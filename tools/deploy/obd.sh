@@ -47,7 +47,7 @@ function variables_prepare {
   HOST=$(hostname -i)
   DATA_PATH="/data/$(whoami)"
   IPADDRESS="127.0.0.1"
-  COMPONENT="oceanbase-seekdb"
+  COMPONENT="oceanbase-lite"
   if grep 'dep_create.sh' $BASE_DIR/build.sh 2>&1 >/dev/null
   then
     DEP_PATH=$BASE_DIR/deps/3rd
@@ -250,7 +250,7 @@ function deploy_cluster {
     if [[ -f $config_yaml ]]
     then
       echo "Use config file: " $config_yaml
-      temp_config_yaml=$(mktemp /tmp/oceanbase-seekdb-config-XXXXXX.yaml)
+      temp_config_yaml=$(mktemp /tmp/oceanbase-lite-config-XXXXXX.yaml)
       cp $config_yaml $temp_config_yaml
       config_yaml=$temp_config_yaml
 
