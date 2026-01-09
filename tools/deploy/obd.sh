@@ -2,7 +2,7 @@
 
 BASE_DIR=$(readlink -f "$(dirname ${BASH_SOURCE[0]})/../..")
 DEPLOY_PATH="$BASE_DIR/tools/deploy"
-OBSERVER_BIN="$BASE_DIR/tools/deploy/bin/observer"
+SEEKDB_BIN="$BASE_DIR/tools/deploy/bin/seekdb"
 OBD_CLUSTER_PATH="$DEPLOY_PATH"/.obd/cluster
 OBD_LOCAL_VERSION_PATH="$DEPLOY_PATH"/.obd/version
 shopt -s expand_aliases
@@ -78,31 +78,31 @@ function copy_sh {
 function mirror_create {
 
   # observer mirror create
-  if [[ "$OBSERVER_PATH" != "" ]]
+  if [[ "$SEEKDB_PATH" != "" ]]
   then
     mkdir -p $BASE_DIR/tools/deploy/{bin,etc,admin}
-    cp -f $OBSERVER_PATH $OBSERVER_BIN || exit 1
+    cp -f $SEEKDB_PATH $SEEKDB_BIN || exit 1
   fi
-  obs_version_info=`$OBSERVER_BIN -V 2>&1`
+  obs_version_info=`$SEEKDB_BIN -V 2>&1`
   if [[ $? != 0 ]]
   then
     echo $obs_version_info
     return 1
   fi
-  obs_version=$(echo "$obs_version_info" | grep -E "observer \(OceanBase([ \_]SeekDB)? ([.0-9]+)\)" | grep -Eo '([.0-9]+)')
+  obs_version=$(echo "$obs_version_info" | grep -E "(observer|seekdb) \(OceanBase([ \_][sS]eek[dD][bB])? ([.0-9]+)\)" | grep -Eo '([.0-9]+)')
   if [[ "$obs_version" == "" ]]
   then
-    echo "can not check observer version"
+    echo "can not check seekdb version"
     echo $obs_version_info
     return 1
   fi
-  $OBSERVER_BIN -V
+  $SEEKDB_BIN -V
 
   mirror_path=$DEPLOY_PATH/mirror_create
   mkdir -p $mirror_path/bin/ && \
     cp -rf $DEPLOY_PATH/etc $mirror_path/ && \
     cp -rf $DEPLOY_PATH/admin $mirror_path/ && \
-    ln -sf $DEPLOY_PATH/bin/observer $mirror_path/bin/observer && \
+    ln -sf $DEPLOY_PATH/bin/seekdb $mirror_path/bin/seekdb && \
     success=1
   if [[ "$success" != "1" ]]
   then
@@ -110,12 +110,12 @@ function mirror_create {
     return 1
   fi
 
-  [[ -f "$BASE_DIR/tools/deploy/obd/.observer_obd_plugin_version" ]] && obs_version=$(cat $BASE_DIR/tools/deploy/obd/.observer_obd_plugin_version)
+  [[ -f "$BASE_DIR/tools/deploy/obd/.seekdb_obd_plugin_version" ]] && obs_version=$(cat $BASE_DIR/tools/deploy/obd/.seekdb_obd_plugin_version)
   obs_mirror_info=$(obd_exec mirror create -n $COMPONENT -p "$mirror_path" -V "$obs_version"  -t $tag -f) && success=1
   if [[ "$success" != "1" ]]
   then
   echo "$obs_mirror_info"
-  echo "create observer mirror failed"
+  echo "create seekdb mirror failed"
   return 2
   else
   echo "$obs_mirror_info"
@@ -149,7 +149,7 @@ function generate_config {
       ip: $IPADDRESS
   server1:
     mysql_port: $mysql_port
-    home_path: $DATA_PATH/observer1
+    home_path: $DATA_PATH/seekdb1
     zone: zone1
     # The directory for data storage. The default value is home_path/store.
     # data_dir: /data
@@ -477,7 +477,7 @@ tpcc [-n DEPLOY_NAME]                    Run tpcc test, use '--help' for more de
 mysqltest [-n DEPLOY_NAME]               Run mysqltest, use '--help' for more details.
 pid [-n DEPLOY_NAME]                     Get pid list for servers, use '--help' for more details.
 ssh [-n DEPLOY_NAME]                     Ssh to target server and change directory to log path, use '--help' for more details.
-less [-n DEPLOY_NAME]                    Use command less to the observer.log, use '--help' for more details.
+less [-n DEPLOY_NAME]                    Use command less to the seekdb.log, use '--help' for more details.
 gdb [-n DEPLOY_NAME]                     Use gdb to attch target server, use '--help' for more details.
 sql [-n DEPLOY_NAME]                     Connect to target server by root@sys, use '--help' for more details.
 sys [-n DEPLOY_NAME]                     Connect to target server by root@sys, use '--help' for more details.
@@ -531,7 +531,7 @@ function main() {
       --cp ) EXEC_CP="1"; shift ;;
       --skip-copy ) SKIP_COPY="1"; shift ;;
       --port ) export port_gen="$2"; extra_args="$extra_args $1"; shift ;;
-      --observer ) OBSERVER_PATH="$2"; shift 2 ;;
+      --seekdb ) SEEKDB_PATH="$2"; shift 2 ;;
       --rm ) RM_CLUSTER="1"; shift ;;
       --exec-init-sql ) EXEC_INIT_SQL="$2"; shift 2 ;;
       -- ) shift ;;
@@ -543,7 +543,7 @@ function main() {
   YAML_CONF=$(absolute_path ${YAML_CONF})
   DATA_PATH=$(absolute_path ${DATA_PATH})
   BUILD_PATH=$(absolute_path ${BUILD_PATH})
-  OBSERVER_PATH=$(absolute_path ${OBSERVER_PATH})
+  SEEKDB_PATH=$(absolute_path ${SEEKDB_PATH})
 
   if [[ "$DISABLE_REBOOT" != "1" ]]
   then

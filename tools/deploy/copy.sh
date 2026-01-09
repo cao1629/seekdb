@@ -58,7 +58,7 @@ then
   mkdir -p $DEBUG_DIR
   mkdir -p $ADMIN_DIR
 
-  do_install $BUILD_DIR/src/observer/observer $BIN_DIR/observer
+  do_install $BUILD_DIR/src/observer/seekdb $BIN_DIR/seekdb
   do_install "$BUILD_DIR/syspack_release/*" $ADMIN_DIR
   do_install $SOURCE_DIR/deps/3rd/usr/local/oceanbase/devtools/bin/llvm-symbolizer $TOOL_DIR/
   do_install $SOURCE_DIR/rpm/.dep_create/lib/libstdc++.so.6 $LIB_DIR true
