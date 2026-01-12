@@ -65,6 +65,7 @@ int ObFTRangeDict::build_one_range(const ObFTDictDesc &desc,
   ObFTDAT *dat_buff = nullptr;
   size_t buffer_size = 0;
 
+  // read one range of words from __ft_dict_ik_utf8, populate trie
   while (OB_SUCC(ret) && !range_end) {
     ObString key;
     if (OB_FAIL(iter.get_key(key))) {
@@ -95,6 +96,8 @@ int ObFTRangeDict::build_one_range(const ObFTDictDesc &desc,
     build_next_range = false; // no more data
     ret = OB_SUCCESS;
   }
+
+  // trie -> DAT Cache
   ObFTCacheRangeHandle *info = nullptr;
 
   if (OB_FAIL(ret)) {
@@ -277,6 +280,7 @@ int ObFTRangeDict::build_cache(const ObFTDictDesc &desc, ObFTCacheRangeContainer
     LOG_WARN("Not supported dict type.", K(ret));
   }
 
+  // read words from __ft_dict_ik_utf8, andd build_ranges
   if (OB_SUCC(ret)) {
     SMART_VAR(ObISQLClient::ReadResult, result)
     {
@@ -292,6 +296,8 @@ int ObFTRangeDict::build_cache(const ObFTDictDesc &desc, ObFTCacheRangeContainer
   return ret;
 }
 
+// try to load all ranges from the global ObDictCache singleton
+// if any range is missing, set OB_ENTRY_NOT_EXIST, and all ranges DAT will be built again.
 int ObFTRangeDict::try_load_cache(const ObFTDictDesc &desc,
                                   const uint32_t range_count,
                                   ObFTCacheRangeContainer &range_container)
@@ -301,6 +307,8 @@ int ObFTRangeDict::try_load_cache(const ObFTDictDesc &desc,
 
   for (int64_t i = 0; OB_SUCC(ret) && i < range_count; ++i) {
     ObDictCacheKey key(name, MTL_ID(), desc.type_, i);
+
+    // populate handle
     ObFTCacheRangeHandle *info = nullptr;
     if (OB_FAIL(range_container.fetch_info_for_dict(info))) {
       LOG_WARN("Failed to fetch info for dict.", K(ret));

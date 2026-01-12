@@ -48,6 +48,7 @@ int ObFTDictHub::destroy()
   is_inited_ = false;
   return ret;
 }
+
 int ObFTDictHub::build_cache(const ObFTDictDesc &desc, ObFTCacheRangeContainer &container)
 {
   int ret = OB_SUCCESS;
@@ -90,11 +91,17 @@ int ObFTDictHub::build_cache(const ObFTDictDesc &desc, ObFTCacheRangeContainer &
   return ret;
 }
 
+// -> get ObFTDictInfo for this dictionary
+// OB_ENTRY_NOT_EXIST when
+// - get_dict_info(), info not found in dict_map_
+// - ObFTRangeDict::try_load_cache() finds any range not exist, info found in dict_map_, 
+//  but DAT cache has been evicted.
 int ObFTDictHub::load_cache(const ObFTDictDesc &desc, ObFTCacheRangeContainer &container)
 {
   int ret = OB_SUCCESS;
   ObFTDictInfo info;
   container.reset();
+  // type: main, quan, stop
   ObFTDictInfoKey key(static_cast<uint64_t>(desc.type_), MTL_ID());
   if (!is_inited_) {
     ret = OB_NOT_INIT;
@@ -102,6 +109,13 @@ int ObFTDictHub::load_cache(const ObFTDictDesc &desc, ObFTCacheRangeContainer &c
   } else {
     {
       ObBucketHashRLockGuard guard(rw_dict_lock_, key.hash());
+
+      // go to hub_ to see if info for this dictionary exists
+      //
+      // when info is not found:
+      // - first-time access
+      //
+      // when dict_map_ is populated: ObFTDicthub:::build_cache()
       if (OB_FAIL(get_dict_info(key, info))) {
         if (OB_HASH_NOT_EXIST == ret) {
           // dict not exist, make new one, by caller

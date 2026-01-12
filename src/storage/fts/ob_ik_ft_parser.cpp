@@ -43,6 +43,7 @@ namespace oceanbase
 {
 namespace storage
 {
+
 int ObIKFTParser::init(const ObFTParserParam &param)
 {
   int ret = OB_SUCCESS;
@@ -222,6 +223,8 @@ int ObIKFTParserDesc::deinit(ObPluginParam *param)
   return OB_SUCCESS;
 }
 
+// -> get dict hub, might have DAT, might not
+// -> create a parser, might need to build DAT, might not
 int ObIKFTParserDesc::segment(ObFTParserParam *param, ObITokenIterator *&iter) const
 {
   int ret = OB_SUCCESS;
@@ -277,6 +280,7 @@ int ObIKFTParser::init_dict(const plugin::ObFTParserParam &param)
     LOG_WARN("Dict hub is not inited", K(ret));
   }
 
+  // initialze dictionary descriptors
   ObFTRangeDict *dict = nullptr;
   ObFTDictDesc main_dict_desc("main_dict",
                               ObFTDictType::DICT_IK_MAIN,
@@ -296,6 +300,7 @@ int ObIKFTParser::init_dict(const plugin::ObFTParserParam &param)
   if (should_read_newest_table()) {
     // clear dict cache, always false now
   } else {
+    
     if (OB_FAIL(init_single_dict(main_dict_desc, cache_main_))) {
       LOG_WARN("Failed to init main dict", K(ret));
     } else if (OB_FAIL(init_single_dict(quan_dict_desc, cache_quan_))) {
@@ -318,6 +323,7 @@ int ObIKFTParser::init_dict(const plugin::ObFTParserParam &param)
   return ret;
 }
 
+// -> see hub_, if DAT doesn't exist (- first time   - already evicted), build_cache
 int ObIKFTParser::init_single_dict(ObFTDictDesc desc, ObFTCacheRangeContainer &container)
 {
   int ret = OB_SUCCESS;
