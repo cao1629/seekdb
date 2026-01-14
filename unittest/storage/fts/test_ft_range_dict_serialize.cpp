@@ -85,7 +85,7 @@ TEST_F(ObFTRangeDictSerializeTest, test_serialize_all_dicts)
 {
   int ret = OB_SUCCESS;
 
-  // Test serializing all 3 dictionaries to the same directory
+  // Test serializing all 3 dictionaries (one file per dictionary, no range division)
   struct DictInfo {
     const char *name;
     ObFTDictType type;
@@ -98,7 +98,6 @@ TEST_F(ObFTRangeDictSerializeTest, test_serialize_all_dicts)
     {"stop", ObFTDictType::DICT_IK_STOP, ObIKDictLoader::dict_stop},
   };
 
-  int total_files = 0;
   for (size_t idx = 0; idx < sizeof(dicts) / sizeof(dicts[0]); idx++) {
     const DictInfo &dict = dicts[idx];
     ObFTDictDesc desc(dict.name, dict.type,
@@ -110,16 +109,24 @@ TEST_F(ObFTRangeDictSerializeTest, test_serialize_all_dicts)
     ret = iter.init();
     ASSERT_EQ(OB_SUCCESS, ret);
 
-    int32_t range_count = 0;
-    ret = ObFTRangeDict::build_and_serialize_ranges(
-        test_dir_.c_str(), desc, iter, range_count);
+    // Build file path: test_dir/dict_name.dat
+    char file_path[4096];
+    snprintf(file_path, sizeof(file_path), "%s/%s.dat", test_dir_.c_str(), dict.name);
+
+    ret = ObFTRangeDict::build_and_serialize(file_path, desc, iter);
     ASSERT_EQ(OB_SUCCESS, ret);
 
-    printf("%s dict: %d ranges\n", dict.name, range_count);
-    total_files += range_count;
+    // Verify file exists
+    ASSERT_EQ(0, access(file_path, F_OK)) << "File not found: " << file_path;
+
+    // Check file size is non-zero
+    struct stat st;
+    ASSERT_EQ(0, stat(file_path, &st));
+    ASSERT_GT(st.st_size, 0) << "File is empty: " << file_path;
+
+    printf("%s dict: serialized to %s (size: %ld bytes)\n", dict.name, file_path, st.st_size);
   }
 
-  printf("Total DAT files generated: %d\n", total_files);
   printf("Output directory: %s\n", test_dir_.c_str());
 }
 

@@ -39,6 +39,7 @@
 #include <unistd.h>
 #include <errno.h>
 #include <cstdio>
+#include <sys/stat.h>
 
 #define USING_LOG_PREFIX STORAGE_FTS
 
@@ -102,7 +103,6 @@ int ObFTRangeDict::build_one_range(const ObFTDictDesc &desc,
     ret = OB_SUCCESS;
   }
 
-  // trie -> DAT Cache
   ObFTCacheRangeHandle *info = nullptr;
 
   if (OB_FAIL(ret)) {
@@ -303,6 +303,42 @@ int ObFTRangeDict::build_cache(const ObFTDictDesc &desc, ObFTCacheRangeContainer
   return ret;
 }
 
+
+int ObFTRangeDict::build_cache_from_file(const ObFTDictDesc &desc, ObFTCacheRangeContainer &range_container)
+{
+  int ret = OB_SUCCESS;
+
+  const char *file_name = nullptr;
+  switch (desc.type_) {
+  case ObFTDictType::DICT_IK_MAIN: {
+    file_name = "main.dat";
+  } break;
+  case ObFTDictType::DICT_IK_QUAN: {
+    file_name = "quan.dat";
+  } break;
+  case ObFTDictType::DICT_IK_STOP: {
+    file_name = "stop.dat";
+  } break;
+  default:
+    ret = OB_NOT_SUPPORTED;
+    LOG_WARN("Not supported dict type.", K(ret));
+  }
+
+  // Build full file path: /tmp/obft_dat_test_XXXXXX/file_name
+  if (OB_SUCC(ret)) {
+    char file_path[OB_MAX_FILE_NAME_LENGTH];
+    int n = snprintf(file_path, sizeof(file_path), "/tmp/obft_dat_test_XXXXXX/%s", file_name);
+    if (n < 0 || n >= static_cast<int>(sizeof(file_path))) {
+      ret = OB_SIZE_OVERFLOW;
+      LOG_WARN("file path too long", K(ret), K(file_name));
+    } else if (OB_FAIL(build_from_file(desc, file_path, range_container))) {
+      LOG_WARN("Failed to build cache from file.", K(ret), K(file_path));
+    }
+  }
+
+  return ret;
+}
+
 // go to global ObDictCache to see of all ranges are cached
 int ObFTRangeDict::try_load_cache(const ObFTDictDesc &desc,
                                   const uint32_t range_count,
@@ -468,6 +504,202 @@ int ObFTRangeDict::serialize_one_range(const ObFTDictDesc &desc,
   }
 
   tmp_alloc.reset();
+  return ret;
+}
+
+int ObFTRangeDict::build_one_range_from_file(const ObFTDictDesc &desc,
+                                              const int32_t range_id,
+                                              const char *file_path,
+                                              ObFTCacheRangeContainer &container)
+{
+  int ret = OB_SUCCESS;
+
+  if (OB_ISNULL(file_path)) {
+    ret = OB_INVALID_ARGUMENT;
+    LOG_WARN("file_path is null", K(ret));
+  } else {
+    // Open file and get size
+    int fd = ::open(file_path, O_RDONLY);
+    if (fd < 0) {
+      ret = OB_FILE_NOT_EXIST;
+      LOG_WARN("failed to open DAT file", K(ret), K(file_path), K(errno));
+    } else {
+      // Get file size
+      struct stat st;
+      if (::fstat(fd, &st) != 0) {
+        ret = OB_IO_ERROR;
+        LOG_WARN("failed to stat file", K(ret), K(file_path), K(errno));
+      } else if (st.st_size < static_cast<off_t>(sizeof(ObFTDAT))) {
+        ret = OB_INVALID_DATA;
+        LOG_WARN("DAT file too small", K(ret), K(file_path), K(st.st_size));
+      } else {
+        size_t buffer_size = static_cast<size_t>(st.st_size);
+
+        // Allocate temporary buffer to read file
+        ObArenaAllocator tmp_alloc(lib::ObMemAttr(MTL_ID(), "LoadDAT"));
+        char *buffer = static_cast<char *>(tmp_alloc.alloc(buffer_size));
+
+        if (OB_ISNULL(buffer)) {
+          ret = OB_ALLOCATE_MEMORY_FAILED;
+          LOG_WARN("failed to allocate buffer", K(ret), K(buffer_size));
+        } else {
+          // Read entire file
+          ssize_t bytes_read = ::read(fd, buffer, buffer_size);
+          if (bytes_read != static_cast<ssize_t>(buffer_size)) {
+            ret = OB_IO_ERROR;
+            LOG_WARN("failed to read DAT file", K(ret), K(file_path),
+                     K(buffer_size), K(bytes_read), K(errno));
+          } else {
+            ObFTDAT *dat_buff = reinterpret_cast<ObFTDAT *>(buffer);
+
+            // Validate DAT header
+            if (dat_buff->mem_block_size_ != static_cast<int64_t>(buffer_size)) {
+              ret = OB_INVALID_DATA;
+              LOG_WARN("DAT size mismatch", K(ret), K(dat_buff->mem_block_size_), K(buffer_size));
+            } else {
+              // Put into cache
+              ObFTCacheRangeHandle *info = nullptr;
+              if (OB_FAIL(container.fetch_info_for_dict(info))) {
+                LOG_WARN("Failed to fetch info for dict.", K(ret));
+              } else if (OB_FAIL(ObFTCacheDict::make_and_fetch_cache_entry(
+                                     desc,
+                                     dat_buff,
+                                     buffer_size,
+                                     range_id,
+                                     info->value_,
+                                     info->handle_))) {
+                LOG_WARN("Failed to put dict into kv cache", K(ret));
+              } else {
+                LOG_INFO("loaded DAT from file into cache", K(range_id), K(file_path), K(buffer_size));
+              }
+            }
+          }
+        }
+        tmp_alloc.reset();
+      }
+      ::close(fd);
+    }
+  }
+
+  return ret;
+}
+
+int ObFTRangeDict::build_ranges_from_files(const ObFTDictDesc &desc,
+                                           const char *dir_path,
+                                           const int32_t range_count,
+                                           ObFTCacheRangeContainer &container)
+{
+  int ret = OB_SUCCESS;
+
+  if (OB_ISNULL(dir_path)) {
+    ret = OB_INVALID_ARGUMENT;
+    LOG_WARN("dir_path is null", K(ret));
+  } else if (range_count <= 0) {
+    ret = OB_INVALID_ARGUMENT;
+    LOG_WARN("invalid range_count", K(ret), K(range_count));
+  } else {
+    for (int32_t range_id = 0; OB_SUCC(ret) && range_id < range_count; ++range_id) {
+      // Build file path: dir_path/dict_type_range_id.dat
+      char file_path[4096];
+      int n = snprintf(file_path, sizeof(file_path), "%s/%d_%d.dat",
+                       dir_path, static_cast<int>(desc.type_), range_id);
+      if (n < 0 || n >= static_cast<int>(sizeof(file_path))) {
+        ret = OB_SIZE_OVERFLOW;
+        LOG_WARN("file path too long", K(ret), K(dir_path), K(range_id));
+      } else if (OB_FAIL(build_one_range_from_file(desc, range_id, file_path, container))) {
+        LOG_WARN("failed to load range from file", K(ret), K(range_id), K(file_path));
+      }
+    }
+
+    if (OB_SUCC(ret)) {
+      LOG_INFO("successfully loaded all ranges from files", K(dir_path), K(range_count));
+    }
+  }
+
+  return ret;
+}
+
+int ObFTRangeDict::build_from_file(const ObFTDictDesc &desc,
+                                   const char *file_path,
+                                   ObFTCacheRangeContainer &container)
+{
+  // Use range_id = 0 since we have a single range for the entire dictionary
+  return build_one_range_from_file(desc, 0 /*range_id*/, file_path, container);
+}
+
+int ObFTRangeDict::build_and_serialize(const char *file_path,
+                                       const ObFTDictDesc &desc,
+                                       ObIFTDictIterator &iter)
+{
+  int ret = OB_SUCCESS;
+
+  if (OB_ISNULL(file_path)) {
+    ret = OB_INVALID_ARGUMENT;
+    LOG_WARN("file_path is null", K(ret));
+  } else {
+    ObArenaAllocator tmp_alloc(lib::ObMemAttr(OB_SERVER_TENANT_ID, "SerializeDAT"));
+    ObFTDATBuilder<void> builder(tmp_alloc);
+    storage::ObFTTrie<void> trie(tmp_alloc, desc.coll_type_);
+
+    int64_t count = 0;
+    ObFTDAT *dat_buff = nullptr;
+    size_t buffer_size = 0;
+
+    // Read ALL words from iterator, populate trie (no range division)
+    while (OB_SUCC(ret)) {
+      ObString key;
+      if (OB_FAIL(iter.get_key(key))) {
+        LOG_WARN("Failed to get key", K(ret));
+      } else if (OB_FAIL(trie.insert(key, {}))) {
+        LOG_WARN("Failed to insert key to trie", K(ret));
+      } else {
+        ++count;
+        if (OB_FAIL(iter.next()) && OB_ITER_END != ret) {
+          LOG_WARN("Failed to step to next word entry.", K(ret));
+        }
+      }
+    }
+
+    if (OB_ITER_END == ret) {
+      ret = OB_SUCCESS; // Normal end of iteration
+    }
+
+    // Build DAT from trie
+    if (OB_FAIL(ret)) {
+      // error already logged
+    } else if (count == 0) {
+      ret = OB_EMPTY_RESULT;
+      LOG_WARN("No words to serialize", K(ret));
+    } else if (OB_FAIL(builder.init(trie))) {
+      LOG_WARN("Failed to init DAT builder.", K(ret));
+    } else if (OB_FAIL(builder.build_from_trie(trie))) {
+      LOG_WARN("Failed to build DAT from trie.", K(ret));
+    } else if (OB_FAIL(builder.get_mem_block(dat_buff, buffer_size))) {
+      LOG_WARN("Failed to get mem block.", K(ret));
+    } else {
+      // Write DAT to file
+      int fd = ::open(file_path, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+      if (fd < 0) {
+        ret = OB_IO_ERROR;
+        LOG_WARN("failed to open file for writing", K(ret), K(file_path), K(errno));
+      } else {
+        ssize_t written = ::write(fd, dat_buff, buffer_size);
+        if (written != static_cast<ssize_t>(buffer_size)) {
+          ret = OB_IO_ERROR;
+          LOG_WARN("failed to write DAT block", K(ret), K(buffer_size), K(written), K(errno));
+        } else if (::fsync(fd) != 0) {
+          ret = OB_IO_ERROR;
+          LOG_WARN("failed to fsync", K(ret), K(errno));
+        } else {
+          LOG_INFO("serialized DAT to file", K(file_path), K(count), K(buffer_size));
+        }
+        ::close(fd);
+      }
+    }
+
+    tmp_alloc.reset();
+  }
+
   return ret;
 }
 

@@ -68,6 +68,8 @@ public:
                             ObFTCacheRangeContainer &range_container);
   static int build_cache(const ObFTDictDesc &desc, ObFTCacheRangeContainer &range_container);
 
+  static int build_cache_from_file(const ObFTDictDesc &desc, ObFTCacheRangeContainer &range_container);
+
   // Build DAT for each range and serialize to separate files
   // @param dir_path: directory to write files to
   // @param desc: dictionary descriptor
@@ -98,6 +100,46 @@ private:
                                  const char *file_path,
                                  ObIFTDictIterator &iter,
                                  bool &build_next_range);
+
+  // Build one range from a serialized DAT file and put into cache
+  // @param desc: dictionary descriptor
+  // @param range_id: range identifier
+  // @param file_path: path to the serialized DAT file
+  // @param container: cache container to store the result
+  // @return OB_SUCCESS on success, error code otherwise
+  static int build_one_range_from_file(const ObFTDictDesc &desc,
+                                       const int32_t range_id,
+                                       const char *file_path,
+                                       ObFTCacheRangeContainer &container);
+
+  // Build all ranges from serialized DAT files and put into cache
+  // @param desc: dictionary descriptor
+  // @param dir_path: directory containing DAT files
+  // @param range_count: number of range files to load
+  // @param container: cache container to store the results
+  // @return OB_SUCCESS on success, error code otherwise
+  static int build_ranges_from_files(const ObFTDictDesc &desc,
+                                     const char *dir_path,
+                                     const int32_t range_count,
+                                     ObFTCacheRangeContainer &container);
+
+  // Build dictionary from a single serialized DAT file (one range = entire dictionary)
+  // @param desc: dictionary descriptor
+  // @param file_path: path to the serialized DAT file
+  // @param container: cache container to store the result
+  // @return OB_SUCCESS on success, error code otherwise
+  static int build_from_file(const ObFTDictDesc &desc,
+                             const char *file_path,
+                             ObFTCacheRangeContainer &container);
+
+  // Build DAT from entire dictionary (no range division) and serialize to a single file
+  // @param file_path: path to write the DAT file
+  // @param desc: dictionary descriptor
+  // @param iter: dictionary iterator (all words)
+  // @return OB_SUCCESS on success, error code otherwise
+  static int build_and_serialize(const char *file_path,
+                                 const ObFTDictDesc &desc,
+                                 ObIFTDictIterator &iter);
 
 private:
   void destroy()

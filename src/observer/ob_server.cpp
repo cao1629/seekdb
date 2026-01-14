@@ -3410,6 +3410,11 @@ int ObServer::ObRefreshNetworkSpeedTask::init(ObServer *obs, int tg_id)
   return ret;
 }
 
+void ObServer::ObRefreshNetworkSpeedTask::runTimerTask()
+{
+  // no-op
+}
+
 ObServer::ObRefreshCpuFreqTimeTask::ObRefreshCpuFreqTimeTask()
 : obs_(nullptr), is_inited_(false)
 {}
