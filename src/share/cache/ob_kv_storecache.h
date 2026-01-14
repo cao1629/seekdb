@@ -59,6 +59,8 @@ public:
   virtual int put_kvpair(ObKVCacheInstHandle &inst_handle, ObKVCachePair *kvpair, ObKVCacheHandle &handle, bool overwrite = true);
 };
 
+// a delegate for ObGlobalKVCache
+// cache_id is assigned during init()
 template <class Key, class Value>
 class ObKVCache : public ObIKVCache<Key, Value>
 {
@@ -76,7 +78,10 @@ public:
     const Value *&pvalue,
     ObKVCacheHandle &handle,
     bool overwrite = true);
+
+    // get() returns handle, pin it to prevent eviction
   virtual int get(const Key &key, const Value *&pvalue, ObKVCacheHandle &handle);
+
   int get_iterator(ObKVCacheIterator &iter);
   virtual int erase(const Key &key);
   virtual int alloc(

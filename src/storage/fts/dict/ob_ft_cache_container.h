@@ -27,7 +27,6 @@ namespace oceanbase
 {
 namespace storage
 {
-// type
 struct ObFTCacheRangeHandle
 {
   ObFTDictType type_;
@@ -44,6 +43,7 @@ public:
   ~ObFTCacheRangeHandle() {}
 };
 
+// a list of ObFTCacheRangeHandle: ObKVCacheHandle, key, value
 class ObFTCacheRangeContainer
 {
 public:

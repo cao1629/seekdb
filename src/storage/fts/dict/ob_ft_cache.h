@@ -122,6 +122,8 @@ public:
   ObFTDAT *dat_block_;
 };
 
+// key: tenent, dictionary, range
+// value: *ObFTDAT
 class ObDictCache : public common::ObKVCache<ObDictCacheKey, ObDictCacheValue>
 {
 public:

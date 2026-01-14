@@ -97,6 +97,10 @@ private:
 };
 
 class ObFTCacheRangeContainer;
+
+// dict_map_  map: dict info key -> dict info
+// dict info key: type (main, stop, quan)
+// dict info: type, num of ranges
 class ObFTDictHub
 {
 public:

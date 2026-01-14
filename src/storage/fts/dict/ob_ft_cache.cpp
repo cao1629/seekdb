@@ -24,6 +24,9 @@ namespace oceanbase
 {
 namespace storage
 {
+
+// -> use key to populate value (key = wchich tenant, which dictionary, which range)
+// -> value->data_block_ which is OBFTDAT
 int ObDictCache::get_dict(const ObDictCacheKey &key,
                           const ObDictCacheValue *&value,
                           common::ObKVCacheHandle &handle)

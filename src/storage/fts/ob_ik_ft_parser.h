@@ -99,10 +99,13 @@ private:
   ObList<ObIIKProcessor *, ObIAllocator> segmenters_;
 
   // For now there's no change of dict in one query, so we can pin dict this level.
+  // This class is used for holding ObKVCacheHandle of each range for preventing eviction
   ObFTCacheRangeContainer cache_main_;
   ObFTCacheRangeContainer cache_quan_;
   ObFTCacheRangeContainer cache_stop_;
 
+  // ObFTCacheDict
+  // This class is used for tokenization
   ObIFTDict *dict_main_;
   ObIFTDict *dict_quan_;
   ObIFTDict *dict_stop_;

@@ -29,34 +29,30 @@
 #include "storage/fts/dict/ob_ft_cache.h"
 #include "storage/fts/dict/ob_ft_dict_def.h"
 
-namespace oceanbase
-{
-namespace storage
-{
-int ObFTCacheDict::init()
-{
+namespace oceanbase {
+namespace storage {
+int ObFTCacheDict::init() {
   int ret = OB_SUCCESS;
   return ret;
 }
 
-int ObFTCacheDict::match(const ObString &single_word, ObDATrieHit &hit) const
-{
+int ObFTCacheDict::match(const ObString &single_word, ObDATrieHit &hit) const {
   return reader_.match_with_hit(single_word, hit, hit);
 }
 
-int ObFTCacheDict::match(const ObString &words, bool &is_match) const
-{
+int ObFTCacheDict::match(const ObString &words, bool &is_match) const {
   int ret = OB_SUCCESS;
 
   int64_t char_len = 0;
   ObDATrieHit hit(this, 0);
-  for (int64_t offset = 0; OB_SUCC(ret) && offset < words.length(); offset += char_len) {
-    if (OB_FAIL(ObCharset::first_valid_char(coll_type_,
-                                            words.ptr() + offset,
+  for (int64_t offset = 0; OB_SUCC(ret) && offset < words.length();
+       offset += char_len) {
+    if (OB_FAIL(ObCharset::first_valid_char(coll_type_, words.ptr() + offset,
                                             words.length() - offset,
                                             char_len))) {
       LOG_WARN("Invalid string encoding", K(ret), K(words));
-    } else if (OB_FAIL(match_with_hit(ObString(char_len, words.ptr() + offset), hit, hit))) {
+    } else if (OB_FAIL(match_with_hit(ObString(char_len, words.ptr() + offset),
+                                      hit, hit))) {
       LOG_WARN("Failed to do match with hit", K(ret));
     } else if (hit.is_match() && offset + char_len == words.length()) {
       is_match = true;
@@ -73,18 +69,17 @@ int ObFTCacheDict::match(const ObString &words, bool &is_match) const
 
 int ObFTCacheDict::match_with_hit(const ObString &single_word,
                                   const ObDATrieHit &last_hit,
-                                  ObDATrieHit &hit) const
-{
+                                  ObDATrieHit &hit) const {
   return reader_.match_with_hit(single_word, last_hit, hit);
 }
+
 
 int ObFTCacheDict::make_and_fetch_cache_entry(const ObFTDictDesc &desc,
                                               ObFTDAT *dat_buff,
                                               const size_t buff_size,
                                               const int32_t range_id,
                                               const ObDictCacheValue *&value,
-                                              ObKVCacheHandle &handle)
-{
+                                              ObKVCacheHandle &handle) {
   int ret = OB_SUCCESS;
   ObDictCache &cache = ObDictCache::get_instance();
 

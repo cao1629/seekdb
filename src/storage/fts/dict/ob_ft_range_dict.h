@@ -68,6 +68,17 @@ public:
                             ObFTCacheRangeContainer &range_container);
   static int build_cache(const ObFTDictDesc &desc, ObFTCacheRangeContainer &range_container);
 
+  // Build DAT for each range and serialize to separate files
+  // @param dir_path: directory to write files to
+  // @param desc: dictionary descriptor
+  // @param iter: dictionary iterator
+  // @param range_count: [out] number of ranges written
+  // @return OB_SUCCESS on success, error code otherwise
+  static int build_and_serialize_ranges(const char *dir_path,
+                                        const ObFTDictDesc &desc,
+                                        ObIFTDictIterator &iter,
+                                        int32_t &range_count);
+
 private:
   // build cache
   static int build_ranges(const ObFTDictDesc &desc,
@@ -80,6 +91,13 @@ private:
                              ObIFTDictIterator &iter,
                              ObFTCacheRangeContainer &container,
                              bool &build_next_range);
+
+  // build one range and serialize to file
+  static int serialize_one_range(const ObFTDictDesc &desc,
+                                 const int32_t range_id,
+                                 const char *file_path,
+                                 ObIFTDictIterator &iter,
+                                 bool &build_next_range);
 
 private:
   void destroy()

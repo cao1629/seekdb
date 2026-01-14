@@ -31,6 +31,7 @@ namespace oceanbase
 {
 namespace storage
 {
+
 template <typename DATA_TYPE>
 int ObFTDATBuilder<DATA_TYPE>::init(ObFTTrie<DATA_TYPE> &trie)
 {
