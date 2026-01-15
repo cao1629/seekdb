@@ -61,7 +61,9 @@ protected:
 
   virtual void SetUp()
   {
+    // Create temporary directory
     test_dir_ = "/tmp/obft_dat_test";
+    mkdir(test_dir_.c_str(), 0755);
   }
 
   virtual void TearDown()
