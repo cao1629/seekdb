@@ -327,7 +327,7 @@ int ObFTRangeDict::build_cache_from_file(const ObFTDictDesc &desc, ObFTCacheRang
   // Build full file path: /tmp/obft_dat_test_XXXXXX/file_name
   if (OB_SUCC(ret)) {
     char file_path[OB_MAX_FILE_NAME_LENGTH];
-    int n = snprintf(file_path, sizeof(file_path), "/tmp/obft_dat_test_XXXXXX/%s", file_name);
+    int n = snprintf(file_path, sizeof(file_path), "/tmp/obft_dat_test/%s", file_name);
     if (n < 0 || n >= static_cast<int>(sizeof(file_path))) {
       ret = OB_SIZE_OVERFLOW;
       LOG_WARN("file path too long", K(ret), K(file_name));

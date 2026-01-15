@@ -61,11 +61,7 @@ protected:
 
   virtual void SetUp()
   {
-    // Create temporary directory
-    char tmp_dir[] = "/tmp/obft_dat_test_XXXXXX";
-    char *result = mkdtemp(tmp_dir);
-    ASSERT_NE(nullptr, result);
-    test_dir_ = tmp_dir;
+    test_dir_ = "/tmp/obft_dat_test";
   }
 
   virtual void TearDown()
