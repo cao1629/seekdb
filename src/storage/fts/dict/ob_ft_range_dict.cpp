@@ -16,6 +16,7 @@
 
 #include "storage/fts/dict/ob_ft_range_dict.h"
 
+#include "storage/fts/dict/ob_ik_dict_data.h"
 #include "lib/allocator/page_arena.h"
 #include "lib/charset/ob_charset.h"
 #include "lib/mysqlclient/ob_isql_client.h"
@@ -625,6 +626,79 @@ int ObFTRangeDict::build_from_file(const ObFTDictDesc &desc,
 {
   // Use range_id = 0 since we have a single range for the entire dictionary
   return build_one_range_from_file(desc, 0 /*range_id*/, file_path, container);
+}
+
+int ObFTRangeDict::build_from_memory(const ObFTDictDesc &desc,
+                                     const char *data,
+                                     const size_t data_size,
+                                     ObFTCacheRangeContainer &container)
+{
+  int ret = OB_SUCCESS;
+
+  if (OB_ISNULL(data)) {
+    ret = OB_INVALID_ARGUMENT;
+    LOG_WARN("data is null", K(ret));
+  } else {
+    const ObFTDAT *dat_buff = reinterpret_cast<const ObFTDAT *>(data);
+
+    // Validate DAT header
+    if (dat_buff->mem_block_size_ != static_cast<int64_t>(data_size)) {
+      ret = OB_INVALID_DATA;
+      LOG_WARN("DAT size mismatch", K(ret), K(dat_buff->mem_block_size_), K(data_size));
+    } else {
+      // Put into cache
+      ObFTCacheRangeHandle *info = nullptr;
+      if (OB_FAIL(container.fetch_info_for_dict(info))) {
+        LOG_WARN("Failed to fetch info for dict.", K(ret));
+      } else if (OB_FAIL(ObFTCacheDict::make_and_fetch_cache_entry(
+                             desc,
+                             const_cast<ObFTDAT *>(dat_buff),
+                             data_size,
+                             0 /*range_id*/,
+                             info->value_,
+                             info->handle_))) {
+        LOG_WARN("Failed to put dict into kv cache", K(ret));
+      } else {
+        LOG_INFO("loaded DAT from binary into cache", K(data_size));
+      }
+    }
+  }
+
+  return ret;
+}
+
+int ObFTRangeDict::build_cache_from_binary(const ObFTDictDesc &desc, ObFTCacheRangeContainer &range_container)
+{
+  int ret = OB_SUCCESS;
+
+  const char *data = nullptr;
+  size_t data_size = 0;
+
+  switch (desc.type_) {
+  case ObFTDictType::DICT_IK_MAIN: {
+    data = ik_main_dat_bg;
+    data_size = ik_main_dat_ed - ik_main_dat_bg;
+  } break;
+  case ObFTDictType::DICT_IK_QUAN: {
+    data = ik_quan_dat_bg;
+    data_size = ik_quan_dat_ed - ik_quan_dat_bg;
+  } break;
+  case ObFTDictType::DICT_IK_STOP: {
+    data = ik_stop_dat_bg;
+    data_size = ik_stop_dat_ed - ik_stop_dat_bg;
+  } break;
+  default:
+    ret = OB_NOT_SUPPORTED;
+    LOG_WARN("Not supported dict type.", K(ret));
+  }
+
+  if (OB_SUCC(ret)) {
+    if (OB_FAIL(build_from_memory(desc, data, data_size, range_container))) {
+      LOG_WARN("Failed to build cache from memory.", K(ret), K(data_size));
+    }
+  }
+
+  return ret;
 }
 
 int ObFTRangeDict::build_and_serialize(const char *file_path,

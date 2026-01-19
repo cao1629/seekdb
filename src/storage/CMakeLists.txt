@@ -274,6 +274,59 @@ ob_set_subtarget(ob_storage ik
   fts/dict/ob_ft_cache.cpp
 )
 
+# Convert IK dictionary .dat files to object files using objcopy
+set(IK_DICT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/fts/dict)
+
+# ik_main.dat -> ik_main_dict.o
+add_custom_command(
+  OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/ik_main_dict.o
+  COMMAND objcopy -I binary -O elf64-x86-64 -B i386:x86-64
+    --rename-section .data=.rodata,alloc,load,readonly,data,contents
+    --redefine-sym _binary_ik_main_dat_start=_ZN9oceanbase7storage14ik_main_dat_bgE
+    --redefine-sym _binary_ik_main_dat_end=_ZN9oceanbase7storage14ik_main_dat_edE
+    ik_main.dat ${CMAKE_CURRENT_BINARY_DIR}/ik_main_dict.o
+  DEPENDS ${IK_DICT_DIR}/ik_main.dat
+  WORKING_DIRECTORY ${IK_DICT_DIR}
+  COMMENT "Converting ik_main.dat to object file"
+)
+add_custom_target(ik_main_dict_target DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/ik_main_dict.o)
+add_library(ik_main_dict OBJECT IMPORTED GLOBAL)
+set_target_properties(ik_main_dict PROPERTIES IMPORTED_OBJECTS ${CMAKE_CURRENT_BINARY_DIR}/ik_main_dict.o)
+add_dependencies(ik_main_dict ik_main_dict_target)
+
+# ik_quan.dat -> ik_quan_dict.o
+add_custom_command(
+  OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/ik_quan_dict.o
+  COMMAND objcopy -I binary -O elf64-x86-64 -B i386:x86-64
+    --rename-section .data=.rodata,alloc,load,readonly,data,contents
+    --redefine-sym _binary_ik_quan_dat_start=_ZN9oceanbase7storage14ik_quan_dat_bgE
+    --redefine-sym _binary_ik_quan_dat_end=_ZN9oceanbase7storage14ik_quan_dat_edE
+    ik_quan.dat ${CMAKE_CURRENT_BINARY_DIR}/ik_quan_dict.o
+  DEPENDS ${IK_DICT_DIR}/ik_quan.dat
+  WORKING_DIRECTORY ${IK_DICT_DIR}
+  COMMENT "Converting ik_quan.dat to object file"
+)
+add_custom_target(ik_quan_dict_target DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/ik_quan_dict.o)
+add_library(ik_quan_dict OBJECT IMPORTED GLOBAL)
+set_target_properties(ik_quan_dict PROPERTIES IMPORTED_OBJECTS ${CMAKE_CURRENT_BINARY_DIR}/ik_quan_dict.o)
+add_dependencies(ik_quan_dict ik_quan_dict_target)
+
+# ik_stop.dat -> ik_stop_dict.o
+add_custom_command(
+  OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/ik_stop_dict.o
+  COMMAND objcopy -I binary -O elf64-x86-64 -B i386:x86-64
+    --rename-section .data=.rodata,alloc,load,readonly,data,contents
+    --redefine-sym _binary_ik_stop_dat_start=_ZN9oceanbase7storage14ik_stop_dat_bgE
+    --redefine-sym _binary_ik_stop_dat_end=_ZN9oceanbase7storage14ik_stop_dat_edE
+    ik_stop.dat ${CMAKE_CURRENT_BINARY_DIR}/ik_stop_dict.o
+  DEPENDS ${IK_DICT_DIR}/ik_stop.dat
+  WORKING_DIRECTORY ${IK_DICT_DIR}
+  COMMENT "Converting ik_stop.dat to object file"
+)
+add_custom_target(ik_stop_dict_target DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/ik_stop_dict.o)
+add_library(ik_stop_dict OBJECT IMPORTED GLOBAL)
+set_target_properties(ik_stop_dict PROPERTIES IMPORTED_OBJECTS ${CMAKE_CURRENT_BINARY_DIR}/ik_stop_dict.o)
+add_dependencies(ik_stop_dict ik_stop_dict_target)
 
 ob_set_subtarget(ob_storage high_availability
   high_availability/ob_physical_copy_ctx.cpp
@@ -1073,7 +1126,12 @@ target_link_libraries(ob_storage_extra PUBLIC ob_base)
 
 add_library(ob_storage_static
   STATIC
-  EXCLUDE_FROM_ALL)
+  EXCLUDE_FROM_ALL
+  ${CMAKE_CURRENT_BINARY_DIR}/ik_main_dict.o
+  ${CMAKE_CURRENT_BINARY_DIR}/ik_quan_dict.o
+  ${CMAKE_CURRENT_BINARY_DIR}/ik_stop_dict.o)
+
+add_dependencies(ob_storage_static ik_main_dict_target ik_quan_dict_target ik_stop_dict_target)
 
 target_link_libraries(ob_storage_static
   PUBLIC ob_storage ob_storage_extra)

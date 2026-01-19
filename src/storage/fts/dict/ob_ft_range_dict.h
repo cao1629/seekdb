@@ -70,6 +70,12 @@ public:
 
   static int build_cache_from_file(const ObFTDictDesc &desc, ObFTCacheRangeContainer &range_container);
 
+  // Build cache from binary data embedded in the executable
+  // @param desc: dictionary descriptor
+  // @param range_container: container to store the cache entries
+  // @return OB_SUCCESS on success, error code otherwise
+  static int build_cache_from_binary(const ObFTDictDesc &desc, ObFTCacheRangeContainer &range_container);
+
   // Build DAT for each range and serialize to separate files
   // @param dir_path: directory to write files to
   // @param desc: dictionary descriptor
@@ -140,6 +146,17 @@ private:
   static int build_and_serialize(const char *file_path,
                                  const ObFTDictDesc &desc,
                                  ObIFTDictIterator &iter);
+
+  // Build dictionary from binary data in memory (one range = entire dictionary)
+  // @param desc: dictionary descriptor
+  // @param data: pointer to the DAT data in memory
+  // @param data_size: size of the DAT data
+  // @param container: cache container to store the result
+  // @return OB_SUCCESS on success, error code otherwise
+  static int build_from_memory(const ObFTDictDesc &desc,
+                               const char *data,
+                               const size_t data_size,
+                               ObFTCacheRangeContainer &container);
 
 private:
   void destroy()

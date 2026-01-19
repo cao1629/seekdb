@@ -69,10 +69,10 @@ protected:
   virtual void TearDown()
   {
     // Cleanup temp directory
-    // if (!test_dir_.empty()) {
-    //   std::string cmd = "rm -rf " + test_dir_;
-    //   system(cmd.c_str());
-    // }
+    if (!test_dir_.empty()) {
+      std::string cmd = "rm -rf " + test_dir_;
+      system(cmd.c_str());
+    }
   }
 
   std::string test_dir_;

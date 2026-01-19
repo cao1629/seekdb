@@ -49,8 +49,9 @@ int ObFTDictHub::destroy()
   return ret;
 }
 
-
-// -> OBFTRangeDict::try_load_cache
+// ObFTDictHub->build_cache
+// -> ObFTRangeDict::try_load_cache
+// -> ObFTRangeDict::build_cache
 int ObFTDictHub::build_cache(const ObFTDictDesc &desc, ObFTCacheRangeContainer &container)
 {
   int ret = OB_SUCCESS;
@@ -81,7 +82,7 @@ int ObFTDictHub::build_cache(const ObFTDictDesc &desc, ObFTCacheRangeContainer &
 
     if (OB_FAIL(ret)) {
       if (OB_ENTRY_NOT_EXIST == ret) {
-        if (OB_FAIL(ObFTRangeDict::build_cache_from_file(desc, container))) {
+        if (OB_FAIL(ObFTRangeDict::build_cache_from_binary(desc, container))) {
           LOG_WARN("Failed to build cache", K(ret));
         } else if (FALSE_IT(info.range_count_ = container.get_handles().size())) {
         } else if (OB_FAIL(put_dict_info(key, info))) {
