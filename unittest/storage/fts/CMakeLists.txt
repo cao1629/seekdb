@@ -1,2 +1,3 @@
 ob_unittest(test_ft_parser)
 ob_unittest(test_ft_range_dict_serialize)
+ob_unittest(test_concurrent_works)

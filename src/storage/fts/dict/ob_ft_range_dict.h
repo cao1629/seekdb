@@ -76,6 +76,18 @@ public:
   // @return OB_SUCCESS on success, error code otherwise
   static int build_cache_from_binary(const ObFTDictDesc &desc, ObFTCacheRangeContainer &range_container);
 
+  // Build cache from static variable data using ObIKDictIterator
+  // @param desc: dictionary descriptor
+  // @param range_container: container to store the cache entries
+  // @return OB_SUCCESS on success, error code otherwise
+  static int build_cache_from_variable(const ObFTDictDesc &desc, ObFTCacheRangeContainer &range_container);
+
+  // Build cache from IK dictionary static data using ObIKDictIterator
+  // @param desc: dictionary descriptor
+  // @param range_container: container to store the cache entries
+  // @return OB_SUCCESS on success, error code otherwise
+  static int build_cache_from_ik_dict(const ObFTDictDesc &desc, ObFTCacheRangeContainer &range_container);
+
   // Build DAT for each range and serialize to separate files
   // @param dir_path: directory to write files to
   // @param desc: dictionary descriptor
@@ -92,6 +104,11 @@ private:
   static int build_ranges(const ObFTDictDesc &desc,
                           ObIFTDictIterator &iter,
                           ObFTCacheRangeContainer &range_container);
+
+  // build cache concurrently: collect words range by range, then build DATs in parallel
+  static int build_ranges_concurrently(const ObFTDictDesc &desc,
+                                       ObIFTDictIterator &iter,
+                                       ObFTCacheRangeContainer &range_container);
 
   // build one range's cache
   static int build_one_range(const ObFTDictDesc &desc,

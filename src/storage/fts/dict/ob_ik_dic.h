@@ -27,11 +27,14 @@ namespace oceanbase
 {
 namespace storage
 {
+
+// Load dictionaries from ob_ik_dic.cpp
 class ObIKDictLoader
 {
 public:
   struct RawDict
   {
+    
     const char **data_;
     int64_t array_size_;
   };

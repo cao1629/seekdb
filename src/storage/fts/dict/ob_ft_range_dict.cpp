@@ -16,6 +16,7 @@
 
 #include "storage/fts/dict/ob_ft_range_dict.h"
 
+#include "storage/fts/dict/ob_ik_dic.h"
 #include "storage/fts/dict/ob_ik_dict_data.h"
 #include "lib/allocator/page_arena.h"
 #include "lib/charset/ob_charset.h"
@@ -41,6 +42,9 @@
 #include <errno.h>
 #include <cstdio>
 #include <sys/stat.h>
+#include <atomic>
+#include <thread>
+#include <vector>
 
 #define USING_LOG_PREFIX STORAGE_FTS
 
@@ -164,6 +168,149 @@ int ObFTRangeDict::build_ranges(const ObFTDictDesc &desc,
       LOG_WARN("fail to build range", K(ret));
     }
   }
+  return ret;
+}
+
+// Function to build one DAT from a trie (runs in std::thread)
+static void build_dat_from_trie(storage::ObFTTrie<void> *trie,
+                                int32_t range_id,
+                                const ObFTDictDesc *desc,
+                                ObFTCacheRangeContainer *container,
+                                std::atomic<int> *error_code)
+{
+  int ret = OB_SUCCESS;
+  ObArenaAllocator dat_alloc(lib::ObMemAttr(OB_SERVER_TENANT_ID, "DATBuild"));
+  ObFTDATBuilder<void> builder(dat_alloc);
+
+  ObFTDAT *dat_buff = nullptr;
+  size_t buffer_size = 0;
+  ObFTCacheRangeHandle *info = nullptr;
+
+  if (OB_FAIL(builder.init(*trie))) {
+    LOG_WARN("Failed to init builder.", K(ret));
+  } else if (OB_FAIL(builder.build_from_trie(*trie))) {
+    LOG_WARN("Failed to build datrie.", K(ret));
+  } else if (OB_FAIL(builder.get_mem_block(dat_buff, buffer_size))) {
+    LOG_WARN("Failed to get mem block.", K(ret));
+  } else if (OB_FAIL(container->fetch_info_for_dict(info))) {
+    LOG_WARN("Failed to fetch info for dict.", K(ret));
+  } else if (OB_FAIL(ObFTCacheDict::make_and_fetch_cache_entry(*desc,
+                                                                dat_buff,
+                                                                buffer_size,
+                                                                range_id,
+                                                                info->value_,
+                                                                info->handle_))) {
+    LOG_WARN("Failed to put dict into kv cache", K(ret));
+  }
+
+  if (OB_FAIL(ret)) {
+    int expected = OB_SUCCESS;
+    error_code->compare_exchange_strong(expected, ret);
+  }
+
+  dat_alloc.reset();
+}
+
+int ObFTRangeDict::build_ranges_concurrently(const ObFTDictDesc &desc,
+                                             ObIFTDictIterator &iter,
+                                             ObFTCacheRangeContainer &range_container)
+{
+  int ret = OB_SUCCESS;
+
+  // Phase 1: Collect words into tries range by range
+  // All tries share tmp_alloc which must outlive them
+  ObArenaAllocator tmp_alloc(lib::ObMemAttr(MTL_ID(), "Tmp Allocator"));
+  ObVector<storage::ObFTTrie<void> *, ObArenaAllocator> all_tries(&tmp_alloc);
+
+  bool has_more = true;
+  while (OB_SUCC(ret) && has_more) {
+
+    // Create ObFTTrie for this range
+    storage::ObFTTrie<void> *trie = OB_NEWx(storage::ObFTTrie<void>, &tmp_alloc, tmp_alloc, desc.coll_type_);
+    if (OB_ISNULL(trie)) {
+      ret = OB_ALLOCATE_MEMORY_FAILED;
+      LOG_WARN("Failed to allocate ObFTTrie", K(ret));
+      break;
+    }
+
+    int count = 0;
+    int64_t first_char_len = 0;
+    ObFTSingleWord end_char;
+    bool range_end = false;
+
+    // Collect words for this range and insert into trie
+    while (OB_SUCC(ret) && !range_end) {
+      ObString key;
+      if (OB_FAIL(iter.get_key(key))) {
+        LOG_WARN("Failed to get key", K(ret));
+      } else {
+        ++count;
+
+        if (count >= DEFAULT_KEY_PER_RANGE
+            && OB_FAIL(ObCharset::first_valid_char(desc.coll_type_,
+                                                   key.ptr(),
+                                                   key.length(),
+                                                   first_char_len))) {
+          LOG_WARN("First char is not valid.");
+        } else if (DEFAULT_KEY_PER_RANGE == count
+                   && OB_FAIL(end_char.set_word(key.ptr(), first_char_len))) {
+          LOG_WARN("Failed to record first char.", K(ret));
+        } else if (count > DEFAULT_KEY_PER_RANGE
+                   && (end_char.get_word() != ObString(first_char_len, key.ptr()))) {
+          // End of range, this key is not consumed
+          range_end = true;
+        } else {
+          // Insert key directly into trie
+          if (OB_FAIL(trie->insert(key, {}))) {
+            LOG_WARN("Failed to insert key to trie", K(ret));
+          } else if (OB_FAIL(iter.next()) && OB_ITER_END != ret) {
+            LOG_WARN("Failed to step to next word entry.", K(ret));
+          }
+        }
+      }
+    }
+
+    if (OB_ITER_END == ret) {
+      
+      has_more = false;
+      ret = OB_SUCCESS;
+    }
+
+    if (OB_SUCC(ret) && trie->node_num() > 0) {
+      if (OB_FAIL(all_tries.push_back(trie))) {
+        LOG_WARN("Failed to push back trie", K(ret));
+      }
+    }
+  }
+
+  // Phase 2: Build DATs concurrently - one std::thread per trie
+  if (OB_SUCC(ret) && all_tries.size() > 0) {
+    std::atomic<int> error_code(OB_SUCCESS);
+    std::vector<std::thread> threads;
+    threads.reserve(all_tries.size());
+
+    // Start all threads
+    for (int32_t i = 0; i < all_tries.size(); ++i) {
+      threads.emplace_back(build_dat_from_trie,
+                           all_tries[i],
+                           i,
+                           &desc,
+                           &range_container,
+                           &error_code);
+    }
+
+    // Wait for all threads
+    for (auto &t : threads) {
+      t.join();
+    }
+
+    ret = error_code.load();
+    if (OB_FAIL(ret)) {
+      LOG_WARN("Thread encountered error", K(ret));
+    }
+  }
+
+  LOG_INFO("build_ranges_concurrently completed", K(ret), K(all_tries.size()));
   return ret;
 }
 
@@ -695,6 +842,70 @@ int ObFTRangeDict::build_cache_from_binary(const ObFTDictDesc &desc, ObFTCacheRa
   if (OB_SUCC(ret)) {
     if (OB_FAIL(build_from_memory(desc, data, data_size, range_container))) {
       LOG_WARN("Failed to build cache from memory.", K(ret), K(data_size));
+    }
+  }
+
+  return ret;
+}
+
+int ObFTRangeDict::build_cache_from_variable(const ObFTDictDesc &desc, ObFTCacheRangeContainer &range_container)
+{
+  int ret = OB_SUCCESS;
+
+  ObIKDictLoader::RawDict raw_dict;
+  switch (desc.type_) {
+  case ObFTDictType::DICT_IK_MAIN: {
+    raw_dict = ObIKDictLoader::dict_text();
+  } break;
+  case ObFTDictType::DICT_IK_QUAN: {
+    raw_dict = ObIKDictLoader::dict_quen_text();
+  } break;
+  case ObFTDictType::DICT_IK_STOP: {
+    raw_dict = ObIKDictLoader::dict_stop();
+  } break;
+  default:
+    ret = OB_NOT_SUPPORTED;
+    LOG_WARN("Not supported dict type.", K(ret));
+  }
+
+  if (OB_SUCC(ret)) {
+    ObIKDictIterator iter(raw_dict);
+    if (OB_FAIL(iter.init())) {
+      LOG_WARN("Failed to init iterator.", K(ret));
+    } else if (OB_FAIL(ObFTRangeDict::build_ranges(desc, iter, range_container))) {
+      LOG_WARN("Failed to build ranges.", K(ret));
+    }
+  }
+
+  return ret;
+}
+
+int ObFTRangeDict::build_cache_from_ik_dict(const ObFTDictDesc &desc, ObFTCacheRangeContainer &range_container)
+{
+  int ret = OB_SUCCESS;
+
+  ObIKDictLoader::RawDict raw_dict;
+  switch (desc.type_) {
+  case ObFTDictType::DICT_IK_MAIN: {
+    raw_dict = ObIKDictLoader::dict_text();
+  } break;
+  case ObFTDictType::DICT_IK_QUAN: {
+    raw_dict = ObIKDictLoader::dict_quen_text();
+  } break;
+  case ObFTDictType::DICT_IK_STOP: {
+    raw_dict = ObIKDictLoader::dict_stop();
+  } break;
+  default:
+    ret = OB_NOT_SUPPORTED;
+    LOG_WARN("Not supported dict type.", K(ret));
+  }
+
+  if (OB_SUCC(ret)) {
+    ObIKDictIterator iter(raw_dict);
+    if (OB_FAIL(iter.init())) {
+      LOG_WARN("Failed to init iterator.", K(ret));
+    } else if (OB_FAIL(ObFTRangeDict::build_ranges(desc, iter, range_container))) {
+      LOG_WARN("Failed to build ranges.", K(ret));
     }
   }
 
