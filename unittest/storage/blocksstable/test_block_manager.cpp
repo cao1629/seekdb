@@ -24,6 +24,7 @@
 #define private public
 
 #include "storage/blocksstable/ob_data_file_prepare.h"
+#include "observer/ob_server_utils.h"
 #include "mtlenv/mock_tenant_module_env.h"
 
 namespace oceanbase
@@ -336,6 +337,11 @@ TEST_F(TestBlockManager, test_ref_cnt_wash_and_load)
   ASSERT_TRUE(block_info.access_time_ > 0);
 }
 
+int64_t get_current_datafile_size()
+{
+  return OB_STORAGE_OBJECT_MGR.get_total_macro_block_count() * OB_STORAGE_OBJECT_MGR.get_macro_block_size();
+}
+
 TEST_F(TestBlockManager, test_resize_file_1)
 {
   struct statvfs svfs;
@@ -344,16 +350,16 @@ TEST_F(TestBlockManager, test_resize_file_1)
   int used_space = OB_STORAGE_OBJECT_MGR.get_total_macro_block_count() * OB_STORAGE_OBJECT_MGR.get_macro_block_size();
 
   double percentage = used_space * 1.0 / (used_space + free_space) + 1;
-  int ret = OB_STORAGE_OBJECT_MGR.resize_local_device(0, percentage, 0);
+  int ret = OB_STORAGE_OBJECT_MGR.resize_local_device(get_current_datafile_size(), 0, percentage, 0);
   ASSERT_EQ(common::OB_SUCCESS, ret);
 
   int64_t free_blk_cnt_1 = OB_SERVER_BLOCK_MGR.io_device_->get_free_block_count();
-  ret = OB_STORAGE_OBJECT_MGR.resize_local_device(used_space + free_space / 2, 99,  0);
+  ret = OB_STORAGE_OBJECT_MGR.resize_local_device(get_current_datafile_size(), used_space + free_space / 2, 99,  0);
   ASSERT_EQ(common::OB_SUCCESS, ret);
   int64_t free_blk_cnt_2 = OB_SERVER_BLOCK_MGR.io_device_->get_free_block_count();
   ASSERT_TRUE(free_space > 0 ? free_blk_cnt_1 < free_blk_cnt_2 : free_blk_cnt_1 == free_blk_cnt_2);
 
-  ret = OB_STORAGE_OBJECT_MGR.resize_local_device(used_space, 99, 0);
+  ret = OB_STORAGE_OBJECT_MGR.resize_local_device(get_current_datafile_size(), used_space, 99, 0);
   ASSERT_EQ(common::OB_NOT_SUPPORTED, ret);
   int64_t free_blk_cnt_3 = OB_SERVER_BLOCK_MGR.io_device_->get_free_block_count();
   ASSERT_TRUE(free_blk_cnt_2 == free_blk_cnt_3);
@@ -365,13 +371,50 @@ TEST_F(TestBlockManager, test_resize_file_2)
   statvfs(util_.storage_env_.sstable_dir_, &svfs);
   int64_t free_space = svfs.f_bavail * svfs.f_bsize;
   int used_space = OB_STORAGE_OBJECT_MGR.get_total_macro_block_count() * OB_STORAGE_OBJECT_MGR.get_macro_block_size();
-  int ret = OB_STORAGE_OBJECT_MGR.resize_local_device(used_space + 2 * free_space, 99, 0);
+  int ret = OB_STORAGE_OBJECT_MGR.resize_local_device(get_current_datafile_size(), used_space + 2 * free_space, 99, 0);
   ASSERT_EQ(common::OB_SERVER_OUTOF_DISK_SPACE, ret);
 
   int64_t delta_space = free_space - 100 * 1024 * 1024 * 1024L;
   int64_t min_space = 0;
-  ret = OB_STORAGE_OBJECT_MGR.resize_local_device(used_space + std::max(delta_space, min_space), 99, 0);
+  ret = OB_STORAGE_OBJECT_MGR.resize_local_device(get_current_datafile_size(),
+      used_space + std::max(delta_space, min_space), 99, 0);
   ASSERT_EQ(common::OB_SUCCESS, ret);
+}
+
+TEST_F(TestBlockManager, test_auto_extend_size)
+{
+  int ret = OB_SUCCESS;
+  const int64_t one_gb = 1L * 1024 * 1024 * 1024;
+  const int64_t two_gb = 2L * 1024 * 1024 * 1024;
+
+  int64_t cur_datafile_size = 0;
+  int64_t actual_extend_size = 0;
+  int64_t datafile_size = get_current_datafile_size();
+  ASSERT_LT(datafile_size, one_gb);
+
+  while (datafile_size < one_gb) {
+    ret = observer::ObServerUtils::calc_auto_extend_size(cur_datafile_size, actual_extend_size);
+    ASSERT_EQ(OB_SUCCESS, ret);
+    ASSERT_EQ(datafile_size, cur_datafile_size);
+    ASSERT_EQ(datafile_size * 2, actual_extend_size);
+    ret = OB_STORAGE_OBJECT_MGR.resize_local_device(cur_datafile_size, actual_extend_size, 99, 0);
+    ASSERT_EQ(OB_SUCCESS, ret);
+    datafile_size = get_current_datafile_size();
+  }
+
+  // test datafile_size >= 1G
+  ret = observer::ObServerUtils::calc_auto_extend_size(cur_datafile_size, actual_extend_size);
+  ASSERT_EQ(OB_SUCCESS, ret);
+  ASSERT_EQ(datafile_size, cur_datafile_size);
+  ASSERT_EQ(cur_datafile_size + one_gb, actual_extend_size);
+
+  // user defined datafile_next
+  const int64_t custom_datafile_next = 32 * 1024 * 1024; // 32M
+  GCONF.datafile_next = custom_datafile_next;
+  ret = observer::ObServerUtils::calc_auto_extend_size(cur_datafile_size, actual_extend_size);
+  ASSERT_EQ(OB_SUCCESS, ret);
+  ASSERT_EQ(datafile_size, cur_datafile_size);
+  ASSERT_EQ(datafile_size + custom_datafile_next, actual_extend_size);
 }
 
 class TestMacroBlockSeqStress : public share::ObThreadPool

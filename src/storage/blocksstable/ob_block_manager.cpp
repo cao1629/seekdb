@@ -259,10 +259,14 @@ int ObBlockManager::inner_alloc_block(ObIODOpts &opts, ObIOFd &io_fd) {
   while (need_retry) {
     ret = io_device_->alloc_block(&opts, io_fd);
     if (OB_SERVER_OUTOF_DISK_SPACE == ret) {
-      if (OB_FAIL(extend_file_size_if_need())) {
+      const int tmp_ret = extend_file_size_if_need();
+      if (OB_SUCCESS == tmp_ret || OB_EAGAIN == tmp_ret) {
+        // need to retry
+      } else {
         ret = OB_SERVER_OUTOF_DISK_SPACE;
         need_retry = false;
-        LOG_ERROR("The data file disk space is exhausted. Please expand the capacity by resizing datafile!!!", K(ret));
+        LOG_ERROR("The data file disk space is exhausted. Please expand the capacity by resizing datafile!!!",
+                  K(ret), K(tmp_ret));
       }
     } else {
       need_retry = false;
@@ -1745,14 +1749,15 @@ int ObBlockManager::extend_file_size_if_need() {
 
       int64_t suggest_extend_size = 0;
       int64_t datafile_disk_percentage = 0;
+      int64_t cur_datafile_size = 0;
 
       if (OB_FAIL(observer::ObServerUtils::calc_auto_extend_size(
-              suggest_extend_size))) {
+              cur_datafile_size, suggest_extend_size))) {
         LOG_DEBUG("calc auto extend size error, maybe ssblock file has reach "
                   "it's max size",
                   K(ret));
       } else if (OB_FAIL(OB_STORAGE_OBJECT_MGR.resize_local_device(
-                     suggest_extend_size, datafile_disk_percentage,
+                     cur_datafile_size, suggest_extend_size, datafile_disk_percentage,
                      reserved_size))) {
         LOG_WARN("Fail to resize file in auto extend", K(ret),
                  K(suggest_extend_size));
@@ -1766,15 +1771,12 @@ bool ObBlockManager::check_can_be_extend(const int64_t reserved_size) {
   bool can_be_extended = false;
 
   const int64_t datafile_maxsize = GCONF.datafile_maxsize;
-  const int64_t datafile_next = GCONF.datafile_next;
   const int64_t current_block_file_size = io_device_->get_total_block_size();
-
-  if (OB_UNLIKELY(datafile_maxsize <= 0) || OB_UNLIKELY(datafile_next <= 0) ||
+  if (OB_UNLIKELY(datafile_maxsize <= 0) ||
       OB_UNLIKELY(current_block_file_size <= 0)) {
     LOG_DEBUG("Do not extend file size, datafile param not set or unexpected "
               "block file size",
-              K(datafile_maxsize), K(datafile_next),
-              K(current_block_file_size));
+              K(datafile_maxsize), K(current_block_file_size));
   } else if (datafile_maxsize <= current_block_file_size) {
     LOG_DEBUG("Do not extend file size, maxsize is smaller than datafile size",
               K(datafile_maxsize), K(current_block_file_size));
