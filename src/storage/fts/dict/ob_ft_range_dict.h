@@ -110,6 +110,11 @@ private:
                                        ObIFTDictIterator &iter,
                                        ObFTCacheRangeContainer &range_container);
 
+  // build cache concurrently using ObThreadPool: collect words range by range, then build DATs in parallel
+  static int build_ranges_concurrently_thread_pool(const ObFTDictDesc &desc,
+                                                   ObIFTDictIterator &iter,
+                                                   ObFTCacheRangeContainer &range_container);
+
   // build one range's cache
   static int build_one_range(const ObFTDictDesc &desc,
                              const int32_t range_id,

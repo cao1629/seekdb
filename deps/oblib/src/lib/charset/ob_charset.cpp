@@ -2671,6 +2671,9 @@ ObCollationType ObCharset::get_system_collation()
   return CS_TYPE_UTF8MB4_GENERAL_CI;
 }
 
+
+// out: char_len
+// how many bytes first character takes
 int ObCharset::first_valid_char(
     const ObCollationType collation_type,
     const char *buf,
