@@ -43,7 +43,7 @@ public:
   ~ObFTCacheRangeHandle() {}
 };
 
-// a list of ObFTCacheRangeHandle: ObKVCacheHandle, key, value
+// a list of ObFTCacheRangeHandle
 class ObFTCacheRangeContainer
 {
 public:

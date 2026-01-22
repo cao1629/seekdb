@@ -196,13 +196,20 @@ public:
     int ret = OB_SUCCESS;
     int64_t idx = get_thread_idx();
 
-    if (OB_ISNULL(all_tries_) || idx >= static_cast<int64_t>(all_tries_->size())) {
+    if (OB_ISNULL(all_tries_)) {
+      ret = OB_ERR_UNEXPECTED;
+      LOG_WARN("all_tries_ is null", K(ret), K(idx));
+      int expected = OB_SUCCESS;
+      error_code_.compare_exchange_strong(expected, ret);
+      return;
+    } else if (idx >= static_cast<int64_t>(all_tries_->size())) {
+      // Thread index exceeds number of tries, nothing to do for this thread
       return;
     }
 
     ObFTTrie<void> *trie = (*all_tries_)[idx];
-    ObArenaAllocator dat_alloc(lib::ObMemAttr(OB_SERVER_TENANT_ID, "DATBuild"));
-    ObFTDATBuilder<void> builder(dat_alloc);
+    ObArenaAllocator tmp_alloc(lib::ObMemAttr(OB_SERVER_TENANT_ID, "DATBuild"));
+    ObFTDATBuilder<void> builder(tmp_alloc);
 
     ObFTDAT *dat_buff = nullptr;
     size_t buffer_size = 0;
@@ -230,7 +237,7 @@ public:
       error_code_.compare_exchange_strong(expected, ret);
     }
 
-    dat_alloc.reset();
+    tmp_alloc.reset();
   }
 
 private:
@@ -239,46 +246,6 @@ private:
   ObFTCacheRangeContainer *container_;
   std::atomic<int> error_code_;
 };
-
-// Function to build one DAT from a trie (runs in std::thread)
-static void build_dat_from_trie(storage::ObFTTrie<void> *trie,
-                                int32_t range_id,
-                                const ObFTDictDesc *desc,
-                                ObFTCacheRangeContainer *container,
-                                std::atomic<int> *error_code)
-{
-  int ret = OB_SUCCESS;
-  ObArenaAllocator dat_alloc(lib::ObMemAttr(OB_SERVER_TENANT_ID, "DATBuild"));
-  ObFTDATBuilder<void> builder(dat_alloc);
-
-  ObFTDAT *dat_buff = nullptr;
-  size_t buffer_size = 0;
-  ObFTCacheRangeHandle *info = nullptr;
-
-  if (OB_FAIL(builder.init(*trie))) {
-    LOG_WARN("Failed to init builder.", K(ret));
-  } else if (OB_FAIL(builder.build_from_trie(*trie))) {
-    LOG_WARN("Failed to build datrie.", K(ret));
-  } else if (OB_FAIL(builder.get_mem_block(dat_buff, buffer_size))) {
-    LOG_WARN("Failed to get mem block.", K(ret));
-  } else if (OB_FAIL(container->fetch_info_for_dict(info))) {
-    LOG_WARN("Failed to fetch info for dict.", K(ret));
-  } else if (OB_FAIL(ObFTCacheDict::make_and_fetch_cache_entry(*desc,
-                                                                dat_buff,
-                                                                buffer_size,
-                                                                range_id,
-                                                                info->value_,
-                                                                info->handle_))) {
-    LOG_WARN("Failed to put dict into kv cache", K(ret));
-  }
-
-  if (OB_FAIL(ret)) {
-    int expected = OB_SUCCESS;
-    error_code->compare_exchange_strong(expected, ret);
-  }
-
-  dat_alloc.reset();
-}
 
 
 int ObFTRangeDict::build_ranges_concurrently_thread_pool(const ObFTDictDesc &desc,
@@ -365,6 +332,7 @@ int ObFTRangeDict::build_ranges_concurrently_thread_pool(const ObFTDictDesc &des
     }
   }
 
+  tmp_alloc.reset();
   LOG_INFO("build_ranges_concurrently_thread_pool completed", K(ret), K(all_tries.size()));
   return ret;
 }

@@ -68,10 +68,6 @@ public:
                             ObFTCacheRangeContainer &range_container);
   static int build_cache(const ObFTDictDesc &desc, ObFTCacheRangeContainer &range_container);
 
-  // Build cache from IK dictionary static data using ObIKDictIterator
-  // @param desc: dictionary descriptor
-  // @param range_container: container to store the cache entries
-  // @return OB_SUCCESS on success, error code otherwise
   static int build_cache_from_ik_dict(const ObFTDictDesc &desc, ObFTCacheRangeContainer &range_container);
 
 private:
