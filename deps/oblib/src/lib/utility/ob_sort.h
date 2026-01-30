@@ -53,6 +53,7 @@ public:
     return *iter_;
   }
   inline pointer operator->()
+<<<<<<< HEAD
   {
     return &(*iter_);
   }
@@ -60,6 +61,15 @@ public:
   {
     return &(*iter_);
   }
+=======
+  {
+    return &(*iter_);
+  }
+  inline pointer operator->() const
+  {
+    return &(*iter_);
+  }
+>>>>>>> master
   inline reference operator[](difference_type n)
   {
     return iter_[n];
@@ -107,6 +117,7 @@ public:
     return *this;
   }
   inline IteratorWrapper &operator-=(int64_t off)
+<<<<<<< HEAD
   {
     if (OB_UNLIKELY(index_ < 0)) abort_maybe_bad_compare();
     iter_ -= off;
@@ -120,6 +131,21 @@ public:
     new_iter -= off;
     return IteratorWrapper(new_iter, index_ - off, end_);
   }
+=======
+  {
+    if (OB_UNLIKELY(index_ < 0)) abort_maybe_bad_compare();
+    iter_ -= off;
+    index_ -= off;
+    return *this;
+  }
+  inline IteratorWrapper operator-(int64_t off) const
+  {
+    if (OB_UNLIKELY(index_ < 0)) abort_maybe_bad_compare();
+    Iterator new_iter = iter_;
+    new_iter -= off;
+    return IteratorWrapper(new_iter, index_ - off, end_);
+  }
+>>>>>>> master
   inline difference_type operator-(const IteratorWrapper &rhs) const
   {
     return index_ - rhs.index_;

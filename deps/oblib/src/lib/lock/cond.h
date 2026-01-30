@@ -114,6 +114,7 @@ Cond::timed_wait_impl(const M& mutex, const ObSysTime& timeout) const
     LockState state;
     mutex.unlock(state);
 
+<<<<<<< HEAD
 #ifdef __APPLE__
     // On macOS, pthread_cond_timedwait uses CLOCK_REALTIME
     // We need to use Realtime clock for the absolute timeout
@@ -128,9 +129,14 @@ Cond::timed_wait_impl(const M& mutex, const ObSysTime& timeout) const
     timespec ts;
     ts.tv_sec  = tv.tv_sec + timeout/1000;
     ts.tv_nsec = tv.tv_usec * 1000 + ( timeout % 1000 ) * 1000000;*/
+=======
+>>>>>>> master
     oceanbase::common::ObWaitEventGuard
         wait_guard(oceanbase::common::ObWaitEventIds::DEFAULT_COND_WAIT, timeout.toMicroSeconds(), reinterpret_cast<uint64_t>(this));
-    const int rc = ob_pthread_cond_timedwait(&_cond, state.mutex, &ts);
+
+    // Use portable timed wait with relative timeout to avoid clock drift issues on macOS
+    // Note: Cond class uses pthread_condattr_setclock(CLOCK_MONOTONIC) on Linux, so pass true
+    const int rc = ob_pthread_cond_timedwait_us(&_cond, state.mutex, timeout.toMicroSeconds(), true);
     mutex.lock(state);
 
     if (rc != 0) {

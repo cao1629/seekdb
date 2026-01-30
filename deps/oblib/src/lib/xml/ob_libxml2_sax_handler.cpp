@@ -330,7 +330,11 @@ void ObLibXml2SaxHandler::entity_reference(void *ctx, const xmlChar *name)
   }
 }
 #if defined(__APPLE__)
+<<<<<<< HEAD
 void ObLibXml2SaxHandler::structured_error(void *ctx, xmlError *error) 
+=======
+void ObLibXml2SaxHandler::structured_error(void *ctx, xmlError *error)
+>>>>>>> master
 #else
 void ObLibXml2SaxHandler::structured_error(void *ctx, const xmlError *error) 
 #endif

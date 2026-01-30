@@ -215,6 +215,10 @@ private:
   static std::vector<std::string*> persistent_strings;
 
 private:
+  // Storage for prefixed symbol names on macOS
+  static std::vector<std::string*> persistent_strings;
+
+private:
   static DenseMap<StringRef, JITTargetAddress> symbol_table;
 };
 
