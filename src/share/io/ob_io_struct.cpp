@@ -1351,11 +1351,7 @@ int ObSyncIOChannel::submit(ObIORequest &req)
 {
   int ret = OB_SUCCESS;
   const int64_t current_ts = ObTimeUtility::current_time();
-<<<<<<< HEAD
-  const int64_t io_depth = get_io_depth(min(max(GMEMCONF.get_server_memory_limit() / 10, static_cast<int64_t>(500 * 1024L * 1024L)), static_cast<int64_t>(4 * 1024L * 1024L * 1024L))); 
-=======
   const int64_t io_depth = get_io_depth(min(max(GMEMCONF.get_server_memory_limit() / 10, static_cast<int64_t>(500 * 1024L * 1024L)), static_cast<int64_t>(4 * 1024L * 1024L * 1024L)));
->>>>>>> master
   if (OB_UNLIKELY(!is_inited_)) {
     ret = OB_NOT_INIT;
     LOG_WARN("not init", K(ret), K(is_inited_));

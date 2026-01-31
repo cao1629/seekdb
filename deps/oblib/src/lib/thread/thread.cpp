@@ -101,22 +101,14 @@ int Thread::start()
         // Continue even if QoS setting failed
       }
 #ifdef __APPLE__
-<<<<<<< HEAD
-      // On macOS, pthread_attr_setstack often fails with EINVAL if address/size 
-=======
       // On macOS, pthread_attr_setstack often fails with EINVAL if address/size
->>>>>>> master
       // are not perfectly aligned or if the memory is already managed in a way
       // that pthread doesn't like. Use setstacksize instead and let the system
       // allocate the stack, while keeping our stack_addr_ for stack_header logic.
       pret = pthread_attr_setstacksize(&attr, stack_size_);
       if (pret != 0) {
         // Fallback to default if setstacksize fails
-<<<<<<< HEAD
-        pret = 0; 
-=======
         pret = 0;
->>>>>>> master
       } else {
         size_t actual_stack_size = 0;
         pthread_attr_getstacksize(&attr, &actual_stack_size);

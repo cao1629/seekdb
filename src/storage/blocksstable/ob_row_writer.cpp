@@ -845,9 +845,5 @@ template void ObRowWriter::loop_cells<ObStorageDatum>(
 
 } // end namespace blocksstable
 } // end namespace oceanbase
-<<<<<<< HEAD
-
-=======
->>>>>>> master
 
 
