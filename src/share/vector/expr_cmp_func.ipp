@@ -239,6 +239,27 @@ int get_cmp_ret(const int ret)
   }
 }
 
+OB_INLINE int get_cmp_ret_runtime(const ObCmpOp cmp_op, const int ret)
+{
+  if (cmp_op == CO_EQ) {
+    return ret == 0;
+  } else if (cmp_op == CO_LE) {
+    return ret <= 0;
+  } else if (cmp_op == CO_LT) {
+    return ret < 0;
+  } else if (cmp_op == CO_GE) {
+    return ret >= 0;
+  } else if (cmp_op == CO_GT) {
+    return ret > 0;
+  } else if (cmp_op == CO_NE) {
+    return ret != 0;
+  } else if (cmp_op == CO_CMP) {
+    return ret;
+  } else {
+    return 0;
+  }
+}
+
 // template <> int get_cmp_ret<CO_EQ> (const int ret) { return ret == 0; }
 // template <> int get_cmp_ret<CO_LE> (const int ret) { return ret <= 0; }
 // template <> int get_cmp_ret<CO_LT> (const int ret) { return ret < 0; }
@@ -272,7 +293,7 @@ int get_cmp_ret(const int ret)
           }                                                                                        \
           if (OB_FAIL(ret)) {                                                                      \
           } else {                                                                                 \
-            res_vec->set_int(i, get_cmp_ret<cmp_op>(cmp_ret));                                     \
+            res_vec->set_int(i, get_cmp_ret_runtime(ObRelationalExprOperator::get_cmp_op(expr.type_), cmp_ret));                                     \
           }                                                                                        \
         }                                                                                          \
         if (OB_SUCC(ret)) { eval_flags.set_all(bound.batch_size()); }                              \
@@ -290,7 +311,7 @@ int get_cmp_ret(const int ret)
           }                                                                                        \
           if (OB_FAIL(ret)) {                                                                      \
           } else {                                                                                 \
-            res_vec->set_int(i, get_cmp_ret<cmp_op>(cmp_ret));                                     \
+            res_vec->set_int(i, get_cmp_ret_runtime(ObRelationalExprOperator::get_cmp_op(expr.type_), cmp_ret));                                     \
             eval_flags.set(i);                                                                     \
           }                                                                                        \
         }                                                                                          \
@@ -313,7 +334,7 @@ int get_cmp_ret(const int ret)
           }                                                                                        \
           if (OB_FAIL(ret)) {                                                                      \
           } else {                                                                                 \
-            res_vec->set_int(i, get_cmp_ret<cmp_op>(cmp_ret));                                     \
+            res_vec->set_int(i, get_cmp_ret_runtime(ObRelationalExprOperator::get_cmp_op(expr.type_), cmp_ret));                                     \
             eval_flags.set(i);                                                                     \
           }                                                                                        \
         }                                                                                          \
@@ -323,7 +344,7 @@ int get_cmp_ret(const int ret)
 
 #define CALC_FORMAT(l, r, res)                                                                     \
   ((int32_t)l + (((int32_t)r) << VEC_MAX_FORMAT) + (((int32_t)res) << (VEC_MAX_FORMAT * 2)))
-template <VecValueTypeClass l_tc, VecValueTypeClass r_tc, ObCmpOp cmp_op>
+template <VecValueTypeClass l_tc, VecValueTypeClass r_tc>
 struct EvalVectorCmp
 {
 #define VECTOR_CMP_CASE(l_fmt, r_fmt, res_fmt)                                                     \
@@ -358,7 +379,7 @@ struct EvalVectorCmp
       VectorFormat left_format = left.get_format(ctx);
       VectorFormat right_format = right.get_format(ctx);
       VectorFormat res_format = expr.get_format(ctx);
-      LOG_DEBUG("eval vector cmp", K(expr), K(l_tc), K(r_tc), K(cmp_op), K(bound), K(left_format),
+      LOG_DEBUG("eval vector cmp", K(expr), K(l_tc), K(r_tc), K(ObRelationalExprOperator::get_cmp_op(expr.type_)), K(bound), K(left_format),
                 K(right_format), K(res_format));
       if (is_valid_format(left_format) && is_valid_format(right_format) && is_valid_format(res_format)) {
         switch (CALC_FORMAT(left_format, right_format, res_format)) {
@@ -430,14 +451,14 @@ struct EvalVectorCmpWithNull
   }
 };
 
-template<VecValueTypeClass l_tc, ObCmpOp cmp_op>
-struct EvalVectorCmp<l_tc, VEC_TC_NULL, cmp_op>: public EvalVectorCmpWithNull {};
+template<VecValueTypeClass l_tc>
+struct EvalVectorCmp<l_tc, VEC_TC_NULL>: public EvalVectorCmpWithNull {};
 
-template<VecValueTypeClass r_tc, ObCmpOp cmp_op>
-struct EvalVectorCmp<VEC_TC_NULL, r_tc, cmp_op>: public EvalVectorCmpWithNull {};
+template<VecValueTypeClass r_tc>
+struct EvalVectorCmp<VEC_TC_NULL, r_tc>: public EvalVectorCmpWithNull {};
 
-template<ObCmpOp cmp_op>
-struct EvalVectorCmp<VEC_TC_NULL, VEC_TC_NULL, cmp_op>: public EvalVectorCmpWithNull {};
+template<>
+struct EvalVectorCmp<VEC_TC_NULL, VEC_TC_NULL>: public EvalVectorCmpWithNull {};
 template<int X, int Y, bool defined>
 struct VectorExprCmpFuncIniter
 {
@@ -450,19 +471,18 @@ struct VectorExprCmpFuncIniter
 template<int X, int Y>
 struct VectorExprCmpFuncIniter<X, Y, true>
 {
-  template <ObCmpOp cmp_op>
   using EvalFunc =
-    EvalVectorCmp<static_cast<VecValueTypeClass>(X), static_cast<VecValueTypeClass>(Y), cmp_op>;
+    EvalVectorCmp<static_cast<VecValueTypeClass>(X), static_cast<VecValueTypeClass>(Y)>;
   static void init_array()
   {
     auto &funcs = EVAL_VECTOR_EXPR_CMP_FUNCS;
-    funcs[X][Y][CO_LE] = &EvalFunc<CO_LE>::eval_vector;
-    funcs[X][Y][CO_LT] = &EvalFunc<CO_LT>::eval_vector;
-    funcs[X][Y][CO_GE] = &EvalFunc<CO_GE>::eval_vector;
-    funcs[X][Y][CO_GT] = &EvalFunc<CO_GT>::eval_vector;
-    funcs[X][Y][CO_NE] = &EvalFunc<CO_NE>::eval_vector;
-    funcs[X][Y][CO_EQ] = &EvalFunc<CO_EQ>::eval_vector;
-    funcs[X][Y][CO_CMP] = &EvalFunc<CO_CMP>::eval_vector;
+    funcs[X][Y][CO_LE] = &EvalFunc::eval_vector;
+    funcs[X][Y][CO_LT] = &EvalFunc::eval_vector;
+    funcs[X][Y][CO_GE] = &EvalFunc::eval_vector;
+    funcs[X][Y][CO_GT] = &EvalFunc::eval_vector;
+    funcs[X][Y][CO_NE] = &EvalFunc::eval_vector;
+    funcs[X][Y][CO_EQ] = &EvalFunc::eval_vector;
+    funcs[X][Y][CO_CMP] = &EvalFunc::eval_vector;
   }
 };
 

@@ -41,6 +41,7 @@
 .review/
 .vscode/
 .cursor/
+.claude/
 /.obdev
 /.settings/
 BROWSE
