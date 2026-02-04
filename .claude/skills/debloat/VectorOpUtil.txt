@@ -1,0 +1,124 @@
+  SIZE(KB) METHOD COUNT  TEMPLATE INSTANTIATION
+  -------- ------------  --------------------------------------------------
+    655.90           38  oceanbase::common::VectorOpUtil<oceanbase::common::ObContinuousVector<oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)23> > >
+    645.29           38  oceanbase::common::VectorOpUtil<oceanbase::common::ObDiscreteVector<oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)23> > >
+    638.57           36  oceanbase::common::VectorOpUtil<oceanbase::common::ObUniformVector<true, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)23> > >
+    321.59           38  oceanbase::common::VectorOpUtil<oceanbase::common::ObContinuousVector<oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)24> > >
+    319.01           38  oceanbase::common::VectorOpUtil<oceanbase::common::ObDiscreteVector<oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)24> > >
+    310.93           36  oceanbase::common::VectorOpUtil<oceanbase::common::ObUniformVector<true, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)24> > >
+    218.70           13  oceanbase::common::VectorOpUtil<oceanbase::common::ObUniformVector<false, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)23> > >
+    121.21           13  oceanbase::common::VectorOpUtil<oceanbase::common::ObUniformVector<false, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)24> > >
+    107.96           34  oceanbase::common::VectorOpUtil<oceanbase::common::ObContinuousVector<oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)13> > >
+    107.96           34  oceanbase::common::VectorOpUtil<oceanbase::common::ObContinuousVector<oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)19> > >
+    104.44           32  oceanbase::common::VectorOpUtil<oceanbase::common::ObDiscreteVector<oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)13> > >
+    104.44           32  oceanbase::common::VectorOpUtil<oceanbase::common::ObDiscreteVector<oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)19> > >
+    101.35           32  oceanbase::common::VectorOpUtil<oceanbase::common::ObUniformVector<true, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)13> > >
+    101.35           32  oceanbase::common::VectorOpUtil<oceanbase::common::ObUniformVector<true, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)19> > >
+     94.43           36  oceanbase::common::VectorOpUtil<oceanbase::common::ObUniformVector<true, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)5> > >
+     94.22           36  oceanbase::common::VectorOpUtil<oceanbase::common::ObFixedLengthVector<double, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)5> > >
+     85.52           38  oceanbase::common::VectorOpUtil<oceanbase::common::ObContinuousVector<oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)25> > >
+     82.37           38  oceanbase::common::VectorOpUtil<oceanbase::common::ObDiscreteVector<oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)25> > >
+     81.77           36  oceanbase::common::VectorOpUtil<oceanbase::common::ObContinuousVector<oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)33> > >
+     78.65           36  oceanbase::common::VectorOpUtil<oceanbase::common::ObDiscreteVector<oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)33> > >
+     77.51           36  oceanbase::common::VectorOpUtil<oceanbase::common::ObUniformVector<true, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)25> > >
+     77.51           36  oceanbase::common::VectorOpUtil<oceanbase::common::ObUniformVector<true, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)33> > >
+     66.79           36  oceanbase::common::VectorOpUtil<oceanbase::common::ObFixedLengthVector<oceanbase::common::wide::ObWideInteger<512u, int>, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)31> > >
+     65.86           32  oceanbase::common::VectorOpUtil<oceanbase::common::ObContinuousVector<oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)6> > >
+     65.15           30  oceanbase::common::VectorOpUtil<oceanbase::common::ObContinuousVector<oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)16> > >
+     64.97           32  oceanbase::common::VectorOpUtil<oceanbase::common::ObDiscreteVector<oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)6> > >
+     63.58           30  oceanbase::common::VectorOpUtil<oceanbase::common::ObDiscreteVector<oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)16> > >
+     63.20           28  oceanbase::common::VectorOpUtil<oceanbase::common::ObUniformVector<true, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)6> > >
+     62.89           30  oceanbase::common::VectorOpUtil<oceanbase::common::ObContinuousVector<oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)22> > >
+     62.30           28  oceanbase::common::VectorOpUtil<oceanbase::common::ObContinuousVector<oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)11> > >
+     62.05           30  oceanbase::common::VectorOpUtil<oceanbase::common::ObDiscreteVector<oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)22> > >
+     61.46           28  oceanbase::common::VectorOpUtil<oceanbase::common::ObDiscreteVector<oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)11> > >
+     60.25           24  oceanbase::common::VectorOpUtil<oceanbase::common::ObUniformVector<true, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)16> > >
+     59.76           20  oceanbase::common::VectorOpUtil<oceanbase::common::ObUniformVector<true, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)0> > >
+     59.76           20  oceanbase::common::VectorOpUtil<oceanbase::common::ObUniformVector<true, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)11> > >
+     59.76           20  oceanbase::common::VectorOpUtil<oceanbase::common::ObUniformVector<true, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)12> > >
+     59.76           20  oceanbase::common::VectorOpUtil<oceanbase::common::ObUniformVector<true, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)22> > >
+     59.76           20  oceanbase::common::VectorOpUtil<oceanbase::common::ObUniformVector<true, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)27> > >
+     59.76           20  oceanbase::common::VectorOpUtil<oceanbase::common::ObUniformVector<true, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)28> > >
+     59.76           20  oceanbase::common::VectorOpUtil<oceanbase::common::ObUniformVector<true, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)29> > >
+     59.76           20  oceanbase::common::VectorOpUtil<oceanbase::common::ObUniformVector<true, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)30> > >
+     59.76           20  oceanbase::common::VectorOpUtil<oceanbase::common::ObUniformVector<true, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)31> > >
+     59.76           20  oceanbase::common::VectorOpUtil<oceanbase::common::ObUniformVector<true, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)35> > >
+     59.76           20  oceanbase::common::VectorOpUtil<oceanbase::common::ObUniformVector<true, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)7> > >
+     57.30           36  oceanbase::common::VectorOpUtil<oceanbase::common::ObContinuousVector<oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)32> > >
+     57.25           36  oceanbase::common::VectorOpUtil<oceanbase::common::ObDiscreteVector<oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)32> > >
+     53.24           36  oceanbase::common::VectorOpUtil<oceanbase::common::ObUniformVector<true, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)32> > >
+     52.42           23  oceanbase::common::VectorOpUtil<oceanbase::common::ObContinuousVector<oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)26> > >
+     51.71           23  oceanbase::common::VectorOpUtil<oceanbase::common::ObDiscreteVector<oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)26> > >
+     48.22           20  oceanbase::common::VectorOpUtil<oceanbase::common::ObUniformVector<true, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)17> > >
+     47.73           21  oceanbase::common::VectorOpUtil<oceanbase::common::ObUniformVector<true, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)26> > >
+     47.51           28  oceanbase::common::VectorOpUtil<oceanbase::common::ObFixedLengthVector<oceanbase::common::wide::ObWideInteger<256u, int>, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)30> > >
+     46.52           20  oceanbase::common::VectorOpUtil<oceanbase::common::ObUniformVector<true, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)18> > >
+     43.12           20  oceanbase::common::VectorOpUtil<oceanbase::common::ObUniformVector<true, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)14> > >
+     43.12           20  oceanbase::common::VectorOpUtil<oceanbase::common::ObUniformVector<true, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)15> > >
+     43.12           20  oceanbase::common::VectorOpUtil<oceanbase::common::ObUniformVector<true, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)1> > >
+     43.12           20  oceanbase::common::VectorOpUtil<oceanbase::common::ObUniformVector<true, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)2> > >
+     43.12           20  oceanbase::common::VectorOpUtil<oceanbase::common::ObUniformVector<true, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)9> > >
+     41.65           20  oceanbase::common::VectorOpUtil<oceanbase::common::ObUniformVector<true, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)21> > >
+     41.21           20  oceanbase::common::VectorOpUtil<oceanbase::common::ObUniformVector<true, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)10> > >
+     41.14           20  oceanbase::common::VectorOpUtil<oceanbase::common::ObUniformVector<true, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)34> > >
+     41.14           20  oceanbase::common::VectorOpUtil<oceanbase::common::ObUniformVector<true, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)8> > >
+     39.55           20  oceanbase::common::VectorOpUtil<oceanbase::common::ObFixedLengthVector<oceanbase::common::ObOTimestampData, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)17> > >
+     38.55           13  oceanbase::common::VectorOpUtil<oceanbase::common::ObUniformVector<false, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)5> > >
+     37.72           20  oceanbase::common::VectorOpUtil<oceanbase::common::ObFixedLengthVector<oceanbase::common::ObOTimestampTinyData, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)18> > >
+     37.61           20  oceanbase::common::VectorOpUtil<oceanbase::common::ObFixedLengthVector<oceanbase::common::wide::ObWideInteger<128u, int>, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)29> > >
+     37.18           13  oceanbase::common::VectorOpUtil<oceanbase::common::ObUniformVector<false, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)13> > >
+     37.18           13  oceanbase::common::VectorOpUtil<oceanbase::common::ObUniformVector<false, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)19> > >
+     36.76           20  oceanbase::common::VectorOpUtil<oceanbase::common::ObFixedLengthVector<float, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)3> > >
+     35.75           20  oceanbase::common::VectorOpUtil<oceanbase::common::ObFixedLengthVector<double, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)4> > >
+     34.55           20  oceanbase::common::VectorOpUtil<oceanbase::common::ObUniformVector<true, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)3> > >
+     34.43           20  oceanbase::common::VectorOpUtil<oceanbase::common::ObUniformVector<true, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)4> > >
+     34.33           20  oceanbase::common::VectorOpUtil<oceanbase::common::ObFixedLengthVector<int, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)27> > >
+     32.57           13  oceanbase::common::VectorOpUtil<oceanbase::common::ObUniformVector<false, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)25> > >
+     32.57           13  oceanbase::common::VectorOpUtil<oceanbase::common::ObUniformVector<false, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)33> > >
+     30.63           20  oceanbase::common::VectorOpUtil<oceanbase::common::ObFixedLengthVector<int, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)34> > >
+     30.63           20  oceanbase::common::VectorOpUtil<oceanbase::common::ObFixedLengthVector<int, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)8> > >
+     29.69           22  oceanbase::common::VectorOpUtil<oceanbase::common::ObFixedLengthVector<long, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)12> > >
+     29.10           20  oceanbase::common::VectorOpUtil<oceanbase::common::ObFixedLengthVector<long, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)28> > >
+     29.10           20  oceanbase::common::VectorOpUtil<oceanbase::common::ObFixedLengthVector<long, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)35> > >
+     29.10           20  oceanbase::common::VectorOpUtil<oceanbase::common::ObFixedLengthVector<long, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)7> > >
+     29.09           20  oceanbase::common::VectorOpUtil<oceanbase::common::ObFixedLengthVector<long, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)1> > >
+     29.09           20  oceanbase::common::VectorOpUtil<oceanbase::common::ObFixedLengthVector<long, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)9> > >
+     29.09           20  oceanbase::common::VectorOpUtil<oceanbase::common::ObFixedLengthVector<unsigned long, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)14> > >
+     29.09           20  oceanbase::common::VectorOpUtil<oceanbase::common::ObFixedLengthVector<unsigned long, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)15> > >
+     29.09           20  oceanbase::common::VectorOpUtil<oceanbase::common::ObFixedLengthVector<unsigned long, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)2> > >
+     27.85           11  oceanbase::common::VectorOpUtil<oceanbase::common::ObUniformVector<false, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)26> > >
+     27.23           20  oceanbase::common::VectorOpUtil<oceanbase::common::ObFixedLengthVector<long, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)21> > >
+     25.98           11  oceanbase::common::VectorOpUtil<oceanbase::common::ObUniformVector<false, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)6> > >
+     25.62           11  oceanbase::common::VectorOpUtil<oceanbase::common::ObUniformVector<false, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)16> > >
+     24.78            9  oceanbase::common::VectorOpUtil<oceanbase::common::ObUniformVector<false, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)0> > >
+     24.78            9  oceanbase::common::VectorOpUtil<oceanbase::common::ObUniformVector<false, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)11> > >
+     24.78            9  oceanbase::common::VectorOpUtil<oceanbase::common::ObUniformVector<false, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)12> > >
+     24.78            9  oceanbase::common::VectorOpUtil<oceanbase::common::ObUniformVector<false, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)22> > >
+     24.78            9  oceanbase::common::VectorOpUtil<oceanbase::common::ObUniformVector<false, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)27> > >
+     24.78            9  oceanbase::common::VectorOpUtil<oceanbase::common::ObUniformVector<false, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)28> > >
+     24.78            9  oceanbase::common::VectorOpUtil<oceanbase::common::ObUniformVector<false, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)29> > >
+     24.78            9  oceanbase::common::VectorOpUtil<oceanbase::common::ObUniformVector<false, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)30> > >
+     24.78            9  oceanbase::common::VectorOpUtil<oceanbase::common::ObUniformVector<false, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)31> > >
+     24.78            9  oceanbase::common::VectorOpUtil<oceanbase::common::ObUniformVector<false, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)35> > >
+     24.78            9  oceanbase::common::VectorOpUtil<oceanbase::common::ObUniformVector<false, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)7> > >
+     24.56           13  oceanbase::common::VectorOpUtil<oceanbase::common::ObUniformVector<false, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)32> > >
+     24.22           20  oceanbase::common::VectorOpUtil<oceanbase::common::ObFixedLengthVector<unsigned char, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)10> > >
+     18.74            9  oceanbase::common::VectorOpUtil<oceanbase::common::ObUniformVector<false, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)17> > >
+     18.01            9  oceanbase::common::VectorOpUtil<oceanbase::common::ObUniformVector<false, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)18> > >
+     16.27            9  oceanbase::common::VectorOpUtil<oceanbase::common::ObUniformVector<false, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)4> > >
+     16.27            9  oceanbase::common::VectorOpUtil<oceanbase::common::ObUniformVector<false, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)14> > >
+     16.27            9  oceanbase::common::VectorOpUtil<oceanbase::common::ObUniformVector<false, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)15> > >
+     16.27            9  oceanbase::common::VectorOpUtil<oceanbase::common::ObUniformVector<false, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)1> > >
+     16.27            9  oceanbase::common::VectorOpUtil<oceanbase::common::ObUniformVector<false, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)2> > >
+     16.27            9  oceanbase::common::VectorOpUtil<oceanbase::common::ObUniformVector<false, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)9> > >
+     16.23            9  oceanbase::common::VectorOpUtil<oceanbase::common::ObUniformVector<false, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)3> > >
+     16.15           20  oceanbase::common::VectorOpUtil<oceanbase::common::ObUniformVector<true, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)20> > >
+     15.32            9  oceanbase::common::VectorOpUtil<oceanbase::common::ObUniformVector<false, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)10> > >
+     15.14            9  oceanbase::common::VectorOpUtil<oceanbase::common::ObUniformVector<false, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)34> > >
+     15.14            9  oceanbase::common::VectorOpUtil<oceanbase::common::ObUniformVector<false, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)8> > >
+     14.38            9  oceanbase::common::VectorOpUtil<oceanbase::common::ObUniformVector<false, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)21> > >
+     14.16           20  oceanbase::common::VectorOpUtil<oceanbase::common::ObFixedLengthVector<long, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)20> > >
+      9.52            9  oceanbase::common::VectorOpUtil<oceanbase::common::ObUniformVector<false, oceanbase::common::VectorBasicOp<(oceanbase::common::VecValueTypeClass)20> > >
+
+  -------- ------------
+   8200.02         2507  TOTAL (119 unique)
