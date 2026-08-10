@@ -29,7 +29,7 @@ namespace obmysql
 // ---- Bridge: the Rust seekdb_nio reactor's callbacks -> ObSqlSockHandler ----
 namespace {
 int nio_on_connect(void* ctx, void* sess, int fd, int is_unix,
-                   nio_greeting_info* greeting) {
+                   NioGreetingInfo* greeting) {
   int ret = static_cast<ObSqlSockHandler*>(ctx)->on_connect(sess, fd, is_unix != 0);
   if (0 == ret && NULL != greeting) {
     // Greeting inputs travel forward through the vtable (this replaced the
@@ -52,7 +52,7 @@ int nio_on_connect(void* ctx, void* sess, int fd, int is_unix,
 }
 int nio_on_readable(void *ctx, void *sess, char *body, int64_t body_len,
                     uint64_t wire_bytes, int packet_kind,
-                    const nio_mysql_command_view *command_view,
+                    const NioMysqlCommandView *command_view,
                     uint64_t generation) {
   return static_cast<ObSqlSockHandler *>(ctx)->on_readable(
       sess, body, body_len, wire_bytes, packet_kind, command_view, generation);
@@ -83,7 +83,7 @@ int ObSqlNioServer::start(int port, rpc::frame::ObReqDeliver* deliver,
   if (OB_FAIL(io_handler_.init(deliver))) {
     LOG_WARN("handler init fail", K(ret));
   } else {
-    nio_callbacks cb = {};
+    NioCallbacks cb = {};
     cb.ctx = &io_handler_;
     cb.on_connect = nio_on_connect;
     cb.on_readable = nio_on_readable;
@@ -102,8 +102,8 @@ int ObSqlNioServer::start(int port, rpc::frame::ObReqDeliver* deliver,
     // TLS is startup-only, like the thread count (set_thread_count already
     // returns OB_NOT_SUPPORTED): toggling ssl_client_authentication at
     // runtime requires an observer restart to take effect.
-    nio_tls_config tls_cfg = { OB_SSL_CA_FILE, OB_SSL_CERT_FILE, OB_SSL_KEY_FILE };
-    const nio_tls_config *tls = use_tls ? &tls_cfg : NULL;
+    NioTlsConfig tls_cfg = { OB_SSL_CA_FILE, OB_SSL_CERT_FILE, OB_SSL_KEY_FILE };
+    const NioTlsConfig *tls = use_tls ? &tls_cfg : NULL;
     int32_t start_err = NIO_START_OK;
     reactor_ = nio_start(addr, &cb, sizeof(cb),
                          sizeof(ObSqlSockSession), thread_count,
@@ -161,7 +161,7 @@ void ObSqlNioServer::wait()
 
 void ObSqlNioServer::destroy()
 {
-  nio_reactor *reactor = NULL;
+  NioReactor *reactor = NULL;
   {
     lib::ObMutexGuard guard(reactor_lock_);
     reactor = reactor_;

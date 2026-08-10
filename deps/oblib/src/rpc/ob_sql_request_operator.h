@@ -20,7 +20,7 @@
 #include <stdint.h>
 #include "lib/net/ob_addr.h"
 
-struct nio_connection_handle;
+struct NioConnectionHandle;
 
 namespace oceanbase
 {
@@ -58,7 +58,7 @@ public:
   ~ObSqlRequestOperator() = default;
 
   observer::ObSMConnection *get_sql_session(ObRequest *req);
-  nio_connection_handle *get_nio_connection_handle(const ObRequest *req);
+  NioConnectionHandle *get_nio_connection_handle(const ObRequest *req);
   common::ObAddr get_peer(const ObRequest *req);
   int disconnect_sql_conn(ObRequest *req, uint64_t generation);
   int finish_sql_request(ObRequest *req, uint64_t generation);

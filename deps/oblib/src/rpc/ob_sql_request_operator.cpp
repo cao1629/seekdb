@@ -37,7 +37,7 @@ ObSqlRequestOperator::get_sql_session(ObRequest *req) {
   return &sess->conn_;
 }
 
-nio_connection_handle *
+NioConnectionHandle *
 ObSqlRequestOperator::get_nio_connection_handle(const ObRequest *req) {
   obmysql::ObSqlSockSession *sess = static_cast<obmysql::ObSqlSockSession *>(
       req->get_server_handle_context());

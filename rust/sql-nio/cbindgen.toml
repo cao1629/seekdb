@@ -33,26 +33,6 @@ header = """/*
  * instead, then rebuild.
  */"""
 
-[export.rename]
-"Reactor" = "nio_reactor"
-"NioConnectionHandle" = "nio_connection_handle"
-"NioTlsConfig" = "nio_tls_config"
-"NioGreetingInfo" = "nio_greeting_info"
-"NioLoginField" = "nio_login_field"
-"NioLoginAttr" = "nio_login_attr"
-"NioLoginView" = "nio_login_view"
-"NioMysqlCommandField" = "nio_mysql_command_field"
-"NioMysqlCommandView" = "nio_mysql_command_view"
-"NioMysqlExecuteParamMeta" = "nio_mysql_execute_param_meta"
-"NioMysqlExecuteParam" = "nio_mysql_execute_param"
-"NioMysqlExecuteParseResult" = "nio_mysql_execute_parse_result"
-"NioByteView" = "nio_byte_view"
-"NioMysqlKvView" = "nio_mysql_kv_view"
-"NioMysqlOkView" = "nio_mysql_ok_view"
-"NioMysqlFieldView" = "nio_mysql_field_view"
-"NioMysqlCellView" = "nio_mysql_cell_view"
-"NioMysqlRowView" = "nio_mysql_row_view"
-"NioCallbacks" = "nio_callbacks"
 
 [export.body]
 "NioMysqlKvView" = """

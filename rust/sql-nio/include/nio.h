@@ -167,91 +167,91 @@
 
 #define NIO_MYSQL_EXECUTE_PARAM_NEGATIVE (1 << 1)
 
-typedef struct nio_connection_handle nio_connection_handle;
+typedef struct NioConnectionHandle NioConnectionHandle;
 
-typedef struct nio_reactor nio_reactor;
+typedef struct NioReactor NioReactor;
 
-typedef struct nio_login_field {
+typedef struct NioLoginField {
   int32_t off;
   int32_t len;
-} nio_login_field;
+} NioLoginField;
 
-typedef struct nio_login_attr {
+typedef struct NioLoginAttr {
   int32_t key_off;
   int32_t key_len;
   int32_t value_off;
   int32_t value_len;
-} nio_login_attr;
+} NioLoginAttr;
 
-typedef struct nio_login_view {
+typedef struct NioLoginView {
   uint32_t capabilities;
   uint8_t charset;
   uint8_t reserved[3];
-  struct nio_login_field username;
-  struct nio_login_field auth_response;
-  struct nio_login_field database;
-  struct nio_login_field auth_plugin_name;
+  struct NioLoginField username;
+  struct NioLoginField auth_response;
+  struct NioLoginField database;
+  struct NioLoginField auth_plugin_name;
   int32_t attr_count;
-  const struct nio_login_attr *attrs;
-} nio_login_view;
+  const struct NioLoginAttr *attrs;
+} NioLoginView;
 
-typedef struct nio_greeting_info {
+typedef struct NioGreetingInfo {
   uint32_t sessid;
   uint8_t scramble[20];
   uint8_t version[64];
   int64_t version_len;
   uint16_t status_flags;
   uint8_t reserved[6];
-} nio_greeting_info;
+} NioGreetingInfo;
 
-typedef struct nio_mysql_command_field {
+typedef struct NioMysqlCommandField {
   int32_t off;
   int32_t len;
-} nio_mysql_command_field;
+} NioMysqlCommandField;
 
-typedef struct nio_mysql_command_view {
+typedef struct NioMysqlCommandView {
   uint32_t command;
   uint32_t layout;
   int64_t scalar0;
   int64_t scalar1;
-  struct nio_mysql_command_field fields[4];
+  struct NioMysqlCommandField fields[4];
   int64_t scalar2;
-} nio_mysql_command_view;
+} NioMysqlCommandView;
 
-typedef struct nio_callbacks {
+typedef struct NioCallbacks {
   void *ctx;
-  int (*on_connect)(void *ctx, void *sess, int fd, int is_unix, struct nio_greeting_info *greeting);
+  int (*on_connect)(void *ctx, void *sess, int fd, int is_unix, struct NioGreetingInfo *greeting);
   int (*on_readable)(void *ctx,
                      void *sess,
                      char *body,
                      int64_t body_len,
                      uint64_t wire_bytes,
                      int packet_kind,
-                     const struct nio_mysql_command_view *command_view,
+                     const struct NioMysqlCommandView *command_view,
                      uint64_t generation);
   void (*on_disconnect)(void *ctx, void *sess);
   void (*on_close)(void *ctx, void *sess, int err);
-} nio_callbacks;
+} NioCallbacks;
 
-typedef struct nio_tls_config {
+typedef struct NioTlsConfig {
   const char *ca_file;
   const char *cert_file;
   const char *key_file;
-} nio_tls_config;
+} NioTlsConfig;
 
-typedef struct nio_byte_view {
+typedef struct NioByteView {
   const char *data;
   int64_t len;
-} nio_byte_view;
+} NioByteView;
 
-typedef struct nio_mysql_field_view {
-  struct nio_byte_view schema;
-  struct nio_byte_view table;
-  struct nio_byte_view org_table;
-  struct nio_byte_view name;
-  struct nio_byte_view org_name;
-  struct nio_byte_view type_owner;
-  struct nio_byte_view type_name;
+typedef struct NioMysqlFieldView {
+  struct NioByteView schema;
+  struct NioByteView table;
+  struct NioByteView org_table;
+  struct NioByteView name;
+  struct NioByteView org_name;
+  struct NioByteView type_owner;
+  struct NioByteView type_name;
   uint32_t column_length;
   uint16_t charset;
   uint16_t flags;
@@ -263,18 +263,18 @@ typedef struct nio_mysql_field_view {
   /* OceanBase array containers instantiate a diagnostic printer for T. */
   int64_t to_string(char *, const int64_t) const { return 0; }
 #endif
-} nio_mysql_field_view;
+} NioMysqlFieldView;
 
-typedef struct nio_mysql_kv_view {
-  struct nio_byte_view key;
-  struct nio_byte_view value;
+typedef struct NioMysqlKvView {
+  struct NioByteView key;
+  struct NioByteView value;
 #ifdef __cplusplus
   /* OceanBase array containers instantiate a diagnostic printer for T. */
   int64_t to_string(char *, const int64_t) const { return 0; }
 #endif
-} nio_mysql_kv_view;
+} NioMysqlKvView;
 
-typedef struct nio_mysql_ok_view {
+typedef struct NioMysqlOkView {
   uint64_t affected_rows;
   uint64_t last_insert_id;
   uint32_t capability_flags;
@@ -282,16 +282,16 @@ typedef struct nio_mysql_ok_view {
   uint16_t status_flags;
   uint16_t warnings;
   uint32_t reserved;
-  struct nio_byte_view message;
-  struct nio_byte_view changed_schema;
-  const struct nio_mysql_kv_view *system_vars;
+  struct NioByteView message;
+  struct NioByteView changed_schema;
+  const struct NioMysqlKvView *system_vars;
   int64_t system_var_count;
-  const struct nio_mysql_kv_view *user_vars;
+  const struct NioMysqlKvView *user_vars;
   int64_t user_var_count;
-} nio_mysql_ok_view;
+} NioMysqlOkView;
 
-typedef struct nio_mysql_cell_view {
-  struct nio_byte_view bytes;
+typedef struct NioMysqlCellView {
+  struct NioByteView bytes;
   uint64_t value;
   uint32_t days;
   uint32_t microseconds;
@@ -309,22 +309,22 @@ typedef struct nio_mysql_cell_view {
   /* OceanBase array containers instantiate a diagnostic printer for T. */
   int64_t to_string(char *, const int64_t) const { return 0; }
 #endif
-} nio_mysql_cell_view;
+} NioMysqlCellView;
 
-typedef struct nio_mysql_row_view {
-  const struct nio_mysql_cell_view *cells;
+typedef struct NioMysqlRowView {
+  const struct NioMysqlCellView *cells;
   int64_t cell_count;
   uint32_t protocol;
   uint32_t reserved;
-} nio_mysql_row_view;
+} NioMysqlRowView;
 
-typedef struct nio_mysql_execute_param_meta {
+typedef struct NioMysqlExecuteParamMeta {
   uint16_t mysql_type;
   uint8_t type_flags;
   uint8_t reserved;
-} nio_mysql_execute_param_meta;
+} NioMysqlExecuteParamMeta;
 
-typedef struct nio_mysql_execute_param {
+typedef struct NioMysqlExecuteParam {
   uint64_t value;
   int32_t value_off;
   int32_t value_len;
@@ -341,12 +341,12 @@ typedef struct nio_mysql_execute_param {
   uint8_t minute;
   uint8_t second;
   uint8_t reserved[4];
-} nio_mysql_execute_param;
+} NioMysqlExecuteParam;
 
-typedef struct nio_mysql_execute_parse_result {
+typedef struct NioMysqlExecuteParseResult {
   uint8_t new_params_bound_flag;
   uint8_t reserved[7];
-} nio_mysql_execute_parse_result;
+} NioMysqlExecuteParseResult;
 
 #ifdef __cplusplus
 extern "C" {
@@ -360,31 +360,31 @@ void nio_bind_sql_session(void *sess);
 
 int nio_release_sql_session(void *sess);
 
-int nio_get_login_view(void *sess, uint64_t generation, struct nio_login_view *out);
+int nio_get_login_view(void *sess, uint64_t generation, struct NioLoginView *out);
 
-struct nio_reactor *nio_start(const char *addr,
-                              const struct nio_callbacks *cb,
-                              size_t callbacks_size,
-                              size_t session_size,
-                              size_t thread_count,
-                              const struct nio_tls_config *tls,
-                              size_t tls_size,
-                              int32_t *out_err,
-                              int disable_tcp);
+struct NioReactor *nio_start(const char *addr,
+                             const struct NioCallbacks *cb,
+                             size_t callbacks_size,
+                             size_t session_size,
+                             size_t thread_count,
+                             const struct NioTlsConfig *tls,
+                             size_t tls_size,
+                             int32_t *out_err,
+                             int disable_tcp);
 
-int nio_update_tcp_keepalive_params(struct nio_reactor *reactor,
+int nio_update_tcp_keepalive_params(struct NioReactor *reactor,
                                     int enabled,
                                     uint32_t idle,
                                     uint32_t interval,
                                     uint32_t count);
 
-void nio_stop(struct nio_reactor *reactor);
+void nio_stop(struct NioReactor *reactor);
 
-void nio_wait_destroy(struct nio_reactor *reactor);
+void nio_wait_destroy(struct NioReactor *reactor);
 
-struct nio_connection_handle *nio_connection_handle_acquire(void *sess);
+struct NioConnectionHandle *nio_connection_handle_acquire(void *sess);
 
-void nio_connection_handle_release(struct nio_connection_handle *connection_handle);
+void nio_connection_handle_release(struct NioConnectionHandle *connection_handle);
 
 int nio_wait_one_packet(void *sess,
                         uint64_t generation,
@@ -397,16 +397,16 @@ int nio_interrupt_read(void *sess, uint64_t generation);
 
 int nio_release_read_packet(void *sess, uint64_t generation, uint64_t packet_lease);
 
-int nio_prepare_commit(struct nio_connection_handle *connection_handle,
+int nio_prepare_commit(struct NioConnectionHandle *connection_handle,
                        uint64_t generation,
                        int auth_outcome);
 
-void nio_commit_request(struct nio_connection_handle *connection_handle, uint64_t generation);
+void nio_commit_request(struct NioConnectionHandle *connection_handle, uint64_t generation);
 
-int nio_response_append_resultset_metadata(struct nio_connection_handle *connection_handle,
+int nio_response_append_resultset_metadata(struct NioConnectionHandle *connection_handle,
                                            uint64_t generation,
                                            int include_result_header,
-                                           const struct nio_mysql_field_view *fields,
+                                           const struct NioMysqlFieldView *fields,
                                            int64_t field_count,
                                            uint8_t eof_field_count,
                                            uint16_t warnings,
@@ -414,19 +414,19 @@ int nio_response_append_resultset_metadata(struct nio_connection_handle *connect
                                            int64_t *packet_count,
                                            int64_t *framed_len);
 
-int nio_response_append_result_header(struct nio_connection_handle *connection_handle,
+int nio_response_append_result_header(struct NioConnectionHandle *connection_handle,
                                       uint64_t generation,
                                       uint64_t field_count,
                                       int64_t *framed_len);
 
-int nio_response_append_eof(struct nio_connection_handle *connection_handle,
+int nio_response_append_eof(struct NioConnectionHandle *connection_handle,
                             uint64_t generation,
                             uint8_t field_count,
                             uint16_t warnings,
                             uint16_t status_flags,
                             int64_t *framed_len);
 
-int nio_response_append_prepare_ok(struct nio_connection_handle *connection_handle,
+int nio_response_append_prepare_ok(struct NioConnectionHandle *connection_handle,
                                    uint64_t generation,
                                    uint32_t statement_id,
                                    uint16_t column_count,
@@ -434,7 +434,7 @@ int nio_response_append_prepare_ok(struct nio_connection_handle *connection_hand
                                    uint16_t warnings,
                                    int64_t *framed_len);
 
-int nio_response_append_error(struct nio_connection_handle *connection_handle,
+int nio_response_append_error(struct NioConnectionHandle *connection_handle,
                               uint64_t generation,
                               uint16_t error_code,
                               const char *sql_state,
@@ -443,7 +443,7 @@ int nio_response_append_error(struct nio_connection_handle *connection_handle,
                               int64_t message_len,
                               int64_t *framed_len);
 
-int nio_response_append_auth_switch(struct nio_connection_handle *connection_handle,
+int nio_response_append_auth_switch(struct NioConnectionHandle *connection_handle,
                                     uint64_t generation,
                                     const char *plugin_name,
                                     int64_t plugin_name_len,
@@ -451,58 +451,58 @@ int nio_response_append_auth_switch(struct nio_connection_handle *connection_han
                                     int64_t scramble_len,
                                     int64_t *framed_len);
 
-int nio_response_append_local_infile(struct nio_connection_handle *connection_handle,
+int nio_response_append_local_infile(struct NioConnectionHandle *connection_handle,
                                      uint64_t generation,
                                      const char *filename,
                                      int64_t filename_len,
                                      int64_t *framed_len);
 
-int nio_response_append_string(struct nio_connection_handle *connection_handle,
+int nio_response_append_string(struct NioConnectionHandle *connection_handle,
                                uint64_t generation,
                                const char *value,
                                int64_t value_len,
                                int64_t *framed_len);
 
-int nio_response_append_ok(struct nio_connection_handle *connection_handle,
+int nio_response_append_ok(struct NioConnectionHandle *connection_handle,
                            uint64_t generation,
-                           const struct nio_mysql_ok_view *ok_view,
+                           const struct NioMysqlOkView *ok_view,
                            int64_t *framed_len);
 
-int nio_response_append_field(struct nio_connection_handle *connection_handle,
+int nio_response_append_field(struct NioConnectionHandle *connection_handle,
                               uint64_t generation,
-                              const struct nio_mysql_field_view *field_view,
+                              const struct NioMysqlFieldView *field_view,
                               int64_t *framed_len);
 
-int nio_response_append_row(struct nio_connection_handle *connection_handle,
+int nio_response_append_row(struct NioConnectionHandle *connection_handle,
                             uint64_t generation,
-                            const struct nio_mysql_row_view *row_view,
+                            const struct NioMysqlRowView *row_view,
                             int64_t *framed_len);
 
-int nio_response_append_packed_row_blob(struct nio_connection_handle *connection_handle,
+int nio_response_append_packed_row_blob(struct NioConnectionHandle *connection_handle,
                                         uint64_t generation,
                                         const char *blob,
                                         int64_t blob_len,
                                         int64_t *framed_len);
 
-int nio_response_flush(struct nio_connection_handle *connection_handle,
+int nio_response_flush(struct NioConnectionHandle *connection_handle,
                        uint64_t generation,
                        int is_final);
 
 int nio_encode_mysql_packed_row_blob(char *buffer,
                                      int64_t buffer_len,
-                                     const struct nio_mysql_row_view *row_view,
+                                     const struct NioMysqlRowView *row_view,
                                      int64_t *blob_len);
 
 int nio_parse_mysql_execute_params(const char *tail,
                                    int64_t tail_len,
                                    int64_t param_count,
-                                   const struct nio_mysql_execute_param_meta *cached_meta,
+                                   const struct NioMysqlExecuteParamMeta *cached_meta,
                                    int64_t cached_count,
                                    const uint8_t *long_data,
                                    int64_t long_data_count,
-                                   struct nio_mysql_execute_param *out_params,
+                                   struct NioMysqlExecuteParam *out_params,
                                    int64_t out_capacity,
-                                   struct nio_mysql_execute_parse_result *out_result);
+                                   struct NioMysqlExecuteParseResult *out_result);
 
 #ifdef __cplusplus
 }  // extern "C"

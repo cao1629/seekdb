@@ -52,7 +52,7 @@ impl Drop for LocalEndpointGuard {
     }
 }
 
-pub struct Reactor {
+pub struct NioReactor {
     pub(crate) wakers: Vec<Arc<Waker>>,
     stop: Arc<AtomicBool>,
     pub(crate) joins: Vec<JoinHandle<()>>,
@@ -916,7 +916,7 @@ pub unsafe extern "C" fn nio_start(
     tls_size: usize,
     out_err: *mut i32,
     disable_tcp: c_int,
-) -> *mut Reactor {
+) -> *mut NioReactor {
     unsafe {
         nio_start_in_dir(
             addr,
@@ -945,7 +945,7 @@ pub(crate) unsafe fn nio_start_in_dir(
     out_err: *mut i32,
     disable_tcp: c_int,
     local_run_dir: &Path,
-) -> *mut Reactor {
+) -> *mut NioReactor {
     if addr.is_null()
         || cb.is_null()
         || callbacks_size != std::mem::size_of::<NioCallbacks>()
@@ -991,7 +991,7 @@ pub(crate) unsafe fn nio_start_in_dir(
         return std::ptr::null_mut();
     }
 
-    let started = (|| -> std::io::Result<Reactor> {
+    let started = (|| -> std::io::Result<NioReactor> {
         let stop = Arc::new(AtomicBool::new(false));
         let keepalive = Arc::new(TcpKeepaliveState::new());
         let mut listener = if disable_tcp == 0 {
@@ -1223,7 +1223,7 @@ pub(crate) unsafe fn nio_start_in_dir(
                 None => None,
             }
         };
-        Ok(Reactor {
+        Ok(NioReactor {
             wakers,
             stop,
             joins,
@@ -1248,7 +1248,7 @@ pub(crate) unsafe fn nio_start_in_dir(
 /// `reactor` is null or a live handle.
 #[no_mangle]
 pub unsafe extern "C" fn nio_update_tcp_keepalive_params(
-    reactor: *mut Reactor,
+    reactor: *mut NioReactor,
     enabled: c_int,
     idle: u32,
     interval: u32,
@@ -1275,7 +1275,7 @@ pub unsafe extern "C" fn nio_update_tcp_keepalive_params(
 /// # Safety
 /// `reactor` is null or a live handle.
 #[no_mangle]
-pub unsafe extern "C" fn nio_stop(reactor: *mut Reactor) {
+pub unsafe extern "C" fn nio_stop(reactor: *mut NioReactor) {
     if let Some(e) = unsafe { reactor.as_ref() } {
         if let Some(endpoint) = e.local_endpoint.as_ref() {
             endpoint.remove_once();
@@ -1290,7 +1290,7 @@ pub unsafe extern "C" fn nio_stop(reactor: *mut Reactor) {
 /// # Safety
 /// `reactor` is null or a live handle, used once.
 #[no_mangle]
-pub unsafe extern "C" fn nio_wait_destroy(reactor: *mut Reactor) {
+pub unsafe extern "C" fn nio_wait_destroy(reactor: *mut NioReactor) {
     if reactor.is_null() {
         return;
     }
