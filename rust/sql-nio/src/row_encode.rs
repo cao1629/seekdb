@@ -14,9 +14,9 @@
 
 use crate::*;
 
-pub(crate) const NIO_FRAME_ERROR: c_int = -1;
-pub(crate) const NIO_FRAME_OK: c_int = 0;
-pub(crate) const NIO_FRAME_NEED_MORE: c_int = 1;
+pub const NIO_FRAME_ERROR: c_int = -1;
+pub const NIO_FRAME_OK: c_int = 0;
+pub const NIO_FRAME_NEED_MORE: c_int = 1;
 
 pub(crate) unsafe fn clear_framed_len(framed_len: *mut i64) {
     if !framed_len.is_null() {

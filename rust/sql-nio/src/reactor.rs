@@ -854,13 +854,12 @@ fn bind_tcp_listener(addr: SocketAddr) -> std::io::Result<TcpListener> {
     TcpListener::bind(addr)
 }
 
-pub(crate) const NIO_START_OK: i32 = 0;
-pub(crate) const NIO_START_EINVAL: i32 = 1;
-pub(crate) const NIO_START_EABI: i32 = 2;
-pub(crate) const NIO_START_EADDR: i32 = 3;
-pub(crate) const NIO_START_ECALLBACKS: i32 = 4;
-pub(crate) const NIO_START_EIO: i32 = 5;
-pub(crate) const NIO_START_ETLS: i32 = 6;
+pub const NIO_START_OK: i32 = 0;
+pub const NIO_START_EINVAL: i32 = 1;
+pub const NIO_START_EADDR: i32 = 3;
+pub const NIO_START_ECALLBACKS: i32 = 4;
+pub const NIO_START_EIO: i32 = 5;
+pub const NIO_START_ETLS: i32 = 6;
 
 fn build_tls_server_config(
     tls: &NioTlsConfig,
@@ -909,7 +908,6 @@ fn write_start_err(out_err: *mut i32, reason: i32) {
 #[no_mangle]
 pub unsafe extern "C" fn nio_start(
     addr: *const c_char,
-    abi_version: u32,
     cb: *const NioCallbacks,
     callbacks_size: usize,
     session_size: usize,
@@ -922,7 +920,6 @@ pub unsafe extern "C" fn nio_start(
     unsafe {
         nio_start_in_dir(
             addr,
-            abi_version,
             cb,
             callbacks_size,
             session_size,
@@ -939,7 +936,6 @@ pub unsafe extern "C" fn nio_start(
 #[allow(clippy::too_many_arguments)]
 pub(crate) unsafe fn nio_start_in_dir(
     addr: *const c_char,
-    abi_version: u32,
     cb: *const NioCallbacks,
     callbacks_size: usize,
     session_size: usize,
@@ -950,10 +946,6 @@ pub(crate) unsafe fn nio_start_in_dir(
     disable_tcp: c_int,
     local_run_dir: &Path,
 ) -> *mut Reactor {
-    if abi_version != NIO_ABI_VERSION {
-        write_start_err(out_err, NIO_START_EABI);
-        return std::ptr::null_mut();
-    }
     if addr.is_null()
         || cb.is_null()
         || callbacks_size != std::mem::size_of::<NioCallbacks>()

@@ -34,7 +34,6 @@ use mio::windows::NamedPipe;
 use mio::{Events, Interest, Poll, Registry, Token, Waker};
 use slab::Slab;
 
-mod abi_layout;
 mod capability;
 mod codec;
 mod command;
@@ -82,7 +81,6 @@ const WAKER: Token = Token(1);
 #[cfg_attr(not(unix), allow(dead_code))]
 const LOCAL_LISTENER: Token = Token(2);
 const FIRST_CONN: usize = 3;
-const NIO_ABI_VERSION: u32 = 24;
 const MAX_IO_THREADS: usize = 128;
 
 const REQUEST_BUSY: u8 = 1 << 0;
@@ -99,6 +97,6 @@ const PACKED_ROW_BLOB_HEADER_LEN: usize = 16;
 
 static NEXT_REQUEST_TICKET: AtomicU64 = AtomicU64::new(1);
 
-const NIO_PACKET_LOGIN: c_int = 1;
-const NIO_PACKET_COMMAND: c_int = 2;
-const NIO_PACKET_AUTH_SWITCH_RESPONSE: c_int = 3;
+pub const NIO_PACKET_LOGIN: c_int = 1;
+pub const NIO_PACKET_COMMAND: c_int = 2;
+pub const NIO_PACKET_AUTH_SWITCH_RESPONSE: c_int = 3;

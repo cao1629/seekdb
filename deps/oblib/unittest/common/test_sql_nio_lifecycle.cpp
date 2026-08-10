@@ -589,7 +589,7 @@ class TestSqlNioLifecycle : public ::testing::Test
       char addr[32] = {};
       std::snprintf(addr, sizeof(addr), "127.0.0.1:%u", port);
       int32_t start_err = NIO_START_OK;
-      reactor_ = nio_start(addr, NIO_ABI_VERSION, &callbacks, sizeof(callbacks),
+      reactor_ = nio_start(addr, &callbacks, sizeof(callbacks),
                            sizeof(ObSqlSockSession), 1, NULL, 0, &start_err, 0);
       if (NULL == reactor_)
       {

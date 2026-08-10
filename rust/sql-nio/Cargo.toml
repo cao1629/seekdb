@@ -37,6 +37,9 @@ rustls = { version = "0.23", default-features = false, features = ["std", "ring"
 # PEM certificate/key loaders (ServerConfig inputs) live here.
 rustls-pki-types = { version = "1", features = ["std"] }
 
+[build-dependencies]
+cbindgen = "=0.29.4"
+
 # libc::shutdown is only used on the Unix path.
 [target.'cfg(unix)'.dependencies]
 libc = "0.2"

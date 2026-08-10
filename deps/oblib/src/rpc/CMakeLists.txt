@@ -18,7 +18,6 @@ ob_set_subtarget(oblib_rpc frame
 ob_set_subtarget(oblib_rpc obmysql
   obmysql/ob_mysql_packet.cpp
   obmysql/ob_mysql_util.cpp
-  obmysql/ob_nio_abi_check.cpp
   obmysql/ob_sql_nio_server.cpp
   obmysql/ob_sql_sock_handler.cpp
   obmysql/ob_sql_sock_session.cpp

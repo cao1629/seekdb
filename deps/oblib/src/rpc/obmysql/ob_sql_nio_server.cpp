@@ -105,15 +105,15 @@ int ObSqlNioServer::start(int port, rpc::frame::ObReqDeliver* deliver,
     nio_tls_config tls_cfg = { OB_SSL_CA_FILE, OB_SSL_CERT_FILE, OB_SSL_KEY_FILE };
     const nio_tls_config *tls = use_tls ? &tls_cfg : NULL;
     int32_t start_err = NIO_START_OK;
-    reactor_ = nio_start(addr, NIO_ABI_VERSION, &cb, sizeof(cb),
+    reactor_ = nio_start(addr, &cb, sizeof(cb),
                          sizeof(ObSqlSockSession), thread_count,
                          tls, use_tls ? sizeof(tls_cfg) : 0, &start_err,
                          disable_tcp ? 1 : 0);
     if (NULL == reactor_) {
       ret = OB_ERR_UNEXPECTED;
-      // start_err makes an ABI drift distinguishable from a busy port; ETLS
-      // means the wallet cert/key/ca failed to load — startup fails rather
-      // than serving cleartext on a port configured for TLS.
+      // start_err distinguishes the failure cause; ETLS means the wallet
+      // cert/key/ca failed to load — startup fails rather than serving
+      // cleartext on a port configured for TLS.
       LOG_WARN("nio_start failed", K(ret), K(port), K(start_err),
                K(disable_tcp), K(use_tls));
     } else {

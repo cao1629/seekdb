@@ -262,8 +262,8 @@ TEST(TestMySQLPacketStorage, rejects_invalid_command_metadata) {
 
   // Layout substitution and per-layout scalar/canonical-shape checks moved to
   // Rust: command.rs owns the command -> layout tables and shapes (pinned by
-  // its unit tests), and ob_nio_abi_check.cpp pins the enum values. C++ now
-  // copies such views verbatim -- only memory safety is enforced here.
+  // its unit tests). C++ now copies such views verbatim -- only memory safety
+  // is enforced here.
   view.fields[0].off = 1;
   view.fields[0].len = 1;
   view.layout = NIO_MYSQL_COMMAND_LAYOUT_U32;

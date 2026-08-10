@@ -108,9 +108,8 @@ inline bool is_valid_mysql_command_field(const nio_mysql_command_field &field,
 // shape, pinned by its unit tests; re-deriving those tables here made the
 // wire shape triple-maintained and re-parsed every packet in reverse on the
 // hot path. What C++ still checks is exactly what memory safety needs: the
-// command range, a known layout enum value (a cheap ABI-drift tripwire backed
-// by the static_asserts in ob_nio_abi_check.cpp), and that all four field
-// ranges lie inside the delivered body.
+// command range, a known layout enum value, and that all four field ranges
+// lie inside the delivered body.
 inline bool is_valid_mysql_command_view(const nio_mysql_command_view &view,
                                         int64_t body_len) {
   const bool is_internal_command =
