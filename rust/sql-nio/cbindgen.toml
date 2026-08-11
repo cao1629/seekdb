@@ -33,20 +33,3 @@ header = """/*
  * instead, then rebuild.
  */"""
 
-
-[export.body]
-"NioMysqlKvView" = """
-#ifdef __cplusplus
-  /* OceanBase array containers instantiate a diagnostic printer for T. */
-  int64_t to_string(char *, const int64_t) const { return 0; }
-#endif"""
-"NioMysqlFieldView" = """
-#ifdef __cplusplus
-  /* OceanBase array containers instantiate a diagnostic printer for T. */
-  int64_t to_string(char *, const int64_t) const { return 0; }
-#endif"""
-"NioMysqlCellView" = """
-#ifdef __cplusplus
-  /* OceanBase array containers instantiate a diagnostic printer for T. */
-  int64_t to_string(char *, const int64_t) const { return 0; }
-#endif"""

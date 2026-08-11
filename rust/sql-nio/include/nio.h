@@ -244,19 +244,11 @@ typedef struct NioMysqlFieldView {
   uint32_t default_type;
   uint8_t decimals;
   uint8_t reserved[7];
-#ifdef __cplusplus
-  /* OceanBase array containers instantiate a diagnostic printer for T. */
-  int64_t to_string(char *, const int64_t) const { return 0; }
-#endif
 } NioMysqlFieldView;
 
 typedef struct NioMysqlKvView {
   struct NioByteView key;
   struct NioByteView value;
-#ifdef __cplusplus
-  /* OceanBase array containers instantiate a diagnostic printer for T. */
-  int64_t to_string(char *, const int64_t) const { return 0; }
-#endif
 } NioMysqlKvView;
 
 typedef struct NioMysqlOkView {
@@ -290,10 +282,6 @@ typedef struct NioMysqlCellView {
   uint8_t flags;
   uint8_t bit_len;
   uint8_t reserved[6];
-#ifdef __cplusplus
-  /* OceanBase array containers instantiate a diagnostic printer for T. */
-  int64_t to_string(char *, const int64_t) const { return 0; }
-#endif
 } NioMysqlCellView;
 
 typedef struct NioMysqlRowView {
