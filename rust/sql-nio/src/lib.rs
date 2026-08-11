@@ -52,8 +52,6 @@ mod response;
 mod response_api;
 mod row_encode;
 mod session_storage;
-#[cfg(test)]
-mod shim_stubs;
 mod shims;
 mod stmt_execute;
 mod tls;
