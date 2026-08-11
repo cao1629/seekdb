@@ -14,7 +14,7 @@
 
 use std::{env, fs, path::Path, path::PathBuf};
 
-const EXTERN_BLOCK_FILE: &str = "shims.rs";
+const EXTERN_BLOCK_FILE: &str = "ffi_types.rs";
 
 fn main() {
     let crate_dir = PathBuf::from(env::var("CARGO_MANIFEST_DIR").unwrap());
