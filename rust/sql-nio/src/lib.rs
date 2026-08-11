@@ -52,6 +52,9 @@ mod response;
 mod response_api;
 mod row_encode;
 mod session_storage;
+#[cfg(test)]
+mod shim_stubs;
+mod shims;
 mod stmt_execute;
 mod tls;
 mod transport;
@@ -73,6 +76,7 @@ pub(crate) use crate::request::*;
 pub(crate) use crate::response_api::*;
 pub(crate) use crate::row_encode::*;
 pub(crate) use crate::session_storage::*;
+pub(crate) use crate::shims::*;
 pub(crate) use crate::tls::*;
 pub(crate) use crate::transport::*;
 
