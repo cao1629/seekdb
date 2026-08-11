@@ -182,7 +182,7 @@ pub(crate) fn take_mid_request_body_for_generation_locked(
 
 pub(crate) fn deliver_decoded_packet(
     conn: &Arc<Conn>,
-    cb: NioCallbacks,
+    handler: Handler,
     packet: DecodedPacket,
     packet_kind: c_int,
     command_view: Option<NioMysqlCommandView>,
@@ -209,7 +209,7 @@ pub(crate) fn deliver_decoded_packet(
             }
         };
     let delivered = deliver_to_cpp(
-        cb,
+        handler,
         conn.sess(),
         body,
         body_len,

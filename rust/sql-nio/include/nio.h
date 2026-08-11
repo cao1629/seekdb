@@ -171,30 +171,6 @@ typedef struct NioConnectionHandle NioConnectionHandle;
 
 typedef struct NioReactor NioReactor;
 
-typedef struct NioLoginField {
-  int32_t off;
-  int32_t len;
-} NioLoginField;
-
-typedef struct NioLoginAttr {
-  int32_t key_off;
-  int32_t key_len;
-  int32_t value_off;
-  int32_t value_len;
-} NioLoginAttr;
-
-typedef struct NioLoginView {
-  uint32_t capabilities;
-  uint8_t charset;
-  uint8_t reserved[3];
-  struct NioLoginField username;
-  struct NioLoginField auth_response;
-  struct NioLoginField database;
-  struct NioLoginField auth_plugin_name;
-  int32_t attr_count;
-  const struct NioLoginAttr *attrs;
-} NioLoginView;
-
 typedef struct NioGreetingInfo {
   uint32_t sessid;
   uint8_t scramble[20];
@@ -218,20 +194,29 @@ typedef struct NioMysqlCommandView {
   int64_t scalar2;
 } NioMysqlCommandView;
 
-typedef struct NioCallbacks {
-  void *ctx;
-  int (*on_connect)(void *ctx, void *sess, int fd, int is_unix, struct NioGreetingInfo *greeting);
-  int (*on_readable)(void *ctx,
-                     void *sess,
-                     char *body,
-                     int64_t body_len,
-                     uint64_t wire_bytes,
-                     int packet_kind,
-                     const struct NioMysqlCommandView *command_view,
-                     uint64_t generation);
-  void (*on_disconnect)(void *ctx, void *sess);
-  void (*on_close)(void *ctx, void *sess, int err);
-} NioCallbacks;
+typedef struct NioLoginField {
+  int32_t off;
+  int32_t len;
+} NioLoginField;
+
+typedef struct NioLoginAttr {
+  int32_t key_off;
+  int32_t key_len;
+  int32_t value_off;
+  int32_t value_len;
+} NioLoginAttr;
+
+typedef struct NioLoginView {
+  uint32_t capabilities;
+  uint8_t charset;
+  uint8_t reserved[3];
+  struct NioLoginField username;
+  struct NioLoginField auth_response;
+  struct NioLoginField database;
+  struct NioLoginField auth_plugin_name;
+  int32_t attr_count;
+  const struct NioLoginAttr *attrs;
+} NioLoginView;
 
 typedef struct NioTlsConfig {
   const char *ca_file;
@@ -360,11 +345,29 @@ void nio_bind_sql_session(void *sess);
 
 int nio_release_sql_session(void *sess);
 
+extern int ob_sql_sock_handler_on_connect(void *handler,
+                                          void *sess,
+                                          int fd,
+                                          int is_unix,
+                                          struct NioGreetingInfo *greeting);
+
+extern int ob_sql_sock_handler_on_readable(void *handler,
+                                           void *sess,
+                                           char *body,
+                                           int64_t body_len,
+                                           uint64_t wire_bytes,
+                                           int packet_kind,
+                                           const struct NioMysqlCommandView *command_view,
+                                           uint64_t generation);
+
+extern void ob_sql_sock_handler_on_disconnect(void *handler, void *sess);
+
+extern void ob_sql_sock_handler_on_close(void *handler, void *sess, int err);
+
 int nio_get_login_view(void *sess, uint64_t generation, struct NioLoginView *out);
 
 struct NioReactor *nio_start(const char *addr,
-                             const struct NioCallbacks *cb,
-                             size_t callbacks_size,
+                             void *handler,
                              size_t session_size,
                              size_t thread_count,
                              const struct NioTlsConfig *tls,

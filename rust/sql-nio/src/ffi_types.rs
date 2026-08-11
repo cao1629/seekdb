@@ -22,36 +22,32 @@ pub struct NioTlsConfig {
     pub key_file: *const c_char,
 }
 
-#[repr(C)]
 #[derive(Clone, Copy)]
-pub struct NioCallbacks {
-    pub ctx: *mut c_void,
-    pub on_connect: Option<
-        extern "C" fn(
-            ctx: *mut c_void,
-            sess: *mut c_void,
-            fd: c_int,
-            is_unix: c_int,
-            greeting: *mut NioGreetingInfo,
-        ) -> c_int,
-    >,
-    pub on_readable: Option<
-        extern "C" fn(
-            ctx: *mut c_void,
-            sess: *mut c_void,
-            body: *mut c_char,
-            body_len: i64,
-            wire_bytes: u64,
-            packet_kind: c_int,
-            command_view: *const NioMysqlCommandView,
-            generation: u64,
-        ) -> c_int,
-    >,
-    pub on_disconnect: Option<extern "C" fn(ctx: *mut c_void, sess: *mut c_void)>,
-    pub on_close: Option<extern "C" fn(ctx: *mut c_void, sess: *mut c_void, err: c_int)>,
+pub(crate) struct Handler(pub(crate) *mut c_void);
+unsafe impl Send for Handler {}
+unsafe impl Sync for Handler {}
+
+extern "C" {
+    pub fn ob_sql_sock_handler_on_connect(
+        handler: *mut c_void,
+        sess: *mut c_void,
+        fd: c_int,
+        is_unix: c_int,
+        greeting: *mut NioGreetingInfo,
+    ) -> c_int;
+    pub fn ob_sql_sock_handler_on_readable(
+        handler: *mut c_void,
+        sess: *mut c_void,
+        body: *mut c_char,
+        body_len: i64,
+        wire_bytes: u64,
+        packet_kind: c_int,
+        command_view: *const NioMysqlCommandView,
+        generation: u64,
+    ) -> c_int;
+    pub fn ob_sql_sock_handler_on_disconnect(handler: *mut c_void, sess: *mut c_void);
+    pub fn ob_sql_sock_handler_on_close(handler: *mut c_void, sess: *mut c_void, err: c_int);
 }
-unsafe impl Send for NioCallbacks {}
-unsafe impl Sync for NioCallbacks {}
 
 #[repr(C)]
 #[derive(Clone, Copy)]
@@ -240,4 +236,45 @@ pub struct NioMysqlRowView {
     pub cell_count: i64,
     pub protocol: u32,
     pub reserved: u32,
+}
+
+#[cfg(test)]
+mod shim_stubs {
+    use super::*;
+
+    #[no_mangle]
+    extern "C" fn ob_sql_sock_handler_on_connect(
+        _handler: *mut c_void,
+        _sess: *mut c_void,
+        _fd: c_int,
+        _is_unix: c_int,
+        _greeting: *mut NioGreetingInfo,
+    ) -> c_int {
+        0
+    }
+
+    #[no_mangle]
+    extern "C" fn ob_sql_sock_handler_on_readable(
+        _handler: *mut c_void,
+        _sess: *mut c_void,
+        _body: *mut c_char,
+        _body_len: i64,
+        _wire_bytes: u64,
+        _packet_kind: c_int,
+        _command_view: *const NioMysqlCommandView,
+        _generation: u64,
+    ) -> c_int {
+        0
+    }
+
+    #[no_mangle]
+    extern "C" fn ob_sql_sock_handler_on_disconnect(_handler: *mut c_void, _sess: *mut c_void) {}
+
+    #[no_mangle]
+    extern "C" fn ob_sql_sock_handler_on_close(
+        _handler: *mut c_void,
+        _sess: *mut c_void,
+        _err: c_int,
+    ) {
+    }
 }

@@ -205,7 +205,7 @@ pub(crate) struct EventLoop {
     pub(crate) commit_batch: Vec<QueuedCompletion>,
     pub(crate) completions: Arc<Mutex<Vec<QueuedCompletion>>>,
     pub(crate) stop: Arc<AtomicBool>,
-    pub(crate) cb: NioCallbacks,
+    pub(crate) handler: Handler,
     pub(crate) session_size: usize,
     pub(crate) tls_config: Option<Arc<rustls::ServerConfig>>,
     pub(crate) keepalive: Arc<TcpKeepaliveState>,
@@ -396,14 +396,11 @@ impl EventLoop {
         let sess = conn.sess();
         insert_conn_mapping(conn);
         let mut greeting = NioGreetingInfo::zeroed();
-        let rejected = match self.cb.on_connect {
-            Some(on_connect) => {
-                let rc = on_connect(self.cb.ctx, sess, fd, is_unix, &mut greeting);
-                conn.session_constructed.store(true, Ordering::Release);
-                rc != 0
-            }
-            None => true,
+        let rc = unsafe {
+            ob_sql_sock_handler_on_connect(self.handler.0, sess, fd, is_unix, &mut greeting)
         };
+        conn.session_constructed.store(true, Ordering::Release);
+        let rejected = rc != 0;
         if rejected || conn.err.load(Ordering::Acquire) || !send_greeting(conn, &greeting) {
             self.abort_admission(conn, preregistered);
             return false;
@@ -614,7 +611,7 @@ impl EventLoop {
             conn.signal_mid_read();
             return;
         }
-        let handled = pump(conn, self.cb);
+        let handled = pump(conn, self.handler);
         if !handled {
             mark_connection_error(conn);
         }
@@ -793,9 +790,7 @@ impl EventLoop {
         if conn.session_constructed.load(Ordering::Acquire)
             && !conn.disconnect_notified.swap(true, Ordering::AcqRel)
         {
-            if let Some(on_disconnect) = self.cb.on_disconnect {
-                on_disconnect(self.cb.ctx, conn.sess());
-            }
+            unsafe { ob_sql_sock_handler_on_disconnect(self.handler.0, conn.sess()) };
         }
     }
 
@@ -803,9 +798,7 @@ impl EventLoop {
         if conn.session_constructed.load(Ordering::Acquire)
             && !conn.close_notified.swap(true, Ordering::AcqRel)
         {
-            if let Some(on_close) = self.cb.on_close {
-                on_close(self.cb.ctx, conn.sess(), err);
-            }
+            unsafe { ob_sql_sock_handler_on_close(self.handler.0, conn.sess(), err) };
         }
     }
 
@@ -903,13 +896,13 @@ fn write_start_err(out_err: *mut i32, reason: i32) {
 }
 
 /// # Safety
-/// `addr` is a valid C string; `cb` points to a valid callbacks struct;
-/// `out_err` is null or points to writable i32 storage.
+/// `addr` is a valid C string; `handler` is the ObSqlSockHandler* the
+/// ob_sql_sock_handler_on_* shims accept; `out_err` is null or points to
+/// writable i32 storage.
 #[no_mangle]
 pub unsafe extern "C" fn nio_start(
     addr: *const c_char,
-    cb: *const NioCallbacks,
-    callbacks_size: usize,
+    handler: *mut c_void,
     session_size: usize,
     thread_count: usize,
     tls: *const NioTlsConfig,
@@ -920,8 +913,7 @@ pub unsafe extern "C" fn nio_start(
     unsafe {
         nio_start_in_dir(
             addr,
-            cb,
-            callbacks_size,
+            handler,
             session_size,
             thread_count,
             tls,
@@ -936,8 +928,7 @@ pub unsafe extern "C" fn nio_start(
 #[allow(clippy::too_many_arguments)]
 pub(crate) unsafe fn nio_start_in_dir(
     addr: *const c_char,
-    cb: *const NioCallbacks,
-    callbacks_size: usize,
+    handler: *mut c_void,
     session_size: usize,
     thread_count: usize,
     tls: *const NioTlsConfig,
@@ -947,8 +938,6 @@ pub(crate) unsafe fn nio_start_in_dir(
     local_run_dir: &Path,
 ) -> *mut NioReactor {
     if addr.is_null()
-        || cb.is_null()
-        || callbacks_size != std::mem::size_of::<NioCallbacks>()
         || session_size == 0
         || !(1..=MAX_IO_THREADS).contains(&thread_count)
         || !matches!(disable_tcp, 0 | 1)
@@ -980,16 +969,11 @@ pub(crate) unsafe fn nio_start_in_dir(
             return std::ptr::null_mut();
         }
     };
-    let cb = unsafe { *cb };
-    if cb.ctx.is_null()
-        || cb.on_connect.is_none()
-        || cb.on_readable.is_none()
-        || cb.on_disconnect.is_none()
-        || cb.on_close.is_none()
-    {
+    if handler.is_null() {
         write_start_err(out_err, NIO_START_ECALLBACKS);
         return std::ptr::null_mut();
     }
+    let handler = Handler(handler);
 
     let started = (|| -> std::io::Result<NioReactor> {
         let stop = Arc::new(AtomicBool::new(false));
@@ -1110,7 +1094,7 @@ pub(crate) unsafe fn nio_start_in_dir(
                 commit_batch: Vec::new(),
                 completions: Arc::new(Mutex::new(Vec::new())),
                 stop: stop.clone(),
-                cb,
+                handler,
                 session_size,
                 tls_config: tls_config.clone(),
                 keepalive: keepalive.clone(),

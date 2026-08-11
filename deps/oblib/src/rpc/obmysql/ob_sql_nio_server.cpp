@@ -26,13 +26,14 @@ using namespace common;
 namespace obmysql
 {
 
-// ---- Bridge: the Rust seekdb_nio reactor's callbacks -> ObSqlSockHandler ----
-namespace {
-int nio_on_connect(void* ctx, void* sess, int fd, int is_unix,
-                   NioGreetingInfo* greeting) {
-  int ret = static_cast<ObSqlSockHandler*>(ctx)->on_connect(sess, fd, is_unix != 0);
+// ---- Event shims: the Rust reactor calls these by name, handler first ----
+extern "C" int ob_sql_sock_handler_on_connect(void* handler, void* sess, int fd,
+                                              int is_unix,
+                                              NioGreetingInfo* greeting) {
+  int ret =
+      static_cast<ObSqlSockHandler*>(handler)->on_connect(sess, fd, is_unix != 0);
   if (0 == ret && NULL != greeting) {
-    // Greeting inputs travel forward through the vtable (this replaced the
+    // Greeting inputs travel forward through the shim (this replaced the
     // out-of-header reverse-FFI symbol sm_conn_greeting_info at ABI 22). The
     // session's sessid + scramble exist as soon as on_connect constructed it.
     observer::ObSMConnection &conn = static_cast<ObSqlSockSession*>(sess)->conn_;
@@ -50,21 +51,20 @@ int nio_on_connect(void* ctx, void* sess, int fd, int is_unix,
   }
   return ret;
 }
-int nio_on_readable(void *ctx, void *sess, char *body, int64_t body_len,
-                    uint64_t wire_bytes, int packet_kind,
-                    const NioMysqlCommandView *command_view,
-                    uint64_t generation) {
-  return static_cast<ObSqlSockHandler *>(ctx)->on_readable(
+extern "C" int ob_sql_sock_handler_on_readable(
+    void *handler, void *sess, char *body, int64_t body_len,
+    uint64_t wire_bytes, int packet_kind,
+    const NioMysqlCommandView *command_view, uint64_t generation) {
+  return static_cast<ObSqlSockHandler *>(handler)->on_readable(
       sess, body, body_len, wire_bytes, packet_kind, command_view, generation);
 }
-void nio_on_disconnect(void* ctx, void* sess) {
-  UNUSED(ctx);
+extern "C" void ob_sql_sock_handler_on_disconnect(void* handler, void* sess) {
+  UNUSED(handler);
   static_cast<ObSqlSockSession*>(sess)->on_disconnect();
 }
-void nio_on_close(void* ctx, void* sess, int err) {
-  static_cast<ObSqlSockHandler*>(ctx)->on_close(sess, err);
+extern "C" void ob_sql_sock_handler_on_close(void* handler, void* sess, int err) {
+  static_cast<ObSqlSockHandler*>(handler)->on_close(sess, err);
 }
-} // anonymous namespace
 
 // Free function declared in rpc/ob_request.h. The accepted descriptor is
 // immutable, so request diagnostics do not need a Rust registry lookup.
@@ -83,12 +83,6 @@ int ObSqlNioServer::start(int port, rpc::frame::ObReqDeliver* deliver,
   if (OB_FAIL(io_handler_.init(deliver))) {
     LOG_WARN("handler init fail", K(ret));
   } else {
-    NioCallbacks cb = {};
-    cb.ctx = &io_handler_;
-    cb.on_connect = nio_on_connect;
-    cb.on_readable = nio_on_readable;
-    cb.on_disconnect = nio_on_disconnect;
-    cb.on_close = nio_on_close;
     char addr[64];
     // Match the old engine's family selection: an IPv6 deployment must bind
     // the v6 wildcard or the MySQL port is unreachable. The Rust bind path
@@ -105,7 +99,7 @@ int ObSqlNioServer::start(int port, rpc::frame::ObReqDeliver* deliver,
     NioTlsConfig tls_cfg = { OB_SSL_CA_FILE, OB_SSL_CERT_FILE, OB_SSL_KEY_FILE };
     const NioTlsConfig *tls = use_tls ? &tls_cfg : NULL;
     int32_t start_err = NIO_START_OK;
-    reactor_ = nio_start(addr, &cb, sizeof(cb),
+    reactor_ = nio_start(addr, &io_handler_,
                          sizeof(ObSqlSockSession), thread_count,
                          tls, use_tls ? sizeof(tls_cfg) : 0, &start_err,
                          disable_tcp ? 1 : 0);
