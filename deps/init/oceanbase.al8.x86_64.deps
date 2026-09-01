@@ -38,6 +38,7 @@ obdevtools-cmake-3.22.1-122024092710.al8.x86_64.rpm
 obdevtools-flex-2.5.35-42024092621.al8.x86_64.rpm
 obdevtools-gcc-12.3.0-32024122017.al8.x86_64.rpm
 obdevtools-llvm-17.0.6-202026032415.al8.x86_64.rpm
+ob-sanity-abiv1-1.0.0-272026041615.al8.x86_64.rpm target=community
 
 [tools-deps]
 obshell-4.4.1.1-32026031914.al8.x86_64.rpm target=community
