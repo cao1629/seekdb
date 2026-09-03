@@ -30,8 +30,7 @@ OB_SERIALIZE_MEMBER((ObExprPLAssocIndex, ObExprOperator),
                     info_.is_index_by_varchar_);
 
 ObExprPLAssocIndex::ObExprPLAssocIndex(ObIAllocator &alloc)
-  : ObExprOperator(alloc, T_FUN_PL_ASSOCIATIVE_INDEX, N_PL_ASSOCIATIVE_INDEX, 2, VALID_FOR_GENERATED_COL, NOT_ROW_DIMENSION,
-                  false, INTERNAL_IN_ORACLE_MODE),
+  : ObExprOperator(alloc, T_FUN_PL_ASSOCIATIVE_INDEX, N_PL_ASSOCIATIVE_INDEX, 2, VALID_FOR_GENERATED_COL, NOT_ROW_DIMENSION, false),
     info_()
 {
 }
@@ -53,7 +52,6 @@ int ObExprPLAssocIndex::assign(const ObExprOperator &other)
     ret = OB_ERR_UNEXPECTED;
     LOG_WARN("expr operator is mismatch", K(other.get_type()));
   } else if (OB_FAIL(ObExprOperator::assign(other))) {
-    LOG_WARN("assign parent expr failed", K(ret));
   } else {
     info_ = static_cast<const ObExprPLAssocIndex &>(other).info_;
   }

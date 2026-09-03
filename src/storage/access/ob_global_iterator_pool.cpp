@@ -89,8 +89,7 @@ ObGlobalIteratorPool::ObGlobalIteratorPool()
     is_disabled_(false),
     get_cnt_(0),
     bucket_cnt_(0),
-    tenant_mem_user_limit_(0),
-    tenant_mem_user_hold_(0),
+    memory_budget_(0),
     allocator_(ObModIds::OB_TABLE_SCAN_ITER, OB_MALLOC_NORMAL_BLOCK_SIZE)
 {
   MEMSET(cached_node_array_, 0, sizeof(cached_node_array_));
@@ -101,7 +100,7 @@ ObGlobalIteratorPool::~ObGlobalIteratorPool()
   destroy();
 }
 
-int ObGlobalIteratorPool::mtl_init(ObGlobalIteratorPool *&pool)
+int ObGlobalIteratorPool::server_module_init(ObGlobalIteratorPool *&pool)
 {
   int ret = OB_SUCCESS;
   if (OB_ISNULL(pool)) {
@@ -110,14 +109,13 @@ int ObGlobalIteratorPool::mtl_init(ObGlobalIteratorPool *&pool)
   } else if (!pool->check_need_iterator_pool()) {
     // do not need use pool
   } else if (OB_FAIL(pool->init())) {
-    LOG_WARN("[Global Iterator Pool] Failed to init ObGlobalIteratorPool", K(ret));
   } else {
-    LOG_INFO("[Global Iterator Pool] mtl init ObGlobalIteratorPool", K(ret), KPC(pool));
+    LOG_INFO("[Global Iterator Pool] initialized", K(ret), KPC(pool));
   }
   return ret;
 }
 
-void ObGlobalIteratorPool::mtl_destroy(ObGlobalIteratorPool *&pool)
+void ObGlobalIteratorPool::server_module_destroy(ObGlobalIteratorPool *&pool)
 {
   if (OB_NOT_NULL(pool)) {
     pool->destroy();
@@ -166,8 +164,7 @@ void ObGlobalIteratorPool::destroy()
   is_disabled_ = false;
   get_cnt_ = 0;
   bucket_cnt_ = 0;
-  tenant_mem_user_limit_ = 0;
-  tenant_mem_user_hold_ = 0;
+  memory_budget_ = 0;
   allocator_.reset();
 }
 
@@ -177,10 +174,8 @@ int ObGlobalIteratorPool::get(const ObQRIterType type, CachedIteratorNode *&cach
   cache_node = nullptr;
   if (is_disabled()) {
   } else if (OB_FAIL(inner_get(type, cache_node))) {
-    STORAGE_LOG(WARN, "[Global Iterator Pool] Failed to inner get", K(ret));
   } else if (nullptr != cache_node) {
     if (OB_FAIL(cache_node->alloc_stmt_iter_pool())) {
-      LOG_WARN("[Global Iterator Pool] Failed to alloc stmt iter pool", K(ret));
     }
   }
   return ret;
@@ -199,9 +194,6 @@ int ObGlobalIteratorPool::inner_get(const ObQRIterType type, CachedIteratorNode 
   int ret = OB_SUCCESS;
   if (IS_NOT_INIT) {
     ret = OB_NOT_INIT;
-  } else if (OB_UNLIKELY(false)) {
-    ret = OB_ERR_UNEXPECTED;
-    LOG_WARN("[Global Iterator Pool] Unexpected tenant id", K(ret));
   } else if (OB_UNLIKELY(type > ITER_POOL_MAX_CACHED_ITER_TYPE || type <= T_INVALID_ITER_TYPE)) {
     ret = OB_INVALID_ARGUMENT;
     LOG_WARN("[Global Iterator Pool] Invalid argument", K(ret), K(type));
@@ -238,15 +230,12 @@ void ObGlobalIteratorPool::wash()
   if (IS_NOT_INIT) {
   } else if (is_washing()) {
   } else if (false == ATOMIC_VCAS(&is_washing_, false, true)) {
-    tenant_mem_user_limit_ = lib::get_tenant_memory_limit();
-    tenant_mem_user_hold_ = lib::get_tenant_memory_hold();
-    const bool need_wash = tenant_mem_user_hold_ * 100 > tenant_mem_user_limit_ * ITER_POOL_WASH_HIGH_THRESHOLD;
+    memory_budget_ = lib::get_memory_budget();
+    const bool need_wash = memory_budget_ < ITER_POOL_MIN_MEM_THRESHOLD
+        || calc_bucket_cnt() < bucket_cnt_;
     const bool disabled = is_disabled();
     if (!need_wash) {
-      if (disabled &&
-          calc_bucket_cnt() >= bucket_cnt_ &&
-          tenant_mem_user_hold_ * 100 < tenant_mem_user_limit_ * ITER_POOL_WASH_LOW_THRESHOLD) {
-        // current holding memory is low, enable iter pool
+      if (disabled && calc_bucket_cnt() >= bucket_cnt_) {
         ATOMIC_STORE(&is_disabled_, false);
       }
     } else if (!disabled) {
@@ -262,14 +251,12 @@ void ObGlobalIteratorPool::wash()
           }
         }
       }
-      tenant_mem_user_hold_ = lib::get_tenant_memory_hold();
-      const bool can_enable = calc_bucket_cnt() >= bucket_cnt_ && tenant_mem_user_hold_ * 100 < tenant_mem_user_limit_ * ITER_POOL_WASH_LOW_THRESHOLD;
+      const bool can_enable = memory_budget_ >= ITER_POOL_MIN_MEM_THRESHOLD
+          && calc_bucket_cnt() >= bucket_cnt_;
       if (can_enable) {
         ATOMIC_STORE(&is_disabled_, false);
       } else {
-         // current holding memory is still high or scaling down happened
-         // 1. keep iter pool disabled, enable it later
-         // 2. the following returned iters would be released directly until the iter pool is enabled
+         // Keep the pool disabled until memory_limit grows back to its initialized capacity.
       }
     }
     ATOMIC_STORE(&is_washing_, false);

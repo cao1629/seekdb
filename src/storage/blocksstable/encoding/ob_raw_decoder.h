@@ -76,20 +76,6 @@ typedef void (*raw_min_max_function)(
             uint32_t to,
             uint64_t &res);
 
-typedef void (*raw_min_max_function_with_null)(
-            const unsigned char *raw_data,
-            const uint64_t null_value,
-            uint32_t from,
-            uint32_t to,
-            uint64_t &res);
-
-typedef void (*raw_min_max_function_with_null_bitmap)(
-            const unsigned char* raw_data,
-            const uint8_t *null_bitmap,
-            uint32_t from,
-            uint32_t to,
-            uint64_t &res);
-
 class RawCompareFunctionFactory {
 public:
   static constexpr uint32_t IS_SIGNED_CNT = 2;
@@ -101,7 +87,7 @@ public:
       const bool is_signed,
       const int32_t fix_len_tag,
       const sql::ObWhiteFilterOperatorType op_type);
-  raw_compare_function_with_null get_cs_cmp_function_with_null(
+  raw_compare_function_with_null get_cmp_function_with_null(
       const int32_t fix_len_tag,
       const sql::ObWhiteFilterOperatorType op_type);
 private:
@@ -110,7 +96,7 @@ private:
   DISALLOW_COPY_AND_ASSIGN(RawCompareFunctionFactory);
 private:
   ObMultiDimArray_T<raw_compare_function, IS_SIGNED_CNT, FIX_LEN_TAG_CNT, OP_TYPE_CNT> functions_array_;
-  ObMultiDimArray_T<raw_compare_function_with_null, FIX_LEN_TAG_CNT, OP_TYPE_CNT> cs_functions_with_null_array_;
+  ObMultiDimArray_T<raw_compare_function_with_null, FIX_LEN_TAG_CNT, OP_TYPE_CNT> functions_with_null_array_;
 };
 
 class RawAggFunctionFactory
@@ -123,20 +109,12 @@ public:
   raw_min_max_function get_min_max_function(
       const int32_t fix_len_tag,
       const bool is_min);
-  raw_min_max_function_with_null get_cs_min_max_function_with_null(
-      const int32_t fix_len_tag,
-      const bool is_min);
-  raw_min_max_function_with_null_bitmap get_cs_min_max_function_with_null_bitmap(
-      const int32_t fix_len_tag,
-      const bool is_min);
 private:
   RawAggFunctionFactory();
   ~RawAggFunctionFactory() = default;
   DISALLOW_COPY_AND_ASSIGN(RawAggFunctionFactory);
 private:
   ObMultiDimArray_T<raw_min_max_function, FIX_LEN_TAG_CNT, MIN_MAX_CNT> min_max_functions_array_;
-  ObMultiDimArray_T<raw_min_max_function_with_null, FIX_LEN_TAG_CNT, MIN_MAX_CNT> cs_min_max_functions_with_null_array_;
-  ObMultiDimArray_T<raw_min_max_function_with_null_bitmap, FIX_LEN_TAG_CNT, MIN_MAX_CNT> cs_min_max_functions_with_null_bitmap_array_;
 };
 
 
@@ -187,10 +165,6 @@ public:
       const int64_t row_cap,
       common::ObDatum *datums) const override;
 
-  virtual int decode_vector(
-      const ObColumnDecoderCtx &decoder_ctx,
-      const ObIRowIndex* row_index,
-      ObVectorDecodeCtx &vector_ctx) const override;
 
   virtual int pushdown_operator(
       const sql::ObPushdownFilterExecutor *parent,
@@ -338,13 +312,6 @@ private:
         bool &result) const;
   };
 
-  int decode_vector_bitpacked(
-      const ObColumnDecoderCtx &decoder_ctx,
-      ObVectorDecodeCtx &vector_ctx) const;
-  template<typename VectorType, bool HAS_NULL>
-  int decode_vector_bitpacked(
-      const ObColumnDecoderCtx &decoder_ctx,
-      ObVectorDecodeCtx &vector_ctx) const;
 
 private:
   ObObjTypeStoreClass store_class_;
@@ -376,7 +343,6 @@ int ObRawDecoder::locate_cell_data(const char *&cell_data, int64_t &cell_len,
         var_data += sizeof(col_idx_byte);
         ObIntegerArrayGenerator gen;
         if (OB_FAIL(gen.init(var_data, col_idx_byte))) {
-          STORAGE_LOG(WARN, "init integer array generator failed", K(ret), K(header));
         } else {
           var_data += (micro_block_header.var_column_count_ - 1) * col_idx_byte;
           int64_t offset = 0;
@@ -434,7 +400,6 @@ int ObRawDecoder::batch_locate_cell_data(
             col_idx_byte = *var_data;
             var_data += sizeof(col_idx_byte);
             if (OB_FAIL(gen.init(var_data - col_idx_byte, col_idx_byte))) {
-              STORAGE_LOG(WARN, "init integer array generator failed", K(ret), K(header));
             } else {
               var_data += (micro_block_header_.var_column_count_ - 1) * col_idx_byte;
               // 0 if header.length_ == 0
@@ -455,7 +420,6 @@ int ObRawDecoder::batch_locate_cell_data(
             col_idx_byte = *var_data;
             var_data += sizeof(col_idx_byte);
             if (OB_FAIL(gen.init(var_data - col_idx_byte, col_idx_byte))) {
-              STORAGE_LOG(WARN, "init integer array generator failed", K(ret), K(header));
             } else {
               var_data += (micro_block_header_.var_column_count_ - 1) * col_idx_byte;
               // 0 if header.length_ == 0

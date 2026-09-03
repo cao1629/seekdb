@@ -24,10 +24,8 @@
  #include "share/schema/ob_priv_sql_service.h"
  #include "rootserver/ddl_task/ob_ddl_scheduler.h"
  #include "storage/compaction/ob_compaction_schedule_util.h"
- #include "storage/mview/ob_mview_sched_job_utils.h"
  #include "rootserver/ddl_task/ob_sys_ddl_util.h" // for ObSysDDLSchedulerUtil
  #include "share/ob_rpc_struct.h"
- #include "pl/ob_pl_persistent.h"
  using namespace oceanbase::lib;
  using namespace oceanbase::common;
  using namespace oceanbase::share;
@@ -64,9 +62,7 @@ ObCreateViewHelper::~ObCreateViewHelper()
  {
    int ret = OB_SUCCESS;
    if (OB_FAIL(check_inner_stat_())) {
-     LOG_WARN("fail to check inner stat", KR(ret));
-   } else if (OB_UNLIKELY((USER_VIEW != arg_.schema_.get_table_type())
-                          && (MATERIALIZED_VIEW != arg_.schema_.get_table_type()))) {
+   } else if (OB_UNLIKELY(USER_VIEW != arg_.schema_.get_table_type())) {
      ret = OB_NOT_SUPPORTED;
      LOG_WARN("not support table type", KR(ret), K(arg_.schema_.get_table_type()));
    } else if (OB_UNLIKELY(OB_INVALID_ID != arg_.schema_.get_table_id())) {
@@ -77,14 +73,6 @@ ObCreateViewHelper::~ObCreateViewHelper()
      ret = OB_NOT_SUPPORTED;
      LOG_WARN("create view with tablespace_id in 4.x is not supported",
               KR(ret), "tablespace_id", arg_.schema_.get_tablespace_id());
-   } else if (OB_UNLIKELY(OB_INVALID_ID != arg_.schema_.get_tablegroup_id())) {
-     ret = OB_NOT_SUPPORTED;
-     LOG_WARN("create view with tablegroup_id in 4.x is not supported",
-              KR(ret), "tablegroup_id", arg_.schema_.get_tablegroup_id());
-   } else if (OB_UNLIKELY(arg_.schema_.is_duplicate_table())) {
-     ret = OB_NOT_SUPPORTED;
-     LOG_WARN("create duplicate view in 4.x is not supported",
-              KR(ret), K(arg_.schema_.is_duplicate_table()));
    } else if (OB_UNLIKELY(PARTITION_LEVEL_ZERO != arg_.schema_.get_part_level())) {
      ret = OB_NOT_SUPPORTED;
      LOG_WARN("create view with partition in 4.x is not supported",
@@ -98,15 +86,10 @@ ObCreateViewHelper::~ObCreateViewHelper()
    int ret = OB_SUCCESS;
    DEBUG_SYNC(BEFORE_PARALLEL_DDL_LOCK);
    if (OB_FAIL(check_inner_stat_())) {
-     LOG_WARN("fail to check inner stat", KR(ret));
    } else if (OB_FAIL(lock_and_check_database_())) {
-     LOG_WARN("fail to lock database name", KR(ret));
    } else if (OB_FAIL(lock_and_check_view_name_())) {
-     LOG_WARN("fail to lock view name", KR(ret));
    } else if (OB_FAIL(lock_object_id_())) {
-     LOG_WARN("fail to lock object id", KR(ret));
    } else if (OB_FAIL(check_parallel_ddl_conflict_())) {
-     LOG_WARN("fail to check parallel ddl conflict", KR(ret));
    }
    DEBUG_SYNC(AFTER_PARALLEL_DDL_LOCK);
    RS_TRACE(lock_objects);
@@ -119,13 +102,9 @@ ObCreateViewHelper::~ObCreateViewHelper()
    const ObString &database_name = arg_.db_name_;
    uint64_t database_id = OB_INVALID_ID;
    if (OB_FAIL(check_inner_stat_())) {
-     LOG_WARN("fail to check inner stat", KR(ret));
    } else if (OB_FAIL(add_lock_object_by_database_name_(database_name, transaction::tablelock::SHARE))) {
-     LOG_WARN("fail to lock database by name", KR(ret), K(database_name));
    } else if (OB_FAIL(lock_databases_by_name_())) {
-     LOG_WARN("fail to lock databses by name", KR(ret));
    } else if (OB_FAIL(check_database_legitimacy_(database_name, database_id))) {
-     LOG_WARN("fail to check databse legitimacy", KR(ret), K(database_name));
    } else if (OB_UNLIKELY(database_id != arg_.schema_.get_database_id())) {
      ret = OB_ERR_PARALLEL_DDL_CONFLICT;
      LOG_WARN("database_id not consistent", KR(ret), K(database_id), K(arg_.schema_.get_database_id()));
@@ -144,9 +123,6 @@ ObCreateViewHelper::~ObCreateViewHelper()
      view name could exist or not
      if view name exist, it must be a view
 
--- oracle mode
-   check oracle object exist with name
-   get table id with name
 -- mysql mode
    get mock table id with name
    get table id with name
@@ -159,15 +135,11 @@ int ObCreateViewHelper::lock_and_check_view_name_()
   const ObString &table_name = arg_.schema_.get_table_name();
   const uint64_t database_id = arg_.schema_.get_database_id();
   if (OB_FAIL(check_inner_stat_())) {
-    LOG_WARN("fail to check to inner stat", KR(ret));
   } else if (OB_FAIL(add_lock_object_by_name_(database_name, table_name, share::schema::TABLE_SCHEMA,
              transaction::tablelock::EXCLUSIVE))) {
-    LOG_WARN("fail to lock object by table name", KR(ret), K(database_name), K(table_name));
   } else if (OB_FAIL(lock_existed_objects_by_name_())) {
-    LOG_WARN("fail to lock objects by name", KR(ret));
   }
   const ObTableSchema* table_schema = nullptr;
-  uint64_t synonym_id = OB_INVALID_ID;
   ObTableType table_type = MAX_TABLE_TYPE;
   int64_t schema_version = OB_INVALID_VERSION;
   const uint64_t session_id = arg_.schema_.get_session_id();
@@ -177,7 +149,6 @@ int ObCreateViewHelper::lock_and_check_view_name_()
     uint64_t mock_table_id = OB_INVALID_ID;
     if (OB_FAIL(schema_guard_wrapper_.get_mock_fk_parent_table_id(database_id,
                        table_name, mock_table_id))) {
-      LOG_WARN("fail to get mock table id", KR(ret), K(database_id), K(table_name));
     } else if (OB_UNLIKELY(OB_INVALID_ID != mock_table_id)) {
       if (arg_.is_alter_view_) {
         ret = OB_ERR_WRONG_OBJECT;
@@ -195,7 +166,6 @@ int ObCreateViewHelper::lock_and_check_view_name_()
       }
     } else if (OB_FAIL(schema_guard_wrapper_.get_table_id(database_id, session_id, table_name,
                                                   orig_table_id_, table_type, schema_version))) {
-      LOG_WARN("fail to get table id", KR(ret), K(database_id), K(session_id), K(table_name));
     } else if (OB_INVALID_ID == orig_table_id_) {
       // view not exist
       // alter view asks for existed view
@@ -239,18 +209,14 @@ int ObCreateViewHelper::lock_object_id_()
 {
   int ret = OB_SUCCESS;
   if (OB_FAIL(check_inner_stat_())) {
-    LOG_WARN("fail to check inner stat", KR(ret));
   } else if (OB_FAIL(add_lock_object_by_id_(arg_.schema_.get_database_id(),
              share::schema::DATABASE_SCHEMA, transaction::tablelock::SHARE))) {
-    LOG_WARN("fail to add lock databse id", KR(ret), K(arg_.schema_.get_database_id()));
   } else if (OB_INVALID_ID != orig_table_id_
              && OB_FAIL(add_lock_object_by_id_(orig_table_id_, VIEW_SCHEMA, transaction::tablelock::EXCLUSIVE))) {
     LOG_WARN("fail to add lock object", KR(ret));
   } else if (OB_FAIL(lock_existed_objects_by_id_())) {
-    LOG_WARN("fail to lock existed objects by id", KR(ret));
   } else if (OB_INVALID_ID != orig_table_id_) {
     if (OB_FAIL(schema_guard_wrapper_.get_table_schema(orig_table_id_, orig_table_schema_))) {
-      LOG_WARN("fail to get table schema", KR(ret), K_(orig_table_id));
     } else if (OB_ISNULL(orig_table_schema_)) {
       ret = OB_ERR_UNEXPECTED;
       LOG_WARN("orig table schema is null", KR(ret));
@@ -263,7 +229,6 @@ int ObCreateViewHelper::lock_object_id_()
       ret = OB_INVALID_ARGUMENT;
       LOG_WARN("invalid obj type", KR(ret), K(dep.get_ref_obj_type()));
     } else if (OB_FAIL(add_lock_object_by_id_(dep.get_ref_obj_id(), schema_type, transaction::tablelock::SHARE))) {
-      LOG_WARN("fail to add lock object", KR(ret));
     }
   }
   for (int64_t i = 0; OB_SUCC(ret) && (i < arg_.based_schema_object_infos_.count()); ++i) {
@@ -273,7 +238,6 @@ int ObCreateViewHelper::lock_object_id_()
     } else if (OB_FAIL(add_lock_object_by_id_(info.schema_id_,
                                               info.schema_type_,
                                               transaction::tablelock::SHARE))) {
-      LOG_WARN("fail to lock based object schema id", KR(ret));
     }
   }
   ObArray<std::pair<uint64_t, share::schema::ObObjectType>> dep_objs_before_lock;
@@ -281,14 +245,12 @@ int ObCreateViewHelper::lock_object_id_()
   } else if (OB_NOT_NULL(orig_table_schema_)) {
     if (OB_FAIL(ObDependencyInfo::collect_all_dep_objs(orig_table_schema_->get_table_id(),
                                                        *sql_proxy_, dep_objs_before_lock))) {
-      LOG_WARN("fail to collect dep obj", KR(ret), K(orig_table_schema_->get_table_id()));
     } else {
       for (int64_t i = 0; OB_SUCC(ret) && i < dep_objs_before_lock.count(); ++i) {
         ObSchemaType schema_type = transfer_obj_type_to_schema_type_for_dep_(dep_objs_before_lock.at(i).second);
         if (ObObjectType::VIEW == dep_objs_before_lock.at(i).second) {
           if (OB_FAIL(add_lock_object_by_id_(dep_objs_before_lock.at(i).first,
                                              VIEW_SCHEMA, transaction::tablelock::EXCLUSIVE))) {
-            LOG_WARN("fail to add lock object", KR(ret));
           }
         }
       }
@@ -296,7 +258,6 @@ int ObCreateViewHelper::lock_object_id_()
     const ObIArray<uint64_t> &trigger_list = orig_table_schema_->get_trigger_list();
     for (int64_t i = 0; OB_SUCC(ret) && i < trigger_list.count(); ++i) {
       if (OB_FAIL(add_lock_object_by_id_(trigger_list.at(i), TRIGGER_SCHEMA, transaction::tablelock::EXCLUSIVE))) {
-        LOG_WARN("fail to add lock object", KR(ret));
       }
     }
   }
@@ -309,7 +270,6 @@ int ObCreateViewHelper::lock_object_id_()
     LOG_WARN("fail to lock objects by id", KR(ret));
   } else if (OB_NOT_NULL(orig_table_schema_)) {
     if (OB_FAIL(ObDependencyInfo::collect_all_dep_objs(orig_table_schema_->get_table_id(), *sql_proxy_, dep_objs_))) {
-      LOG_WARN("fail to collect dep obj", KR(ret), K(orig_table_schema_->get_table_id()));
     } else if (dep_objs_.count() != dep_objs_before_lock.count()) {
       ret = OB_ERR_PARALLEL_DDL_CONFLICT;
       LOG_WARN("dep objs count not consistent", KR(ret), K(dep_objs_.count()), K(dep_objs_before_lock.count()));
@@ -338,66 +298,33 @@ int ObCreateViewHelper::check_parallel_ddl_conflict_()
 {
   int ret = OB_SUCCESS;
   if (OB_FAIL(check_inner_stat_())) {
-    LOG_WARN("fail to check inner stat", KR(ret));
   } else if (OB_FAIL(ObDDLHelper::check_parallel_ddl_conflict_(arg_.based_schema_object_infos_))) {
-    LOG_WARN("fail to check parallel ddl conflict", KR(ret), K_(arg_.based_schema_object_infos));
   } else if (OB_FAIL(check_table_udt_exist_(arg_.schema_))) {
-    LOG_WARN("fail to check table udt exist", KR(ret));
   } else {
     bool exist = true;
     ObArray<uint64_t> table_ids;
     ObArray<uint64_t> routine_ids;
-    ObArray<uint64_t> synonym_ids;
     ObArray<uint64_t> package_ids;
-    ObArray<uint64_t> sequence_ids;
-    ObArray<uint64_t> type_ids;
     for (int64_t i = 0; OB_SUCC(ret) && (i < arg_.dep_infos_.count()); ++i) {
       const ObDependencyInfo &dep = arg_.dep_infos_.at(i);
       if (is_inner_pl_object_id(dep.get_ref_obj_id())
           || is_inner_pl_udt_id(dep.get_ref_obj_id())) {
         // do nothing
-        // pl inner object should check in sys tenant
       } else {
         switch (dep.get_ref_obj_type()) {
           case ObObjectType::TABLE:
           case ObObjectType::VIEW:
-            // create view v1 as select * from odps_catalog.default.table;
-            // catalog table should not check 
-            // because  resolver gen table schema temporarily
-            // this schema will not store in rs do not need 
-            // to check check_max_dependency_version_
-            if (!is_external_object_id(dep.get_ref_obj_id())) {
-              if (OB_FAIL(table_ids.push_back(dep.get_ref_obj_id()))) {
-                LOG_WARN("fail to push back table id", KR(ret), K(dep));
-              }
+            if (OB_FAIL(table_ids.push_back(dep.get_ref_obj_id()))) {
             }
             break;
           case ObObjectType::PROCEDURE:
           case ObObjectType::FUNCTION:
             if (OB_FAIL(routine_ids.push_back(dep.get_ref_obj_id()))) {
-              LOG_WARN("fail to push back routine id", KR(ret), K(dep));
-            }
-            break;
-          case ObObjectType::SEQUENCE:
-            if (OB_FAIL(sequence_ids.push_back(dep.get_ref_obj_id()))) {
-              LOG_WARN("fail to push back sequence id", KR(ret), K(dep));
-            }
-            break;
-          case ObObjectType::SYNONYM:
-            if (OB_FAIL(synonym_ids.push_back(dep.get_ref_obj_id()))) {
-              LOG_WARN("fail to push back synonym id", KR(ret), K(dep));
             }
             break;
           case ObObjectType::PACKAGE:
           case ObObjectType::PACKAGE_BODY:
             if (OB_FAIL(package_ids.push_back(dep.get_ref_obj_id()))) {
-              LOG_WARN("fail to push back package id", KR(ret), K(dep));
-            }
-            break;
-          case ObObjectType::TYPE:
-          case ObObjectType::TYPE_BODY:
-            if (OB_FAIL(type_ids.push_back(dep.get_ref_obj_id()))) {
-              LOG_WARN("fail to push back type id", KR(ret), K(dep));
             }
             break;
           default:
@@ -428,7 +355,6 @@ int ObCreateViewHelper::check_max_dependency_version_(const common::ObIArray<uin
                                                       const common::ObIArray<ObSchemaIdVersion> &versions)
 {
   int ret = OB_SUCCESS;
-  LOG_TRACE("check dep version", K(obj_ids), K(versions));
   if (OB_UNLIKELY(obj_ids.count() != versions.count())) {
     ret = OB_ERR_PARALLEL_DDL_CONFLICT;
     LOG_WARN("obj_ids' count not match versions' count", KR(ret), K(obj_ids.count()), K(versions.count()),
@@ -453,13 +379,9 @@ int ObCreateViewHelper::generate_schemas_()
   const uint64_t object_cnt = 1;
   uint64_t object_id = OB_INVALID_ID;
   if (OB_FAIL(check_inner_stat_())) {
-    LOG_WARN("fail to check inner stat", KR(ret));
   } else if (OB_FAIL(gen_object_ids_(object_cnt, id_generator))) {
-    LOG_WARN("fail to gen object id", KR(ret), K(object_cnt));
   } else if (OB_FAIL(id_generator.next(object_id))) {
-    LOG_WARN("fail to get next object id", KR(ret));
   } else if (OB_FAIL(ObSchemaUtils::alloc_schema(allocator_, arg_.schema_, new_view_schema_))) {
-    LOG_WARN("fail to allocate new table schema", KR(ret));
   } else if (OB_UNLIKELY(OB_ISNULL(new_view_schema_))) {
     ret = OB_ERR_UNEXPECTED;
     LOG_WARN("new view schema is null", KR(ret));
@@ -472,17 +394,13 @@ int ObCreateViewHelper::generate_schemas_()
   if (OB_SUCC(ret) && OB_NOT_NULL(orig_table_schema_)) {
     const uint64_t orig_table_id = orig_table_schema_->get_table_id();
     if (OB_FAIL(schema_guard_wrapper_.get_obj_privs(orig_table_id, ObObjectType::TABLE, obj_privs_))) {
-      LOG_WARN("fail to get obj privs", KR(ret), K(orig_table_id));
     } else {
       for (int64_t i = 0; OB_SUCC(ret) && i < obj_privs_.count(); ++i) {
         std::pair<ObRawObjPrivArray, ObRawObjPrivArray> raw_obj_priv;
         ObObjPriv &obj_priv = obj_privs_.at(i);
         if (OB_FAIL(ObPrivPacker::raw_option_obj_priv_from_pack(obj_priv.get_obj_privs(), raw_obj_priv.first))) {
-          LOG_WARN("fail to raw option obj priv from pack", KR(ret), K(obj_priv));
         } else if (OB_FAIL(ObPrivPacker::raw_no_option_obj_priv_from_pack(obj_priv.get_obj_privs(), raw_obj_priv.second))) {
-          LOG_WARN("fail to raw no option obj priv from pack", KR(ret), K(obj_priv));
         } else if (OB_FAIL(raw_obj_privs_.push_back(raw_obj_priv))) {
-          LOG_WARN("fail to push back raw obj priv", KR(ret));
         }
       }
     }
@@ -490,7 +408,6 @@ int ObCreateViewHelper::generate_schemas_()
     for (int64_t i = 0; OB_SUCC(ret) && i < trigger_list.count(); ++i) {
       const ObTriggerInfo* trigger_info = nullptr;
       if (OB_FAIL(schema_guard_wrapper_.get_trigger_info(trigger_list.at(i), trigger_info))) {
-        LOG_WARN("fail to get trigger info", KR(ret), K(trigger_list.at(i)));
       } else if (OB_ISNULL(trigger_info)) {
         ret = OB_ERR_PARALLEL_DDL_CONFLICT;
         LOG_WARN("trigger info is null, may be dropped", KR(ret));
@@ -498,20 +415,17 @@ int ObCreateViewHelper::generate_schemas_()
         ret = OB_ERR_UNEXPECTED;
         LOG_WARN("trigger is in recyclebin", KR(ret), KP(trigger_info));
       } else if (OB_FAIL(trigger_infos_.push_back(trigger_info))) {
-        LOG_WARN("fail to push back trigger info", KR(ret));
       }
     }
     for (int64_t i = 0; OB_SUCC(ret) && i < dep_objs_.count(); ++i) {
       if (ObObjectType::VIEW == dep_objs_.at(i).second) {
         const ObTableSchema* view_schema = nullptr;
         if (OB_FAIL(schema_guard_wrapper_.get_table_schema(dep_objs_.at(i).first, view_schema))) {
-          LOG_WARN("fail to get table schema", KR(ret), K(dep_objs_.at(i).first));
         } else if (OB_ISNULL(view_schema)) {
           ret = OB_ERR_PARALLEL_DDL_CONFLICT;
         } else if (ObObjectStatus::INVALID == view_schema->get_object_status()) {
           // do nothing
         } else if (OB_FAIL(dep_views_.push_back(view_schema))) {
-          LOG_WARN("fail to push back view schema", KR(ret));
         }
       }
     }
@@ -527,7 +441,6 @@ int ObCreateViewHelper::print_view_expanded_definition_()
   int64_t buf_len = OB_MAX_VARCHAR_LENGTH;
   int64_t pos = 0;
   if (OB_FAIL(check_inner_stat_())) {
-    LOG_WARN("fail to check inner stat", KR(ret));
   } else if (OB_UNLIKELY(OB_ISNULL(new_view_schema_))) {
     ret = OB_ERR_UNEXPECTED;
     LOG_WARN("new view schema is null", KR(ret));
@@ -536,19 +449,16 @@ int ObCreateViewHelper::print_view_expanded_definition_()
       ret = OB_ALLOCATE_MEMORY_FAILED;
       LOG_WARN("fail to allocate memory", KR(ret), K(buf_len));
     } else if (OB_FAIL(schema_guard_wrapper_.get_database_schema(arg_.schema_.get_database_id(), database_schema_))) {
-      LOG_WARN("fail to get database schema", KR(ret));
     } else if (OB_ISNULL(database_schema_)) {
       ret = OB_ERR_UNEXPECTED;
       LOG_WARN("database schema is null", KR(ret), K(arg_.schema_.get_database_id()));
     } else if (OB_FAIL(databuff_printf(buf, buf_len, pos,
-               "CREATE%s %sVIEW `%s`.`%s` AS %.*s;",
+               "CREATE%s VIEW `%s`.`%s` AS %.*s;",
                arg_.if_not_exist_ ? " OR REPLACE" : "",
-               new_view_schema_->is_materialized_view() ? "MATERIALIZED " : "",
                database_schema_->get_database_name(),
                new_view_schema_->get_table_name(),
                new_view_schema_->get_view_schema().get_view_definition_str().length(),
                new_view_schema_->get_view_schema().get_view_definition_str().ptr()))) {
-      LOG_WARN("fail to print view definition", KR(ret));
     } else {
       ddl_stmt_str_.assign_ptr(buf, static_cast<int32_t>(pos));
     }
@@ -562,7 +472,6 @@ int ObCreateViewHelper::calc_schema_version_cnt_()
 {
   int ret = OB_SUCCESS;
   if (OB_FAIL(check_inner_stat_())) {
-    LOG_WARN("fail to check inner stat", KR(ret));
   } else {
     schema_version_cnt_ = 0;
     if (OB_NOT_NULL(orig_table_schema_)) {
@@ -596,15 +505,10 @@ int ObCreateViewHelper::create_schemas_()
 {
   int ret = OB_SUCCESS;
   if (OB_FAIL(check_inner_stat_())) {
-    LOG_WARN("fail to check inner stat", KR(ret));
   } else if (OB_FAIL(create_table_())) {
-    LOG_WARN("fail to create table", KR(ret));
   } else if (OB_FAIL(insert_schema_object_dependency_())) {
-    LOG_WARN("fail to insert schema object dependency", KR(ret));
   } else if (OB_FAIL(restore_obj_privs_())) {
-    LOG_WARN("fail to restore obj privs", KR(ret));
   } else if (OB_FAIL(handle_error_info_())) {
-    LOG_WARN("fail to handle error info", KR(ret));
   } else {
     int64_t last_schema_version = OB_INVALID_VERSION;
     ObDDLOperator ddl_operator(*schema_service_, *sql_proxy_);
@@ -620,12 +524,10 @@ int ObCreateViewHelper::create_schemas_()
       ret = OB_ERR_UNEXPECTED;
       LOG_WARN("new view schema is null", KR(ret));
     } else if (OB_FAIL(tsi_generator->get_current_version(last_schema_version))) {
-      LOG_WARN("fail to get end version", KR(ret), K_(arg));
     } else if (OB_UNLIKELY(last_schema_version <= 0)) {
       ret = OB_ERR_UNEXPECTED;
       LOG_WARN("last schema version is invalid", KR(ret), K(last_schema_version));
     } else if (OB_FAIL(ddl_operator.insert_ori_schema_version(get_trans_(), new_view_schema_->get_table_id(), last_schema_version))) {
-      LOG_WARN("fail to insert ori schema version", KR(ret), K(last_schema_version));
     }
   }
   RS_TRACE(create_schemas);
@@ -637,7 +539,6 @@ int ObCreateViewHelper::create_table_()
   int ret = OB_SUCCESS;
   ObSchemaService *schema_service_impl = nullptr;
   if (OB_FAIL(check_inner_stat_())) {
-    LOG_WARN("fail to check inner stat", KR(ret));
   } else if (OB_ISNULL(schema_service_impl = schema_service_->get_schema_service())) {
     ret = OB_ERR_UNEXPECTED;
     LOG_WARN("schema_service impl is null", KR(ret));
@@ -647,7 +548,6 @@ int ObCreateViewHelper::create_table_()
   } else {
     int64_t new_schema_version = OB_INVALID_VERSION;
     if (OB_FAIL(schema_service_->gen_new_schema_version(new_schema_version))) {
-      LOG_WARN("fail to gen new schema version", KR(ret));
     } else if (FALSE_IT(new_view_schema_->set_schema_version(new_schema_version))) {
     } else if (OB_FAIL(schema_service_impl->get_table_sql_service().create_table(
                        *new_view_schema_,
@@ -655,7 +555,6 @@ int ObCreateViewHelper::create_table_()
                        &ddl_stmt_str_,
                        false /*need sync schema version*/,
                        false /*is truncate table*/))) {
-      LOG_WARN("fail to create table", KR(ret), KPC(new_view_schema_));
     }
   }
   return ret;
@@ -665,7 +564,6 @@ int ObCreateViewHelper::insert_schema_object_dependency_()
 {
   int ret = OB_SUCCESS;
   if (OB_FAIL(check_inner_stat_())) {
-    LOG_WARN("fail to check inner stat", KR(ret));
   } else if (OB_UNLIKELY(OB_ISNULL(new_view_schema_))) {
     ret = OB_ERR_UNEXPECTED;
     LOG_WARN("new view schema is null", KR(ret));
@@ -673,14 +571,12 @@ int ObCreateViewHelper::insert_schema_object_dependency_()
     for (int64_t i = 0; OB_SUCC(ret) && i < arg_.dep_infos_.count(); ++i) {
       ObDependencyInfo dep;
       if (OB_FAIL(dep.assign(arg_.dep_infos_.at(i)))) {
-        LOG_WARN("fail to assign dependency info", KR(ret));
       } else {
         
         dep.set_dep_obj_id(new_view_schema_->get_table_id());
         dep.set_dep_obj_owner_id(new_view_schema_->get_table_id());
         dep.set_schema_version(new_view_schema_->get_schema_version());
         if (OB_FAIL(dep.insert_schema_object_dependency(get_trans_()))) {
-          LOG_WARN("fail to insert schema object dependency", KR(ret), K(dep));
         }
       }
     }
@@ -692,17 +588,12 @@ int ObCreateViewHelper::drop_schemas_()
 {
   int ret = OB_SUCCESS;
   if (OB_FAIL(check_inner_stat_())) {
-    LOG_WARN("fail to check inner stat", KR(ret));
   } else if (OB_ISNULL(orig_table_schema_)) {
     // do nothing
   } else if (OB_FAIL(drop_trigger_schemas_())) {
-    LOG_WARN("fail to drop trigger schemas", KR(ret));
   } else if (OB_FAIL(modify_obj_status_())) {
-    LOG_WARN("fail to modify obj status", KR(ret));
   } else if (OB_FAIL(drop_obj_privs_())) {
-    LOG_WARN("fail to drop obj privs", KR(ret));
   } else if (OB_FAIL(drop_table_())) {
-    LOG_WARN("fail to drop table", KR(ret));
   }
   RS_TRACE(drop_schemas);
   return ret;
@@ -713,7 +604,6 @@ int ObCreateViewHelper::modify_obj_status_()
   int ret = OB_SUCCESS;
   ObSchemaService* schema_service = nullptr;
   if (OB_FAIL(check_inner_stat_())) {
-    LOG_WARN("fail to check inner stat", KR(ret));
   } else if (OB_ISNULL(schema_service = schema_service_->get_schema_service())) {
     ret = OB_ERR_UNEXPECTED;
     LOG_WARN("schema_service is null", KR(ret));
@@ -725,17 +615,14 @@ int ObCreateViewHelper::modify_obj_status_()
         ret = OB_ERR_UNEXPECTED;
         LOG_WARN("view schema is null", KR(ret));
       } else if (OB_FAIL(schema_service_->gen_new_schema_version(new_schema_version))) {
-        LOG_WARN("fail to gen new schema version", KR(ret));
       } else {
         ObObjectStatus new_status = ObObjectStatus::INVALID;
         const bool update_object_status_ignore_version = false;
         ObDDLOperator ddl_operator(*schema_service_, *sql_proxy_);
         HEAP_VAR(ObTableSchema, new_dep_view) {
         if (OB_FAIL(new_dep_view.assign(*view_schema))) {
-          LOG_WARN("fail to assign new dep view", KR(ret));
         } else if (OB_FAIL(ddl_operator.update_table_status(new_dep_view, new_schema_version, new_status,
                             update_object_status_ignore_version, get_trans_()))) {
-          LOG_WARN("failed to update table status", KR(ret));
         }
         } // end heap var
       }
@@ -748,7 +635,6 @@ int ObCreateViewHelper::drop_trigger_schemas_() {
   int ret = OB_SUCCESS;
   ObSchemaService* schema_service = nullptr;
   if (OB_FAIL(check_inner_stat_())) {
-    LOG_WARN("fail to check inner stat", KR(ret));
   } else if (OB_ISNULL(schema_service = schema_service_->get_schema_service())) {
     ret = OB_ERR_UNEXPECTED;
     LOG_WARN("schema_service is null", KR(ret));
@@ -760,31 +646,19 @@ int ObCreateViewHelper::drop_trigger_schemas_() {
         ret = OB_ERR_UNEXPECTED;
         LOG_WARN("trigger info is null", KR(ret));
       } else if (OB_FAIL(schema_service_->gen_new_schema_version(new_schema_version))) {
-        LOG_WARN("fail to gen schema version", KR(ret));
       } else if (OB_FAIL(schema_service->get_trigger_sql_service().drop_trigger(*trigger_info,
                                                                     false /* drop to recyclebin */,
                                                                     new_schema_version,
                                                                     get_trans_(),
                                                                     nullptr /* ddl stmt str */))) {
-        LOG_WARN("fail to drop trigger", KR(ret), KPC(trigger_info));
       } else if (OB_FAIL(ObDependencyInfo::delete_schema_object_dependency(get_trans_(),
                                                                            trigger_info->get_trigger_id(),
                                                                            new_schema_version /* not used */,
                                                                            trigger_info->get_object_type()))) {
-        LOG_WARN("fail to delete schema object dependency", KR(ret), KPC(trigger_info));
-      } else if (OB_FAIL(pl::ObRoutinePersistentInfo::delete_dll_from_disk(get_trans_(),
-                 share::schema::ObTriggerInfo::get_trigger_spec_package_id(trigger_info->get_trigger_id()),
-                                                                           trigger_info->get_database_id()))) {
-        LOG_WARN("fail to delete ddl from disk", KR(ret), KPC(trigger_info));
-      } else if (OB_FAIL(pl::ObRoutinePersistentInfo::delete_dll_from_disk(get_trans_(),
-                 share::schema::ObTriggerInfo::get_trigger_body_package_id(trigger_info->get_trigger_id()),
-                                                                          trigger_info->get_database_id()))) {
-        LOG_WARN("fail to delete ddl from disk", KR(ret), KPC(trigger_info));
       }
       if (OB_SUCC(ret)) {
         ObErrorInfo error_info;
         if (OB_FAIL(error_info.handle_error_info(get_trans_(), trigger_info))) {
-          LOG_WARN("delete trigger error info failed.", KR(ret), K(error_info));
         }
       }
     }
@@ -797,7 +671,6 @@ int ObCreateViewHelper::drop_obj_privs_()
   int ret = OB_SUCCESS;
   ObSchemaService* schema_service = nullptr;
   if (OB_FAIL(check_inner_stat_())) {
-    LOG_WARN("fail to check inner stat", KR(ret));
   } else if (OB_ISNULL(schema_service = schema_service_->get_schema_service())) {
     ret = OB_ERR_UNEXPECTED;
     LOG_WARN("schema_service is null", KR(ret));
@@ -805,14 +678,8 @@ int ObCreateViewHelper::drop_obj_privs_()
     for (int64_t i = 0; OB_SUCC(ret) && i < obj_privs_.count(); ++i) {
       int64_t new_schema_version = OB_INVALID_VERSION;
       if (OB_FAIL(schema_service_->gen_new_schema_version(new_schema_version))) {
-        LOG_WARN("fail to gen new schema version", KR(ret));
       } else if (OB_FAIL(schema_service->get_priv_sql_service().delete_obj_priv(obj_privs_.at(i),
                                                                                new_schema_version, get_trans_()))) {
-        LOG_WARN("fail to drop obj privs", KR(ret), K(obj_privs_.at(i)));
-      }
-      // should not appear, just for compatible with old routine
-      if (OB_UNLIKELY(OB_SEARCH_NOT_FOUND != ret)) {
-        ret = OB_SUCCESS;
       }
     }
   }
@@ -823,12 +690,11 @@ int ObCreateViewHelper::handle_error_info_()
 {
   int ret = OB_SUCCESS;
   if (OB_FAIL(check_inner_stat_())) {
-    LOG_WARN("fail to check inner stat", KR(ret));
   } else if (ERROR_STATUS_HAS_ERROR != arg_.error_info_.get_error_status()) {
     // do nothing
   } else {
     ret = OB_ERR_UNEXPECTED;
-    LOG_WARN("unexpected compat mode add create view error info", KR(ret));
+    LOG_WARN("unexpected create view error info", KR(ret));
   }
   return ret;
 }
@@ -839,7 +705,6 @@ int ObCreateViewHelper::drop_table_()
   ObSchemaService* schema_service = nullptr;
   int64_t new_schema_version = OB_INVALID_VERSION;
   if (OB_FAIL(check_inner_stat_())) {
-    LOG_WARN("fail to check inner stat", KR(ret));
   } else if (OB_ISNULL(schema_service = schema_service_->get_schema_service())) {
     ret = OB_ERR_UNEXPECTED;
     LOG_WARN("schema_service is null", KR(ret));
@@ -847,7 +712,6 @@ int ObCreateViewHelper::drop_table_()
     ret = OB_ERR_UNEXPECTED;
     LOG_WARN("orig_table_schema_ is null", KR(ret));
   } else if (OB_FAIL(schema_service_->gen_new_schema_version(new_schema_version))) {
-    LOG_WARN("fail to gen new schema_version", KR(ret));
   } else if (OB_FAIL(schema_service->get_table_sql_service().drop_table(*orig_table_schema_,
                                                                         new_schema_version,
                                                                         get_trans_(),
@@ -857,13 +721,10 @@ int ObCreateViewHelper::drop_table_()
                                                                         false /* is_force_drop_lonely_lob_aux_table */,
                                                                         nullptr /* schema_guard */,
                                                                         nullptr /* drop_table_set */))) {
-    LOG_WARN("fail to drop table", KR(ret), K(*orig_table_schema_));
   } else if (OB_FAIL(ObDependencyInfo::delete_schema_object_dependency(get_trans_(),
                                                                        orig_table_schema_->get_table_id(),
                                                                        orig_table_schema_->get_schema_version() /*not used*/,
                                                                        ObObjectType::VIEW))) {
-    LOG_WARN("fail to delete schema object dependency", KR(ret), K(orig_table_schema_->get_table_id()),
-                                                        K(orig_table_schema_->get_schema_version()));
   }
   return ret;
 }
@@ -873,7 +734,6 @@ int ObCreateViewHelper::restore_obj_privs_()
   int ret = OB_SUCCESS;
   ObSchemaService* schema_service = nullptr;
   if (OB_FAIL(check_inner_stat_())) {
-    LOG_WARN("fail to check inner stat", KR(ret));
   } else if (OB_ISNULL(schema_service = schema_service_->get_schema_service())) {
     ret = OB_ERR_UNEXPECTED;
     LOG_WARN("schema_service is null", KR(ret));
@@ -896,21 +756,17 @@ int ObCreateViewHelper::restore_obj_privs_()
       if (option_priv.count() > 0) {
         int64_t new_schema_version = OB_INVALID_VERSION;
         if (OB_FAIL(schema_service_->gen_new_schema_version(new_schema_version))) {
-          LOG_WARN("fail to gen new schema version", KR(ret));
         } else if (OB_FAIL(schema_service->get_priv_sql_service().grant_table_ora_only(
           nullptr /* ddl_stmt_str */, get_trans_(), option_priv, true /* option */, obj_priv_key,
           new_schema_version, false /* is_delete */, false /* is_delete_all */))) {
-          LOG_WARN("fail to grant table ora only", KR(ret), K(option_priv));
         }
       }
       if (OB_SUCC(ret) && no_option_priv.count() > 0) {
         int64_t new_schema_version = OB_INVALID_VERSION;
         if (OB_FAIL(schema_service_->gen_new_schema_version(new_schema_version))) {
-          LOG_WARN("fail to gen new schema version", KR(ret));
         } else if (OB_FAIL(schema_service->get_priv_sql_service().grant_table_ora_only(
           nullptr /* ddl_stmt_str */, get_trans_(), no_option_priv, false /* option */,
           obj_priv_key, new_schema_version, false /* is_delete */, false /* is_delete_all */))) {
-          LOG_WARN("fail to grant table ora only", KR(ret), K(no_option_priv));
         }
       }
     }
@@ -922,11 +778,8 @@ int ObCreateViewHelper::operate_schemas_()
 {
   int ret = OB_SUCCESS;
   if (OB_FAIL(check_inner_stat_())) {
-    LOG_WARN("fail to check inner stat", KR(ret));
   } else if (OB_FAIL(drop_schemas_())) {
-    LOG_WARN("fail to drop schemas", KR(ret));
   } else if (OB_FAIL(create_schemas_())) {
-    LOG_WARN("fail create schemas", KR(ret));
   }
   return ret;
 }

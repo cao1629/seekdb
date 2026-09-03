@@ -53,11 +53,10 @@ int ObStartTransResolver::resolve(const ParseNode &parse_node)
   } else {
     stmt_ = start_stmt;
     
-    // Use initial simple sys variable while create a tenant to avoid cyclic dependence
+    // Use the built-in system-variable value to avoid cyclic initialization.
     const share::schema::ObSimpleSysVariableSchema *sys_variable = NULL;
     share::schema::ObSchemaGetterGuard *schema_guard = schema_checker_->get_schema_guard();
     if (OB_FAIL(schema_guard->get_sys_variable_schema( sys_variable))) {
-      LOG_WARN("fail to get sys variable schema", K(ret));
     } else if (OB_ISNULL(sys_variable)) {
       ret = OB_ERR_UNEXPECTED;
       LOG_WARN("sys variable should not be null", K(ret));

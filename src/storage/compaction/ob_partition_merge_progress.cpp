@@ -16,9 +16,8 @@
 
 #define USING_LOG_PREFIX STORAGE_COMPACTION
 #include "ob_partition_merge_progress.h"
-#include "share/rc/ob_module_provider.h"
-#include "ob_tenant_compaction_progress.h"
-#include "storage/column_store/ob_co_merge_dag.h"
+#include "share/rc/ob_server_runtime.h"
+#include "ob_compaction_progress.h"
 
 namespace oceanbase
 {
@@ -43,8 +42,6 @@ ObPartitionMergeProgress::ObPartitionMergeProgress(common::ObIAllocator &allocat
     latest_update_ts_(ObTimeUtility::fast_current_time()),
     estimated_finish_time_(0),
     pre_scanned_row_cnt_(0),
-    start_cg_idx_(0),
-    end_cg_idx_(0),
     is_updating_(false),
     is_empty_merge_(false),
     is_inited_(false)
@@ -71,8 +68,6 @@ void ObPartitionMergeProgress::reset()
   latest_update_ts_ = 0;
   estimated_finish_time_ = 0;
   pre_scanned_row_cnt_ = 0;
-  start_cg_idx_ = 0;
-  end_cg_idx_ = 0;
   concurrent_cnt_ = 0;
   is_updating_ = false;
 }
@@ -85,16 +80,14 @@ int64_t ObPartitionMergeProgress::to_string(char *buf, const int64_t buf_len) co
     J_OBJ_START();
     J_KV(K_(is_inited), K_(is_empty_merge), KP_(merge_dag), KP_(scanned_row_cnt_arr),
         K_(concurrent_cnt), K_(estimated_total_row_cnt),
-        K_(latest_update_ts), K_(estimated_finish_time), K_(start_cg_idx), K_(end_cg_idx));
+        K_(latest_update_ts), K_(estimated_finish_time));
     J_OBJ_END();
   }
   return pos;
 }
 
 int ObPartitionMergeProgress::init(ObBasicTabletMergeCtx *ctx,
-    ObTabletMergeDag *merge_dag,
-    const int64_t start_cg_idx,
-    const int64_t end_cg_idx)
+    ObTabletMergeDag *merge_dag)
 {
   int ret = OB_SUCCESS;
   int64_t *buf = NULL;
@@ -119,11 +112,8 @@ int ObPartitionMergeProgress::init(ObBasicTabletMergeCtx *ctx,
     concurrent_cnt_ = concurrent_cnt;
     ctx_ = ctx;
     merge_dag_ = merge_dag;
-    start_cg_idx_ = start_cg_idx;
-    end_cg_idx_ = end_cg_idx;
 
     if (OB_FAIL(inner_init_estimated_vals())) {
-      LOG_WARN("failed to init estimated vals", K(ret), KPC(ctx));
     } else {
       is_inited_ = true;
     }
@@ -170,10 +160,8 @@ int ObPartitionMergeProgress::estimate_sstables(
       // do nothing
     } else if (FALSE_IT(sstable = static_cast<const ObSSTable *>(table))) {
     } else {
-      if (sstable->is_major_sstable() && 0 == start_cg_idx_) {
-        /* the major sstable size has been accumulated in ObTenantCompactionProgressMgr::init_progress
-          * but for column store table:
-          * total data_size = (minor/mini + co_row_store_cg major) * batch execute dag number */
+      if (sstable->is_major_sstable()) {
+        // Major SSTable size is accumulated by ObCompactionProgressMgr::init_progress.
       } else {
         estimated_total_size_ += sstable->get_occupy_size();
       }
@@ -213,23 +201,19 @@ int ObPartitionMergeProgress::inner_init_estimated_vals()
     ret = OB_ERR_UNEXPECTED;
     LOG_WARN("get unexpected empty tables handle", K(ret), KPC(ctx_));
   } else if (OB_FAIL(ctx_->get_tables_handle().get_tables(tables))) {
-    LOG_WARN("failed to get tables", K(ret), K(tables));
   } else if (is_mini_merge(ctx_->get_merge_type())) {
     if (OB_FAIL(estimate_memtables(tables))) {
-      LOG_WARN("fail to estimate memtables", K(ret), K(tables));
     }
   } else if (OB_FAIL(estimate_sstables(tables))) {
-    LOG_WARN("failed to estimate sstables", K(ret), K(tables));
   }
 
   if (OB_FAIL(ret)) {
   } else if (0 == estimated_total_size_ || 0 == estimated_total_row_cnt_) {
-    estimated_finish_time_ = ObCompactionProgress::EXTRA_TIME + UPDATE_INTERVAL;
+    estimated_finish_time_ = ObCompactionProgressBase::EXTRA_TIME + UPDATE_INTERVAL;
     is_empty_merge_ = true;
   } else {
     avg_row_length_ = estimated_total_size_ * 1.0 / estimated_total_row_cnt_;
     update_estimated_finish_time(0/*cur scanned row cnt*/);
-    LOG_TRACE("success to estimate initial vals", K(ret), "param", ctx_->static_param_, KPC(this));
   }
   return ret;
 }
@@ -274,8 +258,6 @@ int ObPartitionMergeProgress::update_merge_progress(
       // 5. record cur scanned row cnt for the next update
       pre_scanned_row_cnt_ = total_scanned_row_cnt;
 
-      LOG_DEBUG("update merge progress", KPC(this),
-                "param", ctx_->static_param_, K(total_scanned_row_cnt));
 
       ATOMIC_STORE(&is_updating_, false);
     }
@@ -301,8 +283,8 @@ void ObPartitionMergeProgress::update_estimated_finish_time(const int64_t cur_sc
   int64_t start_time = current_time;
 
   if (0 == cur_scanned_row_cnt) { // init merge progress
-    int64_t spend_time = estimated_total_size_ / common::OB_DEFAULT_MACRO_BLOCK_SIZE * ObCompactionProgress::MERGE_SPEED
-        + ObCompactionProgress::EXTRA_TIME;
+    int64_t spend_time = estimated_total_size_ / common::OB_DEFAULT_MACRO_BLOCK_SIZE * ObCompactionProgressBase::MERGE_SPEED
+        + ObCompactionProgressBase::EXTRA_TIME;
     estimated_finish_time_ = spend_time + start_time + UPDATE_INTERVAL;
   } else {
     start_time = merge_dag_->get_start_time();
@@ -319,7 +301,7 @@ void ObPartitionMergeProgress::update_estimated_finish_time(const int64_t cur_sc
   }
 }
 
-int ObPartitionMergeProgress::get_progress_info(ObCompactionProgress &input_progress)
+int ObPartitionMergeProgress::get_progress_info(ObCompactionProgressBase &input_progress)
 {
   int ret = OB_SUCCESS;
 
@@ -362,33 +344,28 @@ int ObPartitionMajorMergeProgress::inner_update_progress_mgr(const int64_t total
   const int64_t scan_data_size_delta = (total_scanned_row_cnt - pre_scanned_row_cnt_) * avg_row_length_;
   const bool is_first_update = pre_scanned_row_cnt_ == 0;
 
-  if (OB_FAIL(share::g_mp->tenant_compaction_progress_mgr()->update_progress(
+  if (OB_FAIL(::oceanbase::share::server_service<::oceanbase::compaction::ObCompactionProgressMgr>()->update_progress(
           ctx_->get_merge_version(),
           is_first_update ? estimated_total_size_ : 0,
           scan_data_size_delta,
           estimated_finish_time_,
           false/*finish_flag*/))) {
-    LOG_WARN("failed to update tenant compaction progress", K(ret),
-             K(scan_data_size_delta), K(is_first_update), KPC(this));
   }
   return ret;
 }
 
 int ObPartitionMajorMergeProgress::finish_progress(
   const int64_t merge_version,
-  ObCompactionTimeGuard *time_guard,
-  const bool is_co_merge)
+  ObCompactionTimeGuard *time_guard)
 {
   int ret = OB_SUCCESS;
   estimated_finish_time_ = ObTimeUtility::fast_current_time();
-  if (OB_FAIL(share::g_mp->tenant_compaction_progress_mgr()->update_progress(merge_version,
+  if (OB_FAIL(::oceanbase::share::server_service<::oceanbase::compaction::ObCompactionProgressMgr>()->update_progress(merge_version,
                                                                    0 == pre_scanned_row_cnt_ ? estimated_total_size_ : 0, // estimate_occupy_size_delta
                                                                    estimated_total_size_ - pre_scanned_row_cnt_ * avg_row_length_,// scanned_data_size_delta
                                                                    estimated_finish_time_,
                                                                    true/*finish_flag*/,
-                                                                   time_guard,
-                                                                   is_co_merge))) {
-    LOG_WARN("failed to update progress mgr", K(ret), K(merge_version), K(is_co_merge), KPC(this));
+                                                                   time_guard))) {
   }
   return ret;
 }
@@ -405,59 +382,13 @@ int ObPartitionMajorMergeProgress::finish_merge_progress()
     LOG_WARN("ctx has unexpected type", K(ret), KPC_(ctx));
   } else if (FALSE_IT(ctx = static_cast<ObTabletMergeCtx *>(ctx_))) {
   } else if (OB_FAIL(finish_progress(ctx->get_merge_version(),
-                                     &ctx->info_collector_.time_guard_,
-                                     false/*is_co_merge*/))) {
-    LOG_WARN("failed to update progress", K(ret), KPC(this));
-  } else if (OB_FAIL(share::g_mp->tenant_compaction_progress_mgr()->update_compression_ratio(
+                                     &ctx->info_collector_.time_guard_))) {
+  } else if (OB_FAIL(::oceanbase::share::server_service<::oceanbase::compaction::ObCompactionProgressMgr>()->update_compression_ratio(
       ctx->get_merge_version(),
       ctx->get_merge_info().get_merge_history()))) {
-    LOG_WARN("failed to update progress", K(ret));
   } else {
     LOG_DEBUG("finish() success to update progress", K(ret),
               "param", ctx->get_dag_param(), KPC(this));
-  }
-  return ret;
-}
-
-int ObCOMajorMergeProgress::finish_merge_progress()
-{
-  int ret = OB_SUCCESS;
-  if (IS_NOT_INIT) {
-    ret = OB_NOT_INIT;
-    LOG_WARN("ObCOMajorMergeProgress not inited", K(ret));
-  } else if (OB_UNLIKELY(OB_ISNULL(merge_dag_) || typeid(*merge_dag_) != typeid(ObCOMergeBatchExeDag))) {
-    ret = OB_ERR_UNEXPECTED;
-    LOG_WARN("merge_dag has unexpected type", K(ret), KPC_(merge_dag));
-  } else if (OB_ISNULL(ctx_)) {
-    ret = OB_ERR_UNEXPECTED;
-    LOG_WARN("get unexpected null ctx", K(ret), KPC_(ctx));
-  } else if (typeid(*ctx_) != typeid(ObCOTabletMergeCtx)) {
-      ret = OB_ERR_UNEXPECTED;
-      LOG_WARN("ctx has unexpected type", K(ret), KPC_(ctx));
-  }
-
-  if (OB_SUCC(ret)) {
-    ObCOMergeBatchExeDag *merge_dag = static_cast<ObCOMergeBatchExeDag*>(merge_dag_);
-    ObCOTabletMergeCtx *ctx = static_cast<ObCOTabletMergeCtx*>(ctx_);
-    if (OB_FAIL(finish_progress(ctx->get_merge_version(),
-                                &merge_dag->get_time_guard(),
-                                true/*co_merge*/))) {
-      LOG_WARN("failed to update progress", K(ret), KPC(this));
-    } else {
-      for (int64_t i = start_cg_idx_; OB_SUCC(ret) && i < end_cg_idx_; ++i) {
-        if (OB_UNLIKELY(OB_ISNULL(ctx->cg_merge_info_array_) || OB_ISNULL(ctx->cg_merge_info_array_[i]))) {
-          ret = OB_ERR_UNEXPECTED;
-          LOG_WARN("merge_info is unexpected null", K(ret), KPC(ctx));
-        } else if (OB_FAIL(share::g_mp->tenant_compaction_progress_mgr()->update_compression_ratio(
-          ctx->get_merge_version(),
-          ctx->cg_merge_info_array_[i]->get_merge_history()))) {
-          LOG_WARN("failed to update progress", K(ret));
-        }
-      }
-    }
-  }
-  if (OB_SUCC(ret)) {
-    LOG_INFO("finish merge progress", "param", ctx_->static_param_, KPC(this));
   }
   return ret;
 }

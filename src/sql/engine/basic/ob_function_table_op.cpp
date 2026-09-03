@@ -49,7 +49,6 @@ int ObFunctionTableOp::inner_rescan()
 {
   int ret = OB_SUCCESS;
   if (OB_FAIL(ObOperator::inner_rescan())) {
-    LOG_WARN("failed to inner rescan", K(ret));
   } else {
     node_idx_ = 0;
     if (MY_SPEC.has_correlated_expr_) {
@@ -69,24 +68,6 @@ int ObFunctionTableOp::inner_close()
   row_count_ = 0;
   col_count_ = 0;
   value_table_ = NULL;
-  return ret;
-}
-
-//ObFunctionTableOp has its own switch_iterator
-int ObFunctionTableOp::switch_iterator()
-{
-  int ret = OB_SUCCESS;
-  if (OB_FAIL(ObOperator::inner_switch_iterator())) {
-    LOG_WARN("failed to switch iterator", K(ret));
-  } else if (OB_ISNULL(ctx_.get_my_session())) {
-    ret = OB_ERR_UNEXPECTED;
-    LOG_WARN("failed to get session", K(ret));
-  } else if (NULL == ctx_.get_my_session()->get_pl_implicit_cursor()
-            || !ctx_.get_my_session()->get_pl_implicit_cursor()->get_in_forall()) {
-    ret = OB_ITER_END;
-  } else {
-    node_idx_ = 0;
-  }
   return ret;
 }
 
@@ -140,12 +121,10 @@ int ObFunctionTableOp::inner_get_next_row_udf()
     LOG_WARN("get unexpected value", K(ret), K(MY_SPEC.value_expr_->datum_meta_.type_));
   } else if (FALSE_IT(plan_ctx->set_autoinc_id_tmp(0))) {
   } else if (OB_FAIL(ctx_.check_status())) {
-    LOG_WARN("failed to check status ", K(ret));
   } else {
     ObDatum *value = nullptr;
     if (!already_calc_) {
       if (OB_FAIL(MY_SPEC.value_expr_->eval(eval_ctx_, value))) {
-        LOG_WARN("failed to eval value expr", K(ret));
       } else if (value->is_null()) {
         //do nothing
       } else if (OB_ISNULL(value_table_ 
@@ -196,7 +175,6 @@ int ObFunctionTableOp::inner_get_next_row_udf()
       } else {
         for (int64_t i = 0; OB_SUCC(ret) && i < col_count_; ++i) {
           if (OB_FAIL(get_current_result(obj_stack[i]))) {
-            LOG_WARN("failed to get current result", K(ret), K(i));
           }
         }
       }
@@ -210,9 +188,9 @@ int ObFunctionTableOp::inner_get_next_row_udf()
           ObExpr * const &expr = MY_SPEC.column_exprs_.at(i);
           ObDatum &datum = expr->locate_datum_for_write(eval_ctx_);
           if (OB_FAIL(datum.from_obj(obj_stack[i], datum_map))) {
-            LOG_WARN("failed to convert datum", K(ret));
           } else if (is_lob_storage(obj_stack[i].get_type()) &&
-                     OB_FAIL(ob_adjust_lob_datum(obj_stack[i], expr->obj_meta_, datum_map,
+                     OB_FAIL(ob_adjust_lob_datum(get_exec_ctx(), obj_stack[i],
+                                                 expr->obj_meta_, datum_map,
                                                  get_exec_ctx().get_allocator(), datum))) {
             LOG_WARN("adjust lob datum failed", K(ret), K(obj_stack[i].get_meta()), K(expr->obj_meta_));
           }
@@ -236,7 +214,6 @@ int ObFunctionTableOp::inner_get_next_row_sys_func()
     ret = OB_ERR_UNEXPECTED;
     LOG_WARN("failed to get plan ctx", K(ret), K(plan_ctx));
   } else if (OB_FAIL(ctx_.check_status())) {
-    LOG_WARN("failed to check status ", K(ret));
   } else if (OB_FAIL(MY_SPEC.value_expr_->eval(eval_ctx_, value))) {
     if (OB_ITER_END != ret) {
       LOG_WARN("failed to eval value expr", K(ret));

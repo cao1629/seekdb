@@ -30,7 +30,6 @@ namespace storage
 {
 class ObLinkedMacroBlockItemReader;
 class ObLinkedMacroBlockItemWriter;
-struct ObSSTableLinkBlockWriteInfo;
 }
 namespace blocksstable
 {
@@ -91,12 +90,6 @@ private:
       const int64_t data_len,
       int64_t &pos);
   int64_t get_serialize_size_() const;
-  int transform_cs_encoding_data_buf_(
-      common::ObIAllocator *allocator,
-      const char *buf, 
-      const int64_t buf_size,
-      const char *&dst_buf,
-      int64_t &dst_buf_size);
   int deep_copy_micro_buf(
       const char *src_buf,
       const int64_t src_buf_len,
@@ -238,19 +231,11 @@ private:
       MacroBlockId *&other_block_ids,
       int64_t &other_block_count);
   int persist_block_ids(
-      const ObTabletID &tablet_id,
-      const int64_t tablet_transfer_seq,
-      const int64_t snapshot_version,
       common::ObArenaAllocator &allocator,
-      storage::ObSSTableLinkBlockWriteInfo * const link_write_info,
-      ObSharedObjectsWriteCtx &linked_block_write_ctx);
+      ObObjectsWriteCtx &linked_block_write_ctx);
   int write_block_ids(
-      const ObTabletID &tablet_id,
-      const int64_t tablet_transfer_seq,
-      const int64_t snapshot_version,
       storage::ObLinkedMacroBlockItemWriter &writer,
-      MacroBlockId &entry_id,
-      storage::ObSSTableLinkBlockWriteInfo * const link_write_info) const;
+      MacroBlockId &entry_id) const;
   static int flush_ids(
       const MacroBlockId *blk_ids,
       const int64_t blk_cnt,

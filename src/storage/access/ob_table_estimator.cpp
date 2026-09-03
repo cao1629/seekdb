@@ -18,42 +18,12 @@
 #include "ob_table_estimator.h"
 #include "ob_index_sstable_estimator.h"
 #include "storage/memtable/mvcc/ob_mvcc_iterator.h"
-#include "storage/ddl/ob_tablet_ddl_kv.h"
 
 namespace oceanbase
 {
 using namespace blocksstable;
 namespace storage
 {
-
-class ObDirectLoadMemtableScanRowCountEstimator
-{
-public:
-  ObDirectLoadMemtableScanRowCountEstimator(const ObTableEstimateBaseInput &base_input,
-                                            const ObDatumRange &range,
-                                            ObPartitionEst &tmp_cost)
-    : base_input_(base_input), range_(range), tmp_cost_(tmp_cost)
-  {
-  }
-  int operator()(ObDDLMemtable *ddl_memtable)
-  {
-    int ret = OB_SUCCESS;
-    if (OB_ISNULL(ddl_memtable)) {
-      ret = OB_ERR_UNEXPECTED;
-      LOG_WARN("unexpected ddl memtable is null", K(ret));
-    } else if (OB_FAIL(ObTableEstimator::estimate_sstable_scan_row_count(base_input_,
-                                                                         ddl_memtable,
-                                                                         range_,
-                                                                         tmp_cost_))) {
-      LOG_WARN("failed to estimate sstable row count", K(ret), KPC(ddl_memtable));
-    }
-    return ret;
-  }
-private:
-  const ObTableEstimateBaseInput &base_input_;
-  const ObDatumRange &range_;
-  ObPartitionEst &tmp_cost_;
-};
 
 int ObTableEstimator::estimate_row_count_for_get(
     ObTableEstimateBaseInput &base_input,
@@ -100,17 +70,14 @@ int ObTableEstimator::estimate_row_count_for_scan(
       } else if (OB_UNLIKELY(table->is_empty())) {
         continue;
       } else if (OB_FAIL(estimate_multi_scan_row_count(base_input, table, ranges, table_est))) {
-        LOG_WARN("failed to estimate cost", K(ret), K(ranges), K(table->get_key()), K(i));
       } else if (FALSE_IT(fix_invalid_logic_row(part_estimate, table_est))) {
       } else if (OB_FAIL(part_estimate.add(table_est))) {
-        LOG_WARN("failed to add table estimation", K(ret), K(i), K(table_est), K(table->get_key()));
       } else {
         record.table_id_ = base_input.table_id_;
         record.table_type_ = table->get_key().table_type_;
         record.logical_row_count_ = table_est.logical_row_count_;
         record.physical_row_count_ = table_est.physical_row_count_;
         if (OB_FAIL(est_records.push_back(record))) {
-          LOG_WARN("failed to push back est row count record", K(ret));
         } else {
           LOG_DEBUG("table estimate row count", K(ret), K(table->get_key()), K(table_est),
              "cost time", common::ObTimeUtility::current_time() - start_time);
@@ -125,7 +92,6 @@ int ObTableEstimator::estimate_row_count_for_scan(
     if (part_estimate.logical_row_count_ > part_estimate.physical_row_count_) {
       part_estimate.logical_row_count_ = part_estimate.physical_row_count_;
     }
-    LOG_DEBUG("final estimate", K(ret), K(part_estimate));
   }
   return ret;
 }
@@ -143,19 +109,16 @@ int ObTableEstimator::estimate_multi_scan_row_count(
     const ObDatumRange &range = ranges.at(i);
     bool is_single_rowkey = false;
     if (OB_FAIL(range.is_single_rowkey(rowkey_read_info.get_datum_utils(), is_single_rowkey))) {
-      STORAGE_LOG(WARN, "Failed to check range is single rowkey", K(ret), K(range));
     } else if (is_single_rowkey) {
       // Back off to get mode if range contains single row key.
       tmp_cost.logical_row_count_ = tmp_cost.physical_row_count_ = 1;
     } else if (current_table->is_sstable()) {
       ObSSTable *sstable = static_cast<ObSSTable *>(current_table);
       if (OB_FAIL(estimate_sstable_scan_row_count(base_input, sstable, range, tmp_cost))) {
-        LOG_WARN("failed to estimate sstable row count", K(ret), K(*current_table));
       }
     } else if (current_table->is_data_memtable()) {
       if (OB_FAIL(estimate_memtable_scan_row_count(base_input,
           static_cast<const memtable::ObMemtable*>(current_table), range, tmp_cost))) {
-        LOG_WARN("failed to estimate memtable row count", K(ret), K(*current_table));
       } else if (tmp_cost.is_invalid_memtable_result()) {
         ObPartitionEst sub_range_cost;
         const static int64_t sub_range_cnt = 3;
@@ -167,18 +130,14 @@ int ObTableEstimator::estimate_multi_scan_row_count(
         range.is_right_closed() ? input_range.set_right_closed() : input_range.set_right_open();
         if (OB_FAIL((static_cast<memtable::ObMemtable *>(current_table))
                         ->get_split_ranges(input_range, sub_range_cnt, store_ranges))) {
-          LOG_WARN("Failed to split ranges", K(ret), K(tmp_cost));
         } else if (store_ranges.count() > 1) {
-          LOG_TRACE("estimated logical row count may be not right, split range and do estimating again", K(tmp_cost), K(store_ranges));
           common::ObArenaAllocator allocator("OB_STORAGE_EST", OB_MALLOC_NORMAL_BLOCK_SIZE);
           for (int64_t i = 0; OB_SUCC(ret) && i < store_ranges.count(); ++i) {
             ObPartitionEst sub_cost;
             ObDatumRange datum_range;
             if (OB_FAIL(datum_range.from_range(store_ranges.at(i), allocator))) {
-              LOG_WARN("Failed to convert range", K(ret), K(i));
             } else if (OB_FAIL(estimate_memtable_scan_row_count(base_input,
                 static_cast<const memtable::ObMemtable*>(current_table), datum_range, sub_cost))) {
-              LOG_WARN("failed to estimate memtable row count", K(ret), K(*current_table));
             } else {
               sub_range_cost.add(sub_cost);
             }
@@ -190,16 +149,6 @@ int ObTableEstimator::estimate_multi_scan_row_count(
         } else {
           tmp_cost.reset();
           tmp_cost.add(sub_range_cost);
-        }
-      }
-    } else if (current_table->is_direct_load_memtable()) {
-      ObDDLKV *ddl_kv =  static_cast<ObDDLKV *>(current_table);
-      ObDirectLoadMemtableScanRowCountEstimator estimator(base_input, range, tmp_cost);
-      if (OB_FAIL(ddl_kv->access_first_ddl_memtable(estimator))) {
-        if (OB_UNLIKELY(OB_ENTRY_NOT_EXIST != ret)) {
-          STORAGE_LOG(WARN, "fail to access first ddl memtable", K(ret), KPC(current_table));
-        } else {
-          ret = OB_SUCCESS;
         }
       }
     } else {
@@ -231,14 +180,9 @@ int ObTableEstimator::estimate_sstable_scan_row_count(
     const ObIndexSSTableEstimateContext context(base_input.tablet_handle_, base_input.query_flag_);
     ObIndexBlockScanEstimator scan_estimator(context);
     if (OB_FAIL(scan_estimator.estimate_row_count(*sstable, key_range, part_est))) {
-      LOG_WARN("Fail to estimate cost of scan.", K(ret), K(base_input.table_id_));
     } else {
-      LOG_DEBUG("estimate_scan_cost", K(ret), K(base_input.table_id_),
-          K(key_range), K(part_est), K(sizeof(scan_estimator)));
     }
   }
-  LOG_DEBUG("[STORAGE ESTIMATE ROW]", K(ret), K(base_input.table_id_),
-      K(base_input.tx_id_), K(part_est), K(key_range), KPC(sstable));
   return ret;
 }
 
@@ -267,10 +211,7 @@ int ObTableEstimator::estimate_memtable_scan_row_count(
     mvcc_scan_range.start_key_ = &start_key;
     mvcc_scan_range.end_key_ = &end_key;
     if (OB_FAIL(memtable->get_mvcc_engine().estimate_scan_row_count(base_input.tx_id_, mvcc_scan_range, part_est))){
-      LOG_WARN("Fail to estimate cost of scan.", K(ret), K(base_input.table_id_));
     }
-    LOG_DEBUG("[STORAGE ESTIMATE ROW]", K(ret), K(base_input.table_id_), K(base_input.tx_id_),
-        K(part_est), K(key_range), KPC(memtable));
   }
 
   return ret;
@@ -282,10 +223,8 @@ void ObTableEstimator::fix_invalid_logic_row(
 {
   if (table_est.logical_row_count_ < 0) {
     if (part_estimate.logical_row_count_ <= 0) {
-      LOG_TRACE("[STORAGE ESTIMATE ROW] the result logical row count is already 0", K(part_estimate), K(table_est));
       table_est.logical_row_count_ = 0;
     } else if (table_est.logical_row_count_ < -part_estimate.logical_row_count_) {
-      LOG_TRACE("[STORAGE ESTIMATE ROW] the deleted row count is greater than result logical row count", K(part_estimate), K(table_est));
       table_est.logical_row_count_ = -0.5 * part_estimate.logical_row_count_;
     }
   }

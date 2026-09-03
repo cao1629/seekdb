@@ -15,8 +15,9 @@
  */
 
 #include "ob_geo.h"
+#include "share/rc/ob_server_runtime.h"
 #include "lib/container/ob_vector.h"
-#include "share/rc/ob_tenant_base.h"
+#include "share/rc/ob_server_runtime.h"
 
 namespace oceanbase {
 namespace common {
@@ -44,11 +45,7 @@ ObWkbConstIterator<T, O>::ObWkbConstIterator(self& iter, bool do_array_assign)
 {
   int ret = OB_SUCCESS; // for log
   if (iter.offsets_ptr_ != nullptr && do_array_assign) {
-    // If the tenant ID can be obtained, use tenant memory
     ObMemAttr mem_attr("GeoWkbIter");
-    if (nullptr != MTL_CTX()) {
-      
-    }
     void *buf = ob_malloc(sizeof(ObWkbIterOffsetArray), mem_attr);
     if (nullptr == buf || nullptr == (offsets_ptr_ = new(buf) ObWkbIterOffsetArray(*iter.offsets_ptr_))) {
       ret = OB_ALLOCATE_MEMORY_FAILED;
@@ -66,11 +63,7 @@ ObWkbConstIterator<T, O>::ObWkbConstIterator(const self& iter, bool do_array_ass
 {
   int ret = OB_SUCCESS; // for log
   if (iter.offsets_ptr_ != nullptr && do_array_assign) {
-    // If the tenant ID can be obtained, use tenant memory
     ObMemAttr mem_attr("GeoWkbIter");
-    if (nullptr != MTL_CTX()) {
-      
-    }
     void *buf = ob_malloc(sizeof(ObWkbIterOffsetArray), mem_attr);
     if (nullptr == buf || nullptr == (offsets_ptr_ = new(buf) ObWkbIterOffsetArray(*iter.offsets_ptr_))) {
       ret = OB_ALLOCATE_MEMORY_FAILED;
@@ -130,11 +123,7 @@ const typename ObWkbConstIterator<T, O>::self& ObWkbConstIterator<T, O>::operato
       *iter.offsets_ptr_ = *iter.offsets_ptr_;
     } else {
       int ret = OB_SUCCESS; // for log
-      // If the tenant ID can be obtained, use tenant memory
       ObMemAttr mem_attr("GeoWkbIter");
-      if (nullptr != MTL_CTX()) {
-        
-      }
       void *buf = ob_malloc(sizeof(ObWkbIterOffsetArray), mem_attr);
       if (nullptr == buf || nullptr == (offsets_ptr_ = new(buf) ObWkbIterOffsetArray(*iter.offsets_ptr_))) {
         ret = OB_ALLOCATE_MEMORY_FAILED;
@@ -363,11 +352,7 @@ void ObWkbUtils::get_sub_addr_common(const T& obj,
   INIT_SUCC(ret);
   bool enable_offset_info = true;
   if (offsets == nullptr) {
-    // If the tenant ID can be obtained, use tenant memory
     ObMemAttr mem_attr("GeoWkbIter");
-    if (nullptr != MTL_CTX()) {
-      
-    }
     void *buf = ob_malloc(sizeof(ObWkbIterOffsetArray), mem_attr);
     if (nullptr == buf || nullptr == (offsets = new(buf) ObWkbIterOffsetArray())) {
       ret = OB_ALLOCATE_MEMORY_FAILED;

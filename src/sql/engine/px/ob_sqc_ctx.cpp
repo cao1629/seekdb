@@ -19,14 +19,13 @@
 
 using namespace oceanbase::sql;
 
-ObSqcCtx::ObSqcCtx(ObPxRpcInitSqcArgs &sqc_arg) : msg_loop_(),
+ObSqcCtx::ObSqcCtx(ObPxInitSqcArgs &sqc_arg) : msg_loop_(),
       msg_proc_(sqc_arg, *this),
       receive_data_ch_msg_proc_(msg_proc_),
       transmit_data_ch_msg_proc_(msg_proc_),
       barrier_whole_msg_proc_(msg_proc_),
       winbuf_whole_msg_proc_(msg_proc_),
       sample_whole_msg_proc_(msg_proc_),
-      rollup_key_whole_msg_proc_(msg_proc_),
       rd_wf_whole_msg_proc_(msg_proc_),
       init_channel_whole_msg_proc_(msg_proc_),
       reporting_wf_piece_msg_proc_(msg_proc_),
@@ -37,23 +36,15 @@ ObSqcCtx::ObSqcCtx(ObPxRpcInitSqcArgs &sqc_arg) : msg_loop_(),
       all_tasks_finish_(false),
       interrupted_(false),
       opt_stats_gather_whole_msg_proc_(msg_proc_),
-      sp_winfunc_whole_msg_proc_(msg_proc_),
-      rd_winfunc_whole_msg_proc_(msg_proc_),
-      join_filter_count_row_whole_msg_proc_(msg_proc_),
-      arena_allocator_(),
-      direct_load_mgr_handles_(nullptr),
-      lob_direct_load_mgr_handles_(nullptr)
+      join_filter_count_row_whole_msg_proc_(msg_proc_)
 {
-  arena_allocator_.set_attr(ObMemAttr("DDL_DLM"));
 }
 
 int ObSqcCtx::add_whole_msg_provider(uint64_t op_id, dtl::ObDtlMsgType msg_type, ObPxDatahubDataProvider &provider)
 {
   int ret = OB_SUCCESS;
   if (OB_FAIL(provider.init(op_id, msg_type))) {
-    LOG_WARN("failed to init provider");
   } else if (OB_FAIL(whole_msg_provider_list_.push_back(&provider))) {
-    LOG_WARN("failed to push_back provider");
   }
   return ret;
 }

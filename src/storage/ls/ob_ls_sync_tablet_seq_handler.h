@@ -19,7 +19,7 @@
 
 #include "common/ob_tablet_id.h"
 #include "share/scn.h"
-#include "logservice/ob_log_base_type.h"
+#include "share/log/ob_log_base_type.h"
 
 namespace oceanbase
 {
@@ -29,7 +29,7 @@ namespace storage
 class ObLS;
 
 class ObLSSyncTabletSeqHandler : public logservice::ObIReplaySubHandler,
-                                 public logservice::ObIRoleChangeSubHandler,
+                                 public logservice::ObILocalLogHandler,
                                  public logservice::ObICheckpointSubHandler
 {
 public:
@@ -45,11 +45,9 @@ public:
              const palf::LSN &lsn,
              const share::SCN &scn) override final;
 
-  // for role change
-  void switch_to_follower_forcedly() override final;
-  int switch_to_leader() override final;
-  int switch_to_follower_gracefully() override final;
-  int resume_leader() override final;
+  // local lifecycle
+  void deactivate() override final;
+  int activate() override final;
 
   // for checkpoint
   int flush(share::SCN &scn) override final;

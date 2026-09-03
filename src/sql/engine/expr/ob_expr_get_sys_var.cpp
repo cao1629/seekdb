@@ -29,7 +29,7 @@ namespace sql
 
 ObExprGetSysVar::ObExprGetSysVar(ObIAllocator &alloc)
     :ObFuncExprOperator(alloc, T_OP_GET_SYS_VAR, N_GET_SYS_VAR, 2, NOT_VALID_FOR_GENERATED_COL, NOT_ROW_DIMENSION,
-                        INTERNAL_IN_MYSQL_MODE, INTERNAL_IN_ORACLE_MODE)
+                        INTERNAL_IN_MYSQL_MODE)
 {
 }
 
@@ -53,12 +53,10 @@ int ObExprGetSysVar::calc_result_type2(ObExprResType &type,
     bool is_exist = false;
     ObObjType data_type = ObMaxType;
     if (OB_FAIL(session->sys_variable_exists(var_name, is_exist))) {
-      LOG_WARN("failed to check if sys variable exists", K(var_name), K(ret));
     } else {
       if (is_exist) {
         ObBasicSysVar *sys_var_ptr = NULL;
         if (OB_FAIL(session->get_sys_variable_by_name(var_name, sys_var_ptr))) {
-          LOG_WARN("fail to get sys var from session", K(var_name), K(ret));
         } else if (OB_ISNULL(sys_var_ptr)) {
           ret = OB_ERR_UNEXPECTED;
           LOG_WARN("sys var is NULL", K(var_name), K(ret));
@@ -80,12 +78,7 @@ int ObExprGetSysVar::calc_result_type2(ObExprResType &type,
 
             int64_t sys_var_val_length = OB_MAX_SYS_VAR_VAL_LENGTH;
             if (0 == var_name.compare(OB_SV_TCP_INVITED_NODES)) {
-              uint64_t data_version = 0;
-              if (OB_FAIL(GET_MIN_DATA_VERSION(data_version))) {
-                LOG_WARN("fail to get tenant data version", KR(ret));
-              } else {
-               sys_var_val_length = OB_MAX_TCP_INVITED_NODES_LENGTH;
-              }
+              sys_var_val_length = OB_MAX_TCP_INVITED_NODES_LENGTH;
             }
  
             if (OB_SUCC(ret)) {
@@ -95,7 +88,7 @@ int ObExprGetSysVar::calc_result_type2(ObExprResType &type,
               OX(type.set_collation_type(conn_coll));
             }
           } else if (ob_is_int_uint_tc(data_type)) {
-            type.set_accuracy(ObAccuracy::MAX_ACCURACY2[MYSQL_MODE][data_type]);
+            type.set_accuracy(ObAccuracy::MAX_ACCURACY2[0][data_type]);
           }
         }
       } else {
@@ -117,7 +110,6 @@ int ObExprGetSysVar::calc_(ObObj &result, const ObString &var_name, const int64_
     ret = OB_ERR_UNEXPECTED;
     LOG_WARN("session is NULL", K(ret));
   } else if (OB_FAIL(session->get_sys_variable_by_name(var_name, sys_var_ptr))) {
-    LOG_WARN("fail to get sys var from session", K(var_name), K(ret));
   } else if (OB_ISNULL(sys_var_ptr)) {
     ret = OB_ERR_UNEXPECTED;
     LOG_WARN("sys var is NULL", K(var_name), K(ret));
@@ -126,12 +118,10 @@ int ObExprGetSysVar::calc_(ObObj &result, const ObString &var_name, const int64_
     if (sys_var_ptr->is_session_scope()) {
       // get session variable
       if (OB_FAIL(get_session_var(result, var_name, alloc, session, exec_ctx))) {
-        LOG_WARN("fail to get session var", K(var_name));
       }
     } else if (sys_var_ptr->is_global_scope()) {
       // get global variable
       if (OB_FAIL(get_sys_var_disp_obj(alloc, *session, var_name, result))) {
-        LOG_WARN("get system variable disp obj failed", K(ret));
       }
     } else {
       ret = OB_ERR_UNEXPECTED;
@@ -146,7 +136,6 @@ int ObExprGetSysVar::calc_(ObObj &result, const ObString &var_name, const int64_
     } else {
       // get global variable
       if (OB_FAIL(get_sys_var_disp_obj(alloc, *session, var_name, result))) {
-        LOG_WARN("get system variable disp obj failed", K(ret));
       }
     }
   } else if (ObSetVar::SET_SCOPE_SESSION == static_cast<ObSetVar::SetScopeType>(var_scope)) {
@@ -158,7 +147,6 @@ int ObExprGetSysVar::calc_(ObObj &result, const ObString &var_name, const int64_
     } else {
       // get session variable
       if (OB_FAIL(get_session_var(result, var_name, alloc, session, exec_ctx))) {
-        LOG_WARN("fail to get session var", K(var_name));
       }
     }
   } else {
@@ -180,7 +168,6 @@ int ObExprGetSysVar::get_session_var(ObObj &result,
     ret = OB_NOT_INIT;
     LOG_WARN("session or exec_ctx is NULL", K(ret), KP(session), KP(exec_ctx));
   } else if (OB_FAIL(session->sys_variable_exists(var_name, is_exist))) {
-    LOG_WARN("failed to check if sys variable exists", K(var_name), K(ret));
   } else if (!is_exist) {
     ret = OB_ERR_SYS_VARIABLE_UNKNOWN;
     LOG_USER_ERROR(OB_ERR_SYS_VARIABLE_UNKNOWN, var_name.length(), var_name.ptr());
@@ -194,13 +181,10 @@ int ObExprGetSysVar::get_session_var(ObObj &result,
         number::ObNumber nmb;
         number::ObNumber nmb_unit;
         if (OB_FAIL(nmb.from(ts_value, alloc))) {
-          LOG_WARN("get nmb from cur time failed", K(ret), K(ts_value));
         } else if (OB_FAIL(nmb_unit.from(USECS_PER_SEC, alloc))) {
-          LOG_WARN("get nmb failed", K(ret), K(USECS_PER_SEC));
         } else {
           number::ObNumber value;
           if (OB_FAIL(nmb.div(nmb_unit, value, alloc))) {
-            LOG_WARN( "failed to get the result of 'timestamp div 1000000'", K(ret));
           } else {
             result.set_number(value);
           }
@@ -209,12 +193,10 @@ int ObExprGetSysVar::get_session_var(ObObj &result,
     } else {
       ObBasicSysVar *sys_var = NULL;
       if (OB_FAIL(session->get_sys_variable_by_name(var_name, sys_var))) {
-        LOG_WARN("fail to get sys var from session", K(var_name), K(ret));
       } else if (OB_ISNULL(sys_var)) {
         ret = OB_ERR_UNEXPECTED;
         LOG_WARN("sys var is NULL", K(var_name), K(ret));
       } else if (OB_FAIL(sys_var->to_select_obj(alloc, *session, result))) {
-        LOG_WARN("fail to convert to select obj", K(*sys_var), K(ret));
       }
     }
   }
@@ -232,19 +214,16 @@ int ObExprGetSysVar::get_sys_var_disp_obj(common::ObIAllocator &allocator,
   ObSysVarClassType sys_var_id = SYS_VAR_INVALID;
   SMART_VAR(ObSysVarFactory, sysvar_fac) {
     if (OB_FAIL(ObBasicSessionInfo::get_global_sys_variable(&session, allocator, var_name, value))) {
-      LOG_WARN("get sys var disp obj failed", K(ret));
     } else if (SYS_VAR_INVALID == (sys_var_id = share::ObSysVarMeta::find_sys_var_id_by_name(var_name, false))) {
       ret = OB_ERR_SYS_VARIABLE_UNKNOWN;
       LOG_WARN("unknown system variable", K(var_name));
     } else if (OB_FAIL(sysvar_fac.create_sys_var(sys_var_id, sys_var))) {
-      LOG_WARN("create system variable obj failed", K(ret));
     } else if (OB_ISNULL(sys_var)) {
       ret = OB_ERR_UNEXPECTED;
       LOG_WARN("system variable is null");
     } else {
       sys_var->set_value(value);
       if (OB_FAIL(sys_var->to_select_obj(allocator, session, disp_obj))) {
-        LOG_WARN("to select obj in sys_var failed", K(ret), K(var_name));
       }
     }
   }
@@ -262,7 +241,6 @@ int ObExprGetSysVar::calc_get_sys_val_expr(const ObExpr &expr, ObEvalCtx &ctx,
     ret = OB_ERR_UNEXPECTED;
     LOG_WARN("invalid arg cnt", K(ret), K(expr.arg_cnt_));
   } else if (OB_FAIL(expr.eval_param_value(ctx, name, scope))) {
-    LOG_WARN("eval param failed", K(ret));
   } else if (OB_ISNULL(name) || OB_ISNULL(scope)) {
     ret = OB_ERR_UNEXPECTED;
     LOG_WARN("unexpected NULL name or scope", K(ret), KPC(name), KPC(scope), K(expr));
@@ -316,7 +294,6 @@ int ObExprGetSysVar::calc_get_sys_val_expr(const ObExpr &expr, ObEvalCtx &ctx,
       // do nothing
     } else if (OB_FAIL(calc_(result, var_name, var_scope, ctx.exec_ctx_.get_my_session(),
                              &ctx.exec_ctx_, calc_alloc))) {
-      LOG_WARN("calc_ failed", K(ret), K(name), K(scope));
     } else {
       const ObObjType &obj_type = result.get_type();
       const ObObjType &res_type = expr.datum_meta_.type_;
@@ -329,13 +306,11 @@ int ObExprGetSysVar::calc_get_sys_val_expr(const ObExpr &expr, ObEvalCtx &ctx,
         ObString res_str;
         ObExprStrResAlloc str_alloc(expr, ctx);
         if (OB_FAIL(deep_copy_ob_string(str_alloc, result.get_string(), res_str))) {
-          LOG_WARN("deep copy obstring failed", K(ret), K(result));
         } else {
           res_datum.set_string(res_str);
         }
       } else {
         if (OB_FAIL(res_datum.from_obj(result))) {
-          LOG_WARN("get datum from obj failed", K(ret), K(result));
         }
       }
     }

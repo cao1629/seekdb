@@ -22,7 +22,6 @@
 #include "ob_partition_merge_iter.h"
 #include "ob_tablet_merge_task.h"
 #include "share/schema/ob_table_schema.h"
-#include "sql/engine/expr/ob_expr_frame_info.h"
 #include "storage/ob_row_fuse.h"
 #include "storage/blocksstable/ob_datum_row.h"
 
@@ -52,7 +51,6 @@ class ObMergeFuser
 public:
   ObMergeFuser(common::ObIAllocator &allocator)
     : is_inited_(false),
-      enable_delete_insert_(false),
       allocator_(allocator),
       column_cnt_(0),
       result_row_(),
@@ -83,7 +81,6 @@ protected:
   virtual int end_fuse_row(const storage::ObNopPos &nop_pos, blocksstable::ObDatumRow &result_row);
 protected:
   bool is_inited_;
-  bool enable_delete_insert_;
   common::ObIAllocator &allocator_;
   int64_t column_cnt_;
   bool is_fuse_row_flag_;
@@ -122,7 +119,6 @@ int ObMergeFuser::fuse_rows(const T& row, const Args&... args)
   } else if (OB_FAIL(add_fuse_rows(row, args...))) {
     STORAGE_LOG(WARN, "Failed to fuse default row", K(ret));
   } else if (OB_FAIL(end_fuse_row(nop_pos_, result_row_))) {
-    STORAGE_LOG(WARN, "failed to end_fuse_row", K(ret));
   }
   return ret;
 }
@@ -152,11 +148,10 @@ protected:
 class ObMajorPartitionMergeFuser : public ObIPartitionMergeFuser
 {
 public:
-  ObMajorPartitionMergeFuser(common::ObIAllocator &allocator, const int64_t cluster_version)
+  explicit ObMajorPartitionMergeFuser(common::ObIAllocator &allocator)
     : ObIPartitionMergeFuser(allocator),
       default_row_(),
-      generated_cols_(allocator_),
-      cluster_version_(cluster_version)
+      generated_cols_(allocator_)
   {}
   virtual ~ObMajorPartitionMergeFuser();
   virtual int end_fuse_row(const storage::ObNopPos &nop_pos, blocksstable::ObDatumRow &result_row) override;
@@ -166,7 +161,6 @@ protected:
 protected:
   blocksstable::ObDatumRow default_row_;
   ObFixedArray<int32_t, ObIAllocator> generated_cols_;
-  const int64_t cluster_version_;
 private:
   DISALLOW_COPY_AND_ASSIGN(ObMajorPartitionMergeFuser);
 };
@@ -194,7 +188,6 @@ protected:
 class ObMergeFuserBuilder {
 public:
   static int build(const ObMergeParameter &merge_param,
-                   const int64_t cluster_version,
                    ObIAllocator &allocator,
                    ObIPartitionMergeFuser *&partition_fuser);
 };

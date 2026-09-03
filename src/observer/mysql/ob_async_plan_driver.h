@@ -26,25 +26,24 @@ namespace sql
 {
 struct ObSqlCtx;
 class ObSQLSessionInfo;
+class ObQueryRetryCtrl;
 }
 
 
 namespace observer
 {
 
-class ObIMPPacketSender;
+class ObMPPacketSender;
 class ObMySQLResultSet;
-class ObQueryRetryCtrl;
 class ObSqlEndTransCb;
 class ObAsyncPlanDriver : public ObQueryDriver
 {
 public:
-  ObAsyncPlanDriver(const ObGlobalContext &gctx,
+  ObAsyncPlanDriver(const share::ObGlobalContext &gctx,
                     const sql::ObSqlCtx &ctx,
                     sql::ObSQLSessionInfo &session,
-                    ObQueryRetryCtrl &retry_ctrl,
-                    ObIMPPacketSender &sender,
-                    bool is_prexecute = false);
+                    sql::ObQueryRetryCtrl &retry_ctrl,
+                    ObMPPacketSender &sender);
   virtual ~ObAsyncPlanDriver();
 
   virtual int response_result(ObMySQLResultSet &result);
@@ -61,4 +60,3 @@ private:
 }
 #endif /* OCEANBASE_OBSERVER_MYSQL_ASYNC_PLAN_DRIVER_ */
 //// end of header file
-

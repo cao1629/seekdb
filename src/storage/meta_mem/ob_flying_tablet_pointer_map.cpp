@@ -40,13 +40,8 @@ int ObFlyingTabletPointerMap::init()
   if (is_inited_) {
     ret = OB_INIT_TWICE;
     LOG_WARN("init twice", K(ret));
-  } else if (false) {
-    ret = OB_INVALID_ARGUMENT;
-    LOG_WARN("invalid argument", K(ret));
   } else if (OB_FAIL(map_.create(bucket_num, "FlyTabletPtrMap", "FlyTabletPtrMap"))) {
-    LOG_WARN("fail to initialize external tablet cnt map");
   } else if (OB_FAIL(bucket_lock_.init(bucket_num, ObLatchIds::DEFAULT_BUCKET_LOCK, ObMemAttr("FlyTabletMapLk")))) {
-    LOG_WARN("fail to init bucket lock", K(ret), K(bucket_num));
   } else {
     is_inited_ = true;
   }
@@ -56,14 +51,12 @@ int ObFlyingTabletPointerMap::init()
 int ObFlyingTabletPointerMap::set(const ObDieingTabletMapKey &key, ObTabletPointerHandle &handle)
 {
   int ret = OB_SUCCESS;
-  int64_t ls_id = handle.get_resource_ptr()->get_ls()->get_ls_id().id();
   if (OB_UNLIKELY(!is_inited_)) {
     ret = common::OB_NOT_INIT;
     LOG_WARN("ObResourceMap has not been inited", K(ret));
   } else if (OB_FAIL(map_.set_refactored(key, handle))) {
-    LOG_WARN("fail to set into ResourceMap", K(ret), K(key));
   } else {
-    FLOG_INFO("success to push tablet_pointer to flying_map", K(ret), K(ls_id), K(key), KP(handle.get_resource_ptr()), KPC(handle.get_resource_ptr()), K(count()));
+    FLOG_INFO("success to push tablet_pointer to flying_map", K(ret), K(key), KP(handle.get_resource_ptr()), KPC(handle.get_resource_ptr()), K(count()));
   }
   return ret;
 }
@@ -118,11 +111,9 @@ int ObFlyingTabletPointerMap::erase(const ObDieingTabletMapKey &key)
     ret = common::OB_NOT_INIT;
     LOG_WARN("ObResourceMap has not been inited", K(ret));
   } else if (OB_FAIL(check_exist(key, is_exist))) {
-    LOG_WARN("failed to check exist", K(ret), K(key));
   } else if (!is_exist) {
     LOG_WARN("this key is not exist, do not erase", K(ret), K(key));
-  } else if (OB_FAIL(inner_erase_(key))) {      
-    LOG_WARN("fail to erase meta pointer", K(ret), K(key));
+  } else if (OB_FAIL(inner_erase_(key))) {
   } 
 
   FLOG_INFO("success to remove tablet_pointer to flying_map", K(ret), K(key), K(count()));
@@ -147,7 +138,6 @@ int ObFlyingTabletPointerMap::inner_erase_(const ObDieingTabletMapKey &key)
       LOG_WARN("tablet_pointer should not be erased when tablet has been referred", 
         K(ret), KP(handle_ptr->get_resource_ptr()), KPC(handle_ptr->get_resource_ptr()) );
     } else if (OB_FAIL(map_.erase_refactored(key))) {
-      LOG_WARN("fail to erase from map", K(ret));
     }
   }
   return ret;

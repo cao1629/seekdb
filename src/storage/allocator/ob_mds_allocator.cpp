@@ -16,7 +16,8 @@
 
 
 #include "ob_mds_allocator.h"
-#include "share/rc/ob_module_provider.h"
+#include "lib/alloc/alloc_func.h"
+#include "share/rc/ob_server_runtime.h"
 #include "storage/allocator/ob_shared_memory_allocator_mgr.h"
 
 using namespace oceanbase::storage::mds;
@@ -24,65 +25,49 @@ using namespace oceanbase::storage::mds;
 namespace oceanbase {
 namespace share {
 
-int64_t ObTenantMdsAllocator::resource_unit_size()
+int64_t ObMdsAllocator::resource_unit_size()
 {
   static const int64_t MDS_RESOURCE_UNIT_SIZE = OB_MALLOC_NORMAL_BLOCK_SIZE; /* 8KB */
   return MDS_RESOURCE_UNIT_SIZE;
 }
 
-void ObTenantMdsAllocator::init_throttle_config(int64_t &resource_limit, int64_t &trigger_percentage, int64_t &max_duration)
+int64_t ObMdsAllocator::get_memory_limit()
+{
+  static constexpr int64_t MDS_MEMORY_FRACTION_DENOMINATOR = 8; // 12.5%
+  return lib::get_memory_budget() / MDS_MEMORY_FRACTION_DENOMINATOR;
+}
+
+void ObMdsAllocator::init_throttle_config(int64_t &resource_limit, int64_t &trigger_percentage, int64_t &max_duration)
 {
   // define some default value
-  const int64_t MDS_LIMIT_PERCENTAGE = 5;
   const int64_t MDS_THROTTLE_TRIGGER_PERCENTAGE = 60;
   const int64_t MDS_THROTTLE_MAX_DURATION = 2LL * 60LL * 60LL * 1000LL * 1000LL;  // 2 hours
 
-  int64_t total_memory = lib::get_tenant_memory_limit();
-
-  // Use tenant config to init throttle config
-  omt::ObTenantConfigGuard tenant_config(TENANT_CONF());
-  if (tenant_config.is_valid()) {
-    resource_limit = total_memory * tenant_config->_mds_memory_limit_percentage / 100LL;
-    trigger_percentage = tenant_config->writing_throttling_trigger_percentage;
-    max_duration = tenant_config->writing_throttling_maximum_duration;
-  } else {
+  resource_limit = get_memory_limit();
+  trigger_percentage = GCONF.writing_throttling_trigger_percentage;
+  max_duration = GCONF.writing_throttling_maximum_duration;
+  if (trigger_percentage <= 0 || max_duration <= 0) {
     SHARE_LOG_RET(WARN, OB_INVALID_CONFIG, "init throttle config with default value");
-    resource_limit = total_memory * MDS_LIMIT_PERCENTAGE / 100;
     trigger_percentage = MDS_THROTTLE_TRIGGER_PERCENTAGE;
     max_duration = MDS_THROTTLE_MAX_DURATION;
   }
 }
-void ObTenantMdsAllocator::adaptive_update_limit(const int64_t holding_size,
-                                                 const int64_t config_specify_resource_limit,
-                                                 int64_t &resource_limit,
-                                                 int64_t &last_update_limit_ts,
-                                                 bool &is_updated)
+void ObMdsAllocator::adaptive_update_limit(const int64_t holding_size,
+                                           const int64_t config_specify_resource_limit,
+                                           int64_t &resource_limit,
+                                           int64_t &last_update_limit_ts,
+                                           bool &is_updated)
 {
-  // do nothing
+  (void)holding_size;
+  (void)last_update_limit_ts;
+  is_updated = resource_limit != config_specify_resource_limit;
+  resource_limit = config_specify_resource_limit;
 }
 
-// moved definition to storage mds_tenant_service.cpp(storage real user)
-
-// moved definition to storage mds_tenant_service.cpp(MDS service-record real user)
-
-// moved definition to storage mds_tenant_service.cpp(MDS service-record real user)
-
-// moved definition to storage mds_tenant_service.cpp(MDS service-record real user)
-
-// moved definition to storage mds_tenant_service.cpp(MDS service-record real user)
-
-// moved definition to storage mds_tenant_service.cpp(MDS service-record real user)
-
-// moved definition to storage mds_tenant_service.cpp(MDS service-record real user)
-
-// moved definition to storage mds_tenant_service.cpp(MDS service-record real user)
-
-// moved definition to storage mds_tenant_service.cpp(MDS service-record real user)
-
-ObMdsThrottleGuard::ObMdsThrottleGuard(const share::ObLSID ls_id, const bool for_replay, const int64_t abs_expire_time)
-    : ls_id_(ls_id), for_replay_(for_replay), abs_expire_time_(abs_expire_time)
+ObMdsThrottleGuard::ObMdsThrottleGuard(const bool for_replay, const int64_t abs_expire_time)
+    : for_replay_(for_replay), abs_expire_time_(abs_expire_time)
 {
-  throttle_tool_ = &(share::g_mp->shared_mem_alloc_mgr()->share_resource_throttle_tool());
+  throttle_tool_ = &(::oceanbase::share::server_service<::oceanbase::share::ObSharedMemAllocMgr>()->share_resource_throttle_tool());
   if (0 == abs_expire_time) {
     abs_expire_time_ =
         ObClockGenerator::getClock() + ObThrottleUnit<ObMdsThrottleGuard>::DEFAULT_MAX_THROTTLE_TIME;
@@ -90,16 +75,13 @@ ObMdsThrottleGuard::ObMdsThrottleGuard(const share::ObLSID ls_id, const bool for
   share::mds_throttled_alloc() = 0;
 }
 
-// moved definition to the upper-layer owner cpp(real upper-layer symbol user, declaration remains in the header, transitional state)
-
-
-void *ObTenantMdsAllocator::alloc(const int64_t size)
+void *ObMdsAllocator::alloc(const int64_t size)
 {
   int64_t abs_expire_time = THIS_WORKER.get_timeout_ts();
   return alloc(size, abs_expire_time);
 }
 
-void *ObTenantMdsAllocator::alloc(const int64_t size, const ObMemAttr &attr)
+void *ObMdsAllocator::alloc(const int64_t size, const ObMemAttr &attr)
 {
   UNUSED(attr);
   void *obj = alloc(size);
@@ -107,40 +89,39 @@ void *ObTenantMdsAllocator::alloc(const int64_t size, const ObMemAttr &attr)
   return obj;
 }
 
-void *ObTenantMdsAllocator::alloc(const int64_t size, const int64_t abs_expire_time)
+void *ObMdsAllocator::alloc(const int64_t size, const int64_t abs_expire_time)
 {
   bool is_throttled = false;
   // record alloc resource in throttle tool, but do not throttle immediately
   // ObMdsThrottleGuard calls the real throttle logic
-  (void)throttle_tool_->alloc_resource<ObTenantMdsAllocator>(size, abs_expire_time, is_throttled);
+  (void)throttle_tool_->alloc_resource<ObMdsAllocator>(size, abs_expire_time, is_throttled);
   if (OB_UNLIKELY(is_throttled)) {
     share::mds_throttled_alloc() += size;
   }
   void *obj = allocator_.alloc(size);
-  MDS_LOG(DEBUG, "mds alloc ", K(size), KP(obj), K(abs_expire_time));
   return obj;
 }
 
-void ObTenantMdsAllocator::free(void *ptr)
+void ObMdsAllocator::free(void *ptr)
 {
   allocator_.free(ptr);
 }
 
-void ObTenantMdsAllocator::set_attr(const ObMemAttr &attr) { allocator_.set_attr(attr); }
+void ObMdsAllocator::set_attr(const ObMemAttr &attr) { allocator_.set_attr(attr); }
 
-void *ObTenantBufferCtxAllocator::alloc(const int64_t size)
+void *ObBufferCtxAllocator::alloc(const int64_t size)
 {
-  return share::mtl_malloc(size, ObMemAttr("MDS_CTX_DEFAULT", ObCtxIds::MDS_CTX_ID));
+  return share::server_malloc(size, ObMemAttr("MDS_CTX_DEFAULT", ObCtxIds::MDS_CTX_ID));
 }
 
-void *ObTenantBufferCtxAllocator::alloc(const int64_t size, const ObMemAttr &attr)
+void *ObBufferCtxAllocator::alloc(const int64_t size, const ObMemAttr &attr)
 {
-  return share::mtl_malloc(size, attr);
+  return share::server_malloc(size, attr);
 }
 
-void ObTenantBufferCtxAllocator::free(void *ptr)
+void ObBufferCtxAllocator::free(void *ptr)
 {
-  share::mtl_free(ptr);
+  share::server_free(ptr);
 }
 
 }  // namespace share

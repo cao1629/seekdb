@@ -33,13 +33,7 @@ public:
     NORMAL   = 1,
     DELETING = 2, // deprecated after 4.1
     DELETED  = 3,
-    TRANSFER_OUT = 4,
-    TRANSFER_IN  = 5,
-    TRANSFER_OUT_DELETED = 6,
-    NONE = 7,
-    SPLIT_SRC = 8,
-    SPLIT_DST = 9,
-    SPLIT_SRC_DELETED = 10,
+    NONE = 4,
     MAX,
   };
 public:
@@ -72,13 +66,7 @@ private:
     "NORMAL",
     "DELETING",
     "DELETED",
-    "TRANSFER_OUT",
-    "TRANSFER_IN",
-    "TRANSFER_OUT_DELETED",
     "NONE",
-    "SPLIT_SRC",
-    "SPLIT_DST",
-    "SPLIT_SRC_DELETED",
     "MAX"
   };
 

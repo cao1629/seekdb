@@ -15,7 +15,6 @@
  */
 
 #include "ob_deadlock_inner_table_service.h"
-#include "rootserver/ob_root_service.h"
 #include "share/ob_server_struct.h"
 
 namespace oceanbase
@@ -35,7 +34,6 @@ int ObDeadLockInnerTableService::init()
     ret = OB_NOT_INIT;
     DETECT_LOG(WARN, "meta_db_pool_ is not initialized", K(ret));
   } else if (OB_FAIL(storage_.init(GCTX.meta_db_pool_))) {
-    DETECT_LOG(WARN, "failed to init deadlock event history storage", K(ret));
   }
   return ret;
 }
@@ -72,7 +70,6 @@ int ObDeadLockInnerTableService::insert(const ObDetectorInnerReportInfo &inner_i
     ObDeadlockEventHistoryEntry entry;
     
     entry.event_id_ = inner_info.get_event_id();
-    entry.svr_addr_ = inner_info.get_addr();
     entry.detector_id_ = inner_info.get_detector_id();
     entry.report_time_ = current_ts;
     entry.cycle_idx_ = idx;
@@ -136,7 +133,6 @@ int ObDeadLockInnerTableService::insert_all(const ObIArray<ObDetectorInnerReport
       ObDeadlockEventHistoryEntry entry;
       
       entry.event_id_ = info.get_event_id();
-      entry.svr_addr_ = info.get_addr();
       entry.detector_id_ = info.get_detector_id();
       entry.report_time_ = current_ts;
       entry.cycle_idx_ = i + 1;

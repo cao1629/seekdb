@@ -16,7 +16,6 @@
 
 #define USING_LOG_PREFIX STORAGE
 #include "ob_table_store_stat_mgr.h"
-#include "share/ob_thread_mgr.h"
 
 namespace oceanbase
 {
@@ -83,7 +82,6 @@ bool ObTableStoreStat::is_valid() const
 {
   bool valid = true;
   if (row_cache_hit_cnt_ < 0 || row_cache_miss_cnt_ < 0 || row_cache_put_cnt_ < 0
-      || bf_filter_cnt_ < 0 || bf_empty_read_cnt_ < 0 || bf_access_cnt_ < 0
       || block_cache_hit_cnt_ < 0 || block_cache_miss_cnt_ < 0
       || access_row_cnt_ < 0 || output_row_cnt_ < 0 || fuse_row_cache_hit_cnt_ < 0
       || fuse_row_cache_miss_cnt_ < 0 || fuse_row_cache_put_cnt_ < 0

@@ -23,8 +23,7 @@
 #include "lib/file/ob_file.h"
 #include "sql/resolver/cmd/ob_load_data_stmt.h"
 #include "sql/engine/cmd/ob_load_data_parser.h"
-#include "share/io/ob_backup_storage_info.h"
-#include "observer/mysql/obmp_packet_sender.h"
+#include "query/protocol/ob_client_protocol.h"
 
 namespace oceanbase
 {
@@ -43,8 +42,7 @@ public:
   ObLoadFileLocation file_location_;
   ObString filename_;
   ObCSVGeneralFormat::ObCSVCompression compression_format_;
-  share::ObBackupStorageInfo access_info_;
-  observer::ObIMPPacketSender *packet_handle_;
+  ObIClientPacketChannel *packet_handle_;
   ObSQLSessionInfo *session_;
   int64_t timeout_ts_;  // A job always has a deadline and file reading may cost a long time
 
@@ -147,27 +145,6 @@ private:
   bool                 is_inited_;
 };
 
-class ObRandomOSSReader : public ObFileReader
-{
-public:
-  ObRandomOSSReader(ObIAllocator &allocator);
-  virtual ~ObRandomOSSReader();
-  int open(const share::ObBackupStorageInfo &storage_info, const ObString &filename);
-  
-  int read(char *buf, int64_t count, int64_t &read_size) override;
-  int seek(int64_t offset) override;
-  int get_file_size(int64_t &file_size) override;
-  int64_t get_offset() const override { return offset_; }
-  bool eof() const override { return eof_; }
-  
-private:
-  ObIODevice *device_handle_;
-  ObIOFd      fd_;
-  int64_t     offset_;
-  bool        eof_;
-  bool        is_inited_;
-};
-
 /**
  * A strem file reader whose data source is mysql packets
  * Refer to LOAD DATA LOCAL INFILE for more detail.
@@ -183,7 +160,7 @@ public:
   virtual ~ObPacketStreamFileReader();
   
   int open(const ObString &filename,
-           observer::ObIMPPacketSender &packet_handle,
+           ObIClientPacketChannel &packet_handle,
            ObSQLSessionInfo *session,
            int64_t timeout_ts);
 
@@ -202,7 +179,7 @@ private:
   bool is_killed() const;
   
 private:
-  observer::ObIMPPacketSender *packet_handle_; // We use this handle to read packet from client
+  ObIClientPacketChannel *packet_handle_; // We use this handle to read packet from client
   ObSQLSessionInfo *session_;
   int64_t timeout_ts_; // The deadline of job
   

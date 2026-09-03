@@ -114,7 +114,6 @@ public:
   {
     table_location_keys_.reset();
   }
-  virtual int init(ObTaskInfo &task_info) override;
   virtual void set_deserialize_allocator(common::ObIAllocator *allocator) override;
   inline int64_t get_parallelism() { return parallelism_; }
   void set_granule_pump(ObGranulePump *pump) { pump_ = pump; }
@@ -131,7 +130,7 @@ public:
 
 private:
 public:
-  // the dop, the QC decide the dop before our task send to SQC server
+  // The QC decides the DOP before the task is handed to the local SQC.
   // but the dop may be change as the worker server don't has enough process.
   int64_t parallelism_;
   // In affinitize mode GI needs to know the current task id of the GI to pull the corresponding partition task
@@ -190,9 +189,8 @@ public:
   // Whether it is a nlj with conditional descent.
   bool nlj_with_param_down_;
   common::ObFixedArray<int64_t, ObIAllocator> pw_dml_tsc_ids_;
-  // Currently all properties of GI are set in the flag, use the flag when possible instead of the above
-  // A few separate variables. Currently, due to compatibility reasons, the above variables cannot be deleted, newly added
-  // The attributes of GI are all determined through this flag.
+  // gi_attri_flag_ is the canonical packed representation of GI attributes;
+  // the direct fields above remain the runtime accessors used by existing paths.
   uint64_t gi_attri_flag_;
   // FULL PARTITION WISE case, GI can be allocated on INSERT/REPLACE operators, GI will control the task partitioning of the insert/replace table
   // for partition join filter
@@ -259,7 +257,7 @@ public:
   { return OPEN_SELF_FIRST; }
   int get_next_granule_task(bool prepare = false, bool round_robin = false);
   int64_t get_worker_id() const { return worker_id_; }
-  ScanResumePoint &get_resume_point() { return scan_resume_point_; }
+  storage::ScanResumePoint &get_resume_point() { return scan_resume_point_; }
   inline void set_paused() { scan_resume_point_.set_paused(); }
   inline bool is_paused() const { return scan_resume_point_.is_paused(); }
   inline void clear_paused() { scan_resume_point_.clear_paused(); }
@@ -377,7 +375,7 @@ private:
   // worker may enter gi pause sync point multiple times, use has_add_to_finished_worker_ to
   // distinguish whether the counter has record it.
   bool has_add_to_finished_worker_;
-  ScanResumePoint scan_resume_point_;
+  storage::ScanResumePoint scan_resume_point_;
   int64_t latest_pause_output_;
   ObGranulePumpArgs *pump_arg_;
 };

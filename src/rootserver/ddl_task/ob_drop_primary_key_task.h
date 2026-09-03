@@ -24,8 +24,6 @@ namespace oceanbase
 {
 namespace rootserver
 {
-class ObRootService;
-
 class ObDropPrimaryKeyTask final : public ObTableRedefinitionTask
 {
 public:
@@ -37,10 +35,9 @@ public:
       const int64_t task_id,
       const share::ObDDLType &ddl_type,
       const int64_t parallelism,
-      const int64_t consumer_group_id,
       const int32_t sub_task_trace_id,
       const obcall::ObAlterTableArg &alter_table_arg,
-      const uint64_t tenant_data_version,
+      const uint64_t data_format_version,
       const int64_t task_status = share::ObDDLTaskStatus::PREPARE,
       const int64_t snapshot_version = 0);
   virtual int process() override;

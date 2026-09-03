@@ -18,14 +18,10 @@
 #define OCEANBASE_STORAGE_COMPACTION_OB_SCHEDULE_DAG_FUNC_H_
 #include "lib/container/ob_iarray.h"
 #include "storage/compaction/ob_compaction_util.h"
-#include "observer/scheduler/ob_tenant_dag_scheduler.h"
+#include "data_plane/scheduler/ob_dag_scheduler.h"
 
 namespace oceanbase
 {
-namespace share
-{
-class ObLSID;
-}
 namespace storage
 {
 namespace mds
@@ -33,23 +29,18 @@ namespace mds
 class ObMdsTableMergeDagParam;
 }
 struct ObDDLTableMergeDagParam;
-struct ObTabletSplitParam;
-struct ObLobSplitParam;
 struct ObTabletForkParam;
-class ObTabletSplitDag;
-class ObTabletLobSplitDag;
 class ObComplementDataDag;
 class ObTablet;
 }
 
 namespace share
 {
-class ObTenantDagScheduler;
+class ObDagScheduler;
 }
 namespace compaction
 {
 struct ObTabletMergeDagParam;
-struct ObCOMergeDagParam;
 struct ObTabletSchedulePair;
 struct ObBatchFreezeTabletsParam;
 
@@ -65,22 +56,6 @@ public:
   static int schedule_ddl_table_merge_dag(
       storage::ObDDLTableMergeDagParam &param,
       const bool is_emergency = false);
-  static int schedule_tablet_split_dag(
-      storage::ObTabletSplitParam &param,
-      const bool is_emergency = false);
-  static int schedule_and_get_tablet_split_dag(
-      storage::ObTabletSplitParam &param,
-      storage::ObTabletSplitDag *&dag,
-      const bool is_emergency = false);
-  static int schedule_lob_tablet_split_dag(
-      storage::ObLobSplitParam &param,
-      const bool is_emergency = false);
-  static int schedule_tablet_co_merge_dag_net(
-      ObCOMergeDagParam &param);
-  static int schedule_and_get_lob_tablet_split_dag(
-      storage::ObLobSplitParam &param,
-      storage::ObTabletLobSplitDag *&dag,
-      const bool is_emergency = false);
   static int schedule_tablet_fork_dag(
       storage::ObTabletForkParam &param,
       const bool is_emergency = false);
@@ -95,19 +70,9 @@ class ObDagParamFunc final
 {
 public:
   static int fill_param(
-    const share::ObLSID &ls_id,
     const storage::ObTablet &tablet,
     const ObMergeType merge_type,
     const int64_t &merge_snapshot_version,
-    const ObExecMode exec_mode,
-    const share::ObDagId *dag_net_id,
-    ObCOMergeDagParam &param);
-  static int fill_param(
-    const share::ObLSID &ls_id,
-    const storage::ObTablet &tablet,
-    const ObMergeType merge_type,
-    const int64_t &merge_snapshot_version,
-    const ObExecMode exec_mode,
     ObTabletMergeDagParam &param);
 };
 

@@ -16,6 +16,7 @@
 
 #define USING_LOG_PREFIX SQL_ENG
 #include "ob_physical_plan_ctx.h"
+#include "share/ob_autoincrement_service.h"
 #include "src/sql/engine/ob_des_exec_context.h"
 #include "sql/engine/expr/ob_expr_sql_udt_utils.h"
 
@@ -26,34 +27,6 @@ using namespace share;
 using namespace transaction;
 namespace sql
 {
-DEF_TO_STRING(ObRemoteSqlInfo)
-{
-  int64_t pos = 0;
-  J_OBJ_START();
-  J_KV(K_(use_ps),
-       K_(is_batched_stmt),
-       K_(is_original_ps_mode),
-       K_(ps_param_cnt),
-       K_(remote_sql));
-  J_COMMA();
-  J_NAME("ps_params");
-  J_COLON();
-  if (OB_ISNULL(ps_params_) || ps_param_cnt_ <= 0) {
-    J_NULL();
-  } else {
-    J_ARRAY_START();
-    for (int64_t i = 0; pos < buf_len && i < ps_param_cnt_; ++i) {
-      BUF_PRINTO(ps_params_->at(i));
-      if (i != ps_param_cnt_ - 1) {
-        J_COMMA();
-      }
-    }
-    J_ARRAY_END();
-  }
-  J_OBJ_END();
-  return pos;
-}
-
 ObPhysicalPlanCtx::ObPhysicalPlanCtx(common::ObIAllocator &allocator)
     : allocator_(allocator),
       tsc_snapshot_timestamp_(0),
@@ -68,11 +41,9 @@ ObPhysicalPlanCtx::ObPhysicalPlanCtx(common::ObIAllocator &allocator)
       last_insert_id_session_(0),
       expr_op_size_(0),
       is_ignore_stmt_(false),
-      bind_array_count_(0),
-      bind_array_idx_(0),
-      tenant_schema_version_(OB_INVALID_VERSION),
+      runtime_schema_version_(OB_INVALID_VERSION),
       orig_question_mark_cnt_(0),
-      tenant_srs_version_(OB_INVALID_VERSION),
+      srs_version_(OB_INVALID_VERSION),
       array_param_groups_(),
       affected_rows_(0),
       is_affect_found_row_(false),
@@ -94,29 +65,22 @@ ObPhysicalPlanCtx::ObPhysicalPlanCtx(common::ObIAllocator &allocator)
       is_select_into_(false),
       is_result_accurate_(true),
       foreign_key_checks_(true),
-      unsed_worker_count_since_222rel_(0),
       exec_ctx_(NULL),
       table_row_count_list_(allocator),
       batched_stmt_param_idxs_(allocator),
       implicit_cursor_infos_(allocator),
       cur_stmt_id_(-1),
       is_or_expand_transformed_(false),
-      is_show_seed_(false),
       is_multi_dml_(false),
       field_array_(nullptr),
       is_ps_protocol_(false),
       plan_start_time_(0),
       ps_fixed_array_index_(nullptr),
       subschema_ctx_(allocator_),
-      enable_rich_format_(false),
       all_local_session_vars_(allocator),
-      mview_ids_(allocator),
-      last_refresh_scns_(allocator),
       total_memstore_read_row_count_(0),
       total_ssstore_read_row_count_(0),
-      is_direct_insert_plan_(false),
-      check_pdml_affected_rows_(false),
-      enable_adaptive_pc_(false)
+      check_pdml_affected_rows_(false)
 {
 }
 
@@ -125,24 +89,15 @@ ObPhysicalPlanCtx::~ObPhysicalPlanCtx()
   destroy();
 }
 
-void ObPhysicalPlanCtx::restore_param_store(const int64_t original_param_cnt)
-{
-  for (int64_t i = param_store_.count(); i > original_param_cnt; --i) {
-    param_store_.pop_back();
-  }
-}
-
 int ObPhysicalPlanCtx::reserve_param_space(int64_t param_count)
 {
   int ret = OB_SUCCESS;
   ObObjParam null_obj;
   if (OB_FAIL(param_store_.reserve(param_count))) {
-    LOG_WARN("reserve param store failed", K(ret));
   }
   int64_t N = param_count - param_store_.count();
   for (int64_t i = 0; OB_SUCC(ret) && i < N; ++i) {
     if (OB_SUCCESS != (ret = param_store_.push_back(null_obj))) {
-      LOG_WARN("failed to add param", K(ret), K(i), K(N));
     }
   }
   return ret;
@@ -156,7 +111,6 @@ int ObPhysicalPlanCtx::init_datum_param_store()
   param_frame_ptrs_.reuse();
   param_frame_capacity_ = 0;
   if (OB_FAIL(datum_param_store_.prepare_allocate(param_store_.count()))) {
-    LOG_WARN("fail to prepare allocate", K(ret), K(param_store_.count()));
   }
   // Through param_store, generate datum_param_store
   for (int64_t i = 0; OB_SUCC(ret) && i < param_store_.count(); i++) {
@@ -164,19 +118,15 @@ int ObPhysicalPlanCtx::init_datum_param_store()
     if (OB_FAIL(datum_param.alloc_datum_reserved_buff(param_store_.at(i).meta_,
                                                       param_store_.at(i).get_precision(),
                                                       allocator_))) {
-      LOG_WARN("alloc datum reserved buffer failed", K(ret));
     } else if (OB_FAIL(datum_param.from_objparam(param_store_.at(i), &allocator_))) {
-      LOG_WARN("fail to convert obj param", K(ret), K(param_store_.at(i)));
     }
   }
   // Allocate param frame memory, and set param datum
   if (OB_SUCC(ret)) {
     const int64_t old_size = 0;
     if (OB_FAIL(extend_param_frame(old_size))) {
-      LOG_WARN("failed to extend param frame", K(ret));
     }
   }
-  LOG_DEBUG("inited datum param store", K(datum_param_store_), K(param_store_));
 
   return ret;
 }
@@ -189,21 +139,19 @@ int ObPhysicalPlanCtx::sync_last_value_local()
   for (int64_t i = 0; OB_SUCC(ret) && i < autoinc_params.count(); ++i) {
     AutoincParam &autoinc_param = autoinc_params.at(i);
     if (OB_FAIL(auto_service.sync_insert_value_local(autoinc_param))) {
-      LOG_WARN("failed to sync last insert value locally", K(ret));
     }
   }
 	return ret;
 }
 
-int ObPhysicalPlanCtx::sync_last_value_global()
+int ObPhysicalPlanCtx::sync_last_value_to_store()
 {
   int ret = OB_SUCCESS;
   ObAutoincrementService &auto_service = ObAutoincrementService::get_instance();
   ObIArray<AutoincParam> &autoinc_params = get_autoinc_params();
   for (int64_t i = 0; OB_SUCC(ret) && i < autoinc_params.count(); ++i) {
     AutoincParam &autoinc_param = autoinc_params.at(i);
-    if (OB_FAIL(auto_service.sync_insert_value_global(autoinc_param))) {
-      LOG_WARN("failed to sync last insert value globally", K(ret));
+    if (OB_FAIL(auto_service.sync_insert_value(autoinc_param))) {
     }
   }
   return ret;
@@ -262,6 +210,21 @@ bool ObPhysicalPlanCtx::is_plain_select_stmt() const
   return phy_plan_ != NULL && phy_plan_->get_stmt_type() == stmt::T_SELECT && false == phy_plan_->has_for_update();
 }
 
+bool ObPhysicalPlanCtx::can_partition_retry() const
+{
+  return phy_plan_ != NULL && !phy_plan_->is_dml_write_stmt() && !phy_plan_->has_for_update();
+}
+
+bool ObPhysicalPlanCtx::has_for_update() const
+{
+  return phy_plan_ != NULL && phy_plan_->has_for_update();
+}
+
+int64_t ObPhysicalPlanCtx::get_ddl_task_id() const
+{
+  return phy_plan_ != NULL ? phy_plan_->get_ddl_task_id() : 0;
+}
+
 void ObPhysicalPlanCtx::set_phy_plan(const ObPhysicalPlan *phy_plan)
 {
   phy_plan_ = phy_plan;
@@ -290,8 +253,6 @@ int ObPhysicalPlanCtx::merge_implicit_cursor_info(const ObImplicitCursorInfo &im
              K(implicit_cursor), K(implicit_cursor_infos_.count()));
   } else if (OB_FAIL(implicit_cursor_infos_.at(implicit_cursor.stmt_id_).
                      merge_cursor(implicit_cursor))) {
-    LOG_WARN("merge implicit cursor info failed", K(ret),
-             K(implicit_cursor), K(implicit_cursor_infos_));
   }
   LOG_DEBUG("merge implicit cursor info", K(ret), K(implicit_cursor), K(lbt()));
   return ret;
@@ -307,8 +268,6 @@ int ObPhysicalPlanCtx::replace_implicit_cursor_info(const ObImplicitCursorInfo &
              K(implicit_cursor), K(implicit_cursor_infos_.count()));
   } else if (OB_FAIL(implicit_cursor_infos_.at(implicit_cursor.stmt_id_).
       replace_cursor(implicit_cursor))) {
-    LOG_WARN("merge implicit cursor info failed", K(ret),
-             K(implicit_cursor), K(implicit_cursor_infos_.count()), K(implicit_cursor));
   }
   LOG_DEBUG("merge implicit cursor info", K(ret), K(implicit_cursor), K(lbt()));
   return ret;
@@ -323,8 +282,6 @@ int ObPhysicalPlanCtx::switch_implicit_cursor()
     LOG_WARN("cur stmt id is invalid", K(ret), K_(cur_stmt_id));
   } else if (cur_stmt_id_ >= implicit_cursor_infos_.count()) {
     ret = OB_ITER_END;
-    LOG_DEBUG("switch implicit cursor iter end", K(ret),
-              K(cur_stmt_id_), K(implicit_cursor_infos_));
   } else if (implicit_cursor_infos_.at(cur_stmt_id_).stmt_id_ != cur_stmt_id_
       && implicit_cursor_infos_.at(cur_stmt_id_).stmt_id_ >= 0) {
     ret = OB_ERR_UNEXPECTED;
@@ -344,10 +301,7 @@ int ObPhysicalPlanCtx::switch_implicit_cursor()
 
 void ObPhysicalPlanCtx::reset_datum_frame(char *frame, int64_t expr_cnt)
 {
-  int64_t item_size = sizeof(ObDatum) + sizeof(ObEvalInfo);
-  if (enable_rich_format_) {
-    item_size += sizeof(VectorHeader);
-  }
+  const int64_t item_size = sizeof(ObDatum) + sizeof(ObEvalInfo);
   for (int64_t j = 0; j < expr_cnt; ++j) {
     ObDatum *datum = reinterpret_cast<ObDatum *>(frame + j * item_size);
     datum->set_null();
@@ -358,12 +312,7 @@ int ObPhysicalPlanCtx::reserve_param_frame(const int64_t input_capacity)
 {
   int ret = OB_SUCCESS;
   if (input_capacity > param_frame_capacity_) {
-    int64_t item_size = 0;
-    if (enable_rich_format_) {
-      item_size = sizeof(ObDatum) + sizeof(ObEvalInfo) + sizeof(VectorHeader);
-    } else {
-      item_size = sizeof(ObDatum) + sizeof(ObEvalInfo);
-    }
+    const int64_t item_size = sizeof(ObDatum) + sizeof(ObEvalInfo);
     int64_t cnt_per_frame = common::MAX_FRAME_SIZE / item_size;
     auto calc_frame_cnt = [&](int64_t cap) { return (cap + cnt_per_frame - 1) / cnt_per_frame; };
     // reserve original param frames first
@@ -443,16 +392,13 @@ int ObPhysicalPlanCtx::extend_param_frame(const int64_t old_size)
     ret = OB_INVALID_ARGUMENT;
     LOG_WARN("invalid argument", K(ret), K(old_size));
   } else if (OB_FAIL(reserve_param_frame(datum_param_store_.count()))) {
-    LOG_WARN("reserve param frame failed", K(ret));
   } else {
     for (int64_t i = old_size; i < datum_param_store_.count(); i++) {
       ObDatum *datum = nullptr;
       ObEvalInfo *eval_info = nullptr;
-      VectorHeader *vec_header = nullptr;
-      get_param_frame_info(i, datum, eval_info, vec_header);
+      get_param_frame_info(i, datum, eval_info);
       *datum = datum_param_store_.at(i).datum_;
       eval_info->evaluated_ = false;
-      LOG_TRACE("extend param frame", K(i), K(*datum), K(enable_rich_format_));
     }
   }
 
@@ -461,15 +407,9 @@ int ObPhysicalPlanCtx::extend_param_frame(const int64_t old_size)
 
 OB_INLINE void ObPhysicalPlanCtx::get_param_frame_info(int64_t param_idx,
                                                        ObDatum *&datum,
-                                                       ObEvalInfo *&eval_info,
-                                                       VectorHeader *&vec_header)
+                                                       ObEvalInfo *&eval_info)
 {
-  int64_t item_size = 0;
-  if (enable_rich_format_) {
-    item_size = sizeof(ObDatum) + sizeof(ObEvalInfo) + sizeof(VectorHeader);
-  } else {
-    item_size = sizeof(ObDatum) + sizeof(ObEvalInfo);
-  }
+  const int64_t item_size = sizeof(ObDatum) + sizeof(ObEvalInfo);
   int64_t cnt_per_frame = common::MAX_FRAME_SIZE / item_size;
   int64_t datum_idx = param_idx < original_param_cnt_ ? param_idx : param_idx - original_param_cnt_;
   int64_t idx = datum_idx / cnt_per_frame;
@@ -479,7 +419,7 @@ OB_INLINE void ObPhysicalPlanCtx::get_param_frame_info(int64_t param_idx,
   }
   datum = reinterpret_cast<ObDatum*>(param_frame_ptrs_.at(idx) + off);
   eval_info = reinterpret_cast<ObEvalInfo *>(param_frame_ptrs_.at(idx) + off + sizeof(ObDatum));
-  LOG_DEBUG("get_param_frame_info", K(param_idx), K(off), K(datum), K(item_size), K(enable_rich_format_), K(lbt()));
+  LOG_DEBUG("get_param_frame_info", K(param_idx), K(off), K(datum), K(item_size), K(lbt()));
 }
 
 int ObPhysicalPlanCtx::replace_batch_param_datum(const int64_t cur_group_id,
@@ -497,8 +437,7 @@ int ObPhysicalPlanCtx::replace_batch_param_datum(const int64_t cur_group_id,
         //need to expand the real param to param frame
         ObDatum *datum = nullptr;
         ObEvalInfo *eval_info = nullptr;
-        VectorHeader *vec_header = nullptr;
-        get_param_frame_info(i, datum, eval_info, vec_header);
+        get_param_frame_info(i, datum, eval_info);
         const ObSqlDatumArray *datum_array = datum_param_store_.at(i).get_sql_datum_array();;
         if (OB_UNLIKELY(cur_group_id < 0) || OB_UNLIKELY(cur_group_id >= datum_array->count_)) {
           ret = OB_ERR_UNEXPECTED;
@@ -507,7 +446,6 @@ int ObPhysicalPlanCtx::replace_batch_param_datum(const int64_t cur_group_id,
           //assign datum ptr to the real param datum
           *datum = datum_array->data_[cur_group_id];
           eval_info->evaluated_ = true;
-          LOG_DEBUG("replace batch param datum", K(cur_group_id), KPC(datum), K(datum));
         }
       }
     }
@@ -564,7 +502,6 @@ OB_DEF_SERIALIZE(ObPhysicalPlanCtx)
   // Follow the old sequence method
   OB_UNIS_ENCODE(tsc_snapshot_timestamp_);
   OB_UNIS_ENCODE(cur_time_);
-  OB_UNIS_ENCODE(merging_frozen_time_);
   OB_UNIS_ENCODE(ts_timeout_us_);
   OB_UNIS_ENCODE(consistency_level_);
   OB_UNIS_ENCODE(*param_store);
@@ -622,7 +559,6 @@ OB_DEF_SERIALIZE(ObPhysicalPlanCtx)
     }
     if (OB_SUCC(ret)) {
       if (OB_FAIL(serialization::encode_i32(buf, buf_len, seri_param_cnt_pos, real_param_cnt))) {
-        LOG_WARN("encode int32_t failed", K(buf_len), K(seri_param_cnt_pos), K(real_param_cnt), K(ret));
       }
     }
   } else {
@@ -642,12 +578,11 @@ OB_DEF_SERIALIZE(ObPhysicalPlanCtx)
     OB_UNIS_ENCODE(param_cnt);
   }
   OB_UNIS_ENCODE(foreign_key_checks_);
-  OB_UNIS_ENCODE(unsed_worker_count_since_222rel_);
-  OB_UNIS_ENCODE(tenant_schema_version_);
+  OB_UNIS_ENCODE(runtime_schema_version_);
   OB_UNIS_ENCODE(cursor_count);
   OB_UNIS_ENCODE(plan_start_time_);
   OB_UNIS_ENCODE(last_trace_id_);
-  OB_UNIS_ENCODE(tenant_srs_version_);
+  OB_UNIS_ENCODE(srs_version_);
   OB_UNIS_ENCODE(original_param_cnt_);
   OB_UNIS_ENCODE(array_param_groups_.count());
   if (OB_SUCC(ret) && array_param_groups_.count() > 0) {
@@ -655,7 +590,6 @@ OB_DEF_SERIALIZE(ObPhysicalPlanCtx)
       OB_UNIS_ENCODE(array_param_groups_.at(i));
     }
   }
-  OB_UNIS_ENCODE(enable_rich_format_);
   OB_UNIS_ENCODE(all_local_session_vars_.count());
   for (int64_t i = 0; OB_SUCC(ret) && i < all_local_session_vars_.count(); ++i) {
     if (OB_ISNULL(all_local_session_vars_.at(i).get_local_vars())) {
@@ -665,9 +599,6 @@ OB_DEF_SERIALIZE(ObPhysicalPlanCtx)
       OB_UNIS_ENCODE(*all_local_session_vars_.at(i).get_local_vars());
     }
   }
-  OB_UNIS_ENCODE(mview_ids_);
-  OB_UNIS_ENCODE(last_refresh_scns_);
-  OB_UNIS_ENCODE(is_direct_insert_plan_);
   OB_UNIS_ENCODE(check_pdml_affected_rows_);
   return ret;
 }
@@ -694,7 +625,6 @@ OB_DEF_SERIALIZE_SIZE(ObPhysicalPlanCtx)
   // Follow the old sequence method
   OB_UNIS_ADD_LEN(tsc_snapshot_timestamp_);
   OB_UNIS_ADD_LEN(cur_time_);
-  OB_UNIS_ADD_LEN(merging_frozen_time_);
   OB_UNIS_ADD_LEN(ts_timeout_us_);
   OB_UNIS_ADD_LEN(consistency_level_);
   OB_UNIS_ADD_LEN(*param_store);
@@ -745,12 +675,11 @@ OB_DEF_SERIALIZE_SIZE(ObPhysicalPlanCtx)
     OB_UNIS_ADD_LEN(param_cnt);
   }
   OB_UNIS_ADD_LEN(foreign_key_checks_);
-  OB_UNIS_ADD_LEN(unsed_worker_count_since_222rel_);
-  OB_UNIS_ADD_LEN(tenant_schema_version_);
+  OB_UNIS_ADD_LEN(runtime_schema_version_);
   OB_UNIS_ADD_LEN(cursor_count);
   OB_UNIS_ADD_LEN(plan_start_time_);
   OB_UNIS_ADD_LEN(last_trace_id_);
-  OB_UNIS_ADD_LEN(tenant_srs_version_);
+  OB_UNIS_ADD_LEN(srs_version_);
   OB_UNIS_ADD_LEN(original_param_cnt_);
   OB_UNIS_ADD_LEN(array_param_groups_.count());
   if (array_param_groups_.count() > 0) {
@@ -758,16 +687,12 @@ OB_DEF_SERIALIZE_SIZE(ObPhysicalPlanCtx)
       OB_UNIS_ADD_LEN(array_param_groups_.at(i));
     }
   }
-  OB_UNIS_ADD_LEN(enable_rich_format_);
   OB_UNIS_ADD_LEN(all_local_session_vars_.count());
   for (int64_t i = 0; i < all_local_session_vars_.count(); ++i) {
     if (OB_NOT_NULL(all_local_session_vars_.at(i).get_local_vars())) {
       OB_UNIS_ADD_LEN(*all_local_session_vars_.at(i).get_local_vars());
     }
   }
-  OB_UNIS_ADD_LEN(mview_ids_);
-  OB_UNIS_ADD_LEN(last_refresh_scns_);
-  OB_UNIS_ADD_LEN(is_direct_insert_plan_);
   OB_UNIS_ADD_LEN(check_pdml_affected_rows_);
   return len;
 }
@@ -787,7 +712,6 @@ OB_DEF_DESERIALIZE(ObPhysicalPlanCtx)
   // Follow the old sequence method
   OB_UNIS_DECODE(tsc_snapshot_timestamp_);
   OB_UNIS_DECODE(cur_time_);
-  OB_UNIS_DECODE(merging_frozen_time_);
   OB_UNIS_DECODE(ts_timeout_us_);
   OB_UNIS_DECODE(consistency_level_);
   OB_UNIS_DECODE(param_store_);
@@ -802,9 +726,7 @@ OB_DEF_DESERIALIZE(ObPhysicalPlanCtx)
   OB_UNIS_DECODE(param_cnt);
   if (OB_SUCC(ret) && param_cnt > 0) {
     if (OB_FAIL(param_store_.prepare_allocate(param_cnt))) {
-      LOG_WARN("prepare_allocate param store failed", K(ret), K(param_cnt));
     } else if (OB_FAIL(serialization::decode_i32(buf, data_len, pos, &real_param_cnt))) {
-      LOG_WARN("decode int32_t failed", K(data_len), K(pos), K(ret));
     }
     for (int64_t i = 0; OB_SUCC(ret) && i < real_param_cnt; ++i) {
       OB_UNIS_DECODE(param_idx);
@@ -814,7 +736,6 @@ OB_DEF_DESERIALIZE(ObPhysicalPlanCtx)
         ret = OB_ERR_UNEXPECTED;
         LOG_WARN("invalid param idx", K(param_idx), K(param_cnt));
       } else if (OB_FAIL(deep_copy_obj(allocator_, param_obj, tmp))) {
-        LOG_WARN("deep copy object failed", K(ret), K(param_obj));
       } else {
         param_store_.at(param_idx) = tmp;
         param_store_.at(param_idx).set_param_meta();
@@ -828,7 +749,6 @@ OB_DEF_DESERIALIZE(ObPhysicalPlanCtx)
   	  const ObObjParam &objpara = param_store_.at(i);
       ObObjParam tmp = objpara;
       if (OB_FAIL(deep_copy_obj(allocator_, objpara, tmp))) {
-      	LOG_WARN("deep copy obj failed", K(ret));
       } else {
         param_store_.at(i) = tmp;
         param_store_.at(i).set_param_meta();
@@ -836,12 +756,10 @@ OB_DEF_DESERIALIZE(ObPhysicalPlanCtx)
   	}
   }
   OB_UNIS_DECODE(foreign_key_checks_);
-  OB_UNIS_DECODE(unsed_worker_count_since_222rel_);
-  OB_UNIS_DECODE(tenant_schema_version_);
+  OB_UNIS_DECODE(runtime_schema_version_);
   OB_UNIS_DECODE(cursor_count);
   if (OB_SUCC(ret) && cursor_count > 0) {
     if (OB_FAIL(implicit_cursor_infos_.prepare_allocate(cursor_count))) {
-      LOG_WARN("init implicit cursor infos failed", K(ret));
     }
   }
   OB_UNIS_DECODE(plan_start_time_);
@@ -850,7 +768,7 @@ OB_DEF_DESERIALIZE(ObPhysicalPlanCtx)
     (void)ObSQLUtils::adjust_time_by_ntp_offset(ts_timeout_us_);
   }
   OB_UNIS_DECODE(last_trace_id_);
-  OB_UNIS_DECODE(tenant_srs_version_);
+  OB_UNIS_DECODE(srs_version_);
   OB_UNIS_DECODE(original_param_cnt_);
   int64_t array_group_count = 0;
   OB_UNIS_DECODE(array_group_count);
@@ -859,15 +777,12 @@ OB_DEF_DESERIALIZE(ObPhysicalPlanCtx)
       ObArrayParamGroup array_p_group;
       OB_UNIS_DECODE(array_p_group);
       if (OB_FAIL(array_param_groups_.push_back(array_p_group))) {
-        LOG_WARN("failed to push back");
       }
     }
   }
-  OB_UNIS_DECODE(enable_rich_format_);
   OB_UNIS_DECODE(local_var_array_cnt);
   if (OB_SUCC(ret)) {
     if (OB_FAIL(all_local_session_vars_.reserve(local_var_array_cnt))) {
-      LOG_WARN("reserve local session vars failed", K(ret));
     }
   }
   for (int64_t i = 0; OB_SUCC(ret) && i < local_var_array_cnt; ++i) {
@@ -876,7 +791,6 @@ OB_DEF_DESERIALIZE(ObPhysicalPlanCtx)
       ret = OB_ERR_UNEXPECTED;
       LOG_WARN("alloc local var failed", K(ret));
     } else if (OB_FAIL(all_local_session_vars_.push_back(ObSolidifiedVarsContext(local_vars, &allocator_)))) {
-      LOG_WARN("push back local session var array failed", K(ret));
     } else {
       local_vars->set_allocator(&allocator_);
       OB_UNIS_DECODE(*local_vars);
@@ -887,12 +801,8 @@ OB_DEF_DESERIALIZE(ObPhysicalPlanCtx)
       datum_param_store_.count() == 0 &&
       datum_param_store_.count() != param_store_.count()) {
     if (OB_FAIL(init_param_store_after_deserialize())) {
-      LOG_WARN("failed to deserialize param store", K(ret));
     }
   }
-  OB_UNIS_DECODE(mview_ids_);
-  OB_UNIS_DECODE(last_refresh_scns_);
-  OB_UNIS_DECODE(is_direct_insert_plan_);
   OB_UNIS_DECODE(check_pdml_affected_rows_);
   return ret;
 }
@@ -941,7 +851,6 @@ int ObPhysicalPlanCtx::get_sqludt_meta_by_subschema_id(uint16_t subschema_id, Ob
     LOG_WARN("invalid subschema id", K(ret), K(subschema_id), K(lbt()));
   } else {
     if (OB_FAIL(subschema_ctx_.get_subschema(subschema_id, value))) {
-      LOG_WARN("failed to get subschema", K(ret), K(subschema_id));
     } else if (value.type_ >= OB_SUBSCHEMA_MAX_TYPE) {
       ret = OB_ERR_UNEXPECTED;
       LOG_WARN("invalid subschema type", K(ret), K(value));
@@ -978,7 +887,6 @@ int ObPhysicalPlanCtx::get_sqludt_meta_by_subschema_id(uint16_t subschema_id, Ob
       LOG_WARN("invalid subschema id", K(ret), K(subschema_id), K(lbt()));
     } else {
       if (OB_FAIL(subschema_ctx_.get_subschema(subschema_id, sub_meta))) {
-        LOG_WARN("failed to get subschema", K(ret), K(subschema_id));
       } else if (sub_meta.type_ >= OB_SUBSCHEMA_MAX_TYPE) {
         ret = OB_ERR_UNEXPECTED;
         LOG_WARN("invalid subschema type", K(ret), K(sub_meta));
@@ -1013,7 +921,6 @@ int ObPhysicalPlanCtx::get_enumset_meta_by_subschema_id(uint16_t subschema_id,
     LOG_WARN("invalid subschema id", K(ret), K(subschema_id), K(lbt()));
   } else {
     if (OB_FAIL(subschema_ctx_.get_subschema(subschema_id, value))) {
-      LOG_WARN("failed to get subschema", K(ret), K(subschema_id));
     } else if (value.type_ >= OB_SUBSCHEMA_MAX_TYPE) {
       ret = OB_ERR_UNEXPECTED;
       LOG_WARN("invalid subschema type", K(ret), K(value));
@@ -1021,7 +928,6 @@ int ObPhysicalPlanCtx::get_enumset_meta_by_subschema_id(uint16_t subschema_id,
       meta = reinterpret_cast<const ObEnumSetMeta *>(value.value_);
     }
   }
-  LOG_TRACE("ENUMSET: search subschema", K(ret), KP(this));
   return ret;
 }
 
@@ -1076,9 +982,7 @@ int ObPhysicalPlanCtx::get_subschema_id_by_udt_id(uint64_t udt_type_id,
                                                                           allocator_,
                                                                           udt_type_id,
                                                                           *udt_meta))) {
-        LOG_WARN("generate udt_meta failed", K(ret), K(1UL), K(udt_type_id));
       } else if (OB_FAIL(subschema_ctx_.get_subschema_id_from_fields(udt_type_id, new_subschema_id))) {
-        LOG_WARN("failed to get subschema id from result fields", K(ret), K(1UL), K(udt_type_id));
       } else if (new_subschema_id == ObInvalidSqlType // not get from fields, generate new
                  && OB_FAIL(subschema_ctx_.get_new_subschema_id(new_subschema_id))) {
         LOG_WARN("failed to get new subschema id", K(ret), K(1UL), K(udt_type_id));
@@ -1087,7 +991,6 @@ int ObPhysicalPlanCtx::get_subschema_id_by_udt_id(uint64_t udt_type_id,
         value.signature_ = udt_type_id;
         value.value_ = static_cast<void *>(udt_meta);
         if (OB_FAIL(subschema_ctx_.set_subschema(new_subschema_id, value))) {
-          LOG_WARN("failed to set new subschema", K(ret), K(new_subschema_id), K(udt_type_id), K(value));
         } else {
           subschema_id = new_subschema_id;
         }
@@ -1112,7 +1015,6 @@ int ObPhysicalPlanCtx::get_subschema_id_by_collection_elem_type(ObNestedType col
     } else if (OB_FAIL(phy_plan_->get_subschema_ctx().get_subschema_id_by_typedef(coll_type,
                                                                                              elem_type,
                                                                                              subschema_id))) {
-      LOG_WARN("failed to get subschema id", K(ret), K(elem_type));
     } 
   // no phy plan
   }
@@ -1120,7 +1022,6 @@ int ObPhysicalPlanCtx::get_subschema_id_by_collection_elem_type(ObNestedType col
     if (!subschema_ctx_.is_inited() && OB_FAIL(subschema_ctx_.init())) {
       LOG_WARN("subschema ctx init failed", K(ret));
     } else if (OB_FAIL(subschema_ctx_.get_subschema_id_by_typedef(coll_type, elem_type, subschema_id))) {
-      LOG_WARN("failed to get subschema id", K(ret), K(elem_type));
     }
   }
   return ret;
@@ -1135,7 +1036,6 @@ int ObPhysicalPlanCtx::get_subschema_id_by_type_string(const ObString &type_stri
       LOG_INFO("plan with empty subschema mapping", K(lbt()), K(phy_plan_->get_subschema_ctx()));
       is_subschema_inited_in_plan = false;
     } else if (OB_FAIL(phy_plan_->get_subschema_ctx().get_subschema_id_by_typedef(type_string, subschema_id))) {
-      LOG_WARN("failed to get subschema id", K(ret));
     } 
   // no phy plan
   } 
@@ -1144,7 +1044,6 @@ int ObPhysicalPlanCtx::get_subschema_id_by_type_string(const ObString &type_stri
     if (!subschema_ctx_.is_inited() && OB_FAIL(subschema_ctx_.init())) {
       LOG_WARN("subschema ctx init failed", K(ret));
     } else if (OB_FAIL(subschema_ctx_.get_subschema_id_by_typedef(type_string, subschema_id))) {
-      LOG_WARN("failed to get subschema id", K(ret));
     }
   }
   return ret;
@@ -1167,20 +1066,16 @@ int ObPhysicalPlanCtx::get_subschema_id_by_type_info(const ObObjMeta &obj_meta,
       ObSubSchemaValue value;
       ObEnumSetMeta *dst_meta = NULL;
       if (OB_FAIL(src_meta.deep_copy(allocator_, dst_meta))) {
-        LOG_WARN("fail to deep copy enumset meta", K(ret));
       } else if (OB_FAIL(subschema_ctx_.get_new_subschema_id(new_subschema_id))) {
-        LOG_WARN("failed to get new subschema id", K(ret), K(1UL));
       } else {
         value.type_ = OB_SUBSCHEMA_ENUM_SET_TYPE;
         value.signature_ = dst_meta->get_signature();
         value.value_ = static_cast<void *>(dst_meta);
         if (OB_FAIL(subschema_ctx_.set_subschema(new_subschema_id, value))) {
-          LOG_WARN("failed to set new subschema", K(ret), K(new_subschema_id), K(value));
         } else {
           subschema_id = new_subschema_id;
         }
       }
-      LOG_TRACE("ENUMSET: build subschema", K(ret), KP(this), K(subschema_id));
     }
   }
   return ret;
@@ -1217,11 +1112,9 @@ int ObPhysicalPlanCtx::set_all_local_session_vars(ObIArray<ObLocalSessionVar> &a
   }
   if (!all_local_session_vars.empty()) {
     if (OB_FAIL(all_local_session_vars_.reserve(all_local_session_vars.count()))) {
-      LOG_WARN("reserve for local_session_vars failed", K(ret));
     } else {
       for (int64_t i = 0; OB_SUCC(ret) && i < all_local_session_vars.count(); ++i) {
         if (OB_FAIL(all_local_session_vars_.push_back(ObSolidifiedVarsContext(&all_local_session_vars.at(i), &allocator_)))) {
-          LOG_WARN("push back local session var failed", K(ret));
         }
       }
     }
@@ -1248,9 +1141,7 @@ int ObPhysicalPlanCtx::build_subschema_by_fields(const ColumnsFieldIArray *field
       if (fields->at(i).type_.is_collection_sql_type()) {
         uint64_t udt_id = fields->at(i).accuracy_.get_accuracy();
         uint16_t subschema_id = 0;
-        if (udt_id != T_OBJ_XML 
-            && OB_FAIL(get_subschema_id_by_udt_id(udt_id, subschema_id, schema_guard))) {
-          LOG_WARN("failed to get subschema id", K(ret), K(fields->at(i)), K(udt_id));
+        if (OB_FAIL(get_subschema_id_by_udt_id(udt_id, subschema_id, schema_guard))) {
         }
       }
     }
@@ -1277,7 +1168,6 @@ int ObPhysicalPlanCtx::build_subschema_ctx_by_param_store(share::schema::ObSchem
       if (!subschema_ctx_.is_inited() && OB_FAIL(subschema_ctx_.init())) {
         LOG_WARN("subschema ctx init failed", K(ret));
       } else if(OB_FAIL(get_subschema_id_by_udt_id(udt_id, subschema_id, schema_guard))) {
-        LOG_WARN("failed to get subschema id", K(ret), K(param), K(udt_id));
       } else if (subschema_id == ObMaxSystemUDTSqlType) {
         LOG_WARN("failed to get subschema id", K(ret), K(param), K(udt_id));
       } else {
@@ -1309,7 +1199,6 @@ int ObPhysicalPlanCtx::init_param_store_after_deserialize()
   int ret = OB_SUCCESS;
   datum_param_store_.reuse();
   if (OB_FAIL(datum_param_store_.prepare_allocate(param_store_.count()))) {
-    LOG_WARN("fail to prepare allocate", K(ret), K(param_store_.count()));
   }
   for (int64_t i = 0; OB_SUCC(ret) && i < param_store_.count(); i++) {
     ObObjParam &obj_param = param_store_.at(i);
@@ -1320,7 +1209,6 @@ int ObPhysicalPlanCtx::init_param_store_after_deserialize()
                                                      reinterpret_cast<char *>(obj_param.get_ext()),
                                                      obj_param.get_val_len(),
                                                      array_obj))) {
-        LOG_WARN("failed to alloc array_obj after decode", K(ret));
       } else {
         obj_param.set_extend(reinterpret_cast<int64_t>(array_obj), T_EXT_SQL_ARRAY);
       }
@@ -1329,24 +1217,11 @@ int ObPhysicalPlanCtx::init_param_store_after_deserialize()
       if (OB_FAIL(datum_param.alloc_datum_reserved_buff(obj_param.meta_,
                                                         obj_param.get_precision(),
                                                         allocator_))) {
-        LOG_WARN("alloc datum reserved buffer failed", K(ret));
       } else if (OB_FAIL(datum_param.from_objparam(obj_param, &allocator_))) {
-        LOG_WARN("fail to convert obj param", K(ret), K(obj_param));
       }
     }
   }
   return ret;
-}
-
-uint64_t ObPhysicalPlanCtx::get_last_refresh_scn(uint64_t mview_id) const
-{
-  uint64_t last_refresh_scn = OB_INVALID_SCN_VAL;
-  for (int64_t i = 0; OB_INVALID_SCN_VAL == last_refresh_scn && i < mview_ids_.count(); ++i) {
-    if (mview_id == mview_ids_.at(i)) {
-      last_refresh_scn = last_refresh_scns_.at(i);
-    }
-  }
-  return last_refresh_scn;
 }
 
 } //sql

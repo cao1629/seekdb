@@ -44,7 +44,7 @@ private:
   {
     int ret = OB_SUCCESS;
     lib::ObMemAttr last_mem_attr = lib::ObMallocHookAttrGuard::get_tl_mem_attr();
-    lib::ObMallocHookAttrGuard tmp_500(lib::ObMemAttr("BoostCache"));
+    lib::ObMallocHookAttrGuard boost_cache_guard(lib::ObMemAttr("BoostCache"));
     boost::geometry::srs::proj4 src_proj4(context.get_val_arg(0)->string_->ptr());
     boost::geometry::srs::proj4 dest_proj4(context.get_val_arg(1)->string_->ptr());
     boost::geometry::srs::transformation<> transformer(src_proj4, dest_proj4);
@@ -82,7 +82,7 @@ private:
       LOG_WARN("fail to create geo by type", K(ret));
     } else {
       lib::ObMemAttr last_mem_attr = lib::ObMallocHookAttrGuard::get_tl_mem_attr();
-      lib::ObMallocHookAttrGuard tmp_500(lib::ObMemAttr("BoostCache"));
+      lib::ObMallocHookAttrGuard boost_cache_guard(lib::ObMemAttr("BoostCache"));
       boost::geometry::srs::proj4 src_proj4(context.get_val_arg(0)->string_->ptr());
       boost::geometry::srs::proj4 dest_proj4(context.get_val_arg(1)->string_->ptr());
       boost::geometry::srs::transformation<> transformer(src_proj4, dest_proj4);
@@ -120,43 +120,36 @@ private:
         switch (sub_type) {
           case ObGeoType::POINT : {
             if (OB_FAIL(Eval<PtInType>::eval(&sub_geo, context, sub_res))) {
-              LOG_WARN("failed to eval point for geometry collection", K(ret));
             }
             break;
           }
           case ObGeoType::LINESTRING : {
             if (OB_FAIL(Eval<LineInType>::eval(&sub_geo, context, sub_res))) {
-              LOG_WARN("failed to eval linestring for geometry collection", K(ret));
             }
             break;
           }
           case ObGeoType::POLYGON : {
             if (OB_FAIL(Eval<PolyInType>::eval(&sub_geo, context, sub_res))) {
-              LOG_WARN("failed to eval polygon for geometry collection", K(ret));
             }
             break;
           }
           case ObGeoType::MULTIPOINT : {
             if (OB_FAIL(Eval<MPtInType>::eval(&sub_geo, context, sub_res))) {
-              LOG_WARN("failed to eval multipoint for geometry collection", K(ret));
             }
             break;
           }
           case ObGeoType::MULTILINESTRING : {
             if (OB_FAIL(Eval<MLineInType>::eval(&sub_geo, context, sub_res))) {
-              LOG_WARN("failed to eval multilinestring for geometry collection", K(ret));
             }
             break;
           }
           case ObGeoType::MULTIPOLYGON : {
             if (OB_FAIL(Eval<MPolyInType>::eval(&sub_geo, context, sub_res))) {
-              LOG_WARN("failed to eval multipolygon for geometry collection", K(ret));
             }
             break;
           }
           case ObGeoType::GEOMETRYCOLLECTION : {
             if (OB_FAIL(Eval<GCInType>::eval(&sub_geo, context, sub_res))) {
-              LOG_WARN("failed to eval geometrycollection for geometry collection", K(ret));
             }
             break;
           }
@@ -168,7 +161,6 @@ private:
         }
         if (OB_SUCC(ret)) {
           if (OB_FAIL(dest_geo->push_back(*sub_res))) {
-            LOG_WARN("failed to push back to geo", K(ret));
           }
         }
       }

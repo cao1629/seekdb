@@ -47,7 +47,6 @@ namespace oceanbase
 
 namespace share
 {
-class ObServerLocality;
 namespace schema
 {
 class ObSchemaGetterGuard;
@@ -91,6 +90,7 @@ class ObSelectLogPlan;
 class ObThreeStageAggrInfo;
 struct ObTextRetrievalInfo;
 class ObHashRollupInfo;
+class ObStrictPwjComparer;
 
 struct TableDependInfo {
   TO_STRING_KV(
@@ -168,16 +168,10 @@ public:
   static const int64_t JOINPATH_SET_HASHBUCKET_SIZE = 3000;
   friend class ::test::ObLogPlanTest_ob_explain_test_Test;
 
-  typedef common::ObList<common::ObAddr, common::ObArenaAllocator> ObAddrList;
-
-  static int select_replicas(ObExecContext &exec_ctx,
-                             const common::ObIArray<const ObTableLocation*> &tbl_loc_list,
-                             const common::ObAddr &local_server,
-                             common::ObIArray<ObCandiTableLoc*> &phy_tbl_loc_info_list);
-  static int select_replicas(ObExecContext &exec_ctx,
-                             bool is_weak,
-                             const common::ObAddr &local_server,
-                             common::ObIArray<ObCandiTableLoc*> &phy_tbl_loc_info_list);
+  static int validate_local_tablets(
+      ObExecContext &exec_ctx,
+      const common::ObIArray<const ObTableLocation*> &table_locations,
+      common::ObIArray<ObCandiTableLoc*> &tablet_locations);
 
 public:
   ObLogPlan(ObOptimizerContext &ctx, const ObDMLStmt *stmt);
@@ -254,7 +248,6 @@ public:
 
   int add_explain_note();
   int add_parallel_explain_note();
-  int add_direct_load_explain_note();
   int add_non_standard_comparison_explain_note();
 
   int adjust_final_plan_info(ObLogicalOperator *&op);
@@ -279,9 +272,6 @@ public:
   int check_das_dppr_filter_exprs(const ObIArray<ObRawExpr *> &input_filters,
                                   bool &has_dppr_filters);
 
-  int choose_duplicate_table_replica(ObLogicalOperator *op,
-                                    const ObAddr &addr,
-                                    bool is_root);
   /**
    *  Get allocator used in sql compilation
    *
@@ -327,7 +317,6 @@ public:
                               const int64_t to) const;
   int remove_duplicate_constraints();
   int sort_pwj_constraint(ObLocationConstraintContext &location_constraint) const;
-  int resolve_dup_tab_constraint(ObLocationConstraintContext &location_constraint) const;
 
   int get_current_semi_infos(const ObIArray<SemiInfo*> &semi_infos,
                              const ObIArray<TableItem*> &table_items,
@@ -366,9 +355,6 @@ public:
                            bool index_back,
                            bool need_set,
                            double &cost);
-  static int select_one_server(const common::ObAddr &selected_server,
-                               common::ObIArray<ObCandiTableLoc*> &phy_tbl_loc_info_list);
-
   int is_partition_in_same_server(const ObIArray<const ObCandiTableLoc *> &phy_location_infos,
                                   bool &is_same,
                                   bool &multi_part_table,
@@ -404,8 +390,6 @@ public:
                                ObTablePartitionInfo *&table_part_info);
   int assign_right_popular_value_to_left(ObExchangeInfo &left_exch_info,
                                          ObExchangeInfo &right_exch_info);
-  void set_insert_stmt(const ObInsertStmt *insert_stmt) { insert_stmt_ = insert_stmt; }
-  const ObInsertStmt *get_insert_stmt() const { return insert_stmt_; }
   int get_part_exprs(uint64_t table_id,
                      uint64_t ref_table_id,
                      share::schema::ObPartitionLevel &part_level,
@@ -453,7 +437,6 @@ public:
       can_storage_pushdown_(false),
       can_basic_pushdown_(false),
       can_three_stage_pushdown_(false),
-      can_rollup_pushdown_(false),
       force_use_hash_(false),
       force_use_merge_(false),
       force_part_sort_(false),
@@ -469,7 +452,6 @@ public:
       non_distinct_aggr_items_(),
       distinct_aggr_items_(),
       distinct_params_(),
-      rollup_id_expr_(NULL),
       group_ndv_(-1.0),
       group_distinct_ndv_(-1.0),
       enable_hash_rollup_(true),
@@ -516,7 +498,6 @@ public:
     bool can_storage_pushdown_;
     bool can_basic_pushdown_;
     bool can_three_stage_pushdown_;
-    bool can_rollup_pushdown_;
     bool force_use_hash_; // has use_hash_aggregation/use_hash_distinct hint
     bool force_use_merge_; // has no_use_hash_aggregation/no_use_hash_distinct hint
     bool force_part_sort_;  // force use partition sort for merge group by
@@ -528,7 +509,6 @@ public:
     bool force_hash_local_;
     bool is_scalar_group_by_;
     bool ignore_hint_;
-    uint64_t optimizer_features_enable_version_;
     ObSEArray<ObRawExpr*, 8> distinct_exprs_;
 
     // context for three stage group by push down
@@ -538,9 +518,6 @@ public:
     ObArray<ObRawExpr *> distinct_params_;
     ObArray<ObDistinctAggrBatch> distinct_aggr_batch_;
 
-    // for rollup distributor and collector
-    ObRawExpr *rollup_id_expr_;
-    
     ObArray<ObRawExpr*> pushdown_groupby_columns_;
     // distinct of group expr
     double group_ndv_;
@@ -555,7 +532,6 @@ public:
     TO_STRING_KV(K_(can_storage_pushdown),
                  K_(can_basic_pushdown),
                  K_(can_three_stage_pushdown),
-                 K_(can_rollup_pushdown),
                  K_(force_use_hash),
                  K_(force_use_merge),
                  K_(force_part_sort),
@@ -567,7 +543,6 @@ public:
                  K_(force_hash_local),
                  K_(is_scalar_group_by),
                  K_(ignore_hint),
-                 K_(optimizer_features_enable_version),
                  K_(distinct_exprs),
                  K_(pushdown_groupby_columns),
                  K_(group_ndv),
@@ -769,8 +744,6 @@ public:
   int perform_simplify_win_expr(ObLogicalOperator *op);
   int perform_adjust_onetime_expr(ObLogicalOperator *op);
   int init_onetime_replaced_exprs_if_needed();
-  int set_advisor_table_id(ObLogicalOperator *op);
-  int negotiate_advisor_table_id(ObLogicalOperator *op);
   int simplify_win_expr(ObLogicalOperator* child_op, ObWinFunRawExpr &win_expr);
   int simplify_win_partition_exprs(ObLogicalOperator* child_op,
                                    ObWinFunRawExpr &win_expr);
@@ -822,12 +795,11 @@ public:
                                       int64_t &dop) const;
   int inner_compute_three_stage_groupby_dop_by_auto_dop(const ObIArray<ObRawExpr*> &group_exprs,
                                                         const GroupingOpHelper &groupby_helper,
-                                                        const int64_t server_cnt,
                                                         int64_t &dop) const;
   int get_three_stage_groupby_number_of_copies(const ObIArray<ObAggFunRawExpr*> &non_distinct_aggrs,
                                                const ObIArray<ObAggFunRawExpr*> &distinct_aggrs,
                                                int64_t &number_of_copies) const;
-  int get_parallel_info_from_candidate_plans(int64_t &server_cnt, int64_t &dop) const;
+  int get_parallel_info_from_candidate_plans(int64_t &dop) const;
   int check_candi_plan_need_calc_dop(bool &need_calc_dop) const;
   int check_op_need_calc_dop(const ObLogicalOperator *cur_op, bool &need_calc) const;
 
@@ -883,10 +855,6 @@ public:
                                          ObIArray<ObRawExpr *> &distinct_exprs,
                                          const bool enable_hash_rollup,
                                          bool &can_push);
-
-  int check_rollup_pushdown(const ObSQLSessionInfo *info,
-                            const ObIArray<ObAggFunRawExpr *> &aggr_items,
-                            bool &can_push);
 
   int adjust_sort_expr_ordering(ObIArray<ObRawExpr*> &sort_exprs,
                                 ObIArray<ObOrderDirection> &sort_directions,
@@ -1006,7 +974,6 @@ public:
                                const bool is_partition_wise = false,
                                const bool is_push_down = false,
                                const bool is_partition_gi = false,
-                               const ObRollupStatus rollup_status = ObRollupStatus::NONE_ROLLUP,
                                bool force_use_scalar = false,
                                const ObThreeStageAggrInfo *three_stage_info = NULL,
                                ObHashRollupInfo *hash_rollup_info = NULL);
@@ -1050,13 +1017,6 @@ public:
   int is_plan_reliable(const ObLogicalOperator *root,
                        bool &is_reliable);
 
-  /** @brief Allocate sequence op on top of plan candidates */
-  int candi_allocate_sequence();
-  int allocate_sequence_as_top(ObLogicalOperator *&old_top);
-
-  int candi_allocate_err_log(const ObDelUpdStmt *stmt);
-  int allocate_err_log_as_top(const ObDelUpdStmt *stmt, ObLogicalOperator *&old_top);
-
   /** @brief Allocate SELECTINTO on top of plan candidates */
   int candi_allocate_select_into();
   /** @brief allocate select into as new top(parent)**/
@@ -1065,8 +1025,7 @@ public:
 
   int check_select_into(bool &has_select_into,
                         bool &is_single,
-                        bool &has_order_by,
-                        ObRawExpr *&file_partition_expr);
+                        bool &has_order_by);
 
   int allocate_expr_values_as_top(ObLogicalOperator *&top,
                                   const ObIArray<ObRawExpr*> *filter_exprs = NULL);
@@ -1111,7 +1070,6 @@ public:
                                           ObBitSet<> &initplan_idxs,
                                           ObBitSet<> &onetime_idxs,
                                           const ObIArray<ObRawExpr *> &filters,
-                                          const bool or_cursor_expr,
                                           const bool is_update_set);
 
   int inner_candi_allocate_subplan_filter(ObIArray<ObSEArray<CandidatePlan, 4>> &best_list,
@@ -1122,7 +1080,6 @@ public:
                                           ObBitSet<> &initplan_idxs,
                                           ObBitSet<> &onetime_idxs,
                                           const ObIArray<ObRawExpr *> &filters,
-                                          const bool for_cursor_expr,
                                           const bool is_update_set,
                                           const int64_t dist_methods,
                                           ObIArray<CandidatePlan> &subquery_plans);
@@ -1135,7 +1092,6 @@ public:
                                                   ObBitSet<> &initplan_idxs,
                                                   ObBitSet<> &onetime_idxs,
                                                   const ObIArray<ObRawExpr *> &filters,
-                                                  const bool for_cursor_expr,
                                                   const bool is_update_set,
                                                   const int64_t dist_methods,
                                                   ObIArray<CandidatePlan> &subquery_plans);
@@ -1145,7 +1101,6 @@ public:
                                      ObIArray<ObSEArray<CandidatePlan, 4>> &best_list,
                                      ObIArray<ObSEArray<CandidatePlan, 4>> &dist_best_list);
   int get_valid_subplan_filter_dist_method(ObIArray<ObLogPlan*> &subplans,
-                                           const bool for_cursor_expr,
                                            const bool has_onetime,
                                            const bool ignore_hint,
                                            int64_t &dist_methods);
@@ -1157,13 +1112,11 @@ public:
                                    ObIArray<ObExecParamRawExpr *> &onetime_exprs,
                                    ObBitSet<> &initplan_idxs,
                                    ObBitSet<> &onetime_idxs,
-                                   bool &for_cursor_expr,
                                    bool for_on_condition);
 
   int get_subplan_filter_distributed_method(ObLogicalOperator *&top,
                                             const ObIArray<ObLogicalOperator*> &subquery_ops,
                                             const ObIArray<ObExecParamRawExpr *> &params,
-                                            const bool for_cursor_expr,
                                             const bool has_onetime,
                                             int64_t &distributed_methods);
   int create_subplan_filter_plan(ObLogicalOperator *&top,
@@ -1176,8 +1129,7 @@ public:
                                  const ObBitSet<> &onetime_idxs,
                                  const int64_t dist_methods,
                                  const ObIArray<ObRawExpr*> &filters,
-                                 const bool is_update_set,
-                                 const bool for_cursor_expr);
+                                 const bool is_update_set);
 
   int check_contains_recursive_cte(ObIArray<ObLogicalOperator*> &child_ops,
                                    bool &is_recursive_cte);
@@ -1449,12 +1401,6 @@ public:
                                       const ObIArray<ObRawExpr*> &right_join_conditions,
                                       ObIArray<JoinFilterInfo> &join_filter_infos);
 
-  int will_use_column_store(const uint64_t table_id,
-                            const uint64_t index_id,
-                            const uint64_t ref_table_id,
-                            bool &use_column_store,
-                            bool &use_row_store);
-
   int pushdown_join_filter_into_subquery(const ObDMLStmt *parent_stmt,
                                          ObLogicalOperator* child_op,
                                          uint64_t subquery_id,
@@ -1531,10 +1477,6 @@ public:
                                              bool need_exchange,
                                              const ObIArray<OrderItem> &sort_keys, 
                                              bool &need_further_sort);
-  static int adjust_dup_table_replica_by_cons(
-    const ObIArray<ObDupTabConstraint> &dup_table_replica_cons,
-    common::ObIArray<ObCandiTableLoc> &phy_tbl_info_list);
-
 protected:
   virtual int generate_normal_raw_plan() = 0;
   int update_plans_interesting_order_info(ObIArray<CandidatePlan> &candidate_plans,
@@ -1799,22 +1741,6 @@ protected:
 private: // member functions
   static int distribute_filters_to_baserels(ObIArray<ObJoinOrder*> &base_level,
                                             ObIArray<ObSEArray<ObRawExpr*,4>> &baserel_filters);
-  static int strong_select_replicas(const common::ObAddr &local_server,
-                                    common::ObIArray<ObCandiTableLoc*> &phy_tbl_loc_info_list,
-                                    bool &is_hit_partition,
-                                    bool sess_in_retry,
-                                    bool is_dup_ls_modified);
-  static int weak_select_replicas(const common::ObAddr &local_server,
-                                  ObRoutePolicyType route_type,
-                                  int64_t max_read_stale_time,
-                                  common::ObIArray<ObCandiTableLoc*> &phy_tbl_loc_info_list,
-                                  bool &is_hit_partition);
-  static int calc_hit_partition_for_compat(const common::ObIArray<ObCandiTableLoc*> &phy_tbl_loc_info_list,
-                                           const common::ObAddr &local_server,
-                                           bool &is_hit_partition,
-                                           ObAddrList &intersect_servers);
-  static int calc_intersect_servers(const ObIArray<ObCandiTableLoc*> &phy_tbl_loc_info_list,
-                                    ObList<ObAddr, ObArenaAllocator> &candidate_server_list);
   int calc_and_set_exec_pwj_map(ObLocationConstraintContext &location_constraint) const;
 
   int check_pwj_cons(const ObPwjConstraint &pwj_cons,
@@ -1829,7 +1755,6 @@ private: // member functions
                               ObOptColumnStatHandle &handle,
                               common::ObIArray<ObObj> &popular_values) const;
 
-  int compute_duplicate_table_replicas(ObLogicalOperator *op);
   int prepare_text_retrieval_info(const uint64_t ref_table_id,
                                   const uint64_t index_table_id,
                                   ObMatchFunRawExpr *ma_expr,
@@ -1852,7 +1777,6 @@ public:
   int do_alloc_values_table_path(ValuesTablePath *values_table_path,
                                  ObLogValuesTableAccess *&out_access_path_op);
   inline ObRawExprReplacer &gen_col_replacer() { return gen_col_replacer_; }
-  int get_enable_rich_vector_format(bool &enable);
 private:
   static const int64_t IDP_PATHNUM_THRESHOLD = 5000;
 protected: // member variable
@@ -1965,15 +1889,13 @@ private:
   bool is_subplan_scan_;  // Is the current plan a subplan scan
   bool is_parent_set_distinct_;
   bool is_rescan_subplan_;    // generate subquery subplan for subplan filter or inner subquery path
-  bool disable_child_batch_rescan_;  // before version 4_2_5, semi/anti join and subplan filter child op can not use batch rescan
+  bool disable_child_batch_rescan_;  // upper plan disables child batch rescan
   ObSqlTempTableInfo *temp_table_info_; // current plan is a temp table
   // Extracted constant expressions from where condition
   common::ObSEArray<ObRawExpr*, 4, common::ModulePageAllocator, true> const_exprs_;
   common::ObSEArray<ObShardingInfo*, 8, common::ModulePageAllocator, true> hash_dist_info_;
   //
   common::ObSEArray<ColumnItem, 8, common::ModulePageAllocator, true> column_items_;
-  // add only for error_logging
-  const ObInsertStmt *insert_stmt_;
   // all basic table meta before base table predicate
   OptTableMetas basic_table_metas_;
   // all basic table meta after base table predicate
@@ -2054,7 +1976,6 @@ int ObLogPlan::plan_traverse_loop(TS ...args)
   TraverseOp ops[] = { args... };
   for (int64_t i = 0; OB_SUCC(ret) && i < ARRAYSIZEOF(ops); i++) {
     if (OB_FAIL(plan_tree_traverse(ops[i], NULL))) {
-      SQL_OPT_LOG(WARN, "failed to do plan traverse", K(ret), "op", ops[i]);
     }
   }
   return ret;

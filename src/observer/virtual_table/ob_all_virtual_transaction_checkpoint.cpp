@@ -15,7 +15,8 @@
  */
 
 #include "observer/virtual_table/ob_all_virtual_transaction_checkpoint.h"
-#include "share/rc/ob_module_provider.h"
+#include "share/rc/ob_server_runtime.h"
+#include "storage/ls/ob_ls.h"
 #include "storage/tx_storage/ob_ls_service.h"
 
 using namespace oceanbase::common;
@@ -28,8 +29,7 @@ namespace observer
 
 ObAllVirtualTransCheckpointInfo::ObAllVirtualTransCheckpointInfo()
     : ObVirtualTableScannerIterator(),
-      addr_(),
-      ls_iter_guard_()
+      ls_(nullptr)
 {
 }
 
@@ -40,49 +40,27 @@ ObAllVirtualTransCheckpointInfo::~ObAllVirtualTransCheckpointInfo()
 
 void ObAllVirtualTransCheckpointInfo::reset()
 {
-  ls_iter_guard_.reset();
+  ls_ = nullptr;
   ob_common_checkpoint_iter_.reset();
-  addr_.reset();
   ObVirtualTableScannerIterator::reset();
-}
-
-int ObAllVirtualTransCheckpointInfo::get_next_ls_(ObLS *&ls)
-{
-  int ret = OB_SUCCESS;
-
-  if (ls_iter_guard_.get_ptr() == nullptr
-      && OB_FAIL(share::g_mp->ls_service()->get_ls_iter(ls_iter_guard_, ObLSGetMod::OBSERVER_MOD))) {
-    SERVER_LOG(WARN, "get_ls_iter fail", K(ret));
-  } else if (OB_FAIL(ls_iter_guard_->get_next(ls))) {
-    if (OB_ITER_END != ret) {
-      SERVER_LOG(WARN, "get_next_ls failed", K(ret));
-    }
-  }
-
-  return ret;
 }
 
 int ObAllVirtualTransCheckpointInfo::prepare_to_read_()
 {
   int ret = OB_SUCCESS;
-  ObLS *ls = nullptr;
   ObArray<ObCommonCheckpointVTInfo> infos;
   ob_common_checkpoint_iter_.reset();
-  if (OB_FAIL(get_next_ls_(ls))) {
-    if (OB_ITER_END != ret) {
-      SERVER_LOG(WARN, "get_next_ls failed", K(ret));
-    }
-  } else if (NULL == ls) {
+  ObLSService *ls_service = ::oceanbase::share::server_service<::oceanbase::storage::ObLSService>();
+  if (OB_ISNULL(ls_service)) {
     ret = OB_ERR_UNEXPECTED;
-    SERVER_LOG(WARN, "ls shouldn't NULL here", K(ret), K(ls));
+    SERVER_LOG(WARN, "ls service is null", K(ret));
+  } else if (OB_FAIL(ls_service->get_ls(ls_))) {
   } else if (FALSE_IT(infos.reset())) {
-  } else if (OB_FAIL(ls->get_common_checkpoint_info(infos))) {
-    SERVER_LOG(WARN, "get commoncheckpoint info failed", K(ret), KPC(ls));
+  } else if (OB_FAIL(ls_->get_common_checkpoint_info(infos))) {
   } else {
     int64_t idx = 0;
     for (; idx < infos.count() && OB_SUCC(ret); ++idx) {
       if (OB_FAIL(ob_common_checkpoint_iter_.push(infos.at(idx)))) {
-        SERVER_LOG(ERROR, "ob_common_checkpoint_iter push failed", K(ret), KPC(ls));
       }
     }
   }
@@ -101,25 +79,12 @@ int ObAllVirtualTransCheckpointInfo::prepare_to_read_()
 int ObAllVirtualTransCheckpointInfo::get_next_(ObCommonCheckpointVTInfo &common_checkpoint)
 {
   int ret = OB_SUCCESS;
-  // ensure inner_get_next_row can get new data
-  bool need_retry = true;
-  while (need_retry) {
-    if (!ob_common_checkpoint_iter_.is_ready() && OB_FAIL(prepare_to_read_())) {
-      if (OB_ITER_END == ret) {
-        SERVER_LOG(DEBUG, "iterate commoncheckpoint info iter end", K(ret));
-      } else {
-        SERVER_LOG(WARN, "prepare data failed", K(ret));
-      }
-    } else if (OB_FAIL(ob_common_checkpoint_iter_.get_next(common_checkpoint))) {
-      if (OB_ITER_END == ret) {
-        ob_common_checkpoint_iter_.reset();
-        SERVER_LOG(DEBUG, "iterate commoncheckpoint info iter in the ls end", K(ret));
-        continue;
-      } else {
-        SERVER_LOG(WARN, "get next commoncheckpoint info error.", K(ret));
-      }
+  if (!ob_common_checkpoint_iter_.is_ready() && OB_FAIL(prepare_to_read_())) {
+    SERVER_LOG(WARN, "prepare data failed", K(ret));
+  } else if (OB_FAIL(ob_common_checkpoint_iter_.get_next(common_checkpoint))) {
+    if (OB_ITER_END != ret) {
+      SERVER_LOG(WARN, "get next commoncheckpoint info error.", K(ret));
     }
-    need_retry = false;
   }
   return ret;
 }
@@ -152,7 +117,6 @@ int ObAllVirtualTransCheckpointInfo::inner_get_next_row(ObNewRow *&row)
           if (OB_FAIL(common_checkpoint_type_to_string(ObCommonCheckpointType(common_checkpoint.checkpoint_type),
                                                        checkpoint_type_buf_,
                                                        sizeof(checkpoint_type_buf_)))) {
-            SERVER_LOG(WARN, "get common_checkpoint type buf failed", K(ret), K(common_checkpoint));
           } else {
             checkpoint_type_buf_[MAX_CHECKPOINT_TYPE_BUF_LENGTH - 1] = '\0';
             cur_row_.cells_[i].set_varchar(checkpoint_type_buf_);

@@ -27,8 +27,7 @@ namespace observer
 ObAllVirtualSysTaskStatus::ObAllVirtualSysTaskStatus()
   : iter_(),
     task_id_(),
-    svr_ip_(),
-    comment_()
+    svr_ip_()
 {
 }
 
@@ -44,7 +43,6 @@ int ObAllVirtualSysTaskStatus::init(ObSysTaskStatMgr &status_mgr)
     ret = OB_INIT_TWICE;
     SERVER_LOG(WARN, "cannot init twice", K(ret));
   } else if (OB_FAIL(status_mgr.get_iter(iter_))) {
-    SERVER_LOG(WARN, "failed to get iter", K(ret));
   } else {
     start_to_read_ = true;
   }
@@ -98,9 +96,8 @@ int ObAllVirtualSysTaskStatus::inner_get_next_row(ObNewRow *&row)
           break;
         }
         case OB_APP_MIN_COLUMN_ID + 3: {
-          // comment, ignore ret
-          snprintf(comment_, sizeof(comment_), "%s", status.comment_);
-          cur_row_.cells_[i].set_varchar(comment_);
+          // comment
+          cur_row_.cells_[i].set_varchar(status.comment_);
           cur_row_.cells_[i].set_collation_type(collcation_type);
           break;
         }

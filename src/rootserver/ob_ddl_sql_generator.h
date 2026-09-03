@@ -80,10 +80,6 @@ public:
                                const share::schema::ObNeedPriv &need_priv,
                                const bool is_grant,
                                common::ObSqlString &sql_string);
-  static int gen_catalog_priv_sql(const obcall::ObAccountArg &account,
-                                  const share::schema::ObNeedPriv &need_priv,
-                                  const bool is_grant,
-                                  common::ObSqlString &sql_string);
   static int gen_db_priv_sql(const obcall::ObAccountArg &account,
                              const share::schema::ObNeedPriv &need_priv,
                              const bool is_grant,
@@ -110,8 +106,6 @@ public:
                                  const share::schema::ObNeedPriv &need_priv,
                                  const bool is_grant,
                                  common::ObSqlString &sql_string);
-  
-  
 private:
   static int get_priv_name(const int64_t priv, const char *&name);
   static int priv_to_name(const ObPrivSet priv, common::ObSqlString &priv_str);

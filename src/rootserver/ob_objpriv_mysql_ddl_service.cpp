@@ -40,18 +40,13 @@ int ObObjPrivMysqlDDLService::grant_object(
   if (OB_ISNULL(ddl_service_)) {
     ret = OB_ERR_UNEXPECTED;
     LOG_WARN("get unexpected null", K(ret));
-  } else if (OB_UNLIKELY(!true)) {
-    ret = OB_INVALID_ARGUMENT;
-    LOG_WARN("invalid input schema", K(ret));
   } else if (OB_FAIL(schema_guard.get_schema_version(refreshed_schema_version))) {
-    LOG_WARN("failed to get tenant schema version", KR(ret));
   } else if (!object_key.is_valid()) {
     ret = OB_INVALID_ARGUMENT;
     LOG_WARN("object_key is invalid", K(object_key), K(ret));
   } else {
     ObDDLSQLTransaction trans(&ddl_service_->get_schema_service());
     if (OB_FAIL(trans.start(&ddl_service_->get_sql_proxy(), refreshed_schema_version))) {
-      LOG_WARN("start transaction failed", KR(ret), K(refreshed_schema_version));
     } else {
       ObObjPrivMysqlDDLOperator ddl_operator(ddl_service_->get_schema_service(), ddl_service_->get_sql_proxy());
       if (OB_FAIL(ddl_operator.grant_object(object_key,
@@ -61,7 +56,6 @@ int ObObjPrivMysqlDDLService::grant_object(
                                           true,
                                           grantor,
                                           grantor_host))) {
-        LOG_WARN("fail to grant object", K(ret), K(object_key), K(priv_set));
       }
       if (trans.is_started()) {
         int temp_ret = OB_SUCCESS;
@@ -76,7 +70,6 @@ int ObObjPrivMysqlDDLService::grant_object(
   // publish schema
   if (OB_SUCC(ret)) {
     if (OB_FAIL(ddl_service_->publish_schema())) {
-      LOG_WARN("publish schema failed", K(ret));
     }
   }
   return ret;
@@ -95,24 +88,17 @@ int ObObjPrivMysqlDDLService::revoke_object(
   if (OB_ISNULL(ddl_service_)) {
     ret = OB_ERR_UNEXPECTED;
     LOG_WARN("get unexpected null", K(ret));
-  } else if (OB_UNLIKELY(!true)) {
-    ret = OB_INVALID_ARGUMENT;
-    LOG_WARN("invalid input schema", K(ret));
   } else if (!object_key.is_valid()) {
     ret = OB_INVALID_ARGUMENT;
     LOG_WARN("object_key is invalid", K(object_key), K(ret));
-  } else if (OB_FAIL(ddl_service_->get_tenant_schema_guard_with_version_in_inner_table(schema_guard))) {
-    LOG_WARN("fail to get schema guard", KR(ret));
+  } else if (OB_FAIL(ddl_service_->get_runtime_schema_guard_with_version_in_inner_table(schema_guard))) {
   } else if (OB_FAIL(schema_guard.get_schema_version(refreshed_schema_version))) {
-    LOG_WARN("failed to get tenant schema version", KR(ret));
   } else {
     ObDDLSQLTransaction trans(&ddl_service_->get_schema_service());
     if (OB_FAIL(trans.start(&ddl_service_->get_sql_proxy(), refreshed_schema_version))) {
-      LOG_WARN("Start transaction failed", KR(ret), K(refreshed_schema_version));
     } else {
       ObObjPrivMysqlDDLOperator ddl_operator(ddl_service_->get_schema_service(), ddl_service_->get_sql_proxy());
       if (OB_FAIL(ddl_operator.revoke_object(object_key, priv_set, trans, true, true, grantor, grantor_host))) {
-        LOG_WARN("fail to revoke object", K(ret), K(object_key), K(priv_set));
       }
       if (trans.is_started()) {
         int temp_ret = OB_SUCCESS;
@@ -127,7 +113,6 @@ int ObObjPrivMysqlDDLService::revoke_object(
   // publish schema
   if (OB_SUCC(ret)) {
     if (OB_FAIL(ddl_service_->publish_schema())) {
-      LOG_WARN("publish schema failed", K(ret));
     }
   }
   return ret;
@@ -135,4 +120,3 @@ int ObObjPrivMysqlDDLService::revoke_object(
 
 }
 }
-

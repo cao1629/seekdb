@@ -17,7 +17,7 @@
 #ifndef OCEANBASE_OB_VIRTUAL_DATA_ACCESS_SERVICE_H_
 #define OCEANBASE_OB_VIRTUAL_DATA_ACCESS_SERVICE_H_
 
-#include "share/ob_i_tablet_scan.h"
+#include "data_plane/access/ob_tablet_scan.h"
 #include "ob_virtual_table_iterator_factory.h"
 
 namespace oceanbase
@@ -30,18 +30,18 @@ class ObServerConfig;
 }
 namespace rootserver
 {
-class ObRootService;
+class ObLocalManagementService;
 }
 namespace observer
 {
-class ObVirtualDataAccessService : public common::ObITabletScan
+class ObVirtualDataAccessService : public common::ObIVirtualTableScan
 {
 public:
   ObVirtualDataAccessService(
-      rootserver::ObRootService &root_service,
+      rootserver::ObLocalManagementService &local_management_service,
       common::ObAddr &addr,
       common::ObServerConfig *config)
-      : vt_iter_factory_(root_service, addr, config)
+      : vt_iter_factory_(local_management_service, addr, config)
   {
   }
   virtual ~ObVirtualDataAccessService() {}

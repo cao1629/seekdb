@@ -18,7 +18,7 @@
 
 #include "ob_server_config.h"
 
-#include "lib/alloc/alloc_struct.h"
+#include "lib/alloc/alloc_func.h"
 #include "lib/cpu/ob_cpu_topology.h"
 #include "lib/hash/ob_hashtable.h"
 #include "lib/hash/ob_hashutils.h"
@@ -31,15 +31,29 @@
 #include "share/config/ob_config.h"
 #include "share/config/ob_system_config.h"
 #include "share/config/ob_system_config_key.h"
-#include "share/config/ob_tenant_config_mgr.h"
+#include "share/config/ob_runtime_config.h"
+#include "share/cache/ob_kvcache_struct.h"
 #include "share/ob_errno.h"
-#include "share/ob_rpc_struct.h"
-#include "share/ob_server_struct.h"
 
 namespace oceanbase
 {
 namespace common
 {
+
+namespace
+{
+constexpr int64_t MEMORY_BUDGET_PERCENTAGE = 80;
+constexpr int64_t KV_CACHE_MEMORY_BUDGET_PERCENTAGE = 40;
+constexpr int64_t SHARED_MODULE_MEMORY_PERCENTAGE = 50;
+
+int64_t resolve_shared_module_memory_limit(const int64_t configured_limit,
+                                           const int64_t memory_budget)
+{
+  return configured_limit > 0
+      ? configured_limit
+      : lib::get_memory_by_percentage(memory_budget, SHARED_MODULE_MEMORY_PERCENTAGE);
+}
+}
 
 int64_t get_cpu_count()
 {
@@ -50,7 +64,7 @@ int64_t get_cpu_count()
 using namespace share;
 
 ObServerConfig::ObServerConfig()
-  : disk_actual_space_(0), self_addr_(), rwlock_(ObLatchIds::CONFIG_LOCK), system_config_(NULL), global_version_(0)
+  : disk_actual_space_(0), self_addr_(), rwlock_(ObLatchIds::CONFIG_LOCK), global_version_(0)
 {
 #undef DEF_PARAM
 #define DEF_PARAM(name, args...) name.update_cb_ = this;
@@ -69,31 +83,8 @@ ObServerConfig &ObServerConfig::get_instance()
   return config;
 }
 
-int ObServerConfig::init(const ObSystemConfig &config)
-{
-  int ret = OB_SUCCESS;
-  system_config_ = &config;
-  if (OB_ISNULL(system_config_)) {
-    ret = OB_INIT_FAIL;
-  }
-  return ret;
-}
-
-bool ObServerConfig::in_upgrade_mode() const
-{
-  bool bret = false;
-  if (enable_upgrade_mode) {
-    bret = true;
-  } else {
-    obcall::ObUpgradeStage stage = GCTX.get_upgrade_stage();
-    bret = (stage >= obcall::OB_UPGRADE_STAGE_PREUPGRADE
-            && stage <= obcall::OB_UPGRADE_STAGE_POSTUPGRADE);
-  }
-  return bret;
-}
-
-
-int ObServerConfig::read_config(const bool enable_static_effect)
+int ObServerConfig::read_config(const ObSystemConfig &system_config,
+                                const bool enable_static_effect)
 {
   int ret = OB_SUCCESS;
   int temp_ret = OB_SUCCESS;
@@ -105,9 +96,8 @@ int ObServerConfig::read_config(const bool enable_static_effect)
       ret = OB_ERR_UNEXPECTED;
       OB_LOG(ERROR, "config item is null", "name", it->first.str(), K(ret));
     } else if (!it->second->reboot_effective() || !enable_static_effect) {
-      temp_ret = system_config_->read_config(key, *(it->second));
+      temp_ret = system_config.read_config(key, *(it->second));
       if (OB_SUCCESS != temp_ret) {
-        OB_LOG(DEBUG, "Read config error", "name", it->first.str(), K(temp_ret));
       }
     }
   }
@@ -155,7 +145,7 @@ int ObServerConfig::add_extra_config(const char *config_str,
   return add_extra_config_unsafe(config_str, version, check_config);
 }
 
-static double calc_default_tenant_cpu(const double quota)
+static double calc_default_server_cpu(const double quota)
 {
   double cpu = quota;
   if (0 == cpu) {
@@ -170,18 +160,24 @@ static double calc_default_tenant_cpu(const double quota)
   return cpu;
 }
 
-double ObServerConfig::get_sys_tenant_default_min_cpu()
+double ObServerConfig::get_server_default_min_cpu()
 {
-  return calc_default_tenant_cpu(server_cpu_quota_min);
+  return calc_default_server_cpu(server_cpu_quota_min);
 }
 
-double ObServerConfig::get_sys_tenant_default_max_cpu()
+double ObServerConfig::get_server_default_max_cpu()
 {
-  return calc_default_tenant_cpu(server_cpu_quota_max);
+  return calc_default_server_cpu(server_cpu_quota_max);
 }
 
 ObServerMemoryConfig::ObServerMemoryConfig()
-  : memory_limit_(0), hard_memory_limit_(INT64_MAX)
+  : kvcache_memory_limit_(resolve_kvcache_memory_limit(
+        0, calculate_automatic_memory_budget(get_effective_memory_size()))),
+    kvcache_memory_capacity_(0),
+    memstore_memory_limit_(resolve_memstore_memory_limit(
+        0, calculate_automatic_memory_budget(get_effective_memory_size()))),
+    vector_memory_limit_(resolve_vector_memory_limit(
+        0, calculate_automatic_memory_budget(get_effective_memory_size())))
 {}
 
 ObServerMemoryConfig &ObServerMemoryConfig::get_instance()
@@ -190,72 +186,123 @@ ObServerMemoryConfig &ObServerMemoryConfig::get_instance()
   return memory_config;
 }
 
+int64_t ObServerMemoryConfig::calculate_automatic_memory_budget(
+    const int64_t system_memory)
+{
+  const int64_t percentage_memory_budget = lib::get_memory_by_percentage(
+      system_memory, MEMORY_BUDGET_PERCENTAGE);
+  const int64_t reserved_memory_budget = system_memory > lib::DEFAULT_MEMORY_BUDGET
+      ? system_memory - lib::DEFAULT_MEMORY_BUDGET
+      : 0;
+  const int64_t automatic_memory_budget = MIN(
+      percentage_memory_budget, reserved_memory_budget);
+  return automatic_memory_budget > lib::DEFAULT_MEMORY_BUDGET
+      ? automatic_memory_budget
+      : lib::DEFAULT_MEMORY_BUDGET;
+}
+
+int64_t ObServerMemoryConfig::resolve_kvcache_memory_limit(
+    const int64_t configured_limit,
+    const int64_t memory_budget)
+{
+  const int64_t requested_limit = configured_limit > 0
+      ? configured_limit
+      : lib::get_memory_by_percentage(
+          memory_budget, KV_CACHE_MEMORY_BUDGET_PERCENTAGE);
+  return requested_limit < MAX_KVCACHE_MEMORY_SIZE
+      ? requested_limit
+      : MAX_KVCACHE_MEMORY_SIZE;
+}
+
+int64_t ObServerMemoryConfig::resolve_memstore_memory_limit(
+    const int64_t configured_limit,
+    const int64_t memory_budget)
+{
+  return resolve_shared_module_memory_limit(configured_limit, memory_budget);
+}
+
+int64_t ObServerMemoryConfig::resolve_vector_memory_limit(
+    const int64_t configured_limit,
+    const int64_t memory_budget)
+{
+  return resolve_shared_module_memory_limit(configured_limit, memory_budget);
+}
+
 int ObServerMemoryConfig::reload_config(const ObServerConfig& server_config)
 {
   int ret = OB_SUCCESS;
-  int64_t memory_limit = server_config.memory_limit;
-  int64_t hard_memory_limit = server_config.memory_hard_limit;
-  int64_t phy_mem_size = get_phy_mem_size();
-  if (0 == memory_limit) {
-    memory_limit = phy_mem_size * server_config.memory_limit_percentage / 100;
+  const int64_t configured_memory_budget = server_config.memory_budget;
+  int64_t memory_budget = configured_memory_budget;
+  const int64_t physical_memory = get_phy_mem_size();
+  const int64_t cgroup_memory_limit = get_cgroup_memory_limit();
+  const int64_t effective_memory = cgroup_memory_limit > 0 &&
+      (physical_memory <= 0 || cgroup_memory_limit < physical_memory)
+      ? cgroup_memory_limit
+      : physical_memory;
+  const int64_t automatic_memory_budget =
+      calculate_automatic_memory_budget(effective_memory);
+  if (0 == memory_budget) {
+    memory_budget = automatic_memory_budget;
   }
-  if (0 == hard_memory_limit) {
-    hard_memory_limit = phy_mem_size * MAX_PHY_MEM_PERCENTAGE / 100;
+  const int64_t configured_kvcache_memory_limit =
+      server_config.kvcache_memory_limit;
+  const int64_t configured_memstore_memory_limit =
+      server_config.memstore_memory_limit;
+  const int64_t configured_vector_memory_limit =
+      server_config.vector_memory_limit;
+  const int64_t resolved_kvcache_memory_limit = resolve_kvcache_memory_limit(
+      configured_kvcache_memory_limit, memory_budget);
+  int64_t kvcache_memory_capacity = get_kvcache_memory_capacity();
+  if (0 == kvcache_memory_capacity) {
+    kvcache_memory_capacity =
+        MIN(resolved_kvcache_memory_limit, MAX_KVCACHE_MEMORY_SIZE / 2) * 2;
+    kvcache_memory_capacity_.store(kvcache_memory_capacity, std::memory_order_release);
   }
-  hard_memory_limit_ = hard_memory_limit;
-  memory_limit_ = MIN(memory_limit, hard_memory_limit_);
-  LOG_INFO("update observer memory config", K_(memory_limit), K_(hard_memory_limit));
+  const int64_t kvcache_memory_limit =
+      MIN(resolved_kvcache_memory_limit, kvcache_memory_capacity);
+  const int64_t memstore_memory_limit = resolve_memstore_memory_limit(
+      configured_memstore_memory_limit, memory_budget);
+  const int64_t vector_memory_limit = resolve_vector_memory_limit(
+      configured_vector_memory_limit, memory_budget);
+  lib::set_memory_budget(memory_budget);
+  kvcache_memory_limit_.store(kvcache_memory_limit, std::memory_order_release);
+  memstore_memory_limit_.store(memstore_memory_limit, std::memory_order_release);
+  vector_memory_limit_.store(vector_memory_limit, std::memory_order_release);
+  LOG_INFO("update observer memory config", K(memory_budget),
+           K(configured_memory_budget), K(physical_memory),
+           K(cgroup_memory_limit), K(effective_memory),
+           K(automatic_memory_budget), K(kvcache_memory_limit),
+           K(resolved_kvcache_memory_limit), K(kvcache_memory_capacity),
+           K(configured_kvcache_memory_limit), K(memstore_memory_limit),
+           K(configured_memstore_memory_limit), K(vector_memory_limit),
+           K(configured_vector_memory_limit));
   return ret;
 }
 
-void ObServerMemoryConfig::check_limit(bool ignore_error)
+int64_t ObServerMemoryConfig::get_server_memory_budget() const
 {
-  int ret = OB_SUCCESS;
-  // check unmanaged memory size
-  const int64_t UNMANAGED_MEMORY_LIMIT = 2LL<<30;
-  int64_t unmanaged_memory_size = lib::get_unmanaged_memory_size();
-  if (unmanaged_memory_size > UNMANAGED_MEMORY_LIMIT) {
-    if (ignore_error) {
-      LOG_WARN("unmanaged_memory_size is over the limit", K(unmanaged_memory_size), K(UNMANAGED_MEMORY_LIMIT));
-    } else {
-      LOG_ERROR("unmanaged_memory_size is over the limit", K(unmanaged_memory_size), K(UNMANAGED_MEMORY_LIMIT));
-    }
-  }
+  return lib::get_memory_budget();
 }
 
-int ObServerConfig::publish_special_config_after_dump()
+int64_t ObServerMemoryConfig::get_kvcache_memory_limit() const
 {
-  int ret = OB_SUCCESS;
-  return ret;
+  return kvcache_memory_limit_.load(std::memory_order_acquire);
 }
 
+int64_t ObServerMemoryConfig::get_kvcache_memory_capacity() const
+{
+  return kvcache_memory_capacity_.load(std::memory_order_acquire);
+}
+
+int64_t ObServerMemoryConfig::get_memstore_memory_limit() const
+{
+  return memstore_memory_limit_.load(std::memory_order_acquire);
+}
+
+int64_t ObServerMemoryConfig::get_vector_memory_limit() const
+{
+  return vector_memory_limit_.load(std::memory_order_acquire);
+}
 
 } // end of namespace common
-namespace obcall {
-int64_t get_max_rpc_packet_size()
-{
-  return GCONF._max_rpc_packet_size;
-}
-
-int64_t get_stream_rpc_max_wait_timeout()
-{
-  int64_t stream_rpc_max_wait_timeout = 30 * 1000 * 1000L;  // was ObCallProcessorBase::DEFAULT_WAIT_NEXT_PACKET_TIMEOUT
-  if (OB_LIKELY(true)) {
-    stream_rpc_max_wait_timeout = GCONF._stream_rpc_max_wait_timeout;
-  }
-  return stream_rpc_max_wait_timeout;
-}
-
-bool stream_rpc_update_timeout()
-{
-  return true;
-}
-
-} // end of namespace obcall
-namespace obgrpc {
-bool ob_grpc_is_rpc_tls_enabled()
-{
-  return GCONF.enable_rpc_tls;
-}
-} // end of namespace obgrpc
 } // end of namespace oceanbase

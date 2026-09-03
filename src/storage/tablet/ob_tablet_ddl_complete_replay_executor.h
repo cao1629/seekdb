@@ -17,7 +17,7 @@
 #ifndef OCEANBASE_STORAGE_OB_TABLET_DDL_COMPLETE_REPLAY_EXECUTOR
 #define OCEANBASE_STORAGE_OB_TABLET_DDL_COMPLETE_REPLAY_EXECUTOR
 
-#include "logservice/replayservice/ob_tablet_replay_executor.h"
+#include "storage/tablet/ob_tablet_replay_executor.h"
 #include "share/scn.h"
 
 namespace oceanbase
@@ -29,7 +29,7 @@ namespace mds
 class BufferCtx;
 }
 
-class ObTabletDDLCompleteReplayExecutor final : public logservice::ObTabletReplayExecutor
+class ObTabletDDLCompleteReplayExecutor final : public ObTabletReplayExecutor
 {
 public:
   ObTabletDDLCompleteReplayExecutor();
@@ -37,7 +37,6 @@ public:
   int init(
       mds::BufferCtx &user_ctx,
       const share::SCN &scn,
-      const bool for_old_mds,
       const ObTabletDDLCompleteMdsUserData &user_data);
   static int freeze_ddl_kv(ObTablet &tablet, const ObTabletDDLCompleteMdsUserData &user_data);
   static int update_tablet_table_store(ObTablet &tablet, const ObTabletDDLCompleteMdsUserData &user_data);
@@ -59,7 +58,6 @@ protected:
 private:
   mds::BufferCtx *user_ctx_;
   share::SCN scn_;
-  bool for_old_mds_;
   const ObTabletDDLCompleteMdsUserData *user_data_;
 };
 } // namespace storage

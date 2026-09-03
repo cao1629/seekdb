@@ -15,10 +15,8 @@
  */
 
 #define USING_LOG_PREFIX SQL_RESV
-#include "observer/ob_inner_sql_connection_pool.h"
 #include "sql/engine/expr/ob_expr_validate_password_strength.h"
 #include "sql/resolver/dcl/ob_dcl_resolver.h"
-#include "share/catalog/ob_catalog_utils.h"
 
 using namespace oceanbase::sql;
 using namespace oceanbase::common;
@@ -33,12 +31,10 @@ int ObDCLResolver::check_and_convert_name(ObString &db, ObString &table)
     ret = OB_NOT_INIT;
     LOG_WARN("Session info is not inited", K(ret));
   } else if (OB_FAIL(session_info_->get_name_case_mode(mode))) {
-    LOG_WARN("fail to get name case mode", K(mode), K(ret));
   } else {
     bool perserve_lettercase = (mode != OB_LOWERCASE_AND_INSENSITIVE);
     ObCollationType cs_type = CS_TYPE_INVALID;
     if (OB_FAIL(session_info_->get_collation_connection(cs_type))) {
-      LOG_WARN("fail to get collation_connection", K(ret));
     } else if (db.length() > 0
                && OB_FAIL(ObSQLUtils::check_and_convert_db_name(
                        cs_type, perserve_lettercase, db))) {
@@ -74,16 +70,13 @@ int ObDCLResolver::check_password_strength(common::ObString &password)
     ret = OB_NOT_INIT;
     LOG_WARN("Session info is not inited", K(ret));
   } else if (OB_FAIL(session_info_->get_sys_variable(share::SYS_VAR_VALIDATE_PASSWORD_POLICY, pw_policy))) {
-    LOG_WARN("fail to get validate_password_policy variable", K(ret));
   } else if (OB_FAIL(session_info_->get_sys_variable(share::SYS_VAR_VALIDATE_PASSWORD_CHECK_USER_NAME, check_user_name_flag))) {
-    LOG_WARN("fail to get validate_password_check_user_name variable", K(ret));
   } else if (!check_user_name_flag && OB_FAIL(check_user_name(password, session_info_->get_user_name()))) {
     LOG_WARN("password cannot be the same with user name", K(ret));
   } else if (OB_FAIL(ObExprValidatePasswordStrength::validate_password_low(password,
                                                                            char_len,
                                                                            *session_info_,
                                                                            passed))) {
-    LOG_WARN("password len dont satisfied current pw policy", K(ret));
   } else if (OB_UNLIKELY(!passed)) {
     // do nothing
   } else if (ObPasswordPolicy::LOW == pw_policy) {
@@ -93,7 +86,6 @@ int ObDCLResolver::check_password_strength(common::ObString &password)
                                                                          char_len,
                                                                          *session_info_,
                                                                          passed))) {
-      LOG_WARN("password len dont satisfied current pw policy", K(ret));
     }
   } else {
     ret = OB_ERR_UNEXPECTED;
@@ -134,10 +126,8 @@ int ObDCLResolver::mask_password_for_single_user(ObIAllocator *allocator,
     LOG_WARN("sql_parser parse user_identification error", K(ret));
   } else if (FALSE_IT(pass_node = user_pass->children_[pwd_idx])) {
   } else if (OB_FAIL(mask_password_for_passwd_node(allocator, src, pass_node, masked_sql))) {
-        LOG_WARN("failed to generated masked_sql", K(src), K(ret));
   }
   
-  LOG_DEBUG("finish mask_password_for_users", K(src), K(masked_sql));
   return ret;
 }
 
@@ -167,12 +157,10 @@ int ObDCLResolver::mask_password_for_users(ObIAllocator *allocator,
         LOG_WARN("sql_parser parse user_identification error", K(ret));
       } else if (FALSE_IT(pass_node = user_pass->children_[pwd_idx])) {
       } else if (OB_FAIL(mask_password_for_passwd_node(allocator, src, pass_node, masked_sql))) {
-        LOG_WARN("failed to generated masked_sql", K(src), K(ret));
       }
     }
   }
 
-  LOG_DEBUG("finish mask_password_for_users", K(src), K(masked_sql));
   return ret;
 }
 
@@ -193,7 +181,6 @@ int ObDCLResolver::mask_password_for_passwd_node(
     ret = OB_INVALID_ARGUMENT;
     LOG_WARN("src sql_text should not be NULL", K(src), K(ret));
   } else if (OB_FAIL(ob_write_string(*allocator, src, tmp_sql))) {
-    LOG_WARN("fail to ob_write_string", K(src), K(ret));
   } else if (OB_ISNULL(passwd_node)) {
     // do nothing
   } else if (passwd_node->stmt_loc_.first_column_ >= src_len) {
@@ -212,7 +199,6 @@ int ObDCLResolver::mask_password_for_passwd_node(
   if (OB_SUCC(ret)) {
     masked_sql = tmp_sql;
   }
-  LOG_DEBUG("finish mask_password_for_passwd_node", K(src), K(masked_sql));
   return ret;
 }
 
@@ -223,50 +209,39 @@ int ObDCLResolver::check_dcl_on_inner_user(const ObItemType &type,
   int ret = OB_SUCCESS;
   uint64_t user_id = OB_INVALID_ID;
   bool is_valid = true;
-  if (GCONF._enable_reserved_user_dcl_restriction) {
-    if (T_ALTER_USER_DEFAULT_ROLE == type ||
-        T_ALTER_USER_PROFILE == type ||
-        T_DROP_USER == type ||
-        T_GRANT == type ||
-        T_LOCK_USER == type ||
-        T_RENAME_USER == type ||
-        T_REVOKE == type ||
-        T_REVOKE_ALL == type ||
-        T_REVOKE_ROLE == type ||
-        T_SET_PASSWORD == type ||
-        T_SET_ROLE == type ||
-        T_SYSTEM_REVOKE == type) {
-      if (user_name.empty() || session_user_id == OB_INVALID_ID) {
-        ret = OB_ERR_UNEXPECTED;
-        LOG_WARN("failed. get empty user name or invalid session user id", K(ret), K(user_name),
-                 K(session_user_id));
-      } else if (OB_ISNULL(schema_checker_) || OB_ISNULL(params_.session_info_)) {
-        ret = OB_ERR_UNEXPECTED;
-        LOG_WARN("failed. get NULL ptr", K(ret), K(schema_checker_), K(params_.session_info_));
-      } else if (OB_FAIL(schema_checker_->get_user_id(
-                                                  user_name,
-                                                  host_name,
-                                                  user_id))) {
-        if (OB_USER_NOT_EXIST == ret) {
-          // do not check user exists here
-          ret = OB_SUCCESS;
-          LOG_TRACE("user is not exists", K(user_name), K(host_name));
-        } else {
-          LOG_WARN("failed to get user id", K(ret), K(user_name));
-        }
+  if (T_ALTER_USER_DEFAULT_ROLE == type ||
+      T_DROP_USER == type ||
+      T_GRANT == type ||
+      T_LOCK_USER == type ||
+      T_RENAME_USER == type ||
+      T_REVOKE == type ||
+      T_REVOKE_ALL == type ||
+      T_REVOKE_ROLE == type ||
+      T_SET_PASSWORD == type ||
+      T_SET_ROLE == type ||
+      T_SYSTEM_REVOKE == type) {
+    if (user_name.empty() || session_user_id == OB_INVALID_ID) {
+      ret = OB_ERR_UNEXPECTED;
+      LOG_WARN("failed. get empty user name or invalid session user id", K(ret), K(user_name),
+               K(session_user_id));
+    } else if (OB_ISNULL(schema_checker_) || OB_ISNULL(params_.session_info_)) {
+      ret = OB_ERR_UNEXPECTED;
+      LOG_WARN("failed. get NULL ptr", K(ret), K(schema_checker_), K(params_.session_info_));
+    } else if (OB_FAIL(schema_checker_->get_user_id(
+                                                user_name,
+                                                host_name,
+                                                user_id))) {
+      if (OB_USER_NOT_EXIST == ret) {
+        // do not check user exists here
+        ret = OB_SUCCESS;
+      } else {
+        LOG_WARN("failed to get user id", K(ret), K(user_name));
       }
-      if (OB_SUCC(ret)) {
-        if (OB_SYS_USER_ID == user_id ||
-            OB_ORA_SYS_USER_ID == user_id ||
-            OB_ORA_AUDITOR_USER_ID == user_id ||
-            OB_ORA_LBACSYS_USER_ID == user_id) {
-          if (session_user_id != user_id &&
-              OB_SYS_USER_ID != session_user_id &&
-              OB_ORA_SYS_USER_ID != session_user_id) {
-            is_valid = false;
-          }
-        }
-      }
+    }
+    if (OB_SUCC(ret)
+        && OB_SYS_USER_ID == user_id
+        && OB_SYS_USER_ID != session_user_id) {
+      is_valid = false;
     }
   }
   if (OB_SUCC(ret) && !is_valid) {
@@ -281,32 +256,23 @@ int ObDCLResolver::check_dcl_on_inner_user(const ObItemType &type,
                                            const uint64_t &user_id) {
   int ret = OB_SUCCESS;
   bool is_valid = true;
-  if (GCONF._enable_reserved_user_dcl_restriction) {
-    if (T_ALTER_USER_DEFAULT_ROLE == type ||
-        T_ALTER_USER_PROFILE == type ||
-        T_DROP_USER == type ||
-        T_GRANT == type ||
-        T_LOCK_USER == type ||
-        T_RENAME_USER == type ||
-        T_REVOKE == type ||
-        T_REVOKE_ALL == type ||
-        T_REVOKE_ROLE == type ||
-        T_SET_PASSWORD == type ||
-        T_SET_ROLE == type ||
-        T_SYSTEM_REVOKE == type) {
-      if (OB_INVALID_ID == user_id || OB_INVALID_ID == session_user_id) {
-        ret = OB_ERR_UNEXPECTED;
-        LOG_WARN("failed.invalid session user id/user id", K(ret), K(user_id), K(session_user_id));
-      } else if (OB_SYS_USER_ID == user_id ||
-                 OB_ORA_SYS_USER_ID == user_id ||
-                 OB_ORA_AUDITOR_USER_ID == user_id ||
-                 OB_ORA_LBACSYS_USER_ID == user_id) {
-        if (session_user_id != user_id &&
-            OB_SYS_USER_ID != session_user_id &&
-            OB_ORA_SYS_USER_ID != session_user_id) {
-          is_valid = false;
-        }
-      }
+  if (T_ALTER_USER_DEFAULT_ROLE == type ||
+      T_DROP_USER == type ||
+      T_GRANT == type ||
+      T_LOCK_USER == type ||
+      T_RENAME_USER == type ||
+      T_REVOKE == type ||
+      T_REVOKE_ALL == type ||
+      T_REVOKE_ROLE == type ||
+      T_SET_PASSWORD == type ||
+      T_SET_ROLE == type ||
+      T_SYSTEM_REVOKE == type) {
+    if (OB_INVALID_ID == user_id || OB_INVALID_ID == session_user_id) {
+      ret = OB_ERR_UNEXPECTED;
+      LOG_WARN("failed.invalid session user id/user id", K(ret), K(user_id), K(session_user_id));
+    } else if (OB_SYS_USER_ID == user_id
+               && OB_SYS_USER_ID != session_user_id) {
+      is_valid = false;
     }
   }
   if (OB_SUCC(ret) && !is_valid) {
@@ -348,7 +314,6 @@ int ObDCLResolver::resolve_user_list_node(ParseNode *user_node,
                            static_cast<int32_t>(user_hostname_node->children_[1]->str_len_));
     }
     if (OB_FAIL(ret)) {
-      LOG_WARN("failed to get user name", K(ret), K(user_name));
     } else if (OB_FAIL(schema_checker_->get_user_info(user_name, host_name, user_info))) {
       LOG_WARN("failed to get user info", K(ret), K(user_name));
       if (OB_USER_NOT_EXIST == ret) {
@@ -362,8 +327,6 @@ int ObDCLResolver::resolve_user_list_node(ParseNode *user_node,
     } else if (OB_FAIL(check_dcl_on_inner_user(top_node->type_,
                                                params_.session_info_->get_priv_user_id(),
                                                user_info->get_user_id()))) {
-      LOG_WARN("failed to check dcl on inner-user or unsupport to modify reserved user",
-               K(ret), K(params_.session_info_->get_user_name()), K(user_name));
     }
   }
   return ret;
@@ -413,7 +376,6 @@ int ObDCLResolver::resolve_user_host(const ParseNode *user_pass,
       ObString default_auth_plugin;
       if (OB_FAIL(session_info_->get_sys_variable(share::SYS_VAR_DEFAULT_AUTHENTICATION_PLUGIN,
                                                   default_auth_plugin))) {
-        LOG_WARN("fail to get block encryption variable", K(ret));
       } else if (OB_UNLIKELY(0 != auth_plugin.case_compare(default_auth_plugin))) {
         ret = OB_ERR_PLUGIN_IS_NOT_LOADED;
         LOG_USER_ERROR(OB_ERR_PLUGIN_IS_NOT_LOADED, auth_plugin.length(), auth_plugin.ptr());

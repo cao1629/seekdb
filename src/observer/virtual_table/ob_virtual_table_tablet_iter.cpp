@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 #include "observer/virtual_table/ob_virtual_table_tablet_iter.h"
-#include "share/rc/ob_module_provider.h"
+#include "share/rc/ob_server_runtime.h"
 #include "storage/tx_storage/ob_ls_service.h"
 
 using namespace oceanbase;
@@ -29,7 +29,6 @@ ObVirtualTableTabletIter::ObVirtualTableTabletIter()
       tablet_iter_(nullptr),
       tablet_allocator_("VTTable"),
       tablet_handle_(),
-      ls_id_(share::ObLSID::INVALID_LS_ID),
       iter_buf_(nullptr)
 {
 }
@@ -42,10 +41,8 @@ ObVirtualTableTabletIter::~ObVirtualTableTabletIter()
 void ObVirtualTableTabletIter::reset()
 {
   addr_.reset();
-  ls_id_ = share::ObLSID::INVALID_LS_ID;
-
   if (OB_NOT_NULL(tablet_iter_)) {
-    tablet_iter_->~ObTenantTabletIterator();
+    tablet_iter_->~ObTabletIterator();
     tablet_iter_ = nullptr;
   }
   if (OB_NOT_NULL(iter_buf_)) {
@@ -68,7 +65,7 @@ int ObVirtualTableTabletIter::init(
   } else if (OB_ISNULL(allocator)) {
     ret = OB_INVALID_ARGUMENT;
     SERVER_LOG(WARN, "invalid argument", K(ret), KP(allocator));
-  } else if (OB_ISNULL(iter_buf_ = allocator->alloc(sizeof(ObTenantTabletIterator)))) {
+  } else if (OB_ISNULL(iter_buf_ = allocator->alloc(sizeof(ObTabletIterator)))) {
     ret = OB_ALLOCATE_MEMORY_FAILED;
     SERVER_LOG(WARN, "fail to alloc tablet iter buf", K(ret));
   } else {
@@ -87,8 +84,8 @@ int ObVirtualTableTabletIter::get_next_tablet()
   tablet_allocator_.reuse();
   if (nullptr == tablet_iter_) {
     
-    ObTenantMetaMemMgr *t3m = share::g_mp->tenant_meta_mem_mgr();
-    if (OB_ISNULL(tablet_iter_ = new (iter_buf_) ObTenantTabletIterator(*t3m, tablet_allocator_, nullptr/*no op*/))) {
+    ObStorageMetaMemMgr *t3m = ::oceanbase::share::server_service<::oceanbase::storage::ObStorageMetaMemMgr>();
+    if (OB_ISNULL(tablet_iter_ = new (iter_buf_) ObTabletIterator(*t3m, tablet_allocator_, nullptr/*no op*/))) {
       ret = OB_ERR_UNEXPECTED;
       SERVER_LOG(WARN, "fail to new tablet_iter_", K(ret));
     }
@@ -101,10 +98,7 @@ int ObVirtualTableTabletIter::get_next_tablet()
   } else if (OB_UNLIKELY(!tablet_handle_.is_valid())) {
     ret = OB_ERR_UNEXPECTED;
     SERVER_LOG(WARN, "unexpected invalid tablet", K(ret), K(tablet_handle_));
-  } else {
-    ls_id_ = tablet_handle_.get_obj()->get_tablet_meta().ls_id_.id();
   }
 
   return ret;
 }
-

@@ -60,9 +60,7 @@ int ObGrantResolver::resolve_grantee_clause(
         } else {
           ObString user_name;
           ObString host_name(OB_DEFAULT_HOST_NAME);
-          LOG_DEBUG("grant_user", K(i), K(grant_user->str_value_), K(grant_user->type_));
           if (OB_FAIL(resolve_grant_user(grant_user, session_info, user_name, host_name))) {
-            LOG_WARN("failed to resolve grant_user", K(ret), K(grant_user));
           } else {
             OZ(user_name_array.push_back(user_name));
             OZ(host_name_array.push_back(host_name));
@@ -78,7 +76,6 @@ int ObGrantResolver::resolve_grantee_clause(
         ObString user_name;
         ObString host_name(OB_DEFAULT_HOST_NAME);
         if (OB_FAIL(resolve_grant_user(grant_user, session_info, user_name, host_name))) {
-          LOG_WARN("failed to resolve grant_user", K(ret), K(grant_user));
         } else {
           OZ(user_name_array.push_back(user_name));
           OZ(host_name_array.push_back(host_name));
@@ -124,7 +121,6 @@ int ObGrantResolver::resolve_grant_user(
           ObString default_auth_plugin;
           if (OB_FAIL(session_info->get_sys_variable(share::SYS_VAR_DEFAULT_AUTHENTICATION_PLUGIN,
                                                      default_auth_plugin))) {
-            LOG_WARN("fail to get block encryption variable", K(ret));
           } else if (0 != auth_plugin.compare(default_auth_plugin)) {
             ret = OB_ERR_PLUGIN_IS_NOT_LOADED;
             LOG_USER_ERROR(OB_ERR_PLUGIN_IS_NOT_LOADED, auth_plugin.length(), auth_plugin.ptr());
@@ -297,7 +293,6 @@ int ObGrantResolver::resolve_grant_role_mysql(
   } else {
     grant_stmt->set_stmt_type(stmt::T_GRANT_ROLE);
     if (OB_FAIL(resolve_grant_role_to_ur(grant_role, grant_stmt))) {
-      LOG_WARN("resolve_grant_role fail", K(ret));
     }
   }
   return ret;
@@ -306,7 +301,6 @@ int ObGrantResolver::resolve_grant_role_mysql(
 int ObGrantResolver::resolve(const ParseNode &parse_tree)
 {
   int ret = OB_SUCCESS;
-  CHECK_COMPATIBILITY_MODE(session_info_);
   ret = resolve_mysql(parse_tree);
   return ret;
 }
@@ -337,7 +331,6 @@ int ObGrantResolver::resolve_mysql(const ParseNode &parse_tree)
     
     if (T_GRANT_ROLE == node->type_) {
       if (OB_FAIL(resolve_grant_role_mysql(node, grant_stmt))) {
-        LOG_WARN("resolve grant system privileges failed", K(ret));
       }
     } else {
       ParseNode *privs_node = node->children_[0];
@@ -350,7 +343,6 @@ int ObGrantResolver::resolve_mysql(const ParseNode &parse_tree)
         if (OB_SUCC(ret)) {
           ObString db = ObString::make_string("");
           ObString table = ObString::make_string("");
-          ObString catalog = ObString::make_string("");
           if (priv_object_node != NULL
               && OB_FAIL(resolve_priv_level_with_object_type(session_info_,
                                                              priv_object_node,
@@ -363,20 +355,15 @@ int ObGrantResolver::resolve_mysql(const ParseNode &parse_tree)
                                                 db,
                                                 table,
                                                 grant_level,
-                                                *allocator_,
-                                                catalog))) {
-            LOG_WARN("Resolve priv_level node error", K(ret));
+                                                *allocator_))) {
           } else {
             grant_stmt->set_grant_level(grant_level);
           }
 
-          if (OB_SUCC(ret) && grant_level != OB_PRIV_CATALOG_LEVEL) {
+          if (OB_SUCC(ret)) {
             if (OB_FAIL(check_and_convert_name(db, table))) {
-              LOG_WARN("Check and convert name error", K(db), K(table), K(ret));
             } else if (OB_FAIL(grant_stmt->set_database_name(db))) {
-              LOG_WARN("Failed to set database_name to grant_stmt", K(ret));
             } else if (OB_FAIL(grant_stmt->set_table_name(table))) {
-              LOG_WARN("Failed to set table_name to grant_stmt", K(ret));
             }
           }
 
@@ -385,7 +372,6 @@ int ObGrantResolver::resolve_mysql(const ParseNode &parse_tree)
                                                           params_.schema_checker_,
                                                           db,
                                                           table,
-                                                          catalog,
                                                           allocator_))) {
             LOG_WARN("failed to resolve priv object", K(ret));
           }
@@ -401,7 +387,6 @@ int ObGrantResolver::resolve_mysql(const ParseNode &parse_tree)
           } else if (OB_FAIL(resolve_priv_set(privs_node, grant_level, priv_set, grant_stmt, params_.schema_checker_,
                                                                                       params_.session_info_,
                                                                                       *allocator_))) {
-            LOG_WARN("Resolve priv set error", K(ret));
           }
           if (OB_FAIL(ret)) {
           } else {
@@ -418,7 +403,6 @@ int ObGrantResolver::resolve_mysql(const ParseNode &parse_tree)
             const ObString &table = grant_stmt->get_table_name();
             if (OB_FAIL(params_.schema_checker_->check_table_exists(
                     db, table, is_index, false/*is_hidden*/, exist))) {
-              LOG_WARN("Check table exist error", K(ret));
             } else if (!exist) {
               if (!(OB_PRIV_CREATE & grant_stmt->get_priv_set())
                   && !params_.is_restore_
@@ -436,9 +420,8 @@ int ObGrantResolver::resolve_mysql(const ParseNode &parse_tree)
 
         //resolve users
         if (OB_SUCC(ret)) {
-          // In oracle mode during grant, if user does not exist, do not allow creating this user; fix #17900015
+          // Resolve whether GRANT should auto-create missing users; fix #17900015.
           bool need_create_user = false;
-          CHECK_COMPATIBILITY_MODE(session_info_);
           need_create_user = !is_no_auto_create_user(params_.session_info_->get_sql_mode());
           grant_stmt->set_need_create_user(need_create_user);
           if (users_node->num_child_ > 0) {
@@ -447,7 +430,6 @@ int ObGrantResolver::resolve_mysql(const ParseNode &parse_tree)
               // do nothing in inner_sql
             } else if (OB_FAIL(mask_password_for_users(allocator_,
                 session_info_->get_current_query_string(), users_node, 1, masked_sql))) {
-              LOG_WARN("fail to mask_password_for_users", K(ret));
             } else {
               grant_stmt->set_masked_sql(masked_sql);
             }
@@ -492,7 +474,6 @@ int ObGrantResolver::resolve_mysql(const ParseNode &parse_tree)
                   if (OB_FAIL(params_.session_info_->get_sys_variable(
                                                        share::SYS_VAR_DEFAULT_AUTHENTICATION_PLUGIN,
                                                        default_auth_plugin))) {
-                    LOG_WARN("fail to get block encryption variable", K(ret));
                   } else if (0 != auth_plugin.compare(default_auth_plugin)) {
                     ret = OB_ERR_PLUGIN_IS_NOT_LOADED;
                     LOG_USER_ERROR(OB_ERR_PLUGIN_IS_NOT_LOADED, auth_plugin.length(), auth_plugin.ptr());
@@ -513,7 +494,6 @@ int ObGrantResolver::resolve_mysql(const ParseNode &parse_tree)
                       LOG_WARN("Wrong password hash format");
                     }
                   } else if (OB_FAIL(check_password_strength(pwd))) {
-                    LOG_WARN("fail to check password strength", K(ret));
                   } else {
                     need_enc = ObString::make_string("YES");
                   }
@@ -529,12 +509,8 @@ int ObGrantResolver::resolve_mysql(const ParseNode &parse_tree)
                                                            session_info_->get_priv_user_id(),
                                                            user_name,
                                                            host_name))) {
-                  LOG_WARN("failed to check dcl on inner-user or unsupport to modify reserved user",
-                           K(ret), K(session_info_->get_user_name()), K(user_name));
                 } else if (OB_FAIL(grant_stmt->add_grantee(user_name))) {
-                  LOG_WARN("Add grantee error", K(user_name), K(ret));
                 } else if (OB_FAIL(grant_stmt->add_user(user_name, host_name, pwd, need_enc))) {
-                  LOG_WARN("Add user and pwd error", K(user_name), K(pwd), K(ret));
                 } else {
                   //do nothing
                 }
@@ -565,10 +541,6 @@ int ObGrantResolver::resolve_priv_level_with_object_type(const ObSQLSessionInfo 
       // do nothing, compat with mysql
     } else if (priv_object_node->value_ == 2 || priv_object_node->value_ == 3) {
       grant_level = OB_PRIV_ROUTINE_LEVEL;
-    } else if (priv_object_node->value_ == 4) {
-      grant_level = OB_PRIV_CATALOG_LEVEL;
-    } else if (priv_object_node->value_ == 5) {
-        grant_level = OB_PRIV_OBJECT_LEVEL;
     } else {
       ret = OB_ERR_UNEXPECTED;
       LOG_WARN("unexpected obj type", K(ret), K(priv_object_node->value_));
@@ -588,22 +560,13 @@ int ObGrantResolver::resolve_priv_level(
     ObString &db,
     ObString &table,
     ObPrivLevel &grant_level,
-    ObIAllocator &allocator,
-    ObString &catalog)
+    ObIAllocator &allocator)
 {
   int ret = OB_SUCCESS;
   bool is_grant_routine = (grant_level == OB_PRIV_ROUTINE_LEVEL);
-  bool is_grant_object = (grant_level == OB_PRIV_OBJECT_LEVEL);
   if (OB_ISNULL(node)) {
     ret = OB_INVALID_ARGUMENT;
     LOG_WARN("Invalid argument", K(node), K(ret));
-  } else if (grant_level == OB_PRIV_CATALOG_LEVEL) {
-    if (0 != node->num_child_ || T_IDENT != node->type_) {
-      ret = OB_ERR_PARSE_SQL;
-      LOG_WARN("sql_parser error", K(ret));
-    } else {
-      catalog.assign_ptr(node->str_value_, static_cast<const int32_t>(node->str_len_));
-    }
   } else {
     CK (guard != NULL);
     db = ObString::make_string("");
@@ -668,7 +631,7 @@ int ObGrantResolver::resolve_priv_level(
         //do nothing
       }
     }
-    if (OB_SUCC(ret) && (is_grant_routine || is_grant_object)) {
+    if (OB_SUCC(ret) && is_grant_routine) {
       if (grant_level != OB_PRIV_TABLE_LEVEL) {
         // tmp_grant_level == OB_PRIV_TABLE_LEVEL means sql is like:
         // grant priv on [object type] ident to user
@@ -677,7 +640,7 @@ int ObGrantResolver::resolve_priv_level(
         ret = OB_ILLEGAL_GRANT_FOR_TABLE;
         LOG_WARN("illegal grant", K(ret));
       } else {
-        grant_level = is_grant_routine ? OB_PRIV_ROUTINE_LEVEL : OB_PRIV_OBJECT_LEVEL;
+        grant_level = OB_PRIV_ROUTINE_LEVEL;
       }
     }
   }

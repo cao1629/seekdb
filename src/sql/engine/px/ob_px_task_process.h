@@ -21,7 +21,6 @@
 #include "sql/engine/px/ob_dfo.h"
 #include "sql/engine/px/ob_px_util.h"
 #include "sql/engine/px/ob_granule_iterator_op.h"
-#include "observer/virtual_table/ob_virtual_table_iterator_factory.h"
 
 namespace oceanbase
 {
@@ -70,7 +69,7 @@ private:
     int ret_;
   };
 public:
-  ObPxTaskProcess(const observer::ObGlobalContext &gctx, ObPxRpcInitTaskArgs &arg);
+  ObPxTaskProcess(const share::ObGlobalContext &gctx, ObPxInitTaskArgs &arg);
   virtual ~ObPxTaskProcess();
   int process();
   void run();
@@ -84,7 +83,7 @@ public:
   int64_t get_process_timestamp() const { return process_timestamp_; }
   int64_t get_exec_start_timestamp() const { return exec_start_timestamp_; }
   int64_t get_exec_end_timestamp() const { return exec_end_timestamp_; }
-  // For interface requirements, the following four methods need to be implemented, because thread pool is used instead of RPC, so we simulate it
+  // The worker-pool audit interface exposes the four lifecycle timestamps below.
   int64_t get_send_timestamp() const { return get_enqueue_timestamp(); }
   int64_t get_receive_timestamp() const { return get_enqueue_timestamp(); }
   int64_t get_run_timestamp() const { return get_process_timestamp(); }
@@ -112,10 +111,9 @@ private:
   int record_user_error_msg(int retcode);
   void release();
   /* variables */
-  const observer::ObGlobalContext &gctx_;
-  ObPxRpcInitTaskArgs &arg_;
+  const share::ObGlobalContext &gctx_;
+  ObPxInitTaskArgs &arg_;
   share::schema::ObSchemaGetterGuard schema_guard_;
-  observer::ObVirtualTableIteratorFactory vt_iter_factory_;
 
   /* timestamps for sql audit */
   int64_t enqueue_timestamp_;
@@ -123,7 +121,6 @@ private:
   int64_t exec_start_timestamp_;
   int64_t exec_end_timestamp_;
 
-  /* record oracle mode */
   DISALLOW_COPY_AND_ASSIGN(ObPxTaskProcess);
 };
 }

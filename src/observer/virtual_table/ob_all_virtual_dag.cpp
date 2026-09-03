@@ -16,7 +16,7 @@
 
 #define USING_LOG_PREFIX STORAGE
 #include "ob_all_virtual_dag.h"
-#include "share/rc/ob_module_provider.h"
+#include "share/rc/ob_server_runtime.h"
 
 namespace oceanbase
 {
@@ -39,30 +39,19 @@ int ObDagInfoIterator<T>::open()
   } else if (typeid(T) != typeid(share::ObDagInfo) && typeid(T) != typeid(share::ObDagSchedulerInfo)) {
     ret = OB_ERR_UNEXPECTED;
     STORAGE_LOG(WARN, "invalid typeid", K(ret));
-  } else if (!true) {
-    ret = OB_INVALID_ARGUMENT;
-    STORAGE_LOG(WARN, "invalid argument", K(ret));
   }
   if (OB_SUCC(ret)) {
-    { // skip virtual tenant
-      MOD_SCOPE {
-        if (typeid(T) == typeid(share::ObDagInfo)) {
-          if (OB_FAIL(share::g_mp->tenant_dag_scheduler()->get_all_dag_info(allocator_, all_tenants_dag_infos_))) {
-            STORAGE_LOG(WARN, "failed to get all dag info", K(ret));
-          }
-        } else if (OB_FAIL(share::g_mp->tenant_dag_scheduler()->get_all_dag_scheduler_info(allocator_, all_tenants_dag_infos_))) {
-          STORAGE_LOG(WARN, "failed to get all dag info", K(ret));
+    SERVER_MODULE_SCOPE {
+      if (typeid(T) == typeid(share::ObDagInfo)) {
+        if (OB_FAIL(::oceanbase::share::server_service<::oceanbase::share::ObDagScheduler>()->get_all_dag_info(allocator_, dag_infos_))) {
         }
-      } else {
-        if (OB_TENANT_NOT_IN_SERVER != ret) {
-          STORAGE_LOG(WARN, "switch tenant failed", K(ret));
-        } else {
-          ret = OB_SUCCESS;
-          continue;
-        }
+      } else if (OB_FAIL(::oceanbase::share::server_service<::oceanbase::share::ObDagScheduler>()->get_all_dag_scheduler_info(allocator_, dag_infos_))) {
       }
+    } else {
+      ret = OB_NOT_INIT;
+      STORAGE_LOG(WARN, "server module is unavailable", K(ret));
     }
-  } // end of for
+  }
   if (OB_SUCC(ret)) {
     cur_idx_ = 0;
     is_opened_ = true;
@@ -77,10 +66,10 @@ int ObDagInfoIterator<T>::get_next_info(T &info)
   if (!is_opened_) {
     ret = OB_NOT_INIT;
     STORAGE_LOG(WARN, "not init", K(ret));
-  } else if (cur_idx_ >= all_tenants_dag_infos_.count()) {
+  } else if (cur_idx_ >= dag_infos_.count()) {
     ret = OB_ITER_END;
   } else {
-    info = *(static_cast<T*>(all_tenants_dag_infos_[cur_idx_++]));
+    info = *(static_cast<T*>(dag_infos_[cur_idx_++]));
   }
   return ret;
 }
@@ -88,7 +77,7 @@ int ObDagInfoIterator<T>::get_next_info(T &info)
 template <typename T>
 void ObDagInfoIterator<T>::reset()
 {
-  all_tenants_dag_infos_.reset();
+  dag_infos_.reset();
   cur_idx_ = 0;
   allocator_.reset();
   is_opened_ = false;
@@ -112,7 +101,6 @@ int ObAllVirtualDag::init()
     ret = OB_INIT_TWICE;
     SERVER_LOG(WARN, "ObAllVirtualDag has been inited, ", K(ret));
   } else if (OB_FAIL(dag_info_iter_.open())) {
-    SERVER_LOG(WARN, "Fail to open merge info iter, ", K(ret));
   } else {
     is_inited_ = true;
   }
@@ -131,7 +119,6 @@ int ObAllVirtualDag::inner_get_next_row(common::ObNewRow *&row)
       STORAGE_LOG(WARN, "Fail to get next merge info, ", K(ret));
     }
   } else if (OB_FAIL(fill_cells(dag_info_))) {
-    STORAGE_LOG(WARN, "Fail to fill cells, ", K(ret), K(dag_info_));
   } else {
     row = &cur_row_;
   }
@@ -157,10 +144,6 @@ int ObAllVirtualDag::fill_cells(share::ObDagInfo &dag_info)
       if (dag_info.dag_type_ >= ObDagType::DAG_TYPE_MINI_MERGE && dag_info.dag_type_ < ObDagType::DAG_TYPE_MAX) {
         cells[i].set_varchar(share::ObIDag::get_dag_type_str(dag_info.dag_type_));
         cells[i].set_collation_type(ObCharset::get_default_collation(ObCharset::get_default_charset()));
-      } else if (dag_info.dag_net_type_ >= ObDagNetType::DAG_NET_TYPE_MIGRATION
-          && dag_info.dag_net_type_ < ObDagNetType::DAG_NET_TYPE_MAX) {
-        cells[i].set_varchar(share::ObIDagNet::get_dag_net_type_str(dag_info.dag_net_type_));
-        cells[i].set_collation_type(ObCharset::get_default_collation(ObCharset::get_default_charset()));
       } else {
         ret = OB_ERR_UNEXPECTED;
         SERVER_LOG(WARN, "unexpected dag info, ", K(ret), K(dag_info));
@@ -169,11 +152,6 @@ int ObAllVirtualDag::fill_cells(share::ObDagInfo &dag_info)
     case DAG_KEY:
       //dag key
       cells[i].set_varchar(dag_info.dag_key_);
-      cells[i].set_collation_type(ObCharset::get_default_collation(ObCharset::get_default_charset()));
-      break;
-    case DAG_NET_KEY:
-      //dag_net key
-      cells[i].set_varchar(dag_info.dag_net_key_);
       cells[i].set_collation_type(ObCharset::get_default_collation(ObCharset::get_default_charset()));
       break;
     case DAG_ID:
@@ -249,7 +227,6 @@ int ObAllVirtualDagScheduler::init()
     ret = OB_INIT_TWICE;
     SERVER_LOG(WARN, "ObAllVirtualDagScheduler has been inited, ", K(ret));
   } else if (OB_FAIL(dag_scheduler_info_iter_.open())) {
-    SERVER_LOG(WARN, "Fail to open merge info iter, ", K(ret));
   } else {
     is_inited_ = true;
   }
@@ -268,7 +245,6 @@ int ObAllVirtualDagScheduler::inner_get_next_row(common::ObNewRow *&row)
       STORAGE_LOG(WARN, "Fail to get next merge info, ", K(ret));
     }
   } else if (OB_FAIL(fill_cells(dag_scheduler_info_))) {
-    STORAGE_LOG(WARN, "Fail to fill cells, ", K(ret), K(dag_scheduler_info_));
   } else {
     row = &cur_row_;
   }

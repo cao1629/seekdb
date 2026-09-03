@@ -64,7 +64,6 @@ int ObExprJsonMergePreserve::calc_result_typeN(ObExprResType& type,
     if (types_stack[0].get_type() == ObNullType) {
       is_result_null = true;
     } else if (OB_FAIL(ObJsonExprHelper::is_valid_for_json(types_stack, i, N_JSON_MERGE_PRESERVE))) {
-      LOG_WARN("wrong type for json doc.", K(ret), K(types_stack[i].get_type()));
     }
   }
   return ret;
@@ -76,7 +75,7 @@ int ObExprJsonMergePreserve::eval_json_merge_preserve(const ObExpr &expr, ObEval
   ObDatum *json_datum = NULL;
   ObEvalCtx::TempAllocGuard tmp_alloc_g(ctx);
   
-  MultimodeAlloctor temp_allocator(tmp_alloc_g.get_allocator(), expr.type_, ret);
+  MultimodeAlloctor temp_allocator(tmp_alloc_g.get_allocator());
   lib::ObMallocHookAttrGuard malloc_guard(lib::ObMemAttr("JSONModule"));
   ObIJsonBase *j_base = NULL;
   ObIJsonBase *j_patch_node = NULL;
@@ -88,10 +87,7 @@ int ObExprJsonMergePreserve::eval_json_merge_preserve(const ObExpr &expr, ObEval
 
   for (int32 i = 0; OB_SUCC(ret) && i < expr.arg_cnt_ && !has_null; i++) {
     ObIJsonBase *j_res = NULL;
-    if (OB_FAIL(temp_allocator.add_baseline_size(expr.args_[i], ctx))) {
-      LOG_WARN("failed to add baseline size.", K(ret));
-    } else if (OB_FAIL(ObJsonExprHelper::get_json_doc(expr, ctx, temp_allocator, i, j_patch_node, has_null))) {
-      LOG_WARN("get_json_doc failed", K(ret));
+    if (OB_FAIL(ObJsonExprHelper::get_json_doc(expr, ctx, temp_allocator, i, j_patch_node, has_null))) {
     } else if (has_null) {
       // do nothing
     } else {
@@ -100,7 +96,6 @@ int ObExprJsonMergePreserve::eval_json_merge_preserve(const ObExpr &expr, ObEval
       } else {
         ObIJsonBase *j_res = NULL;
         if (OB_FAIL(j_base->merge_tree(&temp_allocator, j_patch_node, j_res))) {
-          LOG_WARN("error, merge tree failed", K(ret), K(i));
         } else {
           j_base = j_res;
         }
@@ -113,9 +108,7 @@ int ObExprJsonMergePreserve::eval_json_merge_preserve(const ObExpr &expr, ObEval
     if (has_null) {
       res.set_null();
     } else if (OB_FAIL(ObJsonWrapper::get_raw_binary(j_base, raw_bin, &temp_allocator))) {
-      LOG_WARN("failed: get json raw binary", K(ret));
     } else if (OB_FAIL(ObJsonExprHelper::pack_json_str_res(expr, ctx, res, raw_bin))) {
-      LOG_WARN("fail to pack json result", K(ret));
     }
   }
 

@@ -26,24 +26,23 @@ namespace sql
 {
 struct ObSqlCtx;
 class ObSQLSessionInfo;
+class ObQueryRetryCtrl;
 }
 
 
 namespace observer
 {
 
-class ObIMPPacketSender;
+class ObMPPacketSender;
 class ObMySQLResultSet;
-class ObQueryRetryCtrl;
 class ObAsyncCmdDriver : public ObQueryDriver
 {
 public:
-  ObAsyncCmdDriver(const ObGlobalContext &gctx,
+  ObAsyncCmdDriver(const share::ObGlobalContext &gctx,
                   const sql::ObSqlCtx &ctx,
                   sql::ObSQLSessionInfo &session,
-                  ObQueryRetryCtrl &retry_ctrl,
-                  ObIMPPacketSender &sender,
-                  bool is_prexecute = false);
+                  sql::ObQueryRetryCtrl &retry_ctrl,
+                  ObMPPacketSender &sender);
   virtual ~ObAsyncCmdDriver();
 
   virtual int response_result(ObMySQLResultSet &result);

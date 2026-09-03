@@ -66,13 +66,12 @@ int ObExprPrivSTGeometryType::eval_priv_st_geometrytype(const ObExpr &expr, ObEv
   ObObjType type1 = arg1->datum_meta_.type_;
   ObEvalCtx::TempAllocGuard tmp_alloc_g(ctx);
   
-  MultimodeAlloctor temp_allocator(tmp_alloc_g.get_allocator(), expr.type_, ret, N_PRIV_ST_GEOMETRYTYPE);
+  MultimodeAlloctor temp_allocator(tmp_alloc_g.get_allocator());
   ObString res_type;
 
   if (ob_is_null(type1)) {
     is_null_res = true;
   } else if (OB_FAIL(temp_allocator.eval_arg(arg1, ctx, datum1))) {
-    LOG_WARN("fail to eval args", K(ret));
   } else if (datum1->is_null()) {
     is_null_res = true;
   } else {
@@ -80,13 +79,10 @@ int ObExprPrivSTGeometryType::eval_priv_st_geometrytype(const ObExpr &expr, ObEv
     ObGeoType gtype = ObGeoType::GEOTYPEMAX;
 
     if (OB_FAIL(ObTextStringHelper::read_real_string_data(
-            temp_allocator, *datum1, arg1->datum_meta_, arg1->obj_meta_.has_lob_header(), wkb))) {
-      LOG_WARN("fail to read real string data", K(ret), K(arg1->obj_meta_.has_lob_header()));
-    } else if (FALSE_IT(temp_allocator.set_baseline_size(wkb.length()))) {
+            ctx.exec_ctx_, temp_allocator, *datum1, arg1->datum_meta_,
+            arg1->obj_meta_.has_lob_header(), wkb))) {
     } else if (OB_FAIL(ObGeoTypeUtil::get_type_from_wkb(wkb, gtype))) {
-      LOG_WARN("fail to get geo type from wkb", K(ret), K(gtype));
     } else if (OB_FAIL(ObGeoTypeUtil::get_st_geo_name_by_type(gtype, res_type))) {
-      LOG_WARN("fail to get geo type name", K(ret), K(gtype));
     }
   }
 

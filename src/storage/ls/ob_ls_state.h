@@ -22,11 +22,6 @@
 
 namespace oceanbase
 {
-namespace share
-{
-class ObLSID;
-}
-
 namespace storage
 {
 class ObLSRunningState
@@ -50,11 +45,11 @@ public:
     return (State::LS_INIT == state_ ||
             State::LS_STOPPED == state_);
   }
-  int create_finish(const share::ObLSID &ls_id);
-  int online(const share::ObLSID &ls_id);
-  int pre_offline(const share::ObLSID &ls_id);
-  int post_offline(const share::ObLSID &ls_id);
-  int stop(const share::ObLSID &ls_id);
+  int create_finish();
+  int online();
+  int pre_offline();
+  int post_offline();
+  int stop();
 private:
   class State
   {
@@ -130,12 +125,11 @@ private:
   class StateHelper
   {
   public:
-    explicit StateHelper(const share::ObLSID &ls_id, int64_t &state)
-      : ls_id_(ls_id), state_(state), last_state_(state) {}
+    explicit StateHelper(int64_t &state)
+      : state_(state), last_state_(state) {}
     ~StateHelper() {}
     int switch_state(const int64_t op);
   private:
-    const share::ObLSID &ls_id_;
     int64_t &state_;
     int64_t last_state_;
   };
@@ -157,14 +151,14 @@ public:
   int deserialize(const char* buf, const int64_t data_len, int64_t& pos);
   int64_t get_serialize_size() const;
 
-  int start_work(const share::ObLSID &ls_id);
-  int start_ha(const share::ObLSID &ls_id);
-  int finish_ha(const share::ObLSID &ls_id);
-  int remove(const share::ObLSID &ls_id);
+  int start_work();
+  int start_restore();
+  int finish_restore();
+  int remove();
   inline bool can_update_ls_meta() const
   {
     return (State::LS_NORMAL == state_ ||
-            State::LS_HA == state_);
+            State::LS_RESTORE == state_);
   }
   bool is_need_gc() const
   {
@@ -185,10 +179,6 @@ public:
     return (State::LS_ZOMBIE == state_ ||
             State::LS_CREATE_ABORTED == state_);
   }
-  bool is_ha_state() const
-  {
-    return (State::LS_HA == state_);
-  }
 public:
   class State
   {
@@ -198,7 +188,7 @@ public:
     static const int64_t LS_NORMAL = 1;
     static const int64_t LS_CREATE_ABORTED = 2;
     static const int64_t LS_ZOMBIE = 3;
-    static const int64_t LS_HA = 4;
+    static const int64_t LS_RESTORE = 4;
     static const int64_t MAX = 5;
   public:
     static bool is_valid(const int64_t state)
@@ -216,7 +206,7 @@ public:
         TCM_STATE_CASE_TO_STR(LS_NORMAL);
         TCM_STATE_CASE_TO_STR(LS_CREATE_ABORTED);
         TCM_STATE_CASE_TO_STR(LS_ZOMBIE);
-        TCM_STATE_CASE_TO_STR(LS_HA);
+        TCM_STATE_CASE_TO_STR(LS_RESTORE);
       default:
         break;
       }
@@ -230,8 +220,8 @@ public:
   public:
     static const int64_t INVALID = -1;
     static const int64_t START_WORK = 0;
-    static const int64_t START_HA = 1;
-    static const int64_t FINISH_HA = 2;
+    static const int64_t START_RESTORE = 1;
+    static const int64_t FINISH_RESTORE = 2;
     static const int64_t REMOVE = 3;
     static const int64_t MAX = 4;
   public:
@@ -248,8 +238,8 @@ public:
       const char* str = "INVALID";
       switch (op) {
         TCM_OP_CASE_TO_STR(START_WORK);
-        TCM_OP_CASE_TO_STR(START_HA);
-        TCM_OP_CASE_TO_STR(FINISH_HA);
+        TCM_OP_CASE_TO_STR(START_RESTORE);
+        TCM_OP_CASE_TO_STR(FINISH_RESTORE);
         TCM_OP_CASE_TO_STR(REMOVE);
       default:
         break;
@@ -262,12 +252,11 @@ public:
   class StateHelper
   {
   public:
-    explicit StateHelper(const share::ObLSID &ls_id, int64_t &state)
-      : ls_id_(ls_id), state_(state), last_state_(state) {}
+    explicit StateHelper(int64_t &state)
+      : state_(state), last_state_(state) {}
     ~StateHelper() {}
     int switch_state(const int64_t op);
   private:
-    const share::ObLSID &ls_id_;
     int64_t &state_;
     int64_t last_state_;
   };

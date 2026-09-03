@@ -33,17 +33,11 @@ int ObTmpFilePageCacheController::init()
   } else if (OB_FAIL(task_allocator_.init(lib::ObMallocAllocator::get_instance(),
                                           OB_MALLOC_MIDDLE_BLOCK_SIZE,
                                           ObMemAttr("TmpFileCtl", ObCtxIds::DEFAULT_CTX_ID)))) {
-    STORAGE_LOG(WARN, "fail to init task allocator", KR(ret));
   } else if (OB_FAIL(flush_mgr_.init())) {
-    STORAGE_LOG(WARN, "fail to init flush task mgr", KR(ret));
   } else if (OB_FAIL(flush_priority_mgr_.init())) {
-    STORAGE_LOG(WARN, "fail to init flush priority mgr", KR(ret));
   } else if (OB_FAIL(write_buffer_pool_.init())) {
-    STORAGE_LOG(WARN, "fail to init write buffer pool", KR(ret));
-  } else if (OB_FAIL(flush_tg_.init())) {
-    STORAGE_LOG(WARN, "fail to init flush thread", KR(ret));
-  } else if (OB_FAIL(swap_tg_.init())) {
-    STORAGE_LOG(WARN, "fail to init swap thread", KR(ret));
+  } else if (OB_FAIL(flush_thread_.init())) {
+  } else if (OB_FAIL(swap_thread_.init())) {
   } else {
     flush_all_data_ = false;
     is_inited_ = true;
@@ -56,10 +50,8 @@ int ObTmpFilePageCacheController::start()
   int ret = OB_SUCCESS;
   if (IS_NOT_INIT) {
     STORAGE_LOG(WARN, "tmp file page cache controller is not inited");
-  } else if (OB_FAIL(flush_tg_.start())) {
-    STORAGE_LOG(WARN, "fail to start swap thread", KR(ret));
-  } else if (OB_FAIL(swap_tg_.start())) {
-    STORAGE_LOG(WARN, "fail to start swap thread", KR(ret));
+  } else if (OB_FAIL(flush_thread_.start())) {
+  } else if (OB_FAIL(swap_thread_.start())) {
   }
   return ret;
 }
@@ -71,8 +63,8 @@ void ObTmpFilePageCacheController::stop()
     STORAGE_LOG(WARN, "tmp file page cache controller is not inited");
   } else {
     // stop background threads should follow the order 'swap' -> 'flush' because 'swap' holds ref to 'flush'
-    swap_tg_.stop();
-    flush_tg_.stop();
+    swap_thread_.stop();
+    flush_thread_.stop();
   }
 }
 
@@ -82,15 +74,15 @@ void ObTmpFilePageCacheController::wait()
   if (IS_NOT_INIT) {
     STORAGE_LOG(WARN, "tmp file page cache controller is not inited");
   } else {
-    swap_tg_.wait();
-    flush_tg_.wait();
+    swap_thread_.wait();
+    flush_thread_.wait();
   }
 }
 
 void ObTmpFilePageCacheController::destroy()
 {
-  swap_tg_.destroy();
-  flush_tg_.destroy();
+  swap_thread_.destroy();
+  flush_thread_.destroy();
   task_allocator_.reset();
   write_buffer_pool_.destroy();
   flush_mgr_.destroy();
@@ -109,8 +101,7 @@ int ObTmpFilePageCacheController::swap_job_enqueue_(ObTmpFileSwapJob *swap_job)
   } else if (!swap_job->is_valid()) {
     ret = OB_INVALID_ARGUMENT;
     STORAGE_LOG(WARN, "swap job is not valid", KR(ret), KPC(swap_job));
-  } else if (OB_FAIL(swap_tg_.swap_job_enqueue(swap_job))) {
-    STORAGE_LOG(WARN, "fail to enqueue swap job", KR(ret), KP(swap_job));
+  } else if (OB_FAIL(swap_thread_.swap_job_enqueue(swap_job))) {
   }
   return ret;
 }
@@ -131,7 +122,7 @@ int ObTmpFilePageCacheController::free_swap_job_(ObTmpFileSwapJob *swap_job)
   return ret;
 }
 
-// refresh tmp file disk usage limit from tenant config with timeout 10ms
+// Refresh the temporary-file disk limit from runtime configuration with a 10 ms timeout.
 void ObTmpFilePageCacheController::refresh_disk_usage_limit()
 {
   int ret = OB_SUCCESS;
@@ -139,13 +130,9 @@ void ObTmpFilePageCacheController::refresh_disk_usage_limit()
     ret = OB_NOT_INIT;
     LOG_WARN("tmp file page cache controller is not inited", KR(ret));
   } else {
-    if (!true) {
-      // do nothing
-    } else {
-      const int64_t max_disk_usage = GCONF.temporary_file_max_disk_size;
-      int64_t disk_limit = max_disk_usage > 0 ? max_disk_usage : 0;
-      ATOMIC_SET(&disk_usage_limit_, disk_limit);
-    }
+    const int64_t max_disk_usage = GCONF.temporary_file_max_disk_size;
+    int64_t disk_limit = max_disk_usage > 0 ? max_disk_usage : 0;
+    ATOMIC_SET(&disk_usage_limit_, disk_limit);
   }
 }
 
@@ -168,13 +155,10 @@ int ObTmpFilePageCacheController::invoke_swap_and_wait(int64_t expect_swap_size,
     STORAGE_LOG(WARN, "fail to allocate memory for swap job", KR(ret));
   } else if (FALSE_IT(swap_job = new (task_buf) ObTmpFileSwapJob())) {
   } else if (OB_FAIL(swap_job->init(expect_swap_size, timeout_ms))) {
-    STORAGE_LOG(WARN, "fail to init sync swap job", KR(ret), KPC(swap_job));
   } else if (OB_FAIL(swap_job_enqueue_(swap_job))) {
-    STORAGE_LOG(WARN, "fail to enqueue swap job", KR(ret), KPC(swap_job));
   } else {
-    swap_tg_.notify_doing_swap();
+    swap_thread_.notify_doing_swap();
     if (OB_FAIL(swap_job->wait_swap_complete())) {
-      STORAGE_LOG(WARN, "fail to wait for swap job complete", KR(ret));
     }
   }
 
@@ -188,7 +172,6 @@ int ObTmpFilePageCacheController::invoke_swap_and_wait(int64_t expect_swap_size,
     swap_job->reset();
     int tmp_ret = OB_SUCCESS;
     if (OB_TMP_FAIL(free_swap_job_(swap_job))) {
-      STORAGE_LOG(ERROR, "fail to free swap job", KR(ret), KR(tmp_ret));
     }
   }
   return ret;

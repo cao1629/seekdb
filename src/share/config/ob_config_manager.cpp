@@ -19,9 +19,18 @@
 
 #include "ob_config_manager.h"
 #include "share/ob_sql_client_decorator.h"
+#include "share/config/ob_system_config.h"
+#include "share/config/ob_config_rpc_types.h"
 
 namespace oceanbase
 {
+namespace obcall
+{
+
+OB_SERIALIZE_MEMBER(ObAdminSetConfigItem, name_, value_, comment_);
+
+} // namespace obcall
+
 namespace common
 {
 ObConfigManager::~ObConfigManager()
@@ -34,12 +43,7 @@ int ObConfigManager::init(share::ObSQLiteConnectionPool *pool)
   if (OB_ISNULL(pool)) {
     ret = OB_INVALID_ARGUMENT;
     LOG_WARN("invalid storage", K(ret));
-  } else if (OB_FAIL(system_config_.init())) {
-    LOG_ERROR("init system config failed", K(ret));
-  } else if (OB_FAIL(server_config_.init(system_config_))) {
-    LOG_ERROR("init server config failed", K(ret));
   } else if (OB_FAIL(storage_.init(pool))) {
-    LOG_WARN("failed to init storage", K(ret));
   } else {
     inited_ = true;
   }
@@ -62,11 +66,7 @@ int ObConfigManager::reload_config()
 {
   int ret = OB_SUCCESS;
   if (OB_FAIL(server_config_.check_all())) {
-    LOG_WARN("Check configuration failed, can't reload", K(ret));
   } else if (OB_FAIL(reload_config_func_())) {
-    LOG_WARN("Reload configuration failed.", K(ret));
-  } else {
-    g_enable_ob_error_msg_style = GCONF.enable_ob_error_msg_style;
   }
   return ret;
 }
@@ -86,29 +86,26 @@ int ObConfigManager::dump2file_unsafe(const char* path) const
 
 int ObConfigManager::dump2file(const char* path) const
 {
-  DRWLock::RDLockGuard guard(GCONF.rwlock_);
+  DRWLock::RDLockGuard guard(server_config_.rwlock_);
   return dump2file_unsafe(path);
 }
 
 int ObConfigManager::update_local()
 {
   int ret = OB_SUCCESS;
+  ObSystemConfig system_config;
 
-  if (OB_FAIL(system_config_.clear())) {
-    LOG_WARN("Clear system config map failed", K(ret));
+  if (OB_FAIL(system_config.init())) {
+  } else if (OB_FAIL(storage_.load_all_configs(system_config))) {
   } else {
-    DRWLock::WRLockGuard guard(GCONF.rwlock_);
-    if (OB_FAIL(storage_.load_all_configs(system_config_))) {
-      LOG_WARN("failed to load config", K(ret));
+    DRWLock::WRLockGuard guard(server_config_.rwlock_);
+    if (OB_FAIL(server_config_.read_config(system_config, enable_static_effect_))) {
     } else {
       LOG_INFO("read config success");
     }
   }
 
   if (OB_SUCC(ret)) {
-    if (OB_FAIL(server_config_.read_config(enable_static_effect_))) {
-      LOG_ERROR("Read server config failed", K(ret));
-    }
     server_config_.print();
   } else {
     LOG_WARN("Read system config error", K(ret));
@@ -124,35 +121,8 @@ int ObConfigManager::got_version()
     LOG_WARN("config manager not inited", K(ret));
   } else {
     if (OB_FAIL(update_local())) {
-      LOG_WARN("update local config failed", K(ret));
     } else {
       LOG_INFO("loaded new config synchronously");
-    }
-  }
-  return ret;
-}
-
-int ObConfigManager::add_extra_config(const obcall::ObTenantConfigArg &arg)
-{
-  int ret = OB_SUCCESS;
-  if (!arg.is_valid()) {
-    ret = OB_INVALID_ARGUMENT;
-    LOG_ERROR("invalid arg", K(ret), K(arg));
-  } else {
-    ret = server_config_.add_extra_config(arg.config_str_.ptr());
-  }
-  LOG_INFO("add tenant extra config", K(arg));
-  return ret;
-}
-
-int ObConfigManager::init_tenant_config(const obcall::ObTenantConfigArg &arg)
-{
-  int ret = OB_SUCCESS;
-  if (OB_FAIL(add_extra_config(arg))) {
-    LOG_WARN("fail to add extra config", KR(ret), K(arg));
-  } else {
-    if (OB_FAIL(server_config_.publish_special_config_after_dump())) {
-      LOG_WARN("publish special config after dump failed", K(ret));
     }
   }
   return ret;
@@ -182,8 +152,6 @@ int ObConfigManager::save_config(
           config_name,
           config_item->data_type(), value, config_item->info(), config_item->section(), config_item->scope(),
           config_item->source(), config_item->edit_level()))) {
-        LOG_WARN("failed to save config ", K(ret),
-                 "name", config_name, "value", value);
       }
     }
   }
@@ -202,8 +170,6 @@ int ObConfigManager::save_configs(int64_t base_version)
     }
       if (it->second->version() > base_version) {
       if (OB_FAIL(save_config(it->first.str(), it->second->str()))) {
-        LOG_WARN("failed to save startup config", K(ret),
-                 "name", it->first.str());
       }
     }
   }

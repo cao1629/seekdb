@@ -188,54 +188,13 @@ int convert_string(const ObExpr &expr, ObEvalCtx &ctx, ObString &input_str, ObSt
     if (OB_FAIL(ObExprUtil::convert_string_collation(
           ObString(res_len, res), expr.args_[0]->datum_meta_.cs_type_, converted_result,
           expr.datum_meta_.cs_type_, alloc_guard.get_allocator()))) {
-      LOG_WARN("fail to convert string", K(ret), K(input_str), K(input_str.length()), K(is_encode));
     } else {
       if (OB_FAIL(ob_write_string(ctx.get_expr_res_alloc(), converted_result, output_str, true))) {
-        LOG_WARN("Copy string failed", K(ret), K(res_len));
       }
     }
   }
   return ret;
 }
-
-template <typename IN_VEC, typename OUT_VEC>
-int inner_encode_string(VECTOR_EVAL_FUNC_ARG_DECL, bool is_encode)
-{
-  int ret = OB_SUCCESS;
-  IN_VEC *in_vec = static_cast<IN_VEC *>(expr.args_[0]->get_vector(ctx));
-  OUT_VEC *res_vec = static_cast<OUT_VEC *>(expr.get_vector(ctx));
-
-  ObBitVector &eval_flags = expr.get_evaluated_flags(ctx);
-
-  ObEvalCtx::BatchInfoScopeGuard batch_info_guard(ctx);
-  batch_info_guard.set_batch_size(bound.batch_size());
-
-  for (int64_t i = bound.start(); OB_SUCC(ret) && i < bound.end(); ++i) {
-    batch_info_guard.set_batch_idx(i);
-    if (skip.at(i) || eval_flags.at(i)) {
-      continue;
-    } else if (in_vec->is_null(i)) {
-      res_vec->set_null(i);
-    } else {
-      ObString input_str = in_vec->get_string(i);
-      ObString output_str = nullptr;
-      if (OB_FAIL(convert_string(expr, ctx, input_str, output_str, is_encode))) {
-        LOG_WARN("fail to convert string", K(ret), K(input_str), K(input_str.length()),
-                 K(is_encode));
-      } else {
-        res_vec->set_string(i, output_str);
-      }
-    }
-    if (OB_SUCC(ret)) {
-      eval_flags.set(i);
-    }
-  }
-  return ret;
-}
-
-using Discrete = ObDiscreteFormat;
-using Uniform = ObUniformFormat<false>;
-using UniformConst = ObUniformFormat<true>;
 
 int ObExprURLEncode::eval_url_encode(EVAL_FUNC_ARG_DECL)
 {
@@ -253,14 +212,12 @@ int ObExprURLCODEC::eval_url_codec(EVAL_FUNC_ARG_DECL, bool is_encode)
   ObDatum *input = NULL;
 
   if (OB_FAIL(expr.args_[0]->eval(ctx, input))) {
-    LOG_WARN("fail to eval", K(ret), KPC(expr.args_[0]));
   } else if (input->is_null()) {
     expr_datum.set_null();
   } else {
     ObString input_str = input->get_string();
     ObString output_str = nullptr;
     if (OB_FAIL(convert_string(expr, ctx, input_str, output_str, is_encode))) {
-      LOG_WARN("fail to convert string", K(ret), K(input_str), K(input_str.length()), K(is_encode));
     } else {
       expr_datum.set_string(output_str);
     }
@@ -290,7 +247,6 @@ int ObExprURLCODEC::eval_url_codec_batch(BATCH_EVAL_FUNC_ARG_DECL, bool is_encod
   } else {
     ObBitVector &eval_flags = expr.get_evaluated_flags(ctx);
     if (OB_FAIL(expr.args_[0]->eval_batch(ctx, skip, size))) {
-      LOG_WARN("failed to eval batch result input", K(ret));
     } else {
       ObDatumVector datum_array = expr.args_[0]->locate_expr_datumvector(ctx);
 
@@ -306,8 +262,6 @@ int ObExprURLCODEC::eval_url_codec_batch(BATCH_EVAL_FUNC_ARG_DECL, bool is_encod
           ObString input_str = datum_array.at(i)->get_string();
           ObString output_str = nullptr;
           if (OB_FAIL(convert_string(expr, ctx, input_str, output_str, is_encode))) {
-            LOG_WARN("fail to convert string", K(ret), K(input_str), K(input_str.length()),
-                     K(is_encode));
           } else {
             results[i].set_string(output_str);
           }
@@ -316,58 +270,6 @@ int ObExprURLCODEC::eval_url_codec_batch(BATCH_EVAL_FUNC_ARG_DECL, bool is_encod
           eval_flags.set(i);
         }
       }
-    }
-  }
-  return ret;
-}
-
-int ObExprURLEncode::eval_url_encode_vector(VECTOR_EVAL_FUNC_ARG_DECL)
-{
-  return eval_url_codec_vector(VECTOR_EVAL_FUNC_ARG_LIST, true);
-}
-
-int ObExprURLDecode::eval_url_decode_vector(VECTOR_EVAL_FUNC_ARG_DECL)
-{
-  return eval_url_codec_vector(VECTOR_EVAL_FUNC_ARG_LIST, false);
-}
-
-#define CALC_FORMAT(IN_FORMAT, OUT_FORMAT) (IN_FORMAT << 4 | OUT_FORMAT)
-
-#define DISPATCH_RES_FORMAT(IN, OUT)                                                               \
-  case CALC_FORMAT(IN::FORMAT, OUT::FORMAT): {                                                     \
-    ret = inner_encode_string<IN, OUT>(VECTOR_EVAL_FUNC_ARG_LIST, is_encode);                      \
-    break;                                                                                         \
-  }
-
-int ObExprURLCODEC::eval_url_codec_vector(VECTOR_EVAL_FUNC_ARG_DECL, bool is_encode)
-{
-  int ret = OB_SUCCESS;
-
-  int batch_size = bound.batch_size();
-  ObBitVector &eval_flags = expr.get_evaluated_flags(ctx);
-  if (OB_FAIL(expr.args_[0]->eval_vector(ctx, skip, bound))) {
-    SQL_LOG(WARN, "failed to eval batch result input", K(ret));
-  } else {
-    VectorFormat res_format = expr.get_format(ctx);
-    VectorFormat in_format = expr.args_[0]->get_format(ctx);
-
-    const int64_t cond = CALC_FORMAT(in_format, res_format);
-    switch (cond) {
-      DISPATCH_RES_FORMAT(Discrete, Discrete);
-      DISPATCH_RES_FORMAT(Discrete, Uniform);
-      DISPATCH_RES_FORMAT(Discrete, UniformConst);
-
-      DISPATCH_RES_FORMAT(Uniform, Discrete);
-      DISPATCH_RES_FORMAT(Uniform, Uniform);
-      DISPATCH_RES_FORMAT(Uniform, UniformConst);
-
-      DISPATCH_RES_FORMAT(UniformConst, Discrete);
-      DISPATCH_RES_FORMAT(UniformConst, Uniform);
-      DISPATCH_RES_FORMAT(UniformConst, UniformConst);
-
-    default: {
-      ret = inner_encode_string<ObVectorBase, ObVectorBase>(VECTOR_EVAL_FUNC_ARG_LIST, is_encode);
-    }
     }
   }
   return ret;
@@ -383,7 +285,6 @@ int ObExprURLEncode::cg_expr(ObExprCGCtx &expr_cg_ctx, const ObRawExpr &raw_expr
   } else {
     rt_expr.eval_func_ = eval_url_encode;
     rt_expr.eval_batch_func_ = eval_url_encode_batch;
-    rt_expr.eval_vector_func_ = eval_url_encode_vector;
   }
 
   return ret;
@@ -399,7 +300,6 @@ int ObExprURLDecode::cg_expr(ObExprCGCtx &expr_cg_ctx, const ObRawExpr &raw_expr
   } else {
     rt_expr.eval_func_ = eval_url_decode;
     rt_expr.eval_batch_func_ = eval_url_decode_batch;
-    rt_expr.eval_vector_func_ = eval_url_decode_vector;
   }
 
   return ret;

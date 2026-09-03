@@ -94,7 +94,7 @@ int ObExprJsonObject::eval_json_object(const ObExpr &expr, ObEvalCtx &ctx, ObDat
   INIT_SUCC(ret);
   ObEvalCtx::TempAllocGuard tmp_alloc_g(ctx);
   
-  MultimodeAlloctor temp_allocator(tmp_alloc_g.get_allocator(), expr.type_, ret);
+  MultimodeAlloctor temp_allocator(tmp_alloc_g.get_allocator());
   lib::ObMallocHookAttrGuard malloc_guard(lib::ObMemAttr("JSONModule"));
   ObJsonObject j_obj(&temp_allocator);
   ObIJsonBase *j_base = &j_obj;
@@ -108,7 +108,6 @@ int ObExprJsonObject::eval_json_object(const ObExpr &expr, ObEvalCtx &ctx, ObDat
     ObExpr *arg = expr.args_[i];
     ObDatum *json_datum = NULL;  
     if (OB_FAIL(temp_allocator.eval_arg(arg, ctx, json_datum))) {
-      LOG_WARN("failed: eval json args datum failed", K(ret));
     } else if (json_datum->is_null()) {
       ret = OB_ERR_JSON_DOCUMENT_NULL_KEY;
       LOG_USER_ERROR(OB_ERR_JSON_DOCUMENT_NULL_KEY);
@@ -118,10 +117,6 @@ int ObExprJsonObject::eval_json_object(const ObExpr &expr, ObEvalCtx &ctx, ObDat
       ObIJsonBase *j_val = NULL;
       bool is_null = false;
       if (OB_FAIL(ObJsonExprHelper::get_json_or_str_data(arg, ctx, temp_allocator, key, is_null))) {
-        LOG_WARN("fail to get real data.", K(ret), K(key));
-      } else if (OB_FALSE_IT(temp_allocator.add_baseline_size(key.length()))) {
-      } else if (OB_FAIL(temp_allocator.add_baseline_size(expr.args_[i+1], ctx))) {
-        LOG_WARN("failed to add baseline size.", K(ret), K(i+1));
       } else if (OB_FAIL(ObJsonExprHelper::get_json_val(expr, ctx, &temp_allocator, i+1, j_val))) {
         ret = OB_ERR_INVALID_JSON_TEXT_IN_PARAM;
         LOG_USER_ERROR(OB_ERR_INVALID_JSON_TEXT_IN_PARAM);
@@ -142,9 +137,7 @@ int ObExprJsonObject::eval_json_object(const ObExpr &expr, ObEvalCtx &ctx, ObDat
       ret = OB_ERR_JSON_OUT_OF_DEPTH;
       LOG_WARN("current json over depth", K(ret), K(j_base->depth()));
     } else if (OB_FAIL(ObJsonWrapper::get_raw_binary(j_base, raw_bin, &temp_allocator))) {
-      LOG_WARN("failed: get json raw binary", K(ret));
     } else if (OB_FAIL(ObJsonExprHelper::pack_json_str_res(expr, ctx, res, raw_bin))) {
-      LOG_WARN("fail to pack json result", K(ret));
     }
   }
 

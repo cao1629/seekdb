@@ -25,23 +25,21 @@ namespace oceanbase
 namespace sql
 {
 /**
- * DELETE syntax from MySQL 5.7
+ * DELETE syntax supported by seekdb
  *
  * Single-Table Syntax:
- *   DELETE [LOW_PRIORITY] [QUICK] [IGNORE] FROM tbl_name
+ *   DELETE FROM tbl_name
  *   [PARTITION (partition_name,...)]
  *   [WHERE where_condition]
  *   [ORDER BY ...]
  *   [LIMIT row_count]
  *
  * Multiple-Table Syntax
- *   DELETE [LOW_PRIORITY] [QUICK] [IGNORE]
- *   tbl_name[.*] [, tbl_name[.*]] ...
+ *   DELETE tbl_name[.*] [, tbl_name[.*]] ...
  *   FROM table_references
  *   [WHERE where_condition]
  *  Or:
- *   DELETE [LOW_PRIORITY] [QUICK] [IGNORE]
- *   FROM tbl_name[.*] [, tbl_name[.*]] ...
+ *   DELETE FROM tbl_name[.*] [, tbl_name[.*]] ...
  *   USING table_references
  *   [WHERE where_condition]
  */
@@ -65,7 +63,6 @@ public:
   virtual int get_dml_table_infos(ObIArray<ObDmlTableInfo*>& dml_table_info) override;
   virtual int get_dml_table_infos(ObIArray<const ObDmlTableInfo*>& dml_table_info) const override;
   virtual int get_view_check_exprs(ObIArray<ObRawExpr*>& view_check_exprs) const override;
-  virtual int64_t get_instead_of_trigger_column_count() const override;
   virtual int remove_table_item_dml_info(const TableItem* table) override;
   DECLARE_VIRTUAL_TO_STRING;
 private:

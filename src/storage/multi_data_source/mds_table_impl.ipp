@@ -78,7 +78,6 @@ MdsTableImpl<MdsTableType>::~MdsTableImpl() {
     }
   }
   if (OB_FAIL(unregister_from_removed_recorder())) {
-    MDS_LOG(ERROR, "fail to unregister from removed_recorder", K(*this));
   }
 }
 
@@ -189,7 +188,6 @@ int MdsTableImpl<MdsTableType>::set(int64_t unit_id,
     if (OB_ITER_END == (ret = unit_tuple_.for_each(helper))) {
       ret = OB_SUCCESS;
     } else if (OB_FAIL(ret)) {
-      MDS_LOG(WARN, "fail to set", KR(ret));
     } else {
       ret = OB_OBJ_TYPE_ERROR;
       MDS_LOG(WARN, "not found in tuple", KR(ret));
@@ -304,7 +302,6 @@ int MdsTableImpl<MdsTableType>::replay(int64_t unit_id,
     if (OB_ITER_END == (ret = unit_tuple_.for_each(helper))) {
       ret = OB_SUCCESS;
     } else if (OB_FAIL(ret)) {
-      MDS_LOG(WARN, "fail to set", KR(ret));
     } else {
       ret = OB_OBJ_TYPE_ERROR;
       MDS_LOG(WARN, "not found in tuple", KR(ret));
@@ -387,7 +384,6 @@ int MdsTableImpl<MdsTableType>::remove(int64_t unit_id,
     if (OB_ITER_END == (ret = unit_tuple_.for_each(helper))) {
       ret = OB_SUCCESS;
     } else if (OB_FAIL(ret)) {
-      MDS_LOG(WARN, "fail to set", KR(ret));
     } else {
       ret = OB_OBJ_TYPE_ERROR;
       MDS_LOG(WARN, "not found in tuple", KR(ret));
@@ -470,7 +466,6 @@ int MdsTableImpl<MdsTableType>::replay_remove(int64_t unit_id,
     if (OB_ITER_END == (ret = unit_tuple_.for_each(helper))) {
       ret = OB_SUCCESS;
     } else if (OB_FAIL(ret)) {
-      MDS_LOG(WARN, "fail to set", KR(ret));
     } else {
       ret = OB_OBJ_TYPE_ERROR;
       MDS_LOG(WARN, "not found in tuple", KR(ret));
@@ -585,7 +580,7 @@ int MdsTableImpl<MdsTableType>::get_latest(int64_t unit_id,
   return ret;
 }
 
-// only normal mds table support this method, and only for transfer
+// Only normal mds table supports tablet status node inspection.
 template <typename MdsTableType>
 int MdsTableImpl<MdsTableType>::get_tablet_status_node(ObFunction<int(void *)> &op, const int64_t read_seq) const
 {
@@ -1009,7 +1004,6 @@ struct RecalculateFlushScnCauseOnlySuppportDumpCommittedNodeOP// FIXME: delete t
       bool need_break = false;
       if (op_.do_flush_scn_ >= mds_node.redo_scn_ && op_.do_flush_scn_ < mds_node.end_scn_) {
         need_break = true;
-        MDS_LOG(DEBUG, "try decline do_flush_scn", K_(op_.do_flush_scn), K(mds_node));
         op_.do_flush_scn_ = std::min(op_.do_flush_scn_, share::SCN::minus(mds_node.redo_scn_, 1));
       } else if (!mds_node.redo_scn_.is_max() && op_.do_flush_scn_ < mds_node.redo_scn_) {
         need_break = true;
@@ -1260,7 +1254,7 @@ template <typename DUMP_OP,
                                                             int(const MdsDumpKV &)), bool>::type>
 int MdsTableImpl<MdsTableType>::scan_all_nodes_to_dump(DUMP_OP &&for_each_op,
                                                        const int64_t mds_construct_sequence,
-                                                       /*false is for transfer to bring mds data from old tablet to new*/
+                                                       /*false is used by non-flush dump paths to copy mds data*/
                                                        const bool for_flush,
                                                        const ScanRowOrder scan_row_order,
                                                        const ScanNodeOrder scan_node_order) {

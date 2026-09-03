@@ -32,8 +32,7 @@ enum ObDMLDefaultOp
   OB_NORMAL_DEFAULT_OP = 1,
   OB_NOT_STRICT_DEFAULT_OP = 2,
   OB_GENERATED_COLUMN_DEFAULT_OP = 3,
-  OB_TIMESTAMP_COLUMN_DEFAULT_OP = 4,
-  OB_IDENTITY_COLUMN_DEFAULT_OP = 5
+  OB_TIMESTAMP_COLUMN_DEFAULT_OP = 4
 };
 class ObDMLResolver;
 class ObDefaultValueUtils
@@ -47,9 +46,7 @@ public:
   }
   ~ObDefaultValueUtils() {}
   // Generate default values for columns that do not exist in insert values()
-  int generate_insert_value(const ColumnItem *column,
-                            ObRawExpr* &expr,
-                            bool has_instead_of_trigger = false);
+  int generate_insert_value(const ColumnItem *column, ObRawExpr* &expr);
   //resolve default()
   int resolve_default_function(ObRawExpr *&expr, ObStmtScope scope);
   static int resolve_default_function_static(const ObTableSchema *table_schema,
@@ -62,9 +59,6 @@ public:
   int resolve_default_expr(const ColumnItem &column_item, ObRawExpr *&expr, ObStmtScope scope);
   int build_default_expr_strict(const ColumnItem *column,
                                 ObRawExpr *&const_expr);
-  int build_default_expr_for_identity_column(const ColumnItem &column, 
-                                             ObRawExpr *&expr,
-                                             ObStmtScope scope);
   int build_now_expr(const ColumnItem *column, ObRawExpr *&const_expr);
   int build_expr_default_expr(const ColumnItem *column,
                               ObRawExpr *&input_expr,
@@ -132,4 +126,3 @@ private:
 }//namespace sql
 }//namespace oceanbase
 #endif //OCEANBASE_SQL_OB_DEFAULT_VALUE_UTILS_
-

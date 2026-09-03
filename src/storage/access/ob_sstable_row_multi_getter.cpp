@@ -15,7 +15,6 @@
  */
 
 #define USING_LOG_PREFIX STORAGE
-#include "lib/stat/ob_diagnostic_info_guard.h"
 #include "ob_sstable_row_multi_getter.h"
 
 namespace oceanbase {
@@ -76,15 +75,12 @@ int ObSSTableRowMultiGetter::inner_open(
     if (!prefetcher_.is_valid()) {
       if (OB_FAIL(prefetcher_.init(
                   type_, *sstable_, iter_param, access_ctx, query_range))) {
-        LOG_WARN("fail to init prefetcher, ", K(ret));
       }
     } else if (OB_FAIL(prefetcher_.switch_context(
         type_, *sstable_, iter_param, access_ctx, query_range))) {
-      LOG_WARN("fail to switch context for prefetcher, ", K(ret));
     }
     if (OB_SUCC(ret)) {
       if (OB_FAIL(prefetcher_.multi_prefetch())) {
-        LOG_WARN("Fail to prefetch data", K(ret));
       } else {
         is_opened_ = true;
       }
@@ -106,7 +102,6 @@ int ObSSTableRowMultiGetter::inner_get_next_row(const blocksstable::ObDatumRow *
   } else {
     while (OB_SUCC(ret)) {
       if (OB_FAIL(prefetcher_.multi_prefetch())) {
-        LOG_WARN("Fail to prefetch micro block", K(ret), K_(prefetcher));
       } else if (prefetcher_.fetch_rowkey_idx_ >= prefetcher_.prefetch_rowkey_idx_) {
         if (OB_LIKELY(prefetcher_.is_prefetch_end())) {
           ret = OB_ITER_END;
@@ -136,15 +131,6 @@ int ObSSTableRowMultiGetter::inner_get_next_row(const blocksstable::ObDatumRow *
           OB_FAIL(set_row_scn(access_ctx_->use_fuse_row_cache_, *iter_param_, store_row))) {
         LOG_WARN("failed to set row scn", K(ret));
       }
-      EVENT_INC(ObStatEventIds::SSSTORE_READ_ROW_COUNT);
-      if (OB_NOT_NULL(sstable_)) {
-        if (sstable_->is_minor_sstable()) {
-          EVENT_INC(ObStatEventIds::MINOR_SSSTORE_READ_ROW_COUNT);
-        } else if (sstable_->is_major_sstable()) {
-          EVENT_INC(ObStatEventIds::MAJOR_SSSTORE_READ_ROW_COUNT);
-        }
-      }
-      LOG_DEBUG("inner get next row", K(*store_row));
     }
   }
   return ret;
@@ -158,11 +144,9 @@ int ObSSTableRowMultiGetter::fetch_row(ObSSTableReadHandle &read_handle, const b
       ret = OB_ALLOCATE_MEMORY_FAILED;
       LOG_WARN("Fail to allocate micro block getter", K(ret));
     } else if (OB_FAIL(micro_getter_->init(*iter_param_, *access_ctx_, sstable_))) {
-      LOG_WARN("Fail to init micro block row getter", K(ret));
     }
     //switch context each row due to the cache will be disabled if too many rows getted
   } else if (OB_FAIL(micro_getter_->switch_context(*iter_param_, *access_ctx_, sstable_))) {
-    STORAGE_LOG(WARN, "Fail to switch context", K(ret));
   }
   if (OB_FAIL(ret)) {
   } else if (read_handle.need_read_block() && nullptr == macro_block_reader_) {
@@ -177,7 +161,6 @@ int ObSSTableRowMultiGetter::fetch_row(ObSSTableReadHandle &read_handle, const b
               read_handle,
               store_row,
               macro_block_reader_))) {
-    LOG_WARN("Fail to get row", K(ret), K(prefetcher_));
   } else {
     REALTIME_MONITOR_ADD_SSSTORE_READ_BYTES(access_ctx_, micro_getter_->get_average_row_length());
   }

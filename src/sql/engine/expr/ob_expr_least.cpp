@@ -78,7 +78,6 @@ int ObExprLeastGreatest::calc_result_typeN_mysql(ObExprResType &type,
     }
     bool enable_decimalint = false;
     if (OB_FAIL(calc_result_meta_for_comparison(type, types, param_num, type_ctx, enable_decimalint))) {
-      LOG_WARN("calc result meta for comparison failed");
     }
     if (OB_SUCC(ret)) {
       // can't cast origin parameters.
@@ -90,7 +89,7 @@ int ObExprLeastGreatest::calc_result_typeN_mysql(ObExprResType &type,
       } else if (all_integer && ob_is_number_or_decimal_int_tc(type.get_type())) {
         // the args type is integer and result type is number/decimal, there are unsigned bigint in
         // args, set expr meta here.
-        type.set_accuracy(common::ObAccuracy::DDL_DEFAULT_ACCURACY2[0/*is_oracle*/][ObUInt64Type]);
+        type.set_accuracy(common::ObAccuracy::DDL_DEFAULT_ACCURACY[ObUInt64Type]);
       } else {
         for (int64_t i = 0; i < param_num; i++) {
           if (ob_is_enum_or_set_type(types[i].get_type())) {
@@ -147,9 +146,7 @@ int ObExprLeastGreatest::cg_expr(ObExprCGCtx &op_cg_ctx,
           ret = OB_ALLOCATE_MEMORY_FAILED;
           LOG_WARN("alloc memory failed", K(ret));
         } else if (OB_FAIL(ObSQLUtils::get_solidified_vars_from_ctx(raw_expr, local_vars))) {
-          LOG_WARN("failed to get local session var", K(ret));
         } else if (OB_FAIL(ObSQLUtils::merge_solidified_var_into_sql_mode(local_vars, sql_mode))) {
-          LOG_WARN("try get local sql mode failed", K(ret));
         } else if (CS_TYPE_INVALID == cmp_meta.get_collation_type()) {
           ret = OB_ERR_UNEXPECTED;
           LOG_WARN("compare cs type is invalid", K(ret), K(cmp_meta));
@@ -174,7 +171,6 @@ int ObExprLeastGreatest::cg_expr(ObExprCGCtx &op_cg_ctx,
                                                                             NULL_LAST,
                                                                             cmp_meta.get_collation_type(),
                                                                             info->cmp_meta_.scale_,
-                                                                            false,
                                                                             has_lob_header);
           if (OB_ISNULL(cmp_func)) {
             ret = OB_INVALID_ARGUMENT;
@@ -189,7 +185,6 @@ int ObExprLeastGreatest::cg_expr(ObExprCGCtx &op_cg_ctx,
           }
         }
       }
-      LOG_DEBUG("least cg", K(result_type_));
     }
   }
   return ret;
@@ -212,9 +207,7 @@ int ObExprLeastGreatest::cast_param(const ObExpr &src_expr, ObEvalCtx &ctx,
   } else {
     ObDatum *cast_datum = NULL;
     if (OB_FAIL(ctx.datum_caster_->to_type(dst_meta, src_expr, cm, cast_datum, ctx.get_batch_idx()))) {
-      LOG_WARN("fail to dynamic cast", K(ret), K(cm));
     } else if (OB_FAIL(res_datum.deep_copy(*cast_datum, allocator))) {
-      LOG_WARN("deep copy datum failed", K(ret));
     } else {
       LOG_DEBUG("cast_param", K(src_expr), KP(ctx.frames_[src_expr.frame_idx_]),
                 K(&(src_expr.locate_expr_datum(ctx))),
@@ -237,7 +230,6 @@ int ObExprLeastGreatest::cast_result(const ObExpr &src_expr, const ObExpr &dst_e
               && src_expr.datum_meta_.precision_ == dst_expr.datum_meta_.precision_))) {
     ObDatum *res_datum = nullptr;
     if (OB_FAIL(src_expr.eval(ctx, res_datum))) {
-      LOG_WARN("eval param value failed", K(ret));
     } else {
       expr_datum = *res_datum;
     }
@@ -246,9 +238,7 @@ int ObExprLeastGreatest::cast_result(const ObExpr &src_expr, const ObExpr &dst_e
   } else {
     ObDatum *cast_datum = NULL;
     if (OB_FAIL(ctx.datum_caster_->to_type(dst_expr.datum_meta_, src_expr, cm, cast_datum, ctx.get_batch_idx()))) {
-      LOG_WARN("fail to dynamic cast", K(ret));
     } else if (OB_FAIL(dst_expr.deep_copy_datum(ctx, *cast_datum))) {
-      LOG_WARN("deep copy datum failed", K(ret));
     }
   }
   return ret;
@@ -261,15 +251,15 @@ int ObExprLeastGreatest::calc_mysql(const ObExpr &expr, ObEvalCtx &ctx,
   uint32_t param_num = expr.arg_cnt_;
   bool has_null = false;
   int64_t cmp_res_offset = 0;
-  // Here we need to process the parameters according to the required values, if a parameter value is null, we will no longer calculate the values of the subsequent parameters
+  // Stop evaluating after the first null to preserve warning behavior for arguments
+  // evaluated before that null.
   //create table t(c1 int, c2 varchar(10));
   //insert into t values(null, 'a');
-  // select least(c2, c1) from t; mysql will report warning, oracle will report error
-  // select least(c1, c2) from t; mysql will not report warning, oracle normally outputs null
+  // select least(c2, c1) from t; reports warning
+  // select least(c1, c2) from t; reports null without warning
   for (int i = 0; OB_SUCC(ret) && !has_null && i < param_num; ++i) {
     ObDatum *tmp_datum = NULL;
     if (OB_FAIL(expr.args_[i]->eval(ctx, tmp_datum))) {
-      LOG_WARN("eval param value failed", K(ret), K(i));
     } else {
       if (tmp_datum->is_null()) {
         has_null = true;
@@ -311,7 +301,9 @@ int ObExprLeastGreatest::calc_mysql(const ObExpr &expr, ObEvalCtx &ctx,
       ObDatum minmax_datum;
       ObTempExprCtx::TempAllocGuard tmp_alloc_guard(ctx);
       ObDatumCmpFuncType cmp_func = reinterpret_cast<ObDatumCmpFuncType>(expr.inner_functions_[0]);
-      if (OB_SUCC(ret) &&
+      const common::ObDatumAccessContext *datum_access_ctx = nullptr;
+      if (OB_FAIL(ctx.get_datum_access_ctx(datum_access_ctx))) {
+      } else if (OB_SUCC(ret) &&
           OB_FAIL(cast_param(*expr.args_[0], ctx, cast_info->cmp_meta_, cast_info->cm_,
                              tmp_alloc_guard.get_allocator(), minmax_datum))) {
         LOG_WARN("cast param failed", K(ret));
@@ -320,11 +312,10 @@ int ObExprLeastGreatest::calc_mysql(const ObExpr &expr, ObEvalCtx &ctx,
         ObDatum cur_datum;
         if (OB_FAIL(cast_param(*expr.args_[i], ctx, cast_info->cmp_meta_, cast_info->cm_,
                               tmp_alloc_guard.get_allocator(), cur_datum))) {
-          LOG_WARN("cast param failed", K(ret));
         } else {
           int cmp_res = 0;
-          if (OB_FAIL(cmp_func(minmax_datum, cur_datum, cmp_res))) {
-            LOG_WARN("compare failed", K(ret));
+          if (OB_FAIL(cmp_func(
+                  minmax_datum, cur_datum, cmp_res, datum_access_ctx))) {
           } else if((!least && cmp_res < 0) || (least && cmp_res > 0)) {
             res_idx = i;
             minmax_datum = cur_datum;
@@ -334,7 +325,6 @@ int ObExprLeastGreatest::calc_mysql(const ObExpr &expr, ObEvalCtx &ctx,
       // ok, we got the least / greatest param.
       if (OB_SUCC(ret)) {
         if (OB_FAIL(cast_result(*expr.args_[res_idx], expr, ctx, cast_info->cm_, expr_datum))) {
-          LOG_WARN("cast result failed", K(ret));
         }
       }
     }
@@ -368,4 +358,3 @@ int ObExprLeast::calc_least(const ObExpr &expr, ObEvalCtx &ctx, ObDatum &expr_da
 
 }
 }
-

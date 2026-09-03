@@ -16,8 +16,9 @@
 
 #define USING_LOG_PREFIX SQL_EXE
 #include "sql/executor/ob_maintain_dependency_info_task.h"
-#include "rootserver/ob_rs_serial_call.h"
-#include "rootserver/ob_root_service.h"
+#include "query/command/ob_root_service_serialization.h"
+#include "query/command/ob_root_command_service.h"
+#include "share/ob_share_util.h"
 
 namespace oceanbase
 {
@@ -27,7 +28,8 @@ namespace sql
 ObMaintainObjDepInfoTask::ObMaintainObjDepInfoTask ()
   : gctx_(GCTX),
     view_schema_(&alloc_),
-    reset_view_column_infos_(false)
+    reset_view_column_infos_(false),
+    root_command_service_(nullptr)
 {
   set_retry_times(0);
 }
@@ -47,7 +49,6 @@ int ObMaintainObjDepInfoTask::check_cur_maintain_task_is_valid(
     const share::schema::ObSimpleTableSchemaV2 *table_schema = nullptr;
     if (OB_FAIL(schema_guard.get_simple_table_schema(
                 dep_obj_key.dep_obj_id_, table_schema))) {
-      LOG_WARN("failed to get table schema", K(ret), K(dep_obj_key));
     } else if (OB_ISNULL(table_schema)) {
       ret = OB_ERR_UNEXPECTED;
       LOG_WARN("schema is null", K(ret));
@@ -86,7 +87,6 @@ int ObMaintainObjDepInfoTask::check_and_build_dep_info_arg(
                 dep_objs.at(i).dep_obj_item_.dep_obj_schema_version_,
                 schema_guard,
                 is_valid))) {
-      LOG_WARN("failed to check current maintain task is valid");
     } else if (is_valid) {
       switch (op) {
       case share::schema::ObReferenceObjTable::INSERT_OP:
@@ -121,6 +121,10 @@ share::ObAsyncTask *ObMaintainObjDepInfoTask::deep_copy(char *buf, const int64_t
     LOG_WARN("buffer size is not enough", K(ret), K(buf_size), K(need_size));
   } else {
     task = new (buf) ObMaintainObjDepInfoTask{};
+    if (OB_NOT_NULL(root_command_service_)) {
+      static_cast<ObMaintainObjDepInfoTask *>(task)->
+          bind_root_command_service(*root_command_service_);
+    }
     OZ ((static_cast<ObMaintainObjDepInfoTask *> (task))->get_insert_dep_objs().assign(insert_dep_objs_));
     OZ ((static_cast<ObMaintainObjDepInfoTask *> (task))->get_update_dep_objs().assign(update_dep_objs_));
     OZ ((static_cast<ObMaintainObjDepInfoTask *> (task))->get_delete_dep_objs().assign(delete_dep_objs_));
@@ -140,7 +144,7 @@ int ObMaintainObjDepInfoTask::process()
     
     dep_obj_info_arg.reset_view_column_infos_ = reset_view_column_infos_;
     OZ (gctx_.schema_service_->async_refresh_schema(last_version));
-    OZ (gctx_.schema_service_->get_tenant_schema_guard(schema_guard));
+    OZ (gctx_.schema_service_->get_runtime_schema_guard(schema_guard));
     OZ (check_and_build_dep_info_arg(schema_guard, dep_obj_info_arg,
     insert_dep_objs_, share::schema::ObReferenceObjTable::INSERT_OP));
     OZ (check_and_build_dep_info_arg(schema_guard, dep_obj_info_arg,
@@ -155,8 +159,12 @@ int ObMaintainObjDepInfoTask::process()
               && dep_obj_info_arg.delete_dep_objs_.empty()
               && !dep_obj_info_arg.schema_.is_valid()) {
       // do nothing
-    } else if (OB_FAIL(rootserver::serial_call([&]{ return GCTX.root_service_->maintain_obj_dependency_info(dep_obj_info_arg); }))) {
-      LOG_WARN("failed to maintain_obj_dependency_info", K(ret), K(dep_obj_info_arg));
+    } else if (OB_ISNULL(root_command_service_)) {
+      ret = OB_NOT_INIT;
+      LOG_WARN("root command service is not bound", K(ret));
+    } else if (OB_FAIL(query::serialize_root_service_call(
+        [&]{ return root_command_service_->
+            maintain_obj_dependency_info(dep_obj_info_arg); }))) {
     }
   }
   return ret;
@@ -166,7 +174,6 @@ int ObMaintainObjDepInfoTask::assign_view_schema(const ObTableSchema &view_schem
 {
   int ret = OB_SUCCESS;
   if (OB_FAIL(view_schema_.assign(view_schema))) {
-    LOG_WARN("failed to copy view schema", K(ret));
   }
   return ret;
 }
@@ -174,13 +181,10 @@ int ObMaintainObjDepInfoTask::assign_view_schema(const ObTableSchema &view_schem
 int ObMaintainDepInfoTaskQueue::init(const int64_t thread_cnt, const int64_t queue_size)
 {
   int ret = OB_SUCCESS;
-  auto attr = SET_USE_500("DepInfoTaskQ");
+  auto attr = lib::ObMemAttr("DepInfoTaskQ");
   if (OB_FAIL(ObAsyncTaskQueue::init(thread_cnt, queue_size, "MaintainDepInfoTaskQueue", OB_MALLOC_MIDDLE_BLOCK_SIZE))) {
-    LOG_WARN("failed to init base queue", K(ret));
   } else if (OB_FAIL(view_info_set_.create(INIT_BKT_SIZE, attr, attr))) {
-    LOG_WARN("failed to init view set", K(ret));
   } else if (OB_FAIL(sys_view_consistent_.create(INIT_BKT_SIZE, attr, attr))) {
-    LOG_WARN("failed to init sys view set", K(ret));
   }
   return ret;
 }
@@ -193,7 +197,6 @@ void ObMaintainDepInfoTaskQueue::run2()
     ret = OB_NOT_INIT;
     LOG_WARN("not init", K(ret));
   } else {
-    ObDIActionGuard ag("AsyncTaskThreadPool", "MaintainDepInfoTaskQueue", "detect task");
     ObAddr zero_addr;
     while (!stop_) {
       IGNORE_RETURN lib::Thread::update_loop_ts();
@@ -247,7 +250,6 @@ void ObMaintainDepInfoTaskQueue::run2()
         // generate trace id
         ObCurTraceId::init(zero_addr);
         // just do it
-        ObDIActionGuard ag1("MaintainObjDepInfoTask");
         ret = task->process();
         if (OB_FAIL(ret)) {
           LOG_WARN("task process failed, start retry", "max retry time",
@@ -260,7 +262,6 @@ void ObMaintainDepInfoTaskQueue::run2()
               ret = OB_SIZE_OVERFLOW;
               LOG_WARN("push task to queue failed", K(ret));
             } else if (OB_FAIL(queue_.push(task))) {
-              LOG_WARN("push task to queue failed", K(ret));
             } else {
               rescheduled = true;
             }
@@ -271,7 +272,6 @@ void ObMaintainDepInfoTaskQueue::run2()
             // ignore ret
             int tmp_ret = OB_SUCCESS;
             if (OB_SUCCESS != (tmp_ret = view_info_set_.erase_refactored(view_schema.get_table_id()))) {
-              LOG_WARN("failed to erase obj id", K(tmp_ret), K(view_schema.get_table_id()));
             }
           }
         }
@@ -293,25 +293,25 @@ int process_reference_obj_table(share::schema::ObReferenceObjTable &ref_obj_tabl
                                                      sql::ObMaintainDepInfoTaskQueue &task_queue)
 {
   int ret = OB_SUCCESS;
-  share::ObTenantRole::Role tenant_role;
-  bool is_standby = false;
-  if (OB_FAIL(share::ObShareUtil::mtl_check_if_tenant_role_is_standby(is_standby))) {
-    LOG_WARN("fail to execute mtl_check_if_tenant_role_is_standby", KR(ret));
-  } else if (OB_UNLIKELY(!ref_obj_table.is_inited() || is_standby)) {
+  bool write_enabled = false;
+  if (OB_FAIL(share::ObShareUtil::is_server_write_enabled(write_enabled))) {
+  } else if (OB_UNLIKELY(!ref_obj_table.is_inited() || !write_enabled)) {
     if (OB_INVALID_ID != dep_obj_id) {
       OZ (task_queue.erase_view_id_from_set(dep_obj_id));
     }
   } else {
     SMART_VAR(sql::ObMaintainObjDepInfoTask, task) {
+      if (OB_NOT_NULL(task_queue.get_root_command_service())) {
+        task.bind_root_command_service(
+            *task_queue.get_root_command_service());
+      }
       share::schema::ObReferenceObjTable::ObGetDependencyObjOp op(&task.get_insert_dep_objs(),
                               &task.get_update_dep_objs(),
                               &task.get_delete_dep_objs());
       if (OB_FAIL(ref_obj_table.get_ref_obj_table().foreach_refactored(op))) {
-        LOG_WARN("traverse ref_obj_version_table_ failed", K(ret));
       } else if (nullptr != view_schema && OB_FAIL(task.assign_view_schema(*view_schema))) {
         LOG_WARN("failed to assign view schema", K(ret));
       } else if (OB_FAIL(op.get_callback_ret())) {
-        LOG_WARN("traverse ref_obj_version_table_ failed", K(ret));
       } else if (task.is_empty_task()) {
         if (OB_INVALID_ID != dep_obj_id) {
           OZ (task_queue.erase_view_id_from_set(dep_obj_id));
@@ -328,11 +328,9 @@ int process_reference_obj_table(share::schema::ObReferenceObjTable &ref_obj_tabl
   if (OB_FAIL(ret) && OB_INVALID_ID != dep_obj_id) {
     int tmp_ret = OB_SUCCESS;
     if (OB_SUCCESS != (tmp_ret = task_queue.erase_view_id_from_set(dep_obj_id))) {
-      LOG_WARN("failed to erase obj id", K(tmp_ret), K(ret));
     }
     if (OB_SIZE_OVERFLOW == ret) {
       ret = OB_SUCCESS;
-      LOG_TRACE("async queue is full");
     }
   }
   return ret;

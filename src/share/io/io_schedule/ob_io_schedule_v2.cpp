@@ -23,15 +23,12 @@ namespace oceanbase
 namespace common
 {
 
-int64_t ObTenantIOSchedulerV2::get_qindex(ObIORequest& req)
+int64_t ObIOScheduler::get_qindex(ObIORequest& req)
 {
   int ret = OB_SUCCESS;
   int64_t index = -1;
   const ObIOGroupKey grp_key = req.get_group_key();
-  if (is_sys_group(grp_key.group_id_)) {
-    index = static_cast<int64_t>(grp_key.mode_);
-  } else if (!is_valid_group(grp_key.group_id_)) {
-  } else if (OB_FAIL(req.tenant_io_mgr_->get_group_index(grp_key, (uint64_t&)index))) {
+  if (OB_FAIL(req.io_service_->get_group_index(grp_key, (uint64_t&)index))) {
     if (ret == OB_HASH_NOT_EXIST) {
       ret = OB_SUCCESS;
       if (REACH_TIME_INTERVAL(1 * 1000L * 1000L)) {
@@ -47,7 +44,7 @@ int64_t ObTenantIOSchedulerV2::get_qindex(ObIORequest& req)
   return index;
 }
 
-int ObTenantIOSchedulerV2::schedule_request(ObIORequest &req)
+int ObIOScheduler::schedule_request(ObIORequest &req)
 {
   int ret = OB_SUCCESS;
   ObDeviceChannel *device_channel = nullptr;
@@ -59,10 +56,8 @@ int ObTenantIOSchedulerV2::schedule_request(ObIORequest &req)
   } else if (OB_UNLIKELY(req.is_canceled())) {
     ret = OB_CANCELED;
   } else if (OB_FAIL(req.prepare())) {
-    LOG_WARN("prepare io request failed", K(ret), K(req));
   } else if (FALSE_IT(time_guard.click("prepare_req"))) {
   } else if (OB_FAIL(OB_IO_MANAGER.get_device_channel(req, device_channel))) {
-    LOG_WARN("get device channel failed", K(ret), K(req));
   } else if (FALSE_IT(result->time_log_.dequeue_ts_ = ObTimeUtility::fast_current_time())) {
   } else {
     // Submit with bounded in-place retry on OB_EAGAIN (device queue / io depth full).
@@ -74,7 +69,6 @@ int ObTenantIOSchedulerV2::schedule_request(ObIORequest &req)
       {
         ObThreadCondGuard guard(result->get_cond());
         if (OB_FAIL(guard.get_ret())) {
-          LOG_ERROR("fail to guard master condition", K(ret));
         } else if (req.is_canceled()) {
           ret = OB_CANCELED;
         } else if (OB_FAIL(device_channel->submit(req))) {

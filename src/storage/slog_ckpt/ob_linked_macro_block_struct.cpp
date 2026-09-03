@@ -34,7 +34,7 @@ int ObLinkedMacroBlockHeader::serialize(char *buf, const int64_t buf_len, int64_
   if (OB_UNLIKELY(NULL == buf || buf_len < 0)) {
     ret = OB_INVALID_ARGUMENT;
     LOG_WARN("invalid argument", K(ret), KP(buf), K(buf_len));
-  } else if (OB_UNLIKELY(LINKED_MACRO_BLOCK_HEADER_VERSION_V2 != version_)) {
+  } else if (OB_UNLIKELY(LINKED_MACRO_BLOCK_HEADER_VERSION != version_)) {
     ret = OB_ERR_UNEXPECTED;
     LOG_WARN("unexpected ObLinkedMacroBlockHeader verison", K(ret), K(*this));
   }
@@ -45,7 +45,6 @@ int ObLinkedMacroBlockHeader::serialize(char *buf, const int64_t buf_len, int64_
 
   if (OB_SUCC(ret)) {
     if (OB_FAIL(previous_macro_block_id_.serialize(buf, buf_len, pos))) {
-      LOG_WARN("fail to serialize previous_macro_block_id", K(ret), K(*this));
     }
   }
   return ret;
@@ -63,21 +62,11 @@ int ObLinkedMacroBlockHeader::deserialize(const char *buf, const int64_t data_le
   DESERIALIZE_MEMBER_WITH_MEMCPY(item_count_);
   DESERIALIZE_MEMBER_WITH_MEMCPY(fragment_offset_);
 
-  if (OB_SUCC(ret)) {
-    if (LINKED_MACRO_BLOCK_HEADER_VERSION_V1 == version_) {
-      if (OB_FAIL(previous_macro_block_id_.memcpy_deserialize(buf, data_len, pos))) {
-        LOG_WARN("fail to deserialize previous_macro_block_id", K(ret), K(*this));
-      } else {
-        version_ = LINKED_MACRO_BLOCK_HEADER_VERSION_V2;
-      }
-    } else if (LINKED_MACRO_BLOCK_HEADER_VERSION_V2 == version_) {
-      if (OB_FAIL(previous_macro_block_id_.deserialize(buf, data_len, pos))) {
-        LOG_WARN("fail to deserialize previous_macro_block_id", K(ret), K(*this));
-      }
-    } else {
-      ret = OB_DESERIALIZE_ERROR;
-      LOG_WARN("unexpected ObLinkedMacroBlockHeader version", K(ret), K(*this));
-    }
+  if (OB_SUCC(ret) && OB_UNLIKELY(LINKED_MACRO_BLOCK_HEADER_VERSION != version_)) {
+    ret = OB_DESERIALIZE_ERROR;
+    LOG_WARN("unexpected ObLinkedMacroBlockHeader version", K(ret), K(*this));
+  } else if (OB_SUCC(ret) && OB_FAIL(previous_macro_block_id_.deserialize(buf, data_len, pos))) {
+    LOG_WARN("fail to deserialize previous_macro_block_id", K(ret), K(*this));
   }
   return ret;
 }
@@ -100,7 +89,6 @@ int ObMetaBlockListHandle::add_macro_blocks(const ObIArray<blocksstable::MacroBl
   ObStorageObjectsHandle &new_handle = meta_handles_[1 - cur_handle_pos_];
   for (int64_t i = 0; OB_SUCC(ret) && i < block_list.count(); ++i) {
     if (OB_FAIL(new_handle.add(block_list.at(i)))) {
-      LOG_WARN("fail to add macro block handle", K(ret));
     }
   }
   if (OB_FAIL(ret)) {

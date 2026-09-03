@@ -17,77 +17,38 @@
 #ifndef OCEANBASE_TRANSACTION_OB_TIMESTAMP_ACCESS_
 #define OCEANBASE_TRANSACTION_OB_TIMESTAMP_ACCESS_
 
-#include "share/rc/ob_tenant_base.h"
-#include "common/ob_role.h"
+#include <atomic>
+
+#include "share/rc/ob_server_runtime.h"
 
 namespace oceanbase
 {
 
-namespace obcall
-{
-class ObGtsRpcResult;
-}
-
 namespace transaction
 {
-class ObGtsRequest;
+typedef int (*ObTimestampProvider)(int64_t &timestamp);
 
 class ObTimestampAccess
 {
 public:
-  ObTimestampAccess() : service_type_(FOLLOWER) {}
+  ObTimestampAccess() : provider_(nullptr) {}
   ~ObTimestampAccess() {}
-  static int mtl_init(ObTimestampAccess *&timestamp_access)
+  static int server_module_init(ObTimestampAccess *&timestamp_access)
   {
     timestamp_access->reset();
     return OB_SUCCESS;
   }
   void destroy() { reset();}
-  void reset() { service_type_ = FOLLOWER; }
-  enum ServiceType {
-    FOLLOWER = 0,
-    GTS_LEADER,
-    STS_LEADER,
-  };
-  void set_service_type(const ServiceType service_type) { service_type_ = service_type; }
-  ServiceType get_service_type() const { return service_type_; }
-  int handle_request(const ObGtsRequest &request, obcall::ObGtsRpcResult &result);
+  void reset() { provider_.store(nullptr, std::memory_order_release); }
+  void set_provider(ObTimestampProvider provider)
+  {
+    provider_.store(provider, std::memory_order_release);
+  }
   int get_number(int64_t &gts);
-  void get_virtual_info(int64_t &ts_value,
-                        ServiceType &service_type,
-                        common::ObRole &role,
-                        int64_t &proposal_id);
-  static const char *service_type_to_cstr(const ServiceType service_type)
-  {
-    const char *str;
-    switch (service_type) {
-      case ServiceType::FOLLOWER:
-        str = "FOLLOWER";
-        break;
-      case ServiceType::GTS_LEADER:
-        str = "GTS_LEADER";
-        break;
-      case ServiceType::STS_LEADER:
-        str = "STS_LEADER";
-        break;
-      default:
-        str = "UNKNOWN";
-        break;
-    }
-    return str;
-  }
-  static const char *ts_type_to_cstr(bool is_primary)
-  {
-    const char *str;
-    if (is_primary) {
-      str = "GTS";
-    } else {
-      str = "STS";
-    }
-    return str;
-  }
+  void get_virtual_info(int64_t &ts_value);
+
 private:
-  ServiceType service_type_;
+  std::atomic<ObTimestampProvider> provider_;
 };
 
 

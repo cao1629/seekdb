@@ -19,6 +19,7 @@
 #include "ob_sql_expression.h"
 #include "sql/parser/ob_item_type_str.h"
 #include "sql/engine/ob_exec_context.h"
+#include "sql/engine/ob_physical_plan.h"
 
 namespace oceanbase
 {
@@ -27,12 +28,10 @@ namespace sql
 {
 ObSqlExpression::ObSqlExpression(common::ObIAllocator &allocator, int64_t item_count)
     : inner_alloc_(allocator),
-      post_expr_(allocator, item_count),
       fast_expr_(NULL),
       infix_expr_(allocator, item_count),
       array_param_index_(OB_INVALID_INDEX),
       need_construct_binding_array_(false),
-      gen_infix_expr_(false),
       is_pl_mock_default_expr_(false),
       expr_(NULL)
 {
@@ -47,7 +46,6 @@ int ObSqlExpression::set_item_count(int64_t count)
 {
   int ret = OB_SUCCESS;
   if (OB_FAIL(infix_expr_.set_item_count(count))) {
-    LOG_WARN("set expr item count failed", K(ret));
   }
   return ret;
 }
@@ -58,21 +56,16 @@ int ObSqlExpression::assign(const ObSqlExpression &other)
   if (&other != this) {
     need_construct_binding_array_ = other.need_construct_binding_array_;
     array_param_index_ = other.array_param_index_;
-    ret = post_expr_.assign(other.post_expr_);
 
     // @note we do not copy the members of DLink on purpose
-    if (OB_SUCC(ret) && other.fast_expr_ != NULL) {
+    if (other.fast_expr_ != NULL) {
       ObExprOperatorFactory factory(inner_alloc_);
       if (OB_FAIL(factory.alloc_fast_expr(other.fast_expr_->get_op_type(), fast_expr_))) {
-        LOG_WARN("alloc fast expr failed", K(ret));
       } else if (OB_FAIL(fast_expr_->assign(*other.fast_expr_))) {
-        LOG_WARN("assign fast expr failed", K(ret));
       }
     }
     if (OB_SUCC(ret)) {
-      gen_infix_expr_ = other.gen_infix_expr_;
       if (OB_FAIL(infix_expr_.assign(other.infix_expr_))) {
-        LOG_WARN("infix expr assign failed", K(ret));
       }
     }
   }
@@ -82,29 +75,20 @@ int ObSqlExpression::assign(const ObSqlExpression &other)
 int ObSqlExpression::add_expr_item(const ObPostExprItem &item, const ObRawExpr *raw_expr)
 {
   int ret = OB_SUCCESS;
-  if (!gen_infix_expr_) {
-    if (OB_FAIL(post_expr_.add_expr_item(item))) {
-      LOG_WARN("failed to add post expr item", K(ret));
-    } else {
-      // do nothing
-    }
+  ObInfixExprItem infix_item;
+  if (OB_NOT_NULL(raw_expr)) {
+    infix_item.set_is_boolean(raw_expr->is_bool_expr());
   } else {
-    ObInfixExprItem infix_item;
-    if (OB_NOT_NULL(raw_expr)) {
-      infix_item.set_is_boolean(raw_expr->is_bool_expr());
-    } else {
-      // unittest
-    }
-    *static_cast<ObPostExprItem *>(&infix_item) = item;
-    if (OB_FAIL(infix_expr_.add_expr_item(infix_item))) {
-      LOG_WARN("add infix expr item failed", K(ret));
-    } else if (IS_EXPR_OP(item.get_item_type())) {
-      int64_t last_expr_idx = infix_expr_.get_exprs().count() - 1;
-      infix_expr_.get_exprs().at(last_expr_idx).set_param_idx(static_cast<const ObInfixExprItem *>
-                                                                (&item)->get_param_idx());
-      infix_expr_.get_exprs().at(last_expr_idx).set_param_num(static_cast<const ObInfixExprItem *>
-                                                                (&item)->get_param_num());
-    }
+    // unittest
+  }
+  *static_cast<ObPostExprItem *>(&infix_item) = item;
+  if (OB_FAIL(infix_expr_.add_expr_item(infix_item))) {
+  } else if (IS_EXPR_OP(item.get_item_type())) {
+    int64_t last_expr_idx = infix_expr_.get_exprs().count() - 1;
+    infix_expr_.get_exprs().at(last_expr_idx).set_param_idx(static_cast<const ObInfixExprItem *>
+                                                              (&item)->get_param_idx());
+    infix_expr_.get_exprs().at(last_expr_idx).set_param_num(static_cast<const ObInfixExprItem *>
+                                                              (&item)->get_param_num());
   }
   return ret;
 }
@@ -116,20 +100,13 @@ int ObSqlExpression::calc(ObExprCtx &expr_ctx,
   int ret = OB_SUCCESS;
   if (fast_expr_ != NULL) {
     if (OB_FAIL(fast_expr_->calc(expr_ctx, row, result))) {
-      LOG_WARN("cacl fast expr failed", K(ret));
     }
   } else {
-    {
-      if (OB_UNLIKELY(infix_expr_.is_empty())) {
-        if (post_expr_.is_empty()) {
-          ret = OB_INVALID_ARGUMENT;
-          LOG_WARN("invalid argument", K(post_expr_.is_empty()), K(ret));
-        } else {
-          ret = post_expr_.calc(expr_ctx, row, result);
-        }
-      } else {
-        ret = infix_expr_.calc(expr_ctx, row, result);
-      }
+    if (OB_UNLIKELY(infix_expr_.is_empty())) {
+      ret = OB_INVALID_ARGUMENT;
+      LOG_WARN("empty expression", K(ret));
+    } else {
+      ret = infix_expr_.calc(expr_ctx, row, result);
     }
   }
   return ret;
@@ -140,12 +117,8 @@ int ObSqlExpression::calc(ObExprCtx &expr_ctx, const common::ObNewRow &row1,
 {
   int ret = OB_SUCCESS;
   if (OB_UNLIKELY(infix_expr_.is_empty())) {
-    if (post_expr_.is_empty()) {
-      ret = OB_INVALID_ARGUMENT;
-      LOG_WARN("invalid argument", K(post_expr_.is_empty()), K(ret));
-    } else {
-      ret = post_expr_.calc(expr_ctx, row1, row2, result);
-    }
+    ret = OB_INVALID_ARGUMENT;
+    LOG_WARN("empty expression", K(ret));
   } else {
     ret = infix_expr_.calc(expr_ctx, row1, row2, result);
   }
@@ -156,7 +129,6 @@ int ObSqlExpression::generate_idx_for_regexp_ops(int16_t &cur_regexp_op_count)
 {
   int ret = OB_SUCCESS;
   if (OB_FAIL(infix_expr_.generate_idx_for_regexp_ops(cur_regexp_op_count))) {
-    LOG_WARN("generate idx for regexp failed", K(ret));
   }
   return ret;
 }
@@ -164,25 +136,12 @@ int ObSqlExpression::generate_idx_for_regexp_ops(int16_t &cur_regexp_op_count)
 
 OB_DEF_SERIALIZE(ObSqlExpression) {
   int ret = OB_SUCCESS;
-  // TODO: When the pre-upgrade version of master is changed to 223, remove the post_expr_ structure,
-  // Serialization and deserialization is mock an empty post_expr arrayis sufficient
-  OB_UNIS_ENCODE(post_expr_);
-
-  int idx_v = -1;
-  OB_UNIS_ENCODE(idx_v);  // for compatible with the 3.x func_ member
   OB_UNIS_ENCODE(infix_expr_);
   return ret;
 }
 
 OB_DEF_SERIALIZE_SIZE(ObSqlExpression) {
   int64_t len = 0;
-
-
-  OB_UNIS_ADD_LEN(post_expr_);
-
-  // add len for func_'s idx  i
-  int idx_v = -1;
-  OB_UNIS_ADD_LEN(idx_v);  // for compatible with the 3.x func_ member
   OB_UNIS_ADD_LEN(infix_expr_);
 
   return len;
@@ -190,17 +149,6 @@ OB_DEF_SERIALIZE_SIZE(ObSqlExpression) {
 
 OB_DEF_DESERIALIZE(ObSqlExpression) {
   int ret = OB_SUCCESS;
-
-  OB_UNIS_DECODE(post_expr_);
-
-  int idx = -1; //here must be -1 for compat
-  OB_UNIS_DECODE(idx);
-  void *func_buf = NULL;
-  if (idx >= 0) {
-    ret = OB_ERR_UNEXPECTED;
-    LOG_ERROR("func idx should always be -1", K(ret), K(idx));
-  }
-
   OB_UNIS_DECODE(infix_expr_);
 
   return ret;
@@ -236,8 +184,6 @@ int64_t ObColumnExpression::to_string(char *buf, const int64_t buf_len) const
   J_OBJ_START();
   J_KV(K_(result_index));
   J_COMMA();
-  J_KV(N_POST_EXPR, post_expr_);
-  J_COMMA();
   J_KV(K_(infix_expr));
   J_OBJ_END();
   return pos;
@@ -251,7 +197,6 @@ int ObColumnExpression::calc_and_project(ObExprCtx &expr_ctx, ObNewRow &row) con
     ret = OB_INVALID_ARGUMENT;
     LOG_WARN("invalid result index", K_(result_index), K_(row.count));
   } else if (OB_FAIL(ObSqlExpression::calc(expr_ctx, row, row.cells_[result_index_]))) {
-    LOG_WARN("calc expr result failed", K(ret));
   }
   return ret;
 }
@@ -294,13 +239,9 @@ ObAggregateExpression::ObAggregateExpression(common::ObIAllocator &allocator, in
 {
   int ret = OB_SUCCESS;
   if (OB_FAIL(separator_param_expr_.set_item_count(1))) {
-    LOG_WARN("failed to set item count", K(ret));
   } else if (OB_FAIL(window_size_param_expr_.set_item_count(1))) {
-    LOG_WARN("failed to set item count", K(ret));
   } else if (OB_FAIL(item_size_param_expr_.set_item_count(1))) {
-    LOG_WARN("failed to set item count", K(ret));
   } else if (OB_FAIL(bucket_num_expr_.set_item_count(1))) {
-    LOG_WARN("failed to set item count", K(ret));
   }
 }
 
@@ -314,8 +255,6 @@ int64_t ObAggregateExpression::to_string(char *buf, const int64_t buf_len) const
   J_KV(N_AGGR_FUNC, ob_aggr_func_str(aggr_func_),
        N_DISTINCT, is_distinct_);
   J_COMMA();
-  J_KV(N_POST_EXPR, post_expr_);
-  J_COMMA();
   J_KV(K_(infix_expr));
   J_OBJ_END();
   return pos;
@@ -326,13 +265,12 @@ int ObAggregateExpression::calc(ObExprCtx &expr_ctx,
                                 common::ObObj &result) const
 {
   int ret = OB_SUCCESS;
-  if (OB_UNLIKELY((T_FUN_COUNT == aggr_func_ || T_FUN_KEEP_COUNT == aggr_func_) && is_empty())) {
+  if (OB_UNLIKELY(T_FUN_COUNT == aggr_func_ && is_empty())) {
     // COUNT(*)
     // point the result to an arbitray non-null cell
     result = OBJ_ZERO;
   } else {
     if (OB_FAIL(ObSqlExpression::calc(expr_ctx, row, result))) {
-      LOG_WARN("failed to calc agg expr", K(ret), K(row));
     }
   }
   return ret;
@@ -350,7 +288,6 @@ int ObAggregateExpression::calc(ObExprCtx &expr_ctx,
     result = OBJ_ZERO;
   } else {
     if (OB_FAIL(ObSqlExpression::calc(expr_ctx, row1, row2, result))) {
-      LOG_WARN("failed to calc agg expr", K(ret), K(row1), K(row2));
     }
   }
   return ret;
@@ -367,7 +304,6 @@ int ObAggregateExpression::add_sort_column(const int64_t index,
   sort_column.cs_type_ = cs_type;
   sort_column.set_is_ascending(is_ascending);
   if (OB_FAIL(sort_columns_.push_back(sort_column))) {
-    LOG_WARN("failed to push back to array", K(ret));
   } else {
     // do nothing
   }
@@ -412,9 +348,7 @@ int ObSqlExpressionUtil::expand_array_params(ObExprCtx &expr_ctx,
     CK (expr_ctx.my_session_);
     CK (expr_ctx.exec_ctx_);
     CK (expr_ctx.exec_ctx_->get_sql_ctx());
-    if ((NULL != expr_ctx.my_session_->get_pl_implicit_cursor() &&
-         expr_ctx.my_session_->get_pl_implicit_cursor()->get_in_forall()) ||
-        expr_ctx.exec_ctx_->get_sql_ctx()->multi_stmt_item_.is_batched_multi_stmt()) {
+    if (expr_ctx.exec_ctx_->get_sql_ctx()->multi_stmt_item_.is_batched_multi_stmt()) {
       const ObObjParam *array_data = NULL;
       const ObSqlArrayObj *array_params = nullptr;
       if (OB_UNLIKELY(!src_param.is_ext_sql_array())) {

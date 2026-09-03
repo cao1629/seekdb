@@ -59,13 +59,13 @@ int ObExprPrivSTGeomFromEwkt::eval_st_geomfromewkt(const ObExpr &expr, ObEvalCtx
   int ret = OB_SUCCESS;
   ObEvalCtx::TempAllocGuard tmp_alloc_g(ctx);
   
-  MultimodeAlloctor tmp_allocator(tmp_alloc_g.get_allocator(), expr.type_, ret, N_PRIV_ST_GEOMFROMEWKT);
+  MultimodeAlloctor tmp_allocator(tmp_alloc_g.get_allocator());
   ObDatum *datum = NULL;
   bool is_null_result = false;
   uint32_t srid = 0;
   ObString wkt;
   const ObSrsItem *srs_item = NULL;
-  omt::ObSrsCacheGuard srs_guard;
+  common::ObSrsCacheGuard srs_guard;
   ObSQLSessionInfo *session = ctx.exec_ctx_.get_my_session();
   ObGeometry *geo = NULL;
   bool is_geog = false;
@@ -73,15 +73,12 @@ int ObExprPrivSTGeomFromEwkt::eval_st_geomfromewkt(const ObExpr &expr, ObEvalCtx
 
   // get wkt
   if (OB_FAIL(tmp_allocator.eval_arg(expr.args_[0], ctx, datum))) {
-    LOG_WARN("eval wkt arg failed", K(ret));
   } else if(datum->is_null()){
     is_null_result = true;
   } else {
     wkt = datum->get_string();
-    if (OB_FAIL(ObTextStringHelper::read_real_string_data_with_copy(tmp_allocator, *datum,
+    if (OB_FAIL(ObTextStringHelper::read_real_string_data_with_copy(ctx.exec_ctx_, tmp_allocator, *datum,
         expr.args_[0]->datum_meta_, expr.args_[0]->obj_meta_.has_lob_header(), wkt))) {
-      LOG_WARN("fail to get real string data", K(ret), K(wkt));
-    } else if (FALSE_IT(tmp_allocator.set_baseline_size(wkt.length()))) {
     } 
   } 
   // get srid
@@ -94,10 +91,8 @@ int ObExprPrivSTGeomFromEwkt::eval_st_geomfromewkt(const ObExpr &expr, ObEvalCtx
       ret = OB_OPERATE_OVERFLOW;
       LOG_WARN("srid input value out of range", K(ret), K(datum->get_int()));
     } else if (ObGeoTypeUtil::need_get_srs(srid)) {
-      if (OB_FAIL(OTSRS_MGR->get_tenant_srs_guard(srs_guard))) {
-        LOG_WARN("failed to get srs guard", K(ret));
-      } else if (OB_FAIL(srs_guard.get_srs_item(srid, srs_item))) {
-        LOG_WARN("failed to get srs item", K(ret));
+      if (OB_FAIL(ObGeoExprUtils::get_srs_item(
+              ctx, srs_guard, srid, srs_item))) {
       } else if (OB_ISNULL(srs_item)) {
         ret = OB_ERR_UNEXPECTED;
         LOG_WARN("unexpected null srs item", K(ret));
@@ -118,7 +113,6 @@ int ObExprPrivSTGeomFromEwkt::eval_st_geomfromewkt(const ObExpr &expr, ObEvalCtx
     } else {
       if (is_geog && OB_SUCC(ret)) {
         if (OB_FAIL(ObGeoExprUtils::check_coordinate_range(srs_item, geo, N_PRIV_ST_GEOMFROMEWKT))) {
-          LOG_WARN("check geo coordinate range failed", K(ret));
         }
       }
     }
@@ -133,7 +127,6 @@ int ObExprPrivSTGeomFromEwkt::eval_st_geomfromewkt(const ObExpr &expr, ObEvalCtx
   } else {
     ObString res_wkb;
     if (OB_FAIL(ObGeoExprUtils::geo_to_wkb(*geo, expr, ctx, srs_item, res_wkb))) {
-      LOG_WARN("failed to write geometry to wkb", K(ret));
     } else {
       res.set_string(res_wkb);
     }

@@ -55,7 +55,6 @@ int ObDropTableResolver::resolve(const ParseNode &parse_tree)
       ret = OB_ERR_UNEXPECTED;
       SQL_RESV_LOG(WARN, "invalid parse tree!", K(ret));
     } else if (OB_FAIL(session_info_->get_sys_variable(share::SYS_VAR_RECYCLEBIN, is_recyclebin_open))){
-      SQL_RESV_LOG(WARN, "get sys variable failed", K(ret));
     } else {
       drop_table_arg.if_exist_ = (NULL != parse_tree.children_[IF_EXIST_NODE]) ? true : false;
       
@@ -64,8 +63,8 @@ int ObDropTableResolver::resolve(const ParseNode &parse_tree)
 
     if (OB_FAIL(ret)) {
     } else if (T_DROP_TABLE == parse_tree.type_) {
-      if (NULL != parse_tree.children_[MATERIALIZED_NODE]
-          && T_TEMPORARY == parse_tree.children_[MATERIALIZED_NODE]->type_) {
+      if (NULL != parse_tree.children_[TEMPORARY_NODE]
+          && T_TEMPORARY == parse_tree.children_[TEMPORARY_NODE]->type_) {
         // mysql temporary table special usage
         drop_table_arg.table_type_ = share::schema::TMP_TABLE;
       } else {
@@ -73,10 +72,6 @@ int ObDropTableResolver::resolve(const ParseNode &parse_tree)
       }
     } else if (T_DROP_VIEW == parse_tree.type_) {
       drop_table_arg.table_type_ = share::schema::USER_VIEW; //xiyu@TODO: SYSTEM_VIEW???
-      if (parse_tree.children_[MATERIALIZED_NODE]) {
-        // transfer to materiaized view, RS will drop such view table
-        drop_table_arg.table_type_ = share::schema::MATERIALIZED_VIEW;
-      }
     } else {
       ret = OB_ERR_UNEXPECTED;
       SQL_RESV_LOG(WARN, "Unknown parse tree type", K_(parse_tree.type), K(ret));
@@ -114,11 +109,9 @@ int ObDropTableResolver::resolve(const ParseNode &parse_tree)
           if (OB_FAIL(resolve_table_relation_node(table_node,
                                                   table_name,
                                                   db_name))) {
-            SQL_RESV_LOG(WARN, "failed to resolve table relation node!", K(ret));
           } else {
             table_item.reset();
             if (OB_FAIL(session_info_->get_name_case_mode(table_item.mode_))) {
-              SQL_RESV_LOG(WARN, "failed to get name case mode!", K(ret));
             } else {
               table_item.database_name_ = db_name;
               table_item.table_name_ = table_name;
@@ -126,9 +119,7 @@ int ObDropTableResolver::resolve(const ParseNode &parse_tree)
                 ret = OB_ERR_NONUNIQ_TABLE;
                 LOG_USER_ERROR(OB_ERR_NONUNIQ_TABLE, table_item.table_name_.length(), table_item.table_name_.ptr());
               } else if (OB_FAIL(table_item_set->set_refactored(table_item))) {
-                SQL_RESV_LOG(WARN, "failed to add table item!", K(table_item), K(ret));
               } else if (OB_FAIL(drop_table_stmt->add_table_item(table_item))) {
-                SQL_RESV_LOG(WARN, "failed to add table item!", K(table_item), K(ret));
               }
             }
           }

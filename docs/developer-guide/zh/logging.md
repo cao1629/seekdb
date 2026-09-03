@@ -21,26 +21,24 @@ seekdb 的系统日志存储在工作目录下的log目录下面。
 
 ### 日志参数
 
-目前syslog相关的有7个参数，都是动态生效，即可以在运行时动态调整。
+当前 syslog 相关参数都是动态生效的集群级参数。权威定义位于 `src/share/parameter/ob_parameter_seed.ipp`。
 
-| 配置项                         | 数据类型 | 值域                                        | 默认值    | 描述                                    |
-| --------------------------- | ---- | ----------------------------------------- | ------ | ------------------------------------- |
-| enable_syslog_recycle       | 布尔   |                                           | False  | 是否回收重启之前的旧日志（时间戳最小的日志文件）              |
-| enable_syslog_wf            | 布尔   |                                           | True   | 是否打印WARN级别及以上的日志到单独的wf文件中             |
-| enable_async_syslog         | 布尔   |                                           | True   | 是否异步打印日志                              |
-| max_syslog_file_count       | 整型   | \[0, +∞)                                  | 0      | 每种只读日志文件最大保留数量                        |
-| syslog_io_bandwidth_limit   | 字符串  | 0，其他合法大小                                  | "30MB" | 日志IO带宽限制                              |
-| syslog_level                | 字符串  | DEBUG, TRACE, WDIAG, EDIAG, INFO, WARN, ERROR | WDIAG | 日志打印最低等级，该等级及以上的日志都打印                 |
-| diag_syslog_per_error_limit | 整型   | \[0, +∞)                                  | 200    | 每个错误码每秒允许的 DIAG 系统日志数，超过该阈值后，日志将不再打印。 |
-
-> 这里所有的参数都是集群级的，并且都是动态生效。
-> 参数定义可以参考 ob_parameter_seed.ipp 文件。
+| 配置项 | 默认值 | 说明 |
+| --- | --- | --- |
+| `syslog_level` | 构建默认值 | 最低启用级别：DEBUG、TRACE、WDIAG、EDIAG、INFO、WARN 或 ERROR |
+| `syslog_io_bandwidth_limit` | `5MB` | syslog I/O 带宽限制 |
+| `diag_syslog_per_error_limit` | `200` | 每个错误码每秒允许的 DIAG 日志数 |
+| `max_syslog_file_count` | `2` | 每种日志文件的最大保留数量；`0` 表示不按数量删除 |
+| `enable_async_syslog` | `True` | 是否启用异步日志 |
+| `syslog_disk_size` | `0M` | syslog 文件的磁盘空间预算；`0M` 表示不设置该限制 |
+| `syslog_compress_func` | `none` | 归档日志压缩方式：`none` 或 `zstd_1.3.8` |
+| `syslog_file_uncompressed_count` | `0` | 至少保留多少个不压缩的归档日志文件 |
 
 ## 日志回收
 
 seekdb的日志可以配置文件个数上限，以防止日志文件占用过大的磁盘空间。
 
-如果 `enable_syslog_recycle = true` 且 `max_syslog_file_count > 0` ，每种日志文件的数量不能超过 `max_syslog_file_count`。日志内容刷新到磁盘中时触发旧日志文件回收。
+当 `max_syslog_file_count` 大于零时，按数量限制每种日志文件的保留数量；`syslog_disk_size` 则限制 syslog 使用的磁盘空间。某项设置为零表示不启用对应限制。
 
 每次执行 `flush_logs_to_file` 函数写日志时，如果某种文件写入了数据，就要检查是否需要将当前日志文件进行归档（有可能达到了大小上限）。
 在 `max_syslog_file_count > 0` 的前提下，就可能会调用 `ObLogger::rotate_log` 函数，如果该种日志文件数量超过上限 `max_syslog_file_count`，就会删掉最旧的一个日志文件。
@@ -129,8 +127,7 @@ scn:1702288855704049}, uncertain_bound:0, snapshot_lsid:{id:1},
 snapshot_ls_role:0, parts:[{left:{id:1}, right:491146514786417}]}, 
 savepoint=1702288855704049, tx_desc={this:0x7f31df697420, 
 tx_id:{txid:167035}, state:2, addr:"127.0.0.1:55801", tenant_id:1003, 
-session_id:1, assoc_session_id:1, xid:NULL, xa_mode:"", 
-xa_start_addr:"0.0.0.0:0", access_mode:0, tx_consistency_type:0, 
+session_id:1, assoc_session_id:1, access_mode:0, tx_consistency_type:0,
 isolation:1, snapshot_version:{val:18446744073709551615, v:3}, 
 snapshot_scn:0, active_scn:1702288855704040, op_sn:6, alloc_ts:1702288855706134, 
 active_ts:1702288855706134, commit_ts:-1, finish_ts:-1, timeout_us:29999942, 
@@ -138,7 +135,7 @@ lock_timeout_us:-1, expire_ts:1702288885706076, coord_id:{id:-1},
 parts:[{id:{id:1}, addr:"127.0.0.1:55801", epoch:491146514786417, 
 first_scn:1702288855704043, last_scn:1702288855704048, last_touch_ts:1702288855704044}], 
 exec_info_reap_ts:1702288855704043, commit_version:{val:18446744073709551615, v:3}, 
-commit_times:0, commit_cb:null, cluster_id:1, cluster_version:17180065792, 
+commit_times:0, commit_cb:null, data_version:4295163904,
 flags_.SHADOW:false, flags_.INTERRUPTED:false, flags_.BLOCK:false, 
 flags_.REPLICA:false, can_elr:true, cflict_txs:[], abort_cause:0, 
 commit_expire_ts:0, commit_task_.is_registered():false, ref:2}, 
@@ -319,7 +316,7 @@ seekdb 对WARN级别的日志做了限流，每个错误码每秒钟默认限制
 [2023-12-25 18:01:15.527519] WDIAG [SHARE] refresh (ob_task_define.cpp:402) [35585][LogLimiterRefre][T0][Y0-0000000000000000-0-0] [lt=8][errcode=0] Throttled WDIAG logs in last second(details {error code, dropped logs, earliest tid}=[{errcode:-4006, dropped:31438, tid:35585}])
 ```
 
-限流代码参考 `ObSyslogPerErrLimiter::do_acquire`。
+限流实现参考 `ObSyslogSimpleRateLimiter` 和 `ObSyslogSampleRateLimiter`，后者实现了 `do_acquire`。
 
 
 

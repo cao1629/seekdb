@@ -114,7 +114,7 @@ static ObPLConditionType classify_sqlstate(const char *sql_state)
 
 // Recover the *effective* raised condition (MySQL errno + SQLSTATE) from a
 // propagated OB error code, mirroring ObPLEH::eh_convert_exception (MySQL mode).
-// A MySQL SIGNAL/RESIGNAL with a SQLSTATE surfaces as OB_SP_RAISE_APPLICATION_ERROR
+// A MySQL SIGNAL/RESIGNAL with a SQLSTATE surfaces as OB_ERR_SIGNAL_EXCEPTION
 // (spi_process_resignal raises that via LOG_MYSQL_USER_ERROR and stashes the real
 // errno + literal sqlstate in the TSI warning buffer); for that code the true
 // condition lives in the warning buffer, not in ob_mysql_errno/ob_sqlstate of the
@@ -122,7 +122,7 @@ static ObPLConditionType classify_sqlstate(const char *sql_state)
 // condition derives from the code itself, as before.
 static void effective_raised_condition(int err, int &mysql_errno, const char *&sql_state)
 {
-  if (OB_SP_RAISE_APPLICATION_ERROR == err) {
+  if (OB_ERR_SIGNAL_EXCEPTION == err) {
     ObWarningBuffer *wb = common::ob_get_tsi_warning_buffer();
     if (OB_NOT_NULL(wb)) {
       mysql_errno = wb->get_err_code();
@@ -235,11 +235,11 @@ static int run_matched_handler(ObPLExecCtx *ctx, const ObPLDeclareHandlerStmt *e
       // A native error's message can be wiped off the buffer by an inner frame before the
       // handler catches it (errno + sqlstate survive); restore the standard message for the
       // caught OB code so a bare RESIGNAL re-raises it with text, not an empty message. Skip
-      // user SIGNALs (OB_SP_RAISE_APPLICATION_ERROR), whose message is user-supplied and lives
+      // user SIGNALs (OB_ERR_SIGNAL_EXCEPTION), whose message is user-supplied and lives
       // on the buffer.
       const char *live_msg = wb->get_err_msg();
       if ((OB_ISNULL(live_msg) || '\0' == live_msg[0])
-          && OB_SUCCESS != ob_err && OB_SP_RAISE_APPLICATION_ERROR != ob_err) {
+          && OB_SUCCESS != ob_err && OB_ERR_SIGNAL_EXCEPTION != ob_err) {
         wb->set_error(ob_strerror(ob_err), wb->get_err_code());  // keep errno, restore message
       }
       if (OB_NOT_NULL(exception.sql_state_) && '\0' != exception.sql_state_[0]) {
@@ -471,8 +471,8 @@ static int exec_assign(ObPLExecCtx *ctx, const ObPLAssignStmt *s)
     } else if (OB_NOT_NULL(into) && into->is_obj_access_expr()) {
       // Obj-access write target (a trigger's SET NEW.col = expr, a record field, a
       // collection element). Mirrors codegen visit(ObPLAssignStmt)'s is_obj_access_expr()
-      // branch for the scalar (obj-type) case -- the only obj-access write reachable in
-      // MySQL mode (records via %ROWTYPE and collections are Oracle-only / unparseable here).
+      // branch for the scalar (obj-type) case -- composite records and collections are not
+      // reachable in MySQL-only parsing here.
       //
       // Evaluating the for-write obj-access expr yields an objparam whose extend points to a
       // ObPlCompiteWrite { allocator_, value_addr_ }: value_addr_ is the destination ObObj*,
@@ -488,8 +488,8 @@ static int exec_assign(ObPLExecCtx *ctx, const ObPLAssignStmt *s)
       OZ (static_cast<const ObObjAccessRawExpr *>(into)->get_final_type(final_type));
       if (OB_FAIL(ret)) {
       } else if (!final_type.is_obj_type()) {
-        // Composite (record / collection) write targets are Oracle-only and not reachable in
-        // MySQL mode; leave them unsupported rather than ship an untested deep-copy path.
+        // Composite (record / collection) write targets are not reachable in MySQL-only parsing;
+        // leave them unsupported rather than ship an untested deep-copy path.
         ret = OB_NOT_SUPPORTED;
         LOG_WARN("[pl-interp] composite obj-access assignment not supported yet", K(ret), K(i));
       } else if (OB_UNLIKELY(!into_addr.is_ext() || 0 == into_addr.get_ext())) {
@@ -653,8 +653,8 @@ static int exec_repeat(ObPLExecCtx *ctx, const ObPLRepeatStmt *s, CtrlState &ctr
   return ret;
 }
 
-// LEAVE / ITERATE <label>. ObPLLoopControl may carry a guard cond (Oracle EXIT
-// WHEN); in MySQL it is unconditional. Sets the control state for loops to act on.
+// LEAVE / ITERATE <label>. ObPLLoopControl may carry a guard cond; in MySQL it
+// is unconditional. Sets the control state for loops to act on.
 static int exec_loop_control(ObPLExecCtx *ctx, const ObPLLoopControl *s, CtrlState &ctrl)
 {
   int ret = OB_SUCCESS;
@@ -692,22 +692,6 @@ static int exec_return(ObPLExecCtx *ctx, const ObPLReturnStmt *s, CtrlState &ctr
   return ret;
 }
 
-// Make a null-terminated C string copy of `src` on the exec allocator (spi takes char*).
-static int dup_cstr(ObPLExecCtx *ctx, const ObString &src, const char *&out)
-{
-  int ret = OB_SUCCESS;
-  char *buf = static_cast<char *>(ctx->allocator_->alloc(src.length() + 1));
-  if (OB_ISNULL(buf)) {
-    ret = OB_ALLOCATE_MEMORY_FAILED;
-    LOG_WARN("[pl-interp] failed to allocate sql buffer", K(ret), K(src.length()));
-  } else {
-    MEMCPY(buf, src.ptr(), src.length());
-    buf[src.length()] = '\0';
-    out = buf;
-  }
-  return ret;
-}
-
 // Embedded SQL (SELECT..INTO / INSERT / UPDATE / DELETE). Mirrors codegen's
 // generate_sql: spi_query_into_expr_idx when there are no PL params, else
 // spi_execute_with_expr_idx with the prepared (ps) statement. All param/into
@@ -724,22 +708,17 @@ static int exec_sql(ObPLExecCtx *ctx, const ObPLSqlStmt *s)
     const ObDataType *types = type_count > 0 ? &s->get_data_type().at(0) : NULL;
     const bool *not_null = s->get_not_null_flags().count() > 0 ? &s->get_not_null_flags().at(0) : NULL;
     const int64_t *ranges = s->get_pl_integer_ranges().count() > 0 ? &s->get_pl_integer_ranges().at(0) : NULL;
-    const bool is_bulk = s->is_bulk();
     const bool is_type_record = s->is_type_record();
     const bool for_update = s->is_for_update();
     if (s->get_params().empty()) {
-      const char *sql = NULL;
-      OZ (dup_cstr(ctx, s->get_sql(), sql));
-      OZ (ObSPIService::spi_query_into_expr_idx(ctx, sql, type, into_idx, into_count,
-            types, type_count, not_null, ranges, is_bulk, is_type_record, for_update));
+      OZ (ObSPIService::spi_query_into_expr_idx(ctx, s->get_sql(), type, into_idx, into_count,
+            types, type_count, not_null, ranges, is_type_record, for_update));
     } else {
-      const char *ps_sql = NULL;
-      OZ (dup_cstr(ctx, s->get_ps_sql(), ps_sql));
       const int64_t param_count = s->get_params().count();
       const int64_t *param_idx = param_count > 0 ? &s->get_params().at(0) : NULL;
-      OZ (ObSPIService::spi_execute_with_expr_idx(ctx, ps_sql, type, param_idx, param_count,
+      OZ (ObSPIService::spi_execute_with_expr_idx(ctx, s->get_ps_sql(), type, param_idx, param_count,
             into_idx, into_count, types, type_count, not_null, ranges,
-            is_bulk, s->is_forall_sql(), is_type_record, for_update));
+            is_type_record, for_update));
     }
   }
   return ret;
@@ -776,19 +755,16 @@ static int exec_call(ObPLExecCtx *ctx, const ObPLCallStmt *s)
   ObArenaAllocator tmp_alloc(GET_PL_MOD_STRING(PL_MOD_IDX::OB_PL_ARENA), OB_MALLOC_NORMAL_BLOCK_SIZE);
   ObObjParam **argv = NULL;
   ObObjParam *storage = NULL;  // independent temps backing every actual
-  int64_t *nocopy = NULL;
   if (OB_SUCC(ret) && argc > 0) {
     argv = static_cast<ObObjParam **>(tmp_alloc.alloc(sizeof(ObObjParam *) * argc));
     storage = static_cast<ObObjParam *>(tmp_alloc.alloc(sizeof(ObObjParam) * argc));
-    nocopy = static_cast<int64_t *>(tmp_alloc.alloc(sizeof(int64_t) * argc));
-    if (OB_ISNULL(argv) || OB_ISNULL(storage) || OB_ISNULL(nocopy)) {
+    if (OB_ISNULL(argv) || OB_ISNULL(storage)) {
       ret = OB_ALLOCATE_MEMORY_FAILED;
       LOG_WARN("[pl-interp] failed to allocate call argv", K(ret), K(argc));
     }
   }
   for (int64_t i = 0; OB_SUCC(ret) && i < argc; ++i) {
     const InOutParam &p = s->get_params().at(i);
-    nocopy[i] = (s->get_nocopy_params().count() == argc) ? s->get_nocopy_params().at(i) : OB_INVALID_INDEX;
     new (&storage[i]) ObObjParam();
     const bool local_out = p.is_out() && OB_INVALID_INDEX != p.out_idx_;
     const sql::ObRawExpr *act_expr = s->get_param_expr(i);
@@ -846,7 +822,7 @@ static int exec_call(ObPLExecCtx *ctx, const ObPLCallStmt *s)
     const ObIArray<int64_t> &subpath = s->get_subprogram_path();
     int64_t *path = subpath.count() > 0 ? const_cast<int64_t *>(&subpath.at(0)) : NULL;
     OZ (ObPL::execute_proc(*ctx, s->get_package_id(), s->get_proc_id(), path,
-          subpath.count(), 0 /*line_num*/, argc, argv, nocopy));
+          subpath.count(), 0 /*line_num*/, argc, argv));
   }
   // Copy each OUT/INOUT result from its temp back into the caller's local slot.
   for (int64_t i = 0; OB_SUCC(ret) && i < argc; ++i) {
@@ -908,13 +884,12 @@ static int exec_open(ObPLExecCtx *ctx, const ObPLOpenStmt *s)
     const ObIArray<int64_t> &sql_params = cursor->get_sql_params();
     const int64_t sql_pcount = sql_params.count();
     const int64_t *sql_pidx = sql_pcount > 0 ? &sql_params.at(0) : NULL;
-    // spi_cursor_open requires: with params -> sql must be NULL (run via ps_sql);
-    // without params -> sql must be non-NULL (the raw text).
-    const char *sql = NULL;
-    const char *ps_sql = NULL;
-    OZ (dup_cstr(ctx, cursor->get_ps_sql(), ps_sql));
-    if (OB_SUCC(ret) && 0 == sql_pcount) {
-      OZ (dup_cstr(ctx, cursor->get_sql(), sql));
+    // spi_cursor_open requires: with params -> sql must be empty (run via ps_sql);
+    // without params -> sql must be non-empty (the raw text).
+    ObString sql;
+    const ObString &ps_sql = cursor->get_ps_sql();
+    if (0 == sql_pcount) {
+      sql = cursor->get_sql();
     }
     const ObIArray<int64_t> &actual = s->get_params();
     const int64_t cur_pcount = actual.count();
@@ -946,8 +921,7 @@ static int exec_fetch(ObPLExecCtx *ctx, const ObPLFetchStmt *s)
     const int64_t *ranges = s->get_pl_integer_ranges().count() > 0 ? &s->get_pl_integer_ranges().at(0) : NULL;
     OZ (ObSPIService::spi_cursor_fetch(ctx, s->get_package_id(), s->get_routine_id(),
           s->get_index(), into_idx, into_count, types, type_count, not_null, ranges,
-          s->is_bulk(), s->get_limit(), NULL /*return_types*/, 0 /*return_type_count*/,
-          s->is_type_record()));
+          NULL /*return_types*/, 0 /*return_type_count*/, s->is_type_record()));
   }
   return ret;
 }
@@ -1023,17 +997,17 @@ static int exec_signal(ObPLExecCtx *ctx, const ObPLSignalStmt *s)
     if (OB_SUCC(ret) && OB_SUCCESS != error_code) {
       // Mirror codegen: spi_process_resignal stashed the literal sqlstate + the
       // SIGNAL's errno (ER_SIGNAL_NOT_FOUND / ER_SIGNAL_EXCEPTION or a SET MYSQL_ERRNO)
-      // into the TSI warning buffer and raised OB_SP_RAISE_APPLICATION_ERROR via
+      // into the TSI warning buffer and raised OB_ERR_SIGNAL_EXCEPTION via
       // LOG_MYSQL_USER_ERROR. Surface *that* OB code so an unhandled SIGNAL reports the
       // literal sqlstate (send_error_packet/eh_convert_exception read the warning buffer
-      // for OB_SP_RAISE_APPLICATION_ERROR); the handler search recovers the real errno +
+      // for OB_ERR_SIGNAL_EXCEPTION); the handler search recovers the real errno +
       // sqlstate from the warning buffer too (see effective_raised_condition).
-      ret = OB_SP_RAISE_APPLICATION_ERROR;  // a non-warning SIGNAL raises
+      ret = OB_ERR_SIGNAL_EXCEPTION;  // a non-warning SIGNAL raises
     }
     LOG_WARN("[pl-interp] SIGNAL processed", K(ret), K(error_code),
              "sql_state", ObString(s->get_sql_state()));
   } else if (OB_SUCC(ret)) {
-    // Oracle-mode / error-code SIGNAL: raise the resolved OB error code directly.
+    // Error-code SIGNAL: raise the resolved OB error code directly.
     ret = s->get_ob_error_code();
     if (OB_SUCCESS == ret) {
       ret = OB_ERROR;  // a SIGNAL must raise something the handler search can see
@@ -1061,12 +1035,10 @@ static int exec_execute(ObPLExecCtx *ctx, const ObPLExecuteStmt *s)
   ObArenaAllocator tmp_alloc(GET_PL_MOD_STRING(PL_MOD_IDX::OB_PL_ARENA), OB_MALLOC_NORMAL_BLOCK_SIZE);
   ObObjParam **params = NULL;
   ObObjParam *storage = NULL;  // independent temps backing every USING actual
-  int64_t *params_mode = NULL;
   if (OB_SUCC(ret) && param_count > 0) {
     params = static_cast<ObObjParam **>(tmp_alloc.alloc(sizeof(ObObjParam *) * param_count));
     storage = static_cast<ObObjParam *>(tmp_alloc.alloc(sizeof(ObObjParam) * param_count));
-    params_mode = static_cast<int64_t *>(tmp_alloc.alloc(sizeof(int64_t) * param_count));
-    if (OB_ISNULL(params) || OB_ISNULL(storage) || OB_ISNULL(params_mode)) {
+    if (OB_ISNULL(params) || OB_ISNULL(storage)) {
       ret = OB_ALLOCATE_MEMORY_FAILED;
       LOG_WARN("[pl-interp] failed to allocate USING params", K(ret), K(param_count));
     }
@@ -1074,28 +1046,24 @@ static int exec_execute(ObPLExecCtx *ctx, const ObPLExecuteStmt *s)
   for (int64_t i = 0; OB_SUCC(ret) && i < param_count; ++i) {
     const InOutParam &u = s->get_using().at(i);
     new (&storage[i]) ObObjParam();
-    params_mode[i] = static_cast<int64_t>(u.mode_);
-    if (!u.is_pure_out()) {  // IN/INOUT: evaluate the actual; pure-OUT filled by execute
-      OZ (ObSPIService::spi_calc_expr_at_idx(ctx, u.param_, OB_INVALID_INDEX, &storage[i]));
-    }
+    OZ (ObSPIService::spi_calc_expr_at_idx(ctx, u.param_, OB_INVALID_INDEX, &storage[i]));
     OX (params[i] = &storage[i]);
   }
   // spi_execute_immediate resolves the INTO targets from into_exprs_idx itself
   // (a `SET @uservar = expr` lowers to dynamic SQL with the variable as the INTO
   // target); result types come from the dynamic statement, so column_types stays NULL.
   OZ (ObSPIService::spi_execute_immediate(ctx, s->get_sql(),
-        params, params_mode, param_count,
+        params, param_count,
         into_idx, into_count,
         types, type_count,
         not_null, ranges,
-        s->is_bulk(), s->get_is_returning(), s->is_type_record()));
+        s->is_type_record()));
   return ret;
 }
 
 // PRAGMA INTERFACE(C, <entry>) routine bodies lower to a single PL_INTERFACE stmt.
-// Dispatch to the native C implementation registered under the entry name, mirroring
-// the legacy codegen path (ObPLCodeGenerateVisitor::visit(ObPLInterfaceStmt) -> spi_interface_impl)
-// and ObPL::interface_execute. The native impl reads its arguments from ctx->params_.
+// Dispatch to the C implementation registered under the entry name. The implementation
+// reads its arguments from ctx->params_.
 static int exec_interface(ObPLExecCtx *ctx, const ObPLInterfaceStmt *s)
 {
   int ret = OB_SUCCESS;

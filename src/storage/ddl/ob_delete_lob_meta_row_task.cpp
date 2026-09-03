@@ -16,9 +16,9 @@
 
 #define USING_LOG_PREFIX STORAGE
 #include "ob_delete_lob_meta_row_task.h"
-#include "share/rc/ob_module_provider.h"
-#include "rootserver/ob_root_service.h"
-#include "observer/scheduler/ob_dag_warning_history_mgr.h"
+#include "data_plane/ddl/ob_ddl_coordinator.h"
+#include "share/rc/ob_server_runtime.h"
+#include "storage/scheduler/ob_dag_warning_history_mgr.h"
 #include "storage/access/ob_table_scan_iterator.h"
 
 namespace oceanbase
@@ -29,13 +29,12 @@ using namespace compaction;
 using namespace share;
 using namespace share::schema;
 using namespace sql;
-using namespace observer;
 using namespace name;
 
 namespace storage
 {
 
-int ObDeleteLobMetaRowParam::init(const ObDDLBuildSingleReplicaRequestArg &arg)
+int ObDeleteLobMetaRowParam::init(const obcall::ObDDLLocalBuildArg &arg)
 {
   int ret = OB_SUCCESS;
   
@@ -46,8 +45,6 @@ int ObDeleteLobMetaRowParam::init(const ObDDLBuildSingleReplicaRequestArg &arg)
   } else if (OB_UNLIKELY(!arg.is_valid())) {
     ret = OB_INVALID_ARGUMENT;
     LOG_WARN("invalid arg", K(ret), K(arg));
-  } else {
-    compat_mode_ = lib::Worker::CompatMode::MYSQL;
   }
 
   if (OB_SUCC(ret)) {
@@ -57,7 +54,6 @@ int ObDeleteLobMetaRowParam::init(const ObDDLBuildSingleReplicaRequestArg &arg)
     schema_version_ = arg.schema_version_;
     tablet_id_ = arg.source_tablet_id_;
     dest_tablet_id_ = arg.dest_tablet_id_;
-    ls_id_ = arg.ls_id_;
     task_id_ = arg.task_id_;
     execution_id_ = arg.execution_id_;
     tablet_task_id_ = arg.tablet_task_id_;
@@ -77,7 +73,7 @@ ObDeleteLobMetaRowDag::~ObDeleteLobMetaRowDag()
 {
 }
 
-int ObDeleteLobMetaRowDag::init(const ObDDLBuildSingleReplicaRequestArg &arg)
+int ObDeleteLobMetaRowDag::init(const obcall::ObDDLLocalBuildArg &arg)
 {
   int ret = OB_SUCCESS;
   if (OB_UNLIKELY(is_inited_)) {
@@ -87,12 +83,10 @@ int ObDeleteLobMetaRowDag::init(const ObDDLBuildSingleReplicaRequestArg &arg)
     ret = OB_INVALID_ARGUMENT;
     LOG_WARN("invalid arguments", K(ret), K(arg));
   } else if (OB_FAIL(param_.init(arg))) {
-    LOG_WARN("fail to init dag param", K(ret));
   } else if (OB_UNLIKELY(!param_.is_valid())) {
     ret = OB_ERR_UNEXPECTED;
     LOG_WARN("error unexpected", K(ret), K(param_));
   } else {
-    consumer_group_id_ = arg.consumer_group_id_;
     is_inited_ = true;
   }
   return ret;
@@ -106,14 +100,11 @@ int ObDeleteLobMetaRowDag::create_first_task()
     ret = OB_NOT_INIT;
     LOG_WARN("not init", K(ret));
   } else if (OB_FAIL(alloc_task(delete_task))) {
-    LOG_WARN("allocate task failed", K(ret));
   } else if (OB_ISNULL(delete_task)) {
     ret = OB_ERR_UNEXPECTED;
     LOG_WARN("unexpected nullptr task", K(ret));
   } else if (OB_FAIL(delete_task->init(param_))) {
-    LOG_WARN("init prepare task failed", K(ret));
   } else if (OB_FAIL(add_task(*delete_task))) {
-    LOG_WARN("add task failed", K(ret));
   }
   return ret;
 }
@@ -135,7 +126,6 @@ uint64_t ObDeleteLobMetaRowDag::hash() const
   } else {
     hash_val = param_.table_id_
              + param_.schema_id_
-             + param_.ls_id_.hash()
              + param_.tablet_id_.hash()
              + param_.dest_tablet_id_.hash()
              + ObDagType::DAG_TYPE_DDL_DEL_LOB_META;
@@ -157,7 +147,7 @@ bool ObDeleteLobMetaRowDag::operator==(const ObIDag &other) const
     } else {
       is_equal = (true) && (true) &&
                  (param_.table_id_ == dag.param_.table_id_) && (param_.schema_id_ == dag.param_.schema_id_) &&
-                 (param_.ls_id_ == dag.param_.ls_id_) && (param_.tablet_id_ == dag.param_.tablet_id_) && 
+                 (param_.tablet_id_ == dag.param_.tablet_id_) &&
                  (param_.dest_tablet_id_ == dag.param_.dest_tablet_id_) && 
                  (param_.delete_lob_meta_ret_ == dag.param_.delete_lob_meta_ret_);
     }
@@ -175,13 +165,11 @@ int ObDeleteLobMetaRowDag::fill_info_param(compaction::ObIBasicInfoParam *&out_p
     ret = OB_INVALID_ARGUMENT;
     LOG_WARN("invalid param", K(ret), K(param_));
   } else if (OB_FAIL(ADD_DAG_WARN_INFO_PARAM(out_param, allocator, get_type(), 
-                                param_.ls_id_.id(),
                                 static_cast<int64_t>(param_.table_id_),
                                 static_cast<int64_t>(param_.tablet_id_.id()),
                                 static_cast<int64_t>(param_.dest_tablet_id_.id()),
                                 param_.schema_version_,
                                 param_.snapshot_version_))) {
-    LOG_WARN("failed to fill info param", K(ret));
   }
   return ret;
 }
@@ -195,14 +183,13 @@ int ObDeleteLobMetaRowDag::fill_dag_key(char *buf, const int64_t buf_len) const
   } else if (OB_UNLIKELY(!param_.is_valid())) {
     ret = OB_INVALID_ARGUMENT;
     LOG_WARN("invalid params", K(ret), K(param_));
-  } else if (OB_FAIL(databuff_printf(buf, buf_len, "logstream_id=%ld tablet_id=%ld lob_meta_tablet_id=%ld",
-                              param_.ls_id_.id(), param_.tablet_id_.id(), param_.dest_tablet_id_.id()))) {
-    LOG_WARN("fill dag key for ddl table merge dag failed", K(ret), K(param_));
+  } else if (OB_FAIL(databuff_printf(buf, buf_len, "tablet_id=%ld lob_meta_tablet_id=%ld",
+                              param_.tablet_id_.id(), param_.dest_tablet_id_.id()))) {
   }
   return ret;
 }
 
-int ObDeleteLobMetaRowDag::report_replica_build_status()
+int ObDeleteLobMetaRowDag::report_local_build_status()
 {
   int ret = OB_SUCCESS;
   if (OB_UNLIKELY(!is_inited_)) {
@@ -214,16 +201,14 @@ int ObDeleteLobMetaRowDag::report_replica_build_status()
   } else {
 #ifdef ERRSIM
     if (OB_SUCC(ret)) {
-      ret = OB_E(EventTable::EN_DDL_REPORT_REPLICA_BUILD_STATUS_FAIL) OB_SUCCESS;
-      LOG_INFO("report replica build status errsim", K(ret));
+      ret = OB_E(EventTable::EN_DDL_REPORT_LOCAL_BUILD_STATUS_FAIL) OB_SUCCESS;
+      LOG_INFO("report local build status errsim", K(ret));
     }
 #endif
-    obcall::ObDDLBuildSingleReplicaResponseArg arg;
+    obcall::ObDDLLocalBuildResponse arg;
     ObAddr rs_addr = GCTX.self_addr();
     
     
-    arg.ls_id_ = param_.ls_id_;
-    arg.dest_ls_id_ = param_.ls_id_;
     arg.tablet_id_ = param_.tablet_id_;
     arg.source_table_id_ = param_.table_id_;
     arg.dest_schema_id_ = param_.schema_id_;
@@ -234,10 +219,9 @@ int ObDeleteLobMetaRowDag::report_replica_build_status()
     arg.task_id_ = param_.task_id_;
     arg.execution_id_ = param_.execution_id_;
     arg.server_addr_ = GCTX.self_addr();
-    FLOG_INFO("send replica build status response to RS", K(ret), K(arg));
+    FLOG_INFO("send local build status response to RS", K(ret), K(arg));
     if (OB_FAIL(ret)) {
-    } else if (OB_FAIL(GCTX.root_service_->build_ddl_single_replica_response(arg))) {
-      LOG_WARN("fail to send build ddl single replica response", K(ret), K(arg));
+    } else if (OB_FAIL(data_plane::report_ddl_single_replica_response(arg))) {
     }
   }
   return ret;
@@ -271,7 +255,6 @@ int ObDeleteLobMetaRowTask::init(ObDeleteLobMetaRowParam &param)
 int ObDeleteLobMetaRowTask::init_scan_param(ObTableScanParam& scan_param)
 {
   int ret = OB_SUCCESS;
-  const ObTenantSchema *tenant_schema = nullptr;
   const ObTableSchema *table_schema = nullptr;
   ObSchemaGetterGuard schema_guard;
   if (OB_UNLIKELY(!is_inited_)) {
@@ -281,11 +264,9 @@ int ObDeleteLobMetaRowTask::init_scan_param(ObTableScanParam& scan_param)
     
     const int64_t table_id = param_->table_id_;
     const int64_t schema_version = param_->schema_version_;
-    if (OB_FAIL(ObMultiVersionSchemaService::get_instance().get_tenant_schema_guard(
+    if (OB_FAIL(ObMultiVersionSchemaService::get_instance().get_runtime_schema_guard(
                                             schema_guard))) {
-      LOG_WARN("get tenant schema failed", K(ret));
     } else if (OB_FAIL(schema_guard.get_table_schema( table_id, table_schema))) {
-      LOG_WARN("get table schema failed", K(ret), K(table_id));
     } else if (OB_ISNULL(table_schema)) {
       ret = OB_TABLE_NOT_EXIST;
       LOG_WARN("table not exist", K(ret), K(table_id));
@@ -293,7 +274,6 @@ int ObDeleteLobMetaRowTask::init_scan_param(ObTableScanParam& scan_param)
       scan_param.tablet_id_ = param_->tablet_id_;
       scan_param.schema_version_ = param_->schema_version_;
       scan_param.is_get_ = false;
-      scan_param.ls_id_ = param_->ls_id_;
       ObQueryFlag query_flag(ObQueryFlag::Forward, // scan_order
                             false, // daily_merge
                             false, // optimize
@@ -301,12 +281,10 @@ int ObDeleteLobMetaRowTask::init_scan_param(ObTableScanParam& scan_param)
                             true, // full_row
                             false, // index_back
                             false, // query_stat
-                            ObQueryFlag::MysqlMode, // sql_mode
                             false // read_latest
                           );
       scan_param.scan_flag_.flag_ = query_flag.flag_;
       scan_param.key_ranges_.set_attr(ObMemAttr("ScanParamKR"));
-      scan_param.ss_key_ranges_.set_attr(ObMemAttr("ScanParamSSKR"));
       scan_param.index_id_ = 0;
       for (uint32_t i = 0; OB_SUCC(ret) && i < table_schema->get_column_count(); i++) {
         const ObColumnSchemaV2 *column_schema = table_schema->get_column_schema_by_idx(i);
@@ -316,7 +294,6 @@ int ObDeleteLobMetaRowTask::init_scan_param(ObTableScanParam& scan_param)
         } else if (!column_schema->is_vec_hnsw_key_column() && !column_schema->is_vec_hnsw_data_column()) {
           // do nothing
         } else if (OB_FAIL(scan_param.column_ids_.push_back(column_schema->get_column_id()))) {
-          LOG_WARN("push col id failed.", K(ret), K(i));
         } else {
           collation_type_ = column_schema->get_collation_type();
         }
@@ -337,7 +314,6 @@ int ObDeleteLobMetaRowTask::init_scan_param(ObTableScanParam& scan_param)
         scan_param.for_update_wait_timeout_ = scan_param.timeout_;
         scan_param.scan_allocator_ = &(param_->allocator_);
         scan_param.frozen_version_ = -1;
-        scan_param.force_refresh_lc_ = false;
         scan_param.output_exprs_ = nullptr;
         scan_param.aggregate_exprs_ = nullptr;
         scan_param.op_ = nullptr;
@@ -354,7 +330,6 @@ int ObDeleteLobMetaRowTask::init_scan_param(ObTableScanParam& scan_param)
           table_param->get_enable_lob_locator_v2() = true;
           table_param->set_is_vec_index(true);
           if (OB_FAIL(table_param->convert(*table_schema, scan_param.column_ids_, sql::ObStoragePushdownFlag()))) {
-            LOG_WARN("failed to convert table param.", K(ret));
           } else {
             scan_param.table_param_ = table_param;
           }
@@ -367,7 +342,6 @@ int ObDeleteLobMetaRowTask::init_scan_param(ObTableScanParam& scan_param)
         scan_range.table_id_ = table_id;
         scan_range.set_whole_range();
         if (OB_FAIL(scan_param.key_ranges_.push_back(scan_range))) {
-          LOG_WARN("failed to push back scan range", K(ret));
         }
       } // end of set scan range
     }
@@ -386,23 +360,20 @@ int ObDeleteLobMetaRowTask::process()
   } else {
     ObTableScanParam scan_param;
     transaction::ObTxDesc *tx_desc = nullptr;
-    transaction::ObTransService *txs = share::g_mp->trans_service();
+    transaction::ObTransService *txs = ::oceanbase::share::server_service<::oceanbase::transaction::ObTransService>();
     ObNewRowIterator *scan_iter = nullptr;
-    ObAccessService *tsc_service = share::g_mp->access_service();
+    ObAccessService *tsc_service = ::oceanbase::share::server_service<::oceanbase::storage::ObAccessService>();
     blocksstable::ObDatumRow *datum_row = nullptr;
     ObTableScanIterator *table_scan_iter = nullptr;
-    storage::ObLobManager* lob_mngr = share::g_mp->lob_manager();
+    storage::ObLobManager* lob_mngr = ::oceanbase::share::server_service<::oceanbase::storage::ObLobManager>();
     ObIDag *tmp_dag = get_dag();
     const uint64_t timeout_us = ObTimeUtility::current_time() + ObInsertLobColumnHelper::LOB_TX_TIMEOUT;
     if (OB_ISNULL(txs) || OB_ISNULL(tsc_service) || OB_ISNULL(lob_mngr)) {
       ret = OB_ERR_UNEXPECTED;
       LOG_WARN("should not be null", K(ret), KP(txs), KP(tsc_service), KP(lob_mngr));
-    } else if (OB_FAIL(ObInsertLobColumnHelper::start_trans(param_->ls_id_, true/*is_for_read*/, timeout_us, tx_desc))) {
-      LOG_WARN("fail to get tx_desc", K(ret));
-    } else if (OB_FAIL(txs->get_ls_read_snapshot(*tx_desc, transaction::ObTxIsolationLevel::RC, param_->ls_id_, timeout_us, scan_param.snapshot_))) {
-      LOG_WARN("fail to get snapshot", K(ret));
+    } else if (OB_FAIL(ObInsertLobColumnHelper::start_trans(true/*is_for_read*/, timeout_us, tx_desc))) {
+    } else if (OB_FAIL(txs->get_read_snapshot(*tx_desc, transaction::ObTxIsolationLevel::RC, timeout_us, scan_param.snapshot_))) {
     } else if (OB_FAIL(init_scan_param(scan_param))) {
-      LOG_WARN("fail to init scan_param", K(ret));
     } else if (OB_FAIL(tsc_service->table_scan(scan_param, scan_iter))) {
       if (OB_SNAPSHOT_DISCARDED == ret && scan_param.fb_snapshot_.is_valid()) {
         ret = OB_INVALID_QUERY_TIMESTAMP;
@@ -423,13 +394,11 @@ int ObDeleteLobMetaRowTask::process()
           ret = OB_ERR_UNEXPECTED;
           LOG_WARN("get row column cnt invalid.", K(ret), K(datum_row->get_column_count()));
         } else if (OB_FAIL(ObInsertLobColumnHelper::delete_lob_column(param_->allocator_,
-                                                                      param_->ls_id_,
                                                                       param_->tablet_id_,
                                                                       collation_type_,
                                                                       datum_row->storage_datums_[0],
                                                                       timeout_us,
                                                                       true))) {
-          LOG_WARN("failed to delete lob column", K(ret));
         }
       }
       if (ret == OB_ITER_END) {
@@ -447,7 +416,6 @@ int ObDeleteLobMetaRowTask::process()
     // revert_scan_iter if it is not null, even though ret != OB_SUCCESS
     if (nullptr != scan_iter && nullptr != tsc_service) {
       if (OB_SUCCESS != tsc_service->revert_scan_iter(scan_iter)) {
-        LOG_WARN("fail to revert scan iter", K(ret));
       }
     }
 
@@ -457,10 +425,10 @@ int ObDeleteLobMetaRowTask::process()
         ret = OB_ERR_UNEXPECTED;
         LOG_WARN("dag is invalid", K(ret), KP(tmp_dag));
       } else if (FALSE_IT(dag = static_cast<ObDeleteLobMetaRowDag *>(tmp_dag))) {
-      } else if (OB_SUCCESS != (tmp_ret = dag->report_replica_build_status())) {
+      } else if (OB_SUCCESS != (tmp_ret = dag->report_local_build_status())) {
         // do not override ret if it has already failed.
         ret = OB_SUCCESS == ret ? tmp_ret : ret;
-        LOG_WARN("fail to report replica build status", K(ret), K(tmp_ret));
+        LOG_WARN("fail to report local build status", K(ret), K(tmp_ret));
       }
     }
 

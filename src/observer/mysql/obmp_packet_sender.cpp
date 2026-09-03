@@ -15,17 +15,30 @@
  */
 
 #define USING_LOG_PREFIX SERVER
-#include "lib/stat/ob_diagnostic_info_guard.h"
-#include "obmp_packet_sender.h"
+#include "query/protocol/ob_mysql_packet_sender.h"
+#include "nio.h"
+#include "observer/mysql/ob_mysql_result_set.h"
+#include "query/protocol/ob_mysql_rust_row.h"
+#include "observer/mysql/obmp_utils.h"
+#include "rpc/ob_sql_request_operator.h"
+#include "rpc/obmysql/packet/ompk_auth_switch.h"
+#include "share/rc/ob_server_runtime.h"
 #include "rpc/obmysql/packet/ompk_error.h"
 #include "rpc/obmysql/packet/ompk_eof.h"
-#include "observer/mysql/obmp_utils.h"
-#include "observer/mysql/ob_mysql_result_set.h"
-#include "sql/session/ob_sess_info_verify.h"
+#include "rpc/obmysql/packet/ompk_error.h"
+#include "rpc/obmysql/packet/ompk_field.h"
+#include "rpc/obmysql/packet/ompk_local_infile.h"
+#include "rpc/obmysql/packet/ompk_ok.h"
+#include "rpc/obmysql/packet/ompk_prepare.h"
+#include "rpc/obmysql/packet/ompk_resheader.h"
+#include "rpc/obmysql/packet/ompk_row.h"
+#include "rpc/obmysql/packet/ompk_string.h"
 #ifdef _WIN32
 #include <windows.h>
 #endif
+#include <cstddef>
 #include <ctime>
+#include <type_traits>
 
 namespace oceanbase
 {
@@ -39,13 +52,219 @@ using namespace share::schema;
 
 namespace observer
 {
-void ObOKPParam::reset()
+namespace
 {
+
+static_assert(sizeof(nio_byte_view) == 16, "nio_byte_view ABI mismatch");
+static_assert(sizeof(nio_mysql_kv_view) == 32, "nio_mysql_kv_view ABI mismatch");
+static_assert(std::is_standard_layout<nio_mysql_kv_view>::value,
+              "nio_mysql_kv_view must have standard layout");
+static_assert(std::is_trivially_copyable<nio_mysql_kv_view>::value,
+              "nio_mysql_kv_view must be trivially copyable");
+static_assert(offsetof(nio_mysql_kv_view, key) == 0,
+              "nio_mysql_kv_view.key ABI mismatch");
+static_assert(offsetof(nio_mysql_kv_view, value) == 16,
+              "nio_mysql_kv_view.value ABI mismatch");
+static_assert(sizeof(nio_mysql_ok_view) == 96, "nio_mysql_ok_view ABI mismatch");
+static_assert(offsetof(nio_mysql_ok_view, message) == 32,
+              "nio_mysql_ok_view.message ABI mismatch");
+static_assert(offsetof(nio_mysql_ok_view, system_vars) == 64,
+              "nio_mysql_ok_view.system_vars ABI mismatch");
+static_assert(sizeof(nio_mysql_field_view) == 136,
+              "nio_mysql_field_view ABI mismatch");
+static_assert(std::is_standard_layout<nio_mysql_field_view>::value,
+              "nio_mysql_field_view must have standard layout");
+static_assert(std::is_trivially_copyable<nio_mysql_field_view>::value,
+              "nio_mysql_field_view must be trivially copyable");
+static_assert(offsetof(nio_mysql_field_view, column_length) == 112,
+              "nio_mysql_field_view.column_length ABI mismatch");
+static_assert(offsetof(nio_mysql_field_view, field_type) == 120,
+              "nio_mysql_field_view.field_type ABI mismatch");
+static_assert(offsetof(nio_mysql_field_view, decimals) == 128,
+              "nio_mysql_field_view.decimals ABI mismatch");
+static_assert(static_cast<uint32_t>(MYSQL_TYPE_COMPLEX) == 160,
+              "Rust Field encoder assumes the MySQL complex-type sentinel");
+static_assert(static_cast<uint32_t>(MYSQL_TYPE_NOT_DEFINED) == 65535,
+              "Rust Field encoder assumes the undefined default-type sentinel");
+
+nio_byte_view make_byte_view(const ObString &value) {
+  nio_byte_view view = {};
+  view.data = value.ptr();
+  view.len = value.length();
+  return view;
+}
+
+nio_mysql_field_view make_field_view(const ObMySQLField &field) {
+  nio_mysql_field_view view = {};
+  view.schema = make_byte_view(field.dname_);
+  view.table = make_byte_view(field.tname_);
+  view.org_table = make_byte_view(field.org_tname_);
+  view.name = make_byte_view(field.cname_);
+  view.org_name = make_byte_view(field.org_cname_);
+  view.type_owner = make_byte_view(field.type_owner_);
+  view.type_name = make_byte_view(field.type_name_);
+  view.column_length = static_cast<uint32_t>(field.length_);
+  view.charset = field.charsetnr_;
+  view.flags = field.flags_;
+  view.field_type = static_cast<uint32_t>(field.type_);
+  view.default_type = static_cast<uint32_t>(field.default_value_);
+  view.decimals = static_cast<uint8_t>(field.accuracy_.get_scale());
+  return view;
+}
+
+OB_NOINLINE int encode_field_packet(const OMPKField &field_packet,
+                                    nio_connection_handle *connection_handle,
+                                    const uint64_t generation,
+                                    int64_t *framed_len) {
+  const nio_mysql_field_view view = make_field_view(field_packet.get_field());
+  return nio_response_append_field(connection_handle, generation, &view,
+                                   framed_len);
+}
+
+OB_NOINLINE int encode_row_packet(const OMPKRow &row_packet,
+                                  nio_connection_handle *connection_handle,
+                                  const uint64_t generation,
+                                  int64_t *framed_len, int &encode_ret) {
+  int ret = OB_SUCCESS;
+  int frame_ret = NIO_FRAME_ERROR;
+  const ObMySQLRow &row = row_packet.get_row();
+  if (row.is_packed()) {
+    const char *blob = NULL;
+    int64_t blob_len = 0;
+    if (OB_FAIL(row.get_packed_row_blob(blob, blob_len))) {
+      encode_ret = ret;
+      LOG_WARN("failed to get Rust packed-row blob", K(ret));
+    } else {
+      frame_ret = nio_response_append_packed_row_blob(
+          connection_handle, generation, blob, blob_len, framed_len);
+    }
+  } else {
+    const int64_t cell_count = row.get_cells_count();
+    if (OB_UNLIKELY(cell_count <= 0)) {
+      encode_ret = OB_INVALID_ARGUMENT;
+      LOG_WARN("invalid MySQL Row cell count", K(cell_count));
+    } else {
+      ObArenaAllocator scratch_allocator(ObMemAttr("MySQLRowEncode"));
+      ObSEArray<ObMySQLCellValue, 16> values;
+      ObSEArray<nio_mysql_cell_view, 16> views;
+      if (OB_FAIL(values.prepare_allocate(cell_count))) {
+        encode_ret = ret;
+        LOG_WARN("failed to allocate MySQL Row semantic values", K(ret),
+                 K(cell_count));
+      } else if (OB_FAIL(views.prepare_allocate(cell_count))) {
+        encode_ret = ret;
+        LOG_WARN("failed to allocate Rust MySQL Row views", K(ret),
+                 K(cell_count));
+      } else {
+        for (int64_t i = 0; OB_SUCC(ret) && i < cell_count; ++i) {
+          if (OB_FAIL(
+                  row.build_cell_value(i, scratch_allocator, values.at(i)))) {
+          } else if (OB_FAIL(
+                         query::build_nio_mysql_cell_view(values.at(i), views.at(i)))) {
+          }
+        }
+        if (OB_FAIL(ret)) {
+          encode_ret = ret;
+        } else {
+          nio_mysql_row_view view = {};
+          view.cells = &views.at(0);
+          view.cell_count = views.count();
+          if (OB_FAIL(query::get_nio_mysql_row_protocol(row.get_protocol_type(),
+                                                        view.protocol))) {
+            encode_ret = ret;
+            LOG_WARN("invalid MySQL Row protocol", K(ret), "protocol",
+                     row.get_protocol_type());
+          } else {
+            frame_ret = nio_response_append_row(connection_handle, generation,
+                                                &view, framed_len);
+          }
+        }
+      }
+    }
+  }
+  return frame_ret;
+}
+
+int append_ok_kv_views(const ObIArray<ObStringKV> &source,
+                       ObIArray<nio_mysql_kv_view> &views) {
+  int ret = OB_SUCCESS;
+  for (int64_t i = 0; OB_SUCC(ret) && i < source.count(); ++i) {
+    const ObStringKV &kv = source.at(i);
+    nio_mysql_kv_view view = {};
+    view.key = make_byte_view(kv.key_);
+    view.value = make_byte_view(kv.value_);
+    if (OB_FAIL(views.push_back(view))) {
+    }
+  }
+  return ret;
+}
+
+void fill_ok_view(const OMPKOK &ok, nio_mysql_ok_view &view) {
+  view.affected_rows = ok.get_affected_rows();
+  view.last_insert_id = ok.get_last_insert_id();
+  view.capability_flags = ok.get_capability().capability_;
+  if (ok.use_standard_serialize()) {
+    view.behavior_flags |= NIO_MYSQL_OK_USE_STANDARD_SERIALIZE;
+  }
+  if (ok.is_schema_changed()) {
+    view.behavior_flags |= NIO_MYSQL_OK_SCHEMA_CHANGED;
+  }
+  if (ok.is_state_changed()) {
+    view.behavior_flags |= NIO_MYSQL_OK_STATE_CHANGED;
+  }
+  view.status_flags = ok.get_server_status().flags_;
+  view.warnings = ok.get_warnings();
+  view.message = make_byte_view(ok.get_message());
+  view.changed_schema = make_byte_view(ok.get_changed_schema());
+}
+
+OB_NOINLINE int
+encode_ok_packet_with_vars(const OMPKOK &ok, nio_mysql_ok_view &view,
+                           nio_connection_handle *connection_handle,
+                           const uint64_t generation,
+                           int64_t *framed_len, int &encode_ret) {
+  int ret = OB_SUCCESS;
+  int frame_ret = NIO_FRAME_ERROR;
+  const int64_t system_var_count = ok.get_system_vars().count();
+  ObSEArray<nio_mysql_kv_view, 24> variable_views;
+  if (OB_FAIL(variable_views.reserve(system_var_count))) {
+    encode_ret = ret;
+    LOG_WARN("failed to reserve MySQL OK variable views", K(ret),
+             K(system_var_count));
+  } else if (OB_FAIL(
+                 append_ok_kv_views(ok.get_system_vars(), variable_views))) {
+    encode_ret = ret;
+    LOG_WARN("failed to build system variable views for MySQL OK", K(ret));
+  } else {
+    view.system_vars = 0 == system_var_count ? NULL : &variable_views.at(0);
+    view.system_var_count = system_var_count;
+    frame_ret = nio_response_append_ok(connection_handle, generation, &view,
+                                       framed_len);
+  }
+  return frame_ret;
+}
+
+OB_NOINLINE int encode_ok_packet(const OMPKOK &ok,
+                                 nio_connection_handle *connection_handle,
+                                 const uint64_t generation, int64_t *framed_len,
+                                 int &encode_ret) {
+  nio_mysql_ok_view view = {};
+  fill_ok_view(ok, view);
+  const bool has_system_vars = !ok.get_system_vars().empty();
+  return has_system_vars
+             ? encode_ok_packet_with_vars(ok, view, connection_handle,
+                                          generation, framed_len, encode_ret)
+             : nio_response_append_ok(connection_handle, generation, &view,
+                                      framed_len);
+}
+
+} // namespace
+
+void ObOKPParam::reset() {
   affected_rows_ = 0;
   message_ = NULL;
   is_on_connect_ = false;
   is_on_change_user_ = false;
-  is_partition_hit_ = true;
   has_more_result_ = false;
   take_trace_id_to_client_ = false;
   warnings_count_ = 0;
@@ -57,7 +276,6 @@ int64_t ObOKPParam::to_string(char *buf, const int64_t buf_len) const
   int64_t pos = 0;
   J_KV(KT_(affected_rows),
        K_(is_on_connect),
-       K_(is_partition_hit),
        K_(take_trace_id_to_client),
        K_(has_more_result),
        K_(lii));
@@ -65,20 +283,10 @@ int64_t ObOKPParam::to_string(char *buf, const int64_t buf_len) const
 }
 
 ObMPPacketSender::ObMPPacketSender()
-    : req_(NULL),
-      seq_(0),
-      read_handle_(NULL),
-      comp_context_(),
-      proto20_context_(),
-      ez_buf_(NULL),
-      conn_valid_(true),
-      sessid_(0),
-      req_has_wokenup_(true),
-      query_receive_ts_(0),
-      nio_protocol_(0),
-      conn_(NULL)
-{
-}
+    : req_(NULL), request_generation_(0), nio_connection_handle_(NULL),
+      mid_request_read_started_(false), read_packet_lease_(0),
+      request_ownership_(RequestOwnership::RELEASED), response_started_(false),
+      response_disabled_(true), query_receive_ts_(0), conn_(NULL) {}
 
 ObMPPacketSender::~ObMPPacketSender()
 {
@@ -87,16 +295,25 @@ ObMPPacketSender::~ObMPPacketSender()
 
 void ObMPPacketSender::reset()
 {
-  (void)release_read_handle();
+  if (RequestOwnership::OWNED == request_ownership_) {
+    const int ret = finish_sql_request();
+    if (OB_SUCCESS != ret) {
+    }
+  } else {
+    (void)release_read_packet_lease();
+  }
+  clear_request_identity(RequestOwnership::RELEASED);
+}
 
+void ObMPPacketSender::clear_request_identity(RequestOwnership next_state) {
   req_ = NULL;
-  seq_ = 0;
-  comp_context_.reset();
-  proto20_context_.reset();
-  ez_buf_ = NULL;
-  conn_valid_ = true;
-  sessid_ = 0;
-  req_has_wokenup_ = true;
+  request_generation_ = 0;
+  nio_connection_handle_ = NULL;
+  mid_request_read_started_ = false;
+  read_packet_lease_ = 0;
+  request_ownership_ = next_state;
+  response_started_ = false;
+  response_disabled_ = true;
   query_receive_ts_ = 0;
   conn_ = NULL;
 }
@@ -104,134 +321,140 @@ void ObMPPacketSender::reset()
 int ObMPPacketSender::init(rpc::ObRequest *req)
 {
   int ret = OB_SUCCESS;
-  if (NULL == req) {
+  if (RequestOwnership::RELEASED != request_ownership_ &&
+      RequestOwnership::DETACHED_FOR_RETRY != request_ownership_) {
+    ret = OB_STATE_NOT_MATCH;
+    SERVER_LOG(WARN, "packet sender already retains a request identity",
+               K(ret));
+  } else if (NULL == req) {
     ret = OB_INVALID_ARGUMENT;
   } else {
-    uint8_t pkt_seq = reinterpret_cast<const ObMySQLRawPacket &>(req->get_packet()).get_seq();
-    bool is_conn_valid = true;
-    bool req_has_wokenup = false;
+    bool owns_request = true;
     int64_t receive_ts = req->get_receive_timestamp();
-    ret = do_init(req, pkt_seq + 1, pkt_seq + 1, is_conn_valid, req_has_wokenup, receive_ts);
+    ret = do_init(req, owns_request, receive_ts);
   }
   return ret;
 }
 
-int ObMPPacketSender::clone_from(ObMPPacketSender& that, int64_t com_offset)
-{
+int ObMPPacketSender::snapshot_from(ObMPPacketSender &that) {
   int ret = OB_SUCCESS;
-  if (OB_FAIL(do_init(that.req_, that.seq_, that.comp_context_.seq_ + com_offset, 
-                      that.conn_valid_, that.req_has_wokenup_, that.query_receive_ts_))) {
-    SERVER_LOG(ERROR, "clone packet sender fail", K(ret));
+  if (RequestOwnership::RELEASED != request_ownership_ || NULL != req_ ||
+      !that.is_conn_valid()) {
+    ret = OB_STATE_NOT_MATCH;
+    SERVER_LOG(WARN, "invalid packet sender state while taking snapshot", K(ret));
   } else {
-    comp_context_.is_checksum_off_ = that.comp_context_.is_checksum_off_;
-    proto20_context_.is_checksum_off_ = that.proto20_context_.is_checksum_off_;
+    // Capture a non-owning immutable lease. It becomes the callback's finish
+    // lease only after async submission succeeds under the session query lock.
+    req_ = that.req_;
+    request_generation_ = that.request_generation_;
+    nio_connection_handle_ = that.nio_connection_handle_;
+    mid_request_read_started_ = false;
+    read_packet_lease_ = 0;
+    request_ownership_ = RequestOwnership::SNAPSHOT;
+    response_started_ = that.response_started_;
+    response_disabled_ = true;
+    query_receive_ts_ = that.query_receive_ts_;
+    conn_ = that.conn_;
   }
   return ret;
 }
 
-int ObMPPacketSender::do_init(rpc::ObRequest *req,
-                           uint8_t packet_seq,
-                           uint8_t comp_seq,
-                           bool conn_status,
-                           bool req_has_wokenup,
-                           int64_t query_receive_ts)
-{
+int ObMPPacketSender::handoff_request_to(ObMPPacketSender &target) {
   int ret = OB_SUCCESS;
-  req_ = req;
-  ObSMConnection *conn = get_conn();
-  if (OB_ISNULL(req) || OB_ISNULL(conn)) {
+  if (!is_conn_valid() ||
+      RequestOwnership::SNAPSHOT != target.request_ownership_ ||
+      target.req_ != req_ || target.conn_ != conn_ ||
+      target.nio_connection_handle_ != nio_connection_handle_ ||
+      target.request_generation_ != request_generation_) {
+    ret = OB_STATE_NOT_MATCH;
+    SERVER_LOG(ERROR, "invalid packet sender request handoff", K(ret),
+               K(request_generation_), K(target.request_generation_));
+  } else {
+    (void)release_read_packet_lease();
+    // Response bytes and sequence state remain generation-scoped in Rust; only
+    // C++ request ownership changes hands here.
+    target.request_ownership_ = RequestOwnership::OWNED;
+    target.response_started_ = response_started_;
+    target.response_disabled_ = false;
+    clear_request_identity(RequestOwnership::RELEASED);
+  }
+  return ret;
+}
+
+int ObMPPacketSender::do_init(rpc::ObRequest *req, bool owns_request,
+                              int64_t query_receive_ts) {
+  int ret = OB_SUCCESS;
+  ObSMConnection *conn = NULL;
+  nio_connection_handle *connection_handle = NULL;
+  if (RequestOwnership::RELEASED != request_ownership_ &&
+      RequestOwnership::DETACHED_FOR_RETRY != request_ownership_) {
+    ret = OB_STATE_NOT_MATCH;
+    SERVER_LOG(WARN, "packet sender already retains a request identity",
+               K(ret));
+  } else if (OB_ISNULL(req)) {
     ret = OB_ERR_NULL_VALUE;
-    SERVER_LOG(WARN, "invalid argument", K(ret),
-               K(req), K(conn_status), K(packet_seq), K(conn));
+    SERVER_LOG(WARN, "invalid argument", K(ret), K(req));
+  } else if (OB_ISNULL(conn = SQL_REQ_OP.get_sql_session(req))) {
+    ret = OB_ERR_NULL_VALUE;
+    SERVER_LOG(WARN, "invalid argument", K(ret), K(req), K(conn));
+  } else if (OB_ISNULL(
+                 connection_handle = SQL_REQ_OP.get_nio_connection_handle(req))) {
+    ret = OB_ERR_NULL_VALUE;
+    SERVER_LOG(WARN, "request has no Rust SQL-NIO connection handle", K(ret),
+               K(req));
   } else {
-    // memory for ok eof error packet
-    seq_ = packet_seq;
-    conn_valid_ = conn_status;
-    req_has_wokenup_ = req_has_wokenup;
+    req_ = req;
+    request_generation_ = req->get_nio_request_generation();
+    nio_connection_handle_ = connection_handle;
+    request_ownership_ =
+        owns_request ? RequestOwnership::OWNED : RequestOwnership::SNAPSHOT;
+    response_started_ = false;
+    response_disabled_ = !owns_request;
     query_receive_ts_ = query_receive_ts;
     conn_ = conn;
 
-    sessid_ = conn->sessid_;
-    // init comp_context
-    comp_context_.reset();
-    comp_context_.type_ = conn->get_compress_type();
-    comp_context_.seq_ = comp_seq;
-    comp_context_.sessid_ = sessid_;
-    comp_context_.conn_ = conn;
-
-    // init proto20 context
-    bool is_proto20_supported = (OB_2_0_CS_TYPE == conn->get_cs_protocol_type());
-    bool is_proto20_compress = conn->proxy_cap_flags_.is_ob_protocol_v2_compress();
-    if (is_proto20_supported) {
-      proto20_context_.reset();
-      proto20_context_.is_proto20_used_ = is_proto20_supported;
-      proto20_context_.comp_seq_ = comp_seq;
-      proto20_context_.request_id_ = conn->proto20_pkt_context_.proto20_last_request_id_;
-      proto20_context_.proto20_seq_ = static_cast<uint8_t>(conn->proto20_pkt_context_.proto20_last_pkt_seq_ + 1);
-      // if v2 compress protocol, not add compress head here
-      proto20_context_.header_len_ = OB20_PROTOCOL_HEADER_LENGTH + (is_proto20_compress ? 0 : OB_MYSQL_COMPRESSED_HEADER_SIZE);
-      proto20_context_.tailer_len_ = OB20_PROTOCOL_TAILER_LENGTH;
-      proto20_context_.next_step_ = START_TO_FILL_STEP;
-      proto20_context_.is_checksum_off_ = false;
-      proto20_context_.is_new_extra_info_ = conn->proxy_cap_flags_.is_new_extra_info_support();
-    }
-    nio_protocol_ = req_->get_nio_protocol();
+    // The sender always produces plain MySQL packets — the Rust reactor adds
+    // any negotiated compression framing and owns its sequence cursor.
   }
   return ret;
 }
 
-int ObMPPacketSender::alloc_ezbuf()
-{
-  int ret = OB_SUCCESS;
-  easy_request_t *ez_req =nullptr;
-  char *buf = nullptr;
-  if (OB_ISNULL(ez_buf_)) {
-    if (OB_ISNULL(req_)) {
-      ret = OB_ERR_UNEXPECTED;
-      LOG_ERROR("request or data buffer is null", KP(req_), K(ret));
-    } else if (OB_ISNULL(buf = (char*)SQL_REQ_OP.alloc_sql_response_buffer(req_, OB_MULTI_RESPONSE_BUF_SIZE + sizeof(easy_buf_t)))) {
-      ret = OB_ALLOCATE_MEMORY_FAILED;
-      LOG_ERROR("fail to easy_alloc",
-                "size", OB_MULTI_RESPONSE_BUF_SIZE + sizeof(easy_buf_t), K(ret));
-    } else {
-      ez_buf_ = reinterpret_cast<easy_buf_t*>(buf);
-      init_easy_buf(ez_buf_, reinterpret_cast<char*>(ez_buf_ + 1),
-                    ez_req, OB_MULTI_RESPONSE_BUF_SIZE);
-    }
-  }
-  return ret;
-}
-
-int ObMPPacketSender::read_packet(obmysql::ObICSMemPool &mem_pool, obmysql::ObMySQLPacket *&mysql_pkt)
+int ObMPPacketSender::wait_packet(obmysql::ObICSMemPool &mem_pool,
+                                  int64_t timeout_us,
+                                  obmysql::ObMySQLPacket *&mysql_pkt)
 {
   int ret = OB_SUCCESS;
   mysql_pkt = NULL;
 
-  if (OB_ISNULL(read_handle_)) {
-    ret = init_read_handle();
+  // Same ownership gate as append_response: a RELEASED sender has req_ == NULL
+  // (the operator would dereference it) and a SNAPSHOT sender must not
+  // become a second mid-request reader of the same connection. This also
+  // absorbs the gate that the removed init_read_handle used to apply.
+  if (OB_UNLIKELY(RequestOwnership::OWNED != request_ownership_) || OB_ISNULL(req_)) {
+    ret = OB_STATE_NOT_MATCH;
+    SERVER_LOG(WARN, "mid-request read without request ownership",
+               K(ret), KP_(req));
+  } else if (OB_UNLIKELY(0 != read_packet_lease_)) {
+    ret = OB_STATE_NOT_MATCH;
+    SERVER_LOG(WARN, "previous read packet is still leased",
+               K(ret), K_(read_packet_lease));
+  } else if (OB_UNLIKELY(0 == request_generation_)) {
+    // 0 is never a live generation, so it fails exactly where a null read
+    // handle used to.
+    ret = OB_STATE_NOT_MATCH;
+    SERVER_LOG(WARN, "mid-request read without a live request generation",
+               K(ret), KP_(req));
   }
 
   if (OB_SUCC(ret)) {
     rpc::ObPacket *pkt = NULL;
-    ret = SQL_REQ_OP.read_packet(req_, mem_pool, read_handle_, pkt);
+    uint64_t packet_lease = 0;
+    mid_request_read_started_ = true;
+    ret = SQL_REQ_OP.wait_packet(req_, mem_pool, request_generation_,
+                                 timeout_us, pkt, packet_lease);
     if (pkt != NULL) {
       mysql_pkt = static_cast<obmysql::ObMySQLPacket *>(pkt);
-      const uint8_t seq = mysql_pkt->get_seq();
-      seq_ = seq + 1;
-
-      if (comp_context_.use_compress()) {
-        comp_context_.seq_ = comp_context_.conn_->compressed_pkt_context_.last_pkt_seq_ + 1;
-      }
-
-      if (proto20_context_.is_proto20_used_) {
-        ObSMConnection *conn = get_conn();
-        if (OB_NOT_NULL(conn)) {
-          proto20_context_.comp_seq_ = seq_;
-          proto20_context_.request_id_ = conn->proto20_pkt_context_.proto20_last_request_id_;
-          proto20_context_.proto20_seq_ = static_cast<uint8_t>(conn->proto20_pkt_context_.proto20_last_pkt_seq_ + 1);
-          proto20_context_.is_new_extra_info_ = conn->proxy_cap_flags_.is_new_extra_info_support();
-        }
-      }
+      read_packet_lease_ = packet_lease;
     }
   }
   return ret;
@@ -240,110 +463,84 @@ int ObMPPacketSender::read_packet(obmysql::ObICSMemPool &mem_pool, obmysql::ObMy
 int ObMPPacketSender::release_packet(obmysql::ObMySQLPacket* pkt)
 {
   int ret = OB_SUCCESS;
-  if (OB_ISNULL(read_handle_)) {
+  if (OB_UNLIKELY(RequestOwnership::OWNED != request_ownership_) || OB_ISNULL(req_)) {
+    ret = OB_STATE_NOT_MATCH;
+    SERVER_LOG(WARN, "mid-request release without request ownership",
+               K(ret), KP_(req));
+  } else if (!mid_request_read_started_) {
     ret = OB_NOT_INIT;
+  } else if (0 == read_packet_lease_) {
+    ret = OB_STATE_NOT_MATCH;
+  } else if (OB_FAIL(SQL_REQ_OP.release_read_packet(
+                 req_, request_generation_, read_packet_lease_))) {
   } else {
-    ret = SQL_REQ_OP.release_packet(req_, read_handle_, static_cast<rpc::ObPacket*>(pkt));
+    read_packet_lease_ = 0;
   }
+  UNUSED(pkt);
   return ret;
 }
 
-int ObMPPacketSender::response_compose_packet(obmysql::ObMySQLPacket &pkt,
-                                              obmysql::ObMySQLPacket &okp,
-                                              sql::ObSQLSessionInfo* session,
-                                              bool update_comp_pos) {
+int ObMPPacketSender::response_packet(obmysql::ObMySQLPacket &pkt) {
+  LOG_DEBUG("response-packet", K(lbt()));
   int ret = OB_SUCCESS;
-  comp_context_.update_last_pkt_pos(ez_buf_->last);
-  if (OB_FAIL(response_packet(pkt, session))) {
-    LOG_WARN("failed to response packet", K(ret));
-  } else if (OB_FAIL(alloc_ezbuf())) {
-    LOG_ERROR("easy buffer alloc failed", K(ret));
-  } else {
-    int64_t seri_size = 0;
-    extra_info_kvs_.reset();
-    extra_info_ecds_.reset();
-
-    okp.set_seq(seq_);
-    if (update_comp_pos) {
-      comp_context_.update_last_pkt_pos(ez_buf_->last);
-    }
-
-    if (OB_FAIL(ret)) {
-       // do nothing
-    } else if (OB_FAIL(try_encode_with(okp,
-                                       ez_buf_->end - ez_buf_->pos,
-                                       seri_size,
-                                       0,
-                                       proto20_context_.is_proto20_used()))) {
-      LOG_WARN("failed to encode packet", K(ret));
-    } else {
-      LOG_DEBUG("succ encode packet", K(okp), K(seri_size));
-      seq_ = okp.get_seq(); // here will point next avail seq
-      EVENT_INC(MYSQL_PACKET_OUT);
-      EVENT_ADD(MYSQL_PACKET_OUT_BYTES, seri_size);
-    }
-  }
-  return ret;
-}
-
-int ObMPPacketSender::response_packet(obmysql::ObMySQLPacket &pkt, sql::ObSQLSessionInfo* session)
-{
-  LOG_DEBUG("response-packet", K(proto20_context_.is_proto20_used_), K(lbt()));
-  int ret = OB_SUCCESS;
-  extra_info_kvs_.reset();
-  extra_info_ecds_.reset();
-  if (!conn_valid_) {
+  if (!is_conn_valid()) {
     ret = OB_CONNECT_ERROR;
     LOG_WARN("connection already disconnected", K(ret));
-  } else if (OB_ISNULL(session)) {
-    // do nothing
-  } else if (proto20_context_.is_proto20_used_
-             && OB_FALSE_IT(proto20_context_.is_dup_ls_modified_ = session->is_dup_ls_modified())) {
-    // do nothing
-  } else if (conn_->proxy_cap_flags_.is_full_link_trace_support() &&
-              proto20_context_.is_proto20_used_ &&
-              OB_FAIL(sql::ObFLTUtils::append_flt_extra_info(session->get_extra_info_alloc(),
-                                      &extra_info_kvs_, &extra_info_ecds_, *session,
-                                      conn_->proxy_cap_flags_.is_new_extra_info_support()))) {
-      LOG_WARN("failed to add flt extra info", K(ret));
   }
 
-  if (OB_FAIL(ret)) {
-  } else if (FALSE_IT(ObSessInfoVerify::sess_veri_control(pkt, session))) {
-    // do nothing.
-  }
-
-  if (OB_FAIL(ret)) {
-  } else if (OB_FAIL(alloc_ezbuf())) {
-    LOG_ERROR("easy buffer alloc failed", K(ret));
-  } else {
+  if (OB_SUCC(ret)) {
     int64_t seri_size = 0;
-    pkt.set_seq(seq_);
-    if (OB_FAIL(try_encode_with(pkt,
-                                ez_buf_->end - ez_buf_->pos,
-                                seri_size,
-                                0))) {
-      LOG_WARN("failed to encode packet", K(ret));
+    if (OB_FAIL(append_response(pkt, seri_size))) {
     } else {
-      LOG_DEBUG("succ encode packet", K(pkt), K(seri_size));
-      seq_ = pkt.get_seq(); // here will point next avail seq
-      EVENT_INC(MYSQL_PACKET_OUT);
-      EVENT_ADD(MYSQL_PACKET_OUT_BYTES, seri_size);
     }
   }
 
-  if (OB_ISNULL(session)) {
-    // do nothing
+  return ret;
+}
+
+int ObMPPacketSender::response_resultset_metadata(
+    const common::ObIArray<obmysql::ObMySQLField> &fields,
+    bool include_result_header, uint8_t eof_field_count, uint16_t warnings,
+    uint16_t status_flags) {
+  int ret = OB_SUCCESS;
+  int64_t packet_count = 0;
+  int64_t framed_len = 0;
+  ObSEArray<nio_mysql_field_view, 16> views;
+  if (!is_conn_valid()) {
+    ret = OB_CONNECT_ERROR;
+    LOG_WARN("connection already disconnected", K(ret));
+  } else if (OB_UNLIKELY(RequestOwnership::OWNED != request_ownership_) ||
+             OB_ISNULL(req_)) {
+    ret = OB_ERR_UNEXPECTED;
+    LOG_ERROR("request ownership has been released", K(ret), KP_(req));
   } else {
-    // reset
-    session->get_extra_info_alloc().reset();
+    response_started_ = true;
+    if (OB_FAIL(views.prepare_allocate(fields.count()))) {
+    } else {
+      for (int64_t i = 0; i < fields.count(); ++i) {
+        views.at(i) = make_field_view(fields.at(i));
+      }
+      const nio_mysql_field_view *view_data =
+          views.count() == 0 ? NULL : &views.at(0);
+      const int append_ret = nio_response_append_resultset_metadata(
+          nio_connection_handle_, request_generation_,
+          include_result_header ? 1 : 0, view_data, views.count(),
+          eof_field_count, warnings, status_flags, &packet_count, &framed_len);
+      if (0 != append_ret) {
+        ret = OB_ERR_UNEXPECTED;
+        LOG_WARN("Rust result-set metadata append failed", K(ret),
+                 K(append_ret), K(include_result_header), K(eof_field_count),
+                 K(warnings), K(status_flags), "field_count", fields.count());
+      } else {
+      }
+    }
   }
+
   return ret;
 }
 
 int ObMPPacketSender::send_error_packet(int err,
                                         const char* errmsg,
-                                        bool is_partition_hit /* = true */,
                                         void *extra_err_info /* = NULL */)
 {
   int ret = OB_SUCCESS;
@@ -363,11 +560,9 @@ int ObMPPacketSender::send_error_packet(int err,
     // @BUG work around
     ret = OB_ERR_UNEXPECTED;
     LOG_ERROR("error code is incorrect", K(err));
-  } else if (!conn_valid_ || OB_ISNULL(conn_)) {
+  } else if (!is_conn_valid()) {
     ret = OB_CONNECT_ERROR;
     LOG_WARN("connection already disconnected", K(ret), KP(conn_));
-  } else if (OB_FAIL(alloc_ezbuf())) {
-    LOG_WARN("ez_buf_ alloc failed", K_(ez_buf), K(ret));
   } else {
     // error message
     ObString message;
@@ -376,15 +571,13 @@ int ObMPPacketSender::send_error_packet(int err,
     const ObWarningBuffer *wb = common::ob_get_tsi_warning_buffer();
     if (NULL != wb
         && (wb->get_err_code() == err
-            || (err >= OB_MIN_RAISE_APPLICATION_ERROR
-                && err <= OB_MAX_RAISE_APPLICATION_ERROR))) {
+            || OB_ERR_SIGNAL_EXCEPTION == err)) {
       message = wb->get_err_msg();
     }
     if (message.length() <= 0) {
       if (OB_LIKELY(NULL != errmsg) && 0 < strlen(errmsg)) {
         message = ObString::make_string(errmsg);
-      } else if (err >= OB_MIN_RAISE_APPLICATION_ERROR
-                 && err <= OB_MAX_RAISE_APPLICATION_ERROR) {
+      } else if (OB_ERR_SIGNAL_EXCEPTION == err) {
         // do nothing ...
       } else {
         snprintf(msg_buf, MAX_MSG_BUF_SIZE, "%s", ob_errpkt_strerror(err));
@@ -457,30 +650,27 @@ int ObMPPacketSender::send_error_packet(int err,
                            message.length(), tmp_msg_buf,
                            tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday,
                            tm.tm_hour, tm.tm_min, tm.tm_sec, tv.tv_usec,
-                              ObCurTraceId::get_trace_id_str(trace_id_buf, sizeof(trace_id_buf)));
+                           ObCurTraceId::get_trace_id_str(trace_id_buf, sizeof(trace_id_buf)));
       (void) msg_buf_size; // make compiler happy
       message = ObString::make_string(msg_buf); // default error message
     }
+
     // TODO Negotiate a err for rerouting sql
-    if (OB_SP_RAISE_APPLICATION_ERROR == err) {
+    if (OB_ERR_SIGNAL_EXCEPTION == err && OB_NOT_NULL(wb)) {
       epacket.set_errcode(static_cast<uint16_t>(wb->get_err_code()));
       if (strlen(wb->get_sql_state()) == 0) {
         if (OB_FAIL(epacket.set_sqlstate(ob_sqlstate(err)))) {
-          LOG_WARN("set sql_state failed", K(ret));
         }  
       } else if (OB_FAIL(epacket.set_sqlstate(wb->get_sql_state()))) {
-        LOG_WARN("set sql_state failed", K(ret));
       }
     } else {
       epacket.set_errcode(static_cast<uint16_t>(ob_errpkt_errno(err)));
       if (OB_FAIL(epacket.set_sqlstate(ob_sqlstate(err)))) {
-        LOG_WARN("set sql_state failed", K(ret));
       }
     }
     if (OB_FAIL(ret)) {
     } else {
       if (OB_FAIL(fin_msg.append(message))) {
-        LOG_WARN("append pl exact err msg fail", K(ret), K(message));
       } else if (has_pl()) {
         if (NULL == session && OB_FAIL(get_session(session))) {
           LOG_WARN("fail to get session", K(ret));
@@ -494,7 +684,6 @@ int ObMPPacketSender::send_error_packet(int err,
 
       if (OB_FAIL(ret)) {
       } else if (OB_FAIL(epacket.set_message(fin_msg.string()))) {
-        LOG_WARN("failed to set error message", K(ret));
       } else {
         // do nothing
       }
@@ -506,7 +695,9 @@ int ObMPPacketSender::send_error_packet(int err,
   }
 
   // rollback autocommit transaction which is active
-  if (OB_SUCC(ret) && conn_valid_ && conn_->is_sess_alloc_ && !conn_->is_sess_free_) {
+  if (OB_SUCC(ret) && is_conn_valid()
+      && conn_->is_sess_alloc_.load(std::memory_order_acquire)
+      && !conn_->is_sess_free_.load(std::memory_order_acquire)) {
     transaction::ObTransID trans_id;
     if (OB_ISNULL(session) && OB_FAIL(get_session(session))) {
       LOG_WARN("get session failed", K(ret));
@@ -515,7 +706,6 @@ int ObMPPacketSender::send_error_packet(int err,
       if (session->has_active_autocommit_trans(trans_id)) {
         bool need_disconnect = false;
         if (OB_FAIL(ObSqlTransControl::rollback_trans(session, need_disconnect))) {
-          LOG_WARN("rollback autocommit trans failed", K(ret), K(need_disconnect));
         } else {
           LOG_INFO("rollback autocommit trans succeed", K(trans_id));
         }
@@ -524,57 +714,18 @@ int ObMPPacketSender::send_error_packet(int err,
   }
   // TODO: Should separate the logic below from send_error_packet because connect fails,
   // Also need to call send_error_packet, but there is no session at this time
-  //
-  // for obproxy or OCJ, followed by another OK packet
-  if (conn_valid_) {
+  if (is_conn_valid()) {
     if (OB_FAIL(ret)) {
       disconnect();
-    } else if (!conn_->need_send_extra_ok_packet()) {
-      LOG_TRACE("not need extra ok packet", K(ret), K(epacket.get_sql_state()), K(epacket.get_message()));
-      comp_context_.update_last_pkt_pos(ez_buf_->last);
-      if (OB_FAIL(response_packet(epacket, session))) {
+    } else {
+      if (OB_FAIL(response_packet(epacket))) {
         RPC_LOG(WARN, "failed to send error packet", K(epacket), K(ret));
         disconnect();
-      } else if (has_pl() && NULL != session && 0 < session->get_pl_exact_err_msg().length()) {
+      } else if (has_pl() && NULL != session &&
+                 0 < session->get_pl_exact_err_msg().length()) {
         session->get_pl_exact_err_msg().reset();
       }
-    } else if (conn_->need_send_extra_ok_packet()) {
-      if (conn_->is_in_authed_phase()) {
-        LOG_TRACE("need extra ok packet", K(ret), K(epacket.get_sql_state()), K(epacket.get_message()));
-        if (!has_pl() && NULL == session) {
-          if (OB_FAIL(get_session(session))) {
-            LOG_WARN("fail to get session", K(ret));
-          } else if (OB_ISNULL(session)) {
-            ret = OB_ERR_UNEXPECTED;
-            LOG_WARN("sql session info is null", K(ret));
-          } else {
-            ObSQLSessionInfo::LockGuard lock_guard(session->get_query_lock());
-          }
-        }
-        if (OB_SUCC(ret) && NULL != session) {
-          ObOKPParam ok_param;
-          if (session->is_track_session_info()) {
-            ok_param.is_partition_hit_ = is_partition_hit;
-            ok_param.take_trace_id_to_client_ = true;
-          }
-          if (OB_FAIL(send_ok_packet(*session, ok_param, &epacket))) {
-            LOG_WARN("failed to send ok packet", K(ok_param), K(ret));
-          }
-        }
-      } else {  // just a basic ok packet contain nothing
-        OMPKOK okp;
-        okp.set_capability(conn_->cap_flags_);
-        if (OB_FAIL(response_compose_packet(epacket, okp, session, false))) {
-          LOG_WARN("response ok packet fail", K(ret));
-        }
-      }
-      if (OB_FAIL(ret)) {
-        LOG_WARN("failed to append ok pkt after error pkt, need disconnect", K(ret));
-        disconnect();
-      }
     }
-  } else {
-    // do nothing
   }
   if (OB_LIKELY(NULL != session)) {
     revert_session(session);
@@ -585,11 +736,15 @@ int ObMPPacketSender::send_error_packet(int err,
 int ObMPPacketSender::revert_session(ObSQLSessionInfo *sess_info)
 {
   int ret = OB_SUCCESS;
-  if (OB_ISNULL(GCTX.session_mgr_) || OB_ISNULL(sess_info)) {
+  if (OB_ISNULL(::oceanbase::share::server_service<::oceanbase::sql::ObSQLSessionMgr>()) || OB_ISNULL(sess_info)) {
     ret = OB_ERR_UNEXPECTED;
-    LOG_ERROR("session mgr or session info is null", K_(GCTX.session_mgr), K(sess_info), K(ret));
+    LOG_ERROR(
+        "session mgr or session info is null",
+        KP(::oceanbase::share::server_service<::oceanbase::sql::ObSQLSessionMgr>()),
+        K(sess_info),
+        K(ret));
   } else {
-    GCTX.session_mgr_->revert_session(sess_info);
+    ::oceanbase::share::server_service<::oceanbase::sql::ObSQLSessionMgr>()->revert_session(sess_info);
   }
   return ret;
 }
@@ -597,11 +752,10 @@ int ObMPPacketSender::revert_session(ObSQLSessionInfo *sess_info)
 int ObMPPacketSender::get_session(ObSQLSessionInfo *&sess_info)
 {
   int ret = OB_SUCCESS;
-  if (OB_ISNULL(conn_) || OB_ISNULL(GCTX.session_mgr_)) {
+  if (OB_ISNULL(conn_) || OB_ISNULL(::oceanbase::share::server_service<::oceanbase::sql::ObSQLSessionMgr>())) {
     ret = OB_ERR_UNEXPECTED;
-    LOG_WARN("conn or sessoin mgr is NULL", K(ret), KP(conn_), K(GCTX.session_mgr_));
-  } else if (OB_FAIL(GCTX.session_mgr_->get_session(conn_->sessid_, sess_info))) {
-    LOG_WARN("get session fail", K(ret), "sessid", conn_->sessid_);
+    LOG_WARN("conn or session mgr is NULL", K(ret), KP(conn_), K(::oceanbase::share::server_service<::oceanbase::sql::ObSQLSessionMgr>()));
+  } else if (OB_FAIL(::oceanbase::share::server_service<::oceanbase::sql::ObSQLSessionMgr>()->get_session(conn_->sessid_, sess_info))) {
   } else {
     NG_TRACE_EXT(session, OB_ID(sid), sess_info->get_server_sid());
   }
@@ -614,7 +768,7 @@ int ObMPPacketSender::send_ok_packet(ObSQLSessionInfo &session, ObOKPParam &ok_p
   LOG_DEBUG("send-ok-packet", K(lbt()));
   ObSQLSessionInfo::LockGuard lock_guard(session.get_query_lock());
   OMPKOK okp;
-  if (!conn_valid_ || OB_ISNULL(conn_)) {
+  if (!is_conn_valid()) {
     ret = OB_CONNECT_ERROR;
     LOG_WARN("connection already disconnected", K(ret), KP(conn_));
   } else {
@@ -628,11 +782,6 @@ int ObMPPacketSender::send_ok_packet(ObSQLSessionInfo &session, ObOKPParam &ok_p
     okp.set_last_insert_id(ok_param.lii_);
     okp.set_warnings(ok_param.warnings_count_);
 
-    // set is_partition_hit
-    if (!ok_param.is_partition_hit_) {
-      ret = session.set_partition_hit(false);
-    }
-
     if (OB_SUCC(ret)) {
       if (!ok_param.take_trace_id_to_client_) {
         const int64_t elapsed_time = ObClockGenerator::getClock() - query_receive_ts_;
@@ -642,18 +791,10 @@ int ObMPPacketSender::send_ok_packet(ObSQLSessionInfo &session, ObOKPParam &ok_p
       if (ok_param.take_trace_id_to_client_) {
         ObCurTraceId::TraceId *trace_id = ObCurTraceId::get_trace_id();
         if (NULL != trace_id) {
-          if (OB_FAIL(session.update_last_trace_id(*trace_id))) {
-            LOG_WARN("fail to update last trace id", KPC(trace_id), K(ret));
-            ret = OB_SUCCESS; // ignore ret
-          }
+          session.set_last_trace_id(trace_id);
         }
       }
     }
-  }
-
-  // set is_trans_specfied
-  if (OB_SUCC(ret)) {
-    ret = session.save_trans_status();
   }
 
   bool need_track_session_info = false;
@@ -662,67 +803,15 @@ int ObMPPacketSender::send_ok_packet(ObSQLSessionInfo &session, ObOKPParam &ok_p
       // in hand shake response's ok packet, return all session variable
       if (ok_param.is_on_connect_ || ok_param.is_on_change_user_) {
         need_track_session_info = true;
-        if (conn_->is_normal_client()) {
-          okp.set_use_standard_serialize(true);
-          if (OB_FAIL(ObMPUtils::add_nls_format(okp, session))) {
-            LOG_WARN("fail to add_nls_format", K(ret));
-          }
-        } else if (conn_->is_driver_client()) {
-          // return capability flag to indicate server's capablity
-          okp.set_use_standard_serialize(true);
-          if (OB_FAIL(ObMPUtils::add_nls_format(okp, session))) {
-            LOG_WARN("fail to add_nls_format", K(ret));
-          } else if (OB_FAIL(ObMPUtils::add_cap_flag(okp, session))) {
-            LOG_WARN("fail to add all session system variables", K(ret));
-          } else if (ok_param.is_on_connect_
-                     && OB_FAIL(ObMPUtils::add_min_cluster_version(okp, session))) {
-            LOG_WARN("fail to add all session system variables", K(ret));
-          }
-        } else {
-          if (OB_FAIL(ObMPUtils::add_session_info_on_connect(okp, session))) {
-            LOG_WARN("fail to add all session system variables", K(ret));
-          } else if (ok_param.is_on_connect_
-                     && OB_FAIL(ObMPUtils::add_min_cluster_version(okp, session))) {
-            LOG_WARN("fail to add all session system variables", K(ret));
-          }
-        }
+        okp.set_use_standard_serialize(true);
       } else {
-        // in proxy or OCJ mode will track session info in the last ok packet
         if (!ok_param.has_more_result_) {
           need_track_session_info = true;
-          // send changed session variables to obproxy
           if (OB_SUCC(ret)) {
-            if (conn_->is_normal_client()) {
-              okp.set_use_standard_serialize(true);
-              if (OB_FAIL(ObMPUtils::add_changed_session_info(okp, session))) {
-                SERVER_LOG(WARN, "fail to add changed session info", K(ret));
-              } else if (OB_FAIL(ObMPUtils::add_nls_format(okp, session, true))) {
-                LOG_WARN("fail to add_nls_format", K(ret));
-              }
-            } else if (conn_->is_driver_client()) {
-              // will not track session variables, do nothing
-              okp.set_use_standard_serialize(true);
-              if (OB_FAIL(ObMPUtils::add_changed_session_info(okp, session))) {
-                SERVER_LOG(WARN, "fail to add changed session info", K(ret));
-              } else if (OB_FAIL(ObMPUtils::add_nls_format(okp, session, true))) {
-                LOG_WARN("fail to add_nls_format", K(ret));
-              }
-            } else {
-              if (OB_FAIL(ObMPUtils::add_changed_session_info(okp, session))) {
-                SERVER_LOG(WARN, "fail to add changed session info", K(ret));
-              }
+            okp.set_use_standard_serialize(true);
+            if (OB_FAIL(ObMPUtils::add_changed_session_info(okp, session))) {
             }
           }
-        }
-      }
-    } else {
-      // use to compatible with older OCJ(< 2.0.9)
-      if (ok_param.is_on_connect_ && conn_->is_java_client_ && conn_->proxy_cap_flags_.is_cap_used()) {
-        okp.set_track_session_cap(true);
-        if (OB_FAIL(ObMPUtils::add_session_info_on_connect(okp, session))) {
-          LOG_WARN("fail to add all session system variables", K(ret));
-        } else {
-          need_track_session_info = true;
         }
       }
     }
@@ -734,7 +823,6 @@ int ObMPPacketSender::send_ok_packet(ObSQLSessionInfo &session, ObOKPParam &ok_p
     bool is_no_backslash_escapes = false;
     IS_NO_BACKSLASH_ESCAPES(session.get_sql_mode(), is_no_backslash_escapes);
     if (OB_FAIL(session.get_autocommit(ac))) {
-      LOG_WARN("fail to get autocommit", K(ret));
     } else {
       ObServerStatusFlags flags = okp.get_server_status();
       flags.status_flags_.OB_SERVER_STATUS_IN_TRANS
@@ -742,39 +830,24 @@ int ObMPPacketSender::send_ok_packet(ObSQLSessionInfo &session, ObOKPParam &ok_p
       flags.status_flags_.OB_SERVER_STATUS_AUTOCOMMIT = (ac ? 1 : 0);
       flags.status_flags_.OB_SERVER_MORE_RESULTS_EXISTS = ok_param.has_more_result_;
       flags.status_flags_.OB_SERVER_STATUS_NO_BACKSLASH_ESCAPES = is_no_backslash_escapes;
-      // in java client or others, use slow query bit to indicate partition hit or not
-      flags.status_flags_.OB_SERVER_QUERY_WAS_SLOW = !ok_param.is_partition_hit_;
       flags.status_flags_.OB_SERVER_STATUS_CURSOR_EXISTS = ok_param.cursor_exist_ ? 1 : 0;
       flags.status_flags_.OB_SERVER_STATUS_LAST_ROW_SENT = ok_param.send_last_row_ ? 1 : 0;
       flags.status_flags_.OB_SERVER_PS_OUT_PARAMS = ok_param.has_pl_out_ ? 1 : 0;
       if (ok_param.is_on_connect_) {
-        flags.status_flags_.OB_SERVER_STATUS_RESERVED_OR_ORACLE_MODE = 0;
+        flags.status_flags_.OB_SERVER_STATUS_RESERVED = 0;
       }
       // todo: set OB_SERVER_STATUS_IN_TRANS_READONLY flag if need?
       okp.set_server_status(flags);
     }
   }
 
-  if (OB_SUCC(ret) && OB_FAIL(alloc_ezbuf())) {
-    LOG_WARN("ez_buf_ alloc failed", K(ret));
-  }
-
   if (OB_SUCC(ret)) {
     // for ok packet which has no status packet
     if (NULL == pkt) {
-      if (NULL != ez_buf_ && !ok_param.has_more_result_) {
-        comp_context_.update_last_pkt_pos(ez_buf_->last);
+      if (OB_FAIL(response_packet(okp))) {
       }
-      if (OB_FAIL(response_packet(okp, &session))) {
-        LOG_WARN("response ok packet fail", K(ret));
-      }
-    // oceanbase proxy (aka. odp) need extra ok packet after retruns status packet.
-    // for this logic, we use response_compose_packet to send packet
     } else {
-      if (NULL != pkt && 
-            OB_FAIL(response_compose_packet(*pkt, okp, &session,
-                            NULL != ez_buf_ && !ok_param.has_more_result_))) {
-        LOG_WARN("response ok packet fail", K(pkt), K(ret));
+      if (OB_FAIL(response_packet(*pkt))) {
       }
     }
   }
@@ -791,27 +864,10 @@ int ObMPPacketSender::send_ok_packet(ObSQLSessionInfo &session, ObOKPParam &ok_p
 
 ObSMConnection* ObMPPacketSender::get_conn() const
 {
-  ObSMConnection *conn = NULL;
-  if (OB_ISNULL(req_)) {
-    LOG_ERROR_RET(OB_INVALID_ARGUMENT, "request is null");
-  } else if (conn_valid_) {
-    conn = reinterpret_cast<ObSMConnection *>(SQL_REQ_OP.get_sql_session(req_));
-  } else {
-    // do nothing
+  if (!is_conn_valid()) {
+    LOG_ERROR_RET(OB_INVALID_ARGUMENT, "packet sender does not own a request");
   }
-  return conn;
-}
-
-int ObMPPacketSender::update_last_pkt_pos()
-{
-  int ret = OB_SUCCESS;
-  if (NULL == ez_buf_) {
-    ret = OB_ERR_UNEXPECTED;
-    LOG_WARN("ez buf is null and cannot update last pkt pos for compress protocol", K(ret));
-  } else {
-    comp_context_.update_last_pkt_pos(ez_buf_->last);
-  }
-  return ret;
+  return is_conn_valid() ? conn_ : NULL;
 }
 
 void ObMPPacketSender::force_disconnect()
@@ -822,10 +878,13 @@ void ObMPPacketSender::force_disconnect()
 
 void ObMPPacketSender::disconnect()
 {
-  if (conn_valid_) {
+  if (is_conn_valid()) {
     if (OB_ISNULL(req_)) {// do nothing
+    } else if (OB_SUCCESS != SQL_REQ_OP.disconnect_sql_conn(req_, request_generation_)) {
+      LOG_WARN_RET(OB_STATE_NOT_MATCH, "ignore stale sql request disconnect",
+                   K(request_generation_));
     } else {
-      ObSMConnection *conn = reinterpret_cast<ObSMConnection *>(SQL_REQ_OP.get_sql_session(req_));
+      ObSMConnection *conn = SQL_REQ_OP.get_sql_session(req_);
       if (conn != NULL) {
         LOG_WARN_RET(OB_SUCCESS, "server close connection",
                  "sessid", conn->sessid_,
@@ -843,7 +902,6 @@ void ObMPPacketSender::disconnect()
         LOG_WARN_RET(OB_ERR_UNEXPECTED, "connection is null");
       }
 
-      SQL_REQ_OP.disconnect_sql_conn(req_);
     }
   }
 }
@@ -874,233 +932,160 @@ int ObMPPacketSender::send_eof_packet(const ObSQLSessionInfo &session,
   flags.status_flags_.OB_SERVER_MORE_RESULTS_EXISTS = result.has_more_result();
   eofp.set_server_status(flags);
   if (OB_ISNULL(ok_param)) {
-    if (OB_FAIL(response_packet(eofp, const_cast<ObSQLSessionInfo*>(&session)))) {
-      LOG_WARN("response packet fail", K(ret));
+    if (OB_FAIL(response_packet(eofp))) {
     }
   } else {
-    if (OB_FAIL(send_ok_packet(*const_cast<ObSQLSessionInfo*>(&session), *ok_param, &eofp))) {
-      LOG_WARN("failed to response ok packet and eof packet", K(ret), K(*ok_param));
+    if (OB_FAIL(send_ok_packet(*const_cast<ObSQLSessionInfo *>(&session),
+                               *ok_param, &eofp))) {
     }
   }
   return ret;
 }
 
-int ObMPPacketSender::try_encode_with(ObMySQLPacket &pkt,
-                                      int64_t current_size,
-                                      int64_t &seri_size,
-                                      int64_t try_steps,
-                                      bool is_composed_ok_pkt)
-{
+int ObMPPacketSender::append_response(ObMySQLPacket &pkt, int64_t &seri_size) {
   int ret = OB_SUCCESS;
-  ObProtoEncodeParam param;
-  param.is_composed_ok_pkt_ = is_composed_ok_pkt;
   seri_size = 0;
-  if (OB_ISNULL(ez_buf_)) {
-    ret = OB_ERR_UNEXPECTED;
-    LOG_ERROR("easy buffer is null", K(ret));
-  } else if (conn_->pkt_rec_wrapper_.enable_proto_dia() &&
-              (ez_buf_->last - ez_buf_->pos == 0) &&
-              comp_context_.use_compress()) {
-    conn_->pkt_rec_wrapper_.begin_seal_comp_pkt();
-  }
-  __builtin_prefetch(&conn_->pkt_rec_wrapper_.pkt_rec_[conn_->pkt_rec_wrapper_.cur_pkt_pos_
-                                              % ObPacketRecordWrapper::REC_BUF_SIZE]);
-
-  if (OB_UNLIKELY(pkt.get_mysql_packet_type() == ObMySQLPacketType::PKT_FILENAME)) {
-    proto20_context_.is_filename_packet_ = true;
-
-    if (comp_context_.use_compress() && comp_context_.is_proxy_compress_based()) {
-      // The compression protocol between in observer and obproxy requires that the sequence id should use
-      // last packet's sequence id if there is the last response packet to obproxy. And PKT_FILENAME is
-      // the "last packet" reponse to obproxy this time.
-      // `seq_` means observer will not send more response and client can resolve the response packets now.
-      // NOTE: This action is not compatible with MySQL protocol
-      comp_context_.seq_--;
-    }
-  }
-
-  if (OB_FAIL(ret)) {
-    // do nothing
-  } else if (OB_UNLIKELY(!conn_valid_)) {
-    // force core dump in debug
+  if (OB_UNLIKELY(!is_conn_valid())) {
     ret = OB_CONNECT_ERROR;
     LOG_ERROR("connection already disconnected", K(ret));
-  } else if (OB_UNLIKELY(req_has_wokenup_)) {
+  } else if (OB_UNLIKELY(RequestOwnership::OWNED != request_ownership_) ||
+             OB_ISNULL(req_)) {
     ret = OB_ERR_UNEXPECTED;
-    LOG_ERROR("req_has_wokenup, resource maybe has destroy", K(ret));
-  } else if (OB_ISNULL(req_)) {
-    ret = OB_ERR_UNEXPECTED;
-    LOG_ERROR("invalid input", K(ret), KP(req_));
-  } else if (OB_FAIL(build_encode_param_(param, &pkt, false))) {
-    LOG_ERROR("fail to build encode param", K(ret));
-  } else if (OB_FAIL(ObProto20Utils::do_packet_encode(param))) {
-    LOG_ERROR(" fail to do packet encode", K(param), K(ret));
+    LOG_ERROR("request ownership has been released", K(ret), KP_(req));
   } else {
-    if (param.need_flush_) {
-      // if failed, try flush ---> alloc larger mem ----> continue encoding
-      int last_ret = param.encode_ret_;
-
-      if (need_flush_buffer() && !param.is_composed_ok_pkt_) {
-        // try again with same buf size
-        if (OB_FAIL(flush_buffer(false))) {
-          LOG_WARN("failed to flush_buffer", K(ret), K(last_ret));
-        } else {
-          ret = try_encode_with(pkt, current_size, seri_size, try_steps, is_composed_ok_pkt);
-        }
-      } else {
-        if (try_steps >= MAX_TRY_STEPS) {
-          ret = last_ret;
-          LOG_ERROR("encode MySQL packet fail", "buffer size", ez_buf_->end - ez_buf_->last, K(ret));
-        } else {
-          // try again with larger buf size
-          const int64_t new_alloc_size = TRY_EZ_BUF_SIZES[try_steps++];
-          // refer to doc: 
-          if (OB_SIZE_OVERFLOW != last_ret && OB_BUF_NOT_ENOUGH != last_ret) {
-            ret = last_ret;
-            LOG_WARN("last_ret is not size overflow, need check code", K(last_ret));
-          } else {
-            if (OB_FAIL(resize_ezbuf(new_alloc_size))) {
-              LOG_ERROR("fail to resize_ezbuf", K(ret), K(last_ret));
-            } else {
-              ret = try_encode_with(pkt, new_alloc_size, seri_size, try_steps, is_composed_ok_pkt);
-            }
-          }
-        }
+    // Once response production has been attempted, packet retry is no longer
+    // safe: a failed encoder may already have flushed an earlier batch, moved
+    // a sequence cursor, or marked the Rust connection unusable.
+    response_started_ = true;
+    nio_connection_handle *connection_handle = nio_connection_handle_;
+    int encode_ret = OB_SUCCESS;
+    int append_ret = -1;
+    switch (pkt.get_mysql_packet_type()) {
+      case ObMySQLPacketType::PKT_ERR: {
+        const OMPKError &error = static_cast<const OMPKError &>(pkt);
+        const ObString sql_state = error.get_sql_state();
+        const ObString message = error.get_message();
+        append_ret = nio_response_append_error(
+            connection_handle, request_generation_, error.get_err_code(),
+            sql_state.ptr(), sql_state.length(), message.ptr(),
+            message.length(), &seri_size);
+        break;
       }
-    } else {
-      // nothing, continue encoding next
+      case ObMySQLPacketType::PKT_AUTH_SWITCH: {
+        const OMPKAuthSwitch &auth_switch =
+            static_cast<const OMPKAuthSwitch &>(pkt);
+        const ObString &plugin_name = auth_switch.get_plugin_name();
+        const ObString &scramble = auth_switch.get_scramble();
+        append_ret = nio_response_append_auth_switch(
+            connection_handle, request_generation_, plugin_name.ptr(),
+            plugin_name.length(), scramble.ptr(), scramble.length(),
+            &seri_size);
+        break;
+      }
+      case ObMySQLPacketType::PKT_FILENAME: {
+        const OMPKLocalInfile &local_infile =
+            static_cast<const OMPKLocalInfile &>(pkt);
+        const ObString &filename = local_infile.get_filename();
+        append_ret = nio_response_append_local_infile(
+            connection_handle, request_generation_, filename.ptr(),
+            filename.length(), &seri_size);
+        break;
+      }
+      case ObMySQLPacketType::PKT_STR: {
+        const OMPKString &string = static_cast<const OMPKString &>(pkt);
+        const ObString &value = string.get_string();
+        append_ret =
+            nio_response_append_string(connection_handle, request_generation_,
+                                       value.ptr(), value.length(), &seri_size);
+        break;
+      }
+      case ObMySQLPacketType::PKT_RESHEAD: {
+        const OMPKResheader &resheader =
+            static_cast<const OMPKResheader &>(pkt);
+        append_ret = nio_response_append_result_header(
+            connection_handle, request_generation_, resheader.get_field_count(),
+            &seri_size);
+        break;
+      }
+      case ObMySQLPacketType::PKT_EOF: {
+        const OMPKEOF &eof = static_cast<const OMPKEOF &>(pkt);
+        append_ret = nio_response_append_eof(
+            connection_handle, request_generation_, eof.get_field_count(),
+            eof.get_warning_count(), eof.get_server_status().flags_,
+            &seri_size);
+        break;
+      }
+      case ObMySQLPacketType::PKT_PREPARE: {
+        const OMPKPrepare &prepare = static_cast<const OMPKPrepare &>(pkt);
+        append_ret = nio_response_append_prepare_ok(
+            connection_handle, request_generation_, prepare.get_statement_id(),
+            prepare.get_column_num(), prepare.get_param_num(),
+            prepare.get_warning_count(), &seri_size);
+        break;
+      }
+      case ObMySQLPacketType::PKT_FIELD: {
+        append_ret = encode_field_packet(static_cast<const OMPKField &>(pkt),
+                                         connection_handle, request_generation_,
+                                         &seri_size);
+        break;
+      }
+      case ObMySQLPacketType::PKT_ROW: {
+        append_ret = encode_row_packet(static_cast<const OMPKRow &>(pkt),
+                                       connection_handle, request_generation_,
+                                       &seri_size, encode_ret);
+        break;
+      }
+      case ObMySQLPacketType::PKT_OKP: {
+        append_ret = encode_ok_packet(static_cast<const OMPKOK &>(pkt),
+                                      connection_handle, request_generation_,
+                                      &seri_size, encode_ret);
+        break;
+      }
+      default:
+        encode_ret = OB_NOT_SUPPORTED;
+        LOG_ERROR("MySQL response packet has no Rust encoder", K(encode_ret),
+                  K(pkt.get_mysql_packet_type()));
+        break;
+    }
+    if (OB_FAIL(encode_ret)) {
+      ret = encode_ret;
+    } else if (0 != append_ret) {
+      ret = OB_ERR_UNEXPECTED;
+      LOG_WARN("Rust MySQL response append failed", K(ret), K(append_ret),
+               K(pkt.get_mysql_packet_type()));
     }
   }
   return ret;
 }
 
-bool ObMPPacketSender::need_flush_buffer() const
-{
-  bool bret = false;
-  //there is data in buf
-  if (NULL != ez_buf_ && ez_buf_->pos != ez_buf_->last) {
-    if (comp_context_.is_proxy_compress_based() && comp_context_.last_pkt_pos_ == ez_buf_->pos) {
-      //the whole buf is proxy last packet, no need flush part
-    } else {
-      bret = true;
-    }
-  }
-  return bret;
-}
-
-int ObMPPacketSender::flush_buffer(const bool is_last)
-{
+int ObMPPacketSender::flush_buffer(const bool is_last) {
   int ret = OB_SUCCESS;
-  if (OB_UNLIKELY(!conn_valid_)) {
+  nio_connection_handle *connection_handle = nio_connection_handle_;
+  if (OB_UNLIKELY(!is_conn_valid())) {
     ret = OB_CONNECT_ERROR;
     LOG_WARN("connection in error, maybe has disconnected", K(ret));
-  } else if (req_has_wokenup_) {
+  } else if (RequestOwnership::OWNED != request_ownership_) {
     ret = OB_ERR_UNEXPECTED;
-    LOG_ERROR("req_has_wokenup, resource maybe has destroy", K(ret));
+    LOG_ERROR("request ownership has been released", K(ret));
   } else if (OB_ISNULL(req_)) {
     ret = OB_INVALID_ARGUMENT;
-    LOG_ERROR("req_ is null", KP_(ez_buf), KP_(req), K(ret));
-  } else if (OB_FAIL(alloc_ezbuf())) {
-    LOG_ERROR("easy buffer alloc failed", KP_(ez_buf), K(ret));
-  } else {
-    if (proto20_context_.is_proto20_used() && (FILL_PAYLOAD_STEP == proto20_context_.next_step_)) {
-      ObProtoEncodeParam param;
-      if (OB_FAIL(build_encode_param_(param, NULL, is_last))) {
-        LOG_ERROR("fail to build encode param", K(ret));
-      } else if (OB_FAIL(ObProto20Utils::fill_proto20_header_and_tailer(param))) {
-        LOG_ERROR("fail to fill ob20 protocol header and tailer", K(ret));
-      } else {
-      }
-
-      // `filename packet` is used in load local protocol.
-      // We use the field to indicate if we should set `is last packet flag`
-      proto20_context_.is_filename_packet_ = false;
-    }
-    
-    //int64_t buf_sz = ez_buf_->last - ez_buf_->pos;
-    if (OB_SUCCESS != ret) {
-    } else if (ObRequest::TRANSPORT_PROTO_EASY == nio_protocol_) {
-      ObFlushBufferParam flush_param(*ez_buf_, *req_->get_ez_req(), comp_context_,
-                                     conn_valid_, req_has_wokenup_, is_last);
-      if (OB_FAIL(ObMySQLRequestUtils::flush_buffer(flush_param))) {
-        LOG_WARN("failed to flush_buffer", K(ret));
-      }
-    } else if (ObRequest::TRANSPORT_PROTO_POC == nio_protocol_) {
-      if (comp_context_.use_compress()) {
-        ObEasyBuffer orig_send_buf(*ez_buf_);
-        if (OB_FAIL(ObMySQLRequestUtils::flush_compressed_buffer(is_last, comp_context_, orig_send_buf, *req_))) {
-          LOG_WARN("failed to flush buffer for compressed sql nio", K(ret));
-        }
-      } else {
-        if (is_last) {
-          if (OB_FAIL(SQL_REQ_OP.async_write_response(req_, ez_buf_->pos, ez_buf_->last - ez_buf_->pos))) {
-            LOG_WARN("write response fail", K(ret));
-          }
-        } else {
-          if (OB_FAIL(SQL_REQ_OP.write_response(req_, ez_buf_->pos, ez_buf_->last - ez_buf_->pos))) {
-            LOG_WARN("write response fail", K(ret));
-          } else {
-            init_easy_buf(ez_buf_, (char*)(ez_buf_ + 1),  NULL, ez_buf_->end - ez_buf_->pos);
-          }
-        }
-      }
-    } else {
-      if (is_last) {
-        if (OB_FAIL(SQL_REQ_OP.async_write_response(req_, ez_buf_->pos, ez_buf_->last - ez_buf_->pos))) {
-          LOG_WARN("write response fail", K(ret));
-        }
-      } else {
-        if (OB_FAIL(SQL_REQ_OP.write_response(req_, ez_buf_->pos, ez_buf_->last - ez_buf_->pos))) {
-          LOG_WARN("write response fail", K(ret));
-        } else {
-          init_easy_buf(ez_buf_, (char*)(ez_buf_ + 1),  NULL, ez_buf_->end - ez_buf_->pos);
-        }
-      }
-    }
-
-    if (OB_SUCC(ret)) {
-      if (proto20_context_.is_proto20_used()) {
-        // after flush, set pos to 0
-        proto20_context_.curr_proto20_packet_start_pos_ = 0;
-      }
-      /*
-      ObSQLSessionInfo *sess = nullptr;
-      if (OB_FAIL(get_session(sess))) {
-        LOG_WARN("fail to get session info", K(ret));
-      } else if (OB_ISNULL(sess)) {
-        // do nothing
-      } else {
-        sess->inc_out_bytes(buf_sz);
-      }
-      if (OB_NOT_NULL(sess)) {
-        GCTX.session_mgr_->revert_session(sess);
-      }*/
-    }
+    LOG_ERROR("req_ is null", KP_(req), K(ret));
+  } else if (0 != nio_response_flush(connection_handle, request_generation_,
+                                     is_last ? 1 : 0)) {
+    ret = OB_IO_ERROR;
+    LOG_WARN("flush Rust-owned MySQL response failed", K(ret), K(is_last),
+             K(request_generation_));
   }
   if (is_last) {
-    finish_sql_request();
+    const int finish_ret = finish_sql_request();
+    if (OB_SUCCESS == ret && OB_SUCCESS != finish_ret) {
+      ret = finish_ret;
+    }
   }
   return ret;
 }
 
-inline int ObMPPacketSender::build_encode_param_(ObProtoEncodeParam &param,
-                                                ObMySQLPacket *pkt,
-                                                const bool is_last)
-{
-  ObProtoEncodeParam::build_param(param,
-                                  pkt,
-                                  *ez_buf_,
-                                  conn_->sessid_,
-                                  is_last,
-                                  proto20_context_,
-                                  req_,
-                                  &extra_info_kvs_,
-                                  &extra_info_ecds_);
-  return OB_SUCCESS;
-}
-
-int ObMPPacketSender::get_conn_id(uint32_t &sessid) const
-{
+int ObMPPacketSender::get_conn_id(uint32_t &sessid) const {
   int ret = OB_SUCCESS;
   ObSMConnection *conn = get_conn();
   if (OB_ISNULL(conn)) {
@@ -1112,72 +1097,55 @@ int ObMPPacketSender::get_conn_id(uint32_t &sessid) const
   return ret;
 }
 
-int ObMPPacketSender::resize_ezbuf(const int64_t size)
-{
+int ObMPPacketSender::finish_sql_request() {
   int ret = OB_SUCCESS;
-  if (OB_ISNULL(req_)
-      || OB_ISNULL(ez_buf_)
-      || OB_UNLIKELY(size < static_cast<int64_t>(sizeof(easy_buf_t)))) {
-    ret = OB_INVALID_ARGUMENT;
-    LOG_WARN("invalid input size", K(size), KP_(req), KP_(ez_buf), K(ret));
-  } else {
-    const int64_t remain_data_size = ez_buf_->last - ez_buf_->pos;
-    char *buf = NULL;
-    if (size - sizeof(easy_buf_t) < remain_data_size) {
-      ret = OB_SUCCESS;
-      LOG_WARN("new size is too little, need alloc bigger", K(remain_data_size), K(size));
-    } else if (OB_ISNULL(buf = (char*)SQL_REQ_OP.alloc_sql_response_buffer(req_, size))) {
-      ret = OB_ALLOCATE_MEMORY_FAILED;
-      LOG_ERROR("allocate memory failed", K(size), K(ret));
-      disconnect();
+  if (RequestOwnership::OWNED == request_ownership_) {
+    if (OB_ISNULL(req_)) {
+        ret = OB_ERR_UNEXPECTED;
+        LOG_ERROR("owned mysql request has no request object", K(ret),
+                  K(request_generation_));
     } else {
-      easy_buf_t *tmp = reinterpret_cast<easy_buf_t *>(buf);
-      init_easy_buf(tmp, reinterpret_cast<char *>(tmp + 1),
-                    req_->get_ez_req()/*easy_buf need this to release m->pool ref*/, size - sizeof(easy_buf_t));
-      if (remain_data_size > 0) {
-        //if ezbuf has leave data, we need move it
-        MEMCPY(tmp->last, ez_buf_->pos, remain_data_size);
-        tmp->last = tmp->pos + remain_data_size;
-        ez_buf_->last = ez_buf_->pos;
-      }
-      if (comp_context_.last_pkt_pos_ == ez_buf_->pos) {
-        comp_context_.last_pkt_pos_ = tmp->pos;
-      }
-      ez_buf_ = tmp;
+        (void)release_read_packet_lease();
+        rpc::ObRequest *req = req_;
+        const uint64_t generation = request_generation_;
+        ret = SQL_REQ_OP.finish_sql_request(req, generation);
+        if (OB_SUCCESS != ret) {
+        // A true current owner is guaranteed a fail-closed prepare path by
+        // Rust. Reaching this branch therefore means stale/corrupt local
+        // ownership; request a generation-scoped shutdown before discarding
+        // that unusable identity.
+        const int shutdown_ret =
+            SQL_REQ_OP.disconnect_sql_conn(req, generation);
+        LOG_ERROR("failed to finish owned mysql request", K(ret),
+                  K(shutdown_ret), K(generation));
+        }
     }
+    // Do not relinquish local ownership until prepare/commit has returned.
+    // Repeated finish calls observe RELEASED and are strict no-ops.
+    clear_request_identity(RequestOwnership::RELEASED);
   }
   return ret;
 }
 
-int ObMPPacketSender::update_transmission_checksum_flag(const ObSQLSessionInfo &session)
-{
+int ObMPPacketSender::detach_for_retry() {
   int ret = OB_SUCCESS;
-  if (OB_UNLIKELY(!conn_valid_)) {
-    ret = OB_CONNECT_ERROR;
-    LOG_WARN("connection in error, maybe has disconnected", K(ret));
-  }
-  // obproxy support removed: OB_CAP_CHECKSUM_SWITCH was proxy-only
-  return ret;
-}
-
-void ObMPPacketSender::finish_sql_request()
-{
-  if (conn_valid_ && !req_has_wokenup_) {
-    (void)release_read_handle();
-    SQL_REQ_OP.finish_sql_request(req_);
-    req_has_wokenup_ = true;
-    ez_buf_ = NULL;
-  }
-}
-
-int ObMPPacketSender::clean_buffer()
-{
-  int ret = OB_SUCCESS;
-  CK (OB_NOT_NULL(ez_buf_));
-  if (OB_SUCC(ret)) {
-    ez_buf_->last = reinterpret_cast<char*>(ez_buf_ + 1);
-    ez_buf_->pos = reinterpret_cast<char*>(ez_buf_ + 1);
-    seq_ = 1;
+  if (RequestOwnership::RELEASED == request_ownership_ ||
+      RequestOwnership::DETACHED_FOR_RETRY == request_ownership_) {
+    // A processor with no request ownership has nothing to transfer.
+  } else if (RequestOwnership::OWNED != request_ownership_ || OB_ISNULL(req_)) {
+    ret = OB_STATE_NOT_MATCH;
+    LOG_ERROR("invalid mysql request ownership for packet retry", K(ret));
+  } else if (response_started_ || mid_request_read_started_ ||
+             0 != read_packet_lease_) {
+    // Retrying after any wire progress would let the next processor inherit
+    // bytes or a sequence cursor from a failed attempt. Leave ownership in
+    // place so reset/destruction finishes and closes instead.
+    ret = OB_STATE_NOT_MATCH;
+    LOG_ERROR("cannot retry mysql request after wire progress", K(ret),
+              K(response_started_), K_(mid_request_read_started),
+              K_(read_packet_lease));
+  } else {
+    clear_request_identity(RequestOwnership::DETACHED_FOR_RETRY);
   }
   return ret;
 }
@@ -1189,40 +1157,28 @@ bool ObMPPacketSender::has_pl()
   if (obmysql::COM_STMT_PREPARE == pkt.get_cmd()
         || obmysql::COM_STMT_EXECUTE == pkt.get_cmd()
         || obmysql::COM_QUERY == pkt.get_cmd()
-        || obmysql::COM_STMT_PREXECUTE == pkt.get_cmd()
         || obmysql::COM_STMT_FETCH == pkt.get_cmd()) {
     has_pl = true;
   }
   return has_pl;
 }
 
-// current max_allow_packet_size <= 1G, TODO haozheng
-int64_t ObMPPacketSender::TRY_EZ_BUF_SIZES[] = {64*1024, 128*1024, 2*1024*1024 - 1024, 4*1024*1024 - 1024,
-                                                64*1024*1024 - 1024, 128*1024*1024, 512*1024*1024, 1024*1024*1024};
-
-int ObMPPacketSender::init_read_handle()
+// Teardown counterpart of wait_packet: drop any packet body still leased to
+// C++ before the request identity is discarded.
+int ObMPPacketSender::release_read_packet_lease()
 {
   int ret = OB_SUCCESS;
-  if (OB_NOT_NULL(read_handle_)) {
-    ret = OB_INVALID_ARGUMENT;
-  } else {
-    ret = SQL_REQ_OP.create_read_handle(req_, read_handle_);
-    LOG_DEBUG("create read handle", KP(req_), KP_(read_handle));
+  if (0 != read_packet_lease_) {
+    if (OB_FAIL(SQL_REQ_OP.release_read_packet(req_, request_generation_,
+                                               read_packet_lease_))) {
+    }
+    // A matching request commit is Rust's final cleanup fallback if this
+    // explicit release lost a shutdown or generation race.
+    read_packet_lease_ = 0;
   }
-  return ret;
-}
-
-int ObMPPacketSender::release_read_handle()
-{
-  int ret = OB_SUCCESS;
-  if (OB_NOT_NULL(read_handle_)) {
-    LOG_DEBUG("release read handle", KP(req_), KP_(read_handle));
-    ret = SQL_REQ_OP.release_read_handle(req_, read_handle_);
-    read_handle_ = NULL;
-  }
+  mid_request_read_started_ = false;
   return ret;
 }
 
 }; // end namespace observer
 }; // end namespace oceanbase
-

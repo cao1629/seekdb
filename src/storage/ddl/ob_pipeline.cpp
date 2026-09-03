@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+#include "data_plane/direct_load/ob_table_load_row_array_lifecycle.h"
 #include "storage/ddl/ob_pipeline.h"
 #include "storage/ddl/ob_ddl_struct.h"
 #include "storage/ddl/ob_ddl_pipeline.h"
@@ -25,30 +26,27 @@ using namespace oceanbase::common;
 using namespace oceanbase::storage;
 using namespace oceanbase::blocksstable;
 using namespace oceanbase::share;
-using namespace oceanbase::table;
 
 ObChunk::~ObChunk() 
 {
-  if (type_ == DIRECT_LOAD_BATCH_DATUM_ROWS && direct_load_batch_rows_ != nullptr) {
-    direct_load_batch_rows_->~ObDirectLoadBatchDatumRows();
-    ob_free(direct_load_batch_rows_);
-    direct_load_batch_rows_ = nullptr;
+  if (type_ == DDL_BATCH_DATUM_ROWS && ddl_batch_rows_ != nullptr) {
+    ddl_batch_rows_->~ObDDLBatchDatumRows();
+    ob_free(ddl_batch_rows_);
+    ddl_batch_rows_ = nullptr;
     type_ = INVALID_TYPE;
-  } else if (CG_ROW_TMP_FILES == type_ && nullptr != cg_row_file_arr_) {
-    for (int64_t i = 0; i < cg_row_file_arr_->count(); ++i) {
-      ObCGRowFile *&cg_row_file = cg_row_file_arr_->at(i);
-      if (nullptr != cg_row_file) {
-        cg_row_file->~ObCGRowFile();
-        ob_free(cg_row_file);
-        cg_row_file = nullptr;
+  } else if (DDL_ROW_TMP_FILES == type_ && nullptr != row_file_arr_) {
+    for (int64_t i = 0; i < row_file_arr_->count(); ++i) {
+      ObDDLRowFile *&row_file = row_file_arr_->at(i);
+      if (nullptr != row_file) {
+        row_file->~ObDDLRowFile();
+        ob_free(row_file);
+        row_file = nullptr;
       }
     }
-    cg_row_file_arr_->~ObArray<ObCGRowFile *>();
-    ob_free(cg_row_file_arr_);
-    cg_row_file_arr_ = nullptr;
+    row_file_arr_->~ObArray<ObDDLRowFile *>();
+    ob_free(row_file_arr_);
+    row_file_arr_ = nullptr;
     type_ = INVALID_TYPE;
-  } else if (DIRECT_LOAD_ROW_ARRAY == type_) {
-    OB_DELETE(ObTableLoadTabletObjRowArray, ObMemAttr("TLD_RowArray"), row_array_);
   }
 }
 
@@ -64,11 +62,9 @@ bool ObChunk::is_valid() const
   if (bret) {
     switch (type_) {
       case ChunkType::DATUM_ROW:
-      case ChunkType::MACRO_BUFFER:
-      case ChunkType::DIRECT_LOAD_BATCH_DATUM_ROWS:
-      case ChunkType::CG_ROW_TMP_FILES:
+      case ChunkType::DDL_BATCH_DATUM_ROWS:
+      case ChunkType::DDL_ROW_TMP_FILES:
       case ChunkType::BATCH_DATUM_ROWS:
-      case ChunkType::DIRECT_LOAD_ROW_ARRAY:
       case ChunkType::TASK_BATCH_INFO:
         bret = nullptr != data_ptr_;
         break;
@@ -103,9 +99,7 @@ int ObPipelineOperator::execute_op(
     ret = OB_INVALID_ARGUMENT;
     LOG_WARN("there are invalid argument", K(ret), K(input_chunk));
   } else if (OB_FAIL(execute(input_chunk, result_state, output_chunk))) {
-    LOG_WARN("fail to execute operator", K(ret));
   } else if (OB_FAIL(try_execute_finish(input_chunk, result_state, output_chunk))) {
-    LOG_WARN("fail to execute finish", K(ret));
   }
   return ret;
 }
@@ -139,7 +133,6 @@ int ObPipeline::add_op(ObPipelineOperator *op)
     ret = OB_INVALID_ARGUMENT;
     LOG_WARN("invalid argument", K(ret), KPC(op));
   } else if (OB_FAIL(ops_.push_back(op))) {
-    LOG_WARN("push back operator failed", K(ret), KPC(op));
   }
   return ret;
 }
@@ -151,7 +144,6 @@ int ObPipeline::push(const ObChunk &chunk_data)
     ret = OB_INVALID_ARGUMENT;
     LOG_WARN("invalid argument", K(ret), K(chunk_data));
   } else if (OB_FAIL(execute_ops(0, chunk_data))) {
-    LOG_WARN("execute operators from start failed", K(ret), K(chunk_data));
   }
   return ret;
 }
@@ -179,7 +171,6 @@ int ObPipeline::execute_ops(const int64_t start_pos, const ObChunk &chunk_data)
       } else if (input_chunk.is_valid()) {
         ObPipelineOperator::ResultState result_state = ObPipelineOperator::ResultState::INVALID_VALUE;
         if (OB_FAIL(curr_op->execute_op(input_chunk, result_state, output_chunk))) {
-          LOG_WARN("current op execute failed", K(ret), K(input_chunk));
         }
 
         if (OB_FAIL(ret)) {
@@ -198,7 +189,6 @@ int ObPipeline::execute_ops(const int64_t start_pos, const ObChunk &chunk_data)
             int64_t next_op_idx = op_idx + 1;
             const ObChunk &tmp_input_chunk = output_chunk;
             if (OB_FAIL(execute_ops(next_op_idx, tmp_input_chunk))) {
-              LOG_WARN("execute ops failed", K(ret), K(next_op_idx), K(tmp_input_chunk));
             }
           }
         } else {

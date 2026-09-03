@@ -53,8 +53,6 @@ int ObRawEncoder::init(const ObColumnEncodingCtx &ctx,
     ret = OB_INIT_TWICE;
     LOG_WARN("init twice", K(ret));
   } else if (OB_FAIL(ObIColumnEncoder::init(ctx, column_index, rows))) {
-    LOG_WARN("init base column encoder failed",
-        K(ret), K(ctx), K(column_index), "row count", rows.count());
   } else {
     column_header_.type_ = type_;
     store_class_ = get_store_class_map()[ob_obj_type_class(column_type_.get_type())];
@@ -131,8 +129,7 @@ int ObRawEncoder::traverse(const bool force_var_store, bool &suitable)
       case ObStringSC:
       case ObTextSC:
       case ObJsonSC:
-      case ObGeometrySC:
-      case ObRoaringBitmapSC: {
+      case ObGeometrySC: {
           if (force_var_store || fix_data_size_ < 0) {
             desc_.is_var_data_ = true;
           } else {
@@ -172,7 +169,6 @@ int ObRawEncoder::traverse(const bool force_var_store, bool &suitable)
       }
     }
   }
-  LOG_DEBUG("data desc", K_(desc), K(*this));
 
   return ret;
 }
@@ -219,8 +215,7 @@ int ObRawEncoder::get_var_length(const int64_t row_id, int64_t &length)
         case ObStringSC:
         case ObTextSC:
         case ObJsonSC:
-        case ObGeometrySC:
-        case ObRoaringBitmapSC: {
+        case ObGeometrySC: {
           length = datum.len_;
           break;
         }
@@ -285,8 +280,7 @@ int ObRawEncoder::store_fix_data(ObBufferWriter &buf_writer)
     column_header_.length_ = static_cast<uint32_t>(desc_.bit_packing_length_ > 0
         ? desc_.bit_packing_length_
         : desc_.fix_data_length_);
-    if (OB_FAIL(fill_column_store(buf_writer, *ctx_->col_datums_, getter, DatumDataSetter()))) {
-      LOG_WARN("fill datum column store failed", K(ret));
+    if (OB_FAIL(fill_fixed_data(buf_writer, *ctx_->col_datums_, getter, DatumDataSetter()))) {
     }
   }
   return ret;

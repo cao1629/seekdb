@@ -19,26 +19,24 @@
 
 #include "share/config/ob_reload_config.h"
 #include "share/config/ob_server_config.h"
-#include "observer/ob_server_struct.h"
+#include "share/ob_server_struct.h"
 
 namespace oceanbase
 {
 namespace observer
 {
 
-int set_cluster_name_hash(const common::ObString &cluster_name);
-int calc_cluster_name_hash(const common::ObString &cluster_name, uint64_t &cluster_name_hash);
 class ObServerReloadConfig
   : public common::ObReloadConfig
 {
 public:
-  ObServerReloadConfig(common::ObServerConfig &config, ObGlobalContext &gctx);
+  ObServerReloadConfig(common::ObServerConfig &config, share::ObGlobalContext &gctx);
   virtual ~ObServerReloadConfig();
 
   int operator()();
 private:
-  void reload_tenant_scheduler_config_();
-  void reload_tenant_freezer_config_();
+  void reload_scheduler_config_();
+  void reload_memstore_freezer_config_();
 private:
   ObGlobalContext &gctx_;
 };

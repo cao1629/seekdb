@@ -58,7 +58,6 @@ int ObColumnNamespaceChecker::remove_reference_table(int64_t tid)
   for (int64_t i = 0; OB_SUCC(ret) && i < all_table_refs_.count(); i++) {
     if (tid == all_table_refs_.at(i)->table_id_) {
       if (OB_FAIL(all_table_refs_.remove(i))) {
-        LOG_WARN("failed to remove all_table_refs", K(ret));
       }
       break;
     }
@@ -67,9 +66,9 @@ int ObColumnNamespaceChecker::remove_reference_table(int64_t tid)
 }
 
 /*
- * if database name or table name is not specified, we must check the uniqueness of column in the table with the same name
- * for oracle mode, if table name is specified, we need to make sure that this column does not appear in the using columns in the joined table
- * for example, select t1.a from t1 inner join t2 using (a), this is not allowed in oracle mode
+ * If database name or table name is not specified, check column uniqueness in
+ * tables with the same name. If table name is specified, make sure the column
+ * does not appear in the using columns in the joined table.
  */
 int ObColumnNamespaceChecker::check_table_column_namespace(const ObQualifiedName &q_name,
                                                            const TableItem *&table_item)
@@ -129,7 +128,6 @@ int ObColumnNamespaceChecker::check_column_existence_in_using_clause(const uint6
                                                        column_name,
                                                        *cur_table,
                                                        exist))) {
-      LOG_WARN("failed to check column existence in using clause", K(ret));
     } else if (exist) {
       ret = OB_ERR_QUALIFIER_EXISTS_FOR_USING_COLUMN;
       LOG_WARN("column part of using clause can not have qualifier", K(ret));
@@ -187,14 +185,12 @@ int ObColumnNamespaceChecker::check_column_existence_in_using_clause(const uint6
                                                                            column_name,
                                                                            *joined_table.left_table_,
                                                                            exist)))) {
-        LOG_WARN("failed to check column existence in using scope", K(ret));
       } else if (exist) {
         /*do nothing*/
       } else if (OB_FAIL(SMART_CALL(check_column_existence_in_using_clause(table_id,
                                                                            column_name,
                                                                            *joined_table.right_table_,
                                                                            exist)))) {
-        LOG_WARN("failed to check column existence in using scope", K(ret));
       } else { /*do nothing*/ }
     }
   }
@@ -224,7 +220,6 @@ int ObColumnNamespaceChecker::check_ext_table_column_namespace(
               cur_table->get_object_name(),
               OB_TABLE_NAME_CLASS,
               is_match))) {
-        LOG_WARN("table name case compare failed", K(ret));
       } else if (is_match) {
         table_item = cur_table;
         break;
@@ -256,9 +251,7 @@ int ObColumnNamespaceChecker::check_using_column_namespace(const ObString &colum
     ret = OB_ERR_UNEXPECTED;
     LOG_WARN("current joined table is null", K(joined_table), K(l_table), K(r_table));
   } else if (OB_FAIL(find_column_in_table(*r_table, q_name, right_table, r_need_check_unique))) {
-    LOG_WARN("find column in right joined table failed", K(ret), K(column_name));
   } else if (OB_FAIL(find_column_in_table(*l_table, q_name, left_table, l_need_check_unique))) {
-    LOG_WARN("find column in left joined table failed", K(ret), K(column_name));
   }
   return ret;
 }
@@ -281,13 +274,12 @@ int ObColumnNamespaceChecker::check_column_exists(const TableItem &table_item, c
     LOG_WARN("params_.session_info_ is null", K(ret));
   } else if (table_item.is_basic_table()) {
     //check column name in schema checker
-    if (0 == col_name.case_compare("ORA_ROWSCN") || 0 == col_name.case_compare(OB_MLOG_OLD_NEW_COLUMN_NAME)) {
+    if (0 == col_name.case_compare("ORA_ROWSCN")) {
       //only basic table has ora_rowscn
       is_exist = true;
     } else if (OB_FAIL(params_.schema_checker_->check_column_exists(table_id,
                                                                     col_name,
                                                                     is_exist))) {
-      LOG_WARN("check column exists failed", K(ret));
     }
   } else if (table_item.is_generated_table() || table_item.is_temp_table() || table_item.is_lateral_table()) {
     ObSelectStmt *ref_stmt = table_item.ref_query_;
@@ -299,22 +291,23 @@ int ObColumnNamespaceChecker::check_column_exists(const TableItem &table_item, c
       int64_t unduplicable_count = 0;
       for (int64_t i = 0; OB_SUCC(ret) && i < ref_stmt->get_select_item_size(); ++i) {
         SelectItem& tmp_select_item = ref_stmt->get_select_item(i);
-        if (ObCharset::case_compat_mode_equal(col_name, tmp_select_item.alias_name_)) {
+        if (ObCharset::case_insensitive_equal(col_name, tmp_select_item.alias_name_)) {
           unduplicable_count += (tmp_select_item.expr_->is_column_ref_expr() 
                   && !(static_cast<ObColumnRefRawExpr *>(tmp_select_item.expr_)->is_joined_dup_column())) ? 1 : 0;
-          // In oracle mode, const expr does not raise ambiguously error. More than one aggr funcs in PIVOT should
-          // raise ambiguously error.
+          // Const expr does not raise ambiguous error. More than one aggregate
+          // function in PIVOT should raise ambiguous error.
           if (!is_exist) {
             // set the is_exist = true, is there is a column with the same column name.
             // no matter the column is a duplicable column, we should set the exists to true.
             is_exist = true;
             break;
           } else if (!skip_join_dup) {
-            // 1. in oracle mode and resolve_star cases: only if we meet more than 2 unduplicable column we raise Column Ambiguous error.
-            // duplicable column means the column is a duplicated column in joined table, but not in using.
+            // 1. In resolve_star cases, only more than two unduplicable columns
+            // raise Column Ambiguous error. Duplicable column means the column
+            // is duplicated in a joined table, but not in using.
             // 2. in other cases, we raise error whenever there are columns with same name.
             ret = OB_NON_UNIQ_ERROR;
-            LOG_WARN("column duplicated, should happen in ORACLE mode only", K(col_name), K(ret));
+            LOG_WARN("column duplicated", K(col_name), K(ret));
             ObString scope_name = ObString::make_string(get_scope_name(T_FIELD_LIST_SCOPE));
             LOG_USER_ERROR(OB_NON_UNIQ_ERROR,
                           col_name.length(),
@@ -329,13 +322,11 @@ int ObColumnNamespaceChecker::check_column_exists(const TableItem &table_item, c
     // cte table check columns according to the generate way
     if (OB_FAIL(params_.schema_checker_->check_column_exists(
         table_id, col_name, is_exist))) {
-      LOG_WARN("check column exists failed", K(ret));
     }
   } else if (table_item.is_function_table()) {
     if (OB_FAIL(ObResolverUtils::check_function_table_column_exist(table_item,
                                                                    params_,
                                                                    col_name))) {
-      LOG_WARN("failed to check function table column exist", K(ret), K(col_name));
     } else {
       is_exist = true;
     }
@@ -344,7 +335,6 @@ int ObColumnNamespaceChecker::check_column_exists(const TableItem &table_item, c
                                                                 params_,
                                                                 col_name,
                                                                 is_exist))) {
-      LOG_WARN("failed to check json table column exist", K(ret), K(col_name));
     }
   } else if (table_item.is_values_table()) {
     ObSEArray<ObColumnRefRawExpr *, 4> values_desc;
@@ -352,14 +342,13 @@ int ObColumnNamespaceChecker::check_column_exists(const TableItem &table_item, c
       ret = OB_ERR_UNEXPECTED;
       LOG_WARN("get unexpected null", K(ret), K(dml_stmt_));
     } else if (OB_FAIL(dml_stmt_->get_column_exprs(table_item.table_id_, values_desc))) {
-      LOG_WARN("failed to get column exprs");
     } else {
       for (int64_t i = 0; OB_SUCC(ret) && !is_exist && i < values_desc.count(); ++i) {
         if (OB_ISNULL(values_desc.at(i))) {
           ret = OB_ERR_UNEXPECTED;
           LOG_WARN("get unexpected null", K(ret), K(values_desc.at(i)));
         } else {
-          is_exist = ObCharset::case_compat_mode_equal(values_desc.at(i)->get_column_name(), col_name);
+          is_exist = ObCharset::case_insensitive_equal(values_desc.at(i)->get_column_name(), col_name);
         }
       }
     }
@@ -388,31 +377,12 @@ int ObColumnNamespaceChecker::find_column_in_single_table(const TableItem &table
   //if databasename or table name is not specified,
   //we must check the uniqueness of column in the table with the same name
   bool is_match = true;
-  LOG_TRACE("column info", K(q_name), K(table_item));
-  if (!q_name.catalog_name_.empty()) {
-    if (OB_FAIL(ObResolverUtils::name_case_cmp(params_.session_info_,
-                                               q_name.catalog_name_,
-                                               table_item.catalog_name_,
-                                               OB_TABLE_NAME_CLASS,
-                                               is_match))) {
-      LOG_WARN("catalog name case compare failed", K(ret));
-    }
-  }
-  if (OB_SUCC(ret) && is_match && !q_name.database_name_.empty()) {
+  if (!q_name.database_name_.empty()) {
     if (OB_FAIL(ObResolverUtils::name_case_cmp(params_.session_info_,
                                                q_name.database_name_,
                                                table_item.database_name_,
                                                OB_TABLE_NAME_CLASS,
                                                is_match))) {
-      LOG_WARN("database name case compare failed", K(ret));
-    }
-    if (OB_SUCC(ret) && !is_match && !table_item.synonym_db_name_.empty()
-        && OB_FAIL(ObResolverUtils::name_case_cmp(params_.session_info_,
-                                                  q_name.database_name_,
-                                                  table_item.synonym_db_name_,
-                                                  OB_TABLE_NAME_CLASS,
-                                                  is_match))) {
-      LOG_WARN("database name case compare failed", K(ret));
     }
   }
   if (OB_SUCC(ret) && is_match && !q_name.tbl_name_.empty()) {
@@ -421,12 +391,10 @@ int ObColumnNamespaceChecker::find_column_in_single_table(const TableItem &table
                                                table_item.get_object_name(),
                                                OB_TABLE_NAME_CLASS,
                                                is_match))) {
-      LOG_WARN("database name case compare failed", K(ret));
     }
   }
   if (OB_SUCC(ret) && is_match) {
     if (OB_FAIL(check_column_exists(table_item, q_name.col_name_, is_match))) {
-      LOG_WARN("check column exists failed", K(ret));
     }
   }
   if (OB_SUCC(ret) && !is_match) {
@@ -523,45 +491,6 @@ bool ObColumnNamespaceChecker::hit_join_table_using_name(const JoinedTable &join
     }
   }
   return bret;
-}
-
-int ObColumnNamespaceChecker::check_parittion_id_table_column_namespace(
-                              const ObQualifiedName &q_name,
-                              const TableItem *&table_item) {
-  int ret = OB_SUCCESS;
-  table_item = nullptr;
-  const TableItem *cur_table = nullptr;
-  bool is_match = false;
-  ObTableItemIterator table_item_iter(*this);
-  while (OB_SUCC(ret) && !is_match
-      && (cur_table = table_item_iter.get_next_table_item()) != nullptr) {
-    if (!q_name.tbl_name_.empty()) {
-      if (cur_table->is_joined_table()) {
-        if (OB_FAIL(check_rowid_existence_in_joined_table(params_.session_info_,
-                                                          q_name.tbl_name_,
-                                                          reinterpret_cast<const JoinedTable*>(cur_table),
-                                                          is_match,
-                                                          table_item))) {
-          LOG_WARN("failed to check rowid existence in joined table", K(ret));
-        }
-      } else if (OB_FAIL(ObResolverUtils::name_case_cmp(params_.session_info_,
-                                                        q_name.tbl_name_,
-                                                        cur_table->get_object_name(),
-                                                        OB_TABLE_NAME_CLASS,
-                                                        is_match))) {
-        LOG_WARN("table name case compare failed", K(ret),
-            K(q_name.tbl_name_), K(cur_table->get_object_name()));
-      } else if (is_match) {
-        table_item = cur_table;
-      }
-    } else if (!cur_table->is_joined_table() && NULL == table_item) {
-      table_item = cur_table;
-    } else {
-      ret = OB_NON_UNIQ_ERROR;
-      LOG_WARN("column in all tables is ambiguous", K(ret), K(q_name));
-    }
-  }
-  return ret;
 }
 
 int ObColumnNamespaceChecker::check_rowid_existence_in_joined_table(const ObSQLSessionInfo *session_info,

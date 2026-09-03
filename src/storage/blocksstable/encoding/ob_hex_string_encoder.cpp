@@ -62,8 +62,6 @@ int ObHexStringEncoder::init(
     ret = OB_INIT_TWICE;
     LOG_WARN("init twice", K(ret));
   } else if (OB_FAIL(ObIColumnEncoder::init(ctx, column_index, rows))) {
-    LOG_WARN("init base column encoder failed",
-        K(ret), K(ctx), K(column_index), "row count", rows.count());
   } else {
     column_header_.type_ = type_;
     min_string_size_ = INT64_MAX;
@@ -160,7 +158,6 @@ int ObHexStringEncoder::store_meta(ObBufferWriter &buf_writer)
     header_->reset();
     const int64_t size = sizeof(*header_) + hex_string_map_.size_;
     if (OB_FAIL(buf_writer.advance_zero(size))) {
-      LOG_WARN("advance meta store size failed", K(ret), K(size));
     } else {
       header_->max_string_size_ = static_cast<uint32_t>(max_string_size_);
       hex_string_map_.build_index(reinterpret_cast<unsigned char *>(header_->hex_char_array_));
@@ -185,8 +182,6 @@ int ObHexStringEncoder::store_data(
     if (STORED_NOT_EXT != ext_val) {
       if (OB_FAIL(bs.set(column_header_.extend_value_index_,
           extend_value_bit_, static_cast<int64_t>(ext_val)))) {
-        LOG_WARN("store extend value bit failed",
-            K(ret), K_(column_header), K_(extend_value_bit), K(ext_val));
       }
     } else {
       int64_t offset = 0;
@@ -272,9 +267,9 @@ void ObHexStringEncoder::reuse()
   MEMSET(&hex_string_map_, 0, sizeof(ObHexStringMap));
 }
 
-struct ObHexStringEncoder::ColumnStoreFiller
+struct ObHexStringEncoder::FixedDataFiller
 {
-  explicit ColumnStoreFiller(ObHexStringEncoder &encoder) : enc_(encoder) {}
+  explicit FixedDataFiller(ObHexStringEncoder &encoder) : enc_(encoder) {}
 
   // fill fix store value
   inline int operator()(
@@ -310,9 +305,8 @@ int ObHexStringEncoder::store_fix_data(ObBufferWriter &buf_writer)
       header_->length_ = static_cast<uint32_t>(desc_.fix_data_length_);
     }
     EmptyGetter getter;
-    ColumnStoreFiller filler(*this);
-    if (OB_FAIL(fill_column_store(buf_writer, *ctx_->col_datums_, getter, filler))) {
-      LOG_WARN("fill column store failed", K(ret));
+    FixedDataFiller filler(*this);
+    if (OB_FAIL(fill_fixed_data(buf_writer, *ctx_->col_datums_, getter, filler))) {
     }
   }
   return ret;

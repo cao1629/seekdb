@@ -36,6 +36,7 @@ namespace oceanbase
 {
 namespace common
 {
+struct ObDatumAccessContext;
 namespace datum_cmp
 {
 
@@ -110,9 +111,8 @@ struct ObDatumTCCmp<ObFloatTC, ObFloatTC> : public ObDefined<>
   inline static int real_value_cmp(T l, T r, int &cmp_ret)
   {
     cmp_ret = 0;
-    // Note: For NaN, we can't use C language compare logic, which is not compatible
-    // with oracle rule.
-    // Oracle NaN compare rule: NaN is the king (bigger than any number)
+    // Note: For NaN, we can't use C language compare logic.
+    // NaN sorts after any numeric value.
     if (isnan(l) || isnan(r)) {
       if (isnan(l) && isnan(r)) {
         cmp_ret = 0;
@@ -198,7 +198,6 @@ struct ObDatumTCCmp<ObDecimalIntTC, ObDecimalIntTC>: public ObDefined<>
   {
     int ret = OB_SUCCESS;
     if (OB_FAIL(wide::compare(l, r, cmp_ret))) {
-      COMMON_LOG(WARN, "compare error", K(ret));
     }
     return ret;
   }
@@ -309,29 +308,33 @@ struct ObDatumTypeCmp<ObTimestampType, ObTimestampType> : public ObTCPayloadCmp<
 
 struct ObDatumJsonCmpImpl
 {
-  static int cmp(const ObDatum &l, const ObDatum &r, int &cmp_ret, const bool is_lob);
+  static int cmp(const ObDatum &l, const ObDatum &r, int &cmp_ret, const bool is_lob,
+                 const ObDatumAccessContext *access_ctx);
 };
 
 template <bool HAS_LOB_LOCATOR>
 struct ObDatumJsonCmp : public ObDefined<>
 {
-  inline static int cmp(const ObDatum &l, const ObDatum &r, int &cmp_ret)
+  inline static int cmp(const ObDatum &l, const ObDatum &r, int &cmp_ret,
+                        const ObDatumAccessContext *access_ctx)
   {
-    return ObDatumJsonCmpImpl::cmp(l, r, cmp_ret, HAS_LOB_LOCATOR);
+    return ObDatumJsonCmpImpl::cmp(l, r, cmp_ret, HAS_LOB_LOCATOR, access_ctx);
   }
 };
 
 struct ObDatumGeoCmpImpl
 {
-  static int cmp(const ObDatum &l, const ObDatum &r, int &cmp_ret, const bool is_lob);
+  static int cmp(const ObDatum &l, const ObDatum &r, int &cmp_ret, const bool is_lob,
+                 const ObDatumAccessContext *access_ctx);
 };
 
 template <bool HAS_LOB_HEADER>
 struct ObDatumGeoCmp : public ObDefined<>
 {
-  inline static int cmp(const ObDatum &l, const ObDatum &r, int &cmp_ret)
+  inline static int cmp(const ObDatum &l, const ObDatum &r, int &cmp_ret,
+                        const ObDatumAccessContext *access_ctx)
   {
-    return ObDatumGeoCmpImpl::cmp(l, r, cmp_ret, HAS_LOB_HEADER);
+    return ObDatumGeoCmpImpl::cmp(l, r, cmp_ret, HAS_LOB_HEADER, access_ctx);
   }
 };
 
@@ -343,35 +346,23 @@ struct ObDatumUDTCmp : public ObDefined<>
     UNUSED(l);
     UNUSED(r);
     UNUSED(cmp_ret);
-    return OB_ERR_NO_ORDER_MAP_SQL;
+    return OB_ERR_INVALID_TYPE_FOR_OP;
   }
 };
 
 struct ObDatumCollectionCmpImpl
 {
-  static int cmp(const ObDatum &l, const ObDatum &r, int &cmp_ret, const bool is_lob);
+  static int cmp(const ObDatum &l, const ObDatum &r, int &cmp_ret, const bool is_lob,
+                 const ObDatumAccessContext *access_ctx);
 };
 
 template <bool HAS_LOB_HEADER>
 struct ObDatumCollectionCmp : public ObDefined<>
 {
-  inline static int cmp(const ObDatum &l, const ObDatum &r, int &cmp_ret)
+  inline static int cmp(const ObDatum &l, const ObDatum &r, int &cmp_ret,
+                        const ObDatumAccessContext *access_ctx)
   {
-    return ObDatumCollectionCmpImpl::cmp(l, r, cmp_ret, HAS_LOB_HEADER);
-  }
-};
-
-struct ObDatumRoaringbitmapCmpImpl
-{
-  static int cmp(const ObDatum &l, const ObDatum &r, int &cmp_ret, const bool is_lob);
-};
-
-template <bool HAS_LOB_HEADER>
-struct ObDatumRoaringbitmapCmp : public ObDefined<>
-{
-  inline static int cmp(const ObDatum &l, const ObDatum &r, int &cmp_ret)
-  {
-    return ObDatumRoaringbitmapCmpImpl::cmp(l, r, cmp_ret, HAS_LOB_HEADER);
+    return ObDatumCollectionCmpImpl::cmp(l, r, cmp_ret, HAS_LOB_HEADER, access_ctx);
   }
 };
 
@@ -403,7 +394,8 @@ struct ObDatumStrCmp : public ObDefined<SupportedCollection<CS_TYPE>::defined_>
 struct ObDatumTextCmpImpl
 {
   static OB_INLINE int cmp(const ObDatum &l, const ObDatum &r, int &cmp_ret,
-                 const ObCollationType cs, const bool with_end_space)
+                 const ObCollationType cs, const bool with_end_space,
+                 const ObDatumAccessContext *access_ctx)
   {
     int ret = OB_SUCCESS;
     const ObLobCommon& rlob = r.get_lob_data();
@@ -415,29 +407,33 @@ struct ObDatumTextCmpImpl
             rlob.get_inrow_data_ptr(), static_cast<int32_t>(rlob.get_byte_size(r.len_)), with_end_space);
       cmp_ret = cmp_ret > 0 ? 1 : (cmp_ret < 0 ? -1 : 0);
     } else {
-      ret = cmp_out_row(l, r, cmp_ret, cs, with_end_space);
+      ret = cmp_out_row(l, r, cmp_ret, cs, with_end_space, access_ctx);
     }
     return ret;
   }
 
 private:
   static int cmp_out_row(const ObDatum &l, const ObDatum &r, int &cmp_ret,
-                                   const ObCollationType cs, const bool with_end_space);
+                          const ObCollationType cs, const bool with_end_space,
+                          const ObDatumAccessContext *access_ctx);
 };
 
 template <ObCollationType CS_TYPE, bool WITH_END_SPACE>
 struct ObDatumTextCmp : public ObDefined<SupportedCollection<CS_TYPE>::defined_>
 {
-  inline static int cmp(const ObDatum &l, const ObDatum &r, int &cmp_ret)
+  inline static int cmp(const ObDatum &l, const ObDatum &r, int &cmp_ret,
+                        const ObDatumAccessContext *access_ctx)
   {
-    return ObDatumTextCmpImpl::cmp(l, r, cmp_ret, CS_TYPE, WITH_END_SPACE);
+    return ObDatumTextCmpImpl::cmp(
+        l, r, cmp_ret, CS_TYPE, WITH_END_SPACE, access_ctx);
   }
 };
 
 struct ObDatumTextStringCmpImpl
 {
   static OB_INLINE int cmp(const ObDatum &l, const ObDatum &r, int &cmp_ret,
-                 const ObCollationType cs, const bool with_end_space)
+                 const ObCollationType cs, const bool with_end_space,
+                 const ObDatumAccessContext *access_ctx)
   {
     int ret = OB_SUCCESS;
     const ObLobCommon& llob = l.get_lob_data();
@@ -447,29 +443,33 @@ struct ObDatumTextStringCmpImpl
           r.ptr_, r.len_, with_end_space);
       cmp_ret = cmp_ret > 0 ? 1 : (cmp_ret < 0 ? -1 : 0);
     } else {
-      ret = cmp_out_row(l, r, cmp_ret, cs, with_end_space);
+      ret = cmp_out_row(l, r, cmp_ret, cs, with_end_space, access_ctx);
     }
     return ret;
   }
 
 private:
   static int cmp_out_row(const ObDatum &l, const ObDatum &r, int &cmp_ret,
-                                   const ObCollationType cs, const bool with_end_space);
+                          const ObCollationType cs, const bool with_end_space,
+                          const ObDatumAccessContext *access_ctx);
 };
 
 template <ObCollationType CS_TYPE, bool WITH_END_SPACE>
 struct ObDatumTextStringCmp : public ObDefined<SupportedCollection<CS_TYPE>::defined_>
 {
-  inline static int cmp(const ObDatum &l, const ObDatum &r, int &cmp_ret)
+  inline static int cmp(const ObDatum &l, const ObDatum &r, int &cmp_ret,
+                        const ObDatumAccessContext *access_ctx)
   {
-    return ObDatumTextStringCmpImpl::cmp(l, r, cmp_ret, CS_TYPE, WITH_END_SPACE);
+    return ObDatumTextStringCmpImpl::cmp(
+        l, r, cmp_ret, CS_TYPE, WITH_END_SPACE, access_ctx);
   }
 };
 
 struct ObDatumStringTextCmpImpl
 {
   static int cmp(const ObDatum &l, const ObDatum &r, int &cmp_ret,
-                 const ObCollationType cs, const bool with_end_space)
+                 const ObCollationType cs, const bool with_end_space,
+                 const ObDatumAccessContext *access_ctx)
   {
     int ret = OB_SUCCESS;
     cmp_ret = 0;
@@ -480,21 +480,24 @@ struct ObDatumStringTextCmpImpl
           rlob.get_inrow_data_ptr(), static_cast<int32_t>(rlob.get_byte_size(r.len_)), with_end_space);
       cmp_ret = cmp_ret > 0 ? 1 : (cmp_ret < 0 ? -1 : 0);
     } else {
-      ret = cmp_out_row(l, r, cmp_ret, cs, with_end_space);
+      ret = cmp_out_row(l, r, cmp_ret, cs, with_end_space, access_ctx);
     }
     return ret;
   }
 private:
   static int cmp_out_row(const ObDatum &l, const ObDatum &r, int &cmp_ret,
-                                   const ObCollationType cs, const bool with_end_space);
+                          const ObCollationType cs, const bool with_end_space,
+                          const ObDatumAccessContext *access_ctx);
 };
 
 template <ObCollationType CS_TYPE, bool WITH_END_SPACE>
 struct ObDatumStringTextCmp : public ObDefined<SupportedCollection<CS_TYPE>::defined_>
 {
-  inline static int cmp(const ObDatum &l, const ObDatum &r, int &cmp_ret)
+  inline static int cmp(const ObDatum &l, const ObDatum &r, int &cmp_ret,
+                        const ObDatumAccessContext *access_ctx)
   {
-    return ObDatumStringTextCmpImpl::cmp(l, r, cmp_ret, CS_TYPE, WITH_END_SPACE);
+    return ObDatumStringTextCmpImpl::cmp(
+        l, r, cmp_ret, CS_TYPE, WITH_END_SPACE, access_ctx);
   }
 };
 

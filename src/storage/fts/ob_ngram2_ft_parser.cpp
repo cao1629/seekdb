@@ -17,13 +17,12 @@
 #include "storage/fts/ob_ngram2_ft_parser.h"
 
 #include "lib/charset/ob_ctype.h"
-#include "storage/fts/ob_fts_struct.h"
+#include "data_plane/fts/ob_fts_struct.h"
 #include "storage/fts/utils/ob_ft_ngram_impl.h"
 
 #define USING_LOG_PREFIX STORAGE_FTS
 
 using namespace oceanbase::common;
-using namespace oceanbase::plugin;
 
 namespace oceanbase
 {
@@ -55,7 +54,6 @@ int ObNgram2FTParser::init(ObFTParserParam *param)
                                       param->ft_length_,
                                       param->min_ngram_size_,
                                       param->max_ngram_size_))) {
-    LOG_WARN("fail to init ngram impl", K(ret), KPC(param));
   } else {
     is_inited_ = true;
   }
@@ -87,28 +85,13 @@ int ObNgram2FTParser::get_next_token(const char *&word,
   return ret;
 }
 
-ObNgram2FTParserDesc::ObNgram2FTParserDesc() : is_inited_(false) {}
-
-int ObNgram2FTParserDesc::init(ObPluginParam *param)
-{
-  is_inited_ = true;
-  return OB_SUCCESS;
-}
-
-int ObNgram2FTParserDesc::deinit(ObPluginParam *param)
-{
-  reset();
-  return OB_SUCCESS;
-}
+ObNgram2FTParserDesc::ObNgram2FTParserDesc() {}
 
 int ObNgram2FTParserDesc::segment(ObFTParserParam *param, ObITokenIterator *&iter) const
 {
   int ret = OB_SUCCESS;
   ObNgram2FTParser *parser = nullptr;
-  if (OB_UNLIKELY(!is_inited_)) {
-    ret = OB_NOT_INIT;
-    LOG_WARN("ngram ft parser desc hasn't be initialized", K(ret), K(is_inited_));
-  } else if (OB_ISNULL(param) || OB_ISNULL(param->fulltext_) || OB_UNLIKELY(!param->is_valid())) {
+  if (OB_ISNULL(param) || OB_ISNULL(param->fulltext_) || OB_UNLIKELY(!param->is_valid())) {
     ret = OB_INVALID_ARGUMENT;
     LOG_WARN("invalid argument", K(ret), KPC(param));
   } else if (OB_ISNULL(parser = OB_NEWx(ObNgram2FTParser, param->allocator_))) {

@@ -34,15 +34,6 @@ OB_SERIALIZE_MEMBER(ObTrigDMLCtDef,
                     rowid_old_expr_,
                     rowid_new_expr_);
 
-OB_SERIALIZE_MEMBER(ObErrLogCtDef,
-                    is_error_logging_,
-                    err_log_database_name_,
-                    err_log_table_name_,
-                    reject_limit_,
-                    err_log_values_,
-                    err_log_column_names_);
-
-
 OB_SERIALIZE_MEMBER(ObTriggerColumnsInfo::Flags, flags_);
 
 OB_DEF_SERIALIZE(ObTriggerColumnsInfo)
@@ -59,7 +50,6 @@ OB_DEF_DESERIALIZE(ObTriggerColumnsInfo)
   OB_UNIS_DECODE(flags_count);
   if (flags_count > 0) {
     if (OB_FAIL(init(flags_count))) {
-      LOG_WARN("failed to init trigger column infos", K(ret));
     } else {
       OB_UNIS_DECODE_ARRAY(flags_, flags_count);
       count_ = flags_count;
@@ -209,11 +199,10 @@ OB_SERIALIZE_MEMBER(ObDMLBaseCtDef,
                     column_ids_,
                     old_row_,
                     new_row_,
-                    error_logging_ctdef_,
                     view_check_exprs_,
                     is_primary_index_,
                     is_table_without_pk_, // FARM COMPAT WHITELIST, renamed
-                    has_instead_of_trigger_,
+                    reserved_advanced_trigger_,
                     trans_info_expr_,
                     is_vec_hnsw_index_vid_opt_);
 

@@ -17,17 +17,16 @@
 #define USING_LOG_PREFIX STORAGE_BLKMGR
 
 #include "ob_block_manager.h"
-#include "observer/omt/ob_multi_tenant.h"  // previously hidden behind a transitive include
-#include "share/rc/ob_module_provider.h"
-#include "observer/ob_server_utils.h"
+#include "ob_io_bench_controller.h"
+#include "share/rc/ob_server_runtime.h"
 #include "storage/blocksstable/ob_shared_macro_block_manager.h"
 #include "storage/tmp_file/ob_tmp_file_manager.h"
-#include "storage/meta_mem/ob_tenant_meta_mem_mgr.h"
+#include "storage/meta_mem/ob_storage_meta_mem_mgr.h"
 #include "storage/meta_store/ob_server_storage_meta_service.h"
-#include "storage/meta_store/ob_tenant_storage_meta_service.h"
+#include "storage/meta_store/ob_local_storage_meta_service.h"
 #include "storage/tablet/ob_tablet_macro_info_iterator.h"
-#include "share/io/ob_io_calibration.h"  // relocated-definition owner
-#include "share/io/ob_io_struct.h"  // relocated-definition owner
+#include "share/io/ob_io_calibration.h"
+#include "share/io/ob_io_struct.h"
 
 using namespace oceanbase::common;
 using namespace oceanbase::common::hash;
@@ -38,6 +37,53 @@ using namespace oceanbase::share;
 
 namespace oceanbase {
 namespace blocksstable {
+namespace
+{
+int calc_auto_extend_size(int64_t &cur_datafile_size,
+                          int64_t &actual_extend_size)
+{
+  int ret = OB_SUCCESS;
+  const int64_t datafile_maxsize = GCONF.datafile_maxsize;
+  const int64_t datafile_next = GCONF.datafile_next;
+  const int64_t datafile_size =
+      OB_STORAGE_OBJECT_MGR.get_total_macro_block_count()
+      * OB_STORAGE_OBJECT_MGR.get_macro_block_size();
+
+  if (OB_UNLIKELY(datafile_maxsize <= 0) || OB_UNLIKELY(datafile_size <= 0)) {
+    ret = OB_INVALID_ARGUMENT;
+    LOG_WARN("invalid datafile auto-extend argument",
+             K(ret), K(datafile_maxsize), K(datafile_size));
+  } else {
+    int64_t extend_size = 0;
+    const int64_t max_extend_file = datafile_maxsize - datafile_size;
+    if (0 == datafile_next) {
+      const int64_t datafile_next_scale_limit = 1L * 1024 * 1024 * 1024;
+      extend_size = MIN(datafile_size, datafile_next_scale_limit);
+    } else {
+      const int64_t datafile_next_minsize = 32 * 1024 * 1024;
+      if (datafile_next < datafile_next_minsize) {
+        const int64_t min_extend_size = datafile_maxsize * 10 / 100;
+        extend_size = MIN(min_extend_size, datafile_next_minsize);
+      } else {
+        extend_size = datafile_next;
+      }
+    }
+    actual_extend_size = MIN(extend_size, max_extend_file);
+    if (actual_extend_size <= 0) {
+      ret = OB_SERVER_OUTOF_DISK_SPACE;
+      if (REACH_TIME_INTERVAL(300 * 1000 * 1000L)) {
+        LOG_INFO("no more disk space to extend",
+                 K(ret), K(datafile_maxsize), K(datafile_size));
+      }
+    } else {
+      actual_extend_size += datafile_size;
+      cur_datafile_size = datafile_size;
+    }
+  }
+  return ret;
+}
+} // namespace
+
 /**
  * --------------------------------ObSuperBlockPreadChecker------------------------------------
  */
@@ -49,8 +95,6 @@ int ObSuperBlockPreadChecker::do_check(void *read_buf,
   HEAP_VAR(ObServerSuperBlock, tmp_super_block) {
     if (OB_FAIL(
             tmp_super_block.deserialize((char *)read_buf, read_size, pos))) {
-      LOG_WARN("deserialize super block fail", K(ret), KP(read_buf),
-               K(read_size), K(pos));
     } else if (OB_UNLIKELY(!tmp_super_block.is_valid())) {
       ret = OB_INVALID_ARGUMENT;
       LOG_WARN("deserialize super block is invalid", K(ret), K(tmp_super_block),
@@ -79,18 +123,6 @@ int ObSuperBlockPreadChecker::do_check(void *read_buf,
 }
 
 /**
- * ------------------------------------ObMacroBlockWriteInfo-------------------------------------
- */
-
-int ObMacroBlockWriteInfo::fill_io_info_for_backup(const blocksstable::MacroBlockId &macro_id, ObIOInfo &io_info) const
-{
-  // Backup removed, backup-mode macro blocks cannot exist
-  UNUSED(macro_id);
-  UNUSED(io_info);
-  return OB_SUCCESS;
-}
-
-/**
  * ------------------------------------ObMacroBlockRewriteSeqGenerator-------------------------------------
  */
 ObMacroBlockRewriteSeqGenerator::ObMacroBlockRewriteSeqGenerator()
@@ -114,8 +146,7 @@ int ObMacroBlockRewriteSeqGenerator::generate_next_sequence(uint64_t &blk_seq) {
     if (OB_UNLIKELY(BLOCK_SEQUENCE_WARNING_LINE < blk_seq)) {
       const int64_t remaining_rewritten_block_count =
           MacroBlockId::MAX_WRITE_SEQ - blk_seq;
-      LOG_ERROR("No rewritten sequence!!! This ObServer needs to migrate data "
-                "and offline!!!",
+      LOG_ERROR("macro block rewrite sequence is close to exhaustion; stop local writes before overflow",
                 K(remaining_rewritten_block_count));
     }
   }
@@ -144,16 +175,12 @@ int ObBlockManager::init(ObIODevice *io_device, const int64_t block_size) {
                          ObServerSuperBlockHeader::OB_MAX_SUPER_BLOCK_SIZE)) {
     ret = OB_INVALID_ARGUMENT;
     LOG_WARN("invalid argument, ", K(ret), KP(io_device), K(block_size));
-  } else if (OB_FAIL(timer_.set_run_wrapper_with_ret(MTL_CTX()))) {
-    LOG_WARN("fail to set_run_wrapper for timer", K(ret));
+  } else if (OB_FAIL(timer_.set_run_wrapper_with_ret(share::server_runtime()))) {
   } else if (OB_FAIL(timer_.init("BlkMgr"))) {
-    LOG_WARN("fail to init timer", K(ret));
   } else if (OB_FAIL(bucket_lock_.init(DEFAULT_LOCK_BUCKET_COUNT,
                                        ObLatchIds::BLOCK_MANAGER_LOCK))) {
-    LOG_WARN("fail to init bucket lock", K(ret));
-  } else if (OB_FAIL(block_map_.init(SET_USE_UNEXPECTED_500(
-                 ObMemAttr("BlockMap"))))) {
-    LOG_WARN("fail to init block map", K(ret));
+  } else if (OB_FAIL(block_map_.init(
+                 ObMemAttr("BlockMap")))) {
   } else {
     io_device_ = io_device;
     super_block_fd_.first_id_ = 0;  // super block default fd
@@ -185,17 +212,14 @@ int ObBlockManager::start(const int64_t reserved_size, bool &need_format) {
     ret = OB_NOT_INIT;
     LOG_WARN("not init", K(ret));
   } else if (OB_FAIL(io_device_->start(opts))) {
-    LOG_WARN("start io device fail", K(ret));
   } else {
     if (!timer_.task_exist(inspect_bad_block_task_)) {
       if (OB_FAIL(timer_.schedule(inspect_bad_block_task_, INSPECT_DELAY_US,
                                   true))) {
-        LOG_WARN("Fail to schedule inspect bad block task, ", K(ret));
       }
     }
     if (OB_SUCC(ret) && !timer_.task_exist(mark_block_task_)) {
       if (OB_FAIL(timer_.schedule(mark_block_task_, RECYCLE_DELAY_US, true))) {
-        LOG_WARN("Fail to schedule GC task, ", K(ret));
       }
     }
     if (OB_SUCC(ret) && OB_FAIL(timer_.start())) {
@@ -282,19 +306,15 @@ int ObBlockManager::alloc_object(ObStorageObjectHandle &object_handle) {
     ret = OB_NOT_INIT;
     LOG_WARN("ObBlockManager not init", K(ret));
   } else if (OB_FAIL(inner_alloc_block(opts, io_fd))) {
-    LOG_WARN("Failed to alloc block", K(ret));
   }
 
   if (OB_SUCC(ret)) {
     if (OB_FAIL(blk_seq_generator_.generate_next_sequence(write_seq))) {
-      LOG_WARN("Failed to generate next block id", K(ret), K(write_seq),
-               K_(blk_seq_generator));
     } else {
       macro_id.reset();
       macro_id.set_write_seq(write_seq);
       macro_id.set_block_index(io_fd.second_id_);
       if (OB_FAIL(object_handle.set_macro_block_id(macro_id))) {
-        LOG_ERROR("Failed to set macro block id", K(ret), K(macro_id));
       } else {
         ATOMIC_AAF(&alloc_num_, 1);
         FLOG_INFO("successfully alloc block", K(macro_id));
@@ -315,17 +335,13 @@ int ObBlockManager::alloc_block(ObMacroBlockHandle &macro_handle) {
     ret = OB_NOT_INIT;
     LOG_WARN("ObBlockManager not init", K(ret));
   } else if (OB_FAIL(inner_alloc_block(opts, io_fd))) {
-    LOG_WARN("Failed to alloc block", K(ret));
   }
 
   if (OB_SUCC(ret)) {
     if (OB_FAIL(blk_seq_generator_.generate_next_sequence(write_seq))) {
-      LOG_WARN("Failed to generate next block id", K(ret), K(write_seq),
-               K_(blk_seq_generator));
     } else {
       MacroBlockId macro_id(write_seq, io_fd.second_id_, 0);
       if (OB_FAIL(macro_handle.set_macro_block_id(macro_id))) {
-        LOG_ERROR("Failed to set macro block id", K(ret), K(macro_id));
       } else {
         ATOMIC_AAF(&alloc_num_, 1);
         FLOG_INFO("successfully alloc block", K(macro_id));
@@ -348,9 +364,7 @@ int ObBlockManager::async_write_block(const ObMacroBlockWriteInfo &write_info,
     ret = OB_INVALID_ARGUMENT;
     LOG_WARN("Invalid argument", K(ret), K(write_info));
   } else if (OB_FAIL(OB_SERVER_BLOCK_MGR.alloc_block(macro_handle))) {
-    LOG_WARN("fail to alloc block from block manager", K(ret));
   } else if (OB_FAIL(macro_handle.async_write(write_info))) {
-    LOG_WARN("Fail to async write block", K(ret), K(macro_handle));
   }
   return ret;
 }
@@ -359,9 +373,7 @@ int ObBlockManager::read_block(const ObMacroBlockReadInfo &read_info,
                                ObMacroBlockHandle &macro_handle) {
   int ret = OB_SUCCESS;
   if (OB_FAIL(async_read_block(read_info, macro_handle))) {
-    LOG_WARN("Fail to sync read block", K(ret), K(read_info));
   } else if (OB_FAIL(macro_handle.wait())) {
-    LOG_WARN("Fail to wait io finish", K(ret), K(read_info));
   }
   return ret;
 }
@@ -370,10 +382,7 @@ int ObBlockManager::write_block(const ObMacroBlockWriteInfo &write_info,
                                 ObMacroBlockHandle &macro_handle) {
   int ret = OB_SUCCESS;
   if (OB_FAIL(async_write_block(write_info, macro_handle))) {
-    LOG_WARN("Fail to sync write block", K(ret), K(write_info),
-             K(macro_handle));
   } else if (OB_FAIL(macro_handle.wait())) {
-    LOG_WARN("Fail to wait io finish", K(ret), K(write_info));
   }
   return ret;
 }
@@ -391,8 +400,6 @@ int ObBlockManager::read_super_block(ObServerSuperBlock &super_block,
       if (OB_FAIL(io_device_->pread(
               super_block_fd_, SUPER_BLOCK_OFFSET, buf_holder.get_len(),
               buf_holder.get_buffer(), read_size, &checker))) {
-        LOG_WARN("fail to write super block", K(ret), K_(super_block_fd),
-                 K(buf_holder), K(read_size));
       } else if (OB_UNLIKELY(buf_holder.get_len() != read_size)) {
         ret = OB_IO_ERROR;
         LOG_WARN("read size not equal super block size", K(ret), K(buf_holder),
@@ -417,21 +424,13 @@ int ObBlockManager::write_super_block(const ObServerSuperBlock &super_block,
                                       ObSuperBlockBufferHolder &buf_holder) {
   int ret = OB_SUCCESS;
   int64_t write_size = 0;
-#ifdef ERRSIM
-  ErrsimModuleGuard guard(ObErrsimModuleType::ERRSIM_MODULE_NONE);
-#endif
-
   if (!super_block.is_valid()) {
     ret = OB_INVALID_ARGUMENT;
     LOG_WARN("invalid arguments", K(ret), K(super_block));
   } else if (OB_FAIL(buf_holder.serialize_super_block(super_block))) {
-    LOG_ERROR("failed to serialize super block", K(ret), K(buf_holder),
-              K(super_block));
   } else if (OB_FAIL(io_device_->pwrite(super_block_fd_, SUPER_BLOCK_OFFSET,
                                         buf_holder.get_len(),
                                         buf_holder.get_buffer(), write_size))) {
-    LOG_WARN("fail to write super block", K(ret), K_(super_block_fd),
-             K(buf_holder), K(write_size));
   } else if (OB_UNLIKELY(buf_holder.get_len() != write_size)) {
     ret = OB_IO_ERROR;
     LOG_WARN("write size not equal super block size", K(ret), K(buf_holder),
@@ -449,7 +448,6 @@ int ObBlockManager::first_mark_device() {
     ret = OB_NOT_INIT;
     LOG_WARN("ObBlockManager not init", K(ret));
   } else if (OB_FAIL(io_device_->mark_blocks(iter))) {
-    LOG_WARN("fail to first mark blocks before running", K(ret));
   } else {
     blk_seq_generator_.update_sequence(iter.get_max_write_sequence());
     enable_mark_sweep();
@@ -509,7 +507,6 @@ int ObBlockManager::get_macro_block_info(
       block_info.access_time_ = ObTimeUtility::fast_current_time();
       block_info.ref_cnt_++;
       if (OB_FAIL(block_map_.insert_or_update(macro_id, block_info))) {
-        LOG_ERROR("update block info fail", K(ret), K(macro_id), K(block_info));
       } else {
         has_inc_ref = true;
         LOG_DEBUG("debug ref_cnt: inc_ref in memory", K(ret), K(macro_id),
@@ -519,14 +516,11 @@ int ObBlockManager::get_macro_block_info(
   }
   if (OB_SUCC(ret) && !macro_block_info.is_free_) {
     if (OB_FAIL(macro_block_handle.set_macro_block_id(macro_id))) {
-      LOG_ERROR("fatal error, fail to set macro block id", K(ret), K(macro_id),
-                K(macro_block_info));
     }
   }
   if (has_inc_ref) {
     int tmp_ret = OB_SUCCESS;
     if (OB_TMP_FAIL(dec_ref(macro_id))) {
-      LOG_ERROR("fail to decrease reference count", K(ret), K(macro_id));
     }
   }
 
@@ -567,7 +561,6 @@ int ObBlockManager::get_bad_block_infos(
   } else {
     lib::ObMutexGuard bad_block_guard(bad_block_lock_);
     if (OB_FAIL(bad_block_infos.assign(bad_block_infos_))) {
-      LOG_WARN("fail to assign bad block infos, ", K(ret), K(bad_block_infos_));
     }
   }
   return ret;
@@ -603,8 +596,6 @@ int ObBlockManager::report_bad_block(const MacroBlockId &macro_block_id,
     } else if (OB_FAIL(databuff_printf(bad_block_info.error_msg_,
                                        sizeof(bad_block_info.error_msg_), "%s",
                                        error_msg))) {
-      LOG_WARN("Error msg is too long, ", K(ret), K(error_msg),
-               K(sizeof(bad_block_info.error_msg_)));
     } else {
       STRNCPY(bad_block_info.store_file_path_, file_path,
               sizeof(bad_block_info.store_file_path_) - 1);
@@ -613,8 +604,6 @@ int ObBlockManager::report_bad_block(const MacroBlockId &macro_block_id,
       bad_block_info.error_type_ = error_type;
       bad_block_info.check_time_ = ObTimeUtility::current_time();
       if (OB_FAIL(bad_block_infos_.push_back(bad_block_info))) {
-        LOG_WARN("fail to save bad block info, ", K(ret), K(bad_block_info),
-                 K(bad_block_infos_));
       } else {
         LOG_ERROR("add bad block info", K(bad_block_info));
       }
@@ -648,7 +637,6 @@ int ObBlockManager::resize_file(const int64_t new_data_file_size,
     io_d_opts.opts_ = opts;
     io_d_opts.opt_cnt_ = 3;
     if (OB_FAIL(io_device_->reconfig(io_d_opts))) {
-      LOG_WARN("fail to resize file", K(ret), K(new_data_file_size));
     } else {
       const int64_t new_actual_file_size = get_total_block_size();
       const int64_t new_macro_block_cnt =
@@ -659,8 +647,7 @@ int ObBlockManager::resize_file(const int64_t new_data_file_size,
         super_block.body_.total_macro_block_count_ = new_macro_block_cnt;
         super_block.body_.modify_timestamp_ = ObTimeUtility::current_time();
       }
-      // super block may have format upgrade. Whatever body changed, reconstruct
-      // header for safe
+      // Keep the super-block header consistent with the changed body.
       if (FAILEDx(super_block.construct_header())) {
         LOG_WARN("fail to construct header", K(ret));
       }
@@ -679,7 +666,7 @@ int ObBlockManager::inc_ref(const MacroBlockId &macro_id) {
   } else if (OB_UNLIKELY(!macro_id.is_valid())) {
     ret = OB_INVALID_ARGUMENT;
     LOG_ERROR("Invalid argument, ", K(ret), K(macro_id));
-  } else if (macro_id.is_local_id()) {
+  } else {
     ObBucketHashWLockGuard lock_guard(bucket_lock_, macro_id.hash());
     if (OB_FAIL(block_map_.get(macro_id, block_info))) {
       if (OB_ENTRY_NOT_EXIST == ret) {
@@ -700,7 +687,6 @@ int ObBlockManager::inc_ref(const MacroBlockId &macro_id) {
       block_info.access_time_ = ObTimeUtility::fast_current_time();
       block_info.ref_cnt_++;
       if (OB_FAIL(block_map_.insert_or_update(macro_id, block_info))) {
-        LOG_ERROR("update block info fail", K(ret), K(macro_id), K(block_info));
       } else {
         LOG_DEBUG("debug ref_cnt: inc_ref in memory", K(ret), K(macro_id),
                   K(block_info), K(lbt()));
@@ -720,10 +706,9 @@ int ObBlockManager::dec_ref(const MacroBlockId &macro_id) {
   } else if (OB_UNLIKELY(!macro_id.is_valid())) {
     ret = OB_INVALID_ARGUMENT;
     LOG_ERROR("Invalid argument, ", K(ret), K(macro_id));
-  } else if (macro_id.is_local_id()) {
+  } else {
     ObBucketHashWLockGuard lock_guard(bucket_lock_, macro_id.hash());
     if (OB_FAIL(block_map_.get(macro_id, block_info))) {
-      LOG_ERROR("get block_info fail", K(ret), K(macro_id));
     } else if (OB_UNLIKELY(0 == block_info.ref_cnt_)) {
       // BUG, should not happen
       ret = OB_ERR_SYS;
@@ -733,7 +718,6 @@ int ObBlockManager::dec_ref(const MacroBlockId &macro_id) {
       block_info.access_time_ = ObTimeUtility::fast_current_time();
       block_info.ref_cnt_--;
       if (OB_FAIL(block_map_.insert_or_update(macro_id, block_info))) {
-        LOG_ERROR("update block info fail", K(ret), K(macro_id), K(block_info));
       } else {
         LOG_DEBUG("debug ref_cnt: dec_ref in memory", K(ret), K(macro_id),
                   K(block_info), K(lbt()));
@@ -756,12 +740,10 @@ int ObBlockManager::update_write_time(const MacroBlockId &macro_id,
   } else {
     ObBucketHashWLockGuard lock_guard(bucket_lock_, macro_id.hash());
     if (OB_FAIL(block_map_.get(macro_id, block_info))) {
-      LOG_WARN("get block_info fail", K(ret), K(macro_id));
     } else {
       block_info.last_write_time_ =
           update_to_max_time ? INT64_MAX : ObTimeUtility::fast_current_time();
       if (OB_FAIL(block_map_.insert_or_update(macro_id, block_info))) {
-        LOG_WARN("update block info fail", K(ret), K(macro_id), K(block_info));
       }
     }
   }
@@ -801,9 +783,7 @@ void ObBlockManager::update_marker_status(const ObMacroBlockMarkerStatus &tmp_st
     marker_status_.ids_block_count_ = tmp_status.ids_block_count_;
     marker_status_.tmp_file_count_ = tmp_status.tmp_file_count_;
     marker_status_.data_block_count_ = tmp_status.data_block_count_;
-    marker_status_.shared_data_block_count_ = tmp_status.shared_data_block_count_;
     marker_status_.pending_free_count_ = tmp_status.pending_free_count_;
-    marker_status_.shared_meta_block_count_ = tmp_status.shared_meta_block_count_;
     marker_status_.hold_info_ = tmp_status.hold_info_;
   } else {
     // Mark skipped, update marker status with previous result.
@@ -813,9 +793,7 @@ void ObBlockManager::update_marker_status(const ObMacroBlockMarkerStatus &tmp_st
     marker_status_.ids_block_count_ = prev_result.ids_block_count_;
     marker_status_.tmp_file_count_ = prev_result.tmp_file_count_;
     marker_status_.data_block_count_ = prev_result.data_block_count_;
-    marker_status_.shared_data_block_count_ = prev_result.shared_data_block_count_;
     marker_status_.pending_free_count_ = prev_result.pending_free_count_;
-    marker_status_.shared_meta_block_count_ = prev_result.shared_meta_block_count_;
     marker_status_.hold_info_ = prev_result.hold_info_;
   }
 }
@@ -856,7 +834,6 @@ bool ObBlockManager::GetPendingFreeBlockFunctor::operator()(
   } else if (OB_UNLIKELY(blk_map_.count() >= max_free_blk_cnt_)) {
     // skip inserting more free block
   } else if (OB_FAIL(blk_map_.insert(key, true))) {
-    LOG_WARN("push back block id fail", K(ret), K(key));
   }
   ret_code_ = ret;
   return OB_SUCCESS == ret;
@@ -870,7 +847,6 @@ bool ObBlockManager::GetAllMacroBlockIdFunctor::operator()(
     LOG_ERROR("fatal error, macro block ref cnt less than 0", K(ret), K(key),
               K(value));
   } else if (OB_FAIL(block_ids_.push_back(key))) {
-    LOG_WARN("fail to push back macro block id", K(ret), K(key));
   }
   ret_code_ = ret;
   return OB_SUCCESS == ret;
@@ -884,7 +860,6 @@ bool ObBlockManager::DoBlockSweepFunctor::operator()(
     LOG_WARN("unexpected error, this block cannot be freed", K(macro_id),
              K(can_free));
   } else if (OB_FAIL(block_manager_.sweep_one_block(macro_id))) {
-    LOG_WARN("fail to sweep one block", K(ret), K(macro_id));
   }
   // record last failure ret
   ret_code_ = OB_SUCCESS == ret ? ret_code_ : ret;
@@ -915,7 +890,6 @@ bool ObBlockManager::LimitedIterGetBlockFunctor::operator()(const MacroBlockId &
     LOG_ERROR("fatal error, macro block ref cnt less than 0", K(ret), K(key),
               K(value));
   } else if (OB_FAIL(block_ids_.push_back(key))) {
-    LOG_WARN("fail to push back macro block id", K(ret), K(key));
   }
   ret_code_ = ret;
   max_iteration_--;
@@ -954,11 +928,9 @@ int ObBlockManager::sweep_one_block(const MacroBlockId &macro_id) {
   io_fd.first_id_ = macro_id.first_id();
   io_fd.second_id_ = macro_id.second_id();
   if (OB_FAIL(block_map_.get(macro_id, block_info))) {
-    LOG_WARN("fail to get block info from block map", K(ret), K(macro_id));
   } else if (OB_UNLIKELY(block_info.ref_cnt_ > 0)) {
     // skip using block.
   } else if (OB_FAIL(block_map_.erase(macro_id))) {
-    LOG_WARN("fail to erase block info from block map", K(ret), K(macro_id));
   } else {
     io_device_->free_block(io_fd);
     FLOG_INFO("block manager free block", K(macro_id), K(io_fd));
@@ -984,11 +956,9 @@ void ObBlockManager::mark_and_sweep()
     LOG_INFO("mark and sweep is disabled, do not mark and sweep this round");
   } else {
     if (OB_FAIL(mark_info.init(ObModIds::OB_STORAGE_FILE_BLOCK_REF))) {
-      LOG_WARN("fail to init mark info, ", K(ret));
     } else if (OB_FAIL(macro_id_set.create(MAX(2, MIN(MAX_FREE_BLOCK_COUNT_PER_ROUND, block_map_.get_bkt_cnt())),
                                            "BlkIdSetBkt",
                                            "BlkIdSetNode"))) {
-      LOG_WARN("fail to create macro id set", K(ret));
     } else {
       GetPendingFreeBlockFunctor pending_free_functor(
           MAX_FREE_BLOCK_COUNT_PER_ROUND, mark_info, tmp_status.hold_count_);
@@ -1023,7 +993,6 @@ void ObBlockManager::mark_and_sweep()
         // sweep
         SpinWLockGuard guard(sweep_lock_);
         if (OB_FAIL(do_sweep(mark_info))) {
-          LOG_WARN("do sweep fail", K(ret));
         } else if (tmp_status.mark_finished_) {
           tmp_status.last_end_time_ = ObTimeUtility::fast_current_time();
           tmp_status.sweep_cost_time_ = tmp_status.last_end_time_ - tmp_status.start_time_ - tmp_status.mark_cost_time_;
@@ -1052,36 +1021,24 @@ int ObBlockManager::mark_macro_blocks(
     ObMacroBlockMarkerStatus &tmp_status)
 {
   int ret = OB_SUCCESS;
-  omt::ObMultiTenant *omt = GCTX.omt_;
-
-  if (OB_ISNULL(omt)) {
-    ret = OB_ERR_UNEXPECTED;
-    LOG_WARN("unexpected error, omt is nullptr", K(ret), KP(omt));
-  } else if (0 == mark_info.count() && 0 == alloc_num_) {
+  if (0 == mark_info.count() && 0 == alloc_num_) {
     tmp_status.mark_finished_ = false;
     LOG_INFO("no block alloc/free, no need to mark blocks", K(ret));
   } else if (OB_FAIL(mark_tmp_file_blocks(mark_info, macro_id_set, tmp_status))) {
-    LOG_WARN("fail to mark tmp file blocks", K(ret));
   } else if (OB_FAIL(mark_server_meta_blocks(mark_info, macro_id_set, tmp_status))) {
-    LOG_WARN("fail to mark server meta blocks", K(ret));
   } else {
-    {
-      MacroBlockId macro_id;
-      MOD_SCOPE
-      {
-        CONSUMER_GROUP_FUNC_GUARD(ObFunctionType::PRIO_GC_MACRO_BLOCK);
-        if (OB_FAIL(mark_tenant_blocks(mark_info, macro_id_set, tmp_status))) {
-          LOG_WARN("fail to mark tenant blocks", K(ret));
-        } else if (OB_FALSE_IT(share::g_mp->shared_macro_block_mgr()->get_cur_shared_block(macro_id))) {
-        } else if (OB_FAIL(mark_held_shared_block(macro_id, mark_info, macro_id_set, tmp_status))) {
-          LOG_WARN("fail to mark shared block held by shared_macro_block_manager", K(ret), K(macro_id));
-        } else if (OB_FALSE_IT(share::g_mp->tenant_storage_meta_service()
-                                   ->get_shared_object_reader_writer()
-                                   .get_cur_shared_block(macro_id))) {
-        } else if (OB_FAIL(mark_held_shared_block(macro_id, mark_info, macro_id_set, tmp_status))) {
-          LOG_WARN("fail to mark shared block held by shared_reader_writer", K(ret), K(macro_id));
-        }
-      }
+    MacroBlockId macro_id;
+    if (OB_FAIL(mark_local_storage_blocks(mark_info, macro_id_set, tmp_status))) {
+    } else if (OB_FALSE_IT(
+                   ::oceanbase::share::server_service<::oceanbase::blocksstable::ObSharedMacroBlockMgr>()->get_cur_shared_block(
+                       macro_id))) {
+    } else if (OB_FAIL(
+                   mark_held_block(
+                       macro_id, mark_info, macro_id_set, tmp_status))) {
+    } else if (OB_FALSE_IT(::oceanbase::share::server_service<::oceanbase::storage::ObLocalStorageMetaService>()
+                               ->get_object_reader_writer()
+                               .get_cur_block(macro_id))) {
+    } else if (OB_FAIL(mark_held_block(macro_id, mark_info, macro_id_set, tmp_status))) {
     }
     if (OB_SUCC(ret)) {
       tmp_status.mark_finished_ = true;
@@ -1090,7 +1047,7 @@ int ObBlockManager::mark_macro_blocks(
   return ret;
 }
 
-int ObBlockManager::mark_held_shared_block(
+int ObBlockManager::mark_held_block(
     const MacroBlockId &macro_id, MacroBlkIdMap &mark_info,
     common::hash::ObHashSet<MacroBlockId, common::hash::NoPthreadDefendMode>
         &macro_id_set,
@@ -1098,9 +1055,8 @@ int ObBlockManager::mark_held_shared_block(
   int ret = OB_SUCCESS;
 
   if (!macro_id.is_valid()) {
-    // no small sstable, skip the mark
+    // no block is currently held
   } else if (OB_FAIL(update_mark_info(macro_id, mark_info))) {
-    LOG_WARN("fail to update mark info", K(ret), K(macro_id));
   } else if (OB_FAIL(
                  macro_id_set.set_refactored(macro_id, 0 /*no override*/))) {
     if (OB_HASH_EXIST != ret) {
@@ -1115,24 +1071,23 @@ int ObBlockManager::mark_held_shared_block(
   return ret;
 }
 
-int ObBlockManager::mark_tenant_blocks(
+int ObBlockManager::mark_local_storage_blocks(
     MacroBlkIdMap &mark_info,
     common::hash::ObHashSet<MacroBlockId, common::hash::NoPthreadDefendMode>
         &macro_id_set,
     ObMacroBlockMarkerStatus &tmp_status) {
   int ret = OB_SUCCESS;
-  ObTenantStorageMetaService *meta_service = share::g_mp->tenant_storage_meta_service();
-  ObTenantMetaMemMgr *t3m = share::g_mp->tenant_meta_mem_mgr();
+  ObLocalStorageMetaService *meta_service = ::oceanbase::share::server_service<::oceanbase::storage::ObLocalStorageMetaService>();
+  ObStorageMetaMemMgr *t3m = ::oceanbase::share::server_service<::oceanbase::storage::ObStorageMetaMemMgr>();
   if (OB_ISNULL(t3m) || OB_ISNULL(meta_service)) {
     ret = OB_ERR_UNEXPECTED;
-    LOG_WARN("unexpected error, t3m or meta_service of mtl is nullptr", K(ret),
+    LOG_WARN("unexpected null storage metadata service", K(ret),
              KP(t3m), KP(meta_service));
-  } else if (OB_FAIL(mark_tenant_ckpt_blocks(mark_info, macro_id_set,
-                                             *meta_service, tmp_status))) {
-    LOG_WARN("fail to mark tenant meta blocks", K(ret));
+  } else if (OB_FAIL(mark_local_checkpoint_blocks(mark_info, macro_id_set,
+                                                  *meta_service, tmp_status))) {
   } else {
     ObArenaAllocator iter_allocator("MarkIter", OB_MALLOC_NORMAL_BLOCK_SIZE);
-    ObTenantTabletIterator tablet_iter(*t3m, iter_allocator, nullptr /*no op*/);
+    ObTabletIterator tablet_iter(*t3m, iter_allocator, nullptr /*no op*/);
     ObTabletHandle handle;
     while (OB_SUCC(ret)) {
       handle.reset();
@@ -1144,210 +1099,9 @@ int ObBlockManager::mark_tenant_blocks(
         } else {
           LOG_WARN("fail to get next in-memory tablet", K(ret));
         }
-      } else if (handle.get_obj()->get_version() <
-                 ObTabletBlockHeader::TABLET_VERSION_V3) {
-        if (OB_FAIL(mark_tablet_meta_blocks(mark_info, handle, macro_id_set,
-                                            tmp_status))) {
-          LOG_WARN("fail to mark tablet meta blocks", K(ret));
-        } else if (OB_FAIL(mark_sstable_blocks(mark_info, handle, macro_id_set,
-                                               tmp_status))) {
-          LOG_WARN("fail to mark tablet blocks", K(ret));
-        }
-      } else {
-        if (OB_FAIL(mark_tablet_block(mark_info, handle, macro_id_set,
-                                      tmp_status))) {
-          LOG_WARN("fail to mark tablet's macro blocks", K(ret), K(tmp_status),
-                   KPC(handle.get_obj()));
-        }
+      } else if (OB_FAIL(mark_tablet_block(mark_info, handle, macro_id_set,
+                                          tmp_status))) {
       }
-    }
-  }
-  return ret;
-}
-
-int ObBlockManager::mark_sstable_blocks(
-    MacroBlkIdMap &mark_info, ObTabletHandle &handle,
-    common::hash::ObHashSet<MacroBlockId, common::hash::NoPthreadDefendMode>
-        &macro_id_set,
-    ObMacroBlockMarkerStatus &tmp_status) {
-  int ret = OB_SUCCESS;
-  ObTableStoreIterator table_store_iter(false, false);
-  ObArenaAllocator sstable_allocator("LoadSST", OB_MALLOC_NORMAL_BLOCK_SIZE);
-  ObSafeArenaAllocator safe_allocator(sstable_allocator);
-
-  if (OB_UNLIKELY(!handle.is_valid())) {
-    ret = OB_INVALID_ARGUMENT;
-    LOG_WARN("invalid argument", K(ret), K(handle));
-  } else if (OB_FAIL(handle.get_obj()->get_all_sstables(
-                 table_store_iter, true /* unpac cosstable */))) {
-    LOG_WARN("fail to get all sstables", K(ret));
-  } else {
-    while (OB_SUCC(ret)) {
-      safe_allocator.reuse();
-      ObITable *table = nullptr;
-      ObSSTableMetaHandle sstable_meta_hdl;
-      ObSSTable *sstable = nullptr;
-      if (OB_FAIL(table_store_iter.get_next(table))) {
-        if (OB_UNLIKELY(OB_ITER_END == ret)) {
-          ret = OB_SUCCESS;
-          break;
-        } else {
-          LOG_WARN("fail to get next table from iter", K(ret),
-                   K(table_store_iter));
-        }
-      } else if (FALSE_IT(sstable = static_cast<ObSSTable *>(table))) {
-      } else if (OB_ISNULL(sstable)) {
-        ret = OB_ERR_UNEXPECTED;
-        LOG_WARN("unexpected error, sstable is nullptr", K(ret), KP(sstable));
-      } else if (OB_FAIL(mark_sstable_meta_block(*sstable, mark_info,
-                                                 macro_id_set, tmp_status))) {
-        LOG_WARN("fail to mark sstable meta block", K(ret), KPC(sstable));
-      } else if (OB_FAIL(
-                     sstable->get_meta(sstable_meta_hdl, &safe_allocator))) {
-        LOG_WARN("fail to get sstable meta", K(ret));
-      } else {
-        const ObSSTableMeta &meta = sstable_meta_hdl.get_sstable_meta();
-        ObMacroIdIterator iterator;
-        MacroBlockId macro_id;
-        if (OB_FAIL(meta.get_macro_info().get_data_block_iter(iterator))) {
-          LOG_WARN("fail to get data block iterator", K(ret), K(meta));
-        }
-        while (OB_SUCC(ret)) {
-          if (OB_FAIL(iterator.get_next_macro_id(macro_id))) {
-            if (OB_ITER_END != ret) {
-              LOG_WARN("fail to get next macro id", K(ret), K(iterator));
-            } else {
-              ret = OB_SUCCESS;
-              break;
-            }
-          } else if (OB_FAIL(update_mark_info(macro_id, mark_info))) {
-            LOG_WARN("fail to update mark info", K(ret), K(macro_id),
-                     KPC(sstable));
-          } else if (OB_FAIL(macro_id_set.set_refactored(macro_id,
-                                                         0 /*no override*/))) {
-            if (OB_HASH_EXIST != ret) {
-              LOG_WARN("fail to put macro id into set", K(ret), K(macro_id));
-            } else {
-              ret = OB_SUCCESS;
-            }
-          } else {
-            if (sstable->is_small_sstable()) {
-              tmp_status.shared_data_block_count_++;
-            } else {
-              tmp_status.data_block_count_++;
-            }
-            tmp_status.hold_count_--;
-          }
-        }
-        if (OB_SUCC(ret)) {
-          iterator.reset();
-          if (OB_FAIL(meta.get_macro_info().get_other_block_iter(iterator))) {
-            LOG_WARN("fail to get other block iterator", K(ret), K(meta));
-          }
-        }
-        while (OB_SUCC(ret)) {
-          if (OB_FAIL(iterator.get_next_macro_id(macro_id))) {
-            if (OB_ITER_END != ret) {
-              LOG_WARN("fail to get next macro id", K(ret), K(iterator));
-            } else {
-              ret = OB_SUCCESS;
-              break;
-            }
-          } else if (OB_FAIL(update_mark_info(macro_id, mark_info))) {
-            LOG_ERROR("fail to update mark info", K(ret), K(macro_id),
-                      KPC(sstable));
-          } else if (OB_FAIL(macro_id_set.set_refactored(macro_id))) {
-            LOG_WARN("fail to put macro id into set", K(ret), K(macro_id));
-          } else {
-            tmp_status.index_block_count_++;
-            tmp_status.hold_count_--;
-          }
-        }
-        if (OB_SUCC(ret)) {
-          iterator.reset();
-          if (OB_FAIL(meta.get_macro_info().get_linked_block_iter(iterator))) {
-            LOG_WARN("fail to get linked block iterator", K(ret), K(meta));
-          }
-        }
-        while (OB_SUCC(ret)) {
-          if (OB_FAIL(iterator.get_next_macro_id(macro_id))) {
-            if (OB_ITER_END != ret) {
-              LOG_WARN("fail to get next macro id", K(ret), K(iterator));
-            } else {
-              ret = OB_SUCCESS;
-              break;
-            }
-          } else if (OB_FAIL(update_mark_info(macro_id, mark_info))) {
-            LOG_ERROR("fail to update mark info", K(ret), K(macro_id),
-                      KPC(sstable));
-          } else if (OB_FAIL(macro_id_set.set_refactored(macro_id))) {
-            LOG_WARN("fail to put macro id into set", K(ret), K(macro_id));
-          } else {
-            tmp_status.ids_block_count_++;
-            tmp_status.hold_count_--;
-          }
-        }
-      }
-    }
-  }
-  return ret;
-}
-
-int ObBlockManager::mark_tablet_meta_blocks(
-    MacroBlkIdMap &mark_info, storage::ObTabletHandle &handle,
-    common::hash::ObHashSet<MacroBlockId, common::hash::NoPthreadDefendMode>
-        &macro_id_set,
-    ObMacroBlockMarkerStatus &tmp_status) {
-  int ret = OB_SUCCESS;
-  const ObTablet *tablet = handle.get_obj();
-  ObSArray<MacroBlockId> meta_ids;
-  if (OB_FAIL(tablet->get_tablet_first_second_level_meta_ids(meta_ids))) {
-    LOG_WARN("fail to get tablet meta block ids", K(ret), KPC(tablet));
-  } else {
-    for (int64_t i = 0; OB_SUCC(ret) && i < meta_ids.count(); i++) {
-      const MacroBlockId &macro_id = meta_ids[i];
-      if (OB_FAIL(update_mark_info(macro_id, mark_info))) {
-        LOG_WARN("fail to update mark info", K(ret), K(macro_id));
-      } else if (OB_FAIL(macro_id_set.set_refactored(macro_id,
-                                                     0 /* not overwrite */))) {
-        if (OB_HASH_EXIST != ret) {
-          LOG_WARN("fail to put macro id into set", K(ret), K(macro_id));
-        } else {
-          ret = OB_SUCCESS;
-        }
-      } else {
-        tmp_status.shared_meta_block_count_++;
-        tmp_status.hold_count_--;
-      }
-    }
-  }
-  return ret;
-}
-
-int ObBlockManager::mark_sstable_meta_block(
-    const blocksstable::ObSSTable &sstable, MacroBlkIdMap &mark_info,
-    common::hash::ObHashSet<MacroBlockId, common::hash::NoPthreadDefendMode>
-        &macro_id_set,
-    ObMacroBlockMarkerStatus &tmp_status) {
-  int ret = OB_SUCCESS;
-  const ObMetaDiskAddr &addr = sstable.get_addr();
-  MacroBlockId macro_id;
-  if (addr.is_block()) {
-    if (OB_UNLIKELY(!addr.is_valid())) {
-      LOG_WARN("sstable addr is invalid", K(ret), K(addr));
-    } else if (FALSE_IT(macro_id = addr.block_id())) {
-    } else if (OB_FAIL(update_mark_info(macro_id, mark_info))) {
-      LOG_WARN("fail to update mark info", K(ret), K(addr), K(macro_id));
-    } else if (OB_FAIL(macro_id_set.set_refactored(macro_id,
-                                                   0 /* not overwrite */))) {
-      if (OB_HASH_EXIST != ret) {
-        LOG_WARN("fail to put macro id into set", K(ret), K(macro_id));
-      } else {
-        ret = OB_SUCCESS;
-      }
-    } else {
-      tmp_status.shared_meta_block_count_++;
-      tmp_status.hold_count_--;
     }
   }
   return ret;
@@ -1361,7 +1115,7 @@ int ObBlockManager::mark_tablet_block(
   int ret = OB_SUCCESS;
   const ObTablet *tablet = handle.get_obj();
   ObTabletBlockInfo block_info(tablet->get_tablet_addr().block_id(),
-                               ObTabletMacroType::SHARED_META_BLOCK,
+                               ObTabletMacroType::META_BLOCK,
                                0 /*useless param*/);
 
   if (tablet->get_tablet_addr().is_block() &&
@@ -1374,11 +1128,9 @@ int ObBlockManager::mark_tablet_block(
     ObTabletMacroInfo *macro_info = nullptr;
     bool in_memory = true;
     ObMacroInfoIterator macro_iter;
-    if (OB_FAIL(tablet->load_macro_info(0 /* ls_epoch in shared_storage */,
+    if (OB_FAIL(tablet->load_macro_info(0,
                                         allocator, macro_info, in_memory))) {
-      LOG_WARN("fail to load macro info", K(ret));
     } else if (OB_FAIL(macro_iter.init(ObTabletMacroType::MAX, *macro_info))) {
-      LOG_WARN("fail to init macro iterator", K(ret), KPC(macro_info));
     }
     while (OB_SUCC(ret)) {
       block_info.reset();
@@ -1390,7 +1142,6 @@ int ObBlockManager::mark_tablet_block(
           break;
         }
       } else if (OB_FAIL(do_mark_tablet_block(block_info, mark_info, macro_id_set, tmp_status))) {
-        LOG_WARN("fail to mark macro id", K(ret), K(block_info));
       }
     }
     if (OB_NOT_NULL(macro_info) && !in_memory) {
@@ -1408,7 +1159,6 @@ int ObBlockManager::do_mark_tablet_block(
   int ret = OB_SUCCESS;
   const MacroBlockId &macro_id = block_info.macro_id_;
   if (OB_FAIL(update_mark_info(macro_id, mark_info))) {
-    LOG_WARN("fail to update mark info", K(ret), K(macro_id));
   } else if (OB_FAIL(macro_id_set.set_refactored(macro_id,
                                                  0 /* not overwrite */))) {
     if (OB_HASH_EXIST != ret) {
@@ -1423,13 +1173,8 @@ int ObBlockManager::do_mark_tablet_block(
       tmp_status.index_block_count_++;
       break;
     case ObTabletMacroType::DATA_BLOCK:
-      tmp_status.data_block_count_++;
-      break;
-    case ObTabletMacroType::SHARED_META_BLOCK:
-      tmp_status.shared_meta_block_count_++;
-      break;
     case ObTabletMacroType::SHARED_DATA_BLOCK:
-      tmp_status.shared_data_block_count_++;
+      tmp_status.data_block_count_++;
       break;
     default:
       ret = OB_INVALID_ARGUMENT;
@@ -1443,22 +1188,19 @@ int ObBlockManager::do_mark_tablet_block(
   return ret;
 }
 
-int ObBlockManager::mark_tenant_ckpt_blocks(
+int ObBlockManager::mark_local_checkpoint_blocks(
     MacroBlkIdMap &mark_info,
     common::hash::ObHashSet<MacroBlockId, common::hash::NoPthreadDefendMode>
         &macro_id_set,
-    ObTenantStorageMetaService &meta_service,
+    ObLocalStorageMetaService &meta_service,
     ObMacroBlockMarkerStatus &tmp_status) {
   int ret = OB_SUCCESS;
   ObArray<MacroBlockId> macro_block_list;
 
   if (OB_FAIL(macro_block_list.reserve(DEFAULT_PENDING_FREE_COUNT))) {
-    LOG_WARN("fail to reserve macro block list", K(ret));
   } else if (OB_FAIL(meta_service.get_meta_block_list(macro_block_list))) {
-    LOG_WARN("fail to get tenant checkpoint meta blocks, ", K(ret));
   } else if (OB_FAIL(
                  update_mark_info(macro_block_list, macro_id_set, mark_info))) {
-    LOG_WARN("fail to update mark info", K(ret), K(macro_block_list.count()));
   } else {
     tmp_status.linked_block_count_ += macro_block_list.count();
     tmp_status.hold_count_ -= macro_block_list.count();
@@ -1473,20 +1215,13 @@ int ObBlockManager::mark_tmp_file_blocks(
     ObMacroBlockMarkerStatus &tmp_status) {
   int ret = OB_SUCCESS;
 
-  {
-    MOD_SCOPE {
-      ObArray<MacroBlockId> macro_block_list;
-      if (OB_FAIL(share::g_mp->tenant_tmp_file_manager()->get_sn_file_manager().get_macro_block_list(macro_block_list))) {
-        LOG_WARN("fail to get macro block list", K(ret));
-      } else if (OB_FAIL(update_mark_info(macro_block_list, macro_id_set, mark_info))){
-        LOG_WARN("fail to update mark info", K(ret), K(macro_block_list.count()));
-      } else {
-        tmp_status.tmp_file_count_ += macro_block_list.count();
-        tmp_status.hold_count_ -= macro_block_list.count();
-      }
-    }
+  ObArray<MacroBlockId> macro_block_list;
+  if (OB_FAIL(::oceanbase::share::server_service<::oceanbase::tmp_file::ObTmpFileManager>()->get_sn_file_manager().get_macro_block_list(macro_block_list))) {
+  } else if (OB_FAIL(update_mark_info(macro_block_list, macro_id_set, mark_info))){
+  } else {
+    tmp_status.tmp_file_count_ += macro_block_list.count();
+    tmp_status.hold_count_ -= macro_block_list.count();
   }
-
   return ret;
 }
 
@@ -1499,13 +1234,10 @@ int ObBlockManager::mark_server_meta_blocks(
   ObArray<MacroBlockId> macro_block_list;
 
   if (OB_FAIL(macro_block_list.reserve(DEFAULT_PENDING_FREE_COUNT))) {
-    LOG_WARN("fail to reserve macro block list", K(ret));
   } else if (OB_FAIL(SERVER_STORAGE_META_SERVICE.get_meta_block_list(
                  macro_block_list))) {
-    LOG_WARN("fail to get macro block list", K(ret));
   } else if (OB_FAIL(
                  update_mark_info(macro_block_list, macro_id_set, mark_info))) {
-    LOG_WARN("fail to update mark info", K(ret), K(macro_block_list.count()));
   } else {
     tmp_status.linked_block_count_ += macro_block_list.count();
     tmp_status.hold_count_ -= macro_block_list.count();
@@ -1522,9 +1254,7 @@ int ObBlockManager::update_mark_info(
   for (int64_t i = 0; OB_SUCC(ret) && i < macro_block_list.count(); i++) {
     const MacroBlockId &macro_id = macro_block_list.at(i);
     if (OB_FAIL(update_mark_info(macro_id, mark_info))) {
-      LOG_WARN("fail to update mark info", K(ret), K(macro_id));
     } else if (OB_FAIL(macro_id_set.set_refactored(macro_id))) {
-      LOG_WARN("fail to put macro id into set", K(ret), K(macro_id));
     }
   }
   return ret;
@@ -1571,7 +1301,6 @@ int ObBlockManager::update_mark_info(const MacroBlockId &macro_id,
     }
 
     if (OB_FAIL(mark_info.insert_or_update(macro_id, false))) {
-      LOG_WARN("fail to insert or update mark info", K(ret), K(macro_id));
     }
   }
   return ret;
@@ -1583,7 +1312,6 @@ int ObBlockManager::BlockMapIterator::get_next_block(common::ObIOFd &block_id)
   MacroBlockId key;
   BlockInfo blk_info;
   if (OB_FAIL(iter_.next(key, blk_info))) {
-    LOG_WARN("fail to get next block", K(ret));
   } else {
     block_id.first_id_ = key.first_id();
     block_id.second_id_ = key.second_id();
@@ -1658,9 +1386,7 @@ int ObBlockManager::InspectBadBlockTask::check_block(
                   K(read_info.size_));
     } else if (OB_FAIL(ObBlockManager::async_read_block(read_info,
                                                         macro_block_handle))) {
-      LOG_WARN("async read block failed", K(ret), K(macro_id), K(read_info));
     } else if (OB_FAIL(macro_block_handle.wait())) {
-      LOG_WARN("io wait failed", K(ret), K(macro_id), K(read_info));
     } else if (macro_block_handle.get_data_size() != read_info.size_) {
       ret = OB_ERR_UNEXPECTED;
       LOG_WARN("buf size is too small", K(ret), K(macro_id),
@@ -1679,12 +1405,9 @@ int ObBlockManager::InspectBadBlockTask::check_block(
       if (OB_SUCCESS != (tmp_ret = databuff_printf(
                              error_msg, sizeof(error_msg),
                              "Bad data block: macro id=%s", macro_id_str))) {
-        LOG_WARN("error msg is too long, ", K(tmp_ret), K(sizeof(error_msg)));
       } else if (OB_SUCCESS !=
                  (tmp_ret = blk_mgr_.report_bad_block(macro_id, ret, error_msg,
                                                       GCONF.data_dir))) {
-        LOG_WARN("Fail to report bad block", K(tmp_ret), K(macro_id), K(ret),
-                 K(error_msg));
       } else {
         ret = OB_SUCCESS; // after report bad block, overwrite ret code and
                           // continue to check.
@@ -1696,18 +1419,15 @@ int ObBlockManager::InspectBadBlockTask::check_block(
 
 int ObBlockManager::extend_file_size_if_need() {
   int ret = OB_SUCCESS;
-  int64_t reserved_size = ObStorageLoggerManager::RESERVED_DISK_SIZE;
+  int64_t reserved_size = ObServerStorageMetaService::SLOG_RESERVED_DISK_SIZE;
 
   if (OB_ISNULL(io_device_)) {
     ret = OB_NOT_INIT;
     LOG_WARN("block manager hasn't inited", K(ret), KP(io_device_));
   } else if (OB_FAIL(SERVER_STORAGE_META_SERVICE.get_reserved_size(
                  reserved_size))) {
-    LOG_WARN("Fail to get reserved size", K(ret));
   } else if (!check_can_be_extend(reserved_size)) {
-    ret = OB_NOT_READY_TO_EXTEND_FILE;
-    LOG_DEBUG("Check auto extend, no need to start ssbfile auto extend",
-              K(ret));
+    ret = OB_SERVER_OUTOF_DISK_SPACE;
   } else {
     const int64_t total_block_cnt =
         OB_STORAGE_OBJECT_MGR.get_total_macro_block_count();
@@ -1721,9 +1441,6 @@ int ObBlockManager::extend_file_size_if_need() {
     // 2. free_block_cnt is less than one value (512 = 1G)
     if (free_block_cnt_to_extend < free_block_cnt &&
         (free_block_cnt > AUTO_EXTEND_LEAST_FREE_BLOCK_CNT)) {
-      LOG_DEBUG("Do not extend file, not reach extend trigger.",
-                K(free_block_cnt_to_extend), K(free_block_cnt),
-                K(total_block_cnt));
     } else {
       LOG_INFO("Start to do auto ssblock file extend.", K(total_block_cnt),
                K(free_block_cnt), K(free_block_cnt_to_extend),
@@ -1733,16 +1450,11 @@ int ObBlockManager::extend_file_size_if_need() {
       int64_t datafile_disk_percentage = 0;
       int64_t cur_datafile_size = 0;
 
-      if (OB_FAIL(observer::ObServerUtils::calc_auto_extend_size(
+      if (OB_FAIL(calc_auto_extend_size(
               cur_datafile_size, suggest_extend_size))) {
-        LOG_DEBUG("calc auto extend size error, maybe ssblock file has reach "
-                  "it's max size",
-                  K(ret));
       } else if (OB_FAIL(OB_STORAGE_OBJECT_MGR.resize_local_device(
                      cur_datafile_size, suggest_extend_size, datafile_disk_percentage,
                      reserved_size))) {
-        LOG_WARN("Fail to resize file in auto extend", K(ret),
-                 K(suggest_extend_size));
       }
     }
   }
@@ -1756,20 +1468,12 @@ bool ObBlockManager::check_can_be_extend(const int64_t reserved_size) {
   const int64_t current_block_file_size = io_device_->get_total_block_size();
   if (OB_UNLIKELY(datafile_maxsize <= 0) ||
       OB_UNLIKELY(current_block_file_size <= 0)) {
-    LOG_DEBUG("Do not extend file size, datafile param not set or unexpected "
-              "block file size",
-              K(datafile_maxsize), K(current_block_file_size));
   } else if (datafile_maxsize <= current_block_file_size) {
-    LOG_DEBUG("Do not extend file size, maxsize is smaller than datafile size",
-              K(datafile_maxsize), K(current_block_file_size));
   } else {
     const int64_t max_block_cnt = get_max_macro_block_count(reserved_size);
     const int64_t current_block_cnt =
         OB_STORAGE_OBJECT_MGR.get_total_macro_block_count();
     if (max_block_cnt <= current_block_cnt) {
-      LOG_DEBUG("Do not extend file size, max block cnt is smaller than "
-                "current block cnt",
-                K(max_block_cnt), K(current_block_cnt));
     } else {
       can_be_extended = true;
     }
@@ -1800,10 +1504,7 @@ void ObBlockManager::InspectBadBlockTask::inspect_bad_block() {
     ret = OB_NOT_INIT;
     LOG_WARN("The block manager has not been inited", K(ret));
   } else if (OB_FAIL(macro_ids.reserve(blk_mgr_.block_map_.count()))) {
-    LOG_WARN("fail to reserver macro id array", K(ret), "block count",
-             blk_mgr_.block_map_.count());
   } else if (OB_FAIL(blk_mgr_.block_map_.for_each(getter))) {
-    LOG_WARN("fail to for each block map", K(ret));
   } else if (OB_UNLIKELY(0 == macro_ids.size())) {
     // nothing to do.
   } else {
@@ -1840,8 +1541,6 @@ void ObBlockManager::InspectBadBlockTask::inspect_bad_block() {
       ObMacroBlockHandle macro_block_handle;
       if (OB_FAIL(blk_mgr_.get_macro_block_info(macro_id, block_info,
                                                 macro_block_handle))) {
-        LOG_WARN("fail to get macro block info", K(ret), K(macro_id),
-                 K(last_macro_idx_));
       } else if (OB_UNLIKELY(block_info.is_free_)) {
         // do nothing, this MacroBlock has been released. skip this MacroBlock
         // and continue.
@@ -1858,7 +1557,6 @@ void ObBlockManager::InspectBadBlockTask::inspect_bad_block() {
         LOG_INFO("check macro block", K(block_info), "time_interval",
                  begin_time - block_info.access_time_);
         if (OB_FAIL(check_block(macro_block_handle))) {
-          LOG_WARN("found a bad block", K(ret), K(macro_id));
         }
       }
     }
@@ -1878,11 +1576,55 @@ ObServerBlockManager &ObServerBlockManager::get_instance() {
 } // namespace blocksstable
 } // namespace oceanbase
 
-// ===== definition moved from share/io/ob_io_calibration.cpp(IO benchmark family) =====
 namespace oceanbase
 {
-namespace common
+namespace storage
 {
+
+// Storage owns the macro blocks used by the benchmark. Keep this runner
+// private so the lower Share IO interface does not depend back on Storage.
+class ObIOBenchRunner : public lib::Threads
+{
+public:
+  ObIOBenchRunner();
+  ~ObIOBenchRunner();
+  int init(const int64_t block_count);
+  int do_benchmark(const ObIOBenchLoad &load,
+                   const int64_t thread_count,
+                   ObIOBenchResult &result);
+  void destroy();
+  void run1() override;
+
+private:
+  bool is_inited_;
+  bool thread_inited_;
+  ObArray<blocksstable::ObMacroBlockHandle> block_handles_;
+  ObIOBenchLoad load_;
+  int64_t io_count_;
+  int64_t rt_us_;
+  char *write_buf_;
+  char *read_buf_;
+  int64_t block_count_;
+};
+
+ObIOBenchRunner::ObIOBenchRunner()
+  : lib::Threads(1),
+    is_inited_(false),
+    thread_inited_(false),
+    block_handles_(),
+    load_(),
+    io_count_(0),
+    rt_us_(0),
+    write_buf_(nullptr),
+    read_buf_(nullptr),
+    block_count_(0)
+{
+}
+
+ObIOBenchRunner::~ObIOBenchRunner()
+{
+  destroy();
+}
 
 int ObIOBenchRunner::init(const int64_t block_count)
 {
@@ -1905,9 +1647,7 @@ int ObIOBenchRunner::init(const int64_t block_count)
       for (int64_t i = 0; OB_SUCC(ret) && i < block_count; ++i) {
         blocksstable::ObMacroBlockHandle block_handle;
         if (OB_FAIL(OB_SERVER_BLOCK_MGR.alloc_block(block_handle))) {
-          LOG_WARN("alloc macro block failed", K(ret), K(block_count), K(i));
         } else if (OB_FAIL(block_handles_.push_back(block_handle))) {
-          LOG_WARN("push back block handle failed", K(ret), K(block_count), K(i), K(block_handle));
         }
       }
     }
@@ -1922,6 +1662,86 @@ int ObIOBenchRunner::init(const int64_t block_count)
   return ret;
 }
 
+int ObIOBenchRunner::do_benchmark(const ObIOBenchLoad &load,
+                                  const int64_t thread_count,
+                                  ObIOBenchResult &result)
+{
+  int ret = OB_SUCCESS;
+  result.reset();
+  const int64_t BENCHMARK_TIMEOUT_S = 5L;
+  if (OB_UNLIKELY(!is_inited_)) {
+    ret = OB_NOT_INIT;
+    LOG_WARN("not init", K(ret), K(is_inited_));
+  } else if (OB_UNLIKELY(!load.is_valid() || thread_count <= 0)) {
+    ret = OB_INVALID_ARGUMENT;
+    LOG_WARN("invalid argument", K(ret), K(load), K(thread_count));
+  } else {
+    load_ = load;
+    io_count_ = 0;
+    rt_us_ = 0;
+    if (thread_inited_) {
+      lib::Threads::stop();
+      lib::Threads::wait();
+      lib::Threads::destroy();
+      thread_inited_ = false;
+    }
+    if (OB_FAIL(lib::Threads::set_thread_count(thread_count))) {
+    } else if (OB_FAIL(lib::Threads::init())) {
+    } else if (OB_FAIL(lib::Threads::start())) {
+    } else {
+      thread_inited_ = true;
+#ifdef _WIN32
+      Sleep(static_cast<DWORD>(BENCHMARK_TIMEOUT_S * 1000));
+#else
+      sleep(BENCHMARK_TIMEOUT_S);
+#endif
+      lib::Threads::stop();
+      lib::Threads::wait();
+      lib::Threads::destroy();
+      thread_inited_ = false;
+      if (io_count_ <= 0) {
+        ret = OB_ERR_UNEXPECTED;
+        LOG_WARN("invalid io count", K(ret), K(io_count_));
+      } else {
+        result.mode_ = load_.mode_;
+        result.size_ = load_.size_;
+        result.iops_ = io_count_ / BENCHMARK_TIMEOUT_S;
+        result.rt_us_ = rt_us_ / io_count_;
+      }
+      LOG_INFO("IO BENCHMARK finished", K(ret), K_(load), K(result));
+    }
+    if (OB_FAIL(ret) && thread_inited_) {
+      lib::Threads::stop();
+      lib::Threads::wait();
+      lib::Threads::destroy();
+      thread_inited_ = false;
+    }
+  }
+  return ret;
+}
+
+void ObIOBenchRunner::destroy()
+{
+  if (thread_inited_) {
+    lib::Threads::stop();
+    lib::Threads::wait();
+    lib::Threads::destroy();
+    thread_inited_ = false;
+  }
+  if (nullptr != write_buf_) {
+    ob_free(write_buf_);
+    write_buf_ = nullptr;
+  }
+  if (nullptr != read_buf_) {
+    ob_free(read_buf_);
+    read_buf_ = nullptr;
+  }
+  is_inited_ = false;
+  block_handles_.reset();
+  load_.reset();
+  io_count_ = 0;
+  rt_us_ = 0;
+}
 
 void ObIOBenchRunner::run1()
 {
@@ -1950,19 +1770,8 @@ void ObIOBenchRunner::run1()
       io_info.fd_.device_handle_ = &LOCAL_DEVICE_INSTANCE;
       io_info.offset_ = ObRandom::rand(0, OB_DEFAULT_MACRO_BLOCK_SIZE - load_.size_);
       io_info.timeout_us_ = MAX_IO_WAIT_TIME_MS * 1000;
-#ifdef OB_BUILD_SHARED_STORAGE
-      if (false) {
-        io_info.fd_.first_id_ = ObIOFd::NORMAL_FILE_ID; // first_id is not used in shared storage mode;
-        io_info.fd_.second_id_ = OB_SERVER_FILE_MGR.get_io_calibration_fd();
-        io_info.offset_ += block_idx * OB_DEFAULT_MACRO_BLOCK_SIZE;
-      } else {
-        io_info.fd_.first_id_ = block_handles_[block_idx].get_macro_id().first_id();
-        io_info.fd_.second_id_ = block_handles_[block_idx].get_macro_id().second_id();
-      } 
-#else
       io_info.fd_.first_id_ = block_handles_[block_idx].get_macro_id().first_id();
       io_info.fd_.second_id_ = block_handles_[block_idx].get_macro_id().second_id();
-#endif
 
       if (ObIOMode::WRITE == load_.mode_) {
         io_info.offset_ = lower_align(io_info.offset_, DIO_READ_ALIGN_SIZE);
@@ -1970,11 +1779,9 @@ void ObIOBenchRunner::run1()
       const int64_t begin_ts = ObTimeUtility::fast_current_time();
       if (ObIOMode::READ == load_.mode_) {
         if (OB_FAIL(OB_IO_MANAGER.read(io_info, io_handle))) {
-          LOG_WARN("io benchmark read failed", K(ret), K(io_info));
         }
       } else {
         if (OB_FAIL(OB_IO_MANAGER.write(io_info))) {
-          LOG_WARN("io benchmark write failed", K(ret), K(io_info));
         }
       }
       if (OB_SUCC(ret)) {
@@ -1986,6 +1793,70 @@ void ObIOBenchRunner::run1()
   }
 }
 
+ObIOBenchController::ObIOBenchController()
+  : lib::Threads(1),
+    thread_inited_(false),
+    running_mutex_(),
+    start_ts_(0),
+    finish_ts_(0),
+    ret_code_(OB_SUCCESS)
+{
+}
+
+ObIOBenchController::~ObIOBenchController()
+{
+  if (thread_inited_) {
+    lib::Threads::stop();
+    lib::Threads::wait();
+    lib::Threads::destroy();
+    thread_inited_ = false;
+  }
+}
+
+int ObIOBenchController::start_io_bench()
+{
+  int ret = OB_SUCCESS;
+  if (OB_FAIL(running_mutex_.trylock())) {
+    if (OB_UNLIKELY(OB_EAGAIN != ret)) {
+      LOG_WARN("try lock failed", K(ret));
+    } else {
+      ret = OB_SUCCESS;
+    }
+  } else {
+    if (thread_inited_) {
+      lib::Threads::stop();
+      lib::Threads::wait();
+      lib::Threads::destroy();
+      thread_inited_ = false;
+    }
+    if (OB_FAIL(lib::Threads::init())) {
+    } else if (OB_FAIL(lib::Threads::start())) {
+    } else {
+      thread_inited_ = true;
+    }
+    if (OB_FAIL(ret) && thread_inited_) {
+      lib::Threads::stop();
+      lib::Threads::wait();
+      lib::Threads::destroy();
+      thread_inited_ = false;
+    }
+    const int tmp_ret = running_mutex_.unlock();
+    if (OB_UNLIKELY(OB_SUCCESS != tmp_ret)) {
+    }
+  }
+  return ret;
+}
+
+int ObIOBenchController::get_benchmark_status(
+    int64_t &start_ts,
+    int64_t &finish_ts,
+    int &ret_code) const
+{
+  start_ts = start_ts_;
+  finish_ts = finish_ts_;
+  ret_code = ret_code_;
+  return OB_SUCCESS;
+}
 
 void ObIOBenchController::run1()
 {
@@ -1995,20 +1866,13 @@ void ObIOBenchController::run1()
   start_ts_ = ObTimeUtility::fast_current_time();
   finish_ts_ = 0;
   ret_code_ = OB_SUCCESS;
-  
+
   // prepare io bench runner
   const double MIN_FREE_SPACE_PERCENTAGE = 0.1; // if auto extend is on, _datafile_usage_upper_bound_percentage maybe less than (1 - 0.1 = 0.9), may cause OB_SERVER_OUTOF_DISK_SPACE
   const int64_t MIN_CALIBRATION_BLOCK_COUNT = 1024L * 1024L * 1024L / OB_DEFAULT_MACRO_BLOCK_SIZE;
   const int64_t MAX_CALIBRATION_BLOCK_COUNT = 20LL * 1024LL * 1024LL * 1024LL / OB_DEFAULT_MACRO_BLOCK_SIZE;
   int64_t free_block_count = OB_STORAGE_OBJECT_MGR.get_free_macro_block_count();
   int64_t total_block_count = OB_STORAGE_OBJECT_MGR.get_total_macro_block_count();
-#ifdef OB_BUILD_SHARED_STORAGE
-  if (false) {
-    const int64_t free_disk_size = OB_SERVER_DISK_SPACE_MGR.get_free_disk_size();
-    free_block_count = free_disk_size / OB_DEFAULT_MACRO_BLOCK_SIZE;
-    total_block_count = free_block_count;
-  }
-#endif
 
   if (free_block_count <= MIN_CALIBRATION_BLOCK_COUNT
       || 1.0 * free_block_count / total_block_count < MIN_FREE_SPACE_PERCENTAGE) {
@@ -2019,16 +1883,7 @@ void ObIOBenchController::run1()
     benchmark_block_count = min(benchmark_block_count, MAX_CALIBRATION_BLOCK_COUNT);
     benchmark_block_count = max(benchmark_block_count, MIN_CALIBRATION_BLOCK_COUNT);
     if (OB_FAIL(runner.init(benchmark_block_count))) {
-      LOG_WARN("init benchmark runner failed", K(ret), K(benchmark_block_count));
     }
-#ifdef OB_BUILD_SHARED_STORAGE
-    if (OB_SUCC(ret)) {
-      if (false && OB_FAIL(OB_SERVER_FILE_MGR.create_io_calibration_file(
-          benchmark_block_count))) {
-        LOG_WARN("fail to create io calibration file", KR(ret), K(benchmark_block_count));
-      }
-    }
-#endif
   }
 
   // execute io benchmark
@@ -2036,10 +1891,10 @@ void ObIOBenchController::run1()
   const int64_t bench_thread_count = 16;
   ObIOAbility io_ability;
   // The target file is pre-allocated using fallocate. Due to the initial presence of file holes
-  // in ext4 and xfs file systems, read operations are optimized by the system to immediately return 
+  // in ext4 and xfs file systems, read operations are optimized by the system to immediately return
   // with no content. This optimization leads to unrepresentative read performance metrics.
   // To ensure the validity of our performance testing, the sequence of operations has been adjusted
-  // to perform write operations first, thereby filling the file. This adjustment allows for the 
+  // to perform write operations first, thereby filling the file. This adjustment allows for the
   // acquisition of more accurate read and write performance metrics.
   for (int64_t i = static_cast<int64_t>(ObIOMode::MAX_MODE) - 1; OB_SUCC(ret) && !has_set_stop() && i >= 0; --i) {
     for (int64_t size = bench_start_size; OB_SUCC(ret) && !has_set_stop() && size <= OB_DEFAULT_MACRO_BLOCK_SIZE; size *= 2) {
@@ -2049,12 +1904,10 @@ void ObIOBenchController::run1()
       load.size_ = size;
       ObIOBenchResult result;
       if (OB_FAIL(runner.do_benchmark(load, bench_thread_count, result))) {
-        LOG_WARN("run io benchmark failed", K(ret), K(load), K(bench_thread_count), K(result));
       } else if (OB_UNLIKELY(!result.is_valid())) {
         ret = OB_ERR_SYS;
         LOG_WARN("benchmark result it invalid", K(ret), K(result));
       } else if (OB_FAIL(io_ability.add_measure_item(result))) {
-        LOG_WARN("add benchmark result failed", K(ret), K(result));
       }
     }
   }
@@ -2064,53 +1917,13 @@ void ObIOBenchController::run1()
   }
   if (OB_SUCC(ret)) {
     if (OB_FAIL(ObIOCalibration::get_instance().update_io_ability(io_ability))) {
-      LOG_WARN("update io ability failed", K(ret));
     }
   }
-
-#ifdef OB_BUILD_SHARED_STORAGE
-  int tmp_ret = OB_SUCCESS;
-  if (false && OB_TMP_FAIL(OB_SERVER_FILE_MGR.delete_io_calibration_file())) {
-    LOG_ERROR("fail to delete io calibration file", KR(tmp_ret));
-  }
-#endif
 
   ret_code_ = ret;
   finish_ts_ = ObTimeUtility::fast_current_time();
 }
 
 
-}  // namespace common
-}  // namespace oceanbase
-
-// ===== definition moved from share/io/ob_io_struct.cpp(IO probe task) =====
-namespace oceanbase
-{
-namespace common
-{
-
-int ObIOTuner::send_detect_task()
-{
-  int ret = OB_SUCCESS;
-  ObArray<blocksstable::MacroBlockId> macro_ids;
-  macro_ids.set_attr(ObMemAttr("back_io_detect"));
-  if (!OB_SERVER_BLOCK_MGR.is_started() || 0 == OB_SERVER_BLOCK_MGR.get_used_macro_block_count()) {
-    ret = OB_NOT_INIT;
-    LOG_WARN("block manager not init", K(ret));
-  } else if (OB_FAIL(OB_SERVER_BLOCK_MGR.get_limited_iter_macro_ids(macro_ids, 128))) {
-    LOG_WARN("fail to get macro ids", K(ret), K(macro_ids));
-  } else if (OB_UNLIKELY(0 == macro_ids.count())) {
-    // skip
-  } else {
-    MacroBlockId &rand_id = macro_ids.at(ObRandom::rand(0, macro_ids.count() - 1));
-    if (OB_FAIL(
-            OB_IO_MANAGER.get_device_health_detector().record_timing_task(rand_id.first_id(), rand_id.second_id()))) {
-      LOG_WARN("fail to record timing task", K(ret), K(rand_id));
-    }
-  }
-  return ret;
-}
-
-
-}  // namespace common
+}  // namespace storage
 }  // namespace oceanbase

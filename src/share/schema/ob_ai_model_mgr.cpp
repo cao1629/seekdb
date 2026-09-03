@@ -52,9 +52,7 @@ int ObAiModelSchema::assign(const ObAiModelSchema &other)
   if (this != &other) {
     reset();
     if (OB_FAIL(set_name(other.name_))) {
-      LOG_WARN("failed to set name", K(ret), K(*this), K(other));
     } else if (OB_FAIL(set_model_name(other.model_name_))) {
-      LOG_WARN("failed to set model name", K(ret), K(*this), K(other));
     } else {
       set_model_id(other.model_id_);
       set_type(other.type_);
@@ -69,9 +67,7 @@ int ObAiModelSchema::assign(const ObAiServiceModelInfo &model_info)
   int ret = OB_SUCCESS;
   reset();
   if (OB_FAIL(set_name(model_info.get_name()))) {
-    LOG_WARN("failed to set name", K(ret), K(model_info));
   } else if (OB_FAIL(set_model_name(model_info.get_model_name()))) {
-    LOG_WARN("failed to set model name", K(ret), K(model_info));
   } else {
     set_model_id(OB_INVALID_ID);
     set_schema_version(OB_INVALID_VERSION);
@@ -83,21 +79,21 @@ int ObAiModelSchema::assign(const ObAiServiceModelInfo &model_info)
 
 ObAiModelMgr::ObAiModelMgr()
   : is_inited_(false),
-    local_allocator_(SET_USE_500(ObModIds::OB_SCHEMA_GETTER_GUARD, ObCtxIds::SCHEMA_SERVICE)),
+    local_allocator_(lib::ObMemAttr(ObModIds::OB_SCHEMA_GETTER_GUARD, ObCtxIds::SCHEMA_SERVICE)),
     allocator_(local_allocator_),
-    ai_model_infos_(0, nullptr, SET_USE_500("SchAiModel", ObCtxIds::SCHEMA_SERVICE)),
-    ai_model_id_map_(SET_USE_500("SchAiModel", ObCtxIds::SCHEMA_SERVICE)),
-    ai_model_name_map_(SET_USE_500("SchAiModel", ObCtxIds::SCHEMA_SERVICE))
+    ai_model_infos_(0, nullptr, lib::ObMemAttr("SchAiModel", ObCtxIds::SCHEMA_SERVICE)),
+    ai_model_id_map_(lib::ObMemAttr("SchAiModel", ObCtxIds::SCHEMA_SERVICE)),
+    ai_model_name_map_(lib::ObMemAttr("SchAiModel", ObCtxIds::SCHEMA_SERVICE))
 {
 }
 
 ObAiModelMgr::ObAiModelMgr(ObIAllocator &allocator)
   : is_inited_(false),
-    local_allocator_(SET_USE_500(ObModIds::OB_SCHEMA_GETTER_GUARD, ObCtxIds::SCHEMA_SERVICE)),
+    local_allocator_(lib::ObMemAttr(ObModIds::OB_SCHEMA_GETTER_GUARD, ObCtxIds::SCHEMA_SERVICE)),
     allocator_(allocator),
-    ai_model_infos_(0, nullptr, SET_USE_500("SchAiModel", ObCtxIds::SCHEMA_SERVICE)),
-    ai_model_id_map_(SET_USE_500("SchAiModel", ObCtxIds::SCHEMA_SERVICE)),
-    ai_model_name_map_(SET_USE_500("SchAiModel", ObCtxIds::SCHEMA_SERVICE))
+    ai_model_infos_(0, nullptr, lib::ObMemAttr("SchAiModel", ObCtxIds::SCHEMA_SERVICE)),
+    ai_model_id_map_(lib::ObMemAttr("SchAiModel", ObCtxIds::SCHEMA_SERVICE)),
+    ai_model_name_map_(lib::ObMemAttr("SchAiModel", ObCtxIds::SCHEMA_SERVICE))
 {
 }
 
@@ -109,9 +105,7 @@ int ObAiModelMgr::init()
     ret = OB_INIT_TWICE;
     LOG_WARN("ai model mgr init twice", K(ret), K(lbt()));
   } else if (OB_FAIL(ai_model_id_map_.init())) {
-    LOG_WARN("failed to init ai_model_id_map_", K(ret));
   } else if (OB_FAIL(ai_model_name_map_.init())) {
-    LOG_WARN("failed to init ai_model_name_map_", K(ret));
   } else {
     is_inited_ = true;
   }
@@ -139,11 +133,8 @@ int ObAiModelMgr::assign(const ObAiModelMgr &other)
     LOG_WARN("ai model mgr not init", K(ret));
   } else if (this != &other) {
     if (OB_FAIL(ai_model_infos_.assign(other.ai_model_infos_))) {
-      LOG_WARN("assign ai model infos failed", K(ret));
     } else if (OB_FAIL(ai_model_id_map_.assign(other.ai_model_id_map_))) {
-      LOG_WARN("assign ai model id map failed", K(ret));
     } else if (OB_FAIL(ai_model_name_map_.assign(other.ai_model_name_map_))) {
-      LOG_WARN("assign ai model name map failed", K(ret));
     }
   }
 
@@ -167,7 +158,6 @@ int ObAiModelMgr::deep_copy(const ObAiModelMgr &other)
         ret = OB_ERR_UNEXPECTED;
         LOG_WARN("unexpected NULL ai_model_schema", K(ai_model_schema), K(ret));
       } else if (OB_FAIL(add_ai_model(*ai_model_schema, ai_model_schema->get_case_mode()))) {
-        LOG_WARN("failed to add_ai_model_schema", K(*ai_model_schema), K(ret));
       }
     }
   }
@@ -291,7 +281,6 @@ int ObAiModelMgr::add_ai_model(const ObAiModelSchema &ai_model_schema, common::O
     ret = OB_INVALID_ARGUMENT;
     LOG_WARN("invalid ai_model_schema", K(ret), K(ai_model_schema));
   } else if (OB_FAIL(ObSchemaUtils::alloc_schema(allocator_, ai_model_schema, new_schema))) {
-    LOG_WARN("failed to alloc_schema", K(ret), K(ai_model_schema));
   } else if (OB_ISNULL(new_schema)) {
     ret = OB_ERR_UNEXPECTED;
     LOG_WARN("unexpected NULL new_schema", K(ret), K(ai_model_schema));
@@ -301,15 +290,12 @@ int ObAiModelMgr::add_ai_model(const ObAiModelSchema &ai_model_schema, common::O
                                              compare_ai_model,
                                              equal_ai_model,
                                              replaced_schema))) {
-    LOG_WARN("failed to add ai model schema", K(ret), KPC(new_schema));
   } else {
     ObAiModelHashWrapper hash_wrapper(new_schema->get_name(),
                                       new_schema->get_case_mode());
 
     if (OB_FAIL(ai_model_id_map_.set_refactored(new_schema->get_ai_model_id(), new_schema, overwrite))) {
-      LOG_WARN("failed to set_refactored to ai_model_id_map_", K(ret), KPC(new_schema));
     } else if (OB_FAIL(ai_model_name_map_.set_refactored(hash_wrapper, new_schema, overwrite))) {
-      LOG_WARN("failed to set_refactored to ai_model_name_map_", K(ret), KPC(new_schema));
     }
   }
 
@@ -325,13 +311,12 @@ int ObAiModelMgr::add_ai_model(const ObAiModelSchema &ai_model_schema, common::O
              K(ai_model_infos_));
     int tmp_ret = OB_SUCCESS;
     if (OB_SUCCESS != (tmp_ret = rebuild_ai_model_hashmap())) {
-      LOG_WARN("rebuild ai model hashmap failed", K(ret), K(tmp_ret));
     }
   }
   return ret;
 }
 
-int ObAiModelMgr::del_ai_model(const ObTenantAiModelId &tenant_ai_model_id)
+int ObAiModelMgr::del_ai_model(const ObAiModelId &ai_model_id)
 {
   int ret = OB_SUCCESS;
   ObAiModelSchema *schema = nullptr;
@@ -339,17 +324,16 @@ int ObAiModelMgr::del_ai_model(const ObTenantAiModelId &tenant_ai_model_id)
   if (!is_inited_) {
     ret = OB_NOT_INIT;
     LOG_WARN("ai model mgr not init", K(ret));
-  } else if (!tenant_ai_model_id.is_valid()) {
+  } else if (!ai_model_id.is_valid()) {
     ret = OB_INVALID_ARGUMENT;
-    LOG_WARN("invalid ai_model_id", K(ret), K(tenant_ai_model_id));
-  } else if (OB_FAIL(ai_model_infos_.remove_if(tenant_ai_model_id,
-                                               compare_with_tenant_ai_model_id,
-                                               equal_to_tenant_ai_model_id,
+    LOG_WARN("invalid ai_model_id", K(ret), K(ai_model_id));
+  } else if (OB_FAIL(ai_model_infos_.remove_if(ai_model_id,
+                                               compare_with_ai_model_id,
+                                               equal_to_ai_model_id,
                                                schema))) {
-    LOG_WARN("failed to remove ai_model_schema", K(ret), K(tenant_ai_model_id));
   } else if (OB_ISNULL(schema)) {
     ret = OB_ERR_UNEXPECTED;
-    LOG_WARN("unexpected NULL ai_model_schema", K(ret), K(tenant_ai_model_id));
+    LOG_WARN("unexpected NULL ai_model_schema", K(ret), K(ai_model_id));
   } else {
     int hash_ret = OB_SUCCESS;
     ObAiModelHashWrapper hash_wrapper(schema->get_name(),
@@ -381,14 +365,13 @@ int ObAiModelMgr::del_ai_model(const ObTenantAiModelId &tenant_ai_model_id)
              K(ai_model_infos_));
     int tmp_ret = OB_SUCCESS;
     if (OB_SUCCESS != (tmp_ret = rebuild_ai_model_hashmap())) {
-      LOG_WARN("rebuild ai model hashmap failed", K(ret), K(tmp_ret));  
     }
   }
 
   return ret;
 }
 
-int ObAiModelMgr::get_ai_model_schemas_in_tenant(common::ObIArray<const ObAiModelSchema *> &ai_model_schemas) const
+int ObAiModelMgr::get_ai_model_schemas_in_runtime(common::ObIArray<const ObAiModelSchema *> &ai_model_schemas) const
 {
   int ret = OB_SUCCESS;
 
@@ -406,7 +389,6 @@ int ObAiModelMgr::get_ai_model_schemas_in_tenant(common::ObIArray<const ObAiMode
         ret = OB_ERR_UNEXPECTED;
         LOG_WARN("unexpected NULL schema", K(ret), K(schema), K(ai_model_infos_));
       } else if (OB_FAIL(ai_model_schemas.push_back(schema))) {
-        LOG_WARN("failed to push_back", K(ret), KPC(schema));
       }
     }
   }
@@ -437,9 +419,7 @@ int ObAiModelMgr::rebuild_ai_model_hashmap()
                                           schema->get_case_mode());
 
         if (OB_FAIL(ai_model_id_map_.set_refactored(schema->get_ai_model_id(), schema, overwrite))) {
-          LOG_WARN("failed to set_refactored to ai_model_id_map_", K(ret), KPC(schema));
         } else if (OB_FAIL(ai_model_name_map_.set_refactored(hash_wrapper, schema, overwrite))) {
-          LOG_WARN("failed to set_refactored to ai_model_name_map_", K(ret), KPC(schema));
         }
       }
     }

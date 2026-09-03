@@ -49,10 +49,8 @@ public:
   ~ObStorageSchemaRecorder();
 
   int init(
-      const share::ObLSID &ls_id,
       const ObTabletID &tablet_id,
       const int64_t saved_schema_version,
-      const lib::Worker::CompatMode compat_mode,
       logservice::ObLogHandler *log_handler);
   void destroy();
   bool is_inited() const { return is_inited_; }
@@ -69,7 +67,7 @@ public:
 
   ObStorageSchemaRecorder(const ObStorageSchemaRecorder&) = delete;
   ObStorageSchemaRecorder& operator=(const ObStorageSchemaRecorder&) = delete;
-  INHERIT_TO_STRING_KV("ObIStorageClogRecorder", ObIStorageClogRecorder, K_(ls_id), K_(tablet_id));
+  INHERIT_TO_STRING_KV("ObIStorageClogRecorder", ObIStorageClogRecorder, K_(tablet_id));
 
 private:
   virtual int inner_replay_clog(
@@ -78,8 +76,8 @@ private:
       const char *buf,
       const int64_t size,
       int64_t &pos) override;
-  virtual int sync_clog_succ_for_leader(const int64_t update_version) override;
-  virtual void sync_clog_failed_for_leader() override;
+  virtual int on_sync_clog_success(const int64_t update_version) override;
+  virtual void on_sync_clog_failure() override;
 
   int get_schema(int64_t &table_version);
 
@@ -105,7 +103,6 @@ private:
 
   bool is_inited_;
   bool ignore_storage_schema_;
-  lib::Worker::CompatMode compat_mode_;
   char *clog_buf_;
 
   ObTabletHandle *tablet_handle_ptr_;
@@ -113,7 +110,6 @@ private:
   ObStorageSchema *storage_schema_;
   ObIAllocator *allocator_;
 
-  share::ObLSID ls_id_;
   ObTabletID tablet_id_;
   int64_t table_id_;
   int64_t max_column_cnt_;

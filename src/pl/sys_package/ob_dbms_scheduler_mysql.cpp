@@ -16,19 +16,18 @@
 
 #define USING_LOG_PREFIX PL
 
-#include "observer/ob_inner_sql_connection_pool.h"
-#include "observer/dbms_scheduler/ob_dbms_sched_job_executor.h"
-#include "observer/dbms_scheduler/ob_dbms_sched_service.h"
 #include "ob_dbms_scheduler_mysql.h"
+#include "query/scheduler/ob_scheduler_service.h"
+#include "query/session/ob_inner_sql_connection_access.h"
+#include "share/rc/ob_server_runtime.h"
+#include "sql/session/ob_inner_sql_connection.h"
 #include "sql/optimizer/stat/ob_dbms_stats_maintenance_window.h"
-#include "observer/scheduler/ob_scheduled_manage_dynamic_partition.h"
 
 namespace oceanbase
 {
 
 using namespace common;
 using namespace share;
-using namespace observer;
 using namespace sqlclient;
 using namespace dbms_scheduler;
 namespace pl
@@ -37,19 +36,16 @@ namespace pl
 int ObDBMSSchedulerMysql::execute_sql(sql::ObExecContext &ctx, ObSqlString &sql, int64_t &affected_rows)
 {
   int ret = OB_SUCCESS;
-  ObInnerSQLConnectionPool *pool = NULL;
-  ObInnerSQLConnection *conn = NULL;
+  sqlclient::ObISQLConnection *conn = NULL;
+  sqlclient::ObISQLConnectionGuard conn_guard;
   sql::ObSQLSessionInfo *session = NULL;
   CK (OB_NOT_NULL(ctx.get_sql_proxy()));
   CK (OB_NOT_NULL(session = ctx.get_my_session()));
 
-  CK (OB_NOT_NULL(
-    pool = static_cast<ObInnerSQLConnectionPool *>(ctx.get_sql_proxy()->get_pool())));
-  OZ (pool->acquire_spi_conn(session, conn));
+  OZ (query::ObInnerSQLConnectionAccess::
+      create_spi_connection_with_external_session(session, conn_guard));
+  OX (conn = conn_guard.get_ptr());
   OZ (conn->execute_write(sql.ptr(), affected_rows));
-  if (OB_NOT_NULL(conn)) {
-    ctx.get_sql_proxy()->close(conn, ret);
-  }
   return ret;
 }
 
@@ -70,7 +66,10 @@ int ObDBMSSchedulerMysql::disable(
   OZ (dml.splice_update_sql(OB_ALL_SCHEDULER_JOB_TNAME, sql));
   OZ (execute_sql(ctx, sql, affected_rows));
   CK (OB_LIKELY(1 == affected_rows || 2 == affected_rows));
-  rootserver::ObDBMSSchedService::wakeup_scheduler();
+  query::ObISchedulerService *scheduler =
+      ::oceanbase::share::server_service<::oceanbase::query::ObISchedulerService>();
+  CK (OB_NOT_NULL(scheduler));
+  OX (scheduler->notify_scheduler());
   return ret;
 }
 
@@ -79,7 +78,6 @@ int ObDBMSSchedulerMysql::enable(
 {
   int ret = OB_SUCCESS;
   UNUSED(result);
-  ObString zone;
   ObDMLSqlSplicer dml;
   ObSqlString sql;
   int64_t affected_rows = 0;
@@ -92,7 +90,10 @@ int ObDBMSSchedulerMysql::enable(
   OZ (dml.splice_update_sql(OB_ALL_SCHEDULER_JOB_TNAME, sql));
   OZ (execute_sql(ctx, sql, affected_rows));
   CK (OB_LIKELY(1 == affected_rows || 2 == affected_rows));
-  rootserver::ObDBMSSchedService::wakeup_scheduler();
+  query::ObISchedulerService *scheduler =
+      ::oceanbase::share::server_service<::oceanbase::query::ObISchedulerService>();
+  CK (OB_NOT_NULL(scheduler));
+  OX (scheduler->notify_scheduler());
   return ret;
 }
 
@@ -108,7 +109,6 @@ int ObDBMSSchedulerMysql::set_attribute(
   int64_t affected_rows = 0;
   
   bool is_stat_window_attr = false;
-  bool is_dynamic_partition_attr = false;
   const int64_t now = ObTimeUtility::current_time();
   CK (OB_LIKELY(3 == params.count()));
   OZ (dml.add_gmt_modified(now));
@@ -121,26 +121,14 @@ int ObDBMSSchedulerMysql::set_attribute(
                                                                           params.at(2).get_string(),
                                                                           is_stat_window_attr,
                                                                           dml))) {
-      LOG_WARN("failed to is stats maintenance window attr", K(ret), K(params.at(0).get_string()),
-                                        K(params.at(1).get_string()), K(params.at(2).get_string()));
     } else if (is_stat_window_attr) {
       OZ (dml.splice_update_sql(OB_ALL_SCHEDULER_JOB_TNAME, sql));
       OZ (execute_sql(ctx, sql, affected_rows));
       CK (1 == affected_rows || 2 == affected_rows);
-      rootserver::ObDBMSSchedService::wakeup_scheduler();
-    } else if (OB_FAIL(ObScheduledManageDynamicPartition::set_attribute(ctx.get_my_session(),
-                                                                        params.at(0).get_string(),
-                                                                        params.at(1).get_string(),
-                                                                        params.at(2).get_string(),
-                                                                        is_dynamic_partition_attr,
-                                                                        dml))) {
-      LOG_WARN("failed to set attribute for scheduled manage dynamic partition", KR(ret),
-        K(params.at(0).get_string()), K(params.at(1).get_string()), K(params.at(2).get_string()));
-    } else if (is_dynamic_partition_attr) {
-      OZ (dml.splice_update_sql(OB_ALL_SCHEDULER_JOB_TNAME, sql));
-      OZ (execute_sql(ctx, sql, affected_rows));
-      CK (1 == affected_rows || 2 == affected_rows);
-      rootserver::ObDBMSSchedService::wakeup_scheduler();
+      query::ObISchedulerService *scheduler =
+          ::oceanbase::share::server_service<::oceanbase::query::ObISchedulerService>();
+      CK (OB_NOT_NULL(scheduler));
+      OX (scheduler->notify_scheduler());
     } else {
       OZ (params.at(1).get_varchar(attr_name));
       OZ (params.at(2).get_varchar(attr_val));
@@ -192,11 +180,12 @@ int ObDBMSSchedulerMysql::get_and_increase_job_id(
 int ObDBMSSchedulerMysql::_generate_job_id(int64_t &max_job_id)
 {
   int ret = OB_SUCCESS;
-  ObCommonID raw_id;
-  if (OB_FAIL(storage::ObCommonIDUtils::gen_unique_id(raw_id))) {
-    LOG_WARN("gen unique id failed", K(ret));
-  } else {
-    max_job_id = raw_id.id() + ObDBMSSchedTableOperator::JOB_ID_OFFSET;
+  query::ObISchedulerService *scheduler =
+      ::oceanbase::share::server_service<::oceanbase::query::ObISchedulerService>();
+  if (OB_ISNULL(scheduler)) {
+    ret = OB_NOT_INIT;
+    LOG_WARN("scheduler service is not initialized", K(ret));
+  } else if (OB_FAIL(scheduler->allocate_job_id(max_job_id))) {
   }
   return ret;
 }

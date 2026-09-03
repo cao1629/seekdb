@@ -17,12 +17,10 @@
 #ifndef OCEANBASE_ROOTSERVER_FREEZE_OB_MERGE_SCHEDULER_H_
 #define OCEANBASE_ROOTSERVER_FREEZE_OB_MERGE_SCHEDULER_H_
 
-#include "lib/container/ob_se_array.h"
 #include "lib/lock/ob_mutex.h"
 
-#include "share/ob_zone_merge_info.h"
+#include "share/ob_merge_info.h"
 #include "rootserver/ob_thread_idling.h"
-#include "rootserver/freeze/ob_tenant_all_zone_merge_strategy.h"
 #include "rootserver/freeze/ob_major_merge_progress_checker.h"
 #include "rootserver/freeze/ob_checksum_validator.h"
 #include "rootserver/freeze/ob_freeze_reentrant_thread.h"
@@ -43,9 +41,8 @@ class ObServerConfig;
 
 namespace rootserver
 {
-class ObZoneMergeManager;
+class ObGlobalMergeManager;
 class ObMajorMergeInfoManager;
-class ObTenantMajorMergeStrategy;
 
 class ObMajorMergeIdling : public ObThreadIdling
 {
@@ -82,7 +79,7 @@ public:
 
   int try_update_epoch_and_reload();
   int get_uncompacted_tablets(
-    common::ObArray<share::ObTabletReplica> &uncompacted_tablets,
+    common::ObArray<share::ObTabletRuntimeInfo> &uncompacted_tablets,
     common::ObArray<uint64_t> &uncompacted_table_ids) const;
 
 protected:
@@ -95,10 +92,6 @@ private:
   int do_one_round_major_merge();
 
   int generate_next_global_broadcast_scn();
-  int get_next_merge_zones(share::ObZoneArray &to_merge);
-  int schedule_zones_to_merge(const share::ObZoneArray &to_merge);
-  int start_zones_merge(const share::ObZoneArray &to_merge);
-  int set_zone_merging(const ObZone &zone);
 
   int update_merge_status(
     const share::SCN &global_broadcast_scn);
@@ -112,6 +105,7 @@ private:
   void check_merge_interval_time(const bool is_merging);
 private:
   const static int64_t DEFAULT_IDLE_US = 10 * 1000L * 1000L; // 10s
+  const static int64_t IN_MERGE_IDLE_US = 1 * 1000L * 1000L; // 1s
   static const int64_t MAJOR_MERGE_SCHEDULER_THREAD_CNT = 1;
   static const int64_t ADD_EVENT_INTERVAL = 10L * 60 * 1000 * 1000;  // record every 10 minutes
   const static int64_t PAUSED_WAITING_CLEAR_MEMORY_THRESHOLD = 30L * 60 * 1000 * 1000; // 30 mins
@@ -126,7 +120,6 @@ private:
 
   ObMajorMergeInfoManager *merge_info_mgr_;
   common::ObServerConfig *config_;
-  ObTenantAllZoneMergeStrategy merge_strategy_;
   common::ObMySQLProxy *sql_proxy_;
   ObBasicMergeProgressChecker *progress_checker_;
   DISALLOW_COPY_AND_ASSIGN(ObMajorMergeScheduler);

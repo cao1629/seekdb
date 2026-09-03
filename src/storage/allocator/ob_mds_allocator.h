@@ -19,7 +19,6 @@
 
 #include "lib/allocator/ob_vslice_alloc.h"
 #include "storage/throttle/ob_share_throttle_define.h"
-#include "share/ob_ls_id.h"
 
 namespace oceanbase {
 namespace share {
@@ -30,14 +29,15 @@ OB_INLINE int64_t &mds_throttled_alloc()
   return mds_throttled_alloc;
 }
 
-class ObTenantMdsAllocator : public ObIAllocator {
+class ObMdsAllocator : public ObIAllocator {
 private:
-  static const int64_t MDS_ALLOC_CONCURRENCY = 32;
+  static const int64_t MDS_ALLOC_CONCURRENCY = 8;
 public:
   DEFINE_CUSTOM_FUNC_FOR_THROTTLE(Mds);
+  static int64_t get_memory_limit();
 
 public:
-  ObTenantMdsAllocator() : is_inited_(false), throttle_tool_(nullptr), block_alloc_(), allocator_() {}
+  ObMdsAllocator() : is_inited_(false), throttle_tool_(nullptr), block_alloc_(), allocator_() {}
 
   int init();
   void destroy() { is_inited_ = false; }
@@ -57,7 +57,7 @@ private:
 
 };
 
-struct ObTenantBufferCtxAllocator : public ObIAllocator// for now, it is just a wrapper of mtl_malloc
+struct ObBufferCtxAllocator : public ObIAllocator// for now, it is just a wrapper of server_malloc
 {
   virtual void *alloc(const int64_t size) override;
   virtual void *alloc(const int64_t size, const ObMemAttr &attr) override;
@@ -68,11 +68,10 @@ struct ObTenantBufferCtxAllocator : public ObIAllocator// for now, it is just a 
 class ObMdsThrottleGuard
 {
 public:
-  ObMdsThrottleGuard(const share::ObLSID ls_id, const bool for_replay, const int64_t abs_expire_time);
+  ObMdsThrottleGuard(const bool for_replay, const int64_t abs_expire_time);
   ~ObMdsThrottleGuard();
 
 private:
-  const share::ObLSID ls_id_;
   bool for_replay_;
   int64_t abs_expire_time_;
   share::TxShareThrottleTool *throttle_tool_;

@@ -107,7 +107,7 @@ public:
   ObExecContext *exec_ctx_;
   ObIAllocator *allocator_;
   
-  // for CTAS in oracle mode
+  // for CTAS
   bool is_for_ctas_;
   
   // relation context
@@ -719,8 +719,8 @@ public:
 
   /**
    * @brief is_foreign_key_rely
-   * Determine if the foreign key is reliable, check the global variable foreign_key_check in MYSQL mode
-   * Check the enable_flag in foreign key info in ORACLE mode
+   * Determine whether the foreign key is reliable according to
+   * foreign_key_checks, except for mock parent-table foreign keys.
    */
   static int is_foreign_key_rely (ObSQLSessionInfo* session_info,
                                   const share::schema::ObForeignKeyInfo *foreign_key_info,
@@ -1811,17 +1811,6 @@ public:
   static int add_aggr_winfun_expr(ObSelectStmt *stmt,
                                   ObRawExpr *expr,
                                   bool need_strict_check = true);
-  static int expand_mview_table(ObTransformerCtx *ctx, ObDMLStmt *upper_stmt, TableItem *rt_mv_table);
-  static int adjust_col_and_sel_for_expand_mview(ObTransformerCtx *ctx,
-                                                 ObIArray<ColumnItem> &uppper_col_items,
-                                                 ObIArray<SelectItem> &view_sel_items,
-                                                 uint64_t mv_table_id);
-
-  static int generate_view_stmt_from_query_string(const ObString &expand_view,
-                                                  ObTransformerCtx *ctx,
-                                                  ObSelectStmt *&view_stmt);
-  static int set_expand_mview_flag(ObSelectStmt *view_stmt);
-
   static int is_where_subquery_correlated(const ObIArray<ObExecParamRawExpr *> &exec_params,
                                           const ObSelectStmt &subquery, 
                                           bool &is_correlated);
@@ -2124,14 +2113,11 @@ int ObTransformUtils::replace_exprs(const common::ObIArray<ObRawExpr *> &other_e
     } else if (OB_FAIL(ObTransformUtils::replace_expr(other_exprs,
                                                       new_exprs,
                                                       temp_expr))) {
-      SQL_LOG(WARN, "failed to replace expr", K(ret));
     } else if (OB_FAIL(temp_expr_array.push_back(static_cast<T*>(temp_expr)))) {
-      SQL_LOG(WARN, "failed to push back expr", K(ret));
     } else { /*do nothing*/}
   }
   if (OB_SUCC(ret)) {
     if (OB_FAIL(exprs.assign(temp_expr_array))) {
-      SQL_LOG(WARN, "failed to assign expr", K(ret));
     } else { /*do nothing*/ }
   }
   return ret;
@@ -2199,15 +2185,12 @@ int ObTransformUtils::remove_dup_expr(common::ObIArray<T *> &check,
   for (int64_t i = 0; i < base.count(); i++) {
     int64_t idx = -1;
     if (OB_FAIL(ObTransformUtils::get_expr_idx(check, base.at(i), idx))) {
-      LOG_WARN("find expr failed", K(ret));
     } else if (idx != -1) {
     } else if (OB_FAIL(no_dup.push_back(base.at(i)))) {
-      LOG_WARN("push back failed", K(ret));
     }
   }
   if (OB_SUCC(ret)) {
     if (OB_FAIL(base.assign(no_dup))) {
-      LOG_WARN("assign failed", K(ret));
     }
   }
   return ret;

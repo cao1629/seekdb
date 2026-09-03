@@ -50,19 +50,11 @@ int ObExprLocate::calc_result_typeN(ObExprResType &type,
     LOG_WARN("unexpected error. types_array is null", K(ret), K(types_array));
   } else if (OB_FAIL(ObLocationExprOperator::calc_result_type2(type, types_array[0],
                                                                types_array[1], type_ctx))) {
-    LOG_WARN("calc result type failed", K(ret), K(types_array[0]), K(types_array[1]));
   } else if (3 == param_num) {
     types_array[2].set_calc_type(ObIntType);
     ObCastMode cm = CM_STRING_INTEGER_TRUNC | CM_WARN_ON_FAIL;
     type_ctx.set_cast_mode(type_ctx.get_cast_mode() | cm);
   }
-  return ret;
-}
-
-DEF_SET_LOCAL_SESSION_VARS(ObExprLocate, raw_expr) {
-  int ret = OB_SUCCESS;
-  SET_LOCAL_SYSVAR_CAPACITY(1);
-  EXPR_ADD_LOCAL_SYSVAR(share::SYS_VAR_OB_COMPATIBILITY_VERSION);
   return ret;
 }
 

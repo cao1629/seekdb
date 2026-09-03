@@ -28,11 +28,11 @@ using namespace oceanbase::observer;
 void ObVirtualChannelInfo::get_info(ObDtlChannel* dtl_ch)
 {
   ObDtlBasicChannel *ch = reinterpret_cast<ObDtlBasicChannel*>(dtl_ch);
-  is_local_ = ObDtlChannel::DtlChannelType::LOCAL_CHANNEL == ch->get_channel_type();
+  is_local_ = true;
   is_data_ = ch->is_data_channel();
   is_transmit_ = ch->belong_to_transmit_data();
   channel_id_ = ch->get_id();
-  peer_id_ = ch->get_peer_id();;
+  peer_id_ = ch->get_peer_id();
   alloc_buffer_cnt_ = ch->get_alloc_buffer_cnt();
   free_buffer_cnt_ = ch->get_free_buffer_cnt();
   send_buffer_cnt_ = ch->get_send_buffer_cnt();
@@ -40,7 +40,7 @@ void ObVirtualChannelInfo::get_info(ObDtlChannel* dtl_ch)
   processed_buffer_cnt_ = ch->get_processed_buffer_cnt();
   send_buffer_size_ = ch->get_send_buffer_size();
   hash_val_ = ch->get_hash_val();
-  buffer_pool_id_ = ObDtlTenantMemManager::hash(hash_val_,
+  buffer_pool_id_ = ObDtlMemManager::hash(hash_val_,
     common::ObServerConfig::get_instance()._px_chunklist_count_ratio);
   pins_ = ch->get_pins();
   ObOpMetric &metric = ch->get_op_metric();
@@ -52,7 +52,6 @@ void ObVirtualChannelInfo::get_info(ObDtlChannel* dtl_ch)
   op_id_ = ch->get_op_id();
   thread_id_ = ch->get_thread_id();
   owner_mod_ = ch->get_owner_mod();
-  peer_ = ch->get_peer();
   eof_ = metric.get_eof();
 }
 
@@ -61,9 +60,8 @@ int ObVirtualDtlChannelOp::operator()(ObDtlChannel *ch)
   int ret = OB_SUCCESS;
   ObVirtualChannelInfo chan_info;
   chan_info.get_info(ch);
-  if (channels_->count() < MAX_CHANNEL_CNT_PER_TENANT) {
+  if (channels_->count() < MAX_CHANNEL_COUNT) {
     if (OB_FAIL(channels_->push_back(chan_info))) {
-      LOG_WARN("failed to push back channel info", K(ret));
     }
   }
   return ret;
@@ -80,7 +78,6 @@ int ObVirtualDtlChannelIterator::init()
   int ret = OB_SUCCESS;
   channels_.set_block_allocator(ObWrapperAllocator(iter_allocator_));
   if (OB_FAIL(get_all_channels())) {
-    LOG_WARN("failed to get all channels", K(ret));
   }
   return ret;
 }
@@ -90,7 +87,6 @@ int ObVirtualDtlChannelIterator::get_all_channels()
   int ret = OB_SUCCESS;
   ObVirtualDtlChannelOp op(&channels_);
   if (OB_FAIL(DTL.foreach_refactored(op))) {
-    LOG_WARN("failed to get all channels", K(ret));
   }
   return ret;
 }
@@ -135,7 +131,6 @@ int ObAllVirtualDtlChannel::inner_open()
   int ret = OB_SUCCESS;
   if (!start_to_read_) {
     if (OB_FAIL(iter_.init())) {
-      LOG_WARN("failed to init iterator", K(ret));
     } else {
       start_to_read_ = true;
       char ipbuf[common::OB_IP_STR_BUFF];
@@ -146,7 +141,6 @@ int ObAllVirtualDtlChannel::inner_open()
       } else {
         ipstr_ = ObString::make_string(ipbuf);
         if (OB_FAIL(ob_write_string(*allocator_, ipstr_, ipstr_))) {
-          SERVER_LOG(WARN, "failed to write string", K(ret));
         }
         port_ = addr.get_port();
       }
@@ -270,21 +264,6 @@ int ObAllVirtualDtlChannel::get_row(ObVirtualChannelInfo &chan_info, ObNewRow *&
         cells[cell_idx].set_int(chan_info.owner_mod_);
         break;
       }
-      case PEER_IP: {// OB_APP_MIN_COLUMN_ID + 25
-        const common::ObAddr &addr = chan_info.peer_;
-        if (!addr.ip_to_string(peer_ip_buf_, sizeof(peer_ip_buf_))) {
-          SERVER_LOG(ERROR, "ip to string failed");
-          ret = OB_ERR_UNEXPECTED;
-        } else {
-          ObString ipstr = ObString::make_string(peer_ip_buf_);
-          cells[cell_idx].set_varchar(ipstr);
-        }
-        break;
-      }
-      case PEER_PORT: {// OB_APP_MIN_COLUMN_ID + 26
-        cells[cell_idx].set_int(chan_info.peer_.get_port());
-        break;
-      }
       case DTL_EOF: {
         cells[cell_idx].set_bool(chan_info.eof_);
         break;
@@ -312,7 +291,6 @@ int ObAllVirtualDtlChannel::inner_get_next_row(ObNewRow *&row)
       arena_allocator_.reuse();
     }
   } else if (OB_FAIL(get_row(ch_info, row))) {
-    LOG_WARN("failed to get row from channel info", K(ret));
   }
   return ret;
 }

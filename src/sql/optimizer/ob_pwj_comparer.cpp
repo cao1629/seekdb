@@ -22,7 +22,6 @@ using namespace oceanbase::sql;
 using namespace oceanbase::common;
 using namespace oceanbase::share::schema;
 
-const int64_t ObPwjComparer::MIN_ID_LOCATION_BUCKET_NUMBER = 100;
 const int64_t ObPwjComparer::DEFAULT_ID_ID_BUCKET_NUMBER = 1000;
 
 int PwjTable::init(const ObShardingInfo &sharding)
@@ -37,11 +36,8 @@ int PwjTable::init(const ObShardingInfo &sharding)
   is_partition_single_ = sharding.is_partition_single();
   is_subpartition_single_ = sharding.is_subpartition_single();
   if (OB_FAIL(ordered_tablet_ids_.assign(sharding.get_all_tablet_ids()))) {
-    LOG_WARN("failed to assign partition ids", K(ret));
   } else if (OB_FAIL(all_partition_indexes_.assign(sharding.get_all_partition_indexes()))) {
-    LOG_WARN("failed to assign all partition indexes", K(ret));
   } else if (OB_FAIL(all_subpartition_indexes_.assign(sharding.get_all_subpartition_indexes()))) {
-    LOG_WARN("failed to assign all subpartition indexes", K(ret));
   }
   return ret;
 }
@@ -56,7 +52,6 @@ int PwjTable::init(const ObTableSchema &table_schema, const ObCandiTableLoc &phy
                                                            all_subpartition_indexes_,
                                                            is_partition_single_,
                                                            is_subpartition_single_))) {
-    LOG_WARN("failed to extract used partition indexes", K(ret));
   } else {
     phy_table_loc_info_ = &phy_tbl_info;
     part_level_ = table_schema.get_part_level();
@@ -76,15 +71,6 @@ int PwjTable::init(const ObTableSchema &table_schema, const ObCandiTableLoc &phy
   return ret;
 }
 
-int PwjTable::init(const ObIArray<ObAddr> &server_list)
-{
-  int ret = OB_SUCCESS;
-  if (OB_FAIL(server_list_.assign(server_list))) {
-    LOG_WARN("failed to assign server list for non-strict cons", K(ret));
-  }
-  return ret;
-}
-
 int PwjTable::assign(const PwjTable &other)
 {
   int ret = OB_SUCCESS;
@@ -97,18 +83,11 @@ int PwjTable::assign(const PwjTable &other)
   is_partition_single_ = other.is_partition_single_;
   is_subpartition_single_ = other.is_subpartition_single_;
   if (OB_FAIL(ordered_tablet_ids_.assign(other.ordered_tablet_ids_))) {
-    LOG_WARN("failed to assign ordered partition indexes", K(ret));
   } else if (OB_FAIL(all_partition_indexes_.assign(other.all_partition_indexes_))) {
-    LOG_WARN("failed to assign used partition indexes", K(ret));
   } else if (OB_FAIL(all_subpartition_indexes_.assign(other.all_subpartition_indexes_))) {
-    LOG_WARN("failed to assign used subpartition indexes", K(ret));
-  } else if (OB_FAIL(server_list_.assign(other.server_list_))) {
-    LOG_WARN("failed to assign server list for non-strict cons", K(ret));
   }
   return ret;
 }
-
-OB_SERIALIZE_MEMBER(GroupPWJTabletIdInfo, group_id_, tablet_id_array_);
 
 void ObPwjComparer::reset()
 {
@@ -146,11 +125,8 @@ int ObPwjComparer::extract_all_partition_indexes(const ObCandiTableLoc &phy_tabl
       int64_t part_index = -1;
       int64_t subpart_index = -1;
       if (OB_FAIL(table_schema.get_part_idx_by_tablet(tablet_id, part_index, subpart_index))) {
-        LOG_WARN("failed to get part idx by tablet", K(ret));
       } else if (OB_FAIL(all_tablet_ids.push_back(tablet_id.id()))) {
-        LOG_WARN("failed to push back partition id", K(ret));
       } else if (OB_FAIL(all_partition_indexes.push_back(part_index))) {
-        LOG_WARN("failed to push back partition index", K(ret));
       }
     }
   } else if (share::schema::PARTITION_LEVEL_TWO == part_level) {
@@ -160,13 +136,9 @@ int ObPwjComparer::extract_all_partition_indexes(const ObCandiTableLoc &phy_tabl
       int64_t part_index = -1;
       int64_t subpart_index = -1;
       if (OB_FAIL(table_schema.get_part_idx_by_tablet(tablet_id, part_index, subpart_index))) {
-        LOG_WARN("failed to get part idx by tablet", K(ret));
       } else if (OB_FAIL(all_tablet_ids.push_back(tablet_id.id()))) {
-        LOG_WARN("failed to push back partition id", K(ret));
       } else if (OB_FAIL(all_partition_indexes.push_back(part_index))) {
-        LOG_WARN("failed to push back part index", K(ret));
       } else if (OB_FAIL(all_subpartition_indexes.push_back(subpart_index))) {
-        LOG_WARN("failed to push back subpart index");
       }
     }
   }
@@ -191,14 +163,10 @@ int ObPwjComparer::extract_all_partition_indexes(const ObCandiTableLoc &phy_tabl
           is_subpartition_single = false;
           break;
         } else if (OB_FAIL(part_ids.add_member(all_partition_indexes.at(i)))) {
-          LOG_WARN("failed to add member", K(ret));
         }
       }
     }
   }
-  LOG_TRACE("success extract all partition indexes",
-      K(phy_partitions), K(all_tablet_ids), K(all_partition_indexes),
-      K(all_subpartition_indexes), K(is_partition_single), K(is_subpartition_single));
   return ret;
 }
 
@@ -216,10 +184,8 @@ int ObPwjComparer::is_partition_equal(const ObPartition *l_partition,
     if (OB_FAIL(is_row_equal(l_partition->get_high_bound_val(),
                              r_partition->get_high_bound_val(),
                              is_equal))) {
-      LOG_WARN("failed to check is row equal", K(ret), K(*l_partition), K(*r_partition));
     }
   } else if (OB_FAIL(is_list_partition_equal(l_partition, r_partition, is_equal))) {
-    LOG_WARN("failed to check is list partition equal", K(ret));
   }
   return ret;
 }
@@ -238,10 +204,8 @@ int ObPwjComparer::is_subpartition_equal(const ObSubPartition *l_subpartition,
     if (OB_FAIL(is_row_equal(l_subpartition->get_high_bound_val(),
                              r_subpartition->get_high_bound_val(),
                              is_equal))) {
-      LOG_WARN("failed to check is row equal", K(ret));
     }
   } else if (OB_FAIL(is_list_partition_equal(l_subpartition, r_subpartition, is_equal))) {
-    LOG_WARN("failed to check is list partition equal", K(ret));
   }
   return ret;
 }
@@ -264,7 +228,6 @@ int ObPwjComparer::is_row_equal(const ObRowkey &first_row,
       if (OB_FAIL(is_obj_equal(first_row.get_obj_ptr()[i],
                                second_row.get_obj_ptr()[i],
                                is_equal))) {
-        LOG_WARN("failed to check obj equal", K(ret));
       } else { /*do nothing*/ }
     }
   }
@@ -290,7 +253,6 @@ int ObPwjComparer::is_list_partition_equal(const ObBasePartition *first_part,
       bool is_find = false;
       for (int64_t j = 0; OB_SUCC(ret) && !is_find && j < second_values.count(); j++) {
         if (OB_FAIL(is_row_equal(first_values.at(i), second_values.at(j), is_find))) {
-          LOG_WARN("failed to check row equal", K(ret));
         } else { /*do nothing*/ }
       }
       if (OB_SUCC(ret) && !is_find) {
@@ -316,7 +278,6 @@ int ObPwjComparer::is_row_equal(const common::ObNewRow &first_row,
     is_equal = true;
     for (int64_t i = 0; OB_SUCC(ret) && is_equal && i < first_row.count_; i++) {
       if (OB_FAIL(is_obj_equal(first_row.cells_[i], second_row.cells_[i], is_equal))) {
-        LOG_WARN("failed to check obj equal", K(ret));
       } else { /*do nothing*/ }
     }
   }
@@ -375,9 +336,7 @@ int ObStrictPwjComparer::add_table(PwjTable &table, bool &is_match_pwj)
   if (OB_ISNULL(table.phy_table_loc_info_)) {
     // sharding to check partition wise join maybe reset
     is_match_pwj = false;
-    LOG_TRACE("sharding to check partition wise is invalid", K(table));
   } else if (OB_FAIL(pwj_tables_.push_back(table))) {
-    LOG_WARN("failed to push back pwj table", K(ret));
   } else if (pwj_tables_.count() <= 1) {
     TabletIdArray *part_array = NULL;
     // init first partition id group
@@ -385,97 +344,60 @@ int ObStrictPwjComparer::add_table(PwjTable &table, bool &is_match_pwj)
       ret = OB_ERR_UNEXPECTED;
       LOG_WARN("failed to alloc place holder", K(ret));
     } else if (OB_FAIL(part_array->assign(table.ordered_tablet_ids_))) {
-      LOG_WARN("failed to assign ordered partition ids", K(ret));
     }
   } else if (OB_FAIL(check_logical_equal_and_calc_match_map(pwj_tables_.at(0),
                                                             pwj_tables_.at(pwj_tables_.count() - 1),
                                                             is_match_pwj))) {
-    LOG_WARN("failed to calc match map", K(ret));
   } else if (!is_match_pwj) {
     // do nothing
-  } else if (OB_FAIL(is_physically_equal_partitioned(pwj_tables_.at(0),
-                                                     pwj_tables_.at(pwj_tables_.count() - 1),
-                                                     is_match_pwj))) {
-    LOG_WARN("failed to check is physically equal partitioned", K(ret));
+  } else if (OB_FAIL(match_partitioned_tablets(pwj_tables_.at(0),
+                                               pwj_tables_.at(pwj_tables_.count() - 1),
+                                               is_match_pwj))) {
   }
   return ret;
 }
 
-int ObStrictPwjComparer::is_physically_equal_partitioned(const PwjTable &l_table,
-                                                         const PwjTable &r_table,
-                                                         bool &is_physical_equal)
+int ObStrictPwjComparer::match_partitioned_tablets(const PwjTable &l_table,
+                                                   const PwjTable &r_table,
+                                                   bool &is_match)
 {
   int ret = OB_SUCCESS;
-  is_physical_equal = true;
+  is_match = true;
   const ObCandiTabletLocIArray &left_locations =
       l_table.phy_table_loc_info_->get_phy_part_loc_info_list();
   const ObCandiTabletLocIArray &right_locations =
       r_table.phy_table_loc_info_->get_phy_part_loc_info_list();
   TabletIdArray *r_array = NULL;
-  if (l_table.ordered_tablet_ids_.count() != left_locations.count()) {
+  if (l_table.ordered_tablet_ids_.count() != left_locations.count()
+      || r_table.ordered_tablet_ids_.count() != right_locations.count()) {
     ret = OB_ERR_UNEXPECTED;
     LOG_WARN("get unexpected partition count", K(ret),
-                K(l_table.ordered_tablet_ids_.count()), K(left_locations.count()));
+             K(l_table.ordered_tablet_ids_.count()), K(left_locations.count()),
+             K(r_table.ordered_tablet_ids_.count()), K(right_locations.count()));
   } else if (left_locations.count() != right_locations.count()) {
-    is_physical_equal = false;
+    is_match = false;
   } else if (OB_ISNULL(r_array = tablet_id_group_.alloc_place_holder())) {
     ret = OB_ERR_UNEXPECTED;
     LOG_WARN("failed to alloc place holder", K(ret));
   } else if (OB_FAIL(r_array->prepare_allocate(left_locations.count()))) {
-    LOG_WARN("failed to prepare allocate", K(ret));
   } else {
-    TabletIdLocationMap l_tablet_id_map;
-    TabletIdLocationMap r_tablet_id_map;
     const int64_t N = left_locations.count();
-    if (OB_FAIL(l_tablet_id_map.create(std::max(N, MIN_ID_LOCATION_BUCKET_NUMBER),
-                                     "SqlPwjCompare"))) {
-      LOG_WARN("failed to create hash map", K(ret));
-    } else if (OB_FAIL(r_tablet_id_map.create(std::max(N, MIN_ID_LOCATION_BUCKET_NUMBER),
-                                            "SqlPwjCompare"))) {
-      LOG_WARN("failed to create hash map", K(ret));
-    } else {
-      for (int64_t i = 0; OB_SUCC(ret) && i < N; ++i) {
-        const ObCandiTabletLoc &left_location = left_locations.at(i);
-        const ObCandiTabletLoc &right_locaiton = right_locations.at(i);
-        if (OB_FAIL(l_tablet_id_map.set_refactored(
-                    left_location.get_partition_location().get_tablet_id().id(), &left_location)) ||
-            OB_FAIL(r_tablet_id_map.set_refactored(
-                    right_locaiton.get_partition_location().get_tablet_id().id(), &right_locaiton))) {
-          LOG_WARN("failed to set refactored", K(ret));
+    for (int64_t i = 0; OB_SUCC(ret) && i < N; ++i) {
+      const uint64_t l_tablet_id = l_table.ordered_tablet_ids_.at(i);
+      uint64_t r_tablet_id = 0;
+      if (OB_FAIL(phy_part_map_.get_refactored(l_tablet_id, r_tablet_id))) {
+      } else {
+        bool found = false;
+        for (int64_t j = 0; !found && j < right_locations.count(); ++j) {
+          found = right_locations.at(j).get_partition_location().get_tablet_id().id()
+                  == r_tablet_id;
         }
-      }
-      for (int64_t i = 0; OB_SUCC(ret) && is_physical_equal && i < N; ++i) {
-        uint64_t l_tablet_id = l_table.ordered_tablet_ids_.at(i);
-        uint64_t r_tablet_id = 0;
-        share::ObLSReplicaLocation l_replica_loc;
-        share::ObLSReplicaLocation r_replica_loc;
-        const ObCandiTabletLoc *left_location = NULL;
-        const ObCandiTabletLoc *right_location = NULL;
-        if (OB_FAIL(phy_part_map_.get_refactored(l_tablet_id, r_tablet_id))) {
-          LOG_WARN("failed to get refactored", K(ret));
-        } else if (OB_FAIL(l_tablet_id_map.get_refactored(l_tablet_id, left_location)) ||
-                  OB_FAIL(r_tablet_id_map.get_refactored(r_tablet_id, right_location))) {
-          LOG_WARN("failed to get refactored", K(ret));
-        } else if (OB_FAIL(left_location->get_selected_replica(l_replica_loc))) {
-          LOG_WARN("failed to get selected replica", K(ret), K(left_location));
-        } else if (OB_FAIL(right_location->get_selected_replica(r_replica_loc))) {
-          LOG_WARN("failed to get selected replica", K(ret), K(right_locations.at(i)));
-        } else if (!l_replica_loc.is_valid() || !r_replica_loc.is_valid()) {
-          ret = OB_ERR_UNEXPECTED;
-          LOG_ERROR("replica location is invalid", K(ret), K(i), K(l_replica_loc), K(r_replica_loc));
+        if (!found) {
+          is_match = false;
+          break;
         } else {
-          is_physical_equal = l_replica_loc.get_server() == r_replica_loc.get_server();
-        }
-
-        if (OB_SUCC(ret) && is_physical_equal) {
           r_array->at(i) = r_tablet_id;
         }
-      }
-      // destroy hash map anyway
-      int tmp_ret = OB_SUCCESS;
-      if (OB_SUCCESS != (tmp_ret = l_tablet_id_map.destroy()) ||
-          OB_SUCCESS != (tmp_ret = r_tablet_id_map.destroy())) {
-        LOG_WARN("failed to destroy hash map", K(ret));
       }
     }
   }
@@ -523,7 +445,6 @@ int ObStrictPwjComparer::check_logical_equal_and_calc_match_map(const PwjTable &
   subpart_tablet_id_map_.reuse();
   phy_part_map_.reuse();
 
-  LOG_TRACE("start to check logical equal for l_table and r_table", K(l_table), K(r_table));
 
   if (l_table.part_level_ != r_table.part_level_ ||
       l_table.is_partition_single_ != r_table.is_partition_single_ ||
@@ -535,16 +456,11 @@ int ObStrictPwjComparer::check_logical_equal_and_calc_match_map(const PwjTable &
     part_index_pair.first = l_table.all_partition_indexes_.at(0);
     part_index_pair.second = r_table.all_partition_indexes_.at(0);
     if (OB_FAIL(get_part_tablet_id_by_part_index(l_table, part_index_pair.first, part_tablet_id_pair.first))) {
-      LOG_WARN("failed to get part id by part index", K(ret));
     } else if (OB_FAIL(get_part_tablet_id_by_part_index(r_table, part_index_pair.second, part_tablet_id_pair.second))) {
-      LOG_WARN("failed to get part id by part index", K(ret));
     } else if (OB_FAIL(part_tablet_id_map_.push_back(part_tablet_id_pair))) {
-      LOG_WARN("failed to push back part id pair", K(ret));
     } else if (OB_FAIL(part_index_map_.push_back(part_index_pair))) {
-      LOG_WARN("failed to push back part index pair", K(ret));
     }
   } else if (OB_FAIL(is_first_partition_logically_equal(l_table, r_table, is_match))) {
-    LOG_WARN("failed to compare logical equal partition", K(ret));
   }
 
   if (OB_SUCC(ret) && is_match) {
@@ -554,22 +470,17 @@ int ObStrictPwjComparer::check_logical_equal_and_calc_match_map(const PwjTable &
         uint64_t r_subpart_tablet_id = 0;
         for (int64_t i = 0; OB_SUCC(ret) && i < part_index_map_.count(); ++i) {
           if (OB_FAIL(get_sub_part_tablet_id(l_table, part_index_map_.at(i).first, l_subpart_tablet_id))) {
-            LOG_WARN("failed to get sub part id", K(ret));
           } else if (OB_FAIL(get_sub_part_tablet_id(r_table, part_index_map_.at(i).second, r_subpart_tablet_id))) {
-            LOG_WARN("failed to get sub part id", K(ret));
           } else if (OB_FAIL(phy_part_map_.set_refactored(l_subpart_tablet_id,
                                                           r_subpart_tablet_id))) {
-            LOG_WARN("failed to set refactored", K(ret));
           }
         }
       } else if (OB_FAIL(is_sub_partition_logically_equal(l_table, r_table, is_match))) {
-        LOG_WARN("failed to compare logical equal subpartition", K(ret));
       }
     // First-level partition table partition_id(physical partition id) = part_id(first-level logical partition id)
     } else {
       for (int64_t i = 0; OB_SUCC(ret) && i < part_tablet_id_map_.count(); ++i) {
         if (OB_FAIL(phy_part_map_.set_refactored(part_tablet_id_map_.at(i).first, part_tablet_id_map_.at(i).second))) {
-          LOG_WARN("failed to set refactored", K(ret));
         }
       }
     }
@@ -580,21 +491,7 @@ int ObStrictPwjComparer::check_logical_equal_and_calc_match_map(const PwjTable &
 bool ObStrictPwjComparer::is_same_part_type(const ObPartitionFuncType part_type1,
                                             const ObPartitionFuncType part_type2)
 {
-  bool ret = false;
-  if (part_type1 != part_type2)
-  {
-    if (PARTITION_FUNC_TYPE_RANGE_COLUMNS == part_type1
-        && is_interval_part(part_type2)) {
-      ret = true;
-    } else if (PARTITION_FUNC_TYPE_RANGE_COLUMNS == part_type2
-               && is_interval_part(part_type1)) {
-      ret = true;
-    }
-  } else {
-    ret = true;
-  }
-
-  return ret;
+  return part_type1 == part_type2;
 }
 
 int ObStrictPwjComparer::is_first_partition_logically_equal(const PwjTable &l_table,
@@ -610,11 +507,9 @@ int ObStrictPwjComparer::is_first_partition_logically_equal(const PwjTable &l_ta
   } else if (OB_FAIL(get_used_partition_indexes(l_table.part_number_,
                                                 l_table.all_partition_indexes_,
                                                 l_used_partition_indexes))) {
-    LOG_WARN("failed to get used partition indexes", K(ret));
   } else if (OB_FAIL(get_used_partition_indexes(r_table.part_number_,
                                                 r_table.all_partition_indexes_,
                                                 r_used_partition_indexes))) {
-    LOG_WARN("failed to get used partition indexes", K(ret));
   } else if (l_used_partition_indexes.count() != r_used_partition_indexes.count()) {
     is_equal = false;
   } else if (is_hash_like_part(l_table.part_type_)) {
@@ -626,7 +521,6 @@ int ObStrictPwjComparer::is_first_partition_logically_equal(const PwjTable &l_ta
                                            part_tablet_id_map_,
                                            part_index_map_,
                                            is_equal))) {
-      LOG_WARN("failed to check hash partition equal", K(ret));
     }
   } else if (is_range_part(l_table.part_type_)) {
     // range partition, require the corresponding partition upper bounds to be consistent
@@ -637,7 +531,6 @@ int ObStrictPwjComparer::is_first_partition_logically_equal(const PwjTable &l_ta
                                             part_tablet_id_map_,
                                             part_index_map_,
                                             is_equal))) {
-      LOG_WARN("failed to get range partition match map", K(ret));
     }
   } else if (is_list_part(l_table.part_type_)) {
     // list partition, require each partition on the left to find a corresponding partition on the right
@@ -648,13 +541,10 @@ int ObStrictPwjComparer::is_first_partition_logically_equal(const PwjTable &l_ta
                                            part_tablet_id_map_,
                                            part_index_map_,
                                            is_equal))) {
-      LOG_WARN("failed to get list partition match map", K(ret));
     }
   } else {
     is_equal = false;
   }
-  LOG_TRACE("succeed to check is first partition logical equal",
-              K(is_equal), K(part_tablet_id_map_), K(part_index_map_));
   return ret;
 }
 
@@ -683,10 +573,8 @@ int ObStrictPwjComparer::is_sub_partition_logically_equal(const PwjTable &l_tabl
         LOG_WARN("get unexpected null", K(ret));
       } else if (OB_FAIL(get_subpartition_indexes_by_part_index(l_table, l_part_index,
                                                                 l_used_partition_indexes))) {
-        LOG_WARN("failed to get subpartition indexes by part index", K(ret));
       } else if (OB_FAIL(get_subpartition_indexes_by_part_index(r_table, r_part_index,
                                                                 r_used_partition_indexes))) {
-        LOG_WARN("failed to get subpartition indexes by part index", K(ret));
       } else if (l_used_partition_indexes.count() != r_used_partition_indexes.count()) {
         is_equal = false;
       } else if (is_hash_like_part(l_table.subpart_type_)) {
@@ -699,7 +587,6 @@ int ObStrictPwjComparer::is_sub_partition_logically_equal(const PwjTable &l_tabl
                                                          r_used_partition_indexes,
                                                          subpart_tablet_id_map_,
                                                          is_equal))) {
-          LOG_WARN("failed to get hash subpartition match map", K(ret));
         }
       } else if (is_range_part(l_table.subpart_type_)) {
         // range partition, require the number of partitions used to be consistent, and the corresponding partition upper bounds to be consistent
@@ -709,7 +596,6 @@ int ObStrictPwjComparer::is_sub_partition_logically_equal(const PwjTable &l_tabl
                                                    r_used_partition_indexes,
                                                    subpart_tablet_id_map_,
                                                    is_equal))) {
-          LOG_WARN("failed to get range subpartition match map", K(ret));
         }
       } else if (is_list_part(l_table.subpart_type_)) {
         // list partition, require the number of partitions used to be consistent, and each partition on the left can find a corresponding partition on the right
@@ -719,7 +605,6 @@ int ObStrictPwjComparer::is_sub_partition_logically_equal(const PwjTable &l_tabl
                                                   r_used_partition_indexes,
                                                   subpart_tablet_id_map_,
                                                   is_equal))) {
-          LOG_WARN("failed to get list subpartition match map", K(ret));
         }
       } else {
         is_equal = false;
@@ -728,13 +613,11 @@ int ObStrictPwjComparer::is_sub_partition_logically_equal(const PwjTable &l_tabl
         for (int64_t j = 0; OB_SUCC(ret) && j < subpart_tablet_id_map_.count(); ++j) {
           if (OB_FAIL(phy_part_map_.set_refactored(subpart_tablet_id_map_.at(j).first,
                                                    subpart_tablet_id_map_.at(j).second))) {
-            LOG_WARN("failed to set refactored", K(ret));
           }
         }
       }
     }
   }
-  LOG_TRACE("succeed to check is sub partition logical equal", K(is_equal), K(l_table), K(r_table));
   return ret;
 }
 
@@ -747,7 +630,6 @@ int ObStrictPwjComparer::get_subpartition_indexes_by_part_index(const PwjTable &
     if (part_index != table.all_partition_indexes_.at(i)) {
       // do nothing
     } else if (OB_FAIL(used_subpart_indexes.push_back(table.all_subpartition_indexes_.at(i)))) {
-      LOG_WARN("failed to push back subpartition indexes", K(ret));
     }
   }
   if (OB_SUCC(ret)) {
@@ -787,9 +669,7 @@ int ObStrictPwjComparer::check_hash_partition_equal(const PwjTable &l_table,
           part_tablet_id_pair.first = l_table.partition_array_[l_indexes.at(i)]->get_tablet_id().id();
           part_tablet_id_pair.second = r_table.partition_array_[r_indexes.at(i)]->get_tablet_id().id();
           if (OB_FAIL(part_tablet_id_map.push_back(part_tablet_id_pair))) {
-            LOG_WARN("failed to push back part id pair", K(ret));
           } else if (OB_FAIL(part_index_map.push_back(part_index_pair))) {
-            LOG_WARN("failed to push back part index pair", K(ret));
           } else { /* do nothing*/ }
         }
       } else {
@@ -824,7 +704,6 @@ int ObStrictPwjComparer::check_hash_subpartition_equal(ObSubPartition **l_subpar
         subpart_tablet_id_pair.first = l_subpartition_array[l_indexes.at(i)]->get_tablet_id().id();
         subpart_tablet_id_pair.second = r_subpartition_array[r_indexes.at(i)]->get_tablet_id().id();
         if (OB_FAIL(subpart_tablet_id_map.push_back(subpart_tablet_id_pair))) {
-          LOG_WARN("failed to push back part id pair", K(ret));
         }
       }
     } else {
@@ -858,16 +737,13 @@ int ObStrictPwjComparer::check_range_partition_equal(ObPartition **l_partition_a
       ret = OB_ERR_UNEXPECTED;
       LOG_WARN("get unexpected null", K(ret), K(l_partition), K(r_partition), K(i));
     } else if (OB_FAIL(is_partition_equal(l_partition, r_partition, true, is_equal))) {
-      LOG_WARN("failed to check range partition equal", K(ret));
     } else if (is_equal) {
       part_index_pair.first = l_indexes.at(i);
       part_index_pair.second = r_indexes.at(i);
       part_tablet_id_pair.first = l_partition->get_tablet_id().id();
       part_tablet_id_pair.second = r_partition->get_tablet_id().id();
       if (OB_FAIL(part_tablet_id_map.push_back(part_tablet_id_pair))) {
-        LOG_WARN("failed to push back part id pair", K(ret));
       } else if (OB_FAIL(part_index_map.push_back(part_index_pair))) {
-        LOG_WARN("failed to push back part index pair", K(ret));
       } else { /* do nothing*/ }
     }
   }
@@ -896,12 +772,10 @@ int ObStrictPwjComparer::check_range_subpartition_equal(ObSubPartition **l_subpa
       ret = OB_ERR_UNEXPECTED;
       LOG_WARN("get unexpected null", K(ret));
     } else if (OB_FAIL(is_subpartition_equal(l_partition, r_partition, true, is_equal))) {
-      LOG_WARN("failed to check range subpartition equal", K(ret));
     } else if (is_equal) {
       subpart_tablet_id_pair.first = l_partition->get_tablet_id().id();
       subpart_tablet_id_pair.second = r_partition->get_tablet_id().id();
       if (OB_FAIL(subpart_tablet_id_map.push_back(subpart_tablet_id_pair))) {
-        LOG_WARN("failed to push back part id pair", K(ret));
       }
     }
   }
@@ -941,7 +815,6 @@ int ObStrictPwjComparer::check_list_partition_equal(ObPartition **l_partition_ar
         ret = OB_ERR_UNEXPECTED;
         LOG_WARN("get unexpected null", K(ret));
       } else if (OB_FAIL(is_partition_equal(l_partition, r_partition, false, is_part_equal))) {
-        LOG_WARN("failed to check list partition equal", K(ret));
       } else if (is_part_equal) {
         find = true;
         part_index_pair.first = l_indexes.at(i);
@@ -949,11 +822,8 @@ int ObStrictPwjComparer::check_list_partition_equal(ObPartition **l_partition_ar
         part_tablet_id_pair.first = l_partition->get_tablet_id().id();
         part_tablet_id_pair.second = r_partition->get_tablet_id().id();
         if (OB_FAIL(matched_partitions.add_member(j))) {
-          LOG_WARN("failed to add member", K(ret));
         } else if (OB_FAIL(part_tablet_id_map.push_back(part_tablet_id_pair))) {
-          LOG_WARN("failed to push back part id pair", K(ret));
         } else if (OB_FAIL(part_index_map.push_back(part_index_pair))) {
-          LOG_WARN("failed to push back part index pair", K(ret));
         }
       }
     }
@@ -997,15 +867,12 @@ int ObStrictPwjComparer::check_list_subpartition_equal(ObSubPartition **l_subpar
         ret = OB_ERR_UNEXPECTED;
         LOG_WARN("get unexpected null", K(ret));
       } else if (OB_FAIL(is_subpartition_equal(l_partition, r_partition, false, is_subpart_equal))) {
-        LOG_WARN("failed to check list partition equal", K(ret));
       } else if (is_subpart_equal) {
         find = true;
         subpart_tablet_id_pair.first = l_partition->get_tablet_id().id();
         subpart_tablet_id_pair.second = r_partition->get_tablet_id().id();
         if (OB_FAIL(matched_partitions.add_member(j))) {
-          LOG_WARN("failed to add member", K(ret));
         } else if (OB_FAIL(subpart_tablet_id_map.push_back(subpart_tablet_id_pair))) {
-          LOG_WARN("failed to push back part id pair", K(ret));
         }
       }
     }
@@ -1063,47 +930,6 @@ int ObStrictPwjComparer::get_sub_part_tablet_id(const PwjTable &table,
       LOG_WARN("failed to find part_index in all_partition_indexes", K(ret),
                   K(part_index), K(table.all_partition_indexes_));
     }
-  }
-  return ret;
-}
-
-int ObNonStrictPwjComparer::add_table(PwjTable &table, bool &is_match_nonstrict_pw)
-{
-  int ret = OB_SUCCESS;
-  is_match_nonstrict_pw = true;
-  if (table.server_list_.empty()) {
-    is_match_nonstrict_pw = false;
-    LOG_DEBUG("invalid non strict pwj input", K(table));
-  } else if (OB_FAIL(pwj_tables_.push_back(table))) {
-    LOG_WARN("failed to push back pwj table", K(ret));
-  } else if (pwj_tables_.count() <= 1) {
-    is_match_nonstrict_pw = true;
-  } else if (OB_FAIL(is_match_non_strict_partition_wise(pwj_tables_.at(0),
-                                                        pwj_tables_.at(pwj_tables_.count() - 1),
-                                                        is_match_nonstrict_pw))) {
-    LOG_WARN("failed to check non strict pw", K(ret));
-  }
-  return ret;
-}
-
-int ObNonStrictPwjComparer::is_match_non_strict_partition_wise(PwjTable &l_table,
-                                                               PwjTable &r_table,
-                                                               bool &is_match_nonstrict_pw)
-{
-  int ret = OB_SUCCESS;
-  is_match_nonstrict_pw = false;
-  if (OB_FAIL(ObShardingInfo::is_physically_equal_serverlist(l_table.server_list_,
-                                                             r_table.server_list_,
-                                                             is_match_nonstrict_pw))) {
-    LOG_WARN("failed to check physically equal server list", K(ret));
-  } else if (is_match_nonstrict_pw) {
-    // do nothing
-  } else if (OB_FAIL(ObShardingInfo::is_physically_both_shuffled_serverlist(l_table.server_list_,
-                                                                            r_table.server_list_,
-                                                                            is_match_nonstrict_pw))) {
-    LOG_WARN("failed to check both shuffled server list", K(ret));
-  } else {
-    // do nothing
   }
   return ret;
 }

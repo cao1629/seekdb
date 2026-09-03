@@ -17,8 +17,7 @@
 #ifndef OB_MICRO_BLOCK_HANDLE_MGR_H_
 #define OB_MICRO_BLOCK_HANDLE_MGR_H_
 
-#include "share/ob_i_tablet_scan.h"
-#include "sql/plan_cache/ob_plan_cache_util.h"
+#include "data_plane/access/ob_tablet_scan.h"
 #include "storage/blocksstable/ob_block_manager.h"
 #include "storage/blocksstable/ob_block_sstable_struct.h"
 #include "storage/blocksstable/ob_imicro_block_reader.h"
@@ -78,7 +77,6 @@ struct ObMicroBlockDataHandle
   int32_t block_index_;
   blocksstable::ObMicroBlockInfo micro_info_;
   blocksstable::ObMicroBlockDesMeta des_meta_;
-  char encrypt_key_[share::OB_MAX_TABLESPACE_ENCRYPT_KEY_LENGTH];
   blocksstable::ObMicroBlockBufferHandle cache_handle_;
   blocksstable::ObStorageObjectHandle io_handle_;
   ObMicroBlockHandleMgr *handle_mgr_;

@@ -44,7 +44,11 @@ struct TaskDesc
 class ObDDLTransController : public lib::ThreadPool
 {
 public:
-  ObDDLTransController() : inited_(false), schema_service_(NULL), need_refresh_(false) {}
+  ObDDLTransController()
+      : inited_(false),
+        schema_service_(NULL),
+        pending_refresh_version_(0)
+  {}
   ~ObDDLTransController();
   int init(share::schema::ObMultiVersionSchemaService *schema_service);
   void stop();
@@ -56,8 +60,6 @@ public:
       ObIArray<int64_t> &schema_version_res);
   int wait_task_ready(const int64_t task_id, const int64_t wait_us);
   int remove_task(const int64_t task_id);
-  int broadcast_consensus_version(const int64_t schema_version,
-                                  const ObArray<ObAddr> &server_list);
   int reserve_schema_version(const uint64_t schema_version_count);
 private:
   virtual void run1() override;
@@ -68,10 +70,7 @@ private:
   ObSEArray<TaskDesc, 32> tasks_;
   common::SpinRWLock lock_;
   share::schema::ObMultiVersionSchemaService *schema_service_;
-
-  bool need_refresh_;
-
-
+  int64_t pending_refresh_version_;
   common::ObCond wait_cond_;
 };
 

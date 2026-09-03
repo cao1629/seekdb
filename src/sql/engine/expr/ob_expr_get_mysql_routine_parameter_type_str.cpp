@@ -17,7 +17,7 @@
 #define USING_LOG_PREFIX SQL_ENG
 
 #include "sql/engine/expr/ob_expr_get_mysql_routine_parameter_type_str.h"
-#include "pl/ob_pl_stmt.h"
+#include "sql/pl/ob_pl_stmt.h"
 
 using namespace oceanbase::common;
 namespace oceanbase
@@ -56,7 +56,6 @@ int ObExprGetMySQLRoutineParameterTypeStr::get_mysql_routine_parameter_type_str(
 {
   int ret = OB_SUCCESS;
   if (OB_FAIL(expr.eval_param_value(ctx))) {
-    LOG_WARN("eval arg failed", K(ret));
   } else {
     const share::schema::ObRoutineInfo *routine_info = NULL;
     ObDatum &first_param = expr.locate_param_datum(ctx, 0);
@@ -86,7 +85,7 @@ int ObExprGetMySQLRoutineParameterTypeStr::get_mysql_routine_parameter_type_str(
           memset(type_str, 0, OB_MAX_SYS_PARAM_NAME_LENGTH);
           OZ (ob_sql_type_str(param->get_param_type().get_meta_type(),
                               param->get_param_type().get_accuracy(),
-                              param->get_extended_type_info(), ctx.exec_ctx_.get_my_session()->get_local_nls_length_semantics(),
+                              param->get_extended_type_info(), ctx.exec_ctx_.get_my_session()->get_default_length_semantics(),
                               type_str, OB_MAX_SYS_PARAM_NAME_LENGTH, type_pos));
           OX (res_datum.set_string(type_str, type_pos));
         }

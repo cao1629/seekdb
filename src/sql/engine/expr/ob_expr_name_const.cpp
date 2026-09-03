@@ -24,8 +24,7 @@ namespace sql
 {
 
 ObExprNameConst::ObExprNameConst(ObIAllocator &alloc)
-    : ObFuncExprOperator(alloc, T_FUN_SYS_NAME_CONST, N_NAME_CONST, 2, NOT_VALID_FOR_GENERATED_COL, NOT_ROW_DIMENSION,
-                         false, false)
+    : ObFuncExprOperator(alloc, T_FUN_SYS_NAME_CONST, N_NAME_CONST, 2, NOT_VALID_FOR_GENERATED_COL, NOT_ROW_DIMENSION, false)
 {
 }
 
@@ -114,7 +113,6 @@ int ObExprNameConst::eval_name_const(const ObExpr &expr, ObEvalCtx &ctx, ObDatum
   ObDatum *value_param = NULL;
   ObExpr *name_expr = expr.args_[0];
   if (OB_FAIL(expr.eval_param_value(ctx, name_param, value_param))) {
-    LOG_WARN("eval arg failed", K(ret));
   } else if (OB_ISNULL(name_param) || OB_ISNULL(value_param) || OB_ISNULL(name_expr)) {
     ret = OB_ERR_UNEXPECTED;
     LOG_WARN("name or value is NULL", K(ret), K(name_param), K(value_param));

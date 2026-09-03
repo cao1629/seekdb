@@ -103,7 +103,7 @@ int calc_assign_expr(const ObExpr &expr, ObEvalCtx &ctx, ObDatum &res_datum)
     if (val_res->is_null()) {
       obj.set_null();
       obj_meta.set_null();
-      // same as old engine. but why...
+      // A NULL assignment keeps the default implicit collation metadata.
       obj_meta.set_collation_level(CS_LEVEL_IMPLICIT);
       obj_meta.set_collation_type(ObCharset::get_default_collation(
                                   ObCharset::get_default_charset()));
@@ -117,7 +117,6 @@ int calc_assign_expr(const ObExpr &expr, ObEvalCtx &ctx, ObDatum &res_datum)
         obj_meta.set_has_lob_header();
       }
       if (OB_FAIL(val_res->to_obj(obj, obj_meta))) {
-        LOG_WARN("to_obj failed", K(ret), K(expr), K(obj_meta));
       }
     }
     if (OB_SUCC(ret)) {

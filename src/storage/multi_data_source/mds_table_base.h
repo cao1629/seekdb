@@ -24,7 +24,7 @@
 #include "lib/function/ob_function.h"
 #include "runtime_utility/mds_lock.h"
 #include "storage/multi_data_source/mds_table_mgr.h"
-#include "observer/virtual_table/ob_mds_event_buffer.h"
+#include "storage/multi_data_source/ob_mds_event_buffer.h"
 #include "storage/multi_data_source/runtime_utility/common_define.h"
 #include "storage/multi_data_source/runtime_utility/list_helper.h"
 #include "storage/multi_data_source/runtime_utility/mds_tlocal_info.h"
@@ -102,7 +102,6 @@ protected:
 public:
   MdsTableBase()
   : state_(State::UNKNOWN),
-  ls_id_(),
   tablet_id_(),
   flushing_scn_(),
   last_inner_recycled_scn_(share::SCN::min_scn()),
@@ -113,7 +112,6 @@ public:
   lock_() { construct_sequence_ = ObMdsGlobalSequencer::generate_senquence(); }
   virtual ~MdsTableBase() {}
   int init(const ObTabletID tablet_id,
-           const share::ObLSID ls_id,
            const share::SCN mds_ckpt_scn_from_tablet,// this is used to filter replayed nodes after removed action
            ObTabletPointer *pointer,
            ObMdsTableMgr *p_mgr);
@@ -172,7 +170,6 @@ public:
                                      const ScanNodeOrder scan_node_order) const = 0;
   virtual void on_flush(const share::SCN &flushed_scn, const int flush_ret) = 0;
   virtual int try_recycle(const share::SCN recycle_scn) = 0;
-  share::ObLSID get_ls_id() const;
   int64_t get_node_cnt() const;
   virtual share::SCN get_rec_scn();
   virtual int operate(const ObFunction<int(MdsTableBase &)> &operation) = 0;
@@ -203,25 +200,23 @@ protected:
                                const uint32_t line = __builtin_LINE(),
                                const char *function_name = __builtin_FUNCTION()) {
     int ret = OB_SUCCESS;
-    observer::MdsEvent event;
+    MdsEvent event;
     event.record_thread_info_();
     event.info_str_.reset();
     event.event_ = "CONSTRUCTED";
-    observer::MdsEventKey key(ls_id_,
-                              tablet_id_);
-    observer::ObMdsEventBuffer::append(key, event, this, file, line, function_name);
+    MdsEventKey key(tablet_id_);
+    ObMdsEventBuffer::append(key, event, this, file, line, function_name);
   }
   void report_destruct_event_(const char *file = __builtin_FILE(),
                               const uint32_t line = __builtin_LINE(),
                               const char *function_name = __builtin_FUNCTION()) {
     int ret = OB_SUCCESS;
-    observer::MdsEvent event;
+    MdsEvent event;
     event.record_thread_info_();
     event.info_str_.reset();
     event.event_ = "DESTRUCTED";
-    observer::MdsEventKey key(ls_id_,
-                              tablet_id_);
-    observer::ObMdsEventBuffer::append(key, event, this, file, line, function_name);
+    MdsEventKey key(tablet_id_);
+    ObMdsEventBuffer::append(key, event, this, file, line, function_name);
   }
   template <int N>
   void report_rec_scn_event_(const char (&event_str)[N],
@@ -231,7 +226,7 @@ protected:
                              const uint32_t line = __builtin_LINE(),
                              const char *function_name = __builtin_FUNCTION()) {
     int ret = OB_SUCCESS;
-    observer::MdsEvent event;
+    MdsEvent event;
     constexpr int64_t buffer_size = 1_KB;
     char stack_buffer[buffer_size] = { 0 };
     int64_t pos = 0;
@@ -241,9 +236,8 @@ protected:
     event.record_thread_info_();
     event.info_str_.assign(stack_buffer, pos);
     event.event_ = event_str;
-    observer::MdsEventKey key(ls_id_,
-                              tablet_id_);
-    observer::ObMdsEventBuffer::append(key, event, this, file, line, function_name);
+    MdsEventKey key(tablet_id_);
+    ObMdsEventBuffer::append(key, event, this, file, line, function_name);
   }
   template <int N>
   void report_flush_event_(const char (&event_str)[N],
@@ -252,7 +246,7 @@ protected:
                            const uint32_t line = __builtin_LINE(),
                            const char *function_name = __builtin_FUNCTION()) {
     int ret = OB_SUCCESS;
-    observer::MdsEvent event;
+    MdsEvent event;
     constexpr int64_t buffer_size = 1_KB;
     char stack_buffer[buffer_size] = { 0 };
     int64_t pos = 0;
@@ -261,9 +255,8 @@ protected:
     event.record_thread_info_();
     event.info_str_.assign(stack_buffer, pos);
     event.event_ = event_str;
-    observer::MdsEventKey key(ls_id_,
-                              tablet_id_);
-    observer::ObMdsEventBuffer::append(key, event, this, file, line, function_name);
+    MdsEventKey key(tablet_id_);
+    ObMdsEventBuffer::append(key, event, this, file, line, function_name);
 
   }
   template <int N>
@@ -273,7 +266,7 @@ protected:
                               const uint32_t line = __builtin_LINE(),
                               const char *function_name = __builtin_FUNCTION()) {
     int ret = OB_SUCCESS;
-    observer::MdsEvent event;
+    MdsEvent event;
     constexpr int64_t buffer_size = 1_KB;
     char stack_buffer[buffer_size] = { 0 };
     int64_t pos = 0;
@@ -282,10 +275,8 @@ protected:
     event.record_thread_info_();
     event.info_str_.assign(stack_buffer, pos);
     event.event_ = event_str;
-    observer::MdsEventKey key(ls_id_,
-                              tablet_id_);
-    observer::ObMdsEventBuffer::append(key, event, this, file, line, function_name);
-    observer::ObMdsEventBuffer::append(key, event, this, file, line, function_name);
+    MdsEventKey key(tablet_id_);
+    ObMdsEventBuffer::append(key, event, this, file, line, function_name);
 
   }
   void report_recycle_event_(share::SCN recycle_scn,
@@ -293,7 +284,7 @@ protected:
                              const uint32_t line = __builtin_LINE(),
                              const char *function_name = __builtin_FUNCTION()) {
     int ret = OB_SUCCESS;
-    observer::MdsEvent event;
+    MdsEvent event;
     constexpr int64_t buffer_size = 1_KB;
     char stack_buffer[buffer_size] = { 0 };
     int64_t pos = 0;
@@ -302,9 +293,8 @@ protected:
     event.record_thread_info_();
     event.info_str_.assign(stack_buffer, pos);
     event.event_ = "RECYCLE";
-    observer::MdsEventKey key(ls_id_,
-                              tablet_id_);
-    observer::ObMdsEventBuffer::append(key, event, this, file, line, function_name);
+    MdsEventKey key(tablet_id_);
+    ObMdsEventBuffer::append(key, event, this, file, line, function_name);
   }
 public:
   struct DebugInfo {
@@ -331,7 +321,6 @@ public:
     ObCurTraceId::TraceId remove_trace_id_;
   } debug_info_;// 120B
   mutable State state_;
-  share::ObLSID ls_id_;
   ObTabletID tablet_id_;
   share::SCN flushing_scn_;// To tell if this mds table is flushing
   share::SCN last_inner_recycled_scn_;// To filter repeated release operation, and filter replay operation

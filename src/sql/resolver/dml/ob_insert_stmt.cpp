@@ -28,7 +28,6 @@ int ObUniqueConstraintInfo::assign(const ObUniqueConstraintInfo &other)
 {
   int ret = OB_SUCCESS;
   if (OB_FAIL(constraint_columns_.assign(other.constraint_columns_))) {
-    LOG_WARN("failed to assign constraint columns", K(ret));
   } else {
     table_id_ = other.table_id_;
     index_tid_ = other.index_tid_;
@@ -61,9 +60,7 @@ int ObInsertStmt::deep_copy_stmt_struct(ObIAllocator &allocator,
   } else if (OB_FAIL(ObDelUpdStmt::deep_copy_stmt_struct(allocator,
                                                          expr_copier,
                                                          input))) {
-    LOG_WARN("failed to deep copy stmt struct", K(ret));
   } else if (OB_FAIL(table_info_.deep_copy(expr_copier,other.table_info_))) {
-    LOG_WARN("failed to deep copy table info", K(ret));
   } else {
     is_all_const_values_ = other.is_all_const_values_;
   }
@@ -74,9 +71,7 @@ int ObInsertStmt::assign(const ObInsertStmt &other)
 {
   int ret = OB_SUCCESS;
   if (OB_FAIL(ObDelUpdStmt::assign(other))) {
-    LOG_WARN("failed to copy stmt", K(ret));
   } else if (OB_FAIL(table_info_.assign(other.table_info_))) {
-    LOG_WARN("failed to assign table info", K(ret));
   } else {
     is_all_const_values_ = other.is_all_const_values_;
   }
@@ -92,7 +87,6 @@ int ObInsertStmt::get_all_assignment_exprs(common::ObIArray<ObRawExpr*> &assignm
       ret = OB_ERR_UNEXPECTED;
       LOG_WARN("unexpected nullptr", K(ret));
     } else if (OB_FAIL(assignment_exprs.push_back(assignments.at(i).expr_))) {
-      LOG_WARN("fail to push back assignment expr", K(ret), KPC(assignments.at(i).expr_));
     }
   }
   return ret;
@@ -122,19 +116,10 @@ int64_t ObInsertStmt::to_string(char *buf, const int64_t buf_len) const
          N_QUERY_CTX, *query_ctx_,
          N_VALUE, table_info_.values_vector_,
          "value_desc", table_info_.values_desc_,
-         "returning", returning_exprs_,
          N_CHILD_STMT, child_stmts);
     if (is_insert_up()) {
       J_COMMA();
       J_KV(N_ASSIGN, table_info_.assignments_);
-    }
-    if (is_error_logging()) {
-      J_KV("is_err_log", is_error_logging(),
-           "err_log_table_name", error_log_info_.table_name_,
-           "err_log_database_name", error_log_info_.database_name_,
-           "err_log_table_id", error_log_info_.table_id_,
-           "err_log_reject_limit", error_log_info_.reject_limit_,
-           "err_log_exprs", error_log_info_.error_log_exprs_);
     }
   }
   J_OBJ_END();
@@ -155,7 +140,6 @@ int ObInsertStmt::part_key_has_rand_value(bool &has) const
     } else if (IS_SHADOW_COLUMN(col_expr->get_column_id())) {
       // do nothing
     } else if (OB_FAIL(ObTransformUtils::get_base_column(this, col_expr))) {
-      LOG_WARN("failed to get base column", K(ret));
     } else if (OB_ISNULL(col_expr)) {
       ret = OB_ERR_UNEXPECTED;
       LOG_WARN("get unexpected null", K(ret));
@@ -181,7 +165,6 @@ int ObInsertStmt::part_key_has_auto_inc(bool &has) const
     if (IS_SHADOW_COLUMN(col_expr->get_column_id())) {
       // do nothing
     } else if (OB_FAIL(ObTransformUtils::get_base_column(this, col_expr))) {
-      LOG_WARN("failed to get base column", K(ret));
     } else if (OB_ISNULL(col_expr)) {
       ret = OB_ERR_UNEXPECTED;
       LOG_WARN("get unexpected null", K(ret));
@@ -207,7 +190,6 @@ int ObInsertStmt::part_key_has_subquery(bool &has) const
     } else if (IS_SHADOW_COLUMN(column_expr->get_column_id())) {
       // do nothing
     } else if (OB_FAIL(ObTransformUtils::get_base_column(this, column_expr))) {
-      LOG_WARN("failed to get base column", K(ret));
     } else if (OB_ISNULL(column_expr)) {
       ret = OB_ERR_UNEXPECTED;
       LOG_WARN("get unexpected null", K(ret));
@@ -229,7 +211,6 @@ int ObInsertStmt::part_key_is_updated(bool &is_updated) const
   int ret = OB_SUCCESS;
   is_updated = false;
   if (OB_FAIL(check_part_key_is_updated(table_info_.assignments_, is_updated))) {
-    LOG_WARN("failed to check part key is updated", K(ret));
   } else { /*do nothing*/ }
   return ret;
 }
@@ -264,7 +245,6 @@ int ObInsertStmt::get_value_exprs(ObIArray<ObRawExpr *> &value_exprs) const
         ret = OB_ERR_UNEXPECTED;
         LOG_WARN("param expr is null", K(ret));
       } else if (OB_FAIL(value_exprs.push_back(param))) {
-        LOG_WARN("failed to push back param expr", K(ret));
       } else { /*do nothing*/ }
     }
   }
@@ -285,7 +265,6 @@ int ObInsertStmt::get_ddl_sort_keys(common::ObIArray<OrderItem> &sort_keys) cons
     ObArray<ObRawExpr *> column_list;
     ObArray<ObRawExpr *> view_column_list;
     if (OB_FAIL(get_child_stmts(c_stmts))) {
-      LOG_WARN("fail to get child stmts", K(ret));
     } else if (1 != c_stmts.count()) {
       ret = OB_ERR_UNEXPECTED;
       LOG_WARN("stmt count is unexpected", K(ret));
@@ -293,11 +272,8 @@ int ObInsertStmt::get_ddl_sort_keys(common::ObIArray<OrderItem> &sort_keys) cons
       ret = OB_ERR_UNEXPECTED;
       LOG_WARN("assign sort keys failed", K(ret));
     } else if (OB_FAIL(sort_keys.assign(c_stmts.at(0)->get_order_items()))) {
-      LOG_WARN("fail to assign sort keys", K(ret));
     } else if (OB_FAIL(get_ddl_view_output(*table_item, view_column_list))) {
-      LOG_WARN("fail to get view output", K(ret));
     } else if (OB_FAIL(c_stmts.at(0)->get_select_exprs(column_list))) {
-      LOG_WARN("get select exprs failed", K(ret));
     } else {
       LOG_INFO("get ddl sort keys", K(sort_keys), K(column_list), K(view_column_list));
       ObSEArray<uint64_t, 4> column_ids; // the offset in select_items of sortkey
@@ -309,7 +285,6 @@ int ObInsertStmt::get_ddl_sort_keys(common::ObIArray<OrderItem> &sort_keys) cons
               ret = OB_ERR_UNEXPECTED;
               LOG_WARN("error unexpected, view column list is not as expected", K(ret), K(j), K(view_column_list));
             } else if (OB_FAIL(column_ids.push_back(j))) {
-              LOG_WARN("fail to push back column ids");
             } else {
               sort_keys.at(i).expr_ = view_column_list.at(j);
             }
@@ -359,7 +334,6 @@ int ObInsertStmt::get_assignments_exprs(ObIArray<ObRawExpr*> &exprs) const
   int ret = OB_SUCCESS;
   for (int64_t i = 0; OB_SUCC(ret) && i < table_info_.assignments_.count(); ++i) {
     if (OB_FAIL(exprs.push_back(table_info_.assignments_.at(i).expr_))) {
-      LOG_WARN("failed to push back expr", K(ret));
     }
   }
   return ret;
@@ -369,7 +343,6 @@ int ObInsertStmt::get_dml_table_infos(ObIArray<ObDmlTableInfo*>& dml_table_info)
 {
   int ret = OB_SUCCESS;
   if (OB_FAIL(dml_table_info.push_back(&table_info_))) {
-    LOG_WARN("failed to push back table info", K(ret));
   }
   return ret;
 }
@@ -378,7 +351,6 @@ int ObInsertStmt::get_dml_table_infos(ObIArray<const ObDmlTableInfo*>& dml_table
 {
   int ret = OB_SUCCESS;
   if (OB_FAIL(dml_table_info.push_back(&table_info_))) {
-    LOG_WARN("failed to push back table info", K(ret));
   }
   return ret;
 }
@@ -387,21 +359,8 @@ int ObInsertStmt::get_view_check_exprs(ObIArray<ObRawExpr*>& view_check_exprs) c
 {
   int ret = OB_SUCCESS;
   if (OB_FAIL(append(view_check_exprs, table_info_.view_check_exprs_))) {
-    LOG_WARN("failed to append view check exprs", K(ret));
   }
   return ret;
-}
-
-int64_t ObInsertStmt::get_instead_of_trigger_column_count() const
-{
-  const TableItem *table_item = NULL;
-  int64_t column_count = 0;
-  if (NULL != (table_item = get_table_item_by_id(table_info_.table_id_)) &&
-      table_item->is_view_table_ &&
-      NULL != table_item->ref_query_) {
-    column_count = table_item->ref_query_->get_select_item_size();
-  }
-  return column_count;
 }
 
 int ObInsertStmt::check_pdml_disabled(const bool is_online_ddl,
@@ -412,7 +371,7 @@ int ObInsertStmt::check_pdml_disabled(const bool is_online_ddl,
   is_pk_auto_inc = false;
   if (!value_from_select()) {
     disable_pdml = true;
-  } else if (is_online_ddl || is_normal_table_overwrite()) {
+  } else if (is_online_ddl) {
     disable_pdml = false; // keep online ddl use pdml
   } else {
     const common::ObIArray<ObRawExpr*> &column_conv_exprs = get_column_conv_exprs();
@@ -431,7 +390,6 @@ int ObInsertStmt::check_pdml_disabled(const bool is_online_ddl,
         } else if (column_expr->is_rowkey_column() || column_expr->is_table_part_key_column()) {
           const ObRawExpr *auto_inc_expr = NULL;
           if (OB_FAIL(find_first_auto_inc_expr(column_conv_expr, auto_inc_expr))) {
-            LOG_WARN("fail to find first auto inc expr", K(ret));
           } else if (auto_inc_expr != NULL) {
             disable_pdml = auto_inc_expr->get_param_count() > 0; // means the specified value exists
           }
@@ -442,7 +400,6 @@ int ObInsertStmt::check_pdml_disabled(const bool is_online_ddl,
       }
     }
   }
-  LOG_TRACE("check insert pdml disabled", K(is_online_ddl), K(disable_pdml), K(is_pk_auto_inc), K(is_normal_table_overwrite()));
   return ret;
 }
 
@@ -457,7 +414,6 @@ int ObInsertStmt::find_first_auto_inc_expr(const ObRawExpr *expr, const ObRawExp
   } else {
     for (int64_t i = 0; OB_SUCC(ret) && i < expr->get_param_count(); ++i) {
       if (OB_FAIL(find_first_auto_inc_expr(expr->get_param_expr(i), auto_inc))) {
-        LOG_WARN("fail to find first auto inc expr", K(ret), K(i), K(expr));
       }
     }
   }

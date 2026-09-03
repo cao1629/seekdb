@@ -28,7 +28,6 @@
 #include "sql/engine/px/ob_dfo_scheduler.h"
 #include "sql/engine/px/datahub/components/ob_dh_barrier.h"
 #include "sql/engine/px/datahub/components/ob_dh_winbuf.h"
-#include "sql/engine/px/datahub/components/ob_dh_rollup_key.h"
 #include "sql/engine/px/datahub/components/ob_dh_sample.h"
 #include "lib/container/ob_iarray.h"
 #include "sql/engine/px/datahub/components/ob_dh_init_channel.h"
@@ -61,8 +60,7 @@ public:
   : ObPxCoordSpec(alloc, type),
     all_exprs_(alloc),
     sort_collations_(alloc),
-    sort_cmp_funs_(alloc),
-    is_old_unblock_mode_(true)
+    sort_cmp_funs_(alloc)
   {}
   ~ObPxMSCoordSpec() {}
   virtual const common::ObIArray<ObExpr *> *get_all_exprs() const override { return &all_exprs_; }
@@ -70,7 +68,6 @@ public:
   ExprFixedArray all_exprs_;
   ObSortCollations sort_collations_;
   ObSortFuncs sort_cmp_funs_;
-  bool is_old_unblock_mode_;
 };
 
 class ObPxMSCoordOp : public ObPxCoordOp
@@ -165,13 +162,10 @@ private:
   ObWinbufPieceMsgP winbuf_piece_msg_proc_;
   ObPxQcInterruptedP interrupt_proc_;
   ObDynamicSamplePieceMsgP sample_piece_msg_proc_;
-  ObRollupKeyPieceMsgP rollup_key_piece_msg_proc_;
   ObRDWFPieceMsgP rd_wf_piece_msg_proc_;
   ObInitChannelPieceMsgP init_channel_piece_msg_proc_;
   ObReportingWFPieceMsgP reporting_wf_piece_msg_proc_;
   ObOptStatsGatherPieceMsgP opt_stats_gather_piece_msg_proc_;
-  ObSPWinFuncPXPieceMsgP sp_winfunc_px_piece_msg_proc_;
-  ObRDWinFuncPXPieceMsgP rd_winfunc_px_piece_msg_proc_;
   ObJoinFilterCountRowPieceMsgP join_filter_count_row_piece_msg_proc_;
   // Store the current row of each run in merge sort
   ObArray<ObChunkDatumStore::LastStoredRow*> store_rows_;

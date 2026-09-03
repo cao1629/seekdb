@@ -43,9 +43,6 @@ ObLSRestoreStatus &ObLSRestoreStatus::operator=(const ObLSRestoreStatus &restore
     LRS_CASE_TO_TYPE(WAIT_RESTORE_TABLETS_META); \
     LRS_CASE_TO_TYPE(RESTORE_TO_CONSISTENT_SCN); \
     LRS_CASE_TO_TYPE(WAIT_RESTORE_TO_CONSISTENT_SCN); \
-    LRS_CASE_TO_TYPE(QUICK_RESTORE); \
-    LRS_CASE_TO_TYPE(WAIT_QUICK_RESTORE); \
-    LRS_CASE_TO_TYPE(QUICK_RESTORE_FINISH); \
     LRS_CASE_TO_TYPE(RESTORE_MAJOR_DATA); \
     LRS_CASE_TO_TYPE(WAIT_RESTORE_MAJOR_DATA); \
     LRS_CASE_TO_TYPE(RESTORE_FAILED);
@@ -122,7 +119,6 @@ int ObLSRestoreStatus::serialize(char *buf, const int64_t len, int64_t &pos) con
     ret = OB_INVALID_ARGUMENT;
     LOG_WARN("invalid args", K(ret), K(buf), K(len), K(pos));
   } else if (OB_FAIL(serialization::encode_i8(buf, len, new_pos, static_cast<int8_t>(status_)))) {
-    LOG_WARN("failed to serialize log stream restore status", K(ret), K(len), K_(status));
   } else {
     pos = new_pos;
   }
@@ -139,7 +135,6 @@ int ObLSRestoreStatus::deserialize(const char *buf, const int64_t len, int64_t &
     ret = OB_INVALID_ARGUMENT;
     LOG_WARN("invalid args", K(ret), K(buf), K(len), K(pos));
   } else if (OB_FAIL(serialization::decode_i8(buf, len, new_pos, (int8_t*)(&status_)))) {
-    LOG_WARN("failed to decode log stream restore status", K(ret), K(len), K(new_pos));
   } else {
     pos = new_pos;
   }

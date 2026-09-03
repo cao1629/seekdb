@@ -20,10 +20,9 @@
 #include "common/ob_tablet_id.h"
 #include "lib/allocator/page_arena.h"
 #include "common/mysqlclient/ob_mysql_transaction.h"
-#include "share/ob_ls_id.h"
 #include "share/ob_rpc_struct.h"
 #include "share/ob_tablet_autoincrement_param.h"
-#include "rootserver/truncate_info/ob_truncate_tablet_arg.h"
+#include "storage/truncate_info/ob_truncate_tablet_arg.h"
 
 namespace oceanbase
 {
@@ -48,22 +47,21 @@ struct BufferCtx;
 
 class ObTabletForkMdsArg final
 {
-OB_UNIS_VERSION(1);
+OB_UNIS_VERSION(2);
 public:
   ObTabletForkMdsArg();
   ~ObTabletForkMdsArg();
   bool is_valid() const;
   void reset();
   int set_autoinc_seq_arg(const obcall::ObBatchSetTabletAutoincSeqArg &arg);
-  int set_truncate_arg(const rootserver::ObTruncateTabletArg &arg);
+  int set_truncate_arg(const ObTruncateTabletArg &arg);
 
-  TO_STRING_KV(K_(ls_id), K_(autoinc_seq_arg), K_(truncate_arg));
+  TO_STRING_KV(K_(autoinc_seq_arg), K_(truncate_arg));
 
 public:
   
-  share::ObLSID ls_id_;
   obcall::ObBatchSetTabletAutoincSeqArg autoinc_seq_arg_;
-  rootserver::ObTruncateTabletArg truncate_arg_;
+  ObTruncateTabletArg truncate_arg_;
 
 private:
   common::ObArenaAllocator allocator_;
@@ -85,4 +83,3 @@ private:
 } // namespace oceanbase
 
 #endif // OCEANBASE_STORAGE_OB_TABLET_FORK_MDS_HELPER
-

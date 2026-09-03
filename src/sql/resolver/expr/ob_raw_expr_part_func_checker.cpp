@@ -99,14 +99,14 @@ int ObRawExprPartFuncChecker::visit(ObOpRawExpr &expr)
                "item_type", expr.get_expr_type());
       break;
     }
-    // Only Oracle mode column generation is supported
+    // Division is not allowed in partition function checks.
     case T_OP_DIV:    // /
     {
       ret = OB_ERR_PARTITION_FUNCTION_IS_NOT_ALLOWED;
       LOG_WARN("invalid partition function", K(ret), "item_type", expr.get_expr_type());
       break;
     }
-    // MySQL mode and Oracle mode generated column support
+    // Partition and generated column checks allow these arithmetic operators.
     case T_OP_ADD:    // +
     case T_OP_MINUS:  // -
     case T_OP_MUL:    // *
@@ -158,7 +158,7 @@ int ObRawExprPartFuncChecker::visit(ObSysFunRawExpr &expr)
      */
     //white list, some of them are not implemented now
     switch(expr.get_expr_type()) {
-      // MySQL mode and Oracle mode are both supported
+      // Supported date/time and conversion functions.
       case T_FUN_SYS_DAY:
       case T_FUN_SYS_DAY_OF_MONTH:
       case T_FUN_SYS_DAY_OF_WEEK:
@@ -184,11 +184,6 @@ int ObRawExprPartFuncChecker::visit(ObSysFunRawExpr &expr)
       case T_FUN_SYS_YEARWEEK_OF_DATE: //case YEARKWEEK()
       case T_FUN_SYS_WEEK_OF_YEAR: //case WEEKOFYEAR()
       case T_FUN_SYS_ADDR_TO_PART_ID:
-      case T_FUN_SYS_TO_DATE:
-      case T_FUN_SYS_TO_TIMESTAMP:
-      case T_FUN_SYS_TO_TIMESTAMP_TZ:
-      case T_FUN_SYS_TO_NUMBER: //case TO_NUMBER()
-      case T_FUN_SYS_TO_CHAR:
         {
           ret = OB_SUCCESS;
           break;
@@ -219,7 +214,7 @@ int ObRawExprPartFuncChecker::visit(ObSysFunRawExpr &expr)
           }
           break;
         }
-        // MySQL mode and Oracle generated column support
+        // Partition and generated column checks allow these numeric functions.
       case T_OP_ABS:  //ABS()
       case T_FUN_SYS_CEIL:  //CEILING()
       case T_FUN_SYS_CEILING:
@@ -228,14 +223,14 @@ int ObRawExprPartFuncChecker::visit(ObSysFunRawExpr &expr)
           ret =  OB_SUCCESS;
           break;
         }
-        // Only oracle mode is supported
+        // RPAD is not allowed in partition function checks.
       case T_FUN_SYS_RPAD:
         {
           ret = OB_ERR_PARTITION_FUNCTION_IS_NOT_ALLOWED;
           LOG_WARN("invalid partition function", K(ret), "item_type", expr.get_expr_type());
           break;
         }
-        // only oracle mode support interval expr
+        // Interval constructors are not allowed in partition function checks.
       case T_FUN_SYS_NUMTOYMINTERVAL:
       case T_FUN_SYS_NUMTODSINTERVAL:
         {
@@ -268,4 +263,3 @@ int ObRawExprPartFuncChecker::visit(ObAliasRefRawExpr &expr)
 
 } //namespace sql
 } //namespace oceanbase
-

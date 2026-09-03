@@ -38,7 +38,6 @@ ObCreateRoleResolver::~ObCreateRoleResolver()
 int ObCreateRoleResolver::resolve(const ParseNode &parse_tree)
 {
   int ret = OB_SUCCESS;
-  CHECK_COMPATIBILITY_MODE(session_info_);
   ObCreateRoleStmt *create_role_stmt = NULL;
   if (T_CREATE_ROLE != parse_tree.type_
       || (2 != parse_tree.num_child_ && 3 != parse_tree.num_child_)) {
@@ -132,7 +131,6 @@ int ObCreateRoleResolver::resolve(const ParseNode &parse_tree)
                                                       session_info_->get_current_query_string(), 
                                                       pw_node, 
                                                       masked_sql))) {
-      LOG_WARN("fail to mask_password_for_passwd_node", K(ret));
     } else {
       create_role_stmt->set_masked_sql(masked_sql);
     }

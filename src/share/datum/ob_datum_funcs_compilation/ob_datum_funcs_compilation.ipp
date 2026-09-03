@@ -20,13 +20,11 @@
 #include "share/datum/ob_datum_funcs.h"
 #include "share/datum/ob_datum_cmp_func_def.h"
 #include "common/object/ob_obj_funcs.h"
-#include "sql/engine/ob_bit_vector.h"
-#include "share/ob_cluster_version.h"
+#include "share/vector/ob_bit_vector.h"
 #include "share/datum/ob_datum_funcs_impl.h"
 
 namespace oceanbase
 {
-using namespace sql;
 namespace common
 {
 static const int COMPILATION_UNIT = 8;
@@ -52,11 +50,9 @@ static const int COMPILATION_UNIT = 8;
       ObArrayConstIniter<1, InitJsonCmpArray>::init();                                             \
       ObArrayConstIniter<1, InitGeoCmpArray>::init();                                              \
       ObArrayConstIniter<1, InitCollectionCmpArray>::init();                                       \
-      ObArrayConstIniter<1, InitRoaringbitmapCmpArray>::init();                                    \
       ObArrayConstIniter<1, InitBasicJsonFuncArray>::init();                                       \
       ObArrayConstIniter<1, InitBasicGeoFuncArray>::init();                                        \
       ObArrayConstIniter<1, InitCollectionBasicFuncArray>::init();                                 \
-      ObArrayConstIniter<1, InitBasicRoaringbitmapFuncArray>::init();                              \
       ObArrayConstIniter<1, InitUDTBasicFuncArray>::init();                                        \
     }                                                                                              \
     if constexpr (unit_idx == 1) {                                                                 \

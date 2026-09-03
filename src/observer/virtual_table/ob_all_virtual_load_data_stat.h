@@ -38,10 +38,6 @@ public:
   virtual void reset();
   virtual int inner_open();
   virtual int inner_close();
-  inline void set_addr(common::ObAddr &addr)
-  {
-    addr_ = addr;
-  }
 
 private:
   int64_t calc_remaining_time(sql::ObLoadDataStat &job_status) const;
@@ -50,7 +46,6 @@ private:
   enum TABLE_COLUMN
   {
         JOB_ID = common::OB_APP_MIN_COLUMN_ID,
-    JOB_TYPE,
     TABLE_NAME,
     FILE_PATH,
     TABLE_COLUMN,
@@ -68,24 +63,10 @@ private:
     TOTAL_INSERT_TASK,
     SHUFFLE_RT_SUM,
     INSERT_RT_SUM,
-    TOTAL_WAIT_SECS,
-    MAX_ALLOWED_ERROR_ROWS,
-    DETECTED_ERROR_ROWS,
-    COORDINATOR_RECEIVED_ROWS,
-    COORDINATOR_LAST_COMMIT_SEGMENT_ID,
-    COORDINATOR_STATUS,
-    COORDINATOR_TRANS_STATUS,
-    STORE_PROCESSED_ROWS,
-    STORE_LAST_COMMIT_SEGMENT_ID,
-    STORE_STATUS,
-    STORE_TRANS_STATUS,
-    MESSAGE
+    TOTAL_WAIT_SECS
   };
-  common::ObAddr addr_;
   char ip_buf_[common::OB_IP_STR_BUFF];
   sql::ObGetAllJobStatusOp all_job_status_op_;
-
-  TO_STRING_KV(K(addr_));
 
 private:
   DISALLOW_COPY_AND_ASSIGN(ObAllVirtualLoadDataStat);

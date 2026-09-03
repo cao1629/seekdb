@@ -32,18 +32,16 @@ int ObPxTransmitChProvider::init()
 
 int ObPxTransmitChProvider::get_data_ch_nonblock(
   const int64_t sqc_id, const int64_t task_id, int64_t timeout_ts, ObPxTaskChSet &ch_set,
-  ObDtlChTotalInfo **ch_info, const common::ObAddr &qc_addr,
-  int64_t query_start_time)
+  ObDtlChTotalInfo **ch_info)
 {
   int ret = OB_SUCCESS;
-  if (OB_FAIL(ObPxChProviderUtil::check_status(timeout_ts, qc_addr, query_start_time))) {
+  if (OB_FAIL(ObPxChProviderUtil::check_status(timeout_ts))) {
     // nop
   } else if (!msg_set_) {
     ret = OB_DTL_WAIT_EAGAIN;
   } else {
     if (OB_FAIL(ObPxChProviderUtil::inner_get_data_ch(msg_.get_ch_sets(), 
         msg_.get_ch_total_info(), sqc_id, task_id, ch_set, true))) {
-      LOG_WARN("failed to get data channel", K(ret));
     } else if (OB_NOT_NULL(ch_info)) {
       *ch_info = &msg_.get_ch_total_info();
     }
@@ -65,7 +63,6 @@ int ObPxTransmitChProvider::get_data_ch(const int64_t sqc_id,
       LOG_WARN("channel set is empty. expect at lease one data channel for transmit op", K(ret));
     } else if (OB_FAIL(ObPxChProviderUtil::inner_get_data_ch(
         msg_.get_ch_sets(), msg_.get_ch_total_info(), sqc_id, task_id, ch_set, true))) {
-      LOG_WARN("failed to get data channel", K(ret));
     } else if (OB_NOT_NULL(ch_info)) {
       *ch_info = &msg_.get_ch_total_info();
     }
@@ -89,13 +86,11 @@ int ObPxChProviderUtil::inner_get_data_ch(
     // transmit
     if (OB_FAIL(ObDtlChannelUtil::get_transmit_dtl_channel_set(
         sqc_id, task_id, ch_total_info, ch_set))) {
-      LOG_WARN("failed to get transmit dtl channel set", K(ret));
     }
   } else {
     // receive
     if (OB_FAIL(ObDtlChannelUtil::get_receive_dtl_channel_set(
         sqc_id, task_id, ch_total_info, ch_set))) {
-      LOG_WARN("failed to get transmit dtl channel set", K(ret));
     }
   }
   return ret;
@@ -107,25 +102,21 @@ int ObPxTransmitChProvider::get_part_ch_map(ObPxPartChInfo &map, int64_t timeout
   ret = wait_msg(timeout_ts);
   if (OB_SUCC(ret)) {
     if (OB_FAIL(inner_get_part_ch_map(map))) {
-      LOG_WARN("failed to get part ch map", K(ret));
     }
   }
   return ret;
 }
 
 int ObPxTransmitChProvider::get_part_ch_map_nonblock(ObPxPartChInfo &map,
-                                                      int64_t timeout_ts,
-                                                      const common::ObAddr &qc_addr,
-                                                      int64_t query_start_time)
+                                                      int64_t timeout_ts)
 {
   int ret = OB_SUCCESS;
-  if (OB_FAIL(ObPxChProviderUtil::check_status(timeout_ts, qc_addr, query_start_time))) {
+  if (OB_FAIL(ObPxChProviderUtil::check_status(timeout_ts))) {
     // nop
   } else if (!msg_set_) {
     ret = OB_DTL_WAIT_EAGAIN;
   } else {
     if (OB_FAIL(inner_get_part_ch_map(map))) {
-      LOG_WARN("failed to get part ch map", K(ret));
     }
   }
   return ret;
@@ -140,38 +131,25 @@ int ObPxTransmitChProvider::inner_get_part_ch_map(ObPxPartChInfo &map)
     ObPxPartChMapItem tmp_part_ch_item;
     tmp_part_ch_item.assign(part_ch_item);
     if (INT64_MAX == tmp_part_ch_item.third_) {
-      // slave mapping, as well as PDML random scenario etc.
-      // The sqc to be processed in this loop. get_part_affinity_map() contains all sqc
       int64_t sqc_id = part_ch_item.second_;
-      // prefix_task_counts_[sqc_id] + task_id is the global task_id corresponding to a certain task of this sqc with sqc_id
-      ObIArray<int64_t> &receive_prefix_task_counts =
-                msg_.get_ch_total_info().receive_exec_server_.prefix_task_counts_;
-      // Since the partition id has already saved the mapping with sqc,
-      // So here we only need to map all worker idx of partition and sqc
-      int64_t sqc_task_count = 0;
-      int64_t pre_sqc_task_count = receive_prefix_task_counts.at(sqc_id);
-      if (sqc_id == receive_prefix_task_counts.count() - 1) {
-        sqc_task_count = msg_.get_ch_total_info().receive_exec_server_.total_task_cnt_;
+      if (OB_UNLIKELY(0 != sqc_id)) {
+        ret = OB_ERR_UNEXPECTED;
+        LOG_WARN("local PX requires SQC id zero", K(ret), K(sqc_id));
       } else {
-        sqc_task_count = receive_prefix_task_counts.at(sqc_id + 1);
-      }
-      for (int64_t task_idx = pre_sqc_task_count; task_idx < sqc_task_count && OB_SUCC(ret); ++task_idx) {
-        tmp_part_ch_item.second_ = task_idx; // global task idx
-        if (OB_FAIL(map.part_ch_array_.push_back(tmp_part_ch_item))) {
-          LOG_WARN("failed to push back part ch item", K(ret));
-        } else {
-          LOG_DEBUG("debug partition map", K(tmp_part_ch_item));
+        for (int64_t task_idx = 0;
+             task_idx < msg_.get_ch_total_info().receive_task_layout_.total_task_cnt_ && OB_SUCC(ret);
+             ++task_idx) {
+          tmp_part_ch_item.second_ = task_idx;
+          if (OB_FAIL(map.part_ch_array_.push_back(tmp_part_ch_item))) {
+          }
         }
       }
-      LOG_DEBUG("debug get partition map", K(map.part_ch_array_));
     } else {
       // PK scene map & PDML scene map:
       // [tablet_id, prefiex_task_count + sqc_task_id(i.e., sqc_worker_id)]
       tmp_part_ch_item.second_ = tmp_part_ch_item.second_ + tmp_part_ch_item.third_;
       if (OB_FAIL(map.part_ch_array_.push_back(tmp_part_ch_item))) {
-        LOG_WARN("failed to push back part ch item", K(ret));
       } else {
-        LOG_DEBUG("debug get partition map", K(map.part_ch_array_));
       }
     }
   }
@@ -202,11 +180,9 @@ int ObPxTransmitChProvider::wait_msg(int64_t timeout_ts)
         break;
       } else if (!msg_set_) { // wake up by leader, retry
         ret = OB_DTL_WAIT_EAGAIN;
-        LOG_TRACE("wake up by leader, retry");
         break;
       }
     } else {
-      LOG_TRACE("[CMD] wait msg ok", K(wait_count), K(ret));
     }
     if (timeout_ts <= ObTimeUtility::current_time()) {
       ret = OB_TIMEOUT;
@@ -221,12 +197,10 @@ int ObPxTransmitChProvider::add_msg(const ObPxTransmitDataChannelMsg &msg)
 {
   int ret = OB_SUCCESS;
   if (OB_FAIL(msg_.assign(msg))) {
-    LOG_WARN("fail assign msg", K(msg),K(ret));
   } else {
     ObThreadCondGuard guard(msg_ready_cond_);
     msg_set_ = true;
     msg_ready_cond_.broadcast();
-    LOG_TRACE("set transmit data ch msg to provider done", K(msg));
   }
   return ret;
 }
@@ -235,7 +209,6 @@ int ObPxReceiveChProvider::init()
 {
   int ret = OB_SUCCESS;
   if (OB_FAIL(reserve_msg_set_array_size(MSG_SET_DEFAULT_SIZE))) {
-    LOG_WARN("fail to reserve msg set array", K(ret));
   }
   return ret;
 }
@@ -247,7 +220,6 @@ int ObPxReceiveChProvider::reserve_msg_set_array_size(int64_t size)
   // Dynamically reserve array size based on child_dfo_id value
   int64_t pre_count = msg_set_.count();
   if (OB_FAIL(msg_set_.prepare_allocate(size))) {
-    LOG_WARN("fail to reserve array size", K(ret), K(size));
   } else {
     for (int i = pre_count; i < msg_set_.count(); ++i) {
       msg_set_.at(i) = false;
@@ -262,9 +234,7 @@ int ObPxReceiveChProvider::get_data_ch_nonblock(
   const int64_t task_id,
   int64_t timeout_ts,
   ObPxTaskChSet &ch_set,
-  ObDtlChTotalInfo *ch_info,
-  const common::ObAddr &qc_addr,
-  int64_t query_start_time)
+  ObDtlChTotalInfo *ch_info)
 {
   int ret = OB_SUCCESS;
   bool found = false;
@@ -272,8 +242,7 @@ int ObPxReceiveChProvider::get_data_ch_nonblock(
   if (child_dfo_id < 0 || child_dfo_id >= ObDfo::MAX_DFO_ID) {
     ret = OB_ERR_UNEXPECTED;
     LOG_WARN("invalid msg", K(child_dfo_id), K(ret));
-  } else if (OB_FAIL(ObPxChProviderUtil::check_status(timeout_ts, qc_addr, query_start_time))) {
-    LOG_WARN("Fail to check status", K(child_dfo_id), K(msg_set_), K(msgs_), K(ret));
+  } else if (OB_FAIL(ObPxChProviderUtil::check_status(timeout_ts))) {
   } else {
     ObLockGuard<ObSpinLock> lock_guard(lock_);
     ARRAY_FOREACH_X(msgs_, idx, cnt, OB_SUCC(ret) && !found) {
@@ -282,8 +251,6 @@ int ObPxReceiveChProvider::get_data_ch_nonblock(
         ObPxReceiveDataChannelMsg &msg = msgs_.at(idx);
         if (OB_FAIL(ObPxChProviderUtil::inner_get_data_ch(msg.get_ch_sets(),
             msg.get_ch_total_info(), sqc_id, task_id, ch_set, false))) {
-          LOG_WARN("fail to copy channel info",
-                    K(child_dfo_id), K(idx), K(cnt), K(ret));
         } else if (OB_NOT_NULL(ch_info)) {
           // Here we do a deep copy, because push_back will change the address
           *ch_info = msg.get_ch_total_info();
@@ -321,8 +288,6 @@ int ObPxReceiveChProvider::get_data_ch(
           ObPxReceiveDataChannelMsg &msg = msgs_.at(idx);
           if (OB_FAIL(ObPxChProviderUtil::inner_get_data_ch(msg.get_ch_sets(),
               msg.get_ch_total_info(), sqc_id, task_id, ch_set, false))) {
-            LOG_WARN("fail to copy channel info",
-                     K(child_dfo_id), K(idx), K(cnt), K(ret));
           } else if (OB_NOT_NULL(ch_info)) {
             // Here we do a deep copy, because push_back will change the address
             *ch_info = msg.get_ch_total_info();
@@ -349,7 +314,6 @@ int ObPxReceiveChProvider::add_msg(const ObPxReceiveDataChannelMsg &msg)
   if (OB_SUCC(ret)) {
     ObLockGuard<ObSpinLock> lock_guard(lock_);
     if (OB_FAIL(msgs_.push_back(msg))) {
-      LOG_WARN("fail assign msg", K(ret));
     } else if (child_dfo_id >= msg_set_.count() &&
           OB_FAIL(reserve_msg_set_array_size(child_dfo_id * 2 + 1))) {
       LOG_WARN("fail to reserve msg set array size", K(ret));
@@ -359,7 +323,6 @@ int ObPxReceiveChProvider::add_msg(const ObPxReceiveDataChannelMsg &msg)
   }
   if (OB_SUCC(ret)) {
     msg_ready_cond_.broadcast();
-    LOG_TRACE("set receive data ch msg to provider done", K(msg));
   }
   return ret;
 }
@@ -373,7 +336,6 @@ int ObPxReceiveChProvider::wait_msg(int64_t child_dfo_id, int64_t timeout_ts)
     if (child_dfo_id < msg_set_.count()) {
       /*do nothing*/
     } else if (OB_FAIL(reserve_msg_set_array_size(child_dfo_id * 2 + 1))) {
-      LOG_WARN("fail to reserve msg set array", K(ret));
     }
   }
   if (OB_SUCC(ret)) {
@@ -399,7 +361,6 @@ int ObPxReceiveChProvider::wait_msg(int64_t child_dfo_id, int64_t timeout_ts)
           break;
         } else {
           ret = OB_DTL_WAIT_EAGAIN;
-          LOG_TRACE("follower is wake up by leader, retry");
           break;
         }
       }
@@ -414,8 +375,7 @@ int ObPxReceiveChProvider::wait_msg(int64_t child_dfo_id, int64_t timeout_ts)
   return ret;
 }
 
-int ObPxChProviderUtil::check_status(int64_t timeout_ts, const ObAddr &qc_addr,
-                                     int64_t query_start_time)
+int ObPxChProviderUtil::check_status(int64_t timeout_ts)
 {
   int ret = OB_SUCCESS;
   if (OB_UNLIKELY(IS_INTERRUPTED())) {
@@ -427,10 +387,6 @@ int ObPxChProviderUtil::check_status(int64_t timeout_ts, const ObAddr &qc_addr,
   } else if (timeout_ts <= ObTimeUtility::current_time()) {
     ret = OB_TIMEOUT;
     LOG_WARN("timeout and abort", K(timeout_ts), K(ret));
-  } else if (OB_UNLIKELY(ObPxCheckAlive::is_in_blacklist(qc_addr, query_start_time))) {
-    ret = OB_RPC_CONNECT_ERROR;
-    LOG_WARN("peer no in communication, maybe crashed", K(ret), K(qc_addr),
-              K(static_cast<int64_t>(GCONF.cluster_id)));
   }
   return ret;
 }

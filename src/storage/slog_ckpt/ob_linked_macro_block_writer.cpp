@@ -16,7 +16,7 @@
 
 #define USING_LOG_PREFIX STORAGE
 
-#include "observer/ob_server_struct.h"
+#include "share/ob_server_struct.h"
 
 #include "storage/slog_ckpt/ob_linked_macro_block_writer.h"
 
@@ -29,8 +29,7 @@ using namespace oceanbase::common;
 using namespace oceanbase::blocksstable;
 
 ObLinkedMacroBlockWriter::ObLinkedMacroBlockWriter()
-  : is_inited_(false), write_ctx_(), handle_(), entry_block_id_(),
-    tablet_id_(0), tablet_transfer_seq_(0), snapshot_version_(0), cur_macro_seq_(-1)
+  : is_inited_(false), write_ctx_(), handle_(), entry_block_id_()
 {
 }
 
@@ -41,31 +40,6 @@ int ObLinkedMacroBlockWriter::init()
     ret = OB_INIT_TWICE;
     LOG_WARN("ObLinkedMacroBlockWriter has not been inited", K(ret));
   } else {
-    snapshot_version_ = 0;
-    cur_macro_seq_ = -1;
-    is_inited_ = true;
-  }
-  return ret;
-}
-
-int ObLinkedMacroBlockWriter::init_for_object(
-  const uint64_t tablet_id,
-  const int64_t tablet_transfer_seq,
-  const int64_t snapshot_version,
-  const int64_t start_macro_seq)
-{
-  int ret = OB_SUCCESS;
-  if (OB_UNLIKELY(is_inited_)) {
-    ret = OB_INIT_TWICE;
-    LOG_WARN("ObLinkedMacroBlockWriter has not been inited", K(ret));
-  } else if (OB_UNLIKELY(0 == tablet_id || (snapshot_version > 0 && start_macro_seq < 0))) {
-    ret = OB_INVALID_ARGUMENT;
-    LOG_WARN("invalid arguments", K(ret), K(tablet_id), K(snapshot_version), K(start_macro_seq));
-  } else {
-    tablet_id_ = tablet_id;
-    tablet_transfer_seq_ = tablet_transfer_seq;
-    snapshot_version_ = snapshot_version;
-    cur_macro_seq_ = start_macro_seq;
     is_inited_ = true;
   }
   return ret;
@@ -74,8 +48,7 @@ int ObLinkedMacroBlockWriter::init_for_object(
 int ObLinkedMacroBlockWriter::write_block(
     char *buf, const int64_t buf_len,
     blocksstable::ObMacroBlockCommonHeader &common_header, ObLinkedMacroBlockHeader &linked_header,
-    MacroBlockId &pre_block_id,
-    blocksstable::ObIMacroBlockFlushCallback *write_callback)
+    MacroBlockId &pre_block_id)
 {
   int ret = OB_SUCCESS;
   if (OB_UNLIKELY(!is_inited_)) {
@@ -86,12 +59,7 @@ int ObLinkedMacroBlockWriter::write_block(
     LOG_WARN("invalid argument", K(ret), KP(buf), K(buf_len));
   } else {
     ObStorageObjectOpt opt;
-    if (snapshot_version_ > 0) {
-      opt.set_ss_share_meta_macro_object_opt(tablet_id_, cur_macro_seq_++, 0);
-    } else {
-      opt.set_private_meta_macro_object_opt(tablet_id_, tablet_transfer_seq_);
-    }
-    
+    opt.set_meta_macro_object_opt();
     ObStorageObjectWriteInfo write_info;
     write_info.size_ = buf_len;
     write_info.buffer_ = buf;
@@ -106,23 +74,16 @@ int ObLinkedMacroBlockWriter::write_block(
     int64_t pos = 0;
     if (!handle_.is_empty()) {
       if (OB_FAIL(handle_.wait())) {
-        LOG_WARN("fail to wait io finish", K(ret));
       } else {
         previous_block_id = handle_.get_macro_id();
         pre_block_id = previous_block_id;
       }
 
-      if (OB_SUCC(ret) && OB_NOT_NULL(write_callback)) {
-        if (OB_FAIL(write_callback->wait())) {
-          LOG_WARN("failed to wait write call back", K(ret));
-        }
-      }
     }
     if (OB_SUCC(ret)) {
       pos = common_header.get_serialize_size();
       linked_header.set_previous_block_id(previous_block_id);
       if (OB_FAIL(linked_header.serialize(buf, buf_len, pos))) {
-        LOG_WARN("fail to serialize linked header", K(ret));
       } else {
         common_header.set_payload_checksum(static_cast<int32_t>(
             ob_crc64(buf + common_header.get_serialize_size(), common_header.get_payload_size())));
@@ -131,29 +92,19 @@ int ObLinkedMacroBlockWriter::write_block(
     if (OB_SUCC(ret)) {
       pos = 0;
       if (OB_FAIL(common_header.serialize(buf, buf_len, pos))) {
-        LOG_WARN("fail to serialize common header", K(ret));
       }
     }
     if (OB_SUCC(ret)) {
       handle_.reset();
       if (OB_FAIL(ObObjectManager::async_write_object(opt, write_info, handle_))) {
-        LOG_WARN("fail to async write block", K(ret), K(write_info), K(handle_));
       } else if (OB_FAIL(write_ctx_.add_macro_block_id(handle_.get_macro_id()))) {
-        LOG_WARN("fail to add macro id", K(ret), "macro id", handle_.get_macro_id());
-      }
-      
-      ObLogicMacroBlockId unused_logic_id;
-      if (OB_SUCC(ret) && OB_NOT_NULL(write_callback)) {
-        if (OB_FAIL(write_callback->write(handle_, unused_logic_id, const_cast<char*>(write_info.buffer_), write_info.size_, 0 /* unused row count*/))) {
-          LOG_WARN("fail to write buf into write callback", K(ret), K(handle_.get_macro_id()), K(write_info.size_));
-        }
       }
     }
   }
   return ret;
 }
 
-int ObLinkedMacroBlockWriter::close(blocksstable::ObIMacroBlockFlushCallback *write_callback, MacroBlockId &pre_block_id)
+int ObLinkedMacroBlockWriter::close(MacroBlockId &pre_block_id)
 {
   int ret = OB_SUCCESS;
   if (OB_UNLIKELY(!is_inited_)) {
@@ -163,15 +114,9 @@ int ObLinkedMacroBlockWriter::close(blocksstable::ObIMacroBlockFlushCallback *wr
     // do nothing
   } else {
     if (OB_FAIL(handle_.wait())) {
-      LOG_WARN("fail to wait io finish", K(ret));
     } else {
       entry_block_id_ = handle_.get_macro_id();
       pre_block_id = entry_block_id_;
-    }
-    if (OB_SUCC(ret) && OB_NOT_NULL(write_callback)) {
-      if (OB_FAIL(write_callback->wait())) {
-        LOG_WARN("failed to wait redo callback", K(ret));
-      }
     }
   }
   return ret;
@@ -197,9 +142,6 @@ void ObLinkedMacroBlockWriter::reset()
   write_ctx_.reset();
   handle_.reset();
   entry_block_id_.reset();
-  tablet_id_ = 0;
-  snapshot_version_ = 0;
-  cur_macro_seq_ = -1;
 }
 
 void ObLinkedMacroBlockWriter::reuse_for_next_round()
@@ -207,7 +149,6 @@ void ObLinkedMacroBlockWriter::reuse_for_next_round()
   is_inited_ = false;
   handle_.reset();
   entry_block_id_.reset();
-  OB_ASSERT(-1 == cur_macro_seq_); // for shared macro, can't reuse sequence
 }
 
 //================== ObLinkedMacroBlockItemWriter =============================
@@ -217,7 +158,7 @@ ObLinkedMacroBlockItemWriter::ObLinkedMacroBlockItemWriter()
     need_disk_addr_(false), first_inflight_item_idx_(0),
     pre_block_inflight_items_cnt_(0), curr_block_inflight_items_cnt_(0),
     allocator_(), block_writer_(), io_buf_(nullptr), io_buf_size_(0),
-    io_buf_pos_(0), common_header_(), linked_header_(), write_callback_(nullptr)
+    io_buf_pos_(0), common_header_(), linked_header_()
 {
 }
 
@@ -230,56 +171,16 @@ int ObLinkedMacroBlockItemWriter::init(const bool need_disk_addr, const ObMemAtt
     LOG_WARN("ObLinkedMacroBlockItemWriter has already been inited", K(ret));
   } else if (FALSE_IT(allocator_.set_attr(mem_attr))) {
   } else if (OB_FAIL(block_writer_.init())) {
-    LOG_WARN("fail to init meta block writer", K(ret));
   } else if (OB_ISNULL(io_buf_ = static_cast<char *>(allocator_.alloc(macro_block_size)))) {
     ret = OB_ALLOCATE_MEMORY_FAILED;
     LOG_WARN("fail to allocate memory", K(ret), K(macro_block_size));
   } else if (FALSE_IT(MEMSET(io_buf_, 0, macro_block_size))) {
   } else if (OB_FAIL(common_header_.set_attr(ObMacroBlockCommonHeader::LinkedBlock))) {
-    LOG_WARN("fail to set type for common header", K(ret), K(common_header_));
   } else {
     need_disk_addr_ = need_disk_addr;
     io_buf_size_ = macro_block_size;
     io_buf_pos_ = ObMacroBlockCommonHeader::get_serialize_size() + linked_header_.get_serialize_size();
     written_items_cnt_ = 0;
-    is_inited_ = true;
-    is_closed_ = false;
-  }
-  return ret;
-}
-
-int ObLinkedMacroBlockItemWriter::init_for_object(
-  const uint64_t tablet_id,
-  const int64_t tablet_transfer_seq,
-  const int64_t snapshot_version,
-  const int64_t start_macro_seq,
-  ObIMacroBlockFlushCallback *write_callback)
-{
-  int ret = OB_SUCCESS;
-  const int64_t macro_block_size = OB_STORAGE_OBJECT_MGR.get_macro_block_size();
-  
-  const ObMemAttr mem_attr("ObjLinkWriter");
-  if (OB_UNLIKELY(is_inited_)) {
-    ret = OB_INIT_TWICE;
-    LOG_WARN("ObLinkedMacroBlockItemWriter has already been inited", K(ret));
-  } else if (FALSE_IT(allocator_.set_attr(mem_attr))) {
-  } else if (OB_UNLIKELY(0 == tablet_id || (snapshot_version > 0 && start_macro_seq < 0))) {
-    ret = OB_INVALID_ARGUMENT;
-    LOG_WARN("invalid arguments", K(ret), K(tablet_id), K(snapshot_version), K(start_macro_seq));
-  } else if (OB_FAIL(block_writer_.init_for_object(tablet_id, tablet_transfer_seq, snapshot_version, start_macro_seq))) {
-    LOG_WARN("fail to init meta block writer", K(ret));
-  } else if (OB_ISNULL(io_buf_ = static_cast<char *>(allocator_.alloc(macro_block_size)))) {
-    ret = OB_ALLOCATE_MEMORY_FAILED;
-    LOG_WARN("fail to allocate memory", K(ret), K(macro_block_size));
-  } else if (FALSE_IT(MEMSET(io_buf_, 0, macro_block_size))) {
-  } else if (OB_FAIL(common_header_.set_attr(ObMacroBlockCommonHeader::LinkedBlock))) {
-    LOG_WARN("fail to set type for common header", K(ret), K(common_header_));
-  } else {
-    need_disk_addr_ = false;
-    io_buf_size_ = macro_block_size;
-    io_buf_pos_ = ObMacroBlockCommonHeader::get_serialize_size() + linked_header_.get_serialize_size();
-    written_items_cnt_ = 0;
-    write_callback_ = write_callback;
     is_inited_ = true;
     is_closed_ = false;
   }
@@ -305,18 +206,14 @@ int ObLinkedMacroBlockItemWriter::write_item(
     int64_t remain_size = io_buf_size_ - io_buf_pos_;
     if (real_item_size <= remain_size) {
       if (OB_FAIL(write_item_header(item_buf, item_buf_len))) {
-        LOG_WARN("fail to write item header", K(ret));
       } else if (OB_FAIL(write_item_content(item_buf, item_buf_len, item_buf_pos))) {
-        LOG_WARN("fail to write item buffer", K(ret));
       } else if (OB_FAIL(record_inflight_item(item_buf_len, item_idx))) {
-        LOG_WARN("fail to record inflight item info", K(ret));
       } else {
         ++linked_header_.item_count_;
       }
     } else {
       if (0 != linked_header_.item_count_) {
         if (OB_FAIL(write_block())) {
-          LOG_WARN("fail to write block", K(ret));
         }
       }
 
@@ -326,9 +223,7 @@ int ObLinkedMacroBlockItemWriter::write_item(
         if (real_item_size > remain_size) {
           // write big meta which larger than 2M
           if (OB_FAIL(write_item_header(item_buf, item_buf_len))) {
-            LOG_WARN("fail to write item header", K(ret));
           } else if (OB_FAIL(record_inflight_item(item_buf_len, item_idx))) {
-            LOG_WARN("fail to record inflight item info", K(ret));
           }
           while (OB_SUCC(ret) && item_buf_pos < item_buf_len) {
             remain_size = io_buf_size_ - io_buf_pos_;
@@ -336,27 +231,21 @@ int ObLinkedMacroBlockItemWriter::write_item(
             linked_header_.item_count_ = is_last_block ? 1 : 0;
             linked_header_.fragment_offset_ = item_buf_pos;
             if (OB_FAIL(write_item_content(item_buf, item_buf_len, item_buf_pos))) {
-              LOG_WARN("fail to write item buffer", K(ret));
             } else if (io_buf_pos_ == io_buf_size_) {
               if (OB_FAIL(write_block())) {
-                LOG_WARN("fail to write block", K(ret));
               }
             }
           }
           if (OB_SUCC(ret)) {
             if (io_buf_pos_ > ObMacroBlockCommonHeader::get_serialize_size() + linked_header_.get_serialize_size()) {
               if (OB_FAIL(write_block())) {
-                LOG_WARN("fail to write block", K(ret));
               }
             }
           }
         } else {
           if (OB_FAIL(write_item_header(item_buf, item_buf_len))) {
-            LOG_WARN("fail to write item header", K(ret));
           } else if (OB_FAIL(write_item_content(item_buf, item_buf_len, item_buf_pos))) {
-            LOG_WARN("fail to write item buffer", K(ret));
           } else if (OB_FAIL(record_inflight_item(item_buf_len, item_idx))) {
-            LOG_WARN("fail to record inflight item info", K(ret));
           } else {
             ++linked_header_.item_count_;
           }
@@ -381,7 +270,6 @@ int ObLinkedMacroBlockItemWriter::record_inflight_item(
     LOG_WARN("invalid argument", K(ret), K_(need_disk_addr), KP(item_idx));
   } else if (need_disk_addr_) {
     if (OB_FAIL(item_size_arr_.push_back(item_buf_len + sizeof(ObLinkedMacroBlockItemHeader)))) {
-      LOG_WARN("fail to push back addr", K(ret));
     } else {
       *item_idx = item_size_arr_.count() - 1;
       ++curr_block_inflight_items_cnt_;
@@ -412,9 +300,7 @@ int ObLinkedMacroBlockItemWriter::set_pre_block_inflight_items_addr(
         OB_SUCC(ret) && idx < first_inflight_item_idx_ + pre_block_inflight_items_cnt_; idx++) {
       ObMetaDiskAddr addr;
       if (OB_FAIL(addr.set_block_addr(pre_block_id, offset, item_size_arr_.at(idx), ObMetaDiskAddr::DiskType::BLOCK))) {
-        LOG_WARN("fail to push back address", K(ret), K(addr));
       } else if (OB_FAIL(item_disk_addr_arr_.push_back(addr))) {
-        LOG_WARN("fail to push back address", K(ret), K(addr));
       } else {
         offset += item_size_arr_.at(idx);
       }
@@ -476,10 +362,8 @@ int ObLinkedMacroBlockItemWriter::write_block()
   MacroBlockId pre_block_id;
   const int64_t upper_align_size = upper_align(io_buf_pos_, DIO_ALIGN_SIZE);
   if (OB_FAIL(block_writer_.write_block(
-        io_buf_, upper_align_size, common_header_, linked_header_, pre_block_id, write_callback_))) {
-    LOG_WARN("fail to write block", K(ret));
+        io_buf_, upper_align_size, common_header_, linked_header_, pre_block_id))) {
   } else if (OB_FAIL(set_pre_block_inflight_items_addr(pre_block_id))) {
-    LOG_WARN("fail to set pre block inflight items addr", K(ret));
   } else {
     io_buf_pos_ = common_header_.get_serialize_size() + linked_header_.get_serialize_size();
     linked_header_.item_count_ = 0;
@@ -543,10 +427,8 @@ int ObLinkedMacroBlockItemWriter::close()
   } else if ((io_buf_pos_ > ObMacroBlockCommonHeader::get_serialize_size() + linked_header_.get_serialize_size())
       && OB_FAIL(write_block())) {
     LOG_WARN("fail to write block", K(ret));
-  } else if (OB_FAIL(block_writer_.close(write_callback_, pre_block_id))) {
-    LOG_WARN("fail to close writer", K(ret));
+  } else if (OB_FAIL(block_writer_.close(pre_block_id))) {
   } else if (OB_FAIL(set_pre_block_inflight_items_addr(pre_block_id))) {
-    LOG_WARN("fail to set pre block inflight items addr", K(ret));
   } else {
     is_closed_ = true;
   }

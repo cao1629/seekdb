@@ -40,7 +40,7 @@ int ObCreateUserResolver::resolve(const ParseNode &parse_tree)
   if (OB_UNLIKELY(4 != parse_tree.num_child_)
       || OB_UNLIKELY(T_CREATE_USER != parse_tree.type_)) {
     ret = OB_INVALID_ARGUMENT;
-    LOG_WARN("expect 4 child in mysql mode and 5 child in oracle mode, create user type",
+    LOG_WARN("expect 4 children in create user parse tree",
              "actual_num", parse_tree.num_child_,
              "type", parse_tree.type_,
              K(ret));
@@ -57,7 +57,6 @@ int ObCreateUserResolver::resolve(const ParseNode &parse_tree)
     ParseNode *users = const_cast<ParseNode*>(parse_tree.children_[1]);
     ParseNode *require_info = const_cast<ParseNode*>(parse_tree.children_[2]);
     ParseNode *resource_options = const_cast<ParseNode*>(parse_tree.children_[3]);
-    ParseNode *primary_zone = NULL; 
     ParseNode *ssl_infos = NULL;
     
 		//resolve if_not_exists
@@ -84,7 +83,6 @@ int ObCreateUserResolver::resolve(const ParseNode &parse_tree)
         // do nothing in inner_sql
       } else if (OB_FAIL(mask_password_for_users(allocator_,
           session_info_->get_current_query_string(), users, 1, masked_sql))) {
-        LOG_WARN("fail to mask_password_for_users", K(ret));
       } else {
         create_user_stmt->set_masked_sql(masked_sql);
       }
@@ -101,7 +99,6 @@ int ObCreateUserResolver::resolve(const ParseNode &parse_tree)
           ObString host_name;
 
           if (OB_FAIL(resolve_user_host(user_pass, user_name, host_name))) {
-            LOG_WARN("fail to resolve user_host");
           }
 
           ObString password;
@@ -136,7 +133,6 @@ int ObCreateUserResolver::resolve(const ParseNode &parse_tree)
           }
           if (OB_SUCC(ret) && need_enc) {
             if (OB_FAIL(check_password_strength(password))) {
-              LOG_WARN("password don't satisfied current policy", K(ret));
             }
           }
           
@@ -145,7 +141,6 @@ int ObCreateUserResolver::resolve(const ParseNode &parse_tree)
               ret = OB_WRONG_USER_NAME_LENGTH;
               LOG_USER_ERROR(OB_WRONG_USER_NAME_LENGTH, user_name.length(), user_name.ptr());
             } else if (OB_FAIL(create_user_stmt->add_user(user_name, host_name, password, need_enc_str))) {
-              LOG_WARN("Failed to add user to ObCreateUserStmt", K(user_name), K(host_name), K(password), K(ret));
             } else {
               //do nothing
             }
@@ -200,25 +195,11 @@ int ObCreateUserResolver::resolve(const ParseNode &parse_tree)
         }
       }
     }
-    if (OB_SUCC(ret) && OB_NOT_NULL(primary_zone)) {
-      if (T_PRIMARY_ZONE != primary_zone->type_ || NULL == primary_zone->children_ || 
-          primary_zone->num_child_ != 1) {
-        ret = common::OB_INVALID_ARGUMENT;
-        LOG_WARN("invalid primary_zone argument", K(ret), "num_child", primary_zone->num_child_);
-      } else if (OB_FAIL(ObDatabaseResolver<ObCreateUserStmt>::resolve_primary_zone(
-            create_user_stmt, primary_zone->children_[0]))) {
-        LOG_WARN("fail to resolve primary zone", K(ret));
-      }
-    }
     if (OB_SUCC(ret)) {
       if (OB_FAIL(create_user_stmt->add_ssl_info(get_ssl_type_string(ssl_type),
                                                  infos[static_cast<int32_t>(ObSSLSpecifiedType::SSL_SPEC_TYPE_CIPHER)],
                                                  infos[static_cast<int32_t>(ObSSLSpecifiedType::SSL_SPEC_TYPE_ISSUER)],
                                                  infos[static_cast<int32_t>(ObSSLSpecifiedType::SSL_SPEC_TYPE_SUBJECT)]))) {
-        LOG_WARN("Failed to add_ssl_info", K(ssl_type),
-                 "CIPHER", infos[static_cast<int32_t>(ObSSLSpecifiedType::SSL_SPEC_TYPE_CIPHER)],
-                 "ISSUER", infos[static_cast<int32_t>(ObSSLSpecifiedType::SSL_SPEC_TYPE_ISSUER)],
-                 "SUBJECT", infos[static_cast<int32_t>(ObSSLSpecifiedType::SSL_SPEC_TYPE_SUBJECT)], K(ret));
       }
     }
     if (OB_SUCC(ret) && NULL != resource_options) {

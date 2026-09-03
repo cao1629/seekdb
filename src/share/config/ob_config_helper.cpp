@@ -15,14 +15,13 @@
  */
 #define USING_LOG_PREFIX SHARE
 
-#include "share/schema/ob_schema_struct.h"
-#include "share/schema/ob_schema_utils.h"
 #include "ob_config_helper.h"
-#include "rpc/frame/ob_req_packet_code.h"  // rpc::frame::ObReqCheckSumCheckLevel (relocated)
-#include "share/ob_resource_limit.h"
-#include "share/table/ob_ttl_util.h"
-#include "share/io/ob_backup_storage_info.h"
-#include "share/table/ob_table_config_util.h"
+
+#include "common/ob_store_format.h"
+#include "lib/ob_running_mode.h"
+#include "share/cache/ob_kvcache_struct.h"
+#include "share/config/ob_parallel_ddl_control_mode.h"
+#include "share/config/ob_server_config.h"
 
 namespace oceanbase
 {
@@ -91,103 +90,6 @@ int64_t ObConfigFreezeTriggerIntChecker::get_write_throttle_trigger_percentage_(
   percent = GCONF.writing_throttling_trigger_percentage;
 
   return percent;
-}
-
-bool ObConfigTxShareMemoryLimitChecker::check(const ObAdminSetConfigItem &t)
-{
-  bool is_valid = false;
-  int64_t value = ObConfigIntParser::get(t.value_.ptr(), is_valid);
-  int64_t cluster_memstore_limit = GCONF.memstore_limit_percentage;
-  int64_t memstore_limit = 0;
-  int64_t tx_data_limit = 0;
-  int64_t mds_limit = 0;
-
-  memstore_limit = GCONF._memstore_limit_percentage;
-  tx_data_limit = GCONF._tx_data_memory_limit_percentage;
-  mds_limit = GCONF._mds_memory_limit_percentage;
-
-  if (0 == memstore_limit) {
-    memstore_limit = cluster_memstore_limit;
-  }
-  if (!is_valid) {
-  } else if (0 == memstore_limit) {
-    // both 0 means adjust the percentage automatically.
-    is_valid = true;
-  } else if (0 == value) {
-    // 0 is default value, which means (_tx_share_memory_limit_percentage = memstore_limit_percentage + 10)
-    is_valid = true;
-  } else if ((value > 0 && value < 100) && (memstore_limit <= value) && (tx_data_limit <= value) &&
-             (mds_limit <= value)) {
-    is_valid = true;
-  } else {
-    is_valid = false;
-  }
-
-  if (!is_valid) {
-    OB_LOG_RET(WARN, OB_INVALID_CONFIG,
-       "update _tx_share_memory_limit_percentage failed",
-       "_tx_share_memory_limit_percentage",   value,
-       "memstore_limit_percentage",           memstore_limit,
-       "_tx_data_memory_limit_percentage",    tx_data_limit,
-       "_mds_memory_limit_percentage",        mds_limit);
-  }
-
-  return is_valid;
-}
-
-bool less_or_equal_tx_share_limit(const int64_t value)
-{
-  bool bool_ret = true;
-  int64_t tx_share_limit = 0;
-  tx_share_limit = GCONF._tx_share_memory_limit_percentage;
-  if (0 == value) {
-    // 0 is default value, which means memstore limit percentage will adjust itself.
-    bool_ret = true;
-  } else if (0 == tx_share_limit) {
-    // 0 is default value, which means (_tx_share_memory_limit_percentage = memstore_limit_percentage + 10)
-    bool_ret = true;
-  } else if (value > 0 && value < 100 && value <= tx_share_limit) {
-    bool_ret = true;
-  } else {
-    bool_ret = false;
-  }
-  return bool_ret;
-}
-
-bool ObConfigMemstoreLimitChecker::check(const obcall::ObAdminSetConfigItem &t)
-{
-  bool is_valid = false;
-  int64_t value = ObConfigIntParser::get(t.value_.ptr(), is_valid);
-  if (less_or_equal_tx_share_limit(value)) {
-    is_valid = true;
-  } else {
-    is_valid = false;
-  }
-  return is_valid;
-}
-
-bool ObConfigTxDataLimitChecker::check(const obcall::ObAdminSetConfigItem &t)
-{
-  bool is_valid = false;
-  int64_t value = ObConfigIntParser::get(t.value_.ptr(), is_valid);
-  if (less_or_equal_tx_share_limit(value)) {
-    is_valid = true;
-  } else {
-    is_valid = false;
-  }
-  return is_valid;
-}
-
-bool ObConfigMdsLimitChecker::check(const obcall::ObAdminSetConfigItem &t)
-{
-  bool is_valid = false;
-  int64_t value = ObConfigIntParser::get(t.value_.ptr(), is_valid);
-  if (less_or_equal_tx_share_limit(value)) {
-    is_valid = true;
-  } else {
-    is_valid = false;
-  }
-  return is_valid;
 }
 
 bool ObConfigWriteThrottleTriggerIntChecker::check(const ObAdminSetConfigItem &t)
@@ -311,18 +213,17 @@ bool ObConfigPerfCompressFuncChecker::check(const ObConfigItem &t) const
   return is_valid;
 }
 
-bool ObConfigResourceLimitSpecChecker::check(const ObConfigItem &t) const
-{
-  ObResourceLimit rl;
-  int ret = rl.load_config(t.str());
-  return OB_SUCCESS == ret;
-}
-
 bool ObConfigTempStoreFormatChecker::check(const ObConfigItem &t) const
 {
+  static const char *const FORMAT_OPTIONS[] = {
+    "auto",
+    "zstd",
+    "lz4",
+    "none",
+  };
   bool is_valid = false;
-  for (int i = 0; i < ARRAYSIZEOF(share::temp_store_format_options) && !is_valid; ++i) {
-    if (0 == ObString::make_string(temp_store_format_options[i]).case_compare(t.str())) {
+  for (int i = 0; i < ARRAYSIZEOF(FORMAT_OPTIONS) && !is_valid; ++i) {
+    if (0 == ObString::make_string(FORMAT_OPTIONS[i]).case_compare(t.str())) {
       is_valid = true;
     }
   }
@@ -358,18 +259,6 @@ bool ObConfigRowFormatChecker::check(const ObConfigItem &t) const
   if (OB_ISNULL(t.str()) || strlen(t.str()) == 0) {
   } else if (OB_SUCCESS != ObStoreFormat::find_store_format_type_mysql(ObString::make_string(t.str()), type)) {
   } else if (ObStoreFormat::is_store_format_mysql(type)) {
-    is_valid = true;
-  }
-  return is_valid;
-}
-
-bool ObConfigCompressOptionChecker::check(const ObConfigItem &t) const
-{
-  bool is_valid = false;
-  ObStoreFormatType type = OB_STORE_FORMAT_INVALID;
-  if (OB_ISNULL(t.str()) || strlen(t.str()) == 0) {
-  } else if (OB_SUCCESS != ObStoreFormat::find_store_format_type_oracle(ObString::make_string(t.str()), type)) {
-  } else if (ObStoreFormat::is_store_format_oracle(type)) {
     is_valid = true;
   }
   return is_valid;
@@ -423,12 +312,6 @@ bool ObConfigLogLevelChecker::check(const ObConfigItem &t) const
       || OB_SUCCESS == OB_LOGGER.parse_check(tmp_str.ptr(), tmp_str.length()));
 }
 
-bool ObConfigAlertLogLevelChecker::check(const ObConfigItem &t) const
-{
-  const ObString tmp_str(t.str());
-  return OB_SUCCESS == OB_LOGGER.parse_check_alert(tmp_str.ptr(), tmp_str.length());
-}
-
 bool ObConfigAuditTrailChecker::check(const ObConfigItem &t) const
 {
   common::ObString tmp_string(t.str());
@@ -444,15 +327,12 @@ bool ObConfigAuditLogCompressionChecker::check(const ObConfigItem &t) const
 
 bool ObConfigAuditLogPathChecker::check(const ObConfigItem &t) const
 {
-  int ret = OB_SUCCESS;
-  common::ObString tmp_string(t.str());
-  ObBackupDest dest;
-  if (tmp_string.empty()) {
-    // do nothing
-  } else if (OB_FAIL(dest.set(tmp_string))) {
-    OB_LOG(WARN, "failed to set backup dest", K(ret));
-  }
-  return OB_SUCCESS == ret;
+  static constexpr char FILE_PREFIX[] = "file://";
+  const char *path = t.str();
+  return '\0' == path[0]
+      || (0 == STRNCMP(path, FILE_PREFIX, sizeof(FILE_PREFIX) - 1)
+          && OB_ISNULL(STRCHR(path, '?'))
+          && STRLEN(path) < OB_MAX_URI_LENGTH);
 }
 
 bool ObConfigAuditLogFormatChecker::check(const ObConfigItem &t) const
@@ -482,86 +362,117 @@ bool ObConfigWorkAreaPolicyChecker::check(const ObConfigItem &t) const
   return ((0 == tmp_str.case_compare(MANUAL)) || (0 == tmp_str.case_compare(AUTO)));
 }
 
-bool ObConfigRpcChecksumChecker::check(const ObConfigItem &t) const
+bool ObDutyDurationUtil::extract_value(const char *ptr, uint64_t len, int32_t &value)
 {
-  common::ObString tmp_string(t.str());
-  return rpc::frame::get_rpc_checksum_check_level_from_string(tmp_string) != rpc::frame::ObReqCheckSumCheckLevel::INVALID ;
+  char buffer[16] = {0};
+  bool found = false;
+  for (uint64_t i = 0; i < len; ++i) {
+    if (' ' == ptr[i]) {
+    } else if (ptr[i] >= '0' && ptr[i] <= '9') {
+      found = true;
+      MEMCPY(buffer, ptr + i, MIN(len - i, sizeof(buffer) - 1));
+      break;
+    }
+  }
+  value = static_cast<int32_t>(atoi(buffer));
+  return found;
 }
 
-bool ObTTLDutyDurationChecker::check(const ObConfigItem& t) const
+int ObDutyDurationUtil::parse_time(ObString &input, ObDutyTime &time)
 {
-  common::ObTTLDutyDuration duty_duration;
-  return OB_SUCCESS == common::ObTTLUtil::parse(t.str(), duty_duration) && duty_duration.is_valid();
+  int ret = OB_SUCCESS;
+  const char *first_split = input.find(':');
+  const char *second_split = input.reverse_find(':');
+  if (!input.contains(first_split) || !input.contains(second_split) || first_split >= second_split) {
+    ret = OB_INVALID_CONFIG;
+    LOG_WARN("invalid duty time", K(ret), K(input));
+  } else if (!extract_value(input.ptr(), first_split - input.ptr(), time.hour_)
+             || !extract_value(first_split + 1, second_split - first_split - 1, time.min_)
+             || !extract_value(second_split + 1,
+                               input.length() + input.ptr() - second_split,
+                               time.sec_)) {
+    ret = OB_INVALID_CONFIG;
+    LOG_WARN("invalid duty time", K(ret), K(input));
+  }
+  return ret;
+}
+
+int ObDutyDurationUtil::parse(const char *str, ObDutyDuration &duration)
+{
+  int ret = OB_SUCCESS;
+  if (OB_ISNULL(str) || 0 == strlen(str)) {
+    duration.not_set_ = true;
+  } else {
+    ObString input(str);
+    const char *begin = input.find('[');
+    const char *split = input.find(',');
+    const char *end = input.reverse_find(']');
+    if (OB_ISNULL(begin) || OB_ISNULL(split) || OB_ISNULL(end)) {
+      ret = OB_INVALID_CONFIG;
+      LOG_WARN("failed to parse duty duration", K(ret), K(input));
+    } else {
+      ObString begin_time;
+      ObString end_time;
+      begin_time.assign_ptr(begin + 1, static_cast<ObString::obstr_size_t>(split - begin - 1));
+      end_time.assign_ptr(split + 1, static_cast<ObString::obstr_size_t>(end - split - 1));
+      if (OB_FAIL(parse_time(begin_time, duration.begin_))
+          || OB_FAIL(parse_time(end_time, duration.end_))) {
+        LOG_WARN("failed to parse duty duration times", K(ret));
+      } else {
+        duration.not_set_ = false;
+      }
+    }
+  }
+  return ret;
+}
+
+bool ObDutyDurationUtil::current_in_duration(const ObDutyDuration &duration)
+{
+  bool in_duration = false;
+  if (!duration.not_set_) {
+    time_t now;
+    time(&now);
+    struct tm local_time;
+#ifdef _WIN32
+    localtime_s(&local_time, &now);
+#else
+    localtime_r(&now, &local_time);
+#endif
+    const uint32_t begin = duration.begin_.sec_ + 60 * (duration.begin_.min_ + 60 * duration.begin_.hour_);
+    const uint32_t end = duration.end_.sec_ + 60 * (duration.end_.min_ + 60 * duration.end_.hour_);
+    const uint32_t current = local_time.tm_sec + 60 * (local_time.tm_min + 60 * local_time.tm_hour);
+    in_duration = begin <= current && current <= end;
+  }
+  return in_duration;
 }
 
 bool ObVecIndexOptDutyTimeChecker::check(const ObConfigItem& t) const
 {
-  common::ObTTLDutyDuration duty_duration;
-  return OB_SUCCESS == common::ObTTLUtil::parse(t.str(), duty_duration) && duty_duration.is_valid();
+  common::ObDutyDuration duty_duration;
+  return OB_SUCCESS == common::ObDutyDurationUtil::parse(t.str(), duty_duration)
+      && duty_duration.is_valid();
 }
 
-bool ObMySQLVersionLengthChecker::check(const ObConfigItem& t) const
-{
-  return STRLEN(t.str()) < 16; // length of MySQL version is less then 16
-}
-
-bool ObConfigPublishSchemaModeChecker::check(const ObConfigItem& t) const
-{
-  return 0 == t.case_compare(PUBLISH_SCHEMA_MODE_BEST_EFFORT)
-         || 0 == t.case_compare(PUBLISH_SCHEMA_MODE_ASYNC);
-}
-
-bool ObConfigMemoryLimitChecker::check(const ObConfigItem &t) const
+bool MemoryBudgetConfigChecker::check(const ObConfigItem &t) const
 {
   bool is_valid = false;
   int64_t value = ObConfigCapacityParser::get(t.str(), is_valid, false);
   if (is_valid) {
-    int64_t min_memory_size = lib::ObRunningModeConfig::instance().MINI_MEM_LOWER;
-    is_valid = 0 == value || value >= min_memory_size;
+    is_valid = 0 == value || value >= lib::DEFAULT_MEMORY_BUDGET;
   }
   return is_valid;
 }
 
-bool ObConfigTenantMemoryChecker::check(const ObConfigItem &t) const
+bool KVCacheMemoryLimitConfigChecker::check(const ObConfigItem &t) const
 {
   bool is_valid = false;
-  int64_t value = ObConfigCapacityParser::get(t.str(), is_valid);
+  const int64_t value = ObConfigCapacityParser::get(t.str(), is_valid, false);
   if (is_valid) {
-    is_valid = 0 == value || (value >= ObUnitResource::UNIT_MIN_MEMORY);
-  }
-  return is_valid;
-}
-
-bool ObConfigTenantDataDiskChecker::check(const ObConfigItem &t) const
-{
-  bool is_valid = false;
-  int64_t value = ObConfigCapacityParser::get(t.str(), is_valid);
-  if (is_valid) {
-    is_valid = ((0 == value) || (value >= ObUnitResource::HIDDEN_SYS_TENANT_MIN_DATA_DISK_SIZE));
-  }
-  return is_valid;
-}
-
-bool ObConfigVectorMemoryChecker::check(const obcall::ObAdminSetConfigItem &t)
-{
-  bool is_valid = false;
-  int64_t value = ObConfigIntParser::get(t.value_.ptr(), is_valid);
-  if (less_or_equal_tx_share_limit(value)) {
-    is_valid = true;
-  } else {
-    is_valid = false;
-  }
-  return is_valid;
-}
-
-bool ObConfigQueryRateLimitChecker::check(const ObConfigItem &t) const
-{
-  bool is_valid = false;
-  int64_t value = ObConfigIntParser::get(t.str(), is_valid);
-  if (is_valid) {
-    is_valid = (-1 == value ||
-                (value >= MIN_QUERY_RATE_LIMIT &&
-                 value <= MAX_QUERY_RATE_LIMIT));
+    const int64_t initialized_capacity = GMEMCONF.get_kvcache_memory_capacity();
+    const int64_t maximum_value = initialized_capacity > 0
+        ? initialized_capacity
+        : MAX_KVCACHE_MEMORY_SIZE;
+    is_valid = 0 == value || (value > 0 && value <= maximum_value);
   }
   return is_valid;
 }
@@ -571,7 +482,7 @@ bool ObLogDiskUsagePercentageChecker::check(const ObConfigItem &t) const
   bool is_valid = false;
   int64_t value = ObConfigIntParser::get(t.str(), is_valid);
   if (is_valid) {
-    // TODO by runlun: tenant-level configuration item check
+    // TODO by runlun: runtime configuration item check
     const int64_t log_disk_utilization_threshold = 100;
     if (value < log_disk_utilization_threshold) {
       is_valid = false;
@@ -689,79 +600,10 @@ int64_t ObConfigTimeParser::get(const char *str, bool &valid)
   return value;
 }
 
-bool ObConfigUpgradeStageChecker::check(const ObConfigItem &t) const
-{
-  obcall::ObUpgradeStage stage = obcall::get_upgrade_stage(t.str());
-  return obcall::OB_UPGRADE_STAGE_INVALID < stage
-         && obcall::OB_UPGRADE_STAGE_MAX > stage;
-}
-
-
-bool ObConfigSTScredentialChecker::check(const ObConfigItem &t) const
-{
-  int ret = OB_SUCCESS;
-  bool flag = true;
-  const char *tmp_credential = t.str();
-  ObStsCredential key;
-  if (OB_ISNULL(tmp_credential) || OB_UNLIKELY(strlen(tmp_credential) <= 0 
-      || strlen(tmp_credential) > OB_MAX_STS_CREDENTIAL_LENGTH)) {
-    flag = false;
-    OB_LOG(WARN, "invalid sts credential", KP(tmp_credential));
-  } else if (OB_FAIL(check_sts_credential_format(tmp_credential, key))) {
-    flag = false;
-    OB_LOG(WARN, "fail to check sts credential format", K(ret), K(key), KP(tmp_credential));
-  }
-  return flag;
-}
-
-bool ObConfigStorageCachePolicyChecker::check(const ObConfigItem &t) const
-{
-  bool is_valid = false;
-  ObString str(t.str());
-  if (0 == str.case_compare("auto")) {
-    is_valid = true;
-  } else if (0 == str.case_compare("hot")) {
-    is_valid = true;
-  }
-  return is_valid;
-}
-
-bool ObConfigEnableManualSCPChecker::check(const ObConfigItem &t) const
-{
-  bool is_valid = false;
-  const bool enabled = ObConfigBoolParser::get(t.str(), is_valid);
-  if (enabled) {
-    // TODO @fangdan: impl it in next MR
-  }
-  return is_valid;
-}
-
-bool ObConfigSuspendStorageCacheTaskChecker::check(const ObConfigItem &t) const
-{
-  bool is_valid = false;
-  const bool enabled = ObConfigBoolParser::get(t.str(), is_valid);
-  if (enabled) {
-    // TODO @fangdan: impl it in next MR
-  }
-  return is_valid;
-}
-
-bool ObConfigUseLargePagesChecker::check(const ObConfigItem &t) const
-{
-  bool is_valid = false;
-  for (int i = 0; i < ARRAYSIZEOF(lib::use_large_pages_confs) && !is_valid; i++) {
-    if (0 == ObString::make_string(lib::use_large_pages_confs[i]).case_compare(t.str())) {
-      is_valid = true;
-    }
-  }
-  return is_valid;
-}
-
 bool ObConfigAuditModeChecker::check(const ObConfigItem &t) const
 {
   ObString v_str(t.str());
   return 0 == v_str.case_compare("NONE") ||
-         0 == v_str.case_compare("ORACLE") ||
          0 == v_str.case_compare("MYSQL");
 }
 
@@ -841,17 +683,6 @@ bool ObCtxMemoryLimitChecker::check(const char* str, uint64_t& ctx_id, int64_t& 
     }
   }
   return is_valid && limit >= 0;
-}
-
-bool ObAutoIncrementModeChecker::check(const ObConfigItem &t) const
-{
-  bool is_valid = false;
-  ObString order("order");
-  ObString noorder("noorder");
-  if (0 == order.case_compare(t.str()) || 0 == noorder.case_compare(t.str())) {
-    is_valid = true;
-  }
-  return is_valid;
 }
 
 bool ObCallClientAuthMethodChecker::check(const ObConfigItem &t) const
@@ -986,22 +817,6 @@ bool ObConfigSQLTlsVersionChecker::check(const ObConfigItem &t) const
          0 == tmp_str.case_compare("TLSV1.3");
 }
 
-bool ObDefaultLoadModeChecker::check(const ObConfigItem &t) const
-{
-  const ObString tmp_str(t.str());
-  bool result = false;
-  if (0 == tmp_str.case_compare("DISABLED")) {
-    result = true;
-  } else if (0 == tmp_str.case_compare("FULL_DIRECT_WRITE")) {
-    result = true;
-  } else if (0 == tmp_str.case_compare("INC_DIRECT_WRITE")) {
-    result = true;
-  } else if (0 == tmp_str.case_compare("INC_REPLACE_DIRECT_WRITE")) {
-    result = true;
-  }
-  return result;
-}
-
 int ObModeConfigParserUitl::parse_item_to_kv(char *item, ObString &key, ObString &value, const char* delim)
 {
   int ret = OB_SUCCESS;
@@ -1042,7 +857,6 @@ int ObModeConfigParserUitl::format_mode_str(const char *src, int64_t src_len, ch
            && (NULL != (locate_str = STRCHR(source_str, ',')))) {
       locate = static_cast<int32_t>(locate_str - source_str);
       if (OB_FAIL(databuff_printf(dst, dst_len, pos, "%.*s , ", locate, source_str))) {
-        OB_LOG(WARN, "failed to databuff_print", K(ret), K(dst), K(locate), K(source_str));
       } else {
         source_str = locate_str + 1;
         source_left_len -= (locate + 1);
@@ -1051,10 +865,8 @@ int ObModeConfigParserUitl::format_mode_str(const char *src, int64_t src_len, ch
 
     if (OB_SUCC(ret) && source_left_len > 0) {
       if (OB_FAIL(databuff_printf(dst, dst_len, pos, "%s", source_str))) {
-        OB_LOG(WARN, "failed to databuff_print", KR(ret), K(dst), K(pos));
       }
     }
-    OB_LOG(DEBUG, "format_option_str", K(ret), K(src), K(dst));
   }
   return ret;
 }
@@ -1078,46 +890,13 @@ int ObModeConfigParserUitl::get_kv_list(char *str, ObIArray<std::pair<ObString, 
       while (len > 0 && token[len - 1] == ' ') token[--len] = '\0';
       // check and set mode
       if (OB_FAIL(parse_item_to_kv(token, key, value, delim))) {
-        OB_LOG(WARN, "fail to check config item", K(ret));
       } else if (OB_FAIL(kv_list.push_back(std::make_pair(key, value)))) {
-        OB_LOG(WARN, "fail to push back key and value pair", K(ret), K(key), K(value));
       } else {
         token = STRTOK_R(NULL, ",", &save_ptr);
       }
     }
   }
   return ret;
-}
-
-bool ObConfigIndexStatsModeChecker::check(const ObConfigItem &t) const {
-  const ObString tmp_str(t.str());
-  return 0 == tmp_str.case_compare("SAMPLED") || 0 == tmp_str.case_compare("ALL");
-}
-
-bool ObConfigTableStoreFormatChecker::check(const ObConfigItem &t) const {
-  bool bret = true;
-  const ObString tmp_str(t.str());
-  return 0 == tmp_str.case_compare("ROW") ||
-         0 == tmp_str.case_compare("COLUMN") ||
-         0 == tmp_str.case_compare("COMPOUND");
-  return bret;
-}
-
-bool ObConfigDDLNoLoggingChecker::check(const obcall::ObAdminSetConfigItem &t) {
-  int ret = OB_SUCCESS;
-  bool is_valid = true;
-  const bool value = ObConfigBoolParser::get(t.value_.ptr(), is_valid);
-
-  if (!is_valid) {
-  } else {
-    is_valid = false;
-    LOG_USER_ERROR(OB_OP_NOT_ALLOW, "it's not allowded to set no logging in shared nothing mode");
-  }
-
-  if (OB_FAIL(ret)) {
-    is_valid = false;
-  }
-  return is_valid;
 }
 
 bool ObConfigSQLSpillCompressionCodecChecker::check(const ObConfigItem &t) const
@@ -1186,46 +965,6 @@ bool ObParallelDDLControlParser::parse(const char *str, uint8_t *arr, int64_t le
   return bret;
 }
 
-bool ObConfigDegradationPolicyChecker::check(const ObConfigItem &t) const
-{
-  common::ObString tmp_str(t.str());
-  return 0 == tmp_str.case_compare("LS_POLICY") || 0 == tmp_str.case_compare("CLUSTER_POLICY");
-}
-
-bool ObConfigRegexpEngineChecker::check(const ObConfigItem &t) const
-{
-  return (0 == ObString::make_string("ICU").case_compare(t.str()));
-}
-
-bool ObConfigReplicaParallelMigrationChecker::check(const ObConfigItem &t) const
-{
-  ObString v_str(t.str());
-  return 0 == v_str.case_compare("auto")
-      || 0 == v_str.case_compare("on")
-      || 0 == v_str.case_compare("off");
-}
-
-bool ObConfigS3URLEncodeTypeChecker::check(const ObConfigItem &t) const
-{
-  // When compliantRfc3986Encoding is set to true:
-  // - Adhere to RFC 3986 by supporting the encoding of reserved characters
-  //   such as '-', '_', '.', '$', '@', etc.
-  // - This approach mitigates inconsistencies in server behavior when accessing
-  //   COS using the S3 SDK.
-  // Otherwise, the reserved characters will not be encoded,
-  // following the default behavior of the S3 SDK.
-  bool bret = false;
-  common::ObString tmp_str(t.str());
-  if (0 == tmp_str.case_compare("default")) {
-    bret = true;
-  } else if (0 == tmp_str.case_compare("compliantRfc3986Encoding")) {
-    bret = true;
-  } else {
-    bret = false;
-  }
-  return bret;
-}
-
 bool ObConfigDefaultTableOrganizationChecker::check(const obcall::ObAdminSetConfigItem &t)
 {
   const ObString tmp_str(t.value_.size(), t.value_.ptr());
@@ -1244,16 +983,6 @@ bool ObConfigEnableHashRollupChecker::check(const ObConfigItem &t) const
   return bret;
 }
 
-bool ObConfigPxNodePolicyChecker::check(const ObConfigItem &t) const
-{
-  int bret = false;
-  common::ObString tmp_str(t.str());
-  bret = (0 == tmp_str.case_compare("data")
-          || 0 == tmp_str.case_compare("zone")
-          || 0 == tmp_str.case_compare("cluster"));
-  return bret;
-}
-
 bool ObConfigNonStdCmpLevelChecker::check(const ObConfigItem &t) const
 {
   int bret = false;
@@ -1261,65 +990,6 @@ bool ObConfigNonStdCmpLevelChecker::check(const ObConfigItem &t) const
   bret = (0 == tmp_str.case_compare("none")
           || 0 == tmp_str.case_compare("equal")
           || 0 == tmp_str.case_compare("range"));
-  return bret;
-}
-
-bool ObConfigJavaParamsChecker::check(const ObConfigItem &t) const
-{
-  bool bret = false;
-  // Only the ob_enable_java_env is true, then can pass to continue
-  if (GCONF.ob_enable_java_env) {
-    bret = true;
-  } else {
-    int ret = OB_INVALID_ARGUMENT;
-    OB_LOG(WARN, "enable java env is false", K(ret));
-  }
-  return bret;
-}
-const ObString ObConfigJniTransDataParamsChecker::arrow_table_str_("arrowTable");
-const ObString ObConfigJniTransDataParamsChecker::off_heap_table_str_("offHeapTable");
-bool ObConfigJniTransDataParamsChecker::check(const ObConfigItem &t) const
-{
-  bool bret = false;
-  common::ObString tmp_str(t.str());
-  // Only the ob_enable_java_env is true, then can pass to continue
-  if (GCONF.ob_enable_java_env) {
-    if (0 == tmp_str.case_compare(arrow_table_str_)
-      || 0 == tmp_str.case_compare(off_heap_table_str_)) {
-      bret = true;
-    } else {
-      int ret = OB_INVALID_ARGUMENT;
-      OB_LOG(WARN, "split mode is not arrowTable or offHeapTable", K(ret));
-    }
-  } else {
-    int ret = OB_INVALID_ARGUMENT;
-    OB_LOG(WARN, "enable java env is false", K(ret));
-  }
-
-  return bret;
-}
-
-bool ObConfigEnableAutoSplitChecker::check(const ObConfigItem &t) const
-{
-  bool is_valid = false;
-  bool enable_auto_split = ObConfigBoolParser::get(t.str(), is_valid);
-  return is_valid && !(enable_auto_split);
-}
-
-bool ObConfigAutoSplitTabletSizeChecker::check(const ObConfigItem &t) const
-{
-  bool is_valid = false;
-  int64_t value = ObConfigCapacityParser::get(t.str(), is_valid);
-  return is_valid;
-}
-
-bool ObConfigGlobalIndexAutoSplitPolicyChecker::check(const ObConfigItem &t) const
-{
-  bool bret = false;
-  common::ObString tmp_str(t.str());
-  bret = (0 == tmp_str.case_compare("DISTRIBUTED")
-          || 0 == tmp_str.case_compare("ALL")
-          || 0 == tmp_str.case_compare("OFF"));
   return bret;
 }
 
@@ -1335,4 +1005,136 @@ bool ObHNSWIterFilterScanNumChecker::check(const ObConfigItem &t) const
 }
 
 } // end of namepace common
+
+namespace share
+{
+namespace schema
+{
+
+using namespace common;
+
+static const char *const DDL_TYPES[] = {
+  "TRUNCATE_TABLE",
+  "SET_COMMENT",
+  "CREATE_INDEX",
+  "CREATE_VIEW",
+  "DROP_TABLE"
+};
+
+static const char *const UNSUPPORTED_DDL_TYPES[] = {
+  "CREATE_VIEW"
+};
+
+int ObParallelDDLControlMode::string_to_ddl_type(const ObString &ddl_string, ObParallelDDLType &ddl_type)
+{
+  int ret = OB_SUCCESS;
+  ddl_type = MAX_TYPE;
+  STATIC_ASSERT(ARRAYSIZEOF(DDL_TYPES) == MAX_TYPE, "size count not match");
+  for (uint64_t i = 0; MAX_TYPE == ddl_type && i < ARRAYSIZEOF(DDL_TYPES); ++i) {
+    if (0 == ddl_string.case_compare(DDL_TYPES[i])) {
+      ddl_type = static_cast<ObParallelDDLType>(i);
+    }
+  }
+  if (OB_UNLIKELY(MAX_TYPE == ddl_type)) {
+    ret = OB_INVALID_ARGUMENT;
+    OB_LOG(WARN, "unknown ddl_type", KR(ret), K(ddl_string));
+  }
+  return ret;
+}
+
+int ObParallelDDLControlMode::set_value(const ObConfigModeItem &mode_item)
+{
+  int ret = OB_SUCCESS;
+  const uint8_t *values = mode_item.get_value();
+  if (OB_ISNULL(values)) {
+    ret = OB_ERR_UNEXPECTED;
+    OB_LOG(WARN, "mode item's value_ is null ptr", KR(ret));
+  } else {
+    STATIC_ASSERT(sizeof(value_) / sizeof(uint8_t) <= ObConfigModeItem::MAX_MODE_BYTES,
+                  "value_ size overflow");
+    STATIC_ASSERT(MAX_TYPE * 2 <= sizeof(value_) * 8, "type size overflow");
+    value_ = 0;
+    for (uint64_t i = 0; i < sizeof(value_); ++i) {
+      value_ |= static_cast<uint64_t>(values[i]) << (8 * i);
+    }
+  }
+  return ret;
+}
+
+int ObParallelDDLControlMode::set_parallel_ddl_mode(const ObParallelDDLType type, const uint8_t mode)
+{
+  int ret = OB_SUCCESS;
+  if (TRUNCATE_TABLE <= type && type < MAX_TYPE) {
+    const uint64_t shift = static_cast<uint64_t>(type);
+    if (!check_mode_valid_(mode)) {
+      ret = OB_INVALID_ARGUMENT;
+      OB_LOG(WARN, "mode invalid", KR(ret), K(mode));
+    } else {
+      const uint64_t mask = MASK << (shift * MASK_SIZE);
+      value_ = (value_ & ~mask) | (static_cast<uint64_t>(mode) << (shift * MASK_SIZE));
+    }
+  } else {
+    ret = OB_INVALID_ARGUMENT;
+    OB_LOG(WARN, "type invalid", KR(ret), K(type));
+  }
+  return ret;
+}
+
+int ObParallelDDLControlMode::is_parallel_ddl(const ObParallelDDLType type, bool &is_parallel)
+{
+  int ret = OB_SUCCESS;
+  is_parallel = true;
+  if (TRUNCATE_TABLE <= type && type < MAX_TYPE) {
+    const uint64_t shift = static_cast<uint64_t>(type);
+    const uint8_t value = static_cast<uint8_t>((value_ >> (shift * MASK_SIZE)) & MASK);
+    if (ObParallelDDLControlParser::MODE_OFF == value) {
+      is_parallel = false;
+    } else if (ObParallelDDLControlParser::MODE_ON == value
+               || ObParallelDDLControlParser::MODE_DEFAULT == value) {
+      is_parallel = true;
+    } else {
+      ret = OB_ERR_UNEXPECTED;
+      OB_LOG(WARN, "invalid value unexpected", KR(ret), K(value));
+    }
+  } else {
+    ret = OB_INVALID_ARGUMENT;
+    OB_LOG(WARN, "type invalid", KR(ret), K(type));
+  }
+  return ret;
+}
+
+int ObParallelDDLControlMode::is_parallel_ddl_enable(const ObParallelDDLType ddl_type, bool &is_parallel)
+{
+  int ret = OB_SUCCESS;
+  is_parallel = true;
+  ObParallelDDLControlMode cfg;
+  if (OB_FAIL(GCONF._parallel_ddl_control.init_mode(cfg))) {
+  } else if (OB_FAIL(cfg.is_parallel_ddl(ddl_type, is_parallel))) {
+  }
+  return ret;
+}
+
+int ObParallelDDLControlMode::generate_parallel_ddl_control_config_for_create_tenant(ObSqlString &config_value)
+{
+  int ret = OB_SUCCESS;
+  config_value.reset();
+  for (int i = 0; OB_SUCC(ret) && i < ARRAYSIZEOF(DDL_TYPES); ++i) {
+    const ObString ddl_type = DDL_TYPES[i];
+    bool unsupported = false;
+    for (int j = 0; !unsupported && j < ARRAYSIZEOF(UNSUPPORTED_DDL_TYPES); ++j) {
+      unsupported = 0 == ddl_type.case_compare(UNSUPPORTED_DDL_TYPES[j]);
+    }
+    if (unsupported) {
+      // skip
+    } else if (OB_FAIL(config_value.append_fmt("%s:ON, ", DDL_TYPES[i]))) {
+    }
+  }
+  if (config_value.is_valid()) {
+    config_value.set_length(config_value.length() - 2);
+  }
+  return ret;
+}
+
+} // namespace schema
+} // namespace share
 } // end of namespace oceanbase

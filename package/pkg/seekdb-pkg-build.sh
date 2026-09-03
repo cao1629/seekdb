@@ -1,17 +1,16 @@
 #!/usr/bin/env bash
 # Assemble a macOS .pkg installer from pre-compiled build artifacts.
-# Completely independent of cmake install / cpack — mirrors the APK workflow.
 #
 # Prerequisites:
-#   - A completed build: ./build.sh release --make -j24
+#   - Existing macOS seekdb artifacts under SEEKDB_BUILD
 #   - Xcode Command Line Tools (swiftc, pkgbuild, productbuild)
 #
 # Usage:
 #   ./package/pkg/seekdb-pkg-build.sh [options] PROJECT_NAME VERSION RELEASE
 #
 # Example:
-#   ./package/pkg/seekdb-pkg-build.sh --pkg seekdb 1.3.0 1
-#   # produces: package/pkg/seekdb-1.3.0-1-macos15-arm64.pkg
+#   ./package/pkg/seekdb-pkg-build.sh --pkg seekdb 1.4.0 1
+#   # produces: package/pkg/seekdb-1.4.0-1-macos15-arm64.pkg
 #
 # Env:
 #   SEEKDB_BUILD   Build directory (default: <repo>/build_release)
@@ -23,8 +22,6 @@ TOPDIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
 MACPKG_DIR="$TOPDIR/tools/macpkg"
 
 SEEKDB_BUILD="${SEEKDB_BUILD:-$TOPDIR/build_release}"
-MACOS_ARCH="$(uname -m)"
-MACOS_VERSION_MAJOR="$(sw_vers -productVersion | cut -d. -f1)"
 
 DO_BUILD=false
 DO_PKG=false
@@ -35,22 +32,23 @@ usage() {
 Usage: seekdb-pkg-build.sh [options] PROJECT_NAME VERSION RELEASE
 
   PROJECT_NAME    Package name (e.g. seekdb)
-  VERSION         Version string (e.g. 1.3.0)
+  VERSION         Version string (e.g. 1.4.0)
   RELEASE         Release number (e.g. 1)
 
 Options:
-  --build         Run make in SEEKDB_BUILD before packaging
+  --build         Unsupported; the Bazel release launcher is Linux-only
   --pkg           Assemble the .pkg installer
   --no-menubar    Skip building the menu bar app
   -h, --help      Show this help
 
 Environment:
-  SEEKDB_BUILD    CMake build directory (default: <repo>/build_release)
+  SEEKDB_BUILD    Directory containing existing macOS artifacts
+                  (default: <repo>/build_release)
 
 Typical workflow:
   cd <oceanbase-lite>
-  ./build.sh release --make -j24
-  ./package/pkg/seekdb-pkg-build.sh --pkg seekdb 1.3.0 1
+  SEEKDB_BUILD=/path/to/macos-artifacts \
+    ./package/pkg/seekdb-pkg-build.sh --pkg seekdb 1.4.0 1
 EOF
 }
 
@@ -80,24 +78,23 @@ fi
 info() { printf '[seekdb-pkg-build] %s\n' "$*"; }
 die()  { printf '[seekdb-pkg-build][ERROR] %s\n' "$*" >&2; exit 1; }
 
-# ---------------------------------------------------------------------------
-# Step 1: Optional make
-# ---------------------------------------------------------------------------
 if [[ "$DO_BUILD" == true ]]; then
-  info "Building in $SEEKDB_BUILD ..."
-  make -C "$SEEKDB_BUILD" -j"$(sysctl -n hw.ncpu)"
+  die "--build is not supported because the Bazel release launcher currently supports Linux only. Set SEEKDB_BUILD to existing macOS artifacts and omit --build."
 fi
 
 [[ "$DO_PKG" == true ]] || { info "No --pkg flag; done."; exit 0; }
+
+MACOS_ARCH="$(uname -m)"
+MACOS_VERSION_MAJOR="$(sw_vers -productVersion | cut -d. -f1)"
 
 # ---------------------------------------------------------------------------
 # Validate build artifacts
 # ---------------------------------------------------------------------------
 SEEKDB_BIN="$SEEKDB_BUILD/src/observer/seekdb"
-[[ -x "$SEEKDB_BIN" ]] || die "seekdb binary not found: $SEEKDB_BIN (run build first)"
+[[ -x "$SEEKDB_BIN" ]] || die "seekdb binary not found: $SEEKDB_BIN (set SEEKDB_BUILD to existing macOS artifacts)"
 
 # ---------------------------------------------------------------------------
-# Step 2: Build menu bar app
+# Step 1: Build menu bar app
 # ---------------------------------------------------------------------------
 MENUBAR_SRC="$MACPKG_DIR/seekdbctl/menubar"
 MENUBAR_BIN="$SEEKDB_BUILD/seekdb-menubar"
@@ -132,7 +129,7 @@ if [[ "$DO_MENUBAR" == true && -f "$MENUBAR_SRC/SeekDBMenuBar.swift" ]]; then
 fi
 
 # ---------------------------------------------------------------------------
-# Step 3: Assemble staging directory (the on-disk layout after install)
+# Step 2: Assemble staging directory (the on-disk layout after install)
 # ---------------------------------------------------------------------------
 PKG_NAME="${PROJECT_NAME}-${VERSION}-${RELEASE}-macos${MACOS_VERSION_MAJOR}-${MACOS_ARCH}"
 STAGING="$SEEKDB_BUILD/_pkg_staging"
@@ -150,6 +147,11 @@ install -m 755 "$SEEKDB_BIN" "$STAGING/opt/seekdb/bin/seekdb"
 # --- bundle non-system dylibs (recursive) ---
 info "Bundling dynamic libraries ..."
 DYLIB_DIR="$STAGING/opt/seekdb/lib/seekdb"
+
+# An executable may only depend on system libraries, leaving this directory
+# empty. Expand unmatched dylib globs to an empty list instead of a literal
+# "*.dylib" path.
+shopt -s nullglob
 
 collect_non_system_deps() {
   otool -L "$1" 2>/dev/null | awk '/^\t/ {print $1}' | while read -r dep; do
@@ -185,7 +187,7 @@ while [[ "$changed" -eq 1 ]]; do
   done
 done
 
-BUNDLED_COUNT=$(ls "$DYLIB_DIR"/*.dylib 2>/dev/null | wc -l | tr -d ' ')
+BUNDLED_COUNT=$(find "$DYLIB_DIR" -maxdepth 1 -type f -name '*.dylib' | wc -l | tr -d ' ')
 info "  bundled $BUNDLED_COUNT dylibs"
 
 # rewrite paths: seekdb binary
@@ -210,6 +212,7 @@ info "Re-signing binaries ..."
 for lib in "$DYLIB_DIR"/*.dylib; do
   codesign --force --sign - "$lib" 2>/dev/null || true
 done
+shopt -u nullglob
 codesign --force --sign - "$STAGING/opt/seekdb/bin/seekdb" 2>/dev/null || true
 for script in seekdbctl seekdb_start seekdb_stop seekdb_status seekdb_config \
               seekdb_setup seekdb_paths seekdb_uninstall; do
@@ -272,11 +275,6 @@ done
 if [[ -f "$SEEKDB_BUILD/src/share/ob_system_variable_init.json" ]]; then
   install -m 644 "$SEEKDB_BUILD/src/share/ob_system_variable_init.json" "$STAGING/opt/seekdb/etc/seekdb/"
 fi
-for f in oceanbase_upgrade_dep.yml deps_compat.yml; do
-  if [[ -f "$TOPDIR/tools/upgrade/$f" ]]; then
-    install -m 644 "$TOPDIR/tools/upgrade/$f" "$STAGING/opt/seekdb/etc/seekdb/"
-  fi
-done
 
 # --- share: admin SQL ---
 install -d "$STAGING/opt/seekdb/share/seekdb/admin"
@@ -285,15 +283,9 @@ if [[ -d "$SYS_PACK_DIR" ]]; then
   cp -R "$SYS_PACK_DIR/"* "$STAGING/opt/seekdb/share/seekdb/admin/" 2>/dev/null || true
 fi
 
-# --- share: help ---
-install -d "$STAGING/opt/seekdb/share/seekdb/help"
-if [[ -f "$TOPDIR/src/sql/fill_help_tables-ob.sql" ]]; then
-  install -m 644 "$TOPDIR/src/sql/fill_help_tables-ob.sql" "$STAGING/opt/seekdb/share/seekdb/help/"
-fi
-
 # --- share: timezone ---
 install -d "$STAGING/opt/seekdb/share/seekdb/timezone"
-for f in timezone_V1.log timezone.data timezone_name.data timezone_trans.data timezone_trans_type.data; do
+for f in timezone_V1.log; do
   if [[ -f "$TOPDIR/tools/$f" ]]; then
     install -m 644 "$TOPDIR/tools/$f" "$STAGING/opt/seekdb/share/seekdb/timezone/"
   fi
@@ -301,17 +293,9 @@ done
 
 # --- share: srs ---
 install -d "$STAGING/opt/seekdb/share/seekdb/srs"
-for f in spatial_reference_systems.data default_srs_data_mysql.sql; do
+for f in default_srs_data_mysql.sql; do
   if [[ -f "$TOPDIR/tools/$f" ]]; then
     install -m 644 "$TOPDIR/tools/$f" "$STAGING/opt/seekdb/share/seekdb/srs/"
-  fi
-done
-
-# --- share: upgrade ---
-install -d "$STAGING/opt/seekdb/share/seekdb/upgrade"
-for f in upgrade_pre.py upgrade_post.py upgrade_checker.py upgrade_health_checker.py; do
-  if [[ -f "$TOPDIR/tools/upgrade/$f" ]]; then
-    install -m 644 "$TOPDIR/tools/upgrade/$f" "$STAGING/opt/seekdb/share/seekdb/upgrade/"
   fi
 done
 
@@ -360,7 +344,7 @@ fi
 info "Staging complete: $(find "$STAGING" -type f | wc -l | tr -d ' ') files"
 
 # ---------------------------------------------------------------------------
-# Step 4: Build .pkg with pkgbuild + productbuild
+# Step 3: Build .pkg with pkgbuild + productbuild
 # ---------------------------------------------------------------------------
 COMPONENT_PKG="$SEEKDB_BUILD/_pkg_component.pkg"
 OUTPUT_PKG="$SCRIPT_DIR/${PKG_NAME}.pkg"

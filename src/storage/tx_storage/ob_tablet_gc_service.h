@@ -16,6 +16,7 @@
 
 #ifndef OCEABASE_STORAGE_OB_TABLET_GC_SERVICE_
 #define OCEABASE_STORAGE_OB_TABLET_GC_SERVICE_
+#include "lib/literals/ob_literals.h"
 #include "storage/tx_storage/ob_ls_freeze_thread.h"
 #include "lib/task/ob_timer.h"
 #include "lib/lock/ob_rwlock.h"
@@ -31,6 +32,7 @@ namespace oceanbase
 namespace storage
 {
 class ObLS;
+class ObLSService;
 namespace checkpoint
 {
 #define TABLET_PERSIST                  0x01  /* tablet persist trigger */
@@ -96,8 +98,6 @@ public:
       const bool only_persist,
       bool &need_retry,
       bool &no_need_wait_persist);
-  int get_max_tablet_transfer_scn(const common::ObIArray<ObTabletHandle> &deleted_tablets, share::SCN &transfer_scn);
-  int set_ls_transfer_scn(const common::ObIArray<ObTabletHandle> &deleted_tablets);
   int gc_tablets(const common::ObIArray<ObTabletHandle> &deleted_tablets);
   bool check_stop() { return ATOMIC_LOAD(&update_enabled_) == false; }
   int disable_gc();
@@ -143,7 +143,7 @@ public:
       tablet_shell_task_(*this)
   {}
 
-  static int mtl_init(ObTabletGCService *&m);
+  static int server_module_init(ObTabletGCService *&m);
   int init();
   int start();
   int stop();

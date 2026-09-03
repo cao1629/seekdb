@@ -17,20 +17,13 @@
 #ifndef OCEANBASE_SHARE_CONFIG_OB_CONFIG_MANAGER_H_
 #define OCEANBASE_SHARE_CONFIG_OB_CONFIG_MANAGER_H_
 
-#include "lib/thread/thread_mgr_interface.h"
 #include "share/config/ob_server_config.h"
-#include "share/config/ob_system_config.h"
 #include "share/config/ob_reload_config.h"
 #include "share/config/ob_config_storage.h"
 // Remove code changes are significant, keep for now
 
 namespace oceanbase
 {
-
-namespace obcall
-{
-  class ObTenantConfigArg;
-}
 
 namespace common
 {
@@ -65,8 +58,6 @@ public:
   int save_config(
       const char *config_name,
       const char *value);
-  int add_extra_config(const obcall::ObTenantConfigArg &arg);
-  int init_tenant_config(const obcall::ObTenantConfigArg &arg);
   void enable_static_effect() { enable_static_effect_ = true; }
 private:
   // whitout lock, only used inner
@@ -74,10 +65,9 @@ private:
 
 private:
   bool inited_;
-  ObSystemConfig system_config_;
   ObServerConfig &server_config_;
   ObReloadConfig &reload_config_func_;
-  ObConfigStorage storage_;  // Will be initialized with shared storage from ObServer
+  ObConfigStorage storage_;
   bool enable_static_effect_;
   DISALLOW_COPY_AND_ASSIGN(ObConfigManager);
 };
@@ -85,7 +75,6 @@ private:
 inline ObConfigManager::ObConfigManager(ObServerConfig &server_config,
                                         ObReloadConfig &reload_config)
     : inited_(false),
-      system_config_(),
       server_config_(server_config),
       reload_config_func_(reload_config),
       enable_static_effect_(false)

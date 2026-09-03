@@ -52,11 +52,15 @@ struct ObIRIterLoserTreeCmp
   ObIRIterLoserTreeCmp();
   virtual ~ObIRIterLoserTreeCmp();
 
-  int init(ObDatumMeta doc_id_meta, const ObIArray<ObDocIdExt> *iter_doc_ids);
+  int init(
+      ObDatumMeta doc_id_meta,
+      const ObIArray<ObDocIdExt> *iter_doc_ids,
+      const common::ObDatumAccessContext *datum_access_ctx);
   int cmp(const ObIRIterLoserTreeItem &l, const ObIRIterLoserTreeItem &r, int64_t &cmp_ret);
 private:
   common::ObDatumCmpFuncType cmp_func_;
   const ObIArray<ObDocIdExt> *iter_doc_ids_;
+  const common::ObDatumAccessContext *datum_access_ctx_;
   bool is_inited_;
 };
 typedef common::ObLoserTree<ObIRIterLoserTreeItem, ObIRIterLoserTreeCmp> ObIRIterLoserTree;
@@ -115,9 +119,8 @@ public:
   virtual int do_table_scan() override;
   virtual int rescan() override;
   void set_domain_id_idx_tablet_id(const ObTabletID &tablet_id) { domain_id_idx_tablet_id_ = tablet_id; }
-  void set_ls_id(const share::ObLSID &ls_id) { ls_id_ = ls_id; }
   storage::ObTableScanParam &get_doc_agg_param() { return whole_doc_agg_param_; }
-  int set_related_tablet_ids(const share::ObLSID &ls_id, const ObDASFTSTabletID &related_tablet_ids);
+  int set_related_tablet_ids(const ObDASFTSTabletID &related_tablet_ids);
   virtual int set_merge_iters(const ObIArray<ObDASIter *> &retrieval_iters);
   const ObIArray<ObString> &get_query_tokens() { return query_tokens_; }
   bool is_taat_mode() { return RetrievalProcType::TAAT == processing_type_; }
@@ -163,7 +166,6 @@ protected:
   ObDASIRScanRtDef *ir_rtdef_;
   transaction::ObTxDesc *tx_desc_;
   transaction::ObTxReadSnapshot *snapshot_;
-  share::ObLSID ls_id_;
   common::ObTabletID domain_id_idx_tablet_id_;
   ObArray<ObString> query_tokens_;
   ObDASTokenRetrievalIterArray token_iters_;

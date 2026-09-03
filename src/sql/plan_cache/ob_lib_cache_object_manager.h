@@ -21,7 +21,7 @@
 #include "sql/plan_cache/ob_plan_cache_util.h"
 #include "sql/plan_cache/ob_i_lib_cache_object.h"
 #include "sql/plan_cache/ob_cache_object_factory.h"
-#include "observer/ob_req_time_service.h"
+#include "query/plan_cache/ob_plan_cache_access_service.h"
 
 namespace oceanbase
 {
@@ -34,16 +34,16 @@ class ObLCObjectManager
 public:
   typedef common::hash::ObHashMap<ObCacheObjID, ObILibCacheObject*> IdCacheObjectMap;
 
-  ObLCObjectManager() : object_id_(0) {}
-  int init(int64_t hash_bucket);
+  ObLCObjectManager() : object_id_(0), lib_cache_(nullptr) {}
+  int init(int64_t hash_bucket, ObPlanCache *lib_cache);
   int alloc(ObCacheObjGuard& guard,
             ObLibCacheNameSpace ns,
             lib::MemoryContext &parent_context);
   int destroy_cache_obj(const bool is_leaked,
                         const uint64_t object_id);
-  void free(ObILibCacheObject *&obj, const CacheRefHandleID ref_handle)
+  void free(ObILibCacheObject *&obj)
   {
-    common_free(obj, ref_handle);
+    common_free(obj);
     obj = NULL;
   }
   template<class _callback>
@@ -54,7 +54,7 @@ public:
   int atomic_get_cache_obj(ObCacheObjID id, _callback &callback);
   template<class _callback>
   int atomic_get_alloc_cache_obj(ObCacheObjID id, _callback &callback);
-  int erase_cache_obj(ObCacheObjID id, const CacheRefHandleID ref_handle);
+  int erase_cache_obj(ObCacheObjID id);
   int add_cache_obj(ObILibCacheObject *obj);
   int64_t get_cache_obj_size() const { return cache_obj_map_.size(); }
   IdCacheObjectMap &get_cache_obj_map() { return cache_obj_map_; }
@@ -62,16 +62,16 @@ public:
   uint64_t allocate_object_id() { return __sync_add_and_fetch(&object_id_, 1); }
   template<typename ClassT>
   static int alloc(lib::MemoryContext &mem_ctx,
-                   ObILibCacheObject *&obj,
-                   CacheRefHandleID ref_handle);
+                   ObILibCacheObject *&obj);
 
 private:
   void inner_free(ObILibCacheObject *obj);
-  void common_free(ObILibCacheObject *obj, const CacheRefHandleID ref_handle);
+  void common_free(ObILibCacheObject *obj);
 
 private:
   // used for generate cache obj ids
   volatile ObCacheObjID object_id_;
+  ObPlanCache *lib_cache_;
   /**
    *                                 library cache
    *                                       |key
@@ -100,7 +100,6 @@ int ObLCObjectManager::foreach_cache_obj(_callback &callback) const
 {
   int ret = OB_SUCCESS;
   if (OB_FAIL(cache_obj_map_.foreach_refactored(callback))) {
-    OB_LOG(WARN, "traversal cache_obj_map_ failed", K(ret));
   }
   return ret;
 }
@@ -110,7 +109,6 @@ int ObLCObjectManager::foreach_alloc_cache_obj(_callback &callback) const
 {
   int ret = OB_SUCCESS;
   if (OB_FAIL(alloc_cache_obj_map_.foreach_refactored(callback))) {
-    OB_LOG(WARN, "traversal alloc_cache_obj_map_ failed", K(ret));
   }
   return ret;
 }
@@ -120,7 +118,6 @@ int ObLCObjectManager::atomic_get_cache_obj(ObCacheObjID id, _callback &callback
 {
   int ret = OB_SUCCESS;
   if (OB_FAIL(cache_obj_map_.atomic_refactored(id, callback))) {
-    OB_LOG(WARN, "failed to atomic get cache obj", K(ret));
   }
   return ret;
 }
@@ -130,26 +127,22 @@ int ObLCObjectManager::atomic_get_alloc_cache_obj(ObCacheObjID id, _callback &ca
 {
   int ret = OB_SUCCESS;
   if (OB_FAIL(alloc_cache_obj_map_.atomic_refactored(id, callback))) {
-    OB_LOG(WARN, "failed to atomic get cache obj", K(ret));
   }
   return ret;
 }
 
 template<typename ClassT>
 int ObLCObjectManager::alloc(lib::MemoryContext &mem_ctx,
-                             ObILibCacheObject *&cache_obj,
-                             CacheRefHandleID ref_handle)
+                             ObILibCacheObject *&cache_obj)
 {
   int ret = OB_SUCCESS;
   void *ptr = NULL;
-  observer::ObGlobalReqTimeService::check_req_timeinfo();
   if (NULL == (ptr = (char *)mem_ctx->get_arena_allocator().alloc(sizeof(ClassT)))) {
     ret = OB_ALLOCATE_MEMORY_FAILED;
     OB_LOG(WARN, "failed to allocate memory for lib cache node", K(ret));
   } else {
     cache_obj = new(ptr)ClassT(mem_ctx);
-    
-    cache_obj->inc_ref_count(ref_handle);
+    cache_obj->inc_ref_count();
   }
   return ret;
 }

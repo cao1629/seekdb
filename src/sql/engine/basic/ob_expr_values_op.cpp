@@ -17,6 +17,7 @@
 #define USING_LOG_PREFIX SQL_ENG
 
 #include "sql/engine/basic/ob_expr_values_op.h"
+#include "sql/engine/ob_physical_plan.h"
 #include "sql/engine/dml/ob_dml_service.h"
 
 namespace oceanbase
@@ -36,7 +37,6 @@ int ObExprValuesSpec::serialize(char *buf,
   OB_UNIS_ENCODE(len);
   if (OB_SUCC(ret)) {
     if (OB_FAIL(ObOpSpec::serialize(buf, buf_len, pos))) {
-      LOG_WARN("serialize physical operator failed", K(ret));
     } else {
       const ObIArray<int64_t> *row_id_list = static_cast<const ObIArray<int64_t> *>(
                                                              seri_ctx.row_id_list_);
@@ -77,7 +77,6 @@ int ObExprValuesSpec::serialize(char *buf,
         OB_UNIS_ENCODE(values_);
       }
       OB_UNIS_ENCODE(str_values_array_);
-      OB_UNIS_ENCODE(err_log_ct_def_);
       OB_UNIS_ENCODE(contain_ab_param_);
       OB_UNIS_ENCODE(ins_values_batch_opt_);
       OB_UNIS_ENCODE(column_names_);
@@ -102,7 +101,6 @@ OB_DEF_SERIALIZE_SIZE(ObExprValuesSpec)
   BASE_ADD_LEN((ObExprValuesSpec, ObOpSpec));
   OB_UNIS_ADD_LEN(values_);
   OB_UNIS_ADD_LEN(str_values_array_);
-  OB_UNIS_ADD_LEN(err_log_ct_def_);
   OB_UNIS_ADD_LEN(contain_ab_param_);
   OB_UNIS_ADD_LEN(ins_values_batch_opt_);
   OB_UNIS_ADD_LEN(column_names_);
@@ -116,7 +114,6 @@ OB_DEF_SERIALIZE(ObExprValuesSpec)
   BASE_SER((ObExprValuesSpec, ObOpSpec));
   OB_UNIS_ENCODE(values_);
   OB_UNIS_ENCODE(str_values_array_);
-  OB_UNIS_ENCODE(err_log_ct_def_);
   OB_UNIS_ENCODE(contain_ab_param_);
   OB_UNIS_ENCODE(ins_values_batch_opt_);
   OB_UNIS_ENCODE(column_names_);
@@ -130,7 +127,6 @@ OB_DEF_DESERIALIZE(ObExprValuesSpec)
   BASE_DESER((ObExprValuesSpec, ObOpSpec));
   OB_UNIS_DECODE(values_);
   OB_UNIS_DECODE(str_values_array_);
-  OB_UNIS_DECODE(err_log_ct_def_);
   OB_UNIS_DECODE(contain_ab_param_);
   OB_UNIS_DECODE(ins_values_batch_opt_);
   OB_UNIS_DECODE(column_names_);
@@ -178,7 +174,6 @@ int64_t ObExprValuesSpec::get_serialize_size_(const ObPhyOpSeriCtx &seri_ctx) co
     OB_UNIS_ADD_LEN(values_);
   }
   OB_UNIS_ADD_LEN(str_values_array_);
-  OB_UNIS_ADD_LEN(err_log_ct_def_);
   OB_UNIS_ADD_LEN(contain_ab_param_);
   OB_UNIS_ADD_LEN(ins_values_batch_opt_);
   OB_UNIS_ADD_LEN(column_names_);
@@ -194,9 +189,6 @@ ObExprValuesOp::ObExprValuesOp(ObExecContext &exec_ctx,
     vector_index_(0),
     datum_caster_(),
     cm_(CM_NONE),
-    err_log_service_(get_eval_ctx()),
-    err_log_rt_def_(),
-    has_sequence_(false),
     real_value_cnt_(0),
     param_idx_(0),
     param_cnt_(0)
@@ -214,10 +206,8 @@ int ObExprValuesOp::inner_open()
     ret = OB_ERR_UNEXPECTED;
     LOG_WARN("get unexpected NULL ptr", K(ret), KP(plan_ctx), KP(ctx_.get_sql_ctx()));
   } else if (OB_FAIL(datum_caster_.init(eval_ctx_.exec_ctx_))) {
-    LOG_WARN("fail to init datum_caster", K(ret));
   } else if (OB_FAIL(ObSQLUtils::get_default_cast_mode(is_explicit_cast, result_flag,
                                                        ctx_.get_my_session(), cm_))) {
-    LOG_WARN("fail to get_default_cast_mode", K(ret));
   } else {
     // see ObSQLUtils::wrap_column_convert_ctx(), add CM_WARN_ON_FAIL for INSERT IGNORE.
     cm_ = cm_ | CM_COLUMN_CONVERT;
@@ -225,13 +215,8 @@ int ObExprValuesOp::inner_open()
       // CM_CHARSET_CONVERT_IGNORE_ERR is will give '?' when do string_string convert.
       // eg: insert into t(gbk_col) values('𐐀');
       cm_ = cm_ | CM_WARN_ON_FAIL | CM_CHARSET_CONVERT_IGNORE_ERR;
-      LOG_TRACE("is ignore, set CM_WARN_ON_FAIL and CM_CHARSET_CONVERT_IGNORE_ERR", K(cm_));
     }
-    if (0 == child_cnt_) {
-    } else if (1 == child_cnt_) {
-      CK (PHY_SEQUENCE == left_->get_spec().get_type());
-      has_sequence_ = true;
-    } else {
+    if (0 != child_cnt_) {
       ret = OB_ERR_UNEXPECTED;
       LOG_WARN("unexpected child cnt", K(child_cnt_), K(ret));
     }
@@ -257,7 +242,6 @@ int ObExprValuesOp::inner_open()
       } else {
         real_value_cnt_ = my_spec.get_value_count();
       }
-      LOG_TRACE("init expr values op", K(real_value_cnt_), K(param_cnt_), K(param_idx_));
     }
   }
   return ret;
@@ -267,68 +251,30 @@ int ObExprValuesOp::inner_rescan()
 {
   int ret = OB_SUCCESS;
   if (OB_FAIL(ObOperator::inner_rescan())) {
-    LOG_WARN("failed to do inner rescan", K(ret));
   } else {
     node_idx_ = 0;
   }
   return ret;
 }
-//ObExprValuesOp has its own switch iterator
-int ObExprValuesOp::switch_iterator()
-{
-  int ret = ObOperator::inner_switch_iterator();
-  if (OB_SUCC(ret)) {
-    ObPhysicalPlanCtx *plan_ctx = GET_PHY_PLAN_CTX(ctx_);
-    node_idx_ = 0;
-    if (plan_ctx->get_bind_array_idx() >= plan_ctx->get_bind_array_count() - 1) {
-      ret = OB_ITER_END;
-    }
-  }
-
-#ifndef NDEBUG
-  OX(OB_ASSERT(false == brs_.end_));
-#endif
-
-  return ret;
-}
-
 int ObExprValuesOp::inner_get_next_row()
 {
   int ret = OB_SUCCESS;
   ObPhysicalPlanCtx *plan_ctx = GET_PHY_PLAN_CTX(ctx_);
-  ObSQLSessionInfo *session = GET_MY_SESSION(ctx_);
   if (OB_SUCC(ret)) {
     plan_ctx->set_autoinc_id_tmp(0);
     if (OB_FAIL(try_check_status())) {
-      LOG_WARN("check physical plan status faild", K(ret));
     }
   }
 
   if (OB_SUCC(ret)) {
-    const ObExprValuesSpec &my_spec = MY_SPEC;
-    do {
-      clear_evaluated_flag();
-      err_log_rt_def_.reset();
-      if (OB_FAIL(calc_next_row())) {
-        if(OB_ITER_END != ret) {
-          LOG_WARN("get next row from row store failed", K(ret));
-        }
-      } else if (my_spec.err_log_ct_def_.is_error_logging_ && OB_SUCCESS != err_log_rt_def_.first_err_ret_) {
-        // only if error_logging is true then first_err_ret_ could be set values
-        if (OB_FAIL(err_log_service_.insert_err_log_record(session,
-                                                           my_spec.err_log_ct_def_,
-                                                           err_log_rt_def_,
-                                                           ObDASOpType::DAS_OP_TABLE_INSERT))) {
-          LOG_WARN("insert_err_log_record failed", K(ret), K(err_log_rt_def_.first_err_ret_));
-        } else {
-          err_log_rt_def_.curr_err_log_record_num_++;
-        }
-      } else {
-        LOG_DEBUG("output row", "row", ROWEXPR2STR(eval_ctx_, my_spec.output_));
+    clear_evaluated_flag();
+    if (OB_FAIL(calc_next_row())) {
+      if (OB_ITER_END != ret) {
+        LOG_WARN("get next row from row store failed", K(ret));
       }
-    } while (OB_SUCC(ret) &&
-        my_spec.err_log_ct_def_.is_error_logging_ &&
-        OB_SUCCESS != err_log_rt_def_.first_err_ret_);
+    } else {
+      LOG_DEBUG("output row", "row", ROWEXPR2STR(eval_ctx_, MY_SPEC.output_));
+    }
   }
 
   return ret;
@@ -405,27 +351,24 @@ int ObExprValuesOp::eval_values_op_dynamic_cast_to_lob(ObExpr &real_src_expr,
   if (!string_to_lob_withsame_cs_type) {
     if (OB_FAIL(datum_caster_.to_type(dst_expr->datum_meta_, real_src_expr,
                                       cm_, datum))) {
-      LOG_WARN("fail to dynamic cast", K(dst_expr->datum_meta_),
-                                        K(real_src_expr), K(cm_), K(ret));
     } 
     if (OB_SUCC(ret)) {
       ObExprStrResAlloc res_alloc(*dst_expr, eval_ctx_);
       // need adjust lob header, since lob to lob may not handle headers
       if (is_lob_storage(src_obj_meta.get_type()) &&
-          OB_FAIL(ob_adjust_lob_datum(*datum,
+          OB_FAIL(ob_adjust_lob_datum(eval_ctx_.exec_ctx_,
+                                      *datum,
                                       src_obj_meta,
                                       dst_expr->obj_meta_,
                                       eval_ctx_.exec_ctx_.get_eval_tmp_allocator()))) {
         LOG_WARN("adjust lob datum failed",
                 K(ret), K(*datum), K(src_obj_meta), K(dst_expr->obj_meta_)); 
       } else if (OB_FAIL(dst_datum.deep_copy(*datum, res_alloc))) {
-        LOG_WARN("fail to deep copy datum from cast res datum", K(ret), K(*datum));
       }
     }
   } else {
     ObDatum *src_datum;
     if (OB_FAIL(real_src_expr.eval(eval_ctx_, src_datum))) {
-      LOG_WARN("fail to eval src", K(real_src_expr), K(cm_), K(ret));
     } else if (src_datum->is_null()) {
       dst_datum.set_null();
     } else {
@@ -461,14 +404,6 @@ OB_INLINE int ObExprValuesOp::calc_next_row()
     if (my_spec.contain_ab_param_) {
       group_idx = node_idx_ / my_spec.get_value_count();
       if (OB_FAIL(plan_ctx->replace_batch_param_datum(group_idx, param_idx_, param_cnt_))) {
-        LOG_WARN("replace batch param datum failed", K(ret), K(group_idx));
-      }
-    }
-    if (OB_SUCC(ret) && has_sequence_) {
-      if (OB_FAIL(left_->get_next_row())) {
-        if (OB_ITER_END != ret) {
-          LOG_WARN("failed to calc next row", K(ret));
-        }
       }
     }
     while (OB_SUCC(ret) && node_idx_ < real_value_cnt_ && !is_break) {
@@ -483,7 +418,6 @@ OB_INLINE int ObExprValuesOp::calc_next_row()
       ObObjMeta src_obj_meta = src_expr->obj_meta_;
       if (my_spec.contain_ab_param_) {
         if (OB_FAIL(get_real_batch_obj_type(src_meta, src_obj_meta, src_expr, group_idx))) {
-          LOG_WARN("fail to get real batch obj type info", K(ret), K(real_node_idx), K(group_idx), KPC(src_expr));
         }
       } else {
         if (T_QUESTIONMARK == src_expr->type_
@@ -547,7 +481,6 @@ OB_INLINE int ObExprValuesOp::calc_next_row()
           dst_expr->set_evaluated_projected(eval_ctx_);
         }
       } else if (OB_FAIL(ObCharset::check_valid_implicit_convert(src_meta.cs_type_, dst_expr->datum_meta_.cs_type_))) {
-        LOG_WARN("failed to check valid implicit convert", K(ret));
       } else {
         // Need dynamic cast reason:
         // For the following scenario:
@@ -615,13 +548,11 @@ OB_INLINE int ObExprValuesOp::calc_next_row()
           if (ObObjDatumMapType::OBJ_DATUM_STRING == dst_expr->obj_datum_map_) {
             ObExprStrResAlloc res_alloc(*dst_expr, eval_ctx_);
             if (OB_FAIL(dst_datum.deep_copy(*datum, res_alloc))) {
-              LOG_WARN("fail to deep copy datum from cast res datum", K(ret), KP(datum));
             }
           } else {
             ObDataBuffer res_alloc(const_cast<char*>(dst_datum.ptr_),
                                    dst_expr->res_buf_len_);
             if (OB_FAIL(dst_datum.deep_copy(*datum, res_alloc))) {
-              LOG_WARN("fail to deep copy datum from cast res datum", K(ret), KP(datum));
             }
           }
           dst_expr->set_evaluated_projected(eval_ctx_);
@@ -629,21 +560,9 @@ OB_INLINE int ObExprValuesOp::calc_next_row()
       }
 
       if (OB_FAIL(ret)) {
-        if (my_spec.err_log_ct_def_.is_error_logging_ && should_catch_err(ret)) {
-          if (OB_SUCCESS == err_log_rt_def_.first_err_ret_) {
-            err_log_rt_def_.first_err_ret_ = ret;
-          }
-          dst_expr->locate_datum_for_write(eval_ctx_).set_null();
-          dst_expr->set_evaluated_projected(eval_ctx_);
-          ret = OB_SUCCESS;
-        } else {
-          LOG_WARN("fail to do to_type and not need to catch err", K(ret), KPC(dst_expr), KPC(src_expr));
-        }
       }
 
       if (OB_SUCC(ret)) {
-        LOG_DEBUG("expr values row columns", K(node_idx_), K(real_node_idx),
-                  K(col_idx), KPC(datum), K(datum), KPC(src_expr), KPC(dst_expr));
         ++node_idx_;
         if (col_idx == col_num - 1) {
           //last cell values resolved, output row now
@@ -664,7 +583,6 @@ int ObExprValuesOp::inner_close()
   int ret = OB_SUCCESS;
   node_idx_ = 0;
   if (OB_FAIL(datum_caster_.destroy())) {
-    LOG_WARN("fail to destroy datum_caster", K(ret));
   }
 
   return ret;

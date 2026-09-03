@@ -18,7 +18,6 @@
 #define OCEANBASE_SQL_ENGINE_DML_OB_TABLE_INSERET_OP_
 
 #include "sql/engine/dml/ob_table_modify_op.h"
-#include "sql/engine/dml/ob_err_log_service.h"
 
 namespace oceanbase
 {
@@ -74,8 +73,7 @@ public:
   typedef common::ObArrayWrap<InsRtDefArray> InsRtDef2DArray;
   ObTableInsertOp(ObExecContext &ctx, const ObOpSpec &spec, ObOpInput *input)
       : ObTableModifyOp(ctx, spec, input),
-        ins_rtdefs_(),
-        err_log_service_(get_eval_ctx())
+        ins_rtdefs_()
   {
   }
   virtual ~ObTableInsertOp() {};
@@ -100,8 +98,6 @@ protected:
 protected:
   InsRtDef2DArray ins_rtdefs_; //see the comment of InsCtDef2DArray
 private:
-  ObErrLogService err_log_service_;
-private:
   DISALLOW_COPY_AND_ASSIGN(ObTableInsertOp);
 };
 
@@ -112,10 +108,6 @@ public:
   ObTableInsertOpInput(ObExecContext &ctx, const ObOpSpec &spec)
     : ObTableModifyOpInput(ctx, spec)
   {}
-  int init(ObTaskInfo &task_info) override
-  {
-    return ObTableModifyOpInput::init(task_info);
-  }
 private:
   DISALLOW_COPY_AND_ASSIGN(ObTableInsertOpInput);
 };

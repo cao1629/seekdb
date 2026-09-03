@@ -18,7 +18,6 @@
 #define _OB_MYSQL_RESULT_SET_H_
 
 #include "rpc/obmysql/ob_mysql_field.h"
-#include "rpc/obmysql/ob_mysql_row.h"
 #include "sql/ob_result_set.h"
 
 using namespace oceanbase::sql;
@@ -35,8 +34,6 @@ namespace observer
 {
 
 using obmysql::ObMySQLField;
-using obmysql::ObMySQLRow;
-
 class ObMySQLResultSet
   : public ObResultSet, public common::ObDLinkBase<ObMySQLResultSet>
 {
@@ -46,8 +43,12 @@ public:
    *
    * @param [in] obrs Dataset returned by SQL execution
    */
-  ObMySQLResultSet(sql::ObSQLSessionInfo &session, common::ObIAllocator &allocator)
-      : ObResultSet(session, allocator), field_index_(0), param_index_(0), has_more_result_(false)
+  ObMySQLResultSet(
+      sql::ObSQLSessionInfo &session,
+      common::ObIAllocator &allocator,
+      query::ObIPlanCacheAccessService &plan_cache_access_service)
+      : ObResultSet(session, allocator, plan_cache_access_service),
+        field_index_(0), param_index_(0), has_more_result_(false)
   {
     is_user_sql_ = true;
   }
@@ -97,9 +98,6 @@ public:
   int64_t to_string(char *buf, const int64_t buf_len) const;
   int32_t get_type() {return 0;};
   static int to_mysql_field(const ObField &field, ObMySQLField &mfield);
-  static int to_new_result_field(const ObField &field, ObMySQLField &mfield);
-  static int to_oracle_field(const ObField &field, ObMySQLField &mfield);
-  static void switch_ps(ObPrecision &pre, ObScale &scale, EMySQLFieldType type);
 
 private:
   int64_t field_index_;     /**< The index of the next field to be read */

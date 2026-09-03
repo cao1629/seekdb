@@ -22,12 +22,11 @@ namespace oceanbase
 {
 using namespace common;
 using namespace common::sqlclient;
-using namespace storage;
 using namespace share;
 namespace share
 {
 
-OB_SERIALIZE_MEMBER(TenantIdAndSchemaVersion, schema_version_);
+OB_SERIALIZE_MEMBER(SchemaVersionInfo, schema_version_);
 
 } // end namespace share
 } // end namespace oceanbase

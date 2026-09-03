@@ -26,7 +26,7 @@ namespace sql
 
 ObExprWrapperInner::ObExprWrapperInner(ObIAllocator &alloc)
     : ObFuncExprOperator(alloc, T_FUN_SYS_WRAPPER_INNER, N_WRAPPER_INNER, 1, VALID_FOR_GENERATED_COL, NOT_ROW_DIMENSION,
-                         INTERNAL_IN_MYSQL_MODE, INTERNAL_IN_ORACLE_MODE)
+                         INTERNAL_IN_MYSQL_MODE)
 {
 }
 
@@ -56,7 +56,6 @@ int ObExprWrapperInner::eval_wrapper_inner(const ObExpr &expr,
   int ret = OB_SUCCESS;
   ObDatum *arg = NULL;
   if (OB_FAIL(expr.eval_param_value(ctx, arg))) {
-    LOG_WARN("expr evaluate parameter failed", K(ret));
   } else {
     expr_datum.set_datum(*arg);
   }

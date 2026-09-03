@@ -38,7 +38,6 @@ ObAlterRoleResolver::~ObAlterRoleResolver()
 int ObAlterRoleResolver::resolve(const ParseNode &parse_tree)
 {
   int ret = OB_SUCCESS;
-  CHECK_COMPATIBILITY_MODE(session_info_);
   ObAlterRoleStmt *alter_role_stmt = NULL;
   if (T_ALTER_ROLE != parse_tree.type_
       || (2 != parse_tree.num_child_ && 3 != parse_tree.num_child_)) {
@@ -102,7 +101,6 @@ int ObAlterRoleResolver::resolve(const ParseNode &parse_tree)
                                                       session_info_->get_current_query_string(), 
                                                       pw_node, 
                                                       masked_sql))) {
-      LOG_WARN("fail to mask_password_for_passwd_node", K(ret));
     } else {
       alter_role_stmt->set_masked_sql(masked_sql);
     }

@@ -15,7 +15,7 @@
  */
 
 #include "ob_data_buffer.h"
-#include "share/rc/ob_tenant_base.h"
+#include "share/rc/ob_server_runtime.h"
 using namespace oceanbase;
 using namespace common;
 using namespace share;
@@ -30,7 +30,6 @@ ObSelfBufferWriter::ObSelfBufferWriter(
 {
   int ret = OB_SUCCESS;
   if (OB_FAIL(ensure_space(size))) {
-    STORAGE_LOG(WARN, "cannot allocate memory for data buffer.", K(size), K(ret));
   }
 }
 
@@ -48,9 +47,9 @@ char *ObSelfBufferWriter::alloc(const int64_t size)
 
   char *data = NULL;
   if (is_aligned_) {
-    data = (char *)mtl_malloc_align(BUFFER_ALIGN_SIZE, size, label_);
+    data = (char *)server_malloc_align(BUFFER_ALIGN_SIZE, size, label_);
   } else {
-    data = (char *)mtl_malloc(size, label_);
+    data = (char *)server_malloc(size, label_);
   }
   return data;
 }
@@ -105,9 +104,9 @@ void ObSelfBufferWriter::free()
 {
   if (NULL != data_) {
     if (is_aligned_) {
-      mtl_free_align(data_);
+      server_free_align(data_);
     } else {
-      mtl_free(data_);
+      server_free(data_);
     }
     data_ = NULL;
   }

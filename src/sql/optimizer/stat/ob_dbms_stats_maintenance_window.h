@@ -22,7 +22,6 @@
 #include "share/schema/ob_schema_struct.h"
 #include "share/ob_dml_sql_splicer.h"
 #include "sql/session/ob_sql_session_info.h"
-#include "observer/dbms_scheduler/ob_dbms_sched_job_utils.h"
 
 #define DAY_OF_WEEK 7
 #define HOUR_OF_DAY  24
@@ -41,6 +40,10 @@
 #define DEFAULT_ASYNC_GATHER_STATS_INTERVAL_USEC (15 * 60 * 1000000LL)
 
 namespace oceanbase {
+
+namespace dbms_scheduler {
+class ObDBMSSchedJobInfo;
+}
 
 namespace common {
 
@@ -61,8 +64,6 @@ public:
 
   static bool is_stats_job(const ObString &job_name);
 
-  static int get_async_gather_stats_job_for_upgrade(common::ObMySQLProxy *sql_proxy);
-  
   static int check_job_exists(common::ObMySQLProxy *sql_proxy,
                               const char* job_name,
                               bool &is_join_exists);
@@ -98,11 +99,6 @@ private:
                                             const int64_t job_id,
                                             const ObString &exec_env,
                                             dbms_scheduler::ObDBMSSchedJobInfo &job_info);
-  static int get_next_job_id_and_exec_env(common::ObMySQLProxy *sql_proxy,
-                                          ObIAllocator &allocator,
-                                          int64_t &job_id,
-                                          ObString &exec_env);
-
 };
 
 }

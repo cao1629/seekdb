@@ -18,10 +18,8 @@
 #include "sql/engine/basic/ob_topk_op.h"
 #include "sql/engine/basic/ob_limit_op.h"
 #include "sql/engine/sort/ob_sort_op.h"
-#include "sql/engine/sort/ob_sort_vec_op.h"
 #include "sql/engine/basic/ob_material_op.h"
 #include "sql/engine/aggregate/ob_hash_groupby_op.h"
-#include "sql/engine/basic/ob_material_vec_op.h"
 #include "sql/engine/basic/ob_monitoring_dump_op.h"
 
 namespace oceanbase
@@ -72,7 +70,6 @@ int ObTopKOp::inner_get_next_row()
     } else {
       if (0 == output_count_) {
         if (OB_FAIL(get_topk_final_count())) {
-          LOG_WARN("get topk count failed", K(ret));
         } else if (OB_UNLIKELY(0 == topk_final_count_)) {
           ret = OB_ITER_END;
         }
@@ -100,7 +97,6 @@ int ObTopKOp::get_topk_final_count()
     LOG_WARN("child_ or plan_ctx is NULL", K(ret), KP(child_), KP(plan_ctx));
   } else if (OB_FAIL(ObLimitOp::get_int_val(MY_SPEC.org_limit_, eval_ctx_,
                                             limit, is_null_value))) {
-    LOG_WARN("get limit values failed", K(ret));
   } else if (!is_null_value && OB_FAIL(ObLimitOp::get_int_val(MY_SPEC.org_offset_, eval_ctx_,
                                                               offset, is_null_value))) {
     LOG_WARN("get offset values failed", K(ret));
@@ -116,33 +112,15 @@ int ObTopKOp::get_topk_final_count()
         row_count = sort_op->get_sort_row_count();
         break;
       }
-      case PHY_VEC_SORT: {
-        ObSortVecOp *sort_op = static_cast<ObSortVecOp *>(child_);
-        row_count = sort_op->get_sort_row_count();
-        break;
-      }
       case PHY_MATERIAL: {
         ObMaterialOp *mtrl_op = static_cast<ObMaterialOp *>(child_);
         if (OB_FAIL(mtrl_op->get_material_row_count(row_count))) {
-          LOG_WARN("get material row count failed", K(ret));
         }
         break;
       }
       case PHY_HASH_GROUP_BY: {
         ObHashGroupByOp *gby_op = static_cast<ObHashGroupByOp *>(child_);
         row_count = gby_op->get_hash_groupby_row_count();
-        break;
-      }
-      case PHY_VEC_HASH_GROUP_BY: {
-        ObHashGroupByVecOp *vec_gby_op = static_cast<ObHashGroupByVecOp *>(child_);
-        row_count = vec_gby_op->get_hash_groupby_row_count();
-        break;
-      }
-      case PHY_VEC_MATERIAL: {
-        ObMaterialVecOp *mtrl_op = static_cast<ObMaterialVecOp *>(child_);
-        if (OB_FAIL(mtrl_op->get_material_row_count(row_count))) {
-          LOG_WARN("get material row count failed", K(ret));
-        }
         break;
       }
       case PHY_MONITORING_DUMP: {

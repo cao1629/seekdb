@@ -19,7 +19,6 @@
 
 #include "sql/engine/expr/ob_expr.h"
 #include "sql/engine/expr/ob_expr_frame_info.h"
-#include "share/ob_cluster_version.h"
 #include "lib/container/ob_fixed_array.h"
 
 namespace oceanbase
@@ -51,10 +50,9 @@ class ObExprCGCtx
 public:
   ObExprCGCtx(common::ObIAllocator &allocator,
               ObSQLSessionInfo *session,
-              share::schema::ObSchemaGetterGuard *schema_guard,
-              const uint64_t cur_cluster_version)
+              share::schema::ObSchemaGetterGuard *schema_guard)
     : allocator_(&allocator), session_(session),
-      schema_guard_(schema_guard), cur_cluster_version_(cur_cluster_version)
+      schema_guard_(schema_guard)
   {}
 
 private:
@@ -64,7 +62,6 @@ public:
   common::ObIAllocator *allocator_;
   ObSQLSessionInfo *session_;
   share::schema::ObSchemaGetterGuard *schema_guard_;
-  uint64_t cur_cluster_version_;
 };
 
 class ObRawExpr;
@@ -75,7 +72,7 @@ class ObStaticEngineExprCG
 {
 public:
   static const int64_t STACK_OVERFLOW_CHECK_DEPTH = 16;
-  static const int64_t OLTP_WORKLOAD_CARDINALITY = 16;
+  static const int64_t SMALL_SCAN_CARDINALITY = 16;
   static const int64_t DATUM_EVAL_INFO_SIZE = sizeof(ObDatum) + sizeof(ObEvalInfo);
   friend class ObRawExpr;
   struct TmpFrameInfo {
@@ -85,10 +82,9 @@ public:
                  uint32_t frame_idx,
                  uint32_t frame_size,
                  uint32_t zero_init_pos,
-                 uint32_t zero_init_size,
-                 bool use_rich_format)
+                 uint32_t zero_init_size)
       : expr_start_pos_(start_pos),
-        frame_info_(expr_cnt, frame_idx, frame_size, zero_init_pos, zero_init_size, use_rich_format)
+        frame_info_(expr_cnt, frame_idx, frame_size, zero_init_pos, zero_init_size)
     {}
     TO_STRING_KV(K_(expr_start_pos), K_(frame_info));
   public:
@@ -100,17 +96,15 @@ public:
                        ObSQLSessionInfo *session,
                        share::schema::ObSchemaGetterGuard *schema_guard,
                        const int64_t original_param_cnt,
-                       int64_t param_cnt,
-                       const uint64_t cur_cluster_version)
+                       int64_t param_cnt)
     : allocator_(allocator),
       original_param_cnt_(original_param_cnt),
       param_cnt_(param_cnt),
-      op_cg_ctx_(allocator_, session, schema_guard, cur_cluster_version),
+      op_cg_ctx_(allocator_, session, schema_guard),
       flying_param_cnt_(0),
       batch_size_(0),
       rt_question_mark_eval_(false),
       need_flatten_gen_col_(true),
-      cur_cluster_version_(cur_cluster_version),
       gen_questionmarks_(allocator, param_cnt),
       contain_dynamic_eval_rt_qm_(false)
   {
@@ -146,16 +140,9 @@ public:
                         int64_t config_maxrows, int64_t config_target_maxsize,
                         const double scan_cardinality, int64_t lob_rowsets_max_rows);
 
-  // TP workload VS AP workload:
-  // TableScan cardinality(accessed rows) is used to determine TP load so far
-  // More sophisticated rules would be added when optimizer support new
-  // vectorized cost model
-  bool is_oltp_workload(const double scan_cardinality) const {
-    bool is_oltp_workload = false;
-    if (scan_cardinality < OLTP_WORKLOAD_CARDINALITY) {
-      is_oltp_workload = true;
-    }
-    return is_oltp_workload;
+  // Use TableScan cardinality to keep batches small for short scans.
+  bool is_small_scan(const double scan_cardinality) const {
+    return scan_cardinality < SMALL_SCAN_CARDINALITY;
   }
 
   void set_batch_size(const int64_t v) { batch_size_ = v; }
@@ -165,8 +152,7 @@ public:
 
   static int generate_partial_expr_frame(const ObPhysicalPlan &plan,
                                          ObExprFrameInfo &partial_expr_frame_info,
-                                         ObIArray<ObRawExpr *> &raw_exprs,
-                                         const bool use_rich_format);
+                                         ObIArray<ObRawExpr *> &raw_exprs);
 
   void set_need_flatten_gen_col(const bool v) { need_flatten_gen_col_ = v; }
 
@@ -179,7 +165,7 @@ public:
                                     bool contain_dynamic_eval_rt_qm_ = false);
 
   static int init_temp_expr_mem_size(ObTempExpr &temp_expr);
-  static int64_t frame_max_offset(const ObExpr &e, const int64_t batch_size, const bool use_rich_format);
+  static int64_t frame_max_offset(const ObExpr &e, const int64_t batch_size);
 
 private:
   static ObExpr *get_rt_expr(const ObRawExpr &raw_expr);
@@ -197,8 +183,6 @@ private:
   // init type_, datum_meta_, obj_meta_, obj_datum_map_, args_, arg_cnt_
   // row_dimension_, op_
   int cg_expr_basic(const common::ObIArray<ObRawExpr *> &raw_exprs);
-
-  int init_attr_expr(ObExpr *rt_expr, ObRawExpr *raw_expr);
 
   // init parent_cnt_, parents_
   int cg_expr_parents(const common::ObIArray<ObRawExpr *> &raw_exprs);
@@ -388,12 +372,7 @@ private:
 
   // total datums size: header + reserved data
   int64_t get_expr_datums_size(const ObExpr &expr) {
-    int64_t size = get_expr_datums_header_size(expr) + reserve_datums_buf_len(expr);
-    if (use_rich_format()) {
-      size += get_rich_format_size(expr);
-    }
-
-    return size;
+    return get_expr_datums_header_size(expr) + reserve_datums_buf_len(expr);
   }
 
   // datums meta/header size vector version.
@@ -411,45 +390,6 @@ private:
     return size;
   }
 
-  static int64_t get_vector_header_size() {
-    return sizeof(VectorHeader);
-  }
-
-  // ptrs
-  inline int64_t get_ptrs_size(const ObExpr &expr) {
-    return get_ptrs_size(expr, batch_size_);
-  }
-
-  static inline int64_t get_ptrs_size(const ObExpr &expr, int64_t batch_size) {
-    return expr.is_fixed_length_data_ ? 0 : sizeof(char *) * get_expr_datums_count(expr, batch_size);
-  }
-
-  // cont dynamic buf header size
-  int64_t cont_dynamic_buf_header_size(const ObExpr &expr) {
-    return expr.is_fixed_length_data_
-           ? 0
-           : sizeof(ObDynReserveBuf);
-  }
-
-  // lens / offset
-  inline int64_t get_offsets_size(const ObExpr &expr) {
-    return get_offsets_size(expr, batch_size_);
-  }
-
-  static inline int64_t get_offsets_size(const ObExpr &expr, int64_t batch_size) {
-    return expr.is_fixed_length_data_ ? 0 : sizeof(uint32_t) * (get_expr_datums_count(expr, batch_size) + 1);
-  }
-
-  int64_t get_rich_format_size(const ObExpr &expr) {
-    int64_t size = 0;
-    size += get_offsets_size(expr);
-    size += get_ptrs_size(expr);
-    size += get_vector_header_size();
-    size += get_expr_bitmap_vector_size(expr); /* null bitmaps*/
-    size += cont_dynamic_buf_header_size(expr);
-
-    return size;
-  }
 
   // datum meta/header size non-vector version.
   // two parts:
@@ -500,8 +440,6 @@ private:
 
   int divide_probably_local_exprs(common::ObIArray<ObRawExpr *> &exprs);
 
-  bool use_rich_format() const;
-
 private:
   int generate_extra_questionmarks(ObRawExprUniqueSet &flattened_raw_exprs, ObRawExprFactory &factory);
   bool is_dynamic_eval_qm(const ObRawExpr &raw_expr) const;
@@ -531,7 +469,6 @@ private:
   bool rt_question_mark_eval_;
   //is code generate temp expr witch used in table location
   bool need_flatten_gen_col_;
-  uint64_t cur_cluster_version_;
   common::ObFixedArray<ObRawExpr *, common::ObIAllocator> gen_questionmarks_;
   bool contain_dynamic_eval_rt_qm_;
 };

@@ -21,7 +21,7 @@
 #include "sql/ob_scanner.h"
 #include "common/row/ob_row.h"
 #include "lib/container/ob_se_array.h"
-#include "observer/scheduler/ob_sys_task_stat.h"
+#include "data_plane/scheduler/ob_sys_task_stat.h"
 
 namespace oceanbase
 {
@@ -41,7 +41,6 @@ private:
   share::ObSysStatMgrIter iter_;
   char task_id_[common::OB_TRACE_STAT_BUFFER_SIZE];
   char svr_ip_[common::MAX_IP_ADDR_LENGTH];
-  char comment_[common::OB_MAX_TASK_COMMENT_LENGTH];
   DISALLOW_COPY_AND_ASSIGN(ObAllVirtualSysTaskStatus);
 
 };

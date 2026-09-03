@@ -17,9 +17,8 @@
 #define USING_LOG_PREFIX STORAGE
 
 #include "ob_compaction_memory_pool.h"
-#include "share/rc/ob_module_provider.h"
+#include "share/rc/ob_server_runtime.h"
 #include "share/ob_force_print_log.h"
-#include "share/ob_thread_mgr.h"
 #include "storage/compaction/ob_compaction_memory_context.h"
 
 using namespace oceanbase;
@@ -160,7 +159,6 @@ int ObCompactionBufferChunk::alloc_block(ObCompactionBufferBlock &block)
     LOG_WARN("get unexpected null free block", K(ret), KPC(this));
   } else if (OB_FAIL(block.set_fixed_block(
         start_, free_blocks_[alloc_idx_ % DEFAULT_BLOCK_CNT], DEFAULT_BLOCK_SIZE))) {
-    LOG_WARN("failed to set fixed block", K(ret), KPC(this));
   } else {
     free_blocks_[alloc_idx_++ % DEFAULT_BLOCK_CNT] = nullptr;
   }
@@ -190,22 +188,19 @@ int ObCompactionBufferChunk::free_block(ObCompactionBufferBlock &block)
 }
 
 
-/* ***************************************** ObTenantCompactionMemPool ***************************************** */
-int ObTenantCompactionMemPool::mtl_init(ObTenantCompactionMemPool* &mem_pool)
+/* ***************************************** ObCompactionMemPool ***************************************** */
+int ObCompactionMemPool::server_module_init(ObCompactionMemPool* &mem_pool)
 {
   int ret = OB_SUCCESS;
-  
-  ObMallocAllocator *malloc_allocator = nullptr;
 
   if (OB_FAIL(mem_pool->init())) {
-    LOG_WARN("failed to init compaction memory pool", K(ret));
   } else {
-    LOG_INFO("success to init ObTenantCompactionMemPool");
+    LOG_INFO("success to init ObCompactionMemPool");
   }
   return ret;
 }
 
-ObTenantCompactionMemPool::ObTenantCompactionMemPool()
+ObCompactionMemPool::ObCompactionMemPool()
   : mem_shrink_task_(*this),
     chunk_allocator_("MrgMemPoolChk"),
     piece_allocator_("MrgMemPoolPce"),
@@ -216,39 +211,38 @@ ObTenantCompactionMemPool::ObTenantCompactionMemPool()
     total_block_num_(0),
     used_block_num_(0),
     mem_mode_(NORMAL_MODE),
-    tg_id_(0),
+    shrink_timer_(),
     is_inited_(false)
 {
 }
 
-ObTenantCompactionMemPool::~ObTenantCompactionMemPool()
+ObCompactionMemPool::~ObCompactionMemPool()
 {
   destroy();
 }
 
-void ObTenantCompactionMemPool::wait()
+void ObCompactionMemPool::wait()
 {
-  TG_WAIT(tg_id_);
+  shrink_timer_.wait();
 }
 
-void ObTenantCompactionMemPool::stop()
+void ObCompactionMemPool::stop()
 {
-  TG_STOP(tg_id_);
+  shrink_timer_.stop();
 }
 
-void ObTenantCompactionMemPool::destroy()
+void ObCompactionMemPool::destroy()
 {
   if (IS_INIT) {
     reset();
   }
 }
 
-void ObTenantCompactionMemPool::reset()
+void ObCompactionMemPool::reset()
 {
   stop();
   wait();
-  TG_DESTROY(tg_id_);
-  tg_id_ = -1;
+  shrink_timer_.destroy();
   {
     ObSpinLockGuard guard(chunk_lock_);
 
@@ -273,46 +267,43 @@ void ObTenantCompactionMemPool::reset()
     ObSpinLockGuard guard(piece_lock_);
     piece_allocator_.~DefaultPageAllocator();
   }
-  FLOG_INFO("ObTenantCompactionMemPool destroyed!");
+  FLOG_INFO("ObCompactionMemPool destroyed!");
 }
 
-int ObTenantCompactionMemPool::init()
+int ObCompactionMemPool::init()
 {
   int ret = OB_SUCCESS;
   const bool repeat = true;
 
   if (IS_INIT) {
     ret = OB_INIT_TWICE;
-    LOG_WARN("ObTenantCompactionMemPool has been inited", K(ret));
-  } else if (OB_FAIL(TG_CREATE_TENANT(lib::TGDefIDs::MergeMemPool, tg_id_))) {
-    LOG_WARN("failed to create MergeMemPool thread", K(ret));
-  } else if (OB_FAIL(TG_START(tg_id_))) {
-    LOG_WARN("failed to start stat MergeMemPool thread", K(ret));
-  } else if (OB_FAIL(TG_SCHEDULE(tg_id_, mem_shrink_task_, CHECK_SHRINK_INTERVAL, repeat))) {
-    LOG_WARN("failed to schedule tablet stat update task", K(ret));
+    LOG_WARN("ObCompactionMemPool has been inited", K(ret));
+  } else if (OB_FAIL(shrink_timer_.init("MergeMemPool", ObMemAttr("MergeMemPool")))) {
+  } else if (OB_FAIL(shrink_timer_.schedule(mem_shrink_task_, CHECK_SHRINK_INTERVAL, repeat))) {
   } else {
-    
-    
-    max_block_num_ = MTL_IS_MINI_MODE()
-                   ? MINI_MODE_CHUNK_MEMORY_LIMIT / ObCompactionBufferChunk::DEFAULT_BLOCK_SIZE
-                   : CHUNK_MEMORY_LIMIT / ObCompactionBufferChunk::DEFAULT_BLOCK_SIZE;
+
+
+    max_block_num_ = (share::server_is_mini_mode()
+                          ? MINI_MODE_CHUNK_MEMORY_LIMIT
+                          : CHUNK_MEMORY_LIMIT)
+                     / ObCompactionBufferChunk::DEFAULT_BLOCK_SIZE;
     total_block_num_ = 0;
     is_inited_ = true;
   }
   if (!is_inited_) {
     reset();
-    COMMON_LOG(WARN, "failed to init ObTenantCompactionMemPool", K(ret));
+    COMMON_LOG(WARN, "failed to init ObCompactionMemPool", K(ret));
   }
   return ret;
 }
 
-int ObTenantCompactionMemPool::alloc(const int64_t size, ObCompactionBufferBlock &buffer_block)
+int ObCompactionMemPool::alloc(const int64_t size, ObCompactionBufferBlock &buffer_block)
 {
   int ret = OB_SUCCESS;
 
   if (IS_NOT_INIT) {
     ret = OB_NOT_INIT;
-    LOG_WARN("ObTenantCompactionMemPool not inited", K(ret));
+    LOG_WARN("ObCompactionMemPool not inited", K(ret));
   } else if (size <= 0) {
     ret = OB_INVALID_ARGUMENT;
     LOG_WARN("get invalid arguments", K(ret), K(size));
@@ -332,20 +323,19 @@ int ObTenantCompactionMemPool::alloc(const int64_t size, ObCompactionBufferBlock
 
   if (OB_SUCCESS == ret && buffer_block.empty()) {
     if (OB_FAIL(alloc_piece(size, buffer_block))) {
-      LOG_WARN("failed to alloc buffer block from piece allocator", K(ret), K(size));
     }
   }
   return ret;
 }
 
-int ObTenantCompactionMemPool::alloc_chunk(ObCompactionBufferBlock &buffer_block)
+int ObCompactionMemPool::alloc_chunk(ObCompactionBufferBlock &buffer_block)
 {
   int ret = OB_SUCCESS;
   buffer_block.reset();
 
   if (IS_NOT_INIT) {
     ret = OB_NOT_INIT;
-    LOG_WARN("ObTenantCompactionMemPool not inited", K(ret));
+    LOG_WARN("ObCompactionMemPool not inited", K(ret));
   } else {
     ObSpinLockGuard guard(chunk_lock_);
     while (buffer_block.empty() && OB_SUCC(ret)) {
@@ -356,7 +346,6 @@ int ObTenantCompactionMemPool::alloc_chunk(ObCompactionBufferBlock &buffer_block
         if (!cur->has_free_block()) {
           cur = cur->get_next();
         } else if (OB_FAIL(cur->alloc_block(buffer_block))) {
-          LOG_WARN("failed to alloc free block", K(ret));
         }
       }
 
@@ -374,7 +363,7 @@ int ObTenantCompactionMemPool::alloc_chunk(ObCompactionBufferBlock &buffer_block
   return ret;
 }
 
-int ObTenantCompactionMemPool::alloc_piece(const int64_t size, ObCompactionBufferBlock &buffer_block)
+int ObCompactionMemPool::alloc_piece(const int64_t size, ObCompactionBufferBlock &buffer_block)
 {
   int ret = OB_SUCCESS;
   buffer_block.reset();
@@ -389,7 +378,6 @@ int ObTenantCompactionMemPool::alloc_piece(const int64_t size, ObCompactionBuffe
       ret = OB_ALLOCATE_MEMORY_FAILED;
       LOG_WARN("failed to alloc mem", K(ret), K(size));
     } else if (OB_FAIL(buffer_block.set_piece_block(buf, size, ObCompactionBufferBlock::PIECE_TYPE))) {
-      LOG_WARN("failed to set piece block", K(ret), K(size), K(buf));
     }
 
     if (OB_FAIL(ret) && NULL != buf) {
@@ -400,13 +388,13 @@ int ObTenantCompactionMemPool::alloc_piece(const int64_t size, ObCompactionBuffe
   return ret;
 }
 
-void ObTenantCompactionMemPool::free(ObCompactionBufferBlock &buffer_block)
+void ObCompactionMemPool::free(ObCompactionBufferBlock &buffer_block)
 {
   int ret = OB_SUCCESS;
 
   if (IS_NOT_INIT) {
     ret = OB_NOT_INIT;
-    LOG_WARN("ObTenantCompactionMemPool not inited", K(ret));
+    LOG_WARN("ObCompactionMemPool not inited", K(ret));
   } else if (OB_UNLIKELY(buffer_block.empty())) {
     // do nothing
   } else if (ObCompactionBufferBlock::PIECE_TYPE == buffer_block.get_type()) {
@@ -424,7 +412,6 @@ void ObTenantCompactionMemPool::free(ObCompactionBufferBlock &buffer_block)
         cur = cur->get_next();
       } else if (FALSE_IT(is_contained = true)) {
       } else if (OB_FAIL(cur->free_block(buffer_block))) {
-        LOG_ERROR("[MEMORY LEAK] failed to free block ptr", K(ret), K(buffer_block));
       }
     }
 
@@ -444,7 +431,7 @@ void ObTenantCompactionMemPool::free(ObCompactionBufferBlock &buffer_block)
 }
 
 // should hold lock before calling this func.
-int ObTenantCompactionMemPool::expand()
+int ObCompactionMemPool::expand()
 {
   int ret = OB_SUCCESS;
   const int64_t expand_block_num = ObCompactionBufferChunk::DEFAULT_BLOCK_CNT;
@@ -468,7 +455,6 @@ int ObTenantCompactionMemPool::expand()
 
   if (OB_FAIL(ret)) {
   } else if (OB_FAIL(new_chunk->init(chunk_start_buf, chunk_size, expand_block_num))) {
-    LOG_WARN("failed to init new chunk", K(ret), K(buf), K(chunk_size), K(expand_block_num));
   } else if (OB_UNLIKELY(!chunk_list_.add_last(new_chunk))) {
     ret = OB_ERR_UNEXPECTED;
     LOG_WARN("failed to add new chunk", K(ret), K(new_chunk));
@@ -482,12 +468,12 @@ int ObTenantCompactionMemPool::expand()
   return ret;
 }
 
-int ObTenantCompactionMemPool::try_shrink()
+int ObCompactionMemPool::try_shrink()
 {
   int ret = OB_SUCCESS;
   ObSpinLockGuard guard(chunk_lock_);
   // not reserve mem in mini mode
-  if (!MTL_IS_MINI_MODE() && max_block_num_ > total_block_num_) {
+  if (!share::server_is_mini_mode() && max_block_num_ > total_block_num_) {
     // do nothing
   } else if (used_block_num_ <= total_block_num_ / 2) {
     // Less than half of blocks were used, need shrink
@@ -517,16 +503,14 @@ int ObTenantCompactionMemPool::try_shrink()
 }
 
 // shrink the mem pool
-void ObTenantCompactionMemPool::MemPoolShrinkTask::runTimerTask()
+void ObCompactionMemPool::MemPoolShrinkTask::runTimerTask()
 {
   int ret = OB_SUCCESS;
   int64_t compaction_dag_cnt = 0;
 
-  if (OB_FAIL(share::g_mp->tenant_dag_scheduler()->get_compaction_dag_count(compaction_dag_cnt))) {
-    LOG_WARN("failed to get compaction dag count", K(ret));
+  if (OB_FAIL(::oceanbase::share::server_service<::oceanbase::share::ObDagScheduler>()->get_compaction_dag_count(compaction_dag_cnt))) {
   } else if (0 == compaction_dag_cnt && 0 == last_check_dag_cnt_) {
     if (OB_FAIL(mem_pool_.try_shrink())) {
-      LOG_WARN("failed to try shrink", K(ret));
     }
   } else {
     // exist compaction task, just update last check dag cnt
@@ -534,12 +518,12 @@ void ObTenantCompactionMemPool::MemPoolShrinkTask::runTimerTask()
   }
 }
 
-void ObTenantCompactionMemPool::uplevel_memory_mode(const bool is_reserve_mode)
+void ObCompactionMemPool::uplevel_memory_mode(const bool is_reserve_mode)
 {
   MemoryMode cur_mode = NORMAL_MODE;
   MemoryMode new_mode = NORMAL_MODE;
 
-  if (MTL_IS_MINI_MODE()) {
+  if (share::server_is_mini_mode()) {
     new_mode = CRITICAL_MODE;
   } else if (cur_mode == ATOMIC_LOAD(&mem_mode_)) {
     new_mode = EMERGENCY_MODE;
@@ -570,7 +554,6 @@ ObCompactionBufferWriter::ObCompactionBufferWriter(
 {
   int ret = OB_SUCCESS;
   if (OB_FAIL(ensure_space(size))) {
-    LOG_WARN("cannot allocate memory for data buffer.", K(size), K(ret));
   }
 }
 
@@ -605,7 +588,6 @@ int ObCompactionBufferWriter::ensure_space(int64_t size)
       ret = OB_ERR_UNEXPECTED;
       LOG_ERROR("block is unexpected not empty", K(ret), K(block_)); // lower log level later
     } else if (OB_FAIL(alloc_block(size, block_))) {
-      LOG_WARN("failed to alloc block", K(ret), K(size));
     } else {
       data_ = (char *) block_.get_buffer();
       pos_ = 0;
@@ -613,9 +595,7 @@ int ObCompactionBufferWriter::ensure_space(int64_t size)
     }
   } else if (capacity_ < size) {
     if (OB_FAIL(resize(size))) {
-      LOG_WARN("failed to resize buffer writer", K(ret), K(size));
     } else {
-      LOG_TRACE("success to resize buffer writer", K(ret), K(size));
     }
   }
 
@@ -627,7 +607,6 @@ int ObCompactionBufferWriter::ensure_space(int64_t size)
     if (NULL != ref_mem_ctx_) {
       ref_mem_ctx_->inc_buffer_hold_mem(capacity_ - old_capacity);
     } else {
-      LOG_TRACE("no mem ctx has setted to thread", K(ret), K(label_), K(size), K(capacity_), K(old_capacity));
     }
   }
   return ret;
@@ -643,7 +622,6 @@ int ObCompactionBufferWriter::resize(const int64_t size)
     ret = OB_INVALID_ARGUMENT;
     LOG_WARN("get invalid arguments", K(ret), K(size), K(block_));
   } else if (OB_FAIL(alloc_block(size, new_block))) {
-    LOG_WARN("failed to alloc block", K(ret), K(size));
   } else {
     new_data = (char *) new_block.get_buffer();
     MEMCPY(new_data, data_, pos_);
@@ -662,15 +640,14 @@ int ObCompactionBufferWriter::alloc_block(
 {
   int ret = OB_SUCCESS;
 
-  if (use_mem_pool_ && OB_FAIL(share::g_mp->tenant_compaction_mem_pool()->alloc(size, block))) {
+  if (use_mem_pool_ && OB_FAIL(::oceanbase::share::server_service<::oceanbase::storage::ObCompactionMemPool>()->alloc(size, block))) {
     LOG_WARN("failed to alloc mem for new block", K(ret), K(size));
   } else if (!use_mem_pool_) {
     void *buf = nullptr;
-    if (OB_ISNULL(buf = mtl_malloc(size, label_))) {
+    if (OB_ISNULL(buf = server_malloc(size, label_))) {
       ret = OB_ALLOCATE_MEMORY_FAILED;
       LOG_WARN("failed to alloc mem", K(ret), K(size));
-    } else if (OB_FAIL(block.set_piece_block(buf, size, ObCompactionBufferBlock::MTL_PIECE_TYPE))) {
-      LOG_WARN("failed to set piece block", K(ret), K(size), K(buf));
+    } else if (OB_FAIL(block.set_piece_block(buf, size, ObCompactionBufferBlock::SERVER_PIECE_TYPE))) {
     }
   }
 
@@ -681,15 +658,15 @@ void ObCompactionBufferWriter::free_block()
 {
   if (block_.empty()) {
     // do nothing
-  } else if (OB_UNLIKELY((!use_mem_pool_ && ObCompactionBufferBlock::MTL_PIECE_TYPE != block_.get_type())
-      || (use_mem_pool_ && ObCompactionBufferBlock::MTL_PIECE_TYPE == block_.get_type()))) {
+  } else if (OB_UNLIKELY((!use_mem_pool_ && ObCompactionBufferBlock::SERVER_PIECE_TYPE != block_.get_type())
+      || (use_mem_pool_ && ObCompactionBufferBlock::SERVER_PIECE_TYPE == block_.get_type()))) {
     LOG_ERROR_RET(OB_ERR_UNEXPECTED, "[MEMORY LEAK] get unexpected block", K(use_mem_pool_), K(block_));
     ob_abort(); // tmp code, remove later
   } else if (!use_mem_pool_) {
-    mtl_free(block_.get_buffer());
+    server_free(block_.get_buffer());
     block_.reset();
   } else {
-    ObTenantCompactionMemPool * mem_pool = share::g_mp->tenant_compaction_mem_pool();
+    ObCompactionMemPool * mem_pool = ::oceanbase::share::server_service<::oceanbase::storage::ObCompactionMemPool>();
     if (OB_NOT_NULL(mem_pool)) {
       mem_pool->free(block_);
     } else {

@@ -65,13 +65,12 @@ int ObExprPrivSTIsCollection::eval_priv_st_iscollection(
   ObObjType type1 = arg1->datum_meta_.type_;
   ObEvalCtx::TempAllocGuard tmp_alloc_g(ctx);
   
-  MultimodeAlloctor temp_allocator(tmp_alloc_g.get_allocator(), expr.type_, ret, N_PRIV_ST_ISCOLLECTION);
+  MultimodeAlloctor temp_allocator(tmp_alloc_g.get_allocator());
   bool bres = true;
 
   if (ob_is_null(type1)) {
     is_null_res = true;
   } else if (OB_FAIL(temp_allocator.eval_arg(arg1, ctx, datum1))) {
-    LOG_WARN("fail to eval args", K(ret));
   } else if (datum1->is_null()) {
     is_null_res = true;
   } else {
@@ -80,16 +79,14 @@ int ObExprPrivSTIsCollection::eval_priv_st_iscollection(
     ObGeometry *geo = nullptr;
 
     if (OB_FAIL(ObTextStringHelper::read_real_string_data_with_copy(
-            temp_allocator, *datum1, arg1->datum_meta_, arg1->obj_meta_.has_lob_header(), wkb))) {
-      LOG_WARN("fail to read real string data", K(ret), K(arg1->obj_meta_.has_lob_header()));
-    } else if (FALSE_IT(temp_allocator.set_baseline_size(wkb.length()))) {
+            ctx.exec_ctx_, temp_allocator, *datum1, arg1->datum_meta_,
+            arg1->obj_meta_.has_lob_header(), wkb))) {
     } else if (OB_FAIL(ObGeoExprUtils::build_geometry(temp_allocator,
                    wkb,
                    geo,
                    nullptr,
                    N_PRIV_ST_ISCOLLECTION,
-                   GEO_ALLOW_3D_DEFAULT | GEO_NOT_COPY_WKB))) {  // ObIWkbGeom
-      LOG_WARN("fail to build geometry from wkb", K(ret), K(wkb));
+                   GEO_ALLOW_3D_DEFAULT | GEO_NOT_COPY_WKB))) {
     } else if ((geo->type() <= ObGeoType::GEOMETRY) || (geo->type() >= ObGeoType::GEOTYPEMAX)) {
       ret = OB_ERR_INVALID_GEOMETRY_TYPE;
       LOG_WARN("unknown geometry type", K(ret), K(geo->type()));

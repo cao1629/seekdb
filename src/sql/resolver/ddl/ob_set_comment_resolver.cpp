@@ -38,7 +38,6 @@ ObSetCommentResolver::~ObSetCommentResolver()
 int ObSetCommentResolver::resolve(const ParseNode &parse_tree)
 {
   int ret = OB_SUCCESS;
-  CHECK_COMPATIBILITY_MODE(session_info_);
   if (OB_ISNULL(session_info_)) {
     ret = OB_ERR_UNEXPECTED;
     SQL_RESV_LOG(WARN, "session_info should not be null", K(ret));
@@ -48,7 +47,7 @@ int ObSetCommentResolver::resolve(const ParseNode &parse_tree)
     ret = OB_ERR_UNEXPECTED;
     SQL_RESV_LOG(WARN, "invalid parse tree", K(ret));
   } else {
-    // do-nothing for non-oracle mode
+    // No-op in MySQL-only mode.
   }
   return ret;
 }

@@ -17,7 +17,8 @@
 #define USING_LOG_PREFIX SQL_ENG
 
 #include "sql/engine/px/ob_px_scheduler.h"
-#include "share/rc/ob_module_provider.h"
+#include "data_plane/transaction/ob_i_transaction_service.h"
+#include "data_plane/transaction/ob_tx_desc_access.h"
 #include "sql/engine/px/ob_dfo_scheduler.h"
 #include "sql/engine/px/datahub/components/ob_dh_winbuf.h"
 #include "sql/engine/join/ob_join_filter_op.h"
@@ -50,9 +51,7 @@ public:
     ObDfo *child_dfo = nullptr;
     // FIXME (TODO xiaochu): this dfo id is not necessary, a local mapping from op_id to dfo id can be maintained
     if (OB_FAIL(coord_info.dfo_mgr_.find_dfo_edge(pkt.source_dfo_id_, source_dfo))) {
-      LOG_WARN("fail find dfo", K(pkt), K(ret));
     } else if (OB_FAIL(coord_info.dfo_mgr_.find_dfo_edge(pkt.target_dfo_id_, target_dfo))) {
-      LOG_WARN("fail find dfo", K(pkt), K(ret));
     } else if (OB_ISNULL(source_dfo) || OB_ISNULL(target_dfo)) {
       ret = OB_ERR_UNEXPECTED;
       LOG_WARN("NULL ptr or null session ptr", KP(source_dfo), KP(target_dfo), K(pkt), K(ret));
@@ -64,10 +63,8 @@ public:
         LOG_WARN("fail get ctx", K(pkt), K(ret));
       } else if (OB_FAIL(PieceMsg::PieceMsgCtx::alloc_piece_msg_ctx(pkt, coord_info, ctx,
             source_dfo->get_total_task_count(), piece_ctx))) {
-        LOG_WARN("fail to alloc piece msg", K(ret));
       } else if (nullptr != piece_ctx) {
         if (OB_FAIL(coord_info.piece_msg_ctx_mgr_.add_piece_ctx(piece_ctx, pkt.type()))) {
-          LOG_WARN("fail add barrier piece ctx", K(ret));
         }
       }
     }
@@ -76,7 +73,6 @@ public:
       typename PieceMsg::PieceMsgCtx *ctx = static_cast<typename PieceMsg::PieceMsgCtx *>(piece_ctx);
       ObIArray<ObPxSqcMeta> &sqcs = target_dfo->get_sqcs();
       if (OB_FAIL(PieceMsg::PieceMsgListener::on_message(*ctx, sqcs, pkt))) {
-        LOG_WARN("fail process piece msg", K(pkt), K(ret));
       }
     }
     return ret;
@@ -99,12 +95,8 @@ int ObPxMsgProc::startup_msg_loop(ObExecContext &ctx)
   LOG_TRACE("TIMERECORD ",
             "reserve:=-1 name:=QC dfoid:=-1 sqcid:=-1 taskid:=-1 start:",
             ObTimeUtility::current_time());
-  if (OB_FAIL(scheduler_->prepare_schedule_info(ctx))) {
-    LOG_WARN("fail to prepare schedule info", K(ret));
-  } else if (OB_FAIL(scheduler_->init_all_dfo_channel(ctx))) {
-    LOG_WARN("fail to init all dfo channel", K(ret));
+  if (OB_FAIL(scheduler_->init_all_dfo_channel(ctx))) {
   } else if (OB_FAIL(scheduler_->try_schedule_next_dfo(ctx))) {
-    LOG_WARN("fail to sched next one dfo", K(ret));
   }
   return ret;
 }
@@ -133,17 +125,14 @@ int ObPxMsgProc::on_sqc_init_msg(ObExecContext &ctx, const ObPxInitSqcResultMsg 
 {
   int ret = OB_SUCCESS;
 
-  LOG_TRACE("on_sqc_init_msg", K(pkt));
 
   ObDfo *edge = NULL;
   ObPxSqcMeta *sqc = NULL;
   if (OB_FAIL(coord_info_.dfo_mgr_.find_dfo_edge(pkt.dfo_id_, edge))) {
-    LOG_WARN("fail find dfo", K(pkt), K(ret));
   } else if (OB_ISNULL(edge)) {
     ret = OB_ERR_UNEXPECTED;
     LOG_WARN("NULL ptr", KP(edge), K(ret));
   } else if (OB_FAIL(edge->get_sqc(pkt.sqc_id_, sqc))) {
-    LOG_WARN("fail find sqc", K(pkt), K(ret));
   } else if (OB_ISNULL(sqc)) {
     ret = OB_ERR_UNEXPECTED;
     LOG_WARN("NULL ptr", KP(sqc), K(ret));
@@ -151,14 +140,12 @@ int ObPxMsgProc::on_sqc_init_msg(ObExecContext &ctx, const ObPxInitSqcResultMsg 
     if (OB_SUCCESS != pkt.rc_) {
       ret = pkt.rc_;
       ObPxErrorUtil::update_qc_error_code(coord_info_.first_error_code_,
-          pkt.rc_, pkt.err_msg_, sqc->get_exec_addr());
-      LOG_WARN("fail init sqc, please check remote server log for details",
-               "remote_server", sqc->get_exec_addr(), K(pkt), KP(ret));
+          pkt.rc_, pkt.err_msg_);
+      LOG_WARN("failed to initialize local sqc", K(pkt), KP(ret));
     } else if (pkt.task_count_ <= 0) {
       ret = OB_ERR_UNEXPECTED;
       LOG_WARN("task count returned by sqc invalid. expect 1 or more", K(pkt), K(ret));
     } else if (OB_FAIL(sqc->get_partitions_info().assign(pkt.tablets_info_))) {
-      LOG_WARN("Failed to assign partitions info", K(ret));
     } else {
       sqc->set_task_count(pkt.task_count_);
       sqc->set_thread_inited(true);
@@ -179,8 +166,6 @@ int ObPxMsgProc::on_sqc_init_msg(ObExecContext &ctx, const ObPxInitSqcResultMsg 
       }
     }
     if (OB_SUCC(ret) && sqc_threads_inited) {
-      LOG_TRACE("on_sqc_init_msg: all sqc returned task count. ready to do on_sqc_threads_inited",
-                K(*edge));
       edge->set_thread_inited(true);
       ret = scheduler_->on_sqc_threads_inited(ctx, *edge);
     }
@@ -206,7 +191,6 @@ int ObPxMsgProc::on_sqc_init_msg(ObExecContext &ctx, const ObPxInitSqcResultMsg 
       // Attempt to schedule self-parent pair
       if (edge->has_parent() && edge->parent()->is_thread_inited()) {
         if (OB_FAIL(on_dfo_pair_thread_inited(ctx, *edge, *edge->parent()))) {
-          LOG_WARN("fail co-schedule parent-edge", K(ret));
         }
       }
       // Attempt to schedule self-child pair
@@ -215,13 +199,11 @@ int ObPxMsgProc::on_sqc_init_msg(ObExecContext &ctx, const ObPxInitSqcResultMsg 
         for (int64_t idx = 0; idx < cnt && OB_SUCC(ret); ++idx) {
           ObDfo *child= NULL;
           if (OB_FAIL(edge->get_child_dfo(idx, child))) {
-            LOG_WARN("fail get child dfo", K(idx), K(cnt), K(ret));
           } else if (OB_ISNULL(child)) {
             ret = OB_ERR_UNEXPECTED;
             LOG_WARN("NULL unexpected", K(ret));
           } else if (child->is_thread_inited()) {
             if (OB_FAIL(on_dfo_pair_thread_inited(ctx, *child, *edge))) {
-              LOG_WARN("fail co-schedule edge-child", K(ret));
             }
           }
         }
@@ -248,12 +230,10 @@ int ObPxMsgProc::on_sqc_finish_msg(ObExecContext &ctx,
   ObDfo *edge = NULL;
   ObPxSqcMeta *sqc = NULL;
   if (OB_FAIL(coord_info_.dfo_mgr_.find_dfo_edge(pkt.dfo_id_, edge))) {
-    LOG_WARN("fail find dfo", K(pkt), K(ret));
   } else if (OB_ISNULL(edge)) {
     ret = OB_ERR_UNEXPECTED;
     LOG_WARN("NULL ptr", K(pkt), K(ret));
   } else if (OB_FAIL(edge->get_sqc(pkt.sqc_id_, sqc))) {
-    LOG_WARN("fail find sqc", K(pkt), K(ret));
   } else if (OB_ISNULL(sqc)) {
     ret = OB_ERR_UNEXPECTED;
     LOG_WARN("NULL ptr", K(pkt), K(ret));
@@ -261,7 +241,6 @@ int ObPxMsgProc::on_sqc_finish_msg(ObExecContext &ctx,
     // For virtual tables, if both the mocked SQC finish message and the real SQC finish message are
     // processed by the QC, we should skip the processing of the finish message that arrives later.
   } else if (OB_FAIL(process_sqc_finish_msg_once(ctx, pkt, sqc, edge))) {
-    LOG_WARN("failed to process_sqc_finish_msg_once");
   }
   return ret;
 }
@@ -269,7 +248,7 @@ int ObPxMsgProc::on_sqc_finish_msg(ObExecContext &ctx,
 void ObPxMsgProc::log_warn_sqc_fail(int ret, const ObPxFinishSqcResultMsg &pkt, ObPxSqcMeta *sqc)
 {
   // Do not change the follow log about px_obdiag_sqc_addr, becacue it will use in obdiag tool
-  LOG_WARN("sqc fail, abort qc", K(pkt), K(ret), "px_obdiag_sqc_addr", sqc->get_exec_addr());
+  LOG_WARN("local sqc failed, abort qc", K(pkt), K(ret), KPC(sqc));
 }
 
 int ObPxMsgProc::process_sqc_finish_msg_once(ObExecContext &ctx, const ObPxFinishSqcResultMsg &pkt,
@@ -285,31 +264,23 @@ int ObPxMsgProc::process_sqc_finish_msg_once(ObExecContext &ctx, const ObPxFinis
     ret = OB_ERR_UNEXPECTED;
     LOG_WARN("phy plan ctx NULL", K(ret));
   } else if (OB_FAIL(ctx.get_feedback_info().merge_feedback_info(pkt.fb_info_))) {
-    LOG_WARN("fail to merge feedback info", K(ret));
   } else if (OB_ISNULL(session->get_tx_desc())) {
-  } else if (OB_FAIL(share::g_mp->trans_service()
+  } else if (OB_FAIL(data_plane::query_transaction_service()
                     ->add_tx_exec_result(*session->get_tx_desc(),
                                           pkt.get_trans_result()))) {
-    LOG_WARN("fail merge result", K(ret),
-             "packet_trans_result", pkt.get_trans_result(),
-             "tx_desc", *session->get_tx_desc());
-  } else if (pkt.get_trans_result().get_touched_ls().count() > 0
-             && OB_FAIL(session->get_trans_result()
-                        .add_touched_ls(pkt.get_trans_result().get_touched_ls()))) {
-    LOG_WARN("fail add touched ls for tx", K(ret),
-             "touched_ls", pkt.get_trans_result().get_touched_ls());
   } else {
+    if (pkt.get_trans_result().touches_storage()) {
+      session->get_trans_result().mark_touched_storage();
+    }
     LOG_TRACE("on_sqc_finish_msg trans_result",
               "packet_trans_result", pkt.get_trans_result(),
-              "tx_desc", *session->get_tx_desc(),
+              "tx_desc", data_plane::ObTxDescLogView(session->get_tx_desc()),
               "tx_result", session->get_trans_result());
   }
   if (OB_FAIL(ret)) {
   } else if (common::OB_INVALID_ID != pkt.temp_table_id_) {
     if (OB_FAIL(ctx.add_temp_table_interm_result_ids(pkt.temp_table_id_,
-                                                     sqc->get_exec_addr(),
                                                      pkt.interm_result_ids_))) {
-      LOG_WARN("failed to add temp table interm result ids.", K(ret));
     }
   }
 
@@ -321,17 +292,15 @@ int ObPxMsgProc::process_sqc_finish_msg_once(ObExecContext &ctx, const ObPxFinis
         && ObVirtualTableErrorWhitelist::should_ignore_vtable_error(pkt.rc_)) {
        // If a sqc finish message is received, if the sqc involves a virtual table, all error codes need to be ignored
        // If this dfo is a child_dfo of root_dfo, to allow px to exit the message loop of the data channel
-       // Need to mock an eof dtl buffer local send to px (actual not via rpc, attach only)
+       // Attach a synthetic EOF DTL buffer so the local PX loop can exit.
       const_cast<ObPxFinishSqcResultMsg &>(pkt).rc_ = OB_SUCCESS;
-      OZ(root_dfo_action_.notify_peers_mock_eof(edge,
-          phy_plan_ctx->get_timeout_timestamp(),
-          sqc->get_exec_addr()));
+      OZ(root_dfo_action_.notify_tasks_mock_eof(
+          edge, phy_plan_ctx->get_timeout_timestamp()));
     }
     NG_TRACE_EXT(sqc_finish,
                  OB_ID(dfo_id), sqc->get_dfo_id(),
                  OB_ID(sqc_id), sqc->get_sqc_id());
 
-    LOG_TRACE("[MSG] sqc finish", K(*edge), K(*sqc));
     LOG_TRACE("on_sqc_finish_msg update feedback info",
         K(pkt.fb_info_), K(ctx.get_feedback_info()));
   }
@@ -353,7 +322,6 @@ int ObPxMsgProc::process_sqc_finish_msg_once(ObExecContext &ctx, const ObPxFinis
     if (OB_SUCC(ret) && sqc_threads_finish) {
       edge->set_thread_finish(true);
       edge->set_used_worker_count(dfo_used_worker_count);
-      LOG_TRACE("[MSG] dfo finish", K(*edge));
     }
   }
 
@@ -363,15 +331,15 @@ int ObPxMsgProc::process_sqc_finish_msg_once(ObExecContext &ctx, const ObPxFinis
    * However, because an error occurred, the subsequent scheduling process does not need to continue, and the later process will handle the error.
    */
   ObPxErrorUtil::update_qc_error_code(coord_info_.first_error_code_,
-      pkt.rc_, pkt.err_msg_, sqc->get_exec_addr());
+      pkt.rc_, pkt.err_msg_);
   if (OB_SUCC(ret)) {
     if (OB_FAIL(pkt.rc_)) {
-      DAS_CTX(ctx).get_location_router().save_cur_exec_status(pkt.rc_);
+      DAS_CTX(ctx).save_cur_exec_status(pkt.rc_);
       log_warn_sqc_fail(ret, pkt, sqc);
     } else {
       // pkt rc_ == OB_SUCCESS
       // Process dml + px framework affected row
-      DAS_CTX(ctx).get_location_router().save_cur_exec_status(pkt.das_retry_rc_);
+      DAS_CTX(ctx).save_cur_exec_status(pkt.das_retry_rc_);
       if (OB_ISNULL(ctx.get_physical_plan_ctx())) {
         ret = OB_ERR_UNEXPECTED;
         LOG_WARN("phy plan ctx is null", K(ret));
@@ -429,14 +397,6 @@ int ObPxMsgProc::on_piece_msg(
 
 int ObPxMsgProc::on_piece_msg(
     ObExecContext &ctx,
-    const ObRollupKeyPieceMsg &pkt)
-{
-  ObDhPieceMsgProc<ObRollupKeyPieceMsg> proc;
-  return proc.on_piece_msg(coord_info_, ctx, pkt);
-}
-
-int ObPxMsgProc::on_piece_msg(
-    ObExecContext &ctx,
     const ObRDWFPieceMsg &pkt)
 {
   ObDhPieceMsgProc<ObRDWFPieceMsg> proc;
@@ -467,18 +427,6 @@ int ObPxMsgProc::on_piece_msg(
   return proc.on_piece_msg(coord_info_, ctx, pkt);
 }
 
-int ObPxMsgProc::on_piece_msg(ObExecContext &ctx, const SPWinFuncPXPieceMsg &pkt)
-{
-  ObDhPieceMsgProc<SPWinFuncPXPieceMsg> proc;
-  return proc.on_piece_msg(coord_info_, ctx, pkt);
-}
-
-int ObPxMsgProc::on_piece_msg(ObExecContext &ctx, const RDWinFuncPXPieceMsg &pkt)
-{
-  ObDhPieceMsgProc<RDWinFuncPXPieceMsg> proc;
-  return proc.on_piece_msg(coord_info_, ctx, pkt);
-}
-
 int ObPxMsgProc::on_piece_msg(ObExecContext &ctx, const ObJoinFilterCountRowPieceMsg &pkt)
 {
   ObDhPieceMsgProc<ObJoinFilterCountRowPieceMsg> proc;
@@ -505,17 +453,13 @@ int ObPxMsgProc::on_dfo_pair_thread_inited(ObExecContext &ctx, ObDfo &child, ObD
   //
   if (OB_SUCC(ret)) {
     if (OB_FAIL(scheduler_->build_data_xchg_ch(ctx, child, parent))) {
-      LOG_WARN("fail init dtl data channel", K(ret));
     } else {
-      LOG_TRACE("build data xchange channel for dfo pair ok", K(parent), K(child));
     }
   }
   // Distribute dtl channel information to parent, child two DFOs, so that they can start sending and receiving data
   if (OB_SUCC(ret)) {
     if (OB_FAIL(scheduler_->dispatch_dtl_data_channel_info(ctx, child, parent))) {
-      LOG_WARN("fail setup dtl data channel for child-parent pair", K(ret));
     } else {
-      LOG_TRACE("dispatch dtl data channel for pair ok", K(parent), K(child));
     }
   }
 
@@ -529,7 +473,6 @@ int ObPxMsgProc::on_interrupted(ObExecContext &ctx, const ObInterruptCode &ic)
   // override ret code
   // Throw error code to main processing routine
   ret = ic.code_;
-  LOG_TRACE("qc received a interrupt and throw out of msg proc", K(ic), K(ret));
   return ret;
 }
 
@@ -551,17 +494,14 @@ int ObPxTerminateMsgProc::on_sqc_init_msg(ObExecContext &ctx, const ObPxInitSqcR
   /**
    * Mark sqc, dfo as already started.
    */
-  LOG_TRACE("terminate msg proc on sqc init msg", K(pkt.rc_));
   if (pkt.task_count_ <= 0) {
     ret = OB_ERR_UNEXPECTED;
     LOG_WARN("task count returned by sqc invalid. expect 1 or more", K(pkt), K(ret));
   } else if (OB_FAIL(coord_info_.dfo_mgr_.find_dfo_edge(pkt.dfo_id_, edge))) {
-    LOG_WARN("fail find dfo", K(pkt), K(ret));
   } else if (OB_ISNULL(edge)) {
     ret = OB_ERR_UNEXPECTED;
     LOG_WARN("NULL ptr", KP(edge), K(ret));
   } else if (OB_FAIL(edge->get_sqc(pkt.sqc_id_, sqc))) {
-    LOG_WARN("fail find sqc", K(pkt), K(ret));
   } else if (OB_ISNULL(sqc)) {
     ret = OB_ERR_UNEXPECTED;
     LOG_WARN("NULL ptr", KP(sqc), K(ret));
@@ -571,10 +511,9 @@ int ObPxTerminateMsgProc::on_sqc_init_msg(ObExecContext &ctx, const ObPxInitSqcR
     sqc->set_thread_inited(true);
 
     if (pkt.rc_ != OB_SUCCESS) {
-      LOG_DEBUG("receive error code from sqc init msg", K(coord_info_.first_error_code_), K(pkt.rc_));
     }
     ObPxErrorUtil::update_qc_error_code(coord_info_.first_error_code_,
-        pkt.rc_, pkt.err_msg_, sqc->get_exec_addr());
+        pkt.rc_, pkt.err_msg_);
   }
 
   if (OB_SUCC(ret)) {
@@ -588,8 +527,6 @@ int ObPxTerminateMsgProc::on_sqc_init_msg(ObExecContext &ctx, const ObPxInitSqcR
       }
     }
     if (OB_SUCC(ret) && sqc_threads_inited) {
-      LOG_TRACE("sqc terminate msg: all sqc returned task count. ready to do on_sqc_threads_inited",
-                K(*edge));
       // Mark dfo as fully started
       edge->set_thread_inited(true);
     }
@@ -601,7 +538,6 @@ int ObPxTerminateMsgProc::on_sqc_init_msg(ObExecContext &ctx, const ObPxInitSqcR
 int ObPxTerminateMsgProc::on_sqc_finish_msg(ObExecContext &ctx, const ObPxFinishSqcResultMsg &pkt)
 {
   int ret = OB_SUCCESS;
-  LOG_TRACE("terminate msg : proc on sqc finish msg", K(pkt.rc_));
   ObDfo *edge = NULL;
   ObPxSqcMeta *sqc = NULL;
   ObSQLSessionInfo *session = NULL;
@@ -609,29 +545,21 @@ int ObPxTerminateMsgProc::on_sqc_finish_msg(ObExecContext &ctx, const ObPxFinish
     ret = OB_ERR_UNEXPECTED;
     LOG_WARN("NULL ptr session", K(ret));
   } else if (OB_FAIL(ctx.get_feedback_info().merge_feedback_info(pkt.fb_info_))) {
-    LOG_WARN("fail to merge feedback info", K(ret));
   } else if (OB_ISNULL(session->get_tx_desc())) {
-  } else if (OB_FAIL(share::g_mp->trans_service()
+  } else if (OB_FAIL(data_plane::query_transaction_service()
                      ->add_tx_exec_result(*session->get_tx_desc(),
                                           pkt.get_trans_result()))) {
-    LOG_WARN("fail report tx result", K(ret),
-             "packet_trans_result", pkt.get_trans_result(),
-             "tx_desc", *session->get_tx_desc());
-  } else if (pkt.get_trans_result().get_touched_ls().count() > 0
-             && OB_FAIL(session->get_trans_result()
-                        .add_touched_ls(pkt.get_trans_result().get_touched_ls()))) {
-    LOG_WARN("fail add touched ls for tx", K(ret),
-             "touched_ls", pkt.get_trans_result().get_touched_ls());
   } else {
+    if (pkt.get_trans_result().touches_storage()) {
+      session->get_trans_result().mark_touched_storage();
+    }
     LOG_TRACE("on_sqc_finish_msg trans_result",
               "packet_trans_result", pkt.get_trans_result(),
-              "tx_desc", *session->get_tx_desc());
+              "tx_desc", data_plane::ObTxDescLogView(session->get_tx_desc()));
   }
   if (OB_FAIL(ret)) {
   } else if (OB_FAIL(coord_info_.dfo_mgr_.find_dfo_edge(pkt.dfo_id_, edge))) {
-    LOG_WARN("fail find dfo", K(pkt), K(ret));
   } else if (OB_FAIL(edge->get_sqc(pkt.sqc_id_, sqc))) {
-    LOG_WARN("fail find sqc", K(pkt), K(ret));
   } else if (OB_ISNULL(edge) || OB_ISNULL(sqc)) {
     ret = OB_ERR_UNEXPECTED;
     LOG_WARN("NULL ptr", KP(edge), KP(sqc), K(ret));
@@ -639,16 +567,14 @@ int ObPxTerminateMsgProc::on_sqc_finish_msg(ObExecContext &ctx, const ObPxFinish
   } else {
     sqc->set_thread_finish(true);
     if (pkt.rc_ != OB_SUCCESS) {
-      LOG_DEBUG("receive error code from sqc finish msg", K(coord_info_.first_error_code_), K(pkt.rc_));
     }
     ObPxErrorUtil::update_qc_error_code(coord_info_.first_error_code_,
-        pkt.rc_, pkt.err_msg_, sqc->get_exec_addr());
+        pkt.rc_, pkt.err_msg_);
 
     NG_TRACE_EXT(sqc_finish,
                  OB_ID(dfo_id), sqc->get_dfo_id(),
                  OB_ID(sqc_id), sqc->get_sqc_id());
 
-    LOG_TRACE("terminate msg : sqc finish", K(*edge), K(*sqc));
     LOG_TRACE("on_sqc_finish_msg update feedback info",
         K(pkt.fb_info_), K(ctx.get_feedback_info()));
   }
@@ -670,7 +596,6 @@ int ObPxTerminateMsgProc::on_sqc_finish_msg(ObExecContext &ctx, const ObPxFinish
     if (OB_SUCC(ret) && sqc_threads_finish) {
       edge->set_thread_finish(true);
       edge->set_used_worker_count(dfo_used_worker_count);
-      LOG_TRACE("terminate msg : dfo finish", K(*edge));
     }
   }
 
@@ -727,12 +652,10 @@ int RuntimeFilterDependencyInfo::describe_dependency(ObDfo *root_dfo)
         ObDfo *op_dfo = nullptr;;
         if (OB_FAIL(LowestCommonAncestorFinder::find_op_common_ancestor(
             create_op, rf_use_ops_.at(j), ancestor_op))) {
-          LOG_WARN("failed to find op common ancestor");
         } else if (OB_ISNULL(ancestor_op)) {
           ret = OB_ERR_UNEXPECTED;
           LOG_WARN("op common ancestor not found");
         } else if (OB_FAIL(LowestCommonAncestorFinder::get_op_dfo(ancestor_op, root_dfo, op_dfo))) {
-          LOG_WARN("failed to find op common ancestor");
         } else if (OB_ISNULL(op_dfo)) {
           ret = OB_ERR_UNEXPECTED;
           LOG_WARN("the dfo of ancestor_op not found");
@@ -757,7 +680,6 @@ int ObPxCoordInfo::init()
   if (OB_FAIL(p2p_dfo_map_.create(bucket_num,
       "PxDfoMapKey",
       "PxDfoMapNode"))) {
-    LOG_WARN("create hash table failed", K(ret));
   }
   return ret;
 }

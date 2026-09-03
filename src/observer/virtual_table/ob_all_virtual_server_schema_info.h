@@ -31,16 +31,17 @@ class ObAllVirtualServerSchemaInfo: public common::ObVirtualTableScannerIterator
 {
 public:
   explicit ObAllVirtualServerSchemaInfo(share::schema::ObMultiVersionSchemaService &schema_service)
-             : schema_service_(schema_service), idx_(0) {}
+             : schema_service_(schema_service) {}
   virtual ~ObAllVirtualServerSchemaInfo() {}
 public:
-  virtual int inner_open();
   virtual int inner_get_next_row(common::ObNewRow *&row);
-  void destroy();
 private:
-  const static int64_t DEFAULT_TENANT_NUM = 10;
+  enum COLUMN_ID {
+    REFRESHED_SCHEMA_VERSION = common::OB_APP_MIN_COLUMN_ID,
+    RECEIVED_SCHEMA_VERSION,
+    SCHEMA_COUNT
+  };
   share::schema::ObMultiVersionSchemaService &schema_service_;
-  int64_t idx_;
 }; //class ObAllVirtualServerSchemaInfo
 }//namespace observer
 }//namespace oceanbase

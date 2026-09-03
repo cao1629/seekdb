@@ -46,7 +46,6 @@ int ObRLEDecoder::decode(const ObColumnDecoderCtx &ctx, ObDatum &datum, const in
     if (OB_SUCC(ret)) {
       const int64_t dict_meta_length = ctx.col_header_->length_ - meta_header_->offset_;
       if (OB_FAIL(dict_decoder_.decode(ctx.obj_meta_.get_type(), datum, ref, dict_meta_length))) {
-        LOG_WARN("failed to decode dict", K(ret), K(ref));
       }
     }
   }
@@ -65,7 +64,6 @@ int ObRLEDecoder::update_pointer(const char *old_block, const char *cur_block)
   } else {
     ObIColumnDecoder::update_pointer(meta_header_, old_block, cur_block);
     if (OB_FAIL(dict_decoder_.update_pointer(old_block, cur_block))) {
-      LOG_WARN("dict decoder update pointer failed", K(ret));
     }
   }
   return ret;
@@ -88,50 +86,12 @@ int ObRLEDecoder::batch_decode(
     ret = OB_NOT_INIT;
     LOG_WARN("Not inited", K(ret));
   } else if (OB_FAIL(extract_ref_and_null_count(row_ids, row_cap, datums, unused_null_cnt))) {
-    LOG_WARN("Failed to extract refs",K(ret));
   } else if (OB_FAIL(dict_decoder_.batch_decode_dict(
       ctx.col_header_->get_store_obj_type(),
       cell_datas,
       row_cap,
       ctx.col_header_->length_ - meta_header_->offset_,
       datums))) {
-    LOG_WARN("Failed to batch decode RLE ref data from dict", K(ret), K(ctx));
-  }
-  return ret;
-}
-
-int ObRLEDecoder::decode_vector(
-    const ObColumnDecoderCtx &decoder_ctx,
-    const ObIRowIndex *row_index,
-    ObVectorDecodeCtx &vector_ctx) const
-{
-  UNUSED(row_index);
-  int ret = OB_SUCCESS;
-  int64_t null_cnt = 0;
-  if (OB_UNLIKELY(!is_inited())) {
-    ret = OB_NOT_INIT;
-    LOG_WARN("Not inited", K(ret));
-  } else if (OB_FAIL(extract_ref_and_null_count(
-      vector_ctx.row_ids_, vector_ctx.row_cap_, vector_ctx.len_arr_, null_cnt))) {
-    LOG_WARN("Failed to extract refs",K(ret));
-  } else {
-    if (0 == null_cnt) {
-      if (OB_FAIL(dict_decoder_.batch_decode_dict<false>(
-          decoder_ctx.obj_meta_,
-          decoder_ctx.col_header_->get_store_obj_type(),
-          decoder_ctx.col_header_->length_ - meta_header_->offset_,
-          vector_ctx))) {
-        LOG_WARN("Failed to batch decode dict", K(ret), K(decoder_ctx), K(vector_ctx));
-      }
-    } else {
-      if (OB_FAIL(dict_decoder_.batch_decode_dict<true>(
-          decoder_ctx.obj_meta_,
-          decoder_ctx.col_header_->get_store_obj_type(),
-          decoder_ctx.col_header_->length_ - meta_header_->offset_,
-          vector_ctx))) {
-        LOG_WARN("Failed to batch decode dict", K(ret), K(decoder_ctx), K(vector_ctx));
-      }
-    }
   }
   return ret;
 }
@@ -150,7 +110,6 @@ int ObRLEDecoder::get_null_count(
     ret = OB_NOT_INIT;
     LOG_WARN("Not inited", K(ret));
   } else if (OB_FAIL(extract_ref_and_null_count(row_ids, row_cap, nullptr, null_count))) {
-    LOG_WARN("Failed to extract null count", K(ret));
   }
   return ret;
 }
@@ -178,14 +137,12 @@ int ObRLEDecoder::pushdown_operator(
       case sql::WHITE_OP_NU:
       case sql::WHITE_OP_NN: {
         if (OB_FAIL(nu_nn_operator(parent, col_ctx, filter, pd_filter_info, result_bitmap))) {
-          LOG_WARN("Failed to run NU / NN operator", K(ret), K(col_ctx));
         }
         break;
       }
       case sql::WHITE_OP_EQ:
       case sql::WHITE_OP_NE: {
         if (OB_FAIL(eq_ne_operator(parent, col_ctx, filter, pd_filter_info, result_bitmap))) {
-          LOG_WARN("Failed to run EQ / NE operator", K(ret), K(col_ctx));
         }
         break;
       }
@@ -194,24 +151,20 @@ int ObRLEDecoder::pushdown_operator(
       case sql::WHITE_OP_GE:
       case sql::WHITE_OP_GT: {
         if (OB_FAIL(comparison_operator(parent, col_ctx, filter, pd_filter_info, result_bitmap))) {
-          LOG_WARN("Failed to run Comparison operator", K(ret), K(col_ctx));
         }
         break;
       }
       case sql::WHITE_OP_BT: {
         if (OB_FAIL(bt_operator(parent, col_ctx, filter, pd_filter_info, result_bitmap))) {
-          LOG_WARN("Failed to run BT operator", K(ret), K(filter));
         }
         break;
       }
       case sql::WHITE_OP_IN: {
         if (filter.is_filter_dynamic_node()) {
           if (OB_FAIL(in_operator<sql::ObDynamicFilterExecutor>(parent, col_ctx, static_cast<const sql::ObDynamicFilterExecutor &>(filter), pd_filter_info, result_bitmap))) {
-            LOG_WARN("Failed to run IN operator", K(ret), K(filter));
           }
         } else {
           if (OB_FAIL(in_operator<sql::ObWhiteFilterExecutor>(parent, col_ctx, filter, pd_filter_info, result_bitmap))) {
-            LOG_WARN("Failed to run IN operator", K(ret), K(filter));
           }
         }
         break;
@@ -242,17 +195,13 @@ int ObRLEDecoder::nu_nn_operator(
     if (dict_count == 0) {
       if (sql::WHITE_OP_NU == filter.get_op_type()) {
         if (OB_FAIL(result_bitmap.bit_not())) {
-          LOG_WARN("Failed to bitwise not on result_bitmap", K(ret));
         }
       }
     } else {
       if (OB_FAIL(cmp_ref_and_set_res(parent, col_ctx, dict_count,
           sql::WHITE_OP_EQ, true, pd_filter_info, result_bitmap))) {
-        LOG_WARN("Failed to compare ref table and set result bitmap",
-            K(ret), K(dict_count), K(filter));
       } else if (sql::WHITE_OP_NN == filter.get_op_type()) {
         if (OB_FAIL(result_bitmap.bit_not())) {
-          LOG_WARN("Failed to bitwise not on result bitmnap", K(ret));
         }
       }
     }
@@ -285,13 +234,10 @@ int ObRLEDecoder::eq_ne_operator(
       int64_t dict_ref = 0;
       int cmp_res = 0;
       while (OB_SUCC(ret) && traverse_it != end_it) {
-        if (OB_FAIL(cmp_func(*traverse_it, ref_datum, cmp_res))) {
-          LOG_WARN("Failed to compare datum", K(ret), K(*traverse_it), K(ref_datum));
+        if (OB_FAIL(cmp_func(*traverse_it, ref_datum, cmp_res, nullptr))) {
         } else if (cmp_res == 0) {
           if (OB_FAIL(cmp_ref_and_set_res(parent, col_ctx, dict_ref,
               sql::WHITE_OP_EQ, true, pd_filter_info, result_bitmap))) {
-            LOG_WARN("Failed to compare reference and set result bitmap",
-                K(ret), K(dict_ref), K(filter));
           }
         }
         ++traverse_it;
@@ -300,11 +246,8 @@ int ObRLEDecoder::eq_ne_operator(
     }
     if (OB_SUCC(ret) && filter.get_op_type() == sql::WHITE_OP_NE) {
       if (OB_FAIL(result_bitmap.bit_not())) {
-        LOG_WARN("Failed to bitwise not on result bitmap", K(ret));
       } else if (OB_FAIL(cmp_ref_and_set_res(parent, col_ctx, dict_count,
           sql::WHITE_OP_EQ, false, pd_filter_info, result_bitmap))) {
-        LOG_WARN("Failed to compare reference and set result bitmap to false",
-            K(ret), K(dict_count), K(filter));
       }
     }
   }
@@ -343,8 +286,7 @@ int ObRLEDecoder::comparison_operator(
       int64_t dict_ref = 0;
       int cmp_res = 0;
       while (OB_SUCC(ret) && traverse_it != end_it) {
-        if (OB_FAIL(cmp_func(*traverse_it, ref_datum, cmp_res))) {
-          LOG_WARN("Failed to compare datum", K(ret), K(*traverse_it), K(ref_datum));
+        if (OB_FAIL(cmp_func(*traverse_it, ref_datum, cmp_res, nullptr))) {
         } else if (get_cmp_ret(cmp_res)) {
           found = true;
           ref_bitset->set(dict_ref);
@@ -393,10 +335,8 @@ int ObRLEDecoder::bt_operator(
       int left_cmp_res = 0;
       int right_cmp_res = 0;
       while (OB_SUCC(ret) && traverse_it != end_it) {
-        if (OB_FAIL(cmp_func(*traverse_it, datums.at(0), left_cmp_res))) {
-          LOG_WARN("Failed to compare datum", K(ret), K(*traverse_it), K(datums.at(0)));
-        } else if (OB_FAIL(cmp_func(*traverse_it, datums.at(1), right_cmp_res))) {
-          LOG_WARN("Failed to compare datum", K(ret), K(*traverse_it), K(datums.at(1)));
+        if (OB_FAIL(cmp_func(*traverse_it, datums.at(0), left_cmp_res, nullptr))) {
+        } else if (OB_FAIL(cmp_func(*traverse_it, datums.at(1), right_cmp_res, nullptr))) {
         } else if ((left_cmp_res >= 0)
                   && (right_cmp_res <= 0)) {
           found = true;
@@ -443,7 +383,6 @@ int ObRLEDecoder::in_operator(
       bool is_exist = false;
       while (OB_SUCC(ret) && traverse_it != end_it) {
         if (OB_FAIL(filter.exist_in_set(*traverse_it, is_exist))) {
-          LOG_WARN("Failed to check object in hashset", K(ret), K(*traverse_it));
         } else if (is_exist) {
           found = true;
           ref_bitset->set(dict_ref);
@@ -624,7 +563,6 @@ int ObRLEDecoder::read_distinct(
       cell_datas,
       ctx.col_header_->length_ - meta_header_->offset_,
       group_by_cell))) {
-    LOG_WARN("Failed to load dict", K(ret));
   } else if (has_null_value()) {
     group_by_cell.add_distinct_null_value();
   }
@@ -640,7 +578,6 @@ int ObRLEDecoder::read_reference(
   int ret = OB_SUCCESS;
   int64_t null_cnt = 0;
   if (OB_FAIL(extract_ref_and_null_count(row_ids, row_cap, group_by_cell.get_refs_buf(), null_cnt))) {
-    LOG_WARN("Failed to extract refs",K(ret));
   }
   return ret;
 }

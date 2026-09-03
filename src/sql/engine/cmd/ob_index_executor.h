@@ -45,6 +45,7 @@ private:
       obcall::ObDropIndexArg &drop_index_arg,
       common::ObIAllocator &allocator);
   int sync_check_index_status(sql::ObSQLSessionInfo &my_session,
+        query::ObIRootCommandService &root_commands,
         const obcall::ObCreateIndexArg &create_index_arg,
         const obcall::ObAlterTableRes &res,
         common::ObIAllocator &allocator,
@@ -65,15 +66,6 @@ public:
       sql::ObSQLSessionInfo &session);
 };
 
-class ObFlashBackIndexStmt;
-class ObFlashBackIndexExecutor {
-public:
-  ObFlashBackIndexExecutor() {}
-  virtual ~ObFlashBackIndexExecutor() {}
-  int execute(ObExecContext &ctx, ObFlashBackIndexStmt &stmt);
-private:
-};
-
 class ObPurgeIndexStmt;
 class ObPurgeIndexExecutor {
 public:
@@ -86,4 +78,3 @@ private:
 }
 }
 #endif /* OCEANBASE_SRC_SQL_ENGINE_CMD_OB_INDEX_EXECUTOR_H_ */
-

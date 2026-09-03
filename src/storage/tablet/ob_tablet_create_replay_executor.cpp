@@ -23,7 +23,7 @@ namespace oceanbase
 namespace storage
 {
 ObTabletCreateReplayExecutor::ObTabletCreateReplayExecutor()
-  : logservice::ObTabletReplayExecutor(),
+  : ObTabletReplayExecutor(),
     user_ctx_(nullptr), user_data_(nullptr)
 {
 }
@@ -31,7 +31,6 @@ ObTabletCreateReplayExecutor::ObTabletCreateReplayExecutor()
 int ObTabletCreateReplayExecutor::init(
     mds::BufferCtx &user_ctx,
     const share::SCN &scn,
-    const bool for_old_mds,
     const ObTabletCreateDeleteMdsUserData &user_data)
 {
   int ret = OB_SUCCESS;
@@ -45,7 +44,6 @@ int ObTabletCreateReplayExecutor::init(
     user_ctx_ = &user_ctx;
     scn_ = scn;
     is_inited_ = true;
-    for_old_mds_ = for_old_mds;
     user_data_ = &user_data;
   }
   return ret;
@@ -56,8 +54,7 @@ int ObTabletCreateReplayExecutor::do_replay_(ObTabletHandle &tablet_handle)
   int ret = OB_SUCCESS;
   mds::MdsCtx &user_ctx = static_cast<mds::MdsCtx&>(*user_ctx_);
 
-  if (OB_FAIL(replay_to_mds_table_(tablet_handle, *user_data_, user_ctx, scn_, for_old_mds_))) {
-    LOG_WARN("failed to replay to tablet", K(ret));
+  if (OB_FAIL(replay_to_mds_table_(tablet_handle, *user_data_, user_ctx, scn_))) {
   }
 
   return ret;

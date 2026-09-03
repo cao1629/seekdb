@@ -42,7 +42,6 @@ int ObExprRelationAnalyzer::pull_expr_relation_id(ObRawExpr *expr)
     ret = OB_ERR_UNEXPECTED;
     LOG_WARN("expr is null", K(ret), K(expr));
   } else if (OB_FAIL(visit_expr(*expr))) {
-    LOG_WARN("failed to pull expr relation id and levels", K(ret));
   }
   return ret;
 }
@@ -52,11 +51,7 @@ int ObExprRelationAnalyzer::visit_expr(ObRawExpr &expr)
   int ret = OB_SUCCESS;
   int64_t param_count = expr.has_flag(IS_ONETIME) ? 1 : expr.get_param_count();
   if (!expr.is_column_ref_expr() &&
-      T_PSEUDO_EXTERNAL_FILE_COL != expr.get_expr_type() &&
-      T_PSEUDO_EXTERNAL_FILE_URL != expr.get_expr_type() &&
-      T_PSEUDO_PARTITION_LIST_COL != expr.get_expr_type() &&
-      T_ORA_ROWSCN != expr.get_expr_type() &&
-      T_PSEUDO_OLD_NEW_COL != expr.get_expr_type()) {
+      T_ORA_ROWSCN != expr.get_expr_type()) {
     expr.get_relation_ids().reuse();
   }
   // not sure whether we should visit onetime exec param
@@ -68,9 +63,7 @@ int ObExprRelationAnalyzer::visit_expr(ObRawExpr &expr)
       ret = OB_ERR_UNEXPECTED;
       LOG_WARN("param expr is null", K(ret), K(param), K(i), K(expr));
     } else if (OB_FAIL(SMART_CALL(visit_expr(*param)))) {
-      LOG_WARN("failed to visit param", K(ret));
     } else if (OB_FAIL(expr.get_relation_ids().add_members(param->get_relation_ids()))) {
-      LOG_WARN("failed to add relation ids", K(ret));
     }
   }
   return ret;

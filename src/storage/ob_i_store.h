@@ -27,7 +27,8 @@ MULTI_VERSION_EXTRA_ROWKEY_DEF(MAX_EXTRA_ROWKEY, 0, NULL, NULL)
 #include "common/ob_store_format.h"
 #include "common/ob_tablet_id.h"
 #include "common/row/ob_row.h"
-#include "share/ob_i_tablet_scan.h"
+#include "data_plane/access/ob_lock_flag.h"
+#include "data_plane/access/ob_tablet_scan.h"
 #include "storage/access/ob_table_param.h"
 #include "storage/tx/ob_trans_define.h"
 #include "storage/ob_i_table.h"
@@ -35,7 +36,7 @@ MULTI_VERSION_EXTRA_ROWKEY_DEF(MAX_EXTRA_ROWKEY, 0, NULL, NULL)
 #include "storage/blocksstable/ob_datum_rowkey.h"
 #include "storage/ob_table_store_stat_mgr.h"
 #include "storage/memtable/mvcc/ob_mvcc_acc_ctx.h"
-#include "storage/ob_tenant_tablet_stat_mgr.h"
+#include "storage/ob_tablet_stat_mgr.h"
 #include "lib/hash/ob_hashmap.h"
 
 namespace oceanbase
@@ -47,7 +48,7 @@ class ObMvccRow;
 
 namespace transaction
 {
-class ObPartTransCtx;
+class ObTxCtx;
 }
 
 
@@ -55,7 +56,6 @@ namespace storage
 {
 class ObTableStoreIterator;
 class ObLS;
-class ObLSHandle;
 class ObTablet;
 class ObITable;
 struct ObStoreCtx;
@@ -83,12 +83,6 @@ public:
             access_type == ObStoreAccessType::ROW_LOCK ||
             access_type == ObStoreAccessType::TABLE_LOCK);
   }
-};
-
-enum ObLockFlag
-{
-  LF_NONE = 0,
-  LF_WRITE = 1,
 };
 
 enum ObSSTableStatus
@@ -143,7 +137,6 @@ public:
       reset();
     }
     if (OB_FAIL(prepare_allocate(capacity))) {
-      OB_LOG(WARN, "fail to prepare allocate", K(ret), K(capacity));
     }
     return ret;
   }
@@ -471,18 +464,17 @@ struct ObStoreCtx
   void reset();
   bool is_valid() const
   {
-    return ls_id_.is_valid() && OB_NOT_NULL(ls_) && mvcc_acc_ctx_.is_valid();
+    return OB_NOT_NULL(ls_) && mvcc_acc_ctx_.is_valid();
   }
   bool is_read() const { return mvcc_acc_ctx_.is_read(); }
   bool is_write() const { return mvcc_acc_ctx_.is_write(); }
   bool is_replay() const { return mvcc_acc_ctx_.is_replay(); }
   bool is_read_store_ctx() const { return is_read_store_ctx_; }
-  int init_for_read(const share::ObLSID &ls_id,
-                    const common::ObTabletID tablet_id,
+  int init_for_read(const common::ObTabletID tablet_id,
                     const int64_t timeout,
                     const int64_t lock_timeout_us,
                     const share::SCN &snapshot_version);
-  int init_for_read(const storage::ObLSHandle &ls_handle,
+  int init_for_read(storage::ObLS *tenant_ls,
                     const int64_t timeout,
                     const int64_t lock_timeout_us,
                     const share::SCN &snapshot_version);
@@ -498,7 +490,6 @@ struct ObStoreCtx
   int get_all_tables(ObIArray<ObITable *> &iter_tables);
   int get_fork_snapshot_scn(const common::ObTabletID &tablet_id, share::SCN &fork_snapshot_scn);
   TO_STRING_KV(KP(this),
-               K_(ls_id),
                KP_(ls),
                K_(branch),
                K_(timeout),
@@ -510,7 +501,6 @@ struct ObStoreCtx
                K_(is_read_store_ctx),
                K_(update_full_column),
                K_(is_fork_ctx));
-  share::ObLSID ls_id_;
   storage::ObLS *ls_;
   int16_t branch_;                                 // parallel write id
   common::ObTabletID tablet_id_;
@@ -576,7 +566,6 @@ OB_INLINE bool ObStoreRow::is_valid() const
 } // storage
 } // oceanbase
 
-// demoted from ObTableSchema free function declaration(defined in ob_i_store.cpp; correctly nested in global scope, do not put it inside a storage block)
 namespace oceanbase
 {
 namespace share { namespace schema { class ObTableSchema; } }

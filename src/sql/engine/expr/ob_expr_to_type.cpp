@@ -31,8 +31,7 @@ ObExprToType::ObExprToType(ObIAllocator &alloc)
                                              1,
                                              VALID_FOR_GENERATED_COL,
                                              NOT_ROW_DIMENSION,
-                                             INTERNAL_IN_MYSQL_MODE,
-                                             INTERNAL_IN_ORACLE_MODE),
+                                             INTERNAL_IN_MYSQL_MODE),
       expect_type_(ObMaxType),
       cast_mode_(CM_NONE)
 {
@@ -74,7 +73,6 @@ int ObExprToType::assign(const ObExprOperator &other)
     expect_type_ = other_op.expect_type_;
     cast_mode_ = other_op.cast_mode_;
     if (OB_FAIL(ObFuncExprOperator::assign(other_op))) {
-      LOG_WARN("assign other op failed", K(ret));
     }
   }
   return ret;
@@ -126,7 +124,6 @@ int ObExprToType::calc_result_type_for_literal(ObExprResType &type, ObExprResTyp
                        &res_accuracy);
     ObObj out;
     if (OB_FAIL(ObObjCaster::to_type(expect_type_, cast_ctx, in, out))) {
-      LOG_WARN("failed to cast obj", K(ret), K(in), K(expect_type_));
     } else {
       type.set_type(expect_type_);
       type.set_accuracy(res_accuracy);
@@ -151,12 +148,6 @@ int ObExprToType::calc_result_type_for_column(ObExprResType &type,
 {
   int ret = OB_SUCCESS;
   type.set_type(expect_type_);
-  //deduce collation now.
-  //get_compatibility_mode will not return OCEANBASE_MODE forever, so remove it.
-//if (OCEANBASE_MODE == get_compatibility_mode()) {
-//  ret = OB_INVALID_ARGUMENT;
-//  LOG_WARN("compatibility mode should not be oceanbase", K(ret));
-//} else {
   if (OB_ISNULL(type_ctx.get_session())) {
     ret = OB_INVALID_ARGUMENT;
     LOG_WARN("Invalid argument.", K(ret), K(type_ctx.get_session()));
@@ -176,7 +167,7 @@ int ObExprToType::calc_result_type_for_column(ObExprResType &type,
       type.set_collation_level(CS_LEVEL_NUMERIC);
     }
 
-    type.set_accuracy(ObAccuracy::MAX_ACCURACY2[MYSQL_MODE][expect_type_]);
+    type.set_accuracy(ObAccuracy::MAX_ACCURACY2[0][expect_type_]);
 
     if (ob_is_enumset_tc(type1.get_type())) {
       // There is no need to check whether it is enumset with subschema

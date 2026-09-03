@@ -21,7 +21,7 @@
 
 namespace oceanbase
 {
-namespace share
+namespace rootserver
 {
 
 struct ObDomainDependTaskStatus final
@@ -47,7 +47,7 @@ public:
                                 const uint64_t& data_table_id,
                                 const int64_t& task_id,
                                 obcall::ObCreateIndexArg& index_arg,
-                                rootserver::ObRootService *root_service,
+                                rootserver::ObLocalManagementService *local_management_service,
                                 common::hash::ObHashMap<uint64_t, ObDomainDependTaskStatus> &map,
                                 const oceanbase::common::ObAddr &addr,
                                 int map_num,
@@ -71,7 +71,7 @@ private:
 };
 
 
-}//end namespace share
+}//end namespace rootserver
 }//end namespace oceanbase
 
 #endif //OCEANBASE_SHARE_DOMAIN_INDEX_BUILDER_UTIL_H_

@@ -15,6 +15,7 @@
  */
 
 #define USING_LOG_PREFIX SHARE
+#include "share/ob_encryption_util.h"
 #include <openssl/md4.h>
 #include <openssl/md5.h>
 #include <openssl/sha.h>
@@ -23,7 +24,6 @@
 namespace oceanbase
 {
 using namespace common;
-using namespace sql;
 namespace share
 {
 
@@ -179,22 +179,16 @@ int ObBlockCipher::encrypt(const char *key, const int64_t key_len,
     unsigned char rkey[OB_MAX_CIPHER_KEY_LENGTH / 8];
     unsigned char *iv_encrypt = (!need_iv || iv_len == 0) ? NULL : (unsigned char *)iv;
     unsigned char *add_encrypt = (!need_aead || aad_len == 0) ? NULL : (unsigned char *)aad;
-    ENGINE *engine = ObTdeEncryptEngineLoader::get_instance().get_tde_engine(mode);
     EVP_CIPHER_CTX *ctx = EVP_CIPHER_CTX_new();
     const EVP_CIPHER *cipher = get_evp_cipher(mode);
-    if (NULL != engine) {
-      if (EXECUTE_COUNT_PER_SEC(10)) {
-        LOG_INFO("tde use engine to encrypt data", K(mode));
-      }
-    }
     if (OB_ISNULL(ctx) ||OB_ISNULL(cipher)) {
       ret = OB_INVALID_ARGUMENT;
       LOG_WARN("get EVP_ctx or EVP_cipher is NULL", K(ret), KP(ctx), KP(cipher));
     } else if (FALSE_IT(create_key((const unsigned char *)key, (int)key_len, (char *)rkey, mode))) {
     } else if (FALSE_IT(EVP_CIPHER_CTX_init(ctx))) {
-    } else if (!EVP_EncryptInit_ex(ctx, cipher, engine, rkey, (unsigned char*)iv_encrypt)) {
+    } else if (!EVP_EncryptInit_ex(ctx, cipher, nullptr, rkey, (unsigned char*)iv_encrypt)) {
       ret = OB_ERR_AES_ENCRYPT;
-      LOG_WARN("fail to init evp encrytion cipher and engine in encrypt", K(ret));
+      LOG_WARN("fail to init evp encryption cipher", K(ret));
     } else if (need_padding && !EVP_CIPHER_CTX_set_padding(ctx, true)) {
       ret = OB_ERR_AES_ENCRYPT;
       LOG_WARN("fail to set padding in encrypt", K(ret));
@@ -255,20 +249,14 @@ int ObBlockCipher::decrypt(const char *key, const int64_t key_len,
     unsigned char rkey[OB_MAX_CIPHER_KEY_LENGTH / 8];
     unsigned char *iv_decrypt = (!need_iv || iv_len == 0) ? NULL : (unsigned char *)iv;
     unsigned char *add_decrypt = (!need_aead || aad_len == 0) ? NULL : (unsigned char *)aad;
-    ENGINE *engine = ObTdeEncryptEngineLoader::get_instance().get_tde_engine(mode);
     EVP_CIPHER_CTX *ctx = EVP_CIPHER_CTX_new();
     const EVP_CIPHER *cipher = get_evp_cipher(mode);
-    if (NULL != engine) {
-      if (EXECUTE_COUNT_PER_SEC(10)) {
-        LOG_INFO("use engine to decrypt data", K(mode));
-      }
-    }
     if (OB_ISNULL(ctx) || OB_ISNULL(cipher)) {
       ret = OB_INVALID_ARGUMENT;
       LOG_WARN("fail to to init cipher ctx in decrypt", K(ret), KP(ctx), KP(cipher));
     } else if (FALSE_IT(create_key((const unsigned char *)key, (int)key_len, (char *)rkey, mode))) {
     } else if (FALSE_IT(EVP_CIPHER_CTX_init(ctx))) {
-    } else if (!EVP_DecryptInit_ex(ctx, cipher, engine, rkey, (unsigned char*)iv_decrypt)) {
+    } else if (!EVP_DecryptInit_ex(ctx, cipher, nullptr, rkey, (unsigned char*)iv_decrypt)) {
       ret = OB_ERR_AES_DECRYPT;
       LOG_WARN("fail to init evp ctx in decrypt", K(ret));
     } else if (need_padding && !EVP_CIPHER_CTX_set_padding(ctx, true)) {
@@ -326,8 +314,7 @@ int ObEncryptionUtil::init_ssl_malloc()
 {
   int ret = OB_SUCCESS;
 #ifdef _WIN32
-  // CRYPTO_set_mem_functions fails if OpenSSL has already allocated memory
-  // (e.g. via AWS SDK DLLs loaded at startup). Not critical on Windows.
+  // CRYPTO_set_mem_functions fails if OpenSSL has already allocated memory.
 #else
   int tmp_ret = CRYPTO_set_mem_functions(ob_malloc_openssl, ob_realloc_openssl, ob_free_openssl);
   if (OB_UNLIKELY(tmp_ret != 1)) {
@@ -335,21 +322,6 @@ int ObEncryptionUtil::init_ssl_malloc()
     LOG_WARN("failed to set crypto mem functions", K(tmp_ret), K(ret));
   }
 #endif
-  return ret;
-}
-
-int ObEncryptionUtil::parse_encryption_algorithm(const char *str,
-                                                 ObCipherOpMode &encryption_algorithm)
-{
-  int ret = OB_SUCCESS;
-  encryption_algorithm = ObCipherOpMode::ob_invalid_mode;
-  return ret;
-}
-
-int ObEncryptionUtil::parse_encryption_id(const ObString &str, int64_t &encrypt_id)
-{
-  int ret = OB_SUCCESS;
-  ObCipherOpMode encryption_algorithm = ObCipherOpMode::ob_invalid_mode;
   return ret;
 }
 
@@ -369,57 +341,6 @@ bool ObEncryptionUtil::is_ecb_mode(const ObCipherOpMode opmode)
          (opmode == ObCipherOpMode::ob_sm4_ecb);
 }
 
-// moved definition to the upper-layer owner cpp(transitional state)
-
-bool ObBackupEncryptionMode::is_valid(const EncryptionMode &mode)
-{
-  return mode >= NONE && mode < MAX_MODE;
-}
-const char *backup_encryption_strs[] =
-{
-  "NONE",
-  "PASSWORD",
-  "PASSWORD_ENCRYPTION",
-  "TRANSPARENT_ENCRYPTION",
-  "DUAL_MODE_ENCRYPTION",
-};
-
-const char *ObBackupEncryptionMode::to_str(const EncryptionMode &mode)
-{
-  const char *str = "UNKNOWN";
-
-  if (is_valid(mode)) {
-    str = backup_encryption_strs[mode];
-  }
-  return str;
-}
-
-ObBackupEncryptionMode::EncryptionMode ObBackupEncryptionMode::parse_str(const char *str)
-{
-  ObString obstr(str);
-  return parse_str(obstr);
-}
-
-ObBackupEncryptionMode::EncryptionMode ObBackupEncryptionMode::parse_str(const common::ObString &str)
-{
-  EncryptionMode mode = MAX_MODE;
-  const int64_t count = ARRAYSIZEOF(backup_encryption_strs);
-  STATIC_ASSERT(static_cast<int64_t>(ObBackupEncryptionMode::MAX_MODE) == count,
-      "encryption mode count mismatch");
-
-  if (str.empty()) {
-    mode = NONE;
-  } else {
-    for (int64_t i = 0; i < count; ++i) {
-      if (0 == str.case_compare(backup_encryption_strs[i])) {
-        mode = static_cast<EncryptionMode>(i);
-        break;
-      }
-    }
-  }
-  return mode;
-}
-
 int ObHashUtil::hash(const enum ObHashAlgorithm algo, const ObString data,
                      ObIAllocator &allocator, ObString &output)
 {
@@ -429,12 +350,10 @@ int ObHashUtil::hash(const enum ObHashAlgorithm algo, const ObString data,
   int64_t buf_len = 0;
   int64_t out_len = 0;
   if (OB_FAIL(get_hash_output_len(algo, buf_len))) {
-    LOG_WARN("fail to get hash output len", K(algo), K(ret));
   } else if (OB_ISNULL(buf = static_cast<char *>(allocator.alloc(buf_len)))) {
     ret = OB_ALLOCATE_MEMORY_FAILED;
     LOG_WARN("fail to allocate memory", K(ret));
   } else if (OB_FAIL(hash(algo, data_ptr, data.length(), buf, buf_len, out_len))) {
-    LOG_WARN("fail to calc hash output", K(ret));
   } else {
     output.assign_ptr(buf, static_cast<int32_t>(out_len));
   }
@@ -451,7 +370,6 @@ int ObHashUtil::hash(const enum ObHashAlgorithm algo, const char *data, const in
     ret = OB_INVALID_ARGUMENT;
     LOG_WARN("invalid argument", K(algo), K(data_len), K(buf_len), K(ret));
   } else if (OB_FAIL(get_hash_output_len(algo, expect_out_len))) {
-    LOG_WARN("fail to get hash output len", K(algo), K(ret));
   } else if (OB_UNLIKELY(buf_len < expect_out_len)) {
     ret = OB_INVALID_ARGUMENT;
     LOG_WARN("invalid argument", K(algo), K(buf_len), K(expect_out_len), K(ret));
@@ -559,96 +477,6 @@ const EVP_MD* ObHashUtil::get_hash_evp_md(const ObHashAlgorithm algo)
     case OB_HASH_SM3: return EVP_sm3();
     default: return NULL;
   }
-}
-
-void ObTdeEncryptEngineLoader::ssl_init()
-{
-    OpenSSL_add_all_digests();
-    OpenSSL_add_all_ciphers();
-    OPENSSL_load_builtin_modules();
-    ENGINE_load_builtin_engines();
-    ERR_load_ERR_strings();
-}
-
-int ObTdeEncryptEngineLoader::load(const common::ObString& engine)
-{
-  int ret = OB_SUCCESS;
-  common::ObString err_reason;
-  ObEncryptEngineType type = get_engine_type(engine);
-  if (OB_NONE_ENGINE == type) {
-  } else if (OB_INVALID_ENGINE == type) {
-    ret = OB_INVALID_ARGUMENT;
-    LOG_WARN("unsupport engine", K(engine));
-  } else {
-    if (NULL == tde_engine_[type]) {
-      ENGINE *e = ENGINE_by_id(engine.ptr());
-      if (NULL == e) {
-        ret = OB_INIT_FAIL;
-        err_reason = common::ObString::make_string(ERR_reason_error_string(ERR_get_error()));
-        LOG_WARN("load engine failed", K(engine), K(err_reason));
-      } else if (!ENGINE_init(e)) {
-        ret = OB_INIT_FAIL;
-        err_reason = common::ObString::make_string(ERR_reason_error_string(ERR_get_error()));
-        LOG_WARN("Failed initialisation engine!", K(engine), K(err_reason));
-        ENGINE_free(e);
-      } else {
-        tde_engine_[type] = e;
-        LOG_INFO("tde install engine success", K(engine));
-      }
-    }
-  }
-  return ret;
-}
-
-void ObTdeEncryptEngineLoader::destroy()
-{
-  for (int i = 0; i < OB_MAX_ENGINE; i++) {
-    if (NULL != tde_engine_[i]) {
-      ENGINE_finish(tde_engine_[i]);
-      ENGINE_free(tde_engine_[i]);
-    }
-  }
-}
-
-ENGINE* ObTdeEncryptEngineLoader::get_tde_engine(ObCipherOpMode &mode) const
-{
-  ObEncryptEngineType type = OB_INVALID_ENGINE;
-  if (ObEncryptionUtil::is_aes_encryption(mode)) {
-    type = OB_AES_ENGINE;
-  } else if (ObEncryptionUtil::is_sm4_encryption(mode)) {
-    type = OB_SM4_ENGINE;
-  } else {
-    type = OB_INVALID_ENGINE;
-  }
-  return tde_engine_[type];
-}
-
-ObTdeEncryptEngineLoader &ObTdeEncryptEngineLoader::get_instance()
-{
-  static ObTdeEncryptEngineLoader instance;
-  return instance;
-}
-
-ObTdeEncryptEngineLoader::ObEncryptEngineType ObTdeEncryptEngineLoader::get_engine_type(const common::ObString& engine)
-{
-  ObEncryptEngineType type = OB_INVALID_ENGINE;
-  if (OB_NOT_NULL(strcasestr(engine.ptr(), "sm4"))) {
-    type = OB_SM4_ENGINE;
-  } else if (OB_NOT_NULL(strcasestr(engine.ptr(), "hy")) || OB_NOT_NULL(strcasestr(engine.ptr(), "hct"))) {
-    type = OB_SM4_ENGINE;
-  } else if (OB_NOT_NULL(strcasestr(engine.ptr(), "aes"))) {
-    type = OB_AES_ENGINE;
-  } else if (0 == engine.case_compare("none")) {
-    type = OB_NONE_ENGINE;
-  }
-  return type;
-}
-
-int ObTdeEncryptEngineLoader::reload_config()
-{
-  int ret = OB_SUCCESS;
-  common::ObString engine = GCONF._load_tde_encrypt_engine.get_value_string();
-  return load(engine);
 }
 
 }//end share

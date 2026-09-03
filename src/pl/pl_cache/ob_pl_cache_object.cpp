@@ -30,7 +30,7 @@ OB_SERIALIZE_MEMBER(ObPlParamInfo,
                     scale_,
                     type_,
                     ext_real_type_,
-                    is_oracle_null_value_,  // FARM COMPAT WHITELIST
+                    is_typed_null_value_,  // FARM COMPAT WHITELIST
                     col_type_,
                     pl_type_,
                     udt_id_);
@@ -38,50 +38,24 @@ OB_SERIALIZE_MEMBER(ObPlParamInfo,
 void ObPLCacheObject::reset()
 {
   ObILibCacheObject::reset();
-  tenant_schema_version_ = OB_INVALID_VERSION;
+  runtime_schema_version_ = OB_INVALID_VERSION;
   sys_schema_version_ = OB_INVALID_VERSION;
   params_info_.reset();
   sql_expression_factory_.destroy();
   expr_operator_factory_.destroy();
   expressions_.reset();
-  concurrent_num_ = 0;
-  max_concurrent_num_ = ObMaxConcurrentParam::UNLIMITED;
 }
 
-int ObPLCacheObject::set_tenant_sys_schema_version(schema::ObSchemaGetterGuard &schema_guard)
+int ObPLCacheObject::set_runtime_and_system_schema_versions(
+    share::schema::ObSchemaGetterGuard &schema_guard)
 {
   int ret = OB_SUCCESS;
-  int64_t tenant_schema_version = OB_INVALID_VERSION;
+  int64_t runtime_schema_version = OB_INVALID_VERSION;
   int64_t sys_schema_version = OB_INVALID_VERSION;
-  OZ (schema_guard.get_schema_version(tenant_schema_version));
+  OZ (schema_guard.get_schema_version(runtime_schema_version));
   OZ (schema_guard.get_schema_version(sys_schema_version));
-  OX (set_tenant_schema_version(tenant_schema_version));
+  OX (set_runtime_schema_version(runtime_schema_version));
   OX (set_sys_schema_version(sys_schema_version));
-  return ret;
-}
-
-int ObPLCacheObject::inc_concurrent_num()
-{
-  int ret = OB_SUCCESS;
-  int64_t concurrent_num = 0;
-  int64_t new_num = 0;
-  bool is_succ = false;
-  if (max_concurrent_num_ == ObMaxConcurrentParam::UNLIMITED) {
-    ret = OB_ERR_UNEXPECTED;
-    LOG_WARN("current pl object is unlimit", K(ret), K(max_concurrent_num_));
-  } else {
-    while(OB_SUCC(ret) && false == is_succ) {
-      concurrent_num = ATOMIC_LOAD(&concurrent_num_);
-      if (0 == max_concurrent_num_) {
-        ret = OB_REACH_MAX_CONCURRENT_NUM;
-      } else if (concurrent_num >= max_concurrent_num_) {
-        ret = OB_REACH_MAX_CONCURRENT_NUM;
-      } else {
-        new_num = concurrent_num + 1;
-        is_succ = ATOMIC_BCAS(&concurrent_num_, concurrent_num, new_num);
-      }
-    }
-  }
   return ret;
 }
 
@@ -97,8 +71,8 @@ int ObPLCacheObject::set_params_info(const ParamStore &params, bool is_anonymous
     param_info.flag_ = params.at(i).get_param_flag();
     param_info.type_ = params.at(i).get_param_meta().get_type();
     param_info.col_type_ = params.at(i).get_collation_type();
-    if (sql::ObSQLUtils::is_oracle_null_with_normal_type(params.at(i))) {
-      param_info.is_oracle_null_value_ = true;
+    if (sql::ObSQLUtils::is_typed_null_with_normal_type(params.at(i))) {
+      param_info.is_typed_null_value_ = true;
     }
     if (params.at(i).get_param_meta().get_type() != params.at(i).get_type()) {
       LOG_TRACE("differ in set_params_info",
@@ -122,7 +96,6 @@ int ObPLCacheObject::set_params_info(const ParamStore &params, bool is_anonymous
           param_info.udt_id_ = composite->get_id();
           if (OB_INVALID_ID == param_info.udt_id_) { // anonymous array
             if (OB_FAIL(sql::ObSQLUtils::get_ext_obj_data_type(params.at(i), data_type))) {
-              LOG_WARN("fail to get ext obj data type", K(ret));
             } else {
               param_info.ext_real_type_ = data_type.get_obj_type();
               param_info.scale_ = data_type.get_scale();
@@ -131,7 +104,6 @@ int ObPLCacheObject::set_params_info(const ParamStore &params, bool is_anonymous
         }
       } else {
         if (OB_FAIL(sql::ObSQLUtils::get_ext_obj_data_type(params.at(i), data_type))) {
-          LOG_WARN("fail to get ext obj data type", K(ret));
         } else {
           param_info.ext_real_type_ = data_type.get_obj_type();
           param_info.scale_ = data_type.get_scale();
@@ -150,7 +122,6 @@ int ObPLCacheObject::set_params_info(const ParamStore &params, bool is_anonymous
     }
     if (OB_SUCC(ret)) {
       if (OB_FAIL(params_info_.push_back(param_info))) {
-        LOG_WARN("failed to push back param info", K(ret));
       }
     }
     param_info.reset();
@@ -180,7 +151,6 @@ int ObPLCacheObject::init_params_info_str()
                                     params_info_.at(i).pl_type_,
                                     params_info_.at(i).udt_id_
                                     ))) {
-          LOG_WARN("fail to buff_print param info", K(ret));
         }
       } else {
         if (OB_FAIL(databuff_printf(buf, buf_len, pos, "{%d,%d,%d,%d,%d,%d,%ju}",
@@ -192,14 +162,12 @@ int ObPLCacheObject::init_params_info_str()
                                     params_info_.at(i).pl_type_,
                                     params_info_.at(i).udt_id_
                                     ))) {
-          LOG_WARN("fail to buff_print param info", K(ret));
         }
       }
     }
   }
   if (OB_SUCC(ret)) {
     if (OB_FAIL(ob_write_string(allocator_, ObString(pos, buf), stat_.param_infos_))) {
-      LOG_WARN("fail to deep copy param infos", K(ret));
     }
   }
   return ret;
@@ -215,7 +183,7 @@ int ObPLCacheObject::update_cache_obj_stat(sql::ObILibCacheCtx &ctx)
   stat.gen_time_ = ObTimeUtility::current_time();
   stat.last_active_time_ = ObTimeUtility::current_time();
   stat.hit_count_ = 0;
-  stat.pl_evict_version_ = get_tenant_schema_version();
+  stat.pl_evict_version_ = get_runtime_schema_version();
   MEMCPY(stat.sql_id_, pc_ctx.sql_id_, (int32_t)sizeof(pc_ctx.sql_id_));
 
   if (OB_SUCC(ret)) {
@@ -223,11 +191,9 @@ int ObPLCacheObject::update_cache_obj_stat(sql::ObILibCacheCtx &ctx)
     if (OB_FAIL(ob_write_string(get_allocator(),
                                 trunc_name_sql.string(),
                                 stat.name_))) {
-      LOG_WARN("failed to write sql", K(ret));
     } else if (OB_FAIL(ob_write_string(get_allocator(),
                                        pc_ctx.key_.sys_vars_str_,
                                        stat_.sys_vars_str_))) {
-      LOG_WARN("failed to write sql", K(ret));
     } else {
       stat.sql_cs_type_ = pc_ctx.session_info_->get_local_collation_connection();
     }
@@ -239,7 +205,6 @@ int ObPLCacheObject::update_cache_obj_stat(sql::ObILibCacheCtx &ctx)
       if (OB_FAIL(ob_write_string(get_allocator(),
                                   trunc_raw_sql.string(),
                                   stat.raw_sql_))) {
-        LOG_WARN("failed to write sql", K(ret));
       }
     }
   }

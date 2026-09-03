@@ -24,14 +24,13 @@ namespace storage
 {
 
 ObTabletBindingReplayExecutor::ObTabletBindingReplayExecutor()
-  :logservice::ObTabletReplayExecutor(), user_ctx_(nullptr), user_data_(nullptr)
+  : ObTabletReplayExecutor(), user_ctx_(nullptr), user_data_(nullptr)
 {}
 
 int ObTabletBindingReplayExecutor::init(
     mds::BufferCtx &user_ctx,
     const ObTabletBindingMdsUserData &user_data,
-    const share::SCN &scn,
-    const bool for_old_mds)
+    const share::SCN &scn)
 {
   int ret = OB_SUCCESS;
   if (OB_UNLIKELY(is_inited_)) {
@@ -44,7 +43,6 @@ int ObTabletBindingReplayExecutor::init(
     user_ctx_ = &user_ctx;
     user_data_ = &user_data;
     scn_ = scn;
-    for_old_mds_ = for_old_mds;
     is_inited_ = true;
   }
   return ret;
@@ -56,8 +54,7 @@ int ObTabletBindingReplayExecutor::do_replay_(ObTabletHandle &tablet_handle)
   int ret = OB_SUCCESS;
   mds::MdsCtx &user_ctx = static_cast<mds::MdsCtx&>(*user_ctx_);
 
-  if (OB_FAIL(replay_to_mds_table_(tablet_handle, *user_data_, user_ctx, scn_, for_old_mds_))) {
-    LOG_WARN("failed to replay to tablet", K(ret));
+  if (OB_FAIL(replay_to_mds_table_(tablet_handle, *user_data_, user_ctx, scn_))) {
   }
 
   return ret;

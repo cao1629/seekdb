@@ -18,12 +18,12 @@
 
 #include "ob_all_virtual_sql_stat.h"
 #include "lib/utility/ob_mod_define.h"
-#include "share/rc/ob_module_provider.h"
-#include "lib/utility/ob_mod_define.h"
-#include "observer/omt/ob_multi_tenant.h"
-#include "share/rc/ob_tenant_base.h"
+#include "share/rc/ob_server_runtime.h"
+#include "share/rc/ob_server_runtime.h"
 #include "share/rc/ob_context.h"
-#include "observer/ob_server_struct.h"
+#include "share/ob_server_struct.h"
+#include "observer/ob_server_runtime_access.h"
+#include "sql/ob_sql.h"
 #include "sql/plan_cache/ob_plan_cache.h"
 
 using namespace oceanbase::common;
@@ -42,7 +42,6 @@ int ObGetAllSqlStatCacheIdOp::operator()(common::hash::HashMapPair<ObCacheObjID,
     if (!entry.second->added_lc()) {
       // do nothing
     } else if (OB_FAIL(key_array_->push_back(entry.first))) {
-      LOG_WARN("fail to push back plan_id to key array", K(ret));
     }
   }
   return ret;
@@ -73,15 +72,12 @@ void ObAllVirtualSqlStatIter::reset()
 int ObAllVirtualSqlStatIter::init(ObIAllocator *allocator)
 {
   int ret = OB_SUCCESS;
-  if (OB_ISNULL(GCTX.omt_)) {
-    ret = OB_ERR_UNEXPECTED;
-    LOG_WARN("unexpected null of omt", KR(ret));
-  }
-  
-  if (OB_SUCC(ret)) {
+  if (OB_ISNULL(allocator)) {
+    ret = OB_INVALID_ARGUMENT;
+    LOG_WARN("allocator is null", KR(ret));
+  } else {
     const int64_t default_bucket_num  = 64;
     if (OB_FAIL(tmp_sql_stat_map_.create(default_bucket_num, ObMemAttr("TmpSqlStatMgr")))) {
-      LOG_WARN("fail to create tmp sql stat map", K(ret));
     } else {
       allocator_ = allocator;
     }
@@ -95,30 +91,28 @@ int ObAllVirtualSqlStatIter::get_next_batch_sql_stat()
   if (done_) {
     ret = OB_ITER_END;
   } else if (OB_FAIL(tmp_sql_stat_map_.clear())) {
-    LOG_WARN("failed to clear tmp sql stat map", K(ret));
   } else if (FALSE_IT(sql_stat_cache_id_array_.reuse())) {
   } else {
-    
-    MOD_SCOPE {
+    if (!share::g_server_modules_ready) {
+      done_ = true;
+      ret = OB_ITER_END;
+    } else {
       ObReqTimeGuard req_timeinfo_guard;
-      ObPlanCache* plan_cache = share::g_mp->plan_cache();
+      ObPlanCache* plan_cache = ::oceanbase::share::server_service<::oceanbase::sql::ObPlanCache>();
       if (OB_NOT_NULL(plan_cache)) {
         ObGetAllSqlStatCacheIdOp op(&sql_stat_cache_id_array_);
         if (OB_FAIL(plan_cache->foreach_cache_obj(op))) {
-          LOG_WARN("fail to get all sql stat cache id", K(ret));
         }
       } else {
         LOG_WARN("failed to get library cache", K(ret));
       }
 
       if (OB_SUCC(ret)) {
-        if (OB_NOT_NULL(GCTX.session_mgr_)) {
-          GCTX.session_mgr_->for_each_session(*this);
+        if (OB_NOT_NULL(::oceanbase::share::server_service<::oceanbase::sql::ObSQLSessionMgr>())) {
+          ::oceanbase::share::server_service<::oceanbase::sql::ObSQLSessionMgr>()->for_each_session(*this);
         }
       }
       done_ = true;
-    } else {
-      LOG_WARN("failed to switch mtl tenant", K(ret));
     }
   }
   return ret;
@@ -134,7 +128,7 @@ bool ObAllVirtualSqlStatIter::operator()(sql::ObSQLSessionMgr::Key key, ObSQLSes
     // do nothing
   } else if (ObSQLSessionState::QUERY_ACTIVE != sess_info->get_session_state()) {
     // do nothing
-  } else if (true) {
+  } else {
     // WARNNIGN!!!
     // Access to things like cur_sql_ctx_ and cur_plan is forbidden, 
     // these pointers are not guaranteed to be thread-safe and risk CORE!
@@ -147,19 +141,20 @@ bool ObAllVirtualSqlStatIter::operator()(sql::ObSQLSessionMgr::Key key, ObSQLSes
     {
       if (!key.is_valid()) {
         // do nothing
-      } else if (OB_FAIL(executing_sql_stat_record.record_sqlstat_end_value(nullptr))) {
-        LOG_WARN("failed to record sqlstat end value in query virtual table", K(ret));
+      } else if (OB_ISNULL(get_observer_sql_engine())) {
+        ret = OB_NOT_INIT;
+        LOG_WARN("query runtime environment is not bound", K(ret));
+      } else if (OB_FAIL(executing_sql_stat_record.record_sqlstat_end_value(
+                     get_observer_sql_engine()->get_query_runtime_environment()))) {
       } else if (OB_SUCC(tmp_sql_stat_map_.get_refactored(key, value))) {
         if (OB_FAIL(value->sum_stat_value(executing_sql_stat_record))) {
-          LOG_WARN("sql_stat_value sum value failed", KR(ret));
         }
       } else if (OB_HASH_NOT_EXIST == ret) {
         void *buf = nullptr;
         ObString sql = ObString::make_empty_string();
         if (obmysql::COM_QUERY == sess_info->get_mysql_cmd() ||
             obmysql::COM_STMT_EXECUTE == sess_info->get_mysql_cmd() ||
-            obmysql::COM_STMT_PREPARE == sess_info->get_mysql_cmd() ||
-            obmysql::COM_STMT_PREXECUTE == sess_info->get_mysql_cmd()) {
+            obmysql::COM_STMT_PREPARE == sess_info->get_mysql_cmd()) {
           sql = sess_info->get_current_query_string();
         }
 
@@ -171,11 +166,8 @@ bool ObAllVirtualSqlStatIter::operator()(sql::ObSQLSessionMgr::Key key, ObSQLSes
           LOG_WARN("alloc failed", K(ret));
         } else if (FALSE_IT(value = new(buf) ObExecutedSqlStatRecord())) {
         } else if (OB_FAIL(value->get_sql_stat_info().init(key, *sess_info, sql, nullptr /*phy_plan*/))) {
-          LOG_WARN("failed to init sql stat info", K(ret));
         } else if (OB_FAIL(value->sum_stat_value(executing_sql_stat_record))) {
-          LOG_WARN("sql_stat_value sum value failed", KR(ret));
         } else if (OB_FAIL(tmp_sql_stat_map_.set_refactored(key, value))) {
-          LOG_WARN("tmp_sql_stat_map_ set refactored failed", KR(ret));
         }
       } else {
         LOG_WARN("get_refactored fail", KR(ret), K(key));
@@ -191,22 +183,26 @@ int ObAllVirtualSqlStatIter::get_next_sql_stat (
   int ret = OB_SUCCESS;
   while (OB_SUCC(ret) && sql_stat_cache_id_array_idx_ >= sql_stat_cache_id_array_.count() && tmp_sql_stat_map_.empty()) {
     if (OB_FAIL(get_next_batch_sql_stat())) {
-      LOG_WARN("failed to get next tenant sql stat", K(ret));
+      if (OB_ITER_END != ret) {
+        LOG_WARN("failed to get next SQL stat batch", K(ret));
+      }
     } else {
       sql_stat_cache_id_array_idx_ = 0;
     }
   }
 
   if (OB_SUCC(ret)) {
-    MOD_SCOPE {
+    if (!share::g_server_modules_ready) {
+      ret = OB_ITER_END;
+    } else {
       if (sql_stat_cache_id_array_idx_ < sql_stat_cache_id_array_.count()) {
         ObReqTimeGuard req_timeinfo_guard;
-        ObPlanCache* plan_cache = share::g_mp->plan_cache();
+        ObPlanCache* plan_cache = ::oceanbase::share::server_service<::oceanbase::sql::ObPlanCache>();
         if (OB_NOT_NULL(plan_cache)) {
           uint64_t cur_sql_stat_cache_id = sql_stat_cache_id_array_.at(sql_stat_cache_id_array_idx_);
           sql_stat_cache_id_array_idx_++;
-          ObCacheObjGuard guard(VT_SQL_STAT_HANDLE);
-          int tmp_ret = plan_cache->ref_cache_obj(cur_sql_stat_cache_id, guard); // plan reference count plus VT_SQL_STAT_HANDLE
+          ObCacheObjGuard guard;
+          int tmp_ret = plan_cache->ref_cache_obj(cur_sql_stat_cache_id, guard);
           if (OB_HASH_NOT_EXIST == tmp_ret) {
             //do nothing;
           } else if (OB_SUCCESS != tmp_ret) {
@@ -237,16 +233,13 @@ int ObAllVirtualSqlStatIter::get_next_sql_stat (
               } else {
                 ObExecutedSqlStatRecord *value = nullptr;
                 if (OB_FAIL(sql_stat_value.assign(*(tmp_sql_stat_value)))) {
-                  LOG_WARN("failed to assign executed sql stat record", K(ret));
                 } else {
                   int tmp_ret = tmp_sql_stat_map_.get_refactored(sql_stat_value.get_key(), value);
                   if (OB_HASH_NOT_EXIST == tmp_ret) {
                     // do nothing
                   } else if (OB_SUCCESS == tmp_ret) {
                     if (OB_FAIL(sql_stat_value.sum_stat_value(*value))) {
-                      LOG_WARN("sql_stat_value sum value failed", KR(ret));
                     } else if (OB_FAIL(tmp_sql_stat_map_.erase_refactored(sql_stat_value.get_key()))) {
-                      LOG_WARN("sql_stat_value earse value failed", KR(ret));
                     }
                   } else {
                     ret = OB_ERR_UNEXPECTED;
@@ -268,9 +261,7 @@ int ObAllVirtualSqlStatIter::get_next_sql_stat (
             ret = OB_ERR_UNEXPECTED;
             LOG_WARN("failed to get sql stat from map", K(ret));
           } else if (OB_FAIL(sql_stat_value.assign(*(tmp_sql_stat_value)))) {
-            LOG_WARN("failed to assign executed sql stat record", K(ret));
           } else if (OB_FAIL(tmp_sql_stat_map_.erase_refactored(sql_stat_value.get_key()))) {
-            LOG_WARN("sql_stat_value earse value failed", KR(ret));
           }
         }
       }
@@ -308,7 +299,6 @@ int ObAllVirtualSqlStat::get_server_ip_and_port()
   } else {
     ipstr_ = ObString::make_string(ipbuf);
     if (OB_FAIL(ob_write_string(*allocator_, ipstr_, ipstr_))) {
-      LOG_WARN("failed to write string", K(ret));
     }
     port_ = addr.get_port();
   }
@@ -354,7 +344,6 @@ int ObAllVirtualSqlStat::fill_row(
                                                       ObCharset::get_system_collation(),
                                                       dst_string,
                                                       ObCharset::REPLACE_UNKNOWN_CHARACTER))) {
-          SERVER_LOG(WARN, "fail to convert sql string", K(ret));
         } else {
           cells[cell_idx].set_lob_value(ObLongTextType, dst_string.ptr(),
                                         min(dst_string.length(), 1024));
@@ -561,7 +550,6 @@ int ObAllVirtualSqlStat::fill_row(
           } else {
             source_ip_str = ObString::make_string(ipbuf);
             if (OB_FAIL(ob_write_string(*allocator_, source_ip_str, source_ip_str))) {
-              LOG_WARN("failed to write string", K(ret));
             } else {
               cells[cell_idx].set_varchar(source_ip_str);
               cells[cell_idx].set_collation_type(
@@ -582,14 +570,6 @@ int ObAllVirtualSqlStat::fill_row(
         } else {
           cells[cell_idx].set_int(port_);
         }
-        break;
-      }
-      case ROUTE_MISS_TOTAL: {
-        cells[cell_idx].set_int(sql_stat_record->get_route_miss_total());
-        break;
-      }
-      case ROUTE_MISS_DELTA: {
-        cells[cell_idx].set_int(sql_stat_record->get_route_miss_delta());
         break;
       }
       case FIRST_LOAD_TIME: {
@@ -626,11 +606,9 @@ int ObAllVirtualSqlStat::inner_get_next_row(common::ObNewRow *&row)
   int ret = OB_SUCCESS;
   if (!start_to_read_) {
     if (OB_FAIL(iter_.init(allocator_))) {
-      LOG_WARN("failed to init iterator", K(ret));
     } else {
       start_to_read_ = true;
       if (OB_FAIL(get_server_ip_and_port())) {
-        LOG_WARN("failed to get server ip and port", K(ret));
       }
     }
   }
@@ -670,7 +648,6 @@ int ObAllVirtualSqlStat::inner_get_next_row(common::ObNewRow *&row)
       if (OB_SUCC(ret)) {
         if (sql_stat_record->get_key().is_valid()) {
           if (OB_FAIL(fill_row(sql_stat_record, row))) {
-            LOG_WARN("failed to get row from sql_stat_record", K(ret));
           } else {
             last_sql_stat_record_ = sql_stat_record;
           }

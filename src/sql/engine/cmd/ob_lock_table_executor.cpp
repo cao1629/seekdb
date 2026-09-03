@@ -18,7 +18,8 @@
 #include "sql/engine/cmd/ob_lock_table_executor.h"
 #include "sql/resolver/ddl/ob_lock_table_stmt.h"
 #include "sql/engine/ob_exec_context.h"
-#include "storage/tablelock/ob_mysql_lock_table_executor.h"
+#include "sql/tablelock/ob_mysql_lock_table_executor.h"
+#include "data_plane/tablelock/ob_table_lock_target.h"
 
 namespace oceanbase
 {
@@ -32,17 +33,7 @@ int ObLockTableExecutor::execute(ObExecContext &ctx,
                                  ObLockTableStmt &stmt)
 {
   int ret = OB_SUCCESS;
-  LOG_DEBUG("mysql mode do nothing");
   ret = execute_mysql_(ctx, stmt);
-  return ret;
-}
-
-int ObLockTableExecutor::execute_oracle_(ObExecContext &ctx,
-                                         ObLockTableStmt &stmt)
-{
-  int ret = OB_SUCCESS;
-  ret = OB_ERR_UNEXPECTED;
-  LOG_WARN("should be oracle mode", K(ret));
   return ret;
 }
 
@@ -52,15 +43,23 @@ int ObLockTableExecutor::execute_mysql_(ObExecContext &ctx,
   int ret = OB_SUCCESS;
   // only execute normally after enable lock_priority configuration, otherwise
   // it will directly throw OB_SUCCESS, which is an empty implementation
-  if (!true) {
-    ret = OB_INVALID_ARGUMENT;
-    // if tenant config is invalid, this config will be set as false
-    LOG_WARN("tenant config is invalid");
-  } else if (GCONF.enable_lock_priority) {
+  if (GCONF.enable_lock_priority) {
     switch(stmt.get_lock_stmt_type()) {
     case ObLockTableStmt::MYSQL_LOCK_TABLE_STMT: {
       ObMySQLLockTableExecutor executor;
-      if (OB_FAIL(executor.execute(ctx, stmt.get_mysql_lock_list()))) {
+      ObSEArray<data_plane::ObTableLockTarget, 2> lock_targets;
+      const ObIArray<ObMySQLLockNode> &lock_nodes = stmt.get_mysql_lock_list();
+      for (int64_t i = 0; OB_SUCC(ret) && i < lock_nodes.count(); ++i) {
+        const ObMySQLLockNode &node = lock_nodes.at(i);
+        if (OB_UNLIKELY(!node.is_valid())) {
+          ret = OB_INVALID_ARGUMENT;
+          LOG_WARN("lock node invalid", K(ret), K(node));
+        } else if (OB_FAIL(lock_targets.push_back(data_plane::ObTableLockTarget(
+                       node.table_item_->ref_id_,
+                       static_cast<ObTableLockMode>(node.lock_mode_))))) {
+        }
+      }
+      if (OB_SUCC(ret) && OB_FAIL(executor.execute(ctx, lock_targets))) {
         LOG_WARN("lock table failed", K(ret));
       }
       break;
@@ -68,7 +67,6 @@ int ObLockTableExecutor::execute_mysql_(ObExecContext &ctx,
     case ObLockTableStmt::MYSQL_UNLOCK_TABLE_STMT: {
       ObMySQLUnlockTableExecutor executor;
       if (OB_FAIL(executor.execute(ctx))) {
-        LOG_WARN("unlock table failed", K(ret));
       }
       break;
     }
@@ -78,7 +76,6 @@ int ObLockTableExecutor::execute_mysql_(ObExecContext &ctx,
     }
     }
   }
-  LOG_DEBUG("execute mysql lock table", K(ctx), K(stmt));
   return ret;
 }
 

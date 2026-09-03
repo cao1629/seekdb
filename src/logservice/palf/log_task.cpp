@@ -31,14 +31,11 @@ LogTaskHeaderInfo& LogTaskHeaderInfo::operator=(const LogTaskHeaderInfo &rval)
     this->min_scn_ = rval.min_scn_;
     this->max_scn_ = rval.max_scn_;
     this->data_len_ = rval.data_len_;
-    this->proposal_id_ = rval.proposal_id_;
     this->prev_lsn_ = rval.prev_lsn_;
-    this->prev_proposal_id_  = rval.prev_proposal_id_;
     this->committed_end_lsn_ = rval.committed_end_lsn_;
     this->data_checksum_ = rval.data_checksum_;
     this->accum_checksum_ = rval.accum_checksum_;
     this->is_padding_log_ = rval.is_padding_log_;
-    this->is_raw_write_ = rval.is_raw_write_;
   }
   return *this;
 }
@@ -51,14 +48,11 @@ void LogTaskHeaderInfo::reset()
   min_scn_.reset();
   max_scn_.reset();
   data_len_ = 0;
-  proposal_id_ = INVALID_PROPOSAL_ID;
   prev_lsn_.reset();
-  prev_proposal_id_ = INVALID_PROPOSAL_ID;
   committed_end_lsn_.reset();
   data_checksum_ = -1;
   accum_checksum_ = -1;
   is_padding_log_ = false;
-  is_raw_write_ = false;
 }
 
 bool LogTaskHeaderInfo::is_valid() const
@@ -140,7 +134,6 @@ LogTask::LogTask()
      freeze_ts_(OB_INVALID_TIMESTAMP),
      submit_ts_(OB_INVALID_TIMESTAMP),
      flushed_ts_(OB_INVALID_TIMESTAMP),
-     push_log_type_(PushLogType::PUSH_LOG),
      lock_()
 {
   reset();
@@ -194,7 +187,7 @@ void LogTask::update_data_len(const int64_t data_len)
 int LogTask::set_initial_header_info(const LogTaskHeaderInfo &header_info)
 {
   // Caller need hold lock.
-  // This is called by leader when submitting the first log entry for this log_task.
+  // Called when submitting the first entry for this task.
   int ret = OB_SUCCESS;
   if (is_valid()) {
     ret = OB_ERR_UNEXPECTED;
@@ -203,14 +196,12 @@ int LogTask::set_initial_header_info(const LogTaskHeaderInfo &header_info)
     header_.begin_lsn_ = header_info.begin_lsn_;
     header_.log_id_ = header_info.log_id_;
     header_.is_padding_log_ = header_info.is_padding_log_;
-    header_.proposal_id_ = header_info.proposal_id_;
     header_.min_scn_ = header_info.min_scn_;
     update_data_len(header_info.data_len_);
     // Note: Here direct assignment cannot be used, inc_update must be used instead, because other log_entry may have already updated max_scn_
     inc_update_max_scn(header_info.max_scn_);
     // The first log is responsible for changing state to valid.
     set_valid();
-    PALF_LOG(TRACE, "set_initial_header_info", K(ret), K(header_info), KPC(this));
   }
   return ret;
 }
@@ -230,8 +221,6 @@ int LogTask::update_header_info(const LSN &committed_end_lsn, const int64_t accu
   } else {
     header_.committed_end_lsn_ = committed_end_lsn;
     header_.accum_checksum_ = accum_checksum;
-    PALF_LOG(TRACE, "update_header_info", K(ret), K(committed_end_lsn),
-        K(accum_checksum), KPC(this));
   }
   return ret;
 }
@@ -252,13 +241,11 @@ int LogTask::set_group_header(const LSN &lsn, const SCN &scn, const LogGroupEntr
     header_.end_lsn_ = lsn + group_entry_header.get_serialize_size() + group_entry_header.get_data_len();
     header_.log_id_ = group_entry_header.get_log_id();
     header_.is_padding_log_ = group_entry_header.is_padding_log();
-    header_.proposal_id_ = group_entry_header.get_log_proposal_id();  // leader's proposal_id when generate this log
     header_.min_scn_ = scn;
     header_.max_scn_ = group_entry_header.get_max_scn();
     header_.data_len_ = group_entry_header.get_data_len();          // total len without log_group_entry_header
     header_.committed_end_lsn_ = group_entry_header.get_committed_end_lsn();  // Out-of-order log reception requires this value after filling in the preceding gaps
     header_.accum_checksum_ = group_entry_header.get_accum_checksum();
-    header_.is_raw_write_ = group_entry_header.is_raw_write();
     set_valid();  // set valid
   }
   return ret;
@@ -267,11 +254,6 @@ int LogTask::set_group_header(const LSN &lsn, const SCN &scn, const LogGroupEntr
 void LogTask::set_prev_lsn(const LSN &prev_lsn)
 {
   header_.prev_lsn_ = prev_lsn;
-}
-
-void LogTask::set_prev_log_proposal_id(const int64_t &prev_log_proposal_id)
-{
-  header_.prev_proposal_id_ = prev_log_proposal_id;
 }
 
 void LogTask::set_end_lsn(const LSN &end_lsn)
@@ -290,7 +272,6 @@ int LogTask::try_freeze_by_myself()
   int ret = OB_SUCCESS;
   if (!header_.end_lsn_.is_valid()) {
     ret = OB_EAGAIN;
-    PALF_LOG(TRACE, "header_.end_lsn_ is invalid, cannot freeze by myself", K(ret), K(*this));
   } else {
     // This log_task has not been freezed and its end_lsn_ has been set, try freeze
     ret = try_freeze_(header_.end_lsn_);
@@ -304,7 +285,6 @@ int LogTask::try_freeze_(const LSN &end_lsn)
   int ret = OB_SUCCESS;
   if (is_freezed()) {
     // this log_task has been freezed, return OB_SUCCESS
-    PALF_LOG(TRACE, "this log_task has been freezed", K(ret), K(*this));
   } else if (!end_lsn.is_valid()) {
     ret = OB_INVALID_ARGUMENT;
     PALF_LOG(WARN, "invalid argument", K(ret), K(end_lsn));
@@ -433,16 +413,6 @@ void LogTask::set_submit_ts(const int64_t ts)
 void LogTask::set_flushed_ts(const int64_t ts)
 {
   ATOMIC_STORE(&flushed_ts_, ts);
-}
-
-void LogTask::set_push_log_type(const PushLogType &push_log_type)
-{
-  ATOMIC_STORE(&push_log_type_, push_log_type);
-}
-
-bool LogTask::is_fetch_log_type() const
-{
-  return PushLogType::FETCH_LOG_RESP == ATOMIC_LOAD(&push_log_type_);
 }
 
 }  // namespace palf

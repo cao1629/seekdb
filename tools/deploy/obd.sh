@@ -109,6 +109,7 @@ function mirror_create {
   mirror_path=$DEPLOY_PATH/mirror_create
   mkdir -p $mirror_path/bin/ && \
     cp -rf $DEPLOY_PATH/etc $mirror_path/ && \
+    rm -f $mirror_path/etc/seekdb.data_version.bin && \
     cp -rf $DEPLOY_PATH/admin $mirror_path/ && \
     ln -sf $DEPLOY_PATH/bin/seekdb $mirror_path/bin/seekdb && \
     success=1
@@ -167,9 +168,8 @@ EOF
 )
   single_conf=${base_template}
   single_conf=${single_conf//"{{%% SERVERS %%}}"/$SERVERS}
-  single_without_proxy_conf=${single_conf//"{{%% PROXY_CONF %%}}"/}
 
-  [ ! -f ./single.yaml ] && echo "$single_without_proxy_conf" > ./single.yaml && echo "generate yaml config file: $(readlink -f ./single.yaml)"
+  [ ! -f ./single.yaml ] && echo "$single_conf" > ./single.yaml && echo "generate yaml config file: $(readlink -f ./single.yaml)"
 }
 
 function show_deploy_name {
@@ -327,7 +327,7 @@ function get_init_sql {
   [[ "$INIT_FLIES" != "" ]] && return
   if [[ -f $BASE_DIR/tools/deploy/init.sql ]]
   then
-    INIT_FLIES="--init-sql-files=init.sql,init_user.sql|root@sys|test"
+    INIT_FLIES="--init-sql-files=init.sql,init_user.sql|root|test"
   fi
 }
 
@@ -444,11 +444,6 @@ function sysbench {
   obd test sysbench $deploy_name $OBCLIENT_BIN_ARGS $extra_args
 }
 
-function tpch {
-  get_deploy_name
-  obd test tpch $deploy_name $OBCLIENT_BIN_ARGS $extra_args
-}
-
 function tpcc {
   get_deploy_name
   obd test tpcc $deploy_name $OBCLIENT_BIN_ARGS $extra_args
@@ -491,15 +486,14 @@ upgrade [-n DEPLOY_NAME]                 Upgrade cluster.
 list [-n DEPLOY_NAME]                    List cluster.
 display [-n DEPLOY_NAME]                 Display cluster info.
 sysbench [-n DEPLOY_NAME]                Run sysbench, use '--help' for more details.
-tpch [-n DEPLOY_NAME]                    Run tpch test, use '--help' for more details.
 tpcc [-n DEPLOY_NAME]                    Run tpcc test, use '--help' for more details.
 mysqltest [-n DEPLOY_NAME]               Run mysqltest, use '--help' for more details.
 pid [-n DEPLOY_NAME]                     Get pid list for servers, use '--help' for more details.
 ssh [-n DEPLOY_NAME]                     Ssh to target server and change directory to log path, use '--help' for more details.
 less [-n DEPLOY_NAME]                    Use command less to the seekdb.log, use '--help' for more details.
 gdb [-n DEPLOY_NAME]                     Use gdb to attch target server, use '--help' for more details.
-sql [-n DEPLOY_NAME]                     Connect to target server by root@sys, use '--help' for more details.
-sys [-n DEPLOY_NAME]                     Connect to target server by root@sys, use '--help' for more details.
+sql [-n DEPLOY_NAME]                     Connect to target server by root, use '--help' for more details.
+sys [-n DEPLOY_NAME]                     Connect to target server by root, use '--help' for more details.
 graph [-n DEPLOY_NAME]
 
 Options:
@@ -655,9 +649,6 @@ function main() {
     ;;
     sysbench)
     sysbench
-    ;;
-    tpch)
-    tpch
     ;;
     tpcc)
     tpcc

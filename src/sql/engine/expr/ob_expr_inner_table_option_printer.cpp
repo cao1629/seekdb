@@ -18,6 +18,7 @@
 #include "sql/engine/expr/ob_expr_inner_table_option_printer.h"
 #include "sql/engine/ob_exec_context.h"
 #include "sql/printer/ob_schema_printer.h"
+#include "share/ob_autoincrement_service.h"
 
 
 namespace oceanbase
@@ -28,7 +29,7 @@ namespace sql
 
 ObExprInnerTableOptionPrinter::ObExprInnerTableOptionPrinter(ObIAllocator &alloc)
     : ObStringExprOperator(alloc, T_FUN_SYS_INNER_TABLE_OPTION_PRINTER, N_INNER_TABLE_OPTION_PRINTER, 2,
-                           VALID_FOR_GENERATED_COL, INTERNAL_IN_MYSQL_MODE, INTERNAL_IN_ORACLE_MODE)
+                           VALID_FOR_GENERATED_COL, INTERNAL_IN_MYSQL_MODE)
 {
   need_charset_convert_ = false;
 }
@@ -75,11 +76,8 @@ int ObExprInnerTableOptionPrinter::eval_inner_table_option_printer(const ObExpr 
     ret = OB_ERR_UNEXPECTED;
     LOG_WARN("failed to get schema_service", K(ret));
   } else if (OB_FAIL(expr.eval_param_value(ctx, database_id, table_id))) {
-    LOG_WARN("failed to eval table id", K(ret));
-  } else if (OB_FAIL(GCTX.schema_service_->get_tenant_schema_guard(schema_guard))) {
-    LOG_WARN("failed to get schema guard", K(ret));
+  } else if (OB_FAIL(GCTX.schema_service_->get_runtime_schema_guard(schema_guard))) {
   } else if (OB_FAIL(schema_guard.get_table_schema( table_id->get_int(), table_schema))) {
-    LOG_WARN("failed to get table schema", K(ret), K(table_id->get_int()));
   } else if (nullptr == table_schema) {
     expr_datum.set_null();
   } else {
@@ -95,7 +93,6 @@ int ObExprInnerTableOptionPrinter::eval_inner_table_option_printer(const ObExpr 
                                                                     MAX_TABLE_STATUS_CREATE_OPTION_LENGTH,
                                                                     pos,
                                                                     true))) {
-      LOG_WARN("print table definition table options failed", K(ret));
     } else {
       int64_t len = strlen(buf);
       if (len > 0) {
@@ -112,14 +109,14 @@ DEF_SET_LOCAL_SESSION_VARS(ObExprInnerTableOptionPrinter, raw_expr) {
   int ret = OB_SUCCESS;
   {
     SET_LOCAL_SYSVAR_CAPACITY(1);
-    EXPR_ADD_LOCAL_SYSVAR(SYS_VAR_COLLATION_CONNECTION);
+    EXPR_ADD_LOCAL_SYSVAR(share::SYS_VAR_COLLATION_CONNECTION);
   }
   return ret;
 }
 
 ObExprInnerTableSequenceGetter::ObExprInnerTableSequenceGetter(ObIAllocator &alloc)
     : ObExprOperator(alloc, T_FUN_SYS_INNER_TABLE_SEQUENCE_GETTER, N_INNER_TABLE_SEQUENCE_GETTER, 2,
-                           VALID_FOR_GENERATED_COL, INTERNAL_IN_MYSQL_MODE, INTERNAL_IN_ORACLE_MODE)
+                           VALID_FOR_GENERATED_COL, INTERNAL_IN_MYSQL_MODE, true)
 {
 }
 
@@ -163,22 +160,18 @@ int ObExprInnerTableSequenceGetter::eval_inner_table_sequence_getter(const ObExp
     ret = OB_ERR_UNEXPECTED;
     LOG_WARN("failed to get schema_service", K(ret));
   } else if (OB_FAIL(expr.eval_param_value(ctx, table_id, auto_inc_col_id))) {
-    LOG_WARN("failed to eval table id", K(ret));
   } else if (auto_inc_col_id->is_null() || 0 == auto_inc_col_id->get_int()) {
     expr_datum.set_null();
-  } else if (OB_FAIL(GCTX.schema_service_->get_tenant_schema_guard(schema_guard))) {
-    LOG_WARN("failed to get schema guard", K(ret));
+  } else if (OB_FAIL(GCTX.schema_service_->get_runtime_schema_guard(schema_guard))) {
   } else if (OB_FAIL(schema_guard.get_table_schema( table_id->get_int(), table_schema))) {
-    LOG_WARN("failed to get table schema", K(ret), K(table_id->get_int()));
   } else if (nullptr == table_schema) {
     expr_datum.set_null();
   } else {
     uint64_t auto_increment = 0;
     if (OB_FAIL(share::ObAutoincrementService::get_instance().get_sequence_value(
           table_schema->get_table_id(),
-          table_schema->get_autoinc_column_id(), table_schema->is_order_auto_increment_mode(),
+          table_schema->get_autoinc_column_id(),
           table_schema->get_truncate_version(), auto_increment))) {
-      SHARE_SCHEMA_LOG(WARN, "fail to get auto_increment value", K(ret));
     } else if (auto_increment > 0) {
       if (table_schema->get_auto_increment() > auto_increment) {
         auto_increment = table_schema->get_auto_increment();

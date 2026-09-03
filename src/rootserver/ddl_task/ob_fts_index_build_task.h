@@ -36,9 +36,8 @@ public:
       const ObTableSchema *index_schema,
       const int64_t schema_version,
       const int64_t parallelism,
-      const int64_t consumer_group_id,
       const obcall::ObCreateIndexArg &create_index_arg,
-      const uint64_t tenant_data_version,
+      const uint64_t data_format_version,
       const int64_t parent_task_id = 0,
       const int64_t task_status = share::ObDDLTaskStatus::PREPARE,
       const int64_t snapshot_version = 0,
@@ -86,7 +85,6 @@ public:
       K(drop_index_task_submitted_),
       K(schema_version_),
       K(execution_id_),
-      K(consumer_group_id_),
       K(trace_id_),
       K(parallelism_),
       K(create_index_arg_),
@@ -169,7 +167,7 @@ private:
   int refresh_task_depend_map_context(const ObFtsIndexBuildTask &task);
 
 private:
-  typedef share::ObDomainDependTaskStatus DependTaskStatus;
+  typedef rootserver::ObDomainDependTaskStatus DependTaskStatus;
 
   struct ColumnChecksumInfo final
   {
@@ -193,7 +191,6 @@ private:
   using ObDDLTask::task_id_;
   using ObDDLTask::schema_version_;
   using ObDDLTask::parallelism_;
-  using ObDDLTask::consumer_group_id_;
   using ObDDLTask::parent_task_id_;
   using ObDDLTask::task_status_;
   using ObDDLTask::snapshot_version_;
@@ -215,7 +212,7 @@ private:
   int64_t fts_doc_word_task_id_;
   int64_t drop_index_task_id_;
   bool drop_index_task_submitted_;
-  ObRootService *root_service_;
+  ObLocalManagementService *local_management_service_;
   bool is_rowkey_doc_succ_;
   bool is_doc_rowkey_succ_;
   bool is_domain_aux_succ_;
@@ -223,7 +220,7 @@ private:
   bool fts_index_aux_is_trans_end_;
   bool fts_doc_word_aux_is_trans_end_;
   obcall::ObCreateIndexArg create_index_arg_;
-  common::hash::ObHashMap<uint64_t, share::ObDomainDependTaskStatus> dependent_task_result_map_;
+  common::hash::ObHashMap<uint64_t, rootserver::ObDomainDependTaskStatus> dependent_task_result_map_;
   bool is_retryable_ddl_;
   bool use_doc_id_;
   int64_t rowkey_doc_schema_version_;

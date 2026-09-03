@@ -75,7 +75,6 @@ public:
   int transform(ObDMLStmt *&stmt);
   int do_transform(ObDMLStmt *&stmt);
   int do_transform_pre_precessing(ObDMLStmt *&stmt);
-  int do_prepare_mv_rewrite(const ObDMLStmt *stmt);
   int transform_heuristic_rule(ObDMLStmt *&stmt);
   int transform_rule_set(ObDMLStmt *&stmt,
                          uint64_t needed_types,
@@ -134,7 +133,6 @@ public:
 
   struct StmtFunc {
     StmtFunc () :
-      contain_sequence_(false),
       contain_for_update_(false),
       update_global_index_(false),
       contain_enum_set_values_(false),
@@ -146,8 +144,7 @@ public:
     {}
 
     bool all_found() const {
-      return contain_sequence_ &&
-          contain_for_update_ &&
+      return contain_for_update_ &&
           update_global_index_ &&
           contain_enum_set_values_ &&
           contain_geometry_values_ &&
@@ -157,7 +154,6 @@ public:
           contain_vec_index_approx_;
     }
 
-    bool contain_sequence_;
     bool contain_for_update_;
     bool update_global_index_;
     bool contain_enum_set_values_;
@@ -232,11 +228,8 @@ int ObTransformerImpl::transform_one_rule(ObDMLStmt *&stmt,
       trans.set_transformer_type(type);
       OPT_TRACE_TITLE("start transform rule", rule_name);
       if (OB_FAIL(THIS_WORKER.check_status())) {
-        LOG_WARN("check status fail", K(ret));
       } else if (OB_FAIL(trans.transform(stmt, needed_transform_types_))) {
-        LOG_WARN("failed to transform a rewrite rule", "class", rule_name, K(ret), K(ctx_->outline_trans_hints_));
       } else if (OB_FAIL(collect_trans_stat(trans))) {
-        LOG_WARN("failed to collect transform stat", K(ret));
       } else {
         trans_happened |= trans.get_trans_happened();
         OPT_TRACE_TIME_USED;
@@ -246,7 +239,6 @@ int ObTransformerImpl::transform_one_rule(ObDMLStmt *&stmt,
       }
     }
   } else {
-    LOG_TRACE("skip tranform a rewrite rule", "class", rule_name);
   }
   return ret;
 }

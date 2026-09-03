@@ -15,6 +15,8 @@
  */
 #ifndef OBDEV_SRC_SQL_DAS_OB_DAS_PARALLEL_HANDLER_H_
 #define OBDEV_SRC_SQL_DAS_OB_DAS_PARALLEL_HANDLER_H_
+#include "rpc/frame/ob_req_processor.h"
+#include "share/rpc/ob_server_task.h"
 #include "sql/engine/dml/ob_dml_ctx_define.h"
 namespace oceanbase
 {
@@ -27,7 +29,7 @@ public:
     : task_(nullptr)
   {  }
   ~ObDASParallelHandler() {}
-  int init(observer::ObSrvTask *task);
+  int init(rpc::ObSrvTask *task);
   void reset()
   {
     task_ = nullptr;
@@ -38,7 +40,7 @@ protected:
                              ObIAllocator &alloc,
                              ObIArray<ObIDASTaskOp*> &src_task_list,
                              ObIArray<ObIDASTaskOp*> &new_task_list,
-                             ObDASRemoteInfo &remote_info,
+                             ObDASCopyContext &copy_context,
                              ObDasAggregatedTask &das_task_wrapper);
   int deep_copy_das_task(ObDASTaskFactory &das_factory,
                          ObIDASTaskOp *src_op,
@@ -47,9 +49,9 @@ protected:
   int record_status_and_op_result(ObIDASTaskOp *src_op, ObIDASTaskOp *dst_op);
 private:
   DISALLOW_COPY_AND_ASSIGN(ObDASParallelHandler);
-  observer::ObSrvTask *task_;
+  rpc::ObSrvTask *task_;
 }; // end of class ObDASParallelHandler
-class ObDASParallelTask : public observer::ObSrvTask
+class ObDASParallelTask : public rpc::ObSrvTask
 {
 public:
   ObDASParallelTask(DASRefCountContext &das_ref_count_ctx)
@@ -60,7 +62,7 @@ public:
       handler_()
   {}
   ~ObDASParallelTask() {}
-  int init(ObDasAggregatedTask *agg_task, int64_t timeout_ts, int32_t group_id);
+  int init(ObDasAggregatedTask *agg_task, int64_t timeout_ts);
   const ObCurTraceId::TraceId &get_trace_id() const { return trace_id_; }
   int64_t get_timeout_ts() { return timeout_ts_; }
   void reset()

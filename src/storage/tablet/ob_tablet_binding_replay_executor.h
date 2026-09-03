@@ -18,7 +18,7 @@
 #define OCEANBASE_STORAGE_OB_TABLET_BINDING_REPLAY_EXECUTOR
 
 #include "common/ob_tablet_id.h"
-#include "logservice/replayservice/ob_tablet_replay_executor.h"
+#include "storage/tablet/ob_tablet_replay_executor.h"
 #include "storage/tablet/ob_tablet_binding_mds_user_data.h"
 
 namespace oceanbase
@@ -27,7 +27,7 @@ namespace oceanbase
 namespace storage
 {
 
-class ObTabletBindingReplayExecutor final : public logservice::ObTabletReplayExecutor
+class ObTabletBindingReplayExecutor final : public ObTabletReplayExecutor
 {
 public:
   ObTabletBindingReplayExecutor();
@@ -35,8 +35,7 @@ public:
   int init(
       mds::BufferCtx &user_ctx,
       const ObTabletBindingMdsUserData &user_data,
-      const share::SCN &scn,
-      const bool for_old_mds);
+      const share::SCN &scn);
 
 protected:
   bool is_replay_update_tablet_status_() const override
@@ -57,7 +56,6 @@ private:
   mds::BufferCtx *user_ctx_;
   const ObTabletBindingMdsUserData *user_data_;
   share::SCN scn_;
-  bool for_old_mds_;
 };
 
 

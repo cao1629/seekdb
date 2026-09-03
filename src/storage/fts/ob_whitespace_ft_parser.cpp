@@ -18,14 +18,13 @@
 
 #include "lib/oblog/ob_log_module.h"
 #include "lib/string/ob_string.h"
-#include "storage/fts/ob_fts_struct.h"
+#include "data_plane/fts/ob_fts_struct.h"
 #include "storage/fts/ob_whitespace_ft_parser.h"
 #include "storage/fts/utils/ob_ft_char_utils.h"
 
 #define USING_LOG_PREFIX STORAGE_FTS
 
 using namespace oceanbase::common;
-using namespace oceanbase::plugin;
 
 namespace oceanbase
 {
@@ -143,22 +142,7 @@ int ObSpaceFTParser::get_next_token(const char *&word,
   return ret;
 }
 
-ObWhiteSpaceFTParserDesc::ObWhiteSpaceFTParserDesc()
-  : is_inited_(false)
-{
-}
-
-int ObWhiteSpaceFTParserDesc::init(ObPluginParam *param)
-{
-  is_inited_ = true;
-  return OB_SUCCESS;
-}
-
-int ObWhiteSpaceFTParserDesc::deinit(ObPluginParam *param)
-{
-  reset();
-  return OB_SUCCESS;
-}
+ObWhiteSpaceFTParserDesc::ObWhiteSpaceFTParserDesc() {}
 
 int ObWhiteSpaceFTParserDesc::segment(
     ObFTParserParam *param,
@@ -166,10 +150,7 @@ int ObWhiteSpaceFTParserDesc::segment(
 {
   int ret = OB_SUCCESS;
   ObSpaceFTParser *parser = nullptr;
-  if (OB_UNLIKELY(!is_inited_)) {
-    ret = OB_NOT_INIT;
-    LOG_WARN("default ft parser desc hasn't be initialized", K(ret), K(is_inited_));
-  } else if (OB_ISNULL(param) || OB_ISNULL(param->fulltext_) || OB_UNLIKELY(!param->is_valid())) {
+  if (OB_ISNULL(param) || OB_ISNULL(param->fulltext_) || OB_UNLIKELY(!param->is_valid())) {
     ret = OB_INVALID_ARGUMENT;
     LOG_WARN("invalid argument", K(ret), KPC(param));
   } else if (OB_ISNULL(parser = OB_NEWx(ObSpaceFTParser, param->allocator_))) {
@@ -177,7 +158,6 @@ int ObWhiteSpaceFTParserDesc::segment(
     LOG_WARN("fail to allocate space ft parser", K(ret));
   } else {
     if (OB_FAIL(parser->init(param))) {
-      LOG_WARN("fail to init whitespace fulltext parser", K(ret), KPC(param));
     } else {
       iter = parser;
     }

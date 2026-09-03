@@ -16,6 +16,7 @@
 
 #define USING_LOG_PREFIX  SQL_ENG
 #include "sql/engine/expr/ob_expr_normal.h"
+#include "sql/engine/expr/ob_distribution.h"
 #include "sql/engine/ob_exec_context.h"
 
 namespace oceanbase
@@ -34,10 +35,8 @@ int ObExprNormal::ObExprNormalCtx::initialize(ObEvalCtx &ctx, const ObExpr &expr
       ret = OB_INVALID_ARGUMENT;
       LOG_USER_ERROR(OB_INVALID_ARGUMENT, "normal function. first and second argument must be constant expression.");
   } else {
-    double mean = p1.get_double();
-    double stddev = p2.get_double();
-    std::normal_distribution<double>::param_type param(mean, stddev);
-    normal_dist_.param(param);
+    mean_ = p1.get_double();
+    stddev_ = p2.get_double();
   }
   return ret;
 }
@@ -45,9 +44,8 @@ int ObExprNormal::ObExprNormalCtx::initialize(ObEvalCtx &ctx, const ObExpr &expr
 
 int ObExprNormal::ObExprNormalCtx::generate_next_value(int64_t seed, double &result)
 {
-  normal_dist_.reset();
   gen_.seed(static_cast<uint64_t>(seed));
-  result = normal_dist_(gen_);
+  result = ObDistribution::normal(gen_, mean_, stddev_);
   return OB_SUCCESS;
 }
 
@@ -85,16 +83,13 @@ int ObExprNormal::eval_next_value(const ObExpr &expr,
   ObExecContext &exec_ctx = ctx.exec_ctx_;
 
   if (OB_FAIL(expr.eval_param_value(ctx))) {
-      LOG_WARN("expr.eval_param_value failed", K(ret));
   } else if (OB_ISNULL(normal_ctx = static_cast<ObExprNormalCtx *>(
               exec_ctx.get_expr_op_ctx(op_id)))) {
     if (OB_FAIL(exec_ctx.create_expr_op_ctx(op_id, normal_ctx))) {
-      LOG_WARN("failed to create operator ctx", K(ret), K(op_id));
     } else if (OB_ISNULL(normal_ctx)) {
       ret = OB_ALLOCATE_MEMORY_FAILED;
       LOG_WARN("normal ctx is NULL", K(ret));
     } else if (OB_FAIL(normal_ctx->initialize(ctx, expr))) {
-      LOG_WARN("fail init normal context", K(ret));
     }
   }
 
@@ -106,7 +101,6 @@ int ObExprNormal::eval_next_value(const ObExpr &expr,
       int64_t	seed = rand_val.get_int();
       double next_value_res = 0.0;
       if (OB_FAIL(normal_ctx->generate_next_value(seed, next_value_res))) {
-        LOG_WARN("fail generate next normal value", K(ret), K(seed));
       } else {
         res_datum.set_double(next_value_res);
       }

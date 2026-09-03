@@ -28,13 +28,24 @@ namespace sql
 {
 class ObPCVSet;
 
+struct PsClosedStmt
+{
+  PsClosedStmt() : stmt_id_(OB_INVALID_STMT_ID), closed_timestamp_(0), reclaimable_size_(0) {}
+  ObPsStmtId stmt_id_;
+  int64_t closed_timestamp_;
+  int64_t reclaimable_size_;
+  TO_STRING_KV(K_(stmt_id), K_(closed_timestamp), K_(reclaimable_size));
+};
+
 class ObGetClosedStmtIdOp
 {
 public:
-  ObGetClosedStmtIdOp(common::ObIArray< std::pair<ObPsStmtId, int64_t> > *expired_ps,
-                      common::ObIArray< std::pair<ObPsStmtId, int64_t> > *closed_ps)
+  ObGetClosedStmtIdOp(common::ObIArray<PsClosedStmt> *expired_ps,
+                      common::ObIArray<PsClosedStmt> *closed_ps,
+                      const int64_t map_entry_charge)
     : closed_ps_(closed_ps),
       expired_ps_(expired_ps),
+      map_entry_charge_(map_entry_charge),
       used_size_(0),
       callback_ret_(OB_SUCCESS)
   {
@@ -50,22 +61,25 @@ public:
       callback_ret_ = common::OB_INVALID_ARGUMENT;
       SQL_PC_LOG(WARN, "ps session info is null", KP(entry.second), K_(callback_ret));
     } else if (1 == entry.second->get_ref_count()) {
-      std::pair<ObPsStmtId, int64_t> id_time;
-      id_time.first = entry.first;
-      id_time.second = entry.second->get_last_closed_timestamp();
+      PsClosedStmt closed_stmt;
+      closed_stmt.stmt_id_ = entry.first;
+      closed_stmt.closed_timestamp_ = entry.second->get_last_closed_timestamp();
+      // A schema-expired ObPsStmtInfo can outlive its ObPsStmtItem: the
+      // prepare path erases the item first, while the timer removes the info
+      // later.  ps_item_ is therefore not safe to dereference here.  Use the
+      // item-and-info size snapshot copied into the info when it was built.
+      closed_stmt.reclaimable_size_ = entry.second->get_item_and_info_size() + map_entry_charge_;
       if (entry.second->is_expired()) {
         // for expired ps info, only evicted once;
         // use cas, because auto cache evict and flush ps cache may concurrent processing
         if (ATOMIC_BCAS(entry.second->get_is_expired_evicted_ptr(), false, true)) {
-          if (OB_SUCCESS != (callback_ret_ = expired_ps_->push_back(id_time))) {
-            SQL_PC_LOG(WARN, "fail to push back key", K_(callback_ret));
+          if (OB_SUCCESS != (callback_ret_ = expired_ps_->push_back(closed_stmt))) {
           }
         }
       } else {
-        if (OB_SUCCESS != (callback_ret_ = closed_ps_->push_back(id_time))) {
-          SQL_PC_LOG(WARN, "fail to push back key", K_(callback_ret));
+        if (OB_SUCCESS != (callback_ret_ = closed_ps_->push_back(closed_stmt))) {
         } else {
-          used_size_ += entry.second->get_item_and_info_size();
+          used_size_ += closed_stmt.reclaimable_size_;
         }
       }
     }
@@ -75,7 +89,7 @@ public:
     //   to return immediately, yet for all the existing logics there, they don't care the return
     //   code and wants to continue iteration anyway. So to keep the old behavior and makes everyone
     //   else happy, we have to return OB_SUCCESS here. And we only make this return code thing
-    //   affects the behavior in tenant meta manager washing tablet. If you want to change the
+    //   affects tablet metadata eviction. If you want to change the
     //   behavior in such places, please consult the individual file owners to fully understand the
     //   needs there.
     return common::OB_SUCCESS;
@@ -84,8 +98,9 @@ public:
   int get_callback_ret() { return callback_ret_; }
   int64_t get_used_size() { return used_size_; }
 private:
-  common::ObIArray< std::pair<ObPsStmtId, int64_t> > *closed_ps_;
-  common::ObIArray< std::pair<ObPsStmtId, int64_t> > *expired_ps_;
+  common::ObIArray<PsClosedStmt> *closed_ps_;
+  common::ObIArray<PsClosedStmt> *expired_ps_;
+  int64_t map_entry_charge_;
   int64_t used_size_;
   int callback_ret_;
   DISALLOW_COPY_AND_ASSIGN(ObGetClosedStmtIdOp);
@@ -115,7 +130,7 @@ public:
     //   to return immediately, yet for all the existing logics there, they don't care the return
     //   code and wants to continue iteration anyway. So to keep the old behavior and makes everyone
     //   else happy, we have to return OB_SUCCESS here. And we only make this return code thing
-    //   affects the behavior in tenant meta manager washing tablet. If you want to change the
+    //   affects tablet metadata eviction. If you want to change the
     //   behavior in such places, please consult the individual file owners to fully understand the
     //   needs there.
     return common::OB_SUCCESS;
@@ -228,8 +243,8 @@ protected:
   typedef common::hash::HashMapPair<ObPlanCacheKey, ObPCVSet *> PsPlanCacheKV;
 
 public:
-  ObPsPCVSetAtomicOp(const CacheRefHandleID ref_handle)
-    : pcv_set_(NULL), ref_handle_(ref_handle) {}
+  ObPsPCVSetAtomicOp()
+    : pcv_set_(NULL) {}
   virtual ~ObPsPCVSetAtomicOp() {}
   // get pcv_set and lock
   virtual int get_value(ObPCVSet *&pcv_set);
@@ -243,7 +258,6 @@ protected:
   // back to the caller via the callback functor.
   // pcv_set_ - the plan cache value that is referenced.
   ObPCVSet *pcv_set_;
-  const CacheRefHandleID ref_handle_;
 private:
   DISALLOW_COPY_AND_ASSIGN(ObPsPCVSetAtomicOp);
 };
@@ -251,8 +265,8 @@ private:
 class ObPsPCVSetWlockAndRef : public ObPsPCVSetAtomicOp
 {
 public:
-  ObPsPCVSetWlockAndRef(const CacheRefHandleID ref_handle)
-    : ObPsPCVSetAtomicOp(ref_handle) {}
+  ObPsPCVSetWlockAndRef()
+    : ObPsPCVSetAtomicOp() {}
   virtual ~ObPsPCVSetWlockAndRef() {}
   int lock(ObPCVSet &pcv_set)
   {
@@ -265,8 +279,8 @@ private:
 class ObPsPCVSetRlockAndRef : public ObPsPCVSetAtomicOp
 {
 public:
-  ObPsPCVSetRlockAndRef(const CacheRefHandleID ref_handle)
-    : ObPsPCVSetAtomicOp(ref_handle) {}
+  ObPsPCVSetRlockAndRef()
+    : ObPsPCVSetAtomicOp() {}
   virtual ~ObPsPCVSetRlockAndRef() {}
   int lock(ObPCVSet &pcvs)
   {

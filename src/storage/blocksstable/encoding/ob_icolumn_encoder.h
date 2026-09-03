@@ -55,7 +55,7 @@ public:
 
   struct EncoderDesc
   {
-    bool need_data_store_; // need store data (column store/row store) outside meta
+    bool need_data_store_; // Whether column payload is stored outside metadata.
     bool is_var_data_; // is store var length data in row store
     bool has_null_;
     bool has_nope_;
@@ -155,7 +155,7 @@ public:
       const int64_t bits_size,
       Getter &getter);
   template <typename BitPackingValueGetter, typename FixDataSetter>
-  int fill_column_store(
+  int fill_fixed_data(
       ObBufferWriter &writer,
       const ObColDatums &datums,
       BitPackingValueGetter &getter,
@@ -218,7 +218,6 @@ int ObIColumnEncoder::store_fix_bits(
             || STORED_NOT_EXT == get_stored_ext_value(datum)) {
           uint64_t v = 0;
           if (OB_FAIL(getter(row_id, datum, v))) {
-            STORAGE_LOG(WARN, "get value failed", K(ret), K(datum), K(v));
           } else {
             ObBitStream::memory_safe_set(reinterpret_cast<unsigned char *>(buf),
                 pos, desc_.bit_packing_length_, v);
@@ -232,7 +231,7 @@ int ObIColumnEncoder::store_fix_bits(
 }
 
 template <typename BitPackingValueGetter, typename FixDataSetter>
-int ObIColumnEncoder::fill_column_store(
+int ObIColumnEncoder::fill_fixed_data(
     ObBufferWriter &writer,
     const ObColDatums &datums,
     BitPackingValueGetter &getter,
@@ -249,11 +248,9 @@ int ObIColumnEncoder::fill_column_store(
     calc_fix_data_size(datums.count(), bit_data_size, fix_data_size);
     // extra 8 bytes for memory safe bit setting
     if (OB_FAIL(writer.advance_zero(fix_data_size + sizeof(uint64_t)))) {
-      STORAGE_LOG(WARN, "buffer advance failed", K(ret), K(fix_data_size));
     } else {
       if (bit_data_size > 0) {
         if (OB_FAIL(store_fix_bits(buf, &datums, bit_data_size, getter))) {
-          STORAGE_LOG(WARN, "store fix bit data failed", K(ret));
         }
       }
     }
@@ -265,7 +262,6 @@ int ObIColumnEncoder::fill_column_store(
         if (HAS_MEMBER(FixDataSetter, INCLUDE_EXT_CELL)
             || STORED_NOT_EXT == get_stored_ext_value(datum)) {
           if (OB_FAIL(setter(row_id, datum, buf, desc_.fix_data_length_))) {
-            STORAGE_LOG(WARN, "set data failed", K(ret), K(row_id), K(datum));
           }
         }
         buf += desc_.fix_data_length_;
@@ -275,7 +271,6 @@ int ObIColumnEncoder::fill_column_store(
     if (OB_SUCC(ret)) {
       // revert extra bytes
       if (OB_FAIL(writer.backward(sizeof(uint64_t)))) {
-        STORAGE_LOG(WARN, "backward buffer failed", K(ret));
       }
     }
   }

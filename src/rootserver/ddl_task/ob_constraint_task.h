@@ -96,7 +96,6 @@ public:
       const share::ObDDLType ddl_type,
       const int64_t schema_version,
       const obcall::ObAlterTableArg &alter_table_arg,
-      const int64_t consumer_group_id,
       const int32_t sub_task_trace_id,
       const int64_t parent_task_id = 0,
       const int64_t status = share::ObDDLTaskStatus::WAIT_TRANS_END,
@@ -147,7 +146,7 @@ private:
   common::TCRWLock lock_;
   obcall::ObAlterTableArg alter_table_arg_;
   common::ObArenaAllocator allocator_;
-  ObRootService *root_service_;
+  ObLocalManagementService *local_management_service_;
   int64_t check_job_ret_code_;
   int64_t check_replica_request_time_;
   bool is_table_hidden_;
