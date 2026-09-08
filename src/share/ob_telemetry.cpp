@@ -1385,6 +1385,9 @@ static size_t discard(void* ptr, size_t size, size_t nmemb, void* userdata) {
 
 int send_telemetry_by_libcurl(const char *url, const ObString &json_str)
 {
+#ifdef __EMSCRIPTEN__
+  return OB_NOT_SUPPORTED;
+#else
   int ret = OB_SUCCESS;
   CURL *curl = curl_easy_init();
   if (curl == nullptr) {
@@ -1436,6 +1439,7 @@ int send_telemetry_by_libcurl(const char *url, const ObString &json_str)
     curl_easy_cleanup(curl);
   }
   return ret;
+#endif
 }
 
 int send_telemetry(const char *url, const ObString &json_str)
@@ -1451,12 +1455,17 @@ int send_telemetry(const char *url, const ObString &json_str)
 
 bool is_telemetry_enabled()
 {
+#ifdef __EMSCRIPTEN__
+  // The browser host owns optional telemetry and its transport configuration.
+  return false;
+#else
   bool bret = true;
   const char* telemetry_enabled = getenv("TELEMETRY_ENABLED");
   if (NULL != telemetry_enabled && 0 == STRCMP(telemetry_enabled, "false")) {
     bret = false;
   }
   return bret;
+#endif
 }
 
 int report_telemetry(const char *reporter, const char *event_name)
