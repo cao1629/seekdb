@@ -10,7 +10,8 @@ pre { white-space: pre-wrap; overflow-wrap: anywhere; padding: 16px; background:
 </style>
 <h1>seekdb WASM 浏览器验证</h1>
 <p>在独立 Worker 中启动真实数据库，验证 SQL、事务、取消、关闭和重新打开。
-当前使用内存存储，重新打开后为空库。</p>
+内存模式下重新打开后为空库；浏览器提供 OPFS 时，再验证持久化模式的重开、单实例锁和清空。
+注意：持久化用例会删除当前 origin 在 OPFS 里保存的整个数据库，包括同一 origin 下 shell 保存的数据。</p>
 <p><a href="./database-console.html">打开 SQL 控制台，连接数据库并执行 SQL</a></p>
 <p id="launch-help" hidden>请通过本地服务器访问已构建的页面：
 <a href="http://127.0.0.1:8766/database-browser.html">打开 seekdb 浏览器测试页</a>。
@@ -40,7 +41,7 @@ button.onclick = async () => {
   status.textContent = '正在运行';
   const report = message => { output.textContent += `${message}\n`; };
   const evidence = {startedAt: new Date().toISOString(), userAgent: navigator.userAgent,
-    crossOriginIsolated: globalThis.crossOriginIsolated, storage: 'MEMFS', messages: []};
+    crossOriginIsolated: globalThis.crossOriginIsolated, storage: 'memory, then OPFS when available', messages: []};
   window.seekdbTestResult = evidence;
   try {
     if (location.protocol === 'file:') throw new Error('请通过本地测试服务器打开页面');

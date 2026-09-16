@@ -1508,7 +1508,7 @@ int ObSchemaServiceSQLImpl::fetch_aux_tables(
                                                 "FROM ( "\
                                                 "  SELECT /*+ index(%s idx_data_table_id) */ DISTINCT table_id AS tid "\
                                                 "  FROM %s "\
-                                                "  WHERE data_table_id = %lu "\
+                                                "  WHERE data_table_id = %" PRIu64 " "\
                                                 ") l "\
                                                 "JOIN %s r "\
                                                 "ON r.table_id = l.tid "\
@@ -1516,7 +1516,7 @@ int ObSchemaServiceSQLImpl::fetch_aux_tables(
                                                 "  SELECT /*+ no_rewrite */ schema_version "\
                                                 "  FROM %s "\
                                                 "  WHERE table_id = l.tid "\
-                                                "  AND schema_version <= %ld "\
+                                                "  AND schema_version <= %" PRId64 " "\
                                                 "  ORDER BY schema_version DESC LIMIT 1 "\
                                                 ") "\
                                                 "AND is_deleted = 0 "\

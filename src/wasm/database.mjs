@@ -1,5 +1,5 @@
 // Copyright (c) 2026 OceanBase. SPDX-License-Identifier: Apache-2.0
-import {runtimeArguments} from './runtime-host.mjs';
+import {persistentStorageAvailable, runtimeArguments, storageMode} from './runtime-host.mjs';
 import {SqlError} from './mysql-wire.mjs';
 export {SqlError};
 
@@ -10,35 +10,76 @@ function restoreError(record) {
   return error;
 }
 
+const PERSISTENT_LOCK = 'seekdb-wasm-opfs';
+
+// WasmFS does not enforce file locks, so a Web Lock keeps the persistent
+// database to one instance per origin across tabs and windows.
+async function acquirePersistentLock() {
+  if (typeof navigator === 'undefined' || !navigator.locks) return () => {};
+  let release;
+  const held = new Promise(resolve => { release = resolve; });
+  const granted = await new Promise((resolve, reject) => {
+    navigator.locks.request(PERSISTENT_LOCK, {ifAvailable: true}, lock => {
+      resolve(lock !== null);
+      return lock === null ? undefined : held;
+    }).catch(reject);
+  });
+  if (!granted) throw new Error('The persistent database is already open in another tab or window');
+  return release;
+}
+
 // Each open owns a fresh Worker/module; close awaits native destruction before
-// terminating it. This build uses MEMFS: opening again creates an empty database.
+// terminating it. Storage 'memory' starts empty on every open. Storage 'opfs'
+// keeps the data directory in the origin private file system, one open at a time.
 export class Database {
   #worker;
+  #release;
   #requests = new Map();
   #serial = 0;
   #failure;
   #closing;
   #terminating;
 
-  static async open({moduleURL, budgets, workerURL = new URL('./database-worker.mjs', import.meta.url),
+  static async open({moduleURL, budgets, storage = 'memory', workerURL = new URL('./database-worker.mjs', import.meta.url),
     workerFactory = url => new Worker(url, {type: 'module'})} = {}) {
     if (!moduleURL) throw new TypeError('moduleURL is required');
     runtimeArguments(budgets);
+    storageMode(storage);
     if (typeof window !== 'undefined' && !globalThis.crossOriginIsolated) {
       throw new Error('seekdb requires cross-origin isolation (COOP/COEP) for pthreads');
     }
-    const db = new Database(workerFactory(workerURL));
+    if (storage === 'opfs' && !persistentStorageAvailable()) {
+      throw new Error('This browser does not offer persistent storage (OPFS)');
+    }
+    const release = storage === 'opfs' ? await acquirePersistentLock() : undefined;
+    let db;
     try {
-      await db.#request('open', {moduleURL: String(moduleURL), budgets});
+      db = new Database(workerFactory(workerURL), release);
+      await db.#request('open', {moduleURL: String(moduleURL), budgets, storage});
       return db;
     } catch (error) {
-      await db.#terminate();
+      if (db) await db.#terminate();
+      else release?.();
       throw error;
     }
   }
 
-  constructor(worker) {
+  // Removes everything in the origin private file system root, which is the
+  // persistent data directory. Fails while a persistent database is open.
+  static async clearPersistentStorage() {
+    if (!persistentStorageAvailable()) throw new Error('This browser does not offer persistent storage (OPFS)');
+    const release = await acquirePersistentLock();
+    try {
+      const root = await navigator.storage.getDirectory();
+      const names = [];
+      for await (const name of root.keys()) names.push(name);
+      for (const name of names) await root.removeEntry(name, {recursive: true});
+    } finally { release(); }
+  }
+
+  constructor(worker, release) {
     this.#worker = worker;
+    this.#release = release;
     const message = data => {
       if (data.fatal) { this.#fatal(restoreError(data.fatal)); return; }
       const pending = this.#requests.get(data.id);
@@ -68,7 +109,7 @@ export class Database {
   }
 
   #terminate() {
-    this.#terminating ??= Promise.resolve().then(() => this.#worker.terminate());
+    this.#terminating ??= Promise.resolve().then(() => this.#worker.terminate()).finally(() => this.#release?.());
     return this.#terminating;
   }
 

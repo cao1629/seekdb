@@ -4,7 +4,9 @@ The target is the seekdb execution and storage engine running locally in a
 desktop browser, with SQL, transactions, vector indexes, and recoverable local
 storage. The implementation is in progress. There is no usable browser database
 artifact verified in a browser yet. A real engine module and async Worker API
-now pass the Node integration test described below; persistence is still MEMFS.
+now pass the Node integration test described below; persistence runs on WasmFS
+over the origin private file system, with the limits listed under
+[storage modes](#storage-modes-and-the-wasmfs-adapter).
 
 Requirements follow [seekdb WebAssembly 可行性调研](https://yuque.antfin.com/obopensrc/tignua/cqo1pglv4ybaovay).
 Work began at `a48096008` on `feature/webassembly`, newer than the report's
@@ -122,9 +124,11 @@ each event. `close()` releases sessions, awaits the native stop/wait/destroy
 and runtime exit, then terminates the Worker. Runtime faults reject pending
 requests and terminate the Worker.
 
-Storage is currently **MEMFS only**. Reopening means starting a fresh empty
-database; it does not recover prior data. OPFS, import/export and durable commit
-semantics remain implementation work. The module currently prewarms 64 pthread
+`Database.open({storage})` selects where the data directory lives: `memory`
+(the default) uses the WasmFS memory backend and reopening starts empty; `opfs`
+mounts the origin private file system and reopening recovers committed data,
+one instance per origin. A durable commit contract on OPFS is not established
+yet; see [storage modes](#storage-modes-and-the-wasmfs-adapter). The module currently prewarms 64 pthread
 workers, starts with 512 MiB linear memory, and permits growth to 2 GiB. These
 are configured development budgets, not measured minimum browser requirements.
 Host budgets additionally control the engine memory, allocator, cache,
@@ -151,6 +155,9 @@ rollback and repeated wraparound in a 4 KiB ring, passes after the change in
 Wasm and a native macOS build. The complete Worker test passes after the fix.
 
 ### Browser validation entry point
+
+For the terminal-style browser shell, see [seekdb WebAssembly shell](webassembly-shell.md)
+for its launcher, examples, keyboard controls, and tests.
 
 For interactive SQL, open `http://127.0.0.1:8766/database-console.html` on the
 same server. Choose **连接数据库**, then **执行 SQL** or **创建示例表和数据**.
@@ -223,16 +230,77 @@ SQL equivalence, browser compatibility, or workload performance. The earlier
 malformed internal DDL run also timed out during cleanup; failure injection
 must cover partial DDL rollback under the final persistence implementation.
 
-### Persistence integration boundary
+### Storage modes and the WasmFS adapter
 
-The pinned Emscripten 4.0.23 sources were checked before selecting a backend.
+`seekdb_wasm_database` links with `-sWASMFS`. The runtime's last argument is
+the storage word: `memory` leaves the WasmFS memory backend in place, `opfs`
+mounts the OPFS backend at `/seekdb` before the server starts, and a request
+for `opfs` where `navigator.storage.getDirectory` is missing fails the start
+instead of falling back. The backend root is the origin's OPFS root, so the
+data directory's `store/`, `clog/`, `etc/`, `log/` and `run/` appear directly
+under it. `seekdb_wasm_database_memfs` links the same objects on the legacy
+JavaScript file system for comparison; it accepts only `memory`.
+
+The pinned Emscripten 4.0.23 sources were checked before selecting the backend.
 Its WasmFS `fcntl` implementation returns success for process-level lock
 requests without enforcing them; `__wasi_fd_sync` also returns success for
-directories without syncing directory metadata. The OPFS backend delegates
-file moves to the host handle and does not implement directory moves. Therefore
-enabling WasmFS/OPFS alone cannot satisfy seekdb's file, PALF and SQLite
-contracts. Storage ownership, lock enforcement, namespace operations and
-commit/recovery boundaries still need an explicit adapter and fault tests.
+directories without syncing directory metadata; the OPFS backend delegates
+file moves to `FileSystemFileHandle.move()` and refuses directory moves with
+`EBUSY`. Three more gaps showed up when the engine ran on it. `wasmfs_adapter.cpp`
+wraps the file syscalls with `wasm-ld --wrap` and works around them:
+
+- WasmFS asserts on open flags outside its list, and PALF opens blocks with
+  `O_DIRECT | O_SYNC`; the `openat` wrapper strips `O_DIRECT`, `O_SYNC`,
+  `O_DSYNC`, `O_NOATIME` and `O_NOCTTY`.
+- Inside a mounted backend WasmFS answers `getcwd` with `/`, so after
+  `chdir("/seekdb")` relative paths resolved to `//store/...` and `init_config`
+  failed with `OB_ERR_UNEXPECTED`; the wrapper records the last absolute
+  `chdir` path and returns it whenever WasmFS answers `/`.
+- PALF creates `log_stream.tmp` and renames it to `log_stream`, and
+  `rename_with_retry` retries forever; the `renameat` wrapper emulates a
+  directory move on `EBUSY` by creating the target, renaming each entry and
+  removing the source. File moves are atomic in OPFS but the sequence is not,
+  so the wrapper first records the two absolute paths in `/seekdb/.move`
+  (one slot; the engine moves directories one at a time) and removes the
+  record when the move is done. A move that fails midway is resumed by the
+  engine's retry; a move cut off by a crash is finished right after the next
+  mount, before the engine looks at the directory.
+
+The wrappers also print failing file calls to stderr, at most 300 lines and
+without the expected failures (`ENOENT` from existence probes, `EEXIST` from
+`mkdir`, and the `EIO` OPFS returns when SQLite unlinks the open WAL index
+`meta.db-shm`, which then stays behind and is reused), so a stuck start shows
+the last file operation in the browser console. Files still open when `main`
+returns would be torn down by WasmFS while open, which the OPFS backend
+rejects with an assertion and which keeps their access handles locked, so the
+runtime closes every remaining descriptor after `ObServer::destroy()`.
+
+On the JavaScript side, `Database.open({storage: 'opfs'})` first takes a Web
+Lock (`navigator.locks`, `ifAvailable`) so one instance per origin holds the
+files; a second open reports that the database is open in another tab. Without
+it a second instance would read stale Blob snapshots of the files and fail on
+its first write open, since the OPFS backend returns `EACCES` when the sync
+access handle is taken — a file error deep in startup instead of a clear
+message. The Worker then tries a sync access handle on every file under the
+OPFS root before starting the engine, retrying for up to three seconds, because
+the previous owner's handles are released a little after its Worker ends; a
+file still held after that is reported as locked by another page.
+`Database.clearPersistentStorage()` removes every entry under the OPFS root
+under the same lock.
+
+Verified in headless Chrome: the shell starts on OPFS in about 3 s; committed
+rows survive a clean close and reload, and a reload without an explicit close
+(the page's `pagehide` handler still closes the database); a second tab is
+refused; deleting stored data restarts an empty database; the browser cases
+add a stored reopen, the one-instance rule, a directory move cut off between
+two entries, a file held by another Worker, and clearing. Not covered yet:
+
+- Durability. Directory `fsync` is a no-op and WasmFS does not enforce file
+  locks; the Web Lock and the handle probe cover pages, not a crashed browser
+  mid-write.
+- `getcwd` belongs in WasmFS or in absolute paths in the engine, not in the wrapper.
+- Safari has no `FileSystemFileHandle.move()`, so file renames fail there.
+- Quota exhaustion and failed flushes are untested.
 
 ## Configure engine dependencies
 
@@ -725,7 +793,7 @@ transport additionally exercises these layouts across the Wasm C++/Rust boundary
 | --- | --- | --- |
 | G0: platform primitives and dependency closure | Emscripten 4.0.23 wasm32: real allocator links and runs; atomic, stack/backtrace, futex and memory/thread Node tests pass | Browser runs; engine stack budgets; CAS128/list caller audit; target ABI/varargs audit; minimal service thread and I/O wait graph; complete dependency/source inventory |
 | G1: browser memory database | Node real SQL lifecycle and production async Worker API pass: authentication, CRUD, commit/rollback, invalid-SQL recovery, disconnect rollback/write-lock release, result abandonment, cancellation, complete shutdown, fresh-Worker reopen and startup failure cleanup | Actual browser lifecycle; native SQL comparison; browser cancellation and measured thread/memory budgets |
-| G2: persistence and recovery | Not implemented | Data-device, PALF and SQLite VFS integration; flush/rename/lock semantics; normal reopen, worker termination, failed flush, quota exhaustion and competing instances; clear commit durability contract |
+| G2: persistence and recovery | WasmFS on OPFS with the syscall adapter: the shell starts on the origin private file system in headless Chrome, committed rows survive a clean close and a reload without one, a Web Lock keeps one instance per origin, and the browser cases cover stored reopen and clearing | Durable commit contract on OPFS (directory fsync is a no-op, WasmFS does not enforce file locks, the emulated directory move is not atomic); failed flush and quota exhaustion; Safari without `FileSystemFileHandle.move()`; recovery from an interrupted first start |
 | G3: AI functionality and product measurements | Real SQL HNSW, exact-distance, fulltext mutation/rollback and ANN-plus-text candidate join pass on small Node fixtures; earlier VSAG component tests have native comparisons | All emitted index configurations/parser languages; index refresh/rebuild and persistent restart consistency; ranking fusion; native SQL comparison; recall/performance; Chrome/Safari/Firefox results; size/startup/memory/latency/cancel metrics |
 
 Current runtime tests cover four concurrent threads performing 100,000 total
@@ -771,9 +839,10 @@ HNSW, stream-size guards, VSAG index-support recovery, BLAS/LAPACK, the public
 VSAG factory, PALF block allocation, and memory NIO).
 These are not an engine startup or recovery test.
 
-The database browser cases now pass in the Codex in-app browser against MEMFS
-(see the browser validation entry point above). Other browser engines and
-persistent recovery remain unverified.
+The database browser cases pass in headless Chrome, including the persistent
+storage case that reopens on OPFS, refuses a second instance and clears the
+stored files (see the browser validation entry point above). Other browser
+engines remain unverified.
 
 The development bootstrap target executes the actual `ObServer` against fresh
 MEMFS. It remains a separately invoked lifecycle experiment, outside CTest:

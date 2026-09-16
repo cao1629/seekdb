@@ -17,10 +17,53 @@ export function runtimeArguments(options = {}) {
   return Object.values(budget).map(String);
 }
 
+export const STORAGE_MODES = ['memory', 'opfs'];
+
+export function storageMode(storage = 'memory') {
+  if (!STORAGE_MODES.includes(storage)) throw new TypeError(`Unknown storage: ${storage}`);
+  return storage;
+}
+
+export function persistentStorageAvailable() {
+  return typeof navigator !== 'undefined' && typeof navigator.storage?.getDirectory === 'function';
+}
+
+// Sync access handles are exclusive per file, and the previous owner of the
+// data directory may still be releasing them when this Worker starts.
+async function waitForUnlockedFiles(deadline = 3000) {
+  const files = [];
+  async function collect(directory) {
+    for await (const handle of directory.values()) {
+      if (handle.kind === 'directory') await collect(handle);
+      else files.push(handle);
+    }
+  }
+  await collect(await navigator.storage.getDirectory());
+  const until = Date.now() + deadline;
+  for (const file of files) {
+    for (;;) {
+      try {
+        (await file.createSyncAccessHandle()).close();
+        break;
+      } catch (error) {
+        if (error?.name !== 'NoModificationAllowedError') {
+          throw new Error(`Stored database file ${file.name} cannot be opened: ${error?.message ?? error}`);
+        }
+        if (Date.now() >= until) throw new Error(`Stored database file ${file.name} is locked by another page`);
+        await new Promise(resolve => setTimeout(resolve, 100));
+      }
+    }
+  }
+}
+
 // Internal owner-side API. All calls occur in one Worker. Runtime exit, rather
 // than just a stop flag, acknowledges that ObServer has joined and destroyed.
-export async function openRuntime(factory, {budgets, onFatal = () => {}} = {}) {
-  const args = runtimeArguments(budgets);
+export async function openRuntime(factory, {budgets, storage, onFatal = () => {}} = {}) {
+  const args = [...runtimeArguments(budgets), storageMode(storage)];
+  if (args.at(-1) === 'opfs') {
+    if (!persistentStorageAvailable()) throw new Error('Persistent storage (OPFS) is not available in this Worker');
+    await waitForUnlockedFiles();
+  }
   let terminal;
   let finish;
   const exited = new Promise(resolve => { finish = resolve; });

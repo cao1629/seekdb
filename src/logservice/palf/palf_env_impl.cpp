@@ -16,6 +16,7 @@
 
 #define USING_LOG_PREFIX PALF
 #include "palf_env_impl.h"
+#include <cinttypes>
 #ifdef _WIN32
 #include <direct.h>
 #endif
@@ -865,7 +866,7 @@ int PalfEnvImpl::move_incomplete_palf_into_tmp_dir_()
   } else if (0 > (pret = snprintf(src_log_dir, MAX_PATH_SIZE, "%s/log_stream", log_dir_))) {
     ret = OB_ERR_UNEXPECTED;
     PALF_LOG(ERROR, "snprintf failed, unexpected error", K(ret));
-  } else if (0 > (pret = snprintf(dest_log_dir, MAX_PATH_SIZE, "%s/log_stream_%ld", tmp_log_dir_, timestamp))) {
+  } else if (0 > (pret = snprintf(dest_log_dir, MAX_PATH_SIZE, "%s/log_stream_%" PRId64, tmp_log_dir_, timestamp))) {
     ret = OB_ERR_UNEXPECTED;
     PALF_LOG(ERROR, "snprintf failed, unexpected error", K(ret));
   } else if (OB_FAIL(rename_with_retry(src_log_dir, dest_log_dir))) {

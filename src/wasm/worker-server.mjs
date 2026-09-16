@@ -22,7 +22,7 @@ export function installWorkerServer({listen, send}) {
       if (opening) throw new Error('Worker already opened a database');
       opening = true;
       const {default: factory} = await import(message.moduleURL);
-      runtime = await openRuntime(factory, {budgets: message.budgets,
+      runtime = await openRuntime(factory, {budgets: message.budgets, storage: message.storage,
         onFatal: error => send({fatal: errorRecord(error)})});
       return;
     }

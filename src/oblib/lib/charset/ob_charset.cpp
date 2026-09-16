@@ -15,6 +15,7 @@
  */
 
 #define USING_LOG_PREFIX LIB_CHARSET
+#include <climits>
 #include "ob_charset.h"
 #include "lib/worker.h"
 
@@ -391,7 +392,7 @@ char* ObCharset::lltostr(int64_t val, char *dst, int radix, int upcase)
   //use dst(start) and pret(end) to locate string, please.
   char buffer[MAX_BUFFER_SIZE];
   char *p = NULL;
-#ifndef _WIN32
+#if LONG_MAX >= INT64_MAX
   long int new_val = 0;
 #endif
   char *dig_vec= upcase ? DIG_VEC_UPPER : DIG_VEC_LOWER;
@@ -416,7 +417,7 @@ char* ObCharset::lltostr(int64_t val, char *dst, int radix, int upcase)
   if (OB_SUCC(ret)) {
     p = &buffer[sizeof(buffer)-1];
     *p = '\0';
-#ifdef _WIN32
+#if LONG_MAX < INT64_MAX
     // Windows uses LLP64, where long is 32-bit.  Keep the unsigned value in
     // fixed-width arithmetic so positive-radix conversion preserves uint64
     // semantics for negative inputs.

@@ -1,0 +1,90 @@
+<!doctype html>
+<!--
+Copyright (c) 2025 OceanBase.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark light">
+  <meta name="description" content="Run real seekdb SQL and vector search in your browser with WebAssembly.">
+  <title>seekdb shell · WebAssembly</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="./shell.css">
+  <script type="module" src="./shell.mjs"></script>
+</head>
+<body>
+  <header class="masthead">
+    <a class="brand" href="./shell.html" aria-label="seekdb shell home"><span class="brand-mark" aria-hidden="true"></span>seekdb</a>
+    <span id="version-label" class="wasm-label" aria-label="seekdb version" aria-live="polite">Loading…</span>
+    <nav aria-label="Resources">
+      <a href="./shell.html" aria-current="page">Shell</a>
+      <a href="https://github.com/cao1629/seekdb/tree/feature/webassembly-shell" target="_blank" rel="noopener noreferrer">GitHub</a>
+      <button id="help-button" class="text-button">Help</button>
+    </nav>
+  </header>
+  <main class="terminal" aria-label="seekdb SQL shell">
+    <div class="toolbar">
+      <div class="connection"><span id="status-dot" class="status-dot" data-state="loading"></span><strong id="database-name">seekdb</strong><span id="storage-badge" class="storage-badge">memory://</span></div>
+      <div class="toolbar-actions">
+        <label class="sr-only" for="example">Example</label>
+        <select id="example"><option value="quickstart">Quickstart</option><option value="vector">Vector search</option><option value="transaction">Transactions</option></select>
+        <button id="example-button" disabled>Run example</button>
+        <details id="storage-menu" class="menu">
+          <summary title="Choose where the database keeps its data">Storage</summary>
+          <div class="menu-items" role="group" aria-label="Storage">
+            <button id="memory-button" type="button" aria-pressed="true" title="Data lives in memory and clears on reload or close">In memory</button>
+            <button id="opfs-button" type="button" aria-pressed="false" title="Data lives in this browser's origin private file system and survives reloads">In this browser</button>
+            <hr>
+            <button id="wipe-button" type="button" title="Remove the database files stored in this browser">Delete stored data…</button>
+          </div>
+        </details>
+        <button id="clear-button" title="Clear output (Ctrl+L)">Clear</button>
+      </div>
+    </div>
+    <div class="runtime-status sr-only" role="status" aria-live="polite"><span id="status-text">Loading WebAssembly and starting seekdb…</span></div>
+    <div id="terminal-scroll" class="terminal-scroll" tabindex="0" aria-label="Terminal">
+      <section id="transcript" class="transcript" aria-label="SQL output">
+        <div class="welcome">
+          <h1 class="sr-only">seekdb SQL shell</h1>
+          <p>Welcome to the seekdb shell.</p>
+          <p>Engine: seekdb · WebAssembly</p>
+          <p id="storage-hint">Storage: starting…</p>
+          <p>Type SQL and press Enter. Ctrl+L clears the screen.</p>
+        </div>
+      </section>
+    <form id="query-form" class="composer" data-empty="true">
+      <label for="sql" class="prompt" id="prompt">seekdb&gt;</label>
+      <textarea id="sql" rows="1" spellcheck="false" autocomplete="off" autocapitalize="off" aria-label="SQL statement" placeholder="loading…" disabled></textarea>
+      <button id="run-button" type="submit" disabled>Run</button>
+      <button id="cancel-button" class="cancel-button" type="button" hidden>Cancel</button>
+    </form>
+    </div>
+    <footer class="terminal-footer">
+      <span>Enter runs a statement ending in ;<span class="hint-secondary"> · Shift+Enter for a new line</span> · ↑ ↓ history</span>
+      <span id="activity-time"></span>
+      <span class="footer-actions"><span id="engine-label">WebAssembly</span><button id="connection-button" disabled>Starting…</button></span>
+    </footer>
+  </main>
+  <dialog id="help-dialog" aria-labelledby="help-title">
+    <div class="dialog-heading"><h2 id="help-title">Using the shell</h2><button id="help-close" aria-label="Close help">×</button></div>
+    <p>Each tab runs its own seekdb database in a Web Worker; SQL never leaves this browser. The Storage menu chooses where the data lives: in memory, discarded on reload or close, or in this browser's origin private file system (OPFS), kept across reloads and opened by one tab at a time.</p>
+    <dl><dt>Enter</dt><dd>Run SQL ending in a semicolon.</dd><dt>Ctrl / ⌘ + Enter</dt><dd>Run SQL with or without a final semicolon.</dd><dt>Shift + Enter</dt><dd>Add a new line.</dd><dt>↑ / ↓</dt><dd>Browse history at the first or last line.</dd><dt>Escape / Ctrl + C</dt><dd>Cancel a query. The session reconnects; uncommitted changes roll back and session settings reset.</dd><dt>Ctrl + L</dt><dd>Clear output. Your tables and history stay.</dd></dl>
+    <div class="help-commands"><code>\help</code> help <code>\clear</code> clear output <code>\tables</code> show tables <code>\databases</code> show databases</div>
+    <p>Statements in a batch run in order and stop on the first error. Results show up to 500 rows and 100 columns, with a limit on displayed text. Use LIMIT for large queries. Use backticks for quoted identifiers; ANSI_QUOTES, DELIMITER, and stored-program scripts are not supported.</p>
+  </dialog>
+  <noscript>This shell needs JavaScript and a browser that supports WebAssembly threads.</noscript>
+</body>
+</html>
