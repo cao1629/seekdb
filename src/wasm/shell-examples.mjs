@@ -15,50 +15,42 @@
  */
 
 export const EXAMPLES = Object.freeze({
-  quickstart: `CREATE DATABASE IF NOT EXISTS playground;
+  hybrid: `CREATE DATABASE IF NOT EXISTS playground;
 USE playground;
-CREATE TABLE IF NOT EXISTS shell_notes (
+DROP TABLE IF EXISTS shell_hybrid_demo;
+CREATE TABLE shell_hybrid_demo (
   id INT PRIMARY KEY,
-  title VARCHAR(100),
-  topic VARCHAR(40)
-);
-INSERT IGNORE INTO shell_notes VALUES
-  (1, 'Browser SQL', 'WebAssembly'),
-  (2, 'Vector search', 'Search'),
-  (3, 'Safe experiments', 'Transactions');
-SELECT id, title, topic FROM shell_notes ORDER BY id;`,
-
-  vector: `CREATE DATABASE IF NOT EXISTS playground;
-USE playground;
-CREATE TABLE IF NOT EXISTS shell_vectors (
-  id INT PRIMARY KEY,
-  label VARCHAR(80),
+  body VARCHAR(200),
+  category VARCHAR(20),
   embedding VECTOR(3),
-  VECTOR INDEX shell_hnsw(embedding)
+  FULLTEXT INDEX body_ft(body),
+  VECTOR INDEX embedding_idx(embedding)
     WITH (distance=l2, type=hnsw, lib=vsag)
 );
-INSERT IGNORE INTO shell_vectors VALUES
-  (1, 'Reference vector', '[1,0,0]'),
-  (2, 'One unit away', '[1,1,0]'),
-  (3, 'Three units away', '[1,0,3]');
-SELECT id, label, l2_distance(embedding, [1,0,0]) AS distance
-FROM shell_vectors
-ORDER BY l2_distance(embedding, [1,0,0]) LIMIT 3;
-SELECT id, label, l2_distance(embedding, [1,0,0]) AS distance
-FROM shell_vectors
-ORDER BY l2_distance(embedding, [1,0,0]) APPROXIMATE LIMIT 2;`,
+INSERT INTO shell_hybrid_demo VALUES
+  (1, 'database vector search', 'docs', '[1,0,0]'),
+  (2, 'database full text search', 'docs', '[1,1,0]'),
+  (3, 'image classification guide', 'docs', '[1,0,0]'),
+  (4, 'database pricing', 'news', '[1,0.1,0]');
+SELECT id, body, l2_distance(embedding, '[1,0,0]') AS distance
+FROM shell_hybrid_demo
+WHERE MATCH(body) AGAINST('database') AND category = 'docs'
+ORDER BY distance APPROXIMATE LIMIT 3;`,
 
-  transaction: `CREATE DATABASE IF NOT EXISTS playground;
+  fork: `CREATE DATABASE IF NOT EXISTS playground;
 USE playground;
-CREATE TABLE IF NOT EXISTS shell_accounts (
+DROP TABLE IF EXISTS shell_fork_draft;
+DROP TABLE IF EXISTS shell_fork_notes;
+CREATE TABLE shell_fork_notes (
   id INT PRIMARY KEY,
-  balance INT
+  title VARCHAR(80)
 );
-INSERT IGNORE INTO shell_accounts VALUES (1, 100);
-SELECT 'Before transaction' AS stage, balance FROM shell_accounts WHERE id = 1;
-BEGIN;
-UPDATE shell_accounts SET balance = balance + 25 WHERE id = 1;
-SELECT 'Inside transaction' AS stage, balance FROM shell_accounts WHERE id = 1;
-ROLLBACK;
-SELECT 'After rollback' AS stage, balance FROM shell_accounts WHERE id = 1;`,
+INSERT INTO shell_fork_notes VALUES
+  (1, 'Original title'),
+  (2, 'Shared title');
+FORK TABLE shell_fork_notes TO shell_fork_draft;
+UPDATE shell_fork_draft SET title = 'Edited in fork' WHERE id = 1;
+UPDATE shell_fork_notes SET title = 'Edited in source' WHERE id = 2;
+SELECT 'source' AS table_copy, id, title FROM shell_fork_notes ORDER BY id;
+SELECT 'fork' AS table_copy, id, title FROM shell_fork_draft ORDER BY id;`,
 });

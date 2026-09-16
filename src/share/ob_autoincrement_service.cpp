@@ -16,6 +16,8 @@
 
 #define USING_LOG_PREFIX SHARE
 
+#include <inttypes.h>
+
 #include "lib/stat/ob_diagnostic_info_guard.h"
 #include "common/mysqlclient/ob_mysql_transaction.h"
 #include "share/ob_autoincrement_service.h"
@@ -404,8 +406,8 @@ int ObAutoincrementService::lock_autoinc_row(const uint64_t &table_id,
     ObMySQLResult *result = NULL;
     ObISQLClient *sql_client = &trans;
     if (OB_FAIL(lock_sql.assign_fmt("SELECT sequence_key, sequence_value, sync_value "
-                                    "FROM %s WHERE sequence_key = %lu "
-                                    "AND column_id = %lu FOR UPDATE",
+                                    "FROM %s WHERE sequence_key = %" PRIu64 " "
+                                    "AND column_id = %" PRIu64 " FOR UPDATE",
                                     OB_ALL_AUTO_INCREMENT_TNAME,
                                     ObSchemaUtils::get_extract_schema_id(table_id),
                                     column_id))) {
@@ -434,10 +436,10 @@ int ObAutoincrementService::reset_autoinc_row(const uint64_t &table_id,
   ObSqlString update_sql;
   int64_t affected_rows = 0;
   ObASHSetInnerSqlWaitGuard ash_inner_sql_guard(ObInnerSqlWaitTypeId::SEQUENCE_SAVE);
-  if (OB_FAIL(update_sql.assign_fmt("UPDATE %s SET sequence_value = 1, sync_value = 0, truncate_version = %ld",
+  if (OB_FAIL(update_sql.assign_fmt("UPDATE %s SET sequence_value = 1, sync_value = 0, truncate_version = %" PRId64,
                                     OB_ALL_AUTO_INCREMENT_TNAME,
                                     autoinc_version))) {
-  } else if (OB_FAIL(update_sql.append_fmt(" WHERE sequence_key = %lu AND column_id = %lu",
+  } else if (OB_FAIL(update_sql.append_fmt(" WHERE sequence_key = %" PRIu64 " AND column_id = %" PRIu64,
                                             ObSchemaUtils::get_extract_schema_id(table_id),
                                             column_id))) {
   } else if (OB_FAIL(trans.write(update_sql.ptr(), affected_rows))) {
@@ -479,8 +481,8 @@ int ObAutoincrementService::try_lock_autoinc_row(const uint64_t &table_id,
       ret = OB_INVALID_ARGUMENT;
       LOG_WARN("arg is not invalid", KR(ret), K(table_id), K(column_id));
     } else if (OB_FAIL(lock_sql.assign_fmt("SELECT truncate_version "
-                                    "FROM %s WHERE sequence_key = %lu "
-                                    "AND column_id = %lu FOR UPDATE",
+                                    "FROM %s WHERE sequence_key = %" PRIu64 " "
+                                    "AND column_id = %" PRIu64 " FOR UPDATE",
                                     OB_ALL_AUTO_INCREMENT_TNAME,
                                     ObSchemaUtils::get_extract_schema_id(table_id),
                                     column_id))) {
@@ -1208,7 +1210,7 @@ int ObAutoIncInnerTableProxy::next_autoinc_value(const AutoincKey &key,
       
       const char *table_name = OB_ALL_AUTO_INCREMENT_TNAME;
       sql_len = snprintf(sql, OB_MAX_SQL_LENGTH,
-                         " SELECT sequence_key, sequence_value, sync_value, truncate_version FROM %s WHERE sequence_key = %lu AND column_id = %lu FOR UPDATE",
+                         " SELECT sequence_key, sequence_value, sync_value, truncate_version FROM %s WHERE sequence_key = %" PRIu64 " AND column_id = %" PRIu64 " FOR UPDATE",
                          table_name,
                          ObSchemaUtils::get_extract_schema_id(table_id),
                          column_id);
@@ -1288,8 +1290,8 @@ int ObAutoIncInnerTableProxy::next_autoinc_value(const AutoincKey &key,
             start_inclusive = curr_new_value;
 
             sql_len = snprintf(sql, OB_MAX_SQL_LENGTH,
-                              "UPDATE %s SET sequence_value = %lu, gmt_modified = now(6)"
-                              " WHERE sequence_key = %lu AND column_id = %lu AND truncate_version = %ld",
+                              "UPDATE %s SET sequence_value = %" PRIu64 ", gmt_modified = now(6)"
+                              " WHERE sequence_key = %" PRIu64 " AND column_id = %" PRIu64 " AND truncate_version = %" PRId64,
                               table_name,
                               next_sequence_value,
                               table_id,
@@ -1339,7 +1341,7 @@ int ObAutoIncInnerTableProxy::get_autoinc_value(const AutoincKey &key,
     const char *table_name = OB_ALL_AUTO_INCREMENT_TNAME;
     sql_len = snprintf(sql, OB_MAX_SQL_LENGTH,
                         " SELECT sequence_value, sync_value, truncate_version FROM %s"
-                        " WHERE sequence_key = %lu AND column_id = %lu",
+                        " WHERE sequence_key = %" PRIu64 " AND column_id = %" PRIu64,
                         table_name,
                         ObSchemaUtils::get_extract_schema_id(key.table_id_),
                         key.column_id_);
@@ -1410,7 +1412,7 @@ int ObAutoIncInnerTableProxy::get_autoinc_value_in_batch(const common::ObIArray<
     int64_t P = (0 != M && N - 1 == i) ? M : FETCH_SEQ_NUM_ONCE;
     for (int64_t j = 0; OB_SUCC(ret) && j < P; ++j) {
       AutoincKey key = keys.at(i * FETCH_SEQ_NUM_ONCE + j);
-      if (OB_FAIL(sql.append_fmt("%s(%lu, %lu)",
+      if (OB_FAIL(sql.append_fmt("%s(%" PRIu64 ", %" PRIu64 ")",
                                  (0 == j) ? "" : ", ",
                                  key.table_id_,
                                  key.column_id_))) {
@@ -1491,8 +1493,8 @@ int ObAutoIncInnerTableProxy::sync_autoinc_value(const AutoincKey &key,
     
     const char *table_name = OB_ALL_AUTO_INCREMENT_TNAME;
     int64_t fetch_table_id = OB_INVALID_ID;
-    if (OB_FAIL(sql.assign_fmt(" SELECT sequence_key, sequence_value, sync_value, truncate_version FROM %s WHERE sequence_key = %lu"
-                               " AND column_id = %lu FOR UPDATE",
+    if (OB_FAIL(sql.assign_fmt(" SELECT sequence_key, sequence_value, sync_value, truncate_version FROM %s WHERE sequence_key = %" PRIu64
+                               " AND column_id = %" PRIu64 " FOR UPDATE",
                                table_name,
                                ObSchemaUtils::get_extract_schema_id(table_id),
                                column_id))) {
@@ -1558,8 +1560,8 @@ int ObAutoIncInnerTableProxy::sync_autoinc_value(const AutoincKey &key,
         //       > I can't get MAX_VALUE in DDL context. auto inc column type is needed.
         ObASHSetInnerSqlWaitGuard ash_inner_sql_guard(ObInnerSqlWaitTypeId::SEQUENCE_SAVE);
         if (OB_FAIL(sql.assign_fmt(
-                    "UPDATE %s SET sync_value = %lu, sequence_value = %lu, gmt_modified = now(6) "
-                    "WHERE sequence_key=%lu AND column_id=%lu AND truncate_version=%ld",
+                    "UPDATE %s SET sync_value = %" PRIu64 ", sequence_value = %" PRIu64 ", gmt_modified = now(6) "
+                    "WHERE sequence_key=%" PRIu64 " AND column_id=%" PRIu64 " AND truncate_version=%" PRId64,
                     table_name, sync_value, new_seq_value,
                     table_id, column_id, inner_autoinc_version))) {
         } else if (OB_FAIL((trans.write(sql.ptr(), affected_rows)))) {
@@ -1624,8 +1626,8 @@ int ObAutoIncInnerTableProxy::read_and_push_inner_table(const AutoincKey &key,
 
     const char *table_name = OB_ALL_AUTO_INCREMENT_TNAME;
     int64_t fetch_table_id = OB_INVALID_ID;
-    if (OB_FAIL(sql.assign_fmt(" SELECT sequence_value, truncate_version FROM %s WHERE sequence_key = %lu"
-                               " AND column_id = %lu FOR UPDATE",
+    if (OB_FAIL(sql.assign_fmt(" SELECT sequence_value, truncate_version FROM %s WHERE sequence_key = %" PRIu64
+                               " AND column_id = %" PRIu64 " FOR UPDATE",
                                table_name,
                                ObSchemaUtils::get_extract_schema_id(table_id),
                                column_id))) {
@@ -1682,8 +1684,8 @@ int ObAutoIncInnerTableProxy::read_and_push_inner_table(const AutoincKey &key,
           // push new seq value to inner table
           int64_t affected_rows = 0;
           if (OB_FAIL(sql.assign_fmt(
-                      "UPDATE %s SET sequence_value = %lu, gmt_modified = now(6) "
-                      "WHERE sequence_key=%lu AND column_id=%lu AND truncate_version=%ld",
+                      "UPDATE %s SET sequence_value = %" PRIu64 ", gmt_modified = now(6) "
+                      "WHERE sequence_key=%" PRIu64 " AND column_id=%" PRIu64 " AND truncate_version=%" PRId64,
                       table_name, new_seq_value,
                       table_id, column_id, inner_autoinc_version))) {
           } else if (OB_FAIL((trans.write(sql.ptr(), affected_rows)))) {

@@ -1682,6 +1682,7 @@ int ObServer::stop()
   // Module joins above can still emit diagnostics. Keep the ring consumer
   // alive until they finish; otherwise synchronous fallback logs allocate from
   // a stopped ring whose rolled-back entries are never reclaimed.
+  ObTimerService::get_instance().wait();
   OB_LOGGER.stop();
 #endif
   return ret;

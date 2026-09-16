@@ -74,28 +74,22 @@ try {
   }
 
   for (let pass = 1; pass <= 2; pass++) {
-    assert.deepEqual(await executeScript(EXAMPLES.quickstart), [[
-      ['1', 'Browser SQL', 'WebAssembly'],
-      ['2', 'Vector search', 'Search'],
-      ['3', 'Safe experiments', 'Transactions'],
+    assert.deepEqual(await executeScript(EXAMPLES.hybrid), [[
+      ['1', 'database vector search', '0'],
+      ['2', 'database full text search', '1'],
     ]]);
-    assert.deepEqual(await executeScript(EXAMPLES.vector), [
-      [['1', 'Reference vector', '0'], ['2', 'One unit away', '1'], ['3', 'Three units away', '3']],
-      [['1', 'Reference vector', '0'], ['2', 'One unit away', '1']],
+    assert.deepEqual(await executeScript(EXAMPLES.fork), [
+      [['source', '1', 'Original title'], ['source', '2', 'Edited in source']],
+      [['fork', '1', 'Edited in fork'], ['fork', '2', 'Shared title']],
     ]);
-    assert.deepEqual(await executeScript(EXAMPLES.transaction), [
-      [['Before transaction', '100']],
-      [['Inside transaction', '125']],
-      [['After rollback', '100']],
-    ]);
-    console.log(`shell-examples: quickstart, exact search, ANN and rollback passed (run ${pass})`);
+    console.log(`shell-examples: hybrid search and fork isolation passed (run ${pass})`);
   }
 
-  const plan = await query('EXPLAIN SELECT id FROM shell_vectors ORDER BY l2_distance(embedding, [1,0,0]) APPROXIMATE LIMIT 2');
-  assert.ok(plan.flat().some(line => line.includes('VECTOR INDEX SCAN') && line.includes('shell_hnsw')));
-  assert.deepEqual(await query('SELECT COUNT(*) FROM shell_notes'), [['3']]);
-  assert.deepEqual(await query('SELECT COUNT(*) FROM shell_vectors'), [['3']]);
-  assert.deepEqual(await query('SELECT id, balance FROM shell_accounts'), [['1', '100']]);
+  const plan = await query("EXPLAIN SELECT id FROM shell_hybrid_demo ORDER BY l2_distance(embedding, '[1,0,0]') APPROXIMATE LIMIT 2");
+  assert.ok(plan.flat().some(line => line.includes('VECTOR INDEX SCAN') && line.includes('embedding_idx')));
+  assert.deepEqual(await query('SELECT COUNT(*) FROM shell_hybrid_demo'), [['4']]);
+  assert.deepEqual(await query('SELECT COUNT(*) FROM shell_fork_notes'), [['2']]);
+  assert.deepEqual(await query('SELECT COUNT(*) FROM shell_fork_draft'), [['2']]);
   console.log('shell-examples: HNSW index plan and idempotency passed');
 
   const modes = (await query('SELECT @@SESSION.sql_mode'))[0][0];

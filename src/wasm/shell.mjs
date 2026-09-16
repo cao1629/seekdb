@@ -20,14 +20,12 @@ import {formatTable} from './shell-format.mjs';
 const element = id => document.getElementById(id);
 const input = element('sql');
 const transcript = element('transcript');
+const welcome = transcript.querySelector('.welcome');
 const terminalScroll = element('terminal-scroll');
-const connectionButton = element('connection-button');
-const runButton = element('run-button');
-const cancelButton = element('cancel-button');
-const exampleButton = element('example-button');
+const exampleButtons = element('example-menu').querySelectorAll('button');
+const menus = document.querySelectorAll('.menu');
 const versionLabel = element('version-label');
 const storageHint = element('storage-hint');
-const help = element('help-dialog');
 const decoder = new TextDecoder();
 const history = new CommandHistory();
 const decode = value => value === null ? null : decoder.decode(value);
@@ -45,6 +43,7 @@ let activeEntry;
 const STORAGE_KEY = 'seekdb-shell-storage';
 const persistentSupported = typeof navigator.storage?.getDirectory === 'function' && typeof navigator.locks?.request === 'function';
 let storage = rememberedStorage();
+let persistentClearPending = false;
 
 function node(tag, className, text) {
   const result = document.createElement(tag);
@@ -63,28 +62,22 @@ function setState(next, message) {
   element('status-text').textContent = message;
   input.disabled = !['ready', 'running'].includes(next);
   input.readOnly = next === 'running';
-  input.placeholder = next === 'loading' ? 'loading…' : next === 'closed' || next === 'error' ? 'Connect to start a database' : 'SELECT VERSION();';
-  runButton.disabled = next !== 'ready' || !input.value.trim();
-  runButton.hidden = next === 'running';
-  cancelButton.hidden = next !== 'running';
-  cancelButton.disabled = false;
-  exampleButton.disabled = next !== 'ready';
-  element('example').disabled = !['ready', 'closed', 'error'].includes(next);
-  connectionButton.disabled = ['loading', 'running', 'closing'].includes(next);
-  connectionButton.textContent = next === 'loading' ? 'Starting…' : next === 'closing' ? 'Closing…' : database ? 'Close database' : 'Connect';
-  connectionButton.title = storage === 'opfs'
-    ? database ? 'Close the database; its data stays in this browser' : 'Open the database stored in this browser'
-    : database ? 'Close the database and discard its in-memory data' : 'Start a new in-memory database';
+  input.placeholder = next === 'loading' ? 'loading…' : next === 'closed' || next === 'error' ? 'Choose New Instance to start a database' : 'SELECT VERSION();';
+  for (const button of exampleButtons) button.disabled = next !== 'ready';
   element('database-name').textContent = database ? `seekdb [${currentDatabase ?? '(none)'}]` : 'seekdb';
   element('prompt').textContent = `${element('database-name').textContent}>`;
-  element('engine-label').textContent = database ? 'seekdb · wasm' : 'WebAssembly';
   element('status-dot').title = message;
   updateStorage();
-  clearInterval(activityTimer);
-  element('activity-time').textContent = '';
   if (['loading', 'running', 'closing'].includes(next)) {
-    operationStarted = performance.now();
-    activityTimer = setInterval(() => { element('activity-time').textContent = elapsed(operationStarted); }, 100);
+    if (activityTimer === undefined) {
+      operationStarted = performance.now();
+      element('activity-time').textContent = elapsed(operationStarted);
+      activityTimer = setInterval(() => { element('activity-time').textContent = elapsed(operationStarted); }, 100);
+    }
+  } else {
+    clearInterval(activityTimer);
+    activityTimer = undefined;
+    element('activity-time').textContent = '';
   }
 }
 
@@ -105,8 +98,6 @@ function notice(message, error = false) {
 function resizeInput() {
   input.style.height = 'auto';
   input.style.height = `${Math.min(190, Math.max(20, input.scrollHeight))}px`;
-  element('query-form').dataset.empty = String(!input.value.trim());
-  runButton.disabled = state !== 'ready' || !input.value.trim();
   scrollOutput();
 }
 
@@ -123,10 +114,6 @@ function commandOutput(sql) {
   const command = node('pre', 'command-text');
   command.append(node('span', 'command-prompt', element('prompt').textContent), document.createTextNode(` ${sql.replaceAll('\n', '\n    -> ')};`));
   line.append(command);
-  const reuse = node('button', 'reuse-button', 'Reuse');
-  reuse.title = 'Copy this statement to the editor';
-  reuse.addEventListener('click', () => { if (state === 'ready') setInput(`${sql};`); });
-  line.append(reuse);
   entry.append(line);
   appendOutput(entry);
   return entry;
@@ -241,7 +228,6 @@ async function submit(sql = input.value) {
   if (state !== 'ready' || !sql.trim()) return;
   const command = sql.trim().replace(/;$/, '').toLowerCase();
   if (command === '\\clear') { clearOutput(); setInput(''); return; }
-  if (command === '\\help' || command === '?') { help.showModal(); return; }
   if (command === '\\tables') sql = 'SHOW TABLES;';
   if (command === '\\databases') sql = 'SHOW DATABASES;';
   history.push(sql);
@@ -274,7 +260,7 @@ async function submit(sql = input.value) {
         await database?.close().catch(() => {});
         database = undefined;
         session = undefined;
-        notice(`The database stopped: ${reconnectError.message}\nConnect to start it again.`, true);
+        notice(`The database stopped: ${reconnectError.message}\nChoose New Instance to start again.`, true);
       }
     }
   } finally {
@@ -287,7 +273,6 @@ async function submit(sql = input.value) {
 function cancelQuery() {
   if (!controller || controller.signal.aborted) return;
   controller.abort();
-  cancelButton.disabled = true;
   element('status-text').textContent = 'Cancelling query and reconnecting the session…';
 }
 
@@ -331,10 +316,10 @@ async function openDatabase() {
     database = undefined;
     session = undefined;
     versionLabel.textContent = 'Version unavailable';
-    const hint = storage !== 'opfs' ? 'Check that the compiled .mjs and .wasm files are available, then try Connect.'
-      : /another tab/.test(error.message) ? 'Close it there first, or choose In memory from the Storage menu.'
-      : /locked/.test(error.message) ? 'Another page may still be using the stored database. Close it there, then try Connect again.'
-      : 'Try Connect again. If it keeps failing, choose Delete stored data from the Storage menu to start over, or switch to In memory.';
+    const hint = storage !== 'opfs' ? 'Check that the compiled .mjs and .wasm files are available, then choose New Instance.'
+      : /another tab/.test(error.message) ? 'Close it there first, or choose Memory from New Instance.'
+      : /locked/.test(error.message) ? 'Another page may still be using the stored database. Close it there, then choose New Instance.'
+      : 'Choose New Instance to clear the database and try again.';
     notice(`Could not start seekdb: ${error.message}\n${hint}`, true);
     setState('error', 'Startup failed');
     return false;
@@ -346,13 +331,12 @@ async function closeDatabase() {
   setState('closing', persistent ? 'Closing the database…' : 'Closing the in-memory database…');
   try {
     await database.close();
-    notice(persistent ? 'Database closed. Its data stays in this browser. Connect reopens it.' : 'Database closed. Its in-memory data was discarded. Connect to start a fresh database.');
+    notice(persistent ? 'Database closed. Its data stays in this browser.' : 'Database closed. Its in-memory data was discarded.');
   } catch (error) {
     notice(`Database closed with an error: ${error.message}`, true);
   } finally {
     database = undefined;
     session = undefined;
-    setState('closed', persistent ? 'Database closed · Connect reopens the stored database' : 'Database closed · Connect starts an empty database');
   }
 }
 
@@ -373,44 +357,38 @@ function updateStorage() {
   const busy = ['loading', 'running', 'closing'].includes(state);
   element('storage-badge').textContent = persistent ? 'opfs://' : 'memory://';
   storageHint.textContent = persistent ? 'Storage: opfs:// — data is kept in this browser.' : 'Storage: memory:// — data clears on reload or close.';
-  element('memory-button').setAttribute('aria-pressed', String(!persistent));
-  element('opfs-button').setAttribute('aria-pressed', String(persistent));
   element('memory-button').disabled = busy;
   element('opfs-button').disabled = busy || !persistentSupported;
-  element('wipe-button').disabled = busy || !persistentSupported;
 }
 
-function closeMenu() {
-  element('storage-menu').open = false;
+function closeMenus() {
+  for (const menu of menus) menu.open = false;
 }
 
-async function switchStorage(mode) {
-  closeMenu();
-  if (mode === storage || ['loading', 'running', 'closing'].includes(state)) return;
-  if (database && storage === 'memory' && !confirm('Switch to storage in this browser? The current in-memory data is discarded.')) return;
-  if (database) await closeDatabase();
-  storage = mode;
-  rememberStorage(mode);
-  await openDatabase();
-}
-
-async function wipeStorage() {
-  closeMenu();
+async function createInstance(mode) {
+  closeMenus();
   if (['loading', 'running', 'closing'].includes(state)) return;
-  if (!confirm('Delete the database stored in this browser? This cannot be undone.')) return;
-  if (database && storage === 'opfs') await closeDatabase();
-  setState('loading', 'Deleting stored data…');
-  let deleted = false;
+  persistentClearPending ||= mode === 'opfs' || Boolean(database && storage === 'opfs');
+  if (database) await closeDatabase();
+  setState('loading', 'Clearing data and creating a new instance…');
   try {
-    const module = await import('./database.mjs');
-    await module.Database.clearPersistentStorage();
-    deleted = true;
-    notice('Stored data deleted.');
+    if (persistentClearPending) {
+      const {Database} = await import('./database.mjs');
+      await Database.clearPersistentStorage();
+      persistentClearPending = false;
+    }
+    storage = mode;
+    rememberStorage(mode);
+    transcript.replaceChildren(welcome);
+    followOutput = true;
+    setInput('');
+    await openDatabase();
   } catch (error) {
-    notice(`Could not delete stored data: ${error.message}`, true);
+    versionLabel.textContent = 'Version unavailable';
+    versionLabel.removeAttribute('title');
+    notice(`Could not clear the stored database: ${error.message}\nClose any other page using this database, then try New Instance again.`, true);
+    setState('error', 'Could not create a new instance');
   }
-  if (storage === 'opfs') await openDatabase();
-  else setState(database ? 'ready' : 'closed', database ? deleted ? 'Ready · stored data deleted' : 'Ready · stored data deletion failed' : 'Database closed · Connect starts an empty database');
 }
 
 function clearOutput() {
@@ -430,7 +408,7 @@ terminalScroll.addEventListener('scroll', () => {
 input.addEventListener('keydown', event => {
   if (event.isComposing) return;
   if (state !== 'ready') return;
-  if (event.key === 'Enter' && !event.shiftKey && (event.ctrlKey || event.metaKey || isComplete(input.value, sqlOptions) || /^\\(?:help|clear|tables|databases);?$/.test(input.value.trim()) || input.value.trim() === '?')) {
+  if (event.key === 'Enter' && !event.shiftKey && (event.ctrlKey || event.metaKey || isComplete(input.value, sqlOptions) || /^\\(?:clear|tables|databases);?$/.test(input.value.trim()))) {
     event.preventDefault();
     void submit();
   } else if (event.key === 'ArrowUp' && !input.value.slice(0, input.selectionStart).includes('\n') && input.selectionStart === input.selectionEnd) {
@@ -442,7 +420,7 @@ input.addEventListener('keydown', event => {
   }
 });
 document.addEventListener('keydown', event => {
-  if (help.open || event.isComposing) return;
+  if (event.isComposing) return;
   if (event.ctrlKey && event.key.toLowerCase() === 'l') { event.preventDefault(); clearOutput(); }
   if (state === 'running' && (event.key === 'Escape' || event.ctrlKey && event.key.toLowerCase() === 'c' && !window.getSelection().toString())) {
     event.preventDefault();
@@ -450,17 +428,18 @@ document.addEventListener('keydown', event => {
   }
 });
 element('query-form').addEventListener('submit', event => { event.preventDefault(); void submit(); });
-cancelButton.addEventListener('click', cancelQuery);
-exampleButton.addEventListener('click', () => void submit(EXAMPLES[element('example').value]));
+for (const button of exampleButtons) {
+  button.addEventListener('click', () => {
+    closeMenus();
+    void submit(EXAMPLES[button.dataset.example]);
+  });
+}
 element('clear-button').addEventListener('click', clearOutput);
-connectionButton.addEventListener('click', () => { if (database) void closeDatabase(); else void openDatabase(); });
-element('help-button').addEventListener('click', () => help.showModal());
-element('help-close').addEventListener('click', () => help.close());
-help.addEventListener('close', () => input.focus());
-element('memory-button').addEventListener('click', () => void switchStorage('memory'));
-element('opfs-button').addEventListener('click', () => void switchStorage('opfs'));
-element('wipe-button').addEventListener('click', () => void wipeStorage());
-document.addEventListener('click', event => { if (!element('storage-menu').contains(event.target)) closeMenu(); });
+element('memory-button').addEventListener('click', () => void createInstance('memory'));
+element('opfs-button').addEventListener('click', () => void createInstance('opfs'));
+document.addEventListener('click', event => {
+  for (const menu of menus) if (!menu.contains(event.target)) menu.open = false;
+});
 window.addEventListener('pagehide', () => { void database?.close().catch(() => {}); });
 
 if (storage === 'opfs' && !persistentSupported) {
@@ -468,5 +447,5 @@ if (storage === 'opfs' && !persistentSupported) {
   notice('Persistent storage is not available in this browser; the database runs in memory.');
 }
 if (await openDatabase() && new URLSearchParams(location.search).get('run') === 'example') {
-  await submit(EXAMPLES.quickstart);
+  await submit(EXAMPLES.hybrid);
 }

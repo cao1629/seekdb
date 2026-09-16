@@ -15,6 +15,7 @@
  */
 
 #define USING_LOG_PREFIX SHARE
+#include <inttypes.h>
 #include "ob_ddl_error_message_table_operator.h"
 #include "share/ob_dml_sql_splicer.h"
 #include "share/inner_table/ob_inner_table_schema_constants.h"
@@ -87,7 +88,7 @@ int ObDDLErrorMessageTableOperator::get_index_task_info(
   const uint64_t target_object_id = index_schema.get_table_id();
   SMART_VAR(ObMySQLProxy::MySQLResult, res) {
     sqlclient::ObMySQLResult *result = NULL;
-    if (OB_FAIL(sql_string.assign_fmt("SELECT * FROM %s WHERE target_object_id = %lu",
+    if (OB_FAIL(sql_string.assign_fmt("SELECT * FROM %s WHERE target_object_id = %" PRIu64,
         OB_ALL_DDL_TASK_STATUS_TNAME, target_object_id))) {
     } else if (OB_FAIL(sql_proxy.read(res, sql_string.ptr()))) {
     } else if (OB_ISNULL(result = res.get_result())) {
@@ -122,7 +123,7 @@ int ObDDLErrorMessageTableOperator::load_ddl_user_error(const int64_t task_id,
       LOG_WARN("invalid arguments", K(ret), K(task_id), K(table_id));
     } else if (OB_FAIL(sql.assign_fmt(
         "SELECT ret_code, ddl_type, affected_rows, user_message, dba_message from %s WHERE "
-        "task_id = %ld AND object_id = %ld", OB_ALL_DDL_ERROR_MESSAGE_TNAME,
+        "task_id = %" PRId64 " AND object_id = %" PRIu64, OB_ALL_DDL_ERROR_MESSAGE_TNAME,
         task_id, ObSchemaUtils::get_extract_schema_id(table_id)))) {
     } else if (OB_FAIL(DDL_SIM(task_id, DDL_ERR_MESSAGE_OPERATOR_LOAD_FAILED))) {
     } else if (OB_FAIL(DDL_SIM(task_id, DDL_ERR_MESSAGE_OPERATOR_SLOW))) {
@@ -182,7 +183,7 @@ int ObDDLErrorMessageTableOperator::get_ddl_error_message(const int64_t task_id,
     } else if (is_ddl_retry_task && OB_FAIL(sql.append(" ,UNHEX(user_message) as user_message "))) {
       LOG_WARN("fail to append sql", KR(ret));
     } else if (OB_FAIL(sql.append_fmt(" from %s "
-                                      " WHERE task_id = %ld AND target_object_id = %ld ",
+                                      " WHERE task_id = %" PRId64 " AND target_object_id = %" PRId64 " ",
                                       OB_ALL_DDL_ERROR_MESSAGE_TNAME,
                                       task_id, target_object_id))) {
     } else if (addr.is_valid()) {
@@ -253,7 +254,7 @@ int ObDDLErrorMessageTableOperator::get_ddl_error_message(const int64_t task_id,
       LOG_WARN("invalid arguments", K(ret), K(task_id), K(object_id));
     } else if (OB_FAIL(sql.assign_fmt(
         "SELECT ret_code, ddl_type, affected_rows, dba_message, user_message from %s "
-        "WHERE task_id = %ld AND target_object_id = %ld AND object_id = %ld ",
+        "WHERE task_id = %" PRId64 " AND target_object_id = %" PRId64 " AND object_id = %" PRId64 " ",
         OB_ALL_DDL_ERROR_MESSAGE_TNAME,
         task_id, target_object_id, object_id))) {
     } else if (OB_FAIL(sql_proxy.read(res, sql.ptr()))) {

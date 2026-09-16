@@ -110,7 +110,7 @@ def main():
         handler = partial(ShellHandler, assets=assets)
         with ThreadingHTTPServer(("127.0.0.1", args.port), handler) as server:
             print(f"http://127.0.0.1:{server.server_port}/shell.html", flush=True)
-            print("SQL runs in your browser. The Storage menu keeps data in memory or in this browser's OPFS.", flush=True)
+            print("SQL runs in your browser. New Instance clears data and starts an empty Memory or OPFS database.", flush=True)
             try:
                 server.serve_forever()
             except KeyboardInterrupt:

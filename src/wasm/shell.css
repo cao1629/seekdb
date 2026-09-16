@@ -52,12 +52,10 @@ body {
   flex-direction: column;
 }
 button,
-select,
 textarea {
   font: inherit;
 }
-button,
-select {
+button {
   border: 1px solid var(--control-line);
   border-radius: 0;
   padding: 4px 10px;
@@ -67,24 +65,20 @@ select {
   line-height: 20px;
   white-space: nowrap;
 }
-button:not(:disabled),
-select {
+button:not(:disabled) {
   cursor: pointer;
 }
-button:hover:not(:disabled),
-select:hover:not(:disabled) {
+button:hover:not(:disabled) {
   border-color: var(--accent);
 }
 button:active:not(:disabled) {
   background: rgb(162 193 255 / 10%);
 }
-button:disabled,
-select:disabled {
+button:disabled {
   opacity: 0.45;
 }
 button:focus-visible,
 a:focus-visible,
-select:focus-visible,
 .result-table:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
@@ -146,16 +140,6 @@ code {
   align-items: center;
   gap: 16px;
 }
-.masthead .text-button {
-  padding: 0;
-  border: 0;
-  color: inherit;
-  font: inherit;
-}
-.text-button:hover:not(:disabled) {
-  background: none;
-  text-decoration: underline;
-}
 .terminal {
   display: flex;
   flex-direction: column;
@@ -195,28 +179,6 @@ code {
 }
 .toolbar-actions {
   gap: 4px;
-}
-.toolbar-actions select {
-  max-width: 145px;
-  border-color: transparent;
-  background: var(--surface);
-  color: var(--muted);
-  padding: 4px;
-  margin-right: 8px;
-}
-#example-button,
-#run-button {
-  border-color: var(--control-line);
-  background: var(--brand-gradient);
-  color: var(--text);
-  box-shadow: inset 0 0 8px rgb(162 193 255 / 35%);
-}
-#example-button:hover:not(:disabled),
-#run-button:hover:not(:disabled) {
-  border-color: var(--accent);
-  box-shadow:
-    inset 0 0 8px rgb(162 193 255 / 50%),
-    0 0 12px rgb(127 99 255 / 20%);
 }
 .status-dot[data-state="loading"],
 .status-dot[data-state="running"] {
@@ -274,17 +236,6 @@ code {
   text-align: left;
   padding: 8px 10px 8px 26px;
 }
-.menu-items button[aria-pressed="true"]::before {
-  content: "✓";
-  position: absolute;
-  left: 9px;
-  color: var(--accent);
-}
-.menu-items hr {
-  border: 0;
-  border-top: 1px solid var(--line);
-  margin: 6px 0;
-}
 .terminal-scroll {
   flex: 1;
   min-height: 0;
@@ -307,29 +258,12 @@ code {
 .entry {
   margin: 0 0 12px;
 }
-.command-line {
-  position: relative;
-}
 .command-text {
   margin: 0;
   color: var(--text);
   font: inherit;
   white-space: pre-wrap;
   overflow-wrap: anywhere;
-}
-.reuse-button {
-  position: absolute;
-  right: 0;
-  top: 0;
-  padding: 0 6px;
-  background: var(--terminal);
-  color: var(--muted);
-  font-size: 10px;
-  opacity: 0;
-}
-.command-line:hover .reuse-button,
-.reuse-button:focus-visible {
-  opacity: 1;
 }
 .result-table {
   margin: 0;
@@ -399,15 +333,6 @@ textarea:focus {
 textarea::placeholder {
   color: var(--muted);
 }
-.composer button {
-  padding: 0 8px;
-}
-.composer[data-empty="true"] #run-button {
-  visibility: hidden;
-}
-.cancel-button {
-  color: var(--error);
-}
 .terminal-footer {
   flex: none;
   display: flex;
@@ -421,21 +346,8 @@ textarea::placeholder {
   color: var(--muted);
   font-size: 11px;
 }
-.footer-actions {
+#engine-label {
   margin-left: auto;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-.footer-actions button {
-  padding: 0;
-  border: 0;
-  font: inherit;
-}
-.footer-actions button:hover:not(:disabled) {
-  color: var(--text);
-  text-decoration: underline;
-  background: none;
 }
 [hidden] {
   display: none !important;
@@ -450,57 +362,6 @@ textarea::placeholder {
   overflow: hidden;
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
-}
-dialog {
-  width: min(610px, calc(100% - 32px));
-  max-height: 85dvh;
-  padding: 24px;
-  border: 1px solid var(--control-line);
-  border-radius: 0;
-  background: var(--surface);
-  color: var(--output);
-  font: 13px/1.7 var(--sans);
-}
-dialog::backdrop {
-  background: #0009;
-}
-.dialog-heading {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.dialog-heading h2 {
-  margin: 0;
-  font-size: 18px;
-  color: var(--text);
-}
-.dialog-heading button {
-  font-size: 20px;
-  padding: 0 7px;
-}
-dialog dl {
-  display: grid;
-  grid-template-columns: 145px 1fr;
-  gap: 10px 16px;
-  padding: 16px 0;
-  border-block: 1px solid var(--line);
-}
-dialog dt {
-  font: 12px/1.7 var(--mono);
-  color: var(--text);
-}
-dialog dd {
-  margin: 0;
-}
-.help-commands {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  font-size: 11px;
-}
-.help-commands code {
-  color: var(--accent);
-  font-family: var(--mono);
 }
 @keyframes pulse {
   50% {
@@ -545,20 +406,7 @@ dialog dd {
   .storage-badge {
     display: none;
   }
-  .toolbar-actions select {
-    max-width: 105px;
-    margin-right: 0;
-  }
-  .footer-actions {
-    gap: 10px;
-  }
-  .footer-actions #engine-label {
+  #engine-label {
     display: none;
-  }
-  .reuse-button {
-    display: none;
-  }
-  dialog dl {
-    grid-template-columns: 115px 1fr;
   }
 }

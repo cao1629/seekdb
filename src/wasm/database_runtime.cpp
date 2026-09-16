@@ -3,6 +3,7 @@
 // main runs on an Emscripten pthread so filesystem proxies can make progress.
 #include "observer/ob_server.h"
 #include "observer/ob_server_options.h"
+#include "lib/oblog/ob_warning_buffer.h"
 #include "lib/resource/achunk_mgr.h"
 #include "lib/worker.h"
 #include "rpc/obmysql/ob_sql_nio_server.h"
@@ -106,6 +107,7 @@ int main(int argc, char **argv)
   }
   OB_LOGGER.set_log_level(OB_LOG_LEVEL_WARN);
   OB_LOGGER.set_file_name("log/observer.log", true);
+  ObWarningBuffer::set_warn_log_on(true);
   ObPLogWriterCfg log_config;
   lib::Worker worker;
   lib::Worker::set_worker_to_thread_local(&worker);

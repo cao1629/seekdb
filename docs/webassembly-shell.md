@@ -19,7 +19,7 @@ python3 tools/wasm/serve-shell.py \
 ```
 
 Open [the shell](http://127.0.0.1:8767/shell.html) or
-[run the example](http://127.0.0.1:8767/shell.html?run=example).
+[run the Hybrid Search example](http://127.0.0.1:8767/shell.html?run=example).
 The first load downloads the engine and initializes a database in the browser.
 Keep the server running; press Ctrl+C in its terminal to stop it.
 
@@ -35,8 +35,12 @@ do not start with this shell.
 
 ## Use the shell
 
-The database starts automatically. Choose Quickstart, Vector search, or
-Transactions and select **Run example**, or enter SQL in the prompt.
+The database starts automatically. Once it is ready, choose **Hybrid Search** or
+**Fork Table** from **Examples** to run its SQL immediately, or enter SQL in
+the prompt. Hybrid Search combines full-text matching, a category filter, and
+vector distance. Fork Table creates a copy and shows that changes to either table
+do not affect the other. Each example recreates its own demo tables in `playground`
+so it can be run repeatedly.
 
 | Input | Action |
 | --- | --- |
@@ -46,7 +50,6 @@ Transactions and select **Run example**, or enter SQL in the prompt.
 | Up / Down | Browse history at the first or last input line |
 | Escape / Ctrl + C | Cancel the active query |
 | Ctrl + L | Clear output while keeping tables and history |
-| `\help` | Open help |
 | `\clear` | Clear output |
 | `\tables` | Show tables |
 | `\databases` | Show databases |
@@ -67,23 +70,24 @@ survives depends on the storage mode below.
 
 The shell starts with OPFS when the browser supports both OPFS and Web Locks,
 unless a previous storage choice was saved. Otherwise it starts in memory.
-The **Storage** menu chooses where the database keeps its files:
+Choose **Memory** or **OPFS** from **New Instance** to close the current engine,
+discard its data, clear the terminal, and start an empty database in that mode.
+Selecting the current mode also creates a new instance. Creating an OPFS instance
+clears any previously stored database; leaving a running OPFS instance for Memory
+also clears its stored data. If clearing fails, startup stops and shows the error.
 
 | Item | Effect |
 | --- | --- |
-| In memory | The data directory lives in Wasm memory; it is gone when the database is closed or the page is reloaded |
-| In this browser | The data directory lives in the origin private file system (OPFS); committed data survives reloads and browser restarts |
-| Delete stored data… | Removes the database files kept in OPFS, closing the database first if it is open on them; a fresh stored database starts when this mode is active |
+| Memory | The data directory lives in Wasm memory; it is gone when the database is closed or the page is reloaded |
+| OPFS | The data directory lives in the origin private file system (OPFS); committed data survives reloads and browser restarts until New Instance clears it |
 
 The choice is remembered in this browser and applies on the next load; the
-badge next to the database name shows `memory://` or `opfs://`. Switching from
-memory to browser storage discards the in-memory data after a confirmation.
+badge next to the database name shows `memory://` or `opfs://`. Reloading the page
+reopens an OPFS database without clearing it; **New Instance** starts empty.
 One tab at a time may open the stored database: a second tab is told so and can
 switch to memory, and a page outside this shell that still holds the files is
-reported as locking them, to be closed before trying Connect again. If the
-stored database still does not start, the message suggests Connect once more
-and then Delete stored data. Browsers without OPFS or Web Locks keep the memory
-mode only.
+reported as locking them, to be closed before reloading the page. Browsers
+without OPFS or Web Locks can use Memory only.
 
 ## Build from source
 

@@ -16,6 +16,7 @@
 
 #define USING_LOG_PREFIX SERVER
 
+#include <inttypes.h>
 #include "ob_ddl_checksum.h"
 #include "share/ob_ddl_sim_point.h"
 #include "share/ob_server_struct.h"
@@ -219,7 +220,8 @@ int ObDDLChecksumOperator::get_part_column_checksum(const uint64_t table_id,
     LOG_WARN("invalid argument", K(ret), K(table_id), K(execution_id), K(ddl_task_id), K(sql_proxy.is_inited()), K(column_checksum_map.created()));
   } else if (OB_FAIL(sql.assign_fmt(
     "SELECT column_id, checksum FROM %s "
-    "WHERE execution_id = %ld AND table_id = %ld AND tablet_id = %ld AND ddl_task_id = %ld AND task_id %s "
+    "WHERE execution_id = %" PRIu64 " AND table_id = %" PRIu64 " AND tablet_id = %" PRIu64
+    " AND ddl_task_id = %" PRId64 " AND task_id %s "
     "ORDER BY column_id", OB_ALL_DDL_CHECKSUM_TNAME,
     execution_id, table_id, tablet_id, ddl_task_id, is_unique_index_checking ? "< 0" : ">= 0"))) {
   } else {
@@ -296,7 +298,7 @@ int ObDDLChecksumOperator::get_tablet_latest_execution_id(const uint64_t index_t
     LOG_WARN("invalid argument", K(ret), K(index_table_id), K(ddl_task_id), K(tablet_id), K(sql_proxy.is_inited()));
   } else if (OB_FAIL(sql.assign_fmt(
     "SELECT max(execution_id) as execution_id FROM %s "
-    "WHERE  table_id = %ld AND ddl_task_id = %ld AND task_id = %ld",
+    "WHERE  table_id = %" PRIu64 " AND ddl_task_id = %" PRId64 " AND task_id = %" PRId64,
     OB_ALL_DDL_CHECKSUM_TNAME, index_table_id, ddl_task_id, tablet_id))) {
   } else {
     SMART_VAR(ObMySQLProxy::MySQLResult, res) {
@@ -394,7 +396,8 @@ int ObDDLChecksumOperator::get_tablet_checksum_record(const uint64_t execution_i
         if ((i != 0 && i % batch_size == 0) /* reach batch size */ || i == tablet_ids.count() - 1 /* reach end */) {
           if (OB_FAIL(sql.assign_fmt(
               "SELECT task_id FROM %s "
-              "WHERE execution_id = %ld AND table_id = %ld AND ddl_task_id = %ld AND task_id >= %ld and task_id <= %ld "
+              "WHERE execution_id = %" PRIu64 " AND table_id = %" PRIu64 " AND ddl_task_id = %" PRId64
+              " AND task_id >= %" PRIu64 " and task_id <= %" PRIu64 " "
               "GROUP BY task_id", 
               OB_ALL_DDL_CHECKSUM_TNAME,
               execution_id, 
@@ -445,7 +448,8 @@ int ObDDLChecksumOperator::get_local_index_tablet_finish_status(const uint64_t d
         const uint64_t last_tablet_id = batch_tablet_array.at(batch_tablet_array.count() - 1);
         if (OB_FAIL(sql.assign_fmt(
             "SELECT task_id FROM %s "
-            "WHERE table_id = %ld AND ddl_task_id = %ld AND task_id >= %ld and task_id <= %ld "
+            "WHERE table_id = %" PRIu64 " AND ddl_task_id = %" PRId64
+            " AND task_id >= %" PRIu64 " and task_id <= %" PRIu64 " "
             "GROUP BY task_id",
             OB_ALL_DDL_CHECKSUM_TNAME,
             ObSchemaUtils::get_extract_schema_id(index_table_id),
@@ -479,7 +483,7 @@ int ObDDLChecksumOperator::get_table_column_checksum(const int64_t execution_id,
   } else if (OB_FAIL(DDL_SIM(ddl_task_id, GET_TABLE_COLUMN_CHECKSUM_FAILED))) {
   } else if (OB_FAIL(sql.assign_fmt(
       "SELECT column_id, checksum FROM %s "
-      "WHERE execution_id = %ld AND table_id = %ld AND ddl_task_id = %ld AND task_id %s "
+      "WHERE execution_id = %" PRId64 " AND table_id = %" PRIu64 " AND ddl_task_id = %" PRId64 " AND task_id %s "
       "ORDER BY column_id", OB_ALL_DDL_CHECKSUM_TNAME,
       execution_id,
       ObSchemaUtils::get_extract_schema_id(table_id), ddl_task_id, is_unique_index_checking ? "< 0" : ">= 0"))) {
@@ -647,11 +651,13 @@ int ObDDLChecksumOperator::delete_checksum(const int64_t execution_id,
     LOG_WARN("invalid argument", K(ret), K(execution_id), K(source_table_id), K(dest_table_id));
   } else if (OB_FAIL(DDL_SIM(ddl_task_id, DELETE_DDL_CHECKSUM_FAILED))) {
   } else if (OB_INVALID_INDEX != tablet_task_id 
-    && OB_FAIL(remove_tablet_chksum_sql.assign_fmt("AND (task_id >> %ld) = %ld ", ObDDLChecksumItem::PX_SQC_ID_OFFSET, tablet_task_id))) {
+    && OB_FAIL(remove_tablet_chksum_sql.assign_fmt("AND (task_id >> %" PRId64 ") = %" PRId64 " ",
+        ObDDLChecksumItem::PX_SQC_ID_OFFSET, tablet_task_id))) {
     LOG_WARN("assign fmt failed", K(ret), K(tablet_task_id), K(remove_tablet_chksum_sql));
   } else if (OB_FAIL(sql.assign_fmt(
       "DELETE /*+ use_plan_cache(none) */ FROM %s "
-      "WHERE execution_id = %ld AND ddl_task_id = %ld AND table_id IN (%ld, %ld) %.*s",
+      "WHERE execution_id = %" PRId64 " AND ddl_task_id = %" PRId64
+      " AND table_id IN (%" PRIu64 ", %" PRIu64 ") %.*s",
       OB_ALL_DDL_CHECKSUM_TNAME, execution_id, ddl_task_id, source_table_id, dest_table_id,
       static_cast<int>(remove_tablet_chksum_sql.length()), remove_tablet_chksum_sql.ptr()))) {
   } else if (OB_FAIL(DDL_SIM(ddl_task_id, DELETE_DDL_CHECKSUM_SLOW))) {
