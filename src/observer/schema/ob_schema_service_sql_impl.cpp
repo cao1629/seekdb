@@ -4647,7 +4647,7 @@ int ObSchemaServiceSQLImpl::delete_recycle_object(const ObRecycleObject &recycle
     int64_t affected_rows = 0;
     if (OB_FAIL(sql.assign_fmt("DELETE FROM %s WHERE 0 = %lu %% 1 and object_name = '%.*s' AND type = %d",
                                OB_ALL_RECYCLEBIN_TNAME,
-                               1UL,
+                               uint64_t(1),
                                recycle_object.get_object_name().length(),
                                recycle_object.get_object_name().ptr(),
                                recycle_object.get_type()))) {
@@ -4680,7 +4680,7 @@ int ObSchemaServiceSQLImpl::fetch_recycle_object(const ObString &object_name,
       
       if (OB_FAIL(sql.append_fmt(FETCH_ALL_RECYCLEBIN_SQL,
                                  OB_ALL_RECYCLEBIN_TNAME,
-                                 1UL,
+                                 uint64_t(1),
                                  object_name.length(),
                                  object_name.ptr(),
                                  recycle_obj_type))) {
@@ -4717,7 +4717,7 @@ int ObSchemaServiceSQLImpl::fetch_expire_recycle_objects(const int64_t expire_ti
       {
         if (OB_FAIL(sql.append_fmt(FETCH_EXPIRE_SYS_ALL_RECYCLEBIN_SQL,
                                    OB_ALL_RECYCLEBIN_TNAME,
-                                   1UL,
+                                   uint64_t(1),
                                    expire_time))) {
         }
       }
@@ -4802,7 +4802,7 @@ int ObSchemaServiceSQLImpl::construct_recycle_table_object(
       if (OB_FAIL(ObSchemaUtils::get_all_table_history_name(history_table_name,
                                                             schema_service_))) {
       } else if (OB_FAIL(sql.append_fmt(FETCH_RECYCLE_TABLE_OBJECT, history_table_name,
-                                 1UL,
+                                 uint64_t(1),
                                  ObSchemaUtils::get_extract_schema_id(table_id),
                                  schema_version, table_name.ptr()))) {
       } else {
@@ -4867,7 +4867,7 @@ int ObSchemaServiceSQLImpl::construct_recycle_database_object(
       ObMySQLResult *result = NULL;
       ObSqlString sql;
       if (OB_FAIL(sql.append_fmt(FETCH_RECYCLE_DATABASE_OBJECT, OB_ALL_DATABASE_HISTORY_TNAME,
-                                 1UL,
+                                 uint64_t(1),
                                  ObSchemaUtils::get_extract_schema_id(database_id),
                                  schema_version, database_name.ptr()))) {
       } else {
@@ -5874,7 +5874,7 @@ int ObSchemaServiceSQLImpl::get_table_id(
             " AND database_id = %" PRIu64 " "
             ")) "
             "ORDER BY session_id DESC",                 // case 3.1
-            OB_ALL_VIRTUAL_CORE_ALL_TABLE_TNAME, 1UL, database_id,
+            OB_ALL_VIRTUAL_CORE_ALL_TABLE_TNAME, uint64_t(1), database_id,
             OB_ALL_TABLE_TNAME, tb_name, static_cast<int64_t>(session_id), database_id))) {
         }
       } else {

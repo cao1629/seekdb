@@ -22,3 +22,17 @@ target_link_options(test_wasm_sqlite_metadata PRIVATE -pthread -sUSE_ZLIB=1
 add_test(NAME wasm_sqlite_metadata COMMAND ${CMAKE_CROSSCOMPILING_EMULATOR}
   "$<TARGET_FILE:test_wasm_sqlite_metadata>")
 set_tests_properties(wasm_sqlite_metadata PROPERTIES TIMEOUT 30)
+
+add_executable(test_wasm_sqlite_wal_mapping
+  "${SEEKDB_ROOT}/unittest/wasm/test_wasm_sqlite_wal_mapping.cpp")
+target_link_libraries(test_wasm_sqlite_wal_mapping PRIVATE seekdb_wasm_sqlite)
+target_include_directories(test_wasm_sqlite_wal_mapping PRIVATE "${SEEKDB_WASM_DEPS}/include/sqlite")
+target_compile_features(test_wasm_sqlite_wal_mapping PRIVATE cxx_std_20)
+target_compile_options(test_wasm_sqlite_wal_mapping PRIVATE -O2 -fno-builtin -pthread -UNDEBUG)
+target_link_options(test_wasm_sqlite_wal_mapping PRIVATE -O2 -pthread -sWASMFS
+  -sPTHREAD_POOL_SIZE=3 -sMALLOC=dlmalloc -sABORTING_MALLOC=0
+  -sINITIAL_MEMORY=67108864 -sALLOW_MEMORY_GROWTH=0 -sSTACK_SIZE=1048576
+  -sDEFAULT_PTHREAD_STACK_SIZE=1048576 -sENVIRONMENT=node -sEXIT_RUNTIME=1 -sASSERTIONS=2)
+add_test(NAME wasm_sqlite_wal_mapping COMMAND ${CMAKE_CROSSCOMPILING_EMULATOR}
+  "$<TARGET_FILE:test_wasm_sqlite_wal_mapping>")
+set_tests_properties(wasm_sqlite_wal_mapping PROPERTIES TIMEOUT 30)

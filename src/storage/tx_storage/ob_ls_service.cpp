@@ -124,6 +124,11 @@ int ObLSService::wait()
         if (OB_FAIL(t3m->check_all_meta_mem_released(released, "ls_wait"))) {
           LOG_WARN("check metadata release before destroying LS failed", KR(ret));
         } else if (!released) {
+          bool all_tablet_cleaned = false;
+          const int gc_ret = t3m->gc_tablets_in_queue(all_tablet_cleaned);
+          if (OB_SUCCESS != gc_ret) {
+            LOG_WARN("recycle deferred tablets while waiting for LS failed", K(gc_ret));
+          }
           ob_usleep(10 * 1000);
         }
       }

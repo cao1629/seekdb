@@ -3,7 +3,9 @@
 # WasmFS provides both storage modes: its memory backend by default, and the
 # origin private file system mounted at the data directory on request.
 add_executable(seekdb_wasm_database EXCLUDE_FROM_ALL "${SEEKDB_ROOT}/src/wasm/database_runtime.cpp"
-  "${SEEKDB_ROOT}/src/wasm/wasmfs_adapter.cpp")
+  "${SEEKDB_ROOT}/src/wasm/wasmfs_adapter.cpp"
+  "${SEEKDB_ROOT}/src/wasm/chunked_memory_backend.cpp")
+target_include_directories(seekdb_wasm_database PRIVATE "${EMSCRIPTEN_ROOT_PATH}/system/lib/wasmfs")
 get_target_property(seekdb_wasm_database_libraries seekdb_wasm_engine_link_probe LINK_LIBRARIES)
 target_link_libraries(seekdb_wasm_database PRIVATE ${seekdb_wasm_database_libraries})
 target_compile_definitions(seekdb_wasm_database PRIVATE SEEKDB_WASMFS=1)
@@ -65,3 +67,69 @@ target_compile_options(test_wasm_log_ring PRIVATE -UNDEBUG)
 target_link_options(test_wasm_log_ring PRIVATE -Oz -pthread -msimd128 -sUSE_ZLIB=1
   -sPROXY_TO_PTHREAD=1 -sPTHREAD_POOL_SIZE=5 -sPTHREAD_POOL_SIZE_STRICT=2
   -sINITIAL_MEMORY=134217728 -sSTACK_SIZE=1048576 -sASSERTIONS=2 -sEXIT_RUNTIME=1)
+
+add_executable(test_wasm_ls_metadata_drain EXCLUDE_FROM_ALL
+  "${SEEKDB_ROOT}/unittest/wasm/test_wasm_ls_metadata_drain.cpp")
+target_link_libraries(test_wasm_ls_metadata_drain PRIVATE ${seekdb_wasm_database_libraries})
+target_compile_options(test_wasm_ls_metadata_drain PRIVATE -UNDEBUG)
+target_link_options(test_wasm_ls_metadata_drain PRIVATE -Oz -pthread -msimd128 -sUSE_ZLIB=1
+  -Wl,--wrap=_ZN9oceanbase7storage11ObLSService8free_ls_EPNS0_4ObLSE
+  -sPROXY_TO_PTHREAD=1 -sPTHREAD_POOL_SIZE=5 -sPTHREAD_POOL_SIZE_STRICT=2
+  -sINITIAL_MEMORY=134217728 -sALLOW_MEMORY_GROWTH=0
+  -sSTACK_SIZE=1048576 -sASSERTIONS=2 -sEXIT_RUNTIME=1)
+add_test(NAME wasm_ls_metadata_drain COMMAND ${CMAKE_CROSSCOMPILING_EMULATOR}
+  $<TARGET_FILE:test_wasm_ls_metadata_drain>)
+set_tests_properties(wasm_ls_metadata_drain PROPERTIES TIMEOUT 20)
+
+add_executable(test_wasm_stat_key EXCLUDE_FROM_ALL "${SEEKDB_ROOT}/unittest/wasm/test_wasm_stat_key.cpp")
+target_link_libraries(test_wasm_stat_key PRIVATE ${seekdb_wasm_database_libraries})
+target_compile_options(test_wasm_stat_key PRIVATE -UNDEBUG)
+target_link_options(test_wasm_stat_key PRIVATE -Oz -pthread -msimd128 -sUSE_ZLIB=1
+  -sPROXY_TO_PTHREAD=1 -sPTHREAD_POOL_SIZE=5 -sPTHREAD_POOL_SIZE_STRICT=2
+  -sINITIAL_MEMORY=134217728 -sSTACK_SIZE=1048576 -sASSERTIONS=2 -sEXIT_RUNTIME=1)
+add_test(NAME wasm_stat_key COMMAND ${CMAKE_CROSSCOMPILING_EMULATOR}
+  $<TARGET_FILE:test_wasm_stat_key>)
+set_tests_properties(wasm_stat_key PROPERTIES TIMEOUT 60)
+
+add_executable(test_wasm_hazptr EXCLUDE_FROM_ALL "${SEEKDB_ROOT}/unittest/wasm/test_wasm_hazptr.cpp")
+target_link_libraries(test_wasm_hazptr PRIVATE ${seekdb_wasm_database_libraries})
+target_compile_options(test_wasm_hazptr PRIVATE -UNDEBUG)
+target_link_options(test_wasm_hazptr PRIVATE -Oz -pthread -msimd128 -sUSE_ZLIB=1
+  -sPROXY_TO_PTHREAD=1 -sPTHREAD_POOL_SIZE=5 -sPTHREAD_POOL_SIZE_STRICT=2
+  -sINITIAL_MEMORY=134217728 -sSTACK_SIZE=1048576 -sASSERTIONS=2 -sEXIT_RUNTIME=1)
+add_test(NAME wasm_hazptr COMMAND ${CMAKE_CROSSCOMPILING_EMULATOR}
+  $<TARGET_FILE:test_wasm_hazptr>)
+set_tests_properties(wasm_hazptr PROPERTIES TIMEOUT 60)
+
+add_executable(test_constraint_recycle_name EXCLUDE_FROM_ALL
+  "${SEEKDB_ROOT}/unittest/wasm/test_constraint_recycle_name.cpp")
+target_link_libraries(test_constraint_recycle_name PRIVATE ${seekdb_wasm_database_libraries})
+target_compile_options(test_constraint_recycle_name PRIVATE -UNDEBUG)
+target_link_options(test_constraint_recycle_name PRIVATE -Oz -pthread -msimd128 -sUSE_ZLIB=1
+  -sPROXY_TO_PTHREAD=1 -sPTHREAD_POOL_SIZE=5 -sPTHREAD_POOL_SIZE_STRICT=2
+  -sINITIAL_MEMORY=134217728 -sSTACK_SIZE=1048576 -sASSERTIONS=2 -sEXIT_RUNTIME=1)
+add_test(NAME wasm_constraint_recycle_name COMMAND ${CMAKE_CROSSCOMPILING_EMULATOR}
+  $<TARGET_FILE:test_constraint_recycle_name>)
+set_tests_properties(wasm_constraint_recycle_name PROPERTIES TIMEOUT 60)
+
+add_executable(test_wasm_ip_distance EXCLUDE_FROM_ALL
+  "${SEEKDB_ROOT}/unittest/wasm/test_wasm_ip_distance.cpp")
+target_link_libraries(test_wasm_ip_distance PRIVATE ${seekdb_wasm_database_libraries})
+target_compile_options(test_wasm_ip_distance PRIVATE -UNDEBUG)
+target_link_options(test_wasm_ip_distance PRIVATE -Oz -pthread -msimd128 -sUSE_ZLIB=1
+  -sPROXY_TO_PTHREAD=1 -sPTHREAD_POOL_SIZE=5 -sPTHREAD_POOL_SIZE_STRICT=2
+  -sINITIAL_MEMORY=134217728 -sSTACK_SIZE=1048576 -sASSERTIONS=2 -sEXIT_RUNTIME=1)
+add_test(NAME wasm_ip_distance COMMAND ${CMAKE_CROSSCOMPILING_EMULATOR}
+  $<TARGET_FILE:test_wasm_ip_distance>)
+set_tests_properties(wasm_ip_distance PROPERTIES TIMEOUT 60)
+
+add_executable(test_wasm_random_range EXCLUDE_FROM_ALL
+  "${SEEKDB_ROOT}/unittest/wasm/test_wasm_random_range.cpp")
+target_link_libraries(test_wasm_random_range PRIVATE ${seekdb_wasm_database_libraries})
+target_compile_options(test_wasm_random_range PRIVATE -UNDEBUG)
+target_link_options(test_wasm_random_range PRIVATE -Oz -pthread -msimd128 -sUSE_ZLIB=1
+  -sPROXY_TO_PTHREAD=1 -sPTHREAD_POOL_SIZE=5 -sPTHREAD_POOL_SIZE_STRICT=2
+  -sINITIAL_MEMORY=134217728 -sSTACK_SIZE=1048576 -sASSERTIONS=2 -sEXIT_RUNTIME=1)
+add_test(NAME wasm_random_range COMMAND ${CMAKE_CROSSCOMPILING_EMULATOR}
+  $<TARGET_FILE:test_wasm_random_range>)
+set_tests_properties(wasm_random_range PROPERTIES TIMEOUT 60)

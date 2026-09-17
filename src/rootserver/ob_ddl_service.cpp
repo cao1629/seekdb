@@ -6852,7 +6852,7 @@ int ObDDLService::rename_dropping_index_name(
     } else if (OB_FAIL(new_index_schemas.push_back(*index_table_schema))) {
       LOG_WARN("fail to push back index schema", K(ret), KPC(index_table_schema));
     }
-  } else if ((nwrite = snprintf(buf, buf_size, "%s:%lu",
+  } else if ((nwrite = snprintf(buf, buf_size, "%s:%" PRId64,
     "SYS_DELETING_INDEX", ObTimeUtility::current_time())) >= buf_size || nwrite < 0) {
     ret = common::OB_BUF_NOT_ENOUGH;
     LOG_WARN("buf is not large enough", K(ret), K(buf_size));
@@ -18054,7 +18054,7 @@ int ObDDLService::check_db_and_table_is_exist(const obcall::ObTruncateTableArg &
                               "ON a.database_id = c.database_id WHERE a.database_name = '%s' AND table_name = '%s' "
                               "AND (session_id = 0 or session_id = %lu) order by session_id desc",
                               OB_ALL_DATABASE_TNAME, OB_ALL_TABLE_TNAME,
-                              OB_ALL_VIRTUAL_CORE_ALL_TABLE_TNAME, 1UL,
+                              OB_ALL_VIRTUAL_CORE_ALL_TABLE_TNAME, uint64_t(1),
                               tmp_database_name, tmp_table_name, session_id))) {
       LOG_WARN("failed assing sql", KR(ret), K(table_name), K(database_name), K(session_id));
     } else if (OB_FAIL(trans.read(res, sql.ptr()))) {

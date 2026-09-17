@@ -721,13 +721,8 @@ uint64_t ObCharset::hash(ObCollationType collation_type,
       LOG_WARN("unexpected error. invalid argument(s)", K(cs), K(cs->coll), K(lbt()));
     } else {
       seed = 0xc6a4a7935bd1e995;
-      // hash_sort expects ulong* (unsigned long*), but ret and seed are uint64_t
-      // On macOS ARM64, ulong is unsigned long, while uint64_t is unsigned long long
-      ulong ret_ulong = static_cast<ulong>(ret);
-      ulong seed_ulong = static_cast<ulong>(seed);
       cs->coll->hash_sort(cs, reinterpret_cast<const unsigned char *>(str), str_len,
-                          &ret_ulong, &seed_ulong, calc_end_space, hash_algo);
-      ret = static_cast<uint64_t>(ret_ulong);
+                          &ret, &seed, calc_end_space, hash_algo);
     }
   }
   return ret;

@@ -32,12 +32,129 @@
       }
     ]
   },
+  "boost_geometry_math": {
+    "description": "Evaluate double atan2 and cos through the SDK binary128 functions in Cartesian round joins, geocentric conversions and extended transverse Mercator projections. Other numeric types retain their standard or ADL math overloads.",
+    "headers": [
+      {
+        "path": "boost/geometry/strategies/cartesian/buffer_join_round.hpp",
+        "input_sha256": "663bad23dc6d88648d2ec866b6e03e6421c25992fc7a751143eec9ce143cb6de",
+        "output_sha256": "3c51a1a05e9081e8311f3e15e13dd01c69d9ffb3b77e40f723d6d6f1e4b82ccd",
+        "replacements": [
+          [
+            "#define BOOST_GEOMETRY_STRATEGIES_CARTESIAN_BUFFER_JOIN_ROUND_HPP\n",
+            "#define BOOST_GEOMETRY_STRATEGIES_CARTESIAN_BUFFER_JOIN_ROUND_HPP\n\n#include \"share/geo/geo_math.h\"\n"
+          ],
+          [
+            "\n        PromotedType const angle1 = atan2(dy1, dx1);\n",
+            "\n        PromotedType const angle1 = oceanbase::common::geometry_math::atan2(dy1, dx1);\n"
+          ],
+          [
+            "\n        PromotedType angle2 = atan2(dy2, dx2);\n",
+            "\n        PromotedType angle2 = oceanbase::common::geometry_math::atan2(dy2, dx2);\n"
+          ],
+          [
+            "\n            set<0>(p, get<0>(vertex) + buffer_distance * cos(a));\n",
+            "\n            set<0>(p, get<0>(vertex) + buffer_distance * oceanbase::common::geometry_math::cos(a));\n"
+          ]
+        ]
+      },
+      {
+        "path": "boost/geometry/srs/projections/impl/geocent.hpp",
+        "input_sha256": "e1050706a6b7cfd086a9f8a7f6fe63180202e002f5f1f493da41c0470d6f4331",
+        "output_sha256": "b7defa1c3409051d13595736eb1b8a58c976908de4da211edcf7a7e7b7e37282",
+        "replacements": [
+          [
+            "#define BOOST_GEOMETRY_SRS_PROJECTIONS_IMPL_GEOCENT_HPP\n",
+            "#define BOOST_GEOMETRY_SRS_PROJECTIONS_IMPL_GEOCENT_HPP\n\n#include \"share/geo/geo_math.h\"\n"
+          ],
+          [
+            "\n    return cos(T(67.5) * math::d2r<T>());  /* cosine of 67.5 degrees */\n",
+            "\n    return oceanbase::common::geometry_math::cos(T(67.5) * math::d2r<T>());  /* cosine of 67.5 degrees */\n"
+          ],
+          [
+            "\n    Cos_Lat = cos(Latitude);\n",
+            "\n    Cos_Lat = oceanbase::common::geometry_math::cos(Latitude);\n"
+          ],
+          [
+            "\n    X = (Rn + Height) * Cos_Lat * cos(Longitude);\n",
+            "\n    X = (Rn + Height) * Cos_Lat * oceanbase::common::geometry_math::cos(Longitude);\n"
+          ],
+          [
+            "\n        Longitude = atan2(Y,X);\n",
+            "\n        Longitude = oceanbase::common::geometry_math::atan2(Y,X);\n"
+          ],
+          [
+            "\n        Longitude=atan2(Y,X);\n",
+            "\n        Longitude=oceanbase::common::geometry_math::atan2(Y,X);\n"
+          ]
+        ]
+      },
+      {
+        "path": "boost/geometry/srs/projections/proj/etmerc.hpp",
+        "input_sha256": "4cb29001413597a733bd9ece8a14a15993335e4bd610e25f6a58178676aa338e",
+        "output_sha256": "bb2232ebd884ff63a0b8778109eaeca61e76b858f40b840392d79a2724a71126",
+        "replacements": [
+          [
+            "#define BOOST_GEOMETRY_PROJECTIONS_ETMERC_HPP\n",
+            "#define BOOST_GEOMETRY_PROJECTIONS_ETMERC_HPP\n\n#include \"share/geo/geo_math.h\"\n"
+          ],
+          [
+            "\n                cos_2B = 2*cos(2*B);\n",
+            "\n                cos_2B = 2*oceanbase::common::geometry_math::cos(2*B);\n"
+          ],
+          [
+            "\n                cos_arg_r  = cos(arg_r);\n",
+            "\n                cos_arg_r  = oceanbase::common::geometry_math::cos(arg_r);\n"
+          ],
+          [
+            "\n                    cos_Cn = cos(Cn);\n",
+            "\n                    cos_Cn = oceanbase::common::geometry_math::cos(Cn);\n"
+          ],
+          [
+            "\n                    cos_Ce = cos(Ce);\n",
+            "\n                    cos_Ce = oceanbase::common::geometry_math::cos(Ce);\n"
+          ],
+          [
+            "\n                    Cn     = atan2(sin_Cn, cos_Ce*cos_Cn);\n",
+            "\n                    Cn     = oceanbase::common::geometry_math::atan2(sin_Cn, cos_Ce*cos_Cn);\n"
+          ],
+          [
+            "\n                    Ce     = atan2(sin_Ce*cos_Cn, boost::math::hypot(sin_Cn, cos_Cn*cos_Ce));\n",
+            "\n                    Ce     = oceanbase::common::geometry_math::atan2(sin_Ce*cos_Cn, boost::math::hypot(sin_Cn, cos_Cn*cos_Ce));\n"
+          ],
+          [
+            "\n                        cos_Cn = cos(Cn);\n",
+            "\n                        cos_Cn = oceanbase::common::geometry_math::cos(Cn);\n"
+          ],
+          [
+            "\n                        cos_Ce = cos(Ce);\n",
+            "\n                        cos_Ce = oceanbase::common::geometry_math::cos(Ce);\n"
+          ],
+          [
+            "\n                        Ce     = atan2(sin_Ce, cos_Ce*cos_Cn);\n",
+            "\n                        Ce     = oceanbase::common::geometry_math::atan2(sin_Ce, cos_Ce*cos_Cn);\n"
+          ],
+          [
+            "\n                        Cn     = atan2(sin_Cn*cos_Ce, boost::math::hypot(sin_Ce, cos_Ce*cos_Cn));\n",
+            "\n                        Cn     = oceanbase::common::geometry_math::atan2(sin_Cn*cos_Ce, boost::math::hypot(sin_Ce, cos_Ce*cos_Cn));\n"
+          ]
+        ]
+      }
+    ]
+  },
   "sqlite": {
     "version": "3.38.1",
     "url": "https://www.sqlite.org/2022/sqlite-amalgamation-3380100.zip",
     "sha256": "6fb55507d4517b5cbc80bd2db57b0cbe1b45880b28f2e4bd6dca4cfe3716a231",
     "source_sha3_256": "262ba071e960a8a0a6ce39307ae30244a2b0dc9fe1c4c09d0e1070d4353cd92c",
-    "source_directory": "sqlite-amalgamation-3380100"
+    "source_directory": "sqlite-amalgamation-3380100",
+    "patched_source_sha256": "fdd310f61dd72284e246d1738af29bd444665137445ead96532bc0dca3cefabd",
+    "wasm_patches": [
+      [
+        "osMunmap(p->apRegion[i], p->szRegion);",
+        "osMunmap(p->apRegion[i], p->szRegion*nShmPerMap);"
+      ]
+    ]
   },
   "s2_wasm_port": {
     "path": "s2/base/port.h",
@@ -156,8 +273,28 @@
     "output_sha256": "cc8c045ee9d451a28ae32d36cd9508333a0c7ba3b802bc1a472d481205a6a285"
   },
   "vsag_source_patches": {
-    "description": "Keep static PQ HNSW optional with explicit unsupported errors; remove unused DiskANN includes; guard OpenMP thread settings when using a serial BLAS backend. Pthread task execution remains intact.",
+    "description": "Keep static PQ HNSW optional with explicit unsupported errors; remove unused DiskANN includes; guard OpenMP thread settings when using a serial BLAS backend; keep empty HGraph reverse loops valid on wasm32. Pthread task execution remains intact.",
     "files": [
+      {
+        "path": "src/algorithm/hgraph.cpp",
+        "description": "Convert the upper-graph count to int64_t before subtracting one, so an empty vector skips reverse traversal on wasm32.",
+        "input_sha256": "b5e13a0b1ab68b235561bae24ee40275eaf594e38ffb3f552f5028426340d4db",
+        "output_sha256": "47d7d52f3d2f96dbc8f4c41a8db3b498b247ca28f21e815626d32cfab5fe00e4",
+        "replacements": [
+          [
+            "            for (auto i = static_cast<int64_t>(this->route_graphs_.size() - 1); i >= 0; --i) {",
+            "            for (auto i = static_cast<int64_t>(this->route_graphs_.size()) - 1; i >= 0; --i) {"
+          ],
+          [
+            "    for (auto i = static_cast<int64_t>(this->route_graphs_.size() - 1); i >= 0; --i) {\n        auto result = this->search_one_graph(raw_query,",
+            "    for (auto i = static_cast<int64_t>(this->route_graphs_.size()) - 1; i >= 0; --i) {\n        auto result = this->search_one_graph(raw_query,"
+          ],
+          [
+            "    for (auto i = static_cast<int64_t>(this->route_graphs_.size() - 1); i >= 0; --i) {\n        auto result = this->search_one_graph(\n",
+            "    for (auto i = static_cast<int64_t>(this->route_graphs_.size()) - 1; i >= 0; --i) {\n        auto result = this->search_one_graph(\n"
+          ]
+        ]
+      },
       {
         "path": "src/algorithm/hnswlib/hnswlib.h",
         "input_sha256": "76bfafda3cf238c6784d6650293207a302f28c5517b08d3e69c4bb10cd0dd0b5",

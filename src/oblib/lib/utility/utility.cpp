@@ -17,6 +17,7 @@
 #define USING_LOG_PREFIX LIB
 
 #include "utility.h"
+#include "lib/utility/ob_printf.h"
 #include "dirent.h"
 #if defined(__APPLE__)
 #include <sys/sysctl.h>
@@ -1651,7 +1652,7 @@ int ob_alloc_printf(ObString &result, ObIAllocator &alloc, const char* fmt, va_l
   int ret = OB_SUCCESS;
   va_list ap2;
   va_copy(ap2, ap);
-  int64_t n = vsnprintf(NULL, 0, fmt, ap);
+  int64_t n = ob_vsnprintf(NULL, 0, fmt, ap);
   if (n < 0) {
     LOG_ERROR("vsnprintf failed", K(n), K(errno));
     ret = OB_ERR_SYS;
@@ -1661,7 +1662,7 @@ int ob_alloc_printf(ObString &result, ObIAllocator &alloc, const char* fmt, va_l
       ret = OB_ALLOCATE_MEMORY_FAILED;
       LOG_ERROR("no memory");
     } else {
-      int64_t n2 = vsnprintf(buf, n+1, fmt, ap2);
+      int64_t n2 = ob_vsnprintf(buf, n+1, fmt, ap2);
       if (n2 < 0) {
         LOG_ERROR("vsnprintf failed", K(n), K(errno));
         ret = OB_ERR_SYS;

@@ -326,7 +326,7 @@ public:
     common::databuff_printf(buf, buf_len, pos, "timer_running_flag:%d, ", ATOMIC_LOAD(timer_running_flag_));
     common::databuff_printf(buf, buf_len, pos, "total_running_count:%ld, ", ATOMIC_LOAD(total_running_count_));
     common::databuff_printf(buf, buf_len, pos, "is_running:%d, ", is_running_);
-#ifndef _WIN32
+#if !defined(_WIN32) && !(defined(__EMSCRIPTEN__) && __SIZEOF_LONG__ == 4)
     common::databuff_printf(buf, buf_len, pos, "{this:0x%lx, ", (unsigned long)this);
     common::databuff_printf(buf, buf_len, pos, "func_shared_ptr_.ptr:0x%lx, ", (unsigned long)func_shared_ptr_.get_ptr());
     common::databuff_printf(buf, buf_len, pos, "time_wheel:0x%lx, ", (unsigned long)time_wheel_);

@@ -20,6 +20,8 @@
 #include <emscripten/wasmfs.h>
 #include <wasi/api.h>
 
+extern "C" backend_t seekdb_create_memory_backend();
+
 namespace {
 constexpr const char *MOVE_JOURNAL = "/seekdb/.move";
 std::atomic<int> reported{0};
@@ -104,7 +106,10 @@ void finish_recorded_move()
 
 bool seekdb_mount_storage(bool persistent)
 {
-  if (!persistent) return true;
+  if (!persistent) {
+    backend_t backend = seekdb_create_memory_backend();
+    return backend != nullptr && wasmfs_create_directory("/seekdb", 0777, backend) == 0;
+  }
   const int available = EM_ASM_INT({
     return typeof navigator !== 'undefined' && navigator.storage
         && typeof navigator.storage.getDirectory === 'function' ? 1 : 0;

@@ -1110,6 +1110,8 @@ int ObHashGroupByOp::alloc_group_row(const int64_t group_id, ObGroupRowItem &ite
   } else if (OB_ISNULL(item.group_row_)) {
     ret = OB_ERR_UNEXPECTED;
     LOG_WARN("group_row is null", K(ret));
+  } else {
+    item.is_expr_row_ = false;
   }
   return ret;
 }

@@ -241,5 +241,16 @@ int64_t get_sql_nio_bound_tcp_port()
              ? 0
              : global_sql_nio_server->get_bound_tcp_port();
 }
+
+int64_t get_sql_nio_advertised_tcp_port()
+{
+#ifdef __EMSCRIPTEN__
+  return nullptr == global_sql_nio_server
+             ? 0
+             : global_sql_nio_server->get_advertised_tcp_port();
+#else
+  return get_sql_nio_bound_tcp_port();
+#endif
+}
 }; // end namespace obmysql
 }; // end namespace oceanbase

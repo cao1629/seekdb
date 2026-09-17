@@ -1918,7 +1918,7 @@ OB_INLINE int64_t ob_syscall_gettid()
   return static_cast<int64_t>(GetCurrentThreadId());
 #elif defined(__EMSCRIPTEN__)
   // Emscripten pthread identities are unique for the lifetime of a thread.
-  return static_cast<int64_t>(reinterpret_cast<uintptr_t>(pthread_self()));
+  return static_cast<int64_t>(reinterpret_cast<uintptr_t>(pthread_self()) >> 2);
 #elif defined(__APPLE__)
   // macOS doesn't have gettid, use pthread_threadid_np instead
   uint64_t thread_id = 0;

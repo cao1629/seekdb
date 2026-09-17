@@ -32,3 +32,14 @@ target_link_options(test_wasm_geometry PRIVATE -pthread -sUSE_ZLIB=1
 add_test(NAME wasm_geometry COMMAND ${CMAKE_CROSSCOMPILING_EMULATOR}
   "$<TARGET_FILE:test_wasm_geometry>")
 set_tests_properties(wasm_geometry PROPERTIES TIMEOUT 30)
+
+add_executable(test_wasm_geo_math "${SEEKDB_ROOT}/unittest/wasm/test_wasm_geo_math.cpp")
+target_compile_features(test_wasm_geo_math PRIVATE cxx_std_20)
+target_include_directories(test_wasm_geo_math PRIVATE
+  "${SEEKDB_ROOT}/src" "${CMAKE_CURRENT_BINARY_DIR}/third_party/include")
+target_compile_options(test_wasm_geo_math PRIVATE -Oz -UNDEBUG -ffp-contract=off)
+target_link_options(test_wasm_geo_math PRIVATE
+  -sSTACK_SIZE=1048576 -sASSERTIONS=2 -sEXIT_RUNTIME=1)
+add_test(NAME wasm_geo_math COMMAND ${CMAKE_CROSSCOMPILING_EMULATOR}
+  "$<TARGET_FILE:test_wasm_geo_math>")
+set_tests_properties(wasm_geo_math PROPERTIES TIMEOUT 30)

@@ -188,12 +188,14 @@ int64_t ObMetaDiskAddr::to_string(char *buf, const int64_t buf_len) const
     case FILE:
       databuff_printf(buf, buf_len, pos,
                       "[file_id=%ld,offset=%lu,size=%lu,type=%lu,seq=%lu]}",
-                      file_id_, offset_, size_, type_, seq_);
+                      file_id_, static_cast<uint64_t>(offset_), static_cast<uint64_t>(size_),
+                      static_cast<uint64_t>(type_), seq_);
       break;
     default:
       databuff_printf(buf, buf_len, pos,
                       "[2nd=%ld][3rd=%ld][offset=%lu,size=%lu,type=%lu,seq=%lu]}",
-                      second_id_, third_id_, offset_, size_, type_, seq_);
+                      second_id_, third_id_, static_cast<uint64_t>(offset_), static_cast<uint64_t>(size_),
+                      static_cast<uint64_t>(type_), seq_);
       break;
   }
 

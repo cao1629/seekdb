@@ -16,6 +16,7 @@
 
 #define USING_LOG_PREFIX LIB
 #include "lib/utility/ob_print_utils.h"
+#include "lib/utility/ob_printf.h"
 #include "lib/utility/ob_tracepoint.h" // ERRSIM_POINT_DEF
 #include "lib/allocator/ob_malloc.h"
 namespace oceanbase
@@ -319,7 +320,7 @@ int64_t to_string<long>(const long &v, char *buffer, const int64_t buffer_size)
 {
   int ret = OB_SUCCESS;
   int64_t pos = 0;
-  if (OB_FAIL(databuff_printf(buffer, buffer_size, pos, "%ld", v))) {
+  if (OB_FAIL(databuff_printf(buffer, buffer_size, pos, "%" PRId64, static_cast<int64_t>(v)))) {
   } else {}
   return pos;
 }
@@ -328,7 +329,7 @@ int64_t to_string<unsigned long>(const unsigned long &v, char *buffer, const int
 {
   int ret = OB_SUCCESS;
   int64_t pos = 0;
-  if (OB_FAIL(databuff_printf(buffer, buffer_size, pos, "%lu", v))) {
+  if (OB_FAIL(databuff_printf(buffer, buffer_size, pos, "%" PRIu64, static_cast<uint64_t>(v)))) {
   } else {}
   return pos;
 }
@@ -514,7 +515,7 @@ int databuff_vprintf(char *buf, const int64_t buf_len, int64_t &pos, const char 
     }
     int len = vsnprintf(buf + pos, buf_len - pos, actual_fmt, args);
 #else
-    int len = vsnprintf(buf + pos, buf_len - pos, fmt, args);
+    int len = ob_vsnprintf(buf + pos, buf_len - pos, fmt, args);
 #endif
     if (len < 0) {
       ret = OB_ERR_UNEXPECTED;

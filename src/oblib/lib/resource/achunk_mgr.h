@@ -262,6 +262,9 @@ private:
   }
   bool push_chunk(AChunk* chunk, const uint64_t all_size, const uint64_t hold_size)
   {
+#ifdef __EMSCRIPTEN__
+    if (all_size != NORMAL_ACHUNK_SIZE) { return false; }
+#endif
     int32_t idx = slot_idx(all_size);
     bool bret = slots_[idx]->push(chunk);
     if (bret) {
@@ -286,6 +289,9 @@ private:
   }
   AChunk* pop_chunk_with_size(const uint64_t size)
   {
+#ifdef __EMSCRIPTEN__
+    if (size != NORMAL_ACHUNK_SIZE) { return nullptr; }
+#endif
     AChunk* chunk = NULL;
     int32_t idx = slot_idx(size);
     if (NORMAL_ACHUNK_SIZE == size) {

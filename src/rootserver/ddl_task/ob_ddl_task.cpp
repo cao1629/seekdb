@@ -1076,7 +1076,7 @@ void ObDDLTask::check_ddl_task_execute_too_long()
   int ret = OB_SUCCESS;
   const int64_t execute_time = ObTimeUtility::current_time() - start_time_;
   if (execute_time > TASK_EXECUTE_TIME_THRESHOLD) {
-    if (REACH_TIME_INTERVAL(3600 * 1000 * 1000L)) {
+    if (REACH_TIME_INTERVAL(3600LL * 1000 * 1000L)) {
       ret = OB_DDL_TASK_EXECUTE_TOO_MUCH_TIME;
       LOG_DBA_ERROR(OB_DDL_TASK_EXECUTE_TOO_MUCH_TIME, "msg","ddl task executes too much time", K(ret), K(task_id_), K(execute_time));
     }

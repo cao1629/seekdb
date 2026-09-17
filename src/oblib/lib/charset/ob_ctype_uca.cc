@@ -797,12 +797,12 @@ static int ob_strnncollsp_uca(const ObCharsetInfo *cs, Mb_wc mb_wc,
 }
 template <class Mb_wc>
 static void ob_hash_sort_uca(const ObCharsetInfo *cs, Mb_wc mb_wc,
-                             const unsigned char *s, size_t slen, ulong *n1,
-                             ulong *n2, const bool calc_end_space __attribute__((unused)),
+                             const unsigned char *s, size_t slen, uint64_t *n1,
+                             uint64_t *n2, const bool calc_end_space __attribute__((unused)),
                              hash_algo hash_algo) {
   int s_res;
-  ulong tmp1;
-  ulong tmp2;
+  uint64_t tmp1;
+  uint64_t tmp2;
   int space_weight = ob_space_weight(cs);
   slen = cs->cset->lengthsp(cs, pointer_cast<const char *>(s), slen);
   uca_scanner_any<Mb_wc> scanner(mb_wc, cs, s, slen);
@@ -1101,7 +1101,7 @@ static int ob_strnncollsp_any_uca(const ObCharsetInfo *cs, const unsigned char *
   return ob_strnncollsp_uca(cs, mb_wc, s, slen, t, tlen);
 }
 static void ob_hash_sort_any_uca(const ObCharsetInfo *cs, const unsigned char *s,
-                                 size_t slen, ulong *n1, ulong *n2,
+                                 size_t slen, uint64_t *n1, uint64_t *n2,
                                  const bool calc_end_space,
                                  hash_algo hash_algo) {
   if (cs->cset->mb_wc == ob_mb_wc_utf8mb4_thunk) {
@@ -1173,10 +1173,10 @@ static int ob_strnncollsp_uca_900(const ObCharsetInfo *cs, const unsigned char *
 }  // extern "C"
 template <class Mb_wc, int LEVELS_FOR_COMPARE>
 static void ob_hash_sort_uca_900_tmpl(const ObCharsetInfo *cs, const Mb_wc mb_wc,
-                                      const unsigned char *s, size_t slen, ulong *n1) {
+                                      const unsigned char *s, size_t slen, uint64_t *n1) {
   uca_scanner_900<Mb_wc, LEVELS_FOR_COMPARE> scanner(mb_wc, cs, s, slen);
   
-  uint64 h = *n1;
+  uint64_t h = *n1;
   h ^= 14695981039346656037ULL;
   scanner.for_each_weight(
       [&](int s_res, bool) -> bool {
@@ -1189,7 +1189,7 @@ static void ob_hash_sort_uca_900_tmpl(const ObCharsetInfo *cs, const Mb_wc mb_wc
 }
 extern "C" {
 static void ob_hash_sort_uca_900(const ObCharsetInfo *cs, const unsigned char *s,
-                                 size_t slen, ulong *n1, ulong *, const bool, hash_algo) {
+                                 size_t slen, uint64_t *n1, uint64_t *, const bool, hash_algo) {
   if (cs->cset->mb_wc == ob_mb_wc_utf8mb4_thunk) {
     switch (cs->levels_for_compare) {
       case 1:
@@ -7126,4 +7126,3 @@ ObCharsetInfo *euro_collations[] = {
   &ob_charset_utf16_vietnamese_ci    ,
   nullptr     // do not delete the nullptr to prevent to count array overflow
 };
-
