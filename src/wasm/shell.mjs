@@ -16,6 +16,7 @@
 import {CommandHistory, databaseAfterStatement, isComplete, takeStatement} from './shell-sql.mjs';
 import {EXAMPLES} from './shell-examples.mjs';
 import {formatTable} from './shell-format.mjs';
+import {ENGINE_VERSION} from './engine-version.mjs';
 
 const element = id => document.getElementById(id);
 const input = element('sql');
@@ -25,6 +26,7 @@ const terminalScroll = element('terminal-scroll');
 const exampleButtons = element('example-menu').querySelectorAll('button');
 const menus = document.querySelectorAll('.menu');
 const versionLabel = element('version-label');
+versionLabel.textContent = ENGINE_VERSION;
 const storageHint = element('storage-hint');
 const decoder = new TextDecoder();
 const history = new CommandHistory();
@@ -43,6 +45,7 @@ let activeEntry;
 const STORAGE_KEY = 'seekdb-shell-storage';
 const persistentSupported = typeof navigator.storage?.getDirectory === 'function' && typeof navigator.locks?.request === 'function';
 let storage = rememberedStorage();
+let pendingStorage;
 let persistentClearPending = false;
 
 function node(tag, className, text) {
@@ -58,13 +61,14 @@ function elapsed(start) {
 
 function setState(next, message) {
   state = next;
-  element('status-dot').dataset.state = next;
+  const starting = ['loading', 'closing'].includes(next);
+  element('status-dot').dataset.state = starting ? 'loading' : next;
   element('status-text').textContent = message;
   input.disabled = !['ready', 'running'].includes(next);
   input.readOnly = next === 'running';
-  input.placeholder = next === 'loading' ? 'loading…' : next === 'closed' || next === 'error' ? 'Choose New Instance to start a database' : 'SELECT VERSION();';
+  input.placeholder = starting ? 'loading…' : next === 'closed' || next === 'error' ? 'Choose New Instance to start a database' : 'SELECT VERSION();';
   for (const button of exampleButtons) button.disabled = next !== 'ready';
-  element('database-name').textContent = database ? `seekdb [${currentDatabase ?? '(none)'}]` : 'seekdb';
+  element('database-name').textContent = database && !starting ? `seekdb [${currentDatabase ?? '(none)'}]` : 'seekdb';
   element('prompt').textContent = `${element('database-name').textContent}>`;
   element('status-dot').title = message;
   updateStorage();
@@ -284,18 +288,16 @@ async function updateVersion() {
     for await (const event of metadata.query('SELECT VERSION()')) {
       if (event.kind === 'row') engineVersion = decode(event.values[0]);
     }
-    versionLabel.textContent = engineVersion?.match(/seekdb-(v\S+)/i)?.[1] ?? engineVersion ?? 'Version unavailable';
-    if (engineVersion) versionLabel.title = `WebAssembly · ${engineVersion}`;
-  } catch {
-    versionLabel.textContent = 'Version unavailable';
-  } finally {
+    if (engineVersion) {
+      versionLabel.textContent = engineVersion.match(/seekdb-(v\S+)/i)?.[1] ?? engineVersion;
+      versionLabel.title = `WebAssembly · ${engineVersion}`;
+    }
+  } catch {} finally {
     await metadata?.close().catch(() => {});
   }
 }
 
 async function openDatabase() {
-  versionLabel.textContent = 'Loading…';
-  versionLabel.removeAttribute('title');
   setState('loading', 'Loading WebAssembly and starting seekdb. The first start can take a few seconds…');
   try {
     if (!globalThis.isSecureContext || !globalThis.crossOriginIsolated || typeof SharedArrayBuffer === 'undefined') {
@@ -315,7 +317,6 @@ async function openDatabase() {
     await database?.close().catch(() => {});
     database = undefined;
     session = undefined;
-    versionLabel.textContent = 'Version unavailable';
     const hint = storage !== 'opfs' ? 'Check that the compiled .mjs and .wasm files are available, then choose New Instance.'
       : /another tab/.test(error.message) ? 'Close it there first, or choose Memory from New Instance.'
       : /locked/.test(error.message) ? 'Another page may still be using the stored database. Close it there, then choose New Instance.'
@@ -331,7 +332,6 @@ async function closeDatabase() {
   setState('closing', persistent ? 'Closing the database…' : 'Closing the in-memory database…');
   try {
     await database.close();
-    notice(persistent ? 'Database closed. Its data stays in this browser.' : 'Database closed. Its in-memory data was discarded.');
   } catch (error) {
     notice(`Database closed with an error: ${error.message}`, true);
   } finally {
@@ -353,7 +353,7 @@ function rememberStorage(mode) {
 }
 
 function updateStorage() {
-  const persistent = storage === 'opfs';
+  const persistent = (pendingStorage ?? storage) === 'opfs';
   const busy = ['loading', 'running', 'closing'].includes(state);
   element('storage-badge').textContent = persistent ? 'opfs://' : 'memory://';
   storageHint.textContent = persistent ? 'Storage: opfs:// — data is kept in this browser.' : 'Storage: memory:// — data clears on reload or close.';
@@ -368,7 +368,11 @@ function closeMenus() {
 async function createInstance(mode) {
   closeMenus();
   if (['loading', 'running', 'closing'].includes(state)) return;
+  pendingStorage = mode;
   persistentClearPending ||= mode === 'opfs' || Boolean(database && storage === 'opfs');
+  transcript.replaceChildren(welcome);
+  followOutput = true;
+  setInput('');
   if (database) await closeDatabase();
   setState('loading', 'Clearing data and creating a new instance…');
   try {
@@ -379,15 +383,13 @@ async function createInstance(mode) {
     }
     storage = mode;
     rememberStorage(mode);
-    transcript.replaceChildren(welcome);
-    followOutput = true;
-    setInput('');
     await openDatabase();
   } catch (error) {
-    versionLabel.textContent = 'Version unavailable';
-    versionLabel.removeAttribute('title');
     notice(`Could not clear the stored database: ${error.message}\nClose any other page using this database, then try New Instance again.`, true);
     setState('error', 'Could not create a new instance');
+  } finally {
+    pendingStorage = undefined;
+    updateStorage();
   }
 }
 
@@ -446,6 +448,4 @@ if (storage === 'opfs' && !persistentSupported) {
   storage = 'memory';
   notice('Persistent storage is not available in this browser; the database runs in memory.');
 }
-if (await openDatabase() && new URLSearchParams(location.search).get('run') === 'example') {
-  await submit(EXAMPLES.hybrid);
-}
+await openDatabase();

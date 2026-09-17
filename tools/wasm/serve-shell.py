@@ -24,7 +24,7 @@ from urllib.parse import unquote, urlsplit
 
 
 ROOT = Path(__file__).resolve().parents[2]
-GENERATED_ASSETS = ("seekdb_wasm_database.mjs", "seekdb_wasm_database.wasm")
+GENERATED_ASSETS = ("seekdb_wasm_database.mjs", "seekdb_wasm_database.wasm", "engine-version.mjs")
 SOURCE_ASSETS = (
     "shell.html", "shell.css", "shell.mjs", "shell-sql.mjs", "shell-examples.mjs", "shell-format.mjs", "database.mjs",
     "database-worker.mjs", "worker-server.mjs", "runtime-host.mjs",

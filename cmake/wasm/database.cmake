@@ -17,6 +17,8 @@ set(seekdb_wasm_modules database database-worker worker-server runtime-host mysq
 foreach(module ${seekdb_wasm_modules})
   configure_file("${SEEKDB_ROOT}/src/wasm/${module}.mjs" "${CMAKE_CURRENT_BINARY_DIR}/${module}.mjs" COPYONLY)
 endforeach()
+configure_file("${SEEKDB_ROOT}/src/wasm/engine-version.mjs.in"
+  "${CMAKE_CURRENT_BINARY_DIR}/engine-version.mjs" @ONLY)
 foreach(asset shell.html shell.css)
   configure_file("${SEEKDB_ROOT}/src/wasm/${asset}" "${CMAKE_CURRENT_BINARY_DIR}/${asset}" COPYONLY)
 endforeach()
@@ -57,6 +59,8 @@ set_target_properties(seekdb_wasm_database_memfs PROPERTIES SUFFIX ".mjs" OUTPUT
 foreach(module ${seekdb_wasm_modules})
   configure_file("${SEEKDB_ROOT}/src/wasm/${module}.mjs" "${CMAKE_CURRENT_BINARY_DIR}/memfs/${module}.mjs" COPYONLY)
 endforeach()
+configure_file("${SEEKDB_ROOT}/src/wasm/engine-version.mjs.in"
+  "${CMAKE_CURRENT_BINARY_DIR}/memfs/engine-version.mjs" @ONLY)
 configure_file("${SEEKDB_ROOT}/unittest/wasm/database-browser-cases.mjs"
   "${CMAKE_CURRENT_BINARY_DIR}/memfs/database-browser-cases.mjs" COPYONLY)
 target_link_options(seekdb_wasm_database_memfs PRIVATE ${seekdb_wasm_database_link_options})

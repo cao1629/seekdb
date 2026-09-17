@@ -18,13 +18,14 @@ python3 tools/wasm/serve-shell.py \
   --port 8767
 ```
 
-Open [the shell](http://127.0.0.1:8767/shell.html) or
-[run the Hybrid Search example](http://127.0.0.1:8767/shell.html?run=example).
+Open [the shell](http://127.0.0.1:8767/shell.html).
 The first load downloads the engine and initializes a database in the browser.
+The version badge shows the build version before the engine starts.
+Examples run only when selected from the **Examples** menu.
 Keep the server running; press Ctrl+C in its terminal to stop it.
 
-The launcher copies only `seekdb_wasm_database.mjs` and
-`seekdb_wasm_database.wasm` into this checkout's ignored `build_wasm_shell/`
+The launcher copies `seekdb_wasm_database.mjs`, `seekdb_wasm_database.wasm`, and
+`engine-version.mjs` into this checkout's ignored `build_wasm_shell/`
 directory. It serves the shell and JavaScript API from this checkout, so reloading
 the page picks up source edits. The server binds to `127.0.0.1` and serves an
 explicit list of assets. It does not expose the repository or execute SQL.
@@ -70,8 +71,9 @@ survives depends on the storage mode below.
 
 The shell starts with OPFS when the browser supports both OPFS and Web Locks,
 unless a previous storage choice was saved. Otherwise it starts in memory.
-Choose **Memory** or **OPFS** from **New Instance** to close the current engine,
-discard its data, clear the terminal, and start an empty database in that mode.
+Choose **Memory** or **OPFS** from **New Instance** to restore the welcome message,
+close the current engine, discard its data, and start an empty database in that mode.
+SQL input stays disabled until the new instance is ready.
 Selecting the current mode also creates a new instance. Creating an OPFS instance
 clears any previously stored database; leaving a running OPFS instance for Memory
 also clears its stored data. If clearing fails, startup stops and shows the error.
