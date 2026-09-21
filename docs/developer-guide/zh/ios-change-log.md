@@ -179,3 +179,11 @@ python3 deps/ios-build/build.py --jobs 4 vsag
 - build_app.py 为设备安装增加 120 秒超时，避免连接异常时无限等待；保留失败日志并由用户恢复连接后显式重试，不自动清除设备数据。
 - 较慢的 SQL 测试版安装随后成功，设备 lockState 也恢复响应；启动时却明确返回 FBSOpenApplicationErrorDomain 7 / Locked。读回的 Running JSON 时间早于本次启动，属于旧进程证据，不能当作 SQL 测试版已运行。已请用户解锁手机。
 - main.mm 在探针启动和运行时禁用本 App 的空闲自动锁屏，进入 Stopped / Failed 后恢复；只影响前台测试 App 的 idleTimerDisabled，不修改系统自动锁定设置，也不绕过手动锁屏。
+
+## 2026-09-21：SQL、恢复与停止验证
+
+- 解锁后 SQL 测试版在真机执行成功：SELECT 6*7、建库建表、计数写入和读回全部通过，sql_result=0、sql_verified=true、previous_runs=0。状态随后进入 Stopping。证据 probe-status-sql-current.json 和 device-console-sql-current.log。
+- 停止阶段发生 SIGABRT；系统报告栈为 ObTabletMemtableMgrPool::destroy → obs_destroy_modules → ObServerRuntime::destroy → ObServer::destroy。断言要求池计数为零。第一次控制台命令也达到 20 秒观察超时，但实际崩溃报告明确为 SIGABRT，不能将它归因于控制台超时或宣称正常停止。
+- 同一 seekdb-budget-v1 目录重新启动后，SQL 再次成功，previous_runs=1，验证已提交计数跨进程恢复；这是异常终止后的持久化恢复证据，尚不是干净停止后的重启验收。证据 probe-status-sql-restart.json。
+- src/observer/omt/ob_server_runtime_controller.cpp 将 Memtable 管理池销毁移至 LS 和 storage meta memory manager 之后；这些对象持有池分配的 handle，必须先释放。保留原断言，不绕过销毁，也不强制清零计数。完整链接和真机停止结果待追加。
+- 销毁顺序调整后完整 iOS 链接、UIKit Release 构建及签名通过，10 项脚本测试通过，git diff --check 通过；安装返回 CoreDeviceError 3002 / IXRemoteErrorDomain 6 / Connection interrupted，devicectl 随后显示 unavailable。已请用户恢复直连，尚未取得此调整后 Stopped/result=0 的真机结果。日志 engine-pool-order.log、app-pool-order.log；不将编译通过记为停止问题已解决。
