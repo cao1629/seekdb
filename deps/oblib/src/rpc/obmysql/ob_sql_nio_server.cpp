@@ -16,6 +16,7 @@
 
 #define USING_LOG_PREFIX RPC_OBMYSQL
 #include "rpc/obmysql/ob_sql_nio_server.h"
+#include "nio_shims.h"
 #include "lib/ob_running_mode.h"
 #include <stdio.h>
 #include <unistd.h>

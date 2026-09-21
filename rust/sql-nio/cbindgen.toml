@@ -33,3 +33,6 @@ header = """/*
  * instead, then rebuild.
  */"""
 
+
+[export]
+include = ["NioGreetingInfo", "NioMysqlCommandView"]

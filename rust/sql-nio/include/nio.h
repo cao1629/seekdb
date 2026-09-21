@@ -171,29 +171,6 @@ typedef struct NioConnectionHandle NioConnectionHandle;
 
 typedef struct NioReactor NioReactor;
 
-typedef struct NioGreetingInfo {
-  uint32_t sessid;
-  uint8_t scramble[20];
-  uint8_t version[64];
-  int64_t version_len;
-  uint16_t status_flags;
-  uint8_t reserved[6];
-} NioGreetingInfo;
-
-typedef struct NioMysqlCommandField {
-  int32_t off;
-  int32_t len;
-} NioMysqlCommandField;
-
-typedef struct NioMysqlCommandView {
-  uint32_t command;
-  uint32_t layout;
-  int64_t scalar0;
-  int64_t scalar1;
-  struct NioMysqlCommandField fields[4];
-  int64_t scalar2;
-} NioMysqlCommandView;
-
 typedef struct NioLoginField {
   int32_t off;
   int32_t len;
@@ -321,6 +298,29 @@ typedef struct NioMysqlExecuteParseResult {
   uint8_t reserved[7];
 } NioMysqlExecuteParseResult;
 
+typedef struct NioGreetingInfo {
+  uint32_t sessid;
+  uint8_t scramble[20];
+  uint8_t version[64];
+  int64_t version_len;
+  uint16_t status_flags;
+  uint8_t reserved[6];
+} NioGreetingInfo;
+
+typedef struct NioMysqlCommandField {
+  int32_t off;
+  int32_t len;
+} NioMysqlCommandField;
+
+typedef struct NioMysqlCommandView {
+  uint32_t command;
+  uint32_t layout;
+  int64_t scalar0;
+  int64_t scalar1;
+  struct NioMysqlCommandField fields[4];
+  int64_t scalar2;
+} NioMysqlCommandView;
+
 #ifdef __cplusplus
 extern "C" {
 #endif // __cplusplus
@@ -332,25 +332,6 @@ void nio_shutdown(void *sess);
 void nio_bind_sql_session(void *sess);
 
 int nio_release_sql_session(void *sess);
-
-extern int ob_sql_sock_handler_on_connect(void *handler,
-                                          void *sess,
-                                          int fd,
-                                          int is_unix,
-                                          struct NioGreetingInfo *greeting);
-
-extern int ob_sql_sock_handler_on_readable(void *handler,
-                                           void *sess,
-                                           char *body,
-                                           int64_t body_len,
-                                           uint64_t wire_bytes,
-                                           int packet_kind,
-                                           const struct NioMysqlCommandView *command_view,
-                                           uint64_t generation);
-
-extern void ob_sql_sock_handler_on_disconnect(void *handler, void *sess);
-
-extern void ob_sql_sock_handler_on_close(void *handler, void *sess, int err);
 
 int nio_get_login_view(void *sess, uint64_t generation, struct NioLoginView *out);
 

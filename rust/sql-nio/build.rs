@@ -23,6 +23,18 @@ fn main() {
         .expect("cbindgen failed")
         .write_to_file(&out);
 
+    let shims = crate_dir.join("include").join("nio_shims.h");
+    bindgen::Builder::default()
+        .header(shims.display().to_string())
+        .allowlist_function("ob_sql_sock_handler_on_.*")
+        .blocklist_type("Nio.*")
+        .layout_tests(false)
+        .generate()
+        .expect("bindgen failed")
+        .write_to_file(PathBuf::from(env::var("OUT_DIR").unwrap()).join("shims.rs"))
+        .unwrap();
+
     println!("cargo:rerun-if-changed=src");
     println!("cargo:rerun-if-changed=cbindgen.toml");
+    println!("cargo:rerun-if-changed=include/nio_shims.h");
 }
