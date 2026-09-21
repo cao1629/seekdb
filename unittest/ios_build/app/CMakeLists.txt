@@ -1,0 +1,22 @@
+cmake_minimum_required(VERSION 3.24)
+project(SeekDBProbe LANGUAGES CXX OBJCXX)
+if(NOT CMAKE_SYSTEM_NAME STREQUAL "iOS")
+  message(FATAL_ERROR "This probe requires the iOS SDK")
+endif()
+if(NOT EXISTS "${ENGINE_LINK_RESPONSE}" OR NOT DEVELOPMENT_TEAM)
+  message(FATAL_ERROR "Provide ENGINE_LINK_RESPONSE and DEVELOPMENT_TEAM")
+endif()
+add_executable(SeekDBProbe MACOSX_BUNDLE main.mm)
+target_include_directories(SeekDBProbe PRIVATE "${CMAKE_CURRENT_LIST_DIR}/../../../src/observer/ios")
+target_compile_options(SeekDBProbe PRIVATE -fobjc-arc)
+target_link_options(SeekDBProbe PRIVATE "@${ENGINE_LINK_RESPONSE}")
+target_link_libraries(SeekDBProbe PRIVATE "-framework UIKit")
+set_target_properties(SeekDBProbe PROPERTIES
+  MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_LIST_DIR}/Info.plist.in"
+  MACOSX_BUNDLE_GUI_IDENTIFIER "${PROBE_BUNDLE_ID}"
+  XCODE_ATTRIBUTE_DEVELOPMENT_TEAM "${DEVELOPMENT_TEAM}"
+  XCODE_ATTRIBUTE_CODE_SIGN_STYLE Automatic
+  XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY "Apple Development"
+  XCODE_ATTRIBUTE_TARGETED_DEVICE_FAMILY "1"
+  XCODE_ATTRIBUTE_ENABLE_USER_SCRIPT_SANDBOXING YES
+  LINK_DEPENDS "${ENGINE_LINK_RESPONSE}")

@@ -148,3 +148,14 @@ python3 deps/ios-build/build.py --jobs 4 vsag
 - Rust 在新 rust-target 目录增量重试仍有多个宿主 build-script 被 SIGKILL。cmake/Rust.cmake 将 RUST_TARGET_DIR 暴露为 CACHE PATH，默认不变；本次使用 -DRUST_TARGET_DIR="$PWD/build_ios_arm64/rust-probe" 复用此前已成功编译的同一源码/目标产物，不将此视为全新构建通过。codesign 校验新宿主程序磁盘签名有效，但这不能证明系统运行策略允许执行。
 - 完整链接前磁盘降至约 9.4 GiB，默认 10 GiB 保护正确终止。确认本次是增量链接、observer/SQL 库分别约 48/140 MiB 后，仅该次命令设置 SEEKDB_IOS_MIN_FREE_GIB=6，未修改脚本默认阈值。
 - 最终 seekdb_ios_link_check 构建达到 100%，约 216 MiB；vtool 确认 IOS/minos 18.0/sdk 27.0，otool -L 仅包含 Accelerate、libSystem、Security、CoreFoundation、SystemConfiguration、libiconv、libc++ 等 Apple 系统库，三类未解析符号均已消除。日志 link-check.log；脚本测试 6 项通过，bash -n、py_compile、git diff --check 通过。没有将链接探针误记为 UIKit App、SQL 或真机运行成功。
+
+## 2026-09-21：UIKit 真机测试 App
+
+- 用户在 Xcode Accounts 完成登录后，读取到 Personal Team；起初钥匙串仍只有本地证书，随后通过 xcodebuild 的自动签名流程申请 Apple Development 签名。团队 ID 作为命令参数，不硬编码在源码中。
+- 新增 unittest/ios_build/app 的 main.mm、Info.plist.in 和独立 CMakeLists.txt：UIKit 界面、后台专用线程、停止按钮、Documents/probe-status.json 状态记录。仅测试包装，不替代 QuickLang App，不声称 SQL 已验证。
+- 新增 deps/ios-build/build_app.py：读取成功链接探针的依赖闭包、绝对化静态库路径、移除宿主 rpath、拒绝未知链接参数；生成仓库内 Xcode 工程，使用 Automatic 签名、允许 provisioning 更新和设备注册，codesign 验证后可按 --install 安装。证书私钥由 Xcode/钥匙串管理，不纳入 Git。
+- 新增 unittest/ios_build/test_app_link.py，覆盖带空格路径、参数顺序、未知参数拒绝、缺少运行库拒绝。构建和安装日志位于 build_ios_arm64/logs/app-build.log；实测结果继续追加。
+- 首次 Xcode 包装链接因其宿主库搜索路径选中了 Homebrew macOS libomp.dylib 而失败；提取器现将所有第三方 -l 参数解析为 iOS 前缀内的绝对静态库路径，仅白名单系统库保留 -l，并新增测试。避免仅依赖 -L 顺序。10 项脚本测试全部通过。
+- Xcode 自动签名成功生成 Apple Development 证书；SeekDBProbe Release 真机构建成功，codesign --verify --deep --strict 通过，devicectl 确认 org.seekdb.iosprobe.longda 安装成功。描述文件匹配 App 和目标设备，get-task-allow 为 true，有效期至 2026-09-28。
+- 首次启动返回 CoreDeviceError 10002 / FBSOpenApplicationErrorDomain Security，提示签名、entitlement 或尚未信任描述文件；本机签名检查通过且描述文件包含目标设备，已请用户完成手机端开发者信任，未将安装成功算成引擎运行成功。
+- build_app.py 为后续 Xcode 构建指定仓库内 app/DerivedData，避免测试工程的派生数据使用默认位置；系统 Xcode/SDK 自身的共享缓存及系统凭证仍由 Apple 工具管理，不进入 Git。
