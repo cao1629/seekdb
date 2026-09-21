@@ -166,3 +166,7 @@ python3 deps/ios-build/build.py --jobs 4 vsag
 - main.mm 改用 UIWindowSceneDelegate 创建窗口和启动后台线程，新增轻量 UIApplicationDelegate；Info.plist 声明单 Scene 生命周期。此修复针对 SDK/iOS 27 的实际 UIKit 启动诊断；引擎尚未到达初始化，因此没有基于这次崩溃修改数据库逻辑。
 - 原始报告和控制台位于忽略目录 build_ios_arm64/logs/device-crash.ips、device-console.log；报告中的设备和账号元数据不提交，关键错误和修复已在此受 Git 跟踪的记录中保留。
 - Scene 修复版 Xcode Release 构建成功，但覆盖安装途中设备连接中断，返回 IXRemoteErrorDomain 6 / Connection interrupted；随后 devicectl 显示 unavailable，USB 枚举仍能看到 iPhone。此时不能确认修复版已安装或启动，正在恢复连接。日志 app-scene-build.log、device-console-scene.log。
+- 设备恢复后 Scene 修复版重新安装、启动成功，Documents/probe-status.json 可读回，状态 Failed、result=-4024、sql_verified=false。界面生命周期问题已越过，数据库初始化仍失败。
+- 通过 LLDB 连接真机进程，断点和返回寄存器确认 ObServer::init_opts_config 返回 -4024（OB_BUF_NOT_ENOUGH）；真机执行 sysconf(_SC_ARG_MAX) 返回 -1。ObCommonConfig::add_extra_config_unsafe 将该返回值直接作为最大长度，导致正常配置字符串被拒绝。
+- src/share/config/ob_common_config.cpp 对非正的 sysconf 结果使用 256 KiB 有界备用上限，与 Windows 既有上限一致；正值平台保留系统上限。未禁用配置长度检查，未修改全局安全策略。增量构建日志 engine-argmax.log；修复后的真机结果待追加。
+- ARG_MAX 修复版编译、签名、安装成功；真机不再返回 -4024，日志确认配置和引擎初始化完成，执行到首次 bootstrap 检查后返回 -4015。旧失败目录已包含数据版本标记，不是空库；不删除旧目录，后续使用独立目录继续验证。该结果证明配置限制修复生效，不代表建库或 SQL 成功。
