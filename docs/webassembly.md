@@ -299,7 +299,9 @@ two entries, a file held by another Worker, and clearing. Not covered yet:
   locks; the Web Lock and the handle probe cover pages, not a crashed browser
   mid-write.
 - `getcwd` belongs in WasmFS or in absolute paths in the engine, not in the wrapper.
-- Safari has no `FileSystemFileHandle.move()`, so file renames fail there.
+- Safari startup, file renames, and stored-data recovery have not been tested.
+  Safari supports OPFS and `FileSystemHandle.move()`; see
+  [WebKit's OPFS documentation](https://webkit.org/blog/12257/the-file-system-access-api-with-origin-private-file-system/).
 - Quota exhaustion and failed flushes are untested.
 
 ## Configure engine dependencies
@@ -793,7 +795,7 @@ transport additionally exercises these layouts across the Wasm C++/Rust boundary
 | --- | --- | --- |
 | G0: platform primitives and dependency closure | Emscripten 4.0.23 wasm32: real allocator links and runs; atomic, stack/backtrace, futex and memory/thread Node tests pass | Browser runs; engine stack budgets; CAS128/list caller audit; target ABI/varargs audit; minimal service thread and I/O wait graph; complete dependency/source inventory |
 | G1: browser memory database | Node real SQL lifecycle and production async Worker API pass: authentication, CRUD, commit/rollback, invalid-SQL recovery, disconnect rollback/write-lock release, result abandonment, cancellation, complete shutdown, fresh-Worker reopen and startup failure cleanup | Actual browser lifecycle; native SQL comparison; browser cancellation and measured thread/memory budgets |
-| G2: persistence and recovery | WasmFS on OPFS with the syscall adapter: the shell starts on the origin private file system in headless Chrome, committed rows survive a clean close and a reload without one, a Web Lock keeps one instance per origin, and the browser cases cover stored reopen and clearing | Durable commit contract on OPFS (directory fsync is a no-op, WasmFS does not enforce file locks, the emulated directory move is not atomic); failed flush and quota exhaustion; Safari without `FileSystemFileHandle.move()`; recovery from an interrupted first start |
+| G2: persistence and recovery | WasmFS on OPFS with the syscall adapter: the shell starts on the origin private file system in headless Chrome, committed rows survive a clean close and a reload without one, a Web Lock keeps one instance per origin, and the browser cases cover stored reopen and clearing | Durable commit contract on OPFS (directory fsync is a no-op, WasmFS does not enforce file locks, the emulated directory move is not atomic); failed flush and quota exhaustion; Safari startup, file renames, and stored-data recovery; recovery from an interrupted first start |
 | G3: AI functionality and product measurements | Real SQL HNSW, exact-distance, fulltext mutation/rollback and ANN-plus-text candidate join pass on small Node fixtures; earlier VSAG component tests have native comparisons | All emitted index configurations/parser languages; index refresh/rebuild and persistent restart consistency; ranking fusion; native SQL comparison; recall/performance; Chrome/Safari/Firefox results; size/startup/memory/latency/cancel metrics |
 
 Current runtime tests cover four concurrent threads performing 100,000 total

@@ -20,6 +20,7 @@ import {ENGINE_VERSION} from './engine-version.mjs';
 
 const MAX_RESULT_CHARACTERS = 100000;
 const MAX_TRANSCRIPT_CHARACTERS = 1000000;
+const STORAGE_KEY = 'seekdb-shell-storage-mode';
 const QUERY_PREVIEW = {maxRows: 500, maxColumns: 100, maxCells: 20000, maxCellBytes: 480, maxBytes: 400000};
 const element = id => document.getElementById(id);
 const input = element('sql');
@@ -502,6 +503,7 @@ async function openDatabase() {
     session = await database.connect({database: currentDatabase});
     await updateVersion();
     sqlOptions = {};
+    try { localStorage.setItem(STORAGE_KEY, storage); } catch {}
     setState('ready', storage === 'opfs' ? 'Ready · root · data is kept in this browser' : 'Ready · root · SQL runs locally in a Web Worker');
     input.focus();
     return true;
@@ -510,9 +512,9 @@ async function openDatabase() {
     database = undefined;
     session = undefined;
     const hint = storage !== 'opfs' ? 'Check that the compiled .mjs and .wasm files are available, then choose New Instance.'
-      : /another tab/.test(error.message) ? 'Close it there first, or choose Memory from New Instance.'
-      : /locked/.test(error.message) ? 'Another page may still be using the stored database. Close it there, then choose New Instance.'
-      : 'Choose New Instance to clear the database and try again.';
+      : /another tab/.test(error.message) ? 'Close it there first and reload this page, or choose Memory from New Instance.'
+      : /locked/.test(error.message) ? 'Another page may still be using the stored database. Close it there, then reload this page.'
+      : 'Reload to reopen the stored database. Choose New Instance only to clear its data and start over.';
     notice(`Could not start seekdb: ${error.message}\n${hint}`, true);
     setState('error', 'Startup failed');
     return false;
@@ -538,6 +540,24 @@ function updateStorage() {
   element('storage-badge').textContent = persistent ? 'opfs://' : 'memory://';
   element('memory-button').disabled = busy;
   element('opfs-button').disabled = busy || !persistentSupported;
+}
+
+async function initialStorage() {
+  let saved;
+  try { saved = localStorage.getItem(STORAGE_KEY); } catch {}
+  if (saved === 'opfs' && !persistentSupported) throw new Error('Reopening OPFS requires OPFS and Web Locks support in this browser.');
+  if (saved === 'memory' || saved === 'opfs') return saved;
+  if (!persistentSupported) return 'memory';
+  try {
+    const root = await navigator.storage.getDirectory();
+    const store = await root.getDirectoryHandle('store');
+    const sstable = await store.getDirectoryHandle('sstable');
+    await sstable.getFileHandle('meta.db');
+    return 'opfs';
+  } catch (error) {
+    if (error.name === 'NotFoundError') return 'memory';
+    throw error;
+  }
 }
 
 function closeMenus() {
@@ -642,4 +662,11 @@ document.addEventListener('click', event => {
 });
 window.addEventListener('pagehide', () => { void database?.close().catch(() => {}); });
 
-await openDatabase();
+setState('loading', 'Checking for a stored database…');
+try {
+  storage = await initialStorage();
+  await openDatabase();
+} catch (error) {
+  notice(`Could not inspect stored data: ${error.message}\nReload to retry, or choose Memory from New Instance.`, true);
+  setState('error', 'Could not inspect stored data');
+}

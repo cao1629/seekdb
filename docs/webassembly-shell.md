@@ -103,8 +103,10 @@ whether its data survives depends on the storage mode below.
 
 ### Storage
 
-The shell starts in memory on every page load, including reloads, regardless of
-any storage choice saved by an earlier version.
+The shell remembers the last successfully opened storage mode for this origin.
+Reloading or reopening the page restores that mode. OPFS reopens its existing
+database; Memory starts empty. If no mode has been saved, the shell checks for
+an existing OPFS database and reopens it, or starts in Memory when none exists.
 OPFS can be selected when the browser supports both OPFS and Web Locks.
 Choose **Memory** or **OPFS** from **New Instance** to clear terminal output,
 close the current engine, discard its data, and start an empty database in that mode.
@@ -118,10 +120,10 @@ also clears its stored data. If clearing fails, startup stops and shows the erro
 | Memory | The data directory lives in Wasm memory; it is gone when the database is closed or the page is reloaded |
 | OPFS | The data directory lives in the origin private file system (OPFS); committed data survives reloads and browser restarts until New Instance clears it |
 
-The selected mode applies to the current page only. The badge next to the
-database name shows `memory://` or `opfs://`. Reloading starts a new Memory
-database and leaves existing OPFS files untouched. Stored OPFS data can be
-reopened with the JavaScript API; **New Instance** starts empty.
+The badge next to the database name shows `memory://` or `opfs://`.
+Reloading never clears OPFS files. **New Instance** explicitly starts empty.
+Storage preferences and OPFS files belong to the page's origin, including its
+protocol, hostname, and port. Another origin has separate data.
 One tab at a time may open the stored database: a second tab is told so and can
 switch to memory, and a page outside this shell that still holds the files is
 reported as locking them, to be closed before reloading the page. Browsers
