@@ -3,6 +3,7 @@
 // main runs on an Emscripten pthread so filesystem proxies can make progress.
 #include "observer/ob_server.h"
 #include "observer/ob_server_options.h"
+#include "lib/oblog/ob_warning_buffer.h"
 #include "lib/resource/achunk_mgr.h"
 #include "lib/worker.h"
 #include "rpc/obmysql/ob_sql_nio_server.h"
@@ -10,12 +11,17 @@
 #include <cerrno>
 #include <cstdio>
 #include <cstdlib>
+#include <cstring>
 #include <sys/stat.h>
 #include <unistd.h>
 #include <emscripten/emscripten.h>
 
 using namespace oceanbase;
 using namespace oceanbase::common;
+
+#if defined(SEEKDB_WASMFS)
+bool seekdb_mount_storage(bool persistent);
+#endif
 
 namespace {
 enum State { STARTING = 0, READY = 1, CLOSING = 2, CLOSED = 3, FAILED = 4 };
@@ -61,15 +67,31 @@ extern "C" EMSCRIPTEN_KEEPALIVE nio_memory_client *seekdb_runtime_connect(size_t
   return obmysql::global_sql_nio_server->connect_memory(capacity);
 }
 
+extern "C" EMSCRIPTEN_KEEPALIVE int seekdb_runtime_set_external_tcp_port(unsigned port)
+{
+  if (port > UINT16_MAX || state.load(std::memory_order_acquire) != READY
+      || closing.load(std::memory_order_acquire) || obmysql::global_sql_nio_server == nullptr) {
+    return -1;
+  }
+  return obmysql::global_sql_nio_server->set_external_tcp_port(static_cast<uint16_t>(port)) ? 0 : -1;
+}
+
 int main(int argc, char **argv)
 {
-  // Positional integer arguments are constructed/validated by runtime-host.mjs.
-  // Keep their backing strings alive until server destruction.
+  // Positional integer arguments and the storage word are constructed/validated
+  // by runtime-host.mjs. Keep their backing strings alive until server destruction.
   unsigned budget[] = {1024, 1536, 64, 192, 64, 2, 32, 2048};
-  if (argc != 9) return 1;
+  if (argc != 10) return 1;
   for (int i = 0; i < 8; ++i) if (!positive_integer(argv[i + 1], budget[i])) return 1;
   if (budget[0] > budget[1] || budget[1] > 1536 || budget[5] > 4
       || budget[2] + budget[3] + budget[4] >= budget[0]) return 1;
+  const bool persistent = std::strcmp(argv[9], "opfs") == 0;
+  if (!persistent && std::strcmp(argv[9], "memory") != 0) return 1;
+#if defined(SEEKDB_WASMFS)
+  if (!seekdb_mount_storage(persistent)) return 1;
+#else
+  if (persistent) return 1;
+#endif
   lib::AChunkMgr::instance().set_limit(static_cast<int64_t>(budget[1]) * 1024 * 1024);
   lib::AChunkMgr::instance().set_hard_limit(static_cast<int64_t>(budget[1]) * 1024 * 1024);
   if (!directory("/seekdb") || chdir("/seekdb") != 0) return 1;
@@ -94,6 +116,8 @@ int main(int argc, char **argv)
   }
   OB_LOGGER.set_log_level(OB_LOG_LEVEL_WARN);
   OB_LOGGER.set_file_name("log/observer.log", true);
+  if (!persistent) OB_LOGGER.set_max_file_size(8 * 1024 * 1024);
+  ObWarningBuffer::set_warn_log_on(true);
   ObPLogWriterCfg log_config;
   lib::Worker worker;
   lib::Worker::set_worker_to_thread_local(&worker);
@@ -112,6 +136,9 @@ int main(int argc, char **argv)
     if (ret == OB_SUCCESS) ret = wait_ret;
   }
   server.destroy();
+  // Descriptors left open here would be torn down by WasmFS while still open;
+  // on the OPFS backend that trips an assertion and keeps the files locked.
+  for (int fd = 3; fd < 65536; ++fd) close(fd);
   state.store(ret == OB_SUCCESS ? CLOSED : FAILED, std::memory_order_release);
   std::fprintf(stderr, "seekdb-runtime: destroyed, status %d\n", ret);
   return ret == OB_SUCCESS ? 0 : 1;

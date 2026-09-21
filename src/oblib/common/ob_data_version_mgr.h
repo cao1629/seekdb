@@ -17,6 +17,7 @@
 #ifndef OCEANBASE_COMMON_OB_DATA_VERSION_MGR_H_
 #define OCEANBASE_COMMON_OB_DATA_VERSION_MGR_H_
 
+#include <cinttypes>
 #include "lib/ob_define.h"
 #include "common/ob_version_def.h"
 
@@ -61,13 +62,8 @@ private:
   {
     explicit ObDataVersion(uint64_t version) : version_(version) {}
     ~ObDataVersion() {}
-#ifdef _WIN32
-    static constexpr const char *DUMP_BUF_FORMAT = "%s %llu";
-    static constexpr const char *LOAD_BUF_FORMAT = "%63s %llu %c";
-#else
-    static constexpr const char *DUMP_BUF_FORMAT = "%s %lu";
-    static constexpr const char *LOAD_BUF_FORMAT = "%63s %lu %c";
-#endif
+    static constexpr const char *DUMP_BUF_FORMAT = "%s %" PRIu64;
+    static constexpr const char *LOAD_BUF_FORMAT = "%63s %" SCNu64 " %c";
     static constexpr int64_t MAX_DUMP_BUF_SIZE = OB_SERVER_VERSION_LENGTH + 20 + 4;
     uint64_t get_version() const
     {

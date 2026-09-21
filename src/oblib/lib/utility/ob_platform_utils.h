@@ -469,7 +469,7 @@ inline int ob_get_process_id()
 }
 inline int ob_get_thread_id()
 {
-  return static_cast<int>(reinterpret_cast<uintptr_t>(pthread_self()));
+  return static_cast<int>(reinterpret_cast<uintptr_t>(pthread_self()) >> 2);
 }
 #else
 inline int ob_get_process_id()

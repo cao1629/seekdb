@@ -12,6 +12,7 @@ import shutil
 def copy_headers(source, include, manifest, target_prefix=None):
     patches = [manifest["boost_mpl_backport"], manifest["s2_wasm_port"]]
     patches += manifest["boost_numeric_backport"]["headers"]
+    patches += manifest["boost_geometry_math"]["headers"]
     patched = {patch["path"]: patch for patch in patches}
     trees = [(name, name) for name in (
         "fast_float", "s2", "absl", "rapidjson", "roaring", "vsag", "curl",
@@ -87,6 +88,11 @@ def main():
         apply_header(args.include, patch, [
             (b'"boost/mpl/integral_c.hpp"', b'"boost/type_traits/integral_constant.hpp"'),
             (b"mpl::integral_c<", b"boost::integral_constant<"),
+        ])
+
+    for patch in manifest["boost_geometry_math"]["headers"]:
+        apply_header(args.include, patch, [
+            (old.encode(), new.encode()) for old, new in patch["replacements"]
         ])
 
     # S2's fallback conflicts with musl when another header included byteswap.h.

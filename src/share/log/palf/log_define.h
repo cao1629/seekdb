@@ -16,6 +16,7 @@
 
 #ifndef OCEANBASE_SHARE_LOG_PALF_LOG_DEFINE_
 #define OCEANBASE_SHARE_LOG_PALF_LOG_DEFINE_
+#include <cinttypes>                                     // PRIu64
 #include <cstdint>                                       // UINT64_MAX
 #include <string.h>                                      // strncmp...
 #include <dirent.h>                                      // dirent
@@ -199,7 +200,7 @@ inline int convert_to_tmp_block(const char *log_dir,
                                const int64_t buf_len)
 {
   int64_t pos = 0;
-  return databuff_printf(buf, buf_len, pos, "%s/%lu%s", log_dir,
+  return databuff_printf(buf, buf_len, pos, "%s/%" PRIu64 "%s", log_dir,
           block_id, TMP_SUFFIX);
 }
 
@@ -209,7 +210,7 @@ inline int convert_to_normal_block(const char *log_dir,
                                    const int64_t buf_len)
 {
   int64_t pos = 0;
-  return databuff_printf(buf, buf_len, pos, "%s/%lu", log_dir, block_id);
+  return databuff_printf(buf, buf_len, pos, "%s/%" PRIu64, log_dir, block_id);
 }
 
 struct TimeoutChecker

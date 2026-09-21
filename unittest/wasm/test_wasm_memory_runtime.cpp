@@ -29,7 +29,10 @@
 #include "lib/allocator/ob_malloc.h"
 #include "lib/resource/achunk_mgr.h"
 #include "lib/hash/ob_hashset.h"
+#include "lib/objectpool/ob_pool.h"
+#include "lib/utility/ob_smart_call.h"
 
+using namespace oceanbase;
 using namespace oceanbase::common;
 using namespace oceanbase::lib;
 
@@ -97,6 +100,42 @@ static void check_size_serialization()
   }
 }
 
+class StackThreads : public Threads
+{
+public:
+  void run(int64_t) override
+  {
+    void *base = nullptr;
+    assert(get_stackattr(base, stack_size) == OB_SUCCESS);
+    result = invoke_large_call();
+  }
+  __attribute__((noinline)) int invoke_large_call()
+  {
+    volatile unsigned char frame[64 * 1024];
+    for (size_t i = 0; i < sizeof(frame); ++i) { frame[i] = static_cast<unsigned char>(i); }
+    int ret = SMART_CALL_LARGE((called = true, OB_SUCCESS));
+    for (size_t i = 0; i < sizeof(frame); ++i) { assert(frame[i] == static_cast<unsigned char>(i)); }
+    return ret;
+  }
+  size_t stack_size = 0;
+  int result = OB_NOT_INIT;
+  bool called = false;
+};
+
+static void check_early_thread_stack()
+{
+  StackThreads workers;
+  const int64_t previous = global_thread_stack_size;
+  global_thread_stack_size = 1024 * 1024;
+  assert(workers.start() == OB_SUCCESS);
+  workers.wait();
+  workers.destroy();
+  global_thread_stack_size = previous;
+  fprintf(stderr, "early thread stack=%zu, SMART_CALL_LARGE result=%d, called=%d\n",
+          workers.stack_size, workers.result, workers.called);
+  assert(workers.result == OB_SUCCESS && workers.called);
+}
+
 class AllocatorThreads : public Threads
 {
 public:
@@ -137,6 +176,29 @@ struct TinyNode {
   void set_next_atomic(TinyNode *value) { ATOMIC_STORE(&next, value); }
 };
 
+static void check_object_pool_alignment()
+{
+  ObSmallBlockAllocator<> allocator(24, 256, ObMalloc(ObMemAttr("WasmPool")));
+  std::vector<uint64_t *> objects;
+  for (int i = 0; i < 64; ++i) {
+    auto *object = static_cast<uint64_t *>(allocator.alloc(24));
+    assert(object != nullptr);
+    assert(reinterpret_cast<uintptr_t>(object) % alignof(uint64_t) == 0);
+    ATOMIC_STORE(object, static_cast<uint64_t>(i));
+    objects.push_back(object);
+  }
+  for (size_t i = 0; i < objects.size(); ++i) {
+    assert(ATOMIC_AAF(objects[i], UINT64_C(1)) == i + 1);
+    allocator.free(objects[i]);
+  }
+  for (int i = 0; i < 64; ++i) {
+    auto *object = static_cast<uint64_t *>(allocator.alloc(24));
+    assert(object != nullptr);
+    assert(reinterpret_cast<uintptr_t>(object) % alignof(uint64_t) == 0);
+    allocator.free(object);
+  }
+}
+
 static void check_tiny_allocator()
 {
   ObMemAttr attr("WasmTiny");
@@ -169,11 +231,13 @@ int main()
   AChunkMgr::instance().set_limit(64 * 1024 * 1024);
   AChunkMgr::instance().set_hard_limit(64 * 1024 * 1024);
   AChunkMgr::instance().set_max_chunk_cache_size(0);
+  check_early_thread_stack();
   if (sizeof(size_t) == 4) {
     Threads owner;
     Thread oversized(&owner, 0, (INT64_C(1) << 32) + 1048576);
     assert(oversized.start() == OB_ERR_UNEXPECTED);
   }
+  check_object_pool_alignment();
   check_tiny_allocator();
   check_number_formatting();
   check_size_serialization();

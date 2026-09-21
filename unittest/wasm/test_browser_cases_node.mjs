@@ -15,8 +15,8 @@ const workerFactory = url => {
 };
 const timer = setTimeout(() => { console.error('browser-cases-node: timeout'); process.exit(124); }, 120000);
 try {
-  await runDatabaseBrowserCases({open: () => Database.open({moduleURL, workerFactory,
-    workerURL: new URL('./database_node_worker.mjs', import.meta.url)})});
+  await runDatabaseBrowserCases({open: options => Database.open({moduleURL, workerFactory,
+    workerURL: new URL('./database_node_worker.mjs', import.meta.url), ...options})});
   if (workers.size) throw new Error('Worker leaked after close');
   console.log('browser-cases-node: all assertions passed');
 } finally {

@@ -43,6 +43,16 @@ with zipfile.ZipFile(archive) as files:
         if name == "sqlite3.c" and hashlib.sha3_256(content).hexdigest() != spec["source_sha3_256"]:
             raise SystemExit("SQLite amalgamation checksum mismatch")
         (source / name).write_bytes(content)
+amalgamation = source / "sqlite3.c"
+content = amalgamation.read_bytes()
+for before, after in spec["wasm_patches"]:
+    before, after = before.encode(), after.encode()
+    if content.count(before) != 1:
+        raise SystemExit("SQLite Wasm patch does not match the pinned source")
+    content = content.replace(before, after)
+if hashlib.sha256(content).hexdigest() != spec["patched_source_sha256"]:
+    raise SystemExit("Patched SQLite amalgamation checksum mismatch")
+amalgamation.write_bytes(content)
 obj = source / "sqlite3.o"
 # Keep real mutexes and WAL support. The Unix VFS is only an intermediate MEMFS
 # backend; it is not an OPFS implementation or evidence of durable commits.

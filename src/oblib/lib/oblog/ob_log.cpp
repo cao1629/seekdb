@@ -16,6 +16,7 @@
 
 #define USING_LOG_PREFIX LIB
 #include "ob_log.h"
+#include "lib/utility/ob_printf.h"
 #ifdef _WIN32
 #include <windows.h>
 #ifdef ERROR
@@ -193,7 +194,7 @@ int logdata_vprintf(char *buf, const int64_t buf_len, int64_t &pos, const char *
     }
     int len = vsnprintf(buf + pos, buf_len - pos, actual_fmt, args);
 #else
-    int len = vsnprintf(buf + pos, buf_len - pos, fmt, args);
+    int len = ob_vsnprintf(buf + pos, buf_len - pos, fmt, args);
 #endif
     if (OB_UNLIKELY(len < 0)) {
       ret = OB_ERR_UNEXPECTED;
@@ -660,7 +661,7 @@ void ObLogger::log_user_message(
   char buf[ObWarningBuffer::WarningItem::STR_LEN] = {};
   va_list args;
   va_start(args, fmt);
-  int64_t len = vsnprintf(buf, ObWarningBuffer::WarningItem::STR_LEN, fmt, args);
+  int64_t len = ob_vsnprintf(buf, ObWarningBuffer::WarningItem::STR_LEN, fmt, args);
   va_end(args);
   insert_warning_buffer(user_msg_level, errcode, buf, len);
 }
@@ -736,7 +737,7 @@ int ObLogger::log_head(const int64_t ts,
                            "%04d-%02d-%02d %02d:%02d:%02d.%06ld"
                            "|%s|%s|%s|%d|%ld|%s|%s|%s|%s:%d|",
                            tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min,
-                           tm.tm_sec, tv.tv_usec, errstr_[level], mod_name, dba_event, errcode,
+                           tm.tm_sec, static_cast<int64_t>(tv.tv_usec), errstr_[level], mod_name, dba_event, errcode,
                            GETTID(), GETTNAME_V2(), ObCurTraceId::get_trace_id_str(),
                            function, base_file_name, line);
     } else {
@@ -752,13 +753,13 @@ int ObLogger::log_head(const int64_t ts,
                              "[%04d-%02d-%02d %02d:%02d:%02d.%06ld] "
                              "[%ld][%s][%s] ",
                              tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min,
-                             tm.tm_sec, tv.tv_usec, GETTID(), GETTNAME_V2(), ObCurTraceId::get_trace_id_str());
+                             tm.tm_sec, static_cast<int64_t>(tv.tv_usec), GETTID(), GETTNAME_V2(), ObCurTraceId::get_trace_id_str());
       } else {
         ret = logdata_printf(buf, buf_len, pos,
                              "[%04d-%02d-%02d %02d:%02d:%02d.%06ld] "
                              "%-5s %s%s (%s:%d) [%ld][%s][%s] [lt=%ld]%s ",
                              tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min,
-                             tm.tm_sec, tv.tv_usec, errstr_[level], mod_name, function,
+                             tm.tm_sec, static_cast<int64_t>(tv.tv_usec), errstr_[level], mod_name, function,
                              base_file_name, line, GETTID(), GETTNAME_V2(),
                              ObCurTraceId::get_trace_id_str(),
                              last_logging_cost_time_us_, errcode_buf);

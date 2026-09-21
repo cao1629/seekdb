@@ -93,7 +93,7 @@ try {
   db = await open();
   const fresh = await db.connect();
   const databases = await query(fresh, 'SHOW DATABASES');
-  assert.equal(databases.some(row => row[0] === 'worker_test'), false, 'MEMFS reopen must be documented as empty');
+  assert.equal(databases.some(row => row[0] === 'worker_test'), false, 'in-memory reopen must start empty');
   assert.deepEqual(await query(fresh, 'SELECT 4'), [['4']]);
   // Closing the database wakes a result reader and joins the native engine.
   const active = query(fresh, 'SELECT SLEEP(1)');

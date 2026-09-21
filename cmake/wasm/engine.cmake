@@ -23,7 +23,9 @@ if(NOT engine_version)
 endif()
 target_compile_definitions(seekdb_wasm_engine_options INTERFACE
   PACKAGE_NAME="seekdb" PACKAGE_VERSION="${engine_version}"
-  PACKAGE_STRING="seekdb ${engine_version} WebAssembly")
+  PACKAGE_STRING="seekdb ${engine_version} WebAssembly"
+  _LIBCPP_ENABLE_CXX17_REMOVED_UNARY_BINARY_FUNCTION
+  _XOPEN_SOURCE=700)
 target_compile_features(seekdb_wasm_engine_options INTERFACE cxx_std_20)
 target_compile_options(seekdb_wasm_engine_options INTERFACE
   -pthread -Oz -Wno-register -sUSE_ZLIB=1)
@@ -67,6 +69,7 @@ seekdb_wasm_engine_module(sql SEEKDB_SQL_UNITY SEEKDB_SQL_SIMD_UNITY
   SEEKDB_SQL_STANDALONE SEEKDB_SQL_EXTRA)
 seekdb_wasm_engine_module(storage SEEKDB_STORAGE_UNITY SEEKDB_STORAGE_SIMD_UNITY
   SEEKDB_STORAGE_STANDALONE SEEKDB_STORAGE_EXTRA SEEKDB_STORAGE_TABLET_AUTOINCREMENT_STATE)
+target_compile_definitions(seekdb_wasm_storage PRIVATE OB_BUILD_SYS_VEC_IDX)
 seekdb_wasm_engine_module(share SEEKDB_SHARE_UNITY SEEKDB_SHARE_STANDALONE
   SEEKDB_SHARE_DATUM_STANDALONE)
 seekdb_wasm_engine_module(observer SEEKDB_OBSERVER_UNITY SEEKDB_OBSERVER_STANDALONE

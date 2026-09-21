@@ -120,6 +120,41 @@ static void exercise(const std::string &name, const std::string &quantizer)
   std::printf("public factory %s/%s: query, mutation and stream restore passed\n", name.c_str(), quantizer.c_str());
 }
 
+static void exercise_small_graph(const std::string &quantizer)
+{
+  VsagTestAllocator allocator;
+  const std::string config = R"({"dim":3,"dtype":"float32","metric_type":"l2","use_old_serial_format":true,"index_param":{"max_degree":32,"ef_construction":100,"build_thread_count":1,"base_quantization_type":")" + quantizer + R"("}})";
+  auto created = vsag::Factory::CreateIndex("hgraph", config, &allocator);
+  assert(created.has_value());
+  auto index = created.value();
+  float vectors[] = {0, 1, 2, 1, 1, 2, 1, 2, 3, 100, 1, 2, 1000, 100, 1};
+  int64_t ids[] = {1, 2, 3, 4, 5};
+  auto base = vsag::Dataset::Make()->NumElements(5)->Dim(3)->Ids(ids)->Float32Vectors(vectors)->Owner(false);
+  auto built = index->Build(base);
+  assert(built.has_value() && built->empty());
+  float query_vector[] = {1, 1, 2};
+  auto query = vsag::Dataset::Make()->NumElements(1)->Dim(3)->Float32Vectors(query_vector)->Owner(false);
+  const std::string search = R"({"hgraph":{"ef_search":100}})";
+  auto verify = [](const auto &result) {
+    assert(result.has_value() && result.value()->GetDim() == 5);
+    std::array<bool, 5> found{};
+    for (int i = 0; i < 5; ++i) {
+      const auto id = result.value()->GetIds()[i];
+      const auto distance = result.value()->GetDistances()[i];
+      assert(id >= 1 && id <= 5 && !found[id - 1]);
+      assert(std::isfinite(distance) && distance >= 0);
+      if (i > 0) assert(result.value()->GetDistances()[i - 1] <= distance);
+      found[id - 1] = true;
+    }
+  };
+  verify(index->KnnSearch(query, 5, search));
+  verify(index->RangeSearch(query, 10000000, search, 5));
+  vsag::SearchParam parameter(true, search, nullptr, &allocator);
+  verify(index->KnnSearch(query, 5, parameter));
+  delete parameter.iter_ctx;
+  std::printf("five-point hgraph/%s: KNN, range and iterator search passed\n", quantizer.c_str());
+}
+
 int main()
 {
   vsag::Options::Instance().set_num_threads_building(1);
@@ -129,6 +164,8 @@ int main()
   exercise("hgraph", "fp32");
   exercise("hgraph", "sq8");
   exercise("hgraph", "rabitq");
+  exercise_small_graph("fp32");
+  exercise_small_graph("sq8");
   auto unknown = vsag::Factory::CreateIndex("unknown", parameters("hnsw", "fp32"));
   assert(!unknown && unknown.error().type == vsag::ErrorType::UNSUPPORTED_INDEX);
 #ifdef __EMSCRIPTEN__

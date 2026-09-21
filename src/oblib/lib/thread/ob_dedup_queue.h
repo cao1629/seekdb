@@ -264,7 +264,8 @@ private:
       int64_t pos = 0;
       databuff_printf(buffer, length, pos,
                       "stat=%d task_type=%d running_task=%p busy_start_time=%ld pthread_id=%ld tid=%ld",
-                      stat_, task_type_, running_task_, busy_start_time_, pthread_id_, tid_);
+                      stat_, task_type_, running_task_, busy_start_time_,
+                      static_cast<int64_t>((uintptr_t)pthread_id_), tid_);
       return pos;
     };
   };

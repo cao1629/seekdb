@@ -160,6 +160,7 @@ def prepare_instance(args, repo_root, sdb_script, deploy_dir):
         sdb_script,
         "start",
         (
+            "--nodaemon",
             "--binary",
             args.seekdb,
             "--base-dir",
@@ -243,7 +244,7 @@ def load_configured_case_names(config_path):
     return case_names
 
 
-def discover_cases(repo_root):
+def discover_cases(repo_root, include_all=False, test_set=None):
     config_path = repo_root / "tools" / "deploy" / "mysqltest_config.yaml"
     mysql_test_dir = repo_root / "tools" / "deploy" / "mysql_test"
     test_dir = mysql_test_dir / "t"
@@ -251,7 +252,6 @@ def discover_cases(repo_root):
     suite_dir = mysql_test_dir / "test_suite"
     if not test_dir.is_dir():
         raise RunnerError("mysqltest case directory does not exist: {}".format(test_dir))
-    case_names = load_configured_case_names(config_path)
     available_cases = {}
     top_level_names = set()
 
@@ -278,15 +278,25 @@ def discover_cases(repo_root):
                 test_file.parent.parent / "r" / "mysql" / (test_file.stem + ".result"),
             )
 
+    if include_all:
+        case_names = sorted(available_cases)
+    elif test_set is not None:
+        case_names = [name.strip() for name in test_set.split(",")]
+        if not all(case_names):
+            raise RunnerError("test-set must contain non-empty case names")
+        case_names = unique(case_names)
+    else:
+        case_names = load_configured_case_names(config_path)
+
     missing_cases = sorted(set(case_names) - set(available_cases))
     if missing_cases:
         raise RunnerError(
-            "mysqltest config references missing cases: {}".format(
+            "mysqltest selection references missing cases: {}".format(
                 ", ".join(missing_cases)
             )
         )
     unconfigured_top_level_cases = sorted(top_level_names - set(case_names))
-    if unconfigured_top_level_cases:
+    if not include_all and test_set is None and unconfigured_top_level_cases:
         raise RunnerError(
             "top-level mysqltest cases are missing from {}: {}".format(
                 config_path, ", ".join(unconfigured_top_level_cases)
@@ -364,6 +374,8 @@ def run_case(args, deploy_dir, case, tmp_dir, log_dir):
             stderr=subprocess.STDOUT,
             timeout=CASE_TIMEOUT,
             universal_newlines=True,
+            encoding="utf-8",
+            errors="backslashreplace",
             check=False,
         )
         return_code = result.returncode
@@ -488,7 +500,7 @@ def command_run(args):
     args.work_dir.mkdir(parents=True, exist_ok=True)
 
     try:
-        all_cases = discover_cases(repo_root)
+        all_cases = discover_cases(repo_root, args.all, args.test_set)
         selected_cases = all_cases[args.slice_index :: args.slice_count]
         prepare_instance(args, repo_root, sdb_script, deploy_dir)
         tmp_dir = args.work_dir / "tmp"
@@ -576,7 +588,9 @@ def command_merge(args):
     executed_cases = []
 
     try:
-        expected_cases = [case.name for case in discover_cases(repo_root)]
+        expected_cases = [
+            case.name for case in discover_cases(repo_root, args.all, args.test_set)
+        ]
     except RunnerError as exc:
         expected_cases = []
         errors.append(str(exc))
@@ -669,6 +683,9 @@ def create_parser():
     run.add_argument("--port", type=positive_int, default=2881)
     run.add_argument("--slice-index", type=non_negative_int, required=True)
     run.add_argument("--slice-count", type=positive_int, required=True)
+    selection = run.add_mutually_exclusive_group()
+    selection.add_argument("--all", action="store_true", help="run every discovered case")
+    selection.add_argument("--test-set", help="comma-separated case names, including suite.case")
     run.set_defaults(handler=command_run)
 
     merge = subparsers.add_parser("merge", help="merge mysqltest slice results")
@@ -676,6 +693,9 @@ def create_parser():
     merge.add_argument("--slice-count", type=positive_int, required=True)
     merge.add_argument("--run-id", default="0")
     merge.add_argument("--output", required=True)
+    selection = merge.add_mutually_exclusive_group()
+    selection.add_argument("--all", action="store_true", help="expect every discovered case")
+    selection.add_argument("--test-set", help="comma-separated expected case names, including suite.case")
     merge.set_defaults(handler=command_merge)
 
     return parser

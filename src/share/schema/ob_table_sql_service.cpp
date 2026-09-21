@@ -1316,7 +1316,9 @@ int ObTableSqlService::rename_csts_in_inner_table(common::ObISQLClient &sql_clie
     int64_t affected_rows = 0;
     // `drop table` modify constraint_name but do not modify name_generated_type
     const ObNameGeneratedType name_generated_type = (*iter)->get_name_generated_type();
-    if (OB_FAIL(ObTableSchema::create_cons_name_automatically(new_cst_name, table_schema.get_table_name_str(), allocator, (*iter)->get_constraint_type()))) {
+    if (OB_FAIL(ObTableSchema::create_cons_name_for_recyclebin(new_cst_name,
+        allocator, (*iter)->get_constraint_type(), table_schema.get_table_id(),
+        (*iter)->get_constraint_id()))) {
     } else if (OB_FAIL(gen_constraint_update_name_dml(new_cst_name, name_generated_type, new_schema_version, **iter, dml_for_update))) {
     } else if (OB_FAIL(exec_update(sql_client, table_schema.get_table_id(),
                                    OB_ALL_CONSTRAINT_TNAME, dml_for_update, affected_rows))) {
