@@ -139,7 +139,10 @@ int ObCommonConfig::add_extra_config_unsafe(const char *config_str,
 #ifdef _WIN32
   const int64_t MAX_OPTS_LENGTH = 256 * 1024; // Windows has no sysconf(_SC_ARG_MAX)
 #else
-  const int64_t MAX_OPTS_LENGTH = sysconf(_SC_ARG_MAX);
+  // Sandboxed platforms can report an indeterminate limit (-1). Keep a bounded
+  // parser budget instead of rejecting every nonempty configuration string.
+  const int64_t arg_max = sysconf(_SC_ARG_MAX);
+  const int64_t MAX_OPTS_LENGTH = arg_max > 0 ? arg_max : 256 * 1024;
 #endif
   int64_t config_str_length = 0;
   char *buf = NULL;
