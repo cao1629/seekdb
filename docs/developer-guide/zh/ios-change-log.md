@@ -187,3 +187,8 @@ python3 deps/ios-build/build.py --jobs 4 vsag
 - 同一 seekdb-budget-v1 目录重新启动后，SQL 再次成功，previous_runs=1，验证已提交计数跨进程恢复；这是异常终止后的持久化恢复证据，尚不是干净停止后的重启验收。证据 probe-status-sql-restart.json。
 - src/observer/omt/ob_server_runtime_controller.cpp 将 Memtable 管理池销毁移至 LS 和 storage meta memory manager 之后；这些对象持有池分配的 handle，必须先释放。保留原断言，不绕过销毁，也不强制清零计数。完整链接和真机停止结果待追加。
 - 销毁顺序调整后完整 iOS 链接、UIKit Release 构建及签名通过，10 项脚本测试通过，git diff --check 通过；安装返回 CoreDeviceError 3002 / IXRemoteErrorDomain 6 / Connection interrupted，devicectl 随后显示 unavailable。已请用户恢复直连，尚未取得此调整后 Stopped/result=0 的真机结果。日志 engine-pool-order.log、app-pool-order.log；不将编译通过记为停止问题已解决。
+
+- 恢复连接后，池顺序修复版安装运行成功，SQL 成功且 previous_runs=2。随后仍发生 SIGABRT，栈顶变为 ObLSService::destroy；源码断言要求 LS 已停止且不再持有 log stream。证据 stop-pool-order-crash.ips、probe-status-reconnect.json。
+- ObServer::stop 在 in_process_ 模式下补充 server_runtime_controller_.wait()，位于 stop() 后、其他全局服务停止及资源销毁前。该等待复用现有 worker join 与 obs_stop_modules / obs_wait_modules 流程；命令行模式保留原行为，不禁用断言。完整 iOS 链接与 10 项脚本测试通过；真机验证结果待追加。未新增系统环境设置。
+
+- stop/wait 修复版已安装并启动，SQL 成功读回 previous_runs=3；随后停止阶段仍出现 EXC_BAD_ACCESS / SIGBUS，触发线程为 TableGCTask，经 ObMemtable::safe_to_destroy 调用 ObLogHandler::get_max_decided_scn。说明仍有后台 GC 与日志资源生命周期问题，尚未正常停止。证据 runtime-wait-crash.ips；后续先按 QuickLang 实际 SQL 扩展测试，再继续清理顺序诊断。
