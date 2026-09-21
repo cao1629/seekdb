@@ -170,3 +170,10 @@ python3 deps/ios-build/build.py --jobs 4 vsag
 - 通过 LLDB 连接真机进程，断点和返回寄存器确认 ObServer::init_opts_config 返回 -4024（OB_BUF_NOT_ENOUGH）；真机执行 sysconf(_SC_ARG_MAX) 返回 -1。ObCommonConfig::add_extra_config_unsafe 将该返回值直接作为最大长度，导致正常配置字符串被拒绝。
 - src/share/config/ob_common_config.cpp 对非正的 sysconf 结果使用 256 KiB 有界备用上限，与 Windows 既有上限一致；正值平台保留系统上限。未禁用配置长度检查，未修改全局安全策略。增量构建日志 engine-argmax.log；修复后的真机结果待追加。
 - ARG_MAX 修复版编译、签名、安装成功；真机不再返回 -4024，日志确认配置和引擎初始化完成，执行到首次 bootstrap 检查后返回 -4015。旧失败目录已包含数据版本标记，不是空库；不删除旧目录，后续使用独立目录继续验证。该结果证明配置限制修复生效，不代表建库或 SQL 成功。
+- 读取真机日志发现内存配置自动取约 9.16 GiB；源码参数定义确认 memory_limit 已弃用且不影响内存预算。seekdb_ios.cpp 改为 memory_budget=1G，并显式设置 vector_memory_limit=128M，头文件说明改为逻辑预算而非 RSS 硬限制。
+- main.mm 增加受限的 SEEKDB_PROBE_DATA_NAME 启动环境变量，只允许 Documents 下最多 64 字符的简单目录名，并在状态 JSON 中记录 data_name。用于保留旧失败目录的同时验证空库启动，不自动删除或重置用户数据；默认目录不变。
+- 真机使用新目录 seekdb-budget-v1 后首次启动成功，状态文件为 Running / result=null / sql_verified=false；日志确认 server runtime ready，memory_size=1GB。这是首次原生 iOS 引擎启动证据，尚非 SQL 或完整 QuickLang 验收。
+- 新增 unittest/ios_build/sql_probe.cpp/.h 与独立 seekdb_ios_sql_probe 测试静态库，通过现有内部 SQL proxy 验证 SELECT、DDL、DML 和读回，操作仅限 ios_probe.lifecycle 测试表。它不进入生产运行库；链接探针及 UIKit 测试 App 显式包含该测试库。
+- main.mm 在 Running 后以第二个专用线程执行 SQL 测试，状态文件记录 sql_result、sql_verified、previous_runs；可用 SEEKDB_PROBE_AUTO_STOP=1 在测试返回后请求干净停止。持久化通过同一数据目录的计数读回验证，不能以新目录替代。
+- SQL 测试静态库、完整链接和 UIKit Release 签名构建通过；10 项脚本测试通过。覆盖安装时设备虽然显示 connected，但安装无进展、文件和 details 接口超时，暂不能确认 SQL 测试版安装。旧进程控制台有 alloc_log_item -4013 和 signal 9；未取得对应 Jetsam 报告，不能断言是系统内存终止还是覆盖安装终止。后续需验证内存稳定性。
+- build_app.py 为设备安装增加 120 秒超时，避免连接异常时无限等待；保留失败日志并由用户恢复连接后显式重试，不自动清除设备数据。

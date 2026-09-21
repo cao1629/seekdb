@@ -38,7 +38,7 @@ int prepare_runtime(const char *directory, ObServerOptions &options)
   options.in_process_ = true;
   options.nodaemon_ = true;
   const char *parameters[][2] = {
-      {"memory_limit", "1G"}, {"log_disk_size", "2G"},
+      {"memory_budget", "1G"}, {"vector_memory_limit", "128M"}, {"log_disk_size", "2G"},
       {"mysql_port_mode", "disabled"}, {"sql_net_thread_count", "2"},
       {"cpu_count", "2"}};
   for (const auto &parameter : parameters) {
