@@ -623,6 +623,7 @@ ObServer::~ObServer()
 
 int ObServer::init(const ObServerOptions &opts, const ObPLogWriterCfg &log_cfg)
 {
+  in_process_ = opts.in_process_;
   gctx_.set_embedded_mode(opts.embedded_);
   FLOG_INFO("[OBSERVER_NOTICE] start to init observer");
   DBA_STEP_RESET(server_start);
@@ -1107,10 +1108,12 @@ int ObServer::start()
                     DBA_STEP_INC_INFO(server_start),
                     "observer instance start begin.");
 
-    if (FAILEDx(signal_handle_.start())) {
-      LOG_ERROR("fail to start signal handler", KR(ret));
-    } else {
-      FLOG_INFO("success to start signal handler");
+    if (!in_process_) {
+      if (FAILEDx(signal_handle_.start())) {
+        LOG_ERROR("fail to start signal handler", KR(ret));
+      } else {
+        FLOG_INFO("success to start signal handler");
+      }
     }
     if (FAILEDx(startup_accel_handler_.start())) {
       LOG_ERROR("fail to start server startup task handler", KR(ret));
@@ -1667,13 +1670,16 @@ int ObServer::wait()
   LOG_DBA_INFO_V2(OB_SERVER_WAIT_BEGIN, "observer process wait begin.");
   // wait for stop flag
 
-  if (gctx_.is_embedded_mode()) {
+  if (!in_process_ && gctx_.is_embedded_mode()) {
     std::thread([this]() { wait_no_client(); }).detach();
   }
 
   FLOG_INFO("begin to wait observer setted to stop");
   while (OB_SUCC(ret) && !stop_) {
     SLEEP(3);
+  }
+  if (in_process_) {
+    return stop();
   }
   _Exit(0);
   return ret;
