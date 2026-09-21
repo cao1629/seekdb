@@ -1,0 +1,11 @@
+{
+  "result" : 0,
+  "data_name" : "seekdb-budget-v1",
+  "sql_verified" : true,
+  "sql_result" : 0,
+  "quicklang_result" : 0,
+  "quicklang_verified" : true,
+  "previous_runs" : 6,
+  "timestamp" : 1789970446.328388,
+  "state" : "Stopped"
+}
