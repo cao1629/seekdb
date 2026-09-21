@@ -22,7 +22,8 @@ enum seekdb_ios_state {
  * the process working directory for the engine's lifetime and restores it on
  * clean return. A failed startup may retain global services and the working
  * directory until app exit; restarting the engine in that process is unsupported.
- * Uses 1 GiB memory and 2 GiB redo space, with TCP disabled; clients use
+ * Uses a 1 GiB logical memory budget, a 128 MiB vector allocation limit, and
+ * 2 GiB redo space, with TCP disabled; clients use
  * the engine's Unix socket. Returns an engine error code, or zero on clean stop.
  * Only one invocation is supported per app process. Never call on the UI thread.
  */

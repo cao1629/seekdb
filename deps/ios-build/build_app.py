@@ -92,7 +92,7 @@ def main():
     subprocess.run(["codesign", "--verify", "--deep", "--strict", str(app)], check=True)
     if options.install:
         subprocess.run(["xcrun", "devicectl", "device", "install", "app", "--device",
-                        options.device, str(app)], check=True, env=environment)
+                        options.device, "--timeout", "120", str(app)], check=True, env=environment)
     print("Signed probe:", app)
 
 

@@ -108,3 +108,9 @@ Apple 管理的证书和设备描述文件保存在系统凭证目录，不复�
 真机首次启动已越过信任检查，但旧 UIKit 包装因未采用 Scene 生命周期而触发 SIGTRAP。现已改为 UIWindowSceneDelegate 并声明 Scene manifest，修复版编译通过；覆盖安装期间设备断连，运行验证仍待完成。devicectl 的旧次控制台虽显示退出码 0，实际系统崩溃报告为 SIGTRAP，应以崩溃报告和持久化状态共同判断。
 
 连接恢复后，Scene 修复版已在真机正常显示界面、保存状态。首次引擎调用返回 -4024，真机 LLDB 确认 sysconf(_SC_ARG_MAX) 返回 -1；配置解析增加有界备用上限后，配置和引擎初始化已完成，当前在旧失败目录的 bootstrap 检查返回 -4015。SQL 尚未验证。
+
+运行时当前使用 memory_budget=1G、vector_memory_limit=128M、log_disk_size=2G。memory_budget 是逻辑预算，不是进程 RSS 硬限制；旧 memory_limit 参数在本源码中已弃用，不能用于约束内存配置。
+
+测试新空库可通过 devicectl 启动环境变量 `SEEKDB_PROBE_DATA_NAME` 选择 Documents 内的新子目录（最多 64 个英文字母、数字、下划线或连字符）。默认仍为 seekdb，不自动清除任何失败目录；状态 JSON 同时记录 data_name。验证重启持久化时必须复用同一名称，不能将每次换新目录算作重启验证。
+
+新空库 seekdb-budget-v1 已在 iPhone 17 Pro 达到 Running，日志显示 1 GiB 逻辑预算。新增 SQL 测试版在 Running 后使用内部 SQL proxy 执行表达式、建库建表、计数写入和读回；结果以 sql_verified / sql_result / previous_runs 为准。设置 SEEKDB_PROBE_AUTO_STOP=1 可在 SQL 检查返回后自动请求停止。该测试路径尚不能证明 MySQL Unix socket 客户端或 QuickLang 已兼容。
