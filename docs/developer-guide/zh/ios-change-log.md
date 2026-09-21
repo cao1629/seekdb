@@ -177,3 +177,5 @@ python3 deps/ios-build/build.py --jobs 4 vsag
 - main.mm 在 Running 后以第二个专用线程执行 SQL 测试，状态文件记录 sql_result、sql_verified、previous_runs；可用 SEEKDB_PROBE_AUTO_STOP=1 在测试返回后请求干净停止。持久化通过同一数据目录的计数读回验证，不能以新目录替代。
 - SQL 测试静态库、完整链接和 UIKit Release 签名构建通过；10 项脚本测试通过。覆盖安装时设备虽然显示 connected，但安装无进展、文件和 details 接口超时，暂不能确认 SQL 测试版安装。旧进程控制台有 alloc_log_item -4013 和 signal 9；未取得对应 Jetsam 报告，不能断言是系统内存终止还是覆盖安装终止。后续需验证内存稳定性。
 - build_app.py 为设备安装增加 120 秒超时，避免连接异常时无限等待；保留失败日志并由用户恢复连接后显式重试，不自动清除设备数据。
+- 较慢的 SQL 测试版安装随后成功，设备 lockState 也恢复响应；启动时却明确返回 FBSOpenApplicationErrorDomain 7 / Locked。读回的 Running JSON 时间早于本次启动，属于旧进程证据，不能当作 SQL 测试版已运行。已请用户解锁手机。
+- main.mm 在探针启动和运行时禁用本 App 的空闲自动锁屏，进入 Stopped / Failed 后恢复；只影响前台测试 App 的 idleTimerDisabled，不修改系统自动锁定设置，也不绕过手动锁屏。

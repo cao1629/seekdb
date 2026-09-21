@@ -98,6 +98,8 @@
 - (void)refreshStatus
 {
   NSInteger state = seekdb_ios_get_state();
+  UIApplication.sharedApplication.idleTimerDisabled =
+      state != SEEKDB_IOS_STOPPED && state != SEEKDB_IOS_FAILED;
   if (state == SEEKDB_IOS_RUNNING && !self.sqlStarted) {
     self.sqlStarted = YES;
     NSThread *thread = [[NSThread alloc] initWithTarget:self selector:@selector(verifySQL) object:nil];
