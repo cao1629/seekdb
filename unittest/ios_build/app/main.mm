@@ -4,7 +4,7 @@
 #include "seekdb_ios.h"
 
 /** Host one engine lifecycle and persist observable status inside the sandbox. */
-@interface ProbeDelegate : UIResponder <UIApplicationDelegate>
+@interface ProbeDelegate : UIResponder <UIWindowSceneDelegate>
 @property(nonatomic, strong) UIWindow *window;
 @property(nonatomic, strong) UILabel *statusLabel;
 @property(nonatomic, strong) NSTimer *timer;
@@ -14,10 +14,10 @@
 
 @implementation ProbeDelegate
 /** Create the foreground probe and start the engine on a dedicated thread. */
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)options
+- (void)scene:(UIScene *)scene willConnectToSession:(UISceneSession *)session options:(UISceneConnectionOptions *)options
 {
   self.documents = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject;
-  self.window = [[UIWindow alloc] initWithFrame:UIScreen.mainScreen.bounds];
+  self.window = [[UIWindow alloc] initWithWindowScene:(UIWindowScene *)scene];
   UIViewController *controller = [UIViewController new];
   controller.view.backgroundColor = UIColor.systemBackgroundColor;
   self.statusLabel = [UILabel new];
@@ -44,7 +44,6 @@
   thread.name = @"seekdb-ios-probe";
   thread.stackSize = 8 * 1024 * 1024;
   [thread start];
-  return YES;
 }
 
 /** Run once, reporting the engine return code back on the UI thread. */
@@ -86,10 +85,16 @@
 }
 @end
 
+/** Let UIKit create the single window scene declared in the application manifest. */
+@interface ProbeApplication : UIResponder <UIApplicationDelegate>
+@end
+@implementation ProbeApplication
+@end
+
 /** Enter UIKit; the app delegate owns the background engine thread. */
 int main(int argc, char **argv)
 {
   @autoreleasepool {
-    return UIApplicationMain(argc, argv, nil, NSStringFromClass(ProbeDelegate.class));
+    return UIApplicationMain(argc, argv, nil, NSStringFromClass(ProbeApplication.class));
   }
 }
