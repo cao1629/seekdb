@@ -1645,7 +1645,6 @@ void ObServer::obs_destroy_modules()
   server_module_destroy_default(mods_rb_mem_mgr_);
   ObGlobalIteratorPool::server_module_destroy(mods_global_iterator_pool_);
   server_module_destroy_default(mods_resource_limit_calculator_);
-  server_module_destroy_default(mods_tablet_memtable_mgr_pool_);
   server_module_destroy_default(mods_srs_service_);
   server_module_destroy_default(mods_opt_stat_monitor_manager_);
   server_module_destroy_default(mods_dbms_sched_service_);
@@ -1702,6 +1701,9 @@ void ObServer::obs_destroy_modules()
   server_module_destroy_default(mods_mds_service_);
   ObIOService::server_module_destroy(mods_io_service_);
   server_module_destroy_default(mods_storage_meta_mem_mgr_);
+  // LS and cached tablets own memtable manager handles; release them before
+  // destroying the pool that those handles return their managers to.
+  server_module_destroy_default(mods_tablet_memtable_mgr_pool_);
   server_module_destroy_default(mods_shared_timer_);
 
   // Keep the slots alive while module destructors run, then invalidate every

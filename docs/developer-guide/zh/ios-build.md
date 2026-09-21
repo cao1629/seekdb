@@ -1,6 +1,6 @@
 # iPhone 交叉编译（实验阶段）
 
-最新状态（2026-09-21）：原生 seekdb 引擎已在 iPhone 17 Pro / iOS 27.0 的测试 App 中完成空库启动，状态 Running，日志确认 1 GiB 逻辑预算。SQL / 持久化测试版已签名安装，但启动时手机锁屏，尚未取得这些测试结果；QuickLang 集成尚未完成。测试 App 运行期间保持亮屏，进入 Stopped / Failed 后恢复自动锁屏，不修改系统设置。
+最新状态（2026-09-21）：原生 seekdb 引擎已在 iPhone 17 Pro / iOS 27.0 完成启动、内部 SQL 表达式/DDL/DML/读回，以及同一目录的跨进程计数恢复（previous_runs 从 0 到 1），日志确认 1 GiB 逻辑预算。停止阶段存在 Memtable 管理池销毁顺序断言，已修复并进行真机复测；不能宣称干净停止通过。QuickLang 集成尚未完成。测试 App 运行期间保持亮屏，进入 Stopped / Failed 后恢复自动锁屏，不修改系统设置。
 
 `build.iphone.sh` 为 iPhone ARM64 和 Apple Silicon iOS 模拟器配置 CMake、Rust 和 Apple SDK。默认目标是 `oceanbase_static`。目前不是已完成的 iOS 产品构建流程；脚本不生成、签名或安装 App。
 
