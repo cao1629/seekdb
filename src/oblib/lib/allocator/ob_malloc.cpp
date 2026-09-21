@@ -21,6 +21,7 @@
 #if defined(__linux__)
 #include <malloc.h>
 #elif defined(__APPLE__)
+#include <TargetConditionals.h>
 #include <mach/mach.h>
 #include <malloc/malloc.h>
 #elif defined(_WIN32)
@@ -178,7 +179,13 @@ bool restore_malloc_backend_after_fork()
 bool configure_darwin_malloc_zone(const ObMallocBackend backend)
 {
   bool configured = false;
+#if TARGET_OS_IPHONE
+  // iOS uses explicit je_* calls and must preserve the hosting app's malloc zone.
+  configured = is_ob_malloc_backend(backend);
 #if defined(OB_HAVE_BUNDLED_JEMALLOC)
+  configured = configured || is_jemalloc_backend(backend);
+#endif
+#elif defined(OB_HAVE_BUNDLED_JEMALLOC)
   malloc_zone_t *jemalloc_zone = find_malloc_zone("jemalloc_zone");
   if (is_jemalloc_backend(backend)) {
     configured = promote_malloc_zone(jemalloc_zone);

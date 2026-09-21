@@ -4,6 +4,9 @@ cmake_minimum_required(VERSION 3.20)
 # the authoritative modular build graph. Keep this surface deliberately
 # narrow: one Release-compatible configuration and Unity compilation only.
 include(cmake/Utils.cmake)
+if(CMAKE_SYSTEM_NAME STREQUAL "iOS")
+  include(cmake/IOS.cmake)
+endif()
 include(cmake/Env.cmake)
 
 project("OceanBase"
