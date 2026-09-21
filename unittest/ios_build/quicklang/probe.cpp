@@ -42,7 +42,7 @@ public:
     }
     record(name, ret);
   }
-  /** Check every row and column; i: cells are integers, s: cells are exact UTF-8 strings. */
+  /** Check every row and column; i:/u: cells are signed/unsigned integers; s: cells are exact UTF-8 strings. */
   void read(const char *name, const char *sql, const Rows &expected)
   {
     if (result_ != 0) { return; }
@@ -63,6 +63,10 @@ public:
           int64_t value = 0;
           ret = rows->get_int(static_cast<int64_t>(col), value);
           if (ret == 0 && value != std::stoll(cell.substr(2))) { ret = OB_ERR_UNEXPECTED; }
+        } else if (cell.compare(0, 2, "u:") == 0) {
+          uint64_t value = 0;
+          ret = rows->get_uint(static_cast<int64_t>(col), value);
+          if (ret == 0 && value != std::stoull(cell.substr(2))) { ret = OB_ERR_UNEXPECTED; }
         } else {
           ObString value;
           ret = rows->get_varchar(static_cast<int64_t>(col), value);
@@ -161,12 +165,12 @@ void listening_cases(Suite &s)
   s.write("listening.insert", "INSERT INTO ql_ios_probe.ql_listening VALUES ('alice','audio',1,'{\"title\":\"中文\"}',X'00017FFF'),('bob','audio',1,'{}',X'02')", 2);
   s.read("listening.audio", "SELECT HEX(audio) FROM ql_ios_probe.ql_listening WHERE owner_id='alice' AND material_id='audio'", {{"s:00017FFF"}});
   s.begin("listening.begin");
-  s.read("listening.lock_version", "SELECT version FROM ql_ios_probe.ql_listening WHERE owner_id='alice' AND material_id='audio' FOR UPDATE", {{"i:1"}});
+  s.read("listening.lock_version", "SELECT version FROM ql_ios_probe.ql_listening WHERE owner_id='alice' AND material_id='audio' FOR UPDATE", {{"u:1"}});
   s.write("listening.update", "UPDATE ql_ios_probe.ql_listening SET version=2,payload='{\"title\":\"updated\"}' WHERE owner_id='alice' AND material_id='audio'", 1);
   s.end("listening.commit", true);
-  s.read("listening.list", "SELECT material_id,version,JSON_UNQUOTE(JSON_EXTRACT(payload,'$.title')) FROM ql_ios_probe.ql_listening WHERE owner_id='alice' ORDER BY material_id", {{"s:audio","i:2","s:updated"}});
+  s.read("listening.list", "SELECT material_id,version,JSON_UNQUOTE(JSON_EXTRACT(payload,'$.title')) FROM ql_ios_probe.ql_listening WHERE owner_id='alice' ORDER BY material_id", {{"s:audio","u:2","s:updated"}});
   s.write("speech.upsert", "INSERT INTO ql_ios_probe.ql_listening VALUES ('alice','audio',1,'{\"title\":\"speech\"}',X'') ON DUPLICATE KEY UPDATE payload=VALUES(payload),version=version+1");
-  s.read("speech.audio_preserved", "SELECT version,HEX(audio) FROM ql_ios_probe.ql_listening WHERE owner_id='alice' AND material_id='audio'", {{"i:3","s:00017FFF"}});
+  s.read("speech.audio_preserved", "SELECT version,HEX(audio) FROM ql_ios_probe.ql_listening WHERE owner_id='alice' AND material_id='audio'", {{"u:3","s:00017FFF"}});
   s.write("listening.delete", "DELETE FROM ql_ios_probe.ql_listening WHERE owner_id='alice' AND material_id='audio'", 1);
   s.read("listening.other_preserved", "SELECT owner_id,HEX(audio) FROM ql_ios_probe.ql_listening", {{"s:bob","s:02"}});
 }
@@ -190,7 +194,7 @@ void review_cases(Suite &s)
   s.write("review.rollback_state", "UPDATE ql_ios_probe.ql_review_state SET version=2,payload='discard' WHERE card_id='card' AND version=1", 1);
   s.end("review.rollback", false);
   s.read("review.rollback_no_event", "SELECT payload FROM ql_ios_probe.ql_review_event WHERE event_id='rollback'", {});
-  s.read("review.rollback_state_restored", "SELECT version,payload FROM ql_ios_probe.ql_review_state WHERE card_id='card'", {{"i:1","s:next"}});
+  s.read("review.rollback_state_restored", "SELECT version,payload FROM ql_ios_probe.ql_review_state WHERE card_id='card'", {{"u:1","s:next"}});
 }
 
 /** Cover native string arrays and the dictionary import's IN and keyset queries. */

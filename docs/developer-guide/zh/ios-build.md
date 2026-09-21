@@ -123,4 +123,6 @@ Apple 管理的证书和设备描述文件保存在系统凭证目录，不复�
 
 ## QuickLang SQL 兼容性套件
 
+首轮真机前67步成功，第68步发现测试程序将 BIGINT UNSIGNED 用有符号接口读取，返回 OB_OBJ_TYPE_ERROR。增加无符号结果断言后，重跑103步全部通过，最终 complete=true/result=0，状态 Running、quicklang_verified=true、previous_runs=5。逐项结果已跟踪于 unittest/ios_build/quicklang/results/iphone17pro-2026-09-21.jsonl。本轮未请求停止，不代表正常停止问题已解决，也不代表 QuickLang 已切换后端。
+
 QuickLang iOS 当前仍使用 SQLite；seekdb 测试用于未来后端切换。新增 `unittest/ios_build/quicklang`，按实际仓库 SQL 覆盖十张表、事务、JSON、音频 BLOB、原生字符串数组及约束。UIKit 自动在基础计数测试后执行，`quicklang_result=0` / `quicklang_verified=true` 表示套件通过；逐步结果位于 Documents/quicklang-sql-results.jsonl，必须确认本次时间及最终 complete/result，不能以部分步骤通过代替完整通过。套件只清空独立测试库 ql_ios_probe 的 fixture，勿在其中存储用户数据。详见该目录 README.md 的覆盖映射与限制。

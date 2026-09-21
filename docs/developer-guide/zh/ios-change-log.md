@@ -195,6 +195,10 @@ python3 deps/ios-build/build.py --jobs 4 vsag
 
 ## 2026-09-21：QuickLang SQL 兼容性测试
 
+- 连接恢复后套件成功安装并运行，前67步通过，第68步 listening.lock_version 返回 -4001 (OB_OBJ_TYPE_ERROR)。表的 version 为 BIGINT UNSIGNED，测试错误使用 get_int；增加显式 u: 预期类型并以 get_uint 读取，修正听力/复习版本断言，不改变表结构或 SQL。首次证据 quicklang-sql-device.jsonl、quicklang-status-first.json。
+- 本轮磁盘降至约2.9 GiB触发3 GiB保护；仅删除已生成的216 MiB链接探针可执行文件，保留 link.txt、所有库与日志。增量构建目标改为 seekdb_ios_sql_probe，UIKit 随后重新链接完整引擎。默认空间保护与系统环境均未变。
+- 无符号读取修正后重新构建、签名、安装并启动成功。iPhone 17 Pro / iOS27 真机103步全部返回0，最终 complete=true/result=0；状态 quicklang_verified=true、sql_verified=true、previous_runs=5、Running。逐项不含设备标识的测试记录已加入 unittest/ios_build/quicklang/results/iphone17pro-2026-09-21.jsonl。此次不请求自动停止，正常停止缺陷仍未解决。编译和 git diff --check 通过。
+
 - 用户明确 QuickLang iOS 当前继续使用 SQLite；seekdb 原生 iPhone 移植作为未来可切换后端独立推进。未替换 QuickLang iOS 数据库或修改其并发工作区。
 - unittest/ios_build/quicklang 保存十张原始 seekdb 表结构快照、来源 revision/SHA-256、快照脚本和 C++ 测试；覆盖清单及复现方式见该目录 README.md。测试使用专属 ql_ios_probe 数据库及合成数据，每次仅清空该测试库内 fixture。
 - CMake 将新 runner 加入独立 seekdb_ios_sql_probe 测试库；UIKit 基础 SQL 之后运行 QuickLang 套件，状态增加 quicklang_result / quicklang_verified，逐步证据刷新写入 Documents/quicklang-sql-results.jsonl。不是生产接口，不更改引擎运行库 ABI。
