@@ -34,8 +34,9 @@ Rust 可执行文件由 PATH 或 `CARGO`、`RUSTUP` 提供；脚本也查找仓�
 - 真机和模拟器 CMake 配置成功。
 - 真机 `oceanbase_static` 完整目标编译成功，生成 observer、SQL、storage、share、oblib、malloc 和 parser 共 7 个引擎静态库，逐个通过 iOS ARM64 平台检查。静态库之间仍有链接依赖，不能仅复制 `liboceanbase_static.a` 就运行引擎。
 - `sql-nio` Rust 静态库已按 `aarch64-apple-ios` 编译成功。
-- jemalloc 5.3.1 和上述 10 项依赖已构建为 iOS ARM64 静态库；ICU、VSAG 及其剩余依赖尚未完成。
+- jemalloc 5.3.1 和上述 10 项依赖已构建为 iOS ARM64 静态库；ICU 69.1、OpenMP 21.1.8 和 LAPACKE 子集随后也已构建并通过 iOS 平台检查；VSAG 及其依赖的 8 个静态库也已编译并通过平台检查。默认依赖构建现包含上述 14 项。
 - `seekdb_ios_runtime` 进程内生命周期静态库编译通过，尚未验证运行、SQL 或停止行为。
+- `seekdb_ios_link_check` 完整链接通过，产物约 216 MiB；vtool 显示 IOS/minos 18.0/sdk 27.0，otool -L 仅列 Apple 系统库。此目标是链接探针，没有 UIKit 界面，不能作为 App 运行验收。此次复用已成功构建的 rust-probe 目录；新 Rust 构建目录仍遇到宿主 build-script SIGKILL。
 - 修复 zstd 部分链接误用 macOS 平台的问题，验证合并对象中的 ZSTD 内部符号已局部化。
 - 为 Boost 1.74 回移上游 1.85 的 NumericConversion 枚举包装修复，只生成 iOS 构建目录中的头文件覆盖层；iOS 编译检查和 macOS 数值转换/溢出测试通过。
 - `ob_parser.cpp.o` 经 `file` 验证为 Mach-O ARM64；`xcrun vtool -show-build` 显示平台 IOS、minos 18.0、sdk 27.0。
@@ -53,9 +54,9 @@ Rust 可执行文件由 PATH 或 `CARGO`、`RUSTUP` 提供；脚本也查找仓�
 
 ## 尚未完成
 
-- 其余第三方依赖的 iOS 构建，以及引擎和纯 iOS 依赖的最终链接。磁盘空间已经释放，原有约 5 GiB 的阻塞已解除；继续构建时仍需关注剩余空间。
+- 全新目录的完整依赖流水线及 Rust 宿主 build-script SIGKILL 问题；增量完整链接已通过。磁盘空间约 9.4 GiB，继续构建时仍需关注剩余空间。
 - 已新增 `seekdb_ios_run`、`seekdb_ios_request_stop`、`seekdb_ios_get_state`；`in_process_` 模式跳过服务信号线程，等待结束走 `stop()`，不走原命令行路径的 `_Exit(0)`。这些修改仅编译通过，仍需完整生命周期与 SQL 验证。接口每进程仅允许调用一次，运行时改变进程工作目录，启动失败可能留下全局服务和工作目录；不可在 UI 线程调用。`BUILD_EMBED_MODE` 仍不能恢复旧 C API。
-- 纯 iOS 链接探针当前缺少 `libicui18n.a`。ICU 宿主 configure 的测试程序此前被 macOS 杀死；已开启 Codex 宿主 ChatGPT.app 的开发者工具权限，尚未重跑验证。
+- iOS ARM64 链接已验证 S2/Abseil ABI、OpenMP 运行库版本及 Rust sql_nio 链接修复；数学和向量功能仍需真机运行验证。
 - App 沙箱数据目录、线程和内存限制适配；持久化、重启及前后台切换验证。
 - App 包装与签名，以及 iPhone 17 Pro 真机 SQL / 持久化测试。现有模拟器环境不能替代真机验收。
 
@@ -67,4 +68,22 @@ Rust 可执行文件由 PATH 或 `CARGO`、`RUSTUP` 提供；脚本也查找仓�
 - `build_ios_arm64/logs/sql-nio-build.log`：Rust 构建；保留了宿主构建工具首次运行被 SIGKILL 的失败及后续成功记录。
 - `build_ios_arm64/logs/jemalloc-build.log`：jemalloc 交叉编译。
 - `deps/ios/iphoneos/build/*/verified.json`：基础依赖的源码版本、校验和、SDK 和目标信息。
-- `deps/ios/iphoneos/devel`：已安装的 iOS 第三方库；当前仍未齐全。
+- `deps/ios/iphoneos/devel`：已安装并满足当前链接探针的 iOS 第三方库。
+
+## 真机状态及链接复现
+
+2026-09-21 通过 devicectl 确认 iPhone 17 Pro / iOS 27.0 为 wired、connected、paired，Developer Mode Status 为 Enabled (1)，已具备安装和启动接口。尚未安装 seekdb App；钥匙串当前仅有本地开发证书，iOS 签名仍需 Apple Development 证书和开发团队。账号、私钥不进入 Git。
+
+本次增量链接命令（rust-probe 是此前成功的 Cargo 输出目录，全新环境不能假设它存在）：
+
+```bash
+SEEKDB_IOS_MIN_FREE_GIB=6 ./build.iphone.sh --jobs 4 \
+  --target seekdb_ios_link_check \
+  --headers-prefix "$PWD/deps/3rd/usr/local/oceanbase/deps/devel" \
+  -- -DRUST_TARGET_DIR="$PWD/build_ios_arm64/rust-probe" \
+  -DOB_ENABLE_STANDBY=OFF \
+  -DCMAKE_C_FLAGS_RELWITHDEBINFO=-O2 \
+  -DCMAKE_CXX_FLAGS_RELWITHDEBINFO=-O2
+```
+
+6 GiB 阈值仅用于已评估的增量链接，默认仍为 10 GiB；不可据此估计全量构建空间。

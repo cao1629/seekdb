@@ -27,7 +27,7 @@ Experimental seekdb iOS ARM64 build. This does not package or sign an iPhone app
   --simulator             Build for an Apple Silicon iOS simulator
   --init                  Prepare host tools and install the pinned Rust iOS target
   --configure-only        Generate build rules without compiling
-  --deps-only             Build the 10 supported dependencies (ICU/VSAG remain separate)
+  --deps-only             Build pinned iOS dependencies, including ICU and VSAG
   --jobs N                Parallel C/C++ jobs (default: 4)
   --target NAME           CMake target (default: oceanbase_static)
   --deps-prefix PATH      iOS-built dependencies (default: deps/ios/<sdk>/devel)

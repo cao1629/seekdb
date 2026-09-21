@@ -104,3 +104,47 @@ git diff --check
 原始日志优先查 `build_ios_arm64/logs/`：`engine-build.log`、`sql-nio-build.log`、`jemalloc-build.log`、`icu-build.log`、`link-check.log`。依赖构建证据位于 `deps/ios/iphoneos/build/`；ICU 宿主 configure 详情位于 `deps/ios/host/icu/config.log`。这些缓存日志可能被后续运行覆盖，关键结论应同步摘录到本文件，新的失败/修复应补充命令、日期及结果。
 
 后续条目格式：`日期 → 文件/环境项 → 修改原因与具体参数 → 验证命令及结果 → 剩余问题 → commit（提交后补充）`。
+
+## 2026-09-21：ICU、OpenMP 和数学库继续移植
+
+- 开发者工具权限开启后，ICU 宿主 configure 和工具编译成功，不再遇到此前的 conftest SIGKILL。一次构建收到 SIGTERM 后增量重跑。随后目标工具 pkgdata.cpp 调用了 iOS 不可用的 system()；build.py 在目标 configure 增加 `--disable-tools`，宿主工具仍正常构建并通过 `--with-cross-build` 生成目标数据。ICU 69.1 的 icuuc/icui18n/icudata 均构建、平台检查、安装成功。
+- ICU 的调用点：`src/sql/engine/expr/ob_expr_regexp_context.cpp` 用 uregex_open/find/appendReplacement 等实现 SQL 正则，设置时间和栈上限，并转换 Unicode 文本；对应 REGEXP、REGEXP_LIKE、REGEXP_INSTR、REGEXP_SUBSTR、REGEXP_REPLACE。本轮没有裁剪这些功能。
+- `deps/ios-build/build.py` 新增显式 openmp 目标：LLVM OpenMP 17.0.6 与同版本 CMake 公共模块固定 URL/SHA256；识别 tar.xz，替换解包源码中的公共模块路径。关闭共享库、libomptarget、OMPT、hwloc，静态 libomp.a 已通过 iOS ARM64 平台检查并安装。[LLVM 构建说明](https://openmp.llvm.org/Building.html)。
+- 新增 `deps/ios-build/lapacke/CMakeLists.txt` 与显式 lapack 目标：固定 LAPACK 3.12.0，仅编译 VSAG 使用的 sgeqrf/sorgqr/sgetrf/ssyev/sgesdd C 接口及工具函数；底层链接 Apple Accelerate，使用 LAPACK_F2C 匹配其旧接口。初次链接缺少 LAPACKE_get_nancheck，补入上游 lapacke_nancheck.c 后通过。没有编译或链接 macOS Fortran 库。[Apple 数学库说明](https://developer.apple.com/documentation/accelerate/blasparamerrorproc)。
+- 新增 `unittest/ios_build/lapacke_probe.c`：macOS 宿主执行 QR 重构、LU、特征值和 SVD 检查通过；同一探针使用 iOS SDK 链接成功，vtool 显示 IOS/minos 18.0/sdk 27.0。尚未真机执行。
+- 重跑完整引擎链接，已越过 ICU 缺失错误，当前首先缺少 cpuinfo（VSAG 依赖）。
+- 新增 `deps/ios-build/vsag_packages.py`、`deps/ios-build/vsag/CMakeLists.txt`、`deps/ios-build/vsag/include/cblas.h`，并扩展 build.py 的显式 vsag 目标：固定 VSAG 及 fmt/spdlog/ANTLR/cpuinfo/json/thread-pool/tsl 源码；使用受 Git 追踪的 iOS CMake 适配层及 OpenMP/LAPACKE/Accelerate，保留上游 src 目标图。修改解包源码中的 OpenMP 参数。仍在验证；首次编译发现既有 Boost 头文件包缺少 dynamic_bitset.hpp，正在补全源码头文件，不能宣称完整 VSAG 或引擎链接成功。
+
+新增依赖构建命令（从仓库根目录执行）：
+
+```bash
+python3 deps/ios-build/build.py icu
+python3 deps/ios-build/build.py openmp lapack
+python3 deps/ios-build/build.py --jobs 4 vsag
+```
+
+新日志位于 `build_ios_arm64/logs/`：openmp-build.log、lapacke-build.log、lapacke-host-test.log、vsag-build.log。真机检查仍只发现名为 QuickLang iPhone 17 Pro 的模拟设备，尚未识别到物理手机。
+
+后续适配细节：
+
+- 采用完整 Boost 1.74.0 固定校验和源码头文件，替代缺失 dynamic_bitset 的宿主精简头文件包；build.py 支持 tar.bz2。DiskANN 定义 BOOST_NO_CXX98_FUNCTION_BASE，使用 Boost 自带兼容分支处理 libc++ 已移除的 std::unary_function。
+- VSAG 的 CBLAS 适配仅引入 vecLib/cblas.h，并增加 SDK 内的 Accelerate 子 framework 搜索路径，避免 Accelerate umbrella 与 LAPACKE 重复声明 Fortran LAPACK 函数的类型冲突。DiskANN 显式连接 fmt::fmt，获得 logger 所需头文件。
+- `src/oblib/lib/CMakeLists.txt` 在 iOS ARM64 分支使用 libomp.a、liblapacke.a 和 Accelerate，移除该分支对 macOS Fortran/quadmath/gcc/OpenBLAS 库的依赖；macOS 原有库选择保留。仍待完整引擎链接验证。
+- 新增 `unittest/ios_build/icu_regex_probe.cpp`，在宿主 ICU 上验证中文文本的 Unicode Han 属性正则匹配通过；同一程序 iOS 链接通过，平台 IOS/minos 18.0/sdk 27.0。探针首次启动未取得成功输出，显式再次运行后取得退出码 0 和成功信息；没有将首次调用算作成功。
+- 6 项脚本测试再次全部通过，日志为 ios-script-tests.log；bash 语法和 git diff 格式检查通过。
+- VSAG 适配补全 CRoaring C++ 头文件目录、ANTLR runtime/autogen 的目录布局；布局使用仅位于构建目录的符号链接，避免复制 pragma-once 头文件造成类型重复定义。fmt 头文件作为上游原有的公共 include 提供；Boost 兼容宏也传播给包含 DiskANN 头文件的 VSAG 对象目标。
+- VSAG 自身生成的 version.h 与 ANTLR 的同名头文件冲突，给 vsag_static 优先指定其生成头文件目录，版本记录为 129b82c-ios。
+- 用户确认已连接手机后，再查 devicectl、xctrace 和 USB 枚举仍未发现物理 iPhone；只看到模拟器。已提供手机端开发者模式开启步骤和 USB 直连排查建议，未把用户确认当成设备已被工具识别的证据。
+- VSAG 随后编译成功，产出 libvsag_static、diskann、simd、io、cpuinfo、fmt、antlr4-runtime、antlr4-autogen 共 8 个静态库，逐个通过 iOS ARM64 检查并安装至 `deps/ios/iphoneos/devel/lib/vsag_lib`。verified.json 已生成。此处复用现有 CRoaring 3.0.0，而上游 VSAG 默认取 3.0.1；编译通过不表示完整向量检索回归已通过。
+- `build.iphone.sh --deps-only` 的默认依赖顺序扩展为 14 项：原有 10 项之后依次构建 ICU、OpenMP、LAPACKE 子集和 VSAG；帮助文本同步更新。各项已分别验证，尚未在全新目录一次性执行完整 14 项流水线。
+
+## 2026-09-21：真机接通与最终链接修复
+
+- devicectl 已确认物理 iPhone 17 Pro、iOS 27.0、USB wired / connected / paired，开发者模式由 Disabled 变为 Enabled (1)。期间 USB 枚举一度丢失，重新连接后恢复；无需修改系统 xcode-select。钥匙串尚无 Apple Development 证书，已请用户在 Xcode Accounts 配置个人开发团队，未采集或提交凭证。
+- VSAG 补齐后，完整链接暴露三类未解析符号：Abseil string_view、__kmpc_dispatch_deinit、nio_*。S2 上游 CMake 无条件强制 C++11，而 Abseil 使用 C++17，造成 string_view ABI 不一致。build.py 对固定版本 S2 的 CMake 标准进行受检查替换，统一为 C++17；S2 已重建、安装并通过 iOS 平台验证。
+- build.py 将 OpenMP 和 LLVM CMake 公共模块固定到 21.1.8，记录下载 SHA256，并按版本隔离 OpenMP 构建目录。上游 21.1.8 的 kmp_dispatch.cpp 提供新 Clang 所需的 __kmpc_dispatch_deinit；旧 17.0.6 不提供。21.1.8 静态库已编译、安装并通过 iOS ARM64 平台检查，未自行添加替代运行库函数。
+- src/observer/CMakeLists.txt 为 seekdb_ios_runtime 增加 PUBLIC sql_nio，沿用正式 Cargo 构建依赖和 Rust 系统库。首次正式目标构建中 thiserror 宿主 build-script 被 SIGKILL，保留 sql-nio-cmake.log，随后增量重试；不将首次尝试记为成功。
+- 复现：python3 deps/ios-build/build.py --jobs 4 s2 openmp；随后运行 build.iphone.sh 的 seekdb_ios_link_check 目标，使用上述头文件前缀及 -DOB_ENABLE_STANDBY=OFF、两个 RelWithDebInfo=-O2 参数。最终链接结果将在本节追加。
+- Rust 在新 rust-target 目录增量重试仍有多个宿主 build-script 被 SIGKILL。cmake/Rust.cmake 将 RUST_TARGET_DIR 暴露为 CACHE PATH，默认不变；本次使用 -DRUST_TARGET_DIR="$PWD/build_ios_arm64/rust-probe" 复用此前已成功编译的同一源码/目标产物，不将此视为全新构建通过。codesign 校验新宿主程序磁盘签名有效，但这不能证明系统运行策略允许执行。
+- 完整链接前磁盘降至约 9.4 GiB，默认 10 GiB 保护正确终止。确认本次是增量链接、observer/SQL 库分别约 48/140 MiB 后，仅该次命令设置 SEEKDB_IOS_MIN_FREE_GIB=6，未修改脚本默认阈值。
+- 最终 seekdb_ios_link_check 构建达到 100%，约 216 MiB；vtool 确认 IOS/minos 18.0/sdk 27.0，otool -L 仅包含 Accelerate、libSystem、Security、CoreFoundation、SystemConfiguration、libiconv、libc++ 等 Apple 系统库，三类未解析符号均已消除。日志 link-check.log；脚本测试 6 项通过，bash -n、py_compile、git diff --check 通过。没有将链接探针误记为 UIKit App、SQL 或真机运行成功。

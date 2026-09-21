@@ -178,7 +178,7 @@ endif()
 if(CMAKE_SYSTEM_NAME STREQUAL "iOS")
   add_library(seekdb_ios_runtime STATIC EXCLUDE_FROM_ALL ios/seekdb_ios.cpp)
   target_include_directories(seekdb_ios_runtime PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/ios")
-  target_link_libraries(seekdb_ios_runtime PUBLIC oceanbase_static)
+  target_link_libraries(seekdb_ios_runtime PUBLIC oceanbase_static sql_nio)
   add_executable(seekdb_ios_link_check EXCLUDE_FROM_ALL
     "${CMAKE_SOURCE_DIR}/unittest/ios_build/link_probe.cpp")
   target_link_libraries(seekdb_ios_link_check PRIVATE seekdb_ios_runtime)

@@ -10,11 +10,20 @@ import shutil
 import shlex
 import subprocess
 
+from vsag_packages import PACKAGES as VSAG_PACKAGES
+
 ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_PACKAGES = ("zlib", "openssl", "curl", "abseil", "s2", "roaring",
-                    "lzma", "libxml2", "protobuf-c", "sqlite")
+                    "lzma", "libxml2", "protobuf-c", "sqlite",
+                    "icu", "openmp", "lapack", "vsag")
 
 PACKAGES = {
+    "lapack": ("3.12.0", "https://codeload.github.com/Reference-LAPACK/lapack/tar.gz/refs/tags/v3.12.0",
+               "eac9570f8e0ad6f30ce4b963f4f033f0f643e7c3912fc9ee6cd99120675ad48b"),
+    "openmp": ("21.1.8", "https://github.com/llvm/llvm-project/releases/download/llvmorg-21.1.8/openmp-21.1.8.src.tar.xz",
+               "856b023748b41ac7b2c83fd8e9f765ff48a4df2fe6777d2811ef7c7ed8f2f977"),
+    "llvm-cmake": ("21.1.8", "https://github.com/llvm/llvm-project/releases/download/llvmorg-21.1.8/cmake-21.1.8.src.tar.xz",
+                   "85735f20fd8c81ecb0a09abb0c267018475420e93b65050cc5b7634eab744de9"),
     "lzma": ("5.4.7", "https://codeload.github.com/tukaani-project/xz/tar.gz/refs/tags/v5.4.7",
              "87ef1bb0183ce477ba3ddb2700000b4c1e723f8d984e8f678dddcb11c5bf4f99"),
     "icu": ("69.1", "https://github.com/unicode-org/icu/releases/download/release-69-1/icu4c-69_1-src.tgz",
@@ -40,6 +49,8 @@ PACKAGES = {
                 "fafe27202bde4238dce258d82ec8a8592a657842e5431264620a933a0c9436b7"),
 }
 
+PACKAGES.update(VSAG_PACKAGES)
+
 
 def run(command, directory, environment):
     """Execute one build stage and propagate failure without installing partial output."""
@@ -51,7 +62,7 @@ def source_package(name, environment):
     """Fetch a checksum-pinned upstream archive and extract it inside this checkout."""
     version, url, digest = PACKAGES[name]
     cache = ROOT / "deps/ios"
-    suffix = ".zip" if url.endswith(".zip") else ".tar.gz"
+    suffix = ".zip" if url.endswith(".zip") else (".tar.xz" if url.endswith(".xz") else (".tar.bz2" if url.endswith(".bz2") else ".tar.gz"))
     archive = cache / "downloads" / (name + "-" + version + suffix)
     archive.parent.mkdir(parents=True, exist_ok=True)
     if not archive.exists():
@@ -70,7 +81,7 @@ def source_package(name, environment):
         if suffix == ".zip":
             run(["unzip", "-q", "-o", archive, "-d", source], ROOT, environment)
         else:
-            run(["tar", "-xzf", archive, "-C", source, "--strip-components=1"], ROOT, environment)
+            run(["tar", "-xf", archive, "-C", source, "--strip-components=1"], ROOT, environment)
         marker.write_text(digest)
     return source
 
@@ -155,8 +166,18 @@ def build_curl(source, build, prefix, sdk, options, environment):
 
 def build_cmake_package(name, source, build, prefix, sdk, options, environment):
     """Build a static CMake dependency using only target SDK and prefix libraries."""
+    if name == "s2":
+        # S2 overrides the cache standard; Abseil's string_view ABI must match.
+        project_file = source / "CMakeLists.txt"
+        content = project_file.read_text()
+        original = "set(CMAKE_CXX_STANDARD 11)"
+        replacement = "set(CMAKE_CXX_STANDARD 17)"
+        if original not in content and replacement not in content:
+            raise RuntimeError("Unexpected S2 C++ standard configuration")
+        project_file.write_text(content.replace(original, replacement))
     settings = {
         "lzma": [],
+        "lapack": ["-DLAPACK_SOURCE=" + str(source)],
         "abseil": ["-DABSL_BUILD_TESTING=OFF", "-DABSL_PROPAGATE_CXX_STD=ON", "-DABSL_ENABLE_INSTALL=ON"],
         "s2": ["-DBUILD_EXAMPLES=OFF", "-DWITH_GLOG=OFF", "-DWITH_GFLAGS=OFF",
                "-Dabsl_DIR=" + str(prefix / "lib/cmake/absl")],
@@ -166,7 +187,8 @@ def build_cmake_package(name, source, build, prefix, sdk, options, environment):
                     "-DLIBLZMA_INCLUDE_DIR=" + str(prefix / "include"),
                     "-DLIBLZMA_LIBRARY=" + str(prefix / "lib/liblzma.a")],
     }
-    run(["cmake", "-S", source, "-B", build, "-DCMAKE_SYSTEM_NAME=iOS",
+    project = ROOT / "deps/ios-build/lapacke" if name == "lapack" else source
+    run(["cmake", "-S", project, "-B", build, "-DCMAKE_SYSTEM_NAME=iOS",
          "-DCMAKE_OSX_SYSROOT=" + sdk, "-DCMAKE_OSX_ARCHITECTURES=arm64",
          "-DCMAKE_OSX_DEPLOYMENT_TARGET=" + options.deployment_target,
          "-DCMAKE_BUILD_TYPE=Release", "-DCMAKE_INSTALL_PREFIX=" + str(prefix),
@@ -218,6 +240,72 @@ def build_c_package(name, source, build, prefix, sdk, options, environment):
         shutil.copy2(header, header_directory / header.name)
 
 
+
+
+def build_vsag(source, build, prefix, sdk, options, environment):
+    """Compile pinned VSAG and C++ dependencies with the repository's iOS adapter."""
+    for library in ("libomp.a", "liblapacke.a", "libroaring.a"):
+        verify_archive(prefix / "lib" / library, options.simulator, environment)
+    adapter = ROOT / "deps/ios-build/vsag"
+    dependencies = []
+    for name in VSAG_PACKAGES:
+        if name not in ("vsag", "boost"):
+            path = source_package(name, environment)
+            variable = name.upper().replace("-", "_")
+            dependencies.append("-DSEEKDB_" + variable + "=" + str(path))
+    shutil.copyfile(adapter / "CMakeLists.txt", source / "CMakeLists.txt")
+    for relative in ("src/simd/CMakeLists.txt", "extern/diskann/diskann.cmake"):
+        file = source / relative
+        content = file.read_text()
+        original = "-fopenmp -fopenmp-simd"
+        replacement = "-Xpreprocessor -fopenmp"
+        if original not in content and replacement not in content:
+            raise RuntimeError("Unexpected VSAG OpenMP flags in " + relative)
+        file.write_text(content.replace(original, replacement))
+    boost = source_package("boost", environment)
+    if not (boost / "boost/version.hpp").exists():
+        raise RuntimeError("Pinned Boost headers are missing")
+    run(["cmake", "-S", source, "-B", build, "-DCMAKE_SYSTEM_NAME=iOS",
+         "-DCMAKE_OSX_SYSROOT=" + sdk, "-DCMAKE_OSX_ARCHITECTURES=arm64",
+         "-DCMAKE_OSX_DEPLOYMENT_TARGET=" + options.deployment_target,
+         "-DCMAKE_BUILD_TYPE=Release", "-DCMAKE_POLICY_VERSION_MINIMUM=3.5",
+         "-DSEEKDB_PREFIX=" + str(prefix), "-DSEEKDB_ADAPTER=" + str(adapter),
+         "-DSEEKDB_BOOST_INCLUDE=" + str(boost), *dependencies], ROOT, environment)
+    run(["cmake", "--build", build, "--target", "vsag_static", "--parallel",
+         str(options.jobs)], ROOT, environment)
+    destination = prefix / "lib/vsag_lib"
+    destination.mkdir(parents=True, exist_ok=True)
+    archives = list(build.rglob("lib*.a"))
+    if not any(path.name == "libvsag_static.a" for path in archives):
+        raise RuntimeError("VSAG archive was not produced")
+    for archive in archives:
+        verify_archive(archive, options.simulator, environment)
+        shutil.copy2(archive, destination / archive.name)
+    shutil.copytree(source / "include/vsag", prefix / "include/vsag", dirs_exist_ok=True)
+
+
+def build_openmp(source, build, prefix, sdk, options, environment):
+    """Build the static LLVM OpenMP runtime without host Homebrew dependencies."""
+    utilities = source_package("llvm-cmake", environment)
+    project = source / "CMakeLists.txt"
+    original = "set(LLVM_COMMON_CMAKE_UTILS ${CMAKE_CURRENT_SOURCE_DIR}/../cmake)"
+    replacement = 'set(LLVM_COMMON_CMAKE_UTILS "${SEEKDB_LLVM_CMAKE}")'
+    content = project.read_text()
+    if original not in content and replacement not in content:
+        raise RuntimeError("Unexpected OpenMP CMake utility path")
+    project.write_text(content.replace(original, replacement))
+    run(["cmake", "-S", source, "-B", build, "-DCMAKE_SYSTEM_NAME=iOS",
+         "-DCMAKE_OSX_SYSROOT=" + sdk, "-DCMAKE_OSX_ARCHITECTURES=arm64",
+         "-DCMAKE_OSX_DEPLOYMENT_TARGET=" + options.deployment_target,
+         "-DCMAKE_BUILD_TYPE=Release", "-DCMAKE_INSTALL_PREFIX=" + str(prefix),
+         "-DSEEKDB_LLVM_CMAKE=" + str(utilities), "-DLIBOMP_ENABLE_SHARED=OFF",
+         "-DOPENMP_ENABLE_LIBOMPTARGET=OFF", "-DOPENMP_ENABLE_OMPT_TOOLS=OFF",
+         "-DLIBOMP_OMPT_SUPPORT=OFF", "-DLIBOMP_USE_HWLOC=OFF"], ROOT, environment)
+    run(["cmake", "--build", build, "--parallel", str(options.jobs)], ROOT, environment)
+    verify_archive(build / "runtime/src/libomp.a", options.simulator, environment)
+    run(["cmake", "--install", build], ROOT, environment)
+
+
 def build_icu(source, build, prefix, sdk, options, environment):
     """Build native ICU generators first, then cross-compile the target libraries."""
     source = source / "source"
@@ -237,7 +325,7 @@ def build_icu(source, build, prefix, sdk, options, environment):
         triple += "-simulator"
     cross_env["CFLAGS"] = "-O2 -target " + triple + " -isysroot " + shlex.quote(sdk)
     cross_env["CXXFLAGS"] = cross_env["CFLAGS"]
-    run([source / "configure", *common, "--host=aarch64-apple-darwin",
+    run([source / "configure", *common, "--disable-tools", "--host=aarch64-apple-darwin",
          "--with-cross-build=" + str(host_build), "--prefix=" + str(prefix)], build, cross_env)
     run(["make", "-j" + str(options.jobs)], build, cross_env)
     for name in ("libicuuc.a", "libicui18n.a", "libicudata.a"):
@@ -253,7 +341,7 @@ def main():
     parser.add_argument("--deployment-target", default="18.0")
     parser.add_argument("packages", nargs="*", metavar="PACKAGE")
     options = parser.parse_args()
-    unknown = set(options.packages) - set(PACKAGES)
+    unknown = set(options.packages) - (set(PACKAGES) - {"llvm-cmake"} - (set(VSAG_PACKAGES) - {"vsag"}))
     if unknown:
         parser.error("unknown packages: " + ", ".join(sorted(unknown)))
     if options.jobs < 1 or not re.fullmatch(r"[0-9]+(?:\.[0-9]+){0,2}", options.deployment_target):
@@ -272,11 +360,16 @@ def main():
         directory.mkdir(parents=True, exist_ok=True)
     for name in options.packages or DEFAULT_PACKAGES:
         source = source_package(name, environment)
-        build = ROOT / "deps/ios" / sdk_name / "build" / name
+        build_name = name + "-" + PACKAGES[name][0] if name == "openmp" else name
+        build = ROOT / "deps/ios" / sdk_name / "build" / build_name
         build.mkdir(parents=True, exist_ok=True)
-        if name == "icu":
+        if name == "vsag":
+            build_vsag(source, build, prefix, sdk, options, environment)
+        elif name == "openmp":
+            build_openmp(source, build, prefix, sdk, options, environment)
+        elif name == "icu":
             build_icu(source, build, prefix, sdk, options, environment)
-        elif name in ("abseil", "s2", "roaring", "libxml2", "lzma"):
+        elif name in ("abseil", "s2", "roaring", "libxml2", "lzma", "lapack"):
             build_cmake_package(name, source, build, prefix, sdk, options, environment)
         elif name in ("sqlite", "protobuf-c"):
             build_c_package(name, source, build, prefix, sdk, options, environment)
