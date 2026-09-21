@@ -137,6 +137,96 @@ export class TableFormatter {
   }
 }
 
+export class VerticalFormatter {
+  #columnCount;
+  #labels = [];
+  #labelCharacters = 0;
+  #rows = [];
+  #characters = 0;
+  #maxCharacters;
+  #limited = false;
+  #formatted = '';
+
+  constructor(columns, {maxCharacters = Infinity} = {}) {
+    if (!Array.isArray(columns) || columns.some(column => typeof column !== 'string')) {
+      throw new TypeError('Table columns must be an array of strings.');
+    }
+    if (maxCharacters !== Infinity && (!Number.isSafeInteger(maxCharacters) || maxCharacters < 0)) {
+      throw new RangeError('The table character limit must be a nonnegative integer.');
+    }
+    this.#columnCount = columns.length;
+    this.#maxCharacters = maxCharacters;
+    let characters = 0;
+    let width = 0;
+    const labels = [];
+    for (const column of columns) {
+      const text = this.#prepare(column, maxCharacters - characters);
+      if (text === undefined) { this.#limited = true; return; }
+      characters += text.length;
+      const labelWidth = displayWidth(text);
+      width = Math.max(width, labelWidth);
+      labels.push({text, width: labelWidth});
+    }
+    this.#labelCharacters = labels.reduce((sum, label) => sum + width - label.width + label.text.length + 3, 0);
+    if (this.#header().length + this.#labelCharacters > maxCharacters) {
+      this.#limited = true;
+      return;
+    }
+    this.#labels = labels.map(label => ' '.repeat(width - label.width) + label.text + ': ');
+  }
+
+  #prepare(value, maxCharacters) {
+    if (value === null || typeof value !== 'string' || !value.length || maxCharacters === Infinity) {
+      const text = visibleText(value);
+      return text.length <= maxCharacters ? text : undefined;
+    }
+    if (value.length > maxCharacters) return;
+    const parts = [];
+    let characters = 0;
+    for (let offset = 0; offset < value.length; offset += 256) {
+      const part = visibleText(value.slice(offset, offset + 256));
+      if (part.length > maxCharacters - characters) return;
+      parts.push(part);
+      characters += part.length;
+    }
+    return parts.join('');
+  }
+
+  #header() {
+    return `*************************** ${this.rowCount + 1}. row ***************************`;
+  }
+
+  get rowCount() { return this.#rows.length; }
+  get limited() { return this.#limited; }
+
+  append(row) {
+    if (!Array.isArray(row) || row.length !== this.#columnCount) {
+      throw new TypeError('Each table row must match the column count.');
+    }
+    if (this.#limited) return false;
+    const header = this.#header();
+    const separator = this.rowCount ? 1 : 0;
+    let remaining = this.#maxCharacters - this.#characters - separator - header.length - this.#labelCharacters;
+    if (remaining < 0) { this.#limited = true; return false; }
+    const values = [];
+    for (const value of row) {
+      const text = this.#prepare(value, remaining);
+      if (text === undefined) { this.#limited = true; return false; }
+      values.push(text);
+      remaining -= text.length;
+    }
+    const formatted = [header, ...this.#labels.map((label, index) => label + values[index])].join('\n');
+    this.#rows.push(formatted);
+    this.#characters += separator + formatted.length;
+    this.#formatted = undefined;
+    return true;
+  }
+
+  format() {
+    return this.#formatted ??= this.#rows.join('\n');
+  }
+}
+
 export function formatTable(columns, rows) {
   const formatter = new TableFormatter(columns);
   if (!Array.isArray(rows)) throw new TypeError('Table rows must be an array.');

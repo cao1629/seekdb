@@ -248,15 +248,11 @@ code {
 .transcript {
   min-width: 0;
 }
-.welcome {
-  color: var(--muted);
-  margin-bottom: 4px;
-}
-.welcome p {
-  margin: 0;
-}
 .entry {
   margin: 0 0 12px;
+}
+.entry.pending {
+  margin-bottom: 0;
 }
 .command-text {
   margin: 0;
@@ -379,9 +375,6 @@ textarea::placeholder {
   .terminal-scroll,
   .terminal-footer {
     padding-inline: 16px;
-  }
-  .hint-secondary {
-    display: none;
   }
 }
 @media (max-width: 600px) {

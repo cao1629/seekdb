@@ -30,10 +30,12 @@ limitations under the License.
     <a class="brand" href="./shell.html" aria-label="seekdb shell home"><span class="brand-mark" aria-hidden="true"></span>seekdb</a>
     <span id="version-label" class="wasm-label" aria-label="seekdb version" aria-live="polite"></span>
     <nav aria-label="Resources">
+      <a href="https://www.seekdb.ai/" target="_blank" rel="noopener noreferrer">Website</a>
       <a href="https://github.com/oceanbase/seekdb" target="_blank" rel="noopener noreferrer">GitHub</a>
     </nav>
   </header>
   <main class="terminal" aria-label="seekdb SQL shell">
+    <h1 class="sr-only">seekdb SQL shell</h1>
     <div class="toolbar">
       <div class="connection"><span id="status-dot" class="status-dot" data-state="loading"></span><strong id="database-name">seekdb</strong><span id="storage-badge" class="storage-badge">memory://</span></div>
       <div class="toolbar-actions">
@@ -55,23 +57,14 @@ limitations under the License.
       </div>
     </div>
     <div class="runtime-status sr-only" role="status" aria-live="polite"><span id="status-text">Loading WebAssembly and starting seekdb…</span></div>
-    <div id="terminal-scroll" class="terminal-scroll" tabindex="0" aria-label="Terminal">
-      <section id="transcript" class="transcript" aria-label="SQL output">
-        <div class="welcome">
-          <h1 class="sr-only">seekdb SQL shell</h1>
-          <p>Welcome to the seekdb shell.</p>
-          <p>Engine: seekdb · WebAssembly</p>
-          <p id="storage-hint">Storage: starting…</p>
-          <p>Type SQL and press Enter. Ctrl+L clears the screen.</p>
-        </div>
-      </section>
+    <div id="terminal-scroll" class="terminal-scroll" tabindex="-1" aria-label="Terminal">
+      <section id="transcript" class="transcript" aria-label="SQL output"></section>
     <form id="query-form" class="composer">
       <label for="sql" class="prompt" id="prompt">seekdb&gt;</label>
       <textarea id="sql" rows="1" spellcheck="false" autocomplete="off" autocapitalize="off" aria-label="SQL statement" placeholder="loading…" disabled></textarea>
     </form>
     </div>
     <footer class="terminal-footer">
-      <span>Enter runs a statement ending in ;<span class="hint-secondary"> · Shift+Enter for a new line</span> · ↑ ↓ history</span>
       <span id="activity-time"></span>
       <span id="engine-label">seekdb · wasm</span>
     </footer>

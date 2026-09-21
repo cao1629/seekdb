@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {CommandHistory, databaseAfterStatement, isComplete, takeStatement} from './shell-sql.mjs';
+import {CommandHistory, databaseAfterStatement, interactivePrompt, takeInteractiveStatement, takeStatement} from './shell-sql.mjs';
 import {EXAMPLES} from './shell-examples.mjs';
-import {TableFormatter} from './shell-format.mjs';
+import {TableFormatter, VerticalFormatter} from './shell-format.mjs';
 import {ENGINE_VERSION} from './engine-version.mjs';
 
 const MAX_RESULT_CHARACTERS = 100000;
@@ -24,15 +24,13 @@ const QUERY_PREVIEW = {maxRows: 500, maxColumns: 100, maxCells: 20000, maxCellBy
 const element = id => document.getElementById(id);
 const input = element('sql');
 const transcript = element('transcript');
-const welcome = transcript.querySelector('.welcome');
-const outputLengths = new WeakMap([[welcome, welcome.textContent.length]]);
-let transcriptCharacters = welcome.textContent.length;
+const outputLengths = new WeakMap();
+let transcriptCharacters = 0;
 const terminalScroll = element('terminal-scroll');
 const exampleButtons = element('example-menu').querySelectorAll('button');
 const menus = document.querySelectorAll('.menu');
 const versionLabel = element('version-label');
 versionLabel.textContent = ENGINE_VERSION;
-const storageHint = element('storage-hint');
 const decoder = new TextDecoder();
 const history = new CommandHistory();
 const decode = value => value === null ? null : decoder.decode(value);
@@ -51,6 +49,16 @@ const persistentSupported = typeof navigator.storage?.getDirectory === 'function
 let storage = 'memory';
 let pendingStorage;
 let persistentClearPending = false;
+let inputBuffer = '';
+let inputEntry;
+let delimiter = ';';
+let acceptingInput = false;
+let connectionId;
+let activeQuery;
+let cancellation;
+let cancelRequested = false;
+let cancelPending = false;
+let terminalPointerActive = false;
 
 function node(tag, className, text) {
   const result = document.createElement(tag);
@@ -77,10 +85,10 @@ function setState(next, message) {
   element('status-text').textContent = message;
   input.disabled = !['ready', 'running'].includes(next);
   input.readOnly = next === 'running';
-  input.placeholder = starting ? 'loading…' : next === 'closed' || next === 'error' ? 'Choose New Instance to start a database' : 'SELECT VERSION();';
+  input.placeholder = starting ? 'loading…' : next === 'closed' || next === 'error' ? 'Choose New Instance to start a database' : '';
   for (const button of exampleButtons) button.disabled = next !== 'ready';
   element('database-name').textContent = database && !starting ? `seekdb [${currentDatabase ?? '(none)'}]` : 'seekdb';
-  element('prompt').textContent = `${element('database-name').textContent}>`;
+  updatePrompt();
   element('status-dot').title = message;
   updateStorage();
   if (['loading', 'running', 'closing'].includes(next)) {
@@ -150,6 +158,37 @@ function setInput(value) {
   input.setSelectionRange(value.length, value.length);
 }
 
+function updatePrompt() {
+  const continuation = interactivePrompt(inputBuffer, {...sqlOptions, delimiter});
+  element('prompt').textContent = continuation ? continuation.padStart(6) : `${element('database-name').textContent}>`;
+}
+
+function resetInputBuffer() {
+  inputBuffer = '';
+  inputEntry?.classList.remove('pending');
+  inputEntry = undefined;
+  updatePrompt();
+}
+
+function echoInput(line) {
+  if (inputEntry?.parentNode !== transcript) {
+    inputEntry = node('article', 'entry pending');
+    appendOutput(inputEntry);
+  }
+  const command = node('pre', 'command-text');
+  command.append(node('span', 'command-prompt', element('prompt').textContent), document.createTextNode(` ${shortenText(line, MAX_RESULT_CHARACTERS - 1)}`));
+  inputEntry.append(command);
+  updateOutput(inputEntry);
+  scrollOutput();
+}
+
+function clearInput() {
+  if (input.value || inputBuffer) echoInput(`${input.value}^C`);
+  resetInputBuffer();
+  history.resetNavigation();
+  setInput('');
+}
+
 function commandOutput(sql) {
   const entry = node('article', 'entry');
   const line = node('div', 'command-line');
@@ -166,12 +205,12 @@ function updateContext(sql, event) {
   currentDatabase = databaseAfterStatement(sql, currentDatabase, sqlOptions);
   if ('affectedRows' in event) sqlOptions.noBackslashEscapes = Boolean(event.status & 512);
   element('database-name').textContent = `seekdb [${currentDatabase ?? '(none)'}]`;
-  element('prompt').textContent = `${element('database-name').textContent}>`;
+  updatePrompt();
 }
 
-async function executeStatement(sql, signal) {
-  const entry = commandOutput(sql);
+async function executeStatement(sql, signal, {entry = commandOutput(sql), vertical = false} = {}) {
   activeEntry = entry;
+  activeQuery = {connectionId};
   const started = performance.now();
   let body;
   let table;
@@ -196,7 +235,8 @@ async function executeStatement(sql, signal) {
           textShortened = true;
           return shortenText(name, 120);
         });
-        table = new TableFormatter(resultColumns, {maxCharacters: MAX_RESULT_CHARACTERS});
+        const Formatter = vertical ? VerticalFormatter : TableFormatter;
+        table = new Formatter(resultColumns, {maxCharacters: MAX_RESULT_CHARACTERS});
         body = node('pre', 'result-table');
         body.setAttribute('aria-label', 'Query result');
         body.tabIndex = 0;
@@ -256,6 +296,7 @@ async function executeStatement(sql, signal) {
     updateOutput(entry);
     throw error;
   } finally {
+    activeQuery = undefined;
     activeEntry = undefined;
     scrollOutput();
   }
@@ -273,6 +314,7 @@ async function reconnectSession() {
   }
   if (currentDatabase === null) currentDatabase = 'oceanbase';
   sqlOptions = {};
+  await updateVersion();
 }
 
 async function submit(sql = input.value) {
@@ -281,11 +323,13 @@ async function submit(sql = input.value) {
   if (command === '\\clear') { clearOutput(); setInput(''); return; }
   if (command === '\\tables') sql = 'SHOW TABLES;';
   if (command === '\\databases') sql = 'SHOW DATABASES;';
+  resetInputBuffer();
   history.push(sql);
   setInput('');
   followOutput = true;
   scrollOutput();
   controller = new AbortController();
+  cancelRequested = false;
   const signal = controller.signal;
   setState('running', 'Running SQL…');
   let remaining = sql;
@@ -293,6 +337,7 @@ async function submit(sql = input.value) {
   let failed = false;
   try {
     for (;;) {
+      if (cancelRequested) break;
       signal.throwIfAborted();
       const next = takeStatement(remaining, sqlOptions);
       if (!next) break;
@@ -315,32 +360,132 @@ async function submit(sql = input.value) {
       }
     }
   } finally {
+    await cancellation;
+    cancellation = undefined;
     controller = undefined;
     setState(database ? 'ready' : 'error', database ? failed ? 'Ready · previous batch stopped before completion' : `Ready · ${statements} ${statements === 1 ? 'statement' : 'statements'} completed` : 'Database unavailable');
     input.focus();
   }
 }
 
+async function submitLine() {
+  if (state !== 'ready' || acceptingInput) return;
+  acceptingInput = true;
+  const lines = input.value.replace(/\r\n?/g, '\n').split('\n');
+  setInput('');
+  followOutput = true;
+  controller = new AbortController();
+  cancelRequested = false;
+  try {
+    for (const line of lines) {
+      if (cancelRequested) break;
+      const emptyBuffer = !inputBuffer.trim();
+      echoInput(line);
+      history.push(line);
+      const textCommand = emptyBuffer ? line.trim().replace(/;$/, '').toLowerCase() : '';
+      const delimiterCommand = emptyBuffer && line.trim().match(/^(?:delimiter|\\d)(?:\s+([\s\S]*))?$/iu);
+      if (delimiterCommand) {
+        const value = (delimiterCommand[1] ?? '').trim().replace(/^(['"])([\s\S]*)\1$/u, '$2');
+        if (!value || /[\s\\]/u.test(value)) notice('ERROR: DELIMITER requires a nonempty value without whitespace or backslashes.', true);
+        else delimiter = value;
+        resetInputBuffer();
+        continue;
+      }
+      if (textCommand === 'clear') { resetInputBuffer(); continue; }
+      if (textCommand === '\\clear') { resetInputBuffer(); clearOutput(); continue; }
+      let directSql = textCommand === '\\tables' ? 'SHOW TABLES' : textCommand === '\\databases' ? 'SHOW DATABASES' : undefined;
+      if (emptyBuffer && /^use\s/iu.test(line.trim()) && interactivePrompt(line, {...sqlOptions, delimiter}) === '->'
+        && !takeInteractiveStatement(line, {...sqlOptions, delimiter})) directSql = line.trim();
+      inputBuffer += `${line}\n`;
+      for (;;) {
+        if (cancelRequested) break;
+        const next = directSql ? {statement: directSql, rest: '', terminator: ''}
+          : takeInteractiveStatement(inputBuffer, {...sqlOptions, delimiter});
+        directSql = undefined;
+        if (!next) break;
+        if (next.command === 'clear') {
+          inputBuffer = next.rest;
+          continue;
+        }
+        if (next.command === 'print') {
+          inputEntry.append(node('pre', 'command-text', next.statement));
+          updateOutput(inputEntry);
+          inputBuffer = next.statement + next.rest;
+          continue;
+        }
+        inputBuffer = next.rest;
+        if (!next.statement) {
+          inputEntry.append(node('div', 'entry-error', 'ERROR: No query specified'));
+          updateOutput(inputEntry);
+          continue;
+        }
+        if (next.statement.includes('\n')) history.push(next.statement + next.terminator);
+        setState('running', 'Running SQL…');
+        try {
+          await executeStatement(next.statement, controller.signal, {entry: inputEntry, vertical: next.vertical});
+        } catch (error) {
+          if (!(error instanceof SqlError)) throw error;
+        }
+      }
+      if (!interactivePrompt(inputBuffer, {...sqlOptions, delimiter})) resetInputBuffer();
+      updatePrompt();
+    }
+  } catch (error) {
+    resetInputBuffer();
+    if (!(error instanceof SqlError)) {
+      try {
+        await reconnectSession();
+        notice('Session reconnected. Uncommitted changes were rolled back; session settings were reset.');
+      } catch (reconnectError) {
+        await database?.close().catch(() => {});
+        database = undefined;
+        session = undefined;
+        notice(`The database stopped: ${reconnectError.message}\nChoose New Instance to start again.`, true);
+      }
+    }
+  } finally {
+    await cancellation;
+    cancellation = undefined;
+    if (cancelRequested) resetInputBuffer();
+    controller = undefined;
+    acceptingInput = false;
+    setState(database ? 'ready' : 'error', database ? 'Ready · root · SQL runs locally in a Web Worker' : 'Database unavailable');
+    input.focus();
+  }
+}
+
 function cancelQuery() {
-  if (!controller || controller.signal.aborted) return;
-  controller.abort();
-  element('status-text').textContent = 'Cancelling query and reconnecting the session…';
+  if (!controller || cancelPending) return;
+  cancelRequested = true;
+  const query = activeQuery;
+  if (!query) return;
+  cancelPending = true;
+  element('status-text').textContent = 'Interrupting query…';
+  cancellation = (async () => {
+    let control;
+    try {
+      control = await database.connect();
+      if (activeQuery !== query) return;
+      for await (const event of control.query(`KILL QUERY ${query.connectionId}`)) {}
+    } catch (error) {
+      if (activeQuery === query) notice(`Could not interrupt the query: ${error.message}`, true);
+    } finally {
+      await control?.close().catch(() => {});
+      cancelPending = false;
+    }
+  })();
 }
 
 async function updateVersion() {
-  let metadata;
-  try {
-    metadata = await database.connect({database: 'oceanbase'});
-    let engineVersion;
-    for await (const event of metadata.query('SELECT VERSION()')) {
-      if (event.kind === 'row') engineVersion = decode(event.values[0]);
-    }
+  for await (const event of session.query('SELECT VERSION(), CONNECTION_ID()')) {
+    if (event.kind !== 'row') continue;
+    const engineVersion = decode(event.values[0]);
+    connectionId = decode(event.values[1]);
+    if (!/^\d+$/u.test(connectionId)) throw new Error('The server returned an invalid connection ID.');
     if (engineVersion) {
       versionLabel.textContent = engineVersion.match(/seekdb-(v\S+)/i)?.[1] ?? engineVersion;
       versionLabel.title = `WebAssembly · ${engineVersion}`;
     }
-  } catch {} finally {
-    await metadata?.close().catch(() => {});
   }
 }
 
@@ -353,9 +498,9 @@ async function openDatabase() {
     const module = await import('./database.mjs');
     SqlError = module.SqlError;
     database = await module.Database.open({moduleURL: new URL('./seekdb_wasm_database.mjs', import.meta.url), wasmURL: new URL('./seekdb_wasm_database.wasm', import.meta.url), storage});
-    await updateVersion();
     currentDatabase = 'oceanbase';
     session = await database.connect({database: currentDatabase});
+    await updateVersion();
     sqlOptions = {};
     setState('ready', storage === 'opfs' ? 'Ready · root · data is kept in this browser' : 'Ready · root · SQL runs locally in a Web Worker');
     input.focus();
@@ -391,8 +536,6 @@ function updateStorage() {
   const persistent = (pendingStorage ?? storage) === 'opfs';
   const busy = ['loading', 'running', 'closing'].includes(state);
   element('storage-badge').textContent = persistent ? 'opfs://' : 'memory://';
-  storageHint.textContent = persistent ? 'Storage: opfs:// — data is kept in this browser.' : 'Storage: memory:// — data clears on reload or close.';
-  updateOutput(welcome);
   element('memory-button').disabled = busy;
   element('opfs-button').disabled = busy || !persistentSupported;
 }
@@ -405,8 +548,10 @@ async function createInstance(mode) {
   closeMenus();
   if (['loading', 'running', 'closing'].includes(state)) return;
   pendingStorage = mode;
+  resetInputBuffer();
+  delimiter = ';';
   persistentClearPending ||= mode === 'opfs' || Boolean(database && storage === 'opfs');
-  replaceOutput(welcome);
+  replaceOutput();
   followOutput = true;
   setInput('');
   if (database) await closeDatabase();
@@ -429,10 +574,15 @@ async function createInstance(mode) {
 }
 
 function clearOutput() {
-  replaceOutput(...(activeEntry ? [activeEntry] : []));
+  const retained = activeEntry ?? inputEntry;
+  replaceOutput(...(retained ? [retained] : []));
   followOutput = true;
   scrollOutput();
   if (state === 'ready') input.focus();
+}
+
+function focusInput() {
+  if (!input.disabled) input.focus({preventScroll: true});
 }
 
 input.addEventListener('input', () => {
@@ -442,12 +592,23 @@ input.addEventListener('input', () => {
 terminalScroll.addEventListener('scroll', () => {
   followOutput = terminalScroll.scrollHeight - terminalScroll.scrollTop - terminalScroll.clientHeight < 60;
 });
+terminalScroll.addEventListener('pointerdown', () => { terminalPointerActive = true; });
+document.addEventListener('pointerup', () => { terminalPointerActive = false; });
+document.addEventListener('pointercancel', () => { terminalPointerActive = false; });
+window.addEventListener('blur', () => { terminalPointerActive = false; });
+terminalScroll.addEventListener('focus', () => {
+  if (!terminalPointerActive && !window.getSelection().toString()) focusInput();
+});
+terminalScroll.addEventListener('click', event => {
+  if (window.getSelection().toString() || event.target.closest('.result-table')) return;
+  focusInput();
+});
 input.addEventListener('keydown', event => {
   if (event.isComposing) return;
   if (state !== 'ready') return;
-  if (event.key === 'Enter' && !event.shiftKey && (event.ctrlKey || event.metaKey || isComplete(input.value, sqlOptions) || /^\\(?:clear|tables|databases);?$/.test(input.value.trim()))) {
+  if (event.key === 'Enter') {
     event.preventDefault();
-    void submit();
+    void submitLine();
   } else if (event.key === 'ArrowUp' && !input.value.slice(0, input.selectionStart).includes('\n') && input.selectionStart === input.selectionEnd) {
     const previous = history.previous(input.value);
     if (previous !== undefined) { event.preventDefault(); setInput(previous); }
@@ -457,14 +618,16 @@ input.addEventListener('keydown', event => {
   }
 });
 document.addEventListener('keydown', event => {
+  if (event.key === 'Tab') { event.preventDefault(); focusInput(); return; }
   if (event.isComposing) return;
   if (event.ctrlKey && event.key.toLowerCase() === 'l') { event.preventDefault(); clearOutput(); }
-  if (state === 'running' && (event.key === 'Escape' || event.ctrlKey && event.key.toLowerCase() === 'c' && !window.getSelection().toString())) {
+  if (event.ctrlKey && event.key.toLowerCase() === 'c' && !window.getSelection().toString() && ['ready', 'running'].includes(state)) {
     event.preventDefault();
-    cancelQuery();
+    if (state === 'running') cancelQuery();
+    else clearInput();
   }
 });
-element('query-form').addEventListener('submit', event => { event.preventDefault(); void submit(); });
+element('query-form').addEventListener('submit', event => { event.preventDefault(); void submitLine(); });
 for (const button of exampleButtons) {
   button.addEventListener('click', () => {
     closeMenus();

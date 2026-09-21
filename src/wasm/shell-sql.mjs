@@ -97,6 +97,81 @@ export function isComplete(sql, options) {
   }
 }
 
+function scanInteractiveInput(sql, { noBackslashEscapes = false, ansiQuotes = false, delimiter = ';' } = {}, firstOnly = false) {
+  if (typeof sql !== 'string') throw new TypeError('SQL must be a string.');
+  if (typeof delimiter !== 'string' || !delimiter.length) throw new TypeError('Delimiter must be a non-empty string.');
+  let index = 0;
+  let start = 0;
+  let hasContent = false;
+
+  while (index < sql.length) {
+    const character = sql[index];
+    const shortCommand = character === '\\' && ['g', 'G', 'c', 'p'].includes(sql[index + 1]);
+    if (shortCommand || sql.startsWith(delimiter, index)) {
+      const terminator = shortCommand ? sql.slice(index, index + 2) : delimiter;
+      const command = shortCommand && sql[index + 1] === 'c' ? 'clear'
+        : shortCommand && sql[index + 1] === 'p' ? 'print' : undefined;
+      if (firstOnly) {
+        const statement = command ? sql.slice(start, index) : hasContent ? sql.slice(start, index).trim() : '';
+        const rest = sql.slice(index + terminator.length);
+        return { next: command ? { command, statement, rest, terminator }
+          : { statement, rest, terminator, vertical: shortCommand && sql[index + 1] === 'G' } };
+      }
+      index += terminator.length;
+      if (command !== 'print') {
+        start = index;
+        hasContent = false;
+      }
+    } else if (/\s/u.test(character)) {
+      index++;
+    } else if (character === '#' || (sql.startsWith('--', index)
+      && (index + 2 === sql.length || /[\s\u0000-\u001f\u007f]/u.test(sql[index + 2])))) {
+      while (index < sql.length && sql[index] !== '\n' && sql[index] !== '\r') index++;
+    } else if (sql.startsWith('/*', index)) {
+      const end = sql.indexOf('*/', index + 2);
+      if (end < 0) return { prompt: '/*>' };
+      if (sql[index + 2] === '!'
+        && sql.slice(index + 3, end).replace(/^\d{5,6}(?=\s|$)/u, '').trim()) {
+        hasContent = true;
+      }
+      index = end + 2;
+    } else if (character === "'" || character === '"' || character === '`') {
+      hasContent = true;
+      const identifier = character === '`' || (character === '"' && ansiQuotes);
+      let closed = false;
+      index++;
+      while (index < sql.length) {
+        if (sql[index] === '\\' && !identifier && !noBackslashEscapes) {
+          index += 2;
+        } else if (sql[index] === character) {
+          if (sql[index + 1] === character) {
+            index += 2;
+          } else {
+            index++;
+            closed = true;
+            break;
+          }
+        } else {
+          index++;
+        }
+      }
+      if (!closed) return { prompt: `${character}>` };
+    } else {
+      hasContent = true;
+      index++;
+    }
+  }
+  return { prompt: hasContent ? '->' : '' };
+}
+
+export function takeInteractiveStatement(sql, options) {
+  return scanInteractiveInput(sql, options, true).next;
+}
+
+export function interactivePrompt(sql, options) {
+  return scanInteractiveInput(sql, options).prompt;
+}
+
 function* statementTokens(sql, { noBackslashEscapes = false, ansiQuotes = false } = {}) {
   let index = 0;
   const lineComment = offset => sql[offset] === '#' || (sql.startsWith('--', offset)

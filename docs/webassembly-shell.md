@@ -45,18 +45,40 @@ so it can be run repeatedly.
 
 | Input | Action |
 | --- | --- |
-| Enter | Run SQL ending in a semicolon |
-| Ctrl / Command + Enter | Run SQL with or without a final semicolon |
-| Shift + Enter | Add a new line |
+| Enter | Accept the current line; execute complete statements and keep unfinished SQL in the input buffer |
+| Ctrl / Command + Enter, Shift + Enter | Same as Enter; do not force execution of unfinished SQL |
+| Tab / Shift + Tab | Return focus to SQL input without navigating between controls |
+| `;` or `\g` | End and execute the current statement |
+| `\G` | End and execute the current statement with vertical output |
+| `\c` | Discard the input buffer without clearing earlier output |
+| `\p` | Print the input buffer without executing or discarding it |
+| `DELIMITER $$` or `\d $$` | Change the statement delimiter; use `DELIMITER ;` to restore it |
+| `USE database_name` | Change the database without a delimiter when starting with an empty input buffer |
 | Up / Down | Browse history at the first or last input line |
-| Escape / Ctrl + C | Cancel the active query |
-| Ctrl + L | Clear output while keeping tables and history |
+| Ctrl + C | Clear unfinished input, or interrupt the active query, when no text is selected |
+| Ctrl + L | Clear earlier output while keeping the pending or active statement, tables, and history |
 | `\clear` | Clear output |
 | `\tables` | Show tables |
 | `\databases` | Show databases |
 
-Statements run in order and stop at the first error. Results display up to
-500 rows and 100 columns as ASCII tables. Values and column names longer than
+Clicking unused terminal space also returns focus to SQL input. Selecting text
+and focusing result tables for scrolling do not move focus to the input.
+
+Enter echoes each accepted line in the transcript and clears the editable line.
+Unfinished SQL stays in the input buffer. The continuation prompt is `->` for
+ordinary SQL, `'>` or `">` for an open quoted string, `` `> `` for an open
+backtick identifier, and `/*>` for an open block comment. A blank line does not
+execute the buffer. Delimiters and short commands inside strings or comments
+do not end a statement; close the quote or comment first, or use Ctrl+C to
+discard the input.
+
+Set a custom delimiter on its own line with an empty input buffer. It must be
+nonempty and contain no whitespace or backslashes. The delimiter is removed
+before SQL reaches the engine. New Instance restores the default `;` delimiter.
+
+Interactive statements run in order and continue after SQL errors. Examples
+stop at the first error. Results display up to 500 rows and 100 columns as ASCII
+tables, or vertically when ended with `\G`. Values and column names longer than
 120 characters are shortened for display. Each formatted table is limited to
 100,000 characters, including column padding and borders. The transcript keeps
 up to 40 entries and 1,000,000 characters, removing older output as needed.
@@ -64,20 +86,27 @@ The Worker sends a bounded preview and consumes the rest of the result so the
 reported row count and session state remain correct. These display limits do
 not add a SQL `LIMIT` or stop query execution. Use `LIMIT` for large
 queries. Statement splitting supports default MySQL quoting and
-`NO_BACKSLASH_ESCAPES`. Use backticks for quoted identifiers; `ANSI_QUOTES`,
-`DELIMITER`, and stored-program scripts are not supported.
+`NO_BACKSLASH_ESCAPES`. Use backticks for quoted identifiers; the shell does not
+track `ANSI_QUOTES` mode. Custom delimiters change input parsing, not the SQL
+features supported by the engine.
 
-Canceling disconnects the current session and opens a new one in the same
-database. Committed data remains, uncommitted changes roll back, and session
-settings reset. Closing the database stops the engine; whether its data
-survives depends on the storage mode below.
+The shell implements the client commands listed above, not the full `mysql`
+client or its line editor. Commands for local files, external editors, and
+pagers are not supported. Short commands inside executable comments such as
+`/*! ... */` and optimizer hints such as `/*+ ... */` are not interpreted.
+
+Ctrl+C sends `KILL QUERY` through a separate connection and stops the remaining
+submitted statements. The current session and its settings remain available.
+Connection failures still trigger a reconnect, which rolls back uncommitted
+changes and resets session settings. Closing the database stops the engine;
+whether its data survives depends on the storage mode below.
 
 ### Storage
 
 The shell starts in memory on every page load, including reloads, regardless of
 any storage choice saved by an earlier version.
 OPFS can be selected when the browser supports both OPFS and Web Locks.
-Choose **Memory** or **OPFS** from **New Instance** to restore the welcome message,
+Choose **Memory** or **OPFS** from **New Instance** to clear terminal output,
 close the current engine, discard its data, and start an empty database in that mode.
 SQL input stays disabled until the new instance is ready.
 Selecting the current mode also creates a new instance. Creating an OPFS instance
