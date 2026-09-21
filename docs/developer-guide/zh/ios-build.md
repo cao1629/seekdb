@@ -126,3 +126,7 @@ Apple 管理的证书和设备描述文件保存在系统凭证目录，不复�
 首轮真机前67步成功，第68步发现测试程序将 BIGINT UNSIGNED 用有符号接口读取，返回 OB_OBJ_TYPE_ERROR。增加无符号结果断言后，重跑103步全部通过，最终 complete=true/result=0，状态 Running、quicklang_verified=true、previous_runs=5。逐项结果已跟踪于 unittest/ios_build/quicklang/results/iphone17pro-2026-09-21.jsonl。本轮未请求停止，不代表正常停止问题已解决，也不代表 QuickLang 已切换后端。
 
 QuickLang iOS 当前仍使用 SQLite；seekdb 测试用于未来后端切换。新增 `unittest/ios_build/quicklang`，按实际仓库 SQL 覆盖十张表、事务、JSON、音频 BLOB、原生字符串数组及约束。UIKit 自动在基础计数测试后执行，`quicklang_result=0` / `quicklang_verified=true` 表示套件通过；逐步结果位于 Documents/quicklang-sql-results.jsonl，必须确认本次时间及最终 complete/result，不能以部分步骤通过代替完整通过。套件只清空独立测试库 ql_ios_probe 的 fixture，勿在其中存储用户数据。详见该目录 README.md 的覆盖映射与限制。
+
+停止流程后续修复：将 storage meta memory manager 的等待提前到 LS 释放前，使后台 memtable GC 不再访问已释放日志流。增量编译已通过，仍需真机验收；此前的103步 SQL 全部通过不包含正常停止。
+
+2026-09-21 GC顺序修复后的首轮真机验收已达 Stopped/result=0，SQL套件通过。随后同目录重启读到计数7（前次6），SQL再次通过，确认正常停止后的持久化；第二轮停止状态未完成确认，LLDB停在prepare_stop的等待阶段，暂无新崩溃报告。跟踪结果见 unittest/ios_build/quicklang/results/iphone17pro-clean-{stop,restart}-2026-09-21.json。仍需重复生命周期及前后台稳定性测试，不能以首次成功认定完整iPhone运行目标已完成。

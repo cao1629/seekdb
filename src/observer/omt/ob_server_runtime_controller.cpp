@@ -1621,12 +1621,14 @@ void ObServer::obs_wait_modules()
   server_module_wait_default(mods_tablet_stat_mgr_);
   server_module_wait_default(mods_tmp_file_manager_);
   server_module_wait_default(mods_local_storage_meta_service_);
+  // Deferred memtable GC reads the LS log handler until all metadata is released.
+  // Drain it before ObLSService::wait() frees the LS and its log handler.
+  server_module_wait_default(mods_storage_meta_mem_mgr_);
   server_module_wait_default(mods_ls_service_);
   server_module_wait_default(mods_log_service_);
   server_module_wait_default(mods_trans_service_);
   server_module_wait_default(mods_shared_mem_alloc_mgr_);
   storage::mds::ObMdsService::server_module_wait(mods_mds_service_);
-  server_module_wait_default(mods_storage_meta_mem_mgr_);
   if (OB_NOT_NULL(::oceanbase::share::server_service<::oceanbase::sql::ObSQLSessionMgr>())) {
     ::oceanbase::share::server_service<::oceanbase::sql::ObSQLSessionMgr>()->wait_sessions_drained();
   }

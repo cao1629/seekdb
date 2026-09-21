@@ -207,3 +207,13 @@ python3 deps/ios-build/build.py --jobs 4 vsag
 - 新套件完整编译、UIKit 签名构建、10 项构建脚本测试和十张表 SHA-256/快照可重复生成校验通过。安装因 IXRemoteErrorDomain 6 中断，真机变为 unavailable；新增 QuickLang SQL 套件尚待真机验收，基本 SQL previous_runs=3 不等于新增套件结果。
 - 与并发 QuickLang iOS 任务确认其拥有应用工作区改动；已有 native.execute/transaction 与 dialect 层、iOS SQLite 默认选择。本任务未覆盖或提交其修改，在测试 README 记录未来 seekdb iOS 驱动、显式后端选择、独立数据目录及逻辑迁移边界；未实现运行时热切换。
 - 设备不可用时，指定设备 ID 的 Xcode 构建返回70。使用已有项目离线构建设备目标成功：`DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcodebuild -project build_ios_arm64/app/SeekDBProbe.xcodeproj -scheme SeekDBProbe -configuration Release -derivedDataPath build_ios_arm64/app/DerivedData -destination generic/platform=iOS -allowProvisioningUpdates build`。日志 app-quicklang-sql-offline.log；未使用模拟器替代真机验收。
+
+## 2026-09-21：GC 与日志流停止顺序
+
+- 正常停止此前在 TableGCTask → ObMemtable::safe_to_destroy → ObLogHandler::get_max_decided_scn 发生 SIGBUS。源码确认 ObLSService::wait 直接 free_ls_，而 ObStorageMetaMemMgr::stop 不停止 GC，wait 才等待全部元数据释放并 join GC 定时器。
+- obs_wait_modules 将 storage meta memory manager 的 wait 提前到 LS wait 之前，使延迟回收期间 LS/log handler 仍有效；保留元数据全部释放条件和 GC join，不屏蔽断言或丢弃待回收对象。该顺序仍需真机验证，包括检查是否存在等待依赖。
+- 磁盘约2.3 GiB，清理本任务忽略目录中的可重建缓存：build_ios_arm64/rust-target（失败的旧 Rust 输出，当前使用 rust-probe）、deps/ios/iphoneos/build/icu/data、deps/ios/host/icu/data、deps/ios/iphoneos/build/vsag/CMakeFiles、deps/ios/downloads。保留源码、已安装 iOS 依赖、Rust 成功输出及日志，释放后约3 GiB。后续依赖全量重建需重新下载归档/生成这些缓存。
+- 使用既有增量命令、SEEKDB_IOS_MIN_FREE_GIB=3、目标 seekdb_ios_sql_probe 构建通过。与并发 QuickLang SQLite 真机部署错开设备窗口，先用 generic/platform=iOS 构建签名 App，真机结果待补充。
+- 修复版签名、安装、启动成功；首轮状态 Stopped/result=0、SQL与QuickLang测试均通过、previous_runs=6，系统没有新增 SeekDB 崩溃报告。首次取得正常停止证据，已跟踪 iphone17pro-clean-stop-2026-09-21.json。
+- 同目录再次启动后 previous_runs=7、全部SQL再次通过，证明首轮正常停止后的数据保留。第二轮状态停留 Stopping 且时间不刷新，进程仍存在、没有新增崩溃报告；LLDB显示主线程在runloop，engine线程在 seekdb_ios_run+784，下层为 usleep/nanosleep。对本轮二进制反汇编，该返回位置对应 prepare_stop（源码5秒等待），尚未进入GC等待。不能据此断言GC仍失败，也不能宣称第二次正常停止完成。记录 iphone17pro-clean-restart-2026-09-21.json。
+- 已detach退出LLDB并交还真机给并发QuickLang修复验证；没有卸载或改动QuickLang数据。设备挂起/前后台状态与多次停止稳定性需后续独立复核。
