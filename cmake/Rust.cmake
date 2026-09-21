@@ -66,7 +66,8 @@ elseif(ANDROID)
 endif()
 
 # Keep all cargo output inside the CMake build tree (isolated per build dir).
-set(RUST_TARGET_DIR "${CMAKE_BINARY_DIR}/rust-target")
+set(RUST_TARGET_DIR "${CMAKE_BINARY_DIR}/rust-target" CACHE PATH
+    "Cargo output directory; may reuse a previously built target directory")
 # Cargo's staticlib artifact name is platform-specific: libsql_nio.a on
 # Unix/MSYS, sql_nio.lib with the MSVC toolchain.
 if(WIN32)
