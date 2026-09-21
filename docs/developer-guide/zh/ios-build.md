@@ -120,3 +120,7 @@ Apple 管理的证书和设备描述文件保存在系统凭证目录，不复�
 最新真机进展：SQL 表达式、建库建表、计数写入读回已通过，同一 seekdb-budget-v1 目录跨进程恢复得到 previous_runs=0、1、2。停止曾在 Memtable 管理池及 LS 销毁断言处中止，目前补齐进程内运行时的 stop/wait 顺序后继续验证。尚不能将异常退出后的恢复等同于正常停止验收。
 
 - stop/wait 修复版已安装并启动，SQL 成功读回 previous_runs=3；随后停止阶段仍出现 EXC_BAD_ACCESS / SIGBUS，触发线程为 TableGCTask，经 ObMemtable::safe_to_destroy 调用 ObLogHandler::get_max_decided_scn。说明仍有后台 GC 与日志资源生命周期问题，尚未正常停止。证据 runtime-wait-crash.ips；后续先按 QuickLang 实际 SQL 扩展测试，再继续清理顺序诊断。
+
+## QuickLang SQL 兼容性套件
+
+QuickLang iOS 当前仍使用 SQLite；seekdb 测试用于未来后端切换。新增 `unittest/ios_build/quicklang`，按实际仓库 SQL 覆盖十张表、事务、JSON、音频 BLOB、原生字符串数组及约束。UIKit 自动在基础计数测试后执行，`quicklang_result=0` / `quicklang_verified=true` 表示套件通过；逐步结果位于 Documents/quicklang-sql-results.jsonl，必须确认本次时间及最终 complete/result，不能以部分步骤通过代替完整通过。套件只清空独立测试库 ql_ios_probe 的 fixture，勿在其中存储用户数据。详见该目录 README.md 的覆盖映射与限制。

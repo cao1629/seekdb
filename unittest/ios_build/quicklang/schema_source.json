@@ -1,0 +1,45 @@
+{
+  "revision": "f38bb45b16c9539c0bf82e41a0d7139df3e4fc87",
+  "files": [
+    {
+      "path": "src/schema/ql_ai_profiles.sql",
+      "sha256": "91b84c9deae7443fe5ba54f95b3abb2178d56bcd2417963e6cf70cd11d4577aa"
+    },
+    {
+      "path": "src/schema/ql_app_state.sql",
+      "sha256": "b2f8a79fc5e423584b1f0baf3359e1aeb35749f80073569705232999ad7ccfd8"
+    },
+    {
+      "path": "src/schema/ql_interpretation_chunk.sql",
+      "sha256": "65143703390c5a39dc54f6a5ea20c0ecd908a4aabe2e28e16ccfe561b3cc302e"
+    },
+    {
+      "path": "src/schema/ql_interpretation_session.sql",
+      "sha256": "d609fc02070a1c6511beddd779f9567362d570f61830d0c2de8b1b17f5a0178d"
+    },
+    {
+      "path": "src/schema/ql_listening.sql",
+      "sha256": "add788bf98c67d82953698f5f8d2c3be369b52eb7eb8297f79c81fa16b2fb200"
+    },
+    {
+      "path": "src/schema/ql_review_event.sql",
+      "sha256": "859052ad748980a300ecb540fcc4377b2b5fb4fb665e948e9c3a5791f36cf34f"
+    },
+    {
+      "path": "src/schema/ql_review_state.sql",
+      "sha256": "c032992b8ed3e066cd93beda1a7a7bc715006ec805f08fc5521c0b8e46c1b47c"
+    },
+    {
+      "path": "src/schema/ql_user_settings.sql",
+      "sha256": "f0ecaf09ab03941ca521165d134ab7112247f83a31795a1a524f4ee21fadbac7"
+    },
+    {
+      "path": "src/schema/ql_word.sql",
+      "sha256": "0ee1c920f86093ca82cd22da257130d517c723477bb809e75d39687f16218304"
+    },
+    {
+      "path": "src/schema/wordbook.sql",
+      "sha256": "9bbcb26042aaabcd5148d01ea1ccd7bd8915d95cfffadba941662e55966d6e01"
+    }
+  ]
+}

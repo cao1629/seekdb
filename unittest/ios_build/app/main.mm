@@ -3,6 +3,7 @@
 #import <UIKit/UIKit.h>
 #include "seekdb_ios.h"
 #include "../sql_probe.h"
+#include "../quicklang/probe.h"
 
 /** Host one engine lifecycle and persist observable status inside the sandbox. */
 @interface ProbeDelegate : UIResponder <UIWindowSceneDelegate>
@@ -13,6 +14,7 @@
 @property(nonatomic, copy) NSString *dataName;
 @property(nonatomic, strong) NSNumber *result;
 @property(nonatomic, strong) NSNumber *sqlResult;
+@property(nonatomic, strong) NSNumber *quicklangResult;
 @property(nonatomic, strong) NSNumber *previousRuns;
 @property(nonatomic) BOOL sqlStarted;
 @end
@@ -82,9 +84,12 @@
   @autoreleasepool {
     int64_t previous = 0;
     int result = seekdb_ios_probe_sql(&previous);
+    NSString *report = [self.documents stringByAppendingPathComponent:@"quicklang-sql-results.jsonl"];
+    int quicklang = result == 0 ? seekdb_ios_probe_quicklang(report.fileSystemRepresentation) : result;
     NSLog(@"SQL probe returned %d, previous runs %lld", result, (long long)previous);
     dispatch_async(dispatch_get_main_queue(), ^{
       self.sqlResult = @(result);
+      self.quicklangResult = @(quicklang);
       self.previousRuns = result == 0 ? @(previous) : nil;
       [self refreshStatus];
       if ([NSProcessInfo.processInfo.environment[@"SEEKDB_PROBE_AUTO_STOP"] isEqualToString:@"1"]) {
@@ -108,11 +113,13 @@
   }
   NSArray *names = @[@"Idle", @"Starting", @"Running", @"Stopping", @"Stopped", @"Failed"];
   NSString *name = state >= 0 && state < (NSInteger)names.count ? names[state] : @"Unknown";
-  self.statusLabel.text = [NSString stringWithFormat:@"seekdb iOS probe\n%@\nEngine: %@\nSQL: %@\nPrevious runs: %@",
-                          name, self.result ?: @"pending", self.sqlResult ?: @"pending", self.previousRuns ?: @"pending"];
+  self.statusLabel.text = [NSString stringWithFormat:@"seekdb iOS probe\n%@\nEngine: %@\nSQL: %@\nQuickLang SQL: %@\nPrevious runs: %@",
+                          name, self.result ?: @"pending", self.sqlResult ?: @"pending", self.quicklangResult ?: @"pending", self.previousRuns ?: @"pending"];
   NSDictionary *status = @{@"state": name, @"result": self.result ?: NSNull.null, @"data_name": self.dataName,
                            @"sql_verified": @(self.sqlResult != nil && self.sqlResult.intValue == 0),
                            @"sql_result": self.sqlResult ?: NSNull.null,
+                           @"quicklang_result": self.quicklangResult ?: NSNull.null,
+                           @"quicklang_verified": @(self.quicklangResult != nil && self.quicklangResult.intValue == 0),
                            @"previous_runs": self.previousRuns ?: NSNull.null,
                            @"timestamp": @([[NSDate date] timeIntervalSince1970])};
   NSError *error = nil;
