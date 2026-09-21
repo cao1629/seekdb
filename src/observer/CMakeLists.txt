@@ -87,9 +87,9 @@ if(WIN32)
 endif()
 
 target_link_libraries(seekdb PRIVATE
-  $<$<AND:$<NOT:$<PLATFORM_ID:Darwin>>,$<NOT:$<PLATFORM_ID:Windows>>>:-Wl,--start-group>
+  $<$<AND:$<NOT:$<PLATFORM_ID:Darwin,iOS>>,$<NOT:$<PLATFORM_ID:Windows>>>:-Wl,--start-group>
   ob_main
-  $<$<AND:$<NOT:$<PLATFORM_ID:Darwin>>,$<NOT:$<PLATFORM_ID:Windows>>>:ob_malloc>
+  $<$<AND:$<NOT:$<PLATFORM_ID:Darwin,iOS>>,$<NOT:$<PLATFORM_ID:Windows>>>:ob_malloc>
   oceanbase_static
   ob_sql_static
   ob_storage_static
@@ -97,7 +97,7 @@ target_link_libraries(seekdb PRIVATE
   sql_nio
   $<$<PLATFORM_ID:Windows>:ob_malloc>
   $<$<PLATFORM_ID:Windows>:synchronization>
-  $<$<AND:$<NOT:$<PLATFORM_ID:Darwin>>,$<NOT:$<PLATFORM_ID:Windows>>>:-Wl,--end-group>
+  $<$<AND:$<NOT:$<PLATFORM_ID:Darwin,iOS>>,$<NOT:$<PLATFORM_ID:Windows>>>:-Wl,--end-group>
   $<$<PLATFORM_ID:Linux>:-static-libgcc>
   $<$<PLATFORM_ID:Linux>:-static-libstdc++>
   ${link_malloc_hook})
@@ -173,4 +173,13 @@ else()
     COMMAND ${CMAKE_COMMAND} -E create_symlink
       ${CMAKE_BINARY_DIR}/src/observer/seekdb
       ${CMAKE_BINARY_DIR}/src/observer/observer)
+endif()
+
+if(CMAKE_SYSTEM_NAME STREQUAL "iOS")
+  add_library(seekdb_ios_runtime STATIC EXCLUDE_FROM_ALL ios/seekdb_ios.cpp)
+  target_include_directories(seekdb_ios_runtime PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/ios")
+  target_link_libraries(seekdb_ios_runtime PUBLIC oceanbase_static)
+  add_executable(seekdb_ios_link_check EXCLUDE_FROM_ALL
+    "${CMAKE_SOURCE_DIR}/unittest/ios_build/link_probe.cpp")
+  target_link_libraries(seekdb_ios_link_check PRIVATE seekdb_ios_runtime)
 endif()
