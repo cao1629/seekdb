@@ -1595,6 +1595,10 @@ int ObServer::stop()
     // It will wait for all requests done.
     FLOG_INFO("begin to stop server runtime");
     server_runtime_controller_.stop();
+    if (in_process_) {
+      // Join workers and stop/wait storage modules before destroying their owners.
+      server_runtime_controller_.wait();
+    }
     FLOG_INFO("server runtime stopped");
     FLOG_INFO("begin to stop ob_service");
     if (OB_NOT_NULL(standby_module_)) {
