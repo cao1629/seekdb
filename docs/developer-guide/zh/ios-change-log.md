@@ -192,3 +192,14 @@ python3 deps/ios-build/build.py --jobs 4 vsag
 - ObServer::stop 在 in_process_ 模式下补充 server_runtime_controller_.wait()，位于 stop() 后、其他全局服务停止及资源销毁前。该等待复用现有 worker join 与 obs_stop_modules / obs_wait_modules 流程；命令行模式保留原行为，不禁用断言。完整 iOS 链接与 10 项脚本测试通过；真机验证结果待追加。未新增系统环境设置。
 
 - stop/wait 修复版已安装并启动，SQL 成功读回 previous_runs=3；随后停止阶段仍出现 EXC_BAD_ACCESS / SIGBUS，触发线程为 TableGCTask，经 ObMemtable::safe_to_destroy 调用 ObLogHandler::get_max_decided_scn。说明仍有后台 GC 与日志资源生命周期问题，尚未正常停止。证据 runtime-wait-crash.ips；后续先按 QuickLang 实际 SQL 扩展测试，再继续清理顺序诊断。
+
+## 2026-09-21：QuickLang SQL 兼容性测试
+
+- 用户明确 QuickLang iOS 当前继续使用 SQLite；seekdb 原生 iPhone 移植作为未来可切换后端独立推进。未替换 QuickLang iOS 数据库或修改其并发工作区。
+- unittest/ios_build/quicklang 保存十张原始 seekdb 表结构快照、来源 revision/SHA-256、快照脚本和 C++ 测试；覆盖清单及复现方式见该目录 README.md。测试使用专属 ql_ios_probe 数据库及合成数据，每次仅清空该测试库内 fixture。
+- CMake 将新 runner 加入独立 seekdb_ios_sql_probe 测试库；UIKit 基础 SQL 之后运行 QuickLang 套件，状态增加 quicklang_result / quicklang_verified，逐步证据刷新写入 Documents/quicklang-sql-results.jsonl。不是生产接口，不更改引擎运行库 ABI。
+- 覆盖 JSON、MEDIUMBLOB、VARCHAR 数组、二进制排序规则、UTF-8 hex literal、SELECT FOR UPDATE、显式事务提交/回滚、乐观版本条件、唯一键及 CHECK 约束。事务由 ObMySQLTransaction 固定同一连接；按具体引擎错误验证失败用例。
+- 磁盘下降至约 4.7 GiB 后，默认/6 GiB 空间保护拒绝构建。本次只新增一个测试对象并重链接（签名 App 约185 MiB），评估后命令级使用 SEEKDB_IOS_MIN_FREE_GIB=3；未修改默认10 GiB保护，不用于全量构建。增量 iOS 编译/链接通过，真机测试结果待追加。
+- 新套件完整编译、UIKit 签名构建、10 项构建脚本测试和十张表 SHA-256/快照可重复生成校验通过。安装因 IXRemoteErrorDomain 6 中断，真机变为 unavailable；新增 QuickLang SQL 套件尚待真机验收，基本 SQL previous_runs=3 不等于新增套件结果。
+- 与并发 QuickLang iOS 任务确认其拥有应用工作区改动；已有 native.execute/transaction 与 dialect 层、iOS SQLite 默认选择。本任务未覆盖或提交其修改，在测试 README 记录未来 seekdb iOS 驱动、显式后端选择、独立数据目录及逻辑迁移边界；未实现运行时热切换。
+- 设备不可用时，指定设备 ID 的 Xcode 构建返回70。使用已有项目离线构建设备目标成功：`DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcodebuild -project build_ios_arm64/app/SeekDBProbe.xcodeproj -scheme SeekDBProbe -configuration Release -derivedDataPath build_ios_arm64/app/DerivedData -destination generic/platform=iOS -allowProvisioningUpdates build`。日志 app-quicklang-sql-offline.log；未使用模拟器替代真机验收。
