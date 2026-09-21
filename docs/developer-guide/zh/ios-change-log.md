@@ -159,3 +159,10 @@ python3 deps/ios-build/build.py --jobs 4 vsag
 - Xcode 自动签名成功生成 Apple Development 证书；SeekDBProbe Release 真机构建成功，codesign --verify --deep --strict 通过，devicectl 确认 org.seekdb.iosprobe.longda 安装成功。描述文件匹配 App 和目标设备，get-task-allow 为 true，有效期至 2026-09-28。
 - 首次启动返回 CoreDeviceError 10002 / FBSOpenApplicationErrorDomain Security，提示签名、entitlement 或尚未信任描述文件；本机签名检查通过且描述文件包含目标设备，已请用户完成手机端开发者信任，未将安装成功算成引擎运行成功。
 - build_app.py 为后续 Xcode 构建指定仓库内 app/DerivedData，避免测试工程的派生数据使用默认位置；系统 Xcode/SDK 自身的共享缓存及系统凭证仍由 Apple 工具管理，不进入 Git。
+
+## 2026-09-21：首次真机启动诊断
+
+- 用户完成开发者信任后，devicectl 成功启动测试 App，但程序随即退出。尽管控制台报告 exit code 0，系统崩溃报告显示 EXC_BREAKPOINT / SIGTRAP，栈顶为 UIApplicationEvaluateRuntimeIssueForNoSceneLifecycleAdoption；没有把退出码 0 当作正常运行。
+- main.mm 改用 UIWindowSceneDelegate 创建窗口和启动后台线程，新增轻量 UIApplicationDelegate；Info.plist 声明单 Scene 生命周期。此修复针对 SDK/iOS 27 的实际 UIKit 启动诊断；引擎尚未到达初始化，因此没有基于这次崩溃修改数据库逻辑。
+- 原始报告和控制台位于忽略目录 build_ios_arm64/logs/device-crash.ips、device-console.log；报告中的设备和账号元数据不提交，关键错误和修复已在此受 Git 跟踪的记录中保留。
+- Scene 修复版 Xcode Release 构建成功，但覆盖安装途中设备连接中断，返回 IXRemoteErrorDomain 6 / Connection interrupted；随后 devicectl 显示 unavailable，USB 枚举仍能看到 iPhone。此时不能确认修复版已安装或启动，正在恢复连接。日志 app-scene-build.log、device-console-scene.log。

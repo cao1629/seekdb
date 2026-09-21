@@ -104,3 +104,5 @@ python3 deps/ios-build/build_app.py --team YOURTEAMID \
 Apple 管理的证书和设备描述文件保存在系统凭证目录，不复制进仓库；构建脚本、参数说明和验证结果由 Git 跟踪。
 
 首次安装后，如系统提示未信任开发者，在 iPhone「设置 → 通用 → VPN 与设备管理 → 开发者 App」中信任签名账号，按系统提示完成。随后可点击 SeekDB Probe 图标，或使用 devicectl device process launch 启动。Personal Team 的当前描述文件实测有效期至 2026-09-28；过期后重新构建签名并安装。
+
+真机首次启动已越过信任检查，但旧 UIKit 包装因未采用 Scene 生命周期而触发 SIGTRAP。现已改为 UIWindowSceneDelegate 并声明 Scene manifest，修复版编译通过；覆盖安装期间设备断连，运行验证仍待完成。devicectl 的旧次控制台虽显示退出码 0，实际系统崩溃报告为 SIGTRAP，应以崩溃报告和持久化状态共同判断。

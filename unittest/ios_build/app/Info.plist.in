@@ -10,5 +10,14 @@
   <key>LSRequiresIPhoneOS</key><true/>
   <key>MinimumOSVersion</key><string>${CMAKE_OSX_DEPLOYMENT_TARGET}</string>
   <key>UILaunchScreen</key><dict/>
+  <key>UIApplicationSceneManifest</key><dict>
+    <key>UIApplicationSupportsMultipleScenes</key><false/>
+    <key>UISceneConfigurations</key><dict>
+      <key>UIWindowSceneSessionRoleApplication</key><array><dict>
+        <key>UISceneConfigurationName</key><string>Default</string>
+        <key>UISceneDelegateClassName</key><string>ProbeDelegate</string>
+      </dict></array>
+    </dict>
+  </dict>
   <key>UISupportedInterfaceOrientations</key><array><string>UIInterfaceOrientationPortrait</string></array>
 </dict></plist>
