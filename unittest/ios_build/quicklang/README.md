@@ -1,5 +1,10 @@
 # QuickLang seekdb SQL compatibility probe
 
+Device result (2026-09-21): all 103 steps passed on physical iPhone 17 Pro / iOS 27.
+See `results/iphone17pro-2026-09-21.jsonl`. The first run exposed signed/unsigned
+result handling in the test runner; BIGINT UNSIGNED assertions now use `get_uint`.
+The successful run stayed Running; clean engine shutdown remains unverified.
+
 This suite validates the seekdb dialect needed for a future iOS backend switch.
 QuickLang iOS currently uses SQLite; passing this suite does not change its backend.
 All fixtures are synthetic and isolated in `ql_ios_probe`. Each run deletes fixture
