@@ -40,7 +40,6 @@ mod codec;
 mod command;
 mod compress;
 mod conn;
-mod ffi_check;
 mod ffi_types;
 mod handshake;
 mod login;

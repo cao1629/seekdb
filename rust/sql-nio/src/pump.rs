@@ -15,7 +15,6 @@
 use crate::*;
 
 use crate::capability::session_client_capabilities;
-use crate::ffi_check::checked_out_range;
 
 pub(crate) fn deliver_to_cpp(
     handler: Handler,
@@ -243,9 +242,6 @@ pub unsafe extern "C" fn nio_get_login_view(
     generation: u64,
     out: *mut NioLoginView,
 ) -> c_int {
-    if checked_out_range(out).is_none() {
-        return -1;
-    }
     let conn = match conn_of(sess) {
         Some(c) => c,
         None => return -1,
@@ -297,9 +293,6 @@ pub unsafe extern "C" fn nio_get_tls_session_info(
     generation: u64,
     out: *mut NioTlsSessionInfo,
 ) -> c_int {
-    if checked_out_range(out).is_none() {
-        return -1;
-    }
     let conn = match conn_of(sess) {
         Some(c) => c,
         None => return -1,
