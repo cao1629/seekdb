@@ -212,6 +212,7 @@ class RunAllIphoneTestsTest(unittest.TestCase):
             output_root = Path(temporary_directory) / "iphone_test"
             base = cli.LocalConfiguration(
                 device="device-token",
+                profile_device="profile-udid",
                 bundle_id="first.private.bundle",
                 team="TEAMTOKEN1",
                 signing_identity="private identity",
@@ -234,6 +235,8 @@ class RunAllIphoneTestsTest(unittest.TestCase):
 
             changed_values = (
                 (cli.replace(base, device="different-device-token"),
+                 "c" * 64),
+                (cli.replace(base, profile_device="different-profile-udid"),
                  "c" * 64),
                 (cli.replace(base, bundle_id="second.private.bundle"),
                  "c" * 64),
@@ -265,6 +268,7 @@ class RunAllIphoneTestsTest(unittest.TestCase):
                 for path in output_root.rglob("*") if path.is_file())
             for raw_value in (
                     "device-token", "different-device-token",
+                    "profile-udid", "different-profile-udid",
                     "first.private.bundle", "TEAMTOKEN1",
                     "private identity", "/private/build-one",
                     "/private/Probe-one.app"):
@@ -308,7 +312,7 @@ class RunAllIphoneTestsTest(unittest.TestCase):
             output_root = Path(temporary_directory) / "iphone_test"
             physical = cli.PhysicalDevice(
                 "device", "iPhone", "iOS", "physical", "default",
-                "booted", "paired")
+                "booted", "paired", "profile-device")
             selection = mock.Mock()
             selection.run_directory = output_root / "2026-09-24"
             selection.checkpoint = {"run_id": "safe-run"}
@@ -439,10 +443,10 @@ class RunAllIphoneTestsTest(unittest.TestCase):
         devices = [
             cli.PhysicalDevice(
                 "first", "iPhone 15", "iOS", "physical", "default",
-                "booted", "paired"),
+                "booted", "paired", "first-profile"),
             cli.PhysicalDevice(
                 "second", "iPhone 16", "iOS", "physical", "default",
-                "booted", "paired"),
+                "booted", "paired", "second-profile"),
         ]
         with self.assertRaisesRegex(cli.DeviceSelectionError,
                                     "multiple eligible physical iPhones"):
@@ -453,13 +457,15 @@ class RunAllIphoneTestsTest(unittest.TestCase):
         devices = [
             cli.PhysicalDevice(
                 "physical", "iPhone 16", "iOS",
-                "physical", "default", "booted", "paired"),
+                "physical", "default", "booted", "paired",
+                "profile-udid"),
         ]
         with self.assertRaisesRegex(cli.DeviceSelectionError,
                                     "requested physical iPhone is unavailable"):
             cli.select_physical_device("simulator", devices)
-        self.assertEqual(
-            "physical", cli.select_physical_device("physical", devices).identifier)
+        selected = cli.select_physical_device("physical", devices)
+        self.assertEqual("physical", selected.identifier)
+        self.assertEqual("profile-udid", selected.profile_identifier)
 
     def test_discovery_uses_reality_visibility_boot_and_pairing_state(self):
         """Discovery must use CoreDevice physicality and availability fields."""
@@ -469,7 +475,7 @@ class RunAllIphoneTestsTest(unittest.TestCase):
                     "identifier": "physical",
                     "hardwareProperties": {
                         "platform": "iOS", "deviceType": "iPhone",
-                        "reality": "physical"},
+                        "reality": "physical", "udid": "profile-udid"},
                     "connectionProperties": {
                         "tunnelState": "disconnected",
                         "transportType": "wired",
@@ -547,6 +553,7 @@ class RunAllIphoneTestsTest(unittest.TestCase):
             devices = cli.discover_physical_devices(run_command=run_command)
 
         self.assertEqual(["physical"], [device.identifier for device in devices])
+        self.assertEqual("profile-udid", devices[0].profile_identifier)
         self.assertEqual(
             ["xcrun", "devicectl", "list", "devices",
              "--quiet", "--json-output", "/dev/stdout"],
@@ -572,6 +579,7 @@ class RunAllIphoneTestsTest(unittest.TestCase):
                     "platform": "iOS",
                     "deviceType": "iPhone",
                     "reality": "physical",
+                    "udid": "modern-profile-udid",
                 },
                 "state": {
                     "visibilityClass": "default",
@@ -595,12 +603,31 @@ class RunAllIphoneTestsTest(unittest.TestCase):
               device.visibility_class, device.boot_state)
              for device in devices],
         )
+        self.assertEqual("modern-profile-udid", devices[0].profile_identifier)
+
+    def test_missing_or_ambiguous_hardware_udid_is_rejected(self):
+        """Never guess the profile-scope identifier for a physical device."""
+        record = {
+            "identifier": "command-identifier",
+            "properties": {
+                "hardware": {
+                    "platform": "iOS", "deviceType": "iPhone",
+                    "reality": "physical"},
+                "state": {"visibilityClass": "default", "bootState": "booted"},
+                "connection": {"pairingState": "paired"},
+            },
+        }
+        self.assertIsNone(cli._device_from_record(record))
+        record["properties"]["hardware"]["udid"] = "current-udid"
+        record["hardwareProperties"] = {"udid": "different-legacy-udid"}
+        self.assertIsNone(cli._device_from_record(record))
 
     def test_dry_run_prints_original_directory_and_serializes_no_unique_values(self):
         """Dry-run state and output must omit every process-local unique value."""
         secrets = (
             "00008110-SECRET-DEVICE", "org.private.bundle",
-            "TEAMSECRET", "Apple Development: Private Person",
+            "PROFILE-SCOPE-UDID", "TEAMSECRET",
+            "Apple Development: Private Person",
         )
         with tempfile.TemporaryDirectory() as temporary_directory:
             output_root = Path(temporary_directory) / "iphone_test"
@@ -608,11 +635,11 @@ class RunAllIphoneTestsTest(unittest.TestCase):
             argv = [
                 "--dry-run", "--output-root", str(output_root),
                 "--device", secrets[0], "--bundle-id", secrets[1],
-                "--team", secrets[2], "--signing-identity", secrets[3],
+                "--team", secrets[3], "--signing-identity", secrets[4],
             ]
             physical = cli.PhysicalDevice(
                 secrets[0], "iPhone", "iOS",
-                "physical", "default", "booted", "paired")
+                "physical", "default", "booted", "paired", secrets[2])
             with mock.patch.object(
                     cli, "source_commit", return_value="a" * 40), \
                     mock.patch.object(
@@ -661,7 +688,7 @@ class RunAllIphoneTestsTest(unittest.TestCase):
                 before = snapshot(output_root)
                 physical = cli.PhysicalDevice(
                     "device", "iPhone", "iOS", "physical", "default",
-                    "booted", "paired")
+                    "booted", "paired", "profile-device")
                 arguments = [
                     "--dry-run", "--output-root", str(output_root),
                     *lifecycle,
@@ -707,7 +734,8 @@ class RunAllIphoneTestsTest(unittest.TestCase):
             events.append("discover")
             return [cli.PhysicalDevice(
                 "physical", "iPhone", "iOS",
-                "physical", "default", "booted", "paired")]
+                "physical", "default", "booted", "paired",
+                "profile-device")]
 
         with mock.patch.object(cli, "source_commit", return_value="a" * 40), \
                 mock.patch.object(
@@ -763,7 +791,8 @@ class RunAllIphoneTestsTest(unittest.TestCase):
 
         physical = cli.PhysicalDevice(
             "environment-device", "iPhone", "iOS",
-            "physical", "default", "booted", "paired")
+            "physical", "default", "booted", "paired",
+            "environment-profile")
         timestamp = dt.datetime(2026, 9, 24, 10, tzinfo=UTC)
         preparation_lock = mock.Mock()
         path_preview = mock.Mock(run_directory=selection.run_directory)
@@ -795,6 +824,7 @@ class RunAllIphoneTestsTest(unittest.TestCase):
         self.assertEqual(
             cli.LocalConfiguration(
                 device="environment-device",
+                profile_device="environment-profile",
                 bundle_id="environment.bundle",
                 team="ENVTEAM001",
                 signing_identity="environment identity",
@@ -811,8 +841,8 @@ class RunAllIphoneTestsTest(unittest.TestCase):
             selection.checkpoint["run_id"], captured["run_id"])
         self.assertEqual(("adapter",), captured["adapters"])
         self.assertEqual(
-            ("environment-device", "environment.bundle", "ENVTEAM001",
-             "environment identity"),
+            ("environment-device", "environment-profile",
+             "environment.bundle", "ENVTEAM001", "environment identity"),
             captured["redaction_tokens"],
         )
         selection.close.assert_called_once_with()
@@ -848,6 +878,7 @@ class RunAllIphoneTestsTest(unittest.TestCase):
         secrets = (
             "00008110-SECRET-DEVICE", "org.private.bundle",
             "TEAMSECRET", "Apple Development: Private Person",
+            "PROFILE-SCOPE-UDID",
         )
         timestamp = dt.datetime(2026, 9, 24, 10, tzinfo=UTC)
         for setup_kind in ("import", "factory"):
@@ -856,7 +887,7 @@ class RunAllIphoneTestsTest(unittest.TestCase):
                 output_root = Path(temporary_directory) / "iphone_test"
                 physical = cli.PhysicalDevice(
                     secrets[0], "iPhone", "iOS", "physical", "default",
-                    "booted", "paired")
+                    "booted", "paired", secrets[4])
                 stderr = io.StringIO()
                 failure = SystemExit(
                     f"{setup_kind} failed for {' '.join(secrets)}")
@@ -945,7 +976,7 @@ class RunAllIphoneTestsTest(unittest.TestCase):
             output_root = Path(temporary_directory) / "iphone_test"
             physical = cli.PhysicalDevice(
                 "device", "iPhone", "iOS", "physical", "default",
-                "booted", "paired")
+                "booted", "paired", "profile-device")
             stderr = io.StringIO()
             terminal_stderr = io.StringIO()
             with contextlib.redirect_stderr(terminal_stderr), \
@@ -980,7 +1011,7 @@ class RunAllIphoneTestsTest(unittest.TestCase):
             output_root = Path(temporary_directory) / "iphone_test"
             physical = cli.PhysicalDevice(
                 secret, "iPhone", "iOS", "physical", "default",
-                "booted", "paired")
+                "booted", "paired", "private-profile-token")
             stderr = io.StringIO()
             with mock.patch.object(
                     cli, "source_commit", return_value="a" * 40), \
@@ -1049,7 +1080,7 @@ class RunAllIphoneTestsTest(unittest.TestCase):
 
             physical = cli.PhysicalDevice(
                 "device", "iPhone", "iOS", "physical", "default",
-                "booted", "paired")
+                "booted", "paired", "profile-device")
             engine_statuses = iter((130, 0))
             selected_directories = []
 
@@ -1088,14 +1119,16 @@ class RunAllIphoneTestsTest(unittest.TestCase):
                     encoding="utf-8"))
             actual_identity = cli.validate_build_identity(
                 cli.LocalConfiguration(
-                    device="device", bundle_id="org.private.probe",
+                    device="device", profile_device="profile-device",
+                    bundle_id="org.private.probe",
                     team="TEAMTOKEN1", signing_identity=None,
                     engine_build=engine, app_artifact=app, test_hooks=True),
                 "a" * 40)
             expected_fingerprint = cli.configuration_fingerprint(
                 runner_suites=cli.runner.PHASE_IDS,
                 configuration=cli.LocalConfiguration(
-                    device="device", bundle_id="org.private.probe",
+                    device="device", profile_device="profile-device",
+                    bundle_id="org.private.probe",
                     team="TEAMTOKEN1", signing_identity=None,
                     engine_build=engine, app_artifact=app, test_hooks=True),
                 build_identity=actual_identity)

@@ -23,6 +23,7 @@
 - 本轮仍只运行 host contract，未启动真机；真实 interrupt/resume acceptance 留给审查通过后的独立试运行，不能用 mock 结果声称完成。
 - same-day `--restart` 不再可能因目录内残留的固定 SQL 文件零 launch 假通过：gate JSONL/metadata 使用 runner run ID scoped 文件名，并校验 run ID、build ID、selected-device 隐私哈希、data directory、hook mode、`previous_runs` 与内容摘要。只有同一 run 的完整首轮可在 resume 时跳过；新 run 即使看见旧文件也必须实际 launch。
 - SQL round 增加 durable intent 协议：`prepared` 证明尚未进入外部 launch，`launch-uncertain` 表示只能按同一 round ID 从设备恢复。SIGINT 或 metadata fsync/OSError 后 intent 保留；resume 先重新复制并验证当前设备终态再补 completion metadata，证据缺失或状态不确定时停止而不重复推进 `previous_runs`。新 `--restart` 使用独立 scope，不受旧 intent 影响。
+- CoreDevice 设备身份拆为两种进程内值：顶层 `identifier` 专供 devicectl 命令和显式 `--device` 选择，`properties.hardware.udid`（legacy 为 `hardwareProperties.udid`）专供 embedded profile 的 `ProvisionedDevices` 校验。hardware UDID 缺失或两个 schema 值冲突时安全拒绝；两种标识都进入动态脱敏集合，并以组合 SHA-256 隐私身份绑定 checkpoint fingerprint，任何原值都不进入 checkpoint/report/Git。本修复增加 current/legacy/缺失/冲突、profile scope、参数分流和原值扫描回归，只运行 host 测试，未运行真机。
 
 ## 2026-09-24：Rust runtime tests 的真机入口
 

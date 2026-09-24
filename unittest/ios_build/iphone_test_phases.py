@@ -307,8 +307,9 @@ class TestAppPreparer:
                     "test App preparation requires device, bundle, and team "
                     "configuration"))
         if (self._configuration.provisioned_devices
-                and self._configuration.device
-                not in self._configuration.provisioned_devices):
+                and (not self._configuration.profile_device
+                     or self._configuration.profile_device
+                     not in self._configuration.provisioned_devices)):
             return runner.CaseResult.blocked(
                 diagnostic="selected device is outside the local profile scope")
         if self._configuration.profile_certificate_hashes:

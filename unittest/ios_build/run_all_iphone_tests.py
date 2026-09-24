@@ -48,7 +48,7 @@ class DeviceSelectionError(IphoneTestCliError):
 
 @dataclass(frozen=True)
 class PhysicalDevice:
-    """Retain physical-device discovery fields only in process memory."""
+    """Retain command and profile device identifiers only in process memory."""
 
     identifier: str
     name: str
@@ -57,6 +57,7 @@ class PhysicalDevice:
     visibility_class: str
     boot_state: str
     pairing_state: str
+    profile_identifier: str
 
 
 @dataclass(frozen=True)
@@ -70,13 +71,15 @@ class LocalConfiguration:
     engine_build: Path
     app_artifact: Path
     test_hooks: bool
+    profile_device: Optional[str] = None
     provisioned_devices: tuple[str, ...] = ()
     profile_certificate_hashes: tuple[str, ...] = ()
 
     def redaction_tokens(self) -> tuple[str, ...]:
         """Return unique values that must remain process-local."""
         return tuple(value for value in (
-            self.device, self.bundle_id, self.team, self.signing_identity,
+            self.device, self.profile_device, self.bundle_id, self.team,
+            self.signing_identity,
             *self.provisioned_devices, *self.profile_certificate_hashes)
             if value)
 
@@ -302,6 +305,12 @@ def _device_from_record(record: object) -> Optional[PhysicalDevice]:
         ("properties", "connection", "pairingState"),
         ("connectionProperties", "pairingState"),
     )
+    profile_identifiers = {
+        value for value in (
+            _nested_text(record, "properties", "hardware", "udid"),
+            _nested_text(record, "hardwareProperties", "udid"),
+        ) if value
+    }
     if reality.lower() != "physical":
         return None
     if platform.lower() not in {"ios", "iphoneos"}:
@@ -314,9 +323,12 @@ def _device_from_record(record: object) -> Optional[PhysicalDevice]:
         return None
     if pairing_state.lower() != "paired":
         return None
+    if len(profile_identifiers) != 1:
+        return None
+    profile_identifier = next(iter(profile_identifiers))
     return PhysicalDevice(
         identifier, name, platform, reality, visibility_class, boot_state,
-        pairing_state)
+        pairing_state, profile_identifier)
 
 
 def discover_physical_devices(
@@ -504,13 +516,20 @@ def configuration_fingerprint(
         configuration: LocalConfiguration,
         build_identity: str) -> str:
     """Hash evidence-affecting local inputs into one opaque resume identity."""
+    device_identity = json.dumps(
+        {
+            "command": configuration.device or "host-only",
+            "profile": configuration.profile_device or "host-only",
+        },
+        sort_keys=True,
+        separators=(",", ":"),
+    )
     serialized = json.dumps(
         {
             "runner_version": state.RUNNER_VERSION,
             "suites": list(runner_suites),
             "device_hash": hashlib.sha256(
-                (configuration.device or "host-only").encode("utf-8")
-            ).hexdigest(),
+                device_identity.encode("utf-8")).hexdigest(),
             "bundle_id": configuration.bundle_id,
             "team": configuration.team,
             "signing_identity": configuration.signing_identity,
@@ -721,7 +740,10 @@ def main(
                 selected_device = select_physical_device(
                     configuration.device, discover_physical_devices())
                 configuration = replace(
-                    configuration, device=selected_device.identifier)
+                    configuration,
+                    device=selected_device.identifier,
+                    profile_device=selected_device.profile_identifier,
+                )
                 try:
                     validate_build_identity(configuration, revision)
                 except IphoneTestCliError:
@@ -800,7 +822,10 @@ def main(
                 selected_device = select_physical_device(
                     configuration.device, discover_physical_devices())
                 configuration = replace(
-                    configuration, device=selected_device.identifier)
+                    configuration,
+                    device=selected_device.identifier,
+                    profile_device=selected_device.profile_identifier,
+                )
             print("Dry run completed; no test phase was dispatched.",
                   file=stdout)
             return 0

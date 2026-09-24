@@ -44,6 +44,7 @@ class IphoneTestPhasesTest(unittest.TestCase):
         engine = root / "build_ios_arm64"
         return cli.LocalConfiguration(
             device="private-device-token",
+            profile_device="private-profile-udid",
             bundle_id="org.private.probe",
             team="TEAMTOKEN1",
             signing_identity="private signing identity",
@@ -363,7 +364,7 @@ class IphoneTestPhasesTest(unittest.TestCase):
             root = Path(temporary_directory)
             configuration = cli.replace(
                 self.configuration(root),
-                provisioned_devices=("private-device-token",),
+                provisioned_devices=("private-profile-udid",),
                 profile_certificate_hashes=("A" * 40,),
             )
             commands = []
@@ -384,6 +385,7 @@ class IphoneTestPhasesTest(unittest.TestCase):
         self.assertEqual("/usr/bin/codesign", commands[0][0][0])
         self.assertIn("devicectl", commands[1][0])
         self.assertIn("private-device-token", commands[1][0])
+        self.assertNotIn("private-profile-udid", commands[1][0])
         self.assertFalse(any(
             str(REPOSITORY_ROOT / "build.iphone.sh") in command
             for command, _timeout in commands))
