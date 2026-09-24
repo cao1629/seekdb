@@ -218,6 +218,12 @@ class RustcLldbWrapperTest(unittest.TestCase):
         self.assertIn("SIGSTOP", lldb_arguments[policy_index])
         self.assertIn("SetShouldSuppress(n,False)",
                       lldb_arguments[policy_index])
+        crash_hook_index = lldb_arguments.index("-k")
+        status_script = lldb_arguments[crash_hook_index - 1]
+        self.assertEqual(status_script,
+                         lldb_arguments[crash_hook_index + 1])
+        self.assertIn("p.GetState()==lldb.eStateExited", status_script)
+        self.assertIn("else 125", status_script)
         self.assertEqual(
             [str(build_script.resolve()),
              "argument with spaces", "literal'quote"],
@@ -264,6 +270,12 @@ class RustcLldbWrapperTest(unittest.TestCase):
                 "raise(SIGTRAP);\n"
                 "  if (argc > 1 && strcmp(argv[1], \"quit\") == 0) "
                 "raise(SIGQUIT);\n"
+                "  if (argc > 1 && strcmp(argv[1], \"tstp\") == 0) "
+                "raise(SIGTSTP);\n"
+                "  if (argc > 1 && strcmp(argv[1], \"ttin\") == 0) "
+                "raise(SIGTTIN);\n"
+                "  if (argc > 1 && strcmp(argv[1], \"ttou\") == 0) "
+                "raise(SIGTTOU);\n"
                 "  return 7;\n"
                 "}\n",
                 encoding="utf-8")
@@ -276,7 +288,9 @@ class RustcLldbWrapperTest(unittest.TestCase):
 
             statuses = {}
             diagnostics = {}
-            for mode in ("normal", "term", "kill", "trap", "quit"):
+            for mode in (
+                    "normal", "term", "kill", "trap", "quit",
+                    "tstp", "ttin", "ttou"):
                 result = subprocess.run([
                     str(WRAPPER_PATH), "--run-build-script",
                     str(executable), mode,
@@ -286,7 +300,8 @@ class RustcLldbWrapperTest(unittest.TestCase):
 
         self.assertEqual(
             {"normal": 7, "term": 143, "kill": 137,
-             "trap": 133, "quit": 131}, statuses, diagnostics)
+             "trap": 133, "quit": 131, "tstp": 125,
+             "ttin": 125, "ttou": 125}, statuses, diagnostics)
 
     def test_symlink_and_noncanonical_output_directory_are_rejected(self):
         """Never replace a symlink or an output reached through dot segments."""

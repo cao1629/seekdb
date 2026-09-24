@@ -351,6 +351,7 @@ def run_build_script(
         "-o", "process launch --stop-at-entry",
         "-o", signal_policy_script,
         "-o", "process continue", "-o", status_script,
+        "-k", status_script,
         "--", str(real_build_script), *arguments,
     ], check=False, env=environment)
     if result.returncode < 0:
