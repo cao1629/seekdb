@@ -234,6 +234,9 @@ class IphoneTestPhasesTest(unittest.TestCase):
             value.startswith("CARGO_HOME=") for value in build_commands[0]))
         self.assertTrue(any(
             value.startswith("RUSTUP_HOME=") for value in build_commands[0]))
+        self.assertIn(
+            f"RUSTC_WRAPPER={SCRIPT_DIR / 'rustc_lldb_wrapper.py'}",
+            build_commands[0])
         self.assertIn("--test-hooks", package_commands[0])
         self.assertIn("--install", package_commands[0])
 
@@ -430,6 +433,18 @@ class IphoneTestPhasesTest(unittest.TestCase):
                         suites=("registry-smoke",),
                         source_revision="a" * 40,
                         run_id="safe-run"))
+
+    def test_missing_lldb_blocks_before_the_build_command(self):
+        """Treat the tracked wrapper runtime as a fixed build prerequisite."""
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            configuration = self.configuration(root)
+            environment = self.build_environment(root)
+
+            with mock.patch.object(
+                    phases, "_lldb_is_available", return_value=False), \
+                    self.assertRaises(phases.BuildReadinessError):
+                phases.resolve_build_inputs(configuration, environment)
 
     def test_explicit_fresh_rust_target_is_valid_but_simulator_cache_is_not(self):
         """Allow Cargo to create a fresh target and reject simulator-only state."""

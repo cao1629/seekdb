@@ -21,6 +21,7 @@ INVENTORY_SCRIPT = SCRIPT_DIRECTORY / "generate_test_inventory.py"
 DEVICE_SUITE_SCRIPT = SCRIPT_DIRECTORY / "run_device_suite.py"
 BUILD_SCRIPT = REPOSITORY_ROOT / "build.iphone.sh"
 PACKAGE_SCRIPT = REPOSITORY_ROOT / "deps/ios-build/build_app.py"
+RUSTC_WRAPPER = SCRIPT_DIRECTORY / "rustc_lldb_wrapper.py"
 DEPS_PREFIX_ENVIRONMENT = "SEEKDB_IPHONE_DEPS_PREFIX"
 HEADERS_PREFIX_ENVIRONMENT = "SEEKDB_IPHONE_HEADERS_PREFIX"
 RUST_TARGET_DIR_ENVIRONMENT = "RUST_TARGET_DIR"
@@ -129,6 +130,22 @@ def _rust_tool_environment(
     }
 
 
+def _lldb_is_available() -> bool:
+    """Return whether the fixed macOS LLDB launcher is locally available."""
+    if sys.platform != "darwin":
+        return False
+    try:
+        result = subprocess.run(
+            ["/usr/bin/xcrun", "--find", "lldb"], check=False,
+            capture_output=True, text=True, timeout=10)
+    except (OSError, subprocess.SubprocessError):
+        return False
+    if result.returncode != 0:
+        return False
+    lldb = Path(result.stdout.strip())
+    return lldb.is_file() and os.access(lldb, os.X_OK)
+
+
 def _cache_values(cache_path: Path) -> Mapping[str, str]:
     """Read exact scalar values from one existing CMake cache."""
     if not cache_path.is_file():
@@ -228,6 +245,10 @@ def resolve_build_inputs(
                 rustup, "rustup", probe_environment)
             or not cargo_home.is_dir()
             or not rustup_home.is_dir()
+            or not RUSTC_WRAPPER.is_file()
+            or RUSTC_WRAPPER.is_symlink()
+            or not os.access(RUSTC_WRAPPER, os.X_OK)
+            or not _lldb_is_available()
             or not rust_target_ready
             or not headers_prefix.is_dir()
             or any(not (deps_prefix / relative).exists()
@@ -460,6 +481,7 @@ def _build_command(
         f"CARGO_HOME={inputs.cargo_home}",
         f"RUSTUP_HOME={inputs.rustup_home}",
         f"RUST_TARGET_DIR={inputs.rust_target_dir}",
+        f"RUSTC_WRAPPER={RUSTC_WRAPPER}",
         str(BUILD_SCRIPT),
         "--build-dir", str(build_directory),
         "--deps-prefix", str(inputs.deps_prefix),

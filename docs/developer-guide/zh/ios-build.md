@@ -10,6 +10,8 @@
 
 构建依赖优先使用显式环境；否则读取现有 `CMakeCache.txt`，逐项验证目录、可执行工具和关键 iphoneos 静态库，再把所有路径明确传给 build 命令，不依赖当前 worktree 缺失的默认目录，也不静默沿用缓存配置。runner 先解析 Cargo/rustup candidate 与 `CARGO_HOME`/`RUSTUP_HOME`，然后构造只含解析后 homes、工具 `bin` 优先 `PATH` 的受控 probe 环境；Cargo 与 rustup 再分别通过捕获输出的 `--version` 验证角色，不能仅凭文件可执行就互换。这样 rustup-managed cargo shim 可在其完整上下文中验证；错误 home 仍在 build 前阻断。若 cache 的 `CARGO` 实际指向 rustup，只在同一 `bin` 目录存在且验证通过的 cargo sibling 时修正，并通过 `-DCARGO=` 写回 CMake。probe stdout/stderr 不进入诊断或证据。显式 `RUST_TARGET_DIR` 可以是尚未创建或空的 fresh target；已有 simulator/x86-only target 且没有 device target 时会被拒绝，cache-backed CMake 仍必须明确为 iphoneos ARM64。输出只打印 `environment`、`cmake-cache`、`cargo-sibling` 等非敏感来源标签，不打印路径：
 
+当前 macOS 执行环境会对 Cargo 新生成的 host build-script 直接触发 SIGKILL。standalone runner 因此固定设置 `RUSTC_WRAPPER=unittest/ios_build/rustc_lldb_wrapper.py`，并在启动 build 前验证 `/usr/bin/xcrun` 可解析可执行 LLDB；缺失时作为固定 build-input 错误阻断。该 tracked wrapper 始终先运行真实 rustc，仅对本次新生成、basename 严格为 `build_script_build-<hex>`、带 macOS platform load command 的 64-bit host Mach-O executable 做替换：真实文件原子保留为 `.real`，quote-safe launcher 通过 LLDB 执行并传播 build-script exit。已有文件、非 Mach-O、非 macOS、非严格名称不会替换；symlink、相对/dot-segment 路径、多个新候选或既有 `.real` 会安全失败。compile 非零与 signal shell status 原样返回。它现在是 one-command 构建链的受跟踪组成，不再依赖 `build_ios_arm64/` 下的 ignored 本机脚本。
+
 ```bash
 export SEEKDB_IPHONE_DEPS_PREFIX="<iphoneos dependency prefix>"
 export SEEKDB_IPHONE_HEADERS_PREFIX="<iphoneos header prefix>"
