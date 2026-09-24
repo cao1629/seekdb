@@ -38,3 +38,11 @@ They do not execute the embedded database. Compilation, signing, installation,
 SQL execution, persistence across reuse of the same data directory, clean
 shutdown, and repeated foreground/background cycles require iOS device
 verification. Simulator or link-only success does not replace that boundary.
+
+The `rust` device suite is available only in a test-hook build. Its three real
+cert/TLS cases call the same `Result` functions as the host Rust tests. Two
+control cases then capture an intentional Rust panic and verify that the next
+case continues in the same process. Test builds link the unwind-enabled Rust
+archive instead of the production archive; the two archives must never be
+linked together. Production release and CMake debug archives retain
+`panic=abort` and do not export `nio_device_test_*` symbols.

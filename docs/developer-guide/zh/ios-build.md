@@ -14,6 +14,27 @@
 
 后续 host-only 复核补充“失败 assertion 前缀后继续出现终态失败”的轮询契约，focused 15 项及完整 host 50 项通过；该修改不改变 App/native/CMake，未把上一 App 产物重新标记为新提交的设备证据。上述真机结果仍严格绑定 `a11ef0d6208f`；runner 的 build identity 校验保持不变，后续若要对更新后的 HEAD 再取真机证据，必须先重建并安装同一 HEAD 的 App。
 
+Rust device suite 使用 `ios-device-tests` Cargo feature 和 `ios-device-test` profile。该 profile 仅供签名测试 App 使用，继承 release 优化但把 panic 设为 unwind，使最外层 C ABI 能把 panic 转成有界失败结果；production release 与 CMake debug 继续 `panic="abort"`。三项原 cert/TLS 测试现在由 host `#[test]` 和设备 ABI 共同调用同一组 `Result<(), String>` case，避免两套断言漂移。C ABI 固定提供 count、case info 和 run，并拒绝非法 index、空/过小 output；ID 与诊断使用固定容量，panic 在 `catch_unwind` 外边界内转换。设备 registry 另有 intentional-panic 和紧随其后的 continuation case，后者证明同一进程能在捕获 panic 后继续执行。
+
+`SEEKDB_IOS_TEST_HOOKS=ON` 时 CMake 只选择 `ios-device-test/libsql_nio.a` 并传入 feature；关闭时只选择 production archive。`build_app.py` 从最终 link response 中要求恰好一份 `libsql_nio.a`，再按 archive 的精确 symbol 字符串验证 test/production mode，禁止把两份 Rust archive 并链。测试 App 仅在 test mode 编译 `rust_device_tests.cpp`。主机门禁已通过三项 unit test、doc-test、Clippy `-D warnings`、fmt、focused 6 项和完整 iOS Python 64 项；feature archive 含三项 `nio_device_test_*` symbol，production release archive不含。
+
+最终 source build ID 已重新完成 test-hook iphoneos runtime/App 链接、自动签名、安装及 `rust` suite。三个共享真实 case、intentional panic 和紧随其后的 continuation 共五项均为 `result=0`，run 终态为 0；这证明 panic 没有越过 C ABI，且同一进程继续执行。随后在同一 SHA 关闭 hooks 重建 production archive/App，确认测试 symbol 不存在且链接闭包仍只有一份 Rust archive；再用全新数据目录执行普通 36-step SQL 首轮和同目录 restart 轮，两轮均为 36 个成功 step 加成功 complete，`previous_runs=0/1`，相关 crash/Jetsam 增量为 0。脱敏证据保存在忽略目录 `build_ios_arm64/device-evidence/task4-rust/final/`。签名、设备和账号标识不写入证据。若容器累积导致 stall，只能在保存已有证据后卸载专用、可丢弃的测试 App，并记录该边界；不得删除其他 App 或用户数据。
+
+签名安装 test-hook App 后，Rust suite 的五个独立 case 必须全部列为 host 预期覆盖：
+
+```bash
+python3 unittest/ios_build/run_device_suite.py \
+  --device "$DEVICE_ID" --bundle-id "$BUNDLE_ID" \
+  --suite rust --filter 'ios.rust.*' --data-name ios-rust-tests \
+  --expected-case ios.rust.cert.formats_display_name_for_sql_account \
+  --expected-case ios.rust.cert.rejects_truncated_certificate \
+  --expected-case ios.rust.device.intentional_panic \
+  --expected-case ios.rust.device.panic_continuation \
+  --expected-case ios.rust.tls.exposes_sql_cipher_names
+```
+
+上述顺序是 registry 的字典序。suite 完成后必须先保存 JSONL/status，再重建 hook-off production archive 并证明 test symbol 缺失，最后才在同一 native SHA 的全新目录执行 36-step SQL 首轮和同目录 restart。若累积 container 再触发已知停机 stall，只能在已保存证据且确认是专用可丢弃测试 App 后卸载；卸载行为及数据删除边界必须记录，不得删除用户 App 数据。
+
 C++ 分层覆盖已接入 App：当前源码 revision 没有普通 C++ unittest target，inventory 中的 9 个孤立 GTest 已逐项解析为 3 个 device equivalent、6 个 exact exclusion、0 个 blocked。设备 `cpp` suite 包含 `ios.cpp.allocator.backend`、`ios.cpp.allocator.lifecycle`、`ios.cpp.allocator.realloc_alignment` 和 `ios.cpp.ob_error.mapping`；它们覆盖 iOS 上真实存在的 backend parse/detect-once、普通 allocate/reallocate/usable-size/free、alignment，以及生产错误名、精确 `ER_WRONG_ARGUMENTS` 和 SQLSTATE 映射。Linux malloc hook cross-API 及 libc malloc/realloc/memalign malloc-zone hook 不可用显式 `ob_`/jemalloc API 伪装，fork child、未链接的 `ob_error` CLI manager/getopt parser 也保留精确排除；`test_adder` 源码本身在 Apple 平台通过 `GTEST_SKIP` 排除，且其 `ObErrorInfoMgr` 生成器逻辑未链接进 App，因此生产 error metadata case 只作独立设备覆盖，不伪装为 `test_adder` 等价项。四个设备 ID 和三个映射后的 required GTest 均在 inventory 记录 `latest_result=pass` 与脱敏摘要路径。
 
 签名安装后可用同一 runner 选择全部 C++ case；四个 `--expected-case` 必须独立提供，host 才会接受完整覆盖：

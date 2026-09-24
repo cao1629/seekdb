@@ -211,6 +211,33 @@
       "blocked_reason": null,
       "latest_result": "not-run"
     },
+    "rust.rust.sql-nio.src.device_tests.test_rejects_truncated_certificate": {
+      "device_equivalent": "ios.rust.cert.rejects_truncated_certificate",
+      "requirements": [
+        "Rust 1.98.1 host toolchain",
+        "signed physical-device App for device equivalent"
+      ],
+      "latest_result": "pass",
+      "evidence_path": "build_ios_arm64/device-evidence/task4-rust/final/summary.json"
+    },
+    "rust.rust.sql-nio.src.device_tests.test_formats_display_name_for_sql_account": {
+      "device_equivalent": "ios.rust.cert.formats_display_name_for_sql_account",
+      "requirements": [
+        "Rust 1.98.1 host toolchain",
+        "signed physical-device App for device equivalent"
+      ],
+      "latest_result": "pass",
+      "evidence_path": "build_ios_arm64/device-evidence/task4-rust/final/summary.json"
+    },
+    "rust.rust.sql-nio.src.device_tests.test_exposes_sql_cipher_names": {
+      "device_equivalent": "ios.rust.tls.exposes_sql_cipher_names",
+      "requirements": [
+        "Rust 1.98.1 host toolchain",
+        "signed physical-device App for device equivalent"
+      ],
+      "latest_result": "pass",
+      "evidence_path": "build_ios_arm64/device-evidence/task4-rust/final/summary.json"
+    },
     "ios.probe.sql_probe": {
       "requirements": [
         "signed physical-device App",
@@ -235,6 +262,26 @@
     "ios.cpp.ob_error.mapping": {
       "latest_result": "pass",
       "evidence_path": "build_ios_arm64/device-evidence/task3-cpp/final/summary.json"
+    },
+    "ios.rust.cert.formats_display_name_for_sql_account": {
+      "latest_result": "pass",
+      "evidence_path": "build_ios_arm64/device-evidence/task4-rust/final/summary.json"
+    },
+    "ios.rust.cert.rejects_truncated_certificate": {
+      "latest_result": "pass",
+      "evidence_path": "build_ios_arm64/device-evidence/task4-rust/final/summary.json"
+    },
+    "ios.rust.device.intentional_panic": {
+      "latest_result": "pass",
+      "evidence_path": "build_ios_arm64/device-evidence/task4-rust/final/summary.json"
+    },
+    "ios.rust.device.panic_continuation": {
+      "latest_result": "pass",
+      "evidence_path": "build_ios_arm64/device-evidence/task4-rust/final/summary.json"
+    },
+    "ios.rust.tls.exposes_sql_cipher_names": {
+      "latest_result": "pass",
+      "evidence_path": "build_ios_arm64/device-evidence/task4-rust/final/summary.json"
     }
   },
   "reviewed_decisions": {

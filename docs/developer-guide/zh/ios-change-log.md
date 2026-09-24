@@ -6,6 +6,15 @@
 
 后续每次环境设置、源码、构建脚本或 CMake 变更，同步记录日期、文件/设置、原因、具体参数、影响范围、复现命令、验证结果和剩余问题。失败尝试及撤销原因也保留。按独立功能提交时补充 commit ID，不把机器缓存、证书或密钥提交到仓库。日志与生成产物保存在仓库内；本记录及构建脚本纳入版本控制。
 
+## 2026-09-24：Rust runtime tests 的真机入口
+
+- TDD 首轮 focused RED 证明共享 `device_tests.rs`、test-only feature/profile、固定 C ABI、C++ adapter 和单一 archive marker 均不存在。实现后，`cert.rs`/`tls.rs` 的三项测试断言抽为 `Result<(), String>` case，host `#[test]` 只负责调用并 unwrap；inventory 仍发现精确三项 Rust host test，并分别映射到三个稳定的 `ios.rust.*` device equivalent。
+- `ios-device-tests` feature 才导出 count/case-info/run C ABI；结构只含固定宽度整数和固定容量数组。非法 index、空/过小 output、诊断截断均在 Rust 边界处理。`ios-device-test` profile 是唯一 `panic="unwind"` 的链接 profile；release 与 cmake-debug 均保持 abort。intentional-panic case 在最外层 `catch_unwind` 转成 `NIO_DEVICE_TEST_PANIC`，设置进程内 containment marker；下一 continuation case 必须读到 marker 并成功，防止只验证错误码而未验证后续执行。
+- `cmake/Rust.cmake` 在 iOS test hooks 开启时选择该 profile/feature/output directory，否则走原 production 路径。`seekdb_ios_runtime` 传播 test-only compile definition；App CMake 只在 `RUST_DEVICE_TESTS=ON` 编译 adapter。`build_app.py` 要求最终 link response 中恰好一份 Rust archive，并使用 `/usr/bin/strings -a` 的精确 symbol 行检查模式。没有使用 Apple/LLVM 21 `nm` 作为门禁，因为它无法读取 Rust 1.98.1 所带 LLVM 22 产生的 bitcode attribute；真实 feature archive 已验证包含三项 C ABI symbol，production release archive已验证不含。
+- 主机验证：Rust 三项 unit test 和 doc-test 通过，`cargo clippy --locked -p sql-nio --all-targets -- -D warnings` 通过，`cargo fmt --all -- --check` 通过；`test_rust_device_tests.py` 6 项、inventory 12 项和完整 iOS Python 64 项通过。cbindgen 由 crate build 重新生成 `include/nio.h`，feature declarations 受 `SQL_NIO_IOS_DEVICE_TESTS` 保护。当前主机仍需忽略目录中的 LLDB rustc wrapper 执行 Cargo build-script；该 wrapper 不是仓库接口。为避免磁盘累积 stall，只删除了本轮新建且可再生的 host release/ios-device-test Cargo 输出，未删除 App container、设备证据或用户数据。
+- 真机验收顺序固定为：test archive build/sign/install；`rust` suite 三个真实 case 加 panic/continuation；保存证据并确认干净停止；hook-off production rebuild 并证明 test symbol absent；最后在同一 native SHA 的全新目录执行 36-step SQL 首轮和同目录 restart，并比较相关 crash/Jetsam 增量。验收前不得预填 pass；最终 evidence 只写脱敏摘要，不记录 device、Team、证书、profile 或账号标识。
+- preliminary source build 完成 test-hook iphoneos 全量链接、签名、安装和五项 `rust` 真机 case，全部 case 与 run 结果为 0。将结果状态写入 inventory/docs 后 amend 到最终 source build ID，并在最终 SHA 上重新完成 test-hook 链接与五项 case；再关闭 hooks 重建 production archive/App，确认 test symbols 缺失、链接闭包只有一份 production Rust archive。普通模式在全新目录完成 36-step SQL 首轮及同目录 restart，`previous_runs=0/1`，两轮均干净停止，序列前后相关 crash/Jetsam 增量为 0。最终脱敏证据位于忽略目录 `build_ios_arm64/device-evidence/task4-rust/final/`。
+
 ## 2026-09-24：C++ 孤立测试的真机覆盖
 
 - 当前 revision 没有普通 C++ unittest 构建定义，普通目标数为 0；源码清单仍发现 9 个 GTest 注册。新增 `test_cpp_device_tests.py` 后先取得缺少 `cpp_device_tests.cpp` 的 RED，规格复核又以缺失的精确 parse/backend/memalign 断言、错误等价分类和 evidence metadata 取得第二轮 RED；再实现 4 个独立 `cpp` suite case，并将 App registry 从 smoke-only 合并为 smoke 加 C++。focused 8 项、inventory 12 项通过，完整 host suite 当前为 58 项；新增源以 iphoneos SDK/ARM64 compile-only 通过，仅出现既有引擎头文件 warning。

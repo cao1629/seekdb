@@ -21,3 +21,9 @@ panic = "abort"
 [profile.cmake-debug]
 inherits = "dev"
 panic = "abort"
+
+# The signed validation App contains an outer catch_unwind boundary. No
+# production build selects this profile or its matching Cargo feature.
+[profile.ios-device-test]
+inherits = "release"
+panic = "unwind"

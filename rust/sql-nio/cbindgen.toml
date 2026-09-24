@@ -32,3 +32,5 @@ header = """/*
  * Rust side instead, then rebuild.
  */"""
 
+[defines]
+"feature = ios-device-tests" = "SQL_NIO_IOS_DEVICE_TESTS"

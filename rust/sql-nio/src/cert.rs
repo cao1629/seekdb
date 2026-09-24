@@ -72,7 +72,7 @@ fn format_name(name: &x509_parser::x509::X509Name<'_>) -> Vec<u8> {
     format_display_name(&name.to_string())
 }
 
-fn format_display_name(display: &str) -> Vec<u8> {
+pub(crate) fn format_display_name(display: &str) -> Vec<u8> {
     if display.is_empty() || display.starts_with("<X509Error:") {
         return Vec::new();
     }
@@ -100,24 +100,5 @@ fn format_display_name(display: &str) -> Vec<u8> {
         Vec::new()
     } else {
         formatted
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::{format_display_name, PeerCertificateInfo};
-
-    #[test]
-    fn rejects_truncated_certificate() {
-        assert!(!PeerCertificateInfo::parse(&[0x30, 0x00]).valid);
-    }
-
-    #[test]
-    fn formats_display_name_for_sql_account() {
-        assert_eq!(format_display_name("CN=allowed2"), b"/CN=allowed2");
-        assert_eq!(
-            format_display_name("CN=allowed2, O=seekdb"),
-            b"/CN=allowed2/O=seekdb"
-        );
     }
 }

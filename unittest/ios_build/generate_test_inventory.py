@@ -286,6 +286,20 @@ def _base_discoveries(repo_root, tracked_files):
                 }
             )
 
+    rust_device_path = "unittest/ios_build/rust_device_tests.cpp"
+    if rust_device_path in tracked_files:
+        content = (repo_root / rust_device_path).read_text(encoding="utf-8")
+        for case_id in sorted(set(re.findall(r'\{"(ios\.rust\.[^"]+)",\s*"rust"', content))):
+            discoveries.append(
+                {
+                    "id": case_id,
+                    "source_path": rust_device_path,
+                    "corpus": "ios-probe",
+                    "case_name": case_id.removeprefix("ios.rust."),
+                    "ci_selected": False,
+                }
+            )
+
     for path in tracked_files:
         if re.match(r"^unittest/ios_build/test_.*\.py$", path):
             name = Path(path).stem

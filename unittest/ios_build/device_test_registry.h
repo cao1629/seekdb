@@ -66,6 +66,11 @@ DeviceTestRegistry make_smoke_registry();
 /** Create the device registry for iOS-supported C++ behavior. */
 DeviceTestRegistry make_cpp_device_registry();
 
+#if defined(SQL_NIO_IOS_DEVICE_TESTS)
+/** Create the device registry backed by the test-only Rust C ABI. */
+DeviceTestRegistry make_rust_device_registry();
+#endif
+
 /** Create the complete built-in registry used by the signed test App. */
 DeviceTestRegistry make_device_registry();
 

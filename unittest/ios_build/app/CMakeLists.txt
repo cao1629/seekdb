@@ -11,11 +11,16 @@ add_executable(SeekDBProbe MACOSX_BUNDLE
   ../cpp_device_tests.cpp
   ../device_evidence.cpp
   ../device_test_registry.cpp)
+if(RUST_DEVICE_TESTS)
+  target_sources(SeekDBProbe PRIVATE ../rust_device_tests.cpp)
+  target_compile_definitions(SeekDBProbe PRIVATE SQL_NIO_IOS_DEVICE_TESTS=1)
+endif()
 target_include_directories(SeekDBProbe PRIVATE
   "${CMAKE_CURRENT_LIST_DIR}/.."
   "${CMAKE_CURRENT_LIST_DIR}/../../../src"
   "${CMAKE_CURRENT_LIST_DIR}/../../../src/oblib"
-  "${CMAKE_CURRENT_LIST_DIR}/../../../src/observer/ios")
+  "${CMAKE_CURRENT_LIST_DIR}/../../../src/observer/ios"
+  "${CMAKE_CURRENT_LIST_DIR}/../../../rust/sql-nio/include")
 target_compile_definitions(SeekDBProbe PRIVATE OB_HAVE_BUNDLED_JEMALLOC=1)
 target_compile_options(SeekDBProbe PRIVATE $<$<COMPILE_LANGUAGE:OBJCXX>:-fobjc-arc>)
 target_link_options(SeekDBProbe PRIVATE "@${ENGINE_LINK_RESPONSE}")

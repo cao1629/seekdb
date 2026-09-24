@@ -46,6 +46,34 @@
 
 #define NIO_TLS_MIN_TLSV1_3 4
 
+#if (defined(SQL_NIO_IOS_DEVICE_TESTS) && defined(SQL_NIO_IOS_DEVICE_TESTS))
+#define NIO_DEVICE_TEST_OK 0
+#endif
+
+#if (defined(SQL_NIO_IOS_DEVICE_TESTS) && defined(SQL_NIO_IOS_DEVICE_TESTS))
+#define NIO_DEVICE_TEST_FAILED 1
+#endif
+
+#if (defined(SQL_NIO_IOS_DEVICE_TESTS) && defined(SQL_NIO_IOS_DEVICE_TESTS))
+#define NIO_DEVICE_TEST_INVALID_INDEX 2
+#endif
+
+#if (defined(SQL_NIO_IOS_DEVICE_TESTS) && defined(SQL_NIO_IOS_DEVICE_TESTS))
+#define NIO_DEVICE_TEST_INVALID_CAPACITY 3
+#endif
+
+#if (defined(SQL_NIO_IOS_DEVICE_TESTS) && defined(SQL_NIO_IOS_DEVICE_TESTS))
+#define NIO_DEVICE_TEST_PANIC 4
+#endif
+
+#if (defined(SQL_NIO_IOS_DEVICE_TESTS) && defined(SQL_NIO_IOS_DEVICE_TESTS))
+#define NIO_DEVICE_TEST_ID_CAPACITY 64
+#endif
+
+#if (defined(SQL_NIO_IOS_DEVICE_TESTS) && defined(SQL_NIO_IOS_DEVICE_TESTS))
+#define NIO_DEVICE_TEST_DIAGNOSTIC_CAPACITY 256
+#endif
+
 #define NIO_MYSQL_COMMAND_LAYOUT_BYTES 1
 
 #define NIO_MYSQL_COMMAND_LAYOUT_FIELD_LIST 2
@@ -179,6 +207,20 @@
 typedef struct NioConnectionHandle NioConnectionHandle;
 
 typedef struct NioReactor NioReactor;
+
+#if (defined(SQL_NIO_IOS_DEVICE_TESTS) && defined(SQL_NIO_IOS_DEVICE_TESTS))
+typedef struct NioDeviceTestCaseInfo {
+  char id[NIO_DEVICE_TEST_ID_CAPACITY];
+} NioDeviceTestCaseInfo;
+#endif
+
+#if (defined(SQL_NIO_IOS_DEVICE_TESTS) && defined(SQL_NIO_IOS_DEVICE_TESTS))
+typedef struct NioDeviceTestResult {
+  uint32_t status;
+  uint32_t diagnostic_len;
+  uint8_t diagnostic[NIO_DEVICE_TEST_DIAGNOSTIC_CAPACITY];
+} NioDeviceTestResult;
+#endif
 
 typedef struct NioGreetingInfo {
   uint32_t sessid;
@@ -360,6 +402,20 @@ void nio_shutdown(void *sess);
 void nio_bind_sql_session(void *sess);
 
 int nio_release_sql_session(void *sess);
+
+#if (defined(SQL_NIO_IOS_DEVICE_TESTS) && defined(SQL_NIO_IOS_DEVICE_TESTS))
+uint32_t nio_device_test_count(void);
+#endif
+
+#if (defined(SQL_NIO_IOS_DEVICE_TESTS) && defined(SQL_NIO_IOS_DEVICE_TESTS))
+uint32_t nio_device_test_case_info(uint32_t index,
+                                   struct NioDeviceTestCaseInfo *output,
+                                   size_t capacity);
+#endif
+
+#if (defined(SQL_NIO_IOS_DEVICE_TESTS) && defined(SQL_NIO_IOS_DEVICE_TESTS))
+uint32_t nio_device_test_run(uint32_t index, struct NioDeviceTestResult *output, size_t capacity);
+#endif
 
 extern int ob_sql_sock_handler_on_connect(void *handler,
                                           void *sess,

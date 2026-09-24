@@ -97,6 +97,22 @@ def require_artifact_identity(engine, expected_build_id, expected_hooks):
     return build_id, hook_mode
 
 
+def require_rust_archive_mode(arguments, expected_device_tests):
+    """Require exactly one Rust archive with symbols matching the requested App mode."""
+    archives = [Path(argument) for argument in arguments
+                if Path(argument).name == "libsql_nio.a"]
+    if len(archives) != 1:
+        raise ValueError("the App must link exactly one libsql_nio.a archive")
+    result = subprocess.run(["/usr/bin/strings", "-a", str(archives[0])], check=True,
+                            capture_output=True, text=True)
+    symbols = set(result.stdout.splitlines())
+    has_device_tests = bool({"nio_device_test_count", "_nio_device_test_count"} & symbols)
+    if has_device_tests != expected_device_tests:
+        requested = "test" if expected_device_tests else "production"
+        raise ValueError(f"Rust archive does not match requested {requested} mode")
+    return archives[0]
+
+
 def main():
     """Generate an Xcode wrapper, provision it, and optionally install on a device."""
     parser = argparse.ArgumentParser(description=__doc__)
@@ -120,17 +136,20 @@ def main():
     directory = engine / "src/observer"
     command = (directory / "CMakeFiles/seekdb_ios_link_check.dir/link.txt").read_text()
     arguments = engine_link_arguments(command, directory)
+    require_rust_archive_mode(arguments, options.test_hooks)
     build = engine / "app"
     build.mkdir(parents=True, exist_ok=True)
     response = build / "engine-link.rsp"
     response.write_text("\n".join(json.dumps(argument) for argument in arguments) + "\n")
     environment = dict(os.environ)
     environment.setdefault("DEVELOPER_DIR", "/Applications/Xcode.app/Contents/Developer")
-    subprocess.run(["cmake", "-G", "Xcode", "-S", str(ROOT / "unittest/ios_build/app"),
-                    "-B", str(build), "-DCMAKE_SYSTEM_NAME=iOS", "-DCMAKE_OSX_SYSROOT=iphoneos",
-                    "-DCMAKE_OSX_ARCHITECTURES=arm64", "-DCMAKE_OSX_DEPLOYMENT_TARGET=18.0",
-                    "-DENGINE_LINK_RESPONSE=" + str(response),
-                    "-DDEVELOPMENT_TEAM=" + options.team, "-DPROBE_BUNDLE_ID=" + options.bundle_id],
+    configure = ["cmake", "-G", "Xcode", "-S", str(ROOT / "unittest/ios_build/app"),
+                 "-B", str(build), "-DCMAKE_SYSTEM_NAME=iOS", "-DCMAKE_OSX_SYSROOT=iphoneos",
+                 "-DCMAKE_OSX_ARCHITECTURES=arm64", "-DCMAKE_OSX_DEPLOYMENT_TARGET=18.0",
+                 "-DENGINE_LINK_RESPONSE=" + str(response),
+                 "-DDEVELOPMENT_TEAM=" + options.team, "-DPROBE_BUNDLE_ID=" + options.bundle_id,
+                 "-DRUST_DEVICE_TESTS=" + ("ON" if options.test_hooks else "OFF")]
+    subprocess.run(configure,
                    check=True, env=environment)
     subprocess.run(["xcodebuild", "-project", str(build / "SeekDBProbe.xcodeproj"),
                     "-scheme", "SeekDBProbe", "-configuration", "Release", "-sdk", "iphoneos",
