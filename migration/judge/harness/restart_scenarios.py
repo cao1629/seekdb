@@ -17,6 +17,8 @@ import argparse
 import importlib.util
 import os
 from pathlib import Path
+import re
+import signal
 import subprocess
 import sys
 import tempfile
@@ -34,18 +36,28 @@ SDB_PATH = RUNNER_PATH.with_name("sdb.py")
 DEPLOY_DIR = REPO_ROOT / "tools" / "deploy"
 HOST = "127.0.0.1"
 DATABASE = "test"
+ADMIN_USER = "admin"
+ADMIN_PASSWORD = "admin"
 SQL_TIMEOUT = 600
 PROBE_TIMEOUT = 600
+PROBE_ATTEMPT_TIMEOUT = 30
 PROBE_INTERVAL = 1.0
 CLIENT_TRANSACTIONS = 5000
 KILL_AFTER_ACKNOWLEDGEMENTS = 200
 ACKNOWLEDGEMENT_TIMEOUT = 600
 ACKNOWLEDGEMENT_POLL_INTERVAL = 0.01
+OPEN_SESSION_TIMEOUT = 120
 CLIENT_EXIT_TIMEOUT = 120
+KILL_EXIT_TIMEOUT = 20
+STDERR_TAIL_LINES = 20
+LOST_CONNECTION_ERRORS = ("2006", "2013")
+CLIENT_ERROR_PATTERN = re.compile(r"^ERROR (\d+)(?: \([^)]*\))? at line \d+")
 
 
 def load_runner():
-    spec = importlib.util.spec_from_file_location("mysqltest_for_seekdb", str(RUNNER_PATH))
+    spec = importlib.util.spec_from_file_location(
+        "mysqltest_for_seekdb", str(RUNNER_PATH)
+    )
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     return module
@@ -76,33 +88,33 @@ class Recording(object):
         return holds
 
 
-def client_command(args, options):
-    return [
+def client_command(args, options, user="root", password=None):
+    command = [
         str(args.obclient),
         "-h",
         HOST,
         "-P",
         str(args.port),
-        "-uroot",
-        "-A",
-        "-c",
-        "-D{}".format(DATABASE),
-    ] + list(options)
+        "-u{}".format(user),
+    ]
+    if password is not None:
+        command.append("-p{}".format(password))
+    return command + ["-A", "-c", "-D{}".format(DATABASE)] + list(options)
 
 
-def run_client(args, sql, options):
-    command = client_command(args, options)
+def run_client(args, sql, options, user="root", password=None, timeout=SQL_TIMEOUT):
+    command = client_command(args, options, user, password)
     try:
         result = subprocess.run(
             command,
             input=sql.encode("utf-8") + b"\n",
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
-            timeout=SQL_TIMEOUT,
+            timeout=timeout,
             check=False,
         )
     except subprocess.TimeoutExpired:
-        message = "obclient did not finish within {} seconds\n".format(SQL_TIMEOUT)
+        message = "obclient did not finish within {} seconds\n".format(timeout)
         return None, b"", message.encode("utf-8")
     except OSError as exc:
         raise runner.RunnerError("cannot run obclient: {}".format(exc))
@@ -113,12 +125,14 @@ def statement_lines(step):
     return [step] if isinstance(step, str) else list(step)
 
 
-def execute(args, recording, step):
+def execute(args, recording, step, user="root", password=None):
     statements = statement_lines(step)
     start = len(recording.content)
     for statement in statements:
         recording.line(statement)
-    code, output, error_output = run_client(args, "\n".join(statements), ("--table",))
+    code, output, error_output = run_client(
+        args, "\n".join(statements), ("--table",), user, password
+    )
     recording.append(output)
     if code != 0:
         recording.append(error_output)
@@ -140,12 +154,30 @@ def query_rows(args, sql):
 def wait_readable(args, probe):
     deadline = time.monotonic() + PROBE_TIMEOUT
     while True:
-        code, _, _ = run_client(args, probe, ("-N", "-s"))
+        code, _, error_output = run_client(
+            args, probe, ("-N", "-s"), timeout=PROBE_ATTEMPT_TIMEOUT
+        )
         if code == 0:
-            return True
+            return None
         if time.monotonic() >= deadline:
-            return False
+            return "-- last probe attempt: obclient exit code {}\n".format(
+                code
+            ).encode("utf-8") + tail_lines(error_output)
         time.sleep(PROBE_INTERVAL)
+
+
+def tail_lines(data):
+    lines = data.split(b"\n")
+    if lines and lines[-1] == b"":
+        lines.pop()
+    return b"".join(line + b"\n" for line in lines[-STDERR_TAIL_LINES:])
+
+
+def read_file_bytes(path):
+    try:
+        return path.read_bytes()
+    except OSError:
+        return b""
 
 
 def sdb(command, arguments, description):
@@ -193,14 +225,34 @@ def stop_server(args):
     sdb("stop", ("--base-dir", args.base_dir), "stop seekdb")
 
 
-def server_running(args):
+def instance_pid(args):
     sdb_module = runner.load_sdb_module(SDB_PATH)
     base_dir = sdb_module._base_dir(str(args.base_dir))
     try:
         binary = sdb_module.read_instance_binary(base_dir)
-        return sdb_module.inspect_instance_process(base_dir, binary) is not None
+        return sdb_module.inspect_instance_process(base_dir, binary)
     except (OSError, RuntimeError, ValueError):
-        return False
+        return None
+
+
+def server_running(args):
+    return instance_pid(args) is not None
+
+
+def kill_process(pid):
+    sdb_module = runner.load_sdb_module(SDB_PATH)
+    print("+ kill -KILL {}".format(pid), flush=True)
+    try:
+        os.kill(pid, signal.SIGKILL)
+    except ProcessLookupError:
+        return "seekdb pid={} was gone when SIGKILL was sent".format(pid)
+    except OSError as exc:
+        return "cannot send SIGKILL to seekdb pid={}: {}".format(pid, exc)
+    if not sdb_module.wait_process_exit(pid, KILL_EXIT_TIMEOUT):
+        return "seekdb pid={} did not exit within {} seconds of SIGKILL".format(
+            pid, KILL_EXIT_TIMEOUT
+        )
+    return None
 
 
 def lifecycle_line(prefix, done, failed_step):
@@ -226,17 +278,24 @@ def bring_up(args, recording, scenario):
     recording.line(lifecycle_line("", done, None))
 
 
-def restart(args, recording, number, probe, after_stop=None):
+def restart(args, recording, number, probe, before_kill=None, after_stop=None):
     prefix = "restart {}: ".format(number)
     done = []
 
-    def fail(step, message):
+    def fail(step, message, details=b""):
         recording.line(lifecycle_line(prefix, done, step))
+        recording.append(details)
         raise ScenarioFailed("restart {}: {}".format(number, message))
 
-    if not server_running(args):
+    pid = instance_pid(args)
+    if pid is None:
         recording.line("-- {}seekdb was not running before the kill".format(prefix))
         raise ScenarioFailed("restart {}: seekdb was not running".format(number))
+    if before_kill is not None:
+        before_kill()
+    problem = kill_process(pid)
+    if problem is not None:
+        fail("stop (kill)", problem)
     try:
         stop_server(args)
     except runner.RunnerError as exc:
@@ -255,31 +314,59 @@ def restart(args, recording, number, probe, after_stop=None):
         wait_ready(args)
     except runner.RunnerError as exc:
         fail("ready", str(exc))
-    if probe is not None and not wait_readable(args, probe):
-        fail("ready", "{} did not succeed within {} seconds".format(probe, PROBE_TIMEOUT))
+    if probe is not None:
+        details = wait_readable(args, probe)
+        if details is not None:
+            fail(
+                "ready",
+                "{} did not succeed within {} seconds".format(probe, PROBE_TIMEOUT),
+                details,
+            )
     done.append("ready")
     recording.line(lifecycle_line(prefix, done, None))
 
 
+BULK_ROWS = 40
+BULK_TABLE = (
+    "create table t_bulk (n int not null, primary key (n));",
+    "insert into t_bulk values {};".format(
+        ", ".join("({})".format(n) for n in range(BULK_ROWS))
+    ),
+)
 DATA_WRITES = (
     "create table t_data (id int not null, name varchar(40), amount decimal(12,3), "
     "born date, updated datetime(6), ratio double, note varchar(100), "
     "primary key (id), key idx_name (name));",
+) + BULK_TABLE + (
     "insert into t_data values "
-    "(1, 'alpha', 10.500, '2020-01-31', '2020-01-31 23:59:59.123456', 0.5, 'first row'), "
+    "(1, 'alpha', 10.500, '2020-01-31', '2020-01-31 23:59:59.123456', 0.5, "
+    "'first row'), "
     "(2, 'bravo', -3.250, '1999-12-31', '1999-12-31 00:00:00.000001', -2.25, null), "
-    "(3, null, 0.000, null, null, null, null), "
-    "(4, 'delta', 12345678.901, '2024-02-29', '2024-02-29 12:00:00.500000', 10000000000, 'leap day');",
+    "(3, null, null, null, null, null, null), "
+    "(4, 'delta', 12345678.901, '2024-02-29', '2024-02-29 12:00:00.500000', "
+    "10000000000, 'leap day');",
     "insert into t_data values "
     "(5, 'echo', 0.001, '1970-01-01', '1970-01-01 00:00:01.000000', 3, ''), "
-    "(6, 'O''Brien', 99.990, '2038-01-19', '2038-01-19 03:14:07.999999', 0.125, 'quote'), "
-    r"(7, 'back\\slash', 1.000, '2000-02-29', '2000-02-29 00:00:00.000000', -0.75, 'backslash'), "
-    "(8, 'trailing  ', 7.125, '2010-10-10', '2010-10-10 10:10:10.101010', 1.5, 'two trailing spaces');",
+    "(6, 'O''Brien', 99.990, '2038-01-19', '2038-01-19 03:14:07.999999', 0.125, "
+    "'quote'), "
+    r"(7, 'back\\slash', 1.000, '2000-02-29', '2000-02-29 00:00:00.000000', -0.75, "
+    "'backslash'), "
+    "(8, 'trailing  ', 7.125, '2010-10-10', '2010-10-10 10:10:10.101010', 1.5, "
+    "'two trailing spaces');",
     "insert into t_data values "
-    "(9, 'golf', 250.000, '2015-06-15', '2015-06-15 06:15:00.000000', 2.5, 'renamed later'), "
-    "(10, 'hotel', 42.000, '2012-12-12', '2012-12-12 12:12:12.121212', 4.25, 'deleted by id'), "
+    "(9, 'golf', 250.000, '2015-06-15', '2015-06-15 06:15:00.000000', 2.5, "
+    "'renamed later'), "
+    "(10, 'hotel', 42.000, '2012-12-12', '2012-12-12 12:12:12.121212', 4.25, "
+    "'deleted by id'), "
     "(11, 'india', null, '2011-11-11', null, null, 'null amount'), "
-    "(12, 'juliet', 5.500, '2005-05-05', '2005-05-05 05:05:05.050505', 8, 'deleted by name');",
+    "(12, 'juliet', 5.500, '2005-05-05', '2005-05-05 05:05:05.050505', 8, "
+    "'deleted by name');",
+    (
+        "begin;",
+        "insert into t_data (id, name, note) select 1000 + a.n * {} + b.n, 'bulk', "
+        "repeat('r', 100) from t_bulk a, t_bulk b;".format(BULK_ROWS),
+        "rollback;",
+    ),
     "update t_data set amount = amount * 2 where id in (1, 2);",
     "update t_data set note = null where id = 5;",
     "update t_data set name = 'golf-renamed', note = 'renamed' where id = 9;",
@@ -306,7 +393,23 @@ DATA_WRITES = (
         "rollback;",
     ),
 )
+DATA_WRITES_AFTER_RECOVERY = (
+    "insert into t_data values (15, 'mike', 15.150, '2015-05-15', "
+    "'2015-05-15 15:15:15.151515', 15, 'written after recovery');",
+    "update t_data set amount = amount - 1, note = 'updated after recovery' "
+    "where id = 6;",
+    "update t_data set name = 'bravo-renamed' where name = 'bravo';",
+    "delete from t_data where id = 11;",
+    (
+        "begin;",
+        "insert into t_data values (16, 'november', null, '2016-06-16', null, 0.5, "
+        "'committed in a transaction after recovery');",
+        "delete from t_data where name = 'echo';",
+        "commit;",
+    ),
+)
 DATA_SELECTS = (
+    "show create table t_data;",
     "select * from t_data order by id;",
     "select /*+ index(t_data idx_name) */ id, name from t_data "
     "where name is not null order by name, id;",
@@ -319,29 +422,46 @@ DATA_SELECTS = (
     "select id, name, note from t_data where name like 'd%' order by id;",
     "select * from t_data where id in (1, 4, 9, 13, 14) order by id;",
 )
+ADMIN_SELECT = "show grants;"
 DATA_PROBE = "select count(*) from t_data;"
-DATA_SELECT_SET_LABELS = (
-    "before any restart",
-    "after restart 1",
-    "after restart 2, with no writes since restart 1",
-)
+
+
+def run_select_set(args, recording, index, label):
+    recording.line("-- select set {}: {}".format(index, label))
+    outputs = [execute(args, recording, select) for select in DATA_SELECTS]
+    recording.line(
+        "-- as user {} with its password, the login the runner's mysqltest "
+        "cases use".format(ADMIN_USER)
+    )
+    outputs.append(
+        execute(args, recording, ADMIN_SELECT, ADMIN_USER, ADMIN_PASSWORD)
+    )
+    return b"".join(outputs)
 
 
 def scenario_restart_data(args, recording):
     for step in DATA_WRITES:
         execute(args, recording, step)
-    select_sets = []
-    for index, label in enumerate(DATA_SELECT_SET_LABELS):
-        if index > 0:
-            restart(args, recording, index, DATA_PROBE)
-        recording.line("-- select set {}: {}".format(index, label))
-        select_sets.append(
-            b"".join(execute(args, recording, select) for select in DATA_SELECTS)
+    sets = [run_select_set(args, recording, 0, "before any restart")]
+    restart(args, recording, 1, DATA_PROBE)
+    sets.append(run_select_set(args, recording, 1, "after restart 1"))
+    restart(args, recording, 2, DATA_PROBE)
+    sets.append(
+        run_select_set(
+            args, recording, 2, "after restart 2, with no writes since restart 1"
         )
-    for index in range(1, len(select_sets)):
+    )
+    for step in DATA_WRITES_AFTER_RECOVERY:
+        execute(args, recording, step)
+    sets.append(
+        run_select_set(args, recording, 3, "after new writes since restart 2")
+    )
+    restart(args, recording, 3, DATA_PROBE)
+    sets.append(run_select_set(args, recording, 4, "after restart 3"))
+    for later, earlier in ((1, 0), (2, 0), (4, 3)):
         recording.check(
-            "select set {} is byte-identical to select set 0".format(index),
-            select_sets[index] == select_sets[0],
+            "select set {} is byte-identical to select set {}".format(later, earlier),
+            sets[later] == sets[earlier],
         )
 
 
@@ -364,7 +484,10 @@ def keep_table_columns(output, wanted):
     boundaries = column_boundaries(lines[0])
     header = lines[1]
     names = [
-        header[boundaries[index] + 1 : boundaries[index + 1]].strip().decode("ascii", "replace").lower()
+        header[boundaries[index] + 1 : boundaries[index + 1]]
+        .strip()
+        .decode("ascii", "replace")
+        .lower()
         for index in range(len(boundaries) - 1)
     ]
     positions = []
@@ -384,10 +507,16 @@ def keep_table_columns(output, wanted):
             line[last] != separator[0]
         ):
             return None
-        pieces = [line[boundaries[index] : boundaries[index + 1]] for index in positions]
+        pieces = [
+            line[boundaries[index] : boundaries[index + 1]] for index in positions
+        ]
         kept.append(b"".join(pieces) + separator)
         if not border and line is not header:
-            cells.append(tuple(piece[1:].strip().decode("utf-8", "replace") for piece in pieces))
+            cells.append(
+                tuple(
+                    piece[1:].strip().decode("utf-8", "replace") for piece in pieces
+                )
+            )
     if trailing is not None:
         kept.append(b"")
     return b"\n".join(kept), cells
@@ -396,7 +525,9 @@ def keep_table_columns(output, wanted):
 def show_parameter(args, recording, name):
     statement = "show parameters like '{}';".format(name)
     recording.line(statement)
-    recording.line("-- only the {} columns are kept".format(" and ".join(KEPT_PARAMETER_COLUMNS)))
+    recording.line(
+        "-- only the {} columns are kept".format(" and ".join(KEPT_PARAMETER_COLUMNS))
+    )
     code, output, error_output = run_client(args, statement, ("--table",))
     if code != 0:
         recording.append(output)
@@ -423,7 +554,9 @@ def scenario_restart_parameters(args, recording):
         execute(args, recording, "alter system set {} = {};".format(name, value))
     after_set = dict((name, show_parameter(args, recording, name)) for name in names)
     restart(args, recording, 1, None)
-    after_restart = dict((name, show_parameter(args, recording, name)) for name in names)
+    after_restart = dict(
+        (name, show_parameter(args, recording, name)) for name in names
+    )
     for name in names:
         recording.check(
             "SHOW PARAMETERS shows exactly one row for {}".format(name),
@@ -432,7 +565,9 @@ def scenario_restart_parameters(args, recording):
             and len(after_restart[name]) == 1,
         )
         recording.check(
-            "ALTER SYSTEM SET changed the value SHOW PARAMETERS shows for {}".format(name),
+            "ALTER SYSTEM SET changed the value SHOW PARAMETERS shows for {}".format(
+                name
+            ),
             after_set[name] != defaults[name],
         )
         recording.check(
@@ -441,12 +576,24 @@ def scenario_restart_parameters(args, recording):
         )
 
 
-MID_TABLE = (
+MID_SETUP = (
     "create table t_mid (seq int not null, payload varchar(64) not null, "
-    "amount decimal(12,2) not null, noted date not null);"
+    "amount decimal(12,2) not null, noted date not null);",
+) + BULK_TABLE + (
+    "create table t_open (n int not null, note varchar(100) not null, "
+    "primary key (n));",
 )
+OPEN_SESSION_SQL = (
+    "begin;",
+    "insert into t_open select a.n * {} + b.n, repeat('o', 100) "
+    "from t_bulk a, t_bulk b;".format(BULK_ROWS),
+    "select 'open';",
+)
+OPEN_MARKER = b"open\n"
+OPEN_READ_BACK = "select count(*) from t_open;"
 MID_PROBE = "select count(*) from t_mid;"
 MID_READ_BACK = "select seq, payload, amount, noted from t_mid order by seq;"
+BACKGROUND_CLIENT_OPTIONS = ("-N", "-s", "--unbuffered", "--disable-reconnect")
 
 
 def mid_row(seq):
@@ -479,7 +626,8 @@ def read_acknowledgements(path):
     except OSError:
         return None
     lines = content.split(b"\n")
-    lines.pop()
+    if lines.pop() != b"":
+        return None
     numbers = []
     for line in lines:
         text = line.strip()
@@ -496,13 +644,13 @@ def acknowledgement_count(path):
         return 0
 
 
-def wait_for_acknowledgements(client, path):
-    deadline = time.monotonic() + ACKNOWLEDGEMENT_TIMEOUT
+def wait_until(process, condition, timeout):
+    deadline = time.monotonic() + timeout
     while time.monotonic() < deadline:
-        if acknowledgement_count(path) >= KILL_AFTER_ACKNOWLEDGEMENTS:
+        if condition():
             return True
-        if client.poll() is not None:
-            return acknowledgement_count(path) >= KILL_AFTER_ACKNOWLEDGEMENTS
+        if process.poll() is not None:
+            return condition()
         time.sleep(ACKNOWLEDGEMENT_POLL_INTERVAL)
     return False
 
@@ -518,7 +666,48 @@ def wait_client_exit(client):
 def stop_client(client):
     if client.poll() is None:
         client.kill()
-        client.wait()
+    client.wait()
+    if client.stdin is not None:
+        try:
+            client.stdin.close()
+        except OSError:
+            pass
+
+
+def start_background_client(args, stdin, stdout_path, stderr_path, description):
+    command = client_command(args, BACKGROUND_CLIENT_OPTIONS)
+    print(
+        "+ {} ({}) > {} 2> {}".format(
+            runner.format_command(command), description, stdout_path, stderr_path
+        ),
+        flush=True,
+    )
+    with stdout_path.open("wb") as stdout, stderr_path.open("wb") as stderr:
+        try:
+            return subprocess.Popen(command, stdin=stdin, stdout=stdout, stderr=stderr)
+        except OSError as exc:
+            raise runner.RunnerError("cannot run obclient: {}".format(exc))
+
+
+def start_open_session(args, stdout_path, stderr_path):
+    session = start_background_client(
+        args, subprocess.PIPE, stdout_path, stderr_path, "stdin left open"
+    )
+    try:
+        session.stdin.write(("\n".join(OPEN_SESSION_SQL) + "\n").encode("utf-8"))
+        session.stdin.flush()
+    except OSError:
+        pass
+    return session
+
+
+def only_lost_connection_errors(error_output):
+    codes = []
+    for line in error_output.decode("utf-8", "replace").split("\n"):
+        if line.startswith("ERROR"):
+            match = CLIENT_ERROR_PATTERN.match(line)
+            codes.append(match.group(1) if match else None)
+    return len(codes) <= 1 and all(code in LOST_CONNECTION_ERRORS for code in codes)
 
 
 def parse_mid_rows(rows):
@@ -531,43 +720,94 @@ def parse_mid_rows(rows):
 
 
 def scenario_restart_mid_dml(args, recording):
-    execute(args, recording, MID_TABLE)
-    recording.line(
-        "-- client: one obclient session runs {} numbered transactions (begin; insert; "
-        "commit; then select the number as its acknowledgement); the server is killed "
-        "after {} acknowledgements".format(CLIENT_TRANSACTIONS, KILL_AFTER_ACKNOWLEDGEMENTS)
-    )
+    for step in MID_SETUP:
+        execute(args, recording, step)
+    open_output = args.work_dir / "restart_mid_dml.open.stdout"
+    open_errors = args.work_dir / "restart_mid_dml.open.stderr"
     client_sql = args.work_dir / "restart_mid_dml.client.sql"
     acknowledgements = args.work_dir / "restart_mid_dml.acknowledgements"
     client_errors = args.work_dir / "restart_mid_dml.client.stderr"
-    client_sql.write_text(mid_client_sql(), encoding="utf-8")
-    command = client_command(
-        args, ("-N", "-s", "--unbuffered", "--disable-reconnect")
+    recording.line(
+        "-- open session: one obclient session runs the statements below and "
+        "keeps its transaction open (stdin left open) until the server is killed"
     )
-    print("+ {} < {} > {}".format(runner.format_command(command), client_sql, acknowledgements), flush=True)
-    with client_sql.open("rb") as stdin, acknowledgements.open("wb") as stdout, client_errors.open("wb") as stderr:
-        try:
-            client = subprocess.Popen(command, stdin=stdin, stdout=stdout, stderr=stderr)
-        except OSError as exc:
-            raise runner.RunnerError("cannot run obclient: {}".format(exc))
+    for statement in OPEN_SESSION_SQL:
+        recording.line(statement)
+    session = start_open_session(args, open_output, open_errors)
+    state = {}
     try:
-        if not wait_for_acknowledgements(client, acknowledgements):
-            recording.line(
-                "-- client: fewer than {} acknowledgements".format(
-                    KILL_AFTER_ACKNOWLEDGEMENTS
-                )
+        if not wait_until(
+            session,
+            lambda: read_file_bytes(open_output) == OPEN_MARKER,
+            OPEN_SESSION_TIMEOUT,
+        ):
+            recording.line("-- open session: the insert did not return")
+            recording.append(tail_lines(read_file_bytes(open_errors)))
+            raise ScenarioFailed("the open session's insert did not return")
+        recording.line(
+            "-- client: one obclient session runs {} numbered transactions (begin; "
+            "insert; commit; then select the number as its acknowledgement); the "
+            "server is killed after {} acknowledgements".format(
+                CLIENT_TRANSACTIONS, KILL_AFTER_ACKNOWLEDGEMENTS
             )
-            raise ScenarioFailed(
-                "the client did not acknowledge {} transactions".format(
-                    KILL_AFTER_ACKNOWLEDGEMENTS
-                )
+        )
+        client_sql.write_text(mid_client_sql(), encoding="utf-8")
+        with client_sql.open("rb") as stdin:
+            client = start_background_client(
+                args, stdin, acknowledgements, client_errors, "< {}".format(client_sql)
             )
-        client_running = client.poll() is None
-        restart(args, recording, 1, MID_PROBE, lambda: wait_client_exit(client))
-    finally:
-        stop_client(client)
-    recording.check("the client was still running when the server was killed", client_running)
+        try:
+            if not wait_until(
+                client,
+                lambda: acknowledgement_count(acknowledgements)
+                >= KILL_AFTER_ACKNOWLEDGEMENTS,
+                ACKNOWLEDGEMENT_TIMEOUT,
+            ):
+                recording.line(
+                    "-- client: fewer than {} acknowledgements".format(
+                        KILL_AFTER_ACKNOWLEDGEMENTS
+                    )
+                )
+                recording.append(tail_lines(read_file_bytes(client_errors)))
+                raise ScenarioFailed(
+                    "the client did not acknowledge {} transactions".format(
+                        KILL_AFTER_ACKNOWLEDGEMENTS
+                    )
+                )
 
+            def before_kill():
+                state["client"] = client.poll() is None
+                state["session"] = session.poll() is None
+
+            def after_stop():
+                stop_client(session)
+                return wait_client_exit(client)
+
+            restart(args, recording, 1, MID_PROBE, before_kill, after_stop)
+        finally:
+            stop_client(client)
+    finally:
+        stop_client(session)
+
+    recording.check(
+        "the open session was still running when the server was killed",
+        state["session"],
+    )
+    recording.check(
+        "the client was still running when the server was killed", state["client"]
+    )
+    recording.check(
+        "the client exited with a non-zero status",
+        client.returncode not in (None, 0),
+    )
+    error_output = read_file_bytes(client_errors)
+    if not recording.check(
+        "the client stopped on no error other than one lost connection "
+        "(2006 or 2013)",
+        only_lost_connection_errors(error_output),
+    ):
+        recording.line("-- client stderr, last lines:")
+        recording.append(tail_lines(error_output))
     acknowledged = read_acknowledgements(acknowledgements)
     recording.check(
         "the acknowledgements are 1..A in order, with A at least {}".format(
@@ -577,6 +817,12 @@ def scenario_restart_mid_dml(args, recording):
         and len(acknowledged) >= KILL_AFTER_ACKNOWLEDGEMENTS
         and acknowledged == list(range(1, len(acknowledged) + 1)),
     )
+    recording.check(
+        "the client stopped before its last transaction (A below {})".format(
+            CLIENT_TRANSACTIONS
+        ),
+        acknowledged is not None and len(acknowledged) < CLIENT_TRANSACTIONS,
+    )
     recording.line(
         "-- read back, output not recorded because it depends on when the kill "
         "landed: {}".format(MID_READ_BACK)
@@ -585,8 +831,11 @@ def scenario_restart_mid_dml(args, recording):
     if rows is None:
         raise ScenarioFailed("the read back failed: {}".format(MID_READ_BACK))
     parsed = parse_mid_rows(rows)
-    recording.check("every read-back row has the four columns and a numeric seq", parsed is not None)
-    parsed = parsed or []
+    if not recording.check(
+        "every read-back row has the four columns and a numeric seq",
+        parsed is not None,
+    ):
+        raise ScenarioFailed("the read back returned malformed rows")
     sequence = [seq for seq, _ in parsed]
     present = set(sequence)
     recording.check(
@@ -596,11 +845,26 @@ def scenario_restart_mid_dml(args, recording):
     recording.check("no row is duplicated", len(sequence) == len(present))
     recording.check(
         "the rows form a gap-free prefix 1..M of the numbering",
-        present == set(range(1, len(present) + 1)) and len(present) <= CLIENT_TRANSACTIONS,
+        present == set(range(1, len(present) + 1))
+        and len(present) <= CLIENT_TRANSACTIONS,
+    )
+    recording.check(
+        "at most one row beyond the acknowledged ones is present (M is A or A + 1)",
+        acknowledged is not None and len(present) <= len(acknowledged) + 1,
     )
     recording.check(
         "the other columns of the present rows are intact",
         all(columns == mid_row(seq) for seq, columns in parsed),
+    )
+    recording.line(
+        "-- read back, output checked below: {}".format(OPEN_READ_BACK)
+    )
+    open_rows = query_rows(args, OPEN_READ_BACK)
+    if open_rows is None:
+        raise ScenarioFailed("the read back failed: {}".format(OPEN_READ_BACK))
+    recording.check(
+        "no row of the transaction left open at the kill is present",
+        open_rows == [["0"]],
     )
 
 
@@ -621,12 +885,17 @@ def write_recorded_file(path, content):
 def run_scenario(args, name, function):
     recording = Recording()
     recording.line("-- {}".format(name))
+    recording.line("-- recorder sha256 {}".format(args.recorder_sha256))
     error = None
     print("[ RUN      ] {}".format(name), flush=True)
     started = time.monotonic()
     try:
         bring_up(args, recording, name)
         function(args, recording)
+        recording.check(
+            "seekdb is still running at the end of the scenario",
+            server_running(args),
+        )
     except ScenarioFailed as exc:
         recording.problems.append(str(exc))
     except Exception as exc:
@@ -683,7 +952,7 @@ def write_manifest(args, scenarios):
         "init_user_sql": str(args.init_user_sql),
         "init_user_sql_sha256": runner.file_sha256(args.init_user_sql),
         "sdb_sha256": runner.file_sha256(SDB_PATH),
-        "runner_sha256": runner.file_sha256(Path(__file__).resolve()),
+        "runner_sha256": args.recorder_sha256,
         "mysqltest_runner_sha256": runner.file_sha256(RUNNER_PATH),
         "repo_head": runner.stripped_or_none(
             runner.git_output(REPO_ROOT, ["rev-parse", "HEAD"])
@@ -708,14 +977,25 @@ def write_manifest(args, scenarios):
     runner.write_json(manifest_path, args.manifest)
 
 
+def save_dir_source(args):
+    if args.save_instance_dir:
+        return "--save-instance-dir"
+    if os.environ.get(runner.INSTANCE_SAVE_ENVIRONMENT):
+        return "${}".format(runner.INSTANCE_SAVE_ENVIRONMENT)
+    return None
+
+
 def command_run(args):
+    save_source = save_dir_source(args)
     args.seekdb = runner.absolute_path(args.seekdb)
     args.obclient = runner.absolute_path(args.obclient)
     args.base_dir = runner.absolute_path(args.base_dir)
     args.record_dir = runner.absolute_path(args.record_dir)
     args.save_instance_dir = runner.instance_save_dir(args)
     args.init_sql = (
-        runner.absolute_path(args.init_sql) if args.init_sql else DEPLOY_DIR / "init.sql"
+        runner.absolute_path(args.init_sql)
+        if args.init_sql
+        else DEPLOY_DIR / "init.sql"
     )
     args.init_user_sql = (
         runner.absolute_path(args.init_user_sql)
@@ -724,6 +1004,7 @@ def command_run(args):
     )
     args.host = HOST
     args.manifest = None
+    args.recorder_sha256 = runner.file_sha256(Path(__file__).resolve())
     args.work_dir = Path(tempfile.mkdtemp(prefix="restart-scenarios-"))
     args.entry_gate = {
         "init_sql": str(args.init_sql),
@@ -737,6 +1018,13 @@ def command_run(args):
     requested = set(args.scenario or SCENARIO_NAMES)
     selected = [(name, function) for name, function in SCENARIOS if name in requested]
     print("work directory: {}".format(args.work_dir), flush=True)
+    if args.save_instance_dir is not None:
+        print(
+            "instance save directory (from {}): {}".format(
+                save_source, args.save_instance_dir
+            ),
+            flush=True,
+        )
 
     outcomes = {}
     failed_cases = []
@@ -812,7 +1100,12 @@ def create_parser():
         help="new or empty directory for manifest.json and one "
         "<scenario>.result (or .partial) per scenario",
     )
-    parser.add_argument("--port", type=runner.positive_int, required=True)
+    parser.add_argument(
+        "--port",
+        type=runner.positive_int,
+        required=True,
+        help="the server's SQL port; required because judge runs share this machine",
+    )
     parser.add_argument(
         "--init-sql",
         help="SQL file run in database oceanbase after the first start of each "
@@ -851,14 +1144,25 @@ def main(argv=None):
     for path, what in ((args.seekdb, "--seekdb"), (args.obclient, "--obclient")):
         if not runner.absolute_path(path).is_file():
             parser.error("{} is not a file: {}".format(what, path))
-    for path, what in ((args.init_sql, "--init-sql"), (args.init_user_sql, "--init-user-sql")):
+    for path, what in (
+        (args.init_sql, "--init-sql"),
+        (args.init_user_sql, "--init-user-sql"),
+    ):
         if path is not None and not runner.absolute_path(path).is_file():
             parser.error("{} is not a file: {}".format(what, path))
-    require_new_or_empty(parser, runner.absolute_path(args.base_dir), "base directory")
-    require_new_or_empty(parser, runner.absolute_path(args.record_dir), "record directory")
+    require_new_or_empty(
+        parser, runner.absolute_path(args.base_dir), "base directory"
+    )
+    require_new_or_empty(
+        parser, runner.absolute_path(args.record_dir), "record directory"
+    )
     save_dir = runner.instance_save_dir(args)
     if save_dir is not None:
-        require_new_or_empty(parser, save_dir, "instance save directory")
+        require_new_or_empty(
+            parser,
+            save_dir,
+            "instance save directory (from {})".format(save_dir_source(args)),
+        )
     return command_run(args)
 
 

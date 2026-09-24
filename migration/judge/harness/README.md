@@ -52,3 +52,14 @@ On the archived reference (/Users/colin/seekdb-dev/ref-archive-834bbee1e/seekdb)
 | s4 | a copy of tools/deploy/init.sql with a failing `select` inserted at line 5 | fails as intended: entry-gate.json marks line 5 failed with `ERROR 1146 (42S02) at line 5`, the 4 statements before it succeeded, the 29 after it not_run, and all 6 statements of init_user.sql not_run; `init_failed_statements` 1 |
 
 This is the one real check against obclient that DEV-003 asks for.
+
+## Restart scenarios on the reference (2026-09-24)
+
+`restart_scenarios.py` (restart-scenarios.md) ran twice on the archived reference with the reduced
+init, port 3882: 26 s and 25 s, all three scenarios (restart_data, restart_parameters,
+restart_mid_dml) passed their own checks, and `compare` found the two recordings identical (3 of 3, no
+recording problems). Outputs: /Users/colin/seekdb-dev/mysqltest-runs/00b/restart-smoke/. The first real
+run confirmed what the stubbed tests could not: obclient keeps an open session's transaction until the
+kill, the client stops on a lost-connection error, and SHOW PARAMETERS prints the name and value
+columns the script reads. The recordings carry the script's sha256, so any later edit to the script
+means recording the C++ reference again.
