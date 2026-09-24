@@ -500,6 +500,7 @@ class IphoneTestPhasesTest(unittest.TestCase):
                     "data_name": data_name,
                     "hook_mode": "enabled",
                     "previous_runs": previous_runs,
+                    "round_id": f"round-{previous_runs}",
                     "evidence_sha256": hashlib.sha256(
                         evidence.read_bytes()).hexdigest(),
                 }

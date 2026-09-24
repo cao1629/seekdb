@@ -222,8 +222,9 @@ def _file_sha256(path):
     return digest.hexdigest()
 
 
-def sql_evidence_metadata(evidence, options, build_id, previous_runs):
-    """Build privacy-preserving identity metadata for one SQL round."""
+def sql_round_identity(options, build_id, previous_runs, round_id):
+    """Build the immutable identity shared by intent and completed evidence."""
+    validate_data_name(round_id)
     return {
         "schema_version": 1,
         "runner_run_id": options.runner_run_id,
@@ -233,6 +234,14 @@ def sql_evidence_metadata(evidence, options, build_id, previous_runs):
         "data_name": options.data_name,
         "hook_mode": options.expected_hook_mode,
         "previous_runs": previous_runs,
+        "round_id": round_id,
+    }
+
+
+def sql_evidence_metadata(evidence, options, build_id, previous_runs, round_id):
+    """Build privacy-preserving identity metadata for one SQL round."""
+    return {
+        **sql_round_identity(options, build_id, previous_runs, round_id),
         "evidence_sha256": _file_sha256(evidence),
     }
 
@@ -242,15 +251,45 @@ def sql_evidence_metadata_path(evidence):
     return evidence.with_name(evidence.name + ".meta.json")
 
 
-def write_sql_evidence_metadata(evidence, options, build_id, previous_runs):
+def _durable_write_json(destination, payload):
+    """Atomically replace one JSON file and durably sync its parent directory."""
+    temporary_path = None
+    try:
+        with tempfile.NamedTemporaryFile(
+                mode="w", encoding="utf-8", dir=destination.parent,
+                prefix=f".{destination.name}.", delete=False) as stream:
+            temporary_path = Path(stream.name)
+            stream.write(json.dumps(payload, sort_keys=True) + "\n")
+            stream.flush()
+            os.fsync(stream.fileno())
+        os.replace(temporary_path, destination)
+        directory = os.open(destination.parent, os.O_RDONLY)
+        try:
+            os.fsync(directory)
+        finally:
+            os.close(directory)
+    finally:
+        if temporary_path is not None:
+            temporary_path.unlink(missing_ok=True)
+
+
+def _durable_unlink(path):
+    """Remove one protocol file and durably sync its parent directory."""
+    path.unlink(missing_ok=True)
+    directory = os.open(path.parent, os.O_RDONLY)
+    try:
+        os.fsync(directory)
+    finally:
+        os.close(directory)
+
+
+def write_sql_evidence_metadata(
+        evidence, options, build_id, previous_runs, round_id):
     """Persist validated SQL provenance without retaining raw device identity."""
     metadata = sql_evidence_metadata(
-        evidence, options, build_id, previous_runs)
+        evidence, options, build_id, previous_runs, round_id)
     destination = sql_evidence_metadata_path(evidence)
-    temporary = destination.with_name(destination.name + ".tmp")
-    temporary.write_text(
-        json.dumps(metadata, sort_keys=True) + "\n", encoding="utf-8")
-    os.replace(temporary, destination)
+    _durable_write_json(destination, metadata)
 
 
 def validate_sql_evidence_metadata(evidence, options, build_id, previous_runs):
@@ -262,8 +301,56 @@ def validate_sql_evidence_metadata(evidence, options, build_id, previous_runs):
         actual = json.loads(metadata_path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError):
         return False
-    return actual == sql_evidence_metadata(
-        evidence, options, build_id, previous_runs)
+    round_id = actual.get("round_id") if isinstance(actual, dict) else None
+    if not isinstance(round_id, str):
+        return False
+    try:
+        expected = sql_evidence_metadata(
+            evidence, options, build_id, previous_runs, round_id)
+    except ValueError:
+        return False
+    return actual == expected
+
+
+def sql_round_intent_path(evidence):
+    """Return the durable pre-launch intent path for one SQL round."""
+    return evidence.with_name(evidence.name + ".intent.json")
+
+
+def write_sql_round_intent(
+        evidence, options, build_id, previous_runs, round_id, state):
+    """Durably record whether a round is prepared or may have launched."""
+    if state not in {"prepared", "launch-uncertain"}:
+        raise ValueError("SQL round intent state is invalid")
+    payload = {
+        **sql_round_identity(options, build_id, previous_runs, round_id),
+        "state": state,
+    }
+    _durable_write_json(sql_round_intent_path(evidence), payload)
+
+
+def load_sql_round_intent(evidence, options, build_id, previous_runs):
+    """Load and strictly validate one durable SQL round intent."""
+    path = sql_round_intent_path(evidence)
+    if not path.is_file():
+        return None
+    try:
+        actual = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as error:
+        raise RuntimeError("SQL round intent is unreadable") from error
+    round_id = actual.get("round_id") if isinstance(actual, dict) else None
+    state = actual.get("state") if isinstance(actual, dict) else None
+    try:
+        expected = {
+            **sql_round_identity(
+                options, build_id, previous_runs, round_id),
+            "state": state,
+        }
+    except (TypeError, ValueError) as error:
+        raise RuntimeError("SQL round intent identity is invalid") from error
+    if state not in {"prepared", "launch-uncertain"} or actual != expected:
+        raise RuntimeError("SQL round intent does not match this run")
+    return actual
 
 
 def validate_sql_terminal_status(status, run_id, build_id, data_name, previous_runs,
@@ -313,7 +400,7 @@ def wait_for_sql_round(device, bundle_id, output, deadline, run_id, build_id,
                     validate_sql_records(read_jsonl(output))
                     if options is not None:
                         write_sql_evidence_metadata(
-                            output, options, build_id, previous_runs)
+                            output, options, build_id, previous_runs, run_id)
                     return
                 except (IncompleteEvidenceError, json.JSONDecodeError, ValueError) as error:
                     last_error = error
@@ -331,23 +418,37 @@ def run_sql_restart(options, build_id, deadline):
         if validate_sql_evidence_metadata(
                 output, options, build_id, previous_runs):
             validate_sql_records(read_jsonl(output))
+            _durable_unlink(sql_round_intent_path(output))
             continue
-        run_id = str(uuid.uuid4())
-        launch = devicectl([
-            "device", "process", "launch", "--device", options.device,
-            "--terminate-existing", "--environment-variables", json.dumps({
-                "SEEKDB_IOS_TEST_RUN_ID": run_id,
-                "SEEKDB_PROBE_DATA_NAME": options.data_name,
-                "SEEKDB_PROBE_AUTO_STOP": "1",
-            }), "--timeout", "60", options.bundle_id,
-        ])
-        if launch.returncode != 0:
-            raise SystemExit(
-                "ordinary SQL launch failed; raw device metadata was not persisted")
+        intent = load_sql_round_intent(
+            output, options, build_id, previous_runs)
+        if intent is None:
+            run_id = str(uuid.uuid4())
+            write_sql_round_intent(
+                output, options, build_id, previous_runs, run_id, "prepared")
+            intent = load_sql_round_intent(
+                output, options, build_id, previous_runs)
+        run_id = intent["round_id"]
+        if intent["state"] == "prepared":
+            write_sql_round_intent(
+                output, options, build_id, previous_runs, run_id,
+                "launch-uncertain")
+            launch = devicectl([
+                "device", "process", "launch", "--device", options.device,
+                "--terminate-existing", "--environment-variables", json.dumps({
+                    "SEEKDB_IOS_TEST_RUN_ID": run_id,
+                    "SEEKDB_PROBE_DATA_NAME": options.data_name,
+                    "SEEKDB_PROBE_AUTO_STOP": "1",
+                }), "--timeout", "60", options.bundle_id,
+            ])
+            if launch.returncode != 0:
+                raise SystemExit(
+                    "ordinary SQL launch failed; raw device metadata was not persisted")
         wait_for_sql_round(
             options.device, options.bundle_id, output, deadline, run_id,
             build_id, options.data_name, previous_runs,
             options.expected_hook_mode, options=options)
+        _durable_unlink(sql_round_intent_path(output))
     return {
         "run_result": 0,
         "first_previous_runs": 0,

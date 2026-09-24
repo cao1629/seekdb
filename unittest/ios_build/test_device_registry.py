@@ -316,7 +316,7 @@ class DeviceEvidenceValidationTests(unittest.TestCase):
                 expected_hook_mode="enabled", runner_run_id="runner-1")
             evidence = output / "evidence-gate-first.jsonl"
             self.runner.write_sql_evidence_metadata(
-                evidence, options, "build-1", 0)
+                evidence, options, "build-1", 0, "round-first")
             with mock.patch.object(
                     self.runner, "devicectl",
                     return_value=SimpleNamespace(returncode=0)) as devicectl, \
@@ -347,7 +347,7 @@ class DeviceEvidenceValidationTests(unittest.TestCase):
                 device="device", bundle_id="bundle", data_name="shared",
                 expected_hook_mode="enabled", runner_run_id="old-run")
             self.runner.write_sql_evidence_metadata(
-                evidence, old_options, "build-1", 0)
+                evidence, old_options, "build-1", 0, "round-old")
             new_options = SimpleNamespace(
                 **{**vars(old_options), "runner_run_id": "new-run"})
             with mock.patch.object(
@@ -356,6 +356,123 @@ class DeviceEvidenceValidationTests(unittest.TestCase):
                     mock.patch.object(
                         self.runner, "wait_for_sql_round"):
                 self.runner.run_sql_restart(new_options, "build-1", 100)
+
+        self.assertEqual(2, devicectl.call_count)
+
+    def test_sql_round_sigint_intent_recovers_without_relaunching_first(self):
+        """An uncertain launched round must recover device evidence before launch."""
+        with tempfile.TemporaryDirectory() as temp:
+            output = Path(temp)
+            options = SimpleNamespace(
+                output_dir=output, evidence_prefix="gate",
+                device="device", bundle_id="bundle", data_name="shared",
+                expected_hook_mode="enabled", runner_run_id="runner-1")
+            with mock.patch.object(
+                    self.runner, "devicectl",
+                    return_value=SimpleNamespace(returncode=0)), \
+                    mock.patch.object(
+                        self.runner, "wait_for_sql_round",
+                        side_effect=KeyboardInterrupt):
+                with self.assertRaises(KeyboardInterrupt):
+                    self.runner.run_sql_restart(options, "build-1", 100)
+            first = output / "evidence-gate-first.jsonl"
+            intent = self.runner.load_sql_round_intent(
+                first, options, "build-1", 0)
+            self.assertEqual("launch-uncertain", intent["state"])
+
+            recovered_rounds = []
+
+            def recover(*args, **_kwargs):
+                """Record recovery using the durable round ID."""
+                recovered_rounds.append(args[4])
+
+            with mock.patch.object(
+                    self.runner, "devicectl",
+                    return_value=SimpleNamespace(returncode=0)) as devicectl, \
+                    mock.patch.object(
+                        self.runner, "wait_for_sql_round",
+                        side_effect=recover):
+                self.runner.run_sql_restart(options, "build-1", 100)
+
+        self.assertEqual(1, devicectl.call_count)
+        self.assertEqual(intent["round_id"], recovered_rounds[0])
+
+    def test_sql_round_metadata_failure_keeps_recoverable_intent(self):
+        """A crash writing completion metadata must retain uncertain intent."""
+        with tempfile.TemporaryDirectory() as temp:
+            output = Path(temp)
+            options = SimpleNamespace(
+                output_dir=output, evidence_prefix="gate",
+                device="device", bundle_id="bundle", data_name="shared",
+                expected_hook_mode="enabled", runner_run_id="runner-1")
+            first = output / "evidence-gate-first.jsonl"
+
+            def copy_status(_device, _bundle, destination):
+                """Expose a terminal status for the durable first-round ID."""
+                intent = json.loads(self.runner.sql_round_intent_path(
+                    first).read_text())
+                destination.write_text(json.dumps({
+                    "run_id": intent["round_id"], "build_id": "build-1",
+                    "state": "Stopped", "result": 0, "suite_result": None,
+                    "cleanup_status": 7, "cleanup_error": 0,
+                    "working_directory_restored": True,
+                    "data_name": "shared", "sql_verified": True,
+                    "sql_result": 0, "previous_runs": 0,
+                    "hook_mode": "enabled",
+                }))
+                return True
+
+            def copy_sql(_device, _bundle, destination):
+                """Expose one complete 36-step device SQL report."""
+                records = [
+                    {"step": step, "case": f"case-{step}", "result": 0}
+                    for step in range(1, 37)
+                ] + [{"complete": True, "result": 0}]
+                destination.write_text("".join(
+                    json.dumps(record) + "\n" for record in records))
+                return True
+
+            with mock.patch.object(
+                    self.runner, "devicectl",
+                    return_value=SimpleNamespace(returncode=0)), \
+                    mock.patch.object(
+                        self.runner, "copy_probe_status",
+                        side_effect=copy_status), \
+                    mock.patch.object(
+                        self.runner, "copy_sql_evidence",
+                        side_effect=copy_sql), \
+                    mock.patch.object(
+                        self.runner, "write_sql_evidence_metadata",
+                        side_effect=OSError("metadata fsync failed")), \
+                    mock.patch.object(
+                        self.runner.time, "monotonic", return_value=0):
+                with self.assertRaises(OSError):
+                    self.runner.run_sql_restart(options, "build-1", 100)
+            intent = self.runner.load_sql_round_intent(
+                first, options, "build-1", 0)
+
+        self.assertEqual("launch-uncertain", intent["state"])
+
+    def test_sql_round_restart_new_scope_ignores_old_uncertain_intent(self):
+        """A new runner scope launches independently of an older run's intent."""
+        with tempfile.TemporaryDirectory() as temp:
+            output = Path(temp)
+            old = SimpleNamespace(
+                output_dir=output, evidence_prefix="old-scope",
+                device="device", bundle_id="bundle", data_name="old-data",
+                expected_hook_mode="enabled", runner_run_id="old-run")
+            old_evidence = output / "evidence-old-scope-first.jsonl"
+            self.runner.write_sql_round_intent(
+                old_evidence, old, "build-1", 0, "old-round",
+                "launch-uncertain")
+            new = SimpleNamespace(
+                **{**vars(old), "evidence_prefix": "new-scope",
+                   "data_name": "new-data", "runner_run_id": "new-run"})
+            with mock.patch.object(
+                    self.runner, "devicectl",
+                    return_value=SimpleNamespace(returncode=0)) as devicectl, \
+                    mock.patch.object(self.runner, "wait_for_sql_round"):
+                self.runner.run_sql_restart(new, "build-1", 100)
 
         self.assertEqual(2, devicectl.call_count)
 

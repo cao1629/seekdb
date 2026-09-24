@@ -499,6 +499,17 @@ def _sql_restart_validator(
             metadata = evidence.with_name(evidence.name + ".meta.json")
             if not evidence.is_file() or not metadata.is_file():
                 raise PhaseEvidenceError("SQL restart evidence is missing")
+            try:
+                actual_metadata = json.loads(metadata.read_text(
+                    encoding="utf-8"))
+            except (OSError, json.JSONDecodeError) as error:
+                raise PhaseEvidenceError(
+                    "SQL restart metadata is invalid") from error
+            round_id = actual_metadata.get("round_id") \
+                if isinstance(actual_metadata, Mapping) else None
+            if (not isinstance(round_id, str)
+                    or re.fullmatch(r"[A-Za-z0-9-]{1,64}", round_id) is None):
+                raise PhaseEvidenceError("SQL restart round identity is invalid")
             expected_metadata = {
                 "schema_version": 1,
                 "runner_run_id": run_id,
@@ -509,14 +520,9 @@ def _sql_restart_validator(
                 "data_name": data_name,
                 "hook_mode": expected_hook_mode,
                 "previous_runs": previous_runs,
+                "round_id": round_id,
                 "evidence_sha256": _sha256_file(evidence),
             }
-            try:
-                actual_metadata = json.loads(metadata.read_text(
-                    encoding="utf-8"))
-            except (OSError, json.JSONDecodeError) as error:
-                raise PhaseEvidenceError(
-                    "SQL restart metadata is invalid") from error
             if actual_metadata != expected_metadata:
                 raise PhaseEvidenceError(
                     "SQL restart evidence identity does not match the run")
