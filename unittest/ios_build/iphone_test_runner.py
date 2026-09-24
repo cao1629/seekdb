@@ -47,7 +47,7 @@ SENSITIVE_KEYS = frozenset({
     "udid",
 })
 SENSITIVE_LABEL_PATTERN = re.compile(
-    r"(?im)(?:^|[\s,{])['\"]?\b(" + "|".join(
+    r"(?im)(?<!\w)['\"]?(" + "|".join(
         re.escape(key) for key in sorted(SENSITIVE_KEYS, key=len, reverse=True)
     ) + r")\b['\"]?\s*[:=]")
 

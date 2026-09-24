@@ -373,6 +373,24 @@ class IphoneTestRunnerTest(unittest.TestCase):
         ordinary = "assertion mismatch: expected 1, got 2\ncase remained clean"
         self.assertEqual(ordinary, runner.sanitize(ordinary, run_id))
 
+    def test_sensitive_labels_following_punctuation_are_rejected(self):
+        """Sensitive keys after punctuation must not evade field rejection."""
+        run_id = self.selection.checkpoint["run_id"]
+        diagnostics = (
+            "error(private_key=secret-pem)",
+            '["team_id":"SECRETTEAM"]',
+            "codesign failed --udid=00008110-secret-device",
+        )
+        for diagnostic in diagnostics:
+            with self.subTest(diagnostic=diagnostic):
+                self.assertEqual(
+                    runner.REDACTED, runner.sanitize(diagnostic, run_id))
+
+        ordinary = (
+            "candidate_private_key=value "
+            "valid_team_id_suffix=value notudid=value")
+        self.assertEqual(ordinary, runner.sanitize(ordinary, run_id))
+
     def test_failure_files_keep_only_allowlisted_relative_evidence_paths(self):
         """Failure artifacts must not serialize arbitrary host filesystem paths."""
         def fail_with_paths(_case):
