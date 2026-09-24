@@ -28,7 +28,7 @@ export RUST_TARGET_DIR="<repository-local Rust target directory>"
 
 试运行前仍必须确认：恰好一个 booted/paired/visible physical iPhone（或显式 `SEEKDB_IPHONE_DEVICE`）；profile 覆盖该设备；对应 certificate/private key 可用；依赖为 iphoneos ARM64；当前 checkout 干净；磁盘空间满足构建阈值。若没有可唯一复用的本机 profile，则显式提供 bundle/team 仍要求 Xcode 能在本机完成 provisioning；本轮未用真机构建验证该路径，因此不能仅凭主机测试声称 one-command 真机 ready。
 
-`--suite inventory` 是纯 host-only 路径，不发现设备，也不要求 bundle/team、build、签名或安装。device runner 的 launch、evidence 和 clean-stop 共用一个绝对 deadline，外层 subprocess timeout 另留 120 秒收尾余量，不再把两个独立完整 timeout 串接到较短的外层限制。中断后 resume 会在 checkpoint 记录已通过 case 的 `resume_skip_count` 与 `last_resume_skipped_at`；SQL gate 若已保存首轮完整证据，只续跑 restart 轮。
+`--suite inventory` 是纯 host-only 路径，不发现设备，也不要求 bundle/team、build、签名或安装。device runner 的 launch、evidence 和 clean-stop 共用一个绝对 deadline，外层 subprocess timeout 另留 120 秒收尾余量，不再把两个独立完整 timeout 串接到较短的外层限制。中断后 resume 会在 checkpoint 记录已通过 case 的 `resume_skip_count` 与 `last_resume_skipped_at`；SQL gate 若已保存首轮完整证据，只续跑 restart 轮。每轮 SQL JSONL 都有相邻 metadata，严格绑定 runner run ID、source build ID、selected-device SHA-256、data directory、hook mode、`previous_runs` 和 JSONL digest，文件名也包含由 runner run ID 派生的 scope；同 run resume 可复用，same-day `--restart` 的新 run 绝不接受旧 gate 文件。
 
 最新状态（2026-09-24）：原生 seekdb 引擎已在 iPhone 17 Pro / iOS 27.0 完成 36 步通用 SQL 套件和五轮干净停止。五轮均为 `Stopped/result=0`、`sql_verified=true`，同一数据目录的 `previous_runs` 依次为 0、1、2、3、4；验证后没有新增崩溃报告。日志确认 1 GiB 逻辑预算。测试 App 运行期间保持亮屏，进入 Stopped / Failed 后恢复自动锁屏，不修改系统设置。
 

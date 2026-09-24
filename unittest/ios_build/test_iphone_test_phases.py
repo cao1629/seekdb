@@ -2,6 +2,7 @@
 """Contract tests for standalone iPhone validation phases one through four."""
 
 import json
+import hashlib
 import os
 from pathlib import Path
 import sys
@@ -474,6 +475,53 @@ class IphoneTestPhasesTest(unittest.TestCase):
         case = contracts["registry-smoke"][0]
         inner = int(case.command[case.command.index("--timeout") + 1])
         self.assertGreaterEqual(case.timeout_seconds, inner + 60)
+
+    def test_sql_gate_metadata_binds_run_build_device_data_and_hook_mode(self):
+        """Reject reusable JSONL whose privacy metadata belongs to another run."""
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            configuration = self.configuration(root)
+            prefix = "registry_smoke-run-1"
+            data_name = "standalone-registry_smoke-run-1"
+            validator = phases._sql_restart_validator(
+                root, prefix, configuration, "a" * 40, "run-1",
+                data_name, "enabled")
+            names = []
+            for previous_runs, suffix in enumerate(("first", "restart")):
+                evidence = root / f"evidence-{prefix}-{suffix}.jsonl"
+                evidence.write_text(
+                    '{"complete":true,"result":0}\n', encoding="utf-8")
+                metadata = {
+                    "schema_version": 1,
+                    "runner_run_id": "run-1",
+                    "build_id": "a" * 12,
+                    "device_hash": hashlib.sha256(
+                        b"private-device-token").hexdigest(),
+                    "data_name": data_name,
+                    "hook_mode": "enabled",
+                    "previous_runs": previous_runs,
+                    "evidence_sha256": hashlib.sha256(
+                        evidence.read_bytes()).hexdigest(),
+                }
+                metadata_path = evidence.with_name(
+                    evidence.name + ".meta.json")
+                metadata_path.write_text(
+                    json.dumps(metadata), encoding="utf-8")
+                names.extend((evidence.name, metadata_path.name))
+            process = runner.SanitizedProcessResult(
+                0, json.dumps({
+                    "run_result": 0,
+                    "first_previous_runs": 0,
+                    "second_previous_runs": 1,
+                }), "")
+
+            self.assertEqual(tuple(names), validator(process))
+            first_metadata = root / f"evidence-{prefix}-first.jsonl.meta.json"
+            changed = json.loads(first_metadata.read_text())
+            changed["runner_run_id"] = "old-run"
+            first_metadata.write_text(json.dumps(changed), encoding="utf-8")
+            with self.assertRaises(phases.PhaseEvidenceError):
+                validator(process)
 
 
 if __name__ == "__main__":

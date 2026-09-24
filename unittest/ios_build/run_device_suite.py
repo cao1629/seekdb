@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Launch an installed iOS test suite and validate device-produced JSONL evidence."""
 import argparse
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -212,6 +213,59 @@ def validate_sql_records(records):
         raise ValueError("ordinary SQL evidence is incomplete or failed")
 
 
+def _file_sha256(path):
+    """Return the SHA-256 digest of one bounded host evidence file."""
+    digest = hashlib.sha256()
+    with path.open("rb") as stream:
+        for chunk in iter(lambda: stream.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def sql_evidence_metadata(evidence, options, build_id, previous_runs):
+    """Build privacy-preserving identity metadata for one SQL round."""
+    return {
+        "schema_version": 1,
+        "runner_run_id": options.runner_run_id,
+        "build_id": build_id,
+        "device_hash": hashlib.sha256(
+            options.device.encode("utf-8")).hexdigest(),
+        "data_name": options.data_name,
+        "hook_mode": options.expected_hook_mode,
+        "previous_runs": previous_runs,
+        "evidence_sha256": _file_sha256(evidence),
+    }
+
+
+def sql_evidence_metadata_path(evidence):
+    """Return the run-scoped metadata path adjacent to SQL JSONL evidence."""
+    return evidence.with_name(evidence.name + ".meta.json")
+
+
+def write_sql_evidence_metadata(evidence, options, build_id, previous_runs):
+    """Persist validated SQL provenance without retaining raw device identity."""
+    metadata = sql_evidence_metadata(
+        evidence, options, build_id, previous_runs)
+    destination = sql_evidence_metadata_path(evidence)
+    temporary = destination.with_name(destination.name + ".tmp")
+    temporary.write_text(
+        json.dumps(metadata, sort_keys=True) + "\n", encoding="utf-8")
+    os.replace(temporary, destination)
+
+
+def validate_sql_evidence_metadata(evidence, options, build_id, previous_runs):
+    """Require SQL evidence to match this runner, device, build, and data scope."""
+    metadata_path = sql_evidence_metadata_path(evidence)
+    if not evidence.is_file() or not metadata_path.is_file():
+        return False
+    try:
+        actual = json.loads(metadata_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return False
+    return actual == sql_evidence_metadata(
+        evidence, options, build_id, previous_runs)
+
+
 def validate_sql_terminal_status(status, run_id, build_id, data_name, previous_runs,
                                  expected_hook_mode="disabled"):
     """Require one current ordinary SQL run with the expected persistence count."""
@@ -240,7 +294,8 @@ def copy_sql_evidence(device, bundle_id, destination):
 
 
 def wait_for_sql_round(device, bundle_id, output, deadline, run_id, build_id,
-                       data_name, previous_runs, expected_hook_mode):
+                       data_name, previous_runs, expected_hook_mode,
+                       options=None):
     """Wait for one current ordinary SQL terminal status and copy its evidence."""
     with tempfile.TemporaryDirectory() as temporary_directory:
         status_path = Path(temporary_directory) / "probe-status.json"
@@ -256,6 +311,9 @@ def wait_for_sql_round(device, bundle_id, output, deadline, run_id, build_id,
                         raise IncompleteEvidenceError(
                             "ordinary SQL evidence is not available")
                     validate_sql_records(read_jsonl(output))
+                    if options is not None:
+                        write_sql_evidence_metadata(
+                            output, options, build_id, previous_runs)
                     return
                 except (IncompleteEvidenceError, json.JSONDecodeError, ValueError) as error:
                     last_error = error
@@ -270,7 +328,8 @@ def run_sql_restart(options, build_id, deadline):
         options.output_dir / f"evidence-{options.evidence_prefix}-restart.jsonl",
     )
     for previous_runs, output in enumerate(outputs):
-        if output.is_file():
+        if validate_sql_evidence_metadata(
+                output, options, build_id, previous_runs):
             validate_sql_records(read_jsonl(output))
             continue
         run_id = str(uuid.uuid4())
@@ -288,7 +347,7 @@ def run_sql_restart(options, build_id, deadline):
         wait_for_sql_round(
             options.device, options.bundle_id, output, deadline, run_id,
             build_id, options.data_name, previous_runs,
-            options.expected_hook_mode)
+            options.expected_hook_mode, options=options)
     return {
         "run_result": 0,
         "first_previous_runs": 0,
@@ -349,6 +408,9 @@ def main():
     parser.add_argument(
         "--expected-hook-mode", choices=("enabled", "disabled"),
         default="disabled")
+    parser.add_argument(
+        "--runner-run-id",
+        help="safe standalone runner identity for SQL evidence binding")
     parser.add_argument("--output-dir", type=Path,
                         default=ROOT / "build_ios_arm64/device-evidence/device-suite")
     parser.add_argument("--crash-report-dir", type=Path,
@@ -362,6 +424,11 @@ def main():
     except ValueError as error:
         parser.error(str(error))
     options.evidence_prefix = evidence_prefix
+    if options.sql_restart:
+        try:
+            options.runner_run_id = validate_data_name(options.runner_run_id)
+        except ValueError as error:
+            parser.error(str(error))
     options.output_dir.mkdir(parents=True, exist_ok=True)
     run_id = str(uuid.uuid4())
     build_id = source_build_id()

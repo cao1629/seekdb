@@ -313,7 +313,10 @@ class DeviceEvidenceValidationTests(unittest.TestCase):
             options = SimpleNamespace(
                 output_dir=output, evidence_prefix="gate",
                 device="device", bundle_id="bundle", data_name="shared",
-                expected_hook_mode="enabled")
+                expected_hook_mode="enabled", runner_run_id="runner-1")
+            evidence = output / "evidence-gate-first.jsonl"
+            self.runner.write_sql_evidence_metadata(
+                evidence, options, "build-1", 0)
             with mock.patch.object(
                     self.runner, "devicectl",
                     return_value=SimpleNamespace(returncode=0)) as devicectl, \
@@ -327,6 +330,34 @@ class DeviceEvidenceValidationTests(unittest.TestCase):
         self.assertEqual(1, wait_round.call_count)
         self.assertEqual(1, wait_round.call_args.args[-2])
         self.assertEqual("enabled", wait_round.call_args.args[-1])
+
+    def test_sql_restart_new_run_never_reuses_old_fixed_evidence(self):
+        """A same-day restart must launch even when an old gate file remains."""
+        records = [
+            {"step": step, "case": f"case-{step}", "result": 0}
+            for step in range(1, 37)
+        ] + [{"complete": True, "result": 0}]
+        with tempfile.TemporaryDirectory() as temp:
+            output = Path(temp)
+            evidence = output / "evidence-gate-first.jsonl"
+            evidence.write_text(
+                "".join(json.dumps(record) + "\n" for record in records))
+            old_options = SimpleNamespace(
+                output_dir=output, evidence_prefix="gate",
+                device="device", bundle_id="bundle", data_name="shared",
+                expected_hook_mode="enabled", runner_run_id="old-run")
+            self.runner.write_sql_evidence_metadata(
+                evidence, old_options, "build-1", 0)
+            new_options = SimpleNamespace(
+                **{**vars(old_options), "runner_run_id": "new-run"})
+            with mock.patch.object(
+                    self.runner, "devicectl",
+                    return_value=SimpleNamespace(returncode=0)) as devicectl, \
+                    mock.patch.object(
+                        self.runner, "wait_for_sql_round"):
+                self.runner.run_sql_restart(new_options, "build-1", 100)
+
+        self.assertEqual(2, devicectl.call_count)
 
     def test_complete_invalid_evidence_fails_immediately_while_incomplete_retries(self):
         """Retry only an unfinished prefix and preserve a terminal validation failure."""

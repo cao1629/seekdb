@@ -2,6 +2,7 @@
 """Standalone adapters for iPhone validation phases one through four."""
 
 from dataclasses import dataclass, replace
+import hashlib
 import importlib.util
 import json
 import os
@@ -469,7 +470,9 @@ def _device_validator(
 
 
 def _sql_restart_validator(
-        run_directory: Path, evidence_prefix: str) -> Callable[
+        run_directory: Path, evidence_prefix: str,
+        configuration, source_revision: str, run_id: str,
+        data_name: str, expected_hook_mode: str) -> Callable[
             [runner.SanitizedProcessResult], tuple[str, ...]]:
     """Create a validator for the two-round ordinary SQL restart gate."""
     def validate(
@@ -486,15 +489,50 @@ def _sql_restart_validator(
         }
         if summary != expected:
             raise PhaseEvidenceError("SQL restart gate did not pass")
-        names = (
+        evidence_names = (
             f"evidence-{evidence_prefix}-first.jsonl",
             f"evidence-{evidence_prefix}-restart.jsonl",
         )
-        if any(not (run_directory / name).is_file() for name in names):
-            raise PhaseEvidenceError("SQL restart evidence is missing")
-        return names
+        result_names = []
+        for previous_runs, name in enumerate(evidence_names):
+            evidence = run_directory / name
+            metadata = evidence.with_name(evidence.name + ".meta.json")
+            if not evidence.is_file() or not metadata.is_file():
+                raise PhaseEvidenceError("SQL restart evidence is missing")
+            expected_metadata = {
+                "schema_version": 1,
+                "runner_run_id": run_id,
+                "build_id": source_revision[:12],
+                "device_hash": hashlib.sha256(
+                    (configuration.device or "").encode("utf-8")
+                ).hexdigest(),
+                "data_name": data_name,
+                "hook_mode": expected_hook_mode,
+                "previous_runs": previous_runs,
+                "evidence_sha256": _sha256_file(evidence),
+            }
+            try:
+                actual_metadata = json.loads(metadata.read_text(
+                    encoding="utf-8"))
+            except (OSError, json.JSONDecodeError) as error:
+                raise PhaseEvidenceError(
+                    "SQL restart metadata is invalid") from error
+            if actual_metadata != expected_metadata:
+                raise PhaseEvidenceError(
+                    "SQL restart evidence identity does not match the run")
+            result_names.extend((name, metadata.name))
+        return tuple(result_names)
 
     return validate
+
+
+def _sha256_file(path: Path) -> str:
+    """Hash one evidence file without retaining its contents."""
+    digest = hashlib.sha256()
+    with path.open("rb") as stream:
+        for chunk in iter(lambda: stream.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
 
 
 def _artifact_marker(path: Path) -> Optional[tuple[bytes, bytes]]:
@@ -570,24 +608,30 @@ def _sql_restart_command(
         evidence_prefix: str, run_id: str,
         production: bool) -> tuple[str, ...]:
     """Build one two-round ordinary SQL and same-directory restart command."""
+    data_name = f"standalone-{evidence_prefix}"[:64]
     return (
         sys.executable, str(DEVICE_SUITE_SCRIPT),
         "--device", configuration.device or "",
         "--bundle-id", configuration.bundle_id or "",
-        "--data-name", f"standalone-{evidence_prefix}-{run_id}"[:64],
+        "--data-name", data_name,
         "--timeout", str(SQL_RESTART_INNER_TIMEOUT_SECONDS),
         "--output-dir", str(run_directory),
         "--evidence-prefix", evidence_prefix,
         "--expected-hook-mode", "disabled" if production else "enabled",
+        "--runner-run-id", run_id,
         "--sql-restart",
     )
 
 
 def _sql_restart_contract(
         phase_id: str, configuration, run_directory: Path,
-        run_id: str, *, production: bool = False) -> PhaseCaseContract:
+        source_revision: str, run_id: str,
+        *, production: bool = False) -> PhaseCaseContract:
     """Create one non-optional ordinary SQL persistence gate for a phase."""
-    evidence_prefix = phase_id.replace("-", "_")
+    run_scope = hashlib.sha256(run_id.encode("utf-8")).hexdigest()[:16]
+    evidence_prefix = f"{phase_id.replace('-', '_')}-{run_scope}"[:64]
+    data_name = f"standalone-{evidence_prefix}"[:64]
+    expected_hook_mode = "disabled" if production else "enabled"
     return PhaseCaseContract(
         phase_id=phase_id,
         case_id=SQL_RESTART_CASE_IDS[phase_id],
@@ -597,7 +641,9 @@ def _sql_restart_contract(
             production),
         timeout_seconds=SQL_RESTART_CASE_TIMEOUT_SECONDS,
         evidence_validator=_sql_restart_validator(
-            run_directory, evidence_prefix),
+            run_directory, evidence_prefix, configuration,
+            source_revision=source_revision, run_id=run_id, data_name=data_name,
+            expected_hook_mode=expected_hook_mode),
         requires_sql_restart_followup=False,
         requires_test_app=True,
         requires_production_app=production,
@@ -661,7 +707,8 @@ def create_phase_contracts(
                 requires_test_app=True,
             ),
             _sql_restart_contract(
-                "registry-smoke", configuration, run_directory, run_id),
+                "registry-smoke", configuration, run_directory,
+                source_revision, run_id),
         ),
         "cpp-device-equivalents": (
             *(PhaseCaseContract(
@@ -678,7 +725,7 @@ def create_phase_contracts(
               for case_id in CPP_CASE_IDS),
             _sql_restart_contract(
                 "cpp-device-equivalents", configuration, run_directory,
-                run_id),
+                source_revision, run_id),
         ),
         "rust-device-runtime": (
             *(
@@ -710,7 +757,7 @@ def create_phase_contracts(
             ),
             _sql_restart_contract(
                 "rust-device-runtime", configuration, run_directory,
-                run_id, production=True),
+                source_revision, run_id, production=True),
         ),
     }
     return {

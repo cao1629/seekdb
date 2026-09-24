@@ -21,6 +21,7 @@
 - device launch、evidence poll 与 clean-stop poll 改为共用单一绝对 deadline；adapter 外层 timeout 比内部预算多 120 秒。resume 对每个已通过 case 持久化 skip count/time，供真实 interrupt/resume 试运行审计。
 - `--suite inventory` 走纯 host-only 路径，不发现设备且不 build/sign/install。显式 fresh/empty `RUST_TARGET_DIR` 允许由 Cargo 创建；simulator/x86-only target 和非 iphoneos ARM64 cache 继续严格拒绝。
 - 本轮仍只运行 host contract，未启动真机；真实 interrupt/resume acceptance 留给审查通过后的独立试运行，不能用 mock 结果声称完成。
+- same-day `--restart` 不再可能因目录内残留的固定 SQL 文件零 launch 假通过：gate JSONL/metadata 使用 runner run ID scoped 文件名，并校验 run ID、build ID、selected-device 隐私哈希、data directory、hook mode、`previous_runs` 与内容摘要。只有同一 run 的完整首轮可在 resume 时跳过；新 run 即使看见旧文件也必须实际 launch。
 
 ## 2026-09-24：Rust runtime tests 的真机入口
 
