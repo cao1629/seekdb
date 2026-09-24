@@ -1,2 +1,4 @@
 # The judge keeps its build patches under version control (reference-build.patch, mutations/*.patch, scratch-tree.patch).
 !*.patch
+__pycache__/
+*.pyc

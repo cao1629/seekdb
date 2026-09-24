@@ -1,0 +1,270 @@
+# Multi-connection cases: the configured cases that open more than one connection (family 11, PLAN.md section 4).
+# Produced 2026-09-24 in /Users/colin/seekdb-dev/migrate-to-rust at 7d6dd9141 (branch migrate-to-rust).
+#   tools/deploy is 834bbee1e's: `git diff --quiet 834bbee1e -- tools/deploy .github/script/seekdb/sdb.py` succeeds and
+#   `git status --porcelain -- tools/deploy` prints nothing. The runner is read from 834bbee1e with git show, so the
+#   working tree's runner changes do not move this file.
+# A case opens more than one connection when mysqltest runs a connect command for it: the default connection stays
+#   open, so each connect adds one. Nothing else opens one: no configured case runs a client through exec or system
+#   (the only exec in tools/deploy/mysql_test outside test_suite/config_test is in include/copy_data_for_load.inc,
+#   which runs $SCP_CMD and which no file sources; config_test.config is not configured).
+# How commands are read: the .test and every file it sources (--source or source, followed recursively; paths are
+#   relative to tools/deploy, where the runner starts mysqltest) are split into mysqltest commands the way mysqltest
+#   reads them: '#' lines are comments; a line that starts with -- is one command (a comment when its first word is
+#   not a command); anything else runs to the current delimiter (delimiter changes are followed), outside quotes and
+#   comments. The command is the first word, up to a space, '(' or ';', in any case. if/while/{/} lines are skipped,
+#   and a sourced file is read whatever the if or while around its source line says.
+# 119, not 69. The evidence's scan ("'^(--)?connect(' gives 69", raw/report-workflow-result.json) reads only the
+#   .test files. 50 configured cases open their extra connection in a sourced file: 38 geometry cases through
+#   test_suite/geometry/t/import_default_srs_data_mysql.inc (connect conn_admin), 8 through include/index_quick_major.inc,
+#   2 through include/wait_daily_merge.inc and include/wait_minor_merge.inc, and trx.repeatable_read_transaction and
+#   trx.serializable_transaction through test_suite/trx/include/serializable_or_rr_trans_basic.inc and
+#   serializable_trans_init.inc.
+#   The evidence's rule gives 69 over the 272 configured cases and 74 over the 283 tracked ones, so PLAN.md's 69 (family
+#   11) counts configured cases, not tracked ones as PLAN.md section 4 says of its case counts. This file's rule over
+#   the tracked cases gives 127: these 119 and eight cases the config leaves out (config_test.config, ddl.dump_ddl_mem,
+#   fork_table.fork_table_sstable, geometry.geometry_ddl_mysql, geometry.geometry_index2_mysql,
+#   geometry.st_bestsrid_mysql, update.update2, view.check_privilege).
+# The script prints its counts as '#' lines before the names.
+# Format: one case name per line (the runner's naming), in config order, for the runner's --case-list.
+# Count: grep -vc '^#' migration/judge/lists/multi-connection.txt
+# Reproduce from the worktree root: sed -n 's/^#| \{0,1\}//p' migration/judge/lists/multi-connection.txt | python3 -B -
+#   prints every line that follows the script below (migration/judge/families/concurrency/README.md has the check).
+#| import pathlib, re, subprocess
+#| ns = {"__name__": "census"}
+#| exec(subprocess.check_output(["git", "show", "834bbee1e:.github/script/seekdb/mysqltest_for_seekdb.py"]), ns)
+#| root = pathlib.Path.cwd()
+#| deploy = root / "tools" / "deploy"
+#| LIST = "multi-connection"
+#| BLOCK = re.compile(r"^(if|while)\s*\(.*\)\s*\{?\s*(#.*)?$|^\}?\s*(else\s*)?\{?\s*(#.*)?$", re.I)
+#| WATCH = {"connect", "send", "send_eval", "reap"}
+#| SEND_REAP = {"send", "send_eval", "reap"}
+#| parsed = {}
+#| def first_word(text):
+#|     match = re.match(r"[^\s(;]*", text)
+#|     return match.group(0).lower(), text[match.end():]
+#| def parse(path):
+#|     items, delim, buf, quote, comment = [], ";", "", None, None
+#|     def statement(text):
+#|         nonlocal delim
+#|         word, rest = first_word(text.strip())
+#|         if word == "delimiter":
+#|             delim = rest.strip() or delim
+#|         elif word == "source":
+#|             items.append(("source", rest.strip().rstrip(";").strip()))
+#|         elif word in WATCH:
+#|             items.append(("command", word))
+#|     for raw in path.read_text(encoding="utf-8", errors="replace").splitlines():
+#|         line = raw.strip()
+#|         if not buf.strip() and quote is None and comment is None:
+#|             buf = ""
+#|             if not line or line.startswith("#") or BLOCK.match(line):
+#|                 continue
+#|             if line.startswith("--"):
+#|                 statement(line[2:].lstrip())
+#|                 continue
+#|         text, i, start = raw + "\n", 0, 0
+#|         while i < len(text):
+#|             ch = text[i]
+#|             if comment == "line":
+#|                 if ch == "\n":
+#|                     comment = None
+#|             elif comment == "block":
+#|                 if text.startswith("*/", i):
+#|                     comment, i = None, i + 1
+#|             elif quote:
+#|                 if ch == "\\":
+#|                     i += 1
+#|                 elif ch == quote:
+#|                     quote = None
+#|             elif ch in "'\"`":
+#|                 quote = ch
+#|             elif ch == "#" or text.startswith("-- ", i):
+#|                 comment = "line"
+#|             elif text.startswith("/*", i):
+#|                 comment, i = "block", i + 1
+#|             elif text.startswith(delim, i):
+#|                 statement(buf + text[start:i])
+#|                 buf, start = "", i + len(delim)
+#|                 i = start
+#|                 continue
+#|             i += 1
+#|         buf += text[start:]
+#|     return items
+#| def commands(path, seen, missing):
+#|     if path in seen:
+#|         return
+#|     if not path.is_file():
+#|         missing.add(str(path.relative_to(root)))
+#|         return
+#|     seen.add(path)
+#|     if path not in parsed:
+#|         parsed[path] = parse(path)
+#|     for kind, value in parsed[path]:
+#|         if kind == "source":
+#|             yield from commands(deploy / value, seen, missing)
+#|         else:
+#|             yield path, value
+#| def evidence_rule(test_files):
+#|     connect = send_reap = 0
+#|     for test_file in test_files:
+#|         lines = test_file.read_text(encoding="utf-8", errors="replace").splitlines()
+#|         connect += any(re.match(r"^(--)?connect\s*\(", line) for line in lines)
+#|         send_reap += any(re.match(r"^(--)?(send|reap)", line) for line in lines)
+#|     return connect, send_reap
+#| configured = ns["discover_cases"](root)
+#| tracked = [root / name for name in subprocess.check_output(
+#|     ["git", "ls-files", "tools/deploy/mysql_test/*.test"], text=True).split()]
+#| missing = set()
+#| found = dict((case.name, list(commands(case.test_file, set(), missing))) for case in configured)
+#| tracked_words = [set(word for _, word in commands(path, set(), set())) for path in tracked]
+#| multi = [case for case in configured if any(word == "connect" for _, word in found[case.name])]
+#| direct = [case for case in multi if (case.test_file, "connect") in found[case.name]]
+#| send_reap = [case for case in configured if any(word in SEND_REAP for _, word in found[case.name])]
+#| evidence_configured, evidence_tracked = evidence_rule([case.test_file for case in configured]), evidence_rule(tracked)
+#| print("# configured cases: {}".format(len(configured)))
+#| print("# with a connect command, in the .test or a file it sources (multi-connection.txt): {}".format(len(multi)))
+#| print("#   in the .test itself: {}; only in files the .test sources: {}".format(len(direct), len(multi) - len(direct)))
+#| print("# with a send, send_eval or reap command (send-reap.txt): {}; of them also in multi-connection.txt: {}".format(
+#|     len(send_reap), sum(case in multi for case in send_reap)))
+#| print("# the same rule over the {} tracked .test files: {} with connect, {} with send/send_eval/reap".format(
+#|     len(tracked), sum("connect" in words for words in tracked_words), sum(bool(SEND_REAP & words) for words in tracked_words)))
+#| print("# the evidence's rule (a .test line that starts with connect( or --connect(, or with send or reap; sourced files not"
+#|       " read): {} and {} over the configured cases, {} and {} over the tracked ones".format(
+#|           evidence_configured[0], evidence_configured[1], evidence_tracked[0], evidence_tracked[1]))
+#| print("# sourced files that do not exist (named only on a failure path): {}".format(", ".join(sorted(missing)) or "none"))
+#| if LIST == "multi-connection":
+#|     for case in multi:
+#|         print(case.name)
+#| else:
+#|     for case in send_reap:
+#|         words = [word for _, word in found[case.name]]
+#|         print("# {}: {}".format(case.name, ", ".join(
+#|             "{} {}".format(words.count(word), word) for word in ("connect", "send", "send_eval", "reap") if word in words)))
+#|     for case in send_reap:
+#|         print(case.name)
+# configured cases: 272
+# with a connect command, in the .test or a file it sources (multi-connection.txt): 119
+#   in the .test itself: 69; only in files the .test sources: 50
+# with a send, send_eval or reap command (send-reap.txt): 6; of them also in multi-connection.txt: 6
+# the same rule over the 283 tracked .test files: 127 with connect, 7 with send/send_eval/reap
+# the evidence's rule (a .test line that starts with connect( or --connect(, or with send or reap; sourced files not read): 69 and 6 over the configured cases, 74 and 7 over the tracked ones
+# sourced files that do not exist (named only on a failure path): tools/deploy/include/show_rpl_debug_info.inc
+a_trade_notify
+bug_setEmptyPwd
+bulk_insert
+chinese
+connection
+create_using_type
+generated_column
+idx_const_basic_one_bool
+idx_unique_many_idx_one_ins
+index_14_hint
+index_49_alias
+minitest
+parallel_insert
+sfu
+sfu_norow_alias
+special_hook
+trx_4
+trx_5
+trx_6
+trx_timeout
+two_order_by
+update_behavior
+update_delete_limit_unique_key
+ai_function.ai_model_ddl
+ai_function.ai_model_endpoint_ddl
+ai_function.ai_model_lower_case_name_mysql0
+array.array_arith_op_mysql
+deadlock_detector.trans_deadlock_basic
+executor.trx
+fork_table.fork_table_basic
+fork_table.fork_table_build_data
+fork_table.fork_table_chain
+fork_table.fork_table_cow
+fork_table.fork_table_ddl
+fork_table.fork_table_error
+fork_table.fork_table_fulltext
+fork_table.fork_table_lock
+fork_table.fork_table_merge
+fork_table.fork_table_partition
+fork_table.fork_table_privilege
+fork_table.fork_table_snapshot
+fork_table.fork_table_vector
+fork_table.fork_table_with_constraints
+fork_table.fork_table_with_index
+fork_table.fork_table_with_lob
+fts_index.basic_dml
+fts_index.basic_dml_sequel
+fts_index.cn_word
+fts_index.create_fts_index_afterward
+fts_index.create_table_with_fts_index
+fts_index.drop_index
+fts_index.index_view
+fts_index.load_data
+fts_index.offline_ddl_with_fts_index
+fts_index.online_ddl_on_table_with_fts_index
+fts_index.parser_properties
+fts_index.partitioned_simple_query
+geometry.__all_tenant_spatial_reference_systems
+geometry.create_spatial_index_mysql
+geometry.geometry_basic_mysql
+geometry.geometry_bugfix_mysql
+geometry.geometry_cast_mysql
+geometry.geometry_compare_mysql
+geometry.geometry_ddl_dml_postgis
+geometry.geometry_dml_mysql
+geometry.geometry_filter_mysql
+geometry.geometry_function_mysql
+geometry.geometry_function_postgis
+geometry.geometry_generated_col_mysql
+geometry.geometry_index1_mysql
+geometry.geometry_index_mysql
+geometry.geometry_partition_table_mysql
+geometry.geometry_type_mysql
+geometry.spatial_relation_join_mysql
+geometry.st_area_mysql
+geometry.st_astext_mysql
+geometry.st_aswkb_mysql
+geometry.st_buffer_mysql
+geometry.st_buffer_mysql_from_pg
+geometry.st_covers_mysql
+geometry.st_distance_mysql
+geometry.st_distance_sphere_mysql
+geometry.st_dwithin_mysql
+geometry.st_geometry_columns
+geometry.st_geomfromewkb_mysql
+geometry.st_geomfromtext_mysql
+geometry.st_geomfromwkb_mysql
+geometry.st_intersects_mysql
+geometry.st_intersects_mysql_from_pg
+geometry.st_latitude_mysql
+geometry.st_longitude_mysql
+geometry.st_point_mysql
+geometry.st_srid_mysql
+geometry.st_transform_mysql
+geometry.st_x_mysql
+geometry.st_y_mysql
+histogram.stats_farm
+information_schema.information_schema_desc
+subquery.idx_with_const_expr_21_subquery_dilang
+system_variable.autocommit
+trx.bug_different_tranid_intrx
+trx.repeatable_read_transaction
+trx.serializable_constrains
+trx.serializable_transaction
+trx.trans_weak_read
+vector_index.all_virtual_vector_index_info
+vector_index.create_table_with_vector_index
+vector_index.drop_vector_index
+vector_index.fix_rebuild_or_post_create_hung
+vector_index.rebuild_vector_index
+vector_index.vector_calc_gbk_mysql
+vector_index.vector_calc_utf8_mysql
+vector_index.vector_index_ivfflat_basic
+vector_index.vector_index_ivfflat_dml
+vector_index.vector_index_ivfflat_post_create
+vector_index.vector_index_offline_ddl
+vector_index.vector_index_post_create
+yonyou_test.yonyou
+yonyou_test.yonyou_online_ddl
