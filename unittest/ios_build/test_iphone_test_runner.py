@@ -216,11 +216,67 @@ class IphoneTestRunnerTest(unittest.TestCase):
         missing_phase = checkpoint["phases"][-1]
         self.assertEqual(runner.PHASE_IDS[-1], missing_phase["id"])
         self.assertEqual("failed", missing_phase["status"])
-        self.assertEqual("missing-adapter", missing_phase["cases"][0]["id"])
+        self.assertEqual(
+            f"missing-adapter-{runner.PHASE_IDS[-1]}",
+            missing_phase["cases"][0]["id"],
+        )
         failure = next(self.selection.run_directory.glob(
             f"failure-{runner.PHASE_IDS[-1]}-*.json"))
         self.assertEqual("infrastructure",
                          json.loads(failure.read_text())["failure_category"])
+
+    def test_multiple_missing_adapters_have_phase_qualified_failures(self):
+        """Every absent adapter must persist a distinct case and failure file."""
+        self.assertEqual(1, self.run_engine(self.adapters()[:-2]))
+
+        checkpoint = self.checkpoint()
+        missing_phases = checkpoint["phases"][-2:]
+        self.assertEqual(
+            [f"missing-adapter-{phase_id}"
+             for phase_id in runner.PHASE_IDS[-2:]],
+            [phase["cases"][0]["id"] for phase in missing_phases],
+        )
+        self.assertTrue(all(
+            phase["cases"][0]["status"] == "failed"
+            for phase in missing_phases))
+        failures = list(self.selection.run_directory.glob("failure-*.json"))
+        self.assertEqual(2, len(failures))
+        summary = json.loads(
+            (self.selection.run_directory / "summary.json").read_text())
+        self.assertEqual(2, summary["counts"]["result"]["failed"])
+
+    def test_isolated_failure_stops_before_nonisolated_successor(self):
+        """A prior failure must not dispatch a non-isolated successor case."""
+        executed = []
+        adapters = self.adapters()
+        adapters[0] = runner.PhaseAdapter(
+            phase_id=runner.PHASE_IDS[0],
+            cases=(
+                runner.CaseSpec("isolated-failure", "device-native"),
+                runner.CaseSpec(
+                    "shared-state-successor", "device-native",
+                    isolated=False),
+                runner.CaseSpec("later-isolated", "device-native"),
+            ),
+            execute=lambda case: (
+                executed.append(case.case_id) or
+                (runner.CaseResult.failed(
+                    category="assertion", diagnostic="isolated failure")
+                 if case.case_id == "isolated-failure"
+                 else runner.CaseResult.passed())
+            ),
+        )
+
+        self.assertEqual(1, self.run_engine(adapters))
+
+        checkpoint = self.checkpoint()
+        first_cases = checkpoint["phases"][0]["cases"]
+        self.assertEqual(["isolated-failure"], executed)
+        self.assertEqual(
+            ["failed", "pending", "pending"],
+            [case["status"] for case in first_cases],
+        )
+        self.assertEqual("incomplete", checkpoint["status"])
 
     def test_failure_diagnostics_are_bounded_and_sensitive_values_redacted(self):
         """Artifacts must bound text and redact known keys and foreign UUIDs."""
@@ -270,6 +326,18 @@ class IphoneTestRunnerTest(unittest.TestCase):
         self.assertNotIn(foreign_uuid, result.stdout)
         self.assertLessEqual(len(result.stderr),
                              runner.MAX_PROCESS_OUTPUT_LENGTH)
+
+    def test_redacts_canonical_versionless_and_v7_uuids_except_run_id(self):
+        """Redaction must cover canonical UUID text regardless of version bits."""
+        versionless = "123e4567-e89b-02d3-0456-426614174000"
+        version_seven = "018f3f5e-7b2c-7abc-b123-426614174000"
+        run_id = self.selection.checkpoint["run_id"]
+
+        sanitized = runner.sanitize(
+            f"{versionless} {version_seven} {run_id}", run_id)
+
+        self.assertEqual(f"{runner.REDACTED} {runner.REDACTED} {run_id}",
+                         sanitized)
 
     def test_failure_files_keep_only_allowlisted_relative_evidence_paths(self):
         """Failure artifacts must not serialize arbitrary host filesystem paths."""
@@ -390,6 +458,38 @@ class IphoneTestRunnerTest(unittest.TestCase):
         self.assertEqual(2, cases[0]["attempt_count"])
         self.assertTrue(all(case["attempt_count"] == 1
                             for case in cases[1:]))
+
+    def test_same_day_restart_preserves_prior_run_failure_file(self):
+        """A fresh run must never overwrite an earlier run's case failure."""
+        failing = self.adapters({
+            runner.PHASE_IDS[0]: lambda _case: runner.CaseResult.failed(
+                category="assertion", diagnostic="failed run"),
+        })
+        first_run_id = self.selection.checkpoint["run_id"]
+        self.assertEqual(1, self.run_engine(failing))
+        first_failure = next(self.selection.run_directory.glob("failure-*.json"))
+        first_bytes = first_failure.read_bytes()
+
+        restarted = state.select_run(
+            self.output_root,
+            mode=state.RunMode.RESTART,
+            source_commit="a" * 40,
+            config_fingerprint="b" * 64,
+            now=self.timestamp + dt.timedelta(hours=1),
+        )
+        self.selection = restarted
+        self._selection_consumed = False
+        second_run_id = restarted.checkpoint["run_id"]
+        self.assertEqual(1, self.run_engine(failing))
+
+        failures = sorted(self.selection.run_directory.glob("failure-*.json"))
+        self.assertEqual(2, len(failures))
+        self.assertNotEqual(first_run_id, second_run_id)
+        self.assertEqual(first_bytes, first_failure.read_bytes())
+        self.assertEqual(
+            {first_run_id, second_run_id},
+            {json.loads(path.read_text())["run_id"] for path in failures},
+        )
 
 
 if __name__ == "__main__":

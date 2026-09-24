@@ -31,8 +31,8 @@ MAX_DIAGNOSTIC_LENGTH = 2048
 MAX_PROCESS_OUTPUT_LENGTH = 4096
 REDACTED = "[REDACTED]"
 UUID_PATTERN = re.compile(
-    r"(?i)\b[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-"
-    r"[89ab][0-9a-f]{3}-[0-9a-f]{12}\b")
+    r"(?i)\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-"
+    r"[0-9a-f]{4}-[0-9a-f]{12}\b")
 SENSITIVE_KEYS = frozenset({
     "account",
     "apple_team_id",
@@ -205,9 +205,10 @@ def _slug(value: str) -> str:
     return (slug or "case")[:48].rstrip("-") or "case"
 
 
-def _failure_filename(phase_id: str, case_id: str) -> str:
+def _failure_filename(run_id: str, phase_id: str, case_id: str) -> str:
     """Create a collision-safe stable failure filename for one case ID."""
-    digest = hashlib.sha256(case_id.encode("utf-8")).hexdigest()[:12]
+    digest = hashlib.sha256(
+        f"{run_id}\0{case_id}".encode("utf-8")).hexdigest()[:12]
     return f"failure-{_slug(phase_id)}-{_slug(case_id)}-{digest}.json"
 
 
@@ -281,7 +282,10 @@ def _expected_phases(
         adapter = registry.get(phase_id)
         if adapter is None or not adapter.cases:
             cases = [_case_record(CaseSpec(
-                "missing-adapter", "host-only", isolated=False))]
+                f"missing-adapter-{phase_id}",
+                "host-only",
+                isolated=False,
+            ))]
         else:
             cases = [_case_record(case) for case in adapter.cases]
         phases.append({"id": phase_id, "status": "pending", "cases": cases})
@@ -330,7 +334,8 @@ def _write_failure(
         case: Mapping[str, Any], result: CaseResult,
         later_cases_continued: bool) -> str:
     """Persist one sanitized stable failure file without erasing history."""
-    filename = _failure_filename(phase_id, case["id"])
+    filename = _failure_filename(
+        checkpoint["run_id"], phase_id, case["id"])
     record = sanitize({
         "schema_version": checkpoint["schema_version"],
         "source_commit": checkpoint["source_commit"],
@@ -371,14 +376,19 @@ def _allowlisted_evidence_paths(
     return allowed
 
 
-def _has_later_runnable_case(
-        checkpoint: Mapping[str, Any], phase_id: str, case_id: str) -> bool:
-    """Return whether execution order contains retryable work after one case."""
+def _has_later_isolated_runnable_case(
+        checkpoint: Mapping[str, Any],
+        registry: Mapping[str, PhaseAdapter],
+        phase_id: str, case_id: str) -> bool:
+    """Return whether the next runnable successor is safe to dispatch."""
     found = False
     for phase in checkpoint["phases"]:
         for case in phase["cases"]:
             if found and case["status"] in {"pending", "failed"}:
-                return True
+                adapter = registry.get(phase["id"])
+                if adapter is None:
+                    return False
+                return _find_spec(adapter, case["id"]).isolated
             if phase["id"] == phase_id and case["id"] == case_id:
                 found = True
     return False
@@ -512,6 +522,52 @@ def _find_spec(adapter: PhaseAdapter, case_id: str) -> CaseSpec:
     return next(case for case in adapter.cases if case.case_id == case_id)
 
 
+def _persist_missing_adapters(
+        output_root: Path, run_directory: Path,
+        checkpoint: Dict[str, Any],
+        registry: Mapping[str, PhaseAdapter],
+        now: Callable[[], dt.datetime]) -> bool:
+    """Persist every absent required adapter before any phase command runs."""
+    missing = [
+        phase for phase in checkpoint["phases"]
+        if phase["id"] not in registry or not registry[phase["id"]].cases
+    ]
+    for phase in missing:
+        case = phase["cases"][0]
+        started_at = now()
+        case["status"] = "running"
+        case["attempt_count"] += 1
+        case["started_at"] = started_at.isoformat()
+        case.pop("completed_at", None)
+        _refresh_status(checkpoint)
+        state.save_checkpoint(output_root, run_directory, checkpoint)
+
+        completed_at = now()
+        result = CaseResult.failed(
+            category="infrastructure",
+            diagnostic=f"required adapter is missing: {phase['id']}",
+            retry_safe=False,
+            clean_state=False,
+        )
+        case["status"] = "failed"
+        case["completed_at"] = completed_at.isoformat()
+        case["diagnostic"] = _bounded_diagnostic(
+            result.diagnostic, checkpoint["run_id"])
+        case["failure_category"] = result.category
+        case["exit_status"] = result.exit_status
+        case["evidence_paths"] = []
+        case["retry_safe"] = result.retry_safe
+        case["clean_state"] = result.clean_state
+        case["failure_file"] = _write_failure(
+            output_root, run_directory, checkpoint,
+            phase["id"], case, result,
+            later_cases_continued=False,
+        )
+        _refresh_status(checkpoint)
+        state.save_checkpoint(output_root, run_directory, checkpoint)
+    return bool(missing)
+
+
 def run_phase_engine(
         output_root: Path, selection: state.RunSelection,
         adapters: Iterable[PhaseAdapter],
@@ -524,7 +580,12 @@ def run_phase_engine(
         registry = _adapter_map(adapters)
         _validate_or_initialize_layout(checkpoint, registry)
         state.save_checkpoint(output_root, run_directory, checkpoint)
+        if _persist_missing_adapters(
+                output_root, run_directory, checkpoint, registry, now):
+            write_reports(output_root, run_directory, checkpoint)
+            return 1
         stop_all = False
+        isolated_failure_seen = False
         for phase in checkpoint["phases"]:
             if stop_all:
                 break
@@ -532,6 +593,10 @@ def run_phase_engine(
             for case in phase["cases"]:
                 if case["status"] not in {"pending", "failed"}:
                     continue
+                spec = _find_spec(adapter, case["id"])
+                if isolated_failure_seen and not spec.isolated:
+                    stop_all = True
+                    break
                 current_time = now()
                 case["status"] = "running"
                 case["attempt_count"] += 1
@@ -540,18 +605,7 @@ def run_phase_engine(
                 _refresh_status(checkpoint)
                 state.save_checkpoint(output_root, run_directory, checkpoint)
 
-                if adapter is None or not adapter.cases:
-                    spec = CaseSpec(
-                        "missing-adapter", "host-only", isolated=False)
-                    result = CaseResult.failed(
-                        category="infrastructure",
-                        diagnostic=f"required adapter is missing: {phase['id']}",
-                        retry_safe=False,
-                        clean_state=False,
-                    )
-                else:
-                    spec = _find_spec(adapter, case["id"])
-                    result = _execute_case(adapter, spec)
+                result = _execute_case(adapter, spec)
 
                 completed_time = now()
                 case["status"] = result.status
@@ -575,13 +629,17 @@ def run_phase_engine(
                         output_root, run_directory, checkpoint,
                         phase["id"], case, result,
                         later_cases_continued=(
-                            not unsafe_failure and _has_later_runnable_case(
-                                checkpoint, phase["id"], case["id"])),
+                            not unsafe_failure
+                            and _has_later_isolated_runnable_case(
+                                checkpoint, registry,
+                                phase["id"], case["id"])),
                     )
                 if unsafe_failure:
                     _refresh_status(checkpoint)
                     stop_all = True
                 else:
+                    if result.status == "failed":
+                        isolated_failure_seen = True
                     _refresh_status(checkpoint)
                 state.save_checkpoint(output_root, run_directory, checkpoint)
                 if stop_all:
