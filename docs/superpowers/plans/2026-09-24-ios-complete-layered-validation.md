@@ -56,7 +56,7 @@ Require stable case IDs, duplicate rejection, suite filtering, per-case timeout 
 
 - [ ] **Step 2: Verify RED**
 
-Run `python3 -m unittest unittest.ios_build.test_device_registry -v` and confirm the missing registry and runner cause the expected failures.
+Run `python3 unittest/ios_build/test_device_registry.py -v` and confirm the missing registry and runner cause the expected failures. The direct command is required because the repository's `unittest/` directory conflicts with Python's standard-library `unittest` package when addressed as `unittest.ios_build`.
 
 - [ ] **Step 3: Implement the minimal registry and JSONL writer**
 

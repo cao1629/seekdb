@@ -16,6 +16,7 @@
 - 最终 focused 10 项和完整 iOS host suite 45 项通过。使用 iphoneos SDK 对新 C++ 与 Objective-C++ 源做 compile-only 检查通过，CMake/Xcode 未签名 Release App 完整链接通过。当前提交身份的 `seekdb_ios_link_check` 增量构建通过；Rust host build-script 仍需使用本地忽略目录的 LLDB wrapper 绕过既有 macOS SIGKILL 限制，该 wrapper 不是项目接口或提交内容。
 - Xcode 当前没有登录账号，自动 provisioning 正确失败。随后只在内存中选择唯一 booted/wired 真机，并复用本机现有开发描述文件；脚本核验 bundle、物理设备 provisioning identity、有效期、证书及钥匙串私钥匹配后完成手工 codesign、严格验签和安装。任何 Team、证书、profile、账号或设备唯一标识均未写入仓库证据。
 - `ios.registry.smoke` 真机执行产生 `run_start`、`case_start`、1 条通过 assertion、`case_end` 和 `run_complete`，case/run result 为 0；App 随后达到 `Stopped/result=0`、`suite_result=0`、`cleanup_status=7`、`cleanup_error=0`，工作目录恢复。普通模式使用另一新数据目录完成 36 步 SQL 并干净停止；重启同一目录再次完成 36 步，持久计数从首轮 0 读回为 1。两轮报告均为 36 个成功 step 与最终 `complete/result=0`，且未发现新增相关 crash/Jetsam 报告。
+- Spec review follow-up 把 smoke 记录明确修正为 5 个事件，并在同一个已签名 follow-up HEAD 上严格按 smoke、普通首轮、同一全新目录普通重启轮重新执行。脱敏 JSONL、状态与摘要保存在忽略目录 `build_ios_arm64/device-evidence/task2-final-head/`；顺序执行前后扫描相关 crash/Jetsam 增量，不保存原始 `devicectl`、签名或设备元数据。
 
 ## 2026-09-24：分层测试 Phase 1 启动失败清理
 
