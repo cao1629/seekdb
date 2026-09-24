@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 #include "seekdb_ios.h"
 #include <atomic>
+#include <cstdlib>
 #include <fcntl.h>
 #include <unistd.h>
 #include <curl/curl.h>
@@ -19,6 +20,7 @@ using namespace oceanbase::observer;
 namespace {
 std::atomic<seekdb_ios_state> runtime_state{SEEKDB_IOS_IDLE};
 std::atomic<bool> stop_requested{false};
+std::atomic<unsigned int> cleanup_status{SEEKDB_IOS_CLEANUP_NONE};
 
 /** Create engine-owned directories and configure a bounded, socket-only server. */
 int prepare_runtime(const char *directory, ObServerOptions &options)
@@ -50,6 +52,16 @@ int prepare_runtime(const char *directory, ObServerOptions &options)
   return ret;
 }
 
+/** Stop and destroy a successfully initialized server while preserving its primary error. */
+int cleanup_server(ObServer &server, int primary_ret)
+{
+  server.set_stop();
+  const int cleanup_ret = server.wait();
+  server.destroy();
+  cleanup_status.fetch_or(SEEKDB_IOS_CLEANUP_SERVER);
+  return primary_ret == OB_SUCCESS ? cleanup_ret : primary_ret;
+}
+
 /** Start and stop the singleton without taking ownership of process signals. */
 int run_runtime(ObServerOptions &options)
 {
@@ -62,19 +74,24 @@ int run_runtime(ObServerOptions &options)
   ObPLogWriterCfg log_config;
   ObServer &server = ObServer::get_instance();
   if (OB_FAIL(server.init(options, log_config))) {
-  } else if (OB_FAIL(server.start())) {
   } else {
-    runtime_state.store(SEEKDB_IOS_RUNNING);
-    while (!stop_requested.load()) {
-      usleep(100000);
+#ifdef SEEKDB_IOS_TEST_HOOKS
+    if (nullptr != getenv("SEEKDB_IOS_TEST_FAIL_AFTER_INIT")) {
+      ret = OB_ERR_UNEXPECTED;
     }
-    runtime_state.store(SEEKDB_IOS_STOPPING);
-    server.prepare_stop();
-    server.set_stop();
-    ret = server.wait();
-    server.destroy();
+#endif
+    if (OB_SUCC(ret) && OB_FAIL(server.start())) {
+    }
+    if (OB_SUCC(ret)) {
+      runtime_state.store(SEEKDB_IOS_RUNNING);
+      while (!stop_requested.load()) {
+        usleep(100000);
+      }
+      runtime_state.store(SEEKDB_IOS_STOPPING);
+      server.prepare_stop();
+    }
+    ret = cleanup_server(server, ret);
   }
-  // Failed startup may leave global services initialized; retry is prohibited.
   lib::Worker::set_worker_to_thread_local(nullptr);
   return ret;
 }
@@ -90,7 +107,8 @@ int seekdb_ios_run(const char *absolute_directory)
     return OB_INIT_TWICE;
   }
   int ret = OB_SUCCESS;
-  bool entered_runtime = false;
+  bool curl_initialized = false;
+  cleanup_status.store(SEEKDB_IOS_CLEANUP_NONE);
   const int previous_directory = open(".", O_RDONLY);
   if (previous_directory < 0) {
     ret = OB_IO_ERROR;
@@ -100,15 +118,19 @@ int seekdb_ios_run(const char *absolute_directory)
     } else if (curl_global_init(CURL_GLOBAL_ALL) != CURLE_OK) {
       ret = OB_ERR_UNEXPECTED;
     } else {
-      entered_runtime = true;
+      curl_initialized = true;
       ret = run_runtime(options);
-      // Global curl state remains available if startup left active services.
-      if (OB_SUCC(ret)) {
-        curl_global_cleanup();
-      }
     }
-    if ((!entered_runtime || OB_SUCC(ret)) && fchdir(previous_directory) != 0 && OB_SUCC(ret)) {
-      ret = OB_IO_ERROR;
+    if (curl_initialized) {
+      curl_global_cleanup();
+      cleanup_status.fetch_or(SEEKDB_IOS_CLEANUP_CURL);
+    }
+    if (fchdir(previous_directory) != 0) {
+      if (OB_SUCC(ret)) {
+        ret = OB_IO_ERROR;
+      }
+    } else {
+      cleanup_status.fetch_or(SEEKDB_IOS_CLEANUP_WORKING_DIRECTORY);
     }
     close(previous_directory);
   }
@@ -124,4 +146,9 @@ void seekdb_ios_request_stop(void)
 seekdb_ios_state seekdb_ios_get_state(void)
 {
   return runtime_state.load();
+}
+
+unsigned int seekdb_ios_get_cleanup_status(void)
+{
+  return cleanup_status.load();
 }

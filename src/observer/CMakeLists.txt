@@ -176,9 +176,13 @@ else()
 endif()
 
 if(CMAKE_SYSTEM_NAME STREQUAL "iOS")
+  option(SEEKDB_IOS_TEST_HOOKS "Enable deterministic iOS runtime failure hooks" OFF)
   add_library(seekdb_ios_runtime STATIC EXCLUDE_FROM_ALL ios/seekdb_ios.cpp)
   target_include_directories(seekdb_ios_runtime PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/ios")
   target_link_libraries(seekdb_ios_runtime PUBLIC oceanbase_static sql_nio)
+  if(SEEKDB_IOS_TEST_HOOKS)
+    target_compile_definitions(seekdb_ios_runtime PRIVATE SEEKDB_IOS_TEST_HOOKS=1)
+  endif()
   add_library(seekdb_ios_sql_probe STATIC EXCLUDE_FROM_ALL
     "${CMAKE_SOURCE_DIR}/unittest/ios_build/sql_probe.cpp")
   target_link_libraries(seekdb_ios_sql_probe PUBLIC seekdb_ios_runtime)

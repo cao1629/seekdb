@@ -16,12 +16,20 @@ enum seekdb_ios_state {
   SEEKDB_IOS_FAILED = 5
 };
 
+/** Completed cleanup actions for the current process run. */
+enum seekdb_ios_cleanup_status {
+  SEEKDB_IOS_CLEANUP_NONE = 0,
+  SEEKDB_IOS_CLEANUP_SERVER = 1 << 0,
+  SEEKDB_IOS_CLEANUP_CURL = 1 << 1,
+  SEEKDB_IOS_CLEANUP_WORKING_DIRECTORY = 1 << 2
+};
+
 /**
  * Run the engine synchronously on a dedicated background thread until stopped.
  * The absolute directory must be inside the app's writable sandbox. This changes
- * the process working directory for the engine's lifetime and restores it on
- * clean return. A failed startup may retain global services and the working
- * directory until app exit; restarting the engine in that process is unsupported.
+ * the process working directory for the engine's lifetime and restores it
+ * before returning, including after startup failure. A failed run cannot be
+ * retried in the same process.
  * Uses a 1 GiB logical memory budget, a 128 MiB vector allocation limit, and
  * 2 GiB redo space, with TCP disabled; clients use
  * the engine's Unix socket. Returns an engine error code, or zero on clean stop.
@@ -34,6 +42,9 @@ void seekdb_ios_request_stop(void);
 
 /** Return the current lifecycle state without blocking. */
 enum seekdb_ios_state seekdb_ios_get_state(void);
+
+/** Return completed cleanup actions for the current process run. */
+unsigned int seekdb_ios_get_cleanup_status(void);
 
 #ifdef __cplusplus
 }
