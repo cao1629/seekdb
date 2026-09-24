@@ -241,6 +241,29 @@ class TestInventory(unittest.TestCase):
             with self.assertRaises(generate_test_inventory.InventoryError):
                 generate_test_inventory.reject_untracked_mysqltests(root)
 
+    def test_staged_deletion_of_head_input_is_rejected(self):
+        """Keep deleted HEAD inputs in the relevant set until a new commit exists."""
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            subprocess.run(["git", "init", "-q"], cwd=root, check=True)
+            rust_source = root / "rust/sql-nio/src/lib.rs"
+            rust_source.parent.mkdir(parents=True)
+            rust_source.write_text("pub fn tracked() {}\n", encoding="utf-8")
+            subprocess.run(["git", "add", "."], cwd=root, check=True)
+            subprocess.run(
+                ["git", "-c", "user.name=Inventory Test", "-c",
+                 "user.email=inventory@example.invalid", "commit", "-qm", "fixture"],
+                cwd=root,
+                check=True,
+            )
+            subprocess.run(["git", "rm", "-q", "rust/sql-nio/src/lib.rs"],
+                           cwd=root, check=True)
+
+            relevant = generate_test_inventory.relevant_inventory_inputs_for_revision(root)
+            self.assertIn("rust/sql-nio/src/lib.rs", relevant)
+            with self.assertRaises(generate_test_inventory.InventoryError):
+                generate_test_inventory.assert_relevant_inputs_clean(root, relevant)
+
     def test_documented_focused_command_is_executable(self):
         """Keep the plan on the valid direct focused-test command."""
         plan_path = (

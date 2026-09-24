@@ -15,9 +15,11 @@ mysqltest and orphan GTest ID, a materialized list of all 500 legacy obtest
 IDs, and narrowly scoped per-ID overrides. Exact-set validation rejects new,
 missing, or stale reviewed IDs. Discovery
 uses `git ls-files -z`, so untracked local files cannot silently change the
-reported corpus. Strict generation also rejects relevant staged or unstaged
-tracked changes and untracked active mysqltest files, binding `source_commit`
-to the actual HEAD inputs. Generated inventory and local device logs remain ignored, but
+reported corpus. Strict generation derives relevant paths from the union of
+HEAD and the index, then rejects relevant staged or unstaged tracked changes
+and untracked active mysqltest files. This keeps staged deletions visible and
+binds `source_commit` to the actual HEAD inputs. Generated inventory and local
+device logs remain ignored, but
 important outcomes must be summarized in the tracked iOS build and change-log
 documents.
 

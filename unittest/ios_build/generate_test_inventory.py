@@ -54,6 +54,14 @@ def git_tracked_files(repo_root):
     return sorted(path for path in output.split("\0") if path)
 
 
+def git_head_files(repo_root):
+    """Return sorted repository-relative paths recorded in the HEAD tree."""
+    output = subprocess.check_output(
+        ["git", "ls-tree", "-r", "--name-only", "-z", "HEAD"], cwd=repo_root
+    ).decode("utf-8")
+    return sorted(path for path in output.split("\0") if path)
+
+
 def _is_active_mysqltest_path(path):
     """Return whether a path is an active top-level or suite mysqltest case."""
     if not path.startswith("tools/deploy/mysql_test/") or not path.endswith(".test"):
@@ -121,6 +129,13 @@ def relevant_inventory_inputs(tracked_files):
         elif _is_mysqltest_result_path(path):
             relevant.append(path)
     return sorted(set(relevant))
+
+
+def relevant_inventory_inputs_for_revision(repo_root):
+    """Derive relevant inputs from HEAD union index so deletions remain visible."""
+    revision_paths = set(git_head_files(repo_root))
+    revision_paths.update(git_tracked_files(repo_root))
+    return relevant_inventory_inputs(sorted(revision_paths))
 
 
 def assert_relevant_inputs_clean(repo_root, relevant_paths):
@@ -435,7 +450,7 @@ def build_inventory(repo_root, manifest_path, allow_dirty=False):
         raise InventoryError("classification manifest must be tracked by Git")
     reject_untracked_mysqltests(repo_root)
     if not allow_dirty:
-        relevant_paths = set(relevant_inventory_inputs(tracked_files))
+        relevant_paths = set(relevant_inventory_inputs_for_revision(repo_root))
         relevant_paths.add(manifest_relative)
         assert_relevant_inputs_clean(repo_root, sorted(relevant_paths))
     manifest = _load_manifest(manifest_path)
