@@ -1,0 +1,5 @@
+recording	path	seekdb_sha256 (first 16)	init_sql	case_list	cases	success	compare
+a9-rec-noflag	/Users/colin/seekdb-dev/mysqltest-runs/00b/a9-rec-noflag	157b8a3aa61bf712	deploy/init.sql	plan-bearing.txt	40	True	a9-compare.json: identical=40 different=0 missing=0 problems=[]
+a9-rec-flag	/Users/colin/seekdb-dev/mysqltest-runs/00b/a9-rec-flag	db7d918001aa02c4	deploy/init.sql	plan-bearing.txt	40	True	a9-compare.json: identical=40 different=0 missing=0 problems=[]
+a10-rec1	/Users/colin/seekdb-dev/mysqltest-runs/00b/a10-rec1	db7d918001aa02c4	reduced-init/init.sql	plain-sql.txt	128	True	a10-compare.json: identical=128 different=0 missing=0 problems=[]
+a10-rec2	/Users/colin/seekdb-dev/mysqltest-runs/00b/a10-rec2	db7d918001aa02c4	reduced-init/init.sql	plain-sql.txt	128	True	a10-compare.json: identical=128 different=0 missing=0 problems=[]

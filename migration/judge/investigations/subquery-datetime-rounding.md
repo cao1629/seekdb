@@ -308,3 +308,27 @@ Read-only: nothing was built or run. Additions are marked "[added by the check: 
   the four seed rows as in PLAN.md (with "section" for "§"), and the subquery row pending as action
   4 asks. Unlike the seed rows, its status does not record the coverage outcome (passed in pass A,
   failed in pass B); it is left as written.
+
+## Confirmation on the reference (00b action 7, 2026-09-24)
+
+On the archived reference (/Users/colin/seekdb-dev/ref-archive-834bbee1e/seekdb, sha256
+db7d9180...), full init, retries off; outputs in /Users/colin/seekdb-dev/mysqltest-runs/00b/.
+
+- **The unchanged case, 20 runs through the runner** (`--case-list` naming only it, a fresh instance
+  each run): failed 4 times (runs 10, 12, 14 and 16), passed 16 times.
+- **The diagnostic copy, 20 runs on one instance** (investigations/idx_with_const_expr_21_subquery_dilang.diag.test:
+  the test plus `select now(6) as after_inserts` after line 57 and `select now(6) as before_selects`
+  before the `--replace_column` of the first `-1 microsecond` select; run with deps/3rd's mysqltest
+  and the runner's `OBMYSQL_*` environment). Counting GG1 rows in each output (13 when every select
+  returns the rows, 4 when the nine `-1 microsecond` selects return none):
+
+| Inserts and selects | Runs | GG1 rows |
+|---|---|---|
+| In different seconds | 13 | 13 in all 13 |
+| In the same second | 6 | 4 in all 6 |
+| Probe in the same second, 3 ms before the boundary (run 17: after_inserts 26.260637, before_selects 26.997142) | 1 | 13: the selects themselves ran after the boundary |
+
+The same-second rule explains all 20 runs, and the unchanged case fails at a similar rate. The case
+goes on the quarantine list with this reason (quarantine.tsv). A first attempt at the diagnostic runs
+failed at `connect` in mysql_test/include/index_quick_major.inc because it lacked the runner's
+`OBMYSQL_*` environment; those outputs are kept in mysqltest-runs/00b/a7-diag-noenv/.
