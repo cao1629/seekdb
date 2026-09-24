@@ -542,7 +542,7 @@ def _unit_migrations(
         raise BuildReadinessError(
             "Cargo build-script cache candidate is unsafe")
     hashed = crate / f"build_script_build-{unit_hash}"
-    stale_real = hashed.with_name(f"{hashed.name}.real")
+    expected_real = hashed.with_name(f"{hashed.name}.real")
     final_real = _tracked_launcher_real(final)
     hashed_real = None
     if os.path.lexists(hashed):
@@ -552,7 +552,7 @@ def _unit_migrations(
             raise BuildReadinessError(
                 "Cargo rustc build-script output is unsafe")
         hashed_real = _tracked_launcher_real(hashed)
-    if (final_real is not None and hashed_real == final_real):
+    if (final_real == expected_real and hashed_real == expected_real):
         return None
     if (final_real is None
             and not rustc_lldb_wrapper._is_host_macho_executable(final)):
@@ -564,15 +564,15 @@ def _unit_migrations(
             raise BuildReadinessError(
                 "Cargo rustc build-script output is invalid")
         entries.append(hashed)
-    if os.path.lexists(stale_real):
-        stale_status = stale_real.lstat()
+    if os.path.lexists(expected_real):
+        stale_status = expected_real.lstat()
         if (stat.S_ISLNK(stale_status.st_mode)
                 or not stat.S_ISREG(stale_status.st_mode)
                 or not rustc_lldb_wrapper._is_host_macho_executable(
-                    stale_real)):
+                    expected_real)):
             raise BuildReadinessError(
                 "Cargo rustc build-script preserved output is unsafe")
-        entries.append(stale_real)
+        entries.append(expected_real)
     fingerprint = profile / ".fingerprint" / crate.name
     if os.path.lexists(fingerprint):
         fingerprint_status = fingerprint.lstat()

@@ -424,6 +424,34 @@ class IphoneTestPhasesTest(unittest.TestCase):
         self.assertEqual(0, recovered)
         self.assertFalse(sources_exist)
 
+    def test_wrapped_unit_real_must_match_the_crate_unit_hash(self):
+        """Never accept launchers bound to another Cargo unit's real output."""
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            target = (Path(temporary_directory) / "rust-target").resolve()
+            crate = target / "release/build/pkg-deadbeef12345678"
+            crate.mkdir(parents=True)
+            final = crate / "build-script-build"
+            hashed = crate / "build_script_build-deadbeef12345678"
+            foreign_real = crate / "build_script_build-feedface12345678.real"
+            foreign_real.write_bytes(_host_macho_executable_bytes())
+            foreign_real.chmod(0o755)
+            launcher = phases.rustc_lldb_wrapper._launcher_source(
+                foreign_real)
+            for path in (final, hashed):
+                path.write_text(launcher, encoding="utf-8")
+                path.chmod(0o755)
+
+            migrated = phases.migrate_legacy_raw_build_scripts(
+                target, "mismatch-run")
+            final_exists = final.exists()
+            hashed_exists = hashed.exists()
+            foreign_real_exists = foreign_real.exists()
+
+        self.assertEqual(1, migrated)
+        self.assertFalse(final_exists)
+        self.assertFalse(hashed_exists)
+        self.assertTrue(foreign_real_exists)
+
     @unittest.skipUnless(
         sys.platform == "darwin" and platform.machine() == "arm64"
         and CARGO_198 is not None,
