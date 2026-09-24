@@ -5,8 +5,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-/** Verify SQL and increment a persistent counter; write the prior count and return zero or an engine error. */
-int seekdb_ios_probe_sql(int64_t *previous_runs);
+/** Run generic SQL fixtures and persist per-step evidence when a path is provided. */
+int seekdb_ios_probe_sql(const char *report_path, int64_t *previous_runs);
 #ifdef __cplusplus
 }
 #endif
