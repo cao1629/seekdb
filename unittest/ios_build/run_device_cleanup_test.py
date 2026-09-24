@@ -6,18 +6,23 @@ import os
 from pathlib import Path
 import subprocess
 import time
+import uuid
 
 
 ROOT = Path(__file__).resolve().parents[2]
 REQUIRED_CLEANUP = 0x7
 
 
-def validate_status(status):
+def validate_status(status, expected_run_id):
     """Validate deterministic post-init failure cleanup evidence."""
+    if status.get("run_id") != expected_run_id:
+        raise ValueError("cleanup evidence belongs to a different launch")
     if status.get("state") != "Failed" or not isinstance(status.get("result"), int):
         raise ValueError("engine did not finish in the expected failed state")
     if status["result"] == 0:
         raise ValueError("failure injection unexpectedly succeeded")
+    if status.get("cleanup_error") != 0:
+        raise ValueError("server cleanup reported an error")
     if status.get("cleanup_status", 0) & REQUIRED_CLEANUP != REQUIRED_CLEANUP:
         raise ValueError("required cleanup actions did not complete")
     if status.get("working_directory_restored") is not True:
@@ -48,14 +53,15 @@ def copy_status(device, bundle_id, destination):
     return result.returncode == 0 and destination.is_file()
 
 
-def wait_for_status(device, bundle_id, destination, timeout_seconds):
+def wait_for_status(device, bundle_id, destination, timeout_seconds, run_id):
     """Poll until the probe publishes terminal cleanup evidence."""
     deadline = time.monotonic() + timeout_seconds
     last_status = None
     while time.monotonic() < deadline:
         if copy_status(device, bundle_id, destination):
             last_status = json.loads(destination.read_text())
-            if last_status.get("state") == "Failed" and last_status.get("result") is not None:
+            if (last_status.get("run_id") == run_id and last_status.get("state") == "Failed"
+                    and last_status.get("result") is not None):
                 return last_status
         time.sleep(2)
     raise TimeoutError(f"cleanup evidence did not become terminal: {last_status!r}")
@@ -74,17 +80,19 @@ def main():
         parser.error("timeout must be positive")
     options.output_dir.mkdir(parents=True, exist_ok=True)
     launch_output = options.output_dir / "launch.json"
+    run_id = str(uuid.uuid4())
     launch = devicectl([
         "device", "process", "launch", "--device", options.device,
         "--terminate-existing", "--environment-variables",
-        json.dumps({"SEEKDB_IOS_TEST_FAIL_AFTER_INIT": "1"}),
+        json.dumps({"SEEKDB_IOS_TEST_FAIL_DURING_INIT": "1",
+                    "SEEKDB_IOS_TEST_RUN_ID": run_id}),
         "--timeout", "60", options.bundle_id,
     ], output=launch_output)
     if launch.returncode != 0:
         raise SystemExit(launch.stderr or launch.stdout)
     status_path = options.output_dir / "probe-status.json"
-    status = wait_for_status(options.device, options.bundle_id, status_path, options.timeout)
-    validate_status(status)
+    status = wait_for_status(options.device, options.bundle_id, status_path, options.timeout, run_id)
+    validate_status(status, run_id)
     print(json.dumps(status, indent=2, sort_keys=True))
 
 

@@ -52,11 +52,15 @@ def engine_link_arguments(command, directory):
     return result
 
 
-def require_test_hooks(engine):
-    """Reject packaging unless the selected engine enabled failure hooks."""
+def require_test_hook_mode(engine, expected):
+    """Reject packaging when the engine cache does not match the requested hook mode."""
     cache = engine / "CMakeCache.txt"
-    if not cache.is_file() or "SEEKDB_IOS_TEST_HOOKS:BOOL=ON" not in cache.read_text().splitlines():
-        raise ValueError("engine build does not enable SEEKDB_IOS_TEST_HOOKS")
+    if not cache.is_file():
+        raise ValueError("engine build has no CMake cache")
+    enabled = "SEEKDB_IOS_TEST_HOOKS:BOOL=ON" in cache.read_text().splitlines()
+    if enabled != expected:
+        requested = "enabled" if expected else "disabled"
+        raise ValueError(f"engine build must have SEEKDB_IOS_TEST_HOOKS {requested}")
 
 
 def main():
@@ -76,8 +80,7 @@ def main():
     engine = options.engine_build.resolve()
     if not engine.is_relative_to(ROOT):
         parser.error("engine build must remain inside the seekdb checkout")
-    if options.test_hooks:
-        require_test_hooks(engine)
+    require_test_hook_mode(engine, options.test_hooks)
     directory = engine / "src/observer"
     command = (directory / "CMakeFiles/seekdb_ios_link_check.dir/link.txt").read_text()
     arguments = engine_link_arguments(command, directory)

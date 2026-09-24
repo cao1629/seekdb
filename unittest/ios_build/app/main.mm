@@ -15,8 +15,10 @@
 @property(nonatomic, strong) NSNumber *sqlResult;
 @property(nonatomic, strong) NSNumber *previousRuns;
 @property(nonatomic, strong) NSNumber *cleanupStatus;
+@property(nonatomic, strong) NSNumber *cleanupError;
 @property(nonatomic, strong) NSNumber *workingDirectoryRestored;
 @property(nonatomic, copy) NSString *initialWorkingDirectory;
+@property(nonatomic, copy) NSString *runID;
 @property(nonatomic) BOOL sqlStarted;
 @end
 
@@ -26,6 +28,7 @@
 {
   self.documents = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject;
   self.initialWorkingDirectory = NSFileManager.defaultManager.currentDirectoryPath;
+  self.runID = NSProcessInfo.processInfo.environment[@"SEEKDB_IOS_TEST_RUN_ID"] ?: @"ordinary-run";
   NSString *requestedName = NSProcessInfo.processInfo.environment[@"SEEKDB_PROBE_DATA_NAME"];
   NSCharacterSet *invalid = [[NSCharacterSet characterSetWithCharactersInString:
       @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-"] invertedSet];
@@ -67,12 +70,14 @@
     NSString *directory = [self.documents stringByAppendingPathComponent:self.dataName];
     int result = seekdb_ios_run(directory.fileSystemRepresentation);
     unsigned int cleanupStatus = seekdb_ios_get_cleanup_status();
+    int cleanupError = seekdb_ios_get_cleanup_error();
     BOOL workingDirectoryRestored =
         [NSFileManager.defaultManager.currentDirectoryPath isEqualToString:self.initialWorkingDirectory];
     NSLog(@"seekdb_ios_run returned %d", result);
     dispatch_async(dispatch_get_main_queue(), ^{
       self.result = @(result);
       self.cleanupStatus = @(cleanupStatus);
+      self.cleanupError = @(cleanupError);
       self.workingDirectoryRestored = @(workingDirectoryRestored);
       [self refreshStatus];
     });
@@ -125,7 +130,9 @@
                            @"sql_result": self.sqlResult ?: NSNull.null,
                            @"previous_runs": self.previousRuns ?: NSNull.null,
                            @"cleanup_status": self.cleanupStatus ?: NSNull.null,
+                           @"cleanup_error": self.cleanupError ?: NSNull.null,
                            @"working_directory_restored": self.workingDirectoryRestored ?: NSNull.null,
+                           @"run_id": self.runID,
                            @"timestamp": @([[NSDate date] timeIntervalSince1970])};
   NSError *error = nil;
   NSData *data = [NSJSONSerialization dataWithJSONObject:status options:NSJSONWritingPrettyPrinted error:&error];

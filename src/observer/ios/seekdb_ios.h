@@ -46,6 +46,9 @@ enum seekdb_ios_state seekdb_ios_get_state(void);
 /** Return completed cleanup actions for the current process run. */
 unsigned int seekdb_ios_get_cleanup_status(void);
 
+/** Return the first cleanup error without replacing the primary runtime error. */
+int seekdb_ios_get_cleanup_error(void);
+
 #ifdef __cplusplus
 }
 #endif

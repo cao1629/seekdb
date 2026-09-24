@@ -44,13 +44,16 @@ class AppLinkTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             APP.engine_link_arguments("clang++ probe.o -o probe -lm", ROOT)
 
-    def test_test_hooks_require_an_enabled_engine_cache(self):
-        """Reject failure-injection packaging unless the engine enabled hooks."""
-        self.assertTrue(hasattr(APP, "require_test_hooks"), "test-hook guard is missing")
+    def test_packaging_requires_the_requested_test_hook_mode(self):
+        """Reject both hookless test packages and hook-enabled ordinary packages."""
+        self.assertTrue(hasattr(APP, "require_test_hook_mode"), "test-hook guard is missing")
         with tempfile.TemporaryDirectory() as temporary:
             engine = Path(temporary)
             (engine / "CMakeCache.txt").write_text("SEEKDB_IOS_TEST_HOOKS:BOOL=OFF\n")
             with self.assertRaises(ValueError):
-                APP.require_test_hooks(engine)
+                APP.require_test_hook_mode(engine, True)
+            APP.require_test_hook_mode(engine, False)
             (engine / "CMakeCache.txt").write_text("SEEKDB_IOS_TEST_HOOKS:BOOL=ON\n")
-            APP.require_test_hooks(engine)
+            APP.require_test_hook_mode(engine, True)
+            with self.assertRaises(ValueError):
+                APP.require_test_hook_mode(engine, False)

@@ -25,6 +25,7 @@
 #include <windows.h>
 #endif
 #include <thread>
+#include <cstdlib>
 #include "observer/ob_server.h"
 #include "share/ob_autoincrement_service.h"
 #include "observer/ob_req_time_service.h"
@@ -685,6 +686,12 @@ int ObServer::init(const ObServerOptions &opts, const ObPLogWriterCfg &log_cfg)
       LOG_ERROR("start timer service failed", KR(ret));
     }
   }
+#ifdef SEEKDB_IOS_TEST_HOOKS
+  if (OB_SUCC(ret) && nullptr != std::getenv("SEEKDB_IOS_TEST_FAIL_DURING_INIT")) {
+    ret = OB_ERR_UNEXPECTED;
+    LOG_WARN("injected iOS init failure after timer service startup", KR(ret));
+  }
+#endif
 
     if (FAILEDx(OB_LOGGER.init(log_cfg))) {
       LOG_ERROR("async log init error.", KR(ret));
@@ -858,7 +865,9 @@ int ObServer::init(const ObServerOptions &opts, const ObPLogWriterCfg &log_cfg)
     Sleep(3000);
 #endif
     set_stop();
-    destroy();
+    if (!in_process_) {
+      destroy();
+    }
   } else {
     FLOG_INFO("[OBSERVER_NOTICE] success to init observer",
         "lib::g_runtime_enabled", lib::g_runtime_enabled);

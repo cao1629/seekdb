@@ -20,17 +20,28 @@ class RuntimeCleanupContractTests(unittest.TestCase):
         self.assertIn("SEEKDB_IOS_CLEANUP_CURL", header)
         self.assertIn("SEEKDB_IOS_CLEANUP_WORKING_DIRECTORY", header)
         self.assertIn("seekdb_ios_get_cleanup_status", header)
+        self.assertIn("seekdb_ios_get_cleanup_error", header)
         self.assertIn("curl_initialized", source)
         self.assertIn('@"cleanup_status"', app)
+        self.assertIn('@"cleanup_error"', app)
         self.assertIn('@"working_directory_restored"', app)
 
     def test_failure_hook_is_test_only(self):
         """Compile deterministic startup failure only when explicitly enabled."""
         cmake = (ROOT / "src/observer/CMakeLists.txt").read_text()
-        source = (ROOT / "src/observer/ios/seekdb_ios.cpp").read_text()
+        source = (ROOT / "src/observer/ob_server.cpp").read_text()
         self.assertIn("SEEKDB_IOS_TEST_HOOKS", cmake)
         self.assertIn("#ifdef SEEKDB_IOS_TEST_HOOKS", source)
-        self.assertIn("SEEKDB_IOS_TEST_FAIL_AFTER_INIT", source)
+        server = (ROOT / "src/observer/ob_server.cpp").read_text()
+        self.assertIn("SEEKDB_IOS_TEST_FAIL_DURING_INIT", server)
+        self.assertIn("if (!in_process_)", server)
+
+    def test_server_cleanup_is_only_reported_after_success(self):
+        """Do not report completed server cleanup when the stop path failed."""
+        source = (ROOT / "src/observer/ios/seekdb_ios.cpp").read_text()
+        success = source.index("if (OB_SUCCESS == cleanup_ret)")
+        status = source.index("cleanup_status.fetch_or(SEEKDB_IOS_CLEANUP_SERVER)")
+        self.assertLess(success, status)
 
 
 class DeviceCleanupEvidenceTests(unittest.TestCase):
@@ -45,25 +56,30 @@ class DeviceCleanupEvidenceTests(unittest.TestCase):
 
     def test_accepts_complete_failed_startup_cleanup(self):
         """Accept a nonzero failed run only when every cleanup action completed."""
-        status = {"state": "Failed", "result": -4016, "cleanup_status": 7,
-                  "working_directory_restored": True}
-        self.runner.validate_status(status)
+        status = {"state": "Failed", "result": -4016, "cleanup_error": 0,
+                  "cleanup_status": 7, "working_directory_restored": True,
+                  "run_id": "current-run"}
+        self.runner.validate_status(status, "current-run")
 
     def test_rejects_incomplete_or_successful_evidence(self):
         """Reject missing cleanup actions, incomplete state, and zero results."""
         invalid = [
-            {"state": "Running", "result": None, "cleanup_status": 0,
-             "working_directory_restored": False},
-            {"state": "Failed", "result": 0, "cleanup_status": 7,
-             "working_directory_restored": True},
-            {"state": "Failed", "result": -4016, "cleanup_status": 6,
-             "working_directory_restored": True},
-            {"state": "Failed", "result": -4016, "cleanup_status": 7,
-             "working_directory_restored": False},
+            {"state": "Running", "result": None, "cleanup_error": 0,
+             "cleanup_status": 0, "working_directory_restored": False, "run_id": "current-run"},
+            {"state": "Failed", "result": 0, "cleanup_error": 0,
+             "cleanup_status": 7, "working_directory_restored": True, "run_id": "current-run"},
+            {"state": "Failed", "result": -4016, "cleanup_error": -1,
+             "cleanup_status": 7, "working_directory_restored": True, "run_id": "current-run"},
+            {"state": "Failed", "result": -4016, "cleanup_error": 0,
+             "cleanup_status": 6, "working_directory_restored": True, "run_id": "current-run"},
+            {"state": "Failed", "result": -4016, "cleanup_error": 0,
+             "cleanup_status": 7, "working_directory_restored": False, "run_id": "current-run"},
+            {"state": "Failed", "result": -4016, "cleanup_error": 0,
+             "cleanup_status": 7, "working_directory_restored": True, "run_id": "stale-run"},
         ]
         for status in invalid:
             with self.subTest(status=status), self.assertRaises(ValueError):
-                self.runner.validate_status(status)
+                self.runner.validate_status(status, "current-run")
 
 
 if __name__ == "__main__":

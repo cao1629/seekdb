@@ -182,6 +182,7 @@ if(CMAKE_SYSTEM_NAME STREQUAL "iOS")
   target_link_libraries(seekdb_ios_runtime PUBLIC oceanbase_static sql_nio)
   if(SEEKDB_IOS_TEST_HOOKS)
     target_compile_definitions(seekdb_ios_runtime PRIVATE SEEKDB_IOS_TEST_HOOKS=1)
+    target_compile_definitions(ob_server PRIVATE SEEKDB_IOS_TEST_HOOKS=1)
   endif()
   add_library(seekdb_ios_sql_probe STATIC EXCLUDE_FROM_ALL
     "${CMAKE_SOURCE_DIR}/unittest/ios_build/sql_probe.cpp")

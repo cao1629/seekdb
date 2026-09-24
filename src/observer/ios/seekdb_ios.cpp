@@ -21,6 +21,16 @@ namespace {
 std::atomic<seekdb_ios_state> runtime_state{SEEKDB_IOS_IDLE};
 std::atomic<bool> stop_requested{false};
 std::atomic<unsigned int> cleanup_status{SEEKDB_IOS_CLEANUP_NONE};
+std::atomic<int> cleanup_error{OB_SUCCESS};
+
+/** Preserve the first cleanup failure for diagnostics. */
+void record_cleanup_error(int error)
+{
+  int expected = OB_SUCCESS;
+  if (OB_SUCCESS != error) {
+    cleanup_error.compare_exchange_strong(expected, error);
+  }
+}
 
 /** Create engine-owned directories and configure a bounded, socket-only server. */
 int prepare_runtime(const char *directory, ObServerOptions &options)
@@ -52,13 +62,17 @@ int prepare_runtime(const char *directory, ObServerOptions &options)
   return ret;
 }
 
-/** Stop and destroy a successfully initialized server while preserving its primary error. */
+/** Stop and destroy an in-process server while preserving its primary error. */
 int cleanup_server(ObServer &server, int primary_ret)
 {
   server.set_stop();
   const int cleanup_ret = server.wait();
   server.destroy();
-  cleanup_status.fetch_or(SEEKDB_IOS_CLEANUP_SERVER);
+  if (OB_SUCCESS == cleanup_ret) {
+    cleanup_status.fetch_or(SEEKDB_IOS_CLEANUP_SERVER);
+  } else {
+    record_cleanup_error(cleanup_ret);
+  }
   return primary_ret == OB_SUCCESS ? cleanup_ret : primary_ret;
 }
 
@@ -75,12 +89,7 @@ int run_runtime(ObServerOptions &options)
   ObServer &server = ObServer::get_instance();
   if (OB_FAIL(server.init(options, log_config))) {
   } else {
-#ifdef SEEKDB_IOS_TEST_HOOKS
-    if (nullptr != getenv("SEEKDB_IOS_TEST_FAIL_AFTER_INIT")) {
-      ret = OB_ERR_UNEXPECTED;
-    }
-#endif
-    if (OB_SUCC(ret) && OB_FAIL(server.start())) {
+    if (OB_FAIL(server.start())) {
     }
     if (OB_SUCC(ret)) {
       runtime_state.store(SEEKDB_IOS_RUNNING);
@@ -90,8 +99,8 @@ int run_runtime(ObServerOptions &options)
       runtime_state.store(SEEKDB_IOS_STOPPING);
       server.prepare_stop();
     }
-    ret = cleanup_server(server, ret);
   }
+  ret = cleanup_server(server, ret);
   lib::Worker::set_worker_to_thread_local(nullptr);
   return ret;
 }
@@ -109,6 +118,7 @@ int seekdb_ios_run(const char *absolute_directory)
   int ret = OB_SUCCESS;
   bool curl_initialized = false;
   cleanup_status.store(SEEKDB_IOS_CLEANUP_NONE);
+  cleanup_error.store(OB_SUCCESS);
   const int previous_directory = open(".", O_RDONLY);
   if (previous_directory < 0) {
     ret = OB_IO_ERROR;
@@ -126,13 +136,19 @@ int seekdb_ios_run(const char *absolute_directory)
       cleanup_status.fetch_or(SEEKDB_IOS_CLEANUP_CURL);
     }
     if (fchdir(previous_directory) != 0) {
+      record_cleanup_error(OB_IO_ERROR);
       if (OB_SUCC(ret)) {
         ret = OB_IO_ERROR;
       }
     } else {
       cleanup_status.fetch_or(SEEKDB_IOS_CLEANUP_WORKING_DIRECTORY);
     }
-    close(previous_directory);
+    if (close(previous_directory) != 0) {
+      record_cleanup_error(OB_IO_ERROR);
+      if (OB_SUCC(ret)) {
+        ret = OB_IO_ERROR;
+      }
+    }
   }
   runtime_state.store(OB_SUCC(ret) ? SEEKDB_IOS_STOPPED : SEEKDB_IOS_FAILED);
   return ret;
@@ -151,4 +167,9 @@ seekdb_ios_state seekdb_ios_get_state(void)
 unsigned int seekdb_ios_get_cleanup_status(void)
 {
   return cleanup_status.load();
+}
+
+int seekdb_ios_get_cleanup_error(void)
+{
+  return cleanup_error.load();
 }
