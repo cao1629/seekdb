@@ -1,0 +1,21 @@
+deps_clone rc=0 secs=3
+full_build rc=0 secs=314
+noop_rebuild rc=0 secs=1
+leaf_cpp_rebuild rc=0 secs=9
+leaf_cpp2_rebuild rc=0 secs=37
+-rwxr-xr-x@ 1 colin  staff  192891896 Sep 24 11:40 build_release/src/observer/seekdb
+<jemalloc>: option background_thread currently supports pthread only
+Starting seekdb (OceanBase seekdb 1.4.0.0) source revision 1-076eb309b8e92e6235190d9197dd52c1df276738.
+(null) (OceanBase seekdb 1.4.0.0)
+
+REVISION: 1-076eb309b8e92e6235190d9197dd52c1df276738
+BUILD_BRANCH: migrate-to-rust
+BUILD_TIME: Sep 24 2026 11:39:26
+BUILD_FLAGS: RelWithDebInfo
+BUILD_INFO: 
+
+Copyright (c) 2011-present OceanBase Inc.
+
+cargo_check_warm rc=0 secs=7
+cargo_build_sqlnio_release rc=0 secs=17
+DONE
