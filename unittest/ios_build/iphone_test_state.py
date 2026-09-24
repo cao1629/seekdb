@@ -84,6 +84,11 @@ class RunSelection:
         """Release this selection's runner-lifetime lock."""
         self.lock.release()
 
+    def ensure_locked(self) -> None:
+        """Reject use after the runner-lifetime lock has been released."""
+        if not self.lock.is_held:
+            raise RunLockedError("run selection no longer holds its lock")
+
     def __enter__(self):
         """Return a selection whose lock is already held."""
         return self
@@ -131,6 +136,11 @@ class RunLock:
                     from error
             raise
         self._descriptor = descriptor
+
+    @property
+    def is_held(self) -> bool:
+        """Return whether this object still owns an open lock descriptor."""
+        return self._descriptor is not None
 
     def release(self) -> None:
         """Release the held advisory lock and close its descriptor."""
@@ -578,6 +588,44 @@ def save_checkpoint(
         temporary_name = None
         os.fsync(run_fd)
         checkpoint["generation"] = persisted["generation"]
+    finally:
+        if temporary_name is not None:
+            try:
+                os.unlink(temporary_name, dir_fd=run_fd)
+            except FileNotFoundError:
+                pass
+        _close_run_directories(root_fd, run_fd)
+
+
+def save_run_artifact(
+        output_root: Path, run_directory: Path, filename: str,
+        content: bytes, preserve_existing: bool = False) -> None:
+    """Atomically save one direct-child artifact while its caller owns the lock."""
+    if (not filename or Path(filename).name != filename
+            or filename in {".", "..", CHECKPOINT_FILENAME, LOCK_FILENAME}):
+        raise UnsafeRunPathError("artifact name must be a safe direct child")
+    if not isinstance(content, bytes):
+        raise TypeError("artifact content must be bytes")
+    root_fd, run_fd, _ = _open_run_directory(
+        output_root, run_directory, create=False)
+    temporary_name = None
+    try:
+        if preserve_existing and _entry_exists(run_fd, filename):
+            return
+        temporary_name = f".{filename}.{uuid.uuid4().hex}.tmp"
+        descriptor = _open_file_at(
+            run_fd, temporary_name,
+            os.O_WRONLY | os.O_CREAT | os.O_EXCL,
+        )
+        with os.fdopen(descriptor, mode="wb") as output:
+            output.write(content)
+            output.flush()
+            os.fsync(output.fileno())
+        os.replace(
+            temporary_name, filename,
+            src_dir_fd=run_fd, dst_dir_fd=run_fd)
+        temporary_name = None
+        os.fsync(run_fd)
     finally:
         if temporary_name is not None:
             try:
