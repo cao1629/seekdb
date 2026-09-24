@@ -240,25 +240,73 @@ class IphoneTestRunnerTest(unittest.TestCase):
         self.assertEqual("infrastructure",
                          json.loads(failure.read_text())["failure_category"])
 
-    def test_multiple_missing_adapters_have_phase_qualified_failures(self):
-        """Every absent adapter must persist a distinct case and failure file."""
-        self.assertEqual(1, self.run_engine(self.adapters()[:-2]))
+    def test_missing_adapters_fail_only_when_reached_in_phase_order(self):
+        """Run registered predecessors before failing the first missing phase."""
+        calls = []
+        adapters = self.adapters()[:4]
+        adapters = [runner.PhaseAdapter(
+            phase_id=adapter.phase_id,
+            cases=adapter.cases,
+            execute=lambda case: (
+                calls.append(case.case_id) or runner.CaseResult.passed()),
+        ) for adapter in adapters]
+
+        self.assertEqual(1, self.run_engine(adapters))
 
         checkpoint = self.checkpoint()
-        missing_phases = checkpoint["phases"][-2:]
         self.assertEqual(
-            [f"missing-adapter-{phase_id}"
-             for phase_id in runner.PHASE_IDS[-2:]],
-            [phase["cases"][0]["id"] for phase in missing_phases],
+            ["case-1", "case-2", "case-3", "case-4"], calls)
+        self.assertEqual(
+            ["passed"] * 4 + ["failed"] + ["pending"] * 3,
+            [phase["status"] for phase in checkpoint["phases"]],
         )
-        self.assertTrue(all(
-            phase["cases"][0]["status"] == "failed"
-            for phase in missing_phases))
+        self.assertEqual(
+            f"missing-adapter-{runner.PHASE_IDS[4]}",
+            checkpoint["phases"][4]["cases"][0]["id"],
+        )
         failures = list(self.selection.run_directory.glob("failure-*.json"))
-        self.assertEqual(2, len(failures))
-        summary = json.loads(
-            (self.selection.run_directory / "summary.json").read_text())
-        self.assertEqual(2, summary["counts"]["result"]["failed"])
+        self.assertEqual(1, len(failures))
+        self.assertEqual(
+            runner.PHASE_IDS[4],
+            json.loads(failures[0].read_text())["phase"],
+        )
+
+    def test_resume_skips_passed_predecessors_and_retries_first_missing_phase(self):
+        """Resume must preserve passed work and retry the ordered missing gate."""
+        adapters = self.adapters()[:4]
+        self.assertEqual(1, self.run_engine(adapters))
+
+        resumed = state.select_run(
+            self.output_root,
+            mode=state.RunMode.RESUME,
+            source_commit="a" * 40,
+            config_fingerprint="b" * 64,
+            now=self.timestamp + dt.timedelta(hours=1),
+        )
+        self.selection = resumed
+        self._selection_consumed = False
+        calls = []
+        resumed_adapters = [runner.PhaseAdapter(
+            phase_id=adapter.phase_id,
+            cases=adapter.cases,
+            execute=lambda case: (
+                calls.append(case.case_id) or runner.CaseResult.passed()),
+        ) for adapter in adapters]
+
+        self.assertEqual(1, self.run_engine(resumed_adapters))
+
+        checkpoint = self.checkpoint()
+        self.assertEqual([], calls)
+        self.assertTrue(all(
+            phase["cases"][0]["attempt_count"] == 1
+            and phase["cases"][0]["resume_skip_count"] == 1
+            for phase in checkpoint["phases"][:4]))
+        self.assertEqual(
+            2, checkpoint["phases"][4]["cases"][0]["attempt_count"])
+        self.assertEqual("failed", checkpoint["phases"][4]["status"])
+        self.assertTrue(all(
+            phase["status"] == "pending"
+            for phase in checkpoint["phases"][5:]))
 
     def test_isolated_failure_stops_before_nonisolated_successor(self):
         """A prior failure must not dispatch a non-isolated successor case."""

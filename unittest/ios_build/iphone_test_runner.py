@@ -673,50 +673,44 @@ def _find_spec(adapter: PhaseAdapter, case_id: str) -> CaseSpec:
     return next(case for case in adapter.cases if case.case_id == case_id)
 
 
-def _persist_missing_adapters(
+def _persist_missing_adapter(
         output_root: Path, run_directory: Path,
         checkpoint: Dict[str, Any],
-        registry: Mapping[str, PhaseAdapter],
-        now: Callable[[], dt.datetime]) -> bool:
-    """Persist every absent required adapter before any phase command runs."""
-    missing = [
-        phase for phase in checkpoint["phases"]
-        if phase["id"] not in registry or not registry[phase["id"]].cases
-    ]
-    for phase in missing:
-        case = phase["cases"][0]
-        started_at = now()
-        case["status"] = "running"
-        case["attempt_count"] += 1
-        case["started_at"] = started_at.isoformat()
-        case.pop("completed_at", None)
-        _refresh_status(checkpoint)
-        state.save_checkpoint(output_root, run_directory, checkpoint)
+        phase: Dict[str, Any],
+        now: Callable[[], dt.datetime]) -> None:
+    """Persist one missing adapter only after ordered execution reaches it."""
+    case = phase["cases"][0]
+    started_at = now()
+    case["status"] = "running"
+    case["attempt_count"] += 1
+    case["started_at"] = started_at.isoformat()
+    case.pop("completed_at", None)
+    _refresh_status(checkpoint)
+    state.save_checkpoint(output_root, run_directory, checkpoint)
 
-        completed_at = now()
-        result = CaseResult.failed(
-            category="infrastructure",
-            diagnostic=f"required adapter is missing: {phase['id']}",
-            retry_safe=False,
-            clean_state=False,
-        )
-        case["status"] = "failed"
-        case["completed_at"] = completed_at.isoformat()
-        case["diagnostic"] = _bounded_diagnostic(
-            result.diagnostic, checkpoint["run_id"])
-        case["failure_category"] = result.category
-        case["exit_status"] = result.exit_status
-        case["evidence_paths"] = []
-        case["retry_safe"] = result.retry_safe
-        case["clean_state"] = result.clean_state
-        case["failure_file"] = _write_failure(
-            output_root, run_directory, checkpoint,
-            phase["id"], case, result,
-            later_cases_continued=False,
-        )
-        _refresh_status(checkpoint)
-        state.save_checkpoint(output_root, run_directory, checkpoint)
-    return bool(missing)
+    completed_at = now()
+    result = CaseResult.failed(
+        category="infrastructure",
+        diagnostic=f"required adapter is missing: {phase['id']}",
+        retry_safe=False,
+        clean_state=False,
+    )
+    case["status"] = "failed"
+    case["completed_at"] = completed_at.isoformat()
+    case["diagnostic"] = _bounded_diagnostic(
+        result.diagnostic, checkpoint["run_id"])
+    case["failure_category"] = result.category
+    case["exit_status"] = result.exit_status
+    case["evidence_paths"] = []
+    case["retry_safe"] = result.retry_safe
+    case["clean_state"] = result.clean_state
+    case["failure_file"] = _write_failure(
+        output_root, run_directory, checkpoint,
+        phase["id"], case, result,
+        later_cases_continued=False,
+    )
+    _refresh_status(checkpoint)
+    state.save_checkpoint(output_root, run_directory, checkpoint)
 
 
 def run_phase_engine(
@@ -741,16 +735,18 @@ def run_phase_engine(
         _validate_or_initialize_layout(
             checkpoint, registry, ordered_phase_ids)
         state.save_checkpoint(output_root, run_directory, checkpoint)
-        if _persist_missing_adapters(
-                output_root, run_directory, checkpoint, registry, now):
-            write_reports(output_root, run_directory, checkpoint)
-            return 1
         stop_all = False
         isolated_failure_seen = False
         for phase in checkpoint["phases"]:
             if stop_all:
                 break
             adapter = registry.get(phase["id"])
+            if adapter is None or not adapter.cases:
+                if not isolated_failure_seen:
+                    _persist_missing_adapter(
+                        output_root, run_directory, checkpoint, phase, now)
+                stop_all = True
+                break
             for case in phase["cases"]:
                 if selection.resumed and case["status"] == "passed":
                     case["resume_skip_count"] = (
