@@ -47,6 +47,9 @@ public:
   /** Add a valid unique case, returning false for invalid or duplicate registrations. */
   bool add(DeviceTestCase test_case);
 
+  /** Add every case from another registry, returning false on any conflict. */
+  bool add_all(const DeviceTestRegistry &other);
+
   /** Select cases by exact suite and a glob filter supporting '*' and '?'. */
   std::vector<const DeviceTestCase *> select(const std::string &suite, const std::string &filter) const;
 
@@ -59,6 +62,12 @@ private:
 
 /** Create the built-in smoke registry that proves device execution and assertion capture. */
 DeviceTestRegistry make_smoke_registry();
+
+/** Create the device registry for iOS-supported C++ behavior. */
+DeviceTestRegistry make_cpp_device_registry();
+
+/** Create the complete built-in registry used by the signed test App. */
+DeviceTestRegistry make_device_registry();
 
 /** Run a selected suite and return nonzero after any registration, evidence, or case failure. */
 int run_device_suite(const DeviceTestRegistry &registry, const std::string &suite, const std::string &filter,

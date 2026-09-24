@@ -65,7 +65,7 @@
       "memory_class": "medium",
       "applicability": "blocked",
       "exclusion_reason": null,
-      "blocked_reason": "No normal C++ unittest target is registered at this source revision; the registrations are retained as source inventory until a device equivalent or exact platform exclusion is assigned.",
+      "blocked_reason": "The normal C++ target count is zero because its build definitions are absent from this source revision; orphan registrations remain source inventory until each has a device equivalent or exact platform exclusion.",
       "latest_result": "blocked",
       "evidence_path": null
     },
@@ -105,6 +105,112 @@
     }
   },
   "overrides": {
+    "cpp.gtest.TestJemallocHook.CrossApiAllocationDomain": {
+      "device_equivalent": null,
+      "requirements": [
+        "Linux <malloc.h> malloc_usable_size",
+        "process-wide libc malloc/free hook replacement"
+      ],
+      "applicability": "excluded",
+      "exclusion_reason": "The test requires Linux <malloc.h> malloc_usable_size and process-wide libc hook replacement so malloc and jemalloc allocations can cross APIs; iOS preserves the hosting App malloc zone and does not install that hook replacement.",
+      "blocked_reason": null,
+      "latest_result": "not-run"
+    },
+    "cpp.gtest.TestJemallocHook.ReallocAndAlignment": {
+      "device_equivalent": null,
+      "requirements": [
+        "libc malloc/realloc/memalign redirected through the jemalloc malloc-zone hook",
+        "Linux <malloc.h> malloc_usable_size"
+      ],
+      "applicability": "excluded",
+      "exclusion_reason": "The source invariant requires libc malloc/realloc/memalign to traverse the jemalloc malloc-zone hook and observes Linux <malloc.h> malloc_usable_size; iOS preserves the App malloc zone, so the explicit ob_/jemalloc device API case cannot claim this hook invariant.",
+      "blocked_reason": null,
+      "latest_result": "not-run"
+    },
+    "cpp.gtest.TestMallocBackend.detect_once": {
+      "execution_class": "host-driven-device",
+      "device_equivalent": "ios.cpp.allocator.backend",
+      "requirements": [
+        "signed physical-device App",
+        "initialized iOS allocator backend"
+      ],
+      "applicability": "required",
+      "exclusion_reason": null,
+      "blocked_reason": null,
+      "latest_result": "pass",
+      "evidence_path": "build_ios_arm64/device-evidence/task3-cpp/final/summary.json"
+    },
+    "cpp.gtest.TestMallocBackend.direct_jemalloc": {
+      "execution_class": "host-driven-device",
+      "device_equivalent": "ios.cpp.allocator.realloc_alignment",
+      "requirements": [
+        "signed physical-device App",
+        "bundled iOS jemalloc"
+      ],
+      "applicability": "required",
+      "exclusion_reason": null,
+      "blocked_reason": null,
+      "latest_result": "pass",
+      "evidence_path": "build_ios_arm64/device-evidence/task3-cpp/final/summary.json"
+    },
+    "cpp.gtest.TestMallocBackend.parse": {
+      "execution_class": "host-driven-device",
+      "device_equivalent": "ios.cpp.allocator.backend",
+      "requirements": [
+        "signed physical-device App",
+        "bundled iOS jemalloc"
+      ],
+      "applicability": "required",
+      "exclusion_reason": null,
+      "blocked_reason": null,
+      "latest_result": "pass",
+      "evidence_path": "build_ios_arm64/device-evidence/task3-cpp/final/summary.json"
+    },
+    "cpp.gtest.TestMallocBackend.restore_after_fork": {
+      "device_equivalent": null,
+      "requirements": [
+        "fork() child process",
+        "waitpid process control",
+        "jemalloc background-thread mallctl"
+      ],
+      "applicability": "excluded",
+      "exclusion_reason": "The test requires fork(), waitpid process control, and jemalloc background-thread mallctl state in the child; iOS App processes cannot execute this fork lifecycle.",
+      "blocked_reason": null,
+      "latest_result": "not-run"
+    },
+    "cpp.gtest.TestObError.test_adder": {
+      "device_equivalent": null,
+      "requirements": [
+        "ob_error CLI-only ObErrorInfoMgr implementation",
+        "non-Apple host process"
+      ],
+      "applicability": "excluded",
+      "exclusion_reason": "The source GTEST_SKIP path excludes Apple because test_adder reads uninitialized generated error entries, and the asserted init_global_info/add_os_info/add_mysql_info/add_ob_info behavior belongs to the CLI-only ObErrorInfoMgr implementation that is not linked into the iOS App; production error metadata remains a separate device case, not a false equivalent.",
+      "blocked_reason": null,
+      "latest_result": "not-run"
+    },
+    "cpp.gtest.TestObError.test_mgr": {
+      "device_equivalent": null,
+      "requirements": [
+        "ob_error CLI-only ObErrorInfoMgr implementation",
+        "standalone tool target"
+      ],
+      "applicability": "excluded",
+      "exclusion_reason": "The ob_error CLI-only ObErrorInfoMgr implementation is not linked into the iOS engine or test App, and its source also owns the standalone tool main entry point; production error metadata is covered separately without pretending to execute this manager.",
+      "blocked_reason": null,
+      "latest_result": "not-run"
+    },
+    "cpp.gtest.TestObError.test_parser": {
+      "device_equivalent": null,
+      "requirements": [
+        "ob_error CLI argument parser",
+        "getopt command-line process"
+      ],
+      "applicability": "excluded",
+      "exclusion_reason": "The ob_error CLI argument parser and getopt command-line process are not part of the embedded iOS runtime; the device case validates the production error mapping API instead of simulating CLI parsing.",
+      "blocked_reason": null,
+      "latest_result": "not-run"
+    },
     "ios.probe.sql_probe": {
       "requirements": [
         "signed physical-device App",
@@ -113,6 +219,22 @@
       ],
       "timeout_seconds": 900,
       "memory_class": "large"
+    },
+    "ios.cpp.allocator.backend": {
+      "latest_result": "pass",
+      "evidence_path": "build_ios_arm64/device-evidence/task3-cpp/final/summary.json"
+    },
+    "ios.cpp.allocator.lifecycle": {
+      "latest_result": "pass",
+      "evidence_path": "build_ios_arm64/device-evidence/task3-cpp/final/summary.json"
+    },
+    "ios.cpp.allocator.realloc_alignment": {
+      "latest_result": "pass",
+      "evidence_path": "build_ios_arm64/device-evidence/task3-cpp/final/summary.json"
+    },
+    "ios.cpp.ob_error.mapping": {
+      "latest_result": "pass",
+      "evidence_path": "build_ios_arm64/device-evidence/task3-cpp/final/summary.json"
     }
   },
   "reviewed_decisions": {

@@ -40,6 +40,9 @@ GTEST_PATTERN = re.compile(
     r"\bTEST(_F)?\s*\(\s*([A-Za-z_][A-Za-z0-9_]*)\s*,\s*"
     r"([A-Za-z_][A-Za-z0-9_]*)\s*\)"
 )
+CPP_DEVICE_CASE_PATTERN = re.compile(
+    r'registry\.add\(\{"(ios\.cpp\.[^"]+)",\s*"cpp"'
+)
 
 
 class InventoryError(RuntimeError):
@@ -265,6 +268,20 @@ def _base_discoveries(repo_root, tracked_files):
                     "source_path": path,
                     "corpus": "ios-probe",
                     "case_name": name,
+                    "ci_selected": False,
+                }
+            )
+
+    cpp_device_path = "unittest/ios_build/cpp_device_tests.cpp"
+    if cpp_device_path in tracked_files:
+        content = (repo_root / cpp_device_path).read_text(encoding="utf-8")
+        for case_id in CPP_DEVICE_CASE_PATTERN.findall(content):
+            discoveries.append(
+                {
+                    "id": case_id,
+                    "source_path": cpp_device_path,
+                    "corpus": "ios-probe",
+                    "case_name": case_id.removeprefix("ios.cpp."),
                     "ci_selected": False,
                 }
             )

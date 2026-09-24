@@ -81,7 +81,7 @@
     if (validRunID) {
       NSString *name = [NSString stringWithFormat:@"device-test-%@.jsonl", self.runID];
       NSString *report = [self.documents stringByAppendingPathComponent:name];
-      seekdb::ios_test::DeviceTestRegistry registry = seekdb::ios_test::make_smoke_registry();
+      seekdb::ios_test::DeviceTestRegistry registry = seekdb::ios_test::make_device_registry();
       result = seekdb::ios_test::run_device_suite(
           registry, self.testSuite.UTF8String, self.testFilter.UTF8String, self.runID.UTF8String,
           seekdb_ios_get_build_id(), report.fileSystemRepresentation);

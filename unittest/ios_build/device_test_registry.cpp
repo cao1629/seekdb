@@ -98,6 +98,16 @@ bool DeviceTestRegistry::add(DeviceTestCase test_case)
   return true;
 }
 
+bool DeviceTestRegistry::add_all(const DeviceTestRegistry &other)
+{
+  for (const DeviceTestCase &test_case : other.cases_) {
+    if (!add(test_case)) {
+      return false;
+    }
+  }
+  return true;
+}
+
 std::vector<const DeviceTestCase *> DeviceTestRegistry::select(
     const std::string &suite, const std::string &filter) const
 {

@@ -8,11 +8,15 @@ if(NOT EXISTS "${ENGINE_LINK_RESPONSE}" OR NOT DEVELOPMENT_TEAM)
 endif()
 add_executable(SeekDBProbe MACOSX_BUNDLE
   main.mm
+  ../cpp_device_tests.cpp
   ../device_evidence.cpp
   ../device_test_registry.cpp)
 target_include_directories(SeekDBProbe PRIVATE
   "${CMAKE_CURRENT_LIST_DIR}/.."
+  "${CMAKE_CURRENT_LIST_DIR}/../../../src"
+  "${CMAKE_CURRENT_LIST_DIR}/../../../src/oblib"
   "${CMAKE_CURRENT_LIST_DIR}/../../../src/observer/ios")
+target_compile_definitions(SeekDBProbe PRIVATE OB_HAVE_BUNDLED_JEMALLOC=1)
 target_compile_options(SeekDBProbe PRIVATE $<$<COMPILE_LANGUAGE:OBJCXX>:-fobjc-arc>)
 target_link_options(SeekDBProbe PRIVATE "@${ENGINE_LINK_RESPONSE}")
 target_link_libraries(SeekDBProbe PRIVATE "-framework UIKit")

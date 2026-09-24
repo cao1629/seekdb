@@ -14,6 +14,22 @@
 
 后续 host-only 复核补充“失败 assertion 前缀后继续出现终态失败”的轮询契约，focused 15 项及完整 host 50 项通过；该修改不改变 App/native/CMake，未把上一 App 产物重新标记为新提交的设备证据。上述真机结果仍严格绑定 `a11ef0d6208f`；runner 的 build identity 校验保持不变，后续若要对更新后的 HEAD 再取真机证据，必须先重建并安装同一 HEAD 的 App。
 
+C++ 分层覆盖已接入 App：当前源码 revision 没有普通 C++ unittest target，inventory 中的 9 个孤立 GTest 已逐项解析为 3 个 device equivalent、6 个 exact exclusion、0 个 blocked。设备 `cpp` suite 包含 `ios.cpp.allocator.backend`、`ios.cpp.allocator.lifecycle`、`ios.cpp.allocator.realloc_alignment` 和 `ios.cpp.ob_error.mapping`；它们覆盖 iOS 上真实存在的 backend parse/detect-once、普通 allocate/reallocate/usable-size/free、alignment，以及生产错误名、精确 `ER_WRONG_ARGUMENTS` 和 SQLSTATE 映射。Linux malloc hook cross-API 及 libc malloc/realloc/memalign malloc-zone hook 不可用显式 `ob_`/jemalloc API 伪装，fork child、未链接的 `ob_error` CLI manager/getopt parser 也保留精确排除；`test_adder` 源码本身在 Apple 平台通过 `GTEST_SKIP` 排除，且其 `ObErrorInfoMgr` 生成器逻辑未链接进 App，因此生产 error metadata case 只作独立设备覆盖，不伪装为 `test_adder` 等价项。四个设备 ID 和三个映射后的 required GTest 均在 inventory 记录 `latest_result=pass` 与脱敏摘要路径。
+
+签名安装后可用同一 runner 选择全部 C++ case；四个 `--expected-case` 必须独立提供，host 才会接受完整覆盖：
+
+```bash
+python3 unittest/ios_build/run_device_suite.py \
+  --device "$DEVICE_ID" --bundle-id "$BUNDLE_ID" \
+  --suite cpp --filter 'ios.cpp.*' --data-name ios-cpp-tests \
+  --expected-case ios.cpp.allocator.backend \
+  --expected-case ios.cpp.allocator.lifecycle \
+  --expected-case ios.cpp.allocator.realloc_alignment \
+  --expected-case ios.cpp.ob_error.mapping
+```
+
+该命令中的环境变量只作本机参数示例；设备、Team、证书、profile 和账号标识不得写入仓库证据。本节最终提交已用同一 native source SHA 完成 iphoneos runtime/App 链接、现有本机描述文件签名校验与安装；真机 C++ JSONL 的 4 个 case 均有 assertion 且 `result=0`、`run_complete/result=0`。随后在同一 SHA 下以全新数据目录执行普通模式 36-step SQL 首轮及同目录 restart 轮，两轮均为 36 个成功 step 加 1 个成功 complete，`previous_runs=0/1`，清理状态完整，整个序列的 probe 相关 crash/Jetsam 增量为 0。脱敏证据保存在忽略目录 `build_ios_arm64/device-evidence/task3-cpp/final/`。
+
 `build.iphone.sh` 为 iPhone ARM64 和 Apple Silicon iOS 模拟器配置 CMake、Rust 和 Apple SDK。默认目标是 `oceanbase_static`。目前不是已完成的 iOS 产品构建流程；脚本不生成、签名或安装 App。
 
 完整环境设置、逐文件修改原因和失败尝试见 [iOS 移植变更记录](ios-change-log.md)。后续环境、源码和 CMake 变更必须同步追加该记录，并区分已验证与待验证。

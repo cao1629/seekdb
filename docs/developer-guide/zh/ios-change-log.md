@@ -6,6 +6,13 @@
 
 后续每次环境设置、源码、构建脚本或 CMake 变更，同步记录日期、文件/设置、原因、具体参数、影响范围、复现命令、验证结果和剩余问题。失败尝试及撤销原因也保留。按独立功能提交时补充 commit ID，不把机器缓存、证书或密钥提交到仓库。日志与生成产物保存在仓库内；本记录及构建脚本纳入版本控制。
 
+## 2026-09-24：C++ 孤立测试的真机覆盖
+
+- 当前 revision 没有普通 C++ unittest 构建定义，普通目标数为 0；源码清单仍发现 9 个 GTest 注册。新增 `test_cpp_device_tests.py` 后先取得缺少 `cpp_device_tests.cpp` 的 RED，规格复核又以缺失的精确 parse/backend/memalign 断言、错误等价分类和 evidence metadata 取得第二轮 RED；再实现 4 个独立 `cpp` suite case，并将 App registry 从 smoke-only 合并为 smoke 加 C++。focused 8 项、inventory 12 项通过，完整 host suite 当前为 58 项；新增源以 iphoneos SDK/ARM64 compile-only 通过，仅出现既有引擎头文件 warning。
+- 9 个注册逐项分类为 3 个 device equivalent 和 6 个 exact exclusion。malloc backend 的 `parse`/`detect_once`/`direct_jemalloc` 映射到设备上的 allocator backend、allocate/reallocate/usable-size/free 和 alignment 行为；`direct_jemalloc` 的单一映射 case 同时断言已选 jemalloc 且执行 `jemalloc_memalign`。`CrossApiAllocationDomain` 因 Linux `<malloc.h>` 与进程级 libc hook replacement 排除；`ReallocAndAlignment` 同样依赖 libc malloc/realloc/memalign 通过 malloc-zone hook 进入 jemalloc，显式 `ob_`/jemalloc API 不是该 hook invariant 的等价执行。`restore_after_fork` 因 `fork()`/`waitpid`/jemalloc child background-thread 状态排除；`test_adder` 源码在 Apple 上明确 `GTEST_SKIP`，且其 `ObErrorInfoMgr` 生成器不在 App 链接闭包内，`test_mgr` 与 `test_parser` 同样属于未链接的 CLI manager/getopt 路径，均不伪装成 embedded runtime case。
+- `cpp_device_tests.cpp` 只调用 iOS 链接产物中真实存在的 allocator 和 error metadata API，不复制 GTest 源到 `tools/`，也不调用 fork、Linux malloc API、mallctl 或 Darwin malloc-zone hook；`OB_INVALID_ARGUMENT` 现在精确断言 MySQL `ER_WRONG_ARGUMENTS`，不只检查正数。inventory 新增 4 个稳定 registry ID，当前总计 812 行：9 个 GTest 中 3 个有 device equivalent、6 个 excluded、0 个 blocked。四个设备 ID 和三个 mapped required GTest 都记录 `latest_result=pass` 与同一脱敏摘要路径；严格生成仍要求 manifest/generator/发现输入与 HEAD 一致，忽略证据不作为 source discovery 输入。
+- 最终提交的同一 native source SHA 已完成 iphoneos runtime/App 链接、现有本机描述文件签名校验和安装。真机 `cpp` suite 选中 4 个 registry case，每个 case 均产生至少一个成功 assertion，case 和 run 终态均为 0，engine cleanup 为 `cleanup_status=7`/`cleanup_error=0`且恢复工作目录。随后使用全新数据目录执行普通 36-step SQL 首轮和同目录 restart 轮，两轮均为 36 个成功 step 加成功 complete，`previous_runs` 依次为 0、1，清理终态均完整，probe 相关 crash/Jetsam 增量为 0。证据保存在忽略目录 `build_ios_arm64/device-evidence/task3-cpp/final/`，不含设备、Team、证书、profile 或账号标识。
+
 ## 2026-09-24：device registry 与结构化证据协议
 
 - 质量复核补齐三项协议边界。`timeout_seconds` 现由逐 case watchdog 强制执行；callback 未在 deadline 内返回时，writer 在互斥保护下追加并 flush `case_timeout` 失败 assertion、`case_end/result=124`、`run_complete/result=124`，随后 `_Exit(124)`。这是无法安全取消任意 C++ callback 时的进程级终态失败：它提供有界 host 结果，但不把被终止进程表述为正常 cleanup。
