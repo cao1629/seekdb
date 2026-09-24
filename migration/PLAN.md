@@ -403,36 +403,36 @@ There is no upstream replay alongside any step (Decisions 2 and 3).
 
 ### Model plan
 
-Decision 4 (c): Opus 5.5 for every implementer and every fixer; Fable 5.1 for the design document, the core API sessions and the design review; reviewer tiers as in report §8; Haiku 4.5 only for receipts.
+Decision 4 (c): Opus 5.5 for every implementer and every fixer; reviewer tiers as in report §8; Haiku 4.5 only for receipts. **Since 2026-09-24 every role Decision 4 and row 4a gave Fable 5.1 runs on Opus 5.5 (decisions.md row 4c)**, so the table below has no Fable 5.1 role; where the kit or the report pairs two different reviewer models, this plan runs two Opus 5.5 reviewers in separate contexts on disjoint batches.
 
 | Phase | Model |
 |---|---|
 | 00b harness code and scenario scripts | Opus 5.5 |
 | 00b corpus generation, mutation injection, log triage | Opus 5.5 (report §8 had Sonnet 5; see the note below) |
-| 00b reviewers checking that no assertion was weakened | one Fable 5.1 and one Opus 5.5, in separate contexts |
-| Design document and every amendment | Fable 5.1 |
-| Adversarial review of the design document | Fable 5.1 and Opus 5.5, in separate contexts |
-| Core API design sessions with the developer | Fable 5.1 |
-| Core module bodies (disposable and final runs) | Opus 5.5, with Fable 5.1 reviewers |
+| 00b reviewers checking that no assertion was weakened | two Opus 5.5 runs, in separate contexts, on disjoint batches (before 2026-09-24: one Fable 5.1 and one Opus 5.5) |
+| Design document and every amendment | Opus 5.5 |
+| Adversarial review of the design document | two Opus 5.5 runs, in separate contexts |
+| Core API design sessions with the developer | Opus 5.5 |
+| Core module bodies (disposable and final runs) | Opus 5.5, with Opus 5.5 reviewers |
 | Step 2a disposable full pass | Opus 5.5, one run per unit, no reviewers (report: Sonnet 5; an implementer run under Decision 4) |
 | 01 dependency-map script and skeptics | Opus 5.5 |
 | 02 classifiers | Opus 5.5 for every row family (report: Sonnet 5 for the mechanical families; see the note below) |
-| 02 skeptics | Fable 5.1 for ownership, lifetime and concurrency rows; Opus 5.5 for the rest |
+| 02 skeptics | Opus 5.5 for every row family, two per batch in separate contexts |
 | 03 translators A and B, pilot implementer, pilot fixer | Opus 5.5 |
-| 03 diff inspector / pilot reviewers | Fable 5.1 / Opus 5.5 |
+| 03 diff inspector / pilot reviewers | Opus 5.5 / Opus 5.5 |
 | 04 implementers | Opus 5.5 for every unit |
-| 04 reviewers | Opus 5.5; Fable 5.1 for units that print pinned text (cost model, printers, SORT, ObNumber, casts, errno text) or touch lock-free code |
+| 04 reviewers | Opus 5.5 for every unit, including the units that print pinned text (cost model, printers, SORT, ObNumber, casts, errno text) or touch lock-free code |
 | 04 and 05 fixers | Opus 5.5 |
-| 05 reviewers; recurring error families | Opus 5.5; Opus 5.5 drafts the amendment and Fable 5.1 writes it |
-| Step 5 bootstrap debugging | Opus 5.5; Fable 5.1 for the hardest sessions (decisions.md row 4a) |
+| 05 reviewers; recurring error families | Opus 5.5; Opus 5.5 drafts and writes the amendment |
+| Step 5 bootstrap debugging | Opus 5.5, including the hardest sessions (decisions.md row 4c) |
 | Step 6 triage (inherited, regression, environment) | Opus 5.5 (report: Sonnet 5; see the note below) |
-| Step 6 fixers | Opus 5.5; Fable 5.1 for plan-text and float clusters and for judge or comparator bugs (decisions.md row 4a) |
+| Step 6 fixers | Opus 5.5, including the plan-text and float clusters and judge or comparator bugs (decisions.md row 4c) |
 | 06 fixers / reviewers | Opus 5.5 / Opus 5.5 |
 | Receipts (counts, slicing error lists, trailer checks) | Haiku 4.5 |
 
-**Roles Decision 4 did not settle, or settled against the report** (confirmed by the developer on 2026-09-24, decisions.md row 4a: the five support roles stay on Opus 5.5, and the three fixing roles below move to Fable 5.1):
+**Roles Decision 4 did not settle, or settled against the report** (decisions.md row 4a, 2026-09-24: the five support roles stay on Opus 5.5 and the three fixing roles below moved to Fable 5.1; row 4c, the same day, moved them and every other Fable 5.1 role to Opus 5.5):
 - **Five roles moved from Sonnet 5 to Opus 5.5.** Report §8 used Sonnet 5 for five roles that are not implementers, fixers or reviewers: 00b corpus generation, mutation injection and log triage, the 02 mechanical classifiers, and Step 6 triage. Decision 4 says "Sonnet 5 is no longer used for translating or fixing", which would leave them on Sonnet 5; Decision 5's notes say "with Opus 5.5 everywhere, per Decision 4", which would move them. This plan uses Opus 5.5.
-- **Three fixing roles on Opus 5.5, with Fable 5.1 as the plan's proposed upgrade.** Report §8 used Fable 5.1 for three fixing roles: Step 5's hardest sessions, Step 6's plan-text and float clusters, and Step 6's judge or comparator bugs ("a divergence needs reasoning over two implementations"). Decision 4 says "Opus 5.5 for every implementer and every fixer", so this plan uses Opus 5.5 for all three. The plan proposes Fable 5.1 for them; that changes Decision 4's text and needs the developer's yes.
+- **Three fixing roles on Opus 5.5.** Report §8 used Fable 5.1 for three fixing roles: Step 5's hardest sessions, Step 6's plan-text and float clusters, and Step 6's judge or comparator bugs ("a divergence needs reasoning over two implementations"). Row 4a moved them to Fable 5.1; row 4c moved them back to Opus 5.5 with every other Fable 5.1 role.
 
 Settings: every subagent call sets the model and `effort: 'max'` explicitly, for every role (decisions.md row 4b, which replaces report §8's "set it explicitly, high for reviewers"); inheriting the session default is a deviation to log. Append one row per step to cost-log.tsv in the kit's six columns (`step`, `timestamp`, `wall_clock_min`, `tokens` harness-counted, `subagents`, `model`). Where the harness exposes the usage objects (input, cache-read, cache-write and output tokens), log them per subagent in migration/usage.tsv (the plan's default).
 
@@ -450,7 +450,7 @@ Recorded in the deviation log (migration/RULEBOOK.md, section 7) when each happe
 ### Before Step 1: build the judge (`prompts/00b-judge-setup.md`)
 
 - **How it runs:** the prompt text is the contract, and section 10 lists its steps as they apply here.
-- **Placeholders:** `[target language]` = Rust; `[reviewer model]` = one Fable 5.1 and one Opus 5.5, in separate contexts and on disjoint batches (the prompt's wording).
+- **Placeholders:** `[target language]` = Rust; `[reviewer model]` = two Opus 5.5 runs, in separate contexts and on disjoint batches (decisions.md row 4c; one Fable 5.1 and one Opus 5.5 before 2026-09-24).
 - **Units:** 12 harness items (section 4) and 15 scenario families. The core set (items 1, 2, 3, 10, 12, 13) finishes before Step 1; item 10 is measured and waits on the precondition.
 - **Also in this phase:** the performance baselines (item 9); the `cargo check` rate (section 10, action 14).
 - **Exit:** section 4, "00b's exit" (two sign-offs, departure 6).
@@ -460,7 +460,7 @@ Recorded in the deviation log (migration/RULEBOOK.md, section 7) when each happe
 
 **Order within Step 1.** At 00b's first sign-off, the design document and the map (prompt 01) start together. The inventory (prompt 02) starts once a draft design document is committed as migration/RULEBOOK.md, since prompt 02's prerequisite is "draft RULEBOOK.md committed". 00b's remaining items and families run alongside.
 
-**The design document.** Because this is a redesign, the rulebook becomes a design document, with templates/RULEBOOK.md as its skeleton (migration/RULEBOOK.md). Written by the developer with Fable 5.1. It must decide:
+**The design document.** Because this is a redesign, the rulebook becomes a design document, with templates/RULEBOOK.md as its skeleton (migration/RULEBOOK.md). Written by the developer with Opus 5.5 (decisions.md row 4c). It must decide:
 - the crate graph, and the core's scope (narrow about 352K or wider about 600-650K);
 - the error type, and the rules for error codes used as values;
 - the arena and handoff rules;
@@ -489,7 +489,7 @@ Recorded in the deviation log (migration/RULEBOOK.md, section 7) when each happe
 - **Units:** 3,919 at a 30K-token cap, or 4,137 at a 20K cap, before removing the core and island stems.
 
 **The inventory** (`prompts/02-gap-inventory.md`):
-- **Placeholders:** `[name your gap]` = "ownership and lifetimes: arena memory handed to other threads, tasks and caches; borrowed `ObString`/`ObDatum` views; hand-counted handles. Also atomics on plain fields, error codes used as values, sort and hash order, pointer identity, integer overflow and float contraction"; `[reviewer model]` = Fable 5.1 for ownership, lifetime and concurrency rows, Opus 5.5 for the rest.
+- **Placeholders:** `[name your gap]` = "ownership and lifetimes: arena memory handed to other threads, tasks and caches; borrowed `ObString`/`ObDatum` views; hand-counted handles. Also atomics on plain fields, error codes used as values, sort and hash order, pointer identity, integer overflow and float contraction"; `[reviewer model]` = Opus 5.5 for every row family (decisions.md row 4c).
 - **Sweep lists** (report §6): about 823 `ATOMIC_*` field names; 441 `inc_ref`/`dec_ref` lines and 130 Handle classes; 1,750 `const_cast` lines; 4,189 `OB_X == ret` lines; 2,905 resets; about 1,560 `tmp_ret` lines; 31 uses of `int &ret = ret_;` in 18 files, including the two unfixed comparators; about 40 budget-backed out-of-memory sites plus the logical -4013 errors, and the micro block cache's FIFO; 122 `server_service` slot types; the base classes upper modules subclass (`ObTimerTask` 72, `ObDLinkBase` 72, `ObFuncExprOperator` 313).
 - **Expected size:** about 6K-40K rows (assumption).
 
@@ -507,7 +507,7 @@ The bakeoff does not apply to the core (README, "If you're redesigning"). Before
 - **One-off measurements** (per-crate `cargo check` time and memory, the incremental rebuild and link time) are run by the developer, or through the daemon with `--once`.
 
 No kit prompt covers this step as a whole; it replaces the bakeoff with:
-1. **Adversarial review of the design document** by Fable 5.1 and Opus 5.5 in separate contexts.
+1. **Adversarial review of the design document** by two Opus 5.5 runs in separate contexts.
 2. **One cheap disposable full pass.** Every one of the 2,700-3,400 Step 3 units gets one Opus 5.5 implementer run against the design document, with the core API written as stubs; no reviewers, no compiler in the loop. Then one survey `cargo check` counts cross-crate cycle errors and API errors, and the run is thrown away. It shows whether the crate graph is acyclic over the whole tree, whether the typed-ID IR survives the about 580 `find_item` call lines and the 34 rules, and which API the leaves need that the design lacks. **Run the first 100-unit batch alone and measure the sustainable runs per day before committing to the rest:** at 50 runs a day the pass alone takes 54-68 days (section 7).
 3. **One or two narrow end-to-end runs** of the core path, thrown away after measuring, each with a compile loop in the form of prompt 05 through the build daemon: sql-nio, the C parser core over FFI with its tree converted to the owned Rust AST, the new IR for single-table SELECT, INSERT and CREATE TABLE, typed column batches and the storage filter trait, down to memtable-only storage. Pass criterion: a named list of 20-50 single-table statements from the plain-SQL cases, diffed against the C++ reference under the reduced init. CREATE TABLE alone reaches `ObDDLService` (src/rootserver/ob_ddl_service.cpp, 23,564 lines), the schema service and the build-time inner-table schema; whether a minimal schema path exists without most of bootstrap is Decision 10's switch condition.
 
@@ -531,7 +531,7 @@ This plan drops the report's fourth item, translating the three SQL-tier pilot f
 ### Between Step 2a and Step 2b: build the core (a departure from the kit)
 
 - **A queue on disk:** `migration/core-manifest.tsv`, listing subsystem units (foundation, runtime, IR, execution framework, storage boundary, storage and transaction core) and the stems inside each.
-- **The developer and Fable 5.1 write the APIs by hand.** Where agents write bodies, prompt 04 runs over the core manifest with "file" swapped for "unit": Opus 5.5 implementers, two reviewers (Fable 5.1), Opus 5.5 fixers, the settings.json denies and the batch gates of Step 3.
+- **The developer and Opus 5.5 write the APIs by hand.** Where agents write bodies, prompt 04 runs over the core manifest with "file" swapped for "unit": Opus 5.5 implementers, two reviewers (Opus 5.5), Opus 5.5 fixers, the settings.json denies and the batch gates of Step 3.
 - **Order:** (1) foundation and runtime crates: error, arena, bytes, context, logging, config, thread and timer primitives, IO; (2) the IR; (3) the execution framework and code generator; (4) the storage boundary, the tablet/memtable/transaction core, and a single-writer WAL.
 - **Value libraries** (ObNumber, time, charset, JSON, casts) fan out as soon as the foundation API is frozen, each with differential tests against C++. Those tests also cover the OB_UNIS, ObNumber and JSON binary bytes moved out of the judge.
 - **Compile loop, then run loop, before the exit.** Prompt 04 has no compile or run step, so after the bodies are written: a compile loop in the form of prompt 05 (survey build through the build daemon, the error list sliced by crate, Opus 5.5 fixers without compiler access) until the core crates build; then a run loop in which the daemon's `--cmd` builds the binary and runs the 130 plain-SQL cases differentially under the reduced init (`--case-list migration/judge/lists/plain-sql.txt`), and Opus 5.5 fixers work from the outputs, triaged as in Step 6.
@@ -541,14 +541,14 @@ This plan drops the report's fourth item, translating the three SQL-tier pilot f
 ### Step 2b: stress-test the rules for the leaves (`prompts/03-stress-test.md`, changed)
 
 Starts once the core API list is signed off, and may overlap the last weeks of the core module bodies (report §7); the Step 3 fan-out waits for the core build's full exit. The report ran 03 twice, once per implementer tier; with Opus 5.5 as the only implementer (Decision 4), it runs once.
-- **Placeholders:** `[3]` = 6, the top three by risk score from each pool; `[target language]` = Rust; `[target formatter]` = rustfmt; `[implementer model]` = Opus 5.5; `[reviewer model]` = Opus 5.5, with a Fable 5.1 diff inspector.
+- **Placeholders:** `[3]` = 6, the top three by risk score from each pool; `[target language]` = Rust; `[target formatter]` = rustfmt; `[implementer model]` = Opus 5.5; `[reviewer model]` = Opus 5.5, with an Opus 5.5 diff inspector (decisions.md row 4c).
 - **Candidate pools** (report §6): SQL tier: a slice of ob_transform_utils.cpp (pointer identity), an expression that reads session state and uses casts, a slice of ob_join_order.cpp (cost floats). Other leaves: a slice of ob_ddl_service.cpp (schema guards and handles), a virtual table, a PL interpreter file. The two pools exercise different design-document sections, which is why both stay.
 - **How 03 runs here:** the pilot half as written (the production pipeline on the files, graded on adherence). The bakeoff half in the changed form in "Named departures", item 5; a difference caused by how each translator uses the core API is a finding about the API, not about the rules.
 - **Usage:** 1-2 rounds x 6 files x about 7 agent runs x 0.15-0.6M = 0.006-0.05B harness-counted tokens.
 
 ### Step 3: translate everything (`prompts/04-translation-kickoff.md`, `scripts/queue_runner.mjs`)
 
-- **Placeholders:** `[100]` = 100; `[TODO(port)]` = `TODO(port)`, `PERF(port)`, `BUG(port)`; `[implementer model]` = Opus 5.5 for every unit; `[reviewer model]` = Opus 5.5, and Fable 5.1 for units that print pinned text or touch lock-free code. Fixers: Opus 5.5.
+- **Placeholders:** `[100]` = 100; `[TODO(port)]` = `TODO(port)`, `PERF(port)`, `BUG(port)`; `[implementer model]` = Opus 5.5 for every unit; `[reviewer model]` = Opus 5.5 for every unit (decisions.md row 4c). Fixers: Opus 5.5.
 - **What each unit gets:** its stem (median 2.6K tokens, mean 6.6K); its entry in the declaration index (migration/decl-index/, a Step 1 deliverable) in place of raw headers (the one-level include context has a median of 25.6K tokens, the full closure a median of 1.43M, so raw headers cannot be shown); the design document and the frozen core API; its inventory rows.
 - **The queue:** `node /Users/colin/repo/code-migration-kit-with-claude-code/scripts/queue_runner.mjs --manifest migration/manifest.tsv next --batch 100`, run from the repository root; the manifest's extra columns (Step 1, "Manifest rows") give each unit its inputs.
 - **Order:** the crate graph, leaves to root.
@@ -654,7 +654,7 @@ The sustainable agent runs per day under the subscription, with Opus 5.5 everywh
 
 What follows from this:
 - When the rate limit binds, running two fan-outs at the same time saves nothing, because they draw on one budget (assumption: all models share one subscription budget). So Step 4's fixer runs no longer overlap Step 3 for free, and the report's "about half of Step 4 overlaps Step 3" holds only at the high rate. For the same reason the Step 1 row carries 00b's remaining corpus and family runs, which run alongside it.
-- Two other kinds of work run alongside and are assumed to fit inside the rate (assumption): the value-library fan-out and Step 2b alongside the core build (if agents write the core's bodies, their 2,310-8,820 runs take 46-176 days at 50 a day, about 7-25 weeks, inside the core build's 13-39 weeks), and the Fable 5.1 sessions of the design document (40-150) and the core API (200-800), a few a day.
+- Two other kinds of work run alongside and are assumed to fit inside the rate (assumption): the value-library fan-out and Step 2b alongside the core build (if agents write the core's bodies, their 2,310-8,820 runs take 46-176 days at 50 a day, about 7-25 weeks, inside the core build's 13-39 weeks), and the design-document sessions (40-150) and core API sessions (200-800), now on Opus 5.5 (decisions.md row 4c), a few a day.
 - Step 2a's full pass is itself 2,700-3,400 runs: 54-68 days at 50 a day. That is why section 6 measures the rate on the first 100-unit batch.
 
 ### Calendar
@@ -752,7 +752,7 @@ Later, the Rust target directory for 1.8-3.4M Rust lines is assumed to need 20-6
 | 4 | The reduced init profile | **Settled 2026-09-24:** judge/reduced-init/ creates only the admin user and the test database with its grants (no `set_tp` lines, no system-package PL); two C++ recordings of the 128 plain-SQL cases under it are byte-identical (judge/recordings.tsv). Changes only by a recorded amendment and a new C++ recording | 00b |
 | 5 | The exact list of about 300 hash-order SELECTs for the row-order mask | 633 candidates listed by script over the configured cases (judge/lists/hash-order-select-candidates.txt); to be narrowed against the reference's plans after the mutation runs | 00b, before any Rust code |
 | 6 | Where the judge's files live | The plan's default layout: section 4, "Where the judge's files live" | Developer, at 00b's first sign-off |
-| 7 | Model roles Decision 4 does not settle, or settles against the report | Five Sonnet 5 roles: this plan moves them to Opus 5.5. Three fixing roles the report gave Fable 5.1 (Step 5's hardest sessions, Step 6's plan-text and float clusters, Step 6's judge or comparator bugs): this plan uses Opus 5.5, as Decision 4 says for every fixer, and proposes Fable 5.1 for them (section 6, "Model plan") | **Settled 2026-09-24:** five support roles on Opus 5.5, three fixing roles on Fable 5.1 (decisions.md row 4a) |
+| 7 | Model roles Decision 4 does not settle, or settles against the report | Five Sonnet 5 roles: this plan moves them to Opus 5.5. Three fixing roles the report gave Fable 5.1 (Step 5's hardest sessions, Step 6's plan-text and float clusters, Step 6's judge or comparator bugs): this plan uses Opus 5.5, as Decision 4 says for every fixer, and proposes Fable 5.1 for them (section 6, "Model plan") | **Settled 2026-09-24:** five support roles on Opus 5.5, three fixing roles on Fable 5.1 (decisions.md row 4a); then every Fable 5.1 role moved to Opus 5.5 (row 4c) |
 | 8 | The query-speed ratio, and whether restart time counts as "start-up time" | **Settled 2026-09-24** (decisions.md row 1a): 1.2x on median latency and QPS; restart after a kill counts as start-up time, recorded and not gated | Developer, before Step 2a |
 | 9 | The `cargo check` rate and memory | **Measured 2026-09-24** on cranelift-codegen 0.135.2 (122K hand-written lines plus 181K generated): a full check of the crate at about 19,000-44,000 hand-written lines per second on one thread, maximum RSS under 0.82 GB (migration/measurements/cargo-check-rate.md), well above the report's assumed 500-5,000 | 00b phase |
 | 10 | Sustainable agent runs per day under the subscription with Opus 5.5 | Unknown; the calendar spans about 11-52 months across the scenarios (section 7) | Step 2a, first 100-unit batch; then the developer confirms Decision 5 (b) or remakes it |
@@ -788,7 +788,7 @@ Every place the report's recommendation no longer holds, with what changed it:
 - **Race fixes: merge the wasm branch's two fixes into C++ → not merged; the reference is 834bbee1e's source with no code changes.** Removed from "Start now", from 00b's phase and from Decision 15 (Corrections). Only reference-build.patch, which changes build files, is added.
 - **Building the reference: the coverage build's route → a toolchain choice.** At 834bbee1e a macOS 27 host needs SDK 27, which this Mac lacks; the plan's default keeps the 076eb309b toolchain through reference-build.patch, and the developer confirms it (section 4, "How the C++ reference is built"; section 8, item 2). Found while revising this plan.
 - **Parallel branches: reconcile the design with feature/plugin, let the palf redesign settle → all ruled out as code sources** (Decision 15).
-- **Model plan: (a) → (c).** Opus 5.5 for every implementer and fixer, so Step 2a's full pass and the Step 3 other-leaf units run on Opus 5.5; Step 2b runs once instead of once per tier; the report's trigger "reconsider (c) if Sonnet 5's adherence is weak" is moot; the three fixing roles the report gave Fable 5.1 run on Opus 5.5, with Fable 5.1 proposed; the roles Decision 4 does not settle are an open item (Decision 4 (c); section 8, item 7).
+- **Model plan: (a) → (c).** Opus 5.5 for every implementer and fixer, so Step 2a's full pass and the Step 3 other-leaf units run on Opus 5.5; Step 2b runs once instead of once per tier; the report's trigger "reconsider (c) if Sonnet 5's adherence is weak" is moot; the three fixing roles the report gave Fable 5.1, and every other Fable 5.1 role, run on Opus 5.5 (Decision 4 (c); decisions.md rows 4a and 4c).
 - **Spend: the API with per-step ceilings and dollar triggers → a subscription.** The dollar tables and the $400K trigger are dropped; the report's other stop triggers (tokens per run, the processed-to-harness ratio) become inputs to the calendar re-estimate, with no stop rule (decisions.md row 5b); tokens stay the logged measure; "how many agents at once" becomes "runs per day"; Step 3 goes from 2-7 weeks to 6-46 weeks by scenario; the calendar goes from 10-34 months to about 11-52 months by scenario (Decision 5 (b)).
 - **Performance gates: QPS, latency, cold start, restart, judge wall time and binary size → only QPS and latency, at 1.2x (decisions.md row 1a) and judge wall time.** Cold start and binary size are recorded only (Decision 1 (b)). Restart time is recorded only under this plan's reading of "start-up time", which the developer confirms (section 8, item 8).
 - **Row order: sorted-set fallback wherever the order differed → only for the declared list of about 300 hash-order SELECTs** (Decision 6).
