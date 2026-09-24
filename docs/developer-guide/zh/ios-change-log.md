@@ -30,7 +30,7 @@
 | 编译目标 | ARM64；默认 iphoneos、最低 iOS 18.0；模拟器为 iphonesimulator，独立 Rust target 和输出目录。 |
 | 资源保护 | 默认 4 个构建任务；空闲空间保护阈值 10 GiB，可用 `SEEKDB_IOS_MIN_FREE_GIB` 覆盖。曾剩约 5 GiB，用户释放空间后继续；本次读取约 17 GiB。阈值不代表全量空间需求。 |
 | 开发者工具权限 | 用户明确授权后，通过系统设置加入 `/Applications/ChatGPT.app`，界面验证 `ChatGPT` 开关为 on。此机器 Codex 集成于该应用，没有独立 `/Applications/Codex.app`；Terminal 开关未改变。尚未验证此设置是否解除 ICU 构建阻塞。撤销方式是在同一页面关闭 ChatGPT 开关。 |
-| 真机与签名 | 用户表示可以连接 iPhone 17 Pro；尚无成功安装/运行记录。既有本地 `QuickLang Local Development` 身份不等同于可用的 iOS 开发签名团队。 |
+| 真机与签名 | iPhone 17 Pro 已通过 Xcode 自动签名完成构建、安装和运行；证书及描述文件由系统管理且不进仓库。已有一次 `Stopped/result=0`，重复停止稳定性仍待验证。 |
 
 ## 构建脚本与 CMake 逐文件记录
 
@@ -123,7 +123,7 @@ python3 deps/ios-build/build.py openmp lapack
 python3 deps/ios-build/build.py --jobs 4 vsag
 ```
 
-新日志位于 `build_ios_arm64/logs/`：openmp-build.log、lapacke-build.log、lapacke-host-test.log、vsag-build.log。真机检查仍只发现名为 QuickLang iPhone 17 Pro 的模拟设备，尚未识别到物理手机。
+新日志位于 `build_ios_arm64/logs/`：openmp-build.log、lapacke-build.log、lapacke-host-test.log、vsag-build.log。真机检查当时仍只发现一个 iPhone 17 Pro 模拟设备，尚未识别到物理手机。
 
 后续适配细节：
 
@@ -152,7 +152,7 @@ python3 deps/ios-build/build.py --jobs 4 vsag
 ## 2026-09-21：UIKit 真机测试 App
 
 - 用户在 Xcode Accounts 完成登录后，读取到 Personal Team；起初钥匙串仍只有本地证书，随后通过 xcodebuild 的自动签名流程申请 Apple Development 签名。团队 ID 作为命令参数，不硬编码在源码中。
-- 新增 unittest/ios_build/app 的 main.mm、Info.plist.in 和独立 CMakeLists.txt：UIKit 界面、后台专用线程、停止按钮、Documents/probe-status.json 状态记录。仅测试包装，不替代 QuickLang App，不声称 SQL 已验证。
+- 新增 unittest/ios_build/app 的 main.mm、Info.plist.in 和独立 CMakeLists.txt：UIKit 界面、后台专用线程、停止按钮、Documents/probe-status.json 状态记录。它只是测试包装，不声称 SQL 已验证。
 - 新增 deps/ios-build/build_app.py：读取成功链接探针的依赖闭包、绝对化静态库路径、移除宿主 rpath、拒绝未知链接参数；生成仓库内 Xcode 工程，使用 Automatic 签名、允许 provisioning 更新和设备注册，codesign 验证后可按 --install 安装。证书私钥由 Xcode/钥匙串管理，不纳入 Git。
 - 新增 unittest/ios_build/test_app_link.py，覆盖带空格路径、参数顺序、未知参数拒绝、缺少运行库拒绝。构建和安装日志位于 build_ios_arm64/logs/app-build.log；实测结果继续追加。
 - 首次 Xcode 包装链接因其宿主库搜索路径选中了 Homebrew macOS libomp.dylib 而失败；提取器现将所有第三方 -l 参数解析为 iOS 前缀内的绝对静态库路径，仅白名单系统库保留 -l，并新增测试。避免仅依赖 -L 顺序。10 项脚本测试全部通过。
@@ -172,7 +172,7 @@ python3 deps/ios-build/build.py --jobs 4 vsag
 - ARG_MAX 修复版编译、签名、安装成功；真机不再返回 -4024，日志确认配置和引擎初始化完成，执行到首次 bootstrap 检查后返回 -4015。旧失败目录已包含数据版本标记，不是空库；不删除旧目录，后续使用独立目录继续验证。该结果证明配置限制修复生效，不代表建库或 SQL 成功。
 - 读取真机日志发现内存配置自动取约 9.16 GiB；源码参数定义确认 memory_limit 已弃用且不影响内存预算。seekdb_ios.cpp 改为 memory_budget=1G，并显式设置 vector_memory_limit=128M，头文件说明改为逻辑预算而非 RSS 硬限制。
 - main.mm 增加受限的 SEEKDB_PROBE_DATA_NAME 启动环境变量，只允许 Documents 下最多 64 字符的简单目录名，并在状态 JSON 中记录 data_name。用于保留旧失败目录的同时验证空库启动，不自动删除或重置用户数据；默认目录不变。
-- 真机使用新目录 seekdb-budget-v1 后首次启动成功，状态文件为 Running / result=null / sql_verified=false；日志确认 server runtime ready，memory_size=1GB。这是首次原生 iOS 引擎启动证据，尚非 SQL 或完整 QuickLang 验收。
+- 真机使用新目录 seekdb-budget-v1 后首次启动成功，状态文件为 Running / result=null / sql_verified=false；日志确认 server runtime ready，memory_size=1GB。这是首次原生 iOS 引擎启动证据，尚非 SQL 验收。
 - 新增 unittest/ios_build/sql_probe.cpp/.h 与独立 seekdb_ios_sql_probe 测试静态库，通过现有内部 SQL proxy 验证 SELECT、DDL、DML 和读回，操作仅限 ios_probe.lifecycle 测试表。它不进入生产运行库；链接探针及 UIKit 测试 App 显式包含该测试库。
 - main.mm 在 Running 后以第二个专用线程执行 SQL 测试，状态文件记录 sql_result、sql_verified、previous_runs；可用 SEEKDB_PROBE_AUTO_STOP=1 在测试返回后请求干净停止。持久化通过同一数据目录的计数读回验证，不能以新目录替代。
 - SQL 测试静态库、完整链接和 UIKit Release 签名构建通过；10 项脚本测试通过。覆盖安装时设备虽然显示 connected，但安装无进展、文件和 details 接口超时，暂不能确认 SQL 测试版安装。旧进程控制台有 alloc_log_item -4013 和 signal 9；未取得对应 Jetsam 报告，不能断言是系统内存终止还是覆盖安装终止。后续需验证内存稳定性。
@@ -191,29 +191,26 @@ python3 deps/ios-build/build.py --jobs 4 vsag
 - 恢复连接后，池顺序修复版安装运行成功，SQL 成功且 previous_runs=2。随后仍发生 SIGABRT，栈顶变为 ObLSService::destroy；源码断言要求 LS 已停止且不再持有 log stream。证据 stop-pool-order-crash.ips、probe-status-reconnect.json。
 - ObServer::stop 在 in_process_ 模式下补充 server_runtime_controller_.wait()，位于 stop() 后、其他全局服务停止及资源销毁前。该等待复用现有 worker join 与 obs_stop_modules / obs_wait_modules 流程；命令行模式保留原行为，不禁用断言。完整 iOS 链接与 10 项脚本测试通过；真机验证结果待追加。未新增系统环境设置。
 
-- stop/wait 修复版已安装并启动，SQL 成功读回 previous_runs=3；随后停止阶段仍出现 EXC_BAD_ACCESS / SIGBUS，触发线程为 TableGCTask，经 ObMemtable::safe_to_destroy 调用 ObLogHandler::get_max_decided_scn。说明仍有后台 GC 与日志资源生命周期问题，尚未正常停止。证据 runtime-wait-crash.ips；后续先按 QuickLang 实际 SQL 扩展测试，再继续清理顺序诊断。
+- stop/wait 修复版已安装并启动，SQL 成功读回 previous_runs=3；随后停止阶段仍出现 EXC_BAD_ACCESS / SIGBUS，触发线程为 TableGCTask，经 ObMemtable::safe_to_destroy 调用 ObLogHandler::get_max_decided_scn。说明仍有后台 GC 与日志资源生命周期问题，尚未正常停止。证据 runtime-wait-crash.ips；后续继续扩展通用 SQL 测试并诊断清理顺序。
 
-## 2026-09-21：QuickLang SQL 兼容性测试
+## 2026-09-21：扩展 SQL 兼容性测试
 
-- 连接恢复后套件成功安装并运行，前67步通过，第68步 listening.lock_version 返回 -4001 (OB_OBJ_TYPE_ERROR)。表的 version 为 BIGINT UNSIGNED，测试错误使用 get_int；增加显式 u: 预期类型并以 get_uint 读取，修正听力/复习版本断言，不改变表结构或 SQL。首次证据 quicklang-sql-device.jsonl、quicklang-status-first.json。
-- 本轮磁盘降至约2.9 GiB触发3 GiB保护；仅删除已生成的216 MiB链接探针可执行文件，保留 link.txt、所有库与日志。增量构建目标改为 seekdb_ios_sql_probe，UIKit 随后重新链接完整引擎。默认空间保护与系统环境均未变。
-- 无符号读取修正后重新构建、签名、安装并启动成功。iPhone 17 Pro / iOS27 真机103步全部返回0，最终 complete=true/result=0；状态 quicklang_verified=true、sql_verified=true、previous_runs=5、Running。逐项不含设备标识的测试记录已加入 unittest/ios_build/quicklang/results/iphone17pro-2026-09-21.jsonl。此次不请求自动停止，正常停止缺陷仍未解决。编译和 git diff --check 通过。
-
-- 用户明确 QuickLang iOS 当前继续使用 SQLite；seekdb 原生 iPhone 移植作为未来可切换后端独立推进。未替换 QuickLang iOS 数据库或修改其并发工作区。
-- unittest/ios_build/quicklang 保存十张原始 seekdb 表结构快照、来源 revision/SHA-256、快照脚本和 C++ 测试；覆盖清单及复现方式见该目录 README.md。测试使用专属 ql_ios_probe 数据库及合成数据，每次仅清空该测试库内 fixture。
-- CMake 将新 runner 加入独立 seekdb_ios_sql_probe 测试库；UIKit 基础 SQL 之后运行 QuickLang 套件，状态增加 quicklang_result / quicklang_verified，逐步证据刷新写入 Documents/quicklang-sql-results.jsonl。不是生产接口，不更改引擎运行库 ABI。
-- 覆盖 JSON、MEDIUMBLOB、VARCHAR 数组、二进制排序规则、UTF-8 hex literal、SELECT FOR UPDATE、显式事务提交/回滚、乐观版本条件、唯一键及 CHECK 约束。事务由 ObMySQLTransaction 固定同一连接；按具体引擎错误验证失败用例。
-- 磁盘下降至约 4.7 GiB 后，默认/6 GiB 空间保护拒绝构建。本次只新增一个测试对象并重链接（签名 App 约185 MiB），评估后命令级使用 SEEKDB_IOS_MIN_FREE_GIB=3；未修改默认10 GiB保护，不用于全量构建。增量 iOS 编译/链接通过，真机测试结果待追加。
-- 新套件完整编译、UIKit 签名构建、10 项构建脚本测试和十张表 SHA-256/快照可重复生成校验通过。安装因 IXRemoteErrorDomain 6 中断，真机变为 unavailable；新增 QuickLang SQL 套件尚待真机验收，基本 SQL previous_runs=3 不等于新增套件结果。
-- 与并发 QuickLang iOS 任务确认其拥有应用工作区改动；已有 native.execute/transaction 与 dialect 层、iOS SQLite 默认选择。本任务未覆盖或提交其修改，在测试 README 记录未来 seekdb iOS 驱动、显式后端选择、独立数据目录及逻辑迁移边界；未实现运行时热切换。
-- 设备不可用时，指定设备 ID 的 Xcode 构建返回70。使用已有项目离线构建设备目标成功：`DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcodebuild -project build_ios_arm64/app/SeekDBProbe.xcodeproj -scheme SeekDBProbe -configuration Release -derivedDataPath build_ios_arm64/app/DerivedData -destination generic/platform=iOS -allowProvisioningUpdates build`。日志 app-quicklang-sql-offline.log；未使用模拟器替代真机验收。
+- 真机测试曾发现 BIGINT UNSIGNED 错用 `get_int`，返回 -4001 (OB_OBJ_TYPE_ERROR)；显式 `u:` 类型现使用 `get_uint`。该经验保留在通用结果读取器中。
+- 覆盖 JSON、MEDIUMBLOB、VARCHAR 数组、二进制排序规则、`SELECT FOR UPDATE`、显式事务提交/回滚、乐观版本条件、唯一键及 CHECK 约束。事务由 ObMySQLTransaction 固定同一连接；失败用例检查具体引擎错误。
+- 设备不可用时，指定设备 ID 的 Xcode 构建返回 70；generic/platform=iOS 离线设备构建成功，但不能替代真机执行。
 
 ## 2026-09-21：GC 与日志流停止顺序
 
 - 正常停止此前在 TableGCTask → ObMemtable::safe_to_destroy → ObLogHandler::get_max_decided_scn 发生 SIGBUS。源码确认 ObLSService::wait 直接 free_ls_，而 ObStorageMetaMemMgr::stop 不停止 GC，wait 才等待全部元数据释放并 join GC 定时器。
 - obs_wait_modules 将 storage meta memory manager 的 wait 提前到 LS wait 之前，使延迟回收期间 LS/log handler 仍有效；保留元数据全部释放条件和 GC join，不屏蔽断言或丢弃待回收对象。该顺序仍需真机验证，包括检查是否存在等待依赖。
 - 磁盘约2.3 GiB，清理本任务忽略目录中的可重建缓存：build_ios_arm64/rust-target（失败的旧 Rust 输出，当前使用 rust-probe）、deps/ios/iphoneos/build/icu/data、deps/ios/host/icu/data、deps/ios/iphoneos/build/vsag/CMakeFiles、deps/ios/downloads。保留源码、已安装 iOS 依赖、Rust 成功输出及日志，释放后约3 GiB。后续依赖全量重建需重新下载归档/生成这些缓存。
-- 使用既有增量命令、SEEKDB_IOS_MIN_FREE_GIB=3、目标 seekdb_ios_sql_probe 构建通过。与并发 QuickLang SQLite 真机部署错开设备窗口，先用 generic/platform=iOS 构建签名 App，真机结果待补充。
-- 修复版签名、安装、启动成功；首轮状态 Stopped/result=0、SQL与QuickLang测试均通过、previous_runs=6，系统没有新增 SeekDB 崩溃报告。首次取得正常停止证据，已跟踪 iphone17pro-clean-stop-2026-09-21.json。
-- 同目录再次启动后 previous_runs=7、全部SQL再次通过，证明首轮正常停止后的数据保留。第二轮状态停留 Stopping 且时间不刷新，进程仍存在、没有新增崩溃报告；LLDB显示主线程在runloop，engine线程在 seekdb_ios_run+784，下层为 usleep/nanosleep。对本轮二进制反汇编，该返回位置对应 prepare_stop（源码5秒等待），尚未进入GC等待。不能据此断言GC仍失败，也不能宣称第二次正常停止完成。记录 iphone17pro-clean-restart-2026-09-21.json。
-- 已detach退出LLDB并交还真机给并发QuickLang修复验证；没有卸载或改动QuickLang数据。设备挂起/前后台状态与多次停止稳定性需后续独立复核。
+- 使用既有增量命令、SEEKDB_IOS_MIN_FREE_GIB=3、目标 seekdb_ios_sql_probe 构建通过，并用 generic/platform=iOS 构建签名 App。
+- 修复版签名、安装、启动成功；首轮状态 `Stopped/result=0`、SQL 测试通过、previous_runs=6，系统没有新增 SeekDB 崩溃报告。这是一次正常停止证据，不足以证明重复稳定性。
+- 同目录再次启动后 previous_runs=7、SQL 再次通过，证明首轮正常停止后的数据保留。第二轮状态停留 Stopping 且时间不刷新；LLDB 显示引擎线程位于 `prepare_stop` 等待阶段。不能据此断言 GC 仍失败，也不能宣称第二次正常停止完成。
+
+## 2026-09-24：上游同步与产品中立测试
+
+- 分支已 rebase 到 `upstream/master` 的 `834bbee1e`。冲突处理保留上游事务回调前释放外层 latch 的语义，同时重放 iOS 生命周期、停止顺序和测试变更；未用整文件覆盖掩盖上游修改。
+- SQL probe 收敛为 36 步通用套件。`ios_probe.lifecycle` 保留跨进程计数；每轮只清理无外键的 `feature_matrix` 与 `feature_event`。UIKit 将逐步 JSONL 写入 `Documents/sql-probe-results.jsonl`，只有最终 `complete=true/result=0` 才设置 `sql_verified=true`。
+- 删除旧专属 schema、runner 和历史设备结果，不把旧结果重命名为通用证据。CMake 的 `seekdb_ios_sql_probe` 仅编译 `sql_probe.cpp`。
+- 当前主机验证为 11 项 Python 测试、`bash -n build.sh build.iphone.sh` 与 `git diff --check`。通用 36 步套件尚需重新进行 iOS 编译、签名及真机运行；已有一次干净停止和持久化证据仍保留其时间边界，重复停止与前后台稳定性继续待验证。
