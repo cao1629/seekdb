@@ -12,6 +12,7 @@ import shlex
 import stat
 import subprocess
 import sys
+import tempfile
 from typing import Callable, Iterable, Mapping, Optional, Sequence
 
 import iphone_test_runner as runner
@@ -41,7 +42,7 @@ ARTIFACT_MARKER = re.compile(
 LEGACY_QUARANTINE_DIRECTORY = ".seekdb-ios-runner-quarantine"
 CARGO_PROFILE_DIRECTORY = re.compile(r"[A-Za-z0-9][A-Za-z0-9_.-]*")
 CARGO_BUILD_DIRECTORY = re.compile(
-    r"[A-Za-z0-9_][A-Za-z0-9_.-]*-[0-9a-f]{8,64}")
+    r"[A-Za-z0-9_][A-Za-z0-9_.-]*-(?P<hash>[0-9a-f]{8,64})")
 TRACKED_LAUNCHER_MARKER = b"--run-build-script"
 
 CPP_CASE_IDS = (
@@ -370,11 +371,223 @@ def legacy_quarantine_path(
         raise BuildReadinessError(
             "legacy build-script path escaped the Rust target") from error
     scope = hashlib.sha256(run_id.encode("utf-8")).hexdigest()[:16]
-    return target / LEGACY_QUARANTINE_DIRECTORY / scope / relative
+    return (target / LEGACY_QUARANTINE_DIRECTORY / scope / "payload"
+            / relative)
+
+
+def _migration_manifest_path(target: Path, run_id: str) -> Path:
+    """Return the durable manifest path for one run-scoped migration."""
+    scope = hashlib.sha256(run_id.encode("utf-8")).hexdigest()[:16]
+    return target / LEGACY_QUARANTINE_DIRECTORY / scope / "migration.json"
+
+
+def _write_migration_manifest(
+        target: Path, manifest: Path,
+        migrations: Sequence[tuple[Path, Path]]) -> None:
+    """Durably record every source and destination before the first move."""
+    manifest_parent = _durable_directory(
+        target, manifest.parent.relative_to(target))
+    if os.path.lexists(manifest):
+        raise BuildReadinessError(
+            "legacy build-script migration manifest is occupied")
+    payload = {
+        "schema_version": 1,
+        "entries": [
+            {
+                "source": str(source.relative_to(target)),
+                "destination": str(destination.relative_to(target)),
+                "kind": "directory" if source.is_dir() else "file",
+            }
+            for source, destination in migrations
+        ],
+    }
+    temporary = None
+    try:
+        with tempfile.NamedTemporaryFile(
+                mode="w", encoding="utf-8", dir=manifest_parent,
+                prefix=".migration-", delete=False) as stream:
+            temporary = Path(stream.name)
+            json.dump(payload, stream, sort_keys=True, separators=(",", ":"))
+            stream.write("\n")
+            stream.flush()
+            os.fsync(stream.fileno())
+        os.replace(temporary, manifest)
+        temporary = None
+        _fsync_directory(manifest_parent)
+    finally:
+        if temporary is not None:
+            try:
+                temporary.unlink()
+            except FileNotFoundError:
+                pass
+
+
+def _manifest_migrations(
+        target: Path, manifest: Path
+        ) -> tuple[tuple[Path, Path, str], ...]:
+    """Validate and return direct target-relative manifest entries."""
+    try:
+        payload = json.loads(manifest.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as error:
+        raise BuildReadinessError(
+            "legacy build-script migration manifest is invalid") from error
+    if (not isinstance(payload, dict)
+            or payload.get("schema_version") != 1
+            or not isinstance(payload.get("entries"), list)
+            or not payload["entries"]):
+        raise BuildReadinessError(
+            "legacy build-script migration manifest is invalid")
+    migrations = []
+    payload_root = manifest.parent / "payload"
+    for entry in payload["entries"]:
+        if (not isinstance(entry, dict)
+                or set(entry) != {"source", "destination", "kind"}
+                or not all(isinstance(value, str) for value in entry.values())):
+            raise BuildReadinessError(
+                "legacy build-script migration manifest is invalid")
+        source_relative = Path(entry["source"])
+        destination_relative = Path(entry["destination"])
+        kind = entry["kind"]
+        if (source_relative.is_absolute()
+                or destination_relative.is_absolute()
+                or ".." in source_relative.parts
+                or ".." in destination_relative.parts
+                or not source_relative.parts
+                or source_relative.parts[0] == LEGACY_QUARANTINE_DIRECTORY
+                or kind not in {"file", "directory"}):
+            raise BuildReadinessError(
+                "legacy build-script migration manifest path is unsafe")
+        source = target / source_relative
+        destination = target / destination_relative
+        try:
+            destination.relative_to(payload_root)
+        except ValueError as error:
+            raise BuildReadinessError(
+                "legacy build-script migration destination is unsafe") from error
+        if source.parts[:len(target.parts)] != target.parts:
+            raise BuildReadinessError(
+                "legacy build-script migration source is unsafe")
+        migrations.append((source, destination, kind))
+    if len(set(migrations)) != len(migrations):
+        raise BuildReadinessError(
+            "legacy build-script migration manifest has duplicates")
+    return tuple(migrations)
+
+
+def _complete_migration_manifest(target: Path, manifest: Path) -> None:
+    """Complete a durable migration transaction or fail on ambiguity."""
+    migrations = _manifest_migrations(target, manifest)
+    for source, destination, kind in migrations:
+        source_exists = os.path.lexists(source)
+        destination_exists = os.path.lexists(destination)
+        if source_exists and destination_exists:
+            raise BuildReadinessError(
+                "legacy build-script migration has duplicate state")
+        if not source_exists and not destination_exists:
+            raise BuildReadinessError(
+                "legacy build-script migration lost an entry")
+        if destination_exists:
+            continue
+        source_status = source.lstat()
+        if (stat.S_ISLNK(source_status.st_mode)
+                or (kind == "file" and not stat.S_ISREG(source_status.st_mode))
+                or (kind == "directory"
+                    and not stat.S_ISDIR(source_status.st_mode))):
+            raise BuildReadinessError(
+                "legacy build-script migration source changed type")
+        destination_parent = _durable_directory(
+            target, destination.parent.relative_to(target))
+        os.replace(source, destination)
+        _fsync_directory(source.parent)
+        _fsync_directory(destination_parent)
+    manifest.unlink()
+    _fsync_directory(manifest.parent)
+
+
+def _recover_pending_migrations(target: Path) -> None:
+    """Finish every prior durable transaction before scanning Cargo state."""
+    quarantine = target / LEGACY_QUARANTINE_DIRECTORY
+    if not os.path.lexists(quarantine):
+        return
+    quarantine_status = quarantine.lstat()
+    if (stat.S_ISLNK(quarantine_status.st_mode)
+            or not stat.S_ISDIR(quarantine_status.st_mode)):
+        raise BuildReadinessError(
+            "legacy build-script quarantine root is unsafe")
+    for scope in quarantine.iterdir():
+        scope_status = scope.lstat()
+        if (re.fullmatch(r"[0-9a-f]{16}", scope.name) is None
+                or stat.S_ISLNK(scope_status.st_mode)
+                or not stat.S_ISDIR(scope_status.st_mode)):
+            raise BuildReadinessError(
+                "legacy build-script quarantine scope is unsafe")
+        manifest = scope / "migration.json"
+        if os.path.lexists(manifest):
+            if manifest.is_symlink() or not manifest.is_file():
+                raise BuildReadinessError(
+                    "legacy build-script migration manifest is unsafe")
+            _complete_migration_manifest(target, manifest)
+
+
+def _unit_migrations(
+        target: Path, profile: Path, crate: Path,
+        unit_hash: str, run_id: str) -> Optional[tuple[tuple[Path, Path], ...]]:
+    """Return every cache entry required to invalidate one stale Cargo unit."""
+    final = crate / "build-script-build"
+    if not os.path.lexists(final):
+        return None
+    final_status = final.lstat()
+    if (stat.S_ISLNK(final_status.st_mode)
+            or not stat.S_ISREG(final_status.st_mode)):
+        raise BuildReadinessError(
+            "Cargo build-script cache candidate is unsafe")
+    hashed = crate / f"build_script_build-{unit_hash}"
+    stale_real = hashed.with_name(f"{hashed.name}.real")
+    final_real = _tracked_launcher_real(final)
+    hashed_real = None
+    if os.path.lexists(hashed):
+        hashed_status = hashed.lstat()
+        if (stat.S_ISLNK(hashed_status.st_mode)
+                or not stat.S_ISREG(hashed_status.st_mode)):
+            raise BuildReadinessError(
+                "Cargo rustc build-script output is unsafe")
+        hashed_real = _tracked_launcher_real(hashed)
+    if (final_real is not None and hashed_real == final_real):
+        return None
+    if (final_real is None
+            and not rustc_lldb_wrapper._is_host_macho_executable(final)):
+        return None
+    entries = [final]
+    if os.path.lexists(hashed):
+        if (hashed_real is None
+                and not rustc_lldb_wrapper._is_host_macho_executable(hashed)):
+            raise BuildReadinessError(
+                "Cargo rustc build-script output is invalid")
+        entries.append(hashed)
+    if os.path.lexists(stale_real):
+        stale_status = stale_real.lstat()
+        if (stat.S_ISLNK(stale_status.st_mode)
+                or not stat.S_ISREG(stale_status.st_mode)
+                or not rustc_lldb_wrapper._is_host_macho_executable(
+                    stale_real)):
+            raise BuildReadinessError(
+                "Cargo rustc build-script preserved output is unsafe")
+        entries.append(stale_real)
+    fingerprint = profile / ".fingerprint" / crate.name
+    if os.path.lexists(fingerprint):
+        fingerprint_status = fingerprint.lstat()
+        if (stat.S_ISLNK(fingerprint_status.st_mode)
+                or not stat.S_ISDIR(fingerprint_status.st_mode)):
+            raise BuildReadinessError(
+                "Cargo build-script fingerprint is unsafe")
+        entries.append(fingerprint)
+    return tuple(
+        (entry, legacy_quarantine_path(target, run_id, entry))
+        for entry in entries)
 
 
 def migrate_legacy_raw_build_scripts(target: Path, run_id: str) -> int:
-    """Quarantine exact legacy raw Cargo host launchers before a build."""
+    """Transactionally quarantine stale Cargo build-script units."""
     if not target.exists():
         return 0
     if not target.is_absolute() or target.is_symlink() or not target.is_dir():
@@ -382,14 +595,16 @@ def migrate_legacy_raw_build_scripts(target: Path, run_id: str) -> int:
     resolved_target = target.resolve(strict=True)
     if resolved_target != target:
         raise BuildReadinessError("Rust target path is not canonical")
+    _recover_pending_migrations(target)
     migrations = []
+    migrated_units = 0
     for profile in target.iterdir():
         if (CARGO_PROFILE_DIRECTORY.fullmatch(profile.name) is None
                 or profile.name == LEGACY_QUARANTINE_DIRECTORY):
             continue
         profile_status = profile.lstat()
         if stat.S_ISLNK(profile_status.st_mode):
-            continue
+            raise BuildReadinessError("Cargo profile path is unsafe")
         if not stat.S_ISDIR(profile_status.st_mode):
             continue
         build_root = profile / "build"
@@ -401,46 +616,30 @@ def migrate_legacy_raw_build_scripts(target: Path, run_id: str) -> int:
             raise BuildReadinessError(
                 "Cargo build-script cache path is unsafe")
         for crate in build_root.iterdir():
-            if CARGO_BUILD_DIRECTORY.fullmatch(crate.name) is None:
+            crate_match = CARGO_BUILD_DIRECTORY.fullmatch(crate.name)
+            if crate_match is None:
                 continue
             crate_status = crate.lstat()
             if (stat.S_ISLNK(crate_status.st_mode)
                     or not stat.S_ISDIR(crate_status.st_mode)):
                 raise BuildReadinessError(
                     "Cargo build-script cache path is unsafe")
-            candidate = crate / "build-script-build"
-            if not os.path.lexists(candidate):
-                continue
-            candidate_status = candidate.lstat()
-            if (stat.S_ISLNK(candidate_status.st_mode)
-                    or not stat.S_ISREG(candidate_status.st_mode)):
-                raise BuildReadinessError(
-                    "Cargo build-script cache candidate is unsafe")
-            launcher_real = _tracked_launcher_real(candidate)
-            if launcher_real is not None:
-                continue
-            preserved = candidate.with_name("build-script-build.real")
-            if os.path.lexists(preserved):
-                raise BuildReadinessError(
-                    "Cargo build-script cache has inconsistent wrapper state")
-            if not rustc_lldb_wrapper._is_host_macho_executable(candidate):
-                continue
-            destination = legacy_quarantine_path(
-                target, run_id, candidate)
-            if os.path.lexists(destination):
-                raise BuildReadinessError(
-                    "legacy build-script quarantine destination is occupied")
-            migrations.append((candidate, destination))
-    for candidate, destination in migrations:
-        destination_parent = _durable_directory(
-            target, destination.parent.relative_to(target))
-        if candidate.is_symlink() or not candidate.is_file():
-            raise BuildReadinessError(
-                "Cargo build-script cache candidate changed during migration")
-        os.replace(candidate, destination)
-        _fsync_directory(candidate.parent)
-        _fsync_directory(destination_parent)
-    return len(migrations)
+            unit = _unit_migrations(
+                target, profile, crate, crate_match.group("hash"), run_id)
+            if unit is not None:
+                migrations.extend(unit)
+                migrated_units += 1
+    if not migrations:
+        return 0
+    destinations = [destination for _source, destination in migrations]
+    if (len(set(destinations)) != len(destinations)
+            or any(os.path.lexists(path) for path in destinations)):
+        raise BuildReadinessError(
+            "legacy build-script quarantine destination is occupied")
+    manifest = _migration_manifest_path(target, run_id)
+    _write_migration_manifest(target, manifest, migrations)
+    _complete_migration_manifest(target, manifest)
+    return migrated_units
 
 
 @dataclass(frozen=True)

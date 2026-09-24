@@ -7,7 +7,9 @@ import json
 import hashlib
 import os
 from pathlib import Path
+import platform
 import struct
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -37,6 +39,10 @@ RUST_CASES = (
     "ios.rust.tls.exposes_sql_cipher_names",
 )
 SQL_RESTART_CASES = phases.SQL_RESTART_CASE_IDS
+CARGO_198_CANDIDATES = tuple(sorted(
+    (Path.home() / ".rustup/toolchains").glob(
+        "1.98.*-aarch64-apple-darwin/bin/cargo")))
+CARGO_198 = CARGO_198_CANDIDATES[-1] if CARGO_198_CANDIDATES else None
 
 
 def _host_macho_executable_bytes() -> bytes:
@@ -278,6 +284,18 @@ class IphoneTestPhasesTest(unittest.TestCase):
             raw.parent.mkdir(parents=True)
             raw.write_bytes(_host_macho_executable_bytes())
             raw.chmod(0o755)
+            hashed = raw.with_name(
+                "build_script_build-deadbeef12345678")
+            hashed.write_bytes(_host_macho_executable_bytes())
+            hashed.chmod(0o755)
+            stale_real = hashed.with_name(f"{hashed.name}.real")
+            stale_real.write_bytes(_host_macho_executable_bytes())
+            stale_real.chmod(0o755)
+            fingerprint = (target / "ios-device-test/.fingerprint"
+                           / "sql-nio-deadbeef12345678")
+            fingerprint.mkdir(parents=True)
+            (fingerprint / "build-script-build.json").write_text(
+                "stale", encoding="utf-8")
             wrapped = (target / "release/build"
                        / "serde-feedface12345678/build-script-build")
             wrapped.parent.mkdir(parents=True)
@@ -285,10 +303,14 @@ class IphoneTestPhasesTest(unittest.TestCase):
                 "build_script_build-feedface12345678.real")
             wrapped_real.write_bytes(_host_macho_executable_bytes())
             wrapped_real.chmod(0o755)
-            wrapped.write_text(
-                phases.rustc_lldb_wrapper._launcher_source(wrapped_real),
-                encoding="utf-8")
+            launcher_source = phases.rustc_lldb_wrapper._launcher_source(
+                wrapped_real)
+            wrapped.write_text(launcher_source, encoding="utf-8")
             wrapped.chmod(0o755)
+            wrapped_hashed = wrapped.with_name(
+                "build_script_build-feedface12345678")
+            wrapped_hashed.write_text(launcher_source, encoding="utf-8")
+            wrapped_hashed.chmod(0o755)
             device_binary = (
                 target / "aarch64-apple-ios/release/deps/build-script-build")
             device_binary.parent.mkdir(parents=True)
@@ -304,42 +326,53 @@ class IphoneTestPhasesTest(unittest.TestCase):
                 target, "safe-run")
             second = phases.migrate_legacy_raw_build_scripts(
                 target, "safe-run")
-            quarantined = list(
-                (target / phases.LEGACY_QUARANTINE_DIRECTORY).rglob(
-                    "build-script-build"))
-            raw_exists = raw.exists()
-            quarantined_bytes = tuple(
-                path.read_bytes() for path in quarantined)
+            quarantine = target / phases.LEGACY_QUARANTINE_DIRECTORY
+            quarantined = tuple(
+                path.relative_to(quarantine)
+                for path in quarantine.rglob("*") if path.is_file())
+            unit_sources_exist = any(
+                path.exists() for path in (
+                    raw, hashed, stale_real, fingerprint))
             wrapped_pair_exists = (
-                wrapped.exists() and wrapped_real.exists())
+                wrapped.exists() and wrapped_hashed.exists()
+                and wrapped_real.exists())
             device_binary_exists = device_binary.exists()
             unknown_exists = unknown.exists()
 
         self.assertEqual(1, migrated)
         self.assertEqual(0, second)
-        self.assertFalse(raw_exists)
-        self.assertEqual(1, len(quarantined))
-        self.assertEqual(
-            (_host_macho_executable_bytes(),), quarantined_bytes)
+        self.assertFalse(unit_sources_exist)
+        self.assertEqual(4, len(quarantined))
         self.assertTrue(wrapped_pair_exists)
         self.assertTrue(device_binary_exists)
         self.assertTrue(unknown_exists)
 
     def test_legacy_raw_build_script_symlink_and_collision_are_rejected(self):
         """Fail safely on candidate symlinks and occupied quarantine paths."""
-        for anomaly in ("symlink", "collision"):
+        for anomaly in ("symlink", "profile-symlink", "collision"):
             with self.subTest(anomaly=anomaly), \
                     tempfile.TemporaryDirectory() as temporary_directory:
                 target = (
                     Path(temporary_directory) / "rust-target").resolve()
                 raw = (target / "release/build"
                        / "sql-nio-deadbeef12345678/build-script-build")
-                raw.parent.mkdir(parents=True)
+                if anomaly == "profile-symlink":
+                    outside_profile = target.parent / "outside-profile"
+                    outside_raw = (outside_profile / "build"
+                                   / "sql-nio-deadbeef12345678"
+                                   / "build-script-build")
+                    outside_raw.parent.mkdir(parents=True)
+                    outside_raw.write_bytes(_host_macho_executable_bytes())
+                    outside_raw.chmod(0o755)
+                    target.mkdir()
+                    (target / "release").symlink_to(outside_profile)
+                else:
+                    raw.parent.mkdir(parents=True)
                 if anomaly == "symlink":
                     outside = target.parent / "outside"
                     outside.write_bytes(_host_macho_executable_bytes())
                     raw.symlink_to(outside)
-                else:
+                elif anomaly == "collision":
                     raw.write_bytes(_host_macho_executable_bytes())
                     raw.chmod(0o755)
                     destination = phases.legacy_quarantine_path(
@@ -351,7 +384,112 @@ class IphoneTestPhasesTest(unittest.TestCase):
                     phases.migrate_legacy_raw_build_scripts(
                         target, "safe-run")
 
-                self.assertTrue(os.path.lexists(raw))
+                self.assertTrue(os.path.lexists(
+                    outside_raw if anomaly == "profile-symlink" else raw))
+
+    def test_partial_legacy_unit_migration_is_recovered(self):
+        """Complete a durable transaction after interruption between moves."""
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            target = (Path(temporary_directory) / "rust-target").resolve()
+            final = (target / "release/build"
+                     / "sql-nio-deadbeef12345678/build-script-build")
+            final.parent.mkdir(parents=True)
+            final.write_bytes(_host_macho_executable_bytes())
+            final.chmod(0o755)
+            hashed = final.with_name(
+                "build_script_build-deadbeef12345678")
+            hashed.write_bytes(_host_macho_executable_bytes())
+            hashed.chmod(0o755)
+            real_replace = os.replace
+            calls = 0
+
+            def interrupt(source, destination):
+                """Interrupt the second atomic move after one durable move."""
+                nonlocal calls
+                if Path(source).name.startswith("build"):
+                    calls += 1
+                    if calls == 2:
+                        raise OSError("simulated interruption")
+                real_replace(source, destination)
+
+            with mock.patch.object(phases.os, "replace", side_effect=interrupt), \
+                    self.assertRaises(OSError):
+                phases.migrate_legacy_raw_build_scripts(
+                    target, "safe-run")
+
+            recovered = phases.migrate_legacy_raw_build_scripts(
+                target, "next-run")
+            sources_exist = final.exists() or hashed.exists()
+
+        self.assertEqual(0, recovered)
+        self.assertFalse(sources_exist)
+
+    @unittest.skipUnless(
+        sys.platform == "darwin" and platform.machine() == "arm64"
+        and CARGO_198 is not None,
+        "requires the local macOS Cargo 1.98 toolchain")
+    def test_real_cargo_recompiles_migrated_build_script_through_wrapper(self):
+        """Force Cargo 1.98 to rerun rustc and produce a tracked launcher."""
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory).resolve()
+            project = root / "probe"
+            (project / "src").mkdir(parents=True)
+            (project / "Cargo.toml").write_text(
+                "[package]\n"
+                "name = \"legacy-cache-probe\"\n"
+                "version = \"0.1.0\"\n"
+                "edition = \"2021\"\n"
+                "build = \"build.rs\"\n",
+                encoding="utf-8")
+            (project / "src/lib.rs").write_text(
+                "pub fn value() -> u8 { 1 }\n", encoding="utf-8")
+            (project / "build.rs").write_text(
+                "fn main() { println!(\"cargo:rerun-if-changed=build.rs\"); }\n",
+                encoding="utf-8")
+            target = root / "target"
+            cargo_home = root / "cargo-home"
+            cargo_home.mkdir()
+            environment = dict(os.environ)
+            environment.update({
+                "CARGO_HOME": str(cargo_home),
+                "CARGO_TARGET_DIR": str(target),
+                "PATH": os.pathsep.join((
+                    str(CARGO_198.parent), environment.get("PATH", ""))),
+                "RUSTC": str(CARGO_198.with_name("rustc")),
+            })
+            command = [str(CARGO_198), "build", "-vv", "--offline"]
+            first = subprocess.run(
+                command, cwd=project, env=environment, check=False,
+                capture_output=True, text=True, timeout=120)
+            self.assertEqual(0, first.returncode, first.stderr)
+            units = tuple((target / "debug/build").glob(
+                "legacy-cache-probe-*/build-script-build"))
+            self.assertEqual(1, len(units))
+            raw_final = units[0]
+            self.assertTrue(
+                phases.rustc_lldb_wrapper._is_host_macho_executable(
+                    raw_final))
+
+            migrated = phases.migrate_legacy_raw_build_scripts(
+                target, "cargo-integration")
+            environment["RUSTC_WRAPPER"] = str(phases.RUSTC_WRAPPER)
+            second = subprocess.run(
+                command, cwd=project, env=environment, check=False,
+                capture_output=True, text=True, timeout=120)
+            self.assertEqual(0, second.returncode, second.stderr)
+            rebuilt_units = tuple((target / "debug/build").glob(
+                "legacy-cache-probe-*/build-script-build"))
+            self.assertEqual(1, len(rebuilt_units))
+            final = rebuilt_units[0]
+            unit_hash = final.parent.name.rsplit("-", 1)[1]
+            hashed = final.with_name(f"build_script_build-{unit_hash}")
+            final_real = phases._tracked_launcher_real(final)
+            hashed_real = phases._tracked_launcher_real(hashed)
+
+        self.assertEqual(1, migrated)
+        self.assertIn(str(phases.RUSTC_WRAPPER), second.stderr)
+        self.assertEqual(final_real, hashed_real)
+        self.assertTrue(final_real.name.endswith(".real"))
 
     def test_preparer_migrates_legacy_cache_before_build(self):
         """Remove raw cached launchers before invoking the locked build step."""
