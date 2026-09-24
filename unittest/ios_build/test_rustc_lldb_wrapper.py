@@ -5,6 +5,7 @@ import importlib.util
 import json
 import os
 from pathlib import Path
+import platform
 import stat
 import struct
 import subprocess
@@ -67,6 +68,7 @@ class RustcLldbWrapperTest(unittest.TestCase):
             result = subprocess.run([
                 sys.executable, str(WRAPPER_PATH), str(compiler),
                 "--crate-name", "build_script_build",
+                "-C", "extra-filename=-deadbeef",
                 "--out-dir", str(output),
             ], check=False, capture_output=True, text=True)
 
@@ -76,7 +78,8 @@ class RustcLldbWrapperTest(unittest.TestCase):
             self.assertEqual(0, result.returncode, result.stderr)
             self.assertEqual(
                 ["--crate-name", "build_script_build", "--out-dir", str(output)],
-                compiler_arguments)
+                [argument for argument in compiler_arguments
+                 if argument not in ("-C", "extra-filename=-deadbeef")])
             self.assertTrue(real.is_file())
             self.assertEqual(_macho_executable_bytes(), real.read_bytes())
             self.assertTrue(os.access(launcher, os.X_OK))
@@ -85,6 +88,16 @@ class RustcLldbWrapperTest(unittest.TestCase):
             self.assertEqual(0, subprocess.run(
                 ["/bin/sh", "-n", str(launcher)], check=False).returncode)
             self.assertFalse((old.with_suffix(".real")).exists())
+
+            second = subprocess.run([
+                sys.executable, str(WRAPPER_PATH), str(compiler),
+                "--crate-name", "build_script_build",
+                "-C", "extra-filename=-deadbeef",
+                "--out-dir", str(output),
+            ], check=False, capture_output=True, text=True)
+            self.assertEqual(125, second.returncode)
+            self.assertEqual(_macho_executable_bytes(), launcher.read_bytes())
+            self.assertEqual(_macho_executable_bytes(), real.read_bytes())
 
     def test_compile_failure_is_returned_without_replacement(self):
         """Return the real compiler status and leave no launcher behind."""
@@ -197,6 +210,64 @@ class RustcLldbWrapperTest(unittest.TestCase):
             [str(build_script.resolve()),
              "argument with spaces", "literal'quote"],
             arguments)
+
+    def test_negative_lldb_status_uses_shell_signal_convention(self):
+        """Normalize an xcrun or LLDB signal into 128-plus-signal status."""
+        wrapper = _load_wrapper_module()
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            build_script = root / "build_script_build-deadbeef.real"
+            build_script.write_bytes(_macho_executable_bytes())
+            build_script.chmod(build_script.stat().st_mode | stat.S_IXUSR)
+            fake_xcrun = root / "signaled xcrun.py"
+            fake_xcrun.write_text(
+                "#!/usr/bin/env python3\n"
+                "import os, signal\n"
+                "os.kill(os.getpid(), signal.SIGTERM)\n",
+                encoding="utf-8")
+            fake_xcrun.chmod(fake_xcrun.stat().st_mode | stat.S_IXUSR)
+
+            status = wrapper.run_build_script(
+                build_script, (), xcrun=fake_xcrun)
+
+        self.assertEqual(143, status)
+
+    @unittest.skipUnless(
+        sys.platform == "darwin" and platform.machine() == "arm64",
+        "requires the local arm64 macOS LLDB runtime")
+    def test_real_lldb_maps_normal_and_signal_exits(self):
+        """Map real arm64 process exit, SIGTERM, and SIGKILL statuses."""
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            source = root / "build_script.c"
+            source.write_text(
+                "#include <signal.h>\n"
+                "#include <string.h>\n"
+                "int main(int argc, char **argv) {\n"
+                "  if (argc > 1 && strcmp(argv[1], \"term\") == 0) "
+                "raise(SIGTERM);\n"
+                "  if (argc > 1 && strcmp(argv[1], \"kill\") == 0) "
+                "raise(SIGKILL);\n"
+                "  return 7;\n"
+                "}\n",
+                encoding="utf-8")
+            executable = root / "build_script_build-deadbeef.real"
+            compile_result = subprocess.run([
+                "/usr/bin/xcrun", "clang", "-arch", "arm64",
+                str(source), "-o", str(executable),
+            ], check=False, capture_output=True, text=True)
+            self.assertEqual(0, compile_result.returncode, compile_result.stderr)
+
+            statuses = {}
+            for mode in ("normal", "term", "kill"):
+                result = subprocess.run([
+                    str(WRAPPER_PATH), "--run-build-script",
+                    str(executable), mode,
+                ], check=False, capture_output=True, text=True)
+                statuses[mode] = result.returncode
+
+        self.assertEqual(
+            {"normal": 7, "term": 143, "kill": 137}, statuses)
 
     def test_symlink_and_noncanonical_output_directory_are_rejected(self):
         """Never replace a symlink or an output reached through dot segments."""

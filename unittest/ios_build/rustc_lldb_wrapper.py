@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Run rustc and safely launch new macOS Cargo build scripts through LLDB."""
 
+import hashlib
 import os
 from pathlib import Path
 import re
@@ -10,7 +11,7 @@ import struct
 import subprocess
 import sys
 import tempfile
-from typing import Optional, Sequence
+from typing import Mapping, Optional, Sequence
 
 
 XCRUN = Path("/usr/bin/xcrun")
@@ -25,6 +26,10 @@ MACHO_EXECUTE = 2
 LC_VERSION_MIN_MACOSX = 0x24
 LC_BUILD_VERSION = 0x32
 PLATFORM_MACOS = 1
+PASSTHROUGH_SIGNALS = (
+    "SIGTERM", "SIGKILL", "SIGABRT", "SIGSEGV", "SIGBUS", "SIGILL",
+    "SIGFPE", "SIGPIPE",
+)
 
 
 class WrapperError(RuntimeError):
@@ -61,6 +66,66 @@ def _canonical_output_directory(value: str) -> Path:
     if lexical.is_symlink() or not lexical.is_dir():
         raise WrapperError("build-script output directory is unavailable")
     return lexical.resolve(strict=True)
+
+
+def _extra_filename(arguments: Sequence[str]) -> Optional[str]:
+    """Return one unambiguous rustc extra-filename codegen value."""
+    values = []
+    index = 0
+    while index < len(arguments):
+        argument = arguments[index]
+        setting = None
+        if argument == "-C":
+            if index + 1 >= len(arguments):
+                raise WrapperError("missing value for -C")
+            setting = arguments[index + 1]
+            index += 2
+        elif argument.startswith("-C"):
+            setting = argument[2:]
+            index += 1
+        else:
+            index += 1
+        if setting is not None and setting.startswith("extra-filename="):
+            values.append(setting.split("=", 1)[1])
+    if not values:
+        return None
+    if len(set(values)) != 1:
+        raise WrapperError("ambiguous rustc extra-filename")
+    suffix = values[0]
+    if re.fullmatch(r"-[0-9a-f]+", suffix) is None:
+        raise WrapperError("rustc extra-filename is not a strict hash")
+    return suffix
+
+
+def _file_identity(path: Path) -> tuple[object, ...]:
+    """Fingerprint one candidate strongly enough to detect replacement."""
+    status = path.lstat()
+    if stat.S_ISLNK(status.st_mode):
+        return ("symlink", os.readlink(path), status.st_mtime_ns)
+    if not stat.S_ISREG(status.st_mode):
+        return ("other", status.st_mode, status.st_mtime_ns)
+    digest = hashlib.sha256()
+    with path.open("rb") as stream:
+        for block in iter(lambda: stream.read(1024 * 1024), b""):
+            digest.update(block)
+    return (
+        "regular", status.st_dev, status.st_ino, status.st_size,
+        status.st_mtime_ns, digest.hexdigest(),
+    )
+
+
+def _candidate_snapshot(
+        output_directory: Path,
+        expected_name: Optional[str]) -> Mapping[str, tuple[object, ...]]:
+    """Capture strict candidates before or after one rustc invocation."""
+    snapshot = {}
+    for candidate in output_directory.iterdir():
+        if BUILD_SCRIPT_NAME.fullmatch(candidate.name) is None:
+            continue
+        if expected_name is not None and candidate.name != expected_name:
+            continue
+        snapshot[candidate.name] = _file_identity(candidate)
+    return snapshot
 
 
 def _is_host_macho_executable(path: Path) -> bool:
@@ -110,21 +175,44 @@ def _is_host_macho_executable(path: Path) -> bool:
 
 def _new_build_script(
         output_directory: Path,
-        previous_names: frozenset[str]) -> Optional[Path]:
+        previous_snapshot: Mapping[str, tuple[object, ...]],
+        expected_name: Optional[str]) -> Optional[Path]:
     """Return one new strict build-script output or reject unsafe ambiguity."""
-    matches = []
-    for candidate in output_directory.iterdir():
-        if (candidate.name in previous_names
-                or BUILD_SCRIPT_NAME.fullmatch(candidate.name) is None):
-            continue
+    current_snapshot = _candidate_snapshot(output_directory, expected_name)
+    if expected_name is not None:
+        expected = output_directory / expected_name
+        preserved = expected.with_name(f"{expected.name}.real")
+        if expected_name not in current_snapshot:
+            raise WrapperError("expected build-script output is missing")
+        if os.path.lexists(expected) and os.path.lexists(preserved):
+            raise WrapperError(
+                "current build-script output has stale preserved state")
+        if (previous_snapshot.get(expected_name)
+                == current_snapshot[expected_name]):
+            raise WrapperError("rustc did not refresh its expected output")
+        changed_names = [expected_name]
+    else:
+        changed_names = [
+            name for name, identity in current_snapshot.items()
+            if previous_snapshot.get(name) != identity
+        ]
+    if len(changed_names) > 1:
+        raise WrapperError("multiple changed build-script outputs are ambiguous")
+    if not changed_names:
+        return None
+    candidate = output_directory / changed_names[0]
+    if expected_name is not None and candidate.name != expected_name:
+        raise WrapperError("rustc changed an unexpected build-script output")
+    if BUILD_SCRIPT_NAME.fullmatch(candidate.name) is None:
+        raise WrapperError("new build-script output has an invalid name")
+    try:
         if candidate.is_symlink():
             raise WrapperError("new build-script output is a symlink")
         if candidate.resolve(strict=True).parent != output_directory:
             raise WrapperError("new build-script output escaped its directory")
-        matches.append(candidate)
-    if len(matches) > 1:
-        raise WrapperError("multiple new build-script outputs are ambiguous")
-    return matches[0] if matches else None
+    except OSError as error:
+        raise WrapperError("new build-script output is unavailable") from error
+    return candidate
 
 
 def _launcher_source(real_build_script: Path) -> str:
@@ -176,16 +264,22 @@ def compile_and_wrap(arguments: Sequence[str]) -> int:
     rustc_arguments = tuple(arguments[1:])
     crate_name = _option_value(rustc_arguments, "--crate-name")
     output_value = _option_value(rustc_arguments, "--out-dir")
+    extra_filename = (
+        _extra_filename(rustc_arguments)
+        if crate_name == "build_script_build" else None)
+    expected_name = (
+        f"build_script_build{extra_filename}"
+        if crate_name == "build_script_build" and extra_filename else None)
     output_directory = None
-    previous_names = frozenset()
+    previous_snapshot = {}
     path_error = None
     if crate_name == "build_script_build":
         try:
             if output_value is None:
                 raise WrapperError("build-script output directory is missing")
             output_directory = _canonical_output_directory(output_value)
-            previous_names = frozenset(
-                path.name for path in output_directory.iterdir())
+            previous_snapshot = _candidate_snapshot(
+                output_directory, expected_name)
         except WrapperError as error:
             path_error = error
     compile_result = subprocess.run(
@@ -200,7 +294,8 @@ def compile_and_wrap(arguments: Sequence[str]) -> int:
         return 0
     if path_error is not None:
         raise path_error
-    build_script = _new_build_script(output_directory, previous_names)
+    build_script = _new_build_script(
+        output_directory, previous_snapshot, expected_name)
     if build_script is not None:
         _replace_with_launcher(build_script)
     return 0
@@ -229,14 +324,33 @@ def run_build_script(
     environment = dict(os.environ)
     environment.setdefault(
         "DEVELOPER_DIR", "/Applications/Xcode.app/Contents/Developer")
+    signal_commands = tuple(
+        component
+        for signal_name in PASSTHROUGH_SIGNALS
+        for component in (
+            "-o",
+            f"process handle {signal_name} -s false -n false -p true",
+        )
+    )
+    status_script = (
+        "script import os,re,signal,lldb; "
+        "p=lldb.debugger.GetSelectedTarget().GetProcess(); "
+        "d=p.GetExitDescription() or ''; "
+        "m=re.search(r'[Ss]ignal (SIG[A-Z0-9]+|[0-9]+)',d); "
+        "n=(int(m.group(1)) if m and m.group(1).isdigit() "
+        "else int(getattr(signal,m.group(1)))) if m else None; "
+        "s=p.GetExitStatus(); "
+        "c=((128+n) if n is not None else s) "
+        "if p.GetState()==lldb.eStateExited and "
+        "((m is not None) or (0<=s<=255)) else 125; "
+        "os._exit(c)")
     result = subprocess.run([
-        str(xcrun), "lldb", "--batch", "-o", "run",
-        "-o", (
-            "script import os,lldb; "
-            "os._exit(lldb.debugger.GetSelectedTarget().GetProcess()"
-            ".GetExitStatus())"),
+        str(xcrun), "lldb", "--no-lldbinit", "--batch",
+        *signal_commands, "-o", "run", "-o", status_script,
         "--", str(real_build_script), *arguments,
     ], check=False, env=environment)
+    if result.returncode < 0:
+        return 128 - result.returncode
     return result.returncode
 
 
