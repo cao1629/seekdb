@@ -15,6 +15,7 @@ import subprocess
 import sys
 import tempfile
 import threading
+import time
 import unittest
 from unittest import mock
 
@@ -301,7 +302,10 @@ class IphoneTestPhasesTest(unittest.TestCase):
         self.assertEqual(0, result.exit_status)
         self.assertEqual(command_environment, popen.call_args.kwargs["env"])
         self.assertTrue(popen.call_args.kwargs["start_new_session"])
-        process.wait.assert_called_once_with(timeout=17)
+        self.assertEqual(1, process.wait.call_count)
+        wait_timeout = process.wait.call_args.kwargs["timeout"]
+        self.assertGreater(wait_timeout, 16)
+        self.assertLessEqual(wait_timeout, 17)
 
     def test_unlock_prompt_is_visible_before_process_completion_only_once(self):
         """Echo only the exact fixed prompt while continuing to capture stderr."""
@@ -447,6 +451,39 @@ class IphoneTestPhasesTest(unittest.TestCase):
         self.assertEqual(124, result.exit_status)
         self.assertTrue(status.returncode != 0 or status.stdout.startswith("Z"))
 
+    def test_executor_deadline_includes_pipes_held_after_leader_exit(self):
+        """Treat inherited pipes held past the deadline as command timeout."""
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            child_pid = root / "child.pid"
+            with mock.patch.object(
+                    phases, "validated_xcode_environment",
+                    return_value=dict(os.environ)):
+                execute = phases._default_executor(
+                    "safe-held-pipes", terminal_stream=io.StringIO())
+            child_script = (
+                "import os,signal,time; "
+                "signal.signal(signal.SIGTERM, signal.SIG_IGN); "
+                "os.write(1,b'child-out'); os.write(2,b'child-err'); "
+                "time.sleep(3)")
+            parent_script = (
+                "import pathlib,subprocess,sys; "
+                f"p=subprocess.Popen([sys.executable,'-c',{child_script!r}]); "
+                f"pathlib.Path({str(child_pid)!r}).write_text(str(p.pid))")
+
+            started = time.monotonic()
+            result = execute((sys.executable, "-c", parent_script), 1)
+            elapsed = time.monotonic() - started
+            pid = int(child_pid.read_text())
+            status = subprocess.run(
+                ["/bin/ps", "-p", str(pid), "-o", "stat="],
+                check=False, capture_output=True, text=True)
+
+        self.assertEqual(124, result.exit_status)
+        self.assertGreaterEqual(elapsed, 0.8)
+        self.assertLess(elapsed, 2.0)
+        self.assertTrue(status.returncode != 0 or status.stdout.startswith("Z"))
+
     def test_executor_keyboard_interrupt_cleans_process_group(self):
         """Terminate and reap the child before propagating KeyboardInterrupt."""
         process = mock.Mock()
@@ -469,6 +506,50 @@ class IphoneTestPhasesTest(unittest.TestCase):
         killpg.assert_any_call(4242, signal.SIGTERM)
         killpg.assert_any_call(4242, signal.SIGKILL)
         self.assertEqual(2, process.wait.call_count)
+
+    def test_executor_sigint_cleans_descendant_held_pipes(self):
+        """Bound SIGINT cleanup when a descendant inherits both output pipes."""
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            child_pid = root / "child.pid"
+            interrupted = root / "interrupted"
+            child_script = (
+                "import signal,time; "
+                "signal.signal(signal.SIGTERM, signal.SIG_IGN); "
+                "time.sleep(30)")
+            command_script = (
+                "import os,pathlib,signal,subprocess,sys,time; "
+                f"p=subprocess.Popen([sys.executable,'-c',{child_script!r}]); "
+                f"pathlib.Path({str(child_pid)!r}).write_text(str(p.pid)); "
+                "time.sleep(0.1); os.kill(os.getppid(),signal.SIGINT); "
+                "time.sleep(30)")
+            helper_script = (
+                "import io,os,pathlib,sys; "
+                f"sys.path.insert(0,{str(SCRIPT_DIR)!r}); "
+                "import iphone_test_phases as phases; "
+                "phases.validated_xcode_environment=lambda:dict(os.environ); "
+                "execute=phases._default_executor('sigint-held-pipes',"
+                "terminal_stream=io.StringIO()); "
+                "command=(sys.executable,'-c'," + repr(command_script) + "); "
+                "\ntry:\n execute(command,10)\n"
+                "except KeyboardInterrupt:\n "
+                f"pathlib.Path({str(interrupted)!r}).write_text('yes')\n")
+
+            started = time.monotonic()
+            completed = subprocess.run(
+                [sys.executable, "-c", helper_script], check=False,
+                capture_output=True, text=True, timeout=5)
+            elapsed = time.monotonic() - started
+            interrupted_text = interrupted.read_text()
+            pid = int(child_pid.read_text())
+            status = subprocess.run(
+                ["/bin/ps", "-p", str(pid), "-o", "stat="],
+                check=False, capture_output=True, text=True)
+
+        self.assertEqual(0, completed.returncode, completed.stderr)
+        self.assertEqual("yes", interrupted_text)
+        self.assertLess(elapsed, 2.0)
+        self.assertTrue(status.returncode != 0 or status.stdout.startswith("Z"))
 
     def test_xcode_environment_preserves_and_validates_explicit_selection(self):
         """Retain one explicit full-Xcode directory only after all probes pass."""

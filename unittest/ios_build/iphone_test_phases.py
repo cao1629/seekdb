@@ -15,6 +15,7 @@ import subprocess
 import sys
 import tempfile
 import threading
+import time
 from typing import Callable, Iterable, Mapping, Optional, Sequence
 
 import iphone_test_runner as runner
@@ -88,6 +89,8 @@ SAFE_PROCESS_DIAGNOSTIC_LINES = frozenset((
 ))
 UNLOCK_RETRY_PROMPT = (
     "Unlock the iPhone and keep the screen awake; retrying…")
+PROCESS_TERMINATION_GRACE_SECONDS = 0.5
+PIPE_DRAIN_CLEANUP_SECONDS = 1.0
 
 
 class PhaseEvidenceError(RuntimeError):
@@ -725,16 +728,22 @@ def _slug(case_id: str) -> str:
 
 
 def _drain_process_stream(
-        stream, chunks: list[str], terminal_stream=None) -> None:
+        stream, chunks: list[str], terminal_stream=None,
+        live_echo_enabled: Optional[threading.Event] = None) -> None:
     """Drain one process pipe and echo only the exact complete unlock prompt."""
     pending = ""
     prompt_was_echoed = False
     while True:
-        chunk = stream.read(65536)
+        try:
+            chunk = stream.read(65536)
+        except (OSError, ValueError):
+            break
         if not chunk:
             break
         chunks.append(chunk)
-        if terminal_stream is None or prompt_was_echoed:
+        if (terminal_stream is None or prompt_was_echoed
+                or (live_echo_enabled is not None
+                    and not live_echo_enabled.is_set())):
             continue
         pending += chunk
         while "\n" in pending:
@@ -751,14 +760,14 @@ def _drain_process_stream(
                 break
 
 
-def _terminate_process_group(process: subprocess.Popen) -> None:
-    """Terminate, kill if necessary, and reap one isolated process group."""
+def _terminate_process_group(process: subprocess.Popen) -> bool:
+    """Bound termination and reaping of one isolated process group."""
     try:
         os.killpg(process.pid, signal.SIGTERM)
     except ProcessLookupError:
         pass
     try:
-        process.wait(timeout=1)
+        process.wait(timeout=PROCESS_TERMINATION_GRACE_SECONDS)
         process_was_reaped = True
     except subprocess.TimeoutExpired:
         process_was_reaped = False
@@ -767,14 +776,34 @@ def _terminate_process_group(process: subprocess.Popen) -> None:
     except ProcessLookupError:
         pass
     if not process_was_reaped:
-        process.wait()
+        try:
+            process.wait(timeout=PIPE_DRAIN_CLEANUP_SECONDS)
+        except subprocess.TimeoutExpired:
+            return False
+    return True
 
 
-def _close_process_streams(process: subprocess.Popen) -> None:
-    """Close drained process pipes after the reader threads reach EOF."""
+def _join_process_readers(
+        readers: Sequence[threading.Thread], deadline: float) -> bool:
+    """Join all pipe readers within one shared monotonic deadline."""
+    for reader in readers:
+        reader.join(timeout=max(0.0, deadline - time.monotonic()))
+    return all(not reader.is_alive() for reader in readers)
+
+
+def _close_process_streams(
+        process: subprocess.Popen, readers_stopped: bool = True) -> None:
+    """Close drained streams or force-close descriptors without blocking."""
     for stream in (process.stdout, process.stderr):
-        if stream is not None:
+        if stream is None:
+            continue
+        if readers_stopped:
             stream.close()
+            continue
+        try:
+            os.close(stream.fileno())
+        except (OSError, ValueError):
+            pass
 
 
 def _default_executor(
@@ -797,30 +826,46 @@ def _default_executor(
             env=command_environment, start_new_session=True)
         stdout_chunks: list[str] = []
         stderr_chunks: list[str] = []
+        live_echo_enabled = threading.Event()
+        live_echo_enabled.set()
         stdout_reader = threading.Thread(
             target=_drain_process_stream,
             args=(process.stdout, stdout_chunks), daemon=True)
         stderr_reader = threading.Thread(
             target=_drain_process_stream,
-            args=(process.stderr, stderr_chunks, live_terminal), daemon=True)
+            args=(process.stderr, stderr_chunks, live_terminal,
+                  live_echo_enabled), daemon=True)
         stdout_reader.start()
         stderr_reader.start()
+        readers = (stdout_reader, stderr_reader)
+        deadline = time.monotonic() + timeout_seconds
         timed_out = False
         try:
-            exit_status = process.wait(timeout=timeout_seconds)
+            exit_status = process.wait(
+                timeout=max(0.0, deadline - time.monotonic()))
+            if not _join_process_readers(readers, deadline):
+                timed_out = True
+                live_echo_enabled.clear()
+                _terminate_process_group(process)
+                exit_status = 124
         except subprocess.TimeoutExpired:
             timed_out = True
+            live_echo_enabled.clear()
             _terminate_process_group(process)
             exit_status = 124
         except BaseException:
+            live_echo_enabled.clear()
             _terminate_process_group(process)
-            stdout_reader.join()
-            stderr_reader.join()
-            _close_process_streams(process)
+            readers_stopped = _join_process_readers(
+                readers, time.monotonic() + PIPE_DRAIN_CLEANUP_SECONDS)
+            _close_process_streams(process, readers_stopped)
             raise
-        stdout_reader.join()
-        stderr_reader.join()
-        _close_process_streams(process)
+        if timed_out:
+            readers_stopped = _join_process_readers(
+                readers, time.monotonic() + PIPE_DRAIN_CLEANUP_SECONDS)
+        else:
+            readers_stopped = True
+        _close_process_streams(process, readers_stopped)
         stderr = "".join(stderr_chunks)
         if timed_out:
             if stderr and not stderr.endswith("\n"):
