@@ -1,0 +1,320 @@
+279418	27	src/storage/fts/dict	SCC
+165085	875	src/sql/engine/expr	SCC
+129123	140	src/sql/optimizer	SCC
+97271	95	src/sql/rewrite	SCC
+76465	109	src/share/schema	
+66910	170	src/share	
+50299	78	src/rootserver	SCC
+49040	304	src/observer/virtual_table	
+47252	178	src/share/geo	
+47164	7	src/oblib/common/timezone	
+46346	46	src/sql/resolver/dml	SCC
+41368	122	src/storage/blocksstable	SCC
+40489	128	src/sql/resolver/ddl	SCC
+37032	101	src/storage/tx	SCC
+35318	32	src/sql/resolver/expr	SCC
+34645	113	src/storage/tablet	SCC
+34325	99	src/storage/ddl	SCC
+33045	21	src/sql/session	SCC
+32691	97	src/storage/compaction	SCC
+31590	93	src/storage/access	SCC
+31099	60	src/sql/engine/basic	SCC
+30969	48	src/rootserver/ddl_task	SCC
+27704	49	src/sql/das/iter	SCC
+27614	35	src/sql	SCC
+27306	89	src/storage	SCC
+27287	9	src/oblib/lib/codec	
+26871	18	src/pl	
+26565	15	src/oblib/common/json_type	
+26529	58	src/sql/optimizer/stat	SCC
+26332	62	src/sql/engine/px	SCC
+25154	47	src/oblib/lib/compress/zstd_1_3_8/zstd_src	
+24868	29	src/observer/vector_index	
+24494	72	src/storage/blocksstable/encoding	SCC
+23057	96	src/logservice/palf	
+21197	38	src/storage/blocksstable/index_block	SCC
+20893	46	src/storage/tmp_file	SCC
+20519	15	src/sql/code_generator	SCC
+19873	53	src/sql/plan_cache	SCC
+18517	22	src/sql/engine/aggregate	SCC
+18382	63	src/sql/engine/cmd	SCC
+17686	19	src/oblib/lib/charset	
+17067	49	src/sql/das	SCC
+17006	10	src/share/object	
+16157	35	src/storage/tablelock	SCC
+15804	51	src/observer	
+15469	7	src/oblib/common/object	
+15425	31	src/storage/ls	SCC
+15377	45	src/oblib/lib/utility	
+14961	22	src/oblib/common/xml	
+14372	66	src/observer/mysql	
+14210	44	src/storage/lob	SCC
+14167	24	src/sql/engine/dml	SCC
+14072	29	src/storage/memtable/mvcc	SCC
+14008	6	src/share/system_variable	
+13733	29	src/oblib/lib/hash	
+13153	16	src/sql/engine/join	SCC
+13020	8	src/oblib/grpc	
+12854	33	src/storage/memtable	SCC
+12225	23	src/sql/engine	SCC
+12166	13	src/sql/resolver	SCC
+11460	27	src/oblib/lib/container	
+11356	4	src/observer/schema	
+11079	14	src/sql/printer	SCC
+10675	33	src/storage/retrieval	SCC
+10526	29	src/sql/parser	SCC
+10509	45	src/storage/multi_data_source	SCC
+10428	46	src/sql/resolver/cmd	SCC
+10103	2	src/oblib/common/number	
+9956	27	src/storage/tx_table	SCC
+9688	40	src/sql/dtl	SCC
+9192	28	src/oblib/lib/oblog	
+8957	24	src/standby/restore	
+8927	11	src/pl/sys_package	
+8356	22	src/share/cache	
+8243	23	src/storage/tx_storage	SCC
+8219	25	src/storage/meta_mem	SCC
+8082	35	src/oblib/lib/allocator	
+7952	17	src/sql/pl	SCC
+7435	9	src/share/io	
+7405	32	src/rootserver/freeze	SCC
+7335	18	src/rootserver/parallel_ddl	SCC
+7324	24	src/sql/engine/px/exchange	SCC
+6806	29	src/oblib/lib/alloc	
+6731	18	src/oblib/common/udt	
+6728	16	src/query/api/query/engine/expr	
+6446	6	src/storage/scheduler	SCC
+6337	18	src/sql/engine/table	SCC
+6105	22	src/share/config	
+6060	10	src/sql/hybrid_search	SCC
+6042	32	src/oblib/lib/thread	
+5822	24	src/storage/slog_ckpt	SCC
+5806	30	src/oblib/lib/lock	
+5726	34	src/oblib/common	
+5676	10	src/sql/engine/sort	SCC
+5533	19	src/oblib/lib	
+5262	46	src/sql/resolver/dcl	SCC
+5011	13	src/sql/monitor	SCC
+4973	2	src/sql/engine/window_function	SCC
+4852	15	src/observer/omt	
+4637	18	src/standby	
+4613	12	src/observer/change_stream	
+4416	24	src/storage/slog	SCC
+4242	8	src/oblib/common/wide_integer	
+4163	14	src/sql/engine/expr/ob_expr_ai	SCC
+3971	18	src/storage/fts	
+3839	16	src/logservice	
+3759	6	src/logservice/replayservice	
+3676	18	src/data_plane/api/data_plane/vector	
+3654	13	src/oblib/common/mysqlclient	
+3616	11	src/sql/engine/px/p2p_datahub	SCC
+3493	16	src/storage/truncate_info	SCC
+3491	8	src/query/api/query/vector	
+3478	18	src/sql/engine/set	SCC
+3311	16	src/sql/engine/px/datahub/components	SCC
+3137	10	src/rootserver/fork_table	SCC
+3069	7	src/oblib/lib/file	
+2976	11	src/storage/deadlock	SCC
+2975	8	src/share/datum	
+2962	2	src/query/api/query/parser	
+2908	16	src/sql/engine/basic/chunk_store	SCC
+2903	7	src/query/api/query/optimizer/stat	
+2885	14	src/sql/engine/pdml/static	SCC
+2871	10	src/observer/dbms_scheduler	
+2773	11	src/oblib/common/row	
+2616	15	src/share/storage	
+2513	15	src/storage/fts/ik	
+2486	1	src/objit/include/objit/common	
+2464	9	src/oblib/lib/stat	
+2464	17	src/oblib/rpc/obmysql	
+2458	4	src/rootserver/pl_ddl	SCC
+2449	7	src/oblib/lib/json	
+2407	13	src/share/tablet	
+2367	10	src/oblib/lib/objectpool	
+2283	10	src/oblib/lib/string	
+2232	6	src/oblib/lib/list	
+2212	15	src/oblib/common/log	
+2184	6	src/oblib/common/rowkey	
+2148	6	src/data_plane/api/data_plane/scheduler	
+2128	7	src/query/api/query/engine/basic	
+2123	7	src/storage/checkpoint	SCC
+2120	10	src/oblib/lib/queue	
+2098	14	src/storage/allocator	SCC
+2081	4	src/sql/privilege_check	SCC
+2041	8	src/sql/engine/recursive_cte	SCC
+1993	14	src/data_plane/api/data_plane/access	
+1991	4	src/oblib/lib/vector	
+1977	6	src/oblib/easy/io	
+1958	11	src/storage/multi_data_source/runtime_utility	SCC
+1951	2	src/storage/vector_index	SCC
+1935	4	src/sql/engine/subquery	SCC
+1912	16	src/sql/executor	SCC
+1876	12	src/share/redolog	
+1811	9	src/storage/throttle	SCC
+1790	3	src/pl/pl_cache	
+1767	7	src/query/api/query/engine	
+1697	16	src/storage/meta_store	SCC
+1681	5	src/oblib/lib/net	
+1678	6	src/oblib/lib/trace	
+1652	4	src/share/parameter	
+1635	5	src/oblib/lib/resource	
+1635	1	src/query/vector	
+1631	2	src/logservice/applyservice	
+1570	10	src/oblib/lib/time	
+1546	6	src/oblib/lib/hash_func	
+1527	6	src/oblib/lib/task	
+1527	2	src/storage/blockstore	SCC
+1524	14	src/storage/vector_type	
+1505	2	src/observer/composition/retrieval	
+1495	15	src/oblib/rpc/frame	
+1481	5	src/sql/das/iter/sparse_retrieval	SCC
+1462	13	src/query/api/query/engine/vector	
+1425	6	src/rootserver/dbms_job	
+1404	4	src/oblib/lib/checksum	
+1398	5	src/storage/multi_data_source/adapter_define	SCC
+1372	11	src/sql/pl/sys_package	SCC
+1329	5	src/storage/deadlock/ob_lcl_scheme	SCC
+1314	16	src/data_plane/api/data_plane/transaction	
+1292	6	src/share/resource	
+1271	4	src/oblib/common/cell	
+1257	6	src/sql/tablelock	SCC
+1236	2	src/oblib/common/datum	
+1230	10	src/oblib/rpc	
+1197	6	src/data_plane/api/data_plane/blocksstable	
+1185	3	src/query/api/query/engine/cmd	
+1183	12	src/share/compaction	
+1142	8	src/share/log/palf	
+1079	4	src/oblib/lib/guard	
+1058	6	src/standby/control	
+1021	2	src/rootserver/truncate_info	SCC
+1014	4	src/share/vector	
+1005	4	src/oblib/lib/rc	
+946	8	src/data_plane/api/data_plane/fts	
+922	10	src/data_plane/api/data_plane	
+912	5	src/share/resource_limit_calculator	
+908	4	src/pl/parser	
+880	4	src/share/interrupt	
+871	3	src/sql/pl/pl_cache	SCC
+867	3	src/data_plane/api/data_plane/retrieval	
+860	15	src/oblib/rpc/obmysql/packet	
+859	3	src/query/api/query	
+849	1	src/query/protocol	
+844	2	src/oblib/lib/encrypt	
+841	5	src/share/rc	
+839	4	src/share/text_analysis	
+815	7	src/oblib/common/meta_programming	
+801	4	src/storage/concurrency_control	SCC
+781	4	src/share/inner_table	
+766	13	src/sql/resolver/tcl	SCC
+755	4	src/observer/ai_service	
+728	2	src/sql/engine/opt_statistics	SCC
+716	3	src/oblib/lib/restore	
+708	3	src/oblib/lib/statistic_event	
+666	5	src/oblib/lib/wait_event	
+636	6	src/data_plane/api/data_plane/ddl	
+631	6	src/oblib/lib/signal	
+592	4	src/oblib/lib/compress/zstd_1_3_8	
+582	12	src/sql/resolver/prepare	SCC
+568	3	src/storage/blocksstable/encoding/neon	
+542	4	src/share/longops_mgr	
+539	5	src/storage/fts/utils	
+534	1	rust/sql-nio/include	
+532	3	src/share/log	
+529	5	src/oblib/lib/thread_local	
+527	3	src/oblib/easy/include	
+523	2	src/sql/monitor/show_trace	SCC
+522	4	src/query/api/query/protocol	
+521	5	src/sql/engine/px/datahub	SCC
+499	6	src/oblib/lib/encode	
+498	4	src/oblib/lib/profile	
+484	6	src/sql/engine/prepare	SCC
+484	4	src/oblib/lib/atomic	
+482	6	src/query/api/query/session	
+481	2	src/sql/engine/user_defined_function	SCC
+480	2	src/sql/engine/expand	SCC
+479	3	src/share/ai_service	
+478	3	src/oblib/common/sql_mode	
+472	2	src/oblib/common/lob	
+465	2	src/share/json	
+457	2	src/data_plane/api/data_plane/truncate_info	
+452	10	src/sql/engine/expr/ob_expr_str_cmp_func_compile	
+447	4	src/share/ls	
+437	1	src/oblib/lib/future	
+421	2	src/share/semistruct	
+410	9	src/oblib/easy/util	
+397	2	src/share/session	
+385	1	src/oblib/lib/function	
+378	4	src/storage/multi_data_source/compile_utility	SCC
+376	1	src/data_plane/api/data_plane/meta	
+367	3	src/query/api/query/scheduler	
+361	5	src/oblib/lib/compress	
+344	10	src/share/datum/ob_datum_funcs_compilation	
+327	1	src/query/api/query/engine/px/p2p_datahub	
+325	3	src/oblib/lib/locale	
+324	3	src/query/api/query/engine/px	
+314	3	src/oblib/lib/random	
+302	10	src/sql/engine/expr/ob_expr_cmp_func_compile	
+293	2	src/share/roaringbitmap	
+292	3	src/query/api/query/optimizer	
+289	4	src/data_plane/api/data_plane/tablelock	
+289	4	src/query/api/query/das	
+288	2	src/oblib/lib/compress/zlib	
+286	4	src/oblib/common/storage	
+283	3	src/sql/pl/parser	SCC
+279	2	src/oblib/common/enumset	
+274	4	src/storage/compaction/filter	SCC
+266	3	src/data_plane/api/data_plane/fts/dict	
+266	2	src/query/api/query/runtime	
+249	2	src/oblib/lib/cpu	
+246	1	src/share/statement	
+244	3	src/query/api/query/command	
+229	1	src/query/api/query/engine/aggregate	
+221	4	src/data_plane/api/data_plane/lob	
+218	2	src/logservice/common_util	
+217	1	src/oblib/lib/core_local	
+217	1	src/share/aggregate	
+208	3	src/share/table	
+204	1	src/oblib/lib/literals	
+201	2	src/logservice/localservice	
+198	3	src/query/api/query/ddl	
+197	3	src/query/api/query/resolver	
+180	2	src/share/lob	
+175	1	src/query/api/query/monitor	
+167	2	src/data_plane/api/data_plane/memtable	
+164	2	src/share/diagnosis	
+164	2	src/query/api/query/plan_cache	
+151	2	src/data_plane/api/data_plane/encoding	
+150	5	src/share/datum/ob_str_datum_funcs_compilation	
+149	2	src/share/io/io_schedule	
+140	2	src/share/server_snapshot	
+131	2	src/share/autoincrement	
+130	1	src/share/leak_checker	
+128	2	src/data_plane	
+128	2	src/oblib/lib/compress/none	
+128	3	src/oblib/lib/lds	
+127	2	src/share/location_cache	
+125	1	src/query/scheduler	
+122	2	src/data_plane/api/data_plane/report	
+113	2	src/share/transaction	
+110	1	src/share/allocator	
+107	1	src/oblib/lib/metrics	
+105	2	src/observer/scheduler	
+103	1	src/oblib/easy/thread	
+101	3	src/sql/engine/vector	
+98	1	src/data_plane/api/data_plane/tmp_file	
+92	2	src/query/api/query/ai	
+83	1	src/storage/api/storage/vector	SCC
+78	1	src/data_plane/api/data_plane/compaction	
+75	1	src/storage/deadlock/test	
+57	1	src/share/truncate_info	
+52	1	src/storage/api/storage/runtime	
+48	1	src/storage/tx/deadlock_adapter	
+44	1	src/query/api/query/virtual_table	
+43	1	src/query/api/query/change_stream	
+43	1	src/oblib/lib/geometry	
+40	1	src/share/rpc	
+40	1	src/oblib/lib/coro	
+39	1	src/data_plane/api/data_plane/direct_load	
+37	1	src/share/tablelock	
+35	1	src/query/api/query/tablelock	
+30	1	src/oblib/common/expression	

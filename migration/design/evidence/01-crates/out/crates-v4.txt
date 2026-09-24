@@ -1,0 +1,150 @@
+unassigned files 0 []
+crates not in order file []
+
+crate  all-lines  hand-lines  files  deps(lower crates it includes)
+x-dropped              30838      2881    29  
+ob-base               106822    105212   387  x-dropped
+ob-runtime             81914     56760   264  x-dropped ob-base
+ob-values             133298     88837   170  ob-base ob-runtime
+ob-values-doc          50858     50858    67  ob-base ob-runtime ob-values
+ob-share               96219     65446   277  x-dropped ob-base ob-runtime ob-values ob-values-doc
+ob-schema             205091     88602   173  ob-base ob-runtime ob-values ob-share
+geo-sys                47684     47033   179  ob-base ob-runtime ob-values ob-values-doc ob-share
+ob-log                 34379     34379   135  ob-base ob-runtime ob-values ob-share
+vsag-sys                1583      1583     2  ob-base
+storage-api             7863      7863    77  ob-base ob-runtime ob-values ob-values-doc ob-share ob-schema geo-sys
+storage-sstable       110047    110047   283  ob-base ob-runtime ob-values ob-values-doc ob-share ob-schema storage-api
+storage-tx             98122     98122   265  ob-base ob-runtime ob-values ob-values-doc ob-share ob-schema ob-log storage-api storage-sstable
+storage-tablet        174714    174714   604  x-dropped ob-base ob-runtime ob-values ob-values-doc ob-share ob-schema ob-log storage-api storage-sstable storage-tx
+storage-engine         67309     67309   201  ob-base ob-runtime ob-values ob-values-doc ob-share ob-schema ob-log storage-api storage-sstable storage-tx storage-tablet
+storage-search        306814     30771   165  ob-base ob-runtime ob-values ob-values-doc ob-share ob-schema geo-sys storage-api storage-sstable storage-tx storage-tablet storage-engine
+sql-parser-sys          5337      5337    20  ob-base ob-schema
+sql-session            33063     17122    22  ob-base ob-runtime ob-values ob-share ob-schema storage-api
+sql-ir                 85779     85779    81  ob-base ob-runtime ob-values ob-values-doc ob-share ob-schema geo-sys storage-api sql-parser-sys sql-session
+sql-exec               39768     39768   127  x-dropped ob-base ob-runtime ob-values ob-values-doc ob-share ob-schema storage-api storage-tablet sql-session sql-ir
+icu-regex-sys            954       954     2  x-dropped ob-base ob-values sql-ir sql-exec
+sql-expr              171787    171787   919  x-dropped ob-base ob-runtime ob-values ob-values-doc ob-share ob-schema geo-sys storage-api storage-tablet storage-search sql-session sql-ir sql-exec icu-regex-sys
+sql-das                57757     57757   114  ob-base ob-runtime ob-values ob-values-doc ob-share ob-schema geo-sys storage-api storage-search sql-parser-sys sql-session sql-ir sql-exec sql-expr
+sql-engine            150256    150256   366  ob-base ob-runtime ob-values ob-values-doc ob-share ob-schema geo-sys storage-api storage-tablet storage-engine sql-session sql-ir sql-exec sql-expr sql-das
+sql-parser              9156      9156    20  ob-base ob-runtime ob-values ob-share storage-search sql-parser-sys
+sql-resolver           97612     97612   280  ob-base ob-runtime ob-values ob-share ob-schema storage-api storage-search sql-session sql-ir sql-exec icu-regex-sys sql-expr sql-das sql-engine sql-parser
+sql-rewrite            97271     97271    95  ob-base ob-values ob-share ob-schema geo-sys sql-ir sql-exec sql-expr sql-das sql-parser sql-resolver
+sql-optimizer         142620    142620   211  ob-base ob-runtime ob-values ob-share ob-schema storage-api sql-session sql-ir sql-exec sql-expr sql-das sql-engine sql-parser sql-resolver sql-rewrite
+sql-codegen            21551     21551    18  ob-base ob-values storage-api sql-ir sql-exec sql-expr sql-das sql-engine sql-parser sql-optimizer
+sql                    76121     76121   201  ob-base ob-runtime ob-values ob-values-doc ob-share ob-schema storage-api storage-tablet storage-search sql-parser-sys sql-session sql-ir sql-exec icu-regex-sys sql-expr sql-das sql-engine sql-parser sql-resolver sql-rewrite sql-optimizer sql-codegen
+pl                     43403     43403    89  ob-base ob-runtime ob-values ob-values-doc ob-share ob-schema storage-api sql-session sql-ir sql-exec sql-expr sql-engine sql-parser sql-resolver sql-rewrite sql-optimizer sql-codegen sql
+rootserver            104049    104049   198  ob-base ob-runtime ob-values ob-values-doc ob-share ob-schema ob-log storage-sstable storage-tx storage-tablet storage-engine storage-search sql-session sql-ir sql-exec sql-das sql-engine sql-resolver sql-optimizer sql pl
+observer              118826    117010   494  x-dropped ob-base ob-runtime ob-values ob-values-doc ob-share ob-schema geo-sys ob-log storage-api storage-sstable storage-tx storage-tablet storage-engine storage-search sql-session sql-ir sql-exec sql-expr sql-das sql-engine sql-parser sql-resolver sql-optimizer sql pl rootserver
+standby                14696     14696    50  ob-base ob-runtime ob-values ob-share ob-log storage-sstable storage-tx storage-tablet
+seekdb                  1817      1817     5  x-dropped ob-base ob-runtime ob-share storage-tablet sql observer
+
+crates 34 total hand 2284483
+crate SCCs [['geo-sys', 'icu-regex-sys', 'ob-base', 'ob-log', 'ob-runtime', 'ob-schema', 'ob-share', 'ob-values', 'ob-values-doc', 'pl', 'rootserver', 'sql', 'sql-codegen', 'sql-das', 'sql-engine', 'sql-exec', 'sql-expr', 'sql-ir', 'sql-optimizer', 'sql-parser', 'sql-parser-sys', 'sql-resolver', 'sql-rewrite', 'sql-session', 'storage-api', 'storage-engine', 'storage-search', 'storage-sstable', 'storage-tablet', 'storage-tx', 'vsag-sys', 'x-dropped'], ['observer', 'seekdb']]
+
+back edges (lower crate includes a higher one): 106 pairs, 1053 include lines
+    114 storage-sstable -> storage-tablet: storage/ob_i_store.h(16), storage/access/ob_pushdown_aggregate.h(4), storage/access/ob_table_access_context.h(4), storage/access/ob_rows_info.h(4), storage/ob_i_table.h(4), storage/access/ob_aggregate_base.h(3) ... 55 headers
+     97 storage-tx -> storage-tablet: storage/tx_storage/ob_ls_service.h(16), storage/ls/ob_ls.h(8), storage/ob_i_store.h(7), storage/ob_i_table.h(5), storage/ob_i_memtable_mgr.h(5), storage/ls/ob_freezer.h(4) ... 45 headers
+     70 storage-tablet -> storage-engine: storage/ddl/ob_tablet_ddl_kv.h(9), storage/compaction/ob_tablet_scheduler.h(7), storage/compaction/ob_compaction_util.h(6), storage/compaction/ob_schedule_dag_func.h(5), storage/ddl/ob_direct_load_struct.h(5), storage/compaction/ob_tablet_merge_ctx.h(4) ... 26 headers
+     47 ob-share -> ob-schema: share/schema/ob_schema_struct.h(8), gen/share/inner_table/ob_inner_table_schema_constants.h(7), gen/share/inner_table/ob_inner_table_schema_misc.ipp(7), share/schema/ob_table_schema.h(4), share/schema/ob_schema_getter_guard.h(3), share/schema/ob_schema_service.h(3) ... 20 headers
+     36 ob-runtime -> ob-share: share/ob_define.h(10), share/ob_task_define.h(3), share/ob_io_device_helper.h(3), share/ob_errno.h(2), oblib/common/mysqlclient/ob_mysql_global.h(2), share/ob_version_parser.h(2) ... 18 headers
+     28 sql-resolver -> pl: sql/pl/ob_pl_package.h(8), sql/pl/ob_pl_build.h(4), sql/pl/ob_pl_stmt.h(3), sql/pl/parser/parse_stmt_item_type.h(3), sql/pl/ob_pl_dependency_util.h(2), sql/pl/ob_pl_resolver.h(2) ... 12 headers
+     24 sql-rewrite -> sql-optimizer: sql/optimizer/ob_log_join.h(5), sql/optimizer/ob_log_table_scan.h(4), sql/optimizer/ob_optimizer_context.h(3), sql/optimizer/stat/ob_opt_stat_manager.h(2), sql/optimizer/ob_log_plan.h(2), sql/optimizer/ob_log_subplan_scan.h(2) ... 12 headers
+     24 storage-tablet -> sql-exec: query/api/query/engine/basic/ob_pushdown_filter.h(5), query/api/query/engine/expr/ob_expr.h(4), query/api/query/session/ob_inner_sql_connection_access.h(3), query/api/query/engine/expr/ob_array_expr_utils.h(2), query/api/query/engine/basic/ob_external_pushdown_filter.h(2), query/api/query/engine/basic/ob_row_to_expr_projector.h(1) ... 13 headers
+     22 sql-ir -> sql-expr: sql/engine/expr/ob_expr_column_conv.h(3), sql/engine/expr/ob_lob_result_materializer.h(1), sql/engine/expr/ob_expr_func_part_hash.h(1), sql/engine/expr/ob_expr_version.h(1), sql/engine/expr/ob_json_param_type.h(1), sql/engine/expr/ob_expr_demote_cast.h(1) ... 20 headers
+     21 ob-values -> ob-values-doc: oblib/common/json_type/ob_json_bin.h(4), oblib/common/json_type/ob_json_parse.h(3), share/vector/ob_bit_vector.h(3), oblib/common/json_type/ob_json_base.h(2), oblib/common/udt/ob_array_type.h(2), oblib/common/udt/ob_collection_type.h(1) ... 12 headers
+     19 sql-engine -> sql: sql/ob_sql.h(5), sql/ob_scanner.h(2), sql/engine/cmd/ob_variable_set_executor.h(2), sql/executor/ob_worker_session_guard.h(2), sql/ob_sql_trans_control.h(2), sql/ob_spi.h(1) ... 11 headers
+     18 sql-exec -> sql-engine: sql/engine/basic/ob_temp_block_store.h(5), sql/engine/px/ob_px_util.h(3), sql/engine/basic/ob_chunk_row_store.h(2), sql/engine/basic/ob_sql_mem_callback.h(1), sql/engine/aggregate/ob_pushdown_aggregate_program.h(1), sql/engine/table/ob_i_virtual_table_iterator_factory.h(1) ... 11 headers
+     18 sql -> pl: sql/pl/ob_pl_package.h(4), sql/pl/pl_cache/ob_pl_cache_mgr.h(3), sql/pl/ob_pl.h(3), sql/pl/ob_pl_resolver.h(2), sql/pl/sys_package/ob_dbms_stats.h(1), sql/pl/ob_pl_package_state.h(1) ... 10 headers
+     18 storage-sstable -> storage-engine: storage/compaction/ob_compaction_memory_context.h(5), storage/compaction/ob_compaction_util.h(4), storage/ddl/ob_tablet_ddl_kv.h(2), storage/compaction/ob_sstable_merge_history.h(2), storage/compaction/ob_tablet_scheduler.h(1), storage/compaction/ob_compaction_memory_pool.h(1) ... 9 headers
+     17 storage-search -> sql-exec: query/api/query/engine/expr/ob_expr_bm25.h(4), query/api/query/das/ob_das_iter_access.h(3), query/api/query/das/ob_das_id_protocol.h(2), query/api/query/engine/expr/ob_expr.h(2), query/api/query/ob_sql_define.h(2), query/api/query/das/ob_block_max_spec_access.h(1) ... 9 headers
+     15 sql-ir -> sql-exec: query/api/query/ob_sql_define.h(3), query/api/query/session/ob_local_session_var.h(2), query/api/query/engine/expr/ob_expr_res_type.h(2), query/api/query/protocol/ob_mysql_protocol_util.h(1), query/api/query/engine/expr/ob_expr_lob_utils.h(1), query/api/query/ob_sql_name_service.h(1) ... 11 headers
+     15 sql-das -> sql-engine: sql/engine/dml/ob_dml_service.h(5), sql/engine/dml/ob_dml_ctx_define.h(2), sql/engine/table/ob_table_scan_op.h(1), sql/engine/sort/ob_sort_op_impl.h(1), sql/engine/sort/ob_sort_basic_info.h(1), sql/engine/table/ob_index_lookup_op_impl.h(1) ... 10 headers
+     15 sql-expr -> sql-engine: sql/engine/subquery/ob_subplan_filter_op.h(5), sql/engine/aggregate/ob_aggregate_processor.h(2), sql/engine/px/p2p_datahub/ob_p2p_dh_mgr.h(2), sql/engine/px/p2p_datahub/ob_p2p_dh_share_info.h(2), sql/engine/dml/ob_dml_ctx_define.h(1), sql/engine/px/ob_px_bloom_filter.h(1) ... 8 headers
+     15 sql-expr -> pl: sql/pl/ob_pl_resolver.h(5), sql/pl/ob_pl.h(5), sql/pl/ob_pl_stmt.h(3), sql/pl/ob_pl_package.h(2)
+     14 ob-base -> ob-runtime: oblib/lib/thread/ob_thread_name.h(4), oblib/lib/thread/thread_pool.h(2), oblib/lib/task/ob_timer.h(2), oblib/lib/compress/ob_compressor_pool.h(1), oblib/lib/compress/ob_compress_util.h(1), oblib/lib/net/ob_addr.h(1) ... 9 headers
+     14 sql-ir -> sql-resolver: sql/resolver/ob_resolver_utils.h(3), sql/resolver/dml/ob_inlist_resolver.h(3), sql/resolver/ob_stmt_resolver.h(2), sql/resolver/ddl/ob_create_view_resolver.h(1), sql/resolver/dml/ob_dml_resolver.h(1), sql/resolver/ddl/ob_fts_index_builder_util.h(1) ... 9 headers
+     14 sql-exec -> sql: sql/plan_cache/ob_plan_cache_util.h(2), sql/executor/ob_memory_tracker.h(1), sql/executor/ob_sql_executor_ctx.h(1), sql/monitor/ob_exec_stat.h(1), sql/monitor/ob_exec_stat_collector.h(1), sql/ob_sql_trans_control.h(1) ... 13 headers
+     14 storage-tablet -> storage-search: storage/api/storage/runtime/ob_i_server_runtime.h(8), storage/retrieval/ob_block_stat_iter.h(2), data_plane/api/data_plane/vector/ob_i_vector_index_runtime.h(1), storage/api/storage/vector/ob_i_vector_index_runtime.h(1), data_plane/api/data_plane/fts/ob_doc_id.h(1), data_plane/api/data_plane/vector/ob_vector_index_schema.h(1)
+     13 sql-resolver -> sql-rewrite: sql/rewrite/ob_transform_utils.h(9), sql/rewrite/ob_transform_pre_process.h(2), sql/rewrite/ob_stmt_comparer.h(2)
+     13 sql-session -> sql-exec: sql/engine/ob_physical_plan.h(2), query/api/query/session/ob_local_session_var.h(2), query/api/query/session/ob_deadlock_session.h(2), query/api/query/session/ob_session_inner_sql.h(1), query/api/query/command/ob_root_command_service.h(1), query/api/query/session/ob_session_access.h(1) ... 10 headers
+     12 sql-expr -> sql-parser: query/api/query/parser/ob_item_type.h(10), sql/parser/ob_item_type_str.h(1), sql/parser/ob_parser.h(1)
+     12 sql-ir -> sql-optimizer: sql/optimizer/ob_log_plan.h(3), sql/optimizer/ob_logical_operator.h(2), sql/optimizer/ob_log_values.h(1), sql/optimizer/ob_skyline_prunning.h(1), sql/optimizer/ob_access_path_estimation.h(1), sql/optimizer/ob_log_table_scan.h(1) ... 9 headers
+     12 sql-ir -> sql: sql/ob_sql_context.h(4), sql/executor/ob_maintain_dependency_info_task.h(1), sql/ob_sql.h(1), sql/monitor/ob_sql_plan.h(1), sql/ob_sql_temp_table.h(1), sql/executor/ob_memory_tracker.h(1) ... 9 headers
+     11 sql-engine -> sql-optimizer: sql/optimizer/ob_opt_selectivity.h(1), sql/optimizer/stat/ob_hybrid_hist_estimator.h(1), sql/optimizer/stat/ob_dbms_stats_utils.h(1), sql/optimizer/stat/ob_topk_hist_estimator.h(1), query/api/query/optimizer/stat/ob_opt_table_stat.h(1), query/api/query/optimizer/stat/ob_opt_column_stat.h(1) ... 11 headers
+     11 sql-ir -> sql-rewrite: sql/rewrite/ob_transform_utils.h(9), sql/rewrite/ob_query_range_provider.h(1), sql/rewrite/ob_predicate_deduce.h(1)
+     11 sql-session -> sql: sql/ob_sql_context.h(2), sql/ob_end_trans_callback.h(2), sql/monitor/show_trace/ob_show_trace.h(1), sql/plan_cache/ob_prepare_stmt_struct.h(1), sql/ob_sql_trans_util.h(1), sql/plan_cache/ob_ps_cache.h(1) ... 9 headers
+     10 ob-values -> ob-share: share/ob_lob_access_utils.h(5), share/ob_errno.h(3), oblib/common/mysqlclient/ob_mysql_global.h(1), share/ob_json_access_utils.h(1)
+     10 sql-ir -> sql-parser: query/api/query/parser/parse_node.h(5), query/api/query/parser/ob_item_type.h(2), sql/parser/ob_item_type_str.h(1), sql/parser/ob_sql_parser.h(1), sql/parser/ob_parser.h(1)
+     10 sql-optimizer -> sql: sql/ob_sql_context.h(2), sql/ob_sql_trans_control.h(1), sql/monitor/ob_sql_plan.h(1), sql/monitor/ob_plan_info_manager.h(1), sql/ob_sql_temp_table.h(1), sql/ob_phy_table_location.h(1) ... 9 headers
+     10 storage-engine -> sql-exec: query/api/query/engine/expr/ob_expr_lob_utils.h(2), query/api/query/engine/expr/ob_array_expr_utils.h(2), query/api/query/engine/basic/ob_spill_batch_spool.h(2), query/api/query/engine/ob_batch_rows.h(2), query/api/query/ai/ob_ai_endpoint_resolver.h(1), query/api/query/engine/expr/ob_ai_model_resolver.h(1)
+      9 sql-resolver -> sql: sql/plan_cache/ob_prepare_stmt_struct.h(2), sql/ob_trans_character.h(2), sql/engine/cmd/ob_load_data_file_reader.h(1), sql/ob_sql_context.h(1), sql/hybrid_search/ob_hybrid_search_executor.h(1), sql/executor/ob_memory_tracker.h(1) ... 7 headers
+      8 sql-parser-sys -> sql-parser: sql/parser/parse_malloc.h(3), query/api/query/parser/parse_node.h(3), sql/parser/ob_parser_charset_utils.h(2)
+      8 sql-expr -> sql-resolver: sql/resolver/ob_resolver_utils.h(4), sql/resolver/ddl/ob_explain_stmt.h(1), sql/resolver/dml/ob_select_resolver.h(1), sql/resolver/ddl/ob_fts_index_builder_util.h(1), sql/resolver/ddl/ob_vec_index_builder_util.h(1)
+      8 sql-expr -> sql: sql/ob_spi.h(5), sql/tablelock/ob_lock_func_executor.h(1), sql/plan_cache/ob_sql_parameterization.h(1), sql/ob_query_retry_ctrl.h(1)
+      8 storage-sstable -> sql-exec: query/api/query/engine/basic/ob_pushdown_filter.h(6), query/api/query/engine/expr/ob_expr_bm25.h(1), query/api/query/engine/expr/ob_expr_util.h(1)
+      7 ob-runtime -> ob-values: oblib/lib/charset/ob_charset.h(1), oblib/common/ob_accuracy.h(1), oblib/common/meta_programming/ob_type_traits.h(1), oblib/common/meta_programming/ob_meta_compare.h(1), oblib/common/meta_programming/ob_meta_copy.h(1), oblib/common/ob_store_format.h(1) ... 7 headers
+      7 sql-ir -> pl: sql/pl/ob_pl_package.h(2), sql/pl/ob_pl_resolver.h(2), sql/pl/ob_pl_stmt.h(1), sql/pl/ob_pl_dependency_util.h(1), sql/pl/parser/ob_pl_parser.h(1)
+      7 sql-exec -> sql-codegen: query/api/query/engine/ob_operator_reg.h(3), sql/code_generator/ob_static_engine_cg.h(2), sql/engine/ob_operator_factory.h(2)
+      7 sql-das -> sql-optimizer: sql/optimizer/ob_join_order.h(3), sql/optimizer/ob_phy_table_location_info.h(2), sql/optimizer/ob_log_plan.h(1), query/api/query/optimizer/ob_optimizer_location_defs.h(1)
+      7 sql-expr -> sql-das: query/api/query/vector/ob_vector_index_util.h(6), sql/das/ob_das_scan_op.h(1)
+      7 sql-rewrite -> sql: sql/ob_sql_context.h(6), sql/executor/ob_memory_tracker.h(1)
+      7 storage-engine -> storage-search: storage/api/storage/vector/ob_i_vector_index_runtime.h(3), storage/vector_index/ob_vector_kmeans_ctx.h(2), data_plane/api/data_plane/vector/ob_i_vector_index_runtime.h(1), storage/api/storage/runtime/ob_i_server_runtime.h(1)
+      7 storage-tx -> storage-engine: storage/compaction/ob_schedule_dag_func.h(4), storage/ddl/ob_tablet_ddl_kv.h(2), storage/ddl/ob_ddl_clog.h(1)
+      6 sql-das -> sql: sql/ob_sql_context.h(2), sql/ob_phy_table_location.h(2), sql/ob_query_retry_ctrl.h(2)
+      6 sql-exec -> sql-expr: sql/engine/expr/ob_expr_topn_filter.h(1), sql/engine/expr/ob_json_param_type.h(1), sql/engine/expr/ob_expr_json_func_helper.h(1), sql/engine/expr/ob_expr_operator_factory.h(1), sql/engine/expr/ob_sql_expression_factory.h(1), sql/engine/expr/ob_expr_sql_udt_utils.h(1)
+      6 sql-engine -> sql-resolver: sql/resolver/ddl/ob_fts_index_builder_util.h(2), sql/resolver/prepare/ob_deallocate_stmt.h(1), sql/resolver/cmd/ob_call_procedure_stmt.h(1), sql/resolver/prepare/ob_prepare_stmt.h(1), sql/resolver/ob_resolver_utils.h(1)
+      6 storage-tx -> sql-exec: query/api/query/session/ob_deadlock_session.h(3), query/api/query/ob_i_active_snapshot_service.h(1), query/api/query/tablelock/ob_table_lock_runtime.h(1), query/api/query/ob_sql_define.h(1)
+      5 sql-engine -> pl: sql/pl/ob_pl.h(2), sql/pl/ob_pl_stmt.h(1), sql/pl/parser/parse_stmt_item_type.h(1), sql/pl/ob_pl_resolver.h(1)
+      5 storage-engine -> sql-das: query/api/query/vector/ob_vector_index_util.h(3), query/api/query/vector/ob_vector_embedding_handler.h(2)
+      5 ob-runtime -> storage-engine: storage/compaction/ob_compaction_progress.h(1), storage/compaction/ob_compaction_memory_pool.h(1), storage/compaction/ob_batch_freeze_tablets_dag.h(1), storage/compaction/ob_batch_exec_dag.h(1), storage/compaction/ob_compaction_diagnose.h(1)
+      4 ob-values-doc -> ob-share: oblib/common/mysqlclient/ob_mysql_global.h(4)
+      4 sql-parser -> pl: sql/pl/parser/ob_pl_parser.h(3), sql/pl/ob_pl_resolver.h(1)
+      4 sql-parser-sys -> pl: sql/pl/parser/parse_stmt_item_type.h(2), sql/pl/parser/parse_stmt_node.h(2)
+      4 sql-engine -> sql-parser: query/api/query/parser/parse_node.h(3), query/api/query/parser/ob_item_type.h(1)
+      4 sql-resolver -> sql-optimizer: query/api/query/optimizer/stat/ob_stat_define.h(1), sql/optimizer/stat/ob_dbms_stats_utils.h(1), sql/optimizer/ob_opt_est_utils.h(1), sql/optimizer/ob_opt_selectivity.h(1)
+      4 sql-session -> pl: sql/pl/ob_pl_server_cursor.h(2), sql/pl/ob_pl_package_state.h(1), sql/pl/ob_pl_package.h(1)
+      4 storage-sstable -> storage-tx: storage/memtable/mvcc/ob_keybtree.h(1), storage/memtable/ob_row_conflict_handler.h(1), storage/memtable/ob_nop_bitmap.h(1), storage/tx_table/ob_tx_table_iterator.h(1)
+      3 sql-exec -> sql-parser: query/api/query/parser/ob_item_type.h(3)
+      3 ob-values -> geo-sys: share/geo/ob_srs_provider.h(1), share/geo/ob_geometry_cast.h(1), share/geo/ob_geo_common.h(1)
+      3 sql-das -> sql-resolver: sql/resolver/ddl/ob_vec_index_builder_util.h(1), sql/resolver/ddl/ob_fts_index_builder_util.h(1), sql/resolver/dml/ob_delete_resolver.h(1)
+      3 sql-das -> sql-rewrite: sql/rewrite/ob_query_range_define.h(2), sql/rewrite/ob_transform_utils.h(1)
+      3 sql-optimizer -> sql-codegen: sql/code_generator/ob_code_generator.h(1), sql/engine/ob_operator_factory.h(1), sql/code_generator/ob_static_engine_cg.h(1)
+      3 storage-search -> sql-das: query/api/query/vector/ob_vector_index_adaptor.h(1), query/api/query/vector/ob_vector_embedding_handler.h(1), query/api/query/vector/ob_vector_index_util.h(1)
+      2 x-dropped -> ob-base: oblib/lib/utility/utility.h(2)
+      2 ob-schema -> sql-resolver: sql/resolver/ob_resolver_utils.h(1), sql/resolver/ddl/ob_fts_index_builder_util.h(1)
+      2 storage-api -> sql-exec: query/api/query/engine/expr/ob_expr.h(2)
+      2 sql-das -> pl: sql/pl/ob_pl.h(2)
+      2 sql-exec -> sql-das: sql/das/ob_das_context.h(1), sql/optimizer/ob_table_location.h(1)
+      2 sql-optimizer -> pl: sql/pl/sys_package/ob_dbms_stats.h(2)
+      2 sql-parser-sys -> sql: sql/executor/ob_memory_tracker_wrapper.h(1), sql/ob_trans_character.h(1)
+      2 sql-resolver -> sql-codegen: sql/code_generator/ob_expr_generator_impl.h(1), sql/code_generator/ob_column_index_provider.h(1)
+      2 sql-session -> sql-expr: sql/engine/expr/ob_expr_plsql_variable.h(1), sql/engine/expr/ob_expr_uuid.h(1)
+      1 storage-api -> storage-search: data_plane/api/data_plane/fts/ob_doc_id.h(1)
+      1 ob-base -> ob-values: oblib/lib/charset/ob_mysql_global.h(1)
+      1 ob-values-doc -> vsag-sys: oblib/lib/vector/ob_vsag_adaptor.h(1)
+      1 observer -> standby: standby/standby_module.h(1)
+      1 observer -> seekdb: observer/ob_signal_handle.h(1)
+      1 ob-runtime -> ob-values-doc: oblib/common/json_type/ob_json_tree.h(1)
+      1 ob-runtime -> ob-schema: gen/share/inner_table/ob_inner_table_schema_misc.ipp(1)
+      1 ob-share -> ob-log: share/log/palf/log_define.h(1)
+      1 ob-runtime -> ob-log: share/log/palf/palf_options.h(1)
+      1 sql-exec -> pl: sql/pl/ob_pl_package_guard.h(1)
+      1 sql-exec -> sql-optimizer: query/api/query/optimizer/ob_optimizer_location_defs.h(1)
+      1 sql-engine -> sql-codegen: query/api/query/engine/ob_operator_reg.h(1)
+      1 sql-engine -> sql-rewrite: sql/rewrite/ob_range_generator.h(1)
+      1 sql-das -> sql-codegen: sql/code_generator/ob_column_index_provider.h(1)
+      1 sql-parser -> sql: sql/plan_cache/ob_plan_cache_struct.h(1)
+      1 sql-ir -> sql-das: query/api/query/vector/ob_vector_index_param.h(1)
+      1 sql-ir -> sql-codegen: sql/code_generator/ob_static_engine_expr_cg.h(1)
+      1 sql-rewrite -> sql-codegen: sql/code_generator/ob_column_index_provider.h(1)
+      1 sql-rewrite -> pl: sql/pl/ob_pl_resolver.h(1)
+      1 sql-session -> icu-regex-sys: sql/engine/expr/ob_expr_regexp_context.h(1)
+      1 sql-session -> sql-parser: sql/parser/ob_parser_utils.h(1)
+      1 sql-session -> sql-optimizer: sql/optimizer/stat/ob_opt_stat_manager.h(1)
+      1 sql-session -> sql-ir: sql/ob_optimizer_trace_impl.h(1)
+      1 sql-session -> sql-engine: sql/engine/dml/ob_trigger_handler.h(1)
+      1 storage-tx -> storage-search: data_plane/api/data_plane/vector/ob_i_vector_memory.h(1)
+      1 storage-engine -> rootserver: rootserver/ddl_task/ob_ddl_task.h(1)
+      1 storage-tablet -> sql-das: query/api/query/vector/ob_vector_index_util.h(1)
+      1 storage-tx -> sql-optimizer: query/api/query/optimizer/stat/ob_optimizer_stat_service.h(1)
+      1 storage-tablet -> sql-parser: query/api/query/parser/parse_node.h(1)

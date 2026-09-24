@@ -1,0 +1,7 @@
+total lines 770711
+{'statement': 6744, 'column header': 5740, 'NULL': 519097, 'integer': 165419, 'fixed': 56125, 'error': 365, 'exponent': 17067, 'other': 154}
+NULL literal {'NULL': 16368, 'integer': 0, 'fixed': 0, 'exponent': 0, 'error': 0, 'other': 0}
+decimal operand {'NULL': 103389, 'integer': 14034, 'fixed': 49557, 'exponent': 0, 'error': 15, 'other': 0}
+integer operands only {'NULL': 46911, 'integer': 31893, 'fixed': 0, 'exponent': 0, 'error': 303, 'other': 0}
+string operand {'NULL': 275391, 'integer': 119066, 'fixed': 5464, 'exponent': 17067, 'error': 9, 'other': 0}
+temporal operand {'NULL': 77038, 'integer': 398, 'fixed': 1104, 'exponent': 0, 'error': 17, 'other': 0}

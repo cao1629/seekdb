@@ -1,0 +1,51 @@
+OB_FAIL( lines                                      99935   git grep -h 'OB_FAIL(' -- src
+OB_SUCC( lines                                      31248   git grep -h 'OB_SUCC(' -- src
+OB_SUCC(ret) && lines                               17767   git grep -h 'OB_SUCC(ret) &&' -- src
+OB_TMP_FAIL( lines                                    631   git grep -h 'OB_TMP_FAIL(' -- src
+tmp_ret lines (any)                                  3367   git grep -h -w 'tmp_ret' -- src
+int tmp_ret = OB_SUCCESS; lines                       920   git grep -h 'int tmp_ret = OB_SUCCESS;' -- src
+OB_X == ret lines                                       0   git grep -h -E 'OB_[A-Z_0-9]+ == ret\b' -- src
+  of which OB_SUCCESS == ret                            0   git grep -h -E 'OB_SUCCESS == ret\b' -- src
+  of which non-SUCCESS == ret                           0   git grep -h -E 'OB_[A-Z_0-9]+ == ret\b' -- src | grep -v 'OB_SUCCESS == ret'
+ret == OB_X lines                                       0   git grep -h -E '\bret == OB_[A-Z_0-9]+' -- src
+OB_X != ret lines                                       0   git grep -h -E 'OB_[A-Z_0-9]+ != ret\b' -- src
+  of which OB_SUCCESS != ret                            0   git grep -h -E 'OB_SUCCESS != ret\b' -- src
+ret = OB_SUCCESS; resets                                0   git grep -h -E '\bret = OB_SUCCESS;' -- src
+  excluding declarations                                0   git grep -h -E '\bret = OB_SUCCESS;' -- src | grep -v -E 'int (ret|tmp_ret) = OB_SUCCESS;'
+int ret = OB_SUCCESS; (function starts)                 0   git grep -h -E '\bint ret = OB_SUCCESS;' -- src
+int &ret = ret_; sites                                  0   git grep -n -E 'int\s*&\s*ret\s*=\s*ret_;' -- src
+int ret_; members                                       0   git grep -h -E '^\s*int\s+ret_;' -- src
+switch (ret) statements                                 2   git grep -h -E 'switch\s*\(\s*ret\s*\)' -- src
+K(ret) in log lines                                 15852   git grep -h 'K(ret)' -- src
+LOG_WARN( lines                                      5287   git grep -h 'LOG_WARN(' -- src
+LOG_USER_ERROR( lines                                2805   git grep -h 'LOG_USER_ERROR(' -- src
+LOG_USER_WARN( lines                                  127   git grep -h 'LOG_USER_WARN(' -- src
+LOG_USER_NOTE( lines                                    8   git grep -h 'LOG_USER_NOTE(' -- src
+FORWARD_USER_ERROR( lines                              20   git grep -h 'FORWARD_USER_ERROR(' -- src
+FORWARD_USER_WARN( lines                                3   git grep -h 'FORWARD_USER_WARN(' -- src
+FORWARD_USER_NOTE( lines                                3   git grep -h 'FORWARD_USER_NOTE(' -- src
+LOG_USER_ERROR_LINE_COLUMN( lines                       3   git grep -h 'LOG_USER_ERROR_LINE_COLUMN(' -- src
+LOG_MYSQL_USER_ERROR( lines                            11   git grep -h 'LOG_MYSQL_USER_ERROR(' -- src
+LOG_DBA_ERROR( lines                                   29   git grep -h 'LOG_DBA_ERROR(' -- src
+__USER_ERROR_MSG uses outside ob_errno.h                4   git grep -h '__USER_ERROR_MSG' -- src ':!src/share/ob_errno.h' ':!src/share/gen_errno.pl' ':!src/oblib/lib/oblog/ob_log_module.h'
+ob_errpkt_errno( uses                                  12   git grep -h 'ob_errpkt_errno(' -- src ':!src/share/ob_errno.*'
+ob_sqlstate( uses                                      16   git grep -h 'ob_sqlstate(' -- src ':!src/share/ob_errno.*'
+ob_strerror( uses                                      10   git grep -h 'ob_strerror(' -- src ':!src/share/ob_errno.*'
+ob_str_user_error( uses                                 3   git grep -h 'ob_str_user_error(' -- src ':!src/share/ob_errno.*'
+ob_errpkt_strerror( uses                               29   git grep -h 'ob_errpkt_strerror(' -- src ':!src/share/ob_errno.*'
+ob_errpkt_str_user_error( uses                          9   git grep -h 'ob_errpkt_str_user_error(' -- src ':!src/share/ob_errno.*'
+ob_error_name( uses                                     8   git grep -h 'ob_error_name(' -- src ':!src/share/ob_errno.*'
+ob_mysql_errno( uses                                   10   git grep -h -E 'ob_mysql_errno(_with_check)?\(' -- src ':!src/share/ob_errno.*'
+throw  statements in src                                0   git grep -h -E '^\s*throw\b' -- src
+try { blocks in src                                     0   git grep -h -E '\btry\s*\{' -- src
+catch ( in src                                          0   git grep -h -E '\bcatch\s*\(' -- src
+SMART_CALL( sites                                    1132   git grep -h 'SMART_CALL(' -- src
+OB_SIZE_OVERFLOW total                                652   git grep -h -w 'OB_SIZE_OVERFLOW' -- src
+ret_ member reads (ret_ word)                         704   git grep -h -w 'ret_' -- src
+files with int ret_; member                             0   git grep -l -E '^\s*int\s+ret_;' -- src
+error_ret_ uses                                       107   git grep -h -w 'error_ret_' -- src
+get_err_ret() uses                                     10   git grep -h 'get_err_ret()' -- src
+SQL_ENG_LOG/LOG_WARN with ret as value                  0   git grep -h -E 'LOG_(WARN|ERROR|INFO|TRACE|DEBUG)\(.*\bret\b' -- src
+COVER_SUCC( uses                                       75   git grep -h 'COVER_SUCC(' -- src
+OB_SUCCESS total tokens                             48725   git grep -h -w 'OB_SUCCESS' -- src
+files under src (tracked, code)                      6640   git ls-files src | grep -E '\.(h|hpp|cpp|cc|c|ipp)$'

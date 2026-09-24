@@ -1,0 +1,313 @@
+## AREA: deps
+**What it is:** seekdb links about 19 prebuilt third-party libraries, listed in deps/init/*.deps (13 platform files) and wired in mainly through src/oblib/CMakeLists.txt, src/oblib/lib/CMakeLists.txt and src/oblib/grpc/CMakeLists.txt. It also carries about 34k lines of copied third-party C/C++ source (zstd 1.3.8, xxHash, IANA tzcode, libeasy/libev headers, CRC code) plus about 13k lines of checked-in protobuf/gRPC output. Most libraries are called from a small number of wrapper files. The exceptions are boost::geometry, which runs through src/share/geo, and vsag, whose C++ interfaces seekdb subclasses.
+
+**Size split:** Library code itself is outside the tree (prebuilt packages under deps/3rd, not git-tracked). The in-tree lines that belong to this area break down as follows.
+
+VENDORED THIRD-PARTY SOURCE, 33,789 lines, verified:
+- zstd 1.3.8, src/oblib/lib/compress/zstd_1_3_8/zstd_src: 47 .c/.h files, 25,154 lines.
+- xxHash, src/oblib/lib/hash_func/xxhash.{c,h}: 1,214 lines.
+- murmur_hash.{cpp,h} and wyhash.h: 259 lines.
+- IANA tzcode, src/oblib/common/timezone/{localtime.c,private.h,tzfile.h}: 2,859 lines.
+- libeasy and libev header remnants, src/oblib/easy: 19 .h files, 3,017 lines.
+- CRC code, src/oblib/lib/checksum/ob_crc64.{cpp,h}: 1,286 lines.
+Commands: `git ls-files <dir> | grep -E '\.(c|h)$' | xargs cat | wc -l` and `wc -l`.
+
+PROBABLY PORTED, NOT VERIFIED:
+- src/oblib/lib/charset: 20 files, 24,815 lines, MySQL strings/ ctype-uca and dtoa style. The provenance headers were replaced by the OceanBase Apache header.
+- The SHA1 code in src/oblib/lib/encrypt/ob_encrypted_helper.cpp uses the RFC 3174 names SHA1ProcessMessageBlock and Intermediate_Hash.
+
+GENERATED, 12,996 lines:
+- src/oblib/grpc/standbyservice.{pb,grpc.pb}.{cc,h}: 12,345 lines.
+- src/share/geo/ob_vector_tile.pb-c.{c,h}: 651 lines.
+Command: `wc -l`.
+
+DATA, about 38,963 lines:
+- src/oblib/common/timezone/ob_timezone_info.cpp lines 26-38988 are the embedded tz tables TIME_ZONE_NAMES and TIME_ZONE_TRANS, out of 39,989 lines. Command: `awk '/^};/'` to find where the tables end.
+
+GRAMMARS FED TO BISON/FLEX, 24,585 lines:
+- 3 .y files and 3 .l files. Command: `git ls-files '*.y' '*.l' | xargs wc -l`.
+
+HAND-WRITTEN WRAPPERS THAT CALL THE LIBRARIES DIRECTLY, about 13.5k lines:
+- vsag: src/oblib/lib/vector, 4 files, 1,991 lines.
+- S2: ob_s2adapter.* and ob_geo_to_s2_visitor.*, 1,343 lines.
+- sqlite: ob_sqlite_*, 1,145 lines.
+- libxml2: SAX handler plus XML parser, 2,039 lines.
+- ICU regex: ob_expr_regexp_context.*, 954 lines.
+- relaxed-rapidjson: ob_json_parse.*, 853 lines.
+- zstd: ob_zstd_* wrapper, 608 lines.
+- gRPC: ob_grpc_*, 675 lines.
+- CRoaring: ob_rb_memory_mgr.*, 293 lines.
+- curl: the 3 curl-using .cpp files, 3,627 lines in total, not all of it curl code.
+
+BOOST::GEOMETRY-DEPENDENT CODE:
+- 59 files and 16,383 lines in src/share/geo include boost/geometry or go through ob_geo_dispatcher.h / ob_geo_func_common.h.
+- The whole of src/share/geo is 179 files and 47,684 lines.
+Command: `git grep -l -E 'boost/geometry|boost::geometry|ob_geo_func_common.h|ob_geo_dispatcher.h' -- src/share/geo | xargs cat | wc -l`.
+
+ORPHANS:
+- deps/oblib: 3 files, 308 lines. No build file references them.
+
+**Summary:** 1. The dependency surface is smaller than the manifests suggest, and it keeps shrinking. LLVM is now only the compiler toolchain: the PL JIT was removed in 3f1fbb84f (-62,423 lines), and src/objit is a single enum header. The compression libraries were cut down to none/zstd138 in 4238c88e9 (-53,912 lines). abseil, xz and gtest have no direct users.
+
+2. ICU is not used for charsets or collations. Those are 24,815 lines of in-tree, MySQL-style code in src/oblib/lib/charset. ICU is only the regex engine behind REGEXP (the uregex_* C API in ob_expr_regexp_context.cpp) plus one URL-codec call. So ICU stays a plain C-FFI dependency, while the charset code is translation work that belongs to oblib.
+
+3. Most C dependencies are called from 1-8 wrapper files each and have mature Rust answers:
+   - openssl → RustCrypto crates plus rustls, which sql-nio already uses.
+   - libcurl → reqwest or the curl crate.
+   - sqlite → rusqlite, which reads the same meta.db format.
+   - zlib → flate2.
+   - libaio → io_uring or libc syscalls.
+   - jemalloc → tikv-jemallocator. It is already built through Cargo.
+   - protobuf-c → prost.
+   - gRPC/protobuf → tonic/prost. That removes 12,345 checked-in generated lines.
+
+4. Three dependencies decide the structure:
+   - boost::geometry is header-only C++ templates. It is specialized over seekdb's own geometry types (ob_geo_bin_traits.h, ob_geo_tree_traits.h) and uses ellipsoid ("geographic") strategies. Its exception types leak into user-visible error codes (OB_ERR_BOOST_GEOMETRY_*).
+   - vsag is C++ with virtual Allocator, Logger and Filter interfaces that seekdb subclasses in 4 places. vsag's own C API does not cover allocators, loggers, extra-info, iterators or sparse vectors.
+   - relaxed-rapidjson is a header-only fork with non-standard parse flags.
+   None of the three can be called over FFI without a C++ shim, and no Rust crate matches their behavior.
+
+5. Several dependencies are tied to on-disk formats, so replacing them is a compatibility question and not just a code question. S2 cell ids are written into spatial-index rows; vsag index snapshots are persisted (see the legacy-format fix 50306fbfd); zstd 1.3.8 compresses blocks; the CRC-32C-based ob_crc64 produces checksums; and sqlite stores meta.db.
+
+6. About 34k lines of copied third-party code can be deleted and replaced by crates: zstd, twox-hash/xxhash-rust, chrono-tz/tz-rs, crc32c, and removing the vestigial libeasy headers. The ~39k-line embedded tz table becomes a crate dependency.
+
+7. The strongest case-for-leaving evidence from this area is the in-house memory-safety toolchain: the ob-sanity LLVM pass plugin plus jemalloc-level shadow memory. Commit 6da784ac1 fixed a wrong buffer length, a read after unlock and a dangling pointer, all found with it.
+
+8. Public-surface tests cover boost/S2 heavily: 42 geometry test files, whose 42 result files total 55,904 lines and include results carried over from MySQL. vsag has 31 tests. There are 6 REGEXP tests. libxml2, protobuf-c (ST_AsMVT) and the zlib COMPRESS() function have none.
+
+**Structure call (surveyor):** This area does not translate one-to-one. Each dependency needs its own decision, and they fall into four kinds.
+
+(a) C libraries with a mature Rust crate or plain C FFI can be swapped behind their current wrappers without changing structure:
+- OpenSSL → RustCrypto crates (md-5, sha1, sha2, aes, des, hmac) plus rustls.
+- libcurl → reqwest, or the curl crate.
+- sqlite → rusqlite, same meta.db file format.
+- zlib → flate2.
+- libaio → io-uring or libc syscalls.
+- jemalloc → tikv-jemallocator.
+- libunwind → keep over FFI, because backtraces taken inside signal handlers need it.
+- CRoaring → croaring (the same C library) or roaring.
+- protobuf-c → prost.
+- gRPC/protobuf → tonic + prost.
+- ICU regex → keep ICU4C over its C API, since no pure-Rust regex matches ICU semantics.
+- fast_float → Rust std float parsing.
+
+(b) Copied third-party source is deleted and replaced by crates:
+- zstd → zstd or ruzstd.
+- xxHash → xxhash-rust.
+- tzcode and the tz data → chrono-tz or tz-rs.
+- CRC → crc32c / crc64fast.
+- libeasy/libev headers → std::net types.
+Each replacement must give bit-exact output wherever the result is persisted.
+
+(c) Three dependencies force a redesign, because they are header-only or virtual-interface C++ and no Rust crate behaves the same:
+- boost::geometry, including ellipsoid ("geographic") strategies and user-visible exception-to-error mapping. Options: keep it behind a hand-written C++ shim that instantiates the templates for seekdb's geometry types, or move to geo + geographiclib-rs + proj and accept different numeric results.
+- vsag. Needs a C shim that turns its Allocator, Logger and Filter subclasses and its std::istream/ostream serialization into function-pointer callbacks.
+- relaxed-rapidjson. Needs a hand-written Rust SAX parser that reproduces the fork's flags.
+
+(d) S2 is C++ as well, but its surface is small (1,343 lines). It needs either a small C++ shim or the partial pure-Rust s2 crate, and in either case the cell coverings must stay identical, because cell ids are stored in index rows.
+
+Files that force the redesign: src/share/geo/ob_geo_dispatcher.h, src/share/geo/ob_geo_bin_traits.h, src/share/geo/ob_geo_tree_traits.h, src/oblib/lib/vector/ob_vsag_adaptor.cpp, src/storage/allocator/ob_vector_allocator.h, src/oblib/common/json_type/ob_json_parse.cpp.
+
+**Structure call check (verifier):** I mostly agree. This area needs one decision per dependency, not a line-by-line translation. boost::geometry and vsag are the two real redesign points. The evidence: bg:: and boost:: are used in 39 files, with traits in ob_geo_bin_traits.h and ob_geo_tree_traits.h and the dispatcher in ob_geo_dispatcher.h:1314-1363. vsag is reached through C++ virtual subclasses in ob_vector_util.h:35, ob_vsag_adaptor.cpp:87, ob_vector_allocator.h:71 and ob_vector_index_adaptor.h:237, and through std::istream/ostream serialization, while vsag_c_api.h offers only 'bool (*)(int64_t)' as a callback. Five adjustments. (a) relaxed-rapidjson does not belong in the same bucket as boost and vsag. The fork's full reader.h (2,417 lines) is installed and readable, it is used from 7 files through one SAX wrapper (ob_json_parse.cpp), and Windows already ships without the relaxed flags. So it is a bounded parser rewrite, not a redesign. (b) Keeping S2 behind a C++ shim also keeps OpenSSL: libs2.a has 26 undefined BN_* symbols. libcurl.a and libgrpc.a also reference SSL_*. The plan to replace OpenSSL with RustCrypto plus rustls only works after S2, curl and gRPC are all replaced. (c) tzcode needs deleting, not replacing with a crate. (d) The ICU decision covers ob_expr_regexp_context.cpp alone; the URL codec does not call ICU. (e) The malloc-hook and label hard part applies only to Linux (src/oblib/lib/CMakeLists.txt:33-40). The CRoaring out-of-memory path is simpler than it looks, because seekdb never serializes roaring64 bitmaps: the only roaring64 calls are add, remove, contains, set operations and cardinality, in 4 vector-index files.
+
+**Size split check (verifier):** Most of the counts reproduce exactly: zstd_src 47 .c/.h files and 25,154 lines, xxHash 1,214, murmur plus wyhash 259, tzcode 2,859, easy 3,017, CRC 1,286, charset 20 files and 24,815 lines, gRPC stubs 12,345, pb-c 651, grammars 24,585, boost-dependent geo 59 files and 16,383 lines, deps/oblib 308. src/share/geo is 180 files and 47,763 lines including ob_vector_tile.proto (79 lines); leaving out the .proto gives the survey's 179 and 47,684. Some of the wrapper sizes are a little off, for example the zstd wrapper is 592 lines, or 608 with ob_empty.c. The classification needs changes. (1) Of the '33,789 vendored' lines, tzcode (2,859) is dead: it is in neither build inventory and nothing includes it. libeasy (3,017) is Alibaba's own code; only ev.h (838) is outside code. Live copied third-party code is about 27.9k lines (zstd, xxHash, CRC, wyhash). (2) Of the 24,815 charset lines, ob_ctype_uca.cc (7,129) is not compiled and cannot compile, because it includes ob_ctype_uca_tab.h, which is not in the tree. ob_charset.cpp:2080-2088 registers only utf8mb4_general_ci, utf8mb4_bin and binary. So about 17.7k lines of charset code are live, and that includes big tables such as ob_ctype_utf8_tab.h (4,472). (3) The split leaves out two large blocks that are not hand-written code. src/storage/fts/dict/ob_ik_dic.cpp is 276,043 lines of embedded IK Analyzer dictionary words and is the largest file in src by far. src/oblib/lib/codec/ob_generated_{unalign_simd,scalar}_bp_func.cpp are 24,299 lines of bit-packing code produced by the in-tree Python generators generate_*_bitpakcing.py, which carry an Alibaba 2014-2018 header; ob_fast_delta.h cites Lemire's SIMD compression work. Both belong with the data and generated lines, and together they are larger than every block the survey counted.
+
+**Units of work:** The natural unit is one dependency boundary: the wrapper file group plus its direct callers. There are 18:
+1. boost::geometry: src/share/geo, 59 files / 16,383 lines use boost or the dispatcher.
+2. S2: 4 adapter files plus 3 callers.
+3. vsag: src/oblib/lib/vector (4 files) plus the 3 files that subclass vsag interfaces, plus src/observer/vector_index callers; 11 files call it.
+4. ICU regex: ob_expr_regexp_context.{h,cpp} and ob_expr_url_codec.cpp.
+5. relaxed-rapidjson: src/oblib/common/json_type/ob_json_parse.*, ob_json_tree.h, and the admin dump helper.
+6. libxml2: ob_libxml2_sax_handler.* and ob_xml_parser.*.
+7. libcurl: 5 files.
+8. OpenSSL: 9 including files, plus the in-tree SHA1 in ob_encrypted_helper.
+9. sqlite: src/share/storage, 17 files.
+10. gRPC/protobuf: src/oblib/grpc plus 8 files in src/standby.
+11. protobuf-c: MVT, 3 files.
+12. CRoaring: 2 files plus 4 users.
+13. zstd: copied source plus wrapper, plus 4 users.
+14. zlib: 6 files.
+15. jemalloc and malloc_hook: 3 files plus deps/external.
+16. libaio and libunwind: 8 files plus 1 file.
+17. bison/flex grammars: 3 .y and 3 .l files.
+18. The other copied code, each replaced by a crate: tzcode and tz data, xxHash/murmur/wyhash, CRC, libeasy/libev headers.
+
+fast_float (2 call sites) and the dependencies with no direct users (abseil, xz, gtest) need no work unit of their own.
+
+**Public-surface tests:** All of these are black-box SQL tests run by mysqltest through obclient (tools/deploy/obd.sh:66-71), so they survive a rewrite unchanged. Counts come from git grep over 'tools/deploy/mysql_test/*.test' and 'tools/obtest/*.test', out of 793 in total.
+
+- boost::geometry and S2: test_suite/geometry has 42 .test files, e.g. geometry_bugfix_mysql.test, create_spatial_index_mysql.test and st_buffer_mysql. Its 42 .result files total 55,904 lines. Across all suites, 49 tests call ST_* functions, 14 create SPATIAL INDEX, and 4 use ST_Transform (boost srs).
+- vsag and CRoaring: 31 tests mention vector index or distance functions, 22 of them in test_suite/vector_index, e.g. vector_index_basic.test and sparse_vector_index_vsag_query.test.
+- ICU: 6 tests use REGEXP/RLIKE, e.g. test_suite/expr/t/func_regexp.test and collation_expr.test.
+- libcurl: 8 tests in test_suite/ai_function. They need model endpoints.
+- relaxed-rapidjson: 5 tests use JSON_ functions or ->>.
+- OpenSSL: 2 tests use MD5/SHA/AES/PASSWORD.
+- sqlite (indirectly, through parameter persistence): 472 tests use 'alter system set'.
+- gRPC: the 145 tests in tools/obtest/t/primary_standby, 8 in stanby and those in errsim_primary_standby mention standby. It is not established whether they run against seekdb's gRPC standby.
+- Not covered by any test: libxml2 (0 tests use ExtractValue/UpdateXML/xmltype), protobuf-c (0 use ST_AsMVT) and the URL codec (0).
+- There are no gtest unit tests. The only 2 gtest files, in deps/oblib/unittest, are not built.
+
+**Hard parts:**
+- boost::geometry is header-only C++ templates, specialized over seekdb's own geometry binary and tree types through traits (src/share/geo/ob_geo_bin_traits.h has 56 template lines; ob_geo_tree_traits.h has 46). src/share/geo/ob_geo_dispatcher.h (256 template lines) sends each geometry-type pair and coordinate system to the right function. None of this can be called from Rust without a C++ layer that instantiates every combination.
+- Geographic-coordinate results must match MySQL. src/share/geo uses srs::spheroid, geographic_winding, geographic_segments and andoyer strategies. The Rust geo crate is mostly planar, and geographiclib-rs covers geodesic distance and area but not intersection, within or difference on an ellipsoid. The expected results in tools/deploy/mysql_test/test_suite/geometry/r (55,904 lines, partly from MySQL, e.g. r/mysql/st_buffer_mysql.result) pin the numbers.
+- Error codes follow boost's exception types: src/share/geo/ob_geo_dispatcher.h:1316-1359 maps them to OB_ERR_BOOST_GEOMETRY_* (src/share/ob_errno.h:2533-2541). Any replacement must reproduce when these user-visible errors are raised.
+- S2 cell coverings are persisted as spatial-index keys (src/sql/das/ob_das_domain_utils.cpp:168-193). A pure-Rust S2 must produce the same S2RegionCoverer output (src/share/geo/ob_s2adapter.cpp) as S2 0.10.0, or existing spatial indexes become invalid.
+- The vsag boundary calls back into seekdb code. vsag::Allocator is implemented in src/storage/allocator/ob_vector_allocator.h:71 and src/query/api/query/vector/ob_vector_index_adaptor.h:237; vsag::Filter in src/oblib/lib/vector/ob_vsag_adaptor.cpp:87; vsag::Logger in src/oblib/lib/vector/ob_vector_util.h:35. Serialization goes through std::ostream/istream (fserialize/fdeserialize). vsag's own C API has no hooks for any of these, so a seekdb-owned C++ shim is required.
+- The C++-stream boundary is where a real out-of-bounds read happened: d08a76bce (2026-08-20) worked around vsag's BufferStreamReader treating one shard length as the full stream length when reading seekdb's ObIStreamBuf. The Rust-to-C shim would sit on exactly this seam.
+- vsag snapshots are persisted, and the format is locked (commit 50306fbfd, 'use legacy VSAG serialization format', in src/oblib/lib/vector/ob_vsag_adaptor.cpp). Replacing vsag with a Rust ANN crate such as hnsw_rs or instant-distance would need a way to read existing indexes.
+- CRoaring out-of-memory handling depends on C++ exceptions unwinding through C frames (src/share/roaringbitmap/ob_rb_memory_mgr.cpp: `throw std::bad_alloc()` inside roaring_malloc; 44 CROARING_TRY_CATCH sites). Rust aborts when a panic crosses extern "C", so the Rust design needs a different error path, for example fallible allocation in the pure-Rust roaring crate.
+- Process-wide malloc interposition with memory attributed by thread-local labels (src/oblib/lib/alloc/malloc_hook.cpp:339-342; ObMallocHookAttrGuard used 103 times in 36 files). This is how memory that C libraries allocate gets charged to modules, and Rust's #[global_allocator] does not cover allocations made inside C libraries.
+- relaxed-rapidjson is a header-only template fork whose non-standard flags (src/oblib/common/json_type/ob_json_parse.h:28-30) are implemented in a package whose source is not in the tree. A Rust parser must reproduce case-insensitive keywords, unquoted keys, relaxed numbers and the syntax-error message text.
+- libxml2 is used as a SAX tokenizer that reads parser internals (ctxt->input, 7 uses, through libxml/parserInternals.h in src/oblib/common/xml/ob_libxml2_sax_handler.cpp). Moving to quick-xml means re-deriving the XML declaration and entity handling that is currently read out of libxml2's internal state.
+- Persisted checksums and hashes must be bit-exact: ob_crc64() calls ob_crc64_sse42 (src/oblib/lib/checksum/ob_crc64.cpp:292), which uses the CRC-32C instruction (_mm_crc32_u64, line 365). murmurhash appears in 152 files, and XXH64 in 14 files including blocksstable bloom filters. zstd 1.3.8 compresses storage blocks through ObZstdWrapper with custom memory callbacks (src/oblib/lib/compress/zstd_1_3_8/ob_zstd_wrapper.cpp).
+- Two TLS/crypto stacks in one binary: OpenSSL 1.1.1u for gRPC TLS (src/oblib/grpc/ob_grpc_context.cpp), telemetry HMAC and the SQL encrypt functions, and rustls+ring in rust/sql-nio. Converging on one is extra work.
+- ICU regex has no pure-Rust equivalent. The regex crate lacks backreferences and lookaround; fancy-regex differs in syntax and behavior. ob_expr_regexp_context.cpp also relies on uregex_setStackLimit, uregex_setTimeLimit and uregex_appendReplacement semantics, so ICU4C stays behind C FFI.
+
+**Pain instances:**
+- Commit 6da784ac1 (2026-08-19) fixed three memory-safety defects found with the in-house Sanity LLVM pass (the ob-sanity dependency). (1) src/observer/virtual_table/ob_table_columns.cpp:603 passed buf_len instead of extra_print_buf_size to databuff_printf, so the write could overflow the buffer. (2) src/sql/plan_cache/ob_plan_cache.cpp read a cache object's allocator totals after unlocking the node, while a concurrent eviction could free it. (3) src/sql/plan_cache/ob_ps_cache_callback.h dereferenced ps_item_ after the item could already be erased. Rust's bounds checks, lock guards that own the data, and borrow rules rule out all three kinds of mistake.
+- The existence of ob-sanity itself (deps/init/*.deps, CMakeLists.txt:223-263) and commit a0d8e61ca (2026-09-01, 'support Sanity with jemalloc': shadow memory, jemalloc extent hooks, --wrap=memcpy and friends) are standing costs paid to find memory errors that safe Rust would not produce.
+- Commit ae6edddba (2026-07-13, 'Fix sanity startup crash in pre-main THP init') removed an __attribute__((constructor(101))) from src/observer/main.cpp because it ran before the runtime was ready. 9 __attribute__((constructor)) sites remain in src, e.g. ob_global_init_crc64_table in src/oblib/lib/checksum/ob_crc64.cpp. src/observer/CMakeLists.txt:17 notes that malloc_hook 'conflicts with LLVM's early global constructors on macOS'. Rust has no code that runs before main, so this whole class of problem goes away.
+- src/share/roaringbitmap/ob_rb_memory_mgr.cpp contains defensive code: seekdb's allocator callback throws std::bad_alloc through CRoaring's C frames, and it is caught at 44 CROARING_TRY_CATCH call sites. roaring_free also picks the allocator from the thread-local label at free time, so an allocation made under one label and freed under another goes to the wrong allocator (a hazard; I found no bug report for it). With a Rust bitmap crate that uses the Rust allocator, the wrappers disappear. Caveat: Rust's default reaction to running out of memory is to abort, not to return an error.
+- src/oblib/lib/json/ob_json.h:22-35 replaces POSIX regcomp/regexec on Windows with stubs that always return -1, so RegexFilter silently never matches on that platform. A portable Rust regex crate removes the need for such a stub. The Windows manifest also pulls in the dirent and pthreads compatibility libraries (deps/init/oceanbase.windows.x86_64.deps), used by 9 files that include dirent.h and 39 that include pthread.h. Rust's std covers both.
+
+**Open questions:**
+- Must zstd-compressed storage blocks be byte-identical to zstd 1.3.8's output, for example if checksums of compressed blocks are compared in backup, standby or restore? Or is being able to decode old blocks enough? If decoding is enough, the zstd crate, which bundles a newer libzstd, is a drop-in replacement.
+- Are roaring64 bitmaps persisted anywhere, for example vector-index valid-id bitmaps? If so, does the pure-Rust roaring crate's 64-bit serialization match CRoaring's portable roaring64 format?
+- Which ICU regex features actually work with libicustubdata linked, and therefore what a replacement has to match? This needs a runtime test.
+- Are the 145+8 primary_standby/stanby tests in tools/obtest run against seekdb's gRPC StandbyService, or are they legacy OceanBase cases? They are not wired into the documented obd.sh mysqltest flow.
+- What third-party set does the embedded form link? I found no embedded-library target in this worktree's CMake, only the imported/shared 'oceanbase' target in src/observer/CMakeLists.txt:27-43.
+- Is exact numeric agreement with MySQL on geographic results a product requirement? If yes, boost::geometry has to stay behind a C++ shim; if no, geo, geographiclib-rs and proj become viable.
+- The source of the relaxed-rapidjson fork (which implements the flags 1024, 2048 and 4096) and of the vsag build are outside the tree, so the exact behavior a Rust port must match cannot be read here.
+- What are the provenance and license of src/oblib/lib/charset (24,815 lines) and the SHA1 in ob_encrypted_helper.cpp? They look like ports of MySQL strings/ and RFC 3174 code, but the original headers were replaced with the OceanBase Apache header.
+- Are grpc 1.46.7 and libcurl 8.12.1 built against the end-of-life OpenSSL 1.1.1u package or against their own TLS? That decides whether dropping OpenSSL is possible before those two are replaced.
+
+**Missed by the survey (verifier):**
+- Dead code counted as translation or replacement work: IANA tzcode (2,859 lines) and ob_ctype_uca.cc (7,129 lines) are not compiled. The live charset surface is only the three utf8mb4_general_ci, utf8mb4_bin and binary collations. (evidence: src/oblib/oblib_source_inventory.bzl, which CMake reads via CMakeLists.txt:65 and tools/cmake/emit_bazel_source_inventory.py, lists only 7 charset files and no localtime.c. No file includes localtime.c, tzfile.h or ob_ctype_uca.cc. ob_ctype_uca.cc:24 includes lib/charset/ob_ctype_uca_tab.h, which git ls-files does not track. ob_charset.cpp:2080-2088 returns only ob_charset_utf8mb4_general_ci, ob_charset_utf8mb4_bin or ob_charset_bin.)
+- About 300k lines of embedded data and generated code in dependency-adjacent directories are missing from the size split: the IK Analyzer dictionary and the generated SIMD/scalar bit-packing kernels. The dictionary should become a data file; the kernels should be regenerated or replaced (for example by the bitpacking crate), and the format they write to disk must stay bit-exact. (evidence: src/storage/fts/dict/ob_ik_dic.cpp is 276,043 lines of string literals (static const char *main_dic[] = {"一一列举", ...}). src/oblib/lib/codec/ob_generated_unalign_simd_bp_func.cpp has 12,705 lines and ob_generated_scalar_bp_func.cpp has 11,594, generated by src/oblib/lib/codec/generate_simd_bitpakcing.py and generate_scalar_bitpakcing.py. ob_fast_delta.h:20 cites Lemire et al.)
+- OpenSSL is needed by S2, libcurl and gRPC as well as by seekdb's own 9 files. This answers the survey's open question: none of these libraries brings its own TLS or bignum code, so OpenSSL 1.1.1u cannot be dropped while any of them stays. (evidence: On the installed deps (read-only): nm deps/3rd/.../lib64/libs2.a shows 26 undefined BN_* symbols (BN_add, BN_CTX_new, BN_exp, ...). nm libcurl.a shows undefined SSL_CTX_* and SSL_*. nm lib/grpc/libgrpc.a shows SSL_CTX_new undefined (1 U, 0 T), so there is no bundled BoringSSL. src/oblib/CMakeLists.txt:290-291 links libssl.a and libcrypto.a for all of these.)
+- Dependency versions and behavior already differ by platform, so the 'bit-exact / behavior-exact' targets the survey sets are per platform today. Windows ignores the relaxed JSON flags and has full ICU data; Android runs an older vsag. (evidence: deps/init/oceanbase.android.arm64.deps lists vsag 0.18.0 (Linux uses 1.1.0), libcurl 8.2.1 and libxml2 2.10.4. deps/init/oceanbase.windows.x86_64.deps lists upstream devdeps-rapidjson, and ob_json_parse.h:26-32 defines the fork flags only under _WIN32. src/oblib/CMakeLists.txt:276-278 links icudt.lib on Windows, while line 299 links libicustubdata.a elsewhere. malloc_hook is Linux-only (src/oblib/lib/CMakeLists.txt:33-40).)
+- Third-party libraries are wired into two build systems, and CMake takes its source lists from Bazel files. Every crate swap or C++ shim has to be added to Bazel as well as CMake, and Bazel has no rules_rust. (evidence: MODULE.bazel:10-18 declares only rules_cc and platforms, plus the seekdb_3rd_headers repository. src/observer/BUILD.bazel:529 references @seekdb_3rd_headers//:lib/liblzma.a, and 23 files reference seekdb_3rd_headers. CMakeLists.txt:65 reads src/oblib/oblib_source_inventory.bzl. deps/external/bazel/jemalloc.bzl and rust/BUILD.bazel drive Cargo from Bazel. On top of this, the Windows build takes its libraries from vcpkg (VCPKG_LIB_DIR in src/oblib/CMakeLists.txt).)
+
+**Verifier's trust note:** The survey's facts can mostly be trusted. Almost every count I re-ran with a different method came out the same or within pattern noise: manifests, vendored line counts, gRPC stubs, grammars, geo files, sqlite and vsag wrapper sizes, the test-suite size, and the commit hashes and dates. Every cited path and line range I opened showed what the survey says it shows. The errors are in classification and in scope rather than in fabrication, and some of them matter for the decision. The survey counts 10k lines of dead code (tzcode, ob_ctype_uca.cc) as work. It treats libeasy as third-party. It misses about 300k lines of embedded dictionary data and generated codec kernels. It overstates the URL codec's use of ICU, the gRPC streaming count, and how widely Boost is used (the bg:: alias adds 308 uses). It presents ob-sanity and the malloc hook as always on, when they are optional and Linux-only. It reads the Windows-only flag definitions as the fork's. It leaves the OpenSSL question open, although the installed archives answer it: S2, curl and gRPC all need OpenSSL. The structure call (boost::geometry and vsag force C++ shims or a redesign; most C libraries can be swapped behind their wrappers) holds up. relaxed-rapidjson should drop to a bounded parser rewrite, and the OpenSSL retirement has to wait for S2, curl and gRPC. The survey is good enough to use for which libraries are used and where. Its size figures should be recomputed with the dead code removed and the data and generated blocks moved to their own category before anyone uses them to estimate effort.
+
+**Scope read:** READ IN FULL:
+- All 13 deps/init/*.deps files.
+- deps/external: README.md, Cargo.toml, CMakeLists.txt, cmake/Jemalloc.cmake.
+- src/oblib/CMakeLists.txt; src/oblib/lib/CMakeLists.txt lines 1-140; src/oblib/grpc/CMakeLists.txt.
+- src/oblib/lib/vector/ob_vsag_adaptor.h and ob_vector_util.h.
+- src/share/roaringbitmap/ob_rb_memory_mgr.{h,cpp}.
+- rust/Cargo.toml, rust/sql-nio/Cargo.toml, rust/rust-toolchain.toml.
+- Full diffs of commits 6da784ac1 and ae6edddba.
+- Commit messages of 50306fbfd, d08a76bce, a0d8e61ca, 3f1fbb84f, 4238c88e9 and 915ef6091.
+
+SAMPLED:
+- ob_geo_dispatcher.h, the exception mapping around lines 1190-1360.
+- ob_srs_wkt_parser.cpp includes; ob_sqlite_connection.h.
+- ob_libxml2_sax_handler.cpp lines 100-132; ob_json_parse.cpp head; ob_json.h head.
+- ob_crc64.cpp comments and entry points; the structure of ob_timezone_info.cpp.
+- ob_ctype_uca.cc symbol names.
+- dep_create.sh, the OS selection part; cmake/Env.cmake, the toolchain part; the ENABLE_SANITY section of the top-level CMakeLists.txt.
+- The installed, untracked header deps/3rd/usr/local/oceanbase/deps/devel/include/vsag/vsag_c_api.h.
+- `nm` on the installed libicuuc.a, and `ls -la` sizes of installed archives. Both are read-only looks at deps/3rd, which is not tracked.
+
+COUNTED BUT NOT READ: include and call-site counts for every library via git grep, and test counts via git grep over tools/deploy/mysql_test and tools/obtest.
+
+SKIPPED:
+- The algorithm bodies in src/share/geo.
+- The body of ob_vsag_adaptor.cpp.
+- The src/standby consumers of gRPC.
+- The charset tables and grammar actions.
+- Bazel rule internals.
+- The ~/obsidian storage notes, which were not needed for this area.
+
+MISTAKE: I created one scratch file, /tmp/deps_survey_files.txt (a file list), by accident and deleted it right away. Nothing inside the worktree or in build_release/ was touched.
+
+**Claims (after verification; corrected text replaces the original):**
+- [C1|count|confirmed] Across the 13 deps/init/*.deps files, the Linux [deps] sections list 19 libraries: gtest, libcurl 8.12.1, libunwind 1.6.2 (x86_64 only), libaio, relaxed-rapidjson 1.0.0, openssl 1.1.1u, libxml2 2.13.6, xz 5.2.2, zlib 1.2.13, boost 1.74.0, abseil-cpp 20211102, s2geometry 0.10.0, icu 69.1, protobuf-c 1.4.1, grpc 1.46.7, croaring 3.0.0, vsag 1.1.0, fast-float 6.1.3 and sqlite 3.38.1. The tools are binutils, bison 2.4.1, ccache, cmake, flex 2.5.35, gcc 12.3.0, llvm 17.0.6 and ob-sanity. obshell is a tools-dep; ob-deploy, obclient and libobclient are test utilities. The Windows file adds dirent, pthreads, ninja, win-flex-bison and llvm 18.1.8.
+  evidence: for f in deps/init/*.deps; do cat $f; done
+- [C2|behavior|confirmed] deps/init/oceanbase.macos.arm64.deps is never selected. It is the only file that lists apache-arrow, apache-orc, lua, mariadb-connector-c, mxml and s3-cpp-sdk, and none of these are included anywhere in src.
+  evidence: deps/init/dep_create.sh:217-224 picks macos13.<arch> or macos15.<arch>. git grep for includes of arrow/, orc/, aws/ and mxml in src returns 0 files. The 'lua' and 'mysql.h' hits are false matches on ob_truncate_filter_evaluator.h and *_mysql.h.
+- [C3|behavior|confirmed] LLVM is used only as the toolchain (clang, ld.lld, llvm-objcopy, llvm-strip). No source file includes LLVM headers, and src/objit is a single 2,486-line enum header.
+  evidence: git grep -l -E '#\s*include\s*[<"]llvm/' -- src gives 0. git ls-files src/objit | xargs wc -l shows only include/objit/common/ob_item_type.h at 2,486 lines. Commit 3f1fbb84f (2026-06-25), 'Replace LLVM-JIT PL with a tree-walking interpreter PL', has 147 files changed and 62,423 deletions. cmake/Env.cmake:282-325 sets OB_CC and OB_CXX from DEVTOOLS_DIR/bin and uses ld.lld.
+- [C4|behavior|corrected] Only ob_expr_regexp_context.cpp calls ICU. It uses the C API: uregex_open, uregex_setText, uregex_find/findNext, uregex_appendReplacement/appendTail, uregex_setStackLimit/setTimeLimit, plus u_strFromUTF8/u_strToUTF8 to convert to and from UTF-16. ICU_VERSION() only reads the U_ICU_VERSION macro. ob_expr_url_codec.cpp includes unicode/ucnv.h and unicode/unistr.h (unistr.h is a C++ header) but calls no ICU function; its URL encode/decode is hand-written. src/oblib/lib/charset (20 files, 24,815 lines) does not use ICU.
+  evidence: git grep -l include (unicode|icu)/ -- src returns ob_expr_regexp_context.h and ob_expr_url_codec.cpp. git grep for uregex_|ucnv_|ucol_|UnicodeString finds 50 matches in ob_expr_regexp_context.cpp. git grep -i icu in src/oblib/lib/charset returns nothing.
+  checker: git grep for (unicode|icu)/ includes gives ob_expr_regexp_context.h and ob_expr_url_codec.cpp. grep of ob_expr_url_codec.cpp for UChar, ucnv_, u_ or UnicodeString finds nothing except the includes. The u_strFromUTF8 calls are in ob_expr_regexp_context.cpp.
+- [C5|behavior|corrected] On Linux, macOS and Android, src/oblib/CMakeLists.txt:298-300 links libicustubdata.a. In the local macOS archive that library defines a stub _icudt69_dat (nm: 'S _icudt69_dat'), and libicuuc.a leaves the symbol undefined. No code calls u_setDataDirectory or udata_setCommonData, so those builds run without the ICU data package. The Windows build links the full icudt.lib (src/oblib/CMakeLists.txt:276-278), so what REGEXP can do already differs by platform.
+  evidence: ls -la deps/3rd/usr/local/oceanbase/deps/devel/lib shows libicustubdata.a at 16,464 bytes. `nm libicuuc.a | grep icudt` gives 'U _icudt69_dat'. src/oblib/CMakeLists.txt:299 links libicustubdata.a. This was checked on the local macOS install only.
+  checker: ls -la and nm on deps/3rd/.../lib (read-only). git grep for u_setDataDirectory, udata_setCommonData and ICU_DATA returns nothing.
+- [C6|count|corrected] The Boost components used are geometry (including the srs::proj/srs::transformation extension, 6 uses), spirit::qi with phoenix (in the SRS WKT parser), mpl, variant, numeric (overflow exceptions) and get. Only 6 files include boost headers directly. 'boost::' appears 225 times in 36 files, but 17 files also use the alias 'namespace bg = boost::geometry' for 308 more uses. In total, 39 files use Boost: 38 in src/share/geo plus src/sql/engine/expr/ob_expr_st_buffer.cpp. The strategy counts are correct: spheroid 43, geographic_winding 12, geographic_segments 10, area::geographic 6, andoyer 2, plus 16 buffer strategies.
+  evidence: git grep -l 'boost::' -- src | wc -l gives 36. git grep -o -h -E 'strategy::[a-z_:]+|srs::[a-z_:]+' -- src/share/geo | sort | uniq -c. src/share/geo/ob_srs_wkt_parser.cpp:19 includes boost/spirit/include/qi.hpp.
+  checker: git grep -o -E '(^|[^a-z_])bg::' gives 308 hits in 17 files. The survey's 'boost::' count misses the alias.
+- [C7|behavior|confirmed] boost::geometry exception types are mapped to user-visible error codes: centroid, turn_info, empty_input, inconsistent_turns, overlay_invalid_input, and the generic boost::geometry::exception each map to an OB_ERR_BOOST_GEOMETRY_* code with its own user message.
+  evidence: src/share/geo/ob_geo_dispatcher.h:1316-1359 (the catch chain in ob_boost_geometry_exception_handle). src/share/ob_errno.h:2533-2541 holds the *__USER_ERROR_MSG strings.
+- [C8|behavior|confirmed] S2 cell ids are persisted as the first column of spatial-index rows. S2 API use is confined to 4 files (1,343 lines) plus 3 callers.
+  evidence: src/sql/das/ob_das_domain_utils.cpp:168-193 builds rows from s2object.get_cellids(), with the comment 'Index row[cellid_obj][mbr_obj][rowkey_obj]'. git grep -o -E 'S2[A-Z][A-Za-z]+' -- src shows S2 types only in src/share/geo/ob_s2adapter.*, ob_geo_to_s2_visitor.* and ob_geo_utils.*, plus ob_das_domain_utils.cpp, ob_table_scan_op.cpp and ob_range_generator.cpp. wc -l on the 4 adapter files gives 1,343.
+- [C9|path|confirmed] seekdb talks to vsag through src/oblib/lib/vector (4 files, 1,991 lines). The API uses void* handles but still passes C++ types (std::string, std::ostream, std::istream). seekdb subclasses vsag's C++ virtual interfaces in 4 places, and 11 files call obvsag:: or obvectorutil::.
+  evidence: src/oblib/lib/vector/ob_vector_util.h:35 has ObVsagLogger : public vsag::Logger. src/oblib/lib/vector/ob_vsag_adaptor.cpp:87 has ObVasgFilter : public vsag::Filter. src/query/api/query/vector/ob_vector_index_adaptor.h:237 has ObVsagSearchAlloc : public vsag::Allocator. src/storage/allocator/ob_vector_allocator.h:71 has ObVsagMemContext : public vsag::Allocator. git grep -l 'obvectorutil::|obvsag::' -- src | wc -l gives 11.
+- [C10|assessment|confirmed] vsag's own C API does not cover what seekdb uses. Its 20 functions have no allocator, logger, extra-info, iterator-context, sparse-vector, estimate_memory or immutable_optimize entry points, and its filter callback has no context pointer.
+  evidence: grep -E '^vsag_[a-z_]+\(' on the installed, untracked deps/3rd/usr/local/oceanbase/deps/devel/include/vsag/vsag_c_api.h (324 lines), compared with the function list in src/oblib/lib/vector/ob_vsag_adaptor.h.
+- [C11|count|confirmed] Linking vsag statically pulls in DiskANN, OpenBLAS, libgfortran, libquadmath, libgomp or libomp, the ANTLR4 runtime, fmt, cpuinfo and vsag's own simd library. The installed libvsag_static.a alone is 220 MB.
+  evidence: src/oblib/lib/CMakeLists.txt lines 71-128 (the per-architecture target_link_libraries lists). ls -la on deps/3rd/.../lib/vsag_lib shows libvsag_static.a at 220,342,904 bytes and libopenblas.a at 89,646,272 bytes.
+- [C12|behavior|confirmed] SQLite is seekdb's local metadata store: the file ./store/sstable/meta.db. It holds sys parameters, merge info, tablet checksums, deadlock history and admin-job tables. It arrived with the simplified rootservice in March 2026. Only 3 files call sqlite3_* (52 calls); 44 files reference the wrapper.
+  evidence: src/observer/ob_server.cpp:1699 has meta_db_path = "./store/sstable/meta.db". src/share/storage has 17 files, 3,075 lines, including ob_sqlite_connection.cpp:344 (sqlite3_open). src/share/config/ob_config_storage.cpp:66-147. git log -S'sqlite3_open' points to 208b4bcd8 (2026-03-18, 'Supports standby and a simplified rootservice').
+- [C13|count|corrected] StandbyService has 10 RPCs, and 6 of them are server-streaming: fetch_ls_view, fetch_tablet_info, fetch_tablet_sstable_info, fetch_sstable_macro_info, fetch_macro_block and fetch_log. The other figures hold: 12,345 generated lines, a 675-line hand-written layer, and 8 consumer files in src/standby. gRPC links both grpc and grpc_unsecure, plus address_sorting, re2, upb, c-ares, libprotobuf and its own abseil set from ${DEP_DIR}/lib64/grpc (lib/grpc on Apple and Android). S2 links a separate list of 20 abseil libraries.
+  evidence: src/oblib/grpc/standbyservice.proto (grep -c '^\s*rpc ' gives 10). wc -l on the 4 .pb.* files gives 12,345. src/oblib/grpc/CMakeLists.txt sets GRPC_CORE_LIB_NAMES and ABSL_LIB_NAMES from ${DEP_DIR}/lib64/grpc. src/oblib/CMakeLists.txt sets OBLIB_ABSEIL_LIST from ${_LIB_PATH}. Commit 2a0749f0c regenerated the stubs by hand (+1,263 generated lines).
+  checker: grep -E '^\s*rpc ' standbyservice.proto: 10 rpc lines, 6 with 'stream'. wc -l on the pb files: 421+1677+5216+5031. Read src/oblib/grpc/CMakeLists.txt:60-116.
+- [C14|count|corrected] src has no direct user of abseil (no absl/ include, no absl::) or xz (liblzma.a is linked at src/oblib/lib/CMakeLists.txt:52 because libxml2.a has undefined lzma_* symbols). gtest is included by 3 files, none of them built: 2 in deps/oblib/unittest and tools/ob_error/test/test_ob_error.cpp. Bazel still wires gtest and gmock into seekdb_module_cc_test (bazel/seekdb_module_cc_test.bzl:91-127, bazel/third_party_headers_repo.bzl:46-57), but no BUILD file creates such a target.
+  evidence: git grep -c 'absl::' -- src returns nothing. The include counts for absl/ and lzma.h are 0. git grep -n 'deps/oblib|test_jemalloc_hook|test_malloc_backend' in '*.txt' '*.cmake' '*.bazel' '*.bzl' returns nothing. liblzma.a is linked in src/oblib/lib/CMakeLists.txt:52, presumably for libxml2.
+  checker: git grep -l '<gtest/' also finds tools/ob_error/test/test_ob_error.cpp. nm on libxml2.a shows U _lzma_auto_decoder, _lzma_code and _lzma_end, which confirms the xz link reason.
+- [C15|count|confirmed] Most C libraries are called directly from very few files:
+- libcurl: 5 files, 117 calls, including the curl_multi API.
+- sqlite: 3 files.
+- libaio: 8 files, 71 calls.
+- libunwind: 1 file, 16 calls.
+- protobuf-c: 3 files, for the ST_AsMVT tile encoder.
+- CRoaring: 4 users plus a memory hook, about 120 roaring64 calls.
+- jemalloc: 3 files.
+- zlib: 6 files.
+- libxml2: 1 file, 15 distinct xml* functions; it also reads ctxt->input internals through parserInternals.h.
+- fast_float: 2 files.
+- OpenSSL: included by 9 files.
+  evidence: git grep -l / git grep -o counts per API prefix (curl_(easy|slist|global|multi)_, sqlite3_, io_(setup|submit|getevents...), unw_, protobuf_c_|vector_tile__, roaring64_bitmap_, je_|mallctl, deflate/inflate/compress2, xml[A-Z]). git grep -l '#include <openssl/' -- src lists 9 files. src/oblib/common/xml/ob_libxml2_sax_handler.cpp has 7 uses of ctxt->input.
+- [C16|count|corrected] The line counts are right: zstd 47 files, 25,154 lines; xxHash 1,214; murmur plus wyhash 259; tzcode 2,859; easy 19 headers, 3,017 lines; CRC 1,286; total 33,789. Three classification fixes: (1) localtime.c, private.h and tzfile.h are not built. They are missing from oblib_source_inventory.bzl, which both CMake and Bazel use, and nothing includes them, so they are dead code to delete, not code to replace with tz-rs. (2) libeasy is Alibaba/Taobao's own library: 18 of the 19 headers have no license header, and only io/ev.h (838 lines, Marc Lehmann) is outside code. 5 live files still include the headers for type definitions. (3) murmur_hash.{cpp,h} carry an Alibaba '(C) 2010-2016' header, not the OceanBase Apache header. That leaves about 27.9k lines of live copied third-party code: zstd, xxHash, CRC and wyhash.
+  evidence: git grep -h -i -o 'Copyright.{0,70}' | grep -vi oceanbase lists Yann Collet, Facebook and Marc Lehmann. src/oblib/lib/hash_func/xxhash.c:18-19 reads 'xxHash ... Copyright (C) 2012-2016, Yann Collet'. src/oblib/common/timezone/localtime.c:17-19 reads 'public domain ... Arthur David Olson'. src/oblib/lib/checksum/ob_crc64.cpp:314-339 credits Facebook, Mark Adler and mysql-server ut0crc32.cc. Line counts via wc -l.
+  checker: wc -l on each group. grep of oblib_source_inventory.bzl for timezone/ finds only ob_time_convert, ob_timezone_info and ob_timezone_util. git grep for includes of localtime, tzfile or private.h finds only localtime.c itself.
+- [C17|count|confirmed] ob_timezone_info.cpp is almost entirely data: lines 26-38988 are the embedded tz tables TIME_ZONE_NAMES and TIME_ZONE_TRANS, about 38,963 of its 39,989 lines.
+  evidence: sed -n 26p shows 'ObTimeZoneName ObTimeZoneInfo::TIME_ZONE_NAMES[] ='. Line 604 starts TIME_ZONE_TRANS. awk finds '^};' closing the tables at lines 602 and 38988.
+- [C18|behavior|corrected] The fork's reader.h, installed and readable at deps/3rd/.../include/rapidjson/reader.h:158-160, defines kParseObjectKeyNoQuotesFlag=1024, kParseIgnoreCaseForKeyword=2048 and kParseRelaxNumberFlag=4096. ob_json_parse.h:26-32 defines the same constants only under #ifdef _WIN32. The Windows manifest pulls upstream devdeps-rapidjson, which has no such flags, so Windows builds pass values that the parser ignores. RELAXJSON_FLAG adds comments and trailing commas. STRICTJSON_FLAG is kParseObjectKeyNoQuotesFlag, so even 'strict' mode accepts unquoted keys. The rapidjson:: API is used in 7 .cpp/.h files.
+  evidence: src/oblib/common/json_type/ob_json_parse.h:28-30 defines them as 1024, 2048 and 4096. src/oblib/common/json_type/ob_json_parse.cpp:23-29 has RELAXJSON_FLAG and STRICTJSON_FLAG. The rapidjson API is used in 7 files.
+  checker: Read ob_json_parse.h:20-35 and ob_json_parse.cpp:18-32, and grep'd the installed reader.h (2,417 lines).
+- [C19|behavior|confirmed] CRoaring reports out-of-memory by having seekdb's malloc callback throw std::bad_alloc from inside the C library. Callers catch it with the CROARING_TRY_CATCH macro. The free callback picks which allocator to use from the thread-local malloc label at free time, not from anything stored at allocation time.
+  evidence: src/share/roaringbitmap/ob_rb_memory_mgr.cpp:31-65: roaring_malloc runs `throw std::bad_alloc();` and writes tid_reserved = 0 into the header. Lines 67-95: roaring_free branches on get_tl_mem_attr() and the 'VIB' label. The macro is at ob_rb_memory_mgr.h:30-37. The ROARING_TRY_CATCH token appears 44 times in src.
+- [C20|behavior|corrected] malloc_hook.cpp:339-342 aliases the __libc_* entry points, and ObMallocHookAttrGuard appears 105 times in 36 files. But malloc_hook is built and linked only on Linux: src/oblib/lib/CMakeLists.txt:33-40 says 'malloc_hook is only part of the Linux production runtime', and src/observer/CMakeLists.txt:17-22 drops it on macOS. So process-wide interposition, and the label-based charging of memory that C libraries allocate, applies only to Linux builds.
+  evidence: src/oblib/lib/alloc/malloc_hook.cpp:339-342 aliases __libc_malloc, __libc_realloc, __libc_free and __libc_memalign. git grep -c ObMallocHookAttrGuard gives 36 files and 103 uses, including src/oblib/common/xml/ob_libxml2_sax_handler.cpp:107, src/observer/vector_index/ob_plugin_vector_index_serialize.cpp and src/share/geo/ob_geo_func_transform.cpp.
+  checker: Read malloc_hook.cpp:330-345, ob_libxml2_sax_handler.cpp:106-108, ob_plugin_vector_index_serialize.cpp:195/223 and ob_geo_func_transform.cpp:46.
+- [C21|behavior|corrected] ob-sanity is an optional build mode, not a standing build dependency. It is controlled by option(ENABLE_SANITY ... OFF) at CMakeLists.txt:16 and requires Linux, Clang and bundled jemalloc (CMakeLists.txt:223-230). When it is on, it adds libsanitypass.so through -fpass-plugin (src/oblib/CMakeLists.txt:179), -fno-builtin-mem*/str* and --wrap link options. Only the al8 and el7 manifests list ob-sanity-abiv1. 6da784ac1 fixed the three cited defects: the wrong buffer length in ob_table_columns.cpp, the plan-cache accounting after unlock, and the ps_item_ dereference.
+  evidence: CMakeLists.txt:223-263 (ENABLE_SANITY: SEEKDB_SANITY_PASS = ${DEVTOOLS_DIR}/lib64/libsanitypass.so, -fpass-plugin in src/oblib/CMakeLists.txt). deps/init/oceanbase.al8.*.deps and el7.*.deps list ob-sanity-abiv1. Commits a0d8e61ca (2026-09-01, 'support Sanity with jemalloc') and 6da784ac1 (2026-08-19, '[sanity] fix coredump in plan/PS cache and skip-index output').
+  checker: Read CMakeLists.txt:16 and 217-263, and the diff of 6da784ac1 (3 files, +19/-9).
+- [C22|path|confirmed] The Rust side already relies on pure-Rust replacements for two of these libraries: sql-nio uses rustls 0.23 with ring for MySQL TLS and flate2 for protocol compression, and builds with panic=abort. jemalloc is already built through Cargo.
+  evidence: rust/sql-nio/Cargo.toml lists rustls (default-features=false, ring, tls12), flate2, mio, x509-parser and socket2. rust/Cargo.toml sets panic = "abort". deps/external/Cargo.toml pins seekdb-jemalloc-sys = "=0.2.2". The change came in commit 915ef6091 (2026-09-16, 'build: source jemalloc through Cargo').
+- [C23|count|confirmed] Bison and flex process 3 grammars and 3 lexers (24,585 lines): sql_parser_mysql_mode.y (18,723 lines), pl_parser_mysql_mode.y (2,976) and ftsparser.y (250). All use %define api.pure with %locations and reentrant flex. The generated parser is not checked in.
+  evidence: git ls-files '*.y' '*.l' | xargs wc -l. grep of the %define and %option lines in src/sql/parser/sql_parser_mysql_mode.{y,l}. src/sql/parser/gen_parser.sh.
+- [C24|count|confirmed] Coverage of dependency-backed features in the SQL-level mysqltest cases, out of 793 .test files in total:
+- ST_ functions: 49 tests.
+- SPATIAL INDEX: 14.
+- geometry suite: 42 tests; its 42 .result files total 55,904 lines.
+- vector index or vector distance: 31.
+- REGEXP/RLIKE: 6.
+- AI functions, which use curl: 8.
+- JSON functions: 5.
+- MD5/SHA/AES: 2.
+- XML functions (libxml2): 0.
+- ST_AsMVT (protobuf-c): 0.
+  evidence: git grep -l -i -E '<pattern>' -- 'tools/deploy/mysql_test/*.test' 'tools/obtest/*.test' | wc -l for each pattern. git ls-files tools/deploy/mysql_test/test_suite/geometry | grep '\.result$' | xargs cat | wc -l gives 55,904.
+- [C25|assumption|unverifiable] Licensing:
+- OpenSSL 1.1.1u is past end of life and under the OpenSSL/SSLeay license.
+- libaio is LGPL-2.1 and ships as a shared library.
+- vsag's static link set includes GCC runtime libraries (GPL with the runtime exception).
+- zstd is BSD or GPLv2 (dual license).
+- bison output carries the Bison exception.
+The rest are permissive: BSL-1.0, Apache-2.0, MIT, BSD, zlib, public domain and the Unicode license.
+  evidence: The libaio .so install is in cmake/Pack.cmake:276-285. The zstd license is in the header of src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd.h. The OpenSSL end-of-life date and the other license identities come from general knowledge and were not verified in the tree.
+  checker: The in-tree parts hold: libaio.so is installed by cmake/Pack.cmake:276-285 on non-Apple, non-Windows builds, and zstd.h states the BSD or GPLv2 dual license. The rest comes from general knowledge outside the tree. One likely inaccuracy: libquadmath, which is statically linked in the x86_64 and macOS vsag sets, is LGPL-2.1+ rather than GPL with the runtime exception. That brings static-linking relink obligations and needs legal review.
+

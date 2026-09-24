@@ -1,0 +1,127 @@
+jemalloc	_je_free	je_free
+jemalloc	_je_malloc	je_malloc
+jemalloc	_je_realloc	je_realloc
+unity_oblib_common_oblib_common_reloc_json_type_0_c___cxx.cxx.o	__ZN9oceanbase6common13ObJsonBinMeta16calc_entry_arrayEv	oceanbase::common::ObJsonBinMeta::calc_entry_array()
+unity_oblib_common_oblib_common_reloc_json_type_0_c___cxx.cxx.o	__ZN9oceanbase6common13ObJsonBinMeta9to_headerERNS0_14ObStringBufferE	oceanbase::common::ObJsonBinMeta::to_header(oceanbase::common::ObStringBuffer&)
+unity_oblib_common_oblib_common_reloc_json_type_0_c___cxx.cxx.o	__ZN9oceanbase6common19ObJsonBinSerializer21serialize_json_doubleEdRNS0_14ObStringBufferE	oceanbase::common::ObJsonBinSerializer::serialize_json_double(double, oceanbase::common::ObStringBuffer&)
+unity_oblib_common_oblib_common_reloc_json_type_0_c___cxx.cxx.o	__ZN9oceanbase6common19ObJsonBinSerializer21serialize_json_stringENS0_11ObJBVerTypeERKNS0_8ObStringERNS0_14ObStringBufferE	oceanbase::common::ObJsonBinSerializer::serialize_json_string(oceanbase::common::ObJBVerType, oceanbase::common::ObString const&, oceanbase::common::ObStringBuffer&)
+unity_oblib_common_oblib_common_reloc_json_type_0_c___cxx.cxx.o	__ZN9oceanbase6common9ObJsonBin10reset_iterEv	oceanbase::common::ObJsonBin::reset_iter()
+unity_oblib_common_oblib_common_reloc_json_type_0_c___cxx.cxx.o	__ZN9oceanbase6common9ObJsonBin11set_currentERKNS0_8ObStringEx	oceanbase::common::ObJsonBin::set_current(oceanbase::common::ObString const&, long long)
+unity_oblib_common_oblib_common_reloc_json_type_0_c___cxx.cxx.o	__ZN9oceanbase6common9ObJsonBin12set_obj_sizeEy	oceanbase::common::ObJsonBin::set_obj_size(unsigned long long)
+unity_oblib_common_oblib_common_reloc_json_type_0_c___cxx.cxx.o	__ZN9oceanbase6common9ObJsonBin13set_key_entryEiyyb	oceanbase::common::ObJsonBin::set_key_entry(int, unsigned long long, unsigned long long, bool)
+unity_oblib_common_oblib_common_reloc_json_type_0_c___cxx.cxx.o	__ZN9oceanbase6common9ObJsonBin15set_value_entryEiyhb	oceanbase::common::ObJsonBin::set_value_entry(int, unsigned long long, unsigned char, bool)
+unity_oblib_common_oblib_common_reloc_json_type_0_c___cxx.cxx.o	__ZN9oceanbase6common9ObJsonBin17add_doc_header_v0ERNS0_14ObStringBufferE	oceanbase::common::ObJsonBin::add_doc_header_v0(oceanbase::common::ObStringBuffer&)
+unity_oblib_common_oblib_common_reloc_json_type_0_c___cxx.cxx.o	__ZN9oceanbase6common9ObJsonBin17set_doc_header_v0ERNS0_14ObStringBufferExb	oceanbase::common::ObJsonBin::set_doc_header_v0(oceanbase::common::ObStringBuffer&, long long, bool)
+unity_oblib_common_oblib_common_reloc_json_type_0_c___cxx.cxx.o	__ZN9oceanbase6common9ObJsonBin5resetERKNS0_8ObStringExPNS0_12ObJsonBinCtxE	oceanbase::common::ObJsonBin::reset(oceanbase::common::ObString const&, long long, oceanbase::common::ObJsonBinCtx*)
+unity_oblib_common_oblib_common_reloc_json_type_0_c___cxx.cxx.o	__ZN9oceanbase6common9ObJsonBin7destroyEv	oceanbase::common::ObJsonBin::destroy()
+unity_oblib_common_oblib_common_reloc_json_type_0_c___cxx.cxx.o	__ZN9oceanbase6common9ObJsonVar12get_var_typeEy	oceanbase::common::ObJsonVar::get_var_type(unsigned long long)
+unity_oblib_common_oblib_common_reloc_json_type_0_c___cxx.cxx.o	__ZTVN9oceanbase6common9ObJsonBinE	vtable for oceanbase::common::ObJsonBin
+unity_oblib_common_oblib_common_reloc_number_0_c___cxx.cxx.o	__ZN9oceanbase6common6number8ObNumber8from_v3_EPKcxRNS2_10IAllocatorERiPsS8_PKNS_3lib9ObMemAttrEb	oceanbase::common::number::ObNumber::from_v3_(char const*, long long, oceanbase::common::number::ObNumber::IAllocator&, int&, short*, short*, oceanbase::lib::ObMemAttr const*, bool)
+unity_oblib_common_oblib_common_reloc_number_0_c___cxx.cxx.o	__ZNK9oceanbase6common6number8ObNumber9format_v2EPcxRxsb	oceanbase::common::number::ObNumber::format_v2(char*, long long, long long&, short, bool) const
+unity_ob_malloc_object_ob_malloc_object_list_common_alloc_0_c___cxx.cxx.o	__ZN9oceanbase3lib17ObMallocAllocator10is_inited_E	oceanbase::lib::ObMallocAllocator::is_inited_
+unity_ob_malloc_object_ob_malloc_object_list_common_alloc_0_c___cxx.cxx.o	__ZN9oceanbase3lib17ObMallocAllocator12get_instanceEv	oceanbase::lib::ObMallocAllocator::get_instance()
+unity_ob_malloc_object_ob_malloc_object_list_common_alloc_0_c___cxx.cxx.o	__ZN9oceanbase3lib21ObMallocHookAttrGuardC1ERKNS0_9ObMemAttrE	oceanbase::lib::ObMallocHookAttrGuard::ObMallocHookAttrGuard(oceanbase::lib::ObMemAttr const&)
+unity_ob_malloc_object_ob_malloc_object_list_common_alloc_0_c___cxx.cxx.o	__ZN9oceanbase3lib21ObMallocHookAttrGuardD1Ev	oceanbase::lib::ObMallocHookAttrGuard::~ObMallocHookAttrGuard()
+unity_ob_malloc_object_ob_malloc_object_list_common_alloc_0_c___cxx.cxx.o	__ZN9oceanbase3lib9ObjectSetC1EPNS0_17__MemoryContext__Ejb	oceanbase::lib::ObjectSet::ObjectSet(oceanbase::lib::__MemoryContext__*, unsigned int, bool)
+unity_ob_malloc_object_ob_malloc_object_list_common_alloc_0_c___cxx.cxx.o	__ZN9oceanbase6common15ObFIFOAllocatorC1Ev	oceanbase::common::ObFIFOAllocator::ObFIFOAllocator()
+unity_ob_malloc_object_ob_malloc_object_list_common_alloc_0_c___cxx.cxx.o	__ZN9oceanbase6common15ObFIFOAllocatorD1Ev	oceanbase::common::ObFIFOAllocator::~ObFIFOAllocator()
+unity_ob_malloc_object_ob_malloc_object_list_common_alloc_0_c___cxx.cxx.o	__ZN9oceanbase6common19g_ob_malloc_backendE	oceanbase::common::g_ob_malloc_backend
+unity_ob_malloc_object_ob_malloc_object_list_common_alloc_0_c___cxx.cxx.o	__ZN9oceanbase6common21ob_malloc_usable_sizeEPv	oceanbase::common::ob_malloc_usable_size(void*)
+unity_ob_malloc_object_ob_malloc_object_list_common_alloc_0_c___cxx.cxx.o	__ZN9oceanbase6common28initialize_ob_malloc_backendEv	oceanbase::common::initialize_ob_malloc_backend()
+unity_ob_malloc_object_ob_malloc_object_list_common_alloc_0_c___cxx.cxx.o	__ZN9oceanbase6common28resolve_memory_usage_trackerEx	oceanbase::common::resolve_memory_usage_tracker(long long)
+unity_ob_malloc_object_ob_malloc_object_list_common_alloc_0_c___cxx.cxx.o	__ZNK9oceanbase3lib7ObLabeleqERKS1_	oceanbase::lib::ObLabel::operator==(oceanbase::lib::ObLabel const&) const
+unity_ob_malloc_object_ob_malloc_object_list_common_alloc_0_c___cxx.cxx.o	__ZNK9oceanbase3lib9ObMemAttr9to_stringEPcx	oceanbase::lib::ObMemAttr::to_string(char*, long long) const
+unity_ob_malloc_object_ob_malloc_object_list_common_alloc_0_c___cxx.cxx.o	__ZTVN9oceanbase6common11ObAllocatorE	vtable for oceanbase::common::ObAllocator
+unity_ob_malloc_object_ob_malloc_object_list_common_alloc_0_c___cxx.cxx.o	__ZTVN9oceanbase6common19ObParallelAllocatorE	vtable for oceanbase::common::ObParallelAllocator
+unity_oblib_lib_oblib_lib_charset_0_c___cxx.cxx.o	__ZN9oceanbase6common9ObCharset20get_system_collationEv	oceanbase::common::ObCharset::get_system_collation()
+unity_oblib_lib_oblib_lib_charset_0_c___cxx.cxx.o	__ZN9oceanbase6common9ObCharset7strntodEPKcmPPcPi	oceanbase::common::ObCharset::strntod(char const*, unsigned long, char**, int*)
+unity_oblib_lib_oblib_lib_charset_0_c___cxx.cxx.o	__ZN9oceanbase6common9ObCharset8strntollEPKcmiPi	oceanbase::common::ObCharset::strntoll(char const*, unsigned long, int, int*)
+unity_oblib_lib_oblib_lib_charset_0_c___cxx.cxx.o	_ob_fcvt	ob_fcvt
+unity_oblib_lib_oblib_lib_charset_0_c___cxx.cxx.o	_ob_gcvt	ob_gcvt
+unity_oblib_lib_oblib_lib_charset_0_c___cxx.cxx.o	_ob_gcvt_strict	ob_gcvt_strict
+unity_oblib_lib_oblib_lib_common_0_c___cxx.cxx.o	__Z8ob_abortv	ob_abort()
+unity_oblib_lib_oblib_lib_common_mixed_0_c___cxx.cxx.o	__ZN9oceanbase6common4hash10PRIME_LISTE	oceanbase::common::hash::PRIME_LIST
+unity_oblib_lib_oblib_lib_common_mixed_1_c___cxx.cxx.o	__ZN9oceanbase3lib13MemoryContext4rootEv	oceanbase::lib::MemoryContext::root()
+unity_oblib_lib_oblib_lib_common_mixed_1_c___cxx.cxx.o	__ZN9oceanbase6common10alloc_itidEv	oceanbase::common::alloc_itid()
+unity_oblib_lib_oblib_lib_common_mixed_1_c___cxx.cxx.o	__ZN9oceanbase6common13ObTimeUtility12current_timeEv	oceanbase::common::ObTimeUtility::current_time()
+unity_oblib_lib_oblib_lib_common_mixed_1_c___cxx.cxx.o	__ZN9oceanbase6common14ObStringBuffer10set_lengthEy	oceanbase::common::ObStringBuffer::set_length(unsigned long long)
+unity_oblib_lib_oblib_lib_common_mixed_1_c___cxx.cxx.o	__ZN9oceanbase6common14ObStringBuffer17get_result_stringERNS0_8ObStringE	oceanbase::common::ObStringBuffer::get_result_string(oceanbase::common::ObString&)
+unity_oblib_lib_oblib_lib_common_mixed_1_c___cxx.cxx.o	__ZN9oceanbase6common14ObStringBuffer5resetEv	oceanbase::common::ObStringBuffer::reset()
+unity_oblib_lib_oblib_lib_common_mixed_1_c___cxx.cxx.o	__ZN9oceanbase6common14ObStringBuffer6appendEPKc	oceanbase::common::ObStringBuffer::append(char const*)
+unity_oblib_lib_oblib_lib_common_mixed_1_c___cxx.cxx.o	__ZN9oceanbase6common14ObStringBuffer6appendEPKcya	oceanbase::common::ObStringBuffer::append(char const*, unsigned long long, signed char)
+unity_oblib_lib_oblib_lib_common_mixed_1_c___cxx.cxx.o	__ZN9oceanbase6common14ObStringBuffer6appendERKNS0_8ObStringEa	oceanbase::common::ObStringBuffer::append(oceanbase::common::ObString const&, signed char)
+unity_oblib_lib_oblib_lib_common_mixed_1_c___cxx.cxx.o	__ZN9oceanbase6common14ObStringBuffer6extendEy	oceanbase::common::ObStringBuffer::extend(unsigned long long)
+unity_oblib_lib_oblib_lib_common_mixed_1_c___cxx.cxx.o	__ZN9oceanbase6common14ObStringBuffer7reserveEy	oceanbase::common::ObStringBuffer::reserve(unsigned long long)
+unity_oblib_lib_oblib_lib_common_mixed_1_c___cxx.cxx.o	__ZN9oceanbase6common14ObStringBufferC1EPNS0_12ObIAllocatorE	oceanbase::common::ObStringBuffer::ObStringBuffer(oceanbase::common::ObIAllocator*)
+unity_oblib_lib_oblib_lib_common_mixed_1_c___cxx.cxx.o	__ZN9oceanbase6common14ObStringBufferD1Ev	oceanbase::common::ObStringBuffer::~ObStringBuffer()
+unity_oblib_lib_oblib_lib_common_mixed_1_c___cxx.cxx.o	__ZN9oceanbase6common14ObTscTimestamp12current_timeEv	oceanbase::common::ObTscTimestamp::current_time()
+unity_oblib_lib_oblib_lib_common_mixed_1_c___cxx.cxx.o	__ZN9oceanbase6common14ObTscTimestamp17fast_current_timeEv	oceanbase::common::ObTscTimestamp::fast_current_time()
+unity_oblib_lib_oblib_lib_common_mixed_1_c___cxx.cxx.o	__ZN9oceanbase6common15defer_free_itidERx	oceanbase::common::defer_free_itid(long long&)
+unity_oblib_lib_oblib_lib_common_mixed_1_c___cxx.cxx.o	__ZNK9oceanbase6common14ObStringBuffer6stringEv	oceanbase::common::ObStringBuffer::string() const
+unity_oblib_lib_oblib_lib_common_mixed_1_c___cxx.cxx.o	__ZTWN9oceanbase3lib17ContextTLOptGuard13enable_tl_optE	thread-local wrapper routine for oceanbase::lib::ContextTLOptGuard::enable_tl_opt
+unity_oblib_lib_oblib_lib_downsink_0_c___cxx.cxx.o	__ZN9oceanbase6common13get_stackattrERPvRm	oceanbase::common::get_stackattr(void*&, unsigned long&)
+unity_oblib_lib_oblib_lib_downsink_0_c___cxx.cxx.o	__ZN9oceanbase6common13set_stackattrEPvm	oceanbase::common::set_stackattr(void*, unsigned long)
+unity_oblib_lib_oblib_lib_downsink_0_c___cxx.cxx.o	__ZN9oceanbase6common16ObBasicTimeGuard13tl_time_guardE	oceanbase::common::ObBasicTimeGuard::tl_time_guard
+unity_oblib_lib_oblib_lib_downsink_0_c___cxx.cxx.o	__ZN9oceanbase6common16ObBasicTimeGuard20tl_enable_time_guardE	oceanbase::common::ObBasicTimeGuard::tl_enable_time_guard
+unity_oblib_lib_oblib_lib_downsink_0_c___cxx.cxx.o	__ZN9oceanbase6common16ObClockGenerator16clock_generator_E	oceanbase::common::ObClockGenerator::clock_generator_
+unity_oblib_lib_oblib_lib_downsink_0_c___cxx.cxx.o	__ZN9oceanbase6common20check_stack_overflowERbxPx	oceanbase::common::check_stack_overflow(bool&, long long, long long*)
+unity_oblib_lib_oblib_lib_downsink_0_c___cxx.cxx.o	__ZN9oceanbase6common23get_reserved_stack_sizeEv	oceanbase::common::get_reserved_stack_size()
+unity_oblib_lib_oblib_lib_downsink_0_c___cxx.cxx.o	__ZN9oceanbase6common9jump_callEPvPFiS1_ES1_	oceanbase::common::jump_call(void*, int (*)(void*), void*)
+unity_oblib_lib_oblib_lib_downsink_0_c___cxx.cxx.o	__ZNK9oceanbase6common16ObBasicTimeGuard9to_stringEPcx	oceanbase::common::ObBasicTimeGuard::to_string(char*, long long) const
+unity_oblib_lib_oblib_lib_downsink_0_c___cxx.cxx.o	__ZTWN9oceanbase6common14all_stack_sizeE	thread-local wrapper routine for oceanbase::common::all_stack_size
+unity_oblib_lib_oblib_lib_lock_0_c___cxx.cxx.o	__ZN9oceanbase6common12ObLatchMutex4lockEjxb	oceanbase::common::ObLatchMutex::lock(unsigned int, long long, bool)
+unity_oblib_lib_oblib_lib_lock_0_c___cxx.cxx.o	__ZN9oceanbase6common12ObLatchMutex6unlockEv	oceanbase::common::ObLatchMutex::unlock()
+unity_oblib_lib_oblib_lib_lock_0_c___cxx.cxx.o	__ZN9oceanbase6common12ObLatchMutex8try_lockEjPKj	oceanbase::common::ObLatchMutex::try_lock(unsigned int, unsigned int const*)
+unity_oblib_lib_oblib_lib_lock_0_c___cxx.cxx.o	__ZN9oceanbase6common12ObLatchMutexC1Ev	oceanbase::common::ObLatchMutex::ObLatchMutex()
+unity_oblib_lib_oblib_lib_lock_0_c___cxx.cxx.o	__ZN9oceanbase6common12ObLatchMutexD1Ev	oceanbase::common::ObLatchMutex::~ObLatchMutex()
+unity_oblib_lib_oblib_lib_lock_0_c___cxx.cxx.o	__ZN9oceanbase6common7ObLatch6rdlockEjx	oceanbase::common::ObLatch::rdlock(unsigned int, long long)
+unity_oblib_lib_oblib_lib_lock_0_c___cxx.cxx.o	__ZN9oceanbase6common7ObLatch6unlockEPKj	oceanbase::common::ObLatch::unlock(unsigned int const*)
+unity_oblib_lib_oblib_lib_lock_0_c___cxx.cxx.o	__ZN9oceanbase6common7ObLatch6wrlockEjxPKj	oceanbase::common::ObLatch::wrlock(unsigned int, long long, unsigned int const*)
+unity_oblib_lib_oblib_lib_oblog_0_c___cxx.cxx.o	__ZN9oceanbase6common11get_fd_typeEPKciS2_	oceanbase::common::get_fd_type(char const*, int, char const*)
+unity_oblib_lib_oblib_lib_oblog_0_c___cxx.cxx.o	__ZN9oceanbase6common14logdata_printfEPcxRxPKcz	oceanbase::common::logdata_printf(char*, long long, long long&, char const*, ...)
+unity_oblib_lib_oblib_lib_oblog_0_c___cxx.cxx.o	__ZN9oceanbase6common14on_probe_abortEv	oceanbase::common::on_probe_abort()
+unity_oblib_lib_oblib_lib_oblog_0_c___cxx.cxx.o	__ZN9oceanbase6common15logdata_vprintfEPcxRxPKcS1_	oceanbase::common::logdata_vprintf(char*, long long, long long&, char const*, char*)
+unity_oblib_lib_oblib_lib_oblog_0_c___cxx.cxx.o	__ZN9oceanbase6common18ObRingBufLogWriter13is_queue_fullEv	oceanbase::common::ObRingBufLogWriter::is_queue_full()
+unity_oblib_lib_oblib_lib_oblog_0_c___cxx.cxx.o	__ZN9oceanbase6common18ObRingBufLogWriter6commitEx	oceanbase::common::ObRingBufLogWriter::commit(long long)
+unity_oblib_lib_oblib_lib_oblog_0_c___cxx.cxx.o	__ZN9oceanbase6common8ObLogger13free_log_itemEPNS0_10ObPLogItemE	oceanbase::common::ObLogger::free_log_item(oceanbase::common::ObPLogItem*)
+unity_oblib_lib_oblib_lib_oblog_0_c___cxx.cxx.o	__ZN9oceanbase6common8ObLogger14alloc_log_itemEixRPNS0_10ObPLogItemE	oceanbase::common::ObLogger::alloc_log_item(int, long long, oceanbase::common::ObPLogItem*&)
+unity_oblib_lib_oblib_lib_oblog_0_c___cxx.cxx.o	__ZN9oceanbase6common8ObLogger15issue_dba_errorEiPKciS3_	oceanbase::common::ObLogger::issue_dba_error(int, char const*, int, char const*)
+unity_oblib_lib_oblib_lib_oblog_0_c___cxx.cxx.o	__ZN9oceanbase6common8ObLogger16get_trace_bufferEv	oceanbase::common::ObLogger::get_trace_buffer()
+unity_oblib_lib_oblib_lib_oblog_0_c___cxx.cxx.o	__ZN9oceanbase6common8ObLogger16log_user_messageENS1_12UserMsgLevelEiPKcz	oceanbase::common::ObLogger::log_user_message(oceanbase::common::ObLogger::UserMsgLevel, int, char const*, ...)
+unity_oblib_lib_oblib_lib_oblog_0_c___cxx.cxx.o	__ZN9oceanbase6common8ObLogger18flush_logs_to_fileEPPNS0_10ObPLogItemEx	oceanbase::common::ObLogger::flush_logs_to_file(oceanbase::common::ObPLogItem**, long long)
+unity_oblib_lib_oblib_lib_oblog_0_c___cxx.cxx.o	__ZN9oceanbase6common8ObLogger18print_trace_bufferEPKciS3_iS3_	oceanbase::common::ObLogger::print_trace_buffer(char const*, int, char const*, int, char const*)
+unity_oblib_lib_oblib_lib_oblog_0_c___cxx.cxx.o	__ZN9oceanbase6common8ObLogger19backtrace_if_neededERNS0_10ObPLogItemEb	oceanbase::common::ObLogger::backtrace_if_needed(oceanbase::common::ObPLogItem&, bool)
+unity_oblib_lib_oblib_lib_oblog_0_c___cxx.cxx.o	__ZN9oceanbase6common8ObLogger20check_tl_log_limiterEiixRbRPKc	oceanbase::common::ObLogger::check_tl_log_limiter(int, int, long long, bool&, char const*&)
+unity_oblib_lib_oblib_lib_oblog_0_c___cxx.cxx.o	__ZN9oceanbase6common8ObLogger21inc_dropped_log_countEi	oceanbase::common::ObLogger::inc_dropped_log_count(int)
+unity_oblib_lib_oblib_lib_oblog_0_c___cxx.cxx.o	__ZN9oceanbase6common8ObLogger24check_reset_force_allowsEv	oceanbase::common::ObLogger::check_reset_force_allows()
+unity_oblib_lib_oblib_lib_oblog_0_c___cxx.cxx.o	__ZN9oceanbase6common8ObLogger24need_print_log_limit_msgEv	oceanbase::common::ObLogger::need_print_log_limit_msg()
+unity_oblib_lib_oblib_lib_oblog_0_c___cxx.cxx.o	__ZN9oceanbase6common8ObLogger8log_headExPKcS3_iS3_iS3_iPcxRx	oceanbase::common::ObLogger::log_head(long long, char const*, char const*, int, char const*, int, char const*, int, char*, long long, long long&)
+unity_oblib_lib_oblib_lib_oblog_0_c___cxx.cxx.o	__ZN9oceanbase6common8ObLogger8log_tailEiPcxRx	oceanbase::common::ObLogger::log_tail(int, char*, long long, long long&)
+unity_oblib_lib_oblib_lib_oblog_0_c___cxx.cxx.o	__ZN9oceanbase6common8ObLoggerC1Ev	oceanbase::common::ObLogger::ObLogger()
+unity_oblib_lib_oblib_lib_oblog_0_c___cxx.cxx.o	__ZN9oceanbase6common8ObLoggerD1Ev	oceanbase::common::ObLogger::~ObLogger()
+unity_oblib_lib_oblib_lib_oblog_0_c___cxx.cxx.o	__ZNK9oceanbase6common8ObLogger15is_force_allowsEv	oceanbase::common::ObLogger::is_force_allows() const
+unity_oblib_lib_oblib_lib_oblog_0_c___cxx.cxx.o	__ZTWN9oceanbase6common8ObLogger11trace_mode_E	thread-local wrapper routine for oceanbase::common::ObLogger::trace_mode_
+unity_oblib_lib_oblib_lib_oblog_0_c___cxx.cxx.o	__ZTWN9oceanbase6common8ObLogger16disable_logging_E	thread-local wrapper routine for oceanbase::common::ObLogger::disable_logging_
+unity_oblib_lib_oblib_lib_oblog_0_c___cxx.cxx.o	__ZTWN9oceanbase6common8ObLogger17curr_logging_seq_E	thread-local wrapper routine for oceanbase::common::ObLogger::curr_logging_seq_
+unity_oblib_lib_oblib_lib_oblog_0_c___cxx.cxx.o	__ZTWN9oceanbase6common8ObLogger17last_logging_seq_E	thread-local wrapper routine for oceanbase::common::ObLogger::last_logging_seq_
+unity_oblib_lib_oblib_lib_oblog_0_c___cxx.cxx.o	__ZTWN9oceanbase6common8ObLogger22limited_left_log_size_E	thread-local wrapper routine for oceanbase::common::ObLogger::limited_left_log_size_
+unity_oblib_lib_oblib_lib_oblog_0_c___cxx.cxx.o	__ZTWN9oceanbase6common8ObLogger26last_logging_cost_time_us_E	thread-local wrapper routine for oceanbase::common::ObLogger::last_logging_cost_time_us_
+unity_oblib_lib_oblib_lib_oblog_0_c___cxx.cxx.o	__ZTWN9oceanbase6common8ObLogger8tl_type_E	thread-local wrapper routine for oceanbase::common::ObLogger::tl_type_
+unity_oblib_lib_oblib_lib_thread_0_c___cxx.cxx.o	__ZN9oceanbase3lib15g_stack_allocerE	oceanbase::lib::g_stack_allocer
+unity_oblib_lib_oblib_lib_thread_0_c___cxx.cxx.o	__ZN9oceanbase3lib23ProtectedStackAllocator16smart_call_allocEl	oceanbase::lib::ProtectedStackAllocator::smart_call_alloc(long)
+unity_oblib_lib_oblib_lib_thread_0_c___cxx.cxx.o	__ZN9oceanbase3lib23ProtectedStackAllocator7deallocEPv	oceanbase::lib::ProtectedStackAllocator::dealloc(void*)
+unity_oblib_lib_oblib_lib_utility_0_c___cxx.cxx.o	__Z13get_tp_switchv	get_tp_switch()
+unity_oblib_lib_oblib_lib_utility_0_c___cxx.cxx.o	__ZN9oceanbase6common10EventTable17EN_CHECK_SORT_CMPE	oceanbase::common::EventTable::EN_CHECK_SORT_CMP
+unity_oblib_lib_oblib_lib_utility_0_c___cxx.cxx.o	__ZN9oceanbase6common15ObFastFormatInt13format_signedExPc	oceanbase::common::ObFastFormatInt::format_signed(long long, char*)
+unity_oblib_lib_oblib_lib_utility_0_c___cxx.cxx.o	__ZN9oceanbase6common15ObFastFormatInt15format_unsignedEy	oceanbase::common::ObFastFormatInt::format_unsigned(unsigned long long)
+unity_oblib_lib_oblib_lib_utility_0_c___cxx.cxx.o	__ZN9oceanbase6common15databuff_printfEPcxRxPKcz	oceanbase::common::databuff_printf(char*, long long, long long&, char const*, ...)
+unity_oblib_lib_oblib_lib_utility_0_c___cxx.cxx.o	__ZN9oceanbase6common22databuff_print_key_objINS0_8ObStringEEEiPcxRxPKcbRKT_	int oceanbase::common::databuff_print_key_obj<oceanbase::common::ObString>(char*, long long, long long&, char const*, bool, oceanbase::common::ObString const&)
+unity_oblib_lib_oblib_lib_utility_0_c___cxx.cxx.o	__ZN9oceanbase6common3lbtEv	oceanbase::common::lbt()
+unity_ob_share_ob_share_common_mixed_0_c___cxx.cxx.o	__ZN9oceanbase6common10ObHexUtils3hexERKNS0_8ObStringERNS0_15ObObjCastParamsERNS0_5ObObjE	oceanbase::common::ObHexUtils::hex(oceanbase::common::ObString const&, oceanbase::common::ObObjCastParams&, oceanbase::common::ObObj&)
+unity_ob_share_ob_share_common_mixed_0_c___cxx.cxx.o	__ZN9oceanbase6common11ObObjCaster7to_typeENS0_9ObObjTypeERNS0_15ObObjCastParamsERKNS0_5ObObjERS5_	oceanbase::common::ObObjCaster::to_type(oceanbase::common::ObObjType, oceanbase::common::ObObjCastParams&, oceanbase::common::ObObj const&, oceanbase::common::ObObj&)
+unity_ob_share_ob_share_common_mixed_0_c___cxx.cxx.o	__ZN9oceanbase6common16ObTextStringIter13get_full_dataERNS0_8ObStringE	oceanbase::common::ObTextStringIter::get_full_data(oceanbase::common::ObString&)
+unity_ob_share_ob_share_common_mixed_0_c___cxx.cxx.o	__ZN9oceanbase6common16ObTextStringIter4initEjPKNS0_16ObLobReadOptionsEPNS0_12ObIAllocatorES6_	oceanbase::common::ObTextStringIter::init(unsigned int, oceanbase::common::ObLobReadOptions const*, oceanbase::common::ObIAllocator*, oceanbase::common::ObIAllocator*)
+unity_ob_share_ob_share_common_mixed_0_c___cxx.cxx.o	__ZN9oceanbase6common16ObTextStringIterD1Ev	oceanbase::common::ObTextStringIter::~ObTextStringIter()
+thirdparty:lib/libabsl_time_zone.a	__ZNSt3__117bad_function_callD1Ev	std::__1::bad_function_call::~bad_function_call()
+thirdparty:lib/libabsl_time_zone.a	__ZTINSt3__117bad_function_callE	typeinfo for std::__1::bad_function_call
+thirdparty:lib/libabsl_time_zone.a	__ZTVNSt3__117bad_function_callE	vtable for std::__1::bad_function_call

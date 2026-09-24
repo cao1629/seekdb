@@ -1,0 +1,130 @@
+src/data_plane/api/data_plane/fts/dict/ob_dic_loader.h:106:class ObDicLoaderHandle
+src/data_plane/api/data_plane/lob/ob_json_lob.h:38:class ObJsonLobHandle;
+src/data_plane/api/data_plane/retrieval/ob_sparse_retrieval.h:256:class ObSparseRetrievalHandle
+src/data_plane/api/data_plane/tmp_file/ob_tmp_file.h:57:class ObTmpFileIOHandle final
+src/logservice/palf/palf_env_impl.h:59:class PalfHandle;
+src/logservice/palf/palf_env.h:37:class PalfHandle;
+src/logservice/palf/palf_handle.h:34:class PalfHandle
+src/oblib/lib/allocator/ob_hazard_ref.h:238:class HazardHandle
+src/oblib/lib/allocator/ob_hazard_ref.h:260:class RetireListHandle
+src/oblib/lib/hash/ob_darray.h:556:  class BaseHandle
+src/oblib/lib/hash/ob_hash.h:296:  class BaseHandle
+src/oblib/lib/hash/ob_link_hashmap_deps.h:104:class AllocHandle
+src/oblib/lib/hash/ob_link_hashmap_deps.h:114:class CountHandle
+src/oblib/lib/hash/ob_link_hashmap.h:43:class BaseRefHandle
+src/oblib/lib/hash/ob_link_hashmap.h:68:class ZeroRefHandle final : public BaseRefHandle
+src/oblib/lib/hash/ob_link_hashmap.h:81:class RefHandle final : public BaseRefHandle
+src/oblib/lib/resource/ob_resource_mgr.h:116:  friend class ObResourceMgrHandle;
+src/oblib/lib/resource/ob_resource_mgr.h:98:class ObResourceMgrHandle
+src/observer/ob_signal_handle.h:61:class ObSignalHandle: public share::ObThreadPool
+src/rootserver/fork_table/ob_fork_table_helper.h:29:class ObTabletHandle;
+src/share/cache/ob_kv_storecache.h:153:  friend class ObKVCacheHandle;
+src/share/cache/ob_kv_storecache.h:281:class ObKVCacheHandle
+src/share/cache/ob_kv_storecache.h:34:class ObMicroBlockBufferHandle;
+src/share/cache/ob_kv_storecache.h:38:class ObKVCacheHandle;
+src/share/cache/ob_kv_storecache.h:92:class ObKVCacheHandle;
+src/share/cache/ob_kvcache_hazard_domain.h:33:class ObKVMemBlockHandle;
+src/share/cache/ob_kvcache_hazard_pointer.h:25:class ObKVMemBlockHandle;
+src/share/cache/ob_kvcache_inst_map.h:130:  friend class ObKVCacheInstHandle;
+src/share/cache/ob_kvcache_inst_map.h:95:class ObKVCacheInstHandle
+src/share/io/ob_io_define.h:421:  friend class ObIOHandle;
+src/share/io/ob_io_define.h:555:class ObIOHandle final
+src/share/ob_ex_rpc.h:65:class AsyncHandle : detail::HandleStorage<Res> {
+src/share/redolog/ob_log_file_reader.h:66:class ObLogReadFdHandle final
+src/share/schema/ob_schema_cache.h:35:class ObKVCacheHandle;
+src/share/schema/ob_schema_getter_guard.h:41:class ObKVCacheHandle;
+src/share/schema/ob_schema_mgr_cache.h:97:class ObSchemaMgrHandle
+src/share/schema/ob_schema_struct.h:59:class ObKVCacheHandle;
+src/share/schema/ob_server_schema_service.h:47:class ObKVCacheHandle;
+src/sql/engine/dml/ob_table_modify_op.h:38:class ForeignKeyHandle
+src/sql/engine/dml/ob_trigger_handler.h:30:class TriggerHandle
+src/sql/engine/expr/ob_expr_ai/ob_ai_func.h:119:class ObAIFuncHandle 
+src/sql/optimizer/ob_opt_selectivity.h:43:class ObOptColumnStatHandle;
+src/sql/optimizer/stat/ob_dbms_stats_lock_unlock.h:28:class ObOptColumnStatHandle;
+src/sql/optimizer/stat/ob_opt_column_stat_cache.h:28:class ObOptColumnStatHandle;
+src/sql/optimizer/stat/ob_opt_column_stat_cache.h:55:class ObOptColumnStatHandle
+src/sql/optimizer/stat/ob_opt_stat_manager.h:32:class ObOptColumnStatHandle;
+src/storage/access/ob_table_estimator.h:28:class ObTabletHandle;
+src/storage/allocator/ob_memstore_allocator.h:75:  class AllocHandle: public ListHandle, public ObIAllocator
+src/storage/blocksstable/ob_block_manager.h:39:class ObTabletHandle;
+src/storage/blocksstable/ob_block_manager.h:46:class ObMacroBlockHandle;
+src/storage/blocksstable/ob_imacro_block_flush_callback.h:24:class ObStorageObjectHandle;
+src/storage/blocksstable/ob_kvcache_pointer_swizzle.h:27:  class ObMicroBlockBufferHandle;
+src/storage/blocksstable/ob_macro_block_handle.h:32:class ObMacroBlockHandle final
+src/storage/blocksstable/ob_macro_block_handle.h:62:class ObStorageObjectsHandle final
+src/storage/blocksstable/ob_macro_block.h:37:class ObStorageObjectHandle;
+src/storage/blocksstable/ob_micro_block_cache.h:122:class ObMicroBlockBufferHandle
+src/storage/blocksstable/ob_micro_block_cache.h:34:class ObMicroBlockDataHandle;
+src/storage/blocksstable/ob_micro_block_row_lock_checker.h:26:class ObSSTableReadHandle;
+src/storage/blocksstable/ob_sstable.h:47:class ObSSTableMetaHandle
+src/storage/blocksstable/ob_storage_object_handle.h:34:class ObStorageObjectHandle final
+src/storage/blockstore/ob_object_reader_writer.h:122:class ObObjectBaseHandle
+src/storage/blockstore/ob_object_reader_writer.h:170:class ObObjectReadHandle final
+src/storage/blockstore/ob_object_reader_writer.h:206:class ObObjectWriteHandle final : public ObObjectBaseHandle
+src/storage/blockstore/ob_object_reader_writer.h:217:class ObObjectBatchHandle final : public ObObjectBaseHandle
+src/storage/blockstore/ob_object_reader_writer.h:231:class ObObjectLinkHandle final : public ObObjectBaseHandle
+src/storage/compaction/ob_basic_schedule_tablet_func.h:27:class ObTabletHandle;
+src/storage/compaction/ob_basic_tablet_merge_ctx.h:33:class ObTabletHandle;
+src/storage/compaction/ob_basic_tablet_merge_ctx.h:34:class ObProtectedMemtableMgrHandle;
+src/storage/compaction/ob_compaction_schedule_iterator.h:34:class ObTabletHandle;
+src/storage/compaction/ob_medium_compaction_mgr.h:32:class ObTabletHandle;
+src/storage/compaction/ob_partition_merge_progress.h:26:class ObTabletHandle;
+src/storage/compaction/ob_schedule_tablet_func.h:25:class ObTabletHandle;
+src/storage/compaction/ob_tablet_merge_task.h:37:class ObTabletHandle;
+src/storage/ddl/ob_ddl_merge_schedule.h:39:class ObTabletHandle;
+src/storage/ddl/ob_ddl_redo_log_replayer.h:29:class ObTabletHandle;
+src/storage/ddl/ob_ddl_redo_log_writer.h:111:class ObDDLCtrlSpeedHandle final
+src/storage/ddl/ob_ddl_replay_executor.h:32:class ObTabletHandle;
+src/storage/ddl/ob_ddl_struct.h:102:class ObDDLKVHandle final
+src/storage/ddl/ob_ddl_struct.h:49:class ObDDLMacroHandle
+src/storage/ddl/ob_hnsw_embedmgr.h:228:class ObEmbeddingIOCallbackHandle : public share::ObIEmbeddingCallback
+src/storage/deadlock/ob_deadlock_detector_mgr.h:199:  class InnerAllocHandle
+src/storage/lob/ob_lob_manager.cpp:2352:class ObJsonLobHandle
+src/storage/memtable/mvcc/ob_keybtree_deps.h:186:  friend class ScanHandle<BtreeKey, BtreeVal>;
+src/storage/memtable/mvcc/ob_keybtree_deps.h:34:class ScanHandle;
+src/storage/memtable/mvcc/ob_keybtree_deps.h:407:class BaseHandle
+src/storage/memtable/mvcc/ob_keybtree_deps.h:434:class GetHandle: public BaseHandle<BtreeKey, BtreeVal>
+src/storage/memtable/mvcc/ob_keybtree_deps.h:447:class ScanHandle: public BaseHandle<BtreeKey, BtreeVal>
+src/storage/memtable/mvcc/ob_keybtree_deps.h:482:class WriteHandle: public BaseHandle<BtreeKey, BtreeVal>
+src/storage/memtable/mvcc/ob_keybtree.h:46:class WriteHandle;
+src/storage/memtable/mvcc/ob_keybtree.h:48:class GetHandle;
+src/storage/meta_mem/ob_storage_meta_cache.h:144:class ObStorageMetaValueHandle final
+src/storage/meta_mem/ob_storage_meta_cache.h:167:class ObStorageMetaHandle final
+src/storage/meta_mem/ob_storage_meta_cache.h:40:class ObStorageMetaValueHandle;
+src/storage/meta_mem/ob_tablet_handle.h:37:class ObTabletHandle : public ObMetaObjGuard<ObTablet>
+src/storage/meta_mem/ob_tablet_pointer_handle.h:30:class ObTabletPointerHandle : public ObResourceHandle<ObTabletPointer>
+src/storage/meta_store/ob_local_storage_meta_persister.h:28:class ObTabletHandle;
+src/storage/multi_data_source/mds_ctx.h:35:class MdsTableHandle;
+src/storage/multi_data_source/mds_table_handle.h:34:class MdsTableHandle
+src/storage/multi_data_source/mds_table_impl.h:50:class MdsTableHandle;
+src/storage/multi_data_source/mds_table_impl.h:83:  friend class MdsTableHandle;
+src/storage/multi_data_source/mds_table_mgr.h:167:class MdsTableMgrHandle
+src/storage/multi_data_source/mds_table_mgr.h:32:class ObTabletHandle;
+src/storage/multi_data_source/ob_mds_table_merge_task.h:31:class ObTabletHandle;
+src/storage/multi_data_source/runtime_utility/mds_service.h:42:class ObTabletHandle;
+src/storage/multi_data_source/runtime_utility/mds_service.h:46:class MdsTableHandle;
+src/storage/ob_i_memtable_mgr.h:333:class ObMemtableMgrHandle final
+src/storage/ob_protected_memtable_mgr_handle.h:102:class ObProtectedMemtableMgrHandle
+src/storage/ob_resource_map.h:102:class ObResourceHandle
+src/storage/ob_storage_clog_recorder.h:37:class ObTabletHandle;
+src/storage/ob_storage_schema_recorder.h:42:class ObTabletHandle;
+src/storage/ob_tablet_autoincrement_service.h:117:class ObTabletAutoincMgrAllocHandle
+src/storage/slog_ckpt/ob_linked_macro_block_struct.h:105:class ObMetaBlockListHandle final
+src/storage/tablet/ob_mds_cl_range_query_iterator.h:31:class ObTabletHandle;
+src/storage/tablet/ob_mds_range_query_iterator.h:41:class ObTabletHandle;
+src/storage/tablet/ob_mds_row_iterator.h:35:class ObTabletHandle;
+src/storage/tablet/ob_tablet_binding_helper.h:60:class ObTabletHandle;
+src/storage/tablet/ob_tablet_create_mds_helper.h:60:class ObTabletHandle;
+src/storage/tablet/ob_tablet_delete_mds_helper.h:42:class ObTabletHandle;
+src/storage/tablet/ob_tablet_iterator.h:33:class ObTabletHandle;
+src/storage/tablet/ob_tablet_table_store_iterator.h:28:class ObSSTableMetaHandle;
+src/storage/tablet/ob_tablet_table_store.h:34:class ObCachedTableHandle;
+src/storage/tablet/ob_tablet_table_store.h:35:class ObStorageMetaHandle;
+src/storage/tablet/ob_tablet.h:91:class ObDDLKVHandle;
+src/storage/tmp_file/ob_i_tmp_file.h:380:class ObITmpFileHandle
+src/storage/tmp_file/ob_shared_nothing_tmp_file.h:297:class ObSNTmpFileHandle final : public ObITmpFileHandle
+src/storage/tmp_file/ob_tmp_file_block_manager.h:151:class ObTmpFileBlockHandle final
+src/storage/tmp_file/ob_tmp_file_cache.h:27:  class ObStorageObjectHandle;
+src/storage/tmp_file/ob_tmp_file_io_handle.h:29:class ObTmpFileIOHandle final
+src/storage/tmp_file/ob_tmp_file_meta_tree.h:29:class ObTmpPageValueHandle;
+src/storage/tx/ob_tx_log_adapter.h:33:class PalfHandle;

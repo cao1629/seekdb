@@ -1,0 +1,11 @@
+== include lines: upward 1013 in 110 pairs, not-listed 7 in 4 pairs, listed 11972 in 338 pairs, ignored 219 in 19 pairs
+   not-listed     4 seekdb -> ob-share  src/share/ob_version.h(2), src/share/ob_encryption_util.h(1), src/share/ob_thread_pool.h(1)
+   not-listed     1 seekdb -> sql  src/sql/ob_sql_init.h(1)
+   not-listed     1 seekdb -> storage-tablet  src/storage/tx_storage/ob_memory_printer.h(1)
+   not-listed     1 sql-parser-sys -> ob-schema  src/share/schema/ob_priv_type.h(1)
+== link symbols: upward 2662 in 134 pairs, not-listed 10 in 5 pairs, listed 37735 in 332 pairs, ignored 655 in 20 pairs
+   not-listed     4 seekdb -> storage-tablet  
+   not-listed     3 seekdb -> ob-share  
+   not-listed     1 seekdb -> storage-tx  
+   not-listed     1 seekdb -> sql  
+   not-listed     1 seekdb -> storage-sstable  

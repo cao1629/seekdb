@@ -1,0 +1,6 @@
+file	lines	statements	column_headers	NULL	integer	fixed_point	double_exponent	error_22003	other
+r/mysql/add.result	192731	1658	1436	123858	39761	19316	6617	85	0
+test_suite/datatype/r/mysql/minus.result	191019	1662	1423	122081	39824	19315	6616	98	0
+test_suite/datatype/r/mysql/div.result	198622	1666	1480	152232	43130	0	0	41	73
+test_suite/expr/r/mysql/mul.result	188339	1758	1401	120926	42704	17494	3834	141	81
+total	770711	6744	5740	519097	165419	56125	17067	365	154

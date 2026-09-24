@@ -1,0 +1,75 @@
+src/oblib/lib/alloc/alloc_func.cpp:39:  g_memory_budget.store(bytes, std::memory_order_release);
+src/oblib/lib/alloc/alloc_func.cpp:44:  return g_memory_budget.load(std::memory_order_acquire);
+src/oblib/lib/allocator/ob_malloc.cpp:166:  g_ob_malloc_backend.store(static_cast<int8_t>(backend), std::memory_order_relaxed);
+src/oblib/lib/allocator/ob_malloc.cpp:200:    g_memory_usage_tracker_resolvers[ctx_id].store(resolver, std::memory_order_release);
+src/oblib/lib/allocator/ob_malloc.cpp:208:    resolver = g_memory_usage_tracker_resolvers[ctx_id].load(std::memory_order_acquire);
+src/oblib/lib/allocator/ob_malloc.h:59:      g_ob_malloc_backend.load(std::memory_order_relaxed));
+src/oblib/lib/allocator/ob_malloc.h:192:      live_bytes_.fetch_add(size, std::memory_order_relaxed);
+src/oblib/lib/allocator/ob_malloc.h:199:      live_bytes_.fetch_sub(size, std::memory_order_relaxed);
+src/oblib/lib/allocator/ob_malloc.h:206:      live_bytes_.fetch_add(delta, std::memory_order_relaxed);
+src/oblib/lib/allocator/ob_malloc.h:210:  int64_t used() const { return live_bytes_.load(std::memory_order_relaxed); }
+src/oblib/lib/allocator/ob_malloc.h:211:  void reset() { live_bytes_.store(0, std::memory_order_relaxed); }
+src/oblib/lib/allocator/ob_malloc.h:466:      live_bytes_.fetch_sub(allocation_size, std::memory_order_relaxed);
+src/oblib/lib/allocator/ob_malloc.h:470:  int64_t total() const override { return live_bytes_.load(std::memory_order_relaxed); }
+src/oblib/lib/allocator/ob_malloc.h:491:      live_bytes_.fetch_add(usable_size(ptr), std::memory_order_relaxed);
+src/oblib/lib/allocator/ob_malloc.h:497:    live_bytes_.fetch_add(new_usable_size - old_usable_size, std::memory_order_relaxed);
+src/oblib/lib/allocator/ob_jemalloc_sanity.cpp:238:  uintptr_t current = next_extent_addr.load(std::memory_order_relaxed);
+src/oblib/lib/allocator/ob_jemalloc_sanity.cpp:239:  const uintptr_t end = heap_end.load(std::memory_order_relaxed);
+src/oblib/lib/allocator/ob_jemalloc_sanity.cpp:248:                                                   std::memory_order_relaxed));
+src/oblib/lib/allocator/ob_jemalloc_sanity.cpp:326:    map_fixed_noreplace_unavailable.store(true, std::memory_order_release);
+src/oblib/lib/allocator/ob_jemalloc_sanity.cpp:333:  heap_begin.store(selected.begin_, std::memory_order_relaxed);
+src/oblib/lib/allocator/ob_jemalloc_sanity.cpp:334:  heap_end.store(selected.end_, std::memory_order_relaxed);
+src/oblib/lib/allocator/ob_jemalloc_sanity.cpp:336:                         std::memory_order_relaxed);
+src/oblib/lib/allocator/ob_jemalloc_sanity.cpp:347:    heap_begin.store(0, std::memory_order_relaxed);
+src/oblib/lib/allocator/ob_jemalloc_sanity.cpp:348:    heap_end.store(0, std::memory_order_relaxed);
+src/oblib/lib/allocator/ob_jemalloc_sanity.cpp:355:  InitState state = init_state.load(std::memory_order_acquire);
+src/oblib/lib/allocator/ob_jemalloc_sanity.cpp:361:                                         std::memory_order_acq_rel)) {
+src/oblib/lib/allocator/ob_jemalloc_sanity.cpp:366:                     std::memory_order_release);
+src/oblib/lib/allocator/ob_jemalloc_sanity.cpp:370:         (state = init_state.load(std::memory_order_acquire))) {
+src/oblib/lib/allocator/ob_jemalloc_sanity.cpp:378:    if (map_fixed_noreplace_unavailable.load(std::memory_order_acquire)) {
+src/oblib/lib/allocator/ob_jemalloc_sanity.cpp:554:  const uintptr_t range_begin = heap_begin.load(std::memory_order_relaxed);
+src/oblib/lib/allocator/ob_jemalloc_sanity.cpp:555:  const uintptr_t range_end = heap_end.load(std::memory_order_relaxed);
+src/oblib/lib/allocator/ob_jemalloc_sanity.cpp:569:  const uintptr_t range_begin = heap_begin.load(std::memory_order_relaxed);
+src/oblib/lib/allocator/ob_jemalloc_sanity.cpp:570:  const uintptr_t range_end = heap_end.load(std::memory_order_relaxed);
+src/oblib/lib/thread/ob_adaptive_worker_pool.h:80:    int64_t cur = total_cnt_.load(std::memory_order_relaxed);
+src/oblib/lib/thread/ob_adaptive_worker_pool.h:83:              std::memory_order_acq_rel, std::memory_order_relaxed)) {
+src/oblib/lib/thread/ob_adaptive_worker_pool.h:97:    int64_t cur = total_cnt_.load(std::memory_order_relaxed);
+src/oblib/lib/thread/ob_adaptive_worker_pool.h:100:              std::memory_order_acq_rel, std::memory_order_relaxed)) {
+src/oblib/lib/thread/ob_adaptive_worker_pool.h:102:          total_cnt_.fetch_add(1, std::memory_order_relaxed);
+src/oblib/lib/thread/ob_adaptive_worker_pool.h:112:  int64_t idle_count() const { return idle_cnt_.load(std::memory_order_relaxed); }
+src/oblib/lib/thread/ob_adaptive_worker_pool.h:113:  int64_t worker_count() const { return total_cnt_.load(std::memory_order_relaxed); }
+src/oblib/lib/thread/ob_adaptive_worker_pool.h:116:  int64_t idle_enter() { return idle_cnt_.fetch_add(1, std::memory_order_relaxed); }
+src/oblib/lib/thread/ob_adaptive_worker_pool.h:117:  int64_t idle_exit() { return idle_cnt_.fetch_sub(1, std::memory_order_relaxed); }
+src/oblib/rpc/obmysql/obsm_struct.h:49:    is_sess_alloc_.store(false, std::memory_order_relaxed);
+src/oblib/rpc/obmysql/obsm_struct.h:50:    is_sess_free_.store(false, std::memory_order_relaxed);
+src/observer/omt/ob_th_worker.cpp:286:              runtime_->completion_cnt_.fetch_add(1, std::memory_order_relaxed);
+src/observer/omt/ob_server_runtime.cpp:694:        int64_t completion_cnt = completion_cnt_.load(std::memory_order_relaxed);
+src/observer/mysql/obmp_base.cpp:273:      conn->is_sess_alloc_.store(true, std::memory_order_release);
+src/observer/mysql/obmp_base.cpp:296:      conn->is_sess_free_.store(true, std::memory_order_release);
+src/observer/mysql/obsm_conn_callback.cpp:109:  if (conn.is_sess_alloc_.load(std::memory_order_acquire)) {
+src/observer/mysql/obsm_conn_callback.cpp:110:    if (!conn.is_sess_free_.load(std::memory_order_acquire)) {
+src/observer/mysql/obsm_conn_callback.cpp:158:           "is_sess_alloc_", conn.is_sess_alloc_.load(std::memory_order_acquire),
+src/observer/mysql/obsm_conn_callback.cpp:168:  if (conn.is_sess_alloc_.load(std::memory_order_acquire)
+src/observer/mysql/obsm_conn_callback.cpp:169:      && !conn.is_sess_free_.load(std::memory_order_acquire)
+src/observer/mysql/obmp_packet_sender.cpp:681:      && conn_->is_sess_alloc_.load(std::memory_order_acquire)
+src/observer/mysql/obmp_packet_sender.cpp:682:      && !conn_->is_sess_free_.load(std::memory_order_acquire)) {
+src/storage/tx/ob_timestamp_access.h:42:  void reset() { provider_.store(nullptr, std::memory_order_release); }
+src/storage/tx/ob_timestamp_access.h:45:    provider_.store(provider, std::memory_order_release);
+src/storage/tx/ob_timestamp_access.cpp:29:  ObTimestampProvider provider = provider_.load(std::memory_order_acquire);
+src/storage/tx/ob_timestamp_access.cpp:40:  ObTimestampProvider provider = provider_.load(std::memory_order_acquire);
+src/logservice/ob_log_handler.cpp:78:    local_append_enabled_.store(false, std::memory_order_release);
+src/logservice/ob_log_handler.cpp:130:  local_append_enabled_.store(false, std::memory_order_release);
+src/logservice/ob_log_handler.cpp:157:  if (!local_append_enabled_.load(std::memory_order_acquire)) {
+src/logservice/ob_log_handler.cpp:179:  if (!local_append_enabled_.load(std::memory_order_acquire)) {
+src/logservice/ob_log_handler.cpp:377:      } else if (!local_append_enabled_.load(std::memory_order_acquire)) {
+src/logservice/ob_log_handler.h:165:    local_append_enabled_.store(enabled, std::memory_order_release);
+src/share/ob_ex_rpc.h:67:    void mark_done(int ret) { ret_ = ret; done_.store(1, std::memory_order_release); futex_wake(reinterpret_cast<int*>(&done_), 1); }
+src/share/ob_ex_rpc.h:68:    int wait() { while (done_.load(std::memory_order_acquire) == 0) futex_wait(reinterpret_cast<int*>(&done_), 0, nullptr); return ret_; }
+src/share/config/ob_server_config.cpp:264:    kvcache_memory_capacity_.store(kvcache_memory_capacity, std::memory_order_release);
+src/share/config/ob_server_config.cpp:273:  kvcache_memory_limit_.store(kvcache_memory_limit, std::memory_order_release);
+src/share/config/ob_server_config.cpp:274:  memstore_memory_limit_.store(memstore_memory_limit, std::memory_order_release);
+src/share/config/ob_server_config.cpp:275:  vector_memory_limit_.store(vector_memory_limit, std::memory_order_release);
+src/share/config/ob_server_config.cpp:295:  return kvcache_memory_limit_.load(std::memory_order_acquire);
+src/share/config/ob_server_config.cpp:300:  return kvcache_memory_capacity_.load(std::memory_order_acquire);
+src/share/config/ob_server_config.cpp:305:  return memstore_memory_limit_.load(std::memory_order_acquire);
+src/share/config/ob_server_config.cpp:310:  return vector_memory_limit_.load(std::memory_order_acquire);

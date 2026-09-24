@@ -1,0 +1,39 @@
+ob-errno	
+ob-base	ob-errno
+ob-platform	ob-errno
+ob-simd	ob-errno
+ob-epoch	ob-errno
+ob-clib-sys	ob-errno
+ob-runtime	ob-platform ob-epoch ob-clib-sys
+ob-values	ob-simd ob-runtime
+ob-values-doc	ob-clib-sys ob-runtime ob-values
+ob-share	ob-runtime ob-values ob-values-doc
+ob-schema	ob-runtime ob-values ob-share
+geo-sys	ob-runtime ob-values ob-values-doc ob-share
+vsag-sys	ob-runtime
+ob-log	ob-runtime ob-values ob-share
+storage-api	ob-runtime ob-values ob-values-doc ob-share ob-schema geo-sys
+storage-sstable	ob-simd ob-clib-sys ob-runtime ob-values ob-values-doc ob-share ob-schema storage-api
+storage-tx	ob-epoch ob-runtime ob-values ob-values-doc ob-share ob-schema ob-log storage-api storage-sstable
+storage-tablet	ob-runtime ob-values ob-values-doc ob-share ob-schema ob-log storage-api storage-sstable storage-tx
+storage-engine	ob-runtime ob-values ob-values-doc ob-share ob-schema ob-log storage-api storage-sstable storage-tx storage-tablet
+storage-search	ob-simd ob-runtime ob-values ob-values-doc ob-share ob-schema geo-sys vsag-sys storage-api storage-sstable storage-tx storage-tablet storage-engine
+sql-parse-tree	
+sql-parser-sys	ob-runtime ob-values sql-parse-tree
+sql-session	ob-runtime ob-values ob-share ob-schema storage-api
+sql-ir	ob-runtime ob-values ob-values-doc ob-share ob-schema geo-sys storage-api sql-parse-tree sql-session
+sql-exec	ob-runtime ob-values ob-values-doc ob-share ob-schema storage-api storage-tablet sql-parse-tree sql-session sql-ir
+sql-expr	ob-clib-sys ob-runtime ob-values ob-values-doc ob-share ob-schema geo-sys storage-api storage-tablet storage-search sql-parse-tree sql-session sql-ir sql-exec
+sql-das	ob-runtime ob-values ob-values-doc ob-share ob-schema geo-sys storage-api storage-search sql-parse-tree sql-session sql-ir sql-exec sql-expr
+sql-engine	ob-runtime ob-values ob-values-doc ob-share ob-schema geo-sys storage-api storage-tablet storage-engine sql-parse-tree sql-session sql-ir sql-exec sql-expr sql-das
+sql-parser	ob-runtime ob-values ob-share storage-search sql-parse-tree sql-parser-sys sql-session
+sql-resolver	ob-clib-sys ob-runtime ob-values ob-share ob-schema storage-api storage-search sql-parse-tree sql-session sql-ir sql-exec sql-expr sql-das sql-engine sql-parser
+sql-rewrite	ob-values ob-share ob-schema geo-sys sql-parse-tree sql-ir sql-exec sql-expr sql-das sql-parser sql-resolver
+sql-optimizer	ob-runtime ob-values ob-share ob-schema storage-api sql-parse-tree sql-session sql-ir sql-exec sql-expr sql-das sql-engine sql-parser sql-resolver sql-rewrite
+sql-codegen	ob-values storage-api sql-parse-tree sql-ir sql-exec sql-expr sql-das sql-engine sql-parser sql-optimizer
+sql	ob-clib-sys ob-runtime ob-values ob-values-doc ob-share ob-schema storage-api storage-tablet storage-search sql-parse-tree sql-parser-sys sql-session sql-ir sql-exec sql-expr sql-das sql-engine sql-parser sql-resolver sql-rewrite sql-optimizer sql-codegen
+pl	ob-runtime ob-values ob-values-doc ob-share ob-schema storage-api sql-parse-tree sql-session sql-ir sql-exec sql-expr sql-das sql-engine sql-parser sql-resolver sql-rewrite sql-optimizer sql-codegen sql
+rootserver	ob-runtime ob-values ob-values-doc ob-share ob-schema ob-log storage-sstable storage-tx storage-tablet storage-engine storage-search sql-session sql-ir sql-exec sql-das sql-engine sql-resolver sql-optimizer sql pl
+sql-nio	
+observer	ob-runtime ob-values ob-values-doc ob-share ob-schema geo-sys vsag-sys ob-log storage-api storage-sstable storage-tx storage-tablet storage-engine storage-search sql-parse-tree sql-parser-sys sql-session sql-ir sql-exec sql-expr sql-das sql-engine sql-parser sql-resolver sql-rewrite sql-optimizer sql-codegen sql pl rootserver sql-nio
+seekdb	ob-platform ob-runtime observer

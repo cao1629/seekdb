@@ -1,0 +1,29 @@
+src/oblib/lib/oblog/ob_ringbuf_log_writer.cpp:162:  return ATOMIC_LOAD_ACQ(&push_);
+src/oblib/lib/oblog/ob_ringbuf_log_writer.cpp:320:      uint64_t hdr_raw = ATOMIC_LOAD_ACQ(reinterpret_cast<uint64_t *>(ringbuf_.entry_at(ring_off)));
+src/storage/tx/ob_tx_api.cpp:176:    int64_t cb_tid = ATOMIC_LOAD_ACQ(&tx.cb_tid_);
+src/storage/tx/ob_trans_define_v4.cpp:892:  ATOMIC_LOAD_ACQ((int*)&state_);
+src/storage/tx/ob_trans_define_v4.cpp:909:        ATOMIC_STORE_REL(&cb_tid_, GETTID());
+src/storage/tx/ob_trans_service_v4.cpp:427:    ATOMIC_STORE_REL((int*)&tx.state_, (int)state);
+src/share/cache/ob_kvcache_store.cpp:894:      ATOMIC_STORE_RLX(&mb_handle->status_, ObKVMBHandleStatus::USING);
+src/share/cache/ob_kvcache_store.cpp:1054:        ATOMIC_STORE_RLX(&heap.heap_[i]->seq_num_, heap.heap_[i]->seq_num_ + 1);
+src/share/cache/ob_kvcache_struct.cpp:303:  ATOMIC_STORE_RLX(&status_, FULL);
+src/share/cache/ob_kvcache_hazard_domain.cpp:118:  ObLink* retire_list = ATOMIC_LOAD_RLX(&retire_list_);
+src/share/cache/ob_kvcache_hazard_domain.cpp:136:  _OB_LOG(INFO, "[KVCACHE-HAZARD-POINTER] retired memory size: %ld, %s", ATOMIC_LOAD_RLX(&retired_memory_size_), buf);
+src/share/cache/ob_kvcache_hazard_pointer.cpp:32:    if (seq_num != ATOMIC_LOAD_RLX(&mb_handle->seq_num_)) {
+src/share/cache/ob_kvcache_hazard_pointer.cpp:48:    if (ObKVMBHandleStatus::FREE == ATOMIC_LOAD_RLX(&mb_handle->status_)) {
+src/share/cache/ob_kvcache_hazard_pointer.cpp:64:  ATOMIC_STORE_RLX(addr, mb_handle);
+src/share/cache/ob_kvcache_hazard_pointer.cpp:70:  ATOMIC_STORE_RLX(addr, nullptr);
+src/share/cache/ob_kvcache_hazard_pointer.cpp:81:  return ATOMIC_LOAD_RLX(addr);
+src/share/cache/ob_kvcache_hazard_pointer.cpp:92:  ATOMIC_STORE_RLX(&this->next_, next);
+src/share/cache/ob_kvcache_hazard_domain.h:126:    Block* get_next_atomic() const { return ATOMIC_LOAD_RLX(&next_); }
+src/share/cache/ob_kvcache_hazard_domain.h:127:    void set_next_atomic(Block* next) { ATOMIC_STORE_RLX(&next_, next); }
+src/share/cache/ob_kvcache_hazard_domain.h:375:  uint64_t reclaimed_memory_size = 0, retired_memory_size = ATOMIC_LOAD_RLX(&retired_memory_size_);
+src/share/cache/ob_kvcache_hazard_pointer.h:195:    return ATOMIC_LOAD_RLX(&size_);
+src/share/cache/ob_kvcache_hazard_pointer.h:211:    return is_last_bit_set((uintptr_t)ATOMIC_LOAD_RLX(&head_));
+src/share/cache/ob_kvcache_hazard_pointer.h:365:    ATOMIC_STORE_RLX(&head_, node);
+src/share/cache/ob_kvcache_hazard_pointer.h:381:    ATOMIC_STORE_RLX(&head_, list.get_head());
+src/share/cache/ob_kvcache_hazard_pointer.h:399:  } else if (FALSE_IT(head = ATOMIC_LOAD_RLX(&head_))) {
+src/share/cache/ob_kvcache_hazard_pointer.h:404:      ATOMIC_STORE_RLX(&head_, node);
+src/share/cache/ob_kvcache_hazard_pointer.h:442:    ATOMIC_STORE_RLX(&head_, next);
+src/share/cache/ob_kvcache_hazard_pointer.h:472:    ATOMIC_STORE_RLX(&head_, curr);
+src/sql/engine/px/p2p_datahub/ob_pushdown_topn_filter_msg.h:151:  inline int64_t get_current_data_version() { return ATOMIC_LOAD_ACQ(&data_version_); }

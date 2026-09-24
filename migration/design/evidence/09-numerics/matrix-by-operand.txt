@@ -1,0 +1,6 @@
+operand class	NULL	integer	fixed_point	exponent	error	other	non-NULL total
+NULL literal	16368	0	0	0	0	0	0
+decimal operand (ObNumber)	103389	14034	49557	0	15	0	63606
+integer operands only	46911	31893	0	0	303	0	32196
+string operand (double path in MySQL rules)	275391	119066	5464	17067	9	0	141606
+temporal operand	77038	398	1104	0	17	0	1519

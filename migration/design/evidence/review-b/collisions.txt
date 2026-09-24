@@ -1,0 +1,74 @@
+rust/ob-base/src/ob_define.rs	src/oblib/lib/ob_define.cpp src/oblib/lib/ob_define.h src/share/ob_define.h
+rust/ob-errno/src/ob_errno.rs	src/oblib/lib/ob_errno.h src/share/ob_errno.cpp src/share/ob_errno.h
+rust/ob-runtime/src/ob_dag_scheduler.rs	src/data_plane/api/data_plane/scheduler/ob_dag_scheduler.h src/storage/scheduler/ob_dag_scheduler.cpp
+rust/ob-runtime/src/ob_sys_task_stat.rs	src/data_plane/api/data_plane/scheduler/ob_sys_task_stat.h src/storage/scheduler/ob_sys_task_stat.cpp
+rust/pl/src/ob_pl.rs	src/pl/ob_pl.cpp src/pl/ob_pl.h src/sql/pl/ob_pl.h
+rust/pl/src/ob_pl_allocator.rs	src/pl/ob_pl_allocator.cpp src/pl/ob_pl_allocator.h src/sql/pl/ob_pl_allocator.h
+rust/pl/src/ob_pl_build.rs	src/pl/ob_pl_build.cpp src/pl/ob_pl_build.h src/sql/pl/ob_pl_build.h
+rust/pl/src/ob_pl_dependency_util.rs	src/pl/ob_pl_dependency_util.cpp src/pl/ob_pl_dependency_util.h src/sql/pl/ob_pl_dependency_util.h
+rust/pl/src/ob_pl_exception_handling.rs	src/pl/ob_pl_exception_handling.cpp src/pl/ob_pl_exception_handling.h src/sql/pl/ob_pl_exception_handling.h
+rust/pl/src/ob_pl_interface_pragma.rs	src/pl/ob_pl_interface_pragma.cpp src/pl/ob_pl_interface_pragma.h src/sql/pl/ob_pl_interface_pragma.h
+rust/pl/src/ob_pl_package.rs	src/pl/ob_pl_package.cpp src/pl/ob_pl_package.h src/sql/pl/ob_pl_package.h
+rust/pl/src/ob_pl_package_guard.rs	src/pl/ob_pl_package_guard.cpp src/pl/ob_pl_package_guard.h src/sql/pl/ob_pl_package_guard.h
+rust/pl/src/ob_pl_package_manager.rs	src/pl/ob_pl_package_manager.cpp src/pl/ob_pl_package_manager.h src/sql/pl/ob_pl_package_manager.h
+rust/pl/src/ob_pl_package_state.rs	src/pl/ob_pl_package_state.cpp src/pl/ob_pl_package_state.h src/sql/pl/ob_pl_package_state.h
+rust/pl/src/ob_pl_resolver.rs	src/pl/ob_pl_resolver.cpp src/pl/ob_pl_resolver.h src/sql/pl/ob_pl_resolver.h
+rust/pl/src/ob_pl_router.rs	src/pl/ob_pl_router.cpp src/pl/ob_pl_router.h src/sql/pl/ob_pl_router.h
+rust/pl/src/ob_pl_server_cursor.rs	src/pl/ob_pl_server_cursor.cpp src/sql/pl/ob_pl_server_cursor.h
+rust/pl/src/ob_pl_stmt.rs	src/pl/ob_pl_stmt.cpp src/pl/ob_pl_stmt.h src/sql/pl/ob_pl_stmt.h
+rust/pl/src/pl_cache/ob_pl_cache.rs	src/pl/pl_cache/ob_pl_cache.cpp src/pl/pl_cache/ob_pl_cache.h src/sql/pl/pl_cache/ob_pl_cache.h
+rust/pl/src/pl_cache/ob_pl_cache_mgr.rs	src/pl/pl_cache/ob_pl_cache_mgr.cpp src/pl/pl_cache/ob_pl_cache_mgr.h src/sql/pl/pl_cache/ob_pl_cache_mgr.h
+rust/pl/src/pl_cache/ob_pl_cache_object.rs	src/pl/pl_cache/ob_pl_cache_object.cpp src/pl/pl_cache/ob_pl_cache_object.h src/sql/pl/pl_cache/ob_pl_cache_object.h
+rust/pl/src/sys_package/ob_dbms_ai_service.rs	src/pl/sys_package/ob_dbms_ai_service.cpp src/pl/sys_package/ob_dbms_ai_service.h src/sql/pl/sys_package/ob_dbms_ai_service.h
+rust/pl/src/sys_package/ob_dbms_application.rs	src/pl/sys_package/ob_dbms_application.cpp src/pl/sys_package/ob_dbms_application.h src/sql/pl/sys_package/ob_dbms_application.h
+rust/pl/src/sys_package/ob_dbms_hybrid_vector_mysql.rs	src/pl/sys_package/ob_dbms_hybrid_vector_mysql.cpp src/pl/sys_package/ob_dbms_hybrid_vector_mysql.h src/sql/pl/sys_package/ob_dbms_hybrid_vector_mysql.h
+rust/pl/src/sys_package/ob_dbms_index_manager.rs	src/pl/sys_package/ob_dbms_index_manager.cpp src/pl/sys_package/ob_dbms_index_manager.h src/sql/pl/sys_package/ob_dbms_index_manager.h
+rust/pl/src/sys_package/ob_dbms_limit_calculator_mysql.rs	src/pl/sys_package/ob_dbms_limit_calculator_mysql.cpp src/pl/sys_package/ob_dbms_limit_calculator_mysql.h src/sql/pl/sys_package/ob_dbms_limit_calculator_mysql.h
+rust/pl/src/sys_package/ob_dbms_monitor.rs	src/pl/sys_package/ob_dbms_monitor.cpp src/pl/sys_package/ob_dbms_monitor.h src/sql/pl/sys_package/ob_dbms_monitor.h
+rust/pl/src/sys_package/ob_dbms_scheduler_mysql.rs	src/pl/sys_package/ob_dbms_scheduler_mysql.cpp src/pl/sys_package/ob_dbms_scheduler_mysql.h src/sql/pl/sys_package/ob_dbms_scheduler_mysql.h
+rust/pl/src/sys_package/ob_dbms_session.rs	src/pl/sys_package/ob_dbms_session.cpp src/pl/sys_package/ob_dbms_session.h src/sql/pl/sys_package/ob_dbms_session.h
+rust/pl/src/sys_package/ob_dbms_space.rs	src/pl/sys_package/ob_dbms_space.cpp src/pl/sys_package/ob_dbms_space.h src/sql/pl/sys_package/ob_dbms_space.h
+rust/pl/src/sys_package/ob_dbms_stats.rs	src/pl/sys_package/ob_dbms_stats.cpp src/pl/sys_package/ob_dbms_stats.h src/sql/pl/sys_package/ob_dbms_stats.h
+rust/pl/src/sys_package/ob_dbms_vector_mysql.rs	src/pl/sys_package/ob_dbms_vector_mysql.cpp src/pl/sys_package/ob_dbms_vector_mysql.h src/sql/pl/sys_package/ob_dbms_vector_mysql.h
+rust/sql-das/src/ob_vector_embedding_handler.rs	src/query/api/query/vector/ob_vector_embedding_handler.h src/query/vector/ob_vector_embedding_handler.cpp
+rust/sql-ir/src/ob_monitor_node.rs	src/query/api/query/monitor/ob_monitor_node.h src/sql/monitor/ob_monitor_node.cpp
+rust/sql-ir/src/ob_pl_type.rs	src/pl/ob_pl_type.cpp src/pl/ob_pl_type.h src/sql/pl/ob_pl_type.h
+rust/sql-ir/src/ob_pl_user_type.rs	src/pl/ob_pl_user_type.cpp src/pl/ob_pl_user_type.h src/sql/pl/ob_pl_user_type.h
+rust/sql-optimizer/src/ob_opt_default_stat.rs	src/query/api/query/optimizer/ob_opt_default_stat.h src/sql/optimizer/ob_opt_default_stat.h
+rust/sql-optimizer/src/stat/ob_opt_column_stat.rs	src/query/api/query/optimizer/stat/ob_opt_column_stat.h src/sql/optimizer/stat/ob_opt_column_stat.cpp src/sql/optimizer/stat/ob_opt_column_stat.h
+rust/sql-optimizer/src/stat/ob_opt_ds_stat.rs	src/query/api/query/optimizer/stat/ob_opt_ds_stat.h src/sql/optimizer/stat/ob_opt_ds_stat.cpp src/sql/optimizer/stat/ob_opt_ds_stat.h
+rust/sql-optimizer/src/stat/ob_opt_osg_column_stat.rs	src/query/api/query/optimizer/stat/ob_opt_osg_column_stat.h src/sql/optimizer/stat/ob_opt_osg_column_stat.cpp src/sql/optimizer/stat/ob_opt_osg_column_stat.h
+rust/sql-optimizer/src/stat/ob_opt_table_stat.rs	src/query/api/query/optimizer/stat/ob_opt_table_stat.h src/sql/optimizer/stat/ob_opt_table_stat.cpp src/sql/optimizer/stat/ob_opt_table_stat.h
+rust/sql-optimizer/src/stat/ob_stat_define.rs	src/query/api/query/optimizer/stat/ob_stat_define.h src/sql/optimizer/stat/ob_stat_define.cpp src/sql/optimizer/stat/ob_stat_define.h
+rust/sql-optimizer/src/stat/ob_stat_item.rs	src/query/api/query/optimizer/stat/ob_stat_item.h src/sql/optimizer/stat/ob_stat_item.cpp src/sql/optimizer/stat/ob_stat_item.h
+rust/storage-api/src/ob_bitmap_null_vector_base.rs	src/query/api/query/engine/vector/ob_bitmap_null_vector_base.h src/sql/engine/vector/ob_bitmap_null_vector_base.h
+rust/storage-api/src/ob_continuous_base.rs	src/query/api/query/engine/vector/ob_continuous_base.h src/sql/engine/vector/ob_continuous_base.h
+rust/storage-api/src/ob_continuous_format.rs	src/query/api/query/engine/vector/ob_continuous_format.h src/sql/engine/vector/ob_continuous_format.h
+rust/storage-api/src/ob_discrete_base.rs	src/query/api/query/engine/vector/ob_discrete_base.h src/sql/engine/vector/ob_discrete_base.cpp src/sql/engine/vector/ob_discrete_base.h
+rust/storage-api/src/ob_discrete_format.rs	src/query/api/query/engine/vector/ob_discrete_format.h src/sql/engine/vector/ob_discrete_format.h
+rust/storage-api/src/ob_fixed_length_base.rs	src/query/api/query/engine/vector/ob_fixed_length_base.h src/sql/engine/vector/ob_fixed_length_base.cpp src/sql/engine/vector/ob_fixed_length_base.h
+rust/storage-api/src/ob_fixed_length_format.rs	src/query/api/query/engine/vector/ob_fixed_length_format.h src/sql/engine/vector/ob_fixed_length_format.h
+rust/storage-api/src/ob_i_vector.rs	src/query/api/query/engine/vector/ob_i_vector.h src/sql/engine/vector/ob_i_vector.h
+rust/storage-api/src/ob_uniform_base.rs	src/query/api/query/engine/vector/ob_uniform_base.h src/sql/engine/vector/ob_uniform_base.cpp src/sql/engine/vector/ob_uniform_base.h
+rust/storage-api/src/ob_uniform_format.rs	src/query/api/query/engine/vector/ob_uniform_format.h src/sql/engine/vector/ob_uniform_format.h
+rust/storage-api/src/ob_vector_base.rs	src/query/api/query/engine/vector/ob_vector_base.h src/sql/engine/vector/ob_vector_base.h
+rust/storage-api/src/static_check_utils.rs	src/query/api/query/engine/vector/static_check_utils.h src/sql/engine/vector/static_check_utils.h
+rust/storage-api/src/type_traits.rs	src/query/api/query/engine/vector/type_traits.h src/sql/engine/vector/type_traits.h
+rust/storage-search/src/dict/ob_dic_loader.rs	src/data_plane/api/data_plane/fts/dict/ob_dic_loader.h src/storage/fts/dict/ob_dic_loader.cpp src/storage/fts/dict/ob_dic_loader.h
+rust/storage-search/src/dict/ob_gen_dic_loader.rs	src/data_plane/api/data_plane/fts/dict/ob_gen_dic_loader.h src/storage/fts/dict/ob_gen_dic_loader.cpp src/storage/fts/dict/ob_gen_dic_loader.h
+rust/storage-search/src/ob_fts_literal.rs	src/data_plane/api/data_plane/fts/ob_fts_literal.h src/storage/fts/ob_fts_literal.h
+rust/storage-search/src/ob_fts_parser.rs	src/data_plane/api/data_plane/fts/ob_fts_parser.h src/storage/fts/ob_fts_parser.h
+rust/storage-search/src/ob_fts_parser_helper.rs	src/data_plane/api/data_plane/fts/ob_fts_parser_helper.h src/storage/fts/ob_fts_parser_helper.cpp src/storage/fts/ob_fts_parser_helper.h
+rust/storage-search/src/ob_fts_parser_name.rs	src/data_plane/api/data_plane/fts/ob_fts_parser_name.h src/storage/fts/ob_fts_parser_name.cpp
+rust/storage-search/src/ob_fts_parser_property.rs	src/data_plane/api/data_plane/fts/ob_fts_parser_property.h src/storage/fts/ob_fts_parser_property.cpp src/storage/fts/ob_fts_parser_property.h
+rust/storage-search/src/ob_fts_struct.rs	src/data_plane/api/data_plane/fts/ob_fts_struct.h src/storage/fts/ob_fts_struct.cpp src/storage/fts/ob_fts_struct.h
+rust/storage-search/src/ob_retrieval_program.rs	src/data_plane/api/data_plane/retrieval/ob_retrieval_program.h src/storage/retrieval/ob_retrieval_program.cpp
+rust/storage-search/src/ob_vector_common_util.rs	src/data_plane/api/data_plane/vector/ob_vector_common_util.h src/storage/vector_type/ob_vector_common_util.cpp src/storage/vector_type/ob_vector_common_util.h
+rust/storage-search/src/ob_vector_cosine_similarity.rs	src/data_plane/api/data_plane/vector/ob_vector_cosine_similarity.h src/storage/vector_type/ob_vector_cosine_similarity.cpp src/storage/vector_type/ob_vector_cosine_similarity.h
+rust/storage-search/src/ob_vector_index_util.rs	src/observer/vector_index/ob_vector_index_util.cpp src/observer/vector_index/ob_vector_index_util.h src/query/api/query/vector/ob_vector_index_util.h
+rust/storage-search/src/ob_vector_ip_similarity.rs	src/data_plane/api/data_plane/vector/ob_vector_ip_similarity.h src/storage/vector_type/ob_vector_ip_similarity.cpp src/storage/vector_type/ob_vector_ip_similarity.h
+rust/storage-search/src/ob_vector_l2_similarity.rs	src/data_plane/api/data_plane/vector/ob_vector_l2_similarity.h src/storage/vector_type/ob_vector_l2_similarity.cpp src/storage/vector_type/ob_vector_l2_similarity.h
+rust/storage-search/src/ob_vector_norm.rs	src/data_plane/api/data_plane/vector/ob_vector_norm.h src/storage/vector_type/ob_vector_norm.cpp src/storage/vector_type/ob_vector_norm.h
+rust/storage-search/src/ob_vector_op_common.rs	src/data_plane/api/data_plane/vector/ob_vector_op_common.h src/storage/vector_type/ob_vector_op_common.h
+rust/storage-search/src/ob_vector_pq_coder.rs	src/data_plane/api/data_plane/vector/ob_vector_pq_coder.h src/storage/vector_type/ob_vector_pq_coder.h
+rust/storage-tablet/src/ob_micro_block_handle_mgr.rs	src/storage/access/ob_micro_block_handle_mgr.cpp src/storage/access/ob_micro_block_handle_mgr.h src/storage/ob_micro_block_handle_mgr.h

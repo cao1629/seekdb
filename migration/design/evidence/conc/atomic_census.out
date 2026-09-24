@@ -1,0 +1,76 @@
+calls (outside #define lines and ob_atomic.h): 2967
+files: 462
+#define lines skipped: 34
+by macro:
+   1100 ATOMIC_LOAD
+    498 ATOMIC_STORE
+    354 ATOMIC_AAF
+    188 ATOMIC_BCAS
+    187 ATOMIC_FAA
+    174 ATOMIC_INC
+    112 ATOMIC_SET
+     86 ATOMIC_DEC
+     82 ATOMIC_SAF
+     57 ATOMIC_CAS
+     42 ATOMIC_TAS
+     30 ATOMIC_VCAS
+     12 ATOMIC_STORE_RLX
+     11 ATOMIC_ADD_TAG
+     10 ATOMIC_LOAD_RLX
+      7 ATOMIC_SUB_TAG
+      5 ATOMIC_LOAD64
+      5 ATOMIC_LOAD_ACQ
+      3 ATOMIC_ANDF
+      2 ATOMIC_FAS
+      2 ATOMIC_STORE_REL
+by target form:
+   2127 &name_ (own member)
+    519 member via . or ->
+    154 pointer value passed in
+     81 array element
+     61 &name (local, global or static)
+     25 call-result
+distinct target names: 778
+distinct target names ending in _ (member convention): 711
+distinct names ending in _ or reached through . / -> : 714
+top names:
+    98 ref_cnt_  (39 files)
+    54 lock_  (14 files)
+    48 val_  (8 files)
+    47 next_  (14 files)
+    35 ref_  (13 files)
+    34 ref_count_  (11 files)
+    32 addr  (8 files)
+    30 state_  (12 files)
+    27 value_  (4 files)
+    24 flag_  (4 files)
+    22 head_  (3 files)
+    20 tail_  (5 files)
+    18 size_  (5 files)
+    18 epoch_  (5 files)
+    18 schema_mgr_for_cache_  (2 files)
+    17 status_  (5 files)
+    16 alloc_count_  (6 files)
+    15 is_paused_  (6 files)
+    15 kv_cnt_  (2 files)
+    14 count_  (5 files)
+    14 pop_  (6 files)
+    14 prev_  (4 files)
+    14 task_ref_cnt_  (3 files)
+    13 data_  (4 files)
+    13 free_count_  (4 files)
+    13 store_size_  (3 files)
+    13 total_size_  (5 files)
+    12 hold_  (4 files)
+    12 write_id_  (1 files)
+    12 stopped_  (6 files)
+    12 parallel_stat_  (1 files)
+    12 last_id_  (1 files)
+    11 sub_cnt_  (1 files)
+    11 clock_  (3 files)
+    11 atomic  (2 files)
+    11 list_head_  (3 files)
+    11 limited_id_  (1 files)
+    10 total_hold_  (5 files)
+    10 sub_mgrs_  (1 files)
+    10 push_  (6 files)

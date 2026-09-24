@@ -1,0 +1,282 @@
+== catalog: src/share/ob_errno.def ==
+entry lines by macro: {'DEFINE_ERROR_DEP': 172, 'DEFINE_ERROR_EXT_DEP': 190, 'DEFINE_ERROR': 858, 'DEFINE_ERROR_EXT': 326} total 1546
+DEFINE_OTHER_MSG_FMT lines: [250, 612]
+duplicate names: {'OB_ERR_ARGUMENT_SHOULD_CONSTANT_OR_GROUP_EXPR': 2}
+distinct names: 1545
+duplicate codes across distinct names: {}
+negative codes: 1544 min -38105 max 0
+mysql errno unresolved tokens: [('OB_ERR_CANNOT_REVOKE_PRIVILEGES_YOU_DID_NOT_GRANT', 'OB_ERR_NO_GRANT')]
+entries whose client number is the OB code (mysql errno -1): 1014
+entries mapped to a MySQL number: 529
+distinct MySQL numbers used: 457 ; MySQL numbers shared by 2+ OB codes: 38 ; OB codes involved: 110
+   mysql 4012 shared by 11 OB codes, e.g. OB_WAITQUEUE_TIMEOUT, OB_SESSION_NOT_FOUND, OB_RPC_SEND_ERROR, OB_RPC_POST_ERROR
+   mysql 6002 shared by 7 OB codes, e.g. OB_TRANS_KILLED, OB_TRANS_CTX_NOT_EXIST, OB_PARTITION_IS_FROZEN, OB_TRANS_IS_EXITING
+   mysql 1264 shared by 6 OB codes, e.g. OB_DATA_OUT_OF_RANGE, OB_INTEGER_PRECISION_OVERFLOW, OB_DECIMAL_PRECISION_OVERFLOW, OB_NUMERIC_OVERFLOW
+   mysql 1292 shared by 5 OB codes, e.g. OB_INVALID_DATE_FORMAT, OB_INVALID_DATE_FORMAT_END, OB_INVALID_DATE_VALUE, OB_ERR_DOUBLE_TRUNCATED
+   mysql 1221 shared by 5 OB codes, e.g. OB_ERR_PRIV_USAGE, OB_ERR_SRID_WRONG_USAGE, OB_ERR_INDEX_ORDER_WRONG_USAGE, OB_ERR_SET_USAGE
+   mysql 1210 shared by 4 OB codes, e.g. OB_INVALID_ARGUMENT, OB_MISS_ARGUMENT, INCORRECT_ARGUMENTS_TO_ESCAPE, INCORRECT_ARGUMENTS_TO_URL_DECODE
+   mysql 1235 shared by 4 OB codes, e.g. OB_NOT_SUPPORTED, OB_ERR_NON_STRING_NOT_SUPPORT, OB_NOT_MULTIVALUE_SUPPORT, OB_ERR_UNSUPPROTED_REF_IN_JSON_SCHEMA
+   mysql 1064 shared by 3 OB codes, e.g. OB_ERR_PARSER_INIT, OB_ERR_PARSE_SQL, OB_ERR_PARSE_PARTITION_RANGE
+distinct SQLSTATEs: 77 top: [('HY000', 1094), ('42000', 248), ('25000', 15), ('22000', 13), ('23000', 12), ('22032', 11), ('22S00', 10), ('22003', 9), ('01000', 9), ('22023', 6)]
+entries whose user message has a printf format: 468
+format specifiers in user messages: [('%.*s', 343), ('%s', 202), ('%ld', 38), ('%u', 30), ('%d', 25), ('%.192s', 17), ('%f', 12), ('%-.256s', 10), ('%lu', 7), ('%.64s', 5), ('%c', 4), ('%.80s', 3), ('%%', 2), ('%.20s', 2), ('%-.384s', 1), ('%lf', 1)]
+entries with an explicit cause string: 5 ; with an explicit solution string: 1
+entries whose user message differs from str_error: 454
+entries by range of -code: [('11000-11999', 31), ('4000-4499', 295), ('4500-4999', 70), ('5000-5999', 846), ('6000-6999', 89), ('7000-7999', 130), ('8000-8999', 3), ('9000-9499', 18), ('9500-9999', 57), ('>=12000', 5)]
+
+== code scan: 6636 files (git ls-files src, extensions .h .hpp .cpp .cc .c .ipp .inc, minus the 4 generated errno files) ==
+OB_ISNULL(                                                30896 lines  2326 files   core   3580  sql-tier  14950  other  12366
+int ret = OB_SUCCESS;                                     38256 lines  3169 files   core   5732  sql-tier  13211  other  19313
+OB_FAIL(                                                  99909 lines  2784 files   core  10682  sql-tier  40935  other  48292
+ret = OB_NOT_INIT                                          4523 lines   958 files   core    716  sql-tier    487  other   3320
+ret = OB_ERR_UNEXPECTED                                   27583 lines  2119 files   core   3086  sql-tier  13438  other  11059
+LOG_*_RET( (log with explicit code)                        1794 lines   463 files   core    687  sql-tier     77  other   1030
+ret = OB_ALLOCATE_MEMORY_FAILED                            4722 lines  1165 files   core    498  sql-tier   1421  other   2803
+ret = OB_INVALID_ARGUMENT                                  9847 lines  1711 files   core   1404  sql-tier   2002  other   6441
+ret = OB_INIT_TWICE                                         989 lines   633 files   core    207  sql-tier     56  other    726
+OB_SUCC(                                                  31213 lines  2169 files   core   3383  sql-tier  13502  other  14328
+OB_SUCC(ret) &&                                           17769 lines  1728 files   core   1898  sql-tier   8726  other   7145
+feasibility != pattern                                     2498 lines   773 files   core    368  sql-tier    740  other   1390
+OB_SUCCESS != ret / ret != OB_SUCCESS                       234 lines   151 files   core     46  sql-tier     54  other    134
+FALSE_IT(                                                  2591 lines   727 files   core    366  sql-tier    740  other   1485
+feasibility OB_X == ret pattern                            4192 lines  1028 files   core    607  sql-tier   1037  other   2548
+OB_SUCCESS == ret / ret == OB_SUCCESS                       869 lines   315 files   core    131  sql-tier    123  other    615
+ret = OB_SUCCESS; (reset, whole line)                      2906 lines   847 files   core    351  sql-tier    841  other   1714
+int tmp_ret = OB_SUCCESS                                    931 lines   394 files   core    191  sql-tier    149  other    591
+tmp_ret (word)                                             3367 lines   486 files   core    641  sql-tier    681  other   2045
+tmp_ret or OB_TMP_FAIL (either)                            3983 lines   487 files   core    815  sql-tier    701  other   2467
+OB_TMP_FAIL(                                                631 lines   184 files   core    177  sql-tier     22  other    432
+ret = ... ? tmp_ret : ret (keep first error)                111 lines    67 files   core      5  sql-tier     18  other     88
+ret = tmp_ret;                                              204 lines   107 files   core     16  sql-tier     68  other    120
+OB_E(EventTable::                                           186 lines    96 files   core     13  sql-tier     51  other    122
+errsim EN_ / ERRSIM_POINT                                   299 lines   149 files   core     50  sql-tier     71  other    178
+INIT_SUCC(ret)                                             1620 lines   160 files   core     30  sql-tier    361  other   1229
+SMART_CALL(                                                1131 lines   150 files   core    224  sql-tier    729  other    178
+COVER_SUCC(                                                  75 lines    39 files   core      2  sql-tier     46  other     27
+OZ(                                                        5685 lines   294 files   core    531  sql-tier   1948  other   3206
+int &ret = ret_;                                             31 lines    18 files   core      1  sql-tier     13  other     17
+int &ret = <x>ret_; (wider)                                  39 lines    24 files   core      1  sql-tier     13  other     25
+case OB_<code>:                                             616 lines    61 files   core     17  sql-tier     26  other    573
+LOG_USER_ERROR(                                            2809 lines   393 files   core    111  sql-tier   1664  other   1034
+CK(                                                        2935 lines   251 files   core    336  sql-tier   1089  other   1510
+OX(                                                        2127 lines   165 files   core    223  sql-tier    525  other   1379
+OZX1/OZX2(                                                    8 lines     1 files   core      0  sql-tier      0  other      8
+OV(                                                         341 lines    52 files   core     20  sql-tier    119  other    202
+ob_strerror(                                                  7 lines     4 files   core      2  sql-tier      0  other      5
+ob_get_tsi_warning_buffer(                                   43 lines    23 files   core      1  sql-tier      9  other     33
+set_error( on warning buffer (direct)                         4 lines     4 files   core      0  sql-tier      0  other      4
+append_warning( (direct)                                      8 lines     6 files   core      1  sql-tier      1  other      6
+LOG_MYSQL_USER_*(                                            14 lines     7 files   core      0  sql-tier      5  other      9
+LOG_USER_WARN(                                              127 lines    71 files   core      2  sql-tier     94  other     31
+LOG_USER_NOTE(                                                8 lines     5 files   core      0  sql-tier      1  other      7
+LOG_USER_ERROR_WITH_LINE_COL(                                 1 lines     1 files   core      0  sql-tier      0  other      1
+FORWARD_USER_*(                                              30 lines     8 files   core      0  sql-tier     24  other      6
+ob_error_name(                                                6 lines     5 files   core      3  sql-tier      0  other      3
+RETRY_FUNC                                                    3 lines     1 files   core      3  sql-tier      0  other      0
+ob_str_user_error( / ob_errpkt_str_user_error(                7 lines     5 files   core      0  sql-tier      1  other      6
+ob_mysql_errno( / ob_errpkt_errno(                           14 lines     8 files   core      0  sql-tier      3  other     11
+ob_sqlstate(                                                 14 lines     6 files   core      0  sql-tier      2  other     12
+CM_IS_WARN_ON_FAIL(                                          75 lines    19 files   core      0  sql-tier     54  other     21
+switch (ret)                                                  2 lines     1 files   core      0  sql-tier      0  other      2
+
+lines comparing a variable with OB_SUCCESS                      2354
+lines comparing a variable with a non-success code              6415
+... area core                                                    907
+... of which the variable is ret                                5718
+... area other                                                  3762
+... area sql-tier                                               1746
+distinct non-success codes compared anywhere: 347
+variables other than ret/tmp_ret compared with codes (top 25): [('hash_ret', 258), ('ret_code', 128), ('err', 68), ('ret_', 64), ('warning', 33), ('error_code', 22), ('stat_ret', 18), ('fill_ret', 18), ('ret_code_', 16), ('temp_ret', 15), ('dag_ret_', 14), ('error_message.ret_code_', 12), ('err_code', 12), ('ecode', 12), ('process_ret', 11), ('close_ret', 11), ('reduce_ret', 11), ('release_channel_ret', 11), ('serialization', 10), ('cret', 10), ('task_ctx->err_code_', 9), ('status', 9), ('params.warning_', 9), ('current_error_code', 9), ('err_no', 8)]
+
+== per code (non-success), ranked by comparison lines ==
+code	word lines	cmp_any	cmp==:ret	cmp!=:ret	cmp==:tmp_ret	cmp==:other	cmp!=:other	case	then ret = OB_SUCCESS (within 3 lines)	then ret = other code (within 3 lines)	assign ret	return	area:core	area:sql-tier	area:other	files
+OB_ITER_END	3190	2178	889	1235	6	21	21	0	532	90	822	23	151	902	1125	545
+OB_HASH_NOT_EXIST	647	544	287	138	20	31	51	3	181	48	42	0	46	138	360	229
+OB_ENTRY_NOT_EXIST	827	469	262	191	4	3	3	0	143	60	302	1	140	35	294	201
+OB_EAGAIN	899	347	180	128	4	18	6	4	50	19	394	0	133	11	203	154
+OB_HASH_EXIST	305	236	97	21	12	77	27	0	74	30	24	0	22	59	155	101
+OB_SIZE_OVERFLOW	648	141	88	41	2	3	0	0	43	7	469	2	25	23	93	82
+OB_TRY_LOCK_ROW_CONFLICT	175	132	37	78	3	9	5	1	4	4	14	0	19	31	82	46
+OB_BUF_NOT_ENOUGH	435	116	39	68	0	6	3	0	7	7	303	1	24	8	84	37
+OB_TIMEOUT	325	109	80	11	1	10	1	1	10	40	141	1	36	9	64	60
+OB_TABLET_NOT_EXIST	133	93	56	31	0	6	0	2	27	8	33	0	13	2	78	42
+OB_SEARCH_NOT_FOUND	113	90	88	2	0	0	0	0	60	1	20	0	1	1	88	12
+OB_ERR_NULL_VALUE	497	83	64	17	0	2	0	0	45	1	392	1	2	12	69	23
+OB_ALLOCATE_MEMORY_FAILED	4971	78	54	16	2	5	1	1	6	18	4722	0	31	6	41	47
+OB_SNAPSHOT_DISCARDED	87	62	27	31	0	4	0	0	1	13	21	0	37	7	18	21
+OB_TABLE_NOT_EXIST	472	61	55	4	0	2	0	1	18	10	353	0	0	19	42	25
+OB_ENTRY_EXIST	114	60	28	31	0	0	0	0	22	3	48	0	11	0	49	28
+OB_EMPTY_RESULT	76	51	37	14	0	0	0	0	21	7	24	0	30	2	19	27
+OB_TRANSACTION_SET_VIOLATION	74	48	9	28	0	8	2	1	0	5	7	0	16	4	28	16
+OB_ERR_COLUMN_NOT_FOUND	62	42	42	0	0	0	0	0	29	0	20	0	0	1	41	6
+OB_BEYOND_THE_RANGE	64	42	10	32	0	0	0	0	7	1	21	0	0	0	42	15
+OB_TRANS_CTX_NOT_EXIST	64	41	32	3	0	4	0	1	10	2	16	0	33	0	8	19
+OB_NOT_SUPPORTED	2424	40	13	17	0	8	2	0	2	1	1399	280	2	8	30	25
+OB_DTL_WAIT_EAGAIN	48	33	31	2	0	0	0	0	8	5	14	0	0	25	8	10
+OB_NO_NEED_MERGE	87	33	9	23	0	1	0	0	4	0	52	0	4	0	29	11
+OB_ERR_GIS_INVALID_DATA	364	32	31	0	0	1	0	0	1	0	207	1	0	28	4	19
+OB_ERR_PRIMARY_KEY_DUPLICATE	65	31	22	2	0	6	1	0	2	3	13	0	9	3	19	17
+OB_ERR_BAD_FIELD_ERROR	186	27	27	0	0	0	0	1	9	2	110	0	0	27	0	9
+OB_NO_NEED_UPDATE	52	27	24	2	0	0	0	0	21	0	16	0	9	0	18	13
+OB_DATA_OUT_OF_RANGE	117	26	17	4	0	5	0	0	6	5	73	0	4	14	8	13
+OB_ERR_INDEX_KEY_NOT_FOUND	37	26	21	5	0	0	0	0	17	4	5	0	0	17	9	9
+OB_STATE_NOT_MATCH	263	24	15	6	0	1	0	0	7	1	218	0	2	0	22	16
+OB_ERR_UNEXPECTED	28492	23	8	8	1	6	0	1	3	0	27583	26	0	11	12	20
+OB_READ_NOTHING	50	23	5	16	0	2	0	0	4	1	20	0	0	0	23	7
+OB_LS_NOT_EXIST	28	23	12	6	0	5	0	2	3	0	1	0	0	1	22	17
+OB_TX_NOLOGCB	25	22	6	15	1	0	0	0	1	1	3	0	22	0	0	6
+OB_INIT_TWICE	1016	21	1	20	0	0	0	0	1	0	989	0	1	0	20	19
+OB_ERR_EXCLUSIVE_LOCK_CONFLICT	41	21	13	4	1	3	0	0	3	6	8	0	3	10	8	12
+OB_ERR_UNKNOWN_TIME_ZONE	32	20	13	7	0	0	0	0	2	3	9	0	0	8	12	10
+OB_ERR_DATA_TRUNCATED	58	19	13	0	0	6	0	0	7	2	21	0	0	14	5	7
+OB_CHECKSUM_ERROR	58	18	15	2	0	1	0	0	1	1	29	0	0	0	18	11
+OB_NOT_MASTER	44	17	12	1	0	4	0	2	4	0	10	0	0	2	15	13
+OB_SERVER_RUNTIME_NOT_READY	28	17	9	4	0	3	0	0	4	1	8	0	1	2	14	14
+OB_INVALID_ARGUMENT	10384	16	13	0	1	2	0	0	5	1	9847	9	0	10	6	11
+OB_ERR_OUT_OF_LOWER_BOUND	64	16	10	5	0	1	0	0	4	2	21	0	0	0	16	7
+OB_DECIMAL_PRECISION_OVERFLOW	18	16	16	0	0	0	0	0	16	0	2	0	0	0	16	2
+OB_SERVER_OUTOF_DISK_SPACE	39	16	6	4	0	6	0	0	3	1	14	0	0	0	16	10
+OB_SCHEMA_EAGAIN	75	15	2	11	0	2	0	1	0	0	46	0	0	4	11	8
+OB_REPLICA_NOT_READABLE	26	15	6	5	0	4	0	1	0	4	5	0	0	0	15	13
+OB_BLOCK_FROZEN	23	15	8	3	0	4	0	1	2	3	2	0	11	0	4	8
+OB_NEED_RETRY	51	14	7	2	0	5	0	0	2	1	18	0	5	0	9	13
+OB_NO_SUCH_FILE_OR_DIRECTORY	26	14	11	3	0	0	0	0	6	0	9	0	0	0	14	6
+OB_EXCEED_MEM_LIMIT	21	14	1	12	0	1	0	0	0	0	7	0	0	12	2	7
+OB_USER_NOT_EXIST	46	14	13	0	1	0	0	0	5	7	26	0	0	14	0	5
+OB_ERR_BAD_DATABASE	113	14	13	1	0	0	0	1	4	3	61	0	0	6	8	10
+OB_NOT_INIT	4714	13	8	4	0	1	0	0	6	1	4523	12	3	1	9	12
+OB_INVALID_DATA	296	13	11	2	0	0	0	0	3	0	247	1	0	3	10	7
+OB_ERR_INCORRECT_STRING_VALUE	29	13	13	0	0	0	0	0	13	0	14	0	0	12	1	11
+OB_ERR_NO_PRIVILEGE	66	13	12	1	0	0	0	1	2	1	31	1	0	4	9	7
+OB_ITEM_NOT_SETTED	20	13	9	4	0	0	0	0	4	1	6	0	13	0	0	7
+OB_SQL_PC_NOT_EXIST	32	13	10	1	0	2	0	0	5	0	15	0	0	0	13	6
+OB_PUSHDOWN_STATUS_CHANGED	20	13	3	10	0	0	0	0	3	0	7	0	0	0	13	3
+OB_OBJ_LOCK_NOT_EXIST	27	13	6	7	0	0	0	0	6	0	9	0	0	0	13	2
+OB_ERR_OUT_OF_UPPER_BOUND	29	12	9	3	0	0	0	0	2	5	9	0	1	0	11	9
+OB_ERR_UNEXPECTED_TZ_TRANSITION	20	12	12	0	0	0	0	0	3	3	8	0	0	7	5	3
+OB_ITEM_NOT_MATCH	28	12	12	0	0	0	0	0	8	2	15	0	2	0	10	5
+OB_OLD_SCHEMA_VERSION	26	12	11	0	0	1	0	0	0	1	11	0	0	1	11	5
+OB_IN_STOP_STATE	27	11	6	2	2	1	0	0	1	1	10	1	3	0	8	10
+OB_SQL_PC_PLAN_DUPLICATE	17	11	6	5	0	0	0	0	5	1	5	0	0	1	10	8
+OB_TASK_EXPIRED	40	11	5	0	0	6	0	0	4	0	22	0	0	1	10	9
+OB_NUMERIC_OVERFLOW	37	10	10	0	0	0	0	0	2	0	27	0	0	4	6	7
+
+top 60 by word lines:
+  OB_SUCCESS                                    word lines  48691  cmp  2364  case    4  assign ret 41189  return 1584
+  OB_ERR_UNEXPECTED                             word lines  28492  cmp    23  case    1  assign ret 27583  return   26
+  OB_INVALID_ARGUMENT                           word lines  10384  cmp    16  case    0  assign ret  9847  return    9
+  OB_ALLOCATE_MEMORY_FAILED                     word lines   4971  cmp    78  case    1  assign ret  4722  return    0
+  OB_NOT_INIT                                   word lines   4714  cmp    13  case    0  assign ret  4523  return   12
+  OB_ITER_END                                   word lines   3190  cmp  2178  case    0  assign ret   822  return   23
+  OB_NOT_SUPPORTED                              word lines   2424  cmp    40  case    0  assign ret  1399  return  280
+  OB_INIT_TWICE                                 word lines   1016  cmp    21  case    0  assign ret   989  return    0
+  OB_EAGAIN                                     word lines    899  cmp   347  case    4  assign ret   394  return    0
+  OB_ENTRY_NOT_EXIST                            word lines    827  cmp   469  case    0  assign ret   302  return    1
+  OB_SIZE_OVERFLOW                              word lines    648  cmp   141  case    0  assign ret   469  return    2
+  OB_HASH_NOT_EXIST                             word lines    647  cmp   544  case    3  assign ret    42  return    0
+  OB_ERR_NULL_VALUE                             word lines    497  cmp    83  case    0  assign ret   392  return    1
+  OB_TABLE_NOT_EXIST                            word lines    472  cmp    61  case    1  assign ret   353  return    0
+  OB_ERR_SYS                                    word lines    452  cmp     1  case    0  assign ret   381  return    0
+  OB_BUF_NOT_ENOUGH                             word lines    435  cmp   116  case    0  assign ret   303  return    1
+  OB_ERR_GIS_INVALID_DATA                       word lines    364  cmp    32  case    0  assign ret   207  return    1
+  OB_TIMEOUT                                    word lines    325  cmp   109  case    1  assign ret   141  return    1
+  OB_HASH_EXIST                                 word lines    305  cmp   236  case    0  assign ret    24  return    0
+  OB_INVALID_DATA                               word lines    296  cmp    13  case    0  assign ret   247  return    1
+  OB_INNER_STAT_ERROR                           word lines    285  cmp     0  case    0  assign ret   284  return    0
+  OB_OPERATE_OVERFLOW                           word lines    268  cmp     7  case    0  assign ret   165  return    2
+  OB_STATE_NOT_MATCH                            word lines    263  cmp    24  case    0  assign ret   218  return    0
+  OB_ERR_INVALID_TYPE_FOR_OP                    word lines    250  cmp     2  case    0  assign ret   217  return    2
+  OB_ERROR                                      word lines    219  cmp     2  case    0  assign ret   117  return    0
+  OB_ERR_DBMS_STATS_PL                          word lines    208  cmp     7  case    0  assign ret   107  return    0
+  OB_BAD_NULL_ERROR                             word lines    189  cmp     0  case    0  assign ret   184  return    0
+  OB_ERR_BAD_FIELD_ERROR                        word lines    186  cmp    27  case    1  assign ret   110  return    0
+  OB_TRY_LOCK_ROW_CONFLICT                      word lines    175  cmp   132  case    1  assign ret    14  return    0
+  OB_ERR_PARSER_SYNTAX                          word lines    164  cmp     6  case    0  assign ret   146  return    3
+  OB_OP_NOT_ALLOW                               word lines    143  cmp     6  case    0  assign ret   103  return    0
+  OB_IO_ERROR                                   word lines    142  cmp     4  case    1  assign ret   122  return    0
+  OB_TABLET_NOT_EXIST                           word lines    133  cmp    93  case    2  assign ret    33  return    0
+  OB_NOT_IMPLEMENT                              word lines    124  cmp     6  case    0  assign ret    31  return   77
+  OB_SCHEMA_ERROR                               word lines    122  cmp     2  case    1  assign ret   110  return    0
+  OB_ERR_PARAM_SIZE                             word lines    122  cmp     2  case    0  assign ret    85  return    0
+  OB_ERR_KEY_COLUMN_DOES_NOT_EXITS              word lines    118  cmp     1  case    0  assign ret    59  return    0
+  OB_DATA_OUT_OF_RANGE                          word lines    117  cmp    26  case    0  assign ret    73  return    0
+  OB_ENTRY_EXIST                                word lines    114  cmp    60  case    0  assign ret    48  return    0
+  OB_SEARCH_NOT_FOUND                           word lines    113  cmp    90  case    0  assign ret    20  return    0
+  OB_ERR_BAD_DATABASE                           word lines    113  cmp    14  case    1  assign ret    61  return    0
+  OB_INVALID_DATE_VALUE                         word lines    101  cmp     7  case    0  assign ret    76  return    0
+  OB_SNAPSHOT_DISCARDED                         word lines     87  cmp    62  case    0  assign ret    21  return    0
+  OB_NO_NEED_MERGE                              word lines     87  cmp    33  case    0  assign ret    52  return    0
+  OB_ERR_PARSE_SQL                              word lines     86  cmp     8  case    0  assign ret    68  return    0
+  OB_ERR_NOT_IMPLEMENTED_FOR_GEOGRAPHIC_SRS     word lines     86  cmp     0  case    0  assign ret    25  return    4
+  OB_DESERIALIZE_ERROR                          word lines     79  cmp     0  case    0  assign ret    74  return    0
+  OB_NOT_RUNNING                                word lines     78  cmp    10  case    0  assign ret    58  return    3
+  OB_ERR_WRONG_VALUE                            word lines     77  cmp     2  case    0  assign ret    65  return    0
+  OB_ERR_WRONG_KEY_COLUMN                       word lines     77  cmp     0  case    0  assign ret    42  return    0
+  OB_ERR_DEFENSIVE_CHECK                        word lines     77  cmp    10  case    0  assign ret    29  return    0
+  OB_EMPTY_RESULT                               word lines     76  cmp    51  case    0  assign ret    24  return    0
+  OB_ARRAY_OUT_OF_RANGE                         word lines     75  cmp     0  case    0  assign ret    70  return    0
+  OB_OBJ_TYPE_ERROR                             word lines     75  cmp     2  case    0  assign ret    68  return    2
+  OB_SCHEMA_EAGAIN                              word lines     75  cmp    15  case    1  assign ret    46  return    0
+  OB_TRANSACTION_SET_VIOLATION                  word lines     74  cmp    48  case    1  assign ret     7  return    0
+  OB_CANCELED                                   word lines     71  cmp     7  case    0  assign ret    56  return    0
+  OB_ERR_INVALID_COLUMN_NUM                     word lines     68  cmp     1  case    0  assign ret    34  return    0
+  OB_ERR_NO_PRIVILEGE                           word lines     66  cmp    13  case    1  assign ret    31  return    1
+  OB_ERR_WRONG_VALUE_FOR_VAR                    word lines     65  cmp     8  case    0  assign ret    33  return    0
+
+== int &ret = ...ret_; sites ==
+src/oblib/common/rowkey/ob_store_rowkey.h:247: int &ret = ret_;
+src/share/datum/ob_datum_compare.h:68: int &ret = ret_;
+src/share/schema/ob_dependency_info.cpp:55: int &ret = error_ret_;
+src/share/schema/ob_dependency_info.cpp:805: int &ret = error_ret_;
+src/share/schema/ob_error_info.cpp:58: int &ret = error_ret_;
+src/share/schema/ob_routine_info.cpp:52: int &ret = error_ret_;
+src/share/schema/ob_routine_info.cpp:248: int &ret = error_ret_;
+src/share/schema/ob_trigger_info.cpp:60: int &ret = error_ret_;
+src/share/schema/ob_trigger_mgr.cpp:43: int &ret = error_ret_;
+src/sql/dtl/ob_dtl_interm_result_manager.cpp:63: int &ret = ret_;
+src/sql/engine/px/exchange/ob_px_ms_receive_op.cpp:920: int &ret = ret_;
+src/sql/engine/px/exchange/ob_row_heap.cpp:58: int &ret = ret_;
+src/sql/engine/px/exchange/ob_row_heap.cpp:115: int &ret = ret_;
+src/sql/engine/px/ob_slice_calc.cpp:1051: int &ret = ret_;
+src/sql/engine/px/ob_slice_calc.cpp:1389: int &ret = ret_;
+src/sql/engine/sort/ob_sort_op_impl.cpp:400: int &ret = ret_;
+src/sql/engine/sort/ob_sort_op_impl.cpp:440: int &ret = ret_;
+src/sql/engine/sort/ob_sort_op_impl.cpp:474: int &ret = ret_;
+src/sql/engine/sort/ob_sort_op_impl.cpp:500: int &ret = ret_;
+src/sql/engine/sort/ob_sort_op_impl.cpp:525: int &ret = ret_;
+src/sql/engine/sort/ob_sort_op_impl.cpp:544: int &ret = ret_;
+src/sql/ob_spi.cpp:1520: int &ret = ret_;
+src/sql/ob_spi.cpp:6174: int &ret = ret_;
+src/sql/ob_sql_utils.cpp:53: int &ret = ret_;
+src/sql/optimizer/stat/ob_stat_item.cpp:252: int &ret = ret_;
+src/sql/optimizer/stat/ob_topk_hist_estimator.cpp:33: int &ret = ret_;
+src/sql/plan_cache/ob_ps_cache_callback.h:56: int &ret = callback_ret_;
+src/storage/access/ob_index_tree_prefetcher.ipp:1350: int &ret = ret_;
+src/storage/access/ob_rows_info.h:294: int &ret = ret_;
+src/storage/blocksstable/encoding/ob_imicro_block_decoder.cpp:48: int &ret = ret_;
+src/storage/blocksstable/encoding/ob_imicro_block_decoder.cpp:89: int &ret = ret_;
+src/storage/blocksstable/index_block/ob_index_block_builder.h:134: int &ret = ret_;
+src/storage/blocksstable/index_block/ob_index_block_builder.h:157: int &ret = ret_;
+src/storage/blocksstable/ob_datum_range.h:133: int &ret = ret_;
+src/storage/blocksstable/ob_datum_range.h:152: int &ret = ret_;
+src/storage/blocksstable/ob_datum_rowkey_vector.cpp:34: int &ret = ret_;
+src/storage/blocksstable/ob_datum_rowkey_vector.cpp:54: int &ret = ret_;
+src/storage/blocksstable/ob_datum_rowkey_vector.cpp:72: int &ret = ret_;
+src/storage/blocksstable/ob_micro_block_reader.cpp:63: int &ret = ret_;
+
+== LOG_USER_* / FORWARD_USER_* by macro and first argument ==
+  LOG_USER_ERROR                     2799 calls,  367 distinct first arguments
+  LOG_USER_WARN                       127 calls,   58 distinct first arguments
+  FORWARD_USER_ERROR                   20 calls,    5 distinct first arguments
+  LOG_MYSQL_USER_ERROR                 11 calls,    8 distinct first arguments
+  LOG_USER_NOTE                         8 calls,    7 distinct first arguments
+  FORWARD_USER_ERROR_MSG                4 calls,    3 distinct first arguments
+  FORWARD_USER_WARN                     3 calls,    2 distinct first arguments
+  FORWARD_USER_NOTE                     3 calls,    2 distinct first arguments
+  LOG_MYSQL_USER_NOTE                   2 calls,    2 distinct first arguments
+  LOG_MYSQL_USER_WARN                   1 calls,    1 distinct first arguments
+  LOG_USER_ERROR_WITH_LINE_COL          1 calls,    1 distinct first arguments
+  distinct codes with a LOG_USER_ERROR-family call: 372
+  distinct codes with a LOG_USER_WARN-family call: 58
+  first arguments that are not OB_ names: ['INCORRECT_ARGUMENTS_TO_URL_DECODE', 'errcode', 'ret', 'warn_code']
+  EXT entries (user message differs) never passed to a LOG_USER_* call: 158

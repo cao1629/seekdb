@@ -1,0 +1,32 @@
+# children_[ lines by dir (git grep -c 'children_\[')
+src/sql/resolver 2672
+src/pl 323
+src/sql/plan_cache 72
+src/sql/ob_sql.cpp 20
+src/sql/ob_spi.cpp 23
+src/sql/ob_sql_utils.cpp 19
+src/sql/parser 311
+# resolver files with children_[
+      77
+# ObRawExpr *& lines (git grep -cP 'ObRawExpr\s*\*\s*&')
+src/sql/resolver 691
+src/sql/rewrite 357
+src/sql/optimizer 131
+src/pl 32
+src/sql/code_generator 2
+src/sql/engine 4
+# find_item( call lines
+src/sql/optimizer 109
+src/sql/rewrite 134
+src/sql/resolver 11
+# SMART_CALL lines
+src/sql/resolver 303
+src/sql/rewrite 388
+src/sql/optimizer 229
+# REGISTER_STMT_RESOLVER and case T_ in ob_resolver.cpp
+93
+142
+# static_cast to Ob*RawExpr* lines in optimizer+rewrite
+507
+# static_cast to Ob*Stmt* lines in optimizer+rewrite+resolver
+391

@@ -1,0 +1,82 @@
+virtual keyword	17137	2345
+pure virtual (= 0)	2007	391
+override	6988	1267
+dynamic_cast	263	113
+static_cast to pointer	7368	1110
+reinterpret_cast	3634	764
+const_cast	1733	512
+template< opening	7156	938
+template<> specialization	1042	154
+placement new (new (alloc) T)	2743	720
+explicit destructor call	1274	497
+OB_NEW*	689	228
+OB_FAIL(	99869	2783
+OB_SUCC(	31207	2168
+OB_SUCC(ret) && guard	17767	1727
+OB_ISNULL(	30891	2325
+OB_TMP_FAIL(	631	184
+int tmp_ret = OB_SUCCESS;	928	393
+ret = OB_SUCCESS; reset	2905	846
+OB_X == ret compare	4187	1027
+int ret = OB_SUCCESS;	38211	3166
+int &ret = ..ret_;	39	24
+union keyword	314	185
+goto	124	7
+setjmp/longjmp family	8	4
+throw expression	36	15
+catch (	50	16
+friend	561	258
+operator overload (any)	2977	914
+operator() (functors)	833	330
+operator== 	563	346
+operator< 	123	88
+operator= (assignment)	629	377
+operator[] 	82	33
+operator<< 	5	4
+operator new/delete	34	4
+operator bool/conversion	20	13
+SMART_CALL*	1138	152
+ATOMIC_* macro call	2958	463
+std::atomic	26	14
+lib::ob_sort / ob_sort(	173	100
+std::sort(	4	4
+std::stable_sort(	4	3
+lower_bound/upper_bound (std)	83	35
+std::vector	49	11
+std::map/set/unordered	12	5
+std::string	114	28
+std::function	89	41
+std::shared_ptr/unique_ptr	63	12
+std::variant/optional	0	0
+pthread_ calls	162	33
+std::thread	3	3
+co_await/co_yield/co_return	0	0
+libaio io_ calls	44	6
+mmap/munmap	21	6
+__int128	193	33
+alloca(	4	4
+va_list/va_start	65	18
+__builtin_expect / OB_LIKELY	17023	1946
+#define (all)	16166	5954
+TO_STRING_KV	2661	1067
+OB_UNIS_VERSION*	914	351
+OB_SERIALIZE_MEMBER*	670	280
+LOG_WARN/LOG_INFO/etc	13502	1325
+murmurhash	377	145
+XXH64/XXH3/xxhash	17	9
+wyhash	3	2
+ob_crc64 / crc64_sse42	136	41
+fnv_hash	9	5
+std::hash	0	0
+compress()/compress2()/uncompress()	34	22
+deflateInit/inflateInit	6	2
+zlib crc32(	1	1
+ZSTD_ calls	29	1
+LZ4_ / snappy	0	0
+fma(	0	0
+__attribute__((packed)) / pragma pack	66	34
+bitfield member	897	110
+enum class	214	163
+plain enum	467	301
+typedef	2739	738
+using alias	493	183

@@ -1,0 +1,47 @@
+# NULL tests on str_value_ outside the three parser dirs
+git grep -nP 'NULL\s*[!=]=\s*[\w\[\]\->.()]*str_value_|str_value_\s*[!=]=\s*NULL|OB_ISNULL\([^)]*str_value_\)|OB_NOT_NULL\([^)]*str_value_\)|nullptr\s*[!=]=\s*[\w\[\]\->.()]*str_value_' -- src ':!src/sql/parser' ':!src/pl/parser' | wc -l
+      38
+# NULL tests on raw_text_ outside the parser dirs
+      14
+# reads/writes of ParseNode::reserved_ outside the parser (git grep -nP '(->|\.)reserved_(?!\w)' -- src/sql src/pl, parser dirs and ObNumber excluded)
+src/pl/sys_package/ob_dbms_stats.cpp:4121:    if (node->reserved_ == 1 && (value < 1 || value > 2048)) {
+src/pl/sys_package/ob_dbms_stats.cpp:4124:      size_opt.mode_ = node->reserved_;
+src/sql/plan_cache/ob_sql_parameterization.cpp:1961:      } else if ((0 == func_name.case_compare("concat")) && 1 == node[0]->reserved_) {
+src/sql/resolver/ddl/ob_create_table_resolver.cpp:345:                      1 != create_table_node->reserved_))) {
+src/sql/resolver/ddl/ob_create_view_resolver.cpp:71:                               || 1 == parse_tree.reserved_;
+src/sql/resolver/ddl/ob_create_view_resolver.cpp:72:    create_arg.is_alter_view_ = (1 == parse_tree.reserved_);
+src/sql/resolver/dml/ob_dml_resolver.cpp:700:    } else if (node.reserved_) {
+src/sql/resolver/dml/ob_dml_resolver.cpp:751:          node.reserved_ = 1;
+src/sql/resolver/dml/ob_insert_resolver.cpp:499:    is_mock_ = value_node.reserved_;
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp:2187:    para_expr->set_ref_index(node->reserved_);
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp:2236:            curr_node->reserved_ = i;
+# writes to num_child_ outside the parser
+      15
+# push_back(NULL) into arrays in resolver/rewrite/optimizer
+src/sql/optimizer/ob_logical_operator.cpp:399:    if (OB_FAIL(child_.push_back(NULL))) {
+src/sql/resolver/cmd/ob_call_procedure_resolver.cpp:61:    OZ (params.push_back(NULL));
+src/sql/resolver/expr/ob_raw_expr_util.cpp:794:      if (OB_FAIL(param_exprs.push_back(NULL))) {
+src/sql/rewrite/ob_transform_groupby_pushdown.cpp:1904:          } else if (OB_FAIL(view.correlated_joined_tables_.push_back(NULL))) {
+src/sql/rewrite/ob_transform_simplify_groupby.cpp:2141:            OB_FAIL(count_exprs.push_back(NULL))) {
+src/sql/rewrite/ob_transform_simplify_groupby.cpp:2295:      if (OB_FAIL(count_exprs.push_back(NULL))) {
+# OB_ISNULL lines in resolver/rewrite/optimizer
+11574
+# local ObRawExprFactory constructions (git grep -nP 'ObRawExprFactory\s+\w+\s*\(')
+      41
+# classes declared 'public ObLogicalOperator' / 'public ObTransformRule'
+      30
+      34
+# ParseNode pointer casts outside the parser dirs (git grep -nP '<\s*(const\s+)?ParseNode\s*\*' | grep -v src/sql/parser)
+      57
+# Ob*Stmt classes under src/sql/resolver
+119
+# ObRawExprPointer users outside its definition
+      22
+# KP( log keys (print an address) per dir: git grep -cP 'KP\(' -- <dir>
+src/sql/resolver 53
+src/sql/rewrite 1
+src/sql/optimizer 12
+# ObTransformUtils::free_stmt call lines
+       9
+# set_query_ctx( call lines on statements (excluding the factory's and the group-by checker's)
+       8

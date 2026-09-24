@@ -1,0 +1,50 @@
+src/logservice/ob_log_allocator.h:46:class ObILogAllocator : public ObIAllocator
+src/oblib/common/meta_programming/ob_meta_define.h:27:struct DummyAllocator : public ObIAllocator
+src/oblib/lib/allocator/ob_allocator.h:26:class ObWrapperAllocator: public ObIAllocator
+src/oblib/lib/allocator/ob_allocator_v2.h:42:class ObAllocator : public ObIAllocator
+src/oblib/lib/allocator/ob_allocator_v2.h:164:class ObParallelAllocator : public ObIAllocator
+src/oblib/lib/allocator/ob_concurrent_fifo_allocator.h:25:class ObConcurrentFIFOAllocator : public common::ObIAllocator
+src/oblib/lib/allocator/ob_delay_free_allocator.h:65:class ObDelayFreeAllocator: public ObIAllocator
+src/oblib/lib/allocator/ob_fifo_allocator.h:37:class ObFIFOAllocator : public common::ObIAllocator
+src/oblib/lib/allocator/ob_malloc.h:222:class TrackedAllocator final : public ObIAllocator
+src/oblib/lib/allocator/ob_malloc.h:380:class ObMalloc : public ObIAllocator
+src/oblib/lib/allocator/ob_malloc.h:418:class MemoryContextMalloc final : public ObIAllocator
+src/oblib/lib/allocator/ob_malloc.h:555:class ObMemBufAllocatorWrapper : public ObIAllocator
+src/oblib/lib/allocator/ob_malloc.h:584:class ObRawBufAllocatorWrapper : public ObIAllocator
+src/oblib/lib/allocator/ob_safe_arena.h:27:class ObSafeArena : public ObIAllocator
+src/oblib/lib/allocator/ob_vslice_alloc.h:91:class ObVSliceAlloc : public common::ObIAllocator
+src/oblib/lib/allocator/page_arena.h:60:struct DefaultPageAllocator: public ObIAllocator
+src/oblib/lib/allocator/page_arena.h:92:struct ModulePageAllocator: public ObIAllocator
+src/oblib/lib/allocator/page_arena.h:975:class ObArenaAllocator final : public ObIAllocator
+src/oblib/lib/allocator/page_arena.h:1081:class ObSafeArenaAllocator : public ObIAllocator
+src/oblib/lib/container/ob_array.h:56:class ObNullAllocator: public ObIAllocator
+src/oblib/lib/container/ob_ext_ring_buffer_impl.h:54:class RingBufferAlloc : public ObIAllocator
+src/oblib/lib/function/ob_function.h:124:struct DefaultFunctionAllocator : public ObIAllocator {
+src/oblib/lib/future/ob_future.h:111:struct DefaultFutureAllocator : public ObIAllocator {
+src/oblib/lib/guard/ob_shared_guard.h:128:struct DefaultSharedGuardAllocator : public ObIAllocator {
+src/oblib/lib/guard/ob_unique_guard.h:118:struct DefaultUniqueGuardAllocator : public ObIAllocator {
+src/oblib/lib/objectpool/ob_pool.h:107:class ObSmallBlockAllocator : public ObIAllocator
+src/oblib/lib/utility/data_buffer.h:29:class ObDataBuffer : public ObIAllocator
+src/query/api/query/engine/expr/ob_expr.h:730:class ObExprStrResAlloc : public common::ObIAllocator
+src/query/api/query/engine/expr/ob_expr_operator.h:2079:class ObInplaceAllocator : public common::ObIAllocator
+src/share/allocator/ob_reserve_arena.h:27:class ObReserveArenaAllocator : public ObIAllocator
+src/share/cache/ob_recycle_multi_kvcache.h:126:struct InnerMockAllocator final : public ObIAllocator
+src/share/io/ob_io_struct.h:122:class ObIOAllocator : public ObIAllocator
+src/share/ob_occam_thread_pool.h:54:struct DefaultAllocator : public ObIAllocator {
+src/share/schema/ob_schema_struct.h:1969:class ObSchemaAllocator : public common::ObIAllocator
+src/sql/engine/expr/ob_expr_multi_mode_func_helper.h:28:class MultimodeAlloctor : public ObIAllocator
+src/sql/pl/ob_pl_allocator.h:81:class ObPLAllocator1 : public common::ObIAllocator
+src/sql/pl/ob_pl_stmt.h:105:class ObPLSEArray : public common::ObSEArrayImpl<T, 16, common::ObIAllocator&>
+src/sql/plan_cache/ob_id_manager_allocator.h:33:class ObIdManagerAllocator : public common::ObIAllocator
+src/storage/allocator/ob_mds_allocator.h:32:class ObMdsAllocator : public ObIAllocator {
+src/storage/allocator/ob_mds_allocator.h:60:struct ObBufferCtxAllocator : public ObIAllocator// for now, it is just a wrapper of server_malloc
+src/storage/allocator/ob_tx_data_allocator.h:81:class ObTxDataOpAllocator : public ObIAllocator {
+src/storage/compaction/ob_compaction_memory_context.h:121:class ObLocalAllocator : public common::ObIAllocator
+src/storage/memtable/ob_memtable_context.h:133:class ObQueryAllocator final : public common::ObIAllocator
+src/storage/memtable/ob_memtable_context.h:221:class ObMemtableCtxCbAllocator final : public common::ObIAllocator
+src/storage/multi_data_source/ob_mds_event_buffer.h:241:  struct DefaultAllocator : public ObIAllocator
+src/storage/multi_data_source/runtime_utility/common_define.h:314:struct DefaultAllocator : public ObIAllocator
+src/storage/multi_data_source/runtime_utility/common_define.h:330:struct MdsAllocator : public ObIAllocator
+src/storage/ob_i_store.h:130:class ObReallocatedFixedArray final : public common::ObFixedArrayImpl<T, common::ObIAllocator>
+src/storage/tx/ob_trans_define.h:99:class ObReserveAllocator : public ObIAllocator
+src/storage/tx_table/ob_tx_table_define.h:37:struct TxDataDefaultAllocator : public ObIAllocator {

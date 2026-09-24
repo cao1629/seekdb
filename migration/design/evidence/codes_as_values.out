@@ -1,0 +1,9 @@
+codes defined: 1544  codes appearing in src: 0  codes never referenced: 1544
+distinct codes compared with ret/tmp_ret/err...: 0  total compare lines: 0
+  compare lines excluding OB_SUCCESS: 0
+distinct codes in case labels: 0  total case lines: 0
+distinct codes assigned to ret: 0  total assign lines: 0
+
+code                                            total     cmp   case  assign
+
+top assigned codes:
