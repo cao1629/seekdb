@@ -42,7 +42,7 @@ Examples:
   ./build.iphone.sh --simulator --init --jobs 8
 
 Set DEVELOPER_DIR to a full Xcode Developer directory if needed.
-CARGO and RUSTUP may point to existing rustup executables.
+CARGO and RUSTUP must point to their corresponding Cargo and rustup executables.
 Rust caches, build output, and logs default to directories within this checkout.
 Host dependency initialization supplies parser tools; its macOS libraries cannot
 be linked into iOS. The selected dependency prefix must contain iOS libraries.

@@ -73,6 +73,14 @@ class PhasePreparationError(RuntimeError):
     """Indicate that current-HEAD test App preparation could not complete."""
 
 
+PREPARATION_FAILURE_CODES = {
+    "current-HEAD iOS engine build failed": "build-failed",
+    "existing App signature validation failed": "sign-failed",
+    "current-HEAD App signing or installation failed": "sign-install-failed",
+    "current-HEAD App installation failed": "install-failed",
+}
+
+
 class BuildReadinessError(RuntimeError):
     """Indicate that portable local build prerequisites are unavailable."""
 
@@ -89,6 +97,20 @@ class BuildInputs:
     rustup_home: Path
     rust_target_dir: Path
     sources: Mapping[str, str]
+
+
+def _tool_has_role(tool: Path, role: str) -> bool:
+    """Return whether one executable identifies as the requested Rust tool."""
+    if not tool.is_file() or not os.access(tool, os.X_OK):
+        return False
+    try:
+        result = subprocess.run(
+            [str(tool), "--version"], check=False, capture_output=True,
+            text=True, timeout=10)
+    except (OSError, subprocess.SubprocessError):
+        return False
+    return (result.returncode == 0
+            and result.stdout.strip().lower().startswith(f"{role} "))
 
 
 def _cache_values(cache_path: Path) -> Mapping[str, str]:
@@ -125,6 +147,12 @@ def resolve_build_inputs(
     headers_prefix, headers_source = choose(
         HEADERS_PREFIX_ENVIRONMENT, "SEEKDB_IOS_HEADER_PREFIX")
     cargo, cargo_source = choose("CARGO", "CARGO")
+    if (cargo is not None and cargo_source == "cmake-cache"
+            and not _tool_has_role(cargo, "cargo")):
+        cargo_sibling = cargo.with_name("cargo")
+        if _tool_has_role(cargo_sibling, "cargo"):
+            cargo = cargo_sibling
+            cargo_source = "cargo-sibling"
     rust_target_dir, rust_target_source = choose(
         RUST_TARGET_DIR_ENVIRONMENT, "RUST_TARGET_DIR")
     rustup_value = environment.get("RUSTUP")
@@ -172,8 +200,8 @@ def resolve_build_inputs(
         or (explicit_rust_target
             and not rust_target_dir.exists()
             and rust_target_dir.parent.is_dir()))
-    if (not cargo.is_file() or not os.access(cargo, os.X_OK)
-            or not rustup.is_file() or not os.access(rustup, os.X_OK)
+    if (not _tool_has_role(cargo, "cargo")
+            or not _tool_has_role(rustup, "rustup")
             or not cargo_home.is_dir()
             or not rustup_home.is_dir()
             or not rust_target_ready
@@ -375,10 +403,15 @@ class TestAppPreparer:
                 "--device", self._configuration.device,
                 "--timeout", "120", str(self._configuration.app_artifact),
             ), PACKAGE_TIMEOUT_SECONDS)
+            package_failure_diagnostic = (
+                "current-HEAD App installation failed")
+        if repackage or not reuse_build:
+            package_failure_diagnostic = (
+                "current-HEAD App signing or installation failed")
         if package.exit_status != 0:
             return runner.CaseResult.failed(
                 category="infrastructure",
-                diagnostic="current-HEAD App sign or install failed",
+                diagnostic=package_failure_diagnostic,
                 exit_status=package.exit_status,
                 retry_safe=False,
                 clean_state=False,
@@ -409,6 +442,7 @@ def _build_command(
         "--headers-prefix", str(inputs.headers_prefix),
         "--jobs", "4", "--target", "seekdb_ios_link_check", "--",
         f"-DSEEKDB_IOS_TEST_HOOKS={hook_mode}",
+        f"-DCARGO={inputs.cargo}",
         f"-DRUST_TARGET_DIR={inputs.rust_target_dir}",
     )
 
@@ -881,6 +915,9 @@ def prepare_test_app(
     if failure is None:
         return preparer.build_input_sources
     if failure.status != "blocked":
+        failure_code = PREPARATION_FAILURE_CODES.get(failure.diagnostic)
+        if failure_code is not None:
+            return failure_code
         raise PhasePreparationError("test App preparation command failed")
     if "device, bundle, and team" in failure.diagnostic:
         return "signing-config"
@@ -899,4 +936,7 @@ def verify_test_app(*, configuration, run_id: str):
         return None
     if failure.status == "blocked":
         return "local-profile"
+    failure_code = PREPARATION_FAILURE_CODES.get(failure.diagnostic)
+    if failure_code is not None:
+        return failure_code
     raise PhasePreparationError("prepared App verification or install failed")

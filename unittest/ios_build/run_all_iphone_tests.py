@@ -36,6 +36,28 @@ APP_ARTIFACT_ENVIRONMENT = "SEEKDB_IPHONE_APP_ARTIFACT"
 ARTIFACT_MARKER = re.compile(
     rb"SEEKDB_IOS_ARTIFACT_BUILD_ID=([0-9a-f]{12});"
     rb"SEEKDB_IOS_ARTIFACT_HOOK_MODE=(enabled|disabled)")
+PREPARATION_DIAGNOSTICS = {
+    "signing-config": (
+        "iPhone test App preparation failed during signing configuration; "
+        "set SEEKDB_IPHONE_BUNDLE_ID and SEEKDB_IPHONE_TEAM or provide one "
+        "valid existing signed probe App"),
+    "build-inputs": (
+        "iPhone test App preparation failed during build input validation; "
+        "set SEEKDB_IPHONE_DEPS_PREFIX, SEEKDB_IPHONE_HEADERS_PREFIX, CARGO, "
+        "RUSTUP, CARGO_HOME, RUSTUP_HOME, and RUST_TARGET_DIR or provide one "
+        "valid local CMake cache"),
+    "local-profile": (
+        "iPhone test App preparation failed during profile validation"),
+    "app-output": (
+        "iPhone test App preparation failed during App output validation"),
+    "build-failed": "iPhone test App preparation failed during build",
+    "sign-failed": (
+        "iPhone test App preparation failed during signature validation"),
+    "sign-install-failed": (
+        "iPhone test App preparation failed during signing or installation"),
+    "install-failed": (
+        "iPhone test App preparation failed during installation"),
+}
 
 
 class IphoneTestCliError(RuntimeError):
@@ -764,24 +786,13 @@ def main(
                 if isinstance(preparation_issue, PhasePreparationOutcome):
                     configuration = preparation_issue.configuration
                     preparation_issue = preparation_issue.issue
-                if preparation_issue == "signing-config":
-                    raise IphoneTestCliError(
-                        "set SEEKDB_IPHONE_BUNDLE_ID and SEEKDB_IPHONE_TEAM "
-                        "or provide one valid existing signed probe App")
-                if preparation_issue == "build-inputs":
-                    raise IphoneTestCliError(
-                        "set SEEKDB_IPHONE_DEPS_PREFIX, "
-                        "SEEKDB_IPHONE_HEADERS_PREFIX, CARGO, RUSTUP, "
-                        "CARGO_HOME, RUSTUP_HOME, and RUST_TARGET_DIR or "
-                        "provide one valid local CMake cache")
-                if preparation_issue == "local-profile":
-                    raise IphoneTestCliError(
-                        "the selected device or local signing key is not "
-                        "eligible for the existing probe profile")
-                if preparation_issue == "app-output":
-                    raise IphoneTestCliError(
-                        "SEEKDB_IPHONE_APP_ARTIFACT must match the probe App "
-                        "produced under SEEKDB_IPHONE_ENGINE_BUILD")
+                if isinstance(preparation_issue, str):
+                    diagnostic = PREPARATION_DIAGNOSTICS.get(
+                        preparation_issue)
+                    if diagnostic is None:
+                        raise IphoneTestCliError(
+                            "phase adapter setup failed")
+                    raise IphoneTestCliError(diagnostic)
                 if isinstance(preparation_issue, Mapping):
                     allowed_sources = {
                         "environment", "cmake-cache", "cargo-sibling",
@@ -797,6 +808,8 @@ def main(
                     print(
                         f"Build prerequisite sources: {sources}",
                         file=stdout, flush=True)
+                elif preparation_issue is not None:
+                    raise IphoneTestCliError("phase adapter setup failed")
                 build_identity = validate_build_identity(
                     configuration, revision)
             else:

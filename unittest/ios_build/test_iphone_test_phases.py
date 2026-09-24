@@ -68,7 +68,14 @@ class IphoneTestPhasesTest(unittest.TestCase):
         tools.mkdir(parents=True)
         for name in ("cargo", "rustup"):
             tool = tools / name
-            tool.write_text("#!/bin/sh\n", encoding="utf-8")
+            tool.write_text(
+                "#!/bin/sh\n"
+                "if [ \"${1:-}\" = \"--version\" ]; then\n"
+                f"  echo '{name} 1.0.0'\n"
+                "  exit 0\n"
+                "fi\n"
+                "exit 0\n",
+                encoding="utf-8")
             tool.chmod(0o755)
         rust_target = root / "rust-target"
         rust_target.mkdir()
@@ -163,6 +170,7 @@ class IphoneTestPhasesTest(unittest.TestCase):
             run_directory = root / "run"
             run_directory.mkdir()
             commands = []
+            environment = self.build_environment(root)
 
             def execute(command, timeout_seconds):
                 """Record commands and synthesize safe validated suite evidence."""
@@ -183,7 +191,7 @@ class IphoneTestPhasesTest(unittest.TestCase):
                     0, json.dumps(summary), "")
 
             with mock.patch.dict(
-                    os.environ, self.build_environment(root), clear=False):
+                    os.environ, environment, clear=False):
                 adapters = phases.create_phase_adapters(
                     configuration=self.configuration(root),
                     suites=("registry-smoke",),
@@ -207,6 +215,9 @@ class IphoneTestPhasesTest(unittest.TestCase):
         self.assertEqual(1, len(build_commands))
         self.assertEqual(1, len(package_commands))
         self.assertIn("-DSEEKDB_IOS_TEST_HOOKS=ON", build_commands[0])
+        self.assertIn(
+            f"-DCARGO={Path(environment['CARGO']).resolve()}",
+            build_commands[0])
         self.assertEqual("/usr/bin/env", build_commands[0][0])
         self.assertIn("--deps-prefix", build_commands[0])
         self.assertIn("--headers-prefix", build_commands[0])
@@ -261,7 +272,7 @@ class IphoneTestPhasesTest(unittest.TestCase):
                 "CMAKE_OSX_ARCHITECTURES:STRING=arm64\n".format(
                     environment[phases.DEPS_PREFIX_ENVIRONMENT],
                     environment[phases.HEADERS_PREFIX_ENVIRONMENT],
-                    environment["CARGO"],
+                    environment["RUSTUP"],
                     environment[phases.RUST_TARGET_DIR_ENVIRONMENT]),
                 encoding="utf-8")
 
@@ -271,10 +282,75 @@ class IphoneTestPhasesTest(unittest.TestCase):
                 phases.resolve_build_inputs(configuration, {})
 
         self.assertEqual("cmake-cache", inputs.sources["deps_prefix"])
+        self.assertEqual(
+            Path(environment["CARGO"]).resolve(), inputs.cargo)
+        self.assertEqual("cargo-sibling", inputs.sources["cargo"])
         self.assertEqual("cargo-sibling", inputs.sources["rustup"])
         self.assertEqual("cargo-parent", inputs.sources["cargo_home"])
         self.assertEqual(
             "cargo-home-sibling", inputs.sources["rustup_home"])
+
+    def test_cache_rustup_as_cargo_without_cargo_sibling_is_rejected(self):
+        """Never execute rustup in Cargo's command role."""
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            configuration = self.configuration(root)
+            environment = self.build_environment(root)
+            Path(environment["CARGO"]).unlink()
+            configuration.engine_build.mkdir(parents=True)
+            (configuration.engine_build / "CMakeCache.txt").write_text(
+                "DEP_DIR:PATH={}\n"
+                "SEEKDB_IOS_HEADER_PREFIX:PATH={}\n"
+                "CARGO:FILEPATH={}\n"
+                "RUST_TARGET_DIR:PATH={}\n"
+                "CMAKE_SYSTEM_NAME:STRING=iOS\n"
+                "CMAKE_OSX_SYSROOT:STRING=iphoneos\n"
+                "CMAKE_OSX_ARCHITECTURES:STRING=arm64\n".format(
+                    environment[phases.DEPS_PREFIX_ENVIRONMENT],
+                    environment[phases.HEADERS_PREFIX_ENVIRONMENT],
+                    environment["RUSTUP"],
+                    environment[phases.RUST_TARGET_DIR_ENVIRONMENT]),
+                encoding="utf-8")
+
+            with self.assertRaises(phases.BuildReadinessError):
+                phases.resolve_build_inputs(configuration, {})
+
+    def test_explicit_cargo_and_rustup_roles_cannot_be_mixed(self):
+        """Validate tool identity instead of accepting any executable path."""
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            configuration = self.configuration(root)
+            environment = self.build_environment(root)
+            environment["RUSTUP"] = environment["CARGO"]
+
+            with self.assertRaises(phases.BuildReadinessError):
+                phases.resolve_build_inputs(configuration, environment)
+
+    def test_preparation_failure_diagnostics_map_only_to_fixed_codes(self):
+        """Translate known internal stages without exposing arbitrary details."""
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            configuration = self.configuration(Path(temporary_directory))
+            expected = {
+                "current-HEAD iOS engine build failed": "build-failed",
+                "existing App signature validation failed": "sign-failed",
+                "current-HEAD App signing or installation failed": (
+                    "sign-install-failed"),
+                "current-HEAD App installation failed": "install-failed",
+            }
+            for diagnostic, code in expected.items():
+                with self.subTest(diagnostic=diagnostic), mock.patch.object(
+                        phases.TestAppPreparer, "ensure",
+                        return_value=runner.CaseResult.failed(
+                            category="infrastructure",
+                            diagnostic=diagnostic,
+                            exit_status=1,
+                            retry_safe=False,
+                            clean_state=False)):
+                    self.assertEqual(code, phases.prepare_test_app(
+                        configuration=configuration,
+                        suites=("registry-smoke",),
+                        source_revision="a" * 40,
+                        run_id="safe-run"))
 
     def test_explicit_fresh_rust_target_is_valid_but_simulator_cache_is_not(self):
         """Allow Cargo to create a fresh target and reject simulator-only state."""

@@ -954,6 +954,61 @@ class RunAllIphoneTestsTest(unittest.TestCase):
                 lock.acquire()
                 lock.release()
 
+    def test_preparation_codes_are_allowlisted_without_exposing_setup_output(self):
+        """Expose fixed stage categories but keep arbitrary setup data generic."""
+        token = "private-preparation-token"
+        timestamp = dt.datetime(2026, 9, 24, 10, tzinfo=UTC)
+        cases = (
+            ("build-failed", "failed during build"),
+            (f"build failed for {token}", "phase adapter setup failed"),
+            (None, "phase adapter setup failed"),
+        )
+        for issue, expected in cases:
+            with self.subTest(issue=issue), \
+                    tempfile.TemporaryDirectory() as temporary_directory:
+                output_root = Path(temporary_directory) / "iphone_test"
+                physical = cli.PhysicalDevice(
+                    "command-device", "iPhone", "iOS", "physical",
+                    "default", "booted", "paired", "profile-device")
+
+                def prepare(configuration, *_args, **_kwargs):
+                    """Emit hostile fd output before returning one issue code."""
+                    os.write(2, token.encode("utf-8"))
+                    if issue is None:
+                        raise RuntimeError(token)
+                    return cli.PhasePreparationOutcome(issue, configuration)
+
+                stderr = io.StringIO()
+                terminal_stderr = io.StringIO()
+                with contextlib.redirect_stderr(terminal_stderr), \
+                        mock.patch.object(
+                            cli, "source_commit", return_value="a" * 40), \
+                        mock.patch.object(
+                            cli, "validate_build_identity",
+                            return_value="c" * 64), \
+                        mock.patch.object(
+                            cli, "discover_physical_devices",
+                            return_value=[physical]), \
+                        mock.patch.object(
+                            cli, "prepare_phase_artifacts",
+                            side_effect=prepare):
+                    status = cli.main([
+                        "--output-root", str(output_root),
+                        "--device", "command-device",
+                        "--bundle-id", "example.bundle",
+                        "--team", "TEAMTOKEN1",
+                    ], environment={}, stdout=io.StringIO(), stderr=stderr,
+                        clock=lambda: timestamp)
+
+                serialized = stderr.getvalue() + terminal_stderr.getvalue()
+                if output_root.exists():
+                    serialized += "".join(
+                        path.read_text(encoding="utf-8", errors="replace")
+                        for path in output_root.rglob("*") if path.is_file())
+                self.assertEqual(2, status)
+                self.assertIn(expected, serialized)
+                self.assertNotIn(token, serialized)
+
     def test_custom_base_exception_is_generic_and_fd_output_is_captured(self):
         """Untrusted BaseException types and inherited fd writes never escape."""
         secret = "private-adapter-token"
@@ -1016,7 +1071,7 @@ class RunAllIphoneTestsTest(unittest.TestCase):
             with mock.patch.object(
                     cli, "source_commit", return_value="a" * 40), \
                     mock.patch.object(
-                        cli, "prepare_phase_artifacts"), \
+                        cli, "prepare_phase_artifacts", return_value={}), \
                     mock.patch.object(
                         cli, "validate_build_identity", return_value="c" * 64), \
                     mock.patch.object(
