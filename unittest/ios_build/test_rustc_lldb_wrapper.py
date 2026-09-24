@@ -193,9 +193,8 @@ class RustcLldbWrapperTest(unittest.TestCase):
             fake_xcrun.write_text(
                 "#!/usr/bin/env python3\n"
                 "import json, pathlib, sys\n"
-                "separator = sys.argv.index('--')\n"
                 f"pathlib.Path({str(log)!r}).write_text("
-                "json.dumps(sys.argv[separator + 1:]))\n"
+                "json.dumps(sys.argv[1:]))\n"
                 "raise SystemExit(23)\n",
                 encoding="utf-8")
             fake_xcrun.chmod(fake_xcrun.stat().st_mode | stat.S_IXUSR)
@@ -203,9 +202,22 @@ class RustcLldbWrapperTest(unittest.TestCase):
             status = wrapper.run_build_script(
                 build_script, ("argument with spaces", "literal'quote"),
                 xcrun=fake_xcrun)
-            arguments = json.loads(log.read_text(encoding="utf-8"))
+            invocation = json.loads(log.read_text(encoding="utf-8"))
 
         self.assertEqual(23, status)
+        separator = invocation.index("--")
+        lldb_arguments = invocation[:separator]
+        arguments = invocation[separator + 1:]
+        launch_index = lldb_arguments.index("process launch --stop-at-entry")
+        policy_index = next(
+            index for index, value in enumerate(lldb_arguments)
+            if "GetNumSignals" in value)
+        continue_index = lldb_arguments.index("process continue")
+        self.assertLess(launch_index, policy_index)
+        self.assertLess(policy_index, continue_index)
+        self.assertIn("SIGSTOP", lldb_arguments[policy_index])
+        self.assertIn("SetShouldSuppress(n,False)",
+                      lldb_arguments[policy_index])
         self.assertEqual(
             [str(build_script.resolve()),
              "argument with spaces", "literal'quote"],
@@ -236,7 +248,7 @@ class RustcLldbWrapperTest(unittest.TestCase):
         sys.platform == "darwin" and platform.machine() == "arm64",
         "requires the local arm64 macOS LLDB runtime")
     def test_real_lldb_maps_normal_and_signal_exits(self):
-        """Map real arm64 process exit, SIGTERM, and SIGKILL statuses."""
+        """Map normal and representative debugger-intercepted signal exits."""
         with tempfile.TemporaryDirectory() as temporary_directory:
             root = Path(temporary_directory)
             source = root / "build_script.c"
@@ -248,6 +260,10 @@ class RustcLldbWrapperTest(unittest.TestCase):
                 "raise(SIGTERM);\n"
                 "  if (argc > 1 && strcmp(argv[1], \"kill\") == 0) "
                 "raise(SIGKILL);\n"
+                "  if (argc > 1 && strcmp(argv[1], \"trap\") == 0) "
+                "raise(SIGTRAP);\n"
+                "  if (argc > 1 && strcmp(argv[1], \"quit\") == 0) "
+                "raise(SIGQUIT);\n"
                 "  return 7;\n"
                 "}\n",
                 encoding="utf-8")
@@ -259,15 +275,18 @@ class RustcLldbWrapperTest(unittest.TestCase):
             self.assertEqual(0, compile_result.returncode, compile_result.stderr)
 
             statuses = {}
-            for mode in ("normal", "term", "kill"):
+            diagnostics = {}
+            for mode in ("normal", "term", "kill", "trap", "quit"):
                 result = subprocess.run([
                     str(WRAPPER_PATH), "--run-build-script",
                     str(executable), mode,
-                ], check=False, capture_output=True, text=True)
+                ], check=False, capture_output=True, text=True, timeout=20)
                 statuses[mode] = result.returncode
+                diagnostics[mode] = result.stderr
 
         self.assertEqual(
-            {"normal": 7, "term": 143, "kill": 137}, statuses)
+            {"normal": 7, "term": 143, "kill": 137,
+             "trap": 133, "quit": 131}, statuses, diagnostics)
 
     def test_symlink_and_noncanonical_output_directory_are_rejected(self):
         """Never replace a symlink or an output reached through dot segments."""

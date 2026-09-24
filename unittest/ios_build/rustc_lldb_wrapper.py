@@ -26,9 +26,8 @@ MACHO_EXECUTE = 2
 LC_VERSION_MIN_MACOSX = 0x24
 LC_BUILD_VERSION = 0x32
 PLATFORM_MACOS = 1
-PASSTHROUGH_SIGNALS = (
-    "SIGTERM", "SIGKILL", "SIGABRT", "SIGSEGV", "SIGBUS", "SIGILL",
-    "SIGFPE", "SIGPIPE",
+NON_PASSTHROUGH_SIGNALS = (
+    "SIGSTOP", "SIGTSTP", "SIGTTIN", "SIGTTOU",
 )
 
 
@@ -324,14 +323,17 @@ def run_build_script(
     environment = dict(os.environ)
     environment.setdefault(
         "DEVELOPER_DIR", "/Applications/Xcode.app/Contents/Developer")
-    signal_commands = tuple(
-        component
-        for signal_name in PASSTHROUGH_SIGNALS
-        for component in (
-            "-o",
-            f"process handle {signal_name} -s false -n false -p true",
-        )
-    )
+    excluded_signals = repr(NON_PASSTHROUGH_SIGNALS)
+    signal_policy_script = (
+        "script import lldb; "
+        "p=lldb.debugger.GetSelectedTarget().GetProcess(); "
+        "u=p.GetUnixSignals(); "
+        f"x={excluded_signals}; "
+        "[(u.SetShouldStop(n,False),u.SetShouldNotify(n,False),"
+        "u.SetShouldSuppress(n,False)) "
+        "for i in range(u.GetNumSignals()) "
+        "for n in [u.GetSignalAtIndex(i)] "
+        "if u.GetSignalAsCString(n) not in x]")
     status_script = (
         "script import os,re,signal,lldb; "
         "p=lldb.debugger.GetSelectedTarget().GetProcess(); "
@@ -346,7 +348,9 @@ def run_build_script(
         "os._exit(c)")
     result = subprocess.run([
         str(xcrun), "lldb", "--no-lldbinit", "--batch",
-        *signal_commands, "-o", "run", "-o", status_script,
+        "-o", "process launch --stop-at-entry",
+        "-o", signal_policy_script,
+        "-o", "process continue", "-o", status_script,
         "--", str(real_build_script), *arguments,
     ], check=False, env=environment)
     if result.returncode < 0:
