@@ -1,0 +1,13 @@
+diff --git a/src/sql/privilege_check/ob_privilege_check.cpp b/src/sql/privilege_check/ob_privilege_check.cpp
+index eb04796..6c3b83f 100644
+--- a/src/sql/privilege_check/ob_privilege_check.cpp
++++ b/src/sql/privilege_check/ob_privilege_check.cpp
+@@ -1184,7 +1184,7 @@ int get_fork_table_stmt_need_privs(
+       // Need CREATE privilege on destination database
+       need_priv.db_ = fork_table_arg.dst_database_name_;
+       need_priv.table_ = fork_table_arg.dst_table_name_;
+-      need_priv.priv_set_ = OB_PRIV_CREATE;
++      need_priv.priv_set_ = OB_PRIV_DROP;
+       need_priv.priv_level_ = OB_PRIV_TABLE_LEVEL;
+       ADD_NEED_PRIV(need_priv);
+     }

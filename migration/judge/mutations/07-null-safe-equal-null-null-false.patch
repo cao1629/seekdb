@@ -1,0 +1,13 @@
+diff --git a/src/sql/engine/expr/ob_expr_null_safe_equal.cpp b/src/sql/engine/expr/ob_expr_null_safe_equal.cpp
+index 16370b5..5f69002 100644
+--- a/src/sql/engine/expr/ob_expr_null_safe_equal.cpp
++++ b/src/sql/engine/expr/ob_expr_null_safe_equal.cpp
+@@ -117,7 +117,7 @@ int ObExprNullSafeEqual::ns_equal(const ObExpr &expr, ObDatum &res,
+         || OB_FAIL(right[i]->eval(rctx, r))) {
+     } else {
+       if (l->is_null() && r->is_null()) {
+-        equal = true;
++        equal = false;
+       } else if (!l->is_null() && !r->is_null()) {
+         if (OB_FAIL(reinterpret_cast<DatumCmpFunc>(
+                         expr.inner_functions_[i])(

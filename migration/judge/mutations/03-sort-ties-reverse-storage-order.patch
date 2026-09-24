@@ -1,0 +1,14 @@
+diff --git a/src/sql/engine/sort/ob_sort_op_impl.cpp b/src/sql/engine/sort/ob_sort_op_impl.cpp
+index 298b665..8cea3ac 100644
+--- a/src/sql/engine/sort/ob_sort_op_impl.cpp
++++ b/src/sql/engine/sort/ob_sort_op_impl.cpp
+@@ -427,6 +427,9 @@ bool ObSortOpImpl::Compare::operator()(
+         less = !sort_collation.is_ascending_;
+       }
+     }
++    if (0 == cmp && OB_SUCC(ret)) {
++      less = r < l;
++    }
+   }
+   return less;
+ }

@@ -1,0 +1,13 @@
+diff --git a/src/sql/optimizer/ob_opt_est_cost_model.cpp b/src/sql/optimizer/ob_opt_est_cost_model.cpp
+index c2e7b85..7471955 100644
+--- a/src/sql/optimizer/ob_opt_est_cost_model.cpp
++++ b/src/sql/optimizer/ob_opt_est_cost_model.cpp
+@@ -1389,7 +1389,7 @@ int ObOptEstCostModel::cost_range_scan(const ObCostTableScanInfo &est_cost_info,
+                                          false,
+                                          cpu_cost))) {
+   } else {
+-    if (io_cost > cpu_cost) {
++    if (io_cost < cpu_cost) {
+         range_scan_cost = io_cost + memtable_cost + memtable_merge_cost;
+         OPT_TRACE_COST_MODEL(KV(range_scan_cost), "=", KV(io_cost), "+", 
+                              KV(memtable_cost), "+", KV(memtable_merge_cost));

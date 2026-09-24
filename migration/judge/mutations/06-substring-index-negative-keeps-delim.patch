@@ -1,0 +1,15 @@
+diff --git a/src/sql/engine/expr/ob_expr_operator.cpp b/src/sql/engine/expr/ob_expr_operator.cpp
+index 1c99ef0..9df6635 100644
+--- a/src/sql/engine/expr/ob_expr_operator.cpp
++++ b/src/sql/engine/expr/ob_expr_operator.cpp
+@@ -5464,8 +5464,8 @@ int ObExprKMPSearchCtx::substring_index_search(const ObString &text,
+       } else if (-1 < pos) {
+         // nth delim found from back to front
+         result.assign(
+-            const_cast<char *>(text.ptr() + static_cast<int32_t>(pos + pattern_.length())),
+-            static_cast<int32_t>(text.length() - pattern_.length() - pos));
++            const_cast<char *>(text.ptr() + static_cast<int32_t>(pos)),
++            static_cast<int32_t>(text.length() - pos));
+       }
+     }
+ 

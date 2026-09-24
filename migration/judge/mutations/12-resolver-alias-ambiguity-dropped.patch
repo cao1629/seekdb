@@ -1,0 +1,12 @@
+diff --git a/src/sql/resolver/dml/ob_select_resolver.cpp b/src/sql/resolver/dml/ob_select_resolver.cpp
+index b813b81..fcac03b 100644
+--- a/src/sql/resolver/dml/ob_select_resolver.cpp
++++ b/src/sql/resolver/dml/ob_select_resolver.cpp
+@@ -3316,7 +3316,6 @@ int ObSelectResolver::resolve_alias_column_ref(
+              real_ref_expr = cur_item->expr_;
+             }
+           } else if (real_ref_expr != cur_item->expr_) {
+-            ret = OB_NON_UNIQ_ERROR;
+           }
+         }
+       }

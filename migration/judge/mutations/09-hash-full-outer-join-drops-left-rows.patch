@@ -1,0 +1,13 @@
+diff --git a/src/sql/engine/join/ob_hash_join_op.cpp b/src/sql/engine/join/ob_hash_join_op.cpp
+index e98d03f..cc2f3b7 100644
+--- a/src/sql/engine/join/ob_hash_join_op.cpp
++++ b/src/sql/engine/join/ob_hash_join_op.cpp
+@@ -5195,7 +5195,7 @@ int ObHashJoinOp::fill_left_join_result_batch()
+   while (OB_SUCC(ret) && batch_idx < max_output_cnt_) {
+     if (NULL != tuple) {
+       if ((LEFT_ANTI_JOIN == MY_SPEC.join_type_ && !tuple->is_match())
+-         || (need_left_join() && !tuple->is_match()))  {
++         || (LEFT_OUTER_JOIN == MY_SPEC.join_type_ && !tuple->is_match()))  {
+         left_result_rows[batch_idx] = tuple;
+         batch_idx++;
+       }

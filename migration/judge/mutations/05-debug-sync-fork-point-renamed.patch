@@ -1,0 +1,13 @@
+diff --git a/src/rootserver/fork_table/ob_fork_table_task.cpp b/src/rootserver/fork_table/ob_fork_table_task.cpp
+index 3d61e23..fe6e0f4 100644
+--- a/src/rootserver/fork_table/ob_fork_table_task.cpp
++++ b/src/rootserver/fork_table/ob_fork_table_task.cpp
+@@ -181,7 +181,7 @@ int ObForkTableTask::process()
+         break;
+       }
+       case ObDDLTaskStatus::WAIT_FROZE_END: {
+-        DEBUG_SYNC(FORK_TABLE_WAIT_FREEZE_END);
++        DEBUG_SYNC(FORK_TABLE_BUILD_DATA);
+         const ObDDLTaskStatus from_status = task_status_;
+         if (OB_FAIL(wait_freeze_end(ObDDLTaskStatus::BUILD_DATA))) {
+         } else if (task_status_ == ObDDLTaskStatus::BUILD_DATA) {

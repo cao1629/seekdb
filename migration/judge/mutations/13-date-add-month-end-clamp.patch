@@ -1,0 +1,13 @@
+diff --git a/src/oblib/common/timezone/ob_time_convert.cpp b/src/oblib/common/timezone/ob_time_convert.cpp
+index 5d813a7..59633fc 100644
+--- a/src/oblib/common/timezone/ob_time_convert.cpp
++++ b/src/oblib/common/timezone/ob_time_convert.cpp
+@@ -1880,7 +1880,7 @@ int ObTimeConverter::merge_date_interval(/*const*/ ObTime &base_time, const ObSt
+     // date_add('2000-2-29', interval '1' year) => 2001-02-28.
+     int32_t days = DAYS_PER_MON[IS_LEAP_YEAR(year)][month];
+     if (res_time.parts_[DT_MDAY] > days) {
+-      res_time.parts_[DT_MDAY] = days;
++      res_time.parts_[DT_MDAY] = days - 1;
+     }
+     res_time.parts_[DT_DATE] = ob_time_to_date(res_time);
+     ObTimeConvertCtx cvrt_ctx(NULL, false);

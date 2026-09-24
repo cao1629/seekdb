@@ -1,0 +1,13 @@
+diff --git a/src/storage/tx/ob_tx_api.cpp b/src/storage/tx/ob_tx_api.cpp
+index aef7df8..e2ffc8c 100644
+--- a/src/storage/tx/ob_tx_api.cpp
++++ b/src/storage/tx/ob_tx_api.cpp
+@@ -681,7 +681,7 @@ int ObTransService::get_read_snapshot(ObTxDesc &tx,
+   } else if (is_RR_or_SERIAL_isolevel(isolation)) {
+     // only acquire snapshot once in these isolation level
+     if (tx.isolation_ != isolation /*change isolation*/ ||
+-        !tx.snapshot_version_.is_valid()/*version invalid*/) {
++        true/*version invalid*/) {
+       SCN version;
+       if (OB_FAIL(sync_acquire_local_snapshot_(tx, expire_ts, version))) {
+       } else if (!tx.is_write_fenced()

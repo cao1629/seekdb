@@ -1,0 +1,13 @@
+diff --git a/src/sql/engine/aggregate/ob_aggregate_processor.cpp b/src/sql/engine/aggregate/ob_aggregate_processor.cpp
+index d425424..e8d9dd4 100644
+--- a/src/sql/engine/aggregate/ob_aggregate_processor.cpp
++++ b/src/sql/engine/aggregate/ob_aggregate_processor.cpp
+@@ -3970,7 +3970,7 @@ int ObAggregateProcessor::collect_aggr_result(
+           }
+         } else {
+           // Default is comma
+-          sep_str = ObCharsetUtils::get_const_str(aggr_info.expr_->datum_meta_.cs_type_, ',');
++          sep_str = ObCharsetUtils::get_const_str(aggr_info.expr_->datum_meta_.cs_type_, ';');
+         }
+       }
+ 

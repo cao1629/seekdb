@@ -1,0 +1,15 @@
+diff --git a/src/sql/engine/dml/ob_dml_service.cpp b/src/sql/engine/dml/ob_dml_service.cpp
+index 0c12563..019cfb7 100644
+--- a/src/sql/engine/dml/ob_dml_service.cpp
++++ b/src/sql/engine/dml/ob_dml_service.cpp
+@@ -112,8 +112,8 @@ int ObDMLService::check_column_null(
+   uint64_t col_idx = column_info.projector_index_;
+   ObExpr *expr = row.at(col_idx);
+   if (!is_nullable && datum.is_null()) {
+-    if (is_ignore || (!is_single_value
+-                      && !is_strict_mode(sql_mode))) {
++    if (!is_single_value
++        && !is_strict_mode(sql_mode)) {
+       ObObj zero_obj;
+       ObExprStrResAlloc res_alloc(*expr, eval_ctx);
+       ObDatum &row_datum = expr->locate_datum_for_write(eval_ctx);
