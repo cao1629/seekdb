@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 #import <UIKit/UIKit.h>
 #include "seekdb_ios.h"
+#include "../device_test_registry.h"
 #include "../sql_probe.h"
 
 /** Host one engine lifecycle and persist observable status inside the sandbox. */
@@ -19,7 +20,10 @@
 @property(nonatomic, strong) NSNumber *workingDirectoryRestored;
 @property(nonatomic, copy) NSString *initialWorkingDirectory;
 @property(nonatomic, copy) NSString *runID;
-@property(nonatomic) BOOL sqlStarted;
+@property(nonatomic, copy) NSString *testSuite;
+@property(nonatomic, copy) NSString *testFilter;
+@property(nonatomic, strong) NSNumber *suiteResult;
+@property(nonatomic) BOOL verificationStarted;
 @end
 
 @implementation ProbeDelegate
@@ -29,6 +33,8 @@
   self.documents = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject;
   self.initialWorkingDirectory = NSFileManager.defaultManager.currentDirectoryPath;
   self.runID = NSProcessInfo.processInfo.environment[@"SEEKDB_IOS_TEST_RUN_ID"] ?: @"ordinary-run";
+  self.testSuite = NSProcessInfo.processInfo.environment[@"SEEKDB_IOS_TEST_SUITE"];
+  self.testFilter = NSProcessInfo.processInfo.environment[@"SEEKDB_IOS_TEST_FILTER"] ?: @"*";
   NSString *requestedName = NSProcessInfo.processInfo.environment[@"SEEKDB_PROBE_DATA_NAME"];
   NSCharacterSet *invalid = [[NSCharacterSet characterSetWithCharactersInString:
       @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-"] invertedSet];
@@ -61,6 +67,34 @@
   thread.name = @"seekdb-ios-probe";
   thread.stackSize = 8 * 1024 * 1024;
   [thread start];
+}
+
+/** Run the explicitly selected device suite and persist run-scoped JSONL evidence. */
+- (void)verifyDeviceSuite
+{
+  @autoreleasepool {
+    NSCharacterSet *invalid = [[NSCharacterSet characterSetWithCharactersInString:
+        @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-"] invertedSet];
+    BOOL validRunID = self.runID.length > 0 && self.runID.length <= 64 &&
+        [self.runID rangeOfCharacterFromSet:invalid].location == NSNotFound;
+    int result = 2;
+    if (validRunID) {
+      NSString *name = [NSString stringWithFormat:@"device-test-%@.jsonl", self.runID];
+      NSString *report = [self.documents stringByAppendingPathComponent:name];
+      seekdb::ios_test::DeviceTestRegistry registry = seekdb::ios_test::make_smoke_registry();
+      result = seekdb::ios_test::run_device_suite(
+          registry, self.testSuite.UTF8String, self.testFilter.UTF8String, self.runID.UTF8String,
+          seekdb_ios_get_build_id(), report.fileSystemRepresentation);
+    }
+    NSLog(@"Device suite returned %d", result);
+    dispatch_async(dispatch_get_main_queue(), ^{
+      self.suiteResult = @(result);
+      [self refreshStatus];
+      if ([NSProcessInfo.processInfo.environment[@"SEEKDB_PROBE_AUTO_STOP"] isEqualToString:@"1"]) {
+        [self stopEngine];
+      }
+    });
+  }
 }
 
 /** Run once, reporting the engine return code back on the UI thread. */
@@ -115,21 +149,24 @@
   NSInteger state = seekdb_ios_get_state();
   UIApplication.sharedApplication.idleTimerDisabled =
       state != SEEKDB_IOS_STOPPED && state != SEEKDB_IOS_FAILED;
-  if (state == SEEKDB_IOS_RUNNING && !self.sqlStarted) {
-    self.sqlStarted = YES;
-    NSThread *thread = [[NSThread alloc] initWithTarget:self selector:@selector(verifySQL) object:nil];
+  if (state == SEEKDB_IOS_RUNNING && !self.verificationStarted) {
+    self.verificationStarted = YES;
+    SEL selector = self.testSuite.length > 0 ? @selector(verifyDeviceSuite) : @selector(verifySQL);
+    NSThread *thread = [[NSThread alloc] initWithTarget:self selector:selector object:nil];
     thread.stackSize = 8 * 1024 * 1024;
     [thread start];
   }
   NSArray *names = @[@"Idle", @"Starting", @"Running", @"Stopping", @"Stopped", @"Failed"];
   NSString *name = state >= 0 && state < (NSInteger)names.count ? names[state] : @"Unknown";
-  self.statusLabel.text = [NSString stringWithFormat:@"seekdb iOS probe\n%@\nEngine: %@\nSQL: %@\nPrevious runs: %@",
-                          name, self.result ?: @"pending", self.sqlResult ?: @"pending", self.previousRuns ?: @"pending"];
+  self.statusLabel.text = [NSString stringWithFormat:@"seekdb iOS probe\n%@\nEngine: %@\nSQL: %@\nSuite: %@\nPrevious runs: %@",
+                          name, self.result ?: @"pending", self.sqlResult ?: @"pending",
+                          self.suiteResult ?: @"not selected", self.previousRuns ?: @"pending"];
   NSDictionary *status = @{@"state": name, @"result": self.result ?: NSNull.null, @"data_name": self.dataName,
                            @"build_id": [NSString stringWithUTF8String:seekdb_ios_get_build_id()],
                            @"hook_mode": [NSString stringWithUTF8String:seekdb_ios_get_hook_mode()],
                            @"sql_verified": @(self.sqlResult != nil && self.sqlResult.intValue == 0),
                            @"sql_result": self.sqlResult ?: NSNull.null,
+                           @"suite_result": self.suiteResult ?: NSNull.null,
                            @"previous_runs": self.previousRuns ?: NSNull.null,
                            @"cleanup_status": self.cleanupStatus ?: NSNull.null,
                            @"cleanup_error": self.cleanupError ?: NSNull.null,

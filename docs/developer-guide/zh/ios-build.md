@@ -4,6 +4,10 @@
 
 分层测试方案已开始实施。Phase 1 已完成物理真机验收：确定性初始化失败在 iPhone 上保留主错误 `-4016`，同时完成 server、curl 和工作目录三项清理，`cleanup_error=0`、`cleanup_status=7`，并确认运行 ID、源码 build ID 和 hook mode 与本次 App 一致。随后关闭 `SEEKDB_IOS_TEST_HOOKS` 全量重建，普通 App 在同一数据目录连续完成两轮 36 步通用 SQL、干净停止和持久化恢复，`previous_runs` 为 0、1；三轮执行均未产生新的 seekdb 崩溃或 Jetsam 报告。英文设计见 [iOS Layered Test Strategy Design](../../ios-layered-test-strategy-design.md)，清单格式见 [iOS Test Inventory Schema](../../ios-test-inventory-schema.md)。
 
+测试 App 现提供显式 device registry 模式。主机启动时同时设置 `SEEKDB_IOS_TEST_SUITE`、`SEEKDB_IOS_TEST_FILTER` 和唯一 `SEEKDB_IOS_TEST_RUN_ID`；App 在引擎 Running 后执行匹配 case，并把 `run_start`、`case_start`、逐项 assertion、`case_end`、`run_complete` 依次追加到 run-scoped JSONL，每条写入后立即 flush。`run_device_suite.py` 只复制 allowlist JSONL 和固定生命周期状态，并校验 run/build identity、suite/filter、独立预期 case 覆盖、重复或缺失完成事件、device origin、非零结果及最终干净停止；原始 `devicectl` 元数据不写入仓库证据。runner 显式选择最多 64 字符的独立数据目录，避免继承默认旧目录。没有 suite 环境变量的普通启动仍执行原 36 步 SQL。
+
+2026-09-24 真机验收已完成：`ios.registry.smoke` 在独立数据目录产生完整的 6 条事件序列，case/result 均为 0；随后 App 达到 `Stopped/result=0`、`suite_result=0`、`cleanup_status=7`、`cleanup_error=0` 且工作目录恢复。普通模式在另一个新目录执行 36 步 SQL 后干净停止，重启同一目录再次完成 36 步并读回 `previous_runs=1`；两轮 JSONL 均为 36 个成功 step 加最终 `complete/result=0`。主机 45 项 iOS Python 契约、iphoneos compile-only、未签名和签名 App 完整链接、codesign、安装均通过；smoke 与 SQL/restart 后未发现新增相关 crash/Jetsam 报告。自动签名因 Xcode 当前没有登录账号而不可用，本次仅复用本机已存在并经 bundle、设备范围、有效期、证书私钥校验的开发描述文件手工签名；账号、Team ID、证书和设备唯一标识均未写入仓库证据。
+
 `build.iphone.sh` 为 iPhone ARM64 和 Apple Silicon iOS 模拟器配置 CMake、Rust 和 Apple SDK。默认目标是 `oceanbase_static`。目前不是已完成的 iOS 产品构建流程；脚本不生成、签名或安装 App。
 
 完整环境设置、逐文件修改原因和失败尝试见 [iOS 移植变更记录](ios-change-log.md)。后续环境、源码和 CMake 变更必须同步追加该记录，并区分已验证与待验证。

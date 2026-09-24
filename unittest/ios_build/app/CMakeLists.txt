@@ -6,12 +6,20 @@ endif()
 if(NOT EXISTS "${ENGINE_LINK_RESPONSE}" OR NOT DEVELOPMENT_TEAM)
   message(FATAL_ERROR "Provide ENGINE_LINK_RESPONSE and DEVELOPMENT_TEAM")
 endif()
-add_executable(SeekDBProbe MACOSX_BUNDLE main.mm)
-target_include_directories(SeekDBProbe PRIVATE "${CMAKE_CURRENT_LIST_DIR}/../../../src/observer/ios")
-target_compile_options(SeekDBProbe PRIVATE -fobjc-arc)
+add_executable(SeekDBProbe MACOSX_BUNDLE
+  main.mm
+  ../device_evidence.cpp
+  ../device_test_registry.cpp)
+target_include_directories(SeekDBProbe PRIVATE
+  "${CMAKE_CURRENT_LIST_DIR}/.."
+  "${CMAKE_CURRENT_LIST_DIR}/../../../src/observer/ios")
+target_compile_options(SeekDBProbe PRIVATE $<$<COMPILE_LANGUAGE:OBJCXX>:-fobjc-arc>)
 target_link_options(SeekDBProbe PRIVATE "@${ENGINE_LINK_RESPONSE}")
 target_link_libraries(SeekDBProbe PRIVATE "-framework UIKit")
 set_target_properties(SeekDBProbe PROPERTIES
+  CXX_STANDARD 17
+  CXX_STANDARD_REQUIRED YES
+  CXX_EXTENSIONS NO
   MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_LIST_DIR}/Info.plist.in"
   MACOSX_BUNDLE_GUI_IDENTIFIER "${PROBE_BUNDLE_ID}"
   XCODE_ATTRIBUTE_PRODUCT_BUNDLE_IDENTIFIER "${PROBE_BUNDLE_ID}"

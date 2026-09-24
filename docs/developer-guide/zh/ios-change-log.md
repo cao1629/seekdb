@@ -6,6 +6,17 @@
 
 后续每次环境设置、源码、构建脚本或 CMake 变更，同步记录日期、文件/设置、原因、具体参数、影响范围、复现命令、验证结果和剩余问题。失败尝试及撤销原因也保留。按独立功能提交时补充 commit ID，不把机器缓存、证书或密钥提交到仓库。日志与生成产物保存在仓库内；本记录及构建脚本纳入版本控制。
 
+## 2026-09-24：device registry 与结构化证据协议
+
+- 新增 `device_test_registry.{h,cpp}`：case 使用稳定字符串 ID、suite 和逐 case timeout metadata 注册；注册表拒绝无效或重复 ID，按 ID 排序，并支持 suite 加 glob filter 的确定性选择。内置 `ios.registry.smoke` 仅验证设备回调和 assertion 记录，不替代后续真实 C++、Rust、SQL、vector 或 lifecycle case。
+- 新增 `device_evidence.{h,cpp}`：设备端 JSONL writer 以 append 模式写入 run-scoped 文件，每条记录均包含 device origin、run ID 和链接引擎 build ID，并在继续执行前 flush。事件顺序为 `run_start`、`case_start`、零个或多个执行中的 assertion、`case_end`、最终 `run_complete`；当前 smoke 至少产生一个 assertion。
+- UIKit App 仅在显式提供 `SEEKDB_IOS_TEST_SUITE` 时进入 registry；同时读取 `SEEKDB_IOS_TEST_FILTER` 和 `SEEKDB_IOS_TEST_RUN_ID`，对 run ID 做字符和长度约束，证据文件固定为 `Documents/device-test-<run-id>.jsonl`。普通 launch 不设置 suite，仍执行既有 36 步 SQL 路径。CMake 仅增加两个 registry/evidence C++17 源文件，并把 ARC 编译选项限制到 Objective-C++。
+- 新增主机 runner `run_device_suite.py`：启动已安装 App，只复制 allowlist JSONL；校验 run/build identity、suite/filter、独立预期 registry 覆盖、case timeout metadata、完整且无重复的事件序列、device-authored assertions 及零结果，并检查本机同步目录中新增的相关 crash/Jetsam 报告。`devicectl` 原始输出只保留在进程内存，不写入仓库证据目录。
+- TDD 初始 RED 由缺失 registry、runner 与 App/CMake 接线触发。第一次真机启动又暴露 runner 继承默认旧数据目录，导致引擎在 Running 前返回 `-4109`；cleanup 仍为完整的 `status=7/error=0`，且没有新 crash/Jetsam。新增数据目录名称 RED 契约后，runner 默认选择独立 `ios-device-tests`，只接受 1 至 64 个字母、数字、下划线或连字符。随后又增加终态 RED 契约，要求 JSONL 完成后继续等待当前 run/build 达到 `Stopped/result=0`、`suite_result=0`、完整 cleanup 和工作目录恢复。
+- 最终 focused 10 项和完整 iOS host suite 45 项通过。使用 iphoneos SDK 对新 C++ 与 Objective-C++ 源做 compile-only 检查通过，CMake/Xcode 未签名 Release App 完整链接通过。当前提交身份的 `seekdb_ios_link_check` 增量构建通过；Rust host build-script 仍需使用本地忽略目录的 LLDB wrapper 绕过既有 macOS SIGKILL 限制，该 wrapper 不是项目接口或提交内容。
+- Xcode 当前没有登录账号，自动 provisioning 正确失败。随后只在内存中选择唯一 booted/wired 真机，并复用本机现有开发描述文件；脚本核验 bundle、物理设备 provisioning identity、有效期、证书及钥匙串私钥匹配后完成手工 codesign、严格验签和安装。任何 Team、证书、profile、账号或设备唯一标识均未写入仓库证据。
+- `ios.registry.smoke` 真机执行产生 `run_start`、`case_start`、1 条通过 assertion、`case_end` 和 `run_complete`，case/run result 为 0；App 随后达到 `Stopped/result=0`、`suite_result=0`、`cleanup_status=7`、`cleanup_error=0`，工作目录恢复。普通模式使用另一新数据目录完成 36 步 SQL 并干净停止；重启同一目录再次完成 36 步，持久计数从首轮 0 读回为 1。两轮报告均为 36 个成功 step 与最终 `complete/result=0`，且未发现新增相关 crash/Jetsam 报告。
+
 ## 2026-09-24：分层测试 Phase 1 启动失败清理
 
 - 新增受 Git 跟踪的英文设计 `docs/ios-layered-test-strategy-design.md` 和清单格式 `docs/ios-test-inventory-schema.md`。三类执行位置为 device-native、host-driven-device 和 host-only；交叉编译或主机脚本通过不计作真机通过。
