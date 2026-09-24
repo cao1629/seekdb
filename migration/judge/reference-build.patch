@@ -1,0 +1,22 @@
+diff --git a/cmake/Env.cmake b/cmake/Env.cmake
+index 8cf78d6fe..c8d3d083c 100644
+--- a/cmake/Env.cmake
++++ b/cmake/Env.cmake
+@@ -73,6 +73,8 @@ if(WITH_COVERAGE)
+   set(FILE_PREFIX "")
+ endif()
+ 
++add_compile_options(-ffp-contract=off)
++
+ ob_define(AUTO_FDO_OPT "")
+ if(ENABLE_AUTO_FDO)
+   if( ${ARCHITECTURE} STREQUAL "x86_64" )
+@@ -199,7 +201,7 @@ elseif(APPLE)
+   # extract major version like 15.6.1 -> 15
+   string(REPLACE "." ";" MACOS_VERSION_LISTS "${MACOS_VERSION}")
+   list(GET MACOS_VERSION_LISTS 0 MACOS_MAJOR)
+-  if(MACOS_MAJOR GREATER_EQUAL 27)
++  if(FALSE AND MACOS_MAJOR GREATER_EQUAL 27)
+     include("${CMAKE_CURRENT_LIST_DIR}/MacOS27.cmake")
+   endif()
+   if(MACOS_MAJOR LESS 15)

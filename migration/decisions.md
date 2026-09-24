@@ -28,6 +28,11 @@ Gate A (Decisions 1-9) is complete as of 2026-09-24.
 | 16 | Which Rust toolchain? | (a) One pinned stable toolchain (1.98.1 today) for everything; no nightly features in shared code; allocator-api2 rather than the nightly allocator_api. wasm gets its own pinned nightly when it comes back into scope. | 2026-09-24 | Reopen only if Step 2a measures per-crate checks above about 60 s and -Zthreads would bring them under. |
 | 17 | Does the machine need to grow? | (a) Keep the Mac as it is (14 cores, 24 GiB RAM, 33 GiB free disk on 2026-09-24 after the coverage build). | 2026-09-24 | Risk to watch: the Rust target directory is assumed to need 20-60 GB, next to the C++ build directories and the judge's data. |
 
+| # | Question | Answer | Date | Notes |
+|---|---|---|---|---|
+| 4a | PLAN.md section 8, item 7: model roles Decision 4 left open | The three hardest fixing roles move to Claude Fable 5.1: Step 5's hardest bootstrap sessions, Step 6's plan-text and float clusters, and Step 6's judge or comparator bugs. The five support roles the report gave Sonnet 5 (00b corpus generation, mutation injection and log triage; the 02 mechanical classifiers; Step 6 triage) run on Opus 5.5, as PLAN.md reads Decision 4. | 2026-09-24 | Amends Decision 4's text ("Opus 5.5 for every fixer") for these three roles. |
+| 3a | PLAN.md section 8, item 2: which toolchain builds the C++ reference | (b) The plan's default: reference-build.patch skips the MacOS27.cmake include and adds `-ffp-contract=off`; the build uses deps/3rd's Clang 17.0.6 with SDK 26.2 (SDKROOT=/Library/Developer/CommandLineTools/SDKs/MacOSX26.2.sdk). | 2026-09-24 | Tested the same day without the flag: 834bbee1e built in 317 s, `seekdb -V` reports 834bbee1e. |
+
 Gates B (Decisions 10-16) and C (Decision 17) are complete as of 2026-09-24.
 
 ## Corrections to the feasibility report
