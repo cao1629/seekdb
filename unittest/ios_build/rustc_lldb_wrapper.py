@@ -2,6 +2,7 @@
 """Run rustc and safely launch new macOS Cargo build scripts through LLDB."""
 
 import hashlib
+import json
 import os
 from pathlib import Path
 import re
@@ -224,6 +225,313 @@ def _launcher_source(real_build_script: Path) -> str:
     )
 
 
+def _fsync_directory(directory: Path) -> None:
+    """Persist directory-entry changes for one completed transaction step."""
+    descriptor = os.open(str(directory), os.O_RDONLY)
+    try:
+        os.fsync(descriptor)
+    finally:
+        os.close(descriptor)
+
+
+def _file_digest(path: Path) -> str:
+    """Return the SHA-256 digest of one regular non-symlink file."""
+    status = path.lstat()
+    if stat.S_ISLNK(status.st_mode) or not stat.S_ISREG(status.st_mode):
+        raise WrapperError("build-script transaction file is unsafe")
+    digest = hashlib.sha256()
+    with path.open("rb") as stream:
+        for block in iter(lambda: stream.read(1024 * 1024), b""):
+            digest.update(block)
+    return digest.hexdigest()
+
+
+def _fsync_file(path: Path) -> None:
+    """Persist one regular file before its durable transaction begins."""
+    if path.is_symlink() or not path.is_file():
+        raise WrapperError("build-script transaction file is unsafe")
+    descriptor = os.open(str(path), os.O_RDONLY)
+    try:
+        os.fsync(descriptor)
+    finally:
+        os.close(descriptor)
+
+
+def _optional_digest(path: Path) -> Optional[str]:
+    """Return a safe file digest, or None when the path does not exist."""
+    if not os.path.lexists(path):
+        return None
+    return _file_digest(path)
+
+
+def _is_exact_launcher(build_script: Path, real_build_script: Path) -> bool:
+    """Return whether a regular executable is the tracked exact launcher."""
+    try:
+        status = build_script.lstat()
+        if (stat.S_ISLNK(status.st_mode) or not stat.S_ISREG(status.st_mode)
+                or status.st_mode & 0o111 == 0):
+            return False
+        return build_script.read_text(encoding="utf-8") == _launcher_source(
+            real_build_script)
+    except (OSError, UnicodeError):
+        return False
+
+
+def _rewrap_manifest_path(build_script: Path) -> Path:
+    """Return the deterministic transaction manifest for one Cargo unit."""
+    return build_script.with_name(f".{build_script.name}.rewrap.json")
+
+
+def _write_rewrap_manifest(
+        path: Path, record: Mapping[str, str],
+        *, replace_existing: bool = False) -> None:
+    """Atomically persist a validated rewrap transaction before any rename."""
+    if os.path.lexists(path) != replace_existing:
+        raise WrapperError("build-script rewrap transaction already exists")
+    if replace_existing and (path.is_symlink() or not path.is_file()):
+        raise WrapperError("build-script rewrap manifest is unsafe")
+    temporary = None
+    try:
+        with tempfile.NamedTemporaryFile(
+                mode="w", encoding="utf-8", dir=path.parent,
+                prefix=f".{path.name}.tmp-", delete=False) as stream:
+            temporary = Path(stream.name)
+            json.dump(record, stream, sort_keys=True)
+            stream.write("\n")
+            stream.flush()
+            os.fsync(stream.fileno())
+        os.replace(temporary, path)
+        temporary = None
+        _fsync_directory(path.parent)
+    finally:
+        if temporary is not None:
+            try:
+                temporary.unlink()
+            except FileNotFoundError:
+                pass
+
+
+def _read_rewrap_manifest(
+        build_script: Path, manifest: Path) -> Mapping[str, str]:
+    """Load one transaction while rejecting paths outside the unit directory."""
+    try:
+        if manifest.is_symlink() or not manifest.is_file():
+            raise WrapperError("build-script rewrap manifest is unsafe")
+        record = json.loads(manifest.read_text(encoding="utf-8"))
+    except (OSError, UnicodeError, json.JSONDecodeError) as error:
+        raise WrapperError("build-script rewrap manifest is invalid") from error
+    required = {
+        "schema", "state", "build_script", "real", "backup",
+        "launcher_temporary", "old_digest", "new_digest",
+    }
+    if (not isinstance(record, dict) or set(record) != required
+            or record.get("schema") != "seekdb-rustc-lldb-rewrap-v1"
+            or record.get("state") not in {"prepared", "ready"}
+            or record.get("build_script") != build_script.name
+            or record.get("real") != f"{build_script.name}.real"):
+        raise WrapperError("build-script rewrap manifest is invalid")
+    backup = record.get("backup")
+    launcher_temporary = record.get("launcher_temporary")
+    if (not isinstance(backup, str) or Path(backup).name != backup
+            or re.fullmatch(
+                rf"[.]{re.escape(build_script.name)}[.]previous-"
+                r"[0-9a-f]{16}[.]real", backup) is None
+            or launcher_temporary
+            != f".{build_script.name}.launcher.tmp"):
+        raise WrapperError("build-script rewrap manifest path is unsafe")
+    if re.fullmatch(r"[0-9a-f]{64}", str(record.get("old_digest"))) is None:
+        raise WrapperError("build-script rewrap manifest is invalid")
+    new_digest = record.get("new_digest")
+    if ((record["state"] == "prepared" and new_digest != "")
+            or (record["state"] == "ready" and re.fullmatch(
+                r"[0-9a-f]{64}", str(new_digest)) is None)):
+        raise WrapperError("build-script rewrap manifest is invalid")
+    return record
+
+
+def _write_transaction_launcher(path: Path, real_build_script: Path) -> None:
+    """Create or validate the deterministic durable launcher temporary."""
+    source = _launcher_source(real_build_script)
+    if os.path.lexists(path):
+        try:
+            status = path.lstat()
+            if (stat.S_ISLNK(status.st_mode)
+                    or not stat.S_ISREG(status.st_mode)
+                    or path.read_text(encoding="utf-8") != source):
+                raise WrapperError("build-script launcher temporary is unsafe")
+        except (OSError, UnicodeError) as error:
+            raise WrapperError(
+                "build-script launcher temporary is unsafe") from error
+        return
+    descriptor = os.open(
+        str(path), os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o755)
+    try:
+        os.fchmod(descriptor, 0o755)
+        with os.fdopen(descriptor, "w", encoding="utf-8") as stream:
+            stream.write(source)
+            stream.flush()
+            os.fsync(stream.fileno())
+    except BaseException:
+        try:
+            path.unlink()
+        except FileNotFoundError:
+            pass
+        raise
+
+
+def _recover_rewrap(
+        build_script: Path, *, promote_prepared: bool = True) -> None:
+    """Complete a durable healthy-pair refresh or reject uncertain state."""
+    manifest = _rewrap_manifest_path(build_script)
+    if not os.path.lexists(manifest):
+        return
+    record = _read_rewrap_manifest(build_script, manifest)
+    real = build_script.with_name(record["real"])
+    backup = build_script.with_name(record["backup"])
+    launcher_temporary = build_script.with_name(
+        record["launcher_temporary"])
+    old_digest = record["old_digest"]
+    new_digest = record["new_digest"]
+    if record["state"] == "prepared":
+        if (os.path.lexists(backup) or os.path.lexists(launcher_temporary)
+                or _optional_digest(real) != old_digest):
+            raise WrapperError("prepared build-script transaction is inconsistent")
+        if _is_exact_launcher(build_script, real):
+            manifest.unlink()
+            _fsync_directory(build_script.parent)
+            return
+        if (promote_prepared and os.path.lexists(build_script)
+                and _is_host_macho_executable(build_script)):
+            new_digest = _file_digest(build_script)
+            ready_record = dict(record)
+            ready_record["state"] = "ready"
+            ready_record["new_digest"] = new_digest
+            _fsync_file(build_script)
+            _write_rewrap_manifest(
+                manifest, ready_record, replace_existing=True)
+        else:
+            if os.path.lexists(build_script):
+                status = build_script.lstat()
+                if (stat.S_ISLNK(status.st_mode)
+                        or not stat.S_ISREG(status.st_mode)):
+                    raise WrapperError(
+                        "prepared build-script output is unsafe")
+            _write_transaction_launcher(launcher_temporary, real)
+            os.replace(launcher_temporary, build_script)
+            _fsync_directory(build_script.parent)
+            manifest.unlink()
+            _fsync_directory(build_script.parent)
+            return
+    for _step in range(4):
+        build_digest = _optional_digest(build_script)
+        real_digest = _optional_digest(real)
+        backup_digest = _optional_digest(backup)
+        if (_is_exact_launcher(build_script, real)
+                and real_digest == new_digest
+                and backup_digest == old_digest):
+            if os.path.lexists(launcher_temporary):
+                raise WrapperError("build-script transaction has stale temporary")
+            manifest.unlink()
+            _fsync_directory(build_script.parent)
+            return
+        if (build_digest == new_digest and real_digest == old_digest
+                and backup_digest is None):
+            os.replace(real, backup)
+            _fsync_directory(build_script.parent)
+            continue
+        if (build_digest == new_digest and real_digest is None
+                and backup_digest == old_digest):
+            os.replace(build_script, real)
+            _fsync_directory(build_script.parent)
+            continue
+        if (build_digest is None and real_digest == new_digest
+                and backup_digest == old_digest):
+            _write_transaction_launcher(launcher_temporary, real)
+            os.replace(launcher_temporary, build_script)
+            _fsync_directory(build_script.parent)
+            continue
+        raise WrapperError("build-script rewrap transaction is inconsistent")
+    raise WrapperError("build-script rewrap transaction did not complete")
+
+
+def _healthy_pair_state(build_script: Path) -> Optional[Mapping[str, object]]:
+    """Validate the expected precompile unit and describe a healthy pair."""
+    real = build_script.with_name(f"{build_script.name}.real")
+    build_exists = os.path.lexists(build_script)
+    real_exists = os.path.lexists(real)
+    if build_exists and real_exists:
+        if (not _is_exact_launcher(build_script, real)
+                or not _is_host_macho_executable(real)):
+            raise WrapperError("build-script precompile pair is damaged")
+        return {
+            "launcher_identity": _file_identity(build_script),
+            "real_identity": _file_identity(real),
+            "real_digest": _file_digest(real),
+        }
+    if real_exists:
+        raise WrapperError("build-script precompile preserved state is stale")
+    if build_exists:
+        if build_script.is_symlink():
+            raise WrapperError("build-script precompile output is unsafe")
+        try:
+            source = build_script.read_text(encoding="utf-8")
+            if (source == _launcher_source(real)
+                    or "--run-build-script" in source):
+                raise WrapperError("build-script precompile launcher is damaged")
+        except UnicodeError:
+            pass
+    return None
+
+
+def _refresh_healthy_pair(
+        build_script: Path, prestate: Mapping[str, object]) -> None:
+    """Transactionally replace a healthy pair after rustc refreshes its raw."""
+    real = build_script.with_name(f"{build_script.name}.real")
+    if (not os.path.lexists(build_script) or build_script.is_symlink()
+            or not _is_host_macho_executable(build_script)
+            or _file_identity(build_script) == prestate["launcher_identity"]
+            or not os.path.lexists(real)
+            or _file_identity(real) != prestate["real_identity"]):
+        raise WrapperError("rustc did not safely refresh the healthy pair")
+    old_digest = str(prestate["real_digest"])
+    new_digest = _file_digest(build_script)
+    manifest = _rewrap_manifest_path(build_script)
+    record = _read_rewrap_manifest(build_script, manifest)
+    if (record["state"] != "prepared"
+            or record["old_digest"] != old_digest):
+        raise WrapperError("build-script rewrap intent is incompatible")
+    _fsync_file(build_script)
+    ready_record = dict(record)
+    ready_record["state"] = "ready"
+    ready_record["new_digest"] = new_digest
+    _write_rewrap_manifest(manifest, ready_record, replace_existing=True)
+    _recover_rewrap(build_script)
+
+
+def _prepare_healthy_pair(
+        build_script: Path, prestate: Mapping[str, object]) -> None:
+    """Persist healthy precompile identity before rustc can replace it."""
+    transaction_digest = hashlib.sha256(repr((
+        prestate["launcher_identity"], prestate["real_identity"],
+    )).encode("utf-8")).hexdigest()[:16]
+    backup_name = f".{build_script.name}.previous-{transaction_digest}.real"
+    launcher_temporary_name = f".{build_script.name}.launcher.tmp"
+    if (os.path.lexists(build_script.with_name(backup_name))
+            or os.path.lexists(build_script.with_name(
+                launcher_temporary_name))):
+        raise WrapperError("build-script rewrap destination is occupied")
+    _write_rewrap_manifest(_rewrap_manifest_path(build_script), {
+        "schema": "seekdb-rustc-lldb-rewrap-v1",
+        "state": "prepared",
+        "build_script": build_script.name,
+        "real": f"{build_script.name}.real",
+        "backup": backup_name,
+        "launcher_temporary": launcher_temporary_name,
+        "old_digest": str(prestate["real_digest"]),
+        "new_digest": "",
+    })
+
+
 def _replace_with_launcher(build_script: Path) -> None:
     """Atomically preserve one real build script and install its launcher."""
     if not _is_host_macho_executable(build_script):
@@ -271,19 +579,34 @@ def compile_and_wrap(arguments: Sequence[str]) -> int:
         if crate_name == "build_script_build" and extra_filename else None)
     output_directory = None
     previous_snapshot = {}
+    healthy_prestate = None
     path_error = None
     if crate_name == "build_script_build":
         try:
             if output_value is None:
                 raise WrapperError("build-script output directory is missing")
             output_directory = _canonical_output_directory(output_value)
+            if expected_name is not None:
+                expected = output_directory / expected_name
+                _recover_rewrap(expected)
+                healthy_prestate = _healthy_pair_state(expected)
             previous_snapshot = _candidate_snapshot(
                 output_directory, expected_name)
         except WrapperError as error:
             path_error = error
+    if path_error is not None:
+        raise path_error
+    healthy_transaction = (
+        healthy_prestate is not None and sys.platform == "darwin")
+    if healthy_transaction:
+        _prepare_healthy_pair(
+            output_directory / expected_name, healthy_prestate)
     compile_result = subprocess.run(
         [real_rustc, *rustc_arguments], check=False)
     if compile_result.returncode != 0:
+        if healthy_transaction:
+            _recover_rewrap(
+                output_directory / expected_name, promote_prepared=False)
         if compile_result.returncode < 0:
             return 128 - compile_result.returncode
         return compile_result.returncode
@@ -291,8 +614,10 @@ def compile_and_wrap(arguments: Sequence[str]) -> int:
         return 0
     if crate_name != "build_script_build":
         return 0
-    if path_error is not None:
-        raise path_error
+    if healthy_prestate is not None:
+        _refresh_healthy_pair(
+            output_directory / expected_name, healthy_prestate)
+        return 0
     build_script = _new_build_script(
         output_directory, previous_snapshot, expected_name)
     if build_script is not None:

@@ -34,6 +34,7 @@
 - wrapped Cargo unit 完整性继续绑定 crate unit hash：final 与 hashed launcher 必须同时指向当前 `<crate-hash>` 对应的精确 `build_script_build-<hash>.real`，且 `.real` 仍为 regular、non-symlink host Mach-O。两个 launcher 共同误指另一 hash 的 valid `.real` 不再误判为 healthy，而是迁移当前 unit 后强制重建；新增 mismatch 回归。未运行 iOS build 或真机。
 - phase command environment 统一绑定完整 Xcode：`_default_executor` 现在复制当前环境，保留显式有效 `DEVELOPER_DIR`，仅在缺失时选择默认完整 Xcode，并在命令前验证 devicectl、LLDB、iphoneos SDK。该冻结环境传给所有 phase subprocess，尤其 reuse-build 的 codesign/devicectl install，不再隐式回退 CommandLineTools；无效选择固定返回 `build-inputs`，probe 输出不外泄。新增 executor env、显式选择、reuse install 和固定错误码回归；未运行 iOS build 或真机。
 - phase engine 不再在 dispatch 前批量 terminalize 所有 missing adapter。case spec 仍可预登记，但 engine 严格按 `PHASE_IDS` 执行：先完成已注册 stages 1–4，到第一个 missing stage 5 时只落一个 infrastructure failure 并停止，stages 6–8 保持 pending；resume 跳过已通过的前四阶段并只重试 stage 5。新增顺序、状态、单 failure artifact 与 resume skip/attempt 集成回归；未运行 iOS build 或真机。
+- LLDB rustc wrapper 现在区分 stale raw + `.real` 与可正常重编译的 healthy exact launcher + matching `.real`。后者在 rustc 前先 durable 记录 pair identity/digest 的 prepared intent，成功刷新 raw 后推进为 ready manifest：旧 `.real` 保留到 identity-scoped backup，新 raw 转为 `.real` 后重新安装 launcher，所有 rename 都 fsync；rustc 普通失败恢复旧 launcher，wrapper 在 compiler 后或 partial rename 窗口中断则按 old/new digest 完成恢复，未知、损坏或 collision 状态继续 fail-closed。synthetic stale 回归仍返回 125；故障注入覆盖 post-compiler 与 partial rename 恢复；本机真实 arm64 Mach-O 连续两次不同 binary 编译均成功，第二个 launcher 经 LLDB 实际执行新 binary。未运行 iOS build 或真机。
 
 ## 2026-09-24：Rust runtime tests 的真机入口
 

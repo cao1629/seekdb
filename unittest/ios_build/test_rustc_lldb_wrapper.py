@@ -12,6 +12,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from unittest import mock
 
 
 SCRIPT_DIR = Path(__file__).resolve().parent
@@ -49,7 +50,7 @@ class RustcLldbWrapperTest(unittest.TestCase):
         return compiler
 
     def test_compiles_first_then_wraps_only_new_strict_macho_output(self):
-        """Preserve old files and wrap one newly emitted host build script."""
+        """Wrap a refreshed healthy unit and retain its prior real binary."""
         with tempfile.TemporaryDirectory() as temporary_directory:
             root = Path(temporary_directory)
             output = root / "output with ' quote"
@@ -57,12 +58,18 @@ class RustcLldbWrapperTest(unittest.TestCase):
             old = output / "build_script_build-aaaa"
             old.write_bytes(_macho_executable_bytes())
             log = root / "rustc argv.json"
+            generation = root / "generation"
             compiler = self._write_compiler(root, (
                 "args = sys.argv[1:]\n"
                 f"pathlib.Path({str(log)!r}).write_text(json.dumps(args))\n"
                 "out = pathlib.Path(args[args.index('--out-dir') + 1])\n"
                 "target = out / 'build_script_build-deadbeef'\n"
-                f"target.write_bytes({_macho_executable_bytes()!r})\n"
+                f"generation = pathlib.Path({str(generation)!r})\n"
+                "number = int(generation.read_text()) + 1 "
+                "if generation.exists() else 1\n"
+                "generation.write_text(str(number))\n"
+                f"target.write_bytes({_macho_executable_bytes()!r} + "
+                "str(number).encode())\n"
                 "target.chmod(0o755)\n"))
 
             result = subprocess.run([
@@ -81,7 +88,7 @@ class RustcLldbWrapperTest(unittest.TestCase):
                 [argument for argument in compiler_arguments
                  if argument not in ("-C", "extra-filename=-deadbeef")])
             self.assertTrue(real.is_file())
-            self.assertEqual(_macho_executable_bytes(), real.read_bytes())
+            self.assertEqual(_macho_executable_bytes() + b"1", real.read_bytes())
             self.assertTrue(os.access(launcher, os.X_OK))
             self.assertIn(
                 "--run-build-script", launcher.read_text(encoding="utf-8"))
@@ -95,9 +102,159 @@ class RustcLldbWrapperTest(unittest.TestCase):
                 "-C", "extra-filename=-deadbeef",
                 "--out-dir", str(output),
             ], check=False, capture_output=True, text=True)
-            self.assertEqual(125, second.returncode)
-            self.assertEqual(_macho_executable_bytes(), launcher.read_bytes())
-            self.assertEqual(_macho_executable_bytes(), real.read_bytes())
+            self.assertEqual(0, second.returncode, second.stderr)
+            self.assertIn(
+                "--run-build-script", launcher.read_text(encoding="utf-8"))
+            self.assertEqual(_macho_executable_bytes() + b"2", real.read_bytes())
+            backups = list(output.glob(
+                ".build_script_build-deadbeef.previous-*.real"))
+            self.assertEqual(1, len(backups))
+            self.assertEqual(
+                _macho_executable_bytes() + b"1", backups[0].read_bytes())
+
+    def test_raw_output_with_existing_real_remains_fail_closed(self):
+        """Reject stale raw-plus-real state before invoking the compiler."""
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            output = root / "out"
+            output.mkdir()
+            raw = output / "build_script_build-deadbeef"
+            raw.write_bytes(_macho_executable_bytes())
+            raw.chmod(0o755)
+            preserved = raw.with_name(f"{raw.name}.real")
+            preserved.write_bytes(_macho_executable_bytes() + b"old")
+            preserved.chmod(0o755)
+            called = root / "called"
+            compiler = self._write_compiler(
+                root, f"pathlib.Path({str(called)!r}).touch()\n")
+
+            result = subprocess.run([
+                sys.executable, str(WRAPPER_PATH), str(compiler),
+                "--crate-name", "build_script_build",
+                "-C", "extra-filename=-deadbeef",
+                "--out-dir", str(output),
+            ], check=False)
+
+        self.assertEqual(125, result.returncode)
+        self.assertFalse(called.exists())
+
+    def test_interrupted_healthy_rewrap_recovers_without_losing_old_real(self):
+        """Resume a partial rename transaction and retain the old executable."""
+        wrapper = _load_wrapper_module()
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            output = Path(temporary_directory)
+            launcher = output / "build_script_build-deadbeef"
+            real = launcher.with_name(f"{launcher.name}.real")
+            old_bytes = _macho_executable_bytes() + b"old"
+            new_bytes = _macho_executable_bytes() + b"new"
+            real.write_bytes(old_bytes)
+            real.chmod(0o755)
+            launcher.write_text(
+                wrapper._launcher_source(real), encoding="utf-8")
+            launcher.chmod(0o755)
+            prestate = wrapper._healthy_pair_state(launcher)
+            wrapper._prepare_healthy_pair(launcher, prestate)
+            launcher.write_bytes(new_bytes)
+            launcher.chmod(0o755)
+            original_replace = os.replace
+            replace_count = 0
+
+            def interrupt_third_replace(source, destination):
+                """Crash after manifest commit and old-real quarantine."""
+                nonlocal replace_count
+                replace_count += 1
+                if replace_count == 3:
+                    raise OSError("simulated interruption")
+                return original_replace(source, destination)
+
+            with mock.patch.object(
+                    wrapper.os, "replace", side_effect=interrupt_third_replace):
+                with self.assertRaises(OSError):
+                    wrapper._refresh_healthy_pair(launcher, prestate)
+
+            wrapper._recover_rewrap(launcher)
+
+            backups = list(output.glob(
+                ".build_script_build-deadbeef.previous-*.real"))
+            self.assertEqual(1, len(backups))
+            self.assertEqual(old_bytes, backups[0].read_bytes())
+            self.assertEqual(new_bytes, real.read_bytes())
+            self.assertTrue(wrapper._is_exact_launcher(launcher, real))
+            self.assertFalse(wrapper._rewrap_manifest_path(launcher).exists())
+
+    def test_prepared_intent_recovers_when_wrapper_dies_after_rustc(self):
+        """Recover refreshed raw output using identity saved before rustc."""
+        wrapper = _load_wrapper_module()
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            output = Path(temporary_directory)
+            launcher = output / "build_script_build-deadbeef"
+            real = launcher.with_name(f"{launcher.name}.real")
+            old_bytes = _macho_executable_bytes() + b"old"
+            new_bytes = _macho_executable_bytes() + b"new"
+            real.write_bytes(old_bytes)
+            real.chmod(0o755)
+            launcher.write_text(
+                wrapper._launcher_source(real), encoding="utf-8")
+            launcher.chmod(0o755)
+            prestate = wrapper._healthy_pair_state(launcher)
+            wrapper._prepare_healthy_pair(launcher, prestate)
+
+            launcher.write_bytes(new_bytes)
+            launcher.chmod(0o755)
+            wrapper._recover_rewrap(launcher)
+
+            backups = list(output.glob(
+                ".build_script_build-deadbeef.previous-*.real"))
+            self.assertEqual(1, len(backups))
+            self.assertEqual(old_bytes, backups[0].read_bytes())
+            self.assertEqual(new_bytes, real.read_bytes())
+            self.assertTrue(wrapper._is_exact_launcher(launcher, real))
+
+    @unittest.skipUnless(
+        sys.platform == "darwin" and platform.machine() == "arm64",
+        "requires local arm64 clang and LLDB")
+    def test_real_healthy_unit_recompile_launcher_runs_new_binary(self):
+        """Compile one unit twice and launch the refreshed binary via LLDB."""
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            output = root / "out"
+            output.mkdir()
+            generation = root / "generation"
+            compiler = self._write_compiler(root, (
+                "args = sys.argv[1:]\n"
+                "out = pathlib.Path(args[args.index('--out-dir') + 1])\n"
+                "target = out / 'build_script_build-deadbeef'\n"
+                f"generation = pathlib.Path({str(generation)!r})\n"
+                "number = int(generation.read_text()) + 1 "
+                "if generation.exists() else 1\n"
+                "generation.write_text(str(number))\n"
+                "source = out / 'generation.c'\n"
+                "source.write_text('#include <stdio.h>\\nint main(void) { "
+                "printf(\"generation-' + str(number) + '\\\\n\"); "
+                "return 0; }\\n')\n"
+                "result = __import__('subprocess').run(["
+                "'/usr/bin/xcrun', 'clang', '-arch', 'arm64', "
+                "str(source), '-o', str(target)])\n"
+                "raise SystemExit(result.returncode)\n"))
+            command = [
+                sys.executable, str(WRAPPER_PATH), str(compiler),
+                "--crate-name", "build_script_build",
+                "-C", "extra-filename=-deadbeef",
+                "--out-dir", str(output),
+            ]
+
+            first = subprocess.run(
+                command, check=False, capture_output=True, text=True)
+            second = subprocess.run(
+                command, check=False, capture_output=True, text=True)
+            launched = subprocess.run(
+                [str(output / "build_script_build-deadbeef")],
+                check=False, capture_output=True, text=True, timeout=20)
+
+        self.assertEqual(0, first.returncode, first.stderr)
+        self.assertEqual(0, second.returncode, second.stderr)
+        self.assertEqual(0, launched.returncode, launched.stderr)
+        self.assertIn("generation-2", launched.stdout)
 
     def test_compile_failure_is_returned_without_replacement(self):
         """Return the real compiler status and leave no launcher behind."""
@@ -114,6 +271,42 @@ class RustcLldbWrapperTest(unittest.TestCase):
             ], check=False)
             self.assertEqual(17, result.returncode)
             self.assertEqual([], list(output.iterdir()))
+
+    def test_healthy_pair_compile_failure_restores_prior_launcher(self):
+        """Keep the old runnable pair when rustc returns a normal failure."""
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            output = root / "out"
+            output.mkdir()
+            output = output.resolve()
+            launcher = output / "build_script_build-deadbeef"
+            real = launcher.with_name(f"{launcher.name}.real")
+            real.write_bytes(_macho_executable_bytes() + b"old")
+            real.chmod(0o755)
+            wrapper = _load_wrapper_module()
+            launcher.write_text(
+                wrapper._launcher_source(real), encoding="utf-8")
+            launcher.chmod(0o755)
+            compiler = self._write_compiler(root, (
+                "args = sys.argv[1:]\n"
+                "out = pathlib.Path(args[args.index('--out-dir') + 1])\n"
+                "target = out / 'build_script_build-deadbeef'\n"
+                "target.write_bytes(b'partial')\n"
+                "target.chmod(0o755)\n"
+                "raise SystemExit(17)\n"))
+
+            result = subprocess.run([
+                sys.executable, str(WRAPPER_PATH), str(compiler),
+                "--crate-name", "build_script_build",
+                "-C", "extra-filename=-deadbeef",
+                "--out-dir", str(output),
+            ], check=False)
+
+            self.assertEqual(17, result.returncode)
+            self.assertTrue(wrapper._is_exact_launcher(launcher, real))
+            self.assertEqual(
+                _macho_executable_bytes() + b"old", real.read_bytes())
+            self.assertFalse(wrapper._rewrap_manifest_path(launcher).exists())
 
     def test_compile_signal_is_returned_as_the_shell_status(self):
         """Preserve the conventional 128-plus-signal compiler result."""
