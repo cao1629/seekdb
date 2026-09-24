@@ -2,7 +2,7 @@
 
 最新状态（2026-09-24）：原生 seekdb 引擎已在 iPhone 17 Pro / iOS 27.0 完成 36 步通用 SQL 套件和五轮干净停止。五轮均为 `Stopped/result=0`、`sql_verified=true`，同一数据目录的 `previous_runs` 依次为 0、1、2、3、4；验证后没有新增崩溃报告。日志确认 1 GiB 逻辑预算。测试 App 运行期间保持亮屏，进入 Stopped / Failed 后恢复自动锁屏，不修改系统设置。
 
-分层测试方案已开始实施。Phase 1 已修复进程内启动失败后的 server、curl 和工作目录清理，增加仅在 `SEEKDB_IOS_TEST_HOOKS=ON` 时编译的确定性初始化失败点、独立 cleanup error、run ID、源码 build ID 和 hook mode 证据，并完成带 hook 的 iOS ARM64 全量链接。当前 Xcode 没有可用真机 destination；已配对设备均显示离线，因此本页不把主机契约测试、交叉编译或失败的打包尝试表述成真机通过。英文设计见 [iOS Layered Test Strategy Design](../../ios-layered-test-strategy-design.md)，清单格式见 [iOS Test Inventory Schema](../../ios-test-inventory-schema.md)。
+分层测试方案已开始实施。Phase 1 已完成物理真机验收：确定性初始化失败在 iPhone 上保留主错误 `-4016`，同时完成 server、curl 和工作目录三项清理，`cleanup_error=0`、`cleanup_status=7`，并确认运行 ID、源码 build ID 和 hook mode 与本次 App 一致。随后关闭 `SEEKDB_IOS_TEST_HOOKS` 全量重建，普通 App 在同一数据目录连续完成两轮 36 步通用 SQL、干净停止和持久化恢复，`previous_runs` 为 0、1；三轮执行均未产生新的 seekdb 崩溃或 Jetsam 报告。英文设计见 [iOS Layered Test Strategy Design](../../ios-layered-test-strategy-design.md)，清单格式见 [iOS Test Inventory Schema](../../ios-test-inventory-schema.md)。
 
 `build.iphone.sh` 为 iPhone ARM64 和 Apple Silicon iOS 模拟器配置 CMake、Rust 和 Apple SDK。默认目标是 `oceanbase_static`。目前不是已完成的 iOS 产品构建流程；脚本不生成、签名或安装 App。
 
@@ -39,12 +39,12 @@ Rust 可执行文件由 PATH 或 `CARGO`、`RUSTUP` 提供；脚本也查找仓�
 - 真机 `oceanbase_static` 完整目标编译成功，生成 observer、SQL、storage、share、oblib、malloc 和 parser 共 7 个引擎静态库，逐个通过 iOS ARM64 平台检查。静态库之间仍有链接依赖，不能仅复制 `liboceanbase_static.a` 就运行引擎。
 - `sql-nio` Rust 静态库已按 `aarch64-apple-ios` 编译成功。
 - jemalloc 5.3.1 和上述 10 项依赖已构建为 iOS ARM64 静态库；ICU 69.1、OpenMP 21.1.8 和 LAPACKE 子集随后也已构建并通过 iOS 平台检查；VSAG 及其依赖的 8 个静态库也已编译并通过平台检查。默认依赖构建现包含上述 14 项。
-- `seekdb_ios_runtime` 进程内生命周期静态库编译通过；既有真机证据覆盖运行、SQL 和正常停止。新增启动失败清理路径已完成主机契约测试和带 hook 的完整 iOS 链接，尚待在线真机执行负向验收。
+- `seekdb_ios_runtime` 进程内生命周期静态库编译通过；真机证据覆盖运行、SQL、正常停止及确定性初始化失败后的完整清理。失败注入 App 报告 `Failed/result=-4016`、`cleanup_error=0`、`cleanup_status=7` 且工作目录恢复成功；随后关闭测试 hook 的普通 App 重新通过两轮 36 步 SQL 和干净停止。
 - `seekdb_ios_link_check` 完整链接通过，产物约 216 MiB；vtool 显示 IOS/minos 18.0/sdk 27.0，otool -L 仅列 Apple 系统库。此目标是链接探针，没有 UIKit 界面，不能作为 App 运行验收。此次复用已成功构建的 rust-probe 目录；新 Rust 构建目录仍遇到宿主 build-script SIGKILL。
 - 修复 zstd 部分链接误用 macOS 平台的问题，验证合并对象中的 ZSTD 内部符号已局部化。
 - 为 Boost 1.74 回移上游 1.85 的 NumericConversion 枚举包装修复，只生成 iOS 构建目录中的头文件覆盖层；iOS 编译检查和 macOS 数值转换/溢出测试通过。
 - `ob_parser.cpp.o` 经 `file` 验证为 Mach-O ARM64；`xcrun vtool -show-build` 显示平台 IOS、minos 18.0、sdk 27.0。
-- 脚本参数路由、App 链接参数、模拟器配置、Cargo 多行参数/失败传播、非法参数及产品中立性共 11 项测试通过：`python3 -m unittest discover -s unittest/ios_build -v`。
+- 脚本参数路由、App 链接参数、模拟器配置、Cargo 多行参数/失败传播、非法参数、产品中立性和启动清理契约共 23 项测试通过：`python3 -m unittest discover -s unittest/ios_build -v`。
 - 全新 Rust target 目录的 `aarch64-apple-ios` `libsql_nio.a` 构建通过；主机目标的 3 项 Rust 单元测试、doc-test 及 `cargo clippy --all-targets -- -D warnings` 通过。本机系统会终止由当前 Codex 进程直接生成并启动的宿主 Mach-O，因此验证使用忽略目录中的 LLDB runner；该 runner 不属于项目构建接口。
 - 通用 SQL 套件已在真机完成五轮。每轮 36 个 step 全部成功，最终 JSONL 记录为 `complete=true/result=0`；同一数据目录的持久计数连续递增，五轮均完成自动停止。
 
@@ -61,7 +61,7 @@ Rust 可执行文件由 PATH 或 `CARGO`、`RUSTUP` 提供；脚本也查找仓�
 ## 尚未完成
 
 - 全新目录的完整依赖流水线及 Rust 宿主 build-script SIGKILL 问题；增量完整链接已通过。磁盘空间约 9.4 GiB，继续构建时仍需关注剩余空间。
-- 已新增 `seekdb_ios_run`、`seekdb_ios_request_stop`、`seekdb_ios_get_state`、`seekdb_ios_get_cleanup_status` 和 `seekdb_ios_get_cleanup_error`；`in_process_` 模式跳过服务信号线程，等待结束走 `stop()`，不走原命令行路径的 `_Exit(0)`。该路径已取得 36 步 SQL、五轮正常停止和连续持久化恢复证据。启动失败现在执行 stop/wait/destroy、curl cleanup 和工作目录恢复，主错误与清理错误分别记录；真机负向验收仍待设备在线。接口每进程仅允许调用一次，不可在 UI 线程调用。`BUILD_EMBED_MODE` 仍不能恢复旧 C API。
+- 已新增 `seekdb_ios_run`、`seekdb_ios_request_stop`、`seekdb_ios_get_state`、`seekdb_ios_get_cleanup_status` 和 `seekdb_ios_get_cleanup_error`；`in_process_` 模式跳过服务信号线程，等待结束走 `stop()`，不走原命令行路径的 `_Exit(0)`。该路径已取得 36 步 SQL、多轮正常停止和连续持久化恢复证据。启动失败执行 stop/wait/destroy、curl cleanup 和工作目录恢复，主错误与清理错误分别记录；真机负向验收已通过。接口每进程仅允许调用一次，不可在 UI 线程调用。`BUILD_EMBED_MODE` 仍不能恢复旧 C API。
 - iOS ARM64 链接已验证 S2/Abseil ABI、OpenMP 运行库版本及 Rust sql_nio 链接修复；数学和向量功能仍需真机运行验证。
 - App 沙箱数据目录、线程和内存限制已完成基础适配；重复停止已验证，前后台切换、锁屏恢复和内存压力仍待验证。
 - App 包装、签名、安装、36 步通用 SQL 及五轮正常停止后的持久化恢复已有真机证据；现有模拟器环境不能替代这些真机证据。

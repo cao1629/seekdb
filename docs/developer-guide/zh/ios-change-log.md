@@ -14,10 +14,14 @@
 - `SEEKDB_IOS_TEST_HOOKS` 默认关闭。开启时，仅测试目标在 timer service 初始化后响应 `SEEKDB_IOS_TEST_FAIL_DURING_INIT`；iOS runtime archive 编译进 source revision 和 hook mode marker。`deps/ios-build/build_app.py` 同时校验 cache 和静态库 marker，checkout 前移后复用旧库或只切换 cache 未重编译都会被拒绝，避免 fault hook 混入普通 App。
 - UIKit 状态从链接的 runtime API 读取源码 build ID 和 hook mode，并增加唯一 run ID、cleanup status、独立 cleanup error 和工作目录恢复结果。`run_device_cleanup_test.py` 同时校验 run ID、artifact build ID 和 hook mode；它不再把原始 `devicectl` JSON 写入仓库内证据目录，避免保存 Team ID 或设备唯一标识。
 - 使用固定 Rust 1.98.1、`aarch64-apple-ios` target、iphoneos SDK 27.0、最低 iOS 18.0、`OB_ENABLE_STANDBY=OFF`、`SEEKDB_IOS_TEST_HOOKS=ON` 及 RelWithDebInfo `-O2` 完成 `seekdb_ios_link_check` 全量链接。当前 macOS 会终止直接启动的 Cargo 宿主 build-script；本次沿用忽略目录中的 LLDB wrapper 驱动宿主程序，该 wrapper 不属于项目接口。
-- 主机契约测试覆盖失败 cleanup、stale run ID、stale engine build、artifact hook mode、cleanup error、device SDK 强制选择和原始设备元数据禁写；`python3 -m unittest discover -s unittest/ios_build -v` 共 22 项通过，`bash -n`、Python 编译检查和 `git diff --check` 通过。
+- 主机契约测试覆盖失败 cleanup、partial-init `OB_NOT_INIT`、stale run ID、stale engine build、artifact hook mode、cleanup error、device SDK 强制选择和原始设备元数据禁写；`python3 -m unittest discover -s unittest/ios_build -v` 共 23 项通过，`bash -n`、Python 编译检查和 `git diff --check` 通过。
 - 真机打包尝试未进入设备执行：Xcode 当时没有 compatible physical destination，已配对的 iPhone 记录均为 offline、boot shutdown、DDI unavailable。第一次目标选择退化为 simulator，设备静态库与 simulator 链接被正确拒绝；随后确认不存在在线真机 destination 后停止，不把该结果记作 App、真机或 Phase 1 通过。忽略目录中的失败日志已脱敏。
 - `build_app.py` 现在显式传入 `-sdk iphoneos`，防止离线设备标识被 Xcode 回退为 simulator；未签名的 `generic/platform=iOS` wrapper 编译和完整设备链接通过。当前 Xcode 同时报告没有已登录账号及匹配 provisioning profile，因此签名、安装和真机执行仍未完成。
-- 真机恢复在线后的验收必须使用 hook-enabled App，运行 `unittest/ios_build/run_device_cleanup_test.py`，并同时满足 Failed 非零主错误、cleanup error 为零、三项 cleanup 位完整、工作目录恢复、run ID/build ID/hook mode 匹配且无新增 crash/jetsam；随后必须以 hooks OFF 重建并复跑 36 步 SQL和干净停止持久化基线。
+- 真机恢复在线后，确认设备为 wired、paired、Developer Mode enabled 且 DDI 可用。由于 Xcode 未登录账号，自动签名仍不可用；本次仅复用本机已有且有效的开发描述文件和对应钥匙串证书，在本地验证 bundle、设备范围、有效期及证书匹配后手工签名、验证并安装。账号、签名标识、设备唯一标识、描述文件和私钥均未写入仓库或证据文件。
+- 首次 hook-enabled 真机执行正确触发主错误 `-4016`，但报告 `cleanup_error=-4006`、`cleanup_status=6`。`-4006` 为 `OB_NOT_INIT`：失败点位于 `ObServer::init()` 的部分初始化阶段，统一 `wait()` 会经过尚未初始化组件的 stop 路径。修复仅在 server 初始化尚未完成且清理返回 `OB_NOT_INIT` 时将其视为已完成；完整初始化后的 stop 错误仍然保留为清理失败。该修复提交为 `f25621b67`，并增加对应回归契约测试。
+- 修复后的 hook-enabled App 在 iPhone 17 Pro / iOS 27.0 通过负向验收：状态为 `Failed`，主错误 `-4016`，`cleanup_error=0`，`cleanup_status=7`，工作目录恢复成功，run ID、源码 build ID 和 hook mode 均与本次产物匹配；执行后没有新增 seekdb 崩溃或 Jetsam 报告。
+- 随后关闭 `SEEKDB_IOS_TEST_HOOKS`，重新配置并完成 `seekdb_ios_link_check` 全量链接，产物 marker 确认为 hook disabled。普通 App 在同一新数据目录连续执行两轮，每轮 36 个 SQL step 全部成功，最终状态均为 `Stopped/result=0`、`sql_verified=true`、`cleanup_error=0`，持久计数 `previous_runs` 依次为 0、1；两轮后仍无新增 seekdb 崩溃或 Jetsam 报告。
+- 脱敏后的本地原始证据保存在忽略目录 `build_ios_arm64/device-evidence/`；扫描未发现未屏蔽的设备唯一标识。受 Git 跟踪的本文记录可复现结果与限制，原始设备和签名元数据不进入版本控制。
 
 ## GitHub 追踪
 

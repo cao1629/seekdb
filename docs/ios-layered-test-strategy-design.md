@@ -3,11 +3,13 @@
 ## Status
 
 Implementation in progress. Phase 1 startup-failure cleanup and deterministic
-test-hook support are implemented and host-verified; physical-device acceptance
-remains pending an online iPhone target. This document defines how seekdb
-validation is divided between a physical iPhone, a macOS build host, and
-host-driven device tests. It does not treat a host-only result as device
-evidence.
+test-hook support are implemented, host-verified, and accepted on a physical
+iPhone. The hook-disabled application was rebuilt separately and completed two
+36-step SQL, clean-stop, and persistence cycles on the same device data set.
+Phase 2 inventory and portable test adapters remain pending. This document
+defines how seekdb validation is divided between a physical iPhone, a macOS
+build host, and host-driven device tests. It does not treat a host-only result
+as device evidence.
 
 ## Goals
 
