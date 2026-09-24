@@ -391,6 +391,96 @@ class IphoneTestRunnerTest(unittest.TestCase):
             "valid_team_id_suffix=value notudid=value")
         self.assertEqual(ordinary, runner.sanitize(ordinary, run_id))
 
+    def test_redacts_normalized_apple_identity_forms_without_false_positives(self):
+        """Apple identifiers and normalized labels must redact whole fields."""
+        run_id = self.selection.checkpoint["run_id"]
+        sensitive = (
+            "Device ID: 00008110-001234567890001E",
+            "device-id=00008110001234567890001E",
+            "identifier: 00008110-001234567890001E",
+            "team-id: ABCDE12345",
+            "Apple Development: Jane Doe (ABCDE12345)",
+            "install failed for 00008110-001234567890001E",
+        )
+        for diagnostic in sensitive:
+            with self.subTest(diagnostic=diagnostic):
+                self.assertEqual(
+                    runner.REDACTED, runner.sanitize(diagnostic, run_id))
+
+        ordinary = (
+            "device identifier parsing failed; identifier_count=2; "
+            "Apple developer tools unavailable; hash=00008110abcdef")
+        self.assertEqual(ordinary, runner.sanitize(ordinary, run_id))
+
+    def test_exclusion_contract_requires_exact_tracked_reason(self):
+        """Only exact reviewed non-applicability may produce an exclusion."""
+        with self.assertRaisesRegex(ValueError, "exclusion_reason"):
+            runner.CaseSpec(
+                "missing-reason", "host-only",
+                applicability="not-applicable")
+        with self.assertRaisesRegex(ValueError, "exclusion_reason"):
+            runner.CaseSpec(
+                "unexpected-reason", "host-only",
+                exclusion_reason="requires fork")
+
+        applicable = runner.CaseSpec("applicable", "device-native")
+        excluded = runner.validate_case_result(
+            applicable, runner.CaseResult.excluded("requires fork"))
+        self.assertEqual("failed", excluded.status)
+        self.assertEqual("infrastructure", excluded.category)
+
+        not_applicable = runner.CaseSpec(
+            "fork-only", "host-only", applicability="not-applicable",
+            exclusion_reason="requires fork")
+        matching = runner.validate_case_result(
+            not_applicable, runner.CaseResult.excluded("requires fork"))
+        self.assertEqual("excluded", matching.status)
+        for result in (
+                runner.CaseResult.excluded("different reason"),
+                runner.CaseResult.passed()):
+            with self.subTest(status=result.status,
+                              diagnostic=result.diagnostic):
+                normalized = runner.validate_case_result(
+                    not_applicable, result)
+                self.assertEqual("failed", normalized.status)
+                self.assertEqual("infrastructure", normalized.category)
+
+    def test_inconsistent_pass_is_failure_and_stops_dispatch(self):
+        """Contradictory pass metadata must become an unsafe central failure."""
+        inconsistent = (
+            (runner.CaseResult.passed(exit_status=7), "infrastructure"),
+            (runner.CaseResult.passed(clean_state=False), "cleanup"),
+            (runner.CaseResult.passed(retry_safe=False), "infrastructure"),
+        )
+        spec = runner.CaseSpec("case", "device-native")
+        for result, category in inconsistent:
+            with self.subTest(result=result):
+                normalized = runner.validate_case_result(spec, result)
+                self.assertEqual("failed", normalized.status)
+                self.assertEqual(category, normalized.category)
+                self.assertFalse(normalized.retry_safe)
+
+        executed = []
+        adapters = self.adapters()
+        adapters[0] = runner.PhaseAdapter(
+            phase_id=runner.PHASE_IDS[0],
+            cases=(
+                runner.CaseSpec("contradictory-pass", "device-native"),
+                runner.CaseSpec("must-not-run", "device-native"),
+            ),
+            execute=lambda case: (
+                executed.append(case.case_id) or
+                runner.CaseResult.passed(exit_status=7)),
+        )
+        self.assertEqual(1, self.run_engine(adapters))
+        self.assertEqual(["contradictory-pass"], executed)
+        checkpoint = self.checkpoint()
+        self.assertEqual(
+            ["failed", "pending"],
+            [case["status"]
+             for case in checkpoint["phases"][0]["cases"]],
+        )
+
     def test_failure_files_keep_only_allowlisted_relative_evidence_paths(self):
         """Failure artifacts must not serialize arbitrary host filesystem paths."""
         def fail_with_paths(_case):
@@ -423,7 +513,8 @@ class IphoneTestRunnerTest(unittest.TestCase):
             cases=(
                 runner.CaseSpec("pass", "device-native"),
                 runner.CaseSpec(
-                    "excluded", "host-only", applicability="not-applicable"),
+                    "excluded", "host-only", applicability="not-applicable",
+                    exclusion_reason="requires fork"),
             ),
             execute=lambda case: (
                 runner.CaseResult.excluded("requires fork")

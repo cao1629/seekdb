@@ -39,6 +39,7 @@ SENSITIVE_KEYS = frozenset({
     "certificate",
     "certificate_identity",
     "device_id",
+    "identifier",
     "private_key",
     "provisioning_content",
     "provisioning_profile",
@@ -46,10 +47,17 @@ SENSITIVE_KEYS = frozenset({
     "team_id",
     "udid",
 })
+SENSITIVE_KEY_EXPRESSIONS = tuple(
+    r"[\s_-]+".join(re.escape(part) for part in key.split("_"))
+    for key in sorted(SENSITIVE_KEYS, key=len, reverse=True)
+)
 SENSITIVE_LABEL_PATTERN = re.compile(
-    r"(?im)(?<!\w)['\"]?(" + "|".join(
-        re.escape(key) for key in sorted(SENSITIVE_KEYS, key=len, reverse=True)
-    ) + r")\b['\"]?\s*[:=]")
+    r"(?im)(?<!\w)['\"]?(?:" + "|".join(SENSITIVE_KEY_EXPRESSIONS)
+    + r")\b['\"]?\s*[:=]")
+APPLE_UDID_PATTERN = re.compile(
+    r"(?i)\b[0-9a-f]{8}-?[0-9a-f]{16}\b")
+APPLE_CERTIFICATE_IDENTITY_PATTERN = re.compile(
+    r"(?i)\bApple\s+Development\s*:")
 
 
 class FailureCategory(str, Enum):
@@ -73,6 +81,7 @@ class CaseSpec:
     execution_class: str
     applicability: str = "applicable"
     isolated: bool = True
+    exclusion_reason: Optional[str] = None
 
     def __post_init__(self) -> None:
         """Reject case metadata that cannot be reported deterministically."""
@@ -83,6 +92,14 @@ class CaseSpec:
                 f"invalid execution class: {self.execution_class}")
         if self.applicability not in APPLICABILITY_VALUES:
             raise ValueError(f"invalid applicability: {self.applicability}")
+        if self.applicability == "not-applicable":
+            if (not isinstance(self.exclusion_reason, str)
+                    or not self.exclusion_reason.strip()):
+                raise ValueError(
+                    "not-applicable cases require a nonempty exclusion_reason")
+        elif self.exclusion_reason is not None:
+            raise ValueError(
+                "applicable cases cannot define an exclusion_reason")
 
 
 @dataclass(frozen=True)
@@ -166,9 +183,75 @@ class PhaseAdapter:
     execute: Callable[[CaseSpec], CaseResult]
 
 
+def _contract_failure(category: str, diagnostic: str) -> CaseResult:
+    """Create an unsafe failure for contradictory adapter result metadata."""
+    return CaseResult.failed(
+        category=category,
+        diagnostic=diagnostic,
+        retry_safe=False,
+        clean_state=False,
+    )
+
+
+def validate_case_result(spec: CaseSpec, result: CaseResult) -> CaseResult:
+    """Enforce applicability and success invariants at one runner boundary."""
+    if not isinstance(result, CaseResult):
+        return _contract_failure(
+            "infrastructure", "adapter returned an invalid result")
+    if (not isinstance(result.clean_state, bool)
+            or not isinstance(result.retry_safe, bool)):
+        return _contract_failure(
+            "infrastructure", "result safety flags must be booleans")
+    if (result.exit_status is not None
+            and (isinstance(result.exit_status, bool)
+                 or not isinstance(result.exit_status, int))):
+        return _contract_failure(
+            "infrastructure", "result exit status must be an integer")
+
+    if result.status == "passed":
+        if not result.clean_state:
+            return _contract_failure(
+                "cleanup", "passed result reported an unclean state")
+        if result.exit_status not in (None, 0):
+            return _contract_failure(
+                "infrastructure",
+                "passed result reported a nonzero exit status")
+        if not result.retry_safe:
+            return _contract_failure(
+                "infrastructure",
+                "passed result contradicted retry safety")
+        if result.category is not None:
+            return _contract_failure(
+                "infrastructure",
+                "passed result reported a failure category")
+        if spec.applicability != "applicable":
+            return _contract_failure(
+                "infrastructure",
+                "not-applicable case cannot report passed")
+
+    if result.status == "excluded":
+        if spec.applicability != "not-applicable":
+            return _contract_failure(
+                "infrastructure", "applicable case cannot be excluded")
+        if result.diagnostic != spec.exclusion_reason:
+            return _contract_failure(
+                "infrastructure",
+                "excluded result did not match its tracked reason")
+        if (not result.clean_state or not result.retry_safe
+                or result.exit_status not in (None, 0)
+                or result.category is not None):
+            category = "cleanup" if not result.clean_state else "infrastructure"
+            return _contract_failure(
+                category, "excluded result contained contradictory metadata")
+
+    return result
+
+
 def _redact_text(value: str, run_id: str) -> str:
     """Redact UUID-like values other than the runner-owned run ID."""
-    if SENSITIVE_LABEL_PATTERN.search(value):
+    if (SENSITIVE_LABEL_PATTERN.search(value)
+            or APPLE_UDID_PATTERN.search(value)
+            or APPLE_CERTIFICATE_IDENTITY_PATTERN.search(value)):
         return REDACTED
     protected = "__RUNNER_OWNED_RUN_ID__"
     value = value.replace(run_id, protected)
@@ -182,7 +265,9 @@ def sanitize(value: Any, run_id: str) -> Any:
         sanitized = {}
         for key, item in value.items():
             key_text = str(key)
-            if key_text.lower() in SENSITIVE_KEYS:
+            normalized_key = re.sub(
+                r"[\s-]+", "_", key_text.strip().lower())
+            if normalized_key in SENSITIVE_KEYS:
                 sanitized[key_text] = REDACTED
             else:
                 sanitized[key_text] = sanitize(item, run_id)
@@ -222,6 +307,7 @@ def _case_record(spec: CaseSpec) -> Dict[str, Any]:
         "execution_class": spec.execution_class,
         "applicability": spec.applicability,
         "isolated": spec.isolated,
+        "exclusion_reason": spec.exclusion_reason,
     }
 
 
@@ -303,14 +389,16 @@ def _validate_or_initialize_layout(
     actual_signature = [
         (phase["id"], [
             (case["id"], case.get("execution_class"),
-             case.get("applicability"), case.get("isolated"))
+             case.get("applicability"), case.get("isolated"),
+             case.get("exclusion_reason"))
             for case in phase["cases"]])
         for phase in checkpoint["phases"]
     ]
     expected_signature = [
         (phase["id"], [
             (case["id"], case["execution_class"],
-             case["applicability"], case["isolated"])
+             case["applicability"], case["isolated"],
+             case["exclusion_reason"])
             for case in phase["cases"]])
         for phase in expected
     ]
@@ -507,14 +595,7 @@ def _execute_case(
             retry_safe=False,
             clean_state=False,
         )
-    if not isinstance(result, CaseResult):
-        return CaseResult.failed(
-            category="infrastructure",
-            diagnostic="adapter returned an invalid result",
-            retry_safe=False,
-            clean_state=False,
-        )
-    return result
+    return validate_case_result(spec, result)
 
 
 def _find_spec(adapter: PhaseAdapter, case_id: str) -> CaseSpec:
