@@ -49,6 +49,12 @@ unsigned int seekdb_ios_get_cleanup_status(void);
 /** Return the first cleanup error without replacing the primary runtime error. */
 int seekdb_ios_get_cleanup_error(void);
 
+/** Return the source revision compiled into the linked runtime archive. */
+const char *seekdb_ios_get_build_id(void);
+
+/** Return whether deterministic test hooks were compiled into the runtime. */
+const char *seekdb_ios_get_hook_mode(void);
+
 #ifdef __cplusplus
 }
 #endif

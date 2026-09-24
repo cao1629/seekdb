@@ -126,6 +126,8 @@
   self.statusLabel.text = [NSString stringWithFormat:@"seekdb iOS probe\n%@\nEngine: %@\nSQL: %@\nPrevious runs: %@",
                           name, self.result ?: @"pending", self.sqlResult ?: @"pending", self.previousRuns ?: @"pending"];
   NSDictionary *status = @{@"state": name, @"result": self.result ?: NSNull.null, @"data_name": self.dataName,
+                           @"build_id": [NSString stringWithUTF8String:seekdb_ios_get_build_id()],
+                           @"hook_mode": [NSString stringWithUTF8String:seekdb_ios_get_hook_mode()],
                            @"sql_verified": @(self.sqlResult != nil && self.sqlResult.intValue == 0),
                            @"sql_result": self.sqlResult ?: NSNull.null,
                            @"previous_runs": self.previousRuns ?: NSNull.null,

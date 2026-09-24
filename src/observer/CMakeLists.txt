@@ -177,8 +177,24 @@ endif()
 
 if(CMAKE_SYSTEM_NAME STREQUAL "iOS")
   option(SEEKDB_IOS_TEST_HOOKS "Enable deterministic iOS runtime failure hooks" OFF)
+  execute_process(
+    COMMAND git rev-parse --short=12 HEAD
+    WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
+    RESULT_VARIABLE SEEKDB_IOS_GIT_RESULT
+    OUTPUT_VARIABLE SEEKDB_IOS_BUILD_ID
+    OUTPUT_STRIP_TRAILING_WHITESPACE)
+  if(NOT SEEKDB_IOS_GIT_RESULT EQUAL 0 OR NOT SEEKDB_IOS_BUILD_ID MATCHES "^[0-9a-f]{12}$")
+    message(FATAL_ERROR "Cannot determine the iOS runtime source revision")
+  endif()
+  set(SEEKDB_IOS_HOOK_MODE "disabled")
+  if(SEEKDB_IOS_TEST_HOOKS)
+    set(SEEKDB_IOS_HOOK_MODE "enabled")
+  endif()
   add_library(seekdb_ios_runtime STATIC EXCLUDE_FROM_ALL ios/seekdb_ios.cpp)
   target_include_directories(seekdb_ios_runtime PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/ios")
+  target_compile_definitions(seekdb_ios_runtime PRIVATE
+    SEEKDB_IOS_BUILD_ID="${SEEKDB_IOS_BUILD_ID}"
+    SEEKDB_IOS_HOOK_MODE="${SEEKDB_IOS_HOOK_MODE}")
   target_link_libraries(seekdb_ios_runtime PUBLIC oceanbase_static sql_nio)
   if(SEEKDB_IOS_TEST_HOOKS)
     target_compile_definitions(seekdb_ios_runtime PRIVATE SEEKDB_IOS_TEST_HOOKS=1)

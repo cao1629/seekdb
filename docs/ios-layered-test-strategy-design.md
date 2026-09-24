@@ -2,7 +2,12 @@
 
 ## Status
 
-Proposed for implementation. This document defines how seekdb validation is divided between a physical iPhone, a macOS build host, and host-driven device tests. It does not treat a host-only result as device evidence.
+Implementation in progress. Phase 1 startup-failure cleanup and deterministic
+test-hook support are implemented and host-verified; physical-device acceptance
+remains pending an online iPhone target. This document defines how seekdb
+validation is divided between a physical iPhone, a macOS build host, and
+host-driven device tests. It does not treat a host-only result as device
+evidence.
 
 ## Goals
 
@@ -53,6 +58,9 @@ An inventory generator will enumerate the repository's C++ unit tests and SQL re
 - the device-equivalent test, if one is required.
 
 Classification must be reviewable data rather than an undocumented build-system decision. Unsupported tests remain visible in the final report.
+
+The required inventory record format is defined in
+[iOS Test Inventory Schema](ios-test-inventory-schema.md).
 
 ## Device Test Application
 

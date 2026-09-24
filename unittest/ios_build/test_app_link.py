@@ -3,6 +3,7 @@ import importlib.util
 from pathlib import Path
 import tempfile
 import unittest
+from unittest import mock
 
 ROOT = Path(__file__).resolve().parents[2]
 SPEC = importlib.util.spec_from_file_location("build_app", ROOT / "deps/ios-build/build_app.py")
@@ -57,3 +58,34 @@ class AppLinkTests(unittest.TestCase):
             APP.require_test_hook_mode(engine, True)
             with self.assertRaises(ValueError):
                 APP.require_test_hook_mode(engine, False)
+
+    def test_xcode_build_is_constrained_to_the_device_sdk(self):
+        """Do not let an unavailable device destination fall back to a simulator build."""
+        source = (ROOT / "deps/ios-build/build_app.py").read_text()
+        self.assertIn('"-sdk", "iphoneos"', source)
+
+    def test_artifact_metadata_rejects_stale_hook_mode(self):
+        """Use the linked archive marker instead of trusting a reconfigured cache."""
+        output = "SEEKDB_IOS_ARTIFACT_BUILD_ID=0123456789ab;SEEKDB_IOS_ARTIFACT_HOOK_MODE=disabled\n"
+        with tempfile.TemporaryDirectory() as temporary:
+            engine = Path(temporary)
+            archive = engine / "src/observer/libseekdb_ios_runtime.a"
+            archive.parent.mkdir(parents=True)
+            archive.touch()
+            with mock.patch.object(APP.subprocess, "run") as run:
+                run.return_value = mock.Mock(stdout=output)
+                with self.assertRaises(ValueError):
+                    APP.require_artifact_identity(engine, "0123456789ab", True)
+
+    def test_artifact_metadata_rejects_stale_source_revision(self):
+        """Reject packaging when linked engine objects belong to another revision."""
+        output = "SEEKDB_IOS_ARTIFACT_BUILD_ID=aaaaaaaaaaaa;SEEKDB_IOS_ARTIFACT_HOOK_MODE=enabled\n"
+        with tempfile.TemporaryDirectory() as temporary:
+            engine = Path(temporary)
+            archive = engine / "src/observer/libseekdb_ios_runtime.a"
+            archive.parent.mkdir(parents=True)
+            archive.touch()
+            with mock.patch.object(APP.subprocess, "run") as run:
+                run.return_value = mock.Mock(stdout=output)
+                with self.assertRaises(ValueError):
+                    APP.require_artifact_identity(engine, "bbbbbbbbbbbb", True)

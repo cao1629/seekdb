@@ -6,6 +6,19 @@
 
 后续每次环境设置、源码、构建脚本或 CMake 变更，同步记录日期、文件/设置、原因、具体参数、影响范围、复现命令、验证结果和剩余问题。失败尝试及撤销原因也保留。按独立功能提交时补充 commit ID，不把机器缓存、证书或密钥提交到仓库。日志与生成产物保存在仓库内；本记录及构建脚本纳入版本控制。
 
+## 2026-09-24：分层测试 Phase 1 启动失败清理
+
+- 新增受 Git 跟踪的英文设计 `docs/ios-layered-test-strategy-design.md` 和清单格式 `docs/ios-test-inventory-schema.md`。三类执行位置为 device-native、host-driven-device 和 host-only；交叉编译或主机脚本通过不计作真机通过。
+- `src/observer/ios/seekdb_ios.cpp/.h` 在失败路径分别记录 server、curl 和工作目录清理位，并通过 `seekdb_ios_get_cleanup_error()` 暴露第一个清理错误。server 清理位仅在 stop/wait/destroy 成功后设置，原始引擎错误不被后续清理错误覆盖。
+- `src/observer/ob_server.cpp` 对进程内初始化失败先请求停止，由 iOS 包装统一完成 wait/destroy，避免重复销毁；普通命令行模式保留原清理行为。
+- `SEEKDB_IOS_TEST_HOOKS` 默认关闭。开启时，仅测试目标在 timer service 初始化后响应 `SEEKDB_IOS_TEST_FAIL_DURING_INIT`；iOS runtime archive 编译进 source revision 和 hook mode marker。`deps/ios-build/build_app.py` 同时校验 cache 和静态库 marker，checkout 前移后复用旧库或只切换 cache 未重编译都会被拒绝，避免 fault hook 混入普通 App。
+- UIKit 状态从链接的 runtime API 读取源码 build ID 和 hook mode，并增加唯一 run ID、cleanup status、独立 cleanup error 和工作目录恢复结果。`run_device_cleanup_test.py` 同时校验 run ID、artifact build ID 和 hook mode；它不再把原始 `devicectl` JSON 写入仓库内证据目录，避免保存 Team ID 或设备唯一标识。
+- 使用固定 Rust 1.98.1、`aarch64-apple-ios` target、iphoneos SDK 27.0、最低 iOS 18.0、`OB_ENABLE_STANDBY=OFF`、`SEEKDB_IOS_TEST_HOOKS=ON` 及 RelWithDebInfo `-O2` 完成 `seekdb_ios_link_check` 全量链接。当前 macOS 会终止直接启动的 Cargo 宿主 build-script；本次沿用忽略目录中的 LLDB wrapper 驱动宿主程序，该 wrapper 不属于项目接口。
+- 主机契约测试覆盖失败 cleanup、stale run ID、stale engine build、artifact hook mode、cleanup error、device SDK 强制选择和原始设备元数据禁写；`python3 -m unittest discover -s unittest/ios_build -v` 共 22 项通过，`bash -n`、Python 编译检查和 `git diff --check` 通过。
+- 真机打包尝试未进入设备执行：Xcode 当时没有 compatible physical destination，已配对的 iPhone 记录均为 offline、boot shutdown、DDI unavailable。第一次目标选择退化为 simulator，设备静态库与 simulator 链接被正确拒绝；随后确认不存在在线真机 destination 后停止，不把该结果记作 App、真机或 Phase 1 通过。忽略目录中的失败日志已脱敏。
+- `build_app.py` 现在显式传入 `-sdk iphoneos`，防止离线设备标识被 Xcode 回退为 simulator；未签名的 `generic/platform=iOS` wrapper 编译和完整设备链接通过。当前 Xcode 同时报告没有已登录账号及匹配 provisioning profile，因此签名、安装和真机执行仍未完成。
+- 真机恢复在线后的验收必须使用 hook-enabled App，运行 `unittest/ios_build/run_device_cleanup_test.py`，并同时满足 Failed 非零主错误、cleanup error 为零、三项 cleanup 位完整、工作目录恢复、run ID/build ID/hook mode 匹配且无新增 crash/jetsam；随后必须以 hooks OFF 重建并复跑 36 步 SQL和干净停止持久化基线。
+
 ## GitHub 追踪
 
 远端仓库：`git@github.com:longdafeng/seekdb`；分支：`codex/iphone-arm64-port`。

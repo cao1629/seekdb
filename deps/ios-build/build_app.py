@@ -63,6 +63,40 @@ def require_test_hook_mode(engine, expected):
         raise ValueError(f"engine build must have SEEKDB_IOS_TEST_HOOKS {requested}")
 
 
+def source_build_id():
+    """Return a short immutable source revision for device evidence."""
+    dirty = subprocess.run(["git", "diff-index", "--quiet", "HEAD", "--"], cwd=ROOT)
+    if dirty.returncode != 0:
+        raise ValueError("tracked source changes must be committed before device packaging")
+    result = subprocess.run(["git", "rev-parse", "--short=12", "HEAD"], cwd=ROOT,
+                            check=True, capture_output=True, text=True)
+    build_id = result.stdout.strip()
+    if not re.fullmatch(r"[0-9a-f]{12}", build_id):
+        raise ValueError("git returned an invalid source build identifier")
+    return build_id
+
+
+def require_artifact_identity(engine, expected_build_id, expected_hooks):
+    """Verify identity markers compiled into the linked iOS runtime archive."""
+    archive = engine / "src/observer/libseekdb_ios_runtime.a"
+    if not archive.is_file():
+        raise FileNotFoundError(archive)
+    result = subprocess.run(["/usr/bin/strings", "-a", str(archive)], check=True,
+                            capture_output=True, text=True)
+    marker = re.search(
+        r"SEEKDB_IOS_ARTIFACT_BUILD_ID=([0-9a-f]{12});"
+        r"SEEKDB_IOS_ARTIFACT_HOOK_MODE=(enabled|disabled)", result.stdout)
+    if marker is None:
+        raise ValueError("iOS runtime archive has no artifact identity marker")
+    build_id, hook_mode = marker.groups()
+    if build_id != expected_build_id:
+        raise ValueError("iOS runtime archive belongs to a different source revision")
+    expected_mode = "enabled" if expected_hooks else "disabled"
+    if hook_mode != expected_mode:
+        raise ValueError(f"iOS runtime archive must have test hooks {expected_mode}")
+    return build_id, hook_mode
+
+
 def main():
     """Generate an Xcode wrapper, provision it, and optionally install on a device."""
     parser = argparse.ArgumentParser(description=__doc__)
@@ -81,6 +115,8 @@ def main():
     if not engine.is_relative_to(ROOT):
         parser.error("engine build must remain inside the seekdb checkout")
     require_test_hook_mode(engine, options.test_hooks)
+    build_id = source_build_id()
+    require_artifact_identity(engine, build_id, options.test_hooks)
     directory = engine / "src/observer"
     command = (directory / "CMakeFiles/seekdb_ios_link_check.dir/link.txt").read_text()
     arguments = engine_link_arguments(command, directory)
@@ -97,7 +133,7 @@ def main():
                     "-DDEVELOPMENT_TEAM=" + options.team, "-DPROBE_BUNDLE_ID=" + options.bundle_id],
                    check=True, env=environment)
     subprocess.run(["xcodebuild", "-project", str(build / "SeekDBProbe.xcodeproj"),
-                    "-scheme", "SeekDBProbe", "-configuration", "Release",
+                    "-scheme", "SeekDBProbe", "-configuration", "Release", "-sdk", "iphoneos",
                     "-derivedDataPath", str(build / "DerivedData"),
                     "-destination", "id=" + options.device, "-allowProvisioningUpdates",
                     "-allowProvisioningDeviceRegistration", "build"], check=True, env=environment)

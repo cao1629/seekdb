@@ -21,10 +21,14 @@ class RuntimeCleanupContractTests(unittest.TestCase):
         self.assertIn("SEEKDB_IOS_CLEANUP_WORKING_DIRECTORY", header)
         self.assertIn("seekdb_ios_get_cleanup_status", header)
         self.assertIn("seekdb_ios_get_cleanup_error", header)
+        self.assertIn("seekdb_ios_get_build_id", header)
+        self.assertIn("SEEKDB_IOS_ARTIFACT_BUILD_ID", source)
         self.assertIn("curl_initialized", source)
         self.assertIn('@"cleanup_status"', app)
         self.assertIn('@"cleanup_error"', app)
         self.assertIn('@"working_directory_restored"', app)
+        self.assertIn('@"build_id"', app)
+        self.assertIn('@"hook_mode"', app)
 
     def test_failure_hook_is_test_only(self):
         """Compile deterministic startup failure only when explicitly enabled."""
@@ -58,8 +62,9 @@ class DeviceCleanupEvidenceTests(unittest.TestCase):
         """Accept a nonzero failed run only when every cleanup action completed."""
         status = {"state": "Failed", "result": -4016, "cleanup_error": 0,
                   "cleanup_status": 7, "working_directory_restored": True,
-                  "run_id": "current-run"}
-        self.runner.validate_status(status, "current-run")
+                  "run_id": "current-run", "build_id": "0123456789ab",
+                  "hook_mode": "enabled"}
+        self.runner.validate_status(status, "current-run", "0123456789ab")
 
     def test_rejects_incomplete_or_successful_evidence(self):
         """Reject missing cleanup actions, incomplete state, and zero results."""
@@ -78,8 +83,27 @@ class DeviceCleanupEvidenceTests(unittest.TestCase):
              "cleanup_status": 7, "working_directory_restored": True, "run_id": "stale-run"},
         ]
         for status in invalid:
+            status.setdefault("build_id", "0123456789ab")
+            status.setdefault("hook_mode", "enabled")
             with self.subTest(status=status), self.assertRaises(ValueError):
-                self.runner.validate_status(status, "current-run")
+                self.runner.validate_status(status, "current-run", "0123456789ab")
+
+    def test_rejects_stale_build_or_hookless_evidence(self):
+        """Bind cleanup assertions to the linked runtime artifact identity."""
+        base = {"state": "Failed", "result": -4016, "cleanup_error": 0,
+                "cleanup_status": 7, "working_directory_restored": True,
+                "run_id": "current-run", "build_id": "0123456789ab",
+                "hook_mode": "enabled"}
+        for changes in ({"build_id": "aaaaaaaaaaaa"}, {"hook_mode": "disabled"}):
+            status = {**base, **changes}
+            with self.subTest(status=status), self.assertRaises(ValueError):
+                self.runner.validate_status(status, "current-run", "0123456789ab")
+
+    def test_runner_does_not_persist_raw_device_metadata(self):
+        """Keep device identifiers out of the repository-local evidence directory."""
+        source = RUNNER.read_text()
+        self.assertNotIn('"launch.json"', source)
+        self.assertNotIn("output=launch_output", source)
 
 
 if __name__ == "__main__":

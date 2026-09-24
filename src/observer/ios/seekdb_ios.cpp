@@ -18,6 +18,9 @@ using namespace oceanbase::common;
 using namespace oceanbase::observer;
 
 namespace {
+__attribute__((used)) const char artifact_metadata[] =
+    "SEEKDB_IOS_ARTIFACT_BUILD_ID=" SEEKDB_IOS_BUILD_ID
+    ";SEEKDB_IOS_ARTIFACT_HOOK_MODE=" SEEKDB_IOS_HOOK_MODE;
 std::atomic<seekdb_ios_state> runtime_state{SEEKDB_IOS_IDLE};
 std::atomic<bool> stop_requested{false};
 std::atomic<unsigned int> cleanup_status{SEEKDB_IOS_CLEANUP_NONE};
@@ -172,4 +175,14 @@ unsigned int seekdb_ios_get_cleanup_status(void)
 int seekdb_ios_get_cleanup_error(void)
 {
   return cleanup_error.load();
+}
+
+const char *seekdb_ios_get_build_id(void)
+{
+  return SEEKDB_IOS_BUILD_ID;
+}
+
+const char *seekdb_ios_get_hook_mode(void)
+{
+  return SEEKDB_IOS_HOOK_MODE;
 }
