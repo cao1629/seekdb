@@ -1,0 +1,4 @@
+coverage_build rc=0 secs=582
+dry_run rc=0 secs=28
+pass_A rc=1 secs=1454
+pass_B rc=1 secs=1464
