@@ -44,6 +44,7 @@
 .codegraph/
 /.obdev
 /.settings/
+/iphone_test/
 BROWSE
 Build (GNU)
 gtags.files
