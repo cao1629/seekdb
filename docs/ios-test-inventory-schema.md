@@ -10,9 +10,14 @@ The generated inventory is stored as UTF-8 JSON Lines under
 `build_ios_arm64/generated/ios-test-inventory.jsonl`. Each line is one test or
 one independently runnable suite. The tracked
 `unittest/ios_build/ios-test-classification.json` manifest supplies explicit
-per-corpus classifications and narrowly scoped per-ID overrides. Discovery
+per-corpus classification templates, a reviewed decision for every active
+mysqltest and orphan GTest ID, a materialized list of all 500 legacy obtest
+IDs, and narrowly scoped per-ID overrides. Exact-set validation rejects new,
+missing, or stale reviewed IDs. Discovery
 uses `git ls-files -z`, so untracked local files cannot silently change the
-reported corpus. Generated inventory and local device logs remain ignored, but
+reported corpus. Strict generation also rejects relevant staged or unstaged
+tracked changes and untracked active mysqltest files, binding `source_commit`
+to the actual HEAD inputs. Generated inventory and local device logs remain ignored, but
 important outcomes must be summarized in the tracked iOS build and change-log
 documents.
 
@@ -57,6 +62,11 @@ documents.
   never be silently omitted from coverage totals.
 - Device-equivalent IDs must resolve within the same inventory and may not form
   direct or indirect cycles.
+- Required string fields and requirement entries must be nonempty; booleans,
+  timeouts, enums, nullable fields, relative evidence paths, Git object IDs,
+  and SHA-256 digests are validated by type and format.
+- `excluded` rows carry only `exclusion_reason`, `blocked` rows carry only
+  `blocked_reason`, and `required` rows carry neither.
 
 ## Discovered Corpora
 
@@ -69,8 +79,28 @@ documents.
   that corpus.
 - Rust tests are tracked `#[test]` functions. Orphan C++ tests are tracked
   `TEST`/`TEST_F` registrations even when no normal C++ target exists.
+- The normal C++ target count is derived by scanning tracked non-iOS
+  `unittest/**/CMakeLists.txt` target definitions; it is not accepted as a
+  literal manifest assertion.
 - iOS probes are the tracked `*_probe.c`, `*_probe.cpp`, and `sql_probe.cpp`
   sources. Host Python tests are tracked `unittest/ios_build/test_*.py` files.
+
+## Commands
+
+The official focused validation command is:
+
+```bash
+python3 unittest/ios_build/test_inventory.py -v
+```
+
+Strict inventory generation requires all relevant inputs to match HEAD:
+
+```bash
+python3 unittest/ios_build/generate_test_inventory.py
+```
+
+`--allow-dirty` exists only for pre-commit development and does not provide
+HEAD-bound evidence.
 
 ## Evidence Extension
 

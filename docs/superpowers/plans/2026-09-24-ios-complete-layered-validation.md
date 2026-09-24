@@ -24,7 +24,7 @@ Require deterministic discovery of 283 active mysqltest files, the 272 cases sel
 
 - [ ] **Step 2: Verify RED**
 
-Run `python3 -m unittest unittest.ios_build.test_inventory -v` and confirm failure because the generator and classification manifest do not exist.
+Run `python3 unittest/ios_build/test_inventory.py -v` and confirm failure because the generator and classification manifest do not exist. The direct command is required because the repository's `unittest/` directory name conflicts with Python's standard-library `unittest` package when addressed as `unittest.ios_build`.
 
 - [ ] **Step 3: Implement deterministic discovery**
 
@@ -36,7 +36,7 @@ Every discovered test receives one of `device-native`, `host-driven-device`, or 
 
 - [ ] **Step 5: Verify GREEN and commit**
 
-Run the focused test, generate the inventory twice and compare bytes, run the full iOS Python suite, then commit as `test(ios): inventory layered validation corpus`.
+Run `python3 unittest/ios_build/test_inventory.py -v`, generate the inventory twice and compare bytes, run the full iOS Python suite, then commit as `test(ios): inventory layered validation corpus`.
 
 ### Task 2: Add the device registry and structured evidence protocol
 
@@ -221,4 +221,3 @@ List commands, non-sensitive device/OS/build identity, exact counts, exclusions 
 - [ ] **Step 4: Final verification and review**
 
 Run all Python, Shell, Rust, inventory, production-symbol, device-evidence, neutrality, and documentation checks; confirm a clean worktree. Request a final seekdb code review and commit as `docs(ios): publish complete layered validation`.
-

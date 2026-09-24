@@ -244,3 +244,6 @@ python3 deps/ios-build/build.py --jobs 4 vsag
 - 当前修订发现 283 个 active mysqltest，其中 272 个由 CI psmall 配置选择；`tools/obtest/t/**` 下 500 个 legacy case；3 个 Rust `#[test]`；9 个当前无常规 C++ target 的 `TEST`/`TEST_F`；5 个 iOS probe。主机 Python 用例数量随本次新增清单测试增加，始终按已跟踪文件动态核对。
 - 每一行生成结果包含稳定 ID、源码路径、执行层、适用状态、来源 commit 与 corpus digest。排除项和阻塞项必须分别给出明确原因，设备等价映射必须存在且无环。生成结果写入忽略目录 `build_ios_arm64/generated/`，只证明语料发现与分类完整，不证明设备或主机执行通过。
 - TDD RED 为生成器不存在；实现后 focused 清单测试通过。完整 host iOS Python suite、双次生成字节比对与 `git diff --check` 在提交前执行并记录最终结果。本次没有新增或记录设备、签名、团队或账户唯一标识。
+- 规格复审后收紧清单契约：283 个 active mysqltest 与 9 个 orphan GTest 在 manifest 中逐 ID 记录 reviewed decision，500 个 legacy obtest ID 全部物化并做精确集合校验；corpus default 不再被视为上述语料的审核证据。
+- 正式生成默认绑定 HEAD：相关受跟踪输入存在 staged/unstaged 改动或 active mysqltest 存在未跟踪文件时立即失败。字段类型、枚举、null、相对路径、reason 互斥、commit/digest 格式均增加负向测试。常规 C++ target 数量改为从受跟踪的非 iOS unittest CMake 定义派生，不再读取 manifest 字面量。
+- 官方 focused 命令修正为 `python3 unittest/ios_build/test_inventory.py -v`；仓库目录 `unittest/` 与 Python 标准库包同名，不能使用 `python3 -m unittest unittest.ios_build...`。
