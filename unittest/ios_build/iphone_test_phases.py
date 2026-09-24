@@ -99,18 +99,34 @@ class BuildInputs:
     sources: Mapping[str, str]
 
 
-def _tool_has_role(tool: Path, role: str) -> bool:
+def _tool_has_role(
+        tool: Path, role: str,
+        environment: Mapping[str, str]) -> bool:
     """Return whether one executable identifies as the requested Rust tool."""
     if not tool.is_file() or not os.access(tool, os.X_OK):
         return False
     try:
         result = subprocess.run(
             [str(tool), "--version"], check=False, capture_output=True,
-            text=True, timeout=10)
+            text=True, timeout=10, env=dict(environment))
     except (OSError, subprocess.SubprocessError):
         return False
     return (result.returncode == 0
             and result.stdout.strip().lower().startswith(f"{role} "))
+
+
+def _rust_tool_environment(
+        cargo: Path, rustup: Path, cargo_home: Path, rustup_home: Path,
+        source_environment: Mapping[str, str]) -> Mapping[str, str]:
+    """Build a minimal resolved environment for Rust tool role probes."""
+    tool_directories = tuple(dict.fromkeys((
+        str(cargo.parent), str(rustup.parent))))
+    inherited_path = source_environment.get("PATH") or os.defpath
+    return {
+        "CARGO_HOME": str(cargo_home),
+        "RUSTUP_HOME": str(rustup_home),
+        "PATH": os.pathsep.join((*tool_directories, inherited_path)),
+    }
 
 
 def _cache_values(cache_path: Path) -> Mapping[str, str]:
@@ -147,12 +163,6 @@ def resolve_build_inputs(
     headers_prefix, headers_source = choose(
         HEADERS_PREFIX_ENVIRONMENT, "SEEKDB_IOS_HEADER_PREFIX")
     cargo, cargo_source = choose("CARGO", "CARGO")
-    if (cargo is not None and cargo_source == "cmake-cache"
-            and not _tool_has_role(cargo, "cargo")):
-        cargo_sibling = cargo.with_name("cargo")
-        if _tool_has_role(cargo_sibling, "cargo"):
-            cargo = cargo_sibling
-            cargo_source = "cargo-sibling"
     rust_target_dir, rust_target_source = choose(
         RUST_TARGET_DIR_ENVIRONMENT, "RUST_TARGET_DIR")
     rustup_value = environment.get("RUSTUP")
@@ -193,6 +203,19 @@ def resolve_build_inputs(
         rustup_home, rust_target_dir)
     if any(path is None for path in paths):
         raise BuildReadinessError("required iOS build paths are missing")
+    probe_environment = _rust_tool_environment(
+        cargo, rustup, cargo_home, rustup_home, environment)
+    if (cargo_source == "cmake-cache"
+            and not _tool_has_role(
+                cargo, "cargo", probe_environment)):
+        cargo_sibling = cargo.with_name("cargo")
+        sibling_environment = _rust_tool_environment(
+            cargo_sibling, rustup, cargo_home, rustup_home, environment)
+        if _tool_has_role(
+                cargo_sibling, "cargo", sibling_environment):
+            cargo = cargo_sibling
+            cargo_source = "cargo-sibling"
+            probe_environment = sibling_environment
     explicit_rust_target = bool(environment.get(RUST_TARGET_DIR_ENVIRONMENT))
     rust_target_ready = (
         (rust_target_dir.is_dir()
@@ -200,8 +223,9 @@ def resolve_build_inputs(
         or (explicit_rust_target
             and not rust_target_dir.exists()
             and rust_target_dir.parent.is_dir()))
-    if (not _tool_has_role(cargo, "cargo")
-            or not _tool_has_role(rustup, "rustup")
+    if (not _tool_has_role(cargo, "cargo", probe_environment)
+            or not _tool_has_role(
+                rustup, "rustup", probe_environment)
             or not cargo_home.is_dir()
             or not rustup_home.is_dir()
             or not rust_target_ready

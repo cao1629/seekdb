@@ -8,7 +8,7 @@
 
 无显式 bundle/team 时，只在现有 probe App 的 Info.plist 与 embedded profile 唯一一致、profile 为未过期 iOS profile、只有一个 developer certificate 且包含设备范围时进行进程内推导；证书摘要还必须在本机 codesigning identities 中唯一匹配私钥。任何歧义或缺失都停止，并要求设置 `SEEKDB_IPHONE_BUNDLE_ID`、`SEEKDB_IPHONE_TEAM`；`SEEKDB_IPHONE_SIGNING_IDENTITY` 不是硬要求，当前 `build_app.py` 不消费它。所有推导出的 bundle、team、设备、profile/certificate token 都在首个外部命令前注册为内存脱敏 token，不写入 checkpoint、report 或 Git。
 
-构建依赖优先使用显式环境；否则读取现有 `CMakeCache.txt`，逐项验证目录、可执行工具和关键 iphoneos 静态库，再把所有路径明确传给 build 命令，不依赖当前 worktree 缺失的默认目录，也不静默沿用缓存配置。Cargo 与 rustup 都通过捕获输出的 `--version` probe 验证角色，不能仅凭文件可执行就互换；若 cache 的 `CARGO` 实际指向 rustup，只在同一 `bin` 目录存在且验证通过的 cargo sibling 时修正，并通过 `-DCARGO=` 写回 CMake，否则在构建前安全阻断。probe stdout/stderr 不进入诊断或证据。显式 `RUST_TARGET_DIR` 可以是尚未创建或空的 fresh target；已有 simulator/x86-only target 且没有 device target 时会被拒绝，cache-backed CMake 仍必须明确为 iphoneos ARM64。输出只打印 `environment`、`cmake-cache`、`cargo-sibling` 等非敏感来源标签，不打印路径：
+构建依赖优先使用显式环境；否则读取现有 `CMakeCache.txt`，逐项验证目录、可执行工具和关键 iphoneos 静态库，再把所有路径明确传给 build 命令，不依赖当前 worktree 缺失的默认目录，也不静默沿用缓存配置。runner 先解析 Cargo/rustup candidate 与 `CARGO_HOME`/`RUSTUP_HOME`，然后构造只含解析后 homes、工具 `bin` 优先 `PATH` 的受控 probe 环境；Cargo 与 rustup 再分别通过捕获输出的 `--version` 验证角色，不能仅凭文件可执行就互换。这样 rustup-managed cargo shim 可在其完整上下文中验证；错误 home 仍在 build 前阻断。若 cache 的 `CARGO` 实际指向 rustup，只在同一 `bin` 目录存在且验证通过的 cargo sibling 时修正，并通过 `-DCARGO=` 写回 CMake。probe stdout/stderr 不进入诊断或证据。显式 `RUST_TARGET_DIR` 可以是尚未创建或空的 fresh target；已有 simulator/x86-only target 且没有 device target 时会被拒绝，cache-backed CMake 仍必须明确为 iphoneos ARM64。输出只打印 `environment`、`cmake-cache`、`cargo-sibling` 等非敏感来源标签，不打印路径：
 
 ```bash
 export SEEKDB_IPHONE_DEPS_PREFIX="<iphoneos dependency prefix>"
