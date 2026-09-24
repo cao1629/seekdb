@@ -412,6 +412,22 @@ class IphoneTestRunnerTest(unittest.TestCase):
             "Apple developer tools unavailable; hash=00008110abcdef")
         self.assertEqual(ordinary, runner.sanitize(ordinary, run_id))
 
+    def test_redacts_distribution_and_canonical_signing_identities(self):
+        """Distribution and parenthesized-team identities must be rejected."""
+        run_id = self.selection.checkpoint["run_id"]
+        identities = (
+            "Apple Distribution: Jane Doe (ABCDE12345)",
+            "iPhone Distribution: Example Company (ZYXWV98765)",
+            "Developer ID Application: Build Account (A1B2C3D4E5)",
+        )
+        for identity in identities:
+            with self.subTest(identity=identity):
+                self.assertEqual(
+                    runner.REDACTED, runner.sanitize(identity, run_id))
+
+        ordinary = "distribution archive rejected (error 17)"
+        self.assertEqual(ordinary, runner.sanitize(ordinary, run_id))
+
     def test_exclusion_contract_requires_exact_tracked_reason(self):
         """Only exact reviewed non-applicability may produce an exclusion."""
         with self.assertRaisesRegex(ValueError, "exclusion_reason"):
@@ -480,6 +496,53 @@ class IphoneTestRunnerTest(unittest.TestCase):
             [case["status"]
              for case in checkpoint["phases"][0]["cases"]],
         )
+
+    def test_unsafe_categories_and_unclean_blocked_stop_all_dispatch(self):
+        """Unsafe terminal outcomes must stop the next case and later phases."""
+        outcomes = (
+            runner.CaseResult.failed(
+                category="cleanup", diagnostic="cleanup failed"),
+            runner.CaseResult.failed(
+                category="evidence", diagnostic="evidence malformed"),
+            runner.CaseResult.failed(
+                category="timeout", diagnostic="case timed out"),
+            runner.CaseResult.blocked(
+                "manual gate left device dirty", clean_state=False),
+        )
+        for index, outcome in enumerate(outcomes):
+            with self.subTest(outcome=outcome):
+                output_root = self.output_root / f"unsafe-{index}"
+                selection = state.select_run(
+                    output_root,
+                    mode=state.RunMode.DEFAULT,
+                    source_commit="a" * 40,
+                    config_fingerprint="b" * 64,
+                    now=self.timestamp,
+                )
+                executed = []
+                adapters = self.adapters()
+                adapters[0] = runner.PhaseAdapter(
+                    phase_id=runner.PHASE_IDS[0],
+                    cases=(
+                        runner.CaseSpec("unsafe", "device-native"),
+                        runner.CaseSpec("same-phase-next", "device-native"),
+                    ),
+                    execute=lambda case, result=outcome: (
+                        executed.append(case.case_id) or result),
+                )
+
+                self.assertEqual(1, runner.run_phase_engine(
+                    output_root, selection, adapters, now=self.clock))
+
+                checkpoint = state.load_checkpoint(
+                    output_root, selection.run_directory)
+                statuses = [
+                    case["status"] for phase in checkpoint["phases"]
+                    for case in phase["cases"]]
+                self.assertEqual(["unsafe"], executed)
+                self.assertEqual(outcome.status, statuses[0])
+                self.assertTrue(all(status == "pending"
+                                    for status in statuses[1:]))
 
     def test_failure_files_keep_only_allowlisted_relative_evidence_paths(self):
         """Failure artifacts must not serialize arbitrary host filesystem paths."""

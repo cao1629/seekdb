@@ -57,9 +57,12 @@ SENSITIVE_LABEL_PATTERN = re.compile(
 APPLE_UDID_PATTERN = re.compile(
     r"(?i)\b[0-9a-f]{8}-?[0-9a-f]{16}\b")
 APPLE_CERTIFICATE_IDENTITY_PATTERN = re.compile(
-    r"(?i)\bApple\s+Development\s*:")
-
-
+    r"(?i)\b(?:Apple\s+(?:Development|Distribution)|"
+    r"iPhone\s+Distribution)\s*:")
+CANONICAL_SIGNING_IDENTITY_PATTERN = re.compile(
+    r"(?i)\b(?:Apple\s+(?:Development|Distribution)|"
+    r"iPhone\s+Distribution|Developer\s+ID\s+(?:Application|Installer))"
+    r"\s*:[^\r\n]*\([A-Z0-9]{10}\)")
 class FailureCategory(str, Enum):
     """Classify failures that drive continuation and final reporting."""
 
@@ -71,6 +74,12 @@ class FailureCategory(str, Enum):
 
 
 FAILURE_CATEGORIES = frozenset(category.value for category in FailureCategory)
+UNSAFE_FAILURE_CATEGORIES = frozenset({
+    FailureCategory.CLEANUP.value,
+    FailureCategory.EVIDENCE.value,
+    FailureCategory.INFRASTRUCTURE.value,
+    FailureCategory.TIMEOUT.value,
+})
 
 
 @dataclass(frozen=True)
@@ -247,11 +256,25 @@ def validate_case_result(spec: CaseSpec, result: CaseResult) -> CaseResult:
     return result
 
 
+def should_stop_after_result(spec: CaseSpec, result: CaseResult) -> bool:
+    """Return whether one terminal result makes successor dispatch unsafe."""
+    if not result.clean_state:
+        return True
+    if result.status != "failed":
+        return False
+    return (
+        result.category in UNSAFE_FAILURE_CATEGORIES
+        or not spec.isolated
+        or not result.retry_safe
+    )
+
+
 def _redact_text(value: str, run_id: str) -> str:
     """Redact UUID-like values other than the runner-owned run ID."""
     if (SENSITIVE_LABEL_PATTERN.search(value)
             or APPLE_UDID_PATTERN.search(value)
-            or APPLE_CERTIFICATE_IDENTITY_PATTERN.search(value)):
+            or APPLE_CERTIFICATE_IDENTITY_PATTERN.search(value)
+            or CANONICAL_SIGNING_IDENTITY_PATTERN.search(value)):
         return REDACTED
     protected = "__RUNNER_OWNED_RUN_ID__"
     value = value.replace(run_id, protected)
@@ -699,23 +722,18 @@ def run_phase_engine(
                     result.evidence_paths, checkpoint["run_id"])
                 case["retry_safe"] = result.retry_safe
                 case["clean_state"] = result.clean_state
-                unsafe_failure = (
-                    result.status == "failed" and (
-                        result.category == "infrastructure"
-                        or not spec.isolated
-                        or not result.retry_safe
-                        or not result.clean_state))
+                unsafe_result = should_stop_after_result(spec, result)
                 if result.status == "failed":
                     case["failure_file"] = _write_failure(
                         output_root, run_directory, checkpoint,
                         phase["id"], case, result,
                         later_cases_continued=(
-                            not unsafe_failure
+                            not unsafe_result
                             and _has_later_isolated_runnable_case(
                                 checkpoint, registry,
                                 phase["id"], case["id"])),
                     )
-                if unsafe_failure:
+                if unsafe_result:
                     _refresh_status(checkpoint)
                     stop_all = True
                 else:
