@@ -581,10 +581,15 @@ class RunAllIphoneTestsTest(unittest.TestCase):
         )
         captured = {}
 
-        def load_adapters(configuration, suites):
+        def load_adapters(
+                configuration, suites, run_directory,
+                source_revision, run_id):
             """Capture process-local inputs at the future Task 4 boundary."""
             captured["configuration"] = configuration
             captured["suites"] = suites
+            captured["run_directory"] = run_directory
+            captured["source_revision"] = source_revision
+            captured["run_id"] = run_id
             return ("adapter",)
 
         def run_engine(
@@ -634,6 +639,10 @@ class RunAllIphoneTestsTest(unittest.TestCase):
             captured["configuration"],
         )
         self.assertEqual(tuple(cli.runner.PHASE_IDS), captured["suites"])
+        self.assertEqual(selection.run_directory, captured["run_directory"])
+        self.assertEqual("a" * 40, captured["source_revision"])
+        self.assertEqual(
+            selection.checkpoint["run_id"], captured["run_id"])
         self.assertEqual(("adapter",), captured["adapters"])
         self.assertEqual(
             ("environment-device", "environment.bundle", "ENVTEAM001",
@@ -643,7 +652,7 @@ class RunAllIphoneTestsTest(unittest.TestCase):
         selection.close.assert_called_once_with()
 
     def test_adapter_setup_failure_is_redacted_and_releases_all_state(self):
-        """Import/factory setup errors must not leak process-local values."""
+        """Import/factory exits and terminal writes must not leak local values."""
         secrets = (
             "00008110-SECRET-DEVICE", "org.private.bundle",
             "TEAMSECRET", "Apple Development: Private Person",
@@ -657,18 +666,20 @@ class RunAllIphoneTestsTest(unittest.TestCase):
                     secrets[0], "iPhone", "iOS", "physical", "default",
                     "booted", "paired")
                 stderr = io.StringIO()
-                failure = RuntimeError(
+                failure = SystemExit(
                     f"{setup_kind} failed for {' '.join(secrets)}")
                 original_import = __import__
 
                 def import_module(name, *args, **kwargs):
                     """Fail only the adapter import and delegate all others."""
                     if name == "iphone_test_phases":
+                        print(" ".join(secrets), file=sys.stderr)
                         raise failure
                     return original_import(name, *args, **kwargs)
 
                 def create_phase_adapters(**_kwargs):
                     """Model a phase factory that exposes a sensitive error."""
+                    print(" ".join(secrets), file=sys.stderr)
                     raise failure
 
                 adapter_module = types.SimpleNamespace(
@@ -678,7 +689,9 @@ class RunAllIphoneTestsTest(unittest.TestCase):
                     if setup_kind == "import" else
                     mock.patch.dict(
                         sys.modules, {"iphone_test_phases": adapter_module}))
-                with setup_patch, mock.patch.object(
+                terminal_stderr = io.StringIO()
+                with contextlib.redirect_stderr(terminal_stderr), \
+                        setup_patch, mock.patch.object(
                         cli, "source_commit", return_value="a" * 40), \
                         mock.patch.object(
                             cli, "validate_build_identity",
@@ -695,7 +708,7 @@ class RunAllIphoneTestsTest(unittest.TestCase):
                     ], environment={}, stdout=io.StringIO(), stderr=stderr,
                         clock=lambda: timestamp)
 
-                serialized = stderr.getvalue()
+                serialized = stderr.getvalue() + terminal_stderr.getvalue()
                 if output_root.exists():
                     serialized += "".join(
                         path.read_text(encoding="utf-8", errors="replace")
@@ -709,6 +722,125 @@ class RunAllIphoneTestsTest(unittest.TestCase):
                     output_root, output_root / "2026-09-24")
                 lock.acquire()
                 lock.release()
+
+    def test_adapter_keyboard_interrupt_returns_130_without_leaking(self):
+        """Preserve interrupt semantics while suppressing sensitive exception text."""
+        secret = "private-device-token"
+        timestamp = dt.datetime(2026, 9, 24, 10, tzinfo=UTC)
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            output_root = Path(temporary_directory) / "iphone_test"
+            physical = cli.PhysicalDevice(
+                secret, "iPhone", "iOS", "physical", "default",
+                "booted", "paired")
+            stderr = io.StringIO()
+            with mock.patch.object(
+                    cli, "source_commit", return_value="a" * 40), \
+                    mock.patch.object(
+                        cli, "prepare_phase_artifacts"), \
+                    mock.patch.object(
+                        cli, "validate_build_identity", return_value="c" * 64), \
+                    mock.patch.object(
+                        cli, "discover_physical_devices",
+                        return_value=[physical]), \
+                    mock.patch.object(
+                        cli, "load_phase_adapters",
+                        side_effect=KeyboardInterrupt(secret)):
+                status = cli.main([
+                    "--output-root", str(output_root), "--device", secret,
+                ], environment={}, stdout=io.StringIO(), stderr=stderr,
+                    clock=lambda: timestamp)
+
+            serialized = stderr.getvalue() + "".join(
+                path.read_text(encoding="utf-8", errors="replace")
+                for path in output_root.rglob("*") if path.is_file())
+            self.assertEqual(130, status)
+            self.assertNotIn(secret, serialized)
+            self.assertFalse(cli.runner.has_runtime_redaction_tokens())
+
+    def test_precheckpoint_build_identity_survives_interrupt_and_resume(self):
+        """Artifacts created during setup must already belong to checkpoint identity."""
+        timestamp = dt.datetime(2026, 9, 24, 10, tzinfo=UTC)
+        marker = (
+            b"SEEKDB_IOS_ARTIFACT_BUILD_ID=aaaaaaaaaaaa;"
+            b"SEEKDB_IOS_ARTIFACT_HOOK_MODE=enabled")
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            output_root = root / "iphone_test"
+            engine = root / "build"
+            app = engine / "Probe.app"
+            prepare_calls = []
+
+            def prepare(configuration, suites, source_revision, run_id):
+                """Create deterministic current artifacts before state selection."""
+                self.assertFalse(output_root.exists())
+                prepare_calls.append((tuple(suites), source_revision, run_id))
+                archive = engine / "src/observer/libseekdb_ios_runtime.a"
+                archive.parent.mkdir(parents=True, exist_ok=True)
+                archive.write_bytes(marker + b"-stable-archive")
+                (engine / "CMakeCache.txt").write_text(
+                    "SEEKDB_IOS_TEST_HOOKS:BOOL=ON\n", encoding="utf-8")
+                app.mkdir(parents=True, exist_ok=True)
+                with (app / "Info.plist").open("wb") as plist:
+                    plistlib.dump({"CFBundleExecutable": "Probe"}, plist)
+                (app / "Probe").write_bytes(marker + b"-stable-app")
+
+            physical = cli.PhysicalDevice(
+                "device", "iPhone", "iOS", "physical", "default",
+                "booted", "paired")
+            engine_statuses = iter((130, 0))
+            selected_directories = []
+
+            def run_engine(_root, selection, _adapters, **_kwargs):
+                """Model an interruption after selection and a successful resume."""
+                selected_directories.append(selection.run_directory)
+                selection.close()
+                return next(engine_statuses)
+
+            common = [
+                "--output-root", str(output_root),
+                "--device", "device", "--bundle-id", "org.private.probe",
+                "--team", "TEAMTOKEN1", "--engine-build", str(engine),
+                "--app-artifact", str(app),
+            ]
+            with mock.patch.object(
+                    cli, "source_commit", return_value="a" * 40), \
+                    mock.patch.object(
+                        cli, "prepare_phase_artifacts", side_effect=prepare), \
+                    mock.patch.object(
+                        cli, "discover_physical_devices",
+                        return_value=[physical]), \
+                    mock.patch.object(
+                        cli, "load_phase_adapters", return_value=("adapter",)), \
+                    mock.patch.object(
+                        cli.runner, "run_phase_engine", side_effect=run_engine):
+                first = cli.main(
+                    common, environment={}, stdout=io.StringIO(),
+                    clock=lambda: timestamp)
+                second = cli.main(
+                    [*common, "--resume"], environment={}, stdout=io.StringIO(),
+                    clock=lambda: timestamp + dt.timedelta(hours=1))
+
+            checkpoint = json.loads((
+                selected_directories[0] / "checkpoint.json").read_text(
+                    encoding="utf-8"))
+            actual_identity = cli.validate_build_identity(
+                cli.LocalConfiguration(
+                    device="device", bundle_id="org.private.probe",
+                    team="TEAMTOKEN1", signing_identity=None,
+                    engine_build=engine, app_artifact=app, test_hooks=True),
+                "a" * 40)
+            expected_fingerprint = cli.configuration_fingerprint(
+                runner_suites=cli.runner.PHASE_IDS,
+                configuration=cli.LocalConfiguration(
+                    device="device", bundle_id="org.private.probe",
+                    team="TEAMTOKEN1", signing_identity=None,
+                    engine_build=engine, app_artifact=app, test_hooks=True),
+                build_identity=actual_identity)
+
+        self.assertEqual((130, 0), (first, second))
+        self.assertEqual(1, len(prepare_calls))
+        self.assertEqual(selected_directories[0], selected_directories[1])
+        self.assertEqual(expected_fingerprint, checkpoint["config_fingerprint"])
 
 
 if __name__ == "__main__":

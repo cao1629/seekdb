@@ -877,3 +877,47 @@ def preview_run(
         candidates, key=lambda item: item[0])
     _validate_compatibility(checkpoint, source_commit, config_fingerprint)
     return RunPreview(run_directory, checkpoint=checkpoint, resumed=True)
+
+
+def preview_run_path(
+        output_root: Path, mode: RunMode,
+        now: dt.datetime) -> RunPreview:
+    """Select a read-only candidate path before build identity is available."""
+    _require_aware(now)
+    root = Path(output_root).expanduser().absolute()
+    if root.is_symlink() or (root.exists() and not root.is_dir()):
+        raise UnsafeRunPathError("output root must be a real directory")
+    today_directory = _validate_run_directory(
+        root, root / now.date().isoformat())
+    if mode == RunMode.RESTART:
+        return RunPreview(today_directory, checkpoint=None, resumed=False)
+    if mode == RunMode.DEFAULT:
+        if not _checkpoint_exists(root, today_directory):
+            return RunPreview(today_directory, checkpoint=None, resumed=False)
+        checkpoint = load_checkpoint(root, today_directory)
+        if not _is_incomplete(checkpoint):
+            return RunPreview(today_directory, checkpoint=None, resumed=False)
+        return RunPreview(today_directory, checkpoint=checkpoint, resumed=True)
+    if mode != RunMode.RESUME:
+        raise ValueError(f"unsupported run mode: {mode}")
+    candidates = []
+    if root.exists():
+        for child in root.iterdir():
+            if child.is_symlink() or not child.is_dir():
+                continue
+            try:
+                safe_child = _validate_run_directory(root, child)
+            except UnsafeRunPathError:
+                continue
+            if not _checkpoint_exists(root, safe_child):
+                continue
+            checkpoint = load_checkpoint(root, safe_child)
+            if _is_incomplete(checkpoint):
+                started_at = _parse_aware_timestamp(
+                    checkpoint["started_at"], "started_at")
+                candidates.append((started_at, safe_child, checkpoint))
+    if not candidates:
+        raise NoResumableRunError("no incomplete checkpoint is available")
+    _, run_directory, checkpoint = max(
+        candidates, key=lambda item: item[0])
+    return RunPreview(run_directory, checkpoint=checkpoint, resumed=True)

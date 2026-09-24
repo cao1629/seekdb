@@ -71,6 +71,20 @@ class IphoneTestStateTest(unittest.TestCase):
         state.save_checkpoint(self.output_root, run_directory, checkpoint)
         return run_directory
 
+    def test_preview_run_path_ignores_identity_without_mutating_state(self):
+        """Pre-build discovery may print a path before artifact identity exists."""
+        older = self.new_checkpoint(self.now(day=20, hour=8))
+        older["config_fingerprint"] = "c" * 64
+        run_directory = self.save_for_day("2026-09-20", older)
+        before = (run_directory / state.CHECKPOINT_FILENAME).read_bytes()
+
+        preview = state.preview_run_path(
+            self.output_root, state.RunMode.RESUME, self.now(day=24))
+
+        self.assertEqual(run_directory, preview.run_directory)
+        self.assertEqual(before, (
+            run_directory / state.CHECKPOINT_FILENAME).read_bytes())
+
     def case_record(self, case_id, status, attempt_count=0):
         """Build a structurally valid case record for one lifecycle state."""
         record = {

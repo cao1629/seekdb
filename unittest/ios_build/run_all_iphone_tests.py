@@ -2,9 +2,11 @@
 """Select and execute a resumable physical-iPhone validation run."""
 
 import argparse
+import contextlib
 from dataclasses import dataclass, replace
 import datetime as dt
 import hashlib
+import io
 import json
 import os
 from pathlib import Path
@@ -13,6 +15,7 @@ import re
 import subprocess
 import sys
 from typing import Callable, Iterable, Mapping, Optional, Sequence, TextIO
+import uuid
 
 import iphone_test_runner as runner
 import iphone_test_state as state
@@ -363,28 +366,34 @@ def validate_build_identity(
     }
     app_executable = _app_executable(configuration.app_artifact)
     cache = configuration.engine_build / "CMakeCache.txt"
-    if cache.is_file():
-        identity["cmake_cache"] = _hash_file(cache)
-        expected = "ON" if configuration.test_hooks else "OFF"
-        setting = f"SEEKDB_IOS_TEST_HOOKS:BOOL={expected}"
-        if setting.encode("utf-8") not in cache.read_bytes():
-            raise IphoneTestCliError(
-                "iPhone build configuration does not match runner mode")
+    if not cache.is_file():
+        raise IphoneTestCliError(
+            "iPhone build identity configuration is not prepared")
+    identity["cmake_cache"] = _hash_file(cache)
+    expected = "ON" if configuration.test_hooks else "OFF"
+    setting = f"SEEKDB_IOS_TEST_HOOKS:BOOL={expected}"
+    if setting.encode("utf-8") not in cache.read_bytes():
+        raise IphoneTestCliError(
+            "iPhone build configuration does not match runner mode")
     archive = (
         configuration.engine_build
         / "src/observer/libseekdb_ios_runtime.a")
     expected_mode = b"enabled" if configuration.test_hooks else b"disabled"
     expected_marker = (source_revision[:12].encode("ascii"), expected_mode)
-    if archive.is_file():
-        if _artifact_marker(archive) != expected_marker:
-            raise IphoneTestCliError(
-                "iPhone build identity does not match source and runner mode")
-        identity["runtime_archive"] = _hash_file(archive)
-    if app_executable is not None:
-        if _artifact_marker(app_executable) != expected_marker:
-            raise IphoneTestCliError(
-                "iPhone artifact identity does not match source and runner mode")
-        identity["app_executable"] = _hash_file(app_executable)
+    if not archive.is_file():
+        raise IphoneTestCliError(
+            "iPhone build identity runtime archive is not prepared")
+    if _artifact_marker(archive) != expected_marker:
+        raise IphoneTestCliError(
+            "iPhone build identity does not match source and runner mode")
+    identity["runtime_archive"] = _hash_file(archive)
+    if app_executable is None:
+        raise IphoneTestCliError(
+            "iPhone build identity App artifact is not prepared")
+    if _artifact_marker(app_executable) != expected_marker:
+        raise IphoneTestCliError(
+            "iPhone artifact identity does not match source and runner mode")
+    identity["app_executable"] = _hash_file(app_executable)
     serialized = json.dumps(
         identity, sort_keys=True, separators=(",", ":"))
     return hashlib.sha256(serialized.encode("utf-8")).hexdigest()
@@ -415,7 +424,10 @@ def configuration_fingerprint(
 
 def load_phase_adapters(
         configuration: LocalConfiguration,
-        suites: Sequence[str]) -> Iterable[runner.PhaseAdapter]:
+        suites: Sequence[str],
+        run_directory: Path,
+        source_revision: str,
+        run_id: str) -> Iterable[runner.PhaseAdapter]:
     """Load phase adapters when the standalone phase registry is available."""
     try:
         import iphone_test_phases
@@ -424,7 +436,62 @@ def load_phase_adapters(
             raise
         return ()
     return iphone_test_phases.create_phase_adapters(
-        configuration=configuration, suites=tuple(suites))
+        configuration=configuration,
+        suites=tuple(suites),
+        run_directory=run_directory,
+        source_revision=source_revision,
+        run_id=run_id,
+    )
+
+
+def prepare_phase_artifacts(
+        configuration: LocalConfiguration,
+        suites: Sequence[str],
+        source_revision: str,
+        run_id: str) -> None:
+    """Prepare current artifacts before their identity enters a checkpoint."""
+    try:
+        import iphone_test_phases
+    except ModuleNotFoundError as error:
+        if error.name != "iphone_test_phases":
+            raise
+        return
+    prepare = getattr(iphone_test_phases, "prepare_test_app", None)
+    if prepare is None:
+        return
+    prepare(
+        configuration=configuration,
+        suites=tuple(suites),
+        source_revision=source_revision,
+        run_id=run_id,
+    )
+
+
+def _safe_setup_call(
+        operation: Callable[[], object], run_id: str) -> object:
+    """Run adapter setup with captured terminal streams and safe exceptions."""
+    captured_stdout = io.StringIO()
+    captured_stderr = io.StringIO()
+    try:
+        with contextlib.redirect_stdout(captured_stdout), \
+                contextlib.redirect_stderr(captured_stderr):
+            return operation()
+    except SystemExit as error:
+        diagnostic = runner.sanitize_diagnostic(str(error), run_id)
+        raise IphoneTestCliError(
+            f"phase adapter setup failed: {diagnostic}") from None
+    except KeyboardInterrupt:
+        raise KeyboardInterrupt() from None
+    except Exception as error:
+        diagnostic = runner.sanitize_diagnostic(str(error), run_id)
+        raise IphoneTestCliError(
+            f"phase adapter setup failed: {diagnostic}") from None
+    except BaseException as error:
+        try:
+            sanitized_interrupt = type(error)()
+        except Exception:
+            sanitized_interrupt = KeyboardInterrupt()
+        raise sanitized_interrupt from None
 
 
 def _run_mode(options: argparse.Namespace) -> state.RunMode:
@@ -456,14 +523,15 @@ def main(
     selection = None
     engine_owns_selection = False
     redaction_run_id = None
+    device_selected = False
     try:
         revision = source_commit()
-        build_identity = validate_build_identity(configuration, revision)
-        fingerprint = configuration_fingerprint(
-            runner_suites=suites, configuration=configuration,
-            build_identity=build_identity)
         current_time = clock()
         if options.dry_run:
+            build_identity = validate_build_identity(configuration, revision)
+            fingerprint = configuration_fingerprint(
+                runner_suites=suites, configuration=configuration,
+                build_identity=build_identity)
             preview = state.preview_run(
                 options.output_root,
                 mode=_run_mode(options),
@@ -474,20 +542,65 @@ def main(
             print(f"Selected iPhone test run: {preview.run_directory}",
                   file=stdout, flush=True)
         else:
-            selection = state.select_run(
-                options.output_root,
-                mode=_run_mode(options),
-                source_commit=revision,
-                config_fingerprint=fingerprint,
-                now=current_time,
-            )
-            print(f"Selected iPhone test run: {selection.run_directory}",
-                  file=stdout, flush=True)
+            try:
+                build_identity = validate_build_identity(
+                    configuration, revision)
+            except IphoneTestCliError:
+                path_preview = state.preview_run_path(
+                    options.output_root, _run_mode(options), current_time)
+                print(
+                    f"Selected iPhone test run: {path_preview.run_directory}",
+                    file=stdout, flush=True)
+                selected_device = select_physical_device(
+                    configuration.device, discover_physical_devices())
+                configuration = replace(
+                    configuration, device=selected_device.identifier)
+                device_selected = True
+                setup_run_id = f"setup-{uuid.uuid4().hex}"
+                runner.register_runtime_redaction_tokens(
+                    setup_run_id, configuration.redaction_tokens())
+                try:
+                    _safe_setup_call(
+                        lambda: prepare_phase_artifacts(
+                            configuration, suites, revision, setup_run_id),
+                        setup_run_id)
+                finally:
+                    runner.clear_runtime_redaction_tokens(setup_run_id)
+                build_identity = validate_build_identity(
+                    configuration, revision)
+                fingerprint = configuration_fingerprint(
+                    runner_suites=suites, configuration=configuration,
+                    build_identity=build_identity)
+                selection = state.select_run(
+                    options.output_root,
+                    mode=_run_mode(options),
+                    source_commit=revision,
+                    config_fingerprint=fingerprint,
+                    now=current_time,
+                )
+                if selection.run_directory != path_preview.run_directory:
+                    raise IphoneTestCliError(
+                        "selected run changed during artifact preparation")
+            else:
+                fingerprint = configuration_fingerprint(
+                    runner_suites=suites, configuration=configuration,
+                    build_identity=build_identity)
+                selection = state.select_run(
+                    options.output_root,
+                    mode=_run_mode(options),
+                    source_commit=revision,
+                    config_fingerprint=fingerprint,
+                    now=current_time,
+                )
+                print(
+                    f"Selected iPhone test run: {selection.run_directory}",
+                    file=stdout, flush=True)
 
-        selected_device = select_physical_device(
-            configuration.device, discover_physical_devices())
-        configuration = replace(
-            configuration, device=selected_device.identifier)
+        if not device_selected:
+            selected_device = select_physical_device(
+                configuration.device, discover_physical_devices())
+            configuration = replace(
+                configuration, device=selected_device.identifier)
         if options.dry_run:
             print("Dry run completed; no test phase was dispatched.",
                   file=stdout)
@@ -496,13 +609,11 @@ def main(
         redaction_run_id = selection.checkpoint["run_id"]
         runner.register_runtime_redaction_tokens(
             redaction_run_id, configuration.redaction_tokens())
-        try:
-            adapters = load_phase_adapters(configuration, suites)
-        except Exception as error:
-            diagnostic = runner.sanitize_diagnostic(
-                str(error), redaction_run_id)
-            raise IphoneTestCliError(
-                f"phase adapter setup failed: {diagnostic}") from error
+        adapters = _safe_setup_call(
+            lambda: load_phase_adapters(
+                configuration, suites, selection.run_directory,
+                revision, redaction_run_id),
+            redaction_run_id)
         engine_owns_selection = True
         return runner.run_phase_engine(
             options.output_root, selection, adapters, now=clock,
@@ -510,6 +621,9 @@ def main(
     except (IphoneTestCliError, state.IphoneTestStateError) as error:
         print(f"iPhone test runner error: {error}", file=stderr)
         return 2
+    except KeyboardInterrupt:
+        print("iPhone test runner interrupted.", file=stderr)
+        return 130
     finally:
         if selection is not None and not engine_owns_selection:
             selection.close()
