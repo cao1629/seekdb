@@ -3,6 +3,7 @@
 
 import datetime as dt
 import json
+import multiprocessing
 import os
 from pathlib import Path
 import sys
@@ -18,6 +19,15 @@ import iphone_test_state as state
 
 
 UTC = dt.timezone.utc
+
+
+def _try_run_lock(output_root, run_directory, result_queue):
+    """Report whether a separate process can acquire one run lock."""
+    try:
+        with state.RunLock(Path(output_root), Path(run_directory)):
+            result_queue.put("acquired")
+    except state.RunLockedError:
+        result_queue.put("locked")
 
 
 class IphoneTestStateTest(unittest.TestCase):
@@ -46,6 +56,13 @@ class IphoneTestStateTest(unittest.TestCase):
             now=timestamp or self.now(),
         )
         checkpoint["status"] = status
+        if status == "passed":
+            checkpoint["phases"] = [{
+                "id": "complete",
+                "status": "passed",
+                "cases": [self.case_record(
+                    "complete", "passed", attempt_count=1)],
+            }]
         return checkpoint
 
     def save_for_day(self, day, checkpoint):
@@ -144,6 +161,141 @@ class IphoneTestStateTest(unittest.TestCase):
         self.assertEqual(1, len(list(run_directory.glob("summary.backup-*.json"))))
         self.assertEqual(1, len(list(run_directory.glob("summary.backup-*.md"))))
 
+    def test_run_lock_prevents_concurrent_lost_updates(self):
+        """A second runner process must fail before it can overwrite state."""
+        run_directory = self.save_for_day(
+            "2026-09-24", self.new_checkpoint())
+        context = multiprocessing.get_context("spawn")
+        result_queue = context.Queue()
+
+        with state.RunLock(self.output_root, run_directory):
+            process = context.Process(
+                target=_try_run_lock,
+                args=(self.output_root, run_directory, result_queue),
+            )
+            process.start()
+            process.join(timeout=10)
+
+        self.assertEqual(0, process.exitcode)
+        self.assertEqual("locked", result_queue.get(timeout=2))
+        second_queue = context.Queue()
+        second = context.Process(
+            target=_try_run_lock,
+            args=(self.output_root, run_directory, second_queue),
+        )
+        second.start()
+        second.join(timeout=10)
+        self.assertEqual(0, second.exitcode)
+        self.assertEqual("acquired", second_queue.get(timeout=2))
+
+    def test_checkpoint_generation_rejects_stale_lost_update(self):
+        """Two readers of one generation must not both overwrite checkpoint."""
+        run_directory = self.save_for_day(
+            "2026-09-24", self.new_checkpoint())
+        first = state.load_checkpoint(self.output_root, run_directory)
+        stale = state.load_checkpoint(self.output_root, run_directory)
+        first["last_resumed_at"] = self.now(hour=11).isoformat()
+        stale["last_resumed_at"] = self.now(hour=12).isoformat()
+
+        state.save_checkpoint(self.output_root, run_directory, first)
+
+        with self.assertRaises(state.ConcurrentCheckpointUpdateError):
+            state.save_checkpoint(self.output_root, run_directory, stale)
+
+    def test_selected_run_holds_lock_until_runner_closes(self):
+        """Run selection should retain exclusive ownership for runner lifetime."""
+        selection = state.select_run(
+            self.output_root,
+            mode=state.RunMode.DEFAULT,
+            source_commit=self.source_commit,
+            config_fingerprint=self.config_fingerprint,
+            now=self.now(),
+        )
+        context = multiprocessing.get_context("spawn")
+        locked_queue = context.Queue()
+        locked_process = context.Process(
+            target=_try_run_lock,
+            args=(self.output_root, selection.run_directory, locked_queue),
+        )
+        locked_process.start()
+        locked_process.join(timeout=10)
+        self.assertEqual(0, locked_process.exitcode)
+        self.assertEqual("locked", locked_queue.get(timeout=2))
+
+        selection.close()
+        released_queue = context.Queue()
+        released_process = context.Process(
+            target=_try_run_lock,
+            args=(self.output_root, selection.run_directory, released_queue),
+        )
+        released_process.start()
+        released_process.join(timeout=10)
+        self.assertEqual(0, released_process.exitcode)
+        self.assertEqual("acquired", released_queue.get(timeout=2))
+
+    def test_restart_moves_reports_before_checkpoint_commit_point(self):
+        """An interrupted restart should leave the old checkpoint resumable."""
+        run_directory = self.save_for_day(
+            "2026-09-24", self.new_checkpoint())
+        (run_directory / "summary.json").write_text("{}\n", encoding="utf-8")
+        (run_directory / "summary.md").write_text("old\n", encoding="utf-8")
+        real_replace = os.replace
+        real_fsync = os.fsync
+        events = []
+
+        def interrupt_checkpoint_move(source, destination, **kwargs):
+            """Fail at the restart commit point after recording move order."""
+            events.append(source)
+            if source == "checkpoint.json":
+                raise OSError("simulated restart interruption")
+            return real_replace(source, destination, **kwargs)
+
+        def recording_fsync(descriptor):
+            """Record the report durability barrier before the commit point."""
+            events.append("fsync")
+            return real_fsync(descriptor)
+
+        with mock.patch.object(state.os, "replace",
+                               side_effect=interrupt_checkpoint_move), \
+                mock.patch.object(state.os, "fsync",
+                                  side_effect=recording_fsync):
+            with self.assertRaisesRegex(OSError, "simulated restart"):
+                state.select_run(
+                    self.output_root,
+                    mode=state.RunMode.RESTART,
+                    source_commit=self.source_commit,
+                    config_fingerprint=self.config_fingerprint,
+                    now=self.now(hour=12),
+                )
+
+        self.assertEqual(
+            ["summary.json", "summary.md", "fsync", "checkpoint.json"],
+            events,
+        )
+        self.assertTrue((run_directory / "checkpoint.json").is_file())
+        self.assertFalse((run_directory / "summary.json").exists())
+        self.assertFalse((run_directory / "summary.md").exists())
+
+    def test_new_run_quarantines_reports_left_without_checkpoint(self):
+        """Stale canonical reports must not become part of a fresh run."""
+        run_directory = self.output_root / "2026-09-24"
+        run_directory.mkdir(parents=True)
+        (run_directory / "summary.json").write_text("{}\n", encoding="utf-8")
+        (run_directory / "summary.md").write_text("old\n", encoding="utf-8")
+
+        state.select_run(
+            self.output_root,
+            mode=state.RunMode.DEFAULT,
+            source_commit=self.source_commit,
+            config_fingerprint=self.config_fingerprint,
+            now=self.now(hour=12),
+        )
+
+        self.assertFalse((run_directory / "summary.json").exists())
+        self.assertFalse((run_directory / "summary.md").exists())
+        self.assertEqual(1, len(list(run_directory.glob("summary.backup-*.json"))))
+        self.assertEqual(1, len(list(run_directory.glob("summary.backup-*.md"))))
+
     def test_atomic_save_flushes_file_then_replaces_and_fsyncs_directory(self):
         """Checkpoint writes should use a durable same-directory replacement."""
         checkpoint = self.new_checkpoint()
@@ -151,10 +303,10 @@ class IphoneTestStateTest(unittest.TestCase):
         real_replace = os.replace
         events = []
 
-        def recording_replace(source, destination):
+        def recording_replace(source, destination, **kwargs):
             """Record and perform the tested atomic rename."""
-            events.append((Path(source), Path(destination)))
-            real_replace(source, destination)
+            events.append((source, destination, kwargs))
+            real_replace(source, destination, **kwargs)
 
         with mock.patch.object(state.os, "replace",
                                side_effect=recording_replace) as replace_mock, \
@@ -163,18 +315,24 @@ class IphoneTestStateTest(unittest.TestCase):
             state.save_checkpoint(self.output_root, run_directory, checkpoint)
 
         self.assertEqual(1, replace_mock.call_count)
-        source, destination = events[0]
-        self.assertEqual(run_directory, source.parent)
-        self.assertEqual(run_directory / "checkpoint.json", destination)
-        self.assertFalse(source.exists())
+        source, destination, replace_kwargs = events[0]
+        self.assertRegex(source, r"^\.checkpoint\.[0-9a-f]+\.tmp$")
+        self.assertEqual("checkpoint.json", destination)
+        self.assertEqual(replace_kwargs["src_dir_fd"],
+                         replace_kwargs["dst_dir_fd"])
+        self.assertFalse((run_directory / source).exists())
         self.assertGreaterEqual(fsync_mock.call_count, 2)
-        self.assertEqual(checkpoint, json.loads(destination.read_text()))
+        self.assertEqual(
+            checkpoint,
+            json.loads((run_directory / destination).read_text()),
+        )
 
     def test_load_recovers_interrupted_running_case(self):
         """A running case from a dead process should become retryable pending."""
         checkpoint = self.new_checkpoint()
         checkpoint["phases"] = [{
             "id": "device",
+            "status": "running",
             "cases": [{
                 "id": "startup",
                 "status": "running",
@@ -197,6 +355,7 @@ class IphoneTestStateTest(unittest.TestCase):
         self.assertEqual("pending", recovered["status"])
         self.assertEqual(3, recovered["interruption_count"])
         self.assertEqual(1, recovered["attempt_count"])
+        self.assertEqual("pending", selected.checkpoint["phases"][0]["status"])
         self.assertEqual(self.now(hour=13).isoformat(),
                          recovered["last_interrupted_at"])
         self.assertEqual(selected.checkpoint,
@@ -352,6 +511,81 @@ class IphoneTestStateTest(unittest.TestCase):
                         self.output_root / "2026-09-24",
                         checkpoint,
                     )
+
+    def test_rejects_inconsistent_run_and_phase_aggregate_statuses(self):
+        """Aggregate statuses must agree with every nested case state."""
+        invalid = []
+        passed_case = self.case_record("passed", "passed", attempt_count=1)
+        failed_case = self.case_record("failed", "failed", attempt_count=1)
+        invalid.append(("passed", [{"id": "phase", "cases": [failed_case]}]))
+        invalid.append(("incomplete", [{"id": "phase", "cases": [passed_case]}]))
+        invalid.append((
+            "incomplete",
+            [{"id": "phase", "status": "passed", "cases": [failed_case]}],
+        ))
+        for index, (run_status, phases) in enumerate(invalid):
+            with self.subTest(index=index):
+                with tempfile.TemporaryDirectory() as temporary_directory:
+                    output_root = Path(temporary_directory) / "iphone_test"
+                    checkpoint = self.new_checkpoint(status=run_status)
+                    checkpoint["phases"] = phases
+                    with self.assertRaisesRegex(state.CorruptCheckpointError,
+                                                "status"):
+                        state.save_checkpoint(
+                            output_root,
+                            output_root / "2026-09-24",
+                            checkpoint,
+                        )
+
+    def test_creating_date_directory_fsyncs_output_root(self):
+        """A new run-directory entry should be durable before checkpoint I/O."""
+        checkpoint = self.new_checkpoint()
+        real_fsync = os.fsync
+        fsynced_directories = []
+
+        def recording_fsync(descriptor):
+            """Record each durability barrier while preserving real behavior."""
+            stat_result = os.fstat(descriptor)
+            fsynced_directories.append((stat_result.st_dev, stat_result.st_ino))
+            return real_fsync(descriptor)
+
+        with mock.patch.object(state.os, "fsync", side_effect=recording_fsync):
+            state.save_checkpoint(
+                self.output_root, self.output_root / "2026-09-24", checkpoint)
+
+        root_stat = self.output_root.stat()
+        self.assertIn(
+            (root_stat.st_dev, root_stat.st_ino), fsynced_directories)
+
+    def test_directory_fd_anchor_prevents_symlink_swap_redirection(self):
+        """A swapped date path must not redirect checkpoint writes outside."""
+        self.output_root.mkdir(parents=True)
+        run_directory = self.output_root / "2026-09-24"
+        run_directory.mkdir()
+        anchored_directory = self.output_root / "anchored"
+        outside_directory = Path(self.temporary_directory.name) / "outside"
+        outside_directory.mkdir()
+        real_open = os.open
+        swapped = False
+
+        def swap_after_directory_open(path, flags, *args, **kwargs):
+            """Replace the visible run path immediately after secure opening."""
+            nonlocal swapped
+            descriptor = real_open(path, flags, *args, **kwargs)
+            if (path == "2026-09-24" and kwargs.get("dir_fd") is not None
+                    and not swapped):
+                run_directory.rename(anchored_directory)
+                run_directory.symlink_to(outside_directory, target_is_directory=True)
+                swapped = True
+            return descriptor
+
+        with mock.patch.object(state.os, "open",
+                               side_effect=swap_after_directory_open):
+            state.save_checkpoint(
+                self.output_root, run_directory, self.new_checkpoint())
+
+        self.assertTrue((anchored_directory / "checkpoint.json").is_file())
+        self.assertFalse((outside_directory / "checkpoint.json").exists())
 
     def test_save_rejects_mutated_run_identity(self):
         """An existing run ID and start timestamp should remain immutable."""
