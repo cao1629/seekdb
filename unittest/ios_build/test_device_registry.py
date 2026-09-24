@@ -282,13 +282,18 @@ class DeviceEvidenceValidationTests(unittest.TestCase):
             """Advance time without blocking the host test."""
             now[0] += seconds
 
-        with self.assertRaisesRegex(
-                SystemExit, "device launch failed: iPhone remained locked"):
+        with self.assertRaises(self.runner.LaunchFailure) as raised:
             self.runner.launch_device_process(
                 ("device", "process", "launch"), deadline=11,
                 launch_command=launch, clock=lambda: now[0], sleep=sleep,
                 error_stream=terminal)
 
+        self.assertEqual(
+            self.runner.LaunchFailureCategory.LOCKED,
+            raised.exception.category)
+        self.assertEqual(
+            "device launch failed: iPhone remained locked",
+            raised.exception.diagnostic)
         self.assertEqual([0.0, 5.0, 10.0], attempts)
         self.assertEqual(1, terminal.getvalue().count("Unlock the iPhone"))
 
@@ -311,12 +316,18 @@ class DeviceEvidenceValidationTests(unittest.TestCase):
                 result = SimpleNamespace(returncode=1, stdout="", stderr=raw)
                 launch = mock.Mock(return_value=result)
                 self.assertEqual(
-                    category, self.runner.classify_launch_failure(result))
-                with self.assertRaisesRegex(SystemExit, f"^{diagnostic}$"):
+                    self.runner.LaunchFailureCategory(category),
+                    self.runner.classify_launch_failure(result))
+                with self.assertRaises(
+                        self.runner.LaunchFailure) as raised:
                     self.runner.launch_device_process(
                         ("device", "process", "launch"), deadline=100,
                         launch_command=launch, clock=lambda: 0,
                         sleep=mock.Mock(), error_stream=io.StringIO())
+                self.assertEqual(
+                    self.runner.LaunchFailureCategory(category),
+                    raised.exception.category)
+                self.assertEqual(diagnostic, raised.exception.diagnostic)
                 launch.assert_called_once()
 
     def test_runner_accepts_only_bounded_data_directory_names(self):
@@ -416,6 +427,131 @@ class DeviceEvidenceValidationTests(unittest.TestCase):
         self.assertEqual(1, wait_round.call_count)
         self.assertEqual(1, wait_round.call_args.args[-2])
         self.assertEqual("enabled", wait_round.call_args.args[-1])
+
+    def test_locked_sql_timeout_resets_prepared_and_resume_launches_same_round(self):
+        """Retry the same durable SQL round after a confirmed pre-launch denial."""
+        with tempfile.TemporaryDirectory() as temp:
+            output = Path(temp)
+            options = SimpleNamespace(
+                output_dir=output, evidence_prefix="gate",
+                device="device", bundle_id="bundle", data_name="shared",
+                expected_hook_mode="enabled", runner_run_id="runner-1")
+            evidence = output / "evidence-gate-first.jsonl"
+            now = [0.0]
+
+            def sleep(seconds):
+                """Advance the deterministic launch retry clock."""
+                now[0] += seconds
+
+            locked = SimpleNamespace(
+                returncode=1, stdout="", stderr="FBS reason: Locked")
+            with mock.patch.object(
+                    self.runner, "devicectl", return_value=locked), \
+                    mock.patch.object(
+                        self.runner.time, "monotonic",
+                        side_effect=lambda: now[0]), \
+                    mock.patch.object(
+                        self.runner.time, "sleep", side_effect=sleep), \
+                    mock.patch.object(
+                        self.runner.sys, "stderr", io.StringIO()):
+                with self.assertRaisesRegex(
+                        SystemExit,
+                        "device launch failed: iPhone remained locked"):
+                    self.runner.run_sql_restart(options, "build-1", 11)
+
+            intent = self.runner.load_sql_round_intent(
+                evidence, options, "build-1", 0)
+            self.assertEqual("prepared", intent["state"])
+            round_id = intent["round_id"]
+            waited_rounds = []
+
+            def stop_after_launch(*args, **_kwargs):
+                """Capture the relaunched round before evidence polling."""
+                waited_rounds.append(args[4])
+                raise KeyboardInterrupt
+
+            with mock.patch.object(
+                    self.runner, "devicectl",
+                    return_value=SimpleNamespace(
+                        returncode=0, stdout="", stderr="")) as devicectl, \
+                    mock.patch.object(
+                        self.runner, "wait_for_sql_round",
+                        side_effect=stop_after_launch):
+                with self.assertRaises(KeyboardInterrupt):
+                    self.runner.run_sql_restart(options, "build-1", 100)
+
+        self.assertEqual(1, devicectl.call_count)
+        self.assertEqual([round_id], waited_rounds)
+
+    def test_unknown_sql_launch_failure_keeps_uncertain_intent(self):
+        """Preserve at-most-once safety when launch failure is not definitive."""
+        with tempfile.TemporaryDirectory() as temp:
+            output = Path(temp)
+            options = SimpleNamespace(
+                output_dir=output, evidence_prefix="gate",
+                device="device", bundle_id="bundle", data_name="shared",
+                expected_hook_mode="enabled", runner_run_id="runner-1")
+            evidence = output / "evidence-gate-first.jsonl"
+            unknown = SimpleNamespace(
+                returncode=1, stdout="", stderr="opaque launch failure")
+
+            with mock.patch.object(
+                    self.runner, "devicectl", return_value=unknown):
+                with self.assertRaisesRegex(
+                        SystemExit, "^device launch failed$"):
+                    self.runner.run_sql_restart(options, "build-1", 100)
+
+            intent = self.runner.load_sql_round_intent(
+                evidence, options, "build-1", 0)
+
+        self.assertEqual("launch-uncertain", intent["state"])
+
+    def test_locked_sql_reset_crash_leaves_uncertain_intent(self):
+        """Fail safely if durable prepared reset crashes after locked denial."""
+        with tempfile.TemporaryDirectory() as temp:
+            output = Path(temp)
+            options = SimpleNamespace(
+                output_dir=output, evidence_prefix="gate",
+                device="device", bundle_id="bundle", data_name="shared",
+                expected_hook_mode="enabled", runner_run_id="runner-1")
+            evidence = output / "evidence-gate-first.jsonl"
+            now = [0.0]
+            original_write = self.runner.write_sql_round_intent
+            writes = []
+
+            def write_intent(*args):
+                """Crash only while resetting uncertain back to prepared."""
+                writes.append(args[-1])
+                if writes == ["prepared", "launch-uncertain", "prepared"]:
+                    raise OSError("simulated reset fsync failure")
+                return original_write(*args)
+
+            def sleep(seconds):
+                """Advance the deterministic launch retry clock."""
+                now[0] += seconds
+
+            locked = SimpleNamespace(
+                returncode=1, stdout="", stderr="device is locked")
+            with mock.patch.object(
+                    self.runner, "devicectl", return_value=locked), \
+                    mock.patch.object(
+                        self.runner.time, "monotonic",
+                        side_effect=lambda: now[0]), \
+                    mock.patch.object(
+                        self.runner.time, "sleep", side_effect=sleep), \
+                    mock.patch.object(
+                        self.runner, "write_sql_round_intent",
+                        side_effect=write_intent), \
+                    mock.patch.object(
+                        self.runner.sys, "stderr", io.StringIO()):
+                with self.assertRaisesRegex(
+                        OSError, "simulated reset fsync failure"):
+                    self.runner.run_sql_restart(options, "build-1", 11)
+
+            intent = self.runner.load_sql_round_intent(
+                evidence, options, "build-1", 0)
+
+        self.assertEqual("launch-uncertain", intent["state"])
 
     def test_sql_restart_new_run_never_reuses_old_fixed_evidence(self):
         """A same-day restart must launch even when an old gate file remains."""

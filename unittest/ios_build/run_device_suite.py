@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Launch an installed iOS test suite and validate device-produced JSONL evidence."""
 import argparse
+from enum import Enum
 import hashlib
 import json
 import os
@@ -17,20 +18,47 @@ ROOT = Path(__file__).resolve().parents[2]
 ALLOWED_EVIDENCE_NAME = re.compile(r"^device-test-[0-9a-f-]{36}\.jsonl$")
 LOCKED_RETRY_PROMPT = (
     "Unlock the iPhone and keep the screen awake; retrying…")
-LAUNCH_FAILURE_DIAGNOSTICS = {
-    "locked": "device launch failed: iPhone remained locked",
-    "disconnected": "device launch failed: iPhone is disconnected",
-    "not-installed": "device launch failed: test App is not installed",
-    "trust": "device launch failed: iPhone trust or pairing is unavailable",
-    "developer-mode": (
-        "device launch failed: iPhone Developer Mode is unavailable"),
-    "other": "device launch failed",
-}
 LOCKED_RETRY_SECONDS = 5
 
 
 class IncompleteEvidenceError(ValueError):
     """Report a structurally valid JSONL prefix that may still become complete."""
+
+
+class LaunchFailureCategory(str, Enum):
+    """Describe one allowlisted devicectl launch failure category."""
+
+    LOCKED = "locked"
+    DISCONNECTED = "disconnected"
+    NOT_INSTALLED = "not-installed"
+    TRUST = "trust"
+    DEVELOPER_MODE = "developer-mode"
+    OTHER = "other"
+
+
+LAUNCH_FAILURE_DIAGNOSTICS = {
+    LaunchFailureCategory.LOCKED: (
+        "device launch failed: iPhone remained locked"),
+    LaunchFailureCategory.DISCONNECTED: (
+        "device launch failed: iPhone is disconnected"),
+    LaunchFailureCategory.NOT_INSTALLED: (
+        "device launch failed: test App is not installed"),
+    LaunchFailureCategory.TRUST: (
+        "device launch failed: iPhone trust or pairing is unavailable"),
+    LaunchFailureCategory.DEVELOPER_MODE: (
+        "device launch failed: iPhone Developer Mode is unavailable"),
+    LaunchFailureCategory.OTHER: "device launch failed",
+}
+
+
+class LaunchFailure(RuntimeError):
+    """Carry one structured safe launch category across caller boundaries."""
+
+    def __init__(self, category):
+        """Initialize the failure with its fixed public diagnostic."""
+        self.category = category
+        self.diagnostic = LAUNCH_FAILURE_DIAGNOSTICS[category]
+        super().__init__(self.diagnostic)
 
 
 def validate_records(records, expected_run_id, expected_build_id, expected_case_ids,
@@ -149,22 +177,22 @@ def classify_launch_failure(result):
     if (re.search(r"\blocked\b", normalized) is not None
             or re.search(
                 r"(?:not|could not).{0,40}unlocked", normalized) is not None):
-        return "locked"
+        return LaunchFailureCategory.LOCKED
     if "developer mode" in normalized:
-        return "developer-mode"
+        return LaunchFailureCategory.DEVELOPER_MODE
     if any(pattern in normalized for pattern in (
             "not installed", "application is not installed",
             "application was not found", "bundle identifier was not found")):
-        return "not-installed"
+        return LaunchFailureCategory.NOT_INSTALLED
     if any(pattern in normalized for pattern in (
             "not paired", "pairing", "trust is required",
             "not trusted", "untrusted")):
-        return "trust"
+        return LaunchFailureCategory.TRUST
     if any(pattern in normalized for pattern in (
             "disconnected", "not connected", "connection was lost",
             "device is unavailable")):
-        return "disconnected"
-    return "other"
+        return LaunchFailureCategory.DISCONNECTED
+    return LaunchFailureCategory.OTHER
 
 
 def _bounded_launch_arguments(arguments, remaining_seconds):
@@ -199,8 +227,8 @@ def launch_device_process(
         if result.returncode == 0:
             return result
         category = classify_launch_failure(result)
-        if category != "locked":
-            raise SystemExit(LAUNCH_FAILURE_DIAGNOSTICS[category])
+        if category != LaunchFailureCategory.LOCKED:
+            raise LaunchFailure(category)
         if not prompted:
             print(LOCKED_RETRY_PROMPT, file=error_stream, flush=True)
             prompted = True
@@ -208,7 +236,7 @@ def launch_device_process(
         if remaining <= 0:
             break
         sleep(min(LOCKED_RETRY_SECONDS, remaining))
-    raise SystemExit(LAUNCH_FAILURE_DIAGNOSTICS["locked"])
+    raise LaunchFailure(LaunchFailureCategory.LOCKED)
 
 
 def copy_evidence(device, bundle_id, source_name, destination):
@@ -517,14 +545,22 @@ def run_sql_restart(options, build_id, deadline):
             write_sql_round_intent(
                 output, options, build_id, previous_runs, run_id,
                 "launch-uncertain")
-            launch_device_process([
-                "device", "process", "launch", "--device", options.device,
-                "--terminate-existing", "--environment-variables", json.dumps({
-                    "SEEKDB_IOS_TEST_RUN_ID": run_id,
-                    "SEEKDB_PROBE_DATA_NAME": options.data_name,
-                    "SEEKDB_PROBE_AUTO_STOP": "1",
-                }), "--timeout", "60", options.bundle_id,
-            ], deadline)
+            try:
+                launch_device_process([
+                    "device", "process", "launch", "--device",
+                    options.device, "--terminate-existing",
+                    "--environment-variables", json.dumps({
+                        "SEEKDB_IOS_TEST_RUN_ID": run_id,
+                        "SEEKDB_PROBE_DATA_NAME": options.data_name,
+                        "SEEKDB_PROBE_AUTO_STOP": "1",
+                    }), "--timeout", "60", options.bundle_id,
+                ], deadline)
+            except LaunchFailure as error:
+                if error.category == LaunchFailureCategory.LOCKED:
+                    write_sql_round_intent(
+                        output, options, build_id, previous_runs, run_id,
+                        "prepared")
+                raise SystemExit(error.diagnostic) from None
         wait_for_sql_round(
             options.device, options.bundle_id, output, deadline, run_id,
             build_id, options.data_name, previous_runs,
@@ -625,17 +661,20 @@ def main():
             options.crash_report_dir, before_crashes, options.bundle_id)
         print(json.dumps(summary, sort_keys=True))
         return
-    launch_device_process([
-        "device", "process", "launch", "--device", options.device, "--terminate-existing",
-        "--environment-variables", json.dumps({
-            "SEEKDB_IOS_TEST_SUITE": options.suite,
-            "SEEKDB_IOS_TEST_FILTER": options.filter,
-            "SEEKDB_IOS_TEST_RUN_ID": run_id,
-            "SEEKDB_PROBE_DATA_NAME": data_name,
-            "SEEKDB_PROBE_AUTO_STOP": "1",
-        }),
-        "--timeout", "60", options.bundle_id,
-    ], deadline)
+    try:
+        launch_device_process([
+            "device", "process", "launch", "--device", options.device,
+            "--terminate-existing", "--environment-variables", json.dumps({
+                "SEEKDB_IOS_TEST_SUITE": options.suite,
+                "SEEKDB_IOS_TEST_FILTER": options.filter,
+                "SEEKDB_IOS_TEST_RUN_ID": run_id,
+                "SEEKDB_PROBE_DATA_NAME": data_name,
+                "SEEKDB_PROBE_AUTO_STOP": "1",
+            }),
+            "--timeout", "60", options.bundle_id,
+        ], deadline)
+    except LaunchFailure as error:
+        raise SystemExit(error.diagnostic) from None
     summary = wait_for_evidence(
         options.device, options.bundle_id, source_name, destination, options.timeout,
         run_id, build_id, expected_cases, options.suite, options.filter,
