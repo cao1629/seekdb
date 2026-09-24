@@ -1,0 +1,216 @@
+# Out-of-scope test assets, with the decision that put them out of scope (PLAN.md section 4; decisions.md).
+# Produced 2026-09-24, read-only, from the sibling repositories under /Users/colin/seekdb-dev/ at the commits the
+#   script names and the rows record (seekdb-bindings d7de02902, seekdb-async dd708416a, and cd41da17b, the head of
+#   origin/feature/webassembly-shell in /Users/colin/seekdb-dev/seekdb on that day), plus /Users/colin/seekdb-dev/shell-e2e.
+# Columns (tab-separated): group, decision, location (repository@commit and file:line), test name.
+# Decision 8 (no embedding model for now; the embedded form is deferred):
+#   seekdb-bindings gtest: the 12 TEST_F cases in lib/tests; they start `seekdb --embedded`.
+#   seekdb-bindings wheel smoke test: python/tests/seekdb_test.py opens embedded seekdb through pylibseekdb and runs a
+#     hybrid search; cibuildwheel runs it for every wheel. Decision 8's text counts only the 12 gtests.
+#   seekdb-async test: the 7 #[tokio::test] functions in tests/basic.rs; they open seekdb through seekdb_open.
+# Decision 7 (first release on macOS arm64 only; wasm and its start-up time dropped from the judge):
+#   shell-e2e Playwright test: 68 tests (65 scenarios in scenarios.mjs run by sql-commands.spec.js, SMOKE01, REG01,
+#     REG02). /Users/colin/seekdb-dev/shell-e2e is not under git; its spec files are dated 2026-09-15 and 2026-09-16.
+#   wasm unittest CTest: the 44 CTests registered on origin/feature/webassembly-shell (41 add_test lines in
+#     cmake/wasm/*.cmake and unittest/wasm/CMakeLists.txt; the foreach in cmake/wasm/vsag.cmake registers 4). They are
+#     built from the 53 .cpp files in unittest/wasm and link C++ internals.
+#   wasm unittest script: the 13 Node and Python test scripts in unittest/wasm. test_database_worker.mjs,
+#     test_browser_cases_node.mjs, test_database_search.mjs and test_shell_examples.mjs drive the engine through the
+#     JS Database API; test_engine_sql.mjs drives it through probe exports; the others test JS or Python helpers.
+# Not here: the origin/feat/embedded-mode tests, tools/obtest and the other assets README.md lists.
+# Count: grep -vc '^#' migration/judge/census/out-of-scope.txt
+# Reproduce from the worktree root: sed -n 's/^#| \{0,1\}//p' migration/judge/census/out-of-scope.txt | python3 -B -
+#   prints every line that follows the script below (README.md has the check).
+#| import pathlib, re, subprocess
+#| dev = pathlib.Path("/Users/colin/seekdb-dev")
+#| def git(repo, *args):
+#|     return subprocess.check_output(["git", "-C", str(repo), *args], text=True)
+#| rows = []
+#| repo = dev / "seekdb-bindings"
+#| rev = git(repo, "rev-parse", "--short=9", "d7de02902").strip()
+#| for hit in git(repo, "grep", "-n", "-E", r"^\s*TEST(_F|_P)?\(", rev, "--", "lib/tests").splitlines():
+#|     _, path, line, text = hit.split(":", 3)
+#|     suite, name = re.search(r"\(\s*(\w+)\s*,\s*(\w+)\s*\)", text).groups()
+#|     rows.append(("seekdb-bindings gtest", "Decision 8", "{}@{} {}:{}".format(repo, rev, path, line), suite + "." + name))
+#| rows.append(("seekdb-bindings wheel smoke test", "Decision 8", "{}@{} python/tests/seekdb_test.py".format(repo, rev), "seekdb_test.py"))
+#| repo = dev / "seekdb-async"
+#| rev = git(repo, "rev-parse", "--short=9", "dd708416a").strip()
+#| lines = git(repo, "show", rev + ":tests/basic.rs").splitlines()
+#| for number, text in enumerate(lines, 1):
+#|     if re.match(r"^\s*#\[(tokio::)?test", text):
+#|         name = re.search(r"fn\s+(\w+)", lines[number]).group(1)
+#|         rows.append(("seekdb-async test", "Decision 8", "{}@{} tests/basic.rs:{}".format(repo, rev, number), name))
+#| shell = dev / "shell-e2e"
+#| for spec in ("sql-commands.spec.js", "smoke.spec.js", "regressions.spec.js"):
+#|     text = (shell / spec).read_text(encoding="utf-8")
+#|     if "scenarios" in text:
+#|         ids = re.findall(r"\bid:\s*'([A-Z0-9_-]+)'", (shell / "scenarios.mjs").read_text(encoding="utf-8"))
+#|         where = "{}/{} (no git; one test per scenario in scenarios.mjs)".format(shell, spec)
+#|     else:
+#|         ids = re.findall(r"^test\('([A-Z0-9_-]+)\s", text, re.M)
+#|         where = "{}/{} (no git)".format(shell, spec)
+#|     rows += [("shell-e2e Playwright test", "Decision 7", where, test_id) for test_id in ids]
+#| repo = dev / "seekdb"
+#| branch = "origin/feature/webassembly-shell"
+#| rev = git(repo, "rev-parse", "--short=9", "cd41da17b").strip()
+#| for hit in git(repo, "grep", "-n", "add_test(NAME", rev, "--", "cmake/wasm", "unittest/wasm").splitlines():
+#|     _, path, line, text = hit.split(":", 3)
+#|     name = re.search(r"add_test\(NAME\s+(\S+)", text).group(1)
+#|     names = [name]
+#|     if "${probe}" in name:
+#|         body = git(repo, "show", "{}:{}".format(rev, path))
+#|         probes = re.search(r"foreach\(probe\s+([^)]*)\)", body).group(1).split()
+#|         names = [name.replace("${probe}", probe) for probe in probes]
+#|     for ctest in names:
+#|         rows.append(("wasm unittest CTest", "Decision 7", "{}@{} ({}) {}:{}".format(repo, rev, branch, path, line), ctest))
+#| for path in git(repo, "ls-tree", "-r", "--name-only", rev, "--", "unittest/wasm").split():
+#|     base = path.rsplit("/", 1)[1]
+#|     if re.match(r"^(test_.*\.(mjs|py)|.*\.test\.mjs)$", base):
+#|         rows.append(("wasm unittest script", "Decision 7", "{}@{} ({}) {}".format(repo, rev, branch, path), base))
+#| for row in rows:
+#|     print(*row, sep="\t")
+seekdb-bindings gtest	Decision 8	/Users/colin/seekdb-dev/seekdb-bindings@d7de02902 lib/tests/test_one_client_process.cc:49	OneClientProcess.ClientClose
+seekdb-bindings gtest	Decision 8	/Users/colin/seekdb-dev/seekdb-bindings@d7de02902 lib/tests/test_one_client_process.cc:79	OneClientProcess.ClientExit
+seekdb-bindings gtest	Decision 8	/Users/colin/seekdb-dev/seekdb-bindings@d7de02902 lib/tests/test_one_client_process.cc:108	OneClientProcess.KillClient
+seekdb-bindings gtest	Decision 8	/Users/colin/seekdb-dev/seekdb-bindings@d7de02902 lib/tests/test_open_parameters.cc:110	OpenParameters.RejectsOddParameterCount
+seekdb-bindings gtest	Decision 8	/Users/colin/seekdb-dev/seekdb-bindings@d7de02902 lib/tests/test_open_parameters.cc:118	OpenParameters.RejectsInvalidPort
+seekdb-bindings gtest	Decision 8	/Users/colin/seekdb-dev/seekdb-bindings@d7de02902 lib/tests/test_open_parameters.cc:126	OpenParameters.PortOnlyStillSeedsDefaultServerParameters
+seekdb-bindings gtest	Decision 8	/Users/colin/seekdb-dev/seekdb-bindings@d7de02902 lib/tests/test_open_parameters.cc:149	OpenParameters.PartialUserParametersStillSeedDefaults
+seekdb-bindings gtest	Decision 8	/Users/colin/seekdb-dev/seekdb-bindings@d7de02902 lib/tests/test_open_parameters.cc:176	OpenParameters.SeedsUserProvidedParametersOnFirstInit
+seekdb-bindings gtest	Decision 8	/Users/colin/seekdb-dev/seekdb-bindings@d7de02902 lib/tests/test_parameter_persistence.cc:138	ParameterPersistence.ChangedMemoryLimitSurvivesRestart
+seekdb-bindings gtest	Decision 8	/Users/colin/seekdb-dev/seekdb-bindings@d7de02902 lib/tests/test_two_clients_threads.cc:68	TwoClientsOpen.TwoConcurrentClients
+seekdb-bindings gtest	Decision 8	/Users/colin/seekdb-dev/seekdb-bindings@d7de02902 lib/tests/test_two_clients_threads.cc:162	TwoClientsOpen.BArrivesAfterAStartup
+seekdb-bindings gtest	Decision 8	/Users/colin/seekdb-dev/seekdb-bindings@d7de02902 lib/tests/test_two_clients_threads.cc:274	TwoClientsOpen.ClientBSeesClientAWrite
+seekdb-bindings wheel smoke test	Decision 8	/Users/colin/seekdb-dev/seekdb-bindings@d7de02902 python/tests/seekdb_test.py	seekdb_test.py
+seekdb-async test	Decision 8	/Users/colin/seekdb-dev/seekdb-async@dd708416a tests/basic.rs:29	select_one
+seekdb-async test	Decision 8	/Users/colin/seekdb-dev/seekdb-async@dd708416a tests/basic.rs:40	pool_cycle
+seekdb-async test	Decision 8	/Users/colin/seekdb-dev/seekdb-async@dd708416a tests/basic.rs:63	two_connections_share_data
+seekdb-async test	Decision 8	/Users/colin/seekdb-dev/seekdb-async@dd708416a tests/basic.rs:90	two_conn_opens_share_data
+seekdb-async test	Decision 8	/Users/colin/seekdb-dev/seekdb-async@dd708416a tests/basic.rs:120	conn_open_shares_one_handle_per_dir
+seekdb-async test	Decision 8	/Users/colin/seekdb-dev/seekdb-async@dd708416a tests/basic.rs:155	conn_open_twice_then_disconnect_in_order
+seekdb-async test	Decision 8	/Users/colin/seekdb-dev/seekdb-async@dd708416a tests/basic.rs:170	two_conns_same_dir
+shell-e2e Playwright test	Decision 7	/Users/colin/seekdb-dev/shell-e2e/sql-commands.spec.js (no git; one test per scenario in scenarios.mjs)	DDL01
+shell-e2e Playwright test	Decision 7	/Users/colin/seekdb-dev/shell-e2e/sql-commands.spec.js (no git; one test per scenario in scenarios.mjs)	DDL02
+shell-e2e Playwright test	Decision 7	/Users/colin/seekdb-dev/shell-e2e/sql-commands.spec.js (no git; one test per scenario in scenarios.mjs)	DDL03
+shell-e2e Playwright test	Decision 7	/Users/colin/seekdb-dev/shell-e2e/sql-commands.spec.js (no git; one test per scenario in scenarios.mjs)	DDL04
+shell-e2e Playwright test	Decision 7	/Users/colin/seekdb-dev/shell-e2e/sql-commands.spec.js (no git; one test per scenario in scenarios.mjs)	DDL05
+shell-e2e Playwright test	Decision 7	/Users/colin/seekdb-dev/shell-e2e/sql-commands.spec.js (no git; one test per scenario in scenarios.mjs)	DDL06
+shell-e2e Playwright test	Decision 7	/Users/colin/seekdb-dev/shell-e2e/sql-commands.spec.js (no git; one test per scenario in scenarios.mjs)	DDL07
+shell-e2e Playwright test	Decision 7	/Users/colin/seekdb-dev/shell-e2e/sql-commands.spec.js (no git; one test per scenario in scenarios.mjs)	DDL08
+shell-e2e Playwright test	Decision 7	/Users/colin/seekdb-dev/shell-e2e/sql-commands.spec.js (no git; one test per scenario in scenarios.mjs)	DDL09
+shell-e2e Playwright test	Decision 7	/Users/colin/seekdb-dev/shell-e2e/sql-commands.spec.js (no git; one test per scenario in scenarios.mjs)	DDL10
+shell-e2e Playwright test	Decision 7	/Users/colin/seekdb-dev/shell-e2e/sql-commands.spec.js (no git; one test per scenario in scenarios.mjs)	DDL11
+shell-e2e Playwright test	Decision 7	/Users/colin/seekdb-dev/shell-e2e/sql-commands.spec.js (no git; one test per scenario in scenarios.mjs)	DDL12
+shell-e2e Playwright test	Decision 7	/Users/colin/seekdb-dev/shell-e2e/sql-commands.spec.js (no git; one test per scenario in scenarios.mjs)	DDL13
+shell-e2e Playwright test	Decision 7	/Users/colin/seekdb-dev/shell-e2e/sql-commands.spec.js (no git; one test per scenario in scenarios.mjs)	DDL14
+shell-e2e Playwright test	Decision 7	/Users/colin/seekdb-dev/shell-e2e/sql-commands.spec.js (no git; one test per scenario in scenarios.mjs)	DDL15
+shell-e2e Playwright test	Decision 7	/Users/colin/seekdb-dev/shell-e2e/sql-commands.spec.js (no git; one test per scenario in scenarios.mjs)	DDL16
+shell-e2e Playwright test	Decision 7	/Users/colin/seekdb-dev/shell-e2e/sql-commands.spec.js (no git; one test per scenario in scenarios.mjs)	DDL17
+shell-e2e Playwright test	Decision 7	/Users/colin/seekdb-dev/shell-e2e/sql-commands.spec.js (no git; one test per scenario in scenarios.mjs)	DDL18
+shell-e2e Playwright test	Decision 7	/Users/colin/seekdb-dev/shell-e2e/sql-commands.spec.js (no git; one test per scenario in scenarios.mjs)	DDL19
+shell-e2e Playwright test	Decision 7	/Users/colin/seekdb-dev/shell-e2e/sql-commands.spec.js (no git; one test per scenario in scenarios.mjs)	DDL20
+shell-e2e Playwright test	Decision 7	/Users/colin/seekdb-dev/shell-e2e/sql-commands.spec.js (no git; one test per scenario in scenarios.mjs)	DDL21
+shell-e2e Playwright test	Decision 7	/Users/colin/seekdb-dev/shell-e2e/sql-commands.spec.js (no git; one test per scenario in scenarios.mjs)	DDL22
+shell-e2e Playwright test	Decision 7	/Users/colin/seekdb-dev/shell-e2e/sql-commands.spec.js (no git; one test per scenario in scenarios.mjs)	DDL23
+shell-e2e Playwright test	Decision 7	/Users/colin/seekdb-dev/shell-e2e/sql-commands.spec.js (no git; one test per scenario in scenarios.mjs)	DDL24
+shell-e2e Playwright test	Decision 7	/Users/colin/seekdb-dev/shell-e2e/sql-commands.spec.js (no git; one test per scenario in scenarios.mjs)	DDL25
+shell-e2e Playwright test	Decision 7	/Users/colin/seekdb-dev/shell-e2e/sql-commands.spec.js (no git; one test per scenario in scenarios.mjs)	DDL26
+shell-e2e Playwright test	Decision 7	/Users/colin/seekdb-dev/shell-e2e/sql-commands.spec.js (no git; one test per scenario in scenarios.mjs)	DDL27
+shell-e2e Playwright test	Decision 7	/Users/colin/seekdb-dev/shell-e2e/sql-commands.spec.js (no git; one test per scenario in scenarios.mjs)	DDL28
+shell-e2e Playwright test	Decision 7	/Users/colin/seekdb-dev/shell-e2e/sql-commands.spec.js (no git; one test per scenario in scenarios.mjs)	DDL29
+shell-e2e Playwright test	Decision 7	/Users/colin/seekdb-dev/shell-e2e/sql-commands.spec.js (no git; one test per scenario in scenarios.mjs)	DDL30
+shell-e2e Playwright test	Decision 7	/Users/colin/seekdb-dev/shell-e2e/sql-commands.spec.js (no git; one test per scenario in scenarios.mjs)	META01
+shell-e2e Playwright test	Decision 7	/Users/colin/seekdb-dev/shell-e2e/sql-commands.spec.js (no git; one test per scenario in scenarios.mjs)	META02
+shell-e2e Playwright test	Decision 7	/Users/colin/seekdb-dev/shell-e2e/sql-commands.spec.js (no git; one test per scenario in scenarios.mjs)	DML01
+shell-e2e Playwright test	Decision 7	/Users/colin/seekdb-dev/shell-e2e/sql-commands.spec.js (no git; one test per scenario in scenarios.mjs)	DML02
+shell-e2e Playwright test	Decision 7	/Users/colin/seekdb-dev/shell-e2e/sql-commands.spec.js (no git; one test per scenario in scenarios.mjs)	DML03
+shell-e2e Playwright test	Decision 7	/Users/colin/seekdb-dev/shell-e2e/sql-commands.spec.js (no git; one test per scenario in scenarios.mjs)	DML04
+shell-e2e Playwright test	Decision 7	/Users/colin/seekdb-dev/shell-e2e/sql-commands.spec.js (no git; one test per scenario in scenarios.mjs)	DML05
+shell-e2e Playwright test	Decision 7	/Users/colin/seekdb-dev/shell-e2e/sql-commands.spec.js (no git; one test per scenario in scenarios.mjs)	DML06
+shell-e2e Playwright test	Decision 7	/Users/colin/seekdb-dev/shell-e2e/sql-commands.spec.js (no git; one test per scenario in scenarios.mjs)	DML07
+shell-e2e Playwright test	Decision 7	/Users/colin/seekdb-dev/shell-e2e/sql-commands.spec.js (no git; one test per scenario in scenarios.mjs)	DML08
+shell-e2e Playwright test	Decision 7	/Users/colin/seekdb-dev/shell-e2e/sql-commands.spec.js (no git; one test per scenario in scenarios.mjs)	DML09
+shell-e2e Playwright test	Decision 7	/Users/colin/seekdb-dev/shell-e2e/sql-commands.spec.js (no git; one test per scenario in scenarios.mjs)	DML10
+shell-e2e Playwright test	Decision 7	/Users/colin/seekdb-dev/shell-e2e/sql-commands.spec.js (no git; one test per scenario in scenarios.mjs)	DML11
+shell-e2e Playwright test	Decision 7	/Users/colin/seekdb-dev/shell-e2e/sql-commands.spec.js (no git; one test per scenario in scenarios.mjs)	QUERY01
+shell-e2e Playwright test	Decision 7	/Users/colin/seekdb-dev/shell-e2e/sql-commands.spec.js (no git; one test per scenario in scenarios.mjs)	QUERY02
+shell-e2e Playwright test	Decision 7	/Users/colin/seekdb-dev/shell-e2e/sql-commands.spec.js (no git; one test per scenario in scenarios.mjs)	QUERY03
+shell-e2e Playwright test	Decision 7	/Users/colin/seekdb-dev/shell-e2e/sql-commands.spec.js (no git; one test per scenario in scenarios.mjs)	QUERY04
+shell-e2e Playwright test	Decision 7	/Users/colin/seekdb-dev/shell-e2e/sql-commands.spec.js (no git; one test per scenario in scenarios.mjs)	QUERY05
+shell-e2e Playwright test	Decision 7	/Users/colin/seekdb-dev/shell-e2e/sql-commands.spec.js (no git; one test per scenario in scenarios.mjs)	QUERY06
+shell-e2e Playwright test	Decision 7	/Users/colin/seekdb-dev/shell-e2e/sql-commands.spec.js (no git; one test per scenario in scenarios.mjs)	QUERY07
+shell-e2e Playwright test	Decision 7	/Users/colin/seekdb-dev/shell-e2e/sql-commands.spec.js (no git; one test per scenario in scenarios.mjs)	QUERY08
+shell-e2e Playwright test	Decision 7	/Users/colin/seekdb-dev/shell-e2e/sql-commands.spec.js (no git; one test per scenario in scenarios.mjs)	TYPE01
+shell-e2e Playwright test	Decision 7	/Users/colin/seekdb-dev/shell-e2e/sql-commands.spec.js (no git; one test per scenario in scenarios.mjs)	TYPE02
+shell-e2e Playwright test	Decision 7	/Users/colin/seekdb-dev/shell-e2e/sql-commands.spec.js (no git; one test per scenario in scenarios.mjs)	TYPE03
+shell-e2e Playwright test	Decision 7	/Users/colin/seekdb-dev/shell-e2e/sql-commands.spec.js (no git; one test per scenario in scenarios.mjs)	TX01
+shell-e2e Playwright test	Decision 7	/Users/colin/seekdb-dev/shell-e2e/sql-commands.spec.js (no git; one test per scenario in scenarios.mjs)	TX02
+shell-e2e Playwright test	Decision 7	/Users/colin/seekdb-dev/shell-e2e/sql-commands.spec.js (no git; one test per scenario in scenarios.mjs)	TX03
+shell-e2e Playwright test	Decision 7	/Users/colin/seekdb-dev/shell-e2e/sql-commands.spec.js (no git; one test per scenario in scenarios.mjs)	TX04
+shell-e2e Playwright test	Decision 7	/Users/colin/seekdb-dev/shell-e2e/sql-commands.spec.js (no git; one test per scenario in scenarios.mjs)	SESSION01
+shell-e2e Playwright test	Decision 7	/Users/colin/seekdb-dev/shell-e2e/sql-commands.spec.js (no git; one test per scenario in scenarios.mjs)	SESSION02
+shell-e2e Playwright test	Decision 7	/Users/colin/seekdb-dev/shell-e2e/sql-commands.spec.js (no git; one test per scenario in scenarios.mjs)	SESSION03
+shell-e2e Playwright test	Decision 7	/Users/colin/seekdb-dev/shell-e2e/sql-commands.spec.js (no git; one test per scenario in scenarios.mjs)	ERROR01
+shell-e2e Playwright test	Decision 7	/Users/colin/seekdb-dev/shell-e2e/sql-commands.spec.js (no git; one test per scenario in scenarios.mjs)	ERROR02
+shell-e2e Playwright test	Decision 7	/Users/colin/seekdb-dev/shell-e2e/sql-commands.spec.js (no git; one test per scenario in scenarios.mjs)	ERROR03
+shell-e2e Playwright test	Decision 7	/Users/colin/seekdb-dev/shell-e2e/sql-commands.spec.js (no git; one test per scenario in scenarios.mjs)	ERROR04
+shell-e2e Playwright test	Decision 7	/Users/colin/seekdb-dev/shell-e2e/smoke.spec.js (no git)	SMOKE01
+shell-e2e Playwright test	Decision 7	/Users/colin/seekdb-dev/shell-e2e/regressions.spec.js (no git)	REG01
+shell-e2e Playwright test	Decision 7	/Users/colin/seekdb-dev/shell-e2e/regressions.spec.js (no git)	REG02
+wasm unittest CTest	Decision 7	/Users/colin/seekdb-dev/seekdb@cd41da17b (origin/feature/webassembly-shell) cmake/wasm/database.cmake:63	wasmfs_fd_adapter
+wasm unittest CTest	Decision 7	/Users/colin/seekdb-dev/seekdb@cd41da17b (origin/feature/webassembly-shell) cmake/wasm/database.cmake:99	wasm_ls_metadata_drain
+wasm unittest CTest	Decision 7	/Users/colin/seekdb-dev/seekdb@cd41da17b (origin/feature/webassembly-shell) cmake/wasm/database.cmake:109	wasm_stat_key
+wasm unittest CTest	Decision 7	/Users/colin/seekdb-dev/seekdb@cd41da17b (origin/feature/webassembly-shell) cmake/wasm/database.cmake:119	wasm_hazptr
+wasm unittest CTest	Decision 7	/Users/colin/seekdb-dev/seekdb@cd41da17b (origin/feature/webassembly-shell) cmake/wasm/database.cmake:130	wasm_constraint_recycle_name
+wasm unittest CTest	Decision 7	/Users/colin/seekdb-dev/seekdb@cd41da17b (origin/feature/webassembly-shell) cmake/wasm/database.cmake:141	wasm_ip_distance
+wasm unittest CTest	Decision 7	/Users/colin/seekdb-dev/seekdb@cd41da17b (origin/feature/webassembly-shell) cmake/wasm/database.cmake:152	wasm_random_range
+wasm unittest CTest	Decision 7	/Users/colin/seekdb-dev/seekdb@cd41da17b (origin/feature/webassembly-shell) cmake/wasm/encoding.cmake:12	wasm_order_encoding
+wasm unittest CTest	Decision 7	/Users/colin/seekdb-dev/seekdb@cd41da17b (origin/feature/webassembly-shell) cmake/wasm/encoding.cmake:27	wasm_integer_codec
+wasm unittest CTest	Decision 7	/Users/colin/seekdb-dev/seekdb@cd41da17b (origin/feature/webassembly-shell) cmake/wasm/foreach.cmake:7	wasm_foreach
+wasm unittest CTest	Decision 7	/Users/colin/seekdb-dev/seekdb@cd41da17b (origin/feature/webassembly-shell) cmake/wasm/icu.cmake:26	wasm_regex
+wasm unittest CTest	Decision 7	/Users/colin/seekdb-dev/seekdb@cd41da17b (origin/feature/webassembly-shell) cmake/wasm/log-block.cmake:16	wasm_log_block
+wasm unittest CTest	Decision 7	/Users/colin/seekdb-dev/seekdb@cd41da17b (origin/feature/webassembly-shell) cmake/wasm/nio.cmake:27	wasm_nio_memory
+wasm unittest CTest	Decision 7	/Users/colin/seekdb-dev/seekdb@cd41da17b (origin/feature/webassembly-shell) cmake/wasm/parser.cmake:89	wasm_sql_parser
+wasm unittest CTest	Decision 7	/Users/colin/seekdb-dev/seekdb@cd41da17b (origin/feature/webassembly-shell) cmake/wasm/protobuf.cmake:18	wasm_vector_tile
+wasm unittest CTest	Decision 7	/Users/colin/seekdb-dev/seekdb@cd41da17b (origin/feature/webassembly-shell) cmake/wasm/ptr-spin-lock.cmake:10	wasm_ptr_spin_lock
+wasm unittest CTest	Decision 7	/Users/colin/seekdb-dev/seekdb@cd41da17b (origin/feature/webassembly-shell) cmake/wasm/roaring.cmake:15	wasm_roaring
+wasm unittest CTest	Decision 7	/Users/colin/seekdb-dev/seekdb@cd41da17b (origin/feature/webassembly-shell) cmake/wasm/rpc.cmake:12	wasm_rpc_memory
+wasm unittest CTest	Decision 7	/Users/colin/seekdb-dev/seekdb@cd41da17b (origin/feature/webassembly-shell) cmake/wasm/s2.cmake:32	wasm_geometry
+wasm unittest CTest	Decision 7	/Users/colin/seekdb-dev/seekdb@cd41da17b (origin/feature/webassembly-shell) cmake/wasm/s2.cmake:43	wasm_geo_math
+wasm unittest CTest	Decision 7	/Users/colin/seekdb-dev/seekdb@cd41da17b (origin/feature/webassembly-shell) cmake/wasm/sqlite.cmake:22	wasm_sqlite_metadata
+wasm unittest CTest	Decision 7	/Users/colin/seekdb-dev/seekdb@cd41da17b (origin/feature/webassembly-shell) cmake/wasm/sqlite.cmake:36	wasm_sqlite_wal_mapping
+wasm unittest CTest	Decision 7	/Users/colin/seekdb-dev/seekdb@cd41da17b (origin/feature/webassembly-shell) cmake/wasm/vsag.cmake:30	wasm_vector_distance
+wasm unittest CTest	Decision 7	/Users/colin/seekdb-dev/seekdb@cd41da17b (origin/feature/webassembly-shell) cmake/wasm/vsag.cmake:40	wasm_vsag_runtime
+wasm unittest CTest	Decision 7	/Users/colin/seekdb-dev/seekdb@cd41da17b (origin/feature/webassembly-shell) cmake/wasm/vsag.cmake:51	wasm_hnsw
+wasm unittest CTest	Decision 7	/Users/colin/seekdb-dev/seekdb@cd41da17b (origin/feature/webassembly-shell) cmake/wasm/vsag.cmake:51	wasm_vsag_stream
+wasm unittest CTest	Decision 7	/Users/colin/seekdb-dev/seekdb@cd41da17b (origin/feature/webassembly-shell) cmake/wasm/vsag.cmake:51	wasm_vsag_index_support
+wasm unittest CTest	Decision 7	/Users/colin/seekdb-dev/seekdb@cd41da17b (origin/feature/webassembly-shell) cmake/wasm/vsag.cmake:51	wasm_vsag_blas
+wasm unittest CTest	Decision 7	/Users/colin/seekdb-dev/seekdb@cd41da17b (origin/feature/webassembly-shell) cmake/wasm/vsag.cmake:69	wasm_vsag_factory
+wasm unittest CTest	Decision 7	/Users/colin/seekdb-dev/seekdb@cd41da17b (origin/feature/webassembly-shell) cmake/wasm/xml.cmake:20	wasm_xml
+wasm unittest CTest	Decision 7	/Users/colin/seekdb-dev/seekdb@cd41da17b (origin/feature/webassembly-shell) unittest/wasm/CMakeLists.txt:23	wasm_printf
+wasm unittest CTest	Decision 7	/Users/colin/seekdb-dev/seekdb@cd41da17b (origin/feature/webassembly-shell) unittest/wasm/CMakeLists.txt:35	wasm_memory_allocation
+wasm unittest CTest	Decision 7	/Users/colin/seekdb-dev/seekdb@cd41da17b (origin/feature/webassembly-shell) unittest/wasm/CMakeLists.txt:51	wasm_chunked_memory_backend
+wasm unittest CTest	Decision 7	/Users/colin/seekdb-dev/seekdb@cd41da17b (origin/feature/webassembly-shell) unittest/wasm/CMakeLists.txt:63	wasmfs_directory_move
+wasm unittest CTest	Decision 7	/Users/colin/seekdb-dev/seekdb@cd41da17b (origin/feature/webassembly-shell) unittest/wasm/CMakeLists.txt:81	wasm_charset_integer
+wasm unittest CTest	Decision 7	/Users/colin/seekdb-dev/seekdb@cd41da17b (origin/feature/webassembly-shell) unittest/wasm/CMakeLists.txt:105	wasm_charset_hash
+wasm unittest CTest	Decision 7	/Users/colin/seekdb-dev/seekdb@cd41da17b (origin/feature/webassembly-shell) unittest/wasm/CMakeLists.txt:122	wasm_atomics
+wasm unittest CTest	Decision 7	/Users/colin/seekdb-dev/seekdb@cd41da17b (origin/feature/webassembly-shell) unittest/wasm/CMakeLists.txt:148	wasm_thread_id
+wasm unittest CTest	Decision 7	/Users/colin/seekdb-dev/seekdb@cd41da17b (origin/feature/webassembly-shell) unittest/wasm/CMakeLists.txt:166	wasm_io
+wasm unittest CTest	Decision 7	/Users/colin/seekdb-dev/seekdb@cd41da17b (origin/feature/webassembly-shell) unittest/wasm/CMakeLists.txt:180	wasm_memory_runtime
+wasm unittest CTest	Decision 7	/Users/colin/seekdb-dev/seekdb@cd41da17b (origin/feature/webassembly-shell) unittest/wasm/CMakeLists.txt:196	wasm_achunk_allocation
+wasm unittest CTest	Decision 7	/Users/colin/seekdb-dev/seekdb@cd41da17b (origin/feature/webassembly-shell) unittest/wasm/CMakeLists.txt:211	wasm_stack
+wasm unittest CTest	Decision 7	/Users/colin/seekdb-dev/seekdb@cd41da17b (origin/feature/webassembly-shell) unittest/wasm/CMakeLists.txt:226	wasm_futex
+wasm unittest CTest	Decision 7	/Users/colin/seekdb-dev/seekdb@cd41da17b (origin/feature/webassembly-shell) unittest/wasm/CMakeLists.txt:238	wasm_futex_wait
+wasm unittest script	Decision 7	/Users/colin/seekdb-dev/seekdb@cd41da17b (origin/feature/webassembly-shell) unittest/wasm/database-cache.test.mjs	database-cache.test.mjs
+wasm unittest script	Decision 7	/Users/colin/seekdb-dev/seekdb@cd41da17b (origin/feature/webassembly-shell) unittest/wasm/database-stream.test.mjs	database-stream.test.mjs
+wasm unittest script	Decision 7	/Users/colin/seekdb-dev/seekdb@cd41da17b (origin/feature/webassembly-shell) unittest/wasm/runtime-host.test.mjs	runtime-host.test.mjs
+wasm unittest script	Decision 7	/Users/colin/seekdb-dev/seekdb@cd41da17b (origin/feature/webassembly-shell) unittest/wasm/shell-format.test.mjs	shell-format.test.mjs
+wasm unittest script	Decision 7	/Users/colin/seekdb-dev/seekdb@cd41da17b (origin/feature/webassembly-shell) unittest/wasm/shell-output.test.mjs	shell-output.test.mjs
+wasm unittest script	Decision 7	/Users/colin/seekdb-dev/seekdb@cd41da17b (origin/feature/webassembly-shell) unittest/wasm/shell-sql.test.mjs	shell-sql.test.mjs
+wasm unittest script	Decision 7	/Users/colin/seekdb-dev/seekdb@cd41da17b (origin/feature/webassembly-shell) unittest/wasm/test_browser_cases_node.mjs	test_browser_cases_node.mjs
+wasm unittest script	Decision 7	/Users/colin/seekdb-dev/seekdb@cd41da17b (origin/feature/webassembly-shell) unittest/wasm/test_database_search.mjs	test_database_search.mjs
+wasm unittest script	Decision 7	/Users/colin/seekdb-dev/seekdb@cd41da17b (origin/feature/webassembly-shell) unittest/wasm/test_database_worker.mjs	test_database_worker.mjs
+wasm unittest script	Decision 7	/Users/colin/seekdb-dev/seekdb@cd41da17b (origin/feature/webassembly-shell) unittest/wasm/test_engine_sql.mjs	test_engine_sql.mjs
+wasm unittest script	Decision 7	/Users/colin/seekdb-dev/seekdb@cd41da17b (origin/feature/webassembly-shell) unittest/wasm/test_mysql_wire.mjs	test_mysql_wire.mjs
+wasm unittest script	Decision 7	/Users/colin/seekdb-dev/seekdb@cd41da17b (origin/feature/webassembly-shell) unittest/wasm/test_release_shell.py	test_release_shell.py
+wasm unittest script	Decision 7	/Users/colin/seekdb-dev/seekdb@cd41da17b (origin/feature/webassembly-shell) unittest/wasm/test_shell_examples.mjs	test_shell_examples.mjs

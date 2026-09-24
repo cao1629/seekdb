@@ -1,0 +1,65 @@
+# Plan-bearing cases: the configured cases whose .result holds at least one plan table (family 3; action 9's flag check).
+# Produced 2026-09-24 in /Users/colin/seekdb-dev/migrate-to-rust at c55acd2a5 (branch migrate-to-rust).
+#   tools/deploy is 834bbee1e's: `git diff --quiet 834bbee1e -- tools/deploy .github/script/seekdb/sdb.py` succeeds and
+#   `git status --porcelain -- tools/deploy` prints nothing. The runner is read from 834bbee1e with git show, so the
+#   working tree's runner changes (action 6) do not move this file.
+# A plan table is recognized by its header row `|ID|OPERATOR`. Across the tracked .result files, that header,
+#   `Query Plan` and `Outputs & filters` occur in exactly the same 42 files.
+# 40 or 42: both figures are right, and they count different sets.
+#   42 tracked .result files hold a plan table: git grep -l -F '|ID|OPERATOR' -- 'tools/deploy/mysql_test/*.result' | wc -l
+#   40 of them belong to the 272 configured cases (this file). The other two, test_suite/update/r/mysql/update2.result
+#   and test_suite/geometry/r/mysql/geometry_index2_mysql.result, belong to cases the config leaves out.
+#   So PLAN.md's "40 plan-bearing configured files" holds, and evidence-brief.md:1327's "42" counts tracked files.
+# The 40 files hold 658 plan tables; 568 of those tables, in 33 of the files, carry EST.ROWS and EST.TIME(us)
+#   (LC_ALL=C grep -a -c of '|ID|OPERATOR' and of '|ID|OPERATOR.*EST\.ROWS' over the listed .result files).
+# Six configured .test files contain EXPLAIN, but every EXPLAIN in them runs under --disable_result_log, so their
+#   .result holds no plan table and they are not listed: func_group_1, func_group_7, join_equivalent_transfer,
+#   join_many_table_single_field, join_star, groupby.group_by_2.
+# Format: one case name per line (the runner's naming), in config order, for the runner's --case-list.
+# Count: grep -vc '^#' migration/judge/lists/plan-bearing.txt
+# Reproduce from the worktree root: sed -n 's/^#| \{0,1\}//p' migration/judge/lists/plan-bearing.txt | sh
+#   prints every line that follows the script below (README.md has the check).
+#| python3 -B -c 'import subprocess,pathlib;ns={"__name__":"census"};exec(subprocess.check_output(["git","show","834bbee1e:.github/script/seekdb/mysqltest_for_seekdb.py"]),ns);root=pathlib.Path.cwd();[print(c.name,c.test_file.relative_to(root),c.result_file.relative_to(root),sep="\t") for c in ns["discover_cases"](root)]' |
+#| while IFS="$(printf '\t')" read -r name test result; do
+#|   if LC_ALL=C grep -a -q -F '|ID|OPERATOR' "$result"; then echo "$name"; fi
+#| done
+dist_nest_loop_simple
+explain
+generated_column
+intersect
+topk
+view_2
+array.array_arith_op_mysql
+datatype.div
+executor.basic
+executor.full_join
+fork_table.fork_table_with_index
+fts_index.basic_dml
+fts_index.basic_dml_sequel
+fts_index.create_fts_index_afterward
+fts_index.create_table_with_fts_index
+fts_index.partitioned_simple_query
+fts_index.simple_query
+geometry.geometry_basic_mysql
+geometry.geometry_bugfix_mysql
+geometry.geometry_filter_mysql
+geometry.geometry_generated_col_mysql
+geometry.geometry_index_mysql
+geometry.geometry_partition_table_mysql
+geometry.spatial_relation_join_mysql
+global_index.global_index_lookup_1
+global_index.global_index_lookup_2
+global_index.global_index_lookup_3
+global_index.global_index_lookup_4
+global_index.global_index_lookup_5
+global_index.global_index_lookup_6
+groupby.group_by_basic
+subquery.optimizer_subquery_bug
+subquery.rqg_subquery_semijoin_mismatch
+subquery.spf_bug13044302
+subquery.subquery
+subquery.subquery_sj_firstmatch
+subquery.subquery_sj_innodb
+vector_index.sparse_vector_index_vsag_query
+vector_index.vector_index_bugfix1
+vector_index.vector_ivf_index_with_filter

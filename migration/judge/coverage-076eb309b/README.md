@@ -60,15 +60,17 @@ Not yet. Failures per pass (`pass-*.seekdb_result.json`):
 In pass B, subquery.idx_with_const_expr_21_subquery_dilang returned no rows for nine queries
 that expect three (`pass-B.subquery.idx_with_const_expr_21_subquery_dilang.diff`). The test
 inserts rows with `now()` into a `DATETIME` column (whole seconds) and then selects
-`a5 <= date_add(current_timestamp(), interval -1 microsecond)`. The likely cause, not yet
-confirmed: when the insert happens in the second half of a second, the stored value rounds up
-to the next second, so the rows stay excluded until the clock passes that second; the slower
-instrumented binary shifts the timing. That makes it the same class as the two type_date
-cases.
+`a5 <= date_add(current_timestamp(), interval -1 microsecond)`. The first guess here, that the
+stored value rounds up to the next second, is wrong (00b action 4,
+`../investigations/subquery-datetime-rounding.md`): `now()` and `current_timestamp()` without
+digits are truncated to the whole second when evaluated, so the bound is the start of the
+select's second minus 1 microsecond, and the nine selects exclude the rows whenever the inserts
+and the selects start in the same second (in pass B: about 16:51:32.20 and 16:51:32.86). It is
+the same class as the two type_date cases, and a faster build fails more often.
 
 Under the report's rule this case was not named before the runs, so the precondition is not met.
-00b must confirm the explanation (check how seekdb stores `now()` into `DATETIME`), add the case
-to the quarantine list with that reason, and repeat two clean passes on the pinned C++ build.
+00b confirms the explanation on the reference (action 7), adds the case to the quarantine list
+with that reason, and repeats two clean passes on the pinned C++ build.
 
 ## How it was run
 

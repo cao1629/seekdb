@@ -1,0 +1,858 @@
+# Hash-order SELECT candidates: statements in the configured .test files whose row order may come from hash output.
+#   Candidates only. After action 5 they are checked against the reference's plans, and the confirmed ones go into
+#   lists/hash-order-selects.txt, the row-order mask's declared list (Decision 6; PLAN.md section 4, family 4).
+# Produced 2026-09-24 in /Users/colin/seekdb-dev/migrate-to-rust at c55acd2a5 (branch migrate-to-rust).
+#   tools/deploy is 834bbee1e's: `git diff --quiet 834bbee1e -- tools/deploy .github/script/seekdb/sdb.py` succeeds and
+#   `git status --porcelain -- tools/deploy` prints nothing. The runner is read from 834bbee1e with git show, so the
+#   working tree's runner changes (action 6) do not move this file.
+# Columns (tab-separated): case name (the runner's naming), line in the case's .test where the statement starts,
+#   the statement with its whitespace collapsed to single spaces (after an eval/send/query prefix is removed).
+# How statements are read: the .test is split into statements at the current delimiter (delimiter changes are
+#   followed), outside quotes and comments; mysqltest command lines (--...), '#' comment lines, if/while/{/} lines
+#   and mysqltest command words (let, connection, ...) are not SQL. Files the .test sources are not read: the same
+#   rule over the 30 files the configured cases source finds 0 candidates.
+# A candidate is a SELECT (or WITH, or a parenthesized SELECT) that
+#   - has a FROM, has no ORDER BY outside parentheses and no INTO outside parentheses,
+#   - is not under --error without 0 in its list, not under --sorted_result, not in a --disable_result_log region,
+#   - and has a JOIN, a comma in the outer FROM list, a nested SELECT (more SELECT keywords than 1 + the set
+#     operations), GROUP BY, UNION/INTERSECT/EXCEPT/MINUS, SELECT DISTINCT, OVER, or WITH. 574 candidates read more
+#     than one table; the other 59 read one table and are kept for GROUP BY (41), SELECT DISTINCT (13) or OVER (5),
+#     whose output can come from a hash operator. The script's "single-table" count is the statements with none of these.
+#   String literals and non-hint comments are blanked before the keywords are matched.
+# PLAN.md's "about 300" is the feasibility verifier's estimate of the hash-driven ones; this list is the wider set
+#   that action 5 narrows. Many candidates return one row (an aggregate without GROUP BY, such as
+#   select count(*) from t1, t2), and the plan check drops them.
+# The script prints how the SELECTs split as '#' lines before the rows; a candidate can have several of the kinds.
+# Count: grep -vc '^#' migration/judge/lists/hash-order-select-candidates.txt
+# Reproduce from the worktree root: sed -n 's/^#| \{0,1\}//p' migration/judge/lists/hash-order-select-candidates.txt | python3 -B -
+#   prints every line that follows the script below (README.md has the check).
+#| import collections, pathlib, re, subprocess
+#| ns = {"__name__": "census"}
+#| exec(subprocess.check_output(["git", "show", "834bbee1e:.github/script/seekdb/mysqltest_for_seekdb.py"]), ns)
+#| root = pathlib.Path.cwd()
+#| SKIP_WORDS = {"let", "connect", "connection", "disconnect", "sleep", "real_sleep", "inc", "dec", "echo", "source",
+#|               "die", "exit", "reap", "vertical_results", "horizontal_results", "disable_query_log", "enable_query_log",
+#|               "disable_warnings", "enable_warnings", "disable_info", "enable_info", "disable_abort_on_error",
+#|               "enable_abort_on_error", "replace_result", "replace_column", "replace_regex", "result_format", "system",
+#|               "exec", "remove_file", "write_file", "append_file", "cat_file", "perl", "ping", "skip", "require",
+#|               "explain_protocol", "disable_ps_protocol", "enable_ps_protocol", "while", "if", "end"}
+#| TRIGGERS = [
+#|     ("join", re.compile(r"\b(join|straight_join)\b")),
+#|     ("group by", re.compile(r"\bgroup\s+by\b")),
+#|     ("union/intersect/except/minus", re.compile(r"\b(union|intersect|except|minus)\b")),
+#|     ("select distinct", re.compile(r"^(\(\s*)*select\s+(/\*\+.*?\*/\s*)?(all\s+)?(distinct|distinctrow)\b")),
+#|     ("window function", re.compile(r"\bover\s*\(|\bover\s+[a-z_]\w*")),
+#|     ("with (CTE)", re.compile(r"^(\(\s*)*with\b")),
+#| ]
+#| SET_OP = re.compile(r"\b(union|intersect|except|minus)\b")
+#| def mask(sql):
+#|     out, i, n = [], 0, len(sql)
+#|     while i < n:
+#|         ch = sql[i]
+#|         if ch in "'\"`":
+#|             j = i + 1
+#|             while j < n and sql[j] != ch:
+#|                 j += 2 if sql[j] == "\\" else 1
+#|             out.append(" x ")
+#|             i = j + 1
+#|         elif sql.startswith("/*", i) and not sql.startswith("/*+", i):
+#|             j = sql.find("*/", i + 2)
+#|             out.append(" ")
+#|             i = n if j < 0 else j + 2
+#|         elif ch == "#" or sql.startswith("-- ", i):
+#|             j = sql.find("\n", i)
+#|             i = n if j < 0 else j
+#|         else:
+#|             out.append(ch)
+#|             i += 1
+#|     return " ".join("".join(out).lower().split())
+#| def depth0(sql):
+#|     out, depth = [], 0
+#|     for ch in sql:
+#|         if ch == "(":
+#|             depth += 1
+#|         elif ch == ")":
+#|             depth -= 1
+#|         elif depth == 0:
+#|             out.append(ch)
+#|     return "".join(out)
+#| def split_statements(text, delim):
+#|     parts, start, i, n, quote, comment = [], 0, 0, len(text), None, None
+#|     while i < n:
+#|         ch = text[i]
+#|         if comment == "line":
+#|             if ch == "\n":
+#|                 comment = None
+#|         elif comment == "block":
+#|             if text.startswith("*/", i):
+#|                 comment, i = None, i + 1
+#|         elif quote:
+#|             if ch == "\\":
+#|                 i += 1
+#|             elif ch == quote:
+#|                 quote = None
+#|         elif ch in "'\"`":
+#|             quote = ch
+#|         elif ch == "#" or text.startswith("-- ", i):
+#|             comment = "line"
+#|         elif text.startswith("/*", i):
+#|             comment, i = "block", i + 1
+#|         elif text.startswith(delim, i):
+#|             parts.append(text[start:i])
+#|             start = i + len(delim)
+#|             i = start
+#|             continue
+#|         i += 1
+#|     return parts, text[start:], quote is not None or comment == "block"
+#| def statements(path):
+#|     delim, buf, first_line = ";", "", None
+#|     sorted_next, result_on, error_next = False, True, None
+#|     def directive(word, rest):
+#|         nonlocal sorted_next, result_on, error_next, delim
+#|         if word == "sorted_result":
+#|             sorted_next = True
+#|         elif word == "disable_result_log":
+#|             result_on = False
+#|         elif word == "enable_result_log":
+#|             result_on = True
+#|         elif word == "error":
+#|             error_next = rest
+#|         elif word == "delimiter":
+#|             delim = rest.strip()
+#|     for number, raw in enumerate(path.read_text(encoding="utf-8", errors="replace").splitlines(), 1):
+#|         line = raw.strip()
+#|         if not buf.strip():
+#|             buf = ""
+#|             if not line or line.startswith("#"):
+#|                 continue
+#|             if line.startswith("--"):
+#|                 parts = line[2:].strip().split(None, 1)
+#|                 word = parts[0].lower().rstrip(";") if parts else ""
+#|                 rest = parts[1] if len(parts) > 1 else ""
+#|                 if word in ("eval", "send", "query") and rest:
+#|                     yield number, rest.rstrip().rstrip(";"), sorted_next, result_on, error_next
+#|                     sorted_next, error_next = False, None
+#|                 else:
+#|                     directive(word, rest)
+#|                 continue
+#|             if re.match(r"^(if|while)\s*\(.*\)\s*\{?\s*(#.*)?$", line) or re.match(r"^\}?\s*(else\s*)?\{?\s*$", line):
+#|                 continue
+#|             first_line = number
+#|         buf += raw + "\n"
+#|         parts, buf, open_ = split_statements(buf, delim)
+#|         for stmt in parts:
+#|             stmt = stmt.strip()
+#|             if not stmt:
+#|                 continue
+#|             words = stmt.split(None, 1)
+#|             word, rest = words[0].lower(), (words[1] if len(words) > 1 else "")
+#|             if word in ("sorted_result", "disable_result_log", "enable_result_log", "error", "delimiter"):
+#|                 directive(word, rest)
+#|                 continue
+#|             if word in SKIP_WORDS or word.startswith("$") or word in ("{", "}"):
+#|                 continue
+#|             if word in ("eval", "send", "query"):
+#|                 stmt = rest
+#|             yield first_line, stmt, sorted_next, result_on, error_next
+#|             sorted_next, error_next = False, None
+#|             first_line = number
+#|         if buf.strip():
+#|             first_line = first_line if first_line else number
+#| stats = collections.Counter()
+#| triggers = collections.Counter()
+#| rows = []
+#| for case in ns["discover_cases"](root):
+#|     for line, stmt, sorted_flag, result_on, error in statements(case.test_file):
+#|         sql = mask(stmt)
+#|         if not re.match(r"^(\(\s*)*(select|with)\b", sql):
+#|             continue
+#|         stats["SELECT or WITH statements"] += 1
+#|         top = depth0(sql)
+#|         if re.search(r"\border\s+by\b", top):
+#|             stats["skipped: ORDER BY outside parentheses"] += 1
+#|             continue
+#|         if not re.search(r"\bfrom\b", sql):
+#|             stats["skipped: no FROM"] += 1
+#|             continue
+#|         if re.search(r"\binto\b", top):
+#|             stats["skipped: SELECT ... INTO"] += 1
+#|             continue
+#|         if error is not None and not re.search(r"(^|[\s,])0([\s,;]|$)", error.strip()):
+#|             stats["skipped: under --error (expected to fail)"] += 1
+#|             continue
+#|         if sorted_flag:
+#|             stats["skipped: under --sorted_result"] += 1
+#|             continue
+#|         if not result_on:
+#|             stats["skipped: result log disabled"] += 1
+#|             continue
+#|         hits = [name for name, pattern in TRIGGERS if pattern.search(sql)]
+#|         if len(re.findall(r"\bselect\b", sql)) > 1 + len(SET_OP.findall(sql)):
+#|             hits.append("subquery")
+#|         clause = re.search(r"\bfrom\b(.*?)(\bwhere\b|\bgroup\b|\bhaving\b|\blimit\b|\bwindow\b|\bfor\b|\block\b|\bunion\b|$)", top)
+#|         if clause and "," in clause.group(1):
+#|             hits.append("comma in FROM")
+#|         if not hits:
+#|             stats["skipped: single-table"] += 1
+#|             continue
+#|         stats["candidates"] += 1
+#|         triggers.update(hits)
+#|         rows.append((case.name, line, " ".join(stmt.split())))
+#| for name in ["SELECT or WITH statements", "skipped: no FROM", "skipped: ORDER BY outside parentheses",
+#|              "skipped: SELECT ... INTO", "skipped: under --error (expected to fail)", "skipped: under --sorted_result",
+#|              "skipped: result log disabled", "skipped: single-table", "candidates"]:
+#|     print("# {}: {}".format(name, stats[name]))
+#| for name, count in sorted(triggers.items(), key=lambda item: (-item[1], item[0])):
+#|     print("# candidates with {}: {}".format(name, count))
+#| for row in rows:
+#|     print(*row, sep="\t")
+# SELECT or WITH statements: 22771
+# skipped: no FROM: 10407
+# skipped: ORDER BY outside parentheses: 1787
+# skipped: SELECT ... INTO: 0
+# skipped: under --error (expected to fail): 793
+# skipped: under --sorted_result: 108
+# skipped: result log disabled: 1
+# skipped: single-table: 9042
+# candidates: 633
+# candidates with subquery: 329
+# candidates with comma in FROM: 226
+# candidates with join: 68
+# candidates with group by: 64
+# candidates with union/intersect/except/minus: 50
+# candidates with select distinct: 21
+# candidates with window function: 6
+# candidates with with (CTE): 4
+create_using_type	21	select t.table_name, t.index_using_type from oceanbase.__all_table t join oceanbase.__all_database d on t.database_id = d.database_id where t.table_name = 'using_hash_t1' and d.database_name = 'hualong'
+create_using_type	22	select t.table_name, t.index_using_type from oceanbase.__all_table t join oceanbase.__all_database d on t.database_id = d.database_id where t.table_name = 'using_btree_t1' and d.database_name = 'hualong'
+except	24	select * from t1 except select * from t1
+except	28	select * from t1 except select * from t2
+except	33	select * from t1 except select * from t3
+except	38	select * from t1 except select 1,1 from t1
+except	43	select * from t2 except select * from t3
+except	48	(select * from t2) except (select * from t2 where false)
+except	51	(select * from t2 where false) except (select * from t2)
+except	52	(select * from t2 where false) except (select * from t2 where false)
+except	55	select c2 from t4 except select 1 from t4
+except	58	select c2 from t4 except select 0 from t4
+except	59	select c2 from t4 except select c2 from t4
+except	60	select c2 from t4 except select distinct c2 from t4
+except	61	select distinct c2 from t4 except select distinct c2 from t4
+except	64	select distinct c2 from t4 except select c2 from t4
+except	68	select 0 from t4 except select c2 from t4
+except	69	select 1 from t4 except select 0 from t4
+except	75	(select * from t4 except (select * from t4 where c1=1) )except (select * from t4 where c1=2)
+except	76	select * from t4 except (select * from t4 where c1=1) except (select * from t4 where c1=3)
+except	77	select * from t4 except select 1,0 from t4 except select 3,1 from t4
+except	78	(select * from t4 where false) except (select * from t4 where false) except select * from t4
+except	80	select * from t4 except ((select * from t4 where c1=1) except (select * from t4 where c1=2))
+except	81	select * from t4 except ((select * from t4 where c1=1) union (select * from t4 where c1=2))
+except	90	select c2 from t5 except select c2 from t6
+func_group_1	174	select max(t1.a1), max(t2.a2) from t1, t2
+func_group_1	197	select max(t1.a2) from t1 left outer join t2 on t1.a1=10
+func_group_1	200	select max(t2.a1) from t1 left outer join t2 on t1.pk=t2.pk and 1=0 where t2.a1='AAA'
+func_group_1	205	select max(t2.a1) from t1 left outer join t2 on t1.a2=t2.a1 where t2.a1='AAA'
+func_group_1	210	select max(t2.a1) from t1 left outer join t2 on t1.pk=t2.pk where t2.a1='AAA' and 1=0
+func_group_1	215	select max(t1.a2),max(t2.a1) from t1 left outer join t2 on t1.pk=t2.pk and t1.a1=10
+func_group_1	220	select max(t1.a2),max(t2.a1) from t1 left outer join t2 on t1.pk=t2.pk and t1.pk=10
+func_group_1	225	select * from t1 left join t2 on t1.pk=t2.pk where t2.a2 > 1 and t2.a2 < 10
+func_group_7	146	SELECT a,COUNT(DISTINCT b) AS cnt FROM t1 GROUP BY a HAVING cnt > 50
+func_group_7	147	SELECT a,SUM(DISTINCT b) AS sumation FROM t1 GROUP BY a HAVING sumation > 50
+func_group_7	148	SELECT a,AVG(DISTINCT b) AS average FROM t1 GROUP BY a HAVING average > 50
+func_group_7	287	SELECT COUNT(*) FROM t1 a JOIN t1 b ON a.a= b.a
+func_group_7	478	SELECT AVG(DISTINCT outr.col_int_nokey) FROM t1 AS outr LEFT JOIN t1 AS outr2 ON outr.col_int_nokey = outr2.col_int_nokey
+intersect	23	(select * from t1 where false ) intersect (select * from t2 where false)
+intersect	26	(select * from t1 where false ) intersect select * from t2
+intersect	29	select * from t1 intersect (select * from t2 where false)
+intersect	32	(select * from t1 where false) intersect (select * from t2 where false) intersect (select * from t3 where false)
+intersect	38	select c1 from t1 intersect select c1 from t1
+intersect	41	select c1 from t1 intersect select c1 from t4
+intersect	44	select c1 from t4 intersect select c1 from t1
+intersect	47	select c1 from t2 intersect select c1 from t3
+intersect	50	select c1 from t1 intersect select c1 from t2
+intersect	56	select c2 from t4 intersect select c2 from t1
+intersect	59	select c2 from t1 intersect select c2 from t4
+intersect	62	select * from t1 intersect (select * from t2 union select * from t3)
+intersect	65	(select * from t1 intersect select * from t2) union (select * from t1 intersect select * from t3)
+intersect	68	select c2 from t1 intersect select c2 from t3 intersect select c2 from t4
+intersect	71	select c2 from t1 intersect (select c2 from t3 intersect select c2 from t4)
+intersect	82	select c2 from t5 intersect select c2 from t6
+intersect	94	(select /*+USE_HASH_AGGREGATION*/ c15 from (select c15 from t8) except (select c15 from t8) order by 1 limit 1000) union all (select t8_alias1.c10 from t8 t8_alias1 limit 1)
+intersect	96	(select /*+USE_HASH_AGGREGATION*/ c15 from (select c15 from t8) intersect (select c15 from t8) order by 1 limit 1000) union all (select t8_alias1.c10 from t8 t8_alias1 limit 1)
+join_basic	43	select * from t1, t2 where t1.c1<=t2.c1
+join_basic	56	select a, b from t1, t2 where a > b
+join_basic	57	select a, c from t1, t3 where a > c
+join_basic	66	select * from t1, t2 where t1.c1>=t2.c1
+join_equivalent_transfer	59	select t1.pk,t2.c2 from t1,t2 where t1.pk=t2.pk and t1.pk=1
+join_equivalent_transfer	60	select t1.pk,t2.c2 from t1,t2 where t1.pk=t2.pk and t1.pk>1
+join_equivalent_transfer	63	select t1.pk,t2.c2 from t1 INNER join t2 on t1.pk=t2.pk and t2.pk=1
+join_equivalent_transfer	65	select t1.pk,t2.c2 from t1 LEFT join t2 on t1.pk=t2.pk and t2.pk=1
+join_equivalent_transfer	71	select t1.pk,t2.c2 from t1 RIGHT join t2 on t1.pk=t2.pk and t2.pk=1
+join_many_table_single_field	20	select t1000.id from t1 as t1000 left join t1 as t2000 on t1000.id=t2000.id left join t1 as t2001 on t2000.id=t2001.id left join t1 as t2002 on t2001.id=t2002.id left join t1 as t2003 on t2002.id=t2003.id left join t1 as t2004 on t2003.id=t2004.id left join t1 as t2005 on t2004.id=t2005.id left join t1 as t2006 on t2005.id=t2006.id left join t1 as t2007 on t2006.id=t2007.id left join t1 as t2008 on t2007.id=t2008.id left join t1 as t2009 on t2008.id=t2009.id left join t1 as t2010 on t2009.id=t2010.id left join t1 as t2011 on t2010.id=t2011.id left join t1 as t2012 on t2011.id=t2012.id left join t1 as t2013 on t2012.id=t2013.id left join t1 as t2014 on t2013.id=t2014.id left join t1 as t2015 on t2014.id=t2015.id left join t1 as t2016 on t2015.id=t2016.id left join t1 as t2017 on t2016.id=t2017.id left join t1 as t2018 on t2017.id=t2018.id left join t1 as t2019 on t2018.id=t2019.id left join t1 as t2020 on t2019.id=t2020.id left join t1 as t2021 on t2020.id=t2021.id left join t1 as t2022 on t2021.id=t2022.id left join t1 as t2023 on t2022.id=t2023.id left join t1 as t2024 on t2023.id=t2024.id left join t1 as t2025 on t2024.id=t2025.id left join t1 as t2026 on t2025.id=t2026.id left join t1 as t2027 on t2026.id=t2027.id left join t1 as t2028 on t2027.id=t2028.id left join t1 as t2029 on t2028.id=t2029.id left join t1 as t2030 on t2029.id=t2030.id left join t1 as t2031 on t2030.id=t2031.id
+join_null	30	select id,gender,user_id from t1,t2 where t2.user_id=t1.id
+join_null	36	select * from t5, t6 where t5.a <=> t6.a
+join_star	30	select * from tbl1 join tbl2 on tbl1.i1=tbl2.i1 join tbl3 on tbl1.i1=tbl3.i1 join tbl4 on tbl1.i1=tbl4.i1
+join_star	31	select * from tbl1 a join tbl2 b on a.i1=b.i1 join tbl3 c on a.i1=c.i1 join tbl4 d on a.i1=d.i1
+join_star	32	select * from tbl1 join tbl2 on tbl1.i1=tbl2.i1 join tbl3 on tbl1.i1=tbl3.i1 join tbl4 on tbl1.i1=tbl4.i1 where tbl1.i1=1
+join_star	33	select * from tbl1 join tbl2 on tbl1.i1=tbl2.i1 join tbl3 on tbl2.i1=tbl3.i1 join tbl4 on tbl3.i1=tbl4.i1
+join_star	34	select * from tbl1 a join tbl2 b on a.i1=b.i1 join tbl3 c on b.i1=c.i1 join tbl4 d on c.i1=d.i1
+join_star	51	select * from tbl1 left join tbl2 on tbl1.i1=tbl2.i1 left join tbl3 on tbl1.i1=tbl3.i1 left join tbl4 on tbl1.i1=tbl4.i1
+join_star	52	select * from tbl1 a left join tbl2 b on a.i1=b.i1 left join tbl3 c on a.i1=c.i1 left join tbl4 d on a.i1=d.i1
+join_star	53	select * from tbl1 left join tbl2 on tbl1.i1=tbl2.i1 left join tbl3 on tbl1.i1=tbl3.i1 left join tbl4 on tbl1.i1=tbl4.i1 where tbl1.i1=1
+join_star	54	select * from tbl1 left join tbl2 on tbl1.i1=tbl2.i1 left join tbl3 on tbl2.i1=tbl3.i1 left join tbl4 on tbl3.i1=tbl4.i1
+join_star	55	select * from tbl1 a left join tbl2 b on a.i1=b.i1 left join tbl3 c on b.i1=c.i1 left join tbl4 d on c.i1=d.i1
+join_using1	25	SELECT * FROM tjuo1 JOIN (SELECT * FROM tjuo2) as tjuo2_alias on tjuo1.c1= tjuo2_alias.c1
+join_using1	26	SELECT * FROM tjuo1 RIGHT JOIN (SELECT * FROM tjuo2) as tjuo2_alias USING (c1)
+join_using1	29	SELECT * FROM tjuo1 JOIN tjuo2 on tjuo1.c1=tjuo2.c1 JOIN tjuo3 on tjuo2.c2=tjuo3.c2
+join_using1	30	SELECT * FROM tjuo1 RIGHT JOIN tjuo2 USING (c1) RIGHT JOIN tjuo3 USING (c2)
+join_using1	31	SELECT * FROM tjuo1 RIGHT JOIN (SELECT * FROM tjuo2) as tjuo2_alias USING (c1) RIGHT JOIN tjuo3 USING (c2)
+join_using1	32	SELECT * FROM (SELECT * FROM tjuo1) tjuo1_alias RIGHT JOIN (SELECT * FROM tjuo2) as tjuo2_alias USING (c1) RIGHT JOIN (SELECT * FROM tjuo3) as tjuo3_alias USING (c2)
+join_using1	33	SELECT * FROM (SELECT * FROM tjuo1) tjuo1_alias RIGHT JOIN tjuo2 USING (c1) RIGHT JOIN (SELECT * FROM tjuo3) as tjuo3_alias USING (c2)
+join_using1	34	SELECT * FROM (SELECT c2 FROM tjuo1 as i1 JOIN (SELECT * FROM tjuo2) as i2 USING (c1) ) as t12 RIGHT JOIN (SELECT * FROM tjuo3) as tjuo3_alias USING (c2)
+join_using1	35	SELECT * FROM (SELECT c2 FROM tjuo1 as i1 JOIN (SELECT * FROM tjuo2) as i2 USING (c1) ) as t12
+limit	25	select /*+no_rewrite*/ * from (select * from t1 order by b limit 4) AS t2 limit 2
+minitest	115	select distinct c2, c2+1 from t1
+minitest	136	(select * from t1) union all (select * from t1)
+minitest	144	select * from t1 X, t1 Y where X.c1 = Y.c1
+outer_join_where_is_null	32	select t1.name, t2.name, t2.id from t1 left join t2 on (t1.id = t2.owner) where t2.id is null
+select_basic	25	select * from db1.t1,db2.t1
+select_basic	38	select * from db1.t1,db2.t1
+select_basic	51	select * from db1.t1,db2.t1
+select_basic	73	select 1 as c1, 2 as c2 from t1 group by c1
+select_basic	77	select c1 as c2, c2 as c1 from t1 group by c1
+select_basic	169	select 1 from t1 where c1 in (select c1 from t1 where exists( (select 1) union (select 1)))
+sq_from	25	SELECT sb1,sb2,sb3 FROM (SELECT c1 AS sb1, c2 AS sb2, c3*2 AS sb3 FROM t1) AS sb WHERE sb1 > 1
+sq_from	27	SELECT AVG(sum_column1) FROM (SELECT SUM(c1) AS sum_column1 FROM t1 GROUP BY c1) AS t1
+sq_from	42	SELECT sb1,sb2,sb3 FROM (SELECT c1 AS sb1, c2 AS sb2, c3*2 AS sb3 FROM t1) AS sb WHERE sb1 > 1
+sq_from	44	SELECT AVG(sum_column1) FROM (SELECT SUM(c1) AS sum_column1 FROM t1 GROUP BY c1) AS t1
+sq_from_2	20	SELECT sb1,sb2,sb3 FROM (SELECT c1 AS sb1, c2 AS sb2, c3*2 AS sb3 FROM t1) AS sb WHERE sb1 > 1
+sq_from_2	22	SELECT AVG(sum_column1) FROM (SELECT SUM(c1) AS sum_column1 FROM t1 GROUP BY c1) AS t1
+sq_from_2	29	select a2 from (select *,case b1 when 1 then 2 else 3 end as c from a left join b on a2=b2) v where c>1
+sq_from_2	35	select tb.c2, tb.c3 from (select t.* from (select * from t2 WHERE c2 = 1) t left JOIN t3 b on t.c3=b.c3)tb
+sqlancer_optimizer_regressions	19	select count(*) as d0_where_expr_count from (select /*+ no_use_nl */ d0_t1.c0 from d0_t1 left join d0_t0 on (d0_t1.c0) != (concat(d0_t0.c1,'')) where (if((3680881746) != (10), ((760187400) < (1513041260)) >= ((9285266.166385) > (0.832418)), ((d0_t1.c1,0) not in (("J",-8))) like ("%G"))) not in ((((2,'V') not in ((d0_t1.c0,"1602998041"), (-2,'Kc'))) = (ifnull((not ((not ((cast(((ifnull(((340395148) < (1913548270)) > ("X3"), (not (exists (select 1))))) or (((exists (select 1)) is not true) in (("6") is not true, (((true) <= (7)) xor ((cast((concat(d0_t1.c2,'')) is true as signed)) is null)) is null))) < (concat(d0_t1.c2,'')) as signed)) like ("%Q"))))), exists (select 1 from dual where false)))) = (concat(d0_t0.c1,''))) ) q
+sqlancer_optimizer_regressions	26	select count(*) as d3_original_count from (select /*+ use_merge(d3_t2, d3_t1) */ d3_t1.c0 from d3_t1 inner join d3_t2 on (d3_t1.c1) > (d3_t2.c1) where (d3_t2.c0,d3_t1.c0) not in (select all d3_t1.c0, d3_t1.c0 from d3_t1)) q
+sqlancer_optimizer_regressions	27	select count(*) as d3_tlp_count from ((select /*+ use_merge(d3_t2, d3_t1) */ d3_t1.c0 from d3_t1 inner join d3_t2 on (d3_t1.c1) > (d3_t2.c1) where ((d3_t2.c0,d3_t1.c0) not in (select d3_t1.c0, d3_t1.c0 from d3_t1)) and (675468602)) union all (select /*+ use_merge(d3_t2, d3_t1) */ d3_t1.c0 from d3_t1 cross join d3_t2 on (d3_t1.c1) > (d3_t2.c1) where ((d3_t2.c0,d3_t1.c0) not in (select all d3_t1.c0, d3_t1.c0 from d3_t1)) and ((not (675468602)))) union all (select /*+ use_merge(d3_t2, d3_t1) */ all d3_t1.c0 from d3_t1 cross join d3_t2 on (d3_t1.c1) > (d3_t2.c1) where ((d3_t2.c0,d3_t1.c0) not in (select d3_t1.c0, d3_t1.c0 from d3_t1)) and ((675468602) is null))) q
+sqlancer_optimizer_regressions	33	select count(*) as d5_having_tlp_count from ((select /*+ no_use_hash */ max(distinct d5_t0.c2) as af0 from d5_t0 having ((not ((af0) in (cast(af0 as signed))))) and ((cast(((false) in ((0), (-1))) or ((af0,0,0) not in ((false,-1,0))) as signed)) && ((min("")) like ("224617187%")))) union all (select /*+ no_use_hash */ max(distinct d5_t0.c2) as af0 from d5_t0 having (! (((! ((af0) in (cast(af0 as signed))))) and ((cast(((false) in ((0), (-1))) or ((af0,0,0) not in ((false,-1,0))) as signed)) && ((min("")) like ("224617187%")))))) union all (select /*+ no_use_hash */ all max(distinct d5_t0.c2) as af0 from d5_t0 having (((! ((af0) in (cast(af0 as signed))))) and ((cast(((false) in ((0), (-1))) or ((af0,0,0) not in ((false,-1,0))) as signed)) && ((min("")) like ("224617187%")))) is null)) q
+topk	25	select /*+topk(20 6)*/ avg(c1), avg(c2), avg(c3) from t1 where c2 <10 group by c2 limit 5
+topk	110	select * from (select /*+topk(0 4)*/ avg(c1) from t1 where c2 <10 group by c2 order by sum(c2) limit 5) as a
+topk	111	select c1 from t1 where c1 < any (select /*+topk(0 4)*/ avg(c1) from t1 where c2 <10 group by c2 order by sum(c2) limit 5)
+topk	112	(select /*+topk(0 4)*/ avg(c1) from t1 where c2 <10 group by c2 order by sum(c2) limit 5) union (select /*+topk(0 10)*/ sum(c1) from t1 where c2 <10 group by c2 order by sum(c2) limit 7)
+topk	114	select c1 from t1 where (select /*+topk(0 10)*/ avg(c1) from t1 where c2 <10 group by c2 order by sum(c2) limit 1) > 1
+view_2	132	select c1 from v where (select c2) = 1
+view_2	161	select c1 from v group by c2
+view_2	162	select c1 from v group by (select c2)
+view_2	346	select (select c2 from v limit 1) from t2
+ai_function.ai_prompt	187	select ai_prompt(a,b),sum(d) from t1 group by nr
+ai_function.ai_prompt	188	select ai_prompt(a,b),sum(d) from t1 group by nr having nr>1
+ai_function.ai_prompt	228	select ai_prompt(t1.a) from t1 INNER JOIN t2 on t1.nr = t2.nr
+ai_function.ai_prompt	231	WITH t3 AS ( SELECT ai_prompt(t1.a) AS result FROM t1 INNER JOIN t2 ON t1.nr = t2.nr ) SELECT * FROM t3
+array.array_arith_op_mysql	61	select t1.c2 + t2.c2 from arr_t1 t1, arr_t2 t2
+array.array_arith_op_mysql	286	select if( EXISTS ( select ref_1.c2 as c0, 36 as c1, 35 as c2, 22 as c3, 21 as c4 from (arr_t1 as ref_1 inner join arr_t1 as ref_2 on (EXISTS ( select 91 as c0 from arr_t1 as ref_3 where EXISTS ( select 79 as c0, 59 as c1 from arr_t1 as ref_4 where EXISTS ( select 51 as c0, 67 as c1 from arr_t1 as ref_5 where 61 in ( 89, 100, 59)) limit 34)))) where ref_0.c3 in ( 40, 50)) , ref_0.c4 , cast(null as CHAR) ) as c0, case when EXISTS ( select 96 as c0, 2 as c1, 97 as c2, ref_0.c1 as c3, 53 as c4, 94 as c5 from arr_t1 as ref_6 where EXISTS ( select 13 as c0, 52 as c1, 92 as c2 from arr_t1 as ref_7 where (EXISTS ( select 19 as c0, 58 as c1, 58 as c2, 77 as c3, 51 as c4 from arr_t1 as ref_8 where 39 != 55 limit 76)) and (EXISTS ( select 2 as c0, 45 as c1 from arr_t1 as ref_9 where 0))) limit 165) then ref_0.c1 else ref_0.c1 end as c1 from arr_t1 as ref_0 where EXISTS ( select ref_10.c2 as c0 from arr_t1 as ref_10 where EXISTS ( select 20 as c0, 19 as c1 from arr_t1 as ref_11 where 76 OR 58)) limit 116 for update
+array.array_arith_op_mysql	300	select count(c1), c4, a2,a3,a4,a5 from t1,t2
+array.array_arith_op_mysql	301	select * from t1 a,t1 b,t1 c
+array.array_arith_op_mysql	426	select ref_0.id as c0, ref_0.c2 as c1 from test as ref_0 where EXISTS ( select 24 as c0, ref_1.c1 as c1, 86 as c2, cast(nullif(68, ref_0.id) as DECIMAL) as c3, ref_0.c3 as c4, 51 as c5, 46 as c6, if( EXISTS ( select 41 as c0, 3 as c1, 20 as c2, 86 as c3, 57 as c4, 70 as c5, 95 as c6, 41 as c7, 99 as c8, 48 as c9 from test as ref_2 where EXISTS ( select 58 as c0, 97 as c1, 53 as c2, 73 as c3, 41 as c4, 8 as c5, 60 as c6, 90 as c7, 25 as c8, 81 as c9, 16 as c10, 95 as c11, 59 as c12, 28 as c13, 38 as c14, 16 as c15, 16 as c16, 97 as c17, 21 as c18, 93 as c19 from tt0 as ref_3 where EXISTS ( select 27 as c0, 46 as c1, 43 as c2, 81 as c3, 61 as c4, 67 as c5, 59 as c6, 21 as c7, 55 as c8, 75 as c9, 28 as c10, 25 as c11 from test as ref_4 where EXISTS ( select 46 as c0, 32 as c1, 44 as c2, 53 as c3, 7 as c4, 5 as c5, 34 as c6, 8 as c7 from t as ref_5 where 58 != 44)))) , 79 , ref_1.id ) as c7, 58 as c8, 98 as c9, 28 as c10, cast(nullif(69, 58) as DECIMAL) as c11 from t as ref_1 where EXISTS ( select 54 as c0, ref_1.id as c1, 88 as c2, 43 as c3, 18 as c4, 74 as c5, ref_6.c1 as c6, 92 as c7, 99 as c8, 20 as c9 from t2 as ref_6 where ref_0.id % 3 limit 25) limit 170) for update
+array.array_arith_op_mysql	489	select ref_0.id as c0, ref_0.c1 as c1 from test as ref_0 where (EXISTS (select 8 as c0 from t as ref_1 where (ref_0.id <= cast(nullif(93, 14) as DECIMAL)) or (ref_0.id in ( 95, 12, ref_0.id)) limit 18)) or (EXISTS ( select ref_0.c3 as c0, cast(nullif(28, 44) as DECIMAL) as c1, 30 as c2, ref_0.c2 as c3 from t1 as ref_2 limit 31)) limit 69
+datatype.div	1720	SELECT count(*) FROM table1000_key_pk_parts_2 WHERE col_double > ALL (VALUES ROW((SELECT Floor(-360448000 / 1458241536) FROM dual)))
+delete.delete_from_mysql	202	select * from t1,t2,t3 where t1.a=t2.a AND t2.b=t3.a and t1.b=t3.b
+executor.basic	45	select * from t_h5_int t1, t_refered as t2 where t1.a = t2.aa
+executor.basic	46	select * from t_h5_int t1, t_refered as t2 where t1.a = t2.a
+executor.basic	47	select * from t_h5_int t1, t_refered as t2 where t1.a = t2.b
+executor.basic	48	select * from t_h5_int t1, t_refered as t2 where t1.a = t2.c
+executor.basic	49	select * from t_h5_int t1, t_refered as t2 where t1.a = t2.d
+executor.basic	50	select * from t_h5_int t1, t_refered as t2 where t1.a = t2.e
+executor.basic	53	select * from t_r4_int t1, t_refered as t2 where t1.a = t2.aa
+executor.basic	54	select * from t_r4_int t1, t_refered as t2 where t1.a = t2.a
+executor.basic	55	select * from t_r4_int t1, t_refered as t2 where t1.a = t2.b
+executor.basic	56	select * from t_r4_int t1, t_refered as t2 where t1.a = t2.c
+executor.basic	57	select * from t_r4_int t1, t_refered as t2 where t1.a = t2.d
+executor.basic	58	select * from t_r4_int t1, t_refered as t2 where t1.a = t2.e
+executor.basic	60	select * from t_r4_date t1, t_refered as t2 where t1.c = t2.a
+executor.basic	61	select * from t_r4_date t1, t_refered as t2 where t1.c = t2.b
+executor.basic	66	select * from t_r4_date t1, t_refered as t2 where t1.c = t2.e
+executor.basic	68	select * from t_r4_datetime t1, t_refered as t2 where t1.c = t2.a
+executor.basic	69	select * from t_r4_datetime t1, t_refered as t2 where t1.c = t2.b
+executor.basic	74	select * from t_r4_datetime t1, t_refered as t2 where t1.c = t2.e
+executor.basic	77	select * from t_h5_r4_int_int_datetime t1, t_refered as t2 where t1.a = t2.a and t1.b=t2.a and t1.c = t2.a
+executor.basic	78	select * from t_h5_r4_int_int_datetime t1, t_refered as t2 where t1.a = t2.a and t1.b=t2.a and t1.c = t2.aa
+executor.basic	79	select * from t_h5_r4_int_int_datetime t1, t_refered as t2 where t1.a = t2.a and t1.b=t2.a and t1.c = t2.b
+executor.basic	80	select * from t_h5_r4_int_int_datetime t1, t_refered as t2 where t1.a = t2.a and t1.b=t2.a and t1.c = t2.bb
+executor.basic	81	select * from t_h5_r4_int_int_datetime t1, t_refered as t2 where t1.a = t2.a and t1.b=t2.a and t1.c = t2.c
+executor.basic	82	select * from t_h5_r4_int_int_datetime t1, t_refered as t2 where t1.a = t2.a and t1.b=t2.a and t1.c = t2.d
+executor.basic	83	select * from t_h5_r4_int_int_datetime t1, t_refered as t2 where t1.a = t2.a and t1.b=t2.a and t1.c = t2.e
+executor.basic	86	select * from t_r4_int t1, t_r4_int as t2 where t1.a = t2.a
+executor.basic	87	select * from t_r4_int t1, t_r4_date as t2 where t1.a = t2.c
+executor.basic	88	select * from t_r4_int t1, t_r4_datetime as t2 where t1.a = t2.c
+executor.basic	89	select * from t_r4_int t1, t_r4_timestamp as t2 where t1.a = t2.c
+executor.basic	92	select * from t_r4_date t1, t_r4_int as t2 where t1.c = t2.a
+executor.basic	93	select * from t_r4_date t1, t_r4_date as t2 where t1.c = t2.c
+executor.basic	94	select * from t_r4_date t1, t_r4_datetime as t2 where t1.c = t2.c
+executor.basic	95	select * from t_r4_date t1, t_r4_timestamp as t2 where t1.c = t2.c
+executor.basic	97	select * from t_r4_datetime t1, t_r4_int as t2 where t1.c = t2.a
+executor.basic	98	select * from t_r4_datetime t1, t_r4_date as t2 where t1.c = t2.c
+executor.basic	99	select * from t_r4_datetime t1, t_r4_datetime as t2 where t1.c = t2.c
+executor.basic	100	select * from t_r4_datetime t1, t_r4_timestamp as t2 where t1.c = t2.c
+executor.basic	102	select * from t_h5_int t1, t_refered as t2 where t1.a = t2.aa
+executor.basic	103	select * from t_h5_int t1, t_refered as t2 where t1.a = t2.a
+executor.basic	104	select * from t_h5_int t1, t_refered as t2 where t1.a = t2.b
+executor.basic	105	select * from t_h5_int t1, t_refered as t2 where t1.a = t2.c
+executor.basic	106	select * from t_h5_int t1, t_refered as t2 where t1.a = t2.d
+executor.basic	107	select * from t_h5_int t1, t_refered as t2 where t1.a = t2.e
+executor.basic	109	select * from t_r4_int t1, t_refered as t2 where t1.a = t2.aa
+executor.basic	110	select * from t_r4_int t1, t_refered as t2 where t1.a = t2.a
+executor.basic	111	select * from t_r4_int t1, t_refered as t2 where t1.a = t2.b
+executor.basic	112	select * from t_r4_int t1, t_refered as t2 where t1.a = t2.c
+executor.basic	113	select * from t_r4_int t1, t_refered as t2 where t1.a = t2.d
+executor.basic	114	select * from t_r4_int t1, t_refered as t2 where t1.a = t2.e
+executor.basic	116	select * from t_r4_date t1, t_refered as t2 where t1.c = t2.a
+executor.basic	117	select * from t_r4_date t1, t_refered as t2 where t1.c = t2.b
+executor.basic	122	select * from t_r4_date t1, t_refered as t2 where t1.c = t2.e
+executor.basic	124	select * from t_r4_datetime t1, t_refered as t2 where t1.c = t2.a
+executor.basic	125	select * from t_r4_datetime t1, t_refered as t2 where t1.c = t2.b
+executor.basic	130	select * from t_r4_datetime t1, t_refered as t2 where t1.c = t2.e
+executor.basic	132	select * from t_h5_r4_int_int t1, t_refered as t2 where t1.a = t2.a and t1.b=t2.a
+executor.basic	133	select * from t_h5_r4_int_int t1, t_refered as t2 where t1.a = t2.a and t1.b=t2.aa
+executor.basic	134	select * from t_h5_r4_int_int t1, t_refered as t2 where t1.a = t2.a and t1.b=t2.b
+executor.basic	135	select * from t_h5_r4_int_int t1, t_refered as t2 where t1.a = t2.a and t1.b=t2.c
+executor.basic	136	select * from t_h5_r4_int_int t1, t_refered as t2 where t1.a = t2.a and t1.b=t2.d
+executor.basic	137	select * from t_h5_r4_int_int t1, t_refered as t2 where t1.a = t2.a and t1.b=t2.e
+executor.basic	139	select * from t_h5_r4_int_int_datetime t1, t_refered as t2 where t1.a = t2.a and t1.b=t2.a and t1.c = t2.a
+executor.basic	140	select * from t_h5_r4_int_int_datetime t1, t_refered as t2 where t1.a = t2.a and t1.b=t2.a and t1.c = t2.aa
+executor.basic	141	select * from t_h5_r4_int_int_datetime t1, t_refered as t2 where t1.a = t2.a and t1.b=t2.a and t1.c = t2.b
+executor.basic	142	select * from t_h5_r4_int_int_datetime t1, t_refered as t2 where t1.a = t2.a and t1.b=t2.a and t1.c = t2.bb
+executor.basic	143	select * from t_h5_r4_int_int_datetime t1, t_refered as t2 where t1.a = t2.a and t1.b=t2.a and t1.c = t2.c
+executor.basic	144	select * from t_h5_r4_int_int_datetime t1, t_refered as t2 where t1.a = t2.a and t1.b=t2.a and t1.c = t2.d
+executor.basic	145	select * from t_h5_r4_int_int_datetime t1, t_refered as t2 where t1.a = t2.a and t1.b=t2.a and t1.c = t2.e
+executor.basic	147	select * from t_r4_int t1, t_r4_int as t2 where t1.a = t2.a
+executor.basic	148	select * from t_r4_int t1, t_r4_date as t2 where t1.a = t2.c
+executor.basic	149	select * from t_r4_int t1, t_r4_datetime as t2 where t1.a = t2.c
+executor.basic	150	select * from t_r4_int t1, t_r4_timestamp as t2 where t1.a = t2.c
+executor.basic	153	select * from t_r4_date t1, t_r4_int as t2 where t1.c = t2.a
+executor.basic	154	select * from t_r4_date t1, t_r4_date as t2 where t1.c = t2.c
+executor.basic	155	select * from t_r4_date t1, t_r4_datetime as t2 where t1.c = t2.c
+executor.basic	156	select * from t_r4_date t1, t_r4_timestamp as t2 where t1.c = t2.c
+executor.basic	158	select * from t_r4_datetime t1, t_r4_int as t2 where t1.c = t2.a
+executor.basic	159	select * from t_r4_datetime t1, t_r4_date as t2 where t1.c = t2.c
+executor.basic	160	select * from t_r4_datetime t1, t_r4_datetime as t2 where t1.c = t2.c
+executor.basic	161	select * from t_r4_datetime t1, t_r4_timestamp as t2 where t1.c = t2.c
+expr.expr_nseq	41	select * from t1 join t2 on t1.a=t2.a
+expr.expr_nseq	42	select * from t1 join t2 on t1.a=t2.a where t1.b<=>null and t2.b<=>null
+expr.expr_nseq	45	select * from t1 join t2 on t1.a<=>t2.a
+expr.func_equal	37	select t1.*, t2.*, t1.value=t2.value from t1, t2 where t1.id=t2.id and t1.id=1
+fork_table.fork_table_vector	45	select count(*) from (select * from t_fork order by l2_distance(c2, [0.2,0.2,0.5]) APPROXIMATE limit 3) as tmp1, (select * from t_fork order by l2_distance(c2, [0.2,0.2,0.5]) limit 3) as tmp2 where tmp1.c1=tmp2.c1
+fork_table.fork_table_vector	80	select count(*) from (select * from t_fork_incr order by l2_distance(c2, [0.1,0.1,0.1]) APPROXIMATE limit 3) as tmp1, (select * from t_fork_incr order by l2_distance(c2, [0.1,0.1,0.1]) limit 3) as tmp2 where tmp1.c1=tmp2.c1
+fork_table.fork_table_vector	94	select count(*) from (select * from t_fork_snap order by l2_distance(c2, [0.1,0.1,0.1]) APPROXIMATE limit 3) as tmp1, (select * from t_fork_snap order by l2_distance(c2, [0.1,0.1,0.1]) limit 3) as tmp2 where tmp1.c1=tmp2.c1
+fork_table.fork_table_vector	109	select count(*) from (select * from t_fork_mixed order by l2_distance(c2, [0.0,0.0,0.0]) APPROXIMATE limit 3) as tmp1, (select * from t_fork_mixed order by l2_distance(c2, [0.0,0.0,0.0]) limit 3) as tmp2 where tmp1.c1=tmp2.c1
+fts_index.drop_index	34	SELECT count(*) FROM oceanbase.__all_table WHERE data_table_id in (SELECT table_id FROM oceanbase.__all_table WHERE table_name = 'drop_index_articles') AND index_type = 11
+fts_index.drop_index	36	SELECT count(*) FROM oceanbase.__all_table WHERE data_table_id in (SELECT table_id FROM oceanbase.__all_table WHERE table_name = 'drop_index_articles') AND index_type = 12
+fts_index.drop_index	38	SELECT count(*) FROM oceanbase.__all_table WHERE data_table_id in (SELECT table_id FROM oceanbase.__all_table WHERE table_name = 'drop_index_articles') AND index_type = 13
+fts_index.drop_index	40	SELECT count(*) FROM oceanbase.__all_table WHERE data_table_id in (SELECT table_id FROM oceanbase.__all_table WHERE table_name = 'drop_index_articles') AND index_type = 14
+fts_index.drop_index	42	SELECT column_id, REGEXP_REPLACE(column_name, '[_0-9]+', '*') as column_name FROM oceanbase.__all_column WHERE table_id in (SELECT table_id FROM oceanbase.__all_table WHERE table_name = 'drop_index_articles')
+fts_index.drop_index	48	SELECT count(*) FROM oceanbase.__all_table WHERE data_table_id in (SELECT table_id FROM oceanbase.__all_table WHERE table_name = 'drop_index_articles') AND index_type = 11
+fts_index.drop_index	50	SELECT count(*) FROM oceanbase.__all_table WHERE data_table_id in (SELECT table_id FROM oceanbase.__all_table WHERE table_name = 'drop_index_articles') AND index_type = 12
+fts_index.drop_index	52	SELECT count(*) FROM oceanbase.__all_table WHERE data_table_id in (SELECT table_id FROM oceanbase.__all_table WHERE table_name = 'drop_index_articles') AND index_type = 13
+fts_index.drop_index	54	SELECT count(*) FROM oceanbase.__all_table WHERE data_table_id in (SELECT table_id FROM oceanbase.__all_table WHERE table_name = 'drop_index_articles') AND index_type = 14
+fts_index.drop_index	56	SELECT column_id, REGEXP_REPLACE(column_name, '[_0-9]+', '*') as column_name FROM oceanbase.__all_column WHERE table_id in (SELECT table_id FROM oceanbase.__all_table WHERE table_name = 'drop_index_articles')
+fts_index.drop_index	62	SELECT count(*) FROM oceanbase.__all_table WHERE data_table_id in (SELECT table_id FROM oceanbase.__all_table WHERE table_name = 'drop_index_articles') AND index_type = 11
+fts_index.drop_index	64	SELECT count(*) FROM oceanbase.__all_table WHERE data_table_id in (SELECT table_id FROM oceanbase.__all_table WHERE table_name = 'drop_index_articles') AND index_type = 12
+fts_index.drop_index	66	SELECT count(*) FROM oceanbase.__all_table WHERE data_table_id in (SELECT table_id FROM oceanbase.__all_table WHERE table_name = 'drop_index_articles') AND index_type = 13
+fts_index.drop_index	68	SELECT count(*) FROM oceanbase.__all_table WHERE data_table_id in (SELECT table_id FROM oceanbase.__all_table WHERE table_name = 'drop_index_articles') AND index_type = 14
+fts_index.drop_index	70	SELECT column_id, REGEXP_REPLACE(column_name, '[_0-9]+', '*') as column_name FROM oceanbase.__all_column WHERE table_id in (SELECT table_id FROM oceanbase.__all_table WHERE table_name = 'drop_index_articles')
+fts_index.drop_index	94	SELECT count(*) FROM oceanbase.__all_table WHERE data_table_id in (SELECT table_id FROM oceanbase.__all_table WHERE table_name = 'drop_index_articles') AND index_type = 11
+fts_index.drop_index	96	SELECT count(*) FROM oceanbase.__all_table WHERE data_table_id in (SELECT table_id FROM oceanbase.__all_table WHERE table_name = 'drop_index_articles') AND index_type = 12
+fts_index.drop_index	98	SELECT count(*) FROM oceanbase.__all_table WHERE data_table_id in (SELECT table_id FROM oceanbase.__all_table WHERE table_name = 'drop_index_articles') AND index_type = 13
+fts_index.drop_index	100	SELECT count(*) FROM oceanbase.__all_table WHERE data_table_id in (SELECT table_id FROM oceanbase.__all_table WHERE table_name = 'drop_index_articles') AND index_type = 14
+fts_index.drop_index	102	SELECT column_id, REGEXP_REPLACE(column_name, '[_0-9]+', '*') as column_name FROM oceanbase.__all_column WHERE table_id in (SELECT table_id FROM oceanbase.__all_table WHERE table_name = 'drop_index_articles')
+fts_index.drop_index	108	SELECT count(*) FROM oceanbase.__all_table WHERE data_table_id in (SELECT table_id FROM oceanbase.__all_table WHERE table_name = 'drop_index_articles') AND index_type = 11
+fts_index.drop_index	110	SELECT count(*) FROM oceanbase.__all_table WHERE data_table_id in (SELECT table_id FROM oceanbase.__all_table WHERE table_name = 'drop_index_articles') AND index_type = 12
+fts_index.drop_index	112	SELECT count(*) FROM oceanbase.__all_table WHERE data_table_id in (SELECT table_id FROM oceanbase.__all_table WHERE table_name = 'drop_index_articles') AND index_type = 13
+fts_index.drop_index	114	SELECT count(*) FROM oceanbase.__all_table WHERE data_table_id in (SELECT table_id FROM oceanbase.__all_table WHERE table_name = 'drop_index_articles') AND index_type = 14
+fts_index.drop_index	116	SELECT column_id, REGEXP_REPLACE(column_name, '[_0-9]+', '*') as column_name FROM oceanbase.__all_column WHERE table_id in (SELECT table_id FROM oceanbase.__all_table WHERE table_name = 'drop_index_articles')
+fts_index.drop_index	122	SELECT count(*) FROM oceanbase.__all_table WHERE data_table_id in (SELECT table_id FROM oceanbase.__all_table WHERE table_name = 'drop_index_articles') AND index_type = 11
+fts_index.drop_index	124	SELECT count(*) FROM oceanbase.__all_table WHERE data_table_id in (SELECT table_id FROM oceanbase.__all_table WHERE table_name = 'drop_index_articles') AND index_type = 12
+fts_index.drop_index	126	SELECT count(*) FROM oceanbase.__all_table WHERE data_table_id in (SELECT table_id FROM oceanbase.__all_table WHERE table_name = 'drop_index_articles') AND index_type = 13
+fts_index.drop_index	128	SELECT count(*) FROM oceanbase.__all_table WHERE data_table_id in (SELECT table_id FROM oceanbase.__all_table WHERE table_name = 'drop_index_articles') AND index_type = 14
+fts_index.drop_index	130	SELECT column_id, REGEXP_REPLACE(column_name, '[_0-9]+', '*') as column_name FROM oceanbase.__all_column WHERE table_id in (SELECT table_id FROM oceanbase.__all_table WHERE table_name = 'drop_index_articles')
+fts_index.drop_index	154	SELECT count(*) FROM oceanbase.__all_table WHERE data_table_id in (SELECT table_id FROM oceanbase.__all_table WHERE table_name = 'drop_index_articles') AND index_type = 11
+fts_index.drop_index	156	SELECT count(*) FROM oceanbase.__all_table WHERE data_table_id in (SELECT table_id FROM oceanbase.__all_table WHERE table_name = 'drop_index_articles') AND index_type = 12
+fts_index.drop_index	158	SELECT count(*) FROM oceanbase.__all_table WHERE data_table_id in (SELECT table_id FROM oceanbase.__all_table WHERE table_name = 'drop_index_articles') AND index_type = 13
+fts_index.drop_index	160	SELECT count(*) FROM oceanbase.__all_table WHERE data_table_id in (SELECT table_id FROM oceanbase.__all_table WHERE table_name = 'drop_index_articles') AND index_type = 14
+fts_index.drop_index	162	SELECT column_id, REGEXP_REPLACE(column_name, '[_0-9]+', '*') as column_name FROM oceanbase.__all_column WHERE table_id in (SELECT table_id FROM oceanbase.__all_table WHERE table_name = 'drop_index_articles')
+fts_index.drop_index	168	SELECT count(*) FROM oceanbase.__all_table WHERE data_table_id in (SELECT table_id FROM oceanbase.__all_table WHERE table_name = 'drop_index_articles') AND index_type = 11
+fts_index.drop_index	170	SELECT count(*) FROM oceanbase.__all_table WHERE data_table_id in (SELECT table_id FROM oceanbase.__all_table WHERE table_name = 'drop_index_articles') AND index_type = 12
+fts_index.drop_index	172	SELECT count(*) FROM oceanbase.__all_table WHERE data_table_id in (SELECT table_id FROM oceanbase.__all_table WHERE table_name = 'drop_index_articles') AND index_type = 13
+fts_index.drop_index	174	SELECT count(*) FROM oceanbase.__all_table WHERE data_table_id in (SELECT table_id FROM oceanbase.__all_table WHERE table_name = 'drop_index_articles') AND index_type = 14
+fts_index.drop_index	176	SELECT column_id, REGEXP_REPLACE(column_name, '[_0-9]+', '*') as column_name FROM oceanbase.__all_column WHERE table_id in (SELECT table_id FROM oceanbase.__all_table WHERE table_name = 'drop_index_articles')
+fts_index.drop_index	182	SELECT count(*) FROM oceanbase.__all_table WHERE data_table_id in (SELECT table_id FROM oceanbase.__all_table WHERE table_name = 'drop_index_articles') AND index_type = 11
+fts_index.drop_index	184	SELECT count(*) FROM oceanbase.__all_table WHERE data_table_id in (SELECT table_id FROM oceanbase.__all_table WHERE table_name = 'drop_index_articles') AND index_type = 12
+fts_index.drop_index	186	SELECT count(*) FROM oceanbase.__all_table WHERE data_table_id in (SELECT table_id FROM oceanbase.__all_table WHERE table_name = 'drop_index_articles') AND index_type = 13
+fts_index.drop_index	188	SELECT count(*) FROM oceanbase.__all_table WHERE data_table_id in (SELECT table_id FROM oceanbase.__all_table WHERE table_name = 'drop_index_articles') AND index_type = 14
+fts_index.drop_index	190	SELECT column_id, REGEXP_REPLACE(column_name, '[_0-9]+', '*') as column_name FROM oceanbase.__all_column WHERE table_id in (SELECT table_id FROM oceanbase.__all_table WHERE table_name = 'drop_index_articles')
+fts_index.drop_index	216	SELECT count(*) FROM oceanbase.__all_table WHERE data_table_id in (SELECT table_id FROM oceanbase.__all_table WHERE table_name = 'drop_index_articles') AND index_type = 11
+fts_index.drop_index	218	SELECT count(*) FROM oceanbase.__all_table WHERE data_table_id in (SELECT table_id FROM oceanbase.__all_table WHERE table_name = 'drop_index_articles') AND index_type = 12
+fts_index.drop_index	220	SELECT count(*) FROM oceanbase.__all_table WHERE data_table_id in (SELECT table_id FROM oceanbase.__all_table WHERE table_name = 'drop_index_articles') AND index_type = 13
+fts_index.drop_index	222	SELECT count(*) FROM oceanbase.__all_table WHERE data_table_id in (SELECT table_id FROM oceanbase.__all_table WHERE table_name = 'drop_index_articles') AND index_type = 14
+fts_index.drop_index	224	SELECT column_id, REGEXP_REPLACE(column_name, '[_0-9]+', '*') as column_name FROM oceanbase.__all_column WHERE table_id in (SELECT table_id FROM oceanbase.__all_table WHERE table_name = 'drop_index_articles')
+fts_index.drop_index	230	SELECT count(*) FROM oceanbase.__all_table WHERE data_table_id in (SELECT table_id FROM oceanbase.__all_table WHERE table_name = 'drop_index_articles') AND index_type = 11
+fts_index.drop_index	232	SELECT count(*) FROM oceanbase.__all_table WHERE data_table_id in (SELECT table_id FROM oceanbase.__all_table WHERE table_name = 'drop_index_articles') AND index_type = 12
+fts_index.drop_index	234	SELECT count(*) FROM oceanbase.__all_table WHERE data_table_id in (SELECT table_id FROM oceanbase.__all_table WHERE table_name = 'drop_index_articles') AND index_type = 13
+fts_index.drop_index	236	SELECT count(*) FROM oceanbase.__all_table WHERE data_table_id in (SELECT table_id FROM oceanbase.__all_table WHERE table_name = 'drop_index_articles') AND index_type = 14
+fts_index.drop_index	238	SELECT column_id, REGEXP_REPLACE(column_name, '[_0-9]+', '*') as column_name FROM oceanbase.__all_column WHERE table_id in (SELECT table_id FROM oceanbase.__all_table WHERE table_name = 'drop_index_articles')
+fts_index.drop_index	240	SELECT distinct(ddl_stmt_str) FROM oceanbase.__all_ddl_operation WHERE table_id IN (SELECT table_id FROM oceanbase.__all_table_history WHERE table_name = 'drop_index_articles' OR data_table_id IN (SELECT table_id FROM oceanbase.__all_table WHERE table_name = 'drop_index_articles')) and ddl_stmt_str = 'DROP INDEX ctx ON drop_index_articles'
+fts_index.drop_index	246	SELECT count(*) FROM oceanbase.__all_table WHERE data_table_id in (SELECT table_id FROM oceanbase.__all_table WHERE table_name = 'drop_index_articles') AND index_type = 11
+fts_index.drop_index	248	SELECT count(*) FROM oceanbase.__all_table WHERE data_table_id in (SELECT table_id FROM oceanbase.__all_table WHERE table_name = 'drop_index_articles') AND index_type = 12
+fts_index.drop_index	250	SELECT count(*) FROM oceanbase.__all_table WHERE data_table_id in (SELECT table_id FROM oceanbase.__all_table WHERE table_name = 'drop_index_articles') AND index_type = 13
+fts_index.drop_index	252	SELECT count(*) FROM oceanbase.__all_table WHERE data_table_id in (SELECT table_id FROM oceanbase.__all_table WHERE table_name = 'drop_index_articles') AND index_type = 14
+fts_index.drop_index	254	SELECT column_id, REGEXP_REPLACE(column_name, '[_0-9]+', '*') as column_name FROM oceanbase.__all_column WHERE table_id in (SELECT table_id FROM oceanbase.__all_table WHERE table_name = 'drop_index_articles')
+fts_index.drop_index	260	SELECT count(*) FROM oceanbase.__all_table WHERE data_table_id in (SELECT table_id FROM oceanbase.__all_table WHERE table_name = 'drop_index_articles') AND index_type = 11
+fts_index.drop_index	262	SELECT count(*) FROM oceanbase.__all_table WHERE data_table_id in (SELECT table_id FROM oceanbase.__all_table WHERE table_name = 'drop_index_articles') AND index_type = 12
+fts_index.drop_index	264	SELECT count(*) FROM oceanbase.__all_table WHERE data_table_id in (SELECT table_id FROM oceanbase.__all_table WHERE table_name = 'drop_index_articles') AND index_type = 13
+fts_index.drop_index	266	SELECT count(*) FROM oceanbase.__all_table WHERE data_table_id in (SELECT table_id FROM oceanbase.__all_table WHERE table_name = 'drop_index_articles') AND index_type = 14
+fts_index.drop_index	268	SELECT column_id, REGEXP_REPLACE(column_name, '[_0-9]+', '*') as column_name FROM oceanbase.__all_column WHERE table_id in (SELECT table_id FROM oceanbase.__all_table WHERE table_name = 'drop_index_articles')
+fts_index.drop_index	274	SELECT count(*) FROM oceanbase.__all_table WHERE data_table_id in (SELECT table_id FROM oceanbase.__all_table WHERE table_name = 'drop_index_articles') AND index_type = 11
+fts_index.drop_index	276	SELECT count(*) FROM oceanbase.__all_table WHERE data_table_id in (SELECT table_id FROM oceanbase.__all_table WHERE table_name = 'drop_index_articles') AND index_type = 12
+fts_index.drop_index	278	SELECT count(*) FROM oceanbase.__all_table WHERE data_table_id in (SELECT table_id FROM oceanbase.__all_table WHERE table_name = 'drop_index_articles') AND index_type = 13
+fts_index.drop_index	280	SELECT count(*) FROM oceanbase.__all_table WHERE data_table_id in (SELECT table_id FROM oceanbase.__all_table WHERE table_name = 'drop_index_articles') AND index_type = 14
+fts_index.drop_index	282	SELECT column_id, REGEXP_REPLACE(column_name, '[_0-9]+', '*') as column_name FROM oceanbase.__all_column WHERE table_id in (SELECT table_id FROM oceanbase.__all_table WHERE table_name = 'drop_index_articles')
+fts_index.partitioned_simple_query	344	select distinct 1 from t_ir_single_column where match (detail) against ("distributed database")
+fts_index.partitioned_simple_query	347	select /*+ use_das(t_ir_single_column) */ distinct 1 from t_ir_single_column where match (detail) against ("distributed database")
+fts_index.partitioned_simple_query	350	select distinct digest from t_ir_single_column where match (detail) against ("distributed database")
+fts_index.partitioned_simple_query	353	select /*+ use_das(t_ir_single_column) */ distinct digest from t_ir_single_column where match (detail) against ("distributed database")
+fts_index.partitioned_simple_query	356	select (select digest from t_ir_single_column limit 1) as d1 from t_ir_single_column where match (detail) against ("distributed database") and seq > 1
+fts_index.partitioned_simple_query	359	select distinct (select digest from t_ir_single_column limit 1) as d1 from t_ir_single_column where match (detail) against ("distributed database") and seq > 1
+fts_index.partitioned_simple_query	362	select /*+ use_das(t_ir_single_column) */ distinct (select digest from t_ir_single_column limit 1) as d1 from t_ir_single_column where match (detail) against ("distributed database") and seq > 1
+fts_index.simple_query	476	select distinct 1 from t_ir_single_column where match (detail) against ("distributed database")
+fts_index.simple_query	479	select distinct digest from t_ir_single_column where match (detail) against ("distributed database")
+fts_index.simple_query	482	select distinct digest, match (detail) against ("distributed database") > 0 from t_ir_single_column where match (detail) against ("distributed database")
+fts_index.simple_query	485	select (select digest from t_ir_single_column limit 1) as d1 from t_ir_single_column where match (detail) against ("distributed database") and seq > 1
+fts_index.simple_query	488	select distinct (select digest from t_ir_single_column limit 1) as d1 from t_ir_single_column where match (detail) against ("distributed database") and seq > 1
+geometry.geometry_bugfix_mysql	59	select * from T_GEO group by geo
+geometry.geometry_bugfix_mysql	126	SELECT c1,ST_Astext(c2),ST_Astext(c4) FROM tab GROUP BY c1
+geometry.geometry_bugfix_mysql	127	SELECT c1,ST_Astext(c2),ST_Astext(c4) FROM tab GROUP BY c2
+geometry.geometry_bugfix_mysql	128	SELECT c1,ST_Astext(c2),ST_Astext(c4) FROM tab GROUP BY c3
+geometry.geometry_bugfix_mysql	129	SELECT c1,ST_Astext(c2),ST_Astext(c4) FROM tab GROUP BY c4
+geometry.geometry_bugfix_mysql	130	SELECT c1,ST_Astext(c2),ST_Astext(c4) FROM tab GROUP BY c5
+geometry.geometry_bugfix_mysql	145	SELECT ST_ASTEXT(B) FROM FF01 WHERE B = SOME (SELECT B FROM FF01 WHERE A=1)
+geometry.geometry_bugfix_mysql	146	SELECT ST_ASTEXT(B) FROM FF01 WHERE B = SOME (SELECT A FROM FF01 WHERE B=POINT(1,2))
+geometry.geometry_bugfix_mysql	147	SELECT ST_ASTEXT(B) FROM FF01 WHERE B IN (SELECT B FROM FF01 WHERE B=POINT(1,2))
+geometry.geometry_bugfix_mysql	150	SELECT ST_ASTEXT(B) FROM FF01 WHERE B NOT IN (SELECT B FROM FF01 WHERE B=POINT(1,2))
+geometry.geometry_bugfix_mysql	151	SELECT ST_ASTEXT(B) FROM FF01 WHERE B = ANY (SELECT A FROM FF01 WHERE B=POINT(1,2))
+geometry.geometry_bugfix_mysql	152	SELECT ST_ASTEXT(B) FROM FF01 WHERE B = ALL (SELECT A FROM FF01 WHERE B=POINT(1,2))
+geometry.geometry_bugfix_mysql	158	SELECT ST_ASTEXT(POL) FROM FF01 WHERE (GEO,GEO_C) = (SELECT GEO,GEO_C FROM FF01 WHERE GID=1)
+geometry.geometry_bugfix_mysql	164	SELECT ST_ASTEXT(M_POI) FROM FF01 WHERE M_POI <=> (SELECT M_POI FROM FF02 WHERE GID=1)
+geometry.geometry_bugfix_mysql	343	select st_astext(a.g), st_astext(b.g) from t1 a join t1 b where _st_covers(a.g, b.g)
+geometry.geometry_bugfix_mysql	344	select st_astext(a.g), st_astext(b.g) from t1 a join t1 b where st_contains(a.g, b.g)
+geometry.geometry_bugfix_mysql	345	select st_astext(a.g), st_astext(b.g) from t1 a join t1 b where st_within(a.g, b.g)
+geometry.geometry_bugfix_mysql	346	select st_astext(a.g), st_astext(b.g) from t1 a join t1 b where _st_dwithin(a.g, b.g, 0.1)
+geometry.geometry_bugfix_mysql	359	SELECT ST_ASTEXT(B) FROM FF01 WHERE B NOT IN (SELECT /*+no_unnest*/B FROM FF01 WHERE B=POINT(1,2))
+geometry.geometry_dml_mysql	356	select concat((select st_astext(poi) from gis_point order by id desc limit 1),(select st_astext(poi) from gis_point order by id desc limit 1))
+geometry.geometry_type_mysql	499	SELECT ST_ASTEXT(tableX.c1), ST_ASTEXT(tableX.c4), ST_ASTEXT(tableX.c3) FROM tab AS tableX, tab2 AS tableY WHERE tableX.c1 = tableY.c1 AND tableX.c3 = tableY.c3 AND tableX.c4 = tableY.c4 AND tableX.c5 = tableY.c5 AND tableX.c7 = tableY.c7 AND tableX.c8 = tableY.c8
+geometry.geometry_type_mysql	505	SELECT ST_ASTEXT(tableX.c3), ST_ASTEXT(tableY.c3) FROM tab AS tableX, tab2 AS tableY WHERE tableX.c3 = tableY.c3
+geometry.spatial_relation_join_mysql	33	select st_astext(tgnoindex1.g1),st_astext(tgnoindex2.g2) from tgnoindex1, tgnoindex2 where st_intersects(tgnoindex1.g1, tgnoindex2.g2)
+geometry.spatial_relation_join_mysql	60	select st_astext(tgeom1.g1),st_astext(tgeom2.g2) from tgeom1, tgeom2 where st_intersects(tgeom1.g1, tgeom2.g2)
+geometry.st_covers_mysql	404	SELECT _st_covers(g,g2) FROM gis_geometrycollection,gis_geometrycollection_2 WHERE fid=110 and fid2=105
+geometry.st_covers_mysql	487	SELECT _st_covers(g,g2) FROM gis_geometrycollection,gis_geometrycollection_2 WHERE fid=114 and fid2=108
+geometry.st_covers_mysql	563	SELECT _st_covers(g,g2) FROM gis_geometrycollection,gis_geometrycollection_2 WHERE fid=100 and fid2=111
+geometry.st_covers_mysql	677	SELECT _st_covers(g,g2) FROM gis_geometrycollection,gis_geometrycollection_2 WHERE fid=103 and fid2=103
+geometry.st_covers_mysql	688	SELECT _st_covers(g,g2) FROM gis_geometrycollection,gis_geometrycollection_2 WHERE fid=115 and fid2=103
+geometry.st_covers_mysql	752	SELECT _st_covers(g,g2) FROM gis_geometrycollection,gis_geometrycollection_2 WHERE fid=115 and fid2=103
+geometry.st_covers_mysql	763	SELECT _st_covers(g,g2) FROM gis_geometrycollection,gis_geometrycollection_2 WHERE fid=115 and fid2=215
+geometry.st_covers_mysql	812	SELECT _st_covers(g,NULL) FROM gis_geometrycollection,gis_geometrycollection_2 WHERE fid=103 and fid2=103
+geometry.st_covers_mysql	965	SELECT _st_covers(a.g, b.g) FROM t1 AS a JOIN t1 AS b
+geometry.st_covers_mysql	967	SELECT ST_AsText(a.g), ST_AsText(b.g), _st_covers(ST_SRID(a.g, 4326), ST_SRID(b.g, 4326)) FROM t1 AS a JOIN t1 AS b
+geometry.st_distance_mysql	443	SELECT ST_DISTANCE(g,g2) FROM gis_geometrycollection,gis_geometrycollection_2 WHERE fid=110 and fid2=105
+geometry.st_distance_mysql	570	SELECT ST_DISTANCE(g,g2) FROM gis_geometrycollection,gis_geometrycollection_2 WHERE fid=114 and fid2=108
+geometry.st_distance_mysql	719	SELECT ST_DISTANCE(g,g2) FROM gis_geometrycollection,gis_geometrycollection_2 WHERE fid=100 and fid2=111
+geometry.st_distance_mysql	933	SELECT ST_DISTANCE(g,g2) FROM gis_geometrycollection,gis_geometrycollection_2 WHERE fid=103 and fid2=103
+geometry.st_distance_mysql	935	SELECT ST_DISTANCE(g,g2) FROM gis_geometrycollection,gis_geometrycollection_2 WHERE fid=103 and fid2=103
+geometry.st_distance_mysql	961	SELECT ST_DISTANCE(g,g2) FROM gis_geometrycollection,gis_geometrycollection_2 WHERE fid=103 and fid2=215
+geometry.st_distance_mysql	1128	SELECT ST_DISTANCE(g,g2) FROM gis_geometrycollection,gis_geometrycollection_2 WHERE fid=115 and fid2=103
+geometry.st_distance_mysql	1156	SELECT ST_DISTANCE(g,g2) FROM gis_geometrycollection,gis_geometrycollection_2 WHERE fid=115 and fid2=215
+geometry.st_distance_mysql	1214	SELECT ST_DISTANCE(g,NULL) FROM gis_geometrycollection,gis_geometrycollection_2 WHERE fid=103 and fid2=103
+geometry.st_distance_mysql	1216	SELECT ST_DISTANCE(fid,NULL) FROM gis_geometrycollection,gis_geometrycollection_2 WHERE fid=103 and fid2=103
+geometry.st_distance_mysql	2371	SELECT ST_Distance(position, boundary) FROM bridges, named_places WHERE bridges.name = 'Cam Bridge' AND named_places.name = 'Ashton'
+geometry.st_intersects_mysql	388	SELECT ST_INTERSECTS(g,g2) FROM gis_geometrycollection,gis_geometrycollection_2 WHERE fid=110 and fid2=105
+geometry.st_intersects_mysql	483	SELECT ST_INTERSECTS(g,g2) FROM gis_geometrycollection,gis_geometrycollection_2 WHERE fid=114 and fid2=108
+geometry.st_intersects_mysql	580	SELECT ST_INTERSECTS(g,g2) FROM gis_geometrycollection,gis_geometrycollection_2 WHERE fid=100 and fid2=111
+geometry.st_intersects_mysql	710	SELECT ST_INTERSECTS(g,g2) FROM gis_geometrycollection,gis_geometrycollection_2 WHERE fid=103 and fid2=103
+geometry.st_intersects_mysql	720	SELECT ST_INTERSECTS(g,g2) FROM gis_geometrycollection,gis_geometrycollection_2 WHERE fid=103 and fid2=115
+geometry.st_intersects_mysql	773	SELECT ST_INTERSECTS(g,g2) FROM gis_geometrycollection,gis_geometrycollection_2 WHERE fid=103 and fid2=115
+geometry.st_intersects_mysql	782	SELECT ST_INTERSECTS(g,g2) FROM gis_geometrycollection,gis_geometrycollection_2 WHERE fid=115 and fid2=115
+geometry.st_intersects_mysql	835	SELECT ST_INTERSECTS(g,NULL) FROM gis_geometrycollection,gis_geometrycollection_2 WHERE fid=103 and fid2=103
+geometry.st_intersects_mysql	840	SELECT ST_INTERSECTS(fid,NULL) FROM gis_geometrycollection,gis_geometrycollection_2 WHERE fid=103 and fid2=103
+geometry.st_intersects_mysql	1002	select 1, st_intersects(t.geom, p.geom) from tbl_polygon t, tbl_polygon p where t.id = 'POLY1' and p.id = 'POLY2'
+geometry.st_intersects_mysql	1006	select 1, st_intersects(t.geom, p.geom) from tbl_polygon t, tbl_polygon p where t.id = 'POLY1' and p.id = 'POLY2'
+geometry.st_intersects_mysql_from_pg	290	SELECT lk FROM ltable WHERE EXISTS (SELECT * FROM rtable2 WHERE ST_Intersects(ltable.geom2, rtable2.geom))
+geometry.st_transform_mysql	872	SELECT 13, count(*) FROM ( SELECT _ST_Transform(ST_GeomFromText('POINT(0 0)', 4326), srs_id) AS g FROM ( Select srs_id from oceanbase.__all_spatial_reference_systems where srs_id IN (3819, 3821, 3824, 3889, 3906, 4001, 4002, 4003, 4004, 4005, 4006, 4007, 4008, 4009, 4010, 4011, 4012, 4013, 4014, 4015, 4016, 4018, 4019, 4020, 4021, 4022, 4023, 4024, 4025, 4027, 4028, 4029, 4030, 4031, 4032, 4033, 4034, 4035, 4036, 4041, 4042, 4043, 4044, 4045, 4046, 4047, 4052, 4053, 4054, 4055, 4075, 4081, 4120, 4121, 4122, 4123, 4124, 4125, 4126, 4127, 4128, 4129, 4130, 4131, 4132, 4133, 4134, 4135, 4139, 4140, 4141, 4142, 4143, 4144, 4145, 4146, 4147, 4148, 4149, 4150, 4151, 4152, 4153, 4154, 4155, 4156, 4157, 4158, 4159, 4160, 4161, 4162, 4163, 4164, 4165, 4166, 4167, 4168, 4169, 4170, 4171, 4172, 4173, 4174, 4175, 4176, 4178, 4179, 4180, 4181, 4182, 4183, 4184, 4185, 4188, 4189, 4190, 4191, 4192, 4193, 4194, 4195, 4196, 4197, 4198, 4199, 4200, 4201, 4202, 4203, 4204, 4205, 4206, 4207, 4208, 4209, 4210, 4211, 4212, 4213, 4214, 4215, 4216, 4218, 4219, 4220, 4221)) _a ) _b WHERE g IS NOT NULL
+global_index.global_index_lookup_1	128	select /*+no_rewrite, leading(t1)*/ * from t1 where exists (select /*+index(t2 i1)*/ 1 from t2 where t1.b=t2.b and t2.c>0)
+global_index.global_index_lookup_6	130	select /*+index(bmsql_oorder o_w_id)*/ o_id, o_entry_d, o_carrier_id FROM bmsql_oorder where o_w_id = 36 AND o_d_id = 7 AND o_c_id = 169 AND o_id = (select max(o_id) FROM bmsql_oorder WHERE o_w_id = 36 AND o_d_id = 7 AND o_c_id = 169)
+global_index.global_index_select	59	select /*+index(t1 primary)*/ c2, sum(c3) from t1 where c2 < 10 group by c1
+global_index.global_index_select	60	select /*+index(t1 gkey1)*/ c2, sum(c3) from t1 where c2 < 10 group by c1
+global_index.global_index_select	61	select /*+index(t1 gkey2)*/ c2, sum(c3) from t1 where c2 < 10 group by c1
+groupby.group_by_4	40	select /*+ tracing(2)*/distinct sum(c2) from (select c1, c2 from t1) y group by c1
+groupby.group_by_4	41	select /*+ tracing(2)*/distinct sum(c3) from (select c1, c3 from t1) y group by c1
+groupby.group_by_basic	54	select c2, sum(c1), count(c1), avg(c1), max(c1), min(c1) from t2 group by c2
+groupby.group_by_basic	77	select * from t1 group by -1
+groupby.group_by_basic	98	select group_concat(distinct c2, c3) from t1 group by c5
+groupby.group_by_basic	113	select min(c2), max(c3), count(*), count(c1), avg(c4), group_concat(distinct c2, c3 order by 2 desc, 1 asc) from t1 group by c5
+groupby.group_by_basic	117	select group_concat(distinct c3, c4 order by c4 desc) from t1 group by c5
+groupby.group_by_basic	125	select group_concat(distinct c4 order by 1 desc separator '#') from t1 group by c5
+groupby.group_by_basic	126	select group_concat(distinct c2, c3 order by c3 asc, c2 desc separator '%%') from t1 group by c5
+groupby.group_by_basic	127	select group_concat(c2, c3 order by c4 desc separator '*') from t1 group by c5
+groupby.group_by_basic	220	select c2, avg(distinct c3) from t1 group by c2
+groupby.group_by_basic	221	select c1,c2, group_concat(distinct c3 order by c3 desc) from t1 group by c1,c2
+groupby.group_by_basic	222	select c1,c2, group_concat(distinct c3 order by c3 desc) from t1 group by c1,c2 with rollup
+groupby.group_by_basic	241	SELECT rpup_list_mcs_asoc_b.LIST_MCS_ASOC_ID, rpup_list_mcs_asoc_b.RPUP_CNT_ITEM_ID, rpup_list_mcs_asoc_b.RPUP_CNT_ITEM_ID AS rupuCntItemId, rpup_list_mcs_asoc_b.MCS_REGNO, rpup_list_mcs_asoc_b.MCS_NAME, rpup_list_mcs_asoc_b.MCS_MOL, rpup_mcs_list_info_b.MCS_LIST_CODE, rpup_mcs_list_info_b.LV1_LIST_NAME, rpup_mcs_list_info_b.LV2_LIST_NAME, rpup_mcs_list_info_b.LV3_LIST_NAME, rpup_mcs_list_info_b.GENNAME, rpup_mcs_list_info_b.MATL, rpup_mcs_list_info_b.SPEC, bidprcu_mcs_regcert_b.PRODENTP_CODE, bidprcu_mcs_regcert_b.PRODENTP_NAME, rpup_list_mcs_asoc_b.RID, rpup_list_mcs_asoc_b.CRTER_ID, rpup_list_mcs_asoc_b.CRTER_NAME, rpup_list_mcs_asoc_b.CRTE_OPTINS_NO, rpup_list_mcs_asoc_b.CRTE_TIME, rpup_list_mcs_asoc_b.OPTER_ID, rpup_list_mcs_asoc_b.OPTER_NAME, rpup_list_mcs_asoc_b.OPTINS_NO, rpup_list_mcs_asoc_b.UPDT_TIME, rpup_list_mcs_asoc_b.INVD_FLAG FROM rpup_list_mcs_asoc_b LEFT JOIN bidprcu_mcs_regcert_b ON bidprcu_mcs_regcert_b.mcs_regno = rpup_list_mcs_asoc_b.MCS_REGNO LEFT JOIN rpup_mcs_list_info_b ON rpup_mcs_list_info_b.MCS_LIST_ID = rpup_list_mcs_asoc_b.MCS_LIST_ID WHERE rpup_list_mcs_asoc_b.INVD_FLAG = '0' AND rpup_mcs_list_info_b.INVD_FLAG = '0' AND rpup_list_mcs_asoc_b.RPUP_CNT_ITEM_ID = '1403980836851798017' AND bidprcu_mcs_regcert_b.PRODENTP_NAME IS NOT NULL GROUP BY MCS_LIST_CODE, MCS_REGNO, MCS_NAME, PRODENTP_NAME, MCS_MOL
+groupby.group_by_basic	253	select t1.c1 from t1, t2 group by c1
+subquery.idx_with_const_expr_21_subquery_dilang	80	select * from (select a1, a2*2+1 as b2 from t1 where a2>=1-1 and a2<=round(9.0/2.0)*2) as t
+subquery.idx_with_const_expr_21_subquery_dilang	82	select * from (select a1, a2*2+1 as b2, a3 from t1 where a2>=1-1 and a2<=round(9.0/2.0)*2) as t
+subquery.idx_with_const_expr_21_subquery_dilang	84	select * from (select a1, a2*2+1 as b2 from t1 where a2>=1-(9-8)+(3*5)-45/3 and a2<=100%55-35) as t
+subquery.idx_with_const_expr_21_subquery_dilang	86	select * from (select a1, a2*2+1 as b2, a3 from t1 where a2>=1-(9-8)+(3*5)-45/3 and a2<=100%55-35) as t
+subquery.idx_with_const_expr_21_subquery_dilang	91	select * from (select a1,a2*2+1 as b2,a3,a4,a5 from t1 where a3>=concat('D', 'EE') and a3<=concat('M', 'PP')) as t
+subquery.idx_with_const_expr_21_subquery_dilang	93	select * from (select a1,a2*2+1 as b2,a3,a4,a5 from t1 where a3>=concat(upper(substr('abcde',4,1)), upper(substr('ccddee',5,2))) and a3<=concat(upper(substr('lmnop',2,1)), upper(substr('ooppqq',3,2)))) as t
+subquery.idx_with_const_expr_21_subquery_dilang	98	select * from (select a1,a2*2+1 as b2,a3,a4,a5 from t1 where a4>=0.75/10+1-1 and a4<=0.2*0.4+4%2) as t
+subquery.idx_with_const_expr_21_subquery_dilang	103	select * from (select a1,a2*2+1 as b2,a3,a4 from t1 where a5>=date_add(now(), interval -60 minute) and a5<=date_add(current_timestamp(), interval -1 microsecond)) as t
+subquery.idx_with_const_expr_21_subquery_dilang	105	select * from (select a1,a2*2+1 as b2,a3,a4 from t1 where a5>=date_add(current_timestamp(), interval -60 minute) and a5<=date_add(current_timestamp(), interval -1 microsecond)) as t
+subquery.idx_with_const_expr_21_subquery_dilang	107	select * from (select a1,a2*2+1 as b2,a3,a4 from t1 where a5>=date_add(current_timestamp(), interval -60 minute) and a5<=date_add(now(), interval -1 microsecond)) as t
+subquery.idx_with_const_expr_21_subquery_dilang	110	select * from (select a1,a2*2+1 as b2,a3,a4 from t1 where a5>=date_sub(now(), interval 60 minute) and a5<=date_sub(current_timestamp(), interval 1 microsecond)) as t
+subquery.idx_with_const_expr_21_subquery_dilang	112	select * from (select a1,a2*2+1 as b2,a3,a4 from t1 where a5>=date_sub(current_timestamp(), interval 60 minute) and a5<=date_sub(current_timestamp(), interval 1 microsecond)) as t
+subquery.idx_with_const_expr_21_subquery_dilang	114	select * from (select a1,a2*2+1 as b2,a3,a4 from t1 where a5>=date_sub(current_timestamp(), interval 60 minute) and a5<=date_sub(now(), interval 1 microsecond)) as t
+subquery.idx_with_const_expr_21_subquery_dilang	117	select * from (select a1,a2*2+1 as b2,a3,a4 from t1 where a5>=date_add(now(), interval -60 minute) and a5<=date_sub(current_timestamp(), interval 1 microsecond)) as t
+subquery.idx_with_const_expr_21_subquery_dilang	119	select * from (select a1,a2*2+1 as b2,a3,a4 from t1 where a5>=date_add(current_timestamp(), interval -60 minute) and a5<=date_sub(current_timestamp(), interval 1 microsecond)) as t
+subquery.idx_with_const_expr_21_subquery_dilang	121	select * from (select a1,a2*2+1 as b2,a3,a4 from t1 where a5>=date_add(current_timestamp(), interval -60 minute) and a5<=date_sub(now(), interval 1 microsecond)) as t
+subquery.optimizer_subquery_bug	224	select /*+no_rewrite*/ sum((select sum(a) from t1)) from t1
+subquery.optimizer_subquery_bug	225	select /*+no_rewrite*/ sum((select sum(a) from t1)) from t1 group by b
+subquery.optimizer_subquery_bug	228	select /*+no_rewrite*/ sum((select sum(a) from t1 as t2 where t2.a = t1.a)) from t1
+subquery.optimizer_subquery_bug	229	select /*+no_rewrite*/ sum((select sum(a) from t1 as t2 where t2.a = t1.a)) from t1 group by b
+subquery.optimizer_subquery_bug	234	select * from t1, t2 where t1.a + (select sum(b) from t3) = t2.b
+subquery.optimizer_subquery_bug	235	select * from t1, t2 where t1.a + (select sum(b) from t3 where t1.a = t3.a) = t2.b
+subquery.optimizer_subquery_bug	237	select (select sum(b) from t2) as temp, sum(a) from t1 group by temp
+subquery.optimizer_subquery_bug	238	select (select sum(b) from t2) as temp from t1 group by temp having temp > 4
+subquery.optimizer_subquery_bug	239	select (select sum(b) from t2) as temp from t1 group by temp having temp < 4
+subquery.optimizer_subquery_bug	240	select (select sum(b) from t2) as temp from t1 group by temp having temp > 4 and temp > (select sum(b) from t3)
+subquery.optimizer_subquery_bug	241	select (select sum(b) from t2) as temp from t1 group by temp having temp > 4 and temp > (select sum(b) from t2)
+subquery.optimizer_subquery_bug	244	select (select sum(b) from t2) as temp, a from t1 group by a having temp > 4
+subquery.optimizer_subquery_bug	250	SELECT a IN (SELECT a FROM t1 ) FROM t1 LIMIT 1
+subquery.optimizer_subquery_bug	253	select /*+no_rewrite*/ a, (select sum(b) from t2 where t1.a = t2.a) as agg from t1 having agg > 1 and agg < 3
+subquery.optimizer_subquery_bug	256	select (SELECT coalesce( (SELECT/*+no_rewrite*/ * FROM ( SELECT MAX( pk ) FROM table10_key_pk_parts_1_bigint WHERE CAST( CONCAT( SUBSTR( 'q' , 1, 20) , col_char_20_index ) AS CHAR) >= CAST( CONCAT( SUBSTR( 'kqqdwykxz' , 1, 20) , col_char_20_index ) AS CHAR) ORDER BY col_timestamp_6_index , col_char_5_key ASC , col_bigint_index ASC , pk ) TC1), (SELECT * FROM ( SELECT col_bigint FROM table0_hash_pk_parts_1_bigint WHERE ( col_char_20 NOT IN ('a' , 'b' , 'a') ) OR NOT ( col_char_20_index IN ( 'a' , 'b' , 'a' ) ) ORDER BY col_bigint DESC , col_char_20_index , pk ASC LIMIT 1 ) TC2), 2 ))
+subquery.optimizer_subquery_bug	257	select (SELECT coalesce( (SELECT * FROM ( SELECT MAX( pk ) FROM table10_key_pk_parts_1_bigint WHERE CAST( CONCAT( SUBSTR( 'q' , 1, 20) , col_char_20_index ) AS CHAR) >= CAST( CONCAT( SUBSTR( 'kqqdwykxz' , 1, 20) , col_char_20_index ) AS CHAR) ORDER BY col_timestamp_6_index , col_char_5_key ASC , col_bigint_index ASC , pk ) TC1), (SELECT * FROM ( SELECT col_bigint FROM table0_hash_pk_parts_1_bigint WHERE ( col_char_20 NOT IN ('a' , 'b' , 'a') ) OR NOT ( col_char_20_index IN ( 'a' , 'b' , 'a' ) ) ORDER BY col_bigint DESC , col_char_20_index , pk ASC LIMIT 1 ) TC2), 2 ))
+subquery.optimizer_subquery_bug	260	SELECT Sum(1) FROM table10_bigint WHERE pk NOT IN (SELECT pk FROM table2_bigint WHERE pk NOT IN (SELECT col_decimal_20_0 FROM table100_bigint WHERE (SELECT (SELECT Min(10) FROM table100_bigint WHERE col_char_20 > 0)) = col_decimal_20_0))
+subquery.optimizer_subquery_bug	261	SELECT coalesce( (SELECT SUM(LENGTH(TRIM(SUBSTR(SUBSTR('hizctdn', 1, 20), 1, 20)))) FROM table10_bigint WHERE pk NOT IN (SELECT pk FROM table2_bigint WHERE pk NOT IN (SELECT col_decimal_20_0 FROM table100_bigint WHERE (SELECT coalesce( (SELECT MIN(10) FROM table100_bigint WHERE col_char_20 > CAST(CONCAT(col_char_20, SUBSTR('nhizctdn', 1, 20)) AS CHAR(100)) ORDER BY pk , pk), (SELECT ROUND(FLOOR(62))), 1)) = ROUND(ABS(ROUND(FLOOR(col_decimal_20_0)))) ORDER BY pk , col_bigint , col_char_20 DESC , pk DESC) ORDER BY col_decimal_20_0 , pk DESC) ORDER BY col_bigint, col_char_20, col_decimal_20_0, col_timestamp_6, pk , pk DESC), (SELECT col_decimal_20_0 FROM table10_bigint WHERE pk < -10 ORDER BY col_bigint , pk DESC LIMIT 1), 99)
+subquery.optimizer_subquery_bug	264	SELECT pk FROM table300_bigint WHERE col_char_20 <> (SELECT ( SELECT MIN((SELECT pk FROM m WHERE col_bigint <=> 13624)) FROM t))
+subquery.optimizer_subquery_bug	267	SELECT * FROM tt AS table1 WHERE table1 . pk <> (SELECT coalesce((SELECT MAX((SELECT SUM(-100) FROM tt WHERE NOT EXISTS (SELECT * FROM tt AS table3 LEFT OUTER JOIN tt AS table4 USING (pk) WHERE table1 . pk <> 99 LIMIT 8) )) FROM tt ), 99))
+subquery.optimizer_subquery_bug	281	select (select SUM( (select SUM(c1) from t1) ) from t1 ) from t2
+subquery.optimizer_subquery_bug	298	SELECT /*+ USE_HASH_AGGREGATION */ ALL t0.c0 AS ref0 FROM t0 WHERE (CAST( EXISTS (SELECT 1 from dual wHERE FALSE) AS SIGNED)) IN (( EXISTS (SELECT 1)) XOR ( EXISTS (SELECT 1)), t0.c0, CAST("" AS SIGNED)) UNION ALL SELECT /*+ USE_HASH_AGGREGATION */ t0.c0 AS ref0 FROM t0 WHERE (NOT ((CAST( EXISTS (SELECT 1 from dual wHERE FALSE) AS SIGNED)) IN (( EXISTS (SELECT 1)) XOR ( EXISTS (SELECT 1)), t0.c0, CAST("" AS SIGNED)))) UNION ALL SELECT /*+ USE_HASH_AGGREGATION */ ALL t0.c0 AS ref0 FROM t0 WHERE ((CAST( EXISTS (SELECT 1 from dual wHERE FALSE) AS SIGNED)) IN (( EXISTS (SELECT 1)) XOR ( EXISTS (SELECT 1)), t0.c0, CAST("" AS SIGNED))) IS NULL
+subquery.optimizer_subquery_bug	393	SELECT 1 AS ref0 FROM t5 T11 left join t1 T12 ON T11.col_char_20 < T11.col_varchar_20_key WHERE T11.pk IN (SELECT Avg(T12.col_int + 1) FROM t6 T14)
+subquery.optimizer_subquery_bug	403	select * from t1 where not exists (select /*+no_unnest*/ 1 from (select 1 + t1.c1 as c1, t2.c2 as s2 from t2) v where c1 = s2 and c1 + 1 <= s2)
+subquery.optimizer_subquery_bug	420	SELECT /*+use_nl(t2 v1)*/ * FROM (SELECT /*+no_merge*, no_rewrite, full(t1)*/ c1, (SELECT c1 FROM t3 limit 1) as s_c1, (SELECT c2 FROM t3 limit 1) as s_c2 FROM t1) v1, t2 WHERE v1.s_c2 >= t2.c2 and v1.c1 = t2.c1
+subquery.order_by_subquery	76	(select * from t1 order by c1,(select c1 from t5 order by c1)) intersect (select * from t1 order by c1,(select c1 from t5 order by c1))
+subquery.rqg_subquery_semijoin_nested_timeout	3082	SELECT GRANDPARENT1 . col_datetime AS G1 FROM D AS GRANDPARENT1 WHERE GRANDPARENT1 . `col_varchar_10` IN ( SELECT PARENT1 . `col_varchar_10_key` AS P1 FROM LL AS PARENT1 LEFT JOIN GG AS PARENT2 ON ( PARENT1 . `pk` > PARENT2 . `col_int` ) WHERE PARENT1 . `pk` IN ( SELECT CHILD1 . `col_int_key` AS C1 FROM BB AS CHILD1 LEFT JOIN KK AS CHILD2 ON ( CHILD1 . `col_varchar_10` >= CHILD2 . `col_varchar_10_key` ) ORDER BY CHILD1 . col_datetime ) AND ( ( PARENT1 . `col_varchar_20` >= GRANDPARENT1 . `col_varchar_20_key` ) OR NOT GRANDPARENT1 . `col_date` BETWEEN '2008-10-18' AND '2006-09-15' ) ORDER BY PARENT1 . col_datetime ) AND GRANDPARENT1 . `col_varchar_10_key` >= 'm'
+subquery.subquery	23	select * from t1 where c1>ANY(select c1 from t2)
+subquery.subquery	24	select * from t1 where c1<ALL(select c1 from t2)
+subquery.subquery	27	select * from t1 where c1=(select c1 from t2 limit 1)
+subquery.subquery	28	select * from t1 where c1=ANY(select c1 from t2 where t1.c2>t2.c2)
+subquery.subquery	29	select * from t1 where exists(select c1 from t2 where t1.c2>t2.c2)
+subquery.subquery	30	select * from t1 where 1<ANY(select c1 from t2)
+subquery.subquery	31	select c2 from t1 where exists(select c2 from t2 where t1.c1>t2.c1)
+subquery.subquery	32	select * from t1 where c1>(select c1 from t2 where t2.c1=1)
+subquery.subquery	33	select * from t1 where exists(select * from t2 where t1.c1=t2.c2)
+subquery.subquery	34	select * from t1 where c1 in (select c1 from t1)
+subquery.subquery	35	select * from t1 where c1 not in (select c1 from t1)
+subquery.subquery	36	select c1 from t1 where c1 not in (select c1 from t2 where c2 not in (select c2 from t2))
+subquery.subquery	39	select * from (select * from t1 limit 1) t
+subquery.subquery	40	select c from (select c1 as c from t1) tt
+subquery.subquery	41	select c1 from t1 where c1 in (select c1 from t2 where c2 >= some(select max(c1) from (select c1 from t3 where t1.c2=t3.c1 order by c1 limit 1) as tt))
+subquery.subquery	49	select (select c1 from t1 where c1=1) from t1
+subquery.subquery	124	select NULL=ANY(select c1 from t1)
+subquery.subquery	125	select NULL=ALL(select c1 from t1)
+subquery.subquery	128	select 2=ANY(select c2 from t1)
+subquery.subquery	129	select 2=ALL(select c2 from t1)
+subquery.subquery	131	select 5=ANY(select c2 from t1)
+subquery.subquery	133	select 5!=ANY(select c2 from t1)
+subquery.subquery	136	select 1=ANY(select c1 from t1)
+subquery.subquery	137	select 1!=ANY(select c1 from t1)
+subquery.subquery	138	select 1=ALL(select c1 from t1)
+subquery.subquery	139	select 1!=ALL(select c1 from t1)
+subquery.subquery	140	select 5=ANY(select c1 from t1)
+subquery.subquery	141	select 5!=ANY(select c1 from t1)
+subquery.subquery	142	select 5=ALL(select c1 from t1)
+subquery.subquery	143	select 5!=ALL(select c1 from t1)
+subquery.subquery	146	select 1!=ANY(select c1 from t1)
+subquery.subquery	147	select 1=ANY(select c1 from t1)
+subquery.subquery	148	select 1!=ALL(select c1 from t1)
+subquery.subquery	149	select 1=ALL(select c1 from t1)
+subquery.subquery	150	select 5!=ANY(select c1 from t1)
+subquery.subquery	151	select 5=ANY(select c1 from t1)
+subquery.subquery	152	select 5!=ALL(select c1 from t1)
+subquery.subquery	153	select 5=ALL(select c1 from t1)
+subquery.subquery	156	select * from t1 where c1 > (select t2.c1 from t2 where t1.c1 limit 1)
+subquery.subquery	157	select t1.c1 from t1 left join t3 on t1.c1 = t3.c1 where t3.c1 < (select t2.c1 from t2 where t3.c1 limit 1)
+subquery.subquery	158	select * from t1 where c1 > (select t2.c1 from t2 where t1.c1 > 1 limit 1)
+subquery.subquery	189	select * from t1 where c1 in (trim((select 1)), 2)
+subquery.subquery	190	select * from t1 where c1 in ((select c1 from t1), 2)
+subquery.subquery	191	select * from t1 where c1 in ((select t1.c1 from t1 t), 2)
+subquery.subquery	210	SELECT GRANDPARENT1 . col_varchar_20 AS G1 FROM DD AS GRANDPARENT1 WHERE GRANDPARENT1 . `col_int_key` IN ( SELECT DISTINCT PARENT1 . `col_int_key` AS P1 FROM AA AS PARENT1 LEFT JOIN J AS PARENT2 USING ( col_varchar_20 ) WHERE PARENT1 . `col_int` IN ( SELECT CHILD1 . `col_int` AS C1 FROM CC AS CHILD1 LEFT JOIN GG AS CHILD2 USING ( col_varchar_20 ) ) AND ( GRANDPARENT1 . `col_int` >= 1 ))
+subquery.subquery	237	select * from t1 where t1.c2 = 5 or exists (select 1 from t2 where t1.c1 = t2.c1)
+subquery.subquery	238	select * from t1 where t1.c2 = 5 or exists (select 1 from t2 where t1.c1 > t2.c1)
+subquery.subquery	239	select * from t1 where t1.c2 = 5 or exists (select 1 from t2 where t1.c1 < t2.c1)
+subquery.subquery	240	select * from t1, t2 where t1.c1 > exists(select c1 from t2 where t2.c1 = t1.c1)
+subquery.subquery	241	select * from t1 where (select c1 from t2 limit 1)+1 in (select 2 from t3 where t1.c1=t3.c1)
+subquery.subquery	242	select * from t1 having count(*) > (select c1 from t2 where t1.c1=t2.c1)
+subquery.subquery	243	select * from t1, t2 where t2.c1 = t1.c1 and t2.c1 = (select c1 from t3 where t3.c1 = t1.c1)
+subquery.subquery	244	select * from (select c1+1 as a1 from t1 where t1.c2 = 2) a, t2 where a.a1 = t2.c2 or t2.c1 = ANY(select c3 from t3 where t3.c1 > a.a1)
+subquery.subquery	250	select * from t1 where t1.c1 > (select sum(c1) from t2 where t2.c1 = t1.c1)
+subquery.subquery	251	select * from t1 where t1.c1 > (select sum(c1) from t2 where t2.c1 = t1.c1 and t2.c2 > (select max(c2) from t3 where t3.c1 = t2.c1))
+subquery.subquery	252	select * from t1 where t1.c2 in (select avg(c1) from t2 where t2.c1 = t1.c1 union select count(1) from t3 where t3.c1 = t1.c1)
+subquery.subquery	253	select * from t1 where t1.c1 != (select c2 from t2 where t2.c1 = (select max(c2) from t3 where t3.c1 = t1.c1) order by t2.c2 limit 1)
+subquery.subquery	333	select (select 1 except select pk), (select 1 except select pk), (select 1 except select pk), (select 1 except select pk), (select 1 except select pk), (select 1 except select pk), (select 1 except select pk), (select 1 except select pk), (select 1 except select pk), (select 1 except select pk), (select 1 except select pk), (select 1 except select pk), (select 1 except select pk), (select 1 except select pk), (select 1 except select pk), (select 1 except select pk), (select 1 except select pk), (select 1 except select pk), (select 1 except select pk), (select 1 except select pk), (select 1 except select pk), (select 1 except select pk), (select 1 except select pk), (select 1 except select pk), (select 1 except select pk), (select 1 except select pk), (select 1 except select pk), (select 1 except select pk) from t
+subquery.subquery	382	select /*+no_rewrite*/(select sum(b) from t2) as temp from t1 group by temp having temp > 4 and temp > (select sum(b) from t2)
+subquery.subquery	492	SELECT 1 FROM table0_hash_pk_parts_1_bigint WHERE (SELECT (SELECT MIN( (SELECT MAX(-100) FROM ff WHERE (col_timestamp_6 >= '2015-01-01'))) FROM s WHERE pk IN (SELECT col_bigint FROM table0_hash_pk_parts_1_bigint))) < 1
+subquery.subquery	519	SELECT 1 FROM table0_hash_pk_parts_1_bigint WHERE (SELECT (SELECT MIN( (SELECT 1 FROM ff WHERE (col_timestamp_6 >= '2015-01-01'))) + 1 AS tmp FROM s WHERE pk IN (SELECT col_bigint FROM table0_hash_pk_parts_1_bigint)))
+subquery.subquery_sj_firstmatch	79	SELECT * FROM t2 AS nt2 WHERE 1 IN (SELECT it1.a FROM t1 AS it1 JOIN t6 AS it3 ON it1.a=it3.a)
+subquery.subquery_sj_firstmatch	90	SELECT * FROM t2 AS nt2, t8 AS nt4 WHERE 1 IN (SELECT it1.a FROM t1 AS it1 JOIN t6 AS it3 ON it1.a=it3.a)
+subquery.subquery_sj_firstmatch	101	SELECT * FROM t0 as ot1, t2 AS nt3 WHERE ot1.a IN (SELECT it2.a FROM t1 AS it2 JOIN t8 AS it4 ON it2.a=it4.a)
+subquery.subquery_sj_innodb	43	select * from t2 where b in (select a from t1)
+subquery.subquery_sj_innodb	57	select * from t3 where b in (select a from t1)
+subquery.subquery_sj_innodb	112	select * from t2 where filler1 in ( select a from t1)
+subquery.subquery_sj_innodb	151	SELECT i FROM t1 WHERE i IN (SELECT innr.i FROM t2 LEFT JOIN t2 innr ON innr.vc) AND i = 2
+trx.serializable_constrains	98	select table_name from oceanbase.__all_table as t, oceanbase.__all_database as d where d.database_name='xm_test' and d.database_id = t.database_id and (t.table_name='xm_test_t1' or t.table_name='xm_test_t4')
+trx.serializable_constrains	106	select table_name from oceanbase.__all_table as t, oceanbase.__all_database as d where d.database_name='xm_test' and d.database_id = t.database_id and (t.table_name='xm_test_t1' or t.table_name='xm_test_t4')
+trx.serializable_constrains	108	select /*+read_consistency(weak) */ table_name from oceanbase.__all_table as t, oceanbase.__all_database as d where d.database_name='xm_test' and d.database_id = t.database_id and (t.table_name='xm_test_t1' or t.table_name='xm_test_t4')
+vector_index.all_virtual_vector_index_info	24	select count(distinct inc_index_tablet_id) as count from oceanbase.__all_virtual_vector_index_info a, oceanbase.__all_table b where a.data_table_id = b.table_id and b.table_name in ('t1', 't2')
+vector_index.all_virtual_vector_index_info	31	select count(*) as count from oceanbase.__all_virtual_vector_index_info a, oceanbase.__all_table b where a.data_table_id = b.table_id and b.table_name in ('t1', 't2')
+vector_index.all_virtual_vector_index_info	52	select count(*) as count from oceanbase.__all_virtual_vector_index_info v join oceanbase.__all_table i on v.rowkey_vid_tablet_id = i.tablet_id join oceanbase.__all_table t on t.table_id = i.data_table_id where t.table_name = 't3'
+vector_index.all_virtual_vector_index_info	60	select count(*) as count from oceanbase.__all_virtual_vector_index_info v join oceanbase.__all_table i on v.rowkey_vid_tablet_id = i.tablet_id join oceanbase.__all_table t on t.table_id = i.data_table_id where t.table_name = 't4'
+vector_index.all_virtual_vector_index_info	69	select count(*) as count from oceanbase.__all_virtual_vector_index_info v join oceanbase.__all_table i on v.rowkey_vid_tablet_id = i.tablet_id join oceanbase.__all_table t on t.table_id = i.data_table_id where t.table_name = 't3'
+vector_index.all_virtual_vector_index_info	75	select count(*) as count from oceanbase.__all_virtual_vector_index_info v join oceanbase.__all_table i on v.rowkey_vid_tablet_id = i.tablet_id join oceanbase.__all_table t on t.table_id = i.data_table_id where t.table_name = 't4'
+vector_index.drop_vector_index	109	select count(*) from oceanbase.__all_table where table_name like '%vid_rowkey%' and database_id = (select database_id from oceanbase.__all_database where DATABASE_NAME = 'yjl_vec')
+vector_index.drop_vector_index	110	select count(*) from oceanbase.__all_table where table_name like '%rowkey_vid%' and database_id = (select database_id from oceanbase.__all_database where DATABASE_NAME = 'yjl_vec')
+vector_index.drop_vector_index	111	select count(*) from oceanbase.__all_table where table_name like '%idx1%' and database_id = (select database_id from oceanbase.__all_database where DATABASE_NAME = 'yjl_vec')
+vector_index.drop_vector_index	112	select count(*) from oceanbase.__all_table where table_name like '%idx2%' and database_id = (select database_id from oceanbase.__all_database where DATABASE_NAME = 'yjl_vec')
+vector_index.drop_vector_index	119	select count(table_name) from oceanbase.__all_table where table_name like '%vid_rowkey%' and database_id = (select database_id from oceanbase.__all_database where database_name='yjl_vec')
+vector_index.drop_vector_index	121	select count(*) from oceanbase.__all_table where table_name like '%vid_rowkey%' and database_id = (select database_id from oceanbase.__all_database where DATABASE_NAME = 'yjl_vec')
+vector_index.drop_vector_index	122	select count(*) from oceanbase.__all_table where table_name like '%rowkey_vid%' and database_id = (select database_id from oceanbase.__all_database where DATABASE_NAME = 'yjl_vec')
+vector_index.drop_vector_index	123	select count(*) from oceanbase.__all_table where table_name like '%idx1%' and database_id = (select database_id from oceanbase.__all_database where DATABASE_NAME = 'yjl_vec')
+vector_index.drop_vector_index	124	select count(*) from oceanbase.__all_table where table_name like '%idx2%' and database_id = (select database_id from oceanbase.__all_database where DATABASE_NAME = 'yjl_vec')
+vector_index.drop_vector_index	132	select count(table_name) from oceanbase.__all_table where table_name like '%vid_rowkey%' and database_id = (select database_id from oceanbase.__all_database where database_name='yjl_vec')
+vector_index.drop_vector_index	134	select count(*) from oceanbase.__all_table where table_name like '%vid_rowkey%' and database_id = (select database_id from oceanbase.__all_database where DATABASE_NAME = 'yjl_vec')
+vector_index.drop_vector_index	135	select count(*) from oceanbase.__all_table where table_name like '%rowkey_vid%' and database_id = (select database_id from oceanbase.__all_database where DATABASE_NAME = 'yjl_vec')
+vector_index.drop_vector_index	136	select count(*) from oceanbase.__all_table where table_name like '%idx1%' and database_id = (select database_id from oceanbase.__all_database where DATABASE_NAME = 'yjl_vec')
+vector_index.drop_vector_index	137	select count(*) from oceanbase.__all_table where table_name like '%idx2%' and database_id = (select database_id from oceanbase.__all_database where DATABASE_NAME = 'yjl_vec')
+vector_index.drop_vector_index	176	select count(table_name) from oceanbase.__all_table where table_name like '%vid_rowkey%' and database_id = (select database_id from oceanbase.__all_database where database_name='yjl_vec')
+vector_index.drop_vector_index	178	select count(*) from oceanbase.__all_table where table_name like '%vid_rowkey%' and database_id = (select database_id from oceanbase.__all_database where DATABASE_NAME = 'yjl_vec')
+vector_index.drop_vector_index	179	select count(*) from oceanbase.__all_table where table_name like '%rowkey_vid%' and database_id = (select database_id from oceanbase.__all_database where DATABASE_NAME = 'yjl_vec')
+vector_index.drop_vector_index	180	select count(*) from oceanbase.__all_table where table_name like '%idx1%' and database_id = (select database_id from oceanbase.__all_database where DATABASE_NAME = 'yjl_vec')
+vector_index.drop_vector_index	181	select count(*) from oceanbase.__all_table where table_name like '%idx2%' and database_id = (select database_id from oceanbase.__all_database where DATABASE_NAME = 'yjl_vec')
+vector_index.drop_vector_index	187	select count(table_name) from oceanbase.__all_table where table_name like '%vid_rowkey%' and database_id = (select database_id from oceanbase.__all_database where database_name='yjl_vec')
+vector_index.drop_vector_index	189	select count(*) from oceanbase.__all_table where table_name like '%vid_rowkey%' and database_id = (select database_id from oceanbase.__all_database where DATABASE_NAME = 'yjl_vec')
+vector_index.drop_vector_index	190	select count(*) from oceanbase.__all_table where table_name like '%rowkey_vid%' and database_id = (select database_id from oceanbase.__all_database where DATABASE_NAME = 'yjl_vec')
+vector_index.drop_vector_index	191	select count(*) from oceanbase.__all_table where table_name like '%idx1%' and database_id = (select database_id from oceanbase.__all_database where DATABASE_NAME = 'yjl_vec')
+vector_index.drop_vector_index	192	select count(*) from oceanbase.__all_table where table_name like '%idx2%' and database_id = (select database_id from oceanbase.__all_database where DATABASE_NAME = 'yjl_vec')
+vector_index.drop_vector_index	198	select count(table_name) from oceanbase.__all_table where table_name like '%vid_rowkey%' and database_id = (select database_id from oceanbase.__all_database where database_name='yjl_vec')
+vector_index.drop_vector_index	200	select count(*) from oceanbase.__all_table where table_name like '%vid_rowkey%' and database_id = (select database_id from oceanbase.__all_database where DATABASE_NAME = 'yjl_vec')
+vector_index.drop_vector_index	201	select count(*) from oceanbase.__all_table where table_name like '%rowkey_vid%' and database_id = (select database_id from oceanbase.__all_database where DATABASE_NAME = 'yjl_vec')
+vector_index.drop_vector_index	202	select count(*) from oceanbase.__all_table where table_name like '%idx1%' and database_id = (select database_id from oceanbase.__all_database where DATABASE_NAME = 'yjl_vec')
+vector_index.drop_vector_index	203	select count(*) from oceanbase.__all_table where table_name like '%idx2%' and database_id = (select database_id from oceanbase.__all_database where DATABASE_NAME = 'yjl_vec')
+vector_index.sparse_vector_index_vsag_query	601	select count(*) from (select * from t1 where c2 - 1 > 5 order by negative_inner_product(v, '{3:1, 4:1}') APPROXIMATE limit 5) as tmp1, (select * from t2 order by negative_inner_product(v, '{3:1, 4:1}') APPROXIMATE limit 5) as tmp2 where tmp1.c1=tmp2.c1
+vector_index.sparse_vector_index_vsag_query	619	WITH query_result AS ( select * from t1 where c2 > 5 order by negative_inner_product(v, '{3:1, 4:1}') APPROXIMATE limit 5 ) SELECT c1 FROM query_result
+vector_index.vector_calc_gbk_mysql	73	select c1, l2_distance(c1, '[1,1,1]') from test group by l2_distance(c1, '[1,1,1]')
+vector_index.vector_calc_gbk_mysql	81	select test1.id, test1.c1, test.c1, l2_distance(test1.c1, test.c1) from test1,test where test1.id = test.id and test.id = 2
+vector_index.vector_calc_gbk_mysql	82	select /*+parallel(2)*/test1.id, test1.c1, test.c1, l2_distance(test1.c1, test.c1) from test1,test where test1.id = test.id and test.id = 2
+vector_index.vector_calc_gbk_mysql	83	select test1.id, test1.c1, test.c1, l2_distance(test1.c1, test.c1) from test1,test where test1.id = test.id and test.id = 2
+vector_index.vector_calc_gbk_mysql	94	select test1.c1, test.c1, test1.c1+test.c1 from test1,test where test1.id = test.id && test.id = 2
+vector_index.vector_calc_gbk_mysql	95	select /*+parallel(2)*/test1.c1, test.c1, test1.c1+test.c1 from test1,test where test1.id = test.id && test.id = 2
+vector_index.vector_calc_gbk_mysql	96	select test1.c1, test.c1, test1.c1+test.c1 from test1,test where test1.id = test.id && test.id = 2
+vector_index.vector_calc_gbk_mysql	128	select test1.c1, test.c1 from test1, test
+vector_index.vector_calc_gbk_mysql	129	select test1.c1, test.c1 from test1, test where test.c1 + test1.c1 = [2,0,2]
+vector_index.vector_calc_gbk_mysql	130	select /*+parallel(2)*/test1.c1, test.c1 from test1, test where test.c1 + test1.c1 = [2,0,2]
+vector_index.vector_calc_gbk_mysql	131	select test1.c1, test.c1 from test1, test where test.c1 + test1.c1 = [2,0,2]
+vector_index.vector_calc_gbk_mysql	159	select sum(c1),avg(c1),count(c1) from test group by id
+vector_index.vector_calc_gbk_mysql	160	select sum(c1+[1,2,3]-[1,2,3]),avg(c1+[1,2,3]-[1,2,3]),count(c1+[1,2,3]-[1,2,3]) from test group by id
+vector_index.vector_calc_gbk_mysql	182	select id, sum(c1) = [5.2,6.3,7.4], avg(c1) = [0.1,0.2,0.3] from test group by id
+vector_index.vector_calc_gbk_mysql	183	select c1 from test where id in (select id from test group by id having sum(c1) = [5.2,6.3,7.4])
+vector_index.vector_calc_gbk_mysql	198	select sum(c1),avg(c1),count(c1) from t group by id
+vector_index.vector_calc_gbk_mysql	242	select c1,sum(c2),avg(c2),count(c2) from t1 group by c1
+vector_index.vector_calc_gbk_mysql	248	SELECT c1, SUM(c2) OVER ( ORDER BY c1 ROWS BETWEEN 2 PRECEDING AND CURRENT ROW ) AS rolling_sum_3_days FROM t1
+vector_index.vector_calc_gbk_mysql	256	SELECT c1, SUM(c2) OVER ( ORDER BY c1 ROWS BETWEEN 2 PRECEDING AND CURRENT ROW ) AS rolling_sum_3_days FROM t1
+vector_index.vector_calc_utf8_mysql	65	select c1, l2_distance(c1, '[1,1,1]') from test group by l2_distance(c1, '[1,1,1]')
+vector_index.vector_calc_utf8_mysql	73	select test1.id, test1.c1, test.c1, l2_distance(test1.c1, test.c1) from test1,test where test1.id = test.id and test.id = 2
+vector_index.vector_calc_utf8_mysql	74	select /*+parallel(2)*/test1.id, test1.c1, test.c1, l2_distance(test1.c1, test.c1) from test1,test where test1.id = test.id and test.id = 2
+vector_index.vector_calc_utf8_mysql	75	select test1.id, test1.c1, test.c1, l2_distance(test1.c1, test.c1) from test1,test where test1.id = test.id and test.id = 2
+vector_index.vector_calc_utf8_mysql	86	select test1.c1, test.c1, test1.c1+test.c1 from test1,test where test1.id = test.id && test.id = 2
+vector_index.vector_calc_utf8_mysql	87	select /*+parallel(2)*/test1.c1, test.c1, test1.c1+test.c1 from test1,test where test1.id = test.id && test.id = 2
+vector_index.vector_calc_utf8_mysql	88	select test1.c1, test.c1, test1.c1+test.c1 from test1,test where test1.id = test.id && test.id = 2
+vector_index.vector_calc_utf8_mysql	122	select test1.c1, test.c1 from test1, test
+vector_index.vector_calc_utf8_mysql	123	select test1.c1, test.c1 from test1, test where test.c1 + test1.c1 = [2,0,2]
+vector_index.vector_calc_utf8_mysql	124	select /*+parallel(2)*/test1.c1, test.c1 from test1, test where test.c1 + test1.c1 = [2,0,2]
+vector_index.vector_calc_utf8_mysql	125	select test1.c1, test.c1 from test1, test where test.c1 + test1.c1 = [2,0,2]
+vector_index.vector_calc_utf8_mysql	154	select sum(c1),avg(c1),count(c1) from test group by id
+vector_index.vector_calc_utf8_mysql	155	select sum(c1+[1,2,3]-[1,2,3]),avg(c1+[1,2,3]-[1,2,3]),count(c1+[1,2,3]-[1,2,3]) from test group by id
+vector_index.vector_calc_utf8_mysql	177	select id, sum(c1) = [5.2,6.3,7.4], avg(c1) = [0.1,0.2,0.3] from test group by id
+vector_index.vector_calc_utf8_mysql	178	select c1 from test where id in (select id from test group by id having sum(c1) = [5.2,6.3,7.4])
+vector_index.vector_calc_utf8_mysql	193	select sum(c1),avg(c1),count(c1) from t group by id
+vector_index.vector_calc_utf8_mysql	244	select c1,sum(c2),avg(c2),count(c2) from t1 group by c1
+vector_index.vector_calc_utf8_mysql	250	SELECT c1, SUM(c2) OVER ( ORDER BY c1 ROWS BETWEEN 2 PRECEDING AND CURRENT ROW ) AS rolling_sum_3_days FROM t1
+vector_index.vector_calc_utf8_mysql	258	SELECT c1, SUM(c2) OVER ( ORDER BY c1 ROWS BETWEEN 2 PRECEDING AND CURRENT ROW ) AS rolling_sum_3_days FROM t1
+vector_index.vector_index_basic	319	select count(*) from (select * from t1 order by l2_distance(c2, [0.428146,0.408760,0.765300]) APPROXIMATE limit 10) as tmp1, (select * from t1 order by l2_distance(c2, [0.428146,0.408760,0.765300]) limit 10) as tmp2 where tmp1.c1=tmp2.c1
+vector_index.vector_index_ivfflat_dml	58	select distinct c3 from t1
+vector_index.vector_index_ivfflat_dml	106	select distinct c3 from t1
+vector_index.vector_index_ivfflat_dml	164	select distinct c3 from t1
+vector_index.vector_index_ivfflat_dml	221	select distinct c3 from t1
+vector_index.vector_index_ivfflat_dml	313	with cte as ( select c2, c5 from t2 where c2 = (select t3.c2 from t3 where t3.c1 = 504) ) update t1 set c5 = (select c5 from cte) where c1 = (select c2 from cte)
+vector_index.vector_index_ivfflat_dml	423	select count(*) from $cid_vector_table1 t1 inner join vec_xly t2 on t1.c1 = t2.c1 and t1.$cid_vector_data_column1 = t2.c4
+vector_index.vector_index_ivfflat_dml	424	select count(*) from $cid_vector_table2 t1 inner join vec_xly t2 on t1.c1 = t2.c1 and t1.$cid_vector_data_column2 = t2.c5
+vector_index.vector_index_ivfflat_scan	126	select count(*) from (select * from t1 where c2 - 1 > 9 order by l2_distance(c5, [-0.269,-0.967,-0.539]) APPROXIMATE limit 5) as tmp1, (select * from t2 order by l2_distance(c6, [-0.269,-0.967,-0.539]) APPROXIMATE limit 5) as tmp2 where tmp1.c1=tmp2.c1
+vector_index.vector_index_ivfflat_scan	145	WITH query_result AS ( select * from t1 where c2 > 5 order by l2_distance(c5, [-0.269,-0.967,-0.539]) APPROXIMATE limit 5 ) SELECT c1 FROM query_result
+vector_index.vector_index_partitioned	35	select count(*) from (select * from t1 order by l2_distance(c3, [0.428146,0.408760,0.765300]) APPROXIMATE limit 8) as tmp1, (select * from t1 order by l2_distance(c3, [0.428146,0.408760,0.765300]) limit 8) as tmp2 where tmp1.c1=tmp2.c1
+vector_index.vector_index_partitioned	39	select count(*) from (select * from t1 partition(p0) order by l2_distance(c3, [0.428146,0.408760,0.765300]) APPROXIMATE limit 8) as tmp1, (select * from t1 partition(p0) order by l2_distance(c3, [0.428146,0.408760,0.765300]) limit 8) as tmp2 where tmp1.c1=tmp2.c1
+vector_index.vector_index_partitioned	43	select count(*) from (select * from t1 partition(p1) order by l2_distance(c3, [0.428146,0.408760,0.765300]) APPROXIMATE limit 8) as tmp1, (select * from t1 partition(p1) order by l2_distance(c3, [0.428146,0.408760,0.765300]) limit 8) as tmp2 where tmp1.c1=tmp2.c1
+vector_index.vector_index_partitioned	47	select count(*) from (select * from t1 partition(p2) order by l2_distance(c3, [0.428146,0.408760,0.765300]) APPROXIMATE limit 8) as tmp1, (select * from t1 partition(p2) order by l2_distance(c3, [0.428146,0.408760,0.765300]) limit 8) as tmp2 where tmp1.c1=tmp2.c1
+vector_index.vector_index_partitioned	51	select count(*) from (select * from t1 partition(p3) order by l2_distance(c3, [0.428146,0.408760,0.765300]) APPROXIMATE limit 8) as tmp1, (select * from t1 partition(p3) order by l2_distance(c3, [0.428146,0.408760,0.765300]) limit 8) as tmp2 where tmp1.c1=tmp2.c1
+vector_index.vector_index_partitioned	55	select count(*) from (select * from t1 partition(p4) order by l2_distance(c3, [0.428146,0.408760,0.765300]) APPROXIMATE limit 8) as tmp1, (select * from t1 partition(p4) order by l2_distance(c3, [0.428146,0.408760,0.765300]) limit 8) as tmp2 where tmp1.c1=tmp2.c1
+vector_index.vector_index_partitioned	78	select count(*) from (select * from t1 order by l2_distance(c3, [0.428146,0.408760,0.765300]) APPROXIMATE limit 8) as tmp1, (select * from t1 order by l2_distance(c3, [0.428146,0.408760,0.765300]) limit 8) as tmp2 where tmp1.c1=tmp2.c1
+vector_index.vector_index_partitioned	103	select count(*) from (select * from t1 order by l2_distance(c3, [0.428146,0.408760,0.765300]) APPROXIMATE limit 8) as tmp1, (select * from t1 order by l2_distance(c3, [0.428146,0.408760,0.765300]) limit 8) as tmp2 where tmp1.c1=tmp2.c1
+vector_index.vector_index_partitioned	107	select count(*) from (select * from t1 partition(p0) order by l2_distance(c3, [0.428146,0.408760,0.765300]) APPROXIMATE limit 8) as tmp1, (select * from t1 partition(p0) order by l2_distance(c3, [0.428146,0.408760,0.765300]) limit 8) as tmp2 where tmp1.c1=tmp2.c1
+vector_index.vector_index_partitioned	111	select count(*) from (select * from t1 partition(p1) order by l2_distance(c3, [0.428146,0.408760,0.765300]) APPROXIMATE limit 8) as tmp1, (select * from t1 partition(p1) order by l2_distance(c3, [0.428146,0.408760,0.765300]) limit 8) as tmp2 where tmp1.c1=tmp2.c1
+vector_index.vector_index_partitioned	115	select count(*) from (select * from t1 partition(p2) order by l2_distance(c3, [0.428146,0.408760,0.765300]) APPROXIMATE limit 8) as tmp1, (select * from t1 partition(p2) order by l2_distance(c3, [0.428146,0.408760,0.765300]) limit 8) as tmp2 where tmp1.c1=tmp2.c1
+vector_index.vector_index_partitioned	119	select count(*) from (select * from t1 partition(p3) order by l2_distance(c3, [0.428146,0.408760,0.765300]) APPROXIMATE limit 8) as tmp1, (select * from t1 partition(p3) order by l2_distance(c3, [0.428146,0.408760,0.765300]) limit 8) as tmp2 where tmp1.c1=tmp2.c1
+vector_index.vector_index_partitioned	123	select count(*) from (select * from t1 partition(p4) order by l2_distance(c3, [0.428146,0.408760,0.765300]) APPROXIMATE limit 8) as tmp1, (select * from t1 partition(p4) order by l2_distance(c3, [0.428146,0.408760,0.765300]) limit 8) as tmp2 where tmp1.c1=tmp2.c1
+vector_index.vector_index_partitioned	140	select count(*) from (select * from t1 order by l2_distance(c3, [0.428146,0.408760,0.765300]) APPROXIMATE limit 8) as tmp1, (select * from t1 order by l2_distance(c3, [0.428146,0.408760,0.765300]) limit 8) as tmp2 where tmp1.c1=tmp2.c1
+vector_index.vector_index_partitioned	165	select count(*) from (select * from t1 order by l2_distance(c3, [0.428146,0.408760,0.765300]) APPROXIMATE limit 8) as tmp1, (select * from t1 order by l2_distance(c3, [0.428146,0.408760,0.765300]) limit 8) as tmp2 where tmp1.c1=tmp2.c1
+vector_index.vector_index_partitioned	169	select count(*) from (select * from t1 partition(p0) order by l2_distance(c3, [0.428146,0.408760,0.765300]) APPROXIMATE limit 8) as tmp1, (select * from t1 partition(p0) order by l2_distance(c3, [0.428146,0.408760,0.765300]) limit 8) as tmp2 where tmp1.c1=tmp2.c1
+vector_index.vector_index_partitioned	173	select count(*) from (select * from t1 partition(p1) order by l2_distance(c3, [0.428146,0.408760,0.765300]) APPROXIMATE limit 8) as tmp1, (select * from t1 partition(p1) order by l2_distance(c3, [0.428146,0.408760,0.765300]) limit 8) as tmp2 where tmp1.c1=tmp2.c1
+vector_index.vector_index_partitioned	177	select count(*) from (select * from t1 partition(p2) order by l2_distance(c3, [0.428146,0.408760,0.765300]) APPROXIMATE limit 8) as tmp1, (select * from t1 partition(p2) order by l2_distance(c3, [0.428146,0.408760,0.765300]) limit 8) as tmp2 where tmp1.c1=tmp2.c1
+vector_index.vector_index_partitioned	181	select count(*) from (select * from t1 partition(p3) order by l2_distance(c3, [0.428146,0.408760,0.765300]) APPROXIMATE limit 8) as tmp1, (select * from t1 partition(p3) order by l2_distance(c3, [0.428146,0.408760,0.765300]) limit 8) as tmp2 where tmp1.c1=tmp2.c1
+vector_index.vector_index_partitioned	185	select count(*) from (select * from t1 partition(p4) order by l2_distance(c3, [0.428146,0.408760,0.765300]) APPROXIMATE limit 8) as tmp1, (select * from t1 partition(p4) order by l2_distance(c3, [0.428146,0.408760,0.765300]) limit 8) as tmp2 where tmp1.c1=tmp2.c1
+vector_index.vector_index_partitioned	202	select count(*) from (select * from t1 order by l2_distance(c3, [0.428146,0.408760,0.765300]) APPROXIMATE limit 8) as tmp1, (select * from t1 order by l2_distance(c3, [0.428146,0.408760,0.765300]) limit 8) as tmp2 where tmp1.c1=tmp2.c1
+vector_index.vector_index_partitioned	235	select count(*) from (select * from t1 order by l2_distance(c3, [0.428146,0.408760,0.765300]) APPROXIMATE limit 8) as tmp1, (select * from t1 order by l2_distance(c3, [0.428146,0.408760,0.765300]) limit 8) as tmp2 where tmp1.c1=tmp2.c1
+vector_index.vector_index_partitioned	239	select count(*) from (select * from t1 partition(p0) order by l2_distance(c3, [0.428146,0.408760,0.765300]) APPROXIMATE limit 8) as tmp1, (select * from t1 partition(p0) order by l2_distance(c3, [0.428146,0.408760,0.765300]) limit 8) as tmp2 where tmp1.c1=tmp2.c1
+vector_index.vector_index_partitioned	243	select count(*) from (select * from t1 partition(p1) order by l2_distance(c3, [0.428146,0.408760,0.765300]) APPROXIMATE limit 8) as tmp1, (select * from t1 partition(p1) order by l2_distance(c3, [0.428146,0.408760,0.765300]) limit 8) as tmp2 where tmp1.c1=tmp2.c1
+vector_index.vector_index_partitioned	247	select count(*) from (select * from t1 partition(p2) order by l2_distance(c3, [0.428146,0.408760,0.765300]) APPROXIMATE limit 8) as tmp1, (select * from t1 partition(p2) order by l2_distance(c3, [0.428146,0.408760,0.765300]) limit 8) as tmp2 where tmp1.c1=tmp2.c1
+vector_index.vector_index_partitioned	251	select count(*) from (select * from t1 partition(p3) order by l2_distance(c3, [0.428146,0.408760,0.765300]) APPROXIMATE limit 8) as tmp1, (select * from t1 partition(p3) order by l2_distance(c3, [0.428146,0.408760,0.765300]) limit 8) as tmp2 where tmp1.c1=tmp2.c1
+vector_index.vector_index_partitioned	255	select count(*) from (select * from t1 partition(p4) order by l2_distance(c3, [0.428146,0.408760,0.765300]) APPROXIMATE limit 8) as tmp1, (select * from t1 partition(p4) order by l2_distance(c3, [0.428146,0.408760,0.765300]) limit 8) as tmp2 where tmp1.c1=tmp2.c1
+vector_index.vector_index_partitioned	278	select count(*) from (select * from t1 order by l2_distance(c3, [0.428146,0.408760,0.765300]) APPROXIMATE limit 8) as tmp1, (select * from t1 order by l2_distance(c3, [0.428146,0.408760,0.765300]) limit 8) as tmp2 where tmp1.c1=tmp2.c1
+vector_index.vector_index_partitioned	312	select count(*) from (select * from t1 order by l2_distance(c3, [0.428146,0.408760,0.765300]) APPROXIMATE limit 8) as tmp1, (select * from t1 order by l2_distance(c3, [0.428146,0.408760,0.765300]) limit 8) as tmp2 where tmp1.c1=tmp2.c1
+vector_index.vector_index_partitioned	316	select count(*) from (select * from t1 partition(p0) order by l2_distance(c3, [0.428146,0.408760,0.765300]) APPROXIMATE limit 8) as tmp1, (select * from t1 partition(p0) order by l2_distance(c3, [0.428146,0.408760,0.765300]) limit 8) as tmp2 where tmp1.c1=tmp2.c1
+vector_index.vector_index_partitioned	320	select count(*) from (select * from t1 partition(p1) order by l2_distance(c3, [0.428146,0.408760,0.765300]) APPROXIMATE limit 8) as tmp1, (select * from t1 partition(p1) order by l2_distance(c3, [0.428146,0.408760,0.765300]) limit 8) as tmp2 where tmp1.c1=tmp2.c1
+vector_index.vector_index_partitioned	324	select count(*) from (select * from t1 partition(p2) order by l2_distance(c3, [0.428146,0.408760,0.765300]) APPROXIMATE limit 8) as tmp1, (select * from t1 partition(p2) order by l2_distance(c3, [0.428146,0.408760,0.765300]) limit 8) as tmp2 where tmp1.c1=tmp2.c1
+vector_index.vector_index_partitioned	328	select count(*) from (select * from t1 partition(p3) order by l2_distance(c3, [0.428146,0.408760,0.765300]) APPROXIMATE limit 8) as tmp1, (select * from t1 partition(p3) order by l2_distance(c3, [0.428146,0.408760,0.765300]) limit 8) as tmp2 where tmp1.c1=tmp2.c1
+vector_index.vector_index_partitioned	332	select count(*) from (select * from t1 partition(p4) order by l2_distance(c3, [0.428146,0.408760,0.765300]) APPROXIMATE limit 8) as tmp1, (select * from t1 partition(p4) order by l2_distance(c3, [0.428146,0.408760,0.765300]) limit 8) as tmp2 where tmp1.c1=tmp2.c1
+vector_index.vector_index_partitioned	355	select count(*) from (select * from t1 order by l2_distance(c3, [0.428146,0.408760,0.765300]) APPROXIMATE limit 8) as tmp1, (select * from t1 order by l2_distance(c3, [0.428146,0.408760,0.765300]) limit 8) as tmp2 where tmp1.c1=tmp2.c1
+vector_index.vector_index_partitioned	389	select count(*) from (select * from t1 order by l2_distance(c3, [0.428146,0.408760,0.765300]) APPROXIMATE limit 8) as tmp1, (select * from t1 order by l2_distance(c3, [0.428146,0.408760,0.765300]) limit 8) as tmp2 where tmp1.c1=tmp2.c1
+vector_index.vector_index_partitioned	393	select count(*) from (select * from t1 partition(p0) order by l2_distance(c3, [0.428146,0.408760,0.765300]) APPROXIMATE limit 8) as tmp1, (select * from t1 partition(p0) order by l2_distance(c3, [0.428146,0.408760,0.765300]) limit 8) as tmp2 where tmp1.c1=tmp2.c1
+vector_index.vector_index_partitioned	397	select count(*) from (select * from t1 partition(p1) order by l2_distance(c3, [0.428146,0.408760,0.765300]) APPROXIMATE limit 8) as tmp1, (select * from t1 partition(p1) order by l2_distance(c3, [0.428146,0.408760,0.765300]) limit 8) as tmp2 where tmp1.c1=tmp2.c1
+vector_index.vector_index_partitioned	401	select count(*) from (select * from t1 partition(p2) order by l2_distance(c3, [0.428146,0.408760,0.765300]) APPROXIMATE limit 8) as tmp1, (select * from t1 partition(p2) order by l2_distance(c3, [0.428146,0.408760,0.765300]) limit 8) as tmp2 where tmp1.c1=tmp2.c1
+vector_index.vector_index_partitioned	405	select count(*) from (select * from t1 partition(p3) order by l2_distance(c3, [0.428146,0.408760,0.765300]) APPROXIMATE limit 8) as tmp1, (select * from t1 partition(p3) order by l2_distance(c3, [0.428146,0.408760,0.765300]) limit 8) as tmp2 where tmp1.c1=tmp2.c1
+vector_index.vector_index_partitioned	409	select count(*) from (select * from t1 partition(p4) order by l2_distance(c3, [0.428146,0.408760,0.765300]) APPROXIMATE limit 8) as tmp1, (select * from t1 partition(p4) order by l2_distance(c3, [0.428146,0.408760,0.765300]) limit 8) as tmp2 where tmp1.c1=tmp2.c1
+vector_index.vector_index_partitioned	432	select count(*) from (select * from t1 order by l2_distance(c3, [0.428146,0.408760,0.765300]) APPROXIMATE limit 8) as tmp1, (select * from t1 order by l2_distance(c3, [0.428146,0.408760,0.765300]) limit 8) as tmp2 where tmp1.c1=tmp2.c1
+vector_index.vector_index_partitioned	438	select count(*) as count from oceanbase.__all_virtual_vector_index_info a, oceanbase.__all_table b where a.data_table_id = b.table_id and b.table_name = 't1'
+vector_index.vector_index_rebuild	103	select count(*) from (select * from t1 order by l2_distance(c2, [0.428146,0.408760,0.765300]) APPROXIMATE limit 8) as tmp1, (select * from t1 order by l2_distance(c2, [0.428146,0.408760,0.765300]) limit 8) as tmp2 where tmp1.c1=tmp2.c1
+vector_index.vector_index_rebuild	114	select count(*) from (select * from t1 order by l2_distance(c2, [0.428146,0.408760,0.765300]) APPROXIMATE limit 8) as tmp1, (select * from t1 order by l2_distance(c2, [0.428146,0.408760,0.765300]) limit 8) as tmp2 where tmp1.c1=tmp2.c1
+vector_index.vector_index_rebuild	123	select count(*) from (select * from t1 order by l2_distance(c2, [0.428146,0.408760,0.765300]) APPROXIMATE limit 8) as tmp1, (select * from t1 order by l2_distance(c2, [0.428146,0.408760,0.765300]) limit 8) as tmp2 where tmp1.c1=tmp2.c1
+vector_index.vector_index_rebuild	194	select count(*) from (select * from t1 order by l2_distance(c2, [0.428146,0.408760,0.765300]) APPROXIMATE limit 8) as tmp1, (select * from t1 order by l2_distance(c2, [0.428146,0.408760,0.765300]) limit 8) as tmp2 where tmp1.c1=tmp2.c1
+vector_index.vector_index_rebuild	211	select count(*) from (select * from t1 order by l2_distance(c2, [0.428146,0.408760,0.765300]) APPROXIMATE limit 8) as tmp1, (select * from t1 order by l2_distance(c2, [0.428146,0.408760,0.765300]) limit 8) as tmp2 where tmp1.c1=tmp2.c1
+vector_index.vector_index_rebuild	291	select count(*) from (select * from t1 order by l2_distance(c2, [0.428146,0.408760,0.765300]) APPROXIMATE limit 8) as tmp1, (select * from t1 order by l2_distance(c2, [0.428146,0.408760,0.765300]) limit 8) as tmp2 where tmp1.c1=tmp2.c1
+vector_index.vector_index_rebuild	306	select count(*) from (select * from t1 order by l2_distance(c2, [0.428146,0.408760,0.765300]) APPROXIMATE limit 8) as tmp1, (select * from t1 order by l2_distance(c2, [0.428146,0.408760,0.765300]) limit 8) as tmp2 where tmp1.c1=tmp2.c1
+vector_index.vector_index_rebuild	317	select count(*) from (select * from t1 order by l2_distance(c2, [0.428146,0.408760,0.765300]) APPROXIMATE limit 8) as tmp1, (select * from t1 order by l2_distance(c2, [0.428146,0.408760,0.765300]) limit 8) as tmp2 where tmp1.c1=tmp2.c1
+window_function.farm	91	select * from (select *, row_number() over(partition by nv order by c_customer_sk) as rn from (select c_birth_month, c_birth_year, c_customer_sk, c_first_name, group_concat(c_customer_sk) over w2, ntile(10) over w3 as nv from customer window w as (partition by c_birth_month), w2 as (w order by c_birth_year, c_customer_sk), w3 as (order by c_customer_sk) ) v ) v where rn = 1
+window_function.farm	118	select c_birth_month, c_birth_year, c_customer_sk, c_first_name, count(1) over w, max(c_birth_year) over w, min(c_birth_year) over w, cast(avg(c_birth_year) over w as number(10, 4)), sum(c_birth_month) over w, row_number() over w2, rank() over w2, dense_rank() over w2, cast(percent_rank() over w2 as number(10, 4)), cast(cume_dist() over w2 as number(10, 4)), first_value(c_first_name) over w2, last_value(c_first_name) over w2, nth_value(c_first_name, 1) over w2, ntile(10) over w2, lead(c_first_name, 2) over w2, lag(c_first_name, 2) over w2 from customer window w as (partition by c_birth_month), w2 as (w order by c_birth_year, c_customer_sk)
+yonyou_test.yonyou	195	select distinctrow * from aa_vendor

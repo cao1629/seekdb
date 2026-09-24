@@ -1,0 +1,278 @@
+diff --git a/.github/script/seekdb/mysqltest_for_seekdb.py b/.github/script/seekdb/mysqltest_for_seekdb.py
+index 24ffe3caa..748ad543a 100755
+--- a/.github/script/seekdb/mysqltest_for_seekdb.py
++++ b/.github/script/seekdb/mysqltest_for_seekdb.py
+@@ -17,6 +17,8 @@ import time
+ 
+ CASE_TIMEOUT = 3600
+ MAX_CASE_RETRIES = 3
++INSTANCE_SAVE_ENVIRONMENT = "SEEKDB_COV_PROFRAW_DIR"
++INSTANCE_SAVE_COUNTER = 0
+ READY_TIMEOUT = 600
+ MYSQLTEST_USER = "admin"
+ MYSQLTEST_PASSWORD = "admin"
+@@ -120,6 +122,59 @@ def destroy_instance(sdb_script, base_dir, cwd, check=True):
+     return None
+ 
+ 
++def instance_save_dir(args):
++    value = args.save_instance_dir or os.environ.get(INSTANCE_SAVE_ENVIRONMENT)
++    return absolute_path(value) if value else None
++
++
++def save_instance_outputs(args, sdb_script, cwd, reason):
++    global INSTANCE_SAVE_COUNTER
++    if args.save_instance_dir is None or not args.base_dir.is_dir():
++        return
++    command = [
++        sys.executable,
++        str(sdb_script),
++        "stop",
++        "--base-dir",
++        str(args.base_dir),
++    ]
++    print("+ {}".format(format_command(command)), flush=True)
++    try:
++        result = subprocess.run(command, cwd=str(cwd), check=False)
++        if result.returncode != 0:
++            print(
++                "warning: stop seekdb exited with {}".format(result.returncode),
++                file=sys.stderr,
++            )
++    except OSError as exc:
++        print("warning: failed to stop seekdb: {}".format(exc), file=sys.stderr)
++
++    INSTANCE_SAVE_COUNTER += 1
++    destination = args.save_instance_dir / "{:05d}-{}".format(
++        INSTANCE_SAVE_COUNTER, reason
++    )
++    try:
++        destination.mkdir(parents=True)
++    except OSError as exc:
++        print(
++            "warning: failed to create {}: {}".format(destination, exc),
++            file=sys.stderr,
++        )
++        return
++    log_dir = args.base_dir / "log"
++    if log_dir.is_dir():
++        try:
++            shutil.copytree(str(log_dir), str(destination / "log"))
++        except OSError as exc:
++            print("warning: failed to copy seekdb logs: {}".format(exc), file=sys.stderr)
++    for profile in sorted(args.base_dir.glob("seekdb*.profraw")):
++        try:
++            shutil.copy2(str(profile), str(destination / profile.name))
++        except OSError as exc:
++            print("warning: failed to copy {}: {}".format(profile, exc), file=sys.stderr)
++    print("instance outputs saved to {}".format(destination), flush=True)
++
++
+ def execute_init_sql(obclient, host, port, deploy_dir):
+     init_files = (
+         (deploy_dir / "init.sql", "oceanbase"),
+@@ -154,7 +209,8 @@ def execute_init_sql(obclient, host, port, deploy_dir):
+             )
+ 
+ 
+-def prepare_instance(args, repo_root, sdb_script, deploy_dir):
++def prepare_instance(args, repo_root, sdb_script, deploy_dir, reason):
++    save_instance_outputs(args, sdb_script, repo_root, reason)
+     destroy_instance(sdb_script, args.base_dir, repo_root)
+     run_sdb(
+         sdb_script,
+@@ -166,6 +222,7 @@ def prepare_instance(args, repo_root, sdb_script, deploy_dir):
+             args.base_dir,
+             "--port",
+             args.port,
++            "--nodaemon",
+         ),
+         "start seekdb",
+         repo_root,
+@@ -304,6 +361,42 @@ def discover_cases(repo_root):
+     return [available_cases[name] for name in case_names]
+ 
+ 
++def load_case_list(case_list_path, configured_cases):
++    try:
++        with case_list_path.open("r", encoding="utf-8") as case_list_file:
++            lines = case_list_file.readlines()
++    except OSError as exc:
++        raise RunnerError("cannot read case list {}: {}".format(case_list_path, exc))
++
++    case_names = []
++    for raw_line in lines:
++        case_name = raw_line.split("#", 1)[0].strip()
++        if case_name:
++            case_names.append(case_name)
++
++    if not case_names:
++        raise RunnerError("case list {} names no cases".format(case_list_path))
++    duplicates = sorted(
++        name for name, count in Counter(case_names).items() if count > 1
++    )
++    if duplicates:
++        raise RunnerError(
++            "duplicate cases in case list {}: {}".format(
++                case_list_path, ", ".join(duplicates)
++            )
++        )
++    configured_names = set(case.name for case in configured_cases)
++    unknown_cases = sorted(set(case_names) - configured_names)
++    if unknown_cases:
++        raise RunnerError(
++            "case list {} names cases that are not configured: {}".format(
++                case_list_path, ", ".join(unknown_cases)
++            )
++        )
++    listed_names = set(case_names)
++    return [case for case in configured_cases if case.name in listed_names]
++
++
+ def mysqltest_environment(args):
+     environment = os.environ.copy()
+     client_bin = str(args.obclient.parent)
+@@ -480,44 +573,62 @@ def command_run(args):
+     args.mysqltest = absolute_path(args.mysqltest)
+     args.base_dir = absolute_path(args.base_dir)
+     args.work_dir = absolute_path(args.work_dir)
++    args.case_list = absolute_path(args.case_list) if args.case_list else None
++    args.save_instance_dir = instance_save_dir(args)
+     result_path = args.work_dir / "seekdb_result.json"
+ 
+     selected_cases = []
+     failed_cases = []
++    retried_cases = {}
+     error = None
+     args.work_dir.mkdir(parents=True, exist_ok=True)
+ 
+     try:
+         all_cases = discover_cases(repo_root)
++        if args.case_list is not None:
++            all_cases = load_case_list(args.case_list, all_cases)
+         selected_cases = all_cases[args.slice_index :: args.slice_count]
+-        prepare_instance(args, repo_root, sdb_script, deploy_dir)
++        prepare_instance(args, repo_root, sdb_script, deploy_dir, "initial")
+         tmp_dir = args.work_dir / "tmp"
+         log_dir = args.work_dir / "mysqltest_log"
+         tmp_dir.mkdir(parents=True, exist_ok=True)
+         log_dir.mkdir(parents=True, exist_ok=True)
+ 
+-        for index, case in enumerate(selected_cases):
++        restart_reason = None
++        for case in selected_cases:
++            if restart_reason is not None:
++                prepare_instance(
++                    args, repo_root, sdb_script, deploy_dir, restart_reason
++                )
++                restart_reason = None
+             return_code = None
+             output = ""
+-            for retry_index in range(MAX_CASE_RETRIES + 1):
++            attempt_return_codes = []
++            for retry_index in range(args.max_retries + 1):
+                 if retry_index > 0:
+                     print(
+                         "[ RETRY   ] {} ({}/{})".format(
+-                            case.name, retry_index, MAX_CASE_RETRIES
++                            case.name, retry_index, args.max_retries
+                         ),
+                         flush=True,
+                     )
+-                    prepare_instance(args, repo_root, sdb_script, deploy_dir)
++                    prepare_instance(
++                        args, repo_root, sdb_script, deploy_dir, "retry-" + case.name
++                    )
+                 return_code, output = run_case(
+                     args, deploy_dir, case, tmp_dir, log_dir
+                 )
++                attempt_return_codes.append(return_code)
+                 if return_code == 0:
+                     break
++            if len(attempt_return_codes) > 1:
++                retried_cases[case.name] = attempt_return_codes
+             if return_code != 0:
+                 failed_cases.append(case.name)
+                 save_case_failure(args, case.name, output)
+-                if index + 1 < len(selected_cases):
+-                    prepare_instance(args, repo_root, sdb_script, deploy_dir)
++                restart_reason = "failed-" + case.name
++            elif args.fresh_instance_per_case:
++                restart_reason = "passed-" + case.name
+     except Exception as exc:
+         error = str(exc)
+         print("[mysqltest][ERROR] {}".format(error), file=sys.stderr)
+@@ -531,6 +642,7 @@ def command_run(args):
+                 file=sys.stderr,
+             )
+     finally:
++        save_instance_outputs(args, sdb_script, repo_root, "end")
+         cleanup_error = destroy_instance(
+             sdb_script, args.base_dir, repo_root, check=False
+         )
+@@ -546,6 +658,21 @@ def command_run(args):
+         "cases": [case.name for case in selected_cases],
+         "failed_cases": failed_cases,
+         "error": error,
++        "case_order": (
++            "runtime_configs.psmall.test-set order in "
++            "tools/deploy/mysqltest_config.yaml"
++        ),
++        "slice_assignment": (
++            "cases[slice_index::slice_count] over the configured order, "
++            "after the case_list filter"
++        ),
++        "case_list": str(args.case_list) if args.case_list else None,
++        "max_retries": args.max_retries,
++        "retried_cases": retried_cases,
++        "fresh_instance_per_case": args.fresh_instance_per_case,
++        "save_instance_dir": (
++            str(args.save_instance_dir) if args.save_instance_dir else None
++        ),
+     }
+     write_json(result_path, payload)
+     print(
+@@ -669,6 +796,27 @@ def create_parser():
+     run.add_argument("--port", type=positive_int, default=2881)
+     run.add_argument("--slice-index", type=non_negative_int, required=True)
+     run.add_argument("--slice-count", type=positive_int, required=True)
++    run.add_argument(
++        "--max-retries",
++        type=non_negative_int,
++        default=MAX_CASE_RETRIES,
++        help="times a failed case is run again on a new instance",
++    )
++    run.add_argument(
++        "--fresh-instance-per-case",
++        action="store_true",
++        help="prepare a new seekdb instance before every case",
++    )
++    run.add_argument(
++        "--case-list",
++        help="file naming the configured cases to run, one per line; "
++        "# starts a comment",
++    )
++    run.add_argument(
++        "--save-instance-dir",
++        help="copy each instance's log/ and seekdb*.profraw here before it is "
++        "destroyed; defaults to ${}".format(INSTANCE_SAVE_ENVIRONMENT),
++    )
+     run.set_defaults(handler=command_run)
+ 
+     merge = subparsers.add_parser("merge", help="merge mysqltest slice results")
+@@ -689,6 +837,15 @@ def main(argv=None):
+         return 2
+     if args.command == "run" and args.slice_index >= args.slice_count:
+         parser.error("slice-index must be smaller than slice-count")
++    if args.command == "run":
++        save_dir = instance_save_dir(args)
++        if save_dir is not None and save_dir.exists():
++            if not save_dir.is_dir() or any(save_dir.iterdir()):
++                parser.error(
++                    "instance save directory must be new or empty: {}".format(
++                        save_dir
++                    )
++                )
+     return args.handler(args)
+ 
+ 

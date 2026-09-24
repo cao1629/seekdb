@@ -1,0 +1,1314 @@
+diff --git a/.github/script/seekdb/mysqltest_for_seekdb.py b/.github/script/seekdb/mysqltest_for_seekdb.py
+index 24ffe3caa..6967610c3 100755
+--- a/.github/script/seekdb/mysqltest_for_seekdb.py
++++ b/.github/script/seekdb/mysqltest_for_seekdb.py
+@@ -5,9 +5,14 @@ from __future__ import print_function
+ 
+ import argparse
+ from collections import Counter, namedtuple
++import difflib
++import functools
++import hashlib
++import importlib.util
+ import json
+ import os
+ from pathlib import Path
++import re
+ import shlex
+ import shutil
+ import subprocess
+@@ -17,6 +22,8 @@ import time
+ 
+ CASE_TIMEOUT = 3600
+ MAX_CASE_RETRIES = 3
++INSTANCE_SAVE_ENVIRONMENT = "SEEKDB_COV_PROFRAW_DIR"
++INSTANCE_SAVE_COUNTER = 0
+ READY_TIMEOUT = 600
+ MYSQLTEST_USER = "admin"
+ MYSQLTEST_PASSWORD = "admin"
+@@ -25,8 +32,23 @@ RESULT_MISMATCH_MESSAGES = (
+     "Result content mismatch",
+     "Result length mismatch",
+ )
++INIT_ERROR_PATTERN = re.compile(
++    r"^ERROR(?: \d+)?(?: \([^)]*\))? at line (\d+)(?: in file: '.*')?: "
++)
++COMPARE_MASKS = {}
++RECORDING_INPUT_KEYS = (
++    "mysqltest_sha256",
++    "obclient_sha256",
++    "init_sql_sha256",
++    "init_user_sql_sha256",
++    "sdb_sha256",
++    "tools_deploy_tree",
++    "fresh_instance_per_case",
++)
++RECORDING_NOTE_KEYS = ("seekdb_sha256", "runner_sha256", "repo_head")
+ 
+ MysqltestCase = namedtuple("MysqltestCase", ("name", "test_file", "result_file"))
++InitStatement = namedtuple("InitStatement", ("line", "client_line", "text"))
+ 
+ 
+ class RunnerError(RuntimeError):
+@@ -120,18 +142,279 @@ def destroy_instance(sdb_script, base_dir, cwd, check=True):
+     return None
+ 
+ 
+-def execute_init_sql(obclient, host, port, deploy_dir):
++def instance_save_dir(args):
++    value = args.save_instance_dir or os.environ.get(INSTANCE_SAVE_ENVIRONMENT)
++    return absolute_path(value) if value else None
++
++
++@functools.lru_cache(maxsize=None)
++def load_sdb_module(sdb_script):
++    spec = importlib.util.spec_from_file_location("sdb", str(sdb_script))
++    module = importlib.util.module_from_spec(spec)
++    spec.loader.exec_module(module)
++    return module
++
++
++def stop_instance_like_destroy(sdb_script, base_dir):
++    print(
++        "stopping seekdb in {} with sdb.py command_stop and require_match, "
++        "as destroy does".format(base_dir),
++        flush=True,
++    )
++    try:
++        stop_code = load_sdb_module(sdb_script).command_stop(
++            argparse.Namespace(
++                base_dir=str(base_dir), quiet=False, require_match=True
++            )
++        )
++    except Exception as exc:
++        return "stop seekdb failed: {}".format(exc)
++    if stop_code != 0:
++        return "stop seekdb returned {}".format(stop_code)
++    return None
++
++
++def save_instance_outputs(args, sdb_script, reason):
++    global INSTANCE_SAVE_COUNTER
++    if args.save_instance_dir is None or not args.base_dir.is_dir():
++        return
++    stop_problem = stop_instance_like_destroy(sdb_script, args.base_dir)
++    if stop_problem is not None:
++        print("warning: {}".format(stop_problem), file=sys.stderr)
++
++    INSTANCE_SAVE_COUNTER += 1
++    destination = args.save_instance_dir / "{:05d}-{}{}".format(
++        INSTANCE_SAVE_COUNTER, reason, "-stop-failed" if stop_problem else ""
++    )
++    try:
++        destination.mkdir(parents=True)
++        if stop_problem is not None:
++            (destination / "stop.txt").write_text(
++                stop_problem + "\n", encoding="utf-8"
++            )
++    except OSError as exc:
++        print(
++            "warning: failed to create {}: {}".format(destination, exc),
++            file=sys.stderr,
++        )
++        return
++    log_dir = args.base_dir / "log"
++    if log_dir.is_dir():
++        try:
++            shutil.copytree(str(log_dir), str(destination / "log"))
++        except OSError as exc:
++            print("warning: failed to copy seekdb logs: {}".format(exc), file=sys.stderr)
++    for profile in sorted(args.base_dir.glob("seekdb*.profraw")):
++        try:
++            shutil.copy2(str(profile), str(destination / profile.name))
++        except OSError as exc:
++            print("warning: failed to copy {}: {}".format(profile, exc), file=sys.stderr)
++    print("instance outputs saved to {}".format(destination), flush=True)
++
++
++def make_init_statement(text, first_line, client_line):
++    stripped = text.strip()
++    if not stripped:
++        return None
++    leading = text[: len(text) - len(text.lstrip())]
++    return InitStatement(first_line + leading.count("\n"), client_line, stripped)
++
++
++def split_sql_statements(content):
++    statements = []
++    delimiter = ";"
++    buffer = ""
++    buffer_line = 1
++    client_line = 1
++    in_string = ""
++    in_comment = False
++    for line_number, line in enumerate(content.split("\n"), 1):
++        if not buffer:
++            client_line = line_number
++            buffer_line = line_number
++            words = line.split()
++            if words and words[0].lower() == "delimiter":
++                if len(words) > 1:
++                    delimiter = words[1]
++                continue
++            if not line:
++                continue
++        segment_start = 0
++        position = 0
++        line_consumed = False
++        while position < len(line):
++            character = line[position]
++            if in_comment:
++                if line.startswith("*/", position):
++                    in_comment = False
++                    position += 2
++                else:
++                    position += 1
++            elif in_string:
++                if character == "\\" and in_string != "`":
++                    position += 2
++                else:
++                    if character == in_string:
++                        in_string = ""
++                    position += 1
++            elif line.startswith(delimiter, position):
++                statement = make_init_statement(
++                    buffer + line[segment_start:position], buffer_line, client_line
++                )
++                if statement is not None:
++                    statements.append(statement)
++                position += len(delimiter)
++                while position < len(line) and line[position].isspace():
++                    position += 1
++                rest = line[position:]
++                if rest.startswith("#") or (
++                    rest.startswith("--") and len(rest) > 2 and rest[2].isspace()
++                ):
++                    position = len(line)
++                buffer = ""
++                buffer_line = line_number
++                segment_start = position
++            elif character == "#" or (
++                line.startswith("--", position)
++                and (
++                    position + 2 == len(line)
++                    or line[position + 2].isspace()
++                    or not (buffer or line[segment_start:position])
++                )
++            ):
++                current = buffer + line[segment_start:position]
++                if current:
++                    buffer = current + line[position:] + "\n"
++                else:
++                    statement = make_init_statement(
++                        line[position:], line_number, client_line
++                    )
++                    if statement is not None:
++                        statements.append(statement)
++                    buffer = ""
++                line_consumed = True
++                break
++            elif line.startswith("/*", position) and not line.startswith(
++                ("/*!", "/*+", "/*M!"), position
++            ):
++                in_comment = True
++                position += 2
++            else:
++                if character in "'\"`":
++                    in_string = character
++                position += 1
++        if not line_consumed:
++            remainder = line[segment_start:]
++            if buffer or remainder:
++                buffer += remainder + "\n"
++    statement = make_init_statement(buffer, buffer_line, client_line)
++    if statement is not None:
++        statements.append(statement)
++    return statements
++
++
++def attribute_init_errors(statements, error_output):
++    failures = {}
++    ambiguous = set()
++    unattributed = []
++    cursor = 0
++    for error_line in error_output.splitlines():
++        match = INIT_ERROR_PATTERN.match(error_line)
++        if match is None:
++            if error_line.startswith("ERROR"):
++                unattributed.append(error_line)
++            continue
++        client_line = int(match.group(1))
++        indexes = [
++            index
++            for index in range(cursor, len(statements))
++            if statements[index].client_line == client_line
++        ]
++        if not indexes:
++            unattributed.append(error_line)
++            continue
++        for index in indexes:
++            failures[index] = error_line
++        if len(indexes) > 1:
++            ambiguous.update(indexes)
++        cursor = indexes[-1] + 1
++    return failures, ambiguous, unattributed
++
++
++def init_statement_status(index, failures, ambiguous, unattributed, exit_code):
++    if index in ambiguous:
++        return "unknown"
++    if index in failures:
++        return "failed"
++    if exit_code != 0 and failures and index > max(failures):
++        return "not_run"
++    if unattributed or (exit_code != 0 and not failures):
++        return "unknown"
++    return "succeeded"
++
++
++def write_entry_gate(args):
++    write_json(args.work_dir / "entry-gate.json", args.entry_gate)
++
++
++def not_run_init_file(sql_file, database):
++    try:
++        content = sql_file.read_bytes()
++    except OSError as exc:
++        return {"file": str(sql_file), "database": database, "error": str(exc)}
++    return {
++        "file": str(sql_file),
++        "database": database,
++        "exit_code": None,
++        "unattributed_errors": [],
++        "statements": [
++            {
++                "line": statement.line,
++                "text": statement.text,
++                "status": "not_run",
++                "error": None,
++            }
++            for statement in split_sql_statements(content.decode("utf-8", "replace"))
++        ],
++    }
++
++
++def run_init_file(command, sql_file, deploy_dir):
++    error_lines = []
++    with sql_file.open("rb") as sql_input:
++        process = subprocess.Popen(
++            command,
++            cwd=str(deploy_dir),
++            stdin=sql_input,
++            stderr=subprocess.PIPE,
++        )
++        for error_line in process.stderr:
++            error_lines.append(error_line)
++            sys.stderr.write(decode_output(error_line))
++            sys.stderr.flush()
++        process.stderr.close()
++        exit_code = process.wait()
++    return exit_code, decode_output(b"".join(error_lines))
++
++
++def execute_init_sql(args, deploy_dir, reason):
+     init_files = (
+-        (deploy_dir / "init.sql", "oceanbase"),
+-        (deploy_dir / "init_user.sql", "test"),
++        (args.init_sql, "oceanbase"),
++        (args.init_user_sql, "test"),
+     )
++    preparation = {"reason": reason, "files": []}
++    args.entry_gate["preparations"].append(preparation)
++    failure = None
+     for sql_file, database in init_files:
++        if failure is not None:
++            preparation["files"].append(not_run_init_file(sql_file, database))
++            continue
+         command = [
+-            str(obclient),
++            str(args.obclient),
+             "-h",
+-            host,
++            args.host,
+             "-P",
+-            str(port),
++            str(args.port),
+             "-uroot",
+             "-A",
+             "-c",
+@@ -139,22 +422,46 @@ def execute_init_sql(obclient, host, port, deploy_dir):
+         ]
+         print("+ {} < {}".format(format_command(command), sql_file), flush=True)
+         try:
+-            with sql_file.open("rb") as sql_input:
+-                result = subprocess.run(
+-                    command,
+-                    cwd=str(deploy_dir),
+-                    stdin=sql_input,
+-                    check=False,
+-                )
++            content = sql_file.read_bytes()
++            exit_code, error_output = run_init_file(command, sql_file, deploy_dir)
+         except OSError as exc:
+-            raise RunnerError("failed to execute {}: {}".format(sql_file.name, exc))
+-        if result.returncode != 0:
+-            raise RunnerError(
+-                "{} exited with {}".format(sql_file.name, result.returncode)
++            preparation["files"].append(
++                {"file": str(sql_file), "database": database, "error": str(exc)}
+             )
++            failure = "failed to execute {}: {}".format(sql_file.name, exc)
++            continue
++        statements = split_sql_statements(content.decode("utf-8", "replace"))
++        failures, ambiguous, unattributed = attribute_init_errors(
++            statements, error_output
++        )
++        preparation["files"].append(
++            {
++                "file": str(sql_file),
++                "database": database,
++                "exit_code": exit_code,
++                "unattributed_errors": unattributed,
++                "statements": [
++                    {
++                        "line": statement.line,
++                        "text": statement.text,
++                        "status": init_statement_status(
++                            index, failures, ambiguous, unattributed, exit_code
++                        ),
++                        "error": failures.get(index),
++                    }
++                    for index, statement in enumerate(statements)
++                ],
++            }
++        )
++        if exit_code != 0:
++            failure = "{} exited with {}".format(sql_file.name, exit_code)
++    if failure is not None:
++        write_entry_gate(args)
++        raise RunnerError(failure)
+ 
+ 
+-def prepare_instance(args, repo_root, sdb_script, deploy_dir):
++def prepare_instance(args, repo_root, sdb_script, deploy_dir, reason):
++    save_instance_outputs(args, sdb_script, reason)
+     destroy_instance(sdb_script, args.base_dir, repo_root)
+     run_sdb(
+         sdb_script,
+@@ -166,6 +473,7 @@ def prepare_instance(args, repo_root, sdb_script, deploy_dir):
+             args.base_dir,
+             "--port",
+             args.port,
++            "--nodaemon",
+         ),
+         "start seekdb",
+         repo_root,
+@@ -190,7 +498,7 @@ def prepare_instance(args, repo_root, sdb_script, deploy_dir):
+         "wait for seekdb",
+         repo_root,
+     )
+-    execute_init_sql(args.obclient, args.host, args.port, deploy_dir)
++    execute_init_sql(args, deploy_dir, reason)
+ 
+ 
+ def load_configured_case_names(config_path):
+@@ -304,6 +612,42 @@ def discover_cases(repo_root):
+     return [available_cases[name] for name in case_names]
+ 
+ 
++def load_case_list(case_list_path, configured_cases):
++    try:
++        with case_list_path.open("r", encoding="utf-8") as case_list_file:
++            lines = case_list_file.readlines()
++    except OSError as exc:
++        raise RunnerError("cannot read case list {}: {}".format(case_list_path, exc))
++
++    case_names = []
++    for raw_line in lines:
++        case_name = raw_line.split("#", 1)[0].strip()
++        if case_name:
++            case_names.append(case_name)
++
++    if not case_names:
++        raise RunnerError("case list {} names no cases".format(case_list_path))
++    duplicates = sorted(
++        name for name, count in Counter(case_names).items() if count > 1
++    )
++    if duplicates:
++        raise RunnerError(
++            "duplicate cases in case list {}: {}".format(
++                case_list_path, ", ".join(duplicates)
++            )
++        )
++    configured_names = set(case.name for case in configured_cases)
++    unknown_cases = sorted(set(case_names) - configured_names)
++    if unknown_cases:
++        raise RunnerError(
++            "case list {} names cases that are not configured: {}".format(
++                case_list_path, ", ".join(unknown_cases)
++            )
++        )
++    listed_names = set(case_names)
++    return [case for case in configured_cases if case.name in listed_names]
++
++
+ def mysqltest_environment(args):
+     environment = os.environ.copy()
+     client_bin = str(args.obclient.parent)
+@@ -323,7 +667,60 @@ def mysqltest_environment(args):
+     return environment
+ 
+ 
++def store_recorded_result(args, case, staged_result, mysqltest_log):
++    try:
++        recorded = staged_result.read_bytes()
++        logged = mysqltest_log.read_bytes()
++    except OSError as exc:
++        return "cannot check the recorded result of {}: {}".format(case.name, exc)
++    if recorded != logged:
++        return "recorded result {} differs from mysqltest log {}".format(
++            staged_result, mysqltest_log
++        )
++    try:
++        shutil.move(str(staged_result), str(args.record_dir / (case.name + ".result")))
++    except OSError as exc:
++        return "cannot store the recorded result of {}: {}".format(case.name, exc)
++    return None
++
++
++def store_partial_output(args, case, mysqltest_log):
++    if not mysqltest_log.is_file():
++        return False
++    try:
++        shutil.copy2(str(mysqltest_log), str(args.record_dir / (case.name + ".partial")))
++    except OSError as exc:
++        print(
++            "warning: cannot store the partial output of {}: {}".format(
++                case.name, exc
++            ),
++            file=sys.stderr,
++        )
++        return False
++    return True
++
++
+ def run_case(args, deploy_dir, case, tmp_dir, log_dir):
++    result_file = case.result_file
++    staged_result = None
++    mysqltest_log = None
++    if args.record_dir is not None:
++        record_name = case.name.replace(".", "_")
++        staged_result = args.work_dir / "record_tmp" / (record_name + ".result")
++        mysqltest_log = log_dir / (record_name + ".log")
++        result_file = staged_result
++        for stale_file in (staged_result, mysqltest_log):
++            try:
++                stale_file.unlink()
++            except FileNotFoundError:
++                pass
++            except OSError as exc:
++                print(
++                    "warning: failed to remove stale file {}: {}".format(
++                        stale_file, exc
++                    ),
++                    file=sys.stderr,
++                )
+     command = [
+         str(args.mysqltest),
+         "--host={}".format(args.host),
+@@ -335,10 +732,12 @@ def run_case(args, deploy_dir, case, tmp_dir, log_dir):
+         "--logdir={}".format(log_dir),
+         "--silent",
+         "--test-file={}".format(case.test_file),
+-        "--result-file={}".format(case.result_file),
++        "--result-file={}".format(result_file),
+         "--timer-file={}".format(log_dir / "timer"),
+         "--tail-lines=20",
+     ]
++    if staged_result is not None:
++        command.append("--record")
+     case_name = case.name
+     reject_file = log_dir / (case.result_file.stem + ".reject")
+     try:
+@@ -376,9 +775,29 @@ def run_case(args, deploy_dir, case, tmp_dir, log_dir):
+         return_code = 255
+         output = "failed to run mysqltest: {}\n".format(exc)
+ 
++    if staged_result is not None:
++        if return_code == 0:
++            problem = store_recorded_result(args, case, staged_result, mysqltest_log)
++            if problem is not None:
++                return_code = 1
++                output += problem + "\n"
++        partial = False
++        if return_code != 0:
++            partial = store_partial_output(args, case, mysqltest_log)
++            try:
++                staged_result.unlink()
++            except OSError:
++                pass
++        args.record_outcomes[case.name] = {
++            "exit_code": return_code,
++            "recorded": return_code == 0,
++            "partial": partial,
++        }
++
+     trailing_whitespace_ignored = False
+     if (
+-        return_code != 0
++        args.ignore_trailing_whitespace
++        and return_code != 0
+         and reject_file is not None
+         and any(message in output for message in RESULT_MISMATCH_MESSAGES)
+         and files_equal_ignoring_trailing_whitespace(
+@@ -413,7 +832,7 @@ def run_case(args, deploy_dir, case, tmp_dir, log_dir):
+             ),
+             flush=True,
+         )
+-    return return_code, output
++    return return_code, output, trailing_whitespace_ignored
+ 
+ 
+ def copy_instance_diagnostics(base_dir, destination):
+@@ -471,6 +890,93 @@ def write_json(path, payload):
+     os.replace(str(temporary), str(path))
+ 
+ 
++def file_sha256(path):
++    digest = hashlib.sha256()
++    with path.open("rb") as input_file:
++        for chunk in iter(lambda: input_file.read(1 << 20), b""):
++            digest.update(chunk)
++    return digest.hexdigest()
++
++
++def git_output(repo_root, arguments):
++    try:
++        result = subprocess.run(
++            ["git", "-C", str(repo_root)] + arguments,
++            stdout=subprocess.PIPE,
++            stderr=subprocess.DEVNULL,
++            universal_newlines=True,
++            check=False,
++        )
++    except OSError:
++        return None
++    if result.returncode != 0:
++        return None
++    return result.stdout
++
++
++def stripped_or_none(value):
++    return value.strip() if value is not None else None
++
++
++def write_record_manifest(args, repo_root, sdb_script, cases):
++    manifest_path = args.record_dir / "manifest.json"
++    try:
++        manifest_path.open("x").close()
++    except FileExistsError:
++        raise RunnerError("record directory is already in use: {}".format(manifest_path))
++    args.record_manifest = {
++        "finished": False,
++        "seekdb": str(args.seekdb),
++        "seekdb_sha256": file_sha256(args.seekdb),
++        "mysqltest": str(args.mysqltest),
++        "mysqltest_sha256": file_sha256(args.mysqltest),
++        "obclient": str(args.obclient),
++        "obclient_sha256": file_sha256(args.obclient),
++        "init_sql": str(args.init_sql),
++        "init_sql_sha256": file_sha256(args.init_sql),
++        "init_user_sql": str(args.init_user_sql),
++        "init_user_sql_sha256": file_sha256(args.init_user_sql),
++        "sdb_sha256": file_sha256(sdb_script),
++        "runner_sha256": file_sha256(Path(__file__).resolve()),
++        "repo_head": stripped_or_none(git_output(repo_root, ["rev-parse", "HEAD"])),
++        "tools_deploy_tree": stripped_or_none(
++            git_output(repo_root, ["rev-parse", "HEAD:tools/deploy"])
++        ),
++        "tools_deploy_status": git_output(
++            repo_root, ["status", "--porcelain", "--", "tools/deploy"]
++        ),
++        "cases": [case.name for case in cases],
++        "slice_index": args.slice_index,
++        "slice_count": args.slice_count,
++        "case_list": str(args.case_list) if args.case_list else None,
++        "max_retries": args.max_retries,
++        "fresh_instance_per_case": args.fresh_instance_per_case,
++        "work_dir": str(args.work_dir),
++        "recorded": "<case>.result is the output of mysqltest --record when it "
++        "exited 0; otherwise <case>.partial is the .log mysqltest left, if any, "
++        "and outcomes gives the exit code",
++    }
++    write_json(manifest_path, args.record_manifest)
++
++
++def finish_record_manifest(args, run_outcome):
++    args.record_manifest.update(run_outcome)
++    args.record_manifest["finished"] = True
++    write_json(args.record_dir / "manifest.json", args.record_manifest)
++
++
++def count_failed_init_statements(entry_gate):
++    return len(
++        set(
++            (init_file["file"], statement["line"])
++            for preparation in entry_gate["preparations"]
++            for init_file in preparation["files"]
++            for statement in init_file.get("statements", [])
++            if statement["status"] == "failed"
++        )
++    )
++
++
+ def command_run(args):
+     repo_root = Path(__file__).resolve().parents[3]
+     deploy_dir = repo_root / "tools" / "deploy"
+@@ -480,44 +986,102 @@ def command_run(args):
+     args.mysqltest = absolute_path(args.mysqltest)
+     args.base_dir = absolute_path(args.base_dir)
+     args.work_dir = absolute_path(args.work_dir)
++    args.case_list = absolute_path(args.case_list) if args.case_list else None
++    args.save_instance_dir = instance_save_dir(args)
++    args.init_sql = (
++        absolute_path(args.init_sql) if args.init_sql else deploy_dir / "init.sql"
++    )
++    args.init_user_sql = (
++        absolute_path(args.init_user_sql)
++        if args.init_user_sql
++        else deploy_dir / "init_user.sql"
++    )
++    args.record_dir = absolute_path(args.record_dir) if args.record_dir else None
++    args.record_manifest = None
++    args.record_outcomes = {}
++    args.entry_gate = {
++        "init_sql": str(args.init_sql),
++        "init_user_sql": str(args.init_user_sql),
++        "attribution": "each file is piped to one obclient session; a "
++        "statement's status is inferred from the 'ERROR ... at line N' lines on "
++        "that session's stderr, N being the line where the client started the "
++        "statement",
++        "preparations": [],
++    }
+     result_path = args.work_dir / "seekdb_result.json"
++    entry_gate_path = args.work_dir / "entry-gate.json"
+ 
+     selected_cases = []
+     failed_cases = []
++    retried_cases = {}
++    trailing_whitespace_ignored_cases = []
+     error = None
+     args.work_dir.mkdir(parents=True, exist_ok=True)
++    write_entry_gate(args)
+ 
+     try:
+         all_cases = discover_cases(repo_root)
++        if args.case_list is not None:
++            all_cases = load_case_list(args.case_list, all_cases)
+         selected_cases = all_cases[args.slice_index :: args.slice_count]
+-        prepare_instance(args, repo_root, sdb_script, deploy_dir)
++        if not selected_cases:
++            raise RunnerError(
++                "no cases selected for slice {} of {}{}".format(
++                    args.slice_index,
++                    args.slice_count,
++                    " from case list {}".format(args.case_list)
++                    if args.case_list
++                    else "",
++                )
++            )
++        if args.record_dir is not None:
++            args.record_dir.mkdir(parents=True, exist_ok=True)
++            (args.work_dir / "record_tmp").mkdir(parents=True, exist_ok=True)
++            write_record_manifest(args, repo_root, sdb_script, selected_cases)
++        prepare_instance(args, repo_root, sdb_script, deploy_dir, "initial")
++        write_entry_gate(args)
+         tmp_dir = args.work_dir / "tmp"
+         log_dir = args.work_dir / "mysqltest_log"
+         tmp_dir.mkdir(parents=True, exist_ok=True)
+         log_dir.mkdir(parents=True, exist_ok=True)
+ 
+-        for index, case in enumerate(selected_cases):
++        restart_reason = None
++        for case in selected_cases:
++            if restart_reason is not None:
++                prepare_instance(
++                    args, repo_root, sdb_script, deploy_dir, restart_reason
++                )
++                restart_reason = None
+             return_code = None
+             output = ""
+-            for retry_index in range(MAX_CASE_RETRIES + 1):
++            attempt_return_codes = []
++            for retry_index in range(args.max_retries + 1):
+                 if retry_index > 0:
+                     print(
+                         "[ RETRY   ] {} ({}/{})".format(
+-                            case.name, retry_index, MAX_CASE_RETRIES
++                            case.name, retry_index, args.max_retries
+                         ),
+                         flush=True,
+                     )
+-                    prepare_instance(args, repo_root, sdb_script, deploy_dir)
+-                return_code, output = run_case(
++                    prepare_instance(
++                        args, repo_root, sdb_script, deploy_dir, "retry-" + case.name
++                    )
++                return_code, output, whitespace_ignored = run_case(
+                     args, deploy_dir, case, tmp_dir, log_dir
+                 )
++                if whitespace_ignored:
++                    trailing_whitespace_ignored_cases.append(case.name)
++                attempt_return_codes.append(return_code)
+                 if return_code == 0:
+                     break
++            if len(attempt_return_codes) > 1:
++                retried_cases[case.name] = attempt_return_codes
+             if return_code != 0:
+                 failed_cases.append(case.name)
+                 save_case_failure(args, case.name, output)
+-                if index + 1 < len(selected_cases):
+-                    prepare_instance(args, repo_root, sdb_script, deploy_dir)
++                restart_reason = "failed-" + case.name
++            elif args.fresh_instance_per_case:
++                restart_reason = "passed-" + case.name
+     except Exception as exc:
+         error = str(exc)
+         print("[mysqltest][ERROR] {}".format(error), file=sys.stderr)
+@@ -531,6 +1095,7 @@ def command_run(args):
+                 file=sys.stderr,
+             )
+     finally:
++        save_instance_outputs(args, sdb_script, "end")
+         cleanup_error = destroy_instance(
+             sdb_script, args.base_dir, repo_root, check=False
+         )
+@@ -538,6 +1103,26 @@ def command_run(args):
+             error = "{}; {}".format(error, cleanup_error) if error else cleanup_error
+ 
+     success = not failed_cases and error is None
++    init_failed_statements = count_failed_init_statements(args.entry_gate)
++    write_entry_gate(args)
++    if args.record_manifest is not None:
++        try:
++            finish_record_manifest(
++                args,
++                {
++                    "success": success,
++                    "failed_cases": failed_cases,
++                    "retried_cases": retried_cases,
++                    "error": error,
++                    "init_failed_statements": init_failed_statements,
++                    "outcomes": args.record_outcomes,
++                },
++            )
++        except OSError as exc:
++            manifest_error = "cannot finish the record manifest: {}".format(exc)
++            print("[mysqltest][ERROR] {}".format(manifest_error), file=sys.stderr)
++            error = "{}; {}".format(error, manifest_error) if error else manifest_error
++            success = False
+     payload = {
+         "success": success,
+         "slice_index": args.slice_index,
+@@ -546,6 +1131,28 @@ def command_run(args):
+         "cases": [case.name for case in selected_cases],
+         "failed_cases": failed_cases,
+         "error": error,
++        "case_order": (
++            "runtime_configs.psmall.test-set order in "
++            "tools/deploy/mysqltest_config.yaml"
++        ),
++        "slice_assignment": (
++            "cases[slice_index::slice_count] over the configured order, "
++            "after the case_list filter"
++        ),
++        "case_list": str(args.case_list) if args.case_list else None,
++        "max_retries": args.max_retries,
++        "retried_cases": retried_cases,
++        "fresh_instance_per_case": args.fresh_instance_per_case,
++        "save_instance_dir": (
++            str(args.save_instance_dir) if args.save_instance_dir else None
++        ),
++        "init_sql": str(args.init_sql),
++        "init_user_sql": str(args.init_user_sql),
++        "init_failed_statements": init_failed_statements,
++        "entry_gate": str(entry_gate_path),
++        "record_dir": str(args.record_dir) if args.record_dir else None,
++        "ignore_trailing_whitespace": args.ignore_trailing_whitespace,
++        "trailing_whitespace_ignored_cases": trailing_whitespace_ignored_cases,
+     }
+     write_json(result_path, payload)
+     print(
+@@ -641,6 +1248,361 @@ def command_merge(args):
+     return 0 if success else 1
+ 
+ 
++def load_recording(directory):
++    if not directory.is_dir():
++        raise RunnerError("recording directory does not exist: {}".format(directory))
++    manifest_path = directory / "manifest.json"
++    try:
++        with manifest_path.open("r", encoding="utf-8") as manifest_file:
++            manifest = json.load(manifest_file)
++    except (OSError, ValueError) as exc:
++        raise RunnerError("cannot read {}: {}".format(manifest_path, exc))
++    if not isinstance(manifest, dict) or not isinstance(manifest.get("cases"), list):
++        raise RunnerError("{} has no case list".format(manifest_path))
++    return manifest, [str(name) for name in manifest["cases"]]
++
++
++def recording_problems(side, manifest):
++    problems = []
++    if manifest.get("finished") is not True:
++        problems.append("{} recording did not finish".format(side))
++    if manifest.get("max_retries") != 0:
++        problems.append(
++            "{} recording allowed retries: max_retries={}".format(
++                side, manifest.get("max_retries")
++            )
++        )
++    if manifest.get("retried_cases"):
++        problems.append(
++            "{} recording retried cases: {}".format(
++                side, ", ".join(sorted(manifest["retried_cases"]))
++            )
++        )
++    if manifest.get("error"):
++        problems.append("{} recording failed: {}".format(side, manifest["error"]))
++    if manifest.get("failed_cases"):
++        problems.append(
++            "{} recording has failed cases: {}".format(
++                side, ", ".join(manifest["failed_cases"])
++            )
++        )
++    deploy_status = manifest.get("tools_deploy_status")
++    if deploy_status is None or manifest.get("tools_deploy_tree") is None:
++        problems.append("{} recording does not identify tools/deploy".format(side))
++    elif deploy_status:
++        problems.append(
++            "{} recording ran with local changes in tools/deploy: {}".format(
++                side, "; ".join(deploy_status.splitlines())
++            )
++        )
++    return problems
++
++
++def recording_differences(left_manifest, right_manifest, keys):
++    return [
++        "{} differs: left {}, right {}".format(
++            key, left_manifest.get(key), right_manifest.get(key)
++        )
++        for key in keys
++        if left_manifest.get(key) != right_manifest.get(key)
++    ]
++
++
++def read_recorded_file(directory, case_name, suffix):
++    path = directory / (case_name + suffix)
++    if not path.is_file():
++        return None
++    try:
++        return path.read_bytes()
++    except OSError as exc:
++        raise RunnerError("cannot read {}: {}".format(path, exc))
++
++
++def recorded_exit_code(manifest, case_name):
++    outcomes = manifest.get("outcomes")
++    if not isinstance(outcomes, dict) or not isinstance(outcomes.get(case_name), dict):
++        return None
++    return outcomes[case_name].get("exit_code")
++
++
++def split_result_lines(content):
++    lines = content.split(b"\n")
++    result = [line + b"\n" for line in lines[:-1]]
++    if lines[-1]:
++        result.append(lines[-1])
++    return result
++
++
++def unified_result_diff(left_content, right_content, left_label, right_label):
++    diff_lines = []
++    for line in difflib.diff_bytes(
++        difflib.unified_diff,
++        split_result_lines(left_content),
++        split_result_lines(right_content),
++        os.fsencode(left_label),
++        os.fsencode(right_label),
++    ):
++        text = line.decode("utf-8", "backslashreplace")
++        if text.endswith("\n"):
++            diff_lines.append(text)
++        else:
++            diff_lines.append(text + "\n\\ No newline at end of file\n")
++    return "".join(diff_lines)
++
++
++def first_difference(left_content, right_content):
++    for offset, (left_byte, right_byte) in enumerate(zip(left_content, right_content)):
++        if left_byte != right_byte:
++            return offset
++    return min(len(left_content), len(right_content))
++
++
++def compare_contents(left_content, right_content, left_label, right_label):
++    if left_content == right_content:
++        return "identical", None, None
++    return (
++        "different",
++        unified_result_diff(left_content, right_content, left_label, right_label),
++        first_difference(left_content, right_content),
++    )
++
++
++def apply_masks(masks, case_name, content):
++    for mask in masks:
++        content = COMPARE_MASKS[mask](case_name, content)
++    return content
++
++
++def summarize_statuses(entries, status_key):
++    counts = Counter(entry[status_key] for entry in entries)
++    return {
++        "cases": len(entries),
++        "identical": counts["identical"],
++        "different": counts["different"],
++        "missing": counts["missing"],
++        "failed_alike": sum(1 for entry in entries if entry.get("failed_alike")),
++    }
++
++
++def compare_case(left_dir, right_dir, left_manifest, right_manifest, case_name, masks):
++    left_path = left_dir / (case_name + ".result")
++    right_path = right_dir / (case_name + ".result")
++    left_content = read_recorded_file(left_dir, case_name, ".result")
++    right_content = read_recorded_file(right_dir, case_name, ".result")
++    entry = {"case": case_name}
++    if left_content is not None and right_content is not None:
++        (
++            entry["status"],
++            entry["diff"],
++            entry["first_difference"],
++        ) = compare_contents(
++            left_content, right_content, str(left_path), str(right_path)
++        )
++        if masks:
++            masked_left = apply_masks(masks, case_name, left_content)
++            masked_right = apply_masks(masks, case_name, right_content)
++            entry["mask_changed"] = (
++                masked_left != left_content or masked_right != right_content
++            )
++            (
++                entry["masked_status"],
++                entry["masked_diff"],
++                entry["masked_first_difference"],
++            ) = compare_contents(
++                masked_left, masked_right, str(left_path), str(right_path)
++            )
++        return entry
++
++    entry["status"] = "missing"
++    entry["missing_from"] = [
++        side
++        for side, content in (("left", left_content), ("right", right_content))
++        if content is None
++    ]
++    entry["diff"] = None
++    entry["first_difference"] = None
++    entry["exit_codes"] = {
++        "left": recorded_exit_code(left_manifest, case_name),
++        "right": recorded_exit_code(right_manifest, case_name),
++    }
++    if masks:
++        entry["mask_changed"] = False
++        entry["masked_status"] = "missing"
++        entry["masked_diff"] = None
++        entry["masked_first_difference"] = None
++    if len(entry["missing_from"]) == 2:
++        left_partial = read_recorded_file(left_dir, case_name, ".partial")
++        right_partial = read_recorded_file(right_dir, case_name, ".partial")
++        (
++            entry["partial_status"],
++            entry["partial_diff"],
++            entry["partial_first_difference"],
++        ) = compare_contents(
++            left_partial or b"",
++            right_partial or b"",
++            str(left_dir / (case_name + ".partial")),
++            str(right_dir / (case_name + ".partial")),
++        )
++        entry["failed_alike"] = (
++            left_partial is not None
++            and right_partial is not None
++            and entry["partial_status"] == "identical"
++            and entry["exit_codes"]["left"] is not None
++            and entry["exit_codes"]["left"] == entry["exit_codes"]["right"]
++        )
++    return entry
++
++
++def print_compare_entry(entry, masks):
++    if masks:
++        print(
++            "{:<9} {:<9} {}".format(
++                entry["status"], entry["masked_status"], entry["case"]
++            ),
++            flush=True,
++        )
++    else:
++        print("{:<9} {}".format(entry["status"], entry["case"]), flush=True)
++    if "missing_from" in entry:
++        print(
++            "  missing from {}; exit codes: left {}, right {}".format(
++                ", ".join(entry["missing_from"]),
++                entry["exit_codes"]["left"],
++                entry["exit_codes"]["right"],
++            ),
++            flush=True,
++        )
++    if "partial_status" in entry:
++        print(
++            "  both sides failed; partial output {}{}".format(
++                entry["partial_status"],
++                ", failed alike" if entry["failed_alike"] else "",
++            ),
++            flush=True,
++        )
++        if entry["partial_diff"]:
++            print(entry["partial_diff"], end="", flush=True)
++            print(
++                "  partial output: first difference at byte {}".format(
++                    entry["partial_first_difference"]
++                ),
++                flush=True,
++            )
++    if entry["diff"] is not None:
++        print(entry["diff"], end="", flush=True)
++        print(
++            "  first difference at byte {}".format(entry["first_difference"]),
++            flush=True,
++        )
++    if masks and entry["masked_diff"] is not None:
++        print("  masked ({}):".format(", ".join(masks)), flush=True)
++        print(entry["masked_diff"], end="", flush=True)
++        print(
++            "  masked: first difference at byte {}".format(
++                entry["masked_first_difference"]
++            ),
++            flush=True,
++        )
++
++
++def command_compare(args):
++    left_dir = absolute_path(args.left)
++    right_dir = absolute_path(args.right)
++    masks = unique(args.mask)
++    try:
++        left_manifest, left_names = load_recording(left_dir)
++        right_manifest, right_names = load_recording(right_dir)
++        case_names = unique(left_names + right_names)
++        if not case_names:
++            raise RunnerError(
++                "no recorded cases in {} or {}".format(left_dir, right_dir)
++            )
++        problems = recording_problems("left", left_manifest)
++        problems.extend(recording_problems("right", right_manifest))
++        problems.extend(
++            recording_differences(
++                left_manifest, right_manifest, RECORDING_INPUT_KEYS
++            )
++        )
++        if left_names != right_names:
++            problems.append(
++                "the case lists differ: {} only left, {} only right".format(
++                    ", ".join(sorted(set(left_names) - set(right_names))) or "none",
++                    ", ".join(sorted(set(right_names) - set(left_names))) or "none",
++                )
++            )
++        notes = recording_differences(
++            left_manifest, right_manifest, RECORDING_NOTE_KEYS
++        )
++        results = [
++            compare_case(
++                left_dir, right_dir, left_manifest, right_manifest, case_name, masks
++            )
++            for case_name in case_names
++        ]
++    except RunnerError as exc:
++        print("[compare][ERROR] {}".format(exc), file=sys.stderr)
++        return 2
++
++    for problem in problems:
++        print("recording check failed: {}".format(problem), flush=True)
++    for note in notes:
++        print("note: {}".format(note), flush=True)
++    for entry in results:
++        print_compare_entry(entry, masks)
++
++    summary = summarize_statuses(results, "status")
++    masked_summary = None
++    if masks:
++        masked_summary = summarize_statuses(results, "masked_status")
++        masked_summary["mask_changed"] = sum(
++            1 for entry in results if entry["mask_changed"]
++        )
++    verdict = masked_summary if masks else summary
++    success = verdict["different"] == 0 and verdict["missing"] == 0 and not problems
++    payload = {
++        "success": success,
++        "left": str(left_dir),
++        "right": str(right_dir),
++        "masks": masks,
++        "recording_problems": problems,
++        "recording_notes": notes,
++        "left_manifest": left_manifest,
++        "right_manifest": right_manifest,
++        "summary": summary,
++        "masked_summary": masked_summary,
++        "cases": results,
++    }
++    if args.out:
++        write_json(absolute_path(args.out), payload)
++    print(
++        "compare finished: cases={cases}, identical={identical}, "
++        "different={different}, missing={missing}, "
++        "failed_alike={failed_alike}, recording_problems={problems}".format(
++            problems=len(problems), **summary
++        ),
++        flush=True,
++    )
++    if masks:
++        print(
++            "masked ({}): cases={cases}, identical={identical}, "
++            "different={different}, missing={missing}, "
++            "mask_changed={mask_changed}".format(", ".join(masks), **masked_summary),
++            flush=True,
++        )
++    return 0 if success else 1
++
++
++def mask_name(value):
++    if value not in COMPARE_MASKS:
++        raise argparse.ArgumentTypeError(
++            "unknown mask {}; known masks: {}".format(
++                value, ", ".join(sorted(COMPARE_MASKS)) or "none"
++            )
++        )
++    return value
++
++
+ def non_negative_int(value):
+     number = int(value)
+     if number < 0:
+@@ -669,6 +1631,57 @@ def create_parser():
+     run.add_argument("--port", type=positive_int, default=2881)
+     run.add_argument("--slice-index", type=non_negative_int, required=True)
+     run.add_argument("--slice-count", type=positive_int, required=True)
++    run.add_argument(
++        "--max-retries",
++        type=non_negative_int,
++        default=MAX_CASE_RETRIES,
++        help="times a failed case is run again on a new instance",
++    )
++    run.add_argument(
++        "--fresh-instance-per-case",
++        action="store_true",
++        help="prepare a new seekdb instance before every case",
++    )
++    run.add_argument(
++        "--case-list",
++        help="file naming the configured cases to run, one per line; "
++        "# starts a comment",
++    )
++    run.add_argument(
++        "--save-instance-dir",
++        help="copy each instance's log/ and seekdb*.profraw here before it is "
++        "destroyed; defaults to ${}".format(INSTANCE_SAVE_ENVIRONMENT),
++    )
++    run.add_argument(
++        "--init-sql",
++        help="SQL file run in database oceanbase after every start; "
++        "defaults to tools/deploy/init.sql",
++    )
++    run.add_argument(
++        "--init-user-sql",
++        help="SQL file run in database test after --init-sql; "
++        "defaults to tools/deploy/init_user.sql",
++    )
++    run.add_argument(
++        "--record-dir",
++        help="record each case's actual output with mysqltest --record into "
++        "DIR/<case>.result (DIR/<case>.partial for a failed case), with "
++        "DIR/manifest.json; DIR must be new or empty; needs --max-retries 0",
++    )
++    run.add_argument(
++        "--ignore-trailing-whitespace",
++        dest="ignore_trailing_whitespace",
++        action="store_true",
++        default=True,
++        help="pass a case whose .reject differs from its .result only in "
++        "trailing spaces and tabs (the default)",
++    )
++    run.add_argument(
++        "--no-ignore-trailing-whitespace",
++        dest="ignore_trailing_whitespace",
++        action="store_false",
++        help="fail such a case like any other mismatch",
++    )
+     run.set_defaults(handler=command_run)
+ 
+     merge = subparsers.add_parser("merge", help="merge mysqltest slice results")
+@@ -678,6 +1691,25 @@ def create_parser():
+     merge.add_argument("--output", required=True)
+     merge.set_defaults(handler=command_merge)
+ 
++    compare = subparsers.add_parser(
++        "compare", help="compare two recordings case by case, byte for byte"
++    )
++    compare.add_argument("--left", required=True, help="recording directory")
++    compare.add_argument("--right", required=True, help="recording directory")
++    compare.add_argument("--out", help="write the report to this file as JSON")
++    compare.add_argument(
++        "--mask",
++        action="append",
++        default=[],
++        type=mask_name,
++        metavar="NAME",
++        help="apply a named mask to both sides, reported next to the exact "
++        "comparison; repeatable; known masks: {}".format(
++            ", ".join(sorted(COMPARE_MASKS)) or "none"
++        ),
++    )
++    compare.set_defaults(handler=command_compare)
++
+     return parser
+ 
+ 
+@@ -689,6 +1721,26 @@ def main(argv=None):
+         return 2
+     if args.command == "run" and args.slice_index >= args.slice_count:
+         parser.error("slice-index must be smaller than slice-count")
++    if args.command == "run":
++        save_dir = instance_save_dir(args)
++        if save_dir is not None and save_dir.exists():
++            if not save_dir.is_dir() or any(save_dir.iterdir()):
++                parser.error(
++                    "instance save directory must be new or empty: {}".format(
++                        save_dir
++                    )
++                )
++        if args.record_dir:
++            if args.max_retries != 0:
++                parser.error("--record-dir needs --max-retries 0")
++            record_dir = absolute_path(args.record_dir)
++            if record_dir.exists():
++                if not record_dir.is_dir() or any(record_dir.iterdir()):
++                    parser.error(
++                        "record directory must be new or empty: {}".format(
++                            record_dir
++                        )
++                    )
+     return args.handler(args)
+ 
+ 
