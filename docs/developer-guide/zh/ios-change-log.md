@@ -1,6 +1,6 @@
 # iOS 移植：环境与变更记录
 
-本记录覆盖截至 2026-09-21 的本轮移植，基线为 `6aa8d1548a3136d37017121401f5fab4ecd9bea0`。修改在 `codex/iphone-arm64-port` 分支按功能提交；编译成功不表示已在 iPhone 运行。入口说明见 [ios-build.md](ios-build.md)。
+本记录覆盖截至 2026-09-24 的本轮移植。当前验证分支 `codex/ios-generic-validation` 已 rebase 到 `upstream/master` 的 `834bbee1e`；原始 iOS 分支仍保留。入口说明见 [ios-build.md](ios-build.md)。
 
 ## 记录规则
 
@@ -30,7 +30,7 @@
 | 编译目标 | ARM64；默认 iphoneos、最低 iOS 18.0；模拟器为 iphonesimulator，独立 Rust target 和输出目录。 |
 | 资源保护 | 默认 4 个构建任务；空闲空间保护阈值 10 GiB，可用 `SEEKDB_IOS_MIN_FREE_GIB` 覆盖。曾剩约 5 GiB，用户释放空间后继续；本次读取约 17 GiB。阈值不代表全量空间需求。 |
 | 开发者工具权限 | 用户明确授权后，通过系统设置加入 `/Applications/ChatGPT.app`，界面验证 `ChatGPT` 开关为 on。此机器 Codex 集成于该应用，没有独立 `/Applications/Codex.app`；Terminal 开关未改变。尚未验证此设置是否解除 ICU 构建阻塞。撤销方式是在同一页面关闭 ChatGPT 开关。 |
-| 真机与签名 | iPhone 17 Pro 已通过 Xcode 自动签名完成构建、安装和运行；证书及描述文件由系统管理且不进仓库。已有一次 `Stopped/result=0`，重复停止稳定性仍待验证。 |
+| 真机与签名 | iPhone 17 Pro 已通过 Xcode 自动签名完成构建、安装和运行；证书及描述文件由系统管理且不进仓库。2026-09-24 已完成五轮 `Stopped/result=0` 的通用 SQL 与重复停止验证。 |
 
 ## 构建脚本与 CMake 逐文件记录
 
@@ -213,4 +213,10 @@ python3 deps/ios-build/build.py --jobs 4 vsag
 - 分支已 rebase 到 `upstream/master` 的 `834bbee1e`。冲突处理保留上游事务回调前释放外层 latch 的语义，同时重放 iOS 生命周期、停止顺序和测试变更；未用整文件覆盖掩盖上游修改。
 - SQL probe 收敛为 36 步通用套件。`ios_probe.lifecycle` 保留跨进程计数；每轮只清理无外键的 `feature_matrix` 与 `feature_event`。UIKit 将逐步 JSONL 写入 `Documents/sql-probe-results.jsonl`，只有最终 `complete=true/result=0` 才设置 `sql_verified=true`。
 - 删除旧专属 schema、runner 和历史设备结果，不把旧结果重命名为通用证据。CMake 的 `seekdb_ios_sql_probe` 仅编译 `sql_probe.cpp`。
-- 当前主机验证为 11 项 Python 测试、`bash -n build.sh build.iphone.sh` 与 `git diff --check`。通用 36 步套件尚需重新进行 iOS 编译、签名及真机运行；已有一次干净停止和持久化证据仍保留其时间边界，重复停止与前后台稳定性继续待验证。
+- 主机脚本验证为 11 项 Python 测试、`bash -n build.sh build.iphone.sh` 与 `git diff --check`。产品中立性检查确认 Git 跟踪内容不包含已移除套件的名称或旧目标标识。
+- `sql_probe.cpp` 的结果读取消除了整数下标重载歧义，并显式使用 `sqlclient::ObMySQLResult`。fixture 清理不再错误地要求 `DELETE` 影响零行，因此同一数据目录可重复运行；该缺陷曾使中间两轮分别在 `fixture.clear_events` 和 `fixture.clear_matrix` 返回 `-4016`，修复后未复现。
+- 使用全新 Rust target 目录为 `aarch64-apple-ios` 构建 `libsql_nio.a` 成功。macOS 主机上的 Cargo build-script、测试和 Clippy 驱动在当前 Codex 进程责任链下会被系统以 137 终止；用户授权启用 Developer Tools 后，使用仓库忽略目录中的 LLDB runner 完成 Rust 3 项单元测试、doc-test 和 `cargo clippy --all-targets -- -D warnings`。runner 只是本机验证绕行，不是受 Git 跟踪的构建要求。
+- `seekdb_ios_link_check` 增量完整链接通过；产物为 ARM64 Mach-O，平台 IOS、最低版本 18.0、SDK 27.0，仅依赖预期的 Apple 系统动态库及 framework。随后 UIKit App 完成签名、安装和真机启动。
+- 设备数据目录 `ios-generic-20260924` 共取得五轮完整成功证据：轮次 1、4、5、6、7 的 `previous_runs` 依次为 0、1、2、3、4；每轮 36 个 step 全部 `result=0`，最终记录为 `complete=true/result=0`，状态均为 `Stopped/result=0` 且 `sql_verified=true`。重复停止约需 32 秒，短于该周期的轮询不能判为失败。
+- 2026-09-24 验证后未产生新的 SeekDB Probe 崩溃报告；设备上可见的六份报告均为 2026-09-21 的历史文件。前后台、锁屏恢复、内存压力和完整向量功能仍未覆盖。
+- 当前源码树没有常规 C++ 全量测试入口所需的 `unittest/CMakeLists.txt` 与 `all_tests_main.cpp`，且本机 Linux 容器运行时不可用，因此没有宣称完整 C++/Linux 测试通过。已执行的主机脚本、Rust、iOS 链接与真机测试边界如上。
