@@ -210,6 +210,83 @@ class RustcLldbWrapperTest(unittest.TestCase):
             self.assertEqual(new_bytes, real.read_bytes())
             self.assertTrue(wrapper._is_exact_launcher(launcher, real))
 
+    def test_prepared_rollback_recovers_after_launcher_temporary_fsync(self):
+        """Finish rollback after interruption immediately before replacement."""
+        wrapper = _load_wrapper_module()
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            output = Path(temporary_directory)
+            launcher = output / "build_script_build-deadbeef"
+            real = launcher.with_name(f"{launcher.name}.real")
+            real.write_bytes(_macho_executable_bytes() + b"old")
+            real.chmod(0o755)
+            launcher.write_text(
+                wrapper._launcher_source(real), encoding="utf-8")
+            launcher.chmod(0o755)
+            prestate = wrapper._healthy_pair_state(launcher)
+            wrapper._prepare_healthy_pair(launcher, prestate)
+            launcher.write_bytes(b"partial compiler output")
+            launcher.chmod(0o755)
+            original_replace = os.replace
+
+            def interrupt_launcher_replace(source, destination):
+                """Stop after the rollback launcher temporary is durable."""
+                if Path(source).name.endswith(".launcher.tmp"):
+                    raise OSError("simulated interruption")
+                return original_replace(source, destination)
+
+            with mock.patch.object(
+                    wrapper.os, "replace",
+                    side_effect=interrupt_launcher_replace):
+                with self.assertRaises(OSError):
+                    wrapper._recover_rewrap(
+                        launcher, promote_prepared=False)
+
+            temporary = output / f".{launcher.name}.launcher.tmp"
+            self.assertTrue(temporary.is_file())
+            wrapper._recover_rewrap(launcher)
+            wrapper._recover_rewrap(launcher)
+
+            self.assertTrue(wrapper._is_exact_launcher(launcher, real))
+            self.assertFalse(temporary.exists())
+            self.assertFalse(wrapper._rewrap_manifest_path(launcher).exists())
+
+    def test_prepared_rollback_rejects_untrusted_launcher_temporary(self):
+        """Fail closed when the durable rollback temporary is not exact."""
+        for anomaly in ("content", "symlink"):
+            with self.subTest(anomaly=anomaly), \
+                    tempfile.TemporaryDirectory() as temporary_directory:
+                output = Path(temporary_directory).resolve()
+                launcher = output / "build_script_build-deadbeef"
+                real = launcher.with_name(f"{launcher.name}.real")
+                real.write_bytes(_macho_executable_bytes() + b"old")
+                real.chmod(0o755)
+                wrapper = _load_wrapper_module()
+                launcher.write_text(
+                    wrapper._launcher_source(real), encoding="utf-8")
+                launcher.chmod(0o755)
+                prestate = wrapper._healthy_pair_state(launcher)
+                wrapper._prepare_healthy_pair(launcher, prestate)
+                launcher.write_bytes(b"partial compiler output")
+                launcher.chmod(0o755)
+                temporary = output / f".{launcher.name}.launcher.tmp"
+                if anomaly == "content":
+                    temporary.write_text("not a launcher", encoding="utf-8")
+                    temporary.chmod(0o755)
+                else:
+                    temporary.symlink_to(real)
+                compiler = self._write_compiler(
+                    output, "raise SystemExit(0)\n")
+
+                result = subprocess.run([
+                    sys.executable, str(WRAPPER_PATH), str(compiler),
+                    "--crate-name", "build_script_build",
+                    "-C", "extra-filename=-deadbeef",
+                    "--out-dir", str(output),
+                ], check=False)
+
+                self.assertEqual(125, result.returncode)
+                self.assertTrue(wrapper._rewrap_manifest_path(launcher).exists())
+
     @unittest.skipUnless(
         sys.platform == "darwin" and platform.machine() == "arm64",
         "requires local arm64 clang and LLDB")

@@ -35,6 +35,7 @@
 - phase command environment 统一绑定完整 Xcode：`_default_executor` 现在复制当前环境，保留显式有效 `DEVELOPER_DIR`，仅在缺失时选择默认完整 Xcode，并在命令前验证 devicectl、LLDB、iphoneos SDK。该冻结环境传给所有 phase subprocess，尤其 reuse-build 的 codesign/devicectl install，不再隐式回退 CommandLineTools；无效选择固定返回 `build-inputs`，probe 输出不外泄。新增 executor env、显式选择、reuse install 和固定错误码回归；未运行 iOS build 或真机。
 - phase engine 不再在 dispatch 前批量 terminalize 所有 missing adapter。case spec 仍可预登记，但 engine 严格按 `PHASE_IDS` 执行：先完成已注册 stages 1–4，到第一个 missing stage 5 时只落一个 infrastructure failure 并停止，stages 6–8 保持 pending；resume 跳过已通过的前四阶段并只重试 stage 5。新增顺序、状态、单 failure artifact 与 resume skip/attempt 集成回归；未运行 iOS build 或真机。
 - LLDB rustc wrapper 现在区分 stale raw + `.real` 与可正常重编译的 healthy exact launcher + matching `.real`。后者在 rustc 前先 durable 记录 pair identity/digest 的 prepared intent，成功刷新 raw 后推进为 ready manifest：旧 `.real` 保留到 identity-scoped backup，新 raw 转为 `.real` 后重新安装 launcher，所有 rename 都 fsync；rustc 普通失败恢复旧 launcher，wrapper 在 compiler 后或 partial rename 窗口中断则按 old/new digest 完成恢复，未知、损坏或 collision 状态继续 fail-closed。synthetic stale 回归仍返回 125；故障注入覆盖 post-compiler 与 partial rename 恢复；本机真实 arm64 Mach-O 连续两次不同 binary 编译均成功，第二个 launcher 经 LLDB 实际执行新 binary。未运行 iOS build 或真机。
+- prepared rollback 的 durable launcher temporary 不再造成永久 125：恢复时必须验证它是指向 manifest old `.real` 的 exact、regular、non-symlink tracked launcher，随后完成 replace、directory fsync 与 manifest cleanup；错误内容或 symlink 仍 fail-closed。故障注入覆盖 temporary fsync 后、replace 前中断，并验证恢复后二次调用幂等；未运行 iOS build 或真机。
 
 ## 2026-09-24：Rust runtime tests 的真机入口
 

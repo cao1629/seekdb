@@ -393,9 +393,21 @@ def _recover_rewrap(
     old_digest = record["old_digest"]
     new_digest = record["new_digest"]
     if record["state"] == "prepared":
-        if (os.path.lexists(backup) or os.path.lexists(launcher_temporary)
+        if (os.path.lexists(backup)
                 or _optional_digest(real) != old_digest):
             raise WrapperError("prepared build-script transaction is inconsistent")
+        if os.path.lexists(launcher_temporary):
+            if not _is_exact_launcher(launcher_temporary, real):
+                raise WrapperError(
+                    "prepared build-script launcher temporary is unsafe")
+            os.replace(launcher_temporary, build_script)
+            _fsync_directory(build_script.parent)
+            if not _is_exact_launcher(build_script, real):
+                raise WrapperError(
+                    "prepared build-script rollback did not complete")
+            manifest.unlink()
+            _fsync_directory(build_script.parent)
+            return
         if _is_exact_launcher(build_script, real):
             manifest.unlink()
             _fsync_directory(build_script.parent)
