@@ -1,6 +1,6 @@
 # iPhone 交叉编译（实验阶段）
 
-最新状态（2026-09-24）：原生 seekdb 引擎已在 iPhone 17 Pro / iOS 27.0 完成启动、基础 SQL 和同一目录的跨进程计数恢复，日志确认 1 GiB 逻辑预算。GC 与日志流停止顺序修复后取得过一次 `Stopped/result=0`，但同目录第二轮停止仍未完成确认，因此不能宣称重复干净停止稳定。新 36 步通用 SQL 套件已经完成源码泛化，尚未重新编译、签名并在真机执行。测试 App 运行期间保持亮屏，进入 Stopped / Failed 后恢复自动锁屏，不修改系统设置。
+最新状态（2026-09-24）：原生 seekdb 引擎已在 iPhone 17 Pro / iOS 27.0 完成 36 步通用 SQL 套件和五轮干净停止。五轮均为 `Stopped/result=0`、`sql_verified=true`，同一数据目录的 `previous_runs` 依次为 0、1、2、3、4；验证后没有新增崩溃报告。日志确认 1 GiB 逻辑预算。测试 App 运行期间保持亮屏，进入 Stopped / Failed 后恢复自动锁屏，不修改系统设置。
 
 `build.iphone.sh` 为 iPhone ARM64 和 Apple Silicon iOS 模拟器配置 CMake、Rust 和 Apple SDK。默认目标是 `oceanbase_static`。目前不是已完成的 iOS 产品构建流程；脚本不生成、签名或安装 App。
 
@@ -29,7 +29,7 @@ Rust 可执行文件由 PATH 或 `CARGO`、`RUSTUP` 提供；脚本也查找仓�
 
 真机输出位于 `build_ios_arm64`，模拟器位于 `build_ios_sim_arm64`，每个目录的 `logs` 保留配置及编译日志。默认最低系统版本 18.0，可通过 `--deployment-target` 调整。编译前至少要求 10 GiB 空闲空间，这只是保护阈值，不是全量构建空间估算。仅对已评估过大小的小目标，可显式设置 `SEEKDB_IOS_MIN_FREE_GIB` 调整阈值。
 
-## 已验证范围（2026-09-21）
+## 已验证范围（2026-09-24）
 
 在 Xcode 27 / iOS SDK 27 环境下：
 
@@ -43,6 +43,8 @@ Rust 可执行文件由 PATH 或 `CARGO`、`RUSTUP` 提供；脚本也查找仓�
 - 为 Boost 1.74 回移上游 1.85 的 NumericConversion 枚举包装修复，只生成 iOS 构建目录中的头文件覆盖层；iOS 编译检查和 macOS 数值转换/溢出测试通过。
 - `ob_parser.cpp.o` 经 `file` 验证为 Mach-O ARM64；`xcrun vtool -show-build` 显示平台 IOS、minos 18.0、sdk 27.0。
 - 脚本参数路由、App 链接参数、模拟器配置、Cargo 多行参数/失败传播、非法参数及产品中立性共 11 项测试通过：`python3 -m unittest discover -s unittest/ios_build -v`。
+- 全新 Rust target 目录的 `aarch64-apple-ios` `libsql_nio.a` 构建通过；主机目标的 3 项 Rust 单元测试、doc-test 及 `cargo clippy --all-targets -- -D warnings` 通过。本机系统会终止由当前 Codex 进程直接生成并启动的宿主 Mach-O，因此验证使用忽略目录中的 LLDB runner；该 runner 不属于项目构建接口。
+- 通用 SQL 套件已在真机完成五轮。每轮 36 个 step 全部成功，最终 JSONL 记录为 `complete=true/result=0`；同一数据目录的持久计数连续递增，五轮均完成自动停止。
 
 引擎静态库编译暂用 `deps/3rd/usr/local/oceanbase/deps/devel` 的公共头文件，没有链接其中的 macOS 库。编译引擎静态库的复现命令（不执行最终 App 链接）：
 
@@ -57,10 +59,11 @@ Rust 可执行文件由 PATH 或 `CARGO`、`RUSTUP` 提供；脚本也查找仓�
 ## 尚未完成
 
 - 全新目录的完整依赖流水线及 Rust 宿主 build-script SIGKILL 问题；增量完整链接已通过。磁盘空间约 9.4 GiB，继续构建时仍需关注剩余空间。
-- 已新增 `seekdb_ios_run`、`seekdb_ios_request_stop`、`seekdb_ios_get_state`；`in_process_` 模式跳过服务信号线程，等待结束走 `stop()`，不走原命令行路径的 `_Exit(0)`。该路径已取得基础 SQL、一次正常停止和后续持久化恢复证据，但启动失败清理与重复生命周期仍需验证。接口每进程仅允许调用一次，运行时改变进程工作目录，启动失败可能留下全局服务和工作目录；不可在 UI 线程调用。`BUILD_EMBED_MODE` 仍不能恢复旧 C API。
+- 已新增 `seekdb_ios_run`、`seekdb_ios_request_stop`、`seekdb_ios_get_state`；`in_process_` 模式跳过服务信号线程，等待结束走 `stop()`，不走原命令行路径的 `_Exit(0)`。该路径已取得 36 步 SQL、五轮正常停止和连续持久化恢复证据；启动失败清理仍需完善。接口每进程仅允许调用一次，运行时改变进程工作目录，启动失败可能留下全局服务和工作目录；不可在 UI 线程调用。`BUILD_EMBED_MODE` 仍不能恢复旧 C API。
 - iOS ARM64 链接已验证 S2/Abseil ABI、OpenMP 运行库版本及 Rust sql_nio 链接修复；数学和向量功能仍需真机运行验证。
-- App 沙箱数据目录、线程和内存限制已完成基础适配；仍需重复停止、前后台切换、锁屏恢复和内存压力验证。
-- App 包装、Personal Team 签名、安装、基础 SQL 及一次正常停止后的持久化恢复已有真机证据。新 36 步通用套件及多周期生命周期仍待重新构建和真机验收；现有模拟器环境不能替代真机验收。
+- App 沙箱数据目录、线程和内存限制已完成基础适配；重复停止已验证，前后台切换、锁屏恢复和内存压力仍待验证。
+- App 包装、签名、安装、36 步通用 SQL 及五轮正常停止后的持久化恢复已有真机证据；现有模拟器环境不能替代这些真机证据。
+- 当前分支没有常规 C++ 全量测试入口所需的 `unittest/CMakeLists.txt` 与 `all_tests_main.cpp`，本机也没有可用的 Linux 容器运行时；因此本页不宣称完整 C++/Linux 测试通过。
 
 所有 seekdb 移植修改、缓存和构建产物保持在本仓库目录内。
 
@@ -115,7 +118,7 @@ Apple 管理的证书和设备描述文件保存在系统凭证目录，不复�
 
 测试新空库可通过 devicectl 启动环境变量 `SEEKDB_PROBE_DATA_NAME` 选择 Documents 内的新子目录（最多 64 个英文字母、数字、下划线或连字符）。默认仍为 seekdb，不自动清除任何失败目录；状态 JSON 同时记录 data_name。验证重启持久化时必须复用同一名称，不能将每次换新目录算作重启验证。
 
-新空库 seekdb-budget-v1 已在 iPhone 17 Pro 达到 Running，日志显示 1 GiB 逻辑预算。SQL 测试版在 Running 后使用内部 SQL proxy 执行通用 36 步套件；结果以 `sql_verified`、`sql_result`、`previous_runs` 及 `Documents/sql-probe-results.jsonl` 的最终 `complete/result` 为准。设置 `SEEKDB_PROBE_AUTO_STOP=1` 可在 SQL 检查返回后自动请求停止。该测试路径尚不能证明 MySQL Unix socket 客户端兼容。
+新空库 seekdb-budget-v1 已在 iPhone 17 Pro 达到 Running，日志显示 1 GiB 逻辑预算。SQL 测试版在 Running 后使用内部 SQL proxy 执行通用 36 步套件；结果以 `sql_verified`、`sql_result`、`previous_runs` 及 `Documents/sql-probe-results.jsonl` 的最终 `complete/result` 为准。设置 `SEEKDB_PROBE_AUTO_STOP=1` 可在 SQL 检查返回后自动请求停止。该测试路径尚不能证明 MySQL Unix socket 客户端兼容。2026-09-24 使用数据目录 `ios-generic-20260924` 连续验证五轮，`previous_runs` 为 0 至 4，五轮均完成自动停止；重复停止在本机约需 32 秒。
 
 最新真机进展：SQL 表达式、建库建表、计数写入读回已通过，同一 seekdb-budget-v1 目录跨进程恢复得到 previous_runs=0、1、2。停止曾在 Memtable 管理池及 LS 销毁断言处中止，目前补齐进程内运行时的 stop/wait 顺序后继续验证。尚不能将异常退出后的恢复等同于正常停止验收。
 
@@ -125,4 +128,4 @@ Apple 管理的证书和设备描述文件保存在系统凭证目录，不复�
 
 `unittest/ios_build/sql_probe.cpp` 覆盖表达式与持久计数、二进制键大小写及排序、JSON、BLOB、无符号读取、字符串数组、唯一键原子失败、事务回滚、`FOR UPDATE`、乐观版本更新以及三类 CHECK 约束。`ios_probe.lifecycle` 永不由套件清理；每轮只清空无外键的 `feature_matrix` 与 `feature_event` fixture。完整规则见 `unittest/ios_build/README.md`。
 
-2026-09-21 GC 顺序修复后的首轮真机验收达到 `Stopped/result=0`，同目录重启读到计数 7（前次 6），确认一次正常停止后的持久化；第二轮停止状态未完成确认，LLDB 停在 `prepare_stop` 等待阶段且暂无新崩溃报告。旧设备 JSONL 属于已删除的专属套件证据，不能重命名为通用 36 步结果；通用套件仍需重新编译、签名并在真机完整执行。
+2026-09-24 的通用套件已重新编译、签名并在真机完整执行。成功轮次 1、4、5、6、7 的 JSONL 各含 36 个成功 step 和最终完成记录；状态文件均为 `Stopped/result=0`、`sql_verified=true`，持久计数依次为 0、1、2、3、4。中间两轮暴露 fixture 清理对 affected rows 的错误假设，修复后连续四轮通过。旧设备 JSONL 属于已删除的专属套件证据，不能重命名为本次结果。

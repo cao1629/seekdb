@@ -114,7 +114,7 @@ public:
       ret = OB_ERR_UNEXPECTED;
     }
     if (ret == OB_SUCCESS) {
-      ret = rows->get_int(0, value);
+      ret = rows->get_int(static_cast<int64_t>(0), value);
     }
     if (ret == OB_SUCCESS && rows->next() != OB_ITER_END) {
       ret = OB_ERR_UNEXPECTED;
@@ -185,7 +185,7 @@ private:
   }
 
   /** Compare one result cell against its strictly typed expected encoding. */
-  static int check_cell(ObMySQLResult &rows, int64_t column, const std::string &expected)
+  static int check_cell(sqlclient::ObMySQLResult &rows, int64_t column, const std::string &expected)
   {
     int ret = OB_SUCCESS;
     if (expected.compare(0, 2, "i:") == 0) {
@@ -268,8 +268,8 @@ void schema_cases(Suite &suite)
     feature_id VARCHAR(128) COLLATE utf8mb4_bin NOT NULL,
     payload JSON NOT NULL
   ) DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_bin)SQL", IGNORE_AFFECTED_ROWS);
-  suite.write("fixture.clear_events", "DELETE FROM ios_probe.feature_event", 0);
-  suite.write("fixture.clear_matrix", "DELETE FROM ios_probe.feature_matrix", 0);
+  suite.write("fixture.clear_events", "DELETE FROM ios_probe.feature_event", IGNORE_AFFECTED_ROWS);
+  suite.write("fixture.clear_matrix", "DELETE FROM ios_probe.feature_matrix", IGNORE_AFFECTED_ROWS);
 }
 
 /** Verify expression evaluation and increment the persistent lifecycle counter. */
