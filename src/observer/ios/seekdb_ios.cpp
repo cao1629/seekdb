@@ -66,12 +66,14 @@ int prepare_runtime(const char *directory, ObServerOptions &options)
 }
 
 /** Stop and destroy an in-process server while preserving its primary error. */
-int cleanup_server(ObServer &server, int primary_ret)
+int cleanup_server(ObServer &server, int primary_ret, bool server_initialized)
 {
   server.set_stop();
   const int cleanup_ret = server.wait();
   server.destroy();
-  if (OB_SUCCESS == cleanup_ret) {
+  const bool cleanup_succeeded = OB_SUCCESS == cleanup_ret
+      || (!server_initialized && OB_NOT_INIT == cleanup_ret);
+  if (cleanup_succeeded) {
     cleanup_status.fetch_or(SEEKDB_IOS_CLEANUP_SERVER);
   } else {
     record_cleanup_error(cleanup_ret);
@@ -90,8 +92,10 @@ int run_runtime(ObServerOptions &options)
   OB_LOGGER.set_file_name("log/seekdb.log", true, false);
   ObPLogWriterCfg log_config;
   ObServer &server = ObServer::get_instance();
+  bool server_initialized = false;
   if (OB_FAIL(server.init(options, log_config))) {
   } else {
+    server_initialized = true;
     if (OB_FAIL(server.start())) {
     }
     if (OB_SUCC(ret)) {
@@ -103,7 +107,7 @@ int run_runtime(ObServerOptions &options)
       server.prepare_stop();
     }
   }
-  ret = cleanup_server(server, ret);
+  ret = cleanup_server(server, ret, server_initialized);
   lib::Worker::set_worker_to_thread_local(nullptr);
   return ret;
 }

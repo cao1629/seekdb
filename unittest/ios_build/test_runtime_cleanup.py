@@ -43,9 +43,14 @@ class RuntimeCleanupContractTests(unittest.TestCase):
     def test_server_cleanup_is_only_reported_after_success(self):
         """Do not report completed server cleanup when the stop path failed."""
         source = (ROOT / "src/observer/ios/seekdb_ios.cpp").read_text()
-        success = source.index("if (OB_SUCCESS == cleanup_ret)")
+        success = source.index("if (cleanup_succeeded)")
         status = source.index("cleanup_status.fetch_or(SEEKDB_IOS_CLEANUP_SERVER)")
         self.assertLess(success, status)
+
+    def test_partial_init_cleanup_accepts_uninitialized_stop_components(self):
+        """Treat OB_NOT_INIT as expected only while unwinding a failed init."""
+        source = (ROOT / "src/observer/ios/seekdb_ios.cpp").read_text()
+        self.assertIn("!server_initialized && OB_NOT_INIT == cleanup_ret", source)
 
 
 class DeviceCleanupEvidenceTests(unittest.TestCase):
