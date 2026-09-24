@@ -796,6 +796,7 @@ class RunAllIphoneTestsTest(unittest.TestCase):
         timestamp = dt.datetime(2026, 9, 24, 10, tzinfo=UTC)
         preparation_lock = mock.Mock()
         path_preview = mock.Mock(run_directory=selection.run_directory)
+        stdout = io.StringIO()
         with mock.patch.object(cli, "source_commit", return_value="a" * 40), \
                 mock.patch.object(
                     cli, "validate_build_identity",
@@ -808,7 +809,8 @@ class RunAllIphoneTestsTest(unittest.TestCase):
                 mock.patch.object(cli, "discover_physical_devices",
                                   return_value=[physical]), \
                 mock.patch.object(
-                    cli, "prepare_phase_artifacts", return_value={}), \
+                    cli, "prepare_phase_artifacts", return_value={
+                        "legacy_build_script_cache": "migrated-2"}), \
                 mock.patch.object(cli, "load_phase_adapters",
                                   side_effect=load_adapters), \
                 mock.patch.object(cli.runner, "run_phase_engine",
@@ -816,11 +818,13 @@ class RunAllIphoneTestsTest(unittest.TestCase):
             status = cli.main(
                 ["--output-root", "/tmp/iphone_test"],
                 environment=environment,
-                stdout=io.StringIO(),
+                stdout=stdout,
                 clock=lambda: timestamp,
             )
 
         self.assertEqual(7, status)
+        self.assertIn(
+            "legacy_build_script_cache=migrated-2", stdout.getvalue())
         self.assertEqual(
             cli.LocalConfiguration(
                 device="environment-device",

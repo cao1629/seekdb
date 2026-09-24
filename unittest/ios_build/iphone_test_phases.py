@@ -8,11 +8,14 @@ import json
 import os
 from pathlib import Path
 import re
+import shlex
+import stat
 import subprocess
 import sys
 from typing import Callable, Iterable, Mapping, Optional, Sequence
 
 import iphone_test_runner as runner
+import rustc_lldb_wrapper
 
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[2]
@@ -35,6 +38,11 @@ PACKAGE_TIMEOUT_SECONDS = 1800
 ARTIFACT_MARKER = re.compile(
     rb"SEEKDB_IOS_ARTIFACT_BUILD_ID=([0-9a-f]{12});"
     rb"SEEKDB_IOS_ARTIFACT_HOOK_MODE=(enabled|disabled)")
+LEGACY_QUARANTINE_DIRECTORY = ".seekdb-ios-runner-quarantine"
+CARGO_PROFILE_DIRECTORY = re.compile(r"[A-Za-z0-9][A-Za-z0-9_.-]*")
+CARGO_BUILD_DIRECTORY = re.compile(
+    r"[A-Za-z0-9_][A-Za-z0-9_.-]*-[0-9a-f]{8,64}")
+TRACKED_LAUNCHER_MARKER = b"--run-build-script"
 
 CPP_CASE_IDS = (
     "ios.cpp.allocator.backend",
@@ -289,6 +297,152 @@ def _rust_target_is_incompatible(target: Path) -> bool:
     return not device.exists() and next(target.iterdir(), None) is not None
 
 
+def _fsync_directory(directory: Path) -> None:
+    """Durably publish changes made to one existing directory."""
+    descriptor = os.open(directory, os.O_RDONLY | os.O_DIRECTORY)
+    try:
+        os.fsync(descriptor)
+    finally:
+        os.close(descriptor)
+
+
+def _durable_directory(root: Path, relative: Path) -> Path:
+    """Create a direct non-symlink directory chain and fsync each parent."""
+    current = root
+    for component in relative.parts:
+        child = current / component
+        try:
+            child.mkdir(mode=0o700)
+        except FileExistsError:
+            pass
+        status = child.lstat()
+        if stat.S_ISLNK(status.st_mode) or not stat.S_ISDIR(status.st_mode):
+            raise BuildReadinessError(
+                "legacy build-script quarantine path is unsafe")
+        _fsync_directory(current)
+        current = child
+    return current
+
+
+def _tracked_launcher_real(candidate: Path) -> Optional[Path]:
+    """Return the validated preserved executable named by a tracked launcher."""
+    try:
+        with candidate.open("rb") as stream:
+            source = stream.read(4097)
+    except OSError as error:
+        raise BuildReadinessError(
+            "Cargo build-script launcher is unreadable") from error
+    if TRACKED_LAUNCHER_MARKER not in source:
+        return None
+    if len(source) > 4096:
+        raise BuildReadinessError(
+            "Cargo build-script launcher exceeds its fixed bound")
+    try:
+        lines = source.decode("utf-8").splitlines()
+        tokens = shlex.split(lines[1]) if len(lines) == 2 else []
+    except (UnicodeDecodeError, ValueError) as error:
+        raise BuildReadinessError(
+            "Cargo build-script launcher is malformed") from error
+    if (len(tokens) != 5 or lines[0] != "#!/bin/sh"
+            or tokens[0] != "exec"
+            or Path(tokens[1]).resolve() != RUSTC_WRAPPER.resolve()
+            or tokens[2] != "--run-build-script"
+            or tokens[4] != "$@"):
+        raise BuildReadinessError(
+            "Cargo build-script launcher is not the tracked wrapper")
+    preserved = Path(tokens[3])
+    if (not preserved.is_absolute() or preserved.is_symlink()
+            or preserved.parent.resolve() != candidate.parent.resolve()
+            or rustc_lldb_wrapper.REAL_BUILD_SCRIPT_NAME.fullmatch(
+                preserved.name) is None
+            or not rustc_lldb_wrapper._is_host_macho_executable(preserved)):
+        raise BuildReadinessError(
+            "Cargo build-script launcher has invalid preserved state")
+    return preserved
+
+
+def legacy_quarantine_path(
+        target: Path, run_id: str, candidate: Path) -> Path:
+    """Return the recoverable in-target destination for one raw launcher."""
+    try:
+        relative = candidate.relative_to(target)
+    except ValueError as error:
+        raise BuildReadinessError(
+            "legacy build-script path escaped the Rust target") from error
+    scope = hashlib.sha256(run_id.encode("utf-8")).hexdigest()[:16]
+    return target / LEGACY_QUARANTINE_DIRECTORY / scope / relative
+
+
+def migrate_legacy_raw_build_scripts(target: Path, run_id: str) -> int:
+    """Quarantine exact legacy raw Cargo host launchers before a build."""
+    if not target.exists():
+        return 0
+    if not target.is_absolute() or target.is_symlink() or not target.is_dir():
+        raise BuildReadinessError("Rust target path is unsafe")
+    resolved_target = target.resolve(strict=True)
+    if resolved_target != target:
+        raise BuildReadinessError("Rust target path is not canonical")
+    migrations = []
+    for profile in target.iterdir():
+        if (CARGO_PROFILE_DIRECTORY.fullmatch(profile.name) is None
+                or profile.name == LEGACY_QUARANTINE_DIRECTORY):
+            continue
+        profile_status = profile.lstat()
+        if stat.S_ISLNK(profile_status.st_mode):
+            continue
+        if not stat.S_ISDIR(profile_status.st_mode):
+            continue
+        build_root = profile / "build"
+        if not os.path.lexists(build_root):
+            continue
+        build_status = build_root.lstat()
+        if (stat.S_ISLNK(build_status.st_mode)
+                or not stat.S_ISDIR(build_status.st_mode)):
+            raise BuildReadinessError(
+                "Cargo build-script cache path is unsafe")
+        for crate in build_root.iterdir():
+            if CARGO_BUILD_DIRECTORY.fullmatch(crate.name) is None:
+                continue
+            crate_status = crate.lstat()
+            if (stat.S_ISLNK(crate_status.st_mode)
+                    or not stat.S_ISDIR(crate_status.st_mode)):
+                raise BuildReadinessError(
+                    "Cargo build-script cache path is unsafe")
+            candidate = crate / "build-script-build"
+            if not os.path.lexists(candidate):
+                continue
+            candidate_status = candidate.lstat()
+            if (stat.S_ISLNK(candidate_status.st_mode)
+                    or not stat.S_ISREG(candidate_status.st_mode)):
+                raise BuildReadinessError(
+                    "Cargo build-script cache candidate is unsafe")
+            launcher_real = _tracked_launcher_real(candidate)
+            if launcher_real is not None:
+                continue
+            preserved = candidate.with_name("build-script-build.real")
+            if os.path.lexists(preserved):
+                raise BuildReadinessError(
+                    "Cargo build-script cache has inconsistent wrapper state")
+            if not rustc_lldb_wrapper._is_host_macho_executable(candidate):
+                continue
+            destination = legacy_quarantine_path(
+                target, run_id, candidate)
+            if os.path.lexists(destination):
+                raise BuildReadinessError(
+                    "legacy build-script quarantine destination is occupied")
+            migrations.append((candidate, destination))
+    for candidate, destination in migrations:
+        destination_parent = _durable_directory(
+            target, destination.parent.relative_to(target))
+        if candidate.is_symlink() or not candidate.is_file():
+            raise BuildReadinessError(
+                "Cargo build-script cache candidate changed during migration")
+        os.replace(candidate, destination)
+        _fsync_directory(candidate.parent)
+        _fsync_directory(destination_parent)
+    return len(migrations)
+
+
 @dataclass(frozen=True)
 class PhaseCaseContract:
     """Describe one stable command and its evidence requirements."""
@@ -346,11 +500,13 @@ class TestAppPreparer:
 
     def __init__(
             self, configuration, execute: CommandExecutor,
-            prepared: bool = False):
+            prepared: bool = False,
+            run_id: str = "standalone-phase-setup"):
         """Retain process-local configuration and a sanitized command boundary."""
         self._configuration = configuration
         self._execute = execute
         self._prepared = prepared
+        self._run_id = run_id
         self._build_input_sources = {}
 
     @property
@@ -399,12 +555,16 @@ class TestAppPreparer:
         if not reuse_build:
             try:
                 build_inputs = resolve_build_inputs(self._configuration)
+                migrated_count = migrate_legacy_raw_build_scripts(
+                    build_inputs.rust_target_dir, self._run_id)
             except BuildReadinessError:
                 return runner.CaseResult.blocked(
                     diagnostic=(
                         "iOS build prerequisites require explicit environment "
                         "paths or one valid CMake cache"))
             self._build_input_sources = dict(build_inputs.sources)
+            self._build_input_sources["legacy_build_script_cache"] = (
+                f"migrated-{migrated_count}")
             build = self._execute(_build_command(
                 self._configuration.engine_build,
                 self._configuration.test_hooks, build_inputs),
@@ -869,7 +1029,7 @@ def create_phase_adapters(
         run_id=run_id,
     )
     preparer = TestAppPreparer(
-        configuration, execute, prepared=test_app_prepared)
+        configuration, execute, prepared=test_app_prepared, run_id=run_id)
     reuse_prepared_build = test_app_prepared
     production_build = configuration.engine_build.with_name(
         f"{configuration.engine_build.name}_production")
@@ -881,7 +1041,7 @@ def create_phase_adapters(
         test_hooks=False,
     )
     production_preparer = TestAppPreparer(
-        production_configuration, execute)
+        production_configuration, execute, run_id=run_id)
 
     def execute_contract(
             contract: PhaseCaseContract) -> runner.CaseResult:
@@ -956,7 +1116,7 @@ def prepare_test_app(
     """Build and install current-HEAD test artifacts before checkpointing."""
     del suites, source_revision
     preparer = TestAppPreparer(
-        configuration, _default_executor(run_id))
+        configuration, _default_executor(run_id), run_id=run_id)
     failure = preparer.ensure(reuse_build=reuse_build)
     if failure is None:
         return preparer.build_input_sources
@@ -977,7 +1137,8 @@ def prepare_test_app(
 def verify_test_app(*, configuration, run_id: str):
     """Revalidate and install a newly packaged App using enriched profile data."""
     failure = TestAppPreparer(
-        configuration, _default_executor(run_id)).ensure(reuse_build=True)
+        configuration, _default_executor(run_id), run_id=run_id).ensure(
+            reuse_build=True)
     if failure is None:
         return None
     if failure.status == "blocked":

@@ -797,7 +797,15 @@ def main(
                     allowed_sources = {
                         "environment", "cmake-cache", "cargo-sibling",
                         "cargo-parent", "cargo-home-sibling"}
-                    if (set(preparation_issue.values()) - allowed_sources
+                    invalid_source = any(
+                        not isinstance(value, str)
+                        or (value not in allowed_sources
+                            and not (
+                                key == "legacy_build_script_cache"
+                                and re.fullmatch(
+                                    r"migrated-[0-9]+", value)))
+                        for key, value in preparation_issue.items())
+                    if (invalid_source
                             or any(not isinstance(key, str)
                                    for key in preparation_issue)):
                         raise IphoneTestCliError(
