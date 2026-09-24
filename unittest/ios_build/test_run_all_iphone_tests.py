@@ -5,6 +5,7 @@ import contextlib
 import datetime as dt
 import io
 import json
+import multiprocessing
 import os
 from pathlib import Path
 import plistlib
@@ -25,6 +26,15 @@ import run_all_iphone_tests as cli
 
 
 UTC = dt.timezone.utc
+
+
+def _try_preparation_lock(output_root, run_directory, result_queue):
+    """Report whether a second process can enter the preparation lock."""
+    try:
+        with cli.state.RunLock(Path(output_root), Path(run_directory)):
+            result_queue.put("entered-prepare")
+    except cli.state.RunLockedError:
+        result_queue.put("locked")
 
 
 class CompletedCommand:
@@ -608,11 +618,17 @@ class RunAllIphoneTestsTest(unittest.TestCase):
             "environment-device", "iPhone", "iOS",
             "physical", "default", "booted", "paired")
         timestamp = dt.datetime(2026, 9, 24, 10, tzinfo=UTC)
+        preparation_lock = mock.Mock()
+        path_preview = mock.Mock(run_directory=selection.run_directory)
         with mock.patch.object(cli, "source_commit", return_value="a" * 40), \
                 mock.patch.object(
                     cli, "validate_build_identity",
                     return_value="c" * 64), \
                 mock.patch.object(cli.state, "select_run", return_value=selection), \
+                mock.patch.object(
+                    cli.state, "preview_run_path", return_value=path_preview), \
+                mock.patch.object(
+                    cli.state, "RunLock", return_value=preparation_lock), \
                 mock.patch.object(cli, "discover_physical_devices",
                                   return_value=[physical]), \
                 mock.patch.object(cli, "load_phase_adapters",
@@ -651,6 +667,32 @@ class RunAllIphoneTestsTest(unittest.TestCase):
         )
         selection.close.assert_called_once_with()
 
+    def test_loaded_adapters_reuse_precheckpoint_test_app(self):
+        """Do not rebuild artifacts after their bytes enter run identity."""
+        captured = {}
+
+        def create_phase_adapters(**kwargs):
+            """Capture the immutable preparation handoff to phase adapters."""
+            captured.update(kwargs)
+            return ("adapter",)
+
+        module = types.SimpleNamespace(
+            create_phase_adapters=create_phase_adapters)
+        configuration = cli.LocalConfiguration(
+            device="device", bundle_id="bundle", team="TEAMTOKEN1",
+            signing_identity=None,
+            engine_build=Path("/tmp/build"),
+            app_artifact=Path("/tmp/build/Probe.app"),
+            test_hooks=True,
+        )
+        with mock.patch.dict(sys.modules, {"iphone_test_phases": module}):
+            adapters = cli.load_phase_adapters(
+                configuration, ("inventory",), Path("/tmp/run"),
+                "a" * 40, "runner-id")
+
+        self.assertEqual(("adapter",), adapters)
+        self.assertTrue(captured["test_app_prepared"])
+
     def test_adapter_setup_failure_is_redacted_and_releases_all_state(self):
         """Import/factory exits and terminal writes must not leak local values."""
         secrets = (
@@ -673,13 +715,21 @@ class RunAllIphoneTestsTest(unittest.TestCase):
                 def import_module(name, *args, **kwargs):
                     """Fail only the adapter import and delegate all others."""
                     if name == "iphone_test_phases":
-                        print(" ".join(secrets), file=sys.stderr)
+                        subprocess.run([
+                            sys.executable, "-c",
+                            "import os; os.write(2, %r)" % (
+                                " ".join(secrets).encode(),),
+                        ], check=True)
                         raise failure
                     return original_import(name, *args, **kwargs)
 
                 def create_phase_adapters(**_kwargs):
                     """Model a phase factory that exposes a sensitive error."""
-                    print(" ".join(secrets), file=sys.stderr)
+                    subprocess.run([
+                        sys.executable, "-c",
+                        "import os; os.write(2, %r)" % (
+                            " ".join(secrets).encode(),),
+                    ], check=True)
                     raise failure
 
                 adapter_module = types.SimpleNamespace(
@@ -722,6 +772,55 @@ class RunAllIphoneTestsTest(unittest.TestCase):
                     output_root, output_root / "2026-09-24")
                 lock.acquire()
                 lock.release()
+
+    def test_custom_base_exception_is_generic_and_fd_output_is_captured(self):
+        """Untrusted BaseException types and inherited fd writes never escape."""
+        secret = "private-adapter-token"
+
+        class HostileExit(BaseException):
+            """Model an adapter-defined control-flow exception."""
+
+        def create_phase_adapters(**_kwargs):
+            """Write through inherited fd 2 before raising an untrusted type."""
+            subprocess.run([
+                sys.executable, "-c",
+                "import os; os.write(2, %r)" % (secret.encode(),),
+            ], check=True)
+            raise HostileExit(secret)
+
+        module = types.SimpleNamespace(
+            create_phase_adapters=create_phase_adapters)
+        timestamp = dt.datetime(2026, 9, 24, 10, tzinfo=UTC)
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            output_root = Path(temporary_directory) / "iphone_test"
+            physical = cli.PhysicalDevice(
+                "device", "iPhone", "iOS", "physical", "default",
+                "booted", "paired")
+            stderr = io.StringIO()
+            terminal_stderr = io.StringIO()
+            with contextlib.redirect_stderr(terminal_stderr), \
+                    mock.patch.dict(
+                        sys.modules, {"iphone_test_phases": module}), \
+                    mock.patch.object(
+                        cli, "source_commit", return_value="a" * 40), \
+                    mock.patch.object(
+                        cli, "validate_build_identity", return_value="c" * 64), \
+                    mock.patch.object(
+                        cli, "discover_physical_devices",
+                        return_value=[physical]):
+                status = cli.main([
+                    "--output-root", str(output_root), "--device", "device",
+                ], environment={}, stdout=io.StringIO(), stderr=stderr,
+                    clock=lambda: timestamp)
+
+            serialized = stderr.getvalue() + terminal_stderr.getvalue()
+            serialized += "".join(
+                path.read_text(encoding="utf-8", errors="replace")
+                for path in output_root.rglob("*") if path.is_file())
+            self.assertEqual(2, status)
+            self.assertIn("phase adapter setup failed", serialized)
+            self.assertNotIn(secret, serialized)
+            self.assertNotIn("HostileExit", serialized)
 
     def test_adapter_keyboard_interrupt_returns_130_without_leaking(self):
         """Preserve interrupt semantics while suppressing sensitive exception text."""
@@ -772,7 +871,17 @@ class RunAllIphoneTestsTest(unittest.TestCase):
 
             def prepare(configuration, suites, source_revision, run_id):
                 """Create deterministic current artifacts before state selection."""
-                self.assertFalse(output_root.exists())
+                self.assertFalse(
+                    (output_root / "2026-09-24/checkpoint.json").exists())
+                context = multiprocessing.get_context("spawn")
+                queue = context.Queue()
+                contender = context.Process(
+                    target=_try_preparation_lock,
+                    args=(output_root, output_root / "2026-09-24", queue))
+                contender.start()
+                contender.join(timeout=10)
+                self.assertEqual(0, contender.exitcode)
+                self.assertEqual("locked", queue.get(timeout=2))
                 prepare_calls.append((tuple(suites), source_revision, run_id))
                 archive = engine / "src/observer/libseekdb_ios_runtime.a"
                 archive.parent.mkdir(parents=True, exist_ok=True)

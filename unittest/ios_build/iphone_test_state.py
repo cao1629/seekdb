@@ -151,6 +151,20 @@ class RunLock:
         """Return whether this object still owns an open lock descriptor."""
         return self._descriptor is not None
 
+    def matches(self, output_root: Path, run_directory: Path) -> bool:
+        """Return whether this lock is held for the exact requested run path."""
+        return (
+            self.is_held and self.targets(output_root, run_directory)
+        )
+
+    def targets(self, output_root: Path, run_directory: Path) -> bool:
+        """Return whether this lock was created for the requested run path."""
+        return (
+            self._output_root == Path(output_root).expanduser().absolute()
+            and self._run_directory
+            == Path(run_directory).expanduser().absolute()
+        )
+
     def release(self) -> None:
         """Release the held advisory lock and close its descriptor."""
         if self._descriptor is None:
@@ -739,10 +753,13 @@ def _checkpoint_exists(output_root: Path, run_directory: Path) -> bool:
 def _resume_selection(
         output_root: Path, run_directory: Path,
         source_commit: str, config_fingerprint: str,
-        now: dt.datetime) -> RunSelection:
+        now: dt.datetime, lock: "RunLock" = None) -> RunSelection:
     """Validate, recover, persist, and return an existing run selection."""
-    lock = RunLock(output_root, run_directory)
-    lock.acquire()
+    lock = lock or RunLock(output_root, run_directory)
+    if not lock.targets(output_root, run_directory):
+        raise RunLockedError("run preparation lock targets another directory")
+    if not lock.is_held:
+        lock.acquire()
     try:
         current = load_checkpoint(output_root, run_directory)
         if not _is_incomplete(current):
@@ -761,10 +778,14 @@ def _resume_selection(
 
 def _new_selection(
         output_root: Path, run_directory: Path, source_commit: str,
-        config_fingerprint: str, now: dt.datetime) -> RunSelection:
+        config_fingerprint: str, now: dt.datetime,
+        lock: "RunLock" = None) -> RunSelection:
     """Create, persist, and return a new run selection."""
-    lock = RunLock(output_root, run_directory)
-    lock.acquire()
+    lock = lock or RunLock(output_root, run_directory)
+    if not lock.targets(output_root, run_directory):
+        raise RunLockedError("run preparation lock targets another directory")
+    if not lock.is_held:
+        lock.acquire()
     try:
         _backup_existing_artifacts(output_root, run_directory, now)
         checkpoint = create_checkpoint(source_commit, config_fingerprint, now)
@@ -778,7 +799,8 @@ def _new_selection(
 
 def select_run(
         output_root: Path, mode: RunMode, source_commit: str,
-        config_fingerprint: str, now: dt.datetime) -> RunSelection:
+        config_fingerprint: str, now: dt.datetime,
+        preparation_lock: "RunLock" = None) -> RunSelection:
     """Select or create a run according to default, resume, or restart mode."""
     _require_aware(now)
     root = Path(output_root).expanduser().absolute()
@@ -793,13 +815,15 @@ def select_run(
             if _is_incomplete(checkpoint):
                 return _resume_selection(
                     root, today_directory, source_commit,
-                    config_fingerprint, now)
+                    config_fingerprint, now, preparation_lock)
         return _new_selection(
-            root, today_directory, source_commit, config_fingerprint, now)
+            root, today_directory, source_commit, config_fingerprint, now,
+            preparation_lock)
 
     if mode == RunMode.RESTART:
         return _new_selection(
-            root, today_directory, source_commit, config_fingerprint, now)
+            root, today_directory, source_commit, config_fingerprint, now,
+            preparation_lock)
 
     if mode != RunMode.RESUME:
         raise ValueError(f"unsupported run mode: {mode}")
@@ -825,7 +849,7 @@ def select_run(
     _, run_directory = max(candidates, key=lambda item: item[0])
     return _resume_selection(
         root, run_directory, source_commit,
-        config_fingerprint, now)
+        config_fingerprint, now, preparation_lock)
 
 
 def preview_run(

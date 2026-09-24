@@ -14,6 +14,7 @@ import plistlib
 import re
 import subprocess
 import sys
+import threading
 from typing import Callable, Iterable, Mapping, Optional, Sequence, TextIO
 import uuid
 
@@ -441,6 +442,7 @@ def load_phase_adapters(
         run_directory=run_directory,
         source_revision=source_revision,
         run_id=run_id,
+        test_app_prepared=True,
     )
 
 
@@ -470,28 +472,46 @@ def prepare_phase_artifacts(
 def _safe_setup_call(
         operation: Callable[[], object], run_id: str) -> object:
     """Run adapter setup with captured terminal streams and safe exceptions."""
-    captured_stdout = io.StringIO()
-    captured_stderr = io.StringIO()
+    del run_id
+    saved_descriptors = []
+    drain_threads = []
+
+    def drain(descriptor: int) -> None:
+        """Discard untrusted setup bytes until the redirected fd closes."""
+        try:
+            while os.read(descriptor, 65536):
+                pass
+        finally:
+            os.close(descriptor)
+
     try:
-        with contextlib.redirect_stdout(captured_stdout), \
-                contextlib.redirect_stderr(captured_stderr):
+        for descriptor in (1, 2):
+            read_descriptor, write_descriptor = os.pipe()
+            saved_descriptor = os.dup(descriptor)
+            os.dup2(write_descriptor, descriptor)
+            os.close(write_descriptor)
+            saved_descriptors.append((descriptor, saved_descriptor))
+            thread = threading.Thread(
+                target=drain, args=(read_descriptor,), daemon=True)
+            thread.start()
+            drain_threads.append(thread)
+        with contextlib.redirect_stdout(io.StringIO()), \
+                contextlib.redirect_stderr(io.StringIO()):
             return operation()
     except SystemExit as error:
-        diagnostic = runner.sanitize_diagnostic(str(error), run_id)
         raise IphoneTestCliError(
-            f"phase adapter setup failed: {diagnostic}") from None
+            "phase adapter setup failed") from None
     except KeyboardInterrupt:
         raise KeyboardInterrupt() from None
-    except Exception as error:
-        diagnostic = runner.sanitize_diagnostic(str(error), run_id)
+    except BaseException:
         raise IphoneTestCliError(
-            f"phase adapter setup failed: {diagnostic}") from None
-    except BaseException as error:
-        try:
-            sanitized_interrupt = type(error)()
-        except Exception:
-            sanitized_interrupt = KeyboardInterrupt()
-        raise sanitized_interrupt from None
+            "phase adapter setup failed") from None
+    finally:
+        for descriptor, saved_descriptor in reversed(saved_descriptors):
+            os.dup2(saved_descriptor, descriptor)
+            os.close(saved_descriptor)
+        for thread in drain_threads:
+            thread.join(timeout=5)
 
 
 def _run_mode(options: argparse.Namespace) -> state.RunMode:
@@ -519,11 +539,14 @@ def main(
     options = parse_args(arguments)
     local_environment = os.environ if environment is None else environment
     configuration = resolve_local_configuration(options, local_environment)
-    suites = tuple(options.suite or runner.PHASE_IDS)
+    requested_suites = set(options.suite or runner.PHASE_IDS)
+    suites = tuple(
+        phase_id for phase_id in runner.PHASE_IDS
+        if phase_id in requested_suites)
     selection = None
+    preparation_lock = None
     engine_owns_selection = False
     redaction_run_id = None
-    device_selected = False
     try:
         revision = source_commit()
         current_time = clock()
@@ -542,20 +565,28 @@ def main(
             print(f"Selected iPhone test run: {preview.run_directory}",
                   file=stdout, flush=True)
         else:
+            path_preview = state.preview_run_path(
+                options.output_root, _run_mode(options), current_time)
+            preparation_lock = state.RunLock(
+                Path(options.output_root).expanduser().absolute(),
+                path_preview.run_directory)
+            preparation_lock.acquire()
+            locked_preview = state.preview_run_path(
+                options.output_root, _run_mode(options), current_time)
+            if locked_preview.run_directory != path_preview.run_directory:
+                raise IphoneTestCliError(
+                    "selected run changed before artifact preparation")
+            print(
+                f"Selected iPhone test run: {path_preview.run_directory}",
+                file=stdout, flush=True)
+            selected_device = select_physical_device(
+                configuration.device, discover_physical_devices())
+            configuration = replace(
+                configuration, device=selected_device.identifier)
             try:
                 build_identity = validate_build_identity(
                     configuration, revision)
             except IphoneTestCliError:
-                path_preview = state.preview_run_path(
-                    options.output_root, _run_mode(options), current_time)
-                print(
-                    f"Selected iPhone test run: {path_preview.run_directory}",
-                    file=stdout, flush=True)
-                selected_device = select_physical_device(
-                    configuration.device, discover_physical_devices())
-                configuration = replace(
-                    configuration, device=selected_device.identifier)
-                device_selected = True
                 setup_run_id = f"setup-{uuid.uuid4().hex}"
                 runner.register_runtime_redaction_tokens(
                     setup_run_id, configuration.redaction_tokens())
@@ -568,40 +599,27 @@ def main(
                     runner.clear_runtime_redaction_tokens(setup_run_id)
                 build_identity = validate_build_identity(
                     configuration, revision)
-                fingerprint = configuration_fingerprint(
-                    runner_suites=suites, configuration=configuration,
-                    build_identity=build_identity)
-                selection = state.select_run(
-                    options.output_root,
-                    mode=_run_mode(options),
-                    source_commit=revision,
-                    config_fingerprint=fingerprint,
-                    now=current_time,
-                )
-                if selection.run_directory != path_preview.run_directory:
-                    raise IphoneTestCliError(
-                        "selected run changed during artifact preparation")
-            else:
-                fingerprint = configuration_fingerprint(
-                    runner_suites=suites, configuration=configuration,
-                    build_identity=build_identity)
-                selection = state.select_run(
-                    options.output_root,
-                    mode=_run_mode(options),
-                    source_commit=revision,
-                    config_fingerprint=fingerprint,
-                    now=current_time,
-                )
-                print(
-                    f"Selected iPhone test run: {selection.run_directory}",
-                    file=stdout, flush=True)
+            fingerprint = configuration_fingerprint(
+                runner_suites=suites, configuration=configuration,
+                build_identity=build_identity)
+            selection = state.select_run(
+                options.output_root,
+                mode=_run_mode(options),
+                source_commit=revision,
+                config_fingerprint=fingerprint,
+                now=current_time,
+                preparation_lock=preparation_lock,
+            )
+            preparation_lock = None
+            if selection.run_directory != path_preview.run_directory:
+                raise IphoneTestCliError(
+                    "selected run changed during artifact preparation")
 
-        if not device_selected:
+        if options.dry_run:
             selected_device = select_physical_device(
                 configuration.device, discover_physical_devices())
             configuration = replace(
                 configuration, device=selected_device.identifier)
-        if options.dry_run:
             print("Dry run completed; no test phase was dispatched.",
                   file=stdout)
             return 0
@@ -627,6 +645,8 @@ def main(
     finally:
         if selection is not None and not engine_owns_selection:
             selection.close()
+        if preparation_lock is not None:
+            preparation_lock.release()
         if redaction_run_id is not None:
             runner.clear_runtime_redaction_tokens(redaction_run_id)
 
