@@ -6,11 +6,13 @@
 
 测试 App 现提供显式 device registry 模式。主机启动时同时设置 `SEEKDB_IOS_TEST_SUITE`、`SEEKDB_IOS_TEST_FILTER` 和唯一 `SEEKDB_IOS_TEST_RUN_ID`；App 在引擎 Running 后执行匹配 case，并把 `run_start`、`case_start`、逐项 assertion、`case_end`、`run_complete` 依次追加到 run-scoped JSONL，每条写入后立即 flush。每个 case 的 `timeout_seconds` 是实际 deadline，而不只是元数据：由于任意 C++ callback 无法安全强制取消，watchdog 到期后串行写入失败 assertion、`case_end/result=124` 和 `run_complete/result=124`，flush 后以 124 终止 App 进程，禁止阻塞 callback 随后产生通过结论。host 因而能在 case deadline 加轮询开销内取得有界失败；超时进程不声称完成正常 engine cleanup，后续启动必须使用独立测试目录或走数据库恢复语义。
 
-`run_device_suite.py` 只复制 allowlist JSONL 和固定生命周期状态，并校验 run/build identity、suite/filter、独立预期 case 覆盖、重复或缺失完成事件、device origin、非零结果及最终干净停止。只有尚无 `run_complete` 的合法前缀或最后一条未写完的 JSON 行会继续轮询；已经包含终态但校验失败的证据立即保留原始 `ValueError`，不会被改写为超时。JSON writer 保留合法多字节 UTF-8，按 JSON 规则转义引号和控制字符，并把每个非法输入字节确定性编码为 U+FFFD，因此任意诊断字节都不会破坏 JSONL。原始 `devicectl` 元数据不写入仓库证据。runner 显式选择最多 64 字符的独立数据目录，避免继承默认旧目录。没有 suite 环境变量的普通启动仍执行原 36 步 SQL。
+`run_device_suite.py` 只复制 allowlist JSONL 和固定生命周期状态，并校验 run/build identity、suite/filter、独立预期 case 覆盖、重复或缺失完成事件、device origin、非零结果及最终干净停止。只要流中尚无 `run_complete`，即使已 flush 的前缀包含失败 assertion，也继续轮询；最后一条未写完的 JSON 行同样按未完成处理。`run_complete` 一旦出现，完整语义校验立即运行，终态失败保留原始 `ValueError`，不会被改写为超时。JSON writer 保留合法多字节 UTF-8，按 JSON 规则转义引号和控制字符，并把每个非法输入字节确定性编码为 U+FFFD，因此任意诊断字节都不会破坏 JSONL。原始 `devicectl` 元数据不写入仓库证据。runner 显式选择最多 64 字符的独立数据目录，避免继承默认旧目录。没有 suite 环境变量的普通启动仍执行原 36 步 SQL。
 
 2026-09-24 真机验收已完成：`ios.registry.smoke` 在独立数据目录产生完整的 5 条事件序列，依次为 `run_start`、`case_start`、1 条 assertion、`case_end`、`run_complete`，case/result 均为 0；随后 App 达到 `Stopped/result=0`、`suite_result=0`、`cleanup_status=7`、`cleanup_error=0` 且工作目录恢复。最终复验使用同一个已签名的 follow-up HEAD，严格按 registry smoke、普通模式首轮、同一全新数据目录普通模式重启轮的顺序执行。两轮普通模式各完成 36 步 SQL 后干净停止，持久计数为 0、1；两轮 JSONL 均为 36 个成功 step 加最终 `complete/result=0`。主机 45 项 iOS Python 契约、iphoneos compile-only、未签名和签名 App 完整链接、codesign、安装均通过；完整顺序前后的相关 crash/Jetsam 增量为空。脱敏 JSONL、生命周期状态和运行摘要只保存在忽略目录 `build_ios_arm64/device-evidence/task2-final-head/`。自动签名因 Xcode 当前没有登录账号而不可用，本次仅复用本机已存在并经 bundle、设备范围、有效期、证书私钥校验的开发描述文件手工签名；账号、Team ID、证书和设备唯一标识均未写入仓库证据。
 
 同日质量修复复验增加阻塞 callback、终态错误分类和非法 UTF-8 的可执行契约，focused 14 项及完整 host 49 项通过。修复版重新完成 iphoneos runtime/App 链接、既有本机描述文件手工签名校验和安装，并按 smoke、全新目录普通首轮、同目录 restart 的顺序执行；结果仍为 smoke 5 个事件、两轮各 36 个成功 SQL step 加完成记录、`previous_runs=0/1`，相关 crash/Jetsam 增量为 0。脱敏证据保存在忽略目录 `build_ios_arm64/device-evidence/task2-quality/`。
+
+后续 host-only 复核补充“失败 assertion 前缀后继续出现终态失败”的轮询契约，focused 15 项及完整 host 50 项通过；该修改不改变 App/native/CMake，未把上一 App 产物重新标记为新提交的设备证据。上述真机结果仍严格绑定 `a11ef0d6208f`；runner 的 build identity 校验保持不变，后续若要对更新后的 HEAD 再取真机证据，必须先重建并安装同一 HEAD 的 App。
 
 `build.iphone.sh` 为 iPhone ARM64 和 Apple Silicon iOS 模拟器配置 CMake、Rust 和 Apple SDK。默认目标是 `oceanbase_static`。目前不是已完成的 iOS 产品构建流程；脚本不生成、签名或安装 App。
 

@@ -148,6 +148,8 @@ def wait_for_evidence(device, bundle_id, source_name, destination, timeout_secon
         if copy_evidence(device, bundle_id, source_name, destination):
             try:
                 records = read_jsonl(destination)
+                if not any(record.get("event") == "run_complete" for record in records):
+                    raise IncompleteEvidenceError("device evidence has not reached run_complete")
                 return validate_records(records, run_id, build_id, expected_case_ids, suite, case_filter)
             except IncompleteEvidenceError as error:
                 last_error = error

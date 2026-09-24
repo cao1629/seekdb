@@ -289,6 +289,31 @@ class DeviceEvidenceValidationTests(unittest.TestCase):
             self.assertEqual(2, copied.call_count)
             self.assertEqual(0, summary["run_result"])
 
+    def test_failed_assertion_prefix_waits_for_terminal_failure(self):
+        """Keep polling after a flushed failed assertion until run completion is visible."""
+        incomplete = self.valid_records()[:-2]
+        incomplete[2]["passed"] = False
+        complete = self.valid_records()
+        complete[2]["passed"] = False
+        complete[-2]["result"] = 7
+        complete[-1]["result"] = 7
+        with tempfile.TemporaryDirectory() as temp:
+            destination = Path(temp) / "evidence.jsonl"
+            attempts = iter((incomplete, complete))
+
+            def copy_next(*_):
+                records = next(attempts)
+                destination.write_text("".join(json.dumps(record) + "\n" for record in records))
+                return True
+
+            with mock.patch.object(self.runner, "copy_evidence", side_effect=copy_next) as copied, \
+                    mock.patch.object(self.runner.time, "sleep", return_value=None):
+                with self.assertRaisesRegex(ValueError, "assertion failed"):
+                    self.runner.wait_for_evidence(
+                        "device", "bundle", "source", destination, 2,
+                        "run-1", "build-1", ["smoke.pass"], "smoke", "smoke.*")
+            self.assertEqual(2, copied.call_count)
+
     def test_jsonl_reader_retries_only_an_unterminated_last_record(self):
         """Treat newline-terminated malformed JSON as invalid rather than incomplete."""
         with tempfile.TemporaryDirectory() as temp:
