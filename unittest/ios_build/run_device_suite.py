@@ -7,6 +7,7 @@ import os
 from pathlib import Path
 import re
 import subprocess
+import sys
 import tempfile
 import time
 import uuid
@@ -14,6 +15,18 @@ import uuid
 
 ROOT = Path(__file__).resolve().parents[2]
 ALLOWED_EVIDENCE_NAME = re.compile(r"^device-test-[0-9a-f-]{36}\.jsonl$")
+LOCKED_RETRY_PROMPT = (
+    "Unlock the iPhone and keep the screen awake; retrying…")
+LAUNCH_FAILURE_DIAGNOSTICS = {
+    "locked": "device launch failed: iPhone remained locked",
+    "disconnected": "device launch failed: iPhone is disconnected",
+    "not-installed": "device launch failed: test App is not installed",
+    "trust": "device launch failed: iPhone trust or pairing is unavailable",
+    "developer-mode": (
+        "device launch failed: iPhone Developer Mode is unavailable"),
+    "other": "device launch failed",
+}
+LOCKED_RETRY_SECONDS = 5
 
 
 class IncompleteEvidenceError(ValueError):
@@ -125,6 +138,77 @@ def devicectl(arguments):
     environment.setdefault("DEVELOPER_DIR", "/Applications/Xcode.app/Contents/Developer")
     return subprocess.run(["xcrun", "devicectl", *arguments], check=False, capture_output=True,
                           text=True, env=environment)
+
+
+def classify_launch_failure(result):
+    """Classify raw launch output in memory into one fixed public category."""
+    raw = (
+        f"{getattr(result, 'stderr', '') or ''}\n"
+        f"{getattr(result, 'stdout', '') or ''}")
+    normalized = raw.casefold()
+    if (re.search(r"\blocked\b", normalized) is not None
+            or re.search(
+                r"(?:not|could not).{0,40}unlocked", normalized) is not None):
+        return "locked"
+    if "developer mode" in normalized:
+        return "developer-mode"
+    if any(pattern in normalized for pattern in (
+            "not installed", "application is not installed",
+            "application was not found", "bundle identifier was not found")):
+        return "not-installed"
+    if any(pattern in normalized for pattern in (
+            "not paired", "pairing", "trust is required",
+            "not trusted", "untrusted")):
+        return "trust"
+    if any(pattern in normalized for pattern in (
+            "disconnected", "not connected", "connection was lost",
+            "device is unavailable")):
+        return "disconnected"
+    return "other"
+
+
+def _bounded_launch_arguments(arguments, remaining_seconds):
+    """Bound devicectl's own timeout by the caller-owned shared deadline."""
+    bounded = list(arguments)
+    if "--timeout" not in bounded:
+        return tuple(bounded)
+    index = bounded.index("--timeout") + 1
+    try:
+        configured = int(bounded[index])
+    except (IndexError, TypeError, ValueError) as error:
+        raise ValueError("device launch timeout is invalid") from error
+    bounded[index] = str(min(configured, max(1, int(remaining_seconds))))
+    return tuple(bounded)
+
+
+def launch_device_process(
+        arguments, deadline, *, launch_command=None,
+        clock=None, sleep=None, error_stream=None):
+    """Launch with bounded locked-device retries and fixed safe diagnostics."""
+    launch_command = devicectl if launch_command is None else launch_command
+    clock = time.monotonic if clock is None else clock
+    sleep = time.sleep if sleep is None else sleep
+    error_stream = sys.stderr if error_stream is None else error_stream
+    prompted = False
+    while True:
+        remaining = deadline - clock()
+        if remaining < 1:
+            break
+        result = launch_command(
+            _bounded_launch_arguments(arguments, remaining))
+        if result.returncode == 0:
+            return result
+        category = classify_launch_failure(result)
+        if category != "locked":
+            raise SystemExit(LAUNCH_FAILURE_DIAGNOSTICS[category])
+        if not prompted:
+            print(LOCKED_RETRY_PROMPT, file=error_stream, flush=True)
+            prompted = True
+        remaining = deadline - clock()
+        if remaining <= 0:
+            break
+        sleep(min(LOCKED_RETRY_SECONDS, remaining))
+    raise SystemExit(LAUNCH_FAILURE_DIAGNOSTICS["locked"])
 
 
 def copy_evidence(device, bundle_id, source_name, destination):
@@ -433,17 +517,14 @@ def run_sql_restart(options, build_id, deadline):
             write_sql_round_intent(
                 output, options, build_id, previous_runs, run_id,
                 "launch-uncertain")
-            launch = devicectl([
+            launch_device_process([
                 "device", "process", "launch", "--device", options.device,
                 "--terminate-existing", "--environment-variables", json.dumps({
                     "SEEKDB_IOS_TEST_RUN_ID": run_id,
                     "SEEKDB_PROBE_DATA_NAME": options.data_name,
                     "SEEKDB_PROBE_AUTO_STOP": "1",
                 }), "--timeout", "60", options.bundle_id,
-            ])
-            if launch.returncode != 0:
-                raise SystemExit(
-                    "ordinary SQL launch failed; raw device metadata was not persisted")
+            ], deadline)
         wait_for_sql_round(
             options.device, options.bundle_id, output, deadline, run_id,
             build_id, options.data_name, previous_runs,
@@ -544,7 +625,7 @@ def main():
             options.crash_report_dir, before_crashes, options.bundle_id)
         print(json.dumps(summary, sort_keys=True))
         return
-    launch = devicectl([
+    launch_device_process([
         "device", "process", "launch", "--device", options.device, "--terminate-existing",
         "--environment-variables", json.dumps({
             "SEEKDB_IOS_TEST_SUITE": options.suite,
@@ -554,9 +635,7 @@ def main():
             "SEEKDB_PROBE_AUTO_STOP": "1",
         }),
         "--timeout", "60", options.bundle_id,
-    ])
-    if launch.returncode != 0:
-        raise SystemExit("device suite launch failed; raw device metadata was not persisted")
+    ], deadline)
     summary = wait_for_evidence(
         options.device, options.bundle_id, source_name, destination, options.timeout,
         run_id, build_id, expected_cases, options.suite, options.filter,

@@ -38,6 +38,8 @@ export RUST_TARGET_DIR="<repository-local Rust target directory>"
 
 `--suite inventory` 是纯 host-only 路径，不发现设备，也不要求 bundle/team、build、签名或安装。device runner 的 launch、evidence 和 clean-stop 共用一个绝对 deadline，外层 subprocess timeout 另留 120 秒收尾余量，不再把两个独立完整 timeout 串接到较短的外层限制。中断后 resume 会在 checkpoint 记录已通过 case 的 `resume_skip_count` 与 `last_resume_skipped_at`；SQL gate 若已保存首轮完整证据，只续跑 restart 轮。每轮 launch 前先原子、耐久地写入包含唯一 round ID 的 intent，再把 intent 切换为 `launch-uncertain` 后才允许调用设备；完成后 JSONL 的相邻 metadata 严格绑定 runner run ID、round ID、source build ID、selected-device SHA-256、data directory、hook mode、`previous_runs` 和 JSONL digest。若在设备完成后、metadata 写入前中断，resume 必须用原 round ID 从设备重新复制并验证终态后补 metadata，绝不盲目重跑 first；无法确认时安全失败。文件名包含由 runner run ID 派生的 scope，因此同 run resume 可恢复，same-day `--restart` 的新 run 绝不接受旧 gate 文件或 intent。
 
+devicectl launch 的 stdout/stderr 只在当前进程内分类为 locked、disconnected、not-installed、trust、developer-mode 或 other，不写入 evidence/checkpoint。Locked 会向当前调用终端打印固定提示 `Unlock the iPhone and keep the screen awake; retrying…`，并在同一 shared deadline 内每 5 秒重试；即使非交互运行也会在 deadline 到期后固定失败。其他类别不重试，只输出对应固定安全诊断。phase adapter 只接受这些 allowlist 行，二次脱敏并限长后写入 failure/checkpoint；相邻 raw metadata、argv 和 token 不持久化。launch 类失败按 infrastructure 停止后序 case，避免同一设备状态重复污染所有 case；production isolation 非零退出固定记录 `production isolation build failed`，不复制 build log。
+
 checkpoint 前的 setup 边界只接受固定错误码，并把它们映射为 build、build-input、signing、signature、install、profile 或 App-output 阶段诊断。任意未知返回、异常类型、异常文本及捕获的 stdout/stderr 一律折叠为 generic setup failure；阶段诊断不拼接外部命令输出或本机 token。
 
 最新状态（2026-09-24）：原生 seekdb 引擎已在 iPhone 17 Pro / iOS 27.0 完成 36 步通用 SQL 套件和五轮干净停止。五轮均为 `Stopped/result=0`、`sql_verified=true`，同一数据目录的 `previous_runs` 依次为 0、1、2、3、4；验证后没有新增崩溃报告。日志确认 1 GiB 逻辑预算。测试 App 运行期间保持亮屏，进入 Stopped / Failed 后恢复自动锁屏，不修改系统设置。

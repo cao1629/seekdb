@@ -2,6 +2,7 @@
 """Contract tests for standalone iPhone validation phases one through four."""
 
 import contextlib
+import datetime as dt
 import io
 import json
 import hashlib
@@ -22,6 +23,7 @@ sys.path.insert(0, str(SCRIPT_DIR))
 
 import iphone_test_phases as phases
 import iphone_test_runner as runner
+import iphone_test_state as state
 import run_all_iphone_tests as cli
 
 
@@ -981,6 +983,128 @@ class IphoneTestPhasesTest(unittest.TestCase):
         self.assertEqual("failed", result.status)
         for token in configuration.redaction_tokens():
             self.assertNotIn(token, serialized)
+
+    def test_device_launch_fixed_diagnostic_survives_secondary_redaction(self):
+        """Persist only the safe launch category from captured process output."""
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            configuration = self.configuration(root)
+            fixed = "device launch failed: iPhone is disconnected"
+
+            for stream_name in ("stderr", "stdout"):
+                with self.subTest(stream=stream_name):
+                    def fail(command, _timeout_seconds):
+                        """Return one fixed line plus hostile process-local data."""
+                        if str(phases.DEVICE_SUITE_SCRIPT) not in command:
+                            return runner.SanitizedProcessResult(0, "", "")
+                        values = {
+                            "stdout": "", "stderr": "",
+                        }
+                        values[stream_name] = (
+                            f"{fixed}\n{configuration.device}")
+                        return runner.SanitizedProcessResult(
+                            1, values["stdout"], values["stderr"])
+
+                    adapters = phases.create_phase_adapters(
+                        configuration=configuration,
+                        suites=("registry-smoke",),
+                        run_directory=root / f"run-{stream_name}",
+                        source_revision="a" * 40,
+                        run_id=f"safe-{stream_name}",
+                        command_executor=fail,
+                        test_app_prepared=True,
+                    )
+                    adapter = tuple(adapters)[0]
+                    result = adapter.execute(adapter.cases[0])
+
+                    self.assertEqual("failed", result.status)
+                    self.assertEqual("infrastructure", result.category)
+                    self.assertFalse(result.retry_safe)
+                    self.assertFalse(result.clean_state)
+                    self.assertEqual(fixed, result.diagnostic)
+                    self.assertNotIn(configuration.device, json.dumps({
+                        "diagnostic": result.diagnostic,
+                        "details": result.details,
+                    }))
+
+    def test_fixed_process_diagnostic_is_safe_in_checkpoint_and_failure(self):
+        """Persist the allowlisted category without adjacent hostile output."""
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            output_root = root / "output"
+            run_id = "safe-diagnostic-run"
+            fixed = "device launch failed: iPhone remained locked"
+            private_token = "private-diagnostic-token"
+            selection = state.select_run(
+                output_root,
+                mode=state.RunMode.DEFAULT,
+                source_commit="a" * 40,
+                config_fingerprint="b" * 64,
+                now=dt.datetime(2026, 9, 25, tzinfo=dt.timezone.utc),
+            )
+            adapters = phases.create_phase_adapters(
+                configuration=self.configuration(root),
+                suites=("inventory",),
+                run_directory=selection.run_directory,
+                source_revision="a" * 40,
+                run_id=run_id,
+                command_executor=lambda _command, _timeout: (
+                    runner.SanitizedProcessResult(
+                        1, "", f"{fixed}\n{private_token}")),
+            )
+
+            exit_status = runner.run_phase_engine(
+                output_root, selection, adapters,
+                now=lambda: dt.datetime(
+                    2026, 9, 25, tzinfo=dt.timezone.utc),
+                redaction_tokens=(private_token,),
+                phase_ids=("inventory",),
+            )
+            checkpoint = state.load_checkpoint(
+                output_root, selection.run_directory)
+            failure = next(selection.run_directory.glob("failure-*.json"))
+            serialized = json.dumps(checkpoint) + failure.read_text()
+
+        self.assertEqual(1, exit_status)
+        self.assertEqual(
+            fixed, checkpoint["phases"][0]["cases"][0]["diagnostic"])
+        self.assertNotIn(private_token, serialized)
+
+    def test_production_isolation_failure_keeps_only_fixed_build_diagnostic(self):
+        """Do not persist production build logs when its command exits nonzero."""
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            configuration = self.configuration(root)
+            private_log = "private-production-build-log"
+
+            def execute(command, _timeout_seconds):
+                """Fail only the hook-off production isolation build."""
+                if "-DSEEKDB_IOS_TEST_HOOKS=OFF" in command:
+                    return runner.SanitizedProcessResult(
+                        2, "", private_log)
+                return runner.SanitizedProcessResult(0, "", "")
+
+            with mock.patch.dict(
+                    os.environ, self.build_environment(root), clear=False):
+                adapters = phases.create_phase_adapters(
+                    configuration=configuration,
+                    suites=("rust-device-runtime",),
+                    run_directory=root / "run",
+                    source_revision="a" * 40,
+                    run_id="safe-production",
+                    command_executor=execute,
+                    test_app_prepared=True,
+                )
+                adapter = tuple(adapters)[0]
+                production = next(
+                    case for case in adapter.cases
+                    if case.case_id == phases.PRODUCTION_ISOLATION_CASE_ID)
+                result = adapter.execute(production)
+
+        self.assertEqual("failed", result.status)
+        self.assertEqual("infrastructure", result.category)
+        self.assertEqual("production isolation build failed", result.diagnostic)
+        self.assertNotIn(private_log, result.diagnostic)
 
     def test_followup_and_rust_production_isolation_are_explicit(self):
         """Mark native suites for SQL/restart and production archive proof."""

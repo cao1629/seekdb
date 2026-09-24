@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Verify the iOS device registry and device-origin evidence contract."""
 import importlib.util
+import io
 import json
 from pathlib import Path
 import subprocess
@@ -232,6 +233,91 @@ class DeviceEvidenceValidationTests(unittest.TestCase):
         self.assertNotIn("device-info", source)
         self.assertNotIn("capture_output=False", source)
         self.assertIn("ALLOWED_EVIDENCE_NAME", source)
+
+    def test_locked_launch_retries_with_fixed_prompt_then_succeeds(self):
+        """Retry a locked phone without printing raw CoreDevice metadata."""
+        private_token = "private-device-metadata"
+        results = iter((
+            SimpleNamespace(
+                returncode=1, stdout="", stderr=(
+                    "CoreDeviceError 10002 FBS reason: Locked; the device "
+                    "was not, or could not be, unlocked "
+                    f"{private_token}")),
+            SimpleNamespace(returncode=0, stdout="launched", stderr=""),
+        ))
+        now = [0.0]
+        sleeps = []
+        terminal = io.StringIO()
+
+        def sleep(seconds):
+            """Advance the deterministic shared deadline clock."""
+            sleeps.append(seconds)
+            now[0] += seconds
+
+        result = self.runner.launch_device_process(
+            ("device", "process", "launch"), deadline=20,
+            launch_command=lambda _arguments: next(results),
+            clock=lambda: now[0], sleep=sleep, error_stream=terminal)
+
+        self.assertEqual(0, result.returncode)
+        self.assertEqual([5], sleeps)
+        self.assertEqual(
+            "Unlock the iPhone and keep the screen awake; retrying…\n",
+            terminal.getvalue())
+        self.assertNotIn(private_token, terminal.getvalue())
+
+    def test_locked_launch_stops_at_shared_deadline_noninteractively(self):
+        """Bound locked retries even when no user can unlock the phone."""
+        now = [0.0]
+        attempts = []
+        terminal = io.StringIO()
+
+        def launch(_arguments):
+            """Return the same in-memory locked failure for every attempt."""
+            attempts.append(now[0])
+            return SimpleNamespace(
+                returncode=1, stdout="", stderr="could not be unlocked")
+
+        def sleep(seconds):
+            """Advance time without blocking the host test."""
+            now[0] += seconds
+
+        with self.assertRaisesRegex(
+                SystemExit, "device launch failed: iPhone remained locked"):
+            self.runner.launch_device_process(
+                ("device", "process", "launch"), deadline=11,
+                launch_command=launch, clock=lambda: now[0], sleep=sleep,
+                error_stream=terminal)
+
+        self.assertEqual([0.0, 5.0, 10.0], attempts)
+        self.assertEqual(1, terminal.getvalue().count("Unlock the iPhone"))
+
+    def test_nonlocked_launch_failure_is_classified_without_retry(self):
+        """Emit one fixed safe category and never retry another launch error."""
+        cases = {
+            "connection to the device was disconnected": (
+                "disconnected", "device launch failed: iPhone is disconnected"),
+            "requested application is not installed": (
+                "not-installed", "device launch failed: test App is not installed"),
+            "device is not paired; trust is required": (
+                "trust", "device launch failed: iPhone trust or pairing is unavailable"),
+            "Developer Mode is disabled": (
+                "developer-mode", "device launch failed: iPhone Developer Mode is unavailable"),
+            "opaque failure private-token": (
+                "other", "device launch failed"),
+        }
+        for raw, (category, diagnostic) in cases.items():
+            with self.subTest(category=category):
+                result = SimpleNamespace(returncode=1, stdout="", stderr=raw)
+                launch = mock.Mock(return_value=result)
+                self.assertEqual(
+                    category, self.runner.classify_launch_failure(result))
+                with self.assertRaisesRegex(SystemExit, f"^{diagnostic}$"):
+                    self.runner.launch_device_process(
+                        ("device", "process", "launch"), deadline=100,
+                        launch_command=launch, clock=lambda: 0,
+                        sleep=mock.Mock(), error_stream=io.StringIO())
+                launch.assert_called_once()
 
     def test_runner_accepts_only_bounded_data_directory_names(self):
         """Keep device suites isolated without permitting sandbox path traversal."""

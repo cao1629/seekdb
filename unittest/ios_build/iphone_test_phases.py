@@ -74,6 +74,16 @@ REQUIRED_DEPENDENCY_ARTIFACTS = (
     "lib/libicuuc.a",
     "lib/libssl.a",
 )
+SAFE_PROCESS_DIAGNOSTIC_LINES = frozenset((
+    "Unlock the iPhone and keep the screen awake; retrying…",
+    "device launch failed: iPhone remained locked",
+    "device launch failed: iPhone is disconnected",
+    "device launch failed: test App is not installed",
+    "device launch failed: iPhone trust or pairing is unavailable",
+    "device launch failed: iPhone Developer Mode is unavailable",
+    "device launch failed",
+    "command exceeded its bounded timeout",
+))
 
 
 class PhaseEvidenceError(RuntimeError):
@@ -732,6 +742,23 @@ def _default_executor(run_id: str) -> CommandExecutor:
     return execute
 
 
+def _process_failure_diagnostic(
+        process: runner.SanitizedProcessResult, run_id: str,
+        redaction_tokens: Iterable[str], fallback: str) -> str:
+    """Return only allowlisted subprocess diagnostics after second redaction."""
+    safe_lines = []
+    for stream in (process.stderr, process.stdout):
+        for line in str(stream).splitlines():
+            normalized = line.strip()
+            if normalized in SAFE_PROCESS_DIAGNOSTIC_LINES:
+                safe_lines.append(normalized)
+    diagnostic = "; ".join(safe_lines) if safe_lines else fallback
+    for token in redaction_tokens:
+        if token:
+            diagnostic = diagnostic.replace(str(token), runner.REDACTED)
+    return runner.sanitize_diagnostic(diagnostic, run_id)
+
+
 class TestAppPreparer:
     """Build, package, sign, and install one current-HEAD test-hook App."""
 
@@ -1298,10 +1325,25 @@ def create_phase_adapters(
                 diagnostic=contract.readiness_error)
         process = execute(contract.command, contract.timeout_seconds)
         if process.exit_status != 0:
-            category = "timeout" if process.exit_status == 124 else "assertion"
+            fallback = (
+                "production isolation build failed"
+                if contract.case_id == PRODUCTION_ISOLATION_CASE_ID else
+                "standalone phase command failed")
+            diagnostic = _process_failure_diagnostic(
+                process, run_id, configuration.redaction_tokens(), fallback)
+            is_launch_failure = any(
+                line.startswith("device launch failed")
+                and line in diagnostic
+                for line in SAFE_PROCESS_DIAGNOSTIC_LINES)
+            category = (
+                "timeout" if process.exit_status == 124 else
+                "infrastructure" if (
+                    is_launch_failure
+                    or contract.case_id == PRODUCTION_ISOLATION_CASE_ID) else
+                "assertion")
             return runner.CaseResult.failed(
                 category=category,
-                diagnostic="standalone phase command failed",
+                diagnostic=diagnostic,
                 exit_status=process.exit_status,
                 retry_safe=category == "assertion",
                 clean_state=category == "assertion",
