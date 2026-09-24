@@ -1,0 +1,100 @@
+{
+  "schema_version": 1,
+  "corpus_facts": {
+    "normal_cpp_test_target_count": 0,
+    "normal_cpp_test_target_reason": "Normal C++ unittest build definitions and expected sources are absent at source revision."
+  },
+  "classifications": {
+    "mysqltest-active": {
+      "owning_module": "sql/mysqltest",
+      "framework": "mysqltest",
+      "execution_class": "host-only",
+      "device_equivalent": null,
+      "requirements": ["host seekdb server", "mysqltest client", "psmall fixtures when selected"],
+      "timeout_seconds": 3600,
+      "memory_class": "large",
+      "applicability": "required",
+      "exclusion_reason": null,
+      "blocked_reason": null,
+      "latest_result": "not-run",
+      "evidence_path": null
+    },
+    "obtest-legacy": {
+      "owning_module": "legacy/obtest",
+      "framework": "legacy obtest",
+      "execution_class": "host-only",
+      "device_equivalent": null,
+      "requirements": ["legacy multi-process cluster harness", "Linux process and topology controls"],
+      "timeout_seconds": 3600,
+      "memory_class": "unbounded",
+      "applicability": "excluded",
+      "exclusion_reason": "The current seekdb revision does not register the legacy tools/obtest topology corpus in its supported test runners; these cases require the legacy Linux multi-process cluster harness.",
+      "blocked_reason": null,
+      "latest_result": "not-run",
+      "evidence_path": null
+    },
+    "rust-test": {
+      "owning_module": "rust/sql-nio",
+      "framework": "cargo test",
+      "execution_class": "host-only",
+      "device_equivalent": null,
+      "requirements": ["Rust 1.98.1 host toolchain"],
+      "timeout_seconds": 300,
+      "memory_class": "small",
+      "applicability": "required",
+      "exclusion_reason": null,
+      "blocked_reason": null,
+      "latest_result": "not-run",
+      "evidence_path": null
+    },
+    "gtest-orphan": {
+      "owning_module": "cpp/unregistered-tests",
+      "framework": "GoogleTest source registration",
+      "execution_class": "host-only",
+      "device_equivalent": null,
+      "requirements": ["registered C++ unittest target", "GoogleTest"],
+      "timeout_seconds": 300,
+      "memory_class": "medium",
+      "applicability": "blocked",
+      "exclusion_reason": null,
+      "blocked_reason": "No normal C++ unittest target is registered at this source revision; the registrations are retained as source inventory until a device equivalent or exact platform exclusion is assigned.",
+      "latest_result": "blocked",
+      "evidence_path": null
+    },
+    "ios-probe": {
+      "owning_module": "observer/ios",
+      "framework": "iOS probe executable",
+      "execution_class": "device-native",
+      "device_equivalent": null,
+      "requirements": ["iPhoneOS cross-build", "signed physical-device App"],
+      "timeout_seconds": 300,
+      "memory_class": "medium",
+      "applicability": "required",
+      "exclusion_reason": null,
+      "blocked_reason": null,
+      "latest_result": "not-run",
+      "evidence_path": null
+    },
+    "host-python": {
+      "owning_module": "ios-build-validation",
+      "framework": "Python unittest",
+      "execution_class": "host-only",
+      "device_equivalent": null,
+      "requirements": ["Python 3 host runtime", "tracked seekdb checkout"],
+      "timeout_seconds": 300,
+      "memory_class": "small",
+      "applicability": "required",
+      "exclusion_reason": null,
+      "blocked_reason": null,
+      "latest_result": "not-run",
+      "evidence_path": null
+    }
+  },
+  "overrides": {
+    "ios.probe.sql_probe": {
+      "requirements": ["signed physical-device App", "writable App container", "embedded seekdb runtime"],
+      "timeout_seconds": 900,
+      "memory_class": "large"
+    }
+  }
+}

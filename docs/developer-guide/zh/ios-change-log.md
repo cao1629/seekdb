@@ -237,3 +237,10 @@ python3 deps/ios-build/build.py --jobs 4 vsag
 - 设备数据目录 `ios-generic-20260924` 共取得五轮完整成功证据：轮次 1、4、5、6、7 的 `previous_runs` 依次为 0、1、2、3、4；每轮 36 个 step 全部 `result=0`，最终记录为 `complete=true/result=0`，状态均为 `Stopped/result=0` 且 `sql_verified=true`。重复停止约需 32 秒，短于该周期的轮询不能判为失败。
 - 2026-09-24 验证后未产生新的 SeekDB Probe 崩溃报告；设备上可见的六份报告均为 2026-09-21 的历史文件。前后台、锁屏恢复、内存压力和完整向量功能仍未覆盖。
 - 当前源码树没有常规 C++ 全量测试入口所需的 `unittest/CMakeLists.txt` 与 `all_tests_main.cpp`，且本机 Linux 容器运行时不可用，因此没有宣称完整 C++/Linux 测试通过。已执行的主机脚本、Rust、iOS 链接与真机测试边界如上。
+
+## 2026-09-24：分层测试语料清单
+
+- 新增 `unittest/ios_build/generate_test_inventory.py`、`test_inventory.py` 与受 Git 跟踪的 `ios-test-classification.json`。生成器以 `git ls-files -z` 为唯一文件来源，并直接导入现有 seekdb mysqltest runner 的 `discover_cases`，没有另写 psmall YAML 选择语义。
+- 当前修订发现 283 个 active mysqltest，其中 272 个由 CI psmall 配置选择；`tools/obtest/t/**` 下 500 个 legacy case；3 个 Rust `#[test]`；9 个当前无常规 C++ target 的 `TEST`/`TEST_F`；5 个 iOS probe。主机 Python 用例数量随本次新增清单测试增加，始终按已跟踪文件动态核对。
+- 每一行生成结果包含稳定 ID、源码路径、执行层、适用状态、来源 commit 与 corpus digest。排除项和阻塞项必须分别给出明确原因，设备等价映射必须存在且无环。生成结果写入忽略目录 `build_ios_arm64/generated/`，只证明语料发现与分类完整，不证明设备或主机执行通过。
+- TDD RED 为生成器不存在；实现后 focused 清单测试通过。完整 host iOS Python suite、双次生成字节比对与 `git diff --check` 在提交前执行并记录最终结果。本次没有新增或记录设备、签名、团队或账户唯一标识。

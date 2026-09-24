@@ -45,6 +45,7 @@ Rust 可执行文件由 PATH 或 `CARGO`、`RUSTUP` 提供；脚本也查找仓�
 - 为 Boost 1.74 回移上游 1.85 的 NumericConversion 枚举包装修复，只生成 iOS 构建目录中的头文件覆盖层；iOS 编译检查和 macOS 数值转换/溢出测试通过。
 - `ob_parser.cpp.o` 经 `file` 验证为 Mach-O ARM64；`xcrun vtool -show-build` 显示平台 IOS、minos 18.0、sdk 27.0。
 - 脚本参数路由、App 链接参数、模拟器配置、Cargo 多行参数/失败传播、非法参数、产品中立性和启动清理契约共 23 项测试通过：`python3 -m unittest discover -s unittest/ios_build -v`。
+- 分层测试清单由 `unittest/ios_build/generate_test_inventory.py` 生成。它只读取 `git ls-files -z` 返回的已跟踪文件，复用现有 mysqltest runner 的 psmall 选择逻辑，并将分类清单合并后写入 `build_ios_arm64/generated/ios-test-inventory.jsonl`。分类规则及字段见 `docs/ios-test-inventory-schema.md`；生成结果不等同于任何用例已经执行。
 - 全新 Rust target 目录的 `aarch64-apple-ios` `libsql_nio.a` 构建通过；主机目标的 3 项 Rust 单元测试、doc-test 及 `cargo clippy --all-targets -- -D warnings` 通过。本机系统会终止由当前 Codex 进程直接生成并启动的宿主 Mach-O，因此验证使用忽略目录中的 LLDB runner；该 runner 不属于项目构建接口。
 - 通用 SQL 套件已在真机完成五轮。每轮 36 个 step 全部成功，最终 JSONL 记录为 `complete=true/result=0`；同一数据目录的持久计数连续递增，五轮均完成自动停止。
 

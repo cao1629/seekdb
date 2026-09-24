@@ -6,10 +6,15 @@ This schema records how each seekdb test maps to the layered iOS validation
 strategy. It prevents host-only results from being reported as physical-device
 evidence and makes exclusions explicit and reviewable.
 
-The inventory should be stored as UTF-8 JSON Lines. Each line is one test or
-one independently runnable suite. Generated inventory and local device logs may
-remain ignored, but important outcomes must be summarized in the tracked iOS
-build and change-log documents.
+The generated inventory is stored as UTF-8 JSON Lines under
+`build_ios_arm64/generated/ios-test-inventory.jsonl`. Each line is one test or
+one independently runnable suite. The tracked
+`unittest/ios_build/ios-test-classification.json` manifest supplies explicit
+per-corpus classifications and narrowly scoped per-ID overrides. Discovery
+uses `git ls-files -z`, so untracked local files cannot silently change the
+reported corpus. Generated inventory and local device logs remain ignored, but
+important outcomes must be summarized in the tracked iOS build and change-log
+documents.
 
 ## Required Fields
 
@@ -17,6 +22,9 @@ build and change-log documents.
 | --- | --- | --- |
 | `id` | string | Stable, product-neutral identifier. |
 | `source_path` | string | Repository-relative test or suite path. |
+| `corpus` | string | Discovery corpus used to select the tracked classification. |
+| `case_name` | string | Framework-level test or case name. |
+| `ci_selected` | boolean | Whether the current psmall mysqltest runner selects this case. |
 | `owning_module` | string | seekdb module responsible for the behavior. |
 | `framework` | string | Test framework or runner. |
 | `execution_class` | enum | `device-native`, `host-driven-device`, or `host-only`. |
@@ -24,10 +32,14 @@ build and change-log documents.
 | `requirements` | string array | Runtime, fixture, entitlement, memory, or tooling requirements. |
 | `timeout_seconds` | integer | Positive per-test or per-suite timeout. |
 | `memory_class` | enum | `small`, `medium`, `large`, or `unbounded`. |
-| `applicability` | enum | `required`, `conditional`, or `excluded`. |
+| `applicability` | enum | `required`, `blocked`, or `excluded`. |
 | `exclusion_reason` | string or null | Concrete reason when applicability is `excluded`. |
+| `blocked_reason` | string or null | Concrete missing capability when applicability is `blocked`. |
 | `latest_result` | enum | `pass`, `fail`, `blocked`, or `not-run`. |
 | `evidence_path` | string or null | Repository-relative path to current evidence or summary. |
+| `classification_source` | string | Manifest classification or exact override that classified the row. |
+| `source_commit` | string | Git commit used for the generated source inventory. |
+| `corpus_digest` | string | SHA-256 of canonical classified rows before revision metadata. |
 
 ## Classification Rules
 
@@ -37,10 +49,28 @@ build and change-log documents.
   collects evidence from code executing on the physical iPhone.
 - `host-only` means the asserted behavior runs on macOS. Cross-compilation alone
   does not change this classification.
+- `blocked` means a required runner, target, or platform capability is absent;
+  it is not a passing or excluded result and requires `blocked_reason`.
 - `device_equivalent` may be set only when the replacement asserts the same
   externally observable behavior. Similar code paths are not sufficient.
 - Every excluded row must have a non-empty `exclusion_reason`; exclusions must
   never be silently omitted from coverage totals.
+- Device-equivalent IDs must resolve within the same inventory and may not form
+  direct or indirect cycles.
+
+## Discovered Corpora
+
+- Active mysqltest cases include top-level `tools/deploy/mysql_test/t/*.test`
+  and suite `test_suite/*/t/*.test` files. CI selection imports and calls
+  `.github/script/seekdb/mysqltest_for_seekdb.py::discover_cases`, preserving
+  the current psmall YAML semantics.
+- Legacy obtest inventory is exactly `tools/obtest/t/**/*.test`; helper,
+  include, result, backup, and client `.test` files are not runnable cases in
+  that corpus.
+- Rust tests are tracked `#[test]` functions. Orphan C++ tests are tracked
+  `TEST`/`TEST_F` registrations even when no normal C++ target exists.
+- iOS probes are the tracked `*_probe.c`, `*_probe.cpp`, and `sql_probe.cpp`
+  sources. Host Python tests are tracked `unittest/ios_build/test_*.py` files.
 
 ## Evidence Extension
 
@@ -58,5 +88,5 @@ identifier, private key, provisioning secret, or other credential.
 ## Example
 
 ```json
-{"id":"startup.cleanup.during_init","source_path":"unittest/ios_build/run_device_cleanup_test.py","owning_module":"observer/ios","framework":"python+devicectl","execution_class":"host-driven-device","device_equivalent":null,"requirements":["physical iPhone","test-hook build","writable app container"],"timeout_seconds":180,"memory_class":"large","applicability":"required","exclusion_reason":null,"latest_result":"not-run","evidence_path":null}
+{"id":"startup.cleanup.during_init","source_path":"unittest/ios_build/run_device_cleanup_test.py","corpus":"device-runner","case_name":"during_init","ci_selected":false,"owning_module":"observer/ios","framework":"python+devicectl","execution_class":"host-driven-device","device_equivalent":null,"requirements":["physical iPhone","test-hook build","writable app container"],"timeout_seconds":180,"memory_class":"large","applicability":"required","exclusion_reason":null,"blocked_reason":null,"latest_result":"not-run","evidence_path":null,"classification_source":"override:startup.cleanup.during_init","source_commit":"<git-commit>","corpus_digest":"<sha256>"}
 ```
