@@ -55,4 +55,9 @@ From judge/census/ (each file carries the command that produced it):
 
 ## Performance baselines (item 9)
 
-Pending (judge/performance-protocol.md; the run is in progress).
+Measured on 2026-09-24 under judge/performance-protocol.md (judge/perf/baseline-834bbee1e.md), 5 rounds
+each, median QPS: `oltp_point_select` 7,151 / 43,685 / 58,145 and `oltp_read_write` 6,686 / 40,087 /
+49,857 at 1 / 16 / 64 threads. Point-select stops scaling at about 2 of the server's 8 cores, so its
+limit is the client or the Docker hop; these figures are for the C++-against-Rust ratio, not the
+machine's ceiling. Cold start 2-3 s, restart after a kill about 3.2 s (recorded, not gated). Item 9
+belongs to the second set; it is shown here because it is done.
