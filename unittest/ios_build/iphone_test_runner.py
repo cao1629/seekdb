@@ -46,10 +46,10 @@ SENSITIVE_KEYS = frozenset({
     "team_id",
     "udid",
 })
-SENSITIVE_TEXT_PATTERN = re.compile(
-    r"(?i)\b(" + "|".join(
+SENSITIVE_LABEL_PATTERN = re.compile(
+    r"(?im)(?:^|[\s,{])['\"]?\b(" + "|".join(
         re.escape(key) for key in sorted(SENSITIVE_KEYS, key=len, reverse=True)
-    ) + r")\s*[:=]\s*[^\s,;]+")
+    ) + r")\b['\"]?\s*[:=]")
 
 
 class FailureCategory(str, Enum):
@@ -168,10 +168,10 @@ class PhaseAdapter:
 
 def _redact_text(value: str, run_id: str) -> str:
     """Redact UUID-like values other than the runner-owned run ID."""
+    if SENSITIVE_LABEL_PATTERN.search(value):
+        return REDACTED
     protected = "__RUNNER_OWNED_RUN_ID__"
     value = value.replace(run_id, protected)
-    value = SENSITIVE_TEXT_PATTERN.sub(
-        lambda match: f"{match.group(1)}={REDACTED}", value)
     value = UUID_PATTERN.sub(REDACTED, value)
     return value.replace(protected, run_id)
 

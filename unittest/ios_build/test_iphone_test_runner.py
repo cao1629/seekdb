@@ -339,6 +339,40 @@ class IphoneTestRunnerTest(unittest.TestCase):
         self.assertEqual(f"{runner.REDACTED} {runner.REDACTED} {run_id}",
                          sanitized)
 
+    def test_rejects_entire_labeled_multiline_sensitive_diagnostics(self):
+        """Labeled secrets must not leak quoted payload continuations or names."""
+        run_id = self.selection.checkpoint["run_id"]
+        sensitive_diagnostics = (
+            (
+                "private_key=\"-----BEGIN PRIVATE KEY-----\n"
+                "base64-secret-payload\n"
+                "-----END PRIVATE KEY-----\"\ncommand failed",
+                ("BEGIN PRIVATE KEY", "base64-secret-payload",
+                 "END PRIVATE KEY", "command failed"),
+            ),
+            (
+                "provisioning_content: '<plist>\n"
+                "<key>DeveloperCertificates</key>\n"
+                "<data>profile-secret</data>\n"
+                "</plist>'",
+                ("plist", "DeveloperCertificates", "profile-secret"),
+            ),
+            (
+                "certificate_identity=\"Apple Development: Jane Doe "
+                "(SECRETTEAM)\"\ncodesign failed",
+                ("Jane Doe", "SECRETTEAM", "codesign failed"),
+            ),
+        )
+        for diagnostic, leaked_fragments in sensitive_diagnostics:
+            with self.subTest(diagnostic=diagnostic.splitlines()[0]):
+                sanitized = runner.sanitize(diagnostic, run_id)
+                self.assertEqual(runner.REDACTED, sanitized)
+                for fragment in leaked_fragments:
+                    self.assertNotIn(fragment, sanitized)
+
+        ordinary = "assertion mismatch: expected 1, got 2\ncase remained clean"
+        self.assertEqual(ordinary, runner.sanitize(ordinary, run_id))
+
     def test_failure_files_keep_only_allowlisted_relative_evidence_paths(self):
         """Failure artifacts must not serialize arbitrary host filesystem paths."""
         def fail_with_paths(_case):
