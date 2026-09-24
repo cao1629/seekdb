@@ -30,6 +30,21 @@ python3 unittest/ios_build/run_device_suite.py \
 
 该命令中的环境变量只作本机参数示例；设备、Team、证书、profile 和账号标识不得写入仓库证据。本节最终提交已用同一 native source SHA 完成 iphoneos runtime/App 链接、现有本机描述文件签名校验与安装；真机 C++ JSONL 的 4 个 case 均有 assertion 且 `result=0`、`run_complete/result=0`。随后在同一 SHA 下以全新数据目录执行普通模式 36-step SQL 首轮及同目录 restart 轮，两轮均为 36 个成功 step 加 1 个成功 complete，`previous_runs=0/1`，清理状态完整，整个序列的 probe 相关 crash/Jetsam 增量为 0。脱敏证据保存在忽略目录 `build_ios_arm64/device-evidence/task3-cpp/final/`。
 
+上述最终序列严格只证明 **clean App container** 下的 C++ suite，以及随后同一新目录中 SQL `previous_runs` 从 0 到 1 的重启恢复。最终序列前，两次 C++ suite 都已产生成功 assertion 和 `suite_result=0`，但引擎持续停在 `Stopping`，`result`/cleanup 字段一直为 null；180 秒和 300 秒的 host 终态等待先后超时。当时专用测试 App 的 `Documents` 顶层已累积 43 项多轮测试数据；日志在 stop request 后未出现 `ObServer::set_stop()` 中首个 `sql_nio_stop()` 之后的停机记录。单纯 `--terminate-existing` 后换新目录重试仍可复现；卸载并重装专用测试 App、清空整个 container 后，同一 native 二进制才完成干净停机。这只说明 stall 与累积 container 状态相关；精确的 `sql_nio_stop()` 阻塞根因、触发阈值及非清空恢复方案仍未解决、未验证，不得将本次 clean-container 通过外推为累积多轮数据下的停机可靠性。
+
+仅对可丢弃的专用测试 App，且已将需要的 JSON/JSONL 证据复制到 host 后，可用下列占位参数安全重置。**uninstall 会删除该 App 的整个 data container，包括全部数据库目录和尚未复制的证据**；不得对含需保留数据的 App 执行。
+
+```bash
+DEVICE_ID="<connected-test-device-id>"
+BUNDLE_ID="<dedicated-test-app-bundle-id>"
+APP_PATH="build_ios_arm64/app/Release-iphoneos/SeekDBProbe.app"
+
+xcrun devicectl device uninstall app --device "$DEVICE_ID" "$BUNDLE_ID"
+xcrun devicectl device install app --device "$DEVICE_ID" "$APP_PATH"
+```
+
+本文档边界说明是 native 验收后的 docs-only follow-up；上述真机证据继续绑定 native source SHA `669875476d83857ec4382e57834b5fef1cdcb3d3`，不把后续文档提交标记为新的设备二进制。
+
 `build.iphone.sh` 为 iPhone ARM64 和 Apple Silicon iOS 模拟器配置 CMake、Rust 和 Apple SDK。默认目标是 `oceanbase_static`。目前不是已完成的 iOS 产品构建流程；脚本不生成、签名或安装 App。
 
 完整环境设置、逐文件修改原因和失败尝试见 [iOS 移植变更记录](ios-change-log.md)。后续环境、源码和 CMake 变更必须同步追加该记录，并区分已验证与待验证。
