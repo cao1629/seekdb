@@ -39,7 +39,9 @@ class PhysicalDevice:
     identifier: str
     name: str
     platform: str
-    connection_status: str
+    reality: str
+    visibility_class: str
+    boot_state: str
 
 
 @dataclass(frozen=True)
@@ -102,38 +104,64 @@ def _nested_text(record: Mapping[str, object], *path: str) -> str:
     return current if isinstance(current, str) else ""
 
 
+def _first_nested_text(
+        record: Mapping[str, object],
+        *paths: tuple[str, ...]) -> str:
+    """Return the first populated text field among schema-version paths."""
+    for path in paths:
+        value = _nested_text(record, *path)
+        if value:
+            return value
+    return ""
+
+
 def _device_from_record(record: object) -> Optional[PhysicalDevice]:
-    """Return one connected physical iPhone from a devicectl record."""
+    """Return one available physical iPhone from a devicectl record."""
     if not isinstance(record, Mapping):
         return None
     identifier = record.get("identifier")
     if not isinstance(identifier, str) or not identifier:
         return None
-    name = (
-        _nested_text(record, "deviceProperties", "name")
-        or str(record.get("name", "")))
-    platform = (
-        _nested_text(record, "hardwareProperties", "platform")
-        or str(record.get("platform", "")))
-    device_type = (
-        _nested_text(record, "hardwareProperties", "deviceType")
-        or _nested_text(record, "hardwareProperties", "productType")
-        or name)
-    connection = (
-        _nested_text(record, "connectionProperties", "status")
-        or _nested_text(record, "connectionProperties", "tunnelState")
-        or str(record.get("connectionStatus", "")))
-    combined = " ".join((name, platform, device_type)).lower()
-    if "simulator" in combined:
+    name_value = record.get("name")
+    name = (name_value if isinstance(name_value, str)
+            else _nested_text(record, "deviceProperties", "name"))
+    platform = _first_nested_text(
+        record,
+        ("properties", "hardware", "platform"),
+        ("hardwareProperties", "platform"),
+    )
+    device_type = _first_nested_text(
+        record,
+        ("properties", "hardware", "deviceType"),
+        ("hardwareProperties", "deviceType"),
+    )
+    reality = _first_nested_text(
+        record,
+        ("properties", "hardware", "reality"),
+        ("hardwareProperties", "reality"),
+    )
+    visibility_class = _first_nested_text(
+        record,
+        ("properties", "state", "visibilityClass"),
+        ("visibilityClass",),
+    )
+    boot_state = _first_nested_text(
+        record,
+        ("properties", "state", "bootState"),
+        ("deviceProperties", "bootState"),
+    )
+    if reality.lower() != "physical":
         return None
     if platform.lower() not in {"ios", "iphoneos"}:
         return None
-    if not (name.lower().startswith("iphone")
-            or device_type.lower().startswith("iphone")):
+    if device_type.lower() != "iphone":
         return None
-    if connection.lower() not in {"connected", "available"}:
+    if visibility_class.lower() != "default":
         return None
-    return PhysicalDevice(identifier, name, platform, connection)
+    if boot_state.lower() != "booted":
+        return None
+    return PhysicalDevice(
+        identifier, name, platform, reality, visibility_class, boot_state)
 
 
 def discover_physical_devices(

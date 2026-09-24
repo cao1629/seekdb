@@ -129,8 +129,10 @@ class RunAllIphoneTestsTest(unittest.TestCase):
     def test_multiple_physical_devices_require_explicit_selection(self):
         """Ambiguous physical-device selection must fail before phase dispatch."""
         devices = [
-            cli.PhysicalDevice("first", "iPhone 15", "iOS", "connected"),
-            cli.PhysicalDevice("second", "iPhone 16", "iOS", "connected"),
+            cli.PhysicalDevice(
+                "first", "iPhone 15", "iOS", "physical", "default", "booted"),
+            cli.PhysicalDevice(
+                "second", "iPhone 16", "iOS", "physical", "default", "booted"),
         ]
         with self.assertRaisesRegex(cli.DeviceSelectionError,
                                     "multiple eligible physical iPhones"):
@@ -139,7 +141,9 @@ class RunAllIphoneTestsTest(unittest.TestCase):
     def test_requested_device_must_be_an_eligible_physical_device(self):
         """An arbitrary identifier must not bypass the discovered physical list."""
         devices = [
-            cli.PhysicalDevice("physical", "iPhone 16", "iOS", "connected"),
+            cli.PhysicalDevice(
+                "physical", "iPhone 16", "iOS",
+                "physical", "default", "booted"),
         ]
         with self.assertRaisesRegex(cli.DeviceSelectionError,
                                     "requested physical iPhone is unavailable"):
@@ -147,37 +151,52 @@ class RunAllIphoneTestsTest(unittest.TestCase):
         self.assertEqual(
             "physical", cli.select_physical_device("physical", devices).identifier)
 
-    def test_discovery_keeps_only_connected_physical_iphones(self):
-        """Discovery must reject simulators, non-iOS devices, and disconnected rows."""
+    def test_discovery_uses_reality_visibility_and_boot_state(self):
+        """Discovery must use CoreDevice physicality and availability fields."""
         payload = {
             "result": {"devices": [
                 {
                     "identifier": "physical",
-                    "deviceProperties": {"name": "iPhone 16"},
                     "hardwareProperties": {
-                        "platform": "iOS", "deviceType": "iPhone"},
-                    "connectionProperties": {"status": "connected"},
+                        "platform": "iOS", "deviceType": "iPhone",
+                        "reality": "physical"},
+                    "connectionProperties": {
+                        "tunnelState": "disconnected",
+                        "transportType": "wired",
+                        "pairingState": "paired"},
+                    "visibilityClass": "default",
+                    "deviceProperties": {
+                        "name": "iPhone 16", "bootState": "booted"},
                 },
                 {
                     "identifier": "simulator",
-                    "deviceProperties": {"name": "iPhone Simulator"},
+                    "deviceProperties": {
+                        "name": "iPhone Simulator", "bootState": "booted"},
                     "hardwareProperties": {
-                        "platform": "iOS Simulator", "deviceType": "iPhone"},
-                    "connectionProperties": {"status": "connected"},
+                        "platform": "iOS", "deviceType": "iPhone",
+                        "reality": "simulated"},
+                    "connectionProperties": {"tunnelState": "connected"},
+                    "visibilityClass": "simulators",
                 },
                 {
                     "identifier": "ipad",
-                    "deviceProperties": {"name": "iPad"},
+                    "deviceProperties": {
+                        "name": "iPad", "bootState": "booted"},
                     "hardwareProperties": {
-                        "platform": "iOS", "deviceType": "iPad"},
-                    "connectionProperties": {"status": "connected"},
+                        "platform": "iOS", "deviceType": "iPad",
+                        "reality": "physical"},
+                    "connectionProperties": {"tunnelState": "disconnected"},
+                    "visibilityClass": "default",
                 },
                 {
                     "identifier": "offline",
-                    "deviceProperties": {"name": "iPhone 14"},
+                    "deviceProperties": {
+                        "name": "iPhone 14", "bootState": "shutdown"},
                     "hardwareProperties": {
-                        "platform": "iOS", "deviceType": "iPhone"},
-                    "connectionProperties": {"status": "disconnected"},
+                        "platform": "iOS", "deviceType": "iPhone",
+                        "reality": "physical"},
+                    "connectionProperties": {"tunnelState": "disconnected"},
+                    "visibilityClass": "default",
                 },
             ]},
         }
@@ -213,6 +232,39 @@ class RunAllIphoneTestsTest(unittest.TestCase):
                 "SEEKDB_IPHONE_TEAM", "SEEKDB_IPHONE_SIGNING_IDENTITY"):
             self.assertNotIn(variable, commands[0][1]["env"])
 
+    def test_discovery_accepts_current_properties_without_deprecated_fields(self):
+        """CoreDevice's replacement properties must work without old aliases."""
+        payload = {"result": {"devices": [{
+            "identifier": "modern-physical",
+            "name": "iPhone 16",
+            "properties": {
+                "hardware": {
+                    "platform": "iOS",
+                    "deviceType": "iPhone",
+                    "reality": "physical",
+                },
+                "state": {
+                    "visibilityClass": "default",
+                    "bootState": "booted",
+                },
+                "connection": {
+                    "state": "disconnected",
+                    "transportType": "wired",
+                },
+            },
+        }]}}
+
+        devices = cli.discover_physical_devices(
+            run_command=lambda _command, **_kwargs: CompletedCommand(
+                stdout=json.dumps(payload)))
+
+        self.assertEqual(
+            [("modern-physical", "physical", "default", "booted")],
+            [(device.identifier, device.reality,
+              device.visibility_class, device.boot_state)
+             for device in devices],
+        )
+
     def test_dry_run_prints_original_directory_and_serializes_no_unique_values(self):
         """Dry-run state and output must omit every process-local unique value."""
         secrets = (
@@ -228,7 +280,8 @@ class RunAllIphoneTestsTest(unittest.TestCase):
                 "--team", secrets[2], "--signing-identity", secrets[3],
             ]
             physical = cli.PhysicalDevice(
-                secrets[0], "iPhone", "iOS", "connected")
+                secrets[0], "iPhone", "iOS",
+                "physical", "default", "booted")
             with mock.patch.object(
                     cli, "source_commit", return_value="a" * 40), \
                     mock.patch.object(
@@ -272,7 +325,8 @@ class RunAllIphoneTestsTest(unittest.TestCase):
             """Record the external action after selected-directory output."""
             events.append("discover")
             return [cli.PhysicalDevice(
-                "physical", "iPhone", "iOS", "connected")]
+                "physical", "iPhone", "iOS",
+                "physical", "default", "booted")]
 
         with mock.patch.object(cli, "source_commit", return_value="a" * 40), \
                 mock.patch.object(cli.state, "select_run", return_value=selection), \
@@ -310,7 +364,8 @@ class RunAllIphoneTestsTest(unittest.TestCase):
             return 7
 
         physical = cli.PhysicalDevice(
-            "environment-device", "iPhone", "iOS", "connected")
+            "environment-device", "iPhone", "iOS",
+            "physical", "default", "booted")
         timestamp = dt.datetime(2026, 9, 24, 10, tzinfo=UTC)
         with mock.patch.object(cli, "source_commit", return_value="a" * 40), \
                 mock.patch.object(cli.state, "select_run", return_value=selection), \
