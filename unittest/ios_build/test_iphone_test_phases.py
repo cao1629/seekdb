@@ -275,6 +275,105 @@ class IphoneTestPhasesTest(unittest.TestCase):
             for source in inputs.sources.values()))
         self.assertNotIn("another", str(inputs.deps_prefix))
 
+    def test_default_executor_passes_one_validated_xcode_environment(self):
+        """Run every phase command with the resolved full-Xcode selection."""
+        completed = mock.Mock(returncode=0, stdout="safe", stderr="")
+        command_environment = {
+            "PATH": "/usr/bin:/bin",
+            "DEVELOPER_DIR": "/validated/Xcode/Contents/Developer",
+        }
+        with mock.patch.object(
+                phases, "validated_xcode_environment",
+                return_value=command_environment) as validate, \
+                mock.patch.object(
+                    phases.subprocess, "run", return_value=completed) as run:
+            execute = phases._default_executor("safe-run")
+            result = execute(("xcrun", "devicectl", "help"), 17)
+
+        validate.assert_called_once_with()
+        self.assertEqual(0, result.exit_status)
+        self.assertEqual(command_environment, run.call_args.kwargs["env"])
+        self.assertEqual(17, run.call_args.kwargs["timeout"])
+
+    def test_xcode_environment_preserves_and_validates_explicit_selection(self):
+        """Retain one explicit full-Xcode directory only after all probes pass."""
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            developer = root / "Explicit Xcode/Contents/Developer"
+            developer.mkdir(parents=True)
+            devicectl = root / "bin/devicectl"
+            lldb = root / "bin/lldb"
+            for tool in (devicectl, lldb):
+                tool.parent.mkdir(parents=True, exist_ok=True)
+                tool.write_text("#!/bin/sh\n", encoding="utf-8")
+                tool.chmod(0o755)
+            sdk = root / "iPhoneOS.sdk"
+            sdk.mkdir()
+            responses = iter((devicectl, lldb, sdk))
+            calls = []
+
+            def run_command(command, **kwargs):
+                """Return one validated tool path for each fixed Xcode probe."""
+                calls.append((tuple(command), kwargs))
+                return mock.Mock(
+                    returncode=0, stdout=f"{next(responses)}\n", stderr="")
+
+            resolved = phases.validated_xcode_environment(
+                {"DEVELOPER_DIR": str(developer), "KEEP": "value"},
+                run_command=run_command)
+
+        self.assertEqual(str(developer), resolved["DEVELOPER_DIR"])
+        self.assertEqual("value", resolved["KEEP"])
+        self.assertEqual(3, len(calls))
+        self.assertTrue(all(
+            call[1]["env"]["DEVELOPER_DIR"] == str(developer)
+            for call in calls))
+
+    def test_reuse_install_uses_validated_xcode_environment(self):
+        """Keep codesign and devicectl install on the same selected Xcode."""
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            configuration = cli.replace(
+                self.configuration(Path(temporary_directory)),
+                provisioned_devices=("private-profile-udid",),
+            )
+            command_environment = {
+                "DEVELOPER_DIR": "/validated/Xcode/Contents/Developer"}
+            completed = mock.Mock(returncode=0, stdout="", stderr="")
+            with mock.patch.object(
+                    phases, "validated_xcode_environment",
+                    return_value=command_environment), \
+                    mock.patch.object(
+                        phases.subprocess, "run",
+                        return_value=completed) as run:
+                preparer = phases.TestAppPreparer(
+                    configuration, phases._default_executor("safe-run"))
+                result = preparer.ensure(reuse_build=True)
+
+        self.assertIsNone(result)
+        self.assertEqual(2, run.call_count)
+        self.assertIn("codesign", run.call_args_list[0].args[0][0])
+        self.assertIn("devicectl", run.call_args_list[1].args[0])
+        self.assertTrue(all(
+            call.kwargs["env"] == command_environment
+            for call in run.call_args_list))
+
+    def test_invalid_xcode_environment_returns_fixed_build_input_code(self):
+        """Map Xcode selection failures to the allowlisted build-input stage."""
+        with tempfile.TemporaryDirectory() as temporary_directory, \
+                mock.patch.object(
+                    phases, "validated_xcode_environment",
+                    side_effect=phases.BuildReadinessError(
+                        "untrusted local detail")):
+            issue = phases.prepare_test_app(
+                configuration=self.configuration(Path(temporary_directory)),
+                suites=("registry-smoke",),
+                source_revision="a" * 40,
+                run_id="safe-run",
+                reuse_build=True,
+            )
+
+        self.assertEqual("build-inputs", issue)
+
     def test_legacy_raw_build_scripts_move_to_run_scoped_quarantine(self):
         """Migrate only exact raw Cargo host launchers and remain idempotent."""
         with tempfile.TemporaryDirectory() as temporary_directory:

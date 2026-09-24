@@ -29,6 +29,7 @@ RUSTC_WRAPPER = SCRIPT_DIRECTORY / "rustc_lldb_wrapper.py"
 DEPS_PREFIX_ENVIRONMENT = "SEEKDB_IPHONE_DEPS_PREFIX"
 HEADERS_PREFIX_ENVIRONMENT = "SEEKDB_IPHONE_HEADERS_PREFIX"
 RUST_TARGET_DIR_ENVIRONMENT = "RUST_TARGET_DIR"
+DEFAULT_XCODE_DEVELOPER_DIR = "/Applications/Xcode.app/Contents/Developer"
 DEVICE_INNER_TIMEOUT_SECONDS = 600
 DEVICE_CASE_TIMEOUT_SECONDS = DEVICE_INNER_TIMEOUT_SECONDS + 120
 SQL_RESTART_INNER_TIMEOUT_SECONDS = 900
@@ -139,20 +140,54 @@ def _rust_tool_environment(
     }
 
 
-def _lldb_is_available() -> bool:
-    """Return whether the fixed macOS LLDB launcher is locally available."""
+def validated_xcode_environment(
+        environment: Optional[Mapping[str, str]] = None,
+        run_command: Callable[..., object] = subprocess.run
+        ) -> Mapping[str, str]:
+    """Return an inherited environment bound to one complete Xcode install."""
     if sys.platform != "darwin":
-        return False
+        raise BuildReadinessError("full Xcode tools are unavailable")
+    command_environment = dict(
+        os.environ if environment is None else environment)
+    command_environment.setdefault(
+        "DEVELOPER_DIR", DEFAULT_XCODE_DEVELOPER_DIR)
+    developer_value = command_environment.get("DEVELOPER_DIR", "")
+    developer = Path(developer_value).expanduser()
+    if (not developer_value or not developer.is_absolute()
+            or not developer.is_dir()):
+        raise BuildReadinessError("full Xcode tools are unavailable")
+    probes = (
+        (["/usr/bin/xcrun", "--find", "devicectl"], "executable"),
+        (["/usr/bin/xcrun", "--find", "lldb"], "executable"),
+        (["/usr/bin/xcrun", "--sdk", "iphoneos", "--show-sdk-path"],
+         "directory"),
+    )
+    for command, expected_kind in probes:
+        try:
+            result = run_command(
+                command, check=False, capture_output=True, text=True,
+                timeout=10, env=command_environment)
+        except (OSError, subprocess.SubprocessError) as error:
+            raise BuildReadinessError(
+                "full Xcode tools are unavailable") from error
+        output = result.stdout.strip()
+        resolved = Path(output)
+        valid = result.returncode == 0 and bool(output) and (
+            (resolved.is_file() and os.access(resolved, os.X_OK))
+            if expected_kind == "executable" else resolved.is_dir())
+        if not valid:
+            raise BuildReadinessError("full Xcode tools are unavailable")
+    return command_environment
+
+
+def _lldb_is_available(
+        environment: Optional[Mapping[str, str]] = None) -> bool:
+    """Return whether one complete Xcode command environment is available."""
     try:
-        result = subprocess.run(
-            ["/usr/bin/xcrun", "--find", "lldb"], check=False,
-            capture_output=True, text=True, timeout=10)
-    except (OSError, subprocess.SubprocessError):
+        validated_xcode_environment(environment)
+    except BuildReadinessError:
         return False
-    if result.returncode != 0:
-        return False
-    lldb = Path(result.stdout.strip())
-    return lldb.is_file() and os.access(lldb, os.X_OK)
+    return True
 
 
 def _cache_values(cache_path: Path) -> Mapping[str, str]:
@@ -257,7 +292,7 @@ def resolve_build_inputs(
             or not RUSTC_WRAPPER.is_file()
             or RUSTC_WRAPPER.is_symlink()
             or not os.access(RUSTC_WRAPPER, os.X_OK)
-            or not _lldb_is_available()
+            or not _lldb_is_available(environment)
             or not rust_target_ready
             or not headers_prefix.is_dir()
             or any(not (deps_prefix / relative).exists()
@@ -677,6 +712,8 @@ def _slug(case_id: str) -> str:
 
 def _default_executor(run_id: str) -> CommandExecutor:
     """Create a subprocess boundary that redacts all captured text immediately."""
+    command_environment = validated_xcode_environment()
+
     def execute(
             command: Sequence[str],
             timeout_seconds: int) -> runner.SanitizedProcessResult:
@@ -684,7 +721,8 @@ def _default_executor(run_id: str) -> CommandExecutor:
         try:
             completed = subprocess.run(
                 list(command), cwd=REPOSITORY_ROOT, check=False,
-                capture_output=True, text=True, timeout=timeout_seconds)
+                capture_output=True, text=True, timeout=timeout_seconds,
+                env=command_environment)
         except subprocess.TimeoutExpired:
             return runner.SanitizedProcessResult(
                 124, "", "command exceeded its bounded timeout")
@@ -1314,8 +1352,12 @@ def prepare_test_app(
         reuse_build: bool = False):
     """Build and install current-HEAD test artifacts before checkpointing."""
     del suites, source_revision
+    try:
+        execute = _default_executor(run_id)
+    except BuildReadinessError:
+        return "build-inputs"
     preparer = TestAppPreparer(
-        configuration, _default_executor(run_id), run_id=run_id)
+        configuration, execute, run_id=run_id)
     failure = preparer.ensure(reuse_build=reuse_build)
     if failure is None:
         return preparer.build_input_sources
@@ -1335,8 +1377,12 @@ def prepare_test_app(
 
 def verify_test_app(*, configuration, run_id: str):
     """Revalidate and install a newly packaged App using enriched profile data."""
+    try:
+        execute = _default_executor(run_id)
+    except BuildReadinessError:
+        return "build-inputs"
     failure = TestAppPreparer(
-        configuration, _default_executor(run_id), run_id=run_id).ensure(
+        configuration, execute, run_id=run_id).ensure(
             reuse_build=True)
     if failure is None:
         return None
