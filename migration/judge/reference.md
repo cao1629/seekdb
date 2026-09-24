@@ -31,6 +31,30 @@ Every judge run uses the archived binary, never the worktree's build_release/.
 
 `df -h /` showed 40-41 GiB free after the builds.
 
-## Still to do for item 13
+## The archive and its rebuild check (item 13; 00b action 11, 2026-09-24)
 
-The rest of the archive (deps/3rd as an APFS clone, a copy of the SDK directory, obclient and mysqltest, the recorded outputs) and the rebuild-from-archive check come in action 11. Repeat the rebuild check after any macOS or Command Line Tools update, since the libc++ headers come from the SDK and the runtime libc++ from macOS.
+/Users/colin/seekdb-dev/ref-archive-834bbee1e/ holds:
+
+| Entry | What |
+|---|---|
+| seekdb, seekdb.sha256 | the flagged reference binary every judge run uses |
+| deps-3rd/ | the unpacked deps (an APFS clone of the main checkout's deps/3rd; holds the Clang 17.0.6 toolchain) |
+| MacOSX26.2.sdk/ | a full copy of the SDK the reference was built against (777 MB) |
+| client/ | obclient and mysqltest from deps/3rd/u01/obclient/bin, with sha256.txt |
+| reference-build.patch | the build-file patch |
+| recordings/ | a9-rec-flag (the 40 plan-bearing cases, full init) and a10-rec1, a10-rec2 (the 128 plain-SQL cases, reduced init) |
+
+The rebuild check: the reference worktree's build_release/ was removed and its deps/3rd replaced by a
+clone of the archive's deps-3rd/, then built with `SDKROOT=<archive>/MacOSX26.2.sdk bash build.sh
+release --make`:
+- 381 s, 0 errors; `seekdb -V` reports 834bbee1e;
+- the same compiler (Clang 17.0.6, ob-deps 38008c2a88a845ca1dbb6fc02d7e47c7d455b196), the same
+  `_LIBCPP_VERSION` (200100), the same SDK version (26.2), and `-ffp-contract=off` on all 364 compile
+  commands;
+- the 40 plan-bearing cases recorded on the rebuilt binary are identical to the archived recording
+  (`compare`: 40 identical, 0 different, 0 missing, 0 recording problems).
+The rebuilt binary's sha256 differs from the archived one only because the build embeds its build
+time; judge runs keep using the archived binary. Outputs: /Users/colin/seekdb-dev/mysqltest-runs/00b/a11-rebuild/.
+
+Repeat the rebuild check after any macOS or Command Line Tools update, since the runtime libc++ comes
+from macOS.
