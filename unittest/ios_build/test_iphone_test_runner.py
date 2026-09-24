@@ -77,11 +77,12 @@ class IphoneTestRunnerTest(unittest.TestCase):
             ))
         return adapters
 
-    def run_engine(self, adapters):
+    def run_engine(self, adapters, redaction_tokens=()):
         """Execute and mark this test's selection as consumed by the engine."""
         self._selection_consumed = True
         return runner.run_phase_engine(
-            self.output_root, self.selection, adapters, now=self.clock)
+            self.output_root, self.selection, adapters, now=self.clock,
+            redaction_tokens=redaction_tokens)
 
     def checkpoint(self):
         """Load the final persisted checkpoint for this test run."""
@@ -326,6 +327,46 @@ class IphoneTestRunnerTest(unittest.TestCase):
         self.assertNotIn(foreign_uuid, result.stdout)
         self.assertLessEqual(len(result.stderr),
                              runner.MAX_PROCESS_OUTPUT_LENGTH)
+
+    def test_runtime_tokens_redact_diagnostics_details_and_process_output(self):
+        """Per-run local inputs must be removed at every persistence channel."""
+        tokens = (
+            "custom-device-token", "custom.bundle.token",
+            "CUSTOMTEAM", "custom signing identity",
+        )
+
+        def fail_with_runtime_tokens(_case):
+            """Return tokens through text, nested details, and process streams."""
+            process = runner.SanitizedProcessResult.create(
+                9,
+                stdout=f"device {tokens[0]} bundle {tokens[1]}",
+                stderr=f"team {tokens[2]} identity {tokens[3]}",
+                run_id=self.selection.checkpoint["run_id"],
+            )
+            return runner.CaseResult.failed(
+                category="assertion",
+                diagnostic=" ".join(tokens),
+                details={
+                    "ordinary": list(tokens),
+                    tokens[1]: "runtime token used as a key",
+                    "stdout": process.stdout,
+                    "stderr": process.stderr,
+                },
+            )
+
+        adapters = self.adapters({
+            runner.PHASE_IDS[0]: fail_with_runtime_tokens})
+        self.assertEqual(
+            1, self.run_engine(adapters, redaction_tokens=tokens))
+
+        persisted = "\n".join(
+            path.read_text(encoding="utf-8", errors="replace")
+            for path in self.selection.run_directory.iterdir()
+            if path.is_file())
+        for token in tokens:
+            self.assertNotIn(token, persisted)
+        self.assertIn(runner.REDACTED, persisted)
+        self.assertFalse(runner.has_runtime_redaction_tokens())
 
     def test_redacts_canonical_versionless_and_v7_uuids_except_run_id(self):
         """Redaction must cover canonical UUID text regardless of version bits."""

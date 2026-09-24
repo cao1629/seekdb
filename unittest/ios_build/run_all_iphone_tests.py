@@ -8,6 +8,7 @@ import hashlib
 import json
 import os
 from pathlib import Path
+import re
 import subprocess
 import sys
 from typing import Callable, Iterable, Mapping, Optional, Sequence, TextIO
@@ -18,10 +19,18 @@ import iphone_test_state as state
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_OUTPUT_ROOT = REPOSITORY_ROOT / "iphone_test"
+DEFAULT_ENGINE_BUILD = REPOSITORY_ROOT / "build_ios_arm64"
+DEFAULT_APP_ARTIFACT = (
+    DEFAULT_ENGINE_BUILD / "app/Release-iphoneos/SeekDBProbe.app")
 DEVICE_ENVIRONMENT = "SEEKDB_IPHONE_DEVICE"
 BUNDLE_ENVIRONMENT = "SEEKDB_IPHONE_BUNDLE_ID"
 TEAM_ENVIRONMENT = "SEEKDB_IPHONE_TEAM"
 SIGNING_ENVIRONMENT = "SEEKDB_IPHONE_SIGNING_IDENTITY"
+ENGINE_BUILD_ENVIRONMENT = "SEEKDB_IPHONE_ENGINE_BUILD"
+APP_ARTIFACT_ENVIRONMENT = "SEEKDB_IPHONE_APP_ARTIFACT"
+ARTIFACT_MARKER = re.compile(
+    rb"SEEKDB_IOS_ARTIFACT_BUILD_ID=([0-9a-f]{12});"
+    rb"SEEKDB_IOS_ARTIFACT_HOOK_MODE=(enabled|disabled)")
 
 
 class IphoneTestCliError(RuntimeError):
@@ -42,6 +51,7 @@ class PhysicalDevice:
     reality: str
     visibility_class: str
     boot_state: str
+    pairing_state: str
 
 
 @dataclass(frozen=True)
@@ -52,6 +62,15 @@ class LocalConfiguration:
     bundle_id: Optional[str]
     team: Optional[str]
     signing_identity: Optional[str]
+    engine_build: Path
+    app_artifact: Path
+    test_hooks: bool
+
+    def redaction_tokens(self) -> tuple[str, ...]:
+        """Return unique values that must remain process-local."""
+        return tuple(value for value in (
+            self.device, self.bundle_id, self.team, self.signing_identity)
+            if value)
 
 
 def parse_args(arguments: Optional[Sequence[str]] = None) -> argparse.Namespace:
@@ -73,10 +92,21 @@ def parse_args(arguments: Optional[Sequence[str]] = None) -> argparse.Namespace:
     parser.add_argument(
         "--dry-run", action="store_true",
         help="select state and a physical device without dispatching phases")
-    parser.add_argument("--device", help="physical iPhone identifier")
-    parser.add_argument("--bundle-id", help="application bundle identifier")
-    parser.add_argument("--team", help="Apple development team identifier")
-    parser.add_argument("--signing-identity", help="code-signing identity")
+    parser.add_argument(
+        "--device", help=f"physical iPhone identifier; prefer ${DEVICE_ENVIRONMENT}")
+    parser.add_argument(
+        "--bundle-id", help=f"application bundle ID; prefer ${BUNDLE_ENVIRONMENT}")
+    parser.add_argument(
+        "--team", help=f"Apple team identifier; prefer ${TEAM_ENVIRONMENT}")
+    parser.add_argument(
+        "--signing-identity",
+        help=f"code-signing identity; prefer ${SIGNING_ENVIRONMENT}")
+    parser.add_argument(
+        "--engine-build", type=Path,
+        help=f"iOS engine build directory; default ${ENGINE_BUILD_ENVIRONMENT}")
+    parser.add_argument(
+        "--app-artifact", type=Path,
+        help=f"signed App path; default ${APP_ARTIFACT_ENVIRONMENT}")
     return parser.parse_args(arguments)
 
 
@@ -84,6 +114,16 @@ def resolve_local_configuration(
         options: argparse.Namespace,
         environment: Mapping[str, str]) -> LocalConfiguration:
     """Resolve unique inputs from argv first and the environment second."""
+    engine_value = (
+        options.engine_build or environment.get(ENGINE_BUILD_ENVIRONMENT)
+        or DEFAULT_ENGINE_BUILD)
+    engine_build = Path(engine_value).expanduser().absolute()
+    artifact_value = (
+        options.app_artifact or environment.get(APP_ARTIFACT_ENVIRONMENT))
+    app_artifact = (
+        Path(artifact_value).expanduser().absolute()
+        if artifact_value else
+        engine_build / "app/Release-iphoneos/SeekDBProbe.app")
     return LocalConfiguration(
         device=options.device or environment.get(DEVICE_ENVIRONMENT),
         bundle_id=options.bundle_id or environment.get(BUNDLE_ENVIRONMENT),
@@ -91,6 +131,9 @@ def resolve_local_configuration(
         signing_identity=(
             options.signing_identity
             or environment.get(SIGNING_ENVIRONMENT)),
+        engine_build=engine_build,
+        app_artifact=app_artifact,
+        test_hooks=True,
     )
 
 
@@ -150,6 +193,11 @@ def _device_from_record(record: object) -> Optional[PhysicalDevice]:
         ("properties", "state", "bootState"),
         ("deviceProperties", "bootState"),
     )
+    pairing_state = _first_nested_text(
+        record,
+        ("properties", "connection", "pairingState"),
+        ("connectionProperties", "pairingState"),
+    )
     if reality.lower() != "physical":
         return None
     if platform.lower() not in {"ios", "iphoneos"}:
@@ -160,8 +208,11 @@ def _device_from_record(record: object) -> Optional[PhysicalDevice]:
         return None
     if boot_state.lower() != "booted":
         return None
+    if pairing_state.lower() != "paired":
+        return None
     return PhysicalDevice(
-        identifier, name, platform, reality, visibility_class, boot_state)
+        identifier, name, platform, reality, visibility_class, boot_state,
+        pairing_state)
 
 
 def discover_physical_devices(
@@ -173,7 +224,8 @@ def discover_physical_devices(
         "DEVELOPER_DIR", "/Applications/Xcode.app/Contents/Developer")
     for variable in (
             DEVICE_ENVIRONMENT, BUNDLE_ENVIRONMENT, TEAM_ENVIRONMENT,
-            SIGNING_ENVIRONMENT):
+            SIGNING_ENVIRONMENT, ENGINE_BUILD_ENVIRONMENT,
+            APP_ARTIFACT_ENVIRONMENT):
         command_environment.pop(variable, None)
     result = run_command(
         ["xcrun", "devicectl", "list", "devices",
@@ -223,7 +275,15 @@ def select_physical_device(
 
 def source_commit(
         run_command: Callable[..., object] = subprocess.run) -> str:
-    """Return the complete source revision used for checkpoint compatibility."""
+    """Return HEAD only when no tracked or untracked source change exists."""
+    status = run_command(
+        ["git", "status", "--porcelain=v1", "--untracked-files=all", "--"],
+        cwd=REPOSITORY_ROOT, check=False, capture_output=True, text=True)
+    if status.returncode != 0:
+        raise IphoneTestCliError("cannot inspect tracked source changes")
+    if status.stdout.strip():
+        raise IphoneTestCliError(
+            "tracked source changes must be committed before iPhone tests")
     result = run_command(
         ["git", "rev-parse", "HEAD"], cwd=REPOSITORY_ROOT,
         check=False, capture_output=True, text=True)
@@ -234,10 +294,80 @@ def source_commit(
     return revision
 
 
-def configuration_fingerprint(suites: Sequence[str]) -> str:
-    """Hash only non-secret runner controls for checkpoint compatibility."""
+def _artifact_marker(path: Path) -> Optional[tuple[bytes, bytes]]:
+    """Find a bounded embedded build marker without retaining artifact bytes."""
+    marker = None
+    tail = b""
+    with path.open("rb") as artifact:
+        while True:
+            chunk = artifact.read(1024 * 1024)
+            if not chunk:
+                break
+            match = ARTIFACT_MARKER.search(tail + chunk)
+            if marker is None and match is not None:
+                marker = (match.group(1), match.group(2))
+            tail = (tail + chunk)[-256:]
+    return marker
+
+
+def _app_executable(app_artifact: Path) -> Optional[Path]:
+    """Return a configured App executable path when one exists."""
+    if app_artifact.is_file():
+        return app_artifact
+    candidate = app_artifact / app_artifact.stem
+    return candidate if candidate.is_file() else None
+
+
+def validate_build_identity(
+        configuration: LocalConfiguration, source_revision: str) -> str:
+    """Validate present build outputs and return their opaque aggregate hash."""
+    identity = {
+        "source_revision": source_revision,
+        "test_hooks": configuration.test_hooks,
+    }
+    cache = configuration.engine_build / "CMakeCache.txt"
+    if cache.is_file():
+        expected = "ON" if configuration.test_hooks else "OFF"
+        setting = f"SEEKDB_IOS_TEST_HOOKS:BOOL={expected}"
+        if setting.encode("utf-8") not in cache.read_bytes():
+            raise IphoneTestCliError(
+                "iPhone build configuration does not match runner mode")
+    archive = (
+        configuration.engine_build
+        / "src/observer/libseekdb_ios_runtime.a")
+    expected_mode = b"enabled" if configuration.test_hooks else b"disabled"
+    expected_marker = (source_revision[:12].encode("ascii"), expected_mode)
+    if archive.is_file():
+        if _artifact_marker(archive) != expected_marker:
+            raise IphoneTestCliError(
+                "iPhone build identity does not match source and runner mode")
+    app_executable = _app_executable(configuration.app_artifact)
+    if app_executable is not None:
+        if _artifact_marker(app_executable) != expected_marker:
+            raise IphoneTestCliError(
+                "iPhone artifact identity does not match source and runner mode")
     serialized = json.dumps(
-        {"runner_version": state.RUNNER_VERSION, "suites": list(suites)},
+        identity, sort_keys=True, separators=(",", ":"))
+    return hashlib.sha256(serialized.encode("utf-8")).hexdigest()
+
+
+def configuration_fingerprint(
+        *, runner_suites: Sequence[str],
+        configuration: LocalConfiguration,
+        build_identity: str) -> str:
+    """Hash evidence-affecting local inputs into one opaque resume identity."""
+    serialized = json.dumps(
+        {
+            "runner_version": state.RUNNER_VERSION,
+            "suites": list(runner_suites),
+            "bundle_id": configuration.bundle_id,
+            "team": configuration.team,
+            "signing_identity": configuration.signing_identity,
+            "engine_build": str(configuration.engine_build),
+            "app_artifact": str(configuration.app_artifact),
+            "test_hooks": configuration.test_hooks,
+            "build_identity": build_identity,
+        },
         sort_keys=True,
         separators=(",", ":"),
     )
@@ -287,15 +417,32 @@ def main(
     selection = None
     engine_owns_selection = False
     try:
-        selection = state.select_run(
-            options.output_root,
-            mode=_run_mode(options),
-            source_commit=source_commit(),
-            config_fingerprint=configuration_fingerprint(suites),
-            now=clock(),
-        )
-        print(f"Selected iPhone test run: {selection.run_directory}",
-              file=stdout, flush=True)
+        revision = source_commit()
+        build_identity = validate_build_identity(configuration, revision)
+        fingerprint = configuration_fingerprint(
+            runner_suites=suites, configuration=configuration,
+            build_identity=build_identity)
+        current_time = clock()
+        if options.dry_run:
+            preview = state.preview_run(
+                options.output_root,
+                mode=_run_mode(options),
+                source_commit=revision,
+                config_fingerprint=fingerprint,
+                now=current_time,
+            )
+            print(f"Selected iPhone test run: {preview.run_directory}",
+                  file=stdout, flush=True)
+        else:
+            selection = state.select_run(
+                options.output_root,
+                mode=_run_mode(options),
+                source_commit=revision,
+                config_fingerprint=fingerprint,
+                now=current_time,
+            )
+            print(f"Selected iPhone test run: {selection.run_directory}",
+                  file=stdout, flush=True)
 
         selected_device = select_physical_device(
             configuration.device, discover_physical_devices())
@@ -309,7 +456,8 @@ def main(
         adapters = load_phase_adapters(configuration, suites)
         engine_owns_selection = True
         return runner.run_phase_engine(
-            options.output_root, selection, adapters, now=clock)
+            options.output_root, selection, adapters, now=clock,
+            redaction_tokens=configuration.redaction_tokens())
     except (IphoneTestCliError, state.IphoneTestStateError) as error:
         print(f"iPhone test runner error: {error}", file=stderr)
         return 2

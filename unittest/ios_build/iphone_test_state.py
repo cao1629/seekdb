@@ -105,6 +105,15 @@ class RunSelection:
             pass
 
 
+@dataclass(frozen=True)
+class RunPreview:
+    """Describe a read-only lifecycle selection without creating or locking it."""
+
+    run_directory: Path
+    checkpoint: Any
+    resumed: bool
+
+
 class RunLock:
     """Hold an exclusive advisory lock for one runner's entire lifetime."""
 
@@ -817,3 +826,54 @@ def select_run(
     return _resume_selection(
         root, run_directory, source_commit,
         config_fingerprint, now)
+
+
+def preview_run(
+        output_root: Path, mode: RunMode, source_commit: str,
+        config_fingerprint: str, now: dt.datetime) -> RunPreview:
+    """Preview run selection without creating, locking, or updating any file."""
+    _require_aware(now)
+    root = Path(output_root).expanduser().absolute()
+    if root.is_symlink() or (root.exists() and not root.is_dir()):
+        raise UnsafeRunPathError("output root must be a real directory")
+    today_directory = _validate_run_directory(
+        root, root / now.date().isoformat())
+
+    if mode == RunMode.RESTART:
+        return RunPreview(today_directory, checkpoint=None, resumed=False)
+
+    if mode == RunMode.DEFAULT:
+        if not _checkpoint_exists(root, today_directory):
+            return RunPreview(today_directory, checkpoint=None, resumed=False)
+        checkpoint = load_checkpoint(root, today_directory)
+        if not _is_incomplete(checkpoint):
+            return RunPreview(today_directory, checkpoint=None, resumed=False)
+        _validate_compatibility(
+            checkpoint, source_commit, config_fingerprint)
+        return RunPreview(today_directory, checkpoint=checkpoint, resumed=True)
+
+    if mode != RunMode.RESUME:
+        raise ValueError(f"unsupported run mode: {mode}")
+
+    candidates = []
+    if root.exists():
+        for child in root.iterdir():
+            if child.is_symlink() or not child.is_dir():
+                continue
+            try:
+                safe_child = _validate_run_directory(root, child)
+            except UnsafeRunPathError:
+                continue
+            if not _checkpoint_exists(root, safe_child):
+                continue
+            checkpoint = load_checkpoint(root, safe_child)
+            if _is_incomplete(checkpoint):
+                started_at = _parse_aware_timestamp(
+                    checkpoint["started_at"], "started_at")
+                candidates.append((started_at, safe_child, checkpoint))
+    if not candidates:
+        raise NoResumableRunError("no incomplete checkpoint is available")
+    _, run_directory, checkpoint = max(
+        candidates, key=lambda item: item[0])
+    _validate_compatibility(checkpoint, source_commit, config_fingerprint)
+    return RunPreview(run_directory, checkpoint=checkpoint, resumed=True)

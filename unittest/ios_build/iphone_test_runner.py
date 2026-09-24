@@ -30,6 +30,7 @@ RESULT_VALUES = ("passed", "failed", "blocked", "excluded", "incomplete")
 MAX_DIAGNOSTIC_LENGTH = 2048
 MAX_PROCESS_OUTPUT_LENGTH = 4096
 REDACTED = "[REDACTED]"
+_RUNTIME_REDACTION_TOKENS: Dict[str, tuple[str, ...]] = {}
 UUID_PATTERN = re.compile(
     r"(?i)\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-"
     r"[0-9a-f]{4}-[0-9a-f]{12}\b")
@@ -269,8 +270,31 @@ def should_stop_after_result(spec: CaseSpec, result: CaseResult) -> bool:
     )
 
 
+def register_runtime_redaction_tokens(
+        run_id: str, tokens: Iterable[str]) -> None:
+    """Register nonempty process-local values for one active run."""
+    normalized = {
+        str(token) for token in tokens
+        if token is not None and str(token) and str(token) != run_id
+    }
+    _RUNTIME_REDACTION_TOKENS[run_id] = tuple(
+        sorted(normalized, key=lambda value: (-len(value), value)))
+
+
+def clear_runtime_redaction_tokens(run_id: str) -> None:
+    """Forget process-local values when their run releases its lock."""
+    _RUNTIME_REDACTION_TOKENS.pop(run_id, None)
+
+
+def has_runtime_redaction_tokens() -> bool:
+    """Return whether any process-local redaction scope remains active."""
+    return bool(_RUNTIME_REDACTION_TOKENS)
+
+
 def _redact_text(value: str, run_id: str) -> str:
     """Redact UUID-like values other than the runner-owned run ID."""
+    for token in _RUNTIME_REDACTION_TOKENS.get(run_id, ()):
+        value = value.replace(token, REDACTED)
     if (SENSITIVE_LABEL_PATTERN.search(value)
             or APPLE_UDID_PATTERN.search(value)
             or APPLE_CERTIFICATE_IDENTITY_PATTERN.search(value)
@@ -288,12 +312,13 @@ def sanitize(value: Any, run_id: str) -> Any:
         sanitized = {}
         for key, item in value.items():
             key_text = str(key)
+            safe_key = _redact_text(key_text, run_id)
             normalized_key = re.sub(
                 r"[\s-]+", "_", key_text.strip().lower())
             if normalized_key in SENSITIVE_KEYS:
-                sanitized[key_text] = REDACTED
+                sanitized[safe_key] = REDACTED
             else:
-                sanitized[key_text] = sanitize(item, run_id)
+                sanitized[safe_key] = sanitize(item, run_id)
         return sanitized
     if isinstance(value, (list, tuple)):
         return [sanitize(item, run_id) for item in value]
@@ -675,10 +700,13 @@ def _persist_missing_adapters(
 def run_phase_engine(
         output_root: Path, selection: state.RunSelection,
         adapters: Iterable[PhaseAdapter],
-        now: Callable[[], dt.datetime]) -> int:
+        now: Callable[[], dt.datetime],
+        redaction_tokens: Iterable[str] = ()) -> int:
     """Run all required phases, persist transitions, report, and release lock."""
     checkpoint = selection.checkpoint
     run_directory = selection.run_directory
+    register_runtime_redaction_tokens(
+        checkpoint["run_id"], redaction_tokens)
     try:
         selection.ensure_locked()
         registry = _adapter_map(adapters)
@@ -748,4 +776,7 @@ def run_phase_engine(
         write_reports(output_root, run_directory, checkpoint)
         return 0 if checkpoint["status"] == "passed" else 1
     finally:
-        selection.close()
+        try:
+            selection.close()
+        finally:
+            clear_runtime_redaction_tokens(checkpoint["run_id"])
