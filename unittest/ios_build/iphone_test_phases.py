@@ -8,11 +8,13 @@ import json
 import os
 from pathlib import Path
 import re
+import signal
 import shlex
 import stat
 import subprocess
 import sys
 import tempfile
+import threading
 from typing import Callable, Iterable, Mapping, Optional, Sequence
 
 import iphone_test_runner as runner
@@ -84,6 +86,8 @@ SAFE_PROCESS_DIAGNOSTIC_LINES = frozenset((
     "device launch failed",
     "command exceeded its bounded timeout",
 ))
+UNLOCK_RETRY_PROMPT = (
+    "Unlock the iPhone and keep the screen awake; retrying…")
 
 
 class PhaseEvidenceError(RuntimeError):
@@ -720,24 +724,110 @@ def _slug(case_id: str) -> str:
     return re.sub(r"[^a-z0-9]+", "-", case_id.lower()).strip("-")[:80]
 
 
-def _default_executor(run_id: str) -> CommandExecutor:
-    """Create a subprocess boundary that redacts all captured text immediately."""
+def _drain_process_stream(
+        stream, chunks: list[str], terminal_stream=None) -> None:
+    """Drain one process pipe and echo only the exact complete unlock prompt."""
+    pending = ""
+    prompt_was_echoed = False
+    while True:
+        chunk = stream.read(65536)
+        if not chunk:
+            break
+        chunks.append(chunk)
+        if terminal_stream is None or prompt_was_echoed:
+            continue
+        pending += chunk
+        while "\n" in pending:
+            line, pending = pending.split("\n", 1)
+            if line.endswith("\r"):
+                line = line[:-1]
+            if line == UNLOCK_RETRY_PROMPT:
+                try:
+                    terminal_stream.write(f"{UNLOCK_RETRY_PROMPT}\n")
+                    terminal_stream.flush()
+                except (OSError, ValueError):
+                    terminal_stream = None
+                prompt_was_echoed = True
+                break
+
+
+def _terminate_process_group(process: subprocess.Popen) -> None:
+    """Terminate, kill if necessary, and reap one isolated process group."""
+    try:
+        os.killpg(process.pid, signal.SIGTERM)
+    except ProcessLookupError:
+        pass
+    try:
+        process.wait(timeout=1)
+        process_was_reaped = True
+    except subprocess.TimeoutExpired:
+        process_was_reaped = False
+    try:
+        os.killpg(process.pid, signal.SIGKILL)
+    except ProcessLookupError:
+        pass
+    if not process_was_reaped:
+        process.wait()
+
+
+def _close_process_streams(process: subprocess.Popen) -> None:
+    """Close drained process pipes after the reader threads reach EOF."""
+    for stream in (process.stdout, process.stderr):
+        if stream is not None:
+            stream.close()
+
+
+def _default_executor(
+        run_id: str, terminal_stream=None) -> CommandExecutor:
+    """Create a redacting subprocess boundary with one safe live prompt."""
     command_environment = validated_xcode_environment()
+    live_terminal = sys.stderr if terminal_stream is None else terminal_stream
+    if runner.sanitize_diagnostic(UNLOCK_RETRY_PROMPT, run_id) != (
+            UNLOCK_RETRY_PROMPT):
+        live_terminal = None
 
     def execute(
             command: Sequence[str],
             timeout_seconds: int) -> runner.SanitizedProcessResult:
         """Run one bounded command without persisting its secret-bearing argv."""
+        process = subprocess.Popen(
+            list(command), cwd=REPOSITORY_ROOT,
+            stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+            text=True, encoding="utf-8", errors="replace", bufsize=1,
+            env=command_environment, start_new_session=True)
+        stdout_chunks: list[str] = []
+        stderr_chunks: list[str] = []
+        stdout_reader = threading.Thread(
+            target=_drain_process_stream,
+            args=(process.stdout, stdout_chunks), daemon=True)
+        stderr_reader = threading.Thread(
+            target=_drain_process_stream,
+            args=(process.stderr, stderr_chunks, live_terminal), daemon=True)
+        stdout_reader.start()
+        stderr_reader.start()
+        timed_out = False
         try:
-            completed = subprocess.run(
-                list(command), cwd=REPOSITORY_ROOT, check=False,
-                capture_output=True, text=True, timeout=timeout_seconds,
-                env=command_environment)
+            exit_status = process.wait(timeout=timeout_seconds)
         except subprocess.TimeoutExpired:
-            return runner.SanitizedProcessResult(
-                124, "", "command exceeded its bounded timeout")
+            timed_out = True
+            _terminate_process_group(process)
+            exit_status = 124
+        except BaseException:
+            _terminate_process_group(process)
+            stdout_reader.join()
+            stderr_reader.join()
+            _close_process_streams(process)
+            raise
+        stdout_reader.join()
+        stderr_reader.join()
+        _close_process_streams(process)
+        stderr = "".join(stderr_chunks)
+        if timed_out:
+            if stderr and not stderr.endswith("\n"):
+                stderr += "\n"
+            stderr += "command exceeded its bounded timeout"
         return runner.SanitizedProcessResult.create(
-            completed.returncode, completed.stdout, completed.stderr, run_id)
+            exit_status, "".join(stdout_chunks), stderr, run_id)
 
     return execute
 
@@ -1282,9 +1372,11 @@ def create_phase_adapters(
         source_revision: str, run_id: str = "standalone-phase-setup",
         command_executor: Optional[CommandExecutor] = None,
         test_app_prepared: bool = False,
+        terminal_stream=None,
         ) -> Iterable[runner.PhaseAdapter]:
     """Create executable runner adapters without serializing local secrets."""
-    execute = command_executor or _default_executor(run_id)
+    execute = command_executor or _default_executor(
+        run_id, terminal_stream=terminal_stream)
     contracts = create_phase_contracts(
         configuration=configuration,
         suites=suites,

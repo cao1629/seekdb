@@ -767,13 +767,14 @@ class RunAllIphoneTestsTest(unittest.TestCase):
 
         def load_adapters(
                 configuration, suites, run_directory,
-                source_revision, run_id):
+                source_revision, run_id, terminal_stream):
             """Capture process-local inputs at the future Task 4 boundary."""
             captured["configuration"] = configuration
             captured["suites"] = suites
             captured["run_directory"] = run_directory
             captured["source_revision"] = source_revision
             captured["run_id"] = run_id
+            captured["terminal_stream"] = terminal_stream
             return ("adapter",)
 
         def run_engine(
@@ -797,6 +798,7 @@ class RunAllIphoneTestsTest(unittest.TestCase):
         preparation_lock = mock.Mock()
         path_preview = mock.Mock(run_directory=selection.run_directory)
         stdout = io.StringIO()
+        stderr = io.StringIO()
         with mock.patch.object(cli, "source_commit", return_value="a" * 40), \
                 mock.patch.object(
                     cli, "validate_build_identity",
@@ -819,6 +821,7 @@ class RunAllIphoneTestsTest(unittest.TestCase):
                 ["--output-root", "/tmp/iphone_test"],
                 environment=environment,
                 stdout=stdout,
+                stderr=stderr,
                 clock=lambda: timestamp,
             )
 
@@ -843,6 +846,7 @@ class RunAllIphoneTestsTest(unittest.TestCase):
         self.assertEqual("a" * 40, captured["source_revision"])
         self.assertEqual(
             selection.checkpoint["run_id"], captured["run_id"])
+        self.assertIs(stderr, captured["terminal_stream"])
         self.assertEqual(("adapter",), captured["adapters"])
         self.assertEqual(
             ("environment-device", "environment-profile",
@@ -869,13 +873,15 @@ class RunAllIphoneTestsTest(unittest.TestCase):
             app_artifact=Path("/tmp/build/Probe.app"),
             test_hooks=True,
         )
+        terminal = io.StringIO()
         with mock.patch.dict(sys.modules, {"iphone_test_phases": module}):
             adapters = cli.load_phase_adapters(
                 configuration, ("inventory",), Path("/tmp/run"),
-                "a" * 40, "runner-id")
+                "a" * 40, "runner-id", terminal_stream=terminal)
 
         self.assertEqual(("adapter",), adapters)
         self.assertTrue(captured["test_app_prepared"])
+        self.assertIs(terminal, captured["terminal_stream"])
 
     def test_adapter_setup_failure_is_redacted_and_releases_all_state(self):
         """Import/factory exits and terminal writes must not leak local values."""

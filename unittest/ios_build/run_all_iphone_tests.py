@@ -571,7 +571,8 @@ def load_phase_adapters(
         suites: Sequence[str],
         run_directory: Path,
         source_revision: str,
-        run_id: str) -> Iterable[runner.PhaseAdapter]:
+        run_id: str,
+        terminal_stream: TextIO = sys.stderr) -> Iterable[runner.PhaseAdapter]:
     """Load phase adapters when the standalone phase registry is available."""
     try:
         import iphone_test_phases
@@ -586,6 +587,7 @@ def load_phase_adapters(
         source_revision=source_revision,
         run_id=run_id,
         test_app_prepared=True,
+        terminal_stream=terminal_stream,
     )
 
 
@@ -857,7 +859,7 @@ def main(
         adapters = _safe_setup_call(
             lambda: load_phase_adapters(
                 configuration, suites, selection.run_directory,
-                revision, redaction_run_id),
+                revision, redaction_run_id, terminal_stream=stderr),
             redaction_run_id)
         engine_owns_selection = True
         return runner.run_phase_engine(
