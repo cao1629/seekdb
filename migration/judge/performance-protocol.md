@@ -21,6 +21,15 @@ not that either reaches the machine's ceiling.
 - **Fixed workload:** `oltp_point_select` and `oltp_read_write`, 16 tables x 100,000 rows,
   `--rand-type=uniform`, at 1, 16 and 64 threads; a 15 s warm-up that is discarded, then a 60 s
   measured run with `--report-interval=10`.
+- **`oltp_read_write` runs with `--db-ps-mode=disable`** (plain text statements). With server-side
+  prepared statements, each connection prepares a set of statements for each of the 16 tables and
+  seekdb refuses the prepare with error 5930 "maximum open cursors exceeded" (first baseline run,
+  2026-09-24). `oltp_point_select` prepares one statement per table and stays under the limit. That
+  limit and its error are server behavior the Rust build must reproduce; they are judged by the
+  mysqltest cases and the `--ps-protocol` replay, not by the performance runs.
+- **The script** is judge/harness/perf_run.sh: `perf_run.sh BINARY OUTDIR [PORT] [ROUNDS] [WORKLOADS]`;
+  results.tsv has one row per round, workload and thread count, with a status column (a run with a
+  sysbench FATAL is marked failed and never enters a median).
 
 ## Keeping the two sides comparable
 
