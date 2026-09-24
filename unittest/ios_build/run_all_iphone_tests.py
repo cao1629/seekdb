@@ -8,6 +8,7 @@ import hashlib
 import json
 import os
 from pathlib import Path
+import plistlib
 import re
 import subprocess
 import sys
@@ -310,12 +311,44 @@ def _artifact_marker(path: Path) -> Optional[tuple[bytes, bytes]]:
     return marker
 
 
+def _hash_file(path: Path) -> str:
+    """Return one streaming SHA-256 digest without retaining artifact bytes."""
+    digest = hashlib.sha256()
+    with path.open("rb") as artifact:
+        while True:
+            chunk = artifact.read(1024 * 1024)
+            if not chunk:
+                break
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
 def _app_executable(app_artifact: Path) -> Optional[Path]:
-    """Return a configured App executable path when one exists."""
+    """Resolve an existing bundle executable from its authoritative plist."""
+    if not app_artifact.exists():
+        return None
     if app_artifact.is_file():
         return app_artifact
-    candidate = app_artifact / app_artifact.stem
-    return candidate if candidate.is_file() else None
+    if not app_artifact.is_dir():
+        raise IphoneTestCliError("iPhone App artifact has an unsupported type")
+    plist_path = app_artifact / "Info.plist"
+    if not plist_path.is_file():
+        raise IphoneTestCliError("iPhone App Info.plist is missing")
+    try:
+        with plist_path.open("rb") as plist_file:
+            plist = plistlib.load(plist_file)
+    except (OSError, plistlib.InvalidFileException) as error:
+        raise IphoneTestCliError("iPhone App Info.plist is invalid") from error
+    executable_name = plist.get("CFBundleExecutable") \
+        if isinstance(plist, Mapping) else None
+    if (not isinstance(executable_name, str) or not executable_name
+            or Path(executable_name).name != executable_name):
+        raise IphoneTestCliError(
+            "iPhone App Info.plist has an invalid CFBundleExecutable")
+    executable = app_artifact / executable_name
+    if not executable.is_file():
+        raise IphoneTestCliError("iPhone App bundle executable is missing")
+    return executable
 
 
 def validate_build_identity(
@@ -324,9 +357,14 @@ def validate_build_identity(
     identity = {
         "source_revision": source_revision,
         "test_hooks": configuration.test_hooks,
+        "cmake_cache": None,
+        "runtime_archive": None,
+        "app_executable": None,
     }
+    app_executable = _app_executable(configuration.app_artifact)
     cache = configuration.engine_build / "CMakeCache.txt"
     if cache.is_file():
+        identity["cmake_cache"] = _hash_file(cache)
         expected = "ON" if configuration.test_hooks else "OFF"
         setting = f"SEEKDB_IOS_TEST_HOOKS:BOOL={expected}"
         if setting.encode("utf-8") not in cache.read_bytes():
@@ -341,11 +379,12 @@ def validate_build_identity(
         if _artifact_marker(archive) != expected_marker:
             raise IphoneTestCliError(
                 "iPhone build identity does not match source and runner mode")
-    app_executable = _app_executable(configuration.app_artifact)
+        identity["runtime_archive"] = _hash_file(archive)
     if app_executable is not None:
         if _artifact_marker(app_executable) != expected_marker:
             raise IphoneTestCliError(
                 "iPhone artifact identity does not match source and runner mode")
+        identity["app_executable"] = _hash_file(app_executable)
     serialized = json.dumps(
         identity, sort_keys=True, separators=(",", ":"))
     return hashlib.sha256(serialized.encode("utf-8")).hexdigest()
@@ -416,6 +455,7 @@ def main(
     suites = tuple(options.suite or runner.PHASE_IDS)
     selection = None
     engine_owns_selection = False
+    redaction_run_id = None
     try:
         revision = source_commit()
         build_identity = validate_build_identity(configuration, revision)
@@ -453,7 +493,16 @@ def main(
                   file=stdout)
             return 0
 
-        adapters = load_phase_adapters(configuration, suites)
+        redaction_run_id = selection.checkpoint["run_id"]
+        runner.register_runtime_redaction_tokens(
+            redaction_run_id, configuration.redaction_tokens())
+        try:
+            adapters = load_phase_adapters(configuration, suites)
+        except Exception as error:
+            diagnostic = runner.sanitize_diagnostic(
+                str(error), redaction_run_id)
+            raise IphoneTestCliError(
+                f"phase adapter setup failed: {diagnostic}") from error
         engine_owns_selection = True
         return runner.run_phase_engine(
             options.output_root, selection, adapters, now=clock,
@@ -464,6 +513,8 @@ def main(
     finally:
         if selection is not None and not engine_owns_selection:
             selection.close()
+        if redaction_run_id is not None:
+            runner.clear_runtime_redaction_tokens(redaction_run_id)
 
 
 if __name__ == "__main__":

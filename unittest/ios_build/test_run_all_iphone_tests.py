@@ -7,10 +7,12 @@ import io
 import json
 import os
 from pathlib import Path
+import plistlib
 import stat
 import subprocess
 import sys
 import tempfile
+import types
 import unittest
 from unittest import mock
 
@@ -204,6 +206,70 @@ class RunAllIphoneTestsTest(unittest.TestCase):
             )
             with self.assertRaisesRegex(cli.IphoneTestCliError,
                                         "build identity"):
+                cli.validate_build_identity(configuration, "a" * 40)
+
+    def test_build_identity_binds_cache_archive_and_bundle_executable_bytes(self):
+        """Resume identity must change when any actual build input changes."""
+        marker = (
+            b"SEEKDB_IOS_ARTIFACT_BUILD_ID=aaaaaaaaaaaa;"
+            b"SEEKDB_IOS_ARTIFACT_HOOK_MODE=enabled")
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            engine = Path(temporary_directory) / "build"
+            archive = engine / "src/observer/libseekdb_ios_runtime.a"
+            archive.parent.mkdir(parents=True)
+            archive.write_bytes(marker + b"-archive-one")
+            cache = engine / "CMakeCache.txt"
+            cache.write_text(
+                "SEEKDB_IOS_TEST_HOOKS:BOOL=ON\n"
+                "CMAKE_OSX_DEPLOYMENT_TARGET:STRING=18.0\n",
+                encoding="utf-8",
+            )
+            app = engine / "Probe.app"
+            app.mkdir()
+            with (app / "Info.plist").open("wb") as plist:
+                plistlib.dump({"CFBundleExecutable": "PrivateProbe"}, plist)
+            executable = app / "PrivateProbe"
+            executable.write_bytes(marker + b"-app-one")
+            configuration = cli.LocalConfiguration(
+                device=None, bundle_id=None, team=None, signing_identity=None,
+                engine_build=engine, app_artifact=app, test_hooks=True)
+
+            original = cli.validate_build_identity(configuration, "a" * 40)
+            archive.write_bytes(marker + b"-archive-two")
+            archive_changed = cli.validate_build_identity(
+                configuration, "a" * 40)
+            archive.write_bytes(marker + b"-archive-one")
+            executable.write_bytes(marker + b"-app-two")
+            app_changed = cli.validate_build_identity(
+                configuration, "a" * 40)
+            executable.write_bytes(marker + b"-app-one")
+            cache.write_text(
+                "SEEKDB_IOS_TEST_HOOKS:BOOL=ON\n"
+                "CMAKE_OSX_DEPLOYMENT_TARGET:STRING=19.0\n",
+                encoding="utf-8",
+            )
+            cache_changed = cli.validate_build_identity(
+                configuration, "a" * 40)
+
+        self.assertEqual(4, len({
+            original, archive_changed, app_changed, cache_changed}))
+
+    def test_existing_app_requires_valid_plist_executable(self):
+        """An existing bundle must not silently skip executable identity."""
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            engine = Path(temporary_directory) / "build"
+            app = engine / "Probe.app"
+            app.mkdir(parents=True)
+            configuration = cli.LocalConfiguration(
+                device=None, bundle_id=None, team=None, signing_identity=None,
+                engine_build=engine, app_artifact=app, test_hooks=True)
+            with self.assertRaisesRegex(cli.IphoneTestCliError, "Info.plist"):
+                cli.validate_build_identity(configuration, "a" * 40)
+
+            with (app / "Info.plist").open("wb") as plist:
+                plistlib.dump({"CFBundleExecutable": "MissingProbe"}, plist)
+            with self.assertRaisesRegex(cli.IphoneTestCliError,
+                                        "bundle executable"):
                 cli.validate_build_identity(configuration, "a" * 40)
 
     def test_no_physical_device_is_rejected_without_simulator_fallback(self):
@@ -507,7 +573,12 @@ class RunAllIphoneTestsTest(unittest.TestCase):
             "SEEKDB_IPHONE_TEAM": "ENVTEAM001",
             "SEEKDB_IPHONE_SIGNING_IDENTITY": "environment identity",
         }
-        selection = mock.Mock(run_directory=Path("/tmp/iphone_test/2026-09-24"))
+        selection = mock.Mock(
+            run_directory=Path("/tmp/iphone_test/2026-09-24"),
+            checkpoint=cli.state.create_checkpoint(
+                "a" * 40, "b" * 64,
+                dt.datetime(2026, 9, 24, 10, tzinfo=UTC)),
+        )
         captured = {}
 
         def load_adapters(configuration, suites):
@@ -570,6 +641,74 @@ class RunAllIphoneTestsTest(unittest.TestCase):
             captured["redaction_tokens"],
         )
         selection.close.assert_called_once_with()
+
+    def test_adapter_setup_failure_is_redacted_and_releases_all_state(self):
+        """Import/factory setup errors must not leak process-local values."""
+        secrets = (
+            "00008110-SECRET-DEVICE", "org.private.bundle",
+            "TEAMSECRET", "Apple Development: Private Person",
+        )
+        timestamp = dt.datetime(2026, 9, 24, 10, tzinfo=UTC)
+        for setup_kind in ("import", "factory"):
+            with self.subTest(setup_kind=setup_kind), \
+                    tempfile.TemporaryDirectory() as temporary_directory:
+                output_root = Path(temporary_directory) / "iphone_test"
+                physical = cli.PhysicalDevice(
+                    secrets[0], "iPhone", "iOS", "physical", "default",
+                    "booted", "paired")
+                stderr = io.StringIO()
+                failure = RuntimeError(
+                    f"{setup_kind} failed for {' '.join(secrets)}")
+                original_import = __import__
+
+                def import_module(name, *args, **kwargs):
+                    """Fail only the adapter import and delegate all others."""
+                    if name == "iphone_test_phases":
+                        raise failure
+                    return original_import(name, *args, **kwargs)
+
+                def create_phase_adapters(**_kwargs):
+                    """Model a phase factory that exposes a sensitive error."""
+                    raise failure
+
+                adapter_module = types.SimpleNamespace(
+                    create_phase_adapters=create_phase_adapters)
+                setup_patch = (
+                    mock.patch("builtins.__import__", side_effect=import_module)
+                    if setup_kind == "import" else
+                    mock.patch.dict(
+                        sys.modules, {"iphone_test_phases": adapter_module}))
+                with setup_patch, mock.patch.object(
+                        cli, "source_commit", return_value="a" * 40), \
+                        mock.patch.object(
+                            cli, "validate_build_identity",
+                            return_value="c" * 64), \
+                        mock.patch.object(
+                            cli, "discover_physical_devices",
+                            return_value=[physical]):
+                    status = cli.main([
+                        "--output-root", str(output_root),
+                        "--device", secrets[0],
+                        "--bundle-id", secrets[1],
+                        "--team", secrets[2],
+                        "--signing-identity", secrets[3],
+                    ], environment={}, stdout=io.StringIO(), stderr=stderr,
+                        clock=lambda: timestamp)
+
+                serialized = stderr.getvalue()
+                if output_root.exists():
+                    serialized += "".join(
+                        path.read_text(encoding="utf-8", errors="replace")
+                        for path in output_root.rglob("*") if path.is_file())
+                self.assertEqual(2, status)
+                self.assertIn("phase adapter setup failed", serialized)
+                for secret in secrets:
+                    self.assertNotIn(secret, serialized)
+                self.assertFalse(cli.runner.has_runtime_redaction_tokens())
+                lock = cli.state.RunLock(
+                    output_root, output_root / "2026-09-24")
+                lock.acquire()
+                lock.release()
 
 
 if __name__ == "__main__":

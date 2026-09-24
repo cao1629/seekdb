@@ -332,6 +332,11 @@ def _bounded_diagnostic(value: str, run_id: str) -> str:
     return _redact_text(str(value), run_id)[:MAX_DIAGNOSTIC_LENGTH]
 
 
+def sanitize_diagnostic(value: str, run_id: str) -> str:
+    """Return one bounded diagnostic using the active runtime token scope."""
+    return _bounded_diagnostic(value, run_id)
+
+
 def _slug(value: str) -> str:
     """Create a bounded readable filesystem component from a stable ID."""
     slug = re.sub(r"[^a-z0-9]+", "-", value.lower()).strip("-")
