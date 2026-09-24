@@ -1,0 +1,529 @@
+file	line	symbol	construct	text
+src/oblib/common/json_type/ob_json_base.cpp	4586	ObIJsonBase::to_int	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/oblib/common/json_type/ob_json_base.cpp	4638	ObIJsonBase::to_int	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/oblib/common/json_type/ob_json_base.cpp	4644	ObIJsonBase::to_int	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/oblib/common/json_type/ob_json_base.cpp	4658	ObIJsonBase::to_int	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/oblib/common/json_type/ob_json_base.cpp	4664	ObIJsonBase::to_int	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/oblib/common/json_type/ob_json_base.cpp	4702	ObIJsonBase::to_uint	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/oblib/common/json_type/ob_json_base.cpp	4720	ObIJsonBase::to_uint	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/oblib/common/json_type/ob_json_base.cpp	4729	ObIJsonBase::to_uint	check: raises OB_DATA_OUT_OF_RANGE	ret = OB_DATA_OUT_OF_RANGE;
+src/oblib/common/json_type/ob_json_base.cpp	4765	ObIJsonBase::to_uint	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/oblib/common/json_type/ob_json_base.cpp	4776	ObIJsonBase::to_uint	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/oblib/common/json_type/ob_json_base.cpp	4786	ObIJsonBase::to_uint	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/oblib/common/json_type/ob_json_base.cpp	4794	ObIJsonBase::to_uint	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/oblib/common/json_type/ob_json_base.cpp	4897	ObIJsonBase::to_double	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/oblib/common/json_type/ob_json_base.cpp	4981	ObIJsonBase::to_number	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/oblib/common/json_type/ob_json_base.cpp	5143	ObIJsonBase::to_datetime	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/oblib/common/json_type/ob_json_base.cpp	5169	ObIJsonBase::to_mdatetime	unchecked: arithmetic on a signed value getter	int64_t datetime = (1000 * 1000) *  get_int();
+src/oblib/common/json_type/ob_json_base.cpp	5231	ObIJsonBase::to_mdatetime	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/oblib/common/json_type/ob_json_base.cpp	5294	ObIJsonBase::to_date	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/oblib/common/json_type/ob_json_base.cpp	5352	ObIJsonBase::to_mdate	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/oblib/common/json_type/ob_json_base.cpp	5418	ObIJsonBase::to_time	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/oblib/common/json_type/ob_json_base.cpp	6322	ObJsonBaseUtil::double_to_uint	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/oblib/common/json_type/ob_json_base.cpp	6328	ObJsonBaseUtil::double_to_uint	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/oblib/common/mysqlclient/ob_mysql_result.h	595	#define EXTRACT_INT_FIELD_FROM_NUMBER_MYSQL	check: raises OB_DATA_OUT_OF_RANGE	ret = OB_DATA_OUT_OF_RANGE; \
+src/oblib/common/number/ob_number_v2.cpp	349	ObNumber::from_sci_	check: raises OB_NUMERIC_OVERFLOW	ret = OB_NUMERIC_OVERFLOW;
+src/oblib/common/number/ob_number_v2.cpp	1103	ObNumber::extract_valid_int64_with_trunc	check: raises OB_DATA_OUT_OF_RANGE	ret = OB_DATA_OUT_OF_RANGE;
+src/oblib/common/number/ob_number_v2.cpp	1121	ObNumber::extract_valid_uint64_with_trunc	check: raises OB_DATA_OUT_OF_RANGE	ret = OB_DATA_OUT_OF_RANGE;
+src/oblib/common/number/ob_number_v2.cpp	1139	ObNumber::extract_valid_int64_with_round	check: raises OB_DATA_OUT_OF_RANGE	ret = OB_DATA_OUT_OF_RANGE;
+src/oblib/common/number/ob_number_v2.cpp	1268	ObNumber::check_precision_	check: raises OB_INTEGER_PRECISION_OVERFLOW	ret = OB_INTEGER_PRECISION_OVERFLOW;
+src/oblib/common/number/ob_number_v2.cpp	1288	ObNumber::check_precision_	check: raises OB_DECIMAL_PRECISION_OVERFLOW	ret = OB_DECIMAL_PRECISION_OVERFLOW;
+src/oblib/common/number/ob_number_v2.cpp	2264	ObNumber::rebuild_digits_	check: raises OB_NUMERIC_OVERFLOW	ret = OB_NUMERIC_OVERFLOW;
+src/oblib/common/number/ob_number_v2.cpp	2276	ObNumber::rebuild_digits_	check: raises OB_NUMERIC_OVERFLOW	ret = OB_NUMERIC_OVERFLOW;
+src/oblib/common/number/ob_number_v2.cpp	3172	ObNumber::tan	check: raises OB_NUMERIC_OVERFLOW	ret = OB_NUMERIC_OVERFLOW;
+src/oblib/common/number/ob_number_v2.cpp	3385	ObNumber::atan2	check: raises OB_NUMERIC_OVERFLOW	ret = OB_NUMERIC_OVERFLOW;
+src/oblib/common/number/ob_number_v2.cpp	5321	ObNumber::power	check: raises OB_NUMERIC_OVERFLOW	ret = OB_NUMERIC_OVERFLOW;
+src/oblib/common/number/ob_number_v2.cpp	5582	ObNumber::cast_to_int64	check: raises OB_INTEGER_PRECISION_OVERFLOW	ret = OB_INTEGER_PRECISION_OVERFLOW;
+src/oblib/common/number/ob_number_v2.h	449	ObNumber::fast_sum_agg_may_overflow	check: helper fast_sum_agg_may_overflow (definition)	inline bool fast_sum_agg_may_overflow () const
+src/oblib/common/number/ob_number_v2.h	2510	ObNumber::exp_check_	check: raises OB_INTEGER_PRECISION_OVERFLOW	ret = OB_INTEGER_PRECISION_OVERFLOW;
+src/oblib/common/number/ob_number_v2.h	2513	ObNumber::exp_check_	check: raises OB_DECIMAL_PRECISION_OVERFLOW	ret = OB_DECIMAL_PRECISION_OVERFLOW;
+src/oblib/common/object/ob_object.cpp	1896	ObObj::get_enum_str_val	unchecked: arithmetic on unsigned value val	const ObString &type_info = type_infos.at(val - 1);//enum value start from 1
+src/oblib/common/object/ob_object.h	1704	ObObj::get_decimal_int	unchecked: arithmetic on a signed value getter	inline const ObDecimalInt *get_decimal_int() const
+src/oblib/common/object/ob_object.h	1814	ObObj::is_overflow_integer	check: helper is_overflow_integer (definition)	OB_INLINE bool is_overflow_integer(ObObjType type) const
+src/oblib/common/object/ob_object.h	1827	ObObj::is_overflow_integer	check: helper CHECK_VAL_OVERFLOW	CHECK_VAL_OVERFLOW(INT8_MIN, INT8_MAX);
+src/oblib/common/object/ob_object.h	1831	ObObj::is_overflow_integer	check: helper CHECK_VAL_OVERFLOW	CHECK_VAL_OVERFLOW(INT16_MIN, INT16_MAX);
+src/oblib/common/object/ob_object.h	1835	ObObj::is_overflow_integer	check: helper CHECK_VAL_OVERFLOW	CHECK_VAL_OVERFLOW(-8388608, 8388607);
+src/oblib/common/object/ob_object.h	1839	ObObj::is_overflow_integer	check: helper CHECK_VAL_OVERFLOW	CHECK_VAL_OVERFLOW(INT32_MIN, INT32_MAX);
+src/oblib/common/object/ob_object.h	1843	ObObj::is_overflow_integer	check: helper CHECK_VAL_OVERFLOW	CHECK_VAL_OVERFLOW(INT64_MIN, INT64_MAX);
+src/oblib/common/object/ob_object.h	1847	ObObj::is_overflow_integer	check: helper CHECK_VAL_OVERFLOW	CHECK_VAL_OVERFLOW(0, UINT8_MAX);
+src/oblib/common/object/ob_object.h	1851	ObObj::is_overflow_integer	check: helper CHECK_VAL_OVERFLOW	CHECK_VAL_OVERFLOW(0, UINT16_MAX);
+src/oblib/common/object/ob_object.h	1855	ObObj::is_overflow_integer	check: helper CHECK_VAL_OVERFLOW	CHECK_VAL_OVERFLOW(0, 16777215);
+src/oblib/common/object/ob_object.h	1859	ObObj::is_overflow_integer	check: helper CHECK_VAL_OVERFLOW	CHECK_VAL_OVERFLOW(0, UINT32_MAX);
+src/oblib/common/object/ob_object.h	1863	ObObj::is_overflow_integer	check: helper CHECK_VAL_OVERFLOW	CHECK_VAL_OVERFLOW(0, UINT64_MAX);
+src/oblib/common/timezone/localtime.c	1613	timesub	check: helper increment_overflow [not built]	if (increment_overflow(&newy, idelta)) {
+src/oblib/common/timezone/localtime.c	1643	timesub	check: helper increment_overflow [not built]	if (increment_overflow(&y, -1)) {
+src/oblib/common/timezone/localtime.c	1650	timesub	check: helper increment_overflow [not built]	if (increment_overflow(&y, 1)) {
+src/oblib/common/timezone/localtime.c	1655	timesub	check: helper increment_overflow [not built]	if (increment_overflow(&tmp->tm_year, -TM_YEAR_BASE)) {
+src/oblib/common/timezone/localtime.c	1730	increment_overflow	check: helper increment_overflow (definition) [not built]	increment_overflow(int *const ip, int j)
+src/oblib/common/timezone/localtime.c	1740	increment_overflow	check: limit comparison [not built]	if ((i >= 0) ? (j > INT_MAX - i) : (j < INT_MIN - i)) {
+src/oblib/common/timezone/localtime.c	1748	increment_overflow32	check: helper increment_overflow32 (definition) [not built]	increment_overflow32(int_fast32_t *const lp, int const m)
+src/oblib/common/timezone/localtime.c	1760	normalize_overflow	check: helper normalize_overflow (definition) [not built]	normalize_overflow(int *const tensptr, int *const unitsptr, const int base)
+src/oblib/common/timezone/localtime.c	1768	normalize_overflow	check: helper increment_overflow [not built]	return increment_overflow(tensptr, tensdelta);
+src/oblib/common/timezone/localtime.c	1772	normalize_overflow32	check: helper normalize_overflow32 (definition) [not built]	normalize_overflow32(int_fast32_t *const tensptr, int *const unitsptr,
+src/oblib/common/timezone/localtime.c	1781	normalize_overflow32	check: helper increment_overflow32 [not built]	return increment_overflow32(tensptr, tensdelta);
+src/oblib/common/timezone/localtime.c	1824	time2sub	check: helper normalize_overflow [not built]	if (normalize_overflow(&yourtm.tm_min, &yourtm.tm_sec,
+src/oblib/common/timezone/localtime.c	1829	time2sub	check: helper normalize_overflow [not built]	if (normalize_overflow(&yourtm.tm_hour, &yourtm.tm_min, MINSPERHOUR)) {
+src/oblib/common/timezone/localtime.c	1832	time2sub	check: helper normalize_overflow [not built]	if (normalize_overflow(&yourtm.tm_mday, &yourtm.tm_hour, HOURSPERDAY)) {
+src/oblib/common/timezone/localtime.c	1836	time2sub	check: helper normalize_overflow32 [not built]	if (normalize_overflow32(&y, &yourtm.tm_mon, MONSPERYEAR)) {
+src/oblib/common/timezone/localtime.c	1843	time2sub	check: helper increment_overflow32 [not built]	if (increment_overflow32(&y, TM_YEAR_BASE)) {
+src/oblib/common/timezone/localtime.c	1847	time2sub	check: helper increment_overflow32 [not built]	if (increment_overflow32(&y, -1)) {
+src/oblib/common/timezone/localtime.c	1856	time2sub	check: helper increment_overflow32 [not built]	if (increment_overflow32(&y, 1)) {
+src/oblib/common/timezone/localtime.c	1868	time2sub	check: helper increment_overflow32 [not built]	if (increment_overflow32(&y, 1)) {
+src/oblib/common/timezone/localtime.c	1873	time2sub	check: helper increment_overflow32 [not built]	if (increment_overflow32(&y, -TM_YEAR_BASE)) {
+src/oblib/common/timezone/localtime.c	1891	time2sub	check: helper increment_overflow [not built]	if (increment_overflow(&yourtm.tm_sec, 1 - SECSPERMIN)) {
+src/oblib/common/timezone/ob_time_convert.cpp	368	ObTimeConverter::int_to_datetime	check: raises OB_DATETIME_FUNCTION_OVERFLOW	ret = OB_DATETIME_FUNCTION_OVERFLOW;
+src/oblib/common/timezone/ob_time_convert.cpp	392	ObTimeConverter::int_to_mdatetime	check: raises OB_DATETIME_FUNCTION_OVERFLOW	ret = OB_DATETIME_FUNCTION_OVERFLOW;
+src/oblib/common/timezone/ob_time_convert.cpp	437	ObTimeConverter::int_to_time	check: helper time_overflow_trunc	ret = time_overflow_trunc(value);
+src/oblib/common/timezone/ob_time_convert.cpp	451	ObTimeConverter::int_to_year	check: raises OB_DATA_OUT_OF_RANGE	ret = OB_DATA_OUT_OF_RANGE;
+src/oblib/common/timezone/ob_time_convert.cpp	661	ObTimeConverter::scn_to_str	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/oblib/common/timezone/ob_time_convert.cpp	853	ObTimeConverter::str_to_time	check: helper time_overflow_trunc	time_overflow_trunc(value);
+src/oblib/common/timezone/ob_time_convert.cpp	860	ObTimeConverter::str_to_time	check: helper time_overflow_trunc	ret = time_overflow_trunc(value);
+src/oblib/common/timezone/ob_time_convert.cpp	2766	ObTimeConverter::otimestamp_to_ob_time	check: limit comparison	} else if (OB_UNLIKELY((nsec = ob_time.parts_[DT_USEC] * NSECS_PER_USEC + ot_data.time_ctx_.tail_nsec_) > INT32_MAX)) {
+src/oblib/common/timezone/ob_time_convert.cpp	3262	match_literal_uint	check: limit comparison	if (parsed_value * 10LL > INT32_MAX - digit) {
+src/oblib/common/timezone/ob_time_convert.cpp	3263	match_literal_uint	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/oblib/common/timezone/ob_time_convert.cpp	3765	ObTimeConverter::ob_time_to_datetime	check: raises OB_DATETIME_FUNCTION_OVERFLOW	ret = OB_DATETIME_FUNCTION_OVERFLOW;
+src/oblib/common/timezone/ob_time_convert.cpp	3789	ObTimeConverter::ob_time_to_mdatetime	check: raises OB_DATETIME_FUNCTION_OVERFLOW	ret = OB_DATETIME_FUNCTION_OVERFLOW;
+src/oblib/common/timezone/ob_time_convert.cpp	4060	ObTimeConverter::validate_time	check: limit comparison	if (parts[DT_MDAY] * HOURS_PER_DAY + parts[DT_HOUR] > INT32_MAX) {
+src/oblib/common/timezone/ob_time_convert.cpp	4085	ObTimeConverter::validate_year	check: raises OB_DATA_OUT_OF_RANGE	ret = OB_DATA_OUT_OF_RANGE;
+src/oblib/common/timezone/ob_time_convert.cpp	4101	ObTimeConverter::time_overflow_trunc	check: helper time_overflow_trunc (definition)	int ObTimeConverter::time_overflow_trunc(int64_t &value, const ObScale &time_scale)
+src/oblib/common/timezone/ob_time_convert.cpp	4187	ObTimeConverter::get_datetime_digits	check: limit comparison	if (value * 10LL > INT32_MAX - (*pos - '0')) {
+src/oblib/common/timezone/ob_time_convert.cpp	4188	ObTimeConverter::get_datetime_digits	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/oblib/common/timezone/ob_timezone_util.cpp	326	ObTimezoneUtils::prepare_tz_info	check: limit comparison	cur_time < INT32_MIN - cur_off_and_corr)
+src/oblib/common/timezone/ob_timezone_util.cpp	335	ObTimezoneUtils::prepare_tz_info	check: limit comparison	end_time > INT32_MAX - cur_off_and_corr) {
+src/oblib/common/timezone/ob_timezone_util.cpp	376	ObTimezoneUtils::prepare_tz_info	check: limit comparison	(end_time + cur_off_and_corr >= INT32_MAX)) ||
+src/oblib/common/wide_integer/ob_wide_integer.cpp	295	to_number	check: limit comparison	if (is_neg) { numerator = (v == INT64_MIN ? static_cast<uint64_t>(INT64_MAX) + 1 :  -v ); }
+src/oblib/common/wide_integer/ob_wide_integer.h	180	ObWideInteger::add	check: helper add_overflow	if (check_overflow && _impl::add_overflow(l_neg, r_neg, _impl::is_negative(res))) {
+src/oblib/common/wide_integer/ob_wide_integer.h	181	ObWideInteger::add	check: raises OB_OPERATE_OVERFLOW	return OB_OPERATE_OVERFLOW;
+src/oblib/common/wide_integer/ob_wide_integer.h	199	ObWideInteger::sub	check: helper sub_overflow	if (check_overflow && _impl::sub_overflow(l_neg, r_neg, _impl::is_negative(res))) {
+src/oblib/common/wide_integer/ob_wide_integer.h	200	ObWideInteger::sub	check: raises OB_OPERATE_OVERFLOW	return OB_OPERATE_OVERFLOW;
+src/oblib/common/wide_integer/ob_wide_integer.h	736	ObDecimalIntBuilder::get_decimal_int	unchecked: arithmetic on a signed value getter	inline const ObDecimalInt *get_decimal_int() const
+src/oblib/common/wide_integer/ob_wide_integer_impl.h	137	ObWideInteger::_impl::overflow_negative_range	check: helper overflow_negative_range (definition)	static bool overflow_negative_range(const ObWideInteger<B, S> &x)
+src/oblib/common/wide_integer/ob_wide_integer_impl.h	155	ObWideInteger::_impl::overflow_positive_range	check: helper overflow_positive_range (definition)	static bool overflow_positive_range(const ObWideInteger<B, S> &x)
+src/oblib/common/wide_integer/ob_wide_integer_impl.h	164	ObWideInteger::_impl::add_overflow	check: helper add_overflow (definition)	static bool add_overflow(bool l_neg, bool r_neg, bool res_neg)
+src/oblib/common/wide_integer/ob_wide_integer_impl.h	176	ObWideInteger::_impl::sub_overflow	check: helper sub_overflow (definition)	static bool sub_overflow(bool l_neg, bool r_neg, bool res_neg)
+src/oblib/common/wide_integer/ob_wide_integer_impl.h	420	ObWideInteger::_impl::sub	check: helper sub_overflow	if (check_overflow && sub_overflow(l_neg, r_neg, is_negative(res))) {
+src/oblib/common/wide_integer/ob_wide_integer_impl.h	421	ObWideInteger::_impl::sub	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/oblib/common/wide_integer/ob_wide_integer_impl.h	469	ObWideInteger::_impl::sub	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/oblib/common/wide_integer/ob_wide_integer_impl.h	473	ObWideInteger::_impl::sub	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/oblib/common/wide_integer/ob_wide_integer_impl.h	502	ObWideInteger::_impl::unary_minus	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/oblib/common/wide_integer/ob_wide_integer_impl.h	534	ObWideInteger::_impl::multiply	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/oblib/common/wide_integer/ob_wide_integer_impl.h	535	ObWideInteger::_impl::multiply	check: helper overflow_negative_range	} else if (l_neg != r_neg && overflow_negative_range(res)) {
+src/oblib/common/wide_integer/ob_wide_integer_impl.h	536	ObWideInteger::_impl::multiply	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/oblib/common/wide_integer/ob_wide_integer_impl.h	537	ObWideInteger::_impl::multiply	check: helper overflow_positive_range	} else if (l_neg == r_neg && overflow_positive_range(res)) {
+src/oblib/common/wide_integer/ob_wide_integer_impl.h	538	ObWideInteger::_impl::multiply	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/oblib/common/wide_integer/ob_wide_integer_impl.h	552	ObWideInteger::_impl::multiply	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/oblib/common/wide_integer/ob_wide_integer_impl.h	599	ObWideInteger::_impl::multiply	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/oblib/common/wide_integer/ob_wide_integer_impl.h	652	ObWideInteger::_impl::multiply	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/oblib/common/wide_integer/ob_wide_integer_impl.h	653	ObWideInteger::_impl::multiply	check: helper overflow_negative_range	} else if (l_neg != r_neg && overflow_negative_range(res)) {
+src/oblib/common/wide_integer/ob_wide_integer_impl.h	654	ObWideInteger::_impl::multiply	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/oblib/common/wide_integer/ob_wide_integer_impl.h	655	ObWideInteger::_impl::multiply	check: helper overflow_positive_range	} else if (l_neg == r_neg && overflow_positive_range(res)) {
+src/oblib/common/wide_integer/ob_wide_integer_impl.h	656	ObWideInteger::_impl::multiply	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/oblib/common/wide_integer/ob_wide_integer_impl.h	670	ObWideInteger::_impl::multiply	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/oblib/common/wide_integer/ob_wide_integer_impl.h	686	ObWideInteger::_impl::divide	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/oblib/common/wide_integer/ob_wide_integer_impl.h	709	ObWideInteger::_impl::divide	check: helper overflow_positive_range	if (l_neg && l_neg == r_neg && overflow_positive_range(quotient)) {
+src/oblib/common/wide_integer/ob_wide_integer_impl.h	710	ObWideInteger::_impl::divide	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/oblib/common/wide_integer/ob_wide_integer_impl.h	758	ObWideInteger::_impl::divide	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/oblib/common/wide_integer/ob_wide_integer_impl.h	775	ObWideInteger::_impl::divide	check: helper overflow_positive_range	if (lhs_neg && lhs_neg == rhs_neg && overflow_positive_range(quotient)) {
+src/oblib/common/wide_integer/ob_wide_integer_impl.h	776	ObWideInteger::_impl::divide	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/oblib/common/wide_integer/ob_wide_integer_impl.h	1297	to_number	check: limit comparison	numerator = (v == INT64_MIN ? static_cast<uint64_t>(INT64_MAX) + 1 : static_cast<uint64_t>(-v));
+src/oblib/common/wide_integer/ob_wide_integer_impl.h	1523	mul_overflow	check: helper mul_overflow (definition)	bool mul_overflow(const T &lhs, const T &rhs, T &res)
+src/oblib/common/wide_integer/ob_wide_integer_impl.h	1525	mul_overflow	check: __builtin_*_overflow	return __builtin_mul_overflow(lhs, rhs, &res);
+src/oblib/common/wide_integer/ob_wide_integer_impl.h	1529	mul_overflow	check: helper mul_overflow (definition)	bool mul_overflow(const ObWideInteger<Bits, Signed> &lhs, const ObWideInteger<Bits, Signed> &rhs,
+src/oblib/common/wide_integer/ob_wide_integer_str_funcs.cpp	412	from_string	check: raises OB_NUMERIC_OVERFLOW	ret = OB_NUMERIC_OVERFLOW;
+src/oblib/lib/alloc/malloc_hook_extended.cpp	75	calloc	check: __builtin_*_overflow	if (UNLIKELY(__builtin_mul_overflow(nmemb, size, &real_size))) {
+src/oblib/lib/alloc/malloc_hook_extended.cpp	200	pvalloc	check: __builtin_*_overflow	if (UNLIKELY(__builtin_add_overflow(size, page_mask, &rounded_bytes))) {
+src/oblib/lib/allocator/ob_fixed_size_block_allocator.h	439	ObFixedSizeBlockMemoryContext::free	check: raises OB_DATA_OUT_OF_RANGE	ret = OB_DATA_OUT_OF_RANGE;
+src/oblib/lib/atomic/ob_atomic_reference.cpp	63	ObAtomicReference::inc_ref_cnt	check: raises OB_INTEGER_PRECISION_OVERFLOW	ret = OB_INTEGER_PRECISION_OVERFLOW;
+src/oblib/lib/atomic/ob_atomic_reference.cpp	91	ObAtomicReference::check_seq_num_and_inc_ref_cnt	check: raises OB_INTEGER_PRECISION_OVERFLOW	ret = OB_INTEGER_PRECISION_OVERFLOW;
+src/oblib/lib/atomic/ob_atomic_reference.cpp	120	ObAtomicReference::check_and_inc_ref_cnt	check: raises OB_INTEGER_PRECISION_OVERFLOW	ret = OB_INTEGER_PRECISION_OVERFLOW;
+src/observer/omt/ob_srs_service.cpp	176	ObSrsCacheSnapShot::get_srs_item	check: raises OB_ERR_WARN_DATA_OUT_OF_RANGE	ret = OB_ERR_WARN_DATA_OUT_OF_RANGE;
+src/observer/vector_index/ob_vector_index_util.cpp	365	ObVectorIndexUtil::parser_params_from_string	check: raises OB_DATA_OUT_OF_RANGE	ret = OB_DATA_OUT_OF_RANGE;
+src/observer/vector_index/ob_vector_index_util.cpp	410	ObVectorIndexUtil::parser_params_from_string	check: raises OB_DATA_OUT_OF_RANGE	ret = OB_DATA_OUT_OF_RANGE;
+src/observer/vector_index/ob_vector_index_util.cpp	421	ObVectorIndexUtil::parser_params_from_string	check: raises OB_DATA_OUT_OF_RANGE	ret = OB_DATA_OUT_OF_RANGE;
+src/observer/vector_index/ob_vector_index_util.cpp	477	ObVectorIndexUtil::parser_params_from_string	check: raises OB_DATA_OUT_OF_RANGE	ret = OB_DATA_OUT_OF_RANGE;
+src/observer/vector_index/ob_vector_index_util.cpp	840	ObVectorIndexUtil::resolve_query_param	check: raises OB_DATA_OUT_OF_RANGE	ret = OB_DATA_OUT_OF_RANGE;
+src/observer/vector_index/ob_vector_index_util.cpp	857	ObVectorIndexUtil::resolve_query_param	check: raises OB_DATA_OUT_OF_RANGE	ret = OB_DATA_OUT_OF_RANGE;
+src/observer/vector_index/ob_vector_index_util.cpp	874	ObVectorIndexUtil::resolve_query_param	check: raises OB_DATA_OUT_OF_RANGE	ret = OB_DATA_OUT_OF_RANGE;
+src/observer/vector_index/ob_vector_index_util.cpp	3090	ObVectorIndexUtil::check_index_param	check: raises OB_DATA_OUT_OF_RANGE	ret = OB_DATA_OUT_OF_RANGE;
+src/observer/vector_index/ob_vector_index_util.cpp	3181	ObVectorIndexUtil::check_index_param	check: raises OB_DATA_OUT_OF_RANGE	ret = OB_DATA_OUT_OF_RANGE;
+src/observer/vector_index/ob_vector_index_util.cpp	3194	ObVectorIndexUtil::check_index_param	check: raises OB_DATA_OUT_OF_RANGE	ret = OB_DATA_OUT_OF_RANGE;
+src/query/api/query/engine/aggregate/ob_aggregate_util.h	101	number_accumulator	check: helper fast_sum_agg_may_overflow	if (OB_UNLIKELY(src_num.fast_sum_agg_may_overflow() && fast_sum_path_counter > 0)) {
+src/query/api/query/engine/expr/ob_arithmetic_overflow.h	31	ObArithmeticOverflow::is_int_add_out_of_range	check: helper is_int_add_out_of_range (definition)	static inline bool is_int_add_out_of_range(
+src/query/api/query/engine/expr/ob_arithmetic_overflow.h	38	ObArithmeticOverflow::is_uint_add_out_of_range	check: helper is_uint_add_out_of_range (definition)	static inline bool is_uint_add_out_of_range(
+src/share/geo/ob_geo_dispatcher.h	1358	ob_boost_geometry_exception_handle	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/share/ob_autoincrement_service.cpp	288	ObAutoincrementService::get_handle	check: raises OB_DATA_OUT_OF_RANGE	? OB_ERR_REACH_AUTOINC_MAX : OB_DATA_OUT_OF_RANGE;
+src/share/object/ob_array_cast.cpp	709	parse_uint32_key	check: raises OB_DATA_OUT_OF_RANGE	ret = OB_DATA_OUT_OF_RANGE;
+src/share/object/ob_decint_scale_util.cpp	260	check_decimalint_accuracy	check: raises OB_DATA_OUT_OF_RANGE	cast_ret = OB_DATA_OUT_OF_RANGE;
+src/share/object/ob_decint_scale_util.cpp	263	check_decimalint_accuracy	check: raises OB_DATA_OUT_OF_RANGE	cast_ret = OB_DATA_OUT_OF_RANGE;
+src/share/object/ob_obj_cast.cpp	1202	int_datetime_interval	unchecked: arithmetic on a signed value getter	int64_t value = in.get_int() * USECS_PER_DAY;
+src/share/object/ob_obj_cast.cpp	1942	common_double_int	check: raises OB_DATA_OUT_OF_RANGE	ret = OB_DATA_OUT_OF_RANGE;
+src/share/object/ob_obj_cast.cpp	1950	common_double_int	check: raises OB_DATA_OUT_OF_RANGE	ret = OB_DATA_OUT_OF_RANGE;
+src/share/object/ob_obj_cast.cpp	2667	double_year	check: limit comparison	in_val = in_val < 0 ? INT_MIN : in_val + 0.5;
+src/share/object/ob_obj_cast.cpp	5536	common_string_unsigned_integer	check: raises OB_DATA_OUT_OF_RANGE	ret = OB_DATA_OUT_OF_RANGE;
+src/share/object/ob_obj_cast.cpp	5548	common_string_unsigned_integer	check: raises OB_DATA_OUT_OF_RANGE	ret = OB_DATA_OUT_OF_RANGE;
+src/share/object/ob_obj_cast.cpp	5584	common_string_integer	check: raises OB_DATA_OUT_OF_RANGE	ret = OB_DATA_OUT_OF_RANGE;
+src/share/object/ob_obj_cast.cpp	5597	common_string_integer	check: raises OB_DATA_OUT_OF_RANGE	ret = OB_DATA_OUT_OF_RANGE;
+src/share/object/ob_obj_cast.cpp	6173	string_bit	check: raises OB_DATA_OUT_OF_RANGE	params.warning_ = OB_DATA_OUT_OF_RANGE;
+src/share/object/ob_obj_cast.cpp	9530	int_decimalint	unchecked: arithmetic on signed value value	ObPrecision in_prec = ob_fast_digits10(value < 0 ? -value : value);
+src/share/object/ob_obj_cast.cpp	11110	number_range_check	check: raises OB_DATA_OUT_OF_RANGE	cast_ret = OB_DATA_OUT_OF_RANGE;
+src/share/object/ob_obj_cast.cpp	11113	number_range_check	check: raises OB_DATA_OUT_OF_RANGE	cast_ret = OB_DATA_OUT_OF_RANGE;
+src/share/object/ob_obj_cast.cpp	11173	number_range_check_v2	check: raises OB_DATA_OUT_OF_RANGE	cast_ret = OB_DATA_OUT_OF_RANGE;
+src/share/object/ob_obj_cast.cpp	11176	number_range_check_v2	check: raises OB_DATA_OUT_OF_RANGE	cast_ret = OB_DATA_OUT_OF_RANGE;
+src/share/object/ob_obj_cast.cpp	11184	number_range_check_v2	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/share/object/ob_obj_cast.cpp	11234	time_usec_scale_check	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/share/object/ob_obj_cast.cpp	11257	time_usec_scale_check	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/share/object/ob_obj_cast.cpp	11612	bit_length_check	check: raises OB_DATA_OUT_OF_RANGE	params.warning_ = OB_DATA_OUT_OF_RANGE;
+src/share/object/ob_obj_cast_util.h	87	round_floating_to_uint64	check: raises OB_DATA_OUT_OF_RANGE	ret = OB_DATA_OUT_OF_RANGE;
+src/share/object/ob_obj_cast_util.h	90	round_floating_to_uint64	check: raises OB_DATA_OUT_OF_RANGE	ret = OB_DATA_OUT_OF_RANGE;
+src/share/object/ob_obj_cast_util.h	96	round_floating_to_uint64	check: raises OB_DATA_OUT_OF_RANGE	ret = OB_DATA_OUT_OF_RANGE;
+src/share/object/ob_obj_cast_util.h	101	round_floating_to_uint64	check: raises OB_DATA_OUT_OF_RANGE	ret = OB_DATA_OUT_OF_RANGE;
+src/share/object/ob_obj_cast_util.h	104	round_floating_to_uint64	check: raises OB_DATA_OUT_OF_RANGE	ret = OB_DATA_OUT_OF_RANGE;
+src/share/object/ob_obj_cast_util.h	127	numeric_range_check	check: raises OB_DATA_OUT_OF_RANGE	ret = OB_DATA_OUT_OF_RANGE;
+src/share/object/ob_obj_cast_util.h	130	numeric_range_check	check: raises OB_DATA_OUT_OF_RANGE	ret = OB_DATA_OUT_OF_RANGE;
+src/share/object/ob_obj_cast_util.h	146	numeric_range_check	check: raises OB_DATA_OUT_OF_RANGE	ret = OB_DATA_OUT_OF_RANGE;
+src/share/object/ob_obj_cast_util.h	149	numeric_range_check	check: raises OB_DATA_OUT_OF_RANGE	ret = OB_DATA_OUT_OF_RANGE;
+src/share/object/ob_obj_cast_util.h	168	numeric_range_check	check: raises OB_DATA_OUT_OF_RANGE	ret = OB_DATA_OUT_OF_RANGE;
+src/share/object/ob_obj_cast_util.h	171	numeric_range_check	check: raises OB_DATA_OUT_OF_RANGE	ret = OB_DATA_OUT_OF_RANGE;
+src/share/object/ob_obj_cast_util.h	184	numeric_negative_check	check: raises OB_DATA_OUT_OF_RANGE	ret = OB_DATA_OUT_OF_RANGE;
+src/share/object/ob_obj_cast_util.h	196	numeric_negative_check	check: raises OB_DATA_OUT_OF_RANGE	ret = OB_DATA_OUT_OF_RANGE;
+src/share/object/ob_obj_cast_util.h	210	numeric_upper_check	check: raises OB_DATA_OUT_OF_RANGE	ret = OB_DATA_OUT_OF_RANGE;
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	464	ObAggregateProcessor::AggrCell::collect_result	check: helper check_mysql_decimal_int_overflow	check_mysql_decimal_int_overflow(result); // no ret
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	1637	ObAggregateProcessor::process	unchecked: arithmetic on signed value aggr_code	end_idx = aggr_code + 1;
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	1641	ObAggregateProcessor::process	unchecked: arithmetic on signed value aggr_code	start_idx = 0 == start_idx ? 0 : dist_aggr_group_idxes_->at(aggr_code - 1);
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	1807	ObAggregateProcessor::inner_process_three_stage_batch	unchecked: arithmetic on signed value aggr_code	start_idx = 0 == aggr_code ? 0 : dist_aggr_group_idxes_->at(aggr_code - 1);
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	1842	ObAggregateProcessor::process_batch	unchecked: arithmetic on signed value aggr_code	int64_t start_idx = 0 == aggr_code ? 0 : dist_aggr_group_idxes_->at(aggr_code - 1);
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	1880	ObAggregateProcessor::process_batch	unchecked: arithmetic on signed value aggr_code	int64_t start_idx = 0 == aggr_code ? 0 : dist_aggr_group_idxes_->at(aggr_code - 1);
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	2804	ObAggregateProcessor::rollup_aggregation	unchecked: arithmetic on an unsigned value getter	aggr_cell.set_tiny_num_uint(aggr_cell.get_tiny_num_uint() + 1);
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	2815	ObAggregateProcessor::rollup_aggregation	unchecked: arithmetic on an unsigned value getter	rollup_cell.set_tiny_num_uint(aggr_cell.get_tiny_num_uint() + 1);
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	2889	ObAggregateProcessor::rollup_aggregation	check: limit comparison	if (OB_SUCC(ret) && max_group_cnt != INT64_MIN && cur_rollup_group_idx - max_group_cnt > 1) {
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	3461	ObAggregateProcessor::process_aggr_batch_result	unchecked: arithmetic on signed value origin_size	int64_t new_size = origin_size + size;
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	3698	ObAggregateProcessor::process_aggr_result	unchecked: arithmetic on signed value origin_size	int64_t new_size = origin_size + size;
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	3823	ObAggregateProcessor::collect_aggr_result	unchecked: arithmetic on unsigned value new_value	new_value = new_value << 1;
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	4548	ObAggregateProcessor::add_calc	unchecked: arithmetic checked for overflow only afterwards by is_int_int_out_of_range	int64_t sum_int = left_int + right_int;
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	4549	ObAggregateProcessor::add_calc	check: helper is_int_int_out_of_range	if (ObExprAdd::is_int_int_out_of_range(left_int, right_int, sum_int)) {
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	4577	ObAggregateProcessor::add_calc	unchecked: arithmetic checked for overflow only afterwards by is_uint_uint_out_of_range	uint64_t sum_uint = left_uint + right_uint;
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	4578	ObAggregateProcessor::add_calc	check: helper is_uint_uint_out_of_range	if (ObExprAdd::is_uint_uint_out_of_range(left_uint, right_uint, sum_uint)) {
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	4637	ObAggregateProcessor::add_calc	check: helper fast_sum_agg_may_overflow	removal_info_.is_out_of_range_ = right_nmb.fast_sum_agg_may_overflow();
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	4642	ObAggregateProcessor::add_calc	check: helper fast_sum_agg_may_overflow	removal_info_.is_out_of_range_ = removal_info_.is_out_of_range_ || left_nmb.fast_sum_agg_may_overflow();
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	4694	ObAggregateProcessor::calc_overflow_res_to_decimal_int	check: helper calc_overflow_res_to_decimal_int (definition)	int ObAggregateProcessor::calc_overflow_res_to_decimal_int(ObDatum &result_datum,
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	4734	ObAggregateProcessor::sub_calc	unchecked: arithmetic checked for overflow only afterwards by is_int_int_out_of_range	int64_t dif_int = left_int - right_int;
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	4735	ObAggregateProcessor::sub_calc	check: helper is_int_int_out_of_range	if (ObExprMinus::is_int_int_out_of_range(left_int, right_int, dif_int)) {
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	4771	ObAggregateProcessor::sub_calc	unchecked: arithmetic checked for overflow only afterwards by is_uint_uint_out_of_range	uint64_t dif_uint = left_uint - right_uint;
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	4772	ObAggregateProcessor::sub_calc	check: helper is_uint_uint_out_of_range	if (ObExprMinus::is_uint_uint_out_of_range(left_uint, right_uint, dif_uint)) {
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	4799	ObAggregateProcessor::sub_calc	unchecked: arithmetic on unsigned value right_uint	aggr_cell.set_tiny_num_uint((uint64_t)ULONG_MAX - right_uint + left_uint);
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	4808	ObAggregateProcessor::sub_calc	check: helper fast_sum_agg_may_overflow	removal_info_.is_out_of_range_ = right_nmb.fast_sum_agg_may_overflow();
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	4813	ObAggregateProcessor::sub_calc	check: helper fast_sum_agg_may_overflow	removal_info_.is_out_of_range_ = removal_info_.is_out_of_range_ || left_nmb.fast_sum_agg_may_overflow();
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	5194	ObAggregateProcessor::add_calc_batch	unchecked: arithmetic checked for overflow only afterwards by is_int_int_out_of_range	sum_int   = left_int + right_int;
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	5196	ObAggregateProcessor::add_calc_batch	check: helper is_int_int_out_of_range	if (ObExprAdd::is_int_int_out_of_range(left_int, right_int, sum_int)) {
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	5236	ObAggregateProcessor::add_calc_batch	unchecked: arithmetic checked for overflow only afterwards by is_uint_uint_out_of_range	sum_uint   = left_uint + right_uint;
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	5237	ObAggregateProcessor::add_calc_batch	check: helper is_uint_uint_out_of_range	if (ObExprAdd::is_uint_uint_out_of_range(left_uint, right_uint, sum_uint)) {
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	5525	ObAggregateProcessor::rollup_add_calc	unchecked: arithmetic checked for overflow only afterwards by is_int_int_out_of_range	int64_t sum_int = left_int + right_int;
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	5526	ObAggregateProcessor::rollup_add_calc	check: helper is_int_int_out_of_range	if (ObExprAdd::is_int_int_out_of_range(left_int, right_int, sum_int)) {
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	5562	ObAggregateProcessor::rollup_add_calc	unchecked: arithmetic checked for overflow only afterwards by is_uint_uint_out_of_range	uint64_t sum_uint = left_uint + right_uint;
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	5563	ObAggregateProcessor::rollup_add_calc	check: helper is_uint_uint_out_of_range	if (ObExprAdd::is_uint_uint_out_of_range(left_uint, right_uint, sum_uint)) {
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	5823	ObAggregateCalcFunc::add_calc	unchecked: arithmetic checked for overflow only afterwards by is_int_int_out_of_range	int64_t sum_int = left_int + right_int;
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	5824	ObAggregateCalcFunc::add_calc	check: helper is_int_int_out_of_range	if (ObExprAdd::is_int_int_out_of_range(left_int, right_int, sum_int)) {
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	5850	ObAggregateCalcFunc::add_calc	unchecked: arithmetic checked for overflow only afterwards by is_uint_uint_out_of_range	uint64_t sum_uint = left_uint + right_uint;
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	5851	ObAggregateCalcFunc::add_calc	check: helper is_uint_uint_out_of_range	if (ObExprAdd::is_uint_uint_out_of_range(left_uint, right_uint, sum_uint)) {
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	5980	ObAggregateCalcFunc::add_decimalint_with_same_precision	unchecked: arithmetic on a signed value getter	const int32_t result = left_value.get_decimal_int32() + right_value.get_decimal_int32();
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	5983	ObAggregateCalcFunc::add_decimalint_with_same_precision	unchecked: arithmetic on a signed value getter	const int64_t result = left_value.get_decimal_int64() + right_value.get_decimal_int64();
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	7325	ObAggregateProcessor::init_asmvt_result	unchecked: arithmetic on signed value param_cnt	mvt_res.column_offset_ = param_cnt + 1;
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	7394	ObAggregateProcessor::init_asmvt_result	check: helper is_overflow_integer	|| extent_res->is_overflow_integer(ObInt32Type)) {
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	7639	ObAggregateProcessor::DecIntAggFuncCtx::add_int	unchecked: arithmetic on a signed value getter	*result.get_decimal_int()->int128_v_ + val1 + val2;
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	7643	ObAggregateProcessor::DecIntAggFuncCtx::add_int	unchecked: arithmetic on a signed value getter	*result.get_decimal_int()->int256_v_ + val1 + val2;
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	7656	ObAggregateProcessor::DecIntAggFuncCtx::sub_int	unchecked: arithmetic on a signed value getter	*result.get_decimal_int()->int128_v_ - val1;
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	7660	ObAggregateProcessor::DecIntAggFuncCtx::sub_int	unchecked: arithmetic on a signed value getter	*result.get_decimal_int()->int256_v_ - val1;
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	7666	ObAggregateProcessor::check_mysql_decimal_int_overflow	check: helper check_mysql_decimal_int_overflow (definition)	void ObAggregateProcessor::check_mysql_decimal_int_overflow(ObDatum &datum)
+src/sql/engine/aggregate/ob_aggregate_processor.h	56	RemovalInfo::RemovalInfo	check: helper is_out_of_range_	is_out_of_range_(false)
+src/sql/engine/aggregate/ob_pushdown_aggregate_program.cpp	173	ObCountPushdownAggregateProgramBase::consume	check: limit comparison	if (OB_UNLIKELY(deltas_.at(i) > INT64_MAX - counts_.at(i))) {
+src/sql/engine/aggregate/ob_pushdown_aggregate_program.cpp	273	ObOwnedAggregateDatum::assign	check: limit comparison	while (target_capacity < required && target_capacity <= INT64_MAX / 2) {
+src/sql/engine/aggregate/ob_pushdown_aggregate_program.cpp	484	ObScalarPushdownAggregateProgram::consume	check: limit comparison	&& OB_UNLIKELY(states_.at(i).delta_ > INT64_MAX - states_.at(i).count_)) {
+src/sql/engine/basic/ob_json_table_op.cpp	1526	RegularCol::check_default_value_inner_mysql	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_array_expr_utils.cpp	1004	ObArrayExprUtils::raw_check_add	check: helper is_int_int_out_of_range	if (OB_UNLIKELY(ObExprAdd::is_int_int_out_of_range(l, r, res))) {
+src/sql/engine/expr/ob_array_expr_utils.cpp	1005	ObArrayExprUtils::raw_check_add	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_array_expr_utils.cpp	1013	ObArrayExprUtils::raw_check_add	check: helper is_uint_uint_out_of_range	if (OB_UNLIKELY(ObExprAdd::is_uint_uint_out_of_range(l, r, res))) {
+src/sql/engine/expr/ob_array_expr_utils.cpp	1014	ObArrayExprUtils::raw_check_add	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_array_expr_utils.cpp	1052	ObArrayExprUtils::raw_check_minus	check: helper is_int_int_out_of_range	if (OB_UNLIKELY(ObExprMinus::is_int_int_out_of_range(l, r, res))) {
+src/sql/engine/expr/ob_array_expr_utils.cpp	1053	ObArrayExprUtils::raw_check_minus	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_array_expr_utils.cpp	1061	ObArrayExprUtils::raw_check_minus	check: helper is_uint_uint_out_of_range	if (OB_UNLIKELY(ObExprMinus::is_uint_uint_out_of_range(l, r, res))) {
+src/sql/engine/expr/ob_array_expr_utils.cpp	1062	ObArrayExprUtils::raw_check_minus	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_datum_cast.cpp	1434	common_string_bit	check: raises OB_DATA_OUT_OF_RANGE	warning = OB_DATA_OUT_OF_RANGE;
+src/sql/engine/expr/ob_datum_cast.cpp	2234	common_double_int	check: raises OB_DATA_OUT_OF_RANGE	ret = OB_DATA_OUT_OF_RANGE;
+src/sql/engine/expr/ob_datum_cast.cpp	2242	common_double_int	check: raises OB_DATA_OUT_OF_RANGE	ret = OB_DATA_OUT_OF_RANGE;
+src/sql/engine/expr/ob_datum_cast.cpp	4444	CAST_FUNC_NAME(double, year)	check: limit comparison	in_val = in_val < 0 ? INT_MIN : in_val + 0.5;
+src/sql/engine/expr/ob_datum_cast.cpp	10314	bit_length_check	check: raises OB_DATA_OUT_OF_RANGE	warning = OB_DATA_OUT_OF_RANGE;
+src/sql/engine/expr/ob_datum_cast.cpp	10346	bit_length_check	check: raises OB_DATA_OUT_OF_RANGE	warning = OB_DATA_OUT_OF_RANGE;
+src/sql/engine/expr/ob_datum_cast.cpp	10416	time_usec_scale_check	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_datum_cast.cpp	10440	time_usec_scale_check	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_datum_cast.cpp	10467	time_scale_check	unchecked: arithmetic on signed value value	value *= power_of_10[MAX_SCALE_FOR_TEMPORAL - scale];
+src/sql/engine/expr/ob_datum_cast.cpp	10497	time_scale_check	unchecked: arithmetic on signed value value	value *= power_of_10[MAX_SCALE_FOR_TEMPORAL - scale];
+src/sql/engine/expr/ob_datum_cast.cpp	10603	datetime_scale_check	unchecked: arithmetic on signed value value	value *= power_of_10[MAX_SCALE_FOR_TEMPORAL - scale];
+src/sql/engine/expr/ob_datum_cast.cpp	10644	datetime_scale_check	unchecked: arithmetic on signed value value	value *= power_of_10[MAX_SCALE_FOR_TEMPORAL - scale];
+src/sql/engine/expr/ob_datum_cast.cpp	10785	number_range_check_v2	check: raises OB_DATA_OUT_OF_RANGE	cast_ret = OB_DATA_OUT_OF_RANGE;
+src/sql/engine/expr/ob_datum_cast.cpp	10789	number_range_check_v2	check: raises OB_DATA_OUT_OF_RANGE	cast_ret = OB_DATA_OUT_OF_RANGE;
+src/sql/engine/expr/ob_datum_cast.cpp	10797	number_range_check_v2	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_datum_cast.cpp	10860	number_range_check_v2	check: raises OB_DATA_OUT_OF_RANGE	cast_ret = OB_DATA_OUT_OF_RANGE;
+src/sql/engine/expr/ob_datum_cast.cpp	10864	number_range_check_v2	check: raises OB_DATA_OUT_OF_RANGE	cast_ret = OB_DATA_OUT_OF_RANGE;
+src/sql/engine/expr/ob_datum_cast.cpp	10872	number_range_check_v2	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_datum_cast.cpp	13473	ob_obj_to_ob_time_without_date	check: helper time_overflow_trunc	ObTimeConverter::time_overflow_trunc(value);
+src/sql/engine/expr/ob_datum_cast.h	233	ob_datum_to_ob_time_with_date	unchecked: arithmetic on a signed value getter	ret = ObTimeConverter::datetime_to_ob_time(datum.get_time() + day_usecs, NULL, ob_time);
+src/sql/engine/expr/ob_datum_cast.h	351	ob_datum_to_ob_time_without_date	check: helper time_overflow_trunc	ObTimeConverter::time_overflow_trunc(value);
+src/sql/engine/expr/ob_datum_decint_cast.h	238	batch_explicit_scale	check: helper mul_overflow	bool overflow = wide::mul_overflow(lhs, sf, res);
+src/sql/engine/expr/ob_datum_decint_cast.h	340	batch_const_scale	check: helper mul_overflow	bool overflow = wide::mul_overflow(lhs, sf, res);
+src/sql/engine/expr/ob_expr_abs.cpp	170	DEF_EVAL_ABS_FUNC(ObIntType)	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_abs.cpp	172	DEF_EVAL_ABS_FUNC(ObIntType)	unchecked: arithmetic on signed value param_int	expr_datum.set_int(param_int >= 0 ? param_int : -param_int);
+src/sql/engine/expr/ob_expr_add.cpp	229	ObExprAdd::add_int	unchecked: arithmetic on signed value left_i	res.set_int(left_i + right_i);
+src/sql/engine/expr/ob_expr_add.cpp	230	ObExprAdd::add_int	check: helper is_int_int_out_of_range	if (OB_UNLIKELY(is_int_int_out_of_range(left_i, right_i, res.get_int()))) {
+src/sql/engine/expr/ob_expr_add.cpp	231	ObExprAdd::add_int	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_add.cpp	242	ObExprAdd::add_int	unchecked: arithmetic on signed value left_i	res.set_uint64(left_i + right_i);
+src/sql/engine/expr/ob_expr_add.cpp	243	ObExprAdd::add_int	check: helper is_int_uint_out_of_range	if (OB_UNLIKELY(is_int_uint_out_of_range(left_i, right_i, res.get_uint64()))) {
+src/sql/engine/expr/ob_expr_add.cpp	244	ObExprAdd::add_int	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_add.cpp	267	ObExprAdd::add_uint	unchecked: arithmetic on unsigned value left_i	res.set_uint64(left_i + right_i);
+src/sql/engine/expr/ob_expr_add.cpp	271	ObExprAdd::add_uint	check: helper is_uint_uint_out_of_range	if (OB_UNLIKELY(is_uint_uint_out_of_range(left_i, right_i, res.get_uint64()))) {
+src/sql/engine/expr/ob_expr_add.cpp	272	ObExprAdd::add_uint	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_add.cpp	283	ObExprAdd::add_uint	check: helper is_int_uint_out_of_range	if (OB_UNLIKELY(is_int_uint_out_of_range(right_i, left_i, res.get_uint64()))) {
+src/sql/engine/expr/ob_expr_add.cpp	284	ObExprAdd::add_uint	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_add.cpp	376	ObExprAdd::add_datetime	unchecked: arithmetic on signed value left_i	int64_t round_value = left_i + right_i;
+src/sql/engine/expr/ob_expr_add.cpp	386	ObExprAdd::add_datetime	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_add.cpp	551	ObIntIntBatchAddRaw::raw_op	unchecked: arithmetic on signed value l	res = l + r;
+src/sql/engine/expr/ob_expr_add.cpp	557	ObIntIntBatchAddRaw::raw_check	check: helper is_int_int_out_of_range	if (OB_UNLIKELY(ObExprAdd::is_int_int_out_of_range(l, r, res))) {
+src/sql/engine/expr/ob_expr_add.cpp	559	ObIntIntBatchAddRaw::raw_check	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_add.cpp	587	ObIntUIntBatchAddRaw::raw_op	unchecked: arithmetic on signed value l	res = l + r;
+src/sql/engine/expr/ob_expr_add.cpp	593	ObIntUIntBatchAddRaw::raw_check	check: helper is_int_uint_out_of_range	if (OB_UNLIKELY(ObExprAdd::is_int_uint_out_of_range(l, r, res))) {
+src/sql/engine/expr/ob_expr_add.cpp	595	ObIntUIntBatchAddRaw::raw_check	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_add.cpp	623	ObUIntUIntBatchAddRaw::raw_op	unchecked: arithmetic on unsigned value l	res = l + r;
+src/sql/engine/expr/ob_expr_add.cpp	629	ObUIntUIntBatchAddRaw::raw_check	check: helper is_uint_uint_out_of_range	if (OB_UNLIKELY(ObExprAdd::is_uint_uint_out_of_range(l, r, res))) {
+src/sql/engine/expr/ob_expr_add.cpp	631	ObUIntUIntBatchAddRaw::raw_check	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_add.cpp	659	ObUIntIntBatchAddRaw::raw_op	unchecked: arithmetic on unsigned value l	res = l + r;
+src/sql/engine/expr/ob_expr_add.cpp	665	ObUIntIntBatchAddRaw::raw_check	check: helper is_int_uint_out_of_range	if (OB_UNLIKELY(ObExprAdd::is_int_uint_out_of_range(r, l, res))) {
+src/sql/engine/expr/ob_expr_add.cpp	667	ObUIntIntBatchAddRaw::raw_check	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_add.cpp	896	ObNumberDatetimeAddFunc::operator()	unchecked: arithmetic on signed value right_i	int64_t round_value = left_i + right_i;
+src/sql/engine/expr/ob_expr_add.cpp	906	ObNumberDatetimeAddFunc::operator()	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_add.cpp	948	ObDatetimeDatetimeAddFunc::operator()	unchecked: arithmetic on signed value left_i	int64_t round_value = left_i + right_i;
+src/sql/engine/expr/ob_expr_add.cpp	958	ObDatetimeDatetimeAddFunc::operator()	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_add.cpp	1004	ObDecimalIntBatchAddRawWithCheck::raw_check	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_add.h	56	ObExprAdd::is_add_out_of_range	check: helper is_add_out_of_range (definition)	OB_INLINE static bool is_add_out_of_range(T1 val1, T2 val2, T3 &res)
+src/sql/engine/expr/ob_expr_add.h	58	ObExprAdd::is_add_out_of_range	check: __builtin_*_overflow	return __builtin_add_overflow(val1, val2, &res);
+src/sql/engine/expr/ob_expr_add.h	60	ObExprAdd::is_int_int_out_of_range	check: helper is_int_int_out_of_range (definition)	OB_INLINE static bool is_int_int_out_of_range(int64_t val1, int64_t val2, int64_t res)
+src/sql/engine/expr/ob_expr_add.h	72	ObExprAdd::is_int_uint_out_of_range	check: helper is_int_uint_out_of_range (definition)	OB_INLINE static bool is_int_uint_out_of_range(int64_t val1, uint64_t val2, uint64_t res)
+src/sql/engine/expr/ob_expr_add.h	84	ObExprAdd::is_uint_uint_out_of_range	check: helper is_uint_uint_out_of_range (definition)	OB_INLINE static bool is_uint_uint_out_of_range(uint64_t val1, uint64_t val2, uint64_t res)
+src/sql/engine/expr/ob_expr_array_difference.cpp	118	ObExprArrayDifference::calc_difference	unchecked: arithmetic on a signed value getter	this_elem.get_int() - last_elem.get_int(),
+src/sql/engine/expr/ob_expr_array_difference.cpp	121	ObExprArrayDifference::calc_difference	unchecked: arithmetic on a signed value getter	} else if (OB_FAIL(array_obj->push_back(this_elem.get_int() - last_elem.get_int()))) {
+src/sql/engine/expr/ob_expr_array_position.cpp	219	ObExprArrayPosition::array_position	unchecked: arithmetic on signed value val	ObIArrayType *val = NULL;
+src/sql/engine/expr/ob_expr_array_range.cpp	139	ObExprArrayRange::eval_array_range	unchecked: arithmetic on signed value param_end	interval = abs(param_end - param_start);
+src/sql/engine/expr/ob_expr_array_range.cpp	162	ObExprArrayRange::eval_array_range	unchecked: arithmetic on signed value param_start	arr_data[i] = param_start + i * param_step;
+src/sql/engine/expr/ob_expr_array_slice.cpp	245	ObExprArraySlice::get_subarray	check: limit comparison	if (len > INT64_MAX - offset) {
+src/sql/engine/expr/ob_expr_atan2.cpp	86	calc_atan2_expr	check: raises OB_NUMERIC_OVERFLOW	ret = OB_NUMERIC_OVERFLOW;
+src/sql/engine/expr/ob_expr_concat_ws.cpp	125	ObExprConcatWs::calc	unchecked: arithmetic checked for overflow only afterwards by is_int_int_out_of_range	tmp_alloc_len = alloc_len + word.length();
+src/sql/engine/expr/ob_expr_concat_ws.cpp	126	ObExprConcatWs::calc	check: helper is_int_int_out_of_range	if (ObExprAdd::is_int_int_out_of_range(alloc_len, word.length(), tmp_alloc_len)) {
+src/sql/engine/expr/ob_expr_concat_ws.cpp	127	ObExprConcatWs::calc	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_concat_ws.cpp	135	ObExprConcatWs::calc	check: helper is_multi_overflow64	if (is_multi_overflow64(words.count()-1, sep_str.length())) {
+src/sql/engine/expr/ob_expr_concat_ws.cpp	136	ObExprConcatWs::calc	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_concat_ws.cpp	140	ObExprConcatWs::calc	check: helper is_int_int_out_of_range	if (ObExprAdd::is_int_int_out_of_range(alloc_len, all_sep_str_len, tmp_alloc_len)) {
+src/sql/engine/expr/ob_expr_concat_ws.cpp	141	ObExprConcatWs::calc	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_conv.cpp	115	ObExprConv::eval_conv	unchecked: arithmetic on signed value from_base	dec = ObCharset::strntoll(str.ptr(), str.length(), -from_base, &err);
+src/sql/engine/expr/ob_expr_date_diff.cpp	72	ObExprDateDiff::eval_date_diff	unchecked: arithmetic on signed value date_left	res_datum.set_int(date_left - date_right);
+src/sql/engine/expr/ob_expr_day_of_func.cpp	204	ObExprSecToTime::calc_sectotime	check: helper time_overflow_trunc	if (OB_FAIL(ObTimeConverter::time_overflow_trunc(int_usec))) {
+src/sql/engine/expr/ob_expr_day_of_func.cpp	381	ObExprSubAddtime::calc_result2	unchecked: arithmetic on signed value t_val1	t_val1 = -t_val1;
+src/sql/engine/expr/ob_expr_day_of_func.cpp	388	ObExprSubAddtime::calc_result2	unchecked: arithmetic on signed value t_val1	int64_t int_usec = (get_type() == T_FUN_SYS_SUBTIME) ? t_val1 - t_val2 : t_val1 + t_val2;
+src/sql/engine/expr/ob_expr_day_of_func.cpp	389	ObExprSubAddtime::calc_result2	check: helper time_overflow_trunc	if (OB_FAIL(ObTimeConverter::time_overflow_trunc(int_usec))) {
+src/sql/engine/expr/ob_expr_day_of_func.cpp	412	ObExprSubAddtime::calc_result2	unchecked: arithmetic on a signed value getter	t_val1 = date_arg.get_datetime() + offset * USECS_PER_SEC;
+src/sql/engine/expr/ob_expr_day_of_func.cpp	416	ObExprSubAddtime::calc_result2	unchecked: arithmetic on signed value t_val1	int64_t int_usec = (get_type() == T_FUN_SYS_SUBTIME) ? t_val1 - t_val2 : t_val1 + t_val2;
+src/sql/engine/expr/ob_expr_day_of_func.cpp	562	ObExprSubAddtime::subaddtime_datetime	unchecked: arithmetic on signed value dt_value	t_val1 = dt_value + offset * USECS_PER_SEC;
+src/sql/engine/expr/ob_expr_demote_cast.cpp	515	ObExprDemoteCast::eval_demoted_val	check: raises OB_DATA_OUT_OF_RANGE	ret = OB_DATA_OUT_OF_RANGE;
+src/sql/engine/expr/ob_expr_div.cpp	542	ObDecimalIntBatchDivRawWithCheck::raw_check	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_element_at.cpp	113	ObExprElementAt::eval_element_at	unchecked: arithmetic on a signed value getter	} else if (OB_FALSE_IT(idx = idx_datum->get_int() - 1)) {
+src/sql/engine/expr/ob_expr_element_at.cpp	166	ObExprElementAt::eval_element_at_batch	unchecked: arithmetic on a signed value getter	} else if (OB_FALSE_IT(idx = idx_array.at(j)->get_int() - 1)) {
+src/sql/engine/expr/ob_expr_from_days.cpp	66	ObExprFromDays::calc_fromdays	unchecked: arithmetic on signed value value	expr_datum.set_date(value - DAYS_FROM_ZERO_TO_BASE);
+src/sql/engine/expr/ob_expr_func_part_hash.cpp	73	ObExprFuncPartHashBase::calc_value_for_mysql	unchecked: arithmetic on signed value num	num = num < 0 ? -num : num;
+src/sql/engine/expr/ob_expr_func_round.cpp	262	do_round_by_type	unchecked: arithmetic on signed value x_int	x_int = neg ? -x_int : x_int;
+src/sql/engine/expr/ob_expr_func_round.cpp	405	do_round_by_type_batch_with_check	unchecked: arithmetic on signed value x_int	x_int = neg ? -x_int : x_int;
+src/sql/engine/expr/ob_expr_func_round.cpp	490	do_round_by_type_batch_without_check	unchecked: arithmetic on signed value x_int	x_int = neg ? -x_int : x_int;
+src/sql/engine/expr/ob_expr_get_mysql_routine_parameter_type_str.cpp	64	ObExprGetMySQLRoutineParameterTypeStr::get_mysql_routine_parameter_type_str	unchecked: arithmetic on a signed value getter	int64_t param_pos = second_param.get_int() - 1;
+src/sql/engine/expr/ob_expr_inner_info_cols_printer.cpp	200	ObExprInnerInfoColsCharLenPrinter::eval_column_char_len	unchecked: arithmetic on a signed value getter	mbmaxlen * data_length->get_int()));
+src/sql/engine/expr/ob_expr_insert.cpp	156	ObExprInsert::calc	check: limit comparison	if (expect_length < 0 || start + expect_length > text_len || start > INT64_MAX - expect_length) {
+src/sql/engine/expr/ob_expr_int_div.cpp	48	#define REPORT_OUT_OF_RANGE_ERROR	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;\
+src/sql/engine/expr/ob_expr_int_div.cpp	109	ObExprIntDiv::intdiv_int	unchecked: arithmetic checked for overflow only afterwards by is_int_int_out_of_range	int64_t res_i = left_i / right_i;
+src/sql/engine/expr/ob_expr_int_div.cpp	110	ObExprIntDiv::intdiv_int	check: helper is_int_int_out_of_range	if (OB_UNLIKELY(is_int_int_out_of_range(left_i, right_i, res_i))) {
+src/sql/engine/expr/ob_expr_int_div.cpp	117	ObExprIntDiv::intdiv_int	unchecked: arithmetic on signed value left_i	uint64_t left_ui = left_i < 0 ? -left_i : left_i;
+src/sql/engine/expr/ob_expr_int_div.cpp	160	ObExprIntDiv::intdiv_uint	unchecked: arithmetic on signed value right_i	right_ui = right_i < 0 ? -right_i : right_i;
+src/sql/engine/expr/ob_expr_int_div.cpp	216	ObExprIntDiv::div_int_int	unchecked: arithmetic checked for overflow only afterwards by is_int_int_out_of_range	int64_t res_i = left_i / right_i;
+src/sql/engine/expr/ob_expr_int_div.cpp	217	ObExprIntDiv::div_int_int	check: helper is_int_int_out_of_range	if (OB_UNLIKELY(is_int_int_out_of_range(left_i, right_i, res_i))) {
+src/sql/engine/expr/ob_expr_int_div.cpp	245	ObExprIntDiv::div_int_uint	unchecked: arithmetic on signed value left_i	uint64_t left_ui = left_i < 0 ? -left_i : left_i;
+src/sql/engine/expr/ob_expr_int_div.cpp	302	ObExprIntDiv::div_uint_int	unchecked: arithmetic on signed value right_i	uint64_t right_ui = right_i < 0 ? -right_i : right_i;
+src/sql/engine/expr/ob_expr_int_div.cpp	349	ObExprIntDiv::div_number	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_int_div.h	62	ObExprIntDiv::is_int_int_out_of_range	check: helper is_int_int_out_of_range (definition)	OB_INLINE static bool is_int_int_out_of_range(int64_t val1, int64_t val2, int64_t res)
+src/sql/engine/expr/ob_expr_json_utils.cpp	235	ObJsonUtil::datetime_scale_check	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_json_utils.cpp	270	ObJsonUtil::mdatetime_scale_check	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_json_utils.cpp	369	ObJsonUtil::time_scale_check	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_json_utils.cpp	421	ObJsonUtil::number_range_check	check: raises OB_DATA_OUT_OF_RANGE	ret = OB_DATA_OUT_OF_RANGE;
+src/sql/engine/expr/ob_expr_json_utils.cpp	425	ObJsonUtil::number_range_check	check: raises OB_DATA_OUT_OF_RANGE	ret = OB_DATA_OUT_OF_RANGE;
+src/sql/engine/expr/ob_expr_json_utils.cpp	436	ObJsonUtil::number_range_check	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_json_utils.cpp	615	cast_to_int	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_json_utils.cpp	619	cast_to_int	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_json_utils.cpp	972	cast_to_date	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_json_utils.cpp	1008	cast_to_mdate	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_json_utils.cpp	1089	cast_to_time	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_json_utils.cpp	1093	cast_to_time	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_json_utils.cpp	1136	cast_to_year	check: raises OB_DATA_OUT_OF_RANGE	ret = OB_DATA_OUT_OF_RANGE;
+src/sql/engine/expr/ob_expr_json_value.cpp	509	ObExprJsonValue::check_default_val_accuracy	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_lock_func.cpp	171	ObExprGetLock::get_lock	unchecked: arithmetic on a signed value getter	int64_t timeout_us = lock_timeout->is_null() ? 0 : lock_timeout->get_int() * 1000 * 1000;
+src/sql/engine/expr/ob_expr_maketime.cpp	117	ObExprMakeTime::eval_batch_maketime	unchecked: arithmetic on signed value h	ob_time.parts_[DT_HOUR]  = h < 0 ? -h : h;
+src/sql/engine/expr/ob_expr_maketime.cpp	124	ObExprMakeTime::eval_batch_maketime	check: helper time_overflow_trunc	(void)ObTimeConverter::time_overflow_trunc(value);
+src/sql/engine/expr/ob_expr_maketime.cpp	172	ObExprMakeTime::eval_maketime	unchecked: arithmetic on signed value h	ob_time.parts_[DT_HOUR]  = h < 0 ? -h : h;
+src/sql/engine/expr/ob_expr_maketime.cpp	179	ObExprMakeTime::eval_maketime	check: helper time_overflow_trunc	(void)ObTimeConverter::time_overflow_trunc(value);
+src/sql/engine/expr/ob_expr_minus.cpp	217	ObExprMinus::minus_int	unchecked: arithmetic on signed value left_i	res.set_int(left_i - right_i);
+src/sql/engine/expr/ob_expr_minus.cpp	218	ObExprMinus::minus_int	check: helper is_int_int_out_of_range	if (OB_UNLIKELY(is_int_int_out_of_range(left_i, right_i, res.get_int()))) {
+src/sql/engine/expr/ob_expr_minus.cpp	219	ObExprMinus::minus_int	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_minus.cpp	232	ObExprMinus::minus_int	unchecked: arithmetic on signed value left_i	res.set_uint64(left_i - right_i);
+src/sql/engine/expr/ob_expr_minus.cpp	233	ObExprMinus::minus_int	check: helper is_int_uint_out_of_range	if (OB_UNLIKELY(is_int_uint_out_of_range(left_i, right_i, res.get_uint64()))) {
+src/sql/engine/expr/ob_expr_minus.cpp	234	ObExprMinus::minus_int	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_minus.cpp	259	ObExprMinus::minus_uint	unchecked: arithmetic on unsigned value left_i	res.set_uint64(left_i - right_i);
+src/sql/engine/expr/ob_expr_minus.cpp	263	ObExprMinus::minus_uint	check: helper is_uint_uint_out_of_range	if (OB_UNLIKELY(is_uint_uint_out_of_range(left_i, right_i, res.get_uint64()))) {
+src/sql/engine/expr/ob_expr_minus.cpp	264	ObExprMinus::minus_uint	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_minus.cpp	277	ObExprMinus::minus_uint	check: helper is_uint_int_out_of_range	if (OB_UNLIKELY(is_uint_int_out_of_range(right_i, left_i, res.get_uint64()))) {
+src/sql/engine/expr/ob_expr_minus.cpp	278	ObExprMinus::minus_uint	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_minus.cpp	374	ObExprMinus::minus_datetime	unchecked: arithmetic on signed value left_i	int64_t round_value = left_i - right_i;
+src/sql/engine/expr/ob_expr_minus.cpp	383	ObExprMinus::minus_datetime	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_minus.cpp	538	ObIntIntBatchMinusRaw::raw_op	unchecked: arithmetic on signed value l	res = l - r;
+src/sql/engine/expr/ob_expr_minus.cpp	544	ObIntIntBatchMinusRaw::raw_check	check: helper is_int_int_out_of_range	if (OB_UNLIKELY(ObExprMinus::is_int_int_out_of_range(l, r, res))) {
+src/sql/engine/expr/ob_expr_minus.cpp	546	ObIntIntBatchMinusRaw::raw_check	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_minus.cpp	575	ObIntUIntBatchMinusRaw::raw_op	unchecked: arithmetic on signed value l	res = l - r;
+src/sql/engine/expr/ob_expr_minus.cpp	581	ObIntUIntBatchMinusRaw::raw_check	check: helper is_int_uint_out_of_range	if (OB_UNLIKELY(ObExprMinus::is_int_uint_out_of_range(l, r, res))) {
+src/sql/engine/expr/ob_expr_minus.cpp	583	ObIntUIntBatchMinusRaw::raw_check	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_minus.cpp	611	ObUIntUIntBatchMinusRaw::raw_op	unchecked: arithmetic on unsigned value l	res = l - r;
+src/sql/engine/expr/ob_expr_minus.cpp	617	ObUIntUIntBatchMinusRaw::raw_check	check: helper is_uint_uint_out_of_range	if (OB_UNLIKELY(ObExprMinus::is_uint_uint_out_of_range(l, r, res))) {
+src/sql/engine/expr/ob_expr_minus.cpp	619	ObUIntUIntBatchMinusRaw::raw_check	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_minus.cpp	647	ObUIntIntBatchMinusRaw::raw_op	unchecked: arithmetic on unsigned value l	res = l - r;
+src/sql/engine/expr/ob_expr_minus.cpp	653	ObUIntIntBatchMinusRaw::raw_check	check: helper is_uint_int_out_of_range	if (OB_UNLIKELY(ObExprMinus::is_uint_int_out_of_range(r, l, res))) {
+src/sql/engine/expr/ob_expr_minus.cpp	655	ObUIntIntBatchMinusRaw::raw_check	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_minus.cpp	881	ObDatetimeNumberMinusFunc::operator()	unchecked: arithmetic on signed value left_i	int64_t round_value = left_i - right_i;
+src/sql/engine/expr/ob_expr_minus.cpp	891	ObDatetimeNumberMinusFunc::operator()	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_minus.cpp	960	ObDatetimeDatetimeMinusFunc::operator()	unchecked: arithmetic on signed value left_i	int64_t round_value = left_i - right_i;
+src/sql/engine/expr/ob_expr_minus.cpp	969	ObDatetimeDatetimeMinusFunc::operator()	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_minus.cpp	1015	ObDecimalIntBatchMinusRawWithCheck::raw_check	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_minus.h	140	ObExprMinus::is_int_int_out_of_range	check: helper is_int_int_out_of_range (definition)	OB_INLINE static bool is_int_int_out_of_range(int64_t val1, int64_t val2, int64_t res)
+src/sql/engine/expr/ob_expr_minus.h	152	ObExprMinus::is_int_uint_out_of_range	check: helper is_int_uint_out_of_range (definition)	OB_INLINE static bool is_int_uint_out_of_range(int64_t val1, uint64_t val2, uint64_t res)
+src/sql/engine/expr/ob_expr_minus.h	164	ObExprMinus::is_uint_int_out_of_range	check: helper is_uint_int_out_of_range (definition)	OB_INLINE static bool is_uint_int_out_of_range(uint64_t val1, int64_t val2, uint64_t res)
+src/sql/engine/expr/ob_expr_minus.h	176	ObExprMinus::is_uint_uint_out_of_range	check: helper is_uint_uint_out_of_range (definition)	OB_INLINE static bool is_uint_uint_out_of_range(uint64_t val1, uint64_t val2, uint64_t res)
+src/sql/engine/expr/ob_expr_mod.cpp	119	ObExprMod::mod_int	unchecked: arithmetic on signed value left_i	res.set_int(-static_cast<int64_t>(-left_i % static_cast<uint64_t>(right_i)));
+src/sql/engine/expr/ob_expr_mod.cpp	247	ObExprMod::mod_int_uint	unchecked: arithmetic on signed value left_i	datum.set_int(-static_cast<int64_t>(-left_i % right_ui));
+src/sql/engine/expr/ob_expr_mul.cpp	191	ObExprMul::mul_int	check: helper is_multi_overflow64	if (OB_UNLIKELY(is_multi_overflow64(left_i, right_i))) {
+src/sql/engine/expr/ob_expr_mul.cpp	192	ObExprMul::mul_int	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_mul.cpp	202	ObExprMul::mul_int	unchecked: arithmetic on signed value left_i	res.set_int(left_i * right_i);
+src/sql/engine/expr/ob_expr_mul.cpp	206	ObExprMul::mul_int	check: helper is_int_uint_mul_out_of_range	if (OB_UNLIKELY(is_int_uint_mul_out_of_range(left_i, right_i))) {
+src/sql/engine/expr/ob_expr_mul.cpp	207	ObExprMul::mul_int	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_mul.cpp	217	ObExprMul::mul_int	unchecked: arithmetic on signed value left_i	res.set_uint64(left_i * right_i);
+src/sql/engine/expr/ob_expr_mul.cpp	236	ObExprMul::mul_uint	check: helper is_uint_uint_mul_out_of_range	if (OB_UNLIKELY(is_uint_uint_mul_out_of_range(left_i, right_i))) {
+src/sql/engine/expr/ob_expr_mul.cpp	237	ObExprMul::mul_uint	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_mul.cpp	248	ObExprMul::mul_uint	unchecked: arithmetic on unsigned value left_i	res.set_uint64(left_i * right_i);
+src/sql/engine/expr/ob_expr_mul.cpp	252	ObExprMul::mul_uint	check: helper is_int_uint_mul_out_of_range	if (OB_UNLIKELY(is_int_uint_mul_out_of_range(right_i, left_i))) {
+src/sql/engine/expr/ob_expr_mul.cpp	253	ObExprMul::mul_uint	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_mul.cpp	263	ObExprMul::mul_uint	unchecked: arithmetic on unsigned value left_i	res.set_uint64(left_i * right_i);
+src/sql/engine/expr/ob_expr_mul.cpp	347	ObIntIntBatchMulRaw::raw_op	unchecked: arithmetic on signed value l	res = l * r;
+src/sql/engine/expr/ob_expr_mul.cpp	354	ObIntIntBatchMulRaw::raw_check	check: helper is_mul_out_of_range	if (OB_UNLIKELY(ObExprMul::is_mul_out_of_range(l, r, res))) {
+src/sql/engine/expr/ob_expr_mul.cpp	356	ObIntIntBatchMulRaw::raw_check	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_mul.cpp	383	ObIntUIntBatchMulRaw::raw_op	unchecked: arithmetic on signed value l	res = l * r;
+src/sql/engine/expr/ob_expr_mul.cpp	389	ObIntUIntBatchMulRaw::raw_check	check: helper is_int_uint_mul_out_of_range	if (OB_UNLIKELY(ObExprMul::is_int_uint_mul_out_of_range(l, r))) {
+src/sql/engine/expr/ob_expr_mul.cpp	391	ObIntUIntBatchMulRaw::raw_check	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_mul.cpp	418	ObUIntIntBatchMulRaw::raw_op	unchecked: arithmetic on unsigned value l	res = l * r;
+src/sql/engine/expr/ob_expr_mul.cpp	424	ObUIntIntBatchMulRaw::raw_check	check: helper is_int_uint_mul_out_of_range	if (OB_UNLIKELY(ObExprMul::is_int_uint_mul_out_of_range(r, l))) {
+src/sql/engine/expr/ob_expr_mul.cpp	426	ObUIntIntBatchMulRaw::raw_check	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_mul.cpp	453	ObUIntUIntBatchMulRaw::raw_op	unchecked: arithmetic on unsigned value l	res = l * r;
+src/sql/engine/expr/ob_expr_mul.cpp	459	ObUIntUIntBatchMulRaw::raw_check	check: helper is_uint_uint_mul_out_of_range	if (OB_UNLIKELY(ObExprMul::is_uint_uint_mul_out_of_range(l, r))) {
+src/sql/engine/expr/ob_expr_mul.cpp	461	ObUIntUIntBatchMulRaw::raw_check	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_mul.cpp	729	ObDecimalIntBatchMulRawWithCheck::raw_check	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_mul.cpp	746	ObDecimalIntBatchMulRawWithRoundCheck::raw_check	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_mul.h	182	ObExprMul::is_mul_out_of_range	check: helper is_mul_out_of_range (definition)	OB_INLINE static bool is_mul_out_of_range(T1 val1, T2 val2, T3 &res)
+src/sql/engine/expr/ob_expr_mul.h	184	ObExprMul::is_mul_out_of_range	check: __builtin_*_overflow	return __builtin_mul_overflow(val1, val2, &res);
+src/sql/engine/expr/ob_expr_mul.h	186	ObExprMul::is_int_uint_mul_out_of_range	check: helper is_int_uint_mul_out_of_range (definition)	OB_INLINE static bool is_int_uint_mul_out_of_range(int64_t val1, uint64_t val2)
+src/sql/engine/expr/ob_expr_mul.h	192	ObExprMul::is_int_uint_mul_out_of_range	check: helper is_uint_uint_mul_out_of_range	overflow = is_uint_uint_mul_out_of_range(static_cast<uint64_t>(val1), val2);
+src/sql/engine/expr/ob_expr_mul.h	196	ObExprMul::is_uint_uint_mul_out_of_range	check: helper is_uint_uint_mul_out_of_range (definition)	OB_INLINE static bool is_uint_uint_mul_out_of_range(uint64_t val1, uint64_t val2)
+src/sql/engine/expr/ob_expr_mul.h	200	ObExprMul::is_uint_uint_mul_out_of_range	check: __builtin_*_overflow	overflow = __builtin_umulll_overflow(val1, val2, &res);
+src/sql/engine/expr/ob_expr_neg.cpp	88	DEF_EVAL_NEG_FUNC(ObIntTC)	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_neg.cpp	90	DEF_EVAL_NEG_FUNC(ObIntTC)	unchecked: arithmetic on a signed value getter	expr_datum.set_int(-param->get_int());
+src/sql/engine/expr/ob_expr_neg.cpp	103	DEF_EVAL_NEG_FUNC(ObUIntTC)	check: limit comparison	if (param->get_uint64() > (1UL + INT64_MAX)) {
+src/sql/engine/expr/ob_expr_neg.cpp	104	DEF_EVAL_NEG_FUNC(ObUIntTC)	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_neg.cpp	106	DEF_EVAL_NEG_FUNC(ObUIntTC)	unchecked: arithmetic on an unsigned value getter	expr_datum.set_int(-param->get_uint64());
+src/sql/engine/expr/ob_expr_period_diff.cpp	155	ObExprPeriodAdd::calc	unchecked: arithmetic on signed value rvalue	int64_t res_months = lyear * MONS_PER_YEAR + lmonth + rvalue;
+src/sql/engine/expr/ob_expr_pl_integer_checker.cpp	102	#define GET_VALUE_AND_CHECK	check: raises OB_NUMERIC_OVERFLOW	ret = OB_NUMERIC_OVERFLOW;                                \
+src/sql/engine/expr/ob_expr_pl_integer_checker.cpp	133	ObExprPLIntegerChecker::check_range	check: helper CHECK_OVERFLOW	CHECK_OVERFLOW(pls_range.get_lower(), pls_range.get_upper());
+src/sql/engine/expr/ob_expr_priv_st_asmvtgeom.cpp	182	ObExprPrivSTAsMVTGeom::process_input_geometry	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_priv_st_asmvtgeom.cpp	196	ObExprPrivSTAsMVTGeom::process_input_geometry	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_priv_st_geohash.cpp	270	ObExprPrivSTGeoHash::process_input_geometry	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_priv_st_makeenvelope.cpp	117	ObExprPrivSTMakeEnvelope::read_args	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_priv_st_point.cpp	136	ObExprPrivSTPoint::eval_priv_st_point	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_priv_st_transform.cpp	118	ObExprPrivSTTransform::eval_priv_st_transform	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_priv_st_transform.cpp	168	ObExprPrivSTTransform::eval_priv_st_transform	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_randstr.cpp	99	ObExprRandstr::calc_random_str	unchecked: arithmetic on signed value seed_val	seed_val = (seed_val * 1103515245 + 12345) & ((1U << 31) - 1);
+src/sql/engine/expr/ob_expr_repeat.cpp	127	ObExprRepeat::repeat	check: limit comparison	if ((length > max_result_size / count) || (length > INT_MAX / count)) {
+src/sql/engine/expr/ob_expr_repeat.cpp	176	ObExprRepeat::repeat_text	check: limit comparison	if ((length > max_result_size / count) || (length > INT_MAX / count)) {
+src/sql/engine/expr/ob_expr_scn_to_timestamp.cpp	82	calc_scn_to_timestamp_expr	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_st_buffer.cpp	267	ObExprSTBuffer::init_buffer_strategy	unchecked: arithmetic on a signed value getter	int circle_points = strat_datum->get_int() * ST_BUFFER_QUAR_PER_CIRCLE;
+src/sql/engine/expr/ob_expr_st_geomfromewkt.cpp	90	ObExprPrivSTGeomFromEwkt::eval_st_geomfromewkt	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_st_geomfromtext.cpp	129	ObExprSTGeomFromText::eval_st_geomfromtext_common	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_st_geomfromwkb.cpp	121	ObIExprSTGeomFromWKB::eval_geom_wkb	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_st_srid.cpp	111	ObExprSTSRID::eval_st_srid_common	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_st_transform.cpp	107	ObExprSTTransform::eval_st_transform	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_substr.cpp	78	ObExprSubstr::calc_result_length	unchecked: arithmetic on signed value start_pos	start_pos = (start_pos >= 0) ? start_pos - 1 : start_pos + mb_len;
+src/sql/engine/expr/ob_expr_substr.cpp	82	ObExprSubstr::calc_result_length	unchecked: arithmetic on signed value start_pos	res_len = min(substr_len, mb_len - start_pos);
+src/sql/engine/expr/ob_expr_substr.cpp	98	ObExprSubstr::calc_result_length	check: limit comparison	if (start_pos <= INT64_MAX - substr_len && start_pos + substr_len <= result_len + 1) {
+src/sql/engine/expr/ob_expr_substr.cpp	101	ObExprSubstr::calc_result_length	unchecked: arithmetic on signed value start_pos	res_len = result_len - start_pos + 1;
+src/sql/engine/expr/ob_expr_time_diff.cpp	145	ObExprTimeDiff::calc_timediff	check: helper time_overflow_trunc	ret = ObTimeConverter::time_overflow_trunc(int64_diff);
+src/sql/engine/expr/ob_expr_timestamp.cpp	116	ObExprTimestamp::calc_timestamp2	unchecked: arithmetic on a signed value getter	result.set_datetime(datetime->get_datetime() + time->get_time());
+src/sql/engine/expr/ob_expr_timestamp_add.cpp	101	ObExprTimeStampAdd::calc	check: helper is_mul_out_of_range	if (ObExprMul::is_mul_out_of_range(interval, quota, delta)) {
+src/sql/engine/expr/ob_expr_timestamp_add.cpp	102	ObExprTimeStampAdd::calc	check: raises OB_DATETIME_FUNCTION_OVERFLOW	ret = OB_DATETIME_FUNCTION_OVERFLOW;
+src/sql/engine/expr/ob_expr_timestamp_add.cpp	104	ObExprTimeStampAdd::calc	check: helper is_add_out_of_range	if (ObExprAdd::is_add_out_of_range(ts, delta, value)) {
+src/sql/engine/expr/ob_expr_timestamp_add.cpp	105	ObExprTimeStampAdd::calc	check: raises OB_DATETIME_FUNCTION_OVERFLOW	ret = OB_DATETIME_FUNCTION_OVERFLOW;
+src/sql/engine/expr/ob_expr_timestamp_add.cpp	115	ObExprTimeStampAdd::calc	unchecked: arithmetic checked for overflow only afterwards by is_add_out_of_range	int32_t month = static_cast<int32_t>((ot.parts_[DT_YEAR]) * (MONS_PER_YEAR) + ot.parts_[DT_MON] - 1);
+src/sql/engine/expr/ob_expr_timestamp_add.cpp	116	ObExprTimeStampAdd::calc	check: helper is_add_out_of_range	if (OB_UNLIKELY(ObExprAdd::is_add_out_of_range(month, delta, month))) {
+src/sql/engine/expr/ob_expr_timestamp_add.cpp	117	ObExprTimeStampAdd::calc	check: raises OB_DATETIME_FUNCTION_OVERFLOW	ret = OB_DATETIME_FUNCTION_OVERFLOW;
+src/sql/engine/expr/ob_expr_timestamp_add.cpp	135	ObExprTimeStampAdd::calc	unchecked: arithmetic checked for overflow only afterwards by is_add_out_of_range	int32_t month = static_cast<int32_t>((ot.parts_[DT_YEAR]) * MONS_PER_YEAR + (ot.parts_[DT_MON] - 1));
+src/sql/engine/expr/ob_expr_timestamp_add.cpp	136	ObExprTimeStampAdd::calc	check: helper is_mul_out_of_range	if (OB_UNLIKELY(ObExprMul::is_mul_out_of_range(interval, MONTH_PER_QUARTER, delta))) {
+src/sql/engine/expr/ob_expr_timestamp_add.cpp	137	ObExprTimeStampAdd::calc	check: raises OB_DATETIME_FUNCTION_OVERFLOW	ret = OB_DATETIME_FUNCTION_OVERFLOW;
+src/sql/engine/expr/ob_expr_timestamp_add.cpp	138	ObExprTimeStampAdd::calc	check: helper is_add_out_of_range	} else if (OB_UNLIKELY(ObExprAdd::is_add_out_of_range(month, delta, month))) {
+src/sql/engine/expr/ob_expr_timestamp_add.cpp	139	ObExprTimeStampAdd::calc	check: raises OB_DATETIME_FUNCTION_OVERFLOW	ret = OB_DATETIME_FUNCTION_OVERFLOW;
+src/sql/engine/expr/ob_expr_timestamp_add.cpp	152	ObExprTimeStampAdd::calc	check: helper is_add_out_of_range	if (OB_UNLIKELY(ObExprAdd::is_add_out_of_range(ot.parts_[DT_YEAR], delta, ot.parts_[DT_YEAR]))) {
+src/sql/engine/expr/ob_expr_timestamp_add.cpp	153	ObExprTimeStampAdd::calc	check: raises OB_DATETIME_FUNCTION_OVERFLOW	ret = OB_DATETIME_FUNCTION_OVERFLOW;
+src/sql/engine/expr/ob_expr_to_days.cpp	59	calc_todays_expr	unchecked: arithmetic on a signed value getter	int64_t day_int = day_datum->get_date() + DAYS_FROM_ZERO_TO_BASE;
+src/sql/engine/expr/ob_expr_type_to_str.cpp	458	ObExprEnumToInnerType::calc_to_inner_expr	unchecked: arithmetic on unsigned value element_val	int64_t element_idx = static_cast<int64_t>(element_val - 1);//enum value start from 1
+src/sql/engine/expr/ob_expr_usec_to_time.cpp	69	calc_usec_to_time_expr	unchecked: arithmetic on signed value value	value += SEC_TO_USEC(offset);
+src/sql/engine/expr/ob_expr_usec_to_time.cpp	74	calc_usec_to_time_expr	check: raises OB_DATETIME_FUNCTION_OVERFLOW	ret = OB_DATETIME_FUNCTION_OVERFLOW;
+src/sql/engine/expr/ob_expr_usec_to_time.cpp	75	calc_usec_to_time_expr	unchecked: arithmetic on signed value value	value -= SEC_TO_USEC(offset);
+src/sql/engine/expr/ob_expr_usec_to_time.cpp	77	calc_usec_to_time_expr	unchecked: arithmetic on signed value value	value -= SEC_TO_USEC(offset);
+src/sql/engine/expr/ob_expr_zipf.cpp	63	ObExprZipf::ObExprZipfCtx::initialize	unchecked: arithmetic on signed value n	probe_cp_[n -1] = 1;
+src/sql/engine/expr/ob_expr_zipf.cpp	71	ObExprZipf::ObExprZipfCtx::generate_next_value	check: limit comparison	double normalized_seed = static_cast<double>(gen_()) / UINT64_MAX;
+src/sql/engine/window_function/ob_window_function_op.cpp	456	ObWindowFunctionOp::get_param_int_value	check: raises OB_DATA_OUT_OF_RANGE	ret = OB_DATA_OUT_OF_RANGE;
+src/sql/engine/window_function/ob_window_function_op.cpp	470	ObWindowFunctionOp::get_param_int_value	check: raises OB_DATA_OUT_OF_RANGE	ret = OB_DATA_OUT_OF_RANGE;
+src/sql/engine/window_function/ob_window_function_op.cpp	480	ObWindowFunctionOp::get_param_int_value	check: raises OB_DATA_OUT_OF_RANGE	ret = OB_DATA_OUT_OF_RANGE;
+src/sql/engine/window_function/ob_window_function_op.cpp	490	ObWindowFunctionOp::get_param_int_value	check: raises OB_DATA_OUT_OF_RANGE	ret = OB_DATA_OUT_OF_RANGE;
+src/sql/engine/window_function/ob_window_function_op.cpp	500	ObWindowFunctionOp::get_param_int_value	check: raises OB_DATA_OUT_OF_RANGE	ret = OB_DATA_OUT_OF_RANGE;
+src/sql/engine/window_function/ob_window_function_op.cpp	756	ObWindowFunctionOp::NonAggrCellNtile::eval	check: raises OB_DATA_OUT_OF_RANGE	ret = OB_DATA_OUT_OF_RANGE;
+src/sql/engine/window_function/ob_window_function_op.cpp	2698	ObWindowFunctionOp::get_pos	check: raises OB_DATA_OUT_OF_RANGE	ret = OB_DATA_OUT_OF_RANGE;
+src/sql/engine/window_function/ob_window_function_op.cpp	2705	ObWindowFunctionOp::get_pos	check: limit comparison	if (OB_UNLIKELY(!is_preceding && static_cast<uint64>(row_idx + interval) > INT64_MAX)) {
+src/sql/ob_sql_utils.cpp	3190	ObSqlGeoUtils::check_srid_by_srs	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/optimizer/stat/ob_dbms_stats_copy_table_stats.cpp	55	CopyTableStatHelper::copy_part_stat	check: raises OB_DATA_OUT_OF_RANGE	ret = OB_DATA_OUT_OF_RANGE;
+src/sql/resolver/ddl/ob_ddl_resolver.cpp	461	ObDDLResolver::resolve_default_value	check: raises OB_DATA_OUT_OF_RANGE	ret = OB_DATA_OUT_OF_RANGE;
+src/sql/resolver/ddl/ob_ddl_resolver.cpp	478	ObDDLResolver::resolve_default_value	check: raises OB_DATA_OUT_OF_RANGE	ret = OB_DATA_OUT_OF_RANGE;
+src/sql/resolver/ddl/ob_ddl_resolver.cpp	1462	ObDDLResolver::resolve_table_option	check: raises OB_DATA_OUT_OF_RANGE	ret = OB_DATA_OUT_OF_RANGE;
+src/sql/rewrite/ob_range_graph_generator.cpp	672	mul_check_overflow	check: __builtin_*_overflow	if (__builtin_mul_overflow(a, b, &a)) {
+src/sql/rewrite/ob_range_graph_generator.cpp	679	add_check_overflow	check: __builtin_*_overflow	if (__builtin_add_overflow(a, b, &a)) {
+src/sql/rewrite/ob_transform_simplify_groupby.cpp	1238	ObTransformSimplifyGroupby::check_aggr_win_can_be_removed	check: raises OB_DATA_OUT_OF_RANGE	ret = OB_DATA_OUT_OF_RANGE;
+src/sql/rewrite/ob_transform_simplify_winfunc.cpp	170	ObTransformSimplifyWinfunc::check_aggr_win_can_be_removed	check: raises OB_DATA_OUT_OF_RANGE	ret = OB_DATA_OUT_OF_RANGE;
+src/storage/access/ob_pushdown_aggregate.cpp	469	ObCountAggCell::eval_index_info	unchecked: arithmetic on a signed value getter	row_count_ += index_info.get_row_count() - skip_index_datum_.get_int();
+src/storage/access/ob_pushdown_aggregate.cpp	495	eval_batch_for_count	unchecked: arithmetic on a signed value getter	result_datum.set_int(result_datum.get_int() + 1);
+src/storage/access/ob_pushdown_aggregate.cpp	509	eval_batch_for_count	unchecked: arithmetic on a signed value getter	result_datum.set_int(result_datum.get_int() + 1);
+src/storage/access/ob_pushdown_aggregate.cpp	524	eval_batch_for_count	unchecked: arithmetic on a signed value getter	result_datum.set_int(result_datum.get_int() + 1);
+src/storage/access/ob_pushdown_aggregate.cpp	553	ObCountAggCell::eval_batch_in_group_by	unchecked: arithmetic on a signed value getter	result_datum.set_int(result_datum.get_int() + 1);
+src/storage/access/ob_pushdown_aggregate.cpp	1330	ObSumOpSizeAggCell::eval_index_info	unchecked: arithmetic on signed value null_count	total_size_ += (index_info.get_row_count() - null_count) * op_size_ + null_count * sizeof(ObDatum);
+src/storage/access/ob_pushdown_aggregate.h	694	ObSumAggCell::eval_int_inner	unchecked: arithmetic checked for overflow only afterwards by is_int_add_out_of_range	int64_t sum_int = datum_int + new_int;
+src/storage/access/ob_pushdown_aggregate.h	695	ObSumAggCell::eval_int_inner	check: helper is_int_add_out_of_range	if (query::ObArithmeticOverflow::is_int_add_out_of_range(datum_int, new_int, sum_int)) {
+src/storage/access/ob_pushdown_aggregate.h	702	ObSumAggCell::eval_int_inner	unchecked: arithmetic on signed value new_int	DATUM_TO_CONST_DECIMAL_INT(result_datum, RES_T) + datum_int + new_int;
+src/storage/access/ob_pushdown_aggregate.h	726	ObSumAggCell::eval_int_inner	unchecked: arithmetic checked for overflow only afterwards by is_int_add_out_of_range	int64_t sum_int = datum_int + new_int;
+src/storage/access/ob_pushdown_aggregate.h	727	ObSumAggCell::eval_int_inner	check: helper is_int_add_out_of_range	if (query::ObArithmeticOverflow::is_int_add_out_of_range(datum_int, new_int, sum_int)) {
+src/storage/access/ob_pushdown_aggregate.h	759	ObSumAggCell::eval_uint_inner	unchecked: arithmetic checked for overflow only afterwards by is_uint_add_out_of_range	uint64_t sum_uint = datum_uint + new_uint;
+src/storage/access/ob_pushdown_aggregate.h	760	ObSumAggCell::eval_uint_inner	check: helper is_uint_add_out_of_range	if (query::ObArithmeticOverflow::is_uint_add_out_of_range(datum_uint, new_uint, sum_uint)) {
+src/storage/access/ob_pushdown_aggregate.h	767	ObSumAggCell::eval_uint_inner	unchecked: arithmetic on unsigned value new_uint	DATUM_TO_CONST_DECIMAL_INT(result_datum_, RES_T) + datum_uint + new_uint;
+src/storage/access/ob_pushdown_aggregate.h	791	ObSumAggCell::eval_uint_inner	unchecked: arithmetic checked for overflow only afterwards by is_uint_add_out_of_range	uint64_t sum_uint = datum_uint + new_uint;
+src/storage/access/ob_pushdown_aggregate.h	792	ObSumAggCell::eval_uint_inner	check: helper is_uint_add_out_of_range	if (query::ObArithmeticOverflow::is_uint_add_out_of_range(datum_uint, new_uint, sum_uint)) {
+src/storage/blocksstable/encoding/ob_multi_prefix_tree.cpp	336	ObMultiPrefixTree::add_node	check: raises OB_DATA_OUT_OF_RANGE	ret = OB_DATA_OUT_OF_RANGE;

@@ -1,0 +1,1244 @@
+file	line	symbol	construct	text
+src/data_plane/api/data_plane/fts/dict/ob_dic_loader.h	67	ObDicLoader::inc_ref	inc_ref definition	OB_INLINE int64_t inc_ref()
+src/data_plane/api/data_plane/fts/dict/ob_dic_loader.h	72	ObDicLoader::dec_ref	dec_ref definition	OB_INLINE int64_t dec_ref()
+src/data_plane/api/data_plane/fts/dict/ob_dic_loader.h	106	ObDicLoaderHandle	Handle class definition	class ObDicLoaderHandle
+src/data_plane/api/data_plane/ob_i_write_context_service.h	58	ObWriteContext::reset	release_ call (reference-count function found by its body)	release_(native_handle_);
+src/data_plane/api/data_plane/retrieval/ob_sparse_retrieval.h	256	ObSparseRetrievalHandle	Handle class definition	class ObSparseRetrievalHandle
+src/data_plane/api/data_plane/tmp_file/ob_tmp_file.h	57	ObTmpFileIOHandle	Handle class definition	class ObTmpFileIOHandle final
+src/logservice/applyservice/ob_log_apply_service.cpp	360	ObApplyStatus::inc_ref	inc_ref definition	void ObApplyStatus::inc_ref()
+src/logservice/applyservice/ob_log_apply_service.cpp	364	ObApplyStatus::dec_ref	dec_ref definition	int64_t ObApplyStatus::dec_ref()
+src/logservice/applyservice/ob_log_apply_service.cpp	741	ObApplyStatus::submit_task_to_apply_service_	inc_ref call	inc_ref(); //Add the reference count first, if the task push failed, dec_ref() is required
+src/logservice/applyservice/ob_log_apply_service.cpp	745	ObApplyStatus::submit_task_to_apply_service_	dec_ref call	dec_ref();
+src/logservice/applyservice/ob_log_apply_service.cpp	865	ObApplyStatusGuard::~ObApplyStatusGuard	dec_ref call	if (0 == apply_status_->dec_ref()) {
+src/logservice/applyservice/ob_log_apply_service.cpp	882	ObApplyStatusGuard::set_apply_status_	inc_ref call	apply_status_->inc_ref();
+src/logservice/applyservice/ob_log_apply_service.cpp	1006	ObLogApplyService::create_status	inc_ref call	apply_status->inc_ref();
+src/logservice/applyservice/ob_log_apply_service.cpp	1179	ObLogApplyService::revert_apply_status	dec_ref call	if (0 == apply_status->dec_ref()) {
+src/logservice/applyservice/ob_log_apply_service.h	158	ObApplyStatus	inc_ref declaration	void inc_ref();
+src/logservice/applyservice/ob_log_apply_service.h	159	ObApplyStatus	dec_ref declaration	int64_t dec_ref();
+src/logservice/applyservice/ob_log_apply_service.h	281	ObApplyStatusGuard	Guard class definition whose methods call dec_ref, inc_ref	class ObApplyStatusGuard
+src/logservice/ob_log_handler.cpp	76	ObLogHandler::init	inc_ref call	apply_status_->inc_ref();
+src/logservice/palf/fixed_sliding_window.h	186	FixedSlidingWindow::get	reference-count change: ATOMIC_INC on ref_	ATOMIC_INC(&(array_[idx].ref_));
+src/logservice/palf/fixed_sliding_window.h	249	FixedSlidingWindow::revert_	reference-count change: ATOMIC_SAF on ref_	if (OB_UNLIKELY(0 > (curr_ref = ATOMIC_SAF(&(array_[idx].ref_), 1)))) {
+src/logservice/palf/log_io_adapter.cpp	63	LogIODeviceWrapper::init	release_device call (reference-count function found by its body)	(void) device_manager->release_device(device_handle);
+src/logservice/palf/log_io_adapter.cpp	76	LogIODeviceWrapper::destroy	release_device call (reference-count function found by its body)	device_manager_->release_device((ObIODevice*&) log_local_device_);
+src/logservice/palf/log_sliding_window.h	202	LogSlidingWindow	inc_ref_ declaration	int inc_ref_(LogTask *log_task, const int64_t inc_val, int64_t &result);
+src/logservice/palf/log_task.cpp	394	LogTask::ref	ref definition (reference-count function found by its body: changes a reference-count field)	int64_t LogTask::ref(const int64_t val, const bool is_append_log)
+src/logservice/palf/palf_handle.h	34	PalfHandle	Handle class definition	class PalfHandle
+src/logservice/replayservice/ob_log_replay_service.cpp	391	ObLogReplayService::create_status	inc_ref call	replay_status->inc_ref();
+src/logservice/replayservice/ob_log_replay_service.cpp	936	ObLogReplayService::do_replay_task_	inc_replay_ref call (other name)	replay_log_buff->inc_replay_ref();
+src/logservice/replayservice/ob_log_replay_service.cpp	969	ObLogReplayService::revert_replay_status_	dec_ref call	if (0 == replay_status->dec_ref()) {
+src/logservice/replayservice/ob_replay_status.cpp	351	ObReplayServiceReplayTask::reset	dec_replay_ref call (other name)	} else if (0 == replay_buf->dec_replay_ref()) {
+src/logservice/replayservice/ob_replay_status.cpp	433	ObLogReplayBuffer::dec_replay_ref	dec_replay_ref definition (other name)	int64_t ObLogReplayBuffer::dec_replay_ref()
+src/logservice/replayservice/ob_replay_status.cpp	438	ObLogReplayBuffer::inc_replay_ref	inc_replay_ref definition (other name)	void ObLogReplayBuffer::inc_replay_ref()
+src/logservice/replayservice/ob_replay_status.cpp	1192	ObReplayStatus::check_replay_barrier	dec_replay_ref call (other name)	} else if ((0 == (nv = replay_log_buf->dec_replay_ref()))) {
+src/logservice/replayservice/ob_replay_status.cpp	1248	ObReplayStatus::submit_task_to_replay_service_	inc_ref call	inc_ref(); //Add the reference count first, if the task push fails, dec_ref() is required
+src/logservice/replayservice/ob_replay_status.cpp	1251	ObReplayStatus::submit_task_to_replay_service_	dec_ref call	dec_ref();
+src/logservice/replayservice/ob_replay_status.h	107	ObLogReplayBuffer	dec_replay_ref declaration (other name)	int64_t dec_replay_ref();
+src/logservice/replayservice/ob_replay_status.h	108	ObLogReplayBuffer	inc_replay_ref declaration (other name)	void inc_replay_ref();
+src/logservice/replayservice/ob_replay_status.h	523	ObReplayStatus::inc_ref	inc_ref definition	inline void inc_ref()
+src/logservice/replayservice/ob_replay_status.h	527	ObReplayStatus::dec_ref	dec_ref definition	inline int64_t dec_ref()
+src/logservice/replayservice/ob_replay_status.h	620	ObReplayStatusGuard	Guard class definition whose methods call dec_ref, inc_ref	class ObReplayStatusGuard
+src/logservice/replayservice/ob_replay_status.h	627	ObReplayStatusGuard::~ObReplayStatusGuard	dec_ref call	if (0 == replay_status_->dec_ref()) {
+src/logservice/replayservice/ob_replay_status.h	637	ObReplayStatusGuard::set_replay_status	inc_ref call	replay_status_->inc_ref();
+src/oblib/easy/io/ev.h	612	-	ev_unref declaration (other name) [vendored]	void ev_unref (EV_P);
+src/oblib/lib/alloc/ob_context_allocator.h	184	ObContextAllocatorV2::inc_ref_cnt	inc_ref_cnt definition [not built]	int64_t inc_ref_cnt(int64_t cnt) { return ATOMIC_FAA(&ref_cnt_, cnt); }
+src/oblib/lib/alloc/ob_context_allocator.h	440	ObContextAllocator::inc_ref_cnt	inc_ref_cnt definition; inc_ref_cnt call [not built]	int64_t inc_ref_cnt(int64_t cnt) { return ctx_allocator_.inc_ref_cnt(cnt); }
+src/oblib/lib/allocator/ob_external_ref.h	39	ObExternalRef::acquire	acquire definition (reference-count function found by its body: calls xref)	void* acquire(void** paddr) {
+src/oblib/lib/allocator/ob_external_ref.h	42	ObExternalRef::acquire	xref call (other name)	xref((addr = load_ptr(paddr)), 1);
+src/oblib/lib/allocator/ob_external_ref.h	46	ObExternalRef::acquire	xref call (other name)	xref(addr, -1);
+src/oblib/lib/allocator/ob_external_ref.h	50	ObExternalRef::acquire	xref call (other name)	xref(addr, -1);
+src/oblib/lib/allocator/ob_external_ref.h	54	ObExternalRef::release	release definition (reference-count function found by its body: calls xref)	void release(void* addr) {
+src/oblib/lib/allocator/ob_external_ref.h	56	ObExternalRef::release	xref call (other name)	xref(addr, -1);
+src/oblib/lib/allocator/ob_external_ref.h	72	ObExternalRef::xref	xref definition (other name)	void xref(void* addr, int x) { ATOMIC_FAA(locate(addr), x); }
+src/oblib/lib/allocator/ob_fifo_allocator.cpp	324	ObFIFOAllocator::alloc_new_normal_page	reference-count change: -- on ref_count_	current_using_->ref_count_--;
+src/oblib/lib/allocator/ob_fifo_allocator.cpp	358	ObFIFOAllocator::try_alloc	reference-count change: ++ on ref_count_	current_using_->ref_count_++;
+src/oblib/lib/allocator/ob_fifo_allocator.cpp	435	ObFIFOAllocator::free_normal	reference-count change: -- on ref_count_	page->ref_count_--;
+src/oblib/lib/allocator/ob_hazard_ref.cpp	24	HazardRef::acquire_ref	acquire_ref definition (other name)	uint64_t *HazardRef::acquire_ref()
+src/oblib/lib/allocator/ob_hazard_ref.cpp	46	HazardRef::release_ref	release_ref definition (other name)	void HazardRef::release_ref(uint64_t *ref)
+src/oblib/lib/allocator/ob_hazard_ref.h	55	HazardRef	acquire_ref declaration (other name)	uint64_t *acquire_ref();
+src/oblib/lib/allocator/ob_hazard_ref.h	56	HazardRef	release_ref declaration (other name)	void release_ref(uint64_t *ref);
+src/oblib/lib/allocator/ob_hazard_ref.h	238	HazardHandle	Handle class definition	class HazardHandle
+src/oblib/lib/allocator/ob_hazard_ref.h	244	HazardHandle::acquire_ref	acquire_ref definition (other name)	uint64_t* acquire_ref()
+src/oblib/lib/allocator/ob_hazard_ref.h	246	HazardHandle::acquire_ref	acquire_ref call (other name)	return (ref_ = href_.acquire_ref());
+src/oblib/lib/allocator/ob_hazard_ref.h	248	HazardHandle::release_ref	release_ref definition (other name)	void release_ref()
+src/oblib/lib/allocator/ob_hazard_ref.h	251	HazardHandle::release_ref	release_ref call (other name)	href_.release_ref(ref_);
+src/oblib/lib/allocator/ob_hazard_ref.h	260	RetireListHandle	Handle class definition	class RetireListHandle
+src/oblib/lib/allocator/ob_heavy_ref.h	47	ObHeavyRef::protect	xref call (other name)	xref((addr = load_ptr(paddr)), 1);
+src/oblib/lib/allocator/ob_heavy_ref.h	51	ObHeavyRef::protect	xref call (other name)	xref(addr, -1);
+src/oblib/lib/allocator/ob_heavy_ref.h	55	ObHeavyRef::protect	xref call (other name)	xref(addr, -1);
+src/oblib/lib/allocator/ob_heavy_ref.h	61	ObHeavyRef::unprotect	xref call (other name)	xref(addr, -1);
+src/oblib/lib/allocator/ob_heavy_ref.h	69	ObHeavyRef::acquire	acquire definition (reference-count function found by its body: changes a reference-count field)	RefPtr* acquire(RefPtr** paddr) {
+src/oblib/lib/allocator/ob_heavy_ref.h	77	ObHeavyRef::release	release definition (reference-count function found by its body: changes a reference-count field)	void release(RefPtr* addr) {
+src/oblib/lib/allocator/ob_heavy_ref.h	84	ObHeavyRef::retire	retire definition (reference-count function found by its body: changes a reference-count field)	void retire(RefPtr* ptr) {
+src/oblib/lib/allocator/ob_heavy_ref.h	94	ObHeavyRef::xref	xref definition (other name)	void xref(void* addr, int x) { ATOMIC_FAA(locate(addr), x); }
+src/oblib/lib/allocator/ob_qsync.h	45	ObQSyncImpl::acquire_ref	acquire_ref definition (other name)	int64_t acquire_ref()
+src/oblib/lib/allocator/ob_qsync.h	48	ObQSyncImpl::acquire_ref	add_ref call (other name)	const int64_t new_ref = add_ref(idx, 1);
+src/oblib/lib/allocator/ob_qsync.h	54	ObQSyncImpl::release_ref	release_ref definition (other name)	void release_ref()
+src/oblib/lib/allocator/ob_qsync.h	56	ObQSyncImpl::release_ref	release_ref call (other name)	release_ref(get_id() % ref_num_);
+src/oblib/lib/allocator/ob_qsync.h	58	ObQSyncImpl::release_ref	release_ref definition (other name)	void release_ref(int64_t idx)
+src/oblib/lib/allocator/ob_qsync.h	60	ObQSyncImpl::release_ref	add_ref call (other name)	const int64_t new_ref = add_ref(idx, -1);
+src/oblib/lib/allocator/ob_qsync.h	91	ObQSyncImpl::add_ref	add_ref definition (other name)	int64_t add_ref(int64_t idx, int64_t x)
+src/oblib/lib/allocator/ob_qsync.h	125	QSyncCriticalGuard	Guard struct definition whose methods call release_ref	struct QSyncCriticalGuard
+src/oblib/lib/allocator/ob_qsync.h	127	QSyncCriticalGuard::QSyncCriticalGuard	acquire_ref call (other name)	explicit QSyncCriticalGuard(ObQSync& qsync): qsync_(qsync), ref_(qsync.acquire_ref()) {}
+src/oblib/lib/allocator/ob_qsync.h	128	QSyncCriticalGuard::~QSyncCriticalGuard	release_ref call (other name)	~QSyncCriticalGuard() { qsync_.release_ref(ref_); }
+src/oblib/lib/allocator/ob_qsync.h	186	DynamicQSyncCriticalGuard	Guard struct definition whose methods call release_ref	struct DynamicQSyncCriticalGuard
+src/oblib/lib/allocator/ob_qsync.h	188	DynamicQSyncCriticalGuard::DynamicQSyncCriticalGuard	acquire_ref call (other name)	explicit DynamicQSyncCriticalGuard(ObDynamicQSync& qsync): qsync_(qsync), ref_(qsync.acquire_ref()) {}
+src/oblib/lib/allocator/ob_qsync.h	189	DynamicQSyncCriticalGuard::~DynamicQSyncCriticalGuard	release_ref call (other name)	~DynamicQSyncCriticalGuard() { qsync_.release_ref(ref_); }
+src/oblib/lib/allocator/ob_simple_fifo_alloc.h	58	ObFifoBlock::free_item	reference-count change: ATOMIC_AAF on ref_	bool free_item(Item* p) { return 0 == ATOMIC_AAF(&ref_, -p->size_); }
+src/oblib/lib/allocator/ob_simple_fifo_alloc.h	63	ObFifoBlock::retire	retire definition (reference-count function found by its body: changes a reference-count field)	bool retire(int64_t val) { return 0 == ATOMIC_AAF(&ref_, val); }
+src/oblib/lib/allocator/ob_slice_alloc.h	36	ObSimpleSync::ref	ref definition (reference-count function found by its body: changes a reference-count field)	int32_t ref(int32_t x) { return ATOMIC_AAF(&ref_, x); }
+src/oblib/lib/allocator/ob_vslice_alloc.h	64	ObBlockVSlicer::alloc_item	reference-count change: ATOMIC_FAA on ref_	ATOMIC_FAA(&ref_, alloc_size);
+src/oblib/lib/allocator/ob_vslice_alloc.h	72	ObBlockVSlicer::free_item	reference-count change: ATOMIC_AAF on ref_	int64_t nv = ATOMIC_AAF(&ref_, -p->size_);
+src/oblib/lib/allocator/ob_vslice_alloc.h	80	ObBlockVSlicer::retire	retire definition (reference-count function found by its body: changes a reference-count field)	bool retire() { return 0 == ATOMIC_AAF(&ref_, -K); }
+src/oblib/lib/atomic/ob_atomic_reference.cpp	48	ObAtomicReference::inc_ref_cnt	inc_ref_cnt definition	int ObAtomicReference::inc_ref_cnt()
+src/oblib/lib/atomic/ob_atomic_reference.cpp	76	ObAtomicReference::check_seq_num_and_inc_ref_cnt	check_seq_num_and_inc_ref_cnt definition (prefixed name)	int ObAtomicReference::check_seq_num_and_inc_ref_cnt(const uint32_t seq_num)
+src/oblib/lib/atomic/ob_atomic_reference.cpp	105	ObAtomicReference::check_and_inc_ref_cnt	check_and_inc_ref_cnt definition (prefixed name)	int ObAtomicReference::check_and_inc_ref_cnt()
+src/oblib/lib/atomic/ob_atomic_reference.cpp	134	ObAtomicReference::dec_ref_cnt_and_inc_seq_num	dec_ref_cnt_and_inc_seq_num definition	int ObAtomicReference::dec_ref_cnt_and_inc_seq_num(uint32_t &ref_cnt)
+src/oblib/lib/atomic/ob_atomic_reference.h	48	ObAtomicReference	inc_ref_cnt declaration	int inc_ref_cnt();
+src/oblib/lib/atomic/ob_atomic_reference.h	49	ObAtomicReference	check_seq_num_and_inc_ref_cnt declaration (prefixed name)	int check_seq_num_and_inc_ref_cnt(const uint32_t seq_num);
+src/oblib/lib/atomic/ob_atomic_reference.h	50	ObAtomicReference	check_and_inc_ref_cnt declaration (prefixed name)	int check_and_inc_ref_cnt();
+src/oblib/lib/atomic/ob_atomic_reference.h	51	ObAtomicReference	dec_ref_cnt_and_inc_seq_num declaration	int dec_ref_cnt_and_inc_seq_num(uint32_t &ref_cnt);
+src/oblib/lib/guard/ob_light_shared_gaurd.h	43	LightControlBlock::inc_ref	inc_ref definition	void inc_ref() { OB_ASSERT(ATOMIC_LOAD(&ref_) > 0); ATOMIC_AAF(&ref_, 1); }
+src/oblib/lib/guard/ob_light_shared_gaurd.h	44	LightControlBlock::dec_ref	dec_ref definition	int64_t dec_ref() { return ATOMIC_AAF(&ref_, -1); }
+src/oblib/lib/guard/ob_light_shared_gaurd.h	99	ObLightSharedPtr::assign	inc_ref call	rhs.ctrl_ptr_->inc_ref();
+src/oblib/lib/guard/ob_light_shared_gaurd.h	109	ObLightSharedPtr::reset	dec_ref call	if (0 == ctrl_ptr_->dec_ref()) {
+src/oblib/lib/hash/ob_darray.h	150	ReadRef::add_ref	add_ref definition (other name)	void add_ref(void *wlock)
+src/oblib/lib/hash/ob_darray.h	228	NestLessRWLockHandler::try_rdlock	add_ref call (other name)	ref.add_ref(write_uid);
+src/oblib/lib/hash/ob_darray.h	556	ArrayBase::BaseHandle	Handle class definition	class BaseHandle
+src/oblib/lib/hash/ob_darray.h	566	ArrayBase::BaseHandle::~BaseHandle	release_ref call (other name)	virtual ~BaseHandle() { release_ref(); }
+src/oblib/lib/hash/ob_darray.h	568	ArrayBase::BaseHandle::acquire_ref	acquire_ref definition (other name)	int acquire_ref()
+src/oblib/lib/hash/ob_darray.h	570	ArrayBase::BaseHandle::acquire_ref	acquire_ref call (other name)	return (NULL == hazard_handle_.acquire_ref()) ? -EOVERFLOW : 0;
+src/oblib/lib/hash/ob_darray.h	572	ArrayBase::BaseHandle::release_ref	release_ref definition (other name)	void release_ref()
+src/oblib/lib/hash/ob_darray.h	574	ArrayBase::BaseHandle::release_ref	release_ref call (other name)	hazard_handle_.release_ref();
+src/oblib/lib/hash/ob_darray.h	616	ArrayBase::Handle	Handle class definition : BaseHandle	class Handle: public BaseHandle
+src/oblib/lib/hash/ob_darray.h	757	ArrayBase::get	acquire_ref call (other name)	} else if (0 != (err = handle.acquire_ref())) {
+src/oblib/lib/hash/ob_darray.h	771	ArrayBase::insert	acquire_ref call (other name)	} else if (0 != (err = handle.acquire_ref())) {
+src/oblib/lib/hash/ob_darray.h	778	ArrayBase::insert	release_ref call (other name)	handle.release_ref();
+src/oblib/lib/hash/ob_darray.h	790	ArrayBase::del	acquire_ref call (other name)	} else if (0 != (err = handle.acquire_ref())) {
+src/oblib/lib/hash/ob_darray.h	796	ArrayBase::del	release_ref call (other name)	handle.release_ref();
+src/oblib/lib/hash/ob_dchash.h	210	DCHash::Handle	Handle class definition	class Handle
+src/oblib/lib/hash/ob_dchash.h	219	DCHash::Handle::search_pre	acquire_ref call (other name)	acquire_ref();
+src/oblib/lib/hash/ob_dchash.h	228	DCHash::Handle::retire	retire definition (reference-count function found by its body: calls release_ref)	void retire(int err, int64_t x) {
+src/oblib/lib/hash/ob_dchash.h	233	DCHash::Handle::retire	release_ref call (other name)	release_ref();
+src/oblib/lib/hash/ob_dchash.h	241	DCHash::Handle::acquire_ref	acquire_ref definition (other name); acquire_ref call (other name)	void acquire_ref() { ref_ = qsync_.acquire_ref(); }
+src/oblib/lib/hash/ob_dchash.h	242	DCHash::Handle::release_ref	release_ref definition (other name); release_ref call (other name)	void release_ref() { qsync_.release_ref(ref_); }
+src/oblib/lib/hash/ob_dchash.h	321	DCHash::next	acquire_ref call (other name)	get_global_dchash_qsync().acquire_ref();
+src/oblib/lib/hash/ob_dchash.h	327	DCHash::next	release_ref call (other name)	get_global_dchash_qsync().release_ref();
+src/oblib/lib/hash/ob_hash.h	159	HashBase::IKVRCallback::ref_key_value	ref_key_value definition (other name)	virtual void ref_key_value(key_t &key, val_t &value)
+src/oblib/lib/hash/ob_hash.h	172	HashBase::ArrayHandle	Handle alias of ArrayBase::Handle	typedef ArrayBase::Handle ArrayHandle;
+src/oblib/lib/hash/ob_hash.h	296	HashBase::BaseHandle	Handle class definition	class BaseHandle
+src/oblib/lib/hash/ob_hash.h	305	HashBase::BaseHandle::BaseHandle	acquire_ref call (other name)	acquire_ref();
+src/oblib/lib/hash/ob_hash.h	307	HashBase::BaseHandle::~BaseHandle	release_ref call (other name)	virtual ~BaseHandle() { release_ref(); }
+src/oblib/lib/hash/ob_hash.h	345	HashBase::BaseHandle::acquire_ref	acquire_ref definition (other name)	int acquire_ref()
+src/oblib/lib/hash/ob_hash.h	347	HashBase::BaseHandle::acquire_ref	acquire_ref call (other name)	return (NULL == hazard_handle_.acquire_ref()) ? -EOVERFLOW : 0;
+src/oblib/lib/hash/ob_hash.h	349	HashBase::BaseHandle::release_ref	release_ref definition (other name)	void release_ref()
+src/oblib/lib/hash/ob_hash.h	351	HashBase::BaseHandle::release_ref	release_ref call (other name)	hazard_handle_.release_ref();
+src/oblib/lib/hash/ob_hash.h	360	HashBase::Handle	Handle class definition : BaseHandle	class Handle: public BaseHandle
+src/oblib/lib/hash/ob_hashutils.h	1453	SimpleAllocer::alloc	reference-count change: ++ on ref_cnt	node->block->ref_cnt++;
+src/oblib/lib/hash/ob_hashutils.h	1472	SimpleAllocer::alloc	reference-count change: ++ on ref_cnt	block->ref_cnt++;
+src/oblib/lib/hash/ob_hashutils.h	1497	SimpleAllocer::free	reference-count change: -- on ref_cnt	block->ref_cnt--;
+src/oblib/lib/hash/ob_link_hashmap.h	43	BaseRefHandle	Handle class definition	class BaseRefHandle
+src/oblib/lib/hash/ob_link_hashmap.h	68	ZeroRefHandle	Handle class definition : BaseRefHandle	class ZeroRefHandle final : public BaseRefHandle
+src/oblib/lib/hash/ob_link_hashmap.h	74	ZeroRefHandle::born	born definition (reference-count function found by its body: changes a reference-count field)	void born(Node* node) { (void)ATOMIC_AAF(&node->uref_, BORN_REF); }
+src/oblib/lib/hash/ob_link_hashmap.h	75	ZeroRefHandle::end	end definition (reference-count function found by its body: changes a reference-count field)	int32_t end(Node* node) { return ATOMIC_AAF(&node->uref_, -BORN_REF); }
+src/oblib/lib/hash/ob_link_hashmap.h	77	ZeroRefHandle::dec	reference-count change: ATOMIC_AAF on uref_	int32_t dec(Node* node) { return ATOMIC_AAF(&node->uref_, -1); }
+src/oblib/lib/hash/ob_link_hashmap.h	81	RefHandle	Handle class definition : BaseRefHandle	class RefHandle final : public BaseRefHandle
+src/oblib/lib/hash/ob_link_hashmap.h	87	RefHandle::born	born definition (reference-count function found by its body: changes a reference-count field)	void born(Node* node) { (void)ATOMIC_AAF(&node->uref_, BORN_REF); }
+src/oblib/lib/hash/ob_link_hashmap.h	88	RefHandle::end	end definition (reference-count function found by its body: changes a reference-count field)	int32_t end(Node* node) { return ATOMIC_AAF(&node->uref_, -BORN_REF); }
+src/oblib/lib/hash/ob_link_hashmap.h	90	RefHandle::dec	reference-count change: ATOMIC_AAF on uref_	int32_t dec(Node* node) { return ATOMIC_AAF(&node->uref_, -1); }
+src/oblib/lib/hash/ob_link_hashmap.h	301	ObLinkHashMap::insert_and_get	born call (reference-count function found by its body)	ref_handle_.born(node);
+src/oblib/lib/hash/ob_link_hashmap.h	303	ObLinkHashMap::insert_and_get	xhref call (other name)	node->xhref(2);
+src/oblib/lib/hash/ob_link_hashmap.h	312	ObLinkHashMap::insert_and_get	xhref call (other name)	node->xhref(-2);
+src/oblib/lib/hash/ob_link_hashmap.h	357	ObLinkHashMap::get	try_inc_ref call (prefixed name)	if (!try_inc_ref(node)) {
+src/oblib/lib/hash/ob_link_hashmap.h	398	ObLinkHashMap::revert	dec_uref call (other name)	dec_uref(node);
+src/oblib/lib/hash/ob_link_hashmap.h	479	ObLinkHashMap::try_inc_ref	try_inc_ref definition (prefixed name)	bool try_inc_ref(HashNode* node)
+src/oblib/lib/hash/ob_link_hashmap.h	486	ObLinkHashMap::try_inc_ref	dec_uref call (other name)	dec_uref(node);
+src/oblib/lib/hash/ob_link_hashmap.h	492	ObLinkHashMap::dec_uref	dec_uref definition (other name)	void dec_uref(HashNode* node)
+src/oblib/lib/hash/ob_link_hashmap.h	496	ObLinkHashMap::dec_uref	on_uref_clean call (reference-count function found by its body)	on_uref_clean(node);
+src/oblib/lib/hash/ob_link_hashmap.h	504	ObLinkHashMap::end_uref	on_uref_clean call (reference-count function found by its body)	on_uref_clean(node);
+src/oblib/lib/hash/ob_link_hashmap.h	508	ObLinkHashMap::on_uref_clean	on_uref_clean definition (reference-count function found by its body: calls dec_href)	void on_uref_clean(HashNode* node)
+src/oblib/lib/hash/ob_link_hashmap.h	512	ObLinkHashMap::on_uref_clean	dec_href call (other name)	dec_href(node);
+src/oblib/lib/hash/ob_link_hashmap.h	515	ObLinkHashMap::dec_href	dec_href definition (other name)	void dec_href(HashNode* node)
+src/oblib/lib/hash/ob_link_hashmap.h	518	ObLinkHashMap::dec_href	xhref call (other name)	if (0 == node->xhref(-1)) {
+src/oblib/lib/hash/ob_link_hashmap.h	530	ObLinkHashMap::reclaim_nodes	dec_href call (other name)	dec_href(node);
+src/oblib/lib/hash/ob_link_hashmap.h	540	ObLinkHashMap::next_	try_inc_ref call (prefixed name)	&& !try_inc_ref(next_node = CONTAINER_OF(iter, HashNode, hash_link_)))
+src/oblib/lib/hash/ob_link_hashmap_deps.h	70	RefNode::xhref	xhref definition (other name)	OB_INLINE int32_t xhref(int32_t x) { return ATOMIC_AAF(&href_, x); }
+src/oblib/lib/hash/ob_link_hashmap_deps.h	104	AllocHandle	Handle class definition	class AllocHandle
+src/oblib/lib/hash/ob_link_hashmap_deps.h	114	CountHandle	Handle class definition	class CountHandle
+src/oblib/lib/hash/ob_multi_mod_ref_mgr.h	36	ObRef::inc	reference-count change: ATOMIC_INC on ref_	ATOMIC_INC(&ref_);
+src/oblib/lib/hash/ob_multi_mod_ref_mgr.h	39	ObRef::dec	reference-count change: ATOMIC_DEC on ref_	ATOMIC_DEC(&ref_);
+src/oblib/lib/hash/ob_refered_map.h	45	ObReferedMap::Item::ref	ref definition (reference-count function found by its body: changes a reference-count field)	void ref() { ref_cnt_++; }
+src/oblib/lib/hash/ob_refered_map.h	46	ObReferedMap::Item	unref declaration (other name)	void unref();
+src/oblib/lib/hash/ob_refered_map.h	104	ObReferedMap::Item::unref	unref definition (other name)	void ObReferedMap<K, V>::Item::unref()
+src/oblib/lib/lock/ob_qsync_lock.cpp	49	ObQSyncLock::rdunlock	release_ref call (other name)	qsync_.release_ref();
+src/oblib/lib/lock/ob_qsync_lock.cpp	84	ObQSyncLock::try_rdlock	acquire_ref call (other name)	const int64_t idx = qsync_.acquire_ref();
+src/oblib/lib/lock/ob_qsync_lock.cpp	86	ObQSyncLock::try_rdlock	release_ref call (other name)	qsync_.release_ref(idx);
+src/oblib/lib/lock/ob_qsync_lock.h	62	ObQSyncLockReadGuard	Guard class definition whose methods reach acquire_ref through other functions (ObQSyncLockReadGuard::ObQSyncLockReadGuard > ObQSyncLock::rdlock > ObQSyncLock::try_rdlock > acquire_ref)	class ObQSyncLockReadGuard
+src/oblib/lib/lock/ob_tc_ref.h	45	TCRef::born	born definition (reference-count function found by its body: calls xref_)	int32_t born(int32_t* p) { return xref_(p, REF_LIMIT); }
+src/oblib/lib/lock/ob_tc_ref.h	45	TCRef::born	xref_ call (other name)	int32_t born(int32_t* p) { return xref_(p, REF_LIMIT); }
+src/oblib/lib/lock/ob_tc_ref.h	46	TCRef::end	end definition (reference-count function found by its body: calls xref_)	int32_t end(int32_t* p) { return xref_(p, -REF_LIMIT); }
+src/oblib/lib/lock/ob_tc_ref.h	46	TCRef::end	xref_ call (other name)	int32_t end(int32_t* p) { return xref_(p, -REF_LIMIT); }
+src/oblib/lib/lock/ob_tc_ref.h	54	TCRef::sync	xref_ call (other name)	xref_(p, 1);
+src/oblib/lib/lock/ob_tc_ref.h	68	TCRef::sync	xref_ call (other name)	return xref_(p, cnt);
+src/oblib/lib/lock/ob_tc_ref.h	71	TCRef::inc_ref	inc_ref definition	int32_t inc_ref(int32_t* p) {
+src/oblib/lib/lock/ob_tc_ref.h	82	TCRef::inc_ref	xref_ call (other name)	ref_cnt = xref_(p, 1);
+src/oblib/lib/lock/ob_tc_ref.h	86	TCRef::dec_ref	dec_ref definition	int32_t dec_ref(int32_t* p) {
+src/oblib/lib/lock/ob_tc_ref.h	97	TCRef::dec_ref	xref_ call (other name)	ref_cnt = xref_(p, -1);
+src/oblib/lib/lock/ob_tc_ref.h	102	TCRef::inc_ref	inc_ref definition	int32_t inc_ref(int32_t* p, int64_t &slot_id) {
+src/oblib/lib/lock/ob_tc_ref.h	115	TCRef::inc_ref	xref_ call (other name)	ref_cnt = xref_(p, 1);
+src/oblib/lib/lock/ob_tc_ref.h	119	TCRef::dec_ref	dec_ref definition	int32_t dec_ref(int32_t* p, int64_t slot_id) {
+src/oblib/lib/lock/ob_tc_ref.h	122	TCRef::dec_ref	xref_ call (other name)	ref_cnt = xref_(p, -1);
+src/oblib/lib/lock/ob_tc_ref.h	127	TCRef::xref_	xref_ definition (other name)	int32_t xref_(int32_t* p, int32_t x) { return ATOMIC_AAF(p, x); }
+src/oblib/lib/lock/ob_tc_rwlock.h	57	TCRWLock::RLockGuard	Guard struct definition whose methods reach inc_ref through other functions (RLockGuard::RLockGuard > TCRWLock::rdlock > TCRWLock::try_rdlock > inc_ref)	struct RLockGuard
+src/oblib/lib/lock/ob_tc_rwlock.h	164	TCRWLock::try_rdlock	inc_ref call	get_tcref().inc_ref(&read_ref_);
+src/oblib/lib/lock/ob_tc_rwlock.h	169	TCRWLock::try_rdlock	dec_ref call	get_tcref().dec_ref(&read_ref_);
+src/oblib/lib/lock/ob_tc_rwlock.h	178	TCRWLock::rdunlock	dec_ref call	get_tcref().dec_ref(&read_ref_);
+src/oblib/lib/lock/ob_tc_rwlock.h	263	TCRWLock::try_rdlock	inc_ref call	get_tcref().inc_ref(&read_ref_, slot_id);
+src/oblib/lib/lock/ob_tc_rwlock.h	268	TCRWLock::try_rdlock	dec_ref call	get_tcref().dec_ref(&read_ref_, slot_id);
+src/oblib/lib/lock/ob_tc_rwlock.h	291	TCRWLock::rdunlock	dec_ref call	get_tcref().dec_ref(&read_ref_, slot_id);
+src/oblib/lib/lock/ob_tc_rwlock.h	332	TCRLockGuard	Guard class definition whose methods reach inc_ref through other functions (TCRLockGuard::TCRLockGuard > TCRWLock::rdlock > TCRWLock::try_rdlock > inc_ref)	class TCRLockGuard
+src/oblib/lib/objectpool/ob_pooled_allocator.h	40	ObPooledAllocator::inc_ref	inc_ref definition	void inc_ref() {};
+src/oblib/lib/objectpool/ob_pooled_allocator.h	41	ObPooledAllocator::dec_ref	dec_ref definition	void dec_ref() {};
+src/oblib/lib/resource/ob_resource_mgr.cpp	327	ObResourceMgrHandle::init	inc_ref call	owner_->inc_ref(state_);
+src/oblib/lib/resource/ob_resource_mgr.cpp	340	ObResourceMgrHandle::reset	dec_ref call	owner_->dec_ref(state_);
+src/oblib/lib/resource/ob_resource_mgr.cpp	467	ObResourceMgr::inc_ref	inc_ref definition	void ObResourceMgr::inc_ref(ObResourceState *resource_state)
+src/oblib/lib/resource/ob_resource_mgr.cpp	474	ObResourceMgr::dec_ref	dec_ref definition	void ObResourceMgr::dec_ref(ObResourceState *resource_state)
+src/oblib/lib/resource/ob_resource_mgr.h	98	ObResourceMgrHandle	Handle class definition	class ObResourceMgrHandle
+src/oblib/lib/resource/ob_resource_mgr.h	129	ObResourceMgr	inc_ref declaration	void inc_ref(ObResourceState *state);
+src/oblib/lib/resource/ob_resource_mgr.h	130	ObResourceMgr	dec_ref declaration	void dec_ref(ObResourceState *state);
+src/oblib/lib/restore/ob_io_device.cpp	142	ObIODevice::inc_ref	inc_ref definition	void ObIODevice::inc_ref()
+src/oblib/lib/restore/ob_io_device.cpp	147	ObIODevice::dec_ref	dec_ref definition	void ObIODevice::dec_ref()
+src/oblib/lib/restore/ob_io_device.h	421	ObIODevice	inc_ref declaration	virtual void inc_ref();
+src/oblib/lib/restore/ob_io_device.h	422	ObIODevice	dec_ref declaration	virtual void dec_ref();
+src/oblib/lib/thread/ob_dedup_queue.h	125	AllocatorWrapper::inc_ref	inc_ref definition	void inc_ref() {}
+src/oblib/lib/thread/ob_dedup_queue.h	126	AllocatorWrapper::dec_ref	dec_ref definition	void dec_ref() {}
+src/oblib/lib/thread/ob_dynamic_thread_pool.h	105	ObSimpleDynamicThreadPool::inc_ref	inc_ref definition	void inc_ref() { ATOMIC_INC(&ref_cnt_); }
+src/oblib/lib/thread/ob_dynamic_thread_pool.h	106	ObSimpleDynamicThreadPool::dec_ref	dec_ref definition	void dec_ref() { ATOMIC_SAF(&ref_cnt_, 1); }
+src/observer/ob_signal_handle.h	61	ObSignalHandle	Handle class definition : share::ObThreadPool	class ObSignalHandle: public share::ObThreadPool
+src/observer/omt/ob_srs_service.h	59	ObSrsCacheSnapShot::retain	retain definition (reference-count function found by its body: changes a reference-count field)	void retain() override { ATOMIC_INC(&ref_count_); }
+src/observer/omt/ob_srs_service.h	60	ObSrsCacheSnapShot::release	release definition (reference-count function found by its body: changes a reference-count field)	void release() override { ATOMIC_DEC(&ref_count_); }
+src/observer/vector_index/ob_plugin_vector_index_adaptor.cpp	419	try_free_memdata_resource	dec_ref_and_check_release call	} else if (memdata->dec_ref_and_check_release()) {
+src/observer/vector_index/ob_plugin_vector_index_adaptor.cpp	509	ObPluginVectorIndexAdaptor::init_mem	inc_ref call	table_info->inc_ref();
+src/observer/vector_index/ob_plugin_vector_index_adaptor.cpp	4163	ref_memdata	ref_memdata definition (other name)	static int ref_memdata(ObVectorIndexMemData *&dst_mem_data, ObVectorIndexMemData *&src_mem_data)
+src/observer/vector_index/ob_plugin_vector_index_adaptor.cpp	4170	ref_memdata	inc_ref call	dst_mem_data->inc_ref();
+src/observer/vector_index/ob_plugin_vector_index_adaptor.cpp	4200	ObPluginVectorIndexAdaptor::merge_mem_data_	ref_memdata call (other name)	(void)ref_memdata(dst_mem_data, src_mem_data);
+src/observer/vector_index/ob_plugin_vector_index_adaptor.cpp	4211	ObPluginVectorIndexAdaptor::merge_mem_data_	ref_memdata call (other name)	(void)ref_memdata(dst_mem_data, src_mem_data);
+src/observer/vector_index/ob_plugin_vector_index_adaptor.cpp	4215	ObPluginVectorIndexAdaptor::merge_mem_data_	ref_memdata call (other name)	(void)ref_memdata(dst_mem_data, src_mem_data);
+src/observer/vector_index/ob_plugin_vector_index_adaptor.cpp	4309	ObPluginVectorIndexAdaptor::inc_ref	inc_ref definition	void ObPluginVectorIndexAdaptor::inc_ref()
+src/observer/vector_index/ob_plugin_vector_index_adaptor.cpp	4315	ObPluginVectorIndexAdaptor::dec_ref_and_check_release	dec_ref_and_check_release definition	bool ObPluginVectorIndexAdaptor::dec_ref_and_check_release()
+src/observer/vector_index/ob_plugin_vector_index_scheduler.cpp	589	ObPluginVectorIndexLoadScheduler::try_schedule_task	inc_dag_ref call (other name)	inc_dag_ref();
+src/observer/vector_index/ob_plugin_vector_index_scheduler.cpp	1360	ObVectorIndexTask::process	dec_dag_ref call (other name)	vec_idx_scheduler_->dec_dag_ref();
+src/observer/vector_index/ob_plugin_vector_index_scheduler.h	287	ObPluginVectorIndexLoadScheduler::inc_dag_ref	inc_dag_ref definition (other name)	void inc_dag_ref() { ATOMIC_INC(&dag_ref_cnt_); }
+src/observer/vector_index/ob_plugin_vector_index_scheduler.h	288	ObPluginVectorIndexLoadScheduler::dec_dag_ref	dec_dag_ref definition (other name)	void dec_dag_ref() { ATOMIC_DEC(&dag_ref_cnt_); }
+src/observer/vector_index/ob_plugin_vector_index_service.cpp	69	ObPluginVectorIndexMgr::release_all_adapters	release_vector_index_adapter call (reference-count function found by its body)	if (OB_FAIL(ObPluginVectorIndexUtils::release_vector_index_adapter(adapter))) {
+src/observer/vector_index/ob_plugin_vector_index_service.cpp	77	ObPluginVectorIndexMgr::release_all_adapters	release_vector_index_adapter call (reference-count function found by its body)	if (OB_FAIL(ObPluginVectorIndexUtils::release_vector_index_adapter(adapter))) {
+src/observer/vector_index/ob_plugin_vector_index_service.cpp	85	ObPluginVectorIndexMgr::release_all_adapters	release_vector_index_build_helper call (reference-count function found by its body)	if (OB_FAIL(ObPluginVectorIndexUtils::release_vector_index_build_helper(helper))) {
+src/observer/vector_index/ob_plugin_vector_index_service.cpp	93	ObPluginVectorIndexMgr::release_all_adapters	release_ivf_cache_mgr call (reference-count function found by its body)	if (OB_FAIL(ObPluginVectorIndexUtils::release_ivf_cache_mgr(mgr))) {
+src/observer/vector_index/ob_plugin_vector_index_service.cpp	132	ObPluginVectorIndexMgr::set_complete_adapter_	inc_ref call	adapter_inst->inc_ref();
+src/observer/vector_index/ob_plugin_vector_index_service.cpp	147	ObPluginVectorIndexMgr::erase_complete_adapter	release_vector_index_adapter call (reference-count function found by its body)	if (OB_FAIL(ObPluginVectorIndexUtils::release_vector_index_adapter(adapter_inst))) {
+src/observer/vector_index/ob_plugin_vector_index_service.cpp	160	ObPluginVectorIndexMgr::set_partial_adapter_	inc_ref call	adapter_inst->inc_ref();
+src/observer/vector_index/ob_plugin_vector_index_service.cpp	173	ObPluginVectorIndexMgr::erase_partial_adapter_	release_vector_index_adapter call (reference-count function found by its body)	if (OB_FAIL(ObPluginVectorIndexUtils::release_vector_index_adapter(adapter_inst))) {
+src/observer/vector_index/ob_plugin_vector_index_service.cpp	192	ObPluginVectorIndexMgr::erase_ivf_build_helper	release_vector_index_build_helper call (reference-count function found by its body)	if (OB_FAIL(ObPluginVectorIndexUtils::release_vector_index_build_helper(helper_inst))) {
+src/observer/vector_index/ob_plugin_vector_index_service.cpp	378	ObPluginVectorIndexMgr::set_ivf_build_helper_	inc_ref call	helper_inst->inc_ref();
+src/observer/vector_index/ob_plugin_vector_index_service.cpp	1228	ObPluginVectorIndexMgr::replace_with_full_partial_adapter	release_vector_index_adapter call (reference-count function found by its body)	if (OB_FAIL(ObPluginVectorIndexUtils::release_vector_index_adapter(inc_adapter))) {
+src/observer/vector_index/ob_plugin_vector_index_service.cpp	1229	ObPluginVectorIndexMgr::replace_with_full_partial_adapter	release_vector_index_adapter call (reference-count function found by its body)	} else if (OB_FAIL(ObPluginVectorIndexUtils::release_vector_index_adapter(bitmap_adapter))) {
+src/observer/vector_index/ob_plugin_vector_index_service.cpp	1230	ObPluginVectorIndexMgr::replace_with_full_partial_adapter	release_vector_index_adapter call (reference-count function found by its body)	} else if (OB_FAIL(ObPluginVectorIndexUtils::release_vector_index_adapter(sn_adapter))) {
+src/observer/vector_index/ob_plugin_vector_index_service.cpp	1233	ObPluginVectorIndexMgr::replace_with_full_partial_adapter	release_vector_index_adapter call (reference-count function found by its body)	if (OB_FAIL(ObPluginVectorIndexUtils::release_vector_index_adapter(emdedded_adapter))) {
+src/observer/vector_index/ob_plugin_vector_index_service.cpp	1256	ObPluginVectorIndexMgr::set_ivf_cache_mgr	inc_ref call	cache_mgr->inc_ref();
+src/observer/vector_index/ob_plugin_vector_index_service.cpp	1271	ObPluginVectorIndexMgr::erase_ivf_cache_mgr	release_ivf_cache_mgr call (reference-count function found by its body)	if (OB_FAIL(ObPluginVectorIndexUtils::release_ivf_cache_mgr(cache_mgr))) {
+src/observer/vector_index/ob_plugin_vector_index_service.h	196	ObPluginVectorIndexMgr	release_ivf_cache_mgr declaration (reference-count function found by its body)	int release_ivf_cache_mgr(ObIvfCacheMgr* &mgr);
+src/observer/vector_index/ob_plugin_vector_index_utils.cpp	1511	ObPluginVectorIndexUtils::release_vector_index_adapter	release_vector_index_adapter definition (reference-count function found by its body: calls dec_ref_and_check_release)	int ObPluginVectorIndexUtils::release_vector_index_adapter(ObPluginVectorIndexAdaptor* &adapter)
+src/observer/vector_index/ob_plugin_vector_index_utils.cpp	1517	ObPluginVectorIndexUtils::release_vector_index_adapter	dec_ref_and_check_release call	if (adapter->dec_ref_and_check_release()) {
+src/observer/vector_index/ob_plugin_vector_index_utils.cpp	1533	ObPluginVectorIndexUtils::release_vector_index_build_helper	release_vector_index_build_helper definition (reference-count function found by its body: calls dec_ref_and_check_release)	int ObPluginVectorIndexUtils::release_vector_index_build_helper(ObIvfBuildHelper* &helper)
+src/observer/vector_index/ob_plugin_vector_index_utils.cpp	1539	ObPluginVectorIndexUtils::release_vector_index_build_helper	dec_ref_and_check_release call	if (helper->dec_ref_and_check_release()) {
+src/observer/vector_index/ob_plugin_vector_index_utils.cpp	1554	ObPluginVectorIndexUtils::release_ivf_cache_mgr	release_ivf_cache_mgr definition (reference-count function found by its body: calls dec_ref_and_check_release)	int ObPluginVectorIndexUtils::release_ivf_cache_mgr(ObIvfCacheMgr* &mgr)
+src/observer/vector_index/ob_plugin_vector_index_utils.cpp	1559	ObPluginVectorIndexUtils::release_ivf_cache_mgr	dec_ref_and_check_release call	} else if (mgr->dec_ref_and_check_release()) {
+src/observer/vector_index/ob_plugin_vector_index_utils.h	68	ObPluginVectorIndexUtils	release_vector_index_adapter declaration (reference-count function found by its body)	static int release_vector_index_adapter(ObPluginVectorIndexAdaptor* &adapter);
+src/observer/vector_index/ob_plugin_vector_index_utils.h	69	ObPluginVectorIndexUtils	release_vector_index_build_helper declaration (reference-count function found by its body)	static int release_vector_index_build_helper(ObIvfBuildHelper* &helper);
+src/observer/vector_index/ob_plugin_vector_index_utils.h	70	ObPluginVectorIndexUtils	release_ivf_cache_mgr declaration (reference-count function found by its body)	static int release_ivf_cache_mgr(ObIvfCacheMgr* &mgr);
+src/observer/vector_index/ob_vector_index_async_task_util.cpp	892	ObVecIndexAsyncTaskHandler::push_task	inc_async_task_ref call (other name)	inc_async_task_ref();
+src/observer/vector_index/ob_vector_index_async_task_util.cpp	923	ObVecIndexAsyncTaskHandler::push_task	inc_async_task_ref call (other name)	inc_async_task_ref();
+src/observer/vector_index/ob_vector_index_async_task_util.cpp	934	ObVecIndexAsyncTaskHandler::push_task	inc_async_task_ref call (other name)	inc_async_task_ref();
+src/observer/vector_index/ob_vector_index_async_task_util.cpp	1005	ObVecIndexAsyncTaskHandler::handle	dec_async_task_ref call (other name)	dec_async_task_ref();
+src/observer/vector_index/ob_vector_index_async_task_util.cpp	1048	ObVecIndexAsyncTaskHandler::handle_drop	dec_async_task_ref call (other name)	dec_async_task_ref();
+src/observer/vector_index/ob_vector_index_async_task_util.h	248	ObVecIndexAsyncTaskHandler::inc_async_task_ref	inc_async_task_ref definition (other name)	void inc_async_task_ref() { ATOMIC_INC(&async_task_ref_cnt_); }
+src/observer/vector_index/ob_vector_index_async_task_util.h	249	ObVecIndexAsyncTaskHandler::dec_async_task_ref	dec_async_task_ref definition (other name)	void dec_async_task_ref() { ATOMIC_DEC(&async_task_ref_cnt_); }
+src/observer/vector_index/ob_vector_index_ivf_cache_mgr.cpp	47	ObIvfCacheMgrGuard::~ObIvfCacheMgrGuard	dec_ref_and_check_release call	if (cache_mgr_->dec_ref_and_check_release()) {
+src/observer/vector_index/ob_vector_index_ivf_cache_mgr.cpp	65	ObIvfCacheMgrGuard::set_cache_mgr	inc_ref call	cache_mgr_->inc_ref();
+src/observer/vector_index/ob_vector_index_ivf_cache_mgr.cpp	123	ObIvfCacheMgr::inc_ref	inc_ref definition	void ObIvfCacheMgr::inc_ref()
+src/observer/vector_index/ob_vector_index_ivf_cache_mgr.cpp	129	ObIvfCacheMgr::dec_ref_and_check_release	dec_ref_and_check_release definition	bool ObIvfCacheMgr::dec_ref_and_check_release()
+src/observer/virtual_table/ob_all_virtual_memstore_allocator_info.cpp	34	MemstoreInfoFill::Handle	Handle alias of ObMemstoreAllocator::AllocHandle	typedef ObMemstoreAllocator::AllocHandle Handle;
+src/observer/virtual_table/ob_all_virtual_ps_item_info.cpp	175	ObAllVirtualPsItemInfo::get_next_row	ref_stmt_info call (other name)	int tmp_ret = ps_cache_->ref_stmt_info(stmt_id, stmt_info);
+src/observer/virtual_table/ob_all_virtual_ps_item_info.cpp	183	ObAllVirtualPsItemInfo::get_next_row	ref_stmt_item call (other name)	} else if (FALSE_IT(tmp_ret = ps_cache_->ref_stmt_item(stmt_info->get_sql_key(),
+src/observer/virtual_table/ob_all_virtual_ps_item_info.cpp	207	ObAllVirtualPsItemInfo::get_next_row	dec_ref_count call	stmt_item->dec_ref_count();
+src/observer/virtual_table/ob_all_virtual_ps_item_info.cpp	213	ObAllVirtualPsItemInfo::get_next_row	deref_stmt_info call (other name)	if (OB_SUCCESS != (tmp_ret = ps_cache_->deref_stmt_info(stmt_id))) {
+src/observer/virtual_table/ob_all_virtual_sql_plan.cpp	498	ObAllVirtualSqlPlan::prepare_next_plan	ref_alloc_plan call (other name)	if (OB_SUCCESS != (tmp_ret = plan_cache->ref_alloc_plan(plan_id_, guard))) {
+src/observer/virtual_table/ob_all_virtual_sql_stat.cpp	196	ObAllVirtualSqlStatIter::get_next_sql_stat	ref_cache_obj call (other name)	int tmp_ret = plan_cache->ref_cache_obj(cur_sql_stat_cache_id, guard);
+src/observer/virtual_table/ob_gv_sql.cpp	90	ObGVSql::get_next_plan_row	ref_alloc_obj call (other name)	int tmp_ret = plan_cache_->ref_alloc_obj(plan_id, guard); // increment plan reference count by 1
+src/observer/virtual_table/ob_plan_cache_plan_explain.cpp	295	ObCacheObjIterator::next	ref_cache_obj call (other name)	} else if (OB_FAIL(plan_cache->ref_cache_obj(plan_id, guard))) {
+src/observer/virtual_table/ob_plan_cache_plan_explain.cpp	355	ObPlanCachePlanExplain::inner_open	ref_plan call (other name)	} else if (OB_SUCCESS != (tmp_ret = plan_cache->ref_plan(plan_id_, guard))) {
+src/query/api/query/engine/basic/ob_pushdown_filter.h	828	ObPushdownFilterExecutor::inc_ref	inc_ref definition	void inc_ref() { ++ref_cnt_; }
+src/query/api/query/engine/basic/ob_pushdown_filter.h	829	ObPushdownFilterExecutor::dec_ref	dec_ref definition	void dec_ref() { --ref_cnt_; }
+src/query/api/query/engine/cmd/ob_load_data_stat.h	59	ObLoadDataStat::aquire	aquire definition (reference-count function found by its body: changes a reference-count field)	int64_t aquire() {
+src/query/api/query/engine/cmd/ob_load_data_stat.h	62	ObLoadDataStat::release	release definition (reference-count function found by its body: changes a reference-count field)	int64_t release() {
+src/query/api/query/monitor/ob_ra_queue.h	152	ObRaQueue::get	xref call (other name)	xref(seq, 1);
+src/query/api/query/monitor/ob_ra_queue.h	159	ObRaQueue::revert	xref call (other name)	xref(ref->idx_, -1);
+src/query/api/query/monitor/ob_ra_queue.h	170	ObRaQueue::xref	xref definition (other name)	virtual int64_t xref(int64_t seq, int64_t x) {
+src/query/api/query/vector/ob_vector_embedding_handler.h	39	ObIEmbeddingCallback	retain declaration (reference-count function found by its body)	virtual void retain() = 0;
+src/query/api/query/vector/ob_vector_embedding_handler.h	199	ObEmbeddingTask	retain_if_managed declaration (reference-count function found by its body)	void retain_if_managed();
+src/query/api/query/vector/ob_vector_embedding_handler.h	200	ObEmbeddingTask	release_if_managed declaration (reference-count function found by its body)	void release_if_managed();
+src/query/api/query/vector/ob_vector_embedding_handler.h	405	ObEmbeddingTaskHandler::inc_task_ref	inc_task_ref definition (other name)	void inc_task_ref() { ATOMIC_INC(&task_ref_cnt_); }
+src/query/api/query/vector/ob_vector_embedding_handler.h	406	ObEmbeddingTaskHandler::dec_task_ref	dec_task_ref definition (other name)	void dec_task_ref() { ATOMIC_DEC(&task_ref_cnt_); }
+src/query/api/query/vector/ob_vector_index_adaptor.h	454	ObVectorIndexMemData::inc_ref	inc_ref definition	void inc_ref()
+src/query/api/query/vector/ob_vector_index_adaptor.h	459	ObVectorIndexMemData::dec_ref_and_check_release	dec_ref_and_check_release definition	bool dec_ref_and_check_release()
+src/query/api/query/vector/ob_vector_index_adaptor.h	620	ObPluginVectorIndexAdaptor	inc_ref declaration	void inc_ref();
+src/query/api/query/vector/ob_vector_index_adaptor.h	621	ObPluginVectorIndexAdaptor	dec_ref_and_check_release declaration	bool dec_ref_and_check_release();
+src/query/api/query/vector/ob_vector_index_adaptor.h	963	ObPluginVectorIndexAdapterGuard	Guard class definition whose methods call dec_ref_and_check_release, inc_ref	class ObPluginVectorIndexAdapterGuard
+src/query/api/query/vector/ob_vector_index_adaptor.h	972	ObPluginVectorIndexAdapterGuard::~ObPluginVectorIndexAdapterGuard	dec_ref_and_check_release call	if (adapter_->dec_ref_and_check_release()) {
+src/query/api/query/vector/ob_vector_index_adaptor.h	997	ObPluginVectorIndexAdapterGuard::set_adapter	inc_ref call	(void)adapter_->inc_ref();
+src/query/api/query/vector/ob_vector_index_cache.h	232	ObIvfCacheMgr	inc_ref declaration	void inc_ref();
+src/query/api/query/vector/ob_vector_index_cache.h	233	ObIvfCacheMgr	dec_ref_and_check_release declaration	bool dec_ref_and_check_release();
+src/query/api/query/vector/ob_vector_index_cache.h	272	ObIvfCacheMgrGuard	Guard class definition whose methods call dec_ref_and_check_release, inc_ref	class ObIvfCacheMgrGuard
+src/query/vector/ob_vector_embedding_handler.cpp	46	#define HANDLE_TASK_FAILURE_AND_CLEANUP	dec_task_ref call (other name)	thread_pool->dec_task_ref(); \
+src/query/vector/ob_vector_embedding_handler.cpp	56	#define HANDLE_TASK_COMPLETION_AND_CLEANUP	dec_task_ref call (other name)	thread_pool->dec_task_ref(); \
+src/query/vector/ob_vector_embedding_handler.cpp	360	ObEmbeddingTask::init	retain call (reference-count function found by its body)	cb_handle_->retain();
+src/query/vector/ob_vector_embedding_handler.cpp	499	ObEmbeddingTask::reschedule	retain_if_managed call (reference-count function found by its body)	retain_if_managed();
+src/query/vector/ob_vector_embedding_handler.cpp	506	ObEmbeddingTask::reschedule	release_if_managed call (reference-count function found by its body)	release_if_managed();
+src/query/vector/ob_vector_embedding_handler.cpp	919	ObEmbeddingTask::retain_if_managed	retain_if_managed definition (reference-count function found by its body: changes a reference-count field)	void ObEmbeddingTask::retain_if_managed()
+src/query/vector/ob_vector_embedding_handler.cpp	924	ObEmbeddingTask::release_if_managed	release_if_managed definition (reference-count function found by its body: changes a reference-count field)	void ObEmbeddingTask::release_if_managed()
+src/query/vector/ob_vector_embedding_handler.cpp	1039	ObEmbeddingTask::set_phase	release_if_managed call (reference-count function found by its body)	release_if_managed();
+src/query/vector/ob_vector_embedding_handler.cpp	1289	ObEmbeddingTaskHandler::push_task	retain_if_managed call (reference-count function found by its body)	task.retain_if_managed();
+src/query/vector/ob_vector_embedding_handler.cpp	1296	ObEmbeddingTaskHandler::push_task	release_if_managed call (reference-count function found by its body)	task.release_if_managed();
+src/query/vector/ob_vector_embedding_handler.cpp	1299	ObEmbeddingTaskHandler::push_task	inc_task_ref call (other name)	inc_task_ref();
+src/query/vector/ob_vector_embedding_handler.cpp	1330	ObEmbeddingTaskHandler::handle	release_if_managed call (reference-count function found by its body)	embedding_task->release_if_managed();
+src/query/vector/ob_vector_embedding_handler.cpp	1354	ObEmbeddingTaskHandler::handle_drop	release_if_managed call (reference-count function found by its body)	embedding_task->release_if_managed();
+src/query/vector/ob_vector_embedding_handler.cpp	1362	ObEmbeddingTaskHandler::handle_drop	dec_task_ref call (other name)	dec_task_ref();
+src/share/cache/ob_kv_storecache.h	281	ObKVCacheHandle	Handle class definition	class ObKVCacheHandle
+src/share/cache/ob_kvcache_hazard_pointer.cpp	125	SharedHazptr::operator=	reference-count change: ATOMIC_INC on refcnt_	ATOMIC_INC(&ctrl_ptr_->refcnt_);
+src/share/cache/ob_kvcache_hazard_pointer.cpp	139	SharedHazptr::reset	reference-count change: ATOMIC_SAF on refcnt_	uint64_t refcnt = ATOMIC_SAF(&ctrl_ptr_->refcnt_, 1);
+src/share/cache/ob_kvcache_inst_map.cpp	61	ObKVCacheInst::try_mark_delete	reference-count change: ATOMIC_DEC on ref_cnt_	ATOMIC_DEC(&ref_cnt_);
+src/share/cache/ob_kvcache_inst_map.cpp	81	ObKVCacheInstHandle::reset	de_inst_ref call (reference-count function found by its body)	map_->de_inst_ref(inst_);
+src/share/cache/ob_kvcache_inst_map.cpp	97	ObKVCacheInstHandle::ObKVCacheInstHandle	add_inst_ref call (other name)	map_->add_inst_ref(inst_);
+src/share/cache/ob_kvcache_inst_map.cpp	109	ObKVCacheInstHandle::operator=	add_inst_ref call (other name)	map_->add_inst_ref(inst_);
+src/share/cache/ob_kvcache_inst_map.cpp	186	ObKVCacheInstMap::get_cache_inst	add_inst_ref call (other name)	add_inst_ref(inst);
+src/share/cache/ob_kvcache_inst_map.cpp	194	ObKVCacheInstMap::get_cache_inst	add_inst_ref call (other name)	add_inst_ref(inst);
+src/share/cache/ob_kvcache_inst_map.cpp	211	ObKVCacheInstMap::get_cache_inst	add_inst_ref call (other name)	add_inst_ref(inst);
+src/share/cache/ob_kvcache_inst_map.cpp	213	ObKVCacheInstMap::get_cache_inst	add_inst_ref call (other name)	add_inst_ref(inst);
+src/share/cache/ob_kvcache_inst_map.cpp	401	ObKVCacheInstMap::add_inst_ref	add_inst_ref definition (other name)	void ObKVCacheInstMap::add_inst_ref(ObKVCacheInst *inst)
+src/share/cache/ob_kvcache_inst_map.cpp	408	ObKVCacheInstMap::de_inst_ref	de_inst_ref definition (reference-count function found by its body: changes a reference-count field)	void ObKVCacheInstMap::de_inst_ref(ObKVCacheInst *inst)
+src/share/cache/ob_kvcache_inst_map.cpp	422	ObKVCacheInstMap::inner_push_inst_handle	add_inst_ref call (other name)	add_inst_ref(handle.inst_);
+src/share/cache/ob_kvcache_inst_map.h	54	ObKVMemBlockList::inc_ref	inc_ref definition	inline void inc_ref() { ATOMIC_AAF(&ref_cnt_, 1); }
+src/share/cache/ob_kvcache_inst_map.h	55	ObKVMemBlockList::dec_ref	dec_ref definition	int64_t dec_ref() { return ATOMIC_SAF(&ref_cnt_, 1); }
+src/share/cache/ob_kvcache_inst_map.h	95	ObKVCacheInstHandle	Handle class definition	class ObKVCacheInstHandle
+src/share/cache/ob_kvcache_inst_map.h	132	ObKVCacheInstMap	add_inst_ref declaration (other name)	void add_inst_ref(ObKVCacheInst *inst);
+src/share/cache/ob_kvcache_inst_map.h	133	ObKVCacheInstMap	de_inst_ref declaration (reference-count function found by its body)	void de_inst_ref(ObKVCacheInst *inst);
+src/share/cache/ob_kvcache_struct.h	115	ObKVMemBlockHandle	Handle struct definition : common::ObDLink	struct ObKVMemBlockHandle : public common::ObDLink
+src/share/geo/ob_srs_provider.h	37	ObISrsSnapshot	retain declaration (reference-count function found by its body)	virtual void retain() = 0;
+src/share/geo/ob_srs_provider.h	46	ObSrsCacheGuard	Guard class definition whose methods reach retain through other functions (ObSrsCacheGuard::bind > retain)	class ObSrsCacheGuard
+src/share/geo/ob_srs_provider.h	69	ObSrsCacheGuard::bind	retain call (reference-count function found by its body)	snapshot.retain();
+src/share/interrupt/ob_global_interrupt_call.cpp	151	ObGlobalInterruptManager::register_checker	reference-count change: ATOMIC_INC on ref_count_	ATOMIC_INC(&(checker->ref_count_));
+src/share/interrupt/ob_global_interrupt_call.cpp	192	ObGlobalInterruptManager::unregister_checker	reference-count change: ATOMIC_AAF on ref_count_	int64_t rc = ATOMIC_AAF(&(checker_node->checker_->ref_count_), -1);
+src/share/io/ob_io_define.cpp	682	ObIOResult::inc_ref	inc_ref definition	void ObIOResult::inc_ref(const char *msg)
+src/share/io/ob_io_define.cpp	687	ObIOResult::dec_ref	dec_ref definition	void ObIOResult::dec_ref(const char *msg)
+src/share/io/ob_io_define.cpp	740	ObIOResult::inc_out_ref	inc_out_ref definition (other name)	void ObIOResult::inc_out_ref()
+src/share/io/ob_io_define.cpp	745	ObIOResult::dec_out_ref	dec_out_ref definition (other name)	void ObIOResult::dec_out_ref()
+src/share/io/ob_io_define.cpp	852	ObIORequest::init	inc_ref call	io_result_->inc_ref("request");
+src/share/io/ob_io_define.cpp	878	ObIORequest::set_result	inc_ref call	io_result.inc_ref("request");
+src/share/io/ob_io_define.cpp	929	ObIORequest::destroy	dec_ref call	io_result_->dec_ref("request");
+src/share/io/ob_io_define.cpp	1232	ObIORequest::inc_ref	inc_ref definition	void ObIORequest::inc_ref()
+src/share/io/ob_io_define.cpp	1237	ObIORequest::dec_ref	dec_ref definition	void ObIORequest::dec_ref()
+src/share/io/ob_io_define.cpp	1371	ObIOHandle::set_result	inc_ref call	result.inc_ref("handle_inc"); // ref for handle
+src/share/io/ob_io_define.cpp	1372	ObIOHandle::set_result	inc_out_ref call (other name)	result.inc_out_ref();
+src/share/io/ob_io_define.cpp	1540	ObIOHandle::reset	dec_out_ref call (other name)	result_->dec_out_ref();
+src/share/io/ob_io_define.cpp	1541	ObIOHandle::reset	dec_ref call	result_->dec_ref("handle_dec"); // ref for handle
+src/share/io/ob_io_define.h	288	ObRefHolder::hold	inc_ref call	ptr->inc_ref();
+src/share/io/ob_io_define.h	296	ObRefHolder::reset	dec_ref call	ptr_->dec_ref();
+src/share/io/ob_io_define.h	405	ObIOResult	inc_ref declaration	void inc_ref(const char *msg = nullptr);
+src/share/io/ob_io_define.h	406	ObIOResult	dec_ref declaration	void dec_ref(const char *msg = nullptr);
+src/share/io/ob_io_define.h	407	ObIOResult	inc_out_ref declaration (other name)	void inc_out_ref();
+src/share/io/ob_io_define.h	408	ObIOResult	dec_out_ref declaration (other name)	void dec_out_ref();
+src/share/io/ob_io_define.h	481	ObIORequest	inc_ref declaration	void inc_ref();
+src/share/io/ob_io_define.h	482	ObIORequest	dec_ref declaration	void dec_ref();
+src/share/io/ob_io_define.h	555	ObIOHandle	Handle class definition	class ObIOHandle final
+src/share/io/ob_io_manager.cpp	595	ObIOService::init	inc_ref call	inc_ref();
+src/share/io/ob_io_manager.cpp	616	ObIOService::destroy	dec_ref call	dec_ref();
+src/share/io/ob_io_manager.cpp	1282	ObIOService::inc_ref	inc_ref definition	void ObIOService::inc_ref()
+src/share/io/ob_io_manager.cpp	1287	ObIOService::dec_ref	dec_ref definition	void ObIOService::dec_ref()
+src/share/io/ob_io_manager.h	173	ObIOService	inc_ref declaration	void inc_ref();
+src/share/io/ob_io_manager.h	174	ObIOService	dec_ref declaration	void dec_ref();
+src/share/io/ob_io_struct.cpp	821	ObAsyncIOChannel::submit	inc_ref call	req.inc_ref(); // ref for file system
+src/share/io/ob_io_struct.cpp	824	ObAsyncIOChannel::submit	dec_ref call	req.dec_ref(); // ref for file system
+src/share/io/ob_io_struct.cpp	847	ObAsyncIOChannel::cancel	dec_ref call	req.dec_ref(); // ref for file system
+src/share/io/ob_io_struct.cpp	875	ObAsyncIOChannel::get_events	dec_ref call	req->dec_ref(); // ref for file system
+src/share/io/ob_io_struct.cpp	1111	ObSyncIOChannel::handle	dec_ref call	req->dec_ref(); // ref for file system
+src/share/io/ob_io_struct.cpp	1130	ObSyncIOChannel::submit	inc_ref call	req.inc_ref(); // ref for file system
+src/share/io/ob_io_struct.cpp	1133	ObSyncIOChannel::submit	dec_ref call	req.dec_ref(); // ref for file system
+src/share/io/ob_io_struct.cpp	1497	ObIOCallbackManager::enqueue_callback	inc_ref call	req.inc_ref(); // ref for callback queue
+src/share/io/ob_io_struct.cpp	1503	ObIOCallbackManager::enqueue_callback	dec_ref call	req.dec_ref(); // ref for callback queue
+src/share/io/ob_io_struct.cpp	1520	ObIOCallbackManager::handle	dec_ref call	req->dec_ref(); // ref for callback queue
+src/share/ob_autoincrement_service.h	59	CacheHandle	Handle struct definition	struct CacheHandle
+src/share/ob_device_manager.cpp	218	ObDeviceManager::inc_device_ref_nolock_	inc_device_ref_nolock_ definition (other name)	int ObDeviceManager::inc_device_ref_nolock_(ObDeviceInsInfo *dev_info)
+src/share/ob_device_manager.cpp	228	ObDeviceManager::inc_device_ref_nolock_	inc_ref call	dev_info->device_->inc_ref();
+src/share/ob_device_manager.cpp	247	ObDeviceManager::get_deivce_	inc_device_ref_nolock_ call (other name)	} else if (OB_FAIL(inc_device_ref_nolock_(dev_info))) {
+src/share/ob_device_manager.cpp	276	ObDeviceManager::alloc_device_and_init_	inc_device_ref_nolock_ call (other name)	if (FAILEDx(inc_device_ref_nolock_(dev_info))) {
+src/share/ob_device_manager.cpp	339	ObDeviceManager::release_device	release_device definition (reference-count function found by its body: calls dec_ref)	int ObDeviceManager::release_device(ObIODevice *&device_handle)
+src/share/ob_device_manager.cpp	365	ObDeviceManager::release_device	dec_ref call	device_info->device_->dec_ref();
+src/share/ob_device_manager.h	42	ObDeviceManager	release_device declaration (reference-count function found by its body)	int release_device(common::ObIODevice*& device_handle);
+src/share/ob_device_manager.h	69	ObDeviceManager	inc_device_ref_nolock_ declaration (other name)	int inc_device_ref_nolock_(ObDeviceInsInfo *dev_info);
+src/share/ob_ex_rpc.h	65	AsyncHandle	Handle class definition : detail::HandleStorage<Res>	class AsyncHandle : detail::HandleStorage<Res> {
+src/share/ob_io_device_helper.cpp	193	ObSNIODeviceWrapper::get_local_device_from_mgr	release_device call (reference-count function found by its body)	common::ObDeviceManager::get_instance().release_device((ObIODevice*&)local_device);
+src/share/ob_io_device_helper.cpp	256	ObSNIODeviceWrapper::destroy	release_device call (reference-count function found by its body)	common::ObDeviceManager::get_instance().release_device((ObIODevice*&)local_device_);
+src/share/ob_light_hashmap.h	83	ObLightHashLink::inc_ref	inc_ref definition	inline int inc_ref(int32_t x)
+src/share/ob_light_hashmap.h	90	ObLightHashLink::dec_ref	dec_ref definition	inline int32_t dec_ref(int32_t x)
+src/share/ob_light_hashmap.h	195	ObLightHashMap::insert__	inc_ref call	value->inc_ref(ref);
+src/share/ob_light_hashmap.h	206	ObLightHashMap::insert__	inc_ref call	curr->inc_ref(1);
+src/share/ob_light_hashmap.h	287	ObLightHashMap::get	inc_ref call	value->inc_ref(1);
+src/share/ob_light_hashmap.h	296	ObLightHashMap::revert	dec_ref call	if (0 == value->dec_ref(1)) {
+src/share/ob_light_hashmap.h	337	ObLightHashMap::for_each_in_one_bucket	dec_ref call	if (0 == array.at(i)->dec_ref(1)) {
+src/share/ob_light_hashmap.h	368	ObLightHashMap::remove_if	dec_ref call	if (0 == array.at(i)->dec_ref(1)) {
+src/share/ob_light_hashmap.h	375	ObLightHashMap::remove_if	dec_ref call	if (OB_NOT_NULL(array.at(i)) && 0 == array.at(i)->dec_ref(1)) {
+src/share/ob_light_hashmap.h	392	ObLightHashMap::generate_value_arr_	inc_ref call	val->inc_ref(1);
+src/share/ob_light_hashmap.h	395	ObLightHashMap::generate_value_arr_	dec_ref call	val->dec_ref(1);
+src/share/ob_light_hashmap.h	403	ObLightHashMap::generate_value_arr_	dec_ref call	arr.at(i)->dec_ref(1);
+src/share/redolog/ob_log_file_reader.cpp	85	ObLogReadFdCacheItem::inc_ref	inc_ref definition	void ObLogReadFdCacheItem::inc_ref()
+src/share/redolog/ob_log_file_reader.cpp	90	ObLogReadFdCacheItem::dec_ref	dec_ref definition	void ObLogReadFdCacheItem::dec_ref()
+src/share/redolog/ob_log_file_reader.cpp	103	ObLogReadFdHandle::reset	dec_ref call	fd_item_->dec_ref();
+src/share/redolog/ob_log_file_reader.cpp	122	ObLogReadFdHandle::set_read_fd	inc_ref call	fd_item_->inc_ref();
+src/share/redolog/ob_log_file_reader.h	51	ObLogReadFdCacheItem	inc_ref declaration	void inc_ref();
+src/share/redolog/ob_log_file_reader.h	52	ObLogReadFdCacheItem	dec_ref declaration	void dec_ref();
+src/share/redolog/ob_log_file_reader.h	66	ObLogReadFdHandle	Handle class definition	class ObLogReadFdHandle final
+src/share/schema/ob_schema_mgr_cache.cpp	80	ObSchemaMgrHandle::operator=	reference-count change: ATOMIC_FAA on ref_cnt_	(void)ATOMIC_FAA(&schema_mgr_item_->ref_cnt_, 1);
+src/share/schema/ob_schema_mgr_cache.cpp	81	ObSchemaMgrHandle::operator=	reference-count change: ATOMIC_FAA on mod_ref_cnt_	(void)ATOMIC_FAA(&schema_mgr_item_->mod_ref_cnt_[mod_], 1);
+src/share/schema/ob_schema_mgr_cache.cpp	110	ObSchemaMgrHandle::revert	reference-count change: ATOMIC_FAA on ref_cnt_	(void)ATOMIC_FAA(&schema_mgr_item_->ref_cnt_, -1);
+src/share/schema/ob_schema_mgr_cache.cpp	111	ObSchemaMgrHandle::revert	reference-count change: ATOMIC_FAA on mod_ref_cnt_	(void)ATOMIC_FAA(&schema_mgr_item_->mod_ref_cnt_[mod_], -1);
+src/share/schema/ob_schema_mgr_cache.cpp	234	ObSchemaMgrCache::get	reference-count change: ATOMIC_FAA on ref_cnt_	(void)ATOMIC_FAA(&dst_item->ref_cnt_, 1);
+src/share/schema/ob_schema_mgr_cache.cpp	279	ObSchemaMgrCache::get_nearest	reference-count change: ATOMIC_FAA on ref_cnt_	(void)ATOMIC_FAA(&dst_item->ref_cnt_, 1);
+src/share/schema/ob_schema_mgr_cache.cpp	495	ObSchemaMgrCache::put	reference-count change: ATOMIC_FAA on ref_cnt_	(void)ATOMIC_FAA(&dst_item->ref_cnt_, 1);
+src/share/schema/ob_schema_mgr_cache.h	97	ObSchemaMgrHandle	Handle class definition	class ObSchemaMgrHandle
+src/sql/dtl/ob_dtl_interm_result_manager.cpp	66	ObAtomicGetIntermMemProfileCall::operator()	reference-count change: ATOMIC_INC on ref_count_	ATOMIC_INC(&(mem_profile_info_->ref_count_));
+src/sql/dtl/ob_dtl_interm_result_manager.cpp	263	ObDTLIntermResultManager::insert_interm_result_info	inc_interm_result_ref_count call (other name)	inc_interm_result_ref_count(result_info);
+src/sql/dtl/ob_dtl_interm_result_manager.cpp	265	ObDTLIntermResultManager::insert_interm_result_info	dec_interm_result_ref_count call (other name)	dec_interm_result_ref_count(result_info);
+src/sql/dtl/ob_dtl_interm_result_manager.cpp	304	ObDTLIntermResultManager::free_interm_result_info	dec_mem_profile_ref_count call (other name)	if (OB_FAIL(dec_mem_profile_ref_count(mem_profile_key, mem_profile_info))) {
+src/sql/dtl/ob_dtl_interm_result_manager.cpp	318	ObDTLIntermResultManager::erase_interm_result_info	dec_interm_result_ref_count call (other name)	if (OB_FAIL(dec_interm_result_ref_count(result_info))) {
+src/sql/dtl/ob_dtl_interm_result_manager.cpp	538	ObDTLIntermResultManager::inc_interm_result_ref_count	inc_interm_result_ref_count definition (other name)	void ObDTLIntermResultManager::inc_interm_result_ref_count(ObDTLIntermResultInfo *result_info)
+src/sql/dtl/ob_dtl_interm_result_manager.cpp	541	ObDTLIntermResultManager::inc_interm_result_ref_count	inc_ref_count call	result_info->inc_ref_count();
+src/sql/dtl/ob_dtl_interm_result_manager.cpp	545	ObDTLIntermResultManager::dec_interm_result_ref_count	dec_interm_result_ref_count definition (other name)	int ObDTLIntermResultManager::dec_interm_result_ref_count(ObDTLIntermResultInfo *&result_info)
+src/sql/dtl/ob_dtl_interm_result_manager.cpp	549	ObDTLIntermResultManager::dec_interm_result_ref_count	dec_ref_count call	int64_t ref_count = result_info->dec_ref_count();
+src/sql/dtl/ob_dtl_interm_result_manager.cpp	584	ObDTLIntermResultInfoGuard::set_result_info	inc_interm_result_ref_count call (other name)	ObDTLIntermResultManager::inc_interm_result_ref_count(&result_info);
+src/sql/dtl/ob_dtl_interm_result_manager.cpp	593	ObDTLIntermResultInfoGuard::reset	dec_interm_result_ref_count call (other name)	interm_res_manager_->dec_interm_result_ref_count(result_info_);
+src/sql/dtl/ob_dtl_interm_result_manager.cpp	768	ObDTLIntermResultManager::init_mem_profile	inc_mem_profile_ref_count call (other name)	inc_mem_profile_ref_count(info);
+src/sql/dtl/ob_dtl_interm_result_manager.cpp	808	ObDTLIntermResultManager::inc_mem_profile_ref_count	inc_mem_profile_ref_count definition (other name)	void ObDTLIntermResultManager::inc_mem_profile_ref_count(ObDTLMemProfileInfo *info)
+src/sql/dtl/ob_dtl_interm_result_manager.cpp	815	ObDTLIntermResultManager::dec_mem_profile_ref_count	dec_mem_profile_ref_count definition (other name)	int ObDTLIntermResultManager::dec_mem_profile_ref_count(const ObDTLMemProfileKey &key,
+src/sql/dtl/ob_dtl_interm_result_manager.h	185	ObDTLIntermResultInfo::inc_ref_count	inc_ref_count definition	void inc_ref_count() { ATOMIC_INC(&ref_count_); }
+src/sql/dtl/ob_dtl_interm_result_manager.h	186	ObDTLIntermResultInfo::dec_ref_count	dec_ref_count definition	int64_t dec_ref_count() { return ATOMIC_SAF(&ref_count_, 1); }
+src/sql/dtl/ob_dtl_interm_result_manager.h	226	ObDTLIntermResultInfoGuard	Guard struct definition whose methods call dec_interm_result_ref_count, inc_interm_result_ref_count	struct ObDTLIntermResultInfoGuard
+src/sql/dtl/ob_dtl_interm_result_manager.h	428	ObDTLIntermResultManager	inc_interm_result_ref_count declaration (other name)	static void inc_interm_result_ref_count(ObDTLIntermResultInfo *result_info);
+src/sql/dtl/ob_dtl_interm_result_manager.h	429	ObDTLIntermResultManager	dec_interm_result_ref_count declaration (other name)	int dec_interm_result_ref_count(ObDTLIntermResultInfo *&result_info);
+src/sql/dtl/ob_dtl_interm_result_manager.h	451	ObDTLIntermResultManager	inc_mem_profile_ref_count declaration (other name)	void inc_mem_profile_ref_count(ObDTLMemProfileInfo *info);
+src/sql/dtl/ob_dtl_interm_result_manager.h	452	ObDTLIntermResultManager	dec_mem_profile_ref_count declaration (other name)	int dec_mem_profile_ref_count(const ObDTLMemProfileKey &key,
+src/sql/engine/basic/ob_temp_table_insert_op.cpp	250	ObTempTableInsertOp::init_chunk_row_store	inc_interm_result_ref_count call (other name)	dtl::ObDTLIntermResultManager::inc_interm_result_ref_count(chunk_row_store);
+src/sql/engine/basic/ob_temp_table_insert_op.cpp	320	ObTempTableInsertOp::clear_all_datum_store	dec_interm_result_ref_count call (other name)	::oceanbase::share::server_service<::oceanbase::sql::dtl::ObDTLIntermResultManager>()->dec_interm_result_ref_count(datum_store);
+src/sql/engine/cmd/ob_load_data_impl.h	466	ObShuffleTaskHandle	Handle struct definition	struct ObShuffleTaskHandle {
+src/sql/engine/cmd/ob_load_data_utils.h	180	ObLoadDataStatGuard	Guard class definition whose methods reach ObLoadDataStat::release through other functions (ObLoadDataStatGuard::ObLoadDataStatGuard > ObLoadDataStatGuard::aquire > ObLoadDataStatGuard::release > ObLoadDataStat::release)	class ObLoadDataStatGuard
+src/sql/engine/dml/ob_table_modify_op.h	38	ForeignKeyHandle	Handle class definition	class ForeignKeyHandle
+src/sql/engine/dml/ob_trigger_handler.h	30	TriggerHandle	Handle class definition	class TriggerHandle
+src/sql/engine/expr/ob_expr_ai/ob_ai_func.h	119	ObAIFuncHandle	Handle class definition	class ObAIFuncHandle
+src/sql/engine/expr/ob_expr_join_filter.cpp	55	ObExprJoinFilter::ObExprJoinFilterContext::~ObExprJoinFilterContext	dec_ref_count call	rf_msg_->dec_ref_count();
+src/sql/engine/expr/ob_expr_topn_filter.cpp	34	ObExprTopNFilterContext::~ObExprTopNFilterContext	dec_ref_count call	topn_filter_msg_->dec_ref_count();
+src/sql/engine/expr/ob_expr_topn_filter.cpp	48	ObExprTopNFilterContext::reset_for_rescan	dec_ref_count call	topn_filter_msg_->dec_ref_count();
+src/sql/engine/ob_physical_plan.cpp	852	ObPhysicalPlan::inc_pre_expr_ref_count	inc_pre_expr_ref_count definition (other name)	void ObPhysicalPlan::inc_pre_expr_ref_count()
+src/sql/engine/ob_physical_plan.cpp	857	ObPhysicalPlan::inc_pre_expr_ref_count	inc_ref_cnt call	stat_.pre_cal_expr_handler_->inc_ref_cnt();
+src/sql/engine/ob_physical_plan.cpp	861	ObPhysicalPlan::dec_pre_expr_ref_count	dec_pre_expr_ref_count definition (other name)	void ObPhysicalPlan::dec_pre_expr_ref_count()
+src/sql/engine/ob_physical_plan.cpp	866	ObPhysicalPlan::dec_pre_expr_ref_count	dec_ref_cnt call	int64_t ref_cnt = handler->dec_ref_cnt();
+src/sql/engine/ob_physical_plan.cpp	879	ObPhysicalPlan::before_cache_evicted	dec_pre_expr_ref_count call (other name)	dec_pre_expr_ref_count();
+src/sql/engine/ob_physical_plan.h	290	ObPhysicalPlan	inc_pre_expr_ref_count declaration (other name)	virtual void inc_pre_expr_ref_count() override;
+src/sql/engine/ob_physical_plan.h	291	ObPhysicalPlan	dec_pre_expr_ref_count declaration (other name)	virtual void dec_pre_expr_ref_count() override;
+src/sql/engine/px/ob_granule_iterator_op.cpp	717	ObGranuleIteratorOp::inner_close	dec_ref_count call	rf_msg_->dec_ref_count();
+src/sql/engine/px/ob_granule_iterator_op.cpp	724	ObGranuleIteratorOp::inner_close	dec_ref_count call	rf_msg->dec_ref_count();
+src/sql/engine/px/ob_px_sqc_handler.h	81	ObPxSqcHandler::release	release definition (reference-count function found by its body: changes a reference-count field)	void release(bool &all_released) {
+src/sql/engine/px/ob_px_sqc_handler.h	85	ObPxSqcHandler::inc_ref_count	inc_ref_count definition	void inc_ref_count() { ATOMIC_AAF(&reference_count_, 1); }
+src/sql/engine/px/ob_px_sqc_handler.h	86	ObPxSqcHandler::dec_ref_count	dec_ref_count definition	void dec_ref_count() { ATOMIC_AAF(&reference_count_, -1); }
+src/sql/engine/px/ob_px_sub_coord.cpp	514	ObPxSubCoord::dispatch_tasks	inc_ref_count call	sqc_arg.sqc_handler_->inc_ref_count();
+src/sql/engine/px/ob_px_sub_coord.cpp	519	ObPxSubCoord::dispatch_tasks	dec_ref_count call	sqc_arg.sqc_handler_->dec_ref_count();
+src/sql/engine/px/ob_px_worker.cpp	100	SQCHandlerGuard	Guard class definition whose methods reach ObPxSqcHandler::release through other functions (SQCHandlerGuard::~SQCHandlerGuard > ObPxSqcHandler::release_handler > ObPxSqcHandler::release)	class SQCHandlerGuard
+src/sql/engine/px/p2p_datahub/ob_p2p_dh_mgr.cpp	222	ObP2PDatahubManager::P2PMsgGetCall::operator()	inc_ref_count call	dh_msg_->inc_ref_count();
+src/sql/engine/px/p2p_datahub/ob_p2p_dh_mgr.cpp	234	ObP2PDatahubManager::P2PMsgEraseIfCall::operator()	cas_ref_count call (reference-count function found by its body)	if (1 == entry.second->cas_ref_count(1, 0)) {
+src/sql/engine/px/p2p_datahub/ob_p2p_dh_msg.cpp	104	ObP2PDatahubMsgGuard::ObP2PDatahubMsgGuard	inc_ref_count call	msg->inc_ref_count(2);
+src/sql/engine/px/p2p_datahub/ob_p2p_dh_msg.cpp	109	ObP2PDatahubMsgGuard::~ObP2PDatahubMsgGuard	dec_msg_ref_count call (other name)	dec_msg_ref_count();
+src/sql/engine/px/p2p_datahub/ob_p2p_dh_msg.cpp	117	ObP2PDatahubMsgGuard::dec_msg_ref_count	dec_msg_ref_count definition (other name)	void ObP2PDatahubMsgGuard::dec_msg_ref_count()
+src/sql/engine/px/p2p_datahub/ob_p2p_dh_msg.cpp	120	ObP2PDatahubMsgGuard::dec_msg_ref_count	dec_ref_count call	msg_->dec_ref_count();
+src/sql/engine/px/p2p_datahub/ob_p2p_dh_msg.h	122	ObP2PDatahubMsgBase::inc_ref_count	inc_ref_count definition	void inc_ref_count(int64_t count=1) { ATOMIC_AAF(&ref_count_, count); }
+src/sql/engine/px/p2p_datahub/ob_p2p_dh_msg.h	124	ObP2PDatahubMsgBase::dec_ref_count	dec_ref_count definition	int64_t dec_ref_count() { return ATOMIC_SAF(&ref_count_, 1); }
+src/sql/engine/px/p2p_datahub/ob_p2p_dh_msg.h	125	ObP2PDatahubMsgBase::cas_ref_count	cas_ref_count definition (reference-count function found by its body: changes a reference-count field)	int64_t cas_ref_count(int64_t expect, int64_t new_val) { return ATOMIC_CAS(&ref_count_, expect, new_val); }
+src/sql/engine/px/p2p_datahub/ob_p2p_dh_msg.h	150	ObP2PDatahubMsgGuard	Guard struct definition whose methods call dec_msg_ref_count, dec_ref_count, inc_ref_count	struct ObP2PDatahubMsgGuard
+src/sql/engine/px/p2p_datahub/ob_p2p_dh_msg.h	154	ObP2PDatahubMsgGuard	dec_msg_ref_count declaration (other name)	void dec_msg_ref_count();
+src/sql/ob_sql.cpp	782	ObSql::do_add_ps_cache	deref_stmt_info call (other name)	ps_cache->deref_stmt_info(inner_stmt_id); // need to decide whether to remove
+src/sql/ob_sql.cpp	784	ObSql::do_add_ps_cache	dec_ref_count call	ps_stmt_item->dec_ref_count();
+src/sql/ob_sql.cpp	1396	ObSql::handle_ps_prepare	ref_stmt_item call (other name)	} else if (OB_FAIL(ps_cache->ref_stmt_item(ps_key, stmt_item))) {
+src/sql/ob_sql.cpp	1408	ObSql::handle_ps_prepare	ref_stmt_info call (other name)	} else if (OB_FAIL(ps_cache->ref_stmt_info(inner_stmt_id, stmt_info))) {
+src/sql/ob_sql.cpp	1442	ObSql::handle_ps_prepare	dec_ref_count call	stmt_item->dec_ref_count();
+src/sql/ob_sql.cpp	1445	ObSql::handle_ps_prepare	deref_stmt_info call (other name)	ps_cache->deref_stmt_info(inner_stmt_id); // need to decide whether to remove
+src/sql/ob_sql_trans_control.cpp	202	ObSqlTransControl::end_trans	end_trans definition (reference-count function found by its body: calls inc_session_ref)	int ObSqlTransControl::end_trans(ObSQLSessionInfo *session,
+src/sql/ob_sql_trans_control.cpp	241	ObSqlTransControl::end_trans	inc_session_ref call (other name)	if (OB_FAIL(inc_session_ref(session))) {
+src/sql/ob_sql_trans_control.cpp	450	ObSqlTransControl::do_end_trans_	inc_session_ref call (other name)	if (OB_FAIL(inc_session_ref(session))) {
+src/sql/ob_sql_trans_control.cpp	1018	ObSqlTransControl::inc_session_ref	inc_session_ref definition (other name)	int ObSqlTransControl::inc_session_ref(const ObSQLSessionInfo *session)
+src/sql/ob_sql_trans_control.cpp	1024	ObSqlTransControl::inc_session_ref	inc_session_ref call (other name)	OZ (session_mgr->inc_session_ref(session));
+src/sql/ob_sql_trans_control.h	216	ObSqlTransControl	inc_session_ref declaration (other name)	static int inc_session_ref(const ObSQLSessionInfo *session);
+src/sql/ob_sql_utils.cpp	1902	RelExprPointerChecker::add_expr	add_ref call (other name)	if (OB_FAIL(rel_array_.at(expr_id).add_ref(&expr))) {
+src/sql/optimizer/ob_insert_log_plan.cpp	1266	ObInsertLogPlan::get_all_rowkey_columns_for_ddl	set_explicited_reference call (reference-count function found by its body)	spk_expr->set_explicited_reference();
+src/sql/optimizer/ob_join_order.cpp	17261	ObJoinOrder::deduce_prefix_str_idx_expr	set_explicited_reference call (reference-count function found by its body)	prefix_col->set_explicited_reference();
+src/sql/optimizer/ob_join_order.cpp	17658	ObJoinOrder::deduce_common_gen_col_index_expr	set_explicited_reference call (reference-count function found by its body)	gen_col->set_explicited_reference();
+src/sql/optimizer/ob_log_for_update.cpp	184	ObLogForUpdate::get_for_update_dependant_exprs	set_explicited_reference call (reference-count function found by its body)	dep_exprs.at(i)->set_explicited_reference();
+src/sql/optimizer/ob_log_plan.cpp	10698	ObLogPlan::get_table_for_update_info	set_explicited_reference call (reference-count function found by its body)	temp_rowkeys.at(i)->set_explicited_reference();
+src/sql/optimizer/ob_log_plan.cpp	10713	ObLogPlan::get_table_for_update_info	set_explicited_reference call (reference-count function found by its body)	tmp_partkey_exprs.at(i)->set_explicited_reference();
+src/sql/optimizer/ob_log_plan.cpp	10845	ObLogPlan::get_part_exprs	set_part_key_reference call (reference-count function found by its body)	part_expr->set_part_key_reference();
+src/sql/optimizer/ob_log_plan.cpp	10848	ObLogPlan::get_part_exprs	set_part_key_reference call (reference-count function found by its body)	subpart_expr->set_part_key_reference();
+src/sql/optimizer/ob_select_log_plan.cpp	7212	ObSelectLogPlan::adjust_late_materialization_stmt_structure	set_explicited_reference call (reference-count function found by its body)	rowkeys.at(i)->set_explicited_reference();
+src/sql/optimizer/stat/ob_opt_column_stat_cache.h	55	ObOptColumnStatHandle	Handle class definition	class ObOptColumnStatHandle
+src/sql/optimizer/stat/ob_opt_ds_stat_cache.h	37	ObOptDSStatHandle	Handle struct definition	struct ObOptDSStatHandle
+src/sql/optimizer/stat/ob_opt_system_stat_cache.h	37	ObOptSystemStatHandle	Handle struct definition	struct ObOptSystemStatHandle
+src/sql/optimizer/stat/ob_opt_table_stat_cache.h	37	ObOptTableStatHandle	Handle struct definition	struct ObOptTableStatHandle
+src/sql/plan_cache/ob_cache_object.h	167	ObPlanCacheObject	inc_pre_expr_ref_count declaration (other name)	virtual void inc_pre_expr_ref_count() = 0;
+src/sql/plan_cache/ob_cache_object.h	168	ObPlanCacheObject	dec_pre_expr_ref_count declaration (other name)	virtual void dec_pre_expr_ref_count() = 0;
+src/sql/plan_cache/ob_cache_object_factory.h	71	ObCacheObjGuard	Guard class definition whose methods reach dec_ref_count through other functions (ObCacheObjGuard::force_early_release > ObCacheObjectFactory::free > ObCacheObjectFactory::inner_free > ObPlanCache::free_cache_obj > ObLCObjectManager::free > ObLCObjectManager::common_free > dec_ref_count)	class ObCacheObjGuard {
+src/sql/plan_cache/ob_i_lib_cache_node.cpp	96	ObILibCacheNode::get_cache_obj	inc_ref_count call	obj->inc_ref_count();
+src/sql/plan_cache/ob_i_lib_cache_node.cpp	118	ObILibCacheNode::add_cache_obj	inc_ref_count call	obj->inc_ref_count();
+src/sql/plan_cache/ob_i_lib_cache_node.cpp	192	ObILibCacheNode::inc_ref_count	inc_ref_count definition	int64_t ObILibCacheNode::inc_ref_count()
+src/sql/plan_cache/ob_i_lib_cache_node.cpp	197	ObILibCacheNode::dec_ref_count	dec_ref_count definition	int64_t ObILibCacheNode::dec_ref_count()
+src/sql/plan_cache/ob_i_lib_cache_node.h	159	ObILibCacheNode	inc_ref_count declaration	int64_t inc_ref_count();
+src/sql/plan_cache/ob_i_lib_cache_node.h	160	ObILibCacheNode	dec_ref_count declaration	int64_t dec_ref_count();
+src/sql/plan_cache/ob_i_lib_cache_object.cpp	96	ObILibCacheObject::inc_ref_count	inc_ref_count definition	int64_t ObILibCacheObject::inc_ref_count()
+src/sql/plan_cache/ob_i_lib_cache_object.cpp	101	ObILibCacheObject::try_inc_ref_count	try_inc_ref_count definition (prefixed name)	bool ObILibCacheObject::try_inc_ref_count()
+src/sql/plan_cache/ob_i_lib_cache_object.cpp	110	ObILibCacheObject::dec_ref_count	dec_ref_count definition	int64_t ObILibCacheObject::dec_ref_count()
+src/sql/plan_cache/ob_i_lib_cache_object.h	68	ObILibCacheObject	inc_ref_count declaration	int64_t inc_ref_count();
+src/sql/plan_cache/ob_i_lib_cache_object.h	69	ObILibCacheObject	try_inc_ref_count declaration (prefixed name)	bool try_inc_ref_count();
+src/sql/plan_cache/ob_i_lib_cache_object.h	100	ObILibCacheObject	dec_ref_count declaration	int64_t dec_ref_count();
+src/sql/plan_cache/ob_lib_cache_object_manager.cpp	129	ObLCObjectManager::common_free	dec_ref_count call	int64_t ref_count = cache_obj->dec_ref_count();
+src/sql/plan_cache/ob_lib_cache_object_manager.h	145	ObLCObjectManager::alloc	inc_ref_count call	cache_obj->inc_ref_count();
+src/sql/plan_cache/ob_plan_cache.cpp	210	ObNodeStatFilterOp::operator()	inc_ref_count call	idle_kv.node_->inc_ref_count();
+src/sql/plan_cache/ob_plan_cache.cpp	220	ObNodeStatFilterOp::operator()	inc_ref_count call	lc_kv.node_->inc_ref_count();
+src/sql/plan_cache/ob_plan_cache.cpp	231	ObNodeStatFilterOp::operator()	dec_ref_count call	kv.node_->dec_ref_count();
+src/sql/plan_cache/ob_plan_cache.cpp	235	ObNodeStatFilterOp::operator()	inc_ref_count call	lc_kv.node_->inc_ref_count();
+src/sql/plan_cache/ob_plan_cache.cpp	285	ObIdleEvictOp::operator()	inc_ref_count call	entry.second->inc_ref_count();
+src/sql/plan_cache/ob_plan_cache.cpp	977	ObPlanCache::add_cache_obj	dec_ref_count call	cache_node->dec_ref_count();//cache node dec ref in alloc
+src/sql/plan_cache/ob_plan_cache.cpp	981	ObPlanCache::add_cache_obj	dec_ref_count call	cache_node->dec_ref_count();//cache node dec ref in alloc
+src/sql/plan_cache/ob_plan_cache.cpp	985	ObPlanCache::add_cache_obj	inc_ref_count call	cache_node->inc_ref_count(); //inc ref count in block
+src/sql/plan_cache/ob_plan_cache.cpp	991	ObPlanCache::add_cache_obj	dec_ref_count call	cache_node->dec_ref_count(); //cache node dec ref in block
+src/sql/plan_cache/ob_plan_cache.cpp	992	ObPlanCache::add_cache_obj	dec_ref_count call	cache_node->dec_ref_count(); //cache node dec ref in alloc
+src/sql/plan_cache/ob_plan_cache.cpp	1027	ObPlanCache::add_cache_obj	dec_ref_count call	cache_node->dec_ref_count(); //cache node dec ref in block
+src/sql/plan_cache/ob_plan_cache.cpp	1028	ObPlanCache::add_cache_obj	dec_ref_count call	cache_node->dec_ref_count(); //cache node dec ref in alloc
+src/sql/plan_cache/ob_plan_cache.cpp	1039	ObPlanCache::add_cache_obj	dec_ref_count call	cache_node->dec_ref_count(); //cache node dec ref in block
+src/sql/plan_cache/ob_plan_cache.cpp	1044	ObPlanCache::add_cache_obj	dec_ref_count call	cache_node->dec_ref_count(); //cache node dec ref in block
+src/sql/plan_cache/ob_plan_cache.cpp	1045	ObPlanCache::add_cache_obj	dec_ref_count call	cache_node->dec_ref_count(); //cache node dec ref in alloc
+src/sql/plan_cache/ob_plan_cache.cpp	1073	ObPlanCache::add_cache_obj	dec_ref_count call	cache_node->dec_ref_count();
+src/sql/plan_cache/ob_plan_cache.cpp	1110	ObPlanCache::get_cache_obj	dec_ref_count call	(void)cache_node->dec_ref_count();
+src/sql/plan_cache/ob_plan_cache.cpp	1170	ObPlanCache::foreach_cache_evict	dec_ref_count call	to_evict_list->at(i).node_->dec_ref_count();
+src/sql/plan_cache/ob_plan_cache.cpp	1272	ObPlanCache::cache_evict	dec_ref_count call	idle_evict_keys.at(i).node_->dec_ref_count();
+src/sql/plan_cache/ob_plan_cache.cpp	1325	ObPlanCache::cache_evict_by_glitch_node	dec_ref_count call	co_list.at(i).node_->dec_ref_count();
+src/sql/plan_cache/ob_plan_cache.cpp	1397	ObPlanCache::cache_evict_by_idle	dec_ref_count call	to_evict.at(i).node_->dec_ref_count();
+src/sql/plan_cache/ob_plan_cache.cpp	1448	ObPlanCache::remove_cache_node	dec_ref_count call	del_node->dec_ref_count();
+src/sql/plan_cache/ob_plan_cache.cpp	1462	ObPlanCache::ref_cache_obj	ref_cache_obj definition (other name)	int ObPlanCache::ref_cache_obj(const ObCacheObjID obj_id, ObCacheObjGuard& guard)
+src/sql/plan_cache/ob_plan_cache.cpp	1476	ObPlanCache::ref_plan	ref_plan definition (other name)	int ObPlanCache::ref_plan(const ObCacheObjID plan_id, ObCacheObjGuard& guard)
+src/sql/plan_cache/ob_plan_cache.cpp	1481	ObPlanCache::ref_plan	ref_cache_obj call (other name)	if (OB_FAIL(ref_cache_obj(plan_id, guard))) {
+src/sql/plan_cache/ob_plan_cache.cpp	1493	ObPlanCache::ref_alloc_obj	ref_alloc_obj definition (other name)	int ObPlanCache::ref_alloc_obj(const ObCacheObjID obj_id, ObCacheObjGuard& guard)
+src/sql/plan_cache/ob_plan_cache.cpp	1507	ObPlanCache::ref_alloc_plan	ref_alloc_plan definition (other name)	int ObPlanCache::ref_alloc_plan(const ObCacheObjID plan_id, ObCacheObjGuard& guard)
+src/sql/plan_cache/ob_plan_cache.cpp	1512	ObPlanCache::ref_alloc_plan	ref_alloc_obj call (other name)	if (OB_FAIL(ref_alloc_obj(plan_id, guard))) {
+src/sql/plan_cache/ob_plan_cache.cpp	1532	ObPlanCache::add_cache_obj_stat	inc_ref_count call	cache_obj->inc_ref_count();
+src/sql/plan_cache/ob_plan_cache.cpp	1566	ObPlanCache::create_node_and_add_cache_obj	inc_ref_count call	cache_node->inc_ref_count();
+src/sql/plan_cache/ob_plan_cache.cpp	1577	ObPlanCache::create_node_and_add_cache_obj	dec_ref_count call	cache_node->dec_ref_count();
+src/sql/plan_cache/ob_plan_cache.h	88	ObKVEntryTraverseOp::operator()	inc_ref_count call	entry.second->inc_ref_count();
+src/sql/plan_cache/ob_plan_cache.h	278	ObPlanCache	ref_cache_obj declaration (other name)	int ref_cache_obj(const ObCacheObjID obj_id, ObCacheObjGuard& guard);
+src/sql/plan_cache/ob_plan_cache.h	279	ObPlanCache	ref_plan declaration (other name)	int ref_plan(const ObCacheObjID obj_id, ObCacheObjGuard& guard);
+src/sql/plan_cache/ob_plan_cache.h	427	ObPlanCache	ref_alloc_obj declaration (other name)	int ref_alloc_obj(const ObCacheObjID obj_id, ObCacheObjGuard& guard);
+src/sql/plan_cache/ob_plan_cache.h	428	ObPlanCache	ref_alloc_plan declaration (other name)	int ref_alloc_plan(const ObCacheObjID obj_id, ObCacheObjGuard& guard);
+src/sql/plan_cache/ob_plan_cache_callback.cpp	27	ObLibCacheAtomicOp::operator()	inc_ref_count call	entry.second->inc_ref_count();
+src/sql/plan_cache/ob_plan_cache_callback.cpp	47	ObLibCacheAtomicOp::get_value	dec_ref_count call	cache_node_->dec_ref_count();
+src/sql/plan_cache/ob_plan_cache_callback.cpp	67	ObCacheObjAtomicOp::operator()	try_inc_ref_count call (prefixed name)	if (entry.second->try_inc_ref_count()) {
+src/sql/plan_cache/ob_plan_set.cpp	44	ObPlanSet::~ObPlanSet	dec_ref_cnt call	int64_t ref_cnt = pre_cal_expr_handler_->dec_ref_cnt();
+src/sql/plan_cache/ob_plan_set.cpp	960	ObSqlPlanSet::add_cache_obj	inc_pre_expr_ref_count call (other name)	cache_object.inc_pre_expr_ref_count();
+src/sql/plan_cache/ob_pre_calc_expr_handler.h	67	PreCalcExprHandler::inc_ref_cnt	inc_ref_cnt definition	void inc_ref_cnt()
+src/sql/plan_cache/ob_pre_calc_expr_handler.h	72	PreCalcExprHandler::dec_ref_cnt	dec_ref_cnt definition	int64_t dec_ref_cnt()
+src/sql/plan_cache/ob_prepare_stmt_struct.cpp	135	ObPsStmtItem::check_erase_inc_ref_count	check_erase_inc_ref_count definition (prefixed name)	bool ObPsStmtItem::check_erase_inc_ref_count()
+src/sql/plan_cache/ob_prepare_stmt_struct.cpp	154	ObPsStmtItem::dec_ref_count	dec_ref_count definition	void ObPsStmtItem::dec_ref_count()
+src/sql/plan_cache/ob_prepare_stmt_struct.cpp	556	ObPsStmtInfo::check_erase_inc_ref_count	check_erase_inc_ref_count definition (prefixed name)	bool ObPsStmtInfo::check_erase_inc_ref_count()
+src/sql/plan_cache/ob_prepare_stmt_struct.cpp	575	ObPsStmtInfo::dec_ref_count	dec_ref_count definition	void ObPsStmtInfo::dec_ref_count()
+src/sql/plan_cache/ob_prepare_stmt_struct.cpp	626	ObPsStmtInfoGuard::~ObPsStmtInfoGuard	deref_stmt_info call (other name)	if (OB_FAIL(ps_cache_->deref_stmt_info(stmt_id_))) {
+src/sql/plan_cache/ob_prepare_stmt_struct.h	84	ObPsStmtItem	check_erase_inc_ref_count declaration (prefixed name)	bool check_erase_inc_ref_count();
+src/sql/plan_cache/ob_prepare_stmt_struct.h	85	ObPsStmtItem	dec_ref_count declaration	void dec_ref_count();
+src/sql/plan_cache/ob_prepare_stmt_struct.h	177	ObPsStmtInfo	check_erase_inc_ref_count declaration (prefixed name)	bool check_erase_inc_ref_count();
+src/sql/plan_cache/ob_prepare_stmt_struct.h	178	ObPsStmtInfo	dec_ref_count declaration	void dec_ref_count();
+src/sql/plan_cache/ob_prepare_stmt_struct.h	227	ObPsStmtInfo::try_erase	reference-count change: ATOMIC_VCAS on ref_count_	bool try_erase() { return 1 == ATOMIC_VCAS(&ref_count_, 1, 0); }
+src/sql/plan_cache/ob_prepare_stmt_struct.h	364	ObPsSessionInfo::inc_ref_count	inc_ref_count definition	void inc_ref_count() { ref_cnt_++; }
+src/sql/plan_cache/ob_prepare_stmt_struct.h	365	ObPsSessionInfo::dec_ref_count	dec_ref_count definition	void dec_ref_count() { ref_cnt_--; }
+src/sql/plan_cache/ob_prepare_stmt_struct.h	394	ObPsStmtInfoGuard	Guard class definition whose methods call deref_stmt_info	class ObPsStmtInfoGuard
+src/sql/plan_cache/ob_ps_cache.cpp	235	ObPsCache::deref_ps_stmt	deref_ps_stmt definition (other name)	int ObPsCache::deref_ps_stmt(const ObPsStmtId stmt_id)
+src/sql/plan_cache/ob_ps_cache.cpp	246	ObPsCache::deref_ps_stmt	dec_ref_count call	ps_info->get_ps_item()->dec_ref_count();
+src/sql/plan_cache/ob_ps_cache.cpp	248	ObPsCache::deref_ps_stmt	dec_ref_count call	ps_info->dec_ref_count();
+src/sql/plan_cache/ob_ps_cache.cpp	285	ObPsCache::get_stmt_info_guard	ref_stmt_info call (other name)	if (OB_FAIL(ref_stmt_info(ps_stmt_id, stmt_info))) {
+src/sql/plan_cache/ob_ps_cache.cpp	336	ObPsCache::get_or_add_stmt_item	check_erase_inc_ref_count call (prefixed name)	new_item_value->check_erase_inc_ref_count(); //inc ref count for ps cache, ignore ret;
+src/sql/plan_cache/ob_ps_cache.cpp	431	ObPsCache::ref_stmt_item	ref_stmt_item definition (other name)	int ObPsCache::ref_stmt_item(const ObPsSqlKey &ps_sql_key, ObPsStmtItem *&stmt_item)
+src/sql/plan_cache/ob_ps_cache.cpp	458	ObPsCache::get_or_add_stmt_info	ref_stmt_info call (other name)	} else if (OB_FAIL(ref_stmt_info(ps_item->get_ps_stmt_id(), ref_ps_info))) {
+src/sql/plan_cache/ob_ps_cache.cpp	528	ObPsCache::erase_stmt_item	dec_ref_count call	ps_item->dec_ref_count();
+src/sql/plan_cache/ob_ps_cache.cpp	639	ObPsCache::add_stmt_info	check_erase_inc_ref_count call (prefixed name)	new_info_value->check_erase_inc_ref_count(); //inc ref count for ps cache, ignore ret;
+src/sql/plan_cache/ob_ps_cache.cpp	648	ObPsCache::add_stmt_info	ref_stmt_info call (other name)	if (OB_FAIL(ref_stmt_info(ps_item.get_ps_stmt_id(), tmp_stmt_info))) {
+src/sql/plan_cache/ob_ps_cache.cpp	675	ObPsCache::ref_stmt_info	ref_stmt_info definition (other name)	int ObPsCache::ref_stmt_info(const ObPsStmtId stmt_id, ObPsStmtInfo *&ps_stmt_info)
+src/sql/plan_cache/ob_ps_cache.cpp	714	ObPsCache::deref_stmt_info	deref_stmt_info definition (other name)	int ObPsCache::deref_stmt_info(const ObPsStmtId stmt_id)
+src/sql/plan_cache/ob_ps_cache.h	96	ObPsCache	ref_stmt_item declaration (other name)	int ref_stmt_item(const ObPsSqlKey &ps_sql_key, ObPsStmtItem *&stmt_item);
+src/sql/plan_cache/ob_ps_cache.h	97	ObPsCache	ref_stmt_info declaration (other name)	int ref_stmt_info(const ObPsStmtId stmt_id, ObPsStmtInfo *&ps_stmt_info);
+src/sql/plan_cache/ob_ps_cache.h	98	ObPsCache	deref_stmt_info declaration (other name)	int deref_stmt_info(const ObPsStmtId stmt_id);
+src/sql/plan_cache/ob_ps_cache.h	100	ObPsCache	deref_stmt_item declaration (other name)	int deref_stmt_item(const ObPsSqlKey &ps_sql_key);
+src/sql/plan_cache/ob_ps_cache.h	101	ObPsCache	deref_ps_stmt declaration (other name)	int deref_ps_stmt(const ObPsStmtId stmt_id);
+src/sql/plan_cache/ob_ps_cache_callback.cpp	30	ObPsStmtItemRefAtomicOp::operator()	check_erase_inc_ref_count call (prefixed name)	if (entry.second->check_erase_inc_ref_count()) {//has been marked by other threads
+src/sql/plan_cache/ob_ps_cache_callback.cpp	71	ObPsStmtInfoRefAtomicOp::operator()	check_erase_inc_ref_count call (prefixed name)	if (entry.second->check_erase_inc_ref_count()) {//has been marked by other threads
+src/sql/plan_cache/ob_ps_cache_callback.cpp	102	ObPsStmtInfoDerefAtomicOp::operator()	dec_ref_count call	entry.second->dec_ref_count();
+src/sql/plan_cache/ob_ps_cache_callback.cpp	129	ObPsPCVSetAtomicOp::get_value	dec_ref_count call	pcv_set_->dec_ref_count();
+src/sql/resolver/dml/ob_dml_resolver.cpp	6523	ObDMLResolver::resolve_geo_mbr_column	set_explicited_reference call (reference-count function found by its body)	left_expr->set_explicited_reference();
+src/sql/resolver/dml/ob_dml_stmt.cpp	1778	ObDMLStmt::set_sharable_expr_reference	set_explicited_reference call (reference-count function found by its body)	expr.set_explicited_reference(ref_type);
+src/sql/resolver/dml/ob_dml_stmt.cpp	1813	ObDMLStmt::set_sharable_expr_reference	set_explicited_reference call (reference-count function found by its body)	expr.set_explicited_reference();
+src/sql/resolver/dml/ob_dml_stmt.cpp	2971	ObDMLStmt::add_column_item	set_explicited_reference call (reference-count function found by its body)	column_item.expr_->set_explicited_reference();
+src/sql/resolver/dml/ob_dml_stmt.cpp	3072	ObDMLStmt::add_subquery_ref	set_explicited_reference call (reference-count function found by its body)	query_ref->set_explicited_reference();
+src/sql/resolver/dml/ob_select_resolver.cpp	1199	ObSelectResolver::set_for_update_recursive	set_explicited_reference call (reference-count function found by its body)	rowkeys.at(j)->set_explicited_reference();
+src/sql/resolver/dml/ob_select_stmt.cpp	141	ObSelectStmt::add_window_func_expr	set_explicited_reference call (reference-count function found by its body)	expr->set_explicited_reference();
+src/sql/resolver/dml/ob_select_stmt.h	437	ObSelectStmt::add_agg_item	set_explicited_reference call (reference-count function found by its body)	agg_expr.set_explicited_reference();
+src/sql/resolver/dml/ob_stmt_expr_visitor.cpp	203	ObStmtExecParamFormatter::do_formalize_exec_param	set_explicited_reference call (reference-count function found by its body)	exec_param->set_explicited_reference();
+src/sql/resolver/expr/ob_raw_expr.cpp	5665	ObRawExprPointer::add_ref	add_ref definition (other name)	int ObRawExprPointer::add_ref(ObRawExpr **expr)
+src/sql/resolver/expr/ob_raw_expr.h	2063	ObRawExpr::set_explicited_reference	set_explicited_reference definition (reference-count function found by its body: calls add_ref_count)	void set_explicited_reference()
+src/sql/resolver/expr/ob_raw_expr.h	2065	ObRawExpr::set_explicited_reference	add_ref_count call (other name)	add_ref_count();
+src/sql/resolver/expr/ob_raw_expr.h	2068	ObRawExpr::set_part_key_reference	set_part_key_reference definition (reference-count function found by its body: calls add_ref_count)	void set_part_key_reference() {
+src/sql/resolver/expr/ob_raw_expr.h	2069	ObRawExpr::set_part_key_reference	add_ref_count call (other name)	add_ref_count();
+src/sql/resolver/expr/ob_raw_expr.h	2072	ObRawExpr::set_explicited_reference	set_explicited_reference definition (reference-count function found by its body: calls add_ref_count)	void set_explicited_reference(ExplicitedRefType ref_type)
+src/sql/resolver/expr/ob_raw_expr.h	2074	ObRawExpr::set_explicited_reference	add_ref_count call (other name)	add_ref_count();
+src/sql/resolver/expr/ob_raw_expr.h	2210	ObRawExpr::add_ref_count	add_ref_count definition (other name)	void add_ref_count() { is_shared_reference_ = is_explicited_reference(); }
+src/sql/resolver/expr/ob_raw_expr.h	5144	ObRawExprPointer	add_ref declaration (other name)	int add_ref(ObRawExpr **expr);
+src/sql/resolver/expr/ob_raw_expr_util.h	105	UniqueSetWrapAllocer::inc_ref	inc_ref definition	void inc_ref() {}
+src/sql/resolver/expr/ob_raw_expr_util.h	106	UniqueSetWrapAllocer::dec_ref	dec_ref definition	void dec_ref() {}
+src/sql/rewrite/ob_transform_conditional_aggr_coalesce.cpp	719	ObTransformConditionalAggrCoalesce::try_share_aggr	set_explicited_reference call (reference-count function found by its body)	cur_aggr->set_explicited_reference();
+src/sql/rewrite/ob_transform_const_propagate.cpp	1188	ObTransformConstPropagate::do_remove_const_exec_param	set_explicited_reference call (reference-count function found by its body)	exec_param->set_explicited_reference();
+src/sql/rewrite/ob_transform_pre_process.cpp	2600	ObTransformPreProcess::create_stmt_id_expr	set_explicited_reference call (reference-count function found by its body)	stmt_id_expr->set_explicited_reference();
+src/sql/rewrite/ob_transform_pre_process.cpp	2626	ObTransformPreProcess::create_params_expr	set_explicited_reference call (reference-count function found by its body)	pseudo_param_expr->set_explicited_reference();
+src/sql/rewrite/ob_transform_temp_table.cpp	2142	ObTransformTempTable::get_stmt_pointers	add_ref call (other name)	OZ(stmt_ptr.add_ref(&sel_stmt->get_set_query().at(parent_stmt.pos_)));
+src/sql/rewrite/ob_transform_temp_table.cpp	2155	ObTransformTempTable::get_stmt_pointers	add_ref call (other name)	OZ(stmt_ptr.add_ref(&table_item->ref_query_));
+src/sql/rewrite/ob_transform_temp_table.cpp	2167	ObTransformTempTable::get_stmt_pointers	add_ref call (other name)	OZ(stmt_ptr.add_ref(&subquery_ref->get_ref_stmt()));
+src/sql/rewrite/ob_transform_temp_table.cpp	2177	ObTransformTempTable::get_stmt_pointers	add_ref call (other name)	OZ(stmt_ptr.add_ref(&temp_table_infos.at(j).table_items_.at(k)->ref_query_));
+src/sql/rewrite/ob_transform_temp_table.cpp	2900	ObTransformTempTable::prepare_inline_materialize_stmts	add_ref call (other name)	} else if (OB_FAIL(stmt_ptr.add_ref(&table_item->ref_query_))) {
+src/sql/rewrite/ob_transform_utils.cpp	4889	ObTransformUtils::generate_unique_key_for_basic_table	set_explicited_reference call (reference-count function found by its body)	} else if (FALSE_IT(col_expr->set_explicited_reference())) {
+src/sql/rewrite/ob_transform_utils.cpp	11477	ObSelectStmtPointer::add_ref	add_ref definition (other name)	int ObSelectStmtPointer::add_ref(ObSelectStmt **stmt)
+src/sql/rewrite/ob_transform_utils.h	130	ObSelectStmtPointer	add_ref declaration (other name)	int add_ref(ObSelectStmt **stmt);
+src/sql/session/ob_sql_session_info.cpp	552	ObSQLSessionInfo::close_ps_stmt	dec_ref_count call	ps_sess_info->dec_ref_count();
+src/sql/session/ob_sql_session_info.cpp	554	ObSQLSessionInfo::close_ps_stmt	deref_ps_stmt call (other name)	if (OB_FAIL(ps_cache.deref_ps_stmt(inner_stmt_id))) {
+src/sql/session/ob_sql_session_info.cpp	578	ObSQLSessionInfo::close_all_ps_stmt	deref_ps_stmt call (other name)	} else if (OB_FAIL(ps_cache.deref_ps_stmt(inner_stmt_id))) {
+src/sql/session/ob_sql_session_info.cpp	901	ObSQLSessionInfo::prepare_ps_stmt	inc_ref_count call	session_info->inc_ref_count();
+src/sql/session/ob_sql_session_info.cpp	928	ObSQLSessionInfo::prepare_ps_stmt	inc_ref_count call	session_info->inc_ref_count();
+src/sql/session/ob_sql_session_mgr.cpp	221	ObSQLSessionMgr::inc_session_ref	inc_session_ref definition (other name)	int ObSQLSessionMgr::inc_session_ref(const ObSQLSessionInfo *my_session)
+src/sql/session/ob_sql_session_mgr.h	84	ObSQLSessionMgr	inc_session_ref declaration (other name)	int inc_session_ref(const ObSQLSessionInfo *my_session);
+src/standby/restore/ob_standby_restore_reader.h	76	ObCopyMacroBlockHandle	Handle struct definition	struct ObCopyMacroBlockHandle final
+src/storage/access/ob_index_tree_prefetcher.h	39	ObSSTableReadHandle	Handle struct definition	struct ObSSTableReadHandle
+src/storage/access/ob_index_tree_prefetcher.h	274	ObCachedLevelMicroDataHandle	Handle struct definition	struct ObCachedLevelMicroDataHandle
+src/storage/access/ob_index_tree_prefetcher.h	648	ObIndexTreeMultiPassPrefetcher::ObIndexBlockReadHandle	Handle struct definition	struct ObIndexBlockReadHandle {
+src/storage/access/ob_index_tree_prefetcher.h	671	ObIndexTreeMultiPassPrefetcher::ObIndexTreeLevelHandle	Handle struct definition	struct ObIndexTreeLevelHandle {
+src/storage/access/ob_micro_block_handle_mgr.h	46	ObMicroBlockDataHandle	Handle struct definition	struct ObMicroBlockDataHandle
+src/storage/access/ob_sample_filter.h	56	ObIndexRowIdHandle	Handle struct definition	struct ObIndexRowIdHandle {
+src/storage/access/ob_sstable_row_whole_scanner.h	36	ObSSTableRowWholeScanner::MacroScanHandle	Handle struct definition	struct MacroScanHandle
+src/storage/allocator/ob_fifo_arena.cpp	85	ObFifoArena::shrink_cached_page	release_ref call (other name)	release_ref(ref);
+src/storage/allocator/ob_fifo_arena.cpp	112	ObFifoArena::alloc	ref_and_alloc call (other name)	ptr = handle.ref_and_alloc(way_id, need_switch, page, size);
+src/storage/allocator/ob_fifo_arena.cpp	114	ObFifoArena::alloc	retire_page call (reference-count function found by its body)	retire_page(way_id, handle, page);
+src/storage/allocator/ob_fifo_arena.cpp	127	ObFifoArena::alloc	ref_and_alloc call (other name)	ptr = handle.ref_and_alloc(way_id, need_switch, page, size);
+src/storage/allocator/ob_fifo_arena.cpp	135	ObFifoArena::alloc	retire_page call (reference-count function found by its body)	retire_page(way_id, handle, page);
+src/storage/allocator/ob_fifo_arena.cpp	152	ObFifoArena::release_ref	release_ref definition (other name)	void ObFifoArena::release_ref(Ref* ref)
+src/storage/allocator/ob_fifo_arena.cpp	154	ObFifoArena::release_ref	xref call (other name)	if (0 == ref->page_->xref(ref->allocated_)) {
+src/storage/allocator/ob_fifo_arena.cpp	171	ObFifoArena::free	release_ref call (other name)	release_ref(ref);
+src/storage/allocator/ob_fifo_arena.cpp	201	ObFifoArena::retire_page	retire_page definition (reference-count function found by its body: calls add_ref)	void ObFifoArena::retire_page(int64_t idx, Handle& handle, Page* page)
+src/storage/allocator/ob_fifo_arena.cpp	205	ObFifoArena::retire_page	add_ref call (other name)	handle.add_ref(idx, &page->self_ref_);
+src/storage/allocator/ob_fifo_arena.h	68	ObFifoArena::Page::xref	xref definition (other name)	int64_t xref(int64_t x) { return ATOMIC_AAF(&ref_, x); }
+src/storage/allocator/ob_fifo_arena.h	110	ObFifoArena::Handle	Handle struct definition	struct Handle
+src/storage/allocator/ob_fifo_arena.h	132	ObFifoArena::Handle::ref_and_alloc	ref_and_alloc definition (other name)	void* ref_and_alloc(int64_t idx, bool& need_switch, Page* page, int64_t size) {
+src/storage/allocator/ob_fifo_arena.h	138	ObFifoArena::Handle::ref_and_alloc	add_ref call (other name)	add_ref(idx, ref);
+src/storage/allocator/ob_fifo_arena.h	143	ObFifoArena::Handle::add_ref	add_ref definition (other name)	void add_ref(int64_t idx, Ref* ref) {
+src/storage/allocator/ob_fifo_arena.h	204	ObFifoArena	release_ref declaration (other name)	void release_ref(Ref* ref);
+src/storage/allocator/ob_fifo_arena.h	207	ObFifoArena	retire_page declaration (reference-count function found by its body)	void retire_page(int64_t way_id, Handle& handle, Page* ptr);
+src/storage/allocator/ob_handle_list.h	97	ObHandleList::Handle	Handle struct definition	struct Handle
+src/storage/allocator/ob_memstore_allocator.h	72	ObMemstoreAllocator::ListHandle	Handle alias of HandleList::Handle	typedef HandleList::Handle ListHandle;
+src/storage/allocator/ob_memstore_allocator.h	73	ObMemstoreAllocator::ArenaHandle	Handle alias of Arena::Handle	typedef Arena::Handle ArenaHandle;
+src/storage/allocator/ob_memstore_allocator.h	75	ObMemstoreAllocator::AllocHandle	Handle class definition : ListHandle, ObIAllocator	class AllocHandle: public ListHandle, public ObIAllocator
+src/storage/blocksstable/index_block/ob_index_block_builder.cpp	242	ObSSTableMergeRes::reset	dec_ref call [on-disk block reference]	if (OB_FAIL(OB_STORAGE_OBJECT_MGR.dec_ref(block_id))) {
+src/storage/blocksstable/index_block/ob_index_block_builder.cpp	248	ObSSTableMergeRes::reset	dec_ref call [on-disk block reference]	if (OB_FAIL(OB_STORAGE_OBJECT_MGR.dec_ref(block_id))) {
+src/storage/blocksstable/index_block/ob_index_block_builder.cpp	318	ObSSTableMergeRes::assign	inc_ref call [on-disk block reference]	} else if (OB_FAIL(OB_STORAGE_OBJECT_MGR.inc_ref(block_id))) {
+src/storage/blocksstable/index_block/ob_index_block_builder.cpp	333	ObSSTableMergeRes::assign	inc_ref call [on-disk block reference]	} else if (OB_FAIL(OB_STORAGE_OBJECT_MGR.inc_ref(block_id))) {
+src/storage/blocksstable/index_block/ob_sstable_meta_info.cpp	730	ObSSTableMacroInfo::dec_linked_block_ref_cnt	dec_linked_block_ref_cnt definition (other name) [on-disk block reference]	void ObSSTableMacroInfo::dec_linked_block_ref_cnt()
+src/storage/blocksstable/index_block/ob_sstable_meta_info.cpp	742	ObSSTableMacroInfo::dec_linked_block_ref_cnt	dec_ref call [on-disk block reference]	if (OB_FAIL(OB_STORAGE_OBJECT_MGR.dec_ref(macro_id))) {
+src/storage/blocksstable/index_block/ob_sstable_meta_info.h	246	ObSSTableMacroInfo	dec_linked_block_ref_cnt declaration (other name) [on-disk block reference]	void dec_linked_block_ref_cnt();
+src/storage/blocksstable/ob_block_manager.cpp	484	ObBlockManager::get_macro_block_info	reference-count change: ++ on ref_cnt_	block_info.ref_cnt_++;
+src/storage/blocksstable/ob_block_manager.cpp	499	ObBlockManager::get_macro_block_info	dec_ref call	if (OB_TMP_FAIL(dec_ref(macro_id))) {
+src/storage/blocksstable/ob_block_manager.cpp	622	ObBlockManager::inc_ref	inc_ref definition [on-disk block reference]	int ObBlockManager::inc_ref(const MacroBlockId &macro_id) {
+src/storage/blocksstable/ob_block_manager.cpp	662	ObBlockManager::dec_ref	dec_ref definition [on-disk block reference]	int ObBlockManager::dec_ref(const MacroBlockId &macro_id) {
+src/storage/blocksstable/ob_block_manager.h	233	ObBlockManager	inc_ref declaration [on-disk block reference]	int inc_ref(const MacroBlockId &macro_id);
+src/storage/blocksstable/ob_block_manager.h	234	ObBlockManager	dec_ref declaration [on-disk block reference]	int dec_ref(const MacroBlockId &macro_id);
+src/storage/blocksstable/ob_fuse_row_cache.h	104	ObFuseRowValueHandle	Handle struct definition	struct ObFuseRowValueHandle
+src/storage/blocksstable/ob_macro_block_handle.cpp	53	ObMacroBlockHandle::operator=	inc_ref call [on-disk block reference]	if (OB_FAIL(OB_SERVER_BLOCK_MGR.inc_ref(macro_id_))) {
+src/storage/blocksstable/ob_macro_block_handle.cpp	78	ObMacroBlockHandle::reset_macro_id	dec_ref call [on-disk block reference]	if (OB_FAIL(OB_STORAGE_OBJECT_MGR.dec_ref(macro_id_))) {
+src/storage/blocksstable/ob_macro_block_handle.cpp	208	ObMacroBlockHandle::set_macro_block_id	inc_ref call [on-disk block reference]	if (OB_FAIL(OB_SERVER_BLOCK_MGR.inc_ref(macro_id_))) {
+src/storage/blocksstable/ob_macro_block_handle.cpp	238	ObStorageObjectsHandle::add	inc_ref call [on-disk block reference]	if (OB_FAIL(OB_STORAGE_OBJECT_MGR.inc_ref(macro_id))) {
+src/storage/blocksstable/ob_macro_block_handle.cpp	256	ObStorageObjectsHandle::reset	dec_ref call [on-disk block reference]	if (OB_SUCCESS != (tmp_ret = OB_STORAGE_OBJECT_MGR.dec_ref(macro_id_list_.at(i)))) {
+src/storage/blocksstable/ob_macro_block_handle.h	32	ObMacroBlockHandle	Handle class definition	class ObMacroBlockHandle final
+src/storage/blocksstable/ob_macro_block_handle.h	62	ObStorageObjectsHandle	Handle class definition	class ObStorageObjectsHandle final
+src/storage/blocksstable/ob_macro_block_struct.cpp	41	ObMacroBlocksWriteCtx::clear	dec_ref call [on-disk block reference]	if (OB_FAIL(OB_STORAGE_OBJECT_MGR.dec_ref(macro_block_list_.at(i)))) {
+src/storage/blocksstable/ob_macro_block_struct.cpp	107	ObMacroBlocksWriteCtx::get_macro_id_array	inc_ref call [on-disk block reference]	} else if (OB_FAIL(OB_STORAGE_OBJECT_MGR.inc_ref(block_id))) {
+src/storage/blocksstable/ob_macro_block_struct.cpp	122	ObMacroBlocksWriteCtx::add_macro_block_id	inc_ref call [on-disk block reference]	if (OB_FAIL(OB_STORAGE_OBJECT_MGR.inc_ref(macro_block_id))) {
+src/storage/blocksstable/ob_macro_block_struct.cpp	138	ObMacroBlocksWriteCtx::pop_macro_block_id	dec_ref call [on-disk block reference]	} else if (OB_FAIL(OB_STORAGE_OBJECT_MGR.dec_ref(macro_block_id))) {
+src/storage/blocksstable/ob_micro_block_cache.h	122	ObMicroBlockBufferHandle	Handle class definition	class ObMicroBlockBufferHandle
+src/storage/blocksstable/ob_object_manager.cpp	174	ObObjectManager::inc_ref	inc_ref definition [on-disk block reference]	int ObObjectManager::inc_ref(const MacroBlockId &object_id) const
+src/storage/blocksstable/ob_object_manager.cpp	180	ObObjectManager::inc_ref	inc_ref call [on-disk block reference]	ret = OB_SERVER_BLOCK_MGR.inc_ref(object_id);
+src/storage/blocksstable/ob_object_manager.cpp	185	ObObjectManager::dec_ref	dec_ref definition [on-disk block reference]	int ObObjectManager::dec_ref(const MacroBlockId &object_id) const
+src/storage/blocksstable/ob_object_manager.cpp	191	ObObjectManager::dec_ref	dec_ref call [on-disk block reference]	ret = OB_SERVER_BLOCK_MGR.dec_ref(object_id);
+src/storage/blocksstable/ob_object_manager.h	92	ObObjectManager	inc_ref declaration [on-disk block reference]	int inc_ref(const MacroBlockId &object_id) const;
+src/storage/blocksstable/ob_object_manager.h	93	ObObjectManager	dec_ref declaration [on-disk block reference]	int dec_ref(const MacroBlockId &object_id) const;
+src/storage/blocksstable/ob_row_cache.h	92	ObRowValueHandle	Handle struct definition	struct ObRowValueHandle
+src/storage/blocksstable/ob_sstable.cpp	236	ObSSTable::init	inc_macro_ref call (other name) [on-disk block reference]	} else if (OB_FAIL(inc_macro_ref(inc_success))) {
+src/storage/blocksstable/ob_sstable.cpp	237	ObSSTable::init	dec_linked_block_ref_cnt call (other name) [on-disk block reference]	} else if (FALSE_IT(meta_->macro_info_.dec_linked_block_ref_cnt())) {
+src/storage/blocksstable/ob_sstable.cpp	263	ObSSTable::copy_from_old_sstable	inner_deep_copy_and_inc_macro_ref call (other name) [on-disk block reference]	} else if (OB_FAIL(src.inner_deep_copy_and_inc_macro_ref(allocator, sstable))) {
+src/storage/blocksstable/ob_sstable.cpp	280	ObSSTable::reset	dec_macro_ref call (other name) [on-disk block reference]	ObSSTable::dec_macro_ref(); // dec the used_size added by sstable::init()
+src/storage/blocksstable/ob_sstable.cpp	1097	ObSSTable::inc_ref	inc_ref definition	void ObSSTable::inc_ref()
+src/storage/blocksstable/ob_sstable.cpp	1100	ObSSTable::inc_ref	inc_ref call	ObITable::inc_ref();
+src/storage/blocksstable/ob_sstable.cpp	1104	ObSSTable::dec_ref	dec_ref definition	int64_t ObSSTable::dec_ref()
+src/storage/blocksstable/ob_sstable.cpp	1108	ObSSTable::dec_ref	dec_ref call	cnt = ObITable::dec_ref();
+src/storage/blocksstable/ob_sstable.cpp	1127	ObSSTable::dec_macro_ref	dec_macro_ref definition (other name) [on-disk block reference]	void ObSSTable::dec_macro_ref() const
+src/storage/blocksstable/ob_sstable.cpp	1154	ObSSTable::dec_macro_ref	dec_ref call [on-disk block reference]	if (OB_FAIL(OB_STORAGE_OBJECT_MGR.dec_ref(macro_id))) {
+src/storage/blocksstable/ob_sstable.cpp	1168	ObSSTable::dec_macro_ref	dec_ref call [on-disk block reference]	if (OB_FAIL(OB_STORAGE_OBJECT_MGR.dec_ref(macro_id))) {
+src/storage/blocksstable/ob_sstable.cpp	1178	ObSSTable::dec_macro_ref	dec_ref call [on-disk block reference]	if (OB_FAIL(OB_STORAGE_OBJECT_MGR.dec_ref(macro_id))) {
+src/storage/blocksstable/ob_sstable.cpp	1187	ObSSTable::inc_macro_ref	inc_macro_ref definition (other name) [on-disk block reference]	int ObSSTable::inc_macro_ref(bool &inc_success) const
+src/storage/blocksstable/ob_sstable.cpp	1211	ObSSTable::inc_macro_ref	inc_ref call [on-disk block reference]	} else if (OB_FAIL(OB_STORAGE_OBJECT_MGR.inc_ref(macro_id))) {
+src/storage/blocksstable/ob_sstable.cpp	1229	ObSSTable::inc_macro_ref	inc_ref call [on-disk block reference]	} else if (OB_FAIL(OB_STORAGE_OBJECT_MGR.inc_ref(macro_id))) {
+src/storage/blocksstable/ob_sstable.cpp	1247	ObSSTable::inc_macro_ref	inc_ref call [on-disk block reference]	} else if (OB_FAIL(OB_STORAGE_OBJECT_MGR.inc_ref(macro_id))) {
+src/storage/blocksstable/ob_sstable.cpp	1272	ObSSTable::inc_macro_ref	dec_ref call [on-disk block reference]	} else if (OB_TMP_FAIL(OB_STORAGE_OBJECT_MGR.dec_ref(macro_id))) {
+src/storage/blocksstable/ob_sstable.cpp	1283	ObSSTable::inc_macro_ref	dec_ref call [on-disk block reference]	} else if (OB_TMP_FAIL(OB_STORAGE_OBJECT_MGR.dec_ref(macro_id))) {
+src/storage/blocksstable/ob_sstable.cpp	1294	ObSSTable::inc_macro_ref	dec_ref call [on-disk block reference]	} else if (OB_TMP_FAIL(OB_STORAGE_OBJECT_MGR.dec_ref(macro_id))) {
+src/storage/blocksstable/ob_sstable.cpp	1591	ObSSTable::inner_deep_copy_and_inc_macro_ref	inner_deep_copy_and_inc_macro_ref definition (other name) [on-disk block reference]	int ObSSTable::inner_deep_copy_and_inc_macro_ref(
+src/storage/blocksstable/ob_sstable.cpp	1607	ObSSTable::inner_deep_copy_and_inc_macro_ref	inc_macro_ref call (other name) [on-disk block reference]	if (OB_FAIL(table->inc_macro_ref(inc_success))) {
+src/storage/blocksstable/ob_sstable.h	47	ObSSTableMetaHandle	Handle class definition	class ObSSTableMetaHandle
+src/storage/blocksstable/ob_sstable.h	131	ObSSTable	inc_ref declaration	virtual void inc_ref() override;
+src/storage/blocksstable/ob_sstable.h	132	ObSSTable	dec_ref declaration	virtual int64_t dec_ref() override;
+src/storage/blocksstable/ob_sstable.h	273	ObSSTable	inc_macro_ref declaration (other name) [on-disk block reference]	virtual int inc_macro_ref(bool &inc_success) const;
+src/storage/blocksstable/ob_sstable.h	274	ObSSTable	dec_macro_ref declaration (other name) [on-disk block reference]	virtual void dec_macro_ref() const;
+src/storage/blocksstable/ob_sstable.h	358	ObSSTable	inner_deep_copy_and_inc_macro_ref declaration (other name) [on-disk block reference]	int inner_deep_copy_and_inc_macro_ref(common::ObIAllocator &allocator, ObSSTable *&sstable) const;
+src/storage/blocksstable/ob_storage_object_handle.cpp	51	ObStorageObjectHandle::operator=	inc_ref call [on-disk block reference]	if (OB_FAIL(OB_SERVER_BLOCK_MGR.inc_ref(macro_id_))) {
+src/storage/blocksstable/ob_storage_object_handle.cpp	76	ObStorageObjectHandle::reset_macro_id	dec_ref call [on-disk block reference]	if (OB_FAIL(OB_SERVER_BLOCK_MGR.dec_ref(macro_id_))) {
+src/storage/blocksstable/ob_storage_object_handle.cpp	237	ObStorageObjectHandle::set_macro_block_id	inc_ref call [on-disk block reference]	if (OB_FAIL(OB_SERVER_BLOCK_MGR.inc_ref(macro_id_))) {
+src/storage/blocksstable/ob_storage_object_handle.h	34	ObStorageObjectHandle	Handle class definition	class ObStorageObjectHandle final
+src/storage/blockstore/ob_object_reader_writer.cpp	86	ObObjectsWriteCtx::clear	dec_ref call [on-disk block reference]	if (OB_FAIL(OB_STORAGE_OBJECT_MGR.dec_ref(block_ids_.at(i)))) {
+src/storage/blockstore/ob_object_reader_writer.cpp	115	ObObjectsWriteCtx::add_object_id	inc_ref call [on-disk block reference]	} else if (OB_FAIL(OB_STORAGE_OBJECT_MGR.inc_ref(object_id))) {
+src/storage/blockstore/ob_object_reader_writer.h	122	ObObjectBaseHandle	Handle class definition	class ObObjectBaseHandle
+src/storage/blockstore/ob_object_reader_writer.h	170	ObObjectReadHandle	Handle class definition	class ObObjectReadHandle final
+src/storage/blockstore/ob_object_reader_writer.h	206	ObObjectWriteHandle	Handle class definition : ObObjectBaseHandle	class ObObjectWriteHandle final : public ObObjectBaseHandle
+src/storage/blockstore/ob_object_reader_writer.h	217	ObObjectBatchHandle	Handle class definition : ObObjectBaseHandle	class ObObjectBatchHandle final : public ObObjectBaseHandle
+src/storage/blockstore/ob_object_reader_writer.h	231	ObObjectLinkHandle	Handle class definition : ObObjectBaseHandle	class ObObjectLinkHandle final : public ObObjectBaseHandle
+src/storage/ddl/ob_ddl_clog.cpp	80	ObDDLMacroBlockClogCb::~ObDDLMacroBlockClogCb	dec_ref call [on-disk block reference]	if (macro_block_id_.is_valid() && OB_FAIL(OB_STORAGE_OBJECT_MGR.dec_ref(macro_block_id_))) {
+src/storage/ddl/ob_ddl_clog.cpp	97	ObDDLMacroBlockClogCb::init	inc_ref call [on-disk block reference]	} else if (OB_FAIL(OB_STORAGE_OBJECT_MGR.inc_ref(macro_block_id))) {
+src/storage/ddl/ob_ddl_redo_log_writer.h	87	ObDDLCtrlSpeedItem::inc_ref	inc_ref definition	void inc_ref() { ATOMIC_INC(&ref_cnt_); }
+src/storage/ddl/ob_ddl_redo_log_writer.h	88	ObDDLCtrlSpeedItem::dec_ref	dec_ref definition	int64_t dec_ref() { return ATOMIC_SAF(&ref_cnt_, 1); }
+src/storage/ddl/ob_ddl_redo_log_writer.h	111	ObDDLCtrlSpeedHandle	Handle class definition	class ObDDLCtrlSpeedHandle final
+src/storage/ddl/ob_ddl_redo_log_writer.h	148	ObDDLRedoLogHandle	Handle struct definition	struct ObDDLRedoLogHandle final
+src/storage/ddl/ob_ddl_struct.cpp	52	ObDDLMacroHandle::~ObDDLMacroHandle	reset_macro_block_ref call (reference-count function found by its body)	reset_macro_block_ref();
+src/storage/ddl/ob_ddl_struct.cpp	60	ObDDLMacroHandle::set_block_id	reset_macro_block_ref call (reference-count function found by its body)	} else if (OB_FAIL(reset_macro_block_ref())) {
+src/storage/ddl/ob_ddl_struct.cpp	61	ObDDLMacroHandle::set_block_id	inc_ref call [on-disk block reference]	} else if (OB_FAIL(OB_STORAGE_OBJECT_MGR.inc_ref(block_id))) {
+src/storage/ddl/ob_ddl_struct.cpp	68	ObDDLMacroHandle::reset_macro_block_ref	reset_macro_block_ref definition (reference-count function found by its body: calls dec_ref)	int ObDDLMacroHandle::reset_macro_block_ref()
+src/storage/ddl/ob_ddl_struct.cpp	72	ObDDLMacroHandle::reset_macro_block_ref	dec_ref call [on-disk block reference]	if (OB_FAIL(OB_STORAGE_OBJECT_MGR.dec_ref(block_id_))) {
+src/storage/ddl/ob_ddl_struct.cpp	129	ObDDLKVHandle::operator=	inc_ref call	ddl_kv_->inc_ref();
+src/storage/ddl/ob_ddl_struct.cpp	155	ObDDLKVHandle::set_obj	inc_ref call	ddl_kv->inc_ref();
+src/storage/ddl/ob_ddl_struct.cpp	169	ObDDLKVHandle::reset	dec_ref call	const int64_t ref_cnt = ddl_kv_->dec_ref();
+src/storage/ddl/ob_ddl_struct.h	49	ObDDLMacroHandle	Handle class definition	class ObDDLMacroHandle
+src/storage/ddl/ob_ddl_struct.h	58	ObDDLMacroHandle	reset_macro_block_ref declaration (reference-count function found by its body)	int reset_macro_block_ref();
+src/storage/ddl/ob_ddl_struct.h	102	ObDDLKVHandle	Handle class definition	class ObDDLKVHandle final
+src/storage/ddl/ob_ddl_struct.h	119	ObDDLKVPendingGuard	Guard class definition whose methods reach dec_ref through other functions (ObDDLKVPendingGuard::ObDDLKVPendingGuard > ObDDLKVHandle::reset > dec_ref)	class ObDDLKVPendingGuard final
+src/storage/ddl/ob_hnsw_embedmgr.cpp	375	ObTaskSlotRing::pop_ready_in_order	release_if_managed call (reference-count function found by its body)	slot.task_->release_if_managed();
+src/storage/ddl/ob_hnsw_embedmgr.cpp	414	ObTaskSlotRing::clean_all_slots	release_if_managed call (reference-count function found by its body)	slot.task_->release_if_managed();
+src/storage/ddl/ob_hnsw_embedmgr.cpp	490	ObEmbeddingIOCallbackHandle::retain	retain definition (reference-count function found by its body: changes a reference-count field)	void ObEmbeddingIOCallbackHandle::retain()
+src/storage/ddl/ob_hnsw_embedmgr.cpp	517	ObEmbeddingIOCallbackHandle::release	release definition (reference-count function found by its body: changes a reference-count field)	void ObEmbeddingIOCallbackHandle::release()
+src/storage/ddl/ob_hnsw_embedmgr.cpp	633	ObEmbeddingTaskMgr::submit_batch_info	retain_if_managed call (reference-count function found by its body)	task->retain_if_managed();
+src/storage/ddl/ob_hnsw_embedmgr.cpp	635	ObEmbeddingTaskMgr::submit_batch_info	release_if_managed call (reference-count function found by its body)	task->release_if_managed();
+src/storage/ddl/ob_hnsw_embedmgr.cpp	646	ObEmbeddingTaskMgr::submit_batch_info	release_if_managed call (reference-count function found by its body)	task->release_if_managed();
+src/storage/ddl/ob_hnsw_embedmgr.h	228	ObEmbeddingIOCallbackHandle	Handle class definition : share::ObIEmbeddingCallback	class ObEmbeddingIOCallbackHandle : public share::ObIEmbeddingCallback
+src/storage/ddl/ob_hnsw_embedmgr.h	234	ObEmbeddingIOCallbackHandle	retain declaration (reference-count function found by its body)	void retain() override;
+src/storage/ddl/ob_tablet_ddl_kv_mgr.h	133	ObTabletDDLKvMgr::inc_ref	inc_ref definition	OB_INLINE void inc_ref() { ATOMIC_INC(&ref_cnt_); }
+src/storage/ddl/ob_tablet_ddl_kv_mgr.h	134	ObTabletDDLKvMgr::dec_ref	dec_ref definition	OB_INLINE int64_t dec_ref() { return ATOMIC_SAF(&ref_cnt_, 1 /* just sub 1 */); }
+src/storage/deadlock/ob_deadlock_detector_mgr.h	199	ObDeadLockDetectorMgr::InnerAllocHandle	Handle class definition	class InnerAllocHandle
+src/storage/deadlock/ob_lcl_scheme/ob_lcl_node.cpp	112	ObLCLNode::register_timer_task	add_self_ref_count_ call (other name)	if (CLICK() && OB_FAIL(add_self_ref_count_())) {
+src/storage/deadlock/ob_lcl_scheme/ob_lcl_node.cpp	118	ObLCLNode::register_timer_task	revert_self_ref_count_ call (other name)	revert_self_ref_count_();
+src/storage/deadlock/ob_lcl_scheme/ob_lcl_node.cpp	151	ObLCLNode::unregister_timer_task	revert_self_ref_count_ call (other name)	revert_self_ref_count_();
+src/storage/deadlock/ob_lcl_scheme/ob_lcl_node.cpp	212	ObLCLNode::add_self_ref_count_	add_self_ref_count_ definition (other name)	int ObLCLNode::add_self_ref_count_()
+src/storage/deadlock/ob_lcl_scheme/ob_lcl_node.cpp	235	ObLCLNode::revert_self_ref_count_	revert_self_ref_count_ definition (other name)	void ObLCLNode::revert_self_ref_count_()
+src/storage/deadlock/ob_lcl_scheme/ob_lcl_node.cpp	951	ObLCLNode::PushStateTask::runTimerTask	revert_self_ref_count_ call (other name)	lcl_node_.revert_self_ref_count_();
+src/storage/deadlock/ob_lcl_scheme/ob_lcl_node.h	156	ObLCLNode	add_self_ref_count_ declaration (other name)	int add_self_ref_count_();
+src/storage/deadlock/ob_lcl_scheme/ob_lcl_node.h	157	ObLCLNode	revert_self_ref_count_ declaration (other name)	void revert_self_ref_count_();
+src/storage/fts/dict/ob_dic_loader.cpp	161	ObDicLoaderHandle::operator=	inc_ref call	loader_->inc_ref();
+src/storage/fts/dict/ob_dic_loader.cpp	170	ObDicLoaderHandle::reset	dec_ref call	const int64_t ref_cnt = loader_->dec_ref();
+src/storage/fts/dict/ob_dic_loader.cpp	187	ObDicLoaderHandle::set_loader	inc_ref call	loader_->inc_ref();
+src/storage/fts/dict/ob_ft_cache_container.h	31	ObFTCacheRangeHandle	Handle struct definition	struct ObFTCacheRangeHandle
+src/storage/fts/dict/ob_gen_dic_loader.cpp	135	ObGenDicLoader::get_dic_loader	inc_ref call	} else if (OB_FALSE_IT(dic_loader->inc_ref())) {
+src/storage/lob/ob_lob_manager.cpp	2352	ObJsonLobHandle	Handle class definition	class ObJsonLobHandle
+src/storage/ls/ob_ls_tablet_service.cpp	1217	ObLSTabletService::replay_create_tablet	inc_macro_ref_cnt call (other name) [on-disk block reference]	} else if (OB_FAIL(tablet->inc_macro_ref_cnt())) {
+src/storage/memtable/mvcc/ob_keybtree.cpp	232	BaseHandle::acquire_ref	acquire_ref definition (other name)	int BaseHandle<BtreeKey, BtreeVal>::acquire_ref()
+src/storage/memtable/mvcc/ob_keybtree.cpp	853	Iterator::set_key_range	acquire_ref call (other name)	if (OB_FAIL(scan_handle_.acquire_ref())) {
+src/storage/memtable/mvcc/ob_keybtree.cpp	885	Iterator::get_next	release_ref call (other name)	scan_handle_.release_ref();
+src/storage/memtable/mvcc/ob_keybtree.cpp	993	Iterator::estimate_element_count	release_ref call (other name)	scan_handle_.release_ref();
+src/storage/memtable/mvcc/ob_keybtree.cpp	1565	ObKeyBtree::insert	acquire_ref call (other name)	if (OB_FAIL(handle.acquire_ref())) {
+src/storage/memtable/mvcc/ob_keybtree.cpp	1583	ObKeyBtree::insert	release_ref call (other name)	handle.release_ref();
+src/storage/memtable/mvcc/ob_keybtree.cpp	1604	ObKeyBtree::insert_or_get	acquire_ref call (other name)	if (OB_FAIL(handle.acquire_ref())) {
+src/storage/memtable/mvcc/ob_keybtree.cpp	1623	ObKeyBtree::insert_or_get	release_ref call (other name)	handle.release_ref();
+src/storage/memtable/mvcc/ob_keybtree.cpp	1642	ObKeyBtree::get	acquire_ref call (other name)	if (OB_FAIL(handle.acquire_ref())) {
+src/storage/memtable/mvcc/ob_keybtree.cpp	1657	ObKeyBtree::get	acquire_ref call (other name)	if (OB_FAIL(handle.acquire_ref())) {
+src/storage/memtable/mvcc/ob_keybtree.h	267	ObKeyBtree::WriteHandle	Handle alias of WriteHandle<BtreeKey, BtreeVal>	typedef WriteHandle<BtreeKey, BtreeVal> WriteHandle;
+src/storage/memtable/mvcc/ob_keybtree.h	268	ObKeyBtree::ScanHandle	Handle alias of ScanHandle<BtreeKey, BtreeVal>	typedef ScanHandle<BtreeKey, BtreeVal> ScanHandle;
+src/storage/memtable/mvcc/ob_keybtree.h	269	ObKeyBtree::GetHandle	Handle alias of GetHandle<BtreeKey, BtreeVal>	typedef GetHandle<BtreeKey, BtreeVal> GetHandle;
+src/storage/memtable/mvcc/ob_keybtree_deps.h	66	RWLock::set_spin	reference-count change: ATOMIC_AAF on read_ref_	void set_spin() { UNUSED(ATOMIC_AAF(&read_ref_, 1)); }
+src/storage/memtable/mvcc/ob_keybtree_deps.h	95	RWLock::rdunlock	reference-count change: ATOMIC_FAA on read_ref_	void rdunlock() { UNUSED(ATOMIC_FAA(&read_ref_, -2)); }
+src/storage/memtable/mvcc/ob_keybtree_deps.h	407	BaseHandle	Handle class definition	class BaseHandle
+src/storage/memtable/mvcc/ob_keybtree_deps.h	413	BaseHandle::~BaseHandle	release_ref call (other name)	~BaseHandle() { release_ref(); }
+src/storage/memtable/mvcc/ob_keybtree_deps.h	415	BaseHandle	acquire_ref declaration (other name)	int acquire_ref();
+src/storage/memtable/mvcc/ob_keybtree_deps.h	416	BaseHandle::release_ref	release_ref definition (other name)	void release_ref()
+src/storage/memtable/mvcc/ob_keybtree_deps.h	434	GetHandle	Handle class definition : BaseHandle<BtreeKey, BtreeVal>	class GetHandle: public BaseHandle<BtreeKey, BtreeVal>
+src/storage/memtable/mvcc/ob_keybtree_deps.h	437	GetHandle::BaseHandle	Handle alias of BaseHandle<BtreeKey, BtreeVal>	typedef BaseHandle<BtreeKey, BtreeVal> BaseHandle;
+src/storage/memtable/mvcc/ob_keybtree_deps.h	447	ScanHandle	Handle class definition : BaseHandle<BtreeKey, BtreeVal>	class ScanHandle: public BaseHandle<BtreeKey, BtreeVal>
+src/storage/memtable/mvcc/ob_keybtree_deps.h	450	ScanHandle::BaseHandle	Handle alias of BaseHandle<BtreeKey, BtreeVal>	typedef BaseHandle<BtreeKey, BtreeVal> BaseHandle;
+src/storage/memtable/mvcc/ob_keybtree_deps.h	461	ScanHandle::reset	release_ref call (other name)	this->release_ref();
+src/storage/memtable/mvcc/ob_keybtree_deps.h	482	WriteHandle	Handle class definition : BaseHandle<BtreeKey, BtreeVal>	class WriteHandle: public BaseHandle<BtreeKey, BtreeVal>
+src/storage/memtable/mvcc/ob_keybtree_deps.h	485	WriteHandle::BaseHandle	Handle alias of BaseHandle<BtreeKey, BtreeVal>	typedef BaseHandle<BtreeKey, BtreeVal> BaseHandle;
+src/storage/memtable/mvcc/ob_keybtree_deps.h	591	Iterator::ScanHandle	Handle alias of ScanHandle<BtreeKey, BtreeVal>	typedef ScanHandle<BtreeKey, BtreeVal> ScanHandle;
+src/storage/memtable/mvcc/ob_mvcc_ctx.h	254	ObMvccWriteGuard	Guard class definition whose methods reach acquire_ctx_ref_ through other functions (ObMvccWriteGuard::~ObMvccWriteGuard > ObTxCtx::submit_redo_after_write > ObTxRedoSubmitter::parallel_submit > ObTxRedoSubmitter::_submit_redo_pipeline_ > ObTxRedoSubmitter::submit_log_block_out_ > ObTxCtx::submit_redo_log_out > acquire_ctx_ref_)	class ObMvccWriteGuard
+src/storage/memtable/ob_memtable.cpp	2778	ObMemtable::dec_write_ref	dec_write_ref definition (other name)	int64_t ObMemtable::dec_write_ref()
+src/storage/memtable/ob_memtable.cpp	2793	ObMemtable::dec_write_ref	dec_write_ref_ call (other name)	int64_t old_write_ref_cnt = dec_write_ref_();
+src/storage/memtable/ob_memtable.h	202	ObMemtable	dec_write_ref declaration (other name)	virtual int64_t dec_write_ref() override;
+src/storage/memtable/ob_memtable_context.cpp	199	ObMemtableCtx::inc_ref	inc_ref definition	void ObMemtableCtx::inc_ref()
+src/storage/memtable/ob_memtable_context.cpp	204	ObMemtableCtx::dec_ref	dec_ref definition	void ObMemtableCtx::dec_ref()
+src/storage/memtable/ob_memtable_context.h	335	ObMemtableCtx	inc_ref declaration	virtual void inc_ref();
+src/storage/memtable/ob_memtable_context.h	336	ObMemtableCtx	dec_ref declaration	virtual void dec_ref();
+src/storage/memtable/ob_memtable_interface.h	51	ObIMemtableCtx	inc_ref declaration	virtual void inc_ref() = 0;
+src/storage/memtable/ob_memtable_interface.h	52	ObIMemtableCtx	dec_ref declaration	virtual void dec_ref() = 0;
+src/storage/memtable/ob_memtable_interface.h	146	ObIMemtable::inc_write_ref	inc_write_ref definition (other name)	virtual int64_t inc_write_ref() { return OB_INVALID_COUNT; }
+src/storage/memtable/ob_memtable_interface.h	147	ObIMemtable::dec_write_ref	dec_write_ref definition (other name)	virtual int64_t dec_write_ref() { return OB_INVALID_COUNT; }
+src/storage/memtable/ob_memtable_interface.h	178	ObIMemtable::dec_ref	dec_ref definition; dec_ref call	virtual int64_t dec_ref() { return ObITable::dec_ref(); }
+src/storage/meta_mem/ob_meta_obj_struct.h	159	ObMetaObjGuard	Guard class definition whose methods call dec_ref, inc_ref	class ObMetaObjGuard
+src/storage/meta_mem/ob_meta_obj_struct.h	258	ObMetaObjGuard::set_obj	inc_ref call	obj_->inc_ref();
+src/storage/meta_mem/ob_meta_obj_struct.h	278	ObMetaObjGuard::set_obj	inc_ref call	obj_->inc_ref();
+src/storage/meta_mem/ob_meta_obj_struct.h	323	operator=	inc_ref call	other.obj_->inc_ref();
+src/storage/meta_mem/ob_meta_obj_struct.h	362	ObMetaObjGuard::reset_obj	dec_ref call	const int64_t ref_cnt = obj_->dec_ref();
+src/storage/meta_mem/ob_storage_meta_cache.cpp	290	ObStorageMetaValueHandle::new_value	inc_ref call	cache_value_->inc_ref();
+src/storage/meta_mem/ob_storage_meta_cache.cpp	305	ObStorageMetaValueHandle::set_cache_value	inc_ref call	value->inc_ref();
+src/storage/meta_mem/ob_storage_meta_cache.cpp	319	ObStorageMetaValueHandle::reset	dec_ref call	} else if (0 == cache_value_->dec_ref()) {
+src/storage/meta_mem/ob_storage_meta_cache.h	135	ObStorageMetaCacheValue::inc_ref	inc_ref definition	void inc_ref() { ATOMIC_INC(&ref_cnt_); }
+src/storage/meta_mem/ob_storage_meta_cache.h	136	ObStorageMetaCacheValue::dec_ref	dec_ref definition	int64_t dec_ref() { return ATOMIC_SAF(&ref_cnt_, 1); }
+src/storage/meta_mem/ob_storage_meta_cache.h	144	ObStorageMetaValueHandle	Handle class definition	class ObStorageMetaValueHandle final
+src/storage/meta_mem/ob_storage_meta_cache.h	167	ObStorageMetaHandle	Handle class definition	class ObStorageMetaHandle final
+src/storage/meta_mem/ob_storage_meta_mem_mgr.cpp	686	ObStorageMetaMemMgr::push_tablet_into_gc_queue	release_tablet call (reference-count function found by its body)	release_tablet(tablet, false/*return tablet buffer ptr after release*/);
+src/storage/meta_mem/ob_storage_meta_mem_mgr.cpp	728	ObStorageMetaMemMgr::gc_tablets_in_queue	release_tablet call (reference-count function found by its body)	release_tablet(tablet, false/* return tablet buffer ptr after release*/);
+src/storage/meta_mem/ob_storage_meta_mem_mgr.cpp	768	ObStorageMetaMemMgr::release_tablet	release_tablet definition (reference-count function found by its body: calls dec_macro_ref_cnt)	void *ObStorageMetaMemMgr::release_tablet(ObTablet *tablet, const bool return_buf_ptr_after_release)
+src/storage/meta_mem/ob_storage_meta_mem_mgr.cpp	771	ObStorageMetaMemMgr::release_tablet	dec_macro_ref_cnt call (other name) [on-disk block reference]	tablet->dec_macro_ref_cnt();
+src/storage/meta_mem/ob_storage_meta_mem_mgr.cpp	2156	ObStorageMetaMemMgr::try_wash_tablet_from_gc_queue	release_tablet call (reference-count function found by its body)	free_obj = release_tablet(tablet, true/*return tablet buffer ptr after release*/);
+src/storage/meta_mem/ob_storage_meta_mem_mgr.cpp	2158	ObStorageMetaMemMgr::try_wash_tablet_from_gc_queue	release_tablet call (reference-count function found by its body)	release_tablet(tablet, false/*return tablet buffer ptr after release*/);
+src/storage/meta_mem/ob_storage_meta_mem_mgr.h	458	ObStorageMetaMemMgr	release_tablet declaration (reference-count function found by its body)	void *release_tablet(ObTablet *tablet, const bool return_buf_ptr_after_release);
+src/storage/meta_mem/ob_tablet_handle.cpp	76	ObTabletHandle::reset	dec_ref call	const int64_t ref_cnt = obj_->dec_ref();
+src/storage/meta_mem/ob_tablet_handle.cpp	101	ObTabletHandle::reset	dec_macro_ref_cnt call (other name) [on-disk block reference]	obj_->dec_macro_ref_cnt();
+src/storage/meta_mem/ob_tablet_handle.h	37	ObTabletHandle	Handle class definition : ObMetaObjGuard<ObTablet>	class ObTabletHandle : public ObMetaObjGuard<ObTablet>
+src/storage/meta_mem/ob_tablet_meta_mem_mgr.cpp	688	ObTabletMetaMemMgr::push_tablet_into_gc_queue	release_tablet call (reference-count function found by its body) [not built]	release_tablet(tablet, false/*return tablet buffer ptr after release*/);
+src/storage/meta_mem/ob_tablet_meta_mem_mgr.cpp	730	ObTabletMetaMemMgr::gc_tablets_in_queue	release_tablet call (reference-count function found by its body) [not built]	release_tablet(tablet, false/* return tablet buffer ptr after release*/);
+src/storage/meta_mem/ob_tablet_meta_mem_mgr.cpp	771	ObTabletMetaMemMgr::release_tablet	release_tablet definition (reference-count function found by its body: calls dec_macro_ref_cnt) [not built]	void *ObTabletMetaMemMgr::release_tablet(ObTablet *tablet, const bool return_buf_ptr_after_release)
+src/storage/meta_mem/ob_tablet_meta_mem_mgr.cpp	774	ObTabletMetaMemMgr::release_tablet	dec_macro_ref_cnt call (other name) [on-disk block reference] [not built]	tablet->dec_macro_ref_cnt();
+src/storage/meta_mem/ob_tablet_meta_mem_mgr.cpp	2168	ObTabletMetaMemMgr::try_wash_tablet_from_gc_queue	release_tablet call (reference-count function found by its body) [not built]	free_obj = release_tablet(tablet, true/*return tablet buffer ptr after release*/);
+src/storage/meta_mem/ob_tablet_meta_mem_mgr.cpp	2170	ObTabletMetaMemMgr::try_wash_tablet_from_gc_queue	release_tablet call (reference-count function found by its body) [not built]	release_tablet(tablet, false/*return tablet buffer ptr after release*/);
+src/storage/meta_mem/ob_tablet_meta_mem_mgr.h	456	ObTabletMetaMemMgr	release_tablet declaration (reference-count function found by its body) [not built]	void *release_tablet(ObTablet *tablet, const bool return_buf_ptr_after_release);
+src/storage/meta_mem/ob_tablet_pointer.cpp	98	ObTabletPointer::reset_obj	dec_ref call	const int64_t ref_cnt = obj_.ptr_->dec_ref();
+src/storage/meta_mem/ob_tablet_pointer.cpp	151	ObTabletPointer::hook_obj	inc_ref call	t->inc_ref();
+src/storage/meta_mem/ob_tablet_pointer.cpp	218	ObTabletPointer::set_obj	inc_ref call	obj_.ptr_->inc_ref();
+src/storage/meta_mem/ob_tablet_pointer.cpp	289	ObTabletPointer::dump_meta_obj	dec_ref call	} else if (0 != obj_.ptr_->dec_ref()) {
+src/storage/meta_mem/ob_tablet_pointer.cpp	308	ObTabletPointer::dump_meta_obj	inc_ref call	meta_obj.ptr_->inc_ref();
+src/storage/meta_mem/ob_tablet_pointer.cpp	315	ObTabletPointer::dump_meta_obj	inc_ref call	obj_.ptr_->inc_ref();
+src/storage/meta_mem/ob_tablet_pointer.cpp	348	ObTabletPointer::deep_copy	inc_ref call	obj_.ptr_->inc_ref();
+src/storage/meta_mem/ob_tablet_pointer.h	37	ObDDLKvMgrHandle	Handle alias of ObMetaObjGuard<ObTabletDDLKvMgr>	typedef ObMetaObjGuard<ObTabletDDLKvMgr> ObDDLKvMgrHandle;
+src/storage/meta_mem/ob_tablet_pointer_handle.cpp	57	ObTabletPointerHandle::reset	dec_handle_ref call (other name)	} else if (OB_FAIL(map_->dec_handle_ref(ObResourceHandle<ObTabletPointer>::ptr_))) {
+src/storage/meta_mem/ob_tablet_pointer_handle.cpp	91	ObTabletPointerHandle::set	inc_handle_ref call (other name)	if (OB_FAIL(map->inc_handle_ref(ptr))) {
+src/storage/meta_mem/ob_tablet_pointer_handle.h	30	ObTabletPointerHandle	Handle class definition : ObResourceHandle<ObTabletPointer>	class ObTabletPointerHandle : public ObResourceHandle<ObTabletPointer>
+src/storage/meta_mem/ob_tablet_pointer_map.cpp	91	ObTabletPointerMap::inner_erase	dec_handle_ref call (other name)	if (OB_FAIL(ResourceMap::dec_handle_ref(ptr))) {
+src/storage/meta_mem/ob_tablet_pointer_map.cpp	573	ObTabletPointerMap::get_meta_obj_with_external_memory	dec_macro_ref_cnt call (other name) [on-disk block reference]	t->dec_macro_ref_cnt();
+src/storage/multi_data_source/mds_table_handle.h	34	MdsTableHandle	Handle class definition	class MdsTableHandle
+src/storage/multi_data_source/mds_table_mgr.cpp	296	MdsTableMgrHandle::reset	dec_ref call	mgr_->dec_ref();
+src/storage/multi_data_source/mds_table_mgr.cpp	311	MdsTableMgrHandle::set_mds_table_mgr	inc_ref call	mgr_->inc_ref();
+src/storage/multi_data_source/mds_table_mgr.h	121	ObMdsTableMgr::inc_ref	inc_ref definition	void inc_ref() { ATOMIC_INC(&ref_cnt_); };
+src/storage/multi_data_source/mds_table_mgr.h	122	ObMdsTableMgr::dec_ref	dec_ref definition	void dec_ref() { ATOMIC_DEC(&ref_cnt_); };
+src/storage/multi_data_source/mds_table_mgr.h	167	MdsTableMgrHandle	Handle class definition	class MdsTableMgrHandle
+src/storage/ob_i_memtable_mgr.cpp	242	ObIMemtableMgr::reset_tables	dec_ref call	const int64_t ref_cnt = memtable->dec_ref();
+src/storage/ob_i_memtable_mgr.cpp	254	ObIMemtableMgr::release_head_memtable	release_head_memtable definition (reference-count function found by its body: calls dec_ref)	void ObIMemtableMgr::release_head_memtable()
+src/storage/ob_i_memtable_mgr.cpp	262	ObIMemtableMgr::release_head_memtable	dec_ref call	const int64_t ref_cnt = memtable->dec_ref();
+src/storage/ob_i_memtable_mgr.cpp	269	ObIMemtableMgr::release_tail_memtable	release_tail_memtable definition (reference-count function found by its body: calls dec_ref)	void ObIMemtableMgr::release_tail_memtable()
+src/storage/ob_i_memtable_mgr.cpp	278	ObIMemtableMgr::release_tail_memtable	dec_ref call	const int64_t ref_cnt = memtable->dec_ref();
+src/storage/ob_i_memtable_mgr.cpp	337	ObIMemtableMgr::add_memtable_	inc_ref call	tables_[idx]->inc_ref();
+src/storage/ob_i_memtable_mgr.cpp	386	ObMemtableMgrHandle::reset	dec_ref call	memtable_mgr_->dec_ref();
+src/storage/ob_i_memtable_mgr.cpp	389	ObMemtableMgrHandle::reset	dec_ref call	if (0 == memtable_mgr_->dec_ref()) {
+src/storage/ob_i_memtable_mgr.cpp	411	ObMemtableMgrHandle::operator=	inc_ref call	other.memtable_mgr_->inc_ref();
+src/storage/ob_i_memtable_mgr.cpp	426	ObMemtableMgrHandle::set_memtable_mgr	inc_ref call	memtable_mgr_->inc_ref();
+src/storage/ob_i_memtable_mgr.h	284	ObIMemtableMgr::dec_ref	dec_ref definition	OB_INLINE int64_t dec_ref() { return ATOMIC_SAF(&ref_cnt_, 1 /* just sub 1 */); }
+src/storage/ob_i_memtable_mgr.h	286	ObIMemtableMgr::inc_ref	inc_ref definition	OB_INLINE void inc_ref() { ATOMIC_INC(&ref_cnt_); }
+src/storage/ob_i_memtable_mgr.h	315	ObIMemtableMgr	release_head_memtable declaration (reference-count function found by its body)	void release_head_memtable();
+src/storage/ob_i_memtable_mgr.h	316	ObIMemtableMgr	release_tail_memtable declaration (reference-count function found by its body)	void release_tail_memtable();
+src/storage/ob_i_memtable_mgr.h	333	ObMemtableMgrHandle	Handle class definition	class ObMemtableMgrHandle final
+src/storage/ob_i_table.cpp	185	ObTableHandleV2::reset	dec_ref call	const int64_t ref_cnt = table_->dec_ref();
+src/storage/ob_i_table.cpp	386	ObTableHandleV2::operator=	inc_ref call	other.table_->inc_ref();
+src/storage/ob_i_table.cpp	419	ObTableHandleV2::set_table	inc_ref call	table_->inc_ref();
+src/storage/ob_i_table.cpp	438	ObTableHandleV2::set_sstable	inc_ref call	table_->inc_ref();
+src/storage/ob_i_table.cpp	455	ObTableHandleV2::set_sstable_with_tablet	inc_ref call	table_->inc_ref();
+src/storage/ob_i_table.cpp	472	ObTableHandleV2::set_sstable	inc_ref call	table_->inc_ref();
+src/storage/ob_i_table.h	244	ObITable	inc_ref declaration	virtual void inc_ref();
+src/storage/ob_i_table.h	245	ObITable	dec_ref declaration	virtual int64_t dec_ref();
+src/storage/ob_i_table.h	407	ObITable::inc_ref	inc_ref definition	inline void ObITable::inc_ref()
+src/storage/ob_i_table.h	413	ObITable::dec_ref	dec_ref definition	inline int64_t ObITable::dec_ref()
+src/storage/ob_i_tablet_memtable.cpp	341	ObITabletMemtable::inc_write_ref_	inc_write_ref_ definition (other name)	int64_t ObITabletMemtable::inc_write_ref_() { return ATOMIC_AAF(&write_ref_cnt_, 1); }
+src/storage/ob_i_tablet_memtable.cpp	342	ObITabletMemtable::dec_write_ref_	dec_write_ref_ definition (other name)	int64_t ObITabletMemtable::dec_write_ref_() { return ATOMIC_SAF(&write_ref_cnt_, 1); }
+src/storage/ob_i_tablet_memtable.h	232	ObITabletMemtable::dec_ref	dec_ref definition; dec_ref call	virtual int64_t dec_ref() { return ObITable::dec_ref(); }
+src/storage/ob_i_tablet_memtable.h	235	ObITabletMemtable::inc_write_ref	inc_write_ref definition (other name); inc_write_ref_ call (other name)	virtual int64_t inc_write_ref() override { return inc_write_ref_(); }
+src/storage/ob_i_tablet_memtable.h	236	ObITabletMemtable::dec_write_ref	dec_write_ref definition (other name); dec_write_ref_ call (other name)	virtual int64_t dec_write_ref() override { return dec_write_ref_(); }
+src/storage/ob_i_tablet_memtable.h	375	ObITabletMemtable	inc_write_ref_ declaration (other name)	int64_t inc_write_ref_();
+src/storage/ob_i_tablet_memtable.h	376	ObITabletMemtable	dec_write_ref_ declaration (other name)	int64_t dec_write_ref_();
+src/storage/ob_micro_block_handle_mgr.h	40	ObMicroBlockDataHandle	Handle struct definition	struct ObMicroBlockDataHandle {
+src/storage/ob_protected_memtable_mgr_handle.h	102	ObProtectedMemtableMgrHandle	Handle class definition	class ObProtectedMemtableMgrHandle
+src/storage/ob_resource_map.h	47	ObResourceValueStore	inc_ref_cnt declaration	virtual int inc_ref_cnt();
+src/storage/ob_resource_map.h	48	ObResourceValueStore	dec_ref_cnt declaration	virtual int dec_ref_cnt(int64_t &ref_cnt);
+src/storage/ob_resource_map.h	72	ObResourceValueStore::inc_ref_cnt	inc_ref_cnt definition	int ObResourceValueStore<Value>::inc_ref_cnt()
+src/storage/ob_resource_map.h	80	ObResourceValueStore::dec_ref_cnt	dec_ref_cnt definition	int ObResourceValueStore<Value>::dec_ref_cnt(int64_t &ref_cnt)
+src/storage/ob_resource_map.h	102	ObResourceHandle	Handle class definition	class ObResourceHandle
+src/storage/ob_resource_map.h	179	ObResourceMap	dec_handle_ref declaration (other name)	int dec_handle_ref(ObResourceValueStore<Value> *ptr);
+src/storage/ob_resource_map.h	181	ObResourceMap	inc_handle_ref declaration (other name)	int inc_handle_ref(ObResourceValueStore<Value> *ptr);
+src/storage/ob_resource_map.h	300	ObResourceMap::get_without_lock	inc_ref_cnt call	} else if (OB_FAIL(ptr->inc_ref_cnt())) {
+src/storage/ob_resource_map.h	336	ObResourceMap::set	inc_handle_ref call (other name)	} else if (OB_FAIL(inc_handle_ref(value_store))) {
+src/storage/ob_resource_map.h	373	ObResourceMap::erase	dec_handle_ref call (other name)	} else if (OB_FAIL(dec_handle_ref(ptr))) {
+src/storage/ob_resource_map.h	437	ObResourceMap::inc_handle_ref	inc_handle_ref definition (other name)	int ObResourceMap<Key, Value>::inc_handle_ref(ValueStore *ptr)
+src/storage/ob_resource_map.h	446	ObResourceMap::inc_handle_ref	inc_ref_cnt call	} else if (OB_FAIL(ptr->inc_ref_cnt())) {
+src/storage/ob_resource_map.h	452	ObResourceMap::dec_handle_ref	dec_handle_ref definition (other name)	int ObResourceMap<Key, Value>::dec_handle_ref(ValueStore *ptr)
+src/storage/ob_resource_map.h	462	ObResourceMap::dec_handle_ref	dec_ref_cnt call	} else if (OB_FAIL(ptr->dec_ref_cnt(ref_cnt))) {
+src/storage/ob_storage_table_guard.cpp	162	ObStorageTableGuard::refresh_and_protect_memtable_for_replay	check_freeze_to_inc_write_ref call (other name)	} else if (OB_FAIL(check_freeze_to_inc_write_ref(static_cast<ObMemtable*>(tablet_memtable), need_retry))) {
+src/storage/ob_storage_table_guard.cpp	243	ObStorageTableGuard::reset	dec_write_ref call (other name)	memtable_->dec_write_ref();
+src/storage/ob_storage_table_guard.cpp	254	ObStorageTableGuard::double_check_inc_write_ref	double_check_inc_write_ref definition (other name)	void ObStorageTableGuard::double_check_inc_write_ref(
+src/storage/ob_storage_table_guard.cpp	263	ObStorageTableGuard::double_check_inc_write_ref	inc_write_ref call (other name)	memtable->inc_write_ref();
+src/storage/ob_storage_table_guard.cpp	268	ObStorageTableGuard::double_check_inc_write_ref	dec_write_ref call (other name)	memtable->dec_write_ref();
+src/storage/ob_storage_table_guard.cpp	291	ObStorageTableGuard::check_freeze_to_inc_write_ref	check_freeze_to_inc_write_ref definition (other name)	int ObStorageTableGuard::check_freeze_to_inc_write_ref(ObMemtable *memtable, bool &need_retry)
+src/storage/ob_storage_table_guard.cpp	328	ObStorageTableGuard::check_freeze_to_inc_write_ref	double_check_inc_write_ref call (other name)	double_check_inc_write_ref(old_freeze_flag, is_tablet_freeze, memtable, need_retry);
+src/storage/ob_storage_table_guard.cpp	331	ObStorageTableGuard::check_freeze_to_inc_write_ref	double_check_inc_write_ref call (other name)	double_check_inc_write_ref(old_freeze_flag, is_tablet_freeze, memtable, need_retry);
+src/storage/ob_storage_table_guard.cpp	382	ObStorageTableGuard::check_freeze_to_inc_write_ref	double_check_inc_write_ref call (other name)	double_check_inc_write_ref(old_freeze_flag, is_tablet_freeze, memtable, need_retry);
+src/storage/ob_storage_table_guard.cpp	427	ObStorageTableGuard::need_to_refresh_table	check_freeze_to_inc_write_ref call (other name)	} else if (OB_FAIL(check_freeze_to_inc_write_ref(memtable, bool_ret))) {
+src/storage/ob_storage_table_guard.h	47	ObStorageTableGuard	Guard class definition whose methods call check_freeze_to_inc_write_ref, dec_write_ref, double_check_inc_write_ref, inc_write_ref	class ObStorageTableGuard
+src/storage/ob_storage_table_guard.h	78	ObStorageTableGuard	double_check_inc_write_ref declaration (other name)	void double_check_inc_write_ref(
+src/storage/ob_storage_table_guard.h	83	ObStorageTableGuard	check_freeze_to_inc_write_ref declaration (other name)	int check_freeze_to_inc_write_ref(memtable::ObMemtable *table, bool &bool_ret);
+src/storage/ob_tablet_autoincrement_service.h	117	ObTabletAutoincMgrAllocHandle	Handle class definition	class ObTabletAutoincMgrAllocHandle
+src/storage/scheduler/ob_independent_dag.cpp	528	ObDagExecutor::run	acquire_ call (reference-count function found by its body)	} else if (OB_FAIL(acquire_())) {
+src/storage/scheduler/ob_independent_dag.cpp	539	ObDagExecutor::run	release_ call (reference-count function found by its body)	(void) release_();
+src/storage/scheduler/ob_independent_dag.cpp	544	ObDagExecutor::acquire_	acquire_ definition (reference-count function found by its body: changes a reference-count field)	int ObDagExecutor::acquire_()
+src/storage/scheduler/ob_independent_dag.cpp	566	ObDagExecutor::release_	release_ definition (reference-count function found by its body: changes a reference-count field)	void ObDagExecutor::release_()
+src/storage/scheduler/ob_independent_dag.h	90	ObDagExecutor	acquire_ declaration (reference-count function found by its body)	int acquire_();
+src/storage/scheduler/ob_independent_dag.h	91	ObDagExecutor	release_ declaration (reference-count function found by its body)	void release_();
+src/storage/slog_ckpt/ob_linked_macro_block_struct.h	105	ObMetaBlockListHandle	Handle class definition	class ObMetaBlockListHandle final
+src/storage/slog_ckpt/ob_local_storage_checkpoint_slog_handler.cpp	295	ObLocalStorageCheckpointSlogHandler::do_replay_single_snapshot	inc_linked_block_ref call (other name) [on-disk block reference]	} else if (OB_FAIL(ObServerSnapshotHandler::inc_linked_block_ref(
+src/storage/slog_ckpt/ob_local_storage_checkpoint_slog_handler.cpp	324	ObLocalStorageCheckpointSlogHandler::replay_snapshot_ls	inc_linked_block_ref call (other name) [on-disk block reference]	} else if (OB_FAIL(ObServerSnapshotHandler::inc_linked_block_ref(
+src/storage/slog_ckpt/ob_local_storage_checkpoint_writer.cpp	255	ObLocalStorageCheckpointWriter::persist_and_copy_tablet	inc_macro_ref_cnt call (other name) [on-disk block reference]	} else if (OB_FAIL(new_tablet->inc_macro_ref_cnt())) {
+src/storage/slog_ckpt/ob_local_storage_checkpoint_writer.cpp	319	ObLocalStorageCheckpointWriter::copy_tablet	inc_macro_ref_cnt call (other name) [on-disk block reference]	} else if (OB_FAIL(tablet->inc_macro_ref_cnt())) {
+src/storage/slog_ckpt/ob_local_storage_checkpoint_writer.cpp	457	ObLocalStorageCheckpointWriter::rollback	release_ref_cnt call (other name) [on-disk block reference]	if (OB_FAIL(tablet.release_ref_cnt(allocator, buf, buf_len, pos))) {
+src/storage/slog_ckpt/ob_server_snapshot_handler.cpp	55	ObServerSnapshotHandler::inc_all_linked_block_ref	inc_all_linked_block_ref definition (other name) [on-disk block reference]	int ObServerSnapshotHandler::inc_all_linked_block_ref(
+src/storage/slog_ckpt/ob_server_snapshot_handler.cpp	63	ObServerSnapshotHandler::inc_all_linked_block_ref	inc_linked_block_ref call (other name) [on-disk block reference]	} else if (OB_FAIL(inc_linked_block_ref(*meta_block_list, inc_ls_blocks_ref_succ))) {
+src/storage/slog_ckpt/ob_server_snapshot_handler.cpp	65	ObServerSnapshotHandler::inc_all_linked_block_ref	inc_linked_block_ref call (other name) [on-disk block reference]	} else if (OB_FAIL(inc_linked_block_ref(*meta_block_list, inc_tablet_blocks_ref_succ))) {
+src/storage/slog_ckpt/ob_server_snapshot_handler.cpp	70	ObServerSnapshotHandler::rollback_ref_cnt	rollback_ref_cnt definition (reference-count function found by its body: calls dec_meta_block_ref)	void ObServerSnapshotHandler::rollback_ref_cnt(
+src/storage/slog_ckpt/ob_server_snapshot_handler.cpp	83	ObServerSnapshotHandler::rollback_ref_cnt	dec_meta_block_ref call (other name) [on-disk block reference]	dec_meta_block_ref(*meta_block_list);
+src/storage/slog_ckpt/ob_server_snapshot_handler.cpp	89	ObServerSnapshotHandler::rollback_ref_cnt	dec_meta_block_ref call (other name) [on-disk block reference]	dec_meta_block_ref(*meta_block_list);
+src/storage/slog_ckpt/ob_server_snapshot_handler.cpp	116	ObServerSnapshotHandler::inc_linked_block_ref	inc_linked_block_ref definition (other name) [on-disk block reference]	int ObServerSnapshotHandler::inc_linked_block_ref(
+src/storage/slog_ckpt/ob_server_snapshot_handler.cpp	125	ObServerSnapshotHandler::inc_linked_block_ref	inc_ref call [on-disk block reference]	if (OB_FAIL(OB_STORAGE_OBJECT_MGR.inc_ref(meta_block_list.at(i)))) {
+src/storage/slog_ckpt/ob_server_snapshot_handler.cpp	133	ObServerSnapshotHandler::inc_linked_block_ref	dec_ref call [on-disk block reference]	if (OB_TMP_FAIL(OB_STORAGE_OBJECT_MGR.dec_ref(meta_block_list.at(i)))) {
+src/storage/slog_ckpt/ob_server_snapshot_handler.cpp	142	ObServerSnapshotHandler::dec_meta_block_ref	dec_meta_block_ref definition (other name) [on-disk block reference]	void ObServerSnapshotHandler::dec_meta_block_ref(const ObIArray<blocksstable::MacroBlockId> &meta_block_list)
+src/storage/slog_ckpt/ob_server_snapshot_handler.cpp	146	ObServerSnapshotHandler::dec_meta_block_ref	dec_ref call [on-disk block reference]	if (OB_FAIL(OB_STORAGE_OBJECT_MGR.dec_ref(meta_block_list.at(i)))) {
+src/storage/slog_ckpt/ob_server_snapshot_handler.cpp	180	ObServerSnapshotHandler::delete_server_snapshot	dec_meta_block_ref call (other name) [on-disk block reference]	dec_meta_block_ref(ls_meta_block_list);
+src/storage/slog_ckpt/ob_server_snapshot_handler.cpp	181	ObServerSnapshotHandler::delete_server_snapshot	dec_meta_block_ref call (other name) [on-disk block reference]	dec_meta_block_ref(tablet_meta_block_list);
+src/storage/slog_ckpt/ob_server_snapshot_handler.cpp	260	ObServerSnapshotHandler::inner_delete_tablet_by_addrs	release_ref_cnt call (other name) [on-disk block reference]	if (OB_FAIL(tablet.release_ref_cnt(arena_allocator, buf, buf_len, pos))) {
+src/storage/slog_ckpt/ob_server_snapshot_handler.h	59	ObServerSnapshotHandler	inc_linked_block_ref declaration (other name) [on-disk block reference]	static int inc_linked_block_ref(const ObIArray<blocksstable::MacroBlockId> &meta_block_list, bool &inc_success);
+src/storage/slog_ckpt/ob_server_snapshot_handler.h	62	ObServerSnapshotHandler	inc_all_linked_block_ref declaration (other name) [on-disk block reference]	static int inc_all_linked_block_ref(
+src/storage/slog_ckpt/ob_server_snapshot_handler.h	66	ObServerSnapshotHandler	rollback_ref_cnt declaration (reference-count function found by its body)	static void rollback_ref_cnt(
+src/storage/slog_ckpt/ob_server_snapshot_handler.h	70	ObServerSnapshotHandler	dec_meta_block_ref declaration (other name) [on-disk block reference]	static void dec_meta_block_ref(const ObIArray<blocksstable::MacroBlockId> &meta_block_list);
+src/storage/slog_ckpt/ob_tablet_replay_create_handler.cpp	439	ObTabletReplayCreateHandler::do_replay	replay_inc_macro_ref call (other name) [on-disk block reference]	if (OB_FAIL(replay_inc_macro_ref(replay_item, buf, buf_len, allocator))) {
+src/storage/slog_ckpt/ob_tablet_replay_create_handler.cpp	467	ObTabletReplayCreateHandler::replay_inc_macro_ref	replay_inc_macro_ref definition (other name) [on-disk block reference]	int ObTabletReplayCreateHandler::replay_inc_macro_ref(
+src/storage/slog_ckpt/ob_tablet_replay_create_handler.cpp	479	ObTabletReplayCreateHandler::replay_inc_macro_ref	inc_snapshot_ref_cnt call (other name) [on-disk block reference]	if (OB_FAIL(tablet.inc_snapshot_ref_cnt(allocator, buf, buf_len, pos))) {
+src/storage/slog_ckpt/ob_tablet_replay_create_handler.h	143	ObTabletReplayCreateHandler	replay_inc_macro_ref declaration (other name) [on-disk block reference]	static int replay_inc_macro_ref(
+src/storage/tablelock/ob_lock_memtable_mgr.cpp	177	ObLockMemtableMgr::release_head_memtable_	release_head_memtable call (reference-count function found by its body)	release_head_memtable();
+src/storage/tablet/ob_table_store_util.cpp	455	ObSSTableArray::inc_macro_ref	inc_macro_ref definition (other name) [on-disk block reference]	int ObSSTableArray::inc_macro_ref(bool &is_success) const
+src/storage/tablet/ob_table_store_util.cpp	463	ObSSTableArray::inc_macro_ref	inc_data_ref_cnt call (other name) [on-disk block reference]	} else if (OB_FAIL(inc_data_ref_cnt(inc_data_success))) {
+src/storage/tablet/ob_table_store_util.cpp	464	ObSSTableArray::inc_macro_ref	inc_meta_ref_cnt call (other name) [on-disk block reference]	} else if (OB_FAIL(inc_meta_ref_cnt(inc_meta_success))) {
+src/storage/tablet/ob_table_store_util.cpp	469	ObSSTableArray::inc_macro_ref	dec_data_ref_cnt call (other name) [on-disk block reference]	dec_data_ref_cnt();
+src/storage/tablet/ob_table_store_util.cpp	472	ObSSTableArray::inc_macro_ref	dec_meta_ref_cnt call (other name) [on-disk block reference]	dec_meta_ref_cnt();
+src/storage/tablet/ob_table_store_util.cpp	480	ObSSTableArray::dec_macro_ref	dec_macro_ref definition (other name) [on-disk block reference]	void ObSSTableArray::dec_macro_ref() const
+src/storage/tablet/ob_table_store_util.cpp	486	ObSSTableArray::dec_macro_ref	dec_data_ref_cnt call (other name) [on-disk block reference]	dec_data_ref_cnt();
+src/storage/tablet/ob_table_store_util.cpp	487	ObSSTableArray::dec_macro_ref	dec_meta_ref_cnt call (other name) [on-disk block reference]	dec_meta_ref_cnt();
+src/storage/tablet/ob_table_store_util.cpp	491	ObSSTableArray::inc_meta_ref_cnt	inc_meta_ref_cnt definition (other name) [on-disk block reference]	int ObSSTableArray::inc_meta_ref_cnt(bool &inc_success) const
+src/storage/tablet/ob_table_store_util.cpp	516	ObSSTableArray::inc_meta_ref_cnt	inc_ref call [on-disk block reference]	} else if (OB_FAIL(OB_STORAGE_OBJECT_MGR.inc_ref(macro_id))) {
+src/storage/tablet/ob_table_store_util.cpp	539	ObSSTableArray::inc_meta_ref_cnt	dec_ref call [on-disk block reference]	} else if (OB_TMP_FAIL(OB_STORAGE_OBJECT_MGR.dec_ref(macro_id))) {
+src/storage/tablet/ob_table_store_util.cpp	555	ObSSTableArray::inc_data_ref_cnt	inc_data_ref_cnt definition (other name) [on-disk block reference]	int ObSSTableArray::inc_data_ref_cnt(bool &inc_success) const
+src/storage/tablet/ob_table_store_util.cpp	570	ObSSTableArray::inc_data_ref_cnt	inc_macro_ref call (other name) [on-disk block reference]	if (OB_FAIL(sstable->inc_macro_ref(inc_data_block_success))) {
+src/storage/tablet/ob_table_store_util.cpp	586	ObSSTableArray::inc_data_ref_cnt	dec_macro_ref call (other name) [on-disk block reference]	sstable->dec_macro_ref();
+src/storage/tablet/ob_table_store_util.cpp	598	ObSSTableArray::dec_meta_ref_cnt	dec_meta_ref_cnt definition (other name) [on-disk block reference]	void ObSSTableArray::dec_meta_ref_cnt() const
+src/storage/tablet/ob_table_store_util.cpp	621	ObSSTableArray::dec_meta_ref_cnt	dec_ref call [on-disk block reference]	} else if (OB_FAIL(OB_STORAGE_OBJECT_MGR.dec_ref(macro_id))) {
+src/storage/tablet/ob_table_store_util.cpp	631	ObSSTableArray::dec_data_ref_cnt	dec_data_ref_cnt definition (other name) [on-disk block reference]	void ObSSTableArray::dec_data_ref_cnt() const
+src/storage/tablet/ob_table_store_util.cpp	645	ObSSTableArray::dec_data_ref_cnt	dec_macro_ref call (other name) [on-disk block reference]	sstable->dec_macro_ref();
+src/storage/tablet/ob_table_store_util.h	93	ObSSTableArray	inc_macro_ref declaration (other name) [on-disk block reference]	int inc_macro_ref(bool &is_success) const;
+src/storage/tablet/ob_table_store_util.h	94	ObSSTableArray	dec_macro_ref declaration (other name) [on-disk block reference]	void dec_macro_ref() const;
+src/storage/tablet/ob_table_store_util.h	105	ObSSTableArray	inc_meta_ref_cnt declaration (other name) [on-disk block reference]	int inc_meta_ref_cnt(bool &inc_success) const;
+src/storage/tablet/ob_table_store_util.h	106	ObSSTableArray	inc_data_ref_cnt declaration (other name) [on-disk block reference]	int inc_data_ref_cnt(bool &inc_success) const;
+src/storage/tablet/ob_table_store_util.h	107	ObSSTableArray	dec_meta_ref_cnt declaration (other name) [on-disk block reference]	void dec_meta_ref_cnt() const;
+src/storage/tablet/ob_table_store_util.h	108	ObSSTableArray	dec_data_ref_cnt declaration (other name) [on-disk block reference]	void dec_data_ref_cnt() const;
+src/storage/tablet/ob_tablet.cpp	314	ObTablet::init_for_first_time_creation	inner_inc_macro_ref_cnt call (other name) [on-disk block reference]	} else if (OB_FAIL(inner_inc_macro_ref_cnt())) {
+src/storage/tablet/ob_tablet.cpp	372	ObTablet::init_for_physical_restore	inner_inc_macro_ref_cnt call (other name) [on-disk block reference]	} else if (OB_FAIL(inner_inc_macro_ref_cnt())) {
+src/storage/tablet/ob_tablet.cpp	467	ObTablet::init_for_merge	inner_inc_macro_ref_cnt call (other name) [on-disk block reference]	} else if (OB_FAIL(inner_inc_macro_ref_cnt())) {
+src/storage/tablet/ob_tablet.cpp	540	ObTablet::init_for_defragment	inner_inc_macro_ref_cnt call (other name) [on-disk block reference]	} else if (OB_FAIL(inner_inc_macro_ref_cnt())) {
+src/storage/tablet/ob_tablet.cpp	611	ObTablet::init_for_sstable_replace	inner_inc_macro_ref_cnt call (other name) [on-disk block reference]	} else if (OB_FAIL(inner_inc_macro_ref_cnt())) {
+src/storage/tablet/ob_tablet.cpp	1026	ObTablet::init_with_update_medium_info	inner_inc_macro_ref_cnt call (other name) [on-disk block reference]	} else if (OB_FAIL(inner_inc_macro_ref_cnt())) {
+src/storage/tablet/ob_tablet.cpp	1138	ObTablet::init_with_updated_members	inner_inc_macro_ref_cnt call (other name) [on-disk block reference]	} else if (OB_FAIL(inner_inc_macro_ref_cnt())) {
+src/storage/tablet/ob_tablet.cpp	1204	ObTablet::init_with_mds_sstable	inner_inc_macro_ref_cnt call (other name) [on-disk block reference]	} else if (CLICK_FAIL(inner_inc_macro_ref_cnt())) {
+src/storage/tablet/ob_tablet.cpp	1379	ObTablet::release_ref_cnt	release_ref_cnt definition (other name) [on-disk block reference]	int ObTablet::release_ref_cnt(
+src/storage/tablet/ob_tablet.cpp	1389	ObTablet::release_ref_cnt	dec_macro_ref_cnt call (other name) [on-disk block reference]	dec_macro_ref_cnt();
+src/storage/tablet/ob_tablet.cpp	1394	ObTablet::inc_snapshot_ref_cnt	inc_snapshot_ref_cnt definition (other name) [on-disk block reference]	int ObTablet::inc_snapshot_ref_cnt(
+src/storage/tablet/ob_tablet.cpp	1402	ObTablet::inc_snapshot_ref_cnt	inner_inc_macro_ref_cnt call (other name) [on-disk block reference]	} else if (OB_FAIL(inner_inc_macro_ref_cnt())) {
+src/storage/tablet/ob_tablet.cpp	1460	ObTablet::deserialize_for_replay	inner_inc_macro_ref_cnt call (other name) [on-disk block reference]	} else if (OB_FAIL(inner_inc_macro_ref_cnt())) {
+src/storage/tablet/ob_tablet.cpp	1561	ObTablet::deserialize_post_work	inner_inc_macro_ref_cnt call (other name) [on-disk block reference]	if (FAILEDx(inner_inc_macro_ref_cnt())) {
+src/storage/tablet/ob_tablet.cpp	1948	ObTablet::inc_macro_ref_cnt	inc_macro_ref_cnt definition (other name) [on-disk block reference]	int ObTablet::inc_macro_ref_cnt()
+src/storage/tablet/ob_tablet.cpp	1953	ObTablet::inc_macro_ref_cnt	inner_inc_macro_ref_cnt call (other name) [on-disk block reference]	} else if (OB_FAIL(inner_inc_macro_ref_cnt())) {
+src/storage/tablet/ob_tablet.cpp	1955	ObTablet::inc_macro_ref_cnt	inc_macro_ref_cnt call (other name) [on-disk block reference]	&& OB_FAIL(next_tablet_guard_.get_obj()->inc_macro_ref_cnt())) {
+src/storage/tablet/ob_tablet.cpp	1960	ObTablet::inner_inc_macro_ref_cnt	inner_inc_macro_ref_cnt definition (other name) [on-disk block reference]	int ObTablet::inner_inc_macro_ref_cnt()
+src/storage/tablet/ob_tablet.cpp	1968	ObTablet::inner_inc_macro_ref_cnt	inc_ref_without_aggregated_info call [on-disk block reference]	if (OB_FAIL(inc_ref_without_aggregated_info())) {
+src/storage/tablet/ob_tablet.cpp	1971	ObTablet::inner_inc_macro_ref_cnt	inc_ref_with_aggregated_info call [on-disk block reference]	if (OB_FAIL(inc_ref_with_aggregated_info())) {
+src/storage/tablet/ob_tablet.cpp	1980	ObTablet::inc_ref_with_aggregated_info	inc_ref_with_aggregated_info definition [on-disk block reference]	int ObTablet::inc_ref_with_aggregated_info()
+src/storage/tablet/ob_tablet.cpp	1992	ObTablet::inc_ref_with_aggregated_info	inc_addr_ref_cnt call (other name) [on-disk block reference]	} else if (OB_FAIL(inc_addr_ref_cnt(tablet_addr_, inc_tablet_ref))) {
+src/storage/tablet/ob_tablet.cpp	1993	ObTablet::inc_ref_with_aggregated_info	inc_ref_with_macro_iter call [on-disk block reference]	} else if (OB_FAIL(inc_ref_with_macro_iter(info_iter, inc_other_ref))) {
+src/storage/tablet/ob_tablet.cpp	1997	ObTablet::inc_ref_with_aggregated_info	dec_addr_ref_cnt call (other name) [on-disk block reference]	dec_addr_ref_cnt(tablet_addr_);
+src/storage/tablet/ob_tablet.cpp	2003	ObTablet::inc_ref_with_aggregated_info	dec_ref_with_macro_iter call [on-disk block reference]	dec_ref_with_macro_iter(info_iter);
+src/storage/tablet/ob_tablet.cpp	2014	ObTablet::inc_ref_with_macro_iter	inc_ref_with_macro_iter definition [on-disk block reference]	int ObTablet::inc_ref_with_macro_iter(ObMacroInfoIterator &macro_iter, bool &inc_success) const
+src/storage/tablet/ob_tablet.cpp	2027	ObTablet::inc_ref_with_macro_iter	inc_ref call [on-disk block reference]	} else if (OB_FAIL(OB_STORAGE_OBJECT_MGR.inc_ref(block_info.macro_id_))) {
+src/storage/tablet/ob_tablet.cpp	2063	ObTablet::inc_ref_with_macro_iter	dec_ref call [on-disk block reference]	} else if (OB_TMP_FAIL(OB_STORAGE_OBJECT_MGR.dec_ref(block_info.macro_id_))) {
+src/storage/tablet/ob_tablet.cpp	2095	ObTablet::inc_ref_without_aggregated_info	inc_ref_without_aggregated_info definition [on-disk block reference]	int ObTablet::inc_ref_without_aggregated_info()
+src/storage/tablet/ob_tablet.cpp	2103	ObTablet::inc_ref_without_aggregated_info	inc_addr_ref_cnt call (other name) [on-disk block reference]	if (OB_FAIL(inc_addr_ref_cnt(table_store_addr_.addr_, inc_table_store_ref))) {
+src/storage/tablet/ob_tablet.cpp	2104	ObTablet::inc_ref_without_aggregated_info	inc_addr_ref_cnt call (other name) [on-disk block reference]	} else if (OB_FAIL(inc_addr_ref_cnt(storage_schema_addr_.addr_, inc_storage_schema_ref))) {
+src/storage/tablet/ob_tablet.cpp	2105	ObTablet::inc_ref_without_aggregated_info	inc_addr_ref_cnt call (other name) [on-disk block reference]	} else if (OB_FAIL(inc_addr_ref_cnt(tablet_addr_, inc_tablet_ref))) {
+src/storage/tablet/ob_tablet.cpp	2106	ObTablet::inc_ref_without_aggregated_info	inc_table_store_ref_cnt call (other name) [on-disk block reference]	} else if (OB_FAIL(inc_table_store_ref_cnt(inc_table_store_member_ref))) {
+src/storage/tablet/ob_tablet.cpp	2111	ObTablet::inc_ref_without_aggregated_info	dec_addr_ref_cnt call (other name) [on-disk block reference]	dec_addr_ref_cnt(table_store_addr_.addr_);
+src/storage/tablet/ob_tablet.cpp	2114	ObTablet::inc_ref_without_aggregated_info	dec_addr_ref_cnt call (other name) [on-disk block reference]	dec_addr_ref_cnt(storage_schema_addr_.addr_);
+src/storage/tablet/ob_tablet.cpp	2117	ObTablet::inc_ref_without_aggregated_info	dec_addr_ref_cnt call (other name) [on-disk block reference]	dec_addr_ref_cnt(tablet_addr_);
+src/storage/tablet/ob_tablet.cpp	2120	ObTablet::inc_ref_without_aggregated_info	dec_table_store_ref_cnt call (other name) [on-disk block reference]	dec_table_store_ref_cnt();
+src/storage/tablet/ob_tablet.cpp	2126	ObTablet::dec_macro_ref_cnt	dec_macro_ref_cnt definition (other name) [on-disk block reference]	void ObTablet::dec_macro_ref_cnt()
+src/storage/tablet/ob_tablet.cpp	2138	ObTablet::dec_macro_ref_cnt	dec_ref_without_aggregated_info call [on-disk block reference]	dec_ref_without_aggregated_info();
+src/storage/tablet/ob_tablet.cpp	2140	ObTablet::dec_macro_ref_cnt	dec_ref_with_aggregated_info call [on-disk block reference]	dec_ref_with_aggregated_info();
+src/storage/tablet/ob_tablet.cpp	2144	ObTablet::dec_ref_without_aggregated_info	dec_ref_without_aggregated_info definition [on-disk block reference]	void ObTablet::dec_ref_without_aggregated_info()
+src/storage/tablet/ob_tablet.cpp	2149	ObTablet::dec_ref_without_aggregated_info	dec_table_store_ref_cnt call (other name) [on-disk block reference]	dec_table_store_ref_cnt();
+src/storage/tablet/ob_tablet.cpp	2150	ObTablet::dec_ref_without_aggregated_info	dec_addr_ref_cnt call (other name) [on-disk block reference]	dec_addr_ref_cnt(table_store_addr_.addr_);
+src/storage/tablet/ob_tablet.cpp	2151	ObTablet::dec_ref_without_aggregated_info	dec_addr_ref_cnt call (other name) [on-disk block reference]	dec_addr_ref_cnt(storage_schema_addr_.addr_);
+src/storage/tablet/ob_tablet.cpp	2152	ObTablet::dec_ref_without_aggregated_info	dec_addr_ref_cnt call (other name) [on-disk block reference]	dec_addr_ref_cnt(tablet_addr_);
+src/storage/tablet/ob_tablet.cpp	2155	ObTablet::dec_ref_with_aggregated_info	dec_ref_with_aggregated_info definition [on-disk block reference]	void ObTablet::dec_ref_with_aggregated_info()
+src/storage/tablet/ob_tablet.cpp	2165	ObTablet::dec_ref_with_aggregated_info	dec_addr_ref_cnt call (other name) [on-disk block reference]	dec_addr_ref_cnt(tablet_addr_);
+src/storage/tablet/ob_tablet.cpp	2166	ObTablet::dec_ref_with_aggregated_info	dec_ref_with_macro_iter call [on-disk block reference]	dec_ref_with_macro_iter(info_iter);
+src/storage/tablet/ob_tablet.cpp	2177	ObTablet::dec_ref_with_macro_iter	dec_ref_with_macro_iter definition [on-disk block reference]	void ObTablet::dec_ref_with_macro_iter(ObMacroInfoIterator &macro_iter) const
+src/storage/tablet/ob_tablet.cpp	2190	ObTablet::dec_ref_with_macro_iter	dec_ref call [on-disk block reference]	if (OB_FAIL(OB_STORAGE_OBJECT_MGR.dec_ref(block_info.macro_id_))) {
+src/storage/tablet/ob_tablet.cpp	2220	ObTablet::inc_table_store_ref_cnt	inc_table_store_ref_cnt definition (other name) [on-disk block reference]	int ObTablet::inc_table_store_ref_cnt(bool &inc_success)
+src/storage/tablet/ob_tablet.cpp	2229	ObTablet::inc_table_store_ref_cnt	inc_macro_ref call (other name) [on-disk block reference]	} else if (OB_FAIL(table_store_wrapper.get_member()->inc_macro_ref())) {
+src/storage/tablet/ob_tablet.cpp	2236	ObTablet::dec_table_store_ref_cnt	dec_table_store_ref_cnt definition (other name) [on-disk block reference]	void ObTablet::dec_table_store_ref_cnt()
+src/storage/tablet/ob_tablet.cpp	2248	ObTablet::dec_table_store_ref_cnt	dec_macro_ref call (other name) [on-disk block reference]	table_store_wrapper.get_member()->dec_macro_ref();
+src/storage/tablet/ob_tablet.cpp	2253	ObTablet::inc_addr_ref_cnt	inc_addr_ref_cnt definition (other name) [on-disk block reference]	int ObTablet::inc_addr_ref_cnt(const ObMetaDiskAddr &addr, bool &inc_success)
+src/storage/tablet/ob_tablet.cpp	2262	ObTablet::inc_addr_ref_cnt	inc_ref call [on-disk block reference]	} else if (OB_FAIL(OB_STORAGE_OBJECT_MGR.inc_ref(macro_id))) {
+src/storage/tablet/ob_tablet.cpp	2270	ObTablet::dec_addr_ref_cnt	dec_addr_ref_cnt definition (other name) [on-disk block reference]	void ObTablet::dec_addr_ref_cnt(const ObMetaDiskAddr &addr)
+src/storage/tablet/ob_tablet.cpp	2278	ObTablet::dec_addr_ref_cnt	dec_ref call [on-disk block reference]	} else if (OB_FAIL(OB_STORAGE_OBJECT_MGR.dec_ref(macro_id))) {
+src/storage/tablet/ob_tablet.cpp	2283	ObTablet::inc_linked_block_ref_cnt	inc_linked_block_ref_cnt definition (other name) [on-disk block reference]	int ObTablet::inc_linked_block_ref_cnt(const ObMetaDiskAddr &head_addr, bool &inc_success)
+src/storage/tablet/ob_tablet.cpp	2301	ObTablet::inc_linked_block_ref_cnt	inc_ref call [on-disk block reference]	} else if (OB_FAIL(OB_STORAGE_OBJECT_MGR.inc_ref(macro_id))) {
+src/storage/tablet/ob_tablet.cpp	2314	ObTablet::inc_linked_block_ref_cnt	dec_ref call [on-disk block reference]	} else if (OB_TMP_FAIL(OB_STORAGE_OBJECT_MGR.dec_ref(macro_id))) {
+src/storage/tablet/ob_tablet.cpp	2325	ObTablet::dec_linked_block_ref_cnt	dec_linked_block_ref_cnt definition (other name) [on-disk block reference]	void ObTablet::dec_linked_block_ref_cnt(const ObMetaDiskAddr &head_addr)
+src/storage/tablet/ob_tablet.cpp	2344	ObTablet::dec_linked_block_ref_cnt	dec_ref call [on-disk block reference]	} else if (OB_FAIL(OB_STORAGE_OBJECT_MGR.dec_ref(macro_id))) {
+src/storage/tablet/ob_tablet.cpp	4875	ObTablet::add_memtable	inc_ref call	table->inc_ref();
+src/storage/tablet/ob_tablet.cpp	4917	ObTablet::assign_memtables	inc_ref call	memtable->inc_ref();
+src/storage/tablet/ob_tablet.cpp	4942	ObTablet::assign_ddl_kvs	inc_ref call	ddl_kv->inc_ref();
+src/storage/tablet/ob_tablet.cpp	4956	ObTablet::reset_memtable	dec_ref call	const int64_t ref_cnt = memtables_[i]->dec_ref();
+src/storage/tablet/ob_tablet.cpp	5043	ObTablet::pull_ddl_memtables	inc_ref call	ddl_kv->inc_ref();
+src/storage/tablet/ob_tablet.cpp	5066	ObTablet::reset_ddl_memtables	dec_ref call	const int64_t ref_cnt = ddl_kv->dec_ref();
+src/storage/tablet/ob_tablet.h	146	ObTablet::ObDDLKvMgrHandle	Handle alias of ObMetaObjGuard<ObTabletDDLKvMgr>	typedef ObMetaObjGuard<ObTabletDDLKvMgr> ObDDLKvMgrHandle;
+src/storage/tablet/ob_tablet.h	160	ObTablet	inc_ref declaration	void inc_ref();
+src/storage/tablet/ob_tablet.h	161	ObTablet	dec_ref declaration	int64_t dec_ref();
+src/storage/tablet/ob_tablet.h	249	ObTablet	dec_macro_ref_cnt declaration (other name) [on-disk block reference]	void dec_macro_ref_cnt();
+src/storage/tablet/ob_tablet.h	250	ObTablet	inc_macro_ref_cnt declaration (other name) [on-disk block reference]	int inc_macro_ref_cnt();
+src/storage/tablet/ob_tablet.h	319	ObTablet	release_ref_cnt declaration (other name) [on-disk block reference]	int release_ref_cnt(
+src/storage/tablet/ob_tablet.h	324	ObTablet	inc_snapshot_ref_cnt declaration (other name) [on-disk block reference]	int inc_snapshot_ref_cnt(
+src/storage/tablet/ob_tablet.h	580	ObTablet	dec_ref_with_aggregated_info declaration [on-disk block reference]	void dec_ref_with_aggregated_info();
+src/storage/tablet/ob_tablet.h	581	ObTablet	dec_ref_without_aggregated_info declaration [on-disk block reference]	void dec_ref_without_aggregated_info();
+src/storage/tablet/ob_tablet.h	582	ObTablet	dec_ref_with_macro_iter declaration [on-disk block reference]	void dec_ref_with_macro_iter(ObMacroInfoIterator &macro_iter) const;
+src/storage/tablet/ob_tablet.h	583	ObTablet	inner_inc_macro_ref_cnt declaration (other name) [on-disk block reference]	int inner_inc_macro_ref_cnt();
+src/storage/tablet/ob_tablet.h	584	ObTablet	inc_ref_with_aggregated_info declaration [on-disk block reference]	int inc_ref_with_aggregated_info();
+src/storage/tablet/ob_tablet.h	585	ObTablet	inc_ref_without_aggregated_info declaration [on-disk block reference]	int inc_ref_without_aggregated_info();
+src/storage/tablet/ob_tablet.h	586	ObTablet	inc_ref_with_macro_iter declaration [on-disk block reference]	int inc_ref_with_macro_iter(ObMacroInfoIterator &macro_iter, bool &inc_success) const;
+src/storage/tablet/ob_tablet.h	587	ObTablet	dec_table_store_ref_cnt declaration (other name) [on-disk block reference]	void dec_table_store_ref_cnt();
+src/storage/tablet/ob_tablet.h	588	ObTablet	inc_table_store_ref_cnt declaration (other name) [on-disk block reference]	int inc_table_store_ref_cnt(bool &inc_success);
+src/storage/tablet/ob_tablet.h	589	ObTablet	inc_addr_ref_cnt declaration (other name) [on-disk block reference]	static int inc_addr_ref_cnt(const ObMetaDiskAddr &addr, bool &inc_success);
+src/storage/tablet/ob_tablet.h	590	ObTablet	dec_addr_ref_cnt declaration (other name) [on-disk block reference]	static void dec_addr_ref_cnt(const ObMetaDiskAddr &addr);
+src/storage/tablet/ob_tablet.h	591	ObTablet	inc_linked_block_ref_cnt declaration (other name) [on-disk block reference]	static int inc_linked_block_ref_cnt(const ObMetaDiskAddr &head_addr, bool &inc_success);
+src/storage/tablet/ob_tablet.h	592	ObTablet	dec_linked_block_ref_cnt declaration (other name) [on-disk block reference]	static void dec_linked_block_ref_cnt(const ObMetaDiskAddr &head_addr);
+src/storage/tablet/ob_tablet.h	853	ObTablet::inc_ref	inc_ref definition	inline void ObTablet::inc_ref()
+src/storage/tablet/ob_tablet.h	862	ObTablet::dec_ref	dec_ref definition	inline int64_t ObTablet::dec_ref()
+src/storage/tablet/ob_tablet_memtable_mgr.cpp	682	ObTabletMemtableMgr::release_head_memtable_	release_head_memtable call (reference-count function found by its body)	release_head_memtable();
+src/storage/tablet/ob_tablet_memtable_mgr.cpp	754	ObTabletMemtableMgr::clean_tail_memtable_	release_tail_memtable call (reference-count function found by its body)	ObIMemtableMgr::release_tail_memtable();
+src/storage/tablet/ob_tablet_persister.cpp	419	ObTabletPersister::copy_from_old_tablet	inc_macro_ref_cnt call (other name) [on-disk block reference]	if (OB_FAIL(new_handle.get_obj()->inc_macro_ref_cnt())) {
+src/storage/tablet/ob_tablet_persister.cpp	682	ObTabletPersister::persist_aggregated_meta	inc_ref_with_macro_iter call [on-disk block reference]	} else if (OB_FAIL(inc_ref_with_macro_iter(*new_tablet, macro_iter))) {
+src/storage/tablet/ob_tablet_persister.cpp	690	ObTabletPersister::inc_ref_with_macro_iter	inc_ref_with_macro_iter definition [on-disk block reference]	int ObTabletPersister::inc_ref_with_macro_iter(ObTablet &tablet, ObMacroInfoIterator &macro_iter)
+src/storage/tablet/ob_tablet_persister.cpp	697	ObTabletPersister::inc_ref_with_macro_iter	inc_addr_ref_cnt call (other name) [on-disk block reference]	if (OB_FAIL(ObTablet::inc_addr_ref_cnt(tablet_addr, inc_tablet_macro_ref_success))) {
+src/storage/tablet/ob_tablet_persister.cpp	698	ObTabletPersister::inc_ref_with_macro_iter	inc_ref_with_macro_iter call [on-disk block reference]	} else if (OB_FAIL(tablet.inc_ref_with_macro_iter(macro_iter, inc_other_macro_ref_success))) {
+src/storage/tablet/ob_tablet_persister.cpp	702	ObTabletPersister::inc_ref_with_macro_iter	dec_addr_ref_cnt call (other name) [on-disk block reference]	ObTablet::dec_addr_ref_cnt(tablet_addr);
+src/storage/tablet/ob_tablet_persister.cpp	708	ObTabletPersister::inc_ref_with_macro_iter	dec_ref_with_macro_iter call [on-disk block reference]	tablet.dec_ref_with_macro_iter(macro_iter);
+src/storage/tablet/ob_tablet_persister.h	266	ObTabletPersister	inc_ref_with_macro_iter declaration [on-disk block reference]	static int inc_ref_with_macro_iter(ObTablet &tablet, ObMacroInfoIterator &macro_iter);
+src/storage/tablet/ob_tablet_table_store.cpp	422	ObTabletTableStore::inc_macro_ref	inc_macro_ref definition (other name) [on-disk block reference]	int ObTabletTableStore::inc_macro_ref() const
+src/storage/tablet/ob_tablet_table_store.cpp	434	ObTabletTableStore::inc_macro_ref	inc_macro_ref call (other name) [on-disk block reference]	&& OB_FAIL(major_tables_.inc_macro_ref(major_success))) {
+src/storage/tablet/ob_tablet_table_store.cpp	436	ObTabletTableStore::inc_macro_ref	inc_macro_ref call (other name) [on-disk block reference]	&& OB_FAIL(minor_tables_.inc_macro_ref(minor_success))) {
+src/storage/tablet/ob_tablet_table_store.cpp	438	ObTabletTableStore::inc_macro_ref	inc_macro_ref call (other name) [on-disk block reference]	&& OB_FAIL(ddl_sstables_.inc_macro_ref(ddl_success))) {
+src/storage/tablet/ob_tablet_table_store.cpp	440	ObTabletTableStore::inc_macro_ref	inc_macro_ref call (other name) [on-disk block reference]	&& OB_FAIL(meta_major_tables_.inc_macro_ref(meta_major_success))) {
+src/storage/tablet/ob_tablet_table_store.cpp	442	ObTabletTableStore::inc_macro_ref	inc_macro_ref call (other name) [on-disk block reference]	&& OB_FAIL(mds_sstables_.inc_macro_ref(mds_success))) {
+src/storage/tablet/ob_tablet_table_store.cpp	447	ObTabletTableStore::inc_macro_ref	dec_macro_ref call (other name) [on-disk block reference]	major_tables_.dec_macro_ref();
+src/storage/tablet/ob_tablet_table_store.cpp	450	ObTabletTableStore::inc_macro_ref	dec_macro_ref call (other name) [on-disk block reference]	minor_tables_.dec_macro_ref();
+src/storage/tablet/ob_tablet_table_store.cpp	453	ObTabletTableStore::inc_macro_ref	dec_macro_ref call (other name) [on-disk block reference]	ddl_sstables_.dec_macro_ref();
+src/storage/tablet/ob_tablet_table_store.cpp	456	ObTabletTableStore::inc_macro_ref	dec_macro_ref call (other name) [on-disk block reference]	meta_major_tables_.dec_macro_ref();
+src/storage/tablet/ob_tablet_table_store.cpp	459	ObTabletTableStore::inc_macro_ref	dec_macro_ref call (other name) [on-disk block reference]	mds_sstables_.dec_macro_ref();
+src/storage/tablet/ob_tablet_table_store.cpp	466	ObTabletTableStore::dec_macro_ref	dec_macro_ref definition (other name) [on-disk block reference]	void ObTabletTableStore::dec_macro_ref() const
+src/storage/tablet/ob_tablet_table_store.cpp	469	ObTabletTableStore::dec_macro_ref	dec_macro_ref call (other name) [on-disk block reference]	major_tables_.dec_macro_ref();
+src/storage/tablet/ob_tablet_table_store.cpp	472	ObTabletTableStore::dec_macro_ref	dec_macro_ref call (other name) [on-disk block reference]	minor_tables_.dec_macro_ref();
+src/storage/tablet/ob_tablet_table_store.cpp	475	ObTabletTableStore::dec_macro_ref	dec_macro_ref call (other name) [on-disk block reference]	ddl_sstables_.dec_macro_ref();
+src/storage/tablet/ob_tablet_table_store.cpp	478	ObTabletTableStore::dec_macro_ref	dec_macro_ref call (other name) [on-disk block reference]	meta_major_tables_.dec_macro_ref();
+src/storage/tablet/ob_tablet_table_store.cpp	481	ObTabletTableStore::dec_macro_ref	dec_macro_ref call (other name) [on-disk block reference]	mds_sstables_.dec_macro_ref();
+src/storage/tablet/ob_tablet_table_store.h	153	ObTabletTableStore	inc_macro_ref declaration (other name) [on-disk block reference]	int inc_macro_ref() const;
+src/storage/tablet/ob_tablet_table_store.h	154	ObTabletTableStore	dec_macro_ref declaration (other name) [on-disk block reference]	void dec_macro_ref() const;
+src/storage/throttle/ob_throttle_info.h	92	ObThrottleInfoAllocHandle	Handle struct definition	struct ObThrottleInfoAllocHandle
+src/storage/tmp_file/ob_i_tmp_file.cpp	155	ObITmpFileHandle::ObITmpFileHandle	inc_ref_cnt call	ptr_->inc_ref_cnt();
+src/storage/tmp_file/ob_i_tmp_file.cpp	171	ObITmpFileHandle::operator=	inc_ref_cnt call	ptr_->inc_ref_cnt();
+src/storage/tmp_file/ob_i_tmp_file.cpp	181	ObITmpFileHandle::reset	dec_ref_cnt call	ptr_->dec_ref_cnt(ref_cnt);
+src/storage/tmp_file/ob_i_tmp_file.cpp	202	ObITmpFileHandle::init	inc_ref_cnt call	ptr_->inc_ref_cnt();
+src/storage/tmp_file/ob_i_tmp_file.h	231	ObITmpFile::inc_ref_cnt	inc_ref_cnt definition	OB_INLINE void inc_ref_cnt() { ATOMIC_INC(&ref_cnt_); }
+src/storage/tmp_file/ob_i_tmp_file.h	232	ObITmpFile::dec_ref_cnt	dec_ref_cnt definition	OB_INLINE void dec_ref_cnt() { ATOMIC_AAF(&ref_cnt_, -1); }
+src/storage/tmp_file/ob_i_tmp_file.h	233	ObITmpFile::dec_ref_cnt	dec_ref_cnt definition	OB_INLINE void dec_ref_cnt(int64_t &ref_cnt)
+src/storage/tmp_file/ob_i_tmp_file.h	380	ObITmpFileHandle	Handle class definition	class ObITmpFileHandle
+src/storage/tmp_file/ob_shared_nothing_tmp_file.h	297	ObSNTmpFileHandle	Handle class definition : ObITmpFileHandle	class ObSNTmpFileHandle final : public ObITmpFileHandle
+src/storage/tmp_file/ob_tmp_file_block_manager.cpp	257	ObTmpFileBlock::reset	dec_ref call [on-disk block reference]	if (is_valid() && BlockState::ON_DISK == block_state_ && OB_FAIL(OB_SERVER_BLOCK_MGR.dec_ref(macro_block_id_))) {
+src/storage/tmp_file/ob_tmp_file_block_manager.cpp	328	ObTmpFileBlock::write_back_succ	inc_ref call [on-disk block reference]	} else if (OB_FAIL(OB_SERVER_BLOCK_MGR.inc_ref(macro_block_id))) {
+src/storage/tmp_file/ob_tmp_file_block_manager.cpp	373	ObTmpFileBlock::inc_ref_cnt	inc_ref_cnt definition	int ObTmpFileBlock::inc_ref_cnt()
+src/storage/tmp_file/ob_tmp_file_block_manager.cpp	387	ObTmpFileBlock::dec_ref_cnt	dec_ref_cnt definition	int ObTmpFileBlock::dec_ref_cnt(int64_t &ref_cnt)
+src/storage/tmp_file/ob_tmp_file_block_manager.cpp	443	ObTmpFileBlockHandle::ObTmpFileBlockHandle	inc_ref_cnt call	ptr_->inc_ref_cnt();
+src/storage/tmp_file/ob_tmp_file_block_manager.cpp	460	ObTmpFileBlockHandle::operator=	inc_ref_cnt call	ptr_->inc_ref_cnt();
+src/storage/tmp_file/ob_tmp_file_block_manager.cpp	472	ObTmpFileBlockHandle::reset	dec_ref_cnt call	if (OB_FAIL(ptr_->dec_ref_cnt(cur_ref_cnt))) {
+src/storage/tmp_file/ob_tmp_file_block_manager.cpp	489	ObTmpFileBlockHandle::init	inc_ref_cnt call	} else if (OB_FAIL(block->inc_ref_cnt())) {
+src/storage/tmp_file/ob_tmp_file_block_manager.h	130	ObTmpFileBlock	inc_ref_cnt declaration	int inc_ref_cnt();
+src/storage/tmp_file/ob_tmp_file_block_manager.h	131	ObTmpFileBlock	dec_ref_cnt declaration	int dec_ref_cnt(int64_t &ref_cnt);
+src/storage/tmp_file/ob_tmp_file_block_manager.h	151	ObTmpFileBlockHandle	Handle class definition	class ObTmpFileBlockHandle final
+src/storage/tmp_file/ob_tmp_file_cache.h	71	ObTmpBlockValueHandle	Handle struct definition	struct ObTmpBlockValueHandle final
+src/storage/tmp_file/ob_tmp_file_cache.h	166	ObTmpPageValueHandle	Handle struct definition	struct ObTmpPageValueHandle final
+src/storage/tmp_file/ob_tmp_file_eviction_manager.cpp	87	ObTmpFileEvictionManager::add_file	inc_ref_cnt call	file.inc_ref_cnt();
+src/storage/tmp_file/ob_tmp_file_eviction_manager.cpp	89	ObTmpFileEvictionManager::add_file	dec_ref_cnt call	file.dec_ref_cnt();
+src/storage/tmp_file/ob_tmp_file_eviction_manager.cpp	116	ObTmpFileEvictionManager::remove_file	dec_ref_cnt call	file.dec_ref_cnt();
+src/storage/tmp_file/ob_tmp_file_eviction_manager.cpp	216	ObTmpFileEvictionManager::pop_file_from_list_	dec_ref_cnt call	file->dec_ref_cnt();
+src/storage/tmp_file/ob_tmp_file_flush_priority_manager.cpp	150	ObTmpFileFlushPriorityManager::insert_flush_list_	inc_ref_cnt call	file.inc_ref_cnt();
+src/storage/tmp_file/ob_tmp_file_flush_priority_manager.cpp	152	ObTmpFileFlushPriorityManager::insert_flush_list_	dec_ref_cnt call	file.dec_ref_cnt();
+src/storage/tmp_file/ob_tmp_file_flush_priority_manager.cpp	271	ObTmpFileFlushPriorityManager::remove_file	dec_ref_cnt call	file.dec_ref_cnt();
+src/storage/tmp_file/ob_tmp_file_flush_priority_manager.cpp	307	ObTmpFileFlushPriorityManager::popN_from_file_list	dec_ref_cnt call	file->dec_ref_cnt(); // ref_cnt of flush list
+src/storage/tmp_file/ob_tmp_file_io_ctx.h	131	ObTmpFileIOCtx::ObIReadHandle	Handle struct definition	struct ObIReadHandle
+src/storage/tmp_file/ob_tmp_file_io_ctx.h	148	ObTmpFileIOCtx::ObIOReadHandle	Handle struct definition : ObIReadHandle	struct ObIOReadHandle final : public ObIReadHandle
+src/storage/tmp_file/ob_tmp_file_io_ctx.h	165	ObTmpFileIOCtx::ObBlockCacheHandle	Handle struct definition : ObIReadHandle	struct ObBlockCacheHandle final : public ObIReadHandle
+src/storage/tmp_file/ob_tmp_file_io_ctx.h	184	ObTmpFileIOCtx::ObPageCacheHandle	Handle struct definition : ObIReadHandle	struct ObPageCacheHandle final : public ObIReadHandle
+src/storage/tmp_file/ob_tmp_file_io_handle.h	29	ObTmpFileIOHandle	Handle class definition	class ObTmpFileIOHandle final
+src/storage/truncate_info/ob_truncate_info_kv_cache.h	65	ObTruncateInfoValueHandle	Handle struct definition	struct ObTruncateInfoValueHandle final
+src/storage/tx/ob_trans_ctx.cpp	245	ObTransCtx::register_timeout_task_	acquire_ctx_ref_ call (other name)	} else if (OB_FAIL(acquire_ctx_ref_())) {
+src/storage/tx/ob_trans_ctx.cpp	325	ObTransCtx::release_ctx_ref	release_ctx_ref definition (other name)	void ObTransCtx::release_ctx_ref()
+src/storage/tx/ob_trans_ctx.h	143	ObTransCtx::acquire_ctx_ref	acquire_ctx_ref definition (other name); acquire_ctx_ref_ call (other name)	int acquire_ctx_ref() { return acquire_ctx_ref_(); }
+src/storage/tx/ob_trans_ctx.h	144	ObTransCtx	release_ctx_ref declaration (other name)	void release_ctx_ref();
+src/storage/tx/ob_trans_ctx.h	180	ObTransCtx::acquire_ctx_ref_	acquire_ctx_ref_ definition (other name)	int acquire_ctx_ref_()
+src/storage/tx/ob_trans_ctx.h	182	ObTransCtx::acquire_ctx_ref_	inc_ref call	ObLightHashLink::inc_ref(1);
+src/storage/tx/ob_trans_ctx.h	185	ObTransCtx::release_ctx_ref_	release_ctx_ref_ definition (other name)	void release_ctx_ref_()
+src/storage/tx/ob_trans_ctx.h	187	ObTransCtx::release_ctx_ref_	dec_ref call	ObLightHashLink::dec_ref(1);
+src/storage/tx/ob_trans_ctx_lock.h	99	CtxLockGuard	Guard class definition whose methods reach release_ctx_ref through other functions (CtxLockGuard::reset > CtxLock::unlock_ctx > CtxLock::after_unlock > ObTransCtx::after_unlock > ObTxCommitCallback::callback > release_ctx_ref)	class CtxLockGuard
+src/storage/tx/ob_trans_define_v4.cpp	1527	ObTxDescMgr::alloc	inc_ref call	OX(tx_desc->inc_ref(1));
+src/storage/tx/ob_trans_define_v4.cpp	1586	ObTxDescMgr::acquire_tx_ref	acquire_tx_ref definition (other name)	int ObTxDescMgr::acquire_tx_ref(const ObTransID &trans_id)
+src/storage/tx/ob_trans_define_v4.cpp	1595	ObTxDescMgr::release_tx_ref	release_tx_ref definition (other name)	int ObTxDescMgr::release_tx_ref(ObTxDesc *tx_desc)
+src/storage/tx/ob_trans_define_v4.h	541	ObTxDescMgr	acquire_tx_ref declaration (other name)	int acquire_tx_ref(const ObTransID &trans_id);
+src/storage/tx/ob_trans_define_v4.h	542	ObTxDescMgr	release_tx_ref declaration (other name)	int release_tx_ref(ObTxDesc *tx_desc);
+src/storage/tx/ob_trans_define_v4.h	617	ObTxDescMgr::force_release	dec_ref call	if (tx.dec_ref(1) == 0) {
+src/storage/tx/ob_trans_end_trans_callback.cpp	35	ObTxCommitCallback::reset	release_ctx_ref call (other name)	tx_ctx_->release_ctx_ref();
+src/storage/tx/ob_trans_end_trans_callback.cpp	54	ObTxCommitCallback::link	acquire_ctx_ref call (other name)	tx_ctx->acquire_ctx_ref();
+src/storage/tx/ob_trans_end_trans_callback.cpp	81	ObTxCommitCallback::callback	release_ctx_ref call (other name)	tx_ctx_->release_ctx_ref();
+src/storage/tx/ob_trans_service_v4.cpp	207	ObTransService::register_commit_retry_task_	acquire_tx_ref call (other name)	if (OB_FAIL(tx_desc_mgr_.acquire_tx_ref(tx.tx_id_))) {
+src/storage/tx/ob_trans_service_v4.cpp	756	ObTransService::get_write_store_ctx	end_access call (reference-count function found by its body)	if (access_started) { tx_ctx->end_access(); }
+src/storage/tx/ob_trans_service_v4.cpp	911	ObTransService::revert_store_ctx	end_access call (reference-count function found by its body)	tx_ctx->end_access();
+src/storage/tx/ob_trans_service_v4.h	25	-	release_tx_ref declaration (other name)	int release_tx_ref(ObTxDesc &tx);
+src/storage/tx/ob_trans_timer.cpp	167	ObTxTimeoutTask::runTimerTask	release_tx_ref call (other name)	DEFER({ txs->release_tx_ref(*tx_desc); });
+src/storage/tx/ob_tx_api.cpp	661	ObTransService::direct_execute_commit_cb_	inc_ref call	tx.inc_ref(1);
+src/storage/tx/ob_tx_api.cpp	1603	ObTransService::release_tx_ref	release_tx_ref definition (other name)	int ObTransService::release_tx_ref(ObTxDesc &tx)
+src/storage/tx/ob_tx_api.cpp	1605	ObTransService::release_tx_ref	release_tx_ref call (other name)	return tx_desc_mgr_.release_tx_ref(&tx);
+src/storage/tx/ob_tx_ctx.cpp	2193	ObTxCtx::wait_gts_elapse_commit_version_	acquire_ctx_ref_ call (other name)	if (OB_FAIL(acquire_ctx_ref_())) {
+src/storage/tx/ob_tx_ctx.cpp	2366	ObTxCtx::submit_redo_commit_info_log_	acquire_ctx_ref_ call (other name)	} else if (OB_FAIL(acquire_ctx_ref_())) {
+src/storage/tx/ob_tx_ctx.cpp	2371	ObTxCtx::submit_redo_commit_info_log_	release_ctx_ref_ call (other name)	release_ctx_ref_();
+src/storage/tx/ob_tx_ctx.cpp	2430	ObTxCtx::submit_redo_commit_info_log_	acquire_ctx_ref_ call (other name)	} else if (OB_FAIL(acquire_ctx_ref_())) {
+src/storage/tx/ob_tx_ctx.cpp	2435	ObTxCtx::submit_redo_commit_info_log_	release_ctx_ref_ call (other name)	release_ctx_ref_();
+src/storage/tx/ob_tx_ctx.cpp	2558	ObTxCtx::submit_commit_log_	acquire_ctx_ref_ call (other name)	} else if (OB_FAIL(acquire_ctx_ref_())) {
+src/storage/tx/ob_tx_ctx.cpp	2564	ObTxCtx::submit_commit_log_	release_ctx_ref_ call (other name)	release_ctx_ref_();
+src/storage/tx/ob_tx_ctx.cpp	2592	ObTxCtx::submit_commit_log_	acquire_ctx_ref_ call (other name)	} else if (OB_FAIL(acquire_ctx_ref_())) {
+src/storage/tx/ob_tx_ctx.cpp	2601	ObTxCtx::submit_commit_log_	release_ctx_ref_ call (other name)	release_ctx_ref_();
+src/storage/tx/ob_tx_ctx.cpp	2633	ObTxCtx::submit_commit_log_	acquire_ctx_ref_ call (other name)	} else if (OB_FAIL(acquire_ctx_ref_())) {
+src/storage/tx/ob_tx_ctx.cpp	2640	ObTxCtx::submit_commit_log_	release_ctx_ref_ call (other name)	release_ctx_ref_();
+src/storage/tx/ob_tx_ctx.cpp	2711	ObTxCtx::submit_abort_log_	acquire_ctx_ref_ call (other name)	} else if (OB_FAIL(acquire_ctx_ref_())) {
+src/storage/tx/ob_tx_ctx.cpp	2716	ObTxCtx::submit_abort_log_	release_ctx_ref_ call (other name)	release_ctx_ref_();
+src/storage/tx/ob_tx_ctx.cpp	2749	ObTxCtx::submit_clear_log_	acquire_ctx_ref_ call (other name)	} else if (OB_FAIL(acquire_ctx_ref_())) {
+src/storage/tx/ob_tx_ctx.cpp	2754	ObTxCtx::submit_clear_log_	release_ctx_ref_ call (other name)	release_ctx_ref_();
+src/storage/tx/ob_tx_ctx.cpp	2785	ObTxCtx::submit_record_log_	acquire_ctx_ref_ call (other name)	} else if (OB_FAIL(acquire_ctx_ref_())) {
+src/storage/tx/ob_tx_ctx.cpp	2790	ObTxCtx::submit_record_log_	release_ctx_ref_ call (other name)	release_ctx_ref_();
+src/storage/tx/ob_tx_ctx.cpp	2840	ObTxCtx::submit_big_segment_log_	acquire_ctx_ref_ call (other name)	} else if (OB_FAIL(acquire_ctx_ref_())) {
+src/storage/tx/ob_tx_ctx.cpp	2850	ObTxCtx::submit_big_segment_log_	release_ctx_ref_ call (other name)	release_ctx_ref_();
+src/storage/tx/ob_tx_ctx.cpp	4780	ObTxCtx::submit_multi_data_source_	acquire_ctx_ref_ call (other name)	} else if (OB_FAIL(acquire_ctx_ref_())) {
+src/storage/tx/ob_tx_ctx.cpp	4787	ObTxCtx::submit_multi_data_source_	release_ctx_ref_ call (other name)	release_ctx_ref_();
+src/storage/tx/ob_tx_ctx.cpp	5081	ObTxCtx::submit_pending_log_block_	acquire_ctx_ref_ call (other name)	} else if (OB_FAIL(acquire_ctx_ref_())) {
+src/storage/tx/ob_tx_ctx.cpp	5086	ObTxCtx::submit_pending_log_block_	release_ctx_ref_ call (other name)	release_ctx_ref_();
+src/storage/tx/ob_tx_ctx.cpp	5205	ObTxCtx::start_access	inc_ref call	mt_ctx_.inc_ref();
+src/storage/tx/ob_tx_ctx.cpp	5237	ObTxCtx::end_access	end_access definition (reference-count function found by its body: calls dec_ref)	int ObTxCtx::end_access()
+src/storage/tx/ob_tx_ctx.cpp	5242	ObTxCtx::end_access	dec_ref call	mt_ctx_.dec_ref();
+src/storage/tx/ob_tx_ctx.cpp	5475	ObTxCtx::submit_rollback_to_log_	acquire_ctx_ref call (other name)	} else if (OB_FAIL(acquire_ctx_ref())) {
+src/storage/tx/ob_tx_ctx.cpp	5866	ObTxCtx::submit_redo_log_out	acquire_ctx_ref_ call (other name)	} else if (OB_FAIL(acquire_ctx_ref_())) {
+src/storage/tx/ob_tx_ctx.cpp	5883	ObTxCtx::submit_redo_log_out	release_ctx_ref_ call (other name)	release_ctx_ref_();
+src/storage/tx/ob_tx_ctx.h	548	ObTxCtx	end_access declaration (reference-count function found by its body)	int end_access();
+src/storage/tx/ob_tx_data_define.cpp	469	ObTxData::dec_ref	dec_ref definition	OB_WEAK_SYMBOL void ObTxData::dec_ref()
+src/storage/tx/ob_tx_data_define.cpp	748	ObTxDataOpGuard::init	inc_ref call	} else if (tx_data_op->inc_ref() <= 0) {
+src/storage/tx/ob_tx_data_define.cpp	761	ObTxDataOpGuard::reset	dec_ref call	tx_data_op_->dec_ref();
+src/storage/tx/ob_tx_data_define.h	246	ObTxDataOpGuard	Guard class definition whose methods call dec_ref, inc_ref	class ObTxDataOpGuard
+src/storage/tx/ob_tx_data_define.h	298	ObTxData::inc_ref	inc_ref definition	int64_t inc_ref()
+src/storage/tx/ob_tx_data_define.h	304	ObTxData	dec_ref declaration	void dec_ref();
+src/storage/tx/ob_tx_data_define.h	371	ObTxDataGuard	Guard class definition whose methods call dec_ref, inc_ref	class ObTxDataGuard
+src/storage/tx/ob_tx_data_define.h	386	ObTxDataGuard::init	inc_ref call	} else if (tx_data->inc_ref() <= 0) {
+src/storage/tx/ob_tx_data_define.h	399	ObTxDataGuard::reset	dec_ref call	tx_data_->dec_ref();
+src/storage/tx/ob_tx_data_op.cpp	32	ObTxDataOp::dec_ref	dec_ref definition	void ObTxDataOp::dec_ref() {
+src/storage/tx/ob_tx_data_op.h	146	ObTxDataOp::inc_ref	inc_ref definition	int64_t inc_ref() { return ATOMIC_AAF(&ref_cnt_, 1); }
+src/storage/tx/ob_tx_data_op.h	147	ObTxDataOp	dec_ref declaration	void dec_ref();
+src/storage/tx/ob_tx_elr_handler.cpp	41	ObTxELRHandler::check_and_early_lock_release	acquire_ctx_ref call (other name)	if (OB_FAIL(ctx->acquire_ctx_ref())) {
+src/storage/tx/ob_tx_log_operator.h	229	ObTxCtxLogOperator::prepare_generic_resource_	acquire_ctx_ref_ call (other name)	} else if (OB_FAIL(tx_ctx_->acquire_ctx_ref_())) {
+src/storage/tx/ob_tx_log_operator.h	392	ObTxCtxLogOperator::after_submit_log_fail_	release_ctx_ref_ call (other name)	tx_ctx_->release_ctx_ref_();
+src/storage/tx_table/ob_tx_ctx_memtable_mgr.cpp	186	ObTxCtxMemtableMgr::release_head_memtable_	release_head_memtable call (reference-count function found by its body)	release_head_memtable();
+src/storage/tx_table/ob_tx_ctx_table.cpp	236	ObTxCtxTable::init	acquire_ref_ call (other name)	return acquire_ref_();
+src/storage/tx_table/ob_tx_ctx_table.cpp	239	ObTxCtxTable::acquire_ref_	acquire_ref_ definition (other name)	OB_WEAK_SYMBOL int ObTxCtxTable::acquire_ref_()
+src/storage/tx_table/ob_tx_ctx_table.cpp	257	ObTxCtxTable::release_ref_	release_ref_ definition (other name)	OB_WEAK_SYMBOL int ObTxCtxTable::release_ref_()
+src/storage/tx_table/ob_tx_ctx_table.cpp	274	ObTxCtxTable::reset	release_ref_ call (other name)	release_ref_();
+src/storage/tx_table/ob_tx_ctx_table.h	109	ObTxCtxTable	acquire_ref_ declaration (other name)	int acquire_ref_();
+src/storage/tx_table/ob_tx_ctx_table.h	111	ObTxCtxTable	release_ref_ declaration (other name)	int release_ref_();
+src/storage/tx_table/ob_tx_data_cache.h	124	ObTxDataValueHandle	Handle struct definition	struct ObTxDataValueHandle {
+src/storage/tx_table/ob_tx_data_hash_map.cpp	33	ObTxDataHashMap::destroy	dec_ref call	curr->dec_ref();
+src/storage/tx_table/ob_tx_data_hash_map.cpp	88	ObTxDataHashMap::insert	inc_ref call	if (value->inc_ref() <= 0) {
+src/storage/tx_table/ob_tx_data_memtable.h	333	ObTxDataMemtable::inc_write_ref	inc_write_ref definition (other name)	int64_t inc_write_ref() { return ATOMIC_AAF(&write_ref_, 1); }
+src/storage/tx_table/ob_tx_data_memtable.h	334	ObTxDataMemtable::dec_write_ref	dec_write_ref definition (other name)	int64_t dec_write_ref() { return ATOMIC_AAF(&write_ref_, -1); }
+src/storage/tx_table/ob_tx_data_memtable_mgr.cpp	142	ObTxDataMemtableMgr::release_head_memtable_	release_head_memtable call (reference-count function found by its body)	release_head_memtable();
+src/storage/tx_table/ob_tx_data_memtable_mgr.h	38	ObTxDataMemtableWriteGuard	Guard class definition whose methods call dec_write_ref, inc_write_ref	class ObTxDataMemtableWriteGuard
+src/storage/tx_table/ob_tx_data_memtable_mgr.h	57	ObTxDataMemtableWriteGuard::push_back_table	inc_write_ref call (other name)	tx_data_memtable->inc_write_ref();
+src/storage/tx_table/ob_tx_data_memtable_mgr.h	69	ObTxDataMemtableWriteGuard::reset	dec_write_ref call (other name)	tx_data_memtable->dec_write_ref();
+src/storage/tx_table/ob_tx_table_interface.h	32	ObTxTableGuard	Guard class definition whose methods reach dec_ref through other functions (ObTxTableGuard::check_with_tx_data > ObTxTable::check_with_tx_data > ObTxTable::check_tx_data_in_tables_ > ObTxDataTable::check_with_tx_data > ObTxDataTable::check_tx_data_in_sstable_ > ObTxDataGuard::reset > dec_ref)	class ObTxTableGuard
+src/storage/vector_index/ob_vector_kmeans_ctx.cpp	971	ObIvfBuildHelper::inc_ref	inc_ref definition	void ObIvfBuildHelper::inc_ref()
+src/storage/vector_index/ob_vector_kmeans_ctx.cpp	977	ObIvfBuildHelper::dec_ref_and_check_release	dec_ref_and_check_release definition	bool ObIvfBuildHelper::dec_ref_and_check_release()
+src/storage/vector_index/ob_vector_kmeans_ctx.cpp	1326	ObKmeansBuildTaskHandler::push_task	inc_task_ref call (other name)	inc_task_ref();
+src/storage/vector_index/ob_vector_kmeans_ctx.cpp	1346	ObKmeansBuildTaskHandler::handle	dec_task_ref call (other name)	dec_task_ref();
+src/storage/vector_index/ob_vector_kmeans_ctx.cpp	1363	ObKmeansBuildTaskHandler::handle_drop	dec_task_ref call (other name)	dec_task_ref();
+src/storage/vector_index/ob_vector_kmeans_ctx.h	299	ObIvfBuildHelper	inc_ref declaration	void inc_ref();
+src/storage/vector_index/ob_vector_kmeans_ctx.h	300	ObIvfBuildHelper	dec_ref_and_check_release declaration	bool dec_ref_and_check_release();
+src/storage/vector_index/ob_vector_kmeans_ctx.h	382	ObIvfBuildHelperGuard	Guard class definition whose methods call dec_ref_and_check_release, inc_ref	class ObIvfBuildHelperGuard
+src/storage/vector_index/ob_vector_kmeans_ctx.h	391	ObIvfBuildHelperGuard::~ObIvfBuildHelperGuard	dec_ref_and_check_release call	if (helper_->dec_ref_and_check_release()) {
+src/storage/vector_index/ob_vector_kmeans_ctx.h	416	ObIvfBuildHelperGuard::set_helper	inc_ref call	(void)helper_->inc_ref();
+src/storage/vector_index/ob_vector_kmeans_ctx.h	501	ObKmeansBuildTaskHandler::inc_task_ref	inc_task_ref definition (other name)	void inc_task_ref() { ATOMIC_INC(&task_ref_cnt_); }
+src/storage/vector_index/ob_vector_kmeans_ctx.h	502	ObKmeansBuildTaskHandler::dec_task_ref	dec_task_ref definition (other name)	void dec_task_ref() { ATOMIC_DEC(&task_ref_cnt_); }

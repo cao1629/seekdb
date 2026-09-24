@@ -1,0 +1,253 @@
+file	line	symbol	construct	text
+src/logservice/palf/log_engine.cpp	877	LogEngine::generate_flush_log_task_	budget-backed -4013: clog and replay log allocator	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/logservice/palf/log_engine.cpp	893	LogEngine::generate_handle_submit_task_	budget-backed -4013: clog and replay log allocator	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/logservice/palf/log_engine.cpp	911	LogEngine::generate_truncate_prefix_blocks_task_	budget-backed -4013: clog and replay log allocator	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/logservice/palf/log_engine.cpp	934	LogEngine::generate_flush_meta_task_	budget-backed -4013: clog and replay log allocator	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/logservice/palf/log_engine.cpp	938	LogEngine::generate_flush_meta_task_	budget-backed -4013: clog and replay log allocator	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/logservice/palf/log_engine.cpp	967	LogEngine::generate_purge_throttling_task_	budget-backed -4013: clog and replay log allocator	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/logservice/palf/log_reader.cpp	156	LogReader::inner_pread_	-4013 handled (compared against)	if (OB_ALLOCATE_MEMORY_FAILED == ret) {
+src/logservice/replayservice/ob_replay_status.cpp	1234	ObReplayStatus::is_fatal_error	-4013 handled (compared against)	&& OB_ALLOCATE_MEMORY_FAILED != ret
+src/oblib/lib/allocator/ob_fixed_size_block_allocator.h	301	ObFixedSizeBlockAllocator::expand	budget error raised: OB_EXCEED_MEM_LIMIT	ret = OB_EXCEED_MEM_LIMIT;
+src/oblib/lib/oblog/ob_log.cpp	642	ObLogger::get_trace_buffer	variable initialized to -4013 (not a raise)	int ret = OB_ALLOCATE_MEMORY_FAILED;
+src/oblib/lib/oblog/ob_log.cpp	1684	ObLogger::alloc_log_item	logical -4013, not a named plan case (provisional: no allocation call and no null test in the governing condition)	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/oblib/lib/thread/ob_async_task_queue.cpp	80	ObAsyncTaskQueue::push	bounded allocator not named in the plan: async task queue FIFO (1GB) (a general out-of-memory under Decision 12 unless the design names it a budget owner)	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/oblib/lib/thread/ob_dedup_queue.cpp	303	ObDedupQueue::map_callback_	bounded allocator not named in the plan: dedup queue FIFO (1GB) (a general out-of-memory under Decision 12 unless the design names it a budget owner)	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/oblib/lib/thread/ob_dedup_queue.cpp	332	ObDedupQueue::add_task_	bounded allocator not named in the plan: dedup queue FIFO (1GB) (a general out-of-memory under Decision 12 unless the design names it a budget owner)	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/oblib/lib/utility/ob_print_utils.h	320	ObCStringHelper::convert	logical -4013, not a named plan case (provisional: no allocation call and no null test in the governing condition)	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/oblib/lib/vector/ob_vsag_adaptor.cpp	62	vsag_errcode2ob	logical -4013 (plan case: vsag NO_ENOUGH_MEMORY)	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/oblib/lib/vector/ob_vsag_adaptor.cpp	267	HnswIndexHandler::cal_distance_by_id	budget-backed -4013: vector module (vsag allocator, vector memory limit)	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/observer/composition/retrieval/ob_das_legacy_tr_merge_iter.cpp	1084	ObDASLegacyTRMergeIter::build_query_tokens	logical -4013, not a named plan case (provisional: no allocation call and no null test in the governing condition)	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/observer/ob_uniq_task_queue.h	591	ObUniqTaskQueue::get_group	errsim injection point raising -4013	ret = common::OB_ALLOCATE_MEMORY_FAILED;
+src/observer/omt/ob_th_worker.cpp	333	ObThWorker::check_status	query memory tracker check	if (OB_UNLIKELY((OB_SUCCESS != (ret = CHECK_MEM_STATUS())))) {
+src/observer/vector_index/ob_plugin_vector_index_adaptor.cpp	227	ObVectorQueryAdaptorResultContext::init_bitmaps	-4013 handled (compared against)	} else if (ret == OB_ALLOCATE_MEMORY_FAILED) {
+src/observer/vector_index/ob_plugin_vector_index_adaptor.cpp	233	ObVectorQueryAdaptorResultContext::init_bitmaps	-4013 handled (compared against)	} else if (ret == OB_ALLOCATE_MEMORY_FAILED) {
+src/observer/vector_index/ob_plugin_vector_index_adaptor.cpp	4627	ObHnswBitmapFilter::upgrade_to_roaring_bitmap	-4013 handled (compared against)	} else if (ret == OB_ALLOCATE_MEMORY_FAILED) {
+src/observer/vector_index/ob_plugin_vector_index_scheduler.cpp	732	ObPluginVectorIndexLoadScheduler::check_task_state	-4013 handled (compared against)	} else if (OB_ALLOCATE_MEMORY_FAILED == task_ctx->err_code_
+src/observer/vector_index/ob_plugin_vector_index_scheduler.cpp	733	ObPluginVectorIndexLoadScheduler::check_task_state	budget error handled (compared against or case label): OB_ERR_VSAG_MEM_LIMIT_EXCEEDED	|| OB_ERR_VSAG_MEM_LIMIT_EXCEEDED == task_ctx->err_code_) {
+src/observer/vector_index/ob_plugin_vector_index_scheduler.cpp	1114	ObPluginVectorIndexLoadScheduler::handle_replay_result	-4013 handled (compared against)	if (ret == OB_ALLOCATE_MEMORY_FAILED) {
+src/observer/vector_index/ob_vector_index_ivf_cache_mgr.cpp	163	ObIvfCacheMgr::check_memory_limit	logical -4013 (plan case: IVF cache)	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/observer/vector_index/ob_vector_index_ivf_cache_mgr.cpp	189	ObIvfCacheMgr::create_cache_obj	budget-backed -4013: vector module (vsag allocator, vector memory limit)	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/observer/vector_index/ob_vector_index_ivf_cache_mgr.cpp	375	ObIvfCentCache::init	budget-backed -4013: vector module (vsag allocator, vector memory limit)	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/observer/vector_index/ob_vector_index_ivf_cache_mgr.cpp	389	ObIvfCentCache::init	budget-backed -4013: vector module (vsag allocator, vector memory limit)	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/observer/vector_index/ob_vector_index_ivf_cache_mgr.cpp	403	ObIvfCentCache::init	budget-backed -4013: vector module (vsag allocator, vector memory limit)	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/observer/virtual_table/ob_table_columns.cpp	1345	ObTableColumns::can_rewrite_error_code	-4013 handled (compared against)	if (OB_ALLOCATE_MEMORY_FAILED == ret
+src/pl/ob_pl.cpp	1646	ObPL::add_pl_lib_cache	budget error handled (compared against or case label): OB_REACH_MEMORY_LIMIT	} else if (OB_REACH_MEMORY_LIMIT == ret || OB_SQL_PC_PLAN_SIZE_LIMIT == ret) {
+src/pl/ob_pl_package_manager.cpp	1405	ObPLPackageManager::add_package_to_plan_cache	budget error handled (compared against or case label): OB_REACH_MEMORY_LIMIT	} else if (OB_REACH_MEMORY_LIMIT == ret || OB_SQL_PC_PLAN_SIZE_LIMIT == ret) {
+src/pl/parser/pl_parser_mysql_mode.l	30	#define YY_FATAL_ERROR	-4013 passed to obpl_mysql_parse_fatal_error (raised by the callee; not classified)	#define YY_FATAL_ERROR(msg, args...) (obpl_mysql_parse_fatal_error(OB_PARSER_ERR_NO_MEMORY, yyscanner, msg, ##args))
+src/pl/parser/pl_parser_mysql_mode.y	159	#define YY_FATAL_ERROR	-4013 passed to obpl_mysql_parse_fatal_error (raised by the callee; not classified)	#define YY_FATAL_ERROR(msg, args...) (obpl_mysql_parse_fatal_error(OB_PARSER_ERR_NO_MEMORY, YYLEX_PARAM, msg, ##args))
+src/pl/pl_cache/ob_pl_cache_mgr.cpp	201	ObPLCacheMgr::add_pl_cache	budget error raised: OB_REACH_MEMORY_LIMIT	ret = OB_REACH_MEMORY_LIMIT;
+src/query/api/query/parser/parse_node.h	402	-	query memory tracker check function declaration	extern int check_mem_status();
+src/query/api/query/parser/parse_node.h	403	-	query memory tracker check function declaration	extern int try_check_mem_status(int64_t check_try_times);
+src/rootserver/ddl_task/ob_ddl_scheduler.h	642	ObDDLScheduler::alloc_ddl_task	bounded allocator not named in the plan: DDL scheduler FIFO (1GB) (a general out-of-memory under Decision 12 unless the design names it a budget owner)	ret = common::OB_ALLOCATE_MEMORY_FAILED;
+src/rootserver/freeze/ob_major_merge_progress_checker.cpp	560	ObMajorMergeProgressChecker::deal_with_unfinish_table_ids	-4013 handled (compared against)	} while (OB_ALLOCATE_MEMORY_FAILED == ret && (++retry_times < ASSGIN_FAILURE_RETRY_TIMES));
+src/share/cache/ob_kvcache_store.cpp	407	ObKVCacheStore::wash	-4013 handled (compared against)	} while (OB_UNLIKELY(OB_ALLOCATE_MEMORY_FAILED == ret));
+src/share/cache/ob_kvcache_store.cpp	644	ObKVCacheStore::inner_flush_washable_mb	-4013 handled (compared against)	} while (OB_UNLIKELY(OB_ALLOCATE_MEMORY_FAILED == ret));
+src/share/cache/ob_kvcache_store.cpp	871	ObKVCacheStore::alloc_mbhandle	budget-backed -4013: KV cache store	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/share/cache/ob_kvcache_store.cpp	922	ObKVCacheStore::reserve_store_size	budget-backed -4013: KV cache store	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/share/cache/ob_kvcache_store.cpp	955	ObKVCacheStore::reserve_store_size	budget-backed -4013: KV cache store	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/share/cache/ob_kvcache_store.cpp	1030	ObKVCacheStore::pop_mb_handle_with_recovery	logical -4013 (plan case: KV-cache handle pool)	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/share/cache/ob_kvcache_store.cpp	1151	ObKVCacheStore::alloc_mb	budget-backed -4013: KV cache store	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/share/cache/ob_recycle_multi_kvcache.ipp	215	ObRecycleMultiKVCache::construct_assign_	-4013 handled (compared against)	if (OB_ALLOCATE_MEMORY_FAILED == ret) {
+src/share/cache/ob_recycle_multi_kvcache.ipp	267	ObRecycleMultiKVCache::append	-4013 handled (compared against)	if (OB_ALLOCATE_MEMORY_FAILED == tmp_ret) {
+src/share/cache/ob_recycle_multi_kvcache.ipp	285	ObRecycleMultiKVCache::append	-4013 handled (compared against)	} while (OB_SUCC(ret) && OB_ALLOCATE_MEMORY_FAILED == tmp_ret);
+src/share/io/ob_io_define.cpp	1088	ObIORequest::alloc_aligned_io_buf	budget-backed -4013: IO allocator	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/share/io/ob_io_define.cpp	1200	ObIORequest::try_alloc_buf_until_timeout	-4013 handled (compared against)	if (OB_ALLOCATE_MEMORY_FAILED == ret) {
+src/share/io/ob_io_manager.cpp	402	ObIOManager::add_device_channel	bounded allocator not named in the plan: IO manager FIFO (a general out-of-memory under Decision 12 unless the design names it a budget owner)	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/share/io/ob_io_manager.cpp	728	ObIOService::alloc_and_init_result	-4013 handled (compared against)	if (OB_ALLOCATE_MEMORY_FAILED == ret) {
+src/share/io/ob_io_manager.cpp	764	ObIOService::alloc_req_and_result	-4013 handled (compared against)	if (OB_ALLOCATE_MEMORY_FAILED == ret) {
+src/share/io/ob_io_manager.cpp	943	ObIOService::try_alloc_req_until_timeout	-4013 handled (compared against)	if (OB_ALLOCATE_MEMORY_FAILED == ret) {
+src/share/io/ob_io_manager.cpp	970	ObIOService::try_alloc_result_until_timeout	-4013 handled (compared against)	if (OB_ALLOCATE_MEMORY_FAILED == ret) {
+src/share/io/ob_io_manager.cpp	993	ObIOService::alloc_io_request	budget-backed -4013: IO allocator	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/share/io/ob_io_manager.cpp	1007	ObIOService::alloc_io_result	budget-backed -4013: IO allocator	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/share/io/ob_io_struct.cpp	235	ObIOAllocator::alloc	budget-backed -4013: IO allocator	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/share/io/ob_io_struct.h	600	ObIOAllocator::alloc	budget-backed -4013: IO allocator	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/share/ob_ddl_sim_point_define.h	49	-	errsim injection point raising -4013 (simulation point)	DDL_SIM_POINT_DEFINE(SIM_TYPE_DDL, HEART_BEAT_UPDATE_ACTIVE_TIME, 16, "heart beat mgr update task active time", RET_ERR(OB_ALLOCATE_MEMORY_FAILED))
+src/share/ob_ddl_sim_point_define.h	68	-	errsim injection point raising -4013 (simulation point)	DDL_SIM_POINT_DEFINE(SIM_TYPE_DDL, PROCESS_CHILD_TASK_FINISH_FAILED, 36, "process child task finish failed", RET_ERR(OB_ALLOCATE_MEMORY_FAILED))
+src/share/ob_ddl_sim_point_define.h	72	-	errsim injection point raising -4013 (simulation point)	DDL_SIM_POINT_DEFINE(SIM_TYPE_DDL, LOCAL_BUILD_EXECUTOR_BUILD_FAILED, 40, "local build executor build failed", RET_ERR(OB_ALLOCATE_MEMORY_FAILED))
+src/share/ob_ddl_sim_point_define.h	74	-	errsim injection point raising -4013 (simulation point)	DDL_SIM_POINT_DEFINE(SIM_TYPE_DDL, REDEF_SSTABLE_BULD_TASK_INIT_FAILED, 42, "redef sstable build task init failed", RET_ERR(OB_EAGAIN, OB_ALLOCATE_MEMORY_FAILED))
+src/share/ob_ddl_sim_point_define.h	75	-	errsim injection point raising -4013 (simulation point)	DDL_SIM_POINT_DEFINE(SIM_TYPE_DDL, REDEF_SSTABLE_BULD_TASK_PROCESS_FAILED, 43, "redef sstable build task process failed", RET_ERR(OB_ALLOCATE_MEMORY_FAILED))
+src/share/ob_ddl_sim_point_define.h	91	-	errsim injection point raising -4013 (simulation point)	DDL_SIM_POINT_DEFINE(SIM_TYPE_DDL, REDEF_TASK_CHECK_REBUILD_CONSTRAINT_FAILED, 60, "redef task check rebuild constraint failed", RET_ERR(OB_ALLOCATE_MEMORY_FAILED, OB_EAGAIN))
+src/share/ob_ddl_sim_point_define.h	142	-	errsim injection point raising -4013 (simulation point)	DDL_SIM_POINT_DEFINE(SIM_TYPE_DDL, UNIQUE_INDEX_CHECKER_GENERATE_INDEX_OUTPUT_PARAM_FAILED, 113, "unique index checker generate index output param failed", RET_ERR(OB_ALLOCATE_MEMORY_FAILED))
+src/share/ob_ddl_task_executor.cpp	92	ObDDLTaskQueue::push_task	bounded allocator not named in the plan: DDL task executor FIFO (1GB) (a general out-of-memory under Decision 12 unless the design names it a budget owner)	ret = common::OB_ALLOCATE_MEMORY_FAILED;
+src/share/ob_ddl_task_executor.cpp	95	ObDDLTaskQueue::push_task	bounded allocator not named in the plan: DDL task executor FIFO (1GB) (a general out-of-memory under Decision 12 unless the design names it a budget owner)	ret = common::OB_ALLOCATE_MEMORY_FAILED;
+src/share/ob_ddl_task_executor.h	94	ObIDDLTask::is_retry	budget error handled (compared against or case label): OB_EXCEED_MEM_LIMIT	|| common::OB_EXCEED_MEM_LIMIT == ret_code || common::OB_INACTIVE_SQL_CLIENT == ret_code || common::OB_INACTIVE_RPC_PROXY == ret_code || common::OB_LS_OFFLINE == ret_code;
+src/share/redolog/ob_log_file_handler.cpp	236	ObLogFileHandler::inner_read	-4013 handled (compared against)	} else if (OB_ALLOCATE_MEMORY_FAILED == ret) {
+src/share/roaringbitmap/ob_rb_memory_mgr.cpp	55	roaring_malloc	variable initialized to -4013 (not a raise)	int ret = OB_ALLOCATE_MEMORY_FAILED;
+src/share/schema/ob_multi_version_schema_service.cpp	1407	ObMultiVersionSchemaService::alloc_and_put_schema_mgr_	errsim injection point raising -4013	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/share/schema/ob_multi_version_schema_service.cpp	1410	ObMultiVersionSchemaService::alloc_and_put_schema_mgr_	errsim injection point raising -4013	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/share/schema/ob_multi_version_schema_service.cpp	1461	ObMultiVersionSchemaService::switch_allocator_	errsim injection point raising -4013	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/share/schema/ob_multi_version_schema_service.cpp	1474	ObMultiVersionSchemaService::switch_allocator_	errsim injection point raising -4013	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/share/schema/ob_multi_version_schema_service.cpp	2063	ObMultiVersionSchemaService::try_gc_allocator_when_add_schema_	errsim injection point raising -4013	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/share/schema/ob_schema_mem_mgr.cpp	125	ObSchemaMemMgr::alloc_schema_mgr	errsim injection point raising -4013	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/share/schema/ob_schema_mem_mgr.cpp	205	ObSchemaMemMgr::free_schema_mgr	errsim injection point raising -4013	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/sql/das/iter/ob_das_ivf_scan_iter.cpp	735	ObDASIvfBaseScanIter::get_centers_cache	-4013 handled (compared against)	if (ret == OB_ALLOCATE_MEMORY_FAILED) {
+src/sql/das/iter/ob_das_ivf_scan_iter.cpp	2656	ObDASIvfPQScanIter::get_pq_precomputetable_cache	-4013 handled (compared against)	if (ret == OB_ALLOCATE_MEMORY_FAILED) {
+src/sql/das/iter/ob_das_text_retrieval_merge_iter.cpp	210	ObDASTextRetrievalMergeIter::build_query_tokens	logical -4013, not a named plan case (provisional: no allocation call and no null test in the governing condition)	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/sql/engine/basic/ob_chunk_datum_store.cpp	743	ObChunkDatumStore::dump	budget error raised: OB_EXCEED_MEM_LIMIT	ret = OB_EXCEED_MEM_LIMIT;
+src/sql/engine/basic/ob_chunk_datum_store.cpp	825	ObChunkDatumStore::switch_block	budget error handled (compared against or case label): OB_EXCEED_MEM_LIMIT	if (OB_EXCEED_MEM_LIMIT != ret) {
+src/sql/engine/basic/ob_chunk_datum_store.cpp	862	ObChunkDatumStore::ensure_write_blk	budget error handled (compared against or case label): OB_EXCEED_MEM_LIMIT	if (OB_FAIL(switch_block(Block::min_buf_size(row_size))) && OB_EXCEED_MEM_LIMIT != ret) {
+src/sql/engine/basic/ob_chunk_datum_store.cpp	910	ObChunkDatumStore::add_row	budget error handled (compared against or case label): OB_EXCEED_MEM_LIMIT	if (OB_EXCEED_MEM_LIMIT != ret) {
+src/sql/engine/basic/ob_chunk_datum_store.cpp	1377	ObChunkDatumStore::finish_add_row	budget error handled (compared against or case label): OB_EXCEED_MEM_LIMIT	if (need_dump && OB_FAIL(dump(false, true)) && OB_EXCEED_MEM_LIMIT != ret) {
+src/sql/engine/basic/ob_chunk_row_store.cpp	487	ObChunkRowStore::dump	budget error raised: OB_EXCEED_MEM_LIMIT	ret = OB_EXCEED_MEM_LIMIT;
+src/sql/engine/basic/ob_chunk_row_store.cpp	557	ObChunkRowStore::switch_block	budget error handled (compared against or case label): OB_EXCEED_MEM_LIMIT	if (OB_EXCEED_MEM_LIMIT != ret) {
+src/sql/engine/basic/ob_chunk_row_store.cpp	626	ObChunkRowStore::add_row	budget error handled (compared against or case label): OB_EXCEED_MEM_LIMIT	if (OB_FAIL(switch_block(min_buf_size)) && OB_EXCEED_MEM_LIMIT != ret) {
+src/sql/engine/basic/ob_chunk_row_store.cpp	683	ObChunkRowStore::copy_row	budget error handled (compared against or case label): OB_EXCEED_MEM_LIMIT	if (OB_FAIL(switch_block(min_buf_size)) && OB_EXCEED_MEM_LIMIT != ret) {
+src/sql/engine/basic/ob_chunk_row_store.cpp	716	ObChunkRowStore::finish_add_row	budget error handled (compared against or case label): OB_EXCEED_MEM_LIMIT	if (need_dump && OB_FAIL(dump(false, true)) && OB_EXCEED_MEM_LIMIT != ret) {
+src/sql/engine/basic/ob_hash_partitioning_infrastructure_op.h	1700	ObHashPartInfrastructure::create_dumped_partitions	logical -4013 (plan case: hash-join partition depth)	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/sql/engine/basic/ob_hash_partitioning_infrastructure_op.h	2709	ObHashPartInfrastructure::process_dump	budget-backed -4013: SQL work-area spill	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/sql/engine/basic/ob_temp_block_store.cpp	189	ObTempBlockStore::finish_add_row	budget error handled (compared against or case label): OB_EXCEED_MEM_LIMIT	if (need_dump && OB_FAIL(dump(true)) && OB_EXCEED_MEM_LIMIT != ret) {
+src/sql/engine/basic/ob_temp_block_store.cpp	1099	ObTempBlockStore::dump	budget error raised: OB_EXCEED_MEM_LIMIT	ret = OB_EXCEED_MEM_LIMIT;
+src/sql/engine/expr/ob_expr_date_format.cpp	99	ObExprDateFormat::calc_date_format	-4013 handled (compared against)	if (CM_IS_WARN_ON_FAIL(cast_mode) && OB_ALLOCATE_MEMORY_FAILED != ret) {
+src/sql/engine/expr/ob_expr_day_of_func.cpp	432	ObExprSubAddtime::calc_result2	-4013 handled (compared against)	if (CM_IS_WARN_ON_FAIL(cast_mode) && OB_ALLOCATE_MEMORY_FAILED != ret) {
+src/sql/engine/expr/ob_expr_day_of_func.cpp	637	ObExprSubAddtime::subaddtime_varchar	-4013 handled (compared against)	if (OB_FAIL(ret) && OB_ALLOCATE_MEMORY_FAILED != ret) {
+src/sql/engine/expr/ob_expr_to_pinyin.cpp	69	convert_to_sortkey	variable initialized to -4013 (not a raise)	int ret = OB_ALLOCATE_MEMORY_FAILED;
+src/sql/engine/expr/ob_expr_xml_func_helper.cpp	100	ObXMLExprHelper::replace_xpath_ret_code	-4013 handled (compared against)	} else if (ret == OB_ALLOCATE_MEMORY_FAILED) {
+src/sql/engine/join/ob_hash_join_op.cpp	843	ObHashJoinOp::inner_get_next_row	logical -4013 (plan case: hash-join partition depth)	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/sql/engine/ob_exec_context.cpp	679	ObExecContext::check_status	query memory tracker check	} else if (OB_UNLIKELY((OB_SUCCESS != (ret = CHECK_MEM_STATUS())))) {
+src/sql/engine/pdml/static/ob_pdml_op_batch_row_cache.cpp	166	ObPDMLOpBatchRowCache::add_row	budget error raised: OB_EXCEED_MEM_LIMIT	ret = OB_EXCEED_MEM_LIMIT;
+src/sql/engine/pdml/static/ob_pdml_op_batch_row_cache.cpp	168	ObPDMLOpBatchRowCache::add_row	budget error handled (compared against or case label): OB_EXCEED_MEM_LIMIT	if (OB_EXCEED_MEM_LIMIT != ret) {
+src/sql/engine/pdml/static/ob_pdml_op_batch_row_cache.cpp	181	ObPDMLOpBatchRowCache::add_row	budget error handled (compared against or case label): OB_EXCEED_MEM_LIMIT	if (OB_EXCEED_MEM_LIMIT != ret) {
+src/sql/engine/pdml/static/ob_pdml_op_batch_row_cache.cpp	317	ObPDMLOpBatchRowCache::process_dump	budget error raised: OB_EXCEED_MEM_LIMIT	ret = OB_EXCEED_MEM_LIMIT;
+src/sql/engine/pdml/static/ob_pdml_op_data_driver.cpp	184	ObPDMLOpDataDriver::fill_cache_unitl_cache_full_or_child_iter_end	budget error handled (compared against or case label): OB_EXCEED_MEM_LIMIT	if (!with_barrier_ && OB_EXCEED_MEM_LIMIT == ret) {
+src/sql/engine/px/ob_px_util.cpp	2292	ObVirtualTableErrorWhitelist::should_ignore_vtable_error	-4013 handled (case label through CASE_IGNORE_ERR_HELPER)	CASE_IGNORE_ERR_HELPER(OB_ALLOCATE_MEMORY_FAILED)
+src/sql/executor/ob_memory_tracker.cpp	36	ObMemTrackerGuard::check_status	query memory tracker check function definition	int ObMemTrackerGuard::check_status()
+src/sql/executor/ob_memory_tracker.cpp	48	ObMemTrackerGuard::check_status	budget error raised: OB_EXCEED_QUERY_MEM_LIMIT	ret = OB_EXCEED_QUERY_MEM_LIMIT;
+src/sql/executor/ob_memory_tracker.cpp	56	ObMemTrackerGuard::try_check_status	query memory tracker check function definition	int ObMemTrackerGuard::try_check_status(int64_t check_try_times)
+src/sql/monitor/ob_sql_plan.cpp	120	ObSqlPlan::store_sql_plan_for_explain	-4013 handled (compared against)	allocate_mem_failed |= OB_ALLOCATE_MEMORY_FAILED == ret;
+src/sql/monitor/ob_sql_plan.cpp	127	ObSqlPlan::store_sql_plan_for_explain	-4013 handled (compared against)	allocate_mem_failed |= OB_ALLOCATE_MEMORY_FAILED == ret;
+src/sql/ob_sql.cpp	2991	ObSql::pc_get_plan	budget error handled (compared against or case label): OB_REACH_MEMORY_LIMIT	if (OB_SQL_PC_NOT_EXIST == ret || OB_REACH_MEMORY_LIMIT == ret) {
+src/sql/ob_sql.cpp	3425	ObSql::pc_add_plan	budget error handled (compared against or case label): OB_REACH_MEMORY_LIMIT	} else if (OB_REACH_MEMORY_LIMIT == ret || OB_SQL_PC_PLAN_SIZE_LIMIT == ret) {
+src/sql/ob_sql_utils.cpp	3667	ObSQLUtils::check_need_disconnect_parser_err	-4013 handled (compared against)	|| OB_ALLOCATE_MEMORY_FAILED == ret_code)) {
+src/sql/optimizer/ob_join_order.cpp	16644	ObJoinOrder::get_query_tokens_by_boolean_mode	logical -4013, not a named plan case (provisional: no allocation call and no null test in the governing condition)	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/sql/parser/ob_memory_tracker_wrapper.cpp	20	check_mem_status	query memory tracker check function definition [not built]	int check_mem_status()
+src/sql/parser/ob_memory_tracker_wrapper.cpp	22	check_mem_status	query memory tracker check [not built]	return oceanbase::lib::ObMemTrackerGuard::check_status();
+src/sql/parser/ob_memory_tracker_wrapper.cpp	25	try_check_mem_status	query memory tracker check function definition [not built]	int try_check_mem_status(int64_t check_try_times)
+src/sql/parser/ob_memory_tracker_wrapper.cpp	27	try_check_mem_status	query memory tracker check [not built]	return oceanbase::lib::ObMemTrackerGuard::try_check_status(check_try_times);
+src/sql/parser/ob_memory_tracker_wrapper.h	26	-	query memory tracker check function declaration	int check_mem_status();
+src/sql/parser/ob_memory_tracker_wrapper.h	27	-	query memory tracker check function declaration	int try_check_mem_status(int64_t check_try_times);
+src/sql/parser/ob_non_reserved_keywords.c	183	add_word_from_pool	logical -4013, not a named plan case (provisional: no allocation call and no null test in the governing condition)	ret = OB_PARSER_ERR_NO_MEMORY;
+src/sql/parser/parse_node.c	177	check_mem_status	query memory tracker check function definition	int OB_WEAK_SYMBOL check_mem_status() { return OB_PARSER_SUCCESS; }
+src/sql/parser/parse_node.c	178	try_check_mem_status	query memory tracker check function definition	int OB_WEAK_SYMBOL try_check_mem_status(int64_t check_try_times) { return OB_PARSER_SUCCESS; }
+src/sql/parser/parse_node.c	186	new_node	query memory tracker check	if (OB_UNLIKELY((OB_PARSER_SUCCESS != (ret = try_check_mem_status(check_try_times))))) {
+src/sql/parser/sql_parser_base.c	108	parse_sql	-4013 handled (compared against)	if (p->extra_errno_ == OB_PARSER_ERR_NO_MEMORY) {
+src/sql/parser/sql_parser_base.c	136	parse_sql	logical -4013, not a named plan case (provisional: no allocation call and no null test in the governing condition)	ret = OB_PARSER_ERR_NO_MEMORY;
+src/sql/parser/sql_parser_base.h	89	#define YYABORT_NO_MEMORY	-4013 passed to YYABORT_WITH_ERROR (raised by the callee; not classified)	#define YYABORT_NO_MEMORY YYABORT_WITH_ERROR(OB_PARSER_ERR_NO_MEMORY)
+src/sql/parser/sql_parser_base.h	427	#define lookup_pl_exec_symbol	-4013 handled (compared against)	} else if (OB_PARSER_ERR_NO_MEMORY == ret) {           \
+src/sql/parser/sql_parser_mysql_mode.l	31	#define YY_FATAL_ERROR	-4013 passed to obsql_mysql_parser_fatal_error (raised by the callee; not classified)	#define YY_FATAL_ERROR(msg, args...) (obsql_mysql_parser_fatal_error(OB_PARSER_ERR_NO_MEMORY, yyscanner, msg, ##args))
+src/sql/parser/sql_parser_mysql_mode.y	9195	-	-4013 handled (compared against)	if (OB_PARSER_ERR_NO_MEMORY == result->extra_errno_) {
+src/sql/pl/ob_pl_resolver.h	535	ObPLResolver::is_unrecoverable_error	-4013 handled (compared against)	return OB_ALLOCATE_MEMORY_FAILED == ret
+src/sql/pl/ob_pl_resolver.h	537	ObPLResolver::is_unrecoverable_error	budget error handled (compared against or case label): OB_EXCEED_QUERY_MEM_LIMIT	|| OB_EXCEED_QUERY_MEM_LIMIT == ret
+src/sql/plan_cache/ob_pcv_set.cpp	195	ObPCVSet::inner_add_cache_obj	budget error raised: OB_REACH_MEMORY_LIMIT	ret = OB_REACH_MEMORY_LIMIT;
+src/sql/plan_cache/ob_plan_cache.cpp	886	ObPlanCache::add_plan	budget error raised: OB_REACH_MEMORY_LIMIT	ret = OB_REACH_MEMORY_LIMIT;
+src/sql/plan_cache/ob_plan_cache.cpp	1745	ObPlanCache::add_ps_plan	budget error raised: OB_REACH_MEMORY_LIMIT	ret = OB_REACH_MEMORY_LIMIT;
+src/sql/resolver/cmd/ob_call_procedure_resolver.cpp	247	ObCallProcedureResolver::add_call_proc_info	budget error handled (compared against or case label): OB_REACH_MEMORY_LIMIT	} else if (OB_REACH_MEMORY_LIMIT == ret || OB_SQL_PC_PLAN_SIZE_LIMIT == ret) {
+src/sql/resolver/dml/ob_select_resolver.cpp	1006	ObSelectResolver::resolve	query memory tracker check	if (OB_UNLIKELY((OB_SUCCESS != (ret = TRY_CHECK_MEM_STATUS(check_try_times))))) {
+src/sql/resolver/expr/ob_raw_expr.h	5077	ObRawExprFactory::try_check_status	query memory tracker check	? CHECK_MEM_STATUS()
+src/sql/rewrite/ob_expr_range_converter.cpp	112	ObExprRangeConverter::alloc_range_node	budget error raised: OB_ERR_QUERY_RANGE_MEMORY_EXHAUSTED	ret = OB_ERR_QUERY_RANGE_MEMORY_EXHAUSTED;
+src/sql/rewrite/ob_expr_range_converter.cpp	1647	ObExprRangeConverter::get_final_in_array_idx	budget error raised: OB_ERR_QUERY_RANGE_MEMORY_EXHAUSTED	ret = OB_ERR_QUERY_RANGE_MEMORY_EXHAUSTED;
+src/sql/rewrite/ob_range_graph_generator.cpp	66	ObRangeGraphGenerator::generate_range_graph	budget error handled (compared against or case label): OB_ERR_QUERY_RANGE_MEMORY_EXHAUSTED	if (OB_FAIL(ret) && OB_ERR_QUERY_RANGE_MEMORY_EXHAUSTED == ret) {
+src/sql/rewrite/ob_transform_rule.cpp	287	ObTransformRule::accept_transform	query memory tracker check	if (OB_UNLIKELY((OB_SUCCESS != (ret = TRY_CHECK_MEM_STATUS(check_try_times))))) {
+src/storage/allocator/ob_vector_allocator.cpp	142	ObVectorMemContext::alloc	budget error raised: OB_ERR_VSAG_MEM_LIMIT_EXCEEDED	ret = OB_ERR_VSAG_MEM_LIMIT_EXCEEDED;
+src/storage/blocksstable/index_block/ob_index_block_builder.cpp	1749	ObSSTableIndexBuilder::is_retriable_error	-4013 handled (case label)	case OB_ALLOCATE_MEMORY_FAILED:
+src/storage/blocksstable/ob_block_manager.cpp	935	ObBlockManager::mark_and_sweep	-4013 handled (compared against)	if (OB_ALLOCATE_MEMORY_FAILED == ret) {
+src/storage/blocksstable/ob_macro_block_writer.cpp	2443	ObMacroBlockWriter::create_mem_pre_warmer	variable initialized to -4013 (not a raise)	int tmp_ret = OB_ALLOCATE_MEMORY_FAILED; // use tmp_ret, allow not pre warm mem block cache
+src/storage/blocksstable/ob_macro_block_writer.cpp	2448	ObMacroBlockWriter::create_mem_pre_warmer	variable initialized to -4013 (not a raise)	int tmp_ret = OB_ALLOCATE_MEMORY_FAILED; // use tmp_ret, allow not pre warm mem block cache
+src/storage/blocksstable/ob_micro_block_cache.cpp	397	ObIMicroBlockIOCallback::alloc_data_buf	micro block cache FIFO: owner, limit, hand-out or retry	for (int64_t i = 1; OB_ISNULL(data_buffer_) && i <= ALLOC_BUF_RETRY_TIMES; i++) {
+src/storage/blocksstable/ob_micro_block_cache.cpp	398	ObIMicroBlockIOCallback::alloc_data_buf	micro block cache FIFO: owner, limit, hand-out or retry	ob_usleep(ALLOC_BUF_RETRY_INTERVAL * i);
+src/storage/blocksstable/ob_micro_block_cache.cpp	402	ObIMicroBlockIOCallback::alloc_data_buf	budget-backed -4013: micro block cache FIFO (4GB)	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/storage/blocksstable/ob_micro_block_cache.cpp	503	ObIMicroBlockIOCallback::read_block_and_copy	budget-backed -4013: micro block cache FIFO (4GB)	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/storage/blocksstable/ob_micro_block_cache.cpp	683	ObMultiDataBlockIOCallback::set_io_ctx	budget-backed -4013: micro block cache FIFO (4GB)	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/storage/blocksstable/ob_micro_block_cache.cpp	699	ObMultiDataBlockIOCallback::alloc_result	budget-backed -4013: micro block cache FIFO (4GB)	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/storage/blocksstable/ob_micro_block_cache.cpp	707	ObMultiDataBlockIOCallback::alloc_result	budget-backed -4013: micro block cache FIFO (4GB)	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/storage/blocksstable/ob_micro_block_cache.cpp	715	ObMultiDataBlockIOCallback::alloc_result	budget-backed -4013: micro block cache FIFO (4GB)	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/storage/blocksstable/ob_micro_block_cache.cpp	847	ObIMicroBlockCache::prefetch	micro block cache FIFO: owner, limit, hand-out or retry	callback->allocator_ = allocator;
+src/storage/blocksstable/ob_micro_block_cache.cpp	1006	ObDataMicroBlockCache::init	micro block cache FIFO: owner, limit, hand-out or retry	const int64_t mem_limit = 4 * 1024 * 1024 * 1024LL;
+src/storage/blocksstable/ob_micro_block_cache.cpp	1009	ObDataMicroBlockCache::init	micro block cache FIFO: owner, limit, hand-out or retry	} else if (OB_FAIL(allocator_.init(mem_limit, OB_MALLOC_MIDDLE_BLOCK_SIZE, OB_MALLOC_MIDDLE_BLOCK_SIZE))) {
+src/storage/blocksstable/ob_micro_block_cache.cpp	1011	ObDataMicroBlockCache::init	micro block cache FIFO: owner, limit, hand-out or retry	allocator_.set_attr(ObMemAttr(ObModIds::OB_SSTABLE_MICRO_BLOCK_ALLOCATOR));
+src/storage/blocksstable/ob_micro_block_cache.cpp	1019	ObDataMicroBlockCache::destroy	micro block cache FIFO: owner, limit, hand-out or retry	allocator_.destroy();
+src/storage/blocksstable/ob_micro_block_cache.cpp	1036	ObDataMicroBlockCache::prefetch_multi_block	budget-backed -4013: micro block cache FIFO (4GB), allocator obtained from allocator_	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/storage/blocksstable/ob_micro_block_cache.cpp	1039	ObDataMicroBlockCache::prefetch_multi_block	micro block cache FIFO: owner, limit, hand-out or retry	callback->allocator_ = allocator;
+src/storage/blocksstable/ob_micro_block_cache.cpp	1075	ObDataMicroBlockCache::load_block	micro block cache FIFO: owner, limit, hand-out or retry	callback->allocator_ = allocator;
+src/storage/blocksstable/ob_micro_block_cache.cpp	1118	ObDataMicroBlockCache::get_allocator	micro block cache FIFO: owner, limit, hand-out or retry	allocator = &allocator_;
+src/storage/blocksstable/ob_micro_block_cache.cpp	1332	ObIndexMicroBlockCache::load_block	micro block cache FIFO: owner, limit, hand-out or retry	callback->allocator_ = allocator;
+src/storage/blocksstable/ob_micro_block_cache.h	292	ObIMicroBlockIOCallback	micro block cache FIFO: owner, limit, hand-out or retry	static const int64_t ALLOC_BUF_RETRY_INTERVAL = 100 * 1000;
+src/storage/blocksstable/ob_micro_block_cache.h	293	ObIMicroBlockIOCallback	micro block cache FIFO: owner, limit, hand-out or retry	static const int64_t ALLOC_BUF_RETRY_TIMES = 3;
+src/storage/blocksstable/ob_micro_block_cache.h	297	ObIMicroBlockIOCallback	micro block cache FIFO: owner, limit, hand-out or retry	common::ObIAllocator *allocator_;
+src/storage/blocksstable/ob_micro_block_cache.h	509	ObDataMicroBlockCache	micro block cache FIFO: owner, limit, hand-out or retry	common::ObConcurrentFIFOAllocator allocator_;
+src/storage/blocksstable/ob_shared_macro_block_manager.cpp	463	ObSharedMacroBlockMgr::defragment	-4013 handled (compared against)	} else if (OB_ALLOCATE_MEMORY_FAILED != ret
+src/storage/blocksstable/ob_sstable.cpp	1124	ObSSTable::ignore_ret	-4013 handled (compared against)	return OB_ALLOCATE_MEMORY_FAILED == ret || OB_TIMEOUT == ret || OB_DISK_HUNG == ret;
+src/storage/compaction/ob_compaction_diagnose.h	149	ObIDiagnoseInfo::deep_copy	-4013 handled (compared against)	if (OB_ALLOCATE_MEMORY_FAILED != ret) {
+src/storage/compaction/ob_compaction_diagnose.h	320	ObIDiagnoseInfoMgr::alloc_and_add	-4013 handled (compared against)	OB_ALLOCATE_MEMORY_FAILED == input_info->deep_copy(allocator_, info)) {
+src/storage/compaction/ob_compaction_memory_context.cpp	223	ObCompactionBuffer::reuse	variable initialized to -4013 (not a raise)	int ret = OB_ALLOCATE_MEMORY_FAILED;
+src/storage/compaction/ob_compaction_memory_pool.cpp	307	ObCompactionMemPool::alloc	budget error handled (compared against or case label): OB_EXCEED_MEM_LIMIT	if (OB_EXCEED_MEM_LIMIT != ret) {
+src/storage/compaction/ob_compaction_memory_pool.cpp	431	ObCompactionMemPool::expand	budget error raised: OB_EXCEED_MEM_LIMIT	ret = OB_EXCEED_MEM_LIMIT;
+src/storage/compaction/ob_medium_compaction_mgr.cpp	159	ObTabletMediumCompactionInfoRecorder::submit_medium_compaction_info	-4013 handled (compared against)	if (OB_ALLOCATE_MEMORY_FAILED == ret || OB_BLOCK_FROZEN == ret) {
+src/storage/compaction/ob_partition_merger.cpp	598	ObPartitionMajorMerger::merge_partition	-4013 handled (compared against)	if (OB_ALLOCATE_MEMORY_FAILED != ret && GCONF._enable_compaction_diagnose) {
+src/storage/compaction/ob_partition_merger.cpp	917	ObPartitionMinorMerger::merge_partition	-4013 handled (compared against)	if (OB_ALLOCATE_MEMORY_FAILED != ret && GCONF._enable_compaction_diagnose) {
+src/storage/compaction/ob_tablet_merge_task.cpp	935	ObTabletMergeTask::process	-4013 handled (compared against)	if (OB_ALLOCATE_MEMORY_FAILED == ret || OB_TIMEOUT == ret || OB_IO_ERROR == ret) {
+src/storage/ddl/ob_ddl_common_storage_impl.cpp	744	oceanbase::storage::ObDDLStorageUtil::ddl_get_tablet	-4013 handled (compared against)	if (OB_ALLOCATE_MEMORY_FAILED == ret) {
+src/storage/ls/ob_ls.cpp	1459	ObLS::tablet_freeze	-4013 handled (compared against)	is_retry_code = OB_EAGAIN == ret || OB_MINOR_FREEZE_NOT_ALLOW == ret || OB_ALLOCATE_MEMORY_FAILED == ret;
+src/storage/ls/ob_ls_tablet_service.cpp	518	ObLSTabletService::refresh_tablet_addr	-4013 handled (compared against)	} else if (OB_ALLOCATE_MEMORY_FAILED == ret) {
+src/storage/ls/ob_ls_tablet_service.cpp	1248	ObLSTabletService::get_tablet_with_timeout	-4013 handled (compared against)	while (OB_ALLOCATE_MEMORY_FAILED == ret && ObClockGenerator::getClock() < retry_timeout_us) {
+src/storage/ls/ob_ls_tablet_service.cpp	1251	ObLSTabletService::get_tablet_with_timeout	-4013 handled (compared against)	if (OB_ALLOCATE_MEMORY_FAILED == ret) {
+src/storage/memtable/mvcc/ob_keybtree.cpp	1629	ObKeyBtree::insert_or_get	-4013 handled (compared against)	} else if (OB_ALLOCATE_MEMORY_FAILED == ret) {
+src/storage/memtable/ob_memtable.cpp	946	ObMemtable::replay_row	-4013 handled (compared against)	if (OB_ALLOCATE_MEMORY_FAILED != ret || REACH_TIME_INTERVAL(1 * 1000 * 1000)) {
+src/storage/memtable/ob_memtable_mutator.cpp	650	ObMutatorWriter::append_row_kv	-4013 handled (compared against)	if (ret == OB_ALLOCATE_MEMORY_FAILED) {
+src/storage/memtable/ob_memtable_mutator.cpp	656	ObMutatorWriter::append_row_kv	-4013 handled (compared against)	if (ret == OB_ALLOCATE_MEMORY_FAILED) {
+src/storage/memtable/ob_memtable_mutator.cpp	715	ObMutatorWriter::append_table_lock_kv	-4013 handled (compared against)	if (ret == OB_ALLOCATE_MEMORY_FAILED) {
+src/storage/memtable/ob_memtable_mutator.cpp	726	ObMutatorWriter::append_table_lock_kv	-4013 handled (compared against)	if (ret == OB_ALLOCATE_MEMORY_FAILED) {
+src/storage/memtable/ob_memtable_mutator.cpp	781	ObMutatorWriter::append_ext_info_log_kv	-4013 handled (compared against)	if (ret == OB_ALLOCATE_MEMORY_FAILED) {
+src/storage/memtable/ob_memtable_mutator.cpp	787	ObMutatorWriter::append_ext_info_log_kv	-4013 handled (compared against)	if (ret == OB_ALLOCATE_MEMORY_FAILED) {
+src/storage/meta_mem/ob_storage_meta_mem_mgr.cpp	401	ObStorageMetaMemMgr::push_table_into_gc_queue	-4013 handled (compared against)	if (OB_ALLOCATE_MEMORY_FAILED == ret) {
+src/storage/meta_mem/ob_storage_meta_mem_mgr.cpp	408	ObStorageMetaMemMgr::push_table_into_gc_queue	-4013 handled (compared against)	} while (OB_ALLOCATE_MEMORY_FAILED == ret
+src/storage/meta_mem/ob_storage_meta_mem_mgr.cpp	1203	ObStorageMetaMemMgr::acquire_tablet_from_pool	-4013 handled (compared against)	if (OB_ALLOCATE_MEMORY_FAILED != ret) {
+src/storage/meta_mem/ob_storage_meta_mem_mgr.cpp	1245	ObStorageMetaMemMgr::acquire_tablet	-4013 handled (compared against)	if (OB_ALLOCATE_MEMORY_FAILED != ret) {
+src/storage/meta_mem/ob_tablet_meta_mem_mgr.cpp	396	ObTabletMetaMemMgr::push_table_into_gc_queue	-4013 handled (compared against) [not built]	if (OB_ALLOCATE_MEMORY_FAILED == ret) {
+src/storage/meta_mem/ob_tablet_meta_mem_mgr.cpp	403	ObTabletMetaMemMgr::push_table_into_gc_queue	-4013 handled (compared against) [not built]	} while (OB_ALLOCATE_MEMORY_FAILED == ret
+src/storage/meta_mem/ob_tablet_meta_mem_mgr.cpp	1206	ObTabletMetaMemMgr::acquire_tablet_from_pool	-4013 handled (compared against) [not built]	if (OB_ALLOCATE_MEMORY_FAILED != ret) {
+src/storage/meta_mem/ob_tablet_meta_mem_mgr.cpp	1249	ObTabletMetaMemMgr::acquire_tablet	-4013 handled (compared against) [not built]	if (OB_ALLOCATE_MEMORY_FAILED != ret) {
+src/storage/meta_store/ob_local_storage_meta_persister.cpp	99	ObLocalStorageMetaPersister::batch_update_tablet	-4013 handled (compared against)	if (OB_ALLOCATE_MEMORY_FAILED != ret) {
+src/storage/meta_store/ob_local_storage_meta_persister.cpp	105	ObLocalStorageMetaPersister::batch_update_tablet	-4013 handled (compared against)	} while (OB_ALLOCATE_MEMORY_FAILED == ret);
+src/storage/meta_store/ob_local_storage_meta_persister.cpp	221	ObLocalStorageMetaPersister::write_update_tablet_slog_	-4013 handled (compared against)	if (OB_ALLOCATE_MEMORY_FAILED != ret) {
+src/storage/meta_store/ob_local_storage_meta_persister.cpp	227	ObLocalStorageMetaPersister::write_update_tablet_slog_	-4013 handled (compared against)	} while (OB_ALLOCATE_MEMORY_FAILED == ret);
+src/storage/ob_resource_map.h	325	ObResourceMap::set	bounded allocator not named in the plan: resource map FIFO (a general out-of-memory under Decision 12 unless the design names it a budget owner)	ret = common::OB_ALLOCATE_MEMORY_FAILED;
+src/storage/ob_storage_clog_recorder.cpp	202	ObIStorageClogRecorder::try_update	-4013 handled (compared against)	if (OB_ALLOCATE_MEMORY_FAILED == ret) {
+src/storage/ob_storage_schema_recorder.cpp	162	ObStorageSchemaRecorder::try_update_storage_schema	-4013 handled (compared against)	if (OB_ALLOCATE_MEMORY_FAILED == ret || OB_BLOCK_FROZEN == ret) {
+src/storage/scheduler/ob_dag_scheduler.cpp	3026	ObDagPrioScheduler::deal_with_finish_task	-4013 handled (compared against)	if (OB_ALLOCATE_MEMORY_FAILED == error_code && is_mini_compaction_dag(dag->get_type())) {
+src/storage/slog_ckpt/ob_local_storage_checkpoint_slog_handler.cpp	737	ObLocalStorageCheckpointSlogHandler::update_tablet_meta_addr_and_block_list	-4013 handled (compared against)	} while (OB_ALLOCATE_MEMORY_FAILED == ret);
+src/storage/slog_ckpt/ob_local_storage_checkpoint_writer.cpp	425	ObLocalStorageCheckpointWriter::ignore_ret	-4013 handled (compared against)	return OB_ALLOCATE_MEMORY_FAILED == ret || OB_DISK_HUNG == ret || OB_TIMEOUT == ret || OB_BUF_NOT_ENOUGH == ret;
+src/storage/slog_ckpt/ob_server_checkpoint_writer.cpp	93	ObServerCheckpointWriter::write_runtime_meta_checkpoint	bounded allocator not named in the plan: checkpoint writer FIFO (128MB) (a general out-of-memory under Decision 12 unless the design names it a budget owner)	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/storage/tablet/ob_tablet.cpp	2353	ObTablet::ignore_ret	-4013 handled (compared against)	return OB_ALLOCATE_MEMORY_FAILED == ret || OB_TIMEOUT == ret || OB_DISK_HUNG == ret;
+src/storage/throttle/ob_throttle_unit.ipp	238	ObThrottleUnit::inner_get_throttle_info_	-4013 handled (compared against)	if (OB_ALLOCATE_MEMORY_FAILED == ret) {
+src/storage/tmp_file/ob_i_tmp_file.cpp	576	ObITmpFile::aio_write	budget error handled (compared against or case label): OB_ALLOCATE_TMP_FILE_PAGE_FAILED	if (OB_ALLOCATE_TMP_FILE_PAGE_FAILED == ret) {
+src/storage/tmp_file/ob_i_tmp_file.cpp	657	ObITmpFile::inner_write_continuous_pages_	budget error handled (compared against or case label): OB_ALLOCATE_TMP_FILE_PAGE_FAILED	if (OB_ALLOCATE_TMP_FILE_PAGE_FAILED == ret) {
+src/storage/tmp_file/ob_i_tmp_file.cpp	741	ObITmpFile::inner_write_continuous_pages_	budget error raised: OB_ALLOCATE_TMP_FILE_PAGE_FAILED	ret = is_alloc_failed && OB_SUCC(ret) ? OB_ALLOCATE_TMP_FILE_PAGE_FAILED : ret;
+src/storage/tmp_file/ob_i_tmp_file.cpp	804	ObITmpFile::alloc_and_write_pages_	budget error handled (compared against or case label): OB_ALLOCATE_TMP_FILE_PAGE_FAILED	if (OB_FAIL(ret) && ret != OB_ALLOCATE_TMP_FILE_PAGE_FAILED && !alloced_page_id.empty()) {
+src/storage/tmp_file/ob_shared_nothing_tmp_file.cpp	1677	ObSharedNothingTmpFile::collect_flush_data_page_id_	-4013 handled (compared against)	if (OB_ALLOCATE_MEMORY_FAILED == ret) {
+src/storage/tmp_file/ob_shared_nothing_tmp_file.cpp	1758	ObSharedNothingTmpFile::generate_meta_flush_info_	-4013 handled (compared against)	if (OB_ALLOCATE_MEMORY_FAILED == ret) {
+src/storage/tmp_file/ob_tmp_file_flush_manager.cpp	330	ObTmpFileFlushManager::flush_by_watermark_	budget error handled (compared against or case label): OB_ALLOCATE_TMP_FILE_PAGE_FAILED	if (OB_ALLOCATE_TMP_FILE_PAGE_FAILED == ret){
+src/storage/tmp_file/ob_tmp_file_flush_manager.cpp	621	ObTmpFileFlushManager::insert_items_into_meta_tree_	budget error handled (compared against or case label): OB_ALLOCATE_TMP_FILE_PAGE_FAILED	if (OB_ALLOCATE_TMP_FILE_PAGE_FAILED == ret) {
+src/storage/tmp_file/ob_tmp_file_meta_tree.cpp	278	ObSharedNothingTmpFileMetaTree::try_to_insert_items_to_array_	-4013 handled (compared against)	if (OB_ALLOCATE_MEMORY_FAILED == ret) {
+src/storage/tmp_file/ob_tmp_file_thread_wrapper.cpp	500	ObTmpFileFlushThread::retry_task_	budget error handled (compared against or case label): OB_ALLOCATE_TMP_FILE_PAGE_FAILED	if (FlushState::TFFT_INSERT_META_TREE == state && OB_ALLOCATE_TMP_FILE_PAGE_FAILED == ret) {
+src/storage/tmp_file/ob_tmp_file_write_buffer_pool.cpp	193	ObTmpWriteBufferPool::alloc_page_	-4013 handled (compared against)	if (OB_ALLOCATE_MEMORY_FAILED == ret || OB_OP_NOT_ALLOW == ret ||
+src/storage/tmp_file/ob_tmp_file_write_buffer_pool.cpp	195	ObTmpWriteBufferPool::alloc_page_	budget error raised: OB_ALLOCATE_TMP_FILE_PAGE_FAILED	ret = OB_ALLOCATE_TMP_FILE_PAGE_FAILED;  // can not allocate new page
+src/storage/tmp_file/ob_tmp_file_write_buffer_pool.cpp	482	ObTmpWriteBufferPool::expand_	budget-backed -4013: temp-file write buffer pool	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/storage/tx/ob_multi_data_source.cpp	248	ObMulSourceTxDataNotifier::ob_abort_log_cb_notify_	budget error handled (compared against or case label): OB_SERVER_RUNTIME_OUT_OF_MEM	if (OB_SUCCESS != err_code && OB_SERVER_RUNTIME_OUT_OF_MEM != err_code
+src/storage/tx/ob_multi_data_source.cpp	249	ObMulSourceTxDataNotifier::ob_abort_log_cb_notify_	-4013 handled (compared against)	&& OB_ALLOCATE_MEMORY_FAILED != err_code && OB_EAGAIN != err_code) {
+src/storage/tx/ob_tx_log.h	780	ObTxAdaptiveLogBuf::alloc_normal_buf_	variable initialized to -4013 (not a raise)	int ret = OB_ALLOCATE_MEMORY_FAILED;
+src/storage/tx/ob_tx_log.h	790	ObTxAdaptiveLogBuf::alloc_big_buf_	variable initialized to -4013 (not a raise)	int ret = OB_ALLOCATE_MEMORY_FAILED;
+src/storage/tx/ob_tx_redo_submitter.h	430	ObTxRedoSubmitter::fill_log_block_	-4013 handled (compared against)	if (OB_ALLOCATE_MEMORY_FAILED != ret) {
+src/storage/tx/ob_tx_replay_executor.cpp	699	ObTxReplayExecutor::rewrite_replay_retry_code_	-4013 handled (compared against)	ret_code == OB_ALLOCATE_MEMORY_FAILED) {
+src/storage/tx_storage/ob_access_service.cpp	657	ObAccessService::check_write_allowed_	budget error raised: OB_SERVER_RUNTIME_OUT_OF_MEM	ret = OB_SERVER_RUNTIME_OUT_OF_MEM;
+src/storage/tx_storage/ob_ls_service.cpp	167	ObLSService::inner_create_ls_	bounded allocator not named in the plan: LS allocator FIFO (1GB) (a general out-of-memory under Decision 12 unless the design names it a budget owner)	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/storage/vector_index/ob_vector_kmeans_ctx.cpp	104	ObKmeansCtx::append_sample_vector	budget-backed -4013: vector module (vsag allocator, vector memory limit)	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/storage/vector_index/ob_vector_kmeans_ctx.cpp	248	ObKmeansAlgo::init_first_center	budget-backed -4013: vector module (vsag allocator, vector memory limit)	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/storage/vector_index/ob_vector_kmeans_ctx.cpp	397	ObSingleKmeansExecutor::init	budget-backed -4013: vector module (vsag allocator, vector memory limit)	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/storage/vector_index/ob_vector_kmeans_ctx.cpp	504	ObMultiKmeansExecutor::init	budget-backed -4013: vector module (vsag allocator, vector memory limit)	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/storage/vector_index/ob_vector_kmeans_ctx.cpp	844	ObElkanKmeansAlgo::do_kmeans	budget-backed -4013: vector module (vsag allocator, vector memory limit)	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/storage/vector_index/ob_vector_kmeans_ctx.cpp	853	ObElkanKmeansAlgo::do_kmeans	budget-backed -4013: vector module (vsag allocator, vector memory limit)	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/storage/vector_index/ob_vector_kmeans_ctx.cpp	1031	ObIvfFlatBuildHelper::init_kmeans_ctx	budget-backed -4013: vector module (vsag allocator, vector memory limit)	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/storage/vector_index/ob_vector_kmeans_ctx.cpp	1123	ObIvfSq8BuildHelper::init_kmeans_ctx	budget-backed -4013: vector module (vsag allocator, vector memory limit)	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/storage/vector_index/ob_vector_kmeans_ctx.cpp	1126	ObIvfSq8BuildHelper::init_kmeans_ctx	budget-backed -4013: vector module (vsag allocator, vector memory limit)	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/storage/vector_index/ob_vector_kmeans_ctx.cpp	1129	ObIvfSq8BuildHelper::init_kmeans_ctx	budget-backed -4013: vector module (vsag allocator, vector memory limit)	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/storage/vector_index/ob_vector_kmeans_ctx.cpp	1174	ObIvfPqBuildHelper::init_kmeans_ctx	budget-backed -4013: vector module (vsag allocator, vector memory limit)	ret = OB_ALLOCATE_MEMORY_FAILED;

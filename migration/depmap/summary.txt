@@ -1,0 +1,229 @@
+depmap_seekdb summary
+root	/Users/colin/seekdb-dev/migrate-to-rust
+reference build	/Users/colin/seekdb-dev/ref-834bbee1e/build_release
+
+[files]
+C/C++ files in the tree (tracked or untracked, not git-ignored)	6678
+  skipped (deps/, rust/, build_*, dot and kit skip dirs)	4
+vendored code files (under a vendored prefix and carrying a third-party copyright notice)	50
+  src/oblib/lib/compress/zstd_1_3_8/zstd_src/	47	zstd 1.3.8 upstream source
+  src/oblib/easy/	1	upstream libev header (io/ev.h); the easy_* headers are maintained in this repo
+    kept in the map, no third-party notice	18	src/oblib/easy/include/easy_atomic.h,src/oblib/easy/include/easy_define.h,src/oblib/easy/include/easy_list.h,src/oblib/easy/io/easy_baseth_pool.h,src/oblib/easy/io/easy_io.h,src/oblib/easy/io/easy_io_struct.h,src/oblib/easy/io/easy_log.h,src/oblib/easy/io/easy_summary.h,src/oblib/easy/thread/easy_uthread.h,src/oblib/easy/util/easy_array.h,src/oblib/easy/util/easy_buf.h,src/oblib/easy/util/easy_hash.h,src/oblib/easy/util/easy_inet.h,src/oblib/easy/util/easy_mod_stat.h,src/oblib/easy/util/easy_pool.h,src/oblib/easy/util/easy_string.h,src/oblib/easy/util/easy_time.h,src/oblib/easy/util/easy_util.h
+  src/oblib/lib/hash_func/xxhash.	2	upstream xxHash source
+generated files checked in	38
+map files (nodes)	6587
+  .c	11
+  .cc	8
+  .cpp	2880
+  .def	5
+  .h	3626
+  .hpp	1
+  .ipp	40
+  .map	16
+  nodes added because an include resolved to them	0	
+  by top directory	bazel=5 include=1 src/data_plane=114 src/logservice=124 src/objit=1 src/oblib=785 src/observer=513 src/pl=68 src/query=115 src/rootserver=200 src/share=690 src/sql=2432 src/standby=51 src/storage=1482 tools=6
+map lines	2658615
+live files (compiled by the reference build or reached from a compiled file)	6467
+files not reached by the reference build	120
+
+[build contexts]
+compile commands (translation units)	364
+compiled source files (unity members expanded)	2960
+distinct include-path sets	4
+forced includes (-include/-imacros)	0
+include directives resolved differently under two contexts	0
+
+[include directives]
+include directives	26866
+include edges under a platform condition	23
+miss	1
+resolved: generated	281
+resolved: node	24892
+resolved: system	1379
+resolved: third-party	133
+resolved: unresolved	177
+resolved: vendored	4
+unresolved-external	168
+unresolved-stale	8
+
+[forwarding headers]
+forwarders (only include directives and guards, one in-repo target)	116
+umbrella headers (only include directives, several in-repo targets)	1
+  forwarders by top directory	src/oblib=1 src/observer=3 src/pl=32 src/sql=50 src/standby=2 src/storage=28
+  forwarders whose target is in another top directory	114
+  forwarders to a generated or other non-map file	1	src/storage/testing/ob_storage_test_errors.h->src/share/ob_errno.h
+  forwarders counted with them	117
+
+[definition edges from DWARF]
+objects read	364
+(defining file, declaring file) pairs between map files	2886
+  pairs whose files share a stem	2625
+  pairs across directories	191
+  pairs from a member's definition and its declaration in one object	2781
+  pairs from a namespace-scope declaration matched by symbol to a definition in any object	172
+    of which no member pair covers	105
+  header declarations the defining file does not include while it includes another declaring header (re-declarations, turned into link edges)	12
+namespace-scope symbols with a declaration in DWARF	773
+namespace-scope symbols with a definition in an implementation file, or a non-weak one in a header	9131
+
+[definition edges from the source: every #if branch but #if 0, and files the reference build does not compile]
+rules	a namespace-scope definition matches a header declaration with the same linkage, namespace, name and kind, and for C++ functions the same parameter types; a qualified definition (Class::member) with no DWARF definition at its line matches the file that defines its class; a function or variable declared in several headers gets definition edges to the headers its defining file reaches and link edges from the others, counting DWARF and source declarations together
+declarations of namespace-scope functions and variables in headers	1767
+class definitions (all files)	10695
+free definitions matched to a header declaration	1381
+  with no DWARF definition at that line (a branch or file the reference build does not compile, or code it does not emit)	51
+  matched on name alone: one declaration and one definition, parameters spelled differently	6
+free definitions whose name a header declares with other parameters (no edge)	6
+qualified definitions (Class::member, ns::name)	54941
+  of a class defined in the same file (no edge)	3147
+  members with a DWARF definition (left to DWARF)	50278
+  members with no DWARF definition, matched to the file that defines their class	1439
+  with no DWARF definition and no class or namespace found (no edge)	18
+  with no DWARF definition and a class name several files define, none reached (no edge)	0
+header re-declarations whose declaration only the source gives (turned into link edges)	11
+(defining file, declaring file) pairs only the source gives	96
+  of which no definition is compiled (every one is in a conditional branch without a DWARF definition, or in a file the reference build does not reach)	30
+  pairs across directories	28
+(defining file, declaring file) pairs in total	2982
+
+[link edges: a file declares a function or variable itself (a prototype or extern declaration in an implementation file, or a header re-declaration) and another file defines it]
+local declarations (functions)	129
+local declarations (variables)	9
+  defined in the declaring file itself	7
+  not used in the declaring file	16
+  resolved through DWARF definitions, not referenced by the declaring file's object	4
+  resolved through DWARF definitions, referenced by the declaring file's object	71
+  resolved through source definitions only (definition not compiled by the reference build)	3
+  unresolved: no definition in the tree (system, third-party or generated code)	37
+(declaring file, symbol, defining file) facts confirmed by the reference build	103
+link facts whose definition is in a generated or vendored file (no edge)	4	src/share/datum/ob_str_datum_funcs_compilation/ob_str_datum_funcs_all.cpp<-1 src/sql/engine/expr/ob_expr_str_cmp_func_compile/ob_expr_str_cmp_func_all.cpp<-1 src/sql/parser/type_name.c<-2
+unresolved names (defined outside the map)	35	__llvm_profile_set_filename __real_memcmp __real_memcpy __real_memmove __real_memset __real_strcpy __real_strncasecmp __real_strncpy __real_vsnprintf __real_vsprintf __ulock_wait __ulock_wake free malloc memalign mysql_special_syspack_file_list mysql_syspack_file_list obpl_mysql_yy_delete_buffer obpl_mysql_yy_scan_bytes obpl_mysql_yy_switch_to_buffer obpl_mysql_yylex_init_extra obpl_mysql_yyparse obsql_fts_yyparse obsql_mysql_fast_parse obsql_mysql_multi_fast_parse obsql_mysql_multi_values_parse obsql_mysql_yy_delete_buffer obsql_mysql_yy_scan_bytes obsql_mysql_yy_switch_to_buffer obsql_mysql_yylex_destroy obsql_mysql_yylex_init_extra obsql_mysql_yyparse opterr syspack_source_contents syspack_source_count
+link edges	79
+
+[check against the compiler's own record]
+objects whose DWARF line tables were compared with the include closure of their sources	364
+map files named in an object's line table but not reached by the include graph from its sources	0
+distinct map files named in line tables	6234
+definitions in a unity-built file whose declaring header its own includes do not reach (it relies on an earlier file of the same unity group)	3
+  src/share/ob_share_util.cpp -> src/share/ob_share_util.h	defs=9 oceanbase::share::ObShareUtil	build_release/src/share/CMakeFiles/ob_share.dir/Unity/unity_ob_share_ob_share_common_1_c___cxx.cxx
+  src/storage/ddl/ob_ddl_pipeline.cpp -> src/storage/ddl/ob_vector_index_ddl_pipeline.h	defs=64 oceanbase::storage::ObHNSWEmbeddingOperator	build_release/src/storage/CMakeFiles/ob_storage.dir/Unity/unity_ob_storage_ob_storage_ddl_1_c___cxx.cxx
+  src/storage/tx/ob_trans_service_v4.cpp -> src/storage/tx/ob_trans_service_v4.h	defs=45 oceanbase::transaction::ObTransService	build_release/src/storage/CMakeFiles/ob_storage.dir/Unity/unity_ob_storage_ob_storage_tx_1_c___cxx.cxx
+
+[edges]
+definition	2982
+include	24614
+link	79
+own-header	2773
+via-generated	119
+total rows	30567
+distinct (from, to) pairs	24996
+
+[units]
+rules	same stem in one directory; forwarder with its target; a declaring header group with no implementation file joins its main implementer; an implementation file with no header joins the header it implements most; these merges count only definitions the reference build compiles (DWARF, or source definitions outside any #if branch in a file the build reaches)
+merges from definition edges	196
+definition edges left between different units (declared in one unit, defined in another)	64
+  src/oblib/common/timezone/localtime.c -> src/oblib/common/timezone/private.h	defs=7 ctime; L1456 localtime declared at L289 (no DWARF definition); L1467 localtime_r declared at L290 (no DWARF definition); L1514 gmtime declared at L287 (no DWARF definition); +5 more from the source
+  src/oblib/common/timezone/ob_time_convert.cpp -> src/oblib/lib/trace/ob_trace_event.h	defs=1 oceanbase::common::trace_event_datetime_to_str
+  src/oblib/common/wide_integer/ob_wide_integer_str_funcs.h -> src/oblib/common/wide_integer/ob_wide_integer.h	defs=1 oceanbase::common::wide::ObWideInteger
+  src/oblib/common/xml/ob_libxml2_sax_handler.cpp -> src/oblib/common/xml/ob_xml_parser.h	defs=28 oceanbase::common::ObLibXml2SaxParser
+  src/oblib/lib/alloc/ob_malloc_sample_struct.cpp -> src/oblib/lib/alloc/ob_ctx_allocator.h	defs=1 oceanbase::lib::malloc_sample_allowed; L28 oceanbase::lib::malloc_sample_allowed declared at L36
+  src/oblib/lib/allocator/ob_jemalloc_sanity.cpp -> src/oblib/lib/allocator/ob_jemalloc.h	defs=6 oceanbase::common::jemalloc_sanity_enable_background_threads; L436{defined(ENABLE_SANITY)} oceanbase::common::jemalloc_sanity_malloc declared at L42 (no DWARF definition); L440{defined(ENABLE_SANITY)} oceanbase::common::jemalloc_sanity_free declared at L43 (no DWARF definition); L460{defined(ENABLE_SANITY)} oceanbase::common::jemalloc_sanity_realloc declared at L44 (no DWARF definition); +3 more from the source
+  src/oblib/lib/allocator/ob_jemalloc_sanity.cpp -> src/oblib/lib/allocator/ob_memory_sanity.h	defs=5 oceanbase::common::memory_sanity_enabled; L50{defined(ENABLE_SANITY)} oceanbase::common::memory_sanity_enabled declared at L38 (no DWARF definition); L510{defined(ENABLE_SANITY)} oceanbase::common::memory_sanity_prepare_allocation declared at L42 (no DWARF definition); L532{defined(ENABLE_SANITY)} oceanbase::common::memory_sanity_mark_allocated declared at L48 (no DWARF definition); +2 more from the source
+  src/oblib/lib/charset/ob_ctype_utf8_tab.h -> src/oblib/lib/charset/ob_ctype.h	defs=2 ob_unicase_default; L1560 ob_unicase_default declared at L467; L4470 ob_unicase_unicode520 declared at L469
+  src/oblib/lib/charset/ob_uctype.h -> src/oblib/lib/charset/ob_ctype.h	defs=1 ob_uni_ctype; L1223 ob_uni_ctype declared at L463
+  src/oblib/lib/container/ob_array_serialization.h -> src/oblib/lib/container/ob_2d_array.h	defs=3 oceanbase::common::Ob2DArray
+  src/oblib/lib/container/ob_array_serialization.h -> src/oblib/lib/container/ob_fixed_array.h	defs=3 oceanbase::common::ObFixedArrayImpl
+  src/oblib/lib/container/ob_fixed_array_iterator.h -> src/oblib/lib/container/ob_fixed_array.h	defs=2 oceanbase::common::ObFixedArrayImpl
+  src/oblib/lib/container/ob_se_array_iterator.h -> src/oblib/lib/container/ob_array.h	defs=2 oceanbase::common::ObSEArrayImpl; L25 oceanbase::common::ObSEArrayImpl::begin declared at L270 (no DWARF definition); L38 oceanbase::common::ObSEArrayImpl::begin declared at L270 (no DWARF definition)
+  src/oblib/lib/oblog/ob_log.cpp -> src/oblib/lib/allocator/ob_malloc.h	defs=1 oceanbase::common::g_ob_log_main_entered; L92{defined(_WIN32)} oceanbase::common::g_ob_log_main_entered declared at L30 (no DWARF definition)
+  src/oblib/lib/thread/ob_thread_hook.cpp -> src/oblib/lib/ob_define.h	defs=1 ob_pthread_cond_timedwait_us
+  src/oblib/lib/utility/ob_backtrace.cpp -> src/oblib/lib/ob_define.h	defs=1 oceanbase::common::lbt
+  src/oblib/lib/utility/ob_hang_fatal_error.cpp -> src/oblib/lib/charset/ob_ctype.h	defs=1 right_to_die_or_duty_to_live_c
+  src/observer/main.cpp -> src/oblib/lib/ob_abort.h	defs=1 ob_abort; L313{defined(_WIN32)} ob_abort declared at L31 (no DWARF definition)
+  src/observer/ob_inner_sql_connection.cpp -> src/oblib/common/mysqlclient/ob_mysql_proxy.h	defs=1 oceanbase::common::create_inner_sql_connection_for_proxy; L1459 oceanbase::common::create_inner_sql_connection_for_proxy declared at L33
+  src/observer/omt/ob_server_runtime_controller.cpp -> src/observer/ob_server.h	defs=7 oceanbase::observer::ObServer
+  src/observer/omt/ob_server_runtime_controller.cpp -> src/share/io/ob_io_manager.h	defs=1 oceanbase::common::ObIOManager
+  src/observer/vector_index/ob_plugin_vector_index_adaptor.cpp -> src/query/api/query/vector/ob_vector_index_util.h	defs=8 oceanbase::share::ObVectorIndexParam
+  src/pl/ob_pl_stmt.cpp -> src/query/api/query/parser/parse_node.h	defs=1 lookup_pl_symbol
+  src/pl/parser/ob_pl_parser.cpp -> src/query/api/query/parser/parse_node.h	defs=1 obpl_parser_check_stack_overflow; L28 obpl_parser_check_stack_overflow declared at L401
+  src/rootserver/ob_ddl_operator.cpp -> src/rootserver/ob_runtime_ddl_service.h	defs=3 oceanbase::rootserver::ObSysStat
+  src/rootserver/ob_ddl_service.cpp -> src/rootserver/ddl_task/ob_sys_ddl_util.h	defs=1 oceanbase::rootserver::check_local_is_sys_leader
+  src/share/config/ob_server_config.cpp -> src/oblib/lib/cpu/ob_cpu_topology.h	defs=1 oceanbase::common::get_cpu_count
+  src/share/ob_task_define.cpp -> src/oblib/lib/oblog/ob_log.h	defs=1 oceanbase::common::allow_next_syslog
+  src/share/rc/ob_context.cpp -> src/oblib/lib/rc/ob_rc.h	defs=1 oceanbase::lib::current_resource_owner_id; L26 oceanbase::lib::current_resource_owner_id declared at L27
+  src/share/rc/ob_server_runtime_support.cpp -> src/share/roaringbitmap/ob_rb_memory_mgr.h	defs=1 oceanbase::common::get_rb_mem_mgr; L26 oceanbase::common::get_rb_mem_mgr declared at L42 (no DWARF definition)
+  src/share/schema/ob_schema_struct.cpp -> src/share/schema/ob_dependency_info.h	defs=1 oceanbase::share::schema::ob_object_type_str
+  src/sql/das/ob_das_delete_op.cpp -> src/sql/engine/dml/ob_dml_service.h	defs=1 oceanbase::sql::ObDASIndexDMLAdaptor; L48 oceanbase::sql::ObDASIndexDMLAdaptor::write_rows declared at L301 (no DWARF definition)
+  src/sql/das/ob_das_insert_op.cpp -> src/sql/engine/dml/ob_dml_service.h	defs=1 oceanbase::sql::ObDASIndexDMLAdaptor; L50 oceanbase::sql::ObDASIndexDMLAdaptor::write_rows declared at L301 (no DWARF definition)
+  src/sql/das/ob_das_update_op.cpp -> src/sql/engine/dml/ob_dml_service.h	defs=1 oceanbase::sql::ObDASIndexDMLAdaptor; L372 oceanbase::sql::ObDASIndexDMLAdaptor::write_rows declared at L301 (no DWARF definition)
+  src/sql/das/ob_das_vec_define.cpp -> src/query/api/query/das/ob_block_max_spec_access.h	defs=2 oceanbase::query::get_vector_block_max_column
+  src/sql/dtl/ob_dtl_fc_server.h -> src/sql/dtl/ob_dtl_local_first_buffer_manager.h	defs=1 oceanbase::sql::dtl::ObDtlCacheBufferInfo; L210 oceanbase::sql::dtl::ObDtlCacheBufferInfo::set_buffer declared at L36 (no DWARF definition)
+  src/sql/engine/expr/ob_datum_cast.cpp -> src/sql/engine/expr/ob_expr_cast.h	defs=1 oceanbase::sql::cast_eval_arg_batch; L2489 oceanbase::sql::cast_eval_arg_batch declared at L78
+  src/sql/engine/expr/ob_datum_decint_cast.h -> src/sql/engine/expr/ob_datum_cast.h	defs=7 oceanbase::sql::ObBatchCast; L110 oceanbase::sql::ObBatchCast::explicit_batch_cast declared at L646 (no DWARF definition); L634 oceanbase::sql::ObBatchCast::implicit_batch_cast declared at L646 (no DWARF definition); L857 oceanbase::sql::ObBatchCast::implicit_batch_funcs_ declared at L646 (no DWARF definition); +1 more from the source
+  src/sql/engine/expr/ob_expr_json_query.cpp -> src/sql/engine/expr/ob_expr_json_utils.h	defs=1 oceanbase::sql::ObExprJsonQueryParamInfo
+  src/sql/engine/expr/ob_expr_json_value.cpp -> src/sql/engine/expr/ob_expr_json_utils.h	defs=3 oceanbase::sql::ObExprJsonQueryParamInfo
+  src/sql/ob_sql_utils.cpp -> src/query/api/query/parser/parse_node.h	defs=1 check_stack_overflow_c; L1964 check_stack_overflow_c declared at L461
+  src/sql/optimizer/stat/ob_dbms_stats_executor.cpp -> src/query/api/query/optimizer/stat/ob_stat_define.h	defs=1 oceanbase::common::ObOptStat
+  src/sql/optimizer/stat/ob_opt_stat_monitor_manager.cpp -> src/query/api/query/optimizer/stat/ob_optimizer_stat_service.h	defs=1 oceanbase::query::ObOptimizerStatService
+  src/sql/parser/ob_memory_tracker_wrapper.cpp -> src/query/api/query/parser/parse_node.h	defs=2 check_mem_status; L20 check_mem_status declared at L402 (no DWARF definition); L25 try_check_mem_status declared at L403 (no DWARF definition)
+  src/sql/parser/parse_node.c -> src/pl/parser/pl_parser_base.h	defs=2 count_child; L212 count_child declared at L112; L268 merge_child declared at L113
+  src/sql/parser/parse_node.c -> src/sql/parser/sql_parser_base.h	defs=6 copy_expr_string
+  src/sql/parser/sql_parser_base.c -> src/pl/parser/pl_parser_base.h	defs=1 parse_sql_stmt
+  src/sql/parser/sql_parser_base.c -> src/query/api/query/parser/parse_node.h	defs=3 parse_init; L60 parse_terminate declared at L387
+  src/sql/resolver/dml/ob_insert_stmt.cpp -> src/sql/resolver/dml/ob_del_upd_stmt.h	defs=1 oceanbase::sql::ObUniqueConstraintInfo
+  src/standby/standby_module_disabled.cpp -> src/standby/standby_module.h	defs=13 oceanbase::standby::StandbyModule; L141 oceanbase::standby::StandbyModule::StandbyModule declared at L29 (no DWARF definition); L142 oceanbase::standby::StandbyModule::~StandbyModule declared at L29 (no DWARF definition); L144 oceanbase::standby::StandbyModule::init declared at L29 (no DWARF definition); +10 more from the source
+  src/storage/access/ob_block_row_store.cpp -> src/query/api/query/engine/basic/ob_pushdown_filter.h	defs=1 oceanbase::sql::PushdownFilterInfo
+  src/storage/ddl/ob_ddl_macro_block_write_task.cpp -> src/storage/ddl/ob_ddl_pipeline.h	defs=5 oceanbase::storage::ObDDLWriteMacroBlockBasePipeline
+  src/storage/memtable/mvcc/ob_mvcc_ctx.cpp -> src/storage/memtable/mvcc/ob_mvcc_acc_ctx.h	defs=1 oceanbase::memtable::ObMvccAccessCtx
+  src/storage/meta_mem/ob_meta_obj_pool.cpp -> src/storage/meta_mem/ob_storage_meta_obj_pool.h	defs=5 oceanbase::storage::ObMetaObjBufferHelper; L29 oceanbase::storage::RPMetaObjLabel::LABEL declared at L35 (no DWARF definition); L47 oceanbase::storage::ObMetaObjBufferHelper::get_linked_node declared at L103 (no DWARF definition); L55 oceanbase::storage::ObMetaObjBufferHelper::get_buffer_header declared at L103 (no DWARF definition); +2 more from the source
+  src/storage/meta_mem/ob_tablet_meta_mem_mgr.cpp -> src/storage/meta_mem/ob_storage_meta_mem_mgr.h	defs=14 oceanbase::storage::ObT3mTabletMapIterator; L43 oceanbase::storage::ObTabletBufferInfo::reset declared at L97 (no DWARF definition); L53 oceanbase::storage::ObTabletBufferInfo::fill_info declared at L97 (no DWARF definition); L2255 oceanbase::storage::ObT3mTabletMapIterator::ObT3mTabletMapIterator declared at L541 (no DWARF definition); +11 more from the source
+  src/storage/multi_data_source/runtime_utility/mds_service.cpp -> src/storage/allocator/ob_mds_allocator.h	defs=1 oceanbase::share::ObMdsAllocator
+  src/storage/multi_data_source/runtime_utility/mds_service.cpp -> src/storage/allocator/ob_vector_allocator.h	defs=1 oceanbase::share::ObVectorAllocator
+  src/storage/tx/ob_tx_api.cpp -> src/storage/tx/ob_trans_service_v4.h	defs=16 oceanbase::transaction::ObTransService
+  src/storage/tx/ob_tx_on_demand_print.cpp -> src/storage/tx/ob_trans_define.h	defs=2 oceanbase::transaction::ObTxExecInfo
+  src/storage/tx/ob_tx_on_demand_print.cpp -> src/storage/tx/ob_tx_ctx.h	defs=1 oceanbase::transaction::ObTxCtx
+  src/storage/tx_storage/ob_ls_service.cpp -> src/storage/allocator/ob_mds_allocator.h	defs=1 oceanbase::share::ObMdsThrottleGuard
+  src/storage/tx_storage/ob_ls_service.cpp -> src/storage/allocator/ob_tx_data_allocator.h	defs=3 oceanbase::share::ObTxDataAllocator
+  src/storage/tx_storage/ob_memstore_freezer.cpp -> src/storage/allocator/ob_memstore_allocator.h	defs=5 oceanbase::share::ObMemstoreAllocator
+  src/storage/tx_storage/ob_memstore_freezer.cpp -> src/storage/allocator/ob_shared_memory_allocator_mgr.h	defs=1 oceanbase::share::ObSharedMemAllocMgr
+units	3513
+units reached by the reference build	3422
+files per unit	1:656 2:2686 3:145 4:15 5:7 6:1 7:2 9:1
+largest units by files	src/oblib/rpc/frame/ob_net_easy=9 src/oblib/lib/charset/ob_ctype_simple=7 src/storage/ddl/ob_ddl_vector_utils=7 src/storage/tx/ob_tx_api=6 src/oblib/lib/oblog/ob_log=5 src/rootserver/ob_ddl_service=5 src/share/schema/ob_schema_getter_guard=5 src/sql/engine/expr/ob_expr=5
+
+[migration order]
+batches (strongly connected sets of units)	347
+levels	9
+unit-level cycles	3
+unit-level cycle sizes (units)	3164 3 2
+units in cycles	3169
+files in cycles	6140
+unit-level, counting only edges out of non-implementation files	3416 batches, 107 levels, cycle sizes 46 15 7 7 7 4 3 3 3 3 2 2 2 2 2 2 2 2 2
+file-level order (order-files.txt)	6380 batches, 90 levels
+
+[file-level cycles]
+over include edges	27 cycles, 69 files, sizes 8 7 4 3 3 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+over all edge kinds	37 cycles, 244 files, sizes 154 8 7 4 3 3 3 3 3 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+
+[directory-level cycles]
+include edges between live files	9 cycles; sizes (dirs/files) 110/4100 38/442 18/595 13/139 8/493 5/44 4/120 3/42 3/50
+  largest cycle by top directory	src/pl=4 src/rootserver=7 src/sql=57 src/storage=42
+all edge kinds, all files	1 cycles; sizes (dirs/files) 291/6499
+  largest cycle by top directory	src/data_plane=19 src/logservice=5 src/objit=1 src/oblib=74 src/observer=10 src/pl=4 src/query=23 src/rootserver=8 src/share=40 src/sql=58 src/standby=3 src/storage=46
+module-level (src/<module>) cycles over live include edges	1
+  cycle	src/pl src/rootserver src/sql src/storage
+    src/pl -> src/sql	90	src/pl/ob_pl.cpp->src/sql/engine/dml/ob_trigger_handler.h src/pl/ob_pl.cpp->src/sql/engine/expr/ob_expr_column_conv.h src/pl/ob_pl.cpp->src/sql/engine/expr/ob_expr_pl_integer_checker.h src/pl/ob_pl.cpp->src/sql/ob_spi.h
+    src/rootserver -> src/pl	3	src/rootserver/ddl_task/ob_ddl_redefinition_task.cpp->src/pl/sys_package/ob_dbms_stats.h src/rootserver/ob_ddl_operator.cpp->src/pl/pl_cache/ob_pl_cache_mgr.h src/rootserver/pl_ddl/ob_pl_ddl_operator.cpp->src/pl/pl_cache/ob_pl_cache_mgr.h
+    src/rootserver -> src/sql	54	src/rootserver/ddl_task/ob_ddl_common_rs_impl.cpp->src/sql/engine/px/ob_px_dtl_msg.h src/rootserver/ddl_task/ob_ddl_common_rs_impl.cpp->src/sql/ob_sql_utils.h src/rootserver/ddl_task/ob_ddl_common_rs_impl.cpp->src/sql/resolver/ddl/ob_ddl_resolver.h src/rootserver/ddl_task/ob_ddl_common_rs_impl.cpp->src/sql/resolver/ddl/ob_fts_index_builder_util.h
+    src/rootserver -> src/storage	79	src/rootserver/ddl_task/ob_constraint_task.cpp->src/storage/ddl/ob_ddl_lock.h src/rootserver/ddl_task/ob_ddl_common_rs_impl.cpp->src/storage/ob_storage_rpc_arg.h src/rootserver/ddl_task/ob_ddl_common_rs_impl.cpp->src/storage/tablet/ob_tablet_binding_helper.h src/rootserver/ddl_task/ob_ddl_common_rs_impl.cpp->src/storage/tx/ob_ts_mgr.h
+    src/sql -> src/storage	2	src/sql/engine/px/ob_px_sub_coord.cpp->src/storage/ddl/ob_ddl_direct_load_utils.h src/sql/engine/px/ob_px_sub_coord.cpp->src/storage/ddl/ob_ddl_insert_dag.h
+    src/storage -> src/rootserver	1	src/storage/ddl/ob_ddl_insert_dag.cpp->src/rootserver/ddl_task/ob_ddl_task.h
+    src/storage -> src/sql	1	src/storage/ddl/ob_tablet_slice_writer.cpp->src/sql/engine/ob_batch_rows.h
+
+[generated]
+checked-in generated files	38
+
+[misses]
+unresolved includes with an in-repo candidate (misses)	1
+unresolved quoted includes of in-repo-looking paths that exist nowhere (stale)	8
+unresolved includes without an in-repo candidate (other platforms, absent libraries)	168
