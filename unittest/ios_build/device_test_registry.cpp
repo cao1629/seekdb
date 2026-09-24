@@ -3,10 +3,17 @@
 #include "device_test_registry.h"
 
 #include <algorithm>
+#include <chrono>
+#include <condition_variable>
+#include <cstdlib>
+#include <mutex>
+#include <thread>
 #include <utility>
 
 namespace seekdb::ios_test {
 namespace {
+
+constexpr int CASE_TIMEOUT_RESULT = 124;
 
 /** Match a complete string against a small deterministic glob expression. */
 bool glob_matches(const std::string &pattern, const std::string &value)
@@ -157,8 +164,44 @@ int run_device_suite(const DeviceTestRegistry &registry, const std::string &suit
         })) {
       return 5;
     }
+    std::mutex deadline_mutex;
+    std::condition_variable deadline_condition;
+    bool callback_finished = false;
+    std::thread watchdog([&] {
+      std::unique_lock<std::mutex> lock(deadline_mutex);
+      if (deadline_condition.wait_for(lock, std::chrono::seconds(test_case->timeout_seconds),
+                                      [&] { return callback_finished; })) {
+        return;
+      }
+      lock.unlock();
+      evidence.append({
+          {"event", DeviceEvidenceWriter::json_string("assertion")},
+          {"case_id", DeviceEvidenceWriter::json_string(test_case->id)},
+          {"assertion", DeviceEvidenceWriter::json_string("case_timeout")},
+          {"passed", "false"},
+          {"diagnostic", DeviceEvidenceWriter::json_string("case exceeded its timeout_seconds deadline")},
+      });
+      evidence.append({
+          {"event", DeviceEvidenceWriter::json_string("case_end")},
+          {"case_id", DeviceEvidenceWriter::json_string(test_case->id)},
+          {"result", std::to_string(CASE_TIMEOUT_RESULT)},
+      });
+      evidence.append({
+          {"event", DeviceEvidenceWriter::json_string("run_complete")},
+          {"result", std::to_string(CASE_TIMEOUT_RESULT)},
+          {"selected_count", std::to_string(selected.size())},
+          {"completed_count", std::to_string(completed_count + 1)},
+      });
+      std::_Exit(CASE_TIMEOUT_RESULT);
+    });
     TestContext context(evidence, test_case->id);
     const int callback_result = test_case->function(context);
+    {
+      std::lock_guard<std::mutex> lock(deadline_mutex);
+      callback_finished = true;
+    }
+    deadline_condition.notify_one();
+    watchdog.join();
     const int case_result = callback_result == 0 && context.failure_count() == 0 ? 0 :
                             (callback_result != 0 ? callback_result : context.failure_count());
     if (!evidence.append({

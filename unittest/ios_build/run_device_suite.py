@@ -15,11 +15,15 @@ ROOT = Path(__file__).resolve().parents[2]
 ALLOWED_EVIDENCE_NAME = re.compile(r"^device-test-[0-9a-f-]{36}\.jsonl$")
 
 
+class IncompleteEvidenceError(ValueError):
+    """Report a structurally valid JSONL prefix that may still become complete."""
+
+
 def validate_records(records, expected_run_id, expected_build_id, expected_case_ids,
                      expected_suite, expected_filter):
     """Validate identity, event order, complete coverage, and passing device results."""
     if not records:
-        raise ValueError("device evidence is empty")
+        raise IncompleteEvidenceError("device evidence is empty")
     expected_ids = list(expected_case_ids)
     if len(expected_ids) != len(set(expected_ids)) or not expected_ids:
         raise ValueError("expected case IDs must be unique and nonempty")
@@ -83,7 +87,7 @@ def validate_records(records, expected_run_id, expected_build_id, expected_case_
             raise ValueError("device evidence contains an unknown event")
 
     if active_case is not None or complete is None:
-        raise ValueError("device evidence is missing terminal completion")
+        raise IncompleteEvidenceError("device evidence is missing terminal completion")
     if list(case_results) != expected_ids:
         raise ValueError("device evidence does not cover every expected case exactly once")
     if (complete.get("result") != 0 or complete.get("selected_count") != len(expected_ids)
@@ -96,12 +100,17 @@ def read_jsonl(path):
     """Read a complete JSON object from every nonempty evidence line."""
     records = []
     with path.open(encoding="utf-8") as stream:
-        for line_number, line in enumerate(stream, 1):
+        lines = stream.readlines()
+        last_nonempty = max((index for index, line in enumerate(lines, 1) if line.strip()), default=0)
+        for line_number, line in enumerate(lines, 1):
             if not line.strip():
                 continue
             try:
                 record = json.loads(line)
             except json.JSONDecodeError as error:
+                if line_number == last_nonempty and not line.endswith("\n"):
+                    raise IncompleteEvidenceError(
+                        f"incomplete JSONL record at line {line_number}") from error
                 raise ValueError(f"invalid JSONL record at line {line_number}") from error
             if not isinstance(record, dict):
                 raise ValueError(f"JSONL record at line {line_number} is not an object")
@@ -140,7 +149,7 @@ def wait_for_evidence(device, bundle_id, source_name, destination, timeout_secon
             try:
                 records = read_jsonl(destination)
                 return validate_records(records, run_id, build_id, expected_case_ids, suite, case_filter)
-            except ValueError as error:
+            except IncompleteEvidenceError as error:
                 last_error = error
         time.sleep(2)
     raise TimeoutError(f"device suite did not produce complete evidence: {last_error}")

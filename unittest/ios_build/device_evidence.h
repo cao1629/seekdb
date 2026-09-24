@@ -3,6 +3,7 @@
 #pragma once
 
 #include <cstdio>
+#include <mutex>
 #include <string>
 #include <utility>
 #include <vector>
@@ -27,7 +28,7 @@ public:
   /** Append one JSON object from already encoded field values and flush it to storage. */
   bool append(const std::vector<std::pair<std::string, std::string>> &fields);
 
-  /** Encode a string as a JSON value, including surrounding quotes. */
+  /** Encode arbitrary bytes as valid UTF-8 JSON, replacing each malformed byte with U+FFFD. */
   static std::string json_string(const std::string &value);
 
   /** Encode a string sequence as a JSON array value. */
@@ -38,6 +39,7 @@ private:
   std::string run_id_;
   std::string build_id_;
   bool failed_;
+  mutable std::mutex mutex_;
 };
 
 } // namespace seekdb::ios_test

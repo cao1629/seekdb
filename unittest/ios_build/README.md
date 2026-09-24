@@ -26,6 +26,13 @@ crash evidence, not a successful run. The UIKit wrapper writes the report to
 `Documents/sql-probe-results.jsonl` and separately records the lifecycle
 counter in `Documents/probe-status.json`.
 
+Device registry callbacks have enforced per-case deadlines. A watchdog cannot
+safely cancel arbitrary C++, so a deadline writes and flushes terminal result
+124 evidence before ending the App process with status 124. The host retries
+only incomplete JSONL prefixes; a complete invalid run fails immediately.
+Diagnostic strings always remain valid UTF-8 JSON: valid sequences are kept and
+each malformed input byte is represented as U+FFFD.
+
 The host Python tests validate build-script behavior and product neutrality.
 They do not execute the embedded database. Compilation, signing, installation,
 SQL execution, persistence across reuse of the same data directory, clean

@@ -6,7 +6,9 @@ from pathlib import Path
 import subprocess
 import tempfile
 import textwrap
+import time
 import unittest
+from unittest import mock
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -72,21 +74,89 @@ class DeviceRegistryNativeContractTests(unittest.TestCase):
         self.assertEqual(12, records[1]["timeout_seconds"])
         self.assertEqual(0, records[-1]["result"])
 
-    def _compile_and_run(self, source, arguments=()):
-        """Compile and execute a temporary C++ contract harness."""
+    def test_case_timeout_emits_terminal_failure_and_bounds_the_process(self):
+        """Terminate a process whose callback exceeds its declared per-case deadline."""
+        source = textwrap.dedent(r'''
+            #include "device_test_registry.h"
+            #include <chrono>
+            #include <thread>
+            using namespace seekdb::ios_test;
+            int block(TestContext &) {
+              std::this_thread::sleep_for(std::chrono::seconds(5));
+              return 0;
+            }
+            int main(int, char **argv) {
+              DeviceTestRegistry registry;
+              registry.add({"smoke.block", "smoke", 1, block});
+              return run_device_suite(registry, "smoke", "smoke.*", "run-timeout", "build-1", argv[1]);
+            }
+        ''')
         with tempfile.TemporaryDirectory() as temp:
             temp_path = Path(temp)
-            harness = temp_path / "harness.cpp"
-            binary = temp_path / "harness"
-            harness.write_text(source)
-            subprocess.run(
-                ["clang++", "-std=c++17", "-Wall", "-Wextra", "-Werror", "-I", str(IOS),
-                 str(harness), str(IOS / "device_test_registry.cpp"),
-                 str(IOS / "device_evidence.cpp"), "-o", str(binary)],
-                check=True, capture_output=True, text=True,
-            )
-            return subprocess.run([str(binary), *arguments], check=True, capture_output=True,
-                                  text=True).stdout
+            evidence = temp_path / "evidence.jsonl"
+            binary = self._compile_harness(source, temp_path)
+            started = time.monotonic()
+            result = subprocess.run([str(binary), str(evidence)], check=False, capture_output=True,
+                                    text=True, timeout=3)
+            elapsed = time.monotonic() - started
+            records = [json.loads(line) for line in evidence.read_text().splitlines()]
+        self.assertEqual(124, result.returncode)
+        self.assertLess(elapsed, 4.5)
+        self.assertEqual(
+            ["run_start", "case_start", "assertion", "case_end", "run_complete"],
+            [record["event"] for record in records],
+        )
+        self.assertFalse(records[2]["passed"])
+        self.assertEqual(124, records[3]["result"])
+        self.assertEqual(124, records[4]["result"])
+
+    def test_json_writer_replaces_malformed_utf8_without_losing_valid_text(self):
+        """Keep valid UTF-8 while deterministically replacing every malformed input byte."""
+        source = textwrap.dedent(r'''
+            #include "device_evidence.h"
+            #include <string>
+            using namespace seekdb::ios_test;
+            int main(int, char **argv) {
+              DeviceEvidenceWriter evidence(argv[1], "run-1", "build-1");
+              const std::string malformed("\xf0\x28\x8c\x28", 4);
+              return evidence.append({
+                  {"event", DeviceEvidenceWriter::json_string("diagnostic")},
+                  {"valid", DeviceEvidenceWriter::json_string(u8"你好 \"line\"\n")},
+                  {"malformed", DeviceEvidenceWriter::json_string(malformed)},
+              }) ? 0 : 1;
+            }
+        ''')
+        with tempfile.TemporaryDirectory() as temp:
+            evidence = Path(temp) / "evidence.jsonl"
+            self._compile_and_run(source, [str(evidence)])
+            record = json.loads(evidence.read_text())
+        self.assertEqual('你好 "line"\n', record["valid"])
+        self.assertEqual("\ufffd(\ufffd(", record["malformed"])
+
+    def _compile_and_run(self, source, arguments=()):
+        """Compile and execute a temporary C++ contract harness."""
+        return self._compile_and_run_result(source, arguments).stdout
+
+    def _compile_and_run_result(self, source, arguments=(), check=True, timeout=None):
+        """Compile a temporary C++ harness and return its completed process."""
+        with tempfile.TemporaryDirectory() as temp:
+            temp_path = Path(temp)
+            binary = self._compile_harness(source, temp_path)
+            return subprocess.run([str(binary), *arguments], check=check, capture_output=True,
+                                  text=True, timeout=timeout)
+
+    def _compile_harness(self, source, temp_path):
+        """Compile one portable registry harness into an existing temporary directory."""
+        harness = temp_path / "harness.cpp"
+        binary = temp_path / "harness"
+        harness.write_text(source)
+        subprocess.run(
+            ["clang++", "-std=c++17", "-Wall", "-Wextra", "-Werror", "-I", str(IOS),
+             str(harness), str(IOS / "device_test_registry.cpp"),
+             str(IOS / "device_evidence.cpp"), "-o", str(binary)],
+            check=True, capture_output=True, text=True,
+        )
+        return binary
 
 
 class DeviceEvidenceValidationTests(unittest.TestCase):
@@ -180,6 +250,56 @@ class DeviceEvidenceValidationTests(unittest.TestCase):
                         {"working_directory_restored": False}):
             with self.subTest(changes=changes), self.assertRaises(ValueError):
                 self.runner.validate_terminal_status({**status, **changes}, "run-1", "build-1")
+
+    def test_complete_invalid_evidence_fails_immediately_while_incomplete_retries(self):
+        """Retry only an unfinished prefix and preserve a terminal validation failure."""
+        invalid = self.valid_records()
+        invalid[-2]["result"] = 9
+        invalid[-1]["result"] = 9
+        with tempfile.TemporaryDirectory() as temp:
+            destination = Path(temp) / "evidence.jsonl"
+
+            def copy_invalid(*_):
+                destination.write_text("".join(json.dumps(record) + "\n" for record in invalid))
+                return True
+
+            with mock.patch.object(self.runner, "copy_evidence", side_effect=copy_invalid) as copied:
+                with self.assertRaisesRegex(ValueError, "nonzero result"):
+                    self.runner.wait_for_evidence(
+                        "device", "bundle", "source", destination, 1,
+                        "run-1", "build-1", ["smoke.pass"], "smoke", "smoke.*")
+            self.assertEqual(1, copied.call_count)
+
+        incomplete = self.valid_records()[:-1]
+        complete = self.valid_records()
+        with tempfile.TemporaryDirectory() as temp:
+            destination = Path(temp) / "evidence.jsonl"
+            attempts = iter((incomplete, complete))
+
+            def copy_next(*_):
+                records = next(attempts)
+                destination.write_text("".join(json.dumps(record) + "\n" for record in records))
+                return True
+
+            with mock.patch.object(self.runner, "copy_evidence", side_effect=copy_next) as copied, \
+                    mock.patch.object(self.runner.time, "sleep", return_value=None):
+                summary = self.runner.wait_for_evidence(
+                    "device", "bundle", "source", destination, 2,
+                    "run-1", "build-1", ["smoke.pass"], "smoke", "smoke.*")
+            self.assertEqual(2, copied.call_count)
+            self.assertEqual(0, summary["run_result"])
+
+    def test_jsonl_reader_retries_only_an_unterminated_last_record(self):
+        """Treat newline-terminated malformed JSON as invalid rather than incomplete."""
+        with tempfile.TemporaryDirectory() as temp:
+            evidence = Path(temp) / "evidence.jsonl"
+            evidence.write_text('{"event":')
+            with self.assertRaises(self.runner.IncompleteEvidenceError):
+                self.runner.read_jsonl(evidence)
+            evidence.write_text('{"event":]\n')
+            with self.assertRaises(ValueError) as raised:
+                self.runner.read_jsonl(evidence)
+            self.assertNotIsInstance(raised.exception, self.runner.IncompleteEvidenceError)
 
 
 class DeviceAppWiringTests(unittest.TestCase):
