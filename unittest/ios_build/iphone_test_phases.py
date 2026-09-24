@@ -8,13 +8,13 @@ import json
 import os
 from pathlib import Path
 import re
+import selectors
 import signal
 import shlex
 import stat
 import subprocess
 import sys
 import tempfile
-import threading
 import time
 from typing import Callable, Iterable, Mapping, Optional, Sequence
 
@@ -727,44 +727,11 @@ def _slug(case_id: str) -> str:
     return re.sub(r"[^a-z0-9]+", "-", case_id.lower()).strip("-")[:80]
 
 
-def _drain_process_stream(
-        stream, chunks: list[str], terminal_stream=None,
-        live_echo_enabled: Optional[threading.Event] = None) -> None:
-    """Drain one process pipe and echo only the exact complete unlock prompt."""
-    pending = ""
-    prompt_was_echoed = False
-    while True:
-        try:
-            chunk = stream.read(65536)
-        except (OSError, ValueError):
-            break
-        if not chunk:
-            break
-        chunks.append(chunk)
-        if (terminal_stream is None or prompt_was_echoed
-                or (live_echo_enabled is not None
-                    and not live_echo_enabled.is_set())):
-            continue
-        pending += chunk
-        while "\n" in pending:
-            line, pending = pending.split("\n", 1)
-            if line.endswith("\r"):
-                line = line[:-1]
-            if line == UNLOCK_RETRY_PROMPT:
-                try:
-                    terminal_stream.write(f"{UNLOCK_RETRY_PROMPT}\n")
-                    terminal_stream.flush()
-                except (OSError, ValueError):
-                    terminal_stream = None
-                prompt_was_echoed = True
-                break
-
-
 def _terminate_process_group(process: subprocess.Popen) -> bool:
     """Bound termination and reaping of one isolated process group."""
     try:
         os.killpg(process.pid, signal.SIGTERM)
-    except ProcessLookupError:
+    except (ProcessLookupError, PermissionError):
         pass
     try:
         process.wait(timeout=PROCESS_TERMINATION_GRACE_SECONDS)
@@ -773,7 +740,7 @@ def _terminate_process_group(process: subprocess.Popen) -> bool:
         process_was_reaped = False
     try:
         os.killpg(process.pid, signal.SIGKILL)
-    except ProcessLookupError:
+    except (ProcessLookupError, PermissionError):
         pass
     if not process_was_reaped:
         try:
@@ -783,27 +750,81 @@ def _terminate_process_group(process: subprocess.Popen) -> bool:
     return True
 
 
-def _join_process_readers(
-        readers: Sequence[threading.Thread], deadline: float) -> bool:
-    """Join all pipe readers within one shared monotonic deadline."""
-    for reader in readers:
-        reader.join(timeout=max(0.0, deadline - time.monotonic()))
-    return all(not reader.is_alive() for reader in readers)
+def _drain_process_pipes(
+        selector: selectors.BaseSelector,
+        captured: Mapping[str, bytearray],
+        stderr_line_buffer: bytearray,
+        deadline: float,
+        terminal_stream=None) -> bool:
+    """Drain registered binary pipes until EOF or one absolute deadline."""
+    prompt = UNLOCK_RETRY_PROMPT.encode("utf-8")
+    prompt_was_echoed = terminal_stream is None
+    while selector.get_map():
+        remaining = deadline - time.monotonic()
+        if remaining <= 0:
+            return False
+        events = selector.select(timeout=remaining)
+        if not events:
+            return False
+        for key, _mask in events:
+            try:
+                chunk = os.read(key.fd, 65536)
+            except BlockingIOError:
+                continue
+            if not chunk:
+                selector.unregister(key.fileobj)
+                key.fileobj.close()
+                continue
+            captured[key.data].extend(chunk)
+            if key.data != "stderr" or prompt_was_echoed:
+                continue
+            stderr_line_buffer.extend(chunk)
+            while b"\n" in stderr_line_buffer:
+                line, _, remainder = stderr_line_buffer.partition(b"\n")
+                stderr_line_buffer[:] = remainder
+                if line.endswith(b"\r"):
+                    line = line[:-1]
+                if line != prompt:
+                    continue
+                try:
+                    terminal_stream.write(f"{UNLOCK_RETRY_PROMPT}\n")
+                    terminal_stream.flush()
+                except (OSError, ValueError):
+                    terminal_stream = None
+                prompt_was_echoed = True
+                break
+    return True
 
 
-def _close_process_streams(
-        process: subprocess.Popen, readers_stopped: bool = True) -> None:
-    """Close drained streams or force-close descriptors without blocking."""
-    for stream in (process.stdout, process.stderr):
-        if stream is None:
-            continue
-        if readers_stopped:
-            stream.close()
-            continue
+def _close_process_pipes(
+        selector: selectors.BaseSelector,
+        process: subprocess.Popen) -> None:
+    """Unregister and normally close every pipe still owned by the executor."""
+    for key in tuple(selector.get_map().values()):
         try:
-            os.close(stream.fileno())
+            selector.unregister(key.fileobj)
+        except (KeyError, OSError, ValueError):
+            pass
+        try:
+            key.fileobj.close()
         except (OSError, ValueError):
             pass
+    for stream in (process.stdout, process.stderr):
+        if stream is not None and not stream.closed:
+            try:
+                stream.close()
+            except (OSError, ValueError):
+                pass
+
+
+def _finish_process_pipe_ownership(
+        selector: selectors.BaseSelector,
+        process: subprocess.Popen) -> None:
+    """Release selector registrations and owner streams exactly once."""
+    try:
+        _close_process_pipes(selector, process)
+    finally:
+        selector.close()
 
 
 def _default_executor(
@@ -822,57 +843,59 @@ def _default_executor(
         process = subprocess.Popen(
             list(command), cwd=REPOSITORY_ROOT,
             stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-            text=True, encoding="utf-8", errors="replace", bufsize=1,
             env=command_environment, start_new_session=True)
-        stdout_chunks: list[str] = []
-        stderr_chunks: list[str] = []
-        live_echo_enabled = threading.Event()
-        live_echo_enabled.set()
-        stdout_reader = threading.Thread(
-            target=_drain_process_stream,
-            args=(process.stdout, stdout_chunks), daemon=True)
-        stderr_reader = threading.Thread(
-            target=_drain_process_stream,
-            args=(process.stderr, stderr_chunks, live_terminal,
-                  live_echo_enabled), daemon=True)
-        stdout_reader.start()
-        stderr_reader.start()
-        readers = (stdout_reader, stderr_reader)
+        captured = {
+            "stdout": bytearray(),
+            "stderr": bytearray(),
+        }
+        stderr_line_buffer = bytearray()
+        selector = selectors.DefaultSelector()
         deadline = time.monotonic() + timeout_seconds
         timed_out = False
         try:
-            exit_status = process.wait(
-                timeout=max(0.0, deadline - time.monotonic()))
-            if not _join_process_readers(readers, deadline):
+            for stream, name in (
+                    (process.stdout, "stdout"), (process.stderr, "stderr")):
+                os.set_blocking(stream.fileno(), False)
+                selector.register(stream, selectors.EVENT_READ, name)
+            if not _drain_process_pipes(
+                    selector, captured, stderr_line_buffer,
+                    deadline, live_terminal):
                 timed_out = True
-                live_echo_enabled.clear()
                 _terminate_process_group(process)
                 exit_status = 124
+            else:
+                exit_status = process.wait(
+                    timeout=max(0.0, deadline - time.monotonic()))
         except subprocess.TimeoutExpired:
             timed_out = True
-            live_echo_enabled.clear()
             _terminate_process_group(process)
             exit_status = 124
         except BaseException:
-            live_echo_enabled.clear()
             _terminate_process_group(process)
-            readers_stopped = _join_process_readers(
-                readers, time.monotonic() + PIPE_DRAIN_CLEANUP_SECONDS)
-            _close_process_streams(process, readers_stopped)
+            try:
+                _drain_process_pipes(
+                    selector, captured, stderr_line_buffer,
+                    time.monotonic() + PIPE_DRAIN_CLEANUP_SECONDS)
+            except (OSError, ValueError):
+                pass
+            _finish_process_pipe_ownership(selector, process)
             raise
         if timed_out:
-            readers_stopped = _join_process_readers(
-                readers, time.monotonic() + PIPE_DRAIN_CLEANUP_SECONDS)
-        else:
-            readers_stopped = True
-        _close_process_streams(process, readers_stopped)
-        stderr = "".join(stderr_chunks)
+            try:
+                _drain_process_pipes(
+                    selector, captured, stderr_line_buffer,
+                    time.monotonic() + PIPE_DRAIN_CLEANUP_SECONDS)
+            except (OSError, ValueError):
+                pass
+        _finish_process_pipe_ownership(selector, process)
+        stdout = bytes(captured["stdout"]).decode("utf-8", errors="replace")
+        stderr = bytes(captured["stderr"]).decode("utf-8", errors="replace")
         if timed_out:
             if stderr and not stderr.endswith("\n"):
                 stderr += "\n"
             stderr += "command exceeded its bounded timeout"
         return runner.SanitizedProcessResult.create(
-            exit_status, "".join(stdout_chunks), stderr, run_id)
+            exit_status, stdout, stderr, run_id)
 
     return execute
 

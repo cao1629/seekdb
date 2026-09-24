@@ -282,30 +282,24 @@ class IphoneTestPhasesTest(unittest.TestCase):
 
     def test_default_executor_passes_one_validated_xcode_environment(self):
         """Run every phase command with the resolved full-Xcode selection."""
-        process = mock.Mock()
-        process.stdout = io.StringIO("safe")
-        process.stderr = io.StringIO("")
-        process.wait.return_value = 0
         command_environment = {
             "PATH": "/usr/bin:/bin",
             "DEVELOPER_DIR": "/validated/Xcode/Contents/Developer",
         }
+        real_popen = subprocess.Popen
         with mock.patch.object(
                 phases, "validated_xcode_environment",
                 return_value=command_environment) as validate, \
                 mock.patch.object(
-                    phases.subprocess, "Popen", return_value=process) as popen:
+                    phases.subprocess, "Popen", wraps=real_popen) as popen:
             execute = phases._default_executor("safe-run")
-            result = execute(("xcrun", "devicectl", "help"), 17)
+            result = execute((sys.executable, "-c", "print('safe')"), 17)
 
         validate.assert_called_once_with()
         self.assertEqual(0, result.exit_status)
+        self.assertEqual("safe\n", result.stdout)
         self.assertEqual(command_environment, popen.call_args.kwargs["env"])
         self.assertTrue(popen.call_args.kwargs["start_new_session"])
-        self.assertEqual(1, process.wait.call_count)
-        wait_timeout = process.wait.call_args.kwargs["timeout"]
-        self.assertGreater(wait_timeout, 16)
-        self.assertLessEqual(wait_timeout, 17)
 
     def test_unlock_prompt_is_visible_before_process_completion_only_once(self):
         """Echo only the exact fixed prompt while continuing to capture stderr."""
@@ -331,7 +325,9 @@ class IphoneTestPhasesTest(unittest.TestCase):
 
         script = (
             "import sys,time; "
-            f"sys.stderr.write({prompt + chr(10)!r}); sys.stderr.flush(); "
+            f"sys.stderr.write({prompt[:20]!r}); sys.stderr.flush(); "
+            "time.sleep(0.1); "
+            f"sys.stderr.write({prompt[20:] + chr(10)!r}); sys.stderr.flush(); "
             "time.sleep(0.5); raise SystemExit(1)")
         outcome = []
 
@@ -350,6 +346,27 @@ class IphoneTestPhasesTest(unittest.TestCase):
         self.assertEqual(f"{prompt}\n", terminal.getvalue())
         self.assertEqual(1, outcome[0].exit_status)
         self.assertIn(prompt, outcome[0].stderr)
+
+    def test_partial_prompt_and_invalid_utf8_never_echo(self):
+        """Keep partial lines private and replace invalid captured UTF-8."""
+        prompt = "Unlock the iPhone and keep the screen awake; retrying…"
+        terminal = io.StringIO()
+        with mock.patch.object(
+                phases, "validated_xcode_environment",
+                return_value=dict(os.environ)):
+            execute = phases._default_executor(
+                "safe-invalid-utf8", terminal_stream=terminal)
+        script = (
+            "import os; "
+            f"os.write(2,{prompt.encode('utf-8')!r}); "
+            "os.write(2,b'\\xff\\xfe')")
+
+        result = execute((sys.executable, "-c", script), 5)
+
+        self.assertEqual(0, result.exit_status)
+        self.assertEqual("", terminal.getvalue())
+        self.assertIn(prompt, result.stderr)
+        self.assertIn("\ufffd\ufffd", result.stderr)
 
     def test_executor_drains_large_dual_streams_without_deadlock(self):
         """Concurrently drain stdout and stderr before bounding captured text."""
@@ -484,12 +501,50 @@ class IphoneTestPhasesTest(unittest.TestCase):
         self.assertLess(elapsed, 2.0)
         self.assertTrue(status.returncode != 0 or status.stdout.startswith("Z"))
 
+    def test_executor_never_double_closes_reused_checkpoint_descriptors(self):
+        """Keep later checkpoint descriptors valid after detached pipe holders."""
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            with mock.patch.object(
+                    phases, "validated_xcode_environment",
+                    return_value=dict(os.environ)):
+                execute = phases._default_executor(
+                    "safe-fd-owner", terminal_stream=io.StringIO())
+            detached_script = (
+                "import os,time; os.setsid(); "
+                "os.write(1,b'held-out'); os.write(2,b'held-err'); "
+                "time.sleep(2.5)")
+            parent_script = (
+                "import subprocess,sys; "
+                f"subprocess.Popen([sys.executable,'-c',{detached_script!r}])")
+
+            result = execute((sys.executable, "-c", parent_script), 0.2)
+            first = (root / "checkpoint-a").open("wb", buffering=0)
+            second = (root / "checkpoint-b").open("wb", buffering=0)
+            try:
+                first.write(b"before")
+                second.write(b"before")
+                time.sleep(1.6)
+                first.write(b"-after")
+                second.write(b"-after")
+            finally:
+                first.close()
+                second.close()
+
+            self.assertEqual(124, result.exit_status)
+            self.assertEqual(b"before-after", (root / "checkpoint-a").read_bytes())
+            self.assertEqual(b"before-after", (root / "checkpoint-b").read_bytes())
+
     def test_executor_keyboard_interrupt_cleans_process_group(self):
         """Terminate and reap the child before propagating KeyboardInterrupt."""
         process = mock.Mock()
         process.pid = 4242
-        process.stdout = io.StringIO("")
-        process.stderr = io.StringIO("")
+        stdout_read, stdout_write = os.pipe()
+        stderr_read, stderr_write = os.pipe()
+        os.close(stdout_write)
+        os.close(stderr_write)
+        process.stdout = os.fdopen(stdout_read, "rb")
+        process.stderr = os.fdopen(stderr_read, "rb")
         process.poll.return_value = None
         process.wait.side_effect = (KeyboardInterrupt, 130)
         with mock.patch.object(
@@ -594,13 +649,12 @@ class IphoneTestPhasesTest(unittest.TestCase):
             )
             command_environment = {
                 "DEVELOPER_DIR": "/validated/Xcode/Contents/Developer"}
-            def command_process(*_args, **_kwargs):
+            real_popen = subprocess.Popen
+
+            def command_process(_command, **kwargs):
                 """Return one independent successful captured command."""
-                process = mock.Mock()
-                process.stdout = io.StringIO("")
-                process.stderr = io.StringIO("")
-                process.wait.return_value = 0
-                return process
+                return real_popen(
+                    [sys.executable, "-c", "pass"], **kwargs)
 
             with mock.patch.object(
                     phases, "validated_xcode_environment",
