@@ -1,0 +1,61 @@
+--disable_abort_on_error
+--enable_metadata
+--enable_warnings
+--echo # s7_temporal 12
+SET NAMES utf8mb4 COLLATE utf8mb4_general_ci, @@session.time_zone = '+00:00', @@session.sql_mode = 'STRICT_ALL_TABLES,NO_ZERO_IN_DATE,NO_AUTO_CREATE_USER', @@session.timestamp = 1709214296.654321, @@session.div_precision_increment = 4, @@session.block_encryption_mode = 'aes-128-ecb', @@session.group_concat_max_len = 1024;
+--echo errno $mysql_errno
+--echo # temporal values into TIMESTAMP(0, 3, 6), TIME(0, 3, 6) and DATE, one column per statement (part 1 of 3)
+CREATE TABLE tn (id INT PRIMARY KEY, src VARCHAR(80), d0 DATETIME(0), d1 DATETIME(1), d2 DATETIME(2), d3 DATETIME(3), d4 DATETIME(4), d5 DATETIME(5), d6 DATETIME(6), s0 TIMESTAMP(0) NULL DEFAULT NULL, s3 TIMESTAMP(3) NULL DEFAULT NULL, s6 TIMESTAMP(6) NULL DEFAULT NULL, t0 TIME(0), t3 TIME(3), t6 TIME(6), dd DATE);
+--echo errno $mysql_errno
+INSERT INTO tn (id, src) VALUES (1, 'TIMESTAMP''2024-02-29 23:59:59.999999''');
+--echo errno $mysql_errno
+UPDATE tn SET s0 = TIMESTAMP'2024-02-29 23:59:59.999999' WHERE id = 1;
+--echo errno $mysql_errno
+UPDATE tn SET s3 = TIMESTAMP'2024-02-29 23:59:59.999999' WHERE id = 1;
+--echo errno $mysql_errno
+UPDATE tn SET s6 = TIMESTAMP'2024-02-29 23:59:59.999999' WHERE id = 1;
+--echo errno $mysql_errno
+UPDATE tn SET t0 = TIMESTAMP'2024-02-29 23:59:59.999999' WHERE id = 1;
+--echo errno $mysql_errno
+UPDATE tn SET t3 = TIMESTAMP'2024-02-29 23:59:59.999999' WHERE id = 1;
+--echo errno $mysql_errno
+UPDATE tn SET t6 = TIMESTAMP'2024-02-29 23:59:59.999999' WHERE id = 1;
+--echo errno $mysql_errno
+UPDATE tn SET dd = TIMESTAMP'2024-02-29 23:59:59.999999' WHERE id = 1;
+--echo errno $mysql_errno
+INSERT INTO tn (id, src) VALUES (2, '''2024-02-29 23:59:59.9999995''');
+--echo errno $mysql_errno
+UPDATE tn SET s0 = '2024-02-29 23:59:59.9999995' WHERE id = 2;
+--echo errno $mysql_errno
+UPDATE tn SET s3 = '2024-02-29 23:59:59.9999995' WHERE id = 2;
+--echo errno $mysql_errno
+UPDATE tn SET s6 = '2024-02-29 23:59:59.9999995' WHERE id = 2;
+--echo errno $mysql_errno
+UPDATE tn SET t0 = '2024-02-29 23:59:59.9999995' WHERE id = 2;
+--echo errno $mysql_errno
+UPDATE tn SET t3 = '2024-02-29 23:59:59.9999995' WHERE id = 2;
+--echo errno $mysql_errno
+UPDATE tn SET t6 = '2024-02-29 23:59:59.9999995' WHERE id = 2;
+--echo errno $mysql_errno
+UPDATE tn SET dd = '2024-02-29 23:59:59.9999995' WHERE id = 2;
+--echo errno $mysql_errno
+INSERT INTO tn (id, src) VALUES (3, '''2024-02-29 13:44:56.5''');
+--echo errno $mysql_errno
+UPDATE tn SET s0 = '2024-02-29 13:44:56.5' WHERE id = 3;
+--echo errno $mysql_errno
+UPDATE tn SET s3 = '2024-02-29 13:44:56.5' WHERE id = 3;
+--echo errno $mysql_errno
+UPDATE tn SET s6 = '2024-02-29 13:44:56.5' WHERE id = 3;
+--echo errno $mysql_errno
+UPDATE tn SET t0 = '2024-02-29 13:44:56.5' WHERE id = 3;
+--echo errno $mysql_errno
+UPDATE tn SET t3 = '2024-02-29 13:44:56.5' WHERE id = 3;
+--echo errno $mysql_errno
+UPDATE tn SET t6 = '2024-02-29 13:44:56.5' WHERE id = 3;
+--echo errno $mysql_errno
+UPDATE tn SET dd = '2024-02-29 13:44:56.5' WHERE id = 3;
+--echo errno $mysql_errno
+SELECT id, src, s0, s3, s6, t0, t3, t6, dd FROM tn WHERE id IN (1, 2, 3) ORDER BY id;
+--echo errno $mysql_errno
+DROP TABLE tn;
+--echo errno $mysql_errno

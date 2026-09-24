@@ -1,0 +1,45 @@
+--disable_abort_on_error
+--enable_metadata
+--enable_warnings
+--echo # s7_temporal 15
+SET NAMES utf8mb4 COLLATE utf8mb4_general_ci, @@session.time_zone = '+00:00', @@session.sql_mode = 'STRICT_ALL_TABLES,NO_ZERO_IN_DATE,NO_AUTO_CREATE_USER', @@session.timestamp = 1709214296.654321, @@session.div_precision_increment = 4, @@session.block_encryption_mode = 'aes-128-ecb', @@session.group_concat_max_len = 1024;
+--echo errno $mysql_errno
+--echo # now() on the real clock: stable properties only
+CREATE TABLE tn (id INT PRIMARY KEY, src VARCHAR(80), d0 DATETIME(0), d1 DATETIME(1), d2 DATETIME(2), d3 DATETIME(3), d4 DATETIME(4), d5 DATETIME(5), d6 DATETIME(6), s0 TIMESTAMP(0) NULL DEFAULT NULL, s3 TIMESTAMP(3) NULL DEFAULT NULL, s6 TIMESTAMP(6) NULL DEFAULT NULL, t0 TIME(0), t3 TIME(3), t6 TIME(6), dd DATE);
+--echo errno $mysql_errno
+SET timestamp = DEFAULT;
+--echo errno $mysql_errno
+SET sql_mode = 'STRICT_ALL_TABLES,NO_ZERO_IN_DATE,NO_AUTO_CREATE_USER';
+--echo errno $mysql_errno
+DELETE FROM tn;
+--echo errno $mysql_errno
+INSERT INTO tn (id, src, d0, d1, d2, d3, d4, d5, d6) VALUES (1, 'NOW(n) real clock', NOW(0), NOW(1), NOW(2), NOW(3), NOW(4), NOW(5), NOW(6));
+--echo errno $mysql_errno
+INSERT INTO tn (id, src, d0, d1, d2, d3, d4, d5, d6) VALUES (2, 'NOW(6)', NOW(6), NOW(6), NOW(6), NOW(6), NOW(6), NOW(6), NOW(6));
+--echo errno $mysql_errno
+SELECT id, MICROSECOND(d0) = 0 AS a, MICROSECOND(d3) % 1000 = 0 AS b, MICROSECOND(d5) % 10 = 0 AS c, d6 >= d0 AS d, ABS(TIMESTAMPDIFF(MICROSECOND, d0, d6)) < 1000000 AS e, ABS(TIMESTAMPDIFF(MICROSECOND, d3, d6)) < 1000 AS f FROM tn WHERE id = 1;
+--echo errno $mysql_errno
+SELECT id, MICROSECOND(d0) = 0 AS a, ABS(TIMESTAMPDIFF(MICROSECOND, d0, d6)) <= 1000000 AS b, ABS(TIMESTAMPDIFF(MICROSECOND, d3, d6)) <= 1000 AS c, MICROSECOND(d3) % 1000 = 0 AS d FROM tn WHERE id = 2;
+--echo errno $mysql_errno
+SET sql_mode = 'STRICT_ALL_TABLES,NO_ZERO_IN_DATE,NO_AUTO_CREATE_USER,TIME_TRUNCATE_FRACTIONAL';
+--echo errno $mysql_errno
+DELETE FROM tn;
+--echo errno $mysql_errno
+INSERT INTO tn (id, src, d0, d1, d2, d3, d4, d5, d6) VALUES (1, 'NOW(n) real clock', NOW(0), NOW(1), NOW(2), NOW(3), NOW(4), NOW(5), NOW(6));
+--echo errno $mysql_errno
+INSERT INTO tn (id, src, d0, d1, d2, d3, d4, d5, d6) VALUES (2, 'NOW(6)', NOW(6), NOW(6), NOW(6), NOW(6), NOW(6), NOW(6), NOW(6));
+--echo errno $mysql_errno
+SELECT id, MICROSECOND(d0) = 0 AS a, MICROSECOND(d3) % 1000 = 0 AS b, MICROSECOND(d5) % 10 = 0 AS c, d6 >= d0 AS d, ABS(TIMESTAMPDIFF(MICROSECOND, d0, d6)) < 1000000 AS e, ABS(TIMESTAMPDIFF(MICROSECOND, d3, d6)) < 1000 AS f FROM tn WHERE id = 1;
+--echo errno $mysql_errno
+SELECT id, MICROSECOND(d0) = 0 AS a, ABS(TIMESTAMPDIFF(MICROSECOND, d0, d6)) <= 1000000 AS b, ABS(TIMESTAMPDIFF(MICROSECOND, d3, d6)) <= 1000 AS c, MICROSECOND(d3) % 1000 = 0 AS d FROM tn WHERE id = 2;
+--echo errno $mysql_errno
+SELECT NOW() = NOW(0) AS a, MICROSECOND(NOW()) = 0 AS b, NOW(6) >= NOW() AS c, TIMESTAMPDIFF(MICROSECOND, NOW(), NOW(6)) BETWEEN 0 AND 999999 AS d, TIMESTAMPDIFF(SECOND, NOW(6), SYSDATE(6)) BETWEEN -1 AND 60 AS e, CURDATE() = DATE(NOW()) AS f, UTC_TIMESTAMP() = NOW() AS g, CURTIME() = TIME(NOW()) AS h, UNIX_TIMESTAMP() = UNIX_TIMESTAMP(NOW()) AS i, MICROSECOND(NOW(3)) % 1000 = 0 AS j, NOW(6) > TIMESTAMP'2026-01-01 00:00:00' AS k;
+--echo errno $mysql_errno
+SET sql_mode = 'STRICT_ALL_TABLES,NO_ZERO_IN_DATE,NO_AUTO_CREATE_USER';
+--echo errno $mysql_errno
+SET timestamp = 1709214296.654321;
+--echo errno $mysql_errno
+SET time_zone = '+00:00';
+--echo errno $mysql_errno
+DROP TABLE tn;
+--echo errno $mysql_errno

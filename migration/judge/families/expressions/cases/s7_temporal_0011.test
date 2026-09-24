@@ -1,0 +1,109 @@
+--disable_abort_on_error
+--enable_metadata
+--enable_warnings
+--echo # s7_temporal 11
+SET NAMES utf8mb4 COLLATE utf8mb4_general_ci, @@session.time_zone = '+00:00', @@session.sql_mode = 'STRICT_ALL_TABLES,NO_ZERO_IN_DATE,NO_AUTO_CREATE_USER', @@session.timestamp = 1709214296.654321, @@session.div_precision_increment = 4, @@session.block_encryption_mode = 'aes-128-ecb', @@session.group_concat_max_len = 1024;
+--echo errno $mysql_errno
+--echo # now() into TIMESTAMP(0, 3, 6), TIME(0, 3, 6) and DATE
+CREATE TABLE tn (id INT PRIMARY KEY, src VARCHAR(80), d0 DATETIME(0), d1 DATETIME(1), d2 DATETIME(2), d3 DATETIME(3), d4 DATETIME(4), d5 DATETIME(5), d6 DATETIME(6), s0 TIMESTAMP(0) NULL DEFAULT NULL, s3 TIMESTAMP(3) NULL DEFAULT NULL, s6 TIMESTAMP(6) NULL DEFAULT NULL, t0 TIME(0), t3 TIME(3), t6 TIME(6), dd DATE);
+--echo errno $mysql_errno
+INSERT INTO tn (id, src) VALUES (1, 'NOW()');
+--echo errno $mysql_errno
+UPDATE tn SET s0 = NOW(), s3 = NOW(), s6 = NOW() WHERE id = 1;
+--echo errno $mysql_errno
+UPDATE tn SET t0 = NOW(), t3 = NOW(), t6 = NOW() WHERE id = 1;
+--echo errno $mysql_errno
+UPDATE tn SET dd = NOW() WHERE id = 1;
+--echo errno $mysql_errno
+INSERT INTO tn (id, src) VALUES (2, 'NOW(1)');
+--echo errno $mysql_errno
+UPDATE tn SET s0 = NOW(1), s3 = NOW(1), s6 = NOW(1) WHERE id = 2;
+--echo errno $mysql_errno
+UPDATE tn SET t0 = NOW(1), t3 = NOW(1), t6 = NOW(1) WHERE id = 2;
+--echo errno $mysql_errno
+UPDATE tn SET dd = NOW(1) WHERE id = 2;
+--echo errno $mysql_errno
+INSERT INTO tn (id, src) VALUES (3, 'NOW(3)');
+--echo errno $mysql_errno
+UPDATE tn SET s0 = NOW(3), s3 = NOW(3), s6 = NOW(3) WHERE id = 3;
+--echo errno $mysql_errno
+UPDATE tn SET t0 = NOW(3), t3 = NOW(3), t6 = NOW(3) WHERE id = 3;
+--echo errno $mysql_errno
+UPDATE tn SET dd = NOW(3) WHERE id = 3;
+--echo errno $mysql_errno
+INSERT INTO tn (id, src) VALUES (4, 'NOW(6)');
+--echo errno $mysql_errno
+UPDATE tn SET s0 = NOW(6), s3 = NOW(6), s6 = NOW(6) WHERE id = 4;
+--echo errno $mysql_errno
+UPDATE tn SET t0 = NOW(6), t3 = NOW(6), t6 = NOW(6) WHERE id = 4;
+--echo errno $mysql_errno
+UPDATE tn SET dd = NOW(6) WHERE id = 4;
+--echo errno $mysql_errno
+INSERT INTO tn (id, src) VALUES (5, 'CURRENT_TIMESTAMP');
+--echo errno $mysql_errno
+UPDATE tn SET s0 = CURRENT_TIMESTAMP, s3 = CURRENT_TIMESTAMP, s6 = CURRENT_TIMESTAMP WHERE id = 5;
+--echo errno $mysql_errno
+UPDATE tn SET t0 = CURRENT_TIMESTAMP, t3 = CURRENT_TIMESTAMP, t6 = CURRENT_TIMESTAMP WHERE id = 5;
+--echo errno $mysql_errno
+UPDATE tn SET dd = CURRENT_TIMESTAMP WHERE id = 5;
+--echo errno $mysql_errno
+INSERT INTO tn (id, src) VALUES (6, 'LOCALTIMESTAMP(4)');
+--echo errno $mysql_errno
+UPDATE tn SET s0 = LOCALTIMESTAMP(4), s3 = LOCALTIMESTAMP(4), s6 = LOCALTIMESTAMP(4) WHERE id = 6;
+--echo errno $mysql_errno
+UPDATE tn SET t0 = LOCALTIMESTAMP(4), t3 = LOCALTIMESTAMP(4), t6 = LOCALTIMESTAMP(4) WHERE id = 6;
+--echo errno $mysql_errno
+UPDATE tn SET dd = LOCALTIMESTAMP(4) WHERE id = 6;
+--echo errno $mysql_errno
+INSERT INTO tn (id, src) VALUES (7, 'UTC_TIMESTAMP(6)');
+--echo errno $mysql_errno
+UPDATE tn SET s0 = UTC_TIMESTAMP(6), s3 = UTC_TIMESTAMP(6), s6 = UTC_TIMESTAMP(6) WHERE id = 7;
+--echo errno $mysql_errno
+UPDATE tn SET t0 = UTC_TIMESTAMP(6), t3 = UTC_TIMESTAMP(6), t6 = UTC_TIMESTAMP(6) WHERE id = 7;
+--echo errno $mysql_errno
+UPDATE tn SET dd = UTC_TIMESTAMP(6) WHERE id = 7;
+--echo errno $mysql_errno
+INSERT INTO tn (id, src) VALUES (8, 'CURTIME(6)');
+--echo errno $mysql_errno
+UPDATE tn SET s0 = CURTIME(6), s3 = CURTIME(6), s6 = CURTIME(6) WHERE id = 8;
+--echo errno $mysql_errno
+UPDATE tn SET t0 = CURTIME(6), t3 = CURTIME(6), t6 = CURTIME(6) WHERE id = 8;
+--echo errno $mysql_errno
+UPDATE tn SET dd = CURTIME(6) WHERE id = 8;
+--echo errno $mysql_errno
+INSERT INTO tn (id, src) VALUES (9, 'CURDATE()');
+--echo errno $mysql_errno
+UPDATE tn SET s0 = CURDATE(), s3 = CURDATE(), s6 = CURDATE() WHERE id = 9;
+--echo errno $mysql_errno
+UPDATE tn SET t0 = CURDATE(), t3 = CURDATE(), t6 = CURDATE() WHERE id = 9;
+--echo errno $mysql_errno
+UPDATE tn SET dd = CURDATE() WHERE id = 9;
+--echo errno $mysql_errno
+INSERT INTO tn (id, src) VALUES (10, 'DATE_ADD(NOW(), INTERVAL -1 MICROSECOND)');
+--echo errno $mysql_errno
+UPDATE tn SET s0 = DATE_ADD(NOW(), INTERVAL -1 MICROSECOND), s3 = DATE_ADD(NOW(), INTERVAL -1 MICROSECOND), s6 = DATE_ADD(NOW(), INTERVAL -1 MICROSECOND) WHERE id = 10;
+--echo errno $mysql_errno
+UPDATE tn SET t0 = DATE_ADD(NOW(), INTERVAL -1 MICROSECOND), t3 = DATE_ADD(NOW(), INTERVAL -1 MICROSECOND), t6 = DATE_ADD(NOW(), INTERVAL -1 MICROSECOND) WHERE id = 10;
+--echo errno $mysql_errno
+UPDATE tn SET dd = DATE_ADD(NOW(), INTERVAL -1 MICROSECOND) WHERE id = 10;
+--echo errno $mysql_errno
+INSERT INTO tn (id, src) VALUES (11, 'DATE_ADD(NOW(6), INTERVAL 500000 MICROSECOND)');
+--echo errno $mysql_errno
+UPDATE tn SET s0 = DATE_ADD(NOW(6), INTERVAL 500000 MICROSECOND), s3 = DATE_ADD(NOW(6), INTERVAL 500000 MICROSECOND), s6 = DATE_ADD(NOW(6), INTERVAL 500000 MICROSECOND) WHERE id = 11;
+--echo errno $mysql_errno
+UPDATE tn SET t0 = DATE_ADD(NOW(6), INTERVAL 500000 MICROSECOND), t3 = DATE_ADD(NOW(6), INTERVAL 500000 MICROSECOND), t6 = DATE_ADD(NOW(6), INTERVAL 500000 MICROSECOND) WHERE id = 11;
+--echo errno $mysql_errno
+UPDATE tn SET dd = DATE_ADD(NOW(6), INTERVAL 500000 MICROSECOND) WHERE id = 11;
+--echo errno $mysql_errno
+INSERT INTO tn (id, src) VALUES (12, 'FROM_UNIXTIME(UNIX_TIMESTAMP(NOW(6)))');
+--echo errno $mysql_errno
+UPDATE tn SET s0 = FROM_UNIXTIME(UNIX_TIMESTAMP(NOW(6))), s3 = FROM_UNIXTIME(UNIX_TIMESTAMP(NOW(6))), s6 = FROM_UNIXTIME(UNIX_TIMESTAMP(NOW(6))) WHERE id = 12;
+--echo errno $mysql_errno
+UPDATE tn SET t0 = FROM_UNIXTIME(UNIX_TIMESTAMP(NOW(6))), t3 = FROM_UNIXTIME(UNIX_TIMESTAMP(NOW(6))), t6 = FROM_UNIXTIME(UNIX_TIMESTAMP(NOW(6))) WHERE id = 12;
+--echo errno $mysql_errno
+UPDATE tn SET dd = FROM_UNIXTIME(UNIX_TIMESTAMP(NOW(6))) WHERE id = 12;
+--echo errno $mysql_errno
+SELECT id, src, s0, s3, s6, t0, t3, t6, dd FROM tn ORDER BY id;
+--echo errno $mysql_errno
+DROP TABLE tn;
+--echo errno $mysql_errno

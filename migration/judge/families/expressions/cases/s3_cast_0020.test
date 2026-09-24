@@ -1,0 +1,106 @@
+--disable_abort_on_error
+--enable_metadata
+--enable_warnings
+--echo # s3_cast 20
+SET NAMES utf8mb4 COLLATE utf8mb4_general_ci, @@session.time_zone = '+00:00', @@session.sql_mode = 'STRICT_ALL_TABLES,NO_ZERO_IN_DATE,NO_AUTO_CREATE_USER', @@session.timestamp = 1709214296.654321, @@session.div_precision_increment = 4, @@session.block_encryption_mode = 'aes-128-ecb', @@session.group_concat_max_len = 1024;
+--echo errno $mysql_errno
+CREATE TABLE tm (id INT PRIMARY KEY, c_tinyint TINYINT, c_utinyint TINYINT UNSIGNED, c_smallint SMALLINT, c_mediumint MEDIUMINT, c_int INT, c_uint INT UNSIGNED, c_bigint BIGINT, c_ubigint BIGINT UNSIGNED, c_float FLOAT, c_double DOUBLE, c_dec_9_2 DECIMAL(9,2), c_dec_18_6 DECIMAL(18,6), c_dec_38_10 DECIMAL(38,10), c_dec_65_30 DECIMAL(65,30), c_char CHAR(16), c_varchar VARCHAR(64), c_binary BINARY(4), c_varbinary VARBINARY(64), c_tinytext TINYTEXT, c_text TEXT, c_mediumtext MEDIUMTEXT, c_longtext LONGTEXT, c_tinyblob TINYBLOB, c_blob BLOB, c_mediumblob MEDIUMBLOB, c_longblob LONGBLOB, c_date DATE, c_time TIME, c_time6 TIME(6), c_datetime DATETIME, c_datetime6 DATETIME(6), c_timestamp TIMESTAMP(6) NULL DEFAULT NULL, c_year YEAR, c_bit BIT(64), c_enum ENUM('a','b','c','中'), c_set SET('x','y','z'), c_json JSON, c_geom GEOMETRY, c_vec VECTOR(3), c_arr ARRAY(INT));
+--echo errno $mysql_errno
+INSERT INTO tm (id, c_tinyint, c_utinyint, c_smallint, c_mediumint, c_int, c_uint, c_bigint, c_ubigint, c_float, c_double, c_dec_9_2, c_dec_18_6, c_dec_38_10, c_dec_65_30, c_char, c_varchar, c_binary, c_varbinary, c_tinytext, c_text, c_mediumtext, c_longtext, c_tinyblob, c_blob, c_mediumblob, c_longblob, c_date, c_time, c_time6, c_datetime, c_datetime6, c_timestamp, c_year, c_bit, c_enum, c_set, c_json, c_geom, c_vec, c_arr) VALUES (1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL), (2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', '', '', '', '', '', '', '', '', '', '', '', '1970-01-01', '00:00:00', '00:00:00', '1970-01-01 00:00:00', '1970-01-01 00:00:00', '1970-01-01 00:00:01', 0, b'0', 'a', '', 'null', ST_GeomFromText('POINT(0 0)'), '[0,0,0]', '[]'), (3, -128, 1, -32768, -8388608, -2147483648, 1, -9223372036854775808, 1, -3.40282e38, -1.7976931348623157e308, -9999999.99, -999999999999.999999, -9999999999999999999999999999.9999999999, -99999999999999999999999999999999999.999999999999999999999999999999, ' ', '   ', X'00', X'00', ' ', 'x', '  ', '{"a": 1}', X'00', X'0001', X'00', X'7F', '1000-01-01', '-838:59:59', '-838:59:59', '1000-01-01 00:00:00', '1000-01-01 00:00:00', '1970-01-01 00:00:01.000001', 1901, b'1', 'a', 'x', '[]', ST_GeomFromText('POINT(-1.5 2.5)'), '[-1.5,2,3]', [0]), (4, 127, 255, 32767, 8388607, 2147483647, 4294967295, 9223372036854775807, 18446744073709551615, 3.40282e38, 1.7976931348623157e308, 9999999.99, 999999999999.999999, 9999999999999999999999999999.9999999999, 99999999999999999999999999999999999.999999999999999999999999999999, 'abcdefghijklmnop', '9223372036854775808', X'FFFFFFFF', X'FFFFFFFFFFFFFFFF', 'a', 'The quick brown fox jumps over the lazy dog 0123456789. The quick brown fox jumps over the lazy dog 0123456789. ', 'The quick brown fox jumps over the lazy dog 0123456789. The quick brown fox jumps over the lazy dog 0123456789. ', 'The quick brown fox jumps over the lazy dog 0123456789. The quick brown fox jumps over the lazy dog 0123456789. ', X'FF', 'The quick brown fox jumps over the lazy dog 0123456789. The quick brown fox jumps over the lazy dog 0123456789. ', 'The quick brown fox jumps over the lazy dog 0123456789. The quick brown fox jumps over the lazy dog 0123456789. ', 'The quick brown fox jumps over the lazy dog 0123456789. The quick brown fox jumps over the lazy dog 0123456789. ', '9999-12-31', '838:59:59', '838:59:59', '9999-12-31 23:59:59', '9999-12-31 23:59:59.999999', '2038-01-19 03:14:07.999999', 2155, b'1111111111111111111111111111111111111111111111111111111111111111', '中', 'x,y,z', '{"a": {"b": [1, 2, {"c": null}]}, "d": "e"}', ST_GeomFromText('LINESTRING(0 0,1 1,2 0)'), '[1e10,-1e10,0.001]', [-2147483648,2147483647]), (5, 42, 42, 1234, 123456, 20240229, 134556, 20240229134556, 9223372036854775808, 3.14159, 3.141592653589793, 42.50, 3.141593, 20240229134556.123456, 3.141592653589793238462643383279, 'Hello', 'Hello, World!', 'abcd', 'abc', 'tiny text', 'Some text', 'medium', 'long text', 'blob', 'Some bytes', 'medium blob', 'long blob', '2024-02-29', '13:45:56', '13:45:56.123456', '2024-02-29 13:45:56', '2024-02-29 13:45:56.123456', '2024-02-29 13:45:56.123456', 2024, 42, 'b', 'y', '{"a": 1, "b": [true, false]}', ST_GeomFromText('POLYGON((0 0,4 0,4 4,0 4,0 0))'), '[1,2,3]', [1,2,3]), (6, -7, 7, -1234, -123456, -42, 3000000000, -20240229134556, 20240229134556, -2.5, -2.5, -2.50, -2.5, -2.5, -2.5, ' 12.5abc', '-12.5e3xyz', X'80', X'C3A9', '-1', '-42abc', '7e2', '12', '-1', '-42', '3', '-3', '1999-12-31', '-00:00:01', '-12:30:00.5', '1999-12-31 23:59:59', '1969-12-31 23:59:59.999999', '1999-12-31 23:59:59', 1999, 255, 'c', 'x,z', '[1, "two", 3.5, null]', ST_GeomFromText('MULTIPOINT((1 1),(2 2))'), '[3,4,0]', [3,1,2,1]), (7, 1, 128, 1, 1, 1, 2, 1, 2, 0.5, 0.5, 0.50, 0.5, 0.5, 0.5, '0.5', '2024-02-29 13:45:56.5', '1', '12.5', '2.5', '0.5', '-0.5', '1e3', '2.5', '0.5', '0.25', '1.5', '2000-01-01', '23:59:59', '23:59:59.999999', '2023-12-31 23:59:59', '2023-12-31 23:59:59.500000', '2023-12-31 23:59:59.500000', 2000, 65, 'b', 'z', '"str"', ST_GeomFromText('GEOMETRYCOLLECTION(POINT(1 1),LINESTRING(0 0,1 1))'), '[0.5,-0.5,1e-7]', [5]), (8, -1, 100, -1, -1, -1, 20240229, -1, 3, 1.1, 2.2250738585072014e-308, 1.05, 1234.5, 0.0000000001, 0.000000000000000000000000000001, 'héllo', '中文字符😀', X'41', X'F09F9880', 'é', 'ünïcödé', '中文', '😀', X'E4B8AD', X'F09F9880', X'FFFE', X'C0FFEE', '2023-12-31', '100:00:00', '00:00:00.000001', '2000-01-01 12:00:00', '2000-02-29 00:00:00.000001', '2000-02-29 00:00:00.000001', 70, 1234567890123, 'c', 'y,z', '12.5', ST_GeomFromText('MULTIPOLYGON(((0 0,1 0,1 1,0 1,0 0)),((2 2,3 2,3 3,2 3,2 2)))'), '[1,1,1]', [7,8]);
+--echo errno $mysql_errno
+--echo # CAST from literal -2.5e0 (part 2 of 2)
+SELECT CAST(-2.5e0 AS DOUBLE) AS v;
+--echo errno $mysql_errno
+SELECT CAST(-2.5e0 AS FLOAT) AS v;
+--echo errno $mysql_errno
+SELECT CAST(-2.5e0 AS JSON) AS v;
+--echo errno $mysql_errno
+--echo # CAST from literal 18446744073709551615
+SELECT CAST(18446744073709551615 AS BINARY) AS v;
+--echo errno $mysql_errno
+SELECT CAST(18446744073709551615 AS CHAR) AS v;
+--echo errno $mysql_errno
+SELECT CAST(18446744073709551615 AS CHAR CHARACTER SET latin1) AS v;
+--echo errno $mysql_errno
+SELECT CAST(18446744073709551615 AS DATETIME(6)) AS v;
+--echo errno $mysql_errno
+SELECT CAST(18446744073709551615 AS DATE) AS v;
+--echo errno $mysql_errno
+SELECT CAST(18446744073709551615 AS TIME(6)) AS v;
+--echo errno $mysql_errno
+SELECT CAST(18446744073709551615 AS YEAR) AS v;
+--echo errno $mysql_errno
+SELECT CAST(18446744073709551615 AS NUMBER) AS v;
+--echo errno $mysql_errno
+SELECT CAST(18446744073709551615 AS DECIMAL(65,30)) AS v;
+--echo errno $mysql_errno
+SELECT CAST(18446744073709551615 AS SIGNED) AS v;
+--echo errno $mysql_errno
+SELECT CAST(18446744073709551615 AS UNSIGNED) AS v;
+--echo errno $mysql_errno
+SELECT CAST(18446744073709551615 AS DOUBLE) AS v;
+--echo errno $mysql_errno
+SELECT CAST(18446744073709551615 AS FLOAT) AS v;
+--echo errno $mysql_errno
+SELECT CAST(18446744073709551615 AS JSON) AS v;
+--echo errno $mysql_errno
+--echo # CAST from literal ''
+SELECT CAST('' AS BINARY) AS v;
+--echo errno $mysql_errno
+SELECT CAST('' AS CHAR) AS v;
+--echo errno $mysql_errno
+SELECT CAST('' AS CHAR CHARACTER SET latin1) AS v;
+--echo errno $mysql_errno
+SELECT CAST('' AS DATETIME(6)) AS v;
+--echo errno $mysql_errno
+SELECT CAST('' AS DATE) AS v;
+--echo errno $mysql_errno
+SELECT CAST('' AS TIME(6)) AS v;
+--echo errno $mysql_errno
+SELECT CAST('' AS YEAR) AS v;
+--echo errno $mysql_errno
+SELECT CAST('' AS NUMBER) AS v;
+--echo errno $mysql_errno
+SELECT CAST('' AS DECIMAL(65,30)) AS v;
+--echo errno $mysql_errno
+SELECT CAST('' AS SIGNED) AS v;
+--echo errno $mysql_errno
+SELECT CAST('' AS UNSIGNED) AS v;
+--echo errno $mysql_errno
+SELECT CAST('' AS DOUBLE) AS v;
+--echo errno $mysql_errno
+SELECT CAST('' AS FLOAT) AS v;
+--echo errno $mysql_errno
+SELECT CAST('' AS JSON) AS v;
+--echo errno $mysql_errno
+--echo # CAST from literal ' 12.5x'
+SELECT CAST(' 12.5x' AS BINARY) AS v;
+--echo errno $mysql_errno
+SELECT CAST(' 12.5x' AS CHAR) AS v;
+--echo errno $mysql_errno
+SELECT CAST(' 12.5x' AS CHAR CHARACTER SET latin1) AS v;
+--echo errno $mysql_errno
+SELECT CAST(' 12.5x' AS DATETIME(6)) AS v;
+--echo errno $mysql_errno
+SELECT CAST(' 12.5x' AS DATE) AS v;
+--echo errno $mysql_errno
+SELECT CAST(' 12.5x' AS TIME(6)) AS v;
+--echo errno $mysql_errno
+SELECT CAST(' 12.5x' AS YEAR) AS v;
+--echo errno $mysql_errno
+SELECT CAST(' 12.5x' AS NUMBER) AS v;
+--echo errno $mysql_errno
+SELECT CAST(' 12.5x' AS DECIMAL(65,30)) AS v;
+--echo errno $mysql_errno
+SELECT CAST(' 12.5x' AS SIGNED) AS v;
+--echo errno $mysql_errno
+SELECT CAST(' 12.5x' AS UNSIGNED) AS v;
+--echo errno $mysql_errno
+SELECT CAST(' 12.5x' AS DOUBLE) AS v;
+--echo errno $mysql_errno
+SELECT CAST(' 12.5x' AS FLOAT) AS v;
+--echo errno $mysql_errno
+SELECT CAST(' 12.5x' AS JSON) AS v;
+--echo errno $mysql_errno
+DROP TABLE tm;
+--echo errno $mysql_errno

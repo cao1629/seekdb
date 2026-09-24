@@ -1,0 +1,898 @@
+--- a/.github/script/seekdb/mysqltest_for_seekdb.py
++++ b/.github/script/seekdb/mysqltest_for_seekdb.py
+@@ -5,6 +5,7 @@
+ 
+ import argparse
+ from collections import Counter, namedtuple
++import datetime
+ import difflib
+ import functools
+ import hashlib
+@@ -44,8 +45,35 @@
+     "sdb_sha256",
+     "tools_deploy_tree",
+     "fresh_instance_per_case",
++    "seekdb_parameters",
++    "ps_protocol",
++    "plan_cache_stats",
++    "plan_cache_read",
++    "test_dir_sha256",
+ )
+-RECORDING_NOTE_KEYS = ("seekdb_sha256", "runner_sha256", "repo_head")
++RECORDING_INPUT_DEFAULTS = {
++    "seekdb_parameters": [],
++    "ps_protocol": False,
++    "plan_cache_stats": False,
++}
++RECORDING_NOTE_KEYS = ("seekdb_sha256", "runner_sha256", "repo_head", "test_dir")
++SEEKDB_PARAMETER_PATTERN = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*=[^,]+$")
++PLAN_CACHE_READ_ARGUMENTS = (
++    "-uroot",
++    "-A",
++    "-B",
++    "-N",
++    "--proxy-mode",
++    "--init-command=SET ob_enable_plan_cache = 0",
++    "-e",
++    "SELECT access_count, hit_count FROM oceanbase.__all_virtual_plan_cache_stat",
++)
++PLAN_CACHE_READ_TIMEOUT = 60
++PLAN_CACHE_CHECK_ATTEMPTS = 3
++PLAN_CACHE_CHECK_PAUSE = 1
++PLAN_CACHE_LONG_WINDOW_SECONDS = 20
++PLAN_CACHE_FILE = "plan_cache.tsv"
++PLAN_CACHE_HEADER = "case\thits\tmisses"
+ 
+ MysqltestCase = namedtuple("MysqltestCase", ("name", "test_file", "result_file"))
+ InitStatement = namedtuple("InitStatement", ("line", "client_line", "text"))
+@@ -463,18 +491,21 @@
+ def prepare_instance(args, repo_root, sdb_script, deploy_dir, reason):
+     save_instance_outputs(args, sdb_script, reason)
+     destroy_instance(sdb_script, args.base_dir, repo_root)
++    start_arguments = [
++        "--binary",
++        args.seekdb,
++        "--base-dir",
++        args.base_dir,
++        "--port",
++        args.port,
++        "--nodaemon",
++    ]
++    for parameter in args.seekdb_parameter:
++        start_arguments.extend(("--parameter", parameter))
+     run_sdb(
+         sdb_script,
+         "start",
+-        (
+-            "--binary",
+-            args.seekdb,
+-            "--base-dir",
+-            args.base_dir,
+-            "--port",
+-            args.port,
+-            "--nodaemon",
+-        ),
++        start_arguments,
+         "start seekdb",
+         repo_root,
+     )
+@@ -499,6 +530,8 @@
+         repo_root,
+     )
+     execute_init_sql(args, deploy_dir, reason)
++    if args.plan_cache_stats:
++        check_plan_cache_reads(args, reason)
+ 
+ 
+ def load_configured_case_names(config_path):
+@@ -612,7 +645,81 @@
+     return [available_cases[name] for name in case_names]
+ 
+ 
+-def load_case_list(case_list_path, configured_cases):
++def discover_test_dir_cases(test_dir):
++    if not test_dir.is_dir():
++        raise RunnerError("test directory does not exist: {}".format(test_dir))
++    nested_tests = sorted(
++        test_file.relative_to(test_dir).as_posix()
++        for test_file in test_dir.rglob("*.test")
++        if test_file.parent != test_dir and test_file.is_file()
++    )
++    if nested_tests:
++        raise RunnerError(
++            "test directory {} has .test files below its top level, which the "
++            "runner does not run: {}".format(test_dir, ", ".join(nested_tests))
++        )
++    test_files = sorted(
++        (test_file for test_file in test_dir.glob("*.test") if test_file.is_file()),
++        key=lambda test_file: test_file.stem,
++    )
++    if not test_files:
++        raise RunnerError("test directory {} has no .test files".format(test_dir))
++    dotted_names = [test_file.name for test_file in test_files if "." in test_file.stem]
++    if dotted_names:
++        raise RunnerError(
++            "test file names in {} must have no dot before .test: {}".format(
++                test_dir, ", ".join(dotted_names)
++            )
++        )
++    return [
++        MysqltestCase(
++            test_file.stem, test_file, test_dir / "r" / (test_file.stem + ".result")
++        )
++        for test_file in test_files
++    ]
++
++
++def check_test_dir_results(test_dir, discovered_cases, selected_cases):
++    missing_results = [
++        case.name for case in selected_cases if not case.result_file.is_file()
++    ]
++    if missing_results:
++        raise RunnerError(
++            "mysqltest cases have no result files: {}".format(
++                ", ".join(missing_results)
++            )
++        )
++    case_names = set(case.name for case in discovered_cases)
++    orphaned_results = sorted(
++        result_file.name
++        for result_file in (test_dir / "r").glob("*.result")
++        if result_file.is_file() and result_file.stem not in case_names
++    )
++    if orphaned_results:
++        raise RunnerError(
++            "result files in {} have no .test file in {}: {}".format(
++                test_dir / "r", test_dir, ", ".join(orphaned_results)
++            )
++        )
++
++
++def is_expected_result(test_dir, path):
++    return path.parent == test_dir / "r" and path.suffix == ".result"
++
++
++def test_inputs_sha256(test_dir):
++    files = sorted(
++        (path.relative_to(test_dir).as_posix(), path)
++        for path in test_dir.rglob("*")
++        if path.is_file() and not is_expected_result(test_dir, path)
++    )
++    digest = hashlib.sha256()
++    for name, path in files:
++        digest.update("{}  {}\n".format(file_sha256(path), name).encode("utf-8"))
++    return digest.hexdigest()
++
++
++def load_case_list(case_list_path, available_cases, unknown_description="configured"):
+     try:
+         with case_list_path.open("r", encoding="utf-8") as case_list_file:
+             lines = case_list_file.readlines()
+@@ -636,16 +743,16 @@
+                 case_list_path, ", ".join(duplicates)
+             )
+         )
+-    configured_names = set(case.name for case in configured_cases)
+-    unknown_cases = sorted(set(case_names) - configured_names)
++    available_names = set(case.name for case in available_cases)
++    unknown_cases = sorted(set(case_names) - available_names)
+     if unknown_cases:
+         raise RunnerError(
+-            "case list {} names cases that are not configured: {}".format(
+-                case_list_path, ", ".join(unknown_cases)
++            "case list {} names cases that are not {}: {}".format(
++                case_list_path, unknown_description, ", ".join(unknown_cases)
+             )
+         )
+     listed_names = set(case_names)
+-    return [case for case in configured_cases if case.name in listed_names]
++    return [case for case in available_cases if case.name in listed_names]
+ 
+ 
+ def mysqltest_environment(args):
+@@ -736,6 +843,8 @@
+         "--timer-file={}".format(log_dir / "timer"),
+         "--tail-lines=20",
+     ]
++    if args.ps_protocol:
++        command.append("--ps-protocol")
+     if staged_result is not None:
+         command.append("--record")
+     case_name = case.name
+@@ -835,6 +944,163 @@
+     return return_code, output, trailing_whitespace_ignored
+ 
+ 
++def plan_cache_read_command(args):
++    return [
++        str(args.obclient),
++        "-h",
++        args.host,
++        "-P",
++        str(args.port),
++    ] + list(PLAN_CACHE_READ_ARGUMENTS)
++
++
++def wall_clock():
++    return datetime.datetime.now().isoformat(sep=" ", timespec="microseconds")
++
++
++def read_plan_cache_counters(args):
++    command = plan_cache_read_command(args)
++    started = wall_clock()
++    try:
++        result = subprocess.run(
++            command,
++            stdout=subprocess.PIPE,
++            stderr=subprocess.PIPE,
++            universal_newlines=True,
++            timeout=PLAN_CACHE_READ_TIMEOUT,
++            check=False,
++        )
++    except subprocess.TimeoutExpired:
++        raise RunnerError(
++            "plan cache read timed out after {} seconds".format(
++                PLAN_CACHE_READ_TIMEOUT
++            )
++        )
++    except OSError as exc:
++        raise RunnerError("cannot run {}: {}".format(format_command(command), exc))
++    finished = wall_clock()
++    output = decode_output(result.stdout)
++    if result.returncode != 0:
++        raise RunnerError(
++            "plan cache read exited with {}: {}".format(
++                result.returncode, decode_output(result.stderr).strip()
++            )
++        )
++    rows = [line.split("\t") for line in output.splitlines() if line]
++    if len(rows) == 1 and len(rows[0]) == 2:
++        try:
++            return {
++                "access_count": int(rows[0][0]),
++                "hit_count": int(rows[0][1]),
++                "started": started,
++                "finished": finished,
++            }
++        except ValueError:
++            pass
++    raise RunnerError(
++        "plan cache read printed {!r}; expected one row with access_count "
++        "and hit_count".format(output)
++    )
++
++
++def plan_cache_delta(before, after):
++    hits = after["hit_count"] - before["hit_count"]
++    return {
++        "hits": hits,
++        "misses": after["access_count"] - before["access_count"] - hits,
++        "before": before,
++        "after": after,
++    }
++
++
++def check_plan_cache_reads(args, reason):
++    check = {"instance": reason, "passed": False, "attempts": []}
++    args.plan_cache_checks.append(check)
++    try:
++        for attempt_index in range(PLAN_CACHE_CHECK_ATTEMPTS):
++            if attempt_index > 0:
++                time.sleep(PLAN_CACHE_CHECK_PAUSE)
++            first = read_plan_cache_counters(args)
++            second = read_plan_cache_counters(args)
++            attempt = {
++                "hits": second["hit_count"] - first["hit_count"],
++                "accesses": second["access_count"] - first["access_count"],
++                "first": first,
++                "second": second,
++            }
++            check["attempts"].append(attempt)
++            if attempt["hits"] == 0 and attempt["accesses"] == 1:
++                check["passed"] = True
++                break
++    except RunnerError as exc:
++        check["error"] = str(exc)
++    measured = ", ".join(
++        "hits={} accesses={}".format(attempt["hits"], attempt["accesses"])
++        for attempt in check["attempts"]
++    )
++    if "error" in check:
++        measured = "{}{}{}".format(measured, "; " if measured else "", check["error"])
++    print(
++        "[ PC CHECK ] {} instance {}: {}".format(
++            reason, "passed" if check["passed"] else "failed", measured
++        ),
++        flush=True,
++    )
++    if not check["passed"]:
++        raise RunnerError(
++            "plan cache read check failed on the {} instance: two reads back to "
++            "back must differ by 0 hits and 1 access; got {}".format(reason, measured)
++        )
++
++
++def run_case_with_plan_cache(args, deploy_dir, case, tmp_dir, log_dir):
++    if not args.plan_cache_stats:
++        return run_case(args, deploy_dir, case, tmp_dir, log_dir)
++    before = None
++    before_error = None
++    try:
++        before = read_plan_cache_counters(args)
++    except RunnerError as exc:
++        before_error = "before the case: {}".format(exc)
++    window_started = time.monotonic()
++    outcome = run_case(args, deploy_dir, case, tmp_dir, log_dir)
++    window_seconds = round(time.monotonic() - window_started, 3)
++    if before_error is not None:
++        entry = {"error": before_error}
++    else:
++        try:
++            entry = plan_cache_delta(before, read_plan_cache_counters(args))
++        except RunnerError as exc:
++            entry = {"error": "after the case: {}".format(exc)}
++    entry["seconds"] = window_seconds
++    args.plan_cache[case.name] = entry
++    if "error" in entry:
++        print(
++            "[ PC STATS ] {} not measured: {}".format(case.name, entry["error"]),
++            flush=True,
++        )
++    else:
++        print(
++            "[ PC STATS ] {} hits={} misses={} ({:.3f}s between the reads)".format(
++                case.name, entry["hits"], entry["misses"], window_seconds
++            ),
++            flush=True,
++        )
++    return outcome
++
++
++def write_plan_cache_table(path, plan_cache):
++    lines = [PLAN_CACHE_HEADER]
++    for case_name, entry in plan_cache.items():
++        if "error" not in entry:
++            lines.append(
++                "{}\t{}\t{}".format(case_name, entry["hits"], entry["misses"])
++            )
++    temporary = path.with_name(path.name + ".tmp")
++    temporary.write_text("\n".join(lines) + "\n", encoding="utf-8")
++    os.replace(str(temporary), str(path))
++
++
+ def copy_instance_diagnostics(base_dir, destination):
+     destination.mkdir(parents=True, exist_ok=True)
+     log_dir = base_dir / "log"
+@@ -951,11 +1217,27 @@
+         "case_list": str(args.case_list) if args.case_list else None,
+         "max_retries": args.max_retries,
+         "fresh_instance_per_case": args.fresh_instance_per_case,
++        "seekdb_parameters": sorted(args.seekdb_parameter),
++        "ps_protocol": args.ps_protocol,
++        "plan_cache_stats": args.plan_cache_stats,
++        "plan_cache_read": (
++            list(PLAN_CACHE_READ_ARGUMENTS) if args.plan_cache_stats else None
++        ),
++        "test_dir": str(args.test_dir) if args.test_dir else None,
++        "test_dir_sha256": args.test_dir_sha256,
+         "work_dir": str(args.work_dir),
+         "recorded": "<case>.result is the output of mysqltest --record when it "
+         "exited 0; otherwise <case>.partial is the .log mysqltest left, if any, "
+         "and outcomes gives the exit code",
+     }
++    if args.plan_cache_stats:
++        args.record_manifest["plan_cache_recorded"] = (
++            "{} holds case, hits and misses for every case whose two counter "
++            "reads succeeded; plan_cache_errors names the others; "
++            "plan_cache_seconds gives the seconds between each case's two reads; "
++            "plan_cache_checks gives the check of two reads back to back on each "
++            "instance".format(PLAN_CACHE_FILE)
++        )
+     write_json(manifest_path, args.record_manifest)
+ 
+ 
+@@ -997,6 +1279,10 @@
+         else deploy_dir / "init_user.sql"
+     )
+     args.record_dir = absolute_path(args.record_dir) if args.record_dir else None
++    args.test_dir = absolute_path(args.test_dir) if args.test_dir else None
++    args.test_dir_sha256 = None
++    args.plan_cache = {}
++    args.plan_cache_checks = []
+     args.record_manifest = None
+     args.record_outcomes = {}
+     args.entry_gate = {
+@@ -1020,9 +1306,15 @@
+     write_entry_gate(args)
+ 
+     try:
+-        all_cases = discover_cases(repo_root)
++        if args.test_dir is not None:
++            discovered_cases = discover_test_dir_cases(args.test_dir)
++            unknown_description = "in {}".format(args.test_dir)
++        else:
++            discovered_cases = discover_cases(repo_root)
++            unknown_description = "configured"
++        all_cases = discovered_cases
+         if args.case_list is not None:
+-            all_cases = load_case_list(args.case_list, all_cases)
++            all_cases = load_case_list(args.case_list, all_cases, unknown_description)
+         selected_cases = all_cases[args.slice_index :: args.slice_count]
+         if not selected_cases:
+             raise RunnerError(
+@@ -1034,6 +1326,10 @@
+                     else "",
+                 )
+             )
++        if args.test_dir is not None:
++            if args.record_dir is None:
++                check_test_dir_results(args.test_dir, discovered_cases, selected_cases)
++            args.test_dir_sha256 = test_inputs_sha256(args.test_dir)
+         if args.record_dir is not None:
+             args.record_dir.mkdir(parents=True, exist_ok=True)
+             (args.work_dir / "record_tmp").mkdir(parents=True, exist_ok=True)
+@@ -1066,7 +1362,7 @@
+                     prepare_instance(
+                         args, repo_root, sdb_script, deploy_dir, "retry-" + case.name
+                     )
+-                return_code, output, whitespace_ignored = run_case(
++                return_code, output, whitespace_ignored = run_case_with_plan_cache(
+                     args, deploy_dir, case, tmp_dir, log_dir
+                 )
+                 if whitespace_ignored:
+@@ -1102,9 +1398,23 @@
+         if cleanup_error:
+             error = "{}; {}".format(error, cleanup_error) if error else cleanup_error
+ 
+-    success = not failed_cases and error is None
++    plan_cache_errors = [
++        "{}: {}".format(case_name, entry["error"])
++        for case_name, entry in args.plan_cache.items()
++        if "error" in entry
++    ]
++    success = not failed_cases and error is None and not plan_cache_errors
+     init_failed_statements = count_failed_init_statements(args.entry_gate)
+     write_entry_gate(args)
++    if args.record_manifest is not None and args.plan_cache_stats:
++        plan_cache_path = args.record_dir / PLAN_CACHE_FILE
++        try:
++            write_plan_cache_table(plan_cache_path, args.plan_cache)
++        except OSError as exc:
++            table_error = "cannot write {}: {}".format(plan_cache_path, exc)
++            print("[mysqltest][ERROR] {}".format(table_error), file=sys.stderr)
++            error = "{}; {}".format(error, table_error) if error else table_error
++            success = False
+     if args.record_manifest is not None:
+         try:
+             finish_record_manifest(
+@@ -1116,6 +1426,12 @@
+                     "error": error,
+                     "init_failed_statements": init_failed_statements,
+                     "outcomes": args.record_outcomes,
++                    "plan_cache_errors": plan_cache_errors,
++                    "plan_cache_seconds": dict(
++                        (case_name, entry["seconds"])
++                        for case_name, entry in args.plan_cache.items()
++                    ),
++                    "plan_cache_checks": args.plan_cache_checks,
+                 },
+             )
+         except OSError as exc:
+@@ -1132,17 +1448,34 @@
+         "failed_cases": failed_cases,
+         "error": error,
+         "case_order": (
+-            "runtime_configs.psmall.test-set order in "
++            "file stems of the .test files in {}, sorted".format(args.test_dir)
++            if args.test_dir is not None
++            else "runtime_configs.psmall.test-set order in "
+             "tools/deploy/mysqltest_config.yaml"
+         ),
+         "slice_assignment": (
+-            "cases[slice_index::slice_count] over the configured order, "
+-            "after the case_list filter"
++            "cases[slice_index::slice_count] over the {} order, "
++            "after the case_list filter".format(
++                "sorted" if args.test_dir is not None else "configured"
++            )
+         ),
+         "case_list": str(args.case_list) if args.case_list else None,
++        "test_dir": str(args.test_dir) if args.test_dir else None,
++        "test_dir_sha256": args.test_dir_sha256,
+         "max_retries": args.max_retries,
+         "retried_cases": retried_cases,
+         "fresh_instance_per_case": args.fresh_instance_per_case,
++        "seekdb_parameters": sorted(args.seekdb_parameter),
++        "ps_protocol": args.ps_protocol,
++        "plan_cache_stats": args.plan_cache_stats,
++        "plan_cache_read": (
++            list(PLAN_CACHE_READ_ARGUMENTS) if args.plan_cache_stats else None
++        ),
++        "plan_cache": args.plan_cache if args.plan_cache_stats else None,
++        "plan_cache_errors": plan_cache_errors,
++        "plan_cache_checks": (
++            args.plan_cache_checks if args.plan_cache_stats else None
++        ),
+         "save_instance_dir": (
+             str(args.save_instance_dir) if args.save_instance_dir else None
+         ),
+@@ -1286,6 +1619,30 @@
+                 side, ", ".join(manifest["failed_cases"])
+             )
+         )
++    if manifest.get("plan_cache_errors"):
++        problems.append(
++            "{} recording could not read the plan cache counters: {}".format(
++                side, "; ".join(manifest["plan_cache_errors"])
++            )
++        )
++    if manifest.get("plan_cache_stats") is True:
++        checks = manifest.get("plan_cache_checks")
++        if not isinstance(checks, list) or not checks:
++            problems.append(
++                "{} recording has no check of its plan cache reads".format(side)
++            )
++        else:
++            failed_checks = [
++                str(check.get("instance")) if isinstance(check, dict) else "?"
++                for check in checks
++                if not isinstance(check, dict) or check.get("passed") is not True
++            ]
++            if failed_checks:
++                problems.append(
++                    "{} recording failed the plan cache read check on: {}".format(
++                        side, ", ".join(failed_checks)
++                    )
++                )
+     deploy_status = manifest.get("tools_deploy_status")
+     if deploy_status is None or manifest.get("tools_deploy_tree") is None:
+         problems.append("{} recording does not identify tools/deploy".format(side))
+@@ -1298,16 +1655,140 @@
+     return problems
+ 
+ 
++def recording_value(manifest, key):
++    return manifest.get(key, RECORDING_INPUT_DEFAULTS.get(key))
++
++
+ def recording_differences(left_manifest, right_manifest, keys):
+     return [
+         "{} differs: left {}, right {}".format(
+-            key, left_manifest.get(key), right_manifest.get(key)
++            key,
++            recording_value(left_manifest, key),
++            recording_value(right_manifest, key),
+         )
+         for key in keys
+-        if left_manifest.get(key) != right_manifest.get(key)
++        if recording_value(left_manifest, key) != recording_value(right_manifest, key)
+     ]
++
++
++def load_plan_cache_table(directory, case_names):
++    path = directory / PLAN_CACHE_FILE
++    try:
++        lines = path.read_text(encoding="utf-8").splitlines()
++    except OSError as exc:
++        raise RunnerError("cannot read {}: {}".format(path, exc))
++    if not lines or lines[0] != PLAN_CACHE_HEADER:
++        raise RunnerError(
++            "{} does not start with the header {!r}".format(path, PLAN_CACHE_HEADER)
++        )
++    known_names = set(case_names)
++    rows = {}
++    for line_number, line in enumerate(lines[1:], 2):
++        fields = line.split("\t")
++        if len(fields) != 3:
++            raise RunnerError(
++                "{}:{}: expected case, hits and misses".format(path, line_number)
++            )
++        if fields[0] in rows or fields[0] not in known_names:
++            raise RunnerError(
++                "{}:{}: case {} is repeated or not in the recording".format(
++                    path, line_number, fields[0]
++                )
++            )
++        try:
++            rows[fields[0]] = {"hits": int(fields[1]), "misses": int(fields[2])}
++        except ValueError:
++            raise RunnerError(
++                "{}:{}: hits and misses must be integers".format(path, line_number)
++            )
++    return rows
++
++
++def plan_cache_seconds(manifest):
++    seconds = manifest.get("plan_cache_seconds")
++    if not isinstance(seconds, dict):
++        return {}
++    return dict(
++        (case_name, value)
++        for case_name, value in seconds.items()
++        if isinstance(value, (int, float)) and not isinstance(value, bool)
++    )
++
++
++def compare_plan_cache_case(
++    case_name, left_rows, right_rows, left_seconds, right_seconds
++):
++    entry = {
++        "case": case_name,
++        "left": left_rows.get(case_name),
++        "right": right_rows.get(case_name),
++        "seconds": {
++            "left": left_seconds.get(case_name),
++            "right": right_seconds.get(case_name),
++        },
++    }
++    entry["timing_sensitive"] = any(
++        seconds is not None and seconds >= PLAN_CACHE_LONG_WINDOW_SECONDS
++        for seconds in entry["seconds"].values()
++    )
++    missing_from = [side for side in ("left", "right") if entry[side] is None]
++    if missing_from:
++        entry["status"] = "missing"
++        entry["missing_from"] = missing_from
++    elif entry["left"] == entry["right"]:
++        entry["status"] = "identical"
++    else:
++        entry["status"] = "different"
++    return entry
++
++
++def summarize_plan_cache(entries):
++    counts = Counter(entry["status"] for entry in entries)
++    return {
++        "cases": len(entries),
++        "identical": counts["identical"],
++        "different": counts["different"],
++        "missing": counts["missing"],
++        "different_timing_sensitive": sum(
++            1
++            for entry in entries
++            if entry["status"] == "different" and entry["timing_sensitive"]
++        ),
++    }
+ 
+ 
++def format_seconds(seconds):
++    return "unknown" if seconds is None else "{:.3f}s".format(seconds)
++
++
++def print_plan_cache_entry(entry):
++    print("plan-cache {:<9} {}".format(entry["status"], entry["case"]), flush=True)
++    if entry["status"] == "missing":
++        print("  missing from {}".format(", ".join(entry["missing_from"])), flush=True)
++    elif entry["status"] == "different":
++        print(
++            "  left hits={} misses={}; right hits={} misses={}".format(
++                entry["left"]["hits"],
++                entry["left"]["misses"],
++                entry["right"]["hits"],
++                entry["right"]["misses"],
++            ),
++            flush=True,
++        )
++        print(
++            "  time between the reads: left {}, right {}{}".format(
++                format_seconds(entry["seconds"]["left"]),
++                format_seconds(entry["seconds"]["right"]),
++                "; timing-sensitive: {} s or longer".format(
++                    PLAN_CACHE_LONG_WINDOW_SECONDS
++                )
++                if entry["timing_sensitive"]
++                else "",
++            ),
++            flush=True,
++        )
++
++
+ def read_recorded_file(directory, case_name, suffix):
+     path = directory / (case_name + suffix)
+     if not path.is_file():
+@@ -1519,6 +2000,15 @@
+             )
+         problems = recording_problems("left", left_manifest)
+         problems.extend(recording_problems("right", right_manifest))
++        for side, manifest in (("left", left_manifest), ("right", right_manifest)):
++            if args.require_plan_cache and manifest.get("plan_cache_stats") is not True:
++                problems.append(
++                    "{} recording was not made with --plan-cache-stats".format(side)
++                )
++            if args.require_ps_protocol and manifest.get("ps_protocol") is not True:
++                problems.append(
++                    "{} recording was not made with --ps-protocol".format(side)
++                )
+         problems.extend(
+             recording_differences(
+                 left_manifest, right_manifest, RECORDING_INPUT_KEYS
+@@ -1540,6 +2030,26 @@
+             )
+             for case_name in case_names
+         ]
++        plan_cache_compared = (
++            left_manifest.get("plan_cache_stats") is True
++            and right_manifest.get("plan_cache_stats") is True
++        )
++        plan_cache_results = []
++        if plan_cache_compared:
++            left_plan_cache = load_plan_cache_table(left_dir, left_names)
++            right_plan_cache = load_plan_cache_table(right_dir, right_names)
++            left_seconds = plan_cache_seconds(left_manifest)
++            right_seconds = plan_cache_seconds(right_manifest)
++            plan_cache_results = [
++                compare_plan_cache_case(
++                    case_name,
++                    left_plan_cache,
++                    right_plan_cache,
++                    left_seconds,
++                    right_seconds,
++                )
++                for case_name in case_names
++            ]
+     except RunnerError as exc:
+         print("[compare][ERROR] {}".format(exc), file=sys.stderr)
+         return 2
+@@ -1550,6 +2060,8 @@
+         print("note: {}".format(note), flush=True)
+     for entry in results:
+         print_compare_entry(entry, masks)
++    for entry in plan_cache_results:
++        print_plan_cache_entry(entry)
+ 
+     summary = summarize_statuses(results, "status")
+     masked_summary = None
+@@ -1558,13 +2070,26 @@
+         masked_summary["mask_changed"] = sum(
+             1 for entry in results if entry["mask_changed"]
+         )
++    plan_cache_summary = (
++        summarize_plan_cache(plan_cache_results) if plan_cache_compared else None
++    )
+     verdict = masked_summary if masks else summary
+     success = verdict["different"] == 0 and verdict["missing"] == 0 and not problems
++    if plan_cache_summary is not None:
++        success = (
++            success
++            and plan_cache_summary["different"] == 0
++            and plan_cache_summary["missing"] == 0
++        )
+     payload = {
+         "success": success,
+         "left": str(left_dir),
+         "right": str(right_dir),
+         "masks": masks,
++        "required": {
++            "plan_cache_stats": args.require_plan_cache,
++            "ps_protocol": args.require_ps_protocol,
++        },
+         "recording_problems": problems,
+         "recording_notes": notes,
+         "left_manifest": left_manifest,
+@@ -1572,6 +2097,11 @@
+         "summary": summary,
+         "masked_summary": masked_summary,
+         "cases": results,
++        "plan_cache": {
++            "compared": plan_cache_compared,
++            "summary": plan_cache_summary,
++            "cases": plan_cache_results,
++        },
+     }
+     if args.out:
+         write_json(absolute_path(args.out), payload)
+@@ -1590,6 +2120,15 @@
+             "mask_changed={mask_changed}".format(", ".join(masks), **masked_summary),
+             flush=True,
+         )
++    if plan_cache_summary is not None:
++        print(
++            "plan cache: cases={cases}, identical={identical}, "
++            "different={different}, missing={missing}, "
++            "different_timing_sensitive={different_timing_sensitive}".format(
++                **plan_cache_summary
++            ),
++            flush=True,
++        )
+     return 0 if success else 1
+ 
+ 
+@@ -1617,6 +2156,14 @@
+     return number
+ 
+ 
++def seekdb_parameter(value):
++    if not SEEKDB_PARAMETER_PATTERN.match(value):
++        raise argparse.ArgumentTypeError(
++            "expected NAME=VALUE with no comma in VALUE, got {!r}".format(value)
++        )
++    return value
++
++
+ def create_parser():
+     parser = argparse.ArgumentParser(description=__doc__)
+     subparsers = parser.add_subparsers(dest="command")
+@@ -1644,10 +2191,43 @@
+     )
+     run.add_argument(
+         "--case-list",
+-        help="file naming the configured cases to run, one per line; "
+-        "# starts a comment",
++        help="file naming the cases to run (configured cases, or cases in "
++        "--test-dir), one per line; # starts a comment",
+     )
+     run.add_argument(
++        "--test-dir",
++        help="run DIR/<name>.test, sorted by name, instead of the configured "
++        "cases; <name> has no dot, and no .test file may sit below the top level; "
++        "without --record-dir, every selected case needs its expected output "
++        "DIR/r/<name>.result and every DIR/r/*.result needs a .test; mysqltest "
++        "still runs in tools/deploy",
++    )
++    run.add_argument(
++        "--ps-protocol",
++        action="store_true",
++        help="pass --ps-protocol to mysqltest, which then sends every statement "
++        "its prepared-statement filter accepts through COM_STMT_PREPARE and "
++        "COM_STMT_EXECUTE",
++    )
++    run.add_argument(
++        "--plan-cache-stats",
++        action="store_true",
++        help="read the server's plan cache access and hit counters as root "
++        "before and after every case and store each case's hits and misses in "
++        "seekdb_result.json and, with --record-dir, in DIR/{}; on every new "
++        "instance, first check that two reads back to back differ by 0 hits "
++        "and 1 access".format(PLAN_CACHE_FILE),
++    )
++    run.add_argument(
++        "--seekdb-parameter",
++        action="append",
++        default=[],
++        type=seekdb_parameter,
++        metavar="NAME=VALUE",
++        help="pass --parameter NAME=VALUE to sdb.py start for every instance; "
++        "repeatable, one NAME at most once",
++    )
++    run.add_argument(
+         "--save-instance-dir",
+         help="copy each instance's log/ and seekdb*.profraw here before it is "
+         "destroyed; defaults to ${}".format(INSTANCE_SAVE_ENVIRONMENT),
+@@ -1708,6 +2288,18 @@
+             ", ".join(sorted(COMPARE_MASKS)) or "none"
+         ),
+     )
++    compare.add_argument(
++        "--require-plan-cache",
++        action="store_true",
++        help="report a recording problem unless both recordings were made with "
++        "--plan-cache-stats",
++    )
++    compare.add_argument(
++        "--require-ps-protocol",
++        action="store_true",
++        help="report a recording problem unless both recordings were made with "
++        "--ps-protocol",
++    )
+     compare.set_defaults(handler=command_compare)
+ 
+     return parser
+@@ -1722,6 +2314,18 @@
+     if args.command == "run" and args.slice_index >= args.slice_count:
+         parser.error("slice-index must be smaller than slice-count")
+     if args.command == "run":
++        parameter_names = [
++            parameter.split("=", 1)[0] for parameter in args.seekdb_parameter
++        ]
++        repeated_names = sorted(
++            name for name, count in Counter(parameter_names).items() if count > 1
++        )
++        if repeated_names:
++            parser.error(
++                "--seekdb-parameter names a parameter more than once: {}".format(
++                    ", ".join(repeated_names)
++                )
++            )
+         save_dir = instance_save_dir(args)
+         if save_dir is not None and save_dir.exists():
+             if not save_dir.is_dir() or any(save_dir.iterdir()):

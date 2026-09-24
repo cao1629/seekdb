@@ -1,0 +1,69 @@
+--disable_abort_on_error
+--enable_metadata
+--enable_warnings
+--echo # s7_temporal 7
+SET NAMES utf8mb4 COLLATE utf8mb4_general_ci, @@session.time_zone = '+00:00', @@session.sql_mode = 'STRICT_ALL_TABLES,NO_ZERO_IN_DATE,NO_AUTO_CREATE_USER', @@session.timestamp = 1709214296.654321, @@session.div_precision_increment = 4, @@session.block_encryption_mode = 'aes-128-ecb', @@session.group_concat_max_len = 1024;
+--echo errno $mysql_errno
+--echo # temporal values into DATETIME(0..6), one scale per statement: sql_mode STRICT_ALL_TABLES,NO_ZERO_IN_DATE,NO_AUTO_CREATE_USER (part 3 of 3)
+CREATE TABLE tn (id INT PRIMARY KEY, src VARCHAR(80), d0 DATETIME(0), d1 DATETIME(1), d2 DATETIME(2), d3 DATETIME(3), d4 DATETIME(4), d5 DATETIME(5), d6 DATETIME(6), s0 TIMESTAMP(0) NULL DEFAULT NULL, s3 TIMESTAMP(3) NULL DEFAULT NULL, s6 TIMESTAMP(6) NULL DEFAULT NULL, t0 TIME(0), t3 TIME(3), t6 TIME(6), dd DATE);
+--echo errno $mysql_errno
+SET sql_mode = 'STRICT_ALL_TABLES,NO_ZERO_IN_DATE,NO_AUTO_CREATE_USER';
+--echo errno $mysql_errno
+INSERT INTO tn (id, src) VALUES (7, 'DATE''2024-02-29''');
+--echo errno $mysql_errno
+UPDATE tn SET d0 = DATE'2024-02-29' WHERE id = 7;
+--echo errno $mysql_errno
+UPDATE tn SET d1 = DATE'2024-02-29' WHERE id = 7;
+--echo errno $mysql_errno
+UPDATE tn SET d2 = DATE'2024-02-29' WHERE id = 7;
+--echo errno $mysql_errno
+UPDATE tn SET d3 = DATE'2024-02-29' WHERE id = 7;
+--echo errno $mysql_errno
+UPDATE tn SET d4 = DATE'2024-02-29' WHERE id = 7;
+--echo errno $mysql_errno
+UPDATE tn SET d5 = DATE'2024-02-29' WHERE id = 7;
+--echo errno $mysql_errno
+UPDATE tn SET d6 = DATE'2024-02-29' WHERE id = 7;
+--echo errno $mysql_errno
+INSERT INTO tn (id, src) VALUES (8, 'FROM_UNIXTIME(1709251199.9999995)');
+--echo errno $mysql_errno
+UPDATE tn SET d0 = FROM_UNIXTIME(1709251199.9999995) WHERE id = 8;
+--echo errno $mysql_errno
+UPDATE tn SET d1 = FROM_UNIXTIME(1709251199.9999995) WHERE id = 8;
+--echo errno $mysql_errno
+UPDATE tn SET d2 = FROM_UNIXTIME(1709251199.9999995) WHERE id = 8;
+--echo errno $mysql_errno
+UPDATE tn SET d3 = FROM_UNIXTIME(1709251199.9999995) WHERE id = 8;
+--echo errno $mysql_errno
+UPDATE tn SET d4 = FROM_UNIXTIME(1709251199.9999995) WHERE id = 8;
+--echo errno $mysql_errno
+UPDATE tn SET d5 = FROM_UNIXTIME(1709251199.9999995) WHERE id = 8;
+--echo errno $mysql_errno
+UPDATE tn SET d6 = FROM_UNIXTIME(1709251199.9999995) WHERE id = 8;
+--echo errno $mysql_errno
+INSERT INTO tn (id, src) VALUES (9, '''9999-12-31 23:59:59.9999999''');
+--echo errno $mysql_errno
+UPDATE tn SET d0 = '9999-12-31 23:59:59.9999999' WHERE id = 9;
+--echo errno $mysql_errno
+UPDATE tn SET d1 = '9999-12-31 23:59:59.9999999' WHERE id = 9;
+--echo errno $mysql_errno
+UPDATE tn SET d2 = '9999-12-31 23:59:59.9999999' WHERE id = 9;
+--echo errno $mysql_errno
+UPDATE tn SET d3 = '9999-12-31 23:59:59.9999999' WHERE id = 9;
+--echo errno $mysql_errno
+UPDATE tn SET d4 = '9999-12-31 23:59:59.9999999' WHERE id = 9;
+--echo errno $mysql_errno
+UPDATE tn SET d5 = '9999-12-31 23:59:59.9999999' WHERE id = 9;
+--echo errno $mysql_errno
+UPDATE tn SET d6 = '9999-12-31 23:59:59.9999999' WHERE id = 9;
+--echo errno $mysql_errno
+SELECT id, src, d0, d1, d2, d3, d4, d5, d6 FROM tn WHERE id IN (7, 8, 9) ORDER BY id;
+--echo errno $mysql_errno
+SET sql_mode = 'STRICT_ALL_TABLES,NO_ZERO_IN_DATE,NO_AUTO_CREATE_USER';
+--echo errno $mysql_errno
+SET timestamp = 1709214296.654321;
+--echo errno $mysql_errno
+SET time_zone = '+00:00';
+--echo errno $mysql_errno
+DROP TABLE tn;
+--echo errno $mysql_errno
