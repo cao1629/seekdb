@@ -720,6 +720,42 @@ class IphoneTestRunnerTest(unittest.TestCase):
         self.assertTrue(all(case["attempt_count"] == 1
                             for case in cases[1:]))
 
+    def test_resume_records_why_already_passed_cases_were_skipped(self):
+        """Expose durable evidence that resume did not rerun passed cases."""
+        calls = []
+        adapters = self.adapters({
+            runner.PHASE_IDS[1]: lambda _case: runner.CaseResult.failed(
+                category="infrastructure", diagnostic="interrupted",
+                retry_safe=False, clean_state=False),
+        })
+        adapters[0] = runner.PhaseAdapter(
+            phase_id=runner.PHASE_IDS[0],
+            cases=adapters[0].cases,
+            execute=lambda case: (
+                calls.append(case.case_id) or runner.CaseResult.passed()),
+        )
+        self.assertEqual(1, self.run_engine(adapters))
+
+        resumed = state.select_run(
+            self.output_root,
+            mode=state.RunMode.RESUME,
+            source_commit="a" * 40,
+            config_fingerprint="b" * 64,
+            now=self.timestamp + dt.timedelta(hours=1),
+        )
+        self.selection = resumed
+        self._selection_consumed = False
+        self.assertEqual(0, self.run_engine(self.adapters()))
+
+        first = self.checkpoint()["phases"][0]["cases"][0]
+        summary = json.loads((
+            self.selection.run_directory / "summary.json").read_text())
+        self.assertEqual(1, first["attempt_count"])
+        self.assertEqual(1, first["resume_skip_count"])
+        self.assertIn("last_resume_skipped_at", first)
+        self.assertEqual("case-1", summary["resume_skips"][0]["case_id"])
+        self.assertEqual(["case-1"], calls)
+
     def test_same_day_restart_preserves_prior_run_failure_file(self):
         """A fresh run must never overwrite an earlier run's case failure."""
         failing = self.adapters({

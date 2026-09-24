@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Standalone adapters for iPhone validation phases one through four."""
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 import importlib.util
 import json
 import os
@@ -23,7 +23,10 @@ PACKAGE_SCRIPT = REPOSITORY_ROOT / "deps/ios-build/build_app.py"
 DEPS_PREFIX_ENVIRONMENT = "SEEKDB_IPHONE_DEPS_PREFIX"
 HEADERS_PREFIX_ENVIRONMENT = "SEEKDB_IPHONE_HEADERS_PREFIX"
 RUST_TARGET_DIR_ENVIRONMENT = "RUST_TARGET_DIR"
-DEVICE_CASE_TIMEOUT_SECONDS = 300
+DEVICE_INNER_TIMEOUT_SECONDS = 600
+DEVICE_CASE_TIMEOUT_SECONDS = DEVICE_INNER_TIMEOUT_SECONDS + 120
+SQL_RESTART_INNER_TIMEOUT_SECONDS = 900
+SQL_RESTART_CASE_TIMEOUT_SECONDS = SQL_RESTART_INNER_TIMEOUT_SECONDS + 120
 INVENTORY_TIMEOUT_SECONDS = 300
 BUILD_TIMEOUT_SECONDS = 7200
 PACKAGE_TIMEOUT_SECONDS = 1800
@@ -45,6 +48,11 @@ RUST_CASE_IDS = (
     "ios.rust.tls.exposes_sql_cipher_names",
 )
 PRODUCTION_ISOLATION_CASE_ID = "ios.rust.production.symbol-isolation"
+SQL_RESTART_CASE_IDS = {
+    "registry-smoke": "ios.registry.sql.same-directory-restart",
+    "cpp-device-equivalents": "ios.cpp.sql.same-directory-restart",
+    "rust-device-runtime": "ios.rust.sql.same-directory-restart",
+}
 REQUIRED_DEPENDENCY_ARTIFACTS = (
     "include",
     "lib/libcrypto.a",
@@ -156,11 +164,18 @@ def resolve_build_inputs(
         rustup_home, rust_target_dir)
     if any(path is None for path in paths):
         raise BuildReadinessError("required iOS build paths are missing")
+    explicit_rust_target = bool(environment.get(RUST_TARGET_DIR_ENVIRONMENT))
+    rust_target_ready = (
+        (rust_target_dir.is_dir()
+         and not _rust_target_is_incompatible(rust_target_dir))
+        or (explicit_rust_target
+            and not rust_target_dir.exists()
+            and rust_target_dir.parent.is_dir()))
     if (not cargo.is_file() or not os.access(cargo, os.X_OK)
             or not rustup.is_file() or not os.access(rustup, os.X_OK)
             or not cargo_home.is_dir()
             or not rustup_home.is_dir()
-            or not rust_target_dir.is_dir()
+            or not rust_target_ready
             or not headers_prefix.is_dir()
             or any(not (deps_prefix / relative).exists()
                    for relative in REQUIRED_DEPENDENCY_ARTIFACTS)):
@@ -194,6 +209,12 @@ def resolve_build_inputs(
     )
 
 
+def _rust_target_is_incompatible(target: Path) -> bool:
+    """Reject any nonempty target tree without a device ARM64 target."""
+    device = target / "aarch64-apple-ios"
+    return not device.exists() and next(target.iterdir(), None) is not None
+
+
 @dataclass(frozen=True)
 class PhaseCaseContract:
     """Describe one stable command and its evidence requirements."""
@@ -206,6 +227,7 @@ class PhaseCaseContract:
     evidence_validator: Callable[[runner.SanitizedProcessResult], tuple[str, ...]]
     requires_sql_restart_followup: bool
     requires_test_app: bool = False
+    requires_production_app: bool = False
     invalidates_test_app: bool = False
     readiness_error: Optional[str] = None
 
@@ -262,8 +284,10 @@ class TestAppPreparer:
         """Return only non-sensitive prerequisite provenance labels."""
         return dict(self._build_input_sources)
 
-    def ensure(self) -> Optional[runner.CaseResult]:
-        """Prepare the test App once or return one generic safe failure."""
+    def ensure(
+            self, *, reuse_build: bool = False,
+            repackage: bool = False) -> Optional[runner.CaseResult]:
+        """Prepare or verify and install the App with local signing checks."""
         if self._prepared:
             return None
         package_output = (
@@ -297,37 +321,62 @@ class TestAppPreparer:
                     diagnostic=(
                         "the local provisioning certificate and private key "
                         "are unavailable or ambiguous"))
-        try:
-            build_inputs = resolve_build_inputs(self._configuration)
-        except BuildReadinessError:
-            return runner.CaseResult.blocked(
-                diagnostic=(
-                    "iOS build prerequisites require explicit environment "
-                    "paths or one valid CMake cache"))
-        self._build_input_sources = dict(build_inputs.sources)
-        build = self._execute(_build_command(
-            self._configuration.engine_build, True, build_inputs),
-            BUILD_TIMEOUT_SECONDS)
-        if build.exit_status != 0:
-            return runner.CaseResult.failed(
-                category="infrastructure",
-                diagnostic="current-HEAD test-hook engine build failed",
-                exit_status=build.exit_status,
-                retry_safe=False,
-                clean_state=False,
-            )
-        package = self._execute((
-            sys.executable, str(PACKAGE_SCRIPT),
-            "--team", self._configuration.team,
-            "--device", self._configuration.device,
-            "--bundle-id", self._configuration.bundle_id,
-            "--engine-build", str(self._configuration.engine_build),
-            "--install", "--test-hooks",
-        ), PACKAGE_TIMEOUT_SECONDS)
+        if not reuse_build:
+            try:
+                build_inputs = resolve_build_inputs(self._configuration)
+            except BuildReadinessError:
+                return runner.CaseResult.blocked(
+                    diagnostic=(
+                        "iOS build prerequisites require explicit environment "
+                        "paths or one valid CMake cache"))
+            self._build_input_sources = dict(build_inputs.sources)
+            build = self._execute(_build_command(
+                self._configuration.engine_build,
+                self._configuration.test_hooks, build_inputs),
+                BUILD_TIMEOUT_SECONDS)
+            if build.exit_status != 0:
+                return runner.CaseResult.failed(
+                    category="infrastructure",
+                    diagnostic="current-HEAD iOS engine build failed",
+                    exit_status=build.exit_status,
+                    retry_safe=False,
+                    clean_state=False,
+                )
+        if repackage or not reuse_build:
+            package_command = [
+                sys.executable, str(PACKAGE_SCRIPT),
+                "--team", self._configuration.team,
+                "--device", self._configuration.device,
+                "--bundle-id", self._configuration.bundle_id,
+                "--engine-build", str(self._configuration.engine_build),
+                "--install",
+            ]
+            if self._configuration.test_hooks:
+                package_command.append("--test-hooks")
+            package = self._execute(
+                tuple(package_command), PACKAGE_TIMEOUT_SECONDS)
+        else:
+            verification = self._execute((
+                "/usr/bin/codesign", "--verify", "--deep", "--strict",
+                str(self._configuration.app_artifact),
+            ), PACKAGE_TIMEOUT_SECONDS)
+            if verification.exit_status != 0:
+                return runner.CaseResult.failed(
+                    category="infrastructure",
+                    diagnostic="existing App signature validation failed",
+                    exit_status=verification.exit_status,
+                    retry_safe=False,
+                    clean_state=False,
+                )
+            package = self._execute((
+                "xcrun", "devicectl", "device", "install", "app",
+                "--device", self._configuration.device,
+                "--timeout", "120", str(self._configuration.app_artifact),
+            ), PACKAGE_TIMEOUT_SECONDS)
         if package.exit_status != 0:
             return runner.CaseResult.failed(
                 category="infrastructure",
-                diagnostic="current-HEAD test-hook App package failed",
+                diagnostic="current-HEAD App sign or install failed",
                 exit_status=package.exit_status,
                 retry_safe=False,
                 clean_state=False,
@@ -419,6 +468,35 @@ def _device_validator(
     return validate
 
 
+def _sql_restart_validator(
+        run_directory: Path, evidence_prefix: str) -> Callable[
+            [runner.SanitizedProcessResult], tuple[str, ...]]:
+    """Create a validator for the two-round ordinary SQL restart gate."""
+    def validate(
+            process: runner.SanitizedProcessResult) -> tuple[str, ...]:
+        """Require both 36-step rounds and same-directory restart success."""
+        try:
+            summary = json.loads(process.stdout)
+        except (TypeError, json.JSONDecodeError) as error:
+            raise PhaseEvidenceError("SQL restart summary is invalid") from error
+        expected = {
+            "run_result": 0,
+            "first_previous_runs": 0,
+            "second_previous_runs": 1,
+        }
+        if summary != expected:
+            raise PhaseEvidenceError("SQL restart gate did not pass")
+        names = (
+            f"evidence-{evidence_prefix}-first.jsonl",
+            f"evidence-{evidence_prefix}-restart.jsonl",
+        )
+        if any(not (run_directory / name).is_file() for name in names):
+            raise PhaseEvidenceError("SQL restart evidence is missing")
+        return names
+
+    return validate
+
+
 def _artifact_marker(path: Path) -> Optional[tuple[bytes, bytes]]:
     """Read the first embedded runtime marker without retaining the archive."""
     tail = b""
@@ -482,14 +560,55 @@ def _device_command(
         "--filter", case_id,
         "--expected-case", case_id,
         "--data-name", f"standalone-{_slug(case_id)}"[:64],
-        "--timeout", str(DEVICE_CASE_TIMEOUT_SECONDS),
+        "--timeout", str(DEVICE_INNER_TIMEOUT_SECONDS),
         "--output-dir", str(run_directory),
+    )
+
+
+def _sql_restart_command(
+        configuration, run_directory: Path,
+        evidence_prefix: str, run_id: str,
+        production: bool) -> tuple[str, ...]:
+    """Build one two-round ordinary SQL and same-directory restart command."""
+    return (
+        sys.executable, str(DEVICE_SUITE_SCRIPT),
+        "--device", configuration.device or "",
+        "--bundle-id", configuration.bundle_id or "",
+        "--data-name", f"standalone-{evidence_prefix}-{run_id}"[:64],
+        "--timeout", str(SQL_RESTART_INNER_TIMEOUT_SECONDS),
+        "--output-dir", str(run_directory),
+        "--evidence-prefix", evidence_prefix,
+        "--expected-hook-mode", "disabled" if production else "enabled",
+        "--sql-restart",
+    )
+
+
+def _sql_restart_contract(
+        phase_id: str, configuration, run_directory: Path,
+        run_id: str, *, production: bool = False) -> PhaseCaseContract:
+    """Create one non-optional ordinary SQL persistence gate for a phase."""
+    evidence_prefix = phase_id.replace("-", "_")
+    return PhaseCaseContract(
+        phase_id=phase_id,
+        case_id=SQL_RESTART_CASE_IDS[phase_id],
+        execution_class="device-native",
+        command=_sql_restart_command(
+            configuration, run_directory, evidence_prefix, run_id,
+            production),
+        timeout_seconds=SQL_RESTART_CASE_TIMEOUT_SECONDS,
+        evidence_validator=_sql_restart_validator(
+            run_directory, evidence_prefix),
+        requires_sql_restart_followup=False,
+        requires_test_app=True,
+        requires_production_app=production,
     )
 
 
 def create_phase_contracts(
         *, configuration, suites: Sequence[str], run_directory: Path,
-        source_revision: str) -> Mapping[str, tuple[PhaseCaseContract, ...]]:
+        source_revision: str,
+        run_id: str = "contract") -> Mapping[
+            str, tuple[PhaseCaseContract, ...]]:
     """Return ordered metadata for requested completed standalone phases."""
     run_directory = Path(run_directory)
     selected = set(suites)
@@ -541,9 +660,11 @@ def create_phase_contracts(
                 requires_sql_restart_followup=True,
                 requires_test_app=True,
             ),
+            _sql_restart_contract(
+                "registry-smoke", configuration, run_directory, run_id),
         ),
-        "cpp-device-equivalents": tuple(
-            PhaseCaseContract(
+        "cpp-device-equivalents": (
+            *(PhaseCaseContract(
                 phase_id="cpp-device-equivalents",
                 case_id=case_id,
                 execution_class="device-native",
@@ -554,7 +675,10 @@ def create_phase_contracts(
                 requires_sql_restart_followup=True,
                 requires_test_app=True,
             )
-            for case_id in CPP_CASE_IDS
+              for case_id in CPP_CASE_IDS),
+            _sql_restart_contract(
+                "cpp-device-equivalents", configuration, run_directory,
+                run_id),
         ),
         "rust-device-runtime": (
             *(
@@ -584,6 +708,9 @@ def create_phase_contracts(
                 invalidates_test_app=True,
                 readiness_error=production_readiness,
             ),
+            _sql_restart_contract(
+                "rust-device-runtime", configuration, run_directory,
+                run_id, production=True),
         ),
     }
     return {
@@ -605,15 +732,34 @@ def create_phase_adapters(
         suites=suites,
         run_directory=run_directory,
         source_revision=source_revision,
+        run_id=run_id,
     )
     preparer = TestAppPreparer(
         configuration, execute, prepared=test_app_prepared)
+    reuse_prepared_build = test_app_prepared
+    production_build = configuration.engine_build.with_name(
+        f"{configuration.engine_build.name}_production")
+    production_configuration = replace(
+        configuration,
+        engine_build=production_build,
+        app_artifact=(
+            production_build / "app/Release-iphoneos/SeekDBProbe.app"),
+        test_hooks=False,
+    )
+    production_preparer = TestAppPreparer(
+        production_configuration, execute)
 
     def execute_contract(
             contract: PhaseCaseContract) -> runner.CaseResult:
         """Execute preparation, command, and evidence validation safely."""
-        if contract.requires_test_app:
-            preparation_failure = preparer.ensure()
+        if contract.requires_production_app:
+            preparation_failure = production_preparer.ensure(
+                reuse_build=True, repackage=True)
+            if preparation_failure is not None:
+                return preparation_failure
+        elif contract.requires_test_app:
+            preparation_failure = preparer.ensure(
+                reuse_build=reuse_prepared_build)
             if preparation_failure is not None:
                 return preparation_failure
         if contract.readiness_error is not None:
@@ -671,12 +817,13 @@ def create_phase_adapters(
 
 def prepare_test_app(
         *, configuration, suites: Sequence[str],
-        source_revision: str, run_id: str):
+        source_revision: str, run_id: str,
+        reuse_build: bool = False):
     """Build and install current-HEAD test artifacts before checkpointing."""
     del suites, source_revision
     preparer = TestAppPreparer(
         configuration, _default_executor(run_id))
-    failure = preparer.ensure()
+    failure = preparer.ensure(reuse_build=reuse_build)
     if failure is None:
         return preparer.build_input_sources
     if failure.status != "blocked":
@@ -688,3 +835,14 @@ def prepare_test_app(
     if "package output" in failure.diagnostic:
         return "app-output"
     return "local-profile"
+
+
+def verify_test_app(*, configuration, run_id: str):
+    """Revalidate and install a newly packaged App using enriched profile data."""
+    failure = TestAppPreparer(
+        configuration, _default_executor(run_id)).ensure(reuse_build=True)
+    if failure is None:
+        return None
+    if failure.status == "blocked":
+        return "local-profile"
+    raise PhasePreparationError("prepared App verification or install failed")

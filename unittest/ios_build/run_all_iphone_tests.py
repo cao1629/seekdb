@@ -81,6 +81,14 @@ class LocalConfiguration:
             if value)
 
 
+@dataclass(frozen=True)
+class PhasePreparationOutcome:
+    """Return safe preparation status with enriched process-local configuration."""
+
+    issue: object
+    configuration: LocalConfiguration
+
+
 def parse_args(arguments: Optional[Sequence[str]] = None) -> argparse.Namespace:
     """Parse lifecycle, suite, and process-local configuration options."""
     parser = argparse.ArgumentParser(description=__doc__)
@@ -166,9 +174,11 @@ def _embedded_profile(path: Path) -> Optional[Mapping[str, object]]:
 
 
 def infer_signing_configuration(
-        configuration: LocalConfiguration) -> LocalConfiguration:
+        configuration: LocalConfiguration,
+        validate_explicit: bool = False) -> LocalConfiguration:
     """Infer unique local bundle/team/profile tokens without external commands."""
-    if configuration.bundle_id and configuration.team:
+    if (configuration.bundle_id and configuration.team
+            and not validate_explicit):
         return configuration
     if not configuration.app_artifact.is_dir():
         return configuration
@@ -183,7 +193,8 @@ def infer_signing_configuration(
     profile = _embedded_profile(
         configuration.app_artifact / "embedded.mobileprovision")
     if profile is None:
-        return configuration
+        raise IphoneTestCliError(
+            "existing App has no reusable embedded provisioning profile")
     bundle_id = app_plist.get("CFBundleIdentifier") \
         if isinstance(app_plist, Mapping) else None
     team_values = profile.get("TeamIdentifier")
@@ -497,6 +508,9 @@ def configuration_fingerprint(
         {
             "runner_version": state.RUNNER_VERSION,
             "suites": list(runner_suites),
+            "device_hash": hashlib.sha256(
+                (configuration.device or "host-only").encode("utf-8")
+            ).hexdigest(),
             "bundle_id": configuration.bundle_id,
             "team": configuration.team,
             "signing_identity": configuration.signing_identity,
@@ -538,8 +552,14 @@ def prepare_phase_artifacts(
         configuration: LocalConfiguration,
         suites: Sequence[str],
         source_revision: str,
-        run_id: str):
+        run_id: str,
+        reuse_build: bool = False):
     """Prepare current artifacts before their identity enters a checkpoint."""
+    if reuse_build:
+        configuration = infer_signing_configuration(
+            configuration, validate_explicit=True)
+        runner.register_runtime_redaction_tokens(
+            run_id, configuration.redaction_tokens())
     try:
         import iphone_test_phases
     except ModuleNotFoundError as error:
@@ -549,12 +569,33 @@ def prepare_phase_artifacts(
     prepare = getattr(iphone_test_phases, "prepare_test_app", None)
     if prepare is None:
         return None
-    return prepare(
+    issue = prepare(
         configuration=configuration,
         suites=tuple(suites),
         source_revision=source_revision,
         run_id=run_id,
+        reuse_build=reuse_build,
     )
+    if isinstance(issue, Mapping):
+        configuration = infer_signing_configuration(
+            configuration, validate_explicit=True)
+        runner.register_runtime_redaction_tokens(
+            run_id, configuration.redaction_tokens())
+        if not reuse_build:
+            verify = getattr(iphone_test_phases, "verify_test_app", None)
+            if verify is None:
+                raise IphoneTestCliError(
+                    "phase adapter cannot verify the prepared App")
+            verification_issue = verify(
+                configuration=configuration, run_id=run_id)
+            if verification_issue is not None:
+                issue = verification_issue
+    return PhasePreparationOutcome(issue, configuration)
+
+
+def selected_suites_require_test_app(suites: Sequence[str]) -> bool:
+    """Return whether selected phase contracts require a physical test App."""
+    return any(suite != "inventory" for suite in suites)
 
 
 def _safe_setup_call(
@@ -637,14 +678,18 @@ def main(
     redaction_run_id = None
     bootstrap_redaction_run_id = None
     try:
-        configuration = infer_signing_configuration(configuration)
+        requires_test_app = selected_suites_require_test_app(suites)
+        if requires_test_app:
+            configuration = infer_signing_configuration(configuration)
         bootstrap_redaction_run_id = f"setup-{uuid.uuid4().hex}"
         runner.register_runtime_redaction_tokens(
             bootstrap_redaction_run_id, configuration.redaction_tokens())
         revision = source_commit()
         current_time = clock()
         if options.dry_run:
-            build_identity = validate_build_identity(configuration, revision)
+            build_identity = (
+                validate_build_identity(configuration, revision)
+                if requires_test_app else "host-only-v1")
             fingerprint = configuration_fingerprint(
                 runner_suites=suites, configuration=configuration,
                 build_identity=build_identity)
@@ -672,24 +717,31 @@ def main(
             print(
                 f"Selected iPhone test run: {path_preview.run_directory}",
                 file=stdout, flush=True)
-            selected_device = select_physical_device(
-                configuration.device, discover_physical_devices())
-            configuration = replace(
-                configuration, device=selected_device.identifier)
-            try:
-                build_identity = validate_build_identity(
-                    configuration, revision)
-            except IphoneTestCliError:
+            if requires_test_app:
+                selected_device = select_physical_device(
+                    configuration.device, discover_physical_devices())
+                configuration = replace(
+                    configuration, device=selected_device.identifier)
+                try:
+                    validate_build_identity(configuration, revision)
+                except IphoneTestCliError:
+                    reuse_build = False
+                else:
+                    reuse_build = True
                 setup_run_id = f"setup-{uuid.uuid4().hex}"
                 runner.register_runtime_redaction_tokens(
                     setup_run_id, configuration.redaction_tokens())
                 try:
                     preparation_issue = _safe_setup_call(
                         lambda: prepare_phase_artifacts(
-                            configuration, suites, revision, setup_run_id),
+                            configuration, suites, revision, setup_run_id,
+                            reuse_build=reuse_build),
                         setup_run_id)
                 finally:
                     runner.clear_runtime_redaction_tokens(setup_run_id)
+                if isinstance(preparation_issue, PhasePreparationOutcome):
+                    configuration = preparation_issue.configuration
+                    preparation_issue = preparation_issue.issue
                 if preparation_issue == "signing-config":
                     raise IphoneTestCliError(
                         "set SEEKDB_IPHONE_BUNDLE_ID and SEEKDB_IPHONE_TEAM "
@@ -725,6 +777,8 @@ def main(
                         file=stdout, flush=True)
                 build_identity = validate_build_identity(
                     configuration, revision)
+            else:
+                build_identity = "host-only-v1"
             fingerprint = configuration_fingerprint(
                 runner_suites=suites, configuration=configuration,
                 build_identity=build_identity)
@@ -742,10 +796,11 @@ def main(
                     "selected run changed during artifact preparation")
 
         if options.dry_run:
-            selected_device = select_physical_device(
-                configuration.device, discover_physical_devices())
-            configuration = replace(
-                configuration, device=selected_device.identifier)
+            if requires_test_app:
+                selected_device = select_physical_device(
+                    configuration.device, discover_physical_devices())
+                configuration = replace(
+                    configuration, device=selected_device.identifier)
             print("Dry run completed; no test phase was dispatched.",
                   file=stdout)
             return 0

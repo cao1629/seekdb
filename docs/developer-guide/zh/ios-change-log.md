@@ -14,6 +14,14 @@
 - 依赖路径优先取 `SEEKDB_IPHONE_DEPS_PREFIX`、`SEEKDB_IPHONE_HEADERS_PREFIX`、`CARGO`、`RUSTUP`、`CARGO_HOME`、`RUSTUP_HOME`、`RUST_TARGET_DIR`；否则从现有 cache 与 cargo 相邻目录推导。所有路径在调用前验证，随后显式传给 build；输出只记录非敏感来源标签。当前本机只读审计显示 profile/key 唯一匹配，cache-backed dependencies 可用，但部分输入来自另一 checkout 的 cache，故实际命令会显式传值而不依赖隐式默认。
 - 本提交只运行 host focused/full contract、shell syntax、Python compile 和 diff checks；按任务要求未执行 build、签名、安装或真机 stages 1–4。真正试运行仍以在线唯一物理 iPhone、profile device scope、有效 private key、iphoneos ARM64 dependencies、干净 checkout 和可用磁盘为前置；主机契约通过不等于真机 ready 或真机 pass。
 
+### 质量复审修复
+
+- artifact identity 可复用不再等于跳过准备：每个 device run 在 checkpoint 前都验证 selected device 属于实际 embedded profile、certificate/private-key 唯一可用、App codesign 有效并执行本次安装；fresh build 后重新读取实际签名产物并复验。resume 执行相同的安全复验，selected device 以 SHA-256 隐私摘要进入 fingerprint，A/B 设备不能共享 checkpoint。
+- registry、C++、Rust 三个 device phase 各新增稳定 SQL/restart gate case。每个 gate 必须在 run 专属目录保存两轮各 36 个成功 step，且 `previous_runs` 精确为 0、1；只写 details 不执行 follow-up 的旧行为不再能产生 phase pass。首轮证据已持久化时可在中断后只续跑 restart 轮。
+- device launch、evidence poll 与 clean-stop poll 改为共用单一绝对 deadline；adapter 外层 timeout 比内部预算多 120 秒。resume 对每个已通过 case 持久化 skip count/time，供真实 interrupt/resume 试运行审计。
+- `--suite inventory` 走纯 host-only 路径，不发现设备且不 build/sign/install。显式 fresh/empty `RUST_TARGET_DIR` 允许由 Cargo 创建；simulator/x86-only target 和非 iphoneos ARM64 cache 继续严格拒绝。
+- 本轮仍只运行 host contract，未启动真机；真实 interrupt/resume acceptance 留给审查通过后的独立试运行，不能用 mock 结果声称完成。
+
 ## 2026-09-24：Rust runtime tests 的真机入口
 
 - TDD 首轮 focused RED 证明共享 `device_tests.rs`、test-only feature/profile、固定 C ABI、C++ adapter 和单一 archive marker 均不存在。实现后，`cert.rs`/`tls.rs` 的三项测试断言抽为 `Result<(), String>` case，host `#[test]` 只负责调用并 unwrap；inventory 仍发现精确三项 Rust host test，并分别映射到三个稳定的 `ios.rust.*` device equivalent。

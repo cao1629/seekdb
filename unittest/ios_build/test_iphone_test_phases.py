@@ -32,6 +32,7 @@ RUST_CASES = (
     "ios.rust.device.panic_continuation",
     "ios.rust.tls.exposes_sql_cipher_names",
 )
+SQL_RESTART_CASES = phases.SQL_RESTART_CASE_IDS
 
 
 class IphoneTestPhasesTest(unittest.TestCase):
@@ -99,10 +100,15 @@ class IphoneTestPhasesTest(unittest.TestCase):
         self.assertEqual(
             {
                 "inventory": ("ios.inventory.generate",),
-                "registry-smoke": ("ios.registry.smoke",),
-                "cpp-device-equivalents": CPP_CASES,
+                "registry-smoke": (
+                    "ios.registry.smoke",
+                    SQL_RESTART_CASES["registry-smoke"]),
+                "cpp-device-equivalents": (
+                    *CPP_CASES,
+                    SQL_RESTART_CASES["cpp-device-equivalents"]),
                 "rust-device-runtime": (
-                    *RUST_CASES, "ios.rust.production.symbol-isolation"),
+                    *RUST_CASES, "ios.rust.production.symbol-isolation",
+                    SQL_RESTART_CASES["rust-device-runtime"]),
             },
             by_phase,
         )
@@ -135,7 +141,9 @@ class IphoneTestPhasesTest(unittest.TestCase):
                 "registry-smoke", "cpp-device-equivalents",
                 "rust-device-runtime"):
             for case in contracts[phase_id]:
-                if case.case_id == "ios.rust.production.symbol-isolation":
+                if case.case_id in {
+                        "ios.rust.production.symbol-isolation",
+                        *SQL_RESTART_CASES.values()}:
                     continue
                 with self.subTest(case=case.case_id):
                     self.assertIn(
@@ -266,6 +274,23 @@ class IphoneTestPhasesTest(unittest.TestCase):
         self.assertEqual(
             "cargo-home-sibling", inputs.sources["rustup_home"])
 
+    def test_explicit_fresh_rust_target_is_valid_but_simulator_cache_is_not(self):
+        """Allow Cargo to create a fresh target and reject simulator-only state."""
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            configuration = self.configuration(root)
+            environment = self.build_environment(root)
+            fresh_target = root / "fresh-rust-target"
+            environment[phases.RUST_TARGET_DIR_ENVIRONMENT] = str(fresh_target)
+
+            inputs = phases.resolve_build_inputs(configuration, environment)
+            fresh_target.mkdir()
+            (fresh_target / "aarch64-apple-ios-sim").mkdir()
+            with self.assertRaises(phases.BuildReadinessError):
+                phases.resolve_build_inputs(configuration, environment)
+
+        self.assertEqual(fresh_target.resolve(), inputs.rust_target_dir)
+
     def test_profile_scope_blocks_before_any_build_or_device_command(self):
         """A selected device outside the profile must never reach build/install."""
         with tempfile.TemporaryDirectory() as temporary_directory:
@@ -331,6 +356,37 @@ class IphoneTestPhasesTest(unittest.TestCase):
         self.assertIn("private key", result.diagnostic)
         self.assertEqual([], commands)
 
+    def test_reused_app_validates_signature_and_installs_for_selected_device(self):
+        """Reuse build bytes only after profile/key, signature, and install checks."""
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            configuration = cli.replace(
+                self.configuration(root),
+                provisioned_devices=("private-device-token",),
+                profile_certificate_hashes=("A" * 40,),
+            )
+            commands = []
+
+            def execute(command, timeout):
+                """Record sanitized external validation commands."""
+                commands.append((tuple(command), timeout))
+                return runner.SanitizedProcessResult(0, "", "")
+
+            preparer = phases.TestAppPreparer(configuration, execute)
+            with mock.patch.object(
+                    phases.subprocess, "run",
+                    return_value=mock.Mock(
+                        returncode=0, stdout=f'1) {"A" * 40}\n')):
+                result = preparer.ensure(reuse_build=True)
+
+        self.assertIsNone(result)
+        self.assertEqual("/usr/bin/codesign", commands[0][0][0])
+        self.assertIn("devicectl", commands[1][0])
+        self.assertIn("private-device-token", commands[1][0])
+        self.assertFalse(any(
+            str(REPOSITORY_ROOT / "build.iphone.sh") in command
+            for command, _timeout in commands))
+
     def test_device_metadata_remains_process_local_on_failure(self):
         """Never copy raw device, bundle, team, or signing values to results."""
         with tempfile.TemporaryDirectory() as temporary_directory:
@@ -379,17 +435,45 @@ class IphoneTestPhasesTest(unittest.TestCase):
                 "rust-device-runtime"):
             device_cases = [
                 case for case in contracts[phase_id]
-                if case.execution_class == "device-native"]
+                if (case.execution_class == "device-native"
+                    and case.case_id not in SQL_RESTART_CASES.values())]
             self.assertTrue(device_cases)
             self.assertTrue(all(
                 case.requires_sql_restart_followup for case in device_cases))
-        production = contracts["rust-device-runtime"][-1]
+
+        for phase_id in (
+                "registry-smoke", "cpp-device-equivalents",
+                "rust-device-runtime"):
+            sql_gate = contracts[phase_id][-1]
+            self.assertEqual(SQL_RESTART_CASES[phase_id], sql_gate.case_id)
+            self.assertIn("--sql-restart", sql_gate.command)
+            self.assertFalse(sql_gate.requires_sql_restart_followup)
+            mode = sql_gate.command[
+                sql_gate.command.index("--expected-hook-mode") + 1]
+            self.assertEqual(
+                "disabled" if phase_id == "rust-device-runtime"
+                else "enabled", mode)
+        production = contracts["rust-device-runtime"][-2]
         self.assertEqual("host-only", production.execution_class)
         self.assertIn("-DSEEKDB_IOS_TEST_HOOKS=OFF", production.command)
         production_build = Path(
             production.command[production.command.index("--build-dir") + 1])
         self.assertNotEqual(
             self.configuration(root).engine_build, production_build)
+
+    def test_device_outer_timeout_exceeds_one_shared_inner_deadline(self):
+        """The process timeout must leave margin around the shared device deadline."""
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            contracts = phases.create_phase_contracts(
+                configuration=self.configuration(root),
+                suites=("registry-smoke",),
+                run_directory=root / "run",
+                source_revision="a" * 40,
+            )
+        case = contracts["registry-smoke"][0]
+        inner = int(case.command[case.command.index("--timeout") + 1])
+        self.assertGreaterEqual(case.timeout_seconds, inner + 60)
 
 
 if __name__ == "__main__":

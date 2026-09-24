@@ -233,6 +233,8 @@ class RunAllIphoneTestsTest(unittest.TestCase):
             selection.close()
 
             changed_values = (
+                (cli.replace(base, device="different-device-token"),
+                 "c" * 64),
                 (cli.replace(base, bundle_id="second.private.bundle"),
                  "c" * 64),
                 (cli.replace(
@@ -262,10 +264,81 @@ class RunAllIphoneTestsTest(unittest.TestCase):
                 path.read_text(encoding="utf-8", errors="replace")
                 for path in output_root.rglob("*") if path.is_file())
             for raw_value in (
-                    "device-token", "first.private.bundle", "TEAMTOKEN1",
+                    "device-token", "different-device-token",
+                    "first.private.bundle", "TEAMTOKEN1",
                     "private identity", "/private/build-one",
                     "/private/Probe-one.app"):
                 self.assertNotIn(raw_value, serialized)
+
+    def test_inventory_only_needs_no_device_signing_or_app_preparation(self):
+        """A host-only inventory run must not touch physical-device state."""
+        timestamp = dt.datetime(2026, 9, 24, 10, tzinfo=UTC)
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            output_root = Path(temporary_directory) / "iphone_test"
+            selection = mock.Mock()
+            selection.run_directory = output_root / "2026-09-24"
+            selection.checkpoint = {"run_id": "safe-run"}
+            selection.close = mock.Mock()
+            with mock.patch.object(
+                    cli, "source_commit", return_value="a" * 40), \
+                    mock.patch.object(
+                        cli, "discover_physical_devices") as discover, \
+                    mock.patch.object(
+                        cli, "prepare_phase_artifacts") as prepare, \
+                    mock.patch.object(
+                        cli.state, "select_run", return_value=selection), \
+                    mock.patch.object(
+                        cli, "load_phase_adapters", return_value=()), \
+                    mock.patch.object(
+                        cli.runner, "run_phase_engine", return_value=0):
+                status = cli.main([
+                    "--output-root", str(output_root),
+                    "--suite", "inventory",
+                ], environment={}, stdout=io.StringIO(),
+                    clock=lambda: timestamp)
+
+        self.assertEqual(0, status)
+        discover.assert_not_called()
+        prepare.assert_not_called()
+
+    def test_valid_artifact_still_runs_per_invocation_install_preparation(self):
+        """A reusable build must still validate signing and install for the run."""
+        timestamp = dt.datetime(2026, 9, 24, 10, tzinfo=UTC)
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            output_root = Path(temporary_directory) / "iphone_test"
+            physical = cli.PhysicalDevice(
+                "device", "iPhone", "iOS", "physical", "default",
+                "booted", "paired")
+            selection = mock.Mock()
+            selection.run_directory = output_root / "2026-09-24"
+            selection.checkpoint = {"run_id": "safe-run"}
+            selection.close = mock.Mock()
+            with mock.patch.object(
+                    cli, "source_commit", return_value="a" * 40), \
+                    mock.patch.object(
+                        cli, "validate_build_identity", return_value="c" * 64), \
+                    mock.patch.object(
+                        cli, "discover_physical_devices",
+                        return_value=[physical]), \
+                    mock.patch.object(
+                        cli, "prepare_phase_artifacts",
+                        return_value={}) as prepare, \
+                    mock.patch.object(
+                        cli.state, "select_run", return_value=selection), \
+                    mock.patch.object(
+                        cli, "load_phase_adapters", return_value=()), \
+                    mock.patch.object(
+                        cli.runner, "run_phase_engine", return_value=0):
+                status = cli.main([
+                    "--output-root", str(output_root),
+                    "--device", "device", "--bundle-id", "org.test",
+                    "--team", "TEAMTOKEN1",
+                    "--suite", "registry-smoke",
+                ], environment={}, stdout=io.StringIO(),
+                    clock=lambda: timestamp)
+
+        self.assertEqual(0, status)
+        self.assertTrue(prepare.call_args.kwargs["reuse_build"])
 
     def test_source_and_build_identity_reject_dirty_or_stale_inputs(self):
         """Dirty tracked source and stale runtime archives must fail early."""
@@ -705,6 +778,8 @@ class RunAllIphoneTestsTest(unittest.TestCase):
                     cli.state, "RunLock", return_value=preparation_lock), \
                 mock.patch.object(cli, "discover_physical_devices",
                                   return_value=[physical]), \
+                mock.patch.object(
+                    cli, "prepare_phase_artifacts", return_value={}), \
                 mock.patch.object(cli, "load_phase_adapters",
                                   side_effect=load_adapters), \
                 mock.patch.object(cli.runner, "run_phase_engine",
@@ -944,10 +1019,13 @@ class RunAllIphoneTestsTest(unittest.TestCase):
             app = engine / "Probe.app"
             prepare_calls = []
 
-            def prepare(configuration, suites, source_revision, run_id):
+            def prepare(
+                    configuration, suites, source_revision, run_id,
+                    reuse_build=False):
                 """Create deterministic current artifacts before state selection."""
-                self.assertFalse(
-                    (output_root / "2026-09-24/checkpoint.json").exists())
+                if not reuse_build:
+                    self.assertFalse(
+                        (output_root / "2026-09-24/checkpoint.json").exists())
                 context = multiprocessing.get_context("spawn")
                 queue = context.Queue()
                 contender = context.Process(
@@ -957,7 +1035,8 @@ class RunAllIphoneTestsTest(unittest.TestCase):
                 contender.join(timeout=10)
                 self.assertEqual(0, contender.exitcode)
                 self.assertEqual("locked", queue.get(timeout=2))
-                prepare_calls.append((tuple(suites), source_revision, run_id))
+                prepare_calls.append((
+                    tuple(suites), source_revision, run_id, reuse_build))
                 archive = engine / "src/observer/libseekdb_ios_runtime.a"
                 archive.parent.mkdir(parents=True, exist_ok=True)
                 archive.write_bytes(marker + b"-stable-archive")
@@ -1022,7 +1101,9 @@ class RunAllIphoneTestsTest(unittest.TestCase):
                 build_identity=actual_identity)
 
         self.assertEqual((130, 0), (first, second))
-        self.assertEqual(1, len(prepare_calls))
+        self.assertEqual(2, len(prepare_calls))
+        self.assertEqual((False, True), tuple(
+            call[3] for call in prepare_calls))
         self.assertEqual(selected_directories[0], selected_directories[1])
         self.assertEqual(expected_fingerprint, checkpoint["config_fingerprint"])
 

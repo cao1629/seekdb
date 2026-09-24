@@ -7,6 +7,7 @@ import subprocess
 import tempfile
 import textwrap
 import time
+from types import SimpleNamespace
 import unittest
 from unittest import mock
 
@@ -250,6 +251,82 @@ class DeviceEvidenceValidationTests(unittest.TestCase):
                         {"working_directory_restored": False}):
             with self.subTest(changes=changes), self.assertRaises(ValueError):
                 self.runner.validate_terminal_status({**status, **changes}, "run-1", "build-1")
+
+    def test_sql_restart_gate_requires_36_steps_and_persistence_increment(self):
+        """Accept only complete SQL evidence and exact same-directory 0-to-1 state."""
+        records = [
+            {"step": step, "case": f"case-{step}", "result": 0}
+            for step in range(1, 37)
+        ] + [{"complete": True, "result": 0}]
+        self.runner.validate_sql_records(records)
+        status = {
+            "run_id": "run-1", "build_id": "build-1",
+            "state": "Stopped", "result": 0, "suite_result": None,
+            "cleanup_status": 7, "cleanup_error": 0,
+            "working_directory_restored": True,
+            "data_name": "shared-data", "sql_verified": True,
+            "sql_result": 0, "previous_runs": 1, "hook_mode": "disabled",
+        }
+        self.runner.validate_sql_terminal_status(
+            status, "run-1", "build-1", "shared-data", 1)
+        with self.assertRaises(ValueError):
+            self.runner.validate_sql_records(records[:-1])
+        with self.assertRaises(ValueError):
+            self.runner.validate_sql_terminal_status(
+                {**status, "previous_runs": 0},
+                "run-1", "build-1", "shared-data", 1)
+
+    def test_waiters_honor_one_caller_owned_absolute_deadline(self):
+        """Do not reset the timeout between evidence and cleanup waits."""
+        with tempfile.TemporaryDirectory() as temp:
+            destination = Path(temp) / "evidence.jsonl"
+            with mock.patch.object(
+                    self.runner.time, "monotonic", return_value=101), \
+                    mock.patch.object(
+                        self.runner, "copy_evidence") as copy_evidence:
+                with self.assertRaises(TimeoutError):
+                    self.runner.wait_for_evidence(
+                        "device", "bundle", "source", destination, 999,
+                        "run-1", "build-1", ["smoke.pass"],
+                        "smoke", "smoke.*", deadline=100)
+            with mock.patch.object(
+                    self.runner.time, "monotonic", return_value=101), \
+                    mock.patch.object(
+                        self.runner, "copy_probe_status") as copy_status:
+                with self.assertRaises(TimeoutError):
+                    self.runner.wait_for_terminal_status(
+                        "device", "bundle", destination, 999,
+                        "run-1", "build-1", deadline=100)
+        copy_evidence.assert_not_called()
+        copy_status.assert_not_called()
+
+    def test_sql_restart_retry_skips_a_durable_completed_first_round(self):
+        """Resume the second round without repeating a passed first SQL round."""
+        records = [
+            {"step": step, "case": f"case-{step}", "result": 0}
+            for step in range(1, 37)
+        ] + [{"complete": True, "result": 0}]
+        with tempfile.TemporaryDirectory() as temp:
+            output = Path(temp)
+            (output / "evidence-gate-first.jsonl").write_text(
+                "".join(json.dumps(record) + "\n" for record in records))
+            options = SimpleNamespace(
+                output_dir=output, evidence_prefix="gate",
+                device="device", bundle_id="bundle", data_name="shared",
+                expected_hook_mode="enabled")
+            with mock.patch.object(
+                    self.runner, "devicectl",
+                    return_value=SimpleNamespace(returncode=0)) as devicectl, \
+                    mock.patch.object(
+                        self.runner, "wait_for_sql_round") as wait_round:
+                summary = self.runner.run_sql_restart(
+                    options, "build-1", 100)
+
+        self.assertEqual(0, summary["run_result"])
+        self.assertEqual(1, devicectl.call_count)
+        self.assertEqual(1, wait_round.call_count)
+        self.assertEqual(1, wait_round.call_args.args[-2])
+        self.assertEqual("enabled", wait_round.call_args.args[-1])
 
     def test_complete_invalid_evidence_fails_immediately_while_incomplete_retries(self):
         """Retry only an unfinished prefix and preserve a terminal validation failure."""

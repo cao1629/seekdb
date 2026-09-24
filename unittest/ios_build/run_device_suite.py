@@ -140,9 +140,10 @@ def copy_evidence(device, bundle_id, source_name, destination):
 
 
 def wait_for_evidence(device, bundle_id, source_name, destination, timeout_seconds,
-                      run_id, build_id, expected_case_ids, suite, case_filter):
+                      run_id, build_id, expected_case_ids, suite, case_filter,
+                      deadline=None):
     """Poll until complete current-run evidence validates or the deadline expires."""
-    deadline = time.monotonic() + timeout_seconds
+    deadline = deadline or time.monotonic() + timeout_seconds
     last_error = None
     while time.monotonic() < deadline:
         if copy_evidence(device, bundle_id, source_name, destination):
@@ -180,9 +181,10 @@ def copy_probe_status(device, bundle_id, destination):
     return result.returncode == 0 and destination.is_file()
 
 
-def wait_for_terminal_status(device, bundle_id, destination, timeout_seconds, run_id, build_id):
+def wait_for_terminal_status(device, bundle_id, destination, timeout_seconds, run_id, build_id,
+                             deadline=None):
     """Poll the device lifecycle file until the current suite stops and validates."""
-    deadline = time.monotonic() + timeout_seconds
+    deadline = deadline or time.monotonic() + timeout_seconds
     last_error = None
     while time.monotonic() < deadline:
         if copy_probe_status(device, bundle_id, destination):
@@ -194,6 +196,104 @@ def wait_for_terminal_status(device, bundle_id, destination, timeout_seconds, ru
                 last_error = error
         time.sleep(2)
     raise TimeoutError(f"device suite did not reach a clean terminal state: {last_error}")
+
+
+def validate_sql_records(records):
+    """Require exactly 36 ordered passing SQL steps and one success terminator."""
+    if len(records) != 37:
+        raise ValueError("ordinary SQL evidence must contain 36 steps and completion")
+    steps = records[:-1]
+    if ([record.get("step") for record in steps] != list(range(1, 37))
+            or any(not isinstance(record.get("case"), str)
+                   or not record["case"] or record.get("result") != 0
+                   for record in steps)
+            or len({record["case"] for record in steps}) != 36
+            or records[-1] != {"complete": True, "result": 0}):
+        raise ValueError("ordinary SQL evidence is incomplete or failed")
+
+
+def validate_sql_terminal_status(status, run_id, build_id, data_name, previous_runs,
+                                 expected_hook_mode="disabled"):
+    """Require one current ordinary SQL run with the expected persistence count."""
+    validate_terminal_status(
+        {**status, "suite_result": 0}, run_id, build_id)
+    if (status.get("data_name") != data_name
+            or status.get("sql_verified") is not True
+            or status.get("sql_result") != 0
+            or status.get("suite_result") is not None
+            or status.get("previous_runs") != previous_runs
+            or status.get("hook_mode") != expected_hook_mode):
+        raise ValueError("ordinary SQL terminal status did not pass restart gate")
+
+
+def copy_sql_evidence(device, bundle_id, destination):
+    """Copy the fixed ordinary SQL evidence file without raw device metadata."""
+    destination.unlink(missing_ok=True)
+    result = devicectl([
+        "device", "copy", "from", "--device", device,
+        "--source", "Documents/sql-probe-results.jsonl",
+        "--destination", str(destination),
+        "--domain-type", "appDataContainer", "--domain-identifier", bundle_id,
+        "--timeout", "30",
+    ])
+    return result.returncode == 0 and destination.is_file()
+
+
+def wait_for_sql_round(device, bundle_id, output, deadline, run_id, build_id,
+                       data_name, previous_runs, expected_hook_mode):
+    """Wait for one current ordinary SQL terminal status and copy its evidence."""
+    with tempfile.TemporaryDirectory() as temporary_directory:
+        status_path = Path(temporary_directory) / "probe-status.json"
+        last_error = None
+        while time.monotonic() < deadline:
+            if copy_probe_status(device, bundle_id, status_path):
+                try:
+                    status = json.loads(status_path.read_text())
+                    validate_sql_terminal_status(
+                        status, run_id, build_id, data_name, previous_runs,
+                        expected_hook_mode)
+                    if not copy_sql_evidence(device, bundle_id, output):
+                        raise IncompleteEvidenceError(
+                            "ordinary SQL evidence is not available")
+                    validate_sql_records(read_jsonl(output))
+                    return
+                except (IncompleteEvidenceError, json.JSONDecodeError, ValueError) as error:
+                    last_error = error
+            time.sleep(2)
+    raise TimeoutError(f"ordinary SQL restart gate timed out: {last_error}")
+
+
+def run_sql_restart(options, build_id, deadline):
+    """Run two ordinary SQL probes in one data directory under one deadline."""
+    outputs = (
+        options.output_dir / f"evidence-{options.evidence_prefix}-first.jsonl",
+        options.output_dir / f"evidence-{options.evidence_prefix}-restart.jsonl",
+    )
+    for previous_runs, output in enumerate(outputs):
+        if output.is_file():
+            validate_sql_records(read_jsonl(output))
+            continue
+        run_id = str(uuid.uuid4())
+        launch = devicectl([
+            "device", "process", "launch", "--device", options.device,
+            "--terminate-existing", "--environment-variables", json.dumps({
+                "SEEKDB_IOS_TEST_RUN_ID": run_id,
+                "SEEKDB_PROBE_DATA_NAME": options.data_name,
+                "SEEKDB_PROBE_AUTO_STOP": "1",
+            }), "--timeout", "60", options.bundle_id,
+        ])
+        if launch.returncode != 0:
+            raise SystemExit(
+                "ordinary SQL launch failed; raw device metadata was not persisted")
+        wait_for_sql_round(
+            options.device, options.bundle_id, output, deadline, run_id,
+            build_id, options.data_name, previous_runs,
+            options.expected_hook_mode)
+    return {
+        "run_result": 0,
+        "first_previous_runs": 0,
+        "second_previous_runs": 1,
+    }
 
 
 def crash_snapshot(report_root):
@@ -240,6 +340,15 @@ def main():
     parser.add_argument("--expected-case", action="append")
     parser.add_argument("--data-name", default="ios-device-tests")
     parser.add_argument("--timeout", type=int, default=180)
+    parser.add_argument(
+        "--sql-restart", action="store_true",
+        help="run two ordinary 36-step SQL rounds in one data directory")
+    parser.add_argument(
+        "--evidence-prefix", default="sql",
+        help="safe filename prefix for ordinary SQL evidence")
+    parser.add_argument(
+        "--expected-hook-mode", choices=("enabled", "disabled"),
+        default="disabled")
     parser.add_argument("--output-dir", type=Path,
                         default=ROOT / "build_ios_arm64/device-evidence/device-suite")
     parser.add_argument("--crash-report-dir", type=Path,
@@ -249,8 +358,10 @@ def main():
         parser.error("timeout must be positive")
     try:
         data_name = validate_data_name(options.data_name)
+        evidence_prefix = validate_data_name(options.evidence_prefix)
     except ValueError as error:
         parser.error(str(error))
+    options.evidence_prefix = evidence_prefix
     options.output_dir.mkdir(parents=True, exist_ok=True)
     run_id = str(uuid.uuid4())
     build_id = source_build_id()
@@ -258,6 +369,13 @@ def main():
     source_name = f"device-test-{run_id}.jsonl"
     destination = options.output_dir / source_name
     before_crashes = crash_snapshot(options.crash_report_dir)
+    deadline = time.monotonic() + options.timeout
+    if options.sql_restart:
+        summary = run_sql_restart(options, build_id, deadline)
+        reject_new_crash_reports(
+            options.crash_report_dir, before_crashes, options.bundle_id)
+        print(json.dumps(summary, sort_keys=True))
+        return
     launch = devicectl([
         "device", "process", "launch", "--device", options.device, "--terminate-existing",
         "--environment-variables", json.dumps({
@@ -273,11 +391,12 @@ def main():
         raise SystemExit("device suite launch failed; raw device metadata was not persisted")
     summary = wait_for_evidence(
         options.device, options.bundle_id, source_name, destination, options.timeout,
-        run_id, build_id, expected_cases, options.suite, options.filter)
+        run_id, build_id, expected_cases, options.suite, options.filter,
+        deadline=deadline)
     with tempfile.TemporaryDirectory() as temporary_directory:
         wait_for_terminal_status(
             options.device, options.bundle_id, Path(temporary_directory) / "probe-status.json",
-            options.timeout, run_id, build_id)
+            options.timeout, run_id, build_id, deadline=deadline)
     reject_new_crash_reports(options.crash_report_dir, before_crashes, options.bundle_id)
     print(json.dumps({"run_id": run_id, "build_id": build_id, **summary}, sort_keys=True))
 

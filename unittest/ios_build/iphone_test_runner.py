@@ -572,6 +572,7 @@ def _failure_links(
 def _summary(checkpoint: Mapping[str, Any], run_directory: Path) -> Dict[str, Any]:
     """Build a bounded deterministic machine-readable run summary."""
     phase_records = []
+    resume_skips = []
     for phase in checkpoint["phases"]:
         phase_records.append({
             "id": phase["id"],
@@ -584,6 +585,14 @@ def _summary(checkpoint: Mapping[str, Any], run_directory: Path) -> Dict[str, An
                 for result in RESULT_VALUES
             },
         })
+        for case in phase["cases"]:
+            if case.get("resume_skip_count", 0):
+                resume_skips.append({
+                    "phase_id": phase["id"],
+                    "case_id": case["id"],
+                    "count": case["resume_skip_count"],
+                    "last_skipped_at": case["last_resume_skipped_at"],
+                })
     return {
         "schema_version": checkpoint["schema_version"],
         "runner_version": checkpoint["runner_version"],
@@ -592,6 +601,7 @@ def _summary(checkpoint: Mapping[str, Any], run_directory: Path) -> Dict[str, An
         "status": checkpoint["status"],
         "counts": _result_counts(checkpoint),
         "phases": phase_records,
+        "resume_skips": resume_skips,
         "failure_files": _failure_links(run_directory, checkpoint),
     }
 
@@ -621,6 +631,11 @@ def _summary_markdown(summary: Mapping[str, Any]) -> str:
         lines.extend(
             f"- [{filename}]({filename})"
             for filename in summary["failure_files"])
+    if summary["resume_skips"]:
+        lines.extend(["", "## Resume skips", ""])
+        lines.extend(
+            f"- `{record['case_id']}`: {record['count']}"
+            for record in summary["resume_skips"])
     return "\n".join(lines) + "\n"
 
 
@@ -737,6 +752,13 @@ def run_phase_engine(
                 break
             adapter = registry.get(phase["id"])
             for case in phase["cases"]:
+                if selection.resumed and case["status"] == "passed":
+                    case["resume_skip_count"] = (
+                        case.get("resume_skip_count", 0) + 1)
+                    case["last_resume_skipped_at"] = now().isoformat()
+                    state.save_checkpoint(
+                        output_root, run_directory, checkpoint)
+                    continue
                 if case["status"] not in {"pending", "failed"}:
                     continue
                 spec = _find_spec(adapter, case["id"])

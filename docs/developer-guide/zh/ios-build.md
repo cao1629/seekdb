@@ -2,13 +2,13 @@
 
 ## 单命令 stages 1–4（2026-09-25，尚未执行新一轮真机）
 
-`./run.iphone.test.sh` 已注册 inventory、registry smoke、4 个 C++ device equivalent、5 个 Rust device case，以及独立 production Rust symbol isolation。可用四个 `--suite` 只运行当前已注册阶段；runner 仍按全局顺序执行，并把 SQL/同目录 restart 标记为设备 suite 后续门禁，后续阶段实现前不把该标记冒充已执行结果。
+`./run.iphone.test.sh` 已注册 inventory、registry smoke、4 个 C++ device equivalent、5 个 Rust device case，以及独立 production Rust symbol isolation。每个 device phase 末尾都有稳定、不可选跳的普通模式 gate：在该 run 专属数据目录完成 36-step SQL 首轮和同目录 restart，并严格要求 `previous_runs=0/1`；gate 未通过时 phase/run 都不能通过。可用四个 `--suite` 只运行当前已注册阶段，runner 仍按全局顺序执行。
 
-在创建 checkpoint 前，runner 会持有同一 start-date 目录的独占锁，完成物理设备选择、current-HEAD hook-on `seekdb_ios_link_check`、签名安装 test App、archive/App/CMake identity 哈希，再把锁交给 phase engine。Rust production isolation 使用独立的 `build_ios_arm64_production` 类目录，不覆盖 checkpoint 绑定的 hook-on 产物。该提交只完成主机契约与准备链，**没有启动真机阶段，也没有新增 pass 结果**。
+在创建 checkpoint 前，runner 会持有同一 start-date 目录的独占锁，完成物理设备选择、current-HEAD hook-on `seekdb_ios_link_check`、签名/验签及本次安装、archive/App/CMake identity 哈希，再把锁交给 phase engine。已有合法 artifact 只能复用 engine/App bytes，不能跳过当前 selected device 的 profile scope、certificate/private-key、codesign 和安装检查；新构建 App 在写 checkpoint 前再次读取实际 embedded profile 并完成同样检查。resume 会安全复验/安装，但 fingerprint 以 selected device 的隐私哈希绑定设备，不能把 A 设备证据续跑到 B。Rust production isolation 使用独立的 `build_ios_arm64_production` 类目录，不覆盖 checkpoint 绑定的 hook-on 产物。该提交只完成主机契约与准备链，**没有启动真机阶段，也没有新增 pass 结果**。
 
 无显式 bundle/team 时，只在现有 probe App 的 Info.plist 与 embedded profile 唯一一致、profile 为未过期 iOS profile、只有一个 developer certificate 且包含设备范围时进行进程内推导；证书摘要还必须在本机 codesigning identities 中唯一匹配私钥。任何歧义或缺失都停止，并要求设置 `SEEKDB_IPHONE_BUNDLE_ID`、`SEEKDB_IPHONE_TEAM`；`SEEKDB_IPHONE_SIGNING_IDENTITY` 不是硬要求，当前 `build_app.py` 不消费它。所有推导出的 bundle、team、设备、profile/certificate token 都在首个外部命令前注册为内存脱敏 token，不写入 checkpoint、report 或 Git。
 
-构建依赖优先使用显式环境；否则读取现有 `CMakeCache.txt`，逐项验证目录、可执行工具和关键 iphoneos 静态库，再把所有路径明确传给 build 命令，不依赖当前 worktree 缺失的默认目录，也不静默沿用缓存配置。输出只打印 `environment`、`cmake-cache`、`cargo-sibling` 等非敏感来源标签，不打印路径：
+构建依赖优先使用显式环境；否则读取现有 `CMakeCache.txt`，逐项验证目录、可执行工具和关键 iphoneos 静态库，再把所有路径明确传给 build 命令，不依赖当前 worktree 缺失的默认目录，也不静默沿用缓存配置。显式 `RUST_TARGET_DIR` 可以是尚未创建或空的 fresh target；已有 simulator/x86-only target 且没有 device target 时会被拒绝，cache-backed CMake 仍必须明确为 iphoneos ARM64。输出只打印 `environment`、`cmake-cache`、`cargo-sibling` 等非敏感来源标签，不打印路径：
 
 ```bash
 export SEEKDB_IPHONE_DEPS_PREFIX="<iphoneos dependency prefix>"
@@ -27,6 +27,8 @@ export RUST_TARGET_DIR="<repository-local Rust target directory>"
 ```
 
 试运行前仍必须确认：恰好一个 booted/paired/visible physical iPhone（或显式 `SEEKDB_IPHONE_DEVICE`）；profile 覆盖该设备；对应 certificate/private key 可用；依赖为 iphoneos ARM64；当前 checkout 干净；磁盘空间满足构建阈值。若没有可唯一复用的本机 profile，则显式提供 bundle/team 仍要求 Xcode 能在本机完成 provisioning；本轮未用真机构建验证该路径，因此不能仅凭主机测试声称 one-command 真机 ready。
+
+`--suite inventory` 是纯 host-only 路径，不发现设备，也不要求 bundle/team、build、签名或安装。device runner 的 launch、evidence 和 clean-stop 共用一个绝对 deadline，外层 subprocess timeout 另留 120 秒收尾余量，不再把两个独立完整 timeout 串接到较短的外层限制。中断后 resume 会在 checkpoint 记录已通过 case 的 `resume_skip_count` 与 `last_resume_skipped_at`；SQL gate 若已保存首轮完整证据，只续跑 restart 轮。
 
 最新状态（2026-09-24）：原生 seekdb 引擎已在 iPhone 17 Pro / iOS 27.0 完成 36 步通用 SQL 套件和五轮干净停止。五轮均为 `Stopped/result=0`、`sql_verified=true`，同一数据目录的 `previous_runs` 依次为 0、1、2、3、4；验证后没有新增崩溃报告。日志确认 1 GiB 逻辑预算。测试 App 运行期间保持亮屏，进入 Stopped / Failed 后恢复自动锁屏，不修改系统设置。
 
