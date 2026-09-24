@@ -1,0 +1,82 @@
+diff --git a/.github/script/seekdb/mysqltest_for_seekdb.py b/.github/script/seekdb/mysqltest_for_seekdb.py
+index 24ffe3caa..2ab6cb8c4 100755
+--- a/.github/script/seekdb/mysqltest_for_seekdb.py
++++ b/.github/script/seekdb/mysqltest_for_seekdb.py
+@@ -16,7 +16,8 @@ import time
+ 
+ 
+ CASE_TIMEOUT = 3600
+-MAX_CASE_RETRIES = 3
++MAX_CASE_RETRIES = 0
++COVERAGE_SAVE_COUNTER = 0
+ READY_TIMEOUT = 600
+ MYSQLTEST_USER = "admin"
+ MYSQLTEST_PASSWORD = "admin"
+@@ -97,7 +98,29 @@ def run_sdb(sdb_script, command, arguments, description, cwd):
+     )
+ 
+ 
++def save_coverage_profiles(sdb_script, base_dir, cwd):
++    global COVERAGE_SAVE_COUNTER
++    target = os.environ.get("SEEKDB_COV_PROFRAW_DIR")
++    if not target or not Path(base_dir).is_dir():
++        return
++    subprocess.run(
++        [sys.executable, str(sdb_script), "stop", "--base-dir", str(base_dir)],
++        cwd=str(cwd),
++        check=False,
++    )
++    destination = Path(target)
++    destination.mkdir(parents=True, exist_ok=True)
++    for profile in sorted(Path(base_dir).glob("seekdb*.profraw")):
++        COVERAGE_SAVE_COUNTER += 1
++        name = "{:05d}-{}-{}".format(
++            COVERAGE_SAVE_COUNTER, int(time.time() * 1000), profile.name
++        )
++        shutil.copy2(str(profile), str(destination / name))
++        print("coverage: saved {} -> {}".format(profile, destination / name), flush=True)
++
++
+ def destroy_instance(sdb_script, base_dir, cwd, check=True):
++    save_coverage_profiles(sdb_script, base_dir, cwd)
+     command = [
+         sys.executable,
+         str(sdb_script),
+@@ -166,6 +189,7 @@ def prepare_instance(args, repo_root, sdb_script, deploy_dir):
+             args.base_dir,
+             "--port",
+             args.port,
++            "--nodaemon",
+         ),
+         "start seekdb",
+         repo_root,
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index f1b038166..e099c95c9 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -144,7 +144,7 @@ elseif(SEEKDB_CMAKE_PACKAGE_FORMAT_COUNT EQUAL 1)
+   set(SEEKDB_CMAKE_PACKAGE_BUILD ON)
+ endif()
+ 
+-if(OB_ERRSIM OR WITH_COVERAGE OR OB_BUILD_CCLS)
++if(OB_ERRSIM OR OB_BUILD_CCLS)
+   message(FATAL_ERROR
+     "The compatibility CMake build supports only Release Unity profiles")
+ endif()
+diff --git a/cmake/Env.cmake b/cmake/Env.cmake
+index c8780a246..7d9c49925 100644
+--- a/cmake/Env.cmake
++++ b/cmake/Env.cmake
+@@ -66,7 +66,11 @@ message(STATUS "ARCHITECTURE: ${ARCHITECTURE}")
+ 
+ if(WITH_COVERAGE)
+   set(CMAKE_COVERAGE_COMPILE_OPTIONS -fprofile-instr-generate -fcoverage-mapping -mllvm -runtime-counter-relocation -DWITH_COVERAGE)
+-  set(CMAKE_COVERAGE_EXE_LINKER_OPTIONS "-fprofile-instr-generate -Wl,-u,__llvm_profile_reset_counters -Wl,-u,__llvm_profile_set_filename -Wl,-u,__llvm_profile_write_file")
++  if(APPLE)
++    set(CMAKE_COVERAGE_EXE_LINKER_OPTIONS "-fprofile-instr-generate -Wl,-u,___llvm_profile_reset_counters -Wl,-u,___llvm_profile_set_filename -Wl,-u,___llvm_profile_write_file")
++  else()
++    set(CMAKE_COVERAGE_EXE_LINKER_OPTIONS "-fprofile-instr-generate -Wl,-u,__llvm_profile_reset_counters -Wl,-u,__llvm_profile_set_filename -Wl,-u,__llvm_profile_write_file")
++  endif()
+ 
+   add_compile_options(${CMAKE_COVERAGE_COMPILE_OPTIONS})
+   set(DEBUG_PREFIX "")
