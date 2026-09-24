@@ -52,6 +52,13 @@ def engine_link_arguments(command, directory):
     return result
 
 
+def require_test_hooks(engine):
+    """Reject packaging unless the selected engine enabled failure hooks."""
+    cache = engine / "CMakeCache.txt"
+    if not cache.is_file() or "SEEKDB_IOS_TEST_HOOKS:BOOL=ON" not in cache.read_text().splitlines():
+        raise ValueError("engine build does not enable SEEKDB_IOS_TEST_HOOKS")
+
+
 def main():
     """Generate an Xcode wrapper, provision it, and optionally install on a device."""
     parser = argparse.ArgumentParser(description=__doc__)
@@ -60,6 +67,7 @@ def main():
     parser.add_argument("--bundle-id", default="org.seekdb.iosprobe")
     parser.add_argument("--engine-build", type=Path, default=ROOT / "build_ios_arm64")
     parser.add_argument("--install", action="store_true")
+    parser.add_argument("--test-hooks", action="store_true")
     options = parser.parse_args()
     if not re.fullmatch(r"[A-Z0-9]{10}", options.team):
         parser.error("team must be a 10-character Apple team identifier")
@@ -68,6 +76,8 @@ def main():
     engine = options.engine_build.resolve()
     if not engine.is_relative_to(ROOT):
         parser.error("engine build must remain inside the seekdb checkout")
+    if options.test_hooks:
+        require_test_hooks(engine)
     directory = engine / "src/observer"
     command = (directory / "CMakeFiles/seekdb_ios_link_check.dir/link.txt").read_text()
     arguments = engine_link_arguments(command, directory)
