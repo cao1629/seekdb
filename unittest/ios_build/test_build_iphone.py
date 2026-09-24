@@ -72,6 +72,17 @@ elif name == 'cmake': sys.exit(int(os.environ.get('CMAKE_EXIT', '0')))
         self.assertIn("-DCMAKE_OSX_SYSROOT=iphonesimulator", calls[0])
         self.assertIn("-DTEST_VALUE=a b", calls[0])
 
+    def test_explicit_build_directory_is_used_for_isolated_artifacts(self):
+        """A production isolation build must not overwrite test-hook outputs."""
+        isolated = self.root / "build_ios_production"
+        result = self.run_script(
+            "--build-dir", str(isolated), "--target",
+            "seekdb_ios_link_check")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        calls = [call for call in self.calls() if call[0] == "cmake"]
+        self.assertEqual(str(isolated), calls[0][calls[0].index("-B") + 1])
+        self.assertEqual(str(isolated), calls[1][2])
+
     def test_configuration_failure_is_not_hidden_by_tee(self):
         """A failed configuration must stop before compilation and preserve its exit status."""
         self.env["CMAKE_EXIT"] = "23"

@@ -3,6 +3,7 @@
 
 import contextlib
 import datetime as dt
+import hashlib
 import io
 import json
 import multiprocessing
@@ -131,6 +132,78 @@ class RunAllIphoneTestsTest(unittest.TestCase):
         self.assertEqual("ARGTEAM001", configuration.team)
         self.assertEqual("argument identity", configuration.signing_identity)
         self.assertEqual(original, environment)
+
+    def test_unique_existing_profile_infers_process_local_signing_defaults(self):
+        """Reuse one valid local profile without serializing its unique values."""
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            app = root / "Probe.app"
+            app.mkdir()
+            with (app / "Info.plist").open("wb") as plist:
+                plistlib.dump({
+                    "CFBundleIdentifier": "org.private.probe",
+                    "CFBundleExecutable": "Probe",
+                }, plist)
+            profile = {
+                "TeamIdentifier": ["TEAMTOKEN1"],
+                "Entitlements": {
+                    "application-identifier":
+                        "TEAMTOKEN1.org.private.probe"},
+                "DeveloperCertificates": [b"certificate-der"],
+                "ProvisionedDevices": ["private-device-token"],
+                "ExpirationDate": dt.datetime(
+                    2030, 1, 1, tzinfo=dt.timezone.utc),
+                "Platform": ["iOS"],
+            }
+            profile_xml = plistlib.dumps(profile, fmt=plistlib.FMT_XML)
+            (app / "embedded.mobileprovision").write_bytes(
+                b"cms-prefix" + profile_xml + b"cms-suffix")
+            configuration = cli.LocalConfiguration(
+                device=None, bundle_id=None, team=None,
+                signing_identity=None, engine_build=root / "build",
+                app_artifact=app, test_hooks=True)
+
+            inferred = cli.infer_signing_configuration(configuration)
+
+        certificate_hash = hashlib.sha1(
+            b"certificate-der").hexdigest().upper()
+        self.assertEqual("org.private.probe", inferred.bundle_id)
+        self.assertEqual("TEAMTOKEN1", inferred.team)
+        self.assertEqual(certificate_hash, inferred.signing_identity)
+        self.assertEqual(
+            ("private-device-token",), inferred.provisioned_devices)
+        self.assertIn(certificate_hash, inferred.redaction_tokens())
+
+    def test_ambiguous_existing_profile_requires_explicit_configuration(self):
+        """Never guess among multiple profile teams or developer certificates."""
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            app = root / "Probe.app"
+            app.mkdir()
+            with (app / "Info.plist").open("wb") as plist:
+                plistlib.dump({
+                    "CFBundleIdentifier": "org.private.probe"}, plist)
+            profile = {
+                "TeamIdentifier": ["TEAMTOKEN1", "TEAMTOKEN2"],
+                "Entitlements": {
+                    "application-identifier":
+                        "TEAMTOKEN1.org.private.probe"},
+                "DeveloperCertificates": [b"first", b"second"],
+                "ProvisionedDevices": ["private-device-token"],
+                "ExpirationDate": dt.datetime(
+                    2030, 1, 1, tzinfo=dt.timezone.utc),
+                "Platform": ["iOS"],
+            }
+            (app / "embedded.mobileprovision").write_bytes(
+                plistlib.dumps(profile, fmt=plistlib.FMT_XML))
+            configuration = cli.LocalConfiguration(
+                device=None, bundle_id=None, team=None,
+                signing_identity=None, engine_build=root / "build",
+                app_artifact=app, test_hooks=True)
+
+            with self.assertRaisesRegex(
+                    cli.IphoneTestCliError, "not uniquely consistent"):
+                cli.infer_signing_configuration(configuration)
 
     def test_resume_rejects_changed_bundle_and_build_configuration(self):
         """Evidence-affecting local inputs must participate in resume identity."""
@@ -604,13 +677,14 @@ class RunAllIphoneTestsTest(unittest.TestCase):
 
         def run_engine(
                 output_root, received_selection, adapters, now,
-                redaction_tokens):
+                redaction_tokens, phase_ids):
             """Model engine lock ownership and return a distinctive status."""
             captured["output_root"] = output_root
             captured["selection"] = received_selection
             captured["adapters"] = adapters
             captured["now"] = now()
             captured["redaction_tokens"] = redaction_tokens
+            captured["phase_ids"] = phase_ids
             received_selection.close()
             return 7
 
@@ -655,6 +729,7 @@ class RunAllIphoneTestsTest(unittest.TestCase):
             captured["configuration"],
         )
         self.assertEqual(tuple(cli.runner.PHASE_IDS), captured["suites"])
+        self.assertEqual(tuple(cli.runner.PHASE_IDS), captured["phase_ids"])
         self.assertEqual(selection.run_directory, captured["run_directory"])
         self.assertEqual("a" * 40, captured["source_revision"])
         self.assertEqual(

@@ -70,11 +70,14 @@ class LocalConfiguration:
     engine_build: Path
     app_artifact: Path
     test_hooks: bool
+    provisioned_devices: tuple[str, ...] = ()
+    profile_certificate_hashes: tuple[str, ...] = ()
 
     def redaction_tokens(self) -> tuple[str, ...]:
         """Return unique values that must remain process-local."""
         return tuple(value for value in (
-            self.device, self.bundle_id, self.team, self.signing_identity)
+            self.device, self.bundle_id, self.team, self.signing_identity,
+            *self.provisioned_devices, *self.profile_certificate_hashes)
             if value)
 
 
@@ -139,6 +142,91 @@ def resolve_local_configuration(
         engine_build=engine_build,
         app_artifact=app_artifact,
         test_hooks=True,
+    )
+
+
+def _embedded_profile(path: Path) -> Optional[Mapping[str, object]]:
+    """Parse one embedded XML provisioning plist without external commands."""
+    if not path.is_file():
+        return None
+    content = path.read_bytes()
+    start = content.find(b"<?xml")
+    end = content.find(b"</plist>", start)
+    if start < 0 or end < 0:
+        raise IphoneTestCliError(
+            "embedded provisioning profile is not a readable XML plist")
+    try:
+        profile = plistlib.loads(content[start:end + len(b"</plist>")])
+    except plistlib.InvalidFileException as error:
+        raise IphoneTestCliError(
+            "embedded provisioning profile is invalid") from error
+    if not isinstance(profile, Mapping):
+        raise IphoneTestCliError("embedded provisioning profile is invalid")
+    return profile
+
+
+def infer_signing_configuration(
+        configuration: LocalConfiguration) -> LocalConfiguration:
+    """Infer unique local bundle/team/profile tokens without external commands."""
+    if configuration.bundle_id and configuration.team:
+        return configuration
+    if not configuration.app_artifact.is_dir():
+        return configuration
+    plist_path = configuration.app_artifact / "Info.plist"
+    if not plist_path.is_file():
+        return configuration
+    try:
+        with plist_path.open("rb") as plist_file:
+            app_plist = plistlib.load(plist_file)
+    except (OSError, plistlib.InvalidFileException) as error:
+        raise IphoneTestCliError("existing App Info.plist is invalid") from error
+    profile = _embedded_profile(
+        configuration.app_artifact / "embedded.mobileprovision")
+    if profile is None:
+        return configuration
+    bundle_id = app_plist.get("CFBundleIdentifier") \
+        if isinstance(app_plist, Mapping) else None
+    team_values = profile.get("TeamIdentifier")
+    entitlements = profile.get("Entitlements")
+    application_identifier = entitlements.get("application-identifier") \
+        if isinstance(entitlements, Mapping) else None
+    if (not isinstance(bundle_id, str) or not bundle_id
+            or not isinstance(team_values, list) or len(team_values) != 1
+            or not isinstance(team_values[0], str)
+            or application_identifier != f"{team_values[0]}.{bundle_id}"):
+        raise IphoneTestCliError(
+            "existing App signing metadata is not uniquely consistent")
+    certificates = profile.get("DeveloperCertificates")
+    provisioned_devices = profile.get("ProvisionedDevices")
+    expiration = profile.get("ExpirationDate")
+    platforms = profile.get("Platform")
+    if isinstance(expiration, dt.datetime) and expiration.tzinfo is None:
+        expiration = expiration.replace(tzinfo=dt.timezone.utc)
+    if (not isinstance(certificates, list) or len(certificates) != 1
+            or not isinstance(certificates[0], bytes)
+            or not isinstance(provisioned_devices, list)
+            or not provisioned_devices
+            or any(not isinstance(item, str) or not item
+                   for item in provisioned_devices)
+            or not isinstance(expiration, dt.datetime)
+            or expiration <= dt.datetime.now(dt.timezone.utc)
+            or not isinstance(platforms, list) or "iOS" not in platforms):
+        raise IphoneTestCliError(
+            "existing App provisioning scope is not uniquely usable")
+    certificate_hash = hashlib.sha1(certificates[0]).hexdigest().upper()
+    inferred_bundle = configuration.bundle_id or bundle_id
+    inferred_team = configuration.team or team_values[0]
+    if inferred_bundle != bundle_id or inferred_team != team_values[0]:
+        raise IphoneTestCliError(
+            "configured signing values do not match the existing App")
+    return replace(
+        configuration,
+        bundle_id=inferred_bundle,
+        team=inferred_team,
+        signing_identity=(
+            configuration.signing_identity or certificate_hash),
+        provisioned_devices=tuple(sorted(set(provisioned_devices))),
+        profile_certificate_hashes=(certificate_hash,),
     )
 
 
@@ -450,18 +538,18 @@ def prepare_phase_artifacts(
         configuration: LocalConfiguration,
         suites: Sequence[str],
         source_revision: str,
-        run_id: str) -> None:
+        run_id: str):
     """Prepare current artifacts before their identity enters a checkpoint."""
     try:
         import iphone_test_phases
     except ModuleNotFoundError as error:
         if error.name != "iphone_test_phases":
             raise
-        return
+        return None
     prepare = getattr(iphone_test_phases, "prepare_test_app", None)
     if prepare is None:
-        return
-    prepare(
+        return None
+    return prepare(
         configuration=configuration,
         suites=tuple(suites),
         source_revision=source_revision,
@@ -547,7 +635,12 @@ def main(
     preparation_lock = None
     engine_owns_selection = False
     redaction_run_id = None
+    bootstrap_redaction_run_id = None
     try:
+        configuration = infer_signing_configuration(configuration)
+        bootstrap_redaction_run_id = f"setup-{uuid.uuid4().hex}"
+        runner.register_runtime_redaction_tokens(
+            bootstrap_redaction_run_id, configuration.redaction_tokens())
         revision = source_commit()
         current_time = clock()
         if options.dry_run:
@@ -591,12 +684,45 @@ def main(
                 runner.register_runtime_redaction_tokens(
                     setup_run_id, configuration.redaction_tokens())
                 try:
-                    _safe_setup_call(
+                    preparation_issue = _safe_setup_call(
                         lambda: prepare_phase_artifacts(
                             configuration, suites, revision, setup_run_id),
                         setup_run_id)
                 finally:
                     runner.clear_runtime_redaction_tokens(setup_run_id)
+                if preparation_issue == "signing-config":
+                    raise IphoneTestCliError(
+                        "set SEEKDB_IPHONE_BUNDLE_ID and SEEKDB_IPHONE_TEAM "
+                        "or provide one valid existing signed probe App")
+                if preparation_issue == "build-inputs":
+                    raise IphoneTestCliError(
+                        "set SEEKDB_IPHONE_DEPS_PREFIX, "
+                        "SEEKDB_IPHONE_HEADERS_PREFIX, CARGO, RUSTUP, "
+                        "CARGO_HOME, RUSTUP_HOME, and RUST_TARGET_DIR or "
+                        "provide one valid local CMake cache")
+                if preparation_issue == "local-profile":
+                    raise IphoneTestCliError(
+                        "the selected device or local signing key is not "
+                        "eligible for the existing probe profile")
+                if preparation_issue == "app-output":
+                    raise IphoneTestCliError(
+                        "SEEKDB_IPHONE_APP_ARTIFACT must match the probe App "
+                        "produced under SEEKDB_IPHONE_ENGINE_BUILD")
+                if isinstance(preparation_issue, Mapping):
+                    allowed_sources = {
+                        "environment", "cmake-cache", "cargo-sibling",
+                        "cargo-parent", "cargo-home-sibling"}
+                    if (set(preparation_issue.values()) - allowed_sources
+                            or any(not isinstance(key, str)
+                                   for key in preparation_issue)):
+                        raise IphoneTestCliError(
+                            "phase preparation returned invalid provenance")
+                    sources = ", ".join(
+                        f"{key}={preparation_issue[key]}"
+                        for key in sorted(preparation_issue))
+                    print(
+                        f"Build prerequisite sources: {sources}",
+                        file=stdout, flush=True)
                 build_identity = validate_build_identity(
                     configuration, revision)
             fingerprint = configuration_fingerprint(
@@ -635,7 +761,8 @@ def main(
         engine_owns_selection = True
         return runner.run_phase_engine(
             options.output_root, selection, adapters, now=clock,
-            redaction_tokens=configuration.redaction_tokens())
+            redaction_tokens=configuration.redaction_tokens(),
+            phase_ids=suites)
     except (IphoneTestCliError, state.IphoneTestStateError) as error:
         print(f"iPhone test runner error: {error}", file=stderr)
         return 2
@@ -649,6 +776,9 @@ def main(
             preparation_lock.release()
         if redaction_run_id is not None:
             runner.clear_runtime_redaction_tokens(redaction_run_id)
+        if bootstrap_redaction_run_id is not None:
+            runner.clear_runtime_redaction_tokens(
+                bootstrap_redaction_run_id)
 
 
 if __name__ == "__main__":

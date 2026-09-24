@@ -30,6 +30,7 @@ Experimental seekdb iOS ARM64 build. This does not package or sign an iPhone app
   --deps-only             Build pinned iOS dependencies, including ICU and VSAG
   --jobs N                Parallel C/C++ jobs (default: 4)
   --target NAME           CMake target (default: oceanbase_static)
+  --build-dir PATH        Repository-local CMake build directory
   --deps-prefix PATH      iOS-built dependencies (default: deps/ios/<sdk>/devel)
   --headers-prefix PATH   Optional header-only prefix; libraries still come from --deps-prefix
   --deployment-target V   Minimum iOS version (default: 18.0)
@@ -66,11 +67,12 @@ parse_args() {
       --init) INITIALIZE=true; shift ;;
       --configure-only) CONFIGURE_ONLY=true; shift ;;
       --deps-only) DEPS_ONLY=true; shift ;;
-      --jobs|--target|--deps-prefix|--headers-prefix|--deployment-target)
+      --jobs|--target|--build-dir|--deps-prefix|--headers-prefix|--deployment-target)
         (($# >= 2)) || fail "$1 requires a value"
         case "$1" in
           --jobs) JOBS="$2" ;;
           --target) TARGET="$2" ;;
+          --build-dir) BUILD_DIR="$2" ;;
           --deps-prefix) DEPS_PREFIX="$2" ;;
           --headers-prefix) HEADERS_PREFIX="$2" ;;
           --deployment-target) DEPLOYMENT="$2" ;;
@@ -84,6 +86,11 @@ parse_args() {
   [[ "$JOBS" =~ ^[1-9][0-9]*$ ]] || fail '--jobs must be a positive integer'
   [[ "$DEPLOYMENT" =~ ^[0-9]+(\.[0-9]+){0,2}$ ]] || fail 'invalid iOS version'
   [[ "$TARGET" =~ ^[a-zA-Z0-9_.-]+$ ]] || fail 'invalid CMake target'
+  BUILD_DIR="$(python3 -c 'import os, sys; print(os.path.realpath(sys.argv[1]))' "$BUILD_DIR")"
+  case "$BUILD_DIR/" in
+    "$ROOT/"*) ;;
+    *) fail '--build-dir must remain inside the seekdb checkout' ;;
+  esac
 }
 
 # Install version-pinned host parser generators, retaining downloads inside the checkout.

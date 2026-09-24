@@ -414,10 +414,11 @@ def _adapter_map(adapters: Iterable[PhaseAdapter]) -> Dict[str, PhaseAdapter]:
 
 
 def _expected_phases(
-        registry: Mapping[str, PhaseAdapter]) -> list[Dict[str, Any]]:
-    """Create all eight ordered phases, including explicit missing adapters."""
+        registry: Mapping[str, PhaseAdapter],
+        phase_ids: Sequence[str]) -> list[Dict[str, Any]]:
+    """Create selected ordered phases, including explicit missing adapters."""
     phases = []
-    for phase_id in PHASE_IDS:
+    for phase_id in phase_ids:
         adapter = registry.get(phase_id)
         if adapter is None or not adapter.cases:
             cases = [_case_record(CaseSpec(
@@ -432,9 +433,10 @@ def _expected_phases(
 
 
 def _validate_or_initialize_layout(
-        checkpoint: Dict[str, Any], registry: Mapping[str, PhaseAdapter]) -> None:
+        checkpoint: Dict[str, Any], registry: Mapping[str, PhaseAdapter],
+        phase_ids: Sequence[str]) -> None:
     """Initialize a new layout or reject incompatible resumed case metadata."""
-    expected = _expected_phases(registry)
+    expected = _expected_phases(registry, phase_ids)
     if not checkpoint["phases"]:
         checkpoint["phases"] = expected
         _refresh_status(checkpoint)
@@ -706,16 +708,23 @@ def run_phase_engine(
         output_root: Path, selection: state.RunSelection,
         adapters: Iterable[PhaseAdapter],
         now: Callable[[], dt.datetime],
-        redaction_tokens: Iterable[str] = ()) -> int:
+        redaction_tokens: Iterable[str] = (),
+        phase_ids: Sequence[str] = PHASE_IDS) -> int:
     """Run all required phases, persist transitions, report, and release lock."""
     checkpoint = selection.checkpoint
     run_directory = selection.run_directory
+    selected = set(phase_ids)
+    if not selected or any(phase_id not in PHASE_IDS for phase_id in selected):
+        raise ValueError("phase_ids must select known standalone phases")
+    ordered_phase_ids = tuple(
+        phase_id for phase_id in PHASE_IDS if phase_id in selected)
     register_runtime_redaction_tokens(
         checkpoint["run_id"], redaction_tokens)
     try:
         selection.ensure_locked()
         registry = _adapter_map(adapters)
-        _validate_or_initialize_layout(checkpoint, registry)
+        _validate_or_initialize_layout(
+            checkpoint, registry, ordered_phase_ids)
         state.save_checkpoint(output_root, run_directory, checkpoint)
         if _persist_missing_adapters(
                 output_root, run_directory, checkpoint, registry, now):

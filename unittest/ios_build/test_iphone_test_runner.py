@@ -77,12 +77,13 @@ class IphoneTestRunnerTest(unittest.TestCase):
             ))
         return adapters
 
-    def run_engine(self, adapters, redaction_tokens=()):
+    def run_engine(
+            self, adapters, redaction_tokens=(), phase_ids=runner.PHASE_IDS):
         """Execute and mark this test's selection as consumed by the engine."""
         self._selection_consumed = True
         return runner.run_phase_engine(
             self.output_root, self.selection, adapters, now=self.clock,
-            redaction_tokens=redaction_tokens)
+            redaction_tokens=redaction_tokens, phase_ids=phase_ids)
 
     def checkpoint(self):
         """Load the final persisted checkpoint for this test run."""
@@ -119,6 +120,19 @@ class IphoneTestRunnerTest(unittest.TestCase):
         self.assertTrue(all(
             case["attempt_count"] == 1 for phase in checkpoint["phases"]
             for case in phase["cases"]))
+
+    def test_explicit_phase_scope_runs_only_selected_registered_phases(self):
+        """Suite controls must not invent missing adapters outside their scope."""
+        selected = runner.PHASE_IDS[:4]
+        adapters = self.adapters()[:4]
+
+        exit_status = self.run_engine(
+            adapters, phase_ids=selected)
+
+        checkpoint = self.checkpoint()
+        self.assertEqual(0, exit_status)
+        self.assertEqual(
+            list(selected), [phase["id"] for phase in checkpoint["phases"]])
 
     def test_selection_lock_is_held_during_dispatch_and_released_afterward(self):
         """The engine must own the selected run for its complete lifetime."""

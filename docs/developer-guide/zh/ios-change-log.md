@@ -6,6 +6,14 @@
 
 后续每次环境设置、源码、构建脚本或 CMake 变更，同步记录日期、文件/设置、原因、具体参数、影响范围、复现命令、验证结果和剩余问题。失败尝试及撤销原因也保留。按独立功能提交时补充 commit ID，不把机器缓存、证书或密钥提交到仓库。日志与生成产物保存在仓库内；本记录及构建脚本纳入版本控制。
 
+## 2026-09-25：standalone runner stages 1–4 adapter
+
+- 新增 `iphone_test_phases.py`，把 inventory、registry smoke、4 个现有 C++ case、5 个现有 Rust case 和 production Rust symbol isolation 注册为稳定 adapter contract；每项显式记录 execution class、host timeout、命令、evidence validator 和 SQL/restart follow-up 要求。device runner 继续只保存 allowlist JSONL，不保存原始 CoreDevice/devicectl metadata。
+- test-hook engine build、App package/sign/install 在 checkpoint 前、runner-lifetime 独占锁内完成；实际 CMake cache、runtime archive 和由 Info.plist 指定的 App executable bytes 随后进入 fingerprint。production hook-off/symbol gate 使用新增 `--build-dir` 的独立目录，避免破坏可恢复 checkpoint 绑定的 test App。
+- 无显式 bundle/team 时，仅从唯一一致且未过期的现有 App/profile 推导；设备范围、单一 certificate 和本机 private-key identity 必须全部匹配。原始值只留在进程内并在外部命令前加入动态脱敏集合。签名 identity 不是 `build_app.py` 的硬参数。
+- 依赖路径优先取 `SEEKDB_IPHONE_DEPS_PREFIX`、`SEEKDB_IPHONE_HEADERS_PREFIX`、`CARGO`、`RUSTUP`、`CARGO_HOME`、`RUSTUP_HOME`、`RUST_TARGET_DIR`；否则从现有 cache 与 cargo 相邻目录推导。所有路径在调用前验证，随后显式传给 build；输出只记录非敏感来源标签。当前本机只读审计显示 profile/key 唯一匹配，cache-backed dependencies 可用，但部分输入来自另一 checkout 的 cache，故实际命令会显式传值而不依赖隐式默认。
+- 本提交只运行 host focused/full contract、shell syntax、Python compile 和 diff checks；按任务要求未执行 build、签名、安装或真机 stages 1–4。真正试运行仍以在线唯一物理 iPhone、profile device scope、有效 private key、iphoneos ARM64 dependencies、干净 checkout 和可用磁盘为前置；主机契约通过不等于真机 ready 或真机 pass。
+
 ## 2026-09-24：Rust runtime tests 的真机入口
 
 - TDD 首轮 focused RED 证明共享 `device_tests.rs`、test-only feature/profile、固定 C ABI、C++ adapter 和单一 archive marker 均不存在。实现后，`cert.rs`/`tls.rs` 的三项测试断言抽为 `Result<(), String>` case，host `#[test]` 只负责调用并 unwrap；inventory 仍发现精确三项 Rust host test，并分别映射到三个稳定的 `ios.rust.*` device equivalent。
