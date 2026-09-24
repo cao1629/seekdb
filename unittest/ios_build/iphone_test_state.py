@@ -16,6 +16,12 @@ SCHEMA_VERSION = 1
 RUNNER_VERSION = "1"
 CHECKPOINT_FILENAME = "checkpoint.json"
 REPORT_FILENAMES = ("summary.json", "summary.md")
+CASE_STATUSES = frozenset(
+    {"pending", "running", "passed", "failed", "excluded", "blocked"})
+TERMINAL_CASE_STATUSES = frozenset(
+    {"passed", "failed", "excluded", "blocked"})
+PHASE_STATUSES = CASE_STATUSES
+RUN_STATUSES = frozenset({"incomplete", "passed", "failed", "blocked"})
 
 
 class IphoneTestStateError(RuntimeError):
@@ -135,11 +141,100 @@ def _validate_checkpoint_shape(checkpoint: Any) -> Dict[str, Any]:
         raise CorruptCheckpointError("source_commit must be a string")
     if not isinstance(checkpoint["config_fingerprint"], str):
         raise CorruptCheckpointError("config_fingerprint must be a string")
-    if not isinstance(checkpoint["status"], str):
-        raise CorruptCheckpointError("status must be a string")
+    if (not isinstance(checkpoint["status"], str)
+            or checkpoint["status"] not in RUN_STATUSES):
+        raise CorruptCheckpointError("checkpoint status is invalid")
     if not isinstance(checkpoint["phases"], list):
         raise CorruptCheckpointError("phases must be a list")
+    _validate_phases(checkpoint["phases"])
     return checkpoint
+
+
+def _require_record_id(record: Dict[str, Any], record_type: str) -> str:
+    """Return a nonempty record ID or reject the malformed record."""
+    record_id = record.get("id")
+    if not isinstance(record_id, str) or not record_id:
+        raise CorruptCheckpointError(
+            f"{record_type} id must be a nonempty string")
+    return record_id
+
+
+def _validate_counter(
+        record: Dict[str, Any], field_name: str, case_id: str) -> int:
+    """Return one required nonnegative integer case counter."""
+    value = record.get(field_name)
+    if isinstance(value, bool) or not isinstance(value, int) or value < 0:
+        raise CorruptCheckpointError(
+            f"case {case_id} {field_name} must be a nonnegative integer")
+    return value
+
+
+def _validate_optional_timestamp(
+        case: Dict[str, Any], field_name: str) -> None:
+    """Validate a case timestamp when the field contains a value."""
+    if case.get(field_name) is not None:
+        _parse_aware_timestamp(case[field_name], field_name)
+
+
+def _validate_case(case: Any) -> str:
+    """Validate one case lifecycle record and return its stable ID."""
+    if not isinstance(case, dict):
+        raise CorruptCheckpointError("case records must be objects")
+    case_id = _require_record_id(case, "case")
+    status = case.get("status")
+    if not isinstance(status, str) or status not in CASE_STATUSES:
+        raise CorruptCheckpointError(f"case status is invalid: {case_id}")
+    attempt_count = _validate_counter(case, "attempt_count", case_id)
+    _validate_counter(case, "interruption_count", case_id)
+    _validate_optional_timestamp(case, "started_at")
+    _validate_optional_timestamp(case, "completed_at")
+    _validate_optional_timestamp(case, "last_interrupted_at")
+
+    if status == "running":
+        if attempt_count == 0:
+            raise CorruptCheckpointError(
+                f"running case must have an attempt: {case_id}")
+        if case.get("started_at") is None:
+            raise CorruptCheckpointError(
+                f"running case must have started_at: {case_id}")
+    if status in {"pending", "running"} and case.get("completed_at") is not None:
+        raise CorruptCheckpointError(
+            f"nonterminal case cannot have completed_at: {case_id}")
+    if status in TERMINAL_CASE_STATUSES and case.get("completed_at") is None:
+        raise CorruptCheckpointError(
+            f"terminal case must have completed_at: {case_id}")
+    if status in {"passed", "failed"} and attempt_count == 0:
+        raise CorruptCheckpointError(
+            f"executed terminal case must have an attempt: {case_id}")
+    return case_id
+
+
+def _validate_phases(phases: List[Any]) -> None:
+    """Validate nested phase and case shapes with globally unique IDs."""
+    phase_ids = set()
+    case_ids = set()
+    for phase in phases:
+        if not isinstance(phase, dict):
+            raise CorruptCheckpointError("phase records must be objects")
+        phase_id = _require_record_id(phase, "phase")
+        if phase_id in phase_ids:
+            raise CorruptCheckpointError(f"duplicate phase id: {phase_id}")
+        phase_ids.add(phase_id)
+        if "status" in phase:
+            phase_status = phase["status"]
+            if (not isinstance(phase_status, str)
+                    or phase_status not in PHASE_STATUSES):
+                raise CorruptCheckpointError(
+                    f"phase status is invalid: {phase_id}")
+        cases = phase.get("cases")
+        if not isinstance(cases, list):
+            raise CorruptCheckpointError(
+                f"phase cases must be a list: {phase_id}")
+        for case in cases:
+            case_id = _validate_case(case)
+            if case_id in case_ids:
+                raise CorruptCheckpointError(f"duplicate case id: {case_id}")
+            case_ids.add(case_id)
 
 
 def _validate_compatibility(
@@ -247,6 +342,7 @@ def recover_interrupted_cases(
         checkpoint: Dict[str, Any], now: dt.datetime) -> bool:
     """Reset stale running cases to pending and count their interruptions."""
     _require_aware(now)
+    _validate_checkpoint_shape(checkpoint)
     changed = False
     for phase in checkpoint.get("phases", []):
         if not isinstance(phase, dict):
@@ -268,6 +364,7 @@ def recover_interrupted_cases(
 
 def retryable_case_ids(checkpoint: Dict[str, Any]) -> List[str]:
     """Return failed and pending case IDs in their declared execution order."""
+    _validate_checkpoint_shape(checkpoint)
     retryable = []
     for phase in checkpoint.get("phases", []):
         for case in phase.get("cases", []):

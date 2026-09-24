@@ -54,6 +54,20 @@ class IphoneTestStateTest(unittest.TestCase):
         state.save_checkpoint(self.output_root, run_directory, checkpoint)
         return run_directory
 
+    def case_record(self, case_id, status, attempt_count=0):
+        """Build a structurally valid case record for one lifecycle state."""
+        record = {
+            "id": case_id,
+            "status": status,
+            "attempt_count": attempt_count,
+            "interruption_count": 0,
+        }
+        if status == "running":
+            record["started_at"] = self.now().isoformat()
+        if status in {"passed", "failed", "excluded", "blocked"}:
+            record["completed_at"] = self.now().isoformat()
+        return record
+
     def test_default_continues_incomplete_same_day_run(self):
         """Default mode should reuse today's incomplete run."""
         original = self.new_checkpoint(self.now(hour=8))
@@ -166,6 +180,7 @@ class IphoneTestStateTest(unittest.TestCase):
                 "status": "running",
                 "attempt_count": 1,
                 "interruption_count": 2,
+                "started_at": self.now(hour=12).isoformat(),
             }],
         }]
         run_directory = self.save_for_day("2026-09-24", checkpoint)
@@ -220,17 +235,123 @@ class IphoneTestStateTest(unittest.TestCase):
         checkpoint["phases"] = [{
             "id": "phase",
             "cases": [
-                {"id": "passed", "status": "passed"},
-                {"id": "failed", "status": "failed"},
-                {"id": "pending", "status": "pending"},
-                {"id": "excluded", "status": "excluded"},
-                {"id": "blocked", "status": "blocked"},
+                self.case_record("passed", "passed", attempt_count=1),
+                self.case_record("failed", "failed", attempt_count=1),
+                self.case_record("pending", "pending"),
+                self.case_record("excluded", "excluded"),
+                self.case_record("blocked", "blocked"),
             ],
         }]
 
         retryable = state.retryable_case_ids(checkpoint)
 
         self.assertEqual(["failed", "pending"], retryable)
+
+    def test_rejects_unknown_case_status_instead_of_silently_skipping(self):
+        """Unknown case states must fail checkpoint validation, not disappear."""
+        checkpoint = self.new_checkpoint()
+        checkpoint["phases"] = [{
+            "id": "phase",
+            "cases": [{
+                "id": "case",
+                "status": "paszed",
+                "attempt_count": 0,
+                "interruption_count": 0,
+            }],
+        }]
+
+        with self.assertRaisesRegex(state.CorruptCheckpointError,
+                                    "case status"):
+            state.save_checkpoint(
+                self.output_root, self.output_root / "2026-09-24", checkpoint)
+        run_directory = self.output_root / "2026-09-24"
+        run_directory.mkdir(parents=True)
+        (run_directory / "checkpoint.json").write_text(
+            json.dumps(checkpoint), encoding="utf-8")
+        with self.assertRaisesRegex(state.CorruptCheckpointError,
+                                    "case status"):
+            state.load_checkpoint(self.output_root, run_directory)
+        with self.assertRaisesRegex(state.CorruptCheckpointError,
+                                    "case status"):
+            state.retryable_case_ids(checkpoint)
+
+    def test_rejects_malformed_and_duplicate_phase_or_case_records(self):
+        """Every nested record should be shaped and uniquely identified."""
+        invalid_phases = (
+            [{"id": "phase", "cases": {}}],
+            [{"id": "phase", "cases": ["not-an-object"]}],
+            [
+                {"id": "same", "cases": []},
+                {"id": "same", "cases": []},
+            ],
+            [
+                {"id": "one", "cases": [self.case_record("same", "pending")]},
+                {"id": "two", "cases": [self.case_record("same", "pending")]},
+            ],
+        )
+        for index, phases in enumerate(invalid_phases):
+            with self.subTest(index=index):
+                checkpoint = self.new_checkpoint()
+                checkpoint["phases"] = phases
+                with self.assertRaises(state.CorruptCheckpointError):
+                    state.save_checkpoint(
+                        self.output_root,
+                        self.output_root / "2026-09-24",
+                        checkpoint,
+                    )
+
+    def test_rejects_invalid_case_counters_and_terminal_invariants(self):
+        """Counters and lifecycle timestamps should agree with case status."""
+        invalid_cases = (
+            {
+                "id": "negative",
+                "status": "pending",
+                "attempt_count": -1,
+                "interruption_count": 0,
+            },
+            {
+                "id": "boolean",
+                "status": "pending",
+                "attempt_count": False,
+                "interruption_count": 0,
+            },
+            {
+                "id": "running-without-start",
+                "status": "running",
+                "attempt_count": 1,
+                "interruption_count": 0,
+            },
+            {
+                "id": "pending-complete",
+                "status": "pending",
+                "attempt_count": 0,
+                "interruption_count": 0,
+                "completed_at": self.now().isoformat(),
+            },
+            {
+                "id": "passed-without-completion",
+                "status": "passed",
+                "attempt_count": 1,
+                "interruption_count": 0,
+            },
+            {
+                "id": "failed-without-attempt",
+                "status": "failed",
+                "attempt_count": 0,
+                "interruption_count": 0,
+                "completed_at": self.now().isoformat(),
+            },
+        )
+        for case in invalid_cases:
+            with self.subTest(case=case["id"]):
+                checkpoint = self.new_checkpoint()
+                checkpoint["phases"] = [{"id": "phase", "cases": [case]}]
+                with self.assertRaises(state.CorruptCheckpointError):
+                    state.save_checkpoint(
+                        self.output_root,
+                        self.output_root / "2026-09-24",
+                        checkpoint,
+                    )
 
     def test_save_rejects_mutated_run_identity(self):
         """An existing run ID and start timestamp should remain immutable."""
