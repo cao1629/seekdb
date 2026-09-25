@@ -130,6 +130,14 @@
   对 new start、stop cleanup 对 new start：后操作在锁释放前保持阻塞，旧操作不会删除新
   active marker，最终 destroy 后两代 launcher/LLDB/target 均无 `ps` 条目。未运行 272
   case、iOS build、签名或真机。
+- lifecycle lock key 与任何 start/stop/destroy mutation 前新增 descriptor-anchored
+  base-dir canonicalization：canonical parent 的实际 directory entry 必须与请求 basename
+  字节级一致，并在锁内复核 exact name 与 dev/ino；final symlink、case-insensitive alias、
+  APFS NFC/NFD alias 均拒绝，alias stop 不读取或删除真实 PID/marker，也不创建第二把锁。
+  对尚不存在的名称，lock key 使用 parent dev/ino 与 `NFD+casefold` comparison name，保证
+  潜在 aliases 先共享同一锁，后取得锁者再按真实 entry fail-closed。当前 APFS 上 case 与
+  NFC/NFD alias、symlink 及 canonical-lock 并发回归均通过；未运行 272 case、iOS build、
+  签名或真机。
 
 ## 2026-09-25：standalone runner stages 1–4 adapter
 

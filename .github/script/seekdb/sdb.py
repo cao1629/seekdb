@@ -6,6 +6,7 @@ from __future__ import print_function
 import argparse
 from contextlib import contextmanager
 import ctypes
+from dataclasses import dataclass
 import errno
 import fcntl
 import hashlib
@@ -18,6 +19,7 @@ import stat
 import subprocess
 import sys
 import time
+import unicodedata
 from pathlib import Path
 
 
@@ -52,6 +54,18 @@ class _StartTermination(BaseException):
         """Record the signal whose conventional shell status is required."""
         super().__init__(signum)
         self.signum = signum
+
+
+@dataclass(frozen=True)
+class BaseDirIdentity:
+    """Describe one exact final entry below a canonical parent directory."""
+
+    path: Path
+    parent_device: int
+    parent_inode: int
+    comparison_name: str
+    existing_device: object
+    existing_inode: object
 
 
 def _error(message):
@@ -123,10 +137,71 @@ def _base_dir(value):
     return path.parent.resolve() / path.name
 
 
+def canonicalize_base_dir(base_dir):
+    """Return an exact no-alias identity for one requested base-dir path."""
+    requested = _base_dir(str(base_dir))
+    parent = requested.parent.resolve()
+    directory_flags = os.O_RDONLY | getattr(os, "O_DIRECTORY", 0) \
+        | getattr(os, "O_NOFOLLOW", 0) | getattr(os, "O_CLOEXEC", 0)
+    parent_fd = os.open(str(parent), directory_flags)
+    try:
+        parent_metadata = os.fstat(parent_fd)
+        requested_bytes = os.fsencode(requested.name)
+        entries = {os.fsencode(name) for name in os.listdir(parent_fd)}
+        try:
+            final_metadata = os.stat(
+                requested.name, dir_fd=parent_fd, follow_symlinks=False)
+        except FileNotFoundError:
+            final_metadata = None
+        if final_metadata is not None:
+            if requested_bytes not in entries:
+                raise ValueError("base-dir final component is a filesystem alias")
+            exact_metadata = os.stat(
+                requested.name, dir_fd=parent_fd, follow_symlinks=False)
+            if (final_metadata.st_dev, final_metadata.st_ino) != (
+                    exact_metadata.st_dev, exact_metadata.st_ino):
+                raise ValueError("base-dir changed during canonicalization")
+            if stat.S_ISLNK(final_metadata.st_mode):
+                raise ValueError("base-dir must not be a symbolic link")
+            if not stat.S_ISDIR(final_metadata.st_mode):
+                raise ValueError("base-dir is not a directory")
+            existing_device = final_metadata.st_dev
+            existing_inode = final_metadata.st_ino
+        else:
+            existing_device = None
+            existing_inode = None
+        comparison_name = unicodedata.normalize(
+            "NFD", requested.name).casefold()
+        return BaseDirIdentity(
+            path=parent / requested.name,
+            parent_device=parent_metadata.st_dev,
+            parent_inode=parent_metadata.st_ino,
+            comparison_name=comparison_name,
+            existing_device=existing_device,
+            existing_inode=existing_inode,
+        )
+    finally:
+        os.close(parent_fd)
+
+
+def _validate_locked_base_identity(before, after):
+    """Reject parent, comparison-key, or existing-entry changes under lock."""
+    if (before.parent_device, before.parent_inode, before.comparison_name) != (
+            after.parent_device, after.parent_inode, after.comparison_name):
+        raise RuntimeError("base-dir identity changed before lifecycle lock")
+    if before.existing_inode is not None and (
+            before.existing_device, before.existing_inode) != (
+                after.existing_device, after.existing_inode):
+        raise RuntimeError("base-dir entry changed before lifecycle lock")
+
+
 def lifecycle_lock_path(base_dir):
     """Return the stable parent-owned lock path for one absolute base-dir."""
-    digest = hashlib.sha256(os.fsencode(str(base_dir))).hexdigest()
-    return base_dir.parent / ".sdb-lifecycle-{}.lock".format(digest)
+    identity = canonicalize_base_dir(base_dir)
+    key = "{}:{}:{}".format(
+        identity.parent_device, identity.parent_inode, identity.comparison_name)
+    digest = hashlib.sha256(os.fsencode(key)).hexdigest()
+    return identity.path.parent / ".sdb-lifecycle-{}.lock".format(digest)
 
 
 def _validate_lifecycle_lock(metadata):
@@ -142,7 +217,13 @@ def _validate_lifecycle_lock(metadata):
 @contextmanager
 def lifecycle_lock(base_dir):
     """Hold one stable descriptor-anchored exclusive instance lifecycle lock."""
-    lock_path = lifecycle_lock_path(base_dir)
+    initial_identity = canonicalize_base_dir(base_dir)
+    key = "{}:{}:{}".format(
+        initial_identity.parent_device, initial_identity.parent_inode,
+        initial_identity.comparison_name)
+    digest = hashlib.sha256(os.fsencode(key)).hexdigest()
+    lock_path = initial_identity.path.parent / ".sdb-lifecycle-{}.lock".format(
+        digest)
     directory_flags = os.O_RDONLY | getattr(os, "O_DIRECTORY", 0) \
         | getattr(os, "O_NOFOLLOW", 0) | getattr(os, "O_CLOEXEC", 0)
     parent_fd = os.open(str(lock_path.parent), directory_flags)
@@ -167,7 +248,9 @@ def lifecycle_lock(base_dir):
                 or (after.st_dev, after.st_ino) != (
                     linked.st_dev, linked.st_ino):
             raise RuntimeError("lifecycle lock identity changed")
-        yield descriptor
+        locked_identity = canonicalize_base_dir(initial_identity.path)
+        _validate_locked_base_identity(initial_identity, locked_identity)
+        yield locked_identity.path
     finally:
         if descriptor is not None:
             try:
@@ -699,12 +782,13 @@ def _command_start_with_launcher(args, base_dir, log_dir, command):
 def command_start(args):
     """Start one instance while holding its complete lifecycle lock."""
     base_dir = _base_dir(args.base_dir)
-    log_dir = base_dir / "log"
-    command = build_start_command(args, base_dir)
 
     try:
-        with lifecycle_lock(base_dir):
-            return _command_start_locked(args, base_dir, log_dir, command)
+        with lifecycle_lock(base_dir) as locked_base_dir:
+            locked_log_dir = locked_base_dir / "log"
+            locked_command = build_start_command(args, locked_base_dir)
+            return _command_start_locked(
+                args, locked_base_dir, locked_log_dir, locked_command)
     except (OSError, RuntimeError, ValueError) as exc:
         _error("failed to acquire seekdb lifecycle lock: {}".format(exc))
         return 1
@@ -1145,8 +1229,8 @@ def command_stop(args):
     """Stop one instance while holding its complete lifecycle lock."""
     base_dir = _base_dir(args.base_dir)
     try:
-        with lifecycle_lock(base_dir):
-            return _command_stop_locked(args, base_dir)
+        with lifecycle_lock(base_dir) as locked_base_dir:
+            return _command_stop_locked(args, locked_base_dir)
     except (OSError, RuntimeError, ValueError) as exc:
         _error("failed to acquire seekdb lifecycle lock: {}".format(exc))
         return 1
@@ -1156,8 +1240,8 @@ def command_destroy(args):
     """Destroy one instance while holding its complete lifecycle lock."""
     base_dir = _base_dir(args.base_dir)
     try:
-        with lifecycle_lock(base_dir):
-            return _command_destroy_locked(args, base_dir)
+        with lifecycle_lock(base_dir) as locked_base_dir:
+            return _command_destroy_locked(args, locked_base_dir)
     except (OSError, RuntimeError, ValueError) as exc:
         _error("failed to acquire seekdb lifecycle lock: {}".format(exc))
         return 1

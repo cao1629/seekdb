@@ -561,6 +561,77 @@ class MacosLldbLauncherTest(unittest.TestCase):
                     else:
                         self.assertEqual(b"tampered", lock_path.read_bytes())
 
+    def test_sdb_stop_rejects_final_component_aliases_without_mutation(self):
+        """Reject symlink, case, and Unicode aliases before PID or marker reads."""
+        sdb = _load_sdb()
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve()
+            binary = root / "seekdb"
+            binary.write_bytes(b"binary")
+            requested = root / "CanonicalInstance"
+            sdb.prepare_instance_directory(requested, binary)
+            stored_name = next(
+                name for name in os.listdir(root)
+                if (root / name).is_dir()
+                and os.path.samefile(root / name, requested))
+            canonical = root / stored_name
+            run_dir = canonical / "run"
+            run_dir.mkdir()
+            pid_file = run_dir / "seekdb.pid"
+            marker = run_dir / sdb.LAUNCHER_MARKER_NAME
+            pid_file.write_text("424242\n", encoding="ascii")
+            marker.write_bytes(b"{preserve-invalid-marker\n")
+            symlink_alias = root / "symlink-instance"
+            symlink_alias.symlink_to(canonical, target_is_directory=True)
+            self.assertEqual(
+                sdb.lifecycle_lock_path(root / "MissingAlias"),
+                sdb.lifecycle_lock_path(root / "missingalias"))
+            self.assertEqual(
+                sdb.lifecycle_lock_path(root / "é-missing"),
+                sdb.lifecycle_lock_path(root / "é-missing"))
+
+            alias_candidates = [root / stored_name.swapcase()]
+            composed = "é-instance"
+            decomposed = "é-instance"
+            unicode_requested = root / composed
+            unicode_requested.mkdir()
+            unicode_stored = next(
+                name for name in os.listdir(root)
+                if (root / name).is_dir()
+                and os.path.samefile(root / name, unicode_requested))
+            unicode_canonical = root / unicode_stored
+            unicode_alias = root / (
+                decomposed if unicode_stored != decomposed else composed)
+            if unicode_alias.exists() and os.path.samefile(
+                    unicode_alias, unicode_canonical):
+                alias_candidates.append(unicode_alias)
+
+            canonical_lock = sdb.lifecycle_lock_path(canonical)
+            with sdb.lifecycle_lock(canonical):
+                before_locks = set(root.glob(".sdb-lifecycle-*.lock"))
+                aliases = [symlink_alias]
+                aliases.extend(
+                    candidate for candidate in alias_candidates
+                    if candidate.exists()
+                    and os.path.samefile(candidate, canonical)
+                    and os.fsencode(candidate.name) != os.fsencode(stored_name))
+                if unicode_alias in alias_candidates:
+                    aliases.append(unicode_alias)
+                for alias in dict.fromkeys(aliases):
+                    with self.subTest(alias=alias.name):
+                        result = sdb.command_stop(argparse.Namespace(
+                            base_dir=str(alias), quiet=True,
+                            require_match=True))
+                        self.assertEqual(1, result)
+                        self.assertEqual("424242\n", pid_file.read_text(
+                            encoding="ascii"))
+                        self.assertEqual(
+                            b"{preserve-invalid-marker\n", marker.read_bytes())
+                        self.assertEqual(
+                            before_locks,
+                            set(root.glob(".sdb-lifecycle-*.lock")))
+            self.assertTrue(canonical_lock.is_file())
+
     def test_sdb_keyboard_interrupt_rolls_back_launcher_ownership(self):
         """Clean the detached process before replaying KeyboardInterrupt."""
         sdb = _load_sdb()

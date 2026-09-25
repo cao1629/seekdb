@@ -251,6 +251,11 @@ lock inode。start 从首次 base/marker preflight 到 spawn+durable commit，st
 状态读取到 terminate、marker 删除和 rmtree 完成均持有该锁；destroy 直接调用 locked
 stop helper，避免嵌套 flock。symlink、FIFO、权限篡改等 lock object 原样保留并 fail-closed，
 所有异常与 `BaseException` 路径都关闭 fd 释放锁。
+在计算 lock key 及任何 lifecycle mutation 前，runner 还会通过 canonical parent dir-fd
+核对 final component：现存 entry 必须是 exact stored basename、同一 dev/ino 的真实目录，
+final symlink、case-insensitive alias 与 NFC/NFD Unicode alias 均拒绝。尚不存在的名称以
+parent dev/ino 加 `NFD+casefold` comparison key 共享锁，因此潜在 APFS alias 并发创建也
+会串行；取得锁后再次复核 exact entry/dev/ino，stop 不会经 alias 删除真实 PID/marker。
 
 这是真实完整 host mysqltest，不是静态检查，耗时取决于 272 个 case 和重试；任一 host evidence/binary/corpus 问题都会在 iOS build、签名、安装或设备发现前停止。
 
