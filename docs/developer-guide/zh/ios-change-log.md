@@ -87,6 +87,10 @@
   以及 managed pid 建立前的 outer terminate，均确认 LLDB group 与 target 消失。
   默认 launcher timeout 调整为 23 小时（小于 24 小时 host deadline），mysqltest case
   显式 3570 秒（小于外层 3600 秒），wait-ready client attempt 同样预留清理预算。
+- 补齐首次解除 signal mask 的 pending-signal 窗口：首次 `SIG_SETMASK` 现在也位于
+  `_ExternalTermination` 捕获范围内，TERM/INT/HUP 均先恢复 handler/mask/fd 再返回
+  `128+signal`。cleanup 只接受真实 `pid==pgid` 且命令含 `lldb --no-lldbinit` 的
+  session leader，并冻结 LLDB 后同时清理其 descendant/精确 target snapshot 进程。
 
 ## 2026-09-25：standalone runner stages 1–4 adapter
 

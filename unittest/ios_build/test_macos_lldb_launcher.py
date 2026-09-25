@@ -47,27 +47,67 @@ def _wait_for_pid_file(path: Path, timeout_seconds: float = 30) -> int:
 
 
 def _pid_exists(pid: int) -> bool:
-    """Return whether one process id still exists."""
-    try:
-        os.kill(pid, 0)
-    except ProcessLookupError:
-        return False
-    return True
+    """Return whether one process id still represents a live process."""
+    completed = subprocess.run(
+        ["ps", "-o", "stat=", "-p", str(pid)],
+        capture_output=True, check=False, text=True)
+    state = completed.stdout.strip()
+    return bool(state) and not state.startswith("Z")
 
 
-def _wait_for_child_pid(parent_pid: int, timeout_seconds: float = 15) -> int:
-    """Return one direct child pid after a bounded process-table wait."""
+def _wait_for_lldb_session_leader(
+        parent_pid: int, timeout_seconds: float = 15) -> int:
+    """Return only the direct LLDB child that leads its own session group."""
     deadline = time.monotonic() + timeout_seconds
     while time.monotonic() < deadline:
         completed = subprocess.run(
-            ["ps", "-axo", "pid=,ppid="],
+            ["ps", "-axo", "pid=,ppid=,pgid=,command="],
             capture_output=True, check=False, text=True)
         for line in completed.stdout.splitlines():
-            values = line.split()
-            if len(values) == 2 and int(values[1]) == parent_pid:
-                return int(values[0])
+            values = line.split(maxsplit=3)
+            if len(values) != 4:
+                continue
+            pid, ppid, pgid = (int(value) for value in values[:3])
+            command = values[3]
+            if (ppid == parent_pid and pgid == pid
+                    and "lldb" in command and "--no-lldbinit" in command):
+                return pid
         time.sleep(0.05)
-    raise AssertionError("launcher child process was not created")
+    raise AssertionError("LLDB session leader was not created")
+
+
+def _wait_for_lldb_target(
+        lldb_pid: int, executable: Path, timeout_seconds: float = 15) -> int:
+    """Return the expected target from one LLDB descendant process tree."""
+    deadline = time.monotonic() + timeout_seconds
+    expected_prefix = str(executable) + " "
+    while time.monotonic() < deadline:
+        completed = subprocess.run(
+            ["ps", "-axo", "pid=,ppid=,stat=,command="],
+            capture_output=True, check=False, text=True)
+        parents = {}
+        commands = {}
+        states = {}
+        for line in completed.stdout.splitlines():
+            values = line.split(maxsplit=3)
+            if len(values) != 4:
+                continue
+            pid, ppid = (int(value) for value in values[:2])
+            parents[pid] = ppid
+            states[pid] = values[2]
+            commands[pid] = values[3]
+        for pid, command in commands.items():
+            if not (command == str(executable)
+                    or command.startswith(expected_prefix)) \
+                    or "T" in states[pid]:
+                continue
+            ancestor = parents.get(pid)
+            while ancestor not in (None, 0, 1, lldb_pid):
+                ancestor = parents.get(ancestor)
+            if ancestor == lldb_pid:
+                return pid
+        time.sleep(0.05)
+    raise AssertionError("LLDB target child was not created")
 
 
 def _close_process_pipes(process: subprocess.Popen) -> None:
@@ -235,6 +275,32 @@ class MacosLldbLauncherTest(unittest.TestCase):
         self.assertEqual(128 + signal.SIGTERM, result)
         self.assertIs(previous, signal.getsignal(signal.SIGTERM))
 
+    def test_pending_signal_on_initial_unmask_maps_status_and_restores_state(self):
+        """Catch a signal delivered by the first post-install mask restore."""
+        previous_term = signal.getsignal(signal.SIGTERM)
+        previous_mask = signal.pthread_sigmask(
+            signal.SIG_BLOCK, launcher.HANDLED_SIGNALS)
+
+        def install_with_pending_signal():
+            """Install real handlers and enqueue TERM before initial unmask."""
+            previous = {}
+            for signum in launcher.HANDLED_SIGNALS:
+                previous[signum] = signal.signal(
+                    signum, launcher._handle_external_signal)
+            os.kill(os.getpid(), signal.SIGTERM)
+            return previous, previous_mask
+
+        try:
+            with mock.patch.object(
+                    launcher, "_install_signal_handlers",
+                    side_effect=install_with_pending_signal):
+                result = launcher.main(["--binary", "/snapshot/seekdb"])
+        finally:
+            signal.pthread_sigmask(signal.SIG_SETMASK, previous_mask)
+
+        self.assertEqual(128 + signal.SIGTERM, result)
+        self.assertIs(previous_term, signal.getsignal(signal.SIGTERM))
+
     def test_timeout_terminates_and_kills_the_lldb_process_group(self):
         """Bound timeout cleanup even when the LLDB group ignores SIGTERM."""
         process = mock.Mock(pid=4321)
@@ -249,18 +315,23 @@ class MacosLldbLauncherTest(unittest.TestCase):
                 mock.patch.object(
                     launcher.subprocess, "Popen",
                     return_value=process) as popen, \
+                mock.patch.object(
+                    launcher, "_descendant_process_tree",
+                    return_value=(set(), set())), \
                 mock.patch.object(launcher.os, "killpg") as killpg:
             result = launcher.launch(
                 Path("/snapshot/seekdb"), (), timeout_seconds=1)
 
         self.assertEqual(124, result)
         self.assertEqual(
-            [mock.call(4321, signal.SIGTERM),
+            [mock.call(4321, signal.SIGSTOP),
+             mock.call(4321, signal.SIGCONT),
+             mock.call(4321, signal.SIGTERM),
              mock.call(4321, signal.SIGKILL)],
             killpg.call_args_list)
         popen_options = popen.call_args.kwargs
         self.assertEqual(subprocess.DEVNULL, popen_options["stdin"])
-        self.assertEqual(3, len(popen_options["pass_fds"]))
+        self.assertEqual(4, len(popen_options["pass_fds"]))
 
     def test_interrupt_terminates_and_kills_the_lldb_process_group(self):
         """Clean the LLDB group before propagating an interactive interrupt."""
@@ -275,13 +346,18 @@ class MacosLldbLauncherTest(unittest.TestCase):
                     launcher, "lldb_command", return_value=["lldb"]), \
                 mock.patch.object(
                     launcher.subprocess, "Popen", return_value=process), \
+                mock.patch.object(
+                    launcher, "_descendant_process_tree",
+                    return_value=(set(), set())), \
                 mock.patch.object(launcher.os, "killpg") as killpg:
             with self.assertRaises(KeyboardInterrupt):
                 launcher.launch(
                     Path("/snapshot/seekdb"), (), timeout_seconds=1)
 
         self.assertEqual(
-            [mock.call(4321, signal.SIGTERM),
+            [mock.call(4321, signal.SIGSTOP),
+             mock.call(4321, signal.SIGCONT),
+             mock.call(4321, signal.SIGTERM),
              mock.call(4321, signal.SIGKILL)],
             killpg.call_args_list)
 
@@ -290,13 +366,25 @@ class MacosLldbLauncherTest(unittest.TestCase):
         process = mock.Mock(pid=4321)
         process.wait.return_value = 0
 
-        with mock.patch.object(launcher.os, "killpg") as killpg:
+        with mock.patch.object(
+                launcher, "_descendant_process_tree",
+                return_value=({5001}, {5000})), \
+                mock.patch.object(launcher.os, "kill") as kill_process, \
+                mock.patch.object(launcher.os, "killpg") as killpg:
             launcher._terminate_group(process)
 
         self.assertEqual(
-            [mock.call(4321, signal.SIGTERM),
+            [mock.call(4321, signal.SIGSTOP),
+             mock.call(5000, signal.SIGTERM),
+             mock.call(4321, signal.SIGCONT),
+             mock.call(5000, signal.SIGKILL),
+             mock.call(4321, signal.SIGTERM),
              mock.call(4321, signal.SIGKILL)],
             killpg.call_args_list)
+        self.assertEqual(
+            [mock.call(5001, signal.SIGTERM),
+             mock.call(5001, signal.SIGKILL)],
+            kill_process.call_args_list)
         self.assertEqual(2, process.wait.call_count)
 
     @unittest.skipUnless(
@@ -452,7 +540,6 @@ int main(int argc, char **argv) {
                     ], stdin=subprocess.DEVNULL, stdout=subprocess.PIPE,
                        stderr=subprocess.PIPE)
                     target_pid = _wait_for_pid_file(marker)
-                    target_group = os.getpgid(target_pid)
                     try:
                         os.kill(process.pid, sent_signal)
                         stdout, stderr = process.communicate(timeout=15)
@@ -464,15 +551,13 @@ int main(int argc, char **argv) {
                                and time.monotonic() < deadline):
                             time.sleep(0.05)
                         self.assertFalse(_pid_exists(target_pid))
-                        with self.assertRaises(ProcessLookupError):
-                            os.killpg(target_group, 0)
                     finally:
                         if process.poll() is None:
                             process.kill()
                             process.wait(timeout=5)
                         _close_process_pipes(process)
                         try:
-                            os.killpg(target_group, signal.SIGKILL)
+                            os.kill(target_pid, signal.SIGKILL)
                         except ProcessLookupError:
                             pass
 
@@ -485,12 +570,11 @@ int main(int argc, char **argv) {
                stderr=subprocess.PIPE, timeout=10, check=False)
             self.assertEqual(124, timed_out.returncode, timed_out.stderr)
             timed_out_target = _wait_for_pid_file(timeout_marker)
-            timed_out_group = os.getpgid(timed_out_target) \
-                if _pid_exists(timed_out_target) else None
+            deadline = time.monotonic() + 5
+            while (_pid_exists(timed_out_target)
+                   and time.monotonic() < deadline):
+                time.sleep(0.05)
             self.assertFalse(_pid_exists(timed_out_target))
-            if timed_out_group is not None:
-                with self.assertRaises(ProcessLookupError):
-                    os.killpg(timed_out_group, 0)
 
     @unittest.skipUnless(
         sys.platform == "darwin" and shutil.which("cc"),
@@ -501,9 +585,13 @@ int main(int argc, char **argv) {
 #include <stdio.h>
 #include <unistd.h>
 int main(int argc, char **argv) {
+  FILE *started = fopen(argv[2], "w");
+  if (started == NULL) return 2;
+  fprintf(started, "%d\n", getpid());
+  if (fclose(started) != 0) return 3;
   sleep(20);
   FILE *marker = fopen(argv[1], "w");
-  if (marker == NULL) return 2;
+  if (marker == NULL) return 4;
   fprintf(marker, "%d\n", getpid());
   fclose(marker);
   sleep(300);
@@ -514,6 +602,7 @@ int main(int argc, char **argv) {
             root = Path(directory).resolve()
             program = root / "delayed-sleeper"
             marker = root / "managed.pid"
+            started_marker = root / "target-started.pid"
             compiled = subprocess.run(
                 ["cc", "-x", "c", "-o", str(program), "-"],
                 input=source.encode("utf-8"), capture_output=True,
@@ -523,15 +612,26 @@ int main(int argc, char **argv) {
             process = subprocess.Popen([
                 sys.executable, str(phase.MACOS_LLDB_LAUNCHER),
                 "--binary", str(program), "--timeout", "120", "--",
-                str(marker),
+                str(marker), str(started_marker),
             ], stdin=subprocess.DEVNULL, stdout=subprocess.PIPE,
                stderr=subprocess.PIPE)
-            lldb_pid = _wait_for_child_pid(process.pid)
+            lldb_pid = _wait_for_lldb_session_leader(process.pid)
+            target_pid = _wait_for_lldb_target(lldb_pid, program)
+            self.assertEqual(target_pid, _wait_for_pid_file(started_marker))
+            captured_pids, _captured_groups = launcher._descendant_process_tree(
+                lldb_pid, program)
+            self.assertIn(target_pid, captured_pids)
             try:
+                self.assertFalse(marker.exists())
                 process.terminate()
                 stdout, stderr = process.communicate(timeout=15)
                 self.assertEqual(143, process.returncode, stdout + stderr)
                 self.assertFalse(marker.exists())
+                deadline = time.monotonic() + 5
+                while (_pid_exists(target_pid)
+                       and time.monotonic() < deadline):
+                    time.sleep(0.05)
+                self.assertFalse(_pid_exists(target_pid))
                 with self.assertRaises(ProcessLookupError):
                     os.killpg(lldb_pid, 0)
             finally:

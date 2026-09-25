@@ -214,6 +214,8 @@ process group 后再恢复信号，首次信号触发有界 TERM→KILL→wait�
 最后以 `128+signal` 退出并恢复原 handler。默认 23 小时 timeout 小于 24 小时 host
 deadline；单个 mysqltest case 显式使用 3570 秒，小于外层 3600 秒；wait-ready 的每次
 launcher timeout 也为外层 client attempt 预留清理预算，避免外层先杀 launcher。
+首次解除 mask 本身也位于 signal 捕获范围；cleanup 先确认真实 LLDB session leader，
+冻结其 spawn，再按 descendant pid/process group 与精确 snapshot 路径清理 target。
 
 `sdb.py --launcher` 只改变结构化启动前缀；instance marker、pid inspection 与 cleanup
 仍绑定真实 seekdb snapshot 和 `--base-dir`。wait-ready obclient、init SQL obclient 和

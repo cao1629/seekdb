@@ -176,6 +176,9 @@ returning `128+signal`; later signals cannot re-enter cleanup. Its 23-hour
 default precedes the 24-hour host deadline, each mysqltest invocation receives
 a 3570-second timeout below the outer 3600-second case limit, and readiness
 probes reserve cleanup time below each client-attempt timeout.
+The initial signal-mask restore is inside the same termination boundary.
+Cleanup identifies the actual `pid == pgid` LLDB session leader, freezes new
+launches, and terminates both its descendant tree and the exact target snapshot.
 
 The optional sdb launch prefix never replaces the real executable identity.
 The instance marker and process matcher remain bound to the seekdb snapshot and

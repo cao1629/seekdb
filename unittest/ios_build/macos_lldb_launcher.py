@@ -9,6 +9,7 @@ import stat
 import struct
 import subprocess
 import sys
+import time
 from typing import Sequence
 
 
@@ -23,6 +24,7 @@ PLATFORM_MACOS = 1
 NON_PASSTHROUGH_SIGNALS = ("SIGSTOP", "SIGTSTP", "SIGTTIN", "SIGTTOU")
 DEFAULT_TIMEOUT_SECONDS = 23 * 60 * 60
 PROCESS_CLEANUP_GRACE_SECONDS = 0.5
+TARGET_REAP_GRACE_SECONDS = 0.25
 HANDLED_SIGNALS = tuple(
     item for item in (signal.SIGTERM, signal.SIGINT, signal.SIGHUP)
     if item is not None)
@@ -207,7 +209,8 @@ def lldb_command(
         binary: Path, arguments: Sequence[str],
         *, target_stdin_fd: int = None,
         target_stdout_fd: int = None,
-        target_stderr_fd: int = None) -> list[str]:
+        target_stderr_fd: int = None,
+        target_status_fd: int = None) -> list[str]:
     """Build one quote-safe LLDB argv with exact signal and status mapping."""
     excluded_signals = repr(NON_PASSTHROUGH_SIGNALS)
     signal_policy = (
@@ -219,6 +222,9 @@ def lldb_command(
         "u.SetShouldSuppress(n,False)) for i in range(u.GetNumSignals()) "
         "for n in [u.GetSignalAtIndex(i)] "
         "if u.GetSignalAsCString(n) not in x]")
+    status_suffix = (
+        f"os.write({target_status_fd},(str(c)+'\\n').encode())"
+        if target_status_fd is not None else "c=c")
     status = (
         "script import os,re,signal,lldb; "
         "p=lldb.debugger.GetSelectedTarget().GetProcess(); "
@@ -229,7 +235,8 @@ def lldb_command(
         "s=p.GetExitStatus(); "
         "c=((128+n) if n is not None else s) "
         "if p.GetState()==lldb.eStateExited and "
-        "((m is not None) or (0<=s<=255)) else 125; os._exit(c)")
+        "((m is not None) or (0<=s<=255)) else 125; "
+        + status_suffix)
     launch = "process launch --stop-at-entry"
     if target_stdin_fd is not None:
         launch += f" -i /dev/fd/{target_stdin_fd}"
@@ -245,11 +252,89 @@ def lldb_command(
     ]
 
 
-def _terminate_group(process: subprocess.Popen) -> None:
-    """Boundedly terminate, kill, and reap one LLDB process group."""
+def _descendant_process_tree(
+        root_pid: int, target_binary: Path = None) -> tuple[set[int], set[int]]:
+    """Return process ids and groups in the current LLDB descendant tree."""
+    try:
+        completed = subprocess.run(
+            ["/bin/ps", "-axo", "pid=,ppid=,pgid=,command="],
+            stdout=subprocess.PIPE, stderr=subprocess.DEVNULL,
+            timeout=5, check=False, text=True)
+    except (OSError, subprocess.SubprocessError):
+        return set(), set()
+    if completed.returncode != 0:
+        return set(), set()
+    children = {}
+    groups = {}
+    commands = {}
+    for line in completed.stdout.splitlines():
+        values = line.split(maxsplit=3)
+        if len(values) != 4:
+            continue
+        try:
+            pid, parent_pid, group_id = (
+                int(value) for value in values[:3])
+        except ValueError:
+            continue
+        children.setdefault(parent_pid, []).append(pid)
+        groups[pid] = group_id
+        commands[pid] = values[3]
+    descendants = set()
+    pending = list(children.get(root_pid, ()))
+    while pending:
+        pid = pending.pop()
+        descendants.add(pid)
+        pending.extend(children.get(pid, ()))
+    if target_binary is not None:
+        target = str(target_binary)
+        target_prefix = target + " "
+        descendants.update(
+            pid for pid, command in commands.items()
+            if command == target or command.startswith(target_prefix))
+    descendant_groups = {
+        groups[pid] for pid in descendants
+        if groups.get(pid, root_pid) != root_pid
+    }
+    return descendants, descendant_groups
+
+
+def _signal_descendants(
+        process_ids: set[int], groups: set[int], signum: int) -> None:
+    """Signal every captured descendant pid and distinct process group."""
+    for process_id in process_ids:
+        try:
+            os.kill(process_id, signum)
+        except OSError:
+            pass
+    for group_id in groups:
+        try:
+            os.killpg(group_id, signum)
+        except OSError:
+            pass
+
+
+def _terminate_group(
+        process: subprocess.Popen, target_binary: Path = None) -> None:
+    """Freeze, terminate, kill, and reap LLDB plus target process groups."""
+    try:
+        os.killpg(process.pid, signal.SIGSTOP)
+    except OSError:
+        pass
+    descendant_pids, descendant_groups = _descendant_process_tree(
+        process.pid, target_binary)
+    _signal_descendants(
+        descendant_pids, descendant_groups, signal.SIGTERM)
+    try:
+        os.killpg(process.pid, signal.SIGCONT)
+    except OSError:
+        pass
+    time.sleep(TARGET_REAP_GRACE_SECONDS)
+    _signal_descendants(
+        descendant_pids, descendant_groups, signal.SIGKILL)
+    time.sleep(TARGET_REAP_GRACE_SECONDS)
     try:
         os.killpg(process.pid, signal.SIGTERM)
-    except ProcessLookupError:
+    except OSError:
         pass
     try:
         process.wait(timeout=PROCESS_CLEANUP_GRACE_SECONDS)
@@ -257,7 +342,7 @@ def _terminate_group(process: subprocess.Popen) -> None:
         pass
     try:
         os.killpg(process.pid, signal.SIGKILL)
-    except ProcessLookupError:
+    except OSError:
         pass
     try:
         process.wait(timeout=PROCESS_CLEANUP_GRACE_SECONDS)
@@ -288,6 +373,22 @@ def _close_descriptors(descriptors: list[int]) -> None:
             pass
 
 
+def _read_target_status(descriptor: int) -> int:
+    """Read one bounded target status written before normal LLDB shutdown."""
+    os.set_blocking(descriptor, False)
+    try:
+        payload = os.read(descriptor, 64)
+    except BlockingIOError:
+        return 125
+    try:
+        values = [int(value) for value in payload.decode("ascii").split()]
+    except (UnicodeError, ValueError):
+        return 125
+    if not values or any(value != values[0] for value in values):
+        return 125
+    return values[0] if 0 <= values[0] <= 255 else 125
+
+
 def launch(
         binary: Path, arguments: Sequence[str],
         *, timeout_seconds: float = DEFAULT_TIMEOUT_SECONDS) -> int:
@@ -298,10 +399,13 @@ def launch(
         "DEVELOPER_DIR", "/Applications/Xcode.app/Contents/Developer")
     global _ACTIVE_PROCESS
     descriptors = []
+    status_descriptors = []
     process = None
     try:
         descriptors = list(_duplicate_standard_streams())
         target_stdin_fd, target_stdout_fd, target_stderr_fd = descriptors
+        status_read_fd, status_write_fd = os.pipe()
+        status_descriptors = [status_read_fd, status_write_fd]
         previous_mask = signal.pthread_sigmask(
             signal.SIG_BLOCK, HANDLED_SIGNALS)
         try:
@@ -310,30 +414,36 @@ def launch(
                     binary, arguments,
                     target_stdin_fd=target_stdin_fd,
                     target_stdout_fd=target_stdout_fd,
-                    target_stderr_fd=target_stderr_fd),
+                    target_stderr_fd=target_stderr_fd,
+                    target_status_fd=status_write_fd),
                 env=environment, stdin=subprocess.DEVNULL,
                 stdout=subprocess.DEVNULL,
                 stderr=subprocess.DEVNULL,
-                pass_fds=tuple(descriptors),
+                pass_fds=tuple(descriptors + [status_write_fd]),
                 start_new_session=True)
             _ACTIVE_PROCESS = process
         finally:
             signal.pthread_sigmask(signal.SIG_SETMASK, previous_mask)
         _close_descriptors(descriptors)
+        status_descriptors.remove(status_write_fd)
+        os.close(status_write_fd)
         return_code = process.wait(timeout=timeout_seconds)
+        if return_code != 0:
+            return 128 - return_code if return_code < 0 else 125
+        return _read_target_status(status_read_fd)
     except subprocess.TimeoutExpired:
         if process is not None:
-            _terminate_group(process)
+            _terminate_group(process, binary)
         return 124
     except BaseException:
         if process is not None:
-            _terminate_group(process)
+            _terminate_group(process, binary)
         raise
     finally:
         if _ACTIVE_PROCESS is process:
             _ACTIVE_PROCESS = None
         _close_descriptors(descriptors)
-    return 128 - return_code if return_code < 0 else return_code
+        _close_descriptors(status_descriptors)
 
 
 def parse_args(arguments: Sequence[str]) -> argparse.Namespace:
@@ -355,8 +465,8 @@ def main(arguments: Sequence[str]) -> int:
     """Validate one target and dispatch it through the fixed LLDB command."""
     previous_handlers, previous_mask = _install_signal_handlers()
     try:
-        signal.pthread_sigmask(signal.SIG_SETMASK, previous_mask)
         try:
+            signal.pthread_sigmask(signal.SIG_SETMASK, previous_mask)
             options = parse_args(arguments)
             binary = validate_binary(options.binary)
             return launch(
