@@ -45,6 +45,24 @@ class MacosLldbLauncherTest(unittest.TestCase):
         self.assertEqual(str(binary), command[separator + 1])
         self.assertEqual(list(arguments), command[separator + 2:])
 
+    def test_lldb_command_routes_target_stdin_without_exposing_it_to_lldb(self):
+        """Route a dedicated input fd only through the target launch command."""
+        command = launcher.lldb_command(
+            Path("/snapshot/seekdb"), (), target_stdin_fd=17)
+
+        launch_command = command[command.index("-o") + 1]
+        self.assertIn(" -i /dev/fd/17", launch_command)
+
+    def test_partial_standard_stream_duplication_closes_acquired_fds(self):
+        """Close earlier duplicates when a later standard-stream dup fails."""
+        with mock.patch.object(
+                launcher.os, "dup", side_effect=[31, OSError("dup failed")]), \
+                mock.patch.object(launcher.os, "close") as close:
+            with self.assertRaises(OSError):
+                launcher._duplicate_standard_streams()
+
+        close.assert_called_once_with(31)
+
     def test_direct_sigkill_probe_selects_tracked_launcher(self):
         """Use LLDB for every host tool after one direct policy SIGKILL."""
         calls = []
@@ -143,7 +161,8 @@ class MacosLldbLauncherTest(unittest.TestCase):
                 mock.patch.object(
                     launcher, "lldb_command", return_value=["lldb"]), \
                 mock.patch.object(
-                    launcher.subprocess, "Popen", return_value=process), \
+                    launcher.subprocess, "Popen",
+                    return_value=process) as popen, \
                 mock.patch.object(launcher.os, "killpg") as killpg:
             result = launcher.launch(
                 Path("/snapshot/seekdb"), (), timeout_seconds=1)
@@ -153,6 +172,9 @@ class MacosLldbLauncherTest(unittest.TestCase):
             [mock.call(4321, signal.SIGTERM),
              mock.call(4321, signal.SIGKILL)],
             killpg.call_args_list)
+        popen_options = popen.call_args.kwargs
+        self.assertEqual(subprocess.DEVNULL, popen_options["stdin"])
+        self.assertEqual(3, len(popen_options["pass_fds"]))
 
     def test_interrupt_terminates_and_kills_the_lldb_process_group(self):
         """Clean the LLDB group before propagating an interactive interrupt."""
@@ -224,6 +246,88 @@ int main(int argc, char **argv) {
             self.assertEqual(128 + signal.SIGKILL,
                              launcher.launch(validated, ("kill",),
                                              timeout_seconds=60))
+
+    @unittest.skipUnless(
+        sys.platform == "darwin" and shutil.which("cc"),
+        "requires macOS, clang, and LLDB")
+    def test_real_lldb_preserves_pipe_file_devnull_tty_and_eof_stdin(self):
+        """Round-trip target stdin while LLDB itself remains on DEVNULL."""
+        source = r'''
+#include <stdio.h>
+#include <string.h>
+int main(int argc, char **argv) {
+  char buffer[256];
+  if (argc > 1 && strcmp(argv[1], "fgets") == 0) {
+    if (fgets(buffer, sizeof(buffer), stdin) == NULL) {
+      fputs("EOF", stdout);
+      return 0;
+    }
+    fputs(buffer, stdout);
+    return 0;
+  }
+  size_t count;
+  while ((count = fread(buffer, 1, sizeof(buffer), stdin)) > 0) {
+    if (fwrite(buffer, 1, count, stdout) != count) return 3;
+  }
+  return ferror(stdin) ? 4 : 0;
+}
+'''
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve()
+            program = root / "stdin-roundtrip"
+            compiled = subprocess.run(
+                ["cc", "-x", "c", "-o", str(program), "-"],
+                input=source.encode("utf-8"), capture_output=True,
+                check=False)
+            self.assertEqual(0, compiled.returncode, compiled.stderr)
+            program.chmod(0o500)
+            command = [
+                sys.executable, str(phase.MACOS_LLDB_LAUNCHER),
+                "--binary", str(program), "--timeout", "60", "--",
+            ]
+
+            piped = subprocess.run(
+                command, input=b"pipe input\n", capture_output=True,
+                timeout=90, check=False)
+            self.assertEqual(0, piped.returncode, piped.stderr)
+            self.assertEqual(b"pipe input\n", piped.stdout)
+
+            input_file = root / "init.sql"
+            input_file.write_bytes(b"file input\n")
+            with input_file.open("rb") as stream:
+                from_file = subprocess.run(
+                    command, stdin=stream, capture_output=True,
+                    timeout=90, check=False)
+            self.assertEqual(0, from_file.returncode, from_file.stderr)
+            self.assertEqual(b"file input\n", from_file.stdout)
+
+            from_devnull = subprocess.run(
+                command, stdin=subprocess.DEVNULL, capture_output=True,
+                timeout=90, check=False)
+            self.assertEqual(0, from_devnull.returncode, from_devnull.stderr)
+            self.assertEqual(b"", from_devnull.stdout)
+
+            empty = subprocess.run(
+                [*command, "fgets"], input=b"", capture_output=True,
+                timeout=90, check=False)
+            self.assertEqual(0, empty.returncode, empty.stderr)
+            self.assertEqual(b"EOF", empty.stdout)
+
+            master_fd, slave_fd = os.openpty()
+            try:
+                tty_process = subprocess.Popen(
+                    [*command, "fgets"], stdin=slave_fd,
+                    stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                os.close(slave_fd)
+                slave_fd = -1
+                os.write(master_fd, b"tty input\n")
+                tty_stdout, tty_stderr = tty_process.communicate(timeout=90)
+            finally:
+                os.close(master_fd)
+                if slave_fd >= 0:
+                    os.close(slave_fd)
+            self.assertEqual(0, tty_process.returncode, tty_stderr)
+            self.assertEqual(b"tty input\n", tty_stdout)
 
     @unittest.skipUnless(sys.platform == "darwin", "requires macOS and LLDB")
     def test_current_host_snapshots_execute_read_only_options_via_lldb(self):

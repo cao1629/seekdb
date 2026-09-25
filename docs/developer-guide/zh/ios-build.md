@@ -207,7 +207,8 @@ macOS 继续直跑。launcher 再次校验绝对 anchored snapshot、thin 64-bit
 dylib 和固定 `xcrun lldb`，以 argv list 传参，不经 shell；共享 timeout/中断会清理
 完整 LLDB process group，目标正常退出与 signal 映射保持准确。LLDB 自身 stdout/stderr
 丢弃，目标 stdout/stderr 通过独立继承 fd 转发，避免 debugger 文本污染 mysqltest
-结果判断。
+结果判断；LLDB 自身 stdin 固定为 `/dev/null`，调用进程的 stdin 则复制为独立 fd 并仅
+通过 `process launch -i` 交给目标，保留 PIPE、文件、TTY、`DEVNULL` 和 EOF 语义。
 
 `sdb.py --launcher` 只改变结构化启动前缀；instance marker、pid inspection 与 cleanup
 仍绑定真实 seekdb snapshot 和 `--base-dir`。wait-ready obclient、init SQL obclient 和

@@ -164,7 +164,10 @@ passes every target argument as a separate argv element, maps normal and signal
 termination exactly, and boundedly reaps the LLDB process group on timeout or
 interruption. Debugger output is discarded while target stdout/stderr travels
 through separate inherited descriptors, so LLDB diagnostics cannot affect
-mysqltest result handling.
+mysqltest result handling. LLDB itself reads from `/dev/null`; a duplicate of
+the caller's stdin is passed only to `process launch -i`, preserving pipe,
+file, terminal, `DEVNULL`, and EOF behavior for obclient initialization and
+other target processes.
 
 The optional sdb launch prefix never replaces the real executable identity.
 The instance marker and process matcher remain bound to the seekdb snapshot and

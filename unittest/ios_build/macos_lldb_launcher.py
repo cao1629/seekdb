@@ -156,7 +156,8 @@ def validate_lldb(*, xcrun: Path = XCRUN) -> None:
 
 def lldb_command(
         binary: Path, arguments: Sequence[str],
-        *, target_stdout_fd: int = None,
+        *, target_stdin_fd: int = None,
+        target_stdout_fd: int = None,
         target_stderr_fd: int = None) -> list[str]:
     """Build one quote-safe LLDB argv with exact signal and status mapping."""
     excluded_signals = repr(NON_PASSTHROUGH_SIGNALS)
@@ -181,6 +182,8 @@ def lldb_command(
         "if p.GetState()==lldb.eStateExited and "
         "((m is not None) or (0<=s<=255)) else 125; os._exit(c)")
     launch = "process launch --stop-at-entry"
+    if target_stdin_fd is not None:
+        launch += f" -i /dev/fd/{target_stdin_fd}"
     if target_stdout_fd is not None:
         launch += f" -o /dev/fd/{target_stdout_fd}"
     if target_stderr_fd is not None:
@@ -213,6 +216,19 @@ def _terminate_group(process: subprocess.Popen) -> None:
         pass
 
 
+def _duplicate_standard_streams() -> tuple[int, int, int]:
+    """Duplicate stdin/stdout/stderr and close partial results on failure."""
+    descriptors = []
+    try:
+        for descriptor in (0, 1, 2):
+            descriptors.append(os.dup(descriptor))
+    except OSError:
+        for descriptor in descriptors:
+            os.close(descriptor)
+        raise
+    return tuple(descriptors)
+
+
 def launch(
         binary: Path, arguments: Sequence[str],
         *, timeout_seconds: float = DEFAULT_TIMEOUT_SECONDS) -> int:
@@ -221,19 +237,23 @@ def launch(
     environment = dict(os.environ)
     environment.setdefault(
         "DEVELOPER_DIR", "/Applications/Xcode.app/Contents/Developer")
-    target_stdout_fd = os.dup(sys.stdout.fileno())
-    target_stderr_fd = os.dup(sys.stderr.fileno())
+    (target_stdin_fd, target_stdout_fd,
+     target_stderr_fd) = _duplicate_standard_streams()
     try:
         process = subprocess.Popen(
             lldb_command(
                 binary, arguments,
+                target_stdin_fd=target_stdin_fd,
                 target_stdout_fd=target_stdout_fd,
                 target_stderr_fd=target_stderr_fd),
-            env=environment, stdout=subprocess.DEVNULL,
+            env=environment, stdin=subprocess.DEVNULL,
+            stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL,
-            pass_fds=(target_stdout_fd, target_stderr_fd),
+            pass_fds=(
+                target_stdin_fd, target_stdout_fd, target_stderr_fd),
             start_new_session=True)
     finally:
+        os.close(target_stdin_fd)
         os.close(target_stdout_fd)
         os.close(target_stderr_fd)
     try:

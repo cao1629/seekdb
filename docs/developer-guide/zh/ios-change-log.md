@@ -77,6 +77,10 @@
   marker/process matching 对真实 seekdb snapshot 的绑定，obclient/mysqltest 同样使用
   prefix。focused 实测当前三个 snapshot 的 `--help`/`--version` 经 LLDB 均非 137，
   tiny Mach-O exit 7、SIGTERM 143、SIGKILL 137 均正确；未运行 272 case 或真机。
+- 修复 launcher 的 stdin 传递：LLDB 自身固定读取 `/dev/null`，调用者 fd0 复制后仅以
+  `process launch -i /dev/fd/<n>` 传给目标，并与 stdout/stderr fd 一起显式继承和关闭。
+  真实 tiny Mach-O 覆盖 PIPE、`subprocess.run(input=...)`、SQL 文件、TTY、`DEVNULL`
+  与空 EOF；timeout/SIGINT 的 process-group 清理保持不变。
 
 ## 2026-09-25：standalone runner stages 1–4 adapter
 
