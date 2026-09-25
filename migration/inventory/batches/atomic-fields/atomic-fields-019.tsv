@@ -1,0 +1,47 @@
+file	line	symbol	construct	text
+src/sql/plan_cache/ob_ps_cache.h	175	ObPsCache::next_ps_stmt_id_	field ObPsStmtId; 1 atomic accesses (__sync_add_and_fetch 1)	ObPsStmtId next_ps_stmt_id_;
+src/sql/plan_cache/ob_ps_cache.h	182	ObPsCache::mem_limit_pct_	field int64_t; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_STORE 1)	int64_t mem_limit_pct_;
+src/sql/plan_cache/ob_ps_cache.h	183	ObPsCache::mem_high_pct_	field int64_t; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_STORE 1)	int64_t mem_high_pct_;                     // high water mark percentage
+src/sql/plan_cache/ob_ps_cache.h	184	ObPsCache::mem_low_pct_	field int64_t; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_STORE 1)	int64_t mem_low_pct_;                      // low water mark percentage
+src/sql/plan_cache/ob_ps_cache.h	186	ObPsCache::hit_count_	field uint64_t; 2 atomic accesses (ATOMIC_INC 1, ATOMIC_LOAD 1)	uint64_t hit_count_;
+src/sql/plan_cache/ob_ps_cache.h	187	ObPsCache::access_count_	field uint64_t; 3 atomic accesses (ATOMIC_INC 2, ATOMIC_LOAD 1)	uint64_t access_count_;
+src/sql/plan_cache/ob_ps_cache.h	192	ObPsCache::managed_used_	field int64_t; 4 atomic accesses (ATOMIC_LOAD 2, ATOMIC_BCAS 1, ATOMIC_FAA 1)	int64_t managed_used_;
+src/sql/plan_cache/ob_ps_cache_callback.cpp	62	get_is_expired_evicted_ptr()	no declaration found; 2 atomic accesses in 2 files (ATOMIC_BCAS 2); first access shown	if (ATOMIC_BCAS(entry.second->get_is_expired_evicted_ptr(), false, true)) {
+src/sql/session/ob_basic_session_info.h	301	ObBasicSessionInfo::BaseSavedValue::cur_query_len_	volatile field volatile int64_t; no atomic access found	volatile int64_t cur_query_len_;
+src/sql/session/ob_basic_session_info.h	1306	ObBasicSessionInfo::MultiThreadData::cur_query_len_	volatile field volatile int64_t; no atomic access found	volatile int64_t cur_query_len_;
+src/sql/session/ob_basic_session_info.h	1309	ObBasicSessionInfo::MultiThreadData::top_query_len_	volatile field volatile int64_t; no atomic access found	volatile int64_t top_query_len_;
+src/sql/session/ob_basic_session_info.h	1322	ObBasicSessionInfo::MultiThreadData::is_shadow_	field bool; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_STORE 1)	bool is_shadow_;
+src/sql/session/ob_basic_session_info.h	1325	ObBasicSessionInfo::MultiThreadData::is_mark_killed_	field bool; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_STORE 1)	bool is_mark_killed_; // Mark the current session as delayed kill
+src/sql/session/ob_basic_session_info.h	1828	ObBasicSessionInfo::server_stopping_	field volatile int64_t; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_STORE 1)	volatile int64_t server_stopping_;  // use int64_t for ATOMIC_LOAD / ATOMIC_STORE.
+src/sql/session/ob_sql_session_info.h	322	ObSQLSessionInfo::CursorCache::next_cursor_id_	field int64_t; 1 atomic accesses (__sync_add_and_fetch 1)	int64_t next_cursor_id_;
+src/sql/session/ob_sql_session_info.h	373	ObSQLSessionInfo::ObCachedRuntimeConfig::sort_area_size_	field int64_t; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_STORE 1)	int64_t sort_area_size_;
+src/sql/session/ob_sql_session_info.h	374	ObSQLSessionInfo::ObCachedRuntimeConfig::hash_area_size_	field int64_t; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_STORE 1)	int64_t hash_area_size_;
+src/sql/session/ob_sql_session_info.h	375	ObSQLSessionInfo::ObCachedRuntimeConfig::data_version_	field uint64_t; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_STORE 1)	uint64_t data_version_;
+src/sql/session/ob_sql_session_info.h	376	ObSQLSessionInfo::ObCachedRuntimeConfig::enable_immediate_row_conflict_check_	field bool; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_STORE 1)	bool enable_immediate_row_conflict_check_;
+src/sql/session/ob_sql_session_info.h	377	ObSQLSessionInfo::ObCachedRuntimeConfig::range_optimizer_max_mem_size_	field int64_t; 1 atomic accesses (ATOMIC_STORE 1)	int64_t range_optimizer_max_mem_size_;
+src/sql/session/ob_sql_session_info.h	378	ObSQLSessionInfo::ObCachedRuntimeConfig::_query_record_size_limit_	field int64_t; 1 atomic accesses (ATOMIC_STORE 1)	int64_t _query_record_size_limit_;
+src/sql/session/ob_sql_session_info.h	382	ObSQLSessionInfo::ObCachedRuntimeConfig::print_sample_ppm_	field int64_t; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_STORE 1)	int64_t print_sample_ppm_;
+src/sql/session/ob_sql_session_info.h	383	ObSQLSessionInfo::ObCachedRuntimeConfig::last_check_ec_ts_	field int64_t; 1 atomic accesses (ATOMIC_STORE 1)	int64_t last_check_ec_ts_;
+src/sql/session/ob_sql_session_info.h	384	ObSQLSessionInfo::ObCachedRuntimeConfig::_ob_sqlstat_enable_	field bool; 1 atomic accesses (ATOMIC_STORE 1)	bool _ob_sqlstat_enable_;
+src/sql/session/ob_sql_session_info.h	1024	ObSQLSessionInfo::in_bytes_	field int64_t; 2 atomic accesses (ATOMIC_FAA 1, ATOMIC_LOAD 1)	int64_t in_bytes_;
+src/sql/session/ob_sql_session_info.h	1025	ObSQLSessionInfo::out_bytes_	field int64_t; 2 atomic accesses (ATOMIC_FAA 1, ATOMIC_LOAD 1)	int64_t out_bytes_;
+src/sql/session/ob_sql_session_mgr.h	165	ObSQLSessionMgr::ValueAlloc::active_count_	field int64_t; 3 atomic accesses (ATOMIC_FAA 2, ATOMIC_LOAD 1)	int64_t active_count_;
+src/sql/session/ob_sql_session_mgr.h	166	ObSQLSessionMgr::ValueAlloc::alloc_total_count_	field volatile int64_t; 1 atomic accesses (ATOMIC_FAA 1)	volatile int64_t alloc_total_count_;
+src/sql/session/ob_sql_session_mgr.h	167	ObSQLSessionMgr::ValueAlloc::free_total_count_	field volatile int64_t; 1 atomic accesses (ATOMIC_FAA 1)	volatile int64_t free_total_count_;
+src/sql/session/ob_sql_session_mgr.h	210	ObSQLSessionMgr::next_sessid_	field uint32_t; 1 atomic accesses (ATOMIC_AAF 1)	uint32_t next_sessid_ CACHE_ALIGNED;
+src/standby/restore/ob_physical_copy_ctx.h	61	ObCopyTabletRecordExtraInfo::cost_time_ms_	field int64_t; 1 atomic accesses (ATOMIC_FAA 1)	int64_t cost_time_ms_;
+src/standby/restore/ob_physical_copy_ctx.h	63	ObCopyTabletRecordExtraInfo::total_data_size_	field int64_t; 1 atomic accesses (ATOMIC_FAA 1)	int64_t total_data_size_;
+src/standby/restore/ob_physical_copy_ctx.h	65	ObCopyTabletRecordExtraInfo::write_data_size_	field int64_t; 1 atomic accesses (ATOMIC_FAA 1)	int64_t write_data_size_;
+src/standby/restore/ob_physical_copy_ctx.h	69	ObCopyTabletRecordExtraInfo::major_count_	field int64_t; 2 atomic accesses (ATOMIC_INC 1, ATOMIC_LOAD 1)	int64_t major_count_;
+src/standby/restore/ob_physical_copy_ctx.h	71	ObCopyTabletRecordExtraInfo::macro_count_	field int64_t; 1 atomic accesses (ATOMIC_FAA 1)	int64_t macro_count_;
+src/standby/restore/ob_physical_copy_ctx.h	73	ObCopyTabletRecordExtraInfo::major_macro_count_	field int64_t; 1 atomic accesses (ATOMIC_FAA 1)	int64_t major_macro_count_;
+src/standby/restore/ob_physical_copy_ctx.h	75	ObCopyTabletRecordExtraInfo::reuse_macro_count_	field int64_t; 1 atomic accesses (ATOMIC_FAA 1)	int64_t reuse_macro_count_;
+src/standby/restore/ob_physical_copy_ctx.h	78	ObCopyTabletRecordExtraInfo::restore_action_	field ObTabletRestoreAction::ACTION; 1 atomic accesses (ATOMIC_SET 1)	ObTabletRestoreAction::ACTION restore_action_;
+src/standby/restore/ob_sstable_copy_finish_task.h	208	ObSSTableCopyFinishTask::next_copy_task_id_	field int64_t; 2 atomic accesses (ATOMIC_FAA 1, ATOMIC_LOAD 1)	int64_t next_copy_task_id_;
+src/storage/access/ob_empty_read_bucket.h	96	ObEmptyReadCell::count_	volatile field volatile int32_t; no atomic access found	volatile int32_t count_;
+src/storage/access/ob_empty_read_bucket.h	97	ObEmptyReadCell::hashcode_	volatile field volatile uint64_t; no atomic access found	volatile uint64_t hashcode_;
+src/storage/access/ob_empty_read_bucket.h	98	ObEmptyReadCell::build_time_	volatile field volatile int64_t; no atomic access found	volatile int64_t build_time_;
+src/storage/access/ob_empty_read_bucket.h	99	ObEmptyReadCell::is_waiting_	volatile field volatile bool; no atomic access found	volatile bool is_waiting_;
+src/storage/access/ob_global_iterator_pool.h	61	CachedIteratorNode::is_occupied_	field bool; 5 atomic accesses (ATOMIC_LOAD 2, ATOMIC_VCAS 2, ATOMIC_STORE 1)	bool is_occupied_;
+src/storage/access/ob_global_iterator_pool.h	130	ObGlobalIteratorPool::is_washing_	field bool; 3 atomic accesses (ATOMIC_LOAD 1, ATOMIC_STORE 1, ATOMIC_VCAS 1)	bool is_washing_;
+src/storage/access/ob_global_iterator_pool.h	131	ObGlobalIteratorPool::is_disabled_	field bool; 4 atomic accesses (ATOMIC_STORE 3, ATOMIC_LOAD 1)	bool is_disabled_;

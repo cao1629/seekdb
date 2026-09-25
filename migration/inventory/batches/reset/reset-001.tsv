@@ -1,0 +1,120 @@
+file	line	symbol	construct	text
+src/logservice/applyservice/ob_log_apply_service.cpp	450	ObApplyStatus::try_handle_cb_queue	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/logservice/applyservice/ob_log_apply_service.cpp	464	ObApplyStatus::try_handle_cb_queue	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/logservice/applyservice/ob_log_apply_service.cpp	479	ObApplyStatus::try_handle_cb_queue	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/logservice/applyservice/ob_log_apply_service.cpp	500	ObApplyStatus::try_handle_cb_queue	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/logservice/applyservice/ob_log_apply_service.cpp	787	ObApplyStatus::handle_drop_cb_queue_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/logservice/applyservice/ob_log_apply_service.cpp	800	ObApplyStatus::handle_drop_cb_queue_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/logservice/ob_log_handler.cpp	520	ObLogHandler::get_max_decided_scn	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/logservice/ob_log_service.cpp	266	ObLogService::check_palf_exist	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/logservice/ob_server_log_block_mgr.cpp	479	ObServerLogBlockMgr::unlinkat_until_success_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/logservice/palf/fixed_sliding_window.h	303	FixedSlidingWindow::slide	ret = OB_SUCCESS (line start)	ret = common::OB_SUCCESS;
+src/logservice/palf/fixed_sliding_window.h	370	FixedSlidingWindow::truncate	ret = OB_SUCCESS (line start)	ret = common::OB_SUCCESS;
+src/logservice/palf/fixed_sliding_window.h	397	FixedSlidingWindow::truncate_and_reset_begin_sn	ret = OB_SUCCESS (line start)	ret = common::OB_SUCCESS;
+src/logservice/palf/log_block_handler.cpp	327	LogBlockHandler::inner_truncate_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/logservice/palf/log_block_mgr.cpp	329	LogBlockMgr::check_after_truncate_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/logservice/palf/log_engine.cpp	569	LogEngine::delete_block	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/logservice/palf/log_engine.cpp	719	LogEngine::get_total_used_disk_space	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/logservice/palf/log_engine.cpp	1045	LogEngine::try_clear_up_holes_and_check_storage_integrity_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/logservice/palf/log_io_utils.cpp	198	openat_with_retry	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/logservice/palf/log_io_utils.cpp	322	rename_with_retry	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/logservice/palf/log_io_utils.cpp	352	renameat_with_retry	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/logservice/palf/log_io_utils.cpp	371	fsync_with_retry	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/logservice/palf/log_iterator_impl.h	819	LogIteratorImpl::check_is_the_last_entry	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/logservice/palf/log_iterator_impl.h	822	LogIteratorImpl::check_is_the_last_entry	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/logservice/palf/log_sliding_window.cpp	455	LogSlidingWindow::try_freeze_prev_log_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/logservice/palf/log_sliding_window.cpp	670	LogSlidingWindow::handle_committed_log_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/logservice/palf/log_sliding_window.cpp	966	LogSlidingWindow::try_freeze_last_log_task_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/logservice/palf/log_sliding_window.cpp	1032	LogSlidingWindow::try_feedback_freeze_log_task_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/logservice/palf/log_sliding_window.cpp	1035	LogSlidingWindow::try_feedback_freeze_log_task_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/logservice/palf/log_state_mgr.cpp	87	LogStateMgr::switch_state	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/logservice/palf/log_storage.cpp	358	LogStorage::truncate_prefix_blocks	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/logservice/palf/log_storage.cpp	373	LogStorage::truncate_prefix_blocks	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/logservice/palf/log_storage.cpp	775	LogStorage::inner_pread_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/logservice/palf/log_storage.h	252	LogStorage::load	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/logservice/palf/log_storage.h	302	LogStorage::locate_log_tail_and_last_valid_entry_header_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/logservice/palf/palf_handle_impl.cpp	459	PalfHandleImpl::get_block_id_by_scn_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/logservice/palf/palf_handle_impl.cpp	1092	PalfHandleImpl::get_prev_log_info_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/logservice/palf/palf_handle_impl.cpp	1146	PalfHandleImpl::append_disk_log_to_sw_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/logservice/replayservice/ob_log_replay_service.cpp	1258	ObLogReplayService::handle_replay_task_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/logservice/replayservice/ob_replay_status.cpp	290	ObReplayServiceSubmitTask::reset_iterator	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/logservice/replayservice/ob_replay_status.cpp	1157	ObReplayStatus::check_submit_barrier	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/logservice/replayservice/ob_replay_status.cpp	1313	ObReplayStatus::diagnose	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/common/json_type/ob_json_base.cpp	182	ObIJsonBase::add_if_missing	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // confilict means found duplicated nodes, it is not an error.
+src/oblib/common/json_type/ob_json_base.cpp	325	ObIJsonBase::find_member	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/common/json_type/ob_json_base.cpp	1287	ObIJsonBase::find_date_method	ret = OB_SUCCESS (after other code on the line)	if (OB_FAIL(ret)) ret = OB_SUCCESS;
+src/oblib/common/json_type/ob_json_base.cpp	1289	ObIJsonBase::find_date_method	ret = OB_SUCCESS (after other code on the line)	if (trans_fail) ret = OB_SUCCESS;
+src/oblib/common/json_type/ob_json_base.cpp	1347	ObIJsonBase::find_timestamp_method	ret = OB_SUCCESS (after other code on the line)	if (OB_FAIL(ret)) ret = OB_SUCCESS;
+src/oblib/common/json_type/ob_json_base.cpp	1349	ObIJsonBase::find_timestamp_method	ret = OB_SUCCESS (after other code on the line)	if (trans_fail) ret = OB_SUCCESS;
+src/oblib/common/json_type/ob_json_base.cpp	1393	ObIJsonBase::find_double_method	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/common/json_type/ob_json_base.cpp	2133	ObIJsonBase::cmp_to_right_recursively	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/common/json_type/ob_json_base.cpp	2156	ObIJsonBase::cmp_to_right_recursively	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/common/json_type/ob_json_base.cpp	2220	ObIJsonBase::cmp_to_left_recursively	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/common/json_type/ob_json_base.cpp	2243	ObIJsonBase::cmp_to_left_recursively	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/common/json_type/ob_json_base.cpp	4199	ObIJsonBase::path_compare_string	ret = 0 (a reset of the error code, spelled 0)	ret = 0;
+src/oblib/common/json_type/ob_json_base.cpp	5020	ObIJsonBase::to_number	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/common/json_type/ob_json_base.cpp	5105	ObIJsonBase::to_datetime	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/common/json_type/ob_json_base.cpp	5195	ObIJsonBase::to_mdatetime	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/common/json_type/ob_json_base.cpp	5272	ObIJsonBase::to_date	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/common/json_type/ob_json_base.cpp	5331	ObIJsonBase::to_mdate	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/common/json_type/ob_json_bin.cpp	2728	ObJsonBin::remove	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // if not found, return succ
+src/oblib/common/json_type/ob_json_bin.cpp	2772	ObJsonBin::insert_v0	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/common/json_type/ob_json_schema.cpp	161	ObJsonSchemaTree::get_ref_pointer_value	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/common/json_type/ob_json_schema.cpp	390	ObJsonSchemaTree::union_array_key_words_value	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // confilict means found duplicated nodes, it is not an error.
+src/oblib/common/json_type/ob_json_schema.cpp	402	ObJsonSchemaTree::union_array_key_words_value	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/common/json_type/ob_json_schema.cpp	996	ObJsonSchemaTree::add_required_key	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/common/json_type/ob_json_schema.cpp	1906	ObJsonSchemaValidator::get_vec_schema_composition_ans	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/common/json_type/ob_json_schema.cpp	1968	ObJsonSchemaValidator::check_dep_schema	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // didn't found, do not need check
+src/oblib/common/json_type/ob_json_schema.cpp	2202	ObJsonSchemaValidator::collect_schema_by_key	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/common/json_type/ob_json_schema.cpp	2206	ObJsonSchemaValidator::collect_schema_by_key	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/common/json_type/ob_json_schema.cpp	2219	ObJsonSchemaValidator::collect_schema_by_key	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/common/json_type/ob_json_schema.cpp	2228	ObJsonSchemaValidator::collect_schema_by_key	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/common/json_type/ob_json_schema.cpp	2246	ObJsonSchemaValidator::collect_schema_by_idx	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/common/json_type/ob_json_schema.cpp	2258	ObJsonSchemaValidator::collect_schema_by_idx	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/common/json_type/ob_json_schema.cpp	2262	ObJsonSchemaValidator::collect_schema_by_idx	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/common/json_type/ob_json_schema.cpp	2274	ObJsonSchemaValidator::collect_schema_by_idx	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/common/json_type/ob_json_schema.cpp	2399	ObJsonSchemaValidator::check_all_schema_def	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/common/json_type/ob_json_schema.cpp	2533	ObJsonSchemaValidator::check_all_composition_def	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/common/json_type/ob_json_schema.cpp	2549	ObJsonSchemaValidator::check_all_composition_def	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/common/json_type/ob_json_schema.cpp	2572	ObJsonSchemaValidator::check_all_composition_def	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/common/json_type/ob_json_schema.cpp	2599	ObJsonSchemaValidator::check_all_composition_def	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/common/json_type/ob_json_schema.cpp	2613	ObJsonSchemaValidator::check_all_composition_def	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/common/json_type/ob_json_schema.cpp	2627	ObJsonSchemaValidator::check_all_composition_def	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/common/json_type/ob_json_schema.cpp	2645	ObJsonSchemaValidator::check_all_composition_def	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/common/json_type/ob_json_schema.cpp	2710	ObJsonSchemaValidator::check_public_key_words	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // didn't found, its normal
+src/oblib/common/json_type/ob_json_schema.cpp	2720	ObJsonSchemaValidator::check_public_key_words	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // didn't found, its normal
+src/oblib/common/json_type/ob_json_schema.cpp	2732	ObJsonSchemaValidator::check_public_key_words	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // didn't found, its normal
+src/oblib/common/json_type/ob_json_schema.cpp	2772	ObJsonSchemaValidator::check_number_and_integer	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/common/json_type/ob_json_schema.cpp	2781	ObJsonSchemaValidator::check_number_and_integer	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/common/json_type/ob_json_schema.cpp	2790	ObJsonSchemaValidator::check_number_and_integer	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/common/json_type/ob_json_schema.cpp	2799	ObJsonSchemaValidator::check_number_and_integer	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/common/json_type/ob_json_schema.cpp	2811	ObJsonSchemaValidator::check_number_and_integer	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // didn't found, its normal
+src/oblib/common/json_type/ob_json_schema.cpp	2929	ObJsonSchemaValidator::check_string_type	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // didn't found, its normal
+src/oblib/common/json_type/ob_json_schema.cpp	2941	ObJsonSchemaValidator::check_string_type	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // didn't found, its normal
+src/oblib/common/json_type/ob_json_schema.cpp	2953	ObJsonSchemaValidator::check_string_type	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // didn't found, its normal
+src/oblib/common/json_type/ob_json_schema.cpp	3074	ObJsonSchemaValidator::check_object_type	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // didn't found, its normal
+src/oblib/common/json_type/ob_json_schema.cpp	3086	ObJsonSchemaValidator::check_object_type	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // didn't found, its normal
+src/oblib/common/json_type/ob_json_schema.cpp	3098	ObJsonSchemaValidator::check_object_type	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // didn't found, its normal
+src/oblib/common/json_type/ob_json_schema.cpp	3110	ObJsonSchemaValidator::check_object_type	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // didn't found, its normal
+src/oblib/common/json_type/ob_json_schema.cpp	3138	ObJsonSchemaValidator::check_object_type	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // didn't found, its normal
+src/oblib/common/json_type/ob_json_schema.cpp	3238	ObJsonSchemaValidator::check_array_type	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // didn't found, its normal
+src/oblib/common/json_type/ob_json_schema.cpp	3250	ObJsonSchemaValidator::check_array_type	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // didn't found, its normal
+src/oblib/common/json_type/ob_json_schema.cpp	3262	ObJsonSchemaValidator::check_array_type	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // didn't found, its normal
+src/oblib/common/json_type/ob_json_schema.cpp	3274	ObJsonSchemaValidator::check_array_type	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // didn't found, its normal
+src/oblib/common/json_type/ob_json_schema.cpp	3463	ObJsonSchemaValidator::check_single_ref	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/common/json_type/ob_json_schema.cpp	3527	ObJsonSchemaValidator::check_required	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/common/json_type/ob_json_schema.cpp	3553	ObJsonSchemaValidator::check_dep_required	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/common/json_type/ob_json_schema.cpp	3592	ObJsonSchemaValidator::check_add_pro_in_schema	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // confilict means found duplicated nodes, it is not an error.
+src/oblib/common/json_type/ob_json_schema.cpp	3610	ObJsonSchemaValidator::check_add_pro_in_schema	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // confilict means found duplicated nodes, it is not an error.
+src/oblib/common/json_type/ob_json_schema.cpp	3621	ObJsonSchemaValidator::check_add_pro_in_schema	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // confilict means found duplicated nodes, it is not an error.
+src/oblib/common/json_type/ob_json_schema.cpp	3678	ObJsonSchemaValidator::check_unique_items	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/common/json_type/ob_json_schema.cpp	3922	ObJsonSchemaUtils::get_specific_type_of_child	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // didn't found, its normal
+src/oblib/common/json_type/ob_json_schema.cpp	3949	ObJsonSchemaUtils::get_all_composition_def	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // didn't found, its normal
+src/oblib/common/json_type/ob_json_schema.cpp	4119	ObJsonSchemaUtils::need_check_recursive	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/common/json_type/ob_json_schema.cpp	4124	ObJsonSchemaUtils::need_check_recursive	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/common/json_type/ob_json_schema.cpp	4129	ObJsonSchemaUtils::need_check_recursive	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/common/json_type/ob_json_schema.cpp	4146	ObJsonSchemaUtils::need_check_recursive	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/common/json_type/ob_json_schema.cpp	4151	ObJsonSchemaUtils::need_check_recursive	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/common/json_type/ob_json_schema.cpp	4156	ObJsonSchemaUtils::need_check_recursive	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/common/json_type/ob_json_tree.cpp	943	ObJsonArray::remove	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/common/log/ob_log_dir_scanner.cpp	177	ObLogDirScanner::search_log_dir_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;

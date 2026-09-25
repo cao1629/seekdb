@@ -1,0 +1,75 @@
+file	line	symbol	construct	text
+src/storage/blocksstable/encoding/ob_hex_string_decoder.cpp	226	ObHexStringDecoder::pushdown_operator	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_hex_string_decoder.cpp	228	ObHexStringDecoder::pushdown_operator	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_hex_string_decoder.cpp	231	ObHexStringDecoder::pushdown_operator	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_hex_string_decoder.cpp	238	ObHexStringDecoder::pushdown_operator	sql:: use: ObWhiteFilterOperatorType	const sql::ObWhiteFilterOperatorType op_type = filter.get_op_type();
+src/storage/blocksstable/encoding/ob_hex_string_decoder.cpp	241	ObHexStringDecoder::pushdown_operator	sql:: use: WHITE_OP_MAX	if (OB_UNLIKELY(op_type >= sql::WHITE_OP_MAX)
+src/storage/blocksstable/encoding/ob_hex_string_decoder.cpp	255	ObHexStringDecoder::pushdown_operator	sql:: use: WHITE_OP_NU	case sql::WHITE_OP_NU: {
+src/storage/blocksstable/encoding/ob_hex_string_decoder.cpp	258	ObHexStringDecoder::pushdown_operator	sql:: use: WHITE_OP_NN	case sql::WHITE_OP_NN: {
+src/storage/blocksstable/encoding/ob_hex_string_decoder.h	67	ObHexStringDecoder	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_hex_string_decoder.h	69	ObHexStringDecoder	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter_node,
+src/storage/blocksstable/encoding/ob_hex_string_decoder.h	72	ObHexStringDecoder	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_icolumn_decoder.cpp	32	ObIColumnDecoder::get_is_null_bitmap_from_fixed_column	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_icolumn_decoder.cpp	73	ObIColumnDecoder::get_is_null_bitmap_from_var_column	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_icolumn_decoder.h	151	ObIColumnDecoder::pushdown_operator	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_icolumn_decoder.h	153	ObIColumnDecoder::pushdown_operator	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_icolumn_decoder.h	156	ObIColumnDecoder::pushdown_operator	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_icolumn_decoder.h	164	ObIColumnDecoder::pushdown_operator	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_icolumn_decoder.h	166	ObIColumnDecoder::pushdown_operator	sql:: use: ObBlackFilterExecutor	sql::ObBlackFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_icolumn_decoder.h	169	ObIColumnDecoder::pushdown_operator	sql:: use: PushdownFilterInfo	sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_icolumn_decoder.h	195	ObIColumnDecoder	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_icolumn_decoder.h	201	ObIColumnDecoder	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_imicro_block_decoder.h	46	ObIMicroBlockDecoder	sql:: use: ObPushdownFilterExecutor	virtual int filter_pushdown_filter(const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_imicro_block_decoder.h	47	ObIMicroBlockDecoder	sql:: use: ObPhysicalFilterExecutor, PushdownFilterInfo	sql::ObPhysicalFilterExecutor &filter, const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_imicro_block_decoder.h	49	ObIMicroBlockDecoder	sql:: use: ObPushdownFilterExecutor	virtual int filter_pushdown_filter(const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_imicro_block_decoder.h	50	ObIMicroBlockDecoder	sql:: use: ObWhiteFilterExecutor, PushdownFilterInfo	sql::ObWhiteFilterExecutor &filter, const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_imicro_block_decoder.h	63	ObIMicroBlockDecoder	sql:: use: ObPushdownFilterExecutor	virtual int filter_black_filter_batch(const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_imicro_block_decoder.h	64	ObIMicroBlockDecoder	sql:: use: ObBlackFilterExecutor, PushdownFilterInfo	sql::ObBlackFilterExecutor &filter, sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.cpp	212	ObIntegerBaseDiffDecoder::pushdown_operator	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.cpp	214	ObIntegerBaseDiffDecoder::pushdown_operator	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.cpp	217	ObIntegerBaseDiffDecoder::pushdown_operator	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.cpp	222	ObIntegerBaseDiffDecoder::pushdown_operator	sql:: use: ObWhiteFilterOperatorType	const sql::ObWhiteFilterOperatorType op_type = filter.get_op_type();
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.cpp	227	ObIntegerBaseDiffDecoder::pushdown_operator	sql:: use: WHITE_OP_MAX	} else if (OB_UNLIKELY(op_type >= sql::WHITE_OP_MAX)) {
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.cpp	233	ObIntegerBaseDiffDecoder::pushdown_operator	sql:: use: WHITE_OP_NU	case sql::WHITE_OP_NU: {
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.cpp	236	ObIntegerBaseDiffDecoder::pushdown_operator	sql:: use: WHITE_OP_NN	case sql::WHITE_OP_NN: {
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.cpp	241	ObIntegerBaseDiffDecoder::pushdown_operator	sql:: use: WHITE_OP_EQ	case sql::WHITE_OP_EQ:
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.cpp	242	ObIntegerBaseDiffDecoder::pushdown_operator	sql:: use: WHITE_OP_NE	case sql::WHITE_OP_NE:
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.cpp	243	ObIntegerBaseDiffDecoder::pushdown_operator	sql:: use: WHITE_OP_GT	case sql::WHITE_OP_GT:
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.cpp	244	ObIntegerBaseDiffDecoder::pushdown_operator	sql:: use: WHITE_OP_GE	case sql::WHITE_OP_GE:
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.cpp	245	ObIntegerBaseDiffDecoder::pushdown_operator	sql:: use: WHITE_OP_LT	case sql::WHITE_OP_LT:
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.cpp	246	ObIntegerBaseDiffDecoder::pushdown_operator	sql:: use: WHITE_OP_LE	case sql::WHITE_OP_LE: {
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.cpp	259	ObIntegerBaseDiffDecoder::pushdown_operator	sql:: use: WHITE_OP_BT	case sql::WHITE_OP_BT: {
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.cpp	266	ObIntegerBaseDiffDecoder::pushdown_operator	sql:: use: WHITE_OP_IN	case sql::WHITE_OP_IN: {
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.cpp	326	ObIntegerBaseDiffDecoder::comparison_operator	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.cpp	329	ObIntegerBaseDiffDecoder::comparison_operator	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.cpp	330	ObIntegerBaseDiffDecoder::comparison_operator	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.cpp	360	ObIntegerBaseDiffDecoder::comparison_operator	sql:: use: ObWhiteFilterOperatorType	const sql::ObWhiteFilterOperatorType op_type = filter.get_op_type();
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.cpp	367	ObIntegerBaseDiffDecoder::comparison_operator	sql:: use: WHITE_OP_GE, WHITE_OP_GT, WHITE_OP_NE	if (op_type == sql::WHITE_OP_GE || op_type == sql::WHITE_OP_GT || op_type == sql::WHITE_OP_NE) {
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.cpp	439	ObIntegerBaseDiffDecoder::bt_operator	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.cpp	442	ObIntegerBaseDiffDecoder::bt_operator	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.cpp	443	ObIntegerBaseDiffDecoder::bt_operator	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.cpp	460	ObIntegerBaseDiffDecoder::bt_operator	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.cpp	481	ObIntegerBaseDiffDecoder::in_operator	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.cpp	484	ObIntegerBaseDiffDecoder::in_operator	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.cpp	485	ObIntegerBaseDiffDecoder::in_operator	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.cpp	495	ObIntegerBaseDiffDecoder::in_operator	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.cpp	507	ObIntegerBaseDiffDecoder::traverse_all_data	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.cpp	510	ObIntegerBaseDiffDecoder::traverse_all_data	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.cpp	511	ObIntegerBaseDiffDecoder::traverse_all_data	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.cpp	515	ObIntegerBaseDiffDecoder::traverse_all_data	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.h	65	ObIntegerBaseDiffDecoder	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.h	67	ObIntegerBaseDiffDecoder	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.h	70	ObIntegerBaseDiffDecoder	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.h	98	ObIntegerBaseDiffDecoder	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.h	101	ObIntegerBaseDiffDecoder	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.h	102	ObIntegerBaseDiffDecoder	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.h	106	ObIntegerBaseDiffDecoder	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.h	109	ObIntegerBaseDiffDecoder	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.h	110	ObIntegerBaseDiffDecoder	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.h	114	ObIntegerBaseDiffDecoder	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.h	117	ObIntegerBaseDiffDecoder	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.h	118	ObIntegerBaseDiffDecoder	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.h	122	ObIntegerBaseDiffDecoder	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.h	125	ObIntegerBaseDiffDecoder	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.h	126	ObIntegerBaseDiffDecoder	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.h	130	ObIntegerBaseDiffDecoder	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,

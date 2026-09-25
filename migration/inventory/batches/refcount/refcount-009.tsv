@@ -1,0 +1,50 @@
+file	line	symbol	construct	text
+src/share/io/ob_io_struct.cpp	821	ObAsyncIOChannel::submit	inc_ref call	req.inc_ref(); // ref for file system
+src/share/io/ob_io_struct.cpp	824	ObAsyncIOChannel::submit	dec_ref call	req.dec_ref(); // ref for file system
+src/share/io/ob_io_struct.cpp	847	ObAsyncIOChannel::cancel	dec_ref call	req.dec_ref(); // ref for file system
+src/share/io/ob_io_struct.cpp	875	ObAsyncIOChannel::get_events	dec_ref call	req->dec_ref(); // ref for file system
+src/share/io/ob_io_struct.cpp	1111	ObSyncIOChannel::handle	dec_ref call	req->dec_ref(); // ref for file system
+src/share/io/ob_io_struct.cpp	1130	ObSyncIOChannel::submit	inc_ref call	req.inc_ref(); // ref for file system
+src/share/io/ob_io_struct.cpp	1133	ObSyncIOChannel::submit	dec_ref call	req.dec_ref(); // ref for file system
+src/share/io/ob_io_struct.cpp	1497	ObIOCallbackManager::enqueue_callback	inc_ref call	req.inc_ref(); // ref for callback queue
+src/share/io/ob_io_struct.cpp	1503	ObIOCallbackManager::enqueue_callback	dec_ref call	req.dec_ref(); // ref for callback queue
+src/share/io/ob_io_struct.cpp	1520	ObIOCallbackManager::handle	dec_ref call	req->dec_ref(); // ref for callback queue
+src/share/ob_autoincrement_service.h	59	CacheHandle	Handle struct definition	struct CacheHandle
+src/share/ob_device_manager.cpp	218	ObDeviceManager::inc_device_ref_nolock_	inc_device_ref_nolock_ definition (other name)	int ObDeviceManager::inc_device_ref_nolock_(ObDeviceInsInfo *dev_info)
+src/share/ob_device_manager.cpp	228	ObDeviceManager::inc_device_ref_nolock_	inc_ref call	dev_info->device_->inc_ref();
+src/share/ob_device_manager.cpp	247	ObDeviceManager::get_deivce_	inc_device_ref_nolock_ call (other name)	} else if (OB_FAIL(inc_device_ref_nolock_(dev_info))) {
+src/share/ob_device_manager.cpp	276	ObDeviceManager::alloc_device_and_init_	inc_device_ref_nolock_ call (other name)	if (FAILEDx(inc_device_ref_nolock_(dev_info))) {
+src/share/ob_device_manager.cpp	339	ObDeviceManager::release_device	release_device definition (reference-count function found by its body: calls dec_ref)	int ObDeviceManager::release_device(ObIODevice *&device_handle)
+src/share/ob_device_manager.cpp	365	ObDeviceManager::release_device	dec_ref call	device_info->device_->dec_ref();
+src/share/ob_device_manager.h	42	ObDeviceManager	release_device declaration (reference-count function found by its body)	int release_device(common::ObIODevice*& device_handle);
+src/share/ob_device_manager.h	69	ObDeviceManager	inc_device_ref_nolock_ declaration (other name)	int inc_device_ref_nolock_(ObDeviceInsInfo *dev_info);
+src/share/ob_ex_rpc.h	65	AsyncHandle	Handle class definition : detail::HandleStorage<Res>	class AsyncHandle : detail::HandleStorage<Res> {
+src/share/ob_io_device_helper.cpp	193	ObSNIODeviceWrapper::get_local_device_from_mgr	release_device call (reference-count function found by its body)	common::ObDeviceManager::get_instance().release_device((ObIODevice*&)local_device);
+src/share/ob_io_device_helper.cpp	256	ObSNIODeviceWrapper::destroy	release_device call (reference-count function found by its body)	common::ObDeviceManager::get_instance().release_device((ObIODevice*&)local_device_);
+src/share/ob_light_hashmap.h	83	ObLightHashLink::inc_ref	inc_ref definition	inline int inc_ref(int32_t x)
+src/share/ob_light_hashmap.h	90	ObLightHashLink::dec_ref	dec_ref definition	inline int32_t dec_ref(int32_t x)
+src/share/ob_light_hashmap.h	195	ObLightHashMap::insert__	inc_ref call	value->inc_ref(ref);
+src/share/ob_light_hashmap.h	206	ObLightHashMap::insert__	inc_ref call	curr->inc_ref(1);
+src/share/ob_light_hashmap.h	287	ObLightHashMap::get	inc_ref call	value->inc_ref(1);
+src/share/ob_light_hashmap.h	296	ObLightHashMap::revert	dec_ref call	if (0 == value->dec_ref(1)) {
+src/share/ob_light_hashmap.h	337	ObLightHashMap::for_each_in_one_bucket	dec_ref call	if (0 == array.at(i)->dec_ref(1)) {
+src/share/ob_light_hashmap.h	368	ObLightHashMap::remove_if	dec_ref call	if (0 == array.at(i)->dec_ref(1)) {
+src/share/ob_light_hashmap.h	375	ObLightHashMap::remove_if	dec_ref call	if (OB_NOT_NULL(array.at(i)) && 0 == array.at(i)->dec_ref(1)) {
+src/share/ob_light_hashmap.h	392	ObLightHashMap::generate_value_arr_	inc_ref call	val->inc_ref(1);
+src/share/ob_light_hashmap.h	395	ObLightHashMap::generate_value_arr_	dec_ref call	val->dec_ref(1);
+src/share/ob_light_hashmap.h	403	ObLightHashMap::generate_value_arr_	dec_ref call	arr.at(i)->dec_ref(1);
+src/share/redolog/ob_log_file_reader.cpp	85	ObLogReadFdCacheItem::inc_ref	inc_ref definition	void ObLogReadFdCacheItem::inc_ref()
+src/share/redolog/ob_log_file_reader.cpp	90	ObLogReadFdCacheItem::dec_ref	dec_ref definition	void ObLogReadFdCacheItem::dec_ref()
+src/share/redolog/ob_log_file_reader.cpp	103	ObLogReadFdHandle::reset	dec_ref call	fd_item_->dec_ref();
+src/share/redolog/ob_log_file_reader.cpp	122	ObLogReadFdHandle::set_read_fd	inc_ref call	fd_item_->inc_ref();
+src/share/redolog/ob_log_file_reader.h	51	ObLogReadFdCacheItem	inc_ref declaration	void inc_ref();
+src/share/redolog/ob_log_file_reader.h	52	ObLogReadFdCacheItem	dec_ref declaration	void dec_ref();
+src/share/redolog/ob_log_file_reader.h	66	ObLogReadFdHandle	Handle class definition	class ObLogReadFdHandle final
+src/share/schema/ob_schema_mgr_cache.cpp	80	ObSchemaMgrHandle::operator=	reference-count change: ATOMIC_FAA on ref_cnt_	(void)ATOMIC_FAA(&schema_mgr_item_->ref_cnt_, 1);
+src/share/schema/ob_schema_mgr_cache.cpp	81	ObSchemaMgrHandle::operator=	reference-count change: ATOMIC_FAA on mod_ref_cnt_	(void)ATOMIC_FAA(&schema_mgr_item_->mod_ref_cnt_[mod_], 1);
+src/share/schema/ob_schema_mgr_cache.cpp	110	ObSchemaMgrHandle::revert	reference-count change: ATOMIC_FAA on ref_cnt_	(void)ATOMIC_FAA(&schema_mgr_item_->ref_cnt_, -1);
+src/share/schema/ob_schema_mgr_cache.cpp	111	ObSchemaMgrHandle::revert	reference-count change: ATOMIC_FAA on mod_ref_cnt_	(void)ATOMIC_FAA(&schema_mgr_item_->mod_ref_cnt_[mod_], -1);
+src/share/schema/ob_schema_mgr_cache.cpp	234	ObSchemaMgrCache::get	reference-count change: ATOMIC_FAA on ref_cnt_	(void)ATOMIC_FAA(&dst_item->ref_cnt_, 1);
+src/share/schema/ob_schema_mgr_cache.cpp	279	ObSchemaMgrCache::get_nearest	reference-count change: ATOMIC_FAA on ref_cnt_	(void)ATOMIC_FAA(&dst_item->ref_cnt_, 1);
+src/share/schema/ob_schema_mgr_cache.cpp	495	ObSchemaMgrCache::put	reference-count change: ATOMIC_FAA on ref_cnt_	(void)ATOMIC_FAA(&dst_item->ref_cnt_, 1);
+src/share/schema/ob_schema_mgr_cache.h	97	ObSchemaMgrHandle	Handle class definition	class ObSchemaMgrHandle

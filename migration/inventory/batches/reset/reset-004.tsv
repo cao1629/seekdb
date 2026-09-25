@@ -1,0 +1,121 @@
+file	line	symbol	construct	text
+src/oblib/lib/hash/ob_linear_hash_map.h	1930	ObLinearHashMap::do_insert_or_operate_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/lib/hash/ob_linear_hash_map.h	1940	ObLinearHashMap::do_insert_or_operate_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/lib/hash/ob_linear_hash_map.h	2041	ObLinearHashMap::do_get_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/lib/hash/ob_linear_hash_map.h	2047	ObLinearHashMap::do_get_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/lib/hash/ob_linear_hash_map.h	2074	ObLinearHashMap::do_get_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/lib/hash/ob_linear_hash_map.h	2081	ObLinearHashMap::do_get_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/lib/hash/ob_linear_hash_map.h	2123	ObLinearHashMap::do_erase_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/lib/hash/ob_linear_hash_map.h	2141	ObLinearHashMap::do_erase_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/lib/hash/ob_linear_hash_map.h	2186	ObLinearHashMap::do_erase_if_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/lib/hash/ob_linear_hash_map.h	2205	ObLinearHashMap::do_erase_if_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/lib/hash/ob_linear_hash_map.h	2267	ObLinearHashMap::blurred_iter_get_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/lib/hash/ob_linear_hash_map.h	2276	ObLinearHashMap::blurred_iter_get_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/lib/hash/ob_linear_hash_map.h	2391	ObLinearHashMap::do_operate_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/lib/hash/ob_linear_hash_map.h	2400	ObLinearHashMap::do_operate_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/lib/hash/ob_link_hashmap.h	451	ObLinkHashMap::err_code_map	ret = OB_SUCCESS (after other code on the line)	case 0:           ret = OB_SUCCESS; break;
+src/oblib/lib/hash/ob_pointer_hashmap.h	828	ObPointerHashMap::find_set_pos	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/lib/json/ob_json.cpp	50	Parser::token	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/lib/json/ob_json.cpp	59	Parser::token	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/lib/json/ob_json.cpp	71	Parser::token	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/lib/json/ob_json.cpp	83	Parser::token	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/lib/json/ob_json.cpp	102	Parser::token	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/lib/json/ob_json.cpp	144	Parser::token	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/lib/json/ob_json.cpp	274	Parser::parse_array	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/lib/json/ob_json.cpp	342	Parser::parse_object	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/lib/lock/ob_latch.cpp	166	ObLatchMutex::wait	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/lib/lock/ob_latch.cpp	506	ObLatch::try_rdlock	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/lib/lock/ob_latch.cpp	666	ObLatch::low_lock	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/lib/lock/ob_latch.h	423	ObLatch::LowTryRDLock::operator()	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/lib/lock/ob_latch.h	446	ObLatch::LowTryWRLock::operator()	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/lib/net/ob_net_util.cpp	106	ObNetUtil::get_local_addr_ipv6	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/lib/net/ob_net_util.cpp	201	ObNetUtil::get_local_addr_ipv6	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/lib/oblog/ob_log.h	1330	ObLogger::do_log_message	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/lib/oblog/ob_log_compressor.cpp	279	ObLogCompressor::run_timer_task	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/lib/queue/ob_priority_queue.h	92	ObPriorityQueueImpl::pop	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/lib/queue/ob_priority_queue.h	254	ObPriorityQueue2::try_pop	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/lib/resource/ob_resource_mgr.cpp	441	ObResourceMgr::get_handle	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/lib/resource/ob_resource_mgr.cpp	453	ObResourceMgr::get_handle	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/lib/restore/ob_io_device.h	113	ObIOCBPool::alloc	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/lib/stat/ob_diagnose_info.cpp	271	ObWaitEventHistory::add	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/lib/stat/ob_stat_template.cpp	51	DIRWLock::try_rdlock	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/lib/thread/ob_map_queue_thread_pool.cpp	148	ObMapQueueThreadPool::next_task_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/lib/thread/threads.cpp	157	Threads::do_thread_recycle	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/lib/time/ob_clock_generator.cpp	49	ObClockGenerator::init	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/lib/time/ob_tsc_timestamp.cpp	58	ObTscTimestamp::init	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/lib/utility/ob_macro_utils.h	676	#define RETRY_FUNC_ON_ERROR	ret = OB_SUCCESS (after other code on the line)	ret = ::oceanbase::common::OB_SUCCESS; \
+src/oblib/lib/utility/ob_print_utils.cpp	415	databuff_printf	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/lib/utility/ob_sort.h	32	ob_sort	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/lib/utility/serialization.h	647	decode_bool_type	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/lib/utility/serialization.h	1008	decode_int_safe	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/lib/utility/serialization.h	1112	decode_str	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/lib/utility/serialization.h	1176	decode_float_type	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/lib/utility/utility.cpp	1599	start_daemon	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/lib/utility/utility.cpp	2249	is_dir_empty	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/rpc/frame/ob_req_queue_thread.cpp	123	ObReqQueue::loop	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/rpc/frame/ob_req_queue_thread.cpp	128	ObReqQueue::loop	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/ai_service/ob_ai_service_executor.cpp	97	ObAiServiceExecutor::create_ai_model_endpoint	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/ai_service/ob_ai_service_executor.cpp	151	ObAiServiceExecutor::alter_ai_model_endpoint	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/ai_service/ob_ai_service_executor.cpp	280	ObAiServiceExecutor::lock_and_fetch_endpoint_version	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/change_stream/ob_change_stream_dispatcher.cpp	447	ObCSDispatcher::do_dispatch_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/change_stream/ob_change_stream_dispatcher.cpp	568	ObCSDispatcher::do_dispatch_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;  // Workers / dispatcher already handling cleanup.
+src/observer/change_stream/ob_change_stream_fetcher.cpp	143	ObCSFetcher::init_consumption_position_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/change_stream/ob_change_stream_fetcher.cpp	557	ObCSFetcher::get_or_create_tx_info_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/change_stream/ob_change_stream_fetcher.cpp	626	ObCSFetcher::handle_commit_log_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/change_stream/ob_change_stream_fetcher.cpp	674	ObCSFetcher::handle_abort_log_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // Skip silently.
+src/observer/change_stream/ob_change_stream_fetcher.cpp	696	ObCSFetcher::handle_rollback_to_log_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // Skip silently.
+src/observer/change_stream/ob_change_stream_fetcher.cpp	754	ObCSFetcher::run1	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/change_stream/ob_change_stream_fetcher.cpp	892	ObCSFetcher::run1	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/change_stream/ob_change_stream_worker.cpp	265	ObCSExecutor::do_finish_batch_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/change_stream/ob_cs_plugin_async_index.cpp	139	ObCSAsyncIndexProcessor::process	ret = OB_SUCCESS (line start)	ret = common::OB_SUCCESS;
+src/observer/change_stream/ob_cs_plugin_async_index.cpp	172	ObCSAsyncIndexProcessor::process	ret = OB_SUCCESS (line start)	ret = common::OB_SUCCESS;
+src/observer/change_stream/ob_cs_plugin_async_index.cpp	236	ObCSAsyncIndexProcessor::handle_insert_or_write_error_	ret = OB_SUCCESS (line start)	ret = common::OB_SUCCESS;
+src/observer/dbms_scheduler/ob_dbms_sched_job_executor.cpp	239	ObDBMSSchedJobExecutor::run_dbms_sched_job	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/dbms_scheduler/ob_dbms_sched_job_executor.cpp	268	ObDBMSSchedJobExecutor::run_dbms_sched_job	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/dbms_scheduler/ob_dbms_sched_job_executor.cpp	290	ObDBMSSchedJobExecutor::run_dbms_sched_job	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/dbms_scheduler/ob_dbms_sched_job_utils.cpp	324	ObDBMSSchedJobUtils::stop_dbms_sched_job	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/dbms_scheduler/ob_dbms_sched_table_operator.cpp	315	ObDBMSSchedTableOperator::extract_info	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/dbms_scheduler/ob_dbms_sched_table_operator.cpp	320	ObDBMSSchedTableOperator::extract_info	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/dbms_scheduler/ob_dbms_sched_table_operator.cpp	326	ObDBMSSchedTableOperator::extract_info	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/dbms_scheduler/ob_dbms_sched_table_operator.cpp	344	#define EXTRACT_TIMESTAMP_FIELD_MYSQL_SKIP_RET	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;                                                 \
+src/observer/dbms_scheduler/ob_dbms_sched_table_operator.cpp	354	#define EXTRACT_NUMBER_FIELD_MYSQL_SKIP_RET	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;                                                 \
+src/observer/dbms_scheduler/ob_dbms_sched_table_operator.cpp	508	ObDBMSSchedTableOperator::get_dbms_sched_job_infos_in_runtime	conditional reset (ternary yields OB_SUCCESS)	ret = OB_ITER_END == ret ? OB_SUCCESS : ret;
+src/observer/dbms_scheduler/ob_dbms_sched_table_operator.cpp	530	ObDBMSSchedTableOperator::extract_job_class_info	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/dbms_scheduler/ob_dbms_sched_table_operator.cpp	568	ObDBMSSchedTableOperator::get_dbms_sched_job_class_info	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // job not exist, do nothing ...
+src/observer/dbms_scheduler/ob_dbms_sched_table_operator.cpp	602	ObDBMSSchedTableOperator::get_dbms_sched_job_class_infos_in_runtime	conditional reset (ternary yields OB_SUCCESS)	ret = OB_ITER_END == ret ? OB_SUCCESS : ret;
+src/observer/mysql/ob_query_driver.cpp	238	ObQueryDriver::response_query_result	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/mysql/ob_query_driver.cpp	459	ObQueryDriver::convert_string_charset	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/mysql/ob_sync_plan_driver.cpp	183	ObSyncPlanDriver::response_result	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/mysql/obmp_connect.cpp	118	ObMPConnect::deserialize	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;  // return OB_SUCCESS anyway.
+src/observer/mysql/obmp_connect.cpp	523	ObMPConnect::load_privilege_info	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/mysql/obmp_query.cpp	326	ObMPQuery::try_batched_multi_stmt_optimization	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/mysql/obmp_query.cpp	389	ObMPQuery::process_single_stmt	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; //When a local retry occurs, the error code needs to be reset, otherwise the retry cannot proceed
+src/observer/mysql/obmp_query.cpp	1039	ObMPQuery::store_params_value_to_str	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/mysql/obmp_stmt_execute.cpp	1786	ObMPStmtExecute::do_process_single	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/mysql/obmp_stmt_execute.cpp	1861	ObMPStmtExecute::process_execute_stmt	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/mysql/obmp_stmt_execute.cpp	1986	ObMPStmtExecute::process	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/mysql/obmp_stmt_execute.cpp	1993	ObMPStmtExecute::process	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/mysql/obmp_stmt_fetch.cpp	145	ObMPStmtFetch::do_process	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/mysql/obmp_stmt_fetch.cpp	316	ObMPStmtFetch::response_result	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/mysql/obmp_stmt_prepare.cpp	235	ObMPStmtPrepare::process_prepare_stmt	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/mysql/obmp_stmt_prepare.cpp	507	ObMPStmtPrepare::send_column_packet	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/mysql/obmp_stmt_prepare.cpp	537	ObMPStmtPrepare::send_param_packet	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/mysql/obmp_stmt_reset.cpp	96	ObMPStmtReset::process	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/ob_command_line_parser.cpp	340	ObCommandLineParser::handle_option	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/ob_inner_sql_connection.cpp	430	ObInnerSQLConnection::init_session	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/ob_inner_sql_result.cpp	141	ObInnerSQLResult::open	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/ob_inner_sql_result.cpp	252	ObInnerSQLResult::build_column_map	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/ob_server.cpp	1343	ObServer::initialize_server_runtime	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/ob_server.cpp	1387	ObServer::wait_for_server_runtime	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/ob_server.cpp	1427	ObServer::check_if_schema_ready	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/ob_server.cpp	2694	ObServer::ObCTASCleanUp::operator()	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/ob_service.cpp	463	ObService::handle_tablet_freeze_req_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/ob_service.cpp	490	ObService::server_freeze_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/ob_service.cpp	940	ObService::build_ddl_local	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/ob_service.cpp	956	ObService::build_ddl_local	conditional reset (ternary yields OB_SUCCESS)	ret = OB_EAGAIN == saved_ret ? OB_SUCCESS : ret;
+src/observer/ob_service.cpp	972	ObService::build_ddl_local	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/ob_system_package_load_task.cpp	98	ObSystemPackageLoadTask::load_system_package_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/ob_tablet_runtime_meta_updater.cpp	306	ObTabletRuntimeMetaUpdater::add_task_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/ob_tablet_runtime_meta_updater.cpp	483	ObTabletRuntimeMetaUpdater::generate_tasks_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // do not affect update of other tablets
+src/observer/ob_tablet_runtime_meta_updater.cpp	488	ObTabletRuntimeMetaUpdater::generate_tasks_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/ob_tablet_runtime_meta_updater.cpp	491	ObTabletRuntimeMetaUpdater::generate_tasks_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;

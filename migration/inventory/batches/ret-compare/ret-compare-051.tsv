@@ -1,0 +1,86 @@
+file	line	symbol	construct	text
+src/storage/compaction/ob_basic_schedule_tablet_func.cpp	50	ObBasicScheduleTabletFunc::init	ret != OB_LS_NOT_EXIST	if (OB_LS_NOT_EXIST != ret) {
+src/storage/compaction/ob_basic_schedule_tablet_func.cpp	108	ObBasicScheduleTabletFunc::diagnose_init	ret != OB_LS_NOT_EXIST	if (OB_LS_NOT_EXIST != ret) {
+src/storage/compaction/ob_basic_schedule_tablet_func.cpp	186	ObBasicScheduleTabletFunc::check_need_force_freeze	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) { // no frozen memtable, need force freeze
+src/storage/compaction/ob_basic_tablet_merge_ctx.cpp	416	ObBasicTabletMergeCtx::build_ctx	ret != OB_TABLET_NOT_EXIST	if (OB_TABLET_NOT_EXIST != ret) {
+src/storage/compaction/ob_basic_tablet_merge_ctx.cpp	420	ObBasicTabletMergeCtx::build_ctx	ret != OB_NO_NEED_MERGE	if (OB_NO_NEED_MERGE != ret) {
+src/storage/compaction/ob_basic_tablet_merge_ctx.cpp	484	ObBasicTabletMergeCtx::build_ctx_after_init	ret == OB_NO_NEED_MERGE	if (OB_NO_NEED_MERGE == ret) {
+src/storage/compaction/ob_basic_tablet_merge_ctx.cpp	585	ObBasicTabletMergeCtx::get_merge_tables	ret != OB_NO_NEED_MERGE	if (OB_NO_NEED_MERGE != ret) {
+src/storage/compaction/ob_basic_tablet_merge_ctx.cpp	1093	ObBasicTabletMergeCtx::prepare_from_medium_compaction_info	ret != OB_NO_NEED_MERGE	if (OB_NO_NEED_MERGE != ret) {
+src/storage/compaction/ob_basic_tablet_merge_ctx.cpp	1200	ObBasicTabletMergeCtx::swap_tablet	ret != OB_NO_NEED_MERGE	if (OB_NO_NEED_MERGE != ret) {
+src/storage/compaction/ob_basic_tablet_merge_ctx.cpp	1232	ObBasicTabletMergeCtx::get_meta_compaction_info	ret != OB_TABLE_IS_DELETED	if (OB_TABLE_IS_DELETED != ret) {
+src/storage/compaction/ob_batch_freeze_tablets_dag.cpp	156	ObBatchFreezeTabletsTask::inner_process	tmp_ret != OB_SIZE_OVERFLOW; tmp_ret != OB_EAGAIN	if (OB_SIZE_OVERFLOW != tmp_ret && OB_EAGAIN != tmp_ret) {
+src/storage/compaction/ob_batch_freeze_tablets_dag.cpp	195	ObBatchFreezeTabletsTask::schedule_tablet_major_after_freeze	ret != OB_SIZE_OVERFLOW; ret != OB_EAGAIN	if (OB_SIZE_OVERFLOW != ret && OB_EAGAIN != ret) {
+src/storage/compaction/ob_compaction_diagnose.cpp	268	ObIDiagnoseInfoMgr::get_with_param	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/storage/compaction/ob_compaction_diagnose.cpp	292	ObIDiagnoseInfoMgr::delete_info	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/storage/compaction/ob_compaction_diagnose.cpp	381	ObIDiagnoseInfoMgr::del_with_no_lock	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/storage/compaction/ob_compaction_diagnose.cpp	409	ObIDiagnoseInfoMgr::get_with_no_lock	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/storage/compaction/ob_compaction_diagnose.cpp	648	ObCompactionDiagnoseMgr::diagnose_dag	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/storage/compaction/ob_compaction_diagnose.cpp	653	ObCompactionDiagnoseMgr::diagnose_dag	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/storage/compaction/ob_compaction_diagnose.cpp	657	ObCompactionDiagnoseMgr::diagnose_dag	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/storage/compaction/ob_compaction_diagnose.cpp	673	ObCompactionDiagnoseMgr::diagnose_all_tablets	ret != OB_SERVER_RUNTIME_NOT_READY	if (OB_SERVER_RUNTIME_NOT_READY != ret) {
+src/storage/compaction/ob_compaction_diagnose.cpp	695	ObCompactionDiagnoseMgr::get_and_set_suspect_info	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/storage/compaction/ob_compaction_diagnose.cpp	721	ObCompactionDiagnoseMgr::get_suspect_info	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/storage/compaction/ob_compaction_diagnose.cpp	1135	ObCompactionDiagnoseMgr::diagnose_tablet_major_merge	call result get_and_set_suspect_info(MEDIUM_MERGE,tablet_id) == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == get_and_set_suspect_info(MEDIUM_MERGE, tablet_id)) {
+src/storage/compaction/ob_compaction_diagnose.cpp	1217	ObCompactionDiagnoseMgr::diagnose_row_store_dag	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/storage/compaction/ob_compaction_diagnose.cpp	1267	ObCompactionDiagnoseMgr::get_suspect_and_warning_info	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/storage/compaction/ob_compaction_diagnose.cpp	1275	ObCompactionDiagnoseMgr::get_suspect_and_warning_info	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/storage/compaction/ob_compaction_diagnose.cpp	1332	ObCompactionDiagnoseMgr::diagnose_no_dag	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/storage/compaction/ob_compaction_diagnose.h	149	ObIDiagnoseInfo::deep_copy	ret != OB_ALLOCATE_MEMORY_FAILED	if (OB_ALLOCATE_MEMORY_FAILED != ret) {
+src/storage/compaction/ob_compaction_diagnose.h	308	ObIDiagnoseInfoMgr::alloc_and_add	ret != OB_HASH_EXIST; ret != OB_HASH_NOT_EXIST	if (OB_HASH_EXIST != ret && OB_HASH_NOT_EXIST != ret) {
+src/storage/compaction/ob_compaction_diagnose.h	313	ObIDiagnoseInfoMgr::alloc_and_add	ret == OB_HASH_EXIST	if (OB_HASH_EXIST == ret) {
+src/storage/compaction/ob_compaction_diagnose.h	316	ObIDiagnoseInfoMgr::alloc_and_add	ret == OB_HASH_NOT_EXIST	} else if (OB_HASH_NOT_EXIST == ret || OB_SUCC(ret)) {
+src/storage/compaction/ob_compaction_diagnose.h	320	ObIDiagnoseInfoMgr::alloc_and_add	call result input_info->deep_copy(allocator_,info) == OB_ALLOCATE_MEMORY_FAILED	OB_ALLOCATE_MEMORY_FAILED == input_info->deep_copy(allocator_, info)) {
+src/storage/compaction/ob_compaction_diagnose.h	561	#define DEL_SUSPECT_INFO	tmp_ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != tmp_ret) {                                      \
+src/storage/compaction/ob_compaction_diagnose.h	568	#define DEL_SUSPECT_INFO	tmp_ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != tmp_ret) {                                      \
+src/storage/compaction/ob_compaction_diagnose.h	731	#define DEFINE_SUSPECT_INFO_ADD_EXTRA	ret != OB_SIZE_OVERFLOW	if (OB_FAIL(ret) && OB_SIZE_OVERFLOW != ret) {                                                \
+src/storage/compaction/ob_compaction_memory_context.cpp	309	ObCompactionBuffer::write_nop	ret != OB_BUF_NOT_ENOUGH	if (ret != OB_BUF_NOT_ENOUGH) {
+src/storage/compaction/ob_compaction_memory_context.cpp	330	ObCompactionBuffer::write	ret != OB_BUF_NOT_ENOUGH	if (ret != OB_BUF_NOT_ENOUGH) {
+src/storage/compaction/ob_compaction_memory_context.h	303	ObCompactionBuffer::write	ret != OB_BUF_NOT_ENOUGH	if (ret != OB_BUF_NOT_ENOUGH) {
+src/storage/compaction/ob_compaction_memory_context.h	318	ObCompactionBuffer::write	ret != OB_BUF_NOT_ENOUGH	if (ret != OB_BUF_NOT_ENOUGH) {
+src/storage/compaction/ob_compaction_memory_pool.cpp	307	ObCompactionMemPool::alloc	ret != OB_EXCEED_MEM_LIMIT	if (OB_EXCEED_MEM_LIMIT != ret) {
+src/storage/compaction/ob_compaction_progress.cpp	124	ObCompactionProgressMgr::loop_major_sstable_	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/compaction/ob_compaction_progress.cpp	162	ObCompactionProgressMgr::init_progress	ret != OB_ENTRY_NOT_EXIST	} else if (OB_ENTRY_NOT_EXIST != ret) {
+src/storage/compaction/ob_compaction_schedule_iterator.cpp	128	ObBasicMergeScheduleIterator::get_next_tablet	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/compaction/ob_compaction_schedule_iterator.cpp	133	ObBasicMergeScheduleIterator::get_next_tablet	ret == OB_TABLET_NOT_EXIST	if (OB_TABLET_NOT_EXIST == ret) {
+src/storage/compaction/ob_compaction_schedule_iterator.cpp	141	ObBasicMergeScheduleIterator::get_next_tablet	ret == OB_TABLET_NOT_EXIST	} while (OB_TABLET_NOT_EXIST == ret);
+src/storage/compaction/ob_compaction_suggestion.cpp	574	ObCompactionSuggestionIterator::open	ret != OB_SERVER_RUNTIME_NOT_READY	if (OB_SERVER_RUNTIME_NOT_READY != ret) {
+src/storage/compaction/ob_compaction_tablet_diagnose.cpp	79	ObDiagnoseTabletMgr::add_diagnose_tablet	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/storage/compaction/ob_compaction_tablet_diagnose.cpp	90	ObDiagnoseTabletMgr::add_diagnose_tablet	ret == OB_HASH_EXIST	} else if (OB_HASH_EXIST == ret) {
+src/storage/compaction/ob_compaction_tablet_diagnose.cpp	130	ObDiagnoseTabletMgr::delete_diagnose_tablet	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/storage/compaction/ob_freeze_info_mgr.cpp	208	ObFreezeInfoMgr::get_freeze_info_behind_major_snapshot	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/storage/compaction/ob_freeze_info_mgr.cpp	260	ObFreezeInfoMgr::get_freeze_info_compare_with_snapshot_version_	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/storage/compaction/ob_freeze_info_mgr.cpp	285	ObFreezeInfoMgr::get_neighbour_major_freeze	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/storage/compaction/ob_freeze_info_mgr.cpp	371	ObFreezeInfoMgr::get_min_reserved_snapshot	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/storage/compaction/ob_freeze_info_mgr.h	207	#define SERVER_CALL_FREEZE_INFO_MGR	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {                                             \
+src/storage/compaction/ob_index_block_micro_iterator.cpp	224	ObIndexBlockMicroIterator::next	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/storage/compaction/ob_medium_checker.cpp	227	ObMediumChecker::reput_check_info	tmp_ret (assigned in the comparison) == OB_HASH_EXIST	if (OB_HASH_EXIST == (tmp_ret = tablet_check_set_.exist_refactored(check_info))) {
+src/storage/compaction/ob_medium_checker.cpp	229	ObMediumChecker::reput_check_info	tmp_ret != OB_HASH_NOT_EXIST	} else if (OB_UNLIKELY(OB_HASH_NOT_EXIST != tmp_ret)) {
+src/storage/compaction/ob_medium_compaction_func.cpp	65	ObMediumCompactionScheduleFunc::choose_medium_snapshot	ret != OB_NO_NEED_MERGE	if (OB_NO_NEED_MERGE != ret) {
+src/storage/compaction/ob_medium_compaction_func.cpp	81	ObMediumCompactionScheduleFunc::choose_medium_snapshot	ret != OB_NO_NEED_MERGE	if (OB_NO_NEED_MERGE != ret) {
+src/storage/compaction/ob_medium_compaction_func.cpp	126	ObMediumCompactionScheduleFunc::find_valid_freeze_info	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/storage/compaction/ob_medium_compaction_func.cpp	145	ObMediumCompactionScheduleFunc::find_valid_freeze_info	ret == OB_TABLE_IS_DELETED	if (OB_TABLE_IS_DELETED == ret) {
+src/storage/compaction/ob_medium_compaction_func.cpp	147	ObMediumCompactionScheduleFunc::find_valid_freeze_info	ret == OB_ERR_SCHEMA_HISTORY_EMPTY	} else if (OB_ERR_SCHEMA_HISTORY_EMPTY == ret) {
+src/storage/compaction/ob_medium_compaction_func.cpp	185	ObMediumCompactionScheduleFunc::choose_major_snapshot	ret != OB_EAGAIN	if (OB_EAGAIN != ret) {
+src/storage/compaction/ob_medium_compaction_func.cpp	246	ObMediumCompactionScheduleFunc::get_status_from_inner_table	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/storage/compaction/ob_medium_compaction_func.cpp	293	ObMediumCompactionScheduleFunc::get_adaptive_reason	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/storage/compaction/ob_medium_compaction_func.cpp	537	ObMediumCompactionScheduleFunc::decide_medium_snapshot	ret != OB_NO_NEED_MERGE	if (OB_NO_NEED_MERGE != ret) {
+src/storage/compaction/ob_medium_compaction_func.cpp	550	ObMediumCompactionScheduleFunc::decide_medium_snapshot	ret == OB_NO_NEED_MERGE	if (OB_SUCC(ret) || OB_NO_NEED_MERGE == ret) {
+src/storage/compaction/ob_medium_compaction_func.cpp	561	ObMediumCompactionScheduleFunc::decide_medium_snapshot	ret == OB_TABLE_IS_DELETED; ret == OB_NO_NEED_MERGE	if (OB_TABLE_IS_DELETED == ret || OB_NO_NEED_MERGE == ret) {
+src/storage/compaction/ob_medium_compaction_func.cpp	577	ObMediumCompactionScheduleFunc::decide_medium_snapshot	ret == OB_NO_NEED_MERGE	ret = OB_NO_NEED_MERGE == ret ? OB_SUCCESS : ret;
+src/storage/compaction/ob_medium_compaction_func.cpp	849	ObMediumCompactionScheduleFunc::prepare_medium_info	ret != OB_TABLE_IS_DELETED	if (OB_TABLE_IS_DELETED != ret) {
+src/storage/compaction/ob_medium_compaction_func.cpp	911	ObMediumCompactionScheduleFunc::get_table_schema_to_merge	ret != OB_TABLE_IS_DELETED	if (OB_TABLE_IS_DELETED != ret) {
+src/storage/compaction/ob_medium_compaction_func.cpp	917	ObMediumCompactionScheduleFunc::get_table_schema_to_merge	ret == OB_TABLE_IS_DELETED	if (OB_TABLE_IS_DELETED == ret) {
+src/storage/compaction/ob_medium_compaction_func.cpp	918	ObMediumCompactionScheduleFunc::get_table_schema_to_merge	ret == OB_ERR_SCHEMA_HISTORY_EMPTY	} else if (OB_ERR_SCHEMA_HISTORY_EMPTY == ret) {
+src/storage/compaction/ob_medium_compaction_func.cpp	1004	ObMediumCompactionScheduleFunc::batch_check_medium_meta_table	tmp_ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == tmp_ret) {
+src/storage/compaction/ob_medium_compaction_info.cpp	369	ObMediumCompactionInfo::gene_parallel_info	ret != OB_SIZE_OVERFLOW	if (OB_UNLIKELY(OB_SIZE_OVERFLOW != ret)) {
+src/storage/compaction/ob_medium_compaction_mgr.cpp	159	ObTabletMediumCompactionInfoRecorder::submit_medium_compaction_info	ret == OB_ALLOCATE_MEMORY_FAILED; ret == OB_BLOCK_FROZEN	if (OB_ALLOCATE_MEMORY_FAILED == ret || OB_BLOCK_FROZEN == ret) {
+src/storage/compaction/ob_medium_compaction_mgr.cpp	220	ObTabletMediumCompactionInfoRecorder::inner_replay_clog	ret == OB_TABLET_NOT_EXIST; ret == OB_NO_NEED_UPDATE	if (OB_TABLET_NOT_EXIST == ret || OB_NO_NEED_UPDATE == ret) {
+src/storage/compaction/ob_medium_loop.cpp	74	ObMediumLoop::loop	tmp_ret != OB_SIZE_OVERFLOW	if (OB_SIZE_OVERFLOW != tmp_ret && !schedule_ignore_error(tmp_ret)) {
+src/storage/compaction/ob_medium_loop.cpp	97	ObMediumLoop::loop_tablets	ret != OB_STATE_NOT_MATCH	if (OB_STATE_NOT_MATCH != ret) {
+src/storage/compaction/ob_medium_loop.cpp	110	ObMediumLoop::loop_tablets	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/compaction/ob_medium_loop.cpp	122	ObMediumLoop::loop_tablets	tmp_ret != OB_STATE_NOT_MATCH	if (OB_STATE_NOT_MATCH != tmp_ret) {
+src/storage/compaction/ob_medium_loop.cpp	221	ObScheduleNewMediumLoop::loop	ret != OB_STATE_NOT_MATCH	if (OB_STATE_NOT_MATCH != ret) {
+src/storage/compaction/ob_medium_loop.h	40	ObMediumLoop::schedule_ignore_error	ret == OB_ITER_END	return OB_ITER_END == ret
+src/storage/compaction/ob_medium_loop.h	41	ObMediumLoop::schedule_ignore_error	ret == OB_STATE_NOT_MATCH	|| OB_STATE_NOT_MATCH == ret
+src/storage/compaction/ob_medium_loop.h	42	ObMediumLoop::schedule_ignore_error	ret == OB_LS_NOT_EXIST	|| OB_LS_NOT_EXIST == ret;

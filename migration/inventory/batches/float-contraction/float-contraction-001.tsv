@@ -1,0 +1,37 @@
+file	line	symbol	construct	text
+src/data_plane/api/data_plane/vector/ob_vector_cosine_distance.h	45	cosine_calculate_normal	multiply-add on floating values	ip += a[i] * b[i];
+src/data_plane/api/data_plane/vector/ob_vector_cosine_distance.h	46	cosine_calculate_normal	multiply-add on floating values	abs_dist_a += a[i] * a[i];
+src/data_plane/api/data_plane/vector/ob_vector_cosine_distance.h	47	cosine_calculate_normal	multiply-add on floating values	abs_dist_b += b[i] * b[i];
+src/data_plane/api/data_plane/vector/ob_vector_cosine_distance.h	60	cosine_calculate_normal	multiply-add on floating values	ip += a[i] * b[i];
+src/data_plane/api/data_plane/vector/ob_vector_cosine_distance.h	61	cosine_calculate_normal	multiply-add on floating values	abs_dist_a += a[i] * a[i];
+src/data_plane/api/data_plane/vector/ob_vector_cosine_distance.h	62	cosine_calculate_normal	multiply-add on floating values	abs_dist_b += b[i] * b[i];
+src/data_plane/api/data_plane/vector/ob_vector_ip_distance.h	48	ip_distance_normal	multiply-add on floating values	distance += a[i] * b[i];
+src/data_plane/api/data_plane/vector/ob_vector_ip_distance.h	268	fvec_inner_product_ref	multiply-add on floating values	res += x[i] * y[i];
+src/data_plane/api/data_plane/vector/ob_vector_l2_distance.h	225	l2_square_simd16_avx512	fma call: _mm512_fmadd_ps	vsum = _mm512_fmadd_ps(diff, diff, vsum);  // diff * diff + sum
+src/data_plane/api/data_plane/vector/ob_vector_l2_distance.h	276	l2_square_flt	multiply-add on floating values	result += val * val;
+src/data_plane/api/data_plane/vector/ob_vector_l2_distance.h	284	l2_norm_square	multiply-add on floating values	res += a[i] * a[i];
+src/data_plane/api/data_plane/vector/ob_vector_l2_distance.h	290	fvec_madd	multiply-add on floating values	c[i] = a[i] + bf * b[i];
+src/data_plane/api/data_plane/vector/ob_vector_l2_distance.h	392	fvec_madd	multiply-add on floating values	c[i] = a[i] + bf * b[i];
+src/data_plane/api/data_plane/vector/ob_vector_l2_distance.h	440	l2_square_flt	fma call: _mm256_fmadd_ps	sum = _mm256_fmadd_ps(diff, diff, sum);     // accumulate the squared difference
+src/data_plane/api/data_plane/vector/ob_vector_l2_distance.h	481	l2_norm_square	fma call: _mm256_fmadd_ps	msum_0 = _mm256_fmadd_ps(mx_0, mx_0, msum_0);
+src/data_plane/api/data_plane/vector/ob_vector_l2_distance.h	489	l2_norm_square	fma call: _mm256_fmadd_ps	msum_0 = _mm256_fmadd_ps(mx, mx, msum_0);
+src/data_plane/api/data_plane/vector/ob_vector_l2_distance.h	505	l2_norm_square	fma call: _mm256_fmadd_ps	msum_0 = _mm256_fmadd_ps(mx, mx, msum_0);
+src/data_plane/api/data_plane/vector/ob_vector_l2_distance.h	532	fvec_madd	multiply-add on floating values	c[i] = a[i] + bf * b[i];
+src/data_plane/api/data_plane/vector/ob_vector_l2_distance.h	1025	l2_square_flt	fma call: _mm512_fmadd_ps	sum0 = _mm512_fmadd_ps(diff0, diff0, sum0);
+src/data_plane/api/data_plane/vector/ob_vector_l2_distance.h	1026	l2_square_flt	fma call: _mm512_fmadd_ps	sum1 = _mm512_fmadd_ps(diff1, diff1, sum1);
+src/data_plane/api/data_plane/vector/ob_vector_l2_distance.h	1027	l2_square_flt	fma call: _mm512_fmadd_ps	sum2 = _mm512_fmadd_ps(diff2, diff2, sum2);
+src/data_plane/api/data_plane/vector/ob_vector_l2_distance.h	1028	l2_square_flt	fma call: _mm512_fmadd_ps	sum3 = _mm512_fmadd_ps(diff3, diff3, sum3);
+src/data_plane/api/data_plane/vector/ob_vector_l2_distance.h	1039	l2_square_flt	fma call: _mm512_fmadd_ps	sum = _mm512_fmadd_ps(diff, diff, sum);
+src/data_plane/api/data_plane/vector/ob_vector_l2_distance.h	1059	l2_norm_square	fma call: _mm512_fmadd_ps	m512_res = _mm512_fmadd_ps(mx_0, mx_0, m512_res);
+src/data_plane/api/data_plane/vector/ob_vector_l2_distance.h	1060	l2_norm_square	fma call: _mm512_fmadd_ps	m512_res_0 = _mm512_fmadd_ps(mx_1, mx_1, m512_res_0);
+src/data_plane/api/data_plane/vector/ob_vector_l2_distance.h	1067	l2_norm_square	fma call: _mm512_fmadd_ps	m512_res = _mm512_fmadd_ps(mx, mx, m512_res);
+src/data_plane/api/data_plane/vector/ob_vector_l2_distance.h	1074	l2_norm_square	fma call: _mm512_fmadd_ps	m512_res = _mm512_fmadd_ps(mx, mx, m512_res);
+src/data_plane/api/data_plane/vector/ob_vector_l2_distance.h	1088	fvec_madd	fma call: _mm512_fmadd_ps	const __m512 abmul = _mm512_fmadd_ps(bfmm, bx, ax);
+src/data_plane/api/data_plane/vector/ob_vector_l2_distance.h	1096	fvec_madd	fma call: _mm512_fmadd_ps	const __m512 abmul = _mm512_fmadd_ps(bfmm, bx, ax);
+src/data_plane/api/data_plane/vector/ob_vector_metric.h	66	vector_similarity_from_distance	multiply-add on floating values	similarity = 1 / (1 + distance * distance);
+src/sql/engine/expr/ob_distribution.cpp	89	ObDistribution::normal	multiply-add on floating values	x = 2.0 * canonical_double(gen) - 1.0;
+src/sql/engine/expr/ob_distribution.cpp	90	ObDistribution::normal	multiply-add on floating values	y = 2.0 * canonical_double(gen) - 1.0;
+src/sql/engine/expr/ob_expr_bm25.cpp	149	ObExprBM25::doc_token_weight	multiply-add on floating values	return tf / (tf + p_k1 * (1.0 - p_b + p_b * norm_len));
+src/sql/engine/expr/ob_expr_st_distance_sphere.cpp	149	ObExprSTDistanceSphere::eval_st_distance_sphere	multiply-add on floating values	sphere_radius = ((2.0 * a + b) / 3.0); // Mean radius, as defined by the IUGG
+src/sql/optimizer/ob_access_path_estimation.cpp	961	ObAccessPathEstimation::process_storage_estimation_result	multiply-add on floating values	helper.result_.logical_row_count_ += helper.range_result_.at(j).logical_row_count_ * part_sample_ratio;
+src/sql/optimizer/ob_access_path_estimation.cpp	962	ObAccessPathEstimation::process_storage_estimation_result	multiply-add on floating values	helper.result_.physical_row_count_ += helper.range_result_.at(j).physical_row_count_ * part_sample_ratio;

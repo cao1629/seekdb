@@ -1,0 +1,44 @@
+file	line	symbol	construct	text
+src/storage/memtable/mvcc/ob_keybtree_deps.h	100	RWLock::read_ref_	field int16_t; 4 atomic accesses (ATOMIC_LOAD 2, ATOMIC_AAF 1, ATOMIC_FAA 1)	int16_t read_ref_;
+src/storage/memtable/mvcc/ob_keybtree_deps.h	101	RWLock::writer_id_	field uint16_t; 2 atomic accesses (ATOMIC_BCAS 1, ATOMIC_LOAD 1)	uint16_t writer_id_;
+src/storage/memtable/mvcc/ob_keybtree_deps.h	103	RWLock::lock_	field uint32_t; 3 atomic accesses (ATOMIC_BCAS 1, ATOMIC_LOAD 1, ATOMIC_STORE 1)	uint32_t lock_;
+src/storage/memtable/mvcc/ob_keybtree_deps.h	140	MultibitSet::load	atomic access through parameter index (const MultibitSet&) of MultibitSet::load; the atomic object is the caller's argument; 1 atomic accesses (ATOMIC_LOAD 1); through the single member of value classes MultibitSet::data_	OB_INLINE void load(const MultibitSet& index) { data_ = ATOMIC_LOAD(&index.data_); }
+src/storage/memtable/mvcc/ob_keybtree_deps.h	151	MultibitSet::data_	field RawType; 3 atomic accesses (ATOMIC_LOAD 2, ATOMIC_BCAS 1); single member of a value class: 1 more accesses reach it through fields and variables of type MultibitSet, listed where their own accesses resolve	RawType data_;
+src/storage/memtable/mvcc/ob_keybtree_deps.h	341	BtreeNode::index_	field MultibitSet; 9 atomic accesses (ATOMIC_LOAD 9); through functions with an atomic parameter load; through accessors get_index	MultibitSet index_; // 8byte
+src/storage/memtable/mvcc/ob_mvcc.h	176	ObITransCallback::prev_	field ObITransCallback *; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_STORE 1)	ObITransCallback *prev_;
+src/storage/memtable/mvcc/ob_mvcc.h	177	ObITransCallback::next_	field ObITransCallback *; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_STORE 1)	ObITransCallback *next_;
+src/storage/memtable/mvcc/ob_mvcc_ctx.h	246	ObIMvccCtx::trans_version_	field share::SCN; 3 atomic accesses (ATOMIC_LOAD 2, ATOMIC_SET 1); through member functions atomic_get, atomic_set	share::SCN trans_version_;
+src/storage/memtable/mvcc/ob_mvcc_ctx.h	247	ObIMvccCtx::commit_version_	field share::SCN; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_SET 1); through member functions atomic_get, atomic_set	share::SCN commit_version_;
+src/storage/memtable/mvcc/ob_mvcc_row.h	86	ObMvccTransNode::trans_version_	field share::SCN; 3 atomic accesses (ATOMIC_LOAD 2, ATOMIC_STORE 1); through member functions atomic_load, atomic_store	share::SCN trans_version_;
+src/storage/memtable/mvcc/ob_mvcc_row.h	87	ObMvccTransNode::scn_	field share::SCN; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_STORE 1); through member functions atomic_load, atomic_store	share::SCN scn_;
+src/storage/memtable/mvcc/ob_mvcc_row.h	90	ObMvccTransNode::tx_end_scn_	field share::SCN; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_STORE 1); through member functions atomic_load, atomic_store	share::SCN tx_end_scn_;
+src/storage/memtable/mvcc/ob_mvcc_row.h	91	ObMvccTransNode::prev_	field ObMvccTransNode *; 8 atomic accesses (ATOMIC_STORE 5, ATOMIC_LOAD 3)	ObMvccTransNode *prev_;
+src/storage/memtable/mvcc/ob_mvcc_row.h	92	ObMvccTransNode::next_	field ObMvccTransNode *; 12 atomic accesses (ATOMIC_STORE 11, ATOMIC_LOAD 1)	ObMvccTransNode *next_;
+src/storage/memtable/mvcc/ob_mvcc_row.h	96	ObMvccTransNode::snapshot_version_barrier_	field int64_t; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_STORE 1)	int64_t snapshot_version_barrier_;
+src/storage/memtable/mvcc/ob_mvcc_row.h	98	ObMvccTransNode::flag_	field uint8_t; 25 atomic accesses (ATOMIC_LOAD 15, ATOMIC_BCAS 10); through macros ATOMIC_ADD_TAG, ATOMIC_SUB_TAG	uint8_t flag_;
+src/storage/memtable/mvcc/ob_mvcc_row.h	258	ObMvccRow::ObMvccRowIndex::replay_locations_	field ObMvccTransNode *; 1 atomic accesses (ATOMIC_STORE 1)	ObMvccTransNode *replay_locations_[common::REPLAY_TASK_QUEUE_SIZE];
+src/storage/memtable/mvcc/ob_mvcc_row.h	279	ObMvccRow::flag_	field uint8_t; 14 atomic accesses (ATOMIC_LOAD 9, ATOMIC_BCAS 5); through macros ATOMIC_ADD_TAG, ATOMIC_SUB_TAG	uint8_t flag_;
+src/storage/memtable/mvcc/ob_mvcc_row.h	282	ObMvccRow::update_since_compact_	field int32_t; 5 atomic accesses (ATOMIC_BCAS 2, ATOMIC_FAA 1, ATOMIC_LOAD 1, ATOMIC_STORE 1)	int32_t update_since_compact_;
+src/storage/memtable/mvcc/ob_mvcc_row.h	285	ObMvccRow::latest_compact_ts_	field int64_t; 1 atomic accesses (ATOMIC_STORE 1)	int64_t latest_compact_ts_;
+src/storage/memtable/mvcc/ob_mvcc_row.h	286	ObMvccRow::last_compact_cnt_	field int64_t; 1 atomic accesses (ATOMIC_STORE 1)	int64_t last_compact_cnt_;
+src/storage/memtable/mvcc/ob_mvcc_row.h	287	ObMvccRow::max_trans_version_	field share::SCN; 4 atomic accesses (ATOMIC_LOAD 3, ATOMIC_VCAS 1); through member functions atomic_get, atomic_load, inc_update	share::SCN max_trans_version_;
+src/storage/memtable/mvcc/ob_mvcc_row.h	288	ObMvccRow::max_elr_trans_version_	field share::SCN; 5 atomic accesses (ATOMIC_LOAD 3, ATOMIC_VCAS 2); through member functions atomic_get, atomic_load, inc_update	share::SCN max_elr_trans_version_;
+src/storage/memtable/mvcc/ob_mvcc_row.h	293	ObMvccRow::list_head_	field ObMvccTransNode *; 17 atomic accesses (ATOMIC_LOAD 11, ATOMIC_STORE 6); through local references prev	ObMvccTransNode *list_head_;
+src/storage/memtable/mvcc/ob_mvcc_row.h	294	ObMvccRow::latest_compact_node_	field ObMvccTransNode *; 1 atomic accesses (ATOMIC_STORE 1)	ObMvccTransNode *latest_compact_node_;
+src/storage/memtable/mvcc/ob_mvcc_trans_ctx.h	374	ObTransCallbackMgr::skip_checksum_	field bool; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_STORE 1)	bool skip_checksum_;
+src/storage/memtable/mvcc/ob_mvcc_trans_ctx.h	377	ObTransCallbackMgr::callback_lists_	field ObTxCallbackList *; 4 atomic accesses (ATOMIC_LOAD 3, ATOMIC_STORE 1)	ObTxCallbackList *callback_lists_; // extends for parallel write
+src/storage/memtable/mvcc/ob_mvcc_trans_ctx.h	384	ObTransCallbackMgr::parallel_stat_	field int64_t; 12 atomic accesses (ATOMIC_BCAS 5, ATOMIC_LOAD 5, ATOMIC_STORE 2)	int64_t parallel_stat_;
+src/storage/memtable/mvcc/ob_mvcc_trans_ctx.h	393	ObTransCallbackMgr::for_replay_	field bool; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_STORE 1)	bool for_replay_;
+src/storage/memtable/mvcc/ob_mvcc_trans_ctx.h	401	ObTransCallbackMgr::has_branch_replayed_into_first_list_	field bool; 2 atomic accesses (ATOMIC_STORE 2)	bool has_branch_replayed_into_first_list_;
+src/storage/memtable/mvcc/ob_mvcc_trans_ctx.h	403	ObTransCallbackMgr::serial_final_scn_	field share::SCN; 1 atomic accesses (ATOMIC_SET 1); through member functions atomic_set	share::SCN serial_final_scn_;
+src/storage/memtable/mvcc/ob_mvcc_trans_ctx.h	404	ObTransCallbackMgr::serial_final_seq_no_	field transaction::ObTxSEQ; 1 atomic accesses (ATOMIC_STORE 1); through member functions atomic_store	transaction::ObTxSEQ serial_final_seq_no_;
+src/storage/memtable/mvcc/ob_mvcc_trans_ctx.h	408	ObTransCallbackMgr::serial_sync_scn_	field share::SCN; 1 atomic accesses (ATOMIC_STORE 1); through member functions atomic_store	share::SCN serial_sync_scn_;
+src/storage/memtable/mvcc/ob_mvcc_trans_ctx.h	410	ObTransCallbackMgr::callback_main_list_append_count_	field int64_t; 1 atomic accesses (ATOMIC_AAF 1)	int64_t callback_main_list_append_count_;
+src/storage/memtable/mvcc/ob_mvcc_trans_ctx.h	411	ObTransCallbackMgr::callback_remove_for_trans_end_count_	field int64_t; 1 atomic accesses (ATOMIC_AAF 1)	int64_t callback_remove_for_trans_end_count_;
+src/storage/memtable/mvcc/ob_mvcc_trans_ctx.h	412	ObTransCallbackMgr::callback_remove_for_remove_memtable_count_	field int64_t; 1 atomic accesses (ATOMIC_AAF 1)	int64_t callback_remove_for_remove_memtable_count_;
+src/storage/memtable/mvcc/ob_mvcc_trans_ctx.h	413	ObTransCallbackMgr::callback_remove_for_fast_commit_count_	field int64_t; 1 atomic accesses (ATOMIC_AAF 1)	int64_t callback_remove_for_fast_commit_count_;
+src/storage/memtable/mvcc/ob_mvcc_trans_ctx.h	414	ObTransCallbackMgr::callback_remove_for_rollback_to_count_	field int64_t; 1 atomic accesses (ATOMIC_AAF 1)	int64_t callback_remove_for_rollback_to_count_;
+src/storage/memtable/mvcc/ob_mvcc_trans_ctx.h	415	ObTransCallbackMgr::callback_ext_info_log_count_	field int64_t; 1 atomic accesses (ATOMIC_AAF 1)	int64_t callback_ext_info_log_count_;
+src/storage/memtable/mvcc/ob_mvcc_trans_ctx.h	417	ObTransCallbackMgr::pending_log_size_	field int64_t; 5 atomic accesses (ATOMIC_LOAD 3, ATOMIC_FAA 1, ATOMIC_STORE 1)	int64_t pending_log_size_;
+src/storage/memtable/mvcc/ob_mvcc_trans_ctx.h	419	ObTransCallbackMgr::flushed_log_size_	field int64_t; 2 atomic accesses (ATOMIC_FAA 1, ATOMIC_LOAD 1)	int64_t flushed_log_size_;
+src/storage/memtable/mvcc/ob_row_latch.h	43	ObRowLatch::locked_	field bool; 3 atomic accesses (ATOMIC_LOAD 1, ATOMIC_STORE 1, ATOMIC_TAS 1)	bool locked_;

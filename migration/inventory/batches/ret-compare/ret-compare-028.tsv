@@ -1,0 +1,95 @@
+file	line	symbol	construct	text
+src/sql/engine/aggregate/ob_hash_distinct_op.cpp	197	ObHashDistinctOp::build_distinct_data	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/aggregate/ob_hash_distinct_op.cpp	214	ObHashDistinctOp::build_distinct_data	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/aggregate/ob_hash_distinct_op.cpp	248	ObHashDistinctOp::build_distinct_data_by_pass	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/aggregate/ob_hash_distinct_op.cpp	301	ObHashDistinctOp::build_distinct_data_for_batch	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/aggregate/ob_hash_distinct_op.cpp	326	ObHashDistinctOp::build_distinct_data_for_batch	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/aggregate/ob_hash_distinct_op.cpp	355	ObHashDistinctOp::build_distinct_data_for_batch	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/aggregate/ob_hash_distinct_op.cpp	428	ObHashDistinctOp::build_distinct_data_for_batch_by_pass	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/aggregate/ob_hash_distinct_op.cpp	447	ObHashDistinctOp::do_unblock_distinct	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/aggregate/ob_hash_distinct_op.cpp	475	ObHashDistinctOp::do_block_distinct	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/aggregate/ob_hash_distinct_op.cpp	486	ObHashDistinctOp::do_block_distinct	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/aggregate/ob_hash_distinct_op.cpp	490	ObHashDistinctOp::do_block_distinct	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/aggregate/ob_hash_distinct_op.cpp	496	ObHashDistinctOp::do_block_distinct	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/aggregate/ob_hash_distinct_op.cpp	528	ObHashDistinctOp::do_block_distinct_for_batch	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/aggregate/ob_hash_distinct_op.cpp	532	ObHashDistinctOp::do_block_distinct_for_batch	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/aggregate/ob_hash_distinct_op.cpp	552	ObHashDistinctOp::do_block_distinct_for_batch	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/aggregate/ob_hash_distinct_op.cpp	572	ObHashDistinctOp::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/aggregate/ob_hash_groupby_op.cpp	528	ObHashGroupByOp::inner_get_next_row	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/aggregate/ob_hash_groupby_op.cpp	548	ObHashGroupByOp::inner_get_next_row	ret == OB_ITER_END	if (ret == OB_ITER_END) {
+src/sql/engine/aggregate/ob_hash_groupby_op.cpp	791	ObHashGroupByOp::insert_all_distinct_data	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/aggregate/ob_hash_groupby_op.cpp	814	ObHashGroupByOp::get_next_distinct_row	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/aggregate/ob_hash_groupby_op.cpp	819	ObHashGroupByOp::get_next_distinct_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/aggregate/ob_hash_groupby_op.cpp	826	ObHashGroupByOp::get_next_distinct_row	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/aggregate/ob_hash_groupby_op.cpp	931	ObHashGroupByOp::load_data	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/aggregate/ob_hash_groupby_op.cpp	1022	ObHashGroupByOp::load_data	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/aggregate/ob_hash_groupby_op.cpp	1754	ObHashGroupByOp::next_batch	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/aggregate/ob_hash_groupby_op.cpp	2037	ObHashGroupByOp::batch_insert_all_distinct_data	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/aggregate/ob_hash_groupby_op.cpp	2069	ObHashGroupByOp::get_next_batch_distinct_rows	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/aggregate/ob_hash_groupby_op.cpp	2073	ObHashGroupByOp::get_next_batch_distinct_rows	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/aggregate/ob_hash_groupby_op.cpp	2095	ObHashGroupByOp::get_next_batch_distinct_rows	ret == OB_ITER_END	} else if (OB_ITER_END == ret) {
+src/sql/engine/aggregate/ob_hash_groupby_op.cpp	2391	ObHashGroupByOp::load_one_row	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/sql/engine/aggregate/ob_hash_groupby_op.cpp	2640	ObHashGroupByOp::popular_value_detect	call result popular_map_.get_refactored(elem_hash,elem_exist_cnt) != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != popular_map_.get_refactored(elem_hash, elem_exist_cnt)) {
+src/sql/engine/aggregate/ob_hash_groupby_op.cpp	2691	ObHashGroupByOp::process_popular_value	call result popular_map_.get_refactored(hash_value,num_value) != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != popular_map_.get_refactored(hash_value, num_value)) {
+src/sql/engine/aggregate/ob_merge_distinct_op.cpp	75	ObMergeDistinctOp::inner_get_next_row	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/sql/engine/aggregate/ob_merge_distinct_op.cpp	94	ObMergeDistinctOp::inner_get_next_row	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/sql/engine/aggregate/ob_merge_distinct_op.cpp	152	ObMergeDistinctOp::inner_get_next_batch	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/aggregate/ob_merge_groupby_op.cpp	312	ObMergeGroupByOp::inner_get_next_row	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/sql/engine/aggregate/ob_merge_groupby_op.cpp	362	ObMergeGroupByOp::inner_get_next_row	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/aggregate/ob_pushdown_aggregate_program.cpp	106	ObCountPushdownAggregateProgramBase::can_consume	other variable reduce_ret == OB_NOT_SUPPORTED	if (OB_NOT_SUPPORTED == reduce_ret) {
+src/sql/engine/aggregate/ob_pushdown_aggregate_program.cpp	141	ObCountPushdownAggregateProgramBase::consume	other variable reduce_ret == OB_NOT_SUPPORTED	} else if (OB_NOT_SUPPORTED == reduce_ret) {
+src/sql/engine/aggregate/ob_pushdown_aggregate_program.cpp	616	ObScalarPushdownAggregateProgram::probe_spec	other variable reduce_ret == OB_NOT_SUPPORTED	} else if (OB_NOT_SUPPORTED == reduce_ret) {
+src/sql/engine/aggregate/ob_pushdown_aggregate_program.cpp	673	ObScalarPushdownAggregateProgram::stage_spec	other variable reduce_ret != OB_NOT_SUPPORTED	} else if (OB_NOT_SUPPORTED != reduce_ret) {
+src/sql/engine/aggregate/ob_pushdown_aggregate_program.cpp	698	ObScalarPushdownAggregateProgram::stage_spec	other variable reduce_ret == OB_NOT_SUPPORTED	bool use_values = OB_NOT_SUPPORTED == reduce_ret;
+src/sql/engine/aggregate/ob_pushdown_aggregate_program.cpp	707	ObScalarPushdownAggregateProgram::stage_spec	other variable reduce_ret != OB_NOT_SUPPORTED	} else if (OB_NOT_SUPPORTED != reduce_ret) {
+src/sql/engine/aggregate/ob_scalar_aggregate_op.cpp	107	ObScalarAggregateOp::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/aggregate/ob_scalar_aggregate_op.cpp	121	ObScalarAggregateOp::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/aggregate/ob_scalar_aggregate_op.cpp	127	ObScalarAggregateOp::inner_get_next_row	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/basic/chunk_store/ob_compact_store.cpp	69	ObCompactStore::inner_get_next_row	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/sql/engine/basic/chunk_store/ob_compact_store.cpp	79	ObCompactStore::inner_get_next_row	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/sql/engine/basic/chunk_store/ob_compact_store.cpp	83	ObCompactStore::inner_get_next_row	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/sql/engine/basic/chunk_store/ob_compact_store.cpp	90	ObCompactStore::inner_get_next_row	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/sql/engine/basic/chunk_store/ob_compact_store.cpp	260	ObCompactStore::get_next_row	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/sql/engine/basic/ob_chunk_datum_store.cpp	268	ObChunkDatumStore::BlockBufferWrap::append_row	ret != OB_BUF_NOT_ENOUGH	if (OB_BUF_NOT_ENOUGH != ret) {
+src/sql/engine/basic/ob_chunk_datum_store.cpp	294	ObChunkDatumStore::Block::append_row	ret != OB_BUF_NOT_ENOUGH	if (OB_BUF_NOT_ENOUGH != ret) {
+src/sql/engine/basic/ob_chunk_datum_store.cpp	825	ObChunkDatumStore::switch_block	ret != OB_EXCEED_MEM_LIMIT	if (OB_EXCEED_MEM_LIMIT != ret) {
+src/sql/engine/basic/ob_chunk_datum_store.cpp	862	ObChunkDatumStore::ensure_write_blk	ret != OB_EXCEED_MEM_LIMIT	if (OB_FAIL(switch_block(Block::min_buf_size(row_size))) && OB_EXCEED_MEM_LIMIT != ret) {
+src/sql/engine/basic/ob_chunk_datum_store.cpp	906	ObChunkDatumStore::add_row	ret == OB_BUF_NOT_ENOUGH	if (OB_BUF_NOT_ENOUGH == ret) {
+src/sql/engine/basic/ob_chunk_datum_store.cpp	910	ObChunkDatumStore::add_row	ret != OB_EXCEED_MEM_LIMIT	if (OB_EXCEED_MEM_LIMIT != ret) {
+src/sql/engine/basic/ob_chunk_datum_store.cpp	1377	ObChunkDatumStore::finish_add_row	ret != OB_EXCEED_MEM_LIMIT	if (need_dump && OB_FAIL(dump(false, true)) && OB_EXCEED_MEM_LIMIT != ret) {
+src/sql/engine/basic/ob_chunk_datum_store.cpp	1617	ObChunkDatumStore::Iterator::get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/basic/ob_chunk_datum_store.cpp	1641	ObChunkDatumStore::Iterator::get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/basic/ob_chunk_datum_store.cpp	1648	ObChunkDatumStore::Iterator::get_next_row	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/basic/ob_chunk_datum_store.cpp	1650	ObChunkDatumStore::Iterator::get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/basic/ob_chunk_datum_store.cpp	1669	ObChunkDatumStore::Iterator::get_next_batch	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/basic/ob_chunk_datum_store.cpp	1684	ObChunkDatumStore::Iterator::get_next_batch	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/basic/ob_chunk_datum_store.cpp	1689	ObChunkDatumStore::Iterator::get_next_batch	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/basic/ob_chunk_datum_store.cpp	1700	ObChunkDatumStore::Iterator::get_next_batch	ret == OB_ITER_END	if (OB_ITER_END == ret && read_rows != 0) {
+src/sql/engine/basic/ob_chunk_datum_store.cpp	1722	ObChunkDatumStore::RowIterator::get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/basic/ob_chunk_datum_store.cpp	1738	ObChunkDatumStore::RowIterator::get_next_batch	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/basic/ob_chunk_datum_store.cpp	1745	ObChunkDatumStore::RowIterator::get_next_batch	ret == OB_ITER_END	if (OB_ITER_END == ret && read_rows != 0) {
+src/sql/engine/basic/ob_chunk_datum_store.cpp	1830	ObChunkDatumStore::aio_read_file	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/basic/ob_chunk_datum_store.cpp	1860	ObChunkDatumStore::append_datum_store	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/basic/ob_chunk_datum_store.cpp	1871	ObChunkDatumStore::append_datum_store	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/basic/ob_chunk_datum_store.cpp	2131	ObChunkDatumStore::Iterator::load_next_block	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/basic/ob_chunk_datum_store.h	1298	ObChunkDatumStore::Iterator::get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/basic/ob_chunk_datum_store.h	1359	ObChunkDatumStore::Iterator::get_next_batch	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/basic/ob_chunk_row_store.cpp	557	ObChunkRowStore::switch_block	ret != OB_EXCEED_MEM_LIMIT	if (OB_EXCEED_MEM_LIMIT != ret) {
+src/sql/engine/basic/ob_chunk_row_store.cpp	626	ObChunkRowStore::add_row	ret != OB_EXCEED_MEM_LIMIT	if (OB_FAIL(switch_block(min_buf_size)) && OB_EXCEED_MEM_LIMIT != ret) {
+src/sql/engine/basic/ob_chunk_row_store.cpp	683	ObChunkRowStore::copy_row	ret != OB_EXCEED_MEM_LIMIT	if (OB_FAIL(switch_block(min_buf_size)) && OB_EXCEED_MEM_LIMIT != ret) {
+src/sql/engine/basic/ob_chunk_row_store.cpp	716	ObChunkRowStore::finish_add_row	ret != OB_EXCEED_MEM_LIMIT	if (need_dump && OB_FAIL(dump(false, true)) && OB_EXCEED_MEM_LIMIT != ret) {
+src/sql/engine/basic/ob_chunk_row_store.cpp	809	ObChunkRowStore::load_next_chunk_blocks	tmp_ret != OB_ITER_END	if (OB_ITER_END != tmp_ret) {
+src/sql/engine/basic/ob_chunk_row_store.cpp	861	ObChunkRowStore::load_next_chunk_blocks	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/basic/ob_chunk_row_store.cpp	934	ObChunkRowStore::load_next_block	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/basic/ob_chunk_row_store.cpp	965	ObChunkRowStore::load_next_block	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/basic/ob_chunk_row_store.cpp	973	ObChunkRowStore::load_next_block	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/basic/ob_chunk_row_store.cpp	1004	ObChunkRowStore::load_next_block	ret != OB_ITER_END	if (OB_FAIL(ret) && OB_ITER_END != ret) {
+src/sql/engine/basic/ob_chunk_row_store.cpp	1205	ObChunkRowStore::Iterator::get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/basic/ob_chunk_row_store.cpp	1217	ObChunkRowStore::Iterator::get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/basic/ob_chunk_row_store.cpp	1229	ObChunkRowStore::Iterator::get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/basic/ob_chunk_row_store.cpp	1236	ObChunkRowStore::Iterator::get_next_row	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/basic/ob_chunk_row_store.cpp	1238	ObChunkRowStore::Iterator::get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/basic/ob_chunk_row_store.cpp	1251	ObChunkRowStore::RowIterator::get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/basic/ob_chunk_row_store.cpp	1418	ObChunkRowStore::read_file	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/basic/ob_expr_values_op.cpp	268	ObExprValuesOp::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/basic/ob_function_table_op.cpp	210	ObFunctionTableOp::inner_get_next_row_sys_func	ret != OB_ITER_END	if (OB_ITER_END != ret) {

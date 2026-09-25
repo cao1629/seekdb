@@ -1,0 +1,51 @@
+file	line	symbol	construct	text
+src/storage/access/ob_block_sample_iterator.h	156	ObBlockSampleRangeIterator	heap declared: endkey_heap_ (ObBinaryHeap)	common::ObBinaryHeap<ObBlockSampleSSTableEndkeyIterator *, ObBlockSampleSSTableEndkeyComparor> endkey_heap_;
+src/storage/access/ob_multiple_merge.cpp	997	ObMultipleMerge::reset_extra_access_ctx	iterate hash container extra_access_ctx_ (ObHashMap)	for (hash::ObHashMap<ObTabletID, ObTableAccessContext*>::iterator it = extra_access_ctx_.begin();
+src/storage/access/ob_pushdown_aggregate.cpp	783	ObMinAggCell::eval_batch_in_group_by	lib::ob_sort call	lib::ob_sort(group_by_ref_array_, group_by_ref_array_ + updated_cnt);
+src/storage/access/ob_pushdown_aggregate.cpp	971	ObMaxAggCell::eval_batch_in_group_by	lib::ob_sort call	lib::ob_sort(group_by_ref_array_, group_by_ref_array_ + updated_cnt);
+src/storage/access/ob_pushdown_aggregate.cpp	2790	ObGroupByCell::init	lib::ob_sort call	lib::ob_sort(agg_cells_.begin(), agg_cells_.end(),
+src/storage/access/ob_rows_info.cpp	291	ObRowsInfo::sort_keys	lib::ob_sort call	lib::ob_sort(rowkeys_.begin(), rowkeys_.end(), rows_cmp);
+src/storage/access/ob_table_scan_iterator.cpp	522	ObTableScanIterator::sort_sample_ranges	lib::ob_sort call	lib::ob_sort(sample_ranges_.begin(), sample_ranges_.end(), comparor);
+src/storage/access/ob_table_scan_range.cpp	179	ObTableScanRange::init_rowkeys	lib::ob_sort call	lib::ob_sort(rowkeys_.begin(), rowkeys_.end(), comparor);
+src/storage/access/ob_table_scan_range.cpp	215	ObTableScanRange::init_ranges	lib::ob_sort call	lib::ob_sort(ranges_.begin(), ranges_.end(), comparor);
+src/storage/access/ob_where_optimizer.cpp	106	ObWhereOptimizer::analyze_impl	lib::ob_sort call	lib::ob_sort(&filter_conditions_.at(0), &filter_conditions_.at(0) + child_cnt);
+src/storage/blocksstable/encoding/ob_column_datum_iter.h	56	ObEncodingHashTableDatumIter::ObEncodingHashTableDatumIter	iterate hash container hash_table_ (ObEncodingHashTable)	: hash_table_(hash_table), iter_(hash_table_.begin())
+src/storage/blocksstable/encoding/ob_column_datum_iter.h	60	ObEncodingHashTableDatumIter::reset	iterate hash container hash_table_ (ObEncodingHashTable)	void reset() override { iter_ = hash_table_.begin(); }
+src/storage/blocksstable/encoding/ob_dict_encoder.cpp	152	ObDictEncoder::build_dict	iterate hash container ht_ (ObEncodingHashTable)	lib::ob_sort(ht_->begin(), ht_->end(), DictCmp(ret, cmp_func));
+src/storage/blocksstable/encoding/ob_dict_encoder.cpp	152	ObDictEncoder::build_dict	lib::ob_sort call	lib::ob_sort(ht_->begin(), ht_->end(), DictCmp(ret, cmp_func));
+src/storage/blocksstable/index_block/ob_agg_row_struct.cpp	83	ObAggRowWriter::sort_metas	lib::ob_sort call	lib::ob_sort(col_meta_list_.begin(), col_meta_list_.end());
+src/storage/blocksstable/index_block/ob_index_block_builder.cpp	764	ObSSTableIndexBuilder::sort_roots	lib::ob_sort call	lib::ob_sort(roots_.begin(), roots_.end(), cmp);
+src/storage/blocksstable/ob_block_manager.cpp	833	ObBlockManager::get_limited_iter_macro_ids	iterate hash container block_map_ (BlockMap)	if (OB_FAIL(block_map_.for_each(getter))) {
+src/storage/blocksstable/ob_block_manager.cpp	874	ObBlockManager::do_sweep	iterate hash container mark_info (MacroBlkIdMap)	} else if (OB_FAIL(mark_info.for_each(functor))) {
+src/storage/blocksstable/ob_block_manager.cpp	922	ObBlockManager::mark_and_sweep	iterate hash container block_map_ (BlockMap)	if (OB_FAIL(block_map_.for_each(pending_free_functor))) {
+src/storage/blocksstable/ob_block_manager.cpp	955	ObBlockManager::mark_and_sweep	iterate hash container block_map_ (BlockMap)	if (OB_FAIL(block_map_.for_each(hold_info_functor))) {
+src/storage/blocksstable/ob_block_manager.cpp	1443	ObBlockManager::InspectBadBlockTask::inspect_bad_block	iterate hash container block_map_ (BlockMap)	} else if (OB_FAIL(blk_mgr_.block_map_.for_each(getter))) {
+src/storage/blocksstable/ob_shared_macro_block_manager.cpp	371	ObSharedMacroBlockMgr::get_recyclable_blocks	iterate hash container block_used_size_ (ObLinearHashMap)	} else if (OB_FAIL(block_used_size_.for_each(getOp))) {
+src/storage/compaction/ob_compaction_tablet_diagnose.cpp	105	ObDiagnoseTabletMgr::get_diagnose_tablets	iterate hash container diagnose_tablet_map_ (DiagnoseTabletMap)	for (DiagnoseTabletMap::iterator iter = diagnose_tablet_map_.begin();
+src/storage/compaction/ob_medium_checker.cpp	123	ObMediumChecker::check_medium_finish_schedule	iterate hash container tablet_check_set_ (TabletCheckSet)	for (TabletCheckSet::const_iterator iter = tablet_check_set_.begin();
+src/storage/compaction/ob_medium_loop.cpp	256	ObScheduleNewMediumLoop::sort_tablet_check_info	ob_sort call	ob_sort(tablet_check_infos_.begin(), tablet_check_infos_.end(), cmp);
+src/storage/compaction/ob_partition_merge_policy.cpp	1166	ObMinorExecuteRangeMgr::sort_ranges	lib::ob_sort call	lib::ob_sort(exe_range_array_.begin(), exe_range_array_.end(), compareScnRange);
+src/storage/compaction/ob_table_ckm_items.cpp	125	ObSortColumnIdArray::build_sort_array	lib::ob_sort call	lib::ob_sort(array_.begin(), array_.end());
+src/storage/ddl/ob_ddl_merge_helper.cpp	243	ObSNDDLMergeHelperV2::process_prepare_task	iterate hash container slice_idxes (ObHashSet)	for (hash::ObHashSet<int64_t>::const_iterator iter = slice_idxes.begin();
+src/storage/ddl/ob_ddl_merge_task_utils.cpp	274	sort_and_push_metas	std::sort call	std::sort(meta_array.begin(), meta_array.end(), cmp_less);
+src/storage/ddl/ob_ddl_merge_task_utils.cpp	401	ObDDLMergeTaskUtils::build_sstable	iterate hash container slice_idx_sstables (ObHashMap)	for (hash::ObHashMap<int64_t, ObArray<ObTableHandleV2>*>::const_iterator iter = slice_idx_sstables->begin();
+src/storage/ddl/ob_ddl_merge_task_utils.cpp	442	ObDDLMergeTaskUtils::get_sorted_meta_array	lib::ob_sort call	lib::ob_sort(sorted_sstables.begin(), sorted_sstables.end(), slice_idx_cmp);
+src/storage/ddl/ob_ddl_tablet_context.cpp	36	ObDDLTabletContext::MergeCtx::~MergeCtx	iterate hash container slice_sstables_ (ObHashMap)	for (hash::ObHashMap<int64_t, ObArray<ObTableHandleV2>*>::const_iterator iter = slice_sstables_.begin();
+src/storage/ddl/ob_ddl_tablet_context.cpp	257	ObDDLTabletContext::reset	iterate hash container slice_map_ (SLICE_MAP)	SLICE_MAP::iterator slice_iter = slice_map_.begin();
+src/storage/ddl/ob_ddl_tablet_context.cpp	364	ObDDLTabletContext::get_all_slices	iterate hash container slice_map_ (SLICE_MAP)	SLICE_MAP::iterator slice_iter = slice_map_.begin();
+src/storage/ddl/ob_direct_load_struct.cpp	371	ObDDLTabletMergeDagParamV2::init_slice_sstable_array	iterate hash container slice_idxes (ObHashSet)	for (hash::ObHashSet<int64_t>::const_iterator iter = slice_idxes.begin(); OB_SUCC(ret) && iter != slice_idxes.end(); iter++) {
+src/storage/ddl/ob_direct_load_struct.cpp	386	ObDDLTabletMergeDagParamV2::init_slice_sstable_array	iterate hash container through an iterator of ObHashMap	for (hash::ObHashMap<int64_t, ObArray<ObTableHandleV2>*>::const_iterator iter = merge_ctx->slice_sstables_.begin();
+src/storage/ddl/ob_tablet_copy_util.h	91	ObTabletCopyUtil::destroy_value_ptr_map	iterate hash container map (ObHashMap)	if (map.created() && OB_FAIL(map.foreach_refactored(get_map_item_key_fn))) {
+src/storage/deadlock/ob_deadlock_detector_mgr.cpp	448	ObDeadLockDetectorMgr::stop	iterate hash container detector_map_ (ObLinkHashMap)	detector_map_.for_each(fn);
+src/storage/fts/ob_fts_parser_helper.cpp	441	ObFTParseHelper::make_detail_json	iterate hash container words (ObFTWordMap)	for (ObFTWordMap::const_iterator it = words.begin(); OB_SUCC(ret) && it != words.end(); ++it) {
+src/storage/fts/ob_fts_parser_helper.cpp	487	ObFTParseHelper::make_token_array_json	iterate hash container words (ObFTWordMap)	for (ObFTWordMap::const_iterator it = words.begin(); OB_SUCC(ret) && it != words.end(); ++it) {
+src/storage/lob/ob_lob_util.cpp	486	ObLobPartialData::sort_index	lib::ob_sort call	lib::ob_sort(index_.begin(), index_.end(), ObLobChunkIndexComparator());
+src/storage/ls/ob_freezer.cpp	1601	ObFreezer::get_all_async_freeze_tablets	iterate hash container async_freeze_tablets_ (ObHashSet)	if (OB_FAIL(async_freeze_tablets_.foreach_refactored(get_tablet_ids_func))) {
+src/storage/ls/ob_ls_tablet_service.cpp	3490	ObLSTabletService::construct_update_idx	lib::ob_sort call	lib::ob_sort(update_idx.begin(), update_idx.end());
+src/storage/ls/ob_ls_tablet_service.cpp	5409	ObLSTabletService::get_conflict_rows_by_multi_get	lib::ob_sort call	lib::ob_sort(rowkeys.begin(), rowkeys.end(), comparor);
+src/storage/memtable/mvcc/ob_mvcc_trans_ctx.cpp	667	ObTransCallbackMgr::remove_callback_for_uncommited_txn	iterate hash container memtable_set (ObMemtableSet)	for (common::hash::ObHashSet<uint64_t>::const_iterator iter = memtable_set->begin(); iter != memtable_set->end(); ++iter) {
+src/storage/meta_mem/ob_flying_tablet_pointer_map.cpp	93	ObFlyingTabletPointerMap::destroy	iterate hash container map_ (ObHashMap)	for (common::hash::ObHashMap<ObDieingTabletMapKey, ObTabletPointerHandle>::iterator iter = map_.begin();
+src/storage/meta_mem/ob_storage_meta_mem_mgr.cpp	529	ObStorageMetaMemMgr::batch_destroy_memtable_	iterate hash container memtable_set (ObMemtableSet)	for (common::hash::ObHashSet<uint64_t>::iterator set_iter = memtable_set->begin();
+src/storage/meta_mem/ob_storage_meta_mem_mgr.cpp	597	ObStorageMetaMemMgr::batch_gc_memtable_set_	iterate hash container memtable_set (ObMemtableSet)	for (common::hash::ObHashSet<uint64_t>::iterator set_iter = memtable_set->begin();
+src/storage/meta_mem/ob_storage_meta_mem_mgr.cpp	612	ObStorageMetaMemMgr::batch_gc_memtable_set_	iterate hash container memtable_set (ObMemtableSet)	for (common::hash::ObHashSet<uint64_t>::iterator set_iter = memtable_set->begin();
+src/storage/meta_mem/ob_storage_meta_mem_mgr.cpp	625	ObStorageMetaMemMgr::batch_gc_memtable_set_	iterate hash container memtable_set (ObMemtableSet)	for (common::hash::ObHashSet<uint64_t>::iterator set_iter = memtable_set->begin();

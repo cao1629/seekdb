@@ -1,0 +1,35 @@
+file	line	symbol	construct	text
+src/sql/optimizer/ob_join_order.cpp	1615	ObJoinOrder::create_one_access_path	pointer membership test: ObOptimizerUtil::find_item	} else if (helper.is_index_merge_ && !ObOptimizerUtil::find_item(index_merge_access_cols, col_expr)) {
+src/sql/optimizer/ob_join_order.cpp	1930	ObJoinOrder::add_access_filters	pointer membership test: ObOptimizerUtil::remove_item	if (FAILEDx(ObOptimizerUtil::remove_item(path->filter_, remove_dup))) {
+src/sql/optimizer/ob_join_order.cpp	3279	ObJoinOrder::create_one_index_merge_path	pointer membership test: ObOptimizerUtil::find_item	} else if (ObOptimizerUtil::find_item(match_exprs_in_index, cur_expr)) {
+src/sql/optimizer/ob_join_order.cpp	4616	ObJoinOrder::get_candi_range_expr	pointer membership test: ObOptimizerUtil::find_item	if (ObOptimizerUtil::find_item(ignore_predicates, predicates.at(i))) {
+src/sql/optimizer/ob_join_order.cpp	4812	ObJoinOrder::get_range_filter	pointer membership test: ObOptimizerUtil::find_item	if (ObOptimizerUtil::find_item(range_exprs, expr)) {
+src/sql/optimizer/ob_join_order.cpp	4819	ObJoinOrder::get_range_filter	pointer membership test: ObOptimizerUtil::find_item	if (ObOptimizerUtil::find_item(range_exprs, expr)) {
+src/sql/optimizer/ob_join_order.cpp	4938	ObJoinOrder::get_join_output_exprs	pointer membership test: append_array_no_dup	} else if (OB_FAIL(append_array_no_dup(temp_exprs, plan->get_groupby_rollup_exprs_for_width_est()))) {
+src/sql/optimizer/ob_join_order.cpp	4939	ObJoinOrder::get_join_output_exprs	pointer membership test: append_array_no_dup	} else if (OB_FAIL(append_array_no_dup(temp_exprs, plan->get_having_exprs_for_width_est()))) {
+src/sql/optimizer/ob_join_order.cpp	4940	ObJoinOrder::get_join_output_exprs	pointer membership test: append_array_no_dup	} else if (OB_FAIL(append_array_no_dup(temp_exprs, plan->get_winfunc_exprs_for_width_est()))) {
+src/sql/optimizer/ob_join_order.cpp	4941	ObJoinOrder::get_join_output_exprs	pointer membership test: append_array_no_dup	} else if (OB_FAIL(append_array_no_dup(temp_exprs, plan->get_select_item_exprs_for_width_est()))) {
+src/sql/optimizer/ob_join_order.cpp	4942	ObJoinOrder::get_join_output_exprs	pointer membership test: append_array_no_dup	} else if (OB_FAIL(append_array_no_dup(temp_exprs, plan->get_orderby_exprs_for_width_est()))) {
+src/sql/optimizer/ob_join_order.cpp	4946	ObJoinOrder::get_join_output_exprs	pointer membership test: append_array_no_dup	} else if (OB_FAIL(append_array_no_dup(output_exprs, extracted_column_exprs))) {
+src/sql/optimizer/ob_join_order.cpp	4956	ObJoinOrder::get_excluded_condition_exprs	pointer membership test: append_array_no_dup	if (OB_FAIL(append_array_no_dup(excluded_conditions,
+src/sql/optimizer/ob_join_order.cpp	4958	ObJoinOrder::get_excluded_condition_exprs	pointer membership test: append_array_no_dup	} else if (OB_FAIL(append_array_no_dup(excluded_conditions,
+src/sql/optimizer/ob_join_order.cpp	6611	AccessPath::compute_valid_inner_path	pointer membership test: ObOptimizerUtil::find_item	} else if (ObOptimizerUtil::find_item(parent_->get_plan()->get_pushdown_filters(), expr)) {
+src/sql/optimizer/ob_join_order.cpp	8975	ObJoinOrder::extract_necessary_pushdown_quals	pointer membership test: ObOptimizerUtil::find_item	ObOptimizerUtil::find_item(get_plan()->get_new_or_quals(), expr) ||
+src/sql/optimizer/ob_join_order.cpp	8976	ObJoinOrder::extract_necessary_pushdown_quals	pointer membership test: ObOptimizerUtil::find_item	ObOptimizerUtil::find_item(get_plan()->get_pushdown_filters(), expr)) {
+src/sql/optimizer/ob_join_order.cpp	11011	ObJoinOrder::set_nl_filters	pointer membership test: append_array_no_dup	if (OB_FAIL(append_array_no_dup(join_path->filter_, where_conditions))) {
+src/sql/optimizer/ob_join_order.cpp	11015	ObJoinOrder::set_nl_filters	pointer membership test: ObOptimizerUtil::find_item	ObOptimizerUtil::find_item(right_path->pushdown_filters_, on_conditions.at(i))) {
+src/sql/optimizer/ob_join_order.cpp	11021	ObJoinOrder::set_nl_filters	pointer membership test: append_array_no_dup	if (OB_FAIL(append_array_no_dup(join_path->other_join_conditions_, on_conditions))) {
+src/sql/optimizer/ob_join_order.cpp	11028	ObJoinOrder::set_nl_filters	pointer membership test: ObOptimizerUtil::find_item	ObOptimizerUtil::find_item(right_path->pushdown_filters_, where_conditions.at(i))) {
+src/sql/optimizer/ob_join_order.cpp	15266	ObJoinOrder::check_and_fill_inner_path_info	pointer membership test: ObOptimizerUtil::intersect	} else if (OB_FAIL(ObOptimizerUtil::intersect(exec_params, range_params, pushdown_params))) {
+src/sql/optimizer/ob_join_order.cpp	15267	ObJoinOrder::check_and_fill_inner_path_info	pointer membership test: ObOptimizerUtil::intersect	} else if (OB_FAIL(ObOptimizerUtil::intersect(exec_params, all_params, all_pushdown_params))) {
+src/sql/optimizer/ob_join_order.cpp	15870	ObJoinOrder::extract_naaj_join_conditions	IR pointer == IR pointer	if (left_join_key == cur_expr->get_param_expr(0)) {
+src/sql/optimizer/ob_join_order.cpp	15872	ObJoinOrder::extract_naaj_join_conditions	IR pointer == IR pointer	} else if (right_join_key == cur_expr->get_param_expr(0)) {
+src/sql/optimizer/ob_join_order.cpp	16349	ObJoinOrder::extract_scan_match_expr_candidates	pointer membership test: add_var_to_array_no_dup	if (OB_FAIL(add_var_to_array_no_dup(scan_match_exprs, static_cast<ObMatchFunRawExpr*>(param_expr)))) {
+src/sql/optimizer/ob_join_order.cpp	16384	ObJoinOrder::process_index_for_match_expr	pointer membership test: ObOptimizerUtil::find_item	if (helper.is_index_merge_ && !ObOptimizerUtil::find_item(helper.filters_, all_match_exprs.at(0))) {
+src/sql/optimizer/ob_join_order.cpp	16467	ObJoinOrder::process_index_for_match_expr	pointer membership test: ObOptimizerUtil::find_item	} else if (!ObOptimizerUtil::find_item(scan_match_exprs, match_expr_info->match_expr_, &idx)) {
+src/sql/optimizer/ob_join_order.cpp	16487	ObJoinOrder::process_index_for_match_expr	IR pointer == IR pointer	} else if (curr_expr == match_expr_for_index_scan) {
+src/sql/optimizer/ob_join_order.cpp	17004	ObJoinOrder::find_match_expr_info	IR pointer == IR pointer	if (match_expr_infos.at(i).match_expr_ == match_expr) {
+src/sql/optimizer/ob_join_order.cpp	17023	ObJoinOrder::find_match_expr_infos	IR pointer == IR pointer	if (match_expr_infos.at(i).match_expr_ == match_expr && OB_FAIL(found_match_expr_infos.push_back(&match_expr_infos.at(i)))) {
+src/sql/optimizer/ob_join_order.cpp	17323	ObJoinOrder::check_match_prefix_index	pointer membership test: ObOptimizerUtil::find_item	if (ObOptimizerUtil::find_item(prefix_cols, candi_prefix_cols.at(i))) {
+src/sql/optimizer/ob_join_order.cpp	17493	ObJoinOrder::check_match_common_gen_col_index	pointer membership test: ObOptimizerUtil::find_item	if (ObOptimizerUtil::find_item(common_gen_cols, cur_gen_cols.at(i))) {
+src/sql/optimizer/ob_join_order.cpp	17653	ObJoinOrder::deduce_common_gen_col_index_expr	pointer membership test: ObOptimizerUtil::find_item	} else if (ObOptimizerUtil::find_item(from_exprs, from_expr)) {

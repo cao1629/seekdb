@@ -1,0 +1,58 @@
+file	line	symbol	construct	text
+src/share/ob_simple_batch.h	44	ObSimpleBatch::range_	member SQLScanRange (pointer) of type const SQLScanRange *	const SQLScanRange *range_;
+src/share/ob_simple_batch.h	45	ObSimpleBatch::ranges_	member SQLScanRangeArray (pointer) of type const SQLScanRangeArray *	const SQLScanRangeArray *ranges_;
+src/share/ob_snapshot_table_proxy.h	52	ObSnapshotInfo::comment_	member raw bytes (pointer) of type const char*	const char* comment_;
+src/share/ob_tablet_local_checksum_operator.cpp	293	ObTabletColumnChecksumMeta::get_str_obj	allocator in, arena view out: ObObj &obj	int ObTabletColumnChecksumMeta::get_str_obj(
+src/share/ob_tablet_local_checksum_operator.cpp	314	ObTabletColumnChecksumMeta::get_hex_str	allocator in, arena view out: common::ObString &column_meta_hex_str	int ObTabletColumnChecksumMeta::get_hex_str(
+src/share/ob_tablet_local_checksum_operator.cpp	345	ObTabletColumnChecksumMeta::get_serialize_str	allocator in, arena view out: common::ObString &str	int ObTabletColumnChecksumMeta::get_serialize_str(
+src/share/ob_tablet_local_checksum_operator.cpp	646	ObTabletLocalChecksumOperator::get_visible_column_meta	allocator in, arena view out: common::ObString &column_meta_visible_str	int ObTabletLocalChecksumOperator::get_visible_column_meta(
+src/share/ob_telemetry.cpp	1136	generate_telemetry_json	allocator in, arena view out: ObString &json_str	static int generate_telemetry_json(const char* reporter, const char* event_name,
+src/share/ob_telemetry.cpp	1311	read_telemetry_file	allocator in, arena view out: ObString &json_str	static int read_telemetry_file(ObIAllocator &allocator, ObString &json_str)
+src/share/ob_truncated_string.h	60	ObTruncatedString::str_	member ObString (value) of type ObString	ObString str_;
+src/share/object/ob_array_cast.cpp	182	ObArrayCastUtils::cast_add_element	allocator in, arena view out: ObObj &src_elem	int ObArrayCastUtils::cast_add_element(common::ObIAllocator &alloc, ObObj &src_elem,
+src/share/object/ob_array_cast.cpp	547	ObArrayCastUtils::string_cast_map	allocator in, arena view out: ObString &arr_text	int ObArrayCastUtils::string_cast_map(common::ObIAllocator &alloc,
+src/share/object/ob_array_cast.cpp	787	ObArrayCastUtils::string_cast_sparse_vector_fast	allocator in, arena view out: ObString &arr_text	int ObArrayCastUtils::string_cast_sparse_vector_fast(
+src/share/object/ob_array_cast.cpp	930	ObArrayCastUtils::string_cast_vector	allocator in, arena view out: ObString &arr_text	int ObArrayCastUtils::string_cast_vector(common::ObIAllocator &alloc, ObString &arr_text, ObIArrayType *&dst, const ObCollectionTypeBase *dst_type, bool is_binary)
+src/share/object/ob_array_cast.cpp	1046	ObArrayCastUtils::string_cast	allocator in, arena view out: ObString &arr_text	int ObArrayCastUtils::string_cast(common::ObIAllocator &alloc, ObString &arr_text,
+src/share/object/ob_obj_cast.cpp	12221	ObObjCaster::get_obj_param_text	allocator in, arena view out: ObString &res	int ObObjCaster::get_obj_param_text(const ObObjParam &obj_param,
+src/share/object/ob_obj_cast.h	337	ObExpectType::type_infos_	member container of ObString of type const ObIArray<ObString> *	const ObIArray<ObString> *type_infos_;
+src/share/redolog/ob_clog_switch_write_callback.h	43	ObCLogSwitchWriteCallback::buffer_	member raw bytes (pointer) of type char *	char *buffer_;
+src/share/redolog/ob_log_file_group.h	56	ObLogFileGroup::log_dir_	member raw bytes (pointer) of type const char *	const char *log_dir_;
+src/share/redolog/ob_log_file_handler.h	117	ObLogFileHandler::TmpFileCleaner::log_dir_	member raw bytes (pointer) of type const char*	const char* log_dir_;
+src/share/redolog/ob_log_file_handler.h	126	ObLogFileHandler::log_dir_	member raw bytes (pointer) of type const char *	const char *log_dir_;
+src/share/schema/ob_ai_model_mgr.h	105	ObAiModelSchema::name_	member ObString (value) of type ObString	ObString name_;
+src/share/schema/ob_ai_model_mgr.h	107	ObAiModelSchema::model_name_	member ObString (value) of type ObString	ObString model_name_;
+src/share/schema/ob_ai_model_mgr.h	157	ObAiModelHashWrapper::name_	member ObString (value) of type ObString	ObString name_;
+src/share/schema/ob_column_schema.h	379	ObColumnSchemaV2::orig_default_value_	member ObObj (value) of type common::ObObj	common::ObObj orig_default_value_;//first default value, used for alter table add column; collation must be same with the column
+src/share/schema/ob_column_schema.h	380	ObColumnSchemaV2::cur_default_value_	member ObObj (value) of type common::ObObj	common::ObObj cur_default_value_; //collation must be same with the column
+src/share/schema/ob_column_schema.h	381	ObColumnSchemaV2::column_name_	member ObString (value) of type common::ObString	common::ObString column_name_;
+src/share/schema/ob_column_schema.h	382	ObColumnSchemaV2::comment_	member ObString (value) of type common::ObString	common::ObString comment_;
+src/share/schema/ob_column_schema.h	383	ObColumnSchemaV2::extended_type_info_	member container of ObString of type common::ObArrayHelper<common::ObString>	common::ObArrayHelper<common::ObString> extended_type_info_;//used for enum and set
+src/share/schema/ob_constraint.h	134	ObConstraint::constraint_name_	member ObString (value) of type common::ObString	common::ObString constraint_name_;
+src/share/schema/ob_constraint.h	135	ObConstraint::check_expr_	member ObString (value) of type common::ObString	common::ObString check_expr_;
+src/share/schema/ob_dependency_info.h	221	ObDependencyInfo::dep_attrs_	member ObString (value) of type common::ObString	common::ObString dep_attrs_;
+src/share/schema/ob_dependency_info.h	222	ObDependencyInfo::dep_reason_	member ObString (value) of type common::ObString	common::ObString dep_reason_;
+src/share/schema/ob_dependency_info.h	223	ObDependencyInfo::ref_obj_name_	member ObString (value) of type common::ObString	common::ObString ref_obj_name_;
+src/share/schema/ob_error_info.h	154	ObErrorInfo::text_	member ObString (value) of type common::ObString	common::ObString text_;           // error text
+src/share/schema/ob_list_row_values.h	54	ObListRowValues::values_	member container of ObNewRow of type common::ObSEArray<common::ObNewRow, 2>	common::ObSEArray<common::ObNewRow, 2> values_;
+src/share/schema/ob_mock_fk_parent_table_mgr.h	58	ObMockFKParentTableHashWrapper::mock_table_name_	member ObString (value) of type common::ObString	common::ObString mock_table_name_;
+src/share/schema/ob_objpriv_mysql_schema_struct.h	92	ObObjMysqlPrivSortKey::object_name_	member ObString (value) of type common::ObString	common::ObString object_name_;
+src/share/schema/ob_objpriv_mysql_schema_struct.h	149	ObObjMysqlPriv::obj_name_	member ObString (value) of type common::ObString	common::ObString obj_name_;
+src/share/schema/ob_outline_mgr.h	84	ObSimpleOutlineSchema::name_	member ObString (value) of type common::ObString	common::ObString name_;
+src/share/schema/ob_outline_mgr.h	85	ObSimpleOutlineSchema::signature_	member ObString (value) of type common::ObString	common::ObString signature_;
+src/share/schema/ob_outline_mgr.h	86	ObSimpleOutlineSchema::sql_id_	member ObString (value) of type common::ObString	common::ObString sql_id_;
+src/share/schema/ob_outline_mgr.h	87	ObSimpleOutlineSchema::format_sql_id_	member ObString (value) of type common::ObString	common::ObString format_sql_id_;
+src/share/schema/ob_package_info.h	127	ObPackageInfo::package_name_	member ObString (value) of type common::ObString	common::ObString package_name_;
+src/share/schema/ob_package_info.h	131	ObPackageInfo::exec_env_	member ObString (value) of type common::ObString	common::ObString exec_env_;
+src/share/schema/ob_package_info.h	132	ObPackageInfo::source_	member ObString (value) of type common::ObString	common::ObString source_;
+src/share/schema/ob_package_info.h	133	ObPackageInfo::comment_	member ObString (value) of type common::ObString	common::ObString comment_;
+src/share/schema/ob_package_info.h	134	ObPackageInfo::route_sql_	member ObString (value) of type common::ObString	common::ObString route_sql_;
+src/share/schema/ob_package_mgr.h	135	ObSimplePackageSchema::package_name_	member ObString (value) of type common::ObString	common::ObString package_name_;
+src/share/schema/ob_package_mgr.h	167	ObPackageNameHashWrapper::package_name_	member ObString (value) of type common::ObString	common::ObString package_name_;
+src/share/schema/ob_partition_sql_helper.h	59	ObPartDMLGenerator::PartInfo::part_name_	member ObString (value) of type common::ObString	common::ObString part_name_;
+src/share/schema/ob_partition_sql_helper.h	60	ObPartDMLGenerator::PartInfo::high_bound_val_	member ObString (value) of type common::ObString	common::ObString high_bound_val_;
+src/share/schema/ob_partition_sql_helper.h	61	ObPartDMLGenerator::PartInfo::b_high_bound_val_	member ObString (value) of type common::ObString	common::ObString b_high_bound_val_;
+src/share/schema/ob_partition_sql_helper.h	62	ObPartDMLGenerator::PartInfo::list_val_	member ObString (value) of type common::ObString	common::ObString list_val_;
+src/share/schema/ob_partition_sql_helper.h	63	ObPartDMLGenerator::PartInfo::b_list_val_	member ObString (value) of type common::ObString	common::ObString b_list_val_;
+src/share/schema/ob_partition_sql_helper.h	306	ObAddPartInfoHelper::high_bound_val_	member raw bytes (pointer) of type char *	char *high_bound_val_;
+src/share/schema/ob_partition_sql_helper.h	307	ObAddPartInfoHelper::list_val_	member raw bytes (pointer) of type char *	char *list_val_;

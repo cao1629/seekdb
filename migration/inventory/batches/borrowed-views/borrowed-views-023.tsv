@@ -1,0 +1,56 @@
+file	line	symbol	construct	text
+src/share/schema/ob_trigger_info.h	185	ObTriggerInfo::TriggerContext::before_row_declare_	member ObString (value) of type common::ObString	common::ObString before_row_declare_;
+src/share/schema/ob_trigger_info.h	186	ObTriggerInfo::TriggerContext::before_row_execute_	member ObString (value) of type common::ObString	common::ObString before_row_execute_;
+src/share/schema/ob_trigger_info.h	187	ObTriggerInfo::TriggerContext::after_row_declare_	member ObString (value) of type common::ObString	common::ObString after_row_declare_;
+src/share/schema/ob_trigger_info.h	188	ObTriggerInfo::TriggerContext::after_row_execute_	member ObString (value) of type common::ObString	common::ObString after_row_execute_;
+src/share/schema/ob_trigger_info.h	189	ObTriggerInfo::TriggerContext::trigger_body_	member ObString (value) of type common::ObString	common::ObString trigger_body_; // for mysql trigger
+src/share/schema/ob_trigger_info.h	491	ObTriggerInfo::update_columns_	member ObString (value) of type common::ObString	common::ObString update_columns_;               // set by user
+src/share/schema/ob_trigger_info.h	492	ObTriggerInfo::reference_names_	member ObString (value) of type common::ObString	common::ObString reference_names_[RT_MAX];      // set by user
+src/share/schema/ob_trigger_info.h	493	ObTriggerInfo::when_condition_	member ObString (value) of type common::ObString	common::ObString when_condition_;               // set by user
+src/share/schema/ob_trigger_info.h	494	ObTriggerInfo::trigger_body_	member ObString (value) of type common::ObString	common::ObString trigger_body_;                 // set by user
+src/share/schema/ob_trigger_info.h	498	ObTriggerInfo::priv_user_	member ObString (value) of type common::ObString	common::ObString priv_user_;
+src/share/schema/ob_trigger_info.h	500	ObTriggerInfo::ref_trg_db_name_	member ObString (value) of type common::ObString	common::ObString ref_trg_db_name_;              // db name of the trigger specified in the sorting method
+src/share/schema/ob_trigger_info.h	501	ObTriggerInfo::ref_trg_name_	member ObString (value) of type common::ObString	common::ObString ref_trg_name_;                 // The name of the trigger specified in the sorting method
+src/share/schema/ob_trigger_mgr.h	139	ObSimpleTriggerSchema::trigger_name_	member ObString (value) of type common::ObString	common::ObString trigger_name_;
+src/share/schema/ob_trigger_mgr.h	166	ObTriggerNameHashWrapper::trigger_name_	member ObString (value) of type common::ObString	common::ObString trigger_name_;
+src/share/schema/ob_trigger_sql_service.h	83	ObTriggerSqlService::ObTriggerValues::trigger_name_	member ObString (value) of type common::ObString	common::ObString trigger_name_;
+src/share/schema/ob_trigger_sql_service.h	84	ObTriggerSqlService::ObTriggerValues::spec_source_	member ObString (value) of type common::ObString	common::ObString spec_source_;
+src/share/schema/ob_trigger_sql_service.h	85	ObTriggerSqlService::ObTriggerValues::body_source_	member ObString (value) of type common::ObString	common::ObString body_source_;
+src/share/semistruct/ob_sub_column_path.h	48	ObSubColumnPathItem::key_	member ObString (value) of type ObString	ObString key_;
+src/share/session/ob_local_session_var.cpp	85	ObLocalSessionVar::gen_local_session_var_str	allocator in, arena view out: ObString &local_session_var_str	int ObLocalSessionVar::gen_local_session_var_str(ObIAllocator &allocator,
+src/share/session/ob_local_session_var.h	38	ObSessionSysVar::val_	member ObObj (value) of type common::ObObj	common::ObObj val_;
+src/share/storage/ob_admin_job_table_storage.h	34	ObAdminJobEntry::job_type_	member ObString (value) of type common::ObString	common::ObString job_type_;
+src/share/storage/ob_admin_job_table_storage.h	35	ObAdminJobEntry::job_status_	member ObString (value) of type common::ObString	common::ObString job_status_;
+src/share/storage/ob_deadlock_event_history_table_storage.h	37	ObDeadlockEventHistoryEntry::role_	member ObString (value) of type common::ObString	common::ObString role_;
+src/share/storage/ob_deadlock_event_history_table_storage.h	38	ObDeadlockEventHistoryEntry::priority_level_	member ObString (value) of type common::ObString	common::ObString priority_level_;
+src/share/storage/ob_deadlock_event_history_table_storage.h	42	ObDeadlockEventHistoryEntry::module_	member ObString (value) of type common::ObString	common::ObString module_;
+src/share/storage/ob_deadlock_event_history_table_storage.h	43	ObDeadlockEventHistoryEntry::visitor_	member ObString (value) of type common::ObString	common::ObString visitor_;
+src/share/storage/ob_deadlock_event_history_table_storage.h	44	ObDeadlockEventHistoryEntry::object_	member ObString (value) of type common::ObString	common::ObString object_;
+src/share/storage/ob_deadlock_event_history_table_storage.h	45	ObDeadlockEventHistoryEntry::extra_name1_	member ObString (value) of type common::ObString	common::ObString extra_name1_;
+src/share/storage/ob_deadlock_event_history_table_storage.h	46	ObDeadlockEventHistoryEntry::extra_value1_	member ObString (value) of type common::ObString	common::ObString extra_value1_;
+src/share/storage/ob_deadlock_event_history_table_storage.h	47	ObDeadlockEventHistoryEntry::extra_name2_	member ObString (value) of type common::ObString	common::ObString extra_name2_;
+src/share/storage/ob_deadlock_event_history_table_storage.h	48	ObDeadlockEventHistoryEntry::extra_value2_	member ObString (value) of type common::ObString	common::ObString extra_value2_;
+src/share/storage/ob_deadlock_event_history_table_storage.h	49	ObDeadlockEventHistoryEntry::extra_name3_	member ObString (value) of type common::ObString	common::ObString extra_name3_;
+src/share/storage/ob_deadlock_event_history_table_storage.h	50	ObDeadlockEventHistoryEntry::extra_value3_	member ObString (value) of type common::ObString	common::ObString extra_value3_;
+src/share/system_variable/ob_system_variable_init.h	45	ObSysVarFromJson::name_	member ObString (value) of type common::ObString [generated]	common::ObString name_;
+src/share/system_variable/ob_system_variable_init.h	47	ObSysVarFromJson::default_value_	member ObString (value) of type common::ObString [generated]	common::ObString default_value_; // used for runtime initialization
+src/share/system_variable/ob_system_variable_init.h	48	ObSysVarFromJson::base_value_	member ObString (value) of type common::ObString [generated]	common::ObString base_value_; // used for session sync
+src/share/system_variable/ob_system_variable_init.h	49	ObSysVarFromJson::min_val_	member ObString (value) of type common::ObString [generated]	common::ObString min_val_;
+src/share/system_variable/ob_system_variable_init.h	50	ObSysVarFromJson::max_val_	member ObString (value) of type common::ObString [generated]	common::ObString max_val_;
+src/share/system_variable/ob_system_variable_init.h	51	ObSysVarFromJson::enum_names_	member ObString (value) of type common::ObString [generated]	common::ObString enum_names_;
+src/share/system_variable/ob_system_variable_init.h	52	ObSysVarFromJson::info_	member ObString (value) of type common::ObString [generated]	common::ObString info_;
+src/share/system_variable/ob_system_variable_init.h	54	ObSysVarFromJson::alias_	member ObString (value) of type common::ObString [generated]	common::ObString alias_;
+src/share/system_variable/ob_system_variable_init.h	55	ObSysVarFromJson::base_class_	member ObString (value) of type common::ObString [generated]	common::ObString base_class_;
+src/share/system_variable/ob_system_variable_init.h	56	ObSysVarFromJson::on_check_and_convert_func_	member ObString (value) of type common::ObString [generated]	common::ObString on_check_and_convert_func_;
+src/share/system_variable/ob_system_variable_init.h	57	ObSysVarFromJson::on_update_func_	member ObString (value) of type common::ObString [generated]	common::ObString on_update_func_;
+src/share/system_variable/ob_system_variable_init.h	58	ObSysVarFromJson::to_select_obj_func_	member ObString (value) of type common::ObString [generated]	common::ObString to_select_obj_func_;
+src/share/system_variable/ob_system_variable_init.h	59	ObSysVarFromJson::to_show_str_func_	member ObString (value) of type common::ObString [generated]	common::ObString to_show_str_func_;
+src/share/system_variable/ob_system_variable_init.h	60	ObSysVarFromJson::get_meta_type_func_	member ObString (value) of type common::ObString [generated]	common::ObString get_meta_type_func_;
+src/share/system_variable/ob_system_variable_init.h	61	ObSysVarFromJson::session_special_update_func_	member ObString (value) of type common::ObString [generated]	common::ObString session_special_update_func_;
+src/share/text_analysis/ob_token_stream.h	60	ObTextTokenizer::input_doc_	member ObDatum (pointer) of type const ObDatum *	const ObDatum *input_doc_;
+src/share/text_analysis/ob_token_stream.h	82	ObTextWhitespaceTokenizer::curr_token_ptr_	member raw bytes (pointer) of type const char *	const char *curr_token_ptr_;
+src/share/text_analysis/ob_token_stream.h	153	ObTextTokenGroupNormalizer::grouping_map_	member container of ObString of type common::hash::ObHashMap<ObString, int64_t>	common::hash::ObHashMap<ObString, int64_t> grouping_map_;
+src/share/text_analysis/ob_token_stream.h	154	ObTextTokenGroupNormalizer::map_iter_	member container of ObString of type common::hash::ObHashMap<ObString, int64_t>::const_iterator	common::hash::ObHashMap<ObString, int64_t>::const_iterator map_iter_;
+src/share/text_analysis/ob_token_stream.h	155	ObTextTokenGroupNormalizer::map_end_iter_	member container of ObString of type common::hash::ObHashMap<ObString, int64_t>::const_iterator	common::hash::ObHashMap<ObString, int64_t>::const_iterator map_end_iter_;
+src/sql/das/iter/ob_das_domain_id_merge_iter.cpp	742	ObDASDomainIdMergeIter::get_rowkey	allocator in, arena view out: common::ObRowkey &rowkey	int ObDASDomainIdMergeIter::get_rowkey(
+src/sql/das/iter/ob_das_domain_id_merge_iter.cpp	805	ObDASDomainIdMergeIter::get_domain_id	allocator in, arena view out: share::ObDomainIdUtils::DomainIds &domain_id	int ObDASDomainIdMergeIter::get_domain_id(

@@ -1,0 +1,120 @@
+file	line	symbol	construct	text
+src/observer/ai_service/ob_ai_service_proxy.cpp	121	ObAiServiceProxy::select_ai_endpoint	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/observer/ai_service/ob_ai_service_proxy.cpp	122	ObAiServiceProxy::select_ai_endpoint	assign tmp_ret	if (OB_ITER_END != (tmp_ret = result->next())) {
+src/observer/ai_service/ob_ai_service_proxy.cpp	171	ObAiServiceProxy::select_ai_endpoint_by_ai_model_name	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/observer/ai_service/ob_ai_service_proxy.cpp	172	ObAiServiceProxy::select_ai_endpoint_by_ai_model_name	assign tmp_ret	if (OB_ITER_END != (tmp_ret = result->next())) {
+src/observer/ai_service/ob_ai_service_proxy.cpp	274	ObAiServiceProxy::check_ai_endpoint_exists	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/observer/ai_service/ob_ai_service_proxy.cpp	275	ObAiServiceProxy::check_ai_endpoint_exists	assign tmp_ret	if (OB_ITER_END != (tmp_ret = result->next())) {
+src/observer/change_stream/ob_cs_plugin_async_index.cpp	304	ObCSAsyncIndexProcessor::resolve_vector_index_info_	declare tmp_ret	int tmp_ret = ObVectorIndexUtil::parser_params_from_string(
+src/observer/change_stream/ob_cs_plugin_async_index.cpp	1111	ObCSAsyncIndexProcessor::write_to_vsag_	declare tmp_ret	int tmp_ret = adaptor->update_incr_bitmap(vids, insert_count);
+src/observer/change_stream/ob_cs_plugin_async_index.cpp	1120	ObCSAsyncIndexProcessor::write_to_vsag_	declare tmp_ret	int tmp_ret = adaptor->refresh_bitmap_background();
+src/observer/change_stream/ob_cs_plugin_async_index.cpp	1206	ObCSPluginAsyncIndex::commit	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/observer/change_stream/ob_cs_plugin_async_index.cpp	1207	ObCSPluginAsyncIndex::commit	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(schema_service->try_eliminate_schema_mgr())) {
+src/observer/dbms_scheduler/ob_dbms_sched_job_executor.cpp	327	ObDBMSSchedJobExecutor::run_dbms_sched_job	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/observer/dbms_scheduler/ob_dbms_sched_job_executor.cpp	332	ObDBMSSchedJobExecutor::run_dbms_sched_job	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(ObDBMSSchedJobExecutor::destroy_session(free_session_ctx, session_info))) {
+src/observer/dbms_scheduler/ob_dbms_sched_job_executor.cpp	334	ObDBMSSchedJobExecutor::run_dbms_sched_job	merge into ret	ret = (OB_SUCC(ret)) ? tmp_ret : ret;
+src/observer/dbms_scheduler/ob_dbms_sched_job_executor.cpp	367	ObDBMSSchedJobExecutor::run_dbms_sched_job	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/observer/dbms_scheduler/ob_dbms_sched_job_executor.cpp	369	ObDBMSSchedJobExecutor::run_dbms_sched_job	OB_TMP_FAIL (plan definition)	if ((OB_TMP_FAIL(table_operator_.update_for_kill(job_info)))) {
+src/observer/dbms_scheduler/ob_dbms_sched_job_executor.cpp	378	ObDBMSSchedJobExecutor::run_dbms_sched_job	OB_TMP_FAIL (plan definition)	if ((OB_TMP_FAIL(table_operator_.update_for_end(job_info, ret, errmsg)))) {
+src/observer/dbms_scheduler/ob_dbms_sched_job_executor.cpp	382	ObDBMSSchedJobExecutor::run_dbms_sched_job	merge into ret	ret = OB_SUCCESS == ret ? tmp_ret : ret;
+src/observer/dbms_scheduler/ob_dbms_sched_job_master.cpp	171	ObDBMSSchedJobMaster::schedule_due_jobs	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/observer/dbms_scheduler/ob_dbms_sched_job_master.cpp	186	ObDBMSSchedJobMaster::schedule_due_jobs	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = wait_vector_.remove(wait_vector_.begin()))) {
+src/observer/dbms_scheduler/ob_dbms_sched_job_master.cpp	187	ObDBMSSchedJobMaster::schedule_due_jobs	assign tmp_ret	} else if (OB_SUCCESS != (tmp_ret = scheduler_job(job_key))) {
+src/observer/dbms_scheduler/ob_dbms_sched_table_operator.cpp	177	ObDBMSSchedTableOperator::update_for_rollback	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/observer/dbms_scheduler/ob_dbms_sched_table_operator.cpp	178	ObDBMSSchedTableOperator::update_for_rollback	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = trans.end(OB_SUCC(ret)))) {
+src/observer/dbms_scheduler/ob_dbms_sched_table_operator.cpp	180	ObDBMSSchedTableOperator::update_for_rollback	merge into ret	ret = OB_SUCC(ret) ? tmp_ret : ret;
+src/observer/dbms_scheduler/ob_dbms_sched_table_operator.cpp	234	ObDBMSSchedTableOperator::update_for_end	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/observer/dbms_scheduler/ob_dbms_sched_table_operator.cpp	235	ObDBMSSchedTableOperator::update_for_end	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = trans.end(OB_SUCC(ret)))) {
+src/observer/dbms_scheduler/ob_dbms_sched_table_operator.cpp	237	ObDBMSSchedTableOperator::update_for_end	merge into ret	ret = OB_SUCC(ret) ? tmp_ret : ret;
+src/observer/dbms_scheduler/ob_dbms_sched_table_operator.cpp	257	ObDBMSSchedTableOperator::update_for_kill	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/observer/dbms_scheduler/ob_dbms_sched_table_operator.cpp	258	ObDBMSSchedTableOperator::update_for_kill	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = trans.end(OB_SUCC(ret)))) {
+src/observer/dbms_scheduler/ob_dbms_sched_table_operator.cpp	260	ObDBMSSchedTableOperator::update_for_kill	merge into ret	ret = OB_SUCC(ret) ? tmp_ret : ret;
+src/observer/dbms_scheduler/ob_dbms_sched_table_operator.cpp	459	ObDBMSSchedTableOperator::get_dbms_sched_job_info	declare tmp_ret	int tmp_ret = result.get_result()->next();
+src/observer/dbms_scheduler/ob_dbms_sched_table_operator.cpp	464	ObDBMSSchedTableOperator::get_dbms_sched_job_info	merge into ret	ret = tmp_ret;
+src/observer/dbms_scheduler/ob_dbms_sched_table_operator.cpp	557	ObDBMSSchedTableOperator::get_dbms_sched_job_class_info	declare tmp_ret	int tmp_ret = result.get_result()->next();
+src/observer/dbms_scheduler/ob_dbms_sched_table_operator.cpp	562	ObDBMSSchedTableOperator::get_dbms_sched_job_class_info	merge into ret	ret = tmp_ret;
+src/observer/mysql/obmp_base.cpp	180	ObMPBase::cancel_unsubmitted_callback	declare register_ret (continue-and-record variable)	const int register_ret = OB_STATE_NOT_MATCH;
+src/observer/mysql/obmp_base.cpp	183	ObMPBase::cancel_unsubmitted_callback	merge register_ret into ret (continue-and-record through another variable)	ret = OB_SUCCESS == ret ? register_ret : ret;
+src/observer/mysql/obmp_base.cpp	323	ObMPBase::init_process_var	declare tmp_ret	int tmp_ret = GDS.set_thread_local_actions(session.get_debug_sync_actions());
+src/observer/mysql/obmp_connect.cpp	166	ObMPConnect::init_process_single_stmt	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/observer/mysql/obmp_connect.cpp	167	ObMPConnect::init_process_single_stmt	assign tmp_ret	tmp_ret = do_after_process(session, false, ret); // not asynchronous response
+src/observer/mysql/obmp_connect.cpp	261	ObMPConnect::process	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/observer/mysql/obmp_connect.cpp	440	ObMPConnect::load_privilege_info	declare release_ret (continue-and-record variable)	const int release_ret = packet_sender_.release_packet(asr_pkt);
+src/observer/mysql/obmp_connect.cpp	444	ObMPConnect::load_privilege_info	merge release_ret into ret through if (OB_SUCC(ret)) (continue-and-record through another variable)	ret = release_ret;
+src/observer/mysql/obmp_connect.cpp	460	ObMPConnect::load_privilege_info	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/observer/mysql/obmp_connect.cpp	464	ObMPConnect::load_privilege_info	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = schema_service->get_runtime_refreshed_schema_version(local_version))) {
+src/observer/mysql/obmp_connect.cpp	465	ObMPConnect::load_privilege_info	assign tmp_ret	} else if (OB_SUCCESS != (tmp_ret = schema_service->get_published_schema_version(global_version))) {
+src/observer/mysql/obmp_connect.cpp	468	ObMPConnect::load_privilege_info	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = gctx_.schema_service_->async_refresh_schema(global_version))) {
+src/observer/mysql/obmp_connect.cpp	469	ObMPConnect::load_privilege_info	assign tmp_ret	} else if (OB_SUCCESS != (tmp_ret = gctx_.schema_service_->get_runtime_schema_guard(
+src/observer/mysql/obmp_connect.cpp	508	ObMPConnect::load_privilege_info	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/observer/mysql/obmp_connect.cpp	513	ObMPConnect::load_privilege_info	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = schema_service->get_runtime_refreshed_schema_version(local_version))) {
+src/observer/mysql/obmp_connect.cpp	514	ObMPConnect::load_privilege_info	assign tmp_ret	} else if (OB_SUCCESS != (tmp_ret = schema_service->get_published_schema_version(global_version))) {
+src/observer/mysql/obmp_connect.cpp	518	ObMPConnect::load_privilege_info	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = gctx_.schema_service_->async_refresh_schema(global_version))) {
+src/observer/mysql/obmp_connect.cpp	519	ObMPConnect::load_privilege_info	assign tmp_ret	} else if (OB_SUCCESS != (tmp_ret = gctx_.schema_service_->get_runtime_schema_guard(schema_guard))) {
+src/observer/mysql/obmp_connect.cpp	520	ObMPConnect::load_privilege_info	assign tmp_ret	} else if (OB_SUCCESS != (tmp_ret = schema_guard.get_database_id(session.get_database_name(), db_id))) {
+src/observer/mysql/obmp_init_db.cpp	112	ObMPInitDB::process	declare tmp_ret	int tmp_ret = gctx_.schema_service_->get_runtime_refreshed_schema_version(local_version);
+src/observer/mysql/obmp_packet_sender.cpp	1054	ObMPPacketSender::flush_buffer	declare finish_ret (continue-and-record variable)	const int finish_ret = finish_sql_request();
+src/observer/mysql/obmp_packet_sender.cpp	1056	ObMPPacketSender::flush_buffer	merge finish_ret into ret through if (OB_SUCC(ret)) (continue-and-record through another variable)	ret = finish_ret;
+src/observer/mysql/obmp_query.cpp	61	ObMPQuery::process	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/observer/mysql/obmp_query.cpp	176	ObMPQuery::process	merge OB_NOT_SUPPORTED into ret (continue-and-record through another variable)	ret = OB_SUCC(ret) ? OB_NOT_SUPPORTED : ret;
+src/observer/mysql/obmp_query.cpp	273	ObMPQuery::process	assign tmp_ret	tmp_ret = OB_CONNECT_ERROR;
+src/observer/mysql/obmp_query.cpp	275	ObMPQuery::process	assign tmp_ret	} else if (OB_UNLIKELY(OB_SUCCESS != (tmp_ret = flush_buffer(true)))) {
+src/observer/mysql/obmp_query.cpp	322	ObMPQuery::try_batched_multi_stmt_optimization	declare tmp_ret	int tmp_ret = ret;
+src/observer/mysql/obmp_query.cpp	430	ObMPQuery::process_single_stmt	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/observer/mysql/obmp_query.cpp	431	ObMPQuery::process_single_stmt	assign tmp_ret	tmp_ret = GDS.collect_result_actions(session.get_debug_sync_actions());
+src/observer/mysql/obmp_query.cpp	437	ObMPQuery::process_single_stmt	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/observer/mysql/obmp_query.cpp	439	ObMPQuery::process_single_stmt	assign tmp_ret	tmp_ret = do_after_process(session, async_resp_used, ret);
+src/observer/mysql/obmp_query.cpp	638	ObMPQuery::do_process_trans_ctrl	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/observer/mysql/obmp_query.cpp	639	ObMPQuery::do_process_trans_ctrl	assign tmp_ret	tmp_ret = OB_E(EventTable::EN_PRINT_QUERY_SQL) OB_SUCCESS;
+src/observer/mysql/obmp_query.cpp	768	ObMPQuery::process_trans_ctrl_cmd	declare cancel_ret (continue-and-record variable)	const int cancel_ret = cancel_unsubmitted_callback(session.get_mysql_end_trans_cb());
+src/observer/mysql/obmp_query.cpp	771	ObMPQuery::process_trans_ctrl_cmd	merge cancel_ret into ret (continue-and-record through another variable)	ret = OB_SUCCESS == ret ? cancel_ret : ret;
+src/observer/mysql/obmp_query.cpp	903	ObMPQuery::do_process	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/observer/mysql/obmp_query.cpp	904	ObMPQuery::do_process	assign tmp_ret	tmp_ret = OB_E(EventTable::EN_PRINT_QUERY_SQL) OB_SUCCESS;
+src/observer/mysql/obmp_query.cpp	1233	ObMPQuery::response_result	declare cancel_ret (continue-and-record variable)	const int cancel_ret = cancel_unsubmitted_callback(session.get_mysql_end_trans_cb());
+src/observer/mysql/obmp_query.cpp	1236	ObMPQuery::response_result	merge cancel_ret into ret (continue-and-record through another variable)	ret = OB_SUCCESS == ret ? cancel_ret : ret;
+src/observer/mysql/obmp_reset_connection.cpp	217	ObMPResetConnection::process	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/observer/mysql/obmp_reset_connection.cpp	219	ObMPResetConnection::process	assign tmp_ret	tmp_ret = do_after_process(*session, false/*async_resp_used*/, ret);
+src/observer/mysql/obmp_stmt_close.cpp	69	ObMPStmtClose::process	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/observer/mysql/obmp_stmt_close.cpp	72	ObMPStmtClose::process	assign tmp_ret	tmp_ret = ret;
+src/observer/mysql/obmp_stmt_close.cpp	80	ObMPStmtClose::process	merge into ret	ret = tmp_ret;
+src/observer/mysql/obmp_stmt_execute.cpp	1469	ObMPStmtExecute::execute_response	declare tmp_ret	int tmp_ret = ret;
+src/observer/mysql/obmp_stmt_execute.cpp	1472	ObMPStmtExecute::execute_response	merge into ret	ret = tmp_ret;
+src/observer/mysql/obmp_stmt_execute.cpp	1740	ObMPStmtExecute::response_result	declare cancel_ret (continue-and-record variable)	const int cancel_ret = cancel_unsubmitted_callback(session.get_mysql_end_trans_cb());
+src/observer/mysql/obmp_stmt_execute.cpp	1743	ObMPStmtExecute::response_result	merge cancel_ret into ret (continue-and-record through another variable)	ret = OB_SUCCESS == ret ? cancel_ret : ret;
+src/observer/mysql/obmp_stmt_execute.cpp	1887	ObMPStmtExecute::process_execute_stmt	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/observer/mysql/obmp_stmt_execute.cpp	1888	ObMPStmtExecute::process_execute_stmt	assign tmp_ret	tmp_ret = GDS.collect_result_actions(session.get_debug_sync_actions());
+src/observer/mysql/obmp_stmt_fetch.cpp	386	ObMPStmtFetch::process_fetch_stmt	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/observer/mysql/obmp_stmt_fetch.cpp	387	ObMPStmtFetch::process_fetch_stmt	assign tmp_ret	tmp_ret = GDS.collect_result_actions(session.get_debug_sync_actions());
+src/observer/mysql/obmp_stmt_fetch.cpp	393	ObMPStmtFetch::process_fetch_stmt	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/observer/mysql/obmp_stmt_fetch.cpp	395	ObMPStmtFetch::process_fetch_stmt	assign tmp_ret	tmp_ret = do_after_process(session, false/*no asyn response*/, ret);
+src/observer/mysql/obmp_stmt_fetch.cpp	457	ObMPStmtFetch::process	declare tmp_ret	int tmp_ret = session.close_cursor(cursor_id_);
+src/observer/mysql/obmp_stmt_fetch.cpp	458	ObMPStmtFetch::process	merge into ret	ret = ret == OB_SUCCESS ? tmp_ret : ret;
+src/observer/mysql/obmp_stmt_prepare.cpp	263	ObMPStmtPrepare::process_prepare_stmt	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/observer/mysql/obmp_stmt_prepare.cpp	265	ObMPStmtPrepare::process_prepare_stmt	assign tmp_ret	tmp_ret = do_after_process(session, async_resp_used, ret);
+src/observer/mysql/obmp_stmt_send_long_data.cpp	175	ObMPStmtSendLongData::process_send_long_data_stmt	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/observer/mysql/obmp_stmt_send_long_data.cpp	177	ObMPStmtSendLongData::process_send_long_data_stmt	assign tmp_ret	tmp_ret = do_after_process(session, false, ret);
+src/observer/mysql/obmp_stmt_send_long_data.cpp	262	ObMPStmtSendLongData::store_piece	merge OB_ERR_UNEXPECTED into ret (continue-and-record through another variable)	ret = OB_SUCCESS == ret ? OB_ERR_UNEXPECTED : ret;
+src/observer/mysql/obsm_conn_callback.cpp	112	ObSMConnectionCallback::destroy	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/observer/mysql/obsm_conn_callback.cpp	115	ObSMConnectionCallback::destroy	assign tmp_ret	if (OB_UNLIKELY(OB_SUCCESS != (tmp_ret = guard.get_session(sess_info)))) {
+src/observer/mysql/obsm_conn_callback.cpp	118	ObSMConnectionCallback::destroy	assign tmp_ret	tmp_ret = OB_ERR_UNEXPECTED;
+src/observer/ob_inner_sql_connection.cpp	268	ObInnerSQLConnection::init	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/observer/ob_inner_sql_connection.cpp	269	ObInnerSQLConnection::init	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = destroy_inner_session())) {
+src/observer/ob_server.cpp	536	ObServer::submit_px_task	declare tmp_ret	int tmp_ret = pool->inc_thread_count(1);
+src/observer/ob_server.cpp	539	ObServer::submit_px_task	merge into ret	ret = tmp_ret;
+src/observer/ob_server.cpp	1165	ObServer::start	declare tmp_ret	const int tmp_ret = server_runtime_controller_.get_server_log_disk_size(runtime_log_disk_size);
+src/observer/ob_server.cpp	1170	ObServer::start	merge into ret	ret = tmp_ret;
+src/observer/ob_server.cpp	2824	ObServer::clean_up_invalid_tables	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/observer/ob_server.cpp	2860	ObServer::clean_up_invalid_tables	assign tmp_ret	tmp_ret = OB_ERR_UNEXPECTED;
+src/observer/ob_server_reload_config.cpp	48	ObServerReloadConfig::operator()	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/observer/ob_server_reload_config.cpp	49	ObServerReloadConfig::operator()	merge into ret	int ret = tmp_ret;
+src/observer/ob_server_reload_config.cpp	52	ObServerReloadConfig::operator()	assign tmp_ret; merge into ret	ret = tmp_ret = OB_INNER_STAT_ERROR;
+src/observer/ob_server_reload_config.cpp	54	ObServerReloadConfig::operator()	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(ObReloadConfig::operator()())) {
+src/observer/ob_server_reload_config.cpp	56	ObServerReloadConfig::operator()	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(OBSERVER.reload_config())) {
+src/observer/ob_server_reload_config.cpp	58	ObServerReloadConfig::operator()	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(OBSERVER.get_net_frame().reload_config())) {
+src/observer/ob_server_reload_config.cpp	66	ObServerReloadConfig::operator()	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(ObReloadConfig::operator()())) {
+src/observer/ob_server_reload_config.cpp	85	ObServerReloadConfig::operator()	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(ObIOManager::get_instance().set_io_config(io_config))) {
+src/observer/ob_server_reload_config.cpp	121	ObServerReloadConfig::operator()	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(ObServerUtils::get_data_disk_info_in_config(data_disk_size,
+src/observer/ob_server_reload_config.cpp	123	ObServerReloadConfig::operator()	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(SERVER_STORAGE_META_SERVICE.get_reserved_size(reserved_size))) {
+src/observer/ob_server_reload_config.cpp	124	ObServerReloadConfig::operator()	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(OB_STORAGE_OBJECT_MGR.resize_local_device(
+src/observer/ob_server_schema_updater.cpp	239	ObServerSchemaUpdater::process_async_refresh_tasks	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/observer/ob_server_schema_updater.cpp	242	ObServerSchemaUpdater::process_async_refresh_tasks	assign tmp_ret	} else if (OB_SUCCESS != (tmp_ret = schema_mgr_->get_runtime_refreshed_schema_version(

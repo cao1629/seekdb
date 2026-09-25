@@ -1,0 +1,49 @@
+file	line	symbol	construct	text
+src/storage/memtable/ob_memtable_mutator.cpp	650	ObMutatorWriter::append_row_kv	-4013 handled (compared against)	if (ret == OB_ALLOCATE_MEMORY_FAILED) {
+src/storage/memtable/ob_memtable_mutator.cpp	656	ObMutatorWriter::append_row_kv	-4013 handled (compared against)	if (ret == OB_ALLOCATE_MEMORY_FAILED) {
+src/storage/memtable/ob_memtable_mutator.cpp	715	ObMutatorWriter::append_table_lock_kv	-4013 handled (compared against)	if (ret == OB_ALLOCATE_MEMORY_FAILED) {
+src/storage/memtable/ob_memtable_mutator.cpp	726	ObMutatorWriter::append_table_lock_kv	-4013 handled (compared against)	if (ret == OB_ALLOCATE_MEMORY_FAILED) {
+src/storage/memtable/ob_memtable_mutator.cpp	781	ObMutatorWriter::append_ext_info_log_kv	-4013 handled (compared against)	if (ret == OB_ALLOCATE_MEMORY_FAILED) {
+src/storage/memtable/ob_memtable_mutator.cpp	787	ObMutatorWriter::append_ext_info_log_kv	-4013 handled (compared against)	if (ret == OB_ALLOCATE_MEMORY_FAILED) {
+src/storage/meta_mem/ob_storage_meta_mem_mgr.cpp	401	ObStorageMetaMemMgr::push_table_into_gc_queue	-4013 handled (compared against)	if (OB_ALLOCATE_MEMORY_FAILED == ret) {
+src/storage/meta_mem/ob_storage_meta_mem_mgr.cpp	408	ObStorageMetaMemMgr::push_table_into_gc_queue	-4013 handled (compared against)	} while (OB_ALLOCATE_MEMORY_FAILED == ret
+src/storage/meta_mem/ob_storage_meta_mem_mgr.cpp	1203	ObStorageMetaMemMgr::acquire_tablet_from_pool	-4013 handled (compared against)	if (OB_ALLOCATE_MEMORY_FAILED != ret) {
+src/storage/meta_mem/ob_storage_meta_mem_mgr.cpp	1245	ObStorageMetaMemMgr::acquire_tablet	-4013 handled (compared against)	if (OB_ALLOCATE_MEMORY_FAILED != ret) {
+src/storage/meta_mem/ob_tablet_meta_mem_mgr.cpp	396	ObTabletMetaMemMgr::push_table_into_gc_queue	-4013 handled (compared against) [not built]	if (OB_ALLOCATE_MEMORY_FAILED == ret) {
+src/storage/meta_mem/ob_tablet_meta_mem_mgr.cpp	403	ObTabletMetaMemMgr::push_table_into_gc_queue	-4013 handled (compared against) [not built]	} while (OB_ALLOCATE_MEMORY_FAILED == ret
+src/storage/meta_mem/ob_tablet_meta_mem_mgr.cpp	1206	ObTabletMetaMemMgr::acquire_tablet_from_pool	-4013 handled (compared against) [not built]	if (OB_ALLOCATE_MEMORY_FAILED != ret) {
+src/storage/meta_mem/ob_tablet_meta_mem_mgr.cpp	1249	ObTabletMetaMemMgr::acquire_tablet	-4013 handled (compared against) [not built]	if (OB_ALLOCATE_MEMORY_FAILED != ret) {
+src/storage/meta_store/ob_local_storage_meta_persister.cpp	99	ObLocalStorageMetaPersister::batch_update_tablet	-4013 handled (compared against)	if (OB_ALLOCATE_MEMORY_FAILED != ret) {
+src/storage/meta_store/ob_local_storage_meta_persister.cpp	105	ObLocalStorageMetaPersister::batch_update_tablet	-4013 handled (compared against)	} while (OB_ALLOCATE_MEMORY_FAILED == ret);
+src/storage/meta_store/ob_local_storage_meta_persister.cpp	221	ObLocalStorageMetaPersister::write_update_tablet_slog_	-4013 handled (compared against)	if (OB_ALLOCATE_MEMORY_FAILED != ret) {
+src/storage/meta_store/ob_local_storage_meta_persister.cpp	227	ObLocalStorageMetaPersister::write_update_tablet_slog_	-4013 handled (compared against)	} while (OB_ALLOCATE_MEMORY_FAILED == ret);
+src/storage/ob_resource_map.h	325	ObResourceMap::set	bounded allocator not named in the plan: resource map FIFO (a general out-of-memory under Decision 12 unless the design names it a budget owner)	ret = common::OB_ALLOCATE_MEMORY_FAILED;
+src/storage/ob_storage_clog_recorder.cpp	202	ObIStorageClogRecorder::try_update	-4013 handled (compared against)	if (OB_ALLOCATE_MEMORY_FAILED == ret) {
+src/storage/ob_storage_schema_recorder.cpp	162	ObStorageSchemaRecorder::try_update_storage_schema	-4013 handled (compared against)	if (OB_ALLOCATE_MEMORY_FAILED == ret || OB_BLOCK_FROZEN == ret) {
+src/storage/scheduler/ob_dag_scheduler.cpp	3026	ObDagPrioScheduler::deal_with_finish_task	-4013 handled (compared against)	if (OB_ALLOCATE_MEMORY_FAILED == error_code && is_mini_compaction_dag(dag->get_type())) {
+src/storage/slog_ckpt/ob_local_storage_checkpoint_slog_handler.cpp	737	ObLocalStorageCheckpointSlogHandler::update_tablet_meta_addr_and_block_list	-4013 handled (compared against)	} while (OB_ALLOCATE_MEMORY_FAILED == ret);
+src/storage/slog_ckpt/ob_local_storage_checkpoint_writer.cpp	425	ObLocalStorageCheckpointWriter::ignore_ret	-4013 handled (compared against)	return OB_ALLOCATE_MEMORY_FAILED == ret || OB_DISK_HUNG == ret || OB_TIMEOUT == ret || OB_BUF_NOT_ENOUGH == ret;
+src/storage/slog_ckpt/ob_server_checkpoint_writer.cpp	93	ObServerCheckpointWriter::write_runtime_meta_checkpoint	bounded allocator not named in the plan: checkpoint writer FIFO (128MB) (a general out-of-memory under Decision 12 unless the design names it a budget owner)	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/storage/tablet/ob_tablet.cpp	2353	ObTablet::ignore_ret	-4013 handled (compared against)	return OB_ALLOCATE_MEMORY_FAILED == ret || OB_TIMEOUT == ret || OB_DISK_HUNG == ret;
+src/storage/throttle/ob_throttle_unit.ipp	238	ObThrottleUnit::inner_get_throttle_info_	-4013 handled (compared against)	if (OB_ALLOCATE_MEMORY_FAILED == ret) {
+src/storage/tmp_file/ob_i_tmp_file.cpp	576	ObITmpFile::aio_write	budget error handled (compared against or case label): OB_ALLOCATE_TMP_FILE_PAGE_FAILED	if (OB_ALLOCATE_TMP_FILE_PAGE_FAILED == ret) {
+src/storage/tmp_file/ob_i_tmp_file.cpp	657	ObITmpFile::inner_write_continuous_pages_	budget error handled (compared against or case label): OB_ALLOCATE_TMP_FILE_PAGE_FAILED	if (OB_ALLOCATE_TMP_FILE_PAGE_FAILED == ret) {
+src/storage/tmp_file/ob_i_tmp_file.cpp	741	ObITmpFile::inner_write_continuous_pages_	budget error raised: OB_ALLOCATE_TMP_FILE_PAGE_FAILED	ret = is_alloc_failed && OB_SUCC(ret) ? OB_ALLOCATE_TMP_FILE_PAGE_FAILED : ret;
+src/storage/tmp_file/ob_i_tmp_file.cpp	804	ObITmpFile::alloc_and_write_pages_	budget error handled (compared against or case label): OB_ALLOCATE_TMP_FILE_PAGE_FAILED	if (OB_FAIL(ret) && ret != OB_ALLOCATE_TMP_FILE_PAGE_FAILED && !alloced_page_id.empty()) {
+src/storage/tmp_file/ob_shared_nothing_tmp_file.cpp	1677	ObSharedNothingTmpFile::collect_flush_data_page_id_	-4013 handled (compared against)	if (OB_ALLOCATE_MEMORY_FAILED == ret) {
+src/storage/tmp_file/ob_shared_nothing_tmp_file.cpp	1758	ObSharedNothingTmpFile::generate_meta_flush_info_	-4013 handled (compared against)	if (OB_ALLOCATE_MEMORY_FAILED == ret) {
+src/storage/tmp_file/ob_tmp_file_flush_manager.cpp	330	ObTmpFileFlushManager::flush_by_watermark_	budget error handled (compared against or case label): OB_ALLOCATE_TMP_FILE_PAGE_FAILED	if (OB_ALLOCATE_TMP_FILE_PAGE_FAILED == ret){
+src/storage/tmp_file/ob_tmp_file_flush_manager.cpp	621	ObTmpFileFlushManager::insert_items_into_meta_tree_	budget error handled (compared against or case label): OB_ALLOCATE_TMP_FILE_PAGE_FAILED	if (OB_ALLOCATE_TMP_FILE_PAGE_FAILED == ret) {
+src/storage/tmp_file/ob_tmp_file_meta_tree.cpp	278	ObSharedNothingTmpFileMetaTree::try_to_insert_items_to_array_	-4013 handled (compared against)	if (OB_ALLOCATE_MEMORY_FAILED == ret) {
+src/storage/tmp_file/ob_tmp_file_thread_wrapper.cpp	500	ObTmpFileFlushThread::retry_task_	budget error handled (compared against or case label): OB_ALLOCATE_TMP_FILE_PAGE_FAILED	if (FlushState::TFFT_INSERT_META_TREE == state && OB_ALLOCATE_TMP_FILE_PAGE_FAILED == ret) {
+src/storage/tmp_file/ob_tmp_file_write_buffer_pool.cpp	193	ObTmpWriteBufferPool::alloc_page_	-4013 handled (compared against)	if (OB_ALLOCATE_MEMORY_FAILED == ret || OB_OP_NOT_ALLOW == ret ||
+src/storage/tmp_file/ob_tmp_file_write_buffer_pool.cpp	195	ObTmpWriteBufferPool::alloc_page_	budget error raised: OB_ALLOCATE_TMP_FILE_PAGE_FAILED	ret = OB_ALLOCATE_TMP_FILE_PAGE_FAILED;  // can not allocate new page
+src/storage/tmp_file/ob_tmp_file_write_buffer_pool.cpp	482	ObTmpWriteBufferPool::expand_	budget-backed -4013: temp-file write buffer pool	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/storage/tx/ob_multi_data_source.cpp	248	ObMulSourceTxDataNotifier::ob_abort_log_cb_notify_	budget error handled (compared against or case label): OB_SERVER_RUNTIME_OUT_OF_MEM	if (OB_SUCCESS != err_code && OB_SERVER_RUNTIME_OUT_OF_MEM != err_code
+src/storage/tx/ob_multi_data_source.cpp	249	ObMulSourceTxDataNotifier::ob_abort_log_cb_notify_	-4013 handled (compared against)	&& OB_ALLOCATE_MEMORY_FAILED != err_code && OB_EAGAIN != err_code) {
+src/storage/tx/ob_tx_log.h	780	ObTxAdaptiveLogBuf::alloc_normal_buf_	variable initialized to -4013 (not a raise)	int ret = OB_ALLOCATE_MEMORY_FAILED;
+src/storage/tx/ob_tx_log.h	790	ObTxAdaptiveLogBuf::alloc_big_buf_	variable initialized to -4013 (not a raise)	int ret = OB_ALLOCATE_MEMORY_FAILED;
+src/storage/tx/ob_tx_redo_submitter.h	430	ObTxRedoSubmitter::fill_log_block_	-4013 handled (compared against)	if (OB_ALLOCATE_MEMORY_FAILED != ret) {
+src/storage/tx/ob_tx_replay_executor.cpp	699	ObTxReplayExecutor::rewrite_replay_retry_code_	-4013 handled (compared against)	ret_code == OB_ALLOCATE_MEMORY_FAILED) {
+src/storage/tx_storage/ob_access_service.cpp	657	ObAccessService::check_write_allowed_	budget error raised: OB_SERVER_RUNTIME_OUT_OF_MEM	ret = OB_SERVER_RUNTIME_OUT_OF_MEM;
+src/storage/tx_storage/ob_ls_service.cpp	167	ObLSService::inner_create_ls_	bounded allocator not named in the plan: LS allocator FIFO (1GB) (a general out-of-memory under Decision 12 unless the design names it a budget owner)	ret = OB_ALLOCATE_MEMORY_FAILED;

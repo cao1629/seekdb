@@ -1,0 +1,51 @@
+file	line	symbol	construct	text
+src/sql/plan_cache/ob_ps_cache.cpp	542	ObPsCache::get_all_stmt_id	iterate hash container stmt_info_map_ (PsStmtInfoMap)	} else if (OB_FAIL(stmt_info_map_.foreach_refactored(op))) {
+src/sql/plan_cache/ob_ps_cache.cpp	795	ObPsCache::inner_cache_evict	iterate hash container stmt_info_map_ (PsStmtInfoMap)	} else if (OB_FAIL(stmt_info_map_.foreach_refactored(op))) {
+src/sql/plan_cache/ob_ps_cache.cpp	817	ObPsCache::inner_cache_evict	lib::ob_sort call	lib::ob_sort(closed_stmt_ids.begin(), closed_stmt_ids.end(), PsTimeCmp());
+src/sql/resolver/ddl/ob_create_view_resolver.cpp	525	ObCreateViewResolver::check_privilege_needed	iterate hash container any_tables (ObHashMap)	hash::ObHashMap<int64_t, const TableItem *>::iterator iter = any_tables.begin();
+src/sql/resolver/ddl/ob_create_view_resolver.cpp	546	ObCreateViewResolver::check_privilege_needed	iterate hash container select_tables (ObHashMap)	hash::ObHashMap<int64_t, const TableItem *>::iterator iter = select_tables.begin();
+src/sql/resolver/ddl/ob_ddl_resolver.cpp	4814	ObDDLResolver::is_ids_match	lib::ob_sort call	lib::ob_sort(tmp_src_list.begin(), tmp_src_list.end());
+src/sql/resolver/ddl/ob_ddl_resolver.cpp	4815	ObDDLResolver::is_ids_match	lib::ob_sort call	lib::ob_sort(tmp_dest_list.begin(), tmp_dest_list.end());
+src/sql/resolver/ddl/ob_fts_index_builder_util.cpp	2067	ObFtsIndexBuilderUtil::get_multivalue_index_column_name	lib::ob_sort call	lib::ob_sort(index_columns.begin(), index_columns.end(), compare_index_column);
+src/sql/resolver/dml/ob_dml_stmt.cpp	2651	ObDMLStmt::assign_tables_hash	iterate hash container tables_hash (ObDMLStmtTableHash)	ObDMLStmtTableHash::const_iterator it = tables_hash.begin();
+src/sql/resolver/dml/ob_dml_stmt.cpp	2652	ObDMLStmt::assign_tables_hash	iterate hash container through an iterator of ObDMLStmtTableHash	ObDMLStmtTableHash::const_iterator it_end = tables_hash.end();
+src/sql/resolver/expr/ob_raw_expr_copier.cpp	336	ObRawExprCopier::get_copied_exprs	iterate hash container copied_exprs_ (ObHashMap)	for (auto it = copied_exprs_.begin(); OB_SUCC(ret) && it != copied_exprs_.end(); ++it) {
+src/sql/resolver/expr/ob_raw_expr_replacer.cpp	377	ObRawExprReplacer::append_replace_exprs	iterate hash container expr_replace_map_ (ObHashMap)	for (auto it = other.expr_replace_map_.begin();
+src/sql/resolver/expr/ob_shared_expr_resolver.cpp	98	ObSharedExprResolver::~ObSharedExprResolver	iterate hash container shared_expr_map_ (ObHashMap)	for (hash::ObHashMap<uint64_t, SharedExprs *>::iterator it = shared_expr_map_.begin();
+src/sql/resolver/ob_resolver_utils.cpp	4934	ObResolverUtils::check_match_columns	lib::ob_sort call	lib::ob_sort(tmp_parent_columns.begin(), tmp_parent_columns.end());
+src/sql/resolver/ob_resolver_utils.cpp	4935	ObResolverUtils::check_match_columns	lib::ob_sort call	lib::ob_sort(tmp_key_columns.begin(), tmp_key_columns.end());
+src/sql/rewrite/ob_expr_range_converter.cpp	1838	ObExprRangeConverter::sort_range_exprs	lib::ob_sort call	lib::ob_sort(&out_range_exprs.at(0), &out_range_exprs.at(0) + out_range_exprs.count(),
+src/sql/rewrite/ob_key_part.cpp	289	ObKeyPart::merge_two_in_keys	iterate hash container lr_idx (SameValIdxMap)	for (auto it = lr_idx.begin(); OB_SUCC(ret) && it != lr_idx.end(); ++it) {
+src/sql/rewrite/ob_key_part.cpp	305	ObKeyPart::merge_two_in_keys	iterate hash container lr_idx (SameValIdxMap)	for (auto it = lr_idx.begin(); OB_SUCC(ret) && it != lr_idx.end(); ++it) {
+src/sql/rewrite/ob_key_part.cpp	736	ObKeyPart::formalize_keypart	lib::ob_sort call	lib::ob_sort(in_keypart_->offsets_.begin(), in_keypart_->offsets_.end());
+src/sql/rewrite/ob_key_part.cpp	737	ObKeyPart::formalize_keypart	lib::ob_sort call	lib::ob_sort(in_keypart_->in_params_.begin(),
+src/sql/rewrite/ob_range_generator.cpp	1290	ObRangeGenerator::merge_and_remove_ranges	lib::ob_sort call	lib::ob_sort(&ranges_.at(0), &ranges_.at(0) + ranges_.count(), RangeCmp());
+src/sql/rewrite/ob_range_generator.cpp	1440	ObRangeGenerator::generate_tmp_not_in_param	lib::ob_sort call	lib::ob_sort(&tmp_in_param->in_param_.at(0),
+src/sql/rewrite/ob_range_generator.cpp	1799	ObRangeGenerator::get_coveredby_tmp_geo_param	iterate hash container cellid_set (ObHashSet)	for (hash::ObHashSet<uint64_t>::const_iterator itr = cellid_set.begin(); OB_SUCC(ret) && itr != cellid_set.end();
+src/sql/rewrite/ob_range_graph_generator.cpp	246	ObRangeGraphGenerator::and_range_nodes	lib::ob_sort call	lib::ob_sort(&range_nodes.at(0), &range_nodes.at(0) + range_nodes.count(), RangeNodeCmp());
+src/sql/rewrite/ob_range_graph_generator.cpp	508	ObRangeGraphGenerator::or_range_nodes	lib::ob_sort call	lib::ob_sort(&range_nodes.at(0), &range_nodes.at(0) + range_nodes.count(), RangeNodeCmp());
+src/sql/rewrite/ob_transform_join_limit_pushdown.cpp	135	ObTransformJoinLimitPushDown::sort_pushdown_helpers	lib::ob_sort call	lib::ob_sort(helpers.begin(), helpers.end(), cmp_func);
+src/sql/rewrite/ob_transform_predicate_move_around.cpp	134	ObTransformPredicateMoveAround::adjust_transed_stmts	lib::ob_sort call	lib::ob_sort(transed_stmts_.begin(), transed_stmts_.end(), cmp_func);
+src/sql/rewrite/ob_transform_predicate_move_around.cpp	216	ObTransformPredicateMoveAround::check_outline_valid_to_transform	lib::ob_sort call	lib::ob_sort(views.begin(), views.end(), cmp_func);
+src/sql/rewrite/ob_transform_subquery_coalesce.cpp	2209	ObTransformSubqueryCoalesce::sort_coalesce_stmts	lib::ob_sort call	lib::ob_sort(subqueries->begin(), subqueries->end(), cmp_func1);
+src/sql/rewrite/ob_transform_subquery_coalesce.cpp	2221	ObTransformSubqueryCoalesce::sort_coalesce_stmts	lib::ob_sort call	lib::ob_sort(index_map.begin(), index_map.end(), cmp_func2);
+src/sql/rewrite/ob_transform_temp_table.cpp	2059	ObTransformTempTable::sort_materialize_stmts	lib::ob_sort call	lib::ob_sort(subqueries->begin(), subqueries->end(), cmp_func1);
+src/sql/rewrite/ob_transform_temp_table.cpp	2071	ObTransformTempTable::sort_materialize_stmts	lib::ob_sort call	lib::ob_sort(index_map.begin(), index_map.end(), cmp_func2);
+src/sql/rewrite/ob_transform_utils.cpp	7953	ObTransformUtils::extract_shared_expr	iterate hash container second_stmt_expr_set_ (ObHashSet)	for (hash::ObHashSet<uint64_t>::iterator it = extractor.second_stmt_expr_set_.begin();
+src/sql/rewrite/ob_transform_utils.cpp	10203	ObTransformUtils::get_sorted_table_hint	lib::ob_sort call	lib::ob_sort(tables.begin(), tables.end(), cmp_func);
+src/sql/session/ob_basic_session_info.cpp	3040	ObBasicSessionInfo::replace_user_variables	iterate hash container new_map (VarNameValMap)	for (sql::ObSessionValMap::VarNameValMap::const_iterator iter = new_map.begin();
+src/sql/session/ob_piece_cache.cpp	161	ObPieceCache::close_all	iterate hash container piece_map_ (PieceMap)	for (PieceMap::iterator iter = piece_map_.begin();  //ignore ret
+src/sql/session/ob_session_val_map.cpp	139	ObSessionValMap::assign	iterate hash container map_ (VarNameValMap)	for (VarNameValMap::const_iterator iter = other.map_.begin();
+src/sql/session/ob_session_val_map.cpp	165	ObSessionValMap::free_mem	iterate hash container through an iterator of VarNameValMap	VarNameValMap::iterator iter;
+src/sql/session/ob_session_val_map.cpp	166	ObSessionValMap::free_mem	iterate hash container map_ (VarNameValMap)	for (iter = map_.begin(); OB_SUCC(ret) && iter != map_.end(); ++ iter) {
+src/sql/session/ob_session_val_map.cpp	189	DEFINE_SERIALIZE(ObSessionValMap)	iterate hash container map_ (VarNameValMap)	for (VarNameValMap::const_iterator iter = map_.begin();
+src/sql/session/ob_session_val_map.cpp	232	DEFINE_GET_SERIALIZE_SIZE(ObSessionValMap)	iterate hash container map_ (VarNameValMap)	for (VarNameValMap::const_iterator iter = map_.begin();
+src/sql/session/ob_sql_session_info.cpp	573	ObSQLSessionInfo::close_all_ps_stmt	iterate hash container ps_session_info_map_ (PsSessionInfoMap)	PsSessionInfoMap::iterator iter = ps_session_info_map_.begin();
+src/sql/session/ob_sql_session_info.cpp	596	ObSQLSessionInfo::release_all_ps_session_info	iterate hash container ps_session_info_map_ (PsSessionInfoMap)	for (PsSessionInfoMap::iterator iter = ps_session_info_map_.begin();
+src/sql/session/ob_sql_session_info.cpp	1091	ObSQLSessionInfo::print_all_cursor	iterate hash container pl_cursor_map_ (CursorMap)	for (CursorCache::CursorMap::iterator iter = pl_cursor_cache_.pl_cursor_map_.begin();  //ignore ret
+src/sql/session/ob_sql_session_info.h	278	ObSQLSessionInfo::CursorCache::close_all	iterate hash container pl_cursor_map_ (CursorMap)	CursorMap::iterator iter = pl_cursor_map_.begin();
+src/sql/session/ob_sql_session_info.h	830	ObSQLSessionInfo::for_each_ps_session_info	iterate hash container ps_session_info_map_ (PsSessionInfoMap)	} else if (OB_FAIL(ps_session_info_map_.foreach_refactored(fn))) {
+src/sql/session/ob_sql_session_mgr.h	220	ObSQLSessionMgr::for_each_session	iterate hash container sessinfo_map_ (HashMap)	return sessinfo_map_.for_each(fn);
+src/sql/session/ob_user_resource_mgr.cpp	319	ObConnectResourceMgr::ConnResourceCleanUpTask::runTimerTask	iterate hash container user_res_map_ (ObConnResMap)	if (OB_FAIL(conn_res_mgr_.user_res_map_.for_each(user_func))) {
+src/standby/restore/ob_standby_restore_tablet_builder.cpp	265	ObStandbyRestoreTableInfoMgr::reuse	iterate hash container table_info_mgr_map_ (TabletTableInfoMgr)	for (TabletTableInfoMgr::iterator iter = table_info_mgr_map_.begin(); iter != table_info_mgr_map_.end(); ++iter) {
+src/standby/restore/ob_standby_restore_tablet_builder.cpp	494	ObStandbyRestoreCopySSTableInfoMgr::~ObStandbyRestoreCopySSTableInfoMgr	iterate hash container macro_range_info_map_ (CopySSTableMacroRangeInfoMap)	for (CopySSTableMacroRangeInfoMap::iterator iter = macro_range_info_map_.begin();

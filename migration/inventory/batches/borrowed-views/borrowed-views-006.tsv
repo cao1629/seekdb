@@ -1,0 +1,60 @@
+file	line	symbol	construct	text
+src/oblib/lib/locale/ob_locale_type.h	31	OB_LOCALE_TYPE::name_	member raw bytes (pointer) of type const char *	const char *name_{NULL}; /* Name of typelib */
+src/oblib/lib/locale/ob_locale_type.h	32	OB_LOCALE_TYPE::type_names_	member raw bytes (pointer) of type const char **	const char **type_names_{NULL};
+src/oblib/lib/locale/ob_locale_type.h	46	OB_LOCALE::name_	member raw bytes (pointer) of type const char *	const char *name_;
+src/oblib/lib/locale/ob_locale_type.h	47	OB_LOCALE::description_	member raw bytes (pointer) of type const char *	const char *description_;
+src/oblib/lib/locale/ob_locale_type.h	57	OB_LOCALE::grouping_	member raw bytes (pointer) of type const char *	const char *grouping_;
+src/oblib/lib/net/ob_sql_tls_info.h	69	ObSqlTlsInfo::cipher_name_	member raw bytes (pointer) of type const char *	const char *cipher_name_;
+src/oblib/lib/net/ob_sql_tls_info.h	71	ObSqlTlsInfo::peer_cert_common_name_	member raw bytes (pointer) of type const char *	const char *peer_cert_common_name_;
+src/oblib/lib/net/ob_sql_tls_info.h	73	ObSqlTlsInfo::peer_cert_issuer_	member raw bytes (pointer) of type const char *	const char *peer_cert_issuer_;
+src/oblib/lib/net/ob_sql_tls_info.h	75	ObSqlTlsInfo::peer_cert_subject_	member raw bytes (pointer) of type const char *	const char *peer_cert_subject_;
+src/oblib/lib/objectpool/ob_server_object_pool.h	106	ObServerObjectPool::LABEL	member raw bytes (pointer) of type const char *	const char *LABEL = ObModIds::OB_SERVER_OBJECT_POOL;
+src/oblib/lib/oblog/ob_base_log_buffer.h	73	ObBaseLogBufferCtrl::data_buf_	member raw bytes (pointer) of type char *	char *data_buf_;
+src/oblib/lib/oblog/ob_base_log_writer.h	132	ObBaseLogWriter::thread_name_	member raw bytes (pointer) of type const char*	const char* thread_name_;
+src/oblib/lib/oblog/ob_log.h	194	ObLogNameIdMap::name_id_map_	member raw bytes (pointer) of type const char *	const char *name_id_map_[MAX_PAR_MOD_SIZE][MAX_SUB_MOD_SIZE + 1];
+src/oblib/lib/oblog/ob_log.h	910	ObLogger::new_file_info_	member raw bytes (pointer) of type const char *	const char *new_file_info_;
+src/oblib/lib/oblog/ob_log_print_kv.h	112	ObSzString::str_	member raw bytes (pointer) of type const char *	const char *str_;
+src/oblib/lib/oblog/ob_log_print_kv.h	134	ObQuoteSzString::str_	member raw bytes (pointer) of type const char *	const char *str_;
+src/oblib/lib/oblog/ob_log_print_kv.h	158	ObLenString::str_	member raw bytes (pointer) of type const char *	const char *str_;
+src/oblib/lib/oblog/ob_log_print_kv.h	608	ObLogKV::key_	member raw bytes (pointer) of type const char *	const char *key_;
+src/oblib/lib/oblog/ob_log_print_kv.h	625	ObLogKV::key_	member raw bytes (pointer) of type const char *	const char *key_;
+src/oblib/lib/oblog/ob_ringbuf_log_writer.h	105	ObRingBuf::buf_	member raw bytes (pointer) of type char *	char   *buf_;
+src/oblib/lib/oblog/ob_ringbuf_log_writer.h	156	ObRingBufLogWriter::ringbuf_buf_	member raw bytes (pointer) of type char *	char      *ringbuf_buf_;
+src/oblib/lib/rc/context.h	258	StaticInfo::filename_	member raw bytes (pointer) of type const char *	const char *filename_;
+src/oblib/lib/rc/context.h	260	StaticInfo::function_	member raw bytes (pointer) of type const char *	const char *function_;
+src/oblib/lib/restore/ob_io_device.h	185	ObOptValue::value_str	member raw bytes (pointer) of type const char *	const char * value_str;
+src/oblib/lib/restore/ob_io_device.h	214	ObIODOpt::key_	member raw bytes (pointer) of type const char *	const char *key_;
+src/oblib/lib/signal/ob_signal_struct.h	68	ObSqlInfo::sql_string_	member ObString (value) of type ObString	ObString sql_string_;
+src/oblib/lib/signal/ob_signal_struct.h	69	ObSqlInfo::sql_id_	member ObString (value) of type ObString	ObString sql_id_;
+src/oblib/lib/string/ob_sensitive_string.h	74	ObSensitiveString::str_	member ObString (value) of type const ObString	const ObString str_;
+src/oblib/lib/string/ob_sql_string.h	92	ObSqlString::data_	member raw bytes (pointer) of type char *	char *data_;
+src/oblib/lib/string/ob_string.h	796	ObString::ptr_	member raw bytes (pointer) of type char *	char *ptr_;
+src/oblib/lib/string/ob_string.h	806	ob_write_string	allocator in, arena view out: ObString &dst	int ob_write_string(AllocatorT &allocator, const ObString &src, ObString &dst, bool c_style = false)
+src/oblib/lib/string/ob_string.h	828	ob_write_string	allocator in, arena view out: ObString &dst	int ob_write_string(AllocatorT &allocator, const ObString &src, ObString &dst, int len, int padding = 0, bool c_style = false)
+src/oblib/lib/string/ob_string.h	855	ob_strip_space	allocator in, arena view out: ObString &dst	int ob_strip_space(AllocatorT &allocator, const ObString &src, ObString &dst)
+src/oblib/lib/string/ob_string.h	880	ob_simple_low_to_up	allocator in, arena view out: ObString &dst	int ob_simple_low_to_up(AllocatorT &allocator, const ObString &src, ObString &dst)
+src/oblib/lib/string/ob_string.h	909	ob_sub_str	allocator in, arena view out: ObString &dst	int ob_sub_str(AllocatorT &allocator, const ObString &src, int32_t start_index, ObString &dst)
+src/oblib/lib/string/ob_string.h	933	ob_sub_str	allocator in, arena view out: ObString &dst	int ob_sub_str(AllocatorT &allocator, const ObString &src, int32_t start_index, int32_t end_index, ObString &dst)
+src/oblib/lib/string/ob_string.h	957	ob_dup_cstring	allocator in, arena view out: char* &dst	int ob_dup_cstring(AllocatorT &allocator, const ObString &src, char* &dst)
+src/oblib/lib/string/ob_string_buffer.h	76	ObStringBuffer::data_	member raw bytes (pointer) of type char *	char *data_;
+src/oblib/lib/string/ob_string_holder.h	127	ObStringHolder::buffer_	member raw bytes (pointer) of type char *	char *buffer_;
+src/oblib/lib/string/ob_strings.h	47	ObStrings::strs_	member container of ObString of type ObArray<ObString>	ObArray<ObString> strs_;
+src/oblib/lib/thread/ob_dedup_queue.h	91	IObDedupTask::memory_	member raw bytes (pointer) of type char *	char *memory_;
+src/oblib/lib/thread/ob_dedup_queue.h	293	ObDedupQueue::thread_name_	member raw bytes (pointer) of type const char*	const char* thread_name_;
+src/oblib/lib/thread/ob_dynamic_thread_pool.h	92	ObDynamicThreadPool::thread_name_	member raw bytes (pointer) of type const char*	const char* thread_name_;
+src/oblib/lib/thread/ob_dynamic_thread_pool.h	120	ObSimpleDynamicThreadPool::name_	member raw bytes (pointer) of type const char*	const char* name_;
+src/oblib/lib/thread/ob_map_queue_thread_pool.h	108	ObMapQueueThreadPool::name_	member raw bytes (pointer) of type const char *	const char    *name_;
+src/oblib/lib/thread/ob_reentrant_thread.h	92	ObReentrantThread::thread_name_	member raw bytes (pointer) of type const char*	const char* thread_name_;
+src/oblib/lib/thread/protected_stack_allocator.h	42	ObStackHeader::base_	member raw bytes (pointer) of type char *	char *base_;
+src/oblib/lib/thread_local/thread_buffer.h	52	ThreadSpecificBuffer::Buffer::end_of_storage_	member raw bytes (pointer) of type char *	char *end_of_storage_;
+src/oblib/lib/thread_local/thread_buffer.h	53	ThreadSpecificBuffer::Buffer::end_	member raw bytes (pointer) of type char *	char *end_;
+src/oblib/lib/utility/data_buffer.h	117	ObDataBuffer::data_	member raw bytes (pointer) of type char *	char *data_;
+src/oblib/lib/utility/ob_common_utility.h	79	ObBasicTimeGuard::ClickInfo::mod_	member raw bytes (pointer) of type const char*	const char* mod_;
+src/oblib/lib/utility/ob_common_utility.h	163	ObBasicTimeGuard::owner_	member raw bytes (pointer) of type const char *	const char *owner_;
+src/oblib/lib/utility/ob_common_utility.h	164	ObBasicTimeGuard::start_	member raw bytes (pointer) of type const char *	const char *start_;
+src/oblib/lib/utility/ob_common_utility.h	165	ObBasicTimeGuard::end_	member raw bytes (pointer) of type const char *	const char *end_;
+src/oblib/lib/utility/ob_fast_convert.h	193	ObFastFormatInt::ptr_	member raw bytes (pointer) of type char *	char *ptr_;
+src/oblib/lib/utility/ob_hyperloglog.h	161	ObHyperLogLogCalculator::buckets_	member raw bytes (pointer) of type char *	char *buckets_; // save the count of previous 0 + 1, max value is 256, only left 50 bits
+src/oblib/lib/utility/ob_mod_define.h	521	ObCtxInfo::ctx_names_	member raw bytes (pointer) of type const char *	const char *ctx_names_[CTX_COUNT_LIMIT];
+src/oblib/lib/utility/ob_print_utils.cpp	404	databuff_printf	allocator in, arena view out: char *&buf	int databuff_printf(char *&buf, int64_t &buf_len, int64_t &pos,
+src/oblib/lib/utility/ob_print_utils.cpp	437	multiple_extend_buf	allocator in, arena view out: char *&buf	int multiple_extend_buf(char *&buf, int64_t &buf_len, ObIAllocator &alloc)

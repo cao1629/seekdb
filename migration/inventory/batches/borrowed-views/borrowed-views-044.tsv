@@ -1,0 +1,61 @@
+file	line	symbol	construct	text
+src/sql/resolver/ddl/ob_drop_database_stmt.h	72	ObDropDatabaseStmt::server_charset_	member ObString (value) of type common::ObString	common::ObString server_charset_;
+src/sql/resolver/ddl/ob_drop_database_stmt.h	73	ObDropDatabaseStmt::server_collation_	member ObString (value) of type common::ObString	common::ObString server_collation_;
+src/sql/resolver/ddl/ob_explain_stmt.h	67	ObExplainStmt::into_table_	member ObString (value) of type common::ObString	common::ObString into_table_;
+src/sql/resolver/ddl/ob_explain_stmt.h	68	ObExplainStmt::statement_id_	member ObString (value) of type common::ObString	common::ObString statement_id_;
+src/sql/resolver/ddl/ob_fts_index_builder_util.cpp	388	ObFtsIndexBuilderUtil::generate_fts_aux_index_name	allocator in, arena view out: ObString &new_index_name	int ObFtsIndexBuilderUtil::generate_fts_aux_index_name(
+src/sql/resolver/ddl/ob_fts_parser_resolver.cpp	28	ObFTParserResolverHelper::resolve_parser_properties	allocator in, arena view out: common::ObString &parser_property	int ObFTParserResolverHelper::resolve_parser_properties(
+src/sql/resolver/ddl/ob_trigger_resolver.cpp	679	ObTriggerSourceBuilder::fill_package_spec	allocator in, arena view out: ObString &spec_source	int ObTriggerSourceBuilder::fill_package_spec(const ObTriggerInfo &trigger_info,
+src/sql/resolver/ddl/ob_trigger_resolver.cpp	709	ObTriggerSourceBuilder::fill_package_body	allocator in, arena view out: ObString &body_source	int ObTriggerSourceBuilder::fill_package_body(const ObTriggerInfo &trigger_info,
+src/sql/resolver/ddl/ob_trigger_resolver.cpp	745	ObTriggerSourceBuilder::generate_simple	allocator in, arena view out: ObString &spec_source	int ObTriggerSourceBuilder::generate_simple(const ObTriggerInfo &trigger_info,
+src/sql/resolver/ddl/ob_trigger_resolver.cpp	815	ObTriggerSourceBuilder::generate_package_source	allocator in, arena view out: common::ObString &source	int ObTriggerSourceBuilder::generate_package_source(const uint64_t tg_package_id,
+src/sql/resolver/ddl/ob_trigger_resolver.cpp	971	ObTriggerSourceBuilder::build_procedure_source	allocator in, arena view out: ObString &procedure_source	int ObTriggerSourceBuilder::build_procedure_source(
+src/sql/resolver/ddl/ob_trigger_source_builder.h	86	ObTriggerSourceBuilder::TriggerContext::before_row_declare_	member ObString (value) of type common::ObString	common::ObString before_row_declare_;
+src/sql/resolver/ddl/ob_trigger_source_builder.h	87	ObTriggerSourceBuilder::TriggerContext::before_row_execute_	member ObString (value) of type common::ObString	common::ObString before_row_execute_;
+src/sql/resolver/ddl/ob_trigger_source_builder.h	88	ObTriggerSourceBuilder::TriggerContext::after_row_declare_	member ObString (value) of type common::ObString	common::ObString after_row_declare_;
+src/sql/resolver/ddl/ob_trigger_source_builder.h	89	ObTriggerSourceBuilder::TriggerContext::after_row_execute_	member ObString (value) of type common::ObString	common::ObString after_row_execute_;
+src/sql/resolver/ddl/ob_trigger_source_builder.h	90	ObTriggerSourceBuilder::TriggerContext::trigger_body_	member ObString (value) of type common::ObString	common::ObString trigger_body_;
+src/sql/resolver/ddl/ob_trigger_stmt.h	69	ObDropTriggerStmt::trigger_table_name_	member ObString (value) of type common::ObString	common::ObString trigger_table_name_;
+src/sql/resolver/ddl/ob_use_database_stmt.h	65	ObUseDatabaseStmt::db_name_	member ObString (value) of type common::ObString	common::ObString db_name_;
+src/sql/resolver/ddl/ob_use_database_stmt.h	66	ObUseDatabaseStmt::db_charset_	member ObString (value) of type common::ObString	common::ObString db_charset_;
+src/sql/resolver/ddl/ob_use_database_stmt.h	67	ObUseDatabaseStmt::db_collation_	member ObString (value) of type common::ObString	common::ObString db_collation_;
+src/sql/resolver/ddl/ob_vec_index_builder_util.cpp	741	ObVecIndexBuilderUtil::generate_vec_index_name	allocator in, arena view out: ObString &new_index_name	int ObVecIndexBuilderUtil::generate_vec_index_name(
+src/sql/resolver/dml/ob_column_namespace_checker.h	131	ObColumnNamespaceChecker::equal_columns_	member container of ObString of type common::ObArray<common::ObString>	common::ObArray<common::ObString> equal_columns_;  // for merge stmt usage
+src/sql/resolver/dml/ob_del_upd_stmt.h	134	ObDmlTableInfo::table_name_	member ObString (value) of type common::ObString	common::ObString table_name_;
+src/sql/resolver/dml/ob_del_upd_stmt.h	324	ObUniqueConstraintInfo::constraint_name_	member ObString (value) of type common::ObString	common::ObString constraint_name_;
+src/sql/resolver/dml/ob_dml_resolver.cpp	6802	ObDMLResolver::json_table_make_json_path	allocator in, arena view out: ObString& path_str	int ObDMLResolver::json_table_make_json_path(const ParseNode &parse_tree,
+src/sql/resolver/dml/ob_dml_resolver.h	43	ResolverJoinInfo::using_columns_	member container of ObString of type common::ObSEArray<common::ObString, 1, common::ModulePageAllocator, true>	common::ObSEArray<common::ObString, 1, common::ModulePageAllocator, true> using_columns_;
+src/sql/resolver/dml/ob_dml_resolver.h	164	ObDMLResolver::ObCteResolverCtx::current_cte_table_name_	member ObString (value) of type ObString	ObString current_cte_table_name_;
+src/sql/resolver/dml/ob_dml_resolver.h	169	ObDMLResolver::ObCteResolverCtx::cte_col_names_	member container of ObString of type common::ObArray<ObString>	common::ObArray<ObString> cte_col_names_;
+src/sql/resolver/dml/ob_dml_resolver.h	826	ObDMLResolver::GenColumnExprInfo::column_name_	member ObString (value) of type common::ObString	common::ObString column_name_;  // generate column name
+src/sql/resolver/dml/ob_dml_stmt.cpp	2307	ObDMLStmt::generate_view_name	allocator in, arena view out: ObString &view_name	int ObDMLStmt::generate_view_name(ObIAllocator &allocator, ObString &view_name, bool is_temp)
+src/sql/resolver/dml/ob_dml_stmt.cpp	2325	ObDMLStmt::generate_func_table_name	allocator in, arena view out: ObString &table_name	int ObDMLStmt::generate_func_table_name(ObIAllocator &allocator, ObString &table_name)
+src/sql/resolver/dml/ob_dml_stmt.cpp	2343	ObDMLStmt::generate_json_table_name	allocator in, arena view out: ObString &table_name	int ObDMLStmt::generate_json_table_name(ObIAllocator &allocator, ObString &table_name)
+src/sql/resolver/dml/ob_dml_stmt.cpp	2361	ObDMLStmt::generate_values_table_name	allocator in, arena view out: ObString &table_name	int ObDMLStmt::generate_values_table_name(ObIAllocator &allocator, ObString &table_name)
+src/sql/resolver/dml/ob_dml_stmt.cpp	2379	ObDMLStmt::generate_anonymous_view_name	allocator in, arena view out: ObString &view_name	int ObDMLStmt::generate_anonymous_view_name(ObIAllocator &allocator, ObString &view_name)
+src/sql/resolver/dml/ob_dml_stmt.h	65	ObJtColBaseInfo::col_name_	member ObString (value) of type ObString	ObString col_name_;
+src/sql/resolver/dml/ob_dml_stmt.h	66	ObJtColBaseInfo::path_	member ObString (value) of type ObString	ObString path_;
+src/sql/resolver/dml/ob_dml_stmt.h	101	ObJsonTableDef::namespace_arr_	member container of ObString of type common::ObSEArray<ObString, 16, common::ModulePageAllocator, true>	common::ObSEArray<ObString, 16, common::ModulePageAllocator, true> namespace_arr_;
+src/sql/resolver/dml/ob_dml_stmt.h	119	ObValuesTableDef::access_objs_	member container of ObObjParam of type common::ObArray<ObObjParam, common::ModulePageAllocator, true>	common::ObArray<ObObjParam, common::ModulePageAllocator, true> access_objs_;
+src/sql/resolver/dml/ob_dml_stmt.h	270	TableItem::table_name_	member ObString (value) of type common::ObString	common::ObString    table_name_;
+src/sql/resolver/dml/ob_dml_stmt.h	271	TableItem::alias_name_	member ObString (value) of type common::ObString	common::ObString    alias_name_;
+src/sql/resolver/dml/ob_dml_stmt.h	272	TableItem::qb_name_	member ObString (value) of type common::ObString	common::ObString    qb_name_; // used for hint
+src/sql/resolver/dml/ob_dml_stmt.h	285	TableItem::database_name_	member ObString (value) of type common::ObString	common::ObString database_name_;
+src/sql/resolver/dml/ob_dml_stmt.h	300	TableItem::part_names_	member container of ObString of type common::ObSEArray<ObString, 1, common::ModulePageAllocator, true>	common::ObSEArray<ObString, 1, common::ModulePageAllocator, true> part_names_;
+src/sql/resolver/dml/ob_dml_stmt.h	380	ColumnItem::column_name_	member ObString (value) of type common::ObString	common::ObString column_name_;
+src/sql/resolver/dml/ob_dml_stmt.h	383	ColumnItem::default_value_	member ObObj (value) of type common::ObObj	common::ObObj default_value_;
+src/sql/resolver/dml/ob_group_by_checker.h	85	ObGroupByChecker::param_store_	member ParamStore (pointer) of type const ParamStore *	const ParamStore *param_store_;
+src/sql/resolver/dml/ob_hint.cpp	1299	ObHint::get_expr_str_in_hint	allocator in, arena view out: ObString &str	int ObHint::get_expr_str_in_hint(ObIAllocator &allocator,
+src/sql/resolver/dml/ob_hint.h	196	ObOptParamHint::param_vals_	member container of ObObj of type common::ObSEArray<ObObj, 1, common::ModulePageAllocator, true>	common::ObSEArray<ObObj, 1, common::ModulePageAllocator, true> param_vals_;
+src/sql/resolver/dml/ob_hint.h	234	ObTableInHint::qb_name_	member ObString (value) of type common::ObString	common::ObString qb_name_;
+src/sql/resolver/dml/ob_hint.h	235	ObTableInHint::db_name_	member ObString (value) of type common::ObString	common::ObString db_name_;
+src/sql/resolver/dml/ob_hint.h	236	ObTableInHint::table_name_	member ObString (value) of type common::ObString	common::ObString table_name_;
+src/sql/resolver/dml/ob_hint.h	339	ObGlobalHint::log_level_	member ObString (value) of type common::ObString	common::ObString log_level_;
+src/sql/resolver/dml/ob_hint.h	389	ObPhyPlanHint::log_level_	member ObString (value) of type common::ObString	common::ObString log_level_;
+src/sql/resolver/dml/ob_hint.h	422	QbNameList::qb_names_	member container of ObString of type common::ObSEArray<ObString, 4, common::ModulePageAllocator, true>	common::ObSEArray<ObString, 4, common::ModulePageAllocator, true> qb_names_;
+src/sql/resolver/dml/ob_hint.h	545	ObHint::qb_name_	member ObString (value) of type ObString	ObString qb_name_;
+src/sql/resolver/dml/ob_hint.h	600	ObViewMergeHint::parent_qb_name_	member ObString (value) of type ObString	ObString parent_qb_name_;
+src/sql/resolver/dml/ob_hint.h	626	ObOrExpandHint::expand_cond_	member ObString (value) of type ObString	ObString expand_cond_;
+src/sql/resolver/dml/ob_hint.h	892	ObIndexHint::index_name_	member ObString (value) of type common::ObString	common::ObString index_name_;
+src/sql/resolver/dml/ob_hint.h	915	ObUnionMergeHint::index_name_list_	member container of ObString of type common::ObSEArray<common::ObString, 2, common::ModulePageAllocator, true>	common::ObSEArray<common::ObString, 2, common::ModulePageAllocator, true> index_name_list_;
+src/sql/resolver/dml/ob_hint.h	1034	ObPQSetHint::left_branch_	member ObString (value) of type common::ObString	common::ObString left_branch_;  // qb_name for first branch of set, used for union distinct / intersect

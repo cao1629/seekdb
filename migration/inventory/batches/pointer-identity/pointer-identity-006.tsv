@@ -1,0 +1,32 @@
+file	line	symbol	construct	text
+src/sql/ob_sql_temp_table.cpp	64	ObSqlTempTableInfo::collect_temp_tables	IR pointer == unresolved pointer	} else if (info->table_query_ == table->ref_query_) {
+src/sql/ob_sql_temp_table.cpp	132	ObSqlTempTableInfo::collect_specified_temp_table	IR pointer != unresolved pointer	OB_UNLIKELY(specified_query != table->ref_query_)) {
+src/sql/ob_sql_utils.cpp	1839	RelExprChecker::add_expr	pointer cast to integer used as a key	if (OB_HASH_NOT_EXIST == (ret = duplicated_checker_.exist_refactored(reinterpret_cast<uint64_t>(expr)))) {
+src/sql/ob_sql_utils.cpp	1840	RelExprChecker::add_expr	pointer cast to integer used as a key	if (OB_FAIL(duplicated_checker_.set_refactored(reinterpret_cast<uint64_t>(expr)))) {
+src/sql/ob_sql_utils.cpp	1890	RelExprPointerChecker::add_expr	pointer cast to integer used as a key	if (OB_HASH_NOT_EXIST == (flag = expr_id_map_.get_refactored(reinterpret_cast<uint64_t>(expr), expr_id))) {
+src/sql/ob_sql_utils.cpp	1893	RelExprPointerChecker::add_expr	pointer cast to integer used as a key	if (OB_FAIL(expr_id_map_.set_refactored(reinterpret_cast<uint64_t>(expr), expr_id))) {
+src/sql/ob_sql_utils.cpp	1952	SemanticVectorDistExprChecker::add_expr	pointer membership test: add_var_to_array_no_dup	if (OB_FAIL(add_var_to_array_no_dup(rel_array_, expr))) {
+src/sql/ob_sql_utils.cpp	3442	ObSQLUtils::get_result_from_ctx	pointer cast to integer used as a key	} else if (FALSE_IT(key = reinterpret_cast<uint64_t>(expr))) {
+src/sql/ob_sql_utils.cpp	3468	ObSQLUtils::store_result_to_ctx	pointer cast to integer used as a key	key = reinterpret_cast<uint64_t>(expr);
+src/sql/optimizer/ob_access_path_estimation.cpp	1892	ObAccessPathEstimation::get_need_dynamic_sampling_columns	pointer membership test: append_array_no_dup	if (OB_FAIL(append_array_no_dup(relation_raw_exprs, select_stmt->get_group_exprs()))) {
+src/sql/optimizer/ob_access_path_estimation.cpp	1893	ObAccessPathEstimation::get_need_dynamic_sampling_columns	pointer membership test: append_array_no_dup	} else if (OB_FAIL(append_array_no_dup(relation_raw_exprs, select_stmt->get_rollup_exprs()))) {
+src/sql/optimizer/ob_access_path_estimation.cpp	1894	ObAccessPathEstimation::get_need_dynamic_sampling_columns	pointer membership test: append_array_no_dup	} else if (OB_FAIL(append_array_no_dup(relation_raw_exprs, select_stmt->get_having_exprs()))) {
+src/sql/optimizer/ob_conflict_detector.cpp	671	ObConflictDetectorGenerator::generate_inner_join_detectors	pointer membership test: ObOptimizerUtil::find_item	(expr->has_flag(CNT_SUB_QUERY) && !ObOptimizerUtil::find_item(push_subq_exprs_, expr))) {
+src/sql/optimizer/ob_conflict_detector.cpp	675	ObConflictDetectorGenerator::generate_inner_join_detectors	pointer membership test: ObOptimizerUtil::find_item	ObOptimizerUtil::find_item(all_table_filters, expr)) {
+src/sql/optimizer/ob_conflict_detector.cpp	697	ObConflictDetectorGenerator::generate_inner_join_detectors	pointer membership test: ObOptimizerUtil::find_item	} else if (ObOptimizerUtil::find_item(all_table_filters, expr)) {
+src/sql/optimizer/ob_conflict_detector.cpp	711	ObConflictDetectorGenerator::generate_inner_join_detectors	pointer membership test: ObOptimizerUtil::find_item	} else if (expr->has_flag(CNT_SUB_QUERY) && !ObOptimizerUtil::find_item(push_subq_exprs_, expr) &&
+src/sql/optimizer/ob_conflict_detector.cpp	730	ObConflictDetectorGenerator::generate_inner_join_detectors	pointer membership test: ObOptimizerUtil::find_item	} else if (expr->has_flag(CNT_SUB_QUERY) && !ObOptimizerUtil::find_item(push_subq_exprs_, expr) &&
+src/sql/optimizer/ob_conflict_detector.cpp	1095	ObConflictDetectorGenerator::pushdown_on_conditions	pointer membership test: ObOptimizerUtil::find_item	!ObOptimizerUtil::find_item(push_subq_exprs_, qual)) {
+src/sql/optimizer/ob_del_upd_log_plan.cpp	666	ObDelUpdLogPlan::replace_assignment_expr_from_dml_info	IR pointer == IR pointer	} else if (expr == assignment.column_expr_
+src/sql/optimizer/ob_del_upd_log_plan.cpp	1605	ObDelUpdLogPlan::generate_index_column_exprs	pointer membership test: add_var_to_array_no_dup	} else if (OB_FAIL(add_var_to_array_no_dup(spk_related_columns, col_expr))) {
+src/sql/optimizer/ob_del_upd_log_plan.cpp	1962	ObDelUpdLogPlan::extract_assignment_subqueries	pointer membership test: add_var_to_array_no_dup	if (OB_FAIL(add_var_to_array_no_dup(normal_query_refs, expr))) {
+src/sql/optimizer/ob_del_upd_log_plan.cpp	1968	ObDelUpdLogPlan::extract_assignment_subqueries	pointer membership test: add_var_to_array_no_dup	} else if (OB_FAIL(add_var_to_array_no_dup(alias_query_refs, alias->get_param_expr(0)))) {
+src/sql/optimizer/ob_fd_item.cpp	377	ObFdItemFactory::do_deduce_fd_item_set	pointer membership test: ObOptimizerUtil::find_item	} else if (expr->is_const_expr() || ObOptimizerUtil::find_item(const_exprs, expr)) {
+src/sql/optimizer/ob_insert_log_plan.cpp	275	ObInsertLogPlan::check_contain_non_onetime_expr	pointer membership test: ObOptimizerUtil::find_item	if (!ObOptimizerUtil::find_item(get_onetime_query_refs(), expr)) {
+src/sql/optimizer/ob_insert_log_plan.cpp	279	ObInsertLogPlan::check_contain_non_onetime_expr	pointer membership test: ObOptimizerUtil::find_item	if (ObOptimizerUtil::find_item(get_onetime_query_refs(), expr)) {
+src/sql/optimizer/ob_insert_log_plan.cpp	1191	ObInsertLogPlan::prepare_table_dml_info_for_ddl	IR pointer == unresolved pointer	if (table_info.column_exprs_.at(j) == column) {
+src/sql/optimizer/ob_insert_log_plan.cpp	1244	ObInsertLogPlan::get_all_rowkey_columns_for_ddl	pointer membership test: add_var_to_array_no_dup	} else if (OB_FAIL(add_var_to_array_no_dup(column_exprs, column_item->expr_))) {
+src/sql/optimizer/ob_insert_log_plan.cpp	1270	ObInsertLogPlan::get_all_rowkey_columns_for_ddl	pointer membership test: add_var_to_array_no_dup	} else if (OB_FAIL(add_var_to_array_no_dup(column_exprs, spk_expr))) {
+src/sql/optimizer/ob_insert_log_plan.cpp	1304	ObInsertLogPlan::get_all_columns_for_ddl	pointer membership test: add_var_to_array_no_dup	} else if (OB_FAIL(add_var_to_array_no_dup(column_exprs, column_item->expr_))) {
+src/sql/optimizer/ob_insert_log_plan.cpp	1333	ObInsertLogPlan::get_all_part_columns_for_ddl	pointer membership test: add_var_to_array_no_dup	} else if (OB_FAIL(add_var_to_array_no_dup(column_exprs, column_item->expr_))) {
+src/sql/optimizer/ob_insert_log_plan.cpp	1344	ObInsertLogPlan::get_all_part_columns_for_ddl	pointer membership test: add_var_to_array_no_dup	} else if (OB_FAIL(add_var_to_array_no_dup(column_exprs, column_item->expr_))) {

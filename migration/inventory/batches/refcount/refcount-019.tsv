@@ -1,0 +1,51 @@
+file	line	symbol	construct	text
+src/storage/meta_mem/ob_tablet_handle.cpp	76	ObTabletHandle::reset	dec_ref call	const int64_t ref_cnt = obj_->dec_ref();
+src/storage/meta_mem/ob_tablet_handle.cpp	101	ObTabletHandle::reset	dec_macro_ref_cnt call (other name) [on-disk block reference]	obj_->dec_macro_ref_cnt();
+src/storage/meta_mem/ob_tablet_handle.h	37	ObTabletHandle	Handle class definition : ObMetaObjGuard<ObTablet>	class ObTabletHandle : public ObMetaObjGuard<ObTablet>
+src/storage/meta_mem/ob_tablet_meta_mem_mgr.cpp	688	ObTabletMetaMemMgr::push_tablet_into_gc_queue	release_tablet call (reference-count function found by its body) [not built]	release_tablet(tablet, false/*return tablet buffer ptr after release*/);
+src/storage/meta_mem/ob_tablet_meta_mem_mgr.cpp	730	ObTabletMetaMemMgr::gc_tablets_in_queue	release_tablet call (reference-count function found by its body) [not built]	release_tablet(tablet, false/* return tablet buffer ptr after release*/);
+src/storage/meta_mem/ob_tablet_meta_mem_mgr.cpp	771	ObTabletMetaMemMgr::release_tablet	release_tablet definition (reference-count function found by its body: calls dec_macro_ref_cnt) [not built]	void *ObTabletMetaMemMgr::release_tablet(ObTablet *tablet, const bool return_buf_ptr_after_release)
+src/storage/meta_mem/ob_tablet_meta_mem_mgr.cpp	774	ObTabletMetaMemMgr::release_tablet	dec_macro_ref_cnt call (other name) [on-disk block reference] [not built]	tablet->dec_macro_ref_cnt();
+src/storage/meta_mem/ob_tablet_meta_mem_mgr.cpp	2168	ObTabletMetaMemMgr::try_wash_tablet_from_gc_queue	release_tablet call (reference-count function found by its body) [not built]	free_obj = release_tablet(tablet, true/*return tablet buffer ptr after release*/);
+src/storage/meta_mem/ob_tablet_meta_mem_mgr.cpp	2170	ObTabletMetaMemMgr::try_wash_tablet_from_gc_queue	release_tablet call (reference-count function found by its body) [not built]	release_tablet(tablet, false/*return tablet buffer ptr after release*/);
+src/storage/meta_mem/ob_tablet_meta_mem_mgr.h	456	ObTabletMetaMemMgr	release_tablet declaration (reference-count function found by its body) [not built]	void *release_tablet(ObTablet *tablet, const bool return_buf_ptr_after_release);
+src/storage/meta_mem/ob_tablet_pointer.cpp	98	ObTabletPointer::reset_obj	dec_ref call	const int64_t ref_cnt = obj_.ptr_->dec_ref();
+src/storage/meta_mem/ob_tablet_pointer.cpp	151	ObTabletPointer::hook_obj	inc_ref call	t->inc_ref();
+src/storage/meta_mem/ob_tablet_pointer.cpp	218	ObTabletPointer::set_obj	inc_ref call	obj_.ptr_->inc_ref();
+src/storage/meta_mem/ob_tablet_pointer.cpp	289	ObTabletPointer::dump_meta_obj	dec_ref call	} else if (0 != obj_.ptr_->dec_ref()) {
+src/storage/meta_mem/ob_tablet_pointer.cpp	308	ObTabletPointer::dump_meta_obj	inc_ref call	meta_obj.ptr_->inc_ref();
+src/storage/meta_mem/ob_tablet_pointer.cpp	315	ObTabletPointer::dump_meta_obj	inc_ref call	obj_.ptr_->inc_ref();
+src/storage/meta_mem/ob_tablet_pointer.cpp	348	ObTabletPointer::deep_copy	inc_ref call	obj_.ptr_->inc_ref();
+src/storage/meta_mem/ob_tablet_pointer.h	37	ObDDLKvMgrHandle	Handle alias of ObMetaObjGuard<ObTabletDDLKvMgr>	typedef ObMetaObjGuard<ObTabletDDLKvMgr> ObDDLKvMgrHandle;
+src/storage/meta_mem/ob_tablet_pointer_handle.cpp	57	ObTabletPointerHandle::reset	dec_handle_ref call (other name)	} else if (OB_FAIL(map_->dec_handle_ref(ObResourceHandle<ObTabletPointer>::ptr_))) {
+src/storage/meta_mem/ob_tablet_pointer_handle.cpp	91	ObTabletPointerHandle::set	inc_handle_ref call (other name)	if (OB_FAIL(map->inc_handle_ref(ptr))) {
+src/storage/meta_mem/ob_tablet_pointer_handle.h	30	ObTabletPointerHandle	Handle class definition : ObResourceHandle<ObTabletPointer>	class ObTabletPointerHandle : public ObResourceHandle<ObTabletPointer>
+src/storage/meta_mem/ob_tablet_pointer_map.cpp	91	ObTabletPointerMap::inner_erase	dec_handle_ref call (other name)	if (OB_FAIL(ResourceMap::dec_handle_ref(ptr))) {
+src/storage/meta_mem/ob_tablet_pointer_map.cpp	573	ObTabletPointerMap::get_meta_obj_with_external_memory	dec_macro_ref_cnt call (other name) [on-disk block reference]	t->dec_macro_ref_cnt();
+src/storage/multi_data_source/mds_table_handle.h	34	MdsTableHandle	Handle class definition	class MdsTableHandle
+src/storage/multi_data_source/mds_table_mgr.cpp	296	MdsTableMgrHandle::reset	dec_ref call	mgr_->dec_ref();
+src/storage/multi_data_source/mds_table_mgr.cpp	311	MdsTableMgrHandle::set_mds_table_mgr	inc_ref call	mgr_->inc_ref();
+src/storage/multi_data_source/mds_table_mgr.h	121	ObMdsTableMgr::inc_ref	inc_ref definition	void inc_ref() { ATOMIC_INC(&ref_cnt_); };
+src/storage/multi_data_source/mds_table_mgr.h	122	ObMdsTableMgr::dec_ref	dec_ref definition	void dec_ref() { ATOMIC_DEC(&ref_cnt_); };
+src/storage/multi_data_source/mds_table_mgr.h	167	MdsTableMgrHandle	Handle class definition	class MdsTableMgrHandle
+src/storage/ob_i_memtable_mgr.cpp	242	ObIMemtableMgr::reset_tables	dec_ref call	const int64_t ref_cnt = memtable->dec_ref();
+src/storage/ob_i_memtable_mgr.cpp	254	ObIMemtableMgr::release_head_memtable	release_head_memtable definition (reference-count function found by its body: calls dec_ref)	void ObIMemtableMgr::release_head_memtable()
+src/storage/ob_i_memtable_mgr.cpp	262	ObIMemtableMgr::release_head_memtable	dec_ref call	const int64_t ref_cnt = memtable->dec_ref();
+src/storage/ob_i_memtable_mgr.cpp	269	ObIMemtableMgr::release_tail_memtable	release_tail_memtable definition (reference-count function found by its body: calls dec_ref)	void ObIMemtableMgr::release_tail_memtable()
+src/storage/ob_i_memtable_mgr.cpp	278	ObIMemtableMgr::release_tail_memtable	dec_ref call	const int64_t ref_cnt = memtable->dec_ref();
+src/storage/ob_i_memtable_mgr.cpp	337	ObIMemtableMgr::add_memtable_	inc_ref call	tables_[idx]->inc_ref();
+src/storage/ob_i_memtable_mgr.cpp	386	ObMemtableMgrHandle::reset	dec_ref call	memtable_mgr_->dec_ref();
+src/storage/ob_i_memtable_mgr.cpp	389	ObMemtableMgrHandle::reset	dec_ref call	if (0 == memtable_mgr_->dec_ref()) {
+src/storage/ob_i_memtable_mgr.cpp	411	ObMemtableMgrHandle::operator=	inc_ref call	other.memtable_mgr_->inc_ref();
+src/storage/ob_i_memtable_mgr.cpp	426	ObMemtableMgrHandle::set_memtable_mgr	inc_ref call	memtable_mgr_->inc_ref();
+src/storage/ob_i_memtable_mgr.h	284	ObIMemtableMgr::dec_ref	dec_ref definition	OB_INLINE int64_t dec_ref() { return ATOMIC_SAF(&ref_cnt_, 1 /* just sub 1 */); }
+src/storage/ob_i_memtable_mgr.h	286	ObIMemtableMgr::inc_ref	inc_ref definition	OB_INLINE void inc_ref() { ATOMIC_INC(&ref_cnt_); }
+src/storage/ob_i_memtable_mgr.h	315	ObIMemtableMgr	release_head_memtable declaration (reference-count function found by its body)	void release_head_memtable();
+src/storage/ob_i_memtable_mgr.h	316	ObIMemtableMgr	release_tail_memtable declaration (reference-count function found by its body)	void release_tail_memtable();
+src/storage/ob_i_memtable_mgr.h	333	ObMemtableMgrHandle	Handle class definition	class ObMemtableMgrHandle final
+src/storage/ob_i_table.cpp	185	ObTableHandleV2::reset	dec_ref call	const int64_t ref_cnt = table_->dec_ref();
+src/storage/ob_i_table.cpp	386	ObTableHandleV2::operator=	inc_ref call	other.table_->inc_ref();
+src/storage/ob_i_table.cpp	419	ObTableHandleV2::set_table	inc_ref call	table_->inc_ref();
+src/storage/ob_i_table.cpp	438	ObTableHandleV2::set_sstable	inc_ref call	table_->inc_ref();
+src/storage/ob_i_table.cpp	455	ObTableHandleV2::set_sstable_with_tablet	inc_ref call	table_->inc_ref();
+src/storage/ob_i_table.cpp	472	ObTableHandleV2::set_sstable	inc_ref call	table_->inc_ref();

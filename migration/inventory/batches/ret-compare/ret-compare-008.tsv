@@ -1,0 +1,87 @@
+file	line	symbol	construct	text
+src/observer/schema/ob_schema_service_sql_impl.cpp	151	ObSchemaServiceSQLImpl::retrieve_schema_version	ret == OB_ITER_END	if (ret == OB_ITER_END) { //no record
+src/observer/schema/ob_schema_service_sql_impl.cpp	169	ObSchemaServiceSQLImpl::retrieve_schema_version	ret (assigned in the comparison) != OB_ITER_END	if (OB_ITER_END != (ret = result.next())) {
+src/observer/schema/ob_schema_service_sql_impl.cpp	536	ObSchemaServiceSQLImpl::get_core_table_priorities	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/observer/schema/ob_schema_service_sql_impl.cpp	615	ObSchemaServiceSQLImpl::get_core_table_columns	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/observer/schema/ob_schema_service_sql_impl.cpp	1030	ObSchemaServiceSQLImpl::fetch_sys_variable	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/observer/schema/ob_schema_service_sql_impl.cpp	1048	ObSchemaServiceSQLImpl::fetch_sys_variable	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/observer/schema/ob_schema_service_sql_impl.cpp	1111	ObSchemaServiceSQLImpl::get_system_variable	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/observer/schema/ob_schema_service_sql_impl.cpp	2470	ObSchemaServiceSQLImpl::get_increment_schema_operations	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/observer/schema/ob_schema_service_sql_impl.cpp	2522	ObSchemaServiceSQLImpl::check_sys_schema_change	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/observer/schema/ob_schema_service_sql_impl.cpp	3489	ObSchemaServiceSQLImpl::fetch_sys_variable_version	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/schema/ob_schema_service_sql_impl.cpp	4643	ObSchemaServiceSQLImpl::construct_recycle_table_object	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/schema/ob_schema_service_sql_impl.cpp	4704	ObSchemaServiceSQLImpl::construct_recycle_database_object	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/schema/ob_schema_service_sql_impl.cpp	4939	ObSchemaServiceSQLImpl::get_ori_schema_version	tmp_ret (assigned in the comparison) != OB_ITER_END	} else if (OB_ITER_END != (tmp_ret = result->next())) {
+src/observer/schema/ob_schema_service_sql_impl.cpp	5275	ObSchemaServiceSQLImpl::get_schema_version_by_timestamp	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/observer/schema/ob_schema_service_sql_impl.cpp	5484	ObSchemaServiceSQLImpl::retrieve_schema_id_with_name_	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/observer/schema/ob_schema_service_sql_impl.cpp	5659	ObSchemaServiceSQLImpl::get_table_id	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/observer/schema/ob_schema_service_sql_impl.cpp	5844	ObSchemaServiceSQLImpl::get_constraint_id	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/observer/schema/ob_schema_service_sql_impl.cpp	5917	ObSchemaServiceSQLImpl::get_foreign_key_id	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/observer/schema/ob_schema_service_sql_impl.cpp	6030	ObSchemaServiceSQLImpl::get_routine_id	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/observer/schema/ob_schema_service_sql_impl.cpp	6125	ObSchemaServiceSQLImpl::get_table_schema_versions	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/observer/schema/ob_schema_service_sql_impl.cpp	6180	ObSchemaServiceSQLImpl::get_mock_fk_parent_table_schema_versions	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/observer/schema/ob_schema_service_sql_impl.cpp	6246	ObSchemaServiceSQLImpl::get_table_index_infos	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/observer/vector_index/ob_hybrid_vector_refresh_task.cpp	220	ObHybridVectorRefreshTask::prepare_for_task	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/observer/vector_index/ob_hybrid_vector_refresh_task.cpp	483	ObHybridVectorRefreshTask::prepare_for_embedding	other variable task_ctx->task_status_.last_error_code_ == OB_TRY_LOCK_ROW_CONFLICT	} else if (OB_TRY_LOCK_ROW_CONFLICT == task_ctx->task_status_.last_error_code_) {
+src/observer/vector_index/ob_hybrid_vector_refresh_task.cpp	501	ObHybridVectorRefreshTask::prepare_for_embedding	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/vector_index/ob_hybrid_vector_refresh_task.cpp	529	ObHybridVectorRefreshTask::prepare_for_embedding	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/observer/vector_index/ob_hybrid_vector_refresh_task.cpp	663	ObHybridVectorRefreshTask::prepare_index_id_data	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/vector_index/ob_hybrid_vector_refresh_task.cpp	698	ObHybridVectorRefreshTask::prepare_index_id_data	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/observer/vector_index/ob_hybrid_vector_refresh_task.cpp	745	ObHybridVectorRefreshTask::delete_embedded_table	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/vector_index/ob_hybrid_vector_refresh_task.cpp	871	ObHybridVectorRefreshTask::after_embedding	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/vector_index/ob_hybrid_vector_refresh_task.cpp	912	ObHybridVectorRefreshTask::after_embedding	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/vector_index/ob_ivf_async_task.cpp	31	ObIvfAsyncTask::delete_deprecated_cache	ret != OB_HASH_NOT_EXIST	if (ret != OB_HASH_NOT_EXIST) {
+src/observer/vector_index/ob_ivf_async_task_executor.cpp	39	ObIvfAsyncTaskExector::LoadTaskCallback::is_cache_mgr_deprecated	ret != OB_TABLET_NOT_EXIST	if (OB_TABLET_NOT_EXIST != ret) {
+src/observer/vector_index/ob_ivf_async_task_executor.cpp	240	ObIvfAsyncTaskExector::get_tablet_ids_by_ls	ret == OB_TABLET_NOT_EXIST	} else if (ret == OB_TABLET_NOT_EXIST) {
+src/observer/vector_index/ob_ivf_async_task_executor.cpp	334	ObIvfAsyncTaskExector::generate_aux_table_info_map	ret != OB_HASH_NOT_EXIST	if (ret != OB_HASH_NOT_EXIST) {
+src/observer/vector_index/ob_ivf_async_task_executor.cpp	352	ObIvfAsyncTaskExector::generate_aux_table_info_map	tmp_ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != tmp_ret) {
+src/observer/vector_index/ob_plugin_vector_index_adaptor.cpp	227	ObVectorQueryAdaptorResultContext::init_bitmaps	ret == OB_ALLOCATE_MEMORY_FAILED	} else if (ret == OB_ALLOCATE_MEMORY_FAILED) {
+src/observer/vector_index/ob_plugin_vector_index_adaptor.cpp	233	ObVectorQueryAdaptorResultContext::init_bitmaps	ret == OB_ALLOCATE_MEMORY_FAILED	} else if (ret == OB_ALLOCATE_MEMORY_FAILED) {
+src/observer/vector_index/ob_plugin_vector_index_adaptor.cpp	2091	ObPluginVectorIndexAdaptor::check_delta_buffer_table_readnext_status	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/vector_index/ob_plugin_vector_index_adaptor.cpp	2119	ObPluginVectorIndexAdaptor::check_delta_buffer_table_readnext_status	ret == OB_ITER_END	if (ret == OB_ITER_END) {
+src/observer/vector_index/ob_plugin_vector_index_adaptor.cpp	2366	ObPluginVectorIndexAdaptor::check_index_id_table_readnext_status	ret == OB_ITER_END	if (ret == OB_ITER_END) {
+src/observer/vector_index/ob_plugin_vector_index_adaptor.cpp	2458	ObPluginVectorIndexAdaptor::check_index_id_table_readnext_status_async	ret == OB_ITER_END	if (ret == OB_ITER_END) {
+src/observer/vector_index/ob_plugin_vector_index_adaptor.cpp	2540	ObPluginVectorIndexAdaptor::build_temp_bitmap_from_index_id_table	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/vector_index/ob_plugin_vector_index_adaptor.cpp	2567	ObPluginVectorIndexAdaptor::build_temp_bitmap_from_index_id_table	ret == OB_ITER_END	if (ret == OB_ITER_END) {
+src/observer/vector_index/ob_plugin_vector_index_adaptor.cpp	2706	ObPluginVectorIndexAdaptor::complete_index_mem_data	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/vector_index/ob_plugin_vector_index_adaptor.cpp	2712	ObPluginVectorIndexAdaptor::complete_index_mem_data	ret == OB_ITER_END	if (ret == OB_ITER_END) {
+src/observer/vector_index/ob_plugin_vector_index_adaptor.cpp	2760	ObPluginVectorIndexAdaptor::complete_index_mem_data_incremental	ret == OB_ITEM_NOT_MATCH	if (common::OB_ITEM_NOT_MATCH == ret) {
+src/observer/vector_index/ob_plugin_vector_index_adaptor.cpp	2844	ObPluginVectorIndexAdaptor::complete_index_mem_data_incremental	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/vector_index/ob_plugin_vector_index_adaptor.cpp	2861	ObPluginVectorIndexAdaptor::complete_index_mem_data_incremental	ret == OB_ITER_END	if (ret == OB_ITER_END) {
+src/observer/vector_index/ob_plugin_vector_index_adaptor.cpp	3933	ObPluginVectorIndexAdaptor::query_result	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/observer/vector_index/ob_plugin_vector_index_adaptor.cpp	3947	ObPluginVectorIndexAdaptor::query_result	ret == OB_ERR_VSAG_RETURN_ERROR	if (ret == OB_ERR_VSAG_RETURN_ERROR) {
+src/observer/vector_index/ob_plugin_vector_index_adaptor.cpp	4627	ObHnswBitmapFilter::upgrade_to_roaring_bitmap	ret == OB_ALLOCATE_MEMORY_FAILED	} else if (ret == OB_ALLOCATE_MEMORY_FAILED) {
+src/observer/vector_index/ob_plugin_vector_index_scheduler.cpp	98	ObPluginVectorIndexLoadScheduler::clean_deprecated_adapters	ret != OB_TABLET_NOT_EXIST	if (OB_TABLET_NOT_EXIST != ret) {
+src/observer/vector_index/ob_plugin_vector_index_scheduler.cpp	114	ObPluginVectorIndexLoadScheduler::clean_deprecated_adapters	ret != OB_HASH_NOT_EXIST	if (ret != OB_HASH_NOT_EXIST) {
+src/observer/vector_index/ob_plugin_vector_index_scheduler.cpp	131	ObPluginVectorIndexLoadScheduler::clean_deprecated_adapters	ret != OB_TABLET_NOT_EXIST	if (OB_TABLET_NOT_EXIST != ret) {
+src/observer/vector_index/ob_plugin_vector_index_scheduler.cpp	140	ObPluginVectorIndexLoadScheduler::clean_deprecated_adapters	ret == OB_HASH_EXIST	if (OB_HASH_EXIST == ret) {
+src/observer/vector_index/ob_plugin_vector_index_scheduler.cpp	142	ObPluginVectorIndexLoadScheduler::clean_deprecated_adapters	ret == OB_HASH_NOT_EXIST	} else if (OB_HASH_NOT_EXIST == ret) {
+src/observer/vector_index/ob_plugin_vector_index_scheduler.cpp	176	ObPluginVectorIndexLoadScheduler::clean_deprecated_adapters	ret != OB_HASH_NOT_EXIST	if (ret != OB_HASH_NOT_EXIST) {
+src/observer/vector_index/ob_plugin_vector_index_scheduler.cpp	269	ObPluginVectorIndexLoadScheduler::acquire_adapter_in_maintenance	ret != OB_TABLET_NOT_EXIST	if (OB_TABLET_NOT_EXIST != ret) {
+src/observer/vector_index/ob_plugin_vector_index_scheduler.cpp	301	ObPluginVectorIndexLoadScheduler::acquire_adapter_in_maintenance	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/observer/vector_index/ob_plugin_vector_index_scheduler.cpp	337	ObPluginVectorIndexLoadScheduler::set_shared_table_info_in_maintenance	ret != OB_TABLET_NOT_EXIST	if (OB_TABLET_NOT_EXIST != ret) {
+src/observer/vector_index/ob_plugin_vector_index_scheduler.cpp	343	ObPluginVectorIndexLoadScheduler::set_shared_table_info_in_maintenance	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/observer/vector_index/ob_plugin_vector_index_scheduler.cpp	561	ObPluginVectorIndexLoadScheduler::execute_one_memdata_sync_task	ret != OB_SIZE_OVERFLOW	if (OB_SIZE_OVERFLOW != ret) {
+src/observer/vector_index/ob_plugin_vector_index_scheduler.cpp	583	ObPluginVectorIndexLoadScheduler::try_schedule_task	ret == OB_EAGAIN	if (OB_EAGAIN == ret) {
+src/observer/vector_index/ob_plugin_vector_index_scheduler.cpp	585	ObPluginVectorIndexLoadScheduler::try_schedule_task	ret == OB_SIZE_OVERFLOW	} else if (OB_SIZE_OVERFLOW == ret) { // do nothing, handled by caller
+src/observer/vector_index/ob_plugin_vector_index_scheduler.cpp	622	ObPluginVectorIndexLoadScheduler::try_schedule_remaining_tasks	ret != OB_SIZE_OVERFLOW	if (OB_SIZE_OVERFLOW != ret) {
+src/observer/vector_index/ob_plugin_vector_index_scheduler.cpp	629	ObPluginVectorIndexLoadScheduler::try_schedule_remaining_tasks	ret == OB_SIZE_OVERFLOW	if (OB_SIZE_OVERFLOW == ret) { // task queue full, schedule later
+src/observer/vector_index/ob_plugin_vector_index_scheduler.cpp	677	ObPluginVectorIndexLoadScheduler::generate_vec_idx_memdata_dag	ret == OB_EAGAIN	if (OB_EAGAIN == ret) {
+src/observer/vector_index/ob_plugin_vector_index_scheduler.cpp	679	ObPluginVectorIndexLoadScheduler::generate_vec_idx_memdata_dag	ret == OB_SIZE_OVERFLOW	} else if (OB_SIZE_OVERFLOW == ret) {
+src/observer/vector_index/ob_plugin_vector_index_scheduler.cpp	723	ObPluginVectorIndexLoadScheduler::check_task_state	other variable task_ctx->err_code_ == OB_PARTITION_NOT_EXIST	} else if (OB_PARTITION_NOT_EXIST == task_ctx->err_code_
+src/observer/vector_index/ob_plugin_vector_index_scheduler.cpp	724	ObPluginVectorIndexLoadScheduler::check_task_state	other variable task_ctx->err_code_ == OB_PARTITION_IS_BLOCKED	|| OB_PARTITION_IS_BLOCKED == task_ctx->err_code_
+src/observer/vector_index/ob_plugin_vector_index_scheduler.cpp	725	ObPluginVectorIndexLoadScheduler::check_task_state	other variable task_ctx->err_code_ == OB_TABLE_NOT_EXIST	|| OB_TABLE_NOT_EXIST == task_ctx->err_code_
+src/observer/vector_index/ob_plugin_vector_index_scheduler.cpp	726	ObPluginVectorIndexLoadScheduler::check_task_state	other variable task_ctx->err_code_ == OB_ERR_UNKNOWN_TABLE	|| OB_ERR_UNKNOWN_TABLE == task_ctx->err_code_
+src/observer/vector_index/ob_plugin_vector_index_scheduler.cpp	727	ObPluginVectorIndexLoadScheduler::check_task_state	other variable task_ctx->err_code_ == OB_LS_NOT_EXIST	|| OB_LS_NOT_EXIST == task_ctx->err_code_
+src/observer/vector_index/ob_plugin_vector_index_scheduler.cpp	728	ObPluginVectorIndexLoadScheduler::check_task_state	other variable task_ctx->err_code_ == OB_TABLET_NOT_EXIST	|| OB_TABLET_NOT_EXIST == task_ctx->err_code_) {
+src/observer/vector_index/ob_plugin_vector_index_scheduler.cpp	732	ObPluginVectorIndexLoadScheduler::check_task_state	other variable task_ctx->err_code_ == OB_ALLOCATE_MEMORY_FAILED	} else if (OB_ALLOCATE_MEMORY_FAILED == task_ctx->err_code_
+src/observer/vector_index/ob_plugin_vector_index_scheduler.cpp	733	ObPluginVectorIndexLoadScheduler::check_task_state	other variable task_ctx->err_code_ == OB_ERR_VSAG_MEM_LIMIT_EXCEEDED	|| OB_ERR_VSAG_MEM_LIMIT_EXCEEDED == task_ctx->err_code_) {
+src/observer/vector_index/ob_plugin_vector_index_scheduler.cpp	912	ObPluginVectorIndexLoadScheduler::check_and_execute_memdata_sync_task	ret != OB_SIZE_OVERFLOW	if (OB_SIZE_OVERFLOW != ret) {
+src/observer/vector_index/ob_plugin_vector_index_scheduler.cpp	1114	ObPluginVectorIndexLoadScheduler::handle_replay_result	ret == OB_ALLOCATE_MEMORY_FAILED	if (ret == OB_ALLOCATE_MEMORY_FAILED) {
+src/observer/vector_index/ob_plugin_vector_index_scheduler.cpp	1483	ObVectorIndexMemSyncInfo::add_task_to_waiting_map	ret == OB_HASH_NOT_EXIST	if (ret == OB_HASH_NOT_EXIST) {
+src/observer/vector_index/ob_plugin_vector_index_scheduler.h	318	ObPluginVectorIndexLoadScheduler::in_retry_list	other variable ret_code == OB_REPLICA_NOT_READABLE	static bool in_retry_list(const int ret_code) { return OB_REPLICA_NOT_READABLE == ret_code; }
+src/observer/vector_index/ob_plugin_vector_index_serialize.cpp	198	ObVectorIndexSerializer::serialize	call result streambuf.get_error_code() != OB_ITER_END	if (streambuf.get_error_code() != OB_SUCCESS && streambuf.get_error_code() != OB_ITER_END) {
+src/observer/vector_index/ob_plugin_vector_index_serialize.cpp	217	ObVectorIndexSerializer::deserialize	ret == OB_ITER_END	if (ret == OB_ITER_END) {
+src/observer/vector_index/ob_plugin_vector_index_serialize.cpp	226	ObVectorIndexSerializer::deserialize	call result streambuf.get_error_code() != OB_ITER_END	if (streambuf.get_error_code() != OB_SUCCESS && streambuf.get_error_code() != OB_ITER_END) {
+src/observer/vector_index/ob_plugin_vector_index_serialize.cpp	233	ObVectorIndexSerializer::deserialize	ret == OB_ITER_END	if (ret == OB_ITER_END) {
+src/observer/vector_index/ob_plugin_vector_index_serialize.cpp	337	ObHNSWDeserializeCallback::operator()	ret == OB_ITER_END	if (ret == OB_ITER_END) {

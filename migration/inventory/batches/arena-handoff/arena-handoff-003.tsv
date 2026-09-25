@@ -1,0 +1,41 @@
+file	line	symbol	construct	text
+src/sql/pl/pl_cache/ob_pl_cache_object.h	240	ObPLCacheObject::params_info_	allocator-backed container member of cross-thread class: common::Ob2DArray<ObPlParamInfo, common::OB_MALLOC_BIG_BLOCK_SIZE, common::ObWrapperAllocator, false>	common::Ob2DArray<ObPlParamInfo,
+src/sql/pl/pl_cache/ob_pl_cache_object.h	246	ObPLCacheObject::expressions_	allocator-backed container member of cross-thread class: common::ObFixedArray<sql::ObSqlExpression*, common::ObIAllocator>	common::ObFixedArray<sql::ObSqlExpression*, common::ObIAllocator> expressions_;
+src/sql/plan_cache/ob_cache_object.h	233	ObPlanCacheObject::params_info_	allocator-backed container member of cross-thread class: common::Ob2DArray<ObParamInfo, common::OB_MALLOC_BIG_BLOCK_SIZE, common::ObWrapperAllocator, false>	common::Ob2DArray<ObParamInfo,
+src/sql/plan_cache/ob_i_lib_cache_node.h	210	ObILibCacheNode::mem_context_	allocator member of cross-thread class: lib::MemoryContext	lib::MemoryContext mem_context_;
+src/sql/plan_cache/ob_i_lib_cache_node.h	213	ObILibCacheNode::allocator_	allocator member of cross-thread class: common::ObIAllocator &	common::ObIAllocator &allocator_;
+src/sql/plan_cache/ob_i_lib_cache_object.h	102	ObILibCacheObject::mem_context_	allocator member of cross-thread class: lib::MemoryContext	lib::MemoryContext mem_context_;
+src/sql/plan_cache/ob_i_lib_cache_object.h	103	ObILibCacheObject::allocator_	allocator member of cross-thread class: common::ObIAllocator &	common::ObIAllocator &allocator_;
+src/sql/plan_cache/ob_pcv_set.h	124	ObPCVSet::pc_alloc_	allocator member of cross-thread class: common::ObIAllocator *	common::ObIAllocator *pc_alloc_;
+src/sql/plan_cache/ob_pcv_set.h	125	ObPCVSet::sql_	borrowed view member of cross-thread class: common::ObString	common::ObString sql_;  // when adding a kv pair with sql as the key to the plan cache, this member is needed
+src/sql/plan_cache/ob_pcv_set.h	131	ObPCVSet::sql_ids_	borrowed view member of cross-thread class: common::ObSEArray<common::ObString, 4>	common::ObSEArray<common::ObString, 4> sql_ids_;
+src/sql/plan_cache/ob_pcv_set.h	133	ObPCVSet::col_field_arr_	allocator-backed container member of cross-thread class: common::ObFixedArray<PCColStruct, common::ObIAllocator>	common::ObFixedArray<PCColStruct, common::ObIAllocator> col_field_arr_;
+src/sql/resolver/cmd/ob_call_procedure_stmt.h	132	ObCallProcedureInfo::out_name_	borrowed view member of cross-thread class: ObSEArray<ObString, 32>	ObSEArray<ObString, 32> out_name_;
+src/sql/resolver/cmd/ob_call_procedure_stmt.h	134	ObCallProcedureInfo::out_type_name_	borrowed view member of cross-thread class: ObSEArray<ObString, 32>	ObSEArray<ObString, 32> out_type_name_;
+src/sql/resolver/cmd/ob_call_procedure_stmt.h	135	ObCallProcedureInfo::out_type_owner_	borrowed view member of cross-thread class: ObSEArray<ObString, 32>	ObSEArray<ObString, 32> out_type_owner_;
+src/sql/resolver/cmd/ob_call_procedure_stmt.h	143	ObCallProcedureInfo::db_name_	borrowed view member of cross-thread class: ObString	ObString db_name_;
+src/storage/blocksstable/encoding/ob_multi_prefix_tree.h	175	ObMultiPrefixTree::HashNode::step_str_	borrowed view member of cross-thread class: const char *	const char *step_str_;
+src/storage/blocksstable/ob_block_manager.cpp	1541	ObIOBenchRunner::write_buf_	borrowed view member of cross-thread class: char *	char *write_buf_;
+src/storage/blocksstable/ob_block_manager.cpp	1542	ObIOBenchRunner::read_buf_	borrowed view member of cross-thread class: char *	char *read_buf_;
+src/storage/blocksstable/ob_fuse_row_cache.h	97	ObFuseRowCacheValue::datums_	borrowed view member of cross-thread class: ObStorageDatum *	ObStorageDatum *datums_;
+src/storage/blocksstable/ob_micro_block_cache.h	297	ObIMicroBlockIOCallback::allocator_	allocator member of cross-thread class: common::ObIAllocator *	common::ObIAllocator *allocator_;
+src/storage/blocksstable/ob_micro_block_cache.h	298	ObIMicroBlockIOCallback::data_buffer_	borrowed view member of cross-thread class: char *	char *data_buffer_;
+src/storage/blocksstable/ob_row_cache.h	57	ObRowCacheKey::rowkey_	borrowed view member of cross-thread class: ObDatumRowkey	ObDatumRowkey rowkey_;
+src/storage/blocksstable/ob_row_cache.h	83	ObRowCacheValue::datums_	borrowed view member of cross-thread class: ObStorageDatum *	ObStorageDatum *datums_;
+src/storage/blockstore/ob_object_reader_writer.h	164	ObObjectIOCallback::io_allocator_	allocator member of cross-thread class: ObIAllocator *	ObIAllocator *io_allocator_;
+src/storage/blockstore/ob_object_reader_writer.h	166	ObObjectIOCallback::data_buf_	borrowed view member of cross-thread class: char *	char *data_buf_;   // actual data buffer
+src/storage/compaction/ob_tablet_merge_task.h	202	ObTabletMergeDag::allocator_	allocator member of cross-thread class: common::ObArenaAllocator	common::ObArenaAllocator allocator_;
+src/storage/compaction/ob_tablet_merge_task.h	243	ObTabletMergeTask::allocator_	allocator member of cross-thread class: compaction::ObLocalArena	compaction::ObLocalArena allocator_;
+src/storage/compaction/ob_tablet_scheduler.cpp	815	ObTabletScheduler::schedule_merge_execute_dag	hand-off of allocator-backed object merge_exe_dag via add_dag	} else if (OB_FAIL(::oceanbase::share::server_service<::oceanbase::share::ObDagScheduler>()->add_dag(merge_exe_dag, emergency))) {
+src/storage/ddl/ob_build_index_task.cpp	544	ObUniqueCheckingDag::alloc_unique_checking_prepare_task	hand-off of allocator-backed object prepare_task via add_task	} else if (OB_FAIL(add_task(*prepare_task))) {
+src/storage/ddl/ob_build_index_task.cpp	724	ObUniqueCheckingPrepareTask::generate_unique_checking_task	hand-off of allocator-backed object checking_task via add_task	} else if (OB_FAIL(dag->add_task(*checking_task))) {
+src/storage/ddl/ob_build_index_task.cpp	730	ObUniqueCheckingPrepareTask::generate_unique_checking_task	hand-off of allocator-backed object merge_task via add_task	} else if (OB_FAIL(dag->add_task(*merge_task))) {
+src/storage/ddl/ob_complement_data_task.cpp	517	ObComplementDataDag::create_first_task	hand-off of allocator-backed object merge_task via add_task	} else if (OB_FAIL(add_task(*merge_task))) {
+src/storage/ddl/ob_complement_data_task.cpp	518	ObComplementDataDag::create_first_task	hand-off of allocator-backed object data_merge_prepare_task via add_task	} else if (OB_FAIL(add_task(*data_merge_prepare_task))) {
+src/storage/ddl/ob_complement_data_task.cpp	519	ObComplementDataDag::create_first_task	hand-off of allocator-backed object lob_merge_prepare_task via add_task	} else if (nullptr != lob_merge_prepare_task && OB_FAIL(add_task(*lob_merge_prepare_task))) {
+src/storage/ddl/ob_complement_data_task.cpp	520	ObComplementDataDag::create_first_task	hand-off of allocator-backed object write_task via add_task	} else if (OB_FAIL(add_task(*write_task))) {
+src/storage/ddl/ob_complement_data_task.cpp	521	ObComplementDataDag::create_first_task	hand-off of allocator-backed object prepare_task via add_task	} else if (OB_FAIL(add_task(*prepare_task))) {
+src/storage/ddl/ob_complement_data_task.h	305	ObComplementWriteTask::allocator_	allocator member of cross-thread class: common::ObArenaAllocator	common::ObArenaAllocator allocator_;
+src/storage/ddl/ob_ddl_independent_dag.cpp	384	ObDDLIndependentDag::add_pipeline	hand-off of allocator-backed object pipeline via add_task	if (OB_FAIL(add_task(*pipeline))) {
+src/storage/ddl/ob_ddl_independent_dag.h	112	ObDDLIndependentDag::arena_	allocator member of cross-thread class: ObArenaAllocator	ObArenaAllocator arena_;
+src/storage/ddl/ob_ddl_merge_task.cpp	204	ObDDLTableMergeDag::create_first_task	hand-off of allocator-backed object merge_task via add_task	} else if (OB_FAIL(add_task(*merge_task))) {

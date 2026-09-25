@@ -1,0 +1,60 @@
+file	line	symbol	construct	text
+src/storage/blocksstable/ob_block_sstable_struct.h	73	ObCommitLogSpec::log_dir_	member raw bytes (pointer) of type const char *	const char *log_dir_;
+src/storage/blocksstable/ob_block_sstable_struct.h	92	ObStorageEnv::data_dir_	member raw bytes (pointer) of type const char *	const char *data_dir_;
+src/storage/blocksstable/ob_block_sstable_struct.h	93	ObStorageEnv::sstable_dir_	member raw bytes (pointer) of type const char *	const char *sstable_dir_;
+src/storage/blocksstable/ob_block_sstable_struct.h	108	ObStorageEnv::clog_dir_	member raw bytes (pointer) of type const char *	const char *clog_dir_;
+src/storage/blocksstable/ob_block_sstable_struct.h	457	ObColumnEncodingCtx::col_datums_	member ObDatum (pointer) of type const ObPodFix2dArray<ObDatum, 1 << 20, common::OB_MALLOC_NORMAL_BLOCK_SIZE> *	const ObPodFix2dArray<ObDatum, 1 << 20, common::OB_MALLOC_NORMAL_BLOCK_SIZE> *col_datums_;
+src/storage/blocksstable/ob_block_sstable_struct.h	502	ObMacroBlockSchemaInfo::compressor_	member raw bytes (pointer) of type char *	char *compressor_;
+src/storage/blocksstable/ob_bloom_filter_cache.h	64	ObBloomFilter::bits_	member raw bytes (pointer) of type uint8_t *	uint8_t *bits_;
+src/storage/blocksstable/ob_data_buffer.h	133	ObBufferHolder::data_	member raw bytes (pointer) of type char *	char *data_;
+src/storage/blocksstable/ob_data_buffer.h	379	ObSelfBufferWriter::label_	member raw bytes (pointer) of type const char *	const char *label_;
+src/storage/blocksstable/ob_datum_range.h	80	ObDatumRange::start_key_	member ObDatumRowkey (value) of type ObDatumRowkey	ObDatumRowkey start_key_;
+src/storage/blocksstable/ob_datum_range.h	81	ObDatumRange::end_key_	member ObDatumRowkey (value) of type ObDatumRowkey	ObDatumRowkey end_key_;
+src/storage/blocksstable/ob_datum_range.h	324	ObDatumRange::to_multi_version_range	allocator in, arena view out: ObDatumRange &dest	OB_INLINE int ObDatumRange::to_multi_version_range(common::ObIAllocator &allocator, ObDatumRange &dest) const
+src/storage/blocksstable/ob_datum_range.h	344	ObDatumRange::to_new_range	allocator in, arena view out: common::ObNewRange& range	OB_INLINE int ObDatumRange::to_new_range(common::ObNewRange& range, const ObObjMeta* obj_metas, ObIAllocator& allocator) const
+src/storage/blocksstable/ob_datum_row.h	68	ObNewRowBuilder::new_row_	member ObNewRow (value) of type common::ObNewRow	common::ObNewRow new_row_;
+src/storage/blocksstable/ob_datum_row.h	92	ObConstDatumRow::datums_	member ObDatum (pointer) of type common::ObDatum *	common::ObDatum *datums_;
+src/storage/blocksstable/ob_datum_row_utils.cpp	25	ObDatumRowUtils::ob_create_row	allocator in, arena view out: ObDatumRow *&datum_row	int ObDatumRowUtils::ob_create_row(ObIAllocator &allocator, int64_t col_count, ObDatumRow *&datum_row)
+src/storage/blocksstable/ob_datum_row_utils.cpp	46	ObDatumRowUtils::ob_create_rows	allocator in, arena view out: ObDatumRow *&datum_rows	int ObDatumRowUtils::ob_create_rows(ObIAllocator &allocator, int64_t row_count, int64_t col_count, ObDatumRow *&datum_rows)
+src/storage/blocksstable/ob_datum_row_utils.cpp	77	ObDatumRowUtils::ob_create_rows_shallow_copy	allocator in, arena view out: ObDatumRow *&dst_rows	int ObDatumRowUtils::ob_create_rows_shallow_copy(ObIAllocator &allocator,
+src/storage/blocksstable/ob_datum_row_utils.cpp	103	ObDatumRowUtils::prepare_rowkey	allocator in, arena view out: ObDatumRowkey &rowkey	int ObDatumRowUtils::prepare_rowkey(
+src/storage/blocksstable/ob_datum_row_utils.cpp	124	create_datum_row	allocator in, arena view out: blocksstable::ObDatumRow *&row	int create_datum_row(
+src/storage/blocksstable/ob_datum_row_utils.cpp	133	create_datum_rows	allocator in, arena view out: blocksstable::ObDatumRow *&rows	int create_datum_rows(
+src/storage/blocksstable/ob_datum_rowkey.cpp	262	ObDatumRowkey::to_rowkey	allocator in, arena view out: ObRowkey &rowkey	int ObDatumRowkey::to_rowkey(ObRowkey &rowkey, const ObObjMeta* obj_metas, common::ObIAllocator &allocator) const
+src/storage/blocksstable/ob_datum_rowkey.cpp	331	ObDatumRowkey::to_store_rowkey	allocator in, arena view out: common::ObStoreRowkey &store_rowkey	int ObDatumRowkey::to_store_rowkey(const common::ObIArray<share::schema::ObColDesc> &col_descs,
+src/storage/blocksstable/ob_datum_rowkey.cpp	363	ObDatumRowkey::deep_copy	allocator in, arena view out: ObStoreRowkey &dest	int ObDatumRowkey::deep_copy(ObStoreRowkey &dest,
+src/storage/blocksstable/ob_datum_rowkey.cpp	411	ObDatumRowkey::to_multi_version_rowkey	allocator in, arena view out: ObDatumRowkey &dest	int ObDatumRowkey::to_multi_version_rowkey(const bool min_value,
+src/storage/blocksstable/ob_datum_rowkey.cpp	454	ObDatumRowkey::to_multi_version_range	allocator in, arena view out: ObDatumRange &dest	int ObDatumRowkey::to_multi_version_range(common::ObIAllocator &allocator, ObDatumRange &dest) const
+src/storage/blocksstable/ob_datum_rowkey.cpp	521	ObDiscreteDatumRowkey::deep_copy	allocator in, arena view out: ObDatumRowkey &dest	int ObDiscreteDatumRowkey::deep_copy(ObDatumRowkey &dest, common::ObIAllocator &allocator) const
+src/storage/blocksstable/ob_datum_rowkey.cpp	586	ObCommonDatumRowkey::deep_copy	allocator in, arena view out: ObDatumRowkey &dest	int ObCommonDatumRowkey::deep_copy(ObDatumRowkey &dest, common::ObIAllocator &allocator) const
+src/storage/blocksstable/ob_datum_rowkey.h	111	ObDatumRowkey::datums_	member ObStorageDatum (pointer) of type ObStorageDatum *	ObStorageDatum *datums_;
+src/storage/blocksstable/ob_datum_rowkey.h	112	ObDatumRowkey::store_rowkey_	member ObStoreRowkey (value) of type common::ObStoreRowkey	common::ObStoreRowkey store_rowkey_;
+src/storage/blocksstable/ob_datum_rowkey.h	163	ObDatumRowkeyWrapper::rowkey_	member ObDatumRowkey (pointer) of type const ObDatumRowkey *	const ObDatumRowkey *rowkey_;
+src/storage/blocksstable/ob_datum_rowkey.h	251	ObMarkedRowkey::rowkey_	member ObDatumRowkey (value) of type ObDatumRowkey	ObDatumRowkey rowkey_;
+src/storage/blocksstable/ob_datum_rowkey.h	307	ObCommonDatumRowkey::rowkey_	member ObDatumRowkey (pointer) of type const ObDatumRowkey *	const ObDatumRowkey *rowkey_;
+src/storage/blocksstable/ob_datum_rowkey.h	375	ObDatumRowkey::deep_copy	allocator in, arena view out: ObDatumRowkey &dest	OB_INLINE int ObDatumRowkey::deep_copy(ObDatumRowkey &dest, common::ObIAllocator &allocator) const
+src/storage/blocksstable/ob_datum_rowkey.h	424	ObDatumRowkey::semi_copy	allocator in, arena view out: ObDatumRowkey &dest	OB_INLINE int ObDatumRowkey::semi_copy(ObDatumRowkey &dest, common::ObIAllocator &allocator) const
+src/storage/blocksstable/ob_datum_rowkey_vector.h	144	ObColumnVector::datums_	member ObStorageDatum (pointer) of type ObStorageDatum *	ObStorageDatum *datums_;
+src/storage/blocksstable/ob_datum_rowkey_vector.h	245	ObRowkeyVector::last_rowkey_	member ObDatumRowkey (pointer) of type ObDatumRowkey *	ObDatumRowkey *last_rowkey_;
+src/storage/blocksstable/ob_fuse_row_cache.h	52	ObFuseRowCacheKeyBase::rowkey_	member ObDatumRowkey (value) of type ObDatumRowkey	ObDatumRowkey rowkey_;
+src/storage/blocksstable/ob_fuse_row_cache.h	97	ObFuseRowCacheValue::datums_	member ObStorageDatum (pointer) of type ObStorageDatum *	ObStorageDatum *datums_;
+src/storage/blocksstable/ob_imicro_block_reader.h	167	ObMicroBlockData::buf_	member raw bytes (pointer) of type const char *	const char *buf_;
+src/storage/blocksstable/ob_imicro_block_reader.h	169	ObMicroBlockData::extra_buf_	member raw bytes (pointer) of type const char *	const char *extra_buf_;
+src/storage/blocksstable/ob_imicro_block_reader.h	192	ObMicroBlock::range_	member ObDatumRange (value) of type ObDatumRange	ObDatumRange range_;
+src/storage/blocksstable/ob_imicro_block_writer.h	41	ObMicroBlockDesc::last_rowkey_	member ObDatumRowkey (value) of type ObDatumRowkey	ObDatumRowkey last_rowkey_;
+src/storage/blocksstable/ob_imicro_block_writer.h	42	ObMicroBlockDesc::buf_	member raw bytes (pointer) of type const char *	const char *buf_; // buf does not contain any header
+src/storage/blocksstable/ob_log_file_spec.h	28	ObLogFileSpec::retry_write_policy_	member raw bytes (pointer) of type const char *	const char *retry_write_policy_;
+src/storage/blocksstable/ob_log_file_spec.h	29	ObLogFileSpec::log_create_policy_	member raw bytes (pointer) of type const char *	const char *log_create_policy_;
+src/storage/blocksstable/ob_log_file_spec.h	30	ObLogFileSpec::log_write_policy_	member raw bytes (pointer) of type const char *	const char *log_write_policy_;
+src/storage/blocksstable/ob_macro_block.h	130	ObMacroBlock::last_rowkey_	member ObDatumRowkey (value) of type ObDatumRowkey	ObDatumRowkey last_rowkey_;
+src/storage/blocksstable/ob_macro_block_bare_iterator.h	117	ObMicroBlockBareIterator::macro_block_buf_	member raw bytes (pointer) of type const char *	const char *macro_block_buf_;
+src/storage/blocksstable/ob_macro_block_bare_iterator.h	161	ObMacroBlockRowBareIterator::row_	member ObDatumRow (value) of type ObDatumRow	ObDatumRow row_;
+src/storage/blocksstable/ob_macro_block_meta.cpp	193	ObDataBlockMetaVal::build_value	allocator in, arena view out: ObStorageDatum &datum	int ObDataBlockMetaVal::build_value(ObStorageDatum &datum,
+src/storage/blocksstable/ob_macro_block_meta.cpp	465	ObDataMacroBlockMeta::build_estimate_row	allocator in, arena view out: ObDatumRow &row	int ObDataMacroBlockMeta::build_estimate_row(ObDatumRow &row,
+src/storage/blocksstable/ob_macro_block_meta.cpp	496	ObDataMacroBlockMeta::build_row	allocator in, arena view out: ObDatumRow &row	int ObDataMacroBlockMeta::build_row(ObDatumRow &row, ObIAllocator &allocator, const uint64_t data_version) const
+src/storage/blocksstable/ob_macro_block_meta.h	98	ObDataBlockMetaVal::agg_row_buf_	member raw bytes (pointer) of type const char *	const char *agg_row_buf_; // data buffer for pre aggregated row
+src/storage/blocksstable/ob_macro_block_meta.h	153	ObDataMacroBlockMeta::end_key_	member ObDatumRowkey (value) of type ObDatumRowkey	ObDatumRowkey end_key_; // rowkey is primary key
+src/storage/blocksstable/ob_macro_block_reader.cpp	80	ObMacroBlockReader::decompress_data_buf	allocator in, arena view out: const char *&uncomp_buf	int ObMacroBlockReader::decompress_data_buf(
+src/storage/blocksstable/ob_macro_block_reader.cpp	241	ObMacroBlockReader::alloc_buf	allocator in, arena view out: char *&buf	int ObMacroBlockReader::alloc_buf(ObIAllocator &allocator, const int64_t buf_size, char *&buf)
+src/storage/blocksstable/ob_macro_block_reader.cpp	250	ObMacroBlockReader::decompress_data	allocator in, arena view out: const char *&uncomp_buf	int ObMacroBlockReader::decompress_data(
+src/storage/blocksstable/ob_macro_block_reader.cpp	274	ObMacroBlockReader::do_decompress_data	allocator in, arena view out: const char *&uncomp_buf	int ObMacroBlockReader::do_decompress_data(

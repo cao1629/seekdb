@@ -1,0 +1,61 @@
+file	line	symbol	construct	text
+src/observer/mysql/obmp_query.cpp	1014	ObMPQuery::store_params_value_to_str	allocator in, arena view out: common::ParamStore &params	int ObMPQuery::store_params_value_to_str(ObIAllocator &allocator,
+src/observer/mysql/obmp_query.h	124	ObMPQuery::sql_	member ObString (value) of type common::ObString	common::ObString sql_;
+src/observer/mysql/obmp_query.h	130	ObMPQuery::wild_str_	member ObString (value) of type common::ObString	common::ObString wild_str_;//used to save wildware string in COM_FIELD_LIST
+src/observer/mysql/obmp_query.h	132	ObMPQuery::params_value_	member raw bytes (pointer) of type char *	char *params_value_;
+src/observer/mysql/obmp_stmt_execute.cpp	694	ObMPStmtExecute::parse_request_param_value	allocator in, arena view out: const char* &pos	int ObMPStmtExecute::parse_request_param_value(ObIAllocator &alloc,
+src/observer/mysql/obmp_stmt_execute.cpp	829	ObMPStmtExecute::set_standard_bytes_param	allocator in, arena view out: ObObj &param	int ObMPStmtExecute::set_standard_bytes_param(ObIAllocator &allocator,
+src/observer/mysql/obmp_stmt_execute.cpp	916	ObMPStmtExecute::materialize_standard_long_data	allocator in, arena view out: ObObjParam &param	int ObMPStmtExecute::materialize_standard_long_data(
+src/observer/mysql/obmp_stmt_execute.cpp	1188	ObMPStmtExecute::request_params	allocator in, arena view out: const char* &pos	int ObMPStmtExecute::request_params(ObSQLSessionInfo *session,
+src/observer/mysql/obmp_stmt_execute.cpp	2055	ObMPStmtExecute::parse_complex_param_value	allocator in, arena view out: const char *&data	int ObMPStmtExecute::parse_complex_param_value(ObIAllocator &allocator,
+src/observer/mysql/obmp_stmt_execute.cpp	2079	ObMPStmtExecute::parse_basic_param_value	allocator in, arena view out: const char *& data	int ObMPStmtExecute::parse_basic_param_value(ObIAllocator &allocator,
+src/observer/mysql/obmp_stmt_execute.cpp	2315	ObMPStmtExecute::parse_param_value	allocator in, arena view out: const char *&data	int ObMPStmtExecute::parse_param_value(ObIAllocator &allocator,
+src/observer/mysql/obmp_stmt_execute.cpp	2459	ObMPStmtExecute::copy_or_convert_str	allocator in, arena view out: ObString &out	int ObMPStmtExecute::copy_or_convert_str(common::ObIAllocator &allocator,
+src/observer/mysql/obmp_stmt_execute.cpp	2510	ObMPStmtExecute::parse_integer_value	allocator in, arena view out: const char *&data	int ObMPStmtExecute::parse_integer_value(const uint32_t type,
+src/observer/mysql/obmp_stmt_execute.cpp	2788	decode_mysql_basic_param_value	allocator in, arena view out: const char *&data	int decode_mysql_basic_param_value(
+src/observer/mysql/obmp_stmt_execute.h	36	ObSavedException::error_msg_	member ObString (value) of type common::ObString	common::ObString error_msg_;
+src/observer/mysql/obmp_stmt_execute.h	69	ObPSAnalysisChecker::pos_	member raw bytes (pointer) of type const char**	const char** pos_;
+src/observer/mysql/obmp_stmt_execute.h	70	ObPSAnalysisChecker::begin_pos_	member raw bytes (pointer) of type const char*	const char* begin_pos_;
+src/observer/mysql/obmp_stmt_execute.h	71	ObPSAnalysisChecker::end_pos_	member raw bytes (pointer) of type const char*	const char* end_pos_;
+src/observer/mysql/obmp_stmt_execute.h	356	ObMPStmtExecute::params_	member ParamStore (pointer) of type ParamStore *	ParamStore *params_;
+src/observer/mysql/obmp_stmt_execute.h	358	ObMPStmtExecute::arraybinding_params_	member ParamStore (pointer) of type ParamStore *	ParamStore *arraybinding_params_;
+src/observer/mysql/obmp_stmt_execute.h	360	ObMPStmtExecute::arraybinding_row_	member ObNewRow (pointer) of type ObNewRow *	ObNewRow *arraybinding_row_;
+src/observer/mysql/obmp_stmt_execute.h	375	ObMPStmtExecute::params_value_	member raw bytes (pointer) of type char *	char *params_value_;
+src/observer/mysql/obmp_stmt_prepare.h	75	ObMPStmtPrepare::sql_	member ObString (value) of type common::ObString	common::ObString sql_;
+src/observer/mysql/obmp_stmt_send_long_data.h	63	ObMPStmtSendLongData::buffer_	member ObString (value) of type common::ObString	common::ObString buffer_;
+src/observer/mysql/obmp_utils.cpp	96	ObMPUtils::get_user_sql_literal	allocator in, arena view out: ObString &value_str	int ObMPUtils::get_user_sql_literal(ObIAllocator &allocator, const ObObj &obj, ObString &value_str,
+src/observer/mysql/obsm_row.h	65	ObSMRow::obrow_	member ObNewRow (reference) of type const ObNewRow &	const ObNewRow &obrow_;
+src/observer/ob_command_line_parser.cpp	29	option::name	member raw bytes (pointer) of type const char *	const char *name;
+src/observer/ob_inner_sql_connection.cpp	83	ObInnerSQLConnection::ObSqlQueryExecutor::sql_	member ObString (value) of type ObString	ObString sql_;
+src/observer/ob_inner_sql_connection.cpp	1061	ObInnerSQLConnection::execute_proc	allocator in, arena view out: ParamStore &params	int ObInnerSQLConnection::execute_proc(ObIAllocator &allocator,
+src/observer/ob_inner_sql_result.cpp	456	ObInnerSQLResult::get_obj	allocator in, arena view out: ObObj &obj	int ObInnerSQLResult::get_obj(const int64_t col_idx, ObObj &obj,
+src/observer/ob_inner_sql_result.h	146	ObInnerSQLResult::column_map_	member ColumnMap (value) of type mutable ColumnMap	mutable ColumnMap column_map_;
+src/observer/ob_inner_sql_result.h	159	ObInnerSQLResult::row_	member ObNewRow (pointer) of type const common::ObNewRow *	const common::ObNewRow *row_;
+src/observer/ob_server.cpp	117	ObServer::StandbyHostAdapter::load_log_restore_source	allocator in, arena view out: common::ObString &source	int load_log_restore_source(
+src/observer/ob_server_options.h	51	ObServerOptions::parameters_	member KeyValueArray (value) of type KeyValueArray	KeyValueArray       parameters_;
+src/observer/ob_server_options.h	52	ObServerOptions::variables_	member KeyValueArray (value) of type KeyValueArray	KeyValueArray       variables_;
+src/observer/ob_server_utils.cpp	36	ObServerUtils::get_server_ip	allocator in, arena view out: ObString &ipstr	int ObServerUtils::get_server_ip(ObIAllocator *allocator, ObString &ipstr)
+src/observer/ob_uniq_task_queue.h	168	ObUniqTaskQueue::thread_name_	member raw bytes (pointer) of type const char *	const char *thread_name_;
+src/observer/schema/ob_schema_retrieve_utils.ipp	1816	ObSchemaRetrieveUtils::retrieve_system_variable_obj	allocator in, arena view out: ObObj &out_var_obj	int ObSchemaRetrieveUtils::retrieve_system_variable_obj(T &result,
+src/observer/schema/ob_schema_service_sql_impl.cpp	1066	ObSchemaServiceSQLImpl::get_system_variable	allocator in, arena view out: ObString &var_name	int ObSchemaServiceSQLImpl::get_system_variable(const ObRefreshSchemaStatus &schema_status,
+src/observer/vector_index/ob_hybrid_vector_refresh_task.h	104	ObHybridVectorRefreshTaskCtx::request_model_name_	member ObString (value) of type ObString	ObString request_model_name_;
+src/observer/vector_index/ob_plugin_vector_index_scheduler.h	122	ObVectorIndexSyncLogCb::log_buffer_	member raw bytes (pointer) of type char *	char *log_buffer_;
+src/observer/vector_index/ob_plugin_vector_index_service.cpp	324	ObPluginVectorIndexMgr::create_ivf_build_helper	allocator in, arena view out: ObString &vec_index_param	int ObPluginVectorIndexMgr::create_ivf_build_helper(
+src/observer/vector_index/ob_plugin_vector_index_service.h	299	ObPluginVectorIndexIdentity::index_identity_	member ObString (value) of type ObString	ObString index_identity_; // index_name_prefix
+src/observer/vector_index/ob_plugin_vector_index_utils.cpp	126	ObPluginVectorIndexUtils::read_object_from_data_table_iter	allocator in, arena view out: ObObj *&input_obj	int ObPluginVectorIndexUtils::read_object_from_data_table_iter(ObObj *&input_obj,
+src/observer/vector_index/ob_plugin_vector_index_utils.cpp	184	ObPluginVectorIndexUtils::read_object_from_vid_rowkey_table_iter	allocator in, arena view out: ObObj *&output_obj	int ObPluginVectorIndexUtils::read_object_from_vid_rowkey_table_iter(ObObj *input_obj,
+src/observer/vector_index/ob_plugin_vector_index_utils.cpp	232	ObPluginVectorIndexUtils::read_object_from_embedded_table_iter	allocator in, arena view out: ObObj *&input_obj	int ObPluginVectorIndexUtils::read_object_from_embedded_table_iter(ObObj *&input_obj,
+src/observer/vector_index/ob_vector_index_async_task_util.h	135	ObVecIndexTaskStatusField::field_name_	member ObString (value) of type ObString	ObString field_name_;
+src/observer/vector_index/ob_vector_index_async_task_util.h	146	ObVecIndexTaskStatusField::data::str_	member ObString (value) of type ObString	ObString str_;
+src/observer/vector_index/ob_vector_index_async_task_util.h	305	ObVecIndexIAsyncTask::vid_obj_	member ObObj (value) of type ObObj	ObObj vid_obj_;
+src/observer/vector_index/ob_vector_index_util.cpp	633	ObVectorIndexUtil::cast_vector_array_str_to_float_array_binary	allocator in, arena view out: ObString &output_vec	int ObVectorIndexUtil::cast_vector_array_str_to_float_array_binary(ObIAllocator &allocator,
+src/observer/vector_index/ob_vector_index_util.cpp	678	ObVectorIndexUtil::get_vector_from_vector_array_string	allocator in, arena view out: ObString &output_vec	int ObVectorIndexUtil::get_vector_from_vector_array_string(ObIAllocator &allocator,
+src/observer/vector_index/ob_vector_index_util.cpp	692	ObVectorIndexUtil::get_vector_from_text_by_embedding	allocator in, arena view out: ObString &output_vec	int ObVectorIndexUtil::get_vector_from_text_by_embedding(ObIAllocator &allocator,
+src/observer/vector_index/ob_vector_index_util.cpp	977	ObVectorIndexUtil::construct_rebuild_index_param	allocator in, arena view out: ObString &new_index_params	int ObVectorIndexUtil::construct_rebuild_index_param(
+src/observer/vector_index/ob_vector_index_util.cpp	1588	ObVectorIndexUtil::insert_index_param_str	allocator in, arena view out: ObString &current_index_param	int ObVectorIndexUtil::insert_index_param_str(
+src/observer/vector_index/ob_vector_index_util.cpp	2528	ObVectorIndexUtil::check_vec_index_param	allocator in, arena view out: ObString &index_params	int ObVectorIndexUtil::check_vec_index_param(const ParseNode *option_node,
+src/observer/vector_index/ob_vector_index_util.cpp	2817	ObVectorIndexUtil::check_index_param	allocator in, arena view out: ObString &index_params	int ObVectorIndexUtil::check_index_param(
+src/observer/vector_index/ob_vector_index_util.cpp	3523	ObVectorIndexUtil::generate_new_index_name	allocator in, arena view out: ObString &new_index_name	int ObVectorIndexUtil::generate_new_index_name(ObIAllocator &allocator, ObString &new_index_name)
+src/observer/vector_index/ob_vector_index_util.cpp	5591	ObVecExtraInfo::extra_infos_to_buf	allocator in, arena view out: char *&buf	int ObVecExtraInfo::extra_infos_to_buf(ObIAllocator &allocator, const ObVecExtraInfoObj *extra_info_objs,
+src/observer/vector_index/ob_vector_index_util.cpp	6186	construct_vector_index_rebuild_parameters	allocator in, arena view out: common::ObString &new_index_parameters	int construct_vector_index_rebuild_parameters(
+src/observer/virtual_table/ob_all_disk_stat.h	54	ObInfoSchemaDiskStatTable::ipstr_	member ObString (value) of type common::ObString	common::ObString ipstr_;

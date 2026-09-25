@@ -1,0 +1,61 @@
+file	line	symbol	construct	text
+src/query/api/query/optimizer/stat/ob_stat_define.h	191	PartInfo::part_name_	member ObString (value) of type ObString	ObString part_name_;
+src/query/api/query/optimizer/stat/ob_stat_define.h	481	ObColumnStatParam::column_name_	member ObString (value) of type ObString	ObString column_name_;
+src/query/api/query/optimizer/stat/ob_stat_define.h	490	ObColumnStatParam::index_name_	member ObString (value) of type ObString	ObString index_name_;
+src/query/api/query/optimizer/stat/ob_stat_define.h	627	ObTableStatParam::db_name_	member ObString (value) of type ObString	ObString db_name_;
+src/query/api/query/optimizer/stat/ob_stat_define.h	630	ObTableStatParam::tab_name_	member ObString (value) of type ObString	ObString tab_name_;
+src/query/api/query/optimizer/stat/ob_stat_define.h	637	ObTableStatParam::part_name_	member ObString (value) of type ObString	ObString part_name_;
+src/query/api/query/optimizer/stat/ob_stat_define.h	643	ObTableStatParam::method_opt_	member ObString (value) of type ObString	ObString method_opt_;
+src/query/api/query/optimizer/stat/ob_stat_define.h	646	ObTableStatParam::granularity_	member ObString (value) of type ObString	ObString granularity_;
+src/query/api/query/optimizer/stat/ob_stat_define.h	649	ObTableStatParam::stat_tab_	member ObString (value) of type ObString	ObString stat_tab_;
+src/query/api/query/optimizer/stat/ob_stat_define.h	650	ObTableStatParam::stat_id_	member ObString (value) of type ObString	ObString stat_id_; // what does stat identifer for
+src/query/api/query/optimizer/stat/ob_stat_define.h	651	ObTableStatParam::stat_own_	member ObString (value) of type ObString	ObString stat_own_; // stat owner
+src/query/api/query/optimizer/stat/ob_stat_define.h	660	ObTableStatParam::stat_category_	member ObString (value) of type ObString	ObString stat_category_;
+src/query/api/query/optimizer/stat/ob_stat_define.h	664	ObTableStatParam::data_table_name_	member ObString (value) of type ObString	ObString data_table_name_;
+src/query/api/query/optimizer/stat/ob_stat_define.h	778	ObOptStatGatherParam::db_name_	member ObString (value) of type ObString	ObString db_name_;
+src/query/api/query/optimizer/stat/ob_stat_define.h	779	ObOptStatGatherParam::tab_name_	member ObString (value) of type ObString	ObString tab_name_;
+src/query/api/query/optimizer/stat/ob_stat_define.h	795	ObOptStatGatherParam::data_table_name_	member ObString (value) of type ObString	ObString data_table_name_;
+src/query/api/query/optimizer/stat/ob_stat_define.h	869	ObHistogramParam::minval_	member ObObj (pointer) of type const ObObj *	const ObObj *minval_;               //Minimum value
+src/query/api/query/optimizer/stat/ob_stat_define.h	870	ObHistogramParam::maxval_	member ObObj (pointer) of type const ObObj *	const ObObj *maxval_;               //Maximum value
+src/query/api/query/optimizer/stat/ob_stat_define.h	873	ObHistogramParam::chvals_	member container of ObString of type ObSEArray<ObString, 4>	ObSEArray<ObString, 4> chvals_;     //Array of dumped end point values
+src/query/api/query/optimizer/stat/ob_stat_define.h	874	ObHistogramParam::eavals_	member container of ObString of type ObSEArray<ObString, 4>	ObSEArray<ObString, 4> eavals_;     //Array of end point actual values
+src/query/api/query/optimizer/stat/ob_stat_define.h	987	ObSetSystemStatParam::name_	member ObString (value) of type ObString	ObString name_;
+src/query/api/query/optimizer/stat/ob_stat_item.h	54	ObStatItem::decode	allocator in, arena view out: ObObj &obj	virtual int decode(ObObj &obj,
+src/query/api/query/optimizer/stat/ob_stat_item.h	299	ObPartitionId::calc_partition_id_str_	member ObString (value) of type ObString	ObString calc_partition_id_str_;
+src/query/api/query/optimizer/stat/ob_stat_item.h	443	ObGlobalMaxEval::global_max_	member ObObj (value) of type ObObj	ObObj global_max_;
+src/query/api/query/optimizer/stat/ob_stat_item.h	469	ObGlobalMinEval::global_min_	member ObObj (value) of type ObObj	ObObj global_min_;
+src/query/api/query/optimizer/stat/ob_stat_item.h	544	ObGlobalColumnStat::min_val_	member ObObj (value) of type ObObj	ObObj min_val_;
+src/query/api/query/optimizer/stat/ob_stat_item.h	545	ObGlobalColumnStat::max_val_	member ObObj (value) of type ObObj	ObObj max_val_;
+src/query/api/query/parser/parse_node.h	169	_ParseNode::str_value_	member raw bytes (pointer) of type const char *	const char *str_value_;
+src/query/api/query/parser/parse_node.h	180	_ParseNode::raw_text_	member raw bytes (pointer) of type const char *	const char *raw_text_;
+src/query/api/query/parser/parse_node.h	238	_ObQuestionMarkCtx::name_	member raw bytes (pointer) of type char **	char **name_;
+src/query/api/query/parser/parse_node.h	296	ObParseResult::input_sql_	member raw bytes (pointer) of type const char *	const char *input_sql_;
+src/query/api/query/parser/parse_node.h	336	ObParseResult::error_msg_	member raw bytes (pointer) of type char *	char *error_msg_;
+src/query/api/query/parser/parse_node.h	342	ObParseResult::tmp_literal_	member raw bytes (pointer) of type char *	char *tmp_literal_;
+src/query/api/query/parser/parse_node.h	344	ObParseResult::no_param_sql_	member raw bytes (pointer) of type char *	char *no_param_sql_;
+src/query/api/query/protocol/ob_mysql_packet_sender.h	57	ObOKPParam::message_	member raw bytes (pointer) of type char *	char *message_;
+src/query/api/query/scheduler/ob_scheduler_job.h	212	ObDBMSSchedJobInfo::lowner_	member ObString (value) of type common::ObString	common::ObString lowner_;
+src/query/api/query/scheduler/ob_scheduler_job.h	213	ObDBMSSchedJobInfo::powner_	member ObString (value) of type common::ObString	common::ObString powner_;
+src/query/api/query/scheduler/ob_scheduler_job.h	214	ObDBMSSchedJobInfo::cowner_	member ObString (value) of type common::ObString	common::ObString cowner_;
+src/query/api/query/scheduler/ob_scheduler_job.h	220	ObDBMSSchedJobInfo::interval_	member ObString (value) of type common::ObString	common::ObString interval_;
+src/query/api/query/scheduler/ob_scheduler_job.h	223	ObDBMSSchedJobInfo::what_	member ObString (value) of type common::ObString	common::ObString what_;
+src/query/api/query/scheduler/ob_scheduler_job.h	224	ObDBMSSchedJobInfo::nlsenv_	member ObString (value) of type common::ObString	common::ObString nlsenv_;
+src/query/api/query/scheduler/ob_scheduler_job.h	225	ObDBMSSchedJobInfo::charenv_	member ObString (value) of type common::ObString	common::ObString charenv_;
+src/query/api/query/scheduler/ob_scheduler_job.h	227	ObDBMSSchedJobInfo::exec_env_	member ObString (value) of type common::ObString	common::ObString exec_env_;
+src/query/api/query/scheduler/ob_scheduler_job.h	228	ObDBMSSchedJobInfo::job_name_	member ObString (value) of type common::ObString	common::ObString job_name_;
+src/query/api/query/scheduler/ob_scheduler_job.h	229	ObDBMSSchedJobInfo::job_style_	member ObString (value) of type common::ObString	common::ObString job_style_;
+src/query/api/query/scheduler/ob_scheduler_job.h	230	ObDBMSSchedJobInfo::program_name_	member ObString (value) of type common::ObString	common::ObString program_name_;
+src/query/api/query/scheduler/ob_scheduler_job.h	231	ObDBMSSchedJobInfo::job_type_	member ObString (value) of type common::ObString	common::ObString job_type_;
+src/query/api/query/scheduler/ob_scheduler_job.h	232	ObDBMSSchedJobInfo::job_action_	member ObString (value) of type common::ObString	common::ObString job_action_;
+src/query/api/query/scheduler/ob_scheduler_job.h	235	ObDBMSSchedJobInfo::repeat_interval_	member ObString (value) of type common::ObString	common::ObString repeat_interval_;
+src/query/api/query/scheduler/ob_scheduler_job.h	237	ObDBMSSchedJobInfo::job_class_	member ObString (value) of type common::ObString	common::ObString job_class_;
+src/query/api/query/scheduler/ob_scheduler_job.h	240	ObDBMSSchedJobInfo::state_	member ObString (value) of type common::ObString	common::ObString state_;
+src/query/api/query/scheduler/ob_scheduler_job.h	245	ObDBMSSchedJobInfo::comments_	member ObString (value) of type common::ObString	common::ObString comments_;
+src/query/api/query/scheduler/ob_scheduler_job.h	246	ObDBMSSchedJobInfo::credential_name_	member ObString (value) of type common::ObString	common::ObString credential_name_;
+src/query/api/query/scheduler/ob_scheduler_job.h	247	ObDBMSSchedJobInfo::destination_name_	member ObString (value) of type common::ObString	common::ObString destination_name_;
+src/query/api/query/scheduler/ob_scheduler_job.h	252	ObDBMSSchedJobInfo::this_exec_trace_id_	member ObString (value) of type common::ObString	common::ObString this_exec_trace_id_;
+src/query/api/query/scheduler/ob_scheduler_job.h	285	ObDBMSSchedJobClassInfo::job_class_name_	member ObString (value) of type common::ObString	common::ObString job_class_name_;
+src/query/api/query/scheduler/ob_scheduler_job.h	286	ObDBMSSchedJobClassInfo::service_	member ObString (value) of type common::ObString	common::ObString service_;
+src/query/api/query/scheduler/ob_scheduler_job.h	287	ObDBMSSchedJobClassInfo::logging_level_	member ObString (value) of type common::ObString	common::ObString logging_level_;
+src/query/api/query/scheduler/ob_scheduler_job.h	289	ObDBMSSchedJobClassInfo::comments_	member ObString (value) of type common::ObString	common::ObString comments_;
+src/query/api/query/session/ob_deadlock_session.h	49	ObDeadlockSessionFacts::current_query_	member ObString (value) of type common::ObString	common::ObString current_query_;

@@ -1,0 +1,79 @@
+file	line	symbol	construct	text
+src/oblib/common/xml/ob_xpath.h	94	-	const_cast<char*>	const_cast<char*>("!("),
+src/oblib/common/xml/ob_xpath.h	95	-	const_cast<char*>	const_cast<char*>(" | "),
+src/oblib/common/xml/ob_xpath.h	96	-	const_cast<char*>	const_cast<char*>(" or "),  // json is ||
+src/oblib/common/xml/ob_xpath.h	97	-	const_cast<char*>	const_cast<char*>(" and "), // json is &&
+src/oblib/common/xml/ob_xpath.h	98	-	const_cast<char*>	const_cast<char*>(" = "),   // json is ==
+src/oblib/common/xml/ob_xpath.h	99	-	const_cast<char*>	const_cast<char*>(" != "),
+src/oblib/common/xml/ob_xpath.h	100	-	const_cast<char*>	const_cast<char*>(" <= "),
+src/oblib/common/xml/ob_xpath.h	101	-	const_cast<char*>	const_cast<char*>(" < "),
+src/oblib/common/xml/ob_xpath.h	102	-	const_cast<char*>	const_cast<char*>(" >= "),
+src/oblib/common/xml/ob_xpath.h	103	-	const_cast<char*>	const_cast<char*>(" > "),
+src/oblib/common/xml/ob_xpath.h	104	-	const_cast<char*>	const_cast<char*>(" + "),
+src/oblib/common/xml/ob_xpath.h	105	-	const_cast<char*>	const_cast<char*>(" - "),
+src/oblib/common/xml/ob_xpath.h	106	-	const_cast<char*>	const_cast<char*>(" * "),
+src/oblib/common/xml/ob_xpath.h	107	-	const_cast<char*>	const_cast<char*>(" div "),
+src/oblib/common/xml/ob_xpath.h	108	-	const_cast<char*>	const_cast<char*>(" mod "),
+src/oblib/common/xml/ob_xpath.h	150	-	const_cast<char*>	const_cast<char*>("abs("),
+src/oblib/common/xml/ob_xpath.h	151	-	const_cast<char*>	const_cast<char*>("boolean("),
+src/oblib/common/xml/ob_xpath.h	152	-	const_cast<char*>	const_cast<char*>("booleanOnly("),
+src/oblib/common/xml/ob_xpath.h	153	-	const_cast<char*>	const_cast<char*>("ceiling("),
+src/oblib/common/xml/ob_xpath.h	154	-	const_cast<char*>	const_cast<char*>("date("),
+src/oblib/common/xml/ob_xpath.h	155	-	const_cast<char*>	const_cast<char*>("double("),
+src/oblib/common/xml/ob_xpath.h	156	-	const_cast<char*>	const_cast<char*>("floor("),
+src/oblib/common/xml/ob_xpath.h	157	-	const_cast<char*>	const_cast<char*>("length("),
+src/oblib/common/xml/ob_xpath.h	158	-	const_cast<char*>	const_cast<char*>("lower("),
+src/oblib/common/xml/ob_xpath.h	159	-	const_cast<char*>	const_cast<char*>("number("),
+src/oblib/common/xml/ob_xpath.h	160	-	const_cast<char*>	const_cast<char*>("numberOnly("),
+src/oblib/common/xml/ob_xpath.h	161	-	const_cast<char*>	const_cast<char*>("size("),
+src/oblib/common/xml/ob_xpath.h	162	-	const_cast<char*>	const_cast<char*>("string("),
+src/oblib/common/xml/ob_xpath.h	163	-	const_cast<char*>	const_cast<char*>("stringOnly("),
+src/oblib/common/xml/ob_xpath.h	164	-	const_cast<char*>	const_cast<char*>("timestamp("),
+src/oblib/common/xml/ob_xpath.h	165	-	const_cast<char*>	const_cast<char*>("type("),
+src/oblib/common/xml/ob_xpath.h	166	-	const_cast<char*>	const_cast<char*>("upper("),
+src/oblib/common/xml/ob_xpath.h	167	-	const_cast<char*>	const_cast<char*>("position("),
+src/oblib/common/xml/ob_xpath.h	168	-	const_cast<char*>	const_cast<char*>("last("),
+src/oblib/common/xml/ob_xpath.h	169	-	const_cast<char*>	const_cast<char*>("count("),
+src/oblib/common/xml/ob_xpath.h	170	-	const_cast<char*>	const_cast<char*>("concat("),
+src/oblib/common/xml/ob_xpath.h	171	-	const_cast<char*>	const_cast<char*>("contains("),
+src/oblib/common/xml/ob_xpath.h	172	-	const_cast<char*>	const_cast<char*>("false("),
+src/oblib/common/xml/ob_xpath.h	173	-	const_cast<char*>	const_cast<char*>("true("),
+src/oblib/common/xml/ob_xpath.h	174	-	const_cast<char*>	const_cast<char*>("local-name("),
+src/oblib/common/xml/ob_xpath.h	175	-	const_cast<char*>	const_cast<char*>("lang("),
+src/oblib/common/xml/ob_xpath.h	176	-	const_cast<char*>	const_cast<char*>("not("),
+src/oblib/common/xml/ob_xpath.h	177	-	const_cast<char*>	const_cast<char*>("sum("),
+src/oblib/common/xml/ob_xpath.h	178	-	const_cast<char*>	const_cast<char*>("name("),
+src/oblib/common/xml/ob_xpath.h	179	-	const_cast<char*>	const_cast<char*>("namespace-uri("),
+src/oblib/common/xml/ob_xpath.h	180	-	const_cast<char*>	const_cast<char*>("normalize-space("),
+src/oblib/common/xml/ob_xpath.h	181	-	const_cast<char*>	const_cast<char*>("substring("),
+src/oblib/common/xml/ob_xpath.h	182	-	const_cast<char*>	const_cast<char*>("round("),
+src/oblib/common/xml/ob_xpath.h	285	-	const_cast<char*>	const_cast<char*>("node()"),
+src/oblib/common/xml/ob_xpath.h	286	-	const_cast<char*>	const_cast<char*>(""), // element
+src/oblib/common/xml/ob_xpath.h	287	-	const_cast<char*>	const_cast<char*>("text()"),
+src/oblib/common/xml/ob_xpath.h	288	-	const_cast<char*>	const_cast<char*>("comment()"),
+src/oblib/common/xml/ob_xpath.h	289	-	const_cast<char*>	const_cast<char*>("processing-instruction(")
+src/oblib/common/xml/ob_xpath.h	311	-	const_cast<char*>	const_cast<char*>("self::"),
+src/oblib/common/xml/ob_xpath.h	312	-	const_cast<char*>	const_cast<char*>("parent::"),
+src/oblib/common/xml/ob_xpath.h	313	-	const_cast<char*>	const_cast<char*>("ancestor::"),
+src/oblib/common/xml/ob_xpath.h	314	-	const_cast<char*>	const_cast<char*>("ancestor-or-self::"),
+src/oblib/common/xml/ob_xpath.h	315	-	const_cast<char*>	const_cast<char*>("child::"),
+src/oblib/common/xml/ob_xpath.h	316	-	const_cast<char*>	const_cast<char*>("descendant::"),
+src/oblib/common/xml/ob_xpath.h	317	-	const_cast<char*>	const_cast<char*>("descendant-or-self::"),
+src/oblib/common/xml/ob_xpath.h	318	-	const_cast<char*>	const_cast<char*>("following-sibling::"),
+src/oblib/common/xml/ob_xpath.h	319	-	const_cast<char*>	const_cast<char*>("following::"),
+src/oblib/common/xml/ob_xpath.h	320	-	const_cast<char*>	const_cast<char*>("preceding-sibling::"),
+src/oblib/common/xml/ob_xpath.h	321	-	const_cast<char*>	const_cast<char*>("preceding::"),
+src/oblib/common/xml/ob_xpath.h	322	-	const_cast<char*>	const_cast<char*>("@"),
+src/oblib/common/xml/ob_xpath.h	323	-	const_cast<char*>	const_cast<char*>("namespace::")
+src/oblib/easy/util/easy_buf.h	74	easy_buf_string_append	C-style cast (char *) drops const from value [vendored]	s->data = (char *)(value - s->len);
+src/oblib/lib/alloc/alloc_struct.h	370	AChunk::ptr2blk	C-style cast (char*) drops const from ptr; C-style cast (char*) drops const from this (const member function)	int from = (int)(((char*)ptr - (char*)this - ACHUNK_HEADER_SIZE) / ABLOCK_SIZE);
+src/oblib/lib/alloc/alloc_struct.h	434	AChunk::blk_data	C-style cast (char*) drops const from block	int32_t c_offset = (int32_t)((char*)block - data_);
+src/oblib/lib/alloc/alloc_struct.h	436	AChunk::blk_data	C-style cast (char*) drops const from this (const member function)	return (char*)this + ACHUNK_HEADER_SIZE + b_offset * ABLOCK_SIZE;
+src/oblib/lib/alloc/alloc_struct.h	492	AObject::phy_next	C-style cast (char*) drops const from this (const member function)	AObject *obj = (AObject *)((char*)this + static_cast<int32_t>(steps * AOBJECT_CELL_BYTES));
+src/oblib/lib/alloc/ob_context_allocator.h	461	ObContextAllocator::common_realloc	C-style cast (char*) drops const from ptr [not built]	obj = reinterpret_cast<AObject*>((char*)ptr - AOBJECT_HEADER_SIZE);
+src/oblib/lib/alloc/ob_ctx_allocator.h	434	ObCtxAllocator::common_realloc	C-style cast (char*) drops const from ptr	obj = reinterpret_cast<AObject*>((char*)ptr - AOBJECT_HEADER_SIZE);
+src/oblib/lib/alloc/ob_malloc_allocator.cpp	64	ObMallocAllocator::realloc	const_cast<void *>	void *old_ptr = const_cast<void *>(ptr);
+src/oblib/lib/alloc/ob_malloc_sample_struct.h	165	ObMallocSampleKey::operator==	C-style cast (char*) drops const from other	|| 0 != MEMCMP((char*)bt_, (char*)other.bt_, sizeof(bt_))) {
+src/oblib/lib/allocator/ob_malloc.h	275	TrackedAllocator::realloc	const_cast<void *>	return realloc_with_attr(const_cast<void *>(ptr), size, attr);
+src/oblib/lib/allocator/ob_malloc.h	405	ObMalloc::realloc	const_cast<void *>	return ob_realloc(const_cast<void *>(ptr), size, attr);
+src/oblib/lib/allocator/ob_malloc.h	443	MemoryContextMalloc::realloc	const_cast<void *>	return realloc_with_attr(const_cast<void *>(ptr), size, attr);

@@ -1,0 +1,71 @@
+file	line	symbol	construct	text
+src/share/ob_freeze_info_proxy.cpp	64	ObFreezeInfoProxy::get_freeze_info	tmp_ret (assigned in the comparison) != OB_ITER_END	} else if (OB_ITER_END != (tmp_ret = result->next())) {
+src/share/ob_freeze_info_proxy.cpp	93	ObFreezeInfoProxy::get_all_freeze_info	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/share/ob_freeze_info_proxy.cpp	101	ObFreezeInfoProxy::get_all_freeze_info	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/share/ob_freeze_info_proxy.cpp	128	ObFreezeInfoProxy::get_freeze_info_larger_or_equal_than	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/share/ob_freeze_info_proxy.cpp	136	ObFreezeInfoProxy::get_freeze_info_larger_or_equal_than	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/share/ob_freeze_info_proxy.cpp	243	ObFreezeInfoProxy::get_frozen_info_less_than	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/share/ob_freeze_info_proxy.cpp	251	ObFreezeInfoProxy::get_frozen_info_less_than	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/share/ob_freeze_info_proxy.cpp	276	ObFreezeInfoProxy::get_max_freeze_info	tmp_ret (assigned in the comparison) != OB_ITER_END	} else if (OB_ITER_END != (tmp_ret = result->next())) {
+src/share/ob_freeze_info_proxy.cpp	308	ObFreezeInfoProxy::get_min_major_available_and_larger_info_inner_	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/share/ob_freeze_info_proxy.cpp	318	ObFreezeInfoProxy::get_min_major_available_and_larger_info_inner_	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/share/ob_freeze_info_proxy.cpp	368	ObFreezeInfoProxy::get_freeze_schema_info	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/share/ob_global_merge_table_operator.cpp	54	ObGlobalMergeTableOperator::load_global_merge_info	ret != OB_ENTRY_NOT_EXIST	if (OB_FAIL(ret) && OB_ENTRY_NOT_EXIST != ret) {
+src/share/ob_global_merge_table_operator.cpp	55	ObGlobalMergeTableOperator::load_global_merge_info	ret == OB_ENTRY_NOT_EXIST	} else if (OB_ENTRY_NOT_EXIST == ret) {
+src/share/ob_global_stat_proxy.cpp	298	ObGlobalStatProxy::inner_get_snapshot_gc_scn_	tmp_ret (assigned in the comparison) != OB_ITER_END	} else if (OB_ITER_END != (tmp_ret = result->next())) {
+src/share/ob_global_stat_proxy.cpp	370	ObGlobalStatProxy::select_ddl_epoch_for_update	tmp_ret (assigned in the comparison) != OB_ITER_END	} else if (OB_ITER_END != (tmp_ret = result->next())) {
+src/share/ob_global_stat_proxy.cpp	582	ObGlobalStatProxy::get	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/share/ob_global_stat_proxy.cpp	602	ObGlobalStatProxy::get	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/share/ob_inner_table_operator.cpp	408	ObInnerTableOperator::do_lock_row_	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/share/ob_inner_table_operator.cpp	442	ObInnerTableOperator::do_get_row_	call result result->next() != OB_ITER_END	} else if (OB_ITER_END != result->next()) {
+src/share/ob_inner_table_operator.cpp	558	ObInnerTableOperator::do_get_column_	call result result->next() != OB_ITER_END	} else if (OB_ITER_END != result->next()) {
+src/share/ob_inner_table_operator.cpp	589	ObInnerTableOperator::do_get_int_column_	call result result->next() != OB_ITER_END	} else if (OB_ITER_END != result->next()) {
+src/share/ob_inner_table_operator.cpp	623	ObInnerTableOperator::do_get_string_column_	call result result->next() != OB_ITER_END	} else if (OB_ITER_END != result->next()) {
+src/share/ob_inner_table_operator.cpp	711	ObInnerTableOperator::parse_one_row_	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/share/ob_inner_table_operator.cpp	725	ObInnerTableOperator::parse_one_column_	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/share/ob_inner_table_operator.cpp	740	ObInnerTableOperator::parse_one_column_	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/share/ob_inner_table_operator.cpp	759	ObInnerTableOperator::parse_one_column_	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/share/ob_io_device_helper.cpp	110	ObGetFileSizeFunctor::func	ret != OB_NO_SUCH_FILE_OR_DIRECTORY	&& OB_NO_SUCH_FILE_OR_DIRECTORY != ret) {
+src/share/ob_io_device_helper.cpp	112	ObGetFileSizeFunctor::func	ret == OB_NO_SUCH_FILE_OR_DIRECTORY	} else if (OB_NO_SUCH_FILE_OR_DIRECTORY == ret) {
+src/share/ob_local_device.cpp	644	ObLocalDevice::mark_blocks	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/share/ob_local_device.cpp	717	ObLocalDevice::alloc_blocks	ret != OB_SERVER_OUTOF_DISK_SPACE	if (OB_FAIL(alloc_block(opts, tmp_fd)) && OB_SERVER_OUTOF_DISK_SPACE != ret) {
+src/share/ob_local_device.cpp	719	ObLocalDevice::alloc_blocks	ret == OB_SERVER_OUTOF_DISK_SPACE	} else if (OB_SERVER_OUTOF_DISK_SPACE == ret) {
+src/share/ob_max_id_cache.cpp	181	ObMaxIdCacheMgr::fetch_max_id	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret && runtime_not_inited && init_runtime_if_not_exist) {
+src/share/ob_max_id_cache.cpp	185	ObMaxIdCacheMgr::fetch_max_id	tmp_ret != OB_HASH_EXIST	if (OB_TMP_FAIL(add_runtime_cache_()) && OB_HASH_EXIST != tmp_ret) {
+src/share/ob_max_id_fetcher.cpp	211	ObMaxIdFetcher::fetch_new_max_id_from_inner_table_	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret && UINT64_MAX != initial) {
+src/share/ob_max_id_fetcher.cpp	352	ObMaxIdFetcher::fetch_max_id	ret (assigned in the comparison) != OB_ITER_END	} else if (OB_ITER_END != (ret = result->next())) {
+src/share/ob_max_id_fetcher.cpp	358	ObMaxIdFetcher::fetch_max_id	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/share/ob_max_id_fetcher.cpp	366	ObMaxIdFetcher::fetch_max_id	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/share/ob_max_id_fetcher.cpp	368	ObMaxIdFetcher::fetch_max_id	ret == OB_ITER_END	} else if (OB_ITER_END == ret && no_max_id) {
+src/share/ob_occam_thread_pool.h	385	ObOccamThreadPool::keep_fetching_task_until_stop_	ret != OB_EAGAIN	if (ret != OB_EAGAIN) { // unexcepted error
+src/share/ob_occam_thread_pool.h	404	ObOccamThreadPool::keep_fetching_task_until_stop_	ret == OB_EAGAIN	} else if (ret == OB_EAGAIN) { // all queue empty, waiting for someone commit task
+src/share/ob_scheduled_job_utils.cpp	50	ObScheduledJobUtils::get_time_zone_offset	ret != OB_ERR_UNKNOWN_TIME_ZONE	if (ret != OB_ERR_UNKNOWN_TIME_ZONE) {
+src/share/ob_scheduled_job_utils.cpp	55	ObScheduledJobUtils::get_time_zone_offset	ret == OB_ERR_UNKNOWN_TIME_ZONE	if (OB_ERR_UNKNOWN_TIME_ZONE == ret) {
+src/share/ob_scheduled_job_utils.cpp	102	ObScheduledJobUtils::check_job_exists	ret == OB_ITER_END	ret = OB_ITER_END == ret ? OB_SUCCESS : ret;
+src/share/ob_schema_status_proxy.cpp	127	ObSchemaStatusProxy::load_refresh_schema_status	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/share/ob_share_util.cpp	145	ObShareUtil::get_ora_rowscn	tmp_ret (assigned in the comparison) != OB_ITER_END	} else if (OB_ITER_END != (tmp_ret = result->next())) {
+src/share/ob_snapshot_table_proxy.cpp	346	ObSnapshotTableProxy::get_all_snapshots	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/share/ob_snapshot_table_proxy.cpp	388	ObSnapshotTableProxy::get_all_snapshots	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/share/ob_snapshot_table_proxy.cpp	440	ObSnapshotTableProxy::get_max_snapshot_info	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/share/ob_snapshot_table_proxy.cpp	445	ObSnapshotTableProxy::get_max_snapshot_info	call result result->next() != OB_ITER_END	} else if (OB_ITER_END != result->next()) {
+src/share/ob_snapshot_table_proxy.cpp	479	ObSnapshotTableProxy::get_snapshot	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/share/ob_snapshot_table_proxy.cpp	482	ObSnapshotTableProxy::get_snapshot	call result result->next() != OB_ITER_END	} else if (OB_ITER_END != result->next()) {
+src/share/ob_snapshot_table_proxy.cpp	523	ObSnapshotTableProxy::check_snapshot_exist	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/share/ob_table_access_helper.h	388	ObTableAccessHelper::read_and_convert_to_values_	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/share/ob_table_access_helper.h	432	ObTableAccessHelper::read_and_convert_to_tuples_	ret == OB_ITER_END	if (OB_ITER_END == ret && iter_times > 0) {
+src/share/ob_tablet_checksum_operator.cpp	168	ObTabletChecksumOperator::load_tablet_checksum_items	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/share/ob_tablet_checksum_operator.cpp	203	ObTabletChecksumOperator::load_tablet_checksum_items	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/share/ob_tablet_checksum_operator.cpp	401	ObTabletChecksumOperator::load_all_compaction_scn	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/share/ob_tablet_checksum_operator.cpp	415	ObTabletChecksumOperator::load_all_compaction_scn	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/share/ob_tablet_meta_table_compaction_operator.cpp	48	ObTabletMetaTableCompactionOperator::get_status	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/share/ob_tablet_meta_table_compaction_operator.cpp	383	ObTabletMetaTableCompactionOperator::inner_range_scan_for_compaction	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/share/ob_tablet_meta_table_compaction_operator.cpp	415	ObTabletMetaTableCompactionOperator::inner_get_max_tablet_id_in_range	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/share/ob_telemetry.cpp	724	get_telemetry_podman_runtime_id	ret == OB_ENTRY_NOT_EXIST	while (OB_ENTRY_NOT_EXIST == ret && line_begin < content_len) {
+src/share/ob_telemetry.cpp	823	get_telemetry_container_scope_id	other variable systemd_file_ret != OB_FILE_NOT_EXIST	if (OB_FILE_NOT_EXIST != systemd_file_ret) {
+src/share/ob_telemetry.cpp	850	get_telemetry_container_scope_id	other variable podman_ret != OB_FILE_NOT_EXIST; other variable podman_ret != OB_ENTRY_NOT_EXIST	} else if (OB_FILE_NOT_EXIST != podman_ret && OB_ENTRY_NOT_EXIST != podman_ret) {
+src/share/ob_telemetry.cpp	1479	report_telemetry	other variable read_ret == OB_FILE_NOT_EXIST; ret == OB_ENTRY_NOT_EXIST	if (OB_FILE_NOT_EXIST == read_ret || (OB_SUCCESS == read_ret && OB_ENTRY_NOT_EXIST == ret)) {
+src/share/ob_time_zone_info_manager.cpp	118	ObTimeZoneInfoManager::fetch_time_zone_info	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/share/ob_time_zone_info_manager.cpp	342	ObTimeZoneInfoManager::fill_tz_info_map	ret == OB_ERR_NULL_VALUE	if (OB_ERR_NULL_VALUE == ret) {
+src/share/ob_time_zone_info_manager.cpp	389	ObTimeZoneInfoManager::fill_tz_info_map	ret == OB_ERR_UNKNOWN_TIME_ZONE	if (OB_ERR_UNKNOWN_TIME_ZONE == ret) {
+src/share/ob_time_zone_info_manager.cpp	407	ObTimeZoneInfoManager::fill_tz_info_map	ret == OB_ITER_END	ret = OB_ITER_END == ret ? OB_SUCCESS : ret;
+src/share/ob_time_zone_info_manager.cpp	424	ObTimeZoneInfoManager::find_time_zone_info	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {

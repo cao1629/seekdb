@@ -1,0 +1,71 @@
+file	line	symbol	construct	text
+src/share/schema/ob_table_schema.cpp	892	ObSimpleTableSchemaV2::get_part_ids_by_subpart_ids	tmp_ret == OB_HASH_EXIST	if (OB_HASH_EXIST == tmp_ret) {
+src/share/schema/ob_table_schema.cpp	898	ObSimpleTableSchemaV2::get_part_ids_by_subpart_ids	tmp_ret != OB_HASH_NOT_EXIST	} else if (OB_UNLIKELY(OB_HASH_NOT_EXIST != tmp_ret)) {
+src/share/schema/ob_table_schema.cpp	938	ObSimpleTableSchemaV2::get_part_idx_by_part_id	tmp_ret == OB_HASH_EXIST	if (OB_HASH_EXIST == tmp_ret) {
+src/share/schema/ob_table_schema.cpp	941	ObSimpleTableSchemaV2::get_part_idx_by_part_id	tmp_ret != OB_HASH_NOT_EXIST	} else if (OB_UNLIKELY(OB_HASH_NOT_EXIST != tmp_ret)) {
+src/share/schema/ob_table_schema.cpp	955	ObSimpleTableSchemaV2::get_part_idx_by_part_id	tmp_ret == OB_HASH_EXIST	if (OB_HASH_EXIST == tmp_ret) {
+src/share/schema/ob_table_schema.cpp	958	ObSimpleTableSchemaV2::get_part_idx_by_part_id	tmp_ret != OB_HASH_NOT_EXIST	} else if (OB_UNLIKELY(OB_HASH_NOT_EXIST != tmp_ret)) {
+src/share/schema/ob_table_schema.cpp	1084	ObSimpleTableSchemaV2::get_tablet_id_by_object_id	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/share/schema/ob_table_schema.cpp	1108	ObSimpleTableSchemaV2::check_if_tablet_exists	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/share/schema/ob_table_schema.cpp	1114	ObSimpleTableSchemaV2::check_if_tablet_exists	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/share/schema/ob_table_schema.cpp	1855	ObTableSchema::alter_mysql_table_columns	ret == OB_ERR_COLUMN_DUPLICATE	if (OB_ERR_COLUMN_DUPLICATE == ret) {
+src/share/schema/ob_table_schema.cpp	1865	ObTableSchema::alter_mysql_table_columns	ret == OB_ERR_COLUMN_DUPLICATE	if (OB_ERR_COLUMN_DUPLICATE == ret) {
+src/share/schema/ob_table_schema.cpp	1926	ObTableSchema::reorder_column	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/share/schema/ob_table_schema.cpp	2730	ObTableSchema::generate_new_column_id_map	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/share/schema/ob_table_schema.cpp	3093	ObTableSchema::add_col_to_id_hash_array	other variable hash_ret == OB_HASH_FULL	if (OB_HASH_FULL == hash_ret) {
+src/share/schema/ob_table_schema.cpp	3180	ObTableSchema::add_col_to_name_hash_array	other variable hash_ret == OB_HASH_FULL	if (OB_HASH_FULL == hash_ret) {
+src/share/schema/ob_table_schema.cpp	3205	ObTableSchema::add_col_to_name_hash_array	other variable hash_ret == OB_HASH_EXIST	} else if (hash_ret == OB_HASH_EXIST){
+src/share/schema/ob_table_schema.cpp	4444	ObTableSchema::has_add_column_instant	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/share/schema/ob_table_schema.cpp	5047	ObTableSchema::check_functional_index_columns_depend	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/share/schema/ob_table_schema.cpp	5049	ObTableSchema::check_functional_index_columns_depend	ret == OB_HASH_EXIST	} else if (OB_HASH_EXIST == ret) {
+src/share/schema/ob_table_schema.cpp	5099	ObTableSchema::check_prefix_index_columns_depend	call result deps_gen_columns.exist_refactored(index_col->get_column_n... == OB_HASH_EXIST	} else if (OB_HASH_EXIST == deps_gen_columns.exist_refactored(index_col->get_column_name())) {
+src/share/schema/ob_table_sql_service.cpp	758	ObTableSqlService::drop_table	ret != OB_TABLE_NOT_EXIST	if (OB_TABLE_NOT_EXIST != ret) {
+src/share/schema/ob_table_sql_service.cpp	802	ObTableSqlService::drop_table	call result drop_table_set->exist_refactored(update_table_id) == OB_HASH_EXIST	} else if ((NULL != drop_table_set) && (OB_HASH_EXIST == drop_table_set->exist_refactored(update_table_id))) {
+src/share/schema/ob_table_sql_service.cpp	1782	ObTableSqlService::check_table_history_matched_	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/share/schema/ob_table_sql_service.cpp	2974	ObTableSqlService::update_data_table_schema_version	ret == OB_TABLE_NOT_EXIST	} else if (OB_TABLE_NOT_EXIST == ret) { // need to check if mock fk parent table exist
+src/share/schema/ob_trigger_mgr.cpp	217	ObTriggerMgr::add_trigger	ret == OB_HASH_NOT_EXIST	ret = (ret == OB_HASH_NOT_EXIST) ? OB_SUCCESS : ret;
+src/share/schema/ob_trigger_mgr.cpp	219	ObTriggerMgr::add_trigger	ret == OB_HASH_NOT_EXIST	ret = (ret == OB_HASH_NOT_EXIST) ? OB_SUCCESS : ret;
+src/share/schema/ob_trigger_mgr.cpp	246	ObTriggerMgr::del_trigger	ret == OB_HASH_NOT_EXIST	ret = (ret == OB_HASH_NOT_EXIST) ? OB_SUCCESS : ret;
+src/share/schema/ob_trigger_mgr.cpp	248	ObTriggerMgr::del_trigger	ret == OB_HASH_NOT_EXIST	ret = (ret == OB_HASH_NOT_EXIST) ? OB_SUCCESS : ret;
+src/share/schema/ob_trigger_mgr.cpp	278	ObTriggerMgr::try_rebuild_trigger_hashmap	other variable hash_ret == OB_HASH_EXIST	ret = OB_HASH_EXIST == hash_ret ? OB_SUCCESS : hash_ret;
+src/share/storage/ob_admin_job_table_storage.cpp	153	ObAdminJobTableStorage::get_max_job_id	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/share/storage/ob_column_checksum_error_info_table_storage.cpp	228	ObColumnChecksumErrorInfoTableStorage::get	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/share/storage/ob_merge_info_table_storage.cpp	153	ObMergeInfoTableStorage::get	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/share/storage/ob_sqlite_connection.cpp	401	ObSQLiteConnection::query	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/share/storage/ob_sqlite_connection.cpp	405	ObSQLiteConnection::query	ret == OB_ITER_END	} else if (OB_ITER_END == ret) {
+src/share/storage/ob_sqlite_connection.cpp	629	ObSQLiteConnection::step_execute	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/share/storage/ob_tablet_compaction_checksum_table_storage.cpp	153	ObTabletCompactionChecksumTableStorage::batch_get	ret != OB_ENTRY_NOT_EXIST [not built]	if (OB_ENTRY_NOT_EXIST != ret) {
+src/share/storage/ob_tablet_compaction_checksum_table_storage.cpp	241	ObTabletCompactionChecksumTableStorage::range_get	ret != OB_ENTRY_NOT_EXIST [not built]	if (OB_ENTRY_NOT_EXIST != ret) {
+src/share/storage/ob_tablet_compaction_checksum_table_storage.cpp	278	ObTabletCompactionChecksumTableStorage::get_min_compaction_scn	ret != OB_ENTRY_NOT_EXIST [not built]	if (OB_ENTRY_NOT_EXIST != ret) {
+src/share/storage/ob_tablet_compaction_checksum_table_storage.cpp	317	ObTabletCompactionChecksumTableStorage::get_max_row_count	ret != OB_ENTRY_NOT_EXIST [not built]	if (OB_ENTRY_NOT_EXIST != ret) {
+src/share/storage/ob_tablet_compaction_checksum_table_storage.cpp	371	ObTabletCompactionChecksumTableStorage::batch_check_checksum	ret != OB_ENTRY_NOT_EXIST [not built]	if (OB_ENTRY_NOT_EXIST != ret) {
+src/share/storage/ob_tablet_local_checksum_table_storage.cpp	159	ObTabletLocalChecksumTableStorage::batch_get	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/share/storage/ob_tablet_local_checksum_table_storage.cpp	199	ObTabletLocalChecksumTableStorage::get_row_count	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/share/system_variable/ob_sys_var_meta.cpp	2224	ObSysVarMeta::find_sys_var_id_by_name	ret == OB_SEARCH_NOT_FOUND [generated]	if (OB_UNLIKELY(OB_SEARCH_NOT_FOUND == ret)) {
+src/share/tablet/ob_tablet_mapping_operator.cpp	345	ObTabletMappingTableOperator::construct_results_	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/share/tablet/ob_tablet_meta_table_storage.cpp	150	ObTabletMetaTableStorage::batch_get	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/share/tablet/ob_tablet_meta_table_storage.cpp	345	ObTabletMetaTableStorage::get_data_size	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/share/tablet/ob_tablet_meta_table_storage.cpp	384	ObTabletMetaTableStorage::get_report_scn_and_status	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/share/tablet/ob_tablet_meta_table_storage.cpp	417	ObTabletMetaTableStorage::get_min_compaction_scn	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/share/tablet/ob_tablet_meta_table_storage.cpp	660	ObTabletMetaTableStorage::get_tablet_ids	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/share/tablet/ob_tablet_meta_table_storage.cpp	713	ObTabletMetaTableStorage::get_tablet_ids_with_report_scn_before	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/share/tablet/ob_tablet_meta_table_storage.cpp	757	ObTabletMetaTableStorage::get_max_tablet_id_in_range	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/share/tablet/ob_tablet_meta_table_storage.cpp	802	ObTabletMetaTableStorage::range_scan_for_compaction	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/share/tablet/ob_tablet_table_iterator.cpp	73	ObTabletMetaIterator::next	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/share/tablet/ob_tablet_table_iterator.cpp	112	ObCompactionTabletMetaIterator::next	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/share/tablet/ob_tablet_table_iterator.cpp	149	ObCompactionTabletMetaIterator::prefetch	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/share/text_analysis/ob_token_stream.cpp	195	ObTokenStopWordNormalizer::get_next	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/share/text_analysis/ob_token_stream.cpp	255	ObBasicEnglishNormalizer::get_next	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/share/text_analysis/ob_token_stream.cpp	380	ObTextTokenGroupNormalizer::build_grouping_map	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/share/text_analysis/ob_token_stream.cpp	385	ObTextTokenGroupNormalizer::build_grouping_map	other variable hash_ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == hash_ret) {
+src/share/text_analysis/ob_token_stream.cpp	399	ObTextTokenGroupNormalizer::build_grouping_map	ret != OB_ITER_END	if (OB_UNLIKELY(ret != OB_ITER_END)) {
+src/sql/code_generator/ob_column_index_provider.cpp	71	RowDesc::add_column	ret == OB_HASH_EXIST	if (OB_HASH_EXIST == ret) {
+src/sql/code_generator/ob_column_index_provider.cpp	73	RowDesc::add_column	ret == OB_HASH_NOT_EXIST	} else if (OB_HASH_NOT_EXIST == ret) {
+src/sql/code_generator/ob_column_index_provider.cpp	121	RowDesc::get_idx	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/sql/code_generator/ob_expr_generator_impl.cpp	203	ObExprGeneratorImpl::infix_visit_child	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/sql/code_generator/ob_expr_generator_impl.cpp	426	ObExprGeneratorImpl::visit	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/sql/code_generator/ob_expr_generator_impl.cpp	1486	ObExprGeneratorImpl::visit	ret == OB_HASH_EXIST	if (OB_HASH_EXIST == ret) {
+src/sql/das/iter/ob_das_cache_lookup_iter.cpp	189	ObDASCacheLookupIter::inner_get_next_row	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/sql/das/iter/ob_das_cache_lookup_iter.cpp	222	ObDASCacheLookupIter::inner_get_next_row	ret == OB_ITER_END	if (OB_LIKELY(OB_ITER_END == ret)) {
+src/sql/das/iter/ob_das_cache_lookup_iter.cpp	271	ObDASCacheLookupIter::inner_get_next_rows	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/sql/das/iter/ob_das_cache_lookup_iter.cpp	310	ObDASCacheLookupIter::inner_get_next_rows	ret == OB_ITER_END	if (OB_LIKELY(OB_ITER_END == ret)) {

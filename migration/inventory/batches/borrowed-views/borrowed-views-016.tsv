@@ -1,0 +1,50 @@
+file	line	symbol	construct	text
+src/share/ob_ddl_common.h	458	ObColumnNameInfo::column_name_	member ObString (value) of type ObString	ObString column_name_;
+src/share/ob_ddl_common.h	479	ObColumnNameMap::col_name_map_	member container of ObString of type common::hash::ObHashMap<schema::ObColumnNameHashWrapper, ObString>	common::hash::ObHashMap<schema::ObColumnNameHashWrapper, ObString> col_name_map_;
+src/share/ob_ddl_error_message_table_operator.h	51	ObDDLErrorMessageTableOperator::ObBuildDDLErrorMessage::user_message_	member raw bytes (pointer) of type char *	char *user_message_;
+src/share/ob_ddl_error_message_table_operator.h	87	ObDDLErrorMessageTableOperator::ObDDLErrorInfo::trace_id_	member ObString (value) of type common::ObString	common::ObString trace_id_;
+src/share/ob_ddl_sim_point.h	106	ObDDLSimPoint::name_	member raw bytes (pointer) of type const char *	const char *name_;
+src/share/ob_ddl_sim_point.h	107	ObDDLSimPoint::desc_	member raw bytes (pointer) of type const char *	const char *desc_;
+src/share/ob_device_manager.cpp	377	ObDeviceManager::get_device_key_	allocator in, arena view out: char *&device_key	int ObDeviceManager::get_device_key_(
+src/share/ob_device_manager.h	52	ObDeviceManager::ObDeviceInsInfo::device_key_	member raw bytes (pointer) of type char *	char *device_key_; // dynamically alloc memory
+src/share/ob_device_manager.h	80	ObDeviceManager::device_map_	member DeviceKeyInfoMap (value) of type DeviceKeyInfoMap	DeviceKeyInfoMap device_map_;
+src/share/ob_display_list.h	46	list_to_display_str	allocator in, arena view out: common::ObString &str	int list_to_display_str(Allocator &allocator, const common::ObIArray<Type> &list, common::ObString &str)
+src/share/ob_display_list.h	171	ObDisplayList::to_display_str	allocator in, arena view out: ObString &str	int to_display_str(ObIAllocator &allocator, ObString &str) const
+src/share/ob_dml_sql_splicer.h	153	ObDMLSqlSplicer::Column::name_	member raw bytes (pointer) of type const char *	const char *name_;
+src/share/ob_encryption_util.cpp	335	ObHashUtil::hash	allocator in, arena view out: ObString &output	int ObHashUtil::hash(const enum ObHashAlgorithm algo, const ObString data,
+src/share/ob_errno.cpp	46	_error::error_name	member raw bytes (pointer) of type const char * [generated]	const char *error_name;
+src/share/ob_errno.cpp	47	_error::error_cause	member raw bytes (pointer) of type const char * [generated]	const char *error_cause;
+src/share/ob_errno.cpp	48	_error::error_solution	member raw bytes (pointer) of type const char * [generated]	const char *error_solution;
+src/share/ob_errno.cpp	50	_error::sqlstate	member raw bytes (pointer) of type const char * [generated]	const char *sqlstate;
+src/share/ob_errno.cpp	51	_error::str_error	member raw bytes (pointer) of type const char * [generated]	const char *str_error;
+src/share/ob_errno.cpp	52	_error::str_user_error	member raw bytes (pointer) of type const char * [generated]	const char *str_user_error;
+src/share/ob_global_stat_proxy.h	38	ObGlobalStatItem::name_	member raw bytes (pointer) of type const char *	const char *name_;
+src/share/ob_io_device_helper.h	45	ObGetFileIdRangeFunctor::dir_	member raw bytes (pointer) of type const char *	const char *dir_;
+src/share/ob_io_device_helper.h	64	ObGetFileSizeFunctor::dir_	member raw bytes (pointer) of type const char*	const char* dir_;
+src/share/ob_io_device_helper.h	81	ObScanDirOp::dir_	member raw bytes (pointer) of type const char *	const char *dir_;
+src/share/ob_io_device_helper.h	137	BlockFileAttr::store_path_	member raw bytes (pointer) of type char *	char *store_path_;
+src/share/ob_io_device_helper.h	138	BlockFileAttr::block_sstable_dir_name_	member raw bytes (pointer) of type const char *	const char *block_sstable_dir_name_;
+src/share/ob_io_device_helper.h	139	BlockFileAttr::block_sstable_file_name_	member raw bytes (pointer) of type const char *	const char *block_sstable_file_name_;
+src/share/ob_io_device_helper.h	149	BlockFileAttr::device_name_	member raw bytes (pointer) of type const char *	const char *device_name_;
+src/share/ob_json_access_utils.cpp	30	ObJsonWrapper::get_raw_binary	allocator in, arena view out: ObString &result	int ObJsonWrapper::get_raw_binary(ObIJsonBase *j_base, ObString &result, ObIAllocator *allocator)
+src/share/ob_kv_parser.h	70	ObKVParser::cur_	member raw bytes (pointer) of type const char *	const char *cur_;
+src/share/ob_kv_parser.h	71	ObKVParser::data_	member raw bytes (pointer) of type char *	char *data_;
+src/share/ob_list_parser.h	61	ObListParser::cur_	member raw bytes (pointer) of type const char *	const char *cur_;
+src/share/ob_lob_access_utils.cpp	431	ObTextStringIter::convert_outrow_lob_to_inrow_templob	allocator in, arena view out: ObObj &out_obj	int ObTextStringIter::convert_outrow_lob_to_inrow_templob(const ObObj &in_obj,
+src/share/ob_lob_access_utils.cpp	677	ObTextStringResult::ob_convert_obj_temporay_lob	allocator in, arena view out: ObObj &obj	int ObTextStringResult::ob_convert_obj_temporay_lob(ObObj &obj, ObIAllocator &allocator)
+src/share/ob_lob_access_utils.cpp	703	ObTextStringResult::ob_convert_datum_temporay_lob	allocator in, arena view out: ObDatum &datum	int ObTextStringResult::ob_convert_datum_temporay_lob(ObDatum &datum,
+src/share/ob_lob_access_utils.cpp	853	ObTextStringIter::get_delta_lob_full_data	allocator in, arena view out: ObLobLocatorV2& lob_locator	int ObTextStringIter::get_delta_lob_full_data(ObLobLocatorV2& lob_locator, ObIAllocator *allocator, ObString &data_str)
+src/share/ob_lob_access_utils.cpp	953	read_real_string_data	allocator in, arena view out: ObString &str	int read_real_string_data(
+src/share/ob_lob_access_utils.cpp	976	read_real_string_data	allocator in, arena view out: ObString &str	int read_real_string_data(
+src/share/ob_lob_access_utils.h	151	ObTextStringIter::datum_str_	member ObString (value) of type const ObString	const ObString datum_str_;
+src/share/ob_lob_access_utils.h	225	ObTextStringResult::buffer_	member raw bytes (pointer) of type char *	char *buffer_;
+src/share/ob_lob_access_utils.h	304	pack_to_disk_inrow_lob	allocator in, arena view out: ObString &result	int pack_to_disk_inrow_lob(Allocator &allocator, const ObString data, ObString &result)
+src/share/ob_lob_access_utils.h	322	pack_to_disk_inrow_lob	allocator in, arena view out: ObObj &res_obj	int pack_to_disk_inrow_lob(Allocator &allocator, const ObString data, const ObObjType type, ObObj &res_obj)
+src/share/ob_lob_access_utils.h	358	ObTextStringObObjResult::res_obj_	member ObObj (pointer) of type ObObj *	ObObj *res_obj_;
+src/share/ob_merge_info.h	52	ObMergeInfoItem::name_	member raw bytes (pointer) of type const char *	const char *name_;
+src/share/ob_occam_time_guard.h	188	ObOccamTimeGuard::file_	member raw bytes (pointer) of type const char * const	const char * const file_;
+src/share/ob_occam_time_guard.h	189	ObOccamTimeGuard::func_name_	member raw bytes (pointer) of type const char * const	const char * const func_name_;
+src/share/ob_occam_time_guard.h	190	ObOccamTimeGuard::log_mod_	member raw bytes (pointer) of type const char * const	const char * const log_mod_;
+src/share/ob_occam_time_guard.h	312	ObOccamFastTimeGuard::file_	member raw bytes (pointer) of type const char * const	const char * const file_;
+src/share/ob_occam_time_guard.h	313	ObOccamFastTimeGuard::func_name_	member raw bytes (pointer) of type const char * const	const char * const func_name_;
+src/share/ob_occam_time_guard.h	314	ObOccamFastTimeGuard::log_mod_	member raw bytes (pointer) of type const char * const	const char * const log_mod_;

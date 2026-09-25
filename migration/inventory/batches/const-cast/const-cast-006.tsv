@@ -1,0 +1,77 @@
+file	line	symbol	construct	text
+src/oblib/lib/charset/ob_charset.cpp	292	ObCharset::strntod	const_cast<char *>	result = cs->cset->strntod(cs, const_cast<char *>(str), str_len, endptr, err);
+src/oblib/lib/charset/ob_charset.cpp	304	ObCharset::strntoll	const_cast<char*>	*end_ptr = const_cast<char*>(str);
+src/oblib/lib/charset/ob_charset.cpp	319	ObCharset::strntoull	const_cast<char*>	*end_ptr = const_cast<char*>(str);
+src/oblib/lib/charset/ob_charset.cpp	1884	ObCharset::toupper	const_cast<char*>	size_t size = cs_info->cset->caseup(cs_info, const_cast<char*>(src.ptr()), src.length(), buf, buf_len);
+src/oblib/lib/charset/ob_charset.cpp	1924	ObCharset::tolower	const_cast<char*>	size_t size = cs_info->cset->casedn(cs_info, const_cast<char*>(src.ptr()), src.length(), buf, buf_len);
+src/oblib/lib/charset/ob_charset.cpp	2361	ObCharset::trim_end_of_str	const_cast<char*>	trim_end = const_cast<char*>(end);
+src/oblib/lib/charset/ob_charset.cpp	2554	ObCharset::init_charset_by_collation_type	const_cast<ObCharsetInfo *>	ObCharsetInfo *charset_info = const_cast<ObCharsetInfo *>(get_charset_uninit(collation_type));
+src/oblib/lib/charset/ob_ctype.cc	37	ob_convert_internal	C-style cast (unsigned char*) drops const from from	if ((cnvres= (*mb_wc)(from_cs, &wc, (unsigned char*) from, from_end)) > 0) {
+src/oblib/lib/charset/ob_ctype.cc	95	ob_convert	C-style cast (uint32*) drops const from from	if ((*(uint32*)from) & 0x80808080) break;
+src/oblib/lib/charset/ob_ctype.cc	107	ob_convert	C-style cast (unsigned char*) drops const from from	} else if (*((unsigned char*) from) > 0x7F)  {
+src/oblib/lib/charset/ob_ctype_bin.cc	361	ob_hash_sort_8bit_bin	C-style cast (uchar*) drops const from key	for (; pos < (uchar*) key ; pos++)
+src/oblib/lib/charset/ob_ctype_bin.cc	368	ob_hash_sort_8bit_bin	C-style cast (void*) drops const from pos	nr1[0] = hash_algo((void*)pos, (int)(key - pos), nr1[0]);
+src/oblib/lib/charset/ob_ctype_bin.cc	380	ob_hash_sort_bin	C-style cast (unsigned char*) drops const from key	while (pos < (unsigned char*) key) {
+src/oblib/lib/charset/ob_ctype_bin.cc	387	ob_hash_sort_bin	C-style cast (void*) drops const from pos	nr1[0] = hash_algo((void*)pos, (int)(key - pos), nr1[0]);
+src/oblib/lib/charset/ob_ctype_mb.cc	310	ob_instr_mb	C-style cast (unsigned char*) drops const from b	if (!cs->coll->strnncoll(cs, (unsigned char*) b, s_length,
+src/oblib/lib/charset/ob_ctype_mb.cc	311	ob_instr_mb	C-style cast (unsigned char*) drops const from s	(unsigned char*) s, s_length, 0)) {
+src/oblib/lib/charset/ob_ctype_mb.cc	779	ob_hash_sort_mb_bin	C-style cast (unsigned char*) drops const from key	while (pos < (unsigned char*) key) {
+src/oblib/lib/charset/ob_ctype_mb.cc	786	ob_hash_sort_mb_bin	C-style cast (void*) drops const from pos	nr1[0] = hash_algo((void*)pos, length, nr1[0]);
+src/oblib/lib/charset/ob_ctype_simple.cc	282	ob_strntoll_8bit	C-style cast (char *) drops const from s	*end_ptr = (char *) s;
+src/oblib/lib/charset/ob_ctype_simple.cc	370	ob_strntoull_8bit	C-style cast (char *) drops const from s	*end_ptr = (char *) s;
+src/oblib/lib/charset/ob_ctype_simple.cc	435	ob_strntoull10rnd_8bit	C-style cast (char*) drops const from str	*end_ptr= (char*) str;
+src/oblib/lib/charset/ob_ctype_simple.cc	776	ob_hash_sort_simple	C-style cast (unsigned char*) drops const from end	for (; key < (unsigned char*) end ; key++) {
+src/oblib/lib/charset/ob_ctype_simple.cc	782	ob_hash_sort_simple	C-style cast (unsigned char*) drops const from end	while (key < (unsigned char*)end) {
+src/oblib/lib/charset/ob_ctype_simple.cc	783	ob_hash_sort_simple	C-style cast (unsigned char*) drops const from end	length = (int)((unsigned char*)end - key) > HASH_BUFFER_LENGTH ?
+src/oblib/lib/charset/ob_ctype_simple.cc	784	ob_hash_sort_simple	C-style cast (unsigned char*) drops const from end	HASH_BUFFER_LENGTH : (int)((unsigned char*)end - key);
+src/oblib/lib/charset/ob_ctype_simple.cc	808	skip_trailing_space	C-style cast (unsigned *) drops const from end	while (end > start_words && ((unsigned *)end)[-1] == SPACE_INT) {
+src/oblib/lib/charset/ob_ctype_utf8.cc	112	ob_well_formed_len_utf8mb4	C-style cast (uchar*) drops const from b; C-style cast (uchar*) drops const from e	if ((mb_len= ob_valid_mbcharlen_utf8mb4(cs, (uchar*) b, (uchar*) e)) <= 0)
+src/oblib/lib/charset/ob_ctype_utf8.cc	833	ob_hash_sort_utf8mb4	C-style cast (unsigned char*) drops const from src; C-style cast (unsigned char*) drops const from end	while ((res= ob_mb_wc_utf8mb4(cs, &wc, (unsigned char*) src, (unsigned char*) end)) > 0) {
+src/oblib/lib/charset/ob_ctype_utf8.cc	843	ob_hash_sort_utf8mb4	C-style cast (unsigned char*) drops const from src; C-style cast (unsigned char*) drops const from end	while ((res= ob_mb_wc_utf8mb4(cs, &wc, (unsigned char*) src, (unsigned char*) end)) > 0) {
+src/oblib/lib/charset/ob_dtoa.cc	362	ob_fast_strtod	C-style cast (char *) drops const from str	*end = (char *)str;
+src/oblib/lib/charset/ob_dtoa.cc	372	ob_fast_strtod	const_cast<char *>	*end = const_cast<char *>(ff_ret.ptr);
+src/oblib/lib/charset/ob_dtoa.cc	374	ob_fast_strtod	C-style cast (char *) drops const from str	*end = (char *)str;
+src/oblib/lib/charset/ob_dtoa.cc	411	ob_atof	C-style cast (char**) drops const from end	return (ob_strtod(nptr, (char**) &end, &error));
+src/oblib/lib/checksum/ob_crc64.h	111	ObBatchChecksum::fill	C-style cast (char *) drops const from pv	char *ptr = (char *)pv;
+src/oblib/lib/codec/ob_bp_util.h	154	d_slide	C-style cast (uint64_t *) drops const from ip_s [not built]	bw = (*(uint64_t *)(ip_s));
+src/oblib/lib/codec/ob_delta_zigzag_rle.h	133	ObDeltaZigzagRleInner::encode	C-style cast (UIntT *) drops const from in	UIntT *ip = (UIntT *)(in);
+src/oblib/lib/codec/ob_delta_zigzag_rle.h	134	ObDeltaZigzagRleInner::encode	C-style cast (UIntT *) drops const from in	UIntT *pp = (UIntT *)(in);
+src/oblib/lib/codec/ob_delta_zigzag_rle.h	135	ObDeltaZigzagRleInner::encode	C-style cast (UIntT *) drops const from in	UIntT *in_start = (UIntT *)(in);
+src/oblib/lib/codec/ob_double_delta_zigzag_rle.h	104	ObDoubleDeltaZigzagRleInner::encode	C-style cast (UIntT *) drops const from in	UIntT *ip = (UIntT *)(in);
+src/oblib/lib/codec/ob_double_delta_zigzag_rle.h	106	ObDoubleDeltaZigzagRleInner::encode	C-style cast (UIntT *) drops const from in	UIntT *pp = (UIntT *)(in);
+src/oblib/lib/codec/ob_double_delta_zigzag_rle.h	107	ObDoubleDeltaZigzagRleInner::encode	C-style cast (UIntT *) drops const from in	UIntT *in_start = (UIntT *)(in);
+src/oblib/lib/codec/ob_simd_fixed_pfor.h	301	ObSIMDFixedPFor::inner_do_decode	C-style cast (uint64_t *) drops const from in [not built]	uint64_t xbitmap1 = *(uint64_t *)(in);
+src/oblib/lib/codec/ob_simd_fixed_pfor.h	302	ObSIMDFixedPFor::inner_do_decode	C-style cast (uint64_t *) drops const from in [not built]	uint64_t xbitmap2 = *(uint64_t *)(in + 8);
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_compress.c	1577	ZSTD_resetCCtx_byCopyingCDict	C-style cast (U32*) drops const from cdict [vendored]	assert((U32*)cdict->matchState.chainTable == (U32*)cdict->matchState.hashTable + hSize);  /* chainTable must follow hashTable */
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_compress.c	1578	ZSTD_resetCCtx_byCopyingCDict	C-style cast (U32*) drops const from cdict [vendored]	assert((U32*)cdict->matchState.hashTable3 == (U32*)cdict->matchState.chainTable + chainSize);
+src/oblib/lib/container/ob_2d_array.h	162	Ob2DArray::inner_assign	C-style cast (void *) drops const from other	if ((void *)this != (void *)&other) {
+src/oblib/lib/container/ob_array_helper.h	209	ObArrayHelpers::at	const_cast<T *>	return const_cast<T *>(pthis->at(index));
+src/oblib/lib/container/ob_array_wrap.h	82	ObArrayWrap::ObArrayWrap	const_cast<T*>	: ObIArrayWrap<T>(const_cast<T*>(objs), num)
+src/oblib/lib/container/ob_bit_set.h	227	operator=	C-style cast (void*) drops const from other	MEMCPY((void*)bitset_word_array_, (void*)other.bitset_word_array_, sizeof(bitset_word_array_));
+src/oblib/lib/container/ob_ext_ring_buffer_impl.h	275	ObExtendibleRingBufferBase::get	const_cast<MyType*>	return const_cast<MyType*>(this)->do_get_(sn, val);
+src/oblib/lib/container/ob_ext_ring_buffer_impl.h	299	ObExtendibleRingBufferBase::begin_sn	const_cast<MyType*>	return const_cast<MyType*>(this)->load_begin_sn_();
+src/oblib/lib/container/ob_ext_ring_buffer_impl.h	303	ObExtendibleRingBufferBase::end_sn	const_cast<MyType*>	return const_cast<MyType*>(this)->load_end_sn_();
+src/oblib/lib/container/ob_raw_se_array.h	521	ObRawSEArray::assign	const_cast<ObIArray<T>*>	const_cast<ObIArray<T>*>(&other))->local_data_, N * sizeof(T));
+src/oblib/lib/container/ob_raw_se_array.h	550	ObRawSEArray::assign	const_cast<ObRawSEArray<T, LOCAL_ARRAY_SIZE, BlockAllocatorT, auto_free>*>	const_cast<ObRawSEArray<T, LOCAL_ARRAY_SIZE, BlockAllocatorT, auto_free>*>(&other)->local_data_,
+src/oblib/lib/container/ob_se_array_iterator.h	74	ObSEArrayIterator::ObSEArrayIterator	const_cast<ObSEArrayImpl<T, LOCAL_ARRAY_SIZE, BlockAllocatorT, auto_free>*>	arr_ = const_cast<ObSEArrayImpl<T, LOCAL_ARRAY_SIZE, BlockAllocatorT, auto_free>*>(arr);
+src/oblib/lib/file/ob_file.cpp	842	unintr_pwrite	C-style cast (char *) drops const from buf	write_ret = ob_pwrite(fd, (char *)buf + offset2write, length2write, offset + offset2write);
+src/oblib/lib/file/ob_file.cpp	844	unintr_pwrite	C-style cast (char *) drops const from buf	write_ret = ::pwrite(fd, (char *)buf + offset2write, length2write, offset + offset2write);
+src/oblib/lib/file/ob_file.cpp	852	unintr_pwrite	C-style cast (char *) drops const from buf	write_ret, errno, fd, (char *)buf + offset2write, length2write, offset + offset2write, retry);
+src/oblib/lib/file/ob_file.cpp	877	unintr_write	C-style cast (char *) drops const from buf	write_ret = write(fd, (char *)buf + offset2write, length2write);
+src/oblib/lib/file/ob_file.cpp	884	unintr_write	C-style cast (char *) drops const from buf	write_ret, errno, fd, (char *)buf + offset2write, length2write, offset2write, retry);
+src/oblib/lib/file/ob_file.cpp	1003	pwrite_align	C-style cast (char *) drops const from buf	MEMCPY((char *)align_buffer + buffer_pos, (char *)buf + ret, size2copy);
+src/oblib/lib/file/ob_file.cpp	1515	ObFileAsyncAppender::append	C-style cast (char *) drops const from buf	MEMCPY(iocb->buffer + iocb->buffer_pos, (char *)buf + (count - size2append), size2copy);
+src/oblib/lib/function/ob_function.h	187	-	const_cast<Derived *>	return (const_cast<Derived *>(this))->func_(std::forward<Args>(args)...);
+src/oblib/lib/guard/ob_light_shared_gaurd.h	96	ObLightSharedPtr::assign	C-style cast (void*) drops const from rhs	if ((void*)this != (void*)&rhs) {
+src/oblib/lib/guard/ob_shared_guard.h	231	ObSharedGuardFriend::create_shared_from_combined_block	const_cast<CombinedBLock<T> &>	ptr.block_ptr_.control_ptr_ = &(const_cast<CombinedBLock<T> &>(block).control_block_);
+src/oblib/lib/guard/ob_shared_guard.h	232	ObSharedGuardFriend::create_shared_from_combined_block	const_cast<CombinedBLock<T> &>	ptr.block_ptr_.data_ptr_ = &(const_cast<CombinedBLock<T> &>(block).data_block_);
+src/oblib/lib/guard/ob_shared_guard.h	283	#define UNI_PTR	const_cast<ObUniqueGuard<T> &>	#define UNI_PTR const_cast<ObUniqueGuard<T> &>(unique_guard)
+src/oblib/lib/guard/ob_unique_guard.h	251	ObUniqueGuard::swap_	const_cast<ObUniqueGuard<T>&>	const_cast<ObUniqueGuard<T>&>(rhs).data_ = data_;
+src/oblib/lib/guard/ob_unique_guard.h	254	ObUniqueGuard::swap_	const_cast<ObUniqueGuard<T>&>	const_cast<ObUniqueGuard<T>&>(rhs).allocator_ = allocator_;
+src/oblib/lib/guard/ob_unique_guard.h	257	ObUniqueGuard::swap_	const_cast<ObUniqueGuard<T>&>	const_cast<ObUniqueGuard<T>&>(rhs).deleter_ = deleter_;
+src/oblib/lib/hash/ob_hashmap.h	233	ObHashMap::get_refactored	const_cast<hashtable &>	if (OB_SUCC(const_cast<hashtable &>(ht_).get_refactored(key, pair, timeout_us))) {
+src/oblib/lib/hash/ob_hashmap.h	245	ObHashMap::get	const_cast<hashtable &>	if (OB_SUCCESS == const_cast<hashtable &>(ht_).get_refactored(key, pair)
+src/oblib/lib/hash/ob_hashmap.h	259	ObHashMap::get	const_cast<_value_type*>	return const_cast<_value_type*>(reinterpret_cast<PointerOfConstMe>(this)->get(key));
+src/oblib/lib/hash/ob_hashset.h	148	ObHashSet::get	const_cast<hashtable &>	if (OB_SUCCESS == const_cast<hashtable &>(ht_).get_refactored(key, pair)) {
+src/oblib/lib/hash/ob_hashset.h	151	ObHashSet::get	const_cast<_key_type*>	return const_cast<_key_type*>(ret);
+src/oblib/lib/hash/ob_hashset.h	161	ObHashSet::exist_refactored	const_cast<hashtable &>	ret = const_cast<hashtable &>(ht_).get_refactored(key, pair);

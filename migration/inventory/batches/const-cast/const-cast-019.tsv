@@ -1,0 +1,81 @@
+file	line	symbol	construct	text
+src/sql/engine/join/ob_hash_join_op.cpp	318	ObHashJoinOp::set_hash_function	const_cast<ObHashFunc*>	all_cnt / 2, const_cast<ObHashFunc*>(&cur_hash_funcs->at(0)), all_cnt / 2);
+src/sql/engine/join/ob_hash_join_op.cpp	320	ObHashJoinOp::set_hash_function	const_cast<ObHashFunc*>	const_cast<ObHashFunc*>(&cur_hash_funcs->at(0) + left_hash_funcs_.count()),
+src/sql/engine/join/ob_hash_join_op.cpp	347	assign_alloc_ptr	const_cast<X &>	const_cast<X &>(x) = static_cast<X>(ptr);
+src/sql/engine/join/ob_hash_join_op.cpp	431	ObHashJoinOp::inner_open	const_cast<ObExpr**>	all_cnt / 2, const_cast<ObExpr**>(&MY_SPEC.all_join_keys_.at(0)), all_cnt / 2);
+src/sql/engine/join/ob_hash_join_op.cpp	433	ObHashJoinOp::inner_open	const_cast<ObExpr**>	const_cast<ObExpr**>(&MY_SPEC.all_join_keys_.at(0) + left_join_keys_.count()),
+src/sql/engine/join/ob_hash_join_op.cpp	1021	ObHashJoinOp::get_next_left_row_batch	const_cast<ObBatchRows *>	const_cast<ObBatchRows *>(child_brs)->size_ = 0;
+src/sql/engine/join/ob_hash_join_op.cpp	1022	ObHashJoinOp::get_next_left_row_batch	const_cast<ObBatchRows *>	const_cast<ObBatchRows *>(child_brs)->end_ = true;
+src/sql/engine/join/ob_hash_join_op.cpp	1027	ObHashJoinOp::get_next_left_row_batch	const_cast<ObBatchRows *>	const_cast<ObBatchRows *>(child_brs)->size_ = read_size;
+src/sql/engine/join/ob_hash_join_op.cpp	1028	ObHashJoinOp::get_next_left_row_batch	const_cast<ObBatchRows *>	const_cast<ObBatchRows *>(child_brs)->end_ = false;
+src/sql/engine/join/ob_hash_join_op.cpp	1029	ObHashJoinOp::get_next_left_row_batch	const_cast<ObBatchRows *>	const_cast<ObBatchRows *>(child_brs)->skip_->reset(read_size);
+src/sql/engine/join/ob_hash_join_op.cpp	1077	ObHashJoinOp::get_next_left_row_batch_na	const_cast<ObBatchRows *>	const_cast<ObBatchRows *>(child_brs)->size_ = 0;
+src/sql/engine/join/ob_hash_join_op.cpp	1078	ObHashJoinOp::get_next_left_row_batch_na	const_cast<ObBatchRows *>	const_cast<ObBatchRows *>(child_brs)->end_ = true;
+src/sql/engine/join/ob_hash_join_op.cpp	1083	ObHashJoinOp::get_next_left_row_batch_na	const_cast<ObBatchRows *>	const_cast<ObBatchRows *>(child_brs)->size_ = read_size;
+src/sql/engine/join/ob_hash_join_op.cpp	1084	ObHashJoinOp::get_next_left_row_batch_na	const_cast<ObBatchRows *>	const_cast<ObBatchRows *>(child_brs)->end_ = false;
+src/sql/engine/join/ob_hash_join_op.cpp	1085	ObHashJoinOp::get_next_left_row_batch_na	const_cast<ObBatchRows *>	const_cast<ObBatchRows *>(child_brs)->skip_->reset(read_size);
+src/sql/engine/join/ob_hash_join_op.cpp	1190	ObHashJoinOp::build_hash_table_for_nest_loop	const_cast<ObHashJoinStoredJoinRow *>	hash_table.set(left_stored_rows[i]->get_hash_value(), const_cast<ObHashJoinStoredJoinRow *>(left_stored_rows[i]));
+src/sql/engine/join/ob_hash_join_op.cpp	1626	ObHashJoinOp::build_hash_table_in_memory	const_cast<ObHashJoinStoredJoinRow *>	const_cast<ObHashJoinStoredJoinRow *>(left_stored_rows[i]),
+src/sql/engine/join/ob_hash_join_op.cpp	1632	ObHashJoinOp::build_hash_table_in_memory	const_cast<ObHashJoinStoredJoinRow *>	hash_table.set(left_stored_rows[i]->get_hash_value(), const_cast<ObHashJoinStoredJoinRow *>(left_stored_rows[i]));
+src/sql/engine/join/ob_hash_join_op.cpp	2708	ObHashJoinOp::build_hash_table_for_recursive	const_cast<ObHashJoinStoredJoinRow *>	const_cast<ObHashJoinStoredJoinRow *>(part_stored_rows[i]),
+src/sql/engine/join/ob_hash_join_op.cpp	2714	ObHashJoinOp::build_hash_table_for_recursive	const_cast<ObHashJoinStoredJoinRow *>	hash_table.set(part_stored_rows[i]->get_hash_value(), const_cast<ObHashJoinStoredJoinRow *>(part_stored_rows[i]));
+src/sql/engine/join/ob_hash_join_op.cpp	2954	ObHashJoinOp::PartitionSplitter::repartition_by_part_array	const_cast<ObHashJoinStoredJoinRow*>	hist_item.store_row_ = const_cast<ObHashJoinStoredJoinRow*>(stored_row);
+src/sql/engine/join/ob_hash_join_op.cpp	3108	ObHashJoinOp::PartitionSplitter::build_hash_table_by_part_array	const_cast<ObHashJoinStoredJoinRow*>	hist_item.store_row_ = const_cast<ObHashJoinStoredJoinRow*>(stored_row);
+src/sql/engine/join/ob_hash_join_op.cpp	3366	ObHashJoinOp::get_next_right_batch_na	const_cast<ObBatchRows *>	const_cast<ObBatchRows *>(right_brs_)->size_ = 0;
+src/sql/engine/join/ob_hash_join_op.cpp	3367	ObHashJoinOp::get_next_right_batch_na	const_cast<ObBatchRows *>	const_cast<ObBatchRows *>(right_brs_)->end_ = true;
+src/sql/engine/join/ob_hash_join_op.cpp	3397	ObHashJoinOp::get_next_right_batch_na	const_cast<ObBatchRows *>	const_cast<ObBatchRows *>(right_brs_)->size_ = 0;
+src/sql/engine/join/ob_hash_join_op.cpp	3398	ObHashJoinOp::get_next_right_batch_na	const_cast<ObBatchRows *>	const_cast<ObBatchRows *>(right_brs_)->end_ = true;
+src/sql/engine/join/ob_hash_join_op.cpp	3405	ObHashJoinOp::get_next_right_batch_na	const_cast<ObBatchRows *>	const_cast<ObBatchRows *>(right_brs_)->size_ = 0;
+src/sql/engine/join/ob_hash_join_op.cpp	3406	ObHashJoinOp::get_next_right_batch_na	const_cast<ObBatchRows *>	const_cast<ObBatchRows *>(right_brs_)->end_ = true;
+src/sql/engine/join/ob_hash_join_op.cpp	3411	ObHashJoinOp::get_next_right_batch_na	const_cast<ObBatchRows *>	const_cast<ObBatchRows *>(right_brs_)->size_ = read_size;
+src/sql/engine/join/ob_hash_join_op.cpp	3412	ObHashJoinOp::get_next_right_batch_na	const_cast<ObBatchRows *>	const_cast<ObBatchRows *>(right_brs_)->end_ = false;
+src/sql/engine/join/ob_hash_join_op.cpp	3413	ObHashJoinOp::get_next_right_batch_na	const_cast<ObBatchRows *>	const_cast<ObBatchRows *>(right_brs_)->skip_->reset(read_size);
+src/sql/engine/join/ob_hash_join_op.cpp	3448	ObHashJoinOp::get_next_right_batch	const_cast<ObBatchRows *>	const_cast<ObBatchRows *>(right_brs_)->size_ = 0;
+src/sql/engine/join/ob_hash_join_op.cpp	3449	ObHashJoinOp::get_next_right_batch	const_cast<ObBatchRows *>	const_cast<ObBatchRows *>(right_brs_)->end_ = true;
+src/sql/engine/join/ob_hash_join_op.cpp	3468	ObHashJoinOp::get_next_right_batch	const_cast<ObBatchRows *>	const_cast<ObBatchRows *>(right_brs_)->size_ = 0;
+src/sql/engine/join/ob_hash_join_op.cpp	3469	ObHashJoinOp::get_next_right_batch	const_cast<ObBatchRows *>	const_cast<ObBatchRows *>(right_brs_)->end_ = true;
+src/sql/engine/join/ob_hash_join_op.cpp	3476	ObHashJoinOp::get_next_right_batch	const_cast<ObBatchRows *>	const_cast<ObBatchRows *>(right_brs_)->size_ = 0;
+src/sql/engine/join/ob_hash_join_op.cpp	3477	ObHashJoinOp::get_next_right_batch	const_cast<ObBatchRows *>	const_cast<ObBatchRows *>(right_brs_)->end_ = true;
+src/sql/engine/join/ob_hash_join_op.cpp	3482	ObHashJoinOp::get_next_right_batch	const_cast<ObBatchRows *>	const_cast<ObBatchRows *>(right_brs_)->size_ = read_size;
+src/sql/engine/join/ob_hash_join_op.cpp	3483	ObHashJoinOp::get_next_right_batch	const_cast<ObBatchRows *>	const_cast<ObBatchRows *>(right_brs_)->end_ = false;
+src/sql/engine/join/ob_hash_join_op.cpp	3484	ObHashJoinOp::get_next_right_batch	const_cast<ObBatchRows *>	const_cast<ObBatchRows *>(right_brs_)->skip_->reset(read_size);
+src/sql/engine/join/ob_merge_join_op.cpp	675	ObMergeJoinOp::get_next_right_cache_row	const_cast<const ObChunkDatumStore::StoredRow **> (adds const only)	const_cast<const ObChunkDatumStore::StoredRow **>(&stored_row_)))) {
+src/sql/engine/join/ob_merge_join_op.cpp	1140	ObMergeJoinOp::ChildBatchFetcher::get_list_row	const_cast<ObRADatumStore::StoredRow*>	stored_row = const_cast<ObRADatumStore::StoredRow*>(row);
+src/sql/engine/join/ob_merge_join_op.cpp	1202	ObMergeJoinOp::calc_equal_conds_with_stored_row	const_cast<ObDatum *>	l_table_datum = const_cast<ObDatum *>(&stored_row->cells()[equal_param_idx.at(i)]);
+src/sql/engine/join/ob_merge_join_op.cpp	1206	ObMergeJoinOp::calc_equal_conds_with_stored_row	const_cast<ObDatum *>	r_table_datum = const_cast<ObDatum *>(&stored_row->cells()[equal_param_idx.at(i)]);
+src/sql/engine/ob_exec_context.cpp	882	ObExecContext::init_physical_plan_ctx	const_cast<ObPhysicalPlan*>	my_session_->set_cur_phy_plan(const_cast<ObPhysicalPlan*>(&plan));
+src/sql/engine/px/datahub/components/ob_dh_range_dist_wf.cpp	152	ObRDWFPartialInfo::dup_store_row	const_cast<ObStoredDatumRow *>	s->unswizzling(reinterpret_cast<char *>(const_cast<ObStoredDatumRow *>(&row)));
+src/sql/engine/px/datahub/components/ob_dh_sample.cpp	462	ObDynamicSamplePieceMsgCtx::split_range	const_cast<ObChunkDatumStore &>	} else if (OB_FAIL(sort_row_store(const_cast<ObChunkDatumStore &>(*sample_store)))) {
+src/sql/engine/px/exchange/ob_px_ms_coord_op.cpp	479	ObPxMSCoordOp::next_row	const_cast<ObChunkDatumStore::LastStoredRow*>	last_pop_row_ = const_cast<ObChunkDatumStore::LastStoredRow*>(pop_row);
+src/sql/engine/px/ob_dfo.cpp	328	ObPxInitSqcArgs::serialize_common_parts_1	const_cast<ObSqcSerializeCache &>	ObSqcSerializeCache &ser_cache = const_cast<ObSqcSerializeCache &>(ser_cache_);
+src/sql/engine/px/ob_dfo.cpp	361	ObPxInitSqcArgs::serialize_common_parts_2	const_cast<ObSqcSerializeCache &>	ObSqcSerializeCache &ser_cache = const_cast<ObSqcSerializeCache &>(ser_cache_);
+src/sql/engine/px/ob_dfo.cpp	417	OB_DEF_SERIALIZE(ObPxInitSqcArgs)	const_cast<ObSqcSerializeCache &>	(const_cast<ObSqcSerializeCache &>(ser_cache_)).cache_serialized_ = ser_cache_.enable_serialize_cache_;
+src/sql/engine/px/ob_dfo.cpp	448	OB_DEF_SERIALIZE_SIZE(ObPxInitSqcArgs)	const_cast<ObSqcSerializeCache &>	ObSqcSerializeCache &ser_cache = const_cast<ObSqcSerializeCache &>(ser_cache_);
+src/sql/engine/px/ob_dfo.cpp	664	OB_DEF_DESERIALIZE(ObPxInitTaskArgs)	const_cast<ObExprFrameInfo*>	buf, data_len, pos, *exec_ctx_, *const_cast<ObExprFrameInfo*>(expr_frame_info)))) {
+src/sql/engine/px/ob_dfo_scheduler.cpp	348	ObSerialDfoScheduler::dispatch_sqcs	const_cast<ObOpSpec &>	args.set_serialize_param(exec_ctx, const_cast<ObOpSpec &>(*dfo.get_root_op_spec()), *phy_plan);
+src/sql/engine/px/ob_dfo_scheduler.cpp	949	ObParallelDfoScheduler::dispatch_sqc	const_cast<ObOpSpec &>	args.set_serialize_param(exec_ctx, const_cast<ObOpSpec &>(*dfo.get_root_op_spec()), *phy_plan);
+src/sql/engine/px/ob_granule_iterator_op.cpp	609	ObGranuleIteratorOp::rescan	const_cast<ObGranulePump *>	OZ(const_cast<ObGranulePump *>(pump_)->reset_gi_task());
+src/sql/engine/px/ob_granule_pump.cpp	44	ObGITaskSet::get_task_at_pos	const_cast<ObDASTabletLoc *>	info.tablet_loc_ = const_cast<ObDASTabletLoc *>(gi_task_set_.at(pos).tablet_loc_);
+src/sql/engine/px/ob_granule_pump.h	65	ObGranulePumpArgs::ObGranulePumpOpInfo::get_modify_op	C-style cast (ObTableModifySpec *) drops const from member modify_op_	ObTableModifySpec *get_modify_op() { return (ObTableModifySpec *)modify_op_; }
+src/sql/engine/px/ob_px_dtl_proc.cpp	62	ObPxReceiveRowP::process	const_cast<ObDtlLinkedBuffer &>	} else if (OB_FAIL(reader_->add_buffer(const_cast<ObDtlLinkedBuffer &>(buffer), transferred))) {
+src/sql/engine/px/ob_px_scheduler.cpp	284	ObPxMsgProc::process_sqc_finish_msg_once	const_cast<ObPxFinishSqcResultMsg &>	const_cast<ObPxFinishSqcResultMsg &>(pkt).rc_ = OB_SUCCESS;
+src/sql/engine/px/ob_px_task_process.cpp	578	ObPxTaskProcess::OpPreparation::apply	const_cast<oceanbase::sql::ObOpSpec*>	const_cast<oceanbase::sql::ObOpSpec*>(kit->spec_));
+src/sql/engine/px/ob_px_util.h	378	ObPxTreeSerializer::serialize_expr_frame_info	const_cast<ObIArray<ObExpr> &>	ObExpr::get_serialize_array() = &(const_cast<ObIArray<ObExpr> &>(exprs));
+src/sql/engine/px/ob_px_util.h	508	ObPxTreeSerializer::deserialize_expr_frame_info	const_cast<ObExprFrameInfo &>	const_cast<ObExprFrameInfo &>(expr_frame_info).need_ctx_cnt_ = need_ctx_cnt;
+src/sql/engine/px/ob_px_util.h	520	ObPxTreeSerializer::deserialize_expr_frame_info	const_cast<ObArray<ObExpr> &>	ObIArray<ObExpr> &exprs = const_cast<ObArray<ObExpr> &>(expr_frame_info.rt_exprs_);
+src/sql/engine/px/ob_px_util.h	521	ObPxTreeSerializer::deserialize_expr_frame_info	const_cast<ObIArray<ObExpr> &>	ObExpr::get_serialize_array() = &(const_cast<ObIArray<ObExpr> &>(exprs));
+src/sql/engine/px/ob_px_util.h	540	ObPxTreeSerializer::deserialize_expr_frame_info	const_cast<ObExprFrameInfo &>	&(const_cast<ObExprFrameInfo &>(expr_frame_info)).const_frame_ptrs_ :
+src/sql/engine/px/ob_px_util.h	553	ObPxTreeSerializer::deserialize_expr_frame_info	const_cast<ObIArray<char*>*>	const_cast<ObIArray<char*>*>(param_frame_ptrs), frames, frame_cnt))) {
+src/sql/engine/px/ob_px_util.h	581	ObPxTreeSerializer::deserialize_frame_info	const_cast<ObIArray<ObFrameInfo> &>	ObIArray<ObFrameInfo> &non_const_all_frames = const_cast<ObIArray<ObFrameInfo> &>(all_frames);
+src/sql/engine/px/ob_px_util.h	688	ObPxTreeSerializer::get_serialize_expr_frame_info_size	const_cast<ObIArray<ObExpr> &>	ObExpr::get_serialize_array() = &(const_cast<ObIArray<ObExpr> &>(exprs));
+src/sql/engine/px/ob_slice_calc.cpp	318	ObSlaveMapRepartIdxCalcBase::init	const_cast<TaskIdxArray *>	} else if (OB_FAIL(const_cast<TaskIdxArray *>(task_idx_array)->push_back(task_idx))) {
+src/sql/engine/px/ob_slice_calc.cpp	1305	ObRangeSliceIdCalc::get_slice_indexes_inner	const_cast<ObPxTabletRange::RangeCut &>	ObPxTabletRange::RangeCut &range_cut = const_cast<ObPxTabletRange::RangeCut &>(range_->range_cut_);
+src/sql/engine/px/ob_slice_calc.cpp	1366	ObRangeSliceIdCalc::get_slice_idx_batch_inner	const_cast<ObPxTabletRange::RangeCut &>	ObPxTabletRange::RangeCut &range_cut = const_cast<ObPxTabletRange::RangeCut &>(range_->range_cut_);
+src/sql/engine/px/p2p_datahub/ob_pushdown_topn_filter_msg.cpp	437	ObPushDownTopNFilterMsg::dynamic_copy_cell	const_cast<char *>	memcpy(const_cast<char *>(target.ptr_), src.ptr_, src.len_);
+src/sql/engine/px/p2p_datahub/ob_runtime_filter_msg.cpp	774	ObRFRangeFilterMsg::dynamic_copy_cell	const_cast<char *>	memcpy(const_cast<char *>(target.ptr_), src.ptr_, src.len_);
+src/sql/engine/recursive_cte/ob_fake_cte_table_op.cpp	148	ObFakeCTETableOp::reuse	const_cast<ObChunkDatumStore::StoredRow *>	allocator_->free(const_cast<ObChunkDatumStore::StoredRow *>(pump_row_));
+src/sql/engine/recursive_cte/ob_fake_cte_table_op.cpp	178	ObFakeCTETableOp::add_single_row	const_cast<ObChunkDatumStore::StoredRow *>	old_row = const_cast<ObChunkDatumStore::StoredRow *>(pump_row_);
+src/sql/engine/recursive_cte/ob_fake_cte_table_op.cpp	283	ObFakeCTETableOp::deep_copy_row	const_cast<ObDatum *>	} else if (OB_FAIL(copy_datums(new_row, const_cast<ObDatum *>(src_row->cells()),
+src/sql/engine/recursive_cte/ob_fake_cte_table_op.cpp	317	ObFakeCTETableOp::to_expr	const_cast<char *>	MEMCPY(const_cast<char *>(dst.ptr_), src.ptr_, src.len_);
+src/sql/engine/recursive_cte/ob_fake_cte_table_op.cpp	364	ObFakeCTETableOp::attach_rows	const_cast<char *>	MEMCPY(const_cast<char *>(dst.ptr_), src.ptr_, src.len_);
+src/sql/engine/recursive_cte/ob_fake_cte_table_op.cpp	375	ObFakeCTETableOp::attach_rows	const_cast<char *>	MEMCPY(const_cast<char *>(dst.ptr_), src.ptr_, src.len_);

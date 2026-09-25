@@ -1,0 +1,12 @@
+file	line	symbol	construct	text
+src/storage/vector_index/ob_vector_kmeans_ctx.cpp	104	ObKmeansCtx::append_sample_vector	budget-backed -4013: vector module (vsag allocator, vector memory limit)	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/storage/vector_index/ob_vector_kmeans_ctx.cpp	248	ObKmeansAlgo::init_first_center	budget-backed -4013: vector module (vsag allocator, vector memory limit)	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/storage/vector_index/ob_vector_kmeans_ctx.cpp	397	ObSingleKmeansExecutor::init	budget-backed -4013: vector module (vsag allocator, vector memory limit)	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/storage/vector_index/ob_vector_kmeans_ctx.cpp	504	ObMultiKmeansExecutor::init	budget-backed -4013: vector module (vsag allocator, vector memory limit)	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/storage/vector_index/ob_vector_kmeans_ctx.cpp	844	ObElkanKmeansAlgo::do_kmeans	budget-backed -4013: vector module (vsag allocator, vector memory limit)	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/storage/vector_index/ob_vector_kmeans_ctx.cpp	853	ObElkanKmeansAlgo::do_kmeans	budget-backed -4013: vector module (vsag allocator, vector memory limit)	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/storage/vector_index/ob_vector_kmeans_ctx.cpp	1031	ObIvfFlatBuildHelper::init_kmeans_ctx	budget-backed -4013: vector module (vsag allocator, vector memory limit)	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/storage/vector_index/ob_vector_kmeans_ctx.cpp	1123	ObIvfSq8BuildHelper::init_kmeans_ctx	budget-backed -4013: vector module (vsag allocator, vector memory limit)	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/storage/vector_index/ob_vector_kmeans_ctx.cpp	1126	ObIvfSq8BuildHelper::init_kmeans_ctx	budget-backed -4013: vector module (vsag allocator, vector memory limit)	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/storage/vector_index/ob_vector_kmeans_ctx.cpp	1129	ObIvfSq8BuildHelper::init_kmeans_ctx	budget-backed -4013: vector module (vsag allocator, vector memory limit)	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/storage/vector_index/ob_vector_kmeans_ctx.cpp	1174	ObIvfPqBuildHelper::init_kmeans_ctx	budget-backed -4013: vector module (vsag allocator, vector memory limit)	ret = OB_ALLOCATE_MEMORY_FAILED;

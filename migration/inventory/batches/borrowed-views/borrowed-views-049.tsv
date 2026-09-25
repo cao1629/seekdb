@@ -1,0 +1,57 @@
+file	line	symbol	construct	text
+src/storage/access/ob_sstable_multi_version_row_iterator.h	48	ObSSTableMultiVersionRowGetter::multi_version_range_	member ObDatumRange (value) of type blocksstable::ObDatumRange	blocksstable::ObDatumRange multi_version_range_;
+src/storage/access/ob_sstable_multi_version_row_iterator.h	51	ObSSTableMultiVersionRowGetter::base_rowkey_	member ObDatumRowkey (pointer) of type const blocksstable::ObDatumRowkey *	const blocksstable::ObDatumRowkey *base_rowkey_;
+src/storage/access/ob_sstable_multi_version_row_iterator.h	52	ObSSTableMultiVersionRowGetter::not_exist_row_	member ObDatumRow (value) of type blocksstable::ObDatumRow	blocksstable::ObDatumRow not_exist_row_;
+src/storage/access/ob_sstable_multi_version_row_iterator.h	74	ObSSTableMultiVersionRowScanner::base_range_	member ObDatumRange (pointer) of type const blocksstable::ObDatumRange *	const blocksstable::ObDatumRange *base_range_;
+src/storage/access/ob_sstable_multi_version_row_iterator.h	101	ObSSTableMultiVersionRowMultiGetter::multi_version_ranges_	member container of ObDatumRange of type common::ObSEArray<blocksstable::ObDatumRange, 4>	common::ObSEArray<blocksstable::ObDatumRange, 4> multi_version_ranges_;
+src/storage/access/ob_sstable_multi_version_row_iterator.h	103	ObSSTableMultiVersionRowMultiGetter::not_exist_row_	member ObDatumRow (value) of type blocksstable::ObDatumRow	blocksstable::ObDatumRow not_exist_row_;
+src/storage/access/ob_sstable_multi_version_row_iterator.h	104	ObSSTableMultiVersionRowMultiGetter::pending_row_	member ObDatumRow (pointer) of type const blocksstable::ObDatumRow *	const blocksstable::ObDatumRow *pending_row_;
+src/storage/access/ob_sstable_multi_version_row_iterator.h	105	ObSSTableMultiVersionRowMultiGetter::base_rowkeys_	member container of ObDatumRowkey of type const common::ObIArray<blocksstable::ObDatumRowkey> *	const common::ObIArray<blocksstable::ObDatumRowkey> *base_rowkeys_;
+src/storage/access/ob_sstable_multi_version_row_iterator.h	126	ObSSTableMultiVersionRowMultiScanner::multi_version_ranges_	member container of ObDatumRange of type common::ObSEArray<blocksstable::ObDatumRange, 4>	common::ObSEArray<blocksstable::ObDatumRange, 4> multi_version_ranges_;
+src/storage/access/ob_sstable_row_lock_checker.h	57	ObSSTableRowLockChecker::base_rowkey_	member ObDatumRowkey (pointer) of type const blocksstable::ObDatumRowkey *	const blocksstable::ObDatumRowkey *base_rowkey_;
+src/storage/access/ob_sstable_row_lock_checker.h	58	ObSSTableRowLockChecker::multi_version_range_	member ObDatumRange (value) of type blocksstable::ObDatumRange	blocksstable::ObDatumRange multi_version_range_;
+src/storage/access/ob_sstable_row_scanner.ipp	503	ObSSTableRowScanner::get_next_rowkey	allocator in, arena view out: blocksstable::ObDatumRowkey& rowkey	inline int ObSSTableRowScanner<PrefetchType>::get_next_rowkey(const bool need_set_border_rowkey,
+src/storage/access/ob_sstable_row_whole_scanner.h	123	ObSSTableRowWholeScanner::query_range_	member ObDatumRange (value) of type blocksstable::ObDatumRange	blocksstable::ObDatumRange query_range_;
+src/storage/access/ob_store_row_iterator.h	127	ObStoreRowIterator::get_next_rowkey	allocator in, arena view out: blocksstable::ObDatumRowkey& rowkey	virtual int get_next_rowkey(const bool need_set_border_rowkey,
+src/storage/access/ob_table_scan_iterator.h	122	ObTableScanIterator::sample_ranges_	member container of ObDatumRange of type ObSEArray<ObDatumRange, 1>	ObSEArray<ObDatumRange, 1> sample_ranges_;
+src/storage/access/ob_table_scan_range.h	70	ObTableScanRange::rowkeys_	member container of ObDatumRowkey of type common::ObSEArray<blocksstable::ObDatumRowkey, DEFAULT_RANGE_CNT>	common::ObSEArray<blocksstable::ObDatumRowkey, DEFAULT_RANGE_CNT> rowkeys_;
+src/storage/access/ob_table_scan_range.h	71	ObTableScanRange::ranges_	member container of ObDatumRange of type common::ObSEArray<blocksstable::ObDatumRange, DEFAULT_RANGE_CNT>	common::ObSEArray<blocksstable::ObDatumRange, DEFAULT_RANGE_CNT> ranges_;
+src/storage/access/ob_vector_store.h	110	ObVectorStore::default_datums_	member container of ObStorageDatum of type common::ObFixedArray<blocksstable::ObStorageDatum, common::ObIAllocator>	common::ObFixedArray<blocksstable::ObStorageDatum, common::ObIAllocator> default_datums_;
+src/storage/allocator/ob_memstore_allocator.h	46	FrozenMemstoreInfoLogger::buf_	member raw bytes (pointer) of type char*	char* buf_;
+src/storage/allocator/ob_memstore_allocator.h	56	ActiveMemstoreInfoLogger::buf_	member raw bytes (pointer) of type char*	char* buf_;
+src/storage/blocksstable/encoding/ob_column_datum_iter.h	48	ObColumnDatumIter::col_datums_	member ObColDatums (reference) of type const ObColDatums &	const ObColDatums &col_datums_;
+src/storage/blocksstable/encoding/ob_dict_decoder.h	297	ObDictDecoder::var_data_	member raw bytes (pointer) of type const char *	const char *var_data_;
+src/storage/blocksstable/encoding/ob_dict_decoder.h	330	ObFixedDictDataLocator_T::dict_payload_	member raw bytes (pointer) of type const char *__restrict	const char *__restrict dict_payload_;
+src/storage/blocksstable/encoding/ob_dict_decoder.h	368	ObVarDictDataLocator_T::dict_payload_	member raw bytes (pointer) of type const char *__restrict	const char *__restrict dict_payload_;
+src/storage/blocksstable/encoding/ob_encoding_bitset.h	228	ObBitMapMetaBaseWriter::col_datums_	member ObColDatums (pointer) of type const ObColDatums *	const ObColDatums *col_datums_;
+src/storage/blocksstable/encoding/ob_encoding_hash_util.h	48	ObEncodingHashNode::datum_	member ObDatum (pointer) of type const ObDatum *	const ObDatum *datum_;
+src/storage/blocksstable/encoding/ob_encoding_util.h	740	ObEncodingRowBufHolder::alloc_buf_	member raw bytes (pointer) of type char *	char *alloc_buf_;
+src/storage/blocksstable/encoding/ob_hex_string_encoder.h	59	ObHexStringPacker::data_	member raw bytes (pointer) of type unsigned char *	unsigned char *data_;
+src/storage/blocksstable/encoding/ob_hex_string_encoder.h	76	ObHexStringUnpacker::map_	member raw bytes (pointer) of type const unsigned char *	const unsigned char *map_;
+src/storage/blocksstable/encoding/ob_hex_string_encoder.h	77	ObHexStringUnpacker::data_	member raw bytes (pointer) of type const unsigned char *	const unsigned char *data_;
+src/storage/blocksstable/encoding/ob_micro_block_decoder.cpp	71	ObDecoderArrayAllocator::buf_	member raw bytes (pointer) of type char *	char *buf_;
+src/storage/blocksstable/encoding/ob_micro_block_decoder.h	122	ObIEncodeBlockReader::meta_data_	member raw bytes (pointer) of type const char *	const char *meta_data_;
+src/storage/blocksstable/encoding/ob_micro_block_decoder.h	123	ObIEncodeBlockReader::row_data_	member raw bytes (pointer) of type const char *	const char *row_data_;
+src/storage/blocksstable/encoding/ob_micro_block_decoder.h	135	ObIEncodeBlockReader::allocated_decoders_buf_	member raw bytes (pointer) of type char *	char *allocated_decoders_buf_;
+src/storage/blocksstable/encoding/ob_micro_block_decoder.h	401	ObMicroBlockDecoder::meta_data_	member raw bytes (pointer) of type const char *	const char *meta_data_;
+src/storage/blocksstable/encoding/ob_micro_block_decoder.h	402	ObMicroBlockDecoder::row_data_	member raw bytes (pointer) of type const char *	const char *row_data_;
+src/storage/blocksstable/encoding/ob_micro_block_decoder.h	415	ObMicroBlockDecoder::allocated_decoders_buf_	member raw bytes (pointer) of type char *	char *allocated_decoders_buf_;
+src/storage/blocksstable/encoding/ob_micro_block_encoder.h	162	ObMicroBlockEncoder::all_col_datums_	member container of ObColDatums of type common::ObArray<ObColDatums *>	common::ObArray<ObColDatums *> all_col_datums_;
+src/storage/blocksstable/encoding/ob_multi_prefix_tree.h	72	ObMultiPrefixTree::CellNode::datum_	member ObDatum (pointer) of type const ObDatum *	const ObDatum *datum_;
+src/storage/blocksstable/encoding/ob_multi_prefix_tree.h	164	ObMultiPrefixTree::TreeNode::prefix_	member ObDatum (pointer) of type const common::ObDatum *	const common::ObDatum *prefix_;
+src/storage/blocksstable/encoding/ob_multi_prefix_tree.h	175	ObMultiPrefixTree::HashNode::step_str_	member raw bytes (pointer) of type const char *	const char *step_str_;
+src/storage/blocksstable/encoding/ob_new_column_decoder.cpp	30	ObNewColumnCommonDecoder::decode	allocator in, arena view out: common::ObDatum &datum	int ObNewColumnCommonDecoder::decode(
+src/storage/blocksstable/encoding/ob_raw_decoder.h	319	ObRawDecoder::meta_data_	member raw bytes (pointer) of type const char *	const char *meta_data_;
+src/storage/blocksstable/encoding/ob_row_index.h	71	ObVarRowIndex::data_	member raw bytes (pointer) of type const char *	const char *data_;
+src/storage/blocksstable/encoding/ob_row_index.h	97	ObFixRowIndex::data_	member raw bytes (pointer) of type const char *	const char *data_;
+src/storage/blocksstable/encoding/ob_string_diff_encoder.h	155	ObStringDiffEncoder::first_string_	member raw bytes (pointer) of type const char *	const char *first_string_; // first cell data
+src/storage/blocksstable/encoding/ob_string_prefix_decoder.h	72	ObStringPrefixDecoder::meta_data_	member raw bytes (pointer) of type const char *	const char *meta_data_;
+src/storage/blocksstable/index_block/ob_agg_row_struct.h	132	ObAggRowReader::buf_	member raw bytes (pointer) of type const char *	const char *buf_;
+src/storage/blocksstable/index_block/ob_clustered_index_block_writer.h	115	ObClusteredIndexBlockWriter::last_rowkey_	member ObDatumRowkey (value) of type ObDatumRowkey	ObDatumRowkey last_rowkey_;
+src/storage/blocksstable/index_block/ob_ddl_sstable_scan_merge.h	70	ObDDLSSTableMergeLoserTreeItem::agg_row_buf_	member raw bytes (pointer) of type const char *	const char *agg_row_buf_;
+src/storage/blocksstable/index_block/ob_index_block_aggregator.cpp	1427	ObISkipIndexAggregator::init_col_aggregator	allocator in, arena view out: ObStorageDatum &result_datum	int ObISkipIndexAggregator::init_col_aggregator(
+src/storage/blocksstable/index_block/ob_index_block_aggregator.h	64	ObSkipIndexAggResult::agg_row_	member ObDatumRow (value) of type ObDatumRow	ObDatumRow agg_row_;
+src/storage/blocksstable/index_block/ob_index_block_aggregator.h	112	ObIColAggregator::result_	member ObStorageDatum (pointer) of type ObStorageDatum *	ObStorageDatum *result_;
+src/storage/blocksstable/index_block/ob_index_block_aggregator.h	244	ObMicroDataPreAggParam::col_datums_	member ObDatum (pointer) of type const ObPodFix2dArray<ObDatum, 1 << 20, common::OB_MALLOC_NORMAL_BLOCK_SIZE> *	const ObPodFix2dArray<ObDatum, 1 << 20, common::OB_MALLOC_NORMAL_BLOCK_SIZE> *col_datums_;
+src/storage/blocksstable/index_block/ob_index_block_bare_iterator.h	54	ObIndexBlockBareIterator::row_	member ObDatumRow (value) of type blocksstable::ObDatumRow	blocksstable::ObDatumRow row_;
+src/storage/blocksstable/index_block/ob_index_block_builder.cpp	1623	ObSSTableIndexBuilder::load_single_macro_block	allocator in, arena view out: const char *&data_buf	int ObSSTableIndexBuilder::load_single_macro_block(

@@ -1,0 +1,40 @@
+file	line	symbol	construct	text
+src/pl/ob_pl.cpp	1079	ObPL::execute	cross-thread object constructed with an allocator: ObPLFunction	OX (routine = new(routine)ObPLFunction(mem_context));
+src/pl/ob_pl_build.cpp	1202	ObPLBuilder::compile_subprogram_table	cross-thread object constructed with an allocator: ObPLFunction	new (routine) ObPLFunction(compile_unit.get_mem_context());
+src/query/api/query/optimizer/stat/ob_opt_column_stat.h	356	ObOptColumnStat::min_value_	borrowed view member of cross-thread class: common::ObObj	common::ObObj min_value_;
+src/query/api/query/optimizer/stat/ob_opt_column_stat.h	357	ObOptColumnStat::max_value_	borrowed view member of cross-thread class: common::ObObj	common::ObObj max_value_;
+src/query/api/query/optimizer/stat/ob_opt_column_stat.h	359	ObOptColumnStat::llc_bitmap_	borrowed view member of cross-thread class: char *	char *llc_bitmap_;
+src/query/api/query/optimizer/stat/ob_opt_column_stat.h	366	ObOptColumnStat::inner_allocator_	allocator member of cross-thread class: common::ObArenaAllocator	common::ObArenaAllocator inner_allocator_;
+src/query/api/query/optimizer/stat/ob_opt_column_stat.h	367	ObOptColumnStat::allocator_	allocator member of cross-thread class: common::ObIAllocator &	common::ObIAllocator &allocator_;
+src/rootserver/ddl_task/ob_column_redefinition_task.h	72	ObColumnRedefinitionTask::allocator_	allocator member of cross-thread class: common::ObArenaAllocator	common::ObArenaAllocator allocator_;
+src/rootserver/ddl_task/ob_constraint_task.h	148	ObConstraintTask::allocator_	allocator member of cross-thread class: common::ObArenaAllocator	common::ObArenaAllocator allocator_;
+src/rootserver/ddl_task/ob_ddl_retry_task.h	71	ObDDLRetryTask::forward_user_message_	borrowed view member of cross-thread class: common::ObString	common::ObString forward_user_message_;
+src/rootserver/ddl_task/ob_ddl_retry_task.h	72	ObDDLRetryTask::allocator_	allocator member of cross-thread class: common::ObArenaAllocator	common::ObArenaAllocator allocator_;
+src/rootserver/ddl_task/ob_ddl_scheduler.h	627	ObDDLScheduler::allocator_	allocator member of cross-thread class: common::ObConcurrentFIFOAllocator	common::ObConcurrentFIFOAllocator allocator_;
+src/rootserver/ddl_task/ob_ddl_task.h	740	ObDDLTask::ddl_stmt_str_	borrowed view member of cross-thread class: ObString	ObString ddl_stmt_str_;
+src/rootserver/ddl_task/ob_ddl_task.h	741	ObDDLTask::allocator_	allocator member of cross-thread class: common::ObArenaAllocator	common::ObArenaAllocator allocator_;
+src/rootserver/ddl_task/ob_index_build_task.h	72	ObIndexSSTableBuildTask::allocator_	allocator member of cross-thread class: common::ObArenaAllocator	common::ObArenaAllocator allocator_;
+src/rootserver/ddl_task/ob_rebuild_index_task.h	108	ObRebuildIndexTask::target_object_name_	borrowed view member of cross-thread class: ObString	ObString target_object_name_;
+src/rootserver/ddl_task/ob_table_redefinition_task.h	108	ObTableRedefinitionTask::allocator_	allocator member of cross-thread class: common::ObArenaAllocator	common::ObArenaAllocator allocator_;
+src/rootserver/ob_server_thread_helper.h	71	ObServerThreadHelper::thread_name_	borrowed view member of cross-thread class: const char*	const char* thread_name_;
+src/share/schema/ob_multi_version_schema_service.cpp	1411	ObMultiVersionSchemaService::alloc_and_put_schema_mgr_	hand-off of allocator-backed object new_mgr via put	} else if (OB_FAIL(schema_mgr_cache.put(new_mgr, eli_schema_mgr))) {
+src/sql/dtl/ob_dtl_linked_buffer.h	544	ObDtlLinkedBuffer::buf_	borrowed view member of cross-thread class: char *	char * buf_;
+src/sql/engine/ob_physical_plan.h	412	ObPhysicalPlan::autoinc_params_	allocator-backed container member of cross-thread class: common::ObFixedArray<share::AutoincParam, common::ObIAllocator>	common::ObFixedArray<share::AutoincParam, common::ObIAllocator> autoinc_params_; //auto-increment param
+src/sql/engine/ob_physical_plan.h	417	ObPhysicalPlan::vars_	allocator-backed container member of cross-thread class: common::ObFixedArray<ObVarInfo, common::ObIAllocator>	common::ObFixedArray<ObVarInfo, common::ObIAllocator> vars_;
+src/sql/engine/ob_physical_plan.h	495	ObPhysicalPlan::bit_set_	allocator-backed container member of cross-thread class: common::ObBitSet<common::OB_DEFAULT_BITSET_SIZE, common::ModulePageAllocator>	common::ObBitSet<common::OB_DEFAULT_BITSET_SIZE, common::ModulePageAllocator> bit_set_;
+src/sql/engine/ob_physical_plan.h	521	ObPhysicalPlan::all_local_session_vars_	allocator-backed container member of cross-thread class: common::ObFixedArray<ObLocalSessionVar, common::ObIAllocator>	common::ObFixedArray<ObLocalSessionVar, common::ObIAllocator> all_local_session_vars_;
+src/sql/engine/px/datahub/components/ob_dh_opt_stats_gather.cpp	51	OB_DEF_DESERIALIZE(ObOptStatsGatherPieceMsg)	cross-thread object placed in allocator memory: ObOptTableStat	ObOptTableStat *tmp_stat = OB_NEWx(ObOptTableStat, (&arena_));
+src/sql/engine/px/ob_dfo.cpp	782	ObPxInitTaskArgs::init_deserialize_param	cross-thread object constructed with an allocator: ObPhysicalPlan	inner_phy_plan_ = new (plan_buf) ObPhysicalPlan(mem_context);
+src/sql/engine/px/ob_px_sqc_handler.cpp	186	ObPxSqcHandler::init	cross-thread object constructed with an allocator: ObPhysicalPlan	} else if (FALSE_IT(des_phy_plan_ = new(buf) ObPhysicalPlan(mem_context_))) {
+src/sql/executor/ob_maintain_dependency_info_task.h	86	ObMaintainObjDepInfoTask::alloc_	allocator member of cross-thread class: ObArenaAllocator	ObArenaAllocator alloc_;
+src/sql/optimizer/stat/ob_dbms_stats_copy_table_stats.cpp	28	CopyTableStatHelper::copy_part_stat	cross-thread object placed in allocator memory: ObOptTableStat	} else if (OB_ISNULL(dst_part_stat = OB_NEWx(ObOptTableStat, allocator_))) {
+src/sql/optimizer/stat/ob_dbms_stats_utils.cpp	1754	ObDbmsStatsUtils::copy_prefix_column_stat_to_text	cross-thread object constructed with an allocator: ObOptColumnStat	} else if (OB_FALSE_IT(text_col_stat = new (ptr) ObOptColumnStat(allocator))) {
+src/sql/optimizer/stat/ob_opt_column_stat.cpp	468	ObOptColumnStat::malloc_new_column_stat	cross-thread object placed in allocator memory: ObOptColumnStat	ObOptColumnStat *new_col_stat = OB_NEWx(ObOptColumnStat, (&allocator), allocator);
+src/sql/pl/ob_pl.h	238	ObPLExecutableUnit::routine_table_	allocator-backed container member of cross-thread class: common::ObFixedArray<ObPLFunction*, common::ObIAllocator>	common::ObFixedArray<ObPLFunction*, common::ObIAllocator> routine_table_;
+src/sql/pl/ob_pl.h	336	ObPLFunction::variables_	allocator-backed container member of cross-thread class: common::ObFixedArray<ObPLDataType, common::ObIAllocator>	common::ObFixedArray<ObPLDataType, common::ObIAllocator> variables_; //Generated from the global symbol table of ObPLSymbolTable, all input and output parameters and all variables used within the PL body
+src/sql/pl/ob_pl.h	337	ObPLFunction::default_idxs_	allocator-backed container member of cross-thread class: common::ObFixedArray<int64_t, common::ObIAllocator>	common::ObFixedArray<int64_t, common::ObIAllocator> default_idxs_;
+src/sql/pl/ob_pl.h	344	ObPLFunction::function_name_	borrowed view member of cross-thread class: common::ObString	common::ObString function_name_;
+src/sql/pl/ob_pl.h	345	ObPLFunction::package_name_	borrowed view member of cross-thread class: common::ObString	common::ObString package_name_;
+src/sql/pl/ob_pl.h	346	ObPLFunction::database_name_	borrowed view member of cross-thread class: common::ObString	common::ObString database_name_;
+src/sql/pl/ob_pl.h	347	ObPLFunction::priv_user_	borrowed view member of cross-thread class: common::ObString	common::ObString priv_user_;
+src/sql/pl/pl_cache/ob_pl_cache.h	405	ObPLObjectSet::sql_id_	borrowed view member of cross-thread class: common::ObString	common::ObString sql_id_;

@@ -1,0 +1,81 @@
+file	line	symbol	construct	text
+src/oblib/common/mysqlclient/ob_mysql_result.h	40	#define EXTRACT_BOOL_FIELD_MYSQL_SKIP_RET	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; \
+src/oblib/common/mysqlclient/ob_mysql_result.h	59	#define EXTRACT_BOOL_FIELD_TO_CLASS_MYSQL_SKIP_RET	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; \
+src/oblib/common/mysqlclient/ob_mysql_result.h	116	#define EXTRACT_BOOL_FIELD_TO_CLASS_MYSQL_WITH_DEFAULT_VALUE	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; \
+src/oblib/common/mysqlclient/ob_mysql_result.h	129	#define EXTRACT_BOOL_FIELD_TO_CLASS_MYSQL_WITH_DEFAULT_VALUE	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; \
+src/oblib/common/mysqlclient/ob_mysql_result.h	160	#define EXTRACT_INT_FIELD_MYSQL_WITH_DEFAULT_VALUE	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; \
+src/oblib/common/mysqlclient/ob_mysql_result.h	173	#define EXTRACT_INT_FIELD_MYSQL_WITH_DEFAULT_VALUE	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; \
+src/oblib/common/mysqlclient/ob_mysql_result.h	200	#define EXTRACT_UINT_FIELD_MYSQL_WITH_DEFAULT_VALUE	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; \
+src/oblib/common/mysqlclient/ob_mysql_result.h	213	#define EXTRACT_UINT_FIELD_MYSQL_WITH_DEFAULT_VALUE	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; \
+src/oblib/common/mysqlclient/ob_mysql_result.h	236	#define EXTRACT_INT_FIELD_MYSQL_SKIP_RET	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; \
+src/oblib/common/mysqlclient/ob_mysql_result.h	255	#define EXTRACT_UINT_FIELD_MYSQL_SKIP_RET	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; \
+src/oblib/common/mysqlclient/ob_mysql_result.h	274	#define EXTRACT_DATETIME_FIELD_MYSQL_SKIP_RET	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; \
+src/oblib/common/mysqlclient/ob_mysql_result.h	384	#define EXTRACT_UINT_FIELD_TO_CLASS_MYSQL_WITH_DEFAULT_VALUE	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; \
+src/oblib/common/mysqlclient/ob_mysql_result.h	397	#define EXTRACT_UINT_FIELD_TO_CLASS_MYSQL_WITH_DEFAULT_VALUE	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; \
+src/oblib/common/mysqlclient/ob_mysql_result.h	420	#define EXTRACT_INT_FIELD_TO_CLASS_MYSQL_SKIP_RET	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; \
+src/oblib/common/mysqlclient/ob_mysql_result.h	447	#define EXTRACT_INT_FIELD_TO_CLASS_MYSQL_WITH_DEFAULT_VALUE	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; \
+src/oblib/common/mysqlclient/ob_mysql_result.h	460	#define EXTRACT_INT_FIELD_TO_CLASS_MYSQL_WITH_DEFAULT_VALUE	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; \
+src/oblib/common/mysqlclient/ob_mysql_result.h	483	#define EXTRACT_DOUBLE_FIELD_MYSQL_SKIP_RET	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; \
+src/oblib/common/mysqlclient/ob_mysql_result.h	538	#define EXTRACT_DOUBLE_FIELD_TO_CLASS_MYSQL_WITH_DEFAULT_VALUE	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; \
+src/oblib/common/mysqlclient/ob_mysql_result.h	551	#define EXTRACT_DOUBLE_FIELD_TO_CLASS_MYSQL_WITH_DEFAULT_VALUE	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; \
+src/oblib/common/mysqlclient/ob_mysql_result.h	659	#define EXTRACT_VARCHAR_FIELD_MYSQL_SKIP_RET	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; \
+src/oblib/common/mysqlclient/ob_mysql_result.h	678	#define EXTRACT_VARCHAR_FIELD_MYSQL_SKIP_RET_WITH_COLUMN_INFO	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; \
+src/oblib/common/mysqlclient/ob_mysql_result.h	683	#define EXTRACT_VARCHAR_FIELD_MYSQL_SKIP_RET_WITH_COLUMN_INFO	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; \
+src/oblib/common/mysqlclient/ob_mysql_result.h	706	#define EXTRACT_VARCHAR_FIELD_MYSQL_WITH_DEFAULT_VALUE	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; \
+src/oblib/common/mysqlclient/ob_mysql_result.h	719	#define EXTRACT_VARCHAR_FIELD_MYSQL_WITH_DEFAULT_VALUE	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; \
+src/oblib/common/mysqlclient/ob_mysql_result.h	746	#define EXTRACT_VARCHAR_FIELD_TO_CLASS_MYSQL_SKIP_RET	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; \
+src/oblib/common/mysqlclient/ob_mysql_result.h	774	#define EXTRACT_VARCHAR_FIELD_TO_CLASS_MYSQL_WITH_DEFAULT_VALUE	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; \
+src/oblib/common/mysqlclient/ob_mysql_result.h	825	#define EXTRACT_STRBUF_FIELD_MYSQL_SKIP_RET	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; \
+src/oblib/common/mysqlclient/ob_mysql_result.h	847	#define EXTRACT_STRBUF_FIELD_MYSQL_SKIP_RET_AND_TRUNCATION	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; \
+src/oblib/common/mysqlclient/ob_mysql_result.h	876	#define EXTRACT_STRBUF_FIELD_TO_CLASS_MYSQL_SKIP_RET	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; \
+src/oblib/common/mysqlclient/ob_mysql_result.h	910	#define EXTRACT_STRBUF_FIELD_TO_CLASS_MYSQL_WITH_DEFAULT_VALUE	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; \
+src/oblib/common/mysqlclient/ob_mysql_result.h	923	#define EXTRACT_STRBUF_FIELD_TO_CLASS_MYSQL_WITH_DEFAULT_VALUE	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; \
+src/oblib/common/mysqlclient/ob_mysql_result.h	1005	#define EXTRACT_DEFAULT_VALUE_FIELD_MYSQL	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;                                             \
+src/oblib/common/mysqlclient/ob_mysql_result.h	1011	#define EXTRACT_DEFAULT_VALUE_FIELD_MYSQL	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;                                                 \
+src/oblib/common/mysqlclient/ob_mysql_result.h	1144	#define EXTRACT_DEFAULT_VALUE_FIELD_MYSQL_V2	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;                                             \
+src/oblib/common/mysqlclient/ob_mysql_result.h	1150	#define EXTRACT_DEFAULT_VALUE_FIELD_MYSQL_V2	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;                                                 \
+src/oblib/common/mysqlclient/ob_mysql_result.h	1275	#define GET_COL_IGNORE_NULL	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;                           \
+src/oblib/common/mysqlclient/ob_mysql_result.h	1298	#define GET_COL_IGNORE_NULL_WITH_DEFAULT_VALUE	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;                                                         \
+src/oblib/common/mysqlclient/ob_mysql_result.h	1322	#define GET_TIMESTAMP_COL_BY_NAME_IGNORE_NULL_WITH_DEFAULT_VALUE	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;                                                         \
+src/oblib/common/mysqlclient/ob_mysql_result.h	1351	#define EXTRACT_INT_FIELD_TO_CLASS_MYSQL_AND_DEFAULT_VALUE	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; \
+src/oblib/common/mysqlclient/ob_mysql_result.h	1364	#define EXTRACT_INT_FIELD_TO_CLASS_MYSQL_AND_DEFAULT_VALUE	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; \
+src/oblib/common/mysqlclient/ob_mysql_result.h	1391	#define EXTRACT_UINT_FIELD_TO_CLASS_MYSQL_AND_DEFAULT_VALUE	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; \
+src/oblib/common/mysqlclient/ob_mysql_result.h	1404	#define EXTRACT_UINT_FIELD_TO_CLASS_MYSQL_AND_DEFAULT_VALUE	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; \
+src/oblib/common/mysqlclient/ob_mysql_result.h	1442	#define EXTRACT_TIMESTAMP_FIELD_TO_CLASS_MYSQL_SKIP_RET	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; \
+src/oblib/common/mysqlclient/ob_mysql_result.h	1478	#define EXTRACT_TIMESTAMP_FIELD_MYSQL_SKIP_RET	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;                                                 \
+src/oblib/common/mysqlclient/ob_mysql_result.h	1503	#define EXTRACT_INT_FIELD_FROM_NUMBER_SKIP_RET	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; \
+src/oblib/common/mysqlclient/ob_mysql_result.h	1531	#define EXTRACT_UINT_FIELD_FROM_NUMBER_SKIP_RET	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; \
+src/oblib/common/mysqlclient/ob_mysql_transaction.cpp	153	ObMySQLTransaction::get_stash_query	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/common/number/ob_number_v2.cpp	421	ObNumber::from_sci_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/common/number/ob_number_v2.cpp	460	ObNumber::from_v1_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/common/number/ob_number_v2.cpp	497	ObNumber::from_v2_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/common/number/ob_number_v2.cpp	699	ObNumber::from_v3_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/common/number/ob_number_v2.cpp	701	ObNumber::from_v3_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/common/number/ob_number_v2.cpp	746	ObNumber::from_v2_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/common/number/ob_number_v2.cpp	864	ObNumber::floor	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/common/number/ob_number_v2.cpp	937	ObNumber::ceil	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/common/number/ob_number_v2.cpp	1008	ObNumber::trunc	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/common/number/ob_number_v2.cpp	1026	ObNumber::check_and_round	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/common/number/ob_number_v2.cpp	1238	ObNumber::check_range	conditional reset (ternary yields OB_SUCCESS)	ret = (OB_ITER_END == ret) ? OB_SUCCESS : ret;
+src/oblib/common/number/ob_number_v2.cpp	1283	ObNumber::check_precision_	conditional reset (ternary yields OB_SUCCESS)	ret = (OB_ITER_END == ret) ? OB_SUCCESS : ret;
+src/oblib/common/number/ob_number_v2.cpp	1339	ObNumber::round_scale_	conditional reset (ternary yields OB_SUCCESS)	ret = (OB_ITER_END == ret) ? OB_SUCCESS : ret;
+src/oblib/common/number/ob_number_v2.cpp	1948	ObNumber::trunc_scale_	conditional reset (ternary yields OB_SUCCESS)	ret = (OB_ITER_END == ret) ? OB_SUCCESS : ret;
+src/oblib/common/number/ob_number_v2.cpp	2372	ObNumber::format_v1	conditional reset (ternary yields OB_SUCCESS)	ret = (OB_ITER_END == tmp_ret) ? OB_SUCCESS : tmp_ret;
+src/oblib/common/number/ob_number_v2.cpp	3306	ObNumber::atan	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/common/number/ob_number_v2.cpp	3636	ObNumber::add_v2_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/common/number/ob_number_v2.cpp	3766	ObNumber::add_v3	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/common/number/ob_number_v2.cpp	3874	ObNumber::sub_v2_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/common/number/ob_number_v2.cpp	3884	ObNumber::sub_v2_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/common/number/ob_number_v2.cpp	4049	ObNumber::sub_v3	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/common/number/ob_number_v2.cpp	4272	ObNumber::mul_v2_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/common/number/ob_number_v2.cpp	4393	ObNumber::mul_v3	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/common/number/ob_number_v2.cpp	4533	ObNumber::div_v2_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/common/number/ob_number_v2.cpp	4612	ObNumber::div_v3	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/common/number/ob_number_v2.cpp	4797	ObNumber::rem_v2_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/common/number/ob_number_v2.cpp	4878	ObNumber::rem_v3	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/common/number/ob_number_v2.cpp	6402	ObCalcVector::init	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/common/number/ob_number_v2.h	2206	ObNumber::round_v2	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/common/number/ob_number_v2.h	2221	ObNumber::round_v3	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/common/ob_data_version_mgr.cpp	144	ObDataVersionMgr::load_from_file	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/common/object/ob_object.cpp	1652	ObObj::print_sql_literal	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/oblib/common/object/ob_object.cpp	2005	ObObj::convert_string_value_charset	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;

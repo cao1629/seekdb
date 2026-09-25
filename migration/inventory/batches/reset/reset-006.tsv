@@ -1,0 +1,120 @@
+file	line	symbol	construct	text
+src/observer/vector_index/ob_plugin_vector_index_service.cpp	71	ObPluginVectorIndexMgr::release_all_adapters	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // continue release
+src/observer/vector_index/ob_plugin_vector_index_service.cpp	79	ObPluginVectorIndexMgr::release_all_adapters	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // continue release
+src/observer/vector_index/ob_plugin_vector_index_service.cpp	87	ObPluginVectorIndexMgr::release_all_adapters	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // continue release
+src/observer/vector_index/ob_plugin_vector_index_service.cpp	95	ObPluginVectorIndexMgr::release_all_adapters	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // continue release
+src/observer/vector_index/ob_plugin_vector_index_service.cpp	229	ObPluginVectorIndexMgr::get_adapter_inst_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // not in partial adapter, try to get complete adapter
+src/observer/vector_index/ob_plugin_vector_index_service.cpp	681	ObPluginVectorIndexMgr::check_and_merge_partial_inner	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // continue handle valid candidates
+src/observer/vector_index/ob_plugin_vector_index_service.cpp	1342	ObPluginVectorIndexMgr::create_ivf_cache_mgr	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/vector_index/ob_plugin_vector_index_service.cpp	1421	ObPluginVectorIndexService::get_ivf_aux_info	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/vector_index/ob_plugin_vector_index_service.h	532	ObPluginVectorIndexService::process_ivf_aux_info	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/vector_index/ob_plugin_vector_index_util.cpp	401	ObPluginVectorIndexHelper::driect_merge_delta_and_snap_vids	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/vector_index/ob_plugin_vector_index_util.cpp	404	ObPluginVectorIndexHelper::driect_merge_delta_and_snap_vids	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/vector_index/ob_plugin_vector_index_util.cpp	547	ObPluginVectorIndexHelper::get_vector_memory_limit_size	ret = OB_SUCCESS (after other code on the line)	bool ret = OB_SUCCESS;
+src/observer/vector_index/ob_plugin_vector_index_utils.cpp	154	ObPluginVectorIndexUtils::read_object_from_data_table_iter	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/vector_index/ob_plugin_vector_index_utils.cpp	258	ObPluginVectorIndexUtils::read_object_from_embedded_table_iter	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/vector_index/ob_plugin_vector_index_utils.cpp	484	ObPluginVectorIndexUtils::read_vector_info	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // read next vid
+src/observer/vector_index/ob_plugin_vector_index_utils.cpp	517	ObPluginVectorIndexUtils::read_vector_info	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/vector_index/ob_plugin_vector_index_utils.cpp	565	ObPluginVectorIndexUtils::read_vector_info	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/vector_index/ob_plugin_vector_index_utils.cpp	666	ObPluginVectorIndexUtils::try_sync_snapshot_memdata	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/vector_index/ob_plugin_vector_index_utils.cpp	1669	ObPluginVectorIndexUtils::erase_ivf_build_helper	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/vector_index/ob_plugin_vector_index_utils.cpp	1759	ObPluginVectorIndexUtils::fill_mem_context_detail_info	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/vector_index/ob_plugin_vector_index_utils.cpp	1761	ObPluginVectorIndexUtils::fill_mem_context_detail_info	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/vector_index/ob_plugin_vector_index_utils.cpp	1828	ObPluginVectorIndexUtils::fill_ivf_mem_context_detail_info	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/vector_index/ob_plugin_vector_index_utils.cpp	1830	ObPluginVectorIndexUtils::fill_ivf_mem_context_detail_info	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/vector_index/ob_vector_index_async_task.cpp	395	ObVecTaskManager::check_task_status	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/vector_index/ob_vector_index_async_task_util.cpp	187	ObVecIndexAsyncTaskOption::add_task_ctx	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/vector_index/ob_vector_index_async_task_util.cpp	202	ObVecIndexAsyncTaskOption::del_task_ctx	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/vector_index/ob_vector_index_async_task_util.cpp	216	ObVecIndexAsyncTaskOption::is_task_ctx_exist	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/vector_index/ob_vector_index_async_task_util.cpp	555	ObVecIndexAsyncTaskUtil::resume_task_from_inner_table	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // continue
+src/observer/vector_index/ob_vector_index_async_task_util.cpp	598	ObVecIndexAsyncTaskUtil::resume_task_from_inner_table	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/vector_index/ob_vector_index_async_task_util.cpp	639	ObVecIndexAsyncTaskUtil::read_vec_tasks	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/vector_index/ob_vector_index_async_task_util.cpp	743	ObVecIndexAsyncTaskUtil::add_sys_task	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/vector_index/ob_vector_index_async_task_util.cpp	1429	ObVecIndexAsyncTask::process_data_for_index	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/vector_index/ob_vector_index_async_task_util.cpp	1837	ObVecIndexAsyncTask::get_old_snapshot_data	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/vector_index/ob_vector_index_async_task_util.cpp	1883	ObVecIndexAsyncTask::delete_tablet_data	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/vector_index/ob_vector_index_async_task_util.cpp	1896	ObVecIndexAsyncTask::delete_tablet_data	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/vector_index/ob_vector_index_i_task_executor.cpp	226	ObVecITaskExecutor::clear_task_ctx	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/vector_index/ob_vector_index_util.cpp	1491	ObVectorIndexUtil::determine_vid_type	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/vector_index/ob_vector_index_util.cpp	2322	ObVectorIndexUtil::check_extra_info_size	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/vector_index/ob_vector_index_util.cpp	4888	ObVectorIndexUtil::get_dropping_vec_index_invisiable_table_schema	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/vector_index/ob_vector_index_util.cpp	4910	ObVectorIndexUtil::check_drop_vec_indexs_ith_valid	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/virtual_table/ob_all_virtual_all_tables.cpp	221	ObAllVirtualAllTables::get_table_stats	ret = OB_SUCCESS (line start) [not built]	ret = OB_SUCCESS;
+src/observer/virtual_table/ob_all_virtual_all_tables.cpp	245	ObAllVirtualAllTables::get_table_stats	ret = OB_SUCCESS (line start) [not built]	ret = OB_SUCCESS;
+src/observer/virtual_table/ob_all_virtual_change_stream_refresh_stat.cpp	84	ObAllVirtualChangeStreamRefreshStat::inner_get_next_row	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/virtual_table/ob_all_virtual_ctx_memory_info.cpp	122	ObAllVirtualCtxMemoryInfo::add_row	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/virtual_table/ob_all_virtual_dtl_interm_result_monitor.cpp	226	ObAllDtlIntermResultMonitor::fill_scanner	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/virtual_table/ob_all_virtual_mds_event_history.cpp	87	ObAllVirtualMdsEventHistory::point_read_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/virtual_table/ob_all_virtual_mds_node_stat.cpp	43	ApplyOnTabletOp::operator()	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/virtual_table/ob_all_virtual_mds_node_stat.cpp	95	ObAllVirtualMdsNodeStat::inner_get_next_row	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/virtual_table/ob_all_virtual_memory_info.cpp	134	ObAllVirtualMemoryInfo::inner_get_next_row	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/virtual_table/ob_all_virtual_memstore_info.cpp	101	ObAllVirtualMemstoreInfo::get_next_memtable	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/virtual_table/ob_all_virtual_obj_lock.cpp	170	ObAllVirtualObjLock::get_next_lock_op_iter	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/virtual_table/ob_all_virtual_obj_lock.cpp	247	ObAllVirtualObjLock::get_next_lock_op_iter_from_lock_memtable	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;  // continue
+src/observer/virtual_table/ob_all_virtual_outline.cpp	97	ObAllVirtualOutlineBase::is_database_recycle	ret = OB_SUCCESS (line start) [not built]	ret = OB_SUCCESS;
+src/observer/virtual_table/ob_all_virtual_ps_stat.cpp	87	ObAllVirtualPsStat::inner_get_next_row	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/virtual_table/ob_all_virtual_resource_limit_detail.cpp	70	ObResourceLimitDetailTable::get_next_resource_limit_val_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/virtual_table/ob_all_virtual_session_ps_info.cpp	114	ObAllVirtualSessionPsInfo::fill_cells	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/virtual_table/ob_all_virtual_session_ps_info.cpp	296	ObAllVirtualSessionPsInfo::ObSessionInfoIterator::next	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/virtual_table/ob_all_virtual_sql_plan.cpp	467	ObAllVirtualSqlPlan::dump_plans	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/virtual_table/ob_all_virtual_table_mgr.cpp	115	ObAllVirtualTableMgr::get_next_table	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/virtual_table/ob_all_virtual_tablet_info.cpp	99	ObAllVirtualTabletInfo::inner_get_next_row	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/virtual_table/ob_all_virtual_tablet_sstable_macro_info.cpp	210	ObAllVirtualTabletSSTableMacroInfo::get_next_macro_info	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/virtual_table/ob_all_virtual_tablet_sstable_macro_info.cpp	594	ObAllVirtualTabletSSTableMacroInfo::get_next_sstable	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/virtual_table/ob_all_virtual_tmp_file.cpp	73	ObAllVirtualTmpFileInfo::get_next_tmp_file_info_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/virtual_table/ob_all_virtual_tmp_file.cpp	289	ObAllVirtualTmpFileInfo::inner_get_next_row	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/virtual_table/ob_all_virtual_vector_index_info.cpp	80	ObVectorIndexInfoIterator::get_next_info	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/virtual_table/ob_information_columns_table.cpp	249	ObInfoSchemaColumnsTable::iterate_table_schema_array	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/virtual_table/ob_information_columns_table.cpp	271	ObInfoSchemaColumnsTable::iterate_table_schema_array	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/virtual_table/ob_information_columns_table.cpp	336	ObInfoSchemaColumnsTable::iterate_column_schema_array	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/virtual_table/ob_information_columns_table.cpp	346	ObInfoSchemaColumnsTable::iterate_column_schema_array	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/virtual_table/ob_information_columns_table.cpp	967	ObInfoSchemaColumnsTable::fill_col_privs	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/virtual_table/ob_information_partitions_table.cpp	420	ObInfoSchemaPartitionsTable::add_partitions	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/virtual_table/ob_mysql_proc_table.cpp	468	ObMySQLProcTable::get_info_from_all_routine	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/virtual_table/ob_plan_cache_plan_explain.cpp	228	ObExpVisitor::get_property	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/virtual_table/ob_plan_cache_plan_explain.cpp	297	ObCacheObjIterator::next	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/virtual_table/ob_plan_cache_plan_explain.cpp	390	ObPlanCachePlanExplain::inner_get_next_row	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/virtual_table/ob_show_create_procedure.cpp	253	ObShowCreateProcedure::has_show_create_function_priv	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/virtual_table/ob_show_grants.cpp	53	ObShowGrants::add_priv_map	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/virtual_table/ob_show_table_status.cpp	223	ObShowTableStatus::get_table_stats	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/virtual_table/ob_show_table_status.cpp	247	ObShowTableStatus::get_table_stats	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/virtual_table/ob_table_columns.cpp	174	ObTableColumns::inner_get_next_row	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/virtual_table/ob_table_columns.cpp	242	ObTableColumns::inner_get_next_row	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/virtual_table/ob_table_columns.cpp	336	ObTableColumns::fill_col_privs	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/virtual_table/ob_table_columns.cpp	1044	ObTableColumns::set_col_attrs_according_binary_expr	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/virtual_table/ob_virtual_core_inner_table.cpp	134	ObVritualCoreInnerTable::inner_open	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/virtual_table/ob_virtual_core_inner_table.cpp	160	ObVritualCoreInnerTable::inner_open	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/virtual_table/ob_virtual_outline.cpp	96	ObVirtualOutlineBase::is_database_recycle	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/pl/ob_pl.cpp	1313	ObPL::execute	ret = 0 (a reset of the error code, spelled 0)	ret = 0;
+src/pl/ob_pl.cpp	1644	ObPL::add_pl_lib_cache	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/pl/ob_pl.cpp	1649	ObPL::add_pl_lib_cache	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/pl/ob_pl.cpp	1651	ObPL::add_pl_lib_cache	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/pl/ob_pl.cpp	1654	ObPL::add_pl_lib_cache	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // add plan error, overwrite error code, ensure that plan cache failure does not affect the normal execution path
+src/pl/ob_pl.cpp	2829	ObPLExecRecursionCtx::inc_and_check_depth	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/pl/ob_pl_build.cpp	600	ObPLBuilder::update_schema_object_dep_info	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/pl/ob_pl_build.cpp	837	ObPLBuilder::build_package	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/pl/ob_pl_package_manager.cpp	278	ObPLPackageManager::read_package_sql	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/pl/ob_pl_package_manager.cpp	937	ObPLPackageManager::load_package_spec	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // cache add failed, need not fail execute path
+src/pl/ob_pl_package_manager.cpp	1048	ObPLPackageManager::load_package_body	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; //cache add failed, need not fail execute path
+src/pl/ob_pl_package_manager.cpp	1138	ObPLPackageManager::get_cached_package_spec	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/pl/ob_pl_package_manager.cpp	1196	ObPLPackageManager::get_cached_package	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/pl/ob_pl_package_manager.cpp	1404	ObPLPackageManager::add_package_to_plan_cache	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/pl/ob_pl_package_manager.cpp	1410	ObPLPackageManager::add_package_to_plan_cache	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/pl/ob_pl_package_manager.cpp	1412	ObPLPackageManager::add_package_to_plan_cache	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // add package error, overwrite error code, ensure that plan cache failure does not affect the normal execution path
+src/pl/ob_pl_package_manager.cpp	1487	ObPLPackageManager::destory_package_state	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/pl/ob_pl_resolver.cpp	701	#define RESOLVE_PACKAGE_STMT	conditional reset (ternary yields OB_SUCCESS)	ret = is_object_not_exist_error(ret) ? OB_SUCCESS : ret; \
+src/pl/ob_pl_resolver.cpp	914	ObPLResolver::resolve_sp_composite_type	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/pl/ob_pl_resolver.cpp	1357	ObPLResolver::resolve_extern_type_info	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/pl/ob_pl_resolver.cpp	1691	ObPLResolver::resolve_sp_row_type	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/pl/ob_pl_resolver.cpp	5590	ObPLResolver::resolve_expr	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/pl/ob_pl_resolver.cpp	10807	ObPLResolveCtx::get_user_type	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/pl/ob_pl_stmt.cpp	1245	ObPLExternalNS::resolve_external_symbol	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/pl/ob_pl_stmt.cpp	1251	ObPLExternalNS::resolve_external_symbol	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/pl/ob_pl_stmt.cpp	1278	ObPLExternalNS::resolve_external_symbol	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/pl/ob_pl_stmt.cpp	1354	ObPLExternalNS::resolve_external_symbol	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/pl/ob_pl_stmt.cpp	1407	ObPLExternalNS::resolve_external_symbol	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/pl/ob_pl_type.cpp	535	ObPLDataType::set_type_info	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/pl/ob_pl_type.cpp	731	ObPLEnumSetCtx::set_enum_type_info	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/pl/pl_cache/ob_pl_cache.cpp	1039	ObPLObjectSet::inner_get_cache_obj	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/pl/pl_cache/ob_pl_cache_mgr.cpp	56	ObPLCacheMgr::get_sys_var_in_pl_cache_str	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/pl/pl_cache/ob_pl_cache_mgr.cpp	64	ObPLCacheMgr::get_sys_var_in_pl_cache_str	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;

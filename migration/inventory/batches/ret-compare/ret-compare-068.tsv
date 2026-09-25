@@ -1,0 +1,100 @@
+file	line	symbol	construct	text
+src/storage/tablet/ob_tablet_persister.cpp	640	ObTabletPersister::acquire_tablet	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/storage/tablet/ob_tablet_persister.cpp	644	ObTabletPersister::acquire_tablet	ret != OB_ENTRY_NOT_EXIST	} else if (OB_ENTRY_NOT_EXIST != ret) {
+src/storage/tablet/ob_tablet_persister.cpp	929	ObTabletPersister::batch_write_sstable_info	ret != OB_HASH_EXIST	if (OB_HASH_EXIST != ret) {
+src/storage/tablet/ob_tablet_persister.cpp	1073	ObTabletPersister::fetch_and_persist_sstable	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/tablet/ob_tablet_persister.cpp	1131	ObTabletPersister::copy_shared_macro_info	ret == OB_HASH_EXIST	if (OB_HASH_EXIST == ret) {
+src/storage/tablet/ob_tablet_persister.cpp	1161	ObTabletPersister::convert_macro_info_map	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/storage/tablet/ob_tablet_persister.cpp	1201	ObTabletPersister::do_copy_ids	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/tablet/ob_tablet_persister.cpp	1207	ObTabletPersister::do_copy_ids	ret != OB_HASH_EXIST	if (OB_HASH_EXIST != ret) {
+src/storage/tablet/ob_tablet_persister.cpp	1214	ObTabletPersister::do_copy_ids	ret == OB_ITER_END	return OB_ITER_END == ret ? OB_SUCCESS : ret;
+src/storage/tablet/ob_tablet_persister.cpp	1265	ObTabletPersister::write_and_fill_args	ret != OB_HASH_EXIST	if (OB_HASH_EXIST != ret) {
+src/storage/tablet/ob_tablet_persister.cpp	1361	ObTabletPersister::link_write_medium_info_list	ret != OB_HASH_EXIST	if (OB_HASH_EXIST != ret) {
+src/storage/tablet/ob_tablet_replay_executor.cpp	86	ObTabletReplayExecutor::execute	ret == OB_OBSOLETE_CLOG_NEED_SKIP	if (OB_OBSOLETE_CLOG_NEED_SKIP == ret) {
+src/storage/tablet/ob_tablet_replay_executor.cpp	89	ObTabletReplayExecutor::execute	ret == OB_EAGAIN	} else if (OB_EAGAIN == ret) {
+src/storage/tablet/ob_tablet_replay_executor.cpp	95	ObTabletReplayExecutor::execute	ret == OB_NO_NEED_UPDATE	if (OB_NO_NEED_UPDATE == ret) {
+src/storage/tablet/ob_tablet_replay_executor.cpp	97	ObTabletReplayExecutor::execute	ret == OB_EAGAIN	} else if (OB_EAGAIN == ret) {
+src/storage/tablet/ob_tablet_replay_executor.cpp	116	ObTabletReplayExecutor::execute	ret == OB_NO_NEED_UPDATE	if (OB_NO_NEED_UPDATE == ret) {
+src/storage/tablet/ob_tablet_replay_executor.cpp	118	ObTabletReplayExecutor::execute	ret == OB_EAGAIN	} else if (OB_EAGAIN == ret) {
+src/storage/tablet/ob_tablet_replay_executor.cpp	153	ObTabletReplayExecutor::replay_get_tablet_	ret == OB_TIMEOUT	if (OB_TIMEOUT == ret) {
+src/storage/tablet/ob_tablet_table_store.cpp	195	ObTabletTableStore::init	ret != OB_NO_NEED_MERGE	if (OB_UNLIKELY(OB_NO_NEED_MERGE != ret)) {
+src/storage/tablet/ob_tablet_table_store.cpp	400	#define TRY_CACHE_SSTABLE_META	ret != OB_BUF_NOT_ENOUGH	if (OB_UNLIKELY(OB_BUF_NOT_ENOUGH != ret)) {                                                                                                  \
+src/storage/tablet/ob_tablet_table_store.cpp	1235	ObTabletTableStore::check_ddl_complete	ret == OB_EMPTY_RESULT	if (OB_EMPTY_RESULT == ret) {
+src/storage/tablet/ob_tablet_table_store.cpp	1665	ObTabletTableStore::check_ready_for_read	ret == OB_SIZE_OVERFLOW	if (OB_SIZE_OVERFLOW == ret) {
+src/storage/throttle/ob_throttle_unit.ipp	152	ObThrottleUnit::is_throttling	ret == OB_ENTRY_NOT_EXIST	if (OB_LIKELY(OB_ENTRY_NOT_EXIST == ret)) {
+src/storage/throttle/ob_throttle_unit.ipp	232	ObThrottleUnit::inner_get_throttle_info_	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/storage/throttle/ob_throttle_unit.ipp	238	ObThrottleUnit::inner_get_throttle_info_	ret == OB_ALLOCATE_MEMORY_FAILED	if (OB_ALLOCATE_MEMORY_FAILED == ret) {
+src/storage/throttle/ob_throttle_unit.ipp	277	ObThrottleUnit::get_throttle_info_	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/storage/tmp_file/ob_i_tmp_file.cpp	576	ObITmpFile::aio_write	ret == OB_ALLOCATE_TMP_FILE_PAGE_FAILED	if (OB_ALLOCATE_TMP_FILE_PAGE_FAILED == ret) {
+src/storage/tmp_file/ob_i_tmp_file.cpp	657	ObITmpFile::inner_write_continuous_pages_	ret == OB_ALLOCATE_TMP_FILE_PAGE_FAILED	if (OB_ALLOCATE_TMP_FILE_PAGE_FAILED == ret) {
+src/storage/tmp_file/ob_i_tmp_file.cpp	804	ObITmpFile::alloc_and_write_pages_	ret != OB_ALLOCATE_TMP_FILE_PAGE_FAILED	if (OB_FAIL(ret) && ret != OB_ALLOCATE_TMP_FILE_PAGE_FAILED && !alloced_page_id.empty()) {
+src/storage/tmp_file/ob_i_tmp_file_manager.cpp	122	ObITmpFileManager::destroy	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/tmp_file/ob_i_tmp_file_manager.cpp	166	ObITmpFileManager::remove	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/storage/tmp_file/ob_i_tmp_file_manager.cpp	274	ObITmpFileManager::read	ret == OB_ITER_END	if (OB_SUCC(ret) || OB_ITER_END == ret) {
+src/storage/tmp_file/ob_i_tmp_file_manager.cpp	306	ObITmpFileManager::pread	ret == OB_ITER_END	if (OB_SUCC(ret) || OB_ITER_END == ret) {
+src/storage/tmp_file/ob_i_tmp_file_manager.cpp	390	ObITmpFileManager::get_tmp_file	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/storage/tmp_file/ob_i_tmp_file_manager.cpp	448	ObITmpFileManager::get_tmp_file_info	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/storage/tmp_file/ob_shared_nothing_tmp_file.cpp	298	ObSharedNothingTmpFile::inner_read_from_disk_	ret != OB_ENTRY_NOT_EXIST	} else if (OB_UNLIKELY(OB_ENTRY_NOT_EXIST != ret && OB_SUCCESS != ret)) {
+src/storage/tmp_file/ob_shared_nothing_tmp_file.cpp	524	ObSharedNothingTmpFile::collect_pages_in_block_	ret == OB_ENTRY_NOT_EXIST	} else if (OB_ENTRY_NOT_EXIST == ret) {
+src/storage/tmp_file/ob_shared_nothing_tmp_file.cpp	1677	ObSharedNothingTmpFile::collect_flush_data_page_id_	ret == OB_ALLOCATE_MEMORY_FAILED	if (OB_ALLOCATE_MEMORY_FAILED == ret) {
+src/storage/tmp_file/ob_shared_nothing_tmp_file.cpp	1758	ObSharedNothingTmpFile::generate_meta_flush_info_	ret == OB_ALLOCATE_MEMORY_FAILED	if (OB_ALLOCATE_MEMORY_FAILED == ret) {
+src/storage/tmp_file/ob_sn_tmp_file_manager.cpp	151	ObSNTmpFileManager::get_tmp_file	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/storage/tmp_file/ob_tmp_file_block_manager.cpp	688	ObTmpFileBlockManager::remove_tmp_file_block_	ret != OB_ENTRY_NOT_EXIST	if (ret != OB_ENTRY_NOT_EXIST) {
+src/storage/tmp_file/ob_tmp_file_cache.cpp	148	ObTmpBlockCache::get_block	ret != OB_ENTRY_NOT_EXIST	if (OB_UNLIKELY(OB_ENTRY_NOT_EXIST != ret)) {
+src/storage/tmp_file/ob_tmp_file_cache.cpp	419	ObTmpPageCache::get_page	ret == OB_ENTRY_NOT_EXIST	if (OB_UNLIKELY(OB_ENTRY_NOT_EXIST == ret)) {
+src/storage/tmp_file/ob_tmp_file_cache.cpp	495	ObTmpPageCache::load_page	ret == OB_ENTRY_EXIST	if (OB_ENTRY_EXIST == ret) {
+src/storage/tmp_file/ob_tmp_file_eviction_manager.cpp	170	ObTmpFileEvictionManager::evict_file_from_list_	ret == OB_EMPTY_RESULT	if (OB_EMPTY_RESULT == ret) {
+src/storage/tmp_file/ob_tmp_file_flush_ctx.cpp	436	ObTmpFileFlushTask::wait_macro_block_handle	ret == OB_EAGAIN	if (OB_EAGAIN == ret) {
+src/storage/tmp_file/ob_tmp_file_flush_list_iterator.cpp	190	ObTmpFileFlushListIterator::next	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/tmp_file/ob_tmp_file_flush_manager.cpp	158	ObTmpFileFlushManager::advance_flush_level_	other variable ret_code == OB_ITER_END	} else if (OB_ITER_END == ret_code) {
+src/storage/tmp_file/ob_tmp_file_flush_manager.cpp	170	ObTmpFileFlushManager::advance_flush_level_	other variable ret_code == OB_ITER_END	} else if (OB_ITER_END == ret_code) {
+src/storage/tmp_file/ob_tmp_file_flush_manager.cpp	276	ObTmpFileFlushManager::flush	ret != OB_TMP_FILE_EXCEED_DISK_QUOTA	if (OB_FAIL(ret) && ret != OB_TMP_FILE_EXCEED_DISK_QUOTA && !flushing_queue.is_empty()) {
+src/storage/tmp_file/ob_tmp_file_flush_manager.cpp	305	ObTmpFileFlushManager::flush_by_watermark_	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/tmp_file/ob_tmp_file_flush_manager.cpp	330	ObTmpFileFlushManager::flush_by_watermark_	ret == OB_ALLOCATE_TMP_FILE_PAGE_FAILED	if (OB_ALLOCATE_TMP_FILE_PAGE_FAILED == ret){
+src/storage/tmp_file/ob_tmp_file_flush_manager.cpp	379	ObTmpFileFlushManager::fast_fill_block_buf_with_meta_	ret == OB_ITER_END	if (OB_ITER_END == ret && flush_task.get_flush_infos().size() != 0) {
+src/storage/tmp_file/ob_tmp_file_flush_manager.cpp	398	ObTmpFileFlushManager::fill_block_buf_	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/tmp_file/ob_tmp_file_flush_manager.cpp	408	ObTmpFileFlushManager::fill_block_buf_	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/tmp_file/ob_tmp_file_flush_manager.cpp	418	ObTmpFileFlushManager::fill_block_buf_	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/tmp_file/ob_tmp_file_flush_manager.cpp	432	ObTmpFileFlushManager::fill_block_buf_	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/tmp_file/ob_tmp_file_flush_manager.cpp	444	ObTmpFileFlushManager::fill_block_buf_	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/tmp_file/ob_tmp_file_flush_manager.cpp	458	ObTmpFileFlushManager::fill_block_buf_	ret == OB_ITER_END	if (OB_ITER_END == ret && flush_task.get_flush_infos().size() != 0) {
+src/storage/tmp_file/ob_tmp_file_flush_manager.cpp	480	ObTmpFileFlushManager::inner_fill_block_buf_	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/tmp_file/ob_tmp_file_flush_manager.cpp	556	ObTmpFileFlushManager::inner_fill_block_buf_	tmp_ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != tmp_ret) {
+src/storage/tmp_file/ob_tmp_file_flush_manager.cpp	592	ObTmpFileFlushManager::get_or_create_file_in_ctx_	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/storage/tmp_file/ob_tmp_file_flush_manager.cpp	621	ObTmpFileFlushManager::insert_items_into_meta_tree_	ret == OB_ALLOCATE_TMP_FILE_PAGE_FAILED	if (OB_ALLOCATE_TMP_FILE_PAGE_FAILED == ret) {
+src/storage/tmp_file/ob_tmp_file_flush_manager.cpp	667	ObTmpFileFlushManager::drive_flush_task_prepare_	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/tmp_file/ob_tmp_file_flush_manager.cpp	887	ObTmpFileFlushManager::handle_fill_block_buf_	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/tmp_file/ob_tmp_file_flush_manager.cpp	893	ObTmpFileFlushManager::handle_fill_block_buf_	ret == OB_ITER_END	if (OB_ITER_END == ret && pc_ctrl_.is_flush_all_data() && 0 == flush_task.get_data_length()) {
+src/storage/tmp_file/ob_tmp_file_flush_manager.cpp	896	ObTmpFileFlushManager::handle_fill_block_buf_	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/tmp_file/ob_tmp_file_flush_manager.cpp	908	ObTmpFileFlushManager::handle_fill_block_buf_	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/tmp_file/ob_tmp_file_flush_manager.cpp	1055	ObTmpFileFlushManager::reset_flush_ctx_for_file_	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/storage/tmp_file/ob_tmp_file_io_handle.cpp	169	ObTmpFileIOHandle::wait	ret == OB_ITER_END	if (update_offset_in_file_ && (OB_SUCC(ret) || OB_ITER_END == ret)) {
+src/storage/tmp_file/ob_tmp_file_meta_tree.cpp	278	ObSharedNothingTmpFileMetaTree::try_to_insert_items_to_array_	ret == OB_ALLOCATE_MEMORY_FAILED	if (OB_ALLOCATE_MEMORY_FAILED == ret) {
+src/storage/tmp_file/ob_tmp_file_meta_tree.cpp	2599	ObSharedNothingTmpFileMetaTree::get_page_	ret != OB_ENTRY_NOT_EXIST	} else if (OB_ENTRY_NOT_EXIST != ret) {
+src/storage/tmp_file/ob_tmp_file_meta_tree.cpp	2683	ObSharedNothingTmpFileMetaTree::cache_page_for_write_	ret != OB_ENTRY_NOT_EXIST	} else if (OB_ENTRY_NOT_EXIST != ret) {
+src/storage/tmp_file/ob_tmp_file_thread_job.cpp	72	ObTmpFileSwapJob::wait_swap_complete	ret == OB_TIMEOUT	if (OB_TIMEOUT == ret) {
+src/storage/tmp_file/ob_tmp_file_thread_wrapper.cpp	195	ObTmpFileFlushThread::clean_up_lists	ret == OB_EAGAIN	if (OB_EAGAIN == ret) {
+src/storage/tmp_file/ob_tmp_file_thread_wrapper.cpp	389	ObTmpFileFlushThread::handle_generated_flush_tasks_	call result flush_task->atomic_get_write_block_ret_code() == OB_SERVER_OUTOF_DISK_SPACE	flush_task->atomic_get_write_block_ret_code() == OB_SERVER_OUTOF_DISK_SPACE) {
+src/storage/tmp_file/ob_tmp_file_thread_wrapper.cpp	416	ObTmpFileFlushThread::wash_	ret == OB_TMP_FILE_EXCEED_DISK_QUOTA	if (OB_TMP_FILE_EXCEED_DISK_QUOTA == ret) {
+src/storage/tmp_file/ob_tmp_file_thread_wrapper.cpp	496	ObTmpFileFlushThread::retry_task_	call result flush_task->atomic_get_write_block_ret_code() == OB_SERVER_OUTOF_DISK_SPACE	flush_task->atomic_get_write_block_ret_code() == OB_SERVER_OUTOF_DISK_SPACE) {
+src/storage/tmp_file/ob_tmp_file_thread_wrapper.cpp	500	ObTmpFileFlushThread::retry_task_	ret == OB_ALLOCATE_TMP_FILE_PAGE_FAILED	if (FlushState::TFFT_INSERT_META_TREE == state && OB_ALLOCATE_TMP_FILE_PAGE_FAILED == ret) {
+src/storage/tmp_file/ob_tmp_file_thread_wrapper.cpp	524	ObTmpFileFlushThread::special_flush_meta_tree_page_	ret == OB_TMP_FILE_EXCEED_DISK_QUOTA	if (OB_TMP_FILE_EXCEED_DISK_QUOTA == ret) {
+src/storage/tmp_file/ob_tmp_file_thread_wrapper.cpp	554	ObTmpFileFlushThread::check_flush_task_io_finished_	call result flush_task->atomic_get_write_block_ret_code() == OB_SERVER_OUTOF_DISK_SPACE	if (flush_task->atomic_get_write_block_ret_code() == OB_SERVER_OUTOF_DISK_SPACE) {
+src/storage/tmp_file/ob_tmp_file_thread_wrapper.cpp	570	ObTmpFileFlushThread::check_flush_task_io_finished_	ret == OB_EAGAIN	if (OB_EAGAIN == ret) {
+src/storage/tmp_file/ob_tmp_file_thread_wrapper.cpp	1017	ObTmpFileSwapThread::swap_fast_	other variable io_finished_ret == OB_SERVER_OUTOF_DISK_SPACE	if (OB_SERVER_OUTOF_DISK_SPACE == io_finished_ret ||
+src/storage/tmp_file/ob_tmp_file_thread_wrapper.cpp	1018	ObTmpFileSwapThread::swap_fast_	other variable io_finished_ret == OB_TMP_FILE_EXCEED_DISK_QUOTA	OB_TMP_FILE_EXCEED_DISK_QUOTA == io_finished_ret) {
+src/storage/tmp_file/ob_tmp_file_thread_wrapper.cpp	1202	ObTmpFileSwapThread::shrink_wbp_if_needed_	other variable io_finished_ret == OB_SERVER_OUTOF_DISK_SPACE	if (wbp_.get_shrink_ctx().is_valid() && (!wbp_.need_to_shrink(is_auto) || OB_SERVER_OUTOF_DISK_SPACE == io_finished_ret)) {
+src/storage/tmp_file/ob_tmp_file_write_buffer_pool.cpp	181	ObTmpWriteBufferPool::alloc_page_	ret != OB_SEARCH_NOT_FOUND	if (OB_SEARCH_NOT_FOUND != ret) {
+src/storage/tmp_file/ob_tmp_file_write_buffer_pool.cpp	193	ObTmpWriteBufferPool::alloc_page_	ret == OB_ALLOCATE_MEMORY_FAILED; ret == OB_OP_NOT_ALLOW	if (OB_ALLOCATE_MEMORY_FAILED == ret || OB_OP_NOT_ALLOW == ret ||
+src/storage/truncate_info/ob_mds_info_distinct_mgr.cpp	63	ObMdsInfoDistinctMgr::init	tmp_ret != OB_ENTRY_EXIST	if (OB_ENTRY_EXIST != tmp_ret) {
+src/storage/truncate_info/ob_tablet_truncate_info_reader.cpp	73	ObTabletTruncateInfoReader::get_next_truncate_info	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/truncate_info/ob_tablet_truncate_info_reader.cpp	100	ObTabletTruncateInfoReader::get_next_mds_kv	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/truncate_info/ob_truncate_info_kv_cache.cpp	163	ObTruncateInfoKVCache::get_truncate_info_array	ret != OB_ENTRY_NOT_EXIST	if (OB_UNLIKELY(OB_ENTRY_NOT_EXIST != ret)) {
+src/storage/truncate_info/ob_truncate_info_kv_cache.cpp	179	ObTruncateInfoKVCache::put_truncate_info_array	ret != OB_ENTRY_EXIST	if (OB_ENTRY_EXIST != ret) {
+src/storage/truncate_info/ob_truncate_info_kv_cache.cpp	240	ObTruncateInfoKVCacheUtil::put_truncate_info_array	ret != OB_ENTRY_EXIST	if (OB_ENTRY_EXIST != ret) {
+src/storage/tx/ob_id_service.cpp	50	ObIDService::submit_log_with_lock_	ret == OB_EAGAIN	if (OB_EAGAIN == ret) {
+src/storage/tx/ob_id_service.cpp	289	ObIDService::get_number	ret == OB_EAGAIN	if (OB_EAGAIN == ret || (limited_id_ - last_id_) < (pre_allocated_range_ * 2 / 3)) {
+src/storage/tx/ob_id_service.cpp	355	ObIDService::allocate_number_	ret == OB_EAGAIN	if (OB_EAGAIN == ret || (limited_id_ - last_id_) < (pre_allocated_range_ * 2 / 3)) {
+src/storage/tx/ob_multi_data_source.cpp	248	ObMulSourceTxDataNotifier::ob_abort_log_cb_notify_	other variable err_code != OB_SERVER_RUNTIME_OUT_OF_MEM	if (OB_SUCCESS != err_code && OB_SERVER_RUNTIME_OUT_OF_MEM != err_code
+src/storage/tx/ob_multi_data_source.cpp	249	ObMulSourceTxDataNotifier::ob_abort_log_cb_notify_	other variable err_code != OB_ALLOCATE_MEMORY_FAILED; other variable err_code != OB_EAGAIN	&& OB_ALLOCATE_MEMORY_FAILED != err_code && OB_EAGAIN != err_code) {
+src/storage/tx/ob_trans_ctx.cpp	269	ObTransCtx::unregister_timeout_task_	ret == OB_TIMER_TASK_HAS_NOT_SCHEDULED	if (OB_TIMER_TASK_HAS_NOT_SCHEDULED == ret) {

@@ -1,0 +1,45 @@
+file	line	symbol	construct	text
+src/sql/engine/basic/ob_hash_partitioning_infrastructure_op.h	81	ObHashPartCols::store_row_	member ObHashPartStoredRow (pointer) of type ObHashPartStoredRow *	ObHashPartStoredRow *store_row_;
+src/sql/engine/basic/ob_hash_partitioning_infrastructure_op.h	825	ObHashPartInfrastructure::store_row_buffer_	member StoredRow (pointer) of type ObChunkDatumStore::StoredRow **	ObChunkDatumStore::StoredRow **store_row_buffer_;
+src/sql/engine/basic/ob_hash_partitioning_infrastructure_op.h	833	ObHashPartInfrastructure::store_rows_	member StoredRow (pointer) of type ObChunkDatumStore::StoredRow **	ObChunkDatumStore::StoredRow **store_rows_ = nullptr;
+src/sql/engine/basic/ob_hp_infrastructure_manager.h	121	ObHashPartInfrastructureGroup::hp_infras_buffer_	member HashPartInfras (pointer) of type HashPartInfras *	HashPartInfras *hp_infras_buffer_;
+src/sql/engine/basic/ob_hp_infrastructure_manager.h	123	ObHashPartInfrastructureGroup::hp_infras_list_	member HashPartInfrasList (value) of type HashPartInfrasList	HashPartInfrasList hp_infras_list_;
+src/sql/engine/basic/ob_hp_infrastructure_manager.h	124	ObHashPartInfrastructureGroup::hp_infras_free_list_	member HashPartInfrasList (value) of type HashPartInfrasList	HashPartInfrasList hp_infras_free_list_;
+src/sql/engine/basic/ob_json_table_op.h	85	ObJtColInfo::col_name_	member ObString (value) of type ObString	ObString col_name_;
+src/sql/engine/basic/ob_json_table_op.h	86	ObJtColInfo::path_	member ObString (value) of type ObString	ObString path_;
+src/sql/engine/basic/ob_json_table_op.h	147	ObJsonTableSpec::namespace_def_	member container of ObString of type common::ObFixedArray<ObString, common::ObIAllocator>	common::ObFixedArray<ObString, common::ObIAllocator> namespace_def_;
+src/sql/engine/basic/ob_json_table_op.h	181	JtScanCtx::res_obj_	member ObDatum (pointer) of type ObDatum*	ObDatum* res_obj_;
+src/sql/engine/basic/ob_json_table_op.h	182	JtScanCtx::data_	member ObDatum (pointer) of type ObDatum**	ObDatum** data_;
+src/sql/engine/basic/ob_monitoring_dump_op.h	60	ObMonitoringDumpOp::op_name_	member ObDatum (value) of type common::ObDatum	common::ObDatum op_name_;
+src/sql/engine/basic/ob_ra_datum_store.h	66	ObRADatumStore::ShrinkBuffer::data_	member raw bytes (pointer) of type char *	char *data_;
+src/sql/engine/basic/ob_ra_datum_store.h	436	ObRADatumStore::label_	member raw bytes (pointer) of type const char *	const char *label_;
+src/sql/engine/basic/ob_ra_row_store.h	61	ObRARowStore::ShrinkBuffer::data_	member raw bytes (pointer) of type char *	char *data_;
+src/sql/engine/basic/ob_ra_row_store.h	211	ObRARowStore::Reader::row_	member ObNewRow (value) of type common::ObNewRow	common::ObNewRow row_;
+src/sql/engine/basic/ob_ra_row_store.h	289	ObRARowStore::label_	member raw bytes (pointer) of type const char *	const char *label_;
+src/sql/engine/basic/ob_select_into_basic.h	122	ObCompressStreamWriter::buf_	member raw bytes (pointer) of type char *	char *buf_;
+src/sql/engine/basic/ob_select_into_op.h	79	ObSelectIntoSpec::user_vars_	member container of ObString of type common::ObFixedArray<common::ObString, common::ObIAllocator>	common::ObFixedArray<common::ObString, common::ObIAllocator> user_vars_;
+src/sql/engine/basic/ob_select_into_op.h	80	ObSelectIntoSpec::outfile_name_	member ObObj (value) of type common::ObObj	common::ObObj outfile_name_;
+src/sql/engine/basic/ob_select_into_op.h	81	ObSelectIntoSpec::field_str_	member ObObj (value) of type common::ObObj	common::ObObj field_str_;
+src/sql/engine/basic/ob_select_into_op.h	82	ObSelectIntoSpec::line_str_	member ObObj (value) of type common::ObObj	common::ObObj line_str_;
+src/sql/engine/basic/ob_select_into_op.h	83	ObSelectIntoSpec::closed_cht_	member ObObj (value) of type common::ObObj	common::ObObj closed_cht_;
+src/sql/engine/basic/ob_select_into_op.h	88	ObSelectIntoSpec::escaped_cht_	member ObObj (value) of type common::ObObj	common::ObObj escaped_cht_;
+src/sql/engine/basic/ob_select_into_op.h	173	ObSelectIntoOp::ObEscapePrinter::enclose_	member ObString (value) of type ObString	ObString enclose_;
+src/sql/engine/basic/ob_select_into_op.h	174	ObSelectIntoOp::ObEscapePrinter::escape_	member ObString (value) of type ObString	ObString escape_;
+src/sql/engine/basic/ob_select_into_op.h	175	ObSelectIntoOp::ObEscapePrinter::zero_	member ObString (value) of type ObString	ObString zero_;
+src/sql/engine/basic/ob_select_into_op.h	176	ObSelectIntoOp::ObEscapePrinter::field_terminator_	member ObString (value) of type ObString	ObString field_terminator_;
+src/sql/engine/basic/ob_select_into_op.h	177	ObSelectIntoOp::ObEscapePrinter::line_terminator_	member ObString (value) of type ObString	ObString line_terminator_;
+src/sql/engine/basic/ob_select_into_op.h	178	ObSelectIntoOp::ObEscapePrinter::convert_replacer_	member ObString (value) of type ObString	ObString convert_replacer_;
+src/sql/engine/basic/ob_select_into_op.h	185	ObSelectIntoOp::ObEscapePrinter::buf_	member raw bytes (pointer) of type char *	char *buf_;
+src/sql/engine/basic/ob_select_into_op.h	269	ObSelectIntoOp::field_str_	member ObObj (value) of type ObObj	ObObj field_str_;
+src/sql/engine/basic/ob_select_into_op.h	270	ObSelectIntoOp::line_str_	member ObObj (value) of type ObObj	ObObj line_str_;
+src/sql/engine/basic/ob_select_into_op.h	271	ObSelectIntoOp::file_name_	member ObObj (value) of type ObObj	ObObj file_name_;
+src/sql/engine/basic/ob_select_into_op.h	273	ObSelectIntoOp::basic_url_	member ObString (value) of type ObString	ObString basic_url_; // url without partition expr
+src/sql/engine/basic/ob_select_into_op.h	285	ObSelectIntoOp::json_buf_	member raw bytes (pointer) of type char *	char *json_buf_;  // json needs one more buffer to hold the string before escaping
+src/sql/engine/basic/ob_select_into_op.h	287	ObSelectIntoOp::shared_buf_	member raw bytes (pointer) of type char *	char *shared_buf_;
+src/sql/engine/basic/ob_temp_block_store.h	104	ObTempBlockStore::ShrinkBuffer::data_	member raw bytes (pointer) of type char *	char *data_;
+src/sql/engine/basic/ob_temp_table_access_op.h	118	ObTempTableAccessOp::stored_rows_	member StoredRow (pointer) of type const ObChunkDatumStore::StoredRow **	const ObChunkDatumStore::StoredRow **stored_rows_;
+src/sql/engine/basic/ob_values_op.h	54	ObValuesOp::cur_row_	member ObNewRow (value) of type common::ObNewRow	common::ObNewRow cur_row_;
+src/sql/engine/basic/ob_values_table_access_op.h	42	ObValuesTableAccessSpec::obj_params_	member container of ObObj of type common::ObFixedArray<ObObj, common::ObIAllocator>	common::ObFixedArray<ObObj, common::ObIAllocator> obj_params_;
+src/sql/engine/cmd/ob_load_data_file_reader.h	43	ObFileReadParam::filename_	member ObString (value) of type ObString	ObString filename_;
+src/sql/engine/cmd/ob_load_data_file_reader.h	141	ObRandomFileReader::filename_	member ObString (value) of type ObString	ObString             filename_;
+src/sql/engine/cmd/ob_load_data_file_reader.h	245	ObDecompressFileReader::compressed_data_	member raw bytes (pointer) of type char *	char *  compressed_data_    = nullptr; /// compressed data buffer

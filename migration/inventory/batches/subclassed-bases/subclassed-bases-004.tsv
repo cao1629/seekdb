@@ -1,0 +1,81 @@
+file	line	symbol	construct	text
+src/sql/engine/expr/ob_expr_json_array_insert.h	29	ObExprJsonArrayInsert	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprJsonArrayInsert : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_json_contains.h	29	ObExprJsonContains	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprJsonContains : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_json_contains_path.h	28	ObExprJsonContainsPath	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprJsonContainsPath : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_json_depth.h	28	ObExprJsonDepth	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class
+src/sql/engine/expr/ob_expr_json_extract.h	28	ObExprJsonExtract	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprJsonExtract : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_json_insert.h	27	ObExprJsonInsert	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprJsonInsert : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_json_keys.h	29	ObExprJsonKeys	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class
+src/sql/engine/expr/ob_expr_json_length.h	30	ObExprJsonLength	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprJsonLength : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_json_member_of.h	29	ObExprJsonMemberOf	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprJsonMemberOf : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_json_merge_patch.h	28	ObExprJsonMergePatch	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprJsonMergePatch : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_json_merge_preserve.h	29	ObExprJsonMergePreserve	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprJsonMergePreserve : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_json_object.h	29	ObExprJsonObject	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprJsonObject : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_json_overlaps.h	29	ObExprJsonOverlaps	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprJsonOverlaps : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_json_pretty.h	30	ObExprJsonPretty	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprJsonPretty : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_json_query.h	35	ObExprJsonQuery	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class
+src/sql/engine/expr/ob_expr_json_quote.h	31	ObExprJsonQuote	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprJsonQuote : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_json_remove.h	28	ObExprJsonRemove	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprJsonRemove : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_json_replace.h	28	ObExprJsonReplace	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprJsonReplace : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_json_schema_valid.h	48	ObExprJsonSchemaValid	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprJsonSchemaValid : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_json_schema_validation_report.h	32	ObExprJsonSchemaValidationReport	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprJsonSchemaValidationReport : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_json_search.h	34	ObExprJsonSearch	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprJsonSearch : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_json_set.h	29	ObExprJsonSet	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprJsonSet : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_json_storage_free.h	29	ObExprJsonStorageFree	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprJsonStorageFree : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_json_storage_size.h	29	ObExprJsonStorageSize	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprJsonStorageSize : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_json_type.h	28	ObExprJsonType	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprJsonType : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_json_unquote.h	30	ObExprJsonUnquote	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprJsonUnquote : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_json_valid.h	29	ObExprJsonValid	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprJsonValid : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_json_value.h	38	ObExprJsonValue	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class
+src/sql/engine/expr/ob_expr_last_insert_id.h	26	ObExprLastInsertID	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprLastInsertID: public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_length.h	26	ObExprLength	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprLength : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_like.h	44	ObExprLike	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprLike : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_lnnvl.h	26	ObExprFuncLnnvl	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprFuncLnnvl : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_lock_func.h	27	ObExprLockFunc	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprLockFunc : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_log10.h	26	ObExprLog10	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprLog10 : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_log2.h	26	ObExprLog2	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprLog2 : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_makedate.h	27	ObExprMakedate	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprMakedate : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_maketime.h	34	ObExprMakeTime	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprMakeTime : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_map.h	29	ObExprMap	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprMap : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_map_keys.h	29	ObExprMapComponents	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprMapComponents : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_mysql_port.h	26	ObExprMySQLPort	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprMySQLPort : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_name_const.h	27	ObExprNameConst	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprNameConst : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_normal.h	27	ObExprNormal	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprNormal : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_nullif.h	26	ObExprNullif	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprNullif : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_nvl.h	45	ObExprNvl	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprNvl: public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_object_construct.h	54	ObExprObjectConstruct	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprObjectConstruct : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_part_id_pseudo_column.h	30	ObExprPartIdPseudoColumn	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprPartIdPseudoColumn: public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_period_diff.h	26	ObExprPeriodDiff	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprPeriodDiff : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_period_diff.h	61	ObExprPeriodAdd	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprPeriodAdd : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_pi.h	26	ObExprPi	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprPi : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_pl_get_cursor_attr.h	28	ObExprPLGetCursorAttr	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprPLGetCursorAttr : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_pl_integer_checker.h	28	ObExprPLIntegerChecker	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprPLIntegerChecker : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_pl_sqlcode_sqlerrm.h	26	ObExprPLSQLCodeSQLErrm	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprPLSQLCodeSQLErrm : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_plsql_variable.h	47	ObExprPLSQLVariable	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprPLSQLVariable : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_point.h	26	ObExprPoint	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprPoint : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_priv_st_asewkb.h	27	ObExprStPrivAsEwkb	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprStPrivAsEwkb : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_priv_st_asmvtgeom.h	30	ObExprPrivSTAsMVTGeom	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprPrivSTAsMVTGeom : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_priv_st_clipbybox2d.h	30	ObExprPrivSTClipByBox2D	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprPrivSTClipByBox2D : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_priv_st_equals.h	28	ObExprPrivSTEquals	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprPrivSTEquals : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_priv_st_geogfromtext.h	26	ObExprPrivSTGeogFromText	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprPrivSTGeogFromText : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_priv_st_geohash.h	29	ObExprPrivSTGeoHash	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprPrivSTGeoHash : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_priv_st_geometrytype.h	29	ObExprPrivSTGeometryType	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprPrivSTGeometryType : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_priv_st_iscollection.h	29	ObExprPrivSTIsCollection	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprPrivSTIsCollection : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_priv_st_makeenvelope.h	29	ObExprPrivSTMakeEnvelope	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprPrivSTMakeEnvelope : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_priv_st_makepoint.h	28	ObExprPrivSTMakePoint	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprPrivSTMakePoint : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_priv_st_makevalid.h	28	ObExprPrivSTMakeValid	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprPrivSTMakeValid : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_priv_st_numinteriorrings.h	29	ObExprPrivSTNumInteriorRings	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprPrivSTNumInteriorRings : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_priv_st_point.h	28	ObExprPrivSTPoint	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprPrivSTPoint : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_priv_st_pointonsurface.h	30	ObExprPrivSTPointOnSurface	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprPrivSTPointOnSurface : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_priv_st_touches.h	28	ObExprPrivSTTouches	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprPrivSTTouches : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_priv_st_transform.h	27	ObExprPrivSTTransform	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprPrivSTTransform : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_quarter.h	27	ObExprQuarter	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprQuarter : public ObFuncExprOperator {
+src/sql/engine/expr/ob_expr_radians.h	26	ObExprRadians	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprRadians : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_rand.h	26	ObExprRand	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprRand: public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_random.h	27	ObExprRandom	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprRandom: public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_random_bytes.h	27	ObExprRandomBytes	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprRandomBytes : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_randstr.h	26	ObExprRandstr	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprRandstr: public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_regexp.h	27	ObExprRegexp	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprRegexp : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_regexp_instr.h	27	ObExprRegexpInstr	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprRegexpInstr : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_regexp_like.h	27	ObExprRegexpLike	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprRegexpLike : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_remove_const.h	41	ObExprRemoveConst	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprRemoveConst : public ObFuncExprOperator

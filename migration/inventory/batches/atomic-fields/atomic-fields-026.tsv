@@ -1,0 +1,46 @@
+file	line	symbol	construct	text
+src/storage/tmp_file/ob_tmp_file_write_buffer_pool.cpp	940	ObTmpWriteBufferPool::insert_page_entry_to_free_list_	atomic access through parameter list_head (uint32_t &) of ObTmpWriteBufferPool::insert_page_entry_to_free_list_; the atomic object is the caller's argument; 2 atomic accesses (ATOMIC_BCAS 1, ATOMIC_LOAD 1)	void ObTmpWriteBufferPool::insert_page_entry_to_free_list_(const uint32_t page_id, uint32_t &list_head)
+src/storage/tmp_file/ob_tmp_file_write_buffer_pool.h	73	WBPShrinkContext::max_allow_alloc_page_id_	field uint32_t; 1 atomic accesses (ATOMIC_LOAD 1)	uint32_t max_allow_alloc_page_id_; // in the range between [lower_page_id_ - 1, upper_page_id_].
+src/storage/tmp_file/ob_tmp_file_write_buffer_pool.h	80	WBPShrinkContext::shrink_list_head_	field uint32_t; 4 atomic accesses (ATOMIC_BCAS 2, ATOMIC_LOAD 2); through functions with an atomic parameter insert_page_entry_to_free_list_	uint32_t shrink_list_head_;       // tmp free_page_list when the new free page in the range [lower_page_id, upper_page_id]
+src/storage/tmp_file/ob_tmp_file_write_buffer_pool.h	82	WBPShrinkContext::shrink_list_size_	field int64_t; 2 atomic accesses (ATOMIC_INC 2)	int64_t shrink_list_size_;
+src/storage/tmp_file/ob_tmp_file_write_buffer_pool.h	253	ObTmpWriteBufferPool::capacity_	field int64_t; 10 atomic accesses (ATOMIC_LOAD 8, ATOMIC_AAF 1, ATOMIC_FAA 1)	int64_t capacity_;                   // in bytes
+src/storage/tmp_file/ob_tmp_file_write_buffer_pool.h	254	ObTmpWriteBufferPool::dirty_page_num_	field int64_t; 8 atomic accesses (ATOMIC_LOAD 4, ATOMIC_DEC 2, ATOMIC_INC 2)	int64_t dirty_page_num_;
+src/storage/tmp_file/ob_tmp_file_write_buffer_pool.h	255	ObTmpWriteBufferPool::used_page_num_	field int64_t; 4 atomic accesses (ATOMIC_LOAD 2, ATOMIC_DEC 1, ATOMIC_INC 1)	int64_t used_page_num_;
+src/storage/tmp_file/ob_tmp_file_write_buffer_pool.h	256	ObTmpWriteBufferPool::first_free_page_id_	field uint32_t; 6 atomic accesses (ATOMIC_LOAD 3, ATOMIC_BCAS 2, ATOMIC_SET 1); through functions with an atomic parameter insert_page_entry_to_free_list_	uint32_t first_free_page_id_;        // head of free page list
+src/storage/tmp_file/ob_tmp_file_write_buffer_pool.h	257	ObTmpWriteBufferPool::wbp_memory_limit_	field int64_t; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_STORE 1)	int64_t wbp_memory_limit_;           // in bytes
+src/storage/tmp_file/ob_tmp_file_write_buffer_pool.h	258	ObTmpWriteBufferPool::default_wbp_memory_limit_	field int64_t; 1 atomic accesses (ATOMIC_LOAD 1)	int64_t default_wbp_memory_limit_;   // if this var is valid, the wbp memory limit will always be it.
+src/storage/tmp_file/ob_tmp_file_write_buffer_pool.h	260	ObTmpWriteBufferPool::last_access_runtime_config_ts_	field int64_t; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_STORE 1)	int64_t last_access_runtime_config_ts_;
+src/storage/tmp_file/ob_tmp_file_write_buffer_pool.h	261	ObTmpWriteBufferPool::last_shrink_complete_ts_	field int64_t; 1 atomic accesses (ATOMIC_STORE 1)	int64_t last_shrink_complete_ts_;
+src/storage/tmp_file/ob_tmp_file_write_buffer_pool.h	262	ObTmpWriteBufferPool::max_used_watermark_after_shrinking_	field int64_t; 6 atomic accesses (ATOMIC_LOAD 3, ATOMIC_STORE 3)	int64_t max_used_watermark_after_shrinking_;
+src/storage/tmp_file/ob_tmp_file_write_buffer_pool.h	263	ObTmpWriteBufferPool::meta_page_cnt_	field int64_t; 4 atomic accesses (ATOMIC_LOAD 2, ATOMIC_DEC 1, ATOMIC_INC 1)	int64_t meta_page_cnt_;
+src/storage/tmp_file/ob_tmp_file_write_buffer_pool.h	264	ObTmpWriteBufferPool::data_page_cnt_	field int64_t; 4 atomic accesses (ATOMIC_LOAD 2, ATOMIC_DEC 1, ATOMIC_INC 1)	int64_t data_page_cnt_;
+src/storage/tmp_file/ob_tmp_file_write_buffer_pool.h	265	ObTmpWriteBufferPool::dirty_meta_page_cnt_	field int64_t; 5 atomic accesses (ATOMIC_DEC 2, ATOMIC_INC 2, ATOMIC_LOAD 1)	int64_t dirty_meta_page_cnt_;
+src/storage/tmp_file/ob_tmp_file_write_buffer_pool.h	266	ObTmpWriteBufferPool::dirty_data_page_cnt_	field int64_t; 5 atomic accesses (ATOMIC_DEC 2, ATOMIC_INC 2, ATOMIC_LOAD 1)	int64_t dirty_data_page_cnt_;
+src/storage/tmp_file/ob_tmp_file_write_buffer_pool.h	267	ObTmpWriteBufferPool::write_back_data_cnt_	field int64_t; 7 atomic accesses (ATOMIC_DEC 4, ATOMIC_LOAD 2, ATOMIC_INC 1)	int64_t write_back_data_cnt_;
+src/storage/tmp_file/ob_tmp_file_write_buffer_pool.h	268	ObTmpWriteBufferPool::write_back_meta_cnt_	field int64_t; 7 atomic accesses (ATOMIC_DEC 4, ATOMIC_LOAD 2, ATOMIC_INC 1)	int64_t write_back_meta_cnt_;
+src/storage/tmp_file/ob_tmp_file_write_buffer_pool_entry_array.h	142	ObPageEntry::fd_	field int64_t; 1 atomic accesses (ATOMIC_SET 1)	int64_t fd_;
+src/storage/tmp_file/ob_tmp_file_write_buffer_pool_entry_array.h	143	ObPageEntry::state_	field int32_t; 2 atomic accesses (ATOMIC_LOAD 2)	int32_t state_;
+src/storage/tmp_file/ob_tmp_file_write_buffer_pool_entry_array.h	144	ObPageEntry::next_page_id_	field uint32_t; 4 atomic accesses (ATOMIC_LOAD 2, ATOMIC_SET 2)	uint32_t next_page_id_;
+src/storage/tx/ob_ctx_tx_data.cpp	163	state_	82 candidate declarations, none chosen; 1 atomic accesses in 1 files (ATOMIC_STORE 1); first access shown	ATOMIC_STORE(&(tx_data_guard_.tx_data()->state_), state);
+src/storage/tx/ob_id_service.h	144	ObIDService::last_id_	field int64_t; 15 atomic accesses (ATOMIC_LOAD 5, ATOMIC_FAA 4, inc_update 3, ATOMIC_BCAS 2, ATOMIC_STORE 1)	int64_t last_id_;
+src/storage/tx/ob_id_service.h	146	ObIDService::tmp_last_id_	field int64_t; 6 atomic accesses (ATOMIC_LOAD 3, ATOMIC_STORE 2, inc_update 1)	int64_t tmp_last_id_;
+src/storage/tx/ob_id_service.h	147	ObIDService::limited_id_	field int64_t; 14 atomic accesses (ATOMIC_LOAD 11, inc_update 3)	int64_t limited_id_;
+src/storage/tx/ob_id_service.h	150	ObIDService::rec_log_ts_	field share::SCN; 6 atomic accesses (ATOMIC_LOAD 3, ATOMIC_SET 2, ATOMIC_BCAS 1); through member functions atomic_bcas, atomic_get, atomic_set	share::SCN rec_log_ts_;
+src/storage/tx/ob_id_service.h	152	ObIDService::latest_log_ts_	field share::SCN; 6 atomic accesses (ATOMIC_LOAD 3, ATOMIC_SET 3); through member functions atomic_get, atomic_load, atomic_set	share::SCN latest_log_ts_;
+src/storage/tx/ob_id_service.h	166	ObIDMeta::limited_id_	field int64_t; 2 atomic accesses (inc_update 2)	int64_t limited_id_;
+src/storage/tx/ob_id_service.h	167	ObIDMeta::latest_log_ts_	field share::SCN; 2 atomic accesses (ATOMIC_VCAS 2); through member functions inc_update	share::SCN latest_log_ts_;
+src/storage/tx/ob_keep_alive_ls_handler.h	177	ObKeepAliveLSHandler::is_busy_	field bool; 8 atomic accesses (ATOMIC_STORE 6, ATOMIC_LOAD 2)	bool is_busy_;
+src/storage/tx/ob_keep_alive_ls_handler.h	178	ObKeepAliveLSHandler::is_stopped_	field bool; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_STORE 1)	bool is_stopped_;
+src/storage/tx/ob_timestamp_service.h	51	ObTimestampService::last_gts_	field int64_t; 4 atomic accesses (ATOMIC_STORE 3, ATOMIC_LOAD 1)	int64_t last_gts_;
+src/storage/tx/ob_timestamp_service.h	53	ObTimestampService::last_request_ts_	field int64_t; 6 atomic accesses (ATOMIC_LOAD 3, ATOMIC_STORE 3)	int64_t last_request_ts_;
+src/storage/tx/ob_timestamp_service.h	56	ObTimestampService::check_gts_speed_lock_	field int64_t; 5 atomic accesses (ATOMIC_STORE 3, ATOMIC_BCAS 2)	int64_t check_gts_speed_lock_;
+src/storage/tx/ob_trans_ctx_lock.h	96	CtxLock::waiting_lock_cnt_	field int64_t; 3 atomic accesses (ATOMIC_DEC 1, ATOMIC_INC 1, ATOMIC_LOAD 1)	int64_t waiting_lock_cnt_;
+src/storage/tx/ob_trans_ctx_mgr_v4.h	451	ObLSTxCtxMgr::stopped_	field bool; 3 atomic accesses (ATOMIC_STORE 2, ATOMIC_LOAD 1)	bool stopped_;
+src/storage/tx/ob_trans_ctx_mgr_v4.h	452	ObLSTxCtxMgr::block_tx_	field bool; 3 atomic accesses (ATOMIC_STORE 2, ATOMIC_LOAD 1)	bool block_tx_;
+src/storage/tx/ob_trans_ctx_mgr_v4.h	453	ObLSTxCtxMgr::block_normal_tx_	field bool; 3 atomic accesses (ATOMIC_STORE 2, ATOMIC_LOAD 1)	bool block_normal_tx_;
+src/storage/tx/ob_trans_ctx_mgr_v4.h	454	ObLSTxCtxMgr::block_all_	field bool; 3 atomic accesses (ATOMIC_STORE 2, ATOMIC_LOAD 1)	bool block_all_;
+src/storage/tx/ob_trans_ctx_mgr_v4.h	470	ObLSTxCtxMgr::total_tx_ctx_count_	field int64_t; 4 atomic accesses (ATOMIC_AAF 2, ATOMIC_LOAD 2)	int64_t total_tx_ctx_count_ CACHE_ALIGNED;
+src/storage/tx/ob_trans_ctx_mgr_v4.h	472	ObLSTxCtxMgr::total_active_readonly_request_count_	field int64_t; 3 atomic accesses (ATOMIC_AAF 2, ATOMIC_LOAD 1)	int64_t total_active_readonly_request_count_ CACHE_ALIGNED;
+src/storage/tx/ob_trans_ctx_mgr_v4.h	474	ObLSTxCtxMgr::active_tx_count_	field int64_t; 3 atomic accesses (ATOMIC_AAF 2, ATOMIC_LOAD 1)	int64_t active_tx_count_;
+src/storage/tx/ob_trans_ctx_mgr_v4.h	489	ObLSTxCtxMgr::aggre_rec_scn_	field share::SCN; 3 atomic accesses (ATOMIC_VCAS 2, ATOMIC_LOAD 1); through member functions atomic_get, atomic_vcas	share::SCN aggre_rec_scn_;
+src/storage/tx/ob_trans_ctx_mgr_v4.h	490	ObLSTxCtxMgr::prev_aggre_rec_scn_	field share::SCN; 1 atomic accesses (ATOMIC_LOAD 1); through member functions atomic_get	share::SCN prev_aggre_rec_scn_;

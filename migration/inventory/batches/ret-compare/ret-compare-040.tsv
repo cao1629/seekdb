@@ -1,0 +1,99 @@
+file	line	symbol	construct	text
+src/sql/ob_spi.cpp	284	ObSPIResultSet::is_set_global_var	ret == OB_ERR_SYS_VARIABLE_UNKNOWN	if (OB_ERR_SYS_VARIABLE_UNKNOWN == ret) {
+src/sql/ob_spi.cpp	338	ObSPIResultSet::check_nested_stmt_legal	ret == OB_NOT_SUPPORTED	if (OB_NOT_SUPPORTED == ret) {
+src/sql/ob_spi.cpp	1373	ObSPIService::set_variable	ret == OB_SIZE_OVERFLOW	if (OB_SIZE_OVERFLOW == ret) {
+src/sql/ob_spi.cpp	1375	ObSPIService::set_variable	ret == OB_SIZE_OVERFLOW	while (OB_SIZE_OVERFLOW == ret) {
+src/sql/ob_spi.cpp	1399	ObSPIService::set_variable	ret != OB_SIZE_OVERFLOW	if (OB_SIZE_OVERFLOW != ret) {
+src/sql/ob_spi.cpp	1527	ObPLSPITraceIdGuard::~ObPLSPITraceIdGuard	ret != OB_READ_NOTHING	if (OB_FAIL(ret) && ret != OB_READ_NOTHING) {
+src/sql/ob_spi.cpp	3236	ObSPIService::do_cursor_fetch	ret != OB_READ_NOTHING	cursor->set_fetched_with_row(ret != OB_READ_NOTHING);
+src/sql/ob_spi.cpp	3257	ObSPIService::fetch_server_cursor	ret != OB_READ_NOTHING	if (ret != OB_READ_NOTHING) {
+src/sql/ob_spi.cpp	3448	ObSPIService::spi_check_exception_handler_legal	other variable code == OB_ERR_SP_EXCEPTION_HANDLE_ILLEGAL	|| OB_ERR_SP_EXCEPTION_HANDLE_ILLEGAL == code)) {
+src/sql/ob_spi.cpp	4545	ObSPIService::inner_fetch	ret != OB_READ_NOTHING	if (!for_cursor || (for_cursor && ret != OB_READ_NOTHING)) {
+src/sql/ob_spi.cpp	4585	ObSPIService::inner_fetch_with_retry	call result result_set->get_errcode() != OB_ITER_END	if (result_set->get_errcode() != OB_SUCCESS && result_set->get_errcode() != OB_ITER_END) {
+src/sql/ob_spi.cpp	4618	ObSPIService::inner_fetch_with_retry	ret != OB_READ_NOTHING	if (!for_cursor || (for_cursor && ret != OB_READ_NOTHING)) {
+src/sql/ob_spi.cpp	4904	ObSPIService::get_result	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/ob_spi.cpp	4924	ObSPIService::get_result	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/ob_spi.cpp	5620	ObSPIService::fill_cursor	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/ob_spi.cpp	5663	ObSPIService::fetch_row	ret == OB_INDEX_OUT_OF_RANGE	if (OB_INDEX_OUT_OF_RANGE == ret
+src/sql/ob_spi.cpp	5956	ObSPIService::resolve_ref_objects	ret == OB_TABLE_NOT_EXIST	if (OB_TABLE_NOT_EXIST == ret) {
+src/sql/ob_spi.cpp	6011	ObSPIService::resolve_ref_objects	ret == OB_ERR_SP_DOES_NOT_EXIST	if (ret == OB_ERR_SP_DOES_NOT_EXIST) {
+src/sql/ob_sql.cpp	189	ObSql::stmt_query	ret != OB_EAGAIN	if (OB_EAGAIN != ret) {
+src/sql/ob_sql.cpp	981	ObSql::do_real_prepare	ret == OB_TIMEOUT	if (OB_UNLIKELY(OB_TIMEOUT == ret && session.is_user_session())) {
+src/sql/ob_sql.cpp	1397	ObSql::handle_ps_prepare	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/sql/ob_sql.cpp	1410	ObSql::handle_ps_prepare	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/sql/ob_sql.cpp	2398	ObSql::generate_plan	tmp_ret == OB_ERROR	time_t seed = OB_ERROR == tmp_ret ? time(NULL) : std::abs(tmp_ret);
+src/sql/ob_sql.cpp	2920	ObSql::execute_get_plan	ret == OB_SQL_PC_NOT_EXIST; ret == OB_PC_LOCK_CONFLICT	if (OB_SQL_PC_NOT_EXIST == ret || OB_PC_LOCK_CONFLICT == ret) {
+src/sql/ob_sql.cpp	2927	ObSql::execute_get_plan	ret == OB_SQL_PC_NOT_EXIST; ret == OB_PC_LOCK_CONFLICT	if (OB_SQL_PC_NOT_EXIST == ret || OB_PC_LOCK_CONFLICT == ret) {
+src/sql/ob_sql.cpp	2976	ObSql::pc_get_plan	ret == OB_EAGAIN	if (OB_EAGAIN == ret
+src/sql/ob_sql.cpp	2977	ObSql::pc_get_plan	ret == OB_ARRAY_BINDING_ROLLBACK	|| OB_ARRAY_BINDING_ROLLBACK == ret
+src/sql/ob_sql.cpp	2978	ObSql::pc_get_plan	ret == OB_BATCHED_MULTI_STMT_ROLLBACK	|| OB_BATCHED_MULTI_STMT_ROLLBACK == ret) {
+src/sql/ob_sql.cpp	2980	ObSql::pc_get_plan	ret == OB_PC_LOCK_CONFLICT	} else if (OB_PC_LOCK_CONFLICT == ret) {
+src/sql/ob_sql.cpp	2991	ObSql::pc_get_plan	ret == OB_SQL_PC_NOT_EXIST; ret == OB_REACH_MEMORY_LIMIT	if (OB_SQL_PC_NOT_EXIST == ret || OB_REACH_MEMORY_LIMIT == ret) {
+src/sql/ob_sql.cpp	3260	ObSql::parser_and_check	other variable get_plan_err == OB_SQL_PC_NOT_EXIST	if (OB_SQL_PC_NOT_EXIST == get_plan_err) {
+src/sql/ob_sql.cpp	3268	ObSql::parser_and_check	other variable get_plan_err == OB_SQL_PC_NOT_EXIST	if (OB_SQL_PC_NOT_EXIST == get_plan_err) {
+src/sql/ob_sql.cpp	3337	ObSql::parser_and_check	ret == OB_NOT_SUPPORTED	if (OB_NOT_SUPPORTED == ret) {
+src/sql/ob_sql.cpp	3416	ObSql::pc_add_plan	ret == OB_SQL_PC_PLAN_DUPLICATE	if (OB_SQL_PC_PLAN_DUPLICATE == ret) {
+src/sql/ob_sql.cpp	3423	ObSql::pc_add_plan	ret == OB_SQL_PC_PLAN_DUPLICATE	} else if (OB_SQL_PC_PLAN_DUPLICATE == ret) {
+src/sql/ob_sql.cpp	3425	ObSql::pc_add_plan	ret == OB_REACH_MEMORY_LIMIT; ret == OB_SQL_PC_PLAN_SIZE_LIMIT	} else if (OB_REACH_MEMORY_LIMIT == ret || OB_SQL_PC_PLAN_SIZE_LIMIT == ret) {
+src/sql/ob_sql.cpp	3608	ObSql::handle_physical_plan	ret == OB_TIMEOUT	if (OB_UNLIKELY(OB_TIMEOUT == ret && session.is_user_session())) {
+src/sql/ob_sql_trans_control.cpp	271	ObSqlTransControl::end_trans	ret == OB_TRANS_COMMITED	|| OB_TRANS_COMMITED == ret
+src/sql/ob_sql_trans_control.cpp	272	ObSqlTransControl::end_trans	ret == OB_TRANS_ROLLBACKED	|| OB_TRANS_ROLLBACKED == ret
+src/sql/ob_sql_trans_control.cpp	751	ObSqlTransControl::can_do_plain_insert	other variable last_query_retry_err == OB_TRANSACTION_SET_VIOLATION	|| last_query_retry_err == OB_TRANSACTION_SET_VIOLATION
+src/sql/ob_sql_trans_control.cpp	997	ObSqlTransControl::end_stmt	call result exec_ctx.get_errcode() != OB_TRY_LOCK_ROW_CONFLICT	&& (OB_TRY_LOCK_ROW_CONFLICT != exec_ctx.get_errcode()
+src/sql/ob_sql_trans_control.cpp	1252	ObSqlTransControl::decide_stmt_rollback_tx_clean_policy_	switch (error_code) case OB_TRANSACTION_SET_VIOLATION	case OB_TRANSACTION_SET_VIOLATION:
+src/sql/ob_sql_trans_control.cpp	1253	ObSqlTransControl::decide_stmt_rollback_tx_clean_policy_	switch (error_code) case OB_TRY_LOCK_ROW_CONFLICT	case OB_TRY_LOCK_ROW_CONFLICT:
+src/sql/ob_sql_utils.cpp	94	ObSQLUtils::is_trans_commit_need_disconnect_err	other variable err == OB_TRANS_KILLED	|| OB_TRANS_KILLED == err
+src/sql/ob_sql_utils.cpp	95	ObSQLUtils::is_trans_commit_need_disconnect_err	other variable err == OB_TRANS_CTX_NOT_EXIST	|| OB_TRANS_CTX_NOT_EXIST == err
+src/sql/ob_sql_utils.cpp	96	ObSQLUtils::is_trans_commit_need_disconnect_err	other variable err == OB_TRANS_TIMEOUT	|| OB_TRANS_TIMEOUT == err
+src/sql/ob_sql_utils.cpp	97	ObSQLUtils::is_trans_commit_need_disconnect_err	other variable err == OB_TRANS_STMT_TIMEOUT	|| OB_TRANS_STMT_TIMEOUT == err
+src/sql/ob_sql_utils.cpp	98	ObSQLUtils::is_trans_commit_need_disconnect_err	other variable err == OB_TRANS_NEED_ROLLBACK	|| OB_TRANS_NEED_ROLLBACK == err
+src/sql/ob_sql_utils.cpp	99	ObSQLUtils::is_trans_commit_need_disconnect_err	other variable err == OB_TRANS_ROLLBACKED	|| OB_TRANS_ROLLBACKED == err
+src/sql/ob_sql_utils.cpp	100	ObSQLUtils::is_trans_commit_need_disconnect_err	other variable err == OB_NOT_MASTER	|| OB_NOT_MASTER == err
+src/sql/ob_sql_utils.cpp	101	ObSQLUtils::is_trans_commit_need_disconnect_err	other variable err == OB_TRANS_IS_EXITING	|| OB_TRANS_IS_EXITING == err) {
+src/sql/ob_sql_utils.cpp	274	ObSQLUtils::calc_const_or_calculable_expr	ret == OB_ERR_MIN_VALUE	if (ret == OB_ERR_MIN_VALUE) {
+src/sql/ob_sql_utils.cpp	278	ObSQLUtils::calc_const_or_calculable_expr	ret == OB_ERR_MAX_VALUE	} else if (ret == OB_ERR_MAX_VALUE) {
+src/sql/ob_sql_utils.cpp	688	ObSQLUtils::check_and_convert_db_name	ret (assigned in the comparison) == OB_ERR_WRONG_IDENT_NAME	if (OB_ERR_WRONG_IDENT_NAME == (ret = check_ident_name(cs_type, last_name, check_for_path_chars,
+src/sql/ob_sql_utils.cpp	692	ObSQLUtils::check_and_convert_db_name	ret == OB_ERR_TOO_LONG_IDENT	} else if (OB_ERR_TOO_LONG_IDENT == ret) {
+src/sql/ob_sql_utils.cpp	768	ObSQLUtils::check_and_convert_table_name	ret (assigned in the comparison) == OB_ERR_WRONG_IDENT_NAME	if (OB_ERR_WRONG_IDENT_NAME == (ret = check_ident_name(CS_TYPE_UTF8MB4_GENERAL_CI,
+src/sql/ob_sql_utils.cpp	774	ObSQLUtils::check_and_convert_table_name	ret == OB_ERR_TOO_LONG_IDENT	} else if (OB_ERR_TOO_LONG_IDENT == ret) {
+src/sql/ob_sql_utils.cpp	801	ObSQLUtils::check_index_name	ret (assigned in the comparison) == OB_ERR_WRONG_IDENT_NAME	if (OB_ERR_WRONG_IDENT_NAME == (ret = check_ident_name(CS_TYPE_UTF8MB4_GENERAL_CI, name, check_for_path_chars,
+src/sql/ob_sql_utils.cpp	805	ObSQLUtils::check_index_name	ret == OB_ERR_TOO_LONG_IDENT	} else if (OB_ERR_TOO_LONG_IDENT == ret) {
+src/sql/ob_sql_utils.cpp	1482	ObSQLUtils::get_outline_key	ret != OB_NOT_SUPPORTED	if (OB_NOT_SUPPORTED != ret) {
+src/sql/ob_sql_utils.cpp	1496	ObSQLUtils::get_outline_key	ret == OB_NOT_SUPPORTED	if (OB_NOT_SUPPORTED == ret) {
+src/sql/ob_sql_utils.cpp	1639	ObISqlPrinter::do_print	ret == OB_SIZE_OVERFLOW	if (OB_SIZE_OVERFLOW == ret) {
+src/sql/ob_sql_utils.cpp	1648	ObISqlPrinter::do_print	ret == OB_SIZE_OVERFLOW	if (OB_SIZE_OVERFLOW == ret) {
+src/sql/ob_sql_utils.cpp	1663	ObISqlPrinter::do_print	ret == OB_SIZE_OVERFLOW	} else if (OB_SIZE_OVERFLOW == ret) {
+src/sql/ob_sql_utils.cpp	1839	RelExprChecker::add_expr	ret (assigned in the comparison) == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == (ret = duplicated_checker_.exist_refactored(reinterpret_cast<uint64_t>(expr)))) {
+src/sql/ob_sql_utils.cpp	1843	RelExprChecker::add_expr	ret == OB_HASH_EXIST	} else if (OB_HASH_EXIST == ret) {
+src/sql/ob_sql_utils.cpp	1890	RelExprPointerChecker::add_expr	call result flag=expr_id_map_.get_refactored(reinterpret_cast<uint64_... == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == (flag = expr_id_map_.get_refactored(reinterpret_cast<uint64_t>(expr), expr_id))) {
+src/sql/ob_sql_utils.cpp	3444	ObSQLUtils::get_result_from_ctx	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/sql/ob_sql_utils.cpp	3570	ObSQLUtils::async_recompile_view	call result dependency_info_queue == OB_HASH_NOT_EXIST	&& OB_HASH_NOT_EXIST == dependency_info_queue
+src/sql/ob_sql_utils.cpp	3595	ObSQLUtils::async_recompile_view	ret == OB_HASH_EXIST	if (OB_HASH_EXIST == ret) {
+src/sql/ob_sql_utils.cpp	3658	ObSQLUtils::check_need_disconnect_parser_err	other variable ret_code == OB_ERR_PARSE_SQL	if (OB_LIKELY(OB_ERR_PARSE_SQL == ret_code
+src/sql/ob_sql_utils.cpp	3659	ObSQLUtils::check_need_disconnect_parser_err	other variable ret_code == OB_ERR_PARSER_SYNTAX	|| OB_ERR_PARSER_SYNTAX == ret_code
+src/sql/ob_sql_utils.cpp	3660	ObSQLUtils::check_need_disconnect_parser_err	other variable ret_code == OB_ERR_EMPTY_QUERY	|| OB_ERR_EMPTY_QUERY == ret_code
+src/sql/ob_sql_utils.cpp	3661	ObSQLUtils::check_need_disconnect_parser_err	other variable ret_code == OB_SIZE_OVERFLOW	|| OB_SIZE_OVERFLOW == ret_code
+src/sql/ob_sql_utils.cpp	3662	ObSQLUtils::check_need_disconnect_parser_err	other variable ret_code == OB_ERR_ILLEGAL_NAME	|| OB_ERR_ILLEGAL_NAME == ret_code
+src/sql/ob_sql_utils.cpp	3663	ObSQLUtils::check_need_disconnect_parser_err	other variable ret_code == OB_ERR_NOT_VALID_ROUTINE_NAME	|| OB_ERR_NOT_VALID_ROUTINE_NAME == ret_code
+src/sql/ob_sql_utils.cpp	3664	ObSQLUtils::check_need_disconnect_parser_err	other variable ret_code == OB_ERR_VIEW_SELECT_CONTAIN_QUESTIONMARK	|| OB_ERR_VIEW_SELECT_CONTAIN_QUESTIONMARK == ret_code
+src/sql/ob_sql_utils.cpp	3665	ObSQLUtils::check_need_disconnect_parser_err	other variable ret_code == OB_ERR_PARSER_INIT	|| OB_ERR_PARSER_INIT == ret_code
+src/sql/ob_sql_utils.cpp	3666	ObSQLUtils::check_need_disconnect_parser_err	other variable ret_code == OB_NOT_SUPPORTED	|| OB_NOT_SUPPORTED == ret_code
+src/sql/ob_sql_utils.cpp	3667	ObSQLUtils::check_need_disconnect_parser_err	other variable ret_code == OB_ALLOCATE_MEMORY_FAILED	|| OB_ALLOCATE_MEMORY_FAILED == ret_code)) {
+src/sql/ob_sql_utils.cpp	3775	ObSQLUtils::append_obj_param	ret == OB_SIZE_OVERFLOW	if (ret == OB_SIZE_OVERFLOW) {
+src/sql/ob_sql_utils.cpp	3782	ObSQLUtils::append_obj_param	ret == OB_SIZE_OVERFLOW	} while (ret == OB_SIZE_OVERFLOW);
+src/sql/optimizer/ob_access_path_estimation.cpp	1765	ObAccessPathEstimation::process_dynamic_sampling_estimation	errsim expression OB_E(EN_THROW_DS_ERROR)OB_SUCCESS == OB_TIMEOUT	if (OB_TIMEOUT == (OB_E(EN_THROW_DS_ERROR) OB_SUCCESS) &&
+src/sql/optimizer/ob_access_path_estimation.cpp	1766	ObAccessPathEstimation::process_dynamic_sampling_estimation	ret == OB_TIMEOUT	OB_TIMEOUT == ret) {
+src/sql/optimizer/ob_access_path_estimation.cpp	1773	ObAccessPathEstimation::process_dynamic_sampling_estimation	ret == OB_TIMEOUT	if (OB_TIMEOUT == ret) {
+src/sql/optimizer/ob_access_path_estimation.cpp	2172	ObAccessPathEstimation::is_retry_ret	ret == OB_NOT_MASTER	return ret == OB_NOT_MASTER ||
+src/sql/optimizer/ob_access_path_estimation.cpp	2173	ObAccessPathEstimation::is_retry_ret	ret == OB_RS_NOT_MASTER	ret == OB_RS_NOT_MASTER ||
+src/sql/optimizer/ob_access_path_estimation.cpp	2174	ObAccessPathEstimation::is_retry_ret	ret == OB_SERVER_RUNTIME_NOT_READY	ret == OB_SERVER_RUNTIME_NOT_READY ||
+src/sql/optimizer/ob_access_path_estimation.cpp	2175	ObAccessPathEstimation::is_retry_ret	ret == OB_NO_READABLE_REPLICA	ret == OB_NO_READABLE_REPLICA ||
+src/sql/optimizer/ob_access_path_estimation.cpp	2176	ObAccessPathEstimation::is_retry_ret	ret == OB_LS_NOT_EXIST	ret == OB_LS_NOT_EXIST ||
+src/sql/optimizer/ob_access_path_estimation.cpp	2177	ObAccessPathEstimation::is_retry_ret	ret == OB_TABLET_NOT_EXIST	ret == OB_TABLET_NOT_EXIST;
+src/sql/optimizer/ob_del_upd_log_plan.cpp	299	ObDelUpdLogPlan::calculate_insert_table_location_and_sharding	ret != OB_NO_PARTITION_FOR_GIVEN_VALUE	if (ret != OB_NO_PARTITION_FOR_GIVEN_VALUE) {
+src/sql/optimizer/ob_del_upd_log_plan.cpp	2000	ObDelUpdLogPlan::check_dml_table_write_dependency	ret != OB_ERR_INDEX_KEY_NOT_FOUND	if (OB_UNLIKELY(OB_ERR_INDEX_KEY_NOT_FOUND != ret)) {
+src/sql/optimizer/ob_dynamic_sampling.cpp	163	ObDynamicSampling::get_ds_stat_items	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/sql/optimizer/ob_dynamic_sampling.cpp	953	ObDynamicSampling::do_estimate_rowcount	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/optimizer/ob_insert_log_plan.cpp	166	ObInsertLogPlan::get_index_part_ids	call result data_part_id_set.exist_refactored(data_part_id) == OB_HASH_EXIST	if (OB_UNLIKELY(OB_HASH_EXIST == data_part_id_set.exist_refactored(data_part_id))) {
+src/sql/optimizer/ob_insert_log_plan.cpp	181	ObInsertLogPlan::get_index_part_ids	call result data_part_id_set.exist_refactored(data_part_id) == OB_HASH_EXIST	if (OB_UNLIKELY(OB_HASH_EXIST == data_part_id_set.exist_refactored(data_part_id))) {
+src/sql/optimizer/ob_join_order.cpp	14938	ObJoinOrder::generate_inner_base_paths	ret == OB_ERR_NO_PATH_GENERATED	if (OB_UNLIKELY(OB_ERR_NO_PATH_GENERATED == ret && !inner_path_info.force_inner_nl_)) {

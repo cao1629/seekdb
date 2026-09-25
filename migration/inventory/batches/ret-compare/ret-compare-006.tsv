@@ -1,0 +1,96 @@
+file	line	symbol	construct	text
+src/observer/change_stream/ob_change_stream_fetcher.cpp	142	ObCSFetcher::init_consumption_position_	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/observer/change_stream/ob_change_stream_fetcher.cpp	556	ObCSFetcher::get_or_create_tx_info_	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/observer/change_stream/ob_change_stream_fetcher.cpp	625	ObCSFetcher::handle_commit_log_	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/observer/change_stream/ob_change_stream_fetcher.cpp	673	ObCSFetcher::handle_abort_log_	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/observer/change_stream/ob_change_stream_fetcher.cpp	695	ObCSFetcher::handle_rollback_to_log_	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/observer/change_stream/ob_change_stream_fetcher.cpp	838	ObCSFetcher::run1	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/observer/change_stream/ob_change_stream_fetcher.cpp	891	ObCSFetcher::run1	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/observer/change_stream/ob_cs_plugin_async_index.cpp	137	ObCSAsyncIndexProcessor::process	ret == OB_TABLET_NOT_EXIST	if (common::OB_TABLET_NOT_EXIST == ret) {
+src/observer/change_stream/ob_cs_plugin_async_index.cpp	161	ObCSAsyncIndexProcessor::process	ret == OB_HASH_NOT_EXIST	if (common::OB_HASH_NOT_EXIST == ret) {
+src/observer/change_stream/ob_cs_plugin_async_index.cpp	229	ObCSAsyncIndexProcessor::handle_insert_or_write_error_	ret == OB_TABLET_NOT_EXIST	if (common::OB_TABLET_NOT_EXIST == ret) {
+src/observer/change_stream/ob_cs_plugin_async_index.cpp	437	ObCSAsyncIndexProcessor::resolve_table_id_from_tablet_id_	ret != OB_HASH_NOT_EXIST	} else if (OB_HASH_NOT_EXIST != ret) {
+src/observer/change_stream/ob_cs_plugin_async_index.cpp	446	ObCSAsyncIndexProcessor::resolve_table_id_from_tablet_id_	ret == OB_ITEM_NOT_MATCH	if (common::OB_ITEM_NOT_MATCH == ret) {
+src/observer/change_stream/ob_cs_plugin_async_index.cpp	494	ObCSAsyncIndexProcessor::build_event_from_row_	other variable extract_ret == OB_ERR_UNEXPECTED	if (common::OB_ERR_UNEXPECTED == extract_ret && OB_ISNULL(vec_data)) {
+src/observer/change_stream/ob_cs_plugin_async_index.cpp	504	ObCSAsyncIndexProcessor::build_event_from_row_	other variable extract_ret == OB_ERR_UNEXPECTED	if (common::OB_ERR_UNEXPECTED == extract_ret && OB_ISNULL(vec_data)) {
+src/observer/composition/retrieval/ob_das_legacy_tr_merge_iter.cpp	936	get_query_tokens_by_compacting_repeated_token	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/observer/dbms_scheduler/ob_dbms_sched_job_executor.cpp	233	ObDBMSSchedJobExecutor::run_dbms_sched_job	call result result.get_result()->next() != OB_ITER_END	if (OB_SUCC(ret) && (result.get_result( )->next()) != OB_ITER_END) {
+src/observer/dbms_scheduler/ob_dbms_sched_job_executor.cpp	237	ObDBMSSchedJobExecutor::run_dbms_sched_job	ret == OB_ITER_END	} else if (OB_ITER_END == ret) {
+src/observer/dbms_scheduler/ob_dbms_sched_job_executor.cpp	262	ObDBMSSchedJobExecutor::run_dbms_sched_job	call result result.get_result()->next() != OB_ITER_END	if (OB_SUCC(ret) && (result.get_result()->next()) != OB_ITER_END) {
+src/observer/dbms_scheduler/ob_dbms_sched_job_executor.cpp	266	ObDBMSSchedJobExecutor::run_dbms_sched_job	ret == OB_ITER_END	} else if (OB_ITER_END == ret) {
+src/observer/dbms_scheduler/ob_dbms_sched_job_executor.cpp	280	ObDBMSSchedJobExecutor::run_dbms_sched_job	call result tmp_result.get_result()->next() != OB_ITER_END	if (OB_SUCC(ret) && (tmp_result.get_result()->next()) != OB_ITER_END) {
+src/observer/dbms_scheduler/ob_dbms_sched_job_executor.cpp	284	ObDBMSSchedJobExecutor::run_dbms_sched_job	ret == OB_ITER_END	} else if (OB_ITER_END == ret) {
+src/observer/dbms_scheduler/ob_dbms_sched_job_executor.cpp	359	ObDBMSSchedJobExecutor::run_dbms_sched_job	ret == OB_ERR_SESSION_INTERRUPTED	if (OB_ERR_SESSION_INTERRUPTED == ret) { //It may have been the user interrupted, need to check.
+src/observer/dbms_scheduler/ob_dbms_sched_job_master.cpp	384	ObDBMSSchedJobMaster::register_new_jobs	other variable tmp == OB_HASH_EXIST	if (OB_HASH_EXIST == tmp) {
+src/observer/dbms_scheduler/ob_dbms_sched_job_master.cpp	399	ObDBMSSchedJobMaster::register_new_jobs	other variable tmp == OB_HASH_NOT_EXIST	} else if (OB_HASH_NOT_EXIST == tmp) {
+src/observer/dbms_scheduler/ob_dbms_sched_job_utils.cpp	172	ObDBMSSchedJobUtils::job_class_check_impl	call result result.get_result()->next() != OB_ITER_END	if (OB_SUCC(ret) && (result.get_result()->next()) != OB_ITER_END) {
+src/observer/dbms_scheduler/ob_dbms_sched_job_utils.cpp	267	ObDBMSSchedJobUtils::stop_dbms_sched_job	ret == OB_ITER_END	if (ret == OB_ITER_END) {
+src/observer/dbms_scheduler/ob_dbms_sched_job_utils.cpp	320	ObDBMSSchedJobUtils::stop_dbms_sched_job	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/observer/dbms_scheduler/ob_dbms_sched_job_utils.cpp	596	ObDBMSSchedJobUtils::get_dbms_sched_job_info	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/observer/dbms_scheduler/ob_dbms_sched_table_operator.cpp	314	ObDBMSSchedTableOperator::extract_info	ret == OB_ERR_NULL_VALUE; ret == OB_ERR_COLUMN_NOT_FOUND	if (OB_ERR_NULL_VALUE == ret || OB_ERR_COLUMN_NOT_FOUND == ret) {
+src/observer/dbms_scheduler/ob_dbms_sched_table_operator.cpp	319	ObDBMSSchedTableOperator::extract_info	ret == OB_ERR_NULL_VALUE; ret == OB_ERR_COLUMN_NOT_FOUND	if (OB_ERR_NULL_VALUE == ret || OB_ERR_COLUMN_NOT_FOUND == ret) {
+src/observer/dbms_scheduler/ob_dbms_sched_table_operator.cpp	325	ObDBMSSchedTableOperator::extract_info	ret == OB_ERR_NULL_VALUE; ret == OB_ERR_COLUMN_NOT_FOUND	if (OB_ERR_NULL_VALUE == ret || OB_ERR_COLUMN_NOT_FOUND == ret) {
+src/observer/dbms_scheduler/ob_dbms_sched_table_operator.cpp	343	#define EXTRACT_TIMESTAMP_FIELD_MYSQL_SKIP_RET	ret == OB_ERR_COLUMN_NOT_FOUND	} else if (OB_ERR_COLUMN_NOT_FOUND == ret) {                        \
+src/observer/dbms_scheduler/ob_dbms_sched_table_operator.cpp	353	#define EXTRACT_NUMBER_FIELD_MYSQL_SKIP_RET	ret == OB_ERR_NULL_VALUE; ret == OB_ERR_COLUMN_NOT_FOUND	if (OB_ERR_NULL_VALUE == ret || OB_ERR_COLUMN_NOT_FOUND == ret) {   \
+src/observer/dbms_scheduler/ob_dbms_sched_table_operator.cpp	463	ObDBMSSchedTableOperator::get_dbms_sched_job_info	tmp_ret != OB_ITER_END	} else if (tmp_ret != OB_ITER_END) {
+src/observer/dbms_scheduler/ob_dbms_sched_table_operator.cpp	468	ObDBMSSchedTableOperator::get_dbms_sched_job_info	ret == OB_ITER_END	} else if (OB_ITER_END == ret) {
+src/observer/dbms_scheduler/ob_dbms_sched_table_operator.cpp	508	ObDBMSSchedTableOperator::get_dbms_sched_job_infos_in_runtime	ret == OB_ITER_END	ret = OB_ITER_END == ret ? OB_SUCCESS : ret;
+src/observer/dbms_scheduler/ob_dbms_sched_table_operator.cpp	529	ObDBMSSchedTableOperator::extract_job_class_info	ret == OB_ERR_NULL_VALUE; ret == OB_ERR_COLUMN_NOT_FOUND	if (OB_ERR_NULL_VALUE == ret || OB_ERR_COLUMN_NOT_FOUND == ret) {
+src/observer/dbms_scheduler/ob_dbms_sched_table_operator.cpp	561	ObDBMSSchedTableOperator::get_dbms_sched_job_class_info	tmp_ret != OB_ITER_END	} else if (tmp_ret != OB_ITER_END) {
+src/observer/dbms_scheduler/ob_dbms_sched_table_operator.cpp	566	ObDBMSSchedTableOperator::get_dbms_sched_job_class_info	ret == OB_ITER_END	} else if (OB_ITER_END == ret) {
+src/observer/dbms_scheduler/ob_dbms_sched_table_operator.cpp	602	ObDBMSSchedTableOperator::get_dbms_sched_job_class_infos_in_runtime	ret == OB_ITER_END	ret = OB_ITER_END == ret ? OB_SUCCESS : ret;
+src/observer/mysql/ob_async_plan_driver.cpp	100	ObAsyncPlanDriver::response_result	ret == OB_TIMEOUT	if (OB_TIMEOUT == ret && session_.is_user_session()) {
+src/observer/mysql/ob_mysql_end_trans_cb.cpp	239	ObSqlEndTransCb::complete_callback_locked	other variable cb_param == OB_TRANS_COMMITED	|| OB_TRANS_COMMITED == cb_param
+src/observer/mysql/ob_mysql_end_trans_cb.cpp	240	ObSqlEndTransCb::complete_callback_locked	other variable cb_param == OB_TRANS_ROLLBACKED	|| OB_TRANS_ROLLBACKED == cb_param;
+src/observer/mysql/ob_mysql_end_trans_cb.cpp	303	ObSqlEndTransCb::complete_aborted_callback_locked	other variable cb_param == OB_TRANS_COMMITED	|| OB_TRANS_COMMITED == cb_param
+src/observer/mysql/ob_mysql_end_trans_cb.cpp	304	ObSqlEndTransCb::complete_aborted_callback_locked	other variable cb_param == OB_TRANS_ROLLBACKED	|| OB_TRANS_ROLLBACKED == cb_param;
+src/observer/mysql/ob_mysql_end_trans_cb.cpp	330	ObSqlEndTransCb::cleanup_session_locked	other variable piece_ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == piece_ret) {
+src/observer/mysql/ob_query_driver.cpp	237	ObQueryDriver::response_query_result	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/observer/mysql/ob_sync_plan_driver.cpp	68	ObSyncPlanDriver::response_result	ret != OB_TRANSACTION_SET_VIOLATION; ret != OB_REPLICA_NOT_READABLE	if (OB_TRANSACTION_SET_VIOLATION != ret && OB_REPLICA_NOT_READABLE != ret) {
+src/observer/mysql/ob_sync_plan_driver.cpp	69	ObSyncPlanDriver::response_result	ret == OB_TRY_LOCK_ROW_CONFLICT	if (OB_TRY_LOCK_ROW_CONFLICT == ret && retry_ctrl_.need_retry()) {
+src/observer/mysql/ob_sync_plan_driver.cpp	79	ObSyncPlanDriver::response_result	other variable cret != OB_TRANSACTION_SET_VIOLATION	cret != OB_TRANSACTION_SET_VIOLATION &&
+src/observer/mysql/ob_sync_plan_driver.cpp	80	ObSyncPlanDriver::response_result	other variable cret != OB_TRY_LOCK_ROW_CONFLICT	OB_TRY_LOCK_ROW_CONFLICT != cret) {
+src/observer/mysql/ob_sync_plan_driver.cpp	182	ObSyncPlanDriver::response_result	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/observer/mysql/ob_sync_plan_driver.cpp	191	ObSyncPlanDriver::response_result	ret == OB_TIMEOUT	if (OB_TIMEOUT == ret && session_.is_user_session()) {
+src/observer/mysql/ob_sync_plan_driver.cpp	199	ObSyncPlanDriver::response_result	ret != OB_BATCHED_MULTI_STMT_ROLLBACK	&& OB_BATCHED_MULTI_STMT_ROLLBACK != ret) {
+src/observer/mysql/obmp_base.cpp	108	ObMPBase::after_process	other variable error_code == OB_TRY_LOCK_ROW_CONFLICT	if (THIS_WORKER.need_retry() && OB_TRY_LOCK_ROW_CONFLICT == error_code) {
+src/observer/mysql/obmp_base.cpp	122	ObMPBase::after_process	other variable error_code != OB_TRY_LOCK_ROW_CONFLICT	if (OB_TRY_LOCK_ROW_CONFLICT != error_code) {
+src/observer/mysql/obmp_connect.cpp	269	ObMPConnect::process	switch (proc_ret) case OB_PASSWORD_WRONG	case OB_PASSWORD_WRONG: {
+src/observer/mysql/obmp_init_db.cpp	183	ObMPInitDB::do_process	ret == OB_ERR_NO_DB_SELECTED	if (OB_ERR_NO_DB_SELECTED == ret) {
+src/observer/mysql/obmp_packet_sender.cpp	558	ObMPPacketSender::send_error_packet	other variable err == OB_ERR_SIGNAL_EXCEPTION	|| OB_ERR_SIGNAL_EXCEPTION == err)) {
+src/observer/mysql/obmp_packet_sender.cpp	564	ObMPPacketSender::send_error_packet	other variable err == OB_ERR_SIGNAL_EXCEPTION	} else if (OB_ERR_SIGNAL_EXCEPTION == err) {
+src/observer/mysql/obmp_packet_sender.cpp	643	ObMPPacketSender::send_error_packet	other variable err == OB_ERR_SIGNAL_EXCEPTION	if (OB_ERR_SIGNAL_EXCEPTION == err && OB_NOT_NULL(wb)) {
+src/observer/mysql/obmp_query.cpp	137	ObMPQuery::process	ret == OB_ERR_PARSE_SQL	if (OB_ERR_PARSE_SQL == ret) {
+src/observer/mysql/obmp_query.cpp	684	ObMPQuery::do_process_trans_ctrl	ret == OB_ITER_END	audit_record.status_ = (0 == ret || OB_ITER_END == ret)
+src/observer/mysql/obmp_query.cpp	854	ObMPQuery::do_process	ret == OB_BATCHED_MULTI_STMT_ROLLBACK	} else if (OB_BATCHED_MULTI_STMT_ROLLBACK == ret) {
+src/observer/mysql/obmp_query.cpp	892	ObMPQuery::do_process	ret != OB_TRANSACTION_SET_VIOLATION; ret != OB_REPLICA_NOT_READABLE	if (OB_TRANSACTION_SET_VIOLATION != ret && OB_REPLICA_NOT_READABLE != ret) {
+src/observer/mysql/obmp_query.cpp	921	ObMPQuery::do_process	ret != OB_TRANSACTION_SET_VIOLATION; ret != OB_REPLICA_NOT_READABLE; ret != OB_TRY_LOCK_ROW_CONFLICT	if (OB_TRANSACTION_SET_VIOLATION != ret && OB_REPLICA_NOT_READABLE != ret && OB_TRY_LOCK_ROW_CONFLICT != ret) {
+src/observer/mysql/obmp_query.cpp	966	ObMPQuery::do_process	ret == OB_ITER_END	audit_record.status_ = (0 == ret || OB_ITER_END == ret)
+src/observer/mysql/obmp_stmt_execute.cpp	493	ObMPStmtExecute::after_do_process_for_arraybinding	ret != OB_TRANSACTION_SET_VIOLATION; ret != OB_REPLICA_NOT_READABLE	if (OB_TRANSACTION_SET_VIOLATION != ret && OB_REPLICA_NOT_READABLE != ret) {
+src/observer/mysql/obmp_stmt_execute.cpp	494	ObMPStmtExecute::after_do_process_for_arraybinding	ret == OB_TRY_LOCK_ROW_CONFLICT	if (OB_TRY_LOCK_ROW_CONFLICT == ret && retry_ctrl_.need_retry()) {
+src/observer/mysql/obmp_stmt_execute.cpp	502	ObMPStmtExecute::after_do_process_for_arraybinding	other variable cret != OB_TRANSACTION_SET_VIOLATION	cret != OB_TRANSACTION_SET_VIOLATION &&
+src/observer/mysql/obmp_stmt_execute.cpp	503	ObMPStmtExecute::after_do_process_for_arraybinding	other variable cret != OB_TRY_LOCK_ROW_CONFLICT	OB_TRY_LOCK_ROW_CONFLICT != cret) {
+src/observer/mysql/obmp_stmt_execute.cpp	575	ObMPStmtExecute::before_process	ret == OB_ERR_PREPARE_STMT_CHECKSUM	if (OB_ERR_PREPARE_STMT_CHECKSUM == ret) {
+src/observer/mysql/obmp_stmt_execute.cpp	1637	ObMPStmtExecute::do_process	ret == OB_ITER_END	(0 == ret || OB_ITER_END == ret) ? 0 : (ret);
+src/observer/mysql/obmp_stmt_execute.cpp	1972	ObMPStmtExecute::process	ret == OB_EAGAIN	if (OB_EAGAIN == ret) {
+src/observer/mysql/obmp_stmt_execute.cpp	1992	ObMPStmtExecute::process	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/observer/mysql/obmp_stmt_fetch.cpp	72	ObMPStmtFetch::before_process	ret == OB_ERR_PREPARE_STMT_CHECKSUM	if (OB_ERR_PREPARE_STMT_CHECKSUM == ret) {
+src/observer/mysql/obmp_stmt_fetch.cpp	144	ObMPStmtFetch::do_process	ret == OB_READ_NOTHING	if (OB_READ_NOTHING == ret) {
+src/observer/mysql/obmp_stmt_fetch.cpp	315	ObMPStmtFetch::response_result	ret == OB_ITER_END; ret == OB_READ_NOTHING	if (OB_ITER_END == ret || OB_READ_NOTHING == ret) {
+src/observer/mysql/obmp_stmt_prepare.cpp	179	ObMPStmtPrepare::process	ret == OB_NOT_SUPPORTED	need_disconnect = OB_NOT_SUPPORTED == ret ? false : true;
+src/observer/mysql/obmp_stmt_prepare.cpp	506	ObMPStmtPrepare::send_column_packet	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/observer/mysql/obmp_stmt_prepare.cpp	536	ObMPStmtPrepare::send_param_packet	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/observer/mysql/obmp_stmt_reset.cpp	95	ObMPStmtReset::process	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/observer/mysql/obmp_stmt_reset.cpp	121	ObMPStmtReset::process	ret == OB_ERR_PREPARE_STMT_CHECKSUM	if (OB_ERR_PREPARE_STMT_CHECKSUM == ret || need_disconnect) {
+src/observer/mysql/obsm_conn_callback.cpp	60	sm_conn_init	other variable crt_id_ret != OB_ERR_CON_COUNT_ERROR	if (OB_UNLIKELY(OB_SUCCESS != crt_id_ret && OB_ERR_CON_COUNT_ERROR != crt_id_ret)) {
+src/observer/ob_inner_sql_connection.cpp	601	ObInnerSQLConnection::process_audit_record	other variable last_ret == OB_ITER_END	audit_record.status_ = (0 == last_ret || OB_ITER_END == last_ret)
+src/observer/ob_inner_sql_result.cpp	83	ObInnerSQLResult::init	ret == OB_IN_STOP_STATE	if (OB_IN_STOP_STATE == ret) {
+src/observer/ob_inner_sql_result.cpp	139	ObInnerSQLResult::open	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/observer/ob_inner_sql_result.cpp	217	ObInnerSQLResult::next	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/ob_inner_sql_result.cpp	251	ObInnerSQLResult::build_column_map	ret == OB_HASH_EXIST	if (OB_HASH_EXIST == ret) {
+src/observer/ob_inner_sql_result.cpp	282	ObInnerSQLResult::find_idx	ret != OB_HASH_NOT_EXIST	if (OB_SUCCESS != ret && OB_HASH_NOT_EXIST != ret) {
+src/observer/ob_inner_sql_result.cpp	283	ObInnerSQLResult::find_idx	ret == OB_HASH_NOT_EXIST	} else if (OB_HASH_NOT_EXIST == ret) {
+src/observer/ob_inner_sql_result.cpp	493	#define DEF_GET_VALUE_BY_NAME	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {                                           \
+src/observer/ob_inner_sql_result.cpp	502	#define DEF_GET_VALUE_BY_NAME	ret != OB_ERR_NULL_VALUE	if (OB_ERR_NULL_VALUE != ret) {                                            \
+src/observer/ob_inner_sql_result.cpp	535	ObInnerSQLResult::get_timestamp	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/observer/ob_inner_sql_result.cpp	542	ObInnerSQLResult::get_timestamp	ret != OB_ERR_NULL_VALUE	if (OB_ERR_NULL_VALUE != ret) {

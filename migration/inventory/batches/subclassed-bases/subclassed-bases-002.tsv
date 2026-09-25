@@ -1,0 +1,81 @@
+file	line	symbol	construct	text
+src/rootserver/ob_ddl_service_launcher.h	34	ObDDLServiceLauncher	direct subclass of ObICheckpointSubHandler (class logservice::ObICheckpointSubHandler) [base named in the evidence, not in the plan list]	class ObDDLServiceLauncher : public logservice::ObILocalLogHandler,
+src/rootserver/ob_ddl_service_launcher.h	34	ObDDLServiceLauncher	direct subclass of ObIReplaySubHandler (class logservice::ObIReplaySubHandler) [base named in the evidence, not in the plan list]	class ObDDLServiceLauncher : public logservice::ObILocalLogHandler,
+src/rootserver/ob_local_management_service.h	84	ObLocalManagementService::ObLoadDDLTask	direct subclass of ObTimerTask (class common::ObTimerTask)	class ObLoadDDLTask : public common::ObTimerTask
+src/rootserver/ob_local_management_service.h	94	ObLocalManagementService::ObDeadlockEventClearTask	direct subclass of ObTimerTask (class common::ObTimerTask)	class ObDeadlockEventClearTask : public common::ObTimerTask
+src/rootserver/ob_root_inspection.h	53	ObPurgeRecyclebinTask	direct subclass of ObTimerTask (class common::ObTimerTask)	class ObPurgeRecyclebinTask: public common::ObTimerTask
+src/rootserver/ob_runtime_ddl_service.h	46	ObSysStat::Item	direct subclass of ObDLinkBase (struct common::ObDLinkBase<Item>)	struct Item : public common::ObDLinkBase<Item>
+src/rootserver/ob_system_bootstrap_service.h	42	ObSysStat::Item	direct subclass of ObDLinkBase (struct common::ObDLinkBase<Item>)	struct Item : public common::ObDLinkBase<Item>
+src/share/cache/ob_kv_storecache.h	221	ObKVGlobalCache::KVStoreWashTask	direct subclass of ObTimerTask (class ObTimerTask)	class KVStoreWashTask: public ObTimerTask
+src/share/cache/ob_kv_storecache.h	239	ObKVGlobalCache::KVMapReplaceTask	direct subclass of ObTimerTask (class ObTimerTask)	class KVMapReplaceTask : public ObTimerTask
+src/share/io/ob_io_define.h	450	ObIORequest	direct subclass of ObDLinkBase (class common::ObDLinkBase<ObIORequest>)	class ObIORequest : public common::ObDLinkBase<ObIORequest>
+src/share/ob_ddl_task_executor.h	45	ObIDDLTask	direct subclass of ObDLinkBase (class common::ObDLinkBase<ObIDDLTask>)	class ObIDDLTask : public common::ObDLinkBase<ObIDDLTask>
+src/share/ob_debug_sync.h	93	ObDSActionNode	direct subclass of ObDLinkBase (class ObDLinkBase<ObDSActionNode>)	class ObDSActionNode : public ObDLinkBase<ObDSActionNode>
+src/share/ob_debug_sync.h	140	ObDSEventControl::Event	direct subclass of ObDLinkBase (struct ObDLinkBase<Event>)	struct Event : ObDLinkBase<Event>
+src/share/ob_global_stat_proxy.h	30	ObGlobalStatItem	direct subclass of ObDLinkBase (struct common::ObDLinkBase<ObGlobalStatItem>)	struct ObGlobalStatItem : public common::ObDLinkBase<ObGlobalStatItem>
+src/share/ob_merge_info.h	29	ObMergeInfoItem	direct subclass of ObDLinkBase (struct common::ObDLinkBase<ObMergeInfoItem>)	struct ObMergeInfoItem : public common::ObDLinkBase<ObMergeInfoItem>
+src/share/ob_time_wheel.h	33	ObTimeWheelTask	direct subclass of ObDLinkBase (class ObDLinkBase<ObTimeWheelTask>)	class ObTimeWheelTask : public ObDLinkBase<ObTimeWheelTask>
+src/share/ob_timezone_mgr.h	39	ObTimezoneMgr::UpdateTimezoneTask	direct subclass of ObTimerTask (class common::ObTimerTask)	class UpdateTimezoneTask : public common::ObTimerTask
+src/share/redolog/ob_log_file_reader.h	117	ObLogFileReader2::EvictTask	direct subclass of ObTimerTask (class common::ObTimerTask)	class EvictTask : public common::ObTimerTask
+src/share/schema/ob_schema_cache.h	44	ObSchemaCacheKey	direct subclass of ObIKVCacheKey (class common::ObIKVCacheKey) [base named in the evidence, not in the plan list]	class ObSchemaCacheKey : public common::ObIKVCacheKey
+src/share/schema/ob_schema_cache.h	69	ObSchemaCacheValue	direct subclass of ObIKVCacheValue (class common::ObIKVCacheValue) [base named in the evidence, not in the plan list]	class ObSchemaCacheValue : public common::ObIKVCacheValue
+src/share/schema/ob_schema_cache.h	87	ObSchemaHistoryCacheValue	direct subclass of ObIKVCacheValue (class common::ObIKVCacheValue) [base named in the evidence, not in the plan list]	class ObSchemaHistoryCacheValue : public common::ObIKVCacheValue
+src/share/schema/ob_schema_cache.h	102	ObTabletCacheKey	direct subclass of ObIKVCacheKey (class common::ObIKVCacheKey) [base named in the evidence, not in the plan list]	class ObTabletCacheKey : public common::ObIKVCacheKey
+src/share/schema/ob_schema_cache.h	125	ObTabletCacheValue	direct subclass of ObIKVCacheValue (class common::ObIKVCacheValue) [base named in the evidence, not in the plan list]	class ObTabletCacheValue : public common::ObIKVCacheValue
+src/sql/dtl/ob_dtl_channel.h	93	ObDtlChannel	direct subclass of ObDLinkBase (class common::ObDLinkBase<ObDtlChannel>)	class ObDtlChannel : public common::ObDLinkBase<ObDtlChannel>
+src/sql/dtl/ob_dtl_interm_result_manager.h	381	ObDTLIntermResultGCTask	direct subclass of ObTimerTask (class common::ObTimerTask)	class ObDTLIntermResultGCTask : public common::ObTimerTask
+src/sql/dtl/ob_dtl_linked_buffer.h	219	ObDtlLinkedBuffer	direct subclass of ObLink (class common::ObLink) [base named in the evidence, not in the plan list]	class ObDtlLinkedBuffer
+src/sql/dtl/ob_dtl_local_first_buffer_manager.h	36	ObDtlCacheBufferInfo	direct subclass of ObDLinkBase (class common::ObDLinkBase<ObDtlCacheBufferInfo>)	class ObDtlCacheBufferInfo : public common::ObDLinkBase<ObDtlCacheBufferInfo>
+src/sql/engine/aggregate/ob_hash_groupby_op.h	226	ObHashGroupByOp::DatumStoreLinkPartition	direct subclass of ObDLinkBase (struct common::ObDLinkBase<DatumStoreLinkPartition>)	struct DatumStoreLinkPartition : public common::ObDLinkBase<DatumStoreLinkPartition>
+src/sql/engine/basic/ob_hash_partitioning_infrastructure_op.h	234	ObHashPartInfrastructure	direct subclass of ObDLinkBase (class common::ObDLinkBase<ObHashPartInfrastructure<HashCol,HashRowStore>>)	class ObHashPartInfrastructure :public common::ObDLinkBase<ObHashPartInfrastructure<HashCol, HashRowStore>>
+src/sql/engine/basic/ob_hash_partitioning_infrastructure_op.h	316	ObHashPartInfrastructure::ObIntraPartition	direct subclass of ObDLinkBase (class common::ObDLinkBase<ObIntraPartition>)	class ObIntraPartition : public common::ObDLinkBase<ObIntraPartition>
+src/sql/engine/basic/ob_ra_datum_store.h	72	ObRADatumStore::LinkNode	direct subclass of ObDLinkBase (class common::ObDLinkBase<LinkNode>)	class LinkNode : public common::ObDLinkBase<LinkNode>
+src/sql/engine/basic/ob_ra_row_store.h	67	ObRARowStore::LinkNode	direct subclass of ObDLinkBase (class common::ObDLinkBase<LinkNode>)	class LinkNode : public common::ObDLinkBase<LinkNode>
+src/sql/engine/basic/ob_temp_block_store.h	194	ObTempBlockStore::LinkNode	direct subclass of ObDLinkBase (class common::ObDLinkBase<LinkNode>)	class LinkNode : public common::ObDLinkBase<LinkNode>
+src/sql/engine/cmd/ob_load_data_impl.h	104	ObDataFrag	direct subclass of ObLink (struct common::ObLink) [base named in the evidence, not in the plan list]	struct ObDataFrag : common::ObLink
+src/sql/engine/expr/ob_expr_acos.h	25	ObExprAcos	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprAcos : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_agg_param_list.h	25	ObExprAggParamList	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprAggParamList : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_ai/ob_expr_ai_complete.h	30	ObExprAIComplete	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprAIComplete : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_ai/ob_expr_ai_embed.h	30	ObExprAIEmbed	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprAIEmbed : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_ai/ob_expr_ai_prompt.h	28	ObExprAIPrompt	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprAIPrompt : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_ai/ob_expr_ai_rerank.h	30	ObExprAIRerank	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprAIRerank : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_align_date4cmp.h	35	ObExprAlignDate4Cmp	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprAlignDate4Cmp : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_any_value.h	26	ObExprAnyValue	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprAnyValue : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_array.h	29	ObExprArray	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprArray : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_array_append.h	27	ObExprArrayAppendCommon	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprArrayAppendCommon : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_array_avg.h	27	ObExprArrayAvg	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprArrayAvg : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_array_cardinality.h	27	ObExprArrayCardinality	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprArrayCardinality : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_array_compact.h	27	ObExprArrayCompact	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprArrayCompact : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_array_concat.h	28	ObExprArrayConcat	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprArrayConcat : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_array_contains.h	29	ObExprArrayContains	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprArrayContains : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_array_difference.h	27	ObExprArrayDifference	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprArrayDifference : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_array_distinct.h	28	ObExprArrayDistinct	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprArrayDistinct : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_array_length.h	27	ObExprArrayLength	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprArrayLength : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_array_max.h	28	ObExprArrayExtreme	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprArrayExtreme : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_array_overlaps.h	29	ObExprArrayOverlaps	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprArrayOverlaps : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_array_position.h	29	ObExprArrayPosition	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprArrayPosition : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_array_range.h	27	ObExprArrayRange	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprArrayRange : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_array_remove.h	28	ObExprArrayRemove	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprArrayRemove : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_array_slice.h	27	ObExprArraySlice	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprArraySlice : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_array_sort.h	27	ObExprArraySort	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprArraySort : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_array_sum.h	31	ObExprArraySum	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprArraySum : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_array_to_string.h	28	ObExprArrayToString	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprArrayToString : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_array_union.h	27	ObExprArraySetOperation	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprArraySetOperation : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_ascii.h	26	ObExprAscii	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprAscii : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_ascii.h	48	ObExprOrd	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprOrd : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_asin.h	25	ObExprAsin	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprAsin : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_assign.h	25	ObExprAssign	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprAssign : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_atan.h	25	ObExprAtan	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprAtan : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_atan2.h	25	ObExprAtan2	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprAtan2 : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_autoinc_nextval.h	31	ObExprAutoincNextval	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprAutoincNextval : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_benchmark.h	26	ObExprBenchmark	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprBenchmark : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_bit_length.h	24	ObExprBitLength	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprBitLength : public ObFuncExprOperator {
+src/sql/engine/expr/ob_expr_calc_partition_id.h	143	ObExprCalcPartitionBase	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprCalcPartitionBase : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_cast.h	79	ObExprCast	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprCast: public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_char.h	25	ObExprChar	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprChar : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_char_length.h	26	ObExprCharLength	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprCharLength : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_collection_construct.h	31	ObExprCollectionConstruct	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprCollectionConstruct : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_column_conv.h	77	ObExprColumnConv	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprColumnConv : public ObBaseExprColumnConv, public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_compress.h	27	ObExprCompress	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprCompress : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_compress.h	45	ObExprUncompress	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprUncompress : public ObFuncExprOperator
+src/sql/engine/expr/ob_expr_compress.h	61	ObExprUncompressedLength	direct subclass of ObFuncExprOperator (class ObFuncExprOperator)	class ObExprUncompressedLength : public ObFuncExprOperator

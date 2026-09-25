@@ -1,0 +1,66 @@
+file	line	symbol	construct	text
+src/rootserver/fork_table/ob_fork_table_util.cpp	228	ObForkTableUtil::collect_index_tablet_ids	declare tmp_ret	int tmp_ret = complete_index_schema_map.get_refactored(index_table_id, aux_index_schema);
+src/rootserver/fork_table/ob_fork_table_util.cpp	232	ObForkTableUtil::collect_index_tablet_ids	merge into ret	ret = tmp_ret;
+src/rootserver/fork_table/ob_fork_table_util.cpp	341	ObForkTableUtil::collect_table_ids_from_table	declare tmp_ret	int tmp_ret = complete_index_schema_map.get_refactored(index_table_id, aux_index_schema);
+src/rootserver/fork_table/ob_fork_table_util.cpp	345	ObForkTableUtil::collect_table_ids_from_table	merge into ret	ret = tmp_ret;
+src/rootserver/freeze/ob_checksum_validator.cpp	227	ObChecksumValidator::validate_checksum	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/rootserver/freeze/ob_checksum_validator.cpp	229	ObChecksumValidator::validate_checksum	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(last_table_ckm_items_.build(*schema_guard_, *simple_schema_, cur_tablet_ids_, local_ckm_items_))) {
+src/rootserver/freeze/ob_checksum_validator.cpp	378	ObChecksumValidator::push_finish_tablet_ids_with_update	declare tmp_ret	int64_t tmp_ret = OB_SUCCESS;
+src/rootserver/freeze/ob_checksum_validator.cpp	379	ObChecksumValidator::push_finish_tablet_ids_with_update	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(batch_update_report_scn())) {
+src/rootserver/freeze/ob_daily_major_freeze_launcher.cpp	96	ObDailyMajorFreezeLauncher::runTimerTask	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/rootserver/freeze/ob_daily_major_freeze_launcher.cpp	106	ObDailyMajorFreezeLauncher::runTimerTask	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(try_gc_freeze_info())) {
+src/rootserver/freeze/ob_daily_major_freeze_launcher.cpp	108	ObDailyMajorFreezeLauncher::runTimerTask	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(try_gc_tablet_checksum())) {
+src/rootserver/freeze/ob_global_merge_manager.cpp	420	ObGlobalMergeManager::ObGlobalMergeMgrGuard::ObGlobalMergeMgrGuard	declare tmp_ret	const int tmp_ret = ObGlobalMergeManager::copy_info(shadow_, global_merge_mgr_);
+src/rootserver/freeze/ob_global_merge_manager.cpp	432	ObGlobalMergeManager::ObGlobalMergeMgrGuard::~ObGlobalMergeMgrGuard	declare tmp_ret	const int tmp_ret = ObGlobalMergeManager::copy_info(global_merge_mgr_, shadow_);
+src/rootserver/freeze/ob_major_freeze_service.cpp	140	ObMajorFreezeService::alloc_local_major_freeze	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/rootserver/freeze/ob_major_freeze_service.cpp	141	ObMajorFreezeService::alloc_local_major_freeze	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(delete_local_major_freeze())) {
+src/rootserver/freeze/ob_major_merge_progress_checker.cpp	168	ObMajorMergeProgressChecker::check_verification	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/rootserver/freeze/ob_major_merge_progress_checker.cpp	178	ObMajorMergeProgressChecker::check_verification	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(ckm_validator_.validate_checksum(table_id, schema_guard))) {
+src/rootserver/freeze/ob_major_merge_progress_checker.cpp	180	ObMajorMergeProgressChecker::check_verification	merge into ret	ret = tmp_ret;
+src/rootserver/freeze/ob_major_merge_progress_checker.cpp	196	ObMajorMergeProgressChecker::check_verification	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(unfinish_table_id_array.push_back(table_id))) {
+src/rootserver/freeze/ob_major_merge_progress_checker.cpp	262	ObMajorMergeProgressChecker::check_table_merge_progress	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/rootserver/freeze/ob_major_merge_progress_checker.cpp	263	ObMajorMergeProgressChecker::check_table_merge_progress	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(finish_tablet_ids_.push_back(cur_tablet_ids))) {
+src/rootserver/freeze/ob_major_merge_progress_checker.cpp	265	ObMajorMergeProgressChecker::check_table_merge_progress	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(ObTabletMetaTableCompactionOperator::batch_update_report_scn(
+src/rootserver/freeze/ob_major_merge_progress_checker.cpp	423	ObMajorMergeProgressChecker::prepare_unfinish_table_ids	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/rootserver/freeze/ob_major_merge_progress_checker.cpp	476	ObMajorMergeProgressChecker::prepare_unfinish_table_ids	OB_TMP_FAIL (plan definition)	&& (OB_TMP_FAIL(prepare_fts_group(table_id, index_schemas)))) {
+src/rootserver/freeze/ob_major_merge_progress_checker.cpp	626	ObMajorMergeProgressChecker::check_progress	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/rootserver/freeze/ob_major_merge_progress_checker.cpp	674	ObMajorMergeProgressChecker::check_progress	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(compaction::ADD_COMMON_SUSPECT_INFO(compaction::MAJOR_MERGE, ObDiagnoseTabletType::TYPE_RS_MAJOR_MERGE,
+src/rootserver/freeze/ob_major_merge_progress_checker.cpp	770	ObMajorMergeProgressChecker::deal_with_rest_data_table	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/rootserver/freeze/ob_major_merge_progress_checker.cpp	776	ObMajorMergeProgressChecker::deal_with_rest_data_table	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(set_table_compaction_info_status(table_id, ObTableCompactionInfo::INDEX_CKM_VERIFIED))) {
+src/rootserver/freeze/ob_major_merge_progress_checker.cpp	830	ObMajorMergeProgressChecker::deal_with_validated_table	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/rootserver/freeze/ob_major_merge_progress_checker.cpp	835	ObMajorMergeProgressChecker::deal_with_validated_table	OB_TMP_FAIL (plan definition)	&& OB_TMP_FAIL(update_finish_index_cnt_for_data_table(
+src/rootserver/freeze/ob_major_merge_progress_checker.cpp	842	ObMajorMergeProgressChecker::deal_with_validated_table	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(ckm_validator_.push_finish_tablet_ids_with_update(
+src/rootserver/freeze/ob_major_merge_progress_checker.cpp	846	ObMajorMergeProgressChecker::deal_with_validated_table	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(set_table_compaction_info_status(table_id, ObTableCompactionInfo::VERIFIED))) {
+src/rootserver/freeze/ob_major_merge_progress_checker.cpp	855	ObMajorMergeProgressChecker::loop_index_ckm_validate_array	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/rootserver/freeze/ob_major_merge_scheduler.cpp	147	ObMajorMergeScheduler::run3	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/rootserver/freeze/ob_major_merge_scheduler.cpp	148	ObMajorMergeScheduler::run3	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(try_idle(DEFAULT_IDLE_US, ret))) {
+src/rootserver/freeze/ob_major_merge_scheduler.cpp	294	ObMajorMergeScheduler::do_one_round_major_merge	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/rootserver/freeze/ob_major_merge_scheduler.cpp	320	ObMajorMergeScheduler::do_one_round_major_merge	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = try_idle(IN_MERGE_IDLE_US, ret))) {
+src/rootserver/freeze/ob_major_merge_scheduler.cpp	354	ObMajorMergeScheduler::update_merge_status	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/rootserver/freeze/ob_major_merge_scheduler.cpp	361	ObMajorMergeScheduler::update_merge_status	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(merge_info_mgr_->get_global_merge_mgr().set_merge_status(ObGlobalMergeInfo::CHECKSUM_ERROR))) {
+src/rootserver/ob_admin_job_table_operator.h	96	#define ADMIN_JOB_CREATE_WITH_RET	declare tmp_ret (plan definition)	int tmp_ret = ::oceanbase::common::OB_SUCCESS;            \
+src/rootserver/ob_admin_job_table_operator.h	98	#define ADMIN_JOB_CREATE_WITH_RET	assign tmp_ret	tmp_ret = THE_ADMIN_JOB_TABLE.create_job(job_type, job_id); \
+src/rootserver/ob_admin_job_table_operator.h	107	#define ADMIN_JOB_FIND	declare tmp_ret (plan definition)	int tmp_ret = ::oceanbase::common::OB_SUCCESS;                       \
+src/rootserver/ob_admin_job_table_operator.h	108	#define ADMIN_JOB_FIND	assign tmp_ret	tmp_ret = THE_ADMIN_JOB_TABLE.find_job(JOB_TYPE_ ## job_type, job_id); \
+src/rootserver/ob_admin_job_table_operator.h	114	#define GET_ADMIN_JOB_COUNT	declare tmp_ret (plan definition)	int tmp_ret = ::oceanbase::common::OB_SUCCESS;                               \
+src/rootserver/ob_admin_job_table_operator.h	115	#define GET_ADMIN_JOB_COUNT	assign tmp_ret	tmp_ret = THE_ADMIN_JOB_TABLE.get_job_count(JOB_TYPE_ ## job_type, job_count); \
+src/rootserver/ob_ai_model_ddl_service.cpp	49	ObAiModelDDLService::create_ai_model	declare temp_ret	int temp_ret = OB_SUCCESS;
+src/rootserver/ob_ai_model_ddl_service.cpp	50	ObAiModelDDLService::create_ai_model	assign temp_ret	if (OB_SUCCESS != (temp_ret = trans.end(OB_SUCC(ret)))) {
+src/rootserver/ob_ai_model_ddl_service.cpp	52	ObAiModelDDLService::create_ai_model	merge into ret	ret = (OB_SUCC(ret)) ? temp_ret : ret;
+src/rootserver/ob_ai_model_ddl_service.cpp	87	ObAiModelDDLService::drop_ai_model	declare temp_ret	int temp_ret = OB_SUCCESS;
+src/rootserver/ob_ai_model_ddl_service.cpp	88	ObAiModelDDLService::drop_ai_model	assign temp_ret	if (OB_SUCCESS != (temp_ret = trans.end(OB_SUCC(ret)))) {
+src/rootserver/ob_ai_model_ddl_service.cpp	90	ObAiModelDDLService::drop_ai_model	merge into ret	ret = (OB_SUCC(ret)) ? temp_ret : ret;
+src/rootserver/ob_bootstrap.cpp	424	ObBootstrap::create_core_related_partitions	declare temp_ret	int temp_ret = OB_SUCCESS;
+src/rootserver/ob_bootstrap.cpp	426	ObBootstrap::create_core_related_partitions	assign temp_ret	if (OB_SUCCESS != (temp_ret = trans.end(commit))) {
+src/rootserver/ob_bootstrap.cpp	427	ObBootstrap::create_core_related_partitions	merge into ret	ret = (OB_SUCC(ret)) ? temp_ret : ret;
+src/rootserver/ob_bootstrap.cpp	517	ObBootstrap::create_sys_table_partitions	declare temp_ret	int temp_ret = OB_SUCCESS;
+src/rootserver/ob_bootstrap.cpp	519	ObBootstrap::create_sys_table_partitions	assign temp_ret	if (OB_SUCCESS != (temp_ret = trans.end(commit))) {
+src/rootserver/ob_bootstrap.cpp	520	ObBootstrap::create_sys_table_partitions	merge into ret	ret = (OB_SUCC(ret)) ? temp_ret : ret;
+src/rootserver/ob_bootstrap.cpp	613	ObBootstrap::batch_create_schema	declare tmp_ret	int tmp_ret = trans.end(is_commit);
+src/rootserver/ob_bootstrap.cpp	616	ObBootstrap::batch_create_schema	merge into ret	ret = (OB_SUCCESS == ret) ? tmp_ret : ret;
+src/rootserver/ob_bootstrap.cpp	684	ObBootstrap::init_global_stat	declare temp_ret	int temp_ret = OB_SUCCESS;
+src/rootserver/ob_bootstrap.cpp	685	ObBootstrap::init_global_stat	assign temp_ret	if (OB_SUCCESS != (temp_ret = trans.end(OB_SUCCESS == ret))) {
+src/rootserver/ob_bootstrap.cpp	687	ObBootstrap::init_global_stat	merge into ret	ret = (OB_SUCCESS == ret) ? temp_ret : ret;
+src/rootserver/ob_ddl_operator.cpp	5852	ObDDLOperator::get_target_auto_inc_sequence_value	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_operator.cpp	5853	ObDDLOperator::get_target_auto_inc_sequence_value	assign tmp_ret	if (OB_ITER_END != (tmp_ret = result->next())) {
+src/rootserver/ob_ddl_operator.cpp	5857	ObDDLOperator::get_target_auto_inc_sequence_value	merge into ret	ret = tmp_ret;

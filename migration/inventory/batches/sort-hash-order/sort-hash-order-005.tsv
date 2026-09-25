@@ -1,0 +1,42 @@
+file	line	symbol	construct	text
+src/share/config/ob_config_manager.cpp	158	ObConfigManager::save_configs	iterate hash container returned by get_container()	ObConfigContainer::const_iterator it = server_config_.get_container().begin();
+src/share/config/ob_server_config.cpp	93	ObServerConfig::read_config	iterate hash container container_ (ObConfigContainer)	ObConfigContainer::const_iterator it = container_.begin();
+src/share/config/ob_server_config.cpp	111	ObServerConfig::check_all	iterate hash container container_ (ObConfigContainer)	ObConfigContainer::const_iterator it = container_.begin();
+src/share/config/ob_server_config.cpp	130	ObServerConfig::print	iterate hash container container_ (ObConfigContainer)	ObConfigContainer::const_iterator it = container_.begin();
+src/share/config/ob_system_config.cpp	31	ObSystemConfig::find	iterate hash container map_ (hashmap)	hashmap::const_iterator it = map_.begin();
+src/share/config/ob_system_config.cpp	32	ObSystemConfig::find	iterate hash container through an iterator of hashmap	hashmap::const_iterator last = map_.end();
+src/share/geo/ob_geo_interior_point_visitor.cpp	354	ObGeoInteriorPointVisitor::visit	lib::ob_sort call	lib::ob_sort(crossing_points.begin(), crossing_points.end());
+src/share/geo/ob_geo_mvt.cpp	423	mvt_agg_result::mvt_pack	iterate hash container values_map_ (AttributeMap)	AttributeMap::iterator lt = values_map_.begin();
+src/share/io/ob_io_calibration.cpp	178	ObIOAbility::add_measure_item	lib::ob_sort call	lib::ob_sort(measure_items_[static_cast<int>(item.mode_)].begin(), measure_items_[static_cast<int>(item.mode_)].end(),
+src/share/io/ob_io_define.h	723	ObMClockQueue	heap declared: r_heap_ (ObRemovableHeap)	ObRemovableHeap<ObPhyQueue *, HeapCompare<ObPhyQueue, &ObPhyQueue::reservation_ts_, &ObPhyQueue::req_list_>,
+src/share/io/ob_io_define.h	726	ObMClockQueue	heap declared: l_heap_ (ObRemovableHeap)	ObRemovableHeap<ObPhyQueue *, HeapCompare<ObPhyQueue, &ObPhyQueue::limitation_ts_, &ObPhyQueue::req_list_>,
+src/share/io/ob_io_define.h	729	ObMClockQueue	heap declared: ready_heap_ (ObRemovableHeap)	ObRemovableHeap<ObPhyQueue *, HeapCompare<ObPhyQueue, &ObPhyQueue::proportion_ts_, &ObPhyQueue::req_list_>,
+src/share/io/ob_io_manager.cpp	169	ObIOManager::destroy	iterate hash container channel_map_ (ObHashMap)	channel_map_.foreach_refactored(destry_channel_map_fn);
+src/share/io/ob_io_manager.cpp	364	ObIOManager::set_io_config	iterate hash container channel_map_ (ObHashMap)	if (OB_FAIL(channel_map_.foreach_refactored(fn))) {
+src/share/io/ob_io_manager.cpp	504	ObIOManager::print_channel_status	iterate hash container channel_map_ (ObHashMap)	channel_map_.foreach_refactored(fn);
+src/share/io/ob_io_struct.cpp	2085	ObIOTracer::to_string	iterate hash container trace_map_ (ObHashMap)	} else if (OB_FAIL(trace_map_.foreach_refactored(counter))) {
+src/share/io/ob_io_struct.cpp	2090	ObIOTracer::to_string	iterate hash container bt_count_ (ObHashMap)	} else if (OB_FAIL(counter.bt_count_.foreach_refactored(store_fn))) {
+src/share/io/ob_io_struct.cpp	2092	ObIOTracer::to_string	lib::ob_sort call	lib::ob_sort(trace_array.begin(), trace_array.end(), sort_fn);
+src/share/leak_checker/ob_leak_checker.h	124	ObBaseLeakChecker::for_each	iterate hash container checker_info_ (leak_checker_map_t)	ret = checker_info_.for_each(fn);
+src/share/ob_core_table_proxy.cpp	54	ObCoreTableProxy::Row::init	lib::ob_sort call	lib::ob_sort(cells_, cells_ + cell_cnt_);
+src/share/ob_core_table_proxy.cpp	578	ObCoreTableProxy::incremental_update	lib::ob_sort call	lib::ob_sort(new_cells.begin(), new_cells.end());
+src/share/ob_core_table_proxy.cpp	633	ObCoreTableProxy::update	lib::ob_sort call	lib::ob_sort(new_cells.begin(), new_cells.end());
+src/share/ob_ddl_checksum.cpp	419	ObDDLChecksumOperator::get_local_index_tablet_finish_status	lib::ob_sort call	lib::ob_sort(batch_tablet_array.begin(), batch_tablet_array.end());
+src/share/ob_ddl_checksum.cpp	486	ObDDLChecksumOperator::get_table_column_checksum_without_execution_id	iterate hash container through an iterator of ObHashSet	common::hash::ObHashSet<uint64_t>::iterator iter;
+src/share/ob_ddl_checksum.cpp	521	ObDDLChecksumOperator::check_column_checksum	iterate hash container index_table_column_checksums (ObHashMap)	for (hash::ObHashMap<int64_t, int64_t>::const_iterator iter = index_table_column_checksums.begin();
+src/share/ob_ddl_checksum.cpp	571	ObDDLChecksumOperator::check_column_checksum_without_execution_id	iterate hash container index_table_column_checksums (ObHashMap)	for (hash::ObHashMap<int64_t, int64_t>::const_iterator iter = index_table_column_checksums.begin();
+src/share/ob_ddl_common.cpp	303	ObColumnNameMap::assign	iterate hash container col_name_map_ (ObHashMap)	for (common::hash::ObHashMap<ObColumnNameHashWrapper, ObString>::const_iterator it = other.col_name_map_.begin();
+src/share/ob_ddl_common.cpp	342	ObColumnNameMap::get_orig_column_name	iterate hash container col_name_map_ (ObHashMap)	for (common::hash::ObHashMap<ObColumnNameHashWrapper, ObString>::const_iterator it = col_name_map_.begin();
+src/share/ob_ddl_common.cpp	362	ObColumnNameMap::get_changed_names	iterate hash container col_name_map_ (ObHashMap)	for (common::hash::ObHashMap<ObColumnNameHashWrapper, ObString>::const_iterator it = col_name_map_.begin();
+src/share/ob_ddl_common.cpp	1470	ObCheckTabletDataComplementOp::check_finish_report_checksum	lib::ob_sort call	} else if (OB_FALSE_IT(lib::ob_sort(dest_tablet_ids.begin(), dest_tablet_ids.end()))) { // sort in ASC order.
+src/share/ob_freeze_info_manager.cpp	170	ObFreezeInfoManager::update_freeze_info	lib::ob_sort call	lib::ob_sort(freeze_info_.frozen_statuses_.begin(), freeze_info_.frozen_statuses_.end(),
+src/share/ob_time_zone_info_manager.cpp	87	ObTimeZoneInfoManager::response_time_zone_info	iterate hash container id_map_ (ObTZInfoIDPosMap)	if (OB_FAIL(tz_info_map_.id_map_->for_each(fr_func))) {
+src/share/schema/ob_dependency_info.cpp	947	ObReferenceObjTable::reset	iterate hash container ref_obj_version_table_ (RefObjVersionMap)	} else if (OB_FAIL(ref_obj_version_table_.foreach_refactored(free_func))) {
+src/share/schema/ob_list_row_values.cpp	152	ObListRowValues::sort_array	lib::ob_sort call	lib::ob_sort(values_.begin(), values_.end(), part_list_vector_op);
+src/share/schema/ob_schema_mgr.cpp	2247	ObSchemaMgr::deep_copy_index_name_map	iterate hash container normal_index_name_map_ (IndexNameMap)	IndexNameMap::iterator it = normal_index_name_map_.begin(sub_map_id);
+src/share/schema/ob_schema_mgr.cpp	2248	ObSchemaMgr::deep_copy_index_name_map	iterate hash container through an iterator of IndexNameMap	IndexNameMap::iterator end = normal_index_name_map_.end(sub_map_id);
+src/share/schema/ob_table_schema.cpp	2908	ObTableSchema::sort_column_array_by_column_id	lib::ob_sort call	lib::ob_sort(column_array_, column_array_ + column_cnt_, [](ObColumnSchemaV2 *&lhs, ObColumnSchemaV2 *&rhs) -> bool {
+src/share/text_analysis/ob_token_stream.cpp	403	ObTextTokenGroupNormalizer::build_grouping_map	iterate hash container grouping_map_ (ObHashMap)	map_iter_ = grouping_map_.begin();
+src/sql/code_generator/ob_dml_cg_service.cpp	2267	ObDmlCgService::convert_normal_triggers	lib::ob_sort call	lib::ob_sort(trigger_infos.begin(), trigger_infos.end(), action_order_com);
+src/sql/code_generator/ob_tsc_cg_service.cpp	2778	ObTscCgService::generate_vec_extra_info_exprs	lib::ob_sort call	lib::ob_sort(sorted_row_exprs.begin(), sorted_row_exprs.end(), ObVectorIndexUtil::rowexpr_asc_compare);
+src/sql/das/iter/ob_das_func_data_iter.cpp	343	ObDASFuncDataIter::build_tr_merge_iters_rangekey	lib::ob_sort call	lib::ob_sort(doc_ids_.begin(), doc_ids_.end(),

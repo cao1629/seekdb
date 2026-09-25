@@ -1,0 +1,51 @@
+file	line	symbol	construct	text
+src/sql/plan_cache/ob_prepare_stmt_struct.h	84	ObPsStmtItem	check_erase_inc_ref_count declaration (prefixed name)	bool check_erase_inc_ref_count();
+src/sql/plan_cache/ob_prepare_stmt_struct.h	85	ObPsStmtItem	dec_ref_count declaration	void dec_ref_count();
+src/sql/plan_cache/ob_prepare_stmt_struct.h	177	ObPsStmtInfo	check_erase_inc_ref_count declaration (prefixed name)	bool check_erase_inc_ref_count();
+src/sql/plan_cache/ob_prepare_stmt_struct.h	178	ObPsStmtInfo	dec_ref_count declaration	void dec_ref_count();
+src/sql/plan_cache/ob_prepare_stmt_struct.h	227	ObPsStmtInfo::try_erase	reference-count change: ATOMIC_VCAS on ref_count_	bool try_erase() { return 1 == ATOMIC_VCAS(&ref_count_, 1, 0); }
+src/sql/plan_cache/ob_prepare_stmt_struct.h	364	ObPsSessionInfo::inc_ref_count	inc_ref_count definition	void inc_ref_count() { ref_cnt_++; }
+src/sql/plan_cache/ob_prepare_stmt_struct.h	365	ObPsSessionInfo::dec_ref_count	dec_ref_count definition	void dec_ref_count() { ref_cnt_--; }
+src/sql/plan_cache/ob_prepare_stmt_struct.h	394	ObPsStmtInfoGuard	Guard class definition whose methods call deref_stmt_info	class ObPsStmtInfoGuard
+src/sql/plan_cache/ob_ps_cache.cpp	235	ObPsCache::deref_ps_stmt	deref_ps_stmt definition (other name)	int ObPsCache::deref_ps_stmt(const ObPsStmtId stmt_id)
+src/sql/plan_cache/ob_ps_cache.cpp	246	ObPsCache::deref_ps_stmt	dec_ref_count call	ps_info->get_ps_item()->dec_ref_count();
+src/sql/plan_cache/ob_ps_cache.cpp	248	ObPsCache::deref_ps_stmt	dec_ref_count call	ps_info->dec_ref_count();
+src/sql/plan_cache/ob_ps_cache.cpp	285	ObPsCache::get_stmt_info_guard	ref_stmt_info call (other name)	if (OB_FAIL(ref_stmt_info(ps_stmt_id, stmt_info))) {
+src/sql/plan_cache/ob_ps_cache.cpp	336	ObPsCache::get_or_add_stmt_item	check_erase_inc_ref_count call (prefixed name)	new_item_value->check_erase_inc_ref_count(); //inc ref count for ps cache, ignore ret;
+src/sql/plan_cache/ob_ps_cache.cpp	431	ObPsCache::ref_stmt_item	ref_stmt_item definition (other name)	int ObPsCache::ref_stmt_item(const ObPsSqlKey &ps_sql_key, ObPsStmtItem *&stmt_item)
+src/sql/plan_cache/ob_ps_cache.cpp	458	ObPsCache::get_or_add_stmt_info	ref_stmt_info call (other name)	} else if (OB_FAIL(ref_stmt_info(ps_item->get_ps_stmt_id(), ref_ps_info))) {
+src/sql/plan_cache/ob_ps_cache.cpp	528	ObPsCache::erase_stmt_item	dec_ref_count call	ps_item->dec_ref_count();
+src/sql/plan_cache/ob_ps_cache.cpp	639	ObPsCache::add_stmt_info	check_erase_inc_ref_count call (prefixed name)	new_info_value->check_erase_inc_ref_count(); //inc ref count for ps cache, ignore ret;
+src/sql/plan_cache/ob_ps_cache.cpp	648	ObPsCache::add_stmt_info	ref_stmt_info call (other name)	if (OB_FAIL(ref_stmt_info(ps_item.get_ps_stmt_id(), tmp_stmt_info))) {
+src/sql/plan_cache/ob_ps_cache.cpp	675	ObPsCache::ref_stmt_info	ref_stmt_info definition (other name)	int ObPsCache::ref_stmt_info(const ObPsStmtId stmt_id, ObPsStmtInfo *&ps_stmt_info)
+src/sql/plan_cache/ob_ps_cache.cpp	714	ObPsCache::deref_stmt_info	deref_stmt_info definition (other name)	int ObPsCache::deref_stmt_info(const ObPsStmtId stmt_id)
+src/sql/plan_cache/ob_ps_cache.h	96	ObPsCache	ref_stmt_item declaration (other name)	int ref_stmt_item(const ObPsSqlKey &ps_sql_key, ObPsStmtItem *&stmt_item);
+src/sql/plan_cache/ob_ps_cache.h	97	ObPsCache	ref_stmt_info declaration (other name)	int ref_stmt_info(const ObPsStmtId stmt_id, ObPsStmtInfo *&ps_stmt_info);
+src/sql/plan_cache/ob_ps_cache.h	98	ObPsCache	deref_stmt_info declaration (other name)	int deref_stmt_info(const ObPsStmtId stmt_id);
+src/sql/plan_cache/ob_ps_cache.h	100	ObPsCache	deref_stmt_item declaration (other name)	int deref_stmt_item(const ObPsSqlKey &ps_sql_key);
+src/sql/plan_cache/ob_ps_cache.h	101	ObPsCache	deref_ps_stmt declaration (other name)	int deref_ps_stmt(const ObPsStmtId stmt_id);
+src/sql/plan_cache/ob_ps_cache_callback.cpp	30	ObPsStmtItemRefAtomicOp::operator()	check_erase_inc_ref_count call (prefixed name)	if (entry.second->check_erase_inc_ref_count()) {//has been marked by other threads
+src/sql/plan_cache/ob_ps_cache_callback.cpp	71	ObPsStmtInfoRefAtomicOp::operator()	check_erase_inc_ref_count call (prefixed name)	if (entry.second->check_erase_inc_ref_count()) {//has been marked by other threads
+src/sql/plan_cache/ob_ps_cache_callback.cpp	102	ObPsStmtInfoDerefAtomicOp::operator()	dec_ref_count call	entry.second->dec_ref_count();
+src/sql/plan_cache/ob_ps_cache_callback.cpp	129	ObPsPCVSetAtomicOp::get_value	dec_ref_count call	pcv_set_->dec_ref_count();
+src/sql/resolver/dml/ob_dml_resolver.cpp	6523	ObDMLResolver::resolve_geo_mbr_column	set_explicited_reference call (reference-count function found by its body)	left_expr->set_explicited_reference();
+src/sql/resolver/dml/ob_dml_stmt.cpp	1778	ObDMLStmt::set_sharable_expr_reference	set_explicited_reference call (reference-count function found by its body)	expr.set_explicited_reference(ref_type);
+src/sql/resolver/dml/ob_dml_stmt.cpp	1813	ObDMLStmt::set_sharable_expr_reference	set_explicited_reference call (reference-count function found by its body)	expr.set_explicited_reference();
+src/sql/resolver/dml/ob_dml_stmt.cpp	2971	ObDMLStmt::add_column_item	set_explicited_reference call (reference-count function found by its body)	column_item.expr_->set_explicited_reference();
+src/sql/resolver/dml/ob_dml_stmt.cpp	3072	ObDMLStmt::add_subquery_ref	set_explicited_reference call (reference-count function found by its body)	query_ref->set_explicited_reference();
+src/sql/resolver/dml/ob_select_resolver.cpp	1199	ObSelectResolver::set_for_update_recursive	set_explicited_reference call (reference-count function found by its body)	rowkeys.at(j)->set_explicited_reference();
+src/sql/resolver/dml/ob_select_stmt.cpp	141	ObSelectStmt::add_window_func_expr	set_explicited_reference call (reference-count function found by its body)	expr->set_explicited_reference();
+src/sql/resolver/dml/ob_select_stmt.h	437	ObSelectStmt::add_agg_item	set_explicited_reference call (reference-count function found by its body)	agg_expr.set_explicited_reference();
+src/sql/resolver/dml/ob_stmt_expr_visitor.cpp	203	ObStmtExecParamFormatter::do_formalize_exec_param	set_explicited_reference call (reference-count function found by its body)	exec_param->set_explicited_reference();
+src/sql/resolver/expr/ob_raw_expr.cpp	5665	ObRawExprPointer::add_ref	add_ref definition (other name)	int ObRawExprPointer::add_ref(ObRawExpr **expr)
+src/sql/resolver/expr/ob_raw_expr.h	2063	ObRawExpr::set_explicited_reference	set_explicited_reference definition (reference-count function found by its body: calls add_ref_count)	void set_explicited_reference()
+src/sql/resolver/expr/ob_raw_expr.h	2065	ObRawExpr::set_explicited_reference	add_ref_count call (other name)	add_ref_count();
+src/sql/resolver/expr/ob_raw_expr.h	2068	ObRawExpr::set_part_key_reference	set_part_key_reference definition (reference-count function found by its body: calls add_ref_count)	void set_part_key_reference() {
+src/sql/resolver/expr/ob_raw_expr.h	2069	ObRawExpr::set_part_key_reference	add_ref_count call (other name)	add_ref_count();
+src/sql/resolver/expr/ob_raw_expr.h	2072	ObRawExpr::set_explicited_reference	set_explicited_reference definition (reference-count function found by its body: calls add_ref_count)	void set_explicited_reference(ExplicitedRefType ref_type)
+src/sql/resolver/expr/ob_raw_expr.h	2074	ObRawExpr::set_explicited_reference	add_ref_count call (other name)	add_ref_count();
+src/sql/resolver/expr/ob_raw_expr.h	2210	ObRawExpr::add_ref_count	add_ref_count definition (other name)	void add_ref_count() { is_shared_reference_ = is_explicited_reference(); }
+src/sql/resolver/expr/ob_raw_expr.h	5144	ObRawExprPointer	add_ref declaration (other name)	int add_ref(ObRawExpr **expr);
+src/sql/resolver/expr/ob_raw_expr_util.h	105	UniqueSetWrapAllocer::inc_ref	inc_ref definition	void inc_ref() {}
+src/sql/resolver/expr/ob_raw_expr_util.h	106	UniqueSetWrapAllocer::dec_ref	dec_ref definition	void dec_ref() {}
+src/sql/rewrite/ob_transform_conditional_aggr_coalesce.cpp	719	ObTransformConditionalAggrCoalesce::try_share_aggr	set_explicited_reference call (reference-count function found by its body)	cur_aggr->set_explicited_reference();

@@ -1,0 +1,120 @@
+file	line	symbol	construct	text
+src/storage/tablelock/ob_lock_memtable.cpp	109	ObLockMemtable::lock_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tablelock/ob_lock_memtable.cpp	175	ObLockMemtable::lock_	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(check_and_set_tx_lock_timeout_(ctx.mvcc_acc_ctx_))) {
+src/storage/tablelock/ob_lock_memtable.cpp	176	ObLockMemtable::lock_	merge into ret	ret = tmp_ret;
+src/storage/tablelock/ob_lock_memtable.cpp	191	ObLockMemtable::lock_	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(register_into_deadlock_detector_(ctx, lock_op))) {
+src/storage/tablelock/ob_lock_memtable.cpp	222	ObLockMemtable::lock_	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(unregister_from_deadlock_detector_(lock_op))) {
+src/storage/tablelock/ob_lock_memtable.cpp	254	ObLockMemtable::lock_	assign tmp_ret	tmp_ret = OB_ERR_UNEXPECTED;
+src/storage/tablelock/ob_lock_memtable.cpp	256	ObLockMemtable::lock_	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(post_obj_lock_conflict_(ctx.mvcc_acc_ctx_,
+src/storage/tablelock/ob_lock_memtable.cpp	262	ObLockMemtable::lock_	merge into ret	ret = tmp_ret;
+src/storage/tablelock/ob_lock_memtable.cpp	461	ObLockMemtable::post_obj_lock_conflict_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tablelock/ob_lock_memtable.cpp	465	ObLockMemtable::post_obj_lock_conflict_	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(lock_wait_mgr->post_lock(OB_TRY_LOCK_ROW_CONFLICT,
+src/storage/tablelock/ob_lock_memtable.cpp	997	ObLockMemtable::register_into_deadlock_detector_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tablelock/ob_lock_memtable.cpp	1010	ObLockMemtable::register_into_deadlock_detector_	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = ObTableLockDeadlockDetectorHelper::
+src/storage/tablelock/ob_lock_memtable_mgr.cpp	168	ObLockMemtableMgr::release_head_memtable_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tablelock/ob_mem_ctx_table_lock.cpp	275	ObLockMemCtx::clear_table_lock	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tablelock/ob_mem_ctx_table_lock.cpp	283	ObLockMemCtx::clear_table_lock	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(memtable->remove_priority_task(
+src/storage/tablelock/ob_mem_ctx_table_lock.cpp	646	ObLockMemCtx::clear_priority_list	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tablelock/ob_mem_ctx_table_lock.cpp	657	ObLockMemCtx::clear_priority_list	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(memtable->remove_priority_task(
+src/storage/tablelock/ob_obj_lock.cpp	144	ObOBJLock::slow_lock	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tablelock/ob_obj_lock.cpp	243	ObOBJLock::slow_lock	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(remove_priority_task_(arg, lock_op, allocator))) {
+src/storage/tablelock/ob_obj_lock.cpp	363	ObOBJLock::update_lock_status	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tablelock/ob_obj_lock.cpp	410	ObOBJLock::update_lock_status	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(get_op_list(lock_op.lock_mode_, op_list))) {
+src/storage/tablelock/ob_obj_lock.cpp	411	ObOBJLock::update_lock_status	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(compact_tablelock_(lock_op, op_list, allocator, unused_is_compacted))) {
+src/storage/tablelock/ob_obj_lock.cpp	478	ObOBJLock::fast_lock	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tablelock/ob_obj_lock.cpp	545	ObOBJLock::fast_lock	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(remove_priority_task_(arg, lock_op, allocator))) {
+src/storage/tablelock/ob_obj_lock.cpp	560	ObOBJLock::lock	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tablelock/ob_obj_lock.cpp	623	ObOBJLock::unlock	merge OB_TIMEOUT into ret (continue-and-record through another variable)	ret = (ret == OB_SUCCESS ? OB_TIMEOUT : ret);
+src/storage/tablelock/ob_obj_lock.cpp	860	ObOBJLock::remove_priority_task	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tablelock/ob_obj_lock.cpp	878	ObOBJLock::remove_priority_task_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tablelock/ob_obj_lock.cpp	963	ObOBJLockMap::check_and_clear_obj_lock	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tablelock/ob_obj_lock.cpp	987	ObOBJLockMap::check_and_clear_obj_lock	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(
+src/storage/tablelock/ob_obj_lock.cpp	1196	ObOBJLock::check_allow_lock_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tablelock/ob_obj_lock.cpp	1197	ObOBJLock::check_allow_lock_	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(get_tx_id_set_(lock_op.create_trans_id_,
+src/storage/tablelock/ob_obj_lock.cpp	2551	ObOBJLockMap::switch_to_leader	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tablelock/ob_obj_lock.cpp	2584	ObOBJLockMap::switch_to_follower	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tablelock/ob_obj_lock.cpp	2600	ObOBJLockMap::switch_to_follower	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(obj_lock->switch_to_follower(allocator_))) {
+src/storage/tablelock/ob_session_table_lock.cpp	232	release_persisted_locks	declare tmp_ret (plan definition)	int tmp_ret = common::OB_SUCCESS;
+src/storage/tablelock/ob_session_table_lock.cpp	264	release_persisted_locks	assign tmp_ret	tmp_ret = common::OB_ERR_UNEXPECTED;
+src/storage/tablelock/ob_table_lock_deadlock.cpp	46	ObTxLockPartOnDetectOp::operator()	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tablelock/ob_table_lock_deadlock.cpp	56	ObTxLockPartOnDetectOp::operator()	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = ls->revert_tx_ctx(ctx))) {
+src/storage/tablelock/ob_table_lock_deadlock.cpp	151	ObTransLockPartBlockCallBack::operator()	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tablelock/ob_table_lock_deadlock.cpp	209	ObTransLockPartBlockCallBack::operator()	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = ls->revert_tx_ctx(ctx))) {
+src/storage/tablelock/ob_table_lock_local_executor.cpp	124	handle_batch_lock_task	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tablelock/ob_table_lock_local_executor.cpp	163	handle_batch_lock_task	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = tx_srv->
+src/storage/tablelock/ob_table_lock_local_executor.cpp	185	handle_batch_replace_lock_task	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tablelock/ob_table_lock_local_executor.cpp	218	handle_batch_replace_lock_task	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = tx_srv->
+src/storage/tablelock/ob_table_lock_local_executor.cpp	293	handle_high_priority_batch_lock_task	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tablelock/ob_table_lock_local_executor.cpp	322	handle_high_priority_batch_lock_task	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = tx_srv->
+src/storage/tablelock/ob_table_lock_service.cpp	770	ObTableLockService::process_lock_task_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tablelock/ob_table_lock_service.cpp	790	ObTableLockService::process_lock_task_	assign tmp_ret	if (ctx.is_in_trans_ && OB_UNLIKELY(OB_SUCCESS != (tmp_ret = end_stmt_(ctx, OB_SUCCESS != ret)))) {
+src/storage/tablelock/ob_table_lock_service.cpp	793	ObTableLockService::process_lock_task_	merge into ret	ret = (OB_SUCCESS == tmp_ret) ? ret : tmp_ret;
+src/storage/tablelock/ob_table_lock_service.cpp	794	ObTableLockService::process_lock_task_	assign tmp_ret	} else if (!ctx.is_in_trans_ && OB_UNLIKELY(OB_SUCCESS != (tmp_ret = end_tx_(ctx, OB_SUCCESS != ret)))) {
+src/storage/tablelock/ob_table_lock_service.cpp	796	ObTableLockService::process_lock_task_	merge into ret	ret = (OB_SUCCESS == ret) ? tmp_ret : ret;
+src/storage/tablelock/ob_table_lock_service.cpp	800	ObTableLockService::process_lock_task_	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = deal_with_deadlock_(ctx))) {
+src/storage/tablelock/ob_table_lock_service.cpp	947	ObTableLockService::handle_task_result_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tablelock/ob_table_lock_service.cpp	954	ObTableLockService::handle_task_result_	assign tmp_ret	tmp_ret = executor.get_return_code();
+src/storage/tablelock/ob_table_lock_service.cpp	957	ObTableLockService::handle_task_result_	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(get_retry_lock_ids_(lock_set,
+src/storage/tablelock/ob_table_lock_service.cpp	962	ObTableLockService::handle_task_result_	merge into ret	ret = tmp_ret;
+src/storage/tablelock/ob_table_lock_service.cpp	965	ObTableLockService::handle_task_result_	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(tmp_ret)) {
+src/storage/tablelock/ob_table_lock_service.cpp	966	ObTableLockService::handle_task_result_	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(result.get_tx_result_code())) {
+src/storage/tablelock/ob_table_lock_service.cpp	967	ObTableLockService::handle_task_result_	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(txs->add_tx_exec_result(*ctx.tx_desc_,
+src/storage/tablelock/ob_table_lock_service.cpp	972	ObTableLockService::handle_task_result_	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(tmp_ret)) {
+src/storage/tablelock/ob_table_lock_service.cpp	973	ObTableLockService::handle_task_result_	merge into ret	ret = tmp_ret;
+src/storage/tablelock/ob_table_lock_service.cpp	978	ObTableLockService::handle_task_result_	assign tmp_ret	tmp_ret = result.get_ret_code();
+src/storage/tablelock/ob_table_lock_service.cpp	981	ObTableLockService::handle_task_result_	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(get_retry_lock_ids_(lock_set,
+src/storage/tablelock/ob_table_lock_service.cpp	986	ObTableLockService::handle_task_result_	merge into ret	ret = tmp_ret;
+src/storage/tablelock/ob_table_lock_service.cpp	991	ObTableLockService::handle_task_result_	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(tmp_ret)) {
+src/storage/tablelock/ob_table_lock_service.cpp	995	ObTableLockService::handle_task_result_	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(tmp_ret)) {
+src/storage/tablelock/ob_table_lock_service.cpp	998	ObTableLockService::handle_task_result_	merge into ret	ret = tmp_ret;
+src/storage/tablelock/ob_table_lock_service.cpp	1784	ObTableLockService::start_tx_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tablelock/ob_table_lock_service.cpp	1803	ObTableLockService::start_tx_	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(txs->release_tx(*ctx.tx_desc_))) {
+src/storage/tablelock/ob_table_lock_service.cpp	1814	ObTableLockService::end_tx_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tablelock/ob_table_lock_service.cpp	1828	ObTableLockService::end_tx_	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(txs->release_tx(*ctx.tx_desc_))) {
+src/storage/tablet/ob_i_tablet_mds_interface.cpp	200	ObITabletMdsInterface::read_raw_data	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tablet/ob_i_tablet_mds_interface.cpp	205	ObITabletMdsInterface::read_raw_data	assign tmp_ret	} else if (OB_UNLIKELY(OB_ITER_END != (tmp_ret = iter.get_next_row()))) {
+src/storage/tablet/ob_i_tablet_mds_interface.ipp	703	ObITabletMdsInterface::fill_virtual_info_from_mds_sstable	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tablet/ob_mds_cl_range_query_iterator.h	227	ObMdsRangeQueryIterator::get_next_mds_kv	declare tmp_ret	int tmp_ret = OB_ERR_UNEXPECTED;
+src/storage/tablet/ob_table_store_util.cpp	524	ObSSTableArray::inc_meta_ref_cnt	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tablet/ob_table_store_util.cpp	528	ObSSTableArray::inc_meta_ref_cnt	assign tmp_ret	tmp_ret = OB_ERR_UNEXPECTED;
+src/storage/tablet/ob_table_store_util.cpp	536	ObSSTableArray::inc_meta_ref_cnt	assign tmp_ret	tmp_ret = OB_ERR_UNEXPECTED;
+src/storage/tablet/ob_table_store_util.cpp	538	ObSSTableArray::inc_meta_ref_cnt	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(addr.get_block_addr(macro_id, offset, size))) {
+src/storage/tablet/ob_table_store_util.cpp	539	ObSSTableArray::inc_meta_ref_cnt	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(OB_STORAGE_OBJECT_MGR.dec_ref(macro_id))) {
+src/storage/tablet/ob_table_store_util.cpp	578	ObSSTableArray::inc_data_ref_cnt	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tablet/ob_table_store_util.cpp	582	ObSSTableArray::inc_data_ref_cnt	assign tmp_ret	tmp_ret = OB_ERR_UNEXPECTED;
+src/storage/tablet/ob_tablet.cpp	474	ObTablet::init_for_merge	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tablet/ob_tablet.cpp	475	ObTablet::init_for_merge	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(ObTabletMeta::init_report_info(param.sstable_,
+src/storage/tablet/ob_tablet.cpp	622	ObTablet::init_for_sstable_replace	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tablet/ob_tablet.cpp	624	ObTablet::init_for_sstable_replace	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(ObTabletMeta::init_report_info(last_major,
+src/storage/tablet/ob_tablet.cpp	2000	ObTablet::inc_ref_with_aggregated_info	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tablet/ob_tablet.cpp	2001	ObTablet::inc_ref_with_aggregated_info	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(info_iter.reuse())) {
+src/storage/tablet/ob_tablet.cpp	2034	ObTablet::inc_ref_with_macro_iter	merge OB_ERR_UNEXPECTED into ret through if (OB_SUCC(ret)) (continue-and-record through another variable)	ret = OB_ERR_UNEXPECTED;
+src/storage/tablet/ob_tablet.cpp	2038	ObTablet::inc_ref_with_macro_iter	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tablet/ob_tablet.cpp	2041	ObTablet::inc_ref_with_macro_iter	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(print_arr.push_back(block_info.macro_id_))) {
+src/storage/tablet/ob_tablet.cpp	2057	ObTablet::inc_ref_with_macro_iter	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tablet/ob_tablet.cpp	2058	ObTablet::inc_ref_with_macro_iter	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(macro_iter.reuse())) {
+src/storage/tablet/ob_tablet.cpp	2062	ObTablet::inc_ref_with_macro_iter	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(macro_iter.get_next(block_info))) {
+src/storage/tablet/ob_tablet.cpp	2063	ObTablet::inc_ref_with_macro_iter	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(OB_STORAGE_OBJECT_MGR.dec_ref(block_info.macro_id_))) {
+src/storage/tablet/ob_tablet.cpp	2066	ObTablet::inc_ref_with_macro_iter	OB_TMP_FAIL (plan definition)	&& OB_TMP_FAIL(::oceanbase::share::server_service<::oceanbase::blocksstable::ObSharedMacroBlockMgr>()->free_block(
+src/storage/tablet/ob_tablet.cpp	2071	ObTablet::inc_ref_with_macro_iter	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(tmp_ret)) {
+src/storage/tablet/ob_tablet.cpp	2073	ObTablet::inc_ref_with_macro_iter	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(print_arr.push_back(block_info.macro_id_))) {
+src/storage/tablet/ob_tablet.cpp	2196	ObTablet::dec_ref_with_macro_iter	merge OB_ERR_UNEXPECTED into ret through if (OB_SUCC(ret)) (continue-and-record through another variable)	ret = OB_ERR_UNEXPECTED;
+src/storage/tablet/ob_tablet.cpp	2199	ObTablet::dec_ref_with_macro_iter	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tablet/ob_tablet.cpp	2205	ObTablet::dec_ref_with_macro_iter	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(print_arr.push_back(block_info.macro_id_))) {
+src/storage/tablet/ob_tablet.cpp	2309	ObTablet::inc_linked_block_ref_cnt	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tablet/ob_tablet.cpp	2310	ObTablet::inc_linked_block_ref_cnt	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(iter.reuse())) {
+src/storage/tablet/ob_tablet.cpp	2313	ObTablet::inc_linked_block_ref_cnt	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(iter.get_next_macro_id(macro_id))) {
+src/storage/tablet/ob_tablet.cpp	2314	ObTablet::inc_linked_block_ref_cnt	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(OB_STORAGE_OBJECT_MGR.dec_ref(macro_id))) {
+src/storage/tablet/ob_tablet.cpp	2685	ObTablet::check_row_locked_by_myself	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tablet/ob_tablet.cpp	2694	ObTablet::check_row_locked_by_myself	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(ObRowConflictHandler::check_row_locked(param, context, rowkey, true /* by_myself */))) {
+src/storage/tablet/ob_tablet.cpp	2698	ObTablet::check_row_locked_by_myself	merge into ret	ret = tmp_ret;
+src/storage/tablet/ob_tablet.cpp	3699	ObTablet::get_kept_snapshot_info	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tablet/ob_tablet_create_mds_helper.cpp	61	ObTabletCreateMdsHelper::register_process	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tablet/ob_tablet_create_mds_helper.cpp	125	ObTabletCreateMdsHelper::replay_process	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tablet/ob_tablet_create_mds_helper.cpp	126	ObTabletCreateMdsHelper::replay_process	OB_TMP_FAIL (plan definition)	if (CLICK() && OB_TMP_FAIL(rollback_remove_tablets(tablet_id_array))) {
+src/storage/tablet/ob_tablet_ddl_complete_mds_helper.cpp	248	ObTabletDDLCompleteMdsHelper::process_ddl	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tablet/ob_tablet_ddl_complete_mds_helper.cpp	249	ObTabletDDLCompleteMdsHelper::process_ddl	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(ObTabletDDLCompleteReplayExecutor::schedule_merge(*tablet_handle.get_obj(), data))) {
+src/storage/tablet/ob_tablet_ddl_complete_replay_executor.cpp	65	ObTabletDDLCompleteReplayExecutor::do_replay_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tablet/ob_tablet_ddl_complete_replay_executor.cpp	79	ObTabletDDLCompleteReplayExecutor::do_replay_	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(schedule_merge(*tablet_handle.get_obj(), *user_data_))) {
+src/storage/tablet/ob_tablet_memtable_mgr.cpp	293	ObTabletMemtableMgr::resolve_boundary_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tablet/ob_tablet_memtable_mgr.cpp	518	ObTabletMemtableMgr::resolve_left_boundary_for_active_memtable	declare tmp_ret	int tmp_ret = active_tablet_memtable->resolve_left_boundary(

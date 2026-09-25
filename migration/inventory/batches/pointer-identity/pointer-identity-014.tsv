@@ -1,0 +1,44 @@
+file	line	symbol	construct	text
+src/sql/resolver/dml/ob_select_stmt.cpp	163	ObSelectStmt::remove_window_func_expr	IR pointer == IR pointer	} else if (expr == win_func_exprs_.at(i)) {
+src/sql/resolver/dml/ob_select_stmt.cpp	176	ObSelectStmt::check_aggr_and_winfunc	pointer membership test: ObRawExprUtils::find_expr	!ObRawExprUtils::find_expr(agg_items_, &expr)) {
+src/sql/resolver/dml/ob_select_stmt.cpp	179	ObSelectStmt::check_aggr_and_winfunc	pointer membership test: ObRawExprUtils::find_expr	!ObRawExprUtils::find_expr(win_func_exprs_, &expr)) {
+src/sql/resolver/dml/ob_select_stmt.cpp	793	ObSelectStmt::check_is_select_item_expr	IR pointer == IR pointer	if (expr == select_items_.at(i).expr_) {
+src/sql/resolver/dml/ob_standard_group_checker.cpp	137	ObStandardGroupChecker::deduce_settled_exprs	pointer membership test: ObOptimizerUtil::append_exprs_no_dup (pointer identity, then same_as)	} else if (OB_FAIL(ObOptimizerUtil::append_exprs_no_dup(settled_exprs_, unique_info.const_exprs_))) {
+src/sql/resolver/dml/ob_standard_group_checker.cpp	138	ObStandardGroupChecker::deduce_settled_exprs	pointer membership test: ObOptimizerUtil::append_exprs_no_dup (pointer identity, then same_as)	} else if (OB_FAIL(ObOptimizerUtil::append_exprs_no_dup(settled_exprs_, group_by_exprs_))) {
+src/sql/resolver/dml/ob_stmt_expr_visitor.cpp	128	ObSharedExprChecker::is_shared_expr	pointer cast to integer used as a key	uint64_t key = reinterpret_cast<uint64_t>(expr);
+src/sql/resolver/dml/ob_stmt_expr_visitor.cpp	143	ObSharedExprChecker::do_visit	pointer cast to integer used as a key	uint64_t key = reinterpret_cast<uint64_t>(expr);
+src/sql/resolver/dml/ob_stmt_expr_visitor.h	144	ObStmtExprVisitor::visit	IR pointer == unresolved pointer	} else if (tmp == exprs.at(i)) {
+src/sql/resolver/dml/ob_update_resolver.cpp	372	ObUpdateResolver::generate_update_table_info	pointer membership test: add_var_to_array_no_dup	if (OB_FAIL(add_var_to_array_no_dup(table_info->column_exprs_, assign.column_expr_))) {
+src/sql/resolver/dml/ob_update_resolver.cpp	493	ObUpdateResolver::generate_batched_stmt_info	pointer membership test: has_exist_in_array	if (has_exist_in_array(predicate_columns, column_expr)) {
+src/sql/resolver/dml/ob_update_stmt.cpp	117	ObUpdateStmt::get_vector_assign_values	IR pointer == IR pointer	} else if (alias->get_param_expr(0) == query_ref) {
+src/sql/resolver/expr/ob_raw_expr.cpp	1584	ObQueryRefRawExpr::add_exec_param_exprs	pointer membership test: append_array_no_dup	if (OB_FAIL(append_array_no_dup(exec_params_, exprs))) {
+src/sql/resolver/expr/ob_raw_expr.cpp	1659	ObQueryRefRawExpr::inner_same_as	IR pointer == IR pointer	ref_stmt_ == u_expr.ref_stmt_ &&
+src/sql/resolver/expr/ob_raw_expr.cpp	1678	ObExprEqualCheckContext::compare_query	IR pointer == IR pointer	left.get_ref_stmt() == right.get_ref_stmt() &&
+src/sql/resolver/expr/ob_raw_expr.cpp	2144	ObAliasRefRawExpr::inner_same_as	IR pointer == IR pointer	bret = (alias_ref.get_ref_expr() == get_ref_expr());
+src/sql/resolver/expr/ob_raw_expr.cpp	3845	ObSysFunRawExpr::inner_json_expr_same_as	IR pointer == IR pointer	bool_ret = r_column_expr == l_column_expr;
+src/sql/resolver/expr/ob_raw_expr.cpp	5655	ObRawExprPointer::set	IR pointer == IR pointer	} else if (*expr_group_.at(i) == expr) {
+src/sql/resolver/expr/ob_raw_expr.h	1348	OrderItem::operator==	IR pointer == IR pointer	return (expr_ == other.expr_
+src/sql/resolver/expr/ob_raw_expr_copier.cpp	112	ObRawExprCopier::find_in_copy_context	pointer cast to integer used as a key	uint64_t key = reinterpret_cast<uint64_t>(old_expr);
+src/sql/resolver/expr/ob_raw_expr_copier.cpp	144	ObRawExprCopier::copy_expr_node	pointer membership test: ObRawExprUtils::find_expr	} else if (ObRawExprUtils::find_expr(uncopy_expr_nodes_, expr)) {
+src/sql/resolver/expr/ob_raw_expr_copier.cpp	196	ObRawExprCopier::add_expr	pointer cast to integer used as a key	} else if (OB_SUCCESS != (ret = copied_exprs_.set_refactored(reinterpret_cast<uint64_t>(from),
+src/sql/resolver/expr/ob_raw_expr_copier.cpp	197	ObRawExprCopier::add_expr	pointer cast to integer used as a key	reinterpret_cast<uint64_t>(to)))) {
+src/sql/resolver/expr/ob_raw_expr_copier.cpp	202	ObRawExprCopier::add_expr	pointer cast to integer used as a key	if (OB_FAIL(copied_exprs_.get_refactored(reinterpret_cast<uint64_t>(from), val))) {
+src/sql/resolver/expr/ob_raw_expr_copier.cpp	203	ObRawExprCopier::add_expr	pointer cast to integer compared for identity	} else if (OB_UNLIKELY(val != reinterpret_cast<uint64_t>(to))) {
+src/sql/resolver/expr/ob_raw_expr_copier.cpp	207	ObRawExprCopier::add_expr	pointer cast to integer used as a key	} else if (OB_FAIL(new_exprs_.set_refactored(reinterpret_cast<uint64_t>(to)))) {
+src/sql/resolver/expr/ob_raw_expr_copier.cpp	234	ObRawExprCopier::is_existed	pointer cast to integer used as a key	uint64_t key = reinterpret_cast<uint64_t>(target);
+src/sql/resolver/expr/ob_raw_expr_copier.cpp	296	ObRawExprCopier::copy_on_replace	IR pointer == IR pointer	} else if (param == new_param) {
+src/sql/resolver/expr/ob_raw_expr_copier.cpp	298	ObRawExprCopier::copy_on_replace	IR pointer == IR pointer	} else if (from_expr == to_expr &&
+src/sql/resolver/expr/ob_raw_expr_copier.h	198	ObRawExprCopier::copy_on_replace	IR pointer == IR pointer	} else if (tmp == to_expr || std::is_same<T, ObRawExpr>::value) {
+src/sql/resolver/expr/ob_raw_expr_deduce_type.cpp	3062	ObRawExprDeduceType::add_implicit_cast_for_subquery	IR pointer != IR pointer	if (OB_SUCC(ret) && item.expr_ != new_expr) { // cast expr added
+src/sql/resolver/expr/ob_raw_expr_deduce_type.h	205	ObRawExprDeduceType::try_add_cast_expr	IR pointer != IR pointer	if (OB_SUCC(ret) && child_ptr != new_expr) { // cast expr added
+src/sql/resolver/expr/ob_raw_expr_replacer.cpp	335	ObRawExprReplacer::add_replace_expr	pointer cast to integer used as a key	} else if (OB_FAIL(expr_replace_map_.set_refactored(reinterpret_cast<uint64_t>(from_expr),
+src/sql/resolver/expr/ob_raw_expr_replacer.cpp	336	ObRawExprReplacer::add_replace_expr	pointer cast to integer used as a key	reinterpret_cast<uint64_t>(to_expr),
+src/sql/resolver/expr/ob_raw_expr_replacer.cpp	338	ObRawExprReplacer::add_replace_expr	pointer cast to integer used as a key	} else if (OB_FAIL(to_exprs_.set_refactored(reinterpret_cast<uint64_t>(to_expr)))) {
+src/sql/resolver/expr/ob_raw_expr_replacer.cpp	402	ObRawExprReplacer::is_existed	pointer cast to integer used as a key	uint64_t key = reinterpret_cast<uint64_t>(target);
+src/sql/resolver/expr/ob_raw_expr_replacer.cpp	421	ObRawExprReplacer::add_skip_expr	pointer cast to integer used as a key	} else if (OB_FAIL(to_exprs_.set_refactored(reinterpret_cast<uint64_t>(target)))) {
+src/sql/resolver/expr/ob_raw_expr_replacer.cpp	436	ObRawExprReplacer::check_from_expr_existed	IR pointer != IR pointer	} else if (OB_UNLIKELY(old_expr != to_expr)) {
+src/sql/resolver/expr/ob_raw_expr_replacer.cpp	449	ObRawExprReplacer::check_skip_expr	pointer cast to integer used as a key	uint64_t key = reinterpret_cast<uint64_t>(&expr);
+src/sql/resolver/expr/ob_raw_expr_replacer.cpp	465	ObRawExprReplacer::check_need_replace	pointer cast to integer used as a key	uint64_t key = reinterpret_cast<uint64_t>(old_expr);
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	993	ObRawExprResolverImpl::do_recursive_resolve	IR pointer == IR pointer	if (clone_aggr_exprs.at(i) == ctx_.win_exprs_->at(j)->get_agg_expr()) {
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	2203	ObRawExprResolverImpl::extract_var_exprs	pointer membership test: add_var_to_array_no_dup	if (OB_FAIL(add_var_to_array_no_dup(var_exprs, var_expr))) {
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	2414	ObRawExprResolverImpl::process_left_value_node	pointer membership test: add_var_to_array_no_dup	} else if (OB_FAIL(add_var_to_array_no_dup(*ctx_.user_var_exprs_, var_expr))) {

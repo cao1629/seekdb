@@ -1,0 +1,52 @@
+file	line	symbol	construct	text
+src/share/schema/ob_schema_struct.h	4994	ObUserLoginInfo::runtime_name_	member ObString (value) of type common::ObString	common::ObString runtime_name_;
+src/share/schema/ob_schema_struct.h	4995	ObUserLoginInfo::user_name_	member ObString (value) of type common::ObString	common::ObString user_name_;
+src/share/schema/ob_schema_struct.h	4996	ObUserLoginInfo::client_ip_	member ObString (value) of type common::ObString	common::ObString client_ip_;//client ip for current user
+src/share/schema/ob_schema_struct.h	4997	ObUserLoginInfo::passwd_	member ObString (value) of type common::ObString	common::ObString passwd_;
+src/share/schema/ob_schema_struct.h	4998	ObUserLoginInfo::db_	member ObString (value) of type common::ObString	common::ObString db_;
+src/share/schema/ob_schema_struct.h	4999	ObUserLoginInfo::scramble_str_	member ObString (value) of type common::ObString	common::ObString scramble_str_;
+src/share/schema/ob_schema_struct.h	5159	ObOutlineInfo::name_	member ObString (value) of type common::ObString	common::ObString name_;//outline name
+src/share/schema/ob_schema_struct.h	5160	ObOutlineInfo::signature_	member ObString (value) of type common::ObString	common::ObString signature_;// SQL after constant parameterization
+src/share/schema/ob_schema_struct.h	5161	ObOutlineInfo::sql_id_	member ObString (value) of type common::ObString	common::ObString sql_id_; // Used to directly determine sql_id
+src/share/schema/ob_schema_struct.h	5162	ObOutlineInfo::outline_content_	member ObString (value) of type common::ObString	common::ObString outline_content_;
+src/share/schema/ob_schema_struct.h	5163	ObOutlineInfo::sql_text_	member ObString (value) of type common::ObString	common::ObString sql_text_;
+src/share/schema/ob_schema_struct.h	5164	ObOutlineInfo::outline_target_	member ObString (value) of type common::ObString	common::ObString outline_target_;
+src/share/schema/ob_schema_struct.h	5165	ObOutlineInfo::owner_	member ObString (value) of type common::ObString	common::ObString owner_;
+src/share/schema/ob_schema_struct.h	5167	ObOutlineInfo::version_	member ObString (value) of type common::ObString	common::ObString version_;
+src/share/schema/ob_schema_struct.h	5172	ObOutlineInfo::format_sql_text_	member ObString (value) of type common::ObString	common::ObString format_sql_text_;
+src/share/schema/ob_schema_struct.h	5173	ObOutlineInfo::format_sql_id_	member ObString (value) of type common::ObString	common::ObString format_sql_id_;
+src/share/schema/ob_schema_struct.h	5220	ObOutlineNameHashWrapper::name_	member ObString (value) of type common::ObString	common::ObString name_;
+src/share/schema/ob_schema_struct.h	5266	ObOutlineSignatureHashWrapper::signature_	member ObString (value) of type common::ObString	common::ObString signature_;
+src/share/schema/ob_schema_struct.h	5295	ObOutlineSqlIdHashWrapper::sql_id_	member ObString (value) of type common::ObString	common::ObString sql_id_;
+src/share/schema/ob_schema_struct.h	5408	ObSysTableChecker::TableNameWrapper::table_name_	member ObString (value) of type common::ObString	common::ObString table_name_;
+src/share/schema/ob_schema_struct.h	5475	ObRecycleObject::object_name_	member ObString (value) of type common::ObString	common::ObString object_name_;
+src/share/schema/ob_schema_struct.h	5476	ObRecycleObject::original_name_	member ObString (value) of type common::ObString	common::ObString original_name_;
+src/share/schema/ob_schema_struct.h	5478	ObRecycleObject::database_name_	member ObString (value) of type common::ObString	common::ObString database_name_;
+src/share/schema/ob_schema_struct.h	5724	ObForeignKeyInfo::foreign_key_name_	member ObString (value) of type common::ObString	common::ObString foreign_key_name_;
+src/share/schema/ob_schema_struct.h	5789	ObSimpleForeignKeyInfo::foreign_key_name_	member ObString (value) of type common::ObString	common::ObString foreign_key_name_;
+src/share/schema/ob_schema_struct.h	5837	ObSimpleConstraintInfo::constraint_name_	member ObString (value) of type common::ObString	common::ObString constraint_name_;
+src/share/schema/ob_schema_struct.h	6132	ObSimpleMockFKParentTableSchema::mock_fk_parent_table_name_	member ObString (value) of type common::ObString	common::ObString mock_fk_parent_table_name_;
+src/share/schema/ob_schema_struct.h	6179	ObMockFKParentTableSchema::column_array_	member ObMockFKParentTableColumnArray (value) of type ObMockFKParentTableColumnArray	ObMockFKParentTableColumnArray column_array_;
+src/share/schema/ob_schema_struct.h	6288	ObIndexNameInfo::index_name_	member ObString (value) of type ObString	ObString index_name_;
+src/share/schema/ob_schema_struct.h	6289	ObIndexNameInfo::original_index_name_	member ObString (value) of type ObString	ObString original_index_name_;
+src/share/schema/ob_schema_utils.cpp	266	ObSchemaUtils::get_runtime_varchar_variable	allocator in, arena view out: ObString &v	int ObSchemaUtils::get_runtime_varchar_variable(
+src/share/schema/ob_server_schema_service.h	74	SchemaKey::database_name_	member ObString (value) of type common::ObString	common::ObString database_name_;
+src/share/schema/ob_server_schema_service.h	88	SchemaKey::table_name_	member ObString (value) of type common::ObString	common::ObString table_name_;
+src/share/schema/ob_server_schema_service.h	89	SchemaKey::routine_name_	member ObString (value) of type common::ObString	common::ObString routine_name_;
+src/share/schema/ob_server_schema_service.h	90	SchemaKey::mock_fk_parent_table_namespace_	member ObString (value) of type common::ObString	common::ObString mock_fk_parent_table_namespace_;
+src/share/schema/ob_server_schema_service.h	91	SchemaKey::ai_model_name_	member ObString (value) of type common::ObString	common::ObString ai_model_name_;
+src/share/schema/ob_server_schema_service.h	92	SchemaKey::obj_name_	member ObString (value) of type common::ObString	common::ObString obj_name_;
+src/share/schema/ob_table_schema.cpp	1973	ObTableSchema::create_idx_name_automatically	allocator in, arena view out: common::ObString &idx_name	int ObTableSchema::create_idx_name_automatically(common::ObString &idx_name,
+src/share/schema/ob_table_schema.cpp	2012	ObTableSchema::create_cons_name_automatically	allocator in, arena view out: ObString &cst_name	int ObTableSchema::create_cons_name_automatically(ObString &cst_name,
+src/share/schema/ob_table_schema.cpp	2077	ObTableSchema::create_cons_name_automatically_with_dup_check	allocator in, arena view out: ObString &cst_name	int ObTableSchema::create_cons_name_automatically_with_dup_check(ObString &cst_name,
+src/share/schema/ob_table_schema.cpp	2119	ObTableSchema::create_new_idx_name_after_recyclebin_restore	allocator in, arena view out: common::ObString &new_idx_name	int ObTableSchema::create_new_idx_name_after_recyclebin_restore(
+src/share/schema/ob_table_schema.h	916	ObSimpleTableSchemaV2::table_name_	member ObString (value) of type common::ObString	common::ObString table_name_;
+src/share/schema/ob_table_schema.h	925	ObSimpleTableSchemaV2::origin_index_name_	member ObString (value) of type common::ObString	common::ObString origin_index_name_;
+src/share/schema/ob_table_schema.h	1592	ObTableSchema::comment_	member ObString (value) of type common::ObString	common::ObString comment_;
+src/share/schema/ob_table_schema.h	1593	ObTableSchema::pk_comment_	member ObString (value) of type common::ObString	common::ObString pk_comment_;
+src/share/schema/ob_table_schema.h	1595	ObTableSchema::parser_name_	member ObString (value) of type common::ObString	common::ObString parser_name_; //fulltext index parser name
+src/share/schema/ob_table_schema.h	1596	ObTableSchema::parser_properties_	member ObString (value) of type common::ObString	common::ObString parser_properties_; // fulltext index parser properties
+src/share/schema/ob_table_schema.h	1655	ObTableSchema::index_params_	member ObString (value) of type common::ObString	common::ObString index_params_;
+src/share/schema/ob_table_schema.h	1657	ObTableSchema::exec_env_	member ObString (value) of type common::ObString	common::ObString exec_env_;
+src/share/schema/ob_table_schema.h	2041	ObTableSchema::build_index_table_name	allocator in, arena view out: common::ObString &index_table_name	int ObTableSchema::build_index_table_name(Allocator &allocator,
+src/share/schema/ob_table_schema.h	2086	ObSimpleTableSchemaV2::get_index_name	allocator in, arena view out: common::ObString &dst	int ObSimpleTableSchemaV2::get_index_name(Allocator &allocator, uint64_t table_id,

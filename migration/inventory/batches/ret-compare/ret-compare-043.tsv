@@ -1,0 +1,101 @@
+file	line	symbol	construct	text
+src/sql/resolver/cmd/ob_show_resolver.cpp	121	ObShowResolver::check_db_access_for_show_sql	ret == OB_ERR_NO_DB_PRIVILEGE	if (OB_ERR_NO_DB_PRIVILEGE == ret) {
+src/sql/resolver/cmd/ob_show_resolver.cpp	437	ObShowResolver::resolve	ret == OB_ERR_NO_DB_PRIVILEGE	if (OB_ERR_NO_DB_PRIVILEGE == ret) {
+src/sql/resolver/cmd/ob_show_resolver.cpp	628	ObShowResolver::resolve	ret == OB_ERR_NO_TABLE_PRIVILEGE	if (OB_ERR_NO_TABLE_PRIVILEGE == ret) {
+src/sql/resolver/cmd/ob_show_resolver.cpp	775	ObShowResolver::resolve	ret == OB_USER_NOT_EXIST	if (OB_USER_NOT_EXIST == ret) {
+src/sql/resolver/cmd/ob_show_resolver.cpp	1268	ObShowResolver::resolve_show_create_user	ret == OB_USER_NOT_EXIST	if (ret == OB_USER_NOT_EXIST) {
+src/sql/resolver/cmd/ob_show_resolver.cpp	1296	ObShowResolver::resolve_show_create_user	ret == OB_USER_NOT_EXIST	if (ret == OB_USER_NOT_EXIST) {
+src/sql/resolver/cmd/ob_show_resolver.cpp	1323	ObShowResolver::resolve_show_create_user	ret == OB_ERR_NO_DB_PRIVILEGE	if (OB_ERR_NO_DB_PRIVILEGE == ret) {
+src/sql/resolver/cmd/ob_show_resolver.cpp	1328	ObShowResolver::resolve_show_create_user	ret == OB_ERR_NO_TABLE_PRIVILEGE	} else if (OB_ERR_NO_TABLE_PRIVILEGE == ret) {
+src/sql/resolver/cmd/ob_show_resolver.cpp	1336	ObShowResolver::resolve_show_create_user	tmp_ret == OB_USER_NOT_EXIST	} else if (has_select_privilege && OB_USER_NOT_EXIST == tmp_ret) {
+src/sql/resolver/cmd/ob_show_resolver.cpp	1441	ObShowResolver::check_show_create_user_privilege	ret == OB_ERR_NO_DB_PRIVILEGE; ret == OB_ERR_NO_TABLE_PRIVILEGE	if (OB_ERR_NO_DB_PRIVILEGE == ret || OB_ERR_NO_TABLE_PRIVILEGE == ret) {
+src/sql/resolver/cmd/ob_show_resolver.cpp	1553	ObShowResolver::resolve_show_from_table	ret == OB_TABLE_NOT_EXIST	if (OB_TABLE_NOT_EXIST == ret) {
+src/sql/resolver/cmd/ob_show_resolver.cpp	1637	ObShowResolver::resolve_show_from_database	ret == OB_ERR_BAD_DATABASE	if (OB_ERR_BAD_DATABASE == ret) {
+src/sql/resolver/cmd/ob_show_resolver.cpp	2200	ObShowResolver::resolve_table_info	ret != OB_ERR_BAD_DATABASE	if (OB_ERR_BAD_DATABASE != ret) {
+src/sql/resolver/cmd/ob_show_resolver.cpp	2212	ObShowResolver::resolve_table_info	ret != OB_TABLE_NOT_EXIST	if (OB_TABLE_NOT_EXIST != ret) {
+src/sql/resolver/cmd/ob_show_resolver.cpp	2226	ObShowResolver::resolve_table_info	ret != OB_HASH_EXIST	if (OB_HASH_EXIST != ret) {
+src/sql/resolver/dcl/ob_alter_user_role_resolver.cpp	102	ObAlterUserRoleResolver::resolve_role_list	ret == OB_USER_NOT_EXIST	if (OB_USER_NOT_EXIST == ret) {
+src/sql/resolver/dcl/ob_alter_user_role_resolver.cpp	148	ObAlterUserRoleResolver::resolve_role_list	ret == OB_ERR_ROLE_NOT_GRANTED_TO	if (OB_ERR_ROLE_NOT_GRANTED_TO == ret) {
+src/sql/resolver/dcl/ob_alter_user_role_resolver.cpp	272	ObAlterUserRoleResolver::resolve_default_role	ret == OB_USER_NOT_EXIST	if (ret == OB_USER_NOT_EXIST) {
+src/sql/resolver/dcl/ob_alter_user_role_resolver.cpp	291	ObAlterUserRoleResolver::resolve_default_role	ret == OB_USER_NOT_EXIST	if (OB_USER_NOT_EXIST == ret || OB_ISNULL(user_info)) {
+src/sql/resolver/dcl/ob_dcl_resolver.cpp	220	ObDCLResolver::check_dcl_on_inner_user	ret == OB_USER_NOT_EXIST	if (OB_USER_NOT_EXIST == ret) {
+src/sql/resolver/dcl/ob_dcl_resolver.cpp	297	ObDCLResolver::resolve_user_list_node	ret == OB_USER_NOT_EXIST	if (OB_USER_NOT_EXIST == ret) {
+src/sql/resolver/dcl/ob_grant_resolver.cpp	185	ObGrantResolver::resolve_grant_role_to_ur	ret == OB_USER_NOT_EXIST	if (OB_USER_NOT_EXIST == ret || OB_ISNULL(grantee_info)) {
+src/sql/resolver/dcl/ob_grant_resolver.cpp	222	ObGrantResolver::resolve_grant_role_to_ur	ret == OB_USER_NOT_EXIST	if (OB_USER_NOT_EXIST == ret || OB_ISNULL(role_info)) {
+src/sql/resolver/dcl/ob_grant_resolver.h	240	ObGrantResolver::resolve_priv_object	ret == OB_TABLE_NOT_EXIST	if (OB_TABLE_NOT_EXIST == ret && !is_grant) {
+src/sql/resolver/dcl/ob_grant_resolver.h	256	ObGrantResolver::resolve_priv_object	ret == OB_ERR_SP_DOES_NOT_EXIST	if (OB_ERR_SP_DOES_NOT_EXIST == ret && !is_grant) {
+src/sql/resolver/dcl/ob_revoke_resolver.cpp	75	ObRevokeResolver::resolve_revoke_role_inner	ret == OB_USER_NOT_EXIST	if (OB_USER_NOT_EXIST == ret || OB_ISNULL(role_info)) {
+src/sql/resolver/dcl/ob_revoke_resolver.cpp	85	ObRevokeResolver::resolve_revoke_role_inner	ret == OB_PRIV_DUP	if (OB_PRIV_DUP == ret) {
+src/sql/resolver/dcl/ob_revoke_resolver.cpp	122	ObRevokeResolver::resolve_revoke_role_inner	ret == OB_USER_NOT_EXIST	if (OB_USER_NOT_EXIST == ret) {
+src/sql/resolver/dcl/ob_revoke_resolver.cpp	342	ObRevokeResolver::resolve_mysql	ret == OB_USER_NOT_EXIST	if (OB_USER_NOT_EXIST == ret) {
+src/sql/resolver/dcl/ob_revoke_stmt.cpp	86	ObRevokeStmt::add_role	call result role_id_set_.exist_refactored(role_id) == OB_HASH_EXIST	if (OB_HASH_EXIST == role_id_set_.exist_refactored(role_id)) {
+src/sql/resolver/ddl/ob_alter_table_resolver.cpp	103	ObAlterTableResolver::resolve	ret == OB_TABLE_NOT_EXIST	if (OB_TABLE_NOT_EXIST == ret) {
+src/sql/resolver/ddl/ob_alter_table_resolver.cpp	642	ObAlterTableResolver::resolve_action_list	call result reduced_visible_col_set.exist_refactored(col_key) == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == reduced_visible_col_set.exist_refactored(col_key)) {
+src/sql/resolver/ddl/ob_alter_table_resolver.cpp	656	ObAlterTableResolver::resolve_action_list	call result reduced_visible_col_set.exist_refactored(col_key) == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == reduced_visible_col_set.exist_refactored(col_key)) {
+src/sql/resolver/ddl/ob_alter_table_resolver.cpp	664	ObAlterTableResolver::resolve_action_list	ret != OB_ITER_END	if (OB_FAIL(ret) && OB_ITER_END != ret) {
+src/sql/resolver/ddl/ob_alter_table_resolver.cpp	1048	ObAlterTableResolver::get_table_schema_for_check	ret == OB_TABLE_NOT_EXIST	if (OB_TABLE_NOT_EXIST == ret) {
+src/sql/resolver/ddl/ob_alter_table_resolver.cpp	1783	ObAlterTableResolver::resolve_drop_index	ret == OB_TABLE_NOT_EXIST	if (OB_TABLE_NOT_EXIST == ret) {
+src/sql/resolver/ddl/ob_alter_table_resolver.cpp	2073	ObAlterTableResolver::resolve_exchange_partition_stmt	ret == OB_TABLE_NOT_EXIST	if (OB_TABLE_NOT_EXIST == ret) {
+src/sql/resolver/ddl/ob_alter_table_resolver.cpp	2164	ObAlterTableResolver::resolve_rename_partition	ret == OB_DUPLICATE_OBJECT_NAME_EXIST	if (OB_DUPLICATE_OBJECT_NAME_EXIST == ret) {
+src/sql/resolver/ddl/ob_alter_table_resolver.cpp	2221	ObAlterTableResolver::resolve_rename_subpartition	ret == OB_DUPLICATE_OBJECT_NAME_EXIST	if (OB_DUPLICATE_OBJECT_NAME_EXIST == ret) {
+src/sql/resolver/ddl/ob_alter_table_resolver.cpp	2292	ObAlterTableResolver::resolve_alter_index	ret == OB_TABLE_NOT_EXIST	if (OB_TABLE_NOT_EXIST == ret) {
+src/sql/resolver/ddl/ob_alter_table_resolver.cpp	3447	ObAlterTableResolver::resolve_add_column	ret == OB_HASH_EXIST	if (OB_HASH_EXIST == ret) {
+src/sql/resolver/ddl/ob_alter_table_resolver.cpp	3859	ObAlterTableResolver::resolve_change_column	ret == OB_ERR_BAD_FIELD_ERROR	if (ret == OB_ERR_BAD_FIELD_ERROR) {
+src/sql/resolver/ddl/ob_alter_table_resolver.cpp	4026	ObAlterTableResolver::resolve_modify_column	ret == OB_ERR_BAD_FIELD_ERROR	if (ret == OB_ERR_BAD_FIELD_ERROR) {
+src/sql/resolver/ddl/ob_alter_table_resolver.cpp	4236	ObAlterTableResolver::resolve_drop_column	ret == OB_HASH_EXIST	if (OB_HASH_EXIST == ret) {
+src/sql/resolver/ddl/ob_alter_table_resolver.cpp	4245	ObAlterTableResolver::resolve_drop_column	ret == OB_HASH_EXIST	if (OB_HASH_EXIST == ret) {
+src/sql/resolver/ddl/ob_alter_table_resolver.cpp	4347	ObAlterTableResolver::resolve_rename_column	ret == OB_ERR_BAD_FIELD_ERROR	if (ret == OB_ERR_BAD_FIELD_ERROR) {
+src/sql/resolver/ddl/ob_create_index_resolver.cpp	395	ObCreateIndexResolver::resolve	ret == OB_TABLE_NOT_EXIST	if (OB_TABLE_NOT_EXIST == ret) {
+src/sql/resolver/ddl/ob_create_package_resolver.cpp	116	ObCreatePackageResolver::resolve	ret == OB_ERR_PACKAGE_DOSE_NOT_EXIST	if (OB_ERR_PACKAGE_DOSE_NOT_EXIST == ret) { // may be not old package header
+src/sql/resolver/ddl/ob_create_package_resolver.cpp	531	ObCreatePackageBodyResolver::resolve	ret == OB_ERR_PACKAGE_DOSE_NOT_EXIST	if (OB_ERR_PACKAGE_DOSE_NOT_EXIST == ret) {
+src/sql/resolver/ddl/ob_create_package_resolver.cpp	596	ObCreatePackageBodyResolver::resolve	ret != OB_ERR_UNEXPECTED; ret != OB_ERR_TOO_LONG_IDENT	if (OB_FAIL(ret) && ret != OB_ERR_UNEXPECTED && ret != OB_ERR_TOO_LONG_IDENT) {
+src/sql/resolver/ddl/ob_create_table_resolver.cpp	240	ObCreateTableResolver::resolve	ret == OB_ERR_BAD_DATABASE	if (OB_ERR_BAD_DATABASE == ret) {
+src/sql/resolver/ddl/ob_create_table_resolver.cpp	496	ObCreateTableResolver::check_column_name_duplicate	call result column_name_set_.exist_refactored(column_name_key) == OB_HASH_EXIST	if (OB_HASH_EXIST  == column_name_set_.exist_refactored(column_name_key)) {
+src/sql/resolver/ddl/ob_create_table_resolver.cpp	1758	ObCreateTableResolver::resolve_index_node	call result column_name_set_.exist_refactored(column_key) == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == column_name_set_.exist_refactored(column_key)) {
+src/sql/resolver/ddl/ob_create_table_resolver.cpp	1993	ObCreateTableResolver::resolve_index_name	ret (assigned in the comparison) == OB_HASH_EXIST	if (OB_HASH_EXIST == (ret = current_index_name_set_.exist_refactored(index_key))) {
+src/sql/resolver/ddl/ob_create_table_resolver.cpp	2143	ObCreateTableResolver::check_building_domain_index_legal	ret == OB_HASH_EXIST	if (OB_HASH_EXIST == ret) {
+src/sql/resolver/ddl/ob_create_table_resolver.cpp	2147	ObCreateTableResolver::check_building_domain_index_legal	ret == OB_HASH_NOT_EXIST	} else if (OB_HASH_NOT_EXIST == ret) {
+src/sql/resolver/ddl/ob_create_view_resolver.cpp	107	ObCreateViewResolver::resolve	ret == OB_ERR_BAD_DATABASE	if (OB_ERR_BAD_DATABASE == ret) {
+src/sql/resolver/ddl/ob_create_view_resolver.cpp	318	ObCreateViewResolver::check_view_columns	ret (assigned in the comparison) == OB_HASH_EXIST	} else if (OB_HASH_EXIST == (ret = view_col_names.set_refactored(dup_col_name, 0))) {
+src/sql/resolver/ddl/ob_create_view_resolver.cpp	375	ObCreateViewResolver::get_sel_priv_tables_in_subquery	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/sql/resolver/ddl/ob_create_view_resolver.cpp	470	ObCreateViewResolver::get_need_priv_tables	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/sql/resolver/ddl/ob_create_view_resolver.cpp	482	ObCreateViewResolver::get_need_priv_tables	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/sql/resolver/ddl/ob_create_view_resolver.cpp	607	ObCreateViewResolver::print_rebuilt_view_stmt	ret == OB_SIZE_OVERFLOW	if (OB_SIZE_OVERFLOW == ret && buf_len < OB_MAX_PACKET_LENGTH) {
+src/sql/resolver/ddl/ob_create_view_resolver.cpp	617	ObCreateViewResolver::print_rebuilt_view_stmt	ret == OB_SIZE_OVERFLOW	} while (OB_SIZE_OVERFLOW == ret && buf_len < OB_MAX_PACKET_LENGTH);
+src/sql/resolver/ddl/ob_create_view_resolver.cpp	658	ObCreateViewResolver::check_view_stmt_col_name	call result hash_ret=view_col_names.exist_refactored(dup_col_name) == OB_HASH_EXIST	} else if ((OB_HASH_EXIST == (hash_ret = view_col_names.exist_refactored(dup_col_name)))) {
+src/sql/resolver/ddl/ob_create_view_resolver.cpp	677	ObCreateViewResolver::check_view_stmt_col_name	ret == OB_WRONG_COLUMN_NAME	if (ret == OB_WRONG_COLUMN_NAME) {
+src/sql/resolver/ddl/ob_create_view_resolver.cpp	682	ObCreateViewResolver::check_view_stmt_col_name	call result hash_ret=view_col_names.exist_refactored(dup_col_name) == OB_HASH_EXIST	} else if ((OB_HASH_EXIST == (hash_ret = view_col_names.exist_refactored(dup_col_name)))) {
+src/sql/resolver/ddl/ob_create_view_resolver.cpp	715	ObCreateViewResolver::create_alias_names_auto	other variable hash_ret == OB_HASH_EXIST	while (OB_SUCC(ret) && OB_HASH_EXIST == hash_ret) {
+src/sql/resolver/ddl/ob_create_view_resolver.cpp	724	ObCreateViewResolver::create_alias_names_auto	call result hash_ret=view_col_names.exist_refactored(dup_col_name) == OB_HASH_EXIST	if (OB_HASH_EXIST == (hash_ret = view_col_names.exist_refactored(dup_col_name))) {
+src/sql/resolver/ddl/ob_ddl_resolver.cpp	926	ObDDLResolver::add_storing_column	call result storing_column_set_.exist_refactored(column_name_key) == OB_HASH_EXIST	} else if (OB_HASH_EXIST == storing_column_set_.exist_refactored(column_name_key)) {
+src/sql/resolver/ddl/ob_ddl_resolver.cpp	3344	ObDDLResolver::check_partition_name_duplicate	call result partition_name_set->exist_refactored(partition_name_key) == OB_HASH_EXIST	if (OB_HASH_EXIST == partition_name_set->exist_refactored(partition_name_key)) {
+src/sql/resolver/ddl/ob_ddl_resolver.cpp	4770	ObDDLResolver::check_column_in_check_constraint	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/sql/resolver/ddl/ob_ddl_resolver.cpp	4773	ObDDLResolver::check_column_in_check_constraint	ret == OB_HASH_EXIST	} else if (OB_HASH_EXIST == ret) {
+src/sql/resolver/ddl/ob_ddl_resolver.cpp	5057	ObDDLResolver::generate_global_index_schema	ret == OB_TABLE_NOT_EXIST	if (OB_TABLE_NOT_EXIST == ret) {
+src/sql/resolver/ddl/ob_ddl_resolver.cpp	5385	ObDDLResolver::generate_index_name	call result current_index_name_set.exist_refactored(index_key) != OB_HASH_EXIST	} else if (OB_HASH_EXIST != current_index_name_set.exist_refactored(index_key)) {
+src/sql/resolver/ddl/ob_ddl_resolver.cpp	5402	ObDDLResolver::generate_index_name	call result current_index_name_set.exist_refactored(tmp_key) != OB_HASH_EXIST	if (OB_HASH_EXIST != current_index_name_set.exist_refactored(tmp_key)) {
+src/sql/resolver/ddl/ob_ddl_resolver.cpp	5664	ObDDLResolver::resolve_foreign_key_name	ret (assigned in the comparison) == OB_HASH_EXIST	if (OB_HASH_EXIST == (ret = current_foreign_key_name_set_.exist_refactored(fk_key))) {
+src/sql/resolver/ddl/ob_ddl_resolver.cpp	5738	ObDDLResolver::check_foreign_key_reference	ret == OB_TABLE_NOT_EXIST	if (OB_TABLE_NOT_EXIST == ret) {
+src/sql/resolver/ddl/ob_ddl_resolver.cpp	5900	ObDDLResolver::create_fk_cons_name_automatically	call result hash_ret=current_foreign_key_name_set_.exist_refactored(f... == OB_HASH_EXIST	if (OB_HASH_EXIST == (hash_ret = current_foreign_key_name_set_.exist_refactored(fk_key))) {
+src/sql/resolver/ddl/ob_ddl_resolver.cpp	6141	ObDDLResolver::resolve_partition_name	ret == OB_ERR_WRONG_IDENT_NAME	if (OB_ERR_WRONG_IDENT_NAME == ret) {
+src/sql/resolver/ddl/ob_ddl_resolver.cpp	6144	ObDDLResolver::resolve_partition_name	ret == OB_ERR_TOO_LONG_IDENT	} else if (OB_ERR_TOO_LONG_IDENT == ret) {
+src/sql/resolver/ddl/ob_ddl_resolver.cpp	7586	ObDDLResolver::check_and_set_partition_names	call result partition_name_set->exist_refactored(partition_name_key) == OB_HASH_EXIST	if (OB_HASH_EXIST == partition_name_set->exist_refactored(partition_name_key)) {
+src/sql/resolver/ddl/ob_ddl_resolver.cpp	7615	ObDDLResolver::check_and_set_partition_names	call result partition_name_set->exist_refactored(partition_name_key) == OB_HASH_EXIST	if (OB_HASH_EXIST == partition_name_set->exist_refactored(partition_name_key)) {
+src/sql/resolver/ddl/ob_ddl_resolver.cpp	7681	ObDDLResolver::check_and_set_individual_subpartition_names	call result partition_name_set->exist_refactored(partition_name_key) == OB_HASH_EXIST	if (OB_HASH_EXIST == partition_name_set->exist_refactored(partition_name_key)) {
+src/sql/resolver/ddl/ob_ddl_resolver.cpp	7724	ObDDLResolver::check_and_set_individual_subpartition_names	call result partition_name_set->exist_refactored(partition_name_key) == OB_HASH_EXIST	if (OB_HASH_EXIST == partition_name_set->exist_refactored(partition_name_key)) {
+src/sql/resolver/ddl/ob_ddl_resolver.cpp	7746	ObDDLResolver::set_partition_name_in_hashset	ret == OB_HASH_FULL	if (OB_HASH_FULL == ret) {
+src/sql/resolver/ddl/ob_ddl_resolver.cpp	8033	ObDDLResolver::get_partition_keys_by_part_func_expr	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/resolver/ddl/ob_drop_index_resolver.cpp	90	ObDropIndexResolver::resolve	ret == OB_TABLE_NOT_EXIST	if (OB_TABLE_NOT_EXIST == ret) {
+src/sql/resolver/ddl/ob_drop_routine_resolver.cpp	80	ObDropFunctionResolver::resolve	ret == OB_ERR_NO_DB_SELECTED	if (OB_ERR_NO_DB_SELECTED == ret) {
+src/sql/resolver/ddl/ob_drop_table_resolver.cpp	118	ObDropTableResolver::resolve	call result table_item_set->exist_refactored(table_item) == OB_HASH_EXIST	if (OB_HASH_EXIST == table_item_set->exist_refactored(table_item)) {
+src/sql/resolver/ddl/ob_fts_index_builder_util.cpp	105	ObFtsIndexBuilderUtil::determine_docid_type	ret == OB_ERR_INDEX_KEY_NOT_FOUND	if (OB_ERR_INDEX_KEY_NOT_FOUND == ret) {
+src/sql/resolver/ddl/ob_fts_index_builder_util.cpp	1804	ObFtsIndexBuilderUtil::generate_fts_parser_property	ret == OB_NOT_SUPPORTED	if (OB_NOT_SUPPORTED == ret) {
+src/sql/resolver/ddl/ob_fts_index_builder_util.cpp	2402	ObMulValueIndexBuilderUtil::get_mulvalue_col	ret != OB_ERR_KEY_COLUMN_DOES_NOT_EXITS	if (ret != OB_ERR_KEY_COLUMN_DOES_NOT_EXITS) {
+src/sql/resolver/ddl/ob_optimize_resolver.cpp	72	ObOptimizeTableResolver::resolve	call result table_item_set->exist_refactored(table_item) == OB_HASH_EXIST	if (OB_HASH_EXIST == table_item_set->exist_refactored(table_item)) {
+src/sql/resolver/ddl/ob_trigger_resolver.cpp	107	ObTriggerResolver::get_drop_trigger_stmt_table_name	ret == OB_ERR_TRIGGER_NOT_EXIST; ret == OB_ERR_BAD_DATABASE	if (OB_ERR_TRIGGER_NOT_EXIST == ret || OB_ERR_BAD_DATABASE == ret) {
+src/sql/resolver/ddl/ob_truncate_table_resolver.cpp	84	ObTruncateTableResolver::resolve	ret == OB_TABLE_NOT_EXIST	if (NULL == orig_table_schema && OB_TABLE_NOT_EXIST == ret) {
+src/sql/resolver/dml/ob_aggr_expr_push_up_analyzer.cpp	439	ObStmtExecParamReplacer::check_need_replace	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/sql/resolver/dml/ob_column_namespace_checker.cpp	83	ObColumnNamespaceChecker::check_table_column_namespace	ret == OB_ERR_BAD_FIELD_ERROR	if (OB_ERR_BAD_FIELD_ERROR == ret) {
+src/sql/resolver/dml/ob_column_namespace_checker.cpp	101	ObColumnNamespaceChecker::check_table_column_namespace	ret == OB_ERR_BAD_FIELD_ERROR	if (OB_ERR_BAD_FIELD_ERROR == ret) {
+src/sql/resolver/dml/ob_column_namespace_checker.cpp	417	ObColumnNamespaceChecker::find_column_in_joined_table	ret == OB_ERR_BAD_FIELD_ERROR	if (OB_ERR_BAD_FIELD_ERROR == ret) {
+src/sql/resolver/dml/ob_column_namespace_checker.cpp	426	ObColumnNamespaceChecker::find_column_in_joined_table	ret == OB_ERR_BAD_FIELD_ERROR	if (OB_ERR_BAD_FIELD_ERROR == ret) {

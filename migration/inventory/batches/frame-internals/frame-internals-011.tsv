@@ -1,0 +1,7 @@
+file	line	symbol	construct	text
+src/sql/engine/window_function/ob_window_function_op.cpp	3570	ObWindowFunctionOp::do_partial_next_batch	frame internals: clear_evaluated_flag() (the operator base method); only the operator base method ObOperator::clear_evaluated_flag() (ob_operator.h:700-705), which clears the eval flags of the operator's own output exprs: no direct frame access	clear_evaluated_flag();
+src/sql/engine/window_function/ob_window_function_op.cpp	3574	ObWindowFunctionOp::do_partial_next_batch	frame internals: BatchInfoScopeGuard	ObEvalCtx::BatchInfoScopeGuard guard(eval_ctx_);
+src/sql/engine/window_function/ob_window_function_op.cpp	3575	ObWindowFunctionOp::do_partial_next_batch	frame internals: set_batch_idx	guard.set_batch_idx(0);
+src/sql/engine/window_function/ob_window_function_op.cpp	3699	ObWindowFunctionOp::final_next_batch	frame internals: BatchInfoScopeGuard	ObEvalCtx::BatchInfoScopeGuard guard(eval_ctx_);
+src/sql/engine/window_function/ob_window_function_op.cpp	3700	ObWindowFunctionOp::final_next_batch	frame internals: set_batch_idx	guard.set_batch_idx(0);
+src/sql/engine/window_function/ob_window_function_op.h	928	ObWindowFunctionOp	frame internals: BatchInfoScopeGuard	ObEvalCtx::BatchInfoScopeGuard &guard);

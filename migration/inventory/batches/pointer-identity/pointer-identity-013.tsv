@@ -1,0 +1,48 @@
+file	line	symbol	construct	text
+src/sql/printer/ob_update_stmt_printer.cpp	191	ObUpdateStmtPrinter::print_vector_assign	IR pointer == IR pointer	} else if (alias->get_param_expr(0) == query_ref_expr) {
+src/sql/resolver/dml/ob_aggr_expr_push_up_analyzer.cpp	391	ObAggrExprPushUpAnalyzer::get_exec_params	pointer membership test: ObRawExprUtils::find_expr	if (!ObRawExprUtils::find_expr(*query_ref_exec_params, all_exec_params.at(i))) {
+src/sql/resolver/dml/ob_aggr_expr_push_up_analyzer.cpp	433	ObStmtExecParamReplacer::check_need_replace	pointer cast to integer used as a key	uint64_t key = reinterpret_cast<uint64_t>(old_expr);
+src/sql/resolver/dml/ob_aggr_expr_push_up_analyzer.cpp	473	ObStmtExecParamReplacer::add_replace_exprs	pointer cast to integer used as a key	} else if (OB_FAIL(expr_replace_map_.set_refactored(reinterpret_cast<uint64_t>(from_expr),
+src/sql/resolver/dml/ob_aggr_expr_push_up_analyzer.cpp	474	ObStmtExecParamReplacer::add_replace_exprs	pointer cast to integer used as a key	reinterpret_cast<uint64_t>(to_expr)))) {
+src/sql/resolver/dml/ob_aggr_expr_push_up_analyzer.cpp	475	ObStmtExecParamReplacer::add_replace_exprs	pointer cast to integer used as a key	} else if (OB_FAIL(to_exprs_.set_refactored(reinterpret_cast<uint64_t>(to_expr)))) {
+src/sql/resolver/dml/ob_del_upd_resolver.cpp	687	ObDelUpdResolver::add_assignment	IR pointer == IR pointer	if (assign.column_expr_ == table_assign->assignments_.at(i).column_expr_) {
+src/sql/resolver/dml/ob_del_upd_resolver.cpp	969	ObDelUpdResolver::add_select_item_func	IR pointer == IR pointer	if (si->expr_ == col.expr_) {
+src/sql/resolver/dml/ob_del_upd_resolver.cpp	1502	ObDelUpdResolver::view_pullup_part_exprs	IR pointer == unresolved pointer	} else if (&table->get_base_table_item() == table) {
+src/sql/resolver/dml/ob_del_upd_resolver.cpp	2964	ObDelUpdResolver::replace_column_ref_for_check_constraint	pointer membership test: ObRawExprUtils::find_expr	} else if (ObRawExprUtils::find_expr(table_info.column_conv_exprs_, expr)) {
+src/sql/resolver/dml/ob_del_upd_resolver.cpp	2986	ObDelUpdResolver::replace_column_ref_for_check_constraint	IR pointer == IR pointer	} else if (b_expr == insert_columns.at(i)) {
+src/sql/resolver/dml/ob_delete_resolver.cpp	247	ObDeleteResolver::resolve_table_list	pointer membership test: ObOptimizerUtil::find_item	} else if (OB_UNLIKELY(ObOptimizerUtil::find_item(delete_tables_, table_item))) {
+src/sql/resolver/dml/ob_dml_resolver.cpp	2234	ObDMLResolver::report_user_error_msg	IR pointer == IR pointer	if (root_expr == q_name.ref_expr_) {
+src/sql/resolver/dml/ob_dml_resolver.cpp	5246	ObDMLResolver::add_column_to_stmt	pointer membership test: add_var_to_array_no_dup	if (OB_FAIL(add_var_to_array_no_dup(column_exprs, column_item->expr_))) {
+src/sql/resolver/dml/ob_dml_resolver.cpp	8455	ObDMLResolver::get_all_column_ref	pointer membership test: add_var_to_array_no_dup	if (OB_FAIL(add_var_to_array_no_dup(arr, col_ref))) {
+src/sql/resolver/dml/ob_dml_resolver.cpp	10619	ObDMLResolver::add_fake_schema	IR pointer == IR pointer	} else if (expr == new_expr) {
+src/sql/resolver/dml/ob_dml_resolver.cpp	11434	ObDMLResolver::try_add_cast_to_values	IR pointer == IR pointer	} else if (values_vector.at(i) == new_expr) {
+src/sql/resolver/dml/ob_dml_resolver.cpp	12310	ObDMLResolver::resolve_match_against_expr_with_match_phrase_mode	IR pointer == IR pointer	} else if ((scope == T_WHERE_SCOPE || scope == T_HAVING_SCOPE) && cur_match_expr == expr) {
+src/sql/resolver/dml/ob_dml_stmt.cpp	365	ObDMLStmt::remove_semi_info	IR pointer == IR pointer	if (info == semi_infos_.at(i)) {
+src/sql/resolver/dml/ob_dml_stmt.cpp	1793	ObDMLStmt::set_sharable_expr_reference	pointer membership test: ObRawExprUtils::find_expr	!ObRawExprUtils::find_expr(get_pseudo_column_like_exprs(), &expr)) {
+src/sql/resolver/dml/ob_dml_stmt.cpp	1805	ObDMLStmt::set_sharable_expr_reference	pointer membership test: ObRawExprUtils::find_expr	!ObRawExprUtils::find_expr(get_match_exprs(), &expr)) {
+src/sql/resolver/dml/ob_dml_stmt.cpp	2437	ObDMLStmt::get_table_item_idx	IR pointer == unresolved pointer	if (child_table == get_table_item(i)) {
+src/sql/resolver/dml/ob_dml_stmt.cpp	2474	ObDMLStmt::remove_table_item	IR pointer == unresolved pointer	if (ti == get_table_item(i)) {
+src/sql/resolver/dml/ob_dml_stmt.cpp	3021	ObDMLStmt::remove_column_item	IR pointer == IR pointer	if (column_expr == column_items_.at(i).expr_) {
+src/sql/resolver/dml/ob_dml_stmt.cpp	3037	ObDMLStmt::remove_joined_table_item	IR pointer == IR pointer	if (joined_table == joined_tables_.at(i)) {
+src/sql/resolver/dml/ob_dml_stmt.cpp	3479	ObDMLStmt::remove_subquery_expr	IR pointer == IR pointer	if (expr == subquery_exprs_.at(i)) {
+src/sql/resolver/dml/ob_dml_stmt.cpp	3822	ObDMLStmt::collect_temp_table_infos	IR pointer == unresolved pointer	if (table->ref_query_ == info.temp_table_query_) {
+src/sql/resolver/dml/ob_dml_stmt.cpp	4027	ObDMLStmt::get_CTE_table_items	pointer membership test: add_var_to_array_no_dup	if (OB_FAIL(add_var_to_array_no_dup(cte_table_items, tmp_table))) {
+src/sql/resolver/dml/ob_dml_stmt.cpp	4127	ObDMLStmt::do_formalize_query_ref_exprs_pre	pointer membership test: ObOptimizerUtil::find_item	} else if (ObOptimizerUtil::find_item(ref_exprs,
+src/sql/resolver/dml/ob_dml_stmt.cpp	4232	ObDMLStmt::do_formalize_lateral_derived_table_pre	pointer membership test: ObOptimizerUtil::find_item	} else if (ObOptimizerUtil::find_item(ref_exprs,
+src/sql/resolver/dml/ob_dml_stmt.cpp	4281	ObDMLStmt::get_match_expr_on_table	pointer membership test: add_var_to_array_no_dup	} else if (OB_FAIL(add_var_to_array_no_dup(match_exprs, static_cast<ObRawExpr *>(get_match_exprs().at(i))))) {
+src/sql/resolver/dml/ob_dml_stmt.cpp	4549	ObDMLStmt::is_contain_vector_origin_distance_calc	pointer membership test: ObRawExprUtils::find_expr	} else if (OB_FAIL(ObRawExprUtils::find_expr(si.expr_, vector_expr, bool_ret))) {
+src/sql/resolver/dml/ob_hint.cpp	2721	ObWindowDistHint::add_win_dist_option	pointer membership test: ObOptimizerUtil::find_item	if (OB_UNLIKELY(!ObOptimizerUtil::find_item(all_win_funcs, cur_win_funcs.at(i), &idx))) {
+src/sql/resolver/dml/ob_insert_resolver.cpp	909	ObInsertResolver::mock_values_column_ref	IR pointer != IR pointer	if (base_column_ref != column_ref) {
+src/sql/resolver/dml/ob_insert_resolver.cpp	989	ObInsertResolver::resolve_column_ref_expr	IR pointer == IR pointer	} else if (sel_stmt->get_select_item(idx).expr_ == real_ref_expr) {
+src/sql/resolver/dml/ob_insert_stmt.cpp	270	ObInsertStmt::get_ddl_sort_keys	IR pointer == IR pointer	if (sort_keys.at(i).expr_ == column_list.at(j)) {
+src/sql/resolver/dml/ob_select_resolver.cpp	709	ObSelectResolver::mark_aggr_in_select_scope	pointer membership test: add_var_to_array_no_dup	if(OB_FAIL(add_var_to_array_no_dup(origin_mark_inner_expr, aggr_expr))) {
+src/sql/resolver/dml/ob_select_resolver.cpp	781	ObSelectResolver::mark_aggr_in_order_by_scope	pointer membership test: add_var_to_array_no_dup	} else if (OB_FAIL(add_var_to_array_no_dup(select_agg_expr, aggr_expr))) {
+src/sql/resolver/dml/ob_select_resolver.cpp	815	ObSelectResolver::mark_aggr_in_order_by_scope	pointer membership test: has_exist_in_array	if (!has_exist_in_array(select_agg_expr, aggr_expr)) {
+src/sql/resolver/dml/ob_select_resolver.cpp	2226	ObSelectResolver::add_parent_cte_table_item	pointer membership test: add_var_to_array_no_dup	if (OB_FAIL(add_var_to_array_no_dup(parent_cte_tables_, table_item))) {
+src/sql/resolver/dml/ob_select_resolver.cpp	3292	ObSelectResolver::resolve_alias_column_ref	IR pointer != IR pointer	} else if (real_ref_expr != col_expr) {
+src/sql/resolver/dml/ob_select_resolver.cpp	3318	ObSelectResolver::resolve_alias_column_ref	IR pointer != IR pointer	} else if (real_ref_expr != cur_item->expr_) {
+src/sql/resolver/dml/ob_select_resolver.cpp	3396	ObSelectResolver::resolve_column_ref_in_group_by	IR pointer != IR pointer	} else if (real_ref_expr != col_ref) {
+src/sql/resolver/dml/ob_select_resolver.cpp	3760	ObSelectResolver::resolve_aggr_exprs	IR pointer != IR pointer	} else if (final_aggr != aggr_exprs.at(i)) {
+src/sql/resolver/dml/ob_select_resolver.cpp	3860	ObSelectResolver::check_column_ref_in_group_by_or_field_list	IR pointer == unresolved pointer	if (select_stmt->get_group_exprs().at(i) == column_ref) {
+src/sql/resolver/dml/ob_select_resolver.cpp	3867	ObSelectResolver::check_column_ref_in_group_by_or_field_list	IR pointer == IR pointer	if (select_stmt->get_select_item(i).expr_ == column_ref) {
+src/sql/resolver/dml/ob_select_resolver.cpp	4406	ObSelectResolver::resolve_shared_order_item	pointer membership test: ObOptimizerUtil::find_item	} else if (ObOptimizerUtil::find_item(select_exprs, order_item.expr_)) {

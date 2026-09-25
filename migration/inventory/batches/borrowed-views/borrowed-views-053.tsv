@@ -1,0 +1,61 @@
+file	line	symbol	construct	text
+src/storage/ddl/ob_complement_data_task.h	150	ObComplementDataParam::ranges_	member container of ObDatumRange of type ObArray<blocksstable::ObDatumRange>	ObArray<blocksstable::ObDatumRange> ranges_;
+src/storage/ddl/ob_complement_data_task.h	412	ObLocalScan::default_row_	member ObDatumRow (value) of type blocksstable::ObDatumRow	blocksstable::ObDatumRow default_row_;
+src/storage/ddl/ob_complement_data_task.h	413	ObLocalScan::write_row_	member ObDatumRow (value) of type blocksstable::ObDatumRow	blocksstable::ObDatumRow write_row_; // with extra rowkey.
+src/storage/ddl/ob_ddl_common_storage_impl.cpp	354	oceanbase::storage::ObDDLStorageUtil::convert_to_storage_row	allocator in, arena view out: blocksstable::ObDatumRow &current_row	int oceanbase::storage::ObDDLStorageUtil::convert_to_storage_row(
+src/storage/ddl/ob_ddl_common_storage_impl.cpp	612	oceanbase::storage::ObDDLStorageUtil::handle_lob_columns	allocator in, arena view out: ObDatumRow &datum_row	int oceanbase::storage::ObDDLStorageUtil::handle_lob_columns(
+src/storage/ddl/ob_ddl_continuous_vector.h	162	ObDDLContinuousVector::data_	member raw bytes (pointer) of type char *	char *data_;
+src/storage/ddl/ob_ddl_continuous_vector.h	163	ObDDLContinuousVector::buf_	member raw bytes (pointer) of type char *	char *buf_;
+src/storage/ddl/ob_ddl_discrete_vector.h	147	ObDDLDiscreteVector::vec_ptrs_	member raw bytes (pointer) of type char **	char **vec_ptrs_;
+src/storage/ddl/ob_ddl_discrete_vector.h	149	ObDDLDiscreteVector::ptrs_	member raw bytes (pointer) of type char **	char **ptrs_;
+src/storage/ddl/ob_ddl_pipeline.cpp	36	read_full_lob_string	allocator in, arena view out: ObString &value	int read_full_lob_string(
+src/storage/ddl/ob_ddl_redo_log_row_iterator.h	37	ObDDLRedoLogRowIterator::rowkey_	member ObStoreRowkey (value) of type common::ObStoreRowkey	common::ObStoreRowkey rowkey_;
+src/storage/ddl/ob_ddl_redo_log_row_iterator.h	38	ObDDLRedoLogRowIterator::rowkey_obobj_	member ObObj (pointer) of type common::ObObj *	common::ObObj *rowkey_obobj_;
+src/storage/ddl/ob_ddl_redo_log_writer.h	220	ObDDLRedoLogWriter::buffer_	member raw bytes (pointer) of type char *	char *buffer_;
+src/storage/ddl/ob_ddl_struct.h	96	ObDDLMacroBlock::buf_	member raw bytes (pointer) of type const char*	const char* buf_; // only used for warm up
+src/storage/ddl/ob_ddl_struct.h	169	ObDDLMacroBlockRedoInfo::data_buffer_	member ObString (value) of type ObString	ObString data_buffer_;
+src/storage/ddl/ob_ddl_struct.h	324	ObTableSchemaItem::vec_idx_param_	member ObString (value) of type ObString	ObString vec_idx_param_;
+src/storage/ddl/ob_direct_load_struct.h	208	ObLobMetaRowIterator::tmp_row_	member ObDatumRow (value) of type blocksstable::ObDatumRow	blocksstable::ObDatumRow tmp_row_;
+src/storage/ddl/ob_hnsw_embedmgr.h	55	ObEmbeddingConfig::model_url_	member ObString (value) of type ObString	ObString model_url_;
+src/storage/ddl/ob_hnsw_embedmgr.h	56	ObEmbeddingConfig::model_name_	member ObString (value) of type ObString	ObString model_name_;
+src/storage/ddl/ob_hnsw_embedmgr.h	57	ObEmbeddingConfig::user_key_	member ObString (value) of type ObString	ObString user_key_;
+src/storage/ddl/ob_hnsw_embedmgr.h	58	ObEmbeddingConfig::provider_	member ObString (value) of type ObString	ObString provider_;
+src/storage/ddl/ob_hnsw_embedmgr.h	100	ObEmbeddingResult::extra_values_	member container of ObStorageDatum of type common::ObArray<blocksstable::ObStorageDatum>	common::ObArray<blocksstable::ObStorageDatum> extra_values_;
+src/storage/ddl/ob_hnsw_embedmgr.h	103	ObEmbeddingResult::text_	member ObString (value) of type common::ObString	common::ObString text_;
+src/storage/ddl/ob_lob_macro_block_writer.cpp	107	ObLobMacroBlockWriter::write	allocator in, arena view out: blocksstable::ObStorageDatum &datum	int ObLobMacroBlockWriter::write(const ObColumnSchemaItem &column_schema, ObIAllocator &row_allocator, blocksstable::ObStorageDatum &datum)
+src/storage/ddl/ob_lob_macro_block_writer.h	76	ObLobMacroBlockWriter::lob_meta_row_	member ObDatumRow (value) of type blocksstable::ObDatumRow	blocksstable::ObDatumRow lob_meta_row_;
+src/storage/ddl/ob_pipeline.h	80	ObChunk::datum_row_	member ObDatumRow (pointer) of type blocksstable::ObDatumRow *	blocksstable::ObDatumRow *datum_row_;
+src/storage/ddl/ob_tablet_ddl_kv.h	67	ObBlockMetaTreeValue::rowkey_	member ObDatumRowkey (pointer) of type const blocksstable::ObDatumRowkey *	const blocksstable::ObDatumRowkey *rowkey_;
+src/storage/ddl/ob_tablet_ddl_kv.h	148	ObBlockMetaTree::IndexItem::rowkey_	member ObDatumRowkey (pointer) of type const blocksstable::ObDatumRowkey *	const blocksstable::ObDatumRowkey *rowkey_;
+src/storage/ddl/ob_tablet_fork_task.h	66	ObForkScanParam::query_range_	member ObDatumRange (pointer) of type const ObDatumRange *	const ObDatumRange *query_range_;
+src/storage/ddl/ob_tablet_slice_writer.h	193	ObRsSliceWriter::current_row_	member ObDatumRow (value) of type blocksstable::ObDatumRow	blocksstable::ObDatumRow current_row_;
+src/storage/ddl/ob_tablet_slice_writer.h	212	ObHeapRsSliceWriter::ready_datums_	member container of ObDatum of type ObArray<ObDatum *>	ObArray<ObDatum *> ready_datums_;
+src/storage/ddl/ob_tablet_slice_writer.h	214	ObHeapRsSliceWriter::autoinc_datum_	member ObDatum (value) of type ObDatum	ObDatum autoinc_datum_;
+src/storage/ddl/ob_tablet_slice_writer.h	297	ObBatchSliceWriter::last_key_	member ObDatumRowkey (value) of type blocksstable::ObDatumRowkey	blocksstable::ObDatumRowkey last_key_; // for check order row by row, consider macro block writer will not checkit when append_batch
+src/storage/ddl/ob_tablet_slice_writer.h	326	ObHeapBatchSliceWriter::ready_datums_	member container of ObDatum of type ObArray<ObDatum *>	ObArray<ObDatum *> ready_datums_;
+src/storage/ddl/ob_tablet_slice_writer.h	328	ObHeapBatchSliceWriter::autoinc_datum_	member ObDatum (value) of type ObDatum	ObDatum autoinc_datum_;
+src/storage/ddl/ob_vector_index_ddl_pipeline.h	96	ObVectorIndexTabletContext::vec_idx_param_	member ObString (value) of type common::ObString	common::ObString vec_idx_param_;
+src/storage/ddl/ob_vector_index_ddl_pipeline.h	137	ObVectorIndexRowIterator::current_row_	member ObDatumRow (value) of type blocksstable::ObDatumRow	blocksstable::ObDatumRow current_row_;
+src/storage/ddl/ob_vector_index_ddl_pipeline.h	167	ObHNSWIndexRowIterator::vec_idx_param_	member ObString (value) of type common::ObString	common::ObString vec_idx_param_;
+src/storage/ddl/ob_vector_index_ddl_pipeline.h	304	ObHNSWIndexAppendBufferOperator::vec_idx_param_	member ObString (value) of type common::ObString	common::ObString vec_idx_param_;
+src/storage/ddl/ob_vector_index_ddl_pipeline.h	697	ObHNSWEmbeddingOperator::model_id_	member ObString (value) of type common::ObString	common::ObString model_id_;
+src/storage/deadlock/ob_deadlock_detector_common_define.h	148	ObDetectorUserReportInfo::module_name_	member ObString (value) of type common::ObString	common::ObString module_name_;// like 'transaction' to transaction module
+src/storage/deadlock/ob_deadlock_detector_common_define.h	149	ObDetectorUserReportInfo::resource_visitor_	member ObString (value) of type common::ObString	common::ObString resource_visitor_;// like 'transaction id' to transaction module
+src/storage/deadlock/ob_deadlock_detector_common_define.h	150	ObDetectorUserReportInfo::required_resource_	member ObString (value) of type common::ObString	common::ObString required_resource_;// like 'row key' to transaction module
+src/storage/deadlock/ob_deadlock_detector_common_define.h	151	ObDetectorUserReportInfo::extra_columns_names_	member container of ObString of type common::ObArray<common::ObString>	common::ObArray<common::ObString> extra_columns_names_;// explain the meaning of extra columns
+src/storage/deadlock/ob_deadlock_detector_common_define.h	153	ObDetectorUserReportInfo::extra_columns_values_	member container of ObString of type common::ObArray<common::ObString>	common::ObArray<common::ObString> extra_columns_values_;
+src/storage/deadlock/ob_deadlock_detector_common_define.h	192	ObDetectorInnerReportInfo::role_	member ObString (value) of type common::ObString	common::ObString role_;// the role this detector plays
+src/storage/fts/dict/ob_ft_dict_def.h	72	ObFTDictDesc::name_	member ObString (value) of type ObString	ObString name_;
+src/storage/fts/dict/ob_ik_dic.h	35	ObIKDictLoader::RawDict::data_	member raw bytes (pointer) of type const char **	const char **data_;
+src/storage/fts/ik/ob_ik_processor.h	80	TokenizeContext::fulltext_	member raw bytes (pointer) of type const char *	const char *fulltext_;
+src/storage/fts/ik/ob_ik_token.h	50	ObIKToken::ptr_	member raw bytes (pointer) of type const char *	const char *ptr_;
+src/storage/fts/ob_beng_ft_parser.h	63	ObBEngFTParser::doc_	member ObDatum (value) of type common::ObDatum	common::ObDatum doc_;
+src/storage/fts/ob_fts_parser_property.cpp	269	ObFTParserJsonProps::to_format_json	allocator in, arena view out: ObString &str	int ObFTParserJsonProps::to_format_json(ObIAllocator &alloc, ObString &str)
+src/storage/fts/ob_fts_parser_property.cpp	1083	ObFTParserJsonProps::tokenize_array_to_props_json	allocator in, arena view out: ObString &json_str	int ObFTParserJsonProps::tokenize_array_to_props_json(ObIAllocator &allocator,
+src/storage/fts/ob_whitespace_ft_parser.h	47	ObSpaceFTParser::start_	member raw bytes (pointer) of type const char *	const char *start_;
+src/storage/fts/ob_whitespace_ft_parser.h	48	ObSpaceFTParser::next_	member raw bytes (pointer) of type const char *	const char *next_;
+src/storage/fts/ob_whitespace_ft_parser.h	49	ObSpaceFTParser::end_	member raw bytes (pointer) of type const char *	const char *end_;
+src/storage/fts/utils/ob_ft_ngram_impl.h	50	ObFTNgramImpl::Word::ptr	member raw bytes (pointer) of type const char *	const char *ptr;
+src/storage/fts/utils/ob_ft_ngram_impl.h	89	ObFTNgramImpl::fulltext_start_	member raw bytes (pointer) of type const char *	const char *fulltext_start_;
+src/storage/fts/utils/ob_ft_ngram_impl.h	90	ObFTNgramImpl::fulltext_end_	member raw bytes (pointer) of type const char *	const char *fulltext_end_;
+src/storage/fts/utils/ob_ft_ngram_impl.h	91	ObFTNgramImpl::cur_	member raw bytes (pointer) of type const char *	const char *cur_;

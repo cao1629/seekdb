@@ -1,0 +1,37 @@
+file	line	symbol	construct	text
+src/oblib/lib/container/ob_heap.h	86	ObBinaryHeapBase::push	heap operation definition: ObBinaryHeapBase::push	int ObBinaryHeapBase<T, CompareFunctor, LOCAL_ARRAY_SIZE>::push(const T &element)
+src/oblib/lib/container/ob_heap.h	97	ObBinaryHeapBase::push	heap operation definition: ObBinaryHeapBase::push	int ObBinaryHeapBase<T, CompareFunctor, LOCAL_ARRAY_SIZE>::push(const T &element, bool &in_heap)
+src/oblib/lib/container/ob_heap.h	110	ObBinaryHeapBase::pop	heap operation definition: ObBinaryHeapBase::pop	int ObBinaryHeapBase<T, CompareFunctor, LOCAL_ARRAY_SIZE>::pop()
+src/oblib/lib/container/ob_heap.h	128	ObBinaryHeapBase::top	heap operation definition: ObBinaryHeapBase::top	int ObBinaryHeapBase<T, CompareFunctor, LOCAL_ARRAY_SIZE>::top(const T *&element)
+src/oblib/lib/container/ob_heap.h	142	ObBinaryHeapBase::top	heap operation definition: ObBinaryHeapBase::top	const T& ObBinaryHeapBase<T, CompareFunctor, LOCAL_ARRAY_SIZE>::top() const
+src/oblib/lib/container/ob_heap.h	148	ObBinaryHeapBase::top	heap operation definition: ObBinaryHeapBase::top	T& ObBinaryHeapBase<T, CompareFunctor, LOCAL_ARRAY_SIZE>::top()
+src/oblib/lib/container/ob_heap.h	154	ObBinaryHeapBase::replace_top	heap operation definition: ObBinaryHeapBase::replace_top	int ObBinaryHeapBase<T, CompareFunctor, LOCAL_ARRAY_SIZE>::replace_top(const T &element)
+src/oblib/lib/container/ob_heap.h	293	ObRemovableHeap::remove	heap operation definition: ObRemovableHeap::remove	int remove(const T &element)
+src/oblib/lib/container/ob_heap.h	298	ObRemovableHeap::remove_by_index	heap operation definition: ObRemovableHeap::remove_by_index	int remove_by_index(int64_t index)
+src/oblib/lib/container/ob_paringheap.h	106	ObParingHeap	heap declared: Paringheap (ObParingHeap)	typedef ObParingHeap<T, Compare, L> Paringheap;
+src/oblib/lib/container/ob_paringheap.h	222	ObParingHeap::remove	heap operation definition: ObParingHeap::remove	OB_INLINE int remove(T *phn)
+src/oblib/lib/container/ob_vector.ipp	590	ObSortedVector::sort	sort function definition: ObSortedVector::sort	void ObSortedVector<T, Allocator>::sort(Compare compare)
+src/oblib/lib/container/ob_vector.ipp	592	ObSortedVector::sort	lib::ob_sort call	lib::ob_sort(begin(), end(), compare);
+src/oblib/lib/list/ob_intrusive_list.h	317	SortableQueue::sort	sort function definition: SortableQueue::sort	void sort()
+src/oblib/lib/lock/ob_bucket_lock.cpp	355	ObMultiBucketLockGuard::lock_multi_buckets	iterate hash container latch_idx_set (ObHashSet)	for (common::hash::ObHashSet<uint64_t>::iterator it = latch_idx_set.begin();
+src/oblib/lib/lock/ob_bucket_lock.cpp	365	ObMultiBucketLockGuard::lock_multi_buckets	lib::ob_sort call	lib::ob_sort(&latch_array_[0], &latch_array_[0] + latch_array_.count());
+src/oblib/lib/oblog/ob_log.cpp	1361	ObLogger::add_files_to_list	qsort call	qsort(&files_arr->at(0), files_arr->count(), sizeof(FileName), compare_log_filename_by_date_suffix);
+src/oblib/lib/oblog/ob_log_compressor.h	98	ObSyslogPriorityArray::push	heap operation definition: ObSyslogPriorityArray::push	int push(const ObSyslogFile &element)
+src/oblib/lib/oblog/ob_log_compressor.h	213	ObLogCompressor	heap declared: oldest_files_ (ObSyslogPriorityArray)	ObSyslogPriorityArray oldest_files_;
+src/oblib/lib/utility/ob_common_utility.cpp	177	ObBasicTimeGuard::to_string	lib::ob_sort call	lib::ob_sort(click_infos, click_infos + click_count, ClickInfo::compare);
+src/oblib/lib/utility/ob_sort.h	28	ob_sort	ob_sort call	void ob_sort(Iterator first, Iterator last, Compare comp)
+src/oblib/lib/utility/ob_sort.h	28	ob_sort	sort function definition: ob_sort	void ob_sort(Iterator first, Iterator last, Compare comp)
+src/oblib/lib/utility/ob_sort.h	40	ob_sort	std::sort call	std::sort(first, last, comp);
+src/oblib/lib/utility/ob_sort.h	44	ob_sort	ob_sort call	void ob_sort(Iterator first, Iterator last)
+src/oblib/lib/utility/ob_sort.h	44	ob_sort	sort function definition: ob_sort	void ob_sort(Iterator first, Iterator last)
+src/oblib/lib/utility/ob_sort.h	54	ob_sort	ob_sort call	ob_sort(first, last, Compare());
+src/observer/change_stream/ob_change_stream_fetcher.cpp	204	ObCSFetcher::destroy	iterate hash container tx_info_ (ObHashMap)	for (common::hash::ObHashMap<int64_t, ObCSTxInfo *>::iterator it = tx_info_.begin();
+src/observer/change_stream/ob_change_stream_fetcher.cpp	267	ObCSFetcher::get_min_dep_lsn	iterate hash container tx_info_ (ObHashMap)	for (common::hash::ObHashMap<int64_t, ObCSTxInfo *>::const_iterator it = tx_info_.begin();
+src/observer/change_stream/ob_change_stream_fetcher.cpp	775	ObCSFetcher::run1	iterate hash container tx_info_ (ObHashMap)	for (common::hash::ObHashMap<int64_t, ObCSTxInfo *>::iterator it = tx_info_.begin();
+src/observer/change_stream/ob_cs_plugin_async_index.cpp	646	ObCSAsyncIndexProcessor::build_das_ins_ctdef_	std::sort call	std::sort(sorted_columns.begin(), sorted_columns.end(),
+src/observer/composition/retrieval/ob_das_legacy_tr_merge_iter.cpp	946	get_query_tokens_by_compacting_repeated_token	iterate hash container token_map (ObHashMap)	for (hash::ObHashMap<ObString, double>::const_iterator iter = token_map.begin();
+src/observer/composition/retrieval/ob_das_legacy_tr_merge_iter.cpp	1125	ObDASLegacyTRMergeIter::build_query_tokens	iterate hash container token_map (ObHashMap)	for (hash::ObHashMap<ObFTWord, int64_t>::const_iterator iter = token_map.begin();
+src/observer/ob_server_schema_updater.cpp	183	ObServerSchemaUpdater::batch_process_tasks	lib::ob_sort call	lib::ob_sort(tasks.begin(), tasks.end(), ObServerSchemaTask::greator_than);
+src/observer/omt/ob_server_runtime.cpp	107	ObPxPools::thread_recycle	iterate hash container pool_map_ (ObHashMap)	if (OB_FAIL(pool_map_.foreach_refactored(recycle_pool_func))) {
+src/observer/omt/ob_server_runtime.cpp	162	ObPxPools::server_module_stop	iterate hash container pool_map_ (ObHashMap)	if (OB_FAIL(pools->pool_map_.foreach_refactored(stop_pool_func))) {
+src/observer/omt/ob_server_runtime.cpp	172	ObPxPools::destroy	iterate hash container pool_map_ (ObHashMap)	if (OB_FAIL(pool_map_.foreach_refactored(free_pool_func))) {

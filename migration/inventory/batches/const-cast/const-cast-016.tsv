@@ -1,0 +1,81 @@
+file	line	symbol	construct	text
+src/sql/engine/basic/ob_chunk_datum_store.h	142	ObChunkDatumStore::StoredRow::get_extra_payload	const_cast<char*>	{ return static_cast<void*>(const_cast<char*>(payload_ + sizeof(ObDatum) * cnt_)); }
+src/sql/engine/basic/ob_chunk_datum_store.h	1252	ObChunkDatumStore::StoredRow::to_expr	const_cast<char *>	MEMCPY(const_cast<char *>(dst.ptr_), src.ptr_, src.len_);
+src/sql/engine/basic/ob_chunk_datum_store.h	1323	ObChunkDatumStore::Iterator::get_next_row	const_cast<char *>	MEMCPY(const_cast<char *>(dst.ptr_), src.ptr_, src.len_);
+src/sql/engine/basic/ob_chunk_datum_store.h	1350	ObChunkDatumStore::Iterator::get_next_batch	const_cast<const StoredRow **> (adds const only)	srows = const_cast<const StoredRow **>(store_->batch_ctx_->stored_rows_);
+src/sql/engine/basic/ob_chunk_datum_store.h	1398	ObChunkDatumStore::Iterator::attach_rows	const_cast<char *>	MEMCPY(const_cast<char *>(dst.ptr_), src.ptr_, src.len_);
+src/sql/engine/basic/ob_chunk_datum_store.h	1405	ObChunkDatumStore::Iterator::attach_rows	const_cast<char *>	MEMCPY(const_cast<char *>(dst.ptr_), src.ptr_, src.len_);
+src/sql/engine/basic/ob_chunk_row_store.cpp	94	ObChunkRowStore::StoredRow::assign	const_cast<ObObj*>	ObObj* src_cells = const_cast<ObObj*>(sr->cells());
+src/sql/engine/basic/ob_chunk_row_store.cpp	590	ObChunkRowStore::add_row	const_cast<ObNewRow &>	ObNewRow &r = const_cast<ObNewRow &>(row);
+src/sql/engine/basic/ob_chunk_row_store.cpp	1315	ObChunkRowStore::RowIterator::convert_to_row	const_cast<ObObj *>	row_.cells_ = const_cast<ObObj *>(sr->cells());
+src/sql/engine/basic/ob_chunk_row_store.cpp	1331	ObChunkRowStore::RowIterator::convert_to_row_full	const_cast<ObObj *>	row_.cells_ = const_cast<ObObj *>(sr->cells());
+src/sql/engine/basic/ob_chunk_row_store.h	62	ObChunkRowStore::StoredRow::get_extra_payload	const_cast<char*>	inline void *get_extra_payload() const { return static_cast<void*>(const_cast<char*>(payload_ + sizeof(ObObj) * cnt_)); }
+src/sql/engine/basic/ob_expr_values_op.cpp	534	ObExprValuesOp::calc_next_row	const_cast<char*>	ObDataBuffer res_alloc(const_cast<char*>(dst_datum.ptr_),
+src/sql/engine/basic/ob_group_join_buffer.cpp	377	ObGroupJoinBufffer::drain_left	const_cast<ObBatchRows *&>	const_cast<ObBatchRows *&>(batch_rows)->end_ = false;
+src/sql/engine/basic/ob_group_join_buffer.cpp	583	ObGroupJoinBufffer::batch_fill_group_buffer	const_cast<ObBatchRows *&>	} else if (FALSE_IT(const_cast<ObBatchRows *&>(batch_rows)->end_ = false)) {
+src/sql/engine/basic/ob_hash_partitioning_infrastructure_op.h	2576	ObHashPartInfrastructure::get_left_next_batch	const_cast<const ObChunkDatumStore::StoredRow**> (adds const only)	const_cast<const ObChunkDatumStore::StoredRow**>(store_rows_)))) {
+src/sql/engine/basic/ob_json_table_op.cpp	641	ObJsonTableOp::init	const_cast<ObJsonTableSpec*>	jt_ctx_.spec_ptr_ = const_cast<ObJsonTableSpec*>(spec_ptr);
+src/sql/engine/basic/ob_json_table_op.cpp	649	ObJsonTableOp::init	const_cast<ObJsonTableSpec*>	jt_ctx_.spec_ptr_ = const_cast<ObJsonTableSpec*>(spec_ptr);
+src/sql/engine/basic/ob_pushdown_filter.cpp	2791	ObPushdownOperator::write_trans_info_datum	const_cast<char *>	char *dst_ptr = const_cast<char *>(datum.ptr_);
+src/sql/engine/basic/ob_pushdown_filter.cpp	2846	ObPushdownOperator::deep_copy	const_cast<char *>	MEMMOVE(const_cast<char *>(ptr), datum.ptr_, datum.len_);
+src/sql/engine/basic/ob_ra_datum_store.cpp	145	ObRADatumStore::StoredRow::assign	const_cast<ObDatum*>	ObDatum* src_cells = const_cast<ObDatum*>(sr->cells());
+src/sql/engine/basic/ob_ra_datum_store.h	125	ObRADatumStore::StoredRow::get_extra_payload	const_cast<char*>	{ return static_cast<void*>(const_cast<char*>(payload_ + sizeof(common::ObDatum) * cnt_)); }
+src/sql/engine/basic/ob_ra_row_store.cpp	534	ObRARowStore::add_row	const_cast<ObNewRow &>	ObNewRow &r = const_cast<ObNewRow &>(row);
+src/sql/engine/basic/ob_ra_row_store.cpp	778	ObRARowStore::Reader::get_row	const_cast<ObObj *>	row_.cells_ = const_cast<ObObj *>(sr->cells());
+src/sql/engine/basic/ob_select_into_basic.cpp	297	ObOutfileGzipStreamCompressor::compress	C-style cast (Bytef *) drops const from src	zstr_.next_in = (Bytef *)(src + consumed_size);
+src/sql/engine/basic/ob_select_into_basic.cpp	309	ObOutfileGzipStreamCompressor::compress	C-style cast (Bytef *) drops const from src	consumed_size = zstr_.next_in - (Bytef *)src;
+src/sql/engine/basic/ob_temp_block_store.cpp	331	ObTempBlockStore::get_block	const_cast<Block *>	Block *tmp_blk = const_cast<Block *>(blk);
+src/sql/engine/basic/ob_temp_column_store.cpp	187	ObTempColumnStore::ColumnBlock::get_next_batch	const_cast<char *>	char* buf = const_cast<char *>(payload_ + start_read_pos);
+src/sql/engine/basic/ob_values_table_access_op.cpp	215	ObValuesTableAccessOp::calc_datum_from_expr	const_cast<char*>	ObDataBuffer res_alloc(const_cast<char*>(dst_datum.ptr_), dst_expr->res_buf_len_);
+src/sql/engine/cmd/ob_database_executor.cpp	49	ObCreateDatabaseExecutor::execute	const_cast<obcall::ObCreateDatabaseArg&>	obcall::ObCreateDatabaseArg &tmp_arg = const_cast<obcall::ObCreateDatabaseArg&>(create_database_arg);
+src/sql/engine/cmd/ob_database_executor.cpp	119	ObAlterDatabaseExecutor::execute	const_cast<obcall::ObAlterDatabaseArg&>	obcall::ObAlterDatabaseArg &tmp_arg = const_cast<obcall::ObAlterDatabaseArg&>(alter_database_arg);
+src/sql/engine/cmd/ob_database_executor.cpp	167	ObDropDatabaseExecutor::execute	const_cast<obcall::ObDropDatabaseArg&>	obcall::ObDropDatabaseArg &tmp_arg = const_cast<obcall::ObDropDatabaseArg&>(drop_database_arg);
+src/sql/engine/cmd/ob_database_executor.cpp	222	ObRecyclebinRestoreDatabaseExecutor::execute	const_cast<obcall::ObRecyclebinRestoreDatabaseArg&>	obcall::ObRecyclebinRestoreDatabaseArg &tmp_arg = const_cast<obcall::ObRecyclebinRestoreDatabaseArg&>(restore_database_arg);
+src/sql/engine/cmd/ob_database_executor.cpp	250	ObPurgeDatabaseExecutor::execute	const_cast<obcall::ObPurgeDatabaseArg&>	obcall::ObPurgeDatabaseArg &tmp_arg = const_cast<obcall::ObPurgeDatabaseArg&>(purge_database_arg);
+src/sql/engine/cmd/ob_database_executor.cpp	277	ObForkDatabaseExecutor::execute	const_cast<obcall::ObForkDatabaseArg&>	obcall::ObForkDatabaseArg &tmp_arg = const_cast<obcall::ObForkDatabaseArg&>(fork_database_arg);
+src/sql/engine/cmd/ob_index_executor.cpp	316	ObDropIndexExecutor::execute	const_cast<obcall::ObDropIndexArg&>	obcall::ObDropIndexArg &tmp_arg = const_cast<obcall::ObDropIndexArg&>(drop_index_arg);
+src/sql/engine/cmd/ob_index_executor.cpp	357	ObPurgeIndexExecutor::execute	const_cast<obcall::ObPurgeIndexArg&>	const_cast<obcall::ObPurgeIndexArg&>(purge_index_arg).ddl_stmt_str_ = first_stmt;
+src/sql/engine/cmd/ob_load_data_file_reader.cpp	650	ObZlibDecompressor::decompress	C-style cast (Bytef *) drops const from src	zstream_ptr->next_in  = (Bytef *)src;
+src/sql/engine/cmd/ob_load_data_utils.h	92	ObConcurrentFixedCircularArray::~ObConcurrentFixedCircularArray	const_cast<T *>	ob_free_align(const_cast<T *>(data_));
+src/sql/engine/cmd/ob_recyclebin_executor.cpp	45	ObPurgeRecycleBinExecutor::execute	const_cast<obcall::ObPurgeRecycleBinArg&>	const_cast<obcall::ObPurgeRecycleBinArg&>(purge_recyclebin_arg).ddl_stmt_str_ = first_stmt;
+src/sql/engine/cmd/ob_routine_executor.cpp	293	ObAlterRoutineExecutor::execute	const_cast<ObSArray<ObDependencyInfo> &>	const_cast<ObSArray<ObDependencyInfo> &>(alter_routine_arg.dependency_infos_);
+src/sql/engine/cmd/ob_table_executor.cpp	226	ObCreateTableExecutor::prepare_alter_arg	const_cast<obcall::ObCreateTableArg&>	ObTableSchema &table_schema = const_cast<obcall::ObCreateTableArg&>(create_table_arg).schema_;
+src/sql/engine/cmd/ob_table_executor.cpp	461	ObCreateTableExecutor::execute	const_cast<obcall::ObCreateTableArg&>	const_cast<obcall::ObCreateTableArg&>(create_table_arg).ddl_stmt_str_ = first_stmt;
+src/sql/engine/cmd/ob_table_executor.cpp	515	ObCreateTableExecutor::set_index_arg_list	const_cast<obcall::ObCreateTableArg &>	obcall::ObCreateTableArg &create_table_arg = const_cast<obcall::ObCreateTableArg &>(stmt.get_create_table_arg());
+src/sql/engine/cmd/ob_table_executor.cpp	621	ObAlterTableExecutor::alter_table_rpc_v2	const_cast<AlterTableSchema &>	AlterTableSchema &alter_table_schema = const_cast<AlterTableSchema &>(alter_table_arg.alter_table_schema_);
+src/sql/engine/cmd/ob_table_executor.cpp	1046	ObAlterTableExecutor::calc_range_part_high_bound	const_cast<ObObj&>	const_cast<ObObj&>(*dst_obj)))) {
+src/sql/engine/cmd/ob_table_executor.cpp	1173	ObAlterTableExecutor::calc_list_part_rows	const_cast<ObObj&>	const_cast<ObObj&>(*dst_obj)))) {
+src/sql/engine/cmd/ob_table_executor.cpp	1268	ObAlterTableExecutor::check_alter_part_key	const_cast<AlterTableSchema &>	AlterTableSchema &table_schema = const_cast<AlterTableSchema &>(arg.alter_table_schema_);
+src/sql/engine/cmd/ob_table_executor.cpp	1346	ObAlterTableExecutor::check_alter_partition	const_cast<AlterTableSchema &>	AlterTableSchema &table_schema = const_cast<AlterTableSchema &>(arg.alter_table_schema_);
+src/sql/engine/cmd/ob_table_executor.cpp	1404	ObAlterTableExecutor::set_index_arg_list	const_cast<obcall::ObAlterTableArg &>	obcall::ObAlterTableArg &alter_table_arg = const_cast<obcall::ObAlterTableArg &>(stmt.get_alter_table_arg());
+src/sql/engine/cmd/ob_table_executor.cpp	1530	ObDropTableExecutor::execute	const_cast<obcall::ObDropTableArg&>	obcall::ObDropTableArg &tmp_arg = const_cast<obcall::ObDropTableArg&>(drop_table_arg);
+src/sql/engine/cmd/ob_table_executor.cpp	1679	ObTruncateTableExecutor::execute	const_cast<obcall::ObTruncateTableArg&>	obcall::ObTruncateTableArg &tmp_arg = const_cast<obcall::ObTruncateTableArg&>(truncate_table_arg);
+src/sql/engine/cmd/ob_table_executor.cpp	1774	ObCreateTableLikeExecutor::execute	const_cast<obcall::ObCreateTableLikeArg&>	obcall::ObCreateTableLikeArg &tmp_arg = const_cast<obcall::ObCreateTableLikeArg&>(create_table_like_arg);
+src/sql/engine/cmd/ob_table_executor.cpp	1806	ObForkTableExecutor::execute	const_cast<obcall::ObForkTableArg&>	obcall::ObForkTableArg &tmp_arg = const_cast<obcall::ObForkTableArg&>(fork_table_arg);
+src/sql/engine/cmd/ob_table_executor.cpp	1834	ObRecyclebinRestoreTableExecutor::execute	const_cast<obcall::ObRecyclebinRestoreTableArg&>	obcall::ObRecyclebinRestoreTableArg &tmp_arg = const_cast<obcall::ObRecyclebinRestoreTableArg&>(restore_table_arg);
+src/sql/engine/cmd/ob_table_executor.cpp	1854	ObPurgeTableExecutor::execute	const_cast<obcall::ObPurgeTableArg&>	obcall::ObPurgeTableArg &tmp_arg = const_cast<obcall::ObPurgeTableArg&>(purge_table_arg);
+src/sql/engine/dml/ob_conflict_checker.cpp	481	ObConflictChecker::delete_old_row	const_cast<ObConflictValue*>	constraint_value = const_cast<ObConflictValue*>(map_ctx.conflict_map_.get(*constraint_key));
+src/sql/engine/dml/ob_conflict_checker.cpp	512	ObConflictChecker::insert_new_row	const_cast<ObConflictValue*>	const_cast<ObConflictValue*>(map_ctx.conflict_map_.get(*constraint_key)))) {
+src/sql/engine/dml/ob_conflict_checker.cpp	578	ObConflictChecker::lock_row	const_cast<ObConflictValue*>	constraint_value = const_cast<ObConflictValue*>(map_ctx.conflict_map_.get(*constraint_key));
+src/sql/engine/dml/ob_dml_service.cpp	1794	ObDMLService::add_related_index_info	const_cast<ObDASTabletLoc&>	const_cast<ObDASTabletLoc&>(tablet_loc), related_ctdefs.at(i)->index_tid_);
+src/sql/engine/dml/ob_dml_service.h	426	ObDASIndexDMLAdaptor::write_tablet_with_ignore	const_cast<ObDASWriteBuffer::DmlRow*>	dsr.store_row_ = const_cast<ObDASWriteBuffer::DmlRow*>(dml_row);
+src/sql/engine/dml/ob_table_insert_up_op.cpp	420	ObTableInsertUpOp::do_insert_up_cache	const_cast<ObChunkDatumStore::StoredRow *>	modify_row.old_row_ = const_cast<ObChunkDatumStore::StoredRow *>(upd_old_row);
+src/sql/engine/dml/ob_table_insert_up_op.cpp	543	ObTableInsertUpOp::try_insert_row	const_cast<ObInsCtDef *>	ObDMLModifyRowNode modify_row(this, const_cast<ObInsCtDef *>(&ins_ctdef), &ins_rtdef, ObDmlEventType::DE_INSERTING);
+src/sql/engine/dml/ob_table_replace_op.cpp	694	ObTableReplaceOp::replace_conflict_row_cache	const_cast<ObChunkDatumStore::StoredRow *>	modify_row.old_row_ = const_cast<ObChunkDatumStore::StoredRow *>(delete_row);
+src/sql/engine/expr/ob_array_expr_utils.cpp	141	ObArrayExprUtils::calc_cast_type	const_cast<ObSQLSessionInfo *>	ObSQLSessionInfo *session = const_cast<ObSQLSessionInfo *>(type_ctx.get_session());
+src/sql/engine/expr/ob_array_expr_utils.cpp	244	ObArrayExprUtils::calc_cast_type2	const_cast<ObSQLSessionInfo *>	ObSQLSessionInfo *session = const_cast<ObSQLSessionInfo *>(type_ctx.get_session());
+src/sql/engine/expr/ob_batch_eval_util.h	209	ObArithOpWrap::operator()	const_cast<typename Base::RES_RAW_TYPE *>	*const_cast<typename Base::RES_RAW_TYPE *>(
+src/sql/engine/expr/ob_datum_cast.cpp	8564	geom_copy_string	const_cast<char*>	out_ptr = const_cast<char*>(res_datum.ptr_);
+src/sql/engine/expr/ob_datum_cast.cpp	13070	ObDatumCaster::setup_cast_expr	const_cast<ObExpr*>	cast_expr.args_[0] = const_cast<ObExpr*>(&src_expr);
+src/sql/engine/expr/ob_expr_add.cpp	63	ObExprAdd::calc_result_type2	const_cast<ObSQLSessionInfo *>	ObSQLSessionInfo *session = const_cast<ObSQLSessionInfo *>(type_ctx.get_session());
+src/sql/engine/expr/ob_expr_add.cpp	838	ObExprAdd::add_number_number_batch	const_cast<uint32_t *>	uint32_t *res_digits = const_cast<uint32_t *> (results.at(i)->get_number_digits());
+src/sql/engine/expr/ob_expr_add.cpp	839	ObExprAdd::add_number_number_batch	const_cast<ObNumber::Desc &>	ObNumber::Desc &desc_buf = const_cast<ObNumber::Desc &> (results.at(i)->get_number_desc());
+src/sql/engine/expr/ob_expr_array.cpp	54	ObExprArray::calc_result_typeN	const_cast<ObSQLSessionInfo *>	ObSQLSessionInfo *session = const_cast<ObSQLSessionInfo *>(type_ctx.get_session());
+src/sql/engine/expr/ob_expr_array_append.cpp	56	ObExprArrayAppendCommon::calc_result_type2	const_cast<ObSQLSessionInfo *>	ObSQLSessionInfo *session = const_cast<ObSQLSessionInfo *>(type_ctx.get_session());
+src/sql/engine/expr/ob_expr_array_avg.cpp	53	ObExprArrayAvg::calc_result_type1	const_cast<ObSQLSessionInfo *>	if (OB_ISNULL(session = const_cast<ObSQLSessionInfo *>(type_ctx.get_session()))) {
+src/sql/engine/expr/ob_expr_array_cardinality.cpp	47	ObExprArrayCardinality::calc_result_type1	const_cast<ObSQLSessionInfo *>	ObSQLSessionInfo *session = const_cast<ObSQLSessionInfo *>(type_ctx.get_session());
+src/sql/engine/expr/ob_expr_array_compact.cpp	55	ObExprArrayCompact::calc_result_type1	const_cast<ObSQLSessionInfo *>	ObSQLSessionInfo *session = const_cast<ObSQLSessionInfo *>(type_ctx.get_session());
+src/sql/engine/expr/ob_expr_array_concat.cpp	59	ObExprArrayConcat::calc_result_typeN	const_cast<ObSQLSessionInfo *>	ObSQLSessionInfo *session = const_cast<ObSQLSessionInfo *>(type_ctx.get_session());
+src/sql/engine/expr/ob_expr_array_contains.cpp	55	ObExprArrayContains::calc_result_type2	const_cast<ObSQLSessionInfo *>	ObSQLSessionInfo *session = const_cast<ObSQLSessionInfo *>(type_ctx.get_session());
+src/sql/engine/expr/ob_expr_array_difference.cpp	56	ObExprArrayDifference::calc_result_type1	const_cast<ObSQLSessionInfo *>	if (OB_ISNULL(session = const_cast<ObSQLSessionInfo *>(type_ctx.get_session()))) {
+src/sql/engine/expr/ob_expr_array_distinct.cpp	58	ObExprArrayDistinct::calc_result_type1	const_cast<ObSQLSessionInfo *>	ObSQLSessionInfo *session = const_cast<ObSQLSessionInfo *>(type_ctx.get_session());

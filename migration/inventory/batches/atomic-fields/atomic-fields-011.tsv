@@ -1,0 +1,50 @@
+file	line	symbol	construct	text
+src/query/api/query/vector/ob_vector_index_adaptor.h	111	ObVectorIndexRoaringBitMap::insert_bitmap_	field roaring::api::roaring64_bitmap_t *; 4 atomic accesses (ATOMIC_LOAD 4)	roaring::api::roaring64_bitmap_t *insert_bitmap_;
+src/query/api/query/vector/ob_vector_index_adaptor.h	397	ObVidBound::min_vid_	field int64_t; 1 atomic accesses (ATOMIC_LOAD 1)	int64_t min_vid_;
+src/query/api/query/vector/ob_vector_index_adaptor.h	398	ObVidBound::max_vid_	field int64_t; 1 atomic accesses (ATOMIC_LOAD 1)	int64_t max_vid_;
+src/query/api/query/vector/ob_vector_index_adaptor.h	470	ObVectorIndexMemData::vid_array_	field ObVecIdxVidArray *; 2 atomic accesses (ATOMIC_LOAD 2)	ObVecIdxVidArray *vid_array_; // for hnsw+sq
+src/query/api/query/vector/ob_vector_index_adaptor.h	476	ObVectorIndexMemData::ref_cnt_	field uint64_t; 2 atomic accesses (ATOMIC_INC 1, ATOMIC_SAF 1)	uint64_t ref_cnt_;
+src/query/api/query/vector/ob_vector_index_adaptor.h	478	ObVectorIndexMemData::index_	field void *; 2 atomic accesses (ATOMIC_LOAD 2)	void *index_;
+src/query/api/query/vector/ob_vector_index_adaptor.h	483	ObVectorIndexMemData::last_dml_scn_	field SCN; 3 atomic accesses (ATOMIC_VCAS 3); through member functions inc_update	SCN last_dml_scn_;
+src/query/api/query/vector/ob_vector_index_adaptor.h	484	ObVectorIndexMemData::last_read_scn_	field SCN; 2 atomic accesses (ATOMIC_SET 2); through member functions atomic_set	SCN last_read_scn_;
+src/query/api/query/vector/ob_vector_index_adaptor.h	930	ObPluginVectorIndexAdaptor::ref_cnt_	field int64_t; 3 atomic accesses (ATOMIC_AAF 1, ATOMIC_LOAD 1, ATOMIC_SAF 1)	int64_t ref_cnt_;
+src/query/api/query/vector/ob_vector_index_adaptor.h	934	ObPluginVectorIndexAdaptor::all_vsag_use_mem_	field uint64_t *; 2 atomic accesses (ATOMIC_LOAD 2)	uint64_t *all_vsag_use_mem_;
+src/query/api/query/vector/ob_vector_index_cache.h	160	ObIvfICache::status_	field IvfCacheStatus; 6 atomic accesses (ATOMIC_LOAD 3, ATOMIC_STORE 2, ATOMIC_BCAS 1)	IvfCacheStatus status_;  // atomic
+src/query/api/query/vector/ob_vector_index_cache.h	258	ObIvfCacheMgr::ref_cnt_	field int64_t; 2 atomic accesses (ATOMIC_AAF 1, ATOMIC_SAF 1)	int64_t ref_cnt_;
+src/query/api/query/vector/ob_vector_index_cache.h	269	ObIvfCacheMgr::all_vsag_use_mem_	field uint64_t *; 1 atomic accesses (ATOMIC_LOAD 1)	uint64_t *all_vsag_use_mem_;
+src/rootserver/ddl_task/ob_ddl_scheduler.h	100	ObDDLTaskQueue::stop_	field bool; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_STORE 1)	bool stop_;
+src/rootserver/ddl_task/ob_ddl_task.h	721	ObDDLTask::is_running_	field bool; 2 atomic accesses (ATOMIC_CAS 1, ATOMIC_SET 1)	bool is_running_;
+src/rootserver/ddl_task/ob_ddl_task.h	725	ObDDLTask::sub_task_trace_id_	field int32_t; 4 atomic accesses (ATOMIC_INC 4)	int32_t sub_task_trace_id_;
+src/rootserver/freeze/ob_checksum_validator.h	133	ObChecksumValidator::stop_	volatile field volatile bool &; no atomic access found	volatile bool &stop_;
+src/rootserver/freeze/ob_daily_major_freeze_launcher.h	80	ObDailyMajorFreezeLauncher::stop_	volatile field volatile bool; no atomic access found	volatile bool stop_;
+src/rootserver/freeze/ob_freeze_info_detector.h	81	ObMajorMergeInfoDetector::is_paused_	field bool; 4 atomic accesses (ATOMIC_STORE 3, ATOMIC_LOAD 1)	bool is_paused_;
+src/rootserver/freeze/ob_freeze_info_detector.h	83	ObMajorMergeInfoDetector::is_replay_mode_	field bool; 4 atomic accesses (ATOMIC_LOAD 3, ATOMIC_STORE 1)	bool is_replay_mode_;
+src/rootserver/freeze/ob_freeze_info_detector.h	91	ObMajorMergeInfoDetector::last_schedule_ts_	field int64_t; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_STORE 1)	int64_t last_schedule_ts_;
+src/rootserver/freeze/ob_freeze_info_detector.h	92	ObMajorMergeInfoDetector::need_immediate_run_	field bool; 3 atomic accesses (ATOMIC_STORE 2, ATOMIC_LOAD 1)	bool need_immediate_run_;
+src/rootserver/freeze/ob_major_freeze_service.h	111	ObMajorFreezeService::is_launched_	field bool; 2 atomic accesses (ATOMIC_BCAS 1, ATOMIC_STORE 1)	bool is_launched_;
+src/rootserver/freeze/ob_major_merge_progress_checker.h	178	ObMajorMergeProgressChecker::stop_	volatile field volatile bool &; no atomic access found	volatile bool &stop_;
+src/rootserver/freeze/ob_snapshot_gc_scn_renewer.h	78	ObSnapshotGcScnRenewer::is_paused_	field bool; 7 atomic accesses (ATOMIC_STORE 4, ATOMIC_LOAD 3)	bool is_paused_ = false;
+src/rootserver/ob_admin_job_table_operator.h	78	ObAdminJobTableOperator::max_job_id_	field int64_t; 5 atomic accesses (ATOMIC_AAF 3, ATOMIC_LOAD 1, ATOMIC_SET 1)	int64_t max_job_id_;
+src/rootserver/ob_bootstrap.h	90	ObPreBootstrap::stop_	volatile field volatile bool; no atomic access found	volatile bool stop_;
+src/rootserver/ob_ddl_service_launcher.h	75	ObDDLServiceLauncher::is_ddl_service_started_	field static bool; 3 atomic accesses (ATOMIC_SET 2, ATOMIC_LOAD 1)	static bool is_ddl_service_started_;
+src/rootserver/ob_root_minor_freeze.h	43	ObRootMinorFreeze::stopped_	field bool; 3 atomic accesses (ATOMIC_STORE 2, ATOMIC_LOAD 1)	bool stopped_;
+src/rootserver/ob_rs_reentrant_thread.h	83	ObRsReentrantThread::last_run_timestamp_	field int64_t; 5 atomic accesses (ATOMIC_STORE 3, ATOMIC_LOAD 2)	int64_t last_run_timestamp_;
+src/rootserver/ob_runtime_ddl_service.h	121	ObRuntimeDDLService::stopped_	volatile field volatile bool; no atomic access found	volatile bool stopped_;
+src/rootserver/ob_thread_idling.h	41	ObThreadIdling::stop_	volatile field volatile bool &; no atomic access found	volatile bool &stop_;
+src/share/cache/ob_cache_utils.h	587	ObWashableSizeInfo::copy_from	atomic access through parameter other (const ObWashableSizeInfo &) of ObWashableSizeInfo::copy_from; the atomic object is the caller's argument; 1 atomic accesses (ATOMIC_LOAD 1); through the single member of value classes ObWashableSizeInfo::washable_size_	int copy_from(const ObWashableSizeInfo &other)
+src/share/cache/ob_cache_utils.h	610	ObWashableSizeInfo::washable_size_	field int64_t; 5 atomic accesses (ATOMIC_STORE 3, ATOMIC_AAF 1, ATOMIC_LOAD 1); single member of a value class: 1 more accesses reach it through fields and variables of type ObWashableSizeInfo, listed where their own accesses resolve	int64_t washable_size_;
+src/share/cache/ob_kvcache_hazard_domain.h	138	FixedTinyAllocator::Block::next_	field Block*; 2 atomic accesses (ATOMIC_LOAD_RLX 1, ATOMIC_STORE_RLX 1)	Block* next_;
+src/share/cache/ob_kvcache_hazard_domain.h	206	HazardDomain::retire_list_	field ObLink*; 5 atomic accesses (ATOMIC_VCAS 2, ATOMIC_LOAD 1, ATOMIC_LOAD_RLX 1, ATOMIC_TAS 1)	ObLink* retire_list_;
+src/share/cache/ob_kvcache_hazard_domain.h	207	HazardDomain::retired_memory_size_	field int64_t; 4 atomic accesses (ATOMIC_LOAD_RLX 2, ATOMIC_FAA 1, ATOMIC_SAF 1)	int64_t retired_memory_size_;
+src/share/cache/ob_kvcache_hazard_pointer.h	47	HazardPointer::next_	field HazardPointer*; 2 atomic accesses (ATOMIC_LOAD_RLX 1, ATOMIC_STORE_RLX 1); through local references addr	HazardPointer* next_;
+src/share/cache/ob_kvcache_hazard_pointer.h	48	HazardPointer::mb_handle_	field ObKVMemBlockHandle*; 2 atomic accesses (ATOMIC_STORE_RLX 2); through local references addr	ObKVMemBlockHandle* mb_handle_;
+src/share/cache/ob_kvcache_hazard_pointer.h	66	SharedHazptr::ControlPointer::refcnt_	field uint64_t; 2 atomic accesses (ATOMIC_INC 1, ATOMIC_SAF 1)	uint64_t refcnt_;
+src/share/cache/ob_kvcache_hazard_pointer.h	221	SList::head_	field Node*; 13 atomic accesses (ATOMIC_STORE_RLX 5, ATOMIC_BCAS 4, ATOMIC_LOAD_RLX 2, ATOMIC_LOAD 1, ATOMIC_VCAS 1); through functions with an atomic parameter set_last_bit	Node* head_; /* CACHE_ALIGNED */
+src/share/cache/ob_kvcache_hazard_pointer.h	222	SList::tail_	field Node*; 5 atomic accesses (ATOMIC_BCAS 3, ATOMIC_TAS 2)	Node* tail_; /* CACHE_ALIGNED */
+src/share/cache/ob_kvcache_hazard_pointer.h	223	SList::size_	field int64_t; 6 atomic accesses (ATOMIC_AAF 3, ATOMIC_SAF 2, ATOMIC_LOAD_RLX 1)	int64_t size_; /* CACHE_ALIGNED */
+src/share/cache/ob_kvcache_hazard_version.h	62	ObKVCacheHazardSlot::acquired_version_	field uint64_t; 3 atomic accesses (ATOMIC_BCAS 1, ATOMIC_LOAD 1, ATOMIC_STORE 1)	uint64_t acquired_version_;
+src/share/cache/ob_kvcache_hazard_version.h	63	ObKVCacheHazardSlot::delete_list_	field ObKVCacheHazardNode *; 4 atomic accesses (ATOMIC_LOAD 2, ATOMIC_VCAS 2)	ObKVCacheHazardNode * delete_list_;  // nodes waiting to retire
+src/share/cache/ob_kvcache_hazard_version.h	64	ObKVCacheHazardSlot::waiting_nodes_count_	field int64_t; 2 atomic accesses (ATOMIC_AAF 1, ATOMIC_SAF 1)	int64_t waiting_nodes_count_;  // length of delete_list_
+src/share/cache/ob_kvcache_hazard_version.h	65	ObKVCacheHazardSlot::last_retire_version_	field uint64_t; 1 atomic accesses (ATOMIC_SET 1)	uint64_t last_retire_version_;  // last version of retire()
+src/share/cache/ob_kvcache_hazard_version.h	66	ObKVCacheHazardSlot::is_retiring_	field bool; 2 atomic accesses (ATOMIC_BCAS 1, ATOMIC_SET 1)	bool is_retiring_;
+src/share/cache/ob_kvcache_hazard_version.h	87	ObKVCacheHazardStation::version_	field uint64_t; 2 atomic accesses (ATOMIC_FAA 1, ATOMIC_LOAD 1)	uint64_t version_;  // current global version

@@ -1,0 +1,81 @@
+file	line	symbol	construct	text
+src/sql/resolver/expr/ob_raw_expr_deduce_type.cpp	84	ObRawExprDeduceType::visit	const_cast<ObSQLSessionInfo *>	ObSQLSessionInfo *session = const_cast<ObSQLSessionInfo *>(my_session_);
+src/sql/resolver/expr/ob_raw_expr_deduce_type.cpp	168	ObRawExprDeduceType::visit	const_cast<ObSQLSessionInfo *>	ObSQLSessionInfo *session = const_cast<ObSQLSessionInfo *>(my_session_);
+src/sql/resolver/expr/ob_raw_expr_deduce_type.cpp	1443	ObRawExprDeduceType::visit	const_cast<ObSQLSessionInfo *>	ObSQLSessionInfo *session = const_cast<ObSQLSessionInfo *>(my_session_);
+src/sql/resolver/expr/ob_raw_expr_deduce_type.cpp	2613	ObRawExprDeduceType::set_array_agg_result_type	const_cast<ObSQLSessionInfo *>	ObSQLSessionInfo *session = const_cast<ObSQLSessionInfo *>(my_session_);
+src/sql/resolver/expr/ob_raw_expr_deduce_type.cpp	2801	ObRawExprDeduceType::add_implicit_cast	const_cast<ObExprResType *>	const_cast<ObExprResType *>(&input_types.at(idx)), ele_cnt),
+src/sql/resolver/expr/ob_raw_expr_deduce_type.cpp	2815	ObRawExprDeduceType::add_implicit_cast	const_cast<ObExprResType *>	const_cast<ObExprResType *>(&input_types.at(idx)), column_cnt), cast_mode));
+src/sql/resolver/expr/ob_raw_expr_deduce_type.cpp	2970	ObRawExprDeduceType::try_add_cast_expr_above_for_deduce_type	const_cast<ObSQLSessionInfo *>	if (OB_ISNULL(session = const_cast<ObSQLSessionInfo *>(my_session_))) {
+src/sql/resolver/expr/ob_raw_expr_deduce_type.cpp	3019	ObRawExprDeduceType::add_implicit_cast_for_op_row	const_cast<ObExprResType *>	const_cast<ObExprResType *>(&input_types.at(i * ele_row_dim)),
+src/sql/resolver/expr/ob_raw_expr_deduce_type.cpp	3065	ObRawExprDeduceType::add_implicit_cast_for_subquery	const_cast<ObRawExprResType &>	const_cast<ObRawExprResType &>(expr.get_column_types().at(i)) = new_expr->get_result_type();
+src/sql/resolver/expr/ob_raw_expr_print_visitor.cpp	41	ObRawExprPrintVisitor::to_string	const_cast<ObRawExprPrintVisitor*>	if (OB_FAIL(expr_root_.preorder_accept(*const_cast<ObRawExprPrintVisitor*>(this)))) {
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	400	ObRawExprResolverImpl::do_recursive_resolve	const_cast<ParseNode *>	ParseNode *tmp_node = const_cast<ParseNode *>(node);
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	434	ObRawExprResolverImpl::do_recursive_resolve	const_cast<ObSQLSessionInfo *>	*const_cast<ObSQLSessionInfo *>(ctx_.session_info_),
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	924	ObRawExprResolverImpl::do_recursive_resolve	const_cast<ParseNode&>	modification_type_to_int(const_cast<ParseNode&>(*node));
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	931	ObRawExprResolverImpl::do_recursive_resolve	const_cast<ParseNode&>	modification_type_to_int(const_cast<ParseNode&>(*node));
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	1883	ObRawExprResolverImpl::process_datatype_or_questionmark	const_cast<pl::ObPLVar*>	OX (const_cast<pl::ObPLVar*>(var)->set_name(pl::ObPLResolver::ANONYMOUS_INOUT_ARG));
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	1885	ObRawExprResolverImpl::process_datatype_or_questionmark	const_cast<pl::ObPLVar*>	OX (const_cast<pl::ObPLVar*>(var)->set_is_referenced(true));
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	1950	ObRawExprResolverImpl::process_datatype_or_questionmark	const_cast<pl::ObPLVar*>	OX (const_cast<pl::ObPLVar*>(var)->set_name(pl::ObPLResolver::ANONYMOUS_INOUT_ARG));
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	1952	ObRawExprResolverImpl::process_datatype_or_questionmark	const_cast<pl::ObPLVar*>	OX (const_cast<pl::ObPLVar*>(var)->set_is_referenced(true));
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	1988	ObRawExprResolverImpl::process_system_variable_node	const_cast<char *>	str.assign_ptr(const_cast<char *>(node->str_value_), static_cast<int32_t>(node->str_len_));
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	2245	ObRawExprResolverImpl::check_replace_lambda_params_node	const_cast<ParseNode *>	} else if (OB_FAIL(check_replace_lambda_params_node(params_node, const_cast<ParseNode *>(curr_node->children_[i])))) {
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	2288	ObRawExprResolverImpl::process_lambda_func_node	const_cast<ParseNode *>	}else if (OB_FAIL(check_replace_lambda_params_node(node->children_[0], const_cast<ParseNode *>(node->children_[1])))) {
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	2382	ObRawExprResolverImpl::process_left_value_node	const_cast<char *>	str.assign_ptr(const_cast<char *>(node->str_value_), static_cast<int32_t>(node->str_len_));
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	4620	ObRawExprResolverImpl::process_json_query_node	const_cast<ParseNode&>	if (OB_FAIL(change_json_expr_res_type_if_need(ctx_.expr_factory_.get_allocator(), path_str, const_cast<ParseNode&>(*returning_type), OPT_JSON_QUERY))) {
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	4760	ObRawExprResolverImpl::process_json_value_node	const_cast<ParseNode&>	if (OB_FAIL(change_json_expr_res_type_if_need(ctx_.expr_factory_.get_allocator(), path_str, const_cast<ParseNode&>(*returning_type), OPT_JSON_VALUE))) {
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	4802	ObRawExprResolverImpl::process_json_value_node	const_cast<ParseNode *>	if (OB_FAIL(expand_node(ctx_.expr_factory_.get_allocator(), const_cast<ParseNode *>(on_mismatch), 0, mismatch_arr))) {
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	5833	ObRawExprResolverImpl::process_window_function_node	const_cast<char *>	sort_str.assign_ptr(const_cast<char *>(sort_expr_node->str_value_),
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	6015	ObRawExprResolverImpl::process_bound_node	const_cast<char *>	const_cast<char *>(node->children_[0]->str_value_));
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	6289	ObRawExprResolverImpl::transform_ratio_afun_to_arg_div_sum	const_cast<ParseNode*>	const_cast<ParseNode*>(func_node)->type_ = T_FUN_SUM;
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	6306	ObRawExprResolverImpl::transform_ratio_afun_to_arg_div_sum	const_cast<ParseNode*>	divisor_node->children_[0] = const_cast<ParseNode*>(ratio_fun_node);
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	6308	ObRawExprResolverImpl::transform_ratio_afun_to_arg_div_sum	const_cast<ParseNode*>	divisor_node->children_[2] = const_cast<ParseNode*>(ratio_fun_node);
+src/sql/resolver/expr/ob_raw_expr_type_demotion.cpp	183	ObRawExprTypeDemotion::init_query_ctx_flags	const_cast<ObExecContext *>	} else if (OB_ISNULL(exec_ctx = const_cast<ObExecContext *>(session_->get_cur_exec_ctx()))
+src/sql/resolver/expr/ob_raw_expr_type_demotion.cpp	357	ObRawExprTypeDemotion::try_demote_constant_type	const_cast<ObExecContext *>	} else if (OB_ISNULL(exec_ctx = const_cast<ObExecContext *>(session_->get_cur_exec_ctx()))) {
+src/sql/resolver/expr/ob_raw_expr_util.cpp	1588	ObRawExprUtils::build_generated_column_expr	const_cast<ObQualifiedName &>	const_cast<ObQualifiedName &>(q_name),
+src/sql/resolver/expr/ob_raw_expr_util.cpp	1591	ObRawExprUtils::build_generated_column_expr	const_cast<ObSchemaChecker *>	const_cast<ObSchemaChecker *>(schema_checker),
+src/sql/resolver/expr/ob_raw_expr_util.cpp	1738	ObRawExprUtils::build_generated_column_expr	const_cast<ObSchemaChecker*>	const_cast<ObSchemaChecker*>(schema_checker),
+src/sql/resolver/expr/ob_raw_expr_util.cpp	2238	ObRawExprUtils::extract_set_op_exprs	const_cast<ObRawExpr*>	if (OB_FAIL(add_var_to_array_no_dup(set_op_exprs, const_cast<ObRawExpr*>(raw_expr)))) {
+src/sql/resolver/expr/ob_raw_expr_util.cpp	2258	ObRawExprUtils::extract_var_assign_exprs	const_cast<ObRawExpr*>	if (OB_FAIL(add_var_to_array_no_dup(assign_exprs, const_cast<ObRawExpr*>(raw_expr)))) {
+src/sql/resolver/expr/ob_raw_expr_util.cpp	2293	ObRawExprUtils::extract_column_exprs	const_cast<ObRawExpr*>	ret = add_var_to_array_no_dup(column_exprs, const_cast<ObRawExpr*>(raw_expr));
+src/sql/resolver/expr/ob_raw_expr_util.cpp	2296	ObRawExprUtils::extract_column_exprs	const_cast<ObRawExpr*>	ret = add_var_to_array_no_dup(column_exprs, const_cast<ObRawExpr*>(raw_expr));
+src/sql/resolver/expr/ob_raw_expr_util.cpp	2317	ObRawExprUtils::extract_column_exprs_and_rowscn	const_cast<ObRawExpr*>	ret = add_var_to_array_no_dup(column_exprs, const_cast<ObRawExpr*>(raw_expr));
+src/sql/resolver/expr/ob_raw_expr_util.cpp	2537	ObRawExprUtils::extract_column_exprs	const_cast<ObRawExpr*>	} else if (OB_FAIL(add_var_to_array_no_dup(column_exprs, const_cast<ObRawExpr*>(raw_expr)))) {
+src/sql/resolver/expr/ob_raw_expr_util.cpp	3678	ObRawExprUtils::build_column_conv_expr	const_cast<sql::ObSQLSessionInfo *>	bool is_ddl = const_cast<sql::ObSQLSessionInfo *>(session_info)->get_ddl_info().is_ddl();
+src/sql/resolver/expr/ob_raw_expr_util.cpp	3681	ObRawExprUtils::build_column_conv_expr	const_cast<ObSQLSessionInfo *>	(const_cast<ObSQLSessionInfo *>(session_info))->set_stmt_type(stmt::T_NONE);
+src/sql/resolver/expr/ob_raw_expr_util.cpp	3726	ObRawExprUtils::build_column_conv_expr	const_cast<ObSQLSessionInfo *>	(const_cast<ObSQLSessionInfo *>(session_info))->set_stmt_type(stmt_type_bak);
+src/sql/resolver/expr/ob_raw_expr_util.cpp	4574	ObRawExprUtils::create_equal_expr	const_cast<ObRawExpr*>; const_cast<ObRawExpr*>	} else if (OB_FAIL(equal_expr->set_param_exprs(const_cast<ObRawExpr*>(col_ref), const_cast<ObRawExpr*>(val_ref)))) {
+src/sql/resolver/expr/ob_raw_expr_util.cpp	4615	ObRawExprUtils::create_double_op_expr	const_cast<ObRawExpr*>; const_cast<ObRawExpr*>	} else if (OB_FAIL(op_expr->set_param_exprs(const_cast<ObRawExpr*>(left_expr), const_cast<ObRawExpr*>(right_expr)))) {
+src/sql/resolver/expr/ob_raw_expr_util.cpp	4861	ObRawExprUtils::init_column_expr_subschema	const_cast<ObSQLSessionInfo*>	OB_ISNULL(exec_ctx = const_cast<ObSQLSessionInfo*>(session_info)->get_cur_exec_ctx())) {
+src/sql/resolver/expr/ob_raw_expr_util.cpp	7014	ObRawExprUtils::build_demote_cast_expr	const_cast<ObConstRawExpr*>	} else if (OB_FAIL(new_expr->set_param_exprs(const_cast<ObConstRawExpr*>(const_expr), column_type_expr))) {
+src/sql/resolver/ob_resolver_utils.cpp	1590	ObResolverUtils::resolve_column_ref	const_cast<char*>	column_ref.database_name_.assign_ptr(const_cast<char*>(db_node->str_value_),
+src/sql/resolver/ob_resolver_utils.cpp	1596	ObResolverUtils::resolve_column_ref	const_cast<char *>	column_ref.tbl_name_.assign_ptr(const_cast<char *>(relation_node->str_value_),
+src/sql/resolver/ob_resolver_utils.cpp	1605	ObResolverUtils::resolve_column_ref	const_cast<char *>	column_ref.col_name_.assign_ptr(const_cast<char *>(column_node->str_value_),
+src/sql/resolver/ob_resolver_utils.cpp	1950	ObResolverUtils::resolve_const	const_cast<char *>	str_val.assign_ptr(const_cast<char *>(node->str_value_), static_cast<int32_t>(node->str_len_));
+src/sql/resolver/ob_resolver_utils.cpp	1965	ObResolverUtils::resolve_const	const_cast<char *>	str_val.assign_ptr(const_cast<char *>(node->str_value_), static_cast<int32_t>(node->str_len_));
+src/sql/resolver/ob_resolver_utils.cpp	2339	ObResolverUtils::resolve_timestamp_node	const_cast<ObObj*>	const_cast<ObObj*>(&column.get_cur_default_value())->set_ext(ObActionFlag::OP_DEFAULT_NOW_FLAG);
+src/sql/resolver/ob_resolver_utils.cpp	2350	ObResolverUtils::resolve_timestamp_node	const_cast<ObObj*>	const_cast<ObObj*>(&column.get_cur_default_value())->set_timestamp(ObTimeConverter::ZERO_DATETIME);
+src/sql/resolver/ob_resolver_utils.cpp	2361	ObResolverUtils::resolve_timestamp_node	const_cast<ObObj*>	const_cast<ObObj*>(&column.get_cur_default_value())->set_null();
+src/sql/resolver/ob_resolver_utils.cpp	4580	ObResolverUtils::resolve_udf_name_by_parse_node	const_cast<char*>	udf_info.udf_name_.assign_ptr(const_cast<char*>(node->children_[0]->str_value_),
+src/sql/resolver/ob_resolver_utils.cpp	4583	ObResolverUtils::resolve_udf_name_by_parse_node	const_cast<char*>	udf_info.udf_package_.assign_ptr(const_cast<char*>(node->children_[3]->str_value_),
+src/sql/resolver/ob_resolver_utils.cpp	4587	ObResolverUtils::resolve_udf_name_by_parse_node	const_cast<char*>	udf_info.udf_database_.assign_ptr(const_cast<char*>(node->children_[2]->str_value_),
+src/sql/resolver/ob_resolver_utils.cpp	5871	ObResolverUtils::view_with_check_option_allowed	const_cast<ObSelectStmt &>	if (OB_FAIL(ObResolverUtils::uv_check_basic(const_cast<ObSelectStmt &>(*select_stmt), false))) {
+src/sql/resolver/ob_stmt_resolver.cpp	74	ObStmtResolver::resolve_table_relation_node_v2	const_cast<char*>	table_name.assign_ptr(const_cast<char*>(relation_node->str_value_), table_len);
+src/sql/resolver/ob_stmt_resolver.cpp	100	ObStmtResolver::resolve_table_relation_node_v2	const_cast<char*>	db_name.assign_ptr(const_cast<char*>(db_node->str_value_), db_len);
+src/sql/resolver/ob_stmt_resolver.cpp	146	ObStmtResolver::resolve_ref_factor	const_cast<char*>	table_name.assign_ptr(const_cast<char*>(relation_node->str_value_), table_len);
+src/sql/resolver/ob_stmt_resolver.cpp	163	ObStmtResolver::resolve_ref_factor	const_cast<char*>	db_name.assign_ptr(const_cast<char*>(db_node->str_value_), db_len);
+src/sql/resolver/ob_stmt_resolver.cpp	184	ObStmtResolver::resolve_database_factor	const_cast<char*>	} else if (FALSE_IT(db_name.assign_ptr(const_cast<char*>(node->str_value_),
+src/sql/rewrite/ob_expr_range_converter.cpp	165	ObExprRangeConverter::convert_const_expr	const_cast<ObRawExpr*>	} else if (OB_FAIL(generate_deduce_const_expr(const_cast<ObRawExpr*>(expr), start_val, end_val))) {
+src/sql/rewrite/ob_expr_range_converter.cpp	728	ObExprRangeConverter::convert_like_expr	const_cast<ObRawExpr*>	} else if (OB_FAIL(build_decode_like_expr(const_cast<ObRawExpr*>(pattern_expr),
+src/sql/rewrite/ob_expr_range_converter.cpp	729	ObExprRangeConverter::convert_like_expr	const_cast<ObRawExpr*>	const_cast<ObRawExpr*>(escape_expr),
+src/sql/rewrite/ob_expr_range_converter.cpp	1350	ObExprRangeConverter::add_precise_constraint	const_cast<ObRawExpr*>	ObExprConstraint cons(const_cast<ObRawExpr*>(expr), expect_result);
+src/sql/rewrite/ob_expr_range_converter.cpp	1366	ObExprRangeConverter::add_prefix_pattern_constraint	const_cast<ObRawExpr*>	ObExprConstraint cons(const_cast<ObRawExpr*>(expr), PreCalcExprExpectResult::PRE_CALC_RESULT_NOT_NULL);
+src/sql/rewrite/ob_expr_range_converter.cpp	1875	ObExprRangeConverter::try_wrap_lob_with_substr	const_cast<ObRawExpr*>	} else if (OB_FAIL(substr_expr->set_param_exprs(const_cast<ObRawExpr*>(expr),
+src/sql/rewrite/ob_expr_range_converter.cpp	2254	ObExprRangeConverter::build_double_to_int_expr	const_cast<ObRawExpr*>	} else if (OB_FAIL(inner_double_to_int->set_param_expr(const_cast<ObRawExpr*>(double_expr)))) {
+src/sql/rewrite/ob_expr_range_converter.cpp	2637	ObExprRangeConverter::build_decimal_to_year_expr	const_cast<ObRawExpr*>	} else if (OB_FAIL(inner_decimal_to_year->set_param_expr(const_cast<ObRawExpr*>(decimal_expr)))) {
+src/sql/rewrite/ob_key_part.cpp	930	ObKeyPart::try_cast_value	const_cast<ObObj *>	const_cast<ObObj *>(dest_val)->set_scale(pos.column_type_.get_accuracy().get_scale());
+src/sql/rewrite/ob_key_part.cpp	931	ObKeyPart::try_cast_value	const_cast<ObObj *>	const_cast<ObObj *>(dest_val)->set_subschema_id(pos.column_type_.get_subschema_id());
+src/sql/rewrite/ob_range_generator.cpp	1187	ObRangeGenerator::try_cast_value	const_cast<ObObj *>	const_cast<ObObj *>(dest_val)->set_scale(meta.column_type_.get_accuracy().get_scale());
+src/sql/rewrite/ob_range_generator.cpp	1188	ObRangeGenerator::try_cast_value	const_cast<ObObj *>	const_cast<ObObj *>(dest_val)->set_subschema_id(meta.column_type_.get_subschema_id());
+src/sql/rewrite/ob_range_graph_generator.cpp	1119	ObRangeGraphGenerator::fill_range_exprs	const_cast<ObRawExpr*>	if (OB_FAIL(range_exprs.push_back(const_cast<ObRawExpr*>(expr_item.expr_)))) {
+src/sql/rewrite/ob_range_graph_generator.cpp	1128	ObRangeGraphGenerator::fill_range_exprs	const_cast<ObRawExpr*>	if (OB_FAIL(unpricise_range_exprs.push_back(const_cast<ObRawExpr*>(expr_item.expr_)))) {
+src/sql/rewrite/ob_range_graph_generator.cpp	1160	ObRangeGraphGenerator::generate_expr_final_info	const_cast<ObRawExpr*>	expr_info.related_raw_expr_ = const_cast<ObRawExpr*>(expr);

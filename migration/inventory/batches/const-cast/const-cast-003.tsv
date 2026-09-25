@@ -1,0 +1,75 @@
+file	line	symbol	construct	text
+src/oblib/common/json_type/ob_json_schema.cpp	28	ObJsonSchemaItem	const_cast<char*>	static constexpr char* ROOT = const_cast<char*>("#");
+src/oblib/common/json_type/ob_json_schema.cpp	29	ObJsonSchemaItem	const_cast<char*>	static constexpr char* REF = const_cast<char*>("$ref");
+src/oblib/common/json_type/ob_json_schema.cpp	30	ObJsonSchemaItem	const_cast<char*>	static constexpr char* SCHEMA = const_cast<char*>("schema");
+src/oblib/common/json_type/ob_json_schema.cpp	31	ObJsonSchemaItem	const_cast<char*>	static constexpr char* COMPOSITION = const_cast<char*>("composition");
+src/oblib/common/json_type/ob_json_schema.cpp	32	ObJsonSchemaItem	const_cast<char*>	static constexpr char* PROPERTIES = const_cast<char*>("properties");// 10
+src/oblib/common/json_type/ob_json_schema.cpp	33	ObJsonSchemaItem	const_cast<char*>	static constexpr char* PATTERN_PRO = const_cast<char*>("patternProperties");  //17
+src/oblib/common/json_type/ob_json_schema.cpp	34	ObJsonSchemaItem	const_cast<char*>	static constexpr char* ADDITIONAL_PRO = const_cast<char*>("additionalProperties"); // 20
+src/oblib/common/json_type/ob_json_schema.cpp	35	ObJsonSchemaItem	const_cast<char*>	static constexpr char* ALLOF = const_cast<char*>("allOf");
+src/oblib/common/json_type/ob_json_schema.cpp	36	ObJsonSchemaItem	const_cast<char*>	static constexpr char* ANYOF = const_cast<char*>("anyOf");
+src/oblib/common/json_type/ob_json_schema.cpp	37	ObJsonSchemaItem	const_cast<char*>	static constexpr char* ONEOF = const_cast<char*>("oneOf");
+src/oblib/common/json_type/ob_json_schema.cpp	38	ObJsonSchemaItem	const_cast<char*>	static constexpr char* NOT = const_cast<char*>("not");
+src/oblib/common/json_type/ob_json_schema.cpp	39	ObJsonSchemaItem	const_cast<char*>	static constexpr char* DEPENDENCIES = const_cast<char*>("dependencies");
+src/oblib/common/json_type/ob_json_schema.cpp	42	ObJsonSchemaItem	const_cast<char*>	static constexpr char* DEPENDENTREQUIRED = const_cast<char*>("dependentRequired");// 17
+src/oblib/common/json_type/ob_json_schema.cpp	43	ObJsonSchemaItem	const_cast<char*>	static constexpr char* DEPENDENTSCHEMAS = const_cast<char*>("dependentSchemas");
+src/oblib/common/json_type/ob_json_schema.cpp	44	ObJsonSchemaItem	const_cast<char*>	static constexpr char* ENUM = const_cast<char*>("enum");// 4
+src/oblib/common/json_type/ob_json_schema.cpp	45	ObJsonSchemaItem	const_cast<char*>	static constexpr char* TYPE = const_cast<char*>("type");// 4
+src/oblib/common/json_type/ob_json_schema.cpp	46	ObJsonSchemaItem	const_cast<char*>	static constexpr char* TYPE_STRING = const_cast<char*>("string");
+src/oblib/common/json_type/ob_json_schema.cpp	47	ObJsonSchemaItem	const_cast<char*>	static constexpr char* TYPE_NUMBER = const_cast<char*>("number");
+src/oblib/common/json_type/ob_json_schema.cpp	48	ObJsonSchemaItem	const_cast<char*>	static constexpr char* TYPE_INTEGER = const_cast<char*>("integer");
+src/oblib/common/json_type/ob_json_schema.cpp	49	ObJsonSchemaItem	const_cast<char*>	static constexpr char* TYPE_BOOLEAN = const_cast<char*>("boolean");
+src/oblib/common/json_type/ob_json_schema.cpp	50	ObJsonSchemaItem	const_cast<char*>	static constexpr char* TYPE_NULL = const_cast<char*>("null");
+src/oblib/common/json_type/ob_json_schema.cpp	51	ObJsonSchemaItem	const_cast<char*>	static constexpr char* TYPE_OBJECT = const_cast<char*>("object");
+src/oblib/common/json_type/ob_json_schema.cpp	52	ObJsonSchemaItem	const_cast<char*>	static constexpr char* TYPE_ARRAY = const_cast<char*>("array");
+src/oblib/common/json_type/ob_json_schema.cpp	53	ObJsonSchemaItem	const_cast<char*>	static constexpr char* MIN_LEN = const_cast<char*>("minLength"); // 9
+src/oblib/common/json_type/ob_json_schema.cpp	54	ObJsonSchemaItem	const_cast<char*>	static constexpr char* MAX_LEN = const_cast<char*>("maxLength"); // 9
+src/oblib/common/json_type/ob_json_schema.cpp	55	ObJsonSchemaItem	const_cast<char*>	static constexpr char* PATTERN = const_cast<char*>("pattern");
+src/oblib/common/json_type/ob_json_schema.cpp	56	ObJsonSchemaItem	const_cast<char*>	static constexpr char* MULTIPLE_OF = const_cast<char*>("multipleOf"); // 10
+src/oblib/common/json_type/ob_json_schema.cpp	57	ObJsonSchemaItem	const_cast<char*>	static constexpr char* MINMUM = const_cast<char*>("minimum"); // 7
+src/oblib/common/json_type/ob_json_schema.cpp	58	ObJsonSchemaItem	const_cast<char*>	static constexpr char* MAXMUM = const_cast<char*>("maximum"); // 7
+src/oblib/common/json_type/ob_json_schema.cpp	59	ObJsonSchemaItem	const_cast<char*>	static constexpr char* EXCLUSIVE_MINMUM = const_cast<char*>("exclusiveMinimum"); // 16
+src/oblib/common/json_type/ob_json_schema.cpp	60	ObJsonSchemaItem	const_cast<char*>	static constexpr char* EXCLUSIVE_MAXMUM = const_cast<char*>("exclusiveMaximum"); // 16
+src/oblib/common/json_type/ob_json_schema.cpp	61	ObJsonSchemaItem	const_cast<char*>	static constexpr char* REQUIRED = const_cast<char*>("required"); // 8
+src/oblib/common/json_type/ob_json_schema.cpp	62	ObJsonSchemaItem	const_cast<char*>	static constexpr char* MIN_PROPERTIES = const_cast<char*>("minProperties"); // 13
+src/oblib/common/json_type/ob_json_schema.cpp	63	ObJsonSchemaItem	const_cast<char*>	static constexpr char* MAX_PROPERTIES = const_cast<char*>("maxProperties"); // 13
+src/oblib/common/json_type/ob_json_schema.cpp	64	ObJsonSchemaItem	const_cast<char*>	static constexpr char* ITEMS = const_cast<char*>("items");
+src/oblib/common/json_type/ob_json_schema.cpp	65	ObJsonSchemaItem	const_cast<char*>	static constexpr char* TUPLE_ITEMS = const_cast<char*>("tupleItems");
+src/oblib/common/json_type/ob_json_schema.cpp	66	ObJsonSchemaItem	const_cast<char*>	static constexpr char* ADDITIONAL_ITEMS = const_cast<char*>("additionalItems");
+src/oblib/common/json_type/ob_json_schema.cpp	67	ObJsonSchemaItem	const_cast<char*>	static constexpr char* UNIQUE_ITEMS = const_cast<char*>("uniqueItems"); // 11
+src/oblib/common/json_type/ob_json_schema.cpp	68	ObJsonSchemaItem	const_cast<char*>	static constexpr char* MIN_ITEMS = const_cast<char*>("minItems"); // 8
+src/oblib/common/json_type/ob_json_schema.cpp	69	ObJsonSchemaItem	const_cast<char*>	static constexpr char* MAX_ITEMS = const_cast<char*>("maxItems"); // 8
+src/oblib/common/log/ob_log_data_writer.cpp	84	ObLogDataWriter::~ObLogDataWriter	C-style cast (void *) drops const from member log_dir_	free((void *)log_dir_);
+src/oblib/common/meta_programming/ob_meta_serialization.h	37	MetaSerializer::MetaSerializer	const_cast<T &>	data_(const_cast<T &>(data)) {}
+src/oblib/common/number/ob_number_v2.h	197	ObNumber::ObNumber	const_cast<uint32_t *>	: d_(num.desc_.desc_), digits_(const_cast<uint32_t *>(&(num.digits_[0]))) {}
+src/oblib/common/number/ob_number_v2.h	2194	ObNumber::decode	C-style cast (uint32_t *) drops const from buf	digits_ = (uint32_t *)(buf + pos);
+src/oblib/common/ob_range.h	622	ObNewRange::get_common_rowkey	const_cast<ObObj *>	rowkey.assign(const_cast<ObObj *>(start_key_.get_obj_ptr()), prefix_len);
+src/oblib/common/ob_store_range.h	259	ObStoreRange::get_common_store_rowkey	const_cast<ObObj *>	ret = store_rowkey.assign(const_cast<ObObj *>(start_key_.get_obj_ptr()), prefix_len);
+src/oblib/common/object/ob_obj_funcs.h	2236	obj_val_deserialize	C-style cast (ObDecimalInt *) drops const from buf	decint = (ObDecimalInt *)(buf + pos);
+src/oblib/common/object/ob_object.cpp	833	OB_DEF_DESERIALIZE(ObLobLocatorV2)	const_cast<char*>	ptr_ = const_cast<char*>(buf + new_pos);
+src/oblib/common/object/ob_object.cpp	1184	ObObj::build_not_strict_default_value	const_cast<ObDecimalInt *>	set_decimal_int(int_bytes, 0, const_cast<ObDecimalInt *>(decint));
+src/oblib/common/object/ob_object.h	925	ObLobLocatorV2::ObLobLocatorV2	const_cast<char *>	ptr_(const_cast<char *>(lob_str.ptr())), size_(lob_str.length()), has_lob_header_(has_lob_header)
+src/oblib/common/object/ob_object.h	982	ObLobLocatorV2::assign_ptr	const_cast<ObMemLobCommon *>	ptr_ = reinterpret_cast<char *>(const_cast<ObMemLobCommon *>(lobv2));
+src/oblib/common/object/ob_object.h	3323	ObObj::get_data_ptr	const_cast<char *>	ret = const_cast<char *>(v_.string_);
+src/oblib/common/object/ob_object.h	3325	ObObj::get_data_ptr	const_cast<uint32_t *>	ret = const_cast<uint32_t *>(v_.nmb_digits_);
+src/oblib/common/object/ob_object.h	3327	ObObj::get_data_ptr	const_cast<ObDecimalInt *>	ret = const_cast<ObDecimalInt *>(v_.decimal_int_);
+src/oblib/common/row/ob_row_checksum.cpp	68	DEFINE_DESERIALIZE(ObRowChecksumValue)	const_cast<char *>	const_cast<char *>(buf + pos));
+src/oblib/common/row/ob_row_store.cpp	326	ObRowStore::Iterator::get_next_stored_row	const_cast<StoredRow*>	stored_row = const_cast<StoredRow*>(reinterpret_cast<const StoredRow *>
+src/oblib/common/timezone/ob_time_convert.cpp	1585	ObTimeConverter::str_to_offset	const_cast<ObString &>	const ObString tmp_str = (!use_strict_format ? const_cast<ObString &>(str).trim() : str);
+src/oblib/common/timezone/ob_time_convert.cpp	2356	ObTimeConverter::str_to_ob_time_format	const_cast<char *>	name.assign_ptr(const_cast<char *>(str_pos), static_cast<int32_t>(str_end - str_pos));
+src/oblib/common/timezone/ob_time_convert.cpp	2365	ObTimeConverter::str_to_ob_time_format	const_cast<char *>	name.assign_ptr(const_cast<char *>(str_pos), static_cast<int32_t>(str_end - str_pos));
+src/oblib/common/timezone/ob_time_convert.cpp	2379	ObTimeConverter::str_to_ob_time_format	const_cast<char *>	name.assign_ptr(const_cast<char *>(str_pos), static_cast<int32_t>(str_end - str_pos));
+src/oblib/common/timezone/ob_time_convert.cpp	2429	ObTimeConverter::str_to_ob_time_format	const_cast<char *>	name.assign_ptr(const_cast<char *>(str_pos), static_cast<int32_t>(str_end - str_pos));
+src/oblib/common/timezone/ob_time_convert.cpp	2497	ObTimeConverter::str_to_ob_time_format	const_cast<char *>	name.assign_ptr(const_cast<char *>(str_pos), static_cast<int32_t>(str_end - str_pos));
+src/oblib/common/timezone/ob_time_convert.cpp	3740	check_and_get_tz_info	const_cast<ObTZInfoMap *>	} else if (OB_ISNULL(tz_info_map = const_cast<ObTZInfoMap *>(cvrt_ctx.tz_info_->get_tz_info_map()))) {
+src/oblib/common/timezone/ob_timezone_info.cpp	39069	ObTZMapWrap::set_tz_map	const_cast<ObTZInfoMap *> [data]	ObTZInfoMap *non_const_tz_map = const_cast<ObTZInfoMap *>(timezone_info_map);
+src/oblib/common/udt/ob_array_binary.cpp	298	ObArrayBinary::init	const_cast<uint8_t *>	null_bitmaps_ = const_cast<uint8_t *>(reinterpret_cast<const uint8_t *>(attrs[idx++].get_string().ptr()));
+src/oblib/common/udt/ob_array_binary.cpp	299	ObArrayBinary::init	const_cast<uint32_t *>	offsets_ = const_cast<uint32_t *>(reinterpret_cast<const uint32_t *>(attrs[idx++].get_string().ptr()));
+src/oblib/common/udt/ob_array_binary.cpp	300	ObArrayBinary::init	const_cast<char *>	data_ = const_cast<char *>(reinterpret_cast<const char *>(attrs[idx++].get_string().ptr()));
+src/oblib/common/udt/ob_array_fixed_size.ipp	342	ObArrayFixedSize::init	const_cast<uint8_t *>	this->null_bitmaps_ = const_cast<uint8_t *>(reinterpret_cast<const uint8_t *>(attrs[idx++].get_string().ptr()));
+src/oblib/common/udt/ob_array_fixed_size.ipp	343	ObArrayFixedSize::init	const_cast<T *>	data_ = const_cast<T *>(reinterpret_cast<const T *>(attrs[idx++].get_string().ptr()));
+src/oblib/common/udt/ob_array_nested.cpp	242	ObArrayNested::init	const_cast<uint8_t *>	null_bitmaps_ = const_cast<uint8_t *>(reinterpret_cast<const uint8_t *>(attrs[idx++].get_string().ptr()));
+src/oblib/common/udt/ob_array_nested.cpp	243	ObArrayNested::init	const_cast<uint32_t *>	offsets_ = const_cast<uint32_t *>(reinterpret_cast<const uint32_t *>(attrs[idx++].get_string().ptr()));
+src/oblib/common/udt/ob_udt_type.cpp	287	OB_DEF_DESERIALIZE(ObSqlUDTMeta)	const_cast<char *>	child_attrs_meta_ = reinterpret_cast<ObSqlUDTAttrMeta *>(const_cast<char *>(buf + pos));
+src/oblib/common/udt/ob_udt_type.cpp	295	OB_DEF_DESERIALIZE(ObSqlUDTMeta)	const_cast<char *>	leaf_attrs_meta_ = reinterpret_cast<ObSqlUDTAttrMeta *>(const_cast<char *>(buf + pos));
+src/oblib/common/udt/ob_vector_type.h	304	ObVectorData::init	const_cast<T *>	data_ = const_cast<T *>(reinterpret_cast<const T *>(attrs[count - 1].get_string().ptr()));

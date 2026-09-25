@@ -1,0 +1,48 @@
+file	line	symbol	construct	text
+src/sql/rewrite/ob_transform_const_propagate.cpp	1188	ObTransformConstPropagate::do_remove_const_exec_param	set_explicited_reference call (reference-count function found by its body)	exec_param->set_explicited_reference();
+src/sql/rewrite/ob_transform_pre_process.cpp	2600	ObTransformPreProcess::create_stmt_id_expr	set_explicited_reference call (reference-count function found by its body)	stmt_id_expr->set_explicited_reference();
+src/sql/rewrite/ob_transform_pre_process.cpp	2626	ObTransformPreProcess::create_params_expr	set_explicited_reference call (reference-count function found by its body)	pseudo_param_expr->set_explicited_reference();
+src/sql/rewrite/ob_transform_temp_table.cpp	2142	ObTransformTempTable::get_stmt_pointers	add_ref call (other name)	OZ(stmt_ptr.add_ref(&sel_stmt->get_set_query().at(parent_stmt.pos_)));
+src/sql/rewrite/ob_transform_temp_table.cpp	2155	ObTransformTempTable::get_stmt_pointers	add_ref call (other name)	OZ(stmt_ptr.add_ref(&table_item->ref_query_));
+src/sql/rewrite/ob_transform_temp_table.cpp	2167	ObTransformTempTable::get_stmt_pointers	add_ref call (other name)	OZ(stmt_ptr.add_ref(&subquery_ref->get_ref_stmt()));
+src/sql/rewrite/ob_transform_temp_table.cpp	2177	ObTransformTempTable::get_stmt_pointers	add_ref call (other name)	OZ(stmt_ptr.add_ref(&temp_table_infos.at(j).table_items_.at(k)->ref_query_));
+src/sql/rewrite/ob_transform_temp_table.cpp	2900	ObTransformTempTable::prepare_inline_materialize_stmts	add_ref call (other name)	} else if (OB_FAIL(stmt_ptr.add_ref(&table_item->ref_query_))) {
+src/sql/rewrite/ob_transform_utils.cpp	4889	ObTransformUtils::generate_unique_key_for_basic_table	set_explicited_reference call (reference-count function found by its body)	} else if (FALSE_IT(col_expr->set_explicited_reference())) {
+src/sql/rewrite/ob_transform_utils.cpp	11477	ObSelectStmtPointer::add_ref	add_ref definition (other name)	int ObSelectStmtPointer::add_ref(ObSelectStmt **stmt)
+src/sql/rewrite/ob_transform_utils.h	130	ObSelectStmtPointer	add_ref declaration (other name)	int add_ref(ObSelectStmt **stmt);
+src/sql/session/ob_sql_session_info.cpp	552	ObSQLSessionInfo::close_ps_stmt	dec_ref_count call	ps_sess_info->dec_ref_count();
+src/sql/session/ob_sql_session_info.cpp	554	ObSQLSessionInfo::close_ps_stmt	deref_ps_stmt call (other name)	if (OB_FAIL(ps_cache.deref_ps_stmt(inner_stmt_id))) {
+src/sql/session/ob_sql_session_info.cpp	578	ObSQLSessionInfo::close_all_ps_stmt	deref_ps_stmt call (other name)	} else if (OB_FAIL(ps_cache.deref_ps_stmt(inner_stmt_id))) {
+src/sql/session/ob_sql_session_info.cpp	901	ObSQLSessionInfo::prepare_ps_stmt	inc_ref_count call	session_info->inc_ref_count();
+src/sql/session/ob_sql_session_info.cpp	928	ObSQLSessionInfo::prepare_ps_stmt	inc_ref_count call	session_info->inc_ref_count();
+src/sql/session/ob_sql_session_mgr.cpp	221	ObSQLSessionMgr::inc_session_ref	inc_session_ref definition (other name)	int ObSQLSessionMgr::inc_session_ref(const ObSQLSessionInfo *my_session)
+src/sql/session/ob_sql_session_mgr.h	84	ObSQLSessionMgr	inc_session_ref declaration (other name)	int inc_session_ref(const ObSQLSessionInfo *my_session);
+src/standby/restore/ob_standby_restore_reader.h	76	ObCopyMacroBlockHandle	Handle struct definition	struct ObCopyMacroBlockHandle final
+src/storage/access/ob_index_tree_prefetcher.h	39	ObSSTableReadHandle	Handle struct definition	struct ObSSTableReadHandle
+src/storage/access/ob_index_tree_prefetcher.h	274	ObCachedLevelMicroDataHandle	Handle struct definition	struct ObCachedLevelMicroDataHandle
+src/storage/access/ob_index_tree_prefetcher.h	648	ObIndexTreeMultiPassPrefetcher::ObIndexBlockReadHandle	Handle struct definition	struct ObIndexBlockReadHandle {
+src/storage/access/ob_index_tree_prefetcher.h	671	ObIndexTreeMultiPassPrefetcher::ObIndexTreeLevelHandle	Handle struct definition	struct ObIndexTreeLevelHandle {
+src/storage/access/ob_micro_block_handle_mgr.h	46	ObMicroBlockDataHandle	Handle struct definition	struct ObMicroBlockDataHandle
+src/storage/access/ob_sample_filter.h	56	ObIndexRowIdHandle	Handle struct definition	struct ObIndexRowIdHandle {
+src/storage/access/ob_sstable_row_whole_scanner.h	36	ObSSTableRowWholeScanner::MacroScanHandle	Handle struct definition	struct MacroScanHandle
+src/storage/allocator/ob_fifo_arena.cpp	85	ObFifoArena::shrink_cached_page	release_ref call (other name)	release_ref(ref);
+src/storage/allocator/ob_fifo_arena.cpp	112	ObFifoArena::alloc	ref_and_alloc call (other name)	ptr = handle.ref_and_alloc(way_id, need_switch, page, size);
+src/storage/allocator/ob_fifo_arena.cpp	114	ObFifoArena::alloc	retire_page call (reference-count function found by its body)	retire_page(way_id, handle, page);
+src/storage/allocator/ob_fifo_arena.cpp	127	ObFifoArena::alloc	ref_and_alloc call (other name)	ptr = handle.ref_and_alloc(way_id, need_switch, page, size);
+src/storage/allocator/ob_fifo_arena.cpp	135	ObFifoArena::alloc	retire_page call (reference-count function found by its body)	retire_page(way_id, handle, page);
+src/storage/allocator/ob_fifo_arena.cpp	152	ObFifoArena::release_ref	release_ref definition (other name)	void ObFifoArena::release_ref(Ref* ref)
+src/storage/allocator/ob_fifo_arena.cpp	154	ObFifoArena::release_ref	xref call (other name)	if (0 == ref->page_->xref(ref->allocated_)) {
+src/storage/allocator/ob_fifo_arena.cpp	171	ObFifoArena::free	release_ref call (other name)	release_ref(ref);
+src/storage/allocator/ob_fifo_arena.cpp	201	ObFifoArena::retire_page	retire_page definition (reference-count function found by its body: calls add_ref)	void ObFifoArena::retire_page(int64_t idx, Handle& handle, Page* page)
+src/storage/allocator/ob_fifo_arena.cpp	205	ObFifoArena::retire_page	add_ref call (other name)	handle.add_ref(idx, &page->self_ref_);
+src/storage/allocator/ob_fifo_arena.h	68	ObFifoArena::Page::xref	xref definition (other name)	int64_t xref(int64_t x) { return ATOMIC_AAF(&ref_, x); }
+src/storage/allocator/ob_fifo_arena.h	110	ObFifoArena::Handle	Handle struct definition	struct Handle
+src/storage/allocator/ob_fifo_arena.h	132	ObFifoArena::Handle::ref_and_alloc	ref_and_alloc definition (other name)	void* ref_and_alloc(int64_t idx, bool& need_switch, Page* page, int64_t size) {
+src/storage/allocator/ob_fifo_arena.h	138	ObFifoArena::Handle::ref_and_alloc	add_ref call (other name)	add_ref(idx, ref);
+src/storage/allocator/ob_fifo_arena.h	143	ObFifoArena::Handle::add_ref	add_ref definition (other name)	void add_ref(int64_t idx, Ref* ref) {
+src/storage/allocator/ob_fifo_arena.h	204	ObFifoArena	release_ref declaration (other name)	void release_ref(Ref* ref);
+src/storage/allocator/ob_fifo_arena.h	207	ObFifoArena	retire_page declaration (reference-count function found by its body)	void retire_page(int64_t way_id, Handle& handle, Page* ptr);
+src/storage/allocator/ob_handle_list.h	97	ObHandleList::Handle	Handle struct definition	struct Handle
+src/storage/allocator/ob_memstore_allocator.h	72	ObMemstoreAllocator::ListHandle	Handle alias of HandleList::Handle	typedef HandleList::Handle ListHandle;
+src/storage/allocator/ob_memstore_allocator.h	73	ObMemstoreAllocator::ArenaHandle	Handle alias of Arena::Handle	typedef Arena::Handle ArenaHandle;
+src/storage/allocator/ob_memstore_allocator.h	75	ObMemstoreAllocator::AllocHandle	Handle class definition : ListHandle, ObIAllocator	class AllocHandle: public ListHandle, public ObIAllocator

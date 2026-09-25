@@ -1,0 +1,50 @@
+file	line	symbol	construct	text
+src/oblib/lib/queue/ob_link.h	34	ObLink::next_	field ObLink *; 16 atomic accesses (ATOMIC_LOAD 9, ATOMIC_STORE 4, ATOMIC_VCAS 3); through functions with an atomic parameter set_last_bit, unset_last_bit; single member of a value class: 5 more accesses reach it through fields and variables of type ObLink, listed where their own accesses resolve	ObLink *next_;
+src/oblib/lib/queue/ob_link.h	51	set_last_bit	atomic access through parameter addr (uint64_t *) of set_last_bit; the atomic object is the caller's argument; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_VCAS 1)	inline uint64_t set_last_bit(uint64_t *addr)
+src/oblib/lib/queue/ob_link.h	62	unset_last_bit	atomic access through parameter addr (uint64_t *) of unset_last_bit; the atomic object is the caller's argument; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_STORE 1)	inline void unset_last_bit(uint64_t *addr)
+src/oblib/lib/queue/ob_link.h	247	ObDLink::prev_	field ObDLink*; 3 atomic accesses (ATOMIC_LOAD 2, ATOMIC_TAS 1)	ObDLink* prev_;
+src/oblib/lib/queue/ob_link_queue.h	28	faa_bounded	atomic access through parameter addr (uint64_t *) of faa_bounded; the atomic object is the caller's argument; 3 atomic accesses (ATOMIC_BCAS 1, ATOMIC_FAA 1, ATOMIC_LOAD 1)	static inline uint64_t faa_bounded(uint64_t *addr, uint64_t *limit_addr, uint64_t &limit)
+src/oblib/lib/queue/ob_link_queue.h	28	faa_bounded	atomic access through parameter limit_addr (uint64_t *) of faa_bounded; the atomic object is the caller's argument; 2 atomic accesses (ATOMIC_LOAD 2)	static inline uint64_t faa_bounded(uint64_t *addr, uint64_t *limit_addr, uint64_t &limit)
+src/oblib/lib/queue/ob_link_queue.h	50	faa_bounded2	atomic access through parameter addr (uint64_t *) of faa_bounded2; the atomic object is the caller's argument; 2 atomic accesses (ATOMIC_CAS 1, ATOMIC_LOAD 1)	static inline uint64_t faa_bounded2(uint64_t *addr, uint64_t *limit_addr, uint64_t &limit)
+src/oblib/lib/queue/ob_link_queue.h	50	faa_bounded2	atomic access through parameter limit_addr (uint64_t *) of faa_bounded2; the atomic object is the caller's argument; 1 atomic accesses (ATOMIC_LOAD 1)	static inline uint64_t faa_bounded2(uint64_t *addr, uint64_t *limit_addr, uint64_t &limit)
+src/oblib/lib/queue/ob_link_queue.h	95	ObSpScLinkQueue::head_	field Link; 4 atomic accesses (ATOMIC_STORE 2, ATOMIC_BCAS 1, ATOMIC_LOAD 1); through the single member of value classes ObLink::next_	Link head_;
+src/oblib/lib/queue/ob_link_queue.h	96	ObSpScLinkQueue::tail_	field Link*; 2 atomic accesses (ATOMIC_BCAS 1, ATOMIC_TAS 1)	Link* tail_;
+src/oblib/lib/queue/ob_link_queue.h	183	ObSpLinkQueue::head_	field Link *; 9 atomic accesses (ATOMIC_STORE 4, ATOMIC_LOAD 3, ATOMIC_TAS 2)	Link *head_ CACHE_ALIGNED;
+src/oblib/lib/queue/ob_link_queue.h	184	ObSpLinkQueue::tail_	field Link *; 3 atomic accesses (ATOMIC_LOAD 2, ATOMIC_TAS 1)	Link *tail_ CACHE_ALIGNED;
+src/oblib/lib/queue/ob_link_queue.h	264	ObLinkQueueImpl::push_	field uint64_t; 3 atomic accesses (ATOMIC_LOAD 2, ATOMIC_FAA 1); through functions with an atomic parameter faa_bounded	uint64_t push_ CACHE_ALIGNED;
+src/oblib/lib/queue/ob_link_queue.h	265	ObLinkQueueImpl::pop_	field uint64_t; 5 atomic accesses (ATOMIC_LOAD 2, ATOMIC_BCAS 1, ATOMIC_FAA 1, ATOMIC_SAF 1); through functions with an atomic parameter faa_bounded	uint64_t pop_ CACHE_ALIGNED;
+src/oblib/lib/queue/ob_priority_queue.h	138	ObPriorityQueueImpl::size_	field int64_t; 6 atomic accesses (ATOMIC_FAA 5, ATOMIC_LOAD 1)	int64_t size_ CACHE_ALIGNED;
+src/oblib/lib/queue/ob_priority_queue.h	294	ObPriorityQueue2::Queue_::size	field int64_t; 4 atomic accesses (ATOMIC_FAA 3, ATOMIC_LOAD 1)	int64_t size;
+src/oblib/lib/rc/context.h	198	TreeNode::lock_	field int64_t; 4 atomic accesses (ATOMIC_STORE 2, ATOMIC_TAS 2)	int64_t lock_;
+src/oblib/lib/resource/achunk_mgr.h	178	AChunkMgr::Slot::maps_	field int64_t; 1 atomic accesses (ATOMIC_FAA 1)	int64_t maps_;
+src/oblib/lib/resource/achunk_mgr.h	179	AChunkMgr::Slot::unmaps_	field int64_t; 1 atomic accesses (ATOMIC_FAA 1)	int64_t unmaps_;
+src/oblib/lib/resource/achunk_mgr.h	243	AChunkMgr::slot_idx::global_index	function-local static int in AChunkMgr::slot_idx; 1 atomic accesses (ATOMIC_FAA 1)	static int global_index = 0;
+src/oblib/lib/resource/achunk_mgr.h	326	AChunkMgr::hold_	field int64_t; 3 atomic accesses (ATOMIC_AAF 3)	int64_t hold_; // Including the memory occupied by free_list, limited by memory_limit
+src/oblib/lib/resource/achunk_mgr.h	327	AChunkMgr::total_hold_	field int64_t; 3 atomic accesses (ATOMIC_FAA 2, ATOMIC_LOAD 1)	int64_t total_hold_; // Including virtual memory, just for statifics.
+src/oblib/lib/resource/achunk_mgr.h	328	AChunkMgr::cache_hold_	field int64_t; 3 atomic accesses (ATOMIC_FAA 3)	int64_t cache_hold_;
+src/oblib/lib/resource/achunk_mgr.h	329	AChunkMgr::large_cache_hold_	field int64_t; 3 atomic accesses (ATOMIC_FAA 3)	int64_t large_cache_hold_;
+src/oblib/lib/resource/ob_resource_mgr.h	78	ObMemoryMgr::sum_hold_	field int64_t; 3 atomic accesses (ATOMIC_AAF 3)	int64_t sum_hold_;
+src/oblib/lib/resource/ob_resource_mgr.h	79	ObMemoryMgr::cache_hold_	field int64_t; 1 atomic accesses (ATOMIC_AAF 1)	int64_t cache_hold_;
+src/oblib/lib/resource/ob_resource_mgr.h	80	ObMemoryMgr::cache_item_count_	field int64_t; 1 atomic accesses (ATOMIC_AAF 1)	int64_t cache_item_count_;
+src/oblib/lib/resource/ob_resource_mgr.h	81	ObMemoryMgr::hold_bytes_	field volatile int64_t; 4 atomic accesses (ATOMIC_AAF 3, ATOMIC_STORE 1); through local references hold	volatile int64_t hold_bytes_[common::ObCtxIds::MAX_CTX_ID];
+src/oblib/lib/resource/ob_resource_mgr.h	82	ObMemoryMgr::limit_bytes_	field volatile int64_t; 1 atomic accesses (ATOMIC_STORE 1)	volatile int64_t limit_bytes_[common::ObCtxIds::MAX_CTX_ID];
+src/oblib/lib/resource/ob_resource_mgr.h	83	ObMemoryMgr::hard_limit_bytes_	field volatile int64_t; 1 atomic accesses (ATOMIC_STORE 1)	volatile int64_t hard_limit_bytes_[common::ObCtxIds::MAX_CTX_ID];
+src/oblib/lib/resource/ob_resource_mgr.h	94	ObResourceState::ref_cnt_	field int64_t; 3 atomic accesses (ATOMIC_AAF 1, ATOMIC_LOAD 1, ATOMIC_SAF 1)	int64_t ref_cnt_;
+src/oblib/lib/restore/ob_io_device.h	439	ObIODevice::ref_cnt_	field int64_t; 3 atomic accesses (ATOMIC_FAA 1, ATOMIC_LOAD 1, ATOMIC_SAF 1)	int64_t ref_cnt_;
+src/oblib/lib/stat/ob_stat_template.h	38	DIRWLock::lock_	field volatile uint32_t; 6 atomic accesses (ATOMIC_LOAD 3, ATOMIC_AAF 1, ATOMIC_BCAS 1, ATOMIC_STORE 1)	volatile uint32_t lock_;
+src/oblib/lib/statistic_event/ob_stat_event.h	502	ObStatEventAddStat::stat_value_	field int64_t; 3 atomic accesses (ATOMIC_LOAD 2, ATOMIC_AAF 1)	int64_t stat_value_;
+src/oblib/lib/statistic_event/ob_stat_event.h	519	ObStatEventSetStat::stat_value_	field int64_t; 3 atomic accesses (ATOMIC_LOAD 2, ATOMIC_STORE 1)	int64_t stat_value_;
+src/oblib/lib/task/ob_timer_monitor.h	77	ObTimerMonitor::TimerRecord::task_cnt_	field int64_t; 1 atomic accesses (ATOMIC_FAA 1)	int64_t task_cnt_;
+src/oblib/lib/task/ob_timer_monitor.h	89	ObTimerMonitor::tail_	field int64_t; 4 atomic accesses (ATOMIC_LOAD 3, ATOMIC_VCAS 1)	int64_t tail_;
+src/oblib/lib/thread/ob_balance_filter.h	33	ObBalanceFilter::BucketNode::thread_pos	volatile field volatile int64_t; no atomic access found	volatile int64_t thread_pos;
+src/oblib/lib/thread/ob_balance_filter.h	34	ObBalanceFilter::BucketNode::cnt	volatile field volatile int64_t; no atomic access found	volatile int64_t cnt;
+src/oblib/lib/thread/ob_balance_filter.h	38	ObBalanceFilter::ThreadNode::cnt	volatile field volatile int64_t; no atomic access found	volatile int64_t cnt;
+src/oblib/lib/thread/ob_balance_filter.h	54	ObBalanceFilter::thread_node_num_	volatile field volatile int64_t; no atomic access found	volatile int64_t thread_node_num_;
+src/oblib/lib/thread/ob_dynamic_thread_pool.h	35	ObDynamicThreadInfo::tid_	field void *; 1 atomic accesses (ATOMIC_STORE 1); through functions with an atomic parameter ob_pthread_create	void *tid_;
+src/oblib/lib/thread/ob_dynamic_thread_pool.h	83	ObDynamicThreadPool::is_stop_	volatile field volatile bool; no atomic access found	volatile bool is_stop_;
+src/oblib/lib/thread/ob_dynamic_thread_pool.h	84	ObDynamicThreadPool::thread_num_	field int64_t; 4 atomic accesses (ATOMIC_LOAD 2, ATOMIC_STORE 2)	int64_t thread_num_;
+src/oblib/lib/thread/ob_dynamic_thread_pool.h	123	ObSimpleDynamicThreadPool::ref_cnt_	field int64_t; 3 atomic accesses (ATOMIC_INC 1, ATOMIC_LOAD 1, ATOMIC_SAF 1)	int64_t ref_cnt_;
+src/oblib/lib/thread/ob_map_queue.h	89	ObMapQueue::head_	field int64_t; 2 atomic accesses (ATOMIC_BCAS 1, ATOMIC_LOAD 1)	int64_t head_ CACHE_ALIGNED;
+src/oblib/lib/thread/ob_map_queue.h	90	ObMapQueue::tail_	field int64_t; 2 atomic accesses (ATOMIC_BCAS 1, ATOMIC_LOAD 1)	int64_t tail_ CACHE_ALIGNED;
+src/oblib/lib/thread/ob_map_queue.h	91	ObMapQueue::dummy_tail_	field int64_t; 3 atomic accesses (ATOMIC_LOAD 2, ATOMIC_BCAS 1)	int64_t dummy_tail_ CACHE_ALIGNED;
+src/oblib/lib/thread/ob_pthread.cpp	24	ob_pthread_create	atomic access through parameter ptr (void **) of ob_pthread_create; the atomic object is the caller's argument; 1 atomic accesses (ATOMIC_STORE 1)	int ob_pthread_create(void **ptr, void *(*start_routine) (void *), void *arg)

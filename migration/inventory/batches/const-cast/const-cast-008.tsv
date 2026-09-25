@@ -1,0 +1,57 @@
+file	line	symbol	construct	text
+src/oblib/lib/utility/utility.cpp	430	hex_dump	C-style cast (unsigned char *) drops const from data	unsigned const char *p = (unsigned char *)data;
+src/oblib/lib/utility/utility.cpp	670	all_zero	C-style cast (int64_t *) drops const from iter	if (0 != *((int64_t *)iter)) {
+src/oblib/lib/utility/utility.cpp	2350	extract_cert_expired_time	C-style cast (void*) drops const from cert	} else if (OB_ISNULL(cbio = BIO_new_mem_buf((void*)cert, cert_len))) {
+src/oblib/rpc/frame/ob_net_easy.cpp	162	easy_connection_str	const_cast<char*>	return const_cast<char*>("null");
+src/oblib/rpc/frame/ob_net_easy.cpp	406	easy_buf_set_data	C-style cast (char *) drops const from data	b->data = (char *)data;
+src/oblib/rpc/obmysql/ob_mysql_packet.cpp	47	ObMySQLRawPacket::get_command_field	const_cast<char *>	field.assign_ptr(const_cast<char *>(cdata_ - 1 + off),
+src/oblib/rpc/obmysql/packet/ompk_error.cpp	41	OMPKError::set_message	const_cast<char *>	message_.assign(const_cast<char *>(message.ptr()), message.length());
+src/observer/change_stream/ob_cs_plugin_async_index.cpp	581	ObCSAsyncIndexProcessor::extract_vector_data_	const_cast<char *>	vec_data = const_cast<char *>(datum.ptr_);
+src/observer/change_stream/ob_cs_plugin_async_index.cpp	584	ObCSAsyncIndexProcessor::extract_vector_data_	const_cast<char *>	vec_data = const_cast<char *>(datum.ptr_) + header_len;
+src/observer/mysql/ob_mysql_end_trans_cb.cpp	258	ObSqlEndTransCb::complete_callback_locked	const_cast<char*>	ok_param.message_ = const_cast<char*>(pkt_param_.get_message());
+src/observer/mysql/ob_query_driver.cpp	171	ObQueryDriver::response_query_result	const_cast<ObNewRow*>	ObNewRow *row = const_cast<ObNewRow*>(result_row);
+src/observer/mysql/ob_sync_cmd_driver.cpp	162	ObSyncCmdDriver::response_result	const_cast<char*>	ok_param.message_ = const_cast<char*>(result.get_message());
+src/observer/mysql/ob_sync_cmd_driver.cpp	232	ObSyncCmdDriver::response_query_result	const_cast<ObNewRow*>	ObNewRow *tmp_row = const_cast<ObNewRow*>(row);
+src/observer/mysql/ob_sync_plan_driver.cpp	153	ObSyncPlanDriver::response_result	const_cast<char*>	ok_param.message_ = const_cast<char*>(result.get_message());
+src/observer/mysql/ob_sync_plan_driver.cpp	174	ObSyncPlanDriver::response_result	const_cast<char*>	ok_param.message_ = const_cast<char*>(result.get_message());
+src/observer/mysql/obmp_base.cpp	432	ObMPBase::response_row	const_cast<ObAccuracy*>	cast_ctx.res_accuracy_ = const_cast<ObAccuracy*>(&fields->at(i).accuracy_);
+src/observer/mysql/obmp_packet_sender.cpp	917	ObMPPacketSender::send_eof_packet	const_cast<ObSQLSessionInfo *>	if (OB_FAIL(send_ok_packet(*const_cast<ObSQLSessionInfo *>(&session),
+src/observer/mysql/obmp_stmt_execute.cpp	2345	ObMPStmtExecute::parse_param_value	const_cast<ObObjMeta &>	const_cast<ObObjMeta &>(param.get_param_meta()).set_collation_type(cs_type);
+src/observer/mysql/obmp_stmt_execute.cpp	2346	ObMPStmtExecute::parse_param_value	const_cast<ObObjMeta &>	const_cast<ObObjMeta &>(param.get_param_meta()).set_collation_level(CS_LEVEL_COERCIBLE);
+src/observer/ob_inner_connection_lock_util.cpp	184	#define CONVERT_TYPE_AND_DO_UNLOCK	const_cast<T &>	T &unlock_req = const_cast<T &>(lock_req);                                       \
+src/observer/ob_inner_sql_connection.cpp	611	ObInnerSQLConnection::process_audit_record	const_cast<char *>	audit_record.sql_ = const_cast<char *>(ps_sql.ptr());
+src/observer/ob_signal_handle.cpp	30	sigtimedwait	const_cast<sigset_t*>	int result = sigwait(const_cast<sigset_t*>(set), &signum);
+src/observer/ob_srv_xlator.cpp	307	ObSrvXlator::release	const_cast<ObRequest*>	ObRequest *req = const_cast<ObRequest*>(processor->get_ob_request());
+src/observer/ob_uniq_task_queue.h	351	ObUniqTaskQueue::add	const_cast<Task *>	} else if (!group->list_.add_last(const_cast<Task *>(stored_task))) {
+src/observer/ob_uniq_task_queue.h	597	ObUniqTaskQueue::get_group	const_cast<Group *>	} else if (NULL == (group = const_cast<Group *>(group_map_.get(group_id)))) {
+src/observer/ob_uniq_task_queue.h	621	ObUniqTaskQueue::try_lock	const_cast<Task&>	} else if (FALSE_IT(const_cast<Task&>(task).set_start_timestamp())) {
+src/observer/ob_win_service.cpp	190	ob_install_win_service	const_cast<char *>	desc.lpDescription = const_cast<char *>(OB_SERVICE_DESCRIPTION);
+src/observer/ob_win_service.cpp	291	ob_start_as_win_service	const_cast<char *>	{ const_cast<char *>(service_name), (LPSERVICE_MAIN_FUNCTIONA)service_main_entry },
+src/observer/schema/ob_schema_retrieve_utils.ipp	404	ObSubPartSchemaRetrieveHelper::add	const_cast<ObPartition *>	partition_ = const_cast<ObPartition *>(tmp_partition);
+src/observer/vector_index/ob_plugin_vector_index_adaptor.cpp	85	ObPluginVectorIndexAdaptor::deallocate_query_distances	const_cast<float *>	mem_data->mem_ctx_->Deallocate(const_cast<float *>(distances));
+src/observer/vector_index/ob_plugin_vector_index_adaptor.cpp	3336	ObPluginVectorIndexAdaptor::vsag_query_vids	const_cast<char*>	char *data = const_cast<char*>(vector_str.ptr());
+src/observer/vector_index/ob_plugin_vector_index_scheduler.cpp	1135	ObPluginVectorIndexLoadScheduler::replay	C-style cast (char *) drops const from buffer	} else if (OB_FAIL(ls_log.deserialize((char *)buffer, buf_size, tmp_pos))) {
+src/observer/vector_index/ob_plugin_vector_index_serialize.cpp	358	ObHNSWSerializeCallback::operator()	const_cast<char*>	ObLobLocatorV2 src_lob(const_cast<char*>(data), data_size, false); // data from vsag must has no header
+src/observer/vector_index/ob_vector_index_util.cpp	5650	ObVecExtraInfo::extra_buf_to_obj	C-style cast (int32_t *) drops const from buf	len = *(int32_t *)(buf + pos);
+src/observer/virtual_table/ob_all_virtual_schema_slot.cpp	35	ObAllVirtualSchemaSlot::release_slot_infos	const_cast<char*>	allocator.free(const_cast<char*>(ptr));
+src/observer/virtual_table/ob_gv_sql.cpp	942	ObGVSql::fill_cells	const_cast<ObPlanCache *>	common::hash::ObHashMap<ObCacheObjID, ObILibCacheObject*> &co_map = const_cast<ObPlanCache *>(&plan_cache)->get_cache_obj_mgr().get_cache_obj_map();
+src/observer/virtual_table/ob_table_columns.cpp	835	ObTableColumns::deduce_column_attributes	const_cast<SelectItem &>	ObRawExpr *&item_expr = const_cast<SelectItem &>(select_item).expr_;
+src/observer/virtual_table/ob_table_columns.cpp	1134	ObTableColumns::resolve_view_definition	const_cast<ObSQLSessionInfo*>	resolver_ctx.session_info_ = const_cast<ObSQLSessionInfo*>(session);
+src/pl/ob_pl.cpp	1947	ObPLExecCtx::get_user_type	const_cast<ObPLExecCtx *>	ObIAllocator *expr_alloc = const_cast<ObPLExecCtx *>(this)->get_top_expr_allocator();
+src/pl/ob_pl.cpp	2457	ObPLExecState::init_params	const_cast<ParamStore *>	OZ (check_routine_param_legal(const_cast<ParamStore *>(params)));
+src/pl/ob_pl.cpp	3160	ObPLFunction::get_subprogram	const_cast<ObPLFunction*>	ObPLFunction *parent = const_cast<ObPLFunction*>(this);
+src/pl/ob_pl_allocator.cpp	109	ObPLAllocator1::realloc	const_cast<void *>	newptr = ob_realloc(const_cast<void *>(ptr), size, attr);
+src/pl/ob_pl_build.cpp	160	ObPLBuilder::init_anonymous_ast	const_cast<ObObjParam&>	ObObjParam& param = const_cast<ObObjParam&>(params->at(i));
+src/pl/ob_pl_build.cpp	712	ObPLBuilder::analyze_package	const_cast<ObPLBlockNS &>	(const_cast<ObPLBlockNS &>(package_ast.get_body()->get_namespace())).set_external_ns(NULL);
+src/pl/ob_pl_build.cpp	1017	ObPLBuilder::generate_package_conditions	const_cast<ObIArray<ObPLCondition *> &>	const_cast<ObIArray<ObPLCondition *> &>(package.get_condition_table());
+src/pl/ob_pl_build.cpp	1031	ObPLBuilder::generate_package_cursors	const_cast<ObPLCursorTable &>	ObPLCursorTable &cursor_table = const_cast<ObPLCursorTable &>(package.get_cursor_table());
+src/pl/ob_pl_build.cpp	1103	ObPLBuilder::generate_package_vars	const_cast<ObIArray<ObPLVar *> &>	ObIArray<ObPLVar *> &package_var_table = const_cast<ObIArray<ObPLVar *> &>(package.get_var_table());
+src/pl/ob_pl_build.cpp	1118	ObPLBuilder::compile_types	const_cast<ObUserDefinedType *>	ObUserDefinedType *ast_type = const_cast<ObUserDefinedType *>(types.at(i));
+src/pl/ob_pl_build.cpp	1149	ObPLBuilder::compile_types	const_cast<ObIArray<ObUserDefinedType *> &>	= const_cast<ObIArray<ObUserDefinedType *> &>(unit.get_type_table());
+src/pl/ob_pl_dependency_util.cpp	77	ObPLDependencyUtil::add_dependency_object_impl	const_cast<ObPLDependencyTable &>	OZ (add_dependency_object_impl(const_cast<ObPLDependencyTable &>(*dep_tbl), obj_version));
+src/pl/ob_pl_interpreter.cpp	344	exec_block	const_cast<ObPLStmtBlock *>	const_cast<ObPLStmtBlock *>(block)->get_eh());
+src/pl/ob_pl_interpreter.cpp	407	exec_block	const_cast<ObPLStmtBlock *>	const_cast<ObPLStmtBlock *>(b)->get_eh());
+src/pl/ob_pl_interpreter.cpp	818	exec_call	const_cast<int64_t *>	int64_t *path = subpath.count() > 0 ? const_cast<int64_t *>(&subpath.at(0)) : NULL;
+src/pl/ob_pl_package.cpp	128	ObPLPackageAST::process_generic_type	const_cast<ObUserDefinedType *>	(const_cast<ObUserDefinedType *>(user_type))
+src/pl/ob_pl_package.cpp	159	ObPLPackage::init	const_cast<ObString &>	if (OB_FAIL(ob_write_string(get_allocator(), const_cast<ObString &>(package_ast.get_db_name()), db_name_))) {
+src/pl/ob_pl_package.cpp	160	ObPLPackage::init	const_cast<ObString &>	} else if (OB_FAIL(ob_write_string(get_allocator(), const_cast<ObString &>(package_ast.get_name()), name_))) {

@@ -1,0 +1,79 @@
+file	line	symbol	construct	text
+src/storage/blocksstable/encoding/ob_encoding_util.h	344	batch_load_number_data_to_datum	const_cast<char *>	MEMCPY(const_cast<char *>(datums[i].ptr_), cell_datas[i], sizeof(ObNumberDesc));
+src/storage/blocksstable/encoding/ob_encoding_util.h	348	batch_load_number_data_to_datum	const_cast<char *>	MEMCPY(const_cast<char *>(datums[i].ptr_) + sizeof(ObNumberDesc),
+src/storage/blocksstable/encoding/ob_encoding_util.h	351	batch_load_number_data_to_datum	const_cast<char *>	ENCODING_ADAPT_MEMCPY(const_cast<char *>(datums[i].ptr_) + sizeof(ObNumberDesc),
+src/storage/blocksstable/encoding/ob_encoding_util.h	376	batch_load_ots_intvl_data_to_datum	const_cast<char *>	MEMCPY(const_cast<char *>(datums[i].ptr_), cell_datas[i], size);
+src/storage/blocksstable/encoding/ob_encoding_util.h	412	batch_load_data_to_datum	const_cast<char *>	ENCODING_ADAPT_MEMCPY(const_cast<char *>(datums[i].ptr_), &value, datum_len);
+src/storage/blocksstable/encoding/ob_encoding_util.h	428	batch_load_data_to_datum	const_cast<char *>	MEMCPY(const_cast<char *>(datums[i].ptr_), cell_datas[i], datums[i].len_);
+src/storage/blocksstable/encoding/ob_encoding_util.h	483	load_data_to_datum	const_cast<char *>	MEMCPY(const_cast<char *>(datum.ptr_), &value, datum_len);
+src/storage/blocksstable/encoding/ob_encoding_util.h	488	load_data_to_datum	const_cast<char *>	MEMCPY(const_cast<char *>(datum.ptr_), cell_data, sizeof(ObNumberDesc));
+src/storage/blocksstable/encoding/ob_encoding_util.h	492	load_data_to_datum	const_cast<char *>	MEMCPY(const_cast<char *>(datum.ptr_) + sizeof(ObNumberDesc),
+src/storage/blocksstable/encoding/ob_encoding_util.h	495	load_data_to_datum	const_cast<char *>	MEMCPY(const_cast<char *>(datum.ptr_) + sizeof(ObNumberDesc),
+src/storage/blocksstable/encoding/ob_encoding_util.h	501	load_data_to_datum	const_cast<char *>	MEMCPY(const_cast<char *>(datum.ptr_), cell_data, cell_len);
+src/storage/blocksstable/encoding/ob_encoding_util.h	517	load_data_to_datum	const_cast<char *>	MEMCPY(const_cast<char *>(datum.ptr_), cell_data, size);
+src/storage/blocksstable/encoding/ob_icolumn_decoder.cpp	176	ObIColumnDecoder::get_null_count	const_cast<char *>	ObBitStream bs(reinterpret_cast<unsigned char *>(const_cast<char *>(row_data)), row_len);
+src/storage/blocksstable/encoding/ob_icolumn_decoder.cpp	178	ObIColumnDecoder::get_null_count	const_cast<ObColumnDecoderCtx &>	} else if (OB_FAIL(decode(const_cast<ObColumnDecoderCtx &>(ctx), datum, row_id, bs, row_data, row_len))) {
+src/storage/blocksstable/encoding/ob_integer_array.h	78	ObIntegerArrayGenerator::init	const_cast<char *>	{ return init(const_cast<char *>(data), byte); }
+src/storage/blocksstable/encoding/ob_integer_array.h	82	ObIntegerArrayGenerator::get_array	const_cast<char *>	return *reinterpret_cast<ObIIntegerArray *>(const_cast<char *>(data_));
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.cpp	64	ObIntegerBaseDiffDecoder::decode	const_cast<char *>	MEMCPY(const_cast<char *>(datum.ptr_), &v, datum_len);
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.cpp	71	ObIntegerBaseDiffDecoder::decode	const_cast<char *>	MEMCPY(const_cast<char *>(datum.ptr_), &v, datum_len);
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.cpp	106	#define INT_DIFF_UNPACK_VALUES	const_cast<char *>	ENCODING_ADAPT_MEMCPY(const_cast<char *>(datums[i].ptr_), &value, datum_len); \
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.cpp	119	#define INT_DIFF_UNPACK_VALUES	const_cast<char *>	ENCODING_ADAPT_MEMCPY(const_cast<char *>(datums[i].ptr_), &value, datum_len); \
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.cpp	202	ObIntegerBaseDiffDecoder::batch_decode	const_cast<char *>	MEMCPY(const_cast<char *>(datums[i].ptr_), &value, datum_len);
+src/storage/blocksstable/encoding/ob_micro_block_decoder.cpp	573	ObEncodeBlockGetReader::get_all_columns	const_cast<char *>	ObBitStream bs(reinterpret_cast<unsigned char *>(const_cast<char *>(row_data)), row_len);
+src/storage/blocksstable/encoding/ob_micro_block_decoder.cpp	615	ObEncodeBlockGetReader::locate_row	const_cast<char *>	ObBitStream bs(reinterpret_cast<unsigned char *>(const_cast<char *>(row_data)), row_len);
+src/storage/blocksstable/encoding/ob_micro_block_decoder.cpp	885	ObMicroBlockDecoder::acquire	const_cast<ObIColumnDecoder *>	allocator.free(const_cast<ObIColumnDecoder *>(decoder));
+src/storage/blocksstable/encoding/ob_micro_block_decoder.cpp	1225	ObMicroBlockDecoder::decode_cells	const_cast<char *>	ObBitStream bs(reinterpret_cast<unsigned char *>(const_cast<char *>(row_data)), row_len);
+src/storage/blocksstable/encoding/ob_micro_block_decoder.cpp	1287	ObMicroBlockDecoder::compare_rowkey	const_cast<char *>	ObBitStream bs(reinterpret_cast<unsigned char *>(const_cast<char *>(row_data)), row_len);
+src/storage/blocksstable/encoding/ob_micro_block_decoder.cpp	1323	ObMicroBlockDecoder::compare_rowkey	const_cast<char *>	ObBitStream bs(reinterpret_cast<unsigned char *>(const_cast<char *>(row_data)), row_len);
+src/storage/blocksstable/encoding/ob_micro_block_decoder.cpp	1511	ObMicroBlockDecoder::filter_pushdown_filter	const_cast<char *>	ObBitStream bs(reinterpret_cast<unsigned char *>(const_cast<char *>(row_data)), row_len);
+src/storage/blocksstable/encoding/ob_micro_block_decoder.cpp	1652	ObMicroBlockDecoder::filter_pushdown_retro	const_cast<char *>	ObBitStream bs(reinterpret_cast<unsigned char *>(const_cast<char *>(row_data)), row_len);
+src/storage/blocksstable/encoding/ob_micro_block_decoder.cpp	1904	ObMicroBlockDecoder::get_col_datums	const_cast<char *>	ObBitStream bs(reinterpret_cast<unsigned char *>(const_cast<char *>(row_data)), row_len);
+src/storage/blocksstable/encoding/ob_micro_block_decoder.cpp	1938	ObMicroBlockDecoder::get_column_datum	const_cast<char *>	ObBitStream bs(reinterpret_cast<unsigned char *>(const_cast<char *>(row_data)), row_len);
+src/storage/blocksstable/encoding/ob_micro_block_encoder.cpp	1017	ObMicroBlockEncoder::copy_cell	const_cast<char *>	MEMSET(const_cast<char *>(dest.ptr_), 0, datum_size);
+src/storage/blocksstable/encoding/ob_micro_block_encoder.cpp	1019	ObMicroBlockEncoder::copy_cell	const_cast<char *>	MEMCPY(const_cast<char *>(dest.ptr_), src.ptr_, dest.len_);
+src/storage/blocksstable/encoding/ob_micro_block_encoder.cpp	1063	ObMicroBlockEncoder::process_large_row	const_cast<char *>	MEMSET(const_cast<char *>(dest_datum.ptr_), 0, datum_data_size);
+src/storage/blocksstable/encoding/ob_micro_block_encoder.cpp	1065	ObMicroBlockEncoder::process_large_row	const_cast<char *>	MEMCPY(const_cast<char *>(dest_datum.ptr_), src_datum.ptr_, src_datum.len_);
+src/storage/blocksstable/encoding/ob_new_column_decoder.cpp	74	ObNewColumnCommonDecoder::pushdown_operator	const_cast<ObStorageDatum *>	ObStorageDatum *default_datum = const_cast<ObStorageDatum *>(&filter.get_default_datums().at(0));
+src/storage/blocksstable/encoding/ob_new_column_decoder.cpp	91	ObNewColumnCommonDecoder::pushdown_operator	const_cast<ObStorageDatum *>	ObStorageDatum *default_datum = const_cast<ObStorageDatum *>(&filter.get_default_datums().at(0));
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	122	RawVarBatchDecodeFunc_T::raw_var_batch_decode_func	const_cast<char *>	ENCODING_ADAPT_MEMCPY(const_cast<char *>(datum.ptr_), col_data, col_len);
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	148	RawFixBatchDecodeFunc_T::raw_fix_batch_decode_func	const_cast<char *>	ENCODING_ADAPT_MEMCPY(const_cast<char *>(datum.ptr_), base_data + row_id * col_len, col_len);
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	173	RawFixBatchDecodeFunc_T::raw_fix_batch_decode_func	const_cast<char *>	*reinterpret_cast<DatumType *>(const_cast<char *>(datums[i].ptr_)) = input[row_id];
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	292	ObRawDecoder::decode	const_cast<char *>	MEMCPY(const_cast<char *>(datum.ptr_), &val, datum_len);
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	475	ObRawDecoder::batch_decode_general	const_cast<char *>	MEMCPY(const_cast<char *>(datums[i].ptr_), &value, datum_len);
+src/storage/blocksstable/index_block/ob_index_block_aggregator.cpp	130	ObIColAggregator::copy_agg_datum	const_cast<char *>	MEMCPY(const_cast<char *>(dst.ptr_), src.ptr_, src.len_);
+src/storage/blocksstable/index_block/ob_index_block_dumper.cpp	225	ObBaseIndexBlockDumper::append_row	const_cast<ObDatumRow &>	if (OB_FAIL(tmp_macro_meta.parse_row(const_cast<ObDatumRow &>(row)))) {
+src/storage/blocksstable/index_block/ob_index_block_dumper.cpp	777	ObIndexBlockLoader::open_mem_block	const_cast<ObMicroBlockHeader *>	ObMicroBlockHeader *header = const_cast<ObMicroBlockHeader *>(micro_block_desc->header_);
+src/storage/blocksstable/index_block/ob_index_block_row_scanner.cpp	1510	ObIndexBlockRowScanner::switch_context	const_cast<ObStorageDatumUtils *>	ObStorageDatumUtils *switch_datum_utils = const_cast<ObStorageDatumUtils *>(datum_utils_);
+src/storage/blocksstable/index_block/ob_index_block_tree_cursor.cpp	241	ObIndexBlockTreePath::PathItemStack::release_item_memory	const_cast<char *>	allocator_->free(const_cast<char *>(release_item.block_data_.buf_));
+src/storage/blocksstable/index_block/ob_index_block_tree_cursor.cpp	907	ObIndexBlockTreeCursor::release_held_path_item	const_cast<char *>	cursor_path_.get_allocator()->free(const_cast<char *>(held_item.block_data_.buf_));
+src/storage/blocksstable/index_block/ob_sstable_sec_meta_iterator.cpp	104	ObSSTableSecMetaIterator::open	const_cast<char *>	block_meta_tree_ = reinterpret_cast<ObBlockMetaTree *>(const_cast<char *>(root_block.buf_));
+src/storage/blocksstable/index_block/ob_sstable_sec_meta_iterator.cpp	106	ObSSTableSecMetaIterator::open	const_cast<ObStorageDatumUtils *>	if (OB_FAIL(ddl_iter_.set_iter_param(const_cast<ObStorageDatumUtils *>(&rowkey_read_info.get_datum_utils()), is_reverse_scan, block_meta_tree_, step))) {
+src/storage/blocksstable/ob_block_sstable_struct.cpp	440	ObRecordHeaderV3::deserialize	const_cast<int64_t *>	column_checksums_ = const_cast<int64_t *>(column_checksums);
+src/storage/blocksstable/ob_block_sstable_struct.h	244	ObMicroBlockEncoderOpt::enable	const_cast<bool &>	return const_cast<bool &>(static_cast<const ObMicroBlockEncoderOpt *>(this)->enable(type));
+src/storage/blocksstable/ob_bloom_filter_cache.cpp	495	ObBloomFilterCache::may_contain	const_cast<storage::ObRowsInfo *>	auto *my_rows_info = const_cast<storage::ObRowsInfo *>(rows_info);
+src/storage/blocksstable/ob_bloom_filter_cache.cpp	547	ObBloomFilterCache::may_contain	const_cast<storage::ObRowKeysInfo *>	storage::ObRowKeysInfo *my_rowkeys_info = const_cast<storage::ObRowKeysInfo *>(rowkeys_info);
+src/storage/blocksstable/ob_data_buffer.h	161	DEFINE_DESERIALIZE(ObBufferHolder)	const_cast<char *>	data_ = const_cast<char *>(common::serialization::decode_vstr(buf, data_len, pos, &len));
+src/storage/blocksstable/ob_data_buffer.h	316	ObBufferWriter::assign	const_cast<char *>	data_ = const_cast<char *>(buf);
+src/storage/blocksstable/ob_data_buffer.h	493	ObBufferReader::assign	const_cast<char *>	data_ = const_cast<char *>(buf);
+src/storage/blocksstable/ob_datum_rowkey.h	410	ObDatumRowkey::shallow_copy	const_cast<ObStorageDatum*>	ObStorageDatum *datums = const_cast<ObStorageDatum*>(dest.datums_);
+src/storage/blocksstable/ob_datum_rowkey.h	433	ObDatumRowkey::semi_copy	const_cast<ObStorageDatum *>	ObStorageDatum *datums = const_cast<ObStorageDatum *> (dest.datums_);
+src/storage/blocksstable/ob_fuse_row_cache.cpp	246	ObFuseRowCache::get_row	const_cast<ObFuseRowCacheValue *>	handle.value_ = const_cast<ObFuseRowCacheValue *>(value);
+src/storage/blocksstable/ob_macro_block_bare_iterator.cpp	542	ObMicroBlockBareIterator::get_micro_block_header	const_cast<char *>	} else if (FALSE_IT(micro_block_buf = const_cast<char *>(buf))) {
+src/storage/blocksstable/ob_macro_block_meta.cpp	229	ObDataBlockMetaVal::serialize	const_cast<ObDataBlockMetaVal *>	const_cast<ObDataBlockMetaVal *>(this)->length_ = get_serialize_size(data_version);
+src/storage/blocksstable/ob_macro_block_reader.cpp	662	ObSSTableDataBlockReader::dump_macro_block_meta_block	const_cast<ObDatumRow *>	} else if (OB_FAIL(macro_meta.parse_row(*const_cast<ObDatumRow *>(row)))) {
+src/storage/blocksstable/ob_macro_block_writer.cpp	96	ObMicroBlockBufferHelper::compress_micro_block	const_cast<ObMicroBlockHeader *>	ObMicroBlockHeader *header = const_cast<ObMicroBlockHeader *>(micro_block_desc.header_);
+src/storage/blocksstable/ob_macro_block_writer.cpp	119	ObMicroBlockBufferHelper::check_micro_block	const_cast<char *>	decomp_buf = const_cast<char *>(uncompressed_buf);
+src/storage/blocksstable/ob_macro_block_writer.cpp	1127	ObMacroBlockWriter::check_order	const_cast<ObDatumRow&>	const_cast<ObDatumRow&>(row).storage_datums_[sql_sequence_col_idx].reuse(); // make sql sequence positive
+src/storage/blocksstable/ob_macro_block_writer.cpp	1128	ObMacroBlockWriter::check_order	const_cast<ObDatumRow&>	const_cast<ObDatumRow&>(row).storage_datums_[sql_sequence_col_idx].set_int(0); // make sql sequence positive
+src/storage/blocksstable/ob_micro_block_cache.cpp	526	ObAsyncSingleMicroBlockIOCallback::~ObAsyncSingleMicroBlockIOCallback	const_cast<ObMicroBlockCacheValue *>	allocator_->free(const_cast<ObMicroBlockCacheValue *>(micro_block_));
+src/storage/blocksstable/ob_micro_block_cache.cpp	732	ObMultiDataBlockIOCallback::free_result	const_cast<ObMicroBlockCacheValue *>	allocator_->free(const_cast<ObMicroBlockCacheValue *>(io_result_.micro_blocks_[i]));
+src/storage/blocksstable/ob_micro_block_cache.cpp	1363	ObIndexMicroBlockCache::load_block	const_cast<char *>	raw_idx_block_buf = const_cast<char *>(block_data.get_buf());
+src/storage/blocksstable/ob_micro_block_header.cpp	292	ObMicroBlockHeader::deserialize	const_cast<int64_t *>	column_checksums_ = const_cast<int64_t *>(column_checksums);
+src/storage/blocksstable/ob_micro_block_row_getter.cpp	220	ObMicroBlockRowGetter::get_row	const_cast<ObDatumRow*>	(const_cast<ObDatumRow*> (store_row))->scan_index_ = read_handle.range_idx_;
+src/storage/blocksstable/ob_micro_block_row_scanner.cpp	1195	ObMultiVersionMicroBlockRowScanner::inner_get_next_row	const_cast<ObDatumRow *>	const_cast<ObDatumRow *>(row)->fast_filter_skipped_ = is_filter_applied_;
+src/storage/blocksstable/ob_micro_block_row_scanner.cpp	1288	ObMultiVersionMicroBlockRowScanner::inner_get_next_row_impl	const_cast<ObDatumRow *>	(const_cast<ObDatumRow *>(ret_row))->mvcc_row_flag_.set_uncommitted_row(false);
+src/storage/blocksstable/ob_micro_block_row_scanner.cpp	1289	ObMultiVersionMicroBlockRowScanner::inner_get_next_row_impl	const_cast<ObDatumRow *>	const_cast<ObDatumRow *>(ret_row)->trans_id_.reset();
+src/storage/blocksstable/ob_row_cache.cpp	242	ObRowCache::get_row	const_cast<ObRowCacheValue*>	handle.row_value_ = const_cast<ObRowCacheValue*>(value);
+src/storage/blocksstable/ob_sstable.cpp	808	ObSSTable::deep_copy	const_cast<ObSSTable *>	const_cast<ObSSTable *>(this)->is_tmp_sstable_ = false;
+src/storage/blocksstable/ob_sstable.cpp	1432	ObSSTable::get_last_rowkey	const_cast<char *>	ObBlockMetaTree *block_meta_tree = reinterpret_cast<ObBlockMetaTree *>(const_cast<char *>(root_block.buf_));

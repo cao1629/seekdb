@@ -1,0 +1,47 @@
+file	line	symbol	construct	text
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	902	ObDASHNSWScanIter::do_get_extra_info_by_vids	heap declared: heap (ObSimpleMaxHeap)	int ObDASHNSWScanIter::do_get_extra_info_by_vids(ObPluginVectorIndexAdaptor *adaptor, const ObSimpleMaxHeap &heap,
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	943	ObDASHNSWScanIter::get_extra_info_by_vids	heap declared: heap (ObSimpleMaxHeap)	int ObDASHNSWScanIter::get_extra_info_by_vids(ObPluginVectorIndexAdaptor *adaptor, const ObSimpleMaxHeap &heap, ObVecExtraInfoPtr &extra_info_ptr) {
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	1005	ObDASHNSWScanIter::process_adaptor_state_pre_filter_brute_force_not_bq	heap declared: max_heap (ObSimpleMaxHeap)	ObSimpleMaxHeap max_heap(&allocator, capaticy);
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	1023	ObDASHNSWScanIter::process_adaptor_state_pre_filter_brute_force_not_bq	heap operation push on max_heap (ObSimpleMaxHeap)	max_heap.push(brute_vids[i], distance, is_snap);
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	1034	ObDASHNSWScanIter::process_adaptor_state_pre_filter_brute_force_not_bq	heap operation push on max_heap (ObSimpleMaxHeap)	max_heap.push(brute_vids[i], distance, is_snap);
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	1169	ObDASHNSWScanIter::merge_and_sort_brute_force_results_bq	heap declared: snap_heap (ObSimpleMaxHeap)	ObSimpleMaxHeap& snap_heap,
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	1170	ObDASHNSWScanIter::merge_and_sort_brute_force_results_bq	heap declared: incr_heap (ObSimpleMaxHeap)	ObSimpleMaxHeap& incr_heap,
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	1190	ObDASHNSWScanIter::merge_and_sort_brute_force_results_bq	heap operation push on incr_heap (ObSimpleMaxHeap)	incr_heap.push(brute_vids[i], dist_result.distances_inc[i], false);
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	1193	ObDASHNSWScanIter::merge_and_sort_brute_force_results_bq	heap operation push on snap_heap (ObSimpleMaxHeap)	snap_heap.push(brute_vids[i], dist_result.distances_snap[i], true);
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	1196	ObDASHNSWScanIter::merge_and_sort_brute_force_results_bq	heap operation push on incr_heap (ObSimpleMaxHeap)	incr_heap.push(brute_vids[i], dist_result.distances_inc[i], false);
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	1198	ObDASHNSWScanIter::merge_and_sort_brute_force_results_bq	heap operation push on snap_heap (ObSimpleMaxHeap)	snap_heap.push(brute_vids[i], dist_result.distances_snap[i], true);
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	1208	ObDASHNSWScanIter::build_brute_force_result_iterator_bq	heap declared: snap_heap (ObSimpleMaxHeap)	const ObSimpleMaxHeap& snap_heap,
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	1209	ObDASHNSWScanIter::build_brute_force_result_iterator_bq	heap declared: incr_heap (ObSimpleMaxHeap)	const ObSimpleMaxHeap& incr_heap,
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	1277	ObDASHNSWScanIter::build_brute_force_result_iterator_bq	heap declared: merged_heap (ObSimpleMaxHeap)	ObSimpleMaxHeap merged_heap(&allocator, total_size);
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	1283	ObDASHNSWScanIter::build_brute_force_result_iterator_bq	heap operation push on merged_heap (ObSimpleMaxHeap)	merged_heap.push(vids[i], distances[i], is_snap);
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	1325	ObDASHNSWScanIter::process_adaptor_state_pre_filter_brute_force_bq	heap declared: snap_heap (ObSimpleMaxHeap)	ObSimpleMaxHeap snap_heap(&allocator, capacity);
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	1326	ObDASHNSWScanIter::process_adaptor_state_pre_filter_brute_force_bq	heap declared: incr_heap (ObSimpleMaxHeap)	ObSimpleMaxHeap incr_heap(&allocator, capacity);
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	3507	ObSimpleMaxHeap::push	heap operation definition: ObSimpleMaxHeap::push	void ObSimpleMaxHeap::push(int64_t vid, double distiance, bool is_snap)
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	3523	ObSimpleMaxHeap::max_heap_sort	lib::ob_sort call	lib::ob_sort(heap_, heap_ + size_);
+src/sql/das/iter/ob_das_hnsw_scan_iter.h	442	ObDASHNSWScanIter	heap declared: heap (ObSimpleMaxHeap)	int get_extra_info_by_vids(ObPluginVectorIndexAdaptor *adaptor, const ObSimpleMaxHeap &heap,
+src/sql/das/iter/ob_das_hnsw_scan_iter.h	444	ObDASHNSWScanIter	heap declared: heap (ObSimpleMaxHeap)	int do_get_extra_info_by_vids(ObPluginVectorIndexAdaptor *adaptor, const ObSimpleMaxHeap &heap, int64_t *vids_idx,
+src/sql/das/iter/ob_das_hnsw_scan_iter.h	630	ObDASHNSWScanIter	heap declared: snap_heap (ObSimpleMaxHeap)	ObSimpleMaxHeap& snap_heap,
+src/sql/das/iter/ob_das_hnsw_scan_iter.h	631	ObDASHNSWScanIter	heap declared: incr_heap (ObSimpleMaxHeap)	ObSimpleMaxHeap& incr_heap,
+src/sql/das/iter/ob_das_hnsw_scan_iter.h	636	ObDASHNSWScanIter	heap declared: snap_heap (ObSimpleMaxHeap)	const ObSimpleMaxHeap& snap_heap,
+src/sql/das/iter/ob_das_hnsw_scan_iter.h	637	ObDASHNSWScanIter	heap declared: incr_heap (ObSimpleMaxHeap)	const ObSimpleMaxHeap& incr_heap,
+src/sql/das/iter/ob_das_sort_iter.cpp	289	ObDASSortIter::do_sort	member sort() call	if (OB_FAIL(sort_impl_->sort())) {
+src/sql/das/iter/ob_das_spiv_merge_iter.cpp	1339	ObDASSPIVMergeIter::do_brute_force	heap declared: max_heap (ObSPIVFixedSizeHeap)	ObSPIVFixedSizeHeap<ObRowkeyScoreItem, ObRowkeyScoreItemCmp> max_heap(capacity, allocator, rowkey_score_cmp_);
+src/sql/das/iter/ob_das_spiv_merge_iter.cpp	1377	ObDASSPIVMergeIter::do_brute_force	heap operation push on max_heap (ObSPIVFixedSizeHeap)	max_heap.push(item);
+src/sql/das/iter/ob_das_spiv_merge_iter.cpp	1398	ObDASSPIVMergeIter::do_brute_force	heap operation top on max_heap (ObSPIVFixedSizeHeap)	ObRowkey *rowkey = max_heap.top().rowkey_;
+src/sql/das/iter/ob_das_spiv_merge_iter.cpp	1399	ObDASSPIVMergeIter::do_brute_force	heap operation pop on max_heap (ObSPIVFixedSizeHeap)	if (OB_FAIL(max_heap.pop())) {
+src/sql/das/iter/ob_das_spiv_merge_iter.cpp	1429	ObDASSPIVMergeIter::do_brute_force	heap operation top on max_heap (ObSPIVFixedSizeHeap)	ObRowkey *rowkey = max_heap.top().rowkey_;
+src/sql/das/iter/ob_das_spiv_merge_iter.cpp	1430	ObDASSPIVMergeIter::do_brute_force	heap operation pop on max_heap (ObSPIVFixedSizeHeap)	if (OB_FAIL(max_heap.pop())) {
+src/sql/das/iter/ob_das_text_retrieval_merge_iter.cpp	252	ObDASTextRetrievalMergeIter::build_query_tokens	iterate hash container token_map (ObHashMap)	for (hash::ObHashMap<ObFTWord, int64_t>::const_iterator iter = token_map.begin();
+src/sql/das/iter/ob_das_text_retrieval_merge_iter.cpp	1303	ObDASTRTaatIter::load_next_hashmap	iterate hash container through an iterator of ObDASTRTaatHashMap	ObDASTRTaatHashMap::iterator iter = hash_maps_[cur_map_idx_]->begin();
+src/sql/das/iter/ob_das_text_retrieval_merge_iter.cpp	1305	ObDASTRTaatIter::load_next_hashmap	iterate hash container through an iterator of ObDASTRTaatHashMap	if (nullptr == cur_map_iter_ && OB_ISNULL(buf = mem_context_->get_arena_allocator().alloc(sizeof(ObDASTRTaatHashMap::iterator)))) {
+src/sql/das/iter/ob_das_text_retrieval_merge_iter.cpp	1308	ObDASTRTaatIter::load_next_hashmap	iterate hash container through an iterator of ObDASTRTaatHashMap	cur_map_iter_ = new(cur_map_iter_) ObDASTRTaatHashMap::iterator(iter);
+src/sql/das/iter/ob_das_text_retrieval_merge_iter.cpp	1310	ObDASTRTaatIter::load_next_hashmap	iterate hash container through an iterator of ObDASTRTaatHashMap	cur_map_iter_ = new(buf) ObDASTRTaatHashMap::iterator(iter);
+src/sql/das/ob_das_domain_utils.cpp	311	ObDASDomainUtils::generate_fulltext_word_rows	iterate hash container ft_word_map (ObFTWordMap)	for (ObFTWordMap::const_iterator iter = ft_word_map.begin();
+src/sql/dtl/ob_dtl.cpp	63	ObDtlChannelManager::foreach_refactored	iterate hash container hash_table_ (ObDtlHashTable)	if (OB_FAIL(hash_table_.foreach_refactored(i, op))) {
+src/sql/dtl/ob_dtl_interm_result_manager.cpp	327	ObDTLIntermResultManager::clear_timeout_result_info	iterate hash container interm_res_map_ (IntermResMap)	if (OB_FAIL(interm_res_map_.foreach_refactored(gc_))) {
+src/sql/dtl/ob_dtl_interm_result_manager.cpp	387	ObDTLIntermResultManager::generate_monitor_info_rows	iterate hash container interm_res_map_ (IntermResMap)	if (OB_FAIL(interm_res_map_.foreach_refactored(consumer))) {
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	962	ObAggregateProcessor::GroupConcatExtraResult::finish_add_row	member sort() call	ret = sort_op_->sort();
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	1150	ObAggregateProcessor::HybridHistExtraResult::finish_add_sort_row	member sort() call	if (OB_FAIL(sort_op_->sort())) {
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	1695	ObAggregateProcessor::collect_group_row	member sort() call	if (OB_FAIL(ad_result->unique_sort_op_->sort())) {
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	2026	ObAggregateProcessor::process_distinct_batch	member sort() call	if (OB_FAIL(extra_info->unique_sort_op_->sort())) {
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	2961	ObAggregateProcessor::rollup_distinct	member sort() call	&& OB_FAIL(ad_result->unique_sort_op_->sort())) {

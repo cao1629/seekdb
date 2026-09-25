@@ -1,0 +1,35 @@
+file	line	symbol	construct	text
+src/storage/tx_storage/ob_memstore_freezer.h	52	ObMemstoreFreezerStat::last_captured_timestamp_	field int64_t; 1 atomic accesses (ATOMIC_SET 1)	int64_t last_captured_timestamp_;
+src/storage/tx_storage/ob_memstore_freezer.h	54	ObMemstoreFreezerStat::captured_data_size_	field int64_t; 3 atomic accesses (ATOMIC_SET 2, ATOMIC_FAA 1)	int64_t captured_data_size_;
+src/storage/tx_storage/ob_memstore_freezer.h	55	ObMemstoreFreezerStat::captured_freeze_times_	field int64_t; 3 atomic accesses (ATOMIC_SET 2, ATOMIC_FAA 1)	int64_t captured_freeze_times_;
+src/storage/tx_storage/ob_memstore_freezer.h	57	ObMemstoreFreezerStat::captured_merge_time_cost_	field int64_t; 4 atomic accesses (ATOMIC_SET 2, ATOMIC_FAA 1, ATOMIC_LOAD 1)	int64_t captured_merge_time_cost_[ObFreezerMergeType::MAX_MERGE_TYPE];
+src/storage/tx_storage/ob_memstore_freezer.h	58	ObMemstoreFreezerStat::captured_merge_times_	field int64_t; 4 atomic accesses (ATOMIC_SET 2, ATOMIC_FAA 1, ATOMIC_LOAD 1)	int64_t captured_merge_times_[ObFreezerMergeType::MAX_MERGE_TYPE];
+src/storage/tx_storage/ob_memstore_freezer.h	59	ObMemstoreFreezerStat::captured_source_times_	field int64_t; 4 atomic accesses (ATOMIC_SET 2, ATOMIC_AAF 1, ATOMIC_LOAD 1)	int64_t captured_source_times_[MAX_FREEZE_SOURCE_TYPE_COUNT];
+src/storage/tx_storage/ob_memstore_freezer.h	61	ObMemstoreFreezerStat::last_captured_retire_clock_	field int64_t; 4 atomic accesses (ATOMIC_SET 3, ATOMIC_LOAD 1)	int64_t last_captured_retire_clock_;
+src/storage/tx_storage/ob_memstore_freezer.h	115	ObMemstoreFreezer::PeriodicalUpdateValueCache::update_ts_	field int64_t; 2 atomic accesses (ATOMIC_BCAS 2)	int64_t update_ts_;
+src/storage/tx_storage/ob_memstore_freezer.h	316	ObMemstoreFreezer::is_freezing_tx_data_	field bool; 3 atomic accesses (ATOMIC_CAS 1, ATOMIC_LOAD 1, ATOMIC_STORE 1)	bool is_freezing_tx_data_;
+src/storage/tx_storage/ob_memstore_freezer_common.h	135	ObMemstoreInfo::freeze_cnt_	field int64_t; 2 atomic accesses (ATOMIC_AAF 2)	int64_t freeze_cnt_;         // minor freeze times.
+src/storage/tx_storage/ob_tablet_gc_service.h	129	ObTabletGCHandler::tablet_persist_trigger_	field uint8_t; 6 atomic accesses (ATOMIC_CAS 3, ATOMIC_LOAD 3)	uint8_t tablet_persist_trigger_;
+src/storage/tx_storage/ob_tablet_gc_service.h	130	ObTabletGCHandler::update_enabled_	field bool; 3 atomic accesses (ATOMIC_STORE 2, ATOMIC_LOAD 1)	bool update_enabled_;
+src/storage/tx_table/ob_tx_ctx_memtable.h	109	ObTxCtxMemtable::is_frozen_	field bool; 5 atomic accesses (ATOMIC_LOAD 3, ATOMIC_STORE 2)	bool is_frozen_;
+src/storage/tx_table/ob_tx_ctx_memtable.h	112	ObTxCtxMemtable::max_end_scn_	field share::SCN; 2 atomic accesses (ATOMIC_STORE 2); through member functions atomic_store	share::SCN max_end_scn_;
+src/storage/tx_table/ob_tx_data_hash_map.h	91	ObTxDataHashMap::ObTxDataHashHeader::next_	field ObTxData *; 2 atomic accesses (ATOMIC_CAS 1, ATOMIC_LOAD 1)	ObTxData *next_;
+src/storage/tx_table/ob_tx_data_hash_map.h	112	ObTxDataHashMap::total_cnt_	field int64_t; 2 atomic accesses (ATOMIC_INC 1, ATOMIC_LOAD 1)	int64_t total_cnt_;
+src/storage/tx_table/ob_tx_data_memtable.h	442	ObTxDataMemtable::is_iterating_	field bool; 1 atomic accesses (ATOMIC_STORE 1)	bool is_iterating_;
+src/storage/tx_table/ob_tx_data_memtable.h	448	ObTxDataMemtable::max_tx_scn_	field share::SCN; 1 atomic accesses (ATOMIC_VCAS 1); through member functions inc_update	share::SCN max_tx_scn_;
+src/storage/tx_table/ob_tx_data_memtable.h	450	ObTxDataMemtable::min_tx_scn_	field share::SCN; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_VCAS 1); through member functions atomic_load, dec_update	share::SCN min_tx_scn_[MAX_TX_DATA_TABLE_CONCURRENCY];
+src/storage/tx_table/ob_tx_data_memtable.h	452	ObTxDataMemtable::min_start_scn_	field share::SCN; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_VCAS 1); through member functions atomic_load, dec_update	share::SCN min_start_scn_[MAX_TX_DATA_TABLE_CONCURRENCY];
+src/storage/tx_table/ob_tx_data_memtable.h	454	ObTxDataMemtable::inserted_cnt_	field int64_t; 2 atomic accesses (ATOMIC_INC 2)	int64_t inserted_cnt_;
+src/storage/tx_table/ob_tx_data_memtable.h	456	ObTxDataMemtable::deleted_cnt_	field int64_t; 1 atomic accesses (ATOMIC_INC 1)	int64_t deleted_cnt_;
+src/storage/tx_table/ob_tx_data_memtable.h	458	ObTxDataMemtable::write_ref_	field int64_t; 3 atomic accesses (ATOMIC_AAF 2, ATOMIC_LOAD 1)	int64_t write_ref_;
+src/storage/tx_table/ob_tx_data_memtable.h	460	ObTxDataMemtable::occupied_size_	field int64_t; 1 atomic accesses (ATOMIC_FAA 1)	int64_t occupied_size_[MAX_TX_DATA_TABLE_CONCURRENCY];
+src/storage/tx_table/ob_tx_data_memtable.h	461	ObTxDataMemtable::total_undo_node_cnt_	field int64_t; 1 atomic accesses (ATOMIC_FAA 1)	int64_t total_undo_node_cnt_[MAX_TX_DATA_TABLE_CONCURRENCY];
+src/storage/tx_table/ob_tx_data_memtable_mgr.h	185	ObTxDataMemtableMgr::is_freezing_	field bool; 2 atomic accesses (ATOMIC_CAS 1, ATOMIC_STORE 1)	bool is_freezing_;
+src/storage/tx_table/ob_tx_data_table.h	83	ObTxDataTable::FreezeFrequencyController::last_freeze_ts_	field int64_t; 4 atomic accesses (ATOMIC_BCAS 2, ATOMIC_LOAD 2)	int64_t last_freeze_ts_;
+src/storage/tx_table/ob_tx_data_table.h	84	ObTxDataTable::FreezeFrequencyController::last_request_ts_	field int64_t; 2 atomic accesses (ATOMIC_LOAD 1, inc_update 1)	int64_t last_request_ts_;
+src/storage/tx_table/ob_tx_table.h	385	ObTxTable::calc_upper_trans_is_disabled_	field bool; 4 atomic accesses (ATOMIC_LOAD 2, ATOMIC_STORE 2)	bool calc_upper_trans_is_disabled_;
+src/storage/tx_table/ob_tx_table.h	386	ObTxTable::epoch_	field int64_t; 4 atomic accesses (ATOMIC_LOAD 3, ATOMIC_INC 1)	int64_t epoch_ CACHE_ALIGNED;
+src/storage/tx_table/ob_tx_table.h	387	ObTxTable::state_	field TxTableState; 6 atomic accesses (ATOMIC_STORE 4, ATOMIC_LOAD 2)	TxTableState state_ CACHE_ALIGNED;
+src/storage/vector_index/ob_vector_kmeans_ctx.h	154	ObKmeansAlgo::force_stop_	field volatile bool; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_STORE 1)	volatile bool force_stop_;
+src/storage/vector_index/ob_vector_kmeans_ctx.h	308	ObIvfBuildHelper::ref_cnt_	field int64_t; 2 atomic accesses (ATOMIC_INC 1, ATOMIC_SAF 1)	int64_t ref_cnt_;
+src/storage/vector_index/ob_vector_kmeans_ctx.h	520	ObKmeansBuildTaskHandler::task_ref_cnt_	field volatile int64_t; 3 atomic accesses (ATOMIC_DEC 1, ATOMIC_INC 1, ATOMIC_LOAD 1)	volatile int64_t task_ref_cnt_;

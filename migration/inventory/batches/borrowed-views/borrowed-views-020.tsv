@@ -1,0 +1,36 @@
+file	line	symbol	construct	text
+src/share/schema/ob_routine_info.h	304	ObRoutineParam::param_name_	member ObString (value) of type common::ObString	common::ObString param_name_;   //set by user
+src/share/schema/ob_routine_info.h	308	ObRoutineParam::default_value_	member ObString (value) of type common::ObString	common::ObString default_value_;//set by user, mysql procedure parameters have no default value
+src/share/schema/ob_routine_info.h	310	ObRoutineParam::type_name_	member ObString (value) of type common::ObString	common::ObString type_name_;    //set by user, valid if ObExtendType
+src/share/schema/ob_routine_info.h	311	ObRoutineParam::type_subname_	member ObString (value) of type common::ObString	common::ObString type_subname_; //set by user, valid if ObExtendType, indicate pacakge name
+src/share/schema/ob_routine_info.h	312	ObRoutineParam::extended_type_info_	member container of ObString of type common::ObArrayHelper<common::ObString>	common::ObArrayHelper<common::ObString> extended_type_info_; // set by user, for enum/set info
+src/share/schema/ob_routine_info.h	483	ObRoutineInfo::routine_name_	member ObString (value) of type common::ObString	common::ObString routine_name_; //set by user,
+src/share/schema/ob_routine_info.h	489	ObRoutineInfo::priv_user_	member ObString (value) of type common::ObString	common::ObString priv_user_;    //set by user
+src/share/schema/ob_routine_info.h	490	ObRoutineInfo::exec_env_	member ObString (value) of type common::ObString	common::ObString exec_env_;     //set by user
+src/share/schema/ob_routine_info.h	491	ObRoutineInfo::routine_body_	member ObString (value) of type common::ObString	common::ObString routine_body_; //set by user
+src/share/schema/ob_routine_info.h	492	ObRoutineInfo::comment_	member ObString (value) of type common::ObString	common::ObString comment_;      //set by user
+src/share/schema/ob_routine_info.h	493	ObRoutineInfo::route_sql_	member ObString (value) of type common::ObString	common::ObString route_sql_;
+src/share/schema/ob_routine_mgr.h	140	ObSimpleRoutineSchema::routine_name_	member ObString (value) of type common::ObString	common::ObString routine_name_;
+src/share/schema/ob_routine_mgr.h	144	ObSimpleRoutineSchema::priv_user_	member ObString (value) of type common::ObString	common::ObString priv_user_;
+src/share/schema/ob_routine_mgr.h	182	ObRoutineNameHashWrapper::routine_name_	member ObString (value) of type common::ObString	common::ObString routine_name_;
+src/share/schema/ob_schema_mgr.h	97	ObSimpleServerRuntimeSchema::runtime_name_	member ObString (value) of type common::ObString	common::ObString runtime_name_;
+src/share/schema/ob_schema_mgr.h	144	ObSimpleUserSchema::user_name_	member ObString (value) of type common::ObString	common::ObString user_name_;
+src/share/schema/ob_schema_mgr.h	145	ObSimpleUserSchema::host_name_	member ObString (value) of type common::ObString	common::ObString host_name_;
+src/share/schema/ob_schema_mgr.h	180	ObSimpleDatabaseSchema::database_name_	member ObString (value) of type common::ObString	common::ObString database_name_;
+src/share/schema/ob_schema_mgr_cache.h	52	ObSchemaSlot::mod_ref_infos_	member ObString (value) of type common::ObString	common::ObString mod_ref_infos_;
+src/share/schema/ob_schema_service.h	279	ObSchemaOperation::database_name_	member ObString (value) of type common::ObString	common::ObString database_name_;
+src/share/schema/ob_schema_service.h	295	ObSchemaOperation::table_name_	member ObString (value) of type common::ObString	common::ObString table_name_;
+src/share/schema/ob_schema_service.h	296	ObSchemaOperation::mock_fk_parent_table_name_	member ObString (value) of type common::ObString	common::ObString mock_fk_parent_table_name_;
+src/share/schema/ob_schema_service.h	297	ObSchemaOperation::routine_name_	member ObString (value) of type common::ObString	common::ObString routine_name_;
+src/share/schema/ob_schema_service.h	298	ObSchemaOperation::ai_model_name_	member ObString (value) of type common::ObString	common::ObString ai_model_name_;
+src/share/schema/ob_schema_service.h	299	ObSchemaOperation::obj_name_	member ObString (value) of type common::ObString	common::ObString obj_name_;
+src/share/schema/ob_schema_service.h	302	ObSchemaOperation::ddl_stmt_str_	member ObString (value) of type common::ObString	common::ObString ddl_stmt_str_;
+src/share/schema/ob_schema_service.h	385	AlterColumnSchema::origin_column_name_	member ObString (value) of type common::ObString	common::ObString origin_column_name_;
+src/share/schema/ob_schema_service.h	394	AlterColumnSchema::next_column_name_	member ObString (value) of type common::ObString	common::ObString next_column_name_;
+src/share/schema/ob_schema_service.h	395	AlterColumnSchema::prev_column_name_	member ObString (value) of type common::ObString	common::ObString prev_column_name_;
+src/share/schema/ob_schema_service.h	445	AlterTableSchema::origin_table_name_	member ObString (value) of type common::ObString	common::ObString origin_table_name_;
+src/share/schema/ob_schema_service.h	446	AlterTableSchema::new_database_name_	member ObString (value) of type common::ObString	common::ObString new_database_name_;
+src/share/schema/ob_schema_service.h	447	AlterTableSchema::origin_database_name_	member ObString (value) of type common::ObString	common::ObString origin_database_name_;
+src/share/schema/ob_schema_service.h	450	AlterTableSchema::new_part_name_	member ObString (value) of type common::ObString	common::ObString new_part_name_;
+src/share/schema/ob_schema_struct.cpp	1154	ObSchema::deep_copy_str	allocator in, arena view out: ObString &dest	int ObSchema::deep_copy_str(const ObString &src, ObString &dest, ObIAllocator &alloc)
+src/share/schema/ob_schema_struct.cpp	1666	ObSysVarSchema::get_value	allocator in, arena view out: ObObj &value	int ObSysVarSchema::get_value(ObIAllocator *allocator, const ObDataTypeCastParams &dtc_params, ObObj &value) const

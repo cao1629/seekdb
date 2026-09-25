@@ -1,0 +1,101 @@
+file	line	symbol	construct	text
+src/storage/compaction/ob_partition_merge_iter.cpp	311	ObPartitionRowMergeIter::next	ret == OB_ITER_END	if (OB_LIKELY(OB_ITER_END == ret)) {
+src/storage/compaction/ob_partition_merge_iter.cpp	389	ObPartitionMacroMergeIter::next_range	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/compaction/ob_partition_merge_iter.cpp	394	ObPartitionMacroMergeIter::next_range	ret != OB_ITER_END	} else if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/compaction/ob_partition_merge_iter.cpp	471	ObPartitionMacroMergeIter::next	ret != OB_ITER_END	} else if (OB_UNLIKELY(OB_SUCCESS != ret && OB_ITER_END != ret)) {
+src/storage/compaction/ob_partition_merge_iter.cpp	475	ObPartitionMacroMergeIter::next	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/compaction/ob_partition_merge_iter.cpp	478	ObPartitionMacroMergeIter::next	ret == OB_ITER_END	if (OB_ITER_END == ret || OB_SUCCESS == ret) {
+src/storage/compaction/ob_partition_merge_iter.cpp	681	ObPartitionMicroMergeIter::next_range	ret != OB_ITER_END	} else if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/compaction/ob_partition_merge_iter.cpp	717	ObPartitionMicroMergeIter::next_range	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/compaction/ob_partition_merge_iter.cpp	721	ObPartitionMicroMergeIter::next_range	ret != OB_ITER_END	} else if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/compaction/ob_partition_merge_iter.cpp	845	ObPartitionMicroMergeIter::next	ret != OB_ITER_END	} else if (OB_UNLIKELY(OB_SUCCESS != ret && OB_ITER_END != ret)) {
+src/storage/compaction/ob_partition_merge_iter.cpp	847	ObPartitionMicroMergeIter::next	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/compaction/ob_partition_merge_iter.cpp	985	ObPartitionMinorRowMergeIter::inner_next	ret == OB_ITER_END	if (OB_LIKELY(OB_ITER_END == ret)) {
+src/storage/compaction/ob_partition_merge_iter.cpp	1156	ObPartitionMinorRowMergeIter::next	ret != OB_ITER_END	if (OB_UNLIKELY(ret != OB_ITER_END)) {
+src/storage/compaction/ob_partition_merge_iter.cpp	1160	ObPartitionMinorRowMergeIter::next	ret != OB_ITER_END	if (OB_UNLIKELY(ret != OB_ITER_END)) {
+src/storage/compaction/ob_partition_merge_iter.cpp	1184	ObPartitionMinorRowMergeIter::skip_ghost_row	ret != OB_ITER_END	if (OB_UNLIKELY(ret != OB_ITER_END)) {
+src/storage/compaction/ob_partition_merge_iter.cpp	1430	ObPartitionMinorMacroMergeIter::next_range	ret != OB_ITER_END	} else if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/compaction/ob_partition_merge_iter.cpp	1498	ObPartitionMinorMacroMergeIter::recycle_last_rowkey_in_macro_block	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/compaction/ob_partition_merge_iter.cpp	1517	ObPartitionMinorMacroMergeIter::next	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/compaction/ob_partition_merge_iter.cpp	1536	ObPartitionMinorMacroMergeIter::inner_next	ret != OB_ITER_END	} else if (OB_UNLIKELY(OB_SUCCESS != ret && OB_ITER_END != ret)) {
+src/storage/compaction/ob_partition_merge_iter.cpp	1538	ObPartitionMinorMacroMergeIter::inner_next	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/compaction/ob_partition_merge_iter.cpp	1549	ObPartitionMinorMacroMergeIter::inner_next	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/compaction/ob_partition_merge_iter.cpp	1556	ObPartitionMinorMacroMergeIter::inner_next	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/compaction/ob_partition_merge_iter.cpp	1574	ObPartitionMinorMacroMergeIter::open_curr_range	ret == OB_ITER_END	if (for_compare && ret == OB_ITER_END) {
+src/storage/compaction/ob_partition_merge_iter.cpp	1577	ObPartitionMinorMacroMergeIter::open_curr_range	ret != OB_ITER_END	} else if (ret != OB_ITER_END) {
+src/storage/compaction/ob_partition_merge_policy.cpp	143	ObPartitionMergePolicy::get_mds_merge_tables	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/compaction/ob_partition_merge_policy.cpp	257	ObPartitionMergePolicy::get_mini_merge_tables	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/storage/compaction/ob_partition_merge_policy.cpp	271	ObPartitionMergePolicy::get_mini_merge_tables	ret != OB_NO_NEED_MERGE	if (OB_NO_NEED_MERGE != ret) {
+src/storage/compaction/ob_partition_merge_policy.cpp	356	ObPartitionMergePolicy::find_mini_merge_tables	ret != OB_NO_NEED_MERGE	if (OB_NO_NEED_MERGE != ret) {
+src/storage/compaction/ob_partition_merge_policy.cpp	440	ObPartitionMergePolicy::get_minor_merge_tables	ret != OB_NO_NEED_MERGE	if (OB_NO_NEED_MERGE != ret) {
+src/storage/compaction/ob_partition_merge_policy.cpp	472	ObPartitionMergePolicy::get_boundary_snapshot_version	ret != OB_ENTRY_NOT_EXIST	} else if (OB_ENTRY_NOT_EXIST != ret) {
+src/storage/compaction/ob_partition_merge_policy.cpp	530	ObPartitionMergePolicy::find_minor_merge_tables	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/compaction/ob_partition_merge_policy.cpp	595	ObPartitionMergePolicy::find_minor_merge_tables	ret != OB_NO_NEED_MERGE	if (OB_NO_NEED_MERGE != ret) {
+src/storage/compaction/ob_partition_merge_policy.cpp	603	ObPartitionMergePolicy::find_minor_merge_tables	ret == OB_NO_NEED_MERGE	} else if (OB_NO_NEED_MERGE == ret && tablet.get_minor_table_count() >= diagnose_table_cnt) {
+src/storage/compaction/ob_partition_merge_policy.cpp	667	ObPartitionMergePolicy::get_hist_minor_merge_tables	ret != OB_NO_NEED_MERGE	if (OB_NO_NEED_MERGE != ret) {
+src/storage/compaction/ob_partition_merge_policy.cpp	671	ObPartitionMergePolicy::get_hist_minor_merge_tables	ret != OB_NO_NEED_MERGE	if (OB_NO_NEED_MERGE != ret) {
+src/storage/compaction/ob_partition_merge_policy.cpp	702	ObPartitionMergePolicy::deal_hist_minor_merge	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/storage/compaction/ob_partition_merge_policy.cpp	761	ObPartitionMergePolicy::diagnose_minor_dag	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/storage/compaction/ob_partition_merge_policy.cpp	970	ObPartitionMergePolicy::get_multi_version_start	ret == OB_EAGAIN	const bool need_emergency_minor = OB_EAGAIN == ret && is_minor_merge_type(merge_type)
+src/storage/compaction/ob_partition_merge_policy.cpp	973	ObPartitionMergePolicy::get_multi_version_start	ret == OB_RUNTIME_SCHEMA_NOT_READY	if (is_mini_merge(merge_type) || OB_RUNTIME_SCHEMA_NOT_READY == ret || need_emergency_minor) {
+src/storage/compaction/ob_partition_merge_policy.cpp	1313	ObAdaptiveMergePolicy::get_meta_merge_tables	ret != OB_NO_NEED_MERGE	if (OB_NO_NEED_MERGE != ret) {
+src/storage/compaction/ob_partition_merge_policy.cpp	1448	ObAdaptiveMergePolicy::find_adaptive_merge_tables	ret == OB_NO_NEED_MERGE	if (OB_NO_NEED_MERGE == ret) {
+src/storage/compaction/ob_partition_merge_policy.cpp	1508	ObAdaptiveMergePolicy::get_adaptive_merge_reason	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/storage/compaction/ob_partition_merge_policy.cpp	1555	ObAdaptiveMergePolicy::check_tombstone_reason	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/storage/compaction/ob_partition_merge_policy.cpp	1687	ObAdaptiveMergePolicy::check_adaptive_merge_reason_for_event	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/storage/compaction/ob_partition_merger.cpp	423	ObPartitionMerger::merge_macro_block_iter	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/compaction/ob_partition_merger.cpp	485	write_wrong_row	ret == OB_CHECKSUM_ERROR	&& OB_CHECKSUM_ERROR == ret) {
+src/storage/compaction/ob_partition_merger.cpp	539	ObPartitionMajorMerger::merge_partition	ret != OB_ITER_END	if (OB_FAIL(reuse_base_sstable(*merge_helper_)) && OB_ITER_END != ret) {
+src/storage/compaction/ob_partition_merger.cpp	587	ObPartitionMajorMerger::merge_partition	ret == OB_ITER_END	if (OB_NOT_NULL(merge_progress_) && (OB_SUCC(ret) || ret == OB_ITER_END)) {
+src/storage/compaction/ob_partition_merger.cpp	596	ObPartitionMajorMerger::merge_partition	ret != OB_ITER_END	if (OB_ITER_END != ret || OB_FAIL(merge_helper_->check_iter_end())) { //verify merge end
+src/storage/compaction/ob_partition_merger.cpp	598	ObPartitionMajorMerger::merge_partition	ret != OB_ALLOCATE_MEMORY_FAILED	if (OB_ALLOCATE_MEMORY_FAILED != ret && GCONF._enable_compaction_diagnose) {
+src/storage/compaction/ob_partition_merger.cpp	659	ObPartitionMajorMerger::merge_micro_block_iter	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/compaction/ob_partition_merger.cpp	722	ObPartitionMajorMerger::reuse_base_small_sstable	ret != OB_ITER_END	} else if (OB_FAIL(base_iter->next()) && OB_ITER_END != ret) {
+src/storage/compaction/ob_partition_merger.cpp	765	ObPartitionMajorMerger::reuse_base_sstable	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/compaction/ob_partition_merger.cpp	776	ObPartitionMajorMerger::reuse_base_sstable	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/compaction/ob_partition_merger.cpp	906	ObPartitionMinorMerger::merge_partition	ret == OB_ITER_END	if (OB_NOT_NULL(merge_progress_) && (OB_SUCC(ret) || ret == OB_ITER_END)) {
+src/storage/compaction/ob_partition_merger.cpp	915	ObPartitionMinorMerger::merge_partition	ret != OB_ITER_END	if (OB_ITER_END != ret || OB_FAIL(merge_helper_->check_iter_end())) {
+src/storage/compaction/ob_partition_merger.cpp	917	ObPartitionMinorMerger::merge_partition	ret != OB_ALLOCATE_MEMORY_FAILED	if (OB_ALLOCATE_MEMORY_FAILED != ret && GCONF._enable_compaction_diagnose) {
+src/storage/compaction/ob_partition_merger.cpp	993	ObPartitionMinorMerger::merge_single_iter	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/compaction/ob_partition_merger.cpp	1287	ObPartitionMinorMerger::move_and_remove_unused_iter	ret == OB_ITER_END	if (OB_ITER_END == ret && need_remove) {
+src/storage/compaction/ob_partition_merger.cpp	1386	ObPartitionMergeDumper::need_dump_table	other variable err_no == OB_CHECKSUM_ERROR	if (OB_CHECKSUM_ERROR == err_no
+src/storage/compaction/ob_partition_merger.cpp	1387	ObPartitionMergeDumper::need_dump_table	other variable err_no == OB_ERR_UNEXPECTED	|| OB_ERR_UNEXPECTED == err_no
+src/storage/compaction/ob_partition_merger.cpp	1388	ObPartitionMergeDumper::need_dump_table	other variable err_no == OB_ERR_SYS	|| OB_ERR_SYS == err_no
+src/storage/compaction/ob_partition_merger.cpp	1389	ObPartitionMergeDumper::need_dump_table	other variable err_no == OB_ROWKEY_ORDER_ERROR	|| OB_ROWKEY_ORDER_ERROR == err_no
+src/storage/compaction/ob_partition_merger.cpp	1390	ObPartitionMergeDumper::need_dump_table	other variable err_no == OB_ERR_PRIMARY_KEY_DUPLICATE	|| OB_ERR_PRIMARY_KEY_DUPLICATE == err_no) {
+src/storage/compaction/ob_partition_merger.cpp	1437	ObPartitionMergeDumper::print_error_info	ret != OB_SERVER_OUTOF_DISK_SPACE	if (OB_SERVER_OUTOF_DISK_SPACE != ret) {
+src/storage/compaction/ob_partition_merger.cpp	1451	ObPartitionMergeDumper::print_error_info	ret != OB_SERVER_OUTOF_DISK_SPACE	if (OB_SERVER_OUTOF_DISK_SPACE != ret) {
+src/storage/compaction/ob_partition_rows_merger.cpp	143	ObPartitionMergeLoserTreeCmp::open_iter_range	ret != OB_BLOCK_SWITCHED	if (ret != OB_BLOCK_SWITCHED) {
+src/storage/compaction/ob_partition_rows_merger.cpp	148	ObPartitionMergeLoserTreeCmp::open_iter_range	ret != OB_BLOCK_SWITCHED	if (ret != OB_BLOCK_SWITCHED) {
+src/storage/compaction/ob_partition_rows_merger.cpp	167	ObPartitionMergeLoserTreeCmp::cmp	ret != OB_BLOCK_SWITCHED	if (ret != OB_BLOCK_SWITCHED) {
+src/storage/compaction/ob_partition_rows_merger.cpp	561	ObPartitionMergeHelper::init_merge_iters	ret != OB_BEYOND_THE_RANGE	if (OB_UNLIKELY(OB_BEYOND_THE_RANGE != ret)) {
+src/storage/compaction/ob_partition_rows_merger.cpp	689	ObPartitionMergeHelper::move_iters_next	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/compaction/ob_partition_rows_merger.cpp	769	ObPartitionMergeHelper::build_rows_merger	ret != OB_BLOCK_SWITCHED	if (OB_BLOCK_SWITCHED != ret) {
+src/storage/compaction/ob_partition_rows_merger.cpp	779	ObPartitionMergeHelper::build_rows_merger	ret == OB_BLOCK_SWITCHED	} while(ret == OB_BLOCK_SWITCHED);
+src/storage/compaction/ob_partition_rows_merger.cpp	826	ObPartitionMergeHelper::rebuild_rows_merger	ret == OB_BLOCK_SWITCHED	if (ret == OB_BLOCK_SWITCHED) {
+src/storage/compaction/ob_progressive_merge_helper.cpp	195	ObProgressiveMergeHelper::collect_macro_info	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/compaction/ob_schedule_dag_func.cpp	37	#define CREATE_DAG	ret != OB_SIZE_OVERFLOW; ret != OB_EAGAIN	if (OB_SIZE_OVERFLOW != ret && OB_EAGAIN != ret) {                         \
+src/storage/compaction/ob_schedule_dag_func.cpp	39	#define CREATE_DAG	ret == OB_EAGAIN	} else if (OB_EAGAIN == ret) {                                             \
+src/storage/compaction/ob_schedule_tablet_func.cpp	78	ObScheduleTabletFunc::schedule_tablet	tmp_ret != OB_SIZE_OVERFLOW; tmp_ret != OB_EAGAIN	if (OB_SIZE_OVERFLOW != tmp_ret && OB_EAGAIN != tmp_ret) {
+src/storage/compaction/ob_schedule_tablet_func.cpp	178	ObScheduleTabletFunc::schedule_tablet_execute	ret == OB_NO_NEED_MERGE	if (OB_NO_NEED_MERGE == ret) {
+src/storage/compaction/ob_schedule_tablet_func.cpp	185	ObScheduleTabletFunc::schedule_tablet_execute	ret != OB_SIZE_OVERFLOW; ret != OB_EAGAIN	if (OB_SIZE_OVERFLOW != ret && OB_EAGAIN != ret) {
+src/storage/compaction/ob_schedule_tablet_func.cpp	209	ObScheduleTabletFunc::get_schedule_execute_info	ret != OB_NO_NEED_MERGE	if (OB_NO_NEED_MERGE != ret) {
+src/storage/compaction/ob_server_compaction_event_history.cpp	138	ObServerCompactionEventIterator::open	ret != OB_SERVER_RUNTIME_NOT_READY	if (OB_SERVER_RUNTIME_NOT_READY != ret) {
+src/storage/compaction/ob_sstable_builder.cpp	110	ObSSTableRebuildMicroBlockIter::get_next_micro_block	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/compaction/ob_sstable_builder.cpp	336	ObSSTableRebuilder::check_need_rebuild	ret == OB_ITER_END	if (OB_LIKELY(ret == OB_ITER_END)) {
+src/storage/compaction/ob_sstable_builder.cpp	396	ObSSTableRebuilder::rebuild_macro_block	ret != OB_ITER_END	if (OB_UNLIKELY(ret != OB_ITER_END)) {
+src/storage/compaction/ob_sstable_builder.cpp	417	ObSSTableRebuilder::rewrite_macro_block	ret == OB_ITER_END	if (ret == OB_ITER_END) {
+src/storage/compaction/ob_sstable_merge_info_mgr.cpp	60	ObSSTableMergeInfoMgr::get_next_info	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/compaction/ob_sstable_merge_info_mgr.cpp	62	ObSSTableMergeInfoMgr::get_next_info	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/compaction/ob_table_ckm_items.cpp	68	ObSortColumnIdArray::get_func_from_map	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/storage/compaction/ob_table_ckm_items.cpp	350	ObTableCkmItems::validate_column_ckm_sum	ret != OB_CHECKSUM_ERROR	if (OB_CHECKSUM_ERROR != ret) {
+src/storage/compaction/ob_table_ckm_items.cpp	356	ObTableCkmItems::validate_column_ckm_sum	ret == OB_CHECKSUM_ERROR	if (OB_CHECKSUM_ERROR == ret) { // check if exist truncate/drop partition after major freeze
+src/storage/compaction/ob_table_ckm_items.cpp	360	ObTableCkmItems::validate_column_ckm_sum	ret == OB_CHECKSUM_ERROR	if (OB_CHECKSUM_ERROR == ret) {
+src/storage/compaction/ob_table_ckm_items.cpp	397	ObTableCkmItems::validate_tablet_column_ckm	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/storage/compaction/ob_table_ckm_items.cpp	407	ObTableCkmItems::validate_tablet_column_ckm	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/storage/compaction/ob_table_ckm_items.cpp	438	ObTableCkmItems::validate_tablet_column_ckm	ret != OB_CHECKSUM_ERROR	if (OB_CHECKSUM_ERROR != ret) {
+src/storage/compaction/ob_table_ckm_items.cpp	454	ObTableCkmItems::validate_tablet_column_ckm	ret == OB_CHECKSUM_ERROR	if (OB_CHECKSUM_ERROR == ret) {
+src/storage/compaction/ob_table_ckm_items.cpp	563	ObTableCkmItems::check_schema_change_after_major_freeze	ret == OB_TABLE_NOT_EXIST	if (OB_TABLE_NOT_EXIST == ret) {
+src/storage/compaction/ob_tablet_merge_ctx.cpp	213	ObTabletMiniMergeCtx::try_schedule_compaction_after_mini	tmp_ret != OB_SIZE_OVERFLOW	if (OB_SIZE_OVERFLOW != tmp_ret) {
+src/storage/compaction/ob_tablet_merge_ctx.cpp	251	ObTabletMiniMergeCtx::get_merge_tables	ret != OB_NO_NEED_MERGE	if (OB_NO_NEED_MERGE != ret) {
+src/storage/compaction/ob_tablet_merge_ctx.cpp	327	ObTabletExeMergeCtx::get_tables_by_key	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {

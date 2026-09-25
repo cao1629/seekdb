@@ -1,0 +1,101 @@
+file	line	symbol	construct	text
+src/logservice/palf/palf_handle_impl.cpp	295	PalfHandleImpl::submit_log	ret != OB_EAGAIN	if (OB_EAGAIN != ret) {
+src/logservice/palf/palf_handle_impl.cpp	332	PalfHandleImpl::submit_imported_group	ret != OB_EAGAIN	if (OB_EAGAIN != ret) {
+src/logservice/palf/palf_handle_impl.cpp	337	PalfHandleImpl::submit_imported_group	ret != OB_EAGAIN	if (OB_EAGAIN != ret) {
+src/logservice/palf/palf_handle_impl.cpp	443	PalfHandleImpl::get_block_id_by_scn_	ret == OB_ERR_OUT_OF_LOWER_BOUND	if (OB_ERR_OUT_OF_LOWER_BOUND == ret) {
+src/logservice/palf/palf_handle_impl.cpp	447	PalfHandleImpl::get_block_id_by_scn_	ret == OB_ERR_OUT_OF_UPPER_BOUND	} else if (OB_ERR_OUT_OF_UPPER_BOUND == ret) {
+src/logservice/palf/palf_handle_impl.cpp	503	PalfHandleImpl::get_binary_search_range_	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret && scn <= get_end_scn()) {
+src/logservice/palf/palf_handle_impl.cpp	563	PalfHandleImpl::locate_by_lsn_coarsely	ret == OB_ERR_OUT_OF_UPPER_BOUND	if (OB_ERR_OUT_OF_UPPER_BOUND == ret &&
+src/logservice/palf/palf_handle_impl.cpp	1074	PalfHandleImpl::get_prev_log_info_	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/logservice/palf/palf_handle_impl.cpp	1145	PalfHandleImpl::append_disk_log_to_sw_	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/logservice/palf/palf_handle_impl.cpp	1228	PalfHandleImpl::read_data_from_buffer	ret != OB_ERR_OUT_OF_LOWER_BOUND	if (OB_ERR_OUT_OF_LOWER_BOUND != ret) {
+src/logservice/palf/palf_handle_impl.cpp	1297	PalfHandleImpl::alloc_iterator_from_scn_	ret != OB_ERR_OUT_OF_LOWER_BOUND	OB_ERR_OUT_OF_LOWER_BOUND != ret) {
+src/logservice/palf/palf_handle_impl.cpp	1323	PalfHandleImpl::alloc_iterator_from_scn_	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/logservice/palf/palf_iterator.h	160	PalfIterator::next	ret != OB_ITER_END	&& OB_ITER_END != ret) {
+src/logservice/palf/palf_iterator.h	180	PalfIterator::get_entry	ret != OB_ITER_END	} else if (OB_FAIL(iterator_impl_.get_entry(entry, lsn)) && OB_ITER_END != ret) {
+src/logservice/palf/palf_iterator.h	192	PalfIterator::get_entry	ret != OB_ITER_END	} else if (OB_FAIL(iterator_impl_.get_entry(entry, lsn)) && OB_ITER_END != ret) {
+src/logservice/palf/palf_iterator.h	217	PalfIterator::print_error_log	ret == OB_INVALID_DATA; ret == OB_CHECKSUM_ERROR	if (need_print_error_ && (OB_INVALID_DATA == ret || OB_CHECKSUM_ERROR == ret)) {
+src/logservice/palf/palf_iterator.h	272	PalfIterator::get_entry_	ret != OB_ITER_END	} else if (OB_FAIL(iterator_impl_.get_entry(entry, lsn)) && OB_ITER_END != ret) {
+src/logservice/replayservice/ob_log_replay_service.cpp	221	ObLogReplayService::init	ret != OB_INIT_TWICE	if ((OB_FAIL(ret)) && (OB_INIT_TWICE != ret)) {
+src/logservice/replayservice/ob_log_replay_service.cpp	612	ObLogReplayService::get_max_replayed_scn	ret != OB_STATE_NOT_MATCH	if (OB_STATE_NOT_MATCH != ret) {
+src/logservice/replayservice/ob_log_replay_service.cpp	641	ObLogReplayService::get_min_unreplayed_scn	ret != OB_STATE_NOT_MATCH	if (OB_STATE_NOT_MATCH != ret) {
+src/logservice/replayservice/ob_log_replay_service.cpp	661	ObLogReplayService::submit_task	ret == OB_EAGAIN	while (OB_FAIL(common::ObLinkQueueThreadPool::push(task)) && OB_EAGAIN == ret) {
+src/logservice/replayservice/ob_log_replay_service.cpp	989	ObLogReplayService::check_can_submit_log_replay_task_	ret != OB_EAGAIN	if (OB_EAGAIN != ret) {
+src/logservice/replayservice/ob_log_replay_service.cpp	998	ObLogReplayService::check_can_submit_log_replay_task_	ret == OB_EAGAIN	if (OB_EAGAIN == ret && REACH_TIME_INTERVAL(5 * 1000 * 1000)) {
+src/logservice/replayservice/ob_log_replay_service.cpp	1115	ObLogReplayService::fetch_and_submit_single_log_	ret != OB_EAGAIN	if (OB_EAGAIN != ret) {
+src/logservice/replayservice/ob_log_replay_service.cpp	1194	ObLogReplayService::handle_submit_task_	ret == OB_EAGAIN	} else if (OB_EAGAIN == ret) {
+src/logservice/replayservice/ob_replay_status.cpp	235	ObReplayServiceSubmitTask::next_log	tmp_ret == OB_ITER_END	if (OB_ITER_END == tmp_ret) {
+src/logservice/replayservice/ob_replay_status.cpp	289	ObReplayServiceSubmitTask::reset_iterator	ret == OB_ITER_END	} else if (OB_FAIL(iterator_.next()) && OB_ITER_END == ret) {
+src/logservice/replayservice/ob_replay_status.cpp	594	ObReplayStatus::init	ret != OB_INIT_TWICE	if (OB_FAIL(ret) && (OB_INIT_TWICE != ret))
+src/logservice/replayservice/ob_replay_status.cpp	1234	ObReplayStatus::is_fatal_error	ret != OB_ALLOCATE_MEMORY_FAILED	&& OB_ALLOCATE_MEMORY_FAILED != ret
+src/logservice/replayservice/ob_replay_status.cpp	1235	ObReplayStatus::is_fatal_error	ret != OB_EAGAIN	&& OB_EAGAIN != ret
+src/logservice/replayservice/ob_replay_status.cpp	1236	ObReplayStatus::is_fatal_error	ret != OB_NOT_RUNNING	&& OB_NOT_RUNNING != ret
+src/logservice/replayservice/ob_replay_status.cpp	1238	ObReplayStatus::is_fatal_error	ret != OB_IO_ERROR	&& OB_IO_ERROR != ret
+src/logservice/replayservice/ob_replay_status.cpp	1239	ObReplayStatus::is_fatal_error	ret != OB_DISK_HUNG	&& OB_DISK_HUNG != ret);
+src/logservice/replayservice/ob_replay_status.cpp	1312	ObReplayStatus::diagnose	ret == OB_STATE_NOT_MATCH	if (OB_SUCC(ret) || OB_STATE_NOT_MATCH == ret) {
+src/oblib/common/cell/ob_cell_reader.cpp	272	ObCellReader::next_cell	ret != OB_ITER_END	if (OB_SUCCESS != ret && OB_ITER_END != ret) {
+src/oblib/common/cell/ob_cell_writer.cpp	509	ObCellWriter::append	ret != OB_BUF_NOT_ENOUGH	if (OB_BUF_NOT_ENOUGH != ret) {
+src/oblib/common/json_type/ob_json_base.cpp	181	ObIJsonBase::add_if_missing	ret == OB_CONFLICT_VALUE	} else if (ret == OB_CONFLICT_VALUE) {
+src/oblib/common/json_type/ob_json_base.cpp	323	ObIJsonBase::find_member	ret == OB_SEARCH_NOT_FOUND	} else if (ret == OB_SEARCH_NOT_FOUND) {
+src/oblib/common/json_type/ob_json_base.cpp	6208	ObJsonBaseUtil::compare_decimal_double	ret == OB_NUMERIC_OVERFLOW	if (ret == OB_NUMERIC_OVERFLOW) {
+src/oblib/common/json_type/ob_json_base.cpp	6423	ObJsonBaseUtil::sort_array_pointer	tmp_ret != OB_CONFLICT_VALUE	if (tmp_ret != OB_SUCCESS && tmp_ret != OB_CONFLICT_VALUE) {
+src/oblib/common/json_type/ob_json_bin.cpp	386	ObJsonBin::get_object_value	ret == OB_SEARCH_NOT_FOUND	} else if (ret == OB_SEARCH_NOT_FOUND) {
+src/oblib/common/json_type/ob_json_bin.cpp	2170	ObJsonBin::lookup	ret == OB_SEARCH_NOT_FOUND	if (ret == OB_SEARCH_NOT_FOUND) {
+src/oblib/common/json_type/ob_json_bin.cpp	2727	ObJsonBin::remove	ret == OB_SEARCH_NOT_FOUND	if (ret == OB_SEARCH_NOT_FOUND) {
+src/oblib/common/json_type/ob_json_bin.cpp	2771	ObJsonBin::insert_v0	ret == OB_SEARCH_NOT_FOUND	if (ret == OB_SEARCH_NOT_FOUND) {
+src/oblib/common/json_type/ob_json_parse.cpp	258	ObRapidJsonHandler::seeing_value	ret == OB_ERR_DUPLICATE_KEY	if (ret == OB_ERR_DUPLICATE_KEY) {
+src/oblib/common/json_type/ob_json_schema.cpp	389	ObJsonSchemaTree::union_array_key_words_value	ret == OB_CONFLICT_VALUE	if (ret == OB_CONFLICT_VALUE) {
+src/oblib/common/json_type/ob_json_schema.cpp	401	ObJsonSchemaTree::union_array_key_words_value	ret == OB_CONFLICT_VALUE	if (ret == OB_CONFLICT_VALUE) {
+src/oblib/common/json_type/ob_json_schema.cpp	995	ObJsonSchemaTree::add_required_key	ret == OB_ERR_DUPLICATE_KEY	if (ret == OB_ERR_DUPLICATE_KEY) {
+src/oblib/common/json_type/ob_json_schema.cpp	1905	ObJsonSchemaValidator::get_vec_schema_composition_ans	ret == OB_SEARCH_NOT_FOUND	if (ret == OB_SEARCH_NOT_FOUND) { // didn't define property, its normal
+src/oblib/common/json_type/ob_json_schema.cpp	1967	ObJsonSchemaValidator::check_dep_schema	ret == OB_SEARCH_NOT_FOUND	if (ret == OB_SEARCH_NOT_FOUND) {
+src/oblib/common/json_type/ob_json_schema.cpp	2201	ObJsonSchemaValidator::collect_schema_by_key	ret == OB_SEARCH_NOT_FOUND	if (ret == OB_SEARCH_NOT_FOUND) { // didn't define property, its normal
+src/oblib/common/json_type/ob_json_schema.cpp	2205	ObJsonSchemaValidator::collect_schema_by_key	ret == OB_SEARCH_NOT_FOUND	if (ret == OB_SEARCH_NOT_FOUND) { // didn't define key, its normal
+src/oblib/common/json_type/ob_json_schema.cpp	2218	ObJsonSchemaValidator::collect_schema_by_key	ret == OB_SEARCH_NOT_FOUND	if (ret == OB_SEARCH_NOT_FOUND) {  // didn't define pattern property, its normal
+src/oblib/common/json_type/ob_json_schema.cpp	2227	ObJsonSchemaValidator::collect_schema_by_key	ret == OB_SEARCH_NOT_FOUND	if (ret == OB_SEARCH_NOT_FOUND) {  // didn't define addtional property, its normal
+src/oblib/common/json_type/ob_json_schema.cpp	2245	ObJsonSchemaValidator::collect_schema_by_idx	ret == OB_SEARCH_NOT_FOUND	if (ret == OB_SEARCH_NOT_FOUND) { // didn't define property, its normal
+src/oblib/common/json_type/ob_json_schema.cpp	2257	ObJsonSchemaValidator::collect_schema_by_idx	ret == OB_SEARCH_NOT_FOUND	if (ret == OB_SEARCH_NOT_FOUND) { // didn't define tuple items, its normal
+src/oblib/common/json_type/ob_json_schema.cpp	2261	ObJsonSchemaValidator::collect_schema_by_idx	ret == OB_SEARCH_NOT_FOUND	if (ret == OB_SEARCH_NOT_FOUND) { // didn't define idx i in tuple, its normal
+src/oblib/common/json_type/ob_json_schema.cpp	2273	ObJsonSchemaValidator::collect_schema_by_idx	ret == OB_SEARCH_NOT_FOUND	if (ret == OB_SEARCH_NOT_FOUND) {  // didn't define addtional property, its normal
+src/oblib/common/json_type/ob_json_schema.cpp	2398	ObJsonSchemaValidator::check_all_schema_def	ret == OB_ERR_JSON_KEY_NOT_FOUND	if (ret == OB_ERR_JSON_KEY_NOT_FOUND) { // there is no child in schema, do not need check
+src/oblib/common/json_type/ob_json_schema.cpp	2532	ObJsonSchemaValidator::check_all_composition_def	ret == OB_ERR_JSON_KEY_NOT_FOUND	if (ret == OB_ERR_JSON_KEY_NOT_FOUND) { // there is no child in schema, do not need check
+src/oblib/common/json_type/ob_json_schema.cpp	2548	ObJsonSchemaValidator::check_all_composition_def	ret == OB_ITER_END	if (ret == OB_ITER_END) { // already checked, and ans is false, escape
+src/oblib/common/json_type/ob_json_schema.cpp	2571	ObJsonSchemaValidator::check_all_composition_def	ret == OB_ITER_END	if (ret == OB_ITER_END) { // already checked, and ans is false, escape
+src/oblib/common/json_type/ob_json_schema.cpp	2598	ObJsonSchemaValidator::check_all_composition_def	ret == OB_ITER_END	if (ret == OB_ITER_END) { // already checked, and ans is false, escape
+src/oblib/common/json_type/ob_json_schema.cpp	2612	ObJsonSchemaValidator::check_all_composition_def	ret == OB_ITER_END	if (ret == OB_ITER_END) { // already checked, and ans is false, escape
+src/oblib/common/json_type/ob_json_schema.cpp	2626	ObJsonSchemaValidator::check_all_composition_def	ret == OB_ITER_END	if (ret == OB_ITER_END) { // already checked, and ans is false, escape
+src/oblib/common/json_type/ob_json_schema.cpp	2644	ObJsonSchemaValidator::check_all_composition_def	ret == OB_ITER_END	if (ret == OB_ITER_END) { // already checked, and ans is false, escape
+src/oblib/common/json_type/ob_json_schema.cpp	2709	ObJsonSchemaValidator::check_public_key_words	ret == OB_SEARCH_NOT_FOUND	if (ret == OB_SEARCH_NOT_FOUND) {
+src/oblib/common/json_type/ob_json_schema.cpp	2719	ObJsonSchemaValidator::check_public_key_words	ret == OB_SEARCH_NOT_FOUND	if (ret == OB_SEARCH_NOT_FOUND) {
+src/oblib/common/json_type/ob_json_schema.cpp	2731	ObJsonSchemaValidator::check_public_key_words	ret == OB_SEARCH_NOT_FOUND	if (ret == OB_SEARCH_NOT_FOUND) {
+src/oblib/common/json_type/ob_json_schema.cpp	2771	ObJsonSchemaValidator::check_number_and_integer	ret == OB_SEARCH_NOT_FOUND	if (ret == OB_SEARCH_NOT_FOUND) {
+src/oblib/common/json_type/ob_json_schema.cpp	2780	ObJsonSchemaValidator::check_number_and_integer	ret == OB_SEARCH_NOT_FOUND	if (ret == OB_SEARCH_NOT_FOUND) {
+src/oblib/common/json_type/ob_json_schema.cpp	2789	ObJsonSchemaValidator::check_number_and_integer	ret == OB_SEARCH_NOT_FOUND	if (ret == OB_SEARCH_NOT_FOUND) {
+src/oblib/common/json_type/ob_json_schema.cpp	2798	ObJsonSchemaValidator::check_number_and_integer	ret == OB_SEARCH_NOT_FOUND	if (ret == OB_SEARCH_NOT_FOUND) {
+src/oblib/common/json_type/ob_json_schema.cpp	2810	ObJsonSchemaValidator::check_number_and_integer	ret == OB_SEARCH_NOT_FOUND	if (ret == OB_SEARCH_NOT_FOUND) {
+src/oblib/common/json_type/ob_json_schema.cpp	2928	ObJsonSchemaValidator::check_string_type	ret == OB_SEARCH_NOT_FOUND	if (ret == OB_SEARCH_NOT_FOUND) {
+src/oblib/common/json_type/ob_json_schema.cpp	2940	ObJsonSchemaValidator::check_string_type	ret == OB_SEARCH_NOT_FOUND	if (ret == OB_SEARCH_NOT_FOUND) {
+src/oblib/common/json_type/ob_json_schema.cpp	2952	ObJsonSchemaValidator::check_string_type	ret == OB_SEARCH_NOT_FOUND	if (ret == OB_SEARCH_NOT_FOUND) {
+src/oblib/common/json_type/ob_json_schema.cpp	3073	ObJsonSchemaValidator::check_object_type	ret == OB_SEARCH_NOT_FOUND	if (ret == OB_SEARCH_NOT_FOUND) {
+src/oblib/common/json_type/ob_json_schema.cpp	3085	ObJsonSchemaValidator::check_object_type	ret == OB_SEARCH_NOT_FOUND	if (ret == OB_SEARCH_NOT_FOUND) {
+src/oblib/common/json_type/ob_json_schema.cpp	3097	ObJsonSchemaValidator::check_object_type	ret == OB_SEARCH_NOT_FOUND	if (ret == OB_SEARCH_NOT_FOUND) {
+src/oblib/common/json_type/ob_json_schema.cpp	3109	ObJsonSchemaValidator::check_object_type	ret == OB_SEARCH_NOT_FOUND	if (ret == OB_SEARCH_NOT_FOUND) {
+src/oblib/common/json_type/ob_json_schema.cpp	3137	ObJsonSchemaValidator::check_object_type	ret == OB_SEARCH_NOT_FOUND	if (ret == OB_SEARCH_NOT_FOUND) {
+src/oblib/common/json_type/ob_json_schema.cpp	3237	ObJsonSchemaValidator::check_array_type	ret == OB_SEARCH_NOT_FOUND	if (ret == OB_SEARCH_NOT_FOUND) {
+src/oblib/common/json_type/ob_json_schema.cpp	3249	ObJsonSchemaValidator::check_array_type	ret == OB_SEARCH_NOT_FOUND	if (ret == OB_SEARCH_NOT_FOUND) {
+src/oblib/common/json_type/ob_json_schema.cpp	3261	ObJsonSchemaValidator::check_array_type	ret == OB_SEARCH_NOT_FOUND	if (ret == OB_SEARCH_NOT_FOUND) {
+src/oblib/common/json_type/ob_json_schema.cpp	3273	ObJsonSchemaValidator::check_array_type	ret == OB_SEARCH_NOT_FOUND	if (ret == OB_SEARCH_NOT_FOUND) {
+src/oblib/common/json_type/ob_json_schema.cpp	3591	ObJsonSchemaValidator::check_add_pro_in_schema	ret == OB_CONFLICT_VALUE	if (ret == OB_CONFLICT_VALUE) {
+src/oblib/common/json_type/ob_json_schema.cpp	3609	ObJsonSchemaValidator::check_add_pro_in_schema	ret == OB_CONFLICT_VALUE	if (ret == OB_CONFLICT_VALUE) {
+src/oblib/common/json_type/ob_json_schema.cpp	3620	ObJsonSchemaValidator::check_add_pro_in_schema	ret == OB_CONFLICT_VALUE	if (ret == OB_CONFLICT_VALUE) {
+src/oblib/common/json_type/ob_json_schema.cpp	3677	ObJsonSchemaValidator::check_unique_items	ret == OB_CONFLICT_VALUE	if (ret == OB_CONFLICT_VALUE) {
+src/oblib/common/json_type/ob_json_schema.cpp	3921	ObJsonSchemaUtils::get_specific_type_of_child	ret == OB_SEARCH_NOT_FOUND	if (ret == OB_SEARCH_NOT_FOUND) {
+src/oblib/common/json_type/ob_json_schema.cpp	3948	ObJsonSchemaUtils::get_all_composition_def	ret == OB_SEARCH_NOT_FOUND	if (ret == OB_SEARCH_NOT_FOUND) {
+src/oblib/common/json_type/ob_json_schema.cpp	4118	ObJsonSchemaUtils::need_check_recursive	ret == OB_SEARCH_NOT_FOUND	if (ret == OB_SEARCH_NOT_FOUND || OB_ISNULL(tmp_value)) {
+src/oblib/common/json_type/ob_json_schema.cpp	4123	ObJsonSchemaUtils::need_check_recursive	ret == OB_SEARCH_NOT_FOUND	if (ret == OB_SEARCH_NOT_FOUND || OB_ISNULL(tmp_value)) {
+src/oblib/common/json_type/ob_json_schema.cpp	4128	ObJsonSchemaUtils::need_check_recursive	ret == OB_SEARCH_NOT_FOUND	if (ret == OB_SEARCH_NOT_FOUND || OB_ISNULL(tmp_value)) {
+src/oblib/common/json_type/ob_json_schema.cpp	4145	ObJsonSchemaUtils::need_check_recursive	ret == OB_SEARCH_NOT_FOUND	if (ret == OB_SEARCH_NOT_FOUND || OB_ISNULL(tmp_value)) {
+src/oblib/common/json_type/ob_json_schema.cpp	4150	ObJsonSchemaUtils::need_check_recursive	ret == OB_SEARCH_NOT_FOUND	if (ret == OB_SEARCH_NOT_FOUND || OB_ISNULL(tmp_value)) {
+src/oblib/common/json_type/ob_json_schema.cpp	4155	ObJsonSchemaUtils::need_check_recursive	ret == OB_SEARCH_NOT_FOUND	if (ret == OB_SEARCH_NOT_FOUND || OB_ISNULL(tmp_value)) {
+src/oblib/common/log/ob_log_generator.cpp	195	ObLogGenerator::do_write_log	ret != OB_BUF_NOT_ENOUGH	&& OB_BUF_NOT_ENOUGH != ret) {
+src/oblib/common/log/ob_log_generator.h	117	ObLogGenerator::write_log	ret != OB_BUF_NOT_ENOUGH	&& OB_BUF_NOT_ENOUGH != ret) {

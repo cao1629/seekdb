@@ -1,0 +1,51 @@
+file	line	symbol	construct	text
+src/storage/slog_ckpt/ob_local_storage_checkpoint_writer.cpp	255	ObLocalStorageCheckpointWriter::persist_and_copy_tablet	inc_macro_ref_cnt call (other name) [on-disk block reference]	} else if (OB_FAIL(new_tablet->inc_macro_ref_cnt())) {
+src/storage/slog_ckpt/ob_local_storage_checkpoint_writer.cpp	319	ObLocalStorageCheckpointWriter::copy_tablet	inc_macro_ref_cnt call (other name) [on-disk block reference]	} else if (OB_FAIL(tablet->inc_macro_ref_cnt())) {
+src/storage/slog_ckpt/ob_local_storage_checkpoint_writer.cpp	457	ObLocalStorageCheckpointWriter::rollback	release_ref_cnt call (other name) [on-disk block reference]	if (OB_FAIL(tablet.release_ref_cnt(allocator, buf, buf_len, pos))) {
+src/storage/slog_ckpt/ob_server_snapshot_handler.cpp	55	ObServerSnapshotHandler::inc_all_linked_block_ref	inc_all_linked_block_ref definition (other name) [on-disk block reference]	int ObServerSnapshotHandler::inc_all_linked_block_ref(
+src/storage/slog_ckpt/ob_server_snapshot_handler.cpp	63	ObServerSnapshotHandler::inc_all_linked_block_ref	inc_linked_block_ref call (other name) [on-disk block reference]	} else if (OB_FAIL(inc_linked_block_ref(*meta_block_list, inc_ls_blocks_ref_succ))) {
+src/storage/slog_ckpt/ob_server_snapshot_handler.cpp	65	ObServerSnapshotHandler::inc_all_linked_block_ref	inc_linked_block_ref call (other name) [on-disk block reference]	} else if (OB_FAIL(inc_linked_block_ref(*meta_block_list, inc_tablet_blocks_ref_succ))) {
+src/storage/slog_ckpt/ob_server_snapshot_handler.cpp	70	ObServerSnapshotHandler::rollback_ref_cnt	rollback_ref_cnt definition (reference-count function found by its body: calls dec_meta_block_ref)	void ObServerSnapshotHandler::rollback_ref_cnt(
+src/storage/slog_ckpt/ob_server_snapshot_handler.cpp	83	ObServerSnapshotHandler::rollback_ref_cnt	dec_meta_block_ref call (other name) [on-disk block reference]	dec_meta_block_ref(*meta_block_list);
+src/storage/slog_ckpt/ob_server_snapshot_handler.cpp	89	ObServerSnapshotHandler::rollback_ref_cnt	dec_meta_block_ref call (other name) [on-disk block reference]	dec_meta_block_ref(*meta_block_list);
+src/storage/slog_ckpt/ob_server_snapshot_handler.cpp	116	ObServerSnapshotHandler::inc_linked_block_ref	inc_linked_block_ref definition (other name) [on-disk block reference]	int ObServerSnapshotHandler::inc_linked_block_ref(
+src/storage/slog_ckpt/ob_server_snapshot_handler.cpp	125	ObServerSnapshotHandler::inc_linked_block_ref	inc_ref call [on-disk block reference]	if (OB_FAIL(OB_STORAGE_OBJECT_MGR.inc_ref(meta_block_list.at(i)))) {
+src/storage/slog_ckpt/ob_server_snapshot_handler.cpp	133	ObServerSnapshotHandler::inc_linked_block_ref	dec_ref call [on-disk block reference]	if (OB_TMP_FAIL(OB_STORAGE_OBJECT_MGR.dec_ref(meta_block_list.at(i)))) {
+src/storage/slog_ckpt/ob_server_snapshot_handler.cpp	142	ObServerSnapshotHandler::dec_meta_block_ref	dec_meta_block_ref definition (other name) [on-disk block reference]	void ObServerSnapshotHandler::dec_meta_block_ref(const ObIArray<blocksstable::MacroBlockId> &meta_block_list)
+src/storage/slog_ckpt/ob_server_snapshot_handler.cpp	146	ObServerSnapshotHandler::dec_meta_block_ref	dec_ref call [on-disk block reference]	if (OB_FAIL(OB_STORAGE_OBJECT_MGR.dec_ref(meta_block_list.at(i)))) {
+src/storage/slog_ckpt/ob_server_snapshot_handler.cpp	180	ObServerSnapshotHandler::delete_server_snapshot	dec_meta_block_ref call (other name) [on-disk block reference]	dec_meta_block_ref(ls_meta_block_list);
+src/storage/slog_ckpt/ob_server_snapshot_handler.cpp	181	ObServerSnapshotHandler::delete_server_snapshot	dec_meta_block_ref call (other name) [on-disk block reference]	dec_meta_block_ref(tablet_meta_block_list);
+src/storage/slog_ckpt/ob_server_snapshot_handler.cpp	260	ObServerSnapshotHandler::inner_delete_tablet_by_addrs	release_ref_cnt call (other name) [on-disk block reference]	if (OB_FAIL(tablet.release_ref_cnt(arena_allocator, buf, buf_len, pos))) {
+src/storage/slog_ckpt/ob_server_snapshot_handler.h	59	ObServerSnapshotHandler	inc_linked_block_ref declaration (other name) [on-disk block reference]	static int inc_linked_block_ref(const ObIArray<blocksstable::MacroBlockId> &meta_block_list, bool &inc_success);
+src/storage/slog_ckpt/ob_server_snapshot_handler.h	62	ObServerSnapshotHandler	inc_all_linked_block_ref declaration (other name) [on-disk block reference]	static int inc_all_linked_block_ref(
+src/storage/slog_ckpt/ob_server_snapshot_handler.h	66	ObServerSnapshotHandler	rollback_ref_cnt declaration (reference-count function found by its body)	static void rollback_ref_cnt(
+src/storage/slog_ckpt/ob_server_snapshot_handler.h	70	ObServerSnapshotHandler	dec_meta_block_ref declaration (other name) [on-disk block reference]	static void dec_meta_block_ref(const ObIArray<blocksstable::MacroBlockId> &meta_block_list);
+src/storage/slog_ckpt/ob_tablet_replay_create_handler.cpp	439	ObTabletReplayCreateHandler::do_replay	replay_inc_macro_ref call (other name) [on-disk block reference]	if (OB_FAIL(replay_inc_macro_ref(replay_item, buf, buf_len, allocator))) {
+src/storage/slog_ckpt/ob_tablet_replay_create_handler.cpp	467	ObTabletReplayCreateHandler::replay_inc_macro_ref	replay_inc_macro_ref definition (other name) [on-disk block reference]	int ObTabletReplayCreateHandler::replay_inc_macro_ref(
+src/storage/slog_ckpt/ob_tablet_replay_create_handler.cpp	479	ObTabletReplayCreateHandler::replay_inc_macro_ref	inc_snapshot_ref_cnt call (other name) [on-disk block reference]	if (OB_FAIL(tablet.inc_snapshot_ref_cnt(allocator, buf, buf_len, pos))) {
+src/storage/slog_ckpt/ob_tablet_replay_create_handler.h	143	ObTabletReplayCreateHandler	replay_inc_macro_ref declaration (other name) [on-disk block reference]	static int replay_inc_macro_ref(
+src/storage/tablelock/ob_lock_memtable_mgr.cpp	177	ObLockMemtableMgr::release_head_memtable_	release_head_memtable call (reference-count function found by its body)	release_head_memtable();
+src/storage/tablet/ob_table_store_util.cpp	455	ObSSTableArray::inc_macro_ref	inc_macro_ref definition (other name) [on-disk block reference]	int ObSSTableArray::inc_macro_ref(bool &is_success) const
+src/storage/tablet/ob_table_store_util.cpp	463	ObSSTableArray::inc_macro_ref	inc_data_ref_cnt call (other name) [on-disk block reference]	} else if (OB_FAIL(inc_data_ref_cnt(inc_data_success))) {
+src/storage/tablet/ob_table_store_util.cpp	464	ObSSTableArray::inc_macro_ref	inc_meta_ref_cnt call (other name) [on-disk block reference]	} else if (OB_FAIL(inc_meta_ref_cnt(inc_meta_success))) {
+src/storage/tablet/ob_table_store_util.cpp	469	ObSSTableArray::inc_macro_ref	dec_data_ref_cnt call (other name) [on-disk block reference]	dec_data_ref_cnt();
+src/storage/tablet/ob_table_store_util.cpp	472	ObSSTableArray::inc_macro_ref	dec_meta_ref_cnt call (other name) [on-disk block reference]	dec_meta_ref_cnt();
+src/storage/tablet/ob_table_store_util.cpp	480	ObSSTableArray::dec_macro_ref	dec_macro_ref definition (other name) [on-disk block reference]	void ObSSTableArray::dec_macro_ref() const
+src/storage/tablet/ob_table_store_util.cpp	486	ObSSTableArray::dec_macro_ref	dec_data_ref_cnt call (other name) [on-disk block reference]	dec_data_ref_cnt();
+src/storage/tablet/ob_table_store_util.cpp	487	ObSSTableArray::dec_macro_ref	dec_meta_ref_cnt call (other name) [on-disk block reference]	dec_meta_ref_cnt();
+src/storage/tablet/ob_table_store_util.cpp	491	ObSSTableArray::inc_meta_ref_cnt	inc_meta_ref_cnt definition (other name) [on-disk block reference]	int ObSSTableArray::inc_meta_ref_cnt(bool &inc_success) const
+src/storage/tablet/ob_table_store_util.cpp	516	ObSSTableArray::inc_meta_ref_cnt	inc_ref call [on-disk block reference]	} else if (OB_FAIL(OB_STORAGE_OBJECT_MGR.inc_ref(macro_id))) {
+src/storage/tablet/ob_table_store_util.cpp	539	ObSSTableArray::inc_meta_ref_cnt	dec_ref call [on-disk block reference]	} else if (OB_TMP_FAIL(OB_STORAGE_OBJECT_MGR.dec_ref(macro_id))) {
+src/storage/tablet/ob_table_store_util.cpp	555	ObSSTableArray::inc_data_ref_cnt	inc_data_ref_cnt definition (other name) [on-disk block reference]	int ObSSTableArray::inc_data_ref_cnt(bool &inc_success) const
+src/storage/tablet/ob_table_store_util.cpp	570	ObSSTableArray::inc_data_ref_cnt	inc_macro_ref call (other name) [on-disk block reference]	if (OB_FAIL(sstable->inc_macro_ref(inc_data_block_success))) {
+src/storage/tablet/ob_table_store_util.cpp	586	ObSSTableArray::inc_data_ref_cnt	dec_macro_ref call (other name) [on-disk block reference]	sstable->dec_macro_ref();
+src/storage/tablet/ob_table_store_util.cpp	598	ObSSTableArray::dec_meta_ref_cnt	dec_meta_ref_cnt definition (other name) [on-disk block reference]	void ObSSTableArray::dec_meta_ref_cnt() const
+src/storage/tablet/ob_table_store_util.cpp	621	ObSSTableArray::dec_meta_ref_cnt	dec_ref call [on-disk block reference]	} else if (OB_FAIL(OB_STORAGE_OBJECT_MGR.dec_ref(macro_id))) {
+src/storage/tablet/ob_table_store_util.cpp	631	ObSSTableArray::dec_data_ref_cnt	dec_data_ref_cnt definition (other name) [on-disk block reference]	void ObSSTableArray::dec_data_ref_cnt() const
+src/storage/tablet/ob_table_store_util.cpp	645	ObSSTableArray::dec_data_ref_cnt	dec_macro_ref call (other name) [on-disk block reference]	sstable->dec_macro_ref();
+src/storage/tablet/ob_table_store_util.h	93	ObSSTableArray	inc_macro_ref declaration (other name) [on-disk block reference]	int inc_macro_ref(bool &is_success) const;
+src/storage/tablet/ob_table_store_util.h	94	ObSSTableArray	dec_macro_ref declaration (other name) [on-disk block reference]	void dec_macro_ref() const;
+src/storage/tablet/ob_table_store_util.h	105	ObSSTableArray	inc_meta_ref_cnt declaration (other name) [on-disk block reference]	int inc_meta_ref_cnt(bool &inc_success) const;
+src/storage/tablet/ob_table_store_util.h	106	ObSSTableArray	inc_data_ref_cnt declaration (other name) [on-disk block reference]	int inc_data_ref_cnt(bool &inc_success) const;
+src/storage/tablet/ob_table_store_util.h	107	ObSSTableArray	dec_meta_ref_cnt declaration (other name) [on-disk block reference]	void dec_meta_ref_cnt() const;
+src/storage/tablet/ob_table_store_util.h	108	ObSSTableArray	dec_data_ref_cnt declaration (other name) [on-disk block reference]	void dec_data_ref_cnt() const;

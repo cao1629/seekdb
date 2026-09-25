@@ -1,0 +1,98 @@
+file	line	symbol	construct	text
+src/storage/tablelock/ob_obj_lock.cpp	170	ObOBJLock::slow_lock	ret == OB_TIMEOUT	if (OB_TIMEOUT == ret) {
+src/storage/tablelock/ob_obj_lock.cpp	187	ObOBJLock::slow_lock	ret == OB_EAGAIN	if (OB_EAGAIN == ret) {
+src/storage/tablelock/ob_obj_lock.cpp	208	ObOBJLock::slow_lock	ret != OB_TRY_LOCK_ROW_CONFLICT	if (OB_TRY_LOCK_ROW_CONFLICT != ret) {
+src/storage/tablelock/ob_obj_lock.cpp	233	ObOBJLock::slow_lock	ret == OB_TRY_LOCK_ROW_CONFLICT	if (ret == OB_TRY_LOCK_ROW_CONFLICT && !param.is_try_lock_) {
+src/storage/tablelock/ob_obj_lock.cpp	299	ObOBJLock::recover_lock	ret == OB_TIMEOUT	if (OB_TIMEOUT == ret) {
+src/storage/tablelock/ob_obj_lock.cpp	314	ObOBJLock::recover_lock	ret == OB_TIMEOUT	if (OB_TIMEOUT == ret) {
+src/storage/tablelock/ob_obj_lock.cpp	377	ObOBJLock::update_lock_status	ret == OB_TIMEOUT	if (OB_TIMEOUT == ret) {
+src/storage/tablelock/ob_obj_lock.cpp	404	ObOBJLock::update_lock_status	ret == OB_TIMEOUT	if (OB_TIMEOUT == ret) {
+src/storage/tablelock/ob_obj_lock.cpp	440	ObOBJLock::try_fast_lock_	ret != OB_TRY_LOCK_ROW_CONFLICT	if (OB_TRY_LOCK_ROW_CONFLICT != ret) {
+src/storage/tablelock/ob_obj_lock.cpp	498	ObOBJLock::fast_lock	ret == OB_TIMEOUT	if (OB_TIMEOUT == ret) {
+src/storage/tablelock/ob_obj_lock.cpp	513	ObOBJLock::fast_lock	ret == OB_EAGAIN	if (OB_EAGAIN == ret) {
+src/storage/tablelock/ob_obj_lock.cpp	531	ObOBJLock::fast_lock	ret != OB_TRY_LOCK_ROW_CONFLICT; ret != OB_EAGAIN	if (OB_TRY_LOCK_ROW_CONFLICT != ret && OB_EAGAIN != ret) {
+src/storage/tablelock/ob_obj_lock.cpp	542	ObOBJLock::fast_lock	ret == OB_TIMEOUT	if (OB_TIMEOUT == ret) {
+src/storage/tablelock/ob_obj_lock.cpp	573	ObOBJLock::lock	ret != OB_TRY_LOCK_ROW_CONFLICT	if (ret != OB_TRY_LOCK_ROW_CONFLICT &&
+src/storage/tablelock/ob_obj_lock.cpp	574	ObOBJLock::lock	ret != OB_EAGAIN	ret != OB_EAGAIN) {
+src/storage/tablelock/ob_obj_lock.cpp	582	ObOBJLock::lock	ret != OB_TRY_LOCK_ROW_CONFLICT	if (ret != OB_TRY_LOCK_ROW_CONFLICT &&
+src/storage/tablelock/ob_obj_lock.cpp	583	ObOBJLock::lock	ret != OB_EAGAIN	ret != OB_EAGAIN) {
+src/storage/tablelock/ob_obj_lock.cpp	619	ObOBJLock::unlock	ret == OB_TIMEOUT	if (OB_TIMEOUT == ret) {
+src/storage/tablelock/ob_obj_lock.cpp	664	ObOBJLock::remove_lock_op	ret == OB_TIMEOUT	if (OB_TIMEOUT == ret) {
+src/storage/tablelock/ob_obj_lock.cpp	698	ObOBJLock::get_min_ddl_lock_committed_scn	ret == OB_TIMEOUT	if (OB_TIMEOUT == ret) {
+src/storage/tablelock/ob_obj_lock.cpp	728	ObOBJLock::get_table_lock_store_info	ret == OB_TIMEOUT	if (OB_TIMEOUT == ret) {
+src/storage/tablelock/ob_obj_lock.cpp	766	ObOBJLock::compact_tablelock	ret == OB_TIMEOUT	if (OB_TIMEOUT == ret) {
+src/storage/tablelock/ob_obj_lock.cpp	839	ObOBJLock::prepare_priority_task	ret == OB_ENTRY_EXIST	if (OB_ENTRY_EXIST == ret) {
+src/storage/tablelock/ob_obj_lock.cpp	940	ObOBJLockMap::get_lock_op_iter	ret != OB_OBJ_LOCK_NOT_EXIST	if (ret != OB_OBJ_LOCK_NOT_EXIST) {
+src/storage/tablelock/ob_obj_lock.cpp	972	ObOBJLockMap::check_and_clear_obj_lock	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/tablelock/ob_obj_lock.cpp	976	ObOBJLockMap::check_and_clear_obj_lock	ret != OB_OBJ_LOCK_NOT_EXIST	if (ret != OB_OBJ_LOCK_NOT_EXIST) {
+src/storage/tablelock/ob_obj_lock.cpp	997	ObOBJLockMap::check_and_clear_obj_lock	ret == OB_ITER_END	ret = OB_ITER_END == ret ? OB_SUCCESS : ret;
+src/storage/tablelock/ob_obj_lock.cpp	1045	ObOBJLock::check_op_allow_lock_	ret != OB_TRY_LOCK_ROW_CONFLICT	if (ret != OB_TRY_LOCK_ROW_CONFLICT &&
+src/storage/tablelock/ob_obj_lock.cpp	1046	ObOBJLock::check_op_allow_lock_	ret != OB_OBJ_LOCK_EXIST	ret != OB_OBJ_LOCK_EXIST) {
+src/storage/tablelock/ob_obj_lock.cpp	1179	ObOBJLock::check_allow_lock_	ret != OB_TRY_LOCK_ROW_CONFLICT	if (ret != OB_TRY_LOCK_ROW_CONFLICT &&
+src/storage/tablelock/ob_obj_lock.cpp	1180	ObOBJLock::check_allow_lock_	ret != OB_OBJ_LOCK_EXIST	ret != OB_OBJ_LOCK_EXIST) {
+src/storage/tablelock/ob_obj_lock.cpp	1193	ObOBJLock::check_allow_lock_	ret == OB_TRY_LOCK_ROW_CONFLICT	if (OB_TRY_LOCK_ROW_CONFLICT == ret && conflict_modes != 0) {
+src/storage/tablelock/ob_obj_lock.cpp	1208	ObOBJLock::check_allow_lock_	ret == OB_TRY_LOCK_ROW_CONFLICT	if (OB_TRY_LOCK_ROW_CONFLICT == ret && only_check_dml_lock) {
+src/storage/tablelock/ob_obj_lock.cpp	1213	ObOBJLock::check_allow_lock_	ret == OB_TRY_LOCK_ROW_CONFLICT	if (OB_TRY_LOCK_ROW_CONFLICT == ret) {
+src/storage/tablelock/ob_obj_lock.cpp	1241	ObOBJLock::check_allow_lock	ret == OB_TIMEOUT	if (OB_TIMEOUT == ret) {
+src/storage/tablelock/ob_obj_lock.cpp	1327	ObOBJLock::reset	ret == OB_TIMEOUT	if (OB_TIMEOUT == ret) {
+src/storage/tablelock/ob_obj_lock.cpp	1347	ObOBJLock::print	ret == OB_TIMEOUT	if (OB_TIMEOUT == ret) {
+src/storage/tablelock/ob_obj_lock.cpp	1383	ObOBJLock::get_lock_op_iter	ret == OB_TIMEOUT	if (OB_TIMEOUT == ret) {
+src/storage/tablelock/ob_obj_lock.cpp	1541	ObOBJLock::check_op_allow_lock_from_list_	ret == OB_TRY_LOCK_ROW_CONFLICT	if (OB_TRY_LOCK_ROW_CONFLICT == ret) {
+src/storage/tablelock/ob_obj_lock.cpp	1560	ObOBJLock::check_op_allow_lock_from_list_	ret == OB_TRY_LOCK_ROW_CONFLICT	if (OB_TRY_LOCK_ROW_CONFLICT == ret) {
+src/storage/tablelock/ob_obj_lock.cpp	1572	ObOBJLock::check_op_allow_lock_from_list_	ret == OB_TRY_LOCK_ROW_CONFLICT	if (OB_TRY_LOCK_ROW_CONFLICT == ret) {
+src/storage/tablelock/ob_obj_lock.cpp	1741	ObOBJLock::get_tx_id_set_	ret == OB_HASH_EXIST	if (OB_HASH_EXIST == ret) {
+src/storage/tablelock/ob_obj_lock.cpp	1859	ObOBJLock::compact_tablelock_	ret == OB_OBJ_LOCK_NOT_EXIST	if (OB_OBJ_LOCK_NOT_EXIST == ret) {
+src/storage/tablelock/ob_obj_lock.cpp	2122	ObOBJLockMap::get_or_create_obj_lock_with_ref_	ret == OB_ENTRY_NOT_EXIST	if (ret == OB_ENTRY_NOT_EXIST) {
+src/storage/tablelock/ob_obj_lock.cpp	2130	ObOBJLockMap::get_or_create_obj_lock_with_ref_	ret != OB_ENTRY_EXIST	if (ret != OB_ENTRY_EXIST) {
+src/storage/tablelock/ob_obj_lock.cpp	2137	ObOBJLockMap::get_or_create_obj_lock_with_ref_	ret == OB_ENTRY_EXIST	} while (ret == OB_ENTRY_EXIST);
+src/storage/tablelock/ob_obj_lock.cpp	2151	ObOBJLockMap::get_obj_lock_with_ref_	ret != OB_ENTRY_NOT_EXIST	if (ret != OB_ENTRY_NOT_EXIST) {
+src/storage/tablelock/ob_obj_lock.cpp	2183	ObOBJLockMap::lock	ret != OB_EAGAIN	if (ret != OB_EAGAIN &&
+src/storage/tablelock/ob_obj_lock.cpp	2184	ObOBJLockMap::lock	ret != OB_TRY_LOCK_ROW_CONFLICT	ret != OB_TRY_LOCK_ROW_CONFLICT &&
+src/storage/tablelock/ob_obj_lock.cpp	2185	ObOBJLockMap::lock	ret != OB_OBJ_LOCK_EXIST	ret != OB_OBJ_LOCK_EXIST) {
+src/storage/tablelock/ob_obj_lock.cpp	2195	ObOBJLockMap::lock	ret == OB_EAGAIN	} while (ret == OB_EAGAIN);
+src/storage/tablelock/ob_obj_lock.cpp	2218	ObOBJLockMap::unlock	ret != OB_EAGAIN	if (ret != OB_EAGAIN) {
+src/storage/tablelock/ob_obj_lock.cpp	2227	ObOBJLockMap::unlock	ret == OB_EAGAIN	} while (ret == OB_EAGAIN);
+src/storage/tablelock/ob_obj_lock.cpp	2243	ObOBJLockMap::remove_lock_record	ret == OB_ENTRY_NOT_EXIST	if (ret == OB_ENTRY_NOT_EXIST) {
+src/storage/tablelock/ob_obj_lock.cpp	2265	ObOBJLockMap::remove_lock	ret != OB_OBJ_LOCK_NOT_EXIST	if (ret != OB_OBJ_LOCK_NOT_EXIST) {
+src/storage/tablelock/ob_obj_lock.cpp	2272	ObOBJLockMap::remove_lock	ret == OB_TIMEOUT	if (OB_TIMEOUT == ret) {
+src/storage/tablelock/ob_obj_lock.cpp	2279	ObOBJLockMap::remove_lock	ret != OB_ENTRY_NOT_EXIST	if (ret != OB_ENTRY_NOT_EXIST) {
+src/storage/tablelock/ob_obj_lock.cpp	2289	ObOBJLockMap::remove_lock	ret == OB_OBJ_LOCK_NOT_EXIST	if (ret == OB_OBJ_LOCK_NOT_EXIST) {
+src/storage/tablelock/ob_obj_lock.cpp	2309	ObOBJLockMap::recover_obj_lock	ret != OB_EAGAIN	if (ret != OB_EAGAIN) {
+src/storage/tablelock/ob_obj_lock.cpp	2318	ObOBJLockMap::recover_obj_lock	ret == OB_EAGAIN	} while (ret == OB_EAGAIN);
+src/storage/tablelock/ob_obj_lock.cpp	2365	ObOBJLockMap::check_allow_lock	ret != OB_OBJ_LOCK_NOT_EXIST	if (ret != OB_OBJ_LOCK_NOT_EXIST) {
+src/storage/tablelock/ob_obj_lock.cpp	2380	ObOBJLockMap::check_allow_lock	ret != OB_TRY_LOCK_ROW_CONFLICT	if (OB_TRY_LOCK_ROW_CONFLICT != ret) {
+src/storage/tablelock/ob_obj_lock.cpp	2406	ObOBJLockMap::drop_obj_lock_if_empty_	ret == OB_TIMEOUT	if (OB_TIMEOUT == ret) {
+src/storage/tablelock/ob_obj_lock.cpp	2418	ObOBJLockMap::drop_obj_lock_if_empty_	ret == OB_TIMEOUT	if (OB_TIMEOUT == ret) {
+src/storage/tablelock/ob_obj_lock.cpp	2426	ObOBJLockMap::drop_obj_lock_if_empty_	ret != OB_OBJ_LOCK_NOT_EXIST	if (ret != OB_OBJ_LOCK_NOT_EXIST) {
+src/storage/tablelock/ob_obj_lock.cpp	2464	ObOBJLockMap::add_priority_task	ret != OB_EAGAIN	if (ret != OB_EAGAIN) {
+src/storage/tablelock/ob_obj_lock.cpp	2474	ObOBJLockMap::add_priority_task	ret == OB_EAGAIN	} while (ret == OB_EAGAIN);
+src/storage/tablelock/ob_obj_lock.cpp	2500	ObOBJLockMap::prepare_priority_task	ret != OB_EAGAIN	if (ret != OB_EAGAIN) {
+src/storage/tablelock/ob_obj_lock.cpp	2510	ObOBJLockMap::prepare_priority_task	ret == OB_EAGAIN	} while (ret == OB_EAGAIN);
+src/storage/tablelock/ob_obj_lock.cpp	2528	ObOBJLockMap::remove_priority_task	ret == OB_ENTRY_NOT_EXIST	if (ret == OB_ENTRY_NOT_EXIST) {
+src/storage/tablelock/ob_obj_lock.cpp	2559	ObOBJLockMap::switch_to_leader	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/tablelock/ob_obj_lock.cpp	2562	ObOBJLockMap::switch_to_leader	ret != OB_OBJ_LOCK_NOT_EXIST	if (ret != OB_OBJ_LOCK_NOT_EXIST) {
+src/storage/tablelock/ob_obj_lock.cpp	2576	ObOBJLockMap::switch_to_leader	ret == OB_ITER_END	ret = OB_ITER_END == ret ? OB_SUCCESS : ret;
+src/storage/tablelock/ob_obj_lock.cpp	2592	ObOBJLockMap::switch_to_follower	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/tablelock/ob_obj_lock.cpp	2595	ObOBJLockMap::switch_to_follower	ret != OB_OBJ_LOCK_NOT_EXIST	if (ret != OB_OBJ_LOCK_NOT_EXIST) {
+src/storage/tablelock/ob_obj_lock.cpp	2609	ObOBJLockMap::switch_to_follower	ret == OB_ITER_END	ret = OB_ITER_END == ret ? OB_SUCCESS : ret;
+src/storage/tablelock/ob_obj_lock.cpp	2675	ObObjLockPriorityQueue::push	ret == OB_ENTRY_EXIST	if (OB_ENTRY_EXIST == ret) {
+src/storage/tablelock/ob_obj_lock.cpp	2957	ObObjLockPriorityQueue::remove	ret == OB_ENTRY_EXIST	if (OB_ENTRY_EXIST == ret) {
+src/storage/tablelock/ob_obj_lock.cpp	2965	ObObjLockPriorityQueue::remove	ret == OB_ENTRY_EXIST	if (OB_ENTRY_EXIST == ret) {
+src/storage/tablelock/ob_obj_lock.cpp	2989	ObObjLockPriorityQueue::check_first	ret != OB_EAGAIN	if (OB_EAGAIN != ret) {
+src/storage/tablelock/ob_session_table_lock.cpp	183	release_named_lock	ret == OB_EMPTY_RESULT	if (common::OB_EMPTY_RESULT == ret) {
+src/storage/tablelock/ob_table_lock_common.h	571	is_need_retry_unlock_error	other variable err == OB_OBJ_LOCK_NOT_COMPLETED	return (err == OB_OBJ_LOCK_NOT_COMPLETED ||
+src/storage/tablelock/ob_table_lock_common.h	572	is_need_retry_unlock_error	other variable err == OB_OBJ_UNLOCK_CONFLICT	err == OB_OBJ_UNLOCK_CONFLICT);
+src/storage/tablelock/ob_table_lock_deadlock.cpp	161	ObTransLockPartBlockCallBack::operator()	ret == OB_NOT_RUNNING	if (OB_NOT_RUNNING == ret ||
+src/storage/tablelock/ob_table_lock_deadlock.cpp	162	ObTransLockPartBlockCallBack::operator()	ret == OB_LS_NOT_EXIST	OB_LS_NOT_EXIST == ret) {
+src/storage/tablelock/ob_table_lock_deadlock.cpp	169	ObTransLockPartBlockCallBack::operator()	ret == OB_TRANS_CTX_NOT_EXIST	if (OB_TRANS_CTX_NOT_EXIST == ret) {
+src/storage/tablelock/ob_table_lock_deadlock.cpp	180	ObTransLockPartBlockCallBack::operator()	ret != OB_TRY_LOCK_ROW_CONFLICT	if (OB_TRY_LOCK_ROW_CONFLICT != ret) {
+src/storage/tablelock/ob_table_lock_deadlock.cpp	186	ObTransLockPartBlockCallBack::operator()	ret == OB_TRY_LOCK_ROW_CONFLICT	} else if (OB_TRY_LOCK_ROW_CONFLICT == ret) {
+src/storage/tablelock/ob_table_lock_live_detector.cpp	101	ObTableLockDetectFuncList::get_owner_id_list_from_table_	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/tablelock/ob_table_lock_live_detector.cpp	438	ObTableLockDetector::check_lock_exist_in_table_	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/tablelock/ob_table_lock_live_detector.cpp	682	ObTableLockDetector::get_lock_cnt_in_table_	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/tablelock/ob_table_lock_live_detector.cpp	766	ObTableLockDetector::get_unlock_request_list_	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/tablelock/ob_table_lock_local_executor.cpp	57	check_exist	ret == OB_EMPTY_RESULT	if (OB_EMPTY_RESULT == ret) {
+src/storage/tablelock/ob_table_lock_local_executor.cpp	83	#define BATCH_PROCESS	ret == OB_LS_NOT_EXIST	if (OB_LS_NOT_EXIST == ret) {                                     \
+src/storage/tablelock/ob_table_lock_local_executor.cpp	97	#define BATCH_PROCESS	ret == OB_TABLET_NOT_EXIST	if (OB_TABLET_NOT_EXIST == ret) {                           \
+src/storage/tablelock/ob_table_lock_local_executor.cpp	239	process_for_replace_lock_table_	ret == OB_LS_NOT_EXIST	if (OB_LS_NOT_EXIST == ret) {
+src/storage/tablelock/ob_table_lock_local_executor.cpp	247	process_for_replace_lock_table_	ret == OB_TABLET_NOT_EXIST	if (OB_TABLET_NOT_EXIST == ret) {

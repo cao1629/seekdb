@@ -1,0 +1,94 @@
+file	line	symbol	construct	text
+src/share/schema/ob_partition_schema_iter.cpp	144	ObPartitionSchemaIter::next_tablet_id	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/share/schema/ob_partition_schema_iter.cpp	177	ObPartitionSchemaIter::next_partition_info	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/share/schema/ob_partition_schema_iter.cpp	201	ObPartitionSchemaIter::next_partition_info	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/share/schema/ob_partition_schema_iter.cpp	203	ObPartitionSchemaIter::next_partition_info	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/share/schema/ob_partition_schema_iter.cpp	215	ObPartitionSchemaIter::next_partition_info	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/share/schema/ob_priv_mgr.cpp	564	ObPrivMgr::add_table_priv	other variable hash_ret != OB_HASH_EXIST	if (OB_SUCCESS != hash_ret && OB_HASH_EXIST != hash_ret) {
+src/share/schema/ob_priv_mgr.cpp	625	ObPrivMgr::add_routine_priv	other variable hash_ret != OB_HASH_EXIST	if (OB_SUCCESS != hash_ret && OB_HASH_EXIST != hash_ret) {
+src/share/schema/ob_priv_mgr.cpp	714	ObPrivMgr::del_column_priv	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/share/schema/ob_priv_mgr.cpp	735	ObPrivMgr::del_column_priv	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/share/schema/ob_priv_mgr.cpp	817	ObPrivMgr::add_obj_priv	other variable hash_ret != OB_HASH_EXIST	if (OB_SUCCESS != hash_ret && OB_HASH_EXIST != hash_ret) {
+src/share/schema/ob_priv_mgr.cpp	871	ObPrivMgr::del_routine_priv	other variable hash_ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != hash_ret) {
+src/share/schema/ob_priv_mgr.cpp	979	ObPrivMgr::get_routine_priv	other variable hash_ret != OB_HASH_NOT_EXIST	} else if (OB_HASH_NOT_EXIST != hash_ret) {
+src/share/schema/ob_priv_mgr.cpp	1672	ObPrivMgr::add_obj_mysql_priv	other variable hash_ret != OB_HASH_EXIST	if (OB_SUCCESS != hash_ret && OB_HASH_EXIST != hash_ret) {
+src/share/schema/ob_priv_mgr.cpp	1726	ObPrivMgr::get_obj_mysql_priv	other variable hash_ret != OB_HASH_NOT_EXIST	} else if (OB_HASH_NOT_EXIST != hash_ret) {
+src/share/schema/ob_priv_sql_service.cpp	355	ObPrivSqlService::gen_delete_routine_priv_sql	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/share/schema/ob_routine_mgr.cpp	244	ObRoutineMgr::add_routine	other variable hash_ret != OB_HASH_EXIST	if (OB_SUCCESS != hash_ret && OB_HASH_EXIST != hash_ret) {
+src/share/schema/ob_routine_mgr.cpp	254	ObRoutineMgr::add_routine	other variable hash_ret != OB_HASH_EXIST	if (OB_SUCCESS != hash_ret && OB_HASH_EXIST != hash_ret) {
+src/share/schema/ob_schema_cache.cpp	423	ObSchemaCache::get_schema	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/share/schema/ob_schema_cache.cpp	504	ObSchemaCache::get_tablet_cache	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/share/schema/ob_schema_cache.cpp	547	ObSchemaCache::get_schema_history_cache	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/share/schema/ob_schema_cache.cpp	637	ObSchemaFetcher::fetch_schema	ret == OB_SCHEMA_EAGAIN	if (OB_SCHEMA_EAGAIN == ret) {
+src/share/schema/ob_schema_cache.cpp	770	ObSchemaFetcher::fetch_schema	ret == OB_CONNECT_ERROR	retry = (OB_CONNECT_ERROR == ret) && retry_times++ < RETRY_TIMES_MAX;
+src/share/schema/ob_schema_getter_guard.cpp	316	ObSchemaGetterGuard::get_system_variable	ret != OB_ERR_SYS_VARIABLE_UNKNOWN	if (OB_ERR_SYS_VARIABLE_UNKNOWN != ret) {
+src/share/schema/ob_schema_getter_guard.cpp	332	ObSchemaGetterGuard::get_system_variable	ret != OB_ERR_SYS_VARIABLE_UNKNOWN	if (OB_ERR_SYS_VARIABLE_UNKNOWN != ret) {
+src/share/schema/ob_schema_getter_guard.cpp	2314	ObSchemaGetterGuard::get_schema	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/share/schema/ob_schema_getter_guard_priv.cpp	418	ObSchemaGetterGuard::check_user_priv	ret == OB_ERR_NO_PRIVILEGE	if (OB_ERR_NO_PRIVILEGE == ret) {
+src/share/schema/ob_schema_getter_guard_priv.cpp	539	ObSchemaGetterGuard::check_single_table_priv	ret == OB_ERR_NO_TABLE_PRIVILEGE	if (OB_ERR_NO_TABLE_PRIVILEGE == ret) {
+src/share/schema/ob_schema_getter_guard_priv.cpp	564	ObSchemaGetterGuard::check_single_table_priv	ret == OB_ERR_NO_COLUMN_PRIVILEGE	if (OB_ERR_NO_COLUMN_PRIVILEGE == ret) {
+src/share/schema/ob_schema_getter_guard_priv.cpp	578	ObSchemaGetterGuard::check_single_table_priv	ret == OB_ERR_NO_TABLE_PRIVILEGE	if (OB_ERR_NO_TABLE_PRIVILEGE == ret) {
+src/share/schema/ob_schema_getter_guard_priv.cpp	616	ObSchemaGetterGuard::check_single_table_priv	ret == OB_ERR_NO_COLUMN_PRIVILEGE	if (OB_ERR_NO_COLUMN_PRIVILEGE == ret) {
+src/share/schema/ob_schema_getter_guard_priv.cpp	630	ObSchemaGetterGuard::check_single_table_priv	ret == OB_ERR_NO_COLUMN_PRIVILEGE	if (ret == OB_ERR_NO_COLUMN_PRIVILEGE) {
+src/share/schema/ob_schema_getter_guard_priv.cpp	788	ObSchemaGetterGuard::check_routine_priv	ret == OB_ERR_NO_ROUTINE_PRIVILEGE	if (OB_ERR_NO_ROUTINE_PRIVILEGE == ret) {
+src/share/schema/ob_schema_getter_guard_priv.cpp	861	ObSchemaGetterGuard::check_db_priv	ret == OB_ERR_NO_DB_PRIVILEGE	if (OB_ERR_NO_DB_PRIVILEGE == ret) {
+src/share/schema/ob_schema_mgr.cpp	960	ObSchemaMgr::add_database	other variable hash_ret != OB_HASH_EXIST	if (OB_SUCCESS != hash_ret && OB_HASH_EXIST != hash_ret) {
+src/share/schema/ob_schema_mgr.cpp	1005	ObSchemaMgr::del_database	other variable hash_ret != OB_HASH_NOT_EXIST	ret = OB_HASH_NOT_EXIST != hash_ret ? hash_ret : ret;
+src/share/schema/ob_schema_mgr.cpp	1336	ObSchemaMgr::add_table	other variable hash_ret != OB_HASH_EXIST	if (OB_SUCCESS != hash_ret && OB_HASH_EXIST != hash_ret) {
+src/share/schema/ob_schema_mgr.cpp	1346	ObSchemaMgr::add_table	other variable hash_ret != OB_HASH_EXIST	if (OB_SUCCESS != hash_ret && OB_HASH_EXIST != hash_ret) {
+src/share/schema/ob_schema_mgr.cpp	1357	ObSchemaMgr::add_table	other variable hash_ret != OB_HASH_EXIST	if (OB_SUCCESS != hash_ret && OB_HASH_EXIST != hash_ret) {
+src/share/schema/ob_schema_mgr.cpp	1367	ObSchemaMgr::add_table	other variable hash_ret != OB_HASH_EXIST	if (OB_SUCCESS != hash_ret && OB_HASH_EXIST != hash_ret) {
+src/share/schema/ob_schema_mgr.cpp	1380	ObSchemaMgr::add_table	other variable hash_ret != OB_HASH_EXIST	if (OB_SUCCESS != hash_ret && OB_HASH_EXIST != hash_ret) {
+src/share/schema/ob_schema_mgr.cpp	1451	ObSchemaMgr::add_foreign_keys_in_table	other variable hash_ret == OB_HASH_EXIST	ret = OB_HASH_EXIST == hash_ret ? OB_SUCCESS : OB_ERR_UNEXPECTED;
+src/share/schema/ob_schema_mgr.cpp	1474	ObSchemaMgr::delete_given_fk_from_mgr	other variable hash_ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == hash_ret) {
+src/share/schema/ob_schema_mgr.cpp	1620	ObSchemaMgr::add_constraints_in_table	other variable hash_ret == OB_HASH_EXIST	ret = OB_HASH_EXIST == hash_ret ? OB_SUCCESS : OB_ERR_UNEXPECTED;
+src/share/schema/ob_schema_mgr.cpp	1646	ObSchemaMgr::delete_given_cst_from_mgr	other variable hash_ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == hash_ret) {
+src/share/schema/ob_schema_mgr.cpp	1912	ObSchemaMgr::del_table	other variable hash_ret != OB_HASH_NOT_EXIST	ret = OB_HASH_NOT_EXIST != hash_ret ? hash_ret : ret;
+src/share/schema/ob_schema_mgr.cpp	1923	ObSchemaMgr::del_table	other variable hash_ret != OB_HASH_NOT_EXIST	ret = OB_HASH_NOT_EXIST != hash_ret ? hash_ret : ret;
+src/share/schema/ob_schema_mgr.cpp	1935	ObSchemaMgr::del_table	other variable hash_ret != OB_HASH_NOT_EXIST	ret = OB_HASH_NOT_EXIST != hash_ret ? hash_ret : ret;
+src/share/schema/ob_schema_mgr.cpp	1948	ObSchemaMgr::del_table	other variable hash_ret != OB_HASH_NOT_EXIST	ret = OB_HASH_NOT_EXIST != hash_ret ? hash_ret : ret;
+src/share/schema/ob_schema_mgr.cpp	1963	ObSchemaMgr::del_table	other variable hash_ret != OB_HASH_NOT_EXIST	ret = OB_HASH_NOT_EXIST != hash_ret ? hash_ret : ret;
+src/share/schema/ob_schema_mgr.cpp	2117	ObSchemaMgr::get_table_schema	other variable hash_ret == OB_HASH_NOT_EXIST	} else if (OB_HASH_NOT_EXIST == hash_ret && 0 != session_id && OB_INVALID_ID != session_id) {
+src/share/schema/ob_schema_mgr.cpp	2209	ObSchemaMgr::get_index_schema	ret == OB_SCHEMA_ERROR	if (OB_SCHEMA_ERROR == ret) {
+src/share/schema/ob_schema_mgr.cpp	2280	ObSchemaMgr::deep_copy_index_name_map	ret == OB_HASH_EXIST	if (OB_HASH_EXIST == ret) {
+src/share/schema/ob_schema_mgr.cpp	2607	ObSchemaMgr::deal_with_db_rename	other variable hash_ret != OB_HASH_NOT_EXIST	ret = OB_HASH_NOT_EXIST != hash_ret ? hash_ret : ret;
+src/share/schema/ob_schema_mgr.cpp	2636	ObSchemaMgr::deal_with_change_table_state	other variable hash_ret != OB_HASH_NOT_EXIST	ret = OB_HASH_NOT_EXIST != hash_ret ? hash_ret : ret;
+src/share/schema/ob_schema_mgr.cpp	2651	ObSchemaMgr::deal_with_change_table_state	other variable hash_ret != OB_HASH_NOT_EXIST	ret = OB_HASH_NOT_EXIST != hash_ret ? hash_ret : ret;
+src/share/schema/ob_schema_mgr.cpp	2663	ObSchemaMgr::deal_with_change_table_state	other variable hash_ret != OB_HASH_NOT_EXIST	ret = OB_HASH_NOT_EXIST != hash_ret ? hash_ret : ret;
+src/share/schema/ob_schema_mgr.cpp	2677	ObSchemaMgr::deal_with_change_table_state	other variable hash_ret != OB_HASH_NOT_EXIST	ret = OB_HASH_NOT_EXIST != hash_ret ? hash_ret : ret;
+src/share/schema/ob_schema_mgr.cpp	2725	ObSchemaMgr::deal_with_table_rename	other variable hash_ret != OB_HASH_NOT_EXIST	ret = OB_HASH_NOT_EXIST != hash_ret ? hash_ret : ret;
+src/share/schema/ob_schema_mgr.cpp	2738	ObSchemaMgr::deal_with_table_rename	other variable hash_ret != OB_HASH_NOT_EXIST	ret = OB_HASH_NOT_EXIST != hash_ret ? hash_ret : ret;
+src/share/schema/ob_schema_mgr.cpp	2761	ObSchemaMgr::deal_with_table_rename	other variable hash_ret != OB_HASH_NOT_EXIST	ret = OB_HASH_NOT_EXIST != hash_ret ? hash_ret : ret;
+src/share/schema/ob_schema_mgr.cpp	2791	ObSchemaMgr::rebuild_db_hashmap	other variable hash_ret == OB_HASH_EXIST	ret = OB_HASH_EXIST == hash_ret ? OB_SUCCESS : OB_ERR_UNEXPECTED;
+src/share/schema/ob_schema_mgr.cpp	2845	ObSchemaMgr::rebuild_table_hashmap	other variable hash_ret == OB_HASH_EXIST	ret = OB_HASH_EXIST == hash_ret ? OB_SUCCESS : OB_ERR_UNEXPECTED;
+src/share/schema/ob_schema_mgr.cpp	2873	ObSchemaMgr::rebuild_table_hashmap	other variable hash_ret == OB_HASH_EXIST	ret = OB_HASH_EXIST == hash_ret ? OB_SUCCESS : OB_ERR_UNEXPECTED;
+src/share/schema/ob_schema_mgr.cpp	2892	ObSchemaMgr::rebuild_table_hashmap	other variable hash_ret == OB_HASH_EXIST	ret = OB_HASH_EXIST == hash_ret ? OB_SUCCESS : OB_ERR_UNEXPECTED;
+src/share/schema/ob_schema_mgr.cpp	2917	ObSchemaMgr::rebuild_table_hashmap	other variable hash_ret == OB_HASH_EXIST	ret = OB_HASH_EXIST == hash_ret ? OB_SUCCESS : OB_ERR_UNEXPECTED;
+src/share/schema/ob_schema_mgr_cache.cpp	179	ObSchemaMgrCache::check_schema_mgr_exist	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/share/schema/ob_schema_struct.cpp	291	ObSysTableChecker::init_sys_table_name_map	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/share/schema/ob_schema_struct.cpp	351	ObSysTableChecker::check_runtime_space_table_id	ret == OB_HASH_EXIST; ret == OB_HASH_NOT_EXIST	if (OB_HASH_EXIST == ret || OB_HASH_NOT_EXIST == ret) {
+src/share/schema/ob_schema_struct.cpp	352	ObSysTableChecker::check_runtime_space_table_id	ret == OB_HASH_EXIST	is_runtime_space_table = (OB_HASH_EXIST == ret);
+src/share/schema/ob_schema_struct.cpp	380	ObSysTableChecker::check_sys_table_name	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/share/schema/ob_schema_struct.cpp	881	ObSysVariableSchema::add_sysvar_schema	ret != OB_SYS_VARS_MAYBE_DIFF_VERSION	if (ret != OB_SYS_VARS_MAYBE_DIFF_VERSION) { // If the error is caused by a different version, just ignore it
+src/share/schema/ob_schema_struct.cpp	2712	ObPartitionSchema::get_partition_by_part_id	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/share/schema/ob_schema_struct.cpp	2936	find_partition_by_name	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/share/schema/ob_schema_struct.cpp	3093	ObPartitionSchema::get_subpartition_by_sub_part_id	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/share/schema/ob_schema_struct.cpp	3122	ObPartitionSchema::check_partition_duplicate_with_name	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/share/schema/ob_server_schema_service.cpp	249	#define REPLAY_OP	other variable hash_ret != OB_HASH_NOT_EXIST	if (OB_SUCCESS != hash_ret && OB_HASH_NOT_EXIST != hash_ret) { \
+src/share/schema/ob_server_schema_service.cpp	353	ObServerSchemaService::get_increment_user_keys	other variable hash_ret != OB_HASH_NOT_EXIST	if (OB_SUCCESS != hash_ret && OB_HASH_NOT_EXIST != hash_ret) {
+src/share/schema/ob_server_schema_service.cpp	432	ObServerSchemaService::get_increment_database_keys	other variable hash_ret != OB_HASH_NOT_EXIST	if (OB_SUCCESS != hash_ret && OB_HASH_NOT_EXIST != hash_ret) {
+src/share/schema/ob_server_schema_service.cpp	515	ObServerSchemaService::get_increment_table_keys	other variable hash_ret != OB_HASH_NOT_EXIST	if (OB_SUCCESS != hash_ret && OB_HASH_NOT_EXIST != hash_ret) {
+src/share/schema/ob_server_schema_service.cpp	597	ObServerSchemaService::get_increment_outline_keys	other variable hash_ret != OB_HASH_NOT_EXIST	if (OB_SUCCESS != hash_ret && OB_HASH_NOT_EXIST != hash_ret) {
+src/share/schema/ob_server_schema_service.cpp	675	ObServerSchemaService::get_increment_routine_keys	other variable hash_ret != OB_HASH_NOT_EXIST	if (OB_SUCCESS != hash_ret && OB_HASH_NOT_EXIST != hash_ret) {
+src/share/schema/ob_server_schema_service.cpp	753	ObServerSchemaService::get_increment_package_keys	other variable hash_ret != OB_HASH_NOT_EXIST	if (OB_SUCCESS != hash_ret && OB_HASH_NOT_EXIST != hash_ret) {
+src/share/schema/ob_server_schema_service.cpp	830	ObServerSchemaService::get_increment_trigger_keys	other variable hash_ret != OB_HASH_NOT_EXIST	if (OB_SUCCESS != hash_ret && OB_HASH_NOT_EXIST != hash_ret) {
+src/share/schema/ob_server_schema_service.cpp	908	ObServerSchemaService::get_increment_db_priv_keys	other variable hash_ret != OB_HASH_NOT_EXIST	if (OB_SUCCESS != hash_ret && OB_HASH_NOT_EXIST != hash_ret) {
+src/share/schema/ob_server_schema_service.cpp	988	ObServerSchemaService::get_increment_sys_priv_keys	other variable hash_ret != OB_HASH_NOT_EXIST	if (OB_SUCCESS != hash_ret && OB_HASH_NOT_EXIST != hash_ret) {
+src/share/schema/ob_server_schema_service.cpp	1070	ObServerSchemaService::get_increment_table_priv_keys	other variable hash_ret != OB_HASH_NOT_EXIST	if (OB_SUCCESS != hash_ret && OB_HASH_NOT_EXIST != hash_ret) {
+src/share/schema/ob_server_schema_service.cpp	1159	ObServerSchemaService::get_increment_routine_priv_keys	other variable hash_ret != OB_HASH_NOT_EXIST	if (OB_SUCCESS != hash_ret && OB_HASH_NOT_EXIST != hash_ret) {
+src/share/schema/ob_server_schema_service.cpp	1246	ObServerSchemaService::get_increment_column_priv_keys	other variable hash_ret != OB_HASH_NOT_EXIST	if (OB_SUCCESS != hash_ret && OB_HASH_NOT_EXIST != hash_ret) {
+src/share/schema/ob_server_schema_service.cpp	1328	ObServerSchemaService::get_increment_obj_priv_keys	other variable hash_ret != OB_HASH_NOT_EXIST	if (OB_SUCCESS != hash_ret && OB_HASH_NOT_EXIST != hash_ret) {
+src/share/schema/ob_server_schema_service.cpp	1416	ObServerSchemaService::get_increment_mock_fk_parent_table_keys	other variable hash_ret != OB_HASH_NOT_EXIST	if (OB_SUCCESS != hash_ret && OB_HASH_NOT_EXIST != hash_ret) {
+src/share/schema/ob_server_schema_service.cpp	1496	ObServerSchemaService::get_increment_ai_model_keys	other variable hash_ret != OB_HASH_NOT_EXIST	if (OB_SUCCESS != hash_ret && OB_HASH_NOT_EXIST != hash_ret) {
+src/share/schema/ob_server_schema_service.cpp	3328	ObServerSchemaService::get_increment_obj_mysql_priv_keys	other variable hash_ret != OB_HASH_NOT_EXIST	if (OB_SUCCESS != hash_ret && OB_HASH_NOT_EXIST != hash_ret) {
+src/share/schema/ob_sys_variable_mgr.cpp	184	ObSysVariableMgr::get_sys_variable_schema	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {

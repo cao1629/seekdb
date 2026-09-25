@@ -1,0 +1,117 @@
+file	line	symbol	construct	text
+src/sql/dtl/ob_dtl_fc_server.cpp	156	ObDfc::unregister_dfc_channel	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/dtl/ob_dtl_fc_server.cpp	157	ObDfc::unregister_dfc_channel	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = dfc.unregister_channel(ch))) {
+src/sql/dtl/ob_dtl_fc_server.cpp	158	ObDfc::unregister_dfc_channel	merge into ret	ret = tmp_ret;
+src/sql/dtl/ob_dtl_fc_server.cpp	169	ObDfc::deregister_dfc	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/dtl/ob_dtl_fc_server.cpp	174	ObDfc::deregister_dfc	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = dfc.get_channel(i, ch))) {
+src/sql/dtl/ob_dtl_fc_server.cpp	175	ObDfc::deregister_dfc	merge into ret	ret = tmp_ret;
+src/sql/dtl/ob_dtl_fc_server.cpp	181	ObDfc::deregister_dfc	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = dfc.unregister_all_channel())) {
+src/sql/dtl/ob_dtl_fc_server.cpp	182	ObDfc::deregister_dfc	merge into ret	ret = tmp_ret;
+src/sql/dtl/ob_dtl_flow_control.cpp	101	ObDtlFlowControl::unregister_channel	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/dtl/ob_dtl_flow_control.cpp	113	ObDtlFlowControl::unregister_channel	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = chans_.remove(find_idx))) {
+src/sql/dtl/ob_dtl_flow_control.cpp	114	ObDtlFlowControl::unregister_channel	merge into ret	ret = tmp_ret;
+src/sql/dtl/ob_dtl_flow_control.cpp	121	ObDtlFlowControl::unregister_channel	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = blocks_.pop_back(block))) {
+src/sql/dtl/ob_dtl_flow_control.cpp	122	ObDtlFlowControl::unregister_channel	merge into ret	ret = tmp_ret;
+src/sql/dtl/ob_dtl_flow_control.cpp	275	ObDtlFlowControl::sync_send_drain	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/dtl/ob_dtl_flow_control.cpp	305	ObDtlFlowControl::sync_send_drain	assign tmp_ret	tmp_ret = ret;
+src/sql/dtl/ob_dtl_flow_control.cpp	310	ObDtlFlowControl::sync_send_drain	merge into ret	ret = tmp_ret;
+src/sql/dtl/ob_dtl_flow_control.cpp	335	ObDtlFlowControl::drain_all_channels	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/dtl/ob_dtl_flow_control.cpp	360	ObDtlFlowControl::drain_all_channels	assign tmp_ret	tmp_ret = ret;
+src/sql/dtl/ob_dtl_flow_control.cpp	365	ObDtlFlowControl::drain_all_channels	merge into ret	ret = tmp_ret;
+src/sql/dtl/ob_dtl_local_channel.cpp	76	ObDtlLocalChannel::send_shared_message	declare tmp_ret	int tmp_ret = ret;
+src/sql/dtl/ob_dtl_local_channel.cpp	84	ObDtlLocalChannel::send_shared_message	assign tmp_ret	tmp_ret = OB_SUCCESS;
+src/sql/dtl/ob_dtl_local_channel.cpp	86	ObDtlLocalChannel::send_shared_message	merge into ret	ret = tmp_ret;
+src/sql/dtl/ob_dtl_mem_manager.cpp	60	ObDtlMemManager::init	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/dtl/ob_dtl_mem_manager.cpp	63	ObDtlMemManager::init	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = mem_mgrs_.pop_back(ch_mem_mgr))) {
+src/sql/dtl/ob_dtl_mem_manager.cpp	196	ObDtlMemManager::auto_free_on_time	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/dtl/ob_dtl_mem_manager.cpp	206	ObDtlMemManager::auto_free_on_time	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = mem_mgr->auto_free_on_time(max_reserve_count))) {
+src/sql/dtl/ob_dtl_mem_manager.cpp	207	ObDtlMemManager::auto_free_on_time	merge into ret	ret = tmp_ret;
+src/sql/dtl/ob_dtl_memory_manager.cpp	59	ObDtlMemoryManager::init	declare tmp_ret (plan definition) [not built]	int tmp_ret = OB_SUCCESS;
+src/sql/dtl/ob_dtl_memory_manager.cpp	62	ObDtlMemoryManager::init	assign tmp_ret [not built]	if (OB_SUCCESS != (tmp_ret = mem_mgrs_.pop_back(ch_mem_mgr))) {
+src/sql/dtl/ob_dtl_memory_manager.cpp	198	ObDtlMemoryManager::auto_free_on_time	declare tmp_ret (plan definition) [not built]	int tmp_ret = OB_SUCCESS;
+src/sql/dtl/ob_dtl_memory_manager.cpp	208	ObDtlMemoryManager::auto_free_on_time	assign tmp_ret [not built]	if (OB_SUCCESS != (tmp_ret = mem_mgr->auto_free_on_time(max_reserve_count))) {
+src/sql/dtl/ob_dtl_memory_manager.cpp	209	ObDtlMemoryManager::auto_free_on_time	merge into ret [not built]	ret = tmp_ret;
+src/sql/dtl/ob_dtl_utils.cpp	73	ObDtlAsynSender::asyn_send	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/dtl/ob_dtl_utils.cpp	90	ObDtlAsynSender::asyn_send	assign tmp_ret	tmp_ret = ret;
+src/sql/dtl/ob_dtl_utils.cpp	99	ObDtlAsynSender::asyn_send	assign tmp_ret	tmp_ret = ret;
+src/sql/dtl/ob_dtl_utils.cpp	109	ObDtlAsynSender::asyn_send	merge into ret	ret = tmp_ret;
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	6207	ObAggregateProcessor::get_pl_agg_udf_result	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	6209	ObAggregateProcessor::get_pl_agg_udf_result	assign tmp_ret	tmp_ret = eval_ctx_.exec_ctx_.init_pl_ctx();
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	6212	ObAggregateProcessor::get_pl_agg_udf_result	assign tmp_ret	tmp_ret = eval_ctx_.exec_ctx_.get_pl_ctx()->add(result_obj);
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	6216	ObAggregateProcessor::get_pl_agg_udf_result	merge into ret	ret = OB_SUCCESS == ret ? tmp_ret : ret;
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	6220	ObAggregateProcessor::get_pl_agg_udf_result	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	6221	ObAggregateProcessor::get_pl_agg_udf_result	assign tmp_ret	if ((tmp_ret = pl::ObUserDefinedType::destruct_obj(pl_agg_udf_obj, eval_ctx_.exec_ctx_.get_my_session())) != OB_SUCCESS) {
+src/sql/engine/aggregate/ob_hash_groupby_op.cpp	1042	ObHashGroupByOp::load_data	declare tmp_ret	int tmp_ret = cleanup_dump_env(common::OB_SUCCESS == ret, part_id, parts, part_cnt, bloom_filter);
+src/sql/engine/aggregate/ob_hash_groupby_op.cpp	1045	ObHashGroupByOp::load_data	merge into ret	ret = OB_SUCCESS == ret ? tmp_ret : ret;
+src/sql/engine/aggregate/ob_hash_groupby_op.cpp	1663	ObHashGroupByOp::load_data_batch	declare tmp_ret	int tmp_ret = cleanup_dump_env(common::OB_SUCCESS == ret, part_id, parts, part_cnt, bloom_filter);
+src/sql/engine/aggregate/ob_hash_groupby_op.cpp	1666	ObHashGroupByOp::load_data_batch	merge into ret	ret = OB_SUCCESS == ret ? tmp_ret : ret;
+src/sql/engine/basic/ob_chunk_row_store.cpp	804	ObChunkRowStore::load_next_chunk_blocks	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/engine/basic/ob_chunk_row_store.cpp	805	ObChunkRowStore::load_next_chunk_blocks	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = read_file(
+src/sql/engine/basic/ob_chunk_row_store.cpp	814	ObChunkRowStore::load_next_chunk_blocks	merge into ret	ret = tmp_ret;
+src/sql/engine/basic/ob_json_table_op.cpp	1180	ObRegCol::eval_regular_col	declare tmp_ret	int tmp_ret = ctx->table_func_->set_on_error(*this, ctx, ret);
+src/sql/engine/basic/ob_json_table_op.cpp	1657	JsonTableFunc::set_on_error	declare tmp_ret (plan definition)	INIT_SUCC(tmp_ret);
+src/sql/engine/basic/ob_json_table_op.cpp	1812	JsonTableFunc::cast_to_result	declare tmp_ret	int tmp_ret = set_on_error(col_node, ctx, ret);
+src/sql/engine/basic/ob_temp_table_insert_op.cpp	98	ObTempTableInsertOp::inner_close	declare temp_ret	int temp_ret = ret;
+src/sql/engine/basic/ob_temp_table_insert_op.cpp	101	ObTempTableInsertOp::inner_close	merge into ret	ret = temp_ret;
+src/sql/engine/cmd/ob_analyze_executor.cpp	113	ObAnalyzeExecutor::execute	declare tmp_ret	int tmp_ret = ret;
+src/sql/engine/cmd/ob_analyze_executor.cpp	116	ObAnalyzeExecutor::execute	merge into ret	ret = tmp_ret;
+src/sql/engine/cmd/ob_dcl_executor.cpp	138	ObGrantExecutor::execute	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/engine/cmd/ob_dcl_executor.cpp	139	ObGrantExecutor::execute	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(schema_guard.reset())) {
+src/sql/engine/cmd/ob_dcl_executor.cpp	142	ObGrantExecutor::execute	merge into ret	ret = tmp_ret;
+src/sql/engine/cmd/ob_dcl_executor.cpp	291	ObRevokeExecutor::revoke_table	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/engine/cmd/ob_dcl_executor.cpp	292	ObRevokeExecutor::revoke_table	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(schema_guard.reset())) {
+src/sql/engine/cmd/ob_dcl_executor.cpp	295	ObRevokeExecutor::revoke_table	merge into ret	ret = tmp_ret;
+src/sql/engine/cmd/ob_dcl_executor.cpp	343	ObRevokeExecutor::revoke_routine	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/engine/cmd/ob_dcl_executor.cpp	344	ObRevokeExecutor::revoke_routine	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(schema_guard.reset())) {
+src/sql/engine/cmd/ob_dcl_executor.cpp	347	ObRevokeExecutor::revoke_routine	merge into ret	ret = tmp_ret;
+src/sql/engine/cmd/ob_ddl_executor_util.cpp	77	ObDDLExecutorUtil::wait_ddl_finish	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/engine/cmd/ob_ddl_executor_util.cpp	106	ObDDLExecutorUtil::wait_ddl_finish	OB_TMP_FAIL (plan definition)	if (is_support_cancel && OB_TMP_FAIL(cancel_ddl_task(local_command_service))) {
+src/sql/engine/cmd/ob_ddl_executor_util.cpp	137	ObDDLExecutorUtil::wait_build_index_finish	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/engine/cmd/ob_ddl_executor_util.cpp	192	ObDDLExecutorUtil::wait_ddl_retry_task_finish	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/engine/cmd/ob_ddl_executor_util.cpp	205	ObDDLExecutorUtil::wait_ddl_retry_task_finish	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/engine/cmd/ob_ddl_executor_util.cpp	207	ObDDLExecutorUtil::wait_ddl_retry_task_finish	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = result_code.deserialize(error_message.user_message_, forward_user_msg_len, pos))) {
+src/sql/engine/cmd/ob_ddl_executor_util.cpp	218	ObDDLExecutorUtil::wait_ddl_retry_task_finish	assign tmp_ret	tmp_ret = OB_ERR_UNEXPECTED;
+src/sql/engine/cmd/ob_ddl_executor_util.cpp	227	ObDDLExecutorUtil::wait_ddl_retry_task_finish	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(ObShareUtil::is_server_write_enabled(write_enabled))) {
+src/sql/engine/cmd/ob_ddl_executor_util.cpp	235	ObDDLExecutorUtil::wait_ddl_retry_task_finish	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(cancel_ddl_task(local_command_service))) {
+src/sql/engine/cmd/ob_get_diagnostics_executor.cpp	351	ObGetDiagnosticsExecutor::execute	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/engine/cmd/ob_index_executor.cpp	234	ObCreateIndexExecutor::sync_check_index_status	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/engine/cmd/ob_index_executor.cpp	236	ObCreateIndexExecutor::sync_check_index_status	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = set_drop_index_stmt_str(drop_index_arg, allocator))) {
+src/sql/engine/cmd/ob_index_executor.cpp	237	ObCreateIndexExecutor::sync_check_index_status	assign tmp_ret	} else if (OB_SUCCESS != (tmp_ret = query::serialize_root_service_call(
+src/sql/engine/cmd/ob_index_executor.cpp	285	ObDropIndexExecutor::wait_drop_index_finish	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/engine/cmd/ob_index_executor.cpp	295	ObDropIndexExecutor::wait_drop_index_finish	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(ObShareUtil::is_server_write_enabled(write_enabled))) {
+src/sql/engine/cmd/ob_load_data_impl.cpp	43	#define OW	declare inner_ret (continue-and-record variable)	int inner_ret = statement;\
+src/sql/engine/cmd/ob_load_data_impl.cpp	46	#define OW	merge inner_ret into ret through if (OB_SUCC(ret)) (continue-and-record through another variable)	if (OB_SUCC(ret)) { ret = inner_ret; }\
+src/sql/engine/cmd/ob_load_data_impl.cpp	805	ObLoadDataSPImpl::exec_shuffle	declare temp_ret	int temp_ret = part_buf_mgr.get(tablet_id, frag);
+src/sql/engine/cmd/ob_load_data_impl.cpp	1666	ObLoadDataSPImpl::ToolBox::release_resources	declare tmp_ret	int tmp_ret = data_frag_mgr.clear_all_datafrag();
+src/sql/engine/cmd/ob_load_data_impl.cpp	1670	ObLoadDataSPImpl::ToolBox::release_resources	merge into ret	ret = tmp_ret;
+src/sql/engine/cmd/ob_merge_table_executor.cpp	114	ObMergeTableExecutor::execute	declare tmp_ret	int tmp_ret = conn->commit();
+src/sql/engine/cmd/ob_merge_table_executor.cpp	117	ObMergeTableExecutor::execute	merge into ret	ret = tmp_ret;
+src/sql/engine/cmd/ob_merge_table_executor.cpp	120	ObMergeTableExecutor::execute	declare tmp_ret	int tmp_ret = conn->rollback();
+src/sql/engine/cmd/ob_routine_executor.cpp	309	ObAlterRoutineExecutor::execute	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/engine/cmd/ob_routine_executor.cpp	310	ObAlterRoutineExecutor::execute	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = trans.end(OB_SUCCESS == ret))) {
+src/sql/engine/cmd/ob_routine_executor.cpp	312	ObAlterRoutineExecutor::execute	merge into ret	ret = OB_SUCCESS == ret ? tmp_ret : ret;
+src/sql/engine/cmd/ob_table_executor.cpp	338	ObCreateTableExecutor::execute_ctas	declare tmp_ret	int tmp_ret = OB_E(EventTable::EN_CTAS_FAIL_NO_DROP_ERROR) OB_SUCCESS; // error injection, make the table unable to be cleaned
+src/sql/engine/cmd/ob_table_executor.cpp	340	ObCreateTableExecutor::execute_ctas	merge into ret	ret = tmp_ret;
+src/sql/engine/cmd/ob_table_executor.cpp	373	ObCreateTableExecutor::execute_ctas	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/engine/cmd/ob_table_executor.cpp	374	ObCreateTableExecutor::execute_ctas	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(my_session->set_autocommit(original_autocommit))) {
+src/sql/engine/cmd/ob_table_executor.cpp	375	ObCreateTableExecutor::execute_ctas	merge into ret	ret = (OB_SUCCESS == ret) ? tmp_ret : ret;
+src/sql/engine/cmd/ob_table_executor.cpp	408	ObCreateTableExecutor::execute_ctas	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/engine/cmd/ob_table_executor.cpp	410	ObCreateTableExecutor::execute_ctas	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = query::serialize_root_service_call([&]{
+src/sql/engine/cmd/ob_table_executor.cpp	696	ObAlterTableExecutor::alter_table_rpc_v2	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/engine/cmd/ob_table_executor.cpp	715	ObAlterTableExecutor::alter_table_rpc_v2	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = create_index_executor.set_drop_index_stmt_str(drop_index_arg, allocator))) {
+src/sql/engine/cmd/ob_table_executor.cpp	716	ObAlterTableExecutor::alter_table_rpc_v2	assign tmp_ret	} else if (OB_SUCCESS != (tmp_ret = query::serialize_root_service_call(
+src/sql/engine/cmd/ob_table_executor.cpp	725	ObAlterTableExecutor::alter_table_rpc_v2	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = ObDDLExecutorUtil::wait_build_index_finish( res.task_id_, is_finish))) {
+src/sql/engine/cmd/ob_vector_refresh_index_executor.cpp	598	ObVectorRefreshIndexExecutor::do_refresh	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/engine/cmd/ob_vector_refresh_index_executor.cpp	599	ObVectorRefreshIndexExecutor::do_refresh	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = trans.end(OB_SUCC(ret)))) {
+src/sql/engine/cmd/ob_vector_refresh_index_executor.cpp	601	ObVectorRefreshIndexExecutor::do_refresh	merge into ret	ret = COVER_SUCC(tmp_ret);
+src/sql/engine/cmd/ob_vector_refresh_index_executor.cpp	636	ObVectorRefreshIndexExecutor::do_refresh_with_retry	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/engine/cmd/ob_vector_refresh_index_executor.cpp	637	ObVectorRefreshIndexExecutor::do_refresh_with_retry	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = trans.end(OB_SUCC(ret)))) {
+src/sql/engine/cmd/ob_vector_refresh_index_executor.cpp	639	ObVectorRefreshIndexExecutor::do_refresh_with_retry	merge into ret	ret = COVER_SUCC(tmp_ret);
+src/sql/engine/cmd/ob_vector_refresh_index_executor.cpp	683	ObVectorRefreshIndexExecutor::do_rebuild	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/engine/cmd/ob_vector_refresh_index_executor.cpp	684	ObVectorRefreshIndexExecutor::do_rebuild	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = trans.end(OB_SUCC(ret)))) {
+src/sql/engine/cmd/ob_vector_refresh_index_executor.cpp	686	ObVectorRefreshIndexExecutor::do_rebuild	merge into ret	ret = COVER_SUCC(tmp_ret);
+src/sql/engine/cmd/ob_vector_refresh_index_executor.cpp	725	ObVectorRefreshIndexExecutor::do_rebuild_with_retry	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/engine/cmd/ob_vector_refresh_index_executor.cpp	726	ObVectorRefreshIndexExecutor::do_rebuild_with_retry	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = trans.end(OB_SUCC(ret)))) {
+src/sql/engine/cmd/ob_vector_refresh_index_executor.cpp	728	ObVectorRefreshIndexExecutor::do_rebuild_with_retry	merge into ret	ret = COVER_SUCC(tmp_ret);
+src/sql/engine/dml/ob_table_delete_op.cpp	328	ObTableDeleteOp::inner_close	declare close_ret (continue-and-record variable)	int close_ret = ObTableModifyOp::inner_close();
+src/sql/engine/dml/ob_table_delete_op.cpp	329	ObTableDeleteOp::inner_close	merge close_ret into ret (continue-and-record through another variable)	return (OB_SUCCESS == ret) ? close_ret : ret;

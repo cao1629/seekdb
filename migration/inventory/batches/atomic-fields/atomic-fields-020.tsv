@@ -1,0 +1,51 @@
+file	line	symbol	construct	text
+src/storage/allocator/ob_fifo_arena.h	42	ObFifoArena::total_hold_	field static int64_t; 3 atomic accesses (ATOMIC_FAA 3)	static int64_t total_hold_;
+src/storage/allocator/ob_fifo_arena.h	54	ObFifoArena::Ref::next_	field Ref*; 1 atomic accesses (ATOMIC_STORE 1)	Ref* next_;
+src/storage/allocator/ob_fifo_arena.h	56	ObFifoArena::Ref::allocated_	field int64_t; 1 atomic accesses (ATOMIC_FAA 1)	int64_t allocated_; // the allocated bytes from page
+src/storage/allocator/ob_fifo_arena.h	93	ObFifoArena::Page::limit_	field int64_t; 2 atomic accesses (ATOMIC_LOAD 2)	int64_t limit_; // the max bytes of a page that can be used
+src/storage/allocator/ob_fifo_arena.h	94	ObFifoArena::Page::pos_	field int64_t; 2 atomic accesses (ATOMIC_FAA 1, ATOMIC_LOAD 1)	int64_t pos_;   // the position after which can be allocated
+src/storage/allocator/ob_fifo_arena.h	95	ObFifoArena::Page::ref_	field int64_t; 1 atomic accesses (ATOMIC_AAF 1)	int64_t ref_;
+src/storage/allocator/ob_fifo_arena.h	108	ObFifoArena::LockGuard::lock_	field int64_t&; 2 atomic accesses (ATOMIC_STORE 1, ATOMIC_TAS 1)	int64_t& lock_;
+src/storage/allocator/ob_fifo_arena.h	151	ObFifoArena::Handle::ref_	field Ref*; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_TAS 1)	Ref* ref_[MAX_NWAY];
+src/storage/allocator/ob_fifo_arena.h	152	ObFifoArena::Handle::allocated_	field int64_t; 2 atomic accesses (ATOMIC_FAA 1, ATOMIC_LOAD 1)	int64_t allocated_;  // record requested bytes of all pages acquired by this handle,
+src/storage/allocator/ob_fifo_arena.h	215	ObFifoArena::nway_	field int64_t; 4 atomic accesses (ATOMIC_LOAD 2, ATOMIC_STORE 2)	int64_t nway_;
+src/storage/allocator/ob_fifo_arena.h	216	ObFifoArena::allocated_	field int64_t; 3 atomic accesses (ATOMIC_FAA 2, ATOMIC_LOAD 1)	int64_t allocated_; // record all the memory hold by pages in history.
+src/storage/allocator/ob_fifo_arena.h	218	ObFifoArena::reclaimed_	field int64_t; 2 atomic accesses (ATOMIC_FAA 1, ATOMIC_LOAD 1)	int64_t reclaimed_; // record all the memory reclaimed by pages in history.
+src/storage/allocator/ob_fifo_arena.h	220	ObFifoArena::hold_	field int64_t; 4 atomic accesses (ATOMIC_FAA 2, ATOMIC_AAF 1, ATOMIC_LOAD 1)	int64_t hold_;      // record all the memory hold by pages current.
+src/storage/allocator/ob_fifo_arena.h	223	ObFifoArena::retired_	field int64_t; 3 atomic accesses (ATOMIC_FAA 2, ATOMIC_LOAD 1)	int64_t retired_;   // record all the memory hold by not active pages in history.
+src/storage/allocator/ob_fifo_arena.h	226	ObFifoArena::cur_pages_	field Page*; 5 atomic accesses (ATOMIC_BCAS 3, ATOMIC_LOAD 2); through local references paddr	Page* cur_pages_[MAX_CACHED_PAGE_COUNT];
+src/storage/allocator/ob_handle_list.h	100	ObHandleList::Handle::freeze_stat_	field int; 5 atomic accesses (ATOMIC_LOAD 3, ATOMIC_STORE 2)	int freeze_stat_;
+src/storage/allocator/ob_handle_list.h	101	ObHandleList::Handle::id_	field int64_t; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_STORE 1)	int64_t id_;
+src/storage/allocator/ob_handle_list.h	102	ObHandleList::Handle::clock_	field int64_t; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_STORE 1)	int64_t clock_;
+src/storage/allocator/ob_handle_list.h	152	ObHandleList::id_	field int64_t; 1 atomic accesses (ATOMIC_AAF 1)	int64_t id_;
+src/storage/allocator/ob_handle_list.h	155	ObHandleList::hazard_	field int64_t; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_STORE 1)	int64_t hazard_;
+src/storage/allocator/ob_handle_list.h	156	ObHandleList::total_count_	field int64_t; 3 atomic accesses (ATOMIC_AAF 2, ATOMIC_LOAD 1)	int64_t total_count_;
+src/storage/allocator/ob_vector_allocator.h	41	ObVectorMemContext::check_cnt_	field uint32_t; 4 atomic accesses (ATOMIC_STORE 2, ATOMIC_INC 1, ATOMIC_LOAD 1)	uint32_t check_cnt_;
+src/storage/allocator/ob_vector_allocator.h	67	ObVectorAllocator::all_used_mem_	field uint64_t; 1 atomic accesses (ATOMIC_LOAD 1)	uint64_t all_used_mem_;
+src/storage/allocator/ob_vector_allocator.h	114	ObVsagMemContext::all_vsag_use_mem_	field uint64_t *; 2 atomic accesses (ATOMIC_AAF 1, ATOMIC_SAF 1)	uint64_t *all_vsag_use_mem_;
+src/storage/allocator/ob_vector_allocator.h	161	ObIvfMemContext::all_vsag_use_mem_	field uint64_t *; 4 atomic accesses (ATOMIC_LOAD 2, ATOMIC_AAF 1, ATOMIC_SAF 1)	uint64_t *all_vsag_use_mem_;
+src/storage/blocksstable/index_block/ob_index_block_builder.h	727	ObSSTableIndexBuilder::concurrent_lock_	volatile field volatile bool; no atomic access found	volatile bool concurrent_lock_;
+src/storage/blocksstable/ob_block_manager.cpp	1539	ObIOBenchRunner::io_count_	field int64_t; 1 atomic accesses (ATOMIC_INC 1)	int64_t io_count_;
+src/storage/blocksstable/ob_block_manager.cpp	1540	ObIOBenchRunner::rt_us_	field int64_t; 1 atomic accesses (ATOMIC_AAF 1)	int64_t rt_us_;
+src/storage/blocksstable/ob_block_manager.h	509	ObBlockManager::is_mark_sweep_enabled_	field bool; 3 atomic accesses (ATOMIC_SET 2, ATOMIC_LOAD 1)	bool is_mark_sweep_enabled_;
+src/storage/blocksstable/ob_block_manager.h	521	ObBlockManager::alloc_num_	field int64_t; 7 atomic accesses (ATOMIC_AAF 2, ATOMIC_SET 2, ATOMIC_STORE 2, ATOMIC_FAA 1)	int64_t alloc_num_;
+src/storage/blocksstable/ob_block_writer_concurrent_guard.h	45	ObBlockWriterConcurrentGuard::lock_	field volatile bool &; 2 atomic accesses (ATOMIC_BCAS 2)	volatile bool &lock_;
+src/storage/blocksstable/ob_bloom_filter_cache.h	216	ObBloomFilterCache::bf_cache_miss_count_threshold_	volatile field volatile int64_t; no atomic access found	volatile int64_t bf_cache_miss_count_threshold_;
+src/storage/blocksstable/ob_kvcache_pointer_swizzle.h	48	ObPointerSwizzleNode::ObNodeVersion::value_	field uint64_t; single member of a value class; no direct atomic access, 5 atomic accesses reach it through fields and variables of type ObNodeVersion, listed where their own accesses resolve	uint64_t value_;
+src/storage/blocksstable/ob_kvcache_pointer_swizzle.h	56	ObPointerSwizzleNode::node_version_	field ObNodeVersion; 2 atomic accesses (ATOMIC_LOAD 2); through the single member of value classes ObNodeVersion::value_	} node_version_;
+src/storage/blocksstable/ob_kvcache_pointer_swizzle.h	68	ObPointerSwizzleNode::ObPointerSwizzleGuard::cur_version_	field ObNodeVersion &; 3 atomic accesses (ATOMIC_BCAS 1, ATOMIC_LOAD 1, ATOMIC_STORE 1); through the single member of value classes ObNodeVersion::value_	ObNodeVersion &cur_version_;
+src/storage/blocksstable/ob_macro_block_writer.h	315	ObMacroBlockWriter::concurrent_lock_	volatile field volatile bool; no atomic access found	volatile bool concurrent_lock_;
+src/storage/blocksstable/ob_shared_macro_block_manager.h	198	ObSharedMacroBlockMgr::need_defragment_	field bool; 5 atomic accesses (ATOMIC_SET 4, ATOMIC_LOAD 1)	bool need_defragment_;
+src/storage/blocksstable/ob_sstable_meta.h	169	ObSSTableBasicMeta::upper_trans_version_	field int64_t; 1 atomic accesses (ATOMIC_LOAD 1)	int64_t upper_trans_version_;
+src/storage/checkpoint/ob_data_checkpoint.h	223	ObDataCheckpoint::ls_freeze_finished_	field bool; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_STORE 1)	bool ls_freeze_finished_;
+src/storage/compaction/ob_compaction_diagnose.h	123	ObIDiagnoseInfo::is_deleted_	field bool; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_SET 1)	bool is_deleted_; // for iterator
+src/storage/compaction/ob_compaction_memory_context.h	70	ObCompactionMemMonitor::buffer_hold_mem_	field int64_t; 1 atomic accesses (ATOMIC_LOAD 1)	int64_t buffer_hold_mem_;
+src/storage/compaction/ob_compaction_memory_context.h	71	ObCompactionMemMonitor::buffer_free_mem_	field int64_t; 1 atomic accesses (ATOMIC_LOAD 1)	int64_t buffer_free_mem_;
+src/storage/compaction/ob_compaction_memory_context.h	72	ObCompactionMemMonitor::local_hold_mem_	field int64_t; 1 atomic accesses (ATOMIC_LOAD 1)	int64_t local_hold_mem_;
+src/storage/compaction/ob_compaction_memory_context.h	73	ObCompactionMemMonitor::local_free_mem_	field int64_t; 1 atomic accesses (ATOMIC_LOAD 1)	int64_t local_free_mem_;
+src/storage/compaction/ob_compaction_memory_pool.h	160	ObCompactionMemPool::mem_mode_	field MemoryMode; 4 atomic accesses (ATOMIC_LOAD 2, ATOMIC_CAS 1, ATOMIC_STORE 1)	MemoryMode mem_mode_;
+src/storage/compaction/ob_compaction_schedule_util.h	112	ObBasicMergeScheduler::inner_table_merged_scn_	field int64_t; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_STORE 1)	int64_t inner_table_merged_scn_;
+src/storage/compaction/ob_compaction_schedule_util.h	115	ObBasicMergeScheduler::major_merge_status_	field bool; 3 atomic accesses (ATOMIC_SET 2, ATOMIC_LOAD 1)	bool major_merge_status_;
+src/storage/compaction/ob_medium_compaction_func.cpp	930	ObMediumCompactionScheduleFunc::get_table_schema_to_merge::have_set_errno	function-local static bool in ObMediumCompactionScheduleFunc::get_table_schema_to_merge; 1 atomic accesses (ATOMIC_BCAS 1)	static bool have_set_errno = false;
+src/storage/compaction/ob_partition_merge_progress.h	82	ObPartitionMergeProgress::is_updating_	field bool; 2 atomic accesses (ATOMIC_CAS 1, ATOMIC_STORE 1)	bool is_updating_; // atomic lock
+src/storage/compaction/ob_progressive_merge_helper.h	72	ObProgressiveMergeMgr::finish_cur_round_	field bool; 1 atomic accesses (ATOMIC_SET 1)	bool finish_cur_round_;

@@ -1,0 +1,82 @@
+file	line	symbol	construct	text
+src/storage/retrieval/ob_sparse_bmw_iter.cpp	97	ObSRBMWIterImpl::get_next_rows	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/retrieval/ob_sparse_bmw_iter.cpp	104	ObSRBMWIterImpl::get_next_rows	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/retrieval/ob_sparse_bmw_iter.cpp	116	ObSRBMWIterImpl::top_k_search	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/retrieval/ob_sparse_bmw_iter.cpp	136	ObSRBMWIterImpl::top_k_search	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/retrieval/ob_sparse_bmw_iter.cpp	160	ObSRBMWIterImpl::top_k_search	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/retrieval/ob_sparse_bmw_iter.cpp	172	ObSRBMWIterImpl::top_k_search	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/retrieval/ob_sparse_bmw_iter.cpp	204	ObSRBMWIterImpl::build_top_k_heap	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/retrieval/ob_sparse_bmw_iter.cpp	345	ObSRBMWIterImpl::next_pivot_range	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/retrieval/ob_sparse_bmw_iter.cpp	355	ObSRBMWIterImpl::next_pivot_range	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/retrieval/ob_sparse_bmw_iter.cpp	386	ObSRBMWIterImpl::evaluate_pivot	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/retrieval/ob_sparse_bmw_iter.cpp	411	ObSRBMWIterImpl::evaluate_pivot_range	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/retrieval/ob_sparse_bmw_iter.cpp	450	ObSRBMWIterImpl::fill_merge_heap_with_shallow_dims	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/retrieval/ob_sparse_bmw_iter.cpp	626	ObSRBMWIterImpl::advance_dim_iters_for_next_round	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/retrieval/ob_sparse_daat_iter.cpp	206	ObSRDaaTIterImpl::get_next_row	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/retrieval/ob_sparse_daat_iter.cpp	228	ObSRDaaTIterImpl::get_next_rows	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/retrieval/ob_sparse_daat_iter.cpp	237	ObSRDaaTIterImpl::get_next_rows	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/retrieval/ob_sparse_daat_iter.cpp	242	ObSRDaaTIterImpl::get_next_rows	ret == OB_ITER_END	if (OB_SUCC(ret) || OB_ITER_END == ret) {
+src/storage/retrieval/ob_sparse_daat_iter.cpp	263	ObSRDaaTIterImpl::do_one_merge_round	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/retrieval/ob_sparse_daat_iter.cpp	268	ObSRDaaTIterImpl::do_one_merge_round	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/retrieval/ob_sparse_daat_iter.cpp	284	ObSRDaaTIterImpl::fill_merge_heap	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/retrieval/ob_sparse_lookup_iter.cpp	102	ObSRLookupIter::get_next_row	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/retrieval/ob_sparse_lookup_iter.cpp	131	ObSRLookupIter::get_next_rows	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/retrieval/ob_sparse_lookup_iter.cpp	172	ObSRSortedLookupIter::load_results	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/retrieval/ob_sparse_lookup_iter.cpp	201	ObSRSortedLookupIter::load_results	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/retrieval/ob_sparse_lookup_iter.cpp	284	ObSRHashLookupIter::load_results	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/retrieval/ob_sparse_lookup_iter.cpp	298	ObSRHashLookupIter::load_results	ret (assigned in the comparison) != OB_HASH_NOT_EXIST	} else if (OB_UNLIKELY(OB_HASH_NOT_EXIST != (ret = hash_map_.get_refactored(id, relevance)))) {
+src/storage/retrieval/ob_sparse_lookup_iter.cpp	304	ObSRHashLookupIter::load_results	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/retrieval/ob_sparse_lookup_iter.cpp	329	ObSRHashLookupIter::project_results	ret == OB_HASH_NOT_EXIST	if (OB_LIKELY(OB_HASH_NOT_EXIST == ret)) {
+src/storage/retrieval/ob_sparse_retrieval_factory.cpp	170	ObSparseRetrievalDaaTCursor::load_missing_entries	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/retrieval/ob_sparse_retrieval_factory.cpp	374	ObSparseRetrievalDaaTCursor::materialize	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/retrieval/ob_sparse_retrieval_factory.cpp	648	ObSparseRetrievalBMWCursor::load_missing_entries	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/retrieval/ob_sparse_retrieval_factory.cpp	759	ObSparseRetrievalBMWCursor::advance_one_source	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/retrieval/ob_sparse_retrieval_factory.cpp	772	ObSparseRetrievalBMWCursor::advance_one_source	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/retrieval/ob_sparse_retrieval_factory.cpp	833	ObSparseRetrievalBMWCursor::try_prune_range	other variable block_ret == OB_ITER_END	if (OB_ITER_END == block_ret) {
+src/storage/retrieval/ob_sparse_retrieval_factory.cpp	1028	ObSparseRetrievalBMWCursor::materialize	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/retrieval/ob_sparse_taat_iter.cpp	115	ObSRTaaTIterImpl::get_next_row	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/retrieval/ob_sparse_taat_iter.cpp	135	ObSRTaaTIterImpl::get_next_rows	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/retrieval/ob_sparse_taat_iter.cpp	160	ObSRTaaTIterImpl::get_next_rows	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/retrieval/ob_sparse_taat_iter.cpp	165	ObSRTaaTIterImpl::get_next_rows	ret == OB_ITER_END	if ((OB_SUCC(ret) || OB_ITER_END == ret) && count > 0) {
+src/storage/retrieval/ob_sparse_taat_iter.cpp	274	ObSRTaaTIterImpl::fill_chunk_stores	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/retrieval/ob_sparse_taat_iter.cpp	312	ObSRTaaTIterImpl::fill_chunk_stores	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/retrieval/ob_sparse_taat_iter.cpp	330	ObSRTaaTIterImpl::fill_chunk_stores	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/retrieval/ob_sparse_taat_iter.cpp	337	ObSRTaaTIterImpl::fill_chunk_stores	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/retrieval/ob_sparse_taat_iter.cpp	343	ObSRTaaTIterImpl::fill_chunk_stores	ret == OB_ITER_END	if (OB_LIKELY(OB_ITER_END == ret)) {
+src/storage/retrieval/ob_sparse_taat_iter.cpp	393	ObSRTaaTIterImpl::load_next_hash_map	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/retrieval/ob_sparse_taat_iter.cpp	402	ObSRTaaTIterImpl::load_next_hash_map	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/storage/retrieval/ob_sparse_taat_iter.cpp	413	ObSRTaaTIterImpl::load_next_hash_map	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/retrieval/ob_sparse_vector_block_source.cpp	118	ObSparseVectorBlockSource::advance_to	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/retrieval/ob_sparse_vector_block_source.cpp	191	ObSparseVectorBlockSource::prepare	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/retrieval/ob_sparse_vector_block_source.cpp	207	ObSparseVectorBlockSource::remember	other variable error != OB_ITER_END	if (OB_SUCCESS != error && OB_ITER_END != error) {
+src/storage/retrieval/ob_spiv_daat_iter.cpp	58	ObSPIVDaaTIter::get_next_rows	ret != OB_ITER_END	if(OB_UNLIKELY(ret != OB_ITER_END)) {
+src/storage/retrieval/ob_spiv_daat_iter.cpp	68	ObSPIVDaaTIter::get_next_row	ret != OB_ITER_END	if(OB_UNLIKELY(ret != OB_ITER_END)) {
+src/storage/retrieval/ob_spiv_daat_iter.cpp	176	ObSPIVDaaTNaiveIter::project_results	other variable hash_ret == OB_HASH_EXIST	if (OB_HASH_EXIST == hash_ret) {
+src/storage/retrieval/ob_spiv_daat_iter.cpp	196	ObSPIVDaaTNaiveIter::process	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/retrieval/ob_spiv_daat_iter.cpp	199	ObSPIVDaaTNaiveIter::process	ret == OB_ITER_END	if ((OB_SUCC(ret) || OB_ITER_END == ret) && count > 0) {
+src/storage/retrieval/ob_spiv_daat_iter.cpp	204	ObSPIVDaaTNaiveIter::process	ret == OB_ITER_END	if (ret == OB_ITER_END) {
+src/storage/retrieval/ob_spiv_daat_iter.cpp	243	ObSPIVDaaTNaiveIter::inner_get_next_rows	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/storage/retrieval/ob_spiv_daat_iter.cpp	347	ObSPIVBMWIter::get_next_rows	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/retrieval/ob_spiv_daat_iter.cpp	353	ObSPIVBMWIter::get_next_rows	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/retrieval/ob_spiv_daat_iter.cpp	390	ObSPIVBMWIter::project_rows_from_result_docids	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/storage/retrieval/ob_spiv_daat_iter.cpp	426	ObSPIVBMWIter::process_collected_row	other variable hash_ret == OB_HASH_EXIST	if (OB_HASH_EXIST == hash_ret) {
+src/storage/retrieval/ob_spiv_dim_iter.cpp	131	ObSPIVDaaTDimIter::get_next_row	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/storage/retrieval/ob_spiv_dim_iter.cpp	141	ObSPIVDaaTDimIter::get_next_row	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/storage/retrieval/ob_spiv_dim_iter.cpp	212	ObSPIVDaaTDimIter::advance_to	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/retrieval/ob_spiv_dim_iter.cpp	259	ObSPIVDaaTDimIter::get_dim_max_score	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/storage/retrieval/ob_spiv_dim_iter.cpp	333	ObSPIVBlockMaxDimIter::get_next_row	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/retrieval/ob_spiv_dim_iter.cpp	351	ObSPIVBlockMaxDimIter::advance_to	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/retrieval/ob_spiv_dim_iter.cpp	368	ObSPIVBlockMaxDimIter::advance_shallow	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/retrieval/ob_spiv_dim_iter.cpp	450	ObSPIVBlockMaxDimIter::calc_dim_max_score	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/retrieval/ob_spiv_dim_iter.cpp	459	ObSPIVBlockMaxDimIter::calc_dim_max_score	ret == OB_ITER_END	if (OB_LIKELY(OB_ITER_END == ret)) {
+src/storage/retrieval/ob_text_daat_iter.cpp	130	ObTextBMWIter::get_next_rows	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/retrieval/ob_text_retrieval_token_iter.cpp	208	ObTextRetrievalTokenIter::get_next_row	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/retrieval/ob_text_retrieval_token_iter.cpp	248	ObTextRetrievalTokenIter::get_next_batch	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/retrieval/ob_text_retrieval_token_iter.cpp	477	ObTextRetrievalDaaTTokenIter::get_next_row	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/retrieval/ob_text_retrieval_token_iter.cpp	481	ObTextRetrievalDaaTTokenIter::get_next_row	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/retrieval/ob_text_retrieval_token_iter.cpp	563	ObTextRetrievalDaaTTokenIter::advance_to	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/retrieval/ob_text_retrieval_token_iter.cpp	676	ObTextRetrievalBlockMaxIter::get_next_row	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/retrieval/ob_text_retrieval_token_iter.cpp	694	ObTextRetrievalBlockMaxIter::advance_to	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/retrieval/ob_text_retrieval_token_iter.cpp	711	ObTextRetrievalBlockMaxIter::advance_shallow	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/retrieval/ob_text_retrieval_token_iter.cpp	793	ObTextRetrievalBlockMaxIter::calc_dim_max_score	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/retrieval/ob_text_retrieval_token_iter.cpp	802	ObTextRetrievalBlockMaxIter::calc_dim_max_score	ret == OB_ITER_END	if (OB_LIKELY(OB_ITER_END == ret)) {

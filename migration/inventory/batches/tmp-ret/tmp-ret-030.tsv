@@ -1,0 +1,121 @@
+file	line	symbol	construct	text
+src/storage/tx/ob_trans_timer.cpp	85	ObTransTimeoutTask::runTimerTask	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tx/ob_trans_timer.cpp	92	ObTransTimeoutTask::runTimerTask	assign tmp_ret	tmp_ret = OB_ERR_UNEXPECTED;
+src/storage/tx/ob_trans_timer.cpp	94	ObTransTimeoutTask::runTimerTask	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = ctx_->handle_timeout(delay_))) {
+src/storage/tx/ob_trans_timer.cpp	250	ObTransTimer::destroy	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tx/ob_trans_timer.cpp	254	ObTransTimer::destroy	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = stop())) {
+src/storage/tx/ob_trans_timer.cpp	256	ObTransTimer::destroy	assign tmp_ret	} else if (OB_SUCCESS != (tmp_ret = wait())) {
+src/storage/tx/ob_tx_ctx.cpp	356	ObTxCtx::handle_timeout	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tx/ob_tx_ctx.cpp	381	ObTxCtx::handle_timeout	assign tmp_ret	tmp_ret = OB_TRANS_COMMIT_TOO_MUCH_TIME;
+src/storage/tx/ob_tx_ctx.cpp	390	ObTxCtx::handle_timeout	assign tmp_ret	tmp_ret = OB_TRANS_LIVE_TOO_MUCH_TIME;
+src/storage/tx/ob_tx_ctx.cpp	402	ObTxCtx::handle_timeout	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(submit_log_impl_(ObTxLogType::TX_MULTI_DATA_SOURCE_LOG))) {
+src/storage/tx/ob_tx_ctx.cpp	411	ObTxCtx::handle_timeout	assign tmp_ret	tmp_ret = post_tx_commit_resp_(OB_TRANS_TIMEOUT);
+src/storage/tx/ob_tx_ctx.cpp	414	ObTxCtx::handle_timeout	assign tmp_ret	tmp_ret = post_tx_commit_resp_(OB_TRANS_STMT_TIMEOUT);
+src/storage/tx/ob_tx_ctx.cpp	427	ObTxCtx::handle_timeout	assign tmp_ret	tmp_ret = post_tx_commit_resp_(OB_EAGAIN);
+src/storage/tx/ob_tx_ctx.cpp	503	ObTxCtx::kill	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tx/ob_tx_ctx.cpp	525	ObTxCtx::kill	merge OB_TRANS_CANNOT_BE_KILLED into ret through if (OB_SUCC(ret)) (continue-and-record through another variable)	ret = OB_TRANS_CANNOT_BE_KILLED;
+src/storage/tx/ob_tx_ctx.cpp	542	ObTxCtx::kill	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(prepare_commit_cb_for_role_change_(cb_param, cb_list))) {
+src/storage/tx/ob_tx_ctx.cpp	544	ObTxCtx::kill	merge into ret	ret = (ret == OB_SUCCESS) ? tmp_ret : ret;
+src/storage/tx/ob_tx_ctx.cpp	585	ObTxCtx::commit	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tx/ob_tx_ctx.cpp	834	ObTxCtx::trans_replay_commit_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tx/ob_tx_ctx.cpp	1282	ObTxCtx::serial_submit_redo_after_write_	declare tmp_ret	int tmp_ret = switch_to_parallel_logging_(serial_final_scn, exec_info_.max_submitted_seq_no_);
+src/storage/tx/ob_tx_ctx.cpp	1398	ObTxCtx::compensate_abort_log_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tx/ob_tx_ctx.cpp	1399	ObTxCtx::compensate_abort_log_	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(restart_commit_retry_timer_())) {
+src/storage/tx/ob_tx_ctx.cpp	1516	ObTxCtx::on_success	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tx/ob_tx_ctx.cpp	1643	ObTxCtx::on_success	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = submit_record_log_())) {
+src/storage/tx/ob_tx_ctx.cpp	1678	ObTxCtx::on_success	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(submit_log_impl_(ObTxLogType::TX_MULTI_DATA_SOURCE_LOG))) {
+src/storage/tx/ob_tx_ctx.cpp	1689	ObTxCtx::on_success	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = ls_tx_ctx_mgr_->revert_tx_ctx_without_lock(this))) {
+src/storage/tx/ob_tx_ctx.cpp	1910	ObTxCtx::common_on_success_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tx/ob_tx_ctx.cpp	1934	ObTxCtx::check_and_register_timeout_task_	declare tmp_ret	int64_t tmp_ret = OB_SUCCESS;
+src/storage/tx/ob_tx_ctx.cpp	1942	ObTxCtx::check_and_register_timeout_task_	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = register_timeout_task_(timeout_left))) {
+src/storage/tx/ob_tx_ctx.cpp	2065	ObTxCtx::on_failure	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tx/ob_tx_ctx.cpp	2066	ObTxCtx::on_failure	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(defer_commit_callback_(OB_TRANS_KILLED, SCN::invalid_scn()))) {
+src/storage/tx/ob_tx_ctx.cpp	2071	ObTxCtx::on_failure	merge into ret	ret = COVER_SUCC(tmp_ret);
+src/storage/tx/ob_tx_ctx.cpp	2081	ObTxCtx::on_failure	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tx/ob_tx_ctx.cpp	2082	ObTxCtx::on_failure	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = ls_tx_ctx_mgr_->revert_tx_ctx_without_lock(this))) {
+src/storage/tx/ob_tx_ctx.cpp	2605	ObTxCtx::submit_commit_log_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tx/ob_tx_ctx.cpp	2607	ObTxCtx::submit_commit_log_	assign tmp_ret	!= (tmp_ret = ctx_tx_data_.set_commit_version(log_cb->get_log_ts()))) {
+src/storage/tx/ob_tx_ctx.cpp	2646	ObTxCtx::submit_commit_log_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tx/ob_tx_ctx.cpp	2647	ObTxCtx::submit_commit_log_	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = ctx_tx_data_.set_commit_version(log_cb->get_log_ts()))) {
+src/storage/tx/ob_tx_ctx.cpp	2997	ObTxCtx::submit_log_impl_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tx/ob_tx_ctx.cpp	3067	ObTxCtx::handle_submit_log_err_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tx/ob_tx_ctx.cpp	3070	ObTxCtx::handle_submit_log_err_	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(do_local_tx_end_(TxEndAction::ABORT_TX))) {
+src/storage/tx/ob_tx_ctx.cpp	3076	ObTxCtx::handle_submit_log_err_	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(do_local_tx_end_(TxEndAction::DELAY_ABORT_TX))) {
+src/storage/tx/ob_tx_ctx.cpp	3102	ObTxCtx::need_record_log_	declare tmp_ret	int tmp_ret = OB_E(EventTable::EN_LOG_IDS_COUNT_ERROR) OB_SUCCESS;
+src/storage/tx/ob_tx_ctx.cpp	3827	ObTxCtx::replay_commit_info	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tx/ob_tx_ctx.cpp	4152	ObTxCtx::replay_multi_data_source	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tx/ob_tx_ctx.cpp	4164	ObTxCtx::replay_multi_data_source	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(exec_info_.multi_data_source_.remove(i))) {
+src/storage/tx/ob_tx_ctx.cpp	4815	ObTxCtx::prepare_mul_data_source_tx_end_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tx/ob_tx_ctx.cpp	4823	ObTxCtx::prepare_mul_data_source_tx_end_	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(restart_commit_retry_timer_())) {
+src/storage/tx/ob_tx_ctx.cpp	4936	ObTxCtx::register_multi_data_source	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tx/ob_tx_ctx.cpp	5010	ObTxCtx::register_multi_data_source	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = mds_cache_.rollback_last_mds_node())) {
+src/storage/tx/ob_tx_ctx.cpp	5023	ObTxCtx::register_multi_data_source	assign tmp_ret	!= (tmp_ret = submit_log_impl_(ObTxLogType::TX_MULTI_DATA_SOURCE_LOG))) {
+src/storage/tx/ob_tx_ctx.cpp	5030	ObTxCtx::register_multi_data_source	merge into ret	ret = tmp_ret;
+src/storage/tx/ob_tx_ctx.cpp	5622	ObTxCtx::do_local_commit_tx_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tx/ob_tx_ctx.cpp	5623	ObTxCtx::do_local_commit_tx_	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(restart_commit_retry_timer_())) {
+src/storage/tx/ob_tx_ctx_mds.cpp	82	ObTxMDSCache::alloc_mds_node	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tx/ob_tx_ctx_mds.cpp	106	ObTxMDSCache::alloc_mds_node	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(mem_stat_hash_.create(16, attr, attr))) {
+src/storage/tx/ob_tx_ctx_mds.cpp	112	ObTxMDSCache::alloc_mds_node	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(mem_stat_hash_.get_refactored(cur_register_no, tmp_mem_stat))) {
+src/storage/tx/ob_tx_ctx_mds.cpp	124	ObTxMDSCache::alloc_mds_node	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(mem_stat_hash_.set_refactored(cur_register_no, tmp_mem_stat, 1))) {
+src/storage/tx/ob_tx_ctx_mds.cpp	138	ObTxMDSCache::free_mds_node	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tx/ob_tx_ctx_mds.cpp	152	ObTxMDSCache::free_mds_node	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(mem_stat_hash_.get_refactored(cur_register_no, tmp_mem_stat))) {
+src/storage/tx/ob_tx_ctx_mds.cpp	167	ObTxMDSCache::free_mds_node	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(mem_stat_hash_.erase_refactored(cur_register_no))) {
+src/storage/tx/ob_tx_data_functor.cpp	415	LockForReadFunctor::operator()	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tx/ob_tx_data_functor.cpp	418	LockForReadFunctor::operator()	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(check_clog_disk_full_())) {
+src/storage/tx/ob_tx_data_functor.cpp	419	LockForReadFunctor::operator()	merge into ret	ret = tmp_ret;
+src/storage/tx/ob_tx_log_operator.h	104	ObTxCtxLogOperator::replay_log_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tx/ob_tx_log_operator.h	116	ObTxCtxLogOperator::replay_log_	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(replay_fail_out_ctx_())) {
+src/storage/tx/ob_tx_log_operator.h	371	ObTxCtxLogOperator::after_submit_log_fail_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tx/ob_tx_log_operator.h	376	ObTxCtxLogOperator::after_submit_log_fail_	assign tmp_ret	tmp_ret = OB_NOT_SUPPORTED;
+src/storage/tx/ob_tx_log_operator.h	386	ObTxCtxLogOperator::after_submit_log_fail_	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(tx_ctx_->return_log_cb_(log_op_arg_.submit_arg_.log_cb_))) {
+src/storage/tx/ob_tx_log_operator.h	402	operator()	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tx/ob_tx_log_operator.h	428	operator()	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(common_submit_log_succ_())) {
+src/storage/tx/ob_tx_loop_worker.cpp	131	ObTxLoopWorker::maintain_tx_state_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tx/ob_tx_loop_worker.cpp	152	ObTxLoopWorker::maintain_tx_state_	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(cur_ls_ptr->get_log_handler()->get_max_decided_scn(max_decided_scn))) {
+src/storage/tx/ob_tx_on_demand_print.h	56	#define TX_KV_PRINT_WITH_ERR	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;                                                         \
+src/storage/tx/ob_tx_on_demand_print.h	58	#define TX_KV_PRINT_WITH_ERR	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(common::databuff_print_json_kv(buf, buf_len, pos, #name, obj))) { \
+src/storage/tx/ob_tx_on_demand_print.h	66	#define TX_PRINT_FUNC_WITH_ERR	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;                                                         \
+src/storage/tx/ob_tx_on_demand_print.h	68	#define TX_PRINT_FUNC_WITH_ERR	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(func(buf, buf_len, pos))) { \
+src/storage/tx/ob_tx_replay_executor.cpp	61	ObTxReplayExecutor::execute	declare tmp_ret	int tmp_ret = OB_ERR_UNEXPECTED;
+src/storage/tx/ob_tx_replay_executor.cpp	309	ObTxReplayExecutor::replay_redo_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tx/ob_tx_replay_executor.cpp	330	ObTxReplayExecutor::replay_redo_	OB_TMP_FAIL (plan definition)	if (OB_SUCC(ret) && OB_TMP_FAIL(mt_ctx_->remove_callbacks_for_fast_commit(replay_queue_, share::SCN::minus(log_ts_ns_, 1)))) {
+src/storage/tx_storage/ob_checkpoint_service.cpp	156	ObCheckPointService::flush_to_recycle_clog_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tx_storage/ob_checkpoint_service.cpp	162	ObCheckPointService::flush_to_recycle_clog_	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(tenant_ls->get_checkpoint_executor()->update_clog_checkpoint())) {
+src/storage/tx_storage/ob_checkpoint_service.cpp	163	ObCheckPointService::flush_to_recycle_clog_	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(tenant_ls->flush_to_recycle_clog())) {
+src/storage/tx_storage/ob_ls_service.cpp	325	ObLSService::gc_ls_after_replay_slog	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tx_storage/ob_ls_service.cpp	343	ObLSService::gc_ls_after_replay_slog	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(ls->stop())) {
+src/storage/tx_storage/ob_ls_service.cpp	646	ObLSService::del_ls_after_create_ls_failed_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tx_storage/ob_ls_service.cpp	653	ObLSService::del_ls_after_create_ls_failed_	assign tmp_ret	tmp_ret = OB_SUCCESS;
+src/storage/tx_storage/ob_ls_service.cpp	655	ObLSService::del_ls_after_create_ls_failed_	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(stop_and_remove_ls_(ls, remove_from_disk))) {
+src/storage/tx_storage/ob_ls_service.cpp	664	ObLSService::del_ls_after_create_ls_failed_	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(ls->remove_ls_inner_tablet())) {
+src/storage/tx_storage/ob_ls_service.cpp	671	ObLSService::del_ls_after_create_ls_failed_	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(tmp_ret)) {
+src/storage/tx_storage/ob_ls_service.cpp	673	ObLSService::del_ls_after_create_ls_failed_	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(ls->remove_ls())) {
+src/storage/tx_storage/ob_ls_service.cpp	680	ObLSService::del_ls_after_create_ls_failed_	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(tmp_ret)) {
+src/storage/tx_storage/ob_ls_service.cpp	685	ObLSService::del_ls_after_create_ls_failed_	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(tmp_ret)) {
+src/storage/tx_storage/ob_ls_service.cpp	687	ObLSService::del_ls_after_create_ls_failed_	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(ls->prepare_for_safe_destroy())) {
+src/storage/tx_storage/ob_memory_printer.cpp	55	ObMemoryPrinter::print_memory_usage	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tx_storage/ob_memory_printer.cpp	69	ObMemoryPrinter::print_memory_usage	assign tmp_ret	} else if (OB_SUCCESS != (tmp_ret = print_memory_usage_(print_buf,
+src/storage/tx_storage/ob_memstore_freezer.cpp	340	ObMemstoreFreezer::freeze_all	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tx_storage/ob_memstore_freezer.cpp	362	ObMemstoreFreezer::freeze_all	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(unset_freezing_(OB_FAIL(ret)))) {
+src/storage/tx_storage/ob_memstore_freezer.cpp	414	ObMemstoreFreezer::check_and_freeze_normal_data_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tx_storage/ob_memstore_freezer.cpp	423	ObMemstoreFreezer::check_and_freeze_normal_data_	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(do_major_if_need_(need_freeze))) {
+src/storage/tx_storage/ob_memstore_freezer.cpp	426	ObMemstoreFreezer::check_and_freeze_normal_data_	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(do_minor_freeze_data_(ctx))) {
+src/storage/tx_storage/ob_memstore_freezer.cpp	471	ObMemstoreFreezer::check_and_freeze_tx_data_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tx_storage/ob_memstore_freezer.cpp	582	ObMemstoreFreezer::check_and_freeze_mds_table_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tx_storage/ob_memstore_freezer.cpp	583	ObMemstoreFreezer::check_and_freeze_mds_table_	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(post_mds_table_freeze_request_())) {
+src/storage/tx_storage/ob_memstore_freezer.cpp	691	ObMemstoreFreezer::check_and_do_freeze	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tx_storage/ob_memstore_freezer.cpp	692	ObMemstoreFreezer::check_and_do_freeze	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(check_and_freeze_normal_data_(ctx))) {
+src/storage/tx_storage/ob_memstore_freezer.cpp	695	ObMemstoreFreezer::check_and_do_freeze	assign tmp_ret	tmp_ret = OB_SUCCESS;
+src/storage/tx_storage/ob_memstore_freezer.cpp	696	ObMemstoreFreezer::check_and_do_freeze	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(check_and_freeze_tx_data_())) {
+src/storage/tx_storage/ob_memstore_freezer.cpp	699	ObMemstoreFreezer::check_and_do_freeze	assign tmp_ret	tmp_ret = OB_SUCCESS;
+src/storage/tx_storage/ob_memstore_freezer.cpp	700	ObMemstoreFreezer::check_and_do_freeze	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(check_and_freeze_mds_table_())) {
+src/storage/tx_storage/ob_memstore_freezer.cpp	1336	ObMemstoreFreezer::do_minor_freeze_data_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tx_storage/ob_memstore_freezer.cpp	1357	ObMemstoreFreezer::do_minor_freeze_data_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tx_storage/ob_memstore_freezer.cpp	1359	ObMemstoreFreezer::do_minor_freeze_data_	assign tmp_ret	(tmp_ret = unset_freezing_(rollback_freeze_cnt)))) {
+src/storage/tx_storage/ob_memstore_freezer.cpp	1362	ObMemstoreFreezer::do_minor_freeze_data_	merge into ret	ret = tmp_ret;
+src/storage/tx_storage/ob_memstore_freezer.cpp	1377	ObMemstoreFreezer::do_major_if_need_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tx_storage/ob_memstore_freezer.cpp	1382	ObMemstoreFreezer::do_major_if_need_	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(retry_failed_major_freeze_(major_triggered))) {
+src/storage/tx_table/ob_tx_ctx_memtable_mgr.cpp	175	ObTxCtxMemtableMgr::release_head_memtable_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tx_table/ob_tx_ctx_memtable_mgr.cpp	184	ObTxCtxMemtableMgr::release_head_memtable_	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(unregister_from_common_checkpoint_(memtable))) {
+src/storage/tx_table/ob_tx_ctx_table.cpp	123	ObTxCtxTableRecoverHelper::recover_one_tx_ctx_	declare tmp_ret	int tmp_ret = 0;
+src/storage/tx_table/ob_tx_ctx_table.cpp	124	ObTxCtxTableRecoverHelper::recover_one_tx_ctx_	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(ls_tx_ctx_mgr->revert_tx_ctx(tx_ctx))) {

@@ -1,0 +1,97 @@
+file	line	symbol	construct	text
+src/sql/engine/join/ob_hash_join_op.cpp	684	ObHashJoinOp::do_sync_wait_all	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/join/ob_hash_join_op.cpp	693	ObHashJoinOp::do_sync_wait_all	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/join/ob_hash_join_op.cpp	700	ObHashJoinOp::do_sync_wait_all	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/join/ob_hash_join_op.cpp	725	ObHashJoinOp::next	ret (assigned in the comparison) == OB_ITER_END	} else if (OB_ITER_END == (ret = (this->*state_operation)())) {
+src/sql/engine/join/ob_hash_join_op.cpp	735	ObHashJoinOp::next	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/join/ob_hash_join_op.cpp	777	ObHashJoinOp::inner_get_next_row	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/join/ob_hash_join_op.cpp	813	ObHashJoinOp::inner_get_next_row	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/join/ob_hash_join_op.cpp	932	ObHashJoinOp::get_next_left_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/join/ob_hash_join_op.cpp	939	ObHashJoinOp::get_next_left_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/join/ob_hash_join_op.cpp	956	ObHashJoinOp::get_next_left_row_na	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/join/ob_hash_join_op.cpp	989	ObHashJoinOp::get_next_left_row_na	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/join/ob_hash_join_op.cpp	1020	ObHashJoinOp::get_next_left_row_batch	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/join/ob_hash_join_op.cpp	1076	ObHashJoinOp::get_next_left_row_batch_na	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/join/ob_hash_join_op.cpp	1169	ObHashJoinOp::build_hash_table_for_nest_loop	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/join/ob_hash_join_op.cpp	1206	ObHashJoinOp::build_hash_table_for_nest_loop	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/join/ob_hash_join_op.cpp	1586	ObHashJoinOp::build_hash_table_in_memory	ret == OB_ITER_END	} else if (is_shared_ && OB_ITER_END == ret) {
+src/sql/engine/join/ob_hash_join_op.cpp	1604	ObHashJoinOp::build_hash_table_in_memory	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/join/ob_hash_join_op.cpp	1642	ObHashJoinOp::build_hash_table_in_memory	ret == OB_ITER_END	if (OB_SUCC(ret) || OB_ITER_END == ret) {
+src/sql/engine/join/ob_hash_join_op.cpp	1652	ObHashJoinOp::build_hash_table_in_memory	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/join/ob_hash_join_op.cpp	2234	ObHashJoinOp::fill_partition	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/join/ob_hash_join_op.cpp	2364	ObHashJoinOp::split_partition	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/join/ob_hash_join_op.cpp	2378	ObHashJoinOp::split_partition	ret == OB_ITER_END	if (OB_ITER_END == ret && (!read_null_in_naaj_ || is_shared_)) {
+src/sql/engine/join/ob_hash_join_op.cpp	2681	ObHashJoinOp::build_hash_table_for_recursive	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/join/ob_hash_join_op.cpp	2726	ObHashJoinOp::build_hash_table_for_recursive	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/join/ob_hash_join_op.cpp	2948	ObHashJoinOp::PartitionSplitter::repartition_by_part_array	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/join/ob_hash_join_op.cpp	2964	ObHashJoinOp::PartitionSplitter::repartition_by_part_array	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/join/ob_hash_join_op.cpp	3102	ObHashJoinOp::PartitionSplitter::build_hash_table_by_part_array	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/join/ob_hash_join_op.cpp	3117	ObHashJoinOp::PartitionSplitter::build_hash_table_by_part_array	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/join/ob_hash_join_op.cpp	3264	ObHashJoinOp::split_partition_and_build_hash_table	ret == OB_ITER_END	if (OB_ITER_END == ret && read_null_in_naaj_) {
+src/sql/engine/join/ob_hash_join_op.cpp	3312	ObHashJoinOp::adaptive_process	ret != OB_ITER_END	if (OB_FAIL(in_memory_process(need_not_read_right)) && OB_ITER_END != ret) {
+src/sql/engine/join/ob_hash_join_op.cpp	3317	ObHashJoinOp::adaptive_process	ret != OB_ITER_END	if (OB_FAIL(recursive_process(need_not_read_right)) && OB_ITER_END != ret) {
+src/sql/engine/join/ob_hash_join_op.cpp	3322	ObHashJoinOp::adaptive_process	ret != OB_ITER_END	if (OB_FAIL(nest_loop_process(need_not_read_right)) && OB_ITER_END != ret) {
+src/sql/engine/join/ob_hash_join_op.cpp	3328	ObHashJoinOp::adaptive_process	ret != OB_ITER_END	if (OB_FAIL(recursive_process(need_not_read_right)) && OB_ITER_END != ret) {
+src/sql/engine/join/ob_hash_join_op.cpp	3403	ObHashJoinOp::get_next_right_batch_na	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/join/ob_hash_join_op.cpp	3474	ObHashJoinOp::get_next_right_batch	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/join/ob_hash_join_op.cpp	3491	ObHashJoinOp::get_next_right_batch	ret == OB_ITER_END	if (OB_SUCC(ret) || OB_ITER_END == ret) {
+src/sql/engine/join/ob_hash_join_op.cpp	3516	ObHashJoinOp::get_next_right_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/join/ob_hash_join_op.cpp	3531	ObHashJoinOp::get_next_right_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/join/ob_hash_join_op.cpp	3540	ObHashJoinOp::get_next_right_row	ret == OB_ITER_END	if (OB_SUCC(ret) || OB_ITER_END == ret) {
+src/sql/engine/join/ob_hash_join_op.cpp	3568	ObHashJoinOp::get_next_right_row_na	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/join/ob_hash_join_op.cpp	3608	ObHashJoinOp::get_next_right_row_na	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/join/ob_hash_join_op.cpp	3617	ObHashJoinOp::get_next_right_row_na	ret == OB_ITER_END	if (OB_SUCC(ret) || OB_ITER_END == ret) {
+src/sql/engine/join/ob_hash_join_op.cpp	3754	ObHashJoinOp::get_next_batch_right_rows	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/join/ob_hash_join_op.cpp	3784	ObHashJoinOp::get_next_batch_right_rows	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/join/ob_hash_join_op.cpp	3807	ObHashJoinOp::get_next_batch_right_rows	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/sql/engine/join/ob_hash_join_op.cpp	3886	ObHashJoinOp::get_next_right_row_for_batch	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/join/ob_hash_join_op.cpp	3891	ObHashJoinOp::get_next_right_row_for_batch	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/sql/engine/join/ob_hash_join_op.cpp	3895	ObHashJoinOp::get_next_right_row_for_batch	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/join/ob_hash_join_op.cpp	3949	ObHashJoinOp::read_right_operate	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/join/ob_hash_join_op.cpp	3980	ObHashJoinOp::read_right_operate	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/join/ob_hash_join_op.cpp	3990	ObHashJoinOp::read_right_operate	ret != OB_ITER_END	} else if (OB_FAIL((this->*get_next_right_row_func_)()) && OB_ITER_END != ret) {
+src/sql/engine/join/ob_hash_join_op.cpp	4268	ObHashJoinOp::read_hashrow_for_cache_aware	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/join/ob_hash_join_op.cpp	5214	ObHashJoinOp::fill_left_join_result_batch	ret == OB_ITER_END	if (OB_ITER_END == ret && 0 != batch_idx) {
+src/sql/engine/join/ob_join_filter_op.cpp	448	ObJoinFilterOp::inner_get_next_row	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/join/ob_join_filter_op.cpp	475	ObJoinFilterOp::inner_get_next_row	ret == OB_ITER_END	if (MY_SPEC.is_use_mode() && ret == OB_ITER_END) {
+src/sql/engine/join/ob_join_op.cpp	101	ObJoinOp::get_next_left_row	ret != OB_ITER_END	if (OB_FAIL(left_->get_next_row()) && OB_ITER_END != ret) {
+src/sql/engine/join/ob_join_op.cpp	109	ObJoinOp::get_next_right_row	ret != OB_ITER_END	if (OB_FAIL(right_->get_next_row()) && OB_ITER_END != ret) {
+src/sql/engine/join/ob_merge_join_op.cpp	190	ObMergeJoinOp::inner_switch_iterator	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/join/ob_merge_join_op.cpp	217	ObMergeJoinOp::inner_get_next_row	ret (assigned in the comparison) == OB_ITER_END	if (OB_ITER_END == (ret = (this->*state_operation)())) {
+src/sql/engine/join/ob_merge_join_op.cpp	236	ObMergeJoinOp::inner_get_next_row	ret != OB_ITER_END	} else if (OB_FAIL((this->*state_function)()) && OB_ITER_END != ret) {
+src/sql/engine/join/ob_merge_join_op.cpp	258	ObMergeJoinOp::join_begin_operate	ret != OB_ITER_END	if (OB_FAIL(left_fetcher_.next()) && OB_ITER_END != ret) {
+src/sql/engine/join/ob_merge_join_op.cpp	286	ObMergeJoinOp::left_join_operate	ret != OB_ITER_END	if (OB_FAIL(left_fetcher_.next()) && OB_ITER_END != ret) {
+src/sql/engine/join/ob_merge_join_op.cpp	312	ObMergeJoinOp::right_join_cache_operate	ret != OB_ITER_END	if (OB_FAIL(get_next_right_cache_row()) && OB_ITER_END != ret) {
+src/sql/engine/join/ob_merge_join_op.cpp	361	ObMergeJoinOp::right_join_operate	ret != OB_ITER_END	if (OB_FAIL(right_fetcher_.next()) && OB_ITER_END != ret) {
+src/sql/engine/join/ob_merge_join_op.cpp	390	ObMergeJoinOp::read_cache_operate	ret != OB_ITER_END	} else if (OB_FAIL(get_next_right_cache_row()) && OB_ITER_END != ret) {
+src/sql/engine/join/ob_merge_join_op.cpp	440	ObMergeJoinOp::full_cache_operate	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/join/ob_merge_join_op.cpp	443	ObMergeJoinOp::full_cache_operate	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/join/ob_merge_join_op.cpp	521	ObMergeJoinOp::empty_cache_operate	ret != OB_ITER_END	if (OB_FAIL(left_fetcher_.next()) && OB_ITER_END != ret) {
+src/sql/engine/join/ob_merge_join_op.cpp	535	ObMergeJoinOp::empty_cache_operate	ret != OB_ITER_END	if (OB_FAIL(right_fetcher_.next()) && OB_ITER_END != ret) {
+src/sql/engine/join/ob_merge_join_op.cpp	623	ObMergeJoinOp::fill_cache_operate	ret != OB_ITER_END	if (OB_FAIL(right_fetcher_.next()) && OB_ITER_END != ret) {
+src/sql/engine/join/ob_merge_join_op.cpp	676	ObMergeJoinOp::get_next_right_cache_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/join/ob_merge_join_op.h	162	ObMergeJoinOp::ChildRowFetcher::next	ret == OB_ITER_END	if (common::OB_ITER_END == ret) {
+src/sql/engine/join/ob_nested_loop_join_op.cpp	148	ObNestedLoopJoinOp::switch_iterator	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/join/ob_nested_loop_join_op.cpp	243	ObNestedLoopJoinOp::inner_get_next_row	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/sql/engine/join/ob_nested_loop_join_op.cpp	253	ObNestedLoopJoinOp::inner_get_next_row	ret (assigned in the comparison) == OB_ITER_END	if (OB_ITER_END == (ret = (this->*state_operation)())) {
+src/sql/engine/join/ob_nested_loop_join_op.cpp	262	ObNestedLoopJoinOp::inner_get_next_row	ret != OB_ITER_END	if (OB_FAIL((this->*state_function)()) && OB_ITER_END != ret) {
+src/sql/engine/join/ob_nested_loop_join_op.cpp	268	ObNestedLoopJoinOp::inner_get_next_row	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/join/ob_nested_loop_join_op.cpp	343	ObNestedLoopJoinOp::join_row_with_semi_join	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/join/ob_nested_loop_join_op.cpp	357	ObNestedLoopJoinOp::join_row_with_semi_join	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/join/ob_nested_loop_join_op.cpp	379	ObNestedLoopJoinOp::read_left_operate	ret != OB_ITER_END	if (OB_FAIL(group_read_left_operate()) && OB_ITER_END != ret) {
+src/sql/engine/join/ob_nested_loop_join_op.cpp	382	ObNestedLoopJoinOp::read_left_operate	ret != OB_ITER_END	} else if (OB_FAIL(get_next_left_row()) && OB_ITER_END != ret) {
+src/sql/engine/join/ob_nested_loop_join_op.cpp	411	ObNestedLoopJoinOp::rescan_right_operator	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/join/ob_nested_loop_join_op.cpp	420	ObNestedLoopJoinOp::rescan_right_operator	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/join/ob_nested_loop_join_op.cpp	480	ObNestedLoopJoinOp::group_read_left_operate	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/join/ob_nested_loop_join_op.cpp	500	ObNestedLoopJoinOp::group_read_left_operate	ret == OB_ITER_END	if (OB_SUCC(ret) || (ignore_end && OB_ITER_END == ret)) {
+src/sql/engine/join/ob_nested_loop_join_op.cpp	530	ObNestedLoopJoinOp::group_read_left_operate	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/join/ob_nested_loop_join_op.cpp	540	ObNestedLoopJoinOp::group_read_left_operate	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/join/ob_nested_loop_join_op.cpp	574	ObNestedLoopJoinOp::read_right_operate	ret != OB_ITER_END	if (OB_FAIL(get_next_row_from_right()) && OB_ITER_END != ret) {
+src/sql/engine/join/ob_nested_loop_join_op.cpp	617	ObNestedLoopJoinOp::get_left_batch	ret != OB_ITER_END	if (OB_FAIL(group_get_left_batch(left_brs_)) && OB_ITER_END != ret) {
+src/sql/engine/join/ob_nested_loop_join_op.cpp	733	ObNestedLoopJoinOp::group_get_left_batch	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/join/ob_nested_loop_join_op.cpp	755	ObNestedLoopJoinOp::group_get_left_batch	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/join/ob_nested_loop_join_op.cpp	765	ObNestedLoopJoinOp::group_get_left_batch	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/join/ob_nested_loop_join_op.cpp	801	ObNestedLoopJoinOp::rescan_right_op	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/join/ob_nested_loop_join_op.cpp	980	ObNestedLoopJoinOp::inner_get_next_batch	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/ob_exec_context.cpp	537	ObExecContext::get_temp_expr_eval_ctx	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/sql/engine/ob_exec_context.cpp	1400	ObExecContext::get_datum_access_ctx	ret == OB_NOT_INIT	if (OB_FAIL(get_lob_read_options(lob_read_options)) && OB_NOT_INIT == ret) {

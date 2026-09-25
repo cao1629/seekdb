@@ -1,0 +1,61 @@
+file	line	symbol	construct	text
+src/sql/engine/expr/ob_expr_get_sys_var.cpp	102	ObExprGetSysVar::calc_	allocator in, arena view out: ObObj &result	int ObExprGetSysVar::calc_(ObObj &result, const ObString &var_name, const int64_t var_scope,
+src/sql/engine/expr/ob_expr_get_sys_var.cpp	156	ObExprGetSysVar::get_session_var	allocator in, arena view out: ObObj &result	int ObExprGetSysVar::get_session_var(ObObj &result,
+src/sql/engine/expr/ob_expr_get_sys_var.cpp	200	ObExprGetSysVar::get_sys_var_disp_obj	allocator in, arena view out: ObObj &disp_obj	int ObExprGetSysVar::get_sys_var_disp_obj(common::ObIAllocator &allocator,
+src/sql/engine/expr/ob_expr_insert.cpp	136	ObExprInsert::calc	allocator in, arena view out: ObString &result	int ObExprInsert::calc(ObString &result, const ObString &text, const int64_t start_pos,
+src/sql/engine/expr/ob_expr_int2ip.cpp	37	ObExprInt2ip::int2ip	allocator in, arena view out: ObObj &result	int ObExprInt2ip::int2ip(ObObj &result, const int64_t int_val, ObExprStringBuf &string_buf)
+src/sql/engine/expr/ob_expr_int_div.cpp	87	ObExprIntDiv::intdiv_int	allocator in, arena view out: ObObj &res	int ObExprIntDiv::intdiv_int(ObObj &res, const ObObj &left, const ObObj &right, ObIAllocator *allocator, ObScale scale)
+src/sql/engine/expr/ob_expr_int_div.cpp	137	ObExprIntDiv::intdiv_uint	allocator in, arena view out: ObObj &res	int ObExprIntDiv::intdiv_uint(ObObj &res, const ObObj &left, const ObObj &right, ObIAllocator *allocator, ObScale scale)
+src/sql/engine/expr/ob_expr_int_div.cpp	179	ObExprIntDiv::intdiv_number	allocator in, arena view out: ObObj &res	int ObExprIntDiv::intdiv_number(ObObj &res, const ObObj &left, const ObObj &right, ObIAllocator *allocator, ObScale scale)
+src/sql/engine/expr/ob_expr_join_filter.h	151	ObExprJoinFilter::ObExprJoinFilterContext::cur_row_	member container of ObDatum of type ObTMArray<ObDatum>	ObTMArray<ObDatum> cur_row_;
+src/sql/engine/expr/ob_expr_json_func_helper.cpp	52	ObJsonExprHelper::get_json_or_str_data	allocator in, arena view out: ObString& str	int ObJsonExprHelper::get_json_or_str_data(ObExpr *expr, ObEvalCtx &ctx,
+src/sql/engine/expr/ob_expr_json_func_helper.cpp	243	ObJsonExprHelper::get_json_for_partial_update	allocator in, arena view out: ObDatum &json_datum	int ObJsonExprHelper::get_json_for_partial_update(
+src/sql/engine/expr/ob_expr_json_func_helper.cpp	376	ObJsonExprHelper::cast_to_json_tree	allocator in, arena view out: ObString &text	int ObJsonExprHelper::cast_to_json_tree(ObString &text, common::ObIAllocator *allocator, uint32_t parse_flag, uint32_t max_depth_config)
+src/sql/engine/expr/ob_expr_json_func_helper.cpp	393	ObJsonExprHelper::cast_to_res	allocator in, arena view out: ObDatum &src_datum	int ObJsonExprHelper::cast_to_res(ObIAllocator &allocator,
+src/sql/engine/expr/ob_expr_json_func_helper.cpp	681	ObJsonExprHelper::convert_string_collation_type	allocator in, arena view out: ObString &in_str	int ObJsonExprHelper::convert_string_collation_type(ObCollationType in_cs_type,
+src/sql/engine/expr/ob_expr_json_func_helper.cpp	1952	ObJsonExprHelper::character2_ascii_string	allocator in, arena view out: ObString& result	int ObJsonExprHelper::character2_ascii_string(common::ObIAllocator *allocator,
+src/sql/engine/expr/ob_expr_json_func_helper.cpp	2045	ObJsonExprHelper::pack_json_diff_res	allocator in, arena view out: ObDatum &res	int ObJsonExprHelper::pack_json_diff_res(
+src/sql/engine/expr/ob_expr_json_func_helper.cpp	2075	ObJsonExprHelper::pack_json_res	allocator in, arena view out: ObDatum &res	int ObJsonExprHelper::pack_json_res(
+src/sql/engine/expr/ob_expr_json_func_helper.h	82	ObJsonExprParam::empty_val_	member ObDatum (pointer) of type ObDatum *	ObDatum *empty_val_;
+src/sql/engine/expr/ob_expr_json_func_helper.h	83	ObJsonExprParam::error_val_	member ObDatum (pointer) of type ObDatum *	ObDatum *error_val_;
+src/sql/engine/expr/ob_expr_json_func_helper.h	91	ObJsonExprParam::path_str_	member ObString (value) of type ObString	ObString path_str_;
+src/sql/engine/expr/ob_expr_json_func_helper.h	387	ObJsonExprHelper::pack_json_str_res	allocator in, arena view out: ObDatum &res	static int pack_json_str_res(const ObExpr &expr,
+src/sql/engine/expr/ob_expr_json_keys.cpp	66	ObExprJsonKeys::get_keys_from_wrapper	allocator in, arena view out: ObString &str	int ObExprJsonKeys::get_keys_from_wrapper(ObIJsonBase *json_doc,
+src/sql/engine/expr/ob_expr_json_length.cpp	59	ObExprJsonLength::calc	allocator in, arena view out: ObDatum &res	int ObExprJsonLength::calc(ObEvalCtx &ctx, const ObDatum &data1, ObDatumMeta meta1, bool has_lob_header1,
+src/sql/engine/expr/ob_expr_json_query.cpp	390	ObExprJsonQuery::set_multivalue_result	allocator in, arena view out: ObDatum &res	int ObExprJsonQuery::set_multivalue_result(bool is_result_array,
+src/sql/engine/expr/ob_expr_json_query.cpp	858	ObExprJsonQuery::set_result	allocator in, arena view out: ObDatum &res	int ObExprJsonQuery::set_result(ObJsonExprParam* json_param,
+src/sql/engine/expr/ob_expr_json_query.cpp	1057	ObExprJsonQuery::try_set_error_val	allocator in, arena view out: ObDatum &res	bool ObExprJsonQuery::try_set_error_val(common::ObIAllocator *allocator,
+src/sql/engine/expr/ob_expr_json_schema_valid.h	45	ObExprJsonSchemaValidInfo::json_schema_	member ObString (value) of type ObString	ObString json_schema_;
+src/sql/engine/expr/ob_expr_json_schema_valid.h	67	ObExprJsonSchemaValid::json_schema_	member ObString (value) of type ObString	ObString json_schema_;
+src/sql/engine/expr/ob_expr_json_schema_validation_report.h	53	ObExprJsonSchemaValidationReport::json_schema_	member ObString (value) of type ObString	ObString json_schema_;
+src/sql/engine/expr/ob_expr_json_storage_free.cpp	55	ObExprJsonStorageFree::calc	allocator in, arena view out: ObDatum &res	int ObExprJsonStorageFree::calc(ObEvalCtx &ctx, const ObDatum &data, ObDatumMeta meta,
+src/sql/engine/expr/ob_expr_json_storage_size.cpp	54	ObExprJsonStorageSize::calc	allocator in, arena view out: ObDatum &res	int ObExprJsonStorageSize::calc(ObEvalCtx &ctx, const ObDatum &data, ObDatumMeta meta,
+src/sql/engine/expr/ob_expr_json_utils.cpp	459	ObJsonUtil::set_lob_datum	allocator in, arena view out: ObDatum &res	int ObJsonUtil::set_lob_datum(common::ObIAllocator *allocator,
+src/sql/engine/expr/ob_expr_json_utils.cpp	548	ObJsonUtil::padding_char_for_cast	allocator in, arena view out: ObString &padding_res	int ObJsonUtil::padding_char_for_cast(int64_t padding_cnt,
+src/sql/engine/expr/ob_expr_json_utils.cpp	577	cast_to_null	allocator in, arena view out: ObDatum &res	int cast_to_null(common::ObIAllocator *allocator,
+src/sql/engine/expr/ob_expr_json_utils.cpp	598	cast_to_int	allocator in, arena view out: ObDatum &res	int cast_to_int(common::ObIAllocator *allocator,
+src/sql/engine/expr/ob_expr_json_utils.cpp	667	cast_to_uint	allocator in, arena view out: ObDatum &res	int cast_to_uint(common::ObIAllocator *allocator,
+src/sql/engine/expr/ob_expr_json_utils.cpp	701	cast_to_string	allocator in, arena view out: ObDatum &res	int cast_to_string(common::ObIAllocator *allocator,
+src/sql/engine/expr/ob_expr_json_utils.cpp	849	cast_to_datetime	allocator in, arena view out: ObDatum &res	int cast_to_datetime(common::ObIAllocator *allocator,
+src/sql/engine/expr/ob_expr_json_utils.cpp	881	cast_to_timstamp	allocator in, arena view out: ObDatum &res	int cast_to_timstamp(common::ObIAllocator *allocator,
+src/sql/engine/expr/ob_expr_json_utils.cpp	935	cast_to_date_time	allocator in, arena view out: ObDatum &res	int cast_to_date_time(common::ObIAllocator *allocator,
+src/sql/engine/expr/ob_expr_json_utils.cpp	952	cast_to_date	allocator in, arena view out: ObDatum &res	int cast_to_date(common::ObIAllocator *allocator,
+src/sql/engine/expr/ob_expr_json_utils.cpp	981	cast_to_mdate	allocator in, arena view out: ObDatum &res	int cast_to_mdate(common::ObIAllocator *allocator,
+src/sql/engine/expr/ob_expr_json_utils.cpp	1018	cast_to_mdatetime	allocator in, arena view out: ObDatum &res	int cast_to_mdatetime(common::ObIAllocator *allocator,
+src/sql/engine/expr/ob_expr_json_utils.cpp	1054	cast_to_time	allocator in, arena view out: ObDatum &res	int cast_to_time(common::ObIAllocator *allocator,
+src/sql/engine/expr/ob_expr_json_utils.cpp	1106	cast_to_year	allocator in, arena view out: ObDatum &res	int cast_to_year(common::ObIAllocator *allocator,
+src/sql/engine/expr/ob_expr_json_utils.cpp	1145	cast_to_float	allocator in, arena view out: ObDatum &res	int cast_to_float(common::ObIAllocator *allocator,
+src/sql/engine/expr/ob_expr_json_utils.cpp	1174	cast_to_double	allocator in, arena view out: ObDatum &res	int cast_to_double(common::ObIAllocator *allocator,
+src/sql/engine/expr/ob_expr_json_utils.cpp	1217	cast_to_number	allocator in, arena view out: ObDatum &res	int cast_to_number(common::ObIAllocator *allocator,
+src/sql/engine/expr/ob_expr_json_utils.cpp	1235	cast_to_decimalint	allocator in, arena view out: ObDatum &res	int cast_to_decimalint(common::ObIAllocator *allocator,
+src/sql/engine/expr/ob_expr_json_utils.cpp	1268	cast_to_bit	allocator in, arena view out: ObDatum &res	int cast_to_bit(common::ObIAllocator *allocator,
+src/sql/engine/expr/ob_expr_json_utils.cpp	1300	cast_to_json	allocator in, arena view out: ObDatum &res	int cast_to_json(common::ObIAllocator *allocator,
+src/sql/engine/expr/ob_expr_json_utils.cpp	1333	cast_not_expected	allocator in, arena view out: ObDatum &res	int cast_not_expected(common::ObIAllocator *allocator,
+src/sql/engine/expr/ob_expr_json_utils.cpp	1352	ObJsonUtil::cast_to_res	allocator in, arena view out: ObDatum &res	int ObJsonUtil::cast_to_res(common::ObIAllocator *allocator,
+src/sql/engine/expr/ob_expr_json_utils.cpp	1376	ObJsonUtil::cast_json_scalar_to_sql_obj	allocator in, arena view out: ObObj &res_obj	int ObJsonUtil::cast_json_scalar_to_sql_obj(common::ObIAllocator *allocator,
+src/sql/engine/expr/ob_expr_json_utils.cpp	1421	ObJsonUtil::cast_json_scalar_to_sql_obj	allocator in, arena view out: ObObj &res_obj	int ObJsonUtil::cast_json_scalar_to_sql_obj(common::ObIAllocator *allocator,
+src/sql/engine/expr/ob_expr_json_utils.h	118	ObExprJsonQueryParamInfo::path_str_	member ObString (value) of type ObString	ObString path_str_;
+src/sql/engine/expr/ob_expr_json_valid.cpp	68	ObExprJsonValid::calc	allocator in, arena view out: ObDatum &res	int ObExprJsonValid::calc(ObEvalCtx &ctx, const ObDatum &data, ObDatumMeta meta,
+src/sql/engine/expr/ob_expr_json_value.cpp	260	ObExprJsonQueryParamInfo::get_int_val_from_raw	allocator in, arena view out: ObObj &const_data	int ObExprJsonQueryParamInfo::get_int_val_from_raw(ObIAllocator &alloc, ObExecContext *exec_ctx, const ObRawExpr* raw_expr, ObObj &const_data)
+src/sql/engine/expr/ob_expr_json_value.cpp	338	ObExprJsonValue::set_result	allocator in, arena view out: ObDatum &res	int ObExprJsonValue::set_result(const ObExpr &expr,
+src/sql/engine/expr/ob_expr_least.cpp	184	ObExprLeastGreatest::cast_param	allocator in, arena view out: ObDatum &res_datum	int ObExprLeastGreatest::cast_param(const ObExpr &src_expr, ObEvalCtx &ctx,

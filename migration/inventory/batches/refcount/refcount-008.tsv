@@ -1,0 +1,51 @@
+file	line	symbol	construct	text
+src/share/cache/ob_kvcache_inst_map.cpp	61	ObKVCacheInst::try_mark_delete	reference-count change: ATOMIC_DEC on ref_cnt_	ATOMIC_DEC(&ref_cnt_);
+src/share/cache/ob_kvcache_inst_map.cpp	81	ObKVCacheInstHandle::reset	de_inst_ref call (reference-count function found by its body)	map_->de_inst_ref(inst_);
+src/share/cache/ob_kvcache_inst_map.cpp	97	ObKVCacheInstHandle::ObKVCacheInstHandle	add_inst_ref call (other name)	map_->add_inst_ref(inst_);
+src/share/cache/ob_kvcache_inst_map.cpp	109	ObKVCacheInstHandle::operator=	add_inst_ref call (other name)	map_->add_inst_ref(inst_);
+src/share/cache/ob_kvcache_inst_map.cpp	186	ObKVCacheInstMap::get_cache_inst	add_inst_ref call (other name)	add_inst_ref(inst);
+src/share/cache/ob_kvcache_inst_map.cpp	194	ObKVCacheInstMap::get_cache_inst	add_inst_ref call (other name)	add_inst_ref(inst);
+src/share/cache/ob_kvcache_inst_map.cpp	211	ObKVCacheInstMap::get_cache_inst	add_inst_ref call (other name)	add_inst_ref(inst);
+src/share/cache/ob_kvcache_inst_map.cpp	213	ObKVCacheInstMap::get_cache_inst	add_inst_ref call (other name)	add_inst_ref(inst);
+src/share/cache/ob_kvcache_inst_map.cpp	401	ObKVCacheInstMap::add_inst_ref	add_inst_ref definition (other name)	void ObKVCacheInstMap::add_inst_ref(ObKVCacheInst *inst)
+src/share/cache/ob_kvcache_inst_map.cpp	408	ObKVCacheInstMap::de_inst_ref	de_inst_ref definition (reference-count function found by its body: changes a reference-count field)	void ObKVCacheInstMap::de_inst_ref(ObKVCacheInst *inst)
+src/share/cache/ob_kvcache_inst_map.cpp	422	ObKVCacheInstMap::inner_push_inst_handle	add_inst_ref call (other name)	add_inst_ref(handle.inst_);
+src/share/cache/ob_kvcache_inst_map.h	54	ObKVMemBlockList::inc_ref	inc_ref definition	inline void inc_ref() { ATOMIC_AAF(&ref_cnt_, 1); }
+src/share/cache/ob_kvcache_inst_map.h	55	ObKVMemBlockList::dec_ref	dec_ref definition	int64_t dec_ref() { return ATOMIC_SAF(&ref_cnt_, 1); }
+src/share/cache/ob_kvcache_inst_map.h	95	ObKVCacheInstHandle	Handle class definition	class ObKVCacheInstHandle
+src/share/cache/ob_kvcache_inst_map.h	132	ObKVCacheInstMap	add_inst_ref declaration (other name)	void add_inst_ref(ObKVCacheInst *inst);
+src/share/cache/ob_kvcache_inst_map.h	133	ObKVCacheInstMap	de_inst_ref declaration (reference-count function found by its body)	void de_inst_ref(ObKVCacheInst *inst);
+src/share/cache/ob_kvcache_struct.h	115	ObKVMemBlockHandle	Handle struct definition : common::ObDLink	struct ObKVMemBlockHandle : public common::ObDLink
+src/share/geo/ob_srs_provider.h	37	ObISrsSnapshot	retain declaration (reference-count function found by its body)	virtual void retain() = 0;
+src/share/geo/ob_srs_provider.h	46	ObSrsCacheGuard	Guard class definition whose methods reach retain through other functions (ObSrsCacheGuard::bind > retain)	class ObSrsCacheGuard
+src/share/geo/ob_srs_provider.h	69	ObSrsCacheGuard::bind	retain call (reference-count function found by its body)	snapshot.retain();
+src/share/interrupt/ob_global_interrupt_call.cpp	151	ObGlobalInterruptManager::register_checker	reference-count change: ATOMIC_INC on ref_count_	ATOMIC_INC(&(checker->ref_count_));
+src/share/interrupt/ob_global_interrupt_call.cpp	192	ObGlobalInterruptManager::unregister_checker	reference-count change: ATOMIC_AAF on ref_count_	int64_t rc = ATOMIC_AAF(&(checker_node->checker_->ref_count_), -1);
+src/share/io/ob_io_define.cpp	682	ObIOResult::inc_ref	inc_ref definition	void ObIOResult::inc_ref(const char *msg)
+src/share/io/ob_io_define.cpp	687	ObIOResult::dec_ref	dec_ref definition	void ObIOResult::dec_ref(const char *msg)
+src/share/io/ob_io_define.cpp	740	ObIOResult::inc_out_ref	inc_out_ref definition (other name)	void ObIOResult::inc_out_ref()
+src/share/io/ob_io_define.cpp	745	ObIOResult::dec_out_ref	dec_out_ref definition (other name)	void ObIOResult::dec_out_ref()
+src/share/io/ob_io_define.cpp	852	ObIORequest::init	inc_ref call	io_result_->inc_ref("request");
+src/share/io/ob_io_define.cpp	878	ObIORequest::set_result	inc_ref call	io_result.inc_ref("request");
+src/share/io/ob_io_define.cpp	929	ObIORequest::destroy	dec_ref call	io_result_->dec_ref("request");
+src/share/io/ob_io_define.cpp	1232	ObIORequest::inc_ref	inc_ref definition	void ObIORequest::inc_ref()
+src/share/io/ob_io_define.cpp	1237	ObIORequest::dec_ref	dec_ref definition	void ObIORequest::dec_ref()
+src/share/io/ob_io_define.cpp	1371	ObIOHandle::set_result	inc_ref call	result.inc_ref("handle_inc"); // ref for handle
+src/share/io/ob_io_define.cpp	1372	ObIOHandle::set_result	inc_out_ref call (other name)	result.inc_out_ref();
+src/share/io/ob_io_define.cpp	1540	ObIOHandle::reset	dec_out_ref call (other name)	result_->dec_out_ref();
+src/share/io/ob_io_define.cpp	1541	ObIOHandle::reset	dec_ref call	result_->dec_ref("handle_dec"); // ref for handle
+src/share/io/ob_io_define.h	288	ObRefHolder::hold	inc_ref call	ptr->inc_ref();
+src/share/io/ob_io_define.h	296	ObRefHolder::reset	dec_ref call	ptr_->dec_ref();
+src/share/io/ob_io_define.h	405	ObIOResult	inc_ref declaration	void inc_ref(const char *msg = nullptr);
+src/share/io/ob_io_define.h	406	ObIOResult	dec_ref declaration	void dec_ref(const char *msg = nullptr);
+src/share/io/ob_io_define.h	407	ObIOResult	inc_out_ref declaration (other name)	void inc_out_ref();
+src/share/io/ob_io_define.h	408	ObIOResult	dec_out_ref declaration (other name)	void dec_out_ref();
+src/share/io/ob_io_define.h	481	ObIORequest	inc_ref declaration	void inc_ref();
+src/share/io/ob_io_define.h	482	ObIORequest	dec_ref declaration	void dec_ref();
+src/share/io/ob_io_define.h	555	ObIOHandle	Handle class definition	class ObIOHandle final
+src/share/io/ob_io_manager.cpp	595	ObIOService::init	inc_ref call	inc_ref();
+src/share/io/ob_io_manager.cpp	616	ObIOService::destroy	dec_ref call	dec_ref();
+src/share/io/ob_io_manager.cpp	1282	ObIOService::inc_ref	inc_ref definition	void ObIOService::inc_ref()
+src/share/io/ob_io_manager.cpp	1287	ObIOService::dec_ref	dec_ref definition	void ObIOService::dec_ref()
+src/share/io/ob_io_manager.h	173	ObIOService	inc_ref declaration	void inc_ref();
+src/share/io/ob_io_manager.h	174	ObIOService	dec_ref declaration	void dec_ref();

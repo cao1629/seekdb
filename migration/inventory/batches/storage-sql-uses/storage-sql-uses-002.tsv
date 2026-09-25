@@ -1,0 +1,73 @@
+file	line	symbol	construct	text
+src/storage/access/ob_pushdown_aggregate.cpp	89	ObAggCell::init	sql:: use: ObEvalCtx	int ObAggCell::init(const bool is_group_by, sql::ObEvalCtx *eval_ctx)
+src/storage/access/ob_pushdown_aggregate.cpp	167	ObAggCell::copy_single_output_row	sql:: use: ObEvalCtx	int ObAggCell::copy_single_output_row(sql::ObEvalCtx &ctx)
+src/storage/access/ob_pushdown_aggregate.cpp	173	ObAggCell::copy_single_output_row	sql:: use: ObDatum	sql::ObDatum &datum = basic_info_.agg_expr_->args_[0]->locate_expr_datum(ctx);
+src/storage/access/ob_pushdown_aggregate.cpp	181	ObAggCell::collect_result	sql:: use: ObEvalCtx	int ObAggCell::collect_result(sql::ObEvalCtx &ctx)
+src/storage/access/ob_pushdown_aggregate.cpp	188	ObAggCell::collect_result	sql:: use: ObEvalInfo	sql::ObEvalInfo &eval_info = basic_info_.agg_expr_->get_eval_info(ctx);
+src/storage/access/ob_pushdown_aggregate.cpp	380	ObCountAggCell::init	sql:: use: ObEvalCtx	int ObCountAggCell::init(const bool is_group_by, sql::ObEvalCtx *eval_ctx)
+src/storage/access/ob_pushdown_aggregate.cpp	586	ObCountAggCell::copy_single_output_row	sql:: use: ObEvalCtx	int ObCountAggCell::copy_single_output_row(sql::ObEvalCtx &ctx)
+src/storage/access/ob_pushdown_aggregate.cpp	594	ObCountAggCell::copy_single_output_row	sql:: use: ObDatum	sql::ObDatum &datum = basic_info_.agg_expr_->args_[0]->locate_expr_datum(ctx);
+src/storage/access/ob_pushdown_aggregate.cpp	616	ObCountAggCell::collect_result	sql:: use: ObEvalCtx	int ObCountAggCell::collect_result(sql::ObEvalCtx &ctx)
+src/storage/access/ob_pushdown_aggregate.cpp	620	ObCountAggCell::collect_result	sql:: use: ObEvalInfo	sql::ObEvalInfo &eval_info = basic_info_.agg_expr_->get_eval_info(ctx);
+src/storage/access/ob_pushdown_aggregate.cpp	655	ObMinAggCell::init	sql:: use: ObEvalCtx	int ObMinAggCell::init(const bool is_group_by, sql::ObEvalCtx *eval_ctx)
+src/storage/access/ob_pushdown_aggregate.cpp	847	ObMaxAggCell::init	sql:: use: ObEvalCtx	int ObMaxAggCell::init(const bool is_group_by, sql::ObEvalCtx *eval_ctx)
+src/storage/access/ob_pushdown_aggregate.cpp	1036	ObHyperLogLogAggCell::init	sql:: use: ObEvalCtx	int ObHyperLogLogAggCell::init(const bool is_group_by, sql::ObEvalCtx *eval_ctx)
+src/storage/access/ob_pushdown_aggregate.cpp	1128	ObHyperLogLogAggCell::collect_result	sql:: use: ObEvalCtx	int ObHyperLogLogAggCell::collect_result(sql::ObEvalCtx &ctx)
+src/storage/access/ob_pushdown_aggregate.cpp	1132	ObHyperLogLogAggCell::collect_result	sql:: use: ObEvalInfo	sql::ObEvalInfo &eval_info = basic_info_.agg_expr_->get_eval_info(ctx);
+src/storage/access/ob_pushdown_aggregate.cpp	1166	ObSumOpSizeAggCell::init	sql:: use: ObEvalCtx	int ObSumOpSizeAggCell::init(const bool is_group_by, sql::ObEvalCtx *eval_ctx)
+src/storage/access/ob_pushdown_aggregate.cpp	1339	ObSumOpSizeAggCell::collect_result	sql:: use: ObEvalCtx	int ObSumOpSizeAggCell::collect_result(sql::ObEvalCtx &ctx)
+src/storage/access/ob_pushdown_aggregate.cpp	1343	ObSumOpSizeAggCell::collect_result	sql:: use: ObEvalInfo	sql::ObEvalInfo &eval_info = basic_info_.agg_expr_->get_eval_info(ctx);
+src/storage/access/ob_pushdown_aggregate.cpp	1423	ObSumAggCell::init	sql:: use: ObEvalCtx	int ObSumAggCell::init(const bool is_group_by, sql::ObEvalCtx *eval_ctx)
+src/storage/access/ob_pushdown_aggregate.cpp	1825	ObSumAggCell::copy_single_output_row	sql:: use: ObEvalCtx	int ObSumAggCell::copy_single_output_row(sql::ObEvalCtx &ctx)
+src/storage/access/ob_pushdown_aggregate.cpp	1831	ObSumAggCell::copy_single_output_row	sql:: use: ObDatum	sql::ObDatum &datum = basic_info_.agg_expr_->args_[0]->locate_expr_datum(ctx);
+src/storage/access/ob_pushdown_aggregate.cpp	1844	ObSumAggCell::copy_int_to_number	sql:: use: ObNumStackAllocator	sql::ObNumStackAllocator<1> tmp_alloc;
+src/storage/access/ob_pushdown_aggregate.cpp	1869	ObSumAggCell::copy_uint_to_number	sql:: use: ObNumStackAllocator	sql::ObNumStackAllocator<1> tmp_alloc;
+src/storage/access/ob_pushdown_aggregate.cpp	1928	ObSumAggCell::copy_decimal_int_to_number	sql:: use: ObNumStackAllocator	sql::ObNumStackAllocator<2> tmp_alloc;
+src/storage/access/ob_pushdown_aggregate.cpp	1952	ObSumAggCell::collect_result	sql:: use: ObEvalCtx	int ObSumAggCell::collect_result(sql::ObEvalCtx &ctx)
+src/storage/access/ob_pushdown_aggregate.cpp	1956	ObSumAggCell::collect_result	sql:: use: ObEvalInfo	sql::ObEvalInfo &eval_info = basic_info_.agg_expr_->get_eval_info(ctx);
+src/storage/access/ob_pushdown_aggregate.cpp	1974	ObSumAggCell::collect_result	sql:: use: ObNumStackAllocator	sql::ObNumStackAllocator<2> tmp_alloc;
+src/storage/access/ob_pushdown_aggregate.cpp	2061	ObSumAggCell::eval_collection	sql:: use: ObArrayExprUtils	} else if (OB_FAIL(sql::ObArrayExprUtils::vector_datum_add(
+src/storage/access/ob_pushdown_aggregate.cpp	2141	ObSumAggCell::eval_decimal_int_number	sql:: use: ObNumStackAllocator	sql::ObNumStackAllocator<2> tmp_alloc;
+src/storage/access/ob_pushdown_aggregate.cpp	2222	ObSumAggCell::eval_number_batch	sql:: use: number_accumulator	if (OB_FAIL(sql::number_accumulator(src, allocator1, allocator2, result_nmb,
+src/storage/access/ob_pushdown_aggregate.cpp	2278	ObSumAggCell::eval_decimal_int_number_batch	sql:: use: ObNumStackAllocator	sql::ObNumStackAllocator<2> tmp_alloc;
+src/storage/access/ob_pushdown_aggregate.cpp	2316	ObSumAggCell::collect_result_in_group_by	sql:: use: ObNumStackAllocator	sql::ObNumStackAllocator<2> tmp_alloc;
+src/storage/access/ob_pushdown_aggregate.cpp	2454	ObFirstRowAggCell::init	sql:: use: ObEvalCtx	int ObFirstRowAggCell::init(const bool is_group_by, sql::ObEvalCtx *eval_ctx)
+src/storage/access/ob_pushdown_aggregate.cpp	2563	ObFirstRowAggCell::collect_result	sql:: use: ObEvalCtx	int ObFirstRowAggCell::collect_result(sql::ObEvalCtx &ctx)
+src/storage/access/ob_pushdown_aggregate.cpp	2623	ObPDAggFactory::alloc_cell	sql:: use: ObEvalCtx	sql::ObEvalCtx *eval_ctx)
+src/storage/access/ob_pushdown_aggregate.cpp	2743	ObGroupByCell::init	sql:: use: ObEvalCtx	int ObGroupByCell::init(const ObTableAccessParam &param, const ObTableAccessContext &context, sql::ObEvalCtx &eval_ctx)
+src/storage/access/ob_pushdown_aggregate.cpp	2763	ObGroupByCell::init	sql:: use: ObExpr	sql::ObExpr *expr = param.output_exprs_->at(i);
+src/storage/access/ob_pushdown_aggregate.cpp	2805	ObGroupByCell::init_for_single_row	sql:: use: ObEvalCtx	int ObGroupByCell::init_for_single_row(const ObTableAccessParam &param, const ObTableAccessContext &context, sql::ObEvalCtx &eval_ctx)
+src/storage/access/ob_pushdown_aggregate.cpp	2883	ObGroupByCell::copy_single_output_row	sql:: use: ObEvalCtx	int ObGroupByCell::copy_single_output_row(sql::ObEvalCtx &ctx)
+src/storage/access/ob_pushdown_aggregate.cpp	3059	ObGroupByCell::assign_agg_cells	sql:: use: ObExpr	int ObGroupByCell::assign_agg_cells(const sql::ObExpr *col_expr, common::ObIArray<int32_t> &agg_idxs)
+src/storage/access/ob_pushdown_aggregate.cpp	3080	ObGroupByCell::init_agg_cells	sql:: use: ObEvalCtx	int ObGroupByCell::init_agg_cells(const ObTableAccessParam &param, const ObTableAccessContext &context, sql::ObEvalCtx &eval_ctx, const bool is_for_single_row)
+src/storage/access/ob_pushdown_aggregate.cpp	3088	ObGroupByCell::init_agg_cells	sql:: use: ObExpr	sql::ObExpr *agg_expr = param.aggregate_exprs_->at(i);
+src/storage/access/ob_pushdown_aggregate.h	48	ObAggCellBasicInfo::ObAggCellBasicInfo	sql:: use: ObExpr	sql::ObExpr *agg_expr,
+src/storage/access/ob_pushdown_aggregate.h	84	ObAggCellBasicInfo	sql:: use: ObExpr	sql::ObExpr *agg_expr_;
+src/storage/access/ob_pushdown_aggregate.h	96	ObAggCell	sql:: use: ObEvalCtx	virtual int init(const bool is_group_by, sql::ObEvalCtx *eval_ctx);
+src/storage/access/ob_pushdown_aggregate.h	121	ObAggCell	sql:: use: ObEvalCtx	virtual int copy_single_output_row(sql::ObEvalCtx &ctx);
+src/storage/access/ob_pushdown_aggregate.h	122	ObAggCell	sql:: use: ObEvalCtx	virtual int collect_result(sql::ObEvalCtx &ctx);
+src/storage/access/ob_pushdown_aggregate.h	132	ObAggCell::get_agg_expr	sql:: use: ObExpr	OB_INLINE const sql::ObExpr *get_agg_expr() const { return basic_info_.agg_expr_; }
+src/storage/access/ob_pushdown_aggregate.h	181	ObCountAggCell	sql:: use: ObEvalCtx	virtual int init(const bool is_group_by, sql::ObEvalCtx *eval_ctx) override;
+src/storage/access/ob_pushdown_aggregate.h	203	ObCountAggCell	sql:: use: ObEvalCtx	virtual int copy_single_output_row(sql::ObEvalCtx &ctx) override;
+src/storage/access/ob_pushdown_aggregate.h	204	ObCountAggCell	sql:: use: ObEvalCtx	virtual int collect_result(sql::ObEvalCtx &ctx) override;
+src/storage/access/ob_pushdown_aggregate.h	220	ObMinAggCell	sql:: use: ObEvalCtx	virtual int init(const bool is_group_by, sql::ObEvalCtx *eval_ctx) override;
+src/storage/access/ob_pushdown_aggregate.h	254	ObMaxAggCell	sql:: use: ObEvalCtx	virtual int init(const bool is_group_by, sql::ObEvalCtx *eval_ctx) override;
+src/storage/access/ob_pushdown_aggregate.h	290	ObHyperLogLogAggCell	sql:: use: ObEvalCtx	virtual int init(const bool is_group_by, sql::ObEvalCtx *eval_ctx) override;
+src/storage/access/ob_pushdown_aggregate.h	307	ObHyperLogLogAggCell	sql:: use: ObEvalCtx	virtual int collect_result(sql::ObEvalCtx &ctx) override;
+src/storage/access/ob_pushdown_aggregate.h	315	ObHyperLogLogAggCell	sql:: use: ObExprHashFuncType	sql::ObExprHashFuncType hash_func_;
+src/storage/access/ob_pushdown_aggregate.h	333	ObSumOpSizeAggCell	sql:: use: ObEvalCtx	virtual int init(const bool is_group_by, sql::ObEvalCtx *eval_ctx) override;
+src/storage/access/ob_pushdown_aggregate.h	356	ObSumOpSizeAggCell	sql:: use: ObEvalCtx	virtual int collect_result(sql::ObEvalCtx &ctx) override;
+src/storage/access/ob_pushdown_aggregate.h	395	ObSumAggCell	sql:: use: ObEvalCtx	virtual int init(const bool is_group_by, sql::ObEvalCtx *eval_ctx) override;
+src/storage/access/ob_pushdown_aggregate.h	410	ObSumAggCell	sql:: use: ObEvalCtx	virtual int copy_single_output_row(sql::ObEvalCtx &ctx) override;
+src/storage/access/ob_pushdown_aggregate.h	411	ObSumAggCell	sql:: use: ObEvalCtx	virtual int collect_result(sql::ObEvalCtx &ctx) override;
+src/storage/access/ob_pushdown_aggregate.h	495	ObSumAggCell	sql:: use: ObExecContext	sql::ObExecContext *exec_ctx_;
+src/storage/access/ob_pushdown_aggregate.h	511	ObFirstRowAggCell	sql:: use: ObEvalCtx	virtual int init(const bool is_group_by, sql::ObEvalCtx *eval_ctx) override;
+src/storage/access/ob_pushdown_aggregate.h	541	ObFirstRowAggCell::copy_single_output_row	sql:: use: ObEvalCtx	virtual int copy_single_output_row(sql::ObEvalCtx &ctx) override
+src/storage/access/ob_pushdown_aggregate.h	546	ObFirstRowAggCell	sql:: use: ObEvalCtx	virtual int collect_result(sql::ObEvalCtx &ctx) override;
+src/storage/access/ob_pushdown_aggregate.h	580	ObPDAggFactory	sql:: use: ObEvalCtx	sql::ObEvalCtx *eval_ctx = nullptr);
+src/storage/access/ob_pushdown_aggregate.h	594	ObGroupByCell	sql:: use: ObEvalCtx	int init(const ObTableAccessParam &param, const ObTableAccessContext &context, sql::ObEvalCtx &eval_ctx) override;
+src/storage/access/ob_pushdown_aggregate.h	595	ObGroupByCell	sql:: use: ObEvalCtx	int init_for_single_row(const ObTableAccessParam &param, const ObTableAccessContext &context, sql::ObEvalCtx &eval_ctx);
+src/storage/access/ob_pushdown_aggregate.h	614	ObGroupByCell	sql:: use: ObEvalCtx	int copy_single_output_row(sql::ObEvalCtx &ctx) override;
+src/storage/access/ob_pushdown_aggregate.h	621	ObGroupByCell	sql:: use: ObExpr	int assign_agg_cells(const sql::ObExpr *col_expr, common::ObIArray<int32_t> &agg_idxs) override;
+src/storage/access/ob_pushdown_aggregate.h	638	ObGroupByCell	sql:: use: ObEvalCtx	int init_agg_cells(const ObTableAccessParam &param, const ObTableAccessContext &context, sql::ObEvalCtx &eval_ctx, const bool is_for_single_row);
+src/storage/access/ob_pushdown_aggregate.h	822	ObSumAggCell::eval_float_inner	sql:: use: ObArithExprOperator	if (OB_UNLIKELY(sql::ObArithExprOperator::is_float_out_of_range(left_f + right_f))) {

@@ -1,0 +1,61 @@
+file	line	symbol	construct	text
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	1597	ObDASHNSWScanIter::get_from_vid_rowkey	allocator in, arena view out: ObRowkey *&rowkey	int ObDASHNSWScanIter::get_from_vid_rowkey(ObIAllocator &allocator, ObRowkey *&rowkey)
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	1653	ObDASHNSWScanIter::get_from_embedded_table	allocator in, arena view out: ObString &vector	int ObDASHNSWScanIter::get_from_embedded_table(ObIAllocator &allocator, ObString &vector)
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	1702	ObDASHNSWScanIter::build_embedded_table_rowkey	allocator in, arena view out: ObRowkey &embedded_rowkey	int ObDASHNSWScanIter::build_embedded_table_rowkey(ObIAllocator &allocator, const ObRowkey *main_rowkey, const ObRowkey *vid, ObRowkey &embedded_rowkey)
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	1763	ObDASHNSWScanIter::get_rowkey	allocator in, arena view out: ObRowkey *&rowkey	int ObDASHNSWScanIter::get_rowkey(ObIAllocator &allocator, ObRowkey *&rowkey)
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	3022	ObDASHNSWScanIter::prepare_extra_objs	allocator in, arena view out: ObObj *&objs	int ObDASHNSWScanIter::prepare_extra_objs(ObIAllocator &allocator, ObObj *&objs)
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	3188	ObDASHNSWScanIter::get_rowkey_from_vid_rowkey_table	allocator in, arena view out: ObRowkey& vid	int ObDASHNSWScanIter::get_rowkey_from_vid_rowkey_table(ObIAllocator &allocator, ObRowkey& vid, ObRowkey *&rowkey)
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	3210	ObDASHNSWScanIter::get_vector_from_embedded_table	allocator in, arena view out: ObString &vector	int ObDASHNSWScanIter::get_vector_from_embedded_table(ObIAllocator &allocator, ObRowkey *rowkey, ObRowkey *vid, ObString &vector)
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	3235	ObDASHNSWScanIter::get_vector_from_com_aux_vec_table	allocator in, arena view out: ObString &vector	int ObDASHNSWScanIter::get_vector_from_com_aux_vec_table(ObIAllocator &allocator, ObRowkey *rowkey, ObString &vector)
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	3252	ObDASHNSWScanIter::get_vector_from_com_aux_vec_table	allocator in, arena view out: ObString &vector	int ObDASHNSWScanIter::get_vector_from_com_aux_vec_table(ObIAllocator &allocator, ObString &vector)
+src/sql/das/iter/ob_das_hnsw_scan_iter.h	174	ObHnswSimpleCmpInfo::filter_arg_	member ObObj (value) of type ObObj	ObObj filter_arg_;
+src/sql/das/iter/ob_das_hnsw_scan_iter.h	575	ObDASHNSWScanIter::vec_index_param_	member ObString (value) of type ObString	ObString vec_index_param_;
+src/sql/das/iter/ob_das_hnsw_scan_iter.h	580	ObDASHNSWScanIter::hybrid_search_vec_	member ObString (value) of type ObString	ObString hybrid_search_vec_;
+src/sql/das/iter/ob_das_hnsw_scan_iter.h	603	ObDASHNSWScanIter::BruteForceContext::search_vec	member ObString (value) of type ObString	ObString search_vec;
+src/sql/das/iter/ob_das_ivf_scan_iter.cpp	971	ObDASIvfBaseScanIter::get_main_rowkey_from_cid_vec_datum	allocator in, arena view out: ObRowkey &main_rowkey	int ObDASIvfBaseScanIter::get_main_rowkey_from_cid_vec_datum(ObIAllocator& allocator,
+src/sql/das/iter/ob_das_ivf_scan_iter.cpp	1138	ObDASIvfScanIter::parse_cid_vec_datum	allocator in, arena view out: ObRowkey &main_rowkey	int ObDASIvfScanIter::parse_cid_vec_datum(
+src/sql/das/iter/ob_das_ivf_scan_iter.cpp	1575	ObDASIvfPQScanIter::parse_pq_ids_vec_datum	allocator in, arena view out: ObRowkey &main_rowkey	int ObDASIvfPQScanIter::parse_pq_ids_vec_datum(
+src/sql/das/iter/ob_das_ivf_scan_iter.cpp	2230	ObDASIvfBaseScanIter::get_main_rowkey_brute	allocator in, arena view out: ObRowkey &main_rowkey	int ObDASIvfBaseScanIter::get_main_rowkey_brute(
+src/sql/das/iter/ob_das_ivf_scan_iter.cpp	2294	ObDASIvfPQScanIter::get_cid_from_pq_rowkey_cid_table	allocator in, arena view out: ObString &cid	int ObDASIvfPQScanIter::get_cid_from_pq_rowkey_cid_table(ObIAllocator &allocator, ObString &cid, ObString &pq_cids)
+src/sql/das/iter/ob_das_ivf_scan_iter.h	153	ObIvfPreFilter::rk_range_	member container of ObNewRange of type ObArray<const ObNewRange *>	ObArray<const ObNewRange *> rk_range_;
+src/sql/das/iter/ob_das_ivf_scan_iter.h	249	ObDASIvfBaseScanIter::get_rowkey	allocator in, arena view out: ObRowkey *&rowkey	int get_rowkey(ObIAllocator &allocator, ObRowkey *&rowkey) {
+src/sql/das/iter/ob_das_ivf_scan_iter.h	359	ObDASIvfBaseScanIter::real_search_vec_	member ObString (value) of type ObString	ObString real_search_vec_;
+src/sql/das/iter/ob_das_ivf_scan_iter.h	368	ObDASIvfBaseScanIter::saved_rowkeys_	member container of ObRowkey of type common::ObSEArray<common::ObRowkey, 16>	common::ObSEArray<common::ObRowkey, 16> saved_rowkeys_;
+src/sql/das/iter/ob_das_ivf_scan_iter.h	369	ObDASIvfBaseScanIter::pre_fileter_rowkeys_	member container of ObRowkey of type common::ObSEArray<common::ObRowkey, 16>	common::ObSEArray<common::ObRowkey, 16> pre_fileter_rowkeys_;
+src/sql/das/iter/ob_das_local_lookup_iter.h	82	ObDASLocalLookupIter::trans_info_array_	member container of ObDatum of type ObSEArray<ObDatum *, 4>	ObSEArray<ObDatum *, 4> trans_info_array_;
+src/sql/das/iter/ob_das_spatial_scan_iter.h	77	ObDASSpatialScanIter::obj_ptr_	member ObObj (pointer) of type ObObj *	ObObj *obj_ptr_;
+src/sql/das/iter/ob_das_spiv_merge_iter.h	282	ObDASSPIVMergeIter::saved_rowkeys_	member container of ObRowkey of type common::ObSEArray<common::ObRowkey *, 16>	common::ObSEArray<common::ObRowkey *, 16> saved_rowkeys_;
+src/sql/das/iter/ob_das_text_retrieval_iter.h	146	ObDASTextRetrievalIter::fwd_range_objs_	member ObObj (pointer) of type ObObj *	ObObj *fwd_range_objs_;
+src/sql/das/iter/ob_das_text_retrieval_merge_iter.h	94	ObDASTextRetrievalMergeIterParam::query_tokens_	member container of ObString of type ObArray<ObString>	ObArray<ObString> query_tokens_;
+src/sql/das/iter/ob_das_text_retrieval_merge_iter.h	170	ObDASTextRetrievalMergeIter::query_tokens_	member container of ObString of type ObArray<ObString>	ObArray<ObString> query_tokens_;
+src/sql/das/iter/ob_das_vec_scan_utils.cpp	134	ObDasVecScanUtils::get_real_search_vec	allocator in, arena view out: ObString &real_search_vec	int ObDasVecScanUtils::get_real_search_vec(common::ObIAllocator &allocator,
+src/sql/das/iter/ob_das_vec_scan_utils.cpp	240	ObDasVecScanUtils::init_sort_of_hybrid_index	allocator in, arena view out: ObString &hybrid_search_vec	int ObDasVecScanUtils::init_sort_of_hybrid_index(ObIAllocator &allocator,
+src/sql/das/iter/ob_das_vec_scan_utils.cpp	420	ObDasVecScanUtils::get_rowkey	allocator in, arena view out: ObRowkey *&rowkey	int ObDasVecScanUtils::get_rowkey(ObIAllocator &allocator, const ObDASScanCtDef * ctdef, ObDASScanRtDef *rtdef, ObRowkey *&rowkey)
+src/sql/das/iter/sparse_retrieval/ob_das_tr_merge_iter.h	60	ObDASTRMergeIterParam::query_tokens_	member container of ObString of type ObArray<ObString>	ObArray<ObString> query_tokens_;
+src/sql/das/ob_das_context.h	39	DmlRowkeyDistCtx::deleted_rows_	member SeRowkeyDistCtx (pointer) of type SeRowkeyDistCtx *	SeRowkeyDistCtx *deleted_rows_;
+src/sql/das/ob_das_dml_ctx_define.h	330	ObDASWriteBuffer::DmlShadowRow::reserved_buffer_	member raw bytes (pointer) of type char *	char *reserved_buffer_;
+src/sql/das/ob_das_dml_ctx_define.h	347	ObDASWriteBuffer::Iterator::cur_row_	member DmlRow (pointer) of type DmlRow *	DmlRow *cur_row_;
+src/sql/das/ob_das_dml_ctx_define.h	366	ObDASWriteBuffer::NewRowIterator::cur_row_	member DmlRow (pointer) of type DmlRow *	DmlRow *cur_row_;
+src/sql/das/ob_das_dml_ctx_define.h	369	ObDASWriteBuffer::NewRowIterator::cur_new_row_	member ObDatumRow (pointer) of type blocksstable::ObDatumRow *	blocksstable::ObDatumRow *cur_new_row_;
+src/sql/das/ob_das_dml_ctx_define.h	378	ObDASWriteBuffer::next_	member DmlRow (pointer) of type DmlRow *	DmlRow *next_;
+src/sql/das/ob_das_dml_ctx_define.h	514	ObDASDMLIterator::cur_datum_row_	member ObDatumRow (pointer) of type blocksstable::ObDatumRow *	blocksstable::ObDatumRow *cur_datum_row_;
+src/sql/das/ob_das_dml_ctx_define.h	515	ObDASDMLIterator::cur_datum_rows_	member ObDatumRow (pointer) of type blocksstable::ObDatumRow *	blocksstable::ObDatumRow *cur_datum_rows_;
+src/sql/das/ob_das_dml_vec_iter.cpp	138	ObVecIndexDMLIterator::generate_vec_delta_buff_row	allocator in, arena view out: ObString &vector	int ObVecIndexDMLIterator::generate_vec_delta_buff_row(common::ObIAllocator &allocator,
+src/sql/das/ob_das_dml_vec_iter.cpp	366	ObSparseVecIndexDMLIterator::generate_sparse_vec_index_row	allocator in, arena view out: ObString &sparse_vec	int ObSparseVecIndexDMLIterator::generate_sparse_vec_index_row(
+src/sql/das/ob_das_dml_vec_iter.cpp	498	ObHybridVecLogDMLIterator::generate_hybrid_vec_log_row	allocator in, arena view out: ObDomainIndexRow &rows	int ObHybridVecLogDMLIterator::generate_hybrid_vec_log_row(common::ObIAllocator &allocator,
+src/sql/das/ob_das_domain_utils.cpp	141	ObDASDomainUtils::generate_spatial_index_rows	allocator in, arena view out: ObDomainIndexRow &spat_rows	int ObDASDomainUtils::generate_spatial_index_rows(
+src/sql/das/ob_das_domain_utils.cpp	276	ObDASDomainUtils::generate_fulltext_word_rows	allocator in, arena view out: ObDomainIndexRow &word_rows	/*static*/ int ObDASDomainUtils::generate_fulltext_word_rows(common::ObIAllocator &allocator,
+src/sql/das/ob_das_domain_utils.cpp	442	ObDASDomainUtils::generate_multivalue_index_rows	allocator in, arena view out: ObDomainIndexRow &mvi_rows	int ObDASDomainUtils::generate_multivalue_index_rows(ObIAllocator &allocator,
+src/sql/das/ob_das_domain_utils.h	57	ObFTIndexRowCache::rows_	member ObDomainIndexRow (value) of type ObDomainIndexRow	ObDomainIndexRow rows_;
+src/sql/das/ob_das_domain_utils.h	268	ObDomainDMLIterator::rows_	member ObDomainIndexRow (value) of type ObDomainIndexRow	ObDomainIndexRow rows_;
+src/sql/das/ob_das_scan_op.h	217	ObDASScanRtDef::key_ranges_	member container of ObNewRange of type common::ObSEArray<common::ObNewRange, 1>	common::ObSEArray<common::ObNewRange, 1> key_ranges_;
+src/sql/das/ob_das_scan_op.h	314	ObDASScanOp::trans_info_array_	member container of ObDatum of type ObSEArray<ObDatum *, 4>	ObSEArray<ObDatum *, 4> trans_info_array_;
+src/sql/das/ob_das_scan_op.h	417	ObLocalIndexLookupOp::trans_info_array_	member container of ObDatum of type ObSEArray<ObDatum *, 4>	ObSEArray<ObDatum *, 4> trans_info_array_;
+src/sql/das/ob_das_update_op.cpp	139	ObDASUpdIterator::old_row_	member ObDatumRow (pointer) of type blocksstable::ObDatumRow *	blocksstable::ObDatumRow *old_row_;
+src/sql/das/ob_das_update_op.cpp	140	ObDASUpdIterator::new_row_	member ObDatumRow (pointer) of type blocksstable::ObDatumRow *	blocksstable::ObDatumRow *new_row_;
+src/sql/das/ob_das_update_op.cpp	141	ObDASUpdIterator::old_rows_	member ObDatumRow (pointer) of type blocksstable::ObDatumRow *	blocksstable::ObDatumRow *old_rows_;
+src/sql/das/ob_das_update_op.cpp	142	ObDASUpdIterator::new_rows_	member ObDatumRow (pointer) of type blocksstable::ObDatumRow *	blocksstable::ObDatumRow *new_rows_;
+src/sql/das/ob_das_utils.cpp	158	ObDASUtils::project_storage_row	allocator in, arena view out: blocksstable::ObDatumRow &storage_row	int ObDASUtils::project_storage_row(const ObDASDMLBaseCtDef &dml_ctdef,
+src/sql/das/ob_das_utils.cpp	201	ObDASUtils::reshape_storage_value	allocator in, arena view out: ObObj &value	int ObDASUtils::reshape_storage_value(const ObObjMeta &col_type,
+src/sql/das/ob_das_utils.cpp	212	ObDASUtils::padding_fixed_string_value	allocator in, arena view out: ObObj &value	int ObDASUtils::padding_fixed_string_value(int64_t max_len, ObIAllocator &allocator, ObObj &value)
+src/sql/das/ob_das_vec_define.h	173	ObDASVecAuxScanCtDef::vec_index_param_	member ObString (value) of type ObString	ObString vec_index_param_;

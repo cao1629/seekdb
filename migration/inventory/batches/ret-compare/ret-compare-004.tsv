@@ -1,0 +1,101 @@
+file	line	symbol	construct	text
+src/oblib/common/timezone/ob_timezone_info.cpp	39772	ObTZInfoMap::get_tz_info_by_name	ret == OB_ENTRY_NOT_EXIST [data]	if (OB_ENTRY_NOT_EXIST == ret) {
+src/oblib/common/timezone/ob_timezone_info.cpp	39804	ObTZInfoMap::get_tz_info_by_name	ret == OB_ENTRY_NOT_EXIST [data]	if (OB_ENTRY_NOT_EXIST == ret) {
+src/oblib/common/timezone/ob_timezone_info.cpp	39830	ObTZInfoMap::get_offset_by_couple_tz_name	ret == OB_HASH_NOT_EXIST; ret == OB_ENTRY_NOT_EXIST [data]	if (OB_HASH_NOT_EXIST == ret || OB_ENTRY_NOT_EXIST == ret) {
+src/oblib/common/timezone/ob_timezone_info.cpp	39879	ObTimeZoneInfoWrap::init_time_zone	ret != OB_ERR_UNKNOWN_TIME_ZONE [data]	if (ret != OB_ERR_UNKNOWN_TIME_ZONE) {
+src/oblib/common/timezone/ob_timezone_info.cpp	39888	ObTimeZoneInfoWrap::init_time_zone	ret == OB_ERR_UNKNOWN_TIME_ZONE [data]	} else if (OB_ERR_UNKNOWN_TIME_ZONE == ret) {
+src/oblib/common/timezone/ob_timezone_info.cpp	39899	ObTimeZoneInfoWrap::init_time_zone	ret == OB_ENTRY_NOT_EXIST [data]	if (OB_ENTRY_NOT_EXIST == ret) {
+src/oblib/common/udt/ob_array_binary.cpp	628	ObArrayBinary::distinct	ret == OB_HASH_NOT_EXIST	if (ret == OB_HASH_NOT_EXIST) {
+src/oblib/common/udt/ob_array_binary.cpp	632	ObArrayBinary::distinct	ret == OB_HASH_EXIST	} else if (ret == OB_HASH_EXIST) {
+src/oblib/common/udt/ob_array_binary.cpp	664	ObArrayBinary::push_not_in_set	ret == OB_HASH_NOT_EXIST	if (ret == OB_HASH_NOT_EXIST) {
+src/oblib/common/udt/ob_array_binary.cpp	668	ObArrayBinary::push_not_in_set	ret == OB_HASH_EXIST	} else if (ret == OB_HASH_EXIST) {
+src/oblib/common/udt/ob_array_binary.cpp	703	ObArrayBinary::except	ret == OB_HASH_NOT_EXIST	if (ret == OB_HASH_NOT_EXIST) {
+src/oblib/common/udt/ob_array_binary.cpp	706	ObArrayBinary::except	ret == OB_HASH_EXIST	} else if (ret == OB_HASH_EXIST) {
+src/oblib/common/udt/ob_array_binary.cpp	775	ObArrayBinary::intersect	ret == OB_HASH_NOT_EXIST	if (ret == OB_HASH_NOT_EXIST) {
+src/oblib/common/udt/ob_array_fixed_size.ipp	638	ObArrayFixedSize::distinct	ret == OB_HASH_NOT_EXIST	if (ret == OB_HASH_NOT_EXIST) {
+src/oblib/common/udt/ob_array_fixed_size.ipp	642	ObArrayFixedSize::distinct	ret == OB_HASH_EXIST	} else if (ret == OB_HASH_EXIST) {
+src/oblib/common/udt/ob_array_fixed_size.ipp	677	ObArrayFixedSize::push_not_in_set	ret == OB_HASH_NOT_EXIST	if (ret == OB_HASH_NOT_EXIST) {
+src/oblib/common/udt/ob_array_fixed_size.ipp	681	ObArrayFixedSize::push_not_in_set	ret == OB_HASH_EXIST	} else if (ret == OB_HASH_EXIST) {
+src/oblib/common/udt/ob_array_fixed_size.ipp	719	ObArrayFixedSize::except	ret == OB_HASH_NOT_EXIST	if (ret == OB_HASH_NOT_EXIST) {
+src/oblib/common/udt/ob_array_fixed_size.ipp	722	ObArrayFixedSize::except	ret == OB_HASH_EXIST	} else if (ret == OB_HASH_EXIST) {
+src/oblib/common/udt/ob_array_fixed_size.ipp	795	ObArrayFixedSize::intersect	ret == OB_HASH_NOT_EXIST	if (ret == OB_HASH_NOT_EXIST) {
+src/oblib/common/udt/ob_array_nested.cpp	637	ObArrayNested::distinct	ret == OB_HASH_NOT_EXIST	if (ret == OB_HASH_NOT_EXIST) {
+src/oblib/common/udt/ob_array_nested.cpp	641	ObArrayNested::distinct	ret == OB_HASH_EXIST	} else if (ret == OB_HASH_EXIST) {
+src/oblib/common/udt/ob_array_nested.cpp	708	ObArrayNested::except	ret == OB_HASH_NOT_EXIST	if (ret == OB_HASH_NOT_EXIST) {
+src/oblib/common/udt/ob_array_nested.cpp	711	ObArrayNested::except	ret == OB_HASH_EXIST	} else if (ret == OB_HASH_EXIST) {
+src/oblib/common/udt/ob_array_nested.cpp	734	ObArrayNested::except	ret == OB_HASH_NOT_EXIST	if (ret == OB_HASH_NOT_EXIST) {
+src/oblib/common/udt/ob_array_nested.cpp	737	ObArrayNested::except	ret == OB_HASH_EXIST	} else if (ret == OB_HASH_EXIST) {
+src/oblib/common/udt/ob_array_nested.cpp	793	ObArrayNested::unionize	ret == OB_HASH_NOT_EXIST	if (ret == OB_HASH_NOT_EXIST) {
+src/oblib/common/udt/ob_array_nested.cpp	797	ObArrayNested::unionize	ret == OB_HASH_EXIST	} else if (ret == OB_HASH_EXIST) {
+src/oblib/common/udt/ob_vector_type.h	495	ObVectorData::distinct	ret == OB_HASH_NOT_EXIST	if (ret == OB_HASH_NOT_EXIST) {
+src/oblib/common/udt/ob_vector_type.h	499	ObVectorData::distinct	ret == OB_HASH_EXIST	} else if (ret == OB_HASH_EXIST) {
+src/oblib/common/udt/ob_vector_type.h	533	ObVectorData::push_not_in_set	ret == OB_HASH_NOT_EXIST	if (ret == OB_HASH_NOT_EXIST) {
+src/oblib/common/udt/ob_vector_type.h	537	ObVectorData::push_not_in_set	ret == OB_HASH_EXIST	} else if (ret == OB_HASH_EXIST) {
+src/oblib/common/udt/ob_vector_type.h	574	ObVectorData::except	ret == OB_HASH_NOT_EXIST	if (ret == OB_HASH_NOT_EXIST) {
+src/oblib/common/udt/ob_vector_type.h	577	ObVectorData::except	ret == OB_HASH_EXIST	} else if (ret == OB_HASH_EXIST) {
+src/oblib/common/udt/ob_vector_type.h	649	ObVectorData::intersect	ret == OB_HASH_NOT_EXIST	if (ret == OB_HASH_NOT_EXIST) {
+src/oblib/common/wide_integer/ob_wide_integer_impl.h	1533	mul_overflow	ret == OB_OPERATE_OVERFLOW	return (ret == OB_OPERATE_OVERFLOW);
+src/oblib/common/xml/ob_tree_base.cpp	399	ObLibContainerNode::tree_iterator::next	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/oblib/common/xml/ob_tree_base.cpp	452	ObLibContainerNode::alter_member_sort_policy	ret == OB_ITER_END	if (ret == OB_ITER_END || OB_SUCC(ret)) {
+src/oblib/common/xml/ob_xml_tree.cpp	219	ObXmlNode::set_flag_by_descandant	ret == OB_ITER_END	if (ret == OB_ITER_END || ret == OB_SUCCESS) {
+src/oblib/common/xml/ob_xml_tree.cpp	443	ObXmlNode::get_descendant	ret == OB_ITER_END	if (ret == OB_ITER_END) {
+src/oblib/common/xml/ob_xml_util.cpp	566	ObXmlUtil::dfs_xml_text_node	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/oblib/common/xml/ob_xml_util.cpp	577	ObXmlUtil::dfs_xml_text_node	ret == OB_ITER_END	if (ret == OB_ITER_END) {
+src/oblib/common/xml/ob_xml_util.cpp	695	ObXmlUtil::delete_dup_ns_definition	ret == OB_ENTRY_NOT_EXIST	if (ret == OB_ENTRY_NOT_EXIST) { // didn't find, not duplicate ns, it's normal
+src/oblib/common/xml/ob_xml_util.cpp	723	ObXmlUtil::add_ns_def_if_necessary	ret == OB_ENTRY_NOT_EXIST	if (ret == OB_ENTRY_NOT_EXIST) { // didn't find, not duplicate ns, it's normal
+src/oblib/common/xml/ob_xpath.cpp	825	ObPathRootNode::eval_node	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/oblib/common/xml/ob_xpath.cpp	1026	ObPathUtil::add_dup_if_missing	ret == OB_CONFLICT_VALUE	} else if (ret == OB_CONFLICT_VALUE) {
+src/oblib/common/xml/ob_xpath.cpp	1092	ObPathFuncNode::eval_count	ret == OB_ITER_END	if (ret == OB_ITER_END) {
+src/oblib/common/xml/ob_xpath.cpp	1169	ObSeekIterator::next	ret != OB_ITER_END	if (OB_FAIL(next_child(ctx, res)) && ret != OB_ITER_END) {
+src/oblib/common/xml/ob_xpath.cpp	1174	ObSeekIterator::next	ret != OB_ITER_END	if (OB_FAIL(next_attribute(ctx, res)) && ret != OB_ITER_END) {
+src/oblib/common/xml/ob_xpath.cpp	1179	ObSeekIterator::next	ret != OB_ITER_END	if (OB_FAIL(next_namespace(ctx, res)) && ret != OB_ITER_END) {
+src/oblib/common/xml/ob_xpath.cpp	1184	ObSeekIterator::next	ret != OB_ITER_END	if (OB_FAIL(next_parent(ctx, res)) && ret != OB_ITER_END) {
+src/oblib/common/xml/ob_xpath.cpp	1189	ObSeekIterator::next	ret != OB_ITER_END	if (OB_FAIL(next_self(ctx, res)) && ret != OB_ITER_END) {
+src/oblib/common/xml/ob_xpath.cpp	1206	ObSeekComplexIterator::next	ret != OB_ITER_END	if (OB_FAIL(next_descendant(ctx, DESCENDANT_OR_SELF == axis_, res)) && ret != OB_ITER_END) {
+src/oblib/common/xml/ob_xpath.cpp	1224	ObSeekAncestorIterator::next	ret != OB_ITER_END	if (OB_FAIL(next_ancestor(ctx, ANCESTOR_OR_SELF == axis_, res)) && ret != OB_ITER_END) {
+src/oblib/common/xml/ob_xpath.cpp	1307	ObSeekIterator::next_child	ret == OB_ITER_END	if (ret == OB_ITER_END) {
+src/oblib/common/xml/ob_xpath.cpp	1406	ObSeekComplexIterator::ellipsis_inner_next	ret == OB_ITER_END	if (ret == OB_ITER_END) {
+src/oblib/common/xml/ob_xpath.cpp	1442	ObSeekComplexIterator::next_descendant	ret != OB_ITER_END	if (OB_FAIL(ellipsis_inner_next(ctx, tmp_res)) && ret != OB_ITER_END) {
+src/oblib/common/xml/ob_xpath.cpp	1475	ObSeekAncestorIterator::next_ancestor	ret != OB_ITER_END	if (OB_FAIL(ancestor_inner_next(ctx, tmp_res)) && ret != OB_ITER_END) {
+src/oblib/common/xml/ob_xpath.cpp	1759	ObPathExprIter::get_next_node	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/oblib/common/xml/ob_xpath.cpp	2054	ObPathUtil::filter_compare	ret != OB_INVALID_DATA	if (OB_FAIL(ObXmlUtil::to_number(left[i], left_double)) && ret != OB_INVALID_DATA) {
+src/oblib/common/xml/ob_xpath.cpp	2055	ObPathUtil::filter_compare	ret == OB_INVALID_DATA	} else if (ret == OB_INVALID_DATA) {
+src/oblib/common/xml/ob_xpath.cpp	2058	ObPathUtil::filter_compare	ret != OB_INVALID_DATA	} else if (OB_FAIL(ObXmlUtil::to_number(right[j], right_double)) && ret != OB_INVALID_DATA) {
+src/oblib/common/xml/ob_xpath.cpp	2059	ObPathUtil::filter_compare	ret == OB_INVALID_DATA	} else if (ret == OB_INVALID_DATA) {
+src/oblib/common/xml/ob_xpath.cpp	2197	ObPathFilterOpNode::init_right_without_filter	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/oblib/common/xml/ob_xpath.cpp	2230	ObPathFilterOpNode::init_right_with_filter	ret == OB_ITER_END	if (ret == OB_ITER_END) {
+src/oblib/common/xml/ob_xpath.cpp	2277	ObPathFilterOpNode::eval_node	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/oblib/common/xml/ob_xpath.cpp	2296	ObPathFilterOpNode::eval_node	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/oblib/common/xml/ob_xpath.cpp	2305	ObPathFilterOpNode::eval_node	ret == OB_ITER_END	} else if (ret == OB_ITER_END) {
+src/oblib/common/xml/ob_xpath.cpp	2452	ObPathUtil::get_seek_vec	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/oblib/common/xml/ob_xpath.cpp	2460	ObPathUtil::get_seek_vec	ret == OB_ITER_END	if (ret == OB_ITER_END) {
+src/oblib/lib/allocator/ob_fixed_size_block_allocator.h	210	ObFixedSizeBlockAllocator::alloc	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/oblib/lib/allocator/ob_fixed_size_block_allocator.h	383	ObFixedSizeBlockMemoryContext::init	ret == OB_INIT_TWICE	if (ret == OB_INIT_TWICE) {
+src/oblib/lib/charset/ob_charset.cpp	2629	ObStringScanner::next_character	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/oblib/lib/charset/ob_charset.h	797	ObCharsetUtils::foreach_char	ret == OB_ERR_INCORRECT_STRING_VALUE	if (OB_ERR_INCORRECT_STRING_VALUE == ret && ignore_invalid_character) {
+src/oblib/lib/charset/ob_charset_string_helper.h	287	ObFastStringScanner::convert_charset	ret == OB_ERR_DATA_TRUNCATED	if (OB_ERR_DATA_TRUNCATED == ret && truncated_len > 0) {
+src/oblib/lib/container/ob_ext_ring_buffer_impl.h	635	ObExtendibleRingBufferBase::do_get_	ret == OB_EAGAIN	while(OB_EAGAIN == ret) {
+src/oblib/lib/container/ob_ext_ring_buffer_impl.h	682	ObExtendibleRingBufferBase::do_set_	ret == OB_EAGAIN	while (OB_EAGAIN == ret) {
+src/oblib/lib/container/ob_ext_ring_buffer_impl.h	745	ObExtendibleRingBufferBase::do_pop_	ret == OB_EAGAIN	while (OB_EAGAIN == ret) {
+src/oblib/lib/container/ob_ext_ring_buffer_impl.h	792	ObExtendibleRingBufferBase::do_pop_	ret == OB_EAGAIN	else if (OB_EAGAIN == ret) {
+src/oblib/lib/container/ob_ring_array.h	81	ObRingArray::set	ret == OB_EAGAIN	while (OB_EAGAIN == ret) {
+src/oblib/lib/container/ob_ring_array.h	88	ObRingArray::set	ret == OB_ERR_OUT_OF_UPPER_BOUND	} else if (OB_ERR_OUT_OF_UPPER_BOUND == ret) {
+src/oblib/lib/container/ob_ring_array.h	105	ObRingArray::get	ret == OB_EAGAIN	while (OB_EAGAIN == ret) {
+src/oblib/lib/container/ob_ring_array.h	121	ObRingArray::truncate	ret (assigned in the comparison) == OB_EAGAIN	while (OB_EAGAIN == (ret = rbuffer_.truncate(get_start_pos(idx))))
+src/oblib/lib/container/ob_ring_array.h	133	ObRingArray::try_purge	call result rbuffer_.purge(del_list) == OB_EAGAIN	while(OB_EAGAIN == rbuffer_.purge(del_list))
+src/oblib/lib/container/ob_ring_buffer.h	175	ObRingBuffer::destroy	call result truncate(INT64_MAX) == OB_EAGAIN [not built]	while (OB_EAGAIN == truncate(INT64_MAX))
+src/oblib/lib/container/ob_ring_buffer.h	177	ObRingBuffer::destroy	ret (assigned in the comparison) == OB_EAGAIN [not built]	while (OB_EAGAIN == (ret = purge(del_list))
+src/oblib/lib/container/ob_ring_buffer.h	277	ObRingBuffer::get	ret (assigned in the comparison) == OB_ERR_OUT_OF_LOWER_BOUND [not built]	} else if (OB_ERR_OUT_OF_LOWER_BOUND == (ret = node->get(for_write ? this : NULL, end, buf))) {
+src/oblib/lib/hash/ob_array_hash_map.h	167	ObArrayHashMap::get	ret == OB_ENTRY_NOT_EXIST	for (uint64_t start_idx = key.hash(), i = 0; OB_ENTRY_NOT_EXIST == ret &&
+src/oblib/lib/hash/ob_array_hash_map.h	188	ObArrayHashMap::insert	ret == OB_SIZE_OVERFLOW	for (uint64_t start_idx = key.hash(), i = 0; OB_SIZE_OVERFLOW == ret &&
+src/oblib/lib/hash/ob_array_hash_map.h	212	ObArrayHashMap::update	ret == OB_SIZE_OVERFLOW	for (uint64_t start_idx = key.hash(), i = 0; OB_SIZE_OVERFLOW == ret &&
+src/oblib/lib/hash/ob_hashtable.h	1101	ObHashTable::internal_get_with_timeout_unsafe	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/oblib/lib/hash/ob_hashtable.h	1108	ObHashTable::internal_get_with_timeout_unsafe	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/oblib/lib/hash/ob_hashtable.h	1380	ObHashTable::erase_refactored	ret == OB_HASH_NOT_EXIST	while (NULL != node && OB_HASH_NOT_EXIST == ret) {
+src/oblib/lib/hash/ob_linear_hash_map.h	854	ObLinearHashMap::BlurredIterator::next	ret (assigned in the comparison) == OB_EAGAIN	while (OB_EAGAIN == (ret = map_->blurred_iter_get_(bkt_idx_, key_idx_, key, value))) {
+src/oblib/lib/hash/ob_linear_hash_map.h	2044	ObLinearHashMap::do_get_	ret == OB_ENTRY_NOT_EXIST	while ((iter != NULL) && (OB_ENTRY_NOT_EXIST == ret)) {
+src/oblib/lib/hash/ob_linear_hash_map.h	2077	ObLinearHashMap::do_get_	ret == OB_ENTRY_NOT_EXIST	while ((iter != NULL) && (OB_ENTRY_NOT_EXIST == ret)) {
+src/oblib/lib/hash/ob_linear_hash_map.h	2127	ObLinearHashMap::do_erase_	ret == OB_ENTRY_NOT_EXIST	while ((iter != NULL) && (OB_ENTRY_NOT_EXIST == ret)) {
+src/oblib/lib/hash/ob_linear_hash_map.h	2193	ObLinearHashMap::do_erase_if_	ret == OB_ENTRY_NOT_EXIST	while ((iter != NULL) && (OB_ENTRY_NOT_EXIST == ret)) {
+src/oblib/lib/hash/ob_linear_hash_map.h	2271	ObLinearHashMap::blurred_iter_get_	ret == OB_EAGAIN	while ((cur != NULL) && (OB_EAGAIN == ret)) {
+src/oblib/lib/hash/ob_linear_hash_map.h	2397	ObLinearHashMap::do_operate_	ret == OB_ENTRY_NOT_EXIST	while ((iter != NULL) && (OB_ENTRY_NOT_EXIST == ret)) {

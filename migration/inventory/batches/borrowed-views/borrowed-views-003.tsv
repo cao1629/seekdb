@@ -1,0 +1,61 @@
+file	line	symbol	construct	text
+src/oblib/common/ob_range.h	334	ObNewRange::start_key_	member ObRowkey (value) of type ObRowkey	ObRowkey start_key_;
+src/oblib/common/ob_range.h	335	ObNewRange::end_key_	member ObRowkey (value) of type ObRowkey	ObRowkey end_key_;
+src/oblib/common/ob_range.h	662	deep_copy_range	allocator in, arena view out: ObNewRange &dst	inline int deep_copy_range(Allocator &allocator, const ObNewRange &src, ObNewRange &dst)
+src/oblib/common/ob_range.h	676	deep_copy_range	allocator in, arena view out: ObNewRange *&dst	inline int deep_copy_range(Allocator &allocator, const ObNewRange &src, ObNewRange *&dst)
+src/oblib/common/ob_store_format.h	51	ObStoreFormatItem::format_name_	member raw bytes (pointer) of type const char*	const char* format_name_;
+src/oblib/common/ob_store_format.h	52	ObStoreFormatItem::format_print_str_	member raw bytes (pointer) of type const char*	const char* format_print_str_;
+src/oblib/common/ob_store_format.h	53	ObStoreFormatItem::format_compress_name_	member raw bytes (pointer) of type const char*	const char* format_compress_name_;
+src/oblib/common/ob_store_range.h	117	ObStoreRange::start_key_	member ObStoreRowkey (value) of type ObStoreRowkey	ObStoreRowkey start_key_;
+src/oblib/common/ob_store_range.h	118	ObStoreRange::end_key_	member ObStoreRowkey (value) of type ObStoreRowkey	ObStoreRowkey end_key_;
+src/oblib/common/object/ob_object.cpp	33	ob_obj_read_lob_data	allocator in, arena view out: ObString &data	int OB_WEAK_SYMBOL ob_obj_read_lob_data(ObIAllocator &allocator, const common::ObObj &obj, ObString &data)
+src/oblib/common/object/ob_object.cpp	1643	ObObj::print_sql_literal	allocator in, arena view out: char *&buffer	int ObObj::print_sql_literal(char *&buffer, int64_t &length,
+src/oblib/common/object/ob_object.cpp	2035	ObObj::read_lob_data	allocator in, arena view out: ObString &data	int ObObj::read_lob_data(ObIAllocator &allocator, ObString &data) const
+src/oblib/common/object/ob_object.h	77	ObEnumSetInnerValue::string_value_	member ObString (value) of type common::ObString	common::ObString string_value_;
+src/oblib/common/object/ob_object.h	1123	ObLobLocatorV2::ptr_	member raw bytes (pointer) of type char *	char *ptr_; // if has_lob_header ptr_ is ObMemLobCommon, else it is data content
+src/oblib/common/object/ob_object.h	1265	ObObjValue::string_	member raw bytes (pointer) of type const char *	const char *string_;
+src/oblib/common/object/ob_object.h	3349	ObObj::to_collation_free_obj	allocator in, arena view out: ObObj &dst	int ObObj::to_collation_free_obj(ObObj &dst, bool &is_valid_collation_free, Allocator &allocator)
+src/oblib/common/object/ob_object.h	3510	ob_write_obj	allocator in, arena view out: ObObj &dst	int ob_write_obj(AllocatorT &allocator, const ObObj &src, ObObj &dst)
+src/oblib/common/object/ob_object.h	3819	ObSqlArrayObj::data_	member ObObjParam (pointer) of type common::ObObjParam *	common::ObObjParam *data_;
+src/oblib/common/object/ob_object.h	3882	ObHexEscapeSqlStr::str_	member ObString (value) of type ObString	ObString str_;
+src/oblib/common/row/ob_row.h	165	ObNewRow::cells_	member ObObj (pointer) of type ObObj *	ObObj *cells_;
+src/oblib/common/row/ob_row.h	172	ob_write_row	allocator in, arena view out: ObNewRow &dst	int ob_write_row(AllocatorT &allocator, const ObNewRow &src, ObNewRow &dst)
+src/oblib/common/row/ob_row.h	222	ob_write_row_by_projector	allocator in, arena view out: ObNewRow &dst	int ob_write_row_by_projector(AllocatorT &allocator, const ObNewRow &src, ObNewRow &dst)
+src/oblib/common/row/ob_row.h	246	ob_create_row	allocator in, arena view out: ObNewRow *&row	int ob_create_row(AllocatorT &allocator, int64_t col_count, ObNewRow *&row)
+src/oblib/common/row/ob_row.h	272	ob_create_row	allocator in, arena view out: ObNewRow &row	int ob_create_row(AllocatorT &allocator, int64_t col_count, ObNewRow &row)
+src/oblib/common/row/ob_row.h	296	ob_create_rows	allocator in, arena view out: ObNewRow *&rows	int ob_create_rows(AllocatorT &allocator, int64_t row_count, int64_t col_count, ObNewRow *&rows)
+src/oblib/common/row/ob_row_iterator.h	135	ObSingleRowIteratorWrapper::row_	member ObNewRow (pointer) of type ObNewRow *	ObNewRow *row_;
+src/oblib/common/row/ob_row_store.h	44	ObRowStore::StoredRow::reserved_cells_	member ObObj (value) of type common::ObObj	common::ObObj reserved_cells_[0];
+src/oblib/common/row/ob_row_store.h	246	ObRowStore::pre_project_buf_	member ObObj (pointer) of type ObObj *	ObObj *pre_project_buf_;  //if compact row not used, we need to project row before deep copy
+src/oblib/common/row/ob_row_store.h	247	ObRowStore::pre_project_row_	member ObNewRow (value) of type ObNewRow	ObNewRow pre_project_row_;
+src/oblib/common/rowkey/ob_rowkey.h	292	ObRowkey::obj_ptr_	member ObObj (pointer) of type ObObj *	ObObj *obj_ptr_;
+src/oblib/common/rowkey/ob_rowkey.h	417	ObRowkey::deep_copy	allocator in, arena view out: ObRowkey &rhs	int ObRowkey::deep_copy(ObRowkey &rhs, Allocator &allocator) const
+src/oblib/common/rowkey/ob_rowkey.h	443	ObRowkey::to_collation_free_rowkey	allocator in, arena view out: ObRowkey &collation_free_rowkey	int ObRowkey::to_collation_free_rowkey(ObRowkey &collation_free_rowkey, Allocator &allocator) const
+src/oblib/common/rowkey/ob_rowkey.h	481	ObRowkey::to_collation_free_rowkey_on_demand	allocator in, arena view out: ObRowkey &collation_free_rowkey	int ObRowkey::to_collation_free_rowkey_on_demand(ObRowkey &collation_free_rowkey, Allocator &allocator) const
+src/oblib/common/rowkey/ob_rowkey.h	502	ob_write_rowkey	allocator in, arena view out: ObRowkey &dst	int ob_write_rowkey(AllocatorT &allocator, const ObRowkey &src, ObRowkey &dst)
+src/oblib/common/rowkey/ob_store_rowkey.h	72	ObStoreRowkey::deep_copy	allocator in, arena view out: ObStoreRowkey &rhs	OB_INLINE int deep_copy(ObStoreRowkey &rhs, ObIAllocator &allocator) const
+src/oblib/common/rowkey/ob_store_rowkey.h	130	ObStoreRowkey::to_collation_free_store_rowkey	allocator in, arena view out: ObStoreRowkey &collation_free_key	inline int to_collation_free_store_rowkey(ObStoreRowkey &collation_free_key, ObIAllocator &allocator) const
+src/oblib/common/rowkey/ob_store_rowkey.h	134	ObStoreRowkey::to_collation_free_store_rowkey_on_demand	allocator in, arena view out: ObStoreRowkey &collation_free_key	inline int to_collation_free_store_rowkey_on_demand(ObStoreRowkey &collation_free_key, ObIAllocator &allocator) const
+src/oblib/common/rowkey/ob_store_rowkey.h	233	ObStoreRowkey::key_	member ObRowkey (value) of type ObRowkey	ObRowkey key_; // only used as a container for ObObjs
+src/oblib/common/rowkey/ob_store_rowkey.h	307	ObExtStoreRowkey::store_rowkey_	member ObStoreRowkey (value) of type ObStoreRowkey	ObStoreRowkey store_rowkey_;
+src/oblib/common/rowkey/ob_store_rowkey.h	308	ObExtStoreRowkey::collation_free_store_rowkey_	member ObStoreRowkey (value) of type ObStoreRowkey	ObStoreRowkey collation_free_store_rowkey_;
+src/oblib/common/sql_mode/ob_sql_mode_utils.cpp	187	ob_sql_mode_to_str	allocator in, arena view out: ObObj &str_val	int ob_sql_mode_to_str(const ObObj &int_val, ObObj &str_val, ObIAllocator *allocator)
+src/oblib/common/timezone/ob_time_convert.cpp	3233	ObLiteralParseCtx::cur_	member raw bytes (pointer) of type const char *	const char *cur_;
+src/oblib/common/timezone/ob_time_convert.h	299	ObTimeConstStr::ptr_	member raw bytes (pointer) of type const char *	const char *ptr_;
+src/oblib/common/timezone/ob_time_convert.h	624	ObTimeConverter::ObTimeDigits::ptr_	member raw bytes (pointer) of type const char *	const char *ptr_;
+src/oblib/common/timezone/ob_time_convert.h	633	ObTimeConverter::ObTimeDelims::ptr_	member raw bytes (pointer) of type const char *	const char *ptr_;
+src/oblib/common/timezone/ob_timezone_info.h	222	ObTimeZoneName::name_	member ObString (value) of type ObString	ObString  name_;
+src/oblib/common/timezone/ob_timezone_util.h	68	st_time_zone_info::types	member raw bytes (pointer) of type unsigned char *	unsigned char *types;
+src/oblib/common/timezone/ob_timezone_util.h	70	st_time_zone_info::chars	member raw bytes (pointer) of type char *	char *chars;
+src/oblib/common/udt/ob_array_binary.h	148	ObArrayBinary::data_	member raw bytes (pointer) of type char *	char *data_;
+src/oblib/common/udt/ob_array_type.h	46	ObArrayAttr::ptr_	member raw bytes (pointer) of type const char *	const char *ptr_;
+src/oblib/common/udt/ob_array_type.h	238	ObArrayBase::null_bitmaps_	member raw bytes (pointer) of type uint8_t *	uint8_t *null_bitmaps_;
+src/oblib/common/udt/ob_collection_type.cpp	789	ObSqlCollectionInfo::get_map_attr_def_string	allocator in, arena view out: ObString &def	int ObSqlCollectionInfo::get_map_attr_def_string(ObIAllocator &allocator, ObString &def, bool is_values) const
+src/oblib/common/udt/ob_collection_type.h	167	ObSqlCollectionInfo::name_def_	member raw bytes (pointer) of type const char *	const char *name_def_;
+src/oblib/common/udt/ob_udt_type.h	152	ObSqlUDTMeta::udt_name_	member raw bytes (pointer) of type const char *	const char *udt_name_;
+src/oblib/common/udt/ob_udt_type.h	215	ObSqlUDT::udt_data_	member ObString (value) of type ObString	ObString udt_data_;
+src/oblib/common/xml/ob_mul_mode_reader.h	46	ObPathSeekInfo::key_	member ObString (value) of type ObString	ObString key_;
+src/oblib/common/xml/ob_multi_mode_bin.h	141	ObMulBinHeaderSerializer::data_	member raw bytes (pointer) of type const char *	const char *data_;
+src/oblib/common/xml/ob_multi_mode_bin.h	160	ObMulModeContainerSerializer::data_	member raw bytes (pointer) of type const char *	const char *data_;
+src/oblib/common/xml/ob_multi_mode_interface.h	105	ObParameterPrint::encode	member ObString (value) of type ObString	ObString encode;
+src/oblib/common/xml/ob_multi_mode_interface.h	106	ObParameterPrint::version	member ObString (value) of type ObString	ObString version;

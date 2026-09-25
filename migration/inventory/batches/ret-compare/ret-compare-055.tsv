@@ -1,0 +1,93 @@
+file	line	symbol	construct	text
+src/storage/ddl/ob_tablet_slice_writer.cpp	235	ObTabletSliceWriter::append_row	ret == OB_ERR_PRIMARY_KEY_DUPLICATE	if (OB_ERR_PRIMARY_KEY_DUPLICATE == ret && unique_index_id_ > 0) {
+src/storage/ddl/ob_tablet_slice_writer.cpp	239	ObTabletSliceWriter::append_row	other variable report_ret_code == OB_ERR_DUPLICATED_UNIQUE_KEY	if (OB_ERR_DUPLICATED_UNIQUE_KEY == report_ret_code) {
+src/storage/ddl/ob_tablet_slice_writer.cpp	262	ObTabletSliceWriter::append_batch	ret == OB_ERR_PRIMARY_KEY_DUPLICATE	if (OB_ERR_PRIMARY_KEY_DUPLICATE == ret && unique_index_id_ > 0) {
+src/storage/ddl/ob_tablet_slice_writer.cpp	266	ObTabletSliceWriter::append_batch	other variable report_ret_code == OB_ERR_DUPLICATED_UNIQUE_KEY	if (OB_ERR_DUPLICATED_UNIQUE_KEY == report_ret_code) {
+src/storage/ddl/ob_tablet_slice_writer.cpp	942	ObBatchSliceWriter::check_order	ret == OB_ERR_PRIMARY_KEY_DUPLICATE	if (OB_ERR_PRIMARY_KEY_DUPLICATE == ret && writer_param_.ddl_table_schema_.table_item_.is_unique_index_) {
+src/storage/ddl/ob_tablet_slice_writer.cpp	947	ObBatchSliceWriter::check_order	other variable report_ret_code == OB_ERR_DUPLICATED_UNIQUE_KEY	if (OB_ERR_DUPLICATED_UNIQUE_KEY == report_ret_code) {
+src/storage/ddl/ob_tablet_slice_writer.cpp	1140	ObHeapBatchSliceWriter::append_current_batch	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/ddl/ob_tablet_slice_writer.cpp	1160	ObHeapBatchSliceWriter::append_current_batch	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/ddl/ob_vector_index_ddl_pipeline.h	455	ObVectorIndexBuildAndWritePipeline::postprocess	other variable ret_code == OB_ITER_END	if (OB_ITER_END == ret_code) {
+src/storage/deadlock/ob_deadlock_arg_checker.h	81	#define CHECK_ARGS	temp_ret == OB_INVALID_ARGUMENT	if (temp_ret == OB_INVALID_ARGUMENT) {\
+src/storage/deadlock/ob_deadlock_detector_mgr.cpp	559	ObDeadLockDetectorMgr::process_lcl_state_	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/storage/deadlock/ob_deadlock_detector_mgr.cpp	611	ObDeadLockDetectorMgr::process_parent_notification_	ret == OB_ENTRY_EXIST	if (OB_ENTRY_EXIST == ret) {
+src/storage/deadlock/ob_deadlock_detector_mgr.cpp	618	ObDeadLockDetectorMgr::process_parent_notification_	ret == OB_ENTRY_NOT_EXIST	} else if (OB_ENTRY_NOT_EXIST == ret) {
+src/storage/deadlock/ob_deadlock_detector_mgr.cpp	659	ObDeadLockDetectorMgr::process_parent_notification_	ret == OB_ENTRY_NOT_EXIST	if (common::OB_ENTRY_NOT_EXIST == ret) {
+src/storage/deadlock/ob_deadlock_detector_mgr.h	300	ObDeadLockDetectorMgr::register_key	ret == OB_ENTRY_NOT_EXIST	} else if (common::OB_ENTRY_NOT_EXIST == ret) {// create obj and insert to map
+src/storage/deadlock/ob_deadlock_detector_mgr.h	317	ObDeadLockDetectorMgr::register_key	ret == OB_ENTRY_NOT_EXIST	if (common::OB_ENTRY_NOT_EXIST == ret) {
+src/storage/deadlock/ob_deadlock_detector_mgr.h	344	ObDeadLockDetectorMgr::check_detector_exist	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/storage/deadlock/ob_deadlock_detector_mgr.h	436	ObDeadLockDetectorMgr::block	ret == OB_ENTRY_EXIST	if (OB_ENTRY_EXIST == ret) {
+src/storage/deadlock/ob_lcl_scheme/ob_lcl_node.cpp	140	ObLCLNode::unregister_timer_task	tmp_ret != OB_TIMER_TASK_HAS_NOT_SCHEDULED	} else if (OB_TIMER_TASK_HAS_NOT_SCHEDULED != tmp_ret) {
+src/storage/deadlock/ob_lcl_scheme/ob_lcl_node.cpp	198	ObLCLNode::register_timer_with_necessary_retry_with_lock_	ret == OB_INVALID_ARGUMENT	if (!(CLICK() && OB_INVALID_ARGUMENT == ret && delay < 0)) {
+src/storage/fts/dict/ob_ft_cache.cpp	34	ObDictCache::get_dict	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/storage/fts/dict/ob_ft_dat_dict.cpp	234	ObFTDATBuilder::encode	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/storage/fts/dict/ob_ft_dat_dict.cpp	263	ObFTDATReader::match_with_hit	ret != OB_ENTRY_NOT_EXIST	if (OB_FAIL(dat_->get_map()->find(word, code)) && OB_ENTRY_NOT_EXIST != ret) {
+src/storage/fts/dict/ob_ft_dat_dict.cpp	264	ObFTDATReader::match_with_hit	ret == OB_ENTRY_NOT_EXIST	} else if (OB_ENTRY_NOT_EXIST == ret) {
+src/storage/fts/dict/ob_ft_dict_hub.cpp	63	ObFTDictHub::build_cache	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/storage/fts/dict/ob_ft_dict_hub.cpp	69	ObFTDictHub::build_cache	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/storage/fts/dict/ob_ft_dict_hub.cpp	75	ObFTDictHub::build_cache	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/storage/fts/dict/ob_ft_dict_hub.cpp	98	ObFTDictHub::load_cache	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/storage/fts/dict/ob_ft_dict_hub.cpp	107	ObFTDictHub::load_cache	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/storage/fts/dict/ob_ft_dict_hub.cpp	123	ObFTDictHub::get_dict_info	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/storage/fts/dict/ob_ft_dict_table_iter.cpp	59	ObFTDictTableIter::next	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/fts/dict/ob_ft_dict_table_iter.cpp	87	ObFTDictTableIter::init	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/fts/dict/ob_ft_range_dict.cpp	180	ObFTRangeDict::build_ranges_concurrently_thread_pool	ret != OB_ITER_END	} else if (OB_FAIL(iter.next()) && OB_ITER_END != ret) {
+src/storage/fts/dict/ob_ft_range_dict.cpp	186	ObFTRangeDict::build_ranges_concurrently_thread_pool	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/fts/dict/ob_ft_range_dict.cpp	273	ObFTRangeDict::build_one_range	ret != OB_ITER_END	} else if (OB_FAIL(iter.next()) && OB_ITER_END != ret) {
+src/storage/fts/dict/ob_ft_range_dict.cpp	277	ObFTRangeDict::build_one_range	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/fts/dict/ob_ft_range_dict.cpp	339	ObFTRangeDict::match	ret != OB_ENTRY_NOT_EXIST	if (OB_FAIL(find_first_char_range(single_word, dict)) && OB_ENTRY_NOT_EXIST != ret) {
+src/storage/fts/dict/ob_ft_range_dict.cpp	340	ObFTRangeDict::match	ret == OB_ENTRY_NOT_EXIST	} else if (OB_ENTRY_NOT_EXIST == ret) {
+src/storage/fts/dict/ob_ft_range_dict.cpp	362	ObFTRangeDict::match	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/storage/fts/dict/ob_ft_range_dict.cpp	472	ObFTRangeDict::try_load_cache	ret != OB_ENTRY_NOT_EXIST	&& OB_ENTRY_NOT_EXIST != ret) {
+src/storage/fts/dict/ob_ft_range_dict.cpp	473	ObFTRangeDict::try_load_cache	ret == OB_ENTRY_NOT_EXIST	} else if (OB_ENTRY_NOT_EXIST == ret) {
+src/storage/fts/dict/ob_gen_dic_loader.cpp	130	ObGenDicLoader::get_dic_loader	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/storage/fts/ik/ob_ik_arbitrator.cpp	129	ObIKArbitrator::output_result	ret != OB_HASH_NOT_EXIST	} else if (OB_FAIL(chains_.get_refactored(current, chain)) && OB_HASH_NOT_EXIST != ret) {
+src/storage/fts/ik/ob_ik_arbitrator.cpp	130	ObIKArbitrator::output_result	ret == OB_HASH_NOT_EXIST	} else if (OB_HASH_NOT_EXIST == ret) {
+src/storage/fts/ob_beng_ft_parser.cpp	48	ObBEngFTParser::get_next_token	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/fts/ob_fts_doc_word_iterator.cpp	137	ObFTDocWordScanIterator::get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/fts/ob_fts_doc_word_iterator.cpp	221	ObFTDocWordScanIterator::build_table_param	ret == OB_ERR_INDEX_KEY_NOT_FOUND	if (ret == OB_ERR_INDEX_KEY_NOT_FOUND) {
+src/storage/fts/ob_fts_parser_helper.cpp	295	ObFTParseHelper::segment	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/fts/ob_fts_parser_helper.cpp	300	ObFTParseHelper::segment	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/fts/ob_fts_parser_property.cpp	297	ObFTParserJsonProps::config_get_min_token_size	ret == OB_SEARCH_NOT_FOUND	if (OB_SEARCH_NOT_FOUND == ret) {
+src/storage/fts/ob_fts_parser_property.cpp	319	ObFTParserJsonProps::config_get_max_token_size	ret == OB_SEARCH_NOT_FOUND	if (OB_SEARCH_NOT_FOUND == ret) {
+src/storage/fts/ob_fts_parser_property.cpp	341	ObFTParserJsonProps::config_get_ngram_token_size	ret == OB_SEARCH_NOT_FOUND	if (OB_SEARCH_NOT_FOUND == ret) {
+src/storage/fts/ob_fts_parser_property.cpp	362	ObFTParserJsonProps::config_get_dict_table	ret == OB_SEARCH_NOT_FOUND	if (OB_SEARCH_NOT_FOUND == ret) {
+src/storage/fts/ob_fts_parser_property.cpp	385	ObFTParserJsonProps::config_get_stopword_table	ret == OB_SEARCH_NOT_FOUND	if (OB_SEARCH_NOT_FOUND == ret) {
+src/storage/fts/ob_fts_parser_property.cpp	408	ObFTParserJsonProps::config_get_quantifier_table	ret == OB_SEARCH_NOT_FOUND	if (OB_SEARCH_NOT_FOUND == ret) {
+src/storage/fts/ob_fts_parser_property.cpp	430	ObFTParserJsonProps::config_get_ik_mode	ret == OB_SEARCH_NOT_FOUND	if (OB_SEARCH_NOT_FOUND == ret) {
+src/storage/fts/ob_fts_parser_property.cpp	454	ObFTParserJsonProps::config_get_min_ngram_token_size	ret == OB_SEARCH_NOT_FOUND	if (OB_SEARCH_NOT_FOUND == ret) {
+src/storage/fts/ob_fts_parser_property.cpp	476	ObFTParserJsonProps::config_get_max_ngram_token_size	ret == OB_SEARCH_NOT_FOUND	if (OB_SEARCH_NOT_FOUND == ret) {
+src/storage/fts/ob_fts_parser_property.cpp	578	ObFTParserJsonProps::ik_rebuild_props_for_ddl	ret == OB_SEARCH_NOT_FOUND	if (OB_SEARCH_NOT_FOUND == ret) {
+src/storage/fts/ob_fts_parser_property.cpp	589	ObFTParserJsonProps::ik_rebuild_props_for_ddl	ret == OB_SEARCH_NOT_FOUND	if (OB_SEARCH_NOT_FOUND == ret) {
+src/storage/fts/ob_fts_parser_property.cpp	601	ObFTParserJsonProps::ik_rebuild_props_for_ddl	ret == OB_SEARCH_NOT_FOUND	if (OB_SEARCH_NOT_FOUND == ret) {
+src/storage/fts/ob_fts_parser_property.cpp	615	ObFTParserJsonProps::ik_rebuild_props_for_ddl	ret == OB_SEARCH_NOT_FOUND	if (OB_SEARCH_NOT_FOUND == ret) {
+src/storage/fts/ob_fts_parser_property.cpp	663	ObFTParserJsonProps::ngram_rebuild_props_for_ddl	ret == OB_SEARCH_NOT_FOUND	if (OB_SEARCH_NOT_FOUND == ret) {
+src/storage/fts/ob_fts_parser_property.cpp	703	ObFTParserJsonProps::space_rebuild_props_for_ddl	ret == OB_SEARCH_NOT_FOUND	if (OB_SEARCH_NOT_FOUND == ret) {
+src/storage/fts/ob_fts_parser_property.cpp	717	ObFTParserJsonProps::space_rebuild_props_for_ddl	ret == OB_SEARCH_NOT_FOUND	if (OB_SEARCH_NOT_FOUND == ret) {
+src/storage/fts/ob_fts_parser_property.cpp	761	ObFTParserJsonProps::beng_rebuild_props_for_ddl	ret == OB_SEARCH_NOT_FOUND	if (OB_SEARCH_NOT_FOUND == ret) {
+src/storage/fts/ob_fts_parser_property.cpp	776	ObFTParserJsonProps::beng_rebuild_props_for_ddl	ret == OB_SEARCH_NOT_FOUND	if (OB_SEARCH_NOT_FOUND == ret) {
+src/storage/fts/ob_fts_parser_property.cpp	825	ObFTParserJsonProps::ngram2_rebuild_props_for_ddl	ret == OB_SEARCH_NOT_FOUND	if (OB_SEARCH_NOT_FOUND == ret) {
+src/storage/fts/ob_fts_parser_property.cpp	840	ObFTParserJsonProps::ngram2_rebuild_props_for_ddl	ret == OB_SEARCH_NOT_FOUND	if (OB_SEARCH_NOT_FOUND == ret) {
+src/storage/fts/ob_fts_parser_property.cpp	907	ObFTParserJsonProps::show_parser_properties	ret == OB_SEARCH_NOT_FOUND	if (OB_SEARCH_NOT_FOUND == ret) {
+src/storage/fts/ob_fts_parser_property.cpp	924	ObFTParserJsonProps::show_parser_properties	ret == OB_SEARCH_NOT_FOUND	if (OB_SEARCH_NOT_FOUND == ret) {
+src/storage/fts/ob_fts_parser_property.cpp	941	ObFTParserJsonProps::show_parser_properties	ret == OB_SEARCH_NOT_FOUND	if (OB_SEARCH_NOT_FOUND == ret) {
+src/storage/fts/ob_fts_parser_property.cpp	958	ObFTParserJsonProps::show_parser_properties	ret == OB_SEARCH_NOT_FOUND	if (OB_SEARCH_NOT_FOUND == ret) {
+src/storage/fts/ob_fts_parser_property.cpp	975	ObFTParserJsonProps::show_parser_properties	ret == OB_SEARCH_NOT_FOUND	if (OB_SEARCH_NOT_FOUND == ret) {
+src/storage/fts/ob_fts_parser_property.cpp	992	ObFTParserJsonProps::show_parser_properties	ret == OB_SEARCH_NOT_FOUND	if (OB_SEARCH_NOT_FOUND == ret) {
+src/storage/fts/ob_fts_stop_word.cpp	96	ObStopWordChecker::check_stopword	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/storage/fts/ob_fts_stop_word.cpp	99	ObStopWordChecker::check_stopword	ret == OB_HASH_EXIST	} else if (OB_HASH_EXIST == ret) {
+src/storage/fts/ob_fts_stop_word.cpp	207	ObAddWord::groupby_word	ret != OB_HASH_NOT_EXIST	} else if (OB_FAIL(word_map_.get_refactored(word, word_count)) && OB_HASH_NOT_EXIST != ret) {
+src/storage/fts/ob_fts_stop_word.cpp	209	ObAddWord::groupby_word	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/storage/fts/ob_ik_ft_parser.cpp	88	ObIKFTParser::get_next_token	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/fts/ob_ik_ft_parser.cpp	119	ObIKFTParser::produce	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/fts/ob_ik_ft_parser.cpp	125	ObIKFTParser::produce	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/fts/ob_ik_ft_parser.cpp	173	ObIKFTParser::process_next_batch	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/fts/ob_ik_ft_parser.cpp	180	ObIKFTParser::process_next_batch	ret == OB_ITER_END	if (OB_SUCC(ret) || OB_ITER_END == ret) {
+src/storage/fts/ob_ik_ft_parser.cpp	279	ObIKFTParser::init_single_dict	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/storage/fts/ob_ngram2_ft_parser.cpp	77	ObNgram2FTParser::get_next_token	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/fts/ob_ngram_ft_parser.cpp	81	ObNgramFTParser::get_next_token	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/fts/ob_whitespace_ft_parser.cpp	132	ObSpaceFTParser::get_next_token	ret == OB_ITER_END	if (OB_ITER_END == ret || OB_SUCCESS == ret) {
+src/storage/lob/ob_ext_info_callback.cpp	263	ObExtInfoCbRegister::register_cb	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/lob/ob_ext_info_callback.cpp	335	ObExtInfoCbRegister::get_data	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/lob/ob_ext_info_callback.cpp	345	ObExtInfoCbRegister::get_data	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/lob/ob_lob_cursor.cpp	297	ObLobCursor::get_chunk_idx	ret != OB_HASH_NOT_EXIST	} else if (OB_HASH_NOT_EXIST != ret) {

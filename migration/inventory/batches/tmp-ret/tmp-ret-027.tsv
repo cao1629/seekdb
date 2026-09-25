@@ -1,0 +1,115 @@
+file	line	symbol	construct	text
+src/storage/scheduler/ob_dag_scheduler.cpp	193	ObINodeWithChild::reset_children	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/scheduler/ob_dag_scheduler.cpp	197	ObINodeWithChild::reset_children	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(remove_parent_for_children())) {
+src/storage/scheduler/ob_dag_scheduler.cpp	207	ObINodeWithChild::reset_node	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/scheduler/ob_dag_scheduler.cpp	208	ObINodeWithChild::reset_node	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(remove_child_for_parents())) {
+src/storage/scheduler/ob_dag_scheduler.cpp	210	ObINodeWithChild::reset_node	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(remove_parent_for_children())) {
+src/storage/scheduler/ob_dag_scheduler.cpp	360	ObITask::do_work	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/scheduler/ob_dag_scheduler.cpp	370	ObITask::do_work	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(SYS_TASK_STATUS_MGR.is_task_cancel(dag_id, is_cancel))) {
+src/storage/scheduler/ob_dag_scheduler.cpp	399	ObITask::generate_next_task	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/scheduler/ob_dag_scheduler.cpp	407	ObITask::generate_next_task	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(generate_next_task(next_task))) {
+src/storage/scheduler/ob_dag_scheduler.cpp	409	ObITask::generate_next_task	merge into ret	ret = tmp_ret;
+src/storage/scheduler/ob_dag_scheduler.cpp	429	ObITask::post_generate_next_task	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/scheduler/ob_dag_scheduler.cpp	437	ObITask::post_generate_next_task	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(post_generate_next_task(next_task))) {
+src/storage/scheduler/ob_dag_scheduler.cpp	439	ObITask::post_generate_next_task	merge into ret	ret = tmp_ret;
+src/storage/scheduler/ob_dag_scheduler.cpp	661	ObIDag::check_task_status	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/scheduler/ob_dag_scheduler.cpp	663	ObIDag::check_task_status	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(set_stop_without_lock())) {
+src/storage/scheduler/ob_dag_scheduler.cpp	745	ObIDag::add_child	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/scheduler/ob_dag_scheduler.cpp	746	ObIDag::add_child	OB_TMP_FAIL (plan definition)	if (OB_NOT_NULL(dag_net_) && OB_TMP_FAIL(dag_net_->erase_dag_from_dag_net(child))) {
+src/storage/scheduler/ob_dag_scheduler.cpp	1508	ObIDagNet::diagnose_dag	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/scheduler/ob_dag_scheduler.cpp	1514	ObIDagNet::diagnose_dag	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(dag_record->dag_ptr_->diagnose_compaction_info(progress))) {
+src/storage/scheduler/ob_dag_scheduler.cpp	1517	ObIDagNet::diagnose_dag	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(progress_list.push_back(progress))) {
+src/storage/scheduler/ob_dag_scheduler.cpp	1534	ObIDagNet::gene_dag_info	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/scheduler/ob_dag_scheduler.cpp	1535	ObIDagNet::gene_dag_info	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(fill_dag_net_key(info.dag_net_key_, OB_DAG_KEY_LENGTH))) {
+src/storage/scheduler/ob_dag_scheduler.cpp	1538	ObIDagNet::gene_dag_info	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(fill_comment(info.comment_, OB_DAG_COMMET_LENGTH))) {
+src/storage/scheduler/ob_dag_scheduler.cpp	1551	ObIDagNet::gene_dag_info	assign tmp_ret	tmp_ret = ADD_TASK_INFO_PARAM(info.comment_, OB_DAG_COMMET_LENGTH,
+src/storage/scheduler/ob_dag_scheduler.cpp	1568	ObIDag::gene_dag_info	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/scheduler/ob_dag_scheduler.cpp	1569	ObIDag::gene_dag_info	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(fill_dag_key(info.dag_key_, OB_DAG_KEY_LENGTH))) {
+src/storage/scheduler/ob_dag_scheduler.cpp	1573	ObIDag::gene_dag_info	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(fill_comment(info.comment_, sizeof(info.comment_)))) {
+src/storage/scheduler/ob_dag_scheduler.cpp	1587	ObIDag::gene_dag_info	assign tmp_ret	tmp_ret = OB_SUCCESS;
+src/storage/scheduler/ob_dag_scheduler.cpp	1590	ObIDag::gene_dag_info	assign tmp_ret	tmp_ret = ADD_TASK_INFO_PARAM(info.comment_, OB_DAG_COMMET_LENGTH,
+src/storage/scheduler/ob_dag_scheduler.cpp	1600	ObIDag::gene_dag_info	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(dag_net_->fill_dag_net_key(info.dag_net_key_, OB_DAG_KEY_LENGTH))) {
+src/storage/scheduler/ob_dag_scheduler.cpp	1944	ObDagPrioScheduler::destroy	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/scheduler/ob_dag_scheduler.cpp	1953	ObDagPrioScheduler::destroy	OB_TMP_FAIL (plan definition)	&& OB_TMP_FAIL(ObSysTaskStatMgr::get_instance().del_task(cur_dag->get_dag_id()))) {
+src/storage/scheduler/ob_dag_scheduler.cpp	1959	ObDagPrioScheduler::destroy	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(finish_dag_(ObIDag::DAG_STATUS_ABORT, cur_dag, false/*try_move_child*/))) {
+src/storage/scheduler/ob_dag_scheduler.cpp	2074	ObDagPrioScheduler::add_dag_into_list_and_map_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/scheduler/ob_dag_scheduler.cpp	2100	ObDagPrioScheduler::add_dag_into_list_and_map_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/scheduler/ob_dag_scheduler.cpp	2101	ObDagPrioScheduler::add_dag_into_list_and_map_	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(dag_map_.erase_refactored(&dag))) {
+src/storage/scheduler/ob_dag_scheduler.cpp	2235	ObDagPrioScheduler::schedule_dag_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/scheduler/ob_dag_scheduler.cpp	2246	ObDagPrioScheduler::schedule_dag_	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(sys_task_start(dag))) {
+src/storage/scheduler/ob_dag_scheduler.cpp	2248	ObDagPrioScheduler::schedule_dag_	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(generate_next_dag_(dag))) {
+src/storage/scheduler/ob_dag_scheduler.cpp	2264	ObDagPrioScheduler::pop_task_from_ready_list_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/scheduler/ob_dag_scheduler.cpp	2302	ObDagPrioScheduler::pop_task_from_ready_list_	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(cur->get_next_ready_task(ready_task))) {
+src/storage/scheduler/ob_dag_scheduler.cpp	2306	ObDagPrioScheduler::pop_task_from_ready_list_	merge into ret	ret = tmp_ret;
+src/storage/scheduler/ob_dag_scheduler.cpp	2324	ObDagPrioScheduler::generate_next_dag_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/scheduler/ob_dag_scheduler.cpp	2364	ObDagPrioScheduler::generate_next_dag_	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(dag.report_result())) {
+src/storage/scheduler/ob_dag_scheduler.cpp	2380	ObDagPrioScheduler::finish_dag_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/scheduler/ob_dag_scheduler.cpp	2397	ObDagPrioScheduler::finish_dag_	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(dag->report_result())) {
+src/storage/scheduler/ob_dag_scheduler.cpp	2407	ObDagPrioScheduler::finish_dag_	OB_TMP_FAIL (plan definition)	if (dag->get_dag_id().is_valid() && OB_TMP_FAIL(ObSysTaskStatMgr::get_instance().del_task(dag->get_dag_id()))) {
+src/storage/scheduler/ob_dag_scheduler.cpp	2413	ObDagPrioScheduler::finish_dag_	OB_TMP_FAIL (plan definition)	&& OB_TMP_FAIL(suggestion_mgr->update_finish_cnt(
+src/storage/scheduler/ob_dag_scheduler.cpp	2429	ObDagPrioScheduler::finish_dag_	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(::oceanbase::share::server_service<::oceanbase::share::ObDagWarningHistoryManager>()->add_dag_warning_info(dag))) {
+src/storage/scheduler/ob_dag_scheduler.cpp	2435	ObDagPrioScheduler::finish_dag_	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(::oceanbase::share::server_service<::oceanbase::compaction::ObDiagnoseTabletMgr>()->add_diagnose_tablet(
+src/storage/scheduler/ob_dag_scheduler.cpp	2438	ObDagPrioScheduler::finish_dag_	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(::oceanbase::share::server_service<::oceanbase::compaction::ObDiagnoseTabletMgr>()->delete_diagnose_tablet(
+src/storage/scheduler/ob_dag_scheduler.cpp	2526	ObDagPrioScheduler::finish_task_in_dag_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/scheduler/ob_dag_scheduler.cpp	2535	ObDagPrioScheduler::finish_task_in_dag_	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(dag->finish_task(task))) {
+src/storage/scheduler/ob_dag_scheduler.cpp	2765	ObDagPrioScheduler::add_compaction_info	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/scheduler/ob_dag_scheduler.cpp	2772	ObDagPrioScheduler::add_compaction_info	OB_TMP_FAIL (plan definition)	if (OB_UNLIKELY(OB_TMP_FAIL(cur->gene_compaction_info(progress[idx])))) {
+src/storage/scheduler/ob_dag_scheduler.cpp	2788	ObDagPrioScheduler::check_compaction_dag_exist_with_cancel	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/scheduler/ob_dag_scheduler.cpp	2814	ObDagPrioScheduler::check_compaction_dag_exist_with_cancel	assign tmp_ret	tmp_ret = OB_ERR_UNEXPECTED;
+src/storage/scheduler/ob_dag_scheduler.cpp	2816	ObDagPrioScheduler::check_compaction_dag_exist_with_cancel	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(finish_dag_(ObIDag::DAG_STATUS_ABORT, cancel_dag, false/*try_move_child*/))) {
+src/storage/scheduler/ob_dag_scheduler.cpp	2824	ObDagPrioScheduler::check_compaction_dag_exist_with_cancel	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(cur->set_stop())) {
+src/storage/scheduler/ob_dag_scheduler.cpp	2966	ObDagPrioScheduler::diagnose_compaction_dags	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/scheduler/ob_dag_scheduler.cpp	2982	ObDagPrioScheduler::diagnose_compaction_dags	assign tmp_ret	tmp_ret = OB_ERR_UNEXPECTED;
+src/storage/scheduler/ob_dag_scheduler.cpp	2986	ObDagPrioScheduler::diagnose_compaction_dags	assign tmp_ret	tmp_ret = OB_ERR_UNEXPECTED;
+src/storage/scheduler/ob_dag_scheduler.cpp	2988	ObDagPrioScheduler::diagnose_compaction_dags	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(::oceanbase::share::server_service<::oceanbase::compaction::ObDiagnoseTabletMgr>()->add_diagnose_tablet(merge_dag->tablet_id_,
+src/storage/scheduler/ob_dag_scheduler.cpp	3157	ObDagPrioScheduler::try_switch	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/scheduler/ob_dag_scheduler.cpp	3170	ObDagPrioScheduler::try_switch	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(schedule_one_())) {
+src/storage/scheduler/ob_dag_scheduler.cpp	3310	ObDagNetScheduler::add_dag_net	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/scheduler/ob_dag_scheduler.cpp	3313	ObDagNetScheduler::add_dag_net	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(dag_net_id_map_.get_refactored(dag_net.get_dag_id(), exist_dag_net))) {
+src/storage/scheduler/ob_dag_scheduler.cpp	3471	ObDagNetScheduler::loop_running_dag_net_list	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/scheduler/ob_dag_scheduler.cpp	3482	ObDagNetScheduler::loop_running_dag_net_list	OB_TMP_FAIL (plan definition)	if (dag_net->is_started() && OB_TMP_FAIL(dag_net->schedule_rest_dag())) {
+src/storage/scheduler/ob_dag_scheduler.cpp	3526	ObDagNetScheduler::loop_blocking_dag_net_list	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/scheduler/ob_dag_scheduler.cpp	3544	ObDagNetScheduler::loop_blocking_dag_net_list	OB_TMP_FAIL (plan definition)	if (tmp->is_cancel() || OB_TMP_FAIL(tmp->start_running())) {
+src/storage/scheduler/ob_dag_scheduler.cpp	3951	ObDagScheduler::diagnose_for_suggestion	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/scheduler/ob_dag_scheduler.cpp	3960	ObDagScheduler::diagnose_for_suggestion	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(reasons.push_back(value))) {
+src/storage/scheduler/ob_dag_scheduler.cpp	3963	ObDagScheduler::diagnose_for_suggestion	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(thread_limits.push_back(value))) {
+src/storage/scheduler/ob_dag_scheduler.cpp	3966	ObDagScheduler::diagnose_for_suggestion	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(running_cnts.push_back(value))) {
+src/storage/scheduler/ob_dag_scheduler.cpp	3972	ObDagScheduler::diagnose_for_suggestion	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(dag_running_cnts.push_back(value))) {
+src/storage/scheduler/ob_dag_scheduler.cpp	3978	ObDagScheduler::diagnose_for_suggestion	OB_TMP_FAIL (plan definition)	&& OB_TMP_FAIL(suggestion_mgr->diagnose_for_suggestion(
+src/storage/scheduler/ob_dag_scheduler.cpp	3987	ObDagScheduler::dump_dag_status	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/scheduler/ob_dag_scheduler.cpp	4291	ObDagScheduler::diagnose_all_compaction_dags	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/scheduler/ob_dag_scheduler.cpp	4298	ObDagScheduler::diagnose_all_compaction_dags	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(prio_sche_[prio].diagnose_compaction_dags())) {
+src/storage/scheduler/ob_dag_scheduler.cpp	4422	ObDagScheduler::finish_dag_net	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/scheduler/ob_dag_scheduler.cpp	4425	ObDagScheduler::finish_dag_net	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(dag_net->clear_dag_net_ctx())) {
+src/storage/scheduler/ob_dag_scheduler.cpp	4475	ObDagScheduler::schedule	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/scheduler/ob_dag_scheduler.cpp	4482	ObDagScheduler::schedule	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(prio_sche_[i].loop_waiting_dag_list())) {
+src/storage/scheduler/ob_dag_scheduler.cpp	4492	ObDagScheduler::loop_dag_net	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/scheduler/ob_dag_scheduler.cpp	4494	ObDagScheduler::loop_dag_net	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(dag_net_sche_.loop_blocking_dag_net_list())) {
+src/storage/scheduler/ob_dag_scheduler.cpp	4502	ObDagScheduler::loop_dag_net	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(dag_net_sche_.loop_running_dag_net_list())) {
+src/storage/scheduler/ob_dag_scheduler.cpp	4505	ObDagScheduler::loop_dag_net	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(dag_net_sche_.loop_finished_dag_net_list())) {
+src/storage/scheduler/ob_independent_dag.cpp	92	ObIndependentDag::add_task	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/scheduler/ob_independent_dag.cpp	104	ObIndependentDag::add_task	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(cond_.signal())) {
+src/storage/scheduler/ob_independent_dag.cpp	117	ObIndependentDag::batch_add_task	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/scheduler/ob_independent_dag.cpp	127	ObIndependentDag::batch_add_task	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(cond_.broadcast())) {
+src/storage/scheduler/ob_independent_dag.cpp	189	ObIndependentDag::process	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/scheduler/ob_independent_dag.cpp	282	ObIndependentDag::update_ready_task_list	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/scheduler/ob_independent_dag.cpp	315	ObIndependentDag::update_ready_task_list	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(new_ready_cnt > 1 ? cond_.broadcast() : cond_.signal())) {
+src/storage/scheduler/ob_independent_dag.cpp	381	ObIndependentDag::wait_signal	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/scheduler/ob_independent_dag.cpp	384	ObIndependentDag::wait_signal	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(cond_.wait(DAG_COND_TIMEOUT_MS))) {
+src/storage/scheduler/ob_independent_dag.cpp	435	ObIndependentDag::deal_with_finish_task	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/scheduler/ob_independent_dag.cpp	459	ObIndependentDag::deal_with_finish_task	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(ready_task_cnt == 1 ? cond_.signal() : cond_.broadcast())) {
+src/storage/slog/ob_storage_logger.cpp	155	ObStorageLogger::write_log	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/slog/ob_storage_logger.cpp	197	ObStorageLogger::write_log	OB_TMP_FAIL (plan definition)	if (nullptr != log_item && OB_TMP_FAIL(free_item(log_item))) {
+src/storage/slog/ob_storage_logger.cpp	199	ObStorageLogger::write_log	merge into ret	ret = tmp_ret;
+src/storage/slog/ob_storage_logger.cpp	210	ObStorageLogger::write_log	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/slog/ob_storage_logger.cpp	269	ObStorageLogger::write_log	OB_TMP_FAIL (plan definition)	if (nullptr != log_item && OB_TMP_FAIL(free_item(log_item))) {
+src/storage/slog/ob_storage_logger.cpp	271	ObStorageLogger::write_log	merge into ret	ret = tmp_ret;
+src/storage/slog/ob_storage_logger.cpp	354	ObStorageLogger::alloc_item	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/slog/ob_storage_logger.cpp	355	ObStorageLogger::alloc_item	OB_TMP_FAIL (plan definition)	if (nullptr != log_buffer && OB_TMP_FAIL(free_log_buffer(log_buffer))) {
+src/storage/slog/ob_storage_logger.cpp	358	ObStorageLogger::alloc_item	OB_TMP_FAIL (plan definition)	if (nullptr != tmp_log_item && OB_TMP_FAIL(free_log_item(tmp_log_item))) {
+src/storage/slog_ckpt/ob_local_storage_checkpoint_slog_handler.cpp	519	ObLocalStorageCheckpointSlogHandler::check_slog	declare tmp_ret	int tmp_ret = tablet_key_set_.exist_refactored(tablet_key);
+src/storage/slog_ckpt/ob_local_storage_checkpoint_slog_handler.cpp	524	ObLocalStorageCheckpointSlogHandler::check_slog	merge into ret	ret = tmp_ret;
+src/storage/slog_ckpt/ob_local_storage_checkpoint_slog_handler.cpp	615	ObLocalStorageCheckpointSlogHandler::write_checkpoint	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/slog_ckpt/ob_local_storage_checkpoint_slog_handler.cpp	616	ObLocalStorageCheckpointSlogHandler::write_checkpoint	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(local_storage_ckpt_writer.rollback())) {
+src/storage/slog_ckpt/ob_server_snapshot_handler.cpp	131	ObServerSnapshotHandler::inc_linked_block_ref	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/slog_ckpt/ob_server_snapshot_handler.cpp	133	ObServerSnapshotHandler::inc_linked_block_ref	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(OB_STORAGE_OBJECT_MGR.dec_ref(meta_block_list.at(i)))) {

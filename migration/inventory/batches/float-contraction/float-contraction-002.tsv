@@ -1,0 +1,8 @@
+file	line	symbol	construct	text
+src/sql/optimizer/ob_join_order.cpp	6353	AccessPath::estimate_cost_for_parallel	multiply-add on floating values	cost = storage_est_cost * (1-rate) + stats_est_cost * rate;
+src/sql/optimizer/ob_join_order.cpp	6354	AccessPath::estimate_cost_for_parallel	multiply-add on floating values	px_cost = storage_est_px_cost * (1-rate) + stats_est_px_cost * rate;
+src/sql/optimizer/ob_join_order.cpp	6398	AccessPath::estimate_cost	multiply-add on floating values	cost_ = storage_est_cost * (1-rate) + stats_est_cost * rate;
+src/sql/optimizer/ob_join_order.cpp	6452	AccessPath::re_estimate_cost	multiply-add on floating values	cost = storage_est_cost * (1-rate) + stats_est_cost * rate;
+src/sql/optimizer/ob_join_order.cpp	6453	AccessPath::re_estimate_cost	multiply-add on floating values	card = storage_est_card * (1-rate) + stats_est_card * rate;
+src/sql/optimizer/ob_join_order.cpp	11520	ObJoinOrder::check_normal_join_filter_valid	multiply-add on floating values	info.join_filter_selectivity_ += (1 - join_filter_sel) * misjudgment_rate;
+src/sql/optimizer/ob_log_optimizer_stats_gathering.cpp	96	ObLogOptimizerStatsGathering::est_cost	multiply-add on floating values	op_cost_ += sql_num * 12800;

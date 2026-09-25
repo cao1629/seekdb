@@ -1,0 +1,100 @@
+file	line	symbol	construct	text
+src/sql/engine/px/exchange/ob_px_receive_op.cpp	159	ObPxReceiveOp::init_dfc	ret == OB_HASH_NOT_EXIST	force_block = (OB_HASH_NOT_EXIST == ret);
+src/sql/engine/px/exchange/ob_px_receive_op.cpp	329	ObPxReceiveOp::inner_drain_exch	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/px/exchange/ob_px_receive_op.cpp	335	ObPxReceiveOp::inner_drain_exch	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/px/exchange/ob_px_receive_op.cpp	352	ObPxReceiveOp::active_all_receive_channel	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/px/exchange/ob_px_receive_op.cpp	371	ObPxReceiveOp::wrap_get_next_batch	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/px/exchange/ob_px_receive_op.cpp	441	ObPxReceiveOp::erase_dtl_interm_result	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/sql/engine/px/exchange/ob_px_receive_op.cpp	583	ObPxFifoReceiveOp::inner_get_next_batch	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/px/exchange/ob_px_receive_op.cpp	624	ObPxFifoReceiveOp::fetch_rows	ret == OB_ITER_END	} else if (OB_ITER_END == ret) {
+src/sql/engine/px/exchange/ob_px_receive_op.cpp	631	ObPxFifoReceiveOp::fetch_rows	ret == OB_DTL_WAIT_EAGAIN	} else if (OB_DTL_WAIT_EAGAIN == ret) {
+src/sql/engine/px/exchange/ob_px_receive_op.cpp	650	ObPxFifoReceiveOp::fetch_rows	ret == OB_DTL_WAIT_EAGAIN	} while (OB_DTL_WAIT_EAGAIN == ret);
+src/sql/engine/px/exchange/ob_px_receive_op.cpp	652	ObPxFifoReceiveOp::fetch_rows	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/px/exchange/ob_px_receive_op.cpp	716	ObPxFifoReceiveOp::get_rows_from_channels	ret != OB_DTL_WAIT_EAGAIN	if (OB_DTL_WAIT_EAGAIN != ret) {
+src/sql/engine/px/exchange/ob_px_transmit_op.cpp	228	ObPxTransmitOp::fetch_first_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/px/exchange/ob_px_transmit_op.cpp	376	ObPxTransmitOp::inner_get_next_row	ret != OB_ITER_END	if (OB_FAIL(child_->get_next_row()) && OB_ITER_END != ret) {
+src/sql/engine/px/exchange/ob_px_transmit_op.cpp	524	ObPxTransmitOp::send_row	ret != OB_BUF_NOT_ENOUGH	if (OB_BUF_NOT_ENOUGH != ret) {
+src/sql/engine/px/exchange/ob_px_transmit_op.cpp	566	ObPxTransmitOp::send_row_normal	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/px/exchange/ob_px_transmit_op.h	244	ObPxTransmitOp::send_rows_one_by_one	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/sql/engine/px/exchange/ob_px_transmit_op.h	281	ObPxTransmitOp::send_rows_one_by_one	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/px/exchange/ob_px_transmit_op.h	286	ObPxTransmitOp::send_rows_one_by_one	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/px/exchange/ob_px_transmit_op.h	403	ObPxTransmitOp::broadcast_rows	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/px/ob_dfo_scheduler.cpp	311	ObSerialDfoScheduler::try_schedule_next_dfo	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/px/ob_dfo_scheduler.cpp	489	ObSerialDfoScheduler::erase_dtl_interm_results	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/sql/engine/px/ob_dfo_scheduler.cpp	1040	ObParallelDfoScheduler::try_schedule_next_dfo	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/px/ob_granule_iterator_op.cpp	67	ObGITaskReBalancer::wait_for_rebalance	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/sql/engine/px/ob_granule_iterator_op.cpp	71	ObGITaskReBalancer::wait_for_rebalance	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/sql/engine/px/ob_granule_iterator_op.cpp	195	ObGITaskReBalancer::wait_new_task	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/sql/engine/px/ob_granule_iterator_op.cpp	472	ObGranuleIteratorOp::try_fetch_task	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/px/ob_granule_iterator_op.cpp	503	ObGranuleIteratorOp::get_next_task_pos	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/sql/engine/px/ob_granule_iterator_op.cpp	540	ObGranuleIteratorOp::pw_get_next_task_pos	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/sql/engine/px/ob_granule_iterator_op.cpp	593	ObGranuleIteratorOp::rescan	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/sql/engine/px/ob_granule_iterator_op.cpp	616	ObGranuleIteratorOp::rescan	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/sql/engine/px/ob_granule_iterator_op.cpp	758	ObGranuleIteratorOp::inner_get_next_batch	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/px/ob_granule_iterator_op.cpp	771	ObGranuleIteratorOp::wait_task_rebalance	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/sql/engine/px/ob_granule_iterator_op.cpp	836	ObGranuleIteratorOp::gi_task_pause_process	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/sql/engine/px/ob_granule_iterator_op.cpp	869	ObGranuleIteratorOp::try_get_rows	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/sql/engine/px/ob_granule_iterator_op.cpp	878	ObGranuleIteratorOp::try_get_rows	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/sql/engine/px/ob_granule_iterator_op.cpp	883	ObGranuleIteratorOp::try_get_rows	ret == OB_ITER_END	if (ret == OB_ITER_END) {
+src/sql/engine/px/ob_granule_iterator_op.cpp	895	ObGranuleIteratorOp::try_get_rows	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/px/ob_granule_iterator_op.cpp	985	ObGranuleIteratorOp::get_next_granule_task	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/sql/engine/px/ob_granule_iterator_op.cpp	1037	ObGranuleIteratorOp::do_get_next_granule_task	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/px/ob_granule_iterator_op.cpp	1043	ObGranuleIteratorOp::do_get_next_granule_task	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/px/ob_granule_iterator_op.cpp	1052	ObGranuleIteratorOp::do_get_next_granule_task	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/sql/engine/px/ob_granule_iterator_op.cpp	1083	ObGranuleIteratorOp::do_get_next_granule_task	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/px/ob_granule_iterator_op.cpp	1087	ObGranuleIteratorOp::do_get_next_granule_task	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/px/ob_granule_iterator_op.cpp	1112	ObGranuleIteratorOp::wait_partition_runtime_filter_ready	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/sql/engine/px/ob_granule_iterator_op.cpp	1153	ObGranuleIteratorOp::wait_runtime_filter_ready	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/sql/engine/px/ob_granule_iterator_op.cpp	1190	ObGranuleIteratorOp::do_join_filter_partition_pruning	ret == OB_HASH_NOT_EXIST	ret = OB_HASH_NOT_EXIST == ret ? OB_SCHEMA_ERROR : ret;
+src/sql/engine/px/ob_granule_iterator_op.cpp	1229	ObGranuleIteratorOp::fetch_full_pw_tasks	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/px/ob_granule_iterator_op.cpp	1252	ObGranuleIteratorOp::prepare_table_scan	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/sql/engine/px/ob_granule_iterator_op.cpp	1424	ObGranuleIteratorOp::fetch_rescan_pw_task_infos	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/px/ob_granule_iterator_op.cpp	1461	ObGranuleIteratorOp::fetch_normal_pw_task_infos	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/px/ob_granule_iterator_op.cpp	1525	ObGranuleIteratorOp::try_build_tablet2part_id_map	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/px/ob_granule_pump.cpp	291	ObGranulePump::try_fetch_pwj_tasks	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/sql/engine/px/ob_granule_pump.cpp	297	ObGranulePump::try_fetch_pwj_tasks	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/sql/engine/px/ob_granule_pump.cpp	329	ObGranulePump::fetch_granule_task	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/sql/engine/px/ob_granule_pump.cpp	335	ObGranulePump::fetch_granule_task	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/sql/engine/px/ob_granule_pump.cpp	365	ObGranulePump::fetch_granule_by_worker_id	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/px/ob_granule_pump.cpp	408	ObGranulePump::fetch_granule_from_shared_pool	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/px/ob_granule_pump.cpp	458	ObGranulePump::fetch_pw_granule_by_worker_id	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/sql/engine/px/ob_granule_pump.cpp	469	ObGranulePump::fetch_pw_granule_by_worker_id	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/px/ob_granule_pump.cpp	516	ObGranulePump::fetch_pw_granule_from_shared_pool	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/sql/engine/px/ob_granule_pump.cpp	527	ObGranulePump::fetch_pw_granule_from_shared_pool	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/sql/engine/px/ob_granule_pump.cpp	531	ObGranulePump::fetch_pw_granule_from_shared_pool	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/px/ob_granule_pump.cpp	1108	ObAffinitizeGranuleSplitter::split_tasks_affinity	ret == OB_HASH_NOT_EXIST	ret = OB_HASH_NOT_EXIST == ret ? OB_SCHEMA_ERROR : ret;
+src/sql/engine/px/ob_px_coord_op.cpp	154	ObPxCoordOp::init_dfc	ret == OB_HASH_NOT_EXIST	force_block = (OB_HASH_NOT_EXIST == ret);
+src/sql/engine/px/ob_px_coord_op.cpp	209	ObPxCoordOp::rescan	other variable terminate_ret == OB_GOT_SIGNAL_ABORTING	if (OB_GOT_SIGNAL_ABORTING == terminate_ret) {
+src/sql/engine/px/ob_px_coord_op.cpp	605	ObPxCoordOp::wait_all_running_dfos_exit	ret == OB_TIMEOUT	if (OB_TIMEOUT == ret) {
+src/sql/engine/px/ob_px_coord_op.cpp	616	ObPxCoordOp::wait_all_running_dfos_exit	ret == OB_DTL_WAIT_EAGAIN	if (OB_DTL_WAIT_EAGAIN == ret) {
+src/sql/engine/px/ob_px_coord_op.cpp	618	ObPxCoordOp::wait_all_running_dfos_exit	ret != OB_ITER_END	} else if (OB_ITER_END != ret) {
+src/sql/engine/px/ob_px_coord_op.cpp	651	ObPxCoordOp::wait_all_running_dfos_exit	other variable coord_info_.first_error_code_ != OB_GOT_SIGNAL_ABORTING	&& OB_GOT_SIGNAL_ABORTING != coord_info_.first_error_code_
+src/sql/engine/px/ob_px_coord_op.cpp	652	ObPxCoordOp::wait_all_running_dfos_exit	other variable coord_info_.first_error_code_ != OB_ERR_SIGNALED_IN_PARALLEL_QUERY_SERVER	&& OB_ERR_SIGNALED_IN_PARALLEL_QUERY_SERVER != coord_info_.first_error_code_) {
+src/sql/engine/px/ob_px_dtl_proc.cpp	63	ObPxReceiveRowP::process	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/px/ob_px_row_store.cpp	257	ObReceiveRowReader::get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/px/ob_px_row_store.cpp	341	ObReceiveRowReader::get_next_batch	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/px/ob_px_scheduler.cpp	61	ObDhPieceMsgProc::on_piece_msg	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/sql/engine/px/ob_px_scheduler.cpp	348	ObPxMsgProc::process_sqc_finish_msg_once	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/px/ob_px_sqc_proxy.cpp	116	ObPxSQCProxy::process_dtl_msg	ret == OB_DTL_WAIT_EAGAIN	if (OB_DTL_WAIT_EAGAIN == ret) {
+src/sql/engine/px/ob_px_sqc_proxy.cpp	129	ObPxSQCProxy::do_process_dtl_msg	ret == OB_DTL_WAIT_EAGAIN	if (OB_DTL_WAIT_EAGAIN == ret) {
+src/sql/engine/px/ob_px_sqc_proxy.cpp	158	ObPxSQCProxy::get_transmit_data_ch	ret == OB_DTL_WAIT_EAGAIN	if (OB_DTL_WAIT_EAGAIN == ret) {
+src/sql/engine/px/ob_px_sqc_proxy.cpp	167	ObPxSQCProxy::get_transmit_data_ch	ret == OB_DTL_WAIT_EAGAIN	} while (OB_DTL_WAIT_EAGAIN == ret);
+src/sql/engine/px/ob_px_sqc_proxy.cpp	172	ObPxSQCProxy::get_transmit_data_ch	ret == OB_DTL_WAIT_EAGAIN	} while (OB_DTL_WAIT_EAGAIN == ret);
+src/sql/engine/px/ob_px_sqc_proxy.cpp	199	ObPxSQCProxy::get_receive_data_ch	ret == OB_DTL_WAIT_EAGAIN	if (OB_DTL_WAIT_EAGAIN == ret) {
+src/sql/engine/px/ob_px_sqc_proxy.cpp	209	ObPxSQCProxy::get_receive_data_ch	ret == OB_DTL_WAIT_EAGAIN	} while (OB_DTL_WAIT_EAGAIN == ret);
+src/sql/engine/px/ob_px_sqc_proxy.cpp	215	ObPxSQCProxy::get_receive_data_ch	ret == OB_DTL_WAIT_EAGAIN	} while(OB_DTL_WAIT_EAGAIN == ret);
+src/sql/engine/px/ob_px_sqc_proxy.cpp	236	ObPxSQCProxy::get_part_ch_map	ret == OB_DTL_WAIT_EAGAIN	if (OB_DTL_WAIT_EAGAIN == ret) {
+src/sql/engine/px/ob_px_sqc_proxy.cpp	245	ObPxSQCProxy::get_part_ch_map	ret == OB_DTL_WAIT_EAGAIN	} while (OB_DTL_WAIT_EAGAIN == ret);
+src/sql/engine/px/ob_px_sqc_proxy.cpp	250	ObPxSQCProxy::get_part_ch_map	ret == OB_DTL_WAIT_EAGAIN	} while (OB_DTL_WAIT_EAGAIN == ret);
+src/sql/engine/px/ob_px_sqc_proxy.cpp	292	ObPxSQCProxy::check_task_finish_status	ret != OB_DTL_WAIT_EAGAIN	if (OB_DTL_WAIT_EAGAIN != ret) {
+src/sql/engine/px/ob_px_sqc_proxy.h	241	ObPxSQCProxy::wait_whole_msg	ret == OB_DTL_WAIT_EAGAIN	if (OB_DTL_WAIT_EAGAIN == ret || OB_SUCCESS == ret) {
+src/sql/engine/px/ob_px_sqc_proxy.h	248	ObPxSQCProxy::wait_whole_msg	ret == OB_DTL_WAIT_EAGAIN	if (common::OB_DTL_WAIT_EAGAIN == ret) {
+src/sql/engine/px/ob_px_sqc_proxy.h	254	ObPxSQCProxy::wait_whole_msg	ret == OB_DTL_WAIT_EAGAIN	} while (common::OB_DTL_WAIT_EAGAIN == ret && OB_SUCC(THIS_WORKER.check_status()));
+src/sql/engine/px/ob_px_sub_coord.cpp	758	ObPxSubCoord::ddl_rewrite_ret_code	other variable ret_code == OB_EAGAIN	if (OB_EAGAIN == ret_code) {
+src/sql/engine/px/ob_px_task_process.cpp	204	ObPxTaskProcess::process	ret == OB_ITER_END	audit_record.status_ = (OB_SUCCESS == ret || common::OB_ITER_END == ret)
+src/sql/engine/px/ob_px_task_process.cpp	486	ObPxTaskProcess::record_user_error_msg	other variable retcode == OB_ERR_SIGNAL_EXCEPTION	if (OB_ERR_SIGNAL_EXCEPTION == retcode) {
+src/sql/engine/px/ob_px_util.cpp	797	ObPxSqcDistributionUtil::reorder_all_partitions	ret (assigned in the comparison) == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == (ret = except.get_errno())) {
+src/sql/engine/px/ob_px_util.cpp	808	ObPxSqcDistributionUtil::reorder_all_partitions	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/sql/engine/px/ob_px_util.cpp	819	ObPxSqcDistributionUtil::reorder_all_partitions	ret == OB_HASH_NOT_EXIST	if (ret == OB_HASH_NOT_EXIST) {
+src/sql/engine/px/ob_px_util.cpp	885	ObPxSqcDistributionUtil::build_tablet_idx_map	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/px/ob_px_util.cpp	2074	ObSlaveMapUtil::build_ppwj_ch_mn_map	ret == OB_HASH_NOT_EXIST	ret = OB_HASH_NOT_EXIST == ret ? OB_SCHEMA_ERROR : ret;

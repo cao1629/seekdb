@@ -1,0 +1,60 @@
+file	line	symbol	construct	text
+src/sql/resolver/dml/ob_inlist_resolver.h	45	ObInListsResolverHelper::param_store_	member ParamStore (pointer) of type const ParamStore *	const ParamStore *param_store_;
+src/sql/resolver/dml/ob_select_stmt.h	98	SelectItem::alias_name_	member ObString (value) of type common::ObString	common::ObString alias_name_;
+src/sql/resolver/dml/ob_select_stmt.h	99	SelectItem::paramed_alias_name_	member ObString (value) of type common::ObString	common::ObString paramed_alias_name_;
+src/sql/resolver/dml/ob_select_stmt.h	100	SelectItem::expr_name_	member ObString (value) of type common::ObString	common::ObString expr_name_;
+src/sql/resolver/dml/ob_select_stmt.h	176	ObSelectIntoItem::outfile_name_	member ObObj (value) of type common::ObObj	common::ObObj outfile_name_;
+src/sql/resolver/dml/ob_select_stmt.h	177	ObSelectIntoItem::field_str_	member ObObj (value) of type common::ObObj	common::ObObj field_str_; // field terminated str
+src/sql/resolver/dml/ob_select_stmt.h	178	ObSelectIntoItem::line_str_	member ObObj (value) of type common::ObObj	common::ObObj line_str_; // line terminated str
+src/sql/resolver/dml/ob_select_stmt.h	179	ObSelectIntoItem::user_vars_	member container of ObString of type common::ObSEArray<common::ObString, 16>	common::ObSEArray<common::ObString, 16> user_vars_; // user variables
+src/sql/resolver/dml/ob_select_stmt.h	181	ObSelectIntoItem::closed_cht_	member ObObj (value) of type common::ObObj	common::ObObj closed_cht_; // all fields, "123","ab"
+src/sql/resolver/dml/ob_select_stmt.h	185	ObSelectIntoItem::escaped_cht_	member ObObj (value) of type common::ObObj	common::ObObj escaped_cht_;
+src/sql/resolver/dml/ob_select_stmt.h	188	ObSelectIntoItem::external_properties_	member ObString (value) of type common::ObString	common::ObString external_properties_;
+src/sql/resolver/dml/ob_sql_hint.cpp	360	ObQueryHint::generate_qb_name_for_stmt	allocator in, arena view out: ObString &qb_name	int ObQueryHint::generate_qb_name_for_stmt(ObIAllocator &allocator,
+src/sql/resolver/dml/ob_sql_hint.cpp	414	ObQueryHint::try_add_new_qb_name	allocator in, arena view out: ObString &qb_name	int ObQueryHint::try_add_new_qb_name(ObIAllocator &allocator,
+src/sql/resolver/dml/ob_sql_hint.h	44	ObHints::qb_name_	member ObString (value) of type ObString	ObString qb_name_;
+src/sql/resolver/dml/ob_sql_hint.h	64	QbNames::parent_name_	member ObString (value) of type ObString	ObString parent_name_; // parent stmt qb name in transform, empty for origin stmt
+src/sql/resolver/dml/ob_sql_hint.h	65	QbNames::qb_names_	member container of ObString of type ObSEArray<ObString, 1, common::ModulePageAllocator, true>	ObSEArray<ObString, 1, common::ModulePageAllocator, true> qb_names_; // used qb names for one stmt
+src/sql/resolver/dml/ob_sql_hint.h	186	ObQueryHint::qb_name_map_	member container of ObString of type hash::ObHashMap<ObString, int64_t, common::hash::NoPthreadDefendMode>	hash::ObHashMap<ObString, int64_t, common::hash::NoPthreadDefendMode> qb_name_map_; // qb name -> stmt id
+src/sql/resolver/dml/ob_view_table_resolver.h	100	ObViewTableResolver::view_db_name_	member ObString (value) of type const ObString	const ObString view_db_name_;
+src/sql/resolver/dml/ob_view_table_resolver.h	101	ObViewTableResolver::view_name_	member ObString (value) of type const ObString	const ObString view_name_;
+src/sql/resolver/expr/ob_raw_expr.h	1074	ObUDFInfo::udf_name_	member ObString (value) of type common::ObString	common::ObString udf_name_;
+src/sql/resolver/expr/ob_raw_expr.h	1075	ObUDFInfo::udf_package_	member ObString (value) of type common::ObString	common::ObString udf_package_;
+src/sql/resolver/expr/ob_raw_expr.h	1076	ObUDFInfo::udf_database_	member ObString (value) of type common::ObString	common::ObString udf_database_;
+src/sql/resolver/expr/ob_raw_expr.h	1077	ObUDFInfo::param_names_	member container of ObString of type common::ObArray<common::ObString>	common::ObArray<common::ObString> param_names_;
+src/sql/resolver/expr/ob_raw_expr.h	1170	ObObjAccessIdent::access_name_	member ObString (value) of type common::ObString	common::ObString access_name_;
+src/sql/resolver/expr/ob_raw_expr.h	1297	ObQualifiedName::database_name_	member ObString (value) of type common::ObString	common::ObString database_name_;
+src/sql/resolver/expr/ob_raw_expr.h	1298	ObQualifiedName::tbl_name_	member ObString (value) of type common::ObString	common::ObString tbl_name_; // When used for UDF, indicates package name
+src/sql/resolver/expr/ob_raw_expr.h	1299	ObQualifiedName::col_name_	member ObString (value) of type common::ObString	common::ObString col_name_; // When used for UDF, indicates function name
+src/sql/resolver/expr/ob_raw_expr.h	1566	ObVarInfo::name_	member ObString (value) of type common::ObString	common::ObString name_;
+src/sql/resolver/expr/ob_raw_expr.h	1666	ObResolveContext::param_list_	member ParamStore (pointer) of type const ParamStore *	const ParamStore *param_list_;
+src/sql/resolver/expr/ob_raw_expr.h	2227	ObRawExpr::alias_column_name_	member ObString (value) of type common::ObString	common::ObString alias_column_name_;
+src/sql/resolver/expr/ob_raw_expr.h	2232	ObRawExpr::expr_name_	member ObString (value) of type common::ObString	common::ObString expr_name_;
+src/sql/resolver/expr/ob_raw_expr.h	2627	ObConstRawExpr::value_	member ObObj (value) of type common::ObObj	common::ObObj value_;
+src/sql/resolver/expr/ob_raw_expr.h	2629	ObConstRawExpr::literal_prefix_	member ObString (value) of type common::ObString	common::ObString literal_prefix_; // only used at compile time, irrelevant at runtime
+src/sql/resolver/expr/ob_raw_expr.h	2631	ObConstRawExpr::param_	member ObObj (value) of type common::ObObj	common::ObObj param_;
+src/sql/resolver/expr/ob_raw_expr.h	3124	ObColumnRefRawExpr::database_name_	member ObString (value) of type common::ObString	common::ObString database_name_;
+src/sql/resolver/expr/ob_raw_expr.h	3125	ObColumnRefRawExpr::table_name_	member ObString (value) of type common::ObString	common::ObString table_name_;
+src/sql/resolver/expr/ob_raw_expr.h	3126	ObColumnRefRawExpr::column_name_	member ObString (value) of type common::ObString	common::ObString column_name_;
+src/sql/resolver/expr/ob_raw_expr.h	3922	ObSysFunRawExpr::func_name_	member ObString (value) of type common::ObString	common::ObString func_name_;
+src/sql/resolver/expr/ob_raw_expr.h	3981	ObCollectionConstructRawExpr::access_names_	member container of ObString of type common::ObSEArray<common::ObString, 4, common::ModulePageAllocator, true>	common::ObSEArray<common::ObString, 4, common::ModulePageAllocator, true> access_names_;
+src/sql/resolver/expr/ob_raw_expr.h	4043	ObObjectConstructRawExpr::access_names_	member container of ObString of type common::ObSEArray<common::ObString, 4, common::ModulePageAllocator, true>	common::ObSEArray<common::ObString, 4, common::ModulePageAllocator, true> access_names_;
+src/sql/resolver/expr/ob_raw_expr.h	4296	ObUDFRawExpr::database_name_	member ObString (value) of type common::ObString	common::ObString database_name_;
+src/sql/resolver/expr/ob_raw_expr.h	4297	ObUDFRawExpr::package_name_	member ObString (value) of type common::ObString	common::ObString package_name_;
+src/sql/resolver/expr/ob_raw_expr.h	4303	ObUDFRawExpr::params_name_	member container of ObString of type common::ObSEArray<common::ObString, 5, common::ModulePageAllocator, true>	common::ObSEArray<common::ObString, 5, common::ModulePageAllocator, true> params_name_;
+src/sql/resolver/expr/ob_raw_expr.h	4419	ObPLSQLVariableRawExpr::plsql_variable_	member ObString (value) of type ObString	ObString plsql_variable_; // for PL unit pseudo variables.
+src/sql/resolver/expr/ob_raw_expr.h	4445	ObCallParamRawExpr::name_	member ObString (value) of type ObString	ObString name_;
+src/sql/resolver/expr/ob_raw_expr.h	4540	ObObjAccessRawExpr::func_name_	member ObString (value) of type common::ObString	common::ObString func_name_;
+src/sql/resolver/expr/ob_raw_expr.h	4671	ObWindow::win_name_	member ObString (value) of type common::ObString	common::ObString win_name_;
+src/sql/resolver/expr/ob_raw_expr.h	4775	ObWinFunRawExpr::sort_str_	member ObString (value) of type common::ObString	common::ObString sort_str_;
+src/sql/resolver/expr/ob_raw_expr.h	4827	ObPseudoColumnRawExpr::table_name_	member ObString (value) of type common::ObString	common::ObString table_name_;
+src/sql/resolver/expr/ob_raw_expr.h	4863	ObOpPseudoColumnRawExpr::name_	member raw bytes (pointer) of type const char *	const char *name_;
+src/sql/resolver/expr/ob_raw_expr.h	5224	ObPlQueryRefRawExpr::ps_sql_	member ObString (value) of type common::ObString	common::ObString ps_sql_; //parameterized sql after prepare
+src/sql/resolver/expr/ob_raw_expr.h	5227	ObPlQueryRefRawExpr::route_sql_	member ObString (value) of type common::ObString	common::ObString route_sql_;
+src/sql/resolver/expr/ob_raw_expr_modify_column_name.h	61	ObRawExprModifyColumnName::orig_column_name_	member ObString (value) of type common::ObString	common::ObString orig_column_name_;
+src/sql/resolver/expr/ob_raw_expr_modify_column_name.h	62	ObRawExprModifyColumnName::new_column_name_	member ObString (value) of type common::ObString	common::ObString new_column_name_;
+src/sql/resolver/expr/ob_raw_expr_print_visitor.h	54	ObRawExprPrintVisitor::buf_	member raw bytes (pointer) of type mutable char*	mutable char* buf_;
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	31	change_json_expr_res_type_if_need	allocator in, arena view out: ObString &str	static int change_json_expr_res_type_if_need(common::ObIAllocator &allocator, ObString &str, ParseNode &ret_node, int8_t json_expr_flag)
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	198	ObRawExprResolverImpl::get_opposite_string	allocator in, arena view out: common::ObString &new_string	int ObRawExprResolverImpl::get_opposite_string(const common::ObString &orig_string, common::ObString &new_string, common::ObIAllocator &allocator)
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	1649	ObRawExprResolverImpl::mock_enum_type_info	allocator in, arena view out: ObString &string	int ObRawExprResolverImpl::mock_enum_type_info(common::ObIAllocator &allocator, ObString &string, uint64_t idx, ObIArray<common::ObString> &type_info)
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	1665	ObRawExprResolverImpl::mock_set_type_info	allocator in, arena view out: ObString &string	int ObRawExprResolverImpl::mock_set_type_info(common::ObIAllocator &allocator, ObString &string, uint64_t element_val, ObIArray<common::ObString> &type_info)

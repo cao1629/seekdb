@@ -1,0 +1,81 @@
+file	line	symbol	construct	text
+src/sql/optimizer/ob_opt_selectivity.cpp	525	OptTableMeta::get_increase_rows_ratio	const_cast<double &>	const_cast<double &>(real_rows_) = rows_;
+src/sql/optimizer/ob_opt_selectivity.cpp	535	OptTableMeta::get_increase_rows_ratio	const_cast<double &>	const_cast<double &>(real_rows_) = table_meta.table_row_count_;
+src/sql/optimizer/ob_opt_selectivity.cpp	1236	ObOptSelectivity::calc_selectivity_by_dynamic_sampling	const_cast<ObOptimizerContext &>	if (OB_FAIL(ObDynamicSamplingUtils::get_ds_table_param(const_cast<ObOptimizerContext &>(ctx.get_opt_ctx()),
+src/sql/optimizer/ob_opt_selectivity.cpp	1248	ObOptSelectivity::calc_selectivity_by_dynamic_sampling	const_cast<ObOptimizerContext &>	ObDynamicSampling dynamic_sampling(const_cast<ObOptimizerContext &>(ctx.get_opt_ctx()), allocator);
+src/sql/optimizer/ob_opt_selectivity.cpp	1258	ObOptSelectivity::calc_selectivity_by_dynamic_sampling	const_cast<ObOptimizerContext &>	const_cast<ObOptimizerContext &>(ctx.get_opt_ctx()).get_failed_ds_tab_list()))) {
+src/sql/optimizer/ob_opt_selectivity.cpp	1266	ObOptSelectivity::calc_selectivity_by_dynamic_sampling	const_cast<OptTableMeta *>	const_cast<OptTableMeta *>(ds_param.table_meta_)->set_ds_level(ds_table_param.ds_level_);
+src/sql/optimizer/ob_opt_selectivity.cpp	1391	ObOptSelectivity::add_valid_ds_qual	const_cast<ObRawExpr*>	if (OB_FAIL(quals.push_back(const_cast<ObRawExpr*>(qual)))) {
+src/sql/optimizer/ob_opt_selectivity.cpp	1408	ObOptSelectivity::add_valid_ds_qual	const_cast<ObRawExpr*>	if (OB_FAIL(add_var_to_array_no_dup(ds_params.at(i).quals_, const_cast<ObRawExpr*>(qual)))) {
+src/sql/optimizer/ob_opt_selectivity.cpp	1415	ObOptSelectivity::add_valid_ds_qual	const_cast<ObRawExpr*>	if (OB_FAIL(ds_param.quals_.push_back(const_cast<ObRawExpr*>(qual)))) {
+src/sql/optimizer/ob_opt_selectivity.cpp	1584	ObOptSelectivity::get_column_range_sel	const_cast<ObRawExpr *>	if (OB_FAIL(quals.push_back(const_cast<ObRawExpr *>(&qual)))) {
+src/sql/optimizer/ob_opt_selectivity.cpp	2150	ObOptSelectivity::get_column_min_max	const_cast<OptColumnMeta *>	OptColumnMeta *column_meta = const_cast<OptColumnMeta *>(
+src/sql/optimizer/ob_opt_selectivity.cpp	2153	ObOptSelectivity::get_column_min_max	const_cast<OptSelectivityCtx&>	ObSqlSchemaGuard *schema_guard = const_cast<OptSelectivityCtx&>(ctx).get_sql_schema_guard();
+src/sql/optimizer/ob_opt_selectivity.cpp	2811	ObOptSelectivity::calculate_distinct	const_cast<ObRawExpr*>	if (OB_FAIL(expr_array.push_back(const_cast<ObRawExpr*>(&expr)))) {
+src/sql/optimizer/ob_opt_selectivity.cpp	3766	ObOptSelectivity::remove_ignorable_func_for_est_sel	const_cast<ObRawExpr *>	expr = const_cast<ObRawExpr *>(const_expr);
+src/sql/optimizer/ob_opt_selectivity.h	178	OptSelectivityCtx::get_opt_ctx	const_cast<ObOptimizerContext &>	ObOptimizerContext &get_opt_ctx() const { return const_cast<ObOptimizerContext &>(opt_ctx_); }
+src/sql/optimizer/ob_opt_selectivity.h	187	OptSelectivityCtx::get_session_info	const_cast<ObSQLSessionInfo *>	return const_cast<ObSQLSessionInfo *>(opt_ctx_.get_session_info());
+src/sql/optimizer/ob_opt_selectivity.h	195	OptSelectivityCtx::get_opt_stat_manager	const_cast<common::ObOptStatManager *>	return const_cast<common::ObOptStatManager *>(opt_ctx_.get_opt_stat_manager());
+src/sql/optimizer/ob_opt_selectivity.h	200	OptSelectivityCtx::get_allocator	const_cast<common::ObIAllocator &>	return const_cast<common::ObIAllocator &>(opt_ctx_.get_allocator());
+src/sql/optimizer/ob_optimizer_util.cpp	988	ObOptimizerUtil::get_expr_monotonicity_recursively	const_cast<ObRawExpr*>	if (OB_FAIL(ObTransformUtils::get_expr_int_value(const_cast<ObRawExpr*>(param_expr_pos), &param_store,
+src/sql/optimizer/ob_optimizer_util.cpp	1600	ObOptimizerUtil::generate_rowkey_exprs	const_cast<ObDMLStmt *>	ObDMLStmt *stmt = const_cast<ObDMLStmt *>(cstmt);
+src/sql/optimizer/ob_optimizer_util.cpp	2794	ObOptimizerUtil::add_fd_item_set_for_n2n_join	const_cast<ObFdItem *>	new_fd_item = const_cast<ObFdItem *>(fd_item);
+src/sql/optimizer/ob_optimizer_util.cpp	5090	ObOptimizerUtil::get_expr_without_lossless_cast	const_cast<ObRawExpr*>	expr = const_cast<ObRawExpr*>(tmp_expr);
+src/sql/optimizer/ob_sel_estimator.cpp	783	ObEqualSelEstimator::get_equal_sel	const_cast<ObOptimizerContext &>	if (OB_FAIL(ObOptEstUtils::if_expr_value_equal(const_cast<ObOptimizerContext &>(ctx.get_opt_ctx()),
+src/sql/optimizer/ob_sel_estimator.cpp	816	ObEqualSelEstimator::get_simple_equal_sel	const_cast<ObRawExpr*>	ObRawExpr *expr = const_cast<ObRawExpr*>(&cnt_col_expr);
+src/sql/optimizer/ob_sel_estimator.cpp	1674	ObBoolOpSelEstimator::create_estimator	const_cast<ObRawExpr *>	} else if (OB_FAIL(exprs.push_back(const_cast<ObRawExpr *>(child_expr)))) {
+src/sql/optimizer/ob_sel_estimator.cpp	1835	ObRangeSelEstimator::create_estimator	const_cast<ObRawExpr *>	if (OB_FAIL(range_estimator->range_exprs_.push_back(const_cast<ObRawExpr *>(&expr)))) {
+src/sql/optimizer/ob_sel_estimator.cpp	1890	ObSimpleJoinSelEstimator::create_estimator	const_cast<ObRawExpr *>	} else if (OB_FAIL(simple_join_estimator->join_conditions_.push_back(const_cast<ObRawExpr *>(&expr)))) {
+src/sql/optimizer/ob_select_log_plan.cpp	440	ObSelectLogPlan::inner_create_merge_rollup_plan	const_cast<EqualSets &>	const_cast<EqualSets &>(top->get_output_equal_sets()),
+src/sql/optimizer/ob_select_log_plan.cpp	1224	ObSelectLogPlan::inner_create_merge_group_plan	const_cast<EqualSets &>	const_cast<EqualSets &>(top->get_output_equal_sets()),
+src/sql/optimizer/ob_select_log_plan.cpp	1735	ObSelectLogPlan::check_need_merge_distinct_plan	const_cast<EqualSets &>	const_cast<EqualSets &>(top->get_output_equal_sets()),
+src/sql/optimizer/ob_sharding_info.h	94	ObShardingInfo::get_phy_table_location_info	const_cast<ObCandiTableLoc *>	return const_cast<ObCandiTableLoc *>
+src/sql/optimizer/ob_table_location.cpp	110	ObTableLocation::PartProjector::init_part_projector	const_cast<ObRawExpr*>	if (OB_FAIL(row_desc.add_column(const_cast<ObRawExpr*>(part_column)))) {
+src/sql/optimizer/ob_table_location.cpp	3376	ObTableLocation::calc_partition_ids_by_ranges	const_cast<ObObj*>	input_row.cells_ = const_cast<ObObj*>(range->start_key_.get_obj_ptr());
+src/sql/optimizer/ob_table_location.cpp	3474	ObTableLocation::calc_partition_ids_by_rowkey	const_cast<ObObj*>	cur_row.cells_ = const_cast<ObObj*>(rowkeys.at(i).get_obj_ptr());
+src/sql/optimizer/ob_table_location.cpp	4606	ObTableLocation::calc_partition_ids_by_range	const_cast<ObNewRange *>	} else if (OB_FAIL(dummy_query_ranges.push_back(const_cast<ObNewRange *>(range)))) {
+src/sql/optimizer/ob_table_location.cpp	4724	ObTableLocation::calc_range_by_part_expr	const_cast<ObObj *>	input_row.cells_ = const_cast<ObObj *>(range->start_key_.get_obj_ptr());
+src/sql/optimizer/ob_table_location.cpp	4737	ObTableLocation::calc_range_by_part_expr	const_cast<ObObj *>	input_row.cells_ = const_cast<ObObj *>(range->end_key_.get_obj_ptr());
+src/sql/optimizer/stat/ob_dbms_stats_copy_table_stats.cpp	414	ObDbmsStatsCopyTableStats::find_src_tab_stat	const_cast<ObOptTableStat *>	ObOptTableStat * cur_tab_stat = const_cast<ObOptTableStat *>(tab_handles.at(i).stat_);
+src/sql/optimizer/stat/ob_dbms_stats_executor.cpp	603	ObDbmsStatsExecutor::construct_part_to_subpart_map	const_cast<PartInfo*>	if (OB_FAIL(temp_subpart_infos.push_back(const_cast<PartInfo*>(&subpart)))) {
+src/sql/optimizer/stat/ob_dbms_stats_executor.cpp	613	ObDbmsStatsExecutor::construct_part_to_subpart_map	const_cast<PartInfo*>	if (OB_FAIL(part_id_to_approx_part_map.set_refactored(part.part_id_, const_cast<PartInfo*>(&part)))) {
+src/sql/optimizer/stat/ob_dbms_stats_executor.cpp	644	ObDbmsStatsExecutor::prepare_gather_stats	const_cast<ObTableStatParam&>	} else if (OB_FAIL(determine_auto_sample_table(ctx, const_cast<ObTableStatParam&>(param)))) {
+src/sql/optimizer/stat/ob_dbms_stats_executor.cpp	646	ObDbmsStatsExecutor::prepare_gather_stats	const_cast<ObTableStatParam &>	OB_FAIL(try_use_prefix_index_refine_min_max(ctx, const_cast<ObTableStatParam &>(param)))) {
+src/sql/optimizer/stat/ob_dbms_stats_gather.cpp	40	ObDbmsStatsGather::gather_stats	const_cast<ObOptStatGatherParam&>	} else if (OB_FAIL(adjust_sample_param(opt_stats, const_cast<ObOptStatGatherParam&>(param)))) {
+src/sql/optimizer/stat/ob_dbms_stats_utils.cpp	838	ObDbmsStatsUtils::truncate_string_for_opt_stats	const_cast<ObObj *>	new_obj = const_cast<ObObj *>(old_obj);
+src/sql/optimizer/stat/ob_incremental_stat_estimator.cpp	190	ObIncrementalStatEstimator::generate_all_opt_stat	const_cast<ObOptColumnStat*>	const_cast<ObOptColumnStat*>(col_handles.at(j).stat_)))) {
+src/sql/optimizer/stat/ob_opt_stat_sql_service.cpp	1265	ObOptStatSqlService::get_compressed_llc_bitmap	const_cast<char*>	comp_buf = const_cast<char*>(bitmap_buf);
+src/sql/optimizer/stat/ob_opt_stat_sql_service.cpp	1287	ObOptStatSqlService::get_decompressed_llc_bitmap	const_cast<char*>	bitmap_buf = const_cast<char*>(comp_buf);
+src/sql/parser/ob_fast_parser.cpp	1643	ObFastParserBase::parse_integer	const_cast<char *>	char *copied_str = const_cast<char *>(node->str_value_);
+src/sql/parser/parse_malloc.cpp	178	replace_invalid_character	const_cast<char *>	out_str = const_cast<char *>(str);
+src/sql/pl/ob_pl_dependency_util.h	65	ObPLDependencyGuard::ObPLDependencyGuard	const_cast<ObPLExternalNS *>	old_external_ns_ = const_cast<ObPLExternalNS *>(dst_external_ns);
+src/sql/pl/ob_pl_dependency_util.h	68	ObPLDependencyGuard::ObPLDependencyGuard	const_cast<ObPLExternalNS *>	const_cast<ObPLExternalNS *>(src_external_ns)->get_dependency_table());
+src/sql/pl/ob_pl_stmt.h	1644	ObPLStmt::get_cursor	const_cast<ObPLCursor *>	? NULL : const_cast<ObPLCursor *>(get_cursors()->at(i));
+src/sql/plan_cache/ob_plan_cache.cpp	358	ObPlanCache::init	const_cast<ObAddr &>	set_host(const_cast<ObAddr &>(GCTX.self_addr()));
+src/sql/plan_cache/ob_plan_cache.cpp	517	ObPlanCache::construct_multi_stmt_fast_parser_result	const_cast<ObString &>	ObString trimed_stmt = const_cast<ObString &>(queries->at(i)).trim();
+src/sql/plan_cache/ob_prepare_stmt_struct.cpp	371	ObPsStmtInfo::add_fixed_raw_param	const_cast<char *>	const_cast<char *>(param->node_->str_value_)[tmp_pos - 1] = '-';
+src/sql/plan_cache/ob_ps_cache.cpp	133	ObPsCache::init	const_cast<ObAddr &>	host_ = const_cast<ObAddr &>(GCTX.self_addr());
+src/sql/printer/ob_dml_stmt_printer.cpp	1577	ObDMLStmtPrinter::print_temp_table_as_cte	const_cast<ObDMLStmt*>	} else if (OB_FAIL(const_cast<ObDMLStmt*>(stmt_)->collect_temp_table_infos(temp_table_infos))) {
+src/sql/privilege_check/ob_privilege_check.cpp	1618	ObPrivilegeCheck::check_privilege	const_cast<ObSchemaGetterGuard *>	} else if (OB_FAIL(const_cast<ObSchemaGetterGuard *>(ctx.schema_guard_)->check_priv(
+src/sql/resolver/cmd/ob_anonymous_block_resolver.cpp	130	ObAnonymousBlockResolver::resolve_anonymous_block	const_cast<ObObjMeta&>	const_cast<ObObjMeta&>(param.get_param_meta()).reset();
+src/sql/resolver/cmd/ob_call_procedure_resolver.cpp	219	ObCallProcedureResolver::generate_pl_cache_ctx	const_cast<ParamStore *>	pc_ctx.cache_params_ = const_cast<ParamStore *>(params_.param_list_);
+src/sql/resolver/cmd/ob_load_data_resolver.cpp	102	ObLoadDataResolver::resolve	const_cast<ParseNode*>	ParseNode *node = const_cast<ParseNode*>(&parse_tree);
+src/sql/resolver/cmd/ob_load_data_resolver.cpp	446	ObLoadDataResolver::resolve_hints	const_cast<char *>	const_cast<char *>(node.str_value_)));
+src/sql/resolver/cmd/ob_load_data_resolver.cpp	839	ObLoadDataResolver::resolve_user_vars_node	const_cast<char*>	user_var.assign_ptr(const_cast<char*>(node.children_[0]->str_value_),
+src/sql/resolver/cmd/ob_load_data_resolver.cpp	843	ObLoadDataResolver::resolve_user_vars_node	const_cast<char*>	tmp_struct.field_or_var_name_.assign_ptr(const_cast<char*>(node.children_[0]->str_value_),
+src/sql/resolver/cmd/ob_show_resolver.cpp	1579	ObShowResolver::resolve_show_from_table	const_cast<char *>	show_table_name.assign_ptr(const_cast<char *>(relation_node->str_value_),
+src/sql/resolver/dcl/ob_alter_role_resolver.cpp	55	ObAlterRoleResolver::resolve	const_cast<ParseNode*>	ParseNode *role = const_cast<ParseNode*>(parse_tree.children_[0]);
+src/sql/resolver/dcl/ob_create_role_resolver.cpp	55	ObCreateRoleResolver::resolve	const_cast<ParseNode*>	ParseNode *role = const_cast<ParseNode*>(parse_tree.children_[0]);
+src/sql/resolver/dcl/ob_create_user_resolver.cpp	51	ObCreateUserResolver::resolve	const_cast<ParseNode*>	ParseNode *if_not_exist = const_cast<ParseNode*>(parse_tree.children_[0]);
+src/sql/resolver/dcl/ob_create_user_resolver.cpp	52	ObCreateUserResolver::resolve	const_cast<ParseNode*>	ParseNode *users = const_cast<ParseNode*>(parse_tree.children_[1]);
+src/sql/resolver/dcl/ob_create_user_resolver.cpp	53	ObCreateUserResolver::resolve	const_cast<ParseNode*>	ParseNode *require_info = const_cast<ParseNode*>(parse_tree.children_[2]);
+src/sql/resolver/dcl/ob_create_user_resolver.cpp	54	ObCreateUserResolver::resolve	const_cast<ParseNode*>	ParseNode *resource_options = const_cast<ParseNode*>(parse_tree.children_[3]);
+src/sql/resolver/dcl/ob_drop_role_resolver.cpp	54	ObDropRoleResolver::resolve	const_cast<ParseNode*>	ParseNode *users_node = const_cast<ParseNode*>(parse_tree.children_[0]);
+src/sql/resolver/dcl/ob_drop_user_resolver.cpp	37	ObDropUserResolver::resolve	const_cast<ParseNode*>	ParseNode * top_node = const_cast<ParseNode*>(&parse_tree);
+src/sql/resolver/dcl/ob_grant_resolver.cpp	103	ObGrantResolver::resolve_grant_user	const_cast<char *>	user_name.assign_ptr(const_cast<char *>(grant_user->children_[0]->str_value_),
+src/sql/resolver/dcl/ob_grant_resolver.cpp	108	ObGrantResolver::resolve_grant_user	const_cast<char *>	host_name.assign_ptr(const_cast<char *>(grant_user->children_[3]->str_value_),
+src/sql/resolver/dcl/ob_grant_resolver.cpp	125	ObGrantResolver::resolve_grant_user	const_cast<char *>	user_name.assign_ptr(const_cast<char *>(grant_user->str_value_),
+src/sql/resolver/dcl/ob_grant_resolver.cpp	300	ObGrantResolver::resolve_mysql	const_cast<ParseNode*>	ParseNode *node = const_cast<ParseNode*>(&parse_tree);
+src/sql/resolver/dcl/ob_grant_resolver.cpp	435	ObGrantResolver::resolve_mysql	const_cast<char *>	user_name.assign_ptr(const_cast<char *>(user_node->children_[0]->str_value_),
+src/sql/resolver/dcl/ob_grant_resolver.cpp	464	ObGrantResolver::resolve_mysql	const_cast<char *>	pwd.assign_ptr(const_cast<char *>(user_node->children_[1]->str_value_),
+src/sql/resolver/dcl/ob_grant_resolver.h	140	ObGrantResolver::resolve_col_names_mysql	const_cast<char *>	const_cast<char *>(child_node->str_value_)), column_name))) {

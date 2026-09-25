@@ -1,0 +1,58 @@
+file	line	symbol	construct	text
+src/logservice/palf/log_reader_utils.h	40	ReadBuf::buf_	member raw bytes (pointer) of type char *	char *buf_;
+src/logservice/palf/log_writer_utils.h	55	LogWriteBuf::InnerStruct::buf_	member raw bytes (pointer) of type const char *	const char *buf_;
+src/oblib/common/cell/ob_cell_reader.h	45	ObCellReader::buf_	member raw bytes (pointer) of type const char *	const char *buf_;
+src/oblib/common/cell/ob_cell_reader.h	49	ObCellReader::obj_	member ObObj (value) of type ObObj	ObObj obj_;
+src/oblib/common/cell/ob_cell_writer.h	113	ObCellWriter::buf_	member raw bytes (pointer) of type char *	char *buf_;
+src/oblib/common/datum/ob_datum.h	108	ObDatumPtr::ptr_	member raw bytes (pointer) of type const char *	const char *ptr_;
+src/oblib/common/datum/ob_datum.h	118	ObDatumPtr::year_	member raw bytes (pointer) of type const uint8_t *	const uint8_t *year_;
+src/oblib/common/datum/ob_datum.h	121	ObDatumPtr::inner_enumset_	member raw bytes (pointer) of type const char *	const char *inner_enumset_;
+src/oblib/common/datum/ob_datum.h	126	ObDatumPtr::extend_obj_	member ObObj (pointer) of type const ObObj *	const ObObj *extend_obj_; // for extend type
+src/oblib/common/datum/ob_datum.h	424	ObDatumVector::datums_	member ObDatum (pointer) of type ObDatum *	ObDatum  *datums_   = nullptr;
+src/oblib/common/enumset/ob_enum_set_meta.h	96	ObEnumSetMeta::str_values_	member ObStrValues (pointer) of type const ObStrValues *	const ObStrValues *str_values_; // pointer to extended type info
+src/oblib/common/json_type/ob_json_base.cpp	4527	ObIJsonBase::get_raw_binary	allocator in, arena view out: common::ObString &out	int ObIJsonBase::get_raw_binary(common::ObString &out, ObIAllocator *allocator)
+src/oblib/common/json_type/ob_json_base.cpp	4549	ObIJsonBase::get_raw_binary_v0	allocator in, arena view out: common::ObString &out	int ObIJsonBase::get_raw_binary_v0(common::ObString &out, ObIAllocator *allocator)
+src/oblib/common/json_type/ob_json_base.cpp	6431	ObJsonBaseUtil::str_low_to_up	allocator in, arena view out: ObString &dst	int ObJsonBaseUtil::str_low_to_up(ObIAllocator* allocator, const ObString &src, ObString &dst)
+src/oblib/common/json_type/ob_json_base.cpp	6459	ObJsonBaseUtil::str_up_to_low	allocator in, arena view out: ObString &dst	int ObJsonBaseUtil::str_up_to_low(ObIAllocator* allocator, const ObString &src, ObString &dst)
+src/oblib/common/json_type/ob_json_bin.cpp	1573	ObJsonBin::get_raw_binary	allocator in, arena view out: ObString &buf	int ObJsonBin::get_raw_binary(ObString &buf, ObIAllocator *allocator) const
+src/oblib/common/json_type/ob_json_bin.cpp	1609	ObJsonBin::get_raw_binary_v0	allocator in, arena view out: ObString &buf	int ObJsonBin::get_raw_binary_v0(ObString &buf, ObIAllocator *allocator) const
+src/oblib/common/json_type/ob_json_bin.h	1083	ObJsonBin::data_	member raw bytes (pointer) of type char *	char *data_;
+src/oblib/common/json_type/ob_json_diff.h	66	ObJsonDiff::path_	member ObString (value) of type ObString	ObString path_;
+src/oblib/common/json_type/ob_json_diff.h	67	ObJsonDiff::value_	member ObString (value) of type ObString	ObString value_;
+src/oblib/common/json_type/ob_json_parse.cpp	68	ObJsonParser::parse_json_text	allocator in, arena view out: const char *&syntaxerr	int ObJsonParser::parse_json_text(ObIAllocator *allocator,
+src/oblib/common/json_type/ob_json_parse.h	208	ObRapidJsonHandler::key_	member ObString (value) of type common::ObString	common::ObString key_;              // The current resolved key value
+src/oblib/common/json_type/ob_json_path.cpp	296	ObJsonPathBasicNode::ObJsonPathBasicNode	allocator in, arena view out: ObString &keyname	ObJsonPathBasicNode::ObJsonPathBasicNode(ObIAllocator *allocator, ObString &keyname)
+src/oblib/common/json_type/ob_json_path.cpp	694	ObJsonPath::get_path_item_method_str	allocator in, arena view out: ObString &str	int ObJsonPath::get_path_item_method_str(common::ObIAllocator &allocator,
+src/oblib/common/json_type/ob_json_path.h	102	ObPathMember::object_name_	member raw bytes (pointer) of type const char*	const char* object_name_;
+src/oblib/common/json_type/ob_json_path.h	124	ObPathScalar::scalar_	member raw bytes (pointer) of type char*	char* scalar_;
+src/oblib/common/json_type/ob_json_path.h	129	ObPathVar::var_	member raw bytes (pointer) of type char*	char* var_;
+src/oblib/common/json_type/ob_json_path.h	329	ObJsonPath::expression_	member ObString (value) of type ObString	ObString expression_;
+src/oblib/common/json_type/ob_json_schema.h	267	ObJsonSchemaTree::json_ptr_	member ObString (value) of type ObString	ObString json_ptr_;                      // cur schema ptr, default '#'
+src/oblib/common/json_type/ob_json_schema.h	347	ObJsonSchemaValidator::failed_keyword_	member ObString (value) of type ObString	ObString failed_keyword_;
+src/oblib/common/json_type/ob_json_schema.h	348	ObJsonSchemaValidator::json_pointer_	member container of ObString of type ObStack<ObString>	ObStack<ObString> json_pointer_;
+src/oblib/common/json_type/ob_json_schema.h	349	ObJsonSchemaValidator::schema_pointer_	member container of ObString of type ObStack<ObString>	ObStack<ObString> schema_pointer_;
+src/oblib/common/json_type/ob_json_schema.h	414	ObJsonSchemaCache::schema_str_	member ObJsonSchemaStr (value) of type ObJsonSchemaStr	ObJsonSchemaStr schema_str_;           // array of schema str, for varchar, its json str; for json, its raw binary
+src/oblib/common/json_type/ob_json_tree.h	178	ObJsonObjectPair::key_	member ObString (value) of type common::ObString	common::ObString key_;
+src/oblib/common/json_type/ob_json_tree.h	615	ObJsonString::str_	member ObString (value) of type common::ObString	common::ObString str_;
+src/oblib/common/json_type/ob_json_tree.h	720	ObJsonOpaque::value_	member ObString (value) of type common::ObString	common::ObString value_;
+src/oblib/common/json_type/ob_json_tree.h	857	ObJsonORawString::str_val_	member ObString (value) of type ObString	ObString str_val_;
+src/oblib/common/lob/ob_lob_base.h	107	ObLobInRowCursor::data_	member ObString (value) of type ObString	ObString data_;
+src/oblib/common/log/ob_log_data_writer.h	59	ObLogDataWriter::AppendBuffer::buf_	member raw bytes (pointer) of type char *	char *buf_;
+src/oblib/common/log/ob_log_data_writer.h	72	ObLogDataWriter::log_dir_	member raw bytes (pointer) of type const char *	const char *log_dir_;
+src/oblib/common/log/ob_log_generator.h	63	ObLogGenerator::log_buf_	member raw bytes (pointer) of type char *	char *log_buf_;
+src/oblib/common/mysqlclient/ob_mysql_proxy.h	159	ObSessionParam::secure_file_priv_	member ObString (value) of type common::ObString	common::ObString secure_file_priv_;
+src/oblib/common/ob_field.h	39	ObParamedSelectItemCtx::paramed_cname_	member ObString (value) of type ObString	ObString paramed_cname_;
+src/oblib/common/ob_field.h	76	ObField::dname_	member ObString (value) of type ObString	ObString dname_; //database name for display
+src/oblib/common/ob_field.h	77	ObField::tname_	member ObString (value) of type ObString	ObString tname_; // table name for display
+src/oblib/common/ob_field.h	78	ObField::org_tname_	member ObString (value) of type ObString	ObString org_tname_; // original table name
+src/oblib/common/ob_field.h	79	ObField::cname_	member ObString (value) of type ObString	ObString cname_;     // column name for display
+src/oblib/common/ob_field.h	80	ObField::org_cname_	member ObString (value) of type ObString	ObString org_cname_; // original column name
+src/oblib/common/ob_field.h	81	ObField::type_	member ObObj (value) of type ObObj	ObObj type_; // value type
+src/oblib/common/ob_field.h	82	ObField::type_owner_	member ObString (value) of type ObString	ObString type_owner_; // udt relation name, only valid when type is ObExtended
+src/oblib/common/ob_field.h	83	ObField::type_name_	member ObString (value) of type ObString	ObString type_name_; // udt relation name, only valid when type is ObExtended
+src/oblib/common/ob_field.h	84	ObField::default_value_	member ObObj (value) of type ObObj	ObObj default_value_; //default value, only effective when command was COM_FIELD_LIST
+src/oblib/common/ob_hex_utils_base.cpp	27	ObHexUtilsBase::unhex	allocator in, arena view out: ObObj &result	int ObHexUtilsBase::unhex(const ObString &text, ObIAllocator &alloc, ObObj &result)
+src/oblib/common/ob_hex_utils_base.cpp	85	ObHexUtilsBase::hex	allocator in, arena view out: ObString &text	int ObHexUtilsBase::hex(ObString &text, ObIAllocator &alloc, const char *binary_buf, int64_t binary_len)
+src/oblib/common/ob_hex_utils_base.cpp	108	ObHexUtilsBase::unhex	allocator in, arena view out: char *&binary_buf	int ObHexUtilsBase::unhex(const ObString &text, ObIAllocator &alloc, char *&binary_buf, int64_t &binary_len)
+src/oblib/common/ob_obj_deep_copy.cpp	27	deep_copy_obj	allocator in, arena view out: ObObj &dst	int deep_copy_obj(ObIAllocator &allocator, const ObObj &src, ObObj &dst)
+src/oblib/common/ob_obj_deep_copy.cpp	48	deep_copy_objparam	allocator in, arena view out: ObObjParam &dst	int deep_copy_objparam(ObIAllocator &allocator, const ObObjParam &src, ObObjParam &dst)

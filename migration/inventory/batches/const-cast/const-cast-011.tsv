@@ -1,0 +1,79 @@
+file	line	symbol	construct	text
+src/share/geo/ob_geo_bin.cpp	30	ObWkbGeomPoint::byteorder	const_cast<ObWkbGeomPoint*>	char* ptr = reinterpret_cast<char*>(const_cast<ObWkbGeomPoint*>(this));
+src/share/geo/ob_geo_bin.cpp	37	ObWkbGeomPoint::byteorder	const_cast<ObWkbGeomPoint*>	char* ptr = reinterpret_cast<char*>(const_cast<ObWkbGeomPoint*>(this));
+src/share/geo/ob_geo_bin.cpp	45	ObWkbGeomPoint::get	const_cast<ObWkbGeomPoint*>	char* ptr = reinterpret_cast<char*>(const_cast<ObWkbGeomPoint*>(this));
+src/share/geo/ob_geo_bin.cpp	54	ObWkbGeomPoint::get	const_cast<ObWkbGeomPoint*>	char* ptr = reinterpret_cast<char*>(const_cast<ObWkbGeomPoint*>(this));
+src/share/geo/ob_geo_bin.cpp	63	ObWkbGeomPoint::set	const_cast<ObWkbGeomPoint*>	char* ptr = reinterpret_cast<char*>(const_cast<ObWkbGeomPoint*>(this));
+src/share/geo/ob_geo_bin.cpp	72	ObWkbGeomPoint::set	const_cast<ObWkbGeomPoint*>	char* ptr = reinterpret_cast<char*>(const_cast<ObWkbGeomPoint*>(this));
+src/share/geo/ob_geo_bin.cpp	89	ObWkbGeomPoint::refresh_type	const_cast<ObWkbGeomPoint*>	char* ptr = reinterpret_cast<char*>(const_cast<ObWkbGeomPoint*>(this));
+src/share/geo/ob_geo_bin.cpp	100	ObWkbGeomInnerPoint::get	const_cast<ObWkbGeomInnerPoint*>	char* ptr = reinterpret_cast<char*>(const_cast<ObWkbGeomInnerPoint*>(this));
+src/share/geo/ob_geo_bin.cpp	107	ObWkbGeomInnerPoint::get	const_cast<ObWkbGeomInnerPoint*>	char* ptr = reinterpret_cast<char*>(const_cast<ObWkbGeomInnerPoint*>(this));
+src/share/geo/ob_geo_bin.cpp	114	ObWkbGeomInnerPoint::get_x	const_cast<ObWkbGeomInnerPoint*>	char* ptr = reinterpret_cast<char*>(const_cast<ObWkbGeomInnerPoint*>(this));
+src/share/geo/ob_geo_bin.cpp	120	ObWkbGeomInnerPoint::get_y	const_cast<ObWkbGeomInnerPoint*>	char* ptr = reinterpret_cast<char*>(const_cast<ObWkbGeomInnerPoint*>(this));
+src/share/geo/ob_geo_bin.cpp	127	ObWkbGeogInnerPoint::get_x	const_cast<ObWkbGeogInnerPoint*>	char* ptr = reinterpret_cast<char*>(const_cast<ObWkbGeogInnerPoint*>(this));
+src/share/geo/ob_geo_bin.cpp	133	ObWkbGeogInnerPoint::get_y	const_cast<ObWkbGeogInnerPoint*>	char* ptr = reinterpret_cast<char*>(const_cast<ObWkbGeogInnerPoint*>(this));
+src/share/geo/ob_geo_bin.cpp	142	ObWkbGeomInnerPoint::set	const_cast<ObWkbGeomInnerPoint*>	char* ptr = reinterpret_cast<char*>(const_cast<ObWkbGeomInnerPoint*>(this));
+src/share/geo/ob_geo_bin.cpp	150	ObWkbGeomInnerPoint::set	const_cast<ObWkbGeomInnerPoint*>	char* ptr = reinterpret_cast<char*>(const_cast<ObWkbGeomInnerPoint*>(this));
+src/share/geo/ob_geo_bin.cpp	186	ObWkbGeomLineString::size	const_cast<ObWkbGeomLineString*>	char *ptr = reinterpret_cast<char*>(const_cast<ObWkbGeomLineString*>(this));
+src/share/geo/ob_geo_bin.cpp	206	ObWkbGeomLineString::get_sub_addr	const_cast<ObWkbGeomLineString*>	char *ptr = reinterpret_cast<char*>(const_cast<ObWkbGeomLineString*>(this));
+src/share/geo/ob_geo_bin.cpp	215	ObWkbGeomLinearRing::size	const_cast<ObWkbGeomLinearRing*>	char *ptr = reinterpret_cast<char*>(const_cast<ObWkbGeomLinearRing*>(this));
+src/share/geo/ob_geo_bin.cpp	233	ObWkbGeomLinearRing::get_sub_addr	const_cast<ObWkbGeomLinearRing*>	char *ptr = reinterpret_cast<char*>(const_cast<ObWkbGeomLinearRing*>(this));
+src/share/geo/ob_geo_bin.cpp	244	ObWkbGeomPolygonInnerRings::size	const_cast<ObWkbGeomPolygonInnerRings*>	char *ptr = reinterpret_cast<char*>(const_cast<ObWkbGeomPolygonInnerRings*>(this));
+src/share/geo/ob_geo_bin.cpp	267	ObWkbGeomPolygon::size	const_cast<ObWkbGeomPolygon*>	char *ptr = reinterpret_cast<char*>(const_cast<ObWkbGeomPolygon*>(this));
+src/share/geo/ob_geo_bin.cpp	282	ObWkbGeomPolygon::exterior_ring	const_cast<ObWkbGeomPolygon*>	char *ptr = reinterpret_cast<char*>(const_cast<ObWkbGeomPolygon*>(this));
+src/share/geo/ob_geo_bin.cpp	296	ObWkbGeomPolygon::inner_rings	const_cast<ObWkbGeomPolygon*>	char *ptr = reinterpret_cast<char*>(const_cast<ObWkbGeomPolygon*>(this));
+src/share/geo/ob_geo_bin.cpp	310	ObWkbGeomMultiPoint::size	const_cast<ObWkbGeomMultiPoint*>	char *ptr = reinterpret_cast<char*>(const_cast<ObWkbGeomMultiPoint*>(this));
+src/share/geo/ob_geo_bin.cpp	331	ObWkbGeomMultiPoint::get_sub_addr	const_cast<ObWkbGeomMultiPoint*>	char *ptr = reinterpret_cast<char*>(const_cast<ObWkbGeomMultiPoint*>(this));
+src/share/geo/ob_geo_bin.cpp	343	ObWkbGeomMultiLineString::size	const_cast<ObWkbGeomMultiLineString*>	char *ptr = reinterpret_cast<char*>(const_cast<ObWkbGeomMultiLineString*>(this));
+src/share/geo/ob_geo_bin.cpp	367	ObWkbGeomMultiPolygon::size	const_cast<ObWkbGeomMultiPolygon*>	char *ptr = reinterpret_cast<char*>(const_cast<ObWkbGeomMultiPolygon*>(this));
+src/share/geo/ob_geo_bin.cpp	391	ObWkbGeomCollection::size	const_cast<ObWkbGeomCollection*>	char *ptr = reinterpret_cast<char*>(const_cast<ObWkbGeomCollection*>(this));
+src/share/geo/ob_geo_bin.cpp	415	ObWkbGeomCollection::get_sub_size	const_cast<pointer>	pointer ptr = const_cast<pointer>(data) + sizeof(uint8_t);
+src/share/geo/ob_geo_bin.cpp	463	ObWkbGeomCollection::get_sub_type	const_cast<pointer>	pointer ptr = const_cast<pointer>(data) + sizeof(uint8_t);
+src/share/geo/ob_geo_bin.cpp	475	ObWkbGeogPoint::byteorder	const_cast<ObWkbGeogPoint*>	char* ptr = reinterpret_cast<char*>(const_cast<ObWkbGeogPoint*>(this));
+src/share/geo/ob_geo_bin.cpp	481	ObWkbGeogPoint::byteorder	const_cast<ObWkbGeogPoint*>	char* ptr = reinterpret_cast<char*>(const_cast<ObWkbGeogPoint*>(this));
+src/share/geo/ob_geo_bin.cpp	489	ObWkbGeogPoint::get	const_cast<ObWkbGeogPoint*>	char* ptr = reinterpret_cast<char*>(const_cast<ObWkbGeogPoint*>(this));
+src/share/geo/ob_geo_bin.cpp	498	ObWkbGeogPoint::get	const_cast<ObWkbGeogPoint*>	char* ptr = reinterpret_cast<char*>(const_cast<ObWkbGeogPoint*>(this));
+src/share/geo/ob_geo_bin.cpp	507	ObWkbGeogPoint::set	const_cast<ObWkbGeogPoint*>	char* ptr = reinterpret_cast<char*>(const_cast<ObWkbGeogPoint*>(this));
+src/share/geo/ob_geo_bin.cpp	516	ObWkbGeogPoint::set	const_cast<ObWkbGeogPoint*>	char* ptr = reinterpret_cast<char*>(const_cast<ObWkbGeogPoint*>(this));
+src/share/geo/ob_geo_bin.cpp	524	ObWkbGeogPoint::refresh_type	const_cast<ObWkbGeogPoint*>	char* ptr = reinterpret_cast<char*>(const_cast<ObWkbGeogPoint*>(this));
+src/share/geo/ob_geo_bin.cpp	542	ObWkbGeogInnerPoint::get	const_cast<ObWkbGeogInnerPoint*>	char* ptr = reinterpret_cast<char*>(const_cast<ObWkbGeogInnerPoint*>(this));
+src/share/geo/ob_geo_bin.cpp	549	ObWkbGeogInnerPoint::get	const_cast<ObWkbGeogInnerPoint*>	char* ptr = reinterpret_cast<char*>(const_cast<ObWkbGeogInnerPoint*>(this));
+src/share/geo/ob_geo_bin.cpp	557	ObWkbGeogInnerPoint::set	const_cast<ObWkbGeogInnerPoint*>	char* ptr = reinterpret_cast<char*>(const_cast<ObWkbGeogInnerPoint*>(this));
+src/share/geo/ob_geo_bin.cpp	564	ObWkbGeogInnerPoint::set	const_cast<ObWkbGeogInnerPoint*>	char* ptr = reinterpret_cast<char*>(const_cast<ObWkbGeogInnerPoint*>(this));
+src/share/geo/ob_geo_bin.cpp	590	ObWkbGeogLineString::size	const_cast<ObWkbGeogLineString*>	char *ptr = reinterpret_cast<char*>(const_cast<ObWkbGeogLineString*>(this));
+src/share/geo/ob_geo_bin.cpp	610	ObWkbGeogLineString::get_sub_addr	const_cast<ObWkbGeogLineString*>	char *ptr = reinterpret_cast<char*>(const_cast<ObWkbGeogLineString*>(this));
+src/share/geo/ob_geo_bin.cpp	619	ObWkbGeogLinearRing::size	const_cast<ObWkbGeogLinearRing*>	char *ptr = reinterpret_cast<char*>(const_cast<ObWkbGeogLinearRing*>(this));
+src/share/geo/ob_geo_bin.cpp	637	ObWkbGeogLinearRing::get_sub_addr	const_cast<ObWkbGeogLinearRing*>	char *ptr = reinterpret_cast<char*>(const_cast<ObWkbGeogLinearRing*>(this));
+src/share/geo/ob_geo_bin.cpp	648	ObWkbGeogPolygonInnerRings::size	const_cast<ObWkbGeogPolygonInnerRings*>	char *ptr = reinterpret_cast<char*>(const_cast<ObWkbGeogPolygonInnerRings*>(this));
+src/share/geo/ob_geo_bin.cpp	671	ObWkbGeogPolygon::size	const_cast<ObWkbGeogPolygon*>	char *ptr = reinterpret_cast<char*>(const_cast<ObWkbGeogPolygon*>(this));
+src/share/geo/ob_geo_bin.cpp	686	ObWkbGeogPolygon::exterior_ring	const_cast<ObWkbGeogPolygon*>	char *ptr = reinterpret_cast<char*>(const_cast<ObWkbGeogPolygon*>(this));
+src/share/geo/ob_geo_bin.cpp	700	ObWkbGeogPolygon::inner_rings	const_cast<ObWkbGeogPolygon*>	char *ptr = reinterpret_cast<char*>(const_cast<ObWkbGeogPolygon*>(this));
+src/share/geo/ob_geo_bin.cpp	714	ObWkbGeogMultiPoint::size	const_cast<ObWkbGeogMultiPoint*>	char *ptr = reinterpret_cast<char*>(const_cast<ObWkbGeogMultiPoint*>(this));
+src/share/geo/ob_geo_bin.cpp	735	ObWkbGeogMultiPoint::get_sub_addr	const_cast<ObWkbGeogMultiPoint*>	char *ptr = reinterpret_cast<char*>(const_cast<ObWkbGeogMultiPoint*>(this));
+src/share/geo/ob_geo_bin.cpp	747	ObWkbGeogMultiLineString::size	const_cast<ObWkbGeogMultiLineString*>	char *ptr = reinterpret_cast<char*>(const_cast<ObWkbGeogMultiLineString*>(this));
+src/share/geo/ob_geo_bin.cpp	770	ObWkbGeogMultiPolygon::size	const_cast<ObWkbGeogMultiPolygon*>	char *ptr = reinterpret_cast<char*>(const_cast<ObWkbGeogMultiPolygon*>(this));
+src/share/geo/ob_geo_bin.cpp	794	ObWkbGeogCollection::size	const_cast<ObWkbGeogCollection*>	char *ptr = reinterpret_cast<char*>(const_cast<ObWkbGeogCollection*>(this));
+src/share/geo/ob_geo_bin.cpp	818	ObWkbGeogCollection::get_sub_size	const_cast<pointer>	pointer ptr = const_cast<pointer>(data) + sizeof(uint8_t);
+src/share/geo/ob_geo_bin.cpp	866	ObWkbGeogCollection::get_sub_type	const_cast<pointer>	pointer ptr = const_cast<pointer>(data) + sizeof(uint8_t);
+src/share/geo/ob_geo_bin.h	200	ObWkbGeomPolygonInnerRings::ptr	const_cast<self*>	char* ptr() const { return reinterpret_cast<char*>(const_cast<self*>(this)); }
+src/share/geo/ob_geo_bin.h	297	ObWkbGeomMultiLineString::ptr	const_cast<self*>	char* ptr() const { return reinterpret_cast<char*>(const_cast<self*>(this)); }
+src/share/geo/ob_geo_bin.h	338	ObWkbGeomMultiPolygon::ptr	const_cast<self*>	char* ptr() const { return reinterpret_cast<char*>(const_cast<self*>(this)); }
+src/share/geo/ob_geo_bin.h	382	ObWkbGeomCollection::ptr	const_cast<self*>	char* ptr() const { return reinterpret_cast<char*>(const_cast<self*>(this)); }
+src/share/geo/ob_geo_bin.h	565	ObWkbGeogPolygonInnerRings::ptr	const_cast<self*>	char* ptr() const { return reinterpret_cast<char*>(const_cast<self*>(this)); }
+src/share/geo/ob_geo_bin.h	664	ObWkbGeogMultiLineString::ptr	const_cast<self*>	char* ptr() const { return reinterpret_cast<char*>(const_cast<self*>(this)); }
+src/share/geo/ob_geo_bin.h	705	ObWkbGeogMultiPolygon::ptr	const_cast<self*>	char* ptr() const { return reinterpret_cast<char*>(const_cast<self*>(this)); }
+src/share/geo/ob_geo_bin.h	749	ObWkbGeogCollection::ptr	const_cast<self*>	char* ptr() const { return reinterpret_cast<char*>(const_cast<self*>(this)); }
+src/share/geo/ob_geo_bin_iter.ipp	36	ObWkbConstIterator::ObWkbConstIterator	const_cast<owner_t*>	owner_ = const_cast<owner_t*>(owner);
+src/share/geo/ob_geo_bin_iter.ipp	178	operator*	const_cast<self*>	self* ptr = const_cast<self*>(this);
+src/share/geo/ob_geo_bin_iter.ipp	186	operator->	const_cast<self*>	self* ptr = const_cast<self*>(this);
+src/share/geo/ob_geo_bin_iter.ipp	375	ObWkbUtils::get_sub_addr_common	const_cast<typename T::pointer>	scan_ptr = reinterpret_cast<char*>(const_cast<typename T::pointer>(last_addr));
+src/share/geo/ob_geo_bin_iter.ipp	377	ObWkbUtils::get_sub_addr_common	const_cast<typename T::pointer>	scan_ptr = reinterpret_cast<char*>(const_cast<typename T::pointer>(last_addr));
+src/share/geo/ob_geo_elevation_visitor.cpp	65	ObGeoElevationExtent::add_geometry	const_cast<ObGeometry3D *>	ObGeometry3D *geo3d = const_cast<ObGeometry3D *>(reinterpret_cast<const ObGeometry3D *>(&g));
+src/share/geo/ob_geo_elevation_visitor.cpp	155	ObGeoElevationVisitor::add_geometry	const_cast<ObGeometry &>	ObGeometry3D &geo_3D = reinterpret_cast<ObGeometry3D &>(const_cast<ObGeometry &>(geo));
+src/share/geo/ob_geo_func_buffer.cpp	109	ObGeoFuncBufferImpl::eval_buffer_cartisan	const_cast<GeomIType *>	GeomIType *i_geo = const_cast<GeomIType *>(reinterpret_cast<const GeomIType *>(g));
+src/share/geo/ob_geo_func_buffer.cpp	115	ObGeoFuncBufferImpl::eval_buffer_cartisan	const_cast<GeomTreeType *>	geo_tree = const_cast<GeomTreeType *>(reinterpret_cast<const GeomTreeType *>(g));
+src/share/geo/ob_geo_func_buffer.cpp	216	ObGeoFuncBufferImpl::eval_buffer_cartisan_collection	const_cast<ObGeometry *>	} else if (OB_FAIL(ObGeoFuncUtils::ob_gc_prepare<ObCartesianGeometrycollection>(context, const_cast<ObGeometry *>(g), mpt, ml, mpo))) {
+src/share/geo/ob_geo_func_buffer.cpp	543	OB_GEO_UNARY_FUNC_BEGIN(ObGeoFuncBufferImpl, ObWkbGeogPoint, ObGeometry *)	const_cast<ObIWkbGeogPoint *>	ObIWkbGeogPoint *i_geo = const_cast<ObIWkbGeogPoint *>(reinterpret_cast<const ObIWkbGeogPoint *>(g));
+src/share/geo/ob_geo_func_centroid.cpp	56	ObGeoFuncCentroidImpl::centroid_collection	const_cast<ObGeometry *>	} else if (OB_FAIL(const_cast<ObGeometry *>(g)->do_visit(tree_visitor))) {
+src/share/geo/ob_geo_func_centroid.cpp	88	ObGeoFuncCentroidImpl::centroid_default	const_cast<char *>	geo_candidate = reinterpret_cast<GeoType *>(const_cast<char *>(g->val()));
+src/share/geo/ob_geo_func_centroid.cpp	90	ObGeoFuncCentroidImpl::centroid_default	const_cast<ObGeometry *>	geo_candidate = reinterpret_cast<GeoType *>(const_cast<ObGeometry *>(g));

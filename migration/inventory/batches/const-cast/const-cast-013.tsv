@@ -1,0 +1,77 @@
+file	line	symbol	construct	text
+src/share/geo/ob_geo_func_union_helper.ipp	140	apply_bg_union_collection	const_cast<IGeometryType2 *>	IGeometryType2 *i_geo2 = const_cast<IGeometryType2 *>(reinterpret_cast<const IGeometryType2 *>(g2));
+src/share/geo/ob_geo_func_union_helper.ipp	145	apply_bg_union_collection	const_cast<IGeometryType1 *>	IGeometryType1 *i_geo1 = const_cast<IGeometryType1 *>(reinterpret_cast<const IGeometryType1 *>(g1));
+src/share/geo/ob_geo_func_union_helper.ipp	182	apply_bg_multi_union_collection	const_cast<IGeometryType1 *>	IGeometryType1 *i_geo1 = const_cast<IGeometryType1 *>(reinterpret_cast<const IGeometryType1 *>(g1));
+src/share/geo/ob_geo_func_union_helper.ipp	213	apply_bg_diff_union_collection	const_cast<IGeometryType2 *>	IGeometryType2 *i_geo2 = const_cast<IGeometryType2 *>(reinterpret_cast<const IGeometryType2 *>(g2));
+src/share/geo/ob_geo_func_union_helper.ipp	281	apply_bg_union_multiline_multipolygon	const_cast<IGeometryType2 *>	IGeometryType2 *i_geo2 = const_cast<IGeometryType2 *>(reinterpret_cast<const IGeometryType2 *>(g2));
+src/share/geo/ob_geo_func_union_helper.ipp	325	apply_bg_union_multipoint_multigeo	const_cast<IGeometryType2 *>	IGeometryType2 *i_geo2 = const_cast<IGeometryType2 *>(reinterpret_cast<const IGeometryType2 *>(g2));
+src/share/geo/ob_geo_func_union_helper.ipp	369	apply_bg_union_multipoint_geo	const_cast<IGeometryType2 *>	IGeometryType2 *i_geo2 = const_cast<IGeometryType2 *>(reinterpret_cast<const IGeometryType2 *>(g2));
+src/share/geo/ob_geo_func_union_helper.ipp	431	ObGeoFuncUnionImpl::eval_unions_gc	const_cast<ObGeometry *>	ObGeometry *geo1 = const_cast<ObGeometry *>(g1);
+src/share/geo/ob_geo_func_union_helper.ipp	432	ObGeoFuncUnionImpl::eval_unions_gc	const_cast<ObGeometry *>	ObGeometry *geo2 = const_cast<ObGeometry *>(g2);
+src/share/geo/ob_geo_func_utils.cpp	31	ObGeoFuncUtils::apply_bg_to_tree	const_cast<ObGeometry *>	ObGeometry *geo1 = const_cast<ObGeometry *>(g1);
+src/share/geo/ob_geo_func_within1.cpp	196	OB_GEO_CART_BINARY_FUNC_BEGIN(ObGeoFuncWithinImpl, ObWkbGeomCollection, ObWkbGeomLineStrin)	const_cast<ObGeometry *>	ObGeometry *geo1 = const_cast<ObGeometry *>(reinterpret_cast<const ObGeometry *>(g1));
+src/share/geo/ob_geo_func_within1.cpp	237	OB_GEO_CART_BINARY_FUNC_BEGIN(ObGeoFuncWithinImpl, ObWkbGeomCollection, ObWkbGeomPolygon, )	const_cast<ObGeometry *>	ObGeometry *geo1 = const_cast<ObGeometry *>(reinterpret_cast<const ObGeometry *>(g1));
+src/share/geo/ob_geo_func_within1.cpp	295	OB_GEO_CART_BINARY_FUNC_BEGIN(ObGeoFuncWithinImpl, ObWkbGeomCollection, ObWkbGeomMultiLine)	const_cast<ObGeometry *>	ObGeometry *geo1 = const_cast<ObGeometry *>(reinterpret_cast<const ObGeometry *>(g1));
+src/share/geo/ob_geo_func_within1.cpp	336	OB_GEO_CART_BINARY_FUNC_BEGIN(ObGeoFuncWithinImpl, ObWkbGeomCollection, ObWkbGeomMultiPoly)	const_cast<ObGeometry *>	ObGeometry *geo1 = const_cast<ObGeometry *>(reinterpret_cast<const ObGeometry *>(g1));
+src/share/geo/ob_geo_func_within1.cpp	392	OB_GEO_CART_BINARY_FUNC_BEGIN(ObGeoFuncWithinImpl, ObWkbGeomCollection, ObWkbGeomCollectio)	const_cast<ObGeometry *>	ObGeometry *geo1 = const_cast<ObGeometry *>(reinterpret_cast<const ObGeometry *>(g1));
+src/share/geo/ob_geo_func_within1.cpp	393	OB_GEO_CART_BINARY_FUNC_BEGIN(ObGeoFuncWithinImpl, ObWkbGeomCollection, ObWkbGeomCollectio)	const_cast<ObGeometry *>	ObGeometry *geo2 = const_cast<ObGeometry *>(reinterpret_cast<const ObGeometry *>(g2));
+src/share/geo/ob_geo_func_within2.cpp	301	OB_GEO_GEOG_BINARY_FUNC_BEGIN(ObGeoFuncWithinImpl, ObWkbGeogCollection, ObWkbGeogLineStrin)	const_cast<ObGeometry *>	ObGeometry *geo1 = const_cast<ObGeometry *>(reinterpret_cast<const ObGeometry *>(g1));
+src/share/geo/ob_geo_func_within2.cpp	344	OB_GEO_GEOG_BINARY_FUNC_BEGIN(ObGeoFuncWithinImpl, ObWkbGeogCollection, ObWkbGeogPolygon, )	const_cast<ObGeometry *>	ObGeometry *geo1 = const_cast<ObGeometry *>(reinterpret_cast<const ObGeometry *>(g1));
+src/share/geo/ob_geo_func_within2.cpp	404	OB_GEO_GEOG_BINARY_FUNC_BEGIN(ObGeoFuncWithinImpl, ObWkbGeogCollection, ObWkbGeogMultiLine)	const_cast<ObGeometry *>	ObGeometry *geo1 = const_cast<ObGeometry *>(reinterpret_cast<const ObGeometry *>(g1));
+src/share/geo/ob_geo_func_within2.cpp	447	OB_GEO_GEOG_BINARY_FUNC_BEGIN(ObGeoFuncWithinImpl, ObWkbGeogCollection, ObWkbGeogMultiPoly)	const_cast<ObGeometry *>	ObGeometry *geo1 = const_cast<ObGeometry *>(reinterpret_cast<const ObGeometry *>(g1));
+src/share/geo/ob_geo_func_within2.cpp	504	OB_GEO_GEOG_BINARY_FUNC_BEGIN(ObGeoFuncWithinImpl, ObWkbGeogCollection, ObWkbGeogCollectio)	const_cast<ObGeometry *>	ObGeometry *geo1 = const_cast<ObGeometry *>(reinterpret_cast<const ObGeometry *>(g1));
+src/share/geo/ob_geo_func_within2.cpp	505	OB_GEO_GEOG_BINARY_FUNC_BEGIN(ObGeoFuncWithinImpl, ObWkbGeogCollection, ObWkbGeogCollectio)	const_cast<ObGeometry *>	ObGeometry *geo2 = const_cast<ObGeometry *>(reinterpret_cast<const ObGeometry *>(g2));
+src/share/geo/ob_geo_func_within_helper.ipp	88	apply_bg_within	const_cast<ObGeometry *>	geo1 = reinterpret_cast<GeoType1 *>(const_cast<ObGeometry *>(g1));
+src/share/geo/ob_geo_func_within_helper.ipp	89	apply_bg_within	const_cast<ObGeometry *>	geo2 = reinterpret_cast<GeoType2 *>(const_cast<ObGeometry *>(g2));
+src/share/geo/ob_geo_func_within_helper.ipp	212	ob_caculate_ml_within_gc	const_cast<GEO_TYPE1 *>	GEO_TYPE1 *geo1 = const_cast<GEO_TYPE1 *>(reinterpret_cast<const GEO_TYPE1 *>(g1->val()));
+src/share/geo/ob_geo_func_within_helper.ipp	213	ob_caculate_ml_within_gc	const_cast<ObGeometry *>	ObGeometry *geo2 = const_cast<ObGeometry *>(reinterpret_cast<const ObGeometry *>(g2));
+src/share/geo/ob_geo_func_within_helper.ipp	224	ob_caculate_ml_within_gc	const_cast<ObGeometry *>	ObGeometry *i_geo1 = const_cast<ObGeometry *>(g1);
+src/share/geo/ob_geo_func_within_helper.ipp	249	ob_caculate_ml_within_gc_geog	const_cast<GEO_TYPE1 *>	GEO_TYPE1 *geo1 = const_cast<GEO_TYPE1 *>(reinterpret_cast<const GEO_TYPE1 *>(g1->val()));
+src/share/geo/ob_geo_func_within_helper.ipp	250	ob_caculate_ml_within_gc_geog	const_cast<ObGeometry *>	ObGeometry *geo2 = const_cast<ObGeometry *>(reinterpret_cast<const ObGeometry *>(g2));
+src/share/geo/ob_geo_func_within_helper.ipp	264	ob_caculate_ml_within_gc_geog	const_cast<ObGeometry *>	ObGeometry *i_geo1 = const_cast<ObGeometry *>(g1);
+src/share/geo/ob_geo_func_within_helper.ipp	290	ob_caculate_mpl_within_gc	const_cast<GEO_TYPE1 *>	GEO_TYPE1 *geo1 = const_cast<GEO_TYPE1 *>(reinterpret_cast<const GEO_TYPE1 *>(g1->val()));
+src/share/geo/ob_geo_func_within_helper.ipp	291	ob_caculate_mpl_within_gc	const_cast<ObGeometry *>	ObGeometry *geo2 = const_cast<ObGeometry *>(reinterpret_cast<const ObGeometry *>(g2));
+src/share/geo/ob_geo_func_within_helper.ipp	311	ob_caculate_mpl_within_gc_geog	const_cast<GEO_TYPE1 *>	GEO_TYPE1 *geo1 = const_cast<GEO_TYPE1 *>(reinterpret_cast<const GEO_TYPE1 *>(g1->val()));
+src/share/geo/ob_geo_func_within_helper.ipp	312	ob_caculate_mpl_within_gc_geog	const_cast<ObGeometry *>	ObGeometry *geo2 = const_cast<ObGeometry *>(reinterpret_cast<const ObGeometry *>(g2));
+src/share/geo/ob_geo_func_within_helper.ipp	335	ob_caculate_gc_within_p	const_cast<ObGeometry *>	ObGeometry *geo1 = const_cast<ObGeometry *>(reinterpret_cast<const ObGeometry *>(g1));
+src/share/geo/ob_geo_func_within_helper.ipp	336	ob_caculate_gc_within_p	const_cast<PType *>	PType *geo2 = const_cast<PType *>(reinterpret_cast<const PType *>(g2->val()));
+src/share/geo/ob_geo_func_within_helper.ipp	491	ObGeoFuncWithinImpl::ob_caculate_gc_within_mpt	const_cast<ObGeometry *>	ObGeometry *geo1 = const_cast<ObGeometry *>(reinterpret_cast<const ObGeometry *>(g1));
+src/share/geo/ob_geo_mvt.cpp	113	mvt_agg_result::transform_geom	const_cast<ObGeometry &>	if (OB_FAIL(const_cast<ObGeometry &>(geo).do_visit(visitor))) {
+src/share/geo/ob_geo_reverse_coordinate_visitor.cpp	37	ObGeoReverseCoordinateVisitor::reverse_point_coordinate	const_cast<char*>	ObWkbGeogPoint* inner_pt = reinterpret_cast<ObWkbGeogPoint*>(const_cast<char*>(geo->val()));
+src/share/geo/ob_geo_tree.h	201	ObGeomVector::begin	const_cast<common::ObArray<T, ModulePageAllocator, false> *>	const_iterator begin() const { return const_iterator(const_cast<common::ObArray<T, ModulePageAllocator, false> *>(&vec_)->get_data()); }
+src/share/geo/ob_geo_tree.h	204	ObGeomVector::end	const_cast<common::ObArray<T, ModulePageAllocator, false> *>	auto *arr = const_cast<common::ObArray<T, ModulePageAllocator, false> *>(&vec_);
+src/share/geo/ob_geo_tree.h	598	ObCartesianPolygon::cartesian_exterior_ring	const_cast<ObCartesianLinearring &>	ObCartesianLinearring &cartesian_exterior_ring() const { return const_cast<ObCartesianLinearring &>(exterior_); }
+src/share/geo/ob_geo_tree.h	641	ObGeographPolygon::geographic_exterior_ring	const_cast<ObGeographLinearring &>	ObGeographLinearring &geographic_exterior_ring() const { return const_cast<ObGeographLinearring &>(exterior_); }
+src/share/geo/ob_geo_tree.h	1204	ObCartesianGeometrycollection::push_back	const_cast<ObGeometry &>	int push_back(const ObGeometry &g) { return geoms_.push_back(&const_cast<ObGeometry &>(g)); }
+src/share/geo/ob_geo_tree.h	1267	ObGeographGeometrycollection::push_back	const_cast<ObGeometry &>	int push_back(const ObGeometry &g) { return geoms_.push_back(&const_cast<ObGeometry &>(g));  }
+src/share/geo/ob_geo_utils.cpp	1540	ObGeoTypeUtil::poly_close_ring	const_cast<char *>	ObGeoWkbByteOrderUtil::write<uint32_t>(const_cast<char *>(raw_data), point_num_correct, bo);
+src/share/geo/ob_geo_utils.cpp	1541	ObGeoTypeUtil::poly_close_ring	const_cast<char *>	if (OB_FAIL(res.append(const_cast<char *>(raw_data), WKB_GEO_ELEMENT_NUM_SIZE))) {
+src/share/geo/ob_geo_utils.h	1074	ObGeoTypeUtil::is_polygon_valid_simple	const_cast<ObGeometry *>	if (OB_FAIL(const_cast<ObGeometry *>(geo)->do_visit(tree_visit))) {
+src/share/io/ob_io_manager.cpp	287	ObIOManager::pread	const_cast<char *>	MEMCPY(const_cast<char *>(info.buf_), handle.get_buffer(), read_size);
+src/share/io/ob_io_struct.cpp	1765	ObIOFaultDetector::handle	const_cast<RetryTask *>	op_free(const_cast<RetryTask *>(retry_task));
+src/share/ob_encryption_util.cpp	134	ObBlockCipher::create_key	C-style cast (char *) drops const from key	char *key_end= ((char *)key) + key_length;
+src/share/ob_encryption_util.cpp	137	ObBlockCipher::create_key	C-style cast (char *) drops const from key	for (ptr= rkey, sptr= (char *)key; sptr < key_end; ptr++, sptr++)
+src/share/ob_encryption_util.cpp	176	ObBlockCipher::encrypt	C-style cast (unsigned char *) drops const from iv	unsigned char *iv_encrypt = (!need_iv || iv_len == 0) ? NULL : (unsigned char *)iv;
+src/share/ob_encryption_util.cpp	177	ObBlockCipher::encrypt	C-style cast (unsigned char *) drops const from aad	unsigned char *add_encrypt = (!need_aead || aad_len == 0) ? NULL : (unsigned char *)aad;
+src/share/ob_encryption_util.cpp	193	ObBlockCipher::encrypt	C-style cast (unsigned char *) drops const from data	} else if (!EVP_EncryptUpdate(ctx, (unsigned char *)buf, &u_len, (unsigned char *)data, (int)data_len)) {
+src/share/ob_encryption_util.cpp	241	ObBlockCipher::decrypt	C-style cast (unsigned char *) drops const from iv	unsigned char *iv_decrypt = (!need_iv || iv_len == 0) ? NULL : (unsigned char *)iv;
+src/share/ob_encryption_util.cpp	242	ObBlockCipher::decrypt	C-style cast (unsigned char *) drops const from aad	unsigned char *add_decrypt = (!need_aead || aad_len == 0) ? NULL : (unsigned char *)aad;
+src/share/ob_encryption_util.cpp	262	ObBlockCipher::decrypt	C-style cast (unsigned char *) drops const from tag	} else if (need_aead && !EVP_CIPHER_CTX_ctrl(ctx, EVP_CTRL_GCM_SET_TAG, (int)tag_len, (unsigned char *)tag)) {
+src/share/ob_light_hashmap.h	459	ObLightHashMap::BucketRLockGuard::BucketRLockGuard	const_cast<LockType &>	: lock_(const_cast<LockType &>(lock)), ret_(OB_SUCCESS)
+src/share/ob_light_hashmap.h	487	ObLightHashMap::BucketWLockGuard::BucketWLockGuard	const_cast<LockType &>	: lock_(const_cast<LockType &>(lock)), ret_(OB_SUCCESS), locked_(false)
+src/share/ob_sys_time_zone_util.cpp	47	ObSysTimeZoneUtil::get_runtime_sys_time_zone_wrap	const_cast<ObTZInfoMap *>	*(const_cast<ObTZInfoMap *>(tz_map_wrap.get_tz_map()))))) {
+src/share/object/ob_obj_cast.cpp	62	#define DO_SCALE_DECIMAL_INT	const_cast<ObDecimalInt *>	const_cast<ObDecimalInt *>(tmp_dec.get_decimal_int()));              \
+src/share/object/ob_obj_cast.cpp	11752	obj_accuracy_check	const_cast<ObDecimalInt *>	const_cast<ObDecimalInt *>(res_val.get_decimal_int()));
+src/share/object/ob_obj_cast.cpp	11871	ObObjCaster::to_type	const_cast<ObObjMeta &>	const_cast<ObObjMeta &>(buf_obj.get_meta()).set_type_simple(expect_type);
+src/share/object/ob_obj_cast.cpp	11971	ObObjCaster::to_type	const_cast<ObObjMeta &>	const_cast<ObObjMeta &>(out_obj.get_meta()).set_type_simple(expect_type);
+src/share/schema/ob_error_info.cpp	121	ObErrorInfo::collect_error_info	const_cast<ObWarningBuffer *>	set_line((const_cast<ObWarningBuffer *>(buf))->get_error_line());
+src/share/schema/ob_error_info.cpp	122	ObErrorInfo::collect_error_info	const_cast<ObWarningBuffer *>	set_position((const_cast<ObWarningBuffer *>(buf))->get_error_column());
+src/share/schema/ob_latest_schema_guard.cpp	141	ObLatestSchemaGuard::put_to_local_cache_	const_cast<ObSchema*>	schema_obj.schema_ = const_cast<ObSchema*>(schema);
+src/share/schema/ob_mock_fk_parent_table_mgr.cpp	151	ObMockFKParentTableMgr::deep_copy	const_cast<ObMockFKParentTableMgr&>	if (OB_FAIL((const_cast<ObMockFKParentTableMgr&>(other)).for_each(filter, action, condition))) {
+src/share/schema/ob_schema_getter_guard.cpp	2278	ObSchemaGetterGuard::put_to_local_cache	const_cast<ObSchema*>	schema_obj.schema_ = const_cast<ObSchema*>(schema);
+src/share/schema/ob_schema_getter_guard.cpp	3838	ObSchemaGetterGuard::deep_copy_index_name_map	const_cast<ObSchemaMgr*>	} else if (OB_FAIL(const_cast<ObSchemaMgr*>(mgr)
+src/share/schema/ob_schema_mgr.cpp	1448	ObSchemaMgr::add_foreign_keys_in_table	const_cast<ObSimpleForeignKeyInfo*>	const_cast<ObSimpleForeignKeyInfo*> (simple_foreign_key_info),
+src/share/schema/ob_schema_mgr.cpp	1586	ObSchemaMgr::get_foreign_key_info	const_cast<char *>	foreign_key_info.foreign_key_name_.assign(const_cast<char *>(foreign_key_name.ptr()),
+src/share/schema/ob_schema_mgr.cpp	1617	ObSchemaMgr::add_constraints_in_table	const_cast<ObSimpleConstraintInfo*>	const_cast<ObSimpleConstraintInfo*> (simple_constraint_info),
+src/share/schema/ob_schema_mgr.cpp	1758	ObSchemaMgr::get_constraint_info	const_cast<char *>	constraint_info.constraint_name_.assign(const_cast<char *>(constraint_name.ptr()),
+src/share/schema/ob_schema_service.cpp	460	AlterTableSchema::add_alter_column	const_cast<AlterColumnSchema *>	if (OB_FAIL(add_col_to_column_array(const_cast<AlterColumnSchema *>(&alter_column_schema)))) {

@@ -1,0 +1,58 @@
+file	line	symbol	construct	text
+src/observer/virtual_table/ob_virtual_table_projector.h	47	ObVirtualTableProjector::Column::column_value_	member ObObj (value) of type common::ObObj	common::ObObj column_value_;
+src/pl/ob_pl.cpp	1244	ObPL::execute	allocator in, arena view out: ParamStore &params	int ObPL::execute(ObExecContext &ctx,
+src/pl/ob_pl.cpp	2126	ObPLExecState::init_complex_obj	allocator in, arena view out: common::ObObjParam &obj	int ObPLExecState::init_complex_obj(ObIAllocator &allocator,
+src/pl/ob_pl.cpp	3180	ObPLINS::init_complex_obj	allocator in, arena view out: common::ObObjParam &obj	int ObPLINS::init_complex_obj(ObIAllocator &allocator,
+src/pl/ob_pl_interface_pragma.cpp	30	ObPLInterface::name	member raw bytes (pointer) of type const char*	const char* name;
+src/pl/ob_pl_interpreter.cpp	45	CtrlState::label	member ObString (value) of type ObString	ObString label;  // target label for LEAVE/ITERATE (empty == innermost loop)
+src/pl/ob_pl_package_manager.cpp	67	ObCharStream::name_	member raw bytes (pointer) of type const char *const	const char *const name_;
+src/pl/ob_pl_package_manager.cpp	115	ObCStringStream::data_	member raw bytes (pointer) of type const char *const	const char *const data_;
+src/pl/ob_pl_package_manager.cpp	116	ObCStringStream::cursor_	member raw bytes (pointer) of type const char *	const char *cursor_;
+src/pl/ob_pl_package_manager.cpp	175	ObFileStream::file_path_	member raw bytes (pointer) of type const char *const	const char *const file_path_;
+src/pl/ob_pl_resolver.cpp	2826	ObPLResolver::replace_plsql_line	allocator in, arena view out: ObString &sql	int ObPLResolver::replace_plsql_line(
+src/pl/ob_pl_resolver.cpp	9048	ObPredefinedException::name_	member raw bytes (pointer) of type const char*	const char* name_;
+src/pl/ob_pl_type.cpp	329	ObPLDataType::init_session_var	allocator in, arena view out: ObObj &obj	int ObPLDataType::init_session_var(const ObPLResolveCtx &resolve_ctx,
+src/pl/ob_pl_user_type.cpp	56	ObUserDefinedType::init_session_var	allocator in, arena view out: common::ObObj &obj	int ObUserDefinedType::init_session_var(
+src/pl/ob_pl_user_type.cpp	87	ObUserDefinedType::init_obj	allocator in, arena view out: common::ObObj &obj	int ObUserDefinedType::init_obj(
+src/pl/ob_pl_user_type.cpp	107	ObUserDefinedType::deserialize	allocator in, arena view out: const char *&src	int ObUserDefinedType::deserialize(
+src/pl/ob_pl_user_type.cpp	143	ObUserDefinedType::deep_copy_obj	allocator in, arena view out: ObObj &dst	int ObUserDefinedType::deep_copy_obj(
+src/pl/ob_pl_user_type.cpp	171	ObUserDefinedType::destruct_objparam	allocator in, arena view out: ObObj &src	int ObUserDefinedType::destruct_objparam(ObIAllocator &alloc, ObObj &src, ObSQLSessionInfo *session, bool direct_use_alloc)
+src/pl/ob_pl_user_type.cpp	336	ObUserDefinedType::alloc_sub_composite	allocator in, arena view out: ObObj &dest_element	int ObUserDefinedType::alloc_sub_composite(ObObj &dest_element, ObIAllocator &allocator)
+src/pl/ob_pl_user_type.cpp	495	ObPLCursorType::init_obj	allocator in, arena view out: ObObj &obj	int ObPLCursorType::init_obj(ObSchemaGetterGuard &schema_guard,
+src/pl/ob_pl_user_type.cpp	521	ObPLCursorType::init_session_var	allocator in, arena view out: ObObj &obj	int ObPLCursorType::init_session_var(const ObPLResolveCtx &resolve_ctx,
+src/pl/ob_pl_user_type.cpp	542	ObPLCursorType::deep_copy_cursor	allocator in, arena view out: ObObj &dest	int ObPLCursorType::deep_copy_cursor(common::ObIAllocator &allocator,
+src/pl/ob_pl_user_type.cpp	868	ObRecordType::init_session_var	allocator in, arena view out: ObObj &obj	int ObRecordType::init_session_var(const ObPLResolveCtx &resolve_ctx,
+src/pl/ob_pl_user_type.cpp	996	ObRecordType::init_obj	allocator in, arena view out: ObObj &obj	int ObRecordType::init_obj(ObSchemaGetterGuard &schema_guard,
+src/pl/ob_pl_user_type.cpp	1034	ObRecordType::deserialize	allocator in, arena view out: const char *&src	int ObRecordType::deserialize(ObSchemaGetterGuard &schema_guard,
+src/pl/ob_pl_user_type.cpp	1159	ObPLComposite::assign_element	allocator in, arena view out: ObObj &src	int ObPLComposite::assign_element(ObObj &src, ObObj &dest, ObIAllocator &allocator)
+src/pl/ob_pl_user_type.cpp	1174	ObPLComposite::copy_element	allocator in, arena view out: ObObj &dest	int ObPLComposite::copy_element(const ObObj &src,
+src/pl/pl_cache/ob_pl_cache_mgr.cpp	33	ObPLCacheMgr::get_sys_var_in_pl_cache_str	allocator in, arena view out: ObString &sys_var_str	int ObPLCacheMgr::get_sys_var_in_pl_cache_str(ObBasicSessionInfo &session,
+src/pl/sys_package/ob_dbms_ai_service.cpp	205	ObDBMSAiService::get_json_base_	allocator in, arena view out: sql::ParamStore &params	int ObDBMSAiService::get_json_base_(
+src/pl/sys_package/ob_dbms_stats.cpp	5170	ObDbmsStats::get_new_stat_pref	allocator in, arena view out: ObString &opt_name	int ObDbmsStats::get_new_stat_pref(ObExecContext &ctx,
+src/pl/sys_package/ob_dbms_stats.cpp	5349	ObDbmsStats::convert_vaild_ident_name	allocator in, arena view out: ObString &ident_name	int ObDbmsStats::convert_vaild_ident_name(common::ObIAllocator &allocator,
+src/pl/sys_package/ob_dbms_stats.cpp	5390	ObDbmsStats::get_index_schema	allocator in, arena view out: ObString &index_name	int ObDbmsStats::get_index_schema(sql::ObExecContext &ctx,
+src/query/api/query/das/ob_das_id_protocol.h	54	ObDocIdExt::datum_	member ObDatum (value) of type common::ObDatum	common::ObDatum datum_;
+src/query/api/query/engine/basic/ob_batch_result_holder.h	52	ObBatchResultHolder::datums_	member ObDatum (pointer) of type ObDatum *	ObDatum *datums_;
+src/query/api/query/engine/basic/ob_pushdown_filter.h	81	ObSqlDatumInfo::datum_ptr_	member ObDatum (pointer) of type common::ObDatum *	common::ObDatum *datum_ptr_;
+src/query/api/query/engine/basic/ob_pushdown_filter.h	864	ObPushdownFilterExecutor::default_datums_	member container of ObStorageDatum of type common::ObFixedArray<blocksstable::ObStorageDatum, common::ObIAllocator>	common::ObFixedArray<blocksstable::ObStorageDatum, common::ObIAllocator> default_datums_;
+src/query/api/query/engine/basic/ob_pushdown_filter.h	995	ObWhiteFilterParam::datum_	member ObDatum (pointer) of type const ObDatum *	const ObDatum *datum_;
+src/query/api/query/engine/basic/ob_pushdown_filter.h	1186	ObWhiteFilterExecutor::datum_params_	member container of ObDatum of type common::ObFixedArray<common::ObDatum, common::ObIAllocator>	common::ObFixedArray<common::ObDatum, common::ObIAllocator> datum_params_;
+src/query/api/query/engine/basic/ob_pushdown_filter.h	1538	PushdownFilterInfo::TmpColDatumBuf::datums_	member ObDatum (pointer) of type ObDatum *	ObDatum *datums_;
+src/query/api/query/engine/basic/ob_pushdown_filter.h	1539	PushdownFilterInfo::TmpColDatumBuf::data_buf_	member raw bytes (pointer) of type char *	char *data_buf_;
+src/query/api/query/engine/basic/ob_pushdown_filter.h	1555	PushdownFilterInfo::datum_buf_	member ObStorageDatum (pointer) of type blocksstable::ObStorageDatum *	blocksstable::ObStorageDatum *datum_buf_;
+src/query/api/query/engine/basic/ob_pushdown_filter.h	1556	PushdownFilterInfo::tmp_datum_buf_	member ObStorageDatum (pointer) of type blocksstable::ObStorageDatum *	blocksstable::ObStorageDatum *tmp_datum_buf_;
+src/query/api/query/engine/basic/ob_pushdown_filter.h	1560	PushdownFilterInfo::cell_data_ptrs_	member raw bytes (pointer) of type const char **	const char **cell_data_ptrs_;
+src/query/api/query/engine/basic/ob_row_to_expr_projector.h	62	ObRow2ExprsProjector::Item::datum_	member ObDatum (pointer) of type sql::ObDatum *	sql::ObDatum *datum_;
+src/query/api/query/engine/basic/ob_row_to_expr_projector.h	65	ObRow2ExprsProjector::Item::data_	member raw bytes (pointer) of type const char *	const char *data_;
+src/query/api/query/engine/cmd/ob_load_data_parser.h	121	ObCSVGeneralFormat::line_start_str_	member ObString (value) of type common::ObString	common::ObString line_start_str_;
+src/query/api/query/engine/cmd/ob_load_data_parser.h	122	ObCSVGeneralFormat::line_term_str_	member ObString (value) of type common::ObString	common::ObString line_term_str_;
+src/query/api/query/engine/cmd/ob_load_data_parser.h	123	ObCSVGeneralFormat::field_term_str_	member ObString (value) of type common::ObString	common::ObString field_term_str_;
+src/query/api/query/engine/cmd/ob_load_data_parser.h	131	ObCSVGeneralFormat::null_if_	member container of ObString of type common::ObArrayWrap<common::ObString>	common::ObArrayWrap<common::ObString> null_if_;
+src/query/api/query/engine/cmd/ob_load_data_parser.h	136	ObCSVGeneralFormat::file_extension_	member ObString (value) of type common::ObString	common::ObString file_extension_;
+src/query/api/query/engine/cmd/ob_load_data_parser.h	170	ObCSVGeneralParser::FieldValue::ptr_	member raw bytes (pointer) of type char *	char *ptr_;
+src/query/api/query/engine/cmd/ob_load_data_parser.h	921	ObOriginFileFormat::origin_line_term_str_	member ObString (value) of type common::ObString	common::ObString origin_line_term_str_;
+src/query/api/query/engine/cmd/ob_load_data_parser.h	922	ObOriginFileFormat::origin_field_term_str_	member ObString (value) of type common::ObString	common::ObString origin_field_term_str_;
+src/query/api/query/engine/cmd/ob_load_data_parser.h	923	ObOriginFileFormat::origin_field_escaped_str_	member ObString (value) of type common::ObString	common::ObString origin_field_escaped_str_;
+src/query/api/query/engine/cmd/ob_load_data_parser.h	924	ObOriginFileFormat::origin_field_enclosed_str_	member ObString (value) of type common::ObString	common::ObString origin_field_enclosed_str_;
+src/query/api/query/engine/cmd/ob_load_data_parser.h	925	ObOriginFileFormat::origin_null_if_str_	member ObString (value) of type common::ObString	common::ObString origin_null_if_str_;
+src/query/api/query/engine/cmd/ob_load_data_parser.h	949	ObExternalFileFormat::StringData::str_	member ObString (value) of type common::ObString	common::ObString str_;

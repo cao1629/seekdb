@@ -1,0 +1,60 @@
+file	line	symbol	construct	text
+src/query/api/query/engine/cmd/ob_load_data_stat.h	71	ObLoadDataStat::job_type_	member ObString (value) of type common::ObString	common::ObString job_type_; // normal / direct
+src/query/api/query/engine/cmd/ob_load_data_stat.h	72	ObLoadDataStat::table_name_	member ObString (value) of type common::ObString	common::ObString table_name_;
+src/query/api/query/engine/cmd/ob_load_data_stat.h	73	ObLoadDataStat::file_path_	member ObString (value) of type common::ObString	common::ObString file_path_;
+src/query/api/query/engine/cmd/ob_load_data_stat.h	101	ObLoadDataStat::coordinator::status_	member ObString (value) of type common::ObString	common::ObString status_; // none / inited / loading / frozen / merging / commit / error / abort
+src/query/api/query/engine/cmd/ob_load_data_stat.h	102	ObLoadDataStat::coordinator::trans_status_	member ObString (value) of type common::ObString	common::ObString trans_status_; // none / inited / running / frozen / commit / error / abort
+src/query/api/query/engine/cmd/ob_load_data_stat.h	120	ObLoadDataStat::store::status_	member ObString (value) of type common::ObString	common::ObString status_;
+src/query/api/query/engine/cmd/ob_load_data_stat.h	121	ObLoadDataStat::store::trans_status_	member ObString (value) of type common::ObString	common::ObString trans_status_;
+src/query/api/query/engine/expr/ob_expr.h	275	ObEvalCtx::frames_	member raw bytes (pointer) of type char **	char **frames_;
+src/query/api/query/engine/expr/ob_expr.h	315	ObDynReserveBuf::mem_	member raw bytes (pointer) of type char *	char *mem_;
+src/query/api/query/engine/expr/ob_expr.h	760	ObDatumObj::datum_	member ObDatum (value) of type common::ObDatum	common::ObDatum datum_;
+src/query/api/query/engine/expr/ob_expr.h	909	ObToStringDatum::d_	member ObDatum (reference) of type const common::ObDatum &	const common::ObDatum  &d_;
+src/query/api/query/engine/expr/ob_expr_in.h	284	ObExprInOrNotIn::ObExprInCtx::right_datums_	member ObDatum (pointer) of type common::ObDatum **	common::ObDatum **right_datums_;//IN right constants are stored here
+src/query/api/query/engine/expr/ob_expr_in.h	285	ObExprInOrNotIn::ObExprInCtx::static_engine_hashset_	member container of ObDatum of type ObExprInHashSet<common::ObDatum>	ObExprInHashSet<common::ObDatum> static_engine_hashset_;
+src/query/api/query/engine/expr/ob_expr_in.h	286	ObExprInOrNotIn::ObExprInCtx::static_engine_hashset_vecs_	member container of ObDatum of type ObExprInHashMap<common::ObDatum> *	ObExprInHashMap<common::ObDatum> *static_engine_hashset_vecs_;
+src/query/api/query/engine/expr/ob_expr_lob_utils.h	61	ObTextStringVectorResult::res_datum_	member ObDatum (pointer) of type ObDatum *	ObDatum *res_datum_;
+src/query/api/query/engine/expr/ob_expr_lob_utils.h	184	ObTextStringHelper::get_string	allocator in, arena view out: ObString &str	static int get_string(ObExecContext &exec_ctx,
+src/query/api/query/engine/expr/ob_expr_lob_utils.h	207	ObTextStringHelper::get_string	allocator in, arena view out: ObString &str	static int get_string(ObExecContext &exec_ctx,
+src/query/api/query/engine/expr/ob_expr_lob_utils.h	227	ObTextStringHelper::read_real_string_data	allocator in, arena view out: ObString &str	static int read_real_string_data(ObExecContext &exec_ctx,
+src/query/api/query/engine/expr/ob_expr_lob_utils.h	238	ObTextStringHelper::read_real_string_data	allocator in, arena view out: ObString &str	static int read_real_string_data(const common::ObLobReadOptions &options,
+src/query/api/query/engine/expr/ob_expr_lob_utils.h	250	ObTextStringHelper::read_real_string_data	allocator in, arena view out: ObString &str	static int read_real_string_data(ObExecContext &exec_ctx,
+src/query/api/query/engine/expr/ob_expr_lob_utils.h	263	ObTextStringHelper::read_real_string_data	allocator in, arena view out: ObString &str	static int read_real_string_data(const common::ObLobReadOptions &options,
+src/query/api/query/engine/expr/ob_expr_lob_utils.h	275	ObTextStringHelper::read_real_string_data	allocator in, arena view out: ObString &str	static int read_real_string_data(
+src/query/api/query/engine/expr/ob_expr_lob_utils.h	286	ObTextStringHelper::read_real_string_data	allocator in, arena view out: ObString &str	static int read_real_string_data(
+src/query/api/query/engine/expr/ob_expr_lob_utils.h	298	ObTextStringHelper::read_real_string_data_with_copy	allocator in, arena view out: ObString &str	static int read_real_string_data_with_copy(ObExecContext &exec_ctx,
+src/query/api/query/engine/expr/ob_expr_lob_utils.h	309	ObTextStringHelper::read_real_string_data_with_copy	allocator in, arena view out: ObString &str	static int read_real_string_data_with_copy(
+src/query/api/query/engine/expr/ob_expr_lob_utils.h	322	ObTextStringHelper::read_prefix_string_data	allocator in, arena view out: ObString &str	static int read_prefix_string_data(ObEvalCtx &ctx,
+src/query/api/query/engine/expr/ob_expr_lob_utils.h	344	ObTextStringHelper::read_prefix_string_data	allocator in, arena view out: ObString &str	static int read_prefix_string_data(ObExecContext &exec_ctx,
+src/query/api/query/engine/expr/ob_expr_lob_utils.h	354	ObTextStringHelper::read_prefix_string_data	allocator in, arena view out: ObString &str	static int read_prefix_string_data(
+src/query/api/query/engine/expr/ob_expr_lob_utils.h	392	ObTextStringHelper::read_real_string_data_impl	allocator in, arena view out: ObString &str	static int read_real_string_data_impl(LobReadContext &lob_read_context,
+src/query/api/query/engine/expr/ob_expr_lob_utils.h	440	ObTextStringHelper::read_real_string_data_impl	allocator in, arena view out: ObString &str	static int read_real_string_data_impl(LobReadContext &lob_read_context,
+src/query/api/query/engine/expr/ob_expr_lob_utils.h	494	ObTextStringHelper::read_real_string_data_with_copy_impl	allocator in, arena view out: ObString &str	static int read_real_string_data_with_copy_impl(
+src/query/api/query/engine/expr/ob_expr_lob_utils.h	535	ObTextStringHelper::read_prefix_string_data_impl	allocator in, arena view out: ObString &str	static int read_prefix_string_data_impl(
+src/query/api/query/engine/expr/ob_expr_lob_utils.h	569	ObTextStringHelper::str_to_lob_storage_obj	allocator in, arena view out: common::ObObj& output	static int str_to_lob_storage_obj(ObIAllocator &allocator, const ObString& input, common::ObObj& output)
+src/query/api/query/engine/expr/ob_expr_lob_utils.h	584	ObTextStringHelper::pack_to_disk_inrow_lob	allocator in, arena view out: ObDatum &res_datum	static int pack_to_disk_inrow_lob(Allocator &allocator, const ObString data, ObDatum &res_datum)
+src/query/api/query/engine/expr/ob_expr_lob_utils.h	596	ObTextStringHelper::pack_to_disk_inrow_lob	allocator in, arena view out: ObObj &res_obj	static int pack_to_disk_inrow_lob(Allocator &allocator, const ObString data, const ObObjType type, ObObj &res_obj)
+src/query/api/query/engine/expr/ob_expr_lob_utils.h	609	ObTextStringHelper::pack_to_disk_inrow_lob	allocator in, arena view out: ObString &result	static int pack_to_disk_inrow_lob(Allocator &allocator, const ObString data, ObString &result)
+src/query/api/query/engine/expr/ob_expr_operator.h	255	ObIterExprCtx::cur_row_	member ObNewRow (pointer) of type common::ObNewRow *	common::ObNewRow *cur_row_;
+src/query/api/query/engine/expr/ob_expr_operator.h	734	ObExprOperator::name_	member raw bytes (pointer) of type const char *const	const char *const name_;
+src/query/api/query/engine/expr/ob_expr_operator.h	2074	ObExprFindIntCachedValue::hash_map_	member HASH_MAP_TYPE (value) of type HASH_MAP_TYPE	HASH_MAP_TYPE hash_map_;
+src/query/api/query/engine/expr/ob_expr_operator.h	2125	ObExprKMPSearchCtx::pattern_	member ObString (value) of type common::ObString	common::ObString pattern_;
+src/query/api/query/engine/expr/ob_expr_res_type.h	396	ObExprResType::param_	member ObObj (value) of type common::ObObj	common::ObObj param_;
+src/query/api/query/engine/expr/ob_sql_expression.h	125	ObExprCtx::stack_	member ObObj (pointer) of type common::ObObj *	common::ObObj *stack_;
+src/query/api/query/engine/expr/ob_sql_expression.h	127	ObExprCtx::row1_	member ObNewRow (pointer) of type const common::ObNewRow *	const common::ObNewRow *row1_;
+src/query/api/query/engine/expr/ob_sql_expression.h	128	ObExprCtx::row2_	member ObNewRow (pointer) of type const common::ObNewRow *	const common::ObNewRow *row2_;
+src/query/api/query/engine/ob_operator.h	138	ObBatchRescanParams::params_	member container of ObObjParam of type common::ObSArray<sql::ObTMArray<common::ObObjParam>>	common::ObSArray<sql::ObTMArray<common::ObObjParam>> params_;
+src/query/api/query/engine/ob_operator.h	645	ObOperator::dummy_ptr_	member raw bytes (pointer) of type char *	char *dummy_ptr_;
+src/query/api/query/engine/ob_phy_operator_type.h	147	ObPhyOperatorTypeDescSet::ObPhyOperatorTypeDesc::name_	member raw bytes (pointer) of type const char *	const char *name_;
+src/query/api/query/engine/px/ob_px_tablet_range.h	57	ObPxTabletRange::range_cut_	member RangeCut (value) of type RangeCut	RangeCut range_cut_;
+src/query/api/query/engine/vector/ob_continuous_base.h	63	ObContinuousBase::data_	member raw bytes (pointer) of type char *	char *data_;
+src/query/api/query/engine/vector/ob_discrete_base.h	43	ObDiscreteBase::ptrs_	member raw bytes (pointer) of type char **	char **ptrs_;
+src/query/api/query/engine/vector/ob_fixed_length_base.h	75	ObFixedLengthBase::data_	member raw bytes (pointer) of type char *	char *data_;
+src/query/api/query/engine/vector/ob_uniform_base.h	47	ObUniformBase::datums_	member ObDatum (pointer) of type ObDatum *	ObDatum *datums_;
+src/query/api/query/ob_sql_define.h	578	ObSqlDatumArray::data_	member ObDatum (pointer) of type common::ObDatum *	common::ObDatum *data_;
+src/query/api/query/optimizer/ob_optimizer_location_defs.h	61	ObPartIdRowMapManager::part_row_	member ObNewRow (value) of type common::ObNewRow	common::ObNewRow part_row_;
+src/query/api/query/optimizer/stat/ob_opt_column_stat.h	68	ObHistBucket::endpoint_value_	member ObObj (value) of type common::ObObj	common::ObObj endpoint_value_;
+src/query/api/query/optimizer/stat/ob_opt_column_stat.h	356	ObOptColumnStat::min_value_	member ObObj (value) of type common::ObObj	common::ObObj min_value_;
+src/query/api/query/optimizer/stat/ob_opt_column_stat.h	357	ObOptColumnStat::max_value_	member ObObj (value) of type common::ObObj	common::ObObj max_value_;
+src/query/api/query/optimizer/stat/ob_opt_column_stat.h	359	ObOptColumnStat::llc_bitmap_	member raw bytes (pointer) of type char *	char *llc_bitmap_;
+src/query/api/query/optimizer/stat/ob_opt_osg_column_stat.h	58	ObMinMaxValEval::datum_	member ObDatum (pointer) of type ObDatum *	ObDatum *datum_;

@@ -1,0 +1,94 @@
+file	line	symbol	construct	text
+src/storage/ob_i_pre_warmer.cpp	44	ObPreWarmerParam::init	tmp_ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != tmp_ret) {
+src/storage/ob_i_store.cpp	174	ObStoreCtx::get_all_tables	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/ob_i_store.cpp	221	ObStoreCtx::get_fork_snapshot_scn	tmp_ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == tmp_ret) {
+src/storage/ob_order_perserving_encoder.cpp	179	ObOrderPerservingEncoder::make_order_perserving_encode_from_object	ret == OB_BUF_NOT_ENOUGH	if (ret == OB_BUF_NOT_ENOUGH) {
+src/storage/ob_order_perserving_encoder.cpp	190	ObOrderPerservingEncoder::make_order_perserving_encode_from_object	ret == OB_BUF_NOT_ENOUGH	if (ret == OB_BUF_NOT_ENOUGH) {
+src/storage/ob_order_perserving_encoder.cpp	199	ObOrderPerservingEncoder::make_order_perserving_encode_from_object	ret == OB_BUF_NOT_ENOUGH	if (ret == OB_BUF_NOT_ENOUGH) {
+src/storage/ob_order_perserving_encoder.cpp	719	ObSortkeyConditioner::process_key_conditioning	ret != OB_BUF_NOT_ENOUGH	if (ret != OB_BUF_NOT_ENOUGH) {
+src/storage/ob_parallel_external_sort.h	258	ObFragmentWriterV2::write_item	ret == OB_EAGAIN	if (common::OB_EAGAIN == ret) {
+src/storage/ob_parallel_external_sort.h	556	ObFragmentReaderV2::prefetch	ret != OB_ITER_END	if (common::OB_ITER_END != ret) {
+src/storage/ob_parallel_external_sort.h	595	ObFragmentReaderV2::pipeline	ret != OB_ITER_END	if (common::OB_ITER_END != ret) {
+src/storage/ob_parallel_external_sort.h	614	ObFragmentReaderV2::get_next_item	ret != OB_ITER_END	if (common::OB_ITER_END != ret) {
+src/storage/ob_parallel_external_sort.h	624	ObFragmentReaderV2::get_next_item	ret == OB_EAGAIN	if (common::OB_EAGAIN == ret) {
+src/storage/ob_parallel_external_sort.h	626	ObFragmentReaderV2::get_next_item	ret != OB_ITER_END	if (common::OB_ITER_END != ret) {
+src/storage/ob_parallel_external_sort.h	854	ObFragmentMerge::build_heap	ret != OB_ITER_END	if (common::OB_ITER_END != ret) {
+src/storage/ob_parallel_external_sort.h	890	ObFragmentMerge::direct_get_next_item	ret != OB_ITER_END	if (common::OB_ITER_END != ret) {
+src/storage/ob_parallel_external_sort.h	908	ObFragmentMerge::heap_get_next_item	ret != OB_ITER_END	if (common::OB_ITER_END != ret) {
+src/storage/ob_parallel_external_sort.h	965	ObFragmentMerge::get_next_item	ret != OB_ITER_END	if (common::OB_ITER_END != ret) {
+src/storage/ob_parallel_external_sort.h	970	ObFragmentMerge::get_next_item	ret != OB_ITER_END	if (common::OB_ITER_END != ret) {
+src/storage/ob_parallel_external_sort.h	1243	ObExternalSortRound::do_one_run	ret != OB_ITER_END	if (common::OB_ITER_END != ret) {
+src/storage/ob_parallel_external_sort.h	1288	ObExternalSortRound::get_next_item	ret != OB_ITER_END	if (common::OB_ITER_END != ret) {
+src/storage/ob_parallel_external_sort.h	1629	ObMemorySortRound::get_next_item	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/storage/ob_parallel_external_sort.h	1876	ObExternalSort::get_next_item	ret != OB_ITER_END	if (common::OB_ITER_END != ret) {
+src/storage/ob_parallel_external_sort.h	1881	ObExternalSort::get_next_item	ret != OB_ITER_END	if (common::OB_ITER_END != ret) {
+src/storage/ob_parallel_external_sort.h	1888	ObExternalSort::get_next_item	ret == OB_ITER_END	if (common::OB_ITER_END == ret && is_sorted_ && add_count_ != get_count_) {
+src/storage/ob_partition_range_spliter.cpp	70	ObIndexBlockTreeTraverser::handle_overflow_ranges	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/storage/ob_partition_range_spliter.cpp	146	ObIndexBlockTreeTraverser::goto_next_level_node	ret != OB_NOT_SUPPORTED	if (ret != OB_NOT_SUPPORTED) {
+src/storage/ob_partition_range_spliter.cpp	228	ObIndexBlockTreeTraverser::inner_node_traverse	ret != OB_BEYOND_THE_RANGE	if (ret != OB_BEYOND_THE_RANGE) {
+src/storage/ob_partition_range_spliter.cpp	304	ObIndexBlockTreeTraverser::inner_node_traverse	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/storage/ob_partition_range_spliter.cpp	414	ObIndexBlockTreeTraverser::PathNodeCaches::prefetch	ret != OB_ENTRY_NOT_EXIST	if (OB_UNLIKELY(OB_ENTRY_NOT_EXIST != ret)) {
+src/storage/ob_partition_range_spliter.cpp	497	ObIndexBlockTreeTraverser::TreeNodeContext::locate_range	ret != OB_BEYOND_THE_RANGE	if (ret != OB_BEYOND_THE_RANGE) {
+src/storage/ob_partition_range_spliter.cpp	887	ObPartitionMultiRangeSpliter::get_tables	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/ob_partition_range_spliter.cpp	1335	ObPartitionMultiRangeSpliter::build_heap	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/storage/ob_partition_range_spliter.cpp	1446	ObPartitionMultiRangeSpliter::do_task_split_algorithm	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/storage/ob_partition_range_spliter.cpp	2284	ObPartitionIncrementalRangeSpliter::check_is_incremental	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/ob_partition_range_spliter.cpp	2392	ObPartitionIncrementalRangeSpliter::get_ranges_by_inc_data	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/ob_resource_map.h	295	ObResourceMap::get_without_lock	ret != OB_HASH_NOT_EXIST	if (common::OB_HASH_NOT_EXIST != ret) {
+src/storage/ob_storage_clog_recorder.cpp	146	ObIStorageClogRecorder::try_update_with_lock	ret == OB_BLOCK_FROZEN	while ((OB_SUCC(ret) || OB_BLOCK_FROZEN == ret)) {
+src/storage/ob_storage_clog_recorder.cpp	153	ObIStorageClogRecorder::try_update_with_lock	ret != OB_BLOCK_FROZEN	if (OB_BLOCK_FROZEN != ret) {
+src/storage/ob_storage_clog_recorder.cpp	202	ObIStorageClogRecorder::try_update	ret == OB_ALLOCATE_MEMORY_FAILED	if (OB_ALLOCATE_MEMORY_FAILED == ret) {
+src/storage/ob_storage_clog_recorder.cpp	222	ObIStorageClogRecorder::replay_clog	ret == OB_NO_NEED_UPDATE	if (OB_NO_NEED_UPDATE == ret) { // not update max_saved_version_
+src/storage/ob_storage_clog_recorder.cpp	306	ObIStorageClogRecorder::replay_get_tablet_handle	ret == OB_OBSOLETE_CLOG_NEED_SKIP	if (OB_OBSOLETE_CLOG_NEED_SKIP == ret) {
+src/storage/ob_storage_clog_recorder.cpp	309	ObIStorageClogRecorder::replay_get_tablet_handle	ret == OB_TIMEOUT	} else if (OB_TIMEOUT == ret) {
+src/storage/ob_storage_schema_recorder.cpp	126	ObStorageSchemaRecorder::inner_replay_clog	ret == OB_OBSOLETE_CLOG_NEED_SKIP	if (OB_OBSOLETE_CLOG_NEED_SKIP == ret) {
+src/storage/ob_storage_schema_recorder.cpp	162	ObStorageSchemaRecorder::try_update_storage_schema	ret == OB_ALLOCATE_MEMORY_FAILED; ret == OB_BLOCK_FROZEN	if (OB_ALLOCATE_MEMORY_FAILED == ret || OB_BLOCK_FROZEN == ret) {
+src/storage/ob_storage_table_guard.cpp	157	ObStorageTableGuard::refresh_and_protect_memtable_for_replay	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/storage/ob_storage_table_guard.cpp	163	ObStorageTableGuard::refresh_and_protect_memtable_for_replay	ret == OB_EAGAIN	if (OB_EAGAIN == ret) {
+src/storage/ob_storage_table_guard.cpp	164	ObStorageTableGuard::refresh_and_protect_memtable_for_replay	ret != OB_MINOR_FREEZE_NOT_ALLOW	} else if (OB_MINOR_FREEZE_NOT_ALLOW != ret) {
+src/storage/ob_storage_table_guard.cpp	179	ObStorageTableGuard::refresh_and_protect_memtable_for_replay	ret == OB_ENTRY_NOT_EXIST; ret == OB_EAGAIN	} while ((OB_SUCC(ret) || OB_ENTRY_NOT_EXIST == ret || OB_EAGAIN == ret) && need_retry);
+src/storage/ob_storage_table_guard.cpp	181	ObStorageTableGuard::refresh_and_protect_memtable_for_replay	ret == OB_LS_OFFLINE	if (OB_LS_OFFLINE == ret) {
+src/storage/ob_storage_table_guard.cpp	224	ObStorageTableGuard::double_check_get_memtable_for_replay_	ret == OB_NO_NEED_UPDATE	if (OB_NO_NEED_UPDATE == ret) {
+src/storage/ob_storage_table_guard.cpp	228	ObStorageTableGuard::double_check_get_memtable_for_replay_	ret == OB_ENTRY_NOT_EXIST	} else if (OB_ENTRY_NOT_EXIST == ret) {
+src/storage/ob_storage_table_guard.cpp	316	ObStorageTableGuard::check_freeze_to_inc_write_ref	ret == OB_NO_NEED_UPDATE	if (OB_NO_NEED_UPDATE == ret) {
+src/storage/ob_storage_table_guard.cpp	361	ObStorageTableGuard::check_freeze_to_inc_write_ref	ret == OB_EAGAIN	if (OB_EAGAIN == ret) {
+src/storage/ob_storage_table_guard.cpp	362	ObStorageTableGuard::check_freeze_to_inc_write_ref	ret != OB_MINOR_FREEZE_NOT_ALLOW	} else if (OB_MINOR_FREEZE_NOT_ALLOW != ret) {
+src/storage/ob_storage_table_guard.cpp	370	ObStorageTableGuard::check_freeze_to_inc_write_ref	ret == OB_NO_NEED_UPDATE	if (OB_NO_NEED_UPDATE == ret) {
+src/storage/ob_storage_table_guard.cpp	430	ObStorageTableGuard::need_to_refresh_table	ret != OB_MINOR_FREEZE_NOT_ALLOW	if (OB_MINOR_FREEZE_NOT_ALLOW != ret) {
+src/storage/ob_table_dml_param.cpp	304	ObTableSchemaParam::is_rowkey_column	ret != OB_HASH_NOT_EXIST	if (OB_FAIL(col_map_.get(column_id, idx)) && OB_HASH_NOT_EXIST != ret) {
+src/storage/ob_table_dml_param.cpp	316	ObTableSchemaParam::is_column_nullable_for_write	ret != OB_HASH_NOT_EXIST	if (OB_FAIL(col_map_.get(column_id, idx)) && OB_HASH_NOT_EXIST != ret) {
+src/storage/ob_table_dml_param.cpp	330	ObTableSchemaParam::get_column	ret != OB_HASH_NOT_EXIST	if (OB_FAIL(col_map_.get(column_id, idx)) && OB_HASH_NOT_EXIST != ret) {
+src/storage/ob_tablet_autoinc_seq_service.cpp	286	ObTabletAutoincSeqService::replay_update_tablet_autoinc_seq	ret == OB_TABLET_NOT_EXIST; ret == OB_NO_NEED_UPDATE	if (OB_TABLET_NOT_EXIST == ret || OB_NO_NEED_UPDATE == ret) {
+src/storage/ob_tablet_autoinc_seq_service.cpp	289	ObTabletAutoincSeqService::replay_update_tablet_autoinc_seq	ret != OB_EAGAIN	} else if (OB_EAGAIN != ret) {
+src/storage/ob_tablet_autoinc_seq_service.cpp	349	ObTabletAutoincSeqService::set_tablet_autoinc_seq_in_trans	ret != OB_EAGAIN	if (OB_EAGAIN != ret) {
+src/storage/ob_tablet_autoincrement_service.cpp	119	ObTabletAutoincMgr::fetch_interval	ret == OB_SIZE_OVERFLOW	} else if (OB_SIZE_OVERFLOW == ret) {
+src/storage/ob_tablet_autoincrement_service.cpp	210	ObTabletAutoincrementService::acquire_mgr	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/storage/ob_tablet_autoincrement_service.cpp	214	ObTabletAutoincrementService::acquire_mgr	ret (assigned in the comparison) == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == (ret = tablet_autoinc_mgr_map_.get(key, autoinc_mgr))) {
+src/storage/ob_tablet_autoincrement_service.cpp	333	ObTabletAutoincrementService::clear_tablet_autoinc_seq_cache	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/storage/ob_tablet_autoincrement_service.h	93	ObTabletAutoincMgr::is_retryable	ret == OB_NOT_MASTER; ret == OB_NOT_INIT; ret == OB_TIMEOUT; ret == OB_EAGAIN; ret == OB_LS_NOT_EXIST; ret == OB_SERVER_RUNTIME_NOT_READY; ret == OB_LS_LOCATION_NOT_EXIST	return OB_NOT_MASTER == ret || OB_NOT_INIT == ret || OB_TIMEOUT == ret || OB_EAGAIN == ret || OB_LS_NOT_EXIST == ret || OB_SERVER_RUNTIME_NOT_READY == ret || OB_LS_LOCATION_NOT_EXIST == ret;
+src/storage/ob_tablet_autoincrement_service.h	97	ObTabletAutoincMgr::is_block_renew_location	ret == OB_LOCATION_LEADER_NOT_EXIST; ret == OB_LS_LOCATION_LEADER_NOT_EXIST; ret == OB_NO_READABLE_REPLICA	return OB_LOCATION_LEADER_NOT_EXIST == ret || OB_LS_LOCATION_LEADER_NOT_EXIST == ret || OB_NO_READABLE_REPLICA == ret
+src/storage/ob_tablet_autoincrement_service.h	98	ObTabletAutoincMgr::is_block_renew_location	ret == OB_NOT_MASTER; ret == OB_RS_NOT_MASTER; ret == OB_RS_SHUTDOWN; ret == OB_PARTITION_NOT_EXIST; ret == OB_LOCATION_NOT_EXIST	|| OB_NOT_MASTER == ret || OB_RS_NOT_MASTER == ret || OB_RS_SHUTDOWN == ret || OB_PARTITION_NOT_EXIST == ret || OB_LOCATION_NOT_EXIST == ret
+src/storage/ob_tablet_autoincrement_service.h	99	ObTabletAutoincMgr::is_block_renew_location	ret == OB_PARTITION_IS_STOPPED; ret == OB_SERVER_IS_INIT; ret == OB_SERVER_IS_STOPPING; ret == OB_SERVER_RUNTIME_NOT_READY	|| OB_PARTITION_IS_STOPPED == ret || OB_SERVER_IS_INIT == ret || OB_SERVER_IS_STOPPING == ret || OB_SERVER_RUNTIME_NOT_READY == ret
+src/storage/ob_tablet_autoincrement_service.h	100	ObTabletAutoincMgr::is_block_renew_location	ret == OB_TRANS_RPC_TIMEOUT; ret == OB_TRANS_STMT_NEED_RETRY	|| OB_TRANS_RPC_TIMEOUT == ret || OB_TRANS_STMT_NEED_RETRY == ret
+src/storage/ob_tablet_autoincrement_service.h	101	ObTabletAutoincMgr::is_block_renew_location	ret == OB_LS_NOT_EXIST; ret == OB_TABLET_NOT_EXIST; ret == OB_LS_LOCATION_NOT_EXIST; ret == OB_PARTITION_IS_BLOCKED; ret == OB_MAPPING_BETWEEN_TABLET_AND_LS_NOT_EXIST	|| OB_LS_NOT_EXIST == ret || OB_TABLET_NOT_EXIST == ret || OB_LS_LOCATION_NOT_EXIST == ret || OB_PARTITION_IS_BLOCKED == ret || OB_MAPPING_BETWEEN_TABLET_AND_LS_NOT_EXIST == ret
+src/storage/ob_tablet_autoincrement_service.h	102	ObTabletAutoincMgr::is_block_renew_location	ret == OB_GET_LOCATION_TIME_OUT	|| OB_GET_LOCATION_TIME_OUT == ret;
+src/storage/ob_tablet_stat_mgr.cpp	617	ObTabletStatMgr::get_latest_tablet_stat	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/storage/ob_tablet_stat_mgr.cpp	681	ObTabletStatMgr::get_tablet_analyzer	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/storage/ob_tablet_stat_mgr.cpp	696	ObTabletStatMgr::inner_clear_tablet_stat	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/storage/ob_tablet_stat_mgr.cpp	748	ObTabletStatMgr::update_tablet_stream	ret == OB_HASH_NOT_EXIST	} else if (OB_HASH_NOT_EXIST == ret) {
+src/storage/ob_tablet_stat_mgr.cpp	895	ObTabletStatMgr::refresh_queuing_mode	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/storage/ob_tablet_stat_mgr.cpp	941	ObTabletStatMgr::get_queuing_cfg	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/storage/ob_value_row_iterator.cpp	317	ObRowGetter::get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/ob_value_row_iterator.cpp	325	ObRowGetter::get_next_row	ret == OB_ITER_END	if (OB_SUCC(ret) || OB_ITER_END == ret) {
+src/storage/retrieval/ob_block_max_iter.cpp	200	ObBlockMaxScoreIterator::get_next	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/retrieval/ob_block_max_iter.cpp	253	ObBlockMaxScoreIterator::advance_to	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/retrieval/ob_block_stat_iter.cpp	85	ObBlockStatIterator::SSTableIter::next	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/retrieval/ob_block_stat_iter.cpp	103	ObBlockStatIterator::MemTableIter::next	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/retrieval/ob_block_stat_iter.cpp	403	ObBlockStatIterator::prepare_scan_tables	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/retrieval/ob_block_stat_iter.cpp	418	ObBlockStatIterator::prepare_scan_tables	ret == OB_ITER_END	if (OB_LIKELY(OB_ITER_END == ret)) {
+src/storage/retrieval/ob_block_stat_iter.cpp	589	ObBlockStatIterator::next_baseline_range	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/retrieval/ob_inv_idx_param_estimator.cpp	52	ObTextAvgDocLenEstimator::estimate_avg_doc_len	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/retrieval/ob_inv_idx_param_estimator.cpp	70	ObTextAvgDocLenEstimator::estimate_avg_doc_len	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/retrieval/ob_inv_idx_param_estimator.cpp	219	ObBM25ParamEstimator::do_estimation	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/retrieval/ob_retrieval_program.cpp	84	normalize_non_data_result	other variable result == OB_ITER_END	return OB_ITER_END == result ? OB_ERR_UNEXPECTED : result;
+src/storage/retrieval/ob_retrieval_program.cpp	323	ObRetrievalProgram::Impl::pull	ret == OB_ITER_END	if (OB_ITER_END == ret) {

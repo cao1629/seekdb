@@ -1,0 +1,62 @@
+file	line	symbol	construct	text
+src/storage/blocksstable/index_block/ob_index_block_aggregator.cpp	729	ObColSumAggregator::eval_int_number	sql:: use: ObNumStackAllocator	sql::ObNumStackAllocator<1> tmp_alloc;
+src/storage/blocksstable/index_block/ob_index_block_aggregator.cpp	742	ObColSumAggregator::eval_uint_number	sql:: use: ObNumStackAllocator	sql::ObNumStackAllocator<1> tmp_alloc;
+src/storage/blocksstable/index_block/ob_index_block_aggregator.cpp	755	ObColSumAggregator::eval_decimal_int_number	sql:: use: ObNumStackAllocator	sql::ObNumStackAllocator<1> tmp_alloc;
+src/storage/blocksstable/index_block/ob_index_block_aggregator.cpp	783	ObColSumAggregator::inner_eval_number	sql:: use: ObNumStackAllocator	sql::ObNumStackAllocator<2> tmp_alloc;
+src/storage/blocksstable/index_block/ob_index_block_aggregator.cpp	804	ObColSumAggregator::eval_float	sql:: use: ObArithExprOperator	if (OB_UNLIKELY(sql::ObArithExprOperator::is_float_out_of_range(left_f + right_f))) {
+src/storage/blocksstable/index_block/ob_index_block_aggregator.cpp	1048	ObBM25ParamAggregator::do_max_score_agg	sql:: use: ObExprBM25	const double tf_score = sql::ObExprBM25::doc_token_weight(token_freq, get_norm_len(doc_length));
+src/storage/blocksstable/index_block/ob_index_block_row_struct.h	348	ObSkippingFilterResult	sql:: use: ObBoolMask	sql::ObBoolMask bool_mask_;
+src/storage/blocksstable/index_block/ob_index_block_row_struct.h	349	ObSkippingFilterResult	sql:: use: ObPushdownFilterExecutor	sql::ObPushdownFilterExecutor *filter_;
+src/storage/blocksstable/index_block/ob_index_block_row_struct.h	362	ObSkippingFilterResults::push_back	sql:: use: ObPushdownFilterExecutor	OB_INLINE void push_back(sql::ObPushdownFilterExecutor *filter)
+src/storage/blocksstable/index_block/ob_index_block_row_struct.h	597	ObMicroIndexInfo::is_filter_always_true	sql:: use: ObBoolMaskType	return sql::ObBoolMaskType::ALWAYS_TRUE == static_cast<sql::ObBoolMaskType>(filter_constant_type_);
+src/storage/blocksstable/index_block/ob_index_block_row_struct.h	601	ObMicroIndexInfo::is_filter_always_false	sql:: use: ObBoolMaskType	return sql::ObBoolMaskType::ALWAYS_FALSE == static_cast<sql::ObBoolMaskType>(filter_constant_type_);
+src/storage/blocksstable/index_block/ob_index_block_row_struct.h	605	ObMicroIndexInfo::is_filter_uncertain	sql:: use: ObBoolMaskType	return sql::ObBoolMaskType::PROBABILISTIC == static_cast<sql::ObBoolMaskType>(filter_constant_type_);
+src/storage/blocksstable/index_block/ob_index_block_row_struct.h	609	ObMicroIndexInfo::is_filter_constant	sql:: use: ObBoolMaskType	return sql::ObBoolMaskType::ALWAYS_TRUE == static_cast<sql::ObBoolMaskType>(filter_constant_type_) ||
+src/storage/blocksstable/index_block/ob_index_block_row_struct.h	610	ObMicroIndexInfo::is_filter_constant	sql:: use: ObBoolMaskType	sql::ObBoolMaskType::ALWAYS_FALSE == static_cast<sql::ObBoolMaskType>(filter_constant_type_);
+src/storage/blocksstable/index_block/ob_index_block_row_struct.h	612	ObMicroIndexInfo::set_filter_constant_type	sql:: use: ObBoolMaskType	OB_INLINE void set_filter_constant_type(const sql::ObBoolMaskType type)
+src/storage/blocksstable/index_block/ob_index_block_row_struct.h	616	ObMicroIndexInfo::get_filter_constant_type	sql:: use: ObBoolMaskType	OB_INLINE sql::ObBoolMaskType get_filter_constant_type() const
+src/storage/blocksstable/index_block/ob_index_block_row_struct.h	618	ObMicroIndexInfo::get_filter_constant_type	sql:: use: ObBoolMaskType	return static_cast<sql::ObBoolMaskType>(filter_constant_type_);
+src/storage/blocksstable/index_block/ob_index_block_row_struct.h	628	ObMicroIndexInfo::add_skipping_filter_result	sql:: use: ObPushdownFilterExecutor	OB_INLINE int add_skipping_filter_result(sql::ObPushdownFilterExecutor *filter)
+src/storage/blocksstable/index_block/ob_index_block_row_struct.h	639	ObMicroIndexInfo::apply_skipping_filter_result	sql:: use: ObPushdownFilterExecutor	OB_INLINE bool apply_skipping_filter_result(sql::ObPushdownFilterExecutor *filter)
+src/storage/blocksstable/index_block/ob_index_block_row_struct.h	665	ObMicroIndexInfo::pre_process_filter	sql:: use: ObPushdownFilterExecutor	OB_INLINE void pre_process_filter(sql::ObPushdownFilterExecutor &filter)
+src/storage/blocksstable/index_block/ob_index_block_row_struct.h	675	ObMicroIndexInfo::post_process_filter	sql:: use: ObPushdownFilterExecutor	OB_INLINE void post_process_filter(sql::ObPushdownFilterExecutor &filter)
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.cpp	31	ObSkipIndexFilterExecutor::init	sql:: use: to_bit_vector, ObBitVector	} else if (OB_ISNULL(skip_bit_ = sql::to_bit_vector(allocator->alloc(sql::ObBitVector::memory_size(batch_size))))) {
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.cpp	73	ObSkipIndexFilterExecutor::falsifiable_pushdown_filter	sql:: use: ObPhysicalFilterExecutor	sql::ObPhysicalFilterExecutor &filter,
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.cpp	88	ObSkipIndexFilterExecutor::falsifiable_pushdown_filter	sql:: use: ObDynamicFilterExecutor	sql::ObDynamicFilterExecutor &dynamic_filter =
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.cpp	89	ObSkipIndexFilterExecutor::falsifiable_pushdown_filter	sql:: use: ObDynamicFilterExecutor	static_cast<sql::ObDynamicFilterExecutor &>(filter);
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.cpp	100	ObSkipIndexFilterExecutor::falsifiable_pushdown_filter	sql:: use: ObWhiteFilterExecutor	sql::ObWhiteFilterExecutor &white_filter =
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.cpp	101	ObSkipIndexFilterExecutor::falsifiable_pushdown_filter	sql:: use: ObWhiteFilterExecutor	static_cast<sql::ObWhiteFilterExecutor &>(filter);
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.cpp	106	ObSkipIndexFilterExecutor::falsifiable_pushdown_filter	sql:: use: ObBlackFilterExecutor	sql::ObBlackFilterExecutor &black_filter =
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.cpp	107	ObSkipIndexFilterExecutor::falsifiable_pushdown_filter	sql:: use: ObBlackFilterExecutor	static_cast<sql::ObBlackFilterExecutor &>(filter);
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.cpp	126	ObSkipIndexFilterExecutor::filter_on_min_max	sql:: use: ObWhiteFilterExecutor	sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.cpp	130	ObSkipIndexFilterExecutor::filter_on_min_max	sql:: use: ObBoolMask	sql::ObBoolMask &fal_desc = filter.get_filter_bool_mask();
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.cpp	153	ObSkipIndexFilterExecutor::filter_on_min_max	sql:: use: ObWhiteFilterOperatorType	const sql::ObWhiteFilterOperatorType op_type = filter.get_op_type();
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.cpp	155	ObSkipIndexFilterExecutor::filter_on_min_max	sql:: use: WHITE_OP_NU	case sql::WHITE_OP_NU: {
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.cpp	165	ObSkipIndexFilterExecutor::filter_on_min_max	sql:: use: WHITE_OP_NN	case sql::WHITE_OP_NN: {
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.cpp	175	ObSkipIndexFilterExecutor::filter_on_min_max	sql:: use: WHITE_OP_EQ	case sql::WHITE_OP_EQ: {
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.cpp	184	ObSkipIndexFilterExecutor::filter_on_min_max	sql:: use: WHITE_OP_NE	case sql::WHITE_OP_NE: {
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.cpp	193	ObSkipIndexFilterExecutor::filter_on_min_max	sql:: use: WHITE_OP_GT	case sql::WHITE_OP_GT: {
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.cpp	202	ObSkipIndexFilterExecutor::filter_on_min_max	sql:: use: WHITE_OP_GE	case sql::WHITE_OP_GE: {
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.cpp	211	ObSkipIndexFilterExecutor::filter_on_min_max	sql:: use: WHITE_OP_LT	case sql::WHITE_OP_LT: {
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.cpp	220	ObSkipIndexFilterExecutor::filter_on_min_max	sql:: use: WHITE_OP_LE	case sql::WHITE_OP_LE: {
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.cpp	229	ObSkipIndexFilterExecutor::filter_on_min_max	sql:: use: WHITE_OP_IN	case sql::WHITE_OP_IN: {
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.cpp	238	ObSkipIndexFilterExecutor::filter_on_min_max	sql:: use: WHITE_OP_BT	case sql::WHITE_OP_BT: {
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.cpp	275	ObSkipIndexFilterExecutor::eq_operator	sql:: use: ObWhiteFilterExecutor	int ObSkipIndexFilterExecutor::eq_operator(const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.cpp	280	ObSkipIndexFilterExecutor::eq_operator	sql:: use: ObBoolMask	sql::ObBoolMask &fal_desc)
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.cpp	307	ObSkipIndexFilterExecutor::ne_operator	sql:: use: ObWhiteFilterExecutor	int ObSkipIndexFilterExecutor::ne_operator(const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.cpp	312	ObSkipIndexFilterExecutor::ne_operator	sql:: use: ObBoolMask	sql::ObBoolMask &fal_desc)
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.cpp	339	ObSkipIndexFilterExecutor::gt_operator	sql:: use: ObWhiteFilterExecutor	int ObSkipIndexFilterExecutor::gt_operator(const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.cpp	344	ObSkipIndexFilterExecutor::gt_operator	sql:: use: ObBoolMask	sql::ObBoolMask &fal_desc)
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.cpp	377	ObSkipIndexFilterExecutor::ge_operator	sql:: use: ObWhiteFilterExecutor	int ObSkipIndexFilterExecutor::ge_operator(const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.cpp	382	ObSkipIndexFilterExecutor::ge_operator	sql:: use: ObBoolMask	sql::ObBoolMask &fal_desc)
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.cpp	411	ObSkipIndexFilterExecutor::lt_operator	sql:: use: ObWhiteFilterExecutor	int ObSkipIndexFilterExecutor::lt_operator(const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.cpp	416	ObSkipIndexFilterExecutor::lt_operator	sql:: use: ObBoolMask	sql::ObBoolMask &fal_desc)
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.cpp	445	ObSkipIndexFilterExecutor::le_operator	sql:: use: ObWhiteFilterExecutor	int ObSkipIndexFilterExecutor::le_operator(const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.cpp	450	ObSkipIndexFilterExecutor::le_operator	sql:: use: ObBoolMask	sql::ObBoolMask &fal_desc)
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.cpp	482	ObSkipIndexFilterExecutor::in_operator	sql:: use: ObWhiteFilterExecutor	int ObSkipIndexFilterExecutor::in_operator(const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.cpp	487	ObSkipIndexFilterExecutor::in_operator	sql:: use: ObBoolMask	sql::ObBoolMask &fal_desc)
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.cpp	491	ObSkipIndexFilterExecutor::in_operator	sql:: use: ObExpr	const sql::ObExpr *col_expr = filter.get_filter_node().expr_;
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.cpp	526	ObSkipIndexFilterExecutor::bt_operator	sql:: use: ObWhiteFilterExecutor	int ObSkipIndexFilterExecutor::bt_operator(const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.cpp	531	ObSkipIndexFilterExecutor::bt_operator	sql:: use: ObBoolMask	sql::ObBoolMask &fal_desc)
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.cpp	567	ObSkipIndexFilterExecutor::black_filter_on_min_max	sql:: use: ObBlackFilterExecutor	sql::ObBlackFilterExecutor &filter,
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.cpp	573	ObSkipIndexFilterExecutor::black_filter_on_min_max	sql:: use: ObBoolMask	sql::ObBoolMask &fal_desc = filter.get_filter_bool_mask();

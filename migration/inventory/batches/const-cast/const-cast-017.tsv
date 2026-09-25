@@ -1,0 +1,72 @@
+file	line	symbol	construct	text
+src/sql/engine/expr/ob_expr_array_filter.cpp	60	ObExprArrayFilter::calc_result_typeN	const_cast<ObSQLSessionInfo *>	ObSQLSessionInfo *session = const_cast<ObSQLSessionInfo *>(type_ctx.get_session());
+src/sql/engine/expr/ob_expr_array_first.cpp	58	ObExprArrayFirst::calc_result_typeN	const_cast<ObSQLSessionInfo *>	ObSQLSessionInfo *session = const_cast<ObSQLSessionInfo *>(type_ctx.get_session());
+src/sql/engine/expr/ob_expr_array_length.cpp	47	ObExprArrayLength::calc_result_type1	const_cast<ObSQLSessionInfo *>	ObSQLSessionInfo *session = const_cast<ObSQLSessionInfo *>(type_ctx.get_session());
+src/sql/engine/expr/ob_expr_array_map.cpp	432	ObExprArrayMap::calc_result_typeN	const_cast<ObSQLSessionInfo *>	ObSQLSessionInfo *session = const_cast<ObSQLSessionInfo *>(type_ctx.get_session());
+src/sql/engine/expr/ob_expr_array_max.cpp	53	ObExprArrayExtreme::calc_result_type1	const_cast<ObSQLSessionInfo *>	if (OB_ISNULL(session = const_cast<ObSQLSessionInfo *>(type_ctx.get_session()))) {
+src/sql/engine/expr/ob_expr_array_overlaps.cpp	59	ObExprArrayOverlaps::calc_result_type2	const_cast<ObSQLSessionInfo *>	ObSQLSessionInfo *session = const_cast<ObSQLSessionInfo *>(type_ctx.get_session());
+src/sql/engine/expr/ob_expr_array_position.cpp	50	ObExprArrayPosition::calc_result_type2	const_cast<ObSQLSessionInfo *>	ObSQLSessionInfo *session = const_cast<ObSQLSessionInfo *>(type_ctx.get_session());
+src/sql/engine/expr/ob_expr_array_range.cpp	55	ObExprArrayRange::calc_result_typeN	const_cast<ObSQLSessionInfo *>	if (OB_ISNULL(session = const_cast<ObSQLSessionInfo *>(type_ctx.get_session()))) {
+src/sql/engine/expr/ob_expr_array_remove.cpp	59	ObExprArrayRemove::calc_result_type2	const_cast<ObSQLSessionInfo *>	ObSQLSessionInfo *session = const_cast<ObSQLSessionInfo *>(type_ctx.get_session());
+src/sql/engine/expr/ob_expr_array_slice.cpp	61	ObExprArraySlice::calc_result_typeN	const_cast<ObSQLSessionInfo *>	if (OB_ISNULL(session = const_cast<ObSQLSessionInfo *>(type_ctx.get_session()))) {
+src/sql/engine/expr/ob_expr_array_sort.cpp	63	ObExprArraySort::calc_result_type1	const_cast<ObSQLSessionInfo *>	if (OB_ISNULL(session = const_cast<ObSQLSessionInfo *>(type_ctx.get_session()))) {
+src/sql/engine/expr/ob_expr_array_sortby.cpp	60	ObExprArraySortby::calc_result_typeN	const_cast<ObSQLSessionInfo *>	ObSQLSessionInfo *session = const_cast<ObSQLSessionInfo *>(type_ctx.get_session());
+src/sql/engine/expr/ob_expr_array_sum.cpp	51	ObExprArraySum::calc_result_type1	const_cast<ObSQLSessionInfo *>	if (OB_ISNULL(session = const_cast<ObSQLSessionInfo *>(type_ctx.get_session()))) {
+src/sql/engine/expr/ob_expr_array_to_string.cpp	55	ObExprArrayToString::calc_result_typeN	const_cast<ObSQLSessionInfo *>	if (OB_ISNULL(session = const_cast<ObSQLSessionInfo *>(type_ctx.get_session()))) {
+src/sql/engine/expr/ob_expr_array_union.cpp	54	ObExprArraySetOperation::calc_result_type2	const_cast<ObSQLSessionInfo *>	ObSQLSessionInfo *session = const_cast<ObSQLSessionInfo *>(type_ctx.get_session());
+src/sql/engine/expr/ob_expr_array_union.cpp	99	ObExprArraySetOperation::calc_result_typeN	const_cast<ObSQLSessionInfo *>	ObSQLSessionInfo *session = const_cast<ObSQLSessionInfo *>(type_ctx.get_session());
+src/sql/engine/expr/ob_expr_calc_partition_id.cpp	473	ObExprCalcPartitionBase::calc_partition_id	const_cast<ObObj*>	ObRowkey rowkey(const_cast<ObObj*>(&result), 1);
+src/sql/engine/expr/ob_expr_cast.cpp	286	ObExprCast::calc_result_type2	const_cast<sql::ObSQLSessionInfo*>	if (OB_ISNULL(session = const_cast<sql::ObSQLSessionInfo*>(type_ctx.get_session())) ||
+src/sql/engine/expr/ob_expr_column_conv.cpp	180	ObExprColumnConv::convert_skip_null_check	const_cast<ObObj*>	*const_cast<ObObj*>(res_obj)))) {
+src/sql/engine/expr/ob_expr_column_conv.cpp	230	ObExprColumnConv::calc_result_typeN	const_cast<ObSQLSessionInfo *>	ObSQLSessionInfo *session = const_cast<ObSQLSessionInfo *>(type_ctx.get_session());
+src/sql/engine/expr/ob_expr_column_conv.cpp	264	ObExprColumnConv::calc_result_typeN	const_cast<ObSQLSessionInfo *>	ObSQLSessionInfo *session = const_cast<ObSQLSessionInfo *>(type_ctx.get_session());
+src/sql/engine/expr/ob_expr_convert_tz.cpp	195	ObExprConvertTZ::get_offset_by_couple_tz	const_cast<ObTZInfoMap *>	} else if (OB_ISNULL(tz_info_map = const_cast<ObTZInfoMap *>(tz_info->get_tz_info_map()))) {
+src/sql/engine/expr/ob_expr_convert_tz.cpp	220	ObExprConvertTZ::parse_string	const_cast<ObTZInfoMap *>	const_cast<ObTZInfoMap *>(tz_info->get_tz_info_map())->revert_tz_info_pos(target_tz_pos);
+src/sql/engine/expr/ob_expr_convert_tz.cpp	246	ObExprConvertTZ::find_time_zone_pos	const_cast<ObTZInfoMap *>	if (OB_ISNULL(tz_info_map = const_cast<ObTZInfoMap *>(tz_info.get_tz_info_map()))) {
+src/sql/engine/expr/ob_expr_convert_tz.cpp	262	ObExprConvertTZ::find_time_zone_pos	const_cast<ObTZInfoMap *>	if (OB_ISNULL(tz_info_map = const_cast<ObTZInfoMap *>(tz_info.get_tz_info_map()))) {
+src/sql/engine/expr/ob_expr_convert_tz.h	41	ObExprConvertTZ::ConvertTZInfoWrap::get_tz_info_pos	const_cast<ObTimeZoneInfoPos&>	ObTimeZoneInfoPos& get_tz_info_pos() const { return const_cast<ObTimeZoneInfoPos&>(tz_info_pos_); }
+src/sql/engine/expr/ob_expr_crc32.cpp	55	calc_crc32_inner	const_cast<char*>	unsigned char* buf = reinterpret_cast<unsigned char*>(const_cast<char*>(str_val.ptr()));
+src/sql/engine/expr/ob_expr_div.cpp	622	ObDecintDivWrap::datum_op	const_cast<typename Base::RES_RAW_TYPE *>	*const_cast<typename Base::RES_RAW_TYPE *>(
+src/sql/engine/expr/ob_expr_element_at.cpp	56	ObExprElementAt::calc_result_type2	const_cast<ObSQLSessionInfo *>	if (OB_ISNULL(session = const_cast<ObSQLSessionInfo *>(type_ctx.get_session()))) {
+src/sql/engine/expr/ob_expr_embedded_vec.cpp	49	ObExprEmbeddedVec::calc_result_typeN	const_cast<ObSQLSessionInfo *>	ObSQLSessionInfo *session = const_cast<ObSQLSessionInfo *>(type_ctx.get_session());
+src/sql/engine/expr/ob_expr_frame_info.cpp	308	OB_DEF_SERIALIZE(ObExprFrameInfo)	const_cast<ObArray<ObExpr> *>	ObExpr::get_serialize_array() = const_cast<ObArray<ObExpr> *>(&rt_exprs_);
+src/sql/engine/expr/ob_expr_frame_info.cpp	338	OB_DEF_DESERIALIZE(ObExprFrameInfo)	const_cast<ObArray<ObExpr> &>	ObIArray<ObExpr> &exprs = const_cast<ObArray<ObExpr> &>(rt_exprs_);
+src/sql/engine/expr/ob_expr_frame_info.cpp	374	OB_DEF_SERIALIZE_SIZE(ObExprFrameInfo)	const_cast<ObArray<ObExpr> &>	ObIArray<ObExpr> &exprs = const_cast<ObArray<ObExpr> &>(rt_exprs_);
+src/sql/engine/expr/ob_expr_func_dump.cpp	232	ObExprFuncDump::eval_dump	const_cast<char *>	ObString src_str(0, (int32_t)strlen(nmb_str), const_cast<char *>(nmb_str));
+src/sql/engine/expr/ob_expr_ifnull.cpp	62	ObExprIfNull::calc_result_type2	const_cast<ObSQLSessionInfo *>	ObSQLSessionInfo *sess = const_cast<ObSQLSessionInfo *>(type_ctx.get_session());
+src/sql/engine/expr/ob_expr_in.cpp	190	ObExprInHashMap::set_refactored	const_cast<ObArray<Row<T>> *>	if (OB_ISNULL(arr_ptr = const_cast<ObArray<Row<T>> *> (map_.get(tmp_row_key)))) {
+src/sql/engine/expr/ob_expr_in.cpp	194	ObExprInHashMap::set_refactored	const_cast<ObArray<Row<T>> *>	arr_ptr = const_cast<ObArray<Row<T>> *> (map_.get(tmp_row_key));
+src/sql/engine/expr/ob_expr_in.cpp	1566	ObExprInOrNotIn::setup_row	const_cast<ExprFixedArray &>	row = &const_cast<ExprFixedArray &>(iter->get_output()).at(0);
+src/sql/engine/expr/ob_expr_in.cpp	1646	ObExprInOrNotIn::build_hash_set	C-style cast (void *) drops const from expr	in_ctx->cmp_functions_[i] = (void *)(expr.args_[1]->args_[i]->basic_funcs_->null_first_cmp_);
+src/sql/engine/expr/ob_expr_in.cpp	1660	ObExprInOrNotIn::build_hash_set	C-style cast (void *) drops const from expr	in_ctx->cmp_functions_[i] = (void *)(expr.args_[1]->args_[i]->basic_funcs_->null_first_cmp_);
+src/sql/engine/expr/ob_expr_json_func_helper.cpp	442	ObJsonExprHelper::cast_to_res	const_cast<ObObj*>	(const_cast<ObObj*>(res_obj))->set_null();
+src/sql/engine/expr/ob_expr_json_func_helper.cpp	444	ObJsonExprHelper::cast_to_res	const_cast<ObObj*>	(const_cast<ObObj*>(res_obj))->set_common_value(ObString(trunc_len_byte, str));
+src/sql/engine/expr/ob_expr_json_func_helper.cpp	449	ObJsonExprHelper::cast_to_res	const_cast<ObObj *>	} else if (OB_FAIL(ObSPIService::spi_pad_char_or_varchar(session, obj_type, out_acc, &allocator, const_cast<ObObj *>(res_obj)))) {
+src/sql/engine/expr/ob_expr_json_object.cpp	52	ObExprJsonObject::calc_result_typeN	const_cast<ObSQLSessionInfo *>	ObSQLSessionInfo *session = const_cast<ObSQLSessionInfo *>(type_ctx.get_session());
+src/sql/engine/expr/ob_expr_json_schema_validation_report.cpp	31	ObJsonSchemaReportItem	const_cast<char*>	static constexpr char* RESULT = const_cast<char*>("valid");
+src/sql/engine/expr/ob_expr_json_schema_validation_report.cpp	32	ObJsonSchemaReportItem	const_cast<char*>	static constexpr char* REASON = const_cast<char*>("reason");
+src/sql/engine/expr/ob_expr_json_schema_validation_report.cpp	33	ObJsonSchemaReportItem	const_cast<char*>	static constexpr char* REASON_BEGIN = const_cast<char*>("The JSON document location '");
+src/sql/engine/expr/ob_expr_json_schema_validation_report.cpp	34	ObJsonSchemaReportItem	const_cast<char*>	static constexpr char* REASON_MID = const_cast<char*>("' failed requirement '");
+src/sql/engine/expr/ob_expr_json_schema_validation_report.cpp	35	ObJsonSchemaReportItem	const_cast<char*>	static constexpr char* REASON_END = const_cast<char*>("' at JSON Schema location '");
+src/sql/engine/expr/ob_expr_json_schema_validation_report.cpp	36	ObJsonSchemaReportItem	const_cast<char*>	static constexpr char* SCHEMA_LOCATION = const_cast<char*>("schema-location");
+src/sql/engine/expr/ob_expr_json_schema_validation_report.cpp	37	ObJsonSchemaReportItem	const_cast<char*>	static constexpr char* DOC_LOCATION = const_cast<char*>("document-location");
+src/sql/engine/expr/ob_expr_json_schema_validation_report.cpp	38	ObJsonSchemaReportItem	const_cast<char*>	static constexpr char* FAILED_KEYWORD = const_cast<char*>("schema-failed-keyword");
+src/sql/engine/expr/ob_expr_json_utils.cpp	652	ObJsonUtil::wrapper_set_decimal_int	const_cast<common::ObDecimalInt *>	res.set_decimal_int(int_bytes, scale, const_cast<common::ObDecimalInt *>(decint));
+src/sql/engine/expr/ob_expr_left.cpp	69	ObExprLeft::calc_result_type2	const_cast<ObSQLSessionInfo *>	ObSQLSessionInfo *session = const_cast<ObSQLSessionInfo *>(type_ctx.get_session());
+src/sql/engine/expr/ob_expr_lower.cpp	201	calc_common_inner	const_cast<char*>	char *src_str = (buf_len != m_text.length()) ? const_cast<char*>(m_text.ptr()) : buf;
+src/sql/engine/expr/ob_expr_lrpad.cpp	75	ObExprBaseLRpad::calc_type_length_mysql	const_cast<const char *> (adds const only)	const_cast<const char *>(str_text.ptr()),
+src/sql/engine/expr/ob_expr_lrpad.cpp	325	ObExprBaseLRpad::get_padding_info_mysql	const_cast<const char *> (adds const only)	int64_t text_len = ObCharset::strlen_char(cs, const_cast<const char *>(str_text.ptr()), str_text.length());
+src/sql/engine/expr/ob_expr_lrpad.cpp	326	ObExprBaseLRpad::get_padding_info_mysql	const_cast<const char *> (adds const only)	int64_t pad_len = ObCharset::strlen_char(cs, const_cast<const char *>(str_padtext.ptr()), str_padtext.length());
+src/sql/engine/expr/ob_expr_lrpad.cpp	337	ObExprBaseLRpad::get_padding_info_mysql	const_cast<const char *> (adds const only)	prefix_size = ObCharset::charpos(cs, const_cast<const char *>(str_padtext.ptr()),
+src/sql/engine/expr/ob_expr_lrpad.cpp	396	ObExprBaseLRpad::calc_mysql_inner	const_cast<const char *> (adds const only)	const_cast<const char *>(str_text.ptr()), str_text.length()))) {
+src/sql/engine/expr/ob_expr_map.cpp	54	ObExprMap::calc_result_typeN	const_cast<ObSQLSessionInfo *>	ObSQLSessionInfo *session = const_cast<ObSQLSessionInfo *>(type_ctx.get_session());
+src/sql/engine/expr/ob_expr_map_keys.cpp	58	ObExprMapComponents::calc_map_components_result_type	const_cast<ObSQLSessionInfo *>	if (OB_ISNULL(session = const_cast<ObSQLSessionInfo *>(type_ctx.get_session()))) {
+src/sql/engine/expr/ob_expr_mid.h	33	ObExprMid::ObExprMid	const_cast<ObExprOperatorType*>	*(const_cast<ObExprOperatorType*>(&type_)) = T_FUN_SYS_MID;
+src/sql/engine/expr/ob_expr_mid.h	34	ObExprMid::ObExprMid	const_cast<const char**> (adds const only)	*(const_cast<const char**>(&name_)) = N_MID;
+src/sql/engine/expr/ob_expr_minus.cpp	68	ObExprMinus::calc_result_type2	const_cast<ObSQLSessionInfo *>	ObSQLSessionInfo *session = const_cast<ObSQLSessionInfo *>(type_ctx.get_session());
+src/sql/engine/expr/ob_expr_minus.cpp	824	ObExprMinus::minus_number_number_batch	const_cast<uint32_t *>	uint32_t *res_digits = const_cast<uint32_t *> (results.at(i)->get_number_digits());
+src/sql/engine/expr/ob_expr_minus.cpp	825	ObExprMinus::minus_number_number_batch	const_cast<ObNumber::Desc &>	ObNumber::Desc &desc_buf = const_cast<ObNumber::Desc &> (results.at(i)->get_number_desc());
+src/sql/engine/expr/ob_expr_mul.cpp	627	ObExprMul::mul_number_batch	const_cast<uint32_t *>	uint32_t *res_digits = const_cast<uint32_t *> (results.at(i)->get_number_digits());
+src/sql/engine/expr/ob_expr_mul.cpp	628	ObExprMul::mul_number_batch	const_cast<ObNumber::Desc &>	ObNumber::Desc &desc_buf = const_cast<ObNumber::Desc &> (results.at(i)->get_number_desc());
+src/sql/engine/expr/ob_expr_mysql_proc_info.cpp	498	ObExprMysqlProcInfo::get_body_info	C-style cast (ObString&) drops const from routine_info	ObString &value_str = (ObString&)routine_info->get_routine_body();
+src/sql/engine/expr/ob_expr_obj_access.cpp	426	ObExprObjAccess::ExtraInfo::calc	const_cast<int64_t *>	int64_t *param_ptr = const_cast<int64_t *>(param_array.head());

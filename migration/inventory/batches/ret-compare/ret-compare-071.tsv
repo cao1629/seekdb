@@ -1,0 +1,93 @@
+file	line	symbol	construct	text
+src/storage/tx/ob_tx_replay_executor.cpp	86	ObTxReplayExecutor::do_replay_	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/tx/ob_tx_replay_executor.cpp	219	ObTxReplayExecutor::try_get_tx_ctx_	ret != OB_TRANS_CTX_NOT_EXIST	if (OB_FAIL(ls_tx_srv_->get_tx_ctx(tx_id, true, ctx_)) && OB_TRANS_CTX_NOT_EXIST != ret) {
+src/storage/tx/ob_tx_replay_executor.cpp	221	ObTxReplayExecutor::try_get_tx_ctx_	ret == OB_TRANS_CTX_NOT_EXIST	} else if (OB_TRANS_CTX_NOT_EXIST == ret) {
+src/storage/tx/ob_tx_replay_executor.cpp	474	ObTxReplayExecutor::replay_redo_in_memtable_	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/tx/ob_tx_replay_executor.cpp	485	ObTxReplayExecutor::replay_redo_in_memtable_	ret == OB_MINOR_FREEZE_NOT_ALLOW	if (OB_MINOR_FREEZE_NOT_ALLOW == ret) {
+src/storage/tx/ob_tx_replay_executor.cpp	515	ObTxReplayExecutor::replay_redo_in_memtable_	ret == OB_ITER_END	ret = (OB_ITER_END == ret) ? OB_SUCCESS : ret;
+src/storage/tx/ob_tx_replay_executor.cpp	542	ObTxReplayExecutor::replay_one_row_in_memtable_	ret == OB_OBSOLETE_CLOG_NEED_SKIP	if (OB_OBSOLETE_CLOG_NEED_SKIP == ret) {
+src/storage/tx/ob_tx_replay_executor.cpp	546	ObTxReplayExecutor::replay_one_row_in_memtable_	ret == OB_EAGAIN	} else if (OB_EAGAIN == ret) {
+src/storage/tx/ob_tx_replay_executor.cpp	554	ObTxReplayExecutor::replay_one_row_in_memtable_	ret == OB_NO_NEED_UPDATE	if (OB_NO_NEED_UPDATE == ret) {
+src/storage/tx/ob_tx_replay_executor.cpp	560	ObTxReplayExecutor::replay_one_row_in_memtable_	ret == OB_EAGAIN	} else if (OB_EAGAIN == ret) {
+src/storage/tx/ob_tx_replay_executor.cpp	581	ObTxReplayExecutor::replay_one_row_in_memtable_	ret != OB_ITER_END	if (OB_FAIL(replay_row_(storeCtx, tablet, mmi_ptr_)) && OB_ITER_END != ret) {
+src/storage/tx/ob_tx_replay_executor.cpp	582	ObTxReplayExecutor::replay_one_row_in_memtable_	ret != OB_NO_NEED_UPDATE; ret != OB_MINOR_FREEZE_NOT_ALLOW	if (OB_NO_NEED_UPDATE != ret && OB_MINOR_FREEZE_NOT_ALLOW != ret) {
+src/storage/tx/ob_tx_replay_executor.cpp	585	ObTxReplayExecutor::replay_one_row_in_memtable_	ret == OB_NO_NEED_UPDATE	} else if (OB_NO_NEED_UPDATE == ret) {
+src/storage/tx/ob_tx_replay_executor.cpp	596	ObTxReplayExecutor::replay_one_row_in_memtable_	ret != OB_ITER_END	if (OB_FAIL(replay_lock_(storeCtx, tablet, mmi_ptr_)) && OB_ITER_END != ret) {
+src/storage/tx/ob_tx_replay_executor.cpp	623	ObTxReplayExecutor::prepare_memtable_replay_	ret != OB_NO_NEED_UPDATE	if (OB_NO_NEED_UPDATE != ret) {
+src/storage/tx/ob_tx_replay_executor.cpp	646	ObTxReplayExecutor::replay_row_	ret == OB_NO_NEED_UPDATE	if (OB_NO_NEED_UPDATE == ret) {
+src/storage/tx/ob_tx_replay_executor.cpp	650	ObTxReplayExecutor::replay_row_	ret == OB_TABLET_NOT_EXIST	} else if (OB_TABLET_NOT_EXIST == ret) {
+src/storage/tx/ob_tx_replay_executor.cpp	698	ObTxReplayExecutor::rewrite_replay_retry_code_	other variable ret_code == OB_MINOR_FREEZE_NOT_ALLOW; other variable ret_code == OB_SCN_OUT_OF_BOUND	if (ret_code == OB_MINOR_FREEZE_NOT_ALLOW || ret_code == OB_SCN_OUT_OF_BOUND ||
+src/storage/tx/ob_tx_replay_executor.cpp	699	ObTxReplayExecutor::rewrite_replay_retry_code_	other variable ret_code == OB_ALLOCATE_MEMORY_FAILED	ret_code == OB_ALLOCATE_MEMORY_FAILED) {
+src/storage/tx/ob_tx_timestamp_waiter.cpp	149	ObTxTimestampWaiter::wait_gts_elapse	ret == OB_EAGAIN	if (OB_EAGAIN == ret) {
+src/storage/tx/ob_tx_timestamp_waiter.cpp	185	ObTxTimestampWaiter::run1	ret != OB_EAGAIN	if (OB_EAGAIN != ret) {
+src/storage/tx/ob_tx_timestamp_waiter.cpp	221	ObTxTimestampWaiter::dispatch_ready_tasks_	ret != OB_EAGAIN; ret != OB_IN_STOP_STATE	if (OB_EAGAIN != ret && OB_IN_STOP_STATE != ret) {
+src/storage/tx/ob_tx_timestamp_waiter.cpp	238	ObTxTimestampWaiter::handle_callback_	ret == OB_EAGAIN	if (OB_EAGAIN == ret) {
+src/storage/tx/ob_unique_id_service.h	48	ObUniqueIDService::gen_unique_id	ret == OB_GTI_NOT_READY	} else if (OB_GTI_NOT_READY == ret) {
+src/storage/tx/ob_unique_id_service.h	58	ObUniqueIDService::gen_unique_id	ret == OB_GTI_NOT_READY	} while (OB_GTI_NOT_READY == ret);
+src/storage/tx_storage/ob_access_service.cpp	370	ObAccessService::table_scan	ret != OB_TABLET_NOT_EXIST	if (OB_TABLET_NOT_EXIST != ret) {
+src/storage/tx_storage/ob_access_service.cpp	375	ObAccessService::table_scan	ret != OB_TABLET_NOT_EXIST	if (OB_TABLET_NOT_EXIST != ret) {
+src/storage/tx_storage/ob_access_service.cpp	416	ObAccessService::table_rescan	ret != OB_TABLET_NOT_EXIST	if (OB_TABLET_NOT_EXIST != ret) {
+src/storage/tx_storage/ob_access_service.cpp	421	ObAccessService::table_rescan	ret != OB_TABLET_NOT_EXIST	if (OB_TABLET_NOT_EXIST != ret) {
+src/storage/tx_storage/ob_access_service.cpp	613	ObAccessService::check_read_allowed_	ret == OB_SNAPSHOT_DISCARDED	if (OB_SNAPSHOT_DISCARDED == ret && scan_param.fb_snapshot_.is_valid()) {
+src/storage/tx_storage/ob_access_service.cpp	651	ObAccessService::check_write_allowed_	ret == OB_ERR_UNEXPECTED	if (OB_ERR_UNEXPECTED == ret) {
+src/storage/tx_storage/ob_access_service.cpp	1164	ObAccessService::estimate_row_count	ret != OB_TABLET_NOT_EXIST	if (OB_TABLET_NOT_EXIST != ret) {
+src/storage/tx_storage/ob_access_service.cpp	1225	ObAccessService::get_latest_tablet_row_count_delta	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/storage/tx_storage/ob_access_service.cpp	1499	ObAccessService::do_table_scan_	ret != OB_TABLET_NOT_EXIST	if (OB_TABLET_NOT_EXIST != ret) {
+src/storage/tx_storage/ob_access_service.cpp	1504	ObAccessService::do_table_scan_	ret != OB_TABLET_NOT_EXIST	if (OB_TABLET_NOT_EXIST != ret) {
+src/storage/tx_storage/ob_access_service.cpp	1537	ObAccessService::scan_block_stat	ret != OB_TABLET_NOT_EXIST	if (OB_UNLIKELY(OB_TABLET_NOT_EXIST != ret)) {
+src/storage/tx_storage/ob_access_service.cpp	1541	ObAccessService::scan_block_stat	ret != OB_TABLET_NOT_EXIST	if (OB_UNLIKELY(OB_TABLET_NOT_EXIST != ret)) {
+src/storage/tx_storage/ob_empty_shell_task.cpp	149	ObTabletEmptyShellHandler::get_empty_shell_tablet_ids	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/tx_storage/ob_empty_shell_task.cpp	212	ObTabletEmptyShellHandler::check_candidate_tablet_	ret == OB_EMPTY_RESULT	if (OB_EMPTY_RESULT == ret) {
+src/storage/tx_storage/ob_log_storage_adapter.cpp	92	ObLogStorageAdapter::replay	ret == OB_EAGAIN	if (OB_EAGAIN == ret) {
+src/storage/tx_storage/ob_ls_service.cpp	95	ObLSService::stop	ret == OB_LS_NOT_EXIST	if (OB_LS_NOT_EXIST == ret) {
+src/storage/tx_storage/ob_ls_service.cpp	334	ObLSService::gc_ls_after_replay_slog	ret == OB_LS_NOT_EXIST	if (OB_LS_NOT_EXIST == ret) {
+src/storage/tx_storage/ob_ls_service.cpp	375	ObLSService::online_ls	ret == OB_LS_NOT_EXIST	if (OB_LS_NOT_EXIST == ret) {
+src/storage/tx_storage/ob_ls_service.cpp	411	ObLSService::replay_create_ls_	ret != OB_LS_NOT_EXIST	} else if (OB_LS_NOT_EXIST != ret) {
+src/storage/tx_storage/ob_ls_service.cpp	464	ObLSService::fence_local_transactions	ret == OB_EAGAIN	if (OB_EAGAIN == ret && ObTimeUtility::current_time() < deadline_us) {
+src/storage/tx_storage/ob_ls_service.cpp	467	ObLSService::fence_local_transactions	ret == OB_EAGAIN	} else if (OB_EAGAIN == ret) {
+src/storage/tx_storage/ob_memory_printer.cpp	74	ObMemoryPrinter::print_memory_usage	ret == OB_SIZE_OVERFLOW	if (OB_SIZE_OVERFLOW == ret) {
+src/storage/tx_storage/ob_memstore_freezer.cpp	260	ObMemstoreFreezer::ls_freeze_data_	ret == OB_EAGAIN	need_retry = (ObClockGenerator::getClock() < abs_timeout_ts) && (OB_EAGAIN == ret);
+src/storage/tx_storage/ob_memstore_freezer.cpp	269	ObMemstoreFreezer::ls_freeze_data_	ret == OB_NOT_RUNNING	if (OB_NOT_RUNNING == ret) {
+src/storage/tx_storage/ob_memstore_freezer.cpp	299	ObMemstoreFreezer::ls_freeze_all_unit_	ret == OB_EAGAIN	need_retry = need_retry && (OB_EAGAIN == ret);
+src/storage/tx_storage/ob_memstore_freezer.cpp	308	ObMemstoreFreezer::ls_freeze_all_unit_	ret == OB_NOT_RUNNING	if (OB_NOT_RUNNING == ret) {
+src/storage/tx_storage/ob_memstore_freezer.cpp	402	ObMemstoreFreezer::tablet_freeze	ret == OB_NOT_RUNNING	if (OB_NOT_RUNNING == ret) {
+src/storage/tx_storage/ob_tablet_gc_service.cpp	385	ObTabletGCHandler::check_tablet_need_gc_	ret == OB_EMPTY_RESULT	if (OB_EMPTY_RESULT == ret) {
+src/storage/tx_storage/ob_tablet_gc_service.cpp	445	ObTabletGCHandler::get_unpersist_tablet_ids	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/tx_storage/ob_tablet_gc_service.cpp	608	ObTabletGCHandler::gc_tablets	ret == OB_EAGAIN	if (OB_EAGAIN == ret) {
+src/storage/tx_table/ob_tx_ctx_memtable.cpp	247	ObTxCtxMemtable::flush	ret != OB_EAGAIN; ret != OB_SIZE_OVERFLOW	if (OB_EAGAIN != ret && OB_SIZE_OVERFLOW != ret) {
+src/storage/tx_table/ob_tx_ctx_table.cpp	299	ObTxCtxTable::check_with_tx_data	ret == OB_TRANS_CTX_NOT_EXIST	if (ret == OB_TRANS_CTX_NOT_EXIST) {
+src/storage/tx_table/ob_tx_data_cache.cpp	175	ObTxDataKVCache::get_row	ret != OB_ENTRY_NOT_EXIST	if (OB_UNLIKELY(OB_ENTRY_NOT_EXIST != ret)) {
+src/storage/tx_table/ob_tx_data_memtable.cpp	230	ObTxDataMemtable::get_tx_data	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/storage/tx_table/ob_tx_data_memtable.cpp	306	ObTxDataMemtable::construct_list_for_sort_	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/tx_table/ob_tx_data_memtable.cpp	393	ObTxDataMemtable::fill_in_cur_commit_versions_	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/tx_table/ob_tx_data_memtable.cpp	679	ObTxDataMemtable::get_split_ranges	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/storage/tx_table/ob_tx_data_memtable.cpp	912	ObTxDataMemtable::flush	ret != OB_EAGAIN; ret != OB_SIZE_OVERFLOW	if (OB_EAGAIN != ret && OB_SIZE_OVERFLOW != ret) {
+src/storage/tx_table/ob_tx_data_table.cpp	191	ObTxDataTable::offline	ret != OB_NOT_INIT	} else if (OB_FAIL(get_memtable_mgr_()->offline()) && OB_NOT_INIT != ret) {
+src/storage/tx_table/ob_tx_data_table.cpp	380	ObTxDataTable::check_with_tx_data	ret == OB_TRANS_CTX_NOT_EXIST	} else if (OB_TRANS_CTX_NOT_EXIST == ret && OB_SUCC(check_tx_data_in_sstable_(tx_id, fn, tx_data_guard, recycled_scn))) {
+src/storage/tx_table/ob_tx_data_table.cpp	403	ObTxDataTable::check_tx_data_in_memtable_	ret == OB_EAGAIN	if (OB_EAGAIN == ret) {
+src/storage/tx_table/ob_tx_data_table.cpp	409	ObTxDataTable::check_tx_data_in_memtable_	ret == OB_TRANS_CTX_NOT_EXIST	} else if (OB_TRANS_CTX_NOT_EXIST == ret) {
+src/storage/tx_table/ob_tx_data_table.cpp	430	ObTxDataTable::check_tx_data_with_cache_once_	ret != OB_EAGAIN	if (OB_EAGAIN != ret) {
+src/storage/tx_table/ob_tx_data_table.cpp	483	ObTxDataTable::get_tx_data_from_cache_	tmp_ret == OB_ENTRY_NOT_EXIST	} else if (OB_ENTRY_NOT_EXIST == tmp_ret) {
+src/storage/tx_table/ob_tx_data_table.cpp	562	ObTxDataTable::get_tx_data_in_memtables_cache_	tmp_ret == OB_ENTRY_NOT_EXIST	} else if (OB_ENTRY_NOT_EXIST == tmp_ret) {
+src/storage/tx_table/ob_tx_data_table.cpp	620	ObTxDataTable::get_tx_data_in_sstable_	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/tx_table/ob_tx_data_table.cpp	707	ObTxDataTable::self_freeze_task	ret == OB_NO_NEED_MERGE	if (OB_NO_NEED_MERGE == ret) {
+src/storage/tx_table/ob_tx_data_table.cpp	815	ObTxDataTable::DEBUG_calc_with_row_iter_	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/tx_table/ob_tx_data_table.cpp	838	ObTxDataTable::DEBUG_calc_with_row_iter_	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/tx_table/ob_tx_data_table.cpp	1070	ObTxDataTable::supplement_tx_op_if_exist	ret == OB_TRANS_CTX_NOT_EXIST	if (ret == OB_TRANS_CTX_NOT_EXIST) {
+src/storage/tx_table/ob_tx_data_table.cpp	1134	ObTxDataTable::dump_single_tx_data_2_text	ret == OB_TRANS_CTX_NOT_EXIST	} else if (OB_TRANS_CTX_NOT_EXIST == ret && OB_SUCC(dump_tx_data_in_sstable_2_text_(tx_id, fd))) {
+src/storage/tx_table/ob_tx_data_table.cpp	1236	ObTxDataTable::get_sstable_recycle_scn	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/tx_table/ob_tx_table.cpp	87	ObTxTable::offline_tx_ctx_table_	ret == OB_TABLET_NOT_EXIST	if (OB_TABLET_NOT_EXIST == ret) {
+src/storage/tx_table/ob_tx_table.cpp	494	ObTxTable::restore_tx_ctx_table_	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/tx_table/ob_tx_table.cpp	500	ObTxTable::restore_tx_ctx_table_	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/tx_table/ob_tx_table.cpp	567	ObTxTable::check_with_tx_data	tmp_ret != OB_TRANS_CTX_NOT_EXIST	if (OB_TRANS_CTX_NOT_EXIST != tmp_ret) {
+src/storage/tx_table/ob_tx_table.cpp	579	ObTxTable::check_with_tx_data	tmp_ret != OB_TRANS_CTX_NOT_EXIST	if (OB_TRANS_CTX_NOT_EXIST != tmp_ret) {
+src/storage/tx_table/ob_tx_table.cpp	590	ObTxTable::check_with_tx_data	ret != OB_TRANS_CTX_NOT_EXIST	if (OB_TRANS_CTX_NOT_EXIST != ret) {
+src/storage/tx_table/ob_tx_table.cpp	596	ObTxTable::check_with_tx_data	ret == OB_TRANS_CTX_NOT_EXIST	if (OB_SUCC(ret) || OB_TRANS_CTX_NOT_EXIST == ret) {
+src/storage/tx_table/ob_tx_table.cpp	607	ObTxTable::check_tx_data_in_mini_cache_	ret == OB_TRANS_CTX_NOT_EXIST	if (OB_LIKELY(OB_TRANS_CTX_NOT_EXIST == ret)) {
+src/storage/tx_table/ob_tx_table.cpp	626	ObTxTable::check_tx_data_in_kv_cache_	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/storage/tx_table/ob_tx_table.cpp	662	ObTxTable::check_tx_data_in_tables_	ret == OB_TRANS_CTX_NOT_EXIST	} else if (OB_TRANS_CTX_NOT_EXIST == ret) {
+src/storage/tx_table/ob_tx_table.cpp	669	ObTxTable::check_tx_data_in_tables_	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/tx_table/ob_tx_table.cpp	787	ObTxTable::try_get_tx_state	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/tx_table/ob_tx_table.cpp	991	ObTxTable::cleanout_tx_node	ret == OB_TRANS_CTX_NOT_EXIST	if (OB_TRANS_CTX_NOT_EXIST == ret) {
+src/storage/tx_table/ob_tx_table.cpp	1046	ObTxTable::dump_single_tx_data_2_text	ret == OB_TRANS_CTX_NOT_EXIST	} else if (OB_TRANS_CTX_NOT_EXIST == ret) {
+src/storage/tx_table/ob_tx_table_guards.cpp	155	ObTxTableGuards::check_with_tx_data	ret != OB_TRANS_CTX_NOT_EXIST	if (OB_TRANS_CTX_NOT_EXIST != ret) {

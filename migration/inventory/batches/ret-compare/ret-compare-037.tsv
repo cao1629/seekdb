@@ -1,0 +1,89 @@
+file	line	symbol	construct	text
+src/sql/engine/px/ob_px_util.h	915	ObPxErrorUtil::update_qc_error_code	other variable current_error_code == OB_ERR_SIGNALED_IN_PARALLEL_QUERY_SERVER	OB_ERR_SIGNALED_IN_PARALLEL_QUERY_SERVER == current_error_code ||
+src/sql/engine/px/ob_px_util.h	916	ObPxErrorUtil::update_qc_error_code	other variable current_error_code == OB_GOT_SIGNAL_ABORTING	OB_GOT_SIGNAL_ABORTING == current_error_code) &&
+src/sql/engine/px/ob_px_util.h	943	ObPxErrorUtil::update_sqc_error_code	other variable current_error_code == OB_ERR_SIGNALED_IN_PARALLEL_QUERY_SERVER	((OB_ERR_SIGNALED_IN_PARALLEL_QUERY_SERVER == current_error_code ||
+src/sql/engine/px/ob_px_util.h	944	ObPxErrorUtil::update_sqc_error_code	other variable current_error_code == OB_GOT_SIGNAL_ABORTING	OB_GOT_SIGNAL_ABORTING == current_error_code) &&
+src/sql/engine/px/ob_px_util.h	962	ObPxErrorUtil::update_error_code	other variable current_error_code == OB_ERR_SIGNALED_IN_PARALLEL_QUERY_SERVER	((OB_ERR_SIGNALED_IN_PARALLEL_QUERY_SERVER == current_error_code ||
+src/sql/engine/px/ob_px_util.h	963	ObPxErrorUtil::update_error_code	other variable current_error_code == OB_GOT_SIGNAL_ABORTING	OB_GOT_SIGNAL_ABORTING == current_error_code) &&
+src/sql/engine/px/ob_slice_calc.cpp	202	ObRepartSliceIdxCalc::get_sub_part_id_by_one_level_first_ch_map	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/sql/engine/px/ob_slice_calc.cpp	366	ObSlaveMapPkeyRandomIdxCalc::get_slice_indexes_inner	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/sql/engine/px/ob_slice_calc.cpp	403	ObSlaveMapPkeyRandomIdxCalc::get_slice_idx_batch_inner	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/sql/engine/px/ob_slice_calc.cpp	455	ObAffinitizedRepartSliceIdxCalc::get_slice_indexes_inner	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret && unmatch_row_dist_method_ == ObPQDistributeMethod::DROP) {
+src/sql/engine/px/ob_slice_calc.cpp	458	ObAffinitizedRepartSliceIdxCalc::get_slice_indexes_inner	ret == OB_HASH_NOT_EXIST	} else if (OB_HASH_NOT_EXIST == ret && unmatch_row_dist_method_ == ObPQDistributeMethod::RANDOM) {
+src/sql/engine/px/ob_slice_calc.cpp	463	ObAffinitizedRepartSliceIdxCalc::get_slice_indexes_inner	ret == OB_HASH_NOT_EXIST	} else if (OB_HASH_NOT_EXIST == ret && unmatch_row_dist_method_ == ObPQDistributeMethod::HASH) {
+src/sql/engine/px/ob_slice_calc.cpp	506	ObAffinitizedRepartSliceIdxCalc::get_slice_idx_batch_inner	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret && unmatch_row_dist_method_ == ObPQDistributeMethod::DROP) {
+src/sql/engine/px/ob_slice_calc.cpp	509	ObAffinitizedRepartSliceIdxCalc::get_slice_idx_batch_inner	ret == OB_HASH_NOT_EXIST	} else if (OB_HASH_NOT_EXIST == ret
+src/sql/engine/px/ob_slice_calc.cpp	515	ObAffinitizedRepartSliceIdxCalc::get_slice_idx_batch_inner	ret == OB_HASH_NOT_EXIST	} else if (OB_HASH_NOT_EXIST == ret
+src/sql/engine/px/ob_slice_calc.cpp	1192	ObSlaveMapPkeyHashIdxCalc::get_slice_indexes_inner	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/sql/engine/px/ob_slice_calc.cpp	1509	ObHybridHashSliceIdCalcBase::check_if_popular_value	ret (assigned in the comparison) == OB_HASH_EXIST	if (OB_HASH_EXIST == (ret = popular_values_map_.exist_refactored(hash_val))) {
+src/sql/engine/px/ob_slice_calc.cpp	1512	ObHybridHashSliceIdCalcBase::check_if_popular_value	ret == OB_HASH_NOT_EXIST	} else if (OB_HASH_NOT_EXIST == ret) {
+src/sql/engine/px/p2p_datahub/ob_p2p_dh_mgr.cpp	192	ObP2PDatahubManager::publish_local_copy	ret == OB_HASH_EXIST	if (OB_HASH_EXIST == ret) {
+src/sql/engine/px/p2p_datahub/ob_p2p_dh_mgr.cpp	209	ObP2PDatahubManager::publish_local_msg	ret == OB_HASH_EXIST	if (OB_HASH_EXIST == ret) {
+src/sql/engine/px/p2p_datahub/ob_runtime_filter_msg.cpp	1125	ObRFInFilterMsg::insert_node	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/sql/engine/px/p2p_datahub/ob_runtime_filter_msg.cpp	1133	ObRFInFilterMsg::insert_node	ret == OB_HASH_EXIST	} else if (OB_HASH_EXIST == ret) {
+src/sql/engine/px/p2p_datahub/ob_runtime_filter_msg.cpp	1301	ObRFInFilterMsg::might_contain	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/sql/engine/px/p2p_datahub/ob_runtime_filter_msg.cpp	1304	ObRFInFilterMsg::might_contain	ret == OB_HASH_EXIST	} else if (OB_HASH_EXIST == ret) {
+src/sql/engine/px/p2p_datahub/ob_runtime_filter_msg.cpp	1373	ObRFInFilterMsg::do_might_contain_batch	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/sql/engine/px/p2p_datahub/ob_runtime_filter_msg.cpp	1377	ObRFInFilterMsg::do_might_contain_batch	ret == OB_HASH_EXIST	} else if (OB_HASH_EXIST == ret) {
+src/sql/engine/px/p2p_datahub/ob_runtime_filter_msg.cpp	1555	ObRFInFilterMsg::process_query_ranges_with_deduplicate	ret != OB_HASH_EXIST	if (ret != OB_HASH_EXIST) {
+src/sql/engine/recursive_cte/ob_fake_cte_table_op.cpp	99	ObFakeCTETableOp::get_next_single_batch	ret == OB_ITER_END	if (ret == OB_ITER_END) {
+src/sql/engine/recursive_cte/ob_recursive_inner_data_op.cpp	46	ObRecursiveInnerDataOp::get_all_data_from_left_child	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/recursive_cte/ob_recursive_inner_data_op.cpp	62	ObRecursiveInnerDataOp::get_all_data_from_left_child	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/recursive_cte/ob_recursive_inner_data_op.cpp	115	ObRecursiveInnerDataOp::get_all_data_from_right_child	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/recursive_cte/ob_recursive_inner_data_op.cpp	125	ObRecursiveInnerDataOp::get_all_data_from_right_child	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/recursive_cte/ob_recursive_inner_data_op.cpp	211	ObRecursiveInnerDataOp::try_format_output_batch	ret == OB_ITER_END	if (OB_ITER_END == ret && read_rows > 0) {
+src/sql/engine/recursive_cte/ob_recursive_inner_data_op.cpp	245	ObRecursiveInnerDataOp::breadth_first_union	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/recursive_cte/ob_recursive_inner_data_op.cpp	265	ObRecursiveInnerDataOp::start_new_level	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/recursive_cte/ob_recursive_inner_data_op.cpp	296	ObRecursiveInnerDataOp::breadth_first_bulk_union	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/recursive_cte/ob_recursive_inner_data_op.cpp	313	ObRecursiveInnerDataOp::try_get_left_rows	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/recursive_cte/ob_recursive_inner_data_op.cpp	318	ObRecursiveInnerDataOp::try_get_left_rows	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/recursive_cte/ob_recursive_inner_data_op.cpp	376	ObRecursiveInnerDataOp::try_get_right_rows	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/sql/engine/recursive_cte/ob_recursive_inner_data_op.cpp	381	ObRecursiveInnerDataOp::try_get_right_rows	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/sql/engine/recursive_cte/ob_recursive_inner_data_op.cpp	404	ObRecursiveInnerDataOp::get_next_row	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/sql/engine/recursive_cte/ob_recursive_inner_data_op.cpp	414	ObRecursiveInnerDataOp::get_next_row	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/sql/engine/recursive_cte/ob_recursive_inner_data_op.cpp	451	ObRecursiveInnerDataOp::get_next_batch	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/sql/engine/recursive_cte/ob_recursive_inner_data_op.cpp	461	ObRecursiveInnerDataOp::get_next_batch	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/sql/engine/recursive_cte/ob_recursive_inner_data_op.cpp	480	ObRecursiveInnerDataOp::get_next_batch	ret == OB_ITER_END	} else if (ret == OB_ITER_END) {
+src/sql/engine/recursive_cte/ob_recursive_union_all_op.cpp	100	ObRecursiveUnionAllOp::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/set/ob_hash_except_op.cpp	114	ObHashExceptOp::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/set/ob_hash_except_op.cpp	128	ObHashExceptOp::batch_process_right	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/set/ob_hash_except_op.cpp	159	ObHashExceptOp::batch_process_right	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/set/ob_hash_except_op.cpp	198	ObHashExceptOp::batch_process_right_vectorize	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/set/ob_hash_except_op.cpp	216	ObHashExceptOp::get_next_row_from_hashtable	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/set/ob_hash_except_op.cpp	230	ObHashExceptOp::get_next_row_from_hashtable	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/set/ob_hash_except_op.cpp	259	ObHashExceptOp::get_next_batch_from_hashtable	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/set/ob_hash_except_op.cpp	275	ObHashExceptOp::get_next_batch_from_hashtable	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/set/ob_hash_except_op.cpp	319	ObHashExceptOp::inner_get_next_batch	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/set/ob_hash_except_op.cpp	322	ObHashExceptOp::inner_get_next_batch	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/set/ob_hash_intersect_op.cpp	107	ObHashIntersectOp::inner_get_next_row	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/sql/engine/set/ob_hash_intersect_op.cpp	118	ObHashIntersectOp::inner_get_next_row	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/set/ob_hash_intersect_op.cpp	133	ObHashIntersectOp::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/set/ob_hash_intersect_op.cpp	201	ObHashIntersectOp::inner_get_next_batch	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/set/ob_hash_intersect_op.cpp	207	ObHashIntersectOp::inner_get_next_batch	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/set/ob_hash_intersect_op.cpp	221	ObHashIntersectOp::inner_get_next_batch	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/set/ob_hash_intersect_op.cpp	239	ObHashIntersectOp::inner_get_next_batch	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/set/ob_hash_set_op.cpp	106	ObHashSetOp::is_left_has_row	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/set/ob_hash_set_op.cpp	123	ObHashSetOp::get_left_row	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/sql/engine/set/ob_hash_set_op.cpp	148	ObHashSetOp::get_right_row	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/sql/engine/set/ob_hash_set_op.cpp	191	ObHashSetOp::build_hash_table_from_left	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/set/ob_hash_set_op.cpp	242	ObHashSetOp::build_hash_table_from_left_batch	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/set/ob_hash_union_op.cpp	78	ObHashUnionOp::get_child_next_row	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/set/ob_hash_union_op.cpp	125	ObHashUnionOp::inner_get_next_row	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/set/ob_hash_union_op.cpp	140	ObHashUnionOp::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/set/ob_hash_union_op.cpp	199	ObHashUnionOp::inner_get_next_batch	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/set/ob_hash_union_op.cpp	217	ObHashUnionOp::inner_get_next_batch	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/set/ob_hash_union_op.cpp	249	ObHashUnionOp::inner_get_next_batch	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/set/ob_merge_except_op.cpp	99	ObMergeExceptOp::inner_get_next_row	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/set/ob_merge_except_op.cpp	111	ObMergeExceptOp::inner_get_next_row	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/set/ob_merge_except_op.cpp	174	ObMergeExceptOp::inner_get_next_batch	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/set/ob_merge_except_op.cpp	189	ObMergeExceptOp::inner_get_next_batch	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/set/ob_merge_except_op.cpp	200	ObMergeExceptOp::inner_get_next_batch	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/set/ob_merge_except_op.cpp	213	ObMergeExceptOp::inner_get_next_batch	ret == OB_ITER_END	} else if (OB_ITER_END == ret) {
+src/sql/engine/set/ob_merge_intersect_op.cpp	100	ObMergeIntersectOp::inner_get_next_row	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/set/ob_merge_intersect_op.cpp	110	ObMergeIntersectOp::inner_get_next_row	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/set/ob_merge_intersect_op.cpp	167	ObMergeIntersectOp::inner_get_next_batch	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/set/ob_merge_intersect_op.cpp	181	ObMergeIntersectOp::inner_get_next_batch	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/set/ob_merge_intersect_op.cpp	191	ObMergeIntersectOp::inner_get_next_batch	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/set/ob_merge_intersect_op.cpp	203	ObMergeIntersectOp::inner_get_next_batch	ret == OB_ITER_END	} else if (OB_ITER_END == ret) {
+src/sql/engine/set/ob_merge_set_op.cpp	97	ObMergeSetOp::do_strict_distinct	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/set/ob_merge_set_op.h	130	ObMergeSetOp::do_strict_distinct	ret != OB_ITER_END	if(OB_ITER_END != ret) {

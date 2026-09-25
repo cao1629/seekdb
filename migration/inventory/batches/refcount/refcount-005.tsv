@@ -1,0 +1,44 @@
+file	line	symbol	construct	text
+src/oblib/lib/lock/ob_tc_ref.h	45	TCRef::born	born definition (reference-count function found by its body: calls xref_)	int32_t born(int32_t* p) { return xref_(p, REF_LIMIT); }
+src/oblib/lib/lock/ob_tc_ref.h	45	TCRef::born	xref_ call (other name)	int32_t born(int32_t* p) { return xref_(p, REF_LIMIT); }
+src/oblib/lib/lock/ob_tc_ref.h	46	TCRef::end	end definition (reference-count function found by its body: calls xref_)	int32_t end(int32_t* p) { return xref_(p, -REF_LIMIT); }
+src/oblib/lib/lock/ob_tc_ref.h	46	TCRef::end	xref_ call (other name)	int32_t end(int32_t* p) { return xref_(p, -REF_LIMIT); }
+src/oblib/lib/lock/ob_tc_ref.h	54	TCRef::sync	xref_ call (other name)	xref_(p, 1);
+src/oblib/lib/lock/ob_tc_ref.h	68	TCRef::sync	xref_ call (other name)	return xref_(p, cnt);
+src/oblib/lib/lock/ob_tc_ref.h	71	TCRef::inc_ref	inc_ref definition	int32_t inc_ref(int32_t* p) {
+src/oblib/lib/lock/ob_tc_ref.h	82	TCRef::inc_ref	xref_ call (other name)	ref_cnt = xref_(p, 1);
+src/oblib/lib/lock/ob_tc_ref.h	86	TCRef::dec_ref	dec_ref definition	int32_t dec_ref(int32_t* p) {
+src/oblib/lib/lock/ob_tc_ref.h	97	TCRef::dec_ref	xref_ call (other name)	ref_cnt = xref_(p, -1);
+src/oblib/lib/lock/ob_tc_ref.h	102	TCRef::inc_ref	inc_ref definition	int32_t inc_ref(int32_t* p, int64_t &slot_id) {
+src/oblib/lib/lock/ob_tc_ref.h	115	TCRef::inc_ref	xref_ call (other name)	ref_cnt = xref_(p, 1);
+src/oblib/lib/lock/ob_tc_ref.h	119	TCRef::dec_ref	dec_ref definition	int32_t dec_ref(int32_t* p, int64_t slot_id) {
+src/oblib/lib/lock/ob_tc_ref.h	122	TCRef::dec_ref	xref_ call (other name)	ref_cnt = xref_(p, -1);
+src/oblib/lib/lock/ob_tc_ref.h	127	TCRef::xref_	xref_ definition (other name)	int32_t xref_(int32_t* p, int32_t x) { return ATOMIC_AAF(p, x); }
+src/oblib/lib/lock/ob_tc_rwlock.h	57	TCRWLock::RLockGuard	Guard struct definition whose methods reach inc_ref through other functions (RLockGuard::RLockGuard > TCRWLock::rdlock > TCRWLock::try_rdlock > inc_ref)	struct RLockGuard
+src/oblib/lib/lock/ob_tc_rwlock.h	164	TCRWLock::try_rdlock	inc_ref call	get_tcref().inc_ref(&read_ref_);
+src/oblib/lib/lock/ob_tc_rwlock.h	169	TCRWLock::try_rdlock	dec_ref call	get_tcref().dec_ref(&read_ref_);
+src/oblib/lib/lock/ob_tc_rwlock.h	178	TCRWLock::rdunlock	dec_ref call	get_tcref().dec_ref(&read_ref_);
+src/oblib/lib/lock/ob_tc_rwlock.h	263	TCRWLock::try_rdlock	inc_ref call	get_tcref().inc_ref(&read_ref_, slot_id);
+src/oblib/lib/lock/ob_tc_rwlock.h	268	TCRWLock::try_rdlock	dec_ref call	get_tcref().dec_ref(&read_ref_, slot_id);
+src/oblib/lib/lock/ob_tc_rwlock.h	291	TCRWLock::rdunlock	dec_ref call	get_tcref().dec_ref(&read_ref_, slot_id);
+src/oblib/lib/lock/ob_tc_rwlock.h	332	TCRLockGuard	Guard class definition whose methods reach inc_ref through other functions (TCRLockGuard::TCRLockGuard > TCRWLock::rdlock > TCRWLock::try_rdlock > inc_ref)	class TCRLockGuard
+src/oblib/lib/objectpool/ob_pooled_allocator.h	40	ObPooledAllocator::inc_ref	inc_ref definition	void inc_ref() {};
+src/oblib/lib/objectpool/ob_pooled_allocator.h	41	ObPooledAllocator::dec_ref	dec_ref definition	void dec_ref() {};
+src/oblib/lib/resource/ob_resource_mgr.cpp	327	ObResourceMgrHandle::init	inc_ref call	owner_->inc_ref(state_);
+src/oblib/lib/resource/ob_resource_mgr.cpp	340	ObResourceMgrHandle::reset	dec_ref call	owner_->dec_ref(state_);
+src/oblib/lib/resource/ob_resource_mgr.cpp	467	ObResourceMgr::inc_ref	inc_ref definition	void ObResourceMgr::inc_ref(ObResourceState *resource_state)
+src/oblib/lib/resource/ob_resource_mgr.cpp	474	ObResourceMgr::dec_ref	dec_ref definition	void ObResourceMgr::dec_ref(ObResourceState *resource_state)
+src/oblib/lib/resource/ob_resource_mgr.h	98	ObResourceMgrHandle	Handle class definition	class ObResourceMgrHandle
+src/oblib/lib/resource/ob_resource_mgr.h	129	ObResourceMgr	inc_ref declaration	void inc_ref(ObResourceState *state);
+src/oblib/lib/resource/ob_resource_mgr.h	130	ObResourceMgr	dec_ref declaration	void dec_ref(ObResourceState *state);
+src/oblib/lib/restore/ob_io_device.cpp	142	ObIODevice::inc_ref	inc_ref definition	void ObIODevice::inc_ref()
+src/oblib/lib/restore/ob_io_device.cpp	147	ObIODevice::dec_ref	dec_ref definition	void ObIODevice::dec_ref()
+src/oblib/lib/restore/ob_io_device.h	421	ObIODevice	inc_ref declaration	virtual void inc_ref();
+src/oblib/lib/restore/ob_io_device.h	422	ObIODevice	dec_ref declaration	virtual void dec_ref();
+src/oblib/lib/thread/ob_dedup_queue.h	125	AllocatorWrapper::inc_ref	inc_ref definition	void inc_ref() {}
+src/oblib/lib/thread/ob_dedup_queue.h	126	AllocatorWrapper::dec_ref	dec_ref definition	void dec_ref() {}
+src/oblib/lib/thread/ob_dynamic_thread_pool.h	105	ObSimpleDynamicThreadPool::inc_ref	inc_ref definition	void inc_ref() { ATOMIC_INC(&ref_cnt_); }
+src/oblib/lib/thread/ob_dynamic_thread_pool.h	106	ObSimpleDynamicThreadPool::dec_ref	dec_ref definition	void dec_ref() { ATOMIC_SAF(&ref_cnt_, 1); }
+src/observer/ob_signal_handle.h	61	ObSignalHandle	Handle class definition : share::ObThreadPool	class ObSignalHandle: public share::ObThreadPool
+src/observer/omt/ob_srs_service.h	59	ObSrsCacheSnapShot::retain	retain definition (reference-count function found by its body: changes a reference-count field)	void retain() override { ATOMIC_INC(&ref_count_); }
+src/observer/omt/ob_srs_service.h	60	ObSrsCacheSnapShot::release	release definition (reference-count function found by its body: changes a reference-count field)	void release() override { ATOMIC_DEC(&ref_count_); }

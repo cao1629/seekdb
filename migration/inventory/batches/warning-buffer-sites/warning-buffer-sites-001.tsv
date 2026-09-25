@@ -1,0 +1,25 @@
+file	line	symbol	construct	text
+src/oblib/rpc/frame/ob_req_queue_thread.cpp	86	ObReqQueue::process_task	ob_setup_default_tsi_warning_buffer(); listed in s2-errors.md 2.6 (the request-queue entry)	ob_setup_default_tsi_warning_buffer();
+src/observer/mysql/ob_mysql_end_trans_cb.cpp	169	ObSqlEndTransCb::allow_request_completion	ob_setup_tsi_warning_buffer(); listed in s2-errors.md 2.6 (the end of a request)	ob_setup_tsi_warning_buffer(NULL);
+src/observer/mysql/ob_mysql_end_trans_cb.cpp	220	ObSqlEndTransCb::callback	ob_setup_tsi_warning_buffer(); listed in s2-errors.md 2.6 (the end of a request)	ob_setup_tsi_warning_buffer(NULL);
+src/observer/mysql/obmp_base.cpp	369	ObMPBase::do_after_process	ob_setup_tsi_warning_buffer(); listed in s2-errors.md 2.6 (the end of a request)	ob_setup_tsi_warning_buffer(NULL);
+src/observer/mysql/obmp_base.h	127	ObMPBase::setup_wb	ob_setup_tsi_warning_buffer(); listed in s2-errors.md 2.6 (the request entries, ObMPBase::setup_wb)	ob_setup_tsi_warning_buffer(&session.get_warnings_buffer());
+src/observer/mysql/obmp_init_db.cpp	68	ObMPInitDB::process	through setup_wb(); listed in s2-errors.md 2.6 (the request entries, through ObMPBase::setup_wb)	setup_wb(*session);
+src/observer/mysql/obmp_init_db.cpp	150	ObMPInitDB::process	ob_setup_tsi_warning_buffer(); listed in s2-errors.md 2.6 (the end of a request)	ob_setup_tsi_warning_buffer(NULL);
+src/observer/mysql/obmp_query.cpp	360	ObMPQuery::process_single_stmt	through setup_wb(); listed in s2-errors.md 2.6 (the request entries, through ObMPBase::setup_wb)	setup_wb(session);
+src/observer/mysql/obmp_stmt_execute.cpp	1834	ObMPStmtExecute::process_execute_stmt	through setup_wb(); listed in s2-errors.md 2.6 (the request entries, through ObMPBase::setup_wb)	setup_wb(session);
+src/observer/mysql/obmp_stmt_fetch.cpp	373	ObMPStmtFetch::process_fetch_stmt	through setup_wb(); listed in s2-errors.md 2.6 (the request entries, through ObMPBase::setup_wb)	setup_wb(session);
+src/observer/mysql/obmp_stmt_prepare.cpp	221	ObMPStmtPrepare::process_prepare_stmt	through setup_wb(); listed in s2-errors.md 2.6 (the request entries, through ObMPBase::setup_wb)	setup_wb(session);
+src/observer/mysql/obmp_stmt_send_long_data.cpp	169	ObMPStmtSendLongData::process_send_long_data_stmt	through setup_wb(); listed in s2-errors.md 2.6 (the request entries, through ObMPBase::setup_wb)	setup_wb(session);
+src/observer/omt/ob_worker_processor.cpp	110	ObWorkerProcessor::process	ob_setup_default_tsi_warning_buffer(); listed in s2-errors.md 2.6 (the worker entry)	ob_setup_default_tsi_warning_buffer();
+src/sql/engine/cmd/ob_load_data_impl.cpp	1188	ObLoadDataSPImpl::execute_insert_task	ObWarningBufferIgnoreScope declared; listed in s2-errors.md 2.6 (an ignore scope)	ObWarningBufferIgnoreScope ignore_internal_insert_warnings;
+src/sql/engine/dml/ob_trigger_handler.cpp	449	TriggerHandle::calc_trigger_routine	ob_setup_tsi_warning_buffer(); listed in s2-errors.md 2.6 (the trigger call's private buffer)	ob_setup_tsi_warning_buffer(&trigger_diagnostics);
+src/sql/engine/dml/ob_trigger_handler.cpp	453	TriggerHandle::calc_trigger_routine	ob_setup_tsi_warning_buffer(); listed in s2-errors.md 2.6 (the trigger call's private buffer)	ob_setup_tsi_warning_buffer(outer_diagnostics);
+src/sql/engine/px/ob_px_task_process.cpp	100	ObPxTaskProcess::process	ob_setup_default_tsi_warning_buffer(); listed in s2-errors.md 2.6 (the PX task entry)	common::ob_setup_default_tsi_warning_buffer();
+src/sql/ob_spi.cpp	4953	ObSPIService::get_result	ObWarningBufferIgnoreScope declared; listed in s2-errors.md 2.6 (an ignore scope)	ObWarningBufferIgnoreScope ignore_into_assignment_warnings;
+src/sql/optimizer/ob_dynamic_sampling.cpp	521	ObDynamicSampling::estimte_rowcount	ObWarningBufferIgnoreScope declared; listed in s2-errors.md 2.6 (an ignore scope)	ObWarningBufferIgnoreScope ignore_sampling_diagnostics;
+src/sql/resolver/ddl/ob_create_package_resolver.cpp	202	ObCreatePackageResolver::resolve	ObWarningBufferIgnoreScope declared; listed in s2-errors.md 2.6 (an ignore scope)	ObWarningBufferIgnoreScope ignore_errors_in_warning_buffer;
+src/sql/rewrite/ob_transform_utils.cpp	10090	ObTransformUtils::check_static_expr_has_warning	ob_setup_tsi_warning_buffer(); listed in s2-errors.md 2.6 (a warning probe)	ob_setup_tsi_warning_buffer(&probe_warning_buf);
+src/sql/rewrite/ob_transform_utils.cpp	10096	ObTransformUtils::check_static_expr_has_warning	ob_setup_tsi_warning_buffer(); listed in s2-errors.md 2.6 (a warning probe)	ob_setup_tsi_warning_buffer(old_warning_buf);
+src/sql/rewrite/ob_transform_utils.cpp	10139	ObTransformUtils::calc_const_expr_result	ob_setup_tsi_warning_buffer(); listed in s2-errors.md 2.6 (a warning probe)	ob_setup_tsi_warning_buffer(&probe_warning_buf);
+src/sql/rewrite/ob_transform_utils.cpp	10149	ObTransformUtils::calc_const_expr_result	ob_setup_tsi_warning_buffer(); listed in s2-errors.md 2.6 (a warning probe)	ob_setup_tsi_warning_buffer(old_warning_buf);

@@ -1,0 +1,60 @@
+file	line	symbol	construct	text
+src/sql/resolver/cmd/ob_variable_set_stmt.h	47	ObVariableSetStmt::VariableSetNode::variable_name_	member ObString (value) of type common::ObString	common::ObString variable_name_;
+src/sql/resolver/dcl/ob_alter_role_stmt.h	50	ObAlterRoleStmt::role_name_	member ObString (value) of type common::ObString	common::ObString role_name_;
+src/sql/resolver/dcl/ob_alter_role_stmt.h	51	ObAlterRoleStmt::password_	member ObString (value) of type common::ObString	common::ObString password_;
+src/sql/resolver/dcl/ob_alter_role_stmt.h	53	ObAlterRoleStmt::masked_sql_	member ObString (value) of type common::ObString	common::ObString masked_sql_;
+src/sql/resolver/dcl/ob_create_role_stmt.h	54	ObCreateRoleStmt::role_name_	member ObString (value) of type common::ObString	common::ObString role_name_;
+src/sql/resolver/dcl/ob_create_role_stmt.h	55	ObCreateRoleStmt::password_	member ObString (value) of type common::ObString	common::ObString password_;
+src/sql/resolver/dcl/ob_create_role_stmt.h	57	ObCreateRoleStmt::masked_sql_	member ObString (value) of type common::ObString	common::ObString masked_sql_;
+src/sql/resolver/dcl/ob_create_role_stmt.h	61	ObCreateRoleStmt::user_names_	member container of ObString of type ObArray<common::ObString, common::ModulePageAllocator, true >	ObArray<common::ObString, common::ModulePageAllocator, true /*auto_free*/> user_names_;
+src/sql/resolver/dcl/ob_create_role_stmt.h	62	ObCreateRoleStmt::host_names_	member container of ObString of type ObArray<common::ObString, common::ModulePageAllocator, true >	ObArray<common::ObString, common::ModulePageAllocator, true /*auto_free*/> host_names_;
+src/sql/resolver/dcl/ob_create_user_stmt.h	63	ObCreateUserStmt::masked_sql_	member ObString (value) of type common::ObString	common::ObString masked_sql_;
+src/sql/resolver/dcl/ob_dcl_resolver.cpp	109	ObDCLResolver::mask_password_for_single_user	allocator in, arena view out: common::ObString &masked_sql	int ObDCLResolver::mask_password_for_single_user(ObIAllocator *allocator,
+src/sql/resolver/dcl/ob_dcl_resolver.cpp	128	ObDCLResolver::mask_password_for_users	allocator in, arena view out: common::ObString &masked_sql	int ObDCLResolver::mask_password_for_users(ObIAllocator *allocator,
+src/sql/resolver/dcl/ob_dcl_resolver.cpp	158	ObDCLResolver::mask_password_for_passwd_node	allocator in, arena view out: common::ObString &masked_sql	int ObDCLResolver::mask_password_for_passwd_node(
+src/sql/resolver/dcl/ob_drop_role_stmt.h	48	ObDropRoleStmt::role_name_	member ObString (value) of type common::ObString	common::ObString role_name_;
+src/sql/resolver/dcl/ob_drop_role_stmt.h	51	ObDropRoleStmt::user_names_	member container of ObString of type common::ObArray<common::ObString, common::ModulePageAllocator, true >	common::ObArray<common::ObString, common::ModulePageAllocator, true /*auto_free*/> user_names_;
+src/sql/resolver/dcl/ob_drop_role_stmt.h	52	ObDropRoleStmt::host_names_	member container of ObString of type common::ObArray<common::ObString, common::ModulePageAllocator, true >	common::ObArray<common::ObString, common::ModulePageAllocator, true /*auto_free*/> host_names_;
+src/sql/resolver/dcl/ob_grant_resolver.cpp	529	ObGrantResolver::resolve_priv_level	allocator in, arena view out: ObString &db	int ObGrantResolver::resolve_priv_level(
+src/sql/resolver/dcl/ob_grant_resolver.h	223	ObGrantResolver::resolve_priv_object	allocator in, arena view out: common::ObString &db	int ObGrantResolver::resolve_priv_object(const ParseNode *priv_object_node,
+src/sql/resolver/dcl/ob_grant_stmt.h	98	ObGrantStmt::database_	member ObString (value) of type common::ObString	common::ObString database_;
+src/sql/resolver/dcl/ob_grant_stmt.h	99	ObGrantStmt::table_	member ObString (value) of type common::ObString	common::ObString table_;
+src/sql/resolver/dcl/ob_grant_stmt.h	102	ObGrantStmt::masked_sql_	member ObString (value) of type common::ObString	common::ObString masked_sql_;
+src/sql/resolver/dcl/ob_grant_stmt.h	106	ObGrantStmt::user_name_set_	member container of ObString of type common::hash::ObPlacementHashSet<common::ObString, common::MAX_ENABLED_ROLES>	common::hash::ObPlacementHashSet<common::ObString, common::MAX_ENABLED_ROLES> user_name_set_;
+src/sql/resolver/dcl/ob_grant_stmt.h	107	ObGrantStmt::role_name_set_	member container of ObString of type common::hash::ObPlacementHashSet<common::ObString, common::MAX_ENABLED_ROLES>	common::hash::ObPlacementHashSet<common::ObString, common::MAX_ENABLED_ROLES> role_name_set_;
+src/sql/resolver/dcl/ob_grant_stmt.h	121	ObGrantStmt::column_names_priv_	member container of ObString of type ObSEArray<std::pair<ObString, ObPrivType>, 4>	ObSEArray<std::pair<ObString, ObPrivType>, 4> column_names_priv_;
+src/sql/resolver/dcl/ob_revoke_stmt.h	89	ObRevokeStmt::database_	member ObString (value) of type common::ObString	common::ObString database_;
+src/sql/resolver/dcl/ob_revoke_stmt.h	90	ObRevokeStmt::table_	member ObString (value) of type common::ObString	common::ObString table_;
+src/sql/resolver/dcl/ob_revoke_stmt.h	109	ObRevokeStmt::column_names_priv_	member container of ObString of type ObSEArray<std::pair<ObString, ObPrivType>, 4, common::ModulePageAllocator, true>	ObSEArray<std::pair<ObString, ObPrivType>, 4, common::ModulePageAllocator, true> column_names_priv_;
+src/sql/resolver/dcl/ob_set_password_stmt.h	60	ObSetPasswordStmt::masked_sql_	member ObString (value) of type common::ObString	common::ObString masked_sql_;
+src/sql/resolver/ddl/ob_analyze_stmt.h	92	ObAnalyzeTableInfo::database_name_	member ObString (value) of type ObString	ObString database_name_;
+src/sql/resolver/ddl/ob_analyze_stmt.h	95	ObAnalyzeTableInfo::table_name_	member ObString (value) of type ObString	ObString table_name_;
+src/sql/resolver/ddl/ob_analyze_stmt.h	99	ObAnalyzeTableInfo::partition_name_	member ObString (value) of type ObString	ObString partition_name_;
+src/sql/resolver/ddl/ob_create_outline_stmt.h	62	ObCreateOutlineStmt::sql_id_	member ObString (value) of type common::ObString	common::ObString sql_id_; // given sql_idofcase
+src/sql/resolver/ddl/ob_create_outline_stmt.h	63	ObCreateOutlineStmt::format_sql_id_	member ObString (value) of type common::ObString	common::ObString format_sql_id_; // Given sql_id situation
+src/sql/resolver/ddl/ob_create_outline_stmt.h	64	ObCreateOutlineStmt::hint_	member ObString (value) of type common::ObString	common::ObString hint_; // What is the given hint
+src/sql/resolver/ddl/ob_create_table_resolver.h	140	ObCreateTableResolver::cols_with_nullable_specified_	member container of ObString of type common::ObSEArray<ObString, 16>	common::ObSEArray<ObString, 16> cols_with_nullable_specified_;//store cols with explicitly specified defination for CTAS
+src/sql/resolver/ddl/ob_create_table_stmt.h	87	ObCreateTableStmt::masked_sql_	member ObString (value) of type common::ObString	common::ObString masked_sql_;
+src/sql/resolver/ddl/ob_ddl_resolver.cpp	2722	ObDDLResolver::cast_default_value	allocator in, arena view out: ObObj &default_value	int ObDDLResolver::cast_default_value(ObSQLSessionInfo *session_info,
+src/sql/resolver/ddl/ob_ddl_resolver.cpp	3592	ObDDLResolver::reformat_generated_column_expr	allocator in, arena view out: ObObj &default_value	int ObDDLResolver::reformat_generated_column_expr(ObObj &default_value,
+src/sql/resolver/ddl/ob_ddl_resolver.cpp	3628	ObDDLResolver::resolve_generated_column_expr	allocator in, arena view out: ObString &expr_str	int ObDDLResolver::resolve_generated_column_expr(ObString &expr_str,
+src/sql/resolver/ddl/ob_ddl_resolver.cpp	3662	ObDDLResolver::check_default_value	allocator in, arena view out: ObObj &default_value	int ObDDLResolver::check_default_value(ObObj &default_value,
+src/sql/resolver/ddl/ob_ddl_resolver.cpp	3700	ObDDLResolver::check_default_value	allocator in, arena view out: ObObj &default_value	int ObDDLResolver::check_default_value(ObObj &default_value,
+src/sql/resolver/ddl/ob_ddl_resolver.cpp	3819	ObDDLResolver::check_default_value	allocator in, arena view out: ObObj &default_value	int ObDDLResolver::check_default_value(ObObj &default_value,
+src/sql/resolver/ddl/ob_ddl_resolver.cpp	3847	ObDDLResolver::calc_default_value	allocator in, arena view out: common::ObObj &default_value	int ObDDLResolver::calc_default_value(share::schema::ObColumnSchemaV2 &column,
+src/sql/resolver/ddl/ob_ddl_resolver.cpp	3967	ObDDLResolver::check_udt_default_value	allocator in, arena view out: ObObj &default_value	int ObDDLResolver::check_udt_default_value(ObObj &default_value,
+src/sql/resolver/ddl/ob_ddl_resolver.cpp	4089	ObDDLResolver::get_udt_column_default_values	allocator in, arena view out: ObObj &extend_result	int ObDDLResolver::get_udt_column_default_values(const ObObj &default_value,
+src/sql/resolver/ddl/ob_ddl_resolver.h	50	PartitionInfo::part_keys_	member container of ObString of type common::ObSEArray<common::ObString, 8>	common::ObSEArray<common::ObString, 8> part_keys_;
+src/sql/resolver/ddl/ob_ddl_resolver.h	106	ObDefaultValueRes::value_	member ObObjParam (reference) of type common::ObObjParam &	common::ObObjParam &value_;
+src/sql/resolver/ddl/ob_ddl_resolver.h	842	ObDDLResolver::compress_method_	member ObString (value) of type common::ObString	common::ObString compress_method_;
+src/sql/resolver/ddl/ob_ddl_resolver.h	843	ObDDLResolver::parser_name_	member ObString (value) of type common::ObString	common::ObString parser_name_;
+src/sql/resolver/ddl/ob_ddl_resolver.h	844	ObDDLResolver::parser_properties_	member ObString (value) of type common::ObString	common::ObString parser_properties_;
+src/sql/resolver/ddl/ob_ddl_resolver.h	845	ObDDLResolver::comment_	member ObString (value) of type common::ObString	common::ObString comment_;
+src/sql/resolver/ddl/ob_ddl_resolver.h	851	ObDDLResolver::table_name_	member ObString (value) of type common::ObString	common::ObString table_name_;
+src/sql/resolver/ddl/ob_ddl_resolver.h	852	ObDDLResolver::database_name_	member ObString (value) of type common::ObString	common::ObString database_name_;
+src/sql/resolver/ddl/ob_ddl_resolver.h	854	ObDDLResolver::partition_expr_	member ObString (value) of type common::ObString	common::ObString partition_expr_;
+src/sql/resolver/ddl/ob_ddl_resolver.h	856	ObDDLResolver::index_name_	member ObString (value) of type common::ObString	common::ObString index_name_;
+src/sql/resolver/ddl/ob_ddl_resolver.h	859	ObDDLResolver::store_column_names_	member container of ObString of type common::ObArray<common::ObString>	common::ObArray<common::ObString> store_column_names_;
+src/sql/resolver/ddl/ob_ddl_resolver.h	860	ObDDLResolver::hidden_store_column_names_	member container of ObString of type common::ObArray<common::ObString>	common::ObArray<common::ObString> hidden_store_column_names_;
+src/sql/resolver/ddl/ob_ddl_resolver.h	879	ObDDLResolver::index_params_	member ObString (value) of type common::ObString	common::ObString index_params_;
+src/sql/resolver/ddl/ob_ddl_resolver.h	881	ObDDLResolver::vec_column_name_	member ObString (value) of type common::ObString	common::ObString vec_column_name_;

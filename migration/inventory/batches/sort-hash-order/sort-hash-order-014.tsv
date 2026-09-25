@@ -1,0 +1,51 @@
+file	line	symbol	construct	text
+src/storage/retrieval/ob_spiv_daat_iter.cpp	97	ObSPIVDaaTIter::set_valid_docid_set	iterate hash container valid_docid_set (ObHashSet)	for (common::hash::ObHashSet<ObDocIdExt>::const_iterator iter = valid_docid_set.begin(); OB_SUCC(ret) && iter != valid_docid_set.end(); ++iter) {
+src/storage/retrieval/ob_spiv_daat_iter.cpp	182	ObSPIVDaaTNaiveIter::project_results	heap operation push on sort_heap_ (SPIVSortHeap)	if (OB_FAIL(sort_heap_->push(buffered_domain_ids_[i], -buffered_relevances_[i]))) {
+src/storage/retrieval/ob_spiv_daat_iter.cpp	216	ObSPIVDaaTNaiveIter::process	heap operation top on sort_heap_ (SPIVSortHeap)	docid = sort_heap_->get_doc_id(sort_heap_->top().doc_idx_);
+src/storage/retrieval/ob_spiv_daat_iter.cpp	219	ObSPIVDaaTNaiveIter::process	heap operation pop on sort_heap_ (SPIVSortHeap)	if (OB_FAIL(sort_heap_->pop())) {
+src/storage/retrieval/ob_spiv_daat_iter.cpp	298	ObSPIVBMWIter::set_valid_docid_set	iterate hash container valid_docid_set (ObHashSet)	for (common::hash::ObHashSet<ObDocIdExt>::const_iterator iter = valid_docid_set.begin(); OB_SUCC(ret) && iter != valid_docid_set.end(); ++iter) {
+src/storage/retrieval/ob_spiv_daat_iter.cpp	370	ObSPIVBMWIter::reverse_top_k_heap	heap operation top on top_k_heap_ (TopKHeap)	const TopKItem &top_k_item = top_k_heap_.top();
+src/storage/retrieval/ob_spiv_daat_iter.cpp	373	ObSPIVBMWIter::reverse_top_k_heap	heap operation pop on top_k_heap_ (TopKHeap)	if (OB_FAIL(top_k_heap_.pop())) {
+src/storage/retrieval/ob_spiv_daat_iter.cpp	437	ObSPIVBMWIter::process_collected_row	heap operation push on top_k_heap_ (TopKHeap)	} else if (OB_FAIL(top_k_heap_.push(TopKItem(relevance, top_k_heap_.count())))) {
+src/storage/retrieval/ob_spiv_daat_iter.cpp	440	ObSPIVBMWIter::process_collected_row	heap operation top on top_k_heap_ (TopKHeap)	const int64_t cache_idx = top_k_heap_.top().cache_idx_;
+src/storage/retrieval/ob_spiv_daat_iter.cpp	445	ObSPIVBMWIter::process_collected_row	heap operation pop on top_k_heap_ (TopKHeap)	} else if (OB_FAIL(top_k_heap_.pop())) {
+src/storage/retrieval/ob_spiv_daat_iter.cpp	446	ObSPIVBMWIter::process_collected_row	heap operation push on top_k_heap_ (TopKHeap)	} else if (OB_FAIL(top_k_heap_.push(TopKItem(relevance, cache_idx)))) {
+src/storage/retrieval/ob_spiv_daat_iter.h	96	ObSPIVSortHeap::push	heap operation definition: ObSPIVSortHeap::push	int push(const ObDocIdExt &doc_id, double score)
+src/storage/retrieval/ob_spiv_daat_iter.h	116	ObSPIVSortHeap::pop	heap operation definition: ObSPIVSortHeap::pop	int pop() { return heap_.pop(); }
+src/storage/retrieval/ob_spiv_daat_iter.h	119	ObSPIVSortHeap::top	heap operation definition: ObSPIVSortHeap::top	T& top() { return heap_.top(); }
+src/storage/retrieval/ob_spiv_daat_iter.h	125	ObSPIVSortHeap	heap declared: heap_ (ObBinaryHeap)	ObBinaryHeap<T, CompareFunctor, 16> heap_;
+src/storage/retrieval/ob_spiv_daat_iter.h	129	-	heap declared: SPIVSortHeap (ObSPIVSortHeap)	typedef ObSPIVSortHeap<ObDocidSortItem, ObDocidSortItemCmp> SPIVSortHeap;
+src/storage/retrieval/ob_spiv_daat_iter.h	166	ObSPIVDaaTIter	heap declared: sort_heap_ (SPIVSortHeap)	SPIVSortHeap *sort_heap_;
+src/storage/scheduler/ob_dag_scheduler.cpp	1322	ObIDagNet::reset	iterate hash container dag_record_map_ (DagRecordMap)	for (DagRecordMap::iterator iter = dag_record_map_.begin();
+src/storage/scheduler/ob_dag_scheduler.cpp	1510	ObIDagNet::diagnose_dag	iterate hash container dag_record_map_ (DagRecordMap)	for (DagRecordMap::iterator iter = dag_record_map_.begin();
+src/storage/scheduler/ob_dag_scheduler.cpp	1548	ObIDagNet::gene_dag_info	iterate hash container dag_record_map_ (DagRecordMap)	for (DagRecordMap::iterator iter = dag_record_map_.begin();
+src/storage/scheduler/ob_dag_scheduler.cpp	3196	ObDagNetScheduler::destroy	iterate hash container dag_net_map_ (DagNetMap)	DagNetMap::iterator iter = dag_net_map_.begin();
+src/storage/scheduler/ob_dag_scheduler.cpp	3612	ObDagNetScheduler::get_first_dag_net	iterate hash container dag_net_map_ (DagNetMap)	DagNetMap::iterator iter = dag_net_map_.begin();
+src/storage/slog_ckpt/ob_tablet_replay_create_handler.cpp	151	ObTabletReplayCreateHandler::init	iterate hash container tablet_item_map (ObHashMap)	common::hash::ObHashMap<ObTabletMapKey, ObMetaDiskAddr>::const_iterator iter = tablet_item_map.begin();
+src/storage/slog_ckpt/ob_tablet_replay_create_handler.cpp	169	ObTabletReplayCreateHandler::init	lib::ob_sort call	lib::ob_sort(total_tablet_item_arr_, total_tablet_item_arr_ + total_tablet_cnt_);
+src/storage/tablelock/ob_lock_memtable.cpp	259	ObLockMemtable::lock_	iterate hash container conflict_tx_set (ObTxIDSet)	*(conflict_tx_set.begin()),
+src/storage/tablelock/ob_obj_lock.cpp	909	ObOBJLockMap::get_table_lock_store_info	iterate hash container lock_map_ (Map)	if (OB_FAIL(lock_map_.for_each(fn))) {
+src/storage/tablelock/ob_obj_lock.cpp	918	ObOBJLockMap::get_lock_id_iter	iterate hash container lock_map_ (Map)	if (OB_FAIL(lock_map_.for_each(fn))) {
+src/storage/tablelock/ob_obj_lock.cpp	2084	ObOBJLockMap::reset	iterate hash container lock_map_ (Map)	(void)lock_map_.for_each(fn);
+src/storage/tablelock/ob_obj_lock.cpp	2094	ObOBJLockMap::print	iterate hash container lock_map_ (Map)	lock_map_.for_each(fn);
+src/storage/tablelock/ob_obj_lock.cpp	2102	ObOBJLockMap::get_min_ddl_committed_scn	iterate hash container lock_map_ (Map)	if (OB_FAIL(lock_map_.for_each(fn))) {
+src/storage/tablelock/ob_table_lock_deadlock.cpp	192	ObTransLockPartBlockCallBack::operator()	iterate hash container conflict_tx_set (ObTxIDSet)	ObTxIDSet::const_iterator_t it = conflict_tx_set.begin();
+src/storage/tablet/ob_table_store_util.cpp	1007	ObTableStoreUtil::sort_major_tables	lib::ob_sort call	lib::ob_sort(tables.begin(), tables.end(), comp);
+src/storage/tablet/ob_table_store_util.cpp	1023	ObTableStoreUtil::sort_minor_tables	lib::ob_sort call	lib::ob_sort(tables.begin(), tables.end(), comp);
+src/storage/tablet/ob_tablet_binding_helper.cpp	491	ObTabletBindingMdsHelper::get_sorted_tablets	lib::ob_sort call	lib::ob_sort(sorted_tablet_ids.begin(), sorted_tablet_ids.end(), TabletIDCmp());
+src/storage/tablet/ob_tablet_block_aggregated_info.cpp	145	ObTabletMacroInfo::construct_block_id_arr	iterate hash container id_set (TabletMacroSet)	for (ObBlockInfoSet::SetIterator iter = id_set.begin(); OB_SUCC(ret) && iter != id_set.end(); ++iter) {
+src/storage/tablet/ob_tablet_block_aggregated_info.cpp	163	ObTabletMacroInfo::construct_block_info_arr	iterate hash container block_info_map (TabletMacroMap)	for (ObBlockInfoSet::MapIterator iter = block_info_map.begin(); OB_SUCC(ret) && iter != block_info_map.end(); ++iter) {
+src/storage/tablet/ob_tablet_dumped_medium_info.cpp	129	ObTabletDumpedMediumInfo::init_for_mds_table_dump	lib::ob_sort call	lib::ob_sort(array1.begin(), array1.end(), ObTabletDumpedMediumInfo::compare);
+src/storage/tablet/ob_tablet_dumped_medium_info.cpp	130	ObTabletDumpedMediumInfo::init_for_mds_table_dump	lib::ob_sort call	lib::ob_sort(array2.begin(), array2.end(), ObTabletDumpedMediumInfo::compare);
+src/storage/tablet/ob_tablet_dumped_medium_info.cpp	251	ObTabletDumpedMediumInfo::append	lib::ob_sort call	lib::ob_sort(medium_info_list_.begin(), medium_info_list_.end(), compare);
+src/storage/tablet/ob_tablet_dumped_medium_info.cpp	570	ObTabletDumpedMediumInfoIterator::init	lib::ob_sort call	lib::ob_sort(medium_info_list_.begin(), medium_info_list_.end(), ObTabletDumpedMediumInfo::compare);
+src/storage/tablet/ob_tablet_dumped_medium_info.h	63	ObTabletDumpedMediumInfo::sort_array	lib::ob_sort call	void sort_array() { lib::ob_sort(medium_info_list_.begin(), medium_info_list_.end(), compare); }
+src/storage/tablet/ob_tablet_id_set.h	60	ObTabletIDSet::foreach	iterate hash container id_set_ (NonLockedHashSet)	NonLockedHashSet::const_iterator iter = id_set_.begin();
+src/storage/tablet/ob_tablet_mds_data.cpp	506	ObTabletMdsData::copy_medium_info_list	lib::ob_sort call	lib::ob_sort(array1.begin(), array1.end(), ObTabletDumpedMediumInfo::compare);
+src/storage/tablet/ob_tablet_mds_data.cpp	507	ObTabletMdsData::copy_medium_info_list	lib::ob_sort call	lib::ob_sort(array2.begin(), array2.end(), ObTabletDumpedMediumInfo::compare);
+src/storage/tablet/ob_tablet_persister.cpp	562	ObTabletPersister::calc_tablet_space_usage_	iterate hash container meta_block_info_set_ (TabletMacroSet)	for (ObBlockInfoSet::SetIterator iter = block_info_set.meta_block_info_set_.begin();
+src/storage/tablet/ob_tablet_persister.cpp	1153	ObTabletPersister::convert_macro_info_map	iterate hash container shared_macro_map (SharedMacroMap)	for (SharedMacroIterator iter = shared_macro_map.begin();
+src/storage/tablet/ob_tablet_table_store.cpp	1467	ObTabletTableStore::build_sorted_ddl_slice_sstables	lib::ob_sort call	lib::ob_sort(ddl_tables.begin(), ddl_tables.end(), [](ObITable *left, ObITable *right) {
+src/storage/tablet/ob_tablet_table_store.cpp	1539	ObTabletTableStore::build_sorted_ddl_sstables	lib::ob_sort call	lib::ob_sort(ddl_sstables.begin(), ddl_sstables.end(), [](ObITable *left, ObITable *right) {
+src/storage/tmp_file/ob_i_tmp_file_manager.cpp	435	ObITmpFileManager::get_tmp_file_fds	iterate hash container files_ (TmpFileMap)	} else if (OB_FAIL(files_.for_each(func))) {
+src/storage/tmp_file/ob_tmp_file_block_manager.cpp	766	ObTmpFileBlockManager::get_macro_block_list	iterate hash container block_map_ (ObTmpFileBlockMap)	} else if (OB_FAIL(block_map_.for_each(func))) {

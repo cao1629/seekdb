@@ -1,0 +1,50 @@
+file	line	symbol	construct	text
+src/sql/code_generator/ob_tsc_cg_service.cpp	3900	ObTscCgService::generate_table_lookup_ctdef	pointer membership test: append_array_no_dup	} else if (OB_FAIL(append_array_no_dup(result_outputs, cache_lookup_ctdef->index_scan_proj_exprs_))) {
+src/sql/code_generator/ob_tsc_cg_service.cpp	3928	ObTscCgService::extract_doc_id_index_back_access_columns	pointer membership test: add_var_to_array_no_dup	if (OB_FAIL(add_var_to_array_no_dup(access_exprs, raw_expr))) {
+src/sql/code_generator/ob_tsc_cg_service.cpp	3950	ObTscCgService::extract_vec_id_index_back_access_columns	pointer membership test: add_var_to_array_no_dup	if (OB_FAIL(add_var_to_array_no_dup(access_exprs, raw_expr))) {
+src/sql/code_generator/ob_tsc_cg_service.cpp	4073	ObTscCgService::generate_das_sort_ctdef	pointer membership test: append_array_no_dup	} else if (OB_FAIL(append_array_no_dup(result_output, sort_ctdef->sort_exprs_))) {
+src/sql/code_generator/ob_tsc_cg_service.cpp	4075	ObTscCgService::generate_das_sort_ctdef	pointer membership test: append_array_no_dup	&& OB_FAIL(append_array_no_dup(result_output, static_cast<ObDASAttachCtDef *>(child_ctdef)->result_output_))) {
+src/sql/code_generator/ob_tsc_cg_service.cpp	4077	ObTscCgService::generate_das_sort_ctdef	pointer membership test: append_array_no_dup	&& OB_FAIL(append_array_no_dup(result_output, static_cast<ObDASScanCtDef *>(child_ctdef)->result_output_))) {
+src/sql/code_generator/ob_tsc_cg_service.cpp	4132	ObTscCgService::generate_das_sort_ctdef	pointer membership test: append_array_no_dup	} else if (OB_FAIL(append_array_no_dup(result_output, sort_ctdef->sort_exprs_))) {
+src/sql/code_generator/ob_tsc_cg_service.cpp	4134	ObTscCgService::generate_das_sort_ctdef	pointer membership test: append_array_no_dup	&& OB_FAIL(append_array_no_dup(result_output, static_cast<ObDASAttachCtDef *>(child_ctdef)->result_output_))) {
+src/sql/code_generator/ob_tsc_cg_service.cpp	4136	ObTscCgService::generate_das_sort_ctdef	pointer membership test: append_array_no_dup	&& OB_FAIL(append_array_no_dup(result_output, static_cast<ObDASScanCtDef *>(child_ctdef)->result_output_))) {
+src/sql/code_generator/ob_tsc_cg_service.cpp	4241	ObTscCgService::generate_functional_lookup_ctdef	pointer membership test: append_array_no_dup	} else if (OB_FAIL(append_array_no_dup(func_lookup_result_outputs, output_rowkey_exprs))) {
+src/sql/code_generator/ob_tsc_cg_service.cpp	4254	ObTscCgService::generate_functional_lookup_ctdef	pointer membership test: append_array_no_dup	} else if (OB_FAIL(append_array_no_dup(final_result_outputs, tmp_func_lookup_ctdef->result_output_))) {
+src/sql/code_generator/ob_tsc_cg_service.cpp	4269	ObTscCgService::generate_functional_lookup_ctdef	pointer membership test: append_array_no_dup	} else if (OB_FAIL(append_array_no_dup(final_result_outputs, root_lookup_ctdef->index_scan_proj_exprs_))) {
+src/sql/code_generator/ob_tsc_cg_service.cpp	4316	ObTscCgService::generate_match_ctdef	IR pointer == IR pointer	if (tr_info.match_expr_ == check_repeat_exprs.at(j)) {
+src/sql/code_generator/ob_tsc_cg_service.cpp	4328	ObTscCgService::generate_match_ctdef	IR pointer == IR pointer	if (match_expr == next_tr_info.match_expr_ && OB_FAIL(ir_scan_ctdefs_idx.push_back(j))) {
+src/sql/code_generator/ob_tsc_cg_service.cpp	4381	ObTscCgService::generate_match_ctdef	IR pointer == IR pointer	if (result_output.at(j) == es_match_ctdefs.at(i)->relevance_proj_col_) {
+src/sql/code_generator/ob_tsc_cg_service.cpp	4411	ObTscCgService::generate_match_ctdef	IR pointer != IR pointer	if (result_outputs.at(i) != ir_scan_ctdefs.at(0)->inv_scan_domain_id_col_) {
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	2183	ObDASHNSWScanIter::check_is_simple_cmp_filter	IR pointer == IR pointer	bool is_rowkey_filter = rowkey_expr == arg_col;
+src/sql/das/iter/ob_das_iter_utils.cpp	1343	ObDASIterUtils::create_match_sub_tree	IR pointer == unresolved pointer	if (match_score_ctdef->result_output_.at(i) == domain_id_expr) {
+src/sql/das/iter/ob_das_iter_utils.cpp	1429	ObDASIterUtils::create_match_part_score_sub_tree	IR pointer == unresolved pointer	if (es_match_ctdef->result_output_.at(i) == domain_id_expr) {
+src/sql/das/iter/ob_das_iter_utils.cpp	2125	ObDASIterUtils::create_function_lookup_tree	IR pointer == unresolved pointer	if (rowkey_scan_output_exprs->at(i) == func_lookup_ctdef->lookup_domain_id_expr_) {
+src/sql/das/iter/ob_das_iter_utils.cpp	2143	ObDASIterUtils::create_function_lookup_tree	IR pointer != IR pointer	} else if (OB_UNLIKELY(rowkey_scan_output_expr != func_lookup_ctdef->lookup_domain_id_expr_)) {
+src/sql/das/iter/ob_das_iter_utils.cpp	2147	ObDASIterUtils::create_function_lookup_tree	IR pointer != unresolved pointer	if (OB_UNLIKELY(1 != main_lookup_rowkey_exprs->count() || rowkey_scan_output_expr != main_lookup_rowkey_exprs->at(0))) {
+src/sql/das/iter/ob_das_text_retrieval_iter.cpp	590	ObDASTextRetrievalIter::init_calc_exprs	IR pointer != IR pointer	doc_length_param_expr != ir_ctdef_->inv_scan_doc_length_col_ ||
+src/sql/das/iter/sparse_retrieval/ob_das_match_iter.cpp	374	ObDASMatchIter::inner_get_next_row	IR pointer != IR pointer	} else if (input_relevance_expr != output_relevance_expr) {
+src/sql/das/iter/sparse_retrieval/ob_das_match_iter.cpp	436	ObDASMatchIter::inner_get_next_rows	IR pointer != IR pointer	} else if (input_relevance_expr != output_relevance_expr) {
+src/sql/das/ob_das_tablet_mapper.h	85	DASRelatedTabletMap	container keyed by pointer: ObHashMap	typedef common::hash::ObHashMap<Key*, Value*, common::hash::NoPthreadDefendMode> RelatedTabletMap;
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	48	is_rollup_expr	pointer membership test: has_exist_in_array	if (has_exist_in_array(aggr_info.hash_rollup_info_->gby_exprs_, expr)
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	49	is_rollup_expr	pointer membership test: has_exist_in_array	|| !has_exist_in_array(aggr_info.hash_rollup_info_->expand_exprs_, expr)) {
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	54	is_rollup_expr	IR pointer == IR pointer	found = expr == expand_exprs.at(i);
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	2742	ObAggregateProcessor::rollup_aggregation	IR pointer == unresolved pointer	if (diff_expr != NULL && diff_expr == aggr_info.param_exprs_.at(0)) {
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	3796	ObAggregateProcessor::collect_aggr_result	IR pointer == unresolved pointer	if (diff_expr != NULL && diff_expr == aggr_info.param_exprs_.at(0)) {
+src/sql/engine/aggregate/ob_hash_groupby_op.cpp	340	ObHashGroupByOp::inner_open	pointer membership test: has_exist_in_array	if (!has_exist_in_array(distinct_origin_exprs_, expr)) {
+src/sql/engine/aggregate/ob_hash_groupby_op.cpp	350	ObHashGroupByOp::inner_open	pointer membership test: has_exist_in_array	if (!has_exist_in_array(distinct_origin_exprs_, expr)) {
+src/sql/engine/aggregate/ob_merge_groupby_op.cpp	261	ObMergeGroupByOp::rewrite_rollup_column	IR pointer == unresolved pointer	if (MY_SPEC.group_exprs_[i] == diff_expr) {
+src/sql/engine/aggregate/ob_merge_groupby_op.cpp	495	ObMergeGroupByOp::set_null	IR pointer == unresolved pointer	if (base_expr == MY_SPEC.rollup_exprs_.at(i)) {
+src/sql/engine/basic/ob_expr_values_op.cpp	448	ObExprValuesOp::calc_next_row	IR pointer == IR pointer	} else if (src_expr == dst_expr) {
+src/sql/engine/basic/ob_pushdown_filter.cpp	1248	ObPushdownFilterExecutor::find_evaluated_datums	pointer membership test: is_contain	if (is_contain(calc_exprs, expr)) {
+src/sql/engine/basic/ob_values_table_access_op.cpp	176	ObValuesTableAccessOp::calc_datum_from_expr	IR pointer == IR pointer	if (src_expr == dst_expr) {
+src/sql/engine/basic/ob_values_table_access_op.cpp	313	ObValuesTableAccessOp::calc_next_row	IR pointer == IR pointer	if (i < col_num && output == MY_SPEC.column_exprs_.at(i)) {
+src/sql/engine/dml/ob_dml_service.cpp	54	ObDMLService::check_cascaded_reference	pointer membership test: has_exist_in_array	bret = has_exist_in_array(row, parent_expr);
+src/sql/engine/dml/ob_fk_checker.cpp	251	ObForeignKeyChecker::init_clear_exprs	pointer membership test: has_exist_in_array	} else if (!has_exist_in_array(row, expr)) {
+src/sql/engine/expr/ob_expr_array_map.cpp	316	ObExprArrayMapCommon::get_array_map_lambda_params	IR pointer == IR pointer	if (idx == param_idx[i] && get_rt_expr(*raw_expr) == param_exprs[i]) {
+src/sql/engine/expr/ob_expr_array_map.cpp	318	ObExprArrayMapCommon::get_array_map_lambda_params	IR pointer == IR pointer	} else if (get_rt_expr(*raw_expr) == param_exprs[i]) {
+src/sql/engine/join/ob_hash_join_op.cpp	2588	ObHashJoinOp::prepare_hash_table	pointer cast to integer compared for identity	? (build_ht_thread_ptr == reinterpret_cast<uint64_t>(this))
+src/sql/engine/join/ob_merge_join_op.cpp	898	ObMergeJoinOp::ChildBatchFetcher::init	IR pointer == unresolved pointer	if (all_exprs_->at(j) == param_expr) {
+src/sql/engine/ob_exec_context.cpp	535	ObExecContext::get_temp_expr_eval_ctx	pointer cast to integer used as a key	if (OB_FAIL(temp_expr_ctx_map_.get_refactored(reinterpret_cast<int64_t>(&temp_expr),
+src/sql/engine/ob_exec_context.cpp	541	ObExecContext::get_temp_expr_eval_ctx	pointer cast to integer used as a key	OZ(temp_expr_ctx_map_.set_refactored(reinterpret_cast<int64_t>(&temp_expr),
+src/sql/engine/ob_exec_context.cpp	542	ObExecContext::get_temp_expr_eval_ctx	pointer cast to integer used as a key	reinterpret_cast<int64_t>(temp_expr_ctx)));
+src/sql/engine/pdml/static/ob_px_sstable_insert_op.cpp	314	ObPxMultiPartSSTableInsertOp::locate_exprs	IR pointer == unresolved pointer	if (exprs.at(i) == tablet_autoinc_expr_) {

@@ -1,0 +1,51 @@
+file	line	symbol	construct	text
+src/sql/engine/sort/ob_sort_op_impl.h	544	ObSortOpImpl::ObAdaptiveQS::sort	sort function definition: ObSortOpImpl::ObAdaptiveQS::sort	void sort(int64_t rows_begin, int64_t rows_end)
+src/sql/engine/sort/ob_sort_op_impl.h	624	ObSortOpImpl	heap declared: TopnHeap (ObBinaryHeap)	typedef common::ObBinaryHeap<ObChunkDatumStore::StoredRow *, Compare> TopnHeap;
+src/sql/engine/sort/ob_sort_op_impl.h	634	ObSortOpImpl::TopnHeapNode	heap declared: heap_ (TopnHeap)	TopnHeap heap_;
+src/sql/engine/sort/ob_sort_op_impl.h	654	ObSortOpImpl::TopnHeapNodeComparer::operator()	heap operation top on heap_ (TopnHeap)	return compare_(l->heap_.top(),
+src/sql/engine/sort/ob_sort_op_impl.h	655	ObSortOpImpl::TopnHeapNodeComparer::operator()	heap operation top on heap_ (TopnHeap)	r->heap_.top());
+src/sql/engine/sort/ob_sort_op_impl.h	694	ObSortOpImpl	heap declared: heap (Heap)	int heap_next(Heap &heap, const NextFunc &func, Item &item);
+src/sql/engine/sort/ob_sort_op_impl.h	785	ObSortOpImpl	heap declared: topn_heap (TopnHeap)	void clean_up_topn_heap(TopnHeap *&topn_heap);
+src/sql/engine/sort/ob_sort_op_impl.h	810	ObSortOpImpl	heap declared: IMMSHeap (ObBinaryHeap)	typedef common::ObBinaryHeap<ObChunkDatumStore::StoredRow **, Compare, 16> IMMSHeap;
+src/sql/engine/sort/ob_sort_op_impl.h	811	ObSortOpImpl	heap declared: EMSHeap (ObBinaryHeap)	typedef common::ObBinaryHeap<ObSortOpChunk *, Compare, MAX_MERGE_WAYS> EMSHeap;
+src/sql/engine/sort/ob_sort_op_impl.h	842	ObSortOpImpl	heap declared: imms_heap_ (IMMSHeap)	IMMSHeap *imms_heap_;
+src/sql/engine/sort/ob_sort_op_impl.h	844	ObSortOpImpl	heap declared: ems_heap_ (EMSHeap)	EMSHeap *ems_heap_;
+src/sql/engine/sort/ob_sort_op_impl.h	1012	ObUniqueSortImpl::sort	sort function definition: ObUniqueSortImpl::sort	virtual int sort()
+src/sql/engine/table/ob_table_scan_op.cpp	1302	ObTableScanOp::prepare_single_scan_range	lib::ob_sort call	lib::ob_sort(key_ranges.begin(), key_ranges.end(), ObNewRangeCmp());
+src/sql/engine/table/ob_table_scan_op.cpp	1397	ObTableScanOp::prepare_range_for_each_index	lib::ob_sort call	lib::ob_sort(key_ranges.begin(), key_ranges.end(), ObNewRangeCmp());
+src/sql/engine/window_function/ob_window_function_op.cpp	146	ObWindowFunctionSpec::rd_generate_patch	lib::ob_sort call	lib::ob_sort(ctx.infos_.begin(), ctx.infos_.end(),
+src/sql/executor/ob_maintain_dependency_info_task.cpp	297	process_reference_obj_table	iterate hash container returned by get_ref_obj_table()	if (OB_FAIL(ref_obj_table.get_ref_obj_table().foreach_refactored(op))) {
+src/sql/hybrid_search/ob_hybrid_search_executor.cpp	379	ObHybridSearchExecutor::get_partition_info	lib::ob_sort call	lib::ob_sort(column_ids.begin(), column_ids.end());
+src/sql/hybrid_search/ob_query_parse.cpp	2315	ObESQueryParser::parse_knn	iterate hash container required_params (RequiredParamsSet)	ObString param_name = required_params.begin()->first;
+src/sql/ob_result_set.cpp	1131	ObResultSet::ExternalRetrieveInfo::recount_dynamic_param_info	lib::ob_sort call	lib::ob_sort(recount_params.begin(), recount_params.end(),
+src/sql/ob_scanner.cpp	270	ObScanner::set_session_var_map	iterate hash container returned by get_val_map()	for (sql::ObSessionValMap::VarNameValMap::const_iterator iter = current_map.get_val_map().begin();
+src/sql/optimizer/ob_join_order.cpp	4553	ObJoinOrder::get_candi_range_expr	lib::ob_sort call	lib::ob_sort(sorted_predicates.begin(), sorted_predicates.end(), compare_op);
+src/sql/optimizer/ob_join_order.cpp	16662	ObJoinOrder::get_query_tokens_by_boolean_mode	iterate hash container tokens_map (ObHashMap)	for (hash::ObHashMap<ObString, int32_t>::const_iterator iter = tokens_map.begin();
+src/sql/optimizer/ob_join_order.cpp	16727	ObJoinOrder::get_query_tokens	iterate hash container token_map (ObHashMap)	for (hash::ObHashMap<ObFTWord, int64_t>::const_iterator iter = token_map.begin();
+src/sql/optimizer/ob_log_join.cpp	794	ObLogJoin::print_join_tables_in_hint	lib::ob_sort call	lib::ob_sort(join_tables.begin(), join_tables.end(), cmp_func);
+src/sql/optimizer/ob_log_plan.cpp	8917	ObLogPlan::sort_pwj_constraint	lib::ob_sort call	lib::ob_sort(&cur_cons->at(0), &cur_cons->at(0) + cur_cons->count());
+src/sql/optimizer/ob_log_plan.cpp	8924	ObLogPlan::sort_pwj_constraint	lib::ob_sort call	lib::ob_sort(&cur_cons->at(0), &cur_cons->at(0) + cur_cons->count());
+src/sql/optimizer/ob_logical_operator.cpp	2233	ObLogicalOperator::reorder_filters_exprs	lib::ob_sort call	lib::ob_sort(filter_ranks.begin(), filter_ranks.end(), ObExprRankPairCompare());
+src/sql/optimizer/ob_logical_operator.cpp	3311	ObLogicalOperator::explain_print_partitions	lib::ob_sort call	lib::ob_sort(part_infos.begin(), part_infos.end(), CopyableComparer(cmp));
+src/sql/optimizer/ob_opt_selectivity.cpp	239	ObPartialCorrelationModel::combine_filters_selectivity	lib::ob_sort call	lib::ob_sort(&selectivities.at(0), &selectivities.at(0) + selectivities.count());
+src/sql/optimizer/ob_opt_selectivity.cpp	2840	ObOptSelectivity::combine_ndvs	lib::ob_sort call	lib::ob_sort(&ndvs.at(0), &ndvs.at(0) + ndvs.count());
+src/sql/optimizer/ob_optimizer_util.h	1692	ObOptimizerUtil::choose_random_members	lib::ob_sort call	lib::ob_sort(&indices.at(0), &indices.at(0) + choose_cnt);
+src/sql/optimizer/ob_pwj_comparer.cpp	624	ObStrictPwjComparer::get_subpartition_indexes_by_part_index	lib::ob_sort call	lib::ob_sort(&used_subpart_indexes.at(0), &used_subpart_indexes.at(0) + used_subpart_indexes.count());
+src/sql/optimizer/ob_select_log_plan.cpp	6726	ObSelectLogPlan::sort_window_functions	lib::ob_sort call	lib::ob_sort(first, first + expr_entries.count());
+src/sql/optimizer/ob_skyline_prunning.cpp	63	ObInterestOrderDim::add_filter_column_ids	lib::ob_sort call	lib::ob_sort(filter_column_ids_, filter_column_ids_ + filter_column_cnt_);//do sort, for quick compare
+src/sql/optimizer/ob_skyline_prunning.cpp	333	ObQueryRangeDim::add_rowkey_ids	lib::ob_sort call	lib::ob_sort(column_ids_, column_ids_ + column_cnt_);//do sort, for quick compare
+src/sql/optimizer/stat/ob_dbms_stats_executor.cpp	460	ObDbmsStatsExecutor::split_table_part_param	iterate hash container part_id_to_subpart_map (ObHashMap)	hash::ObHashMap<int64_t, ObArray<PartInfo*>>::const_iterator iter = part_id_to_subpart_map.begin();
+src/sql/optimizer/stat/ob_opt_stat_monitor_manager.cpp	546	ObOptStatMonitorManager::generate_opt_stat_monitoring_info_rows	iterate hash container dml_stat_map_ (DmlStatMap)	if (OB_FAIL(dml_stat_map_.foreach_refactored(consumer))) {
+src/sql/optimizer/stat/ob_opt_stat_monitor_manager.cpp	640	ObOptStatMonitorManager::get_col_usage_info	iterate hash container column_usage_map_ (ColumnUsageMap)	for (auto iter = column_usage_map_.begin(); OB_SUCC(ret) && iter != column_usage_map_.end(); ++iter) {
+src/sql/optimizer/stat/ob_opt_stat_monitor_manager.cpp	659	ObOptStatMonitorManager::get_dml_stats	iterate hash container dml_stat_map_ (DmlStatMap)	for (auto iter = dml_stat_map_.begin(); OB_SUCC(ret) && iter != dml_stat_map_.end(); ++iter) {
+src/sql/optimizer/stat/ob_stat_define.cpp	571	DEF_TO_STRING(ObOptStatGatherAudit)	lib::ob_sort call	lib::ob_sort(&items.at(0),
+src/sql/optimizer/stat/ob_stat_item.cpp	321	ObStatTopKHist::build_histogram_from_topk_items	lib::ob_sort call	lib::ob_sort(&tmp.at(0),
+src/sql/optimizer/stat/ob_topk_hist_estimator.cpp	104	ObTopKFrequencyHistograms::sort_topk_fre_items	lib::ob_sort call	lib::ob_sort(&items.at(0),
+src/sql/plan_cache/ob_lib_cache_object_manager.h	102	ObLCObjectManager::foreach_cache_obj	iterate hash container cache_obj_map_ (IdCacheObjectMap)	if (OB_FAIL(cache_obj_map_.foreach_refactored(callback))) {
+src/sql/plan_cache/ob_lib_cache_object_manager.h	111	ObLCObjectManager::foreach_alloc_cache_obj	iterate hash container alloc_cache_obj_map_ (IdCacheObjectMap)	if (OB_FAIL(alloc_cache_obj_map_.foreach_refactored(callback))) {
+src/sql/plan_cache/ob_plan_cache.cpp	226	ObNodeStatFilterOp::operator()	std::pop_heap call	std::pop_heap(key_value_list_->begin(), key_value_list_->end(), stat_compare);
+src/sql/plan_cache/ob_plan_cache.cpp	242	ObNodeStatFilterOp::operator()	std::push_heap call	std::push_heap(key_value_list_->begin(), key_value_list_->end(), stat_compare);
+src/sql/plan_cache/ob_plan_cache.cpp	1159	ObPlanCache::foreach_cache_evict	iterate hash container cache_key_node_map_ (CacheKeyNodeMap)	if (OB_FAIL(cache_key_node_map_.foreach_refactored(cb))) {
+src/sql/plan_cache/ob_plan_cache.cpp	1299	ObPlanCache::cache_evict_by_glitch_node	iterate hash container cache_key_node_map_ (CacheKeyNodeMap)	if (OB_FAIL(cache_key_node_map_.foreach_refactored(traverse_op))) {
+src/sql/plan_cache/ob_plan_cache.cpp	1311	ObPlanCache::cache_evict_by_glitch_node	std::pop_heap call	std::pop_heap(co_list.begin(), co_list.end(), [](const LCKeyValue &left, const LCKeyValue &right) {
+src/sql/plan_cache/ob_plan_cache_value.cpp	215	ObPlanCacheValue::init	lib::ob_sort call	lib::ob_sort(not_param_info_.begin(), not_param_info_.end(),

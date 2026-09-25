@@ -1,0 +1,23 @@
+file	line	symbol	construct	text
+src/sql/pl/pl_cache/ob_pl_cache_object.h	82	PLCacheObjStat::db_id_	field uint64_t; 1 atomic accesses (ATOMIC_STORE 1)	uint64_t db_id_;
+src/sql/pl/pl_cache/ob_pl_cache_object.h	87	PLCacheObjStat::last_active_time_	field int64_t; 1 atomic accesses (ATOMIC_STORE 1)	int64_t last_active_time_;
+src/sql/pl/pl_cache/ob_pl_cache_object.h	89	PLCacheObjStat::hit_count_	field uint64_t; 1 atomic accesses (ATOMIC_INC 1)	uint64_t hit_count_;
+src/sql/pl/pl_cache/ob_pl_cache_object.h	91	PLCacheObjStat::elapsed_time_	field int64_t; 1 atomic accesses (ATOMIC_AAF 1)	int64_t elapsed_time_;          //Execution time rt
+src/sql/pl/pl_cache/ob_pl_cache_object.h	92	PLCacheObjStat::execute_times_	field int64_t; 1 atomic accesses (ATOMIC_INC 1)	int64_t execute_times_;        // Execution times under SUCC
+src/sql/pl/pl_cache/ob_pl_cache_object.h	93	PLCacheObjStat::slowest_exec_time_	field int64_t; 1 atomic accesses (ATOMIC_STORE 1)	int64_t  slowest_exec_time_;    // execution slowest time
+src/sql/pl/pl_cache/ob_pl_cache_object.h	94	PLCacheObjStat::slowest_exec_usec_	field uint64_t; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_STORE 1)	uint64_t slowest_exec_usec_;    // execution slowest usec
+src/sql/plan_cache/ob_i_lib_cache_node.h	44	StmtStat::last_active_timestamp_	field int64_t; 1 atomic accesses (ATOMIC_STORE 1)	int64_t last_active_timestamp_;           // used now
+src/sql/plan_cache/ob_i_lib_cache_node.h	48	StmtStat::execute_count_	field int64_t; 1 atomic accesses (ATOMIC_INC 1)	int64_t execute_count_;                   // used now
+src/sql/plan_cache/ob_i_lib_cache_node.h	215	ObILibCacheNode::ref_count_	field int64_t; 3 atomic accesses (ATOMIC_AAF 1, ATOMIC_LOAD 1, ATOMIC_SAF 1)	int64_t ref_count_;
+src/sql/plan_cache/ob_i_lib_cache_node.h	221	ObILibCacheNode::accounted_size_	field int64_t; 1 atomic accesses (ATOMIC_TAS 1)	int64_t accounted_size_;
+src/sql/plan_cache/ob_i_lib_cache_object.h	104	ObILibCacheObject::ref_count_	field volatile int64_t; 6 atomic accesses (ATOMIC_LOAD 3, ATOMIC_AAF 1, ATOMIC_BCAS 1, ATOMIC_SAF 1)	volatile int64_t ref_count_;
+src/sql/plan_cache/ob_i_lib_cache_object.h	110	ObILibCacheObject::accounted_size_	field int64_t; 3 atomic accesses (ATOMIC_BCAS 1, ATOMIC_LOAD 1, ATOMIC_TAS 1)	int64_t accounted_size_;
+src/sql/plan_cache/ob_lib_cache_object_manager.h	73	ObLCObjectManager::object_id_	field volatile ObCacheObjID; 1 atomic accesses (__sync_add_and_fetch 1)	volatile ObCacheObjID object_id_;
+src/sql/plan_cache/ob_pcv_set.h	134	ObPCVSet::expired_time_	field int64_t; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_VCAS 1)	int64_t expired_time_;
+src/sql/plan_cache/ob_plan_cache.h	463	ObPlanCache::mem_limit_pct_	field int64_t; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_STORE 1)	int64_t mem_limit_pct_;
+src/sql/plan_cache/ob_plan_cache.h	464	ObPlanCache::mem_high_pct_	field int64_t; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_STORE 1)	int64_t mem_high_pct_;                     // high water mark percentage
+src/sql/plan_cache/ob_plan_cache.h	465	ObPlanCache::mem_low_pct_	field int64_t; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_STORE 1)	int64_t mem_low_pct_;                      // low water mark percentage
+src/sql/plan_cache/ob_plan_cache.h	466	ObPlanCache::managed_used_	field int64_t; 4 atomic accesses (ATOMIC_LOAD 2, ATOMIC_BCAS 1, ATOMIC_FAA 1)	int64_t managed_used_;
+src/sql/plan_cache/ob_plan_cache.h	473	ObPlanCache::destroy_	volatile field volatile int64_t; no atomic access found	volatile int64_t destroy_;
+src/sql/plan_cache/ob_plan_cache_struct.h	504	ObPlanCacheStat::access_count_	field uint64_t; 2 atomic accesses (ATOMIC_INC 2)	uint64_t access_count_;
+src/sql/plan_cache/ob_plan_cache_struct.h	505	ObPlanCacheStat::hit_count_	field uint64_t; 1 atomic accesses (ATOMIC_INC 1)	uint64_t hit_count_;

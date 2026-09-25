@@ -1,0 +1,72 @@
+file	line	symbol	construct	text
+src/pl/ob_pl_resolver.cpp	141	ObPLResolver::init_default_expr	const_cast<ObPLVar *>	OX ((const_cast<ObPLVar *>(var))->set_default(func_ast.get_expr_count() - 1));
+src/pl/ob_pl_resolver.cpp	1745	ObPLResolver::resolve_sp_row_type	const_cast<void *>	record_type = static_cast<ObRecordType *>(const_cast<void *>(dup_type));
+src/pl/ob_pl_resolver.cpp	1754	ObPLResolver::resolve_sp_row_type	const_cast<ObPLBlockNS *>	OZ (const_cast<ObPLBlockNS *>(pre_ns)->add_type(record_type));
+src/pl/ob_pl_resolver.cpp	1789	ObPLResolver::resolve_sp_row_type	const_cast<ObRecordType*>	OX ((const_cast<ObRecordType*>(record_type))->set_type_from(PL_TYPE_ATTR_ROWTYPE));
+src/pl/ob_pl_resolver.cpp	2116	ObPLResolver::resolve_question_mark_node	const_cast<ObPLVar*>	OX (const_cast<ObPLVar*>(var)->set_readonly(false)); // into value need set readonly false
+src/pl/ob_pl_resolver.cpp	2118	ObPLResolver::resolve_question_mark_node	const_cast<ObPLVar*>	OX (const_cast<ObPLVar*>(var)->set_name(ANONYMOUS_INOUT_ARG));
+src/pl/ob_pl_resolver.cpp	2176	ObPLResolver::set_question_mark_type	const_cast<ObPLVar*>	const ObPLDataType *right = &((const_cast<ObPLVar*>(var))->get_type());
+src/pl/ob_pl_resolver.cpp	2204	ObPLResolver::set_question_mark_type	const_cast<ObPLVar*>	OX ((const_cast<ObPLVar*>(var))->set_readonly(false));
+src/pl/ob_pl_resolver.cpp	2206	ObPLResolver::set_question_mark_type	const_cast<ObPLVar*>	OX ((const_cast<ObPLVar*>(var))->set_name(ANONYMOUS_INOUT_ARG));
+src/pl/ob_pl_resolver.cpp	2214	ObPLResolver::set_question_mark_type	const_cast<ObPLVar*>	OX ((const_cast<ObPLVar*>(var))->set_type(dest_type));
+src/pl/ob_pl_resolver.cpp	2995	ObPLResolver::resolve_static_sql	const_cast<ObPLVar*>	OX ((const_cast<ObPLVar*>(var))->set_is_referenced(true));
+src/pl/ob_pl_resolver.cpp	2997	ObPLResolver::resolve_static_sql	const_cast<pl::ObPLVar*>	OX (const_cast<pl::ObPLVar*>(var)->set_name(pl::ObPLResolver::ANONYMOUS_INOUT_ARG));
+src/pl/ob_pl_resolver.cpp	2999	ObPLResolver::resolve_static_sql	const_cast<ObPLVar*>	OX ((const_cast<ObPLVar*>(var))->set_name(ANONYMOUS_SQL_ARG));
+src/pl/ob_pl_resolver.cpp	3121	ObPLResolver::resolve_interface_pragma	const_cast<ObPLRoutineInfo*>	OZ (const_cast<ObPLRoutineInfo*>(routine_info)->get_compile_flag().add_intf());
+src/pl/ob_pl_resolver.cpp	4336	ObPLResolver::resolve_cursor_def	const_cast<ObPLVar *>	const_cast<ObPLVar *>(var)->set_type(type);
+src/pl/ob_pl_resolver.cpp	4375	ObPLResolver::resolve_cursor_def	const_cast<ObPLBlockNS *>	CK (OB_NOT_NULL(external_ns = const_cast<ObPLBlockNS *>(current_block_->get_namespace().get_external_ns()->get_parent_ns())));
+src/pl/ob_pl_resolver.cpp	4386	ObPLResolver::resolve_cursor_def	const_cast<ObIArray<ObRawExpr*>*>	ObIArray<ObRawExpr *> *external_exprs = const_cast<ObIArray<ObRawExpr*>*>(external_ns->get_exprs());
+src/pl/ob_pl_resolver.cpp	4392	ObPLResolver::resolve_cursor_def	const_cast<ObPLCursor*>	OZ (const_cast<ObPLCursor*>(external_cursor)->set(prepare_result.route_sql_,
+src/pl/ob_pl_resolver.cpp	4733	ObPLResolver::resolve_cursor_actual_params	const_cast<ObPLVar*>	OZ (iparams.push_back(const_cast<ObPLVar*>(var)));
+src/pl/ob_pl_resolver.cpp	4741	ObPLResolver::resolve_cursor_actual_params	const_cast<ObPLVar*>	OZ (iparams.push_back(const_cast<ObPLVar*>(var)));
+src/pl/ob_pl_resolver.cpp	4743	ObPLResolver::resolve_cursor_actual_params	const_cast<ObPLVar*>	OZ (iparams.push_back(const_cast<ObPLVar*>(stmt->get_variable((params_list.at(i))))));
+src/pl/ob_pl_resolver.cpp	6014	ObPLResolver::resolve_raw_expr	const_cast<ObObjMeta&>	const_cast<ObObjMeta&>(param.get_param_meta()).reset();
+src/pl/ob_pl_resolver.cpp	6464	ObPLResolver::resolve_obj_access_node	const_cast<const ObStmtNodeTree*> (adds const only)	record_error_line(const_cast<const ObStmtNodeTree*>(&node), session_info, ObString(), ObString(), ObString());
+src/pl/ob_pl_resolver.cpp	6547	ObPLResolver::resolve_obj_access_idents	const_cast<const ObStmtNodeTree*> (adds const only)	record_error_line(const_cast<const ObStmtNodeTree*>(&node), session_info,  ObString(), ObString(), ObString());
+src/pl/ob_pl_resolver.cpp	7303	ObPLResolver::resolve_udf_info	const_cast<ObPLVar*>	ObPLVar* shadow_var = const_cast<ObPLVar*>(var);
+src/pl/ob_pl_resolver.cpp	7353	ObPLResolver::check_local_variable_read_only	const_cast<ObPLVar*>	ObPLVar *shadow_var = const_cast<ObPLVar*>(var);
+src/pl/ob_pl_resolver.cpp	7740	ObPLResolver::get_subprogram_ns	const_cast<ObPLBlockNS *>	*(const_cast<ObPLBlockNS *>(current_ns.get_external_ns()->get_parent_ns())),
+src/pl/ob_pl_resolver.cpp	7830	ObPLResolver::check_variable_accessible	const_cast<ObPLVar *>	OV (OB_NOT_NULL(var = const_cast<ObPLVar *>(symbol_table->get_symbol(idx))), OB_ERR_UNEXPECTED, K(idx));
+src/pl/ob_pl_resolver.cpp	10509	ObPLResolver::resolve_routine_decl	const_cast<ObPLRoutineInfo*>	routine_info = const_cast<ObPLRoutineInfo*>(exist);
+src/pl/ob_pl_resolver.cpp	10560	ObPLResolver::resolve_routine_block	const_cast<ObPLBlockNS &>	OX (const_cast<ObPLBlockNS &>(routine_ast.get_body()->get_namespace()).set_external_ns(NULL));
+src/pl/ob_pl_resolver.cpp	10625	ObPLResolver::resolve_routine_def	const_cast<ObPLRoutineInfo*>	OX (const_cast<ObPLRoutineInfo*>(decl_routine_info)->set_route_sql(route_sql));
+src/pl/ob_pl_resolver.cpp	10817	ObPLResolveCtx::get_user_type	const_cast<ObPLResolveCtx *>	OZ (const_cast<ObPLResolveCtx *>(this)->type_buffer_.push_back(user_type));
+src/pl/ob_pl_stmt.cpp	425	ObPLRoutineInfo::make_routine_param	const_cast<ObString &>	OZ (ob_write_string(allocator, param_name, const_cast<ObString &>(param->get_name())), param_name);
+src/pl/ob_pl_stmt.cpp	436	ObPLRoutineInfo::make_routine_param	const_cast<ObString &>	const_cast<ObString &>(param->get_type_name())), extern_type_info);
+src/pl/ob_pl_stmt.cpp	438	ObPLRoutineInfo::make_routine_param	const_cast<ObString&>	const_cast<ObString&>(param->get_type_subname())), extern_type_info);
+src/pl/ob_pl_stmt.cpp	617	ObPLRoutineTable::make_routine_ast	const_cast<ObString &>	if (OB_FAIL(ob_write_string(allocator, db_name, const_cast<ObString &>(routine_ast->get_db_name())))) {
+src/pl/ob_pl_stmt.cpp	841	ObPLBlockNS::add_symbol	const_cast<ObRawExpr*>	OZ (exprs_->push_back(const_cast<ObRawExpr*>(expr)));
+src/pl/ob_pl_stmt.cpp	1006	ObPLBlockNS::check_dup_symbol	const_cast<ObPLVar *>	ObPLVar *pl_var = const_cast<ObPLVar *>(symbol_table_->get_symbol(symbols_.at(i)));
+src/pl/ob_pl_stmt.cpp	1909	ObPLBlockNS::resolve_symbol	const_cast<ObPLVar *>	ObPLVar *pl_var = const_cast<ObPLVar *>(symbol_table_->get_symbol(get_symbols().at(i)));
+src/pl/ob_pl_stmt.cpp	2182	ObPLBlockNS::resolve_routine	const_cast<ObPLResolveCtx &>	(const_cast<ObPLResolveCtx &>(external_ns_->get_resolve_ctx())).params_.secondary_namespace_
+src/pl/ob_pl_stmt.cpp	2194	ObPLBlockNS::resolve_routine	const_cast<ObPLResolveCtx &>	(const_cast<ObPLResolveCtx &>(external_ns_->get_resolve_ctx())).params_.secondary_namespace_ = second_ns;
+src/pl/ob_pl_stmt.cpp	2375	ObPLBlockNS::get_pl_data_type_by_id	const_cast<ObRecordMember *>	ObRecordMember *member = const_cast<ObRecordMember *>(rec_type->get_record_member(i));
+src/pl/ob_pl_stmt.cpp	2867	ObPLInto::calc_type_constraint	const_cast<ObPLExternalNS *>	ObPLExternalNS *extern_ns = const_cast<ObPLExternalNS *>(root_ns->get_external_ns());
+src/pl/ob_pl_stmt.cpp	2890	ObPLInto::calc_type_constraint	const_cast<ObPLBlockNS&>	const_cast<ObPLBlockNS&>(ns), subprogram_id, subprogram_ns));
+src/pl/ob_pl_stmt.cpp	3001	ObPLStmt::set_label_idx	const_cast<ObPLLabelTable *>	ObPLLabelTable *pl_label = const_cast<ObPLLabelTable *>(get_label_table());
+src/pl/ob_pl_stmt.cpp	3114	ObPLFunctionAST::add_argument	const_cast<ObObjMeta&>	ObObjMeta &meta_type = const_cast<ObObjMeta&>(type->get_meta_type());
+src/pl/ob_pl_stmt.cpp	3117	ObPLFunctionAST::add_argument	const_cast<ObObjMeta&>	ObObjMeta &meta_type = const_cast<ObObjMeta&>(type->get_meta_type());
+src/pl/ob_pl_stmt.cpp	3125	ObPLFunctionAST::add_argument	const_cast<ObRawExpr*>	&& OB_FAIL(get_exprs().push_back(const_cast<ObRawExpr*>(expr)))) {
+src/pl/ob_pl_type.cpp	134	ObPLDataType::transform_from_iparam	const_cast<ObObjMeta&>	ObObjMeta &meta = const_cast<ObObjMeta&>(data_type->get_meta_type());
+src/pl/ob_pl_type.cpp	169	ObPLDataType::transform_from_iparam	const_cast<ObObjMeta&>	ObObjMeta &meta = const_cast<ObObjMeta&>(data_type->get_meta_type());
+src/pl/ob_pl_type.cpp	715	ObPLEnumSetCtx::get_type_info_id	C-style cast (ObIArray<common::ObString>*) drops const from type_info	ObPLEnumSetCtx::ObPLTypeInfoKey enum_type_info_key((ObIArray<common::ObString>*)type_info);
+src/pl/ob_pl_user_type.cpp	1584	ObPLCollection::is_elem_deleted	const_cast<ObObj *>	ObObj *obj = const_cast<ObObj *>(static_cast<const ObObj *>(get_data()));
+src/pl/parser/ob_pl_parser.cpp	74	ObPLParser::parse	const_cast<char*>	parse_result.no_param_sql_ = const_cast<char*>(stmt_block.ptr());
+src/pl/pl_cache/ob_pl_cache.cpp	286	ObPLObjectKey::destory	const_cast<char *>	allocator.free(const_cast<char *>(name_.ptr()));
+src/pl/pl_cache/ob_pl_cache.cpp	289	ObPLObjectKey::destory	const_cast<char *>	allocator.free(const_cast<char *>(sys_vars_str_.ptr()));
+src/pl/sys_package/ob_dbms_application.cpp	62	ObDBMSAppInfo::set_action	const_cast<ObSQLSessionInfo*>	ObSQLSessionInfo* sess = const_cast<ObSQLSessionInfo*>(ctx.get_my_session());
+src/pl/sys_package/ob_dbms_application.cpp	80	ObDBMSAppInfo::set_client_info	const_cast<ObSQLSessionInfo*>	ObSQLSessionInfo* sess = const_cast<ObSQLSessionInfo*>(ctx.get_my_session());
+src/pl/sys_package/ob_dbms_application.cpp	103	ObDBMSAppInfo::set_module	const_cast<ObSQLSessionInfo*>	ObSQLSessionInfo* sess = const_cast<ObSQLSessionInfo*>(ctx.get_my_session());
+src/query/api/query/engine/cmd/ob_load_data_parser.h	583	ObCSVGeneralParser::gen_new_field	const_cast<char*>	new_field.ptr_ = const_cast<char*>(field_begin);
+src/query/api/query/engine/expr/ob_array_expr_utils.h	97	ObArrayExprUtils::calc_array_sum_by_type	const_cast<char *>	T1 *data = reinterpret_cast<T1 *>(const_cast<char *>(data_ptr));
+src/query/api/query/engine/expr/ob_expr.h	1119	ObExpr::deep_copy_datum	const_cast<char *>	MEMMOVE(const_cast<char *>(dst.ptr_), src.ptr_, src.len_);
+src/query/api/query/engine/expr/ob_expr.h	1122	ObExpr::deep_copy_datum	const_cast<char *>	MEMMOVE(const_cast<char *>(dst.ptr_), src.ptr_, src.len_);
+src/query/api/query/engine/expr/ob_expr_lob_utils.h	631	ObTextStringHelper::pack_to_disk_inrow_lob	C-style cast (char*) drops const from expr	if (OB_ISNULL(buf = (char*)expr.get_str_res_mem(ctx, total_len))) {
+src/query/api/query/engine/vector/ob_discrete_format.h	53	ObDiscreteFormat::set_payload_shallow	const_cast<char *>	ptrs_[idx] = const_cast<char *>(static_cast<const char *>(payload));
+src/query/api/query/engine/vector/ob_i_vector.h	350	#define DEF_VEC_WRITE_INTERFACES	const_cast<T *>	return const_cast<T *>(ptr);                                                                   \
+src/query/api/query/engine/vector/ob_uniform_format.h	70	ObUniformFormat::set_payload	const_cast<char *>	MEMCPY(const_cast<char *>(get_payload(idx)), payload, length);
+src/query/api/query/vector/ob_vector_embedding_handler.h	422	ObEmbeddingTaskHandler::get_tracked_task_count	const_cast<common::ObSpinLock&>	common::ObSpinLockGuard guard(const_cast<common::ObSpinLock&>(task_list_lock_));
+src/query/api/query/vector/ob_vector_index_util.h	1016	ObVecExtraInfoPtr::set_with_copy	const_cast<char *>	MEMCPY(const_cast<char *>(buf_[idx]), src_buf, extra_info_actual_size);
+src/query/vector/ob_vector_embedding_handler.cpp	1245	ObEmbeddingTaskHandler::get_all_active_tasks	const_cast<common::ObSpinLock&>	common::ObSpinLockGuard guard(const_cast<common::ObSpinLock&>(task_list_lock_));
+src/rootserver/ddl_task/ob_ddl_redefinition_task.cpp	1414	ObDDLRedefinitionTask::sync_column_level_stats_info	const_cast<ObColumnSchemaV2 *>	const_cast<ObColumnSchemaV2 *>(new_col),
+src/rootserver/freeze/ob_global_merge_manager.cpp	413	ObGlobalMergeManager::ObGlobalMergeMgrGuard::ObGlobalMergeMgrGuard	const_cast<SpinRWLock &>	: lock_(const_cast<SpinRWLock &>(lock)),

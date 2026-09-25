@@ -1,0 +1,29 @@
+file	line	symbol	construct	text
+src/storage/tablelock/ob_lock_memtable.cpp	155	ObLockMemtable::lock_	ret != OB_TRY_LOCK_ROW_CONFLICT	if (ret != OB_TRY_LOCK_ROW_CONFLICT &&
+src/storage/tablelock/ob_lock_memtable.cpp	156	ObLockMemtable::lock_	ret != OB_OBJ_LOCK_EXIST	ret != OB_OBJ_LOCK_EXIST) {
+src/storage/tablelock/ob_lock_memtable.cpp	160	ObLockMemtable::lock_	ret == OB_EAGAIN	if (OB_EAGAIN == ret) {
+src/storage/tablelock/ob_lock_memtable.cpp	174	ObLockMemtable::lock_	ret == OB_TRY_LOCK_ROW_CONFLICT	if (OB_TRY_LOCK_ROW_CONFLICT == ret) {
+src/storage/tablelock/ob_lock_memtable.cpp	198	ObLockMemtable::lock_	ret == OB_OBJ_LOCK_EXIST	} else if (OB_SUCCESS == ret || OB_OBJ_LOCK_EXIST == ret) {
+src/storage/tablelock/ob_lock_memtable.cpp	212	ObLockMemtable::lock_	ret == OB_TRY_LOCK_ROW_CONFLICT	ret = (ret == OB_TRY_LOCK_ROW_CONFLICT ? OB_ERR_EXCLUSIVE_LOCK_CONFLICT : OB_TIMEOUT);
+src/storage/tablelock/ob_lock_memtable.cpp	226	ObLockMemtable::lock_	ret == OB_OBJ_LOCK_EXIST	if (ret == OB_OBJ_LOCK_EXIST && lock_op.lock_id_.obj_type_ != ObLockOBJType::OBJ_TYPE_DBMS_LOCK) {
+src/storage/tablelock/ob_lock_memtable.cpp	229	ObLockMemtable::lock_	ret == OB_TRY_LOCK_ROW_CONFLICT	if (OB_TRY_LOCK_ROW_CONFLICT == ret &&
+src/storage/tablelock/ob_lock_memtable.cpp	244	ObLockMemtable::lock_	ret != OB_TRY_LOCK_ROW_CONFLICT	OB_TRY_LOCK_ROW_CONFLICT != ret) {
+src/storage/tablelock/ob_lock_memtable.cpp	245	ObLockMemtable::lock_	ret == OB_TRY_LOCK_ROW_CONFLICT	} else if (OB_TRY_LOCK_ROW_CONFLICT == ret) {
+src/storage/tablelock/ob_lock_memtable.cpp	261	ObLockMemtable::lock_	tmp_ret == OB_ERR_EXCLUSIVE_LOCK_CONFLICT	if (OB_ERR_EXCLUSIVE_LOCK_CONFLICT == tmp_ret) {
+src/storage/tablelock/ob_lock_memtable.cpp	302	ObLockMemtable::check_tablet_write_allow_	ret == OB_EMPTY_RESULT	if (OB_EMPTY_RESULT == ret) {
+src/storage/tablelock/ob_lock_memtable.cpp	362	ObLockMemtable::unlock_	ret == OB_EAGAIN	if (OB_EAGAIN == ret) {
+src/storage/tablelock/ob_lock_memtable.cpp	532	ObLockMemtable::check_lock_conflict	ret == OB_OBJ_LOCK_EXIST	if (OB_OBJ_LOCK_EXIST == ret && lock_op.lock_id_.obj_type_ != ObLockOBJType::OBJ_TYPE_DBMS_LOCK) {
+src/storage/tablelock/ob_lock_memtable.cpp	534	ObLockMemtable::check_lock_conflict	ret == OB_TRY_LOCK_ROW_CONFLICT	} else if (OB_TRY_LOCK_ROW_CONFLICT == ret) {
+src/storage/tablelock/ob_lock_memtable.cpp	555	ObLockMemtable::lock	ret != OB_TRY_LOCK_ROW_CONFLICT	if (ret != OB_TRY_LOCK_ROW_CONFLICT) {
+src/storage/tablelock/ob_lock_memtable.cpp	576	ObLockMemtable::unlock	ret != OB_TRY_LOCK_ROW_CONFLICT	if (ret != OB_TRY_LOCK_ROW_CONFLICT) {
+src/storage/tablelock/ob_lock_memtable.cpp	596	ObLockMemtable::replace	ret != OB_TRY_LOCK_ROW_CONFLICT	if (ret != OB_TRY_LOCK_ROW_CONFLICT) {
+src/storage/tablelock/ob_lock_memtable.cpp	599	ObLockMemtable::replace	ret != OB_TRY_LOCK_ROW_CONFLICT	if (ret != OB_TRY_LOCK_ROW_CONFLICT) {
+src/storage/tablelock/ob_lock_memtable.cpp	918	ObLockMemtable::flush	ret != OB_EAGAIN; ret != OB_SIZE_OVERFLOW	if (OB_EAGAIN != ret && OB_SIZE_OVERFLOW != ret) {
+src/storage/tablelock/ob_lock_memtable.cpp	1012	ObLockMemtable::register_into_deadlock_detector_	tmp_ret != OB_ENTRY_NOT_EXIST	if (tmp_ret != OB_ENTRY_NOT_EXIST) {
+src/storage/tablelock/ob_lock_memtable.cpp	1079	ObLockMemtable::add_priority_task	ret == OB_ENTRY_EXIST	if (OB_ENTRY_EXIST == ret) {
+src/storage/tablelock/ob_lock_table.cpp	107	ObLockTable::restore_lock_table_	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/tablelock/ob_lock_table.cpp	113	ObLockTable::restore_lock_table_	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/tablelock/ob_lock_table.cpp	253	ObLockTable::offline	ret == OB_NOT_INIT	if (OB_NOT_INIT == ret) {
+src/storage/tablelock/ob_lock_table.cpp	413	ObLockTable::check_lock_conflict	ret != OB_TRY_LOCK_ROW_CONFLICT	if (ret != OB_TRY_LOCK_ROW_CONFLICT) {
+src/storage/tablelock/ob_lock_table.cpp	440	ObLockTable::check_lock_conflict	ret != OB_TRY_LOCK_ROW_CONFLICT	if (ret != OB_TRY_LOCK_ROW_CONFLICT) {
+src/storage/tablelock/ob_lock_table.cpp	484	ObLockTable::lock	ret != OB_TRY_LOCK_ROW_CONFLICT	if (ret != OB_TRY_LOCK_ROW_CONFLICT) {

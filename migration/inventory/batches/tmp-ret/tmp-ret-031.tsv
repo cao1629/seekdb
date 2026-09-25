@@ -1,0 +1,19 @@
+file	line	symbol	construct	text
+src/storage/tx_table/ob_tx_data_table.cpp	480	ObTxDataTable::get_tx_data_from_cache_	declare tmp_ret	int tmp_ret = tx_data_memtable->get_tx_data(tx_id, tx_data_guard);
+src/storage/tx_table/ob_tx_data_table.cpp	558	ObTxDataTable::get_tx_data_in_memtables_cache_	declare tmp_ret	int tmp_ret = tx_data_memtable->get_tx_data(tx_id, tx_data_guard);
+src/storage/tx_table/ob_tx_data_table.cpp	670	ObTxDataTable::get_recycle_scn	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tx_table/ob_tx_data_table.cpp	671	ObTxDataTable::get_recycle_scn	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(OB_TS_MGR.get_gts(MonotonicTs(1), snapshot_version, unused_ts))) {
+src/storage/tx_table/ob_tx_data_table.cpp	1186	ObTxDataTable::FreezeFrequencyController::need_re_freeze	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tx_table/ob_tx_data_table.cpp	1188	ObTxDataTable::FreezeFrequencyController::need_re_freeze	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(EN_TX_DATA_MAX_FREEZE_INTERVAL_SECOND)) {
+src/storage/tx_table/ob_tx_table.cpp	174	ObTxTable::create_tablet	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tx_table/ob_tx_table.cpp	175	ObTxTable::create_tablet	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(remove_tablet())) {
+src/storage/tx_table/ob_tx_table.cpp	563	ObTxTable::check_with_tx_data	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tx_table/ob_tx_table.cpp	566	ObTxTable::check_with_tx_data	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(check_tx_data_in_mini_cache_(read_tx_data_arg, fn))) {
+src/storage/tx_table/ob_tx_table.cpp	578	ObTxTable::check_with_tx_data	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(check_tx_data_in_kv_cache_(read_tx_data_arg, fn))) {
+src/storage/tx_table/ob_tx_table.cpp	687	ObTxTable::check_tx_data_in_tables_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tx_table/ob_tx_table.cpp	688	ObTxTable::check_tx_data_in_tables_	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(put_tx_data_into_kv_cache_(*tx_data))) {
+src/storage/tx_table/ob_tx_table.cpp	732	ObTxTable::check_state_and_epoch_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tx_table/ob_tx_table.cpp	733	ObTxTable::check_state_and_epoch_	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(ls_->get_max_decided_scn(max_decided_scn))) {
+src/storage/tx_table/ob_tx_table_iterator.cpp	430	ObTxDataSingleRowGetter::get_next_row	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tx_table/ob_tx_table_iterator.cpp	431	ObTxDataSingleRowGetter::get_next_row	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(static_cast<ObSSTable*>(sstables_[0])->get_meta(sstable_meta_hdl))) {
+src/storage/tx_table/ob_tx_table_iterator.cpp	508	ObTxDataSingleRowGetter::get_row_from_sstables_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;

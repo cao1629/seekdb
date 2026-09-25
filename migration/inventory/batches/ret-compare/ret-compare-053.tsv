@@ -1,0 +1,93 @@
+file	line	symbol	construct	text
+src/storage/compaction/ob_tablet_merge_task.cpp	202	ObTabletMergeDag::get_tablet_and_check	ret != OB_NO_NEED_MERGE	if (OB_NO_NEED_MERGE != ret) {
+src/storage/compaction/ob_tablet_merge_task.cpp	615	ObTabletMergeDag::prepare_merge_ctx	ret != OB_NO_NEED_MERGE	if (OB_NO_NEED_MERGE != ret) {
+src/storage/compaction/ob_tablet_merge_task.cpp	929	ObTabletMergeTask::process	ret == OB_ENCODING_EST_SIZE_OVERFLOW	if (is_major_merge_type(ctx_->get_merge_type()) && OB_ENCODING_EST_SIZE_OVERFLOW == ret) {
+src/storage/compaction/ob_tablet_merge_task.cpp	935	ObTabletMergeTask::process	ret == OB_ALLOCATE_MEMORY_FAILED; ret == OB_TIMEOUT; ret == OB_IO_ERROR	if (OB_ALLOCATE_MEMORY_FAILED == ret || OB_TIMEOUT == ret || OB_IO_ERROR == ret) {
+src/storage/compaction/ob_tablet_merge_task.cpp	956	ObTabletMergeTask::process	ret == OB_CANCELED	if (OB_CANCELED == ret) {
+src/storage/compaction/ob_tablet_merge_task.h	175	ObTabletMergeDag::can_not_retry_warning	other variable dag_ret == OB_NO_NEED_MERGE	return OB_NO_NEED_MERGE == dag_ret
+src/storage/compaction/ob_tablet_merge_task.h	176	ObTabletMergeDag::can_not_retry_warning	other variable dag_ret == OB_TABLE_IS_DELETED	|| OB_TABLE_IS_DELETED == dag_ret
+src/storage/compaction/ob_tablet_merge_task.h	177	ObTabletMergeDag::can_not_retry_warning	other variable dag_ret == OB_LS_NOT_EXIST	|| OB_LS_NOT_EXIST == dag_ret
+src/storage/compaction/ob_tablet_merge_task.h	178	ObTabletMergeDag::can_not_retry_warning	other variable dag_ret == OB_TABLET_NOT_EXIST	|| OB_TABLET_NOT_EXIST == dag_ret
+src/storage/compaction/ob_tablet_merge_task.h	179	ObTabletMergeDag::can_not_retry_warning	other variable dag_ret == OB_CANCELED	|| OB_CANCELED == dag_ret;
+src/storage/compaction/ob_tablet_scheduler.cpp	89	ObFastFreezeChecker::check_need_fast_freeze	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/storage/compaction/ob_tablet_scheduler.cpp	186	ObFastFreezeChecker::try_update_tablet_threshold	tmp_ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != tmp_ret) {
+src/storage/compaction/ob_tablet_scheduler.cpp	197	ObFastFreezeChecker::try_update_tablet_threshold	tmp_ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != tmp_ret) {
+src/storage/compaction/ob_tablet_scheduler.cpp	393	ObTabletScheduler::try_update_upper_trans_version_and_gc_sstable	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/compaction/ob_tablet_scheduler.cpp	539	ObTabletScheduler::schedule_build_bloomfilter	ret == OB_EAGAIN	if (OB_LIKELY(OB_EAGAIN == ret)) {
+src/storage/compaction/ob_tablet_scheduler.cpp	606	ObTabletScheduler::schedule_merge_dag	ret != OB_EAGAIN; ret != OB_SIZE_OVERFLOW	if (OB_EAGAIN != ret && OB_SIZE_OVERFLOW != ret) {
+src/storage/compaction/ob_tablet_scheduler.cpp	653	ObTabletScheduler::schedule_tablet_meta_merge	ret != OB_NO_NEED_MERGE	if (OB_NO_NEED_MERGE != ret) {
+src/storage/compaction/ob_tablet_scheduler.cpp	664	ObTabletScheduler::schedule_tablet_meta_merge	ret != OB_SIZE_OVERFLOW; ret != OB_EAGAIN	if (OB_SIZE_OVERFLOW != ret && OB_EAGAIN != ret) {
+src/storage/compaction/ob_tablet_scheduler.cpp	753	ObTabletScheduler::schedule_tablet_minor_merge	ret == OB_NO_NEED_MERGE	if (OB_NO_NEED_MERGE == ret) {
+src/storage/compaction/ob_tablet_scheduler.cpp	771	ObTabletScheduler::schedule_tablet_minor_merge	ret != OB_NO_NEED_MERGE	if (OB_NO_NEED_MERGE != ret) {
+src/storage/compaction/ob_tablet_scheduler.cpp	816	ObTabletScheduler::schedule_merge_execute_dag	ret != OB_EAGAIN	if (OB_EAGAIN != ret) {
+src/storage/compaction/ob_tablet_scheduler.cpp	858	ObTabletScheduler::schedule_minor_merge	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/compaction/ob_tablet_scheduler.cpp	861	ObTabletScheduler::schedule_minor_merge	ret != OB_LS_NOT_EXIST	} else if (OB_LS_NOT_EXIST != ret) {
+src/storage/compaction/ob_tablet_scheduler.cpp	926	ObTabletScheduler::schedule_tablet_minor	tmp_ret == OB_SIZE_OVERFLOW	if (OB_SIZE_OVERFLOW == tmp_ret) {
+src/storage/compaction/ob_tablet_scheduler.cpp	928	ObTabletScheduler::schedule_tablet_minor	tmp_ret != OB_EAGAIN	} else if (OB_EAGAIN != tmp_ret) {
+src/storage/compaction/ob_tablet_scheduler.cpp	934	ObTabletScheduler::schedule_tablet_minor	tmp_ret != OB_SIZE_OVERFLOW; tmp_ret != OB_EAGAIN	if (OB_SIZE_OVERFLOW != tmp_ret && OB_EAGAIN != tmp_ret) {
+src/storage/compaction/ob_tablet_scheduler.cpp	963	ObTabletScheduler::schedule_ddl_tablet_merge	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/storage/compaction/ob_tablet_scheduler.cpp	969	ObTabletScheduler::schedule_ddl_tablet_merge	ret != OB_SIZE_OVERFLOW; ret != OB_EAGAIN	if (OB_SIZE_OVERFLOW != ret && OB_EAGAIN != ret) {
+src/storage/compaction/ob_tablet_scheduler.cpp	984	ObTabletScheduler::schedule_all_tablets_medium	ret != OB_NEED_WAIT	if (OB_NEED_WAIT != ret) {
+src/storage/compaction/ob_tablet_scheduler.cpp	1034	ObTabletScheduler::user_request_schedule_medium_merge	ret != OB_STATE_NOT_MATCH	if (OB_STATE_NOT_MATCH != ret) {
+src/storage/compaction/ob_tablet_scheduler.cpp	1052	ObTabletScheduler::get_min_dependent_schema_version	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/storage/compaction/ob_tablet_scheduler.cpp	1133	ObTabletScheduler::try_schedule_adaptive_merge	tmp_ret != OB_STATE_NOT_MATCH	if (OB_STATE_NOT_MATCH != tmp_ret) {
+src/storage/compaction/ob_tablet_scheduler.h	112	ObTabletScheduler::schedule_ignore_error	ret == OB_ITER_END	return OB_ITER_END == ret
+src/storage/compaction/ob_tablet_scheduler.h	113	ObTabletScheduler::schedule_ignore_error	ret == OB_STATE_NOT_MATCH	|| OB_STATE_NOT_MATCH == ret
+src/storage/compaction/ob_tablet_scheduler.h	114	ObTabletScheduler::schedule_ignore_error	ret == OB_LS_NOT_EXIST	|| OB_LS_NOT_EXIST == ret;
+src/storage/concurrency_control/ob_multi_version_garbage_collector.cpp	339	ObMultiVersionGarbageCollector::study_min_unallocated_WRS	ret == OB_REPLICA_NOT_READABLE	if (OB_REPLICA_NOT_READABLE == ret) {
+src/storage/concurrency_control/ob_multi_version_garbage_collector.cpp	465	ObMultiVersionGarbageCollector::is_disk_almost_full_	ret == OB_SERVER_OUTOF_DISK_SPACE	if (OB_SERVER_OUTOF_DISK_SPACE == ret) {
+src/storage/ddl/ob_build_index_task.cpp	84	ObUniqueIndexChecker::calc_column_checksum	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/ddl/ob_build_index_task.cpp	146	ObUniqueIndexChecker::scan_table_with_column_checksum	ret == OB_REPLICA_NOT_READABLE	if (OB_REPLICA_NOT_READABLE == ret) {
+src/storage/ddl/ob_build_index_task.cpp	441	ObUniqueIndexChecker::check_unique_index	tmp_ret == OB_ITER_END	if (OB_ITER_END == tmp_ret) {
+src/storage/ddl/ob_build_index_task.cpp	458	ObUniqueIndexChecker::check_unique_index	ret == OB_ERR_PRIMARY_KEY_DUPLICATE; other variable report_ret_code == OB_ERR_DUPLICATED_UNIQUE_KEY	if (OB_ERR_PRIMARY_KEY_DUPLICATE == ret && OB_ERR_DUPLICATED_UNIQUE_KEY == report_ret_code) {
+src/storage/ddl/ob_build_index_task.cpp	488	ObUniqueIndexChecker::wait_trans_end	ret == OB_EAGAIN	if (OB_EAGAIN == ret && ObTimeUtility::current_time() - now < timeout_us) {
+src/storage/ddl/ob_build_index_task.cpp	630	ObUniqueCheckingDag::ignore_warning	other variable dag_ret_ == OB_EAGAIN	return OB_EAGAIN == dag_ret_
+src/storage/ddl/ob_build_index_task.cpp	631	ObUniqueCheckingDag::ignore_warning	other variable dag_ret_ == OB_NEED_RETRY	|| OB_NEED_RETRY == dag_ret_
+src/storage/ddl/ob_build_index_task.cpp	632	ObUniqueCheckingDag::ignore_warning	other variable dag_ret_ == OB_TASK_EXPIRED	|| OB_TASK_EXPIRED == dag_ret_;
+src/storage/ddl/ob_build_index_task.cpp	813	ObSimpleUniqueCheckingTask::generate_next_task	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/ddl/ob_complement_data_task.cpp	128	ObComplementDataParam::init	ret != OB_SCHEMA_EAGAIN	if (OB_SCHEMA_EAGAIN != ret) {
+src/storage/ddl/ob_complement_data_task.cpp	133	ObComplementDataParam::init	ret != OB_SCHEMA_EAGAIN	if (OB_SCHEMA_EAGAIN != ret) {
+src/storage/ddl/ob_complement_data_task.cpp	529	ObComplementDataDag::ignore_warning	other variable dag_ret_ == OB_EAGAIN	return OB_EAGAIN == dag_ret_
+src/storage/ddl/ob_complement_data_task.cpp	530	ObComplementDataDag::ignore_warning	other variable dag_ret_ == OB_NEED_RETRY	|| OB_NEED_RETRY == dag_ret_
+src/storage/ddl/ob_complement_data_task.cpp	531	ObComplementDataDag::ignore_warning	other variable dag_ret_ == OB_TASK_EXPIRED	|| OB_TASK_EXPIRED == dag_ret_;
+src/storage/ddl/ob_complement_data_task.cpp	768	ObComplementRowIterator::get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/ddl/ob_complement_data_task.cpp	833	ObComplementWriteTask::get_next_chunk	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/ddl/ob_complement_data_task.cpp	911	ObComplementWriteTask::postprocess	other variable ret_code == OB_ITER_END	if (OB_ITER_END == ret_code) {
+src/storage/ddl/ob_complement_data_task.cpp	944	ObComplementWriteTask::generate_next_task	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/ddl/ob_complement_data_task.cpp	1080	ObComplementWriteTask::do_local_scan	ret == OB_REPLICA_NOT_READABLE	if (OB_REPLICA_NOT_READABLE == ret) {
+src/storage/ddl/ob_complement_data_task.cpp	1580	ObLocalScan::get_next_row	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/ddl/ob_complement_data_task.h	47	add_dag_and_get_progress	ret == OB_EAGAIN	if (OB_EAGAIN == ret
+src/storage/ddl/ob_ddl_batch_rows.cpp	291	ObDDLBatchRows::append_selective	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/ddl/ob_ddl_clog.cpp	170	ObDDLMacroBlockClogCb::on_success	ret == OB_ENTRY_EXIST	if (OB_ENTRY_EXIST == ret && is_idem_type(direct_load_type_)) {
+src/storage/ddl/ob_ddl_common_storage_impl.cpp	476	oceanbase::storage::ObDDLStorageUtil::get_task_ranges	ret == OB_REPLICA_NOT_READABLE	if (OB_REPLICA_NOT_READABLE == ret) {
+src/storage/ddl/ob_ddl_common_storage_impl.cpp	488	oceanbase::storage::ObDDLStorageUtil::get_task_ranges	ret == OB_REPLICA_NOT_READABLE	if (OB_REPLICA_NOT_READABLE == ret) {
+src/storage/ddl/ob_ddl_common_storage_impl.cpp	557	oceanbase::storage::ObDDLStorageUtil::get_tablet_physical_row_cnt	ret == OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END == ret)) {
+src/storage/ddl/ob_ddl_common_storage_impl.cpp	744	oceanbase::storage::ObDDLStorageUtil::ddl_get_tablet	ret == OB_ALLOCATE_MEMORY_FAILED	if (OB_ALLOCATE_MEMORY_FAILED == ret) {
+src/storage/ddl/ob_ddl_common_storage_impl.cpp	830	ObDDLStorageUtil::extract_index_key	ret == OB_SIZE_OVERFLOW	if (OB_SIZE_OVERFLOW == ret) {
+src/storage/ddl/ob_ddl_common_storage_impl.cpp	1125	ObDDLStorageUtil::handle_lob_column	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/ddl/ob_ddl_common_storage_impl.cpp	1154	ObDDLStorageUtil::handle_lob_column	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/ddl/ob_ddl_common_storage_impl.cpp	1171	ObDDLStorageUtil::handle_lob_column	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/ddl/ob_ddl_common_storage_impl.cpp	1208	ObDDLStorageUtil::handle_lob_column	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/ddl/ob_ddl_independent_dag.cpp	266	ObDDLIndependentDag::push_chunk	ret != OB_EAGAIN	if (OB_UNLIKELY(OB_EAGAIN != ret)) {
+src/storage/ddl/ob_ddl_insert_dag.cpp	120	ObDDLInsertDag::update_tablet_range_count	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/storage/ddl/ob_ddl_lock.cpp	719	ObDDLLock::do_table_lock	ret == OB_OBJ_LOCK_NOT_EXIST	if (OB_OBJ_LOCK_NOT_EXIST == ret) {
+src/storage/ddl/ob_ddl_lock.cpp	765	ObDDLLock::do_table_lock	ret == OB_OBJ_LOCK_NOT_EXIST	if (OB_OBJ_LOCK_NOT_EXIST == ret) {
+src/storage/ddl/ob_ddl_lock.cpp	953	ObOnlineDDLLock::unlock_table	ret == OB_OBJ_LOCK_NOT_EXIST	if (OB_OBJ_LOCK_NOT_EXIST == ret) {
+src/storage/ddl/ob_ddl_lock.cpp	989	ObOnlineDDLLock::unlock_tablets	ret == OB_OBJ_LOCK_NOT_EXIST	if (OB_OBJ_LOCK_NOT_EXIST == ret) {
+src/storage/ddl/ob_ddl_macro_block_write_task.cpp	153	ObDDLRowFileWriteMacroBlockOperator::execute	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/ddl/ob_ddl_macro_block_write_task.cpp	184	ObDDLWriteMacroBlockBasePipeline::get_next_chunk	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/storage/ddl/ob_ddl_macro_block_write_task.cpp	233	ObDDLWriteMacroBlockBasePipeline::postprocess	other variable ret_code != OB_ITER_END	if (OB_ITER_END != ret_code
+src/storage/ddl/ob_ddl_macro_block_write_task.cpp	234	ObDDLWriteMacroBlockBasePipeline::postprocess	other variable ret_code != OB_DAG_TASK_IS_SUSPENDED	&& OB_DAG_TASK_IS_SUSPENDED != ret_code) {
+src/storage/ddl/ob_ddl_macro_block_write_task.cpp	236	ObDDLWriteMacroBlockBasePipeline::postprocess	other variable ret_code == OB_ITER_END	} else if (OB_ITER_END == ret_code) {
+src/storage/ddl/ob_ddl_macro_block_write_task.cpp	247	ObDDLWriteMacroBlockBasePipeline::postprocess	other variable ret_code != OB_DAG_TASK_IS_SUSPENDED	if (OB_DAG_TASK_IS_SUSPENDED != ret_code) {
+src/storage/ddl/ob_ddl_merge_helper.cpp	101	ObSNDDLMergeHelperV2::set_ddl_complete	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/storage/ddl/ob_ddl_merge_helper.cpp	181	ObSNDDLMergeHelperV2::process_prepare_task	ret == OB_EMPTY_RESULT	if (OB_EMPTY_RESULT == ret) {
+src/storage/ddl/ob_ddl_merge_helper.cpp	193	ObSNDDLMergeHelperV2::process_prepare_task	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/storage/ddl/ob_ddl_merge_helper.cpp	210	ObSNDDLMergeHelperV2::process_prepare_task	ret != OB_EAGAIN	if (OB_EAGAIN != ret) {
+src/storage/ddl/ob_ddl_merge_helper.cpp	345	ObSNDDLMergeHelperV2::merge_slice	ret == OB_EMPTY_RESULT	if (OB_EMPTY_RESULT == ret) {
+src/storage/ddl/ob_ddl_merge_helper.cpp	465	ObIDDLMergeHelper::get_rec_scn_from_ddl_kvs	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/ddl/ob_ddl_merge_helper.cpp	561	ObSNDDLMergeHelperV2::assemble_sstable	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/storage/ddl/ob_ddl_merge_schedule.cpp	60	ObDDLMergeScheduler::check_need_merge_for_idempotent	ret == OB_EMPTY_RESULT	if (OB_EMPTY_RESULT == ret) {
+src/storage/ddl/ob_ddl_merge_schedule.cpp	144	ObDDLMergeScheduler::schedule_ddl_merge	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/storage/ddl/ob_ddl_merge_schedule.cpp	162	ObDDLMergeScheduler::schedule_ddl_merge	ret != OB_SIZE_OVERFLOW; ret != OB_EAGAIN	if (OB_SIZE_OVERFLOW != ret && OB_EAGAIN != ret) {
+src/storage/ddl/ob_ddl_merge_schedule.cpp	203	ObDDLMergeScheduler::schedule_tablet_ddl_major_merge	ret == OB_EMPTY_RESULT	if (OB_EMPTY_RESULT == ret) {

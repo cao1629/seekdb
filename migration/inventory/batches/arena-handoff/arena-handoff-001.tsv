@@ -1,0 +1,41 @@
+file	line	symbol	construct	text
+src/data_plane/api/data_plane/scheduler/ob_dag_scheduler.h	598	ObIDag::allocator_	allocator member of cross-thread class: common::ObIAllocator *	common::ObIAllocator *allocator_;
+src/data_plane/api/data_plane/scheduler/ob_dag_scheduler.h	714	ObIDagNet::allocator_	allocator member of cross-thread class: common::ObIAllocator *	common::ObIAllocator *allocator_; // use to alloc dag in dag_net later
+src/data_plane/api/data_plane/scheduler/ob_dag_scheduler.h	1327	ObDagScheduler::mem_context_	allocator member of cross-thread class: lib::MemoryContext	lib::MemoryContext mem_context_;
+src/data_plane/api/data_plane/scheduler/ob_dag_scheduler.h	1328	ObDagScheduler::reserved_mem_context_	allocator member of cross-thread class: lib::MemoryContext	lib::MemoryContext reserved_mem_context_;
+src/data_plane/api/data_plane/scheduler/ob_dag_scheduler.h	1329	ObDagScheduler::independent_mem_context_	allocator member of cross-thread class: lib::MemoryContext	lib::MemoryContext independent_mem_context_;
+src/data_plane/api/data_plane/scheduler/ob_dag_scheduler.h	1382	ObIDag::inner_create_task	hand-off of allocator-backed object task via add_task	} else if (need_add && OB_FAIL(add_task(*task))) {
+src/data_plane/api/data_plane/scheduler/ob_dag_scheduler.h	1503	ObDagScheduler::create_and_add_dag_net	hand-off of allocator-backed object dag_net via add_dag_net	} else if (OB_FAIL(add_dag_net(dag_net))) {
+src/data_plane/api/data_plane/scheduler/ob_dag_scheduler.h	1549	ObDagScheduler::create_and_add_dag	hand-off of allocator-backed object dag via add_dag	} else if (OB_FAIL(add_dag(dag, emergency, check_size_overflow))) {
+src/logservice/palf/log_io_task.h	154	LogIOFlushMetaTask::buf_	borrowed view member of cross-thread class: const char *	const char *buf_;
+src/logservice/replayservice/ob_log_replay_service.h	184	ObLogReplayService::allocator_	allocator member of cross-thread class: ObILogAllocator *	ObILogAllocator *allocator_;
+src/logservice/replayservice/ob_replay_status.cpp	1051	ObReplayStatus::push_log_replay_task	hand-off of allocator-backed object replay_task via push	task_queues_[index].push(replay_task);
+src/oblib/lib/alloc/memory_dump.h	219	ObMemoryDump::print_buf_	borrowed view member of cross-thread class: char *	char *print_buf_;
+src/oblib/lib/alloc/memory_dump.h	224	ObMemoryDump::dump_context_	allocator member of cross-thread class: lib::MemoryContext	lib::MemoryContext dump_context_;
+src/oblib/lib/alloc/ob_context_allocator.h	191	ObContextAllocatorV2::allocator_	allocator member of cross-thread class: ObContextAllocator * [not built]	ObContextAllocator *allocator_;
+src/oblib/lib/alloc/ob_context_allocator.h	500	ObContextAllocator::ctx_allocator_	allocator member of cross-thread class: ObContextAllocatorV2 & [not built]	ObContextAllocatorV2 &ctx_allocator_;
+src/oblib/lib/task/ob_timer_service.h	185	ObTimerService::token_alloc_	allocator member of cross-thread class: TokenAlloc	TokenAlloc token_alloc_;
+src/oblib/lib/thread/ob_async_task_queue.h	122	ObAsyncTaskQueue::allocator_	allocator member of cross-thread class: common::ObConcurrentFIFOAllocator	common::ObConcurrentFIFOAllocator allocator_;
+src/oblib/lib/thread/ob_dedup_queue.h	91	IObDedupTask::memory_	borrowed view member of cross-thread class: char *	char *memory_;
+src/oblib/lib/thread/ob_dedup_queue.h	283	ObDedupQueue::allocator_	allocator member of cross-thread class: ObConcurrentFIFOAllocator	ObConcurrentFIFOAllocator allocator_;
+src/oblib/lib/thread/ob_dedup_queue.h	284	ObDedupQueue::hash_allocator_	allocator member of cross-thread class: HashAllocator	HashAllocator hash_allocator_;
+src/oblib/lib/thread/ob_dedup_queue.h	285	ObDedupQueue::bucket_allocator_	allocator member of cross-thread class: common::ObWrapperAllocator	common::ObWrapperAllocator bucket_allocator_;
+src/oblib/lib/thread/ob_dedup_queue.h	293	ObDedupQueue::thread_name_	borrowed view member of cross-thread class: const char*	const char* thread_name_;
+src/oblib/lib/thread/ob_dynamic_thread_pool.h	92	ObDynamicThreadPool::thread_name_	borrowed view member of cross-thread class: const char*	const char* thread_name_;
+src/oblib/lib/thread/ob_map_queue_thread_pool.h	108	ObMapQueueThreadPool::name_	borrowed view member of cross-thread class: const char *	const char    *name_;
+src/oblib/lib/thread/ob_reentrant_thread.h	92	ObReentrantThread::thread_name_	borrowed view member of cross-thread class: const char*	const char* thread_name_;
+src/oblib/lib/worker.h	124	Worker::allocator_	allocator member of cross-thread class: ObIAllocator *	ObIAllocator *allocator_;
+src/observer/dbms_scheduler/ob_dbms_sched_job_master.h	83	ObDBMSSchedJobKey::job_name_	borrowed view member of cross-thread class: common::ObString	common::ObString job_name_;
+src/observer/ob_server_duty_task.h	40	ObServerDutyTask::allocator_	allocator member of cross-thread class: common::ObArenaAllocator	common::ObArenaAllocator allocator_;
+src/observer/ob_service.cpp	380	ObService::calc_column_checksum_request	hand-off of allocator-backed object dag via add_dag	} else if (OB_TMP_FAIL(dag_scheduler->add_dag(dag))) {
+src/observer/ob_service.cpp	970	ObService::build_ddl_local	hand-off of allocator-backed object dag via add_dag	} else if (OB_FAIL(dag_scheduler->add_dag(dag))) {
+src/observer/ob_uniq_task_queue.h	168	ObUniqTaskQueue::thread_name_	borrowed view member of cross-thread class: const char *	const char *thread_name_;
+src/observer/ob_uniq_task_queue.h	171	ObUniqTaskQueue::task_set_	allocator-backed container member of cross-thread class: common::hash::ObHashSet<Task, common::hash::NoPthreadDefendMode, common::hash::hash_func<Task>, common::hash::equal_to<Task>, common::hash::SimpleAllocer<typename common::hash::HashSetTypes<Task>::AllocType, common::hash::NodeNumTraits<Task>::NODE_NUM, common::hash::NoPthreadDefendMode, ObHighPrioMemAllocator> >	common::hash::ObHashSet<Task,
+src/observer/ob_uniq_task_queue.h	179	ObUniqTaskQueue::group_map_	allocator-backed container member of cross-thread class: common::hash::ObHashMap<uint64_t, Group, common::hash::NoPthreadDefendMode, common::hash::hash_func<uint64_t>, common::hash::equal_to<uint64_t>, common::hash::SimpleAllocer< typename common::hash::HashMapTypes<uint64_t, Group>::AllocType, common::hash::NodeNumTraits<Group>::NODE_NUM, common::hash::NoPthreadDefendMode, ObHighPrioMemAllocator> >	common::hash::ObHashMap<uint64_t, Group,
+src/observer/ob_uniq_task_queue.h	187	ObUniqTaskQueue::processing_task_set_	allocator-backed container member of cross-thread class: common::hash::ObHashSet<Task, common::hash::NoPthreadDefendMode, common::hash::hash_func<Task>, CompareT<Task>, common::hash::SimpleAllocer<typename common::hash::HashSetTypes<Task>::AllocType, common::hash::NodeNumTraits<Task>::NODE_NUM, common::hash::NoPthreadDefendMode, ObHighPrioMemAllocator> >	common::hash::ObHashSet<Task,
+src/observer/omt/ob_server_runtime.cpp	193	ObPxPool::submit	hand-off of allocator-backed object t via push	} else if (OB_FAIL(queue_.push(static_cast<ObLink*>(t), 0))) {
+src/observer/vector_index/ob_hybrid_vector_refresh_task.cpp	570	ObHybridVectorRefreshTask::prepare_for_embedding	hand-off of allocator-backed object embedding_task_ via push_task	} else if (OB_FAIL(embedding_handler->push_task(*task_ctx->embedding_task_))) {
+src/observer/vector_index/ob_plugin_vector_index_scheduler.cpp	674	ObPluginVectorIndexLoadScheduler::generate_vec_idx_memdata_dag	hand-off of allocator-backed object memdata_sync_task via add_task	} else if (OB_FAIL(dag->add_task(*memdata_sync_task))) {
+src/observer/vector_index/ob_plugin_vector_index_scheduler.cpp	675	ObPluginVectorIndexLoadScheduler::generate_vec_idx_memdata_dag	hand-off of allocator-backed object dag via add_dag	} else if (OB_FAIL(dag_scheduler->add_dag(dag))) {
+src/observer/vector_index/ob_plugin_vector_index_scheduler.h	389	ObVectorIndexTask::allocator_	allocator member of cross-thread class: common::ObArenaAllocator	common::ObArenaAllocator allocator_;
+src/observer/vector_index/ob_vector_index_i_task_executor.cpp	131	ObVecITaskExecutor::start_task	hand-off with an allocator argument via push_task	} else if (OB_FAIL(task_handle.push_task(task_ctx, task_opt.get_allocator()))) {

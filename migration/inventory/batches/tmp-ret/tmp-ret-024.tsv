@@ -1,0 +1,116 @@
+file	line	symbol	construct	text
+src/storage/compaction/ob_tablet_scheduler.cpp	78	ObFastFreezeChecker::check_need_fast_freeze	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/compaction/ob_tablet_scheduler.cpp	84	ObFastFreezeChecker::check_need_fast_freeze	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(::oceanbase::share::server_service<::oceanbase::storage::ObTabletStatMgr>()->get_queuing_cfg(tablet_id, queuing_cfg))) {
+src/storage/compaction/ob_tablet_scheduler.cpp	161	ObFastFreezeChecker::check_tombstone_need_fast_freeze	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/compaction/ob_tablet_scheduler.cpp	162	ObFastFreezeChecker::check_tombstone_need_fast_freeze	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(ObAdaptiveMergePolicy::check_tombstone_reason(tablet, adaptive_merge_reason))) {
+src/storage/compaction/ob_tablet_scheduler.cpp	179	ObFastFreezeChecker::try_update_tablet_threshold	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/compaction/ob_tablet_scheduler.cpp	184	ObFastFreezeChecker::try_update_tablet_threshold	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(store_map_.get_refactored(key, adaptive_threshold))) {
+src/storage/compaction/ob_tablet_scheduler.cpp	196	ObFastFreezeChecker::try_update_tablet_threshold	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(::oceanbase::share::server_service<::oceanbase::storage::ObTabletStatMgr>()->get_latest_tablet_stat(key.tablet_id_, tablet_stat, total_stat, mode))) {
+src/storage/compaction/ob_tablet_scheduler.cpp	316	ObTabletScheduler::reload_runtime_config	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/compaction/ob_tablet_scheduler.cpp	358	ObTabletScheduler::update_upper_trans_version_and_gc_sstable	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/compaction/ob_tablet_scheduler.cpp	374	ObTabletScheduler::update_upper_trans_version_and_gc_sstable	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(try_update_upper_trans_version_and_gc_sstable(
+src/storage/compaction/ob_tablet_scheduler.cpp	407	ObTabletScheduler::try_update_upper_trans_version_and_gc_sstable	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/compaction/ob_tablet_scheduler.cpp	415	ObTabletScheduler::try_update_upper_trans_version_and_gc_sstable	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(ObGCUpperTransHelper::check_need_gc_or_update_upper_trans_version(
+src/storage/compaction/ob_tablet_scheduler.cpp	421	ObTabletScheduler::try_update_upper_trans_version_and_gc_sstable	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(tablet->load_storage_schema(tmp_arena, storage_schema))) {
+src/storage/compaction/ob_tablet_scheduler.cpp	425	ObTabletScheduler::try_update_upper_trans_version_and_gc_sstable	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(ls.update_tablet_table_store(tablet_id, param, new_tablet_handle))) {
+src/storage/compaction/ob_tablet_scheduler.cpp	456	ObTabletScheduler::schedule_all_tablets_minor	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/compaction/ob_tablet_scheduler.cpp	469	ObTabletScheduler::schedule_all_tablets_minor	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(schedule_minor_merge(minor_tablet_iter_.get_ls()))) {
+src/storage/compaction/ob_tablet_scheduler.cpp	551	ObTabletScheduler::schedule_merge	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/compaction/ob_tablet_scheduler.cpp	562	ObTabletScheduler::schedule_merge	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(timer_task_mgr_.set_active_medium_loop(true/*active*/, true/*immediate*/))) {
+src/storage/compaction/ob_tablet_scheduler.cpp	850	ObTabletScheduler::schedule_minor_merge	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/compaction/ob_tablet_scheduler.cpp	866	ObTabletScheduler::schedule_minor_merge	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(schedule_tablet_minor(ls, tablet_handle, schedule_minor_flag, need_fast_freeze_flag))) {
+src/storage/compaction/ob_tablet_scheduler.cpp	869	ObTabletScheduler::schedule_minor_merge	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(need_fast_freeze_tablets.push_back(tablet_id))) {
+src/storage/compaction/ob_tablet_scheduler.cpp	879	ObTabletScheduler::schedule_minor_merge	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(ls->tablet_freeze(need_fast_freeze_tablets,
+src/storage/compaction/ob_tablet_scheduler.cpp	895	ObTabletScheduler::schedule_minor_merge	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(ls->get_tx_table()->get_tx_table_guard(tx_table_guard))) {
+src/storage/compaction/ob_tablet_scheduler.cpp	913	ObTabletScheduler::schedule_tablet_minor	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/compaction/ob_tablet_scheduler.cpp	925	ObTabletScheduler::schedule_tablet_minor	OB_TMP_FAIL (plan definition)	&& OB_TMP_FAIL(schedule_tablet_minor_merge<ObTabletMergeExecuteDag>(ls, tablet_handle))) {
+src/storage/compaction/ob_tablet_scheduler.cpp	933	ObTabletScheduler::schedule_tablet_minor	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(schedule_ddl_tablet_merge(ls, tablet_handle))) {
+src/storage/compaction/ob_tablet_scheduler.cpp	940	ObTabletScheduler::schedule_tablet_minor	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(fast_freeze_checker_.check_need_fast_freeze(*tablet, need_fast_freeze_flag))) {
+src/storage/compaction/ob_tablet_scheduler.cpp	945	ObTabletScheduler::schedule_tablet_minor	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(ObTabletScheduler::try_schedule_adaptive_merge(ls, tablet_handle,
+src/storage/compaction/ob_tablet_scheduler.cpp	1106	ObTabletScheduler::try_schedule_adaptive_merge	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/compaction/ob_tablet_scheduler.cpp	1132	ObTabletScheduler::try_schedule_adaptive_merge	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(func.init(ls))) {
+src/storage/compaction/ob_tablet_scheduler.cpp	1136	ObTabletScheduler::try_schedule_adaptive_merge	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(func.schedule_tablet(tablet_handle, unused_tablet_merge_finish))) {
+src/storage/compaction/ob_tablet_scheduler.cpp	1139	ObTabletScheduler::try_schedule_adaptive_merge	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(ObTabletScheduler::schedule_tablet_meta_merge(ls, tablet_handle, create_dag))) {
+src/storage/compaction/ob_tablet_scheduler_task_mgr.cpp	90	ObTabletSchedulerTaskMgr::MediumLoopTask::runTimerTask	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/compaction/ob_tablet_scheduler_task_mgr.cpp	98	ObTabletSchedulerTaskMgr::MediumLoopTask::runTimerTask	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(scheduler->timer_task_mgr_.set_active_medium_loop(active, false/*immediate*/))) {
+src/storage/ddl/ob_build_index_task.cpp	432	ObUniqueIndexChecker::check_unique_index	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/ddl/ob_build_index_task.cpp	440	ObUniqueIndexChecker::check_unique_index	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = ObDDLErrorMessageTableOperator::get_index_task_info(*GCTX.sql_proxy_, *param_->index_schema_, info))) {
+src/storage/ddl/ob_build_index_task.cpp	450	ObUniqueIndexChecker::check_unique_index	assign tmp_ret	} else if (OB_SUCCESS != (tmp_ret = ObDDLErrorMessageTableOperator::generate_index_ddl_error_message(
+src/storage/ddl/ob_build_index_task.cpp	580	ObUniqueCheckingDag::hash	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/ddl/ob_build_index_task.cpp	583	ObUniqueCheckingDag::hash	assign tmp_ret	tmp_ret = OB_ERR_SYS;
+src/storage/ddl/ob_build_index_task.cpp	637	ObUniqueCheckingDag::operator==	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/ddl/ob_build_index_task.cpp	644	ObUniqueCheckingDag::operator==	assign tmp_ret	tmp_ret = OB_ERR_SYS;
+src/storage/ddl/ob_complement_data_task.cpp	558	ObComplementDataDag::hash	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/ddl/ob_complement_data_task.cpp	561	ObComplementDataDag::hash	assign tmp_ret	tmp_ret = OB_ERR_SYS;
+src/storage/ddl/ob_complement_data_task.cpp	573	ObComplementDataDag::operator==	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/ddl/ob_complement_data_task.cpp	580	ObComplementDataDag::operator==	assign tmp_ret	tmp_ret = OB_ERR_SYS;
+src/storage/ddl/ob_complement_data_task.cpp	1155	ObComplementMergeTask::process	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/ddl/ob_complement_data_task.cpp	1213	ObComplementMergeTask::process	assign tmp_ret	OB_SUCCESS != (tmp_ret = dag->report_local_build_status())) {
+src/storage/ddl/ob_complement_data_task.cpp	1215	ObComplementMergeTask::process	merge into ret	ret = OB_SUCCESS == ret ? tmp_ret : ret;
+src/storage/ddl/ob_complement_data_task.h	40	add_dag_and_get_progress	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/ddl/ob_complement_data_task.h	48	add_dag_and_get_progress	OB_TMP_FAIL (plan definition)	&& OB_TMP_FAIL(::oceanbase::share::server_service<::oceanbase::share::ObDagScheduler>()->get_dag_progress<T>(dag, row_inserted, physical_row_count))) {
+src/storage/ddl/ob_ddl_independent_dag.cpp	235	ObDDLIndependentDag::add_scan_chunk	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/ddl/ob_ddl_independent_dag.cpp	264	ObDDLIndependentDag::push_chunk	merge OB_CANCELED into ret (continue-and-record through another variable)	ret = COVER_SUCC(OB_CANCELED);
+src/storage/ddl/ob_ddl_merge_schedule.cpp	138	ObDDLMergeScheduler::schedule_ddl_merge	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/ddl/ob_ddl_merge_task.cpp	351	wait_lob_tablet_major_exist	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/ddl/ob_ddl_merge_task.cpp	352	wait_lob_tablet_major_exist	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(ObDDLMergeScheduler::schedule_tablet_ddl_major_merge(ls, lob_tablet_handle))) {
+src/storage/ddl/ob_ddl_pipeline.cpp	91	ObIDDLPipeline::process	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/ddl/ob_ddl_pipeline.cpp	97	ObIDDLPipeline::process	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(finish_chunk(chunk))) {
+src/storage/ddl/ob_ddl_redo_log_writer.cpp	119	ObDDLCtrlSpeedItem::do_sleep	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/ddl/ob_ddl_redo_log_writer.cpp	128	ObDDLCtrlSpeedItem::do_sleep	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(check_need_stop_write(checker, is_need_stop_write))) {
+src/storage/ddl/ob_ddl_redo_log_writer.cpp	140	ObDDLCtrlSpeedItem::do_sleep	assign tmp_ret	tmp_ret = OB_NOT_INIT;
+src/storage/ddl/ob_ddl_redo_log_writer.cpp	141	ObDDLCtrlSpeedItem::do_sleep	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(ObDDLUtil::get_data_information(
+src/storage/ddl/ob_ddl_redo_log_writer.cpp	166	ObDDLCtrlSpeedItem::do_sleep	OB_TMP_FAIL (plan definition)	if (is_need_stop_write && OB_TMP_FAIL(check_need_stop_write(checker, is_need_stop_write))) {
+src/storage/ddl/ob_ddl_redo_log_writer.cpp	371	ObDDLRedoLogWriter::local_write_ddl_macro_redo	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/ddl/ob_ddl_redo_log_writer.cpp	392	ObDDLRedoLogWriter::local_write_ddl_macro_redo	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(ObDDLCtrlSpeedHandle::get_instance().limit_and_sleep(buffer_size, task_id, checker, real_sleep_us))) {
+src/storage/ddl/ob_ddl_replay_executor.cpp	219	ObDDLRedoReplayExecutor::do_full_replay_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/ddl/ob_ddl_replay_executor.cpp	234	ObDDLRedoReplayExecutor::do_full_replay_	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(check_idem_block_exist(log_->get_redo_info(), tablet_handle, need_replay, checksum))) {
+src/storage/ddl/ob_ddl_replay_executor.cpp	287	ObDDLRedoReplayExecutor::do_full_replay_	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(set_idem_block_checksum(tablet_handle, redo_info, checksum))) {
+src/storage/ddl/ob_delete_lob_meta_row_task.cpp	114	ObDeleteLobMetaRowDag::hash	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/ddl/ob_delete_lob_meta_row_task.cpp	117	ObDeleteLobMetaRowDag::hash	assign tmp_ret	tmp_ret = OB_ERR_SYS;
+src/storage/ddl/ob_delete_lob_meta_row_task.cpp	131	ObDeleteLobMetaRowDag::operator==	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/ddl/ob_delete_lob_meta_row_task.cpp	138	ObDeleteLobMetaRowDag::operator==	assign tmp_ret	tmp_ret = OB_ERR_SYS;
+src/storage/ddl/ob_delete_lob_meta_row_task.cpp	337	ObDeleteLobMetaRowTask::process	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/ddl/ob_delete_lob_meta_row_task.cpp	401	ObDeleteLobMetaRowTask::process	assign tmp_ret	} else if (OB_SUCCESS != (tmp_ret = dag->report_local_build_status())) {
+src/storage/ddl/ob_delete_lob_meta_row_task.cpp	403	ObDeleteLobMetaRowTask::process	merge into ret	ret = OB_SUCCESS == ret ? tmp_ret : ret;
+src/storage/ddl/ob_tablet_copy_util.h	97	ObTabletCopyUtil::destroy_value_ptr_map	declare tmp_ret	int tmp_ret = map.erase_refactored(key, &value);
+src/storage/ddl/ob_tablet_copy_util.h	99	ObTabletCopyUtil::destroy_value_ptr_map	merge into ret	ret = tmp_ret;
+src/storage/ddl/ob_tablet_ddl_kv.cpp	896	ObDDLKV::set_macro_block	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/ddl/ob_tablet_ddl_kv.cpp	899	ObDDLKV::set_macro_block	assign tmp_ret	tmp_ret = OB_NOT_INIT;
+src/storage/ddl/ob_tablet_ddl_kv.cpp	900	ObDDLKV::set_macro_block	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(runtime->get_server_log_disk_size(log_disk_size))) {
+src/storage/ddl/ob_tablet_ddl_kv.cpp	905	ObDDLKV::set_macro_block	assign tmp_ret	tmp_ret = OB_INVALID_ARGUMENT;
+src/storage/ddl/ob_tablet_ddl_kv.cpp	924	ObDDLKV::set_macro_block	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/ddl/ob_tablet_ddl_kv.cpp	925	ObDDLKV::set_macro_block	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(ObTabletDDLUtil::freeze_ddl_kv(param))) {
+src/storage/ddl/ob_tablet_ddl_kv.cpp	926	ObDDLKV::set_macro_block	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(compaction::ObScheduleDagFunc::schedule_ddl_table_merge_dag(param))) {
+src/storage/ddl/ob_tablet_slice_row_iterator.cpp	90	ObTabletSliceRowIterator::get_next_row	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/ddl/ob_tablet_slice_row_iterator.cpp	91	ObTabletSliceRowIterator::get_next_row	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(lob_writer_->close())) {
+src/storage/ddl/ob_tablet_slice_row_iterator.cpp	93	ObTabletSliceRowIterator::get_next_row	merge into ret	ret = tmp_ret;
+src/storage/deadlock/ob_deadlock_arg_checker.h	80	#define CHECK_ARGS	declare temp_ret	int temp_ret = check_args(args);\
+src/storage/deadlock/ob_lcl_scheme/ob_lcl_node.cpp	129	ObLCLNode::unregister_timer_task	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/deadlock/ob_lcl_scheme/ob_lcl_node.cpp	137	ObLCLNode::unregister_timer_task	assign tmp_ret	if (OB_SUCCESS == (tmp_ret = time_wheel.cancel(&push_state_task_))) {
+src/storage/deadlock/ob_lcl_scheme/ob_lcl_node.cpp	912	ObLCLNode::PushStateTask::runTimerTask	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/deadlock/ob_lcl_scheme/ob_lcl_node.cpp	936	ObLCLNode::PushStateTask::runTimerTask	OB_TMP_FAIL (plan definition)	if (CLICK() && OB_TMP_FAIL(lcl_node_.push_state_to_downstreams_with_lock_())) {
+src/storage/deadlock/ob_lcl_scheme/ob_lcl_node.cpp	941	ObLCLNode::PushStateTask::runTimerTask	OB_TMP_FAIL (plan definition)	if (CLICK() && OB_TMP_FAIL(lcl_node_.register_timer_with_necessary_retry_with_lock_())) {
+src/storage/fts/dict/ob_dic_loader.cpp	133	ObDicLoader::try_load_dictionary_in_trans	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/fts/dict/ob_dic_loader.cpp	134	ObDicLoader::try_load_dictionary_in_trans	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = trans.end(OB_SUCC(ret)))) {
+src/storage/fts/dict/ob_dic_loader.cpp	136	ObDicLoader::try_load_dictionary_in_trans	merge into ret	ret = OB_SUCC(ret) ? tmp_ret : ret;
+src/storage/fts/dict/ob_dic_lock.cpp	43	ObDicLock::lock_dic_tables_out_trans	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/fts/dict/ob_dic_lock.cpp	44	ObDicLock::lock_dic_tables_out_trans	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = trans.end(OB_SUCC(ret)))) {
+src/storage/fts/dict/ob_dic_lock.cpp	46	ObDicLock::lock_dic_tables_out_trans	merge into ret	ret = OB_SUCC(ret) ? tmp_ret : ret;
+src/storage/fts/ob_fts_stop_word.cpp	103	ObStopWordChecker::check_stopword	merge OB_ERR_UNEXPECTED into ret through if (OB_SUCC(ret)) (continue-and-record through another variable)	ret = OB_ERR_UNEXPECTED;
+src/storage/lob/ob_lob_handler.cpp	51	ObLobQueryBaseHandler::execute	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/lob/ob_lob_handler.cpp	63	ObLobQueryBaseHandler::execute	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(ObLobRetryUtil::check_need_retry(param_, ret, retry_cnt, is_continue))) {
+src/storage/lob/ob_lob_util.cpp	73	ObInsertLobColumnHelper::end_trans	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/lob/ob_lob_util.cpp	81	ObInsertLobColumnHelper::end_trans	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = txs->rollback_tx(*tx_desc))) {
+src/storage/lob/ob_lob_util.cpp	82	ObInsertLobColumnHelper::end_trans	merge into ret	ret = tmp_ret;
+src/storage/lob/ob_lob_util.cpp	86	ObInsertLobColumnHelper::end_trans	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = txs->commit_tx(*tx_desc, timeout_ts))) {
+src/storage/lob/ob_lob_util.cpp	87	ObInsertLobColumnHelper::end_trans	merge into ret	ret = tmp_ret;
+src/storage/lob/ob_lob_util.cpp	91	ObInsertLobColumnHelper::end_trans	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = txs->release_tx(*tx_desc))) {
+src/storage/lob/ob_lob_util.cpp	92	ObInsertLobColumnHelper::end_trans	merge into ret	ret = tmp_ret;
+src/storage/lob/ob_lob_util.cpp	108	ObInsertLobColumnHelper::insert_lob_column	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/lob/ob_lob_util.cpp	166	ObInsertLobColumnHelper::insert_lob_column	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = end_trans(tx_desc, OB_SUCCESS != ret, timeout_ts))) {
+src/storage/lob/ob_lob_util.cpp	167	ObInsertLobColumnHelper::insert_lob_column	merge into ret	ret = tmp_ret;
+src/storage/lob/ob_lob_util.cpp	191	ObInsertLobColumnHelper::insert_lob_column	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/lob/ob_lob_util.cpp	266	ObInsertLobColumnHelper::delete_lob_column	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/lob/ob_lob_util.cpp	298	ObInsertLobColumnHelper::delete_lob_column	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = end_trans(tx_desc, OB_SUCCESS != ret, timeout_ts))) {
+src/storage/lob/ob_lob_util.cpp	299	ObInsertLobColumnHelper::delete_lob_column	merge into ret	ret = tmp_ret;

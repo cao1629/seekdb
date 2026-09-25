@@ -1,0 +1,50 @@
+file	line	symbol	construct	text
+src/observer/virtual_table/ob_all_virtual_memstore_allocator_info.cpp	34	MemstoreInfoFill::Handle	Handle alias of ObMemstoreAllocator::AllocHandle	typedef ObMemstoreAllocator::AllocHandle Handle;
+src/observer/virtual_table/ob_all_virtual_ps_item_info.cpp	175	ObAllVirtualPsItemInfo::get_next_row	ref_stmt_info call (other name)	int tmp_ret = ps_cache_->ref_stmt_info(stmt_id, stmt_info);
+src/observer/virtual_table/ob_all_virtual_ps_item_info.cpp	183	ObAllVirtualPsItemInfo::get_next_row	ref_stmt_item call (other name)	} else if (FALSE_IT(tmp_ret = ps_cache_->ref_stmt_item(stmt_info->get_sql_key(),
+src/observer/virtual_table/ob_all_virtual_ps_item_info.cpp	207	ObAllVirtualPsItemInfo::get_next_row	dec_ref_count call	stmt_item->dec_ref_count();
+src/observer/virtual_table/ob_all_virtual_ps_item_info.cpp	213	ObAllVirtualPsItemInfo::get_next_row	deref_stmt_info call (other name)	if (OB_SUCCESS != (tmp_ret = ps_cache_->deref_stmt_info(stmt_id))) {
+src/observer/virtual_table/ob_all_virtual_sql_plan.cpp	498	ObAllVirtualSqlPlan::prepare_next_plan	ref_alloc_plan call (other name)	if (OB_SUCCESS != (tmp_ret = plan_cache->ref_alloc_plan(plan_id_, guard))) {
+src/observer/virtual_table/ob_all_virtual_sql_stat.cpp	196	ObAllVirtualSqlStatIter::get_next_sql_stat	ref_cache_obj call (other name)	int tmp_ret = plan_cache->ref_cache_obj(cur_sql_stat_cache_id, guard);
+src/observer/virtual_table/ob_gv_sql.cpp	90	ObGVSql::get_next_plan_row	ref_alloc_obj call (other name)	int tmp_ret = plan_cache_->ref_alloc_obj(plan_id, guard); // increment plan reference count by 1
+src/observer/virtual_table/ob_plan_cache_plan_explain.cpp	295	ObCacheObjIterator::next	ref_cache_obj call (other name)	} else if (OB_FAIL(plan_cache->ref_cache_obj(plan_id, guard))) {
+src/observer/virtual_table/ob_plan_cache_plan_explain.cpp	355	ObPlanCachePlanExplain::inner_open	ref_plan call (other name)	} else if (OB_SUCCESS != (tmp_ret = plan_cache->ref_plan(plan_id_, guard))) {
+src/query/api/query/engine/basic/ob_pushdown_filter.h	828	ObPushdownFilterExecutor::inc_ref	inc_ref definition	void inc_ref() { ++ref_cnt_; }
+src/query/api/query/engine/basic/ob_pushdown_filter.h	829	ObPushdownFilterExecutor::dec_ref	dec_ref definition	void dec_ref() { --ref_cnt_; }
+src/query/api/query/engine/cmd/ob_load_data_stat.h	59	ObLoadDataStat::aquire	aquire definition (reference-count function found by its body: changes a reference-count field)	int64_t aquire() {
+src/query/api/query/engine/cmd/ob_load_data_stat.h	62	ObLoadDataStat::release	release definition (reference-count function found by its body: changes a reference-count field)	int64_t release() {
+src/query/api/query/monitor/ob_ra_queue.h	152	ObRaQueue::get	xref call (other name)	xref(seq, 1);
+src/query/api/query/monitor/ob_ra_queue.h	159	ObRaQueue::revert	xref call (other name)	xref(ref->idx_, -1);
+src/query/api/query/monitor/ob_ra_queue.h	170	ObRaQueue::xref	xref definition (other name)	virtual int64_t xref(int64_t seq, int64_t x) {
+src/query/api/query/vector/ob_vector_embedding_handler.h	39	ObIEmbeddingCallback	retain declaration (reference-count function found by its body)	virtual void retain() = 0;
+src/query/api/query/vector/ob_vector_embedding_handler.h	199	ObEmbeddingTask	retain_if_managed declaration (reference-count function found by its body)	void retain_if_managed();
+src/query/api/query/vector/ob_vector_embedding_handler.h	200	ObEmbeddingTask	release_if_managed declaration (reference-count function found by its body)	void release_if_managed();
+src/query/api/query/vector/ob_vector_embedding_handler.h	405	ObEmbeddingTaskHandler::inc_task_ref	inc_task_ref definition (other name)	void inc_task_ref() { ATOMIC_INC(&task_ref_cnt_); }
+src/query/api/query/vector/ob_vector_embedding_handler.h	406	ObEmbeddingTaskHandler::dec_task_ref	dec_task_ref definition (other name)	void dec_task_ref() { ATOMIC_DEC(&task_ref_cnt_); }
+src/query/api/query/vector/ob_vector_index_adaptor.h	454	ObVectorIndexMemData::inc_ref	inc_ref definition	void inc_ref()
+src/query/api/query/vector/ob_vector_index_adaptor.h	459	ObVectorIndexMemData::dec_ref_and_check_release	dec_ref_and_check_release definition	bool dec_ref_and_check_release()
+src/query/api/query/vector/ob_vector_index_adaptor.h	620	ObPluginVectorIndexAdaptor	inc_ref declaration	void inc_ref();
+src/query/api/query/vector/ob_vector_index_adaptor.h	621	ObPluginVectorIndexAdaptor	dec_ref_and_check_release declaration	bool dec_ref_and_check_release();
+src/query/api/query/vector/ob_vector_index_adaptor.h	963	ObPluginVectorIndexAdapterGuard	Guard class definition whose methods call dec_ref_and_check_release, inc_ref	class ObPluginVectorIndexAdapterGuard
+src/query/api/query/vector/ob_vector_index_adaptor.h	972	ObPluginVectorIndexAdapterGuard::~ObPluginVectorIndexAdapterGuard	dec_ref_and_check_release call	if (adapter_->dec_ref_and_check_release()) {
+src/query/api/query/vector/ob_vector_index_adaptor.h	997	ObPluginVectorIndexAdapterGuard::set_adapter	inc_ref call	(void)adapter_->inc_ref();
+src/query/api/query/vector/ob_vector_index_cache.h	232	ObIvfCacheMgr	inc_ref declaration	void inc_ref();
+src/query/api/query/vector/ob_vector_index_cache.h	233	ObIvfCacheMgr	dec_ref_and_check_release declaration	bool dec_ref_and_check_release();
+src/query/api/query/vector/ob_vector_index_cache.h	272	ObIvfCacheMgrGuard	Guard class definition whose methods call dec_ref_and_check_release, inc_ref	class ObIvfCacheMgrGuard
+src/query/vector/ob_vector_embedding_handler.cpp	46	#define HANDLE_TASK_FAILURE_AND_CLEANUP	dec_task_ref call (other name)	thread_pool->dec_task_ref(); \
+src/query/vector/ob_vector_embedding_handler.cpp	56	#define HANDLE_TASK_COMPLETION_AND_CLEANUP	dec_task_ref call (other name)	thread_pool->dec_task_ref(); \
+src/query/vector/ob_vector_embedding_handler.cpp	360	ObEmbeddingTask::init	retain call (reference-count function found by its body)	cb_handle_->retain();
+src/query/vector/ob_vector_embedding_handler.cpp	499	ObEmbeddingTask::reschedule	retain_if_managed call (reference-count function found by its body)	retain_if_managed();
+src/query/vector/ob_vector_embedding_handler.cpp	506	ObEmbeddingTask::reschedule	release_if_managed call (reference-count function found by its body)	release_if_managed();
+src/query/vector/ob_vector_embedding_handler.cpp	919	ObEmbeddingTask::retain_if_managed	retain_if_managed definition (reference-count function found by its body: changes a reference-count field)	void ObEmbeddingTask::retain_if_managed()
+src/query/vector/ob_vector_embedding_handler.cpp	924	ObEmbeddingTask::release_if_managed	release_if_managed definition (reference-count function found by its body: changes a reference-count field)	void ObEmbeddingTask::release_if_managed()
+src/query/vector/ob_vector_embedding_handler.cpp	1039	ObEmbeddingTask::set_phase	release_if_managed call (reference-count function found by its body)	release_if_managed();
+src/query/vector/ob_vector_embedding_handler.cpp	1289	ObEmbeddingTaskHandler::push_task	retain_if_managed call (reference-count function found by its body)	task.retain_if_managed();
+src/query/vector/ob_vector_embedding_handler.cpp	1296	ObEmbeddingTaskHandler::push_task	release_if_managed call (reference-count function found by its body)	task.release_if_managed();
+src/query/vector/ob_vector_embedding_handler.cpp	1299	ObEmbeddingTaskHandler::push_task	inc_task_ref call (other name)	inc_task_ref();
+src/query/vector/ob_vector_embedding_handler.cpp	1330	ObEmbeddingTaskHandler::handle	release_if_managed call (reference-count function found by its body)	embedding_task->release_if_managed();
+src/query/vector/ob_vector_embedding_handler.cpp	1354	ObEmbeddingTaskHandler::handle_drop	release_if_managed call (reference-count function found by its body)	embedding_task->release_if_managed();
+src/query/vector/ob_vector_embedding_handler.cpp	1362	ObEmbeddingTaskHandler::handle_drop	dec_task_ref call (other name)	dec_task_ref();
+src/share/cache/ob_kv_storecache.h	281	ObKVCacheHandle	Handle class definition	class ObKVCacheHandle
+src/share/cache/ob_kvcache_hazard_pointer.cpp	125	SharedHazptr::operator=	reference-count change: ATOMIC_INC on refcnt_	ATOMIC_INC(&ctrl_ptr_->refcnt_);
+src/share/cache/ob_kvcache_hazard_pointer.cpp	139	SharedHazptr::reset	reference-count change: ATOMIC_SAF on refcnt_	uint64_t refcnt = ATOMIC_SAF(&ctrl_ptr_->refcnt_, 1);

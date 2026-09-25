@@ -1,0 +1,88 @@
+file	line	symbol	construct	text
+src/storage/ls/ob_ls_tablet_service.cpp	170	ObLSTabletService::replay	ret == OB_TABLET_NOT_EXIST	if (OB_TABLET_NOT_EXIST == ret) {
+src/storage/ls/ob_ls_tablet_service.cpp	173	ObLSTabletService::replay	ret == OB_TIMEOUT	} else if (OB_TIMEOUT == ret) {
+src/storage/ls/ob_ls_tablet_service.cpp	263	ObLSTabletService::remove_tablet	ret == OB_TABLET_NOT_EXIST	if (OB_TABLET_NOT_EXIST == ret) {
+src/storage/ls/ob_ls_tablet_service.cpp	323	ObLSTabletService::remove_tablets	ret == OB_TABLET_NOT_EXIST	if (OB_TABLET_NOT_EXIST == ret) {
+src/storage/ls/ob_ls_tablet_service.cpp	385	ObLSTabletService::inner_remove_tablet	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/storage/ls/ob_ls_tablet_service.cpp	424	ObLSTabletService::get_tablet	ret == OB_TABLET_NOT_EXIST	if (OB_TABLET_NOT_EXIST == ret) {
+src/storage/ls/ob_ls_tablet_service.cpp	518	ObLSTabletService::refresh_tablet_addr	ret == OB_ALLOCATE_MEMORY_FAILED	} else if (OB_ALLOCATE_MEMORY_FAILED == ret) {
+src/storage/ls/ob_ls_tablet_service.cpp	576	ObLSTabletService::update_tablet_checkpoint	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/storage/ls/ob_ls_tablet_service.cpp	619	ObLSTabletService::update_tablet_table_store	ret == OB_TABLET_NOT_EXIST	if (OB_TABLET_NOT_EXIST == ret) {
+src/storage/ls/ob_ls_tablet_service.cpp	673	ObLSTabletService::update_tablet_table_store	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/storage/ls/ob_ls_tablet_service.cpp	783	ObLSTabletService::update_medium_compaction_info	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/storage/ls/ob_ls_tablet_service.cpp	822	ObLSTabletService::build_new_tablet_from_mds_table	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/storage/ls/ob_ls_tablet_service.cpp	1060	ObLSTabletService::update_tablet_snapshot_version	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/storage/ls/ob_ls_tablet_service.cpp	1248	ObLSTabletService::get_tablet_with_timeout	ret == OB_ALLOCATE_MEMORY_FAILED	while (OB_ALLOCATE_MEMORY_FAILED == ret && ObClockGenerator::getClock() < retry_timeout_us) {
+src/storage/ls/ob_ls_tablet_service.cpp	1251	ObLSTabletService::get_tablet_with_timeout	ret == OB_ALLOCATE_MEMORY_FAILED	if (OB_ALLOCATE_MEMORY_FAILED == ret) {
+src/storage/ls/ob_ls_tablet_service.cpp	1268	ObLSTabletService::direct_get_tablet	ret != OB_TABLET_NOT_EXIST	if (OB_TABLET_NOT_EXIST != ret) {
+src/storage/ls/ob_ls_tablet_service.cpp	1513	ObLSTabletService::rollback_remove_tablet_without_lock	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/storage/ls/ob_ls_tablet_service.cpp	1572	ObLSTabletService::create_memtable	ret != OB_MINOR_FREEZE_NOT_ALLOW	if (OB_MINOR_FREEZE_NOT_ALLOW != ret) {
+src/storage/ls/ob_ls_tablet_service.cpp	1628	ObLSTabletService::inner_get_read_tables	ret != OB_TABLET_NOT_EXIST	if (OB_TABLET_NOT_EXIST != ret) {
+src/storage/ls/ob_ls_tablet_service.cpp	1651	ObLSTabletService::set_tablet_status	ret == OB_TABLET_NOT_EXIST	if (OB_TABLET_NOT_EXIST == ret) {
+src/storage/ls/ob_ls_tablet_service.cpp	1678	ObLSTabletService::replay_set_tablet_status	ret == OB_TABLET_NOT_EXIST	if (OB_TABLET_NOT_EXIST == ret) {
+src/storage/ls/ob_ls_tablet_service.cpp	1729	ObLSTabletService::set_ddl_info	ret == OB_TABLET_NOT_EXIST	if (OB_TABLET_NOT_EXIST == ret) {
+src/storage/ls/ob_ls_tablet_service.cpp	1756	ObLSTabletService::replay_set_ddl_info	ret == OB_TABLET_NOT_EXIST	if (OB_TABLET_NOT_EXIST == ret) {
+src/storage/ls/ob_ls_tablet_service.cpp	1784	ObLSTabletService::replay_set_ddl_complete	ret == OB_TABLET_NOT_EXIST	if (OB_TABLET_NOT_EXIST == ret) {
+src/storage/ls/ob_ls_tablet_service.cpp	1863	ObLSTabletService::insert_rows	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/ls/ob_ls_tablet_service.cpp	1900	ObLSTabletService::get_storage_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/ls/ob_ls_tablet_service.cpp	1990	ObLSTabletService::insert_rows_with_fetch_dup	ret == OB_ERR_PRIMARY_KEY_DUPLICATE	if (OB_ERR_PRIMARY_KEY_DUPLICATE == ret) {
+src/storage/ls/ob_ls_tablet_service.cpp	1998	ObLSTabletService::insert_rows_with_fetch_dup	ret != OB_TRY_LOCK_ROW_CONFLICT	} else if (OB_TRY_LOCK_ROW_CONFLICT != ret) {
+src/storage/ls/ob_ls_tablet_service.cpp	2006	ObLSTabletService::insert_rows_with_fetch_dup	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/ls/ob_ls_tablet_service.cpp	2253	ObLSTabletService::update_rows	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/ls/ob_ls_tablet_service.cpp	2331	ObLSTabletService::delay_process_new_rows	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/ls/ob_ls_tablet_service.cpp	2402	ObLSTabletService::put_rows	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/ls/ob_ls_tablet_service.cpp	2409	ObLSTabletService::put_rows	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/ls/ob_ls_tablet_service.cpp	2516	ObLSTabletService::delete_rows	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/ls/ob_ls_tablet_service.cpp	2594	ObLSTabletService::lock_rows	ret != OB_TRY_LOCK_ROW_CONFLICT	if (OB_TRY_LOCK_ROW_CONFLICT != ret) {
+src/storage/ls/ob_ls_tablet_service.cpp	2601	ObLSTabletService::lock_rows	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/ls/ob_ls_tablet_service.cpp	2643	ObLSTabletService::lock_row	ret != OB_TRY_LOCK_ROW_CONFLICT	if (OB_TRY_LOCK_ROW_CONFLICT != ret) {
+src/storage/ls/ob_ls_tablet_service.cpp	2796	ObLSTabletService::check_old_row_legitimacy	other variable inject_err == OB_ERR_DEFENSIVE_CHECK	if (OB_ERR_DEFENSIVE_CHECK == inject_err) {
+src/storage/ls/ob_ls_tablet_service.cpp	2811	ObLSTabletService::check_old_row_legitimacy	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/ls/ob_ls_tablet_service.cpp	2851	ObLSTabletService::check_old_row_legitimacy	ret == OB_ERR_DEFENSIVE_CHECK	if (OB_ERR_DEFENSIVE_CHECK == ret && dml_param.is_batch_stmt_) {
+src/storage/ls/ob_ls_tablet_service.cpp	2855	ObLSTabletService::check_old_row_legitimacy	ret == OB_ERR_DEFENSIVE_CHECK	if (OB_ERR_DEFENSIVE_CHECK == ret) {
+src/storage/ls/ob_ls_tablet_service.cpp	2866	ObLSTabletService::check_old_row_legitimacy	ret == OB_ERR_DEFENSIVE_CHECK	if (OB_ERR_DEFENSIVE_CHECK == ret) {
+src/storage/ls/ob_ls_tablet_service.cpp	3010	ObLSTabletService::insert_tablet_rows	ret == OB_ERR_PRIMARY_KEY_DUPLICATE	if (OB_ERR_PRIMARY_KEY_DUPLICATE == ret) {
+src/storage/ls/ob_ls_tablet_service.cpp	3018	ObLSTabletService::insert_tablet_rows	ret != OB_TRY_LOCK_ROW_CONFLICT	} else if (OB_TRY_LOCK_ROW_CONFLICT != ret) {
+src/storage/ls/ob_ls_tablet_service.cpp	3024	ObLSTabletService::insert_tablet_rows	ret == OB_ERR_PRIMARY_KEY_DUPLICATE	if (OB_ERR_PRIMARY_KEY_DUPLICATE == ret && !run_ctx.dml_param_.is_ignore_ && !rows_info.need_find_all_duplicate_key()) {
+src/storage/ls/ob_ls_tablet_service.cpp	3093	ObLSTabletService::put_tablet_rows	ret != OB_TRY_LOCK_ROW_CONFLICT	if (OB_TRY_LOCK_ROW_CONFLICT != ret) {
+src/storage/ls/ob_ls_tablet_service.cpp	3671	ObLSTabletService::update_rows_to_tablet	ret != OB_TRY_LOCK_ROW_CONFLICT; ret != OB_TRANSACTION_SET_VIOLATION	if (OB_TRY_LOCK_ROW_CONFLICT != ret && OB_TRANSACTION_SET_VIOLATION != ret) {
+src/storage/ls/ob_ls_tablet_service.cpp	3693	ObLSTabletService::update_rows_to_tablet	ret != OB_TRY_LOCK_ROW_CONFLICT; ret != OB_TRANSACTION_SET_VIOLATION	if (OB_TRY_LOCK_ROW_CONFLICT != ret && OB_TRANSACTION_SET_VIOLATION != ret) {
+src/storage/ls/ob_ls_tablet_service.cpp	3742	ObLSTabletService::update_row_to_tablet	ret != OB_TRY_LOCK_ROW_CONFLICT; ret != OB_TRANSACTION_SET_VIOLATION	if (OB_TRY_LOCK_ROW_CONFLICT != ret && OB_TRANSACTION_SET_VIOLATION != ret) {
+src/storage/ls/ob_ls_tablet_service.cpp	3761	ObLSTabletService::update_row_to_tablet	ret != OB_TRY_LOCK_ROW_CONFLICT; ret != OB_TRANSACTION_SET_VIOLATION	if (OB_TRY_LOCK_ROW_CONFLICT != ret && OB_TRANSACTION_SET_VIOLATION != ret) {
+src/storage/ls/ob_ls_tablet_service.cpp	3799	ObLSTabletService::process_old_rows	ret == OB_ERR_DEFENSIVE_CHECK	if (OB_ERR_DEFENSIVE_CHECK == ret) {
+src/storage/ls/ob_ls_tablet_service.cpp	3840	ObLSTabletService::process_old_rows	ret != OB_TRY_LOCK_ROW_CONFLICT; ret != OB_TRANSACTION_SET_VIOLATION	if (OB_TRY_LOCK_ROW_CONFLICT != ret && OB_TRANSACTION_SET_VIOLATION != ret) {
+src/storage/ls/ob_ls_tablet_service.cpp	3849	ObLSTabletService::process_old_rows	ret != OB_TRY_LOCK_ROW_CONFLICT; ret != OB_TRANSACTION_SET_VIOLATION	if (OB_TRY_LOCK_ROW_CONFLICT != ret && OB_TRANSACTION_SET_VIOLATION != ret) {
+src/storage/ls/ob_ls_tablet_service.cpp	3878	ObLSTabletService::process_old_row	ret == OB_ERR_DEFENSIVE_CHECK	if (OB_ERR_DEFENSIVE_CHECK == ret) {
+src/storage/ls/ob_ls_tablet_service.cpp	3913	ObLSTabletService::process_old_row	ret != OB_TRY_LOCK_ROW_CONFLICT; ret != OB_TRANSACTION_SET_VIOLATION	if (OB_TRY_LOCK_ROW_CONFLICT != ret && OB_TRANSACTION_SET_VIOLATION != ret) {
+src/storage/ls/ob_ls_tablet_service.cpp	3920	ObLSTabletService::process_old_row	ret != OB_TRY_LOCK_ROW_CONFLICT; ret != OB_TRANSACTION_SET_VIOLATION	if (OB_TRY_LOCK_ROW_CONFLICT != ret && OB_TRANSACTION_SET_VIOLATION != ret) {
+src/storage/ls/ob_ls_tablet_service.cpp	3967	ObLSTabletService::process_new_rows	ret != OB_TRY_LOCK_ROW_CONFLICT; ret != OB_TRANSACTION_SET_VIOLATION	if (OB_TRY_LOCK_ROW_CONFLICT != ret && OB_TRANSACTION_SET_VIOLATION != ret) {
+src/storage/ls/ob_ls_tablet_service.cpp	3985	ObLSTabletService::process_new_rows	ret == OB_ERR_PRIMARY_KEY_DUPLICATE	if (OB_ERR_PRIMARY_KEY_DUPLICATE == ret) {
+src/storage/ls/ob_ls_tablet_service.cpp	3997	ObLSTabletService::process_new_rows	ret != OB_TRY_LOCK_ROW_CONFLICT; ret != OB_TRANSACTION_SET_VIOLATION	} else if (OB_TRY_LOCK_ROW_CONFLICT != ret && OB_TRANSACTION_SET_VIOLATION != ret) {
+src/storage/ls/ob_ls_tablet_service.cpp	4044	ObLSTabletService::process_new_row	ret != OB_TRY_LOCK_ROW_CONFLICT; ret != OB_TRANSACTION_SET_VIOLATION	if (OB_TRY_LOCK_ROW_CONFLICT != ret && OB_TRANSACTION_SET_VIOLATION != ret) {
+src/storage/ls/ob_ls_tablet_service.cpp	4059	ObLSTabletService::process_new_row	ret == OB_ERR_PRIMARY_KEY_DUPLICATE	if (OB_ERR_PRIMARY_KEY_DUPLICATE == ret) {
+src/storage/ls/ob_ls_tablet_service.cpp	4071	ObLSTabletService::process_new_row	ret != OB_TRY_LOCK_ROW_CONFLICT; ret != OB_TRANSACTION_SET_VIOLATION	} else if (OB_TRY_LOCK_ROW_CONFLICT != ret && OB_TRANSACTION_SET_VIOLATION != ret) {
+src/storage/ls/ob_ls_tablet_service.cpp	4318	ObLSTabletService::table_refresh_row	ret == OB_ITER_END	if (ret == OB_ITER_END) {
+src/storage/ls/ob_ls_tablet_service.cpp	4353	ObLSTabletService::delete_rows_in_tablet	ret == OB_ERR_DEFENSIVE_CHECK	if (OB_ERR_DEFENSIVE_CHECK == ret) {
+src/storage/ls/ob_ls_tablet_service.cpp	4380	ObLSTabletService::delete_rows_in_tablet	ret != OB_TRY_LOCK_ROW_CONFLICT; ret != OB_TRANSACTION_SET_VIOLATION	if (OB_TRY_LOCK_ROW_CONFLICT != ret && OB_TRANSACTION_SET_VIOLATION != ret) {
+src/storage/ls/ob_ls_tablet_service.cpp	4513	ObLSTabletService::dump_diag_info_for_old_row_loss	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/ls/ob_ls_tablet_service.cpp	4544	ObLSTabletService::dump_diag_info_for_old_row_loss	ret != OB_ITER_END	if (OB_FAIL(ret) && OB_ITER_END != ret) {
+src/storage/ls/ob_ls_tablet_service.cpp	4552	ObLSTabletService::dump_diag_info_for_old_row_loss	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/ls/ob_ls_tablet_service.cpp	4633	ObLSTabletService::get_ls_min_end_scn	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/storage/ls/ob_ls_tablet_service.cpp	4739	ObLSTabletService::estimate_row_count	ret != OB_TABLET_NOT_EXIST	if (OB_TABLET_NOT_EXIST != ret) {
+src/storage/ls/ob_ls_tablet_service.cpp	4746	ObLSTabletService::estimate_row_count	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/ls/ob_ls_tablet_service.cpp	4807	ObLSTabletService::inner_estimate_block_count_and_row_count	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/ls/ob_ls_tablet_service.cpp	4985	ObLSTabletService::is_tablet_exist	ret == OB_HASH_EXIST	if (OB_HASH_EXIST == ret) {
+src/storage/ls/ob_ls_tablet_service.cpp	4988	ObLSTabletService::is_tablet_exist	ret == OB_HASH_NOT_EXIST	} else if (OB_HASH_NOT_EXIST == ret) {
+src/storage/ls/ob_ls_tablet_service.cpp	5037	ObLSTabletService::SetMemtableFrozenOperator::operator()	ret == OB_TABLET_NOT_EXIST	if (OB_TABLET_NOT_EXIST == ret) {
+src/storage/ls/ob_ls_tablet_service.cpp	5099	ObLSTabletService::get_tablet_without_memtables	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/storage/ls/ob_ls_tablet_service.cpp	5151	ObLSTabletService::check_tablet_no_active_memtable	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/storage/ls/ob_ls_tablet_service.cpp	5185	ObLSTabletService::offline_gc_uncommitted_tablets_	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/ls/ob_ls_tablet_service.cpp	5200	ObLSTabletService::offline_gc_uncommitted_tablets_	ret == OB_EMPTY_RESULT	if (OB_EMPTY_RESULT == ret) {
+src/storage/ls/ob_ls_tablet_service.cpp	5270	ObLSTabletService::insert_rows_wrap	ret == OB_ERR_PRIMARY_KEY_DUPLICATE	if (rows_info.need_find_all_duplicate_key() && OB_ERR_PRIMARY_KEY_DUPLICATE == ret) {
+src/storage/ls/ob_ls_tablet_service.cpp	5444	ObLSTabletService::get_conflict_rows_by_multi_get	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/ls/ob_ls_tablet_service.cpp	5449	ObLSTabletService::get_conflict_rows_by_multi_get	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/ls/ob_ls_tx_service.cpp	108	ObLSTxService::get_tx_start_session_id	ret == OB_TRANS_CTX_NOT_EXIST	if (OB_TRANS_CTX_NOT_EXIST == ret) {
+src/storage/ls/ob_ls_tx_service.cpp	344	ObLSTxService::check_modify_schema_elapsed	ret != OB_EAGAIN	if (OB_EAGAIN != ret) {
+src/storage/ls/ob_ls_tx_service.cpp	369	ObLSTxService::check_modify_time_elapsed	ret != OB_EAGAIN	if (OB_EAGAIN != ret) {
+src/storage/ls/ob_ls_wrs_handler.cpp	146	ObLSWRSHandler::generate_weak_read_timestamp_	ret == OB_STATE_NOT_MATCH	if (OB_STATE_NOT_MATCH == ret) {
+src/storage/ls/ob_ls_wrs_handler.cpp	157	ObLSWRSHandler::generate_weak_read_timestamp_	ret == OB_PARTITION_NOT_EXIST	if (OB_PARTITION_NOT_EXIST == ret) {

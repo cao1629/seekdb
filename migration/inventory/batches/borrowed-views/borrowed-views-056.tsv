@@ -1,0 +1,60 @@
+file	line	symbol	construct	text
+src/storage/ob_partition_range_spliter.h	259	ObPairStoreAndDatumRange::datum_range_	member ObDatumRange (value) of type ObDatumRange	ObDatumRange datum_range_;
+src/storage/ob_partition_range_spliter.h	272	ObRangeInfo::range_	member ObDatumRange (pointer) of type const ObDatumRange *	const ObDatumRange *range_;
+src/storage/ob_partition_range_spliter.h	379	ObSplitRangeInfo::origin_range_	member ObDatumRange (pointer) of type const ObDatumRange *	const ObDatumRange *origin_range_;
+src/storage/ob_partition_range_spliter.h	380	ObSplitRangeInfo::split_rowkey_	member ObDatumRowkey (value) of type ObDatumRowkey	ObDatumRowkey split_rowkey_;
+src/storage/ob_partition_range_spliter.h	831	ObPartitionIncrementalRangeSpliter::ObIncrementalIterator::range_to_scan_	member ObDatumRange (value) of type blocksstable::ObDatumRange	blocksstable::ObDatumRange range_to_scan_;
+src/storage/ob_partition_range_spliter.h	847	ObPartitionIncrementalRangeSpliter::inc_ranges_	member ObDatumRangeArray (pointer) of type ObDatumRangeArray *	ObDatumRangeArray *inc_ranges_;
+src/storage/ob_partition_range_spliter.h	848	ObPartitionIncrementalRangeSpliter::base_ranges_	member ObDatumRangeArray (pointer) of type ObDatumRangeArray *	ObDatumRangeArray *base_ranges_;
+src/storage/ob_partition_range_spliter.h	849	ObPartitionIncrementalRangeSpliter::combined_ranges_	member ObDatumRangeArray (pointer) of type ObDatumRangeArray *	ObDatumRangeArray *combined_ranges_;
+src/storage/ob_row_fuse.cpp	170	ObRowFuse::fuse_row	allocator in, arena view out: blocksstable::ObDatumRow &result	int ObRowFuse::fuse_row(const blocksstable::ObDatumRow &former,
+src/storage/ob_row_reshape.h	36	ObRowReshape::row_reshape_cells_	member ObObj (pointer) of type common::ObObj *	common::ObObj *row_reshape_cells_;
+src/storage/ob_row_reshape.h	39	ObRowReshape::binary_buffer_ptr_	member raw bytes (pointer) of type char *	char *binary_buffer_ptr_;
+src/storage/ob_storage_schema.h	97	ObStorageColumnSchema::orig_default_value_	member ObObj (value) of type ObObj	ObObj orig_default_value_;
+src/storage/ob_storage_schema_recorder.cpp	187	ObStorageSchemaRecorder::prepare_struct_in_lock	allocator in, arena view out: char *&clog_buf	int ObStorageSchemaRecorder::prepare_struct_in_lock(
+src/storage/ob_storage_schema_recorder.h	106	ObStorageSchemaRecorder::clog_buf_	member raw bytes (pointer) of type char *	char *clog_buf_;
+src/storage/ob_storage_util.cpp	57	pad_on_local_buf	allocator in, arena view out: const char *&ptr	OB_INLINE static int pad_on_local_buf(const ObString &space_pattern,
+src/storage/ob_storage_util.cpp	80	pad_column	allocator in, arena view out: common::ObObj &cell	int pad_column(const ObAccuracy accuracy, common::ObIAllocator &padding_alloc, common::ObObj &cell)
+src/storage/ob_storage_util.cpp	105	pad_column	allocator in, arena view out: blocksstable::ObStorageDatum &datum	int pad_column(const ObObjMeta &obj_meta, const ObAccuracy accuracy, common::ObIAllocator &padding_alloc, blocksstable::ObStorageDatum &datum)
+src/storage/ob_storage_util.cpp	165	pad_on_datums	allocator in, arena view out: common::ObDatum *&datums	int pad_on_datums(const common::ObAccuracy accuracy,
+src/storage/ob_table_dml_param.h	150	ObTableSchemaParam::index_name_	member ObString (value) of type common::ObString	common::ObString index_name_;
+src/storage/ob_table_dml_param.h	151	ObTableSchemaParam::fts_parser_name_	member ObString (value) of type common::ObString	common::ObString fts_parser_name_;
+src/storage/ob_table_dml_param.h	152	ObTableSchemaParam::fts_parser_properties_	member ObString (value) of type common::ObString	common::ObString fts_parser_properties_;
+src/storage/ob_table_dml_param.h	156	ObTableSchemaParam::pk_name_	member ObString (value) of type common::ObString	common::ObString pk_name_; // used for printing primary-key error messages
+src/storage/ob_table_dml_param.h	163	ObTableSchemaParam::vec_index_param_	member ObString (value) of type ObString	ObString vec_index_param_;
+src/storage/ob_value_row_iterator.h	54	ObValueRowIterator::rows_	member RowArray (value) of type RowArray	RowArray rows_;
+src/storage/retrieval/ob_block_max_iter.h	98	ObMaxScoreTuple::min_domain_id_	member ObDatum (pointer) of type const ObDatum *	const ObDatum *min_domain_id_;
+src/storage/retrieval/ob_block_max_iter.h	99	ObMaxScoreTuple::max_domain_id_	member ObDatum (pointer) of type const ObDatum *	const ObDatum *max_domain_id_;
+src/storage/retrieval/ob_block_max_iter.h	208	ObBlockMaxScoreIterator::advance_rowkey_	member ObDatumRowkey (value) of type ObDatumRowkey	ObDatumRowkey advance_rowkey_;
+src/storage/retrieval/ob_block_max_iter.h	217	ObBlockMaxScoreIterator::scan_dim_datum_	member ObStorageDatum (value) of type ObStorageDatum	ObStorageDatum scan_dim_datum_;
+src/storage/retrieval/ob_block_stat_collector.cpp	63	ObBM25MaxScoreParamCollector::init	allocator in, arena view out: blocksstable::ObDatumRow &result_row	int ObBM25MaxScoreParamCollector::init(
+src/storage/retrieval/ob_block_stat_collector.h	65	ObLooseMinMaxStatCollector::agg_result_	member ObStorageDatum (pointer) of type blocksstable::ObStorageDatum *	blocksstable::ObStorageDatum *agg_result_;
+src/storage/retrieval/ob_block_stat_collector.h	94	ObBM25MaxScoreParamCollector::token_freq_res_	member ObStorageDatum (pointer) of type blocksstable::ObStorageDatum *	blocksstable::ObStorageDatum *token_freq_res_;
+src/storage/retrieval/ob_block_stat_collector.h	95	ObBM25MaxScoreParamCollector::doc_len_res_	member ObStorageDatum (pointer) of type blocksstable::ObStorageDatum *	blocksstable::ObStorageDatum *doc_len_res_;
+src/storage/retrieval/ob_block_stat_collector.h	138	ObBlockStatCollector::result_row_	member ObDatumRow (value) of type blocksstable::ObDatumRow	blocksstable::ObDatumRow result_row_;
+src/storage/retrieval/ob_block_stat_collector.h	176	ObLooseMinMaxStatCollector::init	allocator in, arena view out: blocksstable::ObStorageDatum &result_datum	int ObLooseMinMaxStatCollector<AGG_TYPE>::init(
+src/storage/retrieval/ob_block_stat_iter.h	135	ObBlockStatIterator::MemTableIter::row_	member ObDatumRow (pointer) of type const blocksstable::ObDatumRow *	const blocksstable::ObDatumRow *row_;
+src/storage/retrieval/ob_block_stat_iter.h	147	ObBlockStatIterator::ObBlockStatKeyItem::endkey_	member ObDatumRowkey (pointer) of type const ObDatumRowkey *	const ObDatumRowkey *endkey_;
+src/storage/retrieval/ob_block_stat_iter.h	212	ObBlockStatIterator::curr_endkey_	member ObDatumRowkey (pointer) of type const ObDatumRowkey *	const ObDatumRowkey *curr_endkey_;
+src/storage/retrieval/ob_block_stat_iter.h	213	ObBlockStatIterator::curr_merged_endkey_	member ObDatumRowkey (value) of type ObDatumRowkey	ObDatumRowkey curr_merged_endkey_;
+src/storage/retrieval/ob_block_stat_iter.h	214	ObBlockStatIterator::curr_scan_range_	member ObDatumRange (value) of type ObDatumRange	ObDatumRange curr_scan_range_;
+src/storage/retrieval/ob_block_stat_iter.h	215	ObBlockStatIterator::curr_scan_start_key_	member ObDatumRowkey (value) of type ObDatumRowkey	ObDatumRowkey curr_scan_start_key_;
+src/storage/retrieval/ob_retrieval_program.cpp	545	ObRetrievalProgram::Impl::term_datums_	member ObDatum (pointer) of type common::ObDatum *	common::ObDatum *term_datums_;
+src/storage/retrieval/ob_sparse_daat_iter.h	59	ObSRMergeCmp::iter_ids_	member container of ObDatum of type const ObFixedArray<const ObDatum *, ObIAllocator> *	const ObFixedArray<const ObDatum *, ObIAllocator> *iter_ids_;
+src/storage/retrieval/ob_sparse_daat_iter.h	103	ObSRDaaTIterImpl::iter_domain_ids_	member container of ObDatum of type ObFixedArray<const ObDatum *, ObIAllocator>	ObFixedArray<const ObDatum *, ObIAllocator> iter_domain_ids_; // record every dim iter's output domain id, one (ObDatum *) for one dim iter
+src/storage/retrieval/ob_spiv_dim_iter.h	201	ObSPIVBlockMaxDimIter::curr_id_	member ObDatum (pointer) of type const ObDatum *	const ObDatum *curr_id_;
+src/storage/retrieval/ob_text_retrieval_token_iter.h	198	ObTextRetrievalBlockMaxIter::curr_id_	member ObDatum (pointer) of type const ObDatum *	const ObDatum *curr_id_;
+src/storage/retrieval/ob_text_taat_iter.h	44	ObTextTaaTParam::query_tokens_	member container of ObString of type ObIArray<ObString> *	ObIArray<ObString> *query_tokens_;
+src/storage/retrieval/ob_text_taat_iter.h	71	ObTextTaaTIter::query_tokens_	member container of ObString of type ObIArray<ObString> *	ObIArray<ObString> *query_tokens_;
+src/storage/slog/ob_storage_log_item.h	75	ObStorageLogItem::buf_	member raw bytes (pointer) of type char *	char *buf_;
+src/storage/slog/ob_storage_log_nop_log.h	46	ObStorageLogNopLog::buffer_	member raw bytes (pointer) of type char *	char *buffer_;
+src/storage/slog/ob_storage_log_replayer.h	38	ObRedoModuleReplayParam::buf_	member raw bytes (pointer) of type const char *	const char *buf_;
+src/storage/slog/ob_storage_log_replayer.h	113	ObStorageLogReplayer::log_dir_	member raw bytes (pointer) of type const char *	const char *log_dir_;
+src/storage/slog/ob_storage_log_write_buffer.h	51	ObStorageLogWriteBuffer::buf_	member raw bytes (pointer) of type char *	char *buf_;
+src/storage/slog_ckpt/ob_linked_macro_block_reader.h	73	ObLinkedMacroBlockReader::io_buf_	member raw bytes (pointer) of type char *	char *io_buf_[2];
+src/storage/slog_ckpt/ob_linked_macro_block_reader.h	111	ObLinkedMacroBlockItemReader::buf_	member raw bytes (pointer) of type char *	char *buf_;
+src/storage/slog_ckpt/ob_linked_macro_block_writer.h	105	ObLinkedMacroBlockItemWriter::io_buf_	member raw bytes (pointer) of type char *	char *io_buf_;
+src/storage/slog_ckpt/ob_local_storage_checkpoint_slog_handler.cpp	1038	ObLocalStorageCheckpointSlogHandler::read_empty_shell_file	allocator in, arena view out: char *&buf	int ObLocalStorageCheckpointSlogHandler::read_empty_shell_file(
+src/storage/tablelock/ob_lock_memtable.h	241	ObLockMemtable::allocated_lockhandle_map_	member LockHandleMap (value) of type LockHandleMap	LockHandleMap allocated_lockhandle_map_;
+src/storage/tablelock/ob_table_lock_iterator.h	75	ObTableLockBuffer::buf_	member raw bytes (pointer) of type char *	char *buf_;
+src/storage/tablelock/ob_table_lock_iterator.h	106	ObTableLockScanIterator::row_	member ObDatumRow (value) of type blocksstable::ObDatumRow	blocksstable::ObDatumRow row_;

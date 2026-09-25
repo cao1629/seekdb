@@ -1,0 +1,86 @@
+file	line	symbol	construct	text
+src/storage/lob/ob_lob_handler.cpp	135	ObLobQueryDataHandler::do_execute	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/storage/lob/ob_lob_handler.cpp	141	ObLobQueryDataHandler::do_execute	ret == OB_ITER_END	if (ret == OB_ITER_END) {
+src/storage/lob/ob_lob_handler.cpp	393	ObLobEraseHandler::execute	ret == OB_ITER_END	if (ret == OB_ITER_END) {
+src/storage/lob/ob_lob_handler.cpp	400	ObLobEraseHandler::execute	ret == OB_ITER_END	if (ret == OB_ITER_END) {
+src/storage/lob/ob_lob_handler.cpp	482	ObLobFillZeroHandler::execute	ret == OB_ITER_END	if (ret == OB_ITER_END) {
+src/storage/lob/ob_lob_handler.cpp	489	ObLobFillZeroHandler::execute	ret == OB_ITER_END	if (ret == OB_ITER_END) {
+src/storage/lob/ob_lob_handler.cpp	594	ObLobWriteHandler::execute	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/storage/lob/ob_lob_handler.cpp	614	ObLobWriteHandler::execute	ret == OB_ITER_END	if (ret == OB_ITER_END) {
+src/storage/lob/ob_lob_handler.cpp	729	ObLobWriteHandler::replace_process_meta_info	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/storage/lob/ob_lob_handler.cpp	810	ObLobDiffUpdateHandler::execute	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/lob/ob_lob_handler.cpp	831	ObLobDiffUpdateHandler::execute	ret == OB_ITER_END	if (ret == OB_ITER_END) {
+src/storage/lob/ob_lob_handler.cpp	919	ObLobWriteBaseHandler::write_outrow_result	ret == OB_ITER_END	if (ret == OB_ITER_END) {
+src/storage/lob/ob_lob_iterator.cpp	124	ObLobInRowQueryIter::get_next_row	ret == OB_ITER_END	is_end_ = is_end_ || (ret == OB_ITER_END);
+src/storage/lob/ob_lob_iterator.cpp	172	ObLobOutRowQueryIter::get_next_row	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/storage/lob/ob_lob_iterator.cpp	181	ObLobOutRowQueryIter::get_next_row	ret == OB_ITER_END	if (ret == OB_ITER_END && buffer.length() > st_len) {
+src/storage/lob/ob_lob_iterator.cpp	185	ObLobOutRowQueryIter::get_next_row	ret == OB_ITER_END	is_end_ = is_end_ || (ret == OB_ITER_END);
+src/storage/lob/ob_lob_location.cpp	68	ObLobLocationUtil::refresh_local_location	other variable last_err == OB_TABLET_NOT_EXIST	if (last_err == OB_TABLET_NOT_EXIST && OB_FAIL(ObLobLocationUtil::lob_check_tablet_not_exist(param, extern_header->table_id_))) {
+src/storage/lob/ob_lob_locator.cpp	531	ObLobLocatorHelper::build_lob_locatorv2	ret != OB_TIMEOUT; ret != OB_NOT_MASTER	if (ret != OB_TIMEOUT && ret != OB_NOT_MASTER) {
+src/storage/lob/ob_lob_manager.cpp	526	ObLobManager::compare	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/storage/lob/ob_lob_manager.cpp	539	ObLobManager::compare	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/storage/lob/ob_lob_manager.cpp	581	ObLobManager::compare	ret == OB_ITER_END	if (ret == OB_ITER_END) {
+src/storage/lob/ob_lob_manager.cpp	1204	ObLobManager::process_delta	ret == OB_SNAPSHOT_DISCARDED	if (ret == OB_SNAPSHOT_DISCARDED && src_lob.is_persist_lob()) {
+src/storage/lob/ob_lob_manager.cpp	1231	ObLobManager::process_delta	ret == OB_SNAPSHOT_DISCARDED	if (ret == OB_SNAPSHOT_DISCARDED && src_lob.is_persist_lob()) {
+src/storage/lob/ob_lob_manager.cpp	1459	ObLobManager::write_inrow	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/storage/lob/ob_lob_manager.cpp	1473	ObLobManager::write_inrow	ret == OB_ITER_END	if (ret == OB_ITER_END) {
+src/storage/lob/ob_lob_manager.cpp	2278	ObLobManager::get_next_block_inner	ret == OB_ITER_END	if (ret == OB_ITER_END) {
+src/storage/lob/ob_lob_meta.cpp	63	ObLobMetaScanIter::get_next_row	ret == OB_ITER_END	if (ret == OB_ITER_END) {
+src/storage/lob/ob_lob_meta.cpp	110	ObLobMetaScanIter::get_next_row	ret == OB_ITER_END	if (ret == OB_ITER_END) {
+src/storage/lob/ob_lob_meta.cpp	162	ObLobMetaScanIter::get_next_row	ret == OB_ITER_END	if (ret == OB_ITER_END) {
+src/storage/lob/ob_lob_meta.cpp	484	ObLobMetaWriteIter::get_last_meta_info	ret == OB_ITER_END	if (ret == OB_ITER_END) {
+src/storage/lob/ob_lob_meta.cpp	628	ObLobMetaWriteIter::try_fill_data	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/storage/lob/ob_lob_meta.cpp	790	ObLobMetaWriteIter::get_next_row	ret == OB_ITER_END	if (ret == OB_ITER_END && write_buffer.byte_length() > 0) {
+src/storage/lob/ob_lob_meta.cpp	916	ObInRowLobDataSpliter::split	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/lob/ob_lob_meta_manager.cpp	116	ObLobMetaManager::getlength	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/storage/lob/ob_lob_meta_manager.cpp	123	ObLobMetaManager::getlength	ret == OB_ITER_END	if (ret == OB_ITER_END) {
+src/storage/lob/ob_lob_persistent_iterator.cpp	194	ObLobMetaIterator::get_next_row	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/storage/lob/ob_lob_persistent_iterator.cpp	390	ObLobPersistInsertIter::get_next_row	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/storage/lob/ob_lob_persistent_iterator.cpp	424	ObLobPersistDeleteIter::get_next_row	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/storage/lob/ob_lob_retry.cpp	43	ObLobRetryUtil::check_need_retry	switch (error_code) case OB_LS_NOT_EXIST	case  OB_LS_NOT_EXIST: // Fall through to refresh the local LS location.
+src/storage/lob/ob_lob_retry.cpp	44	ObLobRetryUtil::check_need_retry	switch (error_code) case OB_REPLICA_NOT_READABLE	case OB_REPLICA_NOT_READABLE:
+src/storage/lob/ob_lob_retry.cpp	45	ObLobRetryUtil::check_need_retry	switch (error_code) case OB_NOT_MASTER	case  OB_NOT_MASTER:
+src/storage/lob/ob_lob_retry.cpp	46	ObLobRetryUtil::check_need_retry	switch (error_code) case OB_NO_READABLE_REPLICA	case  OB_NO_READABLE_REPLICA:
+src/storage/lob/ob_lob_retry.cpp	47	ObLobRetryUtil::check_need_retry	switch (error_code) case OB_TABLET_NOT_EXIST	case  OB_TABLET_NOT_EXIST:
+src/storage/lob/ob_lob_retry.cpp	48	ObLobRetryUtil::check_need_retry	switch (error_code) case OB_LS_OFFLINE	case  OB_LS_OFFLINE: {
+src/storage/lob/ob_lob_retry.cpp	65	ObLobRetryUtil::is_retryable_error	ret == OB_REPLICA_NOT_READABLE	return (ret == OB_REPLICA_NOT_READABLE) ||
+src/storage/lob/ob_lob_retry.cpp	66	ObLobRetryUtil::is_retryable_error	ret == OB_NOT_MASTER	(ret == OB_NOT_MASTER) ||
+src/storage/lob/ob_lob_retry.cpp	67	ObLobRetryUtil::is_retryable_error	ret == OB_NO_READABLE_REPLICA	(ret == OB_NO_READABLE_REPLICA) ||
+src/storage/lob/ob_lob_retry.cpp	68	ObLobRetryUtil::is_retryable_error	ret == OB_TABLET_NOT_EXIST	(ret == OB_TABLET_NOT_EXIST) ||
+src/storage/lob/ob_lob_retry.cpp	69	ObLobRetryUtil::is_retryable_error	ret == OB_LS_NOT_EXIST	(ret == OB_LS_NOT_EXIST) ||
+src/storage/lob/ob_lob_retry.cpp	70	ObLobRetryUtil::is_retryable_error	ret == OB_LS_OFFLINE	(ret == OB_LS_OFFLINE);
+src/storage/ls/ob_freezer.cpp	749	ObFreezer::try_freeze_tx_data_	ret == OB_EAGAIN	if (OB_EAGAIN == ret) {
+src/storage/ls/ob_freezer.cpp	757	ObFreezer::try_freeze_tx_data_	ret == OB_EAGAIN	} while (OB_EAGAIN == ret && ObClockGenerator::getClock() - start_freeze_ts < MAX_RETRY_DURATION);
+src/storage/ls/ob_freezer.cpp	975	ObFreezer::handle_set_tablet_freeze_failed	ret == OB_ENTRY_NOT_EXIST	if (ret == OB_ENTRY_NOT_EXIST) {
+src/storage/ls/ob_freezer.cpp	1032	ObFreezer::handle_no_active_memtable_	tmp_ret != OB_SIZE_OVERFLOW; tmp_ret != OB_EAGAIN	if (OB_SIZE_OVERFLOW != tmp_ret && OB_EAGAIN != tmp_ret) {
+src/storage/ls/ob_freezer.cpp	1234	ObFreezer::submit_log_for_freeze	ret == OB_LOG_OUTOF_DISK_SPACE	if (OB_LOG_OUTOF_DISK_SPACE == ret) {
+src/storage/ls/ob_freezer.cpp	1354	ObFreezer::decide_max_decided_scn	ret == OB_STATE_NOT_MATCH	if (OB_STATE_NOT_MATCH == ret) {
+src/storage/ls/ob_freezer.cpp	1374	ObFreezer::get_max_consequent_callbacked_scn	ret == OB_STATE_NOT_MATCH	if (OB_STATE_NOT_MATCH == ret) {
+src/storage/ls/ob_freezer.cpp	1630	ObFreezer::erase_async_freeze_tablet	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/storage/ls/ob_ls.cpp	588	ObLS::offline	ret == OB_EAGAIN	if (OB_EAGAIN == ret) {
+src/storage/ls/ob_ls.cpp	594	ObLS::offline	ret == OB_EAGAIN	} while (OB_EAGAIN == ret);
+src/storage/ls/ob_ls.cpp	1163	ObLS::build_tablet_with_batch_tables	ret == OB_EAGAIN	while (OB_EAGAIN == ret && retry_count < MAX_RETRY_NUM) {
+src/storage/ls/ob_ls.cpp	1165	ObLS::build_tablet_with_batch_tables	ret != OB_EAGAIN	if (OB_EAGAIN != ret) {
+src/storage/ls/ob_ls.cpp	1242	ObLS::replay_get_tablet_no_check	ret != OB_TABLET_NOT_EXIST	if (OB_TABLET_NOT_EXIST != ret) {
+src/storage/ls/ob_ls.cpp	1252	ObLS::replay_get_tablet_no_check	ret != OB_TABLET_NOT_EXIST	if (OB_TABLET_NOT_EXIST != ret) {
+src/storage/ls/ob_ls.cpp	1311	ObLS::replay_get_tablet	ret == OB_EMPTY_RESULT	if (OB_EMPTY_RESULT == ret) {
+src/storage/ls/ob_ls.cpp	1459	ObLS::tablet_freeze	ret == OB_EAGAIN; ret == OB_MINOR_FREEZE_NOT_ALLOW; ret == OB_ALLOCATE_MEMORY_FAILED	is_retry_code = OB_EAGAIN == ret || OB_MINOR_FREEZE_NOT_ALLOW == ret || OB_ALLOCATE_MEMORY_FAILED == ret;
+src/storage/ls/ob_ls_ddl_log_handler.cpp	126	ObActiveDDLKVIterator::get_next_ddl_kv_mgr	ret == OB_TABLET_NOT_EXIST	if (OB_TABLET_NOT_EXIST == ret) {
+src/storage/ls/ob_ls_ddl_log_handler.cpp	147	ObActiveDDLKVIterator::get_next_ddl_kv_mgr	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/ls/ob_ls_ddl_log_handler.cpp	212	ObLSDDLLogHandler::online	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/ls/ob_ls_ddl_log_handler.cpp	281	ObLSDDLLogHandler::replay	ret == OB_TABLET_NOT_EXIST	if (OB_TABLET_NOT_EXIST == ret) {
+src/storage/ls/ob_ls_ddl_log_handler.cpp	284	ObLSDDLLogHandler::replay	ret == OB_EAGAIN	} else if (OB_EAGAIN == ret) {
+src/storage/ls/ob_ls_ddl_log_handler.cpp	327	ObLSDDLLogHandler::flush	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/ls/ob_ls_ddl_log_handler.cpp	347	ObLSDDLLogHandler::flush	ret == OB_EMPTY_RESULT	if (OB_EMPTY_RESULT == ret) {
+src/storage/ls/ob_ls_ddl_log_handler.cpp	383	ObLSDDLLogHandler::get_rec_scn	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/ls/ob_ls_ddl_log_handler.cpp	416	ObLSDDLLogHandler::replay_ddl_redo_log_	ret != OB_TABLET_NOT_EXIST; ret != OB_EAGAIN	if (OB_TABLET_NOT_EXIST != ret && OB_EAGAIN != ret) {
+src/storage/ls/ob_ls_ddl_log_handler.cpp	436	ObLSDDLLogHandler::replay_ddl_tablet_schema_version_change_log_	ret == OB_NO_NEED_UPDATE	if (OB_NO_NEED_UPDATE == ret) {
+src/storage/ls/ob_ls_ddl_log_handler.cpp	439	ObLSDDLLogHandler::replay_ddl_tablet_schema_version_change_log_	ret != OB_EAGAIN	} else if (OB_EAGAIN != ret) {
+src/storage/ls/ob_ls_ddl_log_handler.cpp	480	ObLSDDLLogHandler::replay_table_fork_freeze_log_	ret != OB_TABLET_NOT_EXIST; ret != OB_EAGAIN	if (OB_TABLET_NOT_EXIST != ret && OB_EAGAIN != ret) {
+src/storage/ls/ob_ls_ddl_log_handler.cpp	497	ObLSDDLLogHandler::replay_table_fork_start_log_	ret != OB_TABLET_NOT_EXIST; ret != OB_EAGAIN	if (OB_TABLET_NOT_EXIST != ret && OB_EAGAIN != ret) {
+src/storage/ls/ob_ls_ddl_log_handler.cpp	514	ObLSDDLLogHandler::replay_table_fork_finish_log_	ret != OB_TABLET_NOT_EXIST; ret != OB_EAGAIN; ret != OB_NEED_RETRY	if (OB_TABLET_NOT_EXIST != ret && OB_EAGAIN != ret && OB_NEED_RETRY != ret) {
+src/storage/ls/ob_ls_reserved_snapshot_mgr.cpp	86	ObLSReservedSnapshotMgr::add_dependent_medium_tablet	call result hash_ret=dependent_tablet_set_.exist_refactored(tablet_id... == OB_HASH_EXIST	if (OB_HASH_EXIST == (hash_ret = dependent_tablet_set_.exist_refactored(tablet_id.id()))) {
+src/storage/ls/ob_ls_reserved_snapshot_mgr.cpp	88	ObLSReservedSnapshotMgr::add_dependent_medium_tablet	other variable hash_ret != OB_HASH_NOT_EXIST	} else if (OB_UNLIKELY(OB_HASH_NOT_EXIST != hash_ret)) {
+src/storage/ls/ob_ls_reserved_snapshot_mgr.cpp	189	ObLSReservedSnapshotMgr::try_sync_reserved_snapshot	ret != OB_SNAPSHOT_DISCARDED	if (OB_SNAPSHOT_DISCARDED != ret) {
+src/storage/ls/ob_ls_storage_clog_handler.cpp	107	ObMediumCompactionClogHandler::inner_replay	ret == OB_OBSOLETE_CLOG_NEED_SKIP	if (OB_OBSOLETE_CLOG_NEED_SKIP == ret) {
+src/storage/ls/ob_ls_storage_clog_handler.cpp	110	ObMediumCompactionClogHandler::inner_replay	ret == OB_TIMEOUT	} else if (OB_TIMEOUT == ret) {

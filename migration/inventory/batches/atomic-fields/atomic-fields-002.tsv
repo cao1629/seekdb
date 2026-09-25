@@ -1,0 +1,48 @@
+file	line	symbol	construct	text
+src/logservice/palf/log_reader.h	71	LogReader::accum_read_io_count_	field mutable int64_t; 2 atomic accesses (ATOMIC_AAF 1, ATOMIC_STORE 1)	mutable int64_t accum_read_io_count_;
+src/logservice/palf/log_reader.h	72	LogReader::accum_read_log_size_	field mutable int64_t; 2 atomic accesses (ATOMIC_AAF 1, ATOMIC_STORE 1)	mutable int64_t accum_read_log_size_;
+src/logservice/palf/log_reader.h	73	LogReader::accum_read_cost_ts_	field mutable int64_t; 2 atomic accesses (ATOMIC_AAF 1, ATOMIC_STORE 1)	mutable int64_t accum_read_cost_ts_;
+src/logservice/palf/log_sliding_window.h	253	LogSlidingWindow::last_submit_end_lsn_	field LSN; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_STORE 1); through the single member of value classes LSN::val_	LSN last_submit_end_lsn_;
+src/logservice/palf/log_sliding_window.h	260	LogSlidingWindow::max_flushed_end_lsn_	field LSN; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_STORE 1); through the single member of value classes LSN::val_	LSN max_flushed_end_lsn_;
+src/logservice/palf/log_sliding_window.h	263	LogSlidingWindow::committed_end_lsn_	field LSN; 2 atomic accesses (ATOMIC_BCAS 1, ATOMIC_LOAD 1); through the single member of value classes LSN::val_	LSN committed_end_lsn_;
+src/logservice/palf/log_sliding_window.h	268	LogSlidingWindow::last_slide_log_id_	field int64_t; 3 atomic accesses (ATOMIC_LOAD 2, ATOMIC_STORE 1)	int64_t last_slide_log_id_;   // used by clean log
+src/logservice/palf/log_sliding_window.h	282	LogSlidingWindow::accum_slide_log_cnt_	field int64_t; 2 atomic accesses (ATOMIC_AAF 1, ATOMIC_STORE 1)	int64_t accum_slide_log_cnt_;
+src/logservice/palf/log_sliding_window.h	283	LogSlidingWindow::accum_log_gen_to_freeze_cost_	field int64_t; 2 atomic accesses (ATOMIC_AAF 1, ATOMIC_STORE 1)	int64_t accum_log_gen_to_freeze_cost_;
+src/logservice/palf/log_sliding_window.h	284	LogSlidingWindow::accum_log_gen_to_submit_cost_	field int64_t; 2 atomic accesses (ATOMIC_AAF 1, ATOMIC_STORE 1)	int64_t accum_log_gen_to_submit_cost_;
+src/logservice/palf/log_sliding_window.h	285	LogSlidingWindow::accum_log_submit_to_flush_cost_	field int64_t; 2 atomic accesses (ATOMIC_AAF 1, ATOMIC_STORE 1)	int64_t accum_log_submit_to_flush_cost_;
+src/logservice/palf/log_sliding_window.h	288	LogSlidingWindow::accum_log_submit_to_slide_cost_	field int64_t; 2 atomic accesses (ATOMIC_AAF 1, ATOMIC_STORE 1)	int64_t accum_log_submit_to_slide_cost_;
+src/logservice/palf/log_sliding_window.h	291	LogSlidingWindow::accum_log_cnt_	field int64_t; 2 atomic accesses (ATOMIC_AAF 1, ATOMIC_STORE 1)	int64_t accum_log_cnt_;
+src/logservice/palf/log_sliding_window.h	292	LogSlidingWindow::accum_group_log_size_	field int64_t; 2 atomic accesses (ATOMIC_AAF 1, ATOMIC_STORE 1)	int64_t accum_group_log_size_;
+src/logservice/palf/log_sliding_window.h	293	LogSlidingWindow::last_record_group_log_id_	field int64_t; 1 atomic accesses (ATOMIC_STORE 1)	int64_t last_record_group_log_id_;
+src/logservice/palf/log_sliding_window.h	294	LogSlidingWindow::append_cnt_array_	field int64_t; 3 atomic accesses (ATOMIC_INC 1, ATOMIC_LOAD 1, ATOMIC_STORE 1)	int64_t append_cnt_array_[APPEND_CNT_ARRAY_SIZE];
+src/logservice/palf/log_sliding_window.h	296	LogSlidingWindow::has_pending_handle_submit_task_	field bool; 2 atomic accesses (ATOMIC_BCAS 1, ATOMIC_STORE 1)	bool has_pending_handle_submit_task_;
+src/logservice/palf/log_state_mgr.h	66	LogStateMgr::state_	field int32_t; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_STORE 1)	int32_t state_;
+src/logservice/palf/log_task.h	39	LogTaskHeaderInfo::max_scn_	field share::SCN; 1 atomic accesses (ATOMIC_VCAS 1); through member functions inc_update	share::SCN max_scn_;
+src/logservice/palf/log_task.h	40	LogTaskHeaderInfo::data_len_	field int64_t; 2 atomic accesses (ATOMIC_AAF 1, ATOMIC_LOAD 1)	int64_t data_len_;             // total len without log_group_entry_header
+src/logservice/palf/log_task.h	72	LogSimpleBitMap::val_	field uint16_t; 10 atomic accesses (ATOMIC_LOAD 6, ATOMIC_BCAS 3, ATOMIC_STORE 1)	uint16_t val_;
+src/logservice/palf/log_task.h	156	LogTask::ref_cnt_	field int64_t; 3 atomic accesses (ATOMIC_LOAD 2, ATOMIC_AAF 1)	int64_t ref_cnt_;
+src/logservice/palf/log_task.h	157	LogTask::log_cnt_	field int64_t; 2 atomic accesses (ATOMIC_INC 1, ATOMIC_LOAD 1)	int64_t log_cnt_;  // log_entry count
+src/logservice/palf/log_task.h	158	LogTask::gen_ts_	field mutable int64_t; 1 atomic accesses (ATOMIC_LOAD 1)	mutable int64_t gen_ts_;
+src/logservice/palf/log_task.h	159	LogTask::freeze_ts_	field mutable int64_t; 2 atomic accesses (ATOMIC_CAS 1, ATOMIC_LOAD 1)	mutable int64_t freeze_ts_;
+src/logservice/palf/log_task.h	160	LogTask::submit_ts_	field mutable int64_t; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_STORE 1)	mutable int64_t submit_ts_;
+src/logservice/palf/log_task.h	161	LogTask::flushed_ts_	field mutable int64_t; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_STORE 1)	mutable int64_t flushed_ts_;
+src/logservice/palf/log_throttle.h	133	LogWritingThrottle::need_writing_throttling_notified_	field mutable bool; 4 atomic accesses (ATOMIC_LOAD 3, ATOMIC_SET 1)	mutable bool need_writing_throttling_notified_;
+src/logservice/palf/lsn_allocator.h	107	LSNAllocator::lsn_ts_meta_	field LSNTsMeta; 19 atomic accesses (LOAD128 11, CAS128 8)	LSNTsMeta lsn_ts_meta_;
+src/logservice/palf/palf_env_impl.h	308	PalfEnvImpl::last_palf_epoch_	field int64_t; 2 atomic accesses (ATOMIC_AAF 2)	int64_t last_palf_epoch_;
+src/logservice/palf/palf_env_impl.h	312	PalfEnvImpl::diskspace_enough_	field bool; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_STORE 1)	bool diskspace_enough_;
+src/logservice/palf/palf_handle_impl.h	454	PalfHandleImpl::has_set_deleted_	field bool; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_STORE 1)	bool has_set_deleted_;
+src/logservice/palf/palf_handle_impl.h	461	PalfHandleImpl::accum_write_log_size_	field int64_t; 4 atomic accesses (ATOMIC_AAF 2, ATOMIC_STORE 2)	int64_t accum_write_log_size_;  // the accum size of written logs
+src/logservice/replayservice/ob_log_replay_service.h	185	ObLogReplayService::replayable_point_	field share::SCN; 3 atomic accesses (ATOMIC_LOAD 2, ATOMIC_SET 1); through member functions atomic_load, atomic_set	share::SCN replayable_point_;
+src/logservice/replayservice/ob_log_replay_service.h	188	ObLogReplayService::pending_replay_log_size_	field int64_t; 3 atomic accesses (ATOMIC_AAF 1, ATOMIC_LOAD 1, ATOMIC_SAF 1)	int64_t pending_replay_log_size_;
+src/logservice/replayservice/ob_replay_status.h	111	ObLogReplayBuffer::ref_	field int64_t; 3 atomic accesses (ATOMIC_INC 1, ATOMIC_LOAD 1, ATOMIC_SAF 1)	int64_t ref_; //for pre barrier
+src/logservice/replayservice/ob_replay_status.h	309	ObReplayServiceSubmitTask::next_to_submit_lsn_	field palf::LSN; 1 atomic accesses (ATOMIC_LOAD 1); through the single member of value classes LSN::val_	palf::LSN next_to_submit_lsn_;
+src/logservice/replayservice/ob_replay_status.h	310	ObReplayServiceSubmitTask::next_to_submit_scn_	field share::SCN; 1 atomic accesses (ATOMIC_LOAD 1); through member functions atomic_load	share::SCN next_to_submit_scn_;
+src/logservice/replayservice/ob_replay_status.h	592	ObReplayStatus::ref_cnt_	field int64_t; 2 atomic accesses (ATOMIC_INC 1, ATOMIC_SAF 1)	int64_t ref_cnt_;
+src/logservice/replayservice/ob_replay_status.h	594	ObReplayStatus::post_barrier_lsn_	field palf::LSN; 5 atomic accesses (ATOMIC_STORE 3, ATOMIC_LOAD 2); through the single member of value classes LSN::val_	palf::LSN post_barrier_lsn_;
+src/logservice/replayservice/ob_replay_status.h	597	ObReplayStatus::pending_task_count_	field int64_t; 2 atomic accesses (ATOMIC_DEC 1, ATOMIC_INC 1)	int64_t pending_task_count_;
+src/oblib/common/log/ob_log_reader.h	84	ObLogReader::max_log_file_id_	field uint64_t; 1 atomic accesses (ATOMIC_TAS 1)	uint64_t max_log_file_id_;
+src/oblib/common/ob_data_version_mgr.h	78	ObDataVersionMgr::ObDataVersion::version_	field uint64_t; 1 atomic accesses (ATOMIC_LOAD 1)	uint64_t version_;
+src/oblib/common/ob_data_version_mgr.h	99	ObDataVersionMgr::file_exists_when_loading_	field bool; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_STORE 1)	bool file_exists_when_loading_;
+src/oblib/common/ob_role_mgr.h	89	ObRoleMgr::role_	field volatile Role; 1 atomic accesses (ATOMIC_TAS 1)	volatile Role role_;
+src/oblib/common/ob_role_mgr.h	90	ObRoleMgr::state_	field volatile State; 1 atomic accesses (ATOMIC_TAS 1)	volatile State state_;
+src/oblib/common/storage/ob_sequence.h	42	ObSequence::max_seq_no_	field static int64_t; 7 atomic accesses (ATOMIC_AAF 2, ATOMIC_FAA 2, ATOMIC_INC 1, ATOMIC_LOAD64 1, inc_update 1)	static int64_t max_seq_no_ CACHE_ALIGNED;

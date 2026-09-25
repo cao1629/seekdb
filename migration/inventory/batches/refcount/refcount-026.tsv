@@ -1,0 +1,51 @@
+file	line	symbol	construct	text
+src/storage/tx/ob_tx_ctx.cpp	2193	ObTxCtx::wait_gts_elapse_commit_version_	acquire_ctx_ref_ call (other name)	if (OB_FAIL(acquire_ctx_ref_())) {
+src/storage/tx/ob_tx_ctx.cpp	2366	ObTxCtx::submit_redo_commit_info_log_	acquire_ctx_ref_ call (other name)	} else if (OB_FAIL(acquire_ctx_ref_())) {
+src/storage/tx/ob_tx_ctx.cpp	2371	ObTxCtx::submit_redo_commit_info_log_	release_ctx_ref_ call (other name)	release_ctx_ref_();
+src/storage/tx/ob_tx_ctx.cpp	2430	ObTxCtx::submit_redo_commit_info_log_	acquire_ctx_ref_ call (other name)	} else if (OB_FAIL(acquire_ctx_ref_())) {
+src/storage/tx/ob_tx_ctx.cpp	2435	ObTxCtx::submit_redo_commit_info_log_	release_ctx_ref_ call (other name)	release_ctx_ref_();
+src/storage/tx/ob_tx_ctx.cpp	2558	ObTxCtx::submit_commit_log_	acquire_ctx_ref_ call (other name)	} else if (OB_FAIL(acquire_ctx_ref_())) {
+src/storage/tx/ob_tx_ctx.cpp	2564	ObTxCtx::submit_commit_log_	release_ctx_ref_ call (other name)	release_ctx_ref_();
+src/storage/tx/ob_tx_ctx.cpp	2592	ObTxCtx::submit_commit_log_	acquire_ctx_ref_ call (other name)	} else if (OB_FAIL(acquire_ctx_ref_())) {
+src/storage/tx/ob_tx_ctx.cpp	2601	ObTxCtx::submit_commit_log_	release_ctx_ref_ call (other name)	release_ctx_ref_();
+src/storage/tx/ob_tx_ctx.cpp	2633	ObTxCtx::submit_commit_log_	acquire_ctx_ref_ call (other name)	} else if (OB_FAIL(acquire_ctx_ref_())) {
+src/storage/tx/ob_tx_ctx.cpp	2640	ObTxCtx::submit_commit_log_	release_ctx_ref_ call (other name)	release_ctx_ref_();
+src/storage/tx/ob_tx_ctx.cpp	2711	ObTxCtx::submit_abort_log_	acquire_ctx_ref_ call (other name)	} else if (OB_FAIL(acquire_ctx_ref_())) {
+src/storage/tx/ob_tx_ctx.cpp	2716	ObTxCtx::submit_abort_log_	release_ctx_ref_ call (other name)	release_ctx_ref_();
+src/storage/tx/ob_tx_ctx.cpp	2749	ObTxCtx::submit_clear_log_	acquire_ctx_ref_ call (other name)	} else if (OB_FAIL(acquire_ctx_ref_())) {
+src/storage/tx/ob_tx_ctx.cpp	2754	ObTxCtx::submit_clear_log_	release_ctx_ref_ call (other name)	release_ctx_ref_();
+src/storage/tx/ob_tx_ctx.cpp	2785	ObTxCtx::submit_record_log_	acquire_ctx_ref_ call (other name)	} else if (OB_FAIL(acquire_ctx_ref_())) {
+src/storage/tx/ob_tx_ctx.cpp	2790	ObTxCtx::submit_record_log_	release_ctx_ref_ call (other name)	release_ctx_ref_();
+src/storage/tx/ob_tx_ctx.cpp	2840	ObTxCtx::submit_big_segment_log_	acquire_ctx_ref_ call (other name)	} else if (OB_FAIL(acquire_ctx_ref_())) {
+src/storage/tx/ob_tx_ctx.cpp	2850	ObTxCtx::submit_big_segment_log_	release_ctx_ref_ call (other name)	release_ctx_ref_();
+src/storage/tx/ob_tx_ctx.cpp	4780	ObTxCtx::submit_multi_data_source_	acquire_ctx_ref_ call (other name)	} else if (OB_FAIL(acquire_ctx_ref_())) {
+src/storage/tx/ob_tx_ctx.cpp	4787	ObTxCtx::submit_multi_data_source_	release_ctx_ref_ call (other name)	release_ctx_ref_();
+src/storage/tx/ob_tx_ctx.cpp	5081	ObTxCtx::submit_pending_log_block_	acquire_ctx_ref_ call (other name)	} else if (OB_FAIL(acquire_ctx_ref_())) {
+src/storage/tx/ob_tx_ctx.cpp	5086	ObTxCtx::submit_pending_log_block_	release_ctx_ref_ call (other name)	release_ctx_ref_();
+src/storage/tx/ob_tx_ctx.cpp	5205	ObTxCtx::start_access	inc_ref call	mt_ctx_.inc_ref();
+src/storage/tx/ob_tx_ctx.cpp	5237	ObTxCtx::end_access	end_access definition (reference-count function found by its body: calls dec_ref)	int ObTxCtx::end_access()
+src/storage/tx/ob_tx_ctx.cpp	5242	ObTxCtx::end_access	dec_ref call	mt_ctx_.dec_ref();
+src/storage/tx/ob_tx_ctx.cpp	5475	ObTxCtx::submit_rollback_to_log_	acquire_ctx_ref call (other name)	} else if (OB_FAIL(acquire_ctx_ref())) {
+src/storage/tx/ob_tx_ctx.cpp	5866	ObTxCtx::submit_redo_log_out	acquire_ctx_ref_ call (other name)	} else if (OB_FAIL(acquire_ctx_ref_())) {
+src/storage/tx/ob_tx_ctx.cpp	5883	ObTxCtx::submit_redo_log_out	release_ctx_ref_ call (other name)	release_ctx_ref_();
+src/storage/tx/ob_tx_ctx.h	548	ObTxCtx	end_access declaration (reference-count function found by its body)	int end_access();
+src/storage/tx/ob_tx_data_define.cpp	469	ObTxData::dec_ref	dec_ref definition	OB_WEAK_SYMBOL void ObTxData::dec_ref()
+src/storage/tx/ob_tx_data_define.cpp	748	ObTxDataOpGuard::init	inc_ref call	} else if (tx_data_op->inc_ref() <= 0) {
+src/storage/tx/ob_tx_data_define.cpp	761	ObTxDataOpGuard::reset	dec_ref call	tx_data_op_->dec_ref();
+src/storage/tx/ob_tx_data_define.h	246	ObTxDataOpGuard	Guard class definition whose methods call dec_ref, inc_ref	class ObTxDataOpGuard
+src/storage/tx/ob_tx_data_define.h	298	ObTxData::inc_ref	inc_ref definition	int64_t inc_ref()
+src/storage/tx/ob_tx_data_define.h	304	ObTxData	dec_ref declaration	void dec_ref();
+src/storage/tx/ob_tx_data_define.h	371	ObTxDataGuard	Guard class definition whose methods call dec_ref, inc_ref	class ObTxDataGuard
+src/storage/tx/ob_tx_data_define.h	386	ObTxDataGuard::init	inc_ref call	} else if (tx_data->inc_ref() <= 0) {
+src/storage/tx/ob_tx_data_define.h	399	ObTxDataGuard::reset	dec_ref call	tx_data_->dec_ref();
+src/storage/tx/ob_tx_data_op.cpp	32	ObTxDataOp::dec_ref	dec_ref definition	void ObTxDataOp::dec_ref() {
+src/storage/tx/ob_tx_data_op.h	146	ObTxDataOp::inc_ref	inc_ref definition	int64_t inc_ref() { return ATOMIC_AAF(&ref_cnt_, 1); }
+src/storage/tx/ob_tx_data_op.h	147	ObTxDataOp	dec_ref declaration	void dec_ref();
+src/storage/tx/ob_tx_elr_handler.cpp	41	ObTxELRHandler::check_and_early_lock_release	acquire_ctx_ref call (other name)	if (OB_FAIL(ctx->acquire_ctx_ref())) {
+src/storage/tx/ob_tx_log_operator.h	229	ObTxCtxLogOperator::prepare_generic_resource_	acquire_ctx_ref_ call (other name)	} else if (OB_FAIL(tx_ctx_->acquire_ctx_ref_())) {
+src/storage/tx/ob_tx_log_operator.h	392	ObTxCtxLogOperator::after_submit_log_fail_	release_ctx_ref_ call (other name)	tx_ctx_->release_ctx_ref_();
+src/storage/tx_table/ob_tx_ctx_memtable_mgr.cpp	186	ObTxCtxMemtableMgr::release_head_memtable_	release_head_memtable call (reference-count function found by its body)	release_head_memtable();
+src/storage/tx_table/ob_tx_ctx_table.cpp	236	ObTxCtxTable::init	acquire_ref_ call (other name)	return acquire_ref_();
+src/storage/tx_table/ob_tx_ctx_table.cpp	239	ObTxCtxTable::acquire_ref_	acquire_ref_ definition (other name)	OB_WEAK_SYMBOL int ObTxCtxTable::acquire_ref_()
+src/storage/tx_table/ob_tx_ctx_table.cpp	257	ObTxCtxTable::release_ref_	release_ref_ definition (other name)	OB_WEAK_SYMBOL int ObTxCtxTable::release_ref_()
+src/storage/tx_table/ob_tx_ctx_table.cpp	274	ObTxCtxTable::reset	release_ref_ call (other name)	release_ref_();

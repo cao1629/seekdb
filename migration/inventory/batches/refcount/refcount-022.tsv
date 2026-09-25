@@ -1,0 +1,51 @@
+file	line	symbol	construct	text
+src/storage/tablet/ob_tablet.cpp	314	ObTablet::init_for_first_time_creation	inner_inc_macro_ref_cnt call (other name) [on-disk block reference]	} else if (OB_FAIL(inner_inc_macro_ref_cnt())) {
+src/storage/tablet/ob_tablet.cpp	372	ObTablet::init_for_physical_restore	inner_inc_macro_ref_cnt call (other name) [on-disk block reference]	} else if (OB_FAIL(inner_inc_macro_ref_cnt())) {
+src/storage/tablet/ob_tablet.cpp	467	ObTablet::init_for_merge	inner_inc_macro_ref_cnt call (other name) [on-disk block reference]	} else if (OB_FAIL(inner_inc_macro_ref_cnt())) {
+src/storage/tablet/ob_tablet.cpp	540	ObTablet::init_for_defragment	inner_inc_macro_ref_cnt call (other name) [on-disk block reference]	} else if (OB_FAIL(inner_inc_macro_ref_cnt())) {
+src/storage/tablet/ob_tablet.cpp	611	ObTablet::init_for_sstable_replace	inner_inc_macro_ref_cnt call (other name) [on-disk block reference]	} else if (OB_FAIL(inner_inc_macro_ref_cnt())) {
+src/storage/tablet/ob_tablet.cpp	1026	ObTablet::init_with_update_medium_info	inner_inc_macro_ref_cnt call (other name) [on-disk block reference]	} else if (OB_FAIL(inner_inc_macro_ref_cnt())) {
+src/storage/tablet/ob_tablet.cpp	1138	ObTablet::init_with_updated_members	inner_inc_macro_ref_cnt call (other name) [on-disk block reference]	} else if (OB_FAIL(inner_inc_macro_ref_cnt())) {
+src/storage/tablet/ob_tablet.cpp	1204	ObTablet::init_with_mds_sstable	inner_inc_macro_ref_cnt call (other name) [on-disk block reference]	} else if (CLICK_FAIL(inner_inc_macro_ref_cnt())) {
+src/storage/tablet/ob_tablet.cpp	1379	ObTablet::release_ref_cnt	release_ref_cnt definition (other name) [on-disk block reference]	int ObTablet::release_ref_cnt(
+src/storage/tablet/ob_tablet.cpp	1389	ObTablet::release_ref_cnt	dec_macro_ref_cnt call (other name) [on-disk block reference]	dec_macro_ref_cnt();
+src/storage/tablet/ob_tablet.cpp	1394	ObTablet::inc_snapshot_ref_cnt	inc_snapshot_ref_cnt definition (other name) [on-disk block reference]	int ObTablet::inc_snapshot_ref_cnt(
+src/storage/tablet/ob_tablet.cpp	1402	ObTablet::inc_snapshot_ref_cnt	inner_inc_macro_ref_cnt call (other name) [on-disk block reference]	} else if (OB_FAIL(inner_inc_macro_ref_cnt())) {
+src/storage/tablet/ob_tablet.cpp	1460	ObTablet::deserialize_for_replay	inner_inc_macro_ref_cnt call (other name) [on-disk block reference]	} else if (OB_FAIL(inner_inc_macro_ref_cnt())) {
+src/storage/tablet/ob_tablet.cpp	1561	ObTablet::deserialize_post_work	inner_inc_macro_ref_cnt call (other name) [on-disk block reference]	if (FAILEDx(inner_inc_macro_ref_cnt())) {
+src/storage/tablet/ob_tablet.cpp	1948	ObTablet::inc_macro_ref_cnt	inc_macro_ref_cnt definition (other name) [on-disk block reference]	int ObTablet::inc_macro_ref_cnt()
+src/storage/tablet/ob_tablet.cpp	1953	ObTablet::inc_macro_ref_cnt	inner_inc_macro_ref_cnt call (other name) [on-disk block reference]	} else if (OB_FAIL(inner_inc_macro_ref_cnt())) {
+src/storage/tablet/ob_tablet.cpp	1955	ObTablet::inc_macro_ref_cnt	inc_macro_ref_cnt call (other name) [on-disk block reference]	&& OB_FAIL(next_tablet_guard_.get_obj()->inc_macro_ref_cnt())) {
+src/storage/tablet/ob_tablet.cpp	1960	ObTablet::inner_inc_macro_ref_cnt	inner_inc_macro_ref_cnt definition (other name) [on-disk block reference]	int ObTablet::inner_inc_macro_ref_cnt()
+src/storage/tablet/ob_tablet.cpp	1968	ObTablet::inner_inc_macro_ref_cnt	inc_ref_without_aggregated_info call [on-disk block reference]	if (OB_FAIL(inc_ref_without_aggregated_info())) {
+src/storage/tablet/ob_tablet.cpp	1971	ObTablet::inner_inc_macro_ref_cnt	inc_ref_with_aggregated_info call [on-disk block reference]	if (OB_FAIL(inc_ref_with_aggregated_info())) {
+src/storage/tablet/ob_tablet.cpp	1980	ObTablet::inc_ref_with_aggregated_info	inc_ref_with_aggregated_info definition [on-disk block reference]	int ObTablet::inc_ref_with_aggregated_info()
+src/storage/tablet/ob_tablet.cpp	1992	ObTablet::inc_ref_with_aggregated_info	inc_addr_ref_cnt call (other name) [on-disk block reference]	} else if (OB_FAIL(inc_addr_ref_cnt(tablet_addr_, inc_tablet_ref))) {
+src/storage/tablet/ob_tablet.cpp	1993	ObTablet::inc_ref_with_aggregated_info	inc_ref_with_macro_iter call [on-disk block reference]	} else if (OB_FAIL(inc_ref_with_macro_iter(info_iter, inc_other_ref))) {
+src/storage/tablet/ob_tablet.cpp	1997	ObTablet::inc_ref_with_aggregated_info	dec_addr_ref_cnt call (other name) [on-disk block reference]	dec_addr_ref_cnt(tablet_addr_);
+src/storage/tablet/ob_tablet.cpp	2003	ObTablet::inc_ref_with_aggregated_info	dec_ref_with_macro_iter call [on-disk block reference]	dec_ref_with_macro_iter(info_iter);
+src/storage/tablet/ob_tablet.cpp	2014	ObTablet::inc_ref_with_macro_iter	inc_ref_with_macro_iter definition [on-disk block reference]	int ObTablet::inc_ref_with_macro_iter(ObMacroInfoIterator &macro_iter, bool &inc_success) const
+src/storage/tablet/ob_tablet.cpp	2027	ObTablet::inc_ref_with_macro_iter	inc_ref call [on-disk block reference]	} else if (OB_FAIL(OB_STORAGE_OBJECT_MGR.inc_ref(block_info.macro_id_))) {
+src/storage/tablet/ob_tablet.cpp	2063	ObTablet::inc_ref_with_macro_iter	dec_ref call [on-disk block reference]	} else if (OB_TMP_FAIL(OB_STORAGE_OBJECT_MGR.dec_ref(block_info.macro_id_))) {
+src/storage/tablet/ob_tablet.cpp	2095	ObTablet::inc_ref_without_aggregated_info	inc_ref_without_aggregated_info definition [on-disk block reference]	int ObTablet::inc_ref_without_aggregated_info()
+src/storage/tablet/ob_tablet.cpp	2103	ObTablet::inc_ref_without_aggregated_info	inc_addr_ref_cnt call (other name) [on-disk block reference]	if (OB_FAIL(inc_addr_ref_cnt(table_store_addr_.addr_, inc_table_store_ref))) {
+src/storage/tablet/ob_tablet.cpp	2104	ObTablet::inc_ref_without_aggregated_info	inc_addr_ref_cnt call (other name) [on-disk block reference]	} else if (OB_FAIL(inc_addr_ref_cnt(storage_schema_addr_.addr_, inc_storage_schema_ref))) {
+src/storage/tablet/ob_tablet.cpp	2105	ObTablet::inc_ref_without_aggregated_info	inc_addr_ref_cnt call (other name) [on-disk block reference]	} else if (OB_FAIL(inc_addr_ref_cnt(tablet_addr_, inc_tablet_ref))) {
+src/storage/tablet/ob_tablet.cpp	2106	ObTablet::inc_ref_without_aggregated_info	inc_table_store_ref_cnt call (other name) [on-disk block reference]	} else if (OB_FAIL(inc_table_store_ref_cnt(inc_table_store_member_ref))) {
+src/storage/tablet/ob_tablet.cpp	2111	ObTablet::inc_ref_without_aggregated_info	dec_addr_ref_cnt call (other name) [on-disk block reference]	dec_addr_ref_cnt(table_store_addr_.addr_);
+src/storage/tablet/ob_tablet.cpp	2114	ObTablet::inc_ref_without_aggregated_info	dec_addr_ref_cnt call (other name) [on-disk block reference]	dec_addr_ref_cnt(storage_schema_addr_.addr_);
+src/storage/tablet/ob_tablet.cpp	2117	ObTablet::inc_ref_without_aggregated_info	dec_addr_ref_cnt call (other name) [on-disk block reference]	dec_addr_ref_cnt(tablet_addr_);
+src/storage/tablet/ob_tablet.cpp	2120	ObTablet::inc_ref_without_aggregated_info	dec_table_store_ref_cnt call (other name) [on-disk block reference]	dec_table_store_ref_cnt();
+src/storage/tablet/ob_tablet.cpp	2126	ObTablet::dec_macro_ref_cnt	dec_macro_ref_cnt definition (other name) [on-disk block reference]	void ObTablet::dec_macro_ref_cnt()
+src/storage/tablet/ob_tablet.cpp	2138	ObTablet::dec_macro_ref_cnt	dec_ref_without_aggregated_info call [on-disk block reference]	dec_ref_without_aggregated_info();
+src/storage/tablet/ob_tablet.cpp	2140	ObTablet::dec_macro_ref_cnt	dec_ref_with_aggregated_info call [on-disk block reference]	dec_ref_with_aggregated_info();
+src/storage/tablet/ob_tablet.cpp	2144	ObTablet::dec_ref_without_aggregated_info	dec_ref_without_aggregated_info definition [on-disk block reference]	void ObTablet::dec_ref_without_aggregated_info()
+src/storage/tablet/ob_tablet.cpp	2149	ObTablet::dec_ref_without_aggregated_info	dec_table_store_ref_cnt call (other name) [on-disk block reference]	dec_table_store_ref_cnt();
+src/storage/tablet/ob_tablet.cpp	2150	ObTablet::dec_ref_without_aggregated_info	dec_addr_ref_cnt call (other name) [on-disk block reference]	dec_addr_ref_cnt(table_store_addr_.addr_);
+src/storage/tablet/ob_tablet.cpp	2151	ObTablet::dec_ref_without_aggregated_info	dec_addr_ref_cnt call (other name) [on-disk block reference]	dec_addr_ref_cnt(storage_schema_addr_.addr_);
+src/storage/tablet/ob_tablet.cpp	2152	ObTablet::dec_ref_without_aggregated_info	dec_addr_ref_cnt call (other name) [on-disk block reference]	dec_addr_ref_cnt(tablet_addr_);
+src/storage/tablet/ob_tablet.cpp	2155	ObTablet::dec_ref_with_aggregated_info	dec_ref_with_aggregated_info definition [on-disk block reference]	void ObTablet::dec_ref_with_aggregated_info()
+src/storage/tablet/ob_tablet.cpp	2165	ObTablet::dec_ref_with_aggregated_info	dec_addr_ref_cnt call (other name) [on-disk block reference]	dec_addr_ref_cnt(tablet_addr_);
+src/storage/tablet/ob_tablet.cpp	2166	ObTablet::dec_ref_with_aggregated_info	dec_ref_with_macro_iter call [on-disk block reference]	dec_ref_with_macro_iter(info_iter);
+src/storage/tablet/ob_tablet.cpp	2177	ObTablet::dec_ref_with_macro_iter	dec_ref_with_macro_iter definition [on-disk block reference]	void ObTablet::dec_ref_with_macro_iter(ObMacroInfoIterator &macro_iter) const
+src/storage/tablet/ob_tablet.cpp	2190	ObTablet::dec_ref_with_macro_iter	dec_ref call [on-disk block reference]	if (OB_FAIL(OB_STORAGE_OBJECT_MGR.dec_ref(block_info.macro_id_))) {

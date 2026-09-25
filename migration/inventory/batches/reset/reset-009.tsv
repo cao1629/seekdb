@@ -1,0 +1,121 @@
+file	line	symbol	construct	text
+src/rootserver/ob_ddl_service.cpp	1349	ObDDLService::create_tables_in_trans	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	2121	ObDDLService::check_is_change_column_order	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	2569	ObDDLService::handle_drop_all_lob_columns_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	3438	ObDDLService::convert_to_character	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	4495	ObDDLService::update_autoinc_schema	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	4798	ObDDLService::create_aux_index_task_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	5755	ObDDLService::gen_mock_fk_parent_table_for_drop_table	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	6357	ObDDLService::resolve_timestamp_column	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	8169	ObDDLService::update_prev_id_for_add_column	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	8286	ObDDLService::alter_table_column	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	8399	ObDDLService::alter_table_column	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	8655	ObDDLService::create_aux_lob_table_if_need	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	8861	ObDDLService::alter_table_auto_increment	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	9038	ObDDLService::get_partition_by_subpart_name	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	12151	ObDDLService::check_alter_add_partitions	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	12261	ObDDLService::check_alter_add_subpartitions	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	12822	ObDDLService::rename_table	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // continue
+src/rootserver/ob_ddl_service.cpp	13837	ObDDLService::gen_hidden_index_schema_columns	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	15457	ObDDLService::swap_orig_and_hidden_table_state	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	15802	ObDDLService::cleanup_garbage	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	16456	ObDDLService::new_truncate_table	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	17141	ObDDLService::drop_aux_table_in_drop_table	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	17149	ObDDLService::drop_aux_table_in_drop_table	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	17309	ObDDLService::restore_aux_table	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	17346	ObDDLService::check_object_name_matches_db_name	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	17845	ObDDLService::purge_recyclebin_objects	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	18199	ObDDLService::drop_table	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	18363	ObDDLService::drop_table	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	18366	ObDDLService::drop_table	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	18372	ObDDLService::drop_table	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	18887	ObDDLService::create_database	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	19302	ObDDLService::create_user	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	19306	ObDDLService::create_user	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	19414	ObDDLService::drop_user	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; //no such user, recover
+src/rootserver/ob_ddl_service.cpp	19423	ObDDLService::drop_user	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; //drop fail, try next, recover
+src/rootserver/ob_ddl_service.cpp	19580	ObDDLService::rename_user	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; //no such user, recover
+src/rootserver/ob_ddl_service.cpp	19589	ObDDLService::rename_user	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; //rename fail, try next, recover
+src/rootserver/ob_ddl_service.cpp	20730	ObDDLService::lock_user	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; //no such user, recover
+src/rootserver/ob_ddl_service.cpp	20737	ObDDLService::lock_user	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; //lock fail, try next, recover
+src/rootserver/ob_ddl_service.cpp	21720	ObDDLService::create_mysql_roles_in_trans	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	22167	ObDDLSQLTransaction::lock_all_ddl_operation	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	22387	ObDDLService::pre_rename_mysql_columns_online	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	22897	ObDDLService::check_rename_first	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ob_domain_index_builder_util.cpp	101	ObDomainIndexBuilderUtil::prepare_aux_table	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ob_index_builder.cpp	66	ObIndexBuilder::create_index	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ob_index_builder.cpp	335	ObIndexBuilder::drop_index	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ob_index_builder.cpp	343	ObIndexBuilder::drop_index	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ob_index_builder.cpp	349	ObIndexBuilder::drop_index	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ob_index_builder.cpp	448	ObIndexBuilder::drop_index	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ob_index_builder.cpp	938	ObIndexBuilder::check_drop_with_docid_indexs_ith_valid	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ob_index_builder.cpp	1070	ObIndexBuilder::submit_drop_index_task	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ob_index_builder.cpp	1155	ObIndexBuilder::submit_drop_index_task	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ob_local_management_service.cpp	2461	ObLocalManagementService::update_stat_cache	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ob_local_management_service.cpp	2490	ObLocalManagementService::check_weak_read_version_refresh_interval	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ob_local_management_service.cpp	2492	ObLocalManagementService::check_weak_read_version_refresh_interval	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ob_local_management_service.cpp	2701	ObLocalManagementService::purge_recyclebin_objects	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // periodic maintenance retries after the next schema refresh
+src/rootserver/ob_local_management_service.cpp	2708	ObLocalManagementService::purge_recyclebin_objects	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ob_partition_exchange.cpp	117	ObPartitionExchange::check_partition_exchange_schema_for_user	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ob_partition_exchange.cpp	479	ObPartitionExchange::check_table_all_column_conditions_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ob_partition_exchange.cpp	813	ObPartitionExchange::get_next_pair_column_schema_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ob_partition_exchange.cpp	1886	ObPartitionExchange::update_table_all_monitor_modified_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ob_partition_exchange.cpp	2044	ObPartitionExchange::add_table_to_tablet_ids_map	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ob_tablet_creator.cpp	203	ObBatchCreateTabletHelper::try_add_table_schema	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ob_thread_idling.cpp	68	ObThreadIdling::idle	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/parallel_ddl/ob_create_index_helper.cpp	613	ObCreateIndexHelper::construct_and_adjust_result_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/parallel_ddl/ob_ddl_helper.cpp	488	ObDDLHelper::add_lock_object_to_map_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/parallel_ddl/ob_drop_table_helper.cpp	474	ObDropTableHelper::construct_and_adjust_result_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/parallel_ddl/ob_drop_table_helper.cpp	1348	ObDropTableHelper::drop_obj_privs_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/parallel_ddl/ob_table_helper.cpp	457	ObTableHelper::adjust_create_if_not_exist_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/parallel_ddl/ob_update_index_status_helper.cpp	203	ObUpdateIndexStatusHelper::construct_and_adjust_result_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/pl_ddl/ob_pl_ddl_service.cpp	349	ObPLDDLService::drop_routine	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/pl_ddl/ob_pl_ddl_service.cpp	737	ObPLDDLService::drop_trigger	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/share/cache/ob_cache_utils.h	251	ObFixedHashMap::get	ret = OB_SUCCESS (line start)	ret = common::OB_SUCCESS;
+src/share/cache/ob_cache_utils.h	349	ObFixedHashMap::erase	ret = OB_SUCCESS (line start)	ret = common::OB_SUCCESS;
+src/share/cache/ob_kv_storecache.cpp	319	ObKVGlobalCache::put	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/share/cache/ob_kv_storecache.cpp	414	ObKVGlobalCache::erase	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/share/cache/ob_kvcache_store.cpp	278	ObKVCacheStore::alloc_kvpair_without_retry	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/share/cache/ob_kvcache_store.cpp	434	ObKVCacheStore::wash	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/share/config/ob_common_config.cpp	194	ObCommonConfig::add_extra_config_unsafe	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/share/config/ob_config_storage.cpp	146	ObConfigStorage::load_all_configs	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // No rows is acceptable
+src/share/config/ob_system_config.cpp	38	ObSystemConfig::find	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/share/config/ob_system_config.cpp	103	ObSystemConfig::read_int64	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/share/geo/ob_geo_3d.cpp	714	ObGeo3DToWktVisitor::visit_pointz_start	ret = OB_SUCCESS (after other code on the line)	bool ret = OB_SUCCESS;
+src/share/geo/ob_geo_3d.cpp	723	ObGeo3DToWktVisitor::visit_pointz_end	ret = OB_SUCCESS (after other code on the line)	bool ret = OB_SUCCESS;
+src/share/geo/ob_geo_interior_point_visitor.cpp	35	ObGeoInteriorPointVisitor::init	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/share/geo/ob_geo_interior_point_visitor.cpp	404	ObGeoInteriorPointVisitor::visit	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/share/geo/ob_geo_utils.cpp	1371	ObGeoBoxUtil::clip_by_box	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/share/geo/ob_s2adapter.cpp	340	ObS2Adapter::init	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/share/interrupt/ob_global_interrupt_call.cpp	216	ObGlobalInterruptManager::interrupt	conditional reset (ternary yields OB_SUCCESS)	ret = ret == OB_HASH_NOT_EXIST ? OB_SUCCESS : ret;
+src/share/io/io_schedule/ob_io_schedule_v2.cpp	33	ObIOScheduler::get_qindex	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/share/io/ob_io_define.cpp	1207	ObIORequest::try_alloc_buf_until_timeout	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/share/io/ob_io_manager.cpp	730	ObIOService::alloc_and_init_result	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/share/io/ob_io_manager.cpp	766	ObIOService::alloc_req_and_result	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/share/io/ob_io_manager.cpp	950	ObIOService::try_alloc_req_until_timeout	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/share/io/ob_io_manager.cpp	977	ObIOService::try_alloc_result_until_timeout	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/share/io/ob_io_struct.cpp	682	check_io_hang_errsim	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/share/io/ob_io_struct.cpp	1742	ObIOFaultDetector::handle	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/share/io/ob_io_struct.cpp	1745	ObIOFaultDetector::handle	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/share/io/ob_io_struct.cpp	1748	ObIOFaultDetector::handle	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/share/longops_mgr/ob_longops_mgr.cpp	90	ObLongopsMgr::register_longops	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/share/longops_mgr/ob_longops_mgr.cpp	241	ObLongopsIterator::get_next	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/share/ob_autoincrement_service.cpp	374	ObAutoincrementService::refresh_local_sync_value	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/share/ob_autoincrement_service.cpp	477	ObAutoincrementService::try_lock_autoinc_row	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/share/ob_autoincrement_service.cpp	547	ObAutoincrementService::clear_autoinc_cache	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/share/ob_autoincrement_service.cpp	753	ObAutoincrementService::fetch_table_node	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/share/ob_autoincrement_service.cpp	1305	ObAutoIncInnerTableProxy::get_autoinc_value	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/share/ob_autoincrement_service.cpp	1393	ObAutoIncInnerTableProxy::get_autoinc_value_in_batch	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/share/ob_core_table_proxy.cpp	395	ObCoreTableProxy::load	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/share/ob_core_table_proxy.cpp	805	ObCoreTableProxy::check_row_match	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/share/ob_core_table_proxy.cpp	837	ObCoreTableProxy::execute_incremental_update_sql	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/share/ob_core_table_proxy.cpp	932	ObCoreTableProxy::execute_update_sql	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/share/ob_ddl_checksum.cpp	241	ObDDLChecksumOperator::get_part_column_checksum	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/share/ob_ddl_checksum.cpp	252	ObDDLChecksumOperator::get_part_column_checksum	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/share/ob_ddl_checksum.cpp	327	ObDDLChecksumOperator::get_tablet_checksum_status	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/share/ob_ddl_common.cpp	909	ObDDLUtil::get_ls_host_left_disk_space	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/share/ob_ddl_common.cpp	960	ObDDLUtil::get_ddl_rpc_timeout_by_table	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // force succ
+src/share/ob_ddl_common.cpp	1241	ObDDLUtil::check_table_column_checksum_error	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/share/ob_ddl_common.cpp	1333	ObCheckTabletDataComplementOp::check_task_inner_sql_session_status	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/share/ob_ddl_common.cpp	1371	ObCheckTabletDataComplementOp::check_task_inner_sql_session_status	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/share/ob_ddl_common.cpp	1420	ObCheckTabletDataComplementOp::check_tablet_checksum_update_status	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;

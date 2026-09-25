@@ -1,0 +1,100 @@
+file	line	symbol	construct	text
+src/share/object/ob_obj_cast.cpp	430	get_cast_ret	ret == OB_ERR_UNEXPECTED_TZ_TRANSITION	if (OB_UNLIKELY(OB_ERR_UNEXPECTED_TZ_TRANSITION == ret)
+src/share/object/ob_obj_cast.cpp	431	get_cast_ret	ret == OB_ERR_UNKNOWN_TIME_ZONE	|| OB_UNLIKELY(OB_ERR_UNKNOWN_TIME_ZONE == ret)) {
+src/share/object/ob_obj_cast.cpp	452	#define SET_RES_OBJ	other variable params.warning_ == OB_ERR_TRUNCATED_WRONG_VALUE	|| OB_ERR_TRUNCATED_WRONG_VALUE == params.warning_              \
+src/share/object/ob_obj_cast.cpp	453	#define SET_RES_OBJ	other variable params.warning_ == OB_DATA_OUT_OF_RANGE	|| OB_DATA_OUT_OF_RANGE == params.warning_                      \
+src/share/object/ob_obj_cast.cpp	454	#define SET_RES_OBJ	other variable params.warning_ == OB_ERR_DATA_TRUNCATED	|| OB_ERR_DATA_TRUNCATED == params.warning_                     \
+src/share/object/ob_obj_cast.cpp	455	#define SET_RES_OBJ	other variable params.warning_ == OB_ERR_DOUBLE_TRUNCATED	|| OB_ERR_DOUBLE_TRUNCATED == params.warning_                   \
+src/share/object/ob_obj_cast.cpp	456	#define SET_RES_OBJ	other variable params.warning_ == OB_ERR_TRUNCATED_WRONG_VALUE_FOR_FIELD	|| OB_ERR_TRUNCATED_WRONG_VALUE_FOR_FIELD == params.warning_) { \
+src/share/object/ob_obj_cast.cpp	1479	common_build_geometry	ret == OB_ERR_GIS_INVALID_DATA	if (OB_ERR_GIS_INVALID_DATA == ret && OB_NOT_NULL(cast_name)) {
+src/share/object/ob_obj_cast.cpp	1481	common_build_geometry	ret == OB_ERR_GEOMETRY_PARAM_LONGITUDE_OUT_OF_RANGE	} else if (OB_ERR_GEOMETRY_PARAM_LONGITUDE_OUT_OF_RANGE == ret && OB_NOT_NULL(cast_name)) {
+src/share/object/ob_obj_cast.cpp	1487	common_build_geometry	ret == OB_ERR_GEOMETRY_PARAM_LATITUDE_OUT_OF_RANGE	} else if (OB_ERR_GEOMETRY_PARAM_LATITUDE_OUT_OF_RANGE == ret && OB_NOT_NULL(cast_name)) {
+src/share/object/ob_obj_cast.cpp	3657	datetime_datetime	ret == OB_ERR_UNEXPECTED_TZ_TRANSITION	ret = OB_ERR_UNEXPECTED_TZ_TRANSITION == ret ? OB_INVALID_DATE_VALUE : ret;
+src/share/object/ob_obj_cast.cpp	3688	mdatetime_datetime	ret == OB_ERR_UNEXPECTED_TZ_TRANSITION	ret = OB_ERR_UNEXPECTED_TZ_TRANSITION == ret ? OB_INVALID_DATE_VALUE : ret;
+src/share/object/ob_obj_cast.cpp	3717	datetime_mdatetime	ret == OB_ERR_UNEXPECTED_TZ_TRANSITION	ret = OB_ERR_UNEXPECTED_TZ_TRANSITION == ret ? OB_INVALID_DATE_VALUE : ret;
+src/share/object/ob_obj_cast.cpp	5725	string_double	ret == OB_ERR_DATA_TRUNCATED	if (CM_IS_COLUMN_CONVERT(cast_mode) && ret == OB_ERR_DATA_TRUNCATED) {
+src/share/object/ob_obj_cast.cpp	5780	string_number	ret == OB_NUMERIC_OVERFLOW	if (ret == OB_NUMERIC_OVERFLOW) {
+src/share/object/ob_obj_cast.cpp	5798	string_number	ret == OB_INVALID_NUMERIC	} else if (OB_INVALID_NUMERIC == ret
+src/share/object/ob_obj_cast.cpp	5846	common_string_datetime	ret == OB_ERR_UNEXPECTED_TZ_TRANSITION	if (ret == OB_ERR_UNEXPECTED_TZ_TRANSITION && CM_IS_WARN_ON_FAIL(cast_mode)) {
+src/share/object/ob_obj_cast.cpp	6296	string_set	ret == OB_ERR_DATA_TRUNCATED	(OB_ERR_DATA_TRUNCATED == ret
+src/share/object/ob_obj_cast.cpp	6297	string_set	other variable params.warning_ == OB_ERR_DATA_TRUNCATED	|| (params.warning_ == OB_ERR_DATA_TRUNCATED && CM_IS_WARN_ON_FAIL(cast_mode)))) {
+src/share/object/ob_obj_cast.cpp	8465	json_year	other variable params.warning_ == OB_DATA_OUT_OF_RANGE	if (params.warning_ == OB_DATA_OUT_OF_RANGE) {
+src/share/object/ob_obj_cast.cpp	9002	geometry_geometry	ret == OB_ERR_GIS_INVALID_DATA	if (OB_ERR_GIS_INVALID_DATA == ret) {
+src/share/object/ob_obj_cast.cpp	9004	geometry_geometry	ret == OB_ERR_GEOMETRY_PARAM_LONGITUDE_OUT_OF_RANGE	} else if (OB_ERR_GEOMETRY_PARAM_LONGITUDE_OUT_OF_RANGE == ret) {
+src/share/object/ob_obj_cast.cpp	9010	geometry_geometry	ret == OB_ERR_GEOMETRY_PARAM_LATITUDE_OUT_OF_RANGE	} else if (OB_ERR_GEOMETRY_PARAM_LATITUDE_OUT_OF_RANGE == ret) {
+src/share/object/ob_obj_cast.cpp	9899	string_decimalint	ret == OB_NUMERIC_OVERFLOW	if (OB_NUMERIC_OVERFLOW == ret) {
+src/share/object/ob_obj_cast.cpp	9923	string_decimalint	ret == OB_INVALID_NUMERIC	} else if (OB_INVALID_NUMERIC == ret && OB_NOT_NULL(params.runtime_)) {
+src/share/object/ob_obj_cast.cpp	11511	string_length_check	other variable params.warning_ == OB_ERR_DATA_TOO_LONG	if (OB_UNLIKELY(OB_ERR_DATA_TOO_LONG == params.warning_)) {
+src/share/object/ob_obj_cast.cpp	12142	ObObjCaster::is_order_consistent	ret == OB_CANT_AGGREGATE_2COLLATIONS	if (OB_CANT_AGGREGATE_2COLLATIONS == ret) {
+src/share/object/ob_obj_cast.cpp	14250	ObGeoCastUtils::geo_cast_error_handle	other variable err_code == OB_ERR_INVALID_CAST_TO_GEOMETRY	if (OB_ERR_INVALID_CAST_TO_GEOMETRY == err_code) {
+src/share/object/ob_obj_cast.cpp	14254	ObGeoCastUtils::geo_cast_error_handle	other variable err_code == OB_ERR_GEOMETRY_PARAM_LONGITUDE_OUT_OF_RANGE	} else if (OB_ERR_GEOMETRY_PARAM_LONGITUDE_OUT_OF_RANGE == err_code) {
+src/share/object/ob_obj_cast.cpp	14260	ObGeoCastUtils::geo_cast_error_handle	other variable err_code == OB_ERR_GEOMETRY_PARAM_LATITUDE_OUT_OF_RANGE	} else if (OB_ERR_GEOMETRY_PARAM_LATITUDE_OUT_OF_RANGE == err_code) {
+src/share/object/ob_obj_cast.cpp	14266	ObGeoCastUtils::geo_cast_error_handle	other variable err_code == OB_ERR_GIS_INVALID_DATA	} else if (OB_ERR_GIS_INVALID_DATA == err_code) {
+src/share/object/ob_obj_cast.cpp	14268	ObGeoCastUtils::geo_cast_error_handle	other variable err_code == OB_ERR_INVALID_CAST_POLYGON_RING_DIRECTION	} else if (OB_ERR_INVALID_CAST_POLYGON_RING_DIRECTION == err_code) {
+src/share/redolog/ob_log_file_handler.cpp	218	ObLogFileHandler::inner_read	ret == OB_DATA_OUT_OF_RANGE	if (OB_DATA_OUT_OF_RANGE == ret && io_handle.get_data_size() < io_info.size_) { // partial read
+src/share/redolog/ob_log_file_handler.cpp	233	ObLogFileHandler::inner_read	ret == OB_DATA_OUT_OF_RANGE	} else if (OB_DATA_OUT_OF_RANGE == ret) {
+src/share/redolog/ob_log_file_handler.cpp	236	ObLogFileHandler::inner_read	ret == OB_ALLOCATE_MEMORY_FAILED	} else if (OB_ALLOCATE_MEMORY_FAILED == ret) {
+src/share/redolog/ob_log_file_handler.cpp	254	ObLogFileHandler::unlink	ret != OB_NO_SUCH_FILE_OR_DIRECTORY	if (OB_FAIL(LOCAL_DEVICE_INSTANCE.unlink(file_path)) && OB_NO_SUCH_FILE_OR_DIRECTORY != ret) {
+src/share/redolog/ob_log_file_handler.cpp	257	ObLogFileHandler::unlink	ret == OB_NO_SUCH_FILE_OR_DIRECTORY	} else if (OB_NO_SUCH_FILE_OR_DIRECTORY == ret) {
+src/share/redolog/ob_log_file_handler.cpp	323	ObLogFileHandler::open	ret == OB_TIMEOUT; ret == OB_EAGAIN; ret == OB_SERVER_OUTOF_DISK_SPACE	if (OB_TIMEOUT == ret || OB_EAGAIN == ret || OB_SERVER_OUTOF_DISK_SPACE == ret) {
+src/share/redolog/ob_log_file_reader.cpp	256	ObLogFileReader2::evict_fd_from_map	ret != OB_HASH_NOT_EXIST	} else if (OB_FAIL(quick_map_.erase_refactored(fd_key, &target)) && OB_HASH_NOT_EXIST != ret) {
+src/share/redolog/ob_log_file_reader.cpp	257	ObLogFileReader2::evict_fd_from_map	ret == OB_HASH_NOT_EXIST	} else if (OB_HASH_NOT_EXIST == ret) {
+src/share/redolog/ob_log_file_reader.cpp	321	ObLogFileReader2::get_fd	ret != OB_HASH_NOT_EXIST	if (OB_FAIL(try_get_cache(fd_key, ret_item)) && OB_HASH_NOT_EXIST != ret) {
+src/share/redolog/ob_log_file_reader.cpp	399	ObLogFileReader2::do_clear_work	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/share/redolog/ob_log_file_reader.cpp	448	ObLogFileReader2::put_new_item	ret != OB_HASH_EXIST	&& OB_HASH_EXIST != ret) {
+src/share/redolog/ob_log_file_reader.cpp	449	ObLogFileReader2::put_new_item	ret == OB_HASH_EXIST	} else if (OB_HASH_EXIST == ret) {
+src/share/redolog/ob_log_file_reader.cpp	496	ObLogFileReader2::try_get_cache	ret != OB_HASH_NOT_EXIST	&& OB_HASH_NOT_EXIST != ret) {
+src/share/redolog/ob_log_file_reader.cpp	497	ObLogFileReader2::try_get_cache	ret == OB_HASH_NOT_EXIST	} else if (OB_HASH_NOT_EXIST == ret) {
+src/share/resource_limit_calculator/ob_resource_limit_calculator.cpp	292	ObResourceLimitCalculator::get_runtime_logical_resource	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/share/resource_limit_calculator/ob_resource_limit_calculator.cpp	297	ObResourceLimitCalculator::get_runtime_logical_resource	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/share/schema/ob_ai_model_mgr.cpp	210	ObAiModelMgr::get_ai_model_schema	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/share/schema/ob_ai_model_mgr.cpp	238	ObAiModelMgr::get_ai_model_schema	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/share/schema/ob_ai_model_mgr.cpp	322	ObAiModelMgr::del_ai_model	other variable hash_ret != OB_HASH_NOT_EXIST	ret = OB_HASH_NOT_EXIST != hash_ret ? hash_ret : ret;
+src/share/schema/ob_ai_model_mgr.cpp	324	ObAiModelMgr::del_ai_model	other variable hash_ret != OB_HASH_NOT_EXIST	ret = OB_HASH_NOT_EXIST != hash_ret ? hash_ret : ret;
+src/share/schema/ob_ddl_epoch.cpp	152	ObDDLEpochMgr::promote_ddl_epoch	ret == OB_ENTRY_NOT_EXIST	if (ret == OB_ENTRY_NOT_EXIST) {
+src/share/schema/ob_ddl_epoch.cpp	196	ObDDLEpochMgr::promote_ddl_epoch_inner_	ret == OB_ITER_END	if (ret == OB_ITER_END) {
+src/share/schema/ob_ddl_epoch.cpp	230	ObDDLEpochMgr::check_and_lock_ddl_epoch	ret == OB_ERR_NULL_VALUE	if (OB_ERR_NULL_VALUE == ret) {
+src/share/schema/ob_dependency_info.cpp	418	ObDependencyInfo::collect_ref_infos	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/share/schema/ob_dependency_info.cpp	455	ObDependencyInfo::collect_dep_infos	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/share/schema/ob_dependency_info.cpp	514	ObDependencyInfo::collect_all_dep_objs_inner	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/share/schema/ob_dependency_info.cpp	596	ObDependencyInfo::collect_all_dep_objs	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/share/schema/ob_dependency_info.cpp	1012	ObReferenceObjTable::get_or_add_def_obj_item	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/share/schema/ob_error_info.cpp	315	ObErrorInfo::get_error_obj_seq	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/share/schema/ob_latest_schema_guard.cpp	47	ObLatestSchemaGuard::check_inner_stat_	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/share/schema/ob_latest_schema_guard.cpp	85	ObLatestSchemaGuard::get_schema_	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/share/schema/ob_mock_fk_parent_table_mgr.cpp	202	ObMockFKParentTableMgr::rebuild_mock_fk_parent_table_hashmap	other variable hash_ret == OB_HASH_EXIST	ret = OB_HASH_EXIST == hash_ret ? OB_SUCCESS : hash_ret;
+src/share/schema/ob_mock_fk_parent_table_mgr.cpp	287	ObMockFKParentTableMgr::del_mock_fk_parent_table	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/share/schema/ob_mock_fk_parent_table_mgr.cpp	300	ObMockFKParentTableMgr::del_mock_fk_parent_table	other variable hash_ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == hash_ret) {
+src/share/schema/ob_mock_fk_parent_table_mgr.cpp	455	ObMockFKParentTableMgr::get_mock_fk_parent_table_schema_with_name	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/share/schema/ob_multi_version_schema_service.cpp	373	ObMultiVersionSchemaService::get_schema	ret != OB_ENTRY_NOT_EXIST	if (ret != OB_ENTRY_NOT_EXIST) {
+src/share/schema/ob_multi_version_schema_service.cpp	427	ObMultiVersionSchemaService::get_schema	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/share/schema/ob_multi_version_schema_service.cpp	445	ObMultiVersionSchemaService::get_schema	ret != OB_ENTRY_NOT_EXIST	if (ret != OB_ENTRY_NOT_EXIST) {
+src/share/schema/ob_multi_version_schema_service.cpp	719	ObMultiVersionSchemaService::get_runtime_schema_guard_with_version_in_inner_table	ret == OB_SCHEMA_EAGAIN	if (OB_SCHEMA_EAGAIN == ret) {
+src/share/schema/ob_multi_version_schema_service.cpp	756	ObMultiVersionSchemaService::construct_fallback_schema_mgr_	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/share/schema/ob_multi_version_schema_service.cpp	768	ObMultiVersionSchemaService::construct_fallback_schema_mgr_	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/share/schema/ob_multi_version_schema_service.cpp	857	ObMultiVersionSchemaService::add_schema_mgr_info	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/share/schema/ob_multi_version_schema_service.cpp	902	ObMultiVersionSchemaService::retry_get_schema_guard	ret != OB_SCHEMA_EAGAIN	if (OB_SCHEMA_EAGAIN != ret) {
+src/share/schema/ob_multi_version_schema_service.cpp	905	ObMultiVersionSchemaService::retry_get_schema_guard	ret != OB_SCHEMA_EAGAIN; ret != OB_NOT_INIT	if (OB_SCHEMA_EAGAIN != ret && OB_NOT_INIT != ret) {
+src/share/schema/ob_multi_version_schema_service.cpp	936	ObMultiVersionSchemaService::retry_get_schema_guard	ret != OB_HASH_NOT_EXIST	if (OB_SUCCESS != ret && OB_HASH_NOT_EXIST != ret) {
+src/share/schema/ob_multi_version_schema_service.cpp	937	ObMultiVersionSchemaService::retry_get_schema_guard	ret == OB_HASH_NOT_EXIST	} else if (OB_HASH_NOT_EXIST == ret) { // overwrite ret
+src/share/schema/ob_multi_version_schema_service.cpp	960	ObMultiVersionSchemaService::retry_get_schema_guard	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/share/schema/ob_multi_version_schema_service.cpp	982	ObMultiVersionSchemaService::retry_get_schema_guard	ret != OB_SCHEMA_EAGAIN	if (OB_SCHEMA_EAGAIN != ret) {
+src/share/schema/ob_multi_version_schema_service.cpp	985	ObMultiVersionSchemaService::retry_get_schema_guard	ret != OB_SCHEMA_EAGAIN; ret != OB_NOT_INIT	if (OB_SCHEMA_EAGAIN != ret && OB_NOT_INIT != ret) {
+src/share/schema/ob_multi_version_schema_service.cpp	1538	ObMultiVersionSchemaService::async_refresh_schema	ret == OB_EAGAIN; ret == OB_SIZE_OVERFLOW	if (OB_EAGAIN == ret || OB_SIZE_OVERFLOW == ret) {
+src/share/schema/ob_multi_version_schema_service.cpp	1947	ObMultiVersionSchemaService::try_gc_another_allocator	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/share/schema/ob_multi_version_schema_service.cpp	2015	ObMultiVersionSchemaService::try_gc_current_allocator	ret == OB_EAGAIN; ret == OB_ENTRY_NOT_EXIST	if (OB_EAGAIN == ret || OB_ENTRY_NOT_EXIST == ret) {
+src/share/schema/ob_multi_version_schema_service.cpp	2115	ObMultiVersionSchemaService::try_gc_allocator_when_add_schema_	ret == OB_EAGAIN; ret == OB_ENTRY_NOT_EXIST	if (OB_EAGAIN == ret || OB_ENTRY_NOT_EXIST == ret) {
+src/share/schema/ob_multi_version_schema_service.cpp	2314	ObMultiVersionSchemaService::get_schema_version_history	other variable hash_ret == OB_HASH_NOT_EXIST	if (hash_ret == OB_HASH_NOT_EXIST || schema_version > val.snapshot_version_) {
+src/share/schema/ob_multi_version_schema_service.cpp	2436	ObMultiVersionSchemaService::get_tablet_to_table_history	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/share/schema/ob_multi_version_schema_service.cpp	2488	ObMultiVersionSchemaService::get_tablet_to_table_history	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/share/schema/ob_multi_version_schema_service.cpp	2825	ObMultiVersionSchemaService::batch_fetch_tablet_to_table_history_	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/share/schema/ob_outline_mgr.cpp	295	ObOutlineMgr::add_outline	other variable hash_ret != OB_HASH_EXIST	if (OB_SUCCESS != hash_ret && OB_HASH_EXIST != hash_ret) {
+src/share/schema/ob_outline_mgr.cpp	304	ObOutlineMgr::add_outline	other variable hash_ret != OB_HASH_EXIST	if (OB_SUCCESS != hash_ret && OB_HASH_EXIST != hash_ret) {
+src/share/schema/ob_outline_mgr.cpp	315	ObOutlineMgr::add_outline	other variable hash_ret != OB_HASH_EXIST	if (OB_SUCCESS != hash_ret && OB_HASH_EXIST != hash_ret) {
+src/share/schema/ob_outline_mgr.cpp	325	ObOutlineMgr::add_outline	other variable hash_ret != OB_HASH_EXIST	if (OB_SUCCESS != hash_ret && OB_HASH_EXIST != hash_ret) {
+src/share/schema/ob_package_mgr.cpp	215	ObPackageMgr::add_package	other variable hash_ret != OB_HASH_EXIST	if (OB_SUCCESS != hash_ret && OB_HASH_EXIST != hash_ret) {
+src/share/schema/ob_package_mgr.cpp	223	ObPackageMgr::add_package	other variable hash_ret != OB_HASH_EXIST	if (OB_SUCCESS != hash_ret && OB_HASH_EXIST != hash_ret) {
+src/share/schema/ob_part_mgr_util.cpp	63	ObPartGetter::get_part_ids	ret == OB_ITER_END	if (OB_LIKELY(OB_ITER_END == ret)) {
+src/share/schema/ob_part_mgr_util.cpp	74	ObPartGetter::get_part_ids	ret == OB_ITER_END	if (!find && OB_ITER_END == ret) {
+src/share/schema/ob_part_mgr_util.cpp	104	ObPartGetter::get_subpart_ids	ret == OB_ITER_END	if (!find && OB_ITER_END == ret) {
+src/share/schema/ob_part_mgr_util.cpp	137	ObPartGetter::get_subpart_ids_in_partition	ret == OB_ITER_END	if (!find && OB_ITER_END == ret) {

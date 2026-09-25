@@ -1,0 +1,101 @@
+file	line	symbol	construct	text
+src/sql/session/ob_system_variable.cpp	246	ObBasicSysVar::log_err_wrong_value_for_var	other variable error_no != OB_ERR_WRONG_VALUE_FOR_VAR	if (OB_UNLIKELY(OB_ERR_WRONG_VALUE_FOR_VAR != error_no)) {
+src/sql/session/ob_system_variable.cpp	419	ObBasicSysVar::session_update	ret == OB_ERR_SYS_VARIABLE_UNKNOWN	if (OB_LIKELY(OB_ERR_SYS_VARIABLE_UNKNOWN == ret)) {
+src/sql/session/ob_system_variable.cpp	752	ObTypeLibSysVar::find_type	ret == OB_ENTRY_NOT_EXIST	for (int64_t i = 0; OB_ENTRY_NOT_EXIST == ret && i < type_lib_.count_; ++i) {
+src/sql/session/ob_system_variable.cpp	785	ObTypeLibSysVar::do_check_and_convert	ret == OB_ENTRY_NOT_EXIST	if (OB_LIKELY(OB_ENTRY_NOT_EXIST == ret)) {
+src/sql/session/ob_system_variable.cpp	800	ObTypeLibSysVar::do_check_and_convert	ret == OB_ERR_WRONG_VALUE_FOR_VAR	if (OB_LIKELY(OB_ERR_WRONG_VALUE_FOR_VAR == ret)) {
+src/sql/session/ob_system_variable.cpp	812	ObTypeLibSysVar::do_check_and_convert	ret == OB_ERR_WRONG_VALUE_FOR_VAR	if (OB_LIKELY(OB_ERR_WRONG_VALUE_FOR_VAR == ret)) {
+src/sql/session/ob_system_variable.cpp	963	ObIntSysVar::do_check_and_convert	ret != OB_ERR_WRONG_VALUE_FOR_VAR	if (OB_UNLIKELY(OB_ERR_WRONG_VALUE_FOR_VAR != ret)) {
+src/sql/session/ob_system_variable.cpp	1200	ObNumericSysVar::do_check_and_convert	ret != OB_ERR_WRONG_VALUE_FOR_VAR	if (OB_UNLIKELY(OB_ERR_WRONG_VALUE_FOR_VAR != ret)) {
+src/sql/session/ob_system_variable.cpp	1333	ObTimeZoneSysVar::do_check_and_convert	ret != OB_ERR_UNKNOWN_TIME_ZONE	if (OB_ERR_UNKNOWN_TIME_ZONE != ret) {
+src/sql/session/ob_system_variable.cpp	1340	ObTimeZoneSysVar::do_check_and_convert	ret == OB_ERR_UNKNOWN_TIME_ZONE	} else if (OB_ERR_UNKNOWN_TIME_ZONE == ret) {
+src/sql/session/ob_system_variable.cpp	1381	ObSqlModeVar::do_check_and_convert	ret == OB_ERR_WRONG_VALUE_FOR_VAR	if (OB_ERR_WRONG_VALUE_FOR_VAR == ret) {
+src/sql/session/ob_system_variable.cpp	1393	ObSqlModeVar::do_check_and_convert	ret == OB_ERR_WRONG_VALUE_FOR_VAR	if (OB_ERR_WRONG_VALUE_FOR_VAR == ret) {
+src/sql/session/ob_system_variable.cpp	2453	ObCharsetSysVarPair::get_charset_var_by_collation_var	ret == OB_ENTRY_NOT_EXIST	for (int64_t i = 0; OB_ENTRY_NOT_EXIST == ret && i < SYS_CHARSET_SYS_VAR_PAIR_COUNT; ++i) {
+src/sql/session/ob_system_variable.cpp	2466	ObCharsetSysVarPair::get_collation_var_by_charset_var	ret == OB_ENTRY_NOT_EXIST	for (int64_t i = 0; OB_ENTRY_NOT_EXIST == ret && i < SYS_CHARSET_SYS_VAR_PAIR_COUNT; ++i) {
+src/sql/session/ob_user_resource_mgr.cpp	120	ObConnectResourceMgr::get_or_insert_user_resource	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/sql/session/ob_user_resource_mgr.cpp	138	ObConnectResourceMgr::get_or_insert_user_resource	ret == OB_ENTRY_EXIST	if (OB_ENTRY_EXIST == ret && OB_FAIL(user_res_map_.get(user_key, user_res))) {
+src/sql/session/ob_user_resource_mgr.cpp	293	ObConnectResourceMgr::CleanUpConnResourceFunc::operator()	ret != OB_RUNTIME_SCHEMA_NOT_READY	if (OB_RUNTIME_SCHEMA_NOT_READY != ret) {
+src/sql/tablelock/ob_lock_executor.cpp	341	ObLockExecutor::query_lock_id_	ret == OB_EMPTY_RESULT	if (OB_EMPTY_RESULT == ret) {
+src/sql/tablelock/ob_lock_executor.cpp	374	ObLockExecutor::query_lock_id_and_lock_handle_	ret == OB_EMPTY_RESULT	if (OB_EMPTY_RESULT == ret) {
+src/sql/tablelock/ob_lock_func_executor.cpp	104	ObGetLockExecutor::generate_lock_id_	ret == OB_EMPTY_RESULT	if (OB_EMPTY_RESULT == ret) {
+src/sql/tablelock/ob_lock_func_executor.cpp	192	ObReleaseLockExecutor::execute	ret == OB_EMPTY_RESULT	if (OB_EMPTY_RESULT == ret) {
+src/standby/control/ob_standby_role_transition_service.cpp	123	prepare_primary_id_services	tmp_ret != OB_EAGAIN	} else if (OB_EAGAIN != tmp_ret) {
+src/standby/control/ob_standby_role_transition_service.cpp	133	prepare_primary_id_services	tmp_ret != OB_EAGAIN	} else if (OB_EAGAIN != tmp_ret) {
+src/standby/control/ob_standby_timestamp_provider.cpp	85	ObStandbyTimestampProvider::prepare_for_startup	other variable refresh_ret != OB_EAGAIN	} else if (OB_SUCCESS != refresh_ret && OB_EAGAIN != refresh_ret) {
+src/standby/control/standby_state_store.cpp	174	load_from_config	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/standby/control/standby_state_store.cpp	243	StandbyStateStore::load	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/standby/ob_standby_bootstrap_service.cpp	106	ObStandbyBootstrapService::check_bootstrap_source	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/standby/ob_standby_grpc.cpp	352	StandbyGrpcService::fetch_ls_view	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/standby/ob_standby_grpc.cpp	467	StandbyGrpcService::fetch_tablet_info	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/standby/ob_standby_grpc.cpp	533	StandbyGrpcService::fetch_tablet_sstable_info	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/standby/ob_standby_grpc.cpp	584	StandbyGrpcService::fetch_sstable_macro_info	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/standby/ob_standby_grpc.cpp	641	StandbyGrpcService::fetch_macro_block	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/standby/ob_standby_grpc.cpp	711	StandbyGrpcService::check_restore_precondition	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/standby/ob_standby_grpc.cpp	856	StandbyGrpcService::fetch_log	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/standby/ob_standby_grpc.cpp	1462	ObStandbyGrpcClient::fetch_tablet_info	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/standby/ob_standby_grpc_stream_util.cpp	70	ObStandbyGrpcStreamUtil::build_tablet_sstable_info	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/standby/ob_standby_grpc_stream_util.cpp	129	ObStandbyGrpcStreamUtil::build_sstable_macro_info	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/standby/ob_standby_log_sync_service.cpp	63	is_fatal_sync_error	ret == OB_ENTRY_NOT_EXIST	return OB_ENTRY_NOT_EXIST == ret
+src/standby/ob_standby_log_sync_service.cpp	64	is_fatal_sync_error	ret == OB_ERR_OUT_OF_LOWER_BOUND	|| OB_ERR_OUT_OF_LOWER_BOUND == ret
+src/standby/ob_standby_log_sync_service.cpp	65	is_fatal_sync_error	ret == OB_ERR_OUT_OF_UPPER_BOUND	|| OB_ERR_OUT_OF_UPPER_BOUND == ret
+src/standby/ob_standby_log_sync_service.cpp	66	is_fatal_sync_error	ret == OB_STATE_NOT_MATCH	|| OB_STATE_NOT_MATCH == ret
+src/standby/ob_standby_log_sync_service.cpp	67	is_fatal_sync_error	ret == OB_CHECKSUM_ERROR	|| OB_CHECKSUM_ERROR == ret
+src/standby/ob_standby_log_sync_service.cpp	68	is_fatal_sync_error	ret == OB_INVALID_DATA	|| OB_INVALID_DATA == ret;
+src/standby/ob_standby_log_sync_service.cpp	428	ObStandbyLogSyncService::append_log_group_	ret == OB_STATE_NOT_MATCH; ret == OB_CHECKSUM_ERROR; ret == OB_INVALID_DATA	if (OB_STATE_NOT_MATCH == ret || OB_CHECKSUM_ERROR == ret || OB_INVALID_DATA == ret) {
+src/standby/ob_standby_log_sync_service.cpp	785	ObStandbyLogSyncService::runTimerTask	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/standby/ob_standby_palf_base_info.cpp	89	ObStandbyPalfBaseInfoBuilder::build	ret == OB_ERR_OUT_OF_LOWER_BOUND	if (OB_ERR_OUT_OF_LOWER_BOUND == ret) {
+src/standby/ob_standby_palf_base_info.cpp	91	ObStandbyPalfBaseInfoBuilder::build	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/standby/ob_standby_palf_base_info.cpp	98	ObStandbyPalfBaseInfoBuilder::build	ret == OB_ENTRY_NOT_EXIST	} else if (OB_ENTRY_NOT_EXIST == ret) {
+src/standby/ob_standby_palf_base_info.cpp	138	ObStandbyPalfBaseInfoBuilder::build	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/standby/restore/ob_physical_copy_task.cpp	129	ObPhysicalCopyTask::build_macro_block_copy_info_	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/standby/restore/ob_physical_copy_task.cpp	182	ObPhysicalCopyTask::process	ret == OB_TABLET_NOT_EXIST	if (OB_TABLET_NOT_EXIST == ret) {
+src/standby/restore/ob_physical_copy_task.cpp	217	ObPhysicalCopyTask::fetch_macro_block_with_retry_	ret == OB_TABLET_NOT_EXIST	if (OB_TABLET_NOT_EXIST == ret) {
+src/standby/restore/ob_restore_helper.cpp	791	ObStandbyRestoreHelper::fetch_next_macro_block	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/standby/restore/ob_sstable_copy_finish_task.cpp	442	ObSSTableCopyFinishTask::process	ret == OB_TABLET_NOT_EXIST	if (OB_TABLET_NOT_EXIST == ret) {
+src/standby/restore/ob_sstable_copy_finish_task.cpp	569	ObSSTableCopyFinishTask::prepare_sstable_index_builder_	ret == OB_TABLET_NOT_EXIST	if (OB_TABLET_NOT_EXIST == ret) {
+src/standby/restore/ob_standby_restore_macro_block_writer.cpp	152	ObStandbyRestoreMacroBlockWriter::process	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/standby/restore/ob_standby_restore_reader.cpp	47	get_sstable_data_size	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/standby/restore/ob_standby_restore_reader.cpp	262	ObCopyMacroBlockObProducer::init	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/standby/restore/ob_standby_restore_reader.cpp	559	ObCopyTabletInfoObProducer::get_next_tablet_info	ret != OB_TABLET_NOT_EXIST	&& OB_TABLET_NOT_EXIST != ret) {
+src/standby/restore/ob_standby_restore_reader.cpp	561	ObCopyTabletInfoObProducer::get_next_tablet_info	ret == OB_TABLET_NOT_EXIST	} else if (OB_TABLET_NOT_EXIST == ret) {
+src/standby/restore/ob_standby_restore_reader.cpp	667	errsim_copy_new_sstable_array	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/standby/restore/ob_standby_restore_reader.cpp	683	errsim_copy_new_sstable_array	ret == OB_ITER_END	ret = (OB_ITER_END == ret ? OB_SUCCESS : ret);
+src/standby/restore/ob_standby_restore_reader.cpp	711	ObCopySSTableInfoObProducer::init	ret == OB_TABLET_NOT_EXIST	if (OB_TABLET_NOT_EXIST == ret) {
+src/standby/restore/ob_standby_restore_reader.cpp	767	ObCopySSTableInfoObProducer::get_next_sstable_info	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/standby/restore/ob_standby_restore_reader.cpp	887	ObCopySSTableInfoObProducer::get_copy_sstable_count_	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/standby/restore/ob_standby_restore_reader.cpp	1040	ObCopySSTableMacroObProducer::get_next_sstable_macro_range_info_	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/standby/restore/ob_standby_restore_reader.cpp	1117	ObCopySSTableMacroRangeObProducer::init	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/standby/restore/ob_standby_restore_reader.cpp	1153	ObCopySSTableMacroRangeObProducer::get_next_macro_range_info	call result second_meta_iterator_.get_next(macro_meta) != OB_ITER_END	if (OB_ITER_END != second_meta_iterator_.get_next(macro_meta)) {
+src/standby/restore/ob_standby_restore_reader.cpp	1164	ObCopySSTableMacroRangeObProducer::get_next_macro_range_info	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/standby/restore/ob_standby_restore_tablet_builder.cpp	344	ObStandbyRestoreTableInfoMgr::init_tablet_info	other variable hash_ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != hash_ret) {
+src/standby/restore/ob_standby_restore_tablet_builder.cpp	415	ObStandbyRestoreTableInfoMgr::check_tablet_table_info_exist	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/standby/restore/ob_standby_restore_tablet_builder.cpp	557	ObStandbyRestoreCopySSTableInfoMgr::build_sstable_macro_range_info_map_	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/standby/restore/ob_standby_restore_tablet_builder.cpp	560	ObStandbyRestoreCopySSTableInfoMgr::build_sstable_macro_range_info_map_	ret == OB_TABLET_NOT_EXIST	} else if (OB_TABLET_NOT_EXIST == ret) {
+src/standby/restore/ob_standby_sstable_copier.cpp	251	ObStandbySSTableCopier::fetch_ls_view_and_create_tablets_	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/standby/restore/ob_standby_sstable_copier.cpp	329	ObStandbySSTableCopier::build_table_info_	ret == OB_TABLET_NOT_EXIST	if (OB_TABLET_NOT_EXIST == ret) {
+src/standby/restore/ob_standby_sstable_copier.cpp	352	ObStandbySSTableCopier::build_table_info_	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/standby/restore/ob_standby_sstable_copier.cpp	434	ObStandbySSTableCopier::finish_tablet_restore_	ret == OB_TABLET_NOT_EXIST	if (OB_TABLET_NOT_EXIST == ret) {
+src/standby/restore/ob_standby_sstable_copier.cpp	596	ObStandbySSTableCopier::copy_sstable_	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/standby/restore/ob_tablet_copy_finish_task.cpp	100	ObTabletCopyFinishTask::process	ret == OB_DDL_TASK_EXECUTE_TOO_MUCH_TIME	} else if (OB_DDL_TASK_EXECUTE_TOO_MUCH_TIME == ret ) { // ret=-4192, errsim trigger to test ddl-split orthogonal ls-migration.
+src/standby/restore/ob_tablet_copy_finish_task.cpp	135	ObTabletCopyFinishTask::process	ret == OB_TABLET_NOT_EXIST	if (OB_TABLET_NOT_EXIST == ret) {
+src/storage/access/ob_advance_scan_helper.cpp	173	ObAdvanceScanHelper::seek_to_range	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/access/ob_advance_scanner.cpp	186	ObAdvanceScanner::skip	ret != OB_ITER_END [not built]	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/access/ob_aggregated_store.cpp	359	ObAggregatedStore::fill_rows	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/access/ob_aggregated_store.cpp	403	ObAggregatedStore::fill_rows	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/access/ob_block_sample_iterator.cpp	96	ObBlockSampleSSTableEndkeyIterator::open	ret == OB_BEYOND_THE_RANGE	if (OB_LIKELY(OB_BEYOND_THE_RANGE == ret)) {
+src/storage/access/ob_block_sample_iterator.cpp	104	ObBlockSampleSSTableEndkeyIterator::open	ret == OB_BEYOND_THE_RANGE	if (OB_LIKELY(OB_BEYOND_THE_RANGE == ret)) {
+src/storage/access/ob_block_sample_iterator.cpp	169	ObBlockSampleSSTableEndkeyIterator::locate_bound	ret == OB_ITER_END	if (OB_LIKELY(OB_ITER_END == ret)) {
+src/storage/access/ob_block_sample_iterator.cpp	180	ObBlockSampleSSTableEndkeyIterator::locate_bound	ret == OB_ITER_END	if (OB_LIKELY(OB_ITER_END == ret)) {
+src/storage/access/ob_block_sample_iterator.cpp	359	ObBlockSampleRangeIterator::get_next_range	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/access/ob_block_sample_iterator.cpp	369	ObBlockSampleRangeIterator::get_next_range	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/access/ob_block_sample_iterator.cpp	398	ObBlockSampleRangeIterator::init_and_push_endkey_iterator	ret == OB_ITER_END	if (OB_LIKELY(OB_ITER_END == ret)) {
+src/storage/access/ob_block_sample_iterator.cpp	553	ObBlockSampleRangeIterator::move_endkey_iter	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/access/ob_block_sample_iterator.cpp	682	ObBlockSampleIterator::get_next_row	ret == OB_ITER_END	if (OB_ITER_END == ret || OB_SUCCESS == ret) {
+src/storage/access/ob_block_sample_iterator.cpp	689	ObBlockSampleIterator::get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/access/ob_block_sample_iterator.cpp	704	ObBlockSampleIterator::get_next_row	ret != OB_ITER_END	if (OB_FAIL(ret) && OB_ITER_END != ret)  {
+src/storage/access/ob_block_sample_iterator.cpp	708	ObBlockSampleIterator::get_next_row	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/access/ob_block_sample_iterator.cpp	750	ObBlockSampleIterator::inner_get_next_rows	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/access/ob_block_sample_iterator.cpp	768	ObBlockSampleIterator::get_next_rows	ret == OB_ITER_END	if (OB_ITER_END == ret || OB_SUCCESS == ret) {
+src/storage/access/ob_block_sample_iterator.cpp	775	ObBlockSampleIterator::get_next_rows	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/access/ob_block_sample_iterator.cpp	789	ObBlockSampleIterator::get_next_rows	ret != OB_ITER_END	if (OB_FAIL(ret) && OB_ITER_END != ret)  {

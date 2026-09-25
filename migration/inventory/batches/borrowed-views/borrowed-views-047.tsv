@@ -1,0 +1,61 @@
+file	line	symbol	construct	text
+src/sql/session/ob_basic_session_info.h	311	ObBasicSessionInfo::BaseSavedValue::cur_query_	member raw bytes (pointer) of type char *	char *cur_query_;
+src/sql/session/ob_basic_session_info.h	943	ObBasicSessionInfo::ChangedVar::old_val_	member ObObj (value) of type ObObj	ObObj old_val_;   // record the old val, used to compare if the final value has changed
+src/sql/session/ob_basic_session_info.h	1292	ObBasicSessionInfo::MultiThreadData::user_name_	member ObString (value) of type common::ObString	common::ObString user_name_;    //current user name
+src/sql/session/ob_basic_session_info.h	1293	ObBasicSessionInfo::MultiThreadData::host_name_	member ObString (value) of type common::ObString	common::ObString host_name_;    //current user host name
+src/sql/session/ob_basic_session_info.h	1294	ObBasicSessionInfo::MultiThreadData::client_ip_	member ObString (value) of type common::ObString	common::ObString client_ip_;    //current user real client host name
+src/sql/session/ob_basic_session_info.h	1295	ObBasicSessionInfo::MultiThreadData::user_at_host_name_	member ObString (value) of type common::ObString	common::ObString user_at_host_name_;    //current user@host, for current_user()
+src/sql/session/ob_basic_session_info.h	1296	ObBasicSessionInfo::MultiThreadData::user_at_client_ip_	member ObString (value) of type common::ObString	common::ObString user_at_client_ip_;    //current user@clientip, for user()
+src/sql/session/ob_basic_session_info.h	1305	ObBasicSessionInfo::MultiThreadData::cur_query_	member raw bytes (pointer) of type char *	char *cur_query_;
+src/sql/session/ob_basic_session_info.h	1308	ObBasicSessionInfo::MultiThreadData::top_query_	member raw bytes (pointer) of type char *	char *top_query_;
+src/sql/session/ob_basic_session_info.h	1504	ObBasicSessionInfo::SysVarsCacheData::log_row_value_option_	member ObString (value) of type common::ObString	common::ObString log_row_value_option_;
+src/sql/session/ob_basic_session_info.h	1693	ObBasicSessionInfo::client_version_	member ObString (value) of type common::ObString	common::ObString client_version_;  // current client version
+src/sql/session/ob_basic_session_info.h	1694	ObBasicSessionInfo::driver_version_	member ObString (value) of type common::ObString	common::ObString driver_version_;  // current driver version
+src/sql/session/ob_basic_session_info.h	1748	ObBasicSessionInfo::sys_var_in_pc_str_	member ObString (value) of type common::ObString	common::ObString sys_var_in_pc_str_;
+src/sql/session/ob_basic_session_info.h	1750	ObBasicSessionInfo::config_in_pc_str_	member ObString (value) of type common::ObString	common::ObString config_in_pc_str_;
+src/sql/session/ob_basic_session_info.h	1783	ObBasicSessionInfo::changed_user_vars_	member container of ObString of type common::ObSEArray<common::ObString, 16>	common::ObSEArray<common::ObString, 16> changed_user_vars_;
+src/sql/session/ob_basic_session_info.h	1793	ObBasicSessionInfo::app_trace_id_	member ObString (value) of type common::ObString	common::ObString app_trace_id_;
+src/sql/session/ob_basic_session_info.h	1805	ObBasicSessionInfo::client_identifier_	member ObString (value) of type common::ObString	common::ObString client_identifier_;
+src/sql/session/ob_local_session_var.cpp	172	ObLocalSessionVarHelper::get_sys_var_val_str	allocator in, arena view out: ObString &val_str	int ObLocalSessionVarHelper::get_sys_var_val_str(const ObSysVarClassType var_type,
+src/sql/session/ob_piece_cache.h	84	ObPieceBuffer::buffer_	member ObString (value) of type ObString	ObString buffer_;
+src/sql/session/ob_piece_cache.h	85	ObPieceBuffer::pos_	member raw bytes (pointer) of type char *	char     *pos_;
+src/sql/session/ob_session_val_map.h	36	ObSessionVariable::value_	member ObObj (value) of type common::ObObj	common::ObObj value_; // value of the session variable
+src/sql/session/ob_session_val_map.h	88	ObSessionValMap::map_	member VarNameValMap (value) of type VarNameValMap	VarNameValMap map_;
+src/sql/session/ob_sql_session_info.cpp	1608	write_str_reuse_buf	allocator in, arena view out: ObString &dst	static int write_str_reuse_buf(AllocatorT &allocator, const ObString &src, ObString &dst)
+src/sql/session/ob_sql_session_info.h	391	ObSQLSessionInfo::ApplicationInfo::module_name_	member ObString (value) of type common::ObString	common::ObString module_name_;  // name as set by the dbms_application_info(set_module)
+src/sql/session/ob_sql_session_info.h	392	ObSQLSessionInfo::ApplicationInfo::action_name_	member ObString (value) of type common::ObString	common::ObString action_name_;  // action as set by the dbms_application_info(set_action)
+src/sql/session/ob_sql_session_info.h	393	ObSQLSessionInfo::ApplicationInfo::client_info_	member ObString (value) of type common::ObString	common::ObString client_info_;  // for addition info
+src/sql/session/ob_sql_session_info.h	942	ObSQLSessionInfo::ps_name_id_map_	member PsNameIdMap (value) of type PsNameIdMap	PsNameIdMap ps_name_id_map_;
+src/sql/session/ob_sql_session_info.h	1029	ObSQLSessionInfo::audit_filter_name_	member ObString (value) of type common::ObString	common::ObString audit_filter_name_;
+src/sql/session/ob_system_variable.cpp	444	ObBasicSysVar::inner_to_select_obj	allocator in, arena view out: ObObj &select_obj	int ObBasicSysVar::inner_to_select_obj(ObIAllocator &allocator,
+src/sql/session/ob_system_variable.cpp	455	ObBasicSysVar::inner_to_show_str	allocator in, arena view out: ObString &show_str	int ObBasicSysVar::inner_to_show_str(ObIAllocator &allocator,
+src/sql/session/ob_system_variable.cpp	520	ObBasicSysVar::to_select_obj	allocator in, arena view out: ObObj &select_obj	int ObBasicSysVar::to_select_obj(ObIAllocator &allocator,
+src/sql/session/ob_system_variable.cpp	535	ObBasicSysVar::to_show_str	allocator in, arena view out: ObString &show_str	int ObBasicSysVar::to_show_str(ObIAllocator &allocator,
+src/sql/session/ob_system_variable.cpp	717	ObTypeLibSysVar::inner_to_show_str	allocator in, arena view out: ObString &show_str	int ObTypeLibSysVar::inner_to_show_str(ObIAllocator &allocator,
+src/sql/session/ob_system_variable.cpp	830	ObEnumSysVar::inner_to_select_obj	allocator in, arena view out: ObObj &select_obj	int ObEnumSysVar::inner_to_select_obj(ObIAllocator &allocator,
+src/sql/session/ob_system_variable.cpp	2196	ObSysVarToObjFuncs::to_obj_charset	allocator in, arena view out: ObObj &result_obj	int ObSysVarToObjFuncs::to_obj_charset(ObIAllocator &allocator,
+src/sql/session/ob_system_variable.cpp	2214	ObSysVarToObjFuncs::to_obj_collation	allocator in, arena view out: ObObj &result_obj	int ObSysVarToObjFuncs::to_obj_collation(ObIAllocator &allocator,
+src/sql/session/ob_system_variable.cpp	2233	ObSysVarToObjFuncs::to_obj_sql_mode	allocator in, arena view out: ObObj &result_obj	int ObSysVarToObjFuncs::to_obj_sql_mode(ObIAllocator &allocator,
+src/sql/session/ob_system_variable.cpp	2248	ObSysVarToObjFuncs::to_obj_default_storage_engine	allocator in, arena view out: ObObj &result_obj	int ObSysVarToObjFuncs::to_obj_default_storage_engine(ObIAllocator &allocator,
+src/sql/session/ob_system_variable.cpp	2262	ObSysVarToStrFuncs::to_str_charset	allocator in, arena view out: ObString &result_str	int ObSysVarToStrFuncs::to_str_charset(ObIAllocator &allocator,
+src/sql/session/ob_system_variable.cpp	2287	ObSysVarToStrFuncs::to_str_collation	allocator in, arena view out: ObString &result_str	int ObSysVarToStrFuncs::to_str_collation(ObIAllocator &allocator,
+src/sql/session/ob_system_variable.cpp	2312	ObSysVarToStrFuncs::to_str_sql_mode	allocator in, arena view out: ObString &result_str	int ObSysVarToStrFuncs::to_str_sql_mode(ObIAllocator &allocator,
+src/sql/session/ob_system_variable.cpp	2326	ObSysVarToStrFuncs::to_str_default_storage_engine	allocator in, arena view out: ObString &result_str	int ObSysVarToStrFuncs::to_str_default_storage_engine(ObIAllocator &allocator,
+src/sql/session/ob_system_variable.h	105	ObSetVar::var_name_	member ObString (value) of type common::ObString	common::ObString var_name_;
+src/sql/session/ob_system_variable.h	137	ObSysVarTypeLib::type_names_	member raw bytes (pointer) of type const char **	const char **type_names_;
+src/sql/session/ob_system_variable.h	270	ObBasicSysVar::base_value_	member ObObj (value) of type common::ObObj	common::ObObj base_value_;
+src/sql/session/ob_system_variable.h	271	ObBasicSysVar::inc_value_	member ObObj (value) of type common::ObObj	common::ObObj inc_value_;
+src/sql/session/ob_system_variable.h	272	ObBasicSysVar::min_val_	member ObObj (value) of type common::ObObj	common::ObObj min_val_;
+src/sql/session/ob_system_variable.h	273	ObBasicSysVar::max_val_	member ObObj (value) of type common::ObObj	common::ObObj max_val_;
+src/sql/session/ob_system_variable.h	1014	ObCharsetSysVarPair::cs_var_name_	member ObString (value) of type common::ObString	common::ObString cs_var_name_;
+src/sql/session/ob_system_variable.h	1015	ObCharsetSysVarPair::coll_var_name_	member ObString (value) of type common::ObString	common::ObString coll_var_name_;
+src/standby/control/standby_state_store.cpp	37	serialize_server_info	allocator in, arena view out: common::ObString &str	int serialize_server_info(
+src/standby/ob_standby_bootstrap_service.h	41	ObStandbyBootstrapParam::source_	member ObString (value) of type common::ObString	common::ObString source_;
+src/standby/ob_standby_log_sync_service.cpp	371	ObStandbyLogSyncService::load_source_snapshot_	allocator in, arena view out: common::ObString &source	int ObStandbyLogSyncService::load_source_snapshot_(
+src/standby/restore/ob_standby_restore_reader.h	129	ObCopyMacroBlockObProducer::datum_range_	member ObDatumRange (value) of type ObDatumRange	ObDatumRange datum_range_;
+src/standby/restore/ob_standby_restore_reader.h	133	ObCopyMacroBlockObProducer::io_buf_	member raw bytes (pointer) of type char *	char *io_buf_[MAX_PREFETCH_MACRO_BLOCK_NUM];
+src/standby/restore/ob_standby_restore_reader.h	282	ObCopySSTableMacroRangeObProducer::datum_range_	member ObDatumRange (value) of type ObDatumRange	ObDatumRange datum_range_;
+src/standby/restore/ob_standby_restore_rpc.h	122	ObCopyMacroRangeInfo::datums_	member ObStorageDatum (value) of type blocksstable::ObStorageDatum	blocksstable::ObStorageDatum datums_[OB_INNER_MAX_ROWKEY_COLUMN_NUMBER];
+src/standby/restore/ob_standby_restore_rpc.h	123	ObCopyMacroRangeInfo::start_macro_block_end_key_	member ObDatumRowkey (value) of type blocksstable::ObDatumRowkey	blocksstable::ObDatumRowkey start_macro_block_end_key_;
+src/storage/access/ob_advance_scan_helper.h	116	ObAdvanceScanHelper::complete_range_	member ObDatumRange (value) of type blocksstable::ObDatumRange	blocksstable::ObDatumRange complete_range_;
+src/storage/access/ob_advance_scan_helper.h	117	ObAdvanceScanHelper::range_datums_	member ObStorageDatum (pointer) of type blocksstable::ObStorageDatum *	blocksstable::ObStorageDatum *range_datums_;

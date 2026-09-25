@@ -1,0 +1,39 @@
+file	line	symbol	construct	text
+src/sql/ob_spi.cpp	726	ObSPIService::spi_convert	allocator in, arena view out: ObObj &src	int ObSPIService::spi_convert(ObSQLSessionInfo &session,
+src/sql/ob_spi.cpp	758	ObSPIService::spi_convert	allocator in, arena view out: ObObjParam &src	int ObSPIService::spi_convert(ObSQLSessionInfo *session,
+src/sql/ob_spi.cpp	1150	ObSPIService::check_and_deep_copy_result	allocator in, arena view out: ObObj &dst	int ObSPIService::check_and_deep_copy_result(ObIAllocator &alloc,
+src/sql/ob_spi.cpp	2047	ObSPIService::prepare_dynamic	allocator in, arena view out: ObString &ps_sql	int ObSPIService::prepare_dynamic(ObPLExecCtx *ctx,
+src/sql/ob_spi.cpp	2067	ObSPIService::prepare_dynamic	allocator in, arena view out: ObString &ps_sql	int ObSPIService::prepare_dynamic(ObPLExecCtx *ctx,
+src/sql/ob_spi.cpp	2186	ObSPIService::deep_copy_dynamic_param	allocator in, arena view out: ParamStore *&exec_params	int ObSPIService::deep_copy_dynamic_param(ObPLExecCtx *ctx,
+src/sql/ob_spi.cpp	2213	ObSPIService::prepare_dynamic_sql_params	allocator in, arena view out: ParamStore *&exec_params	int ObSPIService::prepare_dynamic_sql_params(ObPLExecCtx *ctx,
+src/sql/ob_spi.cpp	2234	ObSPIService::prepare_cursor_params	allocator in, arena view out: ParamStore *&exec_params	int ObSPIService::prepare_cursor_params(ObPLExecCtx *ctx,
+src/sql/ob_spi.cpp	2353	ObSPIService::spi_cursor_alloc	allocator in, arena view out: ObObj &obj	int ObSPIService::spi_cursor_alloc(ObIAllocator &allocator, ObObj &obj)
+src/sql/ob_spi.cpp	4170	ObSPIService::construct_exec_params	allocator in, arena view out: ParamStore &exec_params	int ObSPIService::construct_exec_params(ObPLExecCtx *ctx,
+src/sql/ob_spi.cpp	4320	ObSPIService::prepare_static_sql_params	allocator in, arena view out: ParamStore *&curr_params	int ObSPIService::prepare_static_sql_params(ObPLExecCtx *ctx,
+src/sql/ob_spi.cpp	5473	ObSPIService::check_and_copy_composite	allocator in, arena view out: ObObj &result	int ObSPIService::check_and_copy_composite(
+src/sql/ob_spi.cpp	5496	ObSPIService::store_datums	allocator in, arena view out: ObObj &dest_addr	int ObSPIService::store_datums(ObObj &dest_addr, ObIArray<ObObj> &obj_array,
+src/sql/ob_spi.h	60	ObPLSPITraceIdGuard::sql_	member ObString (value) of type const ObString	const ObString sql_;
+src/sql/ob_spi.h	61	ObPLSPITraceIdGuard::ps_sql_	member ObString (value) of type const ObString	const ObString ps_sql_;
+src/sql/ob_spi.h	127	ObSPICursor::complex_objs_	member container of ObObj of type ObArray<ObObj>	ObArray<ObObj> complex_objs_;
+src/sql/ob_spi.h	158	ObSPIOutParams::out_params_	member container of ObObj of type ObSEArray<ObObj, OB_DEFAULT_SE_ARRAY_COUNT>	ObSEArray<ObObj, OB_DEFAULT_SE_ARRAY_COUNT> out_params_; // used to record function's return values
+src/sql/ob_spi.h	293	ObSPIResultSet::exec_params_str_	member ObString (value) of type ObString	ObString exec_params_str_;
+src/sql/ob_spi.h	322	ObSPIService::ObSPIPrepareResult::route_sql_	member ObString (value) of type ObString	ObString route_sql_; // routing string parsed from prepare statement
+src/sql/ob_spi.h	326	ObSPIService::ObSPIPrepareResult::ps_sql_	member ObString (value) of type ObString	ObString ps_sql_; // sql prepared parameterized sql
+src/sql/ob_sql.cpp	1576	ObSql::clac_fixed_param_store	allocator in, arena view out: ParamStore &fixed_param_store	int ObSql::clac_fixed_param_store(const stmt::StmtType stmt_type,
+src/sql/ob_sql.cpp	1634	ObSql::init_execute_params_for_ab	allocator in, arena view out: ParamStore *&first_group_params	int ObSql::init_execute_params_for_ab(ObIAllocator &allocator,
+src/sql/ob_sql.cpp	1666	ObSql::reconstruct_pl_params_store	allocator in, arena view out: ParamStore &pl_params	int ObSql::reconstruct_pl_params_store(ObIAllocator &allocator,
+src/sql/ob_sql.cpp	1690	ObSql::reconstruct_ps_params_store	allocator in, arena view out: ParamStore &ps_params	int ObSql::reconstruct_ps_params_store(ObIAllocator &allocator,
+src/sql/ob_sql_context.h	232	ObMultiStmtItem::sql_	member ObString (value) of type common::ObString	common::ObString sql_;
+src/sql/ob_sql_context.h	234	ObMultiStmtItem::batched_queries_	member container of ObString of type const common::ObIArray<ObString> *	const common::ObIArray<ObString> *batched_queries_;
+src/sql/ob_sql_context.h	395	ObSqlPlanKey::constructed_sql_	member ObString (value) of type common::ObString	common::ObString constructed_sql_;
+src/sql/ob_sql_context.h	396	ObSqlPlanKey::sql_id_	member ObString (value) of type common::ObString	common::ObString sql_id_;
+src/sql/ob_sql_context.h	397	ObSqlPlanKey::format_sql_id_	member ObString (value) of type common::ObString	common::ObString format_sql_id_;
+src/sql/ob_sql_context.h	398	ObSqlPlanKey::format_sql_	member ObString (value) of type common::ObString	common::ObString format_sql_;
+src/sql/ob_sql_context.h	486	ObSqlCtx::cur_sql_	member ObString (value) of type common::ObString	common::ObString cur_sql_;
+src/sql/ob_sql_context.h	494	ObSqlCtx::related_user_var_names_	member container of ObString of type common::ObFixedArray<common::ObString, common::ObIAllocator>	common::ObFixedArray<common::ObString, common::ObIAllocator> related_user_var_names_;
+src/sql/ob_sql_context.h	531	ObSqlCtx::first_outline_data_	member ObString (value) of type common::ObString	common::ObString first_outline_data_;
+src/sql/ob_sql_context.h	545	ObSqlCtx::raw_sql_	member ObString (value) of type common::ObString	common::ObString raw_sql_;
+src/sql/ob_sql_context.h	546	ObSqlCtx::reconstruct_ps_sql_	member ObString (value) of type common::ObString	common::ObString reconstruct_ps_sql_;
+src/sql/ob_sql_context.h	701	ObQueryCtx::calculable_expr_results_	member container of ObObj of type common::hash::ObHashMap<uint64_t, ObObj, common::hash::NoPthreadDefendMode>	common::hash::ObHashMap<uint64_t, ObObj, common::hash::NoPthreadDefendMode> calculable_expr_results_;
+src/sql/ob_sql_context.h	711	ObQueryCtx::sql_stmt_	member ObString (value) of type common::ObString	common::ObString sql_stmt_;
+src/sql/ob_sql_temp_table.h	128	ObSqlTempTableInfo::table_name_	member ObString (value) of type common::ObString	common::ObString table_name_;

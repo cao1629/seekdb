@@ -1,0 +1,59 @@
+file	line	symbol	construct	text
+src/sql/pl/pl_cache/ob_pl_cache_object.h	83	PLCacheObjStat::raw_sql_	member ObString (value) of type common::ObString	common::ObString raw_sql_; // sql txt for anonymous block
+src/sql/pl/pl_cache/ob_pl_cache_object.h	84	PLCacheObjStat::name_	member ObString (value) of type common::ObString	common::ObString name_;
+src/sql/pl/pl_cache/ob_pl_cache_object.h	98	PLCacheObjStat::sys_vars_str_	member ObString (value) of type common::ObString	common::ObString sys_vars_str_;
+src/sql/pl/pl_cache/ob_pl_cache_object.h	99	PLCacheObjStat::param_infos_	member ObString (value) of type common::ObString	common::ObString param_infos_;
+src/sql/plan_cache/ob_cache_object.cpp	296	ObPlanCacheObject::type_to_name	allocator in, arena view out: common::ObString &type_name	int ObPlanCacheObject::type_to_name(const ObLibCacheNameSpace ns,
+src/sql/plan_cache/ob_param_value_formatter.cpp	32	store_params_value_to_str	allocator in, arena view out: char *&params_value	int store_params_value_to_str(common::ObIAllocator &allocator,
+src/sql/plan_cache/ob_pcv_set.h	125	ObPCVSet::sql_	member ObString (value) of type common::ObString	common::ObString sql_;  // when adding a kv pair with sql as the key to the plan cache, this member is needed
+src/sql/plan_cache/ob_pcv_set.h	131	ObPCVSet::sql_ids_	member container of ObString of type common::ObSEArray<common::ObString, 4>	common::ObSEArray<common::ObString, 4> sql_ids_;
+src/sql/plan_cache/ob_plan_cache.cpp	97	ObGetKVEntryBySQLIDOp::sql_id_	member ObString (value) of type common::ObString	common::ObString sql_id_;
+src/sql/plan_cache/ob_plan_cache.cpp	129	ObGetPcvSetByTabNameOp::tab_name_	member ObString (value) of type common::ObString	common::ObString tab_name_;
+src/sql/plan_cache/ob_plan_cache.cpp	810	ObPlanCache::check_can_do_insert_opt	allocator in, arena view out: ObString &first_truncated_sql	int ObPlanCache::check_can_do_insert_opt(common::ObIAllocator &allocator,
+src/sql/plan_cache/ob_plan_cache_struct.h	155	ObPlanCacheKey::name_	member ObString (value) of type common::ObString	common::ObString name_;
+src/sql/plan_cache/ob_plan_cache_struct.h	162	ObPlanCacheKey::sys_vars_str_	member ObString (value) of type common::ObString	common::ObString sys_vars_str_;
+src/sql/plan_cache/ob_plan_cache_struct.h	163	ObPlanCacheKey::config_str_	member ObString (value) of type common::ObString	common::ObString config_str_;
+src/sql/plan_cache/ob_plan_cache_struct.h	179	NotParamInfo::raw_text_	member ObString (value) of type common::ObString	common::ObString raw_text_;
+src/sql/plan_cache/ob_plan_cache_struct.h	202	PsNotParamInfo::ps_param_	member ObObjParam (value) of type common::ObObjParam	common::ObObjParam ps_param_;
+src/sql/plan_cache/ob_plan_cache_struct.h	233	ObFastParserResult::parameterized_params_	member container of ObObjParam of type common::ObFixedArray<const common::ObObjParam *, common::ObIAllocator>	common::ObFixedArray<const common::ObObjParam *, common::ObIAllocator> parameterized_params_;
+src/sql/plan_cache/ob_plan_cache_struct.h	234	ObFastParserResult::cache_params_	member ParamStore (pointer) of type ParamStore *	ParamStore *cache_params_;
+src/sql/plan_cache/ob_plan_cache_struct.h	347	ObInsertBatchOptInfo::new_reconstruct_sql_	member ObString (value) of type ObString	ObString new_reconstruct_sql_;
+src/sql/plan_cache/ob_plan_cache_struct.h	389	ObPlanCacheCtx::get_not_param_info_str	allocator in, arena view out: common::ObString &str	int get_not_param_info_str(common::ObIAllocator &allocator, common::ObString &str)
+src/sql/plan_cache/ob_plan_cache_struct.h	453	ObPlanCacheCtx::raw_sql_	member ObString (reference) of type const common::ObString &	const common::ObString &raw_sql_; //query sql
+src/sql/plan_cache/ob_plan_cache_struct.h	468	ObPlanCacheCtx::tmp_table_names_	member TmpTableNameArray (value) of type TmpTableNameArray	TmpTableNameArray tmp_table_names_;
+src/sql/plan_cache/ob_plan_cache_struct.h	488	ObPlanCacheCtx::ab_params_	member ParamStore (pointer) of type ParamStore *	ParamStore *ab_params_;  // arraybinding batch parameters,
+src/sql/plan_cache/ob_plan_cache_struct.h	489	ObPlanCacheCtx::new_raw_sql_	member ObString (value) of type ObString	ObString new_raw_sql_;  // values clause rebuild raw sql
+src/sql/plan_cache/ob_plan_cache_util.h	106	ObSysVarInPC::system_variables_	member container of ObObj of type common::ObSEArray<common::ObObj, 32>	common::ObSEArray<common::ObObj, 32> system_variables_;
+src/sql/plan_cache/ob_plan_cache_util.h	107	ObSysVarInPC::buf_	member raw bytes (pointer) of type char *	char *buf_;
+src/sql/plan_cache/ob_plan_cache_util.h	273	ObPCConstParamInfo::const_params_	member container of ObObj of type common::ObSEArray<common::ObObj, 4>	common::ObSEArray<common::ObObj, 4> const_params_;
+src/sql/plan_cache/ob_plan_cache_util.h	396	ObAcsIdxSelRange::index_name_	member ObString (value) of type ObString	ObString index_name_;
+src/sql/plan_cache/ob_plan_cache_util.h	516	ObPlanStat::stmt_	member ObString (value) of type common::ObString	common::ObString stmt_;       //  sql stmt
+src/sql/plan_cache/ob_plan_cache_util.h	536	ObPlanStat::sp_info_str_	member ObString (value) of type common::ObString	common::ObString sp_info_str_; // record non-parameter constant information
+src/sql/plan_cache/ob_plan_cache_util.h	537	ObPlanStat::param_infos_	member ObString (value) of type common::ObString	common::ObString param_infos_;  // record all parameterized parameter data types
+src/sql/plan_cache/ob_plan_cache_util.h	538	ObPlanStat::sys_vars_str_	member ObString (value) of type common::ObString	common::ObString sys_vars_str_;
+src/sql/plan_cache/ob_plan_cache_util.h	539	ObPlanStat::config_str_	member ObString (value) of type common::ObString	common::ObString config_str_;
+src/sql/plan_cache/ob_plan_cache_util.h	540	ObPlanStat::raw_sql_	member ObString (value) of type common::ObString	common::ObString raw_sql_; // record the original sql when generating plan
+src/sql/plan_cache/ob_plan_cache_util.h	544	ObPlanStat::constructed_sql_	member ObString (value) of type common::ObString	common::ObString constructed_sql_;
+src/sql/plan_cache/ob_plan_cache_util.h	545	ObPlanStat::sql_id_	member ObString (value) of type common::ObString	common::ObString sql_id_;
+src/sql/plan_cache/ob_plan_cache_util.h	546	ObPlanStat::format_sql_id_	member ObString (value) of type common::ObString	common::ObString format_sql_id_;
+src/sql/plan_cache/ob_plan_cache_util.h	596	ObPlanStat::outline_data_	member ObString (value) of type common::ObString	common::ObString outline_data_;
+src/sql/plan_cache/ob_plan_cache_util.h	597	ObPlanStat::hints_info_	member ObString (value) of type common::ObString	common::ObString hints_info_;
+src/sql/plan_cache/ob_plan_cache_util.h	882	SysVarNameVal::name_	member ObString (value) of type common::ObString	common::ObString name_;
+src/sql/plan_cache/ob_plan_cache_util.h	883	SysVarNameVal::value_	member ObObj (value) of type common::ObObj	common::ObObj value_;
+src/sql/plan_cache/ob_plan_cache_value.h	66	PCVSchemaObj::table_name_	member ObString (value) of type common::ObString	common::ObString table_name_;
+src/sql/plan_cache/ob_plan_cache_value.h	352	ObPlanCacheValue::outline_signature_	member ObString (value) of type common::ObString	common::ObString outline_signature_;
+src/sql/plan_cache/ob_plan_cache_value.h	353	ObPlanCacheValue::outline_format_signature_	member ObString (value) of type common::ObString	common::ObString outline_format_signature_;
+src/sql/plan_cache/ob_plan_cache_value.h	354	ObPlanCacheValue::constructed_sql_	member ObString (value) of type common::ObString	common::ObString constructed_sql_;
+src/sql/plan_cache/ob_plan_cache_value.h	386	ObPlanCacheValue::raw_sql_	member ObString (value) of type common::ObString	common::ObString raw_sql_;
+src/sql/plan_cache/ob_plan_set.h	98	HashKey::rowkey_	member container of ObObj of type common::ObSEArray<ObObj, 4>	common::ObSEArray<ObObj, 4> rowkey_;
+src/sql/plan_cache/ob_plan_set.h	281	ObPlanSet::related_user_var_names_	member container of ObString of type common::ObFixedArray<common::ObString, common::ObIAllocator>	common::ObFixedArray<common::ObString, common::ObIAllocator> related_user_var_names_;
+src/sql/plan_cache/ob_prepare_stmt_struct.h	67	ObPsSqlKey::ps_sql_	member ObString (value) of type common::ObString	common::ObString ps_sql_;
+src/sql/plan_cache/ob_prepare_stmt_struct.h	256	ObPsStmtInfo::no_param_sql_	member ObString (value) of type common::ObString	common::ObString no_param_sql_;
+src/sql/plan_cache/ob_prepare_stmt_struct.h	258	ObPsStmtInfo::raw_sql_	member ObString (value) of type common::ObString	common::ObString raw_sql_;
+src/sql/plan_cache/ob_prepare_stmt_struct.h	294	TypeInfo::relation_name_	member ObString (value) of type common::ObString	common::ObString relation_name_;
+src/sql/plan_cache/ob_prepare_stmt_struct.h	295	TypeInfo::package_name_	member ObString (value) of type common::ObString	common::ObString package_name_;
+src/sql/plan_cache/ob_prepare_stmt_struct.h	296	TypeInfo::type_name_	member ObString (value) of type common::ObString	common::ObString type_name_;
+src/sql/plan_cache/ob_prepare_stmt_struct.h	441	PsCacheInfoCtx::normalized_sql_	member ObString (value) of type common::ObString	common::ObString normalized_sql_;
+src/sql/plan_cache/ob_prepare_stmt_struct.h	442	PsCacheInfoCtx::raw_sql_	member ObString (value) of type common::ObString	common::ObString raw_sql_;
+src/sql/plan_cache/ob_prepare_stmt_struct.h	443	PsCacheInfoCtx::no_param_sql_	member ObString (value) of type common::ObString	common::ObString no_param_sql_;
+src/sql/plan_cache/ob_ps_sql_utils.cpp	25	ObPsSqlUtils::deep_copy_str	allocator in, arena view out: common::ObString &dst	int ObPsSqlUtils::deep_copy_str(common::ObIAllocator &allocator,

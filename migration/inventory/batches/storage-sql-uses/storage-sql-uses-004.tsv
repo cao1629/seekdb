@@ -1,0 +1,76 @@
+file	line	symbol	construct	text
+src/storage/access/ob_table_access_param.h	180	ObTableIterParam	sql:: use: ObPushdownFilterExecutor	sql::ObPushdownFilterExecutor *pushdown_filter_;
+src/storage/access/ob_table_access_param.h	181	ObTableIterParam	sql:: use: ObPushdownOperator	sql::ObPushdownOperator *op_;
+src/storage/access/ob_table_access_param.h	183	ObTableIterParam	sql:: use: ObExprPtrIArray	const sql::ObExprPtrIArray *output_exprs_;
+src/storage/access/ob_table_access_param.h	184	ObTableIterParam	sql:: use: ObExprPtrIArray	const sql::ObExprPtrIArray *aggregate_exprs_;
+src/storage/access/ob_table_access_param.h	202	ObTableIterParam	sql:: use: ObStoragePushdownFlag	sql::ObStoragePushdownFlag pd_storage_flag_;
+src/storage/access/ob_table_access_param.h	240	ObTableAccessParam::get_op	sql:: use: ObPushdownOperator	OB_INLINE sql::ObPushdownOperator *get_op() { return iter_param_.op_; }
+src/storage/access/ob_table_access_param.h	241	ObTableAccessParam::get_op	sql:: use: ObPushdownOperator	OB_INLINE sql::ObPushdownOperator *get_op() const { return iter_param_.op_; }
+src/storage/access/ob_table_access_param.h	258	ObTableAccessParam	sql:: use: ObExprPtrIArray	const sql::ObExprPtrIArray *output_exprs_;
+src/storage/access/ob_table_access_param.h	259	ObTableAccessParam	sql:: use: ObExprPtrIArray	const sql::ObExprPtrIArray *aggregate_exprs_;
+src/storage/access/ob_table_access_param.h	260	ObTableAccessParam	sql:: use: ObExprPtrIArray	const sql::ObExprPtrIArray *op_filters_;
+src/storage/access/ob_table_param.cpp	814	ObTableParam::construct_columns_and_projector	sql:: use: ObStoragePushdownFlag	const sql::ObStoragePushdownFlag &pd_pushdown_flag)
+src/storage/access/ob_table_param.cpp	1047	ObTableParam::convert	sql:: use: ObStoragePushdownFlag	const sql::ObStoragePushdownFlag &pd_pushdown_flag,
+src/storage/access/ob_table_param.cpp	1078	ObTableParam::convert_group_by	sql:: use: ObStoragePushdownFlag	const sql::ObStoragePushdownFlag &pd_pushdown_flag)
+src/storage/access/ob_vector_store.cpp	32	ObVectorStore::ObVectorStore	sql:: use: ObEvalCtx	sql::ObEvalCtx &eval_ctx,
+src/storage/access/ob_vector_store.cpp	34	ObVectorStore::ObVectorStore	sql:: use: ObBitVector	sql::ObBitVector *skip_bit)
+src/storage/access/ob_vector_store.cpp	97	ObVectorStore::init	sql:: use: ObExpr	sql::ObExpr *expr = nullptr;
+src/storage/access/ob_vector_store.h	42	ObVectorStore	sql:: use: ObEvalCtx	sql::ObEvalCtx &eval_ctx,
+src/storage/access/ob_vector_store.h	44	ObVectorStore	sql:: use: ObBitVector	sql::ObBitVector *skip_bit);
+src/storage/access/ob_vector_store.h	105	ObVectorStore	sql:: use: ExprFixedArray	sql::ExprFixedArray exprs_;
+src/storage/access/ob_vector_store.h	109	ObVectorStore	sql:: use: ObExpr	sql::ObExpr *group_idx_expr_;
+src/storage/access/ob_vector_store.h	113	ObVectorStore	sql:: use: ObBitVector	sql::ObBitVector *skip_bit_;
+src/storage/access/ob_where_optimizer.cpp	38	ObWhereOptimizer::init	sql:: use: ObPushdownFilterExecutor	sql::ObPushdownFilterExecutor *filter)
+src/storage/access/ob_where_optimizer.cpp	92	ObWhereOptimizer::analyze_impl	sql:: use: ObPushdownFilterExecutor	int ObWhereOptimizer::analyze_impl(sql::ObPushdownFilterExecutor &filter, bool &reordered)
+src/storage/access/ob_where_optimizer.cpp	95	ObWhereOptimizer::analyze_impl	sql:: use: ObPushdownFilterExecutor	sql::ObPushdownFilterExecutor **children = filter.get_childs();
+src/storage/access/ob_where_optimizer.cpp	132	ObWhereOptimizer::collect_filter_info	sql:: use: ObPushdownFilterExecutor	sql::ObPushdownFilterExecutor &filter,
+src/storage/access/ob_where_optimizer.cpp	142	ObWhereOptimizer::judge_filter_whether_enable_reorder	sql:: use: ObPushdownFilterExecutor	void ObWhereOptimizer::judge_filter_whether_enable_reorder(sql::ObPushdownFilterExecutor *filter) {
+src/storage/access/ob_where_optimizer.cpp	148	ObWhereOptimizer::judge_filter_whether_enable_reorder	sql:: use: ObPushdownFilterExecutor	sql::ObPushdownFilterExecutor *child = filter->get_childs()[i];
+src/storage/access/ob_where_optimizer.h	31	ObWhereOptimizer	sql:: use: ObPushdownFilterExecutor	sql::ObPushdownFilterExecutor *filter);
+src/storage/access/ob_where_optimizer.h	49	ObWhereOptimizer::ObFilterCondition	sql:: use: ObPushdownFilterExecutor	sql::ObPushdownFilterExecutor *filter_;
+src/storage/access/ob_where_optimizer.h	69	ObWhereOptimizer	sql:: use: ObPushdownFilterExecutor	int analyze_impl(sql::ObPushdownFilterExecutor &filter, bool &reordered);
+src/storage/access/ob_where_optimizer.h	70	ObWhereOptimizer	sql:: use: ObPushdownFilterExecutor	void collect_filter_info(sql::ObPushdownFilterExecutor &filter, ObFilterCondition &filter_condition);
+src/storage/access/ob_where_optimizer.h	71	ObWhereOptimizer	sql:: use: ObPushdownFilterExecutor	void judge_filter_whether_enable_reorder(sql::ObPushdownFilterExecutor *filter);
+src/storage/access/ob_where_optimizer.h	75	ObWhereOptimizer	sql:: use: ObPushdownFilterExecutor	sql::ObPushdownFilterExecutor *filter_;
+src/storage/blocksstable/encoding/neon/ob_dict_decoder_neon.cpp	43	DictCmpRefNeonFunc_T::dict_cmp_ref_func	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/neon/ob_dict_decoder_neon.cpp	44	DictCmpRefNeonFunc_T::dict_cmp_ref_func	sql:: use: ObBitVector	sql::ObBitVector &result)
+src/storage/blocksstable/encoding/neon/ob_dict_decoder_neon.cpp	54	DictCmpRefNeonFunc_T::dict_cmp_ref_func	sql:: use: WHITE_OP_LT	if (CMP_TYPE <= sql::WHITE_OP_LT) {
+src/storage/blocksstable/encoding/neon/ob_dict_decoder_neon.cpp	75	DictCmpRefNeonFunc_T::dict_cmp_ref_func	sql:: use: WHITE_OP_GE	uint8x16_t cmp_res_cnt = neon_cmp_int<uint8x16_t, uint8x16_t, sql::WHITE_OP_GE>(data_vec, dict_cnt_vec);
+src/storage/blocksstable/encoding/neon/ob_dict_decoder_neon.cpp	84	DictCmpRefNeonFunc_T::dict_cmp_ref_func	sql:: use: WHITE_OP_GE	if (value_cmp_t<uint8_t, sql::WHITE_OP_GE>(ref_arr[row_id], casted_dict_cnt)) {
+src/storage/blocksstable/encoding/neon/ob_dict_decoder_neon.cpp	103	DictCmpRefNeonFunc_T::dict_cmp_ref_func	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/neon/ob_dict_decoder_neon.cpp	104	DictCmpRefNeonFunc_T::dict_cmp_ref_func	sql:: use: ObBitVector	sql::ObBitVector &result)
+src/storage/blocksstable/encoding/neon/ob_dict_decoder_neon.cpp	114	DictCmpRefNeonFunc_T::dict_cmp_ref_func	sql:: use: WHITE_OP_LT	if (CMP_TYPE <= sql::WHITE_OP_LT) {
+src/storage/blocksstable/encoding/neon/ob_dict_decoder_neon.cpp	134	DictCmpRefNeonFunc_T::dict_cmp_ref_func	sql:: use: WHITE_OP_GE	uint16x8_t cmp_res_cnt = neon_cmp_int<uint16x8_t, uint16x8_t, sql::WHITE_OP_GE>(data_vec, dict_cnt_vec);
+src/storage/blocksstable/encoding/neon/ob_dict_decoder_neon.cpp	142	DictCmpRefNeonFunc_T::dict_cmp_ref_func	sql:: use: WHITE_OP_GE	if (value_cmp_t<uint16_t, sql::WHITE_OP_GE>(ref_arr[row_id], casted_dict_cnt)) {
+src/storage/blocksstable/encoding/neon/ob_encoding_neon_util.h	49	neon_cmp_int	sql:: use: WHITE_OP_EQ	uint8x16_t neon_cmp_int<uint8x16_t, uint8x16_t, sql::WHITE_OP_EQ>(uint8x16_t left, uint8x16_t right)
+src/storage/blocksstable/encoding/neon/ob_encoding_neon_util.h	55	neon_cmp_int	sql:: use: WHITE_OP_EQ	uint8x16_t neon_cmp_int<uint8x16_t, int8x16_t, sql::WHITE_OP_EQ>(int8x16_t left, int8x16_t right)
+src/storage/blocksstable/encoding/neon/ob_encoding_neon_util.h	61	neon_cmp_int	sql:: use: WHITE_OP_LT	uint8x16_t neon_cmp_int<uint8x16_t, uint8x16_t, sql::WHITE_OP_LT>(uint8x16_t left, uint8x16_t right)
+src/storage/blocksstable/encoding/neon/ob_encoding_neon_util.h	67	neon_cmp_int	sql:: use: WHITE_OP_LT	uint8x16_t neon_cmp_int<uint8x16_t, int8x16_t, sql::WHITE_OP_LT>(int8x16_t left, int8x16_t right)
+src/storage/blocksstable/encoding/neon/ob_encoding_neon_util.h	73	neon_cmp_int	sql:: use: WHITE_OP_LE	uint8x16_t neon_cmp_int<uint8x16_t, uint8x16_t, sql::WHITE_OP_LE>(uint8x16_t left, uint8x16_t right)
+src/storage/blocksstable/encoding/neon/ob_encoding_neon_util.h	79	neon_cmp_int	sql:: use: WHITE_OP_LE	uint8x16_t neon_cmp_int<uint8x16_t, int8x16_t, sql::WHITE_OP_LE>(int8x16_t left, int8x16_t right)
+src/storage/blocksstable/encoding/neon/ob_encoding_neon_util.h	85	neon_cmp_int	sql:: use: WHITE_OP_GE	uint8x16_t neon_cmp_int<uint8x16_t, uint8x16_t, sql::WHITE_OP_GE>(uint8x16_t left, uint8x16_t right)
+src/storage/blocksstable/encoding/neon/ob_encoding_neon_util.h	91	neon_cmp_int	sql:: use: WHITE_OP_GE	uint8x16_t neon_cmp_int<uint8x16_t, int8x16_t, sql::WHITE_OP_GE>(int8x16_t left, int8x16_t right)
+src/storage/blocksstable/encoding/neon/ob_encoding_neon_util.h	97	neon_cmp_int	sql:: use: WHITE_OP_GT	uint8x16_t neon_cmp_int<uint8x16_t, uint8x16_t, sql::WHITE_OP_GT>(uint8x16_t left, uint8x16_t right)
+src/storage/blocksstable/encoding/neon/ob_encoding_neon_util.h	103	neon_cmp_int	sql:: use: WHITE_OP_GT	uint8x16_t neon_cmp_int<uint8x16_t, int8x16_t, sql::WHITE_OP_GT>(int8x16_t left, int8x16_t right)
+src/storage/blocksstable/encoding/neon/ob_encoding_neon_util.h	109	neon_cmp_int	sql:: use: WHITE_OP_NE	uint8x16_t neon_cmp_int<uint8x16_t, uint8x16_t, sql::WHITE_OP_NE>(uint8x16_t left, uint8x16_t right)
+src/storage/blocksstable/encoding/neon/ob_encoding_neon_util.h	115	neon_cmp_int	sql:: use: WHITE_OP_NE	uint8x16_t neon_cmp_int<uint8x16_t, int8x16_t, sql::WHITE_OP_NE>(int8x16_t left, int8x16_t right)
+src/storage/blocksstable/encoding/neon/ob_encoding_neon_util.h	122	neon_cmp_int	sql:: use: WHITE_OP_EQ	uint16x8_t neon_cmp_int<uint16x8_t, uint16x8_t, sql::WHITE_OP_EQ>(uint16x8_t left, uint16x8_t right)
+src/storage/blocksstable/encoding/neon/ob_encoding_neon_util.h	128	neon_cmp_int	sql:: use: WHITE_OP_EQ	uint16x8_t neon_cmp_int<uint16x8_t, int16x8_t, sql::WHITE_OP_EQ>(int16x8_t left, int16x8_t right)
+src/storage/blocksstable/encoding/neon/ob_encoding_neon_util.h	134	neon_cmp_int	sql:: use: WHITE_OP_LT	uint16x8_t neon_cmp_int<uint16x8_t, uint16x8_t, sql::WHITE_OP_LT>(uint16x8_t left, uint16x8_t right)
+src/storage/blocksstable/encoding/neon/ob_encoding_neon_util.h	140	neon_cmp_int	sql:: use: WHITE_OP_LT	uint16x8_t neon_cmp_int<uint16x8_t, int16x8_t, sql::WHITE_OP_LT>(int16x8_t left, int16x8_t right)
+src/storage/blocksstable/encoding/neon/ob_encoding_neon_util.h	146	neon_cmp_int	sql:: use: WHITE_OP_LE	uint16x8_t neon_cmp_int<uint16x8_t, uint16x8_t, sql::WHITE_OP_LE>(uint16x8_t left, uint16x8_t right)
+src/storage/blocksstable/encoding/neon/ob_encoding_neon_util.h	152	neon_cmp_int	sql:: use: WHITE_OP_LE	uint16x8_t neon_cmp_int<uint16x8_t, int16x8_t, sql::WHITE_OP_LE>(int16x8_t left, int16x8_t right)
+src/storage/blocksstable/encoding/neon/ob_encoding_neon_util.h	158	neon_cmp_int	sql:: use: WHITE_OP_GE	uint16x8_t neon_cmp_int<uint16x8_t, uint16x8_t, sql::WHITE_OP_GE>(uint16x8_t left, uint16x8_t right)
+src/storage/blocksstable/encoding/neon/ob_encoding_neon_util.h	164	neon_cmp_int	sql:: use: WHITE_OP_GE	uint16x8_t neon_cmp_int<uint16x8_t, int16x8_t, sql::WHITE_OP_GE>(int16x8_t left, int16x8_t right)
+src/storage/blocksstable/encoding/neon/ob_encoding_neon_util.h	170	neon_cmp_int	sql:: use: WHITE_OP_GT	uint16x8_t neon_cmp_int<uint16x8_t, uint16x8_t, sql::WHITE_OP_GT>(uint16x8_t left, uint16x8_t right)
+src/storage/blocksstable/encoding/neon/ob_encoding_neon_util.h	176	neon_cmp_int	sql:: use: WHITE_OP_GT	uint16x8_t neon_cmp_int<uint16x8_t, int16x8_t, sql::WHITE_OP_GT>(int16x8_t left, int16x8_t right)
+src/storage/blocksstable/encoding/neon/ob_encoding_neon_util.h	182	neon_cmp_int	sql:: use: WHITE_OP_NE	uint16x8_t neon_cmp_int<uint16x8_t, uint16x8_t, sql::WHITE_OP_NE>(uint16x8_t left, uint16x8_t right)
+src/storage/blocksstable/encoding/neon/ob_encoding_neon_util.h	188	neon_cmp_int	sql:: use: WHITE_OP_NE	uint16x8_t neon_cmp_int<uint16x8_t, int16x8_t, sql::WHITE_OP_NE>(int16x8_t left, int16x8_t right)
+src/storage/blocksstable/encoding/neon/ob_raw_decoder_neon.cpp	42	RawFixFilterNeonFunc_T::fix_filter_func	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/neon/ob_raw_decoder_neon.cpp	43	RawFixFilterNeonFunc_T::fix_filter_func	sql:: use: ObBitVector	sql::ObBitVector &res)
+src/storage/blocksstable/encoding/neon/ob_raw_decoder_neon.cpp	78	RawFixFilterNeonFunc_T::fix_filter_func	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/neon/ob_raw_decoder_neon.cpp	79	RawFixFilterNeonFunc_T::fix_filter_func	sql:: use: ObBitVector	sql::ObBitVector &res)
+src/storage/blocksstable/encoding/neon/ob_raw_decoder_neon.cpp	114	RawFixFilterNeonFunc_T::fix_filter_func	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/neon/ob_raw_decoder_neon.cpp	115	RawFixFilterNeonFunc_T::fix_filter_func	sql:: use: ObBitVector	sql::ObBitVector &res)
+src/storage/blocksstable/encoding/neon/ob_raw_decoder_neon.cpp	149	RawFixFilterNeonFunc_T::fix_filter_func	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/neon/ob_raw_decoder_neon.cpp	150	RawFixFilterNeonFunc_T::fix_filter_func	sql:: use: ObBitVector	sql::ObBitVector &res)

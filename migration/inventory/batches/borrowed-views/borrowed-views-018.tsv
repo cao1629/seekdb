@@ -1,0 +1,60 @@
+file	line	symbol	construct	text
+src/share/ob_rpc_struct.h	2429	ObAlterRoleArg::pwd_enc_	member ObString (value) of type ObString	ObString pwd_enc_;
+src/share/ob_rpc_struct.h	2444	ObRenameUserArg::old_users_	member container of ObString of type common::ObSArray<common::ObString>	common::ObSArray<common::ObString> old_users_;
+src/share/ob_rpc_struct.h	2445	ObRenameUserArg::new_users_	member container of ObString of type common::ObSArray<common::ObString>	common::ObSArray<common::ObString> new_users_;
+src/share/ob_rpc_struct.h	2446	ObRenameUserArg::old_hosts_	member container of ObString of type common::ObSArray<common::ObString>	common::ObSArray<common::ObString> old_hosts_;
+src/share/ob_rpc_struct.h	2447	ObRenameUserArg::new_hosts_	member container of ObString of type common::ObSArray<common::ObString>	common::ObSArray<common::ObString> new_hosts_;
+src/share/ob_rpc_struct.h	2468	ObSetPasswdArg::user_	member ObString (value) of type common::ObString	common::ObString user_;
+src/share/ob_rpc_struct.h	2469	ObSetPasswdArg::passwd_	member ObString (value) of type common::ObString	common::ObString passwd_;
+src/share/ob_rpc_struct.h	2470	ObSetPasswdArg::host_	member ObString (value) of type common::ObString	common::ObString host_;
+src/share/ob_rpc_struct.h	2472	ObSetPasswdArg::ssl_cipher_	member ObString (value) of type common::ObString	common::ObString ssl_cipher_;
+src/share/ob_rpc_struct.h	2473	ObSetPasswdArg::x509_issuer_	member ObString (value) of type common::ObString	common::ObString x509_issuer_;
+src/share/ob_rpc_struct.h	2474	ObSetPasswdArg::x509_subject_	member ObString (value) of type common::ObString	common::ObString x509_subject_;
+src/share/ob_rpc_struct.h	2492	ObLockUserArg::users_	member container of ObString of type common::ObSArray<common::ObString>	common::ObSArray<common::ObString> users_;
+src/share/ob_rpc_struct.h	2493	ObLockUserArg::hosts_	member container of ObString of type common::ObSArray<common::ObString>	common::ObSArray<common::ObString> hosts_;
+src/share/ob_rpc_struct.h	2510	ObAlterUserRoleArg::user_name_	member ObString (value) of type common::ObString	common::ObString user_name_;
+src/share/ob_rpc_struct.h	2511	ObAlterUserRoleArg::host_name_	member ObString (value) of type common::ObString	common::ObString host_name_;
+src/share/ob_rpc_struct.h	2547	ObGrantArg::db_	member ObString (value) of type common::ObString	common::ObString db_;
+src/share/ob_rpc_struct.h	2548	ObGrantArg::table_	member ObString (value) of type common::ObString	common::ObString table_;
+src/share/ob_rpc_struct.h	2550	ObGrantArg::users_passwd_	member container of ObString of type common::ObSArray<common::ObString>	common::ObSArray<common::ObString> users_passwd_;//user_name1, pwd1; user_name2, pwd2
+src/share/ob_rpc_struct.h	2551	ObGrantArg::hosts_	member container of ObString of type common::ObSArray<common::ObString>	common::ObSArray<common::ObString> hosts_;//hostname1, hostname2, ..
+src/share/ob_rpc_struct.h	2554	ObGrantArg::roles_	member container of ObString of type common::ObSArray<common::ObString>	common::ObSArray<common::ObString> roles_;
+src/share/ob_rpc_struct.h	2566	ObGrantArg::remain_roles_	member container of ObString of type common::ObSArray<common::ObString>	common::ObSArray<common::ObString> remain_roles_;
+src/share/ob_rpc_struct.h	2569	ObGrantArg::column_names_priv_	member container of ObString of type common::ObSEArray<std::pair<ObString, ObPrivType>, 4>	common::ObSEArray<std::pair<ObString, ObPrivType>, 4> column_names_priv_;
+src/share/ob_rpc_struct.h	2570	ObGrantArg::grantor_	member ObString (value) of type common::ObString	common::ObString grantor_;
+src/share/ob_rpc_struct.h	2571	ObGrantArg::grantor_host_	member ObString (value) of type common::ObString	common::ObString grantor_host_;
+src/share/ob_rpc_struct.h	2613	ObRevokeDBArg::db_	member ObString (value) of type common::ObString	common::ObString db_;
+src/share/ob_rpc_struct.h	2648	ObRevokeTableArg::db_	member ObString (value) of type common::ObString	common::ObString  db_;
+src/share/ob_rpc_struct.h	2649	ObRevokeTableArg::table_	member ObString (value) of type common::ObString	common::ObString table_;
+src/share/ob_rpc_struct.h	2661	ObRevokeTableArg::column_names_priv_	member container of ObString of type common::ObSEArray<std::pair<ObString, ObPrivType>, 4>	common::ObSEArray<std::pair<ObString, ObPrivType>, 4> column_names_priv_;
+src/share/ob_rpc_struct.h	2662	ObRevokeTableArg::grantor_	member ObString (value) of type common::ObString	common::ObString grantor_;
+src/share/ob_rpc_struct.h	2663	ObRevokeTableArg::grantor_host_	member ObString (value) of type common::ObString	common::ObString grantor_host_;
+src/share/ob_rpc_struct.h	2694	ObRevokeRoutineArg::db_	member ObString (value) of type common::ObString	common::ObString db_;
+src/share/ob_rpc_struct.h	2695	ObRevokeRoutineArg::routine_	member ObString (value) of type common::ObString	common::ObString routine_;
+src/share/ob_rpc_struct.h	2703	ObRevokeRoutineArg::grantor_	member ObString (value) of type common::ObString	common::ObString grantor_;
+src/share/ob_rpc_struct.h	2704	ObRevokeRoutineArg::grantor_host_	member ObString (value) of type common::ObString	common::ObString grantor_host_;
+src/share/ob_rpc_struct.h	2790	ObUpdateIndexStatusArg::database_name_	member ObString (value) of type ObString	ObString database_name_;
+src/share/ob_rpc_struct.h	2922	ObCreateOutlineArg::db_name_	member ObString (value) of type common::ObString	common::ObString db_name_;
+src/share/ob_rpc_struct.h	2943	ObAlterOutlineArg::db_name_	member ObString (value) of type common::ObString	common::ObString db_name_;
+src/share/ob_rpc_struct.h	2956	ObDropOutlineArg::db_name_	member ObString (value) of type common::ObString	common::ObString db_name_;
+src/share/ob_rpc_struct.h	2957	ObDropOutlineArg::outline_name_	member ObString (value) of type common::ObString	common::ObString outline_name_;
+src/share/ob_rpc_struct.h	2995	ObSetTracepointParam::event_name_	member ObString (value) of type common::ObString	common::ObString event_name_;      // tracepoint name
+src/share/ob_rpc_struct.h	3025	ObCreateRoutineArg::db_name_	member ObString (value) of type common::ObString	common::ObString db_name_;
+src/share/ob_rpc_struct.h	3053	ObDropRoutineArg::db_name_	member ObString (value) of type common::ObString	common::ObString db_name_;
+src/share/ob_rpc_struct.h	3054	ObDropRoutineArg::routine_name_	member ObString (value) of type common::ObString	common::ObString routine_name_;
+src/share/ob_rpc_struct.h	3078	ObCreatePackageArg::db_name_	member ObString (value) of type common::ObString	common::ObString db_name_;
+src/share/ob_rpc_struct.h	3099	ObDropPackageArg::db_name_	member ObString (value) of type common::ObString	common::ObString db_name_;
+src/share/ob_rpc_struct.h	3100	ObDropPackageArg::package_name_	member ObString (value) of type common::ObString	common::ObString package_name_;
+src/share/ob_rpc_struct.h	3127	ObCreateTriggerArg::trigger_database_	member ObString (value) of type common::ObString	common::ObString trigger_database_;
+src/share/ob_rpc_struct.h	3128	ObCreateTriggerArg::base_object_database_	member ObString (value) of type common::ObString	common::ObString base_object_database_;
+src/share/ob_rpc_struct.h	3129	ObCreateTriggerArg::base_object_name_	member ObString (value) of type common::ObString	common::ObString base_object_name_;
+src/share/ob_rpc_struct.h	3198	ObDropTriggerArg::trigger_database_	member ObString (value) of type common::ObString	common::ObString trigger_database_;
+src/share/ob_rpc_struct.h	3199	ObDropTriggerArg::trigger_name_	member ObString (value) of type common::ObString	common::ObString trigger_name_;
+src/share/ob_rpc_struct.h	3221	ObAlterTriggerArg::trigger_database_	member ObString (value) of type common::ObString	common::ObString trigger_database_;           // deprecated
+src/share/ob_rpc_struct.h	3731	ObRuntimeConfigArg::config_str_	member ObString (value) of type common::ObString	common::ObString config_str_;
+src/share/ob_rpc_struct.h	3948	ObCancelGatherStatsArg::task_id_	member ObString (value) of type common::ObString	common::ObString task_id_;
+src/share/ob_rpc_struct.h	3995	ObDropAiModelArg::ai_model_name_	member ObString (value) of type ObString	ObString ai_model_name_;
+src/share/ob_rpc_struct.h	4022	ObRevokeObjMysqlArg::obj_name_	member ObString (value) of type common::ObString	common::ObString obj_name_;
+src/share/ob_rpc_struct.h	4026	ObRevokeObjMysqlArg::grantor_	member ObString (value) of type common::ObString	common::ObString grantor_;
+src/share/ob_rpc_struct.h	4027	ObRevokeObjMysqlArg::grantor_host_	member ObString (value) of type common::ObString	common::ObString grantor_host_;
+src/share/ob_share_util.cpp	32	ObShareUtil::get_server_ip	allocator in, arena view out: ObString &ip_string	int ObShareUtil::get_server_ip(

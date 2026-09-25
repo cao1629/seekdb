@@ -1,0 +1,61 @@
+file	line	symbol	construct	text
+src/sql/pl/ob_pl_package_manager.h	71	ObSysPackageFile::package_name	member raw bytes (pointer) of type const char *const	const char *const package_name;
+src/sql/pl/ob_pl_package_manager.h	72	ObSysPackageFile::package_spec_file_name	member raw bytes (pointer) of type const char *const	const char *const package_spec_file_name;
+src/sql/pl/ob_pl_package_manager.h	73	ObSysPackageFile::package_body_file_name	member raw bytes (pointer) of type const char *const	const char *const package_body_file_name;
+src/sql/pl/ob_pl_package_state.h	140	ObPLPackageState::vars_	member container of ObObj of type common::ObSEArray<ObObj, 64>	common::ObSEArray<ObObj, 64> vars_;
+src/sql/pl/ob_pl_server_cursor.h	63	ObPLServerCursorInfo::ps_sql_	member ObString (value) of type common::ObString	common::ObString ps_sql_;
+src/sql/pl/ob_pl_server_cursor.h	64	ObPLServerCursorInfo::exec_params_	member ParamStore (value) of type common::ParamStore	common::ParamStore exec_params_;
+src/sql/pl/ob_pl_stmt.h	77	AccessorItem::schema_	member ObString (value) of type ObString	ObString schema_;
+src/sql/pl/ob_pl_stmt.h	78	AccessorItem::name_	member ObString (value) of type ObString	ObString name_;
+src/sql/pl/ob_pl_stmt.h	165	ObPLVar::name_	member ObString (value) of type common::ObString	common::ObString name_;
+src/sql/pl/ob_pl_stmt.h	253	ObPLLabelTable::ObPLLabel::label_	member ObString (value) of type common::ObString	common::ObString label_;
+src/sql/pl/ob_pl_stmt.h	337	ObPLConditionValue::sql_state_	member raw bytes (pointer) of type const char *	const char *sql_state_;
+src/sql/pl/ob_pl_stmt.h	368	ObPLCondition::name_	member ObString (value) of type common::ObString	common::ObString name_;
+src/sql/pl/ob_pl_stmt.h	443	ObPLSql::sql_	member ObString (value) of type common::ObString	common::ObString sql_;
+src/sql/pl/ob_pl_stmt.h	450	ObPLSql::ps_sql_	member ObString (value) of type common::ObString	common::ObString ps_sql_;
+src/sql/pl/ob_pl_stmt.h	649	ObPLRoutineParam::name_	member ObString (value) of type common::ObString	common::ObString name_;
+src/sql/pl/ob_pl_stmt.h	652	ObPLRoutineParam::default_value_	member ObString (value) of type common::ObString	common::ObString default_value_;
+src/sql/pl/ob_pl_stmt.h	656	ObPLRoutineParam::type_name_	member ObString (value) of type common::ObString	common::ObString type_name_;
+src/sql/pl/ob_pl_stmt.h	657	ObPLRoutineParam::type_subname_	member ObString (value) of type common::ObString	common::ObString type_subname_;
+src/sql/pl/ob_pl_stmt.h	869	ObPLRoutineInfo::name_	member ObString (value) of type common::ObString	common::ObString name_;
+src/sql/pl/ob_pl_stmt.h	870	ObPLRoutineInfo::decl_str_	member ObString (value) of type common::ObString	common::ObString decl_str_;
+src/sql/pl/ob_pl_stmt.h	871	ObPLRoutineInfo::route_sql_	member ObString (value) of type common::ObString	common::ObString route_sql_;
+src/sql/pl/ob_pl_stmt.h	872	ObPLRoutineInfo::routine_body_	member ObString (value) of type common::ObString	common::ObString routine_body_;
+src/sql/pl/ob_pl_stmt.h	881	ObPLRoutineInfo::priv_user_	member ObString (value) of type common::ObString	common::ObString priv_user_;
+src/sql/pl/ob_pl_stmt.h	1287	ObPLBlockNS::db_name_	member ObString (value) of type common::ObString	common::ObString db_name_;
+src/sql/pl/ob_pl_stmt.h	1289	ObPLBlockNS::package_name_	member ObString (value) of type common::ObString	common::ObString package_name_;
+src/sql/pl/ob_pl_stmt.h	1293	ObPLBlockNS::routine_name_	member ObString (value) of type common::ObString	common::ObString routine_name_;
+src/sql/pl/ob_pl_stmt.h	1470	ObPLAstUnit::priv_user_	member ObString (value) of type ObString	ObString priv_user_;
+src/sql/pl/ob_pl_stmt.h	1543	ObPLFunctionAST::db_name_	member ObString (value) of type common::ObString	common::ObString db_name_;
+src/sql/pl/ob_pl_stmt.h	1544	ObPLFunctionAST::package_name_	member ObString (value) of type common::ObString	common::ObString package_name_;
+src/sql/pl/ob_pl_stmt.h	1545	ObPLFunctionAST::name_	member ObString (value) of type common::ObString	common::ObString name_;
+src/sql/pl/ob_pl_stmt.h	1975	ObPLInto::into_name_	member container of ObString of type ObPLSEArray<common::ObString>	ObPLSEArray<common::ObString> into_name_;
+src/sql/pl/ob_pl_stmt.h	1992	ObPLLoopControl::next_label_	member ObString (value) of type common::ObString	common::ObString next_label_;
+src/sql/pl/ob_pl_stmt.h	2304	ObPLSignalStmt::InfoItem::name_	member ObString (value) of type common::ObString	common::ObString name_;
+src/sql/pl/ob_pl_stmt.h	2403	ObPLCallStmt::route_sql_	member ObString (value) of type common::ObString	common::ObString route_sql_;
+src/sql/pl/ob_pl_stmt.h	2632	ObPLInterfaceStmt::entry_	member ObString (value) of type common::ObString	common::ObString entry_;
+src/sql/pl/ob_pl_type.h	212	ObPLExternTypeInfo::type_name_	member ObString (value) of type common::ObString	common::ObString type_name_; // TypeName
+src/sql/pl/ob_pl_type.h	213	ObPLExternTypeInfo::type_subname_	member ObString (value) of type common::ObString	common::ObString type_subname_; // Determine if it is PackageName or TableName based on the flag
+src/sql/pl/ob_pl_type.h	571	ObPLEnumSetCtx::ObPLTypeInfoKey::type_info_	member container of ObString of type ObIArray<common::ObString>*	ObIArray<common::ObString>* type_info_;
+src/sql/pl/ob_pl_type.h	612	ObPLEnumSetCtx::enum_type_info_array_	member ObEnumTypeInfoArray (value) of type ObEnumTypeInfoArray	ObEnumTypeInfoArray enum_type_info_array_;
+src/sql/pl/ob_pl_type.h	744	ObObjAccessIdx::var_name_	member ObString (value) of type common::ObString	common::ObString var_name_;
+src/sql/pl/ob_pl_type.h	966	ObPLCursorInfo::current_row_	member ObNewRow (value) of type ObNewRow	ObNewRow current_row_;    //current row
+src/sql/pl/ob_pl_type.h	967	ObPLCursorInfo::first_row_	member ObNewRow (value) of type ObNewRow	ObNewRow first_row_;    // First row
+src/sql/pl/ob_pl_type.h	968	ObPLCursorInfo::last_row_	member ObNewRow (value) of type ObNewRow	ObNewRow last_row_;     // last row
+src/sql/pl/ob_pl_type.h	983	ObPLCursorInfo::sql_text_	member ObString (value) of type ObString	ObString sql_text_;     // non-session non-streaming cursor saves sql text
+src/sql/pl/ob_pl_user_type.h	131	ObUserDefinedType::type_name_	member ObString (value) of type common::ObString	common::ObString type_name_;
+src/sql/pl/ob_pl_user_type.h	221	ObRecordMember::member_name_	member ObString (value) of type common::ObString	common::ObString member_name_;
+src/sql/pl/ob_pl_user_type.h	547	ObPLRecord::data_	member ObObj (pointer) of type ObObj *	ObObj *data_; // points to the data domain allocated by its own allocator
+src/sql/pl/ob_pl_user_type.h	691	ObPLCollection::data_	member ObObj (pointer) of type ObObj *	ObObj *data_;
+src/sql/pl/parser/parse_stmt_node.h	47	_ObScannerCtx::tmp_literal_	member raw bytes (pointer) of type char *	char *tmp_literal_;
+src/sql/pl/parser/parse_stmt_node.h	65	_ObParseCtx::stmt_str_	member raw bytes (pointer) of type const char *	const char *stmt_str_;
+src/sql/pl/parser/parse_stmt_node.h	67	_ObParseCtx::orig_stmt_str_	member raw bytes (pointer) of type const char *	const char *orig_stmt_str_;
+src/sql/pl/pl_cache/ob_pl_cache.h	49	ObPLTableColumnInfo::column_name_	member ObString (value) of type common::ObString	common::ObString column_name_;
+src/sql/pl/pl_cache/ob_pl_cache.h	50	ObPLTableColumnInfo::type_info_	member container of ObString of type common::ObArray<common::ObString>	common::ObArray<common::ObString> type_info_;//used for enum and set
+src/sql/pl/pl_cache/ob_pl_cache.h	123	PCVPlSchemaObj::table_name_	member ObString (value) of type common::ObString	common::ObString table_name_;
+src/sql/pl/pl_cache/ob_pl_cache.h	236	ObPLObjectKey::name_	member ObString (value) of type common::ObString	common::ObString name_;
+src/sql/pl/pl_cache/ob_pl_cache.h	237	ObPLObjectKey::sys_vars_str_	member ObString (value) of type common::ObString	common::ObString sys_vars_str_;
+src/sql/pl/pl_cache/ob_pl_cache.h	364	ObPLCacheCtx::cache_params_	member ParamStore (pointer) of type ParamStore *	ParamStore *cache_params_;
+src/sql/pl/pl_cache/ob_pl_cache.h	365	ObPLCacheCtx::raw_sql_	member ObString (value) of type ObString	ObString raw_sql_;
+src/sql/pl/pl_cache/ob_pl_cache.h	405	ObPLObjectSet::sql_id_	member ObString (value) of type common::ObString	common::ObString sql_id_;
+src/sql/pl/pl_cache/ob_pl_cache_mgr.h	163	ObGetPLKVEntryBySQLIDOp::sql_id_	member ObString (value) of type common::ObString	common::ObString sql_id_;

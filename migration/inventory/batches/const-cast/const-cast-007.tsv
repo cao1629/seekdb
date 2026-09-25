@@ -1,0 +1,79 @@
+file	line	symbol	construct	text
+src/oblib/lib/hash/ob_linear_hash_map.h	970	ObLinearHashMap::get_load_factor	const_cast<ObLinearHashMap&>	uint64_t bkt_cnt = const_cast<ObLinearHashMap&>(*this).bkt_cnt_();
+src/oblib/lib/hash/ob_linear_hash_map.h	1002	ObLinearHashMap::get	const_cast<ObLinearHashMap<Key, Value, MemMgrTag>*>	return const_cast<ObLinearHashMap<Key, Value, MemMgrTag>*>(this)->do_get_(key, value);
+src/oblib/lib/hash/ob_linear_hash_map.h	1008	ObLinearHashMap::get	const_cast<ObLinearHashMap<Key, Value, MemMgrTag>*>	return const_cast<ObLinearHashMap<Key, Value, MemMgrTag>*>(this)->do_get_(key, value, copy_inner_key);
+src/oblib/lib/hash/ob_linear_hash_map.h	2425	operator()	const_cast<const Key &> (adds const only)	ret = fn(const_cast<const Key &>(bkt->key_), bkt->value_);
+src/oblib/lib/hash/ob_linear_hash_map.h	2428	operator()	const_cast<const Key &> (adds const only)	ret = fn(const_cast<const Key &>(cur->key_), cur->value_);
+src/oblib/lib/hash/ob_linear_hash_map.h	2450	operator()	const_cast<const Key &> (adds const only)	if (fn(const_cast<const Key &>(cur->key_), cur->value_)) {
+src/oblib/lib/hash/ob_linear_hash_map.h	2461	operator()	const_cast<const Key &> (adds const only)	if (fn(const_cast<const Key &>(bkt->key_), bkt->value_)) {
+src/oblib/lib/hash/ob_link_hashmap.h	411	ObLinkHashMap::contains_key	const_cast<Hash&>	while (-EAGAIN == (hash_ret = const_cast<Hash&>(hash_).get(key, hash_link)))
+src/oblib/lib/hash/ob_pointer_hashmap.h	46	ObPointerHashArray::Iterator::operator*	const_cast<V &>	V &operator*() const { return const_cast<V &>(*pos_); }
+src/oblib/lib/hash/ob_pointer_hashmap.h	940	ObPointerHashMap::copy_from	const_cast<ObPointerHashMap &>	for (iterator it = const_cast<ObPointerHashMap &>(other).sub_maps_[i]->begin();
+src/oblib/lib/hash/ob_pointer_hashmap.h	941	ObPointerHashMap::copy_from	const_cast<ObPointerHashMap &>	it != const_cast<ObPointerHashMap &>(other).sub_maps_[i]->end(); ++it) {
+src/oblib/lib/hash/ob_ptr_array_map.h	207	ObPtrArrayWrapper::get_refactored	const_cast<Array&>	T* addr = (T*)const_cast<Array&>(array_).locate(key, /*alloc*/false);
+src/oblib/lib/hash/ob_refered_map.h	162	ObReferedMap::locate	const_cast<Item *>	const_cast<Item *>(const_value)->set_map(this);
+src/oblib/lib/hash/ob_refered_map.h	173	ObReferedMap::locate	const_cast<Item *>	value = const_cast<Item *>(const_value);
+src/oblib/lib/hash/ob_refered_map.h	187	ObReferedMap::get	const_cast<HashTable &>	} else if (OB_FAIL(const_cast<HashTable &>(hash_table_).get_refactored(key, item))
+src/oblib/lib/hash/ob_serialization.h	74	serialization	const_cast<_value &>	return (const_cast<_value &>(value)).serialization(ar);
+src/oblib/lib/json/ob_json.cpp	216	Parser::parse_value	const_cast<char *>	value->set_string(const_cast<char *>(cur_token_.value_.str_.begin_),
+src/oblib/lib/json/ob_json.cpp	313	Parser::parse_pair	const_cast<char *>	pair->name_.assign_ptr(const_cast<char *>(cur_token_.value_.str_.begin_),
+src/oblib/lib/json/ob_json.cpp	487	Tidy::to_string	const_cast<Tidy *>	if (OB_FAIL(const_cast<Tidy *>(this)->go())) {
+src/oblib/lib/json/ob_json.cpp	799	RegexFilter::on_walk_start	const_cast<Value *>	return mark_need_print(const_cast<Value *>(root_), path_buffer, is_need_print);
+src/oblib/lib/json/ob_yson.cpp	32	databuff_decode_key	C-style cast (ElementKeyType*) drops const from buf	key = *((ElementKeyType*)(buf+pos));
+src/oblib/lib/json/ob_yson.cpp	142	databuff_print_elements	C-style cast (ElementKeyType*) drops const from yson_buf	key = *((ElementKeyType*)(yson_buf+yson_pos));
+src/oblib/lib/json/ob_yson.cpp	145	databuff_print_elements	C-style cast (int32_t*) drops const from yson_buf	i32 = *((int32_t*)(yson_buf+yson_pos));
+src/oblib/lib/json/ob_yson_encode.h	293	databuff_decode_element_value	C-style cast (int32_t*) drops const from buf	int32_t obj_len = *((int32_t*)(buf+pos));
+src/oblib/lib/json/ob_yson_encode.h	310	databuff_decode_element_value	C-style cast (int64_t*) drops const from buf	value = *((int64_t*)(buf+pos));
+src/oblib/lib/json/ob_yson_encode.h	322	databuff_decode_element_value	C-style cast (int32_t*) drops const from buf	value = *((int32_t*)(buf+pos));
+src/oblib/lib/json/ob_yson_encode.h	334	databuff_decode_element_value	C-style cast (int64_t*) drops const from buf	value = (void*)*((int64_t*)(buf+pos));
+src/oblib/lib/json/ob_yson_encode.h	346	databuff_decode_element_value	C-style cast (int8_t*) drops const from buf	value = *((int8_t*)(buf+pos));
+src/oblib/lib/json/ob_yson_encode.h	359	databuff_decode_element_value	C-style cast (int32_t*) drops const from buf	int32_t str_len = *((int32_t*)(buf+pos));
+src/oblib/lib/json/ob_yson_encode.h	364	databuff_decode_element_value	C-style cast (char*) drops const from buf	value.assign_ptr((char*)buf+pos, str_len);
+src/oblib/lib/json/ob_yson_encode.h	377	databuff_decode_element_value	C-style cast (uint64_t*) drops const from buf	value = *((uint64_t*)(buf+pos));
+src/oblib/lib/json/ob_yson_encode.h	389	databuff_decode_element_value	C-style cast (uint32_t*) drops const from buf	value = *((uint32_t*)(buf+pos));
+src/oblib/lib/json/ob_yson_encode.h	401	databuff_decode_element_value	C-style cast (uint64_t*) drops const from buf	value.set(((uint64_t*)(buf+pos)));
+src/oblib/lib/list/ob_dlist.h	204	ObDList::add_before	const_cast<DLinkNode *>	const_cast<DLinkNode *>(pos)->add_before(e);
+src/oblib/lib/list/ob_list.h	89	ConstIterator::ConstIterator	const_cast<node_ptr_t>	node_ = const_cast<node_ptr_t>(node);
+src/oblib/lib/list/ob_list.h	173	Iterator::Iterator	const_cast<node_ptr_t>	node_ = const_cast<node_ptr_t>(node);
+src/oblib/lib/lock/ob_rwlock.h	90	ObRWLock::rlock	const_cast<ObRLock*>	ObRLock* rlock() const { return const_cast<ObRLock*>(&rlock_); }
+src/oblib/lib/lock/ob_rwlock.h	91	ObRWLock::wlock	const_cast<ObWLock*>	ObWLock* wlock() const { return const_cast<ObWLock*>(&wlock_); }
+src/oblib/lib/lock/ob_spin_rwlock.h	69	SpinRLockGuard::SpinRLockGuard	const_cast<SpinRWLock&>	: lock_(const_cast<SpinRWLock&>(lock)), ret_(OB_SUCCESS)
+src/oblib/lib/lock/ob_spin_rwlock.h	126	SpinWLockGuard::SpinWLockGuard	const_cast<SpinRWLock&>	: lock_(const_cast<SpinRWLock&>(lock)), ret_(OB_SUCCESS)
+src/oblib/lib/lock/ob_tc_rwlock.h	65	TCRWLock::RLockGuardWithTimeout::RLockGuardWithTimeout	const_cast<TCRWLock&>	[[nodiscard]] explicit RLockGuardWithTimeout(const TCRWLock &lock, const int64_t abs_timeout_us, int &ret): lock_(const_cast<TCRWLock&>(lock)), need_unlock_(true)
+src/oblib/lib/lock/ob_tc_rwlock.h	92	TCRWLock::WLockGuardWithTimeout::WLockGuardWithTimeout	const_cast<TCRWLock&>	[[nodiscard]] explicit WLockGuardWithTimeout(const TCRWLock &lock, const int64_t abs_timeout_us, int &ret): lock_(const_cast<TCRWLock&>(lock)), need_unlock_(true)
+src/oblib/lib/lock/ob_tc_rwlock.h	310	TCWLockGuard::TCWLockGuard	const_cast<TCRWLock&>	: lock_(const_cast<TCRWLock&>(lock)), ret_(OB_SUCCESS)
+src/oblib/lib/lock/ob_tc_rwlock.h	336	TCRLockGuard::TCRLockGuard	const_cast<TCRWLock&>	: lock_(const_cast<TCRWLock&>(lock)), ret_(OB_SUCCESS), slot_id_(0)
+src/oblib/lib/net/ob_net_util.cpp	283	ObNetUtil::make_unix_sockaddr	C-style cast (uint32_t*) drops const from ip	sin->sin_addr.s_addr = htonl(*(uint32_t*)ip);
+src/oblib/lib/objectpool/ob_tc_factory.h	372	ObTCFactory::stat	const_cast<self_t *>	self_t *tc_factory = const_cast<self_t *>(TC_FACTORY_LIST_HEAD);
+src/oblib/lib/objectpool/ob_tc_factory.h	408	ObTCFactory::stat	const_cast<self_t *>	tc_factory = const_cast<self_t *>(tc_factory->next_);
+src/oblib/lib/oblog/ob_log.cpp	1267	ObLogger::get_log_files_in_dir	const_cast<char*>	dir_name = const_cast<char*>(".");
+src/oblib/lib/oblog/ob_log_time_fmt.cpp	69	ObTime2Str::ob_timestamp_str_range_	const_cast<char*>	const_cast<char*>(str)[TIME_RANGE_INDEX[2 * static_cast<int>(to) + 1]] = '\0';
+src/oblib/lib/resource/achunk_mgr.cpp	177	AChunkMgr::low_free	C-style cast (void*) drops const from ptr	this->munmap((void*)ptr, size);
+src/oblib/lib/stat/ob_diagnose_info.cpp	257	ObWaitEventHistory::add	const_cast<ObWaitEventHistory &>	if (OB_FAIL(const_cast<ObWaitEventHistory &>(other).get_iter(iter))) {
+src/oblib/lib/stat/ob_diagnose_info.cpp	579	ObDiagnoseRuntimeInfo::add_wait_event	const_cast<ObDiagnoseRuntimeInfo &>	ObWaitEventStat *source = const_cast<ObDiagnoseRuntimeInfo &>(other).event_stats_.get(i);
+src/oblib/lib/stat/ob_diagnose_info.cpp	598	ObDiagnoseRuntimeInfo::add_stat_event	const_cast<ObDiagnoseRuntimeInfo &>	ObStatEventAddStat *source = const_cast<ObDiagnoseRuntimeInfo &>(other).stat_add_stats_.get(i);
+src/oblib/lib/stat/ob_diagnose_info.cpp	609	ObDiagnoseRuntimeInfo::add_stat_event	const_cast<ObDiagnoseRuntimeInfo &>	ObStatEventSetStat *source = const_cast<ObDiagnoseRuntimeInfo &>(other).stat_set_stats_.get(i);
+src/oblib/lib/stat/ob_diagnose_info.cpp	669	ObDiagnoseRuntimeInfo::get_stat	const_cast<ObDiagnoseRuntimeInfo *>	ObStatEventAddStat *stat = const_cast<ObDiagnoseRuntimeInfo *>(this)->stat_add_stats_.get(stat_no);
+src/oblib/lib/stat/ob_diagnose_info.cpp	676	ObDiagnoseRuntimeInfo::get_stat	const_cast<ObDiagnoseRuntimeInfo *>	ObStatEventSetStat *stat = const_cast<ObDiagnoseRuntimeInfo *>(this)->stat_set_stats_.get(
+src/oblib/lib/string/ob_string.cpp	49	DEFINE_DESERIALIZE(ObString)	const_cast<char *>	ptr_ = const_cast<char *>(serialization::decode_vstr(buf, data_len, pos, &len));
+src/oblib/lib/string/ob_string.h	77	ObString::ObString	const_cast<char *>	ptr_(const_cast<char *>(ptr))
+src/oblib/lib/string/ob_string.h	87	ObString::ObString	const_cast<char *>	ptr_(const_cast<char *>(ptr))
+src/oblib/lib/string/ob_string.h	97	ObString::ObString	const_cast<char *>	: buffer_size_(size), data_length_(length), ptr_(const_cast<char *>(ptr))
+src/oblib/lib/string/ob_string.h	205	ObString::assign_ptr	const_cast<char *>	ptr_ = const_cast<char *>(bytes);
+src/oblib/lib/string/ob_string.h	334	ObString::case_compare_equal	const_cast<char *>	char *p = const_cast<char *>(str);
+src/oblib/lib/string/ob_string.h	363	ObString::case_compare	const_cast<char *>	char *p = const_cast<char *>(str);
+src/oblib/lib/string/ob_string.h	389	ObString::compare_equal	const_cast<char *>	char *p = const_cast<char *>(str);
+src/oblib/lib/string/ob_string.h	413	ObString::compare	const_cast<char *>	char *p = const_cast<char *>(str);
+src/oblib/lib/string/ob_string.h	469	ObString::prefix_match	const_cast<char *>	char *p = const_cast<char *>(str);
+src/oblib/lib/string/ob_string.h	493	ObString::prefix_match_ci	const_cast<char *>	char *p = const_cast<char *>(str);
+src/oblib/lib/string/ob_string.h	620	ObString::make_string	const_cast<char *>	: ObString(0, static_cast<obstr_size_t>(strlen(cstr)), const_cast<char *>(cstr));
+src/oblib/lib/string/ob_string.h	718	ObString::split_on	const_cast<char *>	ptr_ = const_cast<char *>(p + 1);
+src/oblib/lib/task/ob_timer_service.cpp	378	ObTimerService::cancel_task	const_cast<ObTimerTask *>	TaskToken target(timer, const_cast<ObTimerTask *>(task));
+src/oblib/lib/trace/ob_trace.cpp	477	ObTrace::serialize	const_cast<ObTrace*>	ObSpanCtx* span = const_cast<ObTrace*>(this)->last_active_span_;
+src/oblib/lib/utility/alloc_assist.h	37	strcasestr	C-style cast (char*) drops const from haystack	return (char*)haystack;
+src/oblib/lib/utility/alloc_assist.h	85	ob_memmem	C-style cast (void *) drops const from haystack	if (needlelen == 0) return (void *)haystack;
+src/oblib/lib/utility/alloc_assist.h	90	ob_memmem	C-style cast (void *) drops const from h	if (memcmp(h + i, n, needlelen) == 0) return (void *)(h + i);
+src/oblib/lib/utility/ob_platform_utils.h	82	memrchr	const_cast<void *>	return const_cast<void *>(static_cast<const void *>(p));
+src/oblib/lib/utility/ob_print_utils.h	340	ObCStringHelper::convert	const_cast<char *>	ptr = const_cast<char *>(convert(obj));
+src/oblib/lib/utility/ob_utility.cpp	80	ob_pwrite	C-style cast (char *) drops const from buf	write_ret = ::pwrite(fd, (char *)buf + offset2write, length2write, offset + offset2write);
+src/oblib/lib/utility/serialization.h	1210	decode_number_type	C-style cast (uint32_t *) drops const from buf	digits = (uint32_t *)(buf + tmp_pos);

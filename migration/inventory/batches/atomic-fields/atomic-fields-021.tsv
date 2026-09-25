@@ -1,0 +1,49 @@
+file	line	symbol	construct	text
+src/storage/compaction/ob_runtime_status_cache.h	51	ObRuntimeStatusCache::during_restore_	field bool; 2 atomic accesses (ATOMIC_SET 2)	bool during_restore_;
+src/storage/compaction/ob_runtime_status_cache.h	53	ObRuntimeStatusCache::enable_adaptive_compaction_	field bool; 1 atomic accesses (ATOMIC_SET 1)	bool enable_adaptive_compaction_;
+src/storage/compaction/ob_snapshot_gc_scn_renewal_state.h	52	ObSnapshotGcScnRenewalState::renew_target_scn_	field int64_t; 3 atomic accesses (ATOMIC_LOAD 2, ATOMIC_VCAS 1)	int64_t renew_target_scn_;
+src/storage/compaction/ob_tablet_scheduler_task_mgr.h	70	ObTabletSchedulerTaskMgr::is_active_medium_loop_	field bool; 4 atomic accesses (ATOMIC_LOAD 2, ATOMIC_STORE 2)	bool is_active_medium_loop_;
+src/storage/concurrency_control/ob_multi_version_garbage_collector.h	129	ObMultiVersionGarbageCollector::last_sstable_overflow_timestamp_	field int64_t; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_STORE 1)	int64_t last_sstable_overflow_timestamp_;
+src/storage/concurrency_control/ob_multi_version_garbage_collector.h	136	ObMultiVersionGarbageCollector::local_reserved_snapshot_	field share::SCN; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_SET 1); through member functions atomic_load, atomic_set	share::SCN local_reserved_snapshot_;
+src/storage/ddl/ob_ddl_clog.h	67	ObDDLClogCbStatus::the_other_release_this_	field bool; 1 atomic accesses (ATOMIC_BCAS 1)	bool the_other_release_this_;
+src/storage/ddl/ob_ddl_independent_dag.h	119	ObDDLIndependentDag::pipeline_count_	field int64_t; 3 atomic accesses (ATOMIC_DEC 1, ATOMIC_INC 1, ATOMIC_LOAD 1)	int64_t pipeline_count_;
+src/storage/ddl/ob_ddl_independent_dag.h	120	ObDDLIndependentDag::ret_code_	field int; 1 atomic accesses (ATOMIC_SET 1)	int ret_code_;
+src/storage/ddl/ob_ddl_insert_dag.h	57	ObDDLInsertDag::px_finished_count_	field int64_t; 1 atomic accesses (ATOMIC_INC 1)	int64_t px_finished_count_;
+src/storage/ddl/ob_ddl_redo_log_writer.h	103	ObDDLCtrlSpeedItem::next_available_write_ts_	field int64_t; 1 atomic accesses (ATOMIC_BCAS 1)	int64_t next_available_write_ts_;
+src/storage/ddl/ob_ddl_redo_log_writer.h	107	ObDDLCtrlSpeedItem::ref_cnt_	field int64_t; 3 atomic accesses (ATOMIC_INC 1, ATOMIC_LOAD 1, ATOMIC_SAF 1)	int64_t ref_cnt_; // reference count
+src/storage/ddl/ob_ddl_struct.h	225	ObInsertMonitor::vec_index_task_thread_pool_cnt_	field int64_t *; 2 atomic accesses (ATOMIC_SET 2)	int64_t *vec_index_task_thread_pool_cnt_;
+src/storage/ddl/ob_ddl_struct.h	226	ObInsertMonitor::vec_index_task_total_cnt_	field int64_t *; 2 atomic accesses (ATOMIC_AAF 2)	int64_t *vec_index_task_total_cnt_;
+src/storage/ddl/ob_ddl_struct.h	227	ObInsertMonitor::vec_index_task_finish_cnt_	field int64_t *; 2 atomic accesses (ATOMIC_AAF 2)	int64_t *vec_index_task_finish_cnt_;
+src/storage/ddl/ob_ddl_struct.h	243	ObDDLWriteStat::row_count_	field int64_t; 1 atomic accesses (ATOMIC_AAF 1)	int64_t row_count_;
+src/storage/ddl/ob_hnsw_embedmgr.h	243	ObEmbeddingIOCallbackHandle::ref_cnt_	field int64_t; 2 atomic accesses (ATOMIC_AAF 2)	int64_t ref_cnt_;
+src/storage/ddl/ob_tablet_ddl_kv.h	350	ObDDLKV::is_independent_freezed_	field bool; 4 atomic accesses (ATOMIC_SET 2, ATOMIC_LOAD 1, ATOMIC_STORE 1)	bool is_independent_freezed_;
+src/storage/ddl/ob_tablet_ddl_kv.h	364	ObDDLKV::pending_cnt_	field int64_t; 3 atomic accesses (ATOMIC_DEC 1, ATOMIC_INC 1, ATOMIC_LOAD 1)	int64_t pending_cnt_; // the amount of kvs that are replaying
+src/storage/ddl/ob_tablet_ddl_kv_mgr.h	202	ObTabletDDLKvMgr::ref_cnt_	field volatile int64_t; 4 atomic accesses (ATOMIC_INC 1, ATOMIC_LOAD 1, ATOMIC_SAF 1, ATOMIC_STORE 1)	volatile int64_t ref_cnt_ CACHE_ALIGNED;
+src/storage/deadlock/ob_deadlock_detector_common_define.h	52	ObIDeadLockDetector::total_constructed_count	field static int64_t; 1 atomic accesses (ATOMIC_INC 1)	static int64_t total_constructed_count;
+src/storage/deadlock/ob_deadlock_detector_common_define.h	53	ObIDeadLockDetector::total_destructed_count	field static int64_t; 1 atomic accesses (ATOMIC_INC 1)	static int64_t total_destructed_count;
+src/storage/deadlock/ob_deadlock_detector_mgr.h	94	ObDeadLockLocalTaskQueue::is_running_	field bool; 4 atomic accesses (ATOMIC_STORE 3, ATOMIC_LOAD 1)	bool is_running_;
+src/storage/deadlock/ob_deadlock_detector_mgr.h	216	ObDeadLockDetectorMgr::InnerAllocHandle::InnerFactory::create_count_	field static uint64_t; 3 atomic accesses (ATOMIC_LOAD 2, ATOMIC_INC 1)	static uint64_t create_count_;
+src/storage/deadlock/ob_deadlock_detector_mgr.h	217	ObDeadLockDetectorMgr::InnerAllocHandle::InnerFactory::release_count_	field static uint64_t; 3 atomic accesses (ATOMIC_LOAD 2, ATOMIC_INC 1)	static uint64_t release_count_;
+src/storage/deadlock/ob_deadlock_detector_mgr.h	219	ObDeadLockDetectorMgr::InnerAllocHandle::InnerFactory::logic_id_	field uint64_t; 1 atomic accesses (ATOMIC_AAF 1)	uint64_t logic_id_;
+src/storage/deadlock/ob_deadlock_detector_mgr.h	248	ObDeadLockDetectorMgr::stop_ts_	field int64_t; 3 atomic accesses (ATOMIC_STORE 2, ATOMIC_LOAD 1)	int64_t stop_ts_;// nonzero after stop() begins
+src/storage/deadlock/ob_lcl_scheme/ob_lcl_node.h	182	ObLCLNode::is_timer_task_canceled_	field bool; 4 atomic accesses (ATOMIC_LOAD 3, ATOMIC_STORE 1)	bool is_timer_task_canceled_;
+src/storage/deadlock/ob_lcl_scheme/ob_lcl_node.h	183	ObLCLNode::is_timer_task_running_	field bool; 4 atomic accesses (ATOMIC_LOAD 2, ATOMIC_STORE 2)	bool is_timer_task_running_;
+src/storage/deadlock/ob_lcl_scheme/ob_lcl_node.h	191	ObLCLNode::count_down_allow_detect_	field uint32_t; 4 atomic accesses (ATOMIC_LOAD 3, ATOMIC_CAS 1)	uint32_t count_down_allow_detect_;
+src/storage/lob/ob_lob_persistent_adaptor.h	141	ObPersistentLobApator::table_param_inited_	field bool; 6 atomic accesses (ATOMIC_LOAD 5, ATOMIC_STORE 1)	bool table_param_inited_;
+src/storage/lob/ob_lob_persistent_adaptor.h	142	ObPersistentLobApator::meta_table_param_	field ObTableParam *; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_STORE 1)	ObTableParam *meta_table_param_;
+src/storage/lob/ob_lob_persistent_adaptor.h	143	ObPersistentLobApator::meta_table_dml_param_	field ObTableDMLParam *; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_STORE 1)	ObTableDMLParam *meta_table_dml_param_;
+src/storage/ls/ob_freezer.h	345	ObFreezer::freeze_flag_	field uint32_t; 8 atomic accesses (ATOMIC_LOAD 5, ATOMIC_CAS 3)	uint32_t freeze_flag_;
+src/storage/ls/ob_freezer.h	356	ObFreezer::empty_memtable_cnt_	field int64_t; 2 atomic accesses (ATOMIC_INC 1, ATOMIC_STORE 1)	int64_t empty_memtable_cnt_;
+src/storage/ls/ob_freezer.h	359	ObFreezer::high_priority_freeze_cnt_	field int64_t; 5 atomic accesses (ATOMIC_LOAD 3, ATOMIC_DEC 1, ATOMIC_INC 1)	int64_t high_priority_freeze_cnt_; // waiting and freeze cnt
+src/storage/ls/ob_freezer.h	360	ObFreezer::low_priority_freeze_cnt_	field int64_t; 4 atomic accesses (ATOMIC_DEC 2, ATOMIC_INC 1, ATOMIC_LOAD 1)	int64_t low_priority_freeze_cnt_; // freeze tablet cnt
+src/storage/ls/ob_freezer.h	363	ObFreezer::need_resubmit_log_	field bool; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_STORE 1)	bool need_resubmit_log_;
+src/storage/ls/ob_freezer.h	366	ObFreezer::is_async_tablet_freeze_task_existing_	field bool; 4 atomic accesses (ATOMIC_STORE 2, ATOMIC_BCAS 1, ATOMIC_LOAD 1)	bool is_async_tablet_freeze_task_existing_;
+src/storage/ls/ob_freezer.h	367	ObFreezer::is_async_ls_freeze_task_existing_	field bool; 4 atomic accesses (ATOMIC_STORE 2, ATOMIC_BCAS 1, ATOMIC_LOAD 1)	bool is_async_ls_freeze_task_existing_;
+src/storage/ls/ob_ls.h	706	ObLS::state_seq_	field int64_t; 3 atomic accesses (inc_update 2, ATOMIC_LOAD 1)	int64_t state_seq_;
+src/storage/ls/ob_ls.h	707	ObLS::switch_epoch_	field uint64_t; 8 atomic accesses (ATOMIC_LOAD 6, ATOMIC_AAF 2)	uint64_t switch_epoch_;// started from 0, odd means online, even means offline
+src/storage/ls/ob_ls_wrs_handler.h	69	ObLSWRSHandler::ls_weak_read_ts_	field share::SCN; 1 atomic accesses (ATOMIC_VCAS 1); through member functions inc_update	share::SCN ls_weak_read_ts_;
+src/storage/memtable/mvcc/ob_keybtree.h	57	BtreeKV::val_	field BtreeVal; 3 atomic accesses (ATOMIC_STORE 2, ATOMIC_LOAD 1)	BtreeVal val_; // 8byte
+src/storage/memtable/mvcc/ob_keybtree.h	73	BtreeNodeList::tail_	field BtreeNode*; 4 atomic accesses (ATOMIC_STORE 2, ATOMIC_LOAD 1, ATOMIC_TAS 1)	BtreeNode* tail_;
+src/storage/memtable/mvcc/ob_keybtree.h	138	BtreeNodeAllocator::alloc_memory_	field int64_t; 1 atomic accesses (ATOMIC_LOAD 1)	int64_t alloc_memory_;
+src/storage/memtable/mvcc/ob_keybtree.h	317	ObKeyBtree::split_info_	field uint64_t; 1 atomic accesses (ATOMIC_FAA 1)	uint64_t split_info_;
+src/storage/memtable/mvcc/ob_keybtree.h	321	ObKeyBtree::root_	field BtreeNode *; 9 atomic accesses (ATOMIC_LOAD 5, ATOMIC_BCAS 2, ATOMIC_SET 2)	BtreeNode *root_;

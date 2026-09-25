@@ -1,0 +1,64 @@
+file	line	symbol	construct	text
+src/rootserver/ob_ddl_service.cpp	3007	ObDDLService::check_alter_table_index	const_cast<ObIndexArg *>	ObIndexArg *index_arg = const_cast<ObIndexArg *>(index_arg_list.at(i));
+src/rootserver/ob_ddl_service.cpp	3545	ObDDLService::alter_table_primary_key	const_cast<ObIndexArg *>	ObIndexArg *index_arg = const_cast<ObIndexArg *>(index_arg_list.at(i));
+src/rootserver/ob_ddl_service.cpp	3941	ObDDLService::check_drop_column_with_drop_foreign_key	const_cast<ObIndexArg *>	ObIndexArg *index_arg = const_cast<ObIndexArg *>(index_arg_list.at(i));
+src/rootserver/ob_ddl_service.cpp	6574	ObDDLService::update_generated_column_schema	const_cast<ObString&>	const_cast<ObString&>(orig_column_schema.get_column_name_str()),
+src/rootserver/ob_ddl_service.cpp	8994	ObDDLService::check_can_alter_table_constraints	const_cast<ObConstraint *>	const_cast<ObConstraint *>(*iter)->set_constraint_id((*res)->get_constraint_id());
+src/rootserver/ob_ddl_service.cpp	8995	ObDDLService::check_can_alter_table_constraints	const_cast<ObConstraint *>	const_cast<ObConstraint *>(*iter)->set_constraint_type((*res)->get_constraint_type());
+src/rootserver/ob_ddl_service.cpp	9376	ObDDLService::gen_inc_table_schema_for_trun_subpart	const_cast<ObPartition*>	} else if (OB_FAIL(const_cast<ObPartition*>(inc_part)->add_partition(*orig_subpart))) {
+src/rootserver/ob_ddl_service.cpp	10242	ObDDLService::check_is_only_add_index_on_empty_table	const_cast<ObIndexArg *>	ObIndexArg *index_arg = const_cast<ObIndexArg *>(index_arg_list.at(i));
+src/rootserver/ob_ddl_service.cpp	10780	ObDDLService::alter_table_in_trans	const_cast<ObIndexArg *>	ObIndexArg *index_arg = const_cast<ObIndexArg *>(index_arg_list.at(i));
+src/rootserver/ob_ddl_service.cpp	11347	ObDDLService::check_ddl_with_primary_key_operation	const_cast<ObIndexArg *>	ObIndexArg *index_arg = const_cast<ObIndexArg *>(index_arg_list.at(i));
+src/rootserver/ob_ddl_service.cpp	13691	ObDDLService::create_user_hidden_table	const_cast<ObTableSchema*>	share::schema::ObTableSchema *table_schema = const_cast<ObTableSchema*>(schemas.at(i));
+src/rootserver/ob_ddl_service.cpp	13707	ObDDLService::create_user_hidden_table	const_cast<ObTableSchema*>	share::schema::ObTableSchema *table_schema = const_cast<ObTableSchema*>(schemas.at(i));
+src/rootserver/ob_ddl_service.cpp	14048	ObDDLService::add_new_index_schema	const_cast<ObIndexArg *>	ObIndexArg *index_arg = const_cast<ObIndexArg *>(index_arg_list.at(i));
+src/rootserver/ob_ddl_service.cpp	14990	ObDDLService::get_rebuild_foreign_key_infos	const_cast<ObIndexArg *>	ObIndexArg *index_arg = const_cast<ObIndexArg *>(index_arg_list.at(j));
+src/rootserver/ob_ddl_service.cpp	18098	ObDDLService::collect_temporary_tables_in_session	const_cast<ObDropTableArg &>	ObDropTableArg &drop_table_arg = const_cast<ObDropTableArg &>(const_drop_table_arg);
+src/rootserver/ob_local_management_service.cpp	754	ObLocalManagementService::execute_ddl_task	const_cast<obcall::ObAlterTableArg &>	const_cast<obcall::ObAlterTableArg &>(arg), obj_ids))) {
+src/rootserver/ob_local_management_service.cpp	760	ObLocalManagementService::execute_ddl_task	const_cast<obcall::ObAlterTableArg &>	const_cast<obcall::ObAlterTableArg &>(arg), obj_ids))) {
+src/rootserver/ob_local_management_service.cpp	766	ObLocalManagementService::execute_ddl_task	const_cast<obcall::ObAlterTableArg &>	const_cast<obcall::ObAlterTableArg &>(arg), obj_ids))) {
+src/rootserver/ob_local_management_service.cpp	772	ObLocalManagementService::execute_ddl_task	const_cast<obcall::ObAlterTableArg &>	const_cast<obcall::ObAlterTableArg &>(arg)))) {
+src/rootserver/ob_local_management_service.cpp	779	ObLocalManagementService::execute_ddl_task	const_cast<obcall::ObAlterTableArg &>	const_cast<obcall::ObAlterTableArg &>(arg)))) {
+src/rootserver/ob_local_management_service.cpp	785	ObLocalManagementService::execute_ddl_task	const_cast<obcall::ObAlterTableArg &>	const_cast<obcall::ObAlterTableArg &>(arg)))) {
+src/rootserver/ob_local_management_service.cpp	790	ObLocalManagementService::execute_ddl_task	const_cast<ObAlterTableArg &>	if (OB_FAIL(ddl_service_.delete_column_from_schema(const_cast<ObAlterTableArg &>(arg)))) {
+src/rootserver/ob_local_management_service.cpp	797	ObLocalManagementService::execute_ddl_task	const_cast<obcall::ObAlterTableArg &>	const_cast<obcall::ObAlterTableArg &>(arg)))) {
+src/rootserver/ob_local_management_service.cpp	802	ObLocalManagementService::execute_ddl_task	const_cast<ObAlterTableArg &>	if (OB_FAIL(ddl_service_.update_autoinc_schema(const_cast<ObAlterTableArg &>(arg)))) {
+src/rootserver/ob_local_management_service.cpp	812	ObLocalManagementService::execute_ddl_task	const_cast<ObAlterTableArg &>	if (OB_FAIL(ddl_service_.switch_index_name_and_status_for_vec_index_table(const_cast<ObAlterTableArg &>(arg)))) {
+src/rootserver/ob_local_management_service.cpp	991	ObLocalManagementService::alter_table	const_cast<ObAlterTableArg &>	ObAlterTableArg &nonconst_arg = const_cast<ObAlterTableArg &>(arg);
+src/rootserver/ob_schema2ddl_sql.cpp	78	ObSchema2DDLSql::convert	const_cast<ObColumnSchemaV2*>	(const_cast<ObColumnSchemaV2*>(column))->set_data_length(
+src/rootserver/parallel_ddl/ob_create_table_helper.cpp	394	ObCreateTableHelper::check_and_set_database_id_	const_cast<ObTableSchema&>	(void) const_cast<ObTableSchema&>(arg_.schema_).set_database_id(database_id);
+src/rootserver/parallel_ddl/ob_create_table_helper.cpp	494	ObCreateTableHelper::check_and_set_parent_table_id_	const_cast<obcall::ObCreateForeignKeyArg&>	const_cast<obcall::ObCreateForeignKeyArg&>(foreign_key_arg).parent_database_id_ = parent_database_id;
+src/rootserver/parallel_ddl/ob_create_table_helper.cpp	495	ObCreateTableHelper::check_and_set_parent_table_id_	const_cast<obcall::ObCreateForeignKeyArg&>	const_cast<obcall::ObCreateForeignKeyArg&>(foreign_key_arg).parent_table_id_ = parent_table_id;
+src/rootserver/parallel_ddl/ob_create_view_helper.cpp	104	ObCreateViewHelper::lock_and_check_database_	const_cast<ObTableSchema&>	(void) const_cast<ObTableSchema&>(arg_.schema_).set_database_id(database_id);
+src/rootserver/parallel_ddl/ob_table_helper.cpp	532	ObTableHelper::inner_generate_table_schema_	const_cast<ObConstraint &>	ObConstraint &cst = const_cast<ObConstraint &>(constraints.at(i));
+src/rootserver/parallel_ddl/ob_table_helper.cpp	576	ObTableHelper::inner_generate_aux_table_schema_	const_cast<obcall::ObCreateIndexArg&>	obcall::ObCreateIndexArg &index_arg = const_cast<obcall::ObCreateIndexArg&>(arg.index_arg_list_.at(i));
+src/rootserver/pl_ddl/ob_pl_ddl_service.cpp	95	ObPLDDLService::create_routine	const_cast<ObSArray<ObDependencyInfo> &>	ObSArray<ObDependencyInfo> &dep_infos = const_cast<ObSArray<ObDependencyInfo> &>(arg.dependency_infos_);
+src/rootserver/pl_ddl/ob_pl_ddl_service.cpp	490	ObPLDDLService::create_package	const_cast<ObSArray<ObRoutineInfo> &>	ObSArray<ObRoutineInfo> &public_routine_infos = const_cast<ObSArray<ObRoutineInfo> &>(arg.public_routine_infos_);
+src/rootserver/pl_ddl/ob_pl_ddl_service.cpp	493	ObPLDDLService::create_package	const_cast<ObSArray<ObDependencyInfo> &>	const_cast<ObSArray<ObDependencyInfo> &>(arg.dependency_infos_);
+src/rootserver/pl_ddl/ob_pl_ddl_service.cpp	788	ObPLDDLService::create_trigger	const_cast<ObErrorInfo &>	const_cast<ObErrorInfo &>(arg.error_info_),
+src/rootserver/pl_ddl/ob_pl_ddl_service.cpp	789	ObPLDDLService::create_trigger	const_cast<ObSArray<ObDependencyInfo> &>	const_cast<ObSArray<ObDependencyInfo> &>(arg.dependency_infos_),
+src/rootserver/pl_ddl/ob_pl_ddl_service.cpp	858	ObPLDDLService::drop_trigger_in_trans	const_cast<ObTriggerInfo &>	OZ (adjust_trigger_action_order(schema_guard, trans, pl_operator, const_cast<ObTriggerInfo &>(trigger_info), false));
+src/share/cache/ob_kvcache_hazard_domain.cpp	251	HazptrHolder::assign	const_cast<HazptrHolder&>	HazptrHolder& nc_other = const_cast<HazptrHolder&>(other);
+src/share/config/ob_config.cpp	73	ObConfigItem::~ObConfigItem	const_cast<ObConfigChecker*>	ObConfigChecker *ck = const_cast<ObConfigChecker*>(ck_);
+src/share/config/ob_config.cpp	92	ObConfigItem::set_value_unsafe	const_cast<char *>	} else if (OB_FAIL(databuff_printf(const_cast<char *>(ptr), value_len(), pos,
+src/share/config/ob_config.cpp	275	ObConfigStrListItem::get	const_cast<ObLatch&>	ObLatch &latch = const_cast<ObLatch&>(inner_value->rwlock_);
+src/share/config/ob_config.cpp	833	ObConfigStringItem::deep_copy_value_string	const_cast<ObLatch&>	ObLatchRGuard rd_guard(const_cast<ObLatch&>(lock_), ObLatchIds::CONFIG_LOCK);
+src/share/config/ob_config.h	131	ObConfigItem::str	const_cast<ObLatch&>	ObLatchRGuard rd_guard(const_cast<ObLatch&>(lock_), ObLatchIds::CONFIG_LOCK);
+src/share/config/ob_config.h	136	ObConfigItem::case_compare	const_cast<ObLatch&>	ObLatchRGuard rd_guard(const_cast<ObLatch&>(lock_), ObLatchIds::CONFIG_LOCK);
+src/share/config/ob_config.h	141	ObConfigItem::default_str	const_cast<ObLatch&>	ObLatchRGuard rd_guard(const_cast<ObLatch&>(lock_), ObLatchIds::CONFIG_LOCK);
+src/share/config/ob_config.h	327	ObConfigStrListItem::ObInnerConfigStrListItem::operator=	const_cast<ObLatch&>	ObLatchRGuard rd_guard(const_cast<ObLatch&>(value.rwlock_), ObLatchIds::CONFIG_LOCK);
+src/share/config/ob_config.h	343	ObConfigStrListItem::ObInnerConfigStrListItem::ObInnerConfigStrListItem	const_cast<ObLatch&>	ObLatchRGuard rd_guard(const_cast<ObLatch&>(value.rwlock_), ObLatchIds::CONFIG_LOCK);
+src/share/config/ob_config.h	792	ObConfigStringItem::operatorconstchar*	const_cast<ObLatch&>	ObLatchRGuard rd_guard(const_cast<ObLatch&>(lock_), ObLatchIds::CONFIG_LOCK);
+src/share/config/ob_config.h	797	ObConfigStringItem::get_value	const_cast<ObLatch&>	ObLatchRGuard rd_guard(const_cast<ObLatch&>(lock_), ObLatchIds::CONFIG_LOCK);
+src/share/config/ob_config.h	802	ObConfigStringItem::get_value_string	const_cast<ObLatch&>	ObLatchRGuard rd_guard(const_cast<ObLatch&>(lock_), ObLatchIds::CONFIG_LOCK);
+src/share/config/ob_config.h	807	ObConfigStringItem::case_compare	const_cast<ObLatch&>	ObLatchRGuard rd_guard(const_cast<ObLatch&>(lock_), ObLatchIds::CONFIG_LOCK);
+src/share/config/ob_config_helper.cpp	45	ObConfigConsChecker::~ObConfigConsChecker	const_cast<ObConfigChecker*>	ObConfigChecker *left = const_cast<ObConfigChecker*>(left_);
+src/share/config/ob_config_helper.cpp	49	ObConfigConsChecker::~ObConfigConsChecker	const_cast<ObConfigChecker*>	ObConfigChecker *right = const_cast<ObConfigChecker*>(right_);
+src/share/datum/ob_datum_funcs_impl.h	436	datum_varchar_hash_utf8mb4_bin	C-style cast (void*) drops const from str_ptr	ret = T::hash((void*)str_ptr, str_len, seed);
+src/share/datum/ob_datum_funcs_impl.h	443	datum_varchar_hash_utf8mb4_bin	C-style cast (void*) drops const from pos	ret = T::hash((void*)pos, length, seed);
+src/share/geo/ob_geo_3d.cpp	38	ObGeometry3D::byteorder	const_cast<char*>	uint8_t *p = reinterpret_cast<uint8_t*>(const_cast<char*>(ptr + pos));
+src/share/geo/ob_geo_3d.cpp	905	ObGeo3DReserverCoordinate::visit_pointz_start	const_cast<char *>	char *ptr = const_cast<char *>(geo->val());
+src/share/geo/ob_geo_3d.cpp	1145	ObGeo3DElevationVisitor::visit_pointz_start	const_cast<char *>	char *ptr = const_cast<char *>(geo->val());
+src/share/geo/ob_geo_3d.cpp	1169	ObGeo3DNormalizeVisitor::visit_pointz_start	const_cast<char *>	char *ptr = const_cast<char *>(geo->val());
+src/share/geo/ob_geo_3d.cpp	1203	ObGeo3DEmptyVisitor::visit_pointz_start	const_cast<char *>	char *ptr = const_cast<char *>(geo->val());
+src/share/geo/ob_geo_3d.cpp	1231	ObGeo3DLonLatChecker::visit_pointz_start	const_cast<char *>	char *ptr = const_cast<char *>(geo->val());

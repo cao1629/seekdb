@@ -1,0 +1,68 @@
+file	line	symbol	construct	text
+src/storage/retrieval/ob_block_max_iter.h	27	-	opens namespace sql (lines 27-31): storage declares SQL types here	namespace sql
+src/storage/retrieval/ob_block_max_iter.h	29	-	unqualified SQL name inside namespace sql: ObDASIRScanCtDef	struct ObDASIRScanCtDef;
+src/storage/retrieval/ob_block_max_iter.h	30	-	unqualified SQL name inside namespace sql: ObDASVecAuxScanCtDef	struct ObDASVecAuxScanCtDef;
+src/storage/retrieval/ob_block_max_iter.h	34	-	using sql::ObDocIdExt	using sql::ObDocIdExt;
+src/storage/retrieval/ob_block_max_iter.h	68	ObBlockMaxScoreIterParam	sql:: use: ObDASIRScanCtDef	int init(const sql::ObDASIRScanCtDef &ir_ctdef, ObIAllocator &alloc);
+src/storage/retrieval/ob_block_max_iter.h	69	ObBlockMaxScoreIterParam	sql:: use: ObDASVecAuxScanCtDef	int init(const sql::ObDASVecAuxScanCtDef &vec_aux_ctdef, ObIAllocator &alloc);
+src/storage/retrieval/ob_block_max_iter.h	134	ObBlockMaxScoreCalc::calc_max_score	sql:: use: ObExprBM25	max_score = sql::ObExprBM25::eval(
+src/storage/retrieval/ob_block_max_iter.h	209	ObBlockMaxScoreIterator	unqualified SQL name under a using declaration: ObDocIdExt	ObDocIdExt advance_doc_id_;
+src/storage/retrieval/ob_block_stat_collector.cpp	129	ObBM25MaxScoreParamCollector::collect_data_row	sql:: use: ObExprBM25	const double tf_score = sql::ObExprBM25::doc_token_weight(token_freq, norm_len);
+src/storage/retrieval/ob_block_stat_collector.cpp	151	ObBM25MaxScoreParamCollector::collect_agg_row	sql:: use: ObExprBM25	const double tf_score = sql::ObExprBM25::doc_token_weight(token_freq, norm_len);
+src/storage/retrieval/ob_i_sparse_retrieval_iter.h	31	-	opens namespace sql (lines 31-36): storage declares SQL types here	namespace sql
+src/storage/retrieval/ob_i_sparse_retrieval_iter.h	33	-	unqualified SQL name inside namespace sql: ObEvalCtx	class ObEvalCtx;
+src/storage/retrieval/ob_i_sparse_retrieval_iter.h	34	-	unqualified SQL name inside namespace sql: ObExpr	class ObExpr;
+src/storage/retrieval/ob_i_sparse_retrieval_iter.h	35	-	unqualified SQL name inside namespace sql: ObDatumMeta	struct ObDatumMeta;
+src/storage/retrieval/ob_i_sparse_retrieval_iter.h	39	-	using sql::ObDocIdExt	using sql::ObDocIdExt;
+src/storage/retrieval/ob_i_sparse_retrieval_iter.h	40	-	using sql::ObDatumMeta	using sql::ObDatumMeta;
+src/storage/retrieval/ob_i_sparse_retrieval_iter.h	41	-	using sql::ObEvalCtx	using sql::ObEvalCtx;
+src/storage/retrieval/ob_i_sparse_retrieval_iter.h	42	-	using sql::ObExpr	using sql::ObExpr;
+src/storage/retrieval/ob_i_sparse_retrieval_iter.h	126	ObSparseRetrievalMergeParam	sql:: use: ObEvalCtx	sql::ObEvalCtx *eval_ctx_;
+src/storage/retrieval/ob_i_sparse_retrieval_iter.h	127	ObSparseRetrievalMergeParam	sql:: use: ObExpr	sql::ObExpr *id_proj_expr_;
+src/storage/retrieval/ob_i_sparse_retrieval_iter.h	128	ObSparseRetrievalMergeParam	sql:: use: ObExpr	sql::ObExpr *relevance_expr_;
+src/storage/retrieval/ob_i_sparse_retrieval_iter.h	129	ObSparseRetrievalMergeParam	sql:: use: ObExpr	sql::ObExpr *relevance_proj_expr_;
+src/storage/retrieval/ob_i_sparse_retrieval_iter.h	130	ObSparseRetrievalMergeParam	sql:: use: ObExpr	sql::ObExpr *filter_expr_; // filter expr on score
+src/storage/retrieval/ob_i_sparse_retrieval_iter.h	151	ObISparseRetrievalMergeIter::set_datum_int	unqualified SQL name under a using declaration: ObDocIdExt	inline static void set_datum_int(ObDatum &datum, const ObDocIdExt &id)
+src/storage/retrieval/ob_i_sparse_retrieval_iter.h	155	ObISparseRetrievalMergeIter::set_datum_shallow	unqualified SQL name under a using declaration: ObDocIdExt	inline static void set_datum_shallow(ObDatum &datum, const ObDocIdExt &id)
+src/storage/retrieval/ob_inv_idx_param_estimator.cpp	32	ObTextAvgDocLenEstimator::estimate_avg_doc_len	sql:: use: ObExpr	sql::ObExpr &avg_doc_token_cnt_expr,
+src/storage/retrieval/ob_inv_idx_param_estimator.cpp	33	ObTextAvgDocLenEstimator::estimate_avg_doc_len	sql:: use: ObEvalCtx	sql::ObEvalCtx &eval_ctx,
+src/storage/retrieval/ob_inv_idx_param_estimator.cpp	45	ObTextAvgDocLenEstimator::estimate_avg_doc_len	sql:: use: ObNumStackAllocator	sql::ObNumStackAllocator<2> tmp_alloc;
+src/storage/retrieval/ob_inv_idx_param_estimator.cpp	90	ObTextAvgDocLenEstimator::estimate_avg_doc_len	sql:: use: ObExprBM25	const double default_avg_doc_token_cnt = sql::ObExprBM25::DEFAULT_AVG_DOC_TOKEN_CNT;
+src/storage/retrieval/ob_inv_idx_param_estimator.cpp	206	ObBM25ParamEstimator::do_estimation	sql:: use: ObEvalCtx	int ObBM25ParamEstimator::do_estimation(sql::ObEvalCtx &eval_ctx)
+src/storage/retrieval/ob_inv_idx_param_estimator.cpp	209	ObBM25ParamEstimator::do_estimation	sql:: use: ObEvalCtx	sql::ObEvalCtx::BatchInfoScopeGuard guard(eval_ctx);
+src/storage/retrieval/ob_inv_idx_param_estimator.cpp	241	ObBM25ParamEstimator::do_estimation	sql:: use: ObExprBM25	est_ctx_.avg_doc_token_cnt_expr_->locate_datum_for_write(eval_ctx).set_double(sql::ObExprBM25::DEFAULT_AVG_DOC_TOKEN_CNT);
+src/storage/retrieval/ob_inv_idx_param_estimator.cpp	242	ObBM25ParamEstimator::do_estimation	sql:: use: ObExprBM25	avg_doc_token_cnt_ = sql::ObExprBM25::DEFAULT_AVG_DOC_TOKEN_CNT;
+src/storage/retrieval/ob_inv_idx_param_estimator.cpp	245	ObBM25ParamEstimator::do_estimation	sql:: use: ObExprBM25	avg_doc_token_cnt_ = sql::ObExprBM25::DEFAULT_AVG_DOC_TOKEN_CNT;
+src/storage/retrieval/ob_inv_idx_param_estimator.h	25	-	opens namespace sql (lines 25-30): storage declares SQL types here	namespace sql
+src/storage/retrieval/ob_inv_idx_param_estimator.h	27	-	unqualified SQL name inside namespace sql: ObExpr	class ObExpr;
+src/storage/retrieval/ob_inv_idx_param_estimator.h	28	-	unqualified SQL name inside namespace sql: ObEvalCtx	class ObEvalCtx;
+src/storage/retrieval/ob_inv_idx_param_estimator.h	29	-	unqualified SQL name inside namespace sql: ObDASScanIter	class ObDASScanIter;
+src/storage/retrieval/ob_inv_idx_param_estimator.h	42	ObTextAvgDocLenEstimator	sql:: use: ObExpr, ObEvalCtx	int estimate_avg_doc_len(sql::ObExpr &avg_doc_token_cnt_expr, sql::ObEvalCtx &eval_ctx, double &result);
+src/storage/retrieval/ob_inv_idx_param_estimator.h	60	ObBM25ParamEstCtx	sql:: use: ObDASScanIter	sql::ObDASScanIter *total_doc_cnt_iter_;
+src/storage/retrieval/ob_inv_idx_param_estimator.h	61	ObBM25ParamEstCtx	sql:: use: ObExpr	sql::ObExpr *total_doc_cnt_expr_;
+src/storage/retrieval/ob_inv_idx_param_estimator.h	62	ObBM25ParamEstCtx	sql:: use: ObExpr	sql::ObExpr *avg_doc_token_cnt_expr_;
+src/storage/retrieval/ob_inv_idx_param_estimator.h	77	ObBM25ParamEstimator	sql:: use: ObEvalCtx	int do_estimation(sql::ObEvalCtx &eval_ctx);
+src/storage/retrieval/ob_sparse_bmw_iter.cpp	557	ObSRBMWIterImpl::project_rows_from_top_k_heap	sql:: use: ObBitVector	sql::ObBitVector &id_evaluated_flags = id_proj_expr->get_evaluated_flags(*eval_ctx);
+src/storage/retrieval/ob_sparse_bmw_iter.cpp	558	ObSRBMWIterImpl::project_rows_from_top_k_heap	sql:: use: ObBitVector	sql::ObBitVector *relevance_evaluated_flags = nullptr;
+src/storage/retrieval/ob_sparse_daat_iter.cpp	34	ObSRMergeCmp::init	sql:: use: ObDatumMeta	sql::ObDatumMeta id_meta,
+src/storage/retrieval/ob_sparse_daat_iter.cpp	419	ObSRDaaTIterImpl::project_results	sql:: use: ObBitVector	sql::ObBitVector &id_evaluated_flags = id_proj_expr->get_evaluated_flags(*eval_ctx);
+src/storage/retrieval/ob_sparse_daat_iter.cpp	428	ObSRDaaTIterImpl::project_results	sql:: use: ObBitVector	sql::ObBitVector &relevance_evaluated_flags = relevance_proj_expr->get_evaluated_flags(*eval_ctx);
+src/storage/retrieval/ob_sparse_daat_iter.h	46	ObSRMergeCmp	sql:: use: ObDatumMeta	int init(sql::ObDatumMeta id_meta, const ObFixedArray<const ObDatum *, ObIAllocator> *iter_ids);
+src/storage/retrieval/ob_sparse_lookup_iter.cpp	215	ObSRSortedLookupIter::project_results	sql:: use: ObBitVector	sql::ObBitVector &id_evaluated_flags = id_proj_expr->get_evaluated_flags(*eval_ctx);
+src/storage/retrieval/ob_sparse_lookup_iter.cpp	216	ObSRSortedLookupIter::project_results	sql:: use: ObBitVector	sql::ObBitVector &relevance_evaluated_flags = relevance_proj_expr->get_evaluated_flags(*eval_ctx);
+src/storage/retrieval/ob_sparse_lookup_iter.cpp	318	ObSRHashLookupIter::project_results	sql:: use: ObBitVector	sql::ObBitVector &id_evaluated_flags = id_proj_expr->get_evaluated_flags(*eval_ctx);
+src/storage/retrieval/ob_sparse_lookup_iter.cpp	319	ObSRHashLookupIter::project_results	sql:: use: ObBitVector	sql::ObBitVector &relevance_evaluated_flags = relevance_proj_expr->get_evaluated_flags(*eval_ctx);
+src/storage/retrieval/ob_sparse_taat_iter.cpp	210	ObSRTaaTIterImpl::init_chunk_stores	sql:: use: ObBitVector	} else if (OB_ISNULL(buf = iter_allocator_->alloc(sizeof(sql::ObBitVector *) * partition_cnt_))) {
+src/storage/retrieval/ob_sparse_taat_iter.cpp	213	ObSRTaaTIterImpl::init_chunk_stores	sql:: use: ObBitVector	skips_ = static_cast<sql::ObBitVector **>(buf);
+src/storage/retrieval/ob_sparse_taat_iter.cpp	235	ObSRTaaTIterImpl::init_chunk_stores	sql:: use: ObBitVector	} else if (OB_ISNULL(buf = iter_allocator_->alloc(sql::ObBitVector::memory_size(capacity)))) {
+src/storage/retrieval/ob_sparse_taat_iter.cpp	238	ObSRTaaTIterImpl::init_chunk_stores	sql:: use: ObBitVector, to_bit_vector	sql::ObBitVector *skip = sql::to_bit_vector(buf);
+src/storage/retrieval/ob_sparse_taat_iter.h	61	ObSRTaaTIterImpl	sql:: use: ObBitVector	sql::ObBitVector **skips_;
+src/storage/retrieval/ob_sparse_utils.cpp	68	ObSRDaaTBooleanRelevanceCollector::init	sql:: use: ObFtsEvalNode	sql::ObFtsEvalNode *node)
+src/storage/retrieval/ob_sparse_utils.h	24	-	opens namespace sql (lines 24-27): storage declares SQL types here	namespace sql
+src/storage/retrieval/ob_sparse_utils.h	26	-	unqualified SQL name inside namespace sql: ObFtsEvalNode	struct ObFtsEvalNode;
+src/storage/retrieval/ob_sparse_utils.h	67	ObSRDaaTBooleanRelevanceCollector	sql:: use: ObFtsEvalNode	int init(ObIAllocator *allocator, const int64_t dim_cnt, sql::ObFtsEvalNode *node);
+src/storage/retrieval/ob_sparse_utils.h	75	ObSRDaaTBooleanRelevanceCollector	sql:: use: ObFtsEvalNode	sql::ObFtsEvalNode *boolean_compute_node_;
+src/storage/retrieval/ob_spiv_daat_iter.cpp	258	ObSPIVDaaTNaiveIter::inner_get_next_rows	sql:: use: ObBitVector	sql::ObBitVector &id_evaluated_flags = id_proj_expr->get_evaluated_flags(*eval_ctx);
+src/storage/retrieval/ob_spiv_daat_iter.cpp	405	ObSPIVBMWIter::project_rows_from_result_docids	sql:: use: ObBitVector	sql::ObBitVector &id_evaluated_flags = id_proj_expr->get_evaluated_flags(*eval_ctx);
+src/storage/retrieval/ob_spiv_daat_iter.h	26	-	opens namespace sql (lines 26-29): storage declares SQL types here	namespace sql
+src/storage/retrieval/ob_spiv_daat_iter.h	28	-	unqualified SQL name inside namespace sql: ObDASScanIter	class ObDASScanIter;

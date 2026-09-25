@@ -1,0 +1,52 @@
+file	line	symbol	construct	text
+src/storage/access/ob_aggregate_base.h	42	-	opens namespace sql (lines 42-46): storage declares SQL types here	namespace sql
+src/storage/access/ob_aggregate_base.h	44	-	unqualified SQL name inside namespace sql: ObEvalCtx	struct ObEvalCtx;
+src/storage/access/ob_aggregate_base.h	45	-	unqualified SQL name inside namespace sql: ObExpr	class ObExpr;
+src/storage/access/ob_aggregate_base.h	246	ObGroupByCellBase	sql:: use: ObEvalCtx	virtual int init(const ObTableAccessParam &param, const ObTableAccessContext &context, sql::ObEvalCtx &eval_ctx) = 0;
+src/storage/access/ob_aggregate_base.h	256	ObGroupByCellBase	sql:: use: ObEvalCtx	virtual int copy_single_output_row(sql::ObEvalCtx &ctx) = 0;
+src/storage/access/ob_aggregate_base.h	262	ObGroupByCellBase	sql:: use: ObExpr	virtual int assign_agg_cells(const sql::ObExpr *col_expr, common::ObIArray<int32_t> &agg_idxs) = 0;
+src/storage/access/ob_aggregate_base.h	338	ObGroupByCellBase	sql:: use: ObExpr	sql::ObExpr *group_by_col_expr_;
+src/storage/access/ob_aggregated_store.cpp	66	ObAggRow::init	sql:: use: ObEvalCtx	sql::ObEvalCtx &eval_ctx)
+src/storage/access/ob_aggregated_store.cpp	86	ObAggRow::init	sql:: use: ObExpr	sql::ObExpr *expr = param.output_exprs_->at(i);
+src/storage/access/ob_aggregated_store.cpp	106	ObAggRow::init	sql:: use: ObExpr	sql::ObExpr *agg_expr = param.aggregate_exprs_->at(i);
+src/storage/access/ob_aggregated_store.cpp	143	ObAggregatedStore::ObAggregatedStore	sql:: use: ObEvalCtx	ObAggregatedStore::ObAggregatedStore(const int64_t batch_size, sql::ObEvalCtx &eval_ctx, ObTableAccessContext &context)
+src/storage/access/ob_aggregated_store.cpp	493	ObAggregatedStore::get_agg_cell	sql:: use: ObExpr	int ObAggregatedStore::get_agg_cell(const sql::ObExpr *expr, ObAggCell *&agg_cell)
+src/storage/access/ob_aggregated_store.h	51	ObAggRow	sql:: use: ObEvalCtx	sql::ObEvalCtx &eval_ctx);
+src/storage/access/ob_aggregated_store.h	76	ObAggregatedStore	sql:: use: ObEvalCtx	sql::ObEvalCtx &eval_ctx,
+src/storage/access/ob_aggregated_store.h	93	ObAggregatedStore	sql:: use: ObExpr	int get_agg_cell(const sql::ObExpr *expr, ObAggCell *&agg_cell);
+src/storage/access/ob_block_batched_row_store.cpp	34	ObBlockBatchedRowStore::ObBlockBatchedRowStore	sql:: use: ObEvalCtx	sql::ObEvalCtx &eval_ctx,
+src/storage/access/ob_block_batched_row_store.h	33	-	opens namespace sql (lines 33-36): storage declares SQL types here	namespace sql
+src/storage/access/ob_block_batched_row_store.h	35	-	unqualified SQL name inside namespace sql: ObEvalCtx	class ObEvalCtx;
+src/storage/access/ob_block_batched_row_store.h	56	ObBlockBatchedRowStore	sql:: use: ObEvalCtx	sql::ObEvalCtx &eval_ctx,
+src/storage/access/ob_block_batched_row_store.h	92	ObBlockBatchedRowStore	sql:: use: ObEvalCtx	sql::ObEvalCtx &eval_ctx_;
+src/storage/access/ob_block_row_store.cpp	127	-	opens namespace sql (lines 127-189): storage defines PushdownFilterInfo::init here	namespace sql
+src/storage/access/ob_block_row_store.cpp	129	PushdownFilterInfo::init	defines the SQL function PushdownFilterInfo::init inside namespace sql (lines 129-188)	int PushdownFilterInfo::init(const storage::ObTableIterParam &iter_param,
+src/storage/access/ob_block_row_store.cpp	169	PushdownFilterInfo::init	unqualified SQL name inside namespace sql: ObBitVector	to_bit_vector(alloc.alloc(ObBitVector::memory_size(batch_size_))))) {
+src/storage/access/ob_block_row_store.h	81	ObBlockRowStore::get_pd_filter	sql:: use: ObPushdownFilterExecutor	OB_INLINE sql::ObPushdownFilterExecutor *get_pd_filter()
+src/storage/access/ob_block_row_store.h	83	ObBlockRowStore::get_pd_filter_info	sql:: use: PushdownFilterInfo	OB_INLINE sql::PushdownFilterInfo &get_pd_filter_info()
+src/storage/access/ob_block_row_store.h	107	ObBlockRowStore	sql:: use: PushdownFilterInfo	sql::PushdownFilterInfo pd_filter_info_;
+src/storage/access/ob_datum_reshape.cpp	33	-	using namespace sql	using namespace sql;
+src/storage/access/ob_datum_reshape.cpp	221	new_discrete_vector	unqualified SQL name under a using declaration: ObBitVector	const int64_t nulls_size = ObBitVector::memory_size(max_batch_size);
+src/storage/access/ob_datum_reshape.cpp	224	new_discrete_vector	unqualified SQL name under a using declaration: ObBitVector	ObBitVector *nulls = nullptr;
+src/storage/access/ob_dml_param.cpp	27	ObRow2ExprsProjector::init	sql:: use: ObExprPtrIArray	int ObRow2ExprsProjector::init(const sql::ObExprPtrIArray &exprs,
+src/storage/access/ob_dml_param.cpp	28	ObRow2ExprsProjector::init	sql:: use: ObPushdownOperator	sql::ObPushdownOperator &op,
+src/storage/access/ob_dml_param.cpp	55	ObRow2ExprsProjector::init	sql:: use: ObExpr	sql::ObExpr *e = exprs.at(i);
+src/storage/access/ob_dml_param.cpp	83	ObRow2ExprsProjector::init	sql:: use: ObExpr	sql::ObExpr *e = exprs.at(i);
+src/storage/access/ob_dml_param.cpp	161	ObRow2ExprsProjector::project	sql:: use: ObExprPtrIArray	int ObRow2ExprsProjector::project(const sql::ObExprPtrIArray &exprs,
+src/storage/access/ob_dml_param.h	32	-	opens namespace sql (lines 32-39): storage declares SQL types here	namespace sql
+src/storage/access/ob_dml_param.h	34	-	unqualified SQL name inside namespace sql: ObOperator	class ObOperator;
+src/storage/access/ob_dml_param.h	35	-	unqualified SQL name inside namespace sql: ObTableLocation	class ObTableLocation;
+src/storage/access/ob_dml_param.h	36	-	unqualified SQL name inside namespace sql: ObEvalCtx	class ObEvalCtx;
+src/storage/access/ob_dml_param.h	37	-	unqualified SQL name inside namespace sql: ObEvalInfo	class ObEvalInfo;
+src/storage/access/ob_multiple_merge.cpp	33	-	using namespace sql	using namespace sql;
+src/storage/access/ob_multiple_merge.cpp	160	ObMultipleMerge::init	unqualified SQL name under a using declaration: ObBitVector	} else if (OB_ISNULL(skip_bit_ = to_bit_vector(long_life_allocator_->alloc(ObBitVector::memory_size(batch_size))))) {
+src/storage/access/ob_multiple_merge.cpp	333	ObMultipleMerge::switch_table	unqualified SQL name under a using declaration: ObBitVector	} else if (OB_ISNULL(skip_bit_ = to_bit_vector(access_ctx_->stmt_allocator_->alloc(ObBitVector::memory_size(batch_size))))) {
+src/storage/access/ob_multiple_merge.cpp	554	ObMultipleMerge::get_next_rows	sql:: use: ObEvalCtx	sql::ObEvalCtx *eval_ctx = nullptr;
+src/storage/access/ob_multiple_merge.cpp	708	ObMultipleMerge::get_next_aggregate_row	sql:: use: ObEvalCtx	sql::ObEvalCtx &eval_ctx = access_param_->get_op()->get_eval_ctx();
+src/storage/access/ob_multiple_merge.cpp	1177	ObMultipleMerge::fuse_default	sql:: use: ObExpr	sql::ObExpr *expr = access_param_->output_exprs_->at(pos);
+src/storage/access/ob_multiple_merge.cpp	1178	ObMultipleMerge::fuse_default	sql:: use: ObDatum	sql::ObDatum &datum = expr->locate_datum_for_write(
+src/storage/access/ob_multiple_merge.cpp	1180	ObMultipleMerge::fuse_default	sql:: use: ObEvalInfo	sql::ObEvalInfo &eval_info = expr->get_eval_info(
+src/storage/access/ob_multiple_merge.cpp	1184	ObMultipleMerge::fuse_default	sql:: use: ob_adjust_lob_datum	OB_FAIL(sql::ob_adjust_lob_datum(
+src/storage/access/ob_multiple_merge.cpp	1239	ObMultipleMerge::pad_columns	sql:: use: ObExpr	sql::ObExpr *e = access_param_->output_exprs_->at(idx);
+src/storage/access/ob_multiple_merge.cpp	1262	ObMultipleMerge::fill_virtual_columns	sql:: use: ObExpr	sql::ObExpr *expr = access_param_->output_exprs_->at(pos);
+src/storage/access/ob_multiple_merge.h	179	ObMultipleMerge	sql:: use: ObBitVector	sql::ObBitVector *skip_bit_;

@@ -1,0 +1,42 @@
+file	line	symbol	construct	text
+src/sql/engine/sort/ob_sort_op_impl.cpp	664	ObSortOpImpl::enlarge_partition_topn_buckets	heap operation top on heap_ (TopnHeap)	OB_ISNULL(top_row = cur_heap.heap_.top())) {
+src/sql/engine/sort/ob_sort_op_impl.cpp	1440	ObSortOpImpl::do_partition_sort	lib::ob_sort call	lib::ob_sort(&bucket_nodes.at(0), &bucket_nodes.at(0) + bucket_part_cnt, HashNodeComparer(comp_));
+src/sql/engine/sort/ob_sort_op_impl.cpp	1455	ObSortOpImpl::do_partition_sort	member sort() call	aqs.sort(rows_last, rows_idx);
+src/sql/engine/sort/ob_sort_op_impl.cpp	1459	ObSortOpImpl::do_partition_sort	lib::ob_sort call	lib::ob_sort(&rows.at(0) + rows_last, &rows.at(0) + rows_idx, CopyableComparer(comp_));
+src/sql/engine/sort/ob_sort_op_impl.cpp	1462	ObSortOpImpl::do_partition_sort	lib::ob_sort call	lib::ob_sort(&rows.at(0) + rows_last, &rows.at(0) + rows_idx, CopyableComparer(comp_));
+src/sql/engine/sort/ob_sort_op_impl.cpp	1492	ObSortOpImpl::do_partition_topn_sort	lib::ob_sort call	lib::ob_sort(heap_nodes_.begin() + cur_bucket_cnt,
+src/sql/engine/sort/ob_sort_op_impl.cpp	1507	ObSortOpImpl::do_partition_topn_sort	member sort() call	aqs.sort(0, cur_heap->heap_.count());
+src/sql/engine/sort/ob_sort_op_impl.cpp	1511	ObSortOpImpl::do_partition_topn_sort	lib::ob_sort call	lib::ob_sort(&heap_rows.at(0), &heap_rows.at(0) + heap_rows.count(), CopyableComparer(comp_));
+src/sql/engine/sort/ob_sort_op_impl.cpp	1517	ObSortOpImpl::do_partition_topn_sort	lib::ob_sort call	lib::ob_sort(&heap_rows.at(0), &heap_rows.at(0) + heap_rows.count(), CopyableComparer(comp_));
+src/sql/engine/sort/ob_sort_op_impl.cpp	1719	ObSortOpImpl::build_ems_heap	heap operation push on ems_heap_ (EMSHeap)	} else if (OB_FAIL(ems_heap_->push(chunk))) {
+src/sql/engine/sort/ob_sort_op_impl.cpp	1733	ObSortOpImpl::heap_next	heap declared: heap (Heap)	int ObSortOpImpl::heap_next(Heap &heap, const NextFunc &func, Item &item)
+src/sql/engine/sort/ob_sort_op_impl.cpp	1741	ObSortOpImpl::heap_next	heap operation top on heap (Heap)	Item it = heap.top();
+src/sql/engine/sort/ob_sort_op_impl.cpp	1746	ObSortOpImpl::heap_next	heap operation pop on heap (Heap)	if (OB_FAIL(heap.pop())) {
+src/sql/engine/sort/ob_sort_op_impl.cpp	1749	ObSortOpImpl::heap_next	heap operation replace_top on heap (Heap)	if (OB_FAIL(heap.replace_top(it))) {
+src/sql/engine/sort/ob_sort_op_impl.cpp	1762	ObSortOpImpl::heap_next	heap operation top on heap (Heap)	item = heap.top();
+src/sql/engine/sort/ob_sort_op_impl.cpp	1858	ObSortOpImpl::sort_inmem_data	member sort() call	aqs.sort(begin, rows_->count());
+src/sql/engine/sort/ob_sort_op_impl.cpp	1862	ObSortOpImpl::sort_inmem_data	lib::ob_sort call	lib::ob_sort(&rows_->at(begin), &rows_->at(0) + rows_->count(), CopyableComparer(comp_));
+src/sql/engine/sort/ob_sort_op_impl.cpp	1865	ObSortOpImpl::sort_inmem_data	lib::ob_sort call	lib::ob_sort(&rows_->at(begin), &rows_->at(0) + rows_->count(), CopyableComparer(comp_));
+src/sql/engine/sort/ob_sort_op_impl.cpp	1896	ObSortOpImpl::sort_inmem_data	heap operation push on imms_heap_ (IMMSHeap)	if (OB_FAIL(imms_heap_->push(&rows_->at(i)))) {
+src/sql/engine/sort/ob_sort_op_impl.cpp	1905	ObSortOpImpl::sort_inmem_data	heap operation top on imms_heap_ (IMMSHeap)	&& OB_FAIL(pd_topn_filter_.update_filter_data(*imms_heap_->top()))) {
+src/sql/engine/sort/ob_sort_op_impl.cpp	1917	ObSortOpImpl::sort	sort function definition: ObSortOpImpl::sort	int ObSortOpImpl::sort()
+src/sql/engine/sort/ob_sort_op_impl.cpp	2044	ObSortOpImpl::locate_current_heap	heap declared: new_heap (TopnHeap)	TopnHeap *new_heap = NULL;
+src/sql/engine/sort/ob_sort_op_impl.cpp	2087	ObSortOpImpl::locate_current_heap_in_bucket	heap operation top on heap_ (TopnHeap)	const ObChunkDatumStore::StoredRow *top_row = exist->topn_heap_node_.heap_.top();
+src/sql/engine/sort/ob_sort_op_impl.cpp	2277	ObSortOpImpl::add_heap_sort_row	heap operation push on heap_ (TopnHeap)	} else if (OB_FAIL(topn_heap_->heap_.push(new_row))) {
+src/sql/engine/sort/ob_sort_op_impl.cpp	2317	ObSortOpImpl::add_heap_sort_batch	heap operation top on heap_ (TopnHeap)	if (OB_FAIL(pd_topn_filter_.update_filter_data(topn_heap_->heap_.top()))) {
+src/sql/engine/sort/ob_sort_op_impl.cpp	2345	ObSortOpImpl::add_heap_sort_batch	heap operation top on heap_ (TopnHeap)	} else if (OB_NOT_NULL(topn_heap_) && OB_NOT_NULL(topn_heap_->heap_.top())) {
+src/sql/engine/sort/ob_sort_op_impl.cpp	2346	ObSortOpImpl::add_heap_sort_batch	heap operation top on heap_ (TopnHeap)	stored_rows_[i] = const_cast<ObChunkDatumStore::StoredRow *>(topn_heap_->heap_.top());
+src/sql/engine/sort/ob_sort_op_impl.cpp	2399	ObSortOpImpl::add_part_heap_sort_batch	heap operation top on heap_ (TopnHeap)	} else if (OB_NOT_NULL(topn_heap_) && OB_NOT_NULL(topn_heap_->heap_.top())) {
+src/sql/engine/sort/ob_sort_op_impl.cpp	2400	ObSortOpImpl::add_part_heap_sort_batch	heap operation top on heap_ (TopnHeap)	stored_rows_[i] = const_cast<ObChunkDatumStore::StoredRow *>(topn_heap_->heap_.top());
+src/sql/engine/sort/ob_sort_op_impl.cpp	2414	ObSortOpImpl::adjust_topn_heap	heap operation top on heap_ (TopnHeap)	} else if (OB_ISNULL(topn_heap_->heap_.top())) {
+src/sql/engine/sort/ob_sort_op_impl.cpp	2420	ObSortOpImpl::adjust_topn_heap	heap operation top on heap_ (TopnHeap)	if (comp_(&exprs, topn_heap_->heap_.top(), *eval_ctx_)) {
+src/sql/engine/sort/ob_sort_op_impl.cpp	2424	ObSortOpImpl::adjust_topn_heap	heap operation replace_top on heap_ (TopnHeap)	} else if (OB_FAIL(topn_heap_->heap_.replace_top(new_row))) {
+src/sql/engine/sort/ob_sort_op_impl.cpp	2453	ObSortOpImpl::adjust_topn_heap_with_ties	heap operation top on heap_ (TopnHeap)	} else if (OB_ISNULL(topn_heap_->heap_.top())) {
+src/sql/engine/sort/ob_sort_op_impl.cpp	2462	ObSortOpImpl::adjust_topn_heap_with_ties	heap operation top on heap_ (TopnHeap)	SortStoredRow *pre_heap_top_row = static_cast<SortStoredRow *>(topn_heap_->heap_.top());
+src/sql/engine/sort/ob_sort_op_impl.cpp	2466	ObSortOpImpl::adjust_topn_heap_with_ties	heap operation top on heap_ (TopnHeap)	cmp = comp_.with_ties_cmp(&exprs, topn_heap_->heap_.top(), *eval_ctx_);
+src/sql/engine/sort/ob_sort_op_impl.cpp	2483	ObSortOpImpl::adjust_topn_heap_with_ties	heap operation replace_top on heap_ (TopnHeap)	} else if (OB_FAIL(topn_heap_->heap_.replace_top(new_row))) {
+src/sql/engine/sort/ob_sort_op_impl.cpp	2484	ObSortOpImpl::adjust_topn_heap_with_ties	heap operation top on heap_ (TopnHeap)	} else if (OB_FALSE_IT(cmp = comp_.with_ties_cmp(copy_pre_heap_top_row, topn_heap_->heap_.top()))) {
+src/sql/engine/sort/ob_sort_op_impl.cpp	2524	ObSortOpImpl::copy_to_topn_row	heap operation top on heap_ (TopnHeap)	SortStoredRow *top_row = static_cast<SortStoredRow *>(topn_heap_->heap_.top());
+src/sql/engine/sort/ob_sort_op_impl.cpp	2528	ObSortOpImpl::copy_to_topn_row	heap operation top on heap_ (TopnHeap)	topn_heap_->heap_.top() = static_cast<ObChunkDatumStore::StoredRow *>(top_row);
+src/sql/engine/sort/ob_sort_op_impl.cpp	2955	ObPrefixSortImpl::add_immediate_prefix	lib::ob_sort call	lib::ob_sort(immediate_prefix_rows_ + pos, immediate_prefix_rows_ + pos + selector_size_,
+src/sql/engine/sort/ob_sort_op_impl.cpp	3355	sort_encoded_rows	member sort() call	sorter.sort(0, query_rows.count());

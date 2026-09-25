@@ -1,0 +1,50 @@
+file	line	symbol	construct	text
+src/sql/resolver/expr/ob_raw_expr_util.cpp	2087	ObRawExprUtils::replace_ref_column	IR pointer == IR pointer	} else if (raw_expr == to) {
+src/sql/resolver/expr/ob_raw_expr_util.cpp	2091	ObRawExprUtils::replace_ref_column	pointer membership test: is_contain	} else if (NULL != except_exprs && is_contain(*except_exprs, raw_expr)) {
+src/sql/resolver/expr/ob_raw_expr_util.cpp	2093	ObRawExprUtils::replace_ref_column	IR pointer == IR pointer	} else if (raw_expr == from) {
+src/sql/resolver/expr/ob_raw_expr_util.cpp	2135	ObRawExprUtils::replace_ref_column	pointer membership test: is_contain	} else if (NULL != except_exprs && is_contain(*except_exprs, raw_expr)) {
+src/sql/resolver/expr/ob_raw_expr_util.cpp	2137	ObRawExprUtils::replace_ref_column	pointer membership test: ObOptimizerUtil::find_item	} else if (ObOptimizerUtil::find_item(from, raw_expr, &idx)) {
+src/sql/resolver/expr/ob_raw_expr_util.cpp	2238	ObRawExprUtils::extract_set_op_exprs	pointer membership test: add_var_to_array_no_dup	if (OB_FAIL(add_var_to_array_no_dup(set_op_exprs, const_cast<ObRawExpr*>(raw_expr)))) {
+src/sql/resolver/expr/ob_raw_expr_util.cpp	2258	ObRawExprUtils::extract_var_assign_exprs	pointer membership test: add_var_to_array_no_dup	if (OB_FAIL(add_var_to_array_no_dup(assign_exprs, const_cast<ObRawExpr*>(raw_expr)))) {
+src/sql/resolver/expr/ob_raw_expr_util.cpp	2293	ObRawExprUtils::extract_column_exprs	pointer membership test: add_var_to_array_no_dup	ret = add_var_to_array_no_dup(column_exprs, const_cast<ObRawExpr*>(raw_expr));
+src/sql/resolver/expr/ob_raw_expr_util.cpp	2296	ObRawExprUtils::extract_column_exprs	pointer membership test: add_var_to_array_no_dup	ret = add_var_to_array_no_dup(column_exprs, const_cast<ObRawExpr*>(raw_expr));
+src/sql/resolver/expr/ob_raw_expr_util.cpp	2317	ObRawExprUtils::extract_column_exprs_and_rowscn	pointer membership test: add_var_to_array_no_dup	ret = add_var_to_array_no_dup(column_exprs, const_cast<ObRawExpr*>(raw_expr));
+src/sql/resolver/expr/ob_raw_expr_util.cpp	2340	ObRawExprUtils::extract_contain_exprs	pointer membership test: is_contain	} else if (is_contain(src_exprs, raw_expr) &&
+src/sql/resolver/expr/ob_raw_expr_util.cpp	2341	ObRawExprUtils::extract_contain_exprs	pointer membership test: add_var_to_array_no_dup	OB_FAIL(add_var_to_array_no_dup(contain_exprs, raw_expr))) {
+src/sql/resolver/expr/ob_raw_expr_util.cpp	2375	ObRawExprUtils::extract_column_exprs	pointer membership test: add_var_to_array_no_dup	if (OB_FAIL(add_var_to_array_no_dup(column_exprs, expr))) {
+src/sql/resolver/expr/ob_raw_expr_util.cpp	2412	ObRawExprUtils::extract_col_aggr_winfunc_exprs	pointer membership test: add_var_to_array_no_dup	if (OB_FAIL(add_var_to_array_no_dup(column_aggr_winfunc_exprs, expr))) {
+src/sql/resolver/expr/ob_raw_expr_util.cpp	2415	ObRawExprUtils::extract_col_aggr_winfunc_exprs	pointer membership test: add_var_to_array_no_dup	if (OB_FAIL(add_var_to_array_no_dup(column_aggr_winfunc_exprs, expr))) {
+src/sql/resolver/expr/ob_raw_expr_util.cpp	2418	ObRawExprUtils::extract_col_aggr_winfunc_exprs	pointer membership test: add_var_to_array_no_dup	if (OB_FAIL(add_var_to_array_no_dup(column_aggr_winfunc_exprs, expr))) {
+src/sql/resolver/expr/ob_raw_expr_util.cpp	2421	ObRawExprUtils::extract_col_aggr_winfunc_exprs	pointer membership test: add_var_to_array_no_dup	if (OB_FAIL(add_var_to_array_no_dup(column_aggr_winfunc_exprs, expr))) {
+src/sql/resolver/expr/ob_raw_expr_util.cpp	2453	ObRawExprUtils::extract_col_aggr_exprs	pointer membership test: add_var_to_array_no_dup	if (OB_FAIL(add_var_to_array_no_dup(column_or_aggr_exprs, expr))) {
+src/sql/resolver/expr/ob_raw_expr_util.cpp	2456	ObRawExprUtils::extract_col_aggr_exprs	pointer membership test: add_var_to_array_no_dup	if (OB_FAIL(add_var_to_array_no_dup(column_or_aggr_exprs, expr))) {
+src/sql/resolver/expr/ob_raw_expr_util.cpp	2497	ObRawExprUtils::extract_virtual_generated_column_parents	pointer membership test: add_var_to_array_no_dup	if (OB_FAIL(add_var_to_array_no_dup(vir_gen_par_exprs, par_expr))) {
+src/sql/resolver/expr/ob_raw_expr_util.cpp	2537	ObRawExprUtils::extract_column_exprs	pointer membership test: add_var_to_array_no_dup	} else if (OB_FAIL(add_var_to_array_no_dup(column_exprs, const_cast<ObRawExpr*>(raw_expr)))) {
+src/sql/resolver/expr/ob_raw_expr_util.cpp	2559	ObRawExprUtils::extract_column_exprs	pointer membership test: add_var_to_array_no_dup	if (OB_FAIL(add_var_to_array_no_dup(column_exprs, expr))) {
+src/sql/resolver/expr/ob_raw_expr_util.cpp	3309	ObRawExprUtils::get_exec_param_expr	IR pointer == IR pointer	} else if (param->get_ref_expr() == outer_val_expr) {
+src/sql/resolver/expr/ob_raw_expr_util.cpp	3369	ObRawExprUtils::get_exec_param_expr	IR pointer == IR pointer	} else if (param->get_ref_expr() == outer_val_expr) {
+src/sql/resolver/expr/ob_raw_expr_util.cpp	4222	ObRawExprUtils::build_get_user_var	pointer membership test: add_var_to_array_no_dup	OB_FAIL(add_var_to_array_no_dup(*user_var_exprs, var_expr))) {
+src/sql/resolver/expr/ob_raw_expr_util.cpp	4785	ObRawExprUtils::is_same_column_ref	IR pointer == IR pointer	bool bret = (left_real_ref == right_real_ref);
+src/sql/resolver/expr/ob_raw_expr_util.cpp	6299	ObRawExprUtils::process_window_complex_agg_expr	pointer membership test: ObOptimizerUtil::find_item	} else if (ObOptimizerUtil::find_item(*win_exprs, window_agg_expr)) {
+src/sql/resolver/expr/ob_raw_expr_util.cpp	6957	ObRawExprUtils::extract_match_against_filters	pointer membership test: add_var_to_array_no_dup	if (OB_FAIL(add_var_to_array_no_dup(match_filters, expr))) {
+src/sql/resolver/expr/ob_raw_expr_util.cpp	6959	ObRawExprUtils::extract_match_against_filters	pointer membership test: add_var_to_array_no_dup	} else if (OB_FAIL(add_var_to_array_no_dup(other_filters, expr))) {
+src/sql/resolver/expr/ob_raw_expr_util.cpp	6973	ObRawExprUtils::extract_match_exprs	pointer membership test: add_var_to_array_no_dup	} else if (OB_FAIL(add_var_to_array_no_dup(match_exprs, static_cast<ObMatchFunRawExpr*>(expr)))) {
+src/sql/resolver/expr/ob_raw_expr_util.cpp	7102	ObRawExprUtils::copy_and_formalize	IR pointer == IR pointer	} else if (new_expr == expr) {
+src/sql/resolver/expr/ob_raw_expr_util.cpp	7124	ObRawExprUtils::copy_and_formalize	IR pointer == IR pointer	if (exprs.at(i) == new_exprs.at(i)) {
+src/sql/resolver/expr/ob_raw_expr_util.cpp	7300	ObRawExprUtils::find_expr	IR pointer == IR pointer	} else if (root == expected) {
+src/sql/resolver/expr/ob_raw_expr_util.cpp	7304	ObRawExprUtils::find_expr	pointer membership test: find_expr	ret = SMART_CALL(find_expr(root->get_param_expr(i), expected, found));
+src/sql/resolver/expr/ob_raw_expr_util.h	1167	ObRawExprUtils::find_expr	pointer membership test: get_expr_idx	return get_expr_idx(exprs, expr) != common::OB_INVALID_INDEX;
+src/sql/resolver/expr/ob_raw_expr_util.h	1176	ObRawExprUtils::get_expr_idx	IR pointer == unresolved pointer	if (exprs.at(i) == expr) {
+src/sql/resolver/expr/ob_shared_expr_resolver.cpp	61	ObRawExprEntry::compare	IR pointer == IR pointer	bret = (expr_ == node.expr_) ||
+src/sql/resolver/expr/ob_shared_expr_resolver.cpp	79	ObSharedExprResolver::hash_expr_tree	pointer cast to integer used for hashing or a bucket choice	hash_code = common::do_hash((uintptr_t) (expr), hash_code);
+src/sql/resolver/expr/ob_shared_expr_resolver.cpp	87	ObSharedExprResolver::hash_expr_tree	pointer cast to integer used for hashing or a bucket choice	hash_code = common::do_hash(((uintptr_t) (param)), hash_code);
+src/sql/resolver/ob_resolver_utils.cpp	5436	ObResolverUtils::revert_external_param_info	IR pointer == unresolved pointer	if (child == param_infos.at(j).element<1>()) {
+src/sql/resolver/ob_resolver_utils.cpp	5813	ObResolverUtils::uv_mysql_insertable_join	IR pointer != IR pointer	if (table_item.view_base_item_ != item && item->ref_id_ == base_tid) {
+src/sql/resolver/ob_resolver_utils.cpp	5827	ObResolverUtils::uv_mysql_insertable_join	IR pointer != IR pointer	if (OB_SUCC(ret) && insertable && item != table_item.view_base_item_) {
+src/sql/resolver/ob_resolver_utils.cpp	6306	ObResolverUtils::prune_check_constraints	pointer membership test: has_exist_in_array	need_add_cst_to_stmt = has_exist_in_array(column_exprs,
+src/sql/resolver/ob_stmt.cpp	212	ObStmtFactory::free_stmt	IR pointer == unresolved pointer	if (node != NULL && node->get_obj() == stmt) {
+src/sql/resolver/ob_stmt.h	64	expr_hash_func::operator()	pointer cast to integer used for hashing or a bucket choice	return reinterpret_cast<uint64_t>(expr);
+src/sql/resolver/ob_stmt.h	72	expr_equal_to::operator()	IR pointer == IR pointer	return a == b;
+src/sql/rewrite/ob_equal_analysis.cpp	146	ObEqualAnalysis::feed_equal_sets	pointer membership test: get_expr_idx	} else if (OB_FAIL(get_expr_idx(expr, expr_idx))) {
+src/sql/rewrite/ob_equal_analysis.cpp	182	ObEqualAnalysis::add_equal_cond	pointer membership test: get_expr_idx	} else if (OB_FAIL(get_expr_idx(expr.get_param_expr(0), l_expr_idx))) {
+src/sql/rewrite/ob_equal_analysis.cpp	183	ObEqualAnalysis::add_equal_cond	pointer membership test: get_expr_idx	} else if (OB_FAIL(get_expr_idx(expr.get_param_expr(1), r_expr_idx))) {

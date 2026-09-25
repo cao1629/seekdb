@@ -1,0 +1,42 @@
+file	line	symbol	construct	text
+src/storage/meta_mem/ob_storage_meta_mem_mgr.h	440	ObStorageMetaMemMgr	heap declared: Heap (ObBinaryHeap)	typedef common::ObBinaryHeap<CandidateTabletInfo, HeapCompare, DEFAULT_TABLET_WASH_HEAP_COUNT> Heap;
+src/storage/meta_mem/ob_tablet_meta_mem_mgr.cpp	526	ObTabletMetaMemMgr::batch_destroy_memtable_	iterate hash container memtable_set (ObMemtableSet) [not built]	for (common::hash::ObHashSet<uint64_t>::iterator set_iter = memtable_set->begin();
+src/storage/meta_mem/ob_tablet_meta_mem_mgr.cpp	596	ObTabletMetaMemMgr::batch_gc_memtable_set_	iterate hash container memtable_set (ObMemtableSet) [not built]	for (common::hash::ObHashSet<uint64_t>::iterator set_iter = memtable_set->begin();
+src/storage/meta_mem/ob_tablet_meta_mem_mgr.cpp	613	ObTabletMetaMemMgr::batch_gc_memtable_set_	iterate hash container memtable_set (ObMemtableSet) [not built]	for (common::hash::ObHashSet<uint64_t>::iterator set_iter = memtable_set->begin();
+src/storage/meta_mem/ob_tablet_meta_mem_mgr.cpp	626	ObTabletMetaMemMgr::batch_gc_memtable_set_	iterate hash container memtable_set (ObMemtableSet) [not built]	for (common::hash::ObHashSet<uint64_t>::iterator set_iter = memtable_set->begin();
+src/storage/meta_mem/ob_tablet_meta_mem_mgr.h	438	ObTabletMetaMemMgr	heap declared: Heap (ObBinaryHeap) [not built]	typedef common::ObBinaryHeap<CandidateTabletInfo, HeapCompare, DEFAULT_TABLET_WASH_HEAP_COUNT> Heap;
+src/storage/meta_mem/ob_tablet_pointer_map.h	145	ObTabletPointerMap::for_each_value_store	iterate hash container map_ (MAP)	if (OB_FAIL(ResourceMap::map_.foreach_refactored(op))) {
+src/storage/multi_data_source/mds_table_mgr.cpp	213	ObMdsTableMgr::order_flush_	iterate hash container mds_table_map_ (MdsTableMap)	if (MDS_FAIL(mds_table_map_.for_each(flush_op))) {// third scan
+src/storage/multi_data_source/mds_table_mgr.h	109	ObMdsTableMgr::for_each_in_t3m_mds_table	iterate hash container mds_table_map_ (MdsTableMap)	return mds_table_map_.for_each(wrapper);
+src/storage/multi_data_source/mds_table_order_flusher.ipp	147	MdsTableOrderFlusher::flush_by_order	lib::ob_sort call	lib::ob_sort(extra_mds_tables_.begin(), extra_mds_tables_.end());
+src/storage/ob_parallel_external_sort.h	729	ObFragmentMerge	heap declared: heap_ (ObBinaryHeap)	common::ObBinaryHeap<HeapItem, HeapCompare, DEFAULT_ITERATOR_NUM> heap_;
+src/storage/ob_parallel_external_sort.h	865	ObFragmentMerge::build_heap	heap operation push on heap_ (ObBinaryHeap)	if (OB_FAIL(heap_.push(heap_item))) {
+src/storage/ob_parallel_external_sort.h	910	ObFragmentMerge::heap_get_next_item	heap operation pop on heap_ (ObBinaryHeap)	} else if (OB_FAIL(heap_.pop())) { // overwrite OB_ITER_END
+src/storage/ob_parallel_external_sort.h	921	ObFragmentMerge::heap_get_next_item	heap operation replace_top on heap_ (ObBinaryHeap)	if (OB_FAIL(heap_.replace_top(heap_item))) {
+src/storage/ob_parallel_external_sort.h	938	ObFragmentMerge::heap_get_next_item	heap operation top on heap_ (ObBinaryHeap)	if (OB_FAIL(heap_.top(item_ptr))) {
+src/storage/ob_parallel_external_sort.h	1529	ObMemorySortRound::build_fragment	lib::ob_sort call	lib::ob_sort(item_list_.begin(), item_list_.end(), *compare_);
+src/storage/ob_parallel_external_sort.h	1571	ObMemorySortRound::finish	lib::ob_sort call	lib::ob_sort(item_list_.begin(), item_list_.end(), *compare_);
+src/storage/ob_partition_range_spliter.cpp	542	ObMultiRangeRowEstimateContext::init	lib::ob_sort call	lib::ob_sort(ranges_.begin(), ranges_.end(), compartor);
+src/storage/ob_partition_range_spliter.cpp	1002	ObPartitionMultiRangeSpliter::transform_to_datum_range_and_sort	lib::ob_sort call	lib::ob_sort(sorted_ranges.get_data(), sorted_ranges.get_data() + sorted_ranges.count(), cmp);
+src/storage/ob_partition_range_spliter.cpp	1327	ObPartitionMultiRangeSpliter::build_heap	heap declared: heap (ObBinaryHeap)	ObBinaryHeap<ObSplitRangeHeapElement, ObSplitRangeHeapElementCompator> &heap)
+src/storage/ob_partition_range_spliter.cpp	1339	ObPartitionMultiRangeSpliter::build_heap	heap operation push on heap (ObBinaryHeap)	} else if (OB_FAIL(heap.push(element))) {
+src/storage/ob_partition_range_spliter.cpp	1353	ObPartitionMultiRangeSpliter::do_task_split_algorithm	heap declared: heap (ObBinaryHeap)	ObBinaryHeap<ObSplitRangeHeapElement, ObSplitRangeHeapElementCompator> &heap,
+src/storage/ob_partition_range_spliter.cpp	1377	ObPartitionMultiRangeSpliter::do_task_split_algorithm	heap operation top on heap (ObBinaryHeap)	ObSplitRangeHeapElement element = heap.top();
+src/storage/ob_partition_range_spliter.cpp	1444	ObPartitionMultiRangeSpliter::do_task_split_algorithm	heap operation pop on heap (ObBinaryHeap)	} else if (OB_FAIL(heap.pop())) {
+src/storage/ob_partition_range_spliter.cpp	1450	ObPartitionMultiRangeSpliter::do_task_split_algorithm	heap operation push on heap (ObBinaryHeap)	} else if (OB_FAIL(heap.push(new_element))) {
+src/storage/ob_partition_range_spliter.cpp	1482	ObPartitionMultiRangeSpliter::build_range_array	heap declared: heap (ObBinaryHeap)	ObBinaryHeap<ObSplitRangeHeapElement, ObSplitRangeHeapElementCompator> heap(cmp);
+src/storage/ob_partition_range_spliter.h	741	ObPartitionMultiRangeSpliter	heap declared: heap (ObBinaryHeap)	ObBinaryHeap<ObSplitRangeHeapElement, ObSplitRangeHeapElementCompator> &heap);
+src/storage/ob_partition_range_spliter.h	750	ObPartitionMultiRangeSpliter	heap declared: heap (ObBinaryHeap)	ObBinaryHeap<ObSplitRangeHeapElement, ObSplitRangeHeapElementCompator> &heap,
+src/storage/ob_resource_map.h	391	ObResourceMap::foreach	iterate hash container map_ (MAP)	} else if (OB_FAIL(map_.foreach_refactored(callback_adpator))) {
+src/storage/ob_resource_map.h	420	ObResourceMap::destroy	iterate hash container map_ (MAP)	for (iter = map_.begin(); iter != map_.end(); iter++) {
+src/storage/ob_tablet_stat_mgr.cpp	656	ObTabletStatMgr::get_all_tablet_stats	iterate hash container stream_map_ (TabletStreamMap)	for (auto bucket_it = stream_map_.begin(); OB_SUCC(ret) && bucket_it != stream_map_.end(); ++bucket_it) {
+src/storage/ob_tablet_stat_mgr.cpp	828	ObTabletStatMgr::refresh_all	iterate hash container stream_map_ (TabletStreamMap)	TabletStreamMap::iterator iter = stream_map_.begin();
+src/storage/ob_tablet_stat_mgr.cpp	868	ObTabletStatMgr::refresh_queuing_mode	iterate hash container stream_map_ (TabletStreamMap)	TabletStreamMap::iterator iter = stream_map_.begin();
+src/storage/ob_tablet_stat_mgr.cpp	880	ObTabletStatMgr::refresh_queuing_mode	iterate hash container stream_map_ (TabletStreamMap)	iter = stream_map_.begin();
+src/storage/retrieval/ob_sparse_bmw_iter.h	54	ObSRBMWIterImpl::get_top_k_threshold	heap operation top on top_k_heap_ (TopKHeap)	return top_k_heap_.empty() ? 0.0 : top_k_heap_.top().relevance_;
+src/storage/retrieval/ob_sparse_bmw_iter.h	97	ObSRBMWIterImpl	heap declared: TopKHeap (ObBinaryHeap)	typedef common::ObBinaryHeap<TopKItem, TopKItemCmp> TopKHeap;
+src/storage/retrieval/ob_sparse_bmw_iter.h	103	ObSRBMWIterImpl	heap declared: top_k_heap_ (TopKHeap)	TopKHeap top_k_heap_;
+src/storage/retrieval/ob_sparse_taat_iter.cpp	418	ObSRTaaTIterImpl::load_next_hash_map	iterate hash container through an iterator of ObSRTaaTHashMap	ObSRTaaTHashMap::iterator map_iter = hash_maps_[cur_map_idx_]->begin();
+src/storage/retrieval/ob_sparse_taat_iter.cpp	421	ObSRTaaTIterImpl::load_next_hash_map	iterate hash container through an iterator of ObSRTaaTHashMap	cur_map_iter_ = new (cur_map_iter_) ObSRTaaTHashMap::iterator(map_iter);
+src/storage/retrieval/ob_sparse_taat_iter.cpp	422	ObSRTaaTIterImpl::load_next_hash_map	iterate hash container through an iterator of ObSRTaaTHashMap	} else if (OB_ISNULL(buf = iter_allocator_->alloc(sizeof(ObSRTaaTHashMap::iterator)))) {
+src/storage/retrieval/ob_sparse_taat_iter.cpp	425	ObSRTaaTIterImpl::load_next_hash_map	iterate hash container through an iterator of ObSRTaaTHashMap	cur_map_iter_ = new (buf) ObSRTaaTHashMap::iterator(map_iter);

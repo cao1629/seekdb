@@ -1,0 +1,51 @@
+file	line	symbol	construct	text
+src/sql/engine/expr/ob_expr_date_format.cpp	99	ObExprDateFormat::calc_date_format	-4013 handled (compared against)	if (CM_IS_WARN_ON_FAIL(cast_mode) && OB_ALLOCATE_MEMORY_FAILED != ret) {
+src/sql/engine/expr/ob_expr_day_of_func.cpp	432	ObExprSubAddtime::calc_result2	-4013 handled (compared against)	if (CM_IS_WARN_ON_FAIL(cast_mode) && OB_ALLOCATE_MEMORY_FAILED != ret) {
+src/sql/engine/expr/ob_expr_day_of_func.cpp	637	ObExprSubAddtime::subaddtime_varchar	-4013 handled (compared against)	if (OB_FAIL(ret) && OB_ALLOCATE_MEMORY_FAILED != ret) {
+src/sql/engine/expr/ob_expr_to_pinyin.cpp	69	convert_to_sortkey	variable initialized to -4013 (not a raise)	int ret = OB_ALLOCATE_MEMORY_FAILED;
+src/sql/engine/expr/ob_expr_xml_func_helper.cpp	100	ObXMLExprHelper::replace_xpath_ret_code	-4013 handled (compared against)	} else if (ret == OB_ALLOCATE_MEMORY_FAILED) {
+src/sql/engine/join/ob_hash_join_op.cpp	843	ObHashJoinOp::inner_get_next_row	logical -4013 (plan case: hash-join partition depth)	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/sql/engine/ob_exec_context.cpp	679	ObExecContext::check_status	query memory tracker check	} else if (OB_UNLIKELY((OB_SUCCESS != (ret = CHECK_MEM_STATUS())))) {
+src/sql/engine/pdml/static/ob_pdml_op_batch_row_cache.cpp	166	ObPDMLOpBatchRowCache::add_row	budget error raised: OB_EXCEED_MEM_LIMIT	ret = OB_EXCEED_MEM_LIMIT;
+src/sql/engine/pdml/static/ob_pdml_op_batch_row_cache.cpp	168	ObPDMLOpBatchRowCache::add_row	budget error handled (compared against or case label): OB_EXCEED_MEM_LIMIT	if (OB_EXCEED_MEM_LIMIT != ret) {
+src/sql/engine/pdml/static/ob_pdml_op_batch_row_cache.cpp	181	ObPDMLOpBatchRowCache::add_row	budget error handled (compared against or case label): OB_EXCEED_MEM_LIMIT	if (OB_EXCEED_MEM_LIMIT != ret) {
+src/sql/engine/pdml/static/ob_pdml_op_batch_row_cache.cpp	317	ObPDMLOpBatchRowCache::process_dump	budget error raised: OB_EXCEED_MEM_LIMIT	ret = OB_EXCEED_MEM_LIMIT;
+src/sql/engine/pdml/static/ob_pdml_op_data_driver.cpp	184	ObPDMLOpDataDriver::fill_cache_unitl_cache_full_or_child_iter_end	budget error handled (compared against or case label): OB_EXCEED_MEM_LIMIT	if (!with_barrier_ && OB_EXCEED_MEM_LIMIT == ret) {
+src/sql/engine/px/ob_px_util.cpp	2292	ObVirtualTableErrorWhitelist::should_ignore_vtable_error	-4013 handled (case label through CASE_IGNORE_ERR_HELPER)	CASE_IGNORE_ERR_HELPER(OB_ALLOCATE_MEMORY_FAILED)
+src/sql/executor/ob_memory_tracker.cpp	36	ObMemTrackerGuard::check_status	query memory tracker check function definition	int ObMemTrackerGuard::check_status()
+src/sql/executor/ob_memory_tracker.cpp	48	ObMemTrackerGuard::check_status	budget error raised: OB_EXCEED_QUERY_MEM_LIMIT	ret = OB_EXCEED_QUERY_MEM_LIMIT;
+src/sql/executor/ob_memory_tracker.cpp	56	ObMemTrackerGuard::try_check_status	query memory tracker check function definition	int ObMemTrackerGuard::try_check_status(int64_t check_try_times)
+src/sql/monitor/ob_sql_plan.cpp	120	ObSqlPlan::store_sql_plan_for_explain	-4013 handled (compared against)	allocate_mem_failed |= OB_ALLOCATE_MEMORY_FAILED == ret;
+src/sql/monitor/ob_sql_plan.cpp	127	ObSqlPlan::store_sql_plan_for_explain	-4013 handled (compared against)	allocate_mem_failed |= OB_ALLOCATE_MEMORY_FAILED == ret;
+src/sql/ob_sql.cpp	2991	ObSql::pc_get_plan	budget error handled (compared against or case label): OB_REACH_MEMORY_LIMIT	if (OB_SQL_PC_NOT_EXIST == ret || OB_REACH_MEMORY_LIMIT == ret) {
+src/sql/ob_sql.cpp	3425	ObSql::pc_add_plan	budget error handled (compared against or case label): OB_REACH_MEMORY_LIMIT	} else if (OB_REACH_MEMORY_LIMIT == ret || OB_SQL_PC_PLAN_SIZE_LIMIT == ret) {
+src/sql/ob_sql_utils.cpp	3667	ObSQLUtils::check_need_disconnect_parser_err	-4013 handled (compared against)	|| OB_ALLOCATE_MEMORY_FAILED == ret_code)) {
+src/sql/optimizer/ob_join_order.cpp	16644	ObJoinOrder::get_query_tokens_by_boolean_mode	logical -4013, not a named plan case (provisional: no allocation call and no null test in the governing condition)	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/sql/parser/ob_memory_tracker_wrapper.cpp	20	check_mem_status	query memory tracker check function definition [not built]	int check_mem_status()
+src/sql/parser/ob_memory_tracker_wrapper.cpp	22	check_mem_status	query memory tracker check [not built]	return oceanbase::lib::ObMemTrackerGuard::check_status();
+src/sql/parser/ob_memory_tracker_wrapper.cpp	25	try_check_mem_status	query memory tracker check function definition [not built]	int try_check_mem_status(int64_t check_try_times)
+src/sql/parser/ob_memory_tracker_wrapper.cpp	27	try_check_mem_status	query memory tracker check [not built]	return oceanbase::lib::ObMemTrackerGuard::try_check_status(check_try_times);
+src/sql/parser/ob_memory_tracker_wrapper.h	26	-	query memory tracker check function declaration	int check_mem_status();
+src/sql/parser/ob_memory_tracker_wrapper.h	27	-	query memory tracker check function declaration	int try_check_mem_status(int64_t check_try_times);
+src/sql/parser/ob_non_reserved_keywords.c	183	add_word_from_pool	logical -4013, not a named plan case (provisional: no allocation call and no null test in the governing condition)	ret = OB_PARSER_ERR_NO_MEMORY;
+src/sql/parser/parse_node.c	177	check_mem_status	query memory tracker check function definition	int OB_WEAK_SYMBOL check_mem_status() { return OB_PARSER_SUCCESS; }
+src/sql/parser/parse_node.c	178	try_check_mem_status	query memory tracker check function definition	int OB_WEAK_SYMBOL try_check_mem_status(int64_t check_try_times) { return OB_PARSER_SUCCESS; }
+src/sql/parser/parse_node.c	186	new_node	query memory tracker check	if (OB_UNLIKELY((OB_PARSER_SUCCESS != (ret = try_check_mem_status(check_try_times))))) {
+src/sql/parser/sql_parser_base.c	108	parse_sql	-4013 handled (compared against)	if (p->extra_errno_ == OB_PARSER_ERR_NO_MEMORY) {
+src/sql/parser/sql_parser_base.c	136	parse_sql	logical -4013, not a named plan case (provisional: no allocation call and no null test in the governing condition)	ret = OB_PARSER_ERR_NO_MEMORY;
+src/sql/parser/sql_parser_base.h	89	#define YYABORT_NO_MEMORY	-4013 passed to YYABORT_WITH_ERROR (raised by the callee; not classified)	#define YYABORT_NO_MEMORY YYABORT_WITH_ERROR(OB_PARSER_ERR_NO_MEMORY)
+src/sql/parser/sql_parser_base.h	427	#define lookup_pl_exec_symbol	-4013 handled (compared against)	} else if (OB_PARSER_ERR_NO_MEMORY == ret) {           \
+src/sql/parser/sql_parser_mysql_mode.l	31	#define YY_FATAL_ERROR	-4013 passed to obsql_mysql_parser_fatal_error (raised by the callee; not classified)	#define YY_FATAL_ERROR(msg, args...) (obsql_mysql_parser_fatal_error(OB_PARSER_ERR_NO_MEMORY, yyscanner, msg, ##args))
+src/sql/parser/sql_parser_mysql_mode.y	9195	-	-4013 handled (compared against)	if (OB_PARSER_ERR_NO_MEMORY == result->extra_errno_) {
+src/sql/pl/ob_pl_resolver.h	535	ObPLResolver::is_unrecoverable_error	-4013 handled (compared against)	return OB_ALLOCATE_MEMORY_FAILED == ret
+src/sql/pl/ob_pl_resolver.h	537	ObPLResolver::is_unrecoverable_error	budget error handled (compared against or case label): OB_EXCEED_QUERY_MEM_LIMIT	|| OB_EXCEED_QUERY_MEM_LIMIT == ret
+src/sql/plan_cache/ob_pcv_set.cpp	195	ObPCVSet::inner_add_cache_obj	budget error raised: OB_REACH_MEMORY_LIMIT	ret = OB_REACH_MEMORY_LIMIT;
+src/sql/plan_cache/ob_plan_cache.cpp	886	ObPlanCache::add_plan	budget error raised: OB_REACH_MEMORY_LIMIT	ret = OB_REACH_MEMORY_LIMIT;
+src/sql/plan_cache/ob_plan_cache.cpp	1745	ObPlanCache::add_ps_plan	budget error raised: OB_REACH_MEMORY_LIMIT	ret = OB_REACH_MEMORY_LIMIT;
+src/sql/resolver/cmd/ob_call_procedure_resolver.cpp	247	ObCallProcedureResolver::add_call_proc_info	budget error handled (compared against or case label): OB_REACH_MEMORY_LIMIT	} else if (OB_REACH_MEMORY_LIMIT == ret || OB_SQL_PC_PLAN_SIZE_LIMIT == ret) {
+src/sql/resolver/dml/ob_select_resolver.cpp	1006	ObSelectResolver::resolve	query memory tracker check	if (OB_UNLIKELY((OB_SUCCESS != (ret = TRY_CHECK_MEM_STATUS(check_try_times))))) {
+src/sql/resolver/expr/ob_raw_expr.h	5077	ObRawExprFactory::try_check_status	query memory tracker check	? CHECK_MEM_STATUS()
+src/sql/rewrite/ob_expr_range_converter.cpp	112	ObExprRangeConverter::alloc_range_node	budget error raised: OB_ERR_QUERY_RANGE_MEMORY_EXHAUSTED	ret = OB_ERR_QUERY_RANGE_MEMORY_EXHAUSTED;
+src/sql/rewrite/ob_expr_range_converter.cpp	1647	ObExprRangeConverter::get_final_in_array_idx	budget error raised: OB_ERR_QUERY_RANGE_MEMORY_EXHAUSTED	ret = OB_ERR_QUERY_RANGE_MEMORY_EXHAUSTED;
+src/sql/rewrite/ob_range_graph_generator.cpp	66	ObRangeGraphGenerator::generate_range_graph	budget error handled (compared against or case label): OB_ERR_QUERY_RANGE_MEMORY_EXHAUSTED	if (OB_FAIL(ret) && OB_ERR_QUERY_RANGE_MEMORY_EXHAUSTED == ret) {
+src/sql/rewrite/ob_transform_rule.cpp	287	ObTransformRule::accept_transform	query memory tracker check	if (OB_UNLIKELY((OB_SUCCESS != (ret = TRY_CHECK_MEM_STATUS(check_try_times))))) {

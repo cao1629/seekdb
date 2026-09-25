@@ -1,0 +1,51 @@
+file	line	symbol	construct	text
+src/sql/rewrite/ob_transform_utils.cpp	53	ObTransformUtils::decorrelate	pointer membership test: ObOptimizerUtil::find_item	if (ObOptimizerUtil::find_item(exec_params, exec_expr)) {
+src/sql/rewrite/ob_transform_utils.cpp	123	ObTransformUtils::get_exec_params	pointer membership test: ObRawExprUtils::find_expr	ObRawExprUtils::find_expr(exec_params, expr) &&
+src/sql/rewrite/ob_transform_utils.cpp	124	ObTransformUtils::get_exec_params	pointer membership test: ObRawExprUtils::find_expr	!ObRawExprUtils::find_expr(used_params, expr)) {
+src/sql/rewrite/ob_transform_utils.cpp	173	ObTransformUtils::is_correlated_expr	pointer membership test: ObRawExprUtils::find_expr	bret = ObRawExprUtils::find_expr(exec_params, expr);
+src/sql/rewrite/ob_transform_utils.cpp	612	ObTransformUtils::merge_from_items_as_inner_join	pointer membership test: ObOptimizerUtil::remove_item	if (OB_FAIL(ObOptimizerUtil::remove_item(stmt.get_joined_tables(), joined_table))) {
+src/sql/rewrite/ob_transform_utils.cpp	664	ObTransformUtils::merge_from_items_as_inner_join	pointer membership test: ObOptimizerUtil::remove_item	if (OB_FAIL(ObOptimizerUtil::remove_item(joined_table_list, joined_table))) {
+src/sql/rewrite/ob_transform_utils.cpp	764	ObTransformUtils::create_columns_for_view	IR pointer != IR pointer	(expr != view_stmt->get_select_item(idx).expr_ || !ignore_dup_select_expr);
+src/sql/rewrite/ob_transform_utils.cpp	1067	ObTransformUtils::replace_expr	pointer membership test: ObOptimizerUtil::find_item	if (ObOptimizerUtil::find_item(other_exprs, expr, &idx)) {
+src/sql/rewrite/ob_transform_utils.cpp	1076	ObTransformUtils::replace_expr	pointer membership test: ObOptimizerUtil::find_item	} else if (ObOptimizerUtil::find_item(new_exprs, expr, &idx)) {
+src/sql/rewrite/ob_transform_utils.cpp	1694	ObNotNullContext::generate_stmt_context	pointer membership test: ObOptimizerUtil::find_item	} else if (ObOptimizerUtil::find_item(not_null_reserve_exprs, expr)) {
+src/sql/rewrite/ob_transform_utils.cpp	1771	ObNotNullContext::remove_filter	pointer membership test: ObOptimizerUtil::remove_item	return ObOptimizerUtil::remove_item(filters_, filter);
+src/sql/rewrite/ob_transform_utils.cpp	1782	ObNotNullContext::remove_having_filter	pointer membership test: ObOptimizerUtil::remove_item	return ObOptimizerUtil::remove_item(having_filters_, filter);
+src/sql/rewrite/ob_transform_utils.cpp	1849	ObTransformUtils::is_expr_not_null	pointer membership test: ObOptimizerUtil::find_item	} else if (ObOptimizerUtil::find_item(ctx.group_clause_exprs_, expr)) {
+src/sql/rewrite/ob_transform_utils.cpp	2334	ObTransformUtils::is_null_propagate_expr	pointer membership test: find_expr (pointer identity, then same_as)	} else if (OB_FAIL(find_expr(targets, expr, bret))) {
+src/sql/rewrite/ob_transform_utils.cpp	2481	ObTransformUtils::find_expr	IR pointer == IR pointer	} else if (source.at(i) == target || source.at(i)->same_as(*target, check_context)) {
+src/sql/rewrite/ob_transform_utils.cpp	2501	ObTransformUtils::find_expr	IR pointer == IR pointer	} else if (source.at(i) == target || source.at(i)->same_as(*target, check_context)) {
+src/sql/rewrite/ob_transform_utils.cpp	2564	ObTransformUtils::get_simple_filter_column	pointer membership test: add_var_to_array_no_dup	} else if (OB_FAIL(add_var_to_array_no_dup(col_exprs, static_cast<ObColumnRefRawExpr*>(left)))) {
+src/sql/rewrite/ob_transform_utils.cpp	2570	ObTransformUtils::get_simple_filter_column	pointer membership test: add_var_to_array_no_dup	} else if (OB_FAIL(add_var_to_array_no_dup(col_exprs, static_cast<ObColumnRefRawExpr*>(right)))) {
+src/sql/rewrite/ob_transform_utils.cpp	2596	ObTransformUtils::get_simple_filter_column	pointer membership test: add_var_to_array_no_dup	if (OB_FAIL(add_var_to_array_no_dup(col_exprs, static_cast<ObColumnRefRawExpr*>(left)))) {
+src/sql/rewrite/ob_transform_utils.cpp	2658	ObTransformUtils::get_parent_stmt	IR pointer == IR pointer	} else if (root_stmt == stmt) {
+src/sql/rewrite/ob_transform_utils.cpp	2666	ObTransformUtils::get_parent_stmt	IR pointer == IR pointer	if (child_query.at(i) == stmt) {
+src/sql/rewrite/ob_transform_utils.cpp	2679	ObTransformUtils::get_parent_stmt	IR pointer == unresolved pointer	} else if (stmt == table->ref_query_) {
+src/sql/rewrite/ob_transform_utils.cpp	2777	ObTransformUtils::get_simple_filter_column_in_parent_stmt	pointer membership test: add_var_to_array_no_dup	} else if (OB_FAIL(add_var_to_array_no_dup(col_exprs, col_expr))) {
+src/sql/rewrite/ob_transform_utils.cpp	3155	ObTransformUtils::is_match_index	pointer membership test: ObOptimizerUtil::find_item	} else if (NULL != col_exprs && ObOptimizerUtil::find_item(*col_exprs, index_expr)) {
+src/sql/rewrite/ob_transform_utils.cpp	3202	ObTransformUtils::classify_scalar_query_ref	pointer membership test: add_var_to_array_no_dup	if (OB_FAIL(add_var_to_array_no_dup(non_scalar_query_refs, expr))) {
+src/sql/rewrite/ob_transform_utils.cpp	3207	ObTransformUtils::classify_scalar_query_ref	pointer membership test: add_var_to_array_no_dup	if (OB_FAIL(add_var_to_array_no_dup(scalar_query_refs, expr))) {
+src/sql/rewrite/ob_transform_utils.cpp	3212	ObTransformUtils::classify_scalar_query_ref	pointer membership test: add_var_to_array_no_dup	if (OB_FAIL(add_var_to_array_no_dup(scalar_query_refs, expr))) {
+src/sql/rewrite/ob_transform_utils.cpp	3264	ObTransformUtils::extract_query_ref_expr	pointer membership test: add_var_to_array_no_dup	OB_FAIL(add_var_to_array_no_dup(subqueries, static_cast<ObQueryRefRawExpr *>(expr)))) {
+src/sql/rewrite/ob_transform_utils.cpp	3292	ObTransformUtils::extract_aggr_expr	pointer membership test: add_var_to_array_no_dup	ret = add_var_to_array_no_dup(aggrs, static_cast<ObAggFunRawExpr*>(expr));
+src/sql/rewrite/ob_transform_utils.cpp	3320	ObTransformUtils::extract_winfun_expr	pointer membership test: add_var_to_array_no_dup	ret = add_var_to_array_no_dup(win_exprs, static_cast<ObWinFunRawExpr*>(expr));
+src/sql/rewrite/ob_transform_utils.cpp	3769	ObTransformUtils::compute_stmt_property	pointer membership test: append_array_no_dup	} else if (OB_FAIL(append_array_no_dup(res_info.const_exprs_, select_exprs))) {
+src/sql/rewrite/ob_transform_utils.cpp	4160	ObTransformUtils::compute_basic_table_property	pointer membership test: ObOptimizerUtil::remove_item	} else if (OB_FAIL(ObOptimizerUtil::remove_item(cond_exprs, cur_cond_exprs))) {
+src/sql/rewrite/ob_transform_utils.cpp	4234	ObTransformUtils::compute_generate_table_property	pointer membership test: ObOptimizerUtil::remove_item	} else if (OB_FAIL(ObOptimizerUtil::remove_item(cond_exprs, cur_cond_exprs))) {
+src/sql/rewrite/ob_transform_utils.cpp	4315	ObTransformUtils::compute_inner_join_property	pointer membership test: ObOptimizerUtil::remove_item	} else if (OB_FAIL(ObOptimizerUtil::remove_item(cond_exprs, cur_cond_exprs))) {
+src/sql/rewrite/ob_transform_utils.cpp	4400	ObTransformUtils::compute_outer_join_property	pointer membership test: ObOptimizerUtil::remove_item	} else if (OB_FAIL(ObOptimizerUtil::remove_item(cond_exprs, cur_cond_exprs))) {
+src/sql/rewrite/ob_transform_utils.cpp	4464	ObTransformUtils::extract_table_exprs	pointer membership test: add_var_to_array_no_dup	} else if (OB_FAIL(add_var_to_array_no_dup(table_exprs, expr))) {
+src/sql/rewrite/ob_transform_utils.cpp	4711	ObTransformUtils::merge_table_items	pointer membership test: ObOptimizerUtil::remove_item	} else if (OB_FAIL(ObOptimizerUtil::remove_item(stmt->get_pseudo_column_like_exprs(), from_pseudo_col_exprs))) {
+src/sql/rewrite/ob_transform_utils.cpp	4837	ObTransformUtils::find_parent_expr	IR pointer == IR pointer	} else if (expr == target) {
+src/sql/rewrite/ob_transform_utils.cpp	4848	ObTransformUtils::find_parent_expr	IR pointer == IR pointer	} else if (target == param_expr) {
+src/sql/rewrite/ob_transform_utils.cpp	5256	ObTransformUtils::check_group_by_consistent	pointer membership test: ObOptimizerUtil::find_item	ObOptimizerUtil::find_item(sel_stmt->get_group_exprs(), expr) ||
+src/sql/rewrite/ob_transform_utils.cpp	5257	ObTransformUtils::check_group_by_consistent	pointer membership test: ObOptimizerUtil::find_item	ObOptimizerUtil::find_item(sel_stmt->get_rollup_exprs(), expr)) {
+src/sql/rewrite/ob_transform_utils.cpp	5538	ObTransformUtils::pushdown_group_by	pointer membership test: add_var_to_array_no_dup	if (OB_FAIL(add_var_to_array_no_dup(pushdown_aggr,
+src/sql/rewrite/ob_transform_utils.cpp	5619	ObTransformUtils::create_simple_view	pointer membership test: append_array_no_dup	} else if (OB_FAIL(append_array_no_dup(select_list, group_exprs))) {
+src/sql/rewrite/ob_transform_utils.cpp	5634	ObTransformUtils::create_simple_view	pointer membership test: append_array_no_dup	} else if (OB_FAIL(append_array_no_dup(select_list, alias_exprs))) {
+src/sql/rewrite/ob_transform_utils.cpp	5643	ObTransformUtils::create_simple_view	pointer membership test: ObOptimizerUtil::remove_item	} else if (OB_FAIL(ObOptimizerUtil::remove_item(stmt->get_condition_exprs(), norm_conds))) {
+src/sql/rewrite/ob_transform_utils.cpp	5691	ObTransformUtils::pushdown_pseudo_column_like_exprs	pointer membership test: append_array_no_dup	} else if (OB_FAIL(append_array_no_dup(pushdown_exprs, new_pushdown_exprs))) {
+src/sql/rewrite/ob_transform_utils.cpp	5880	ObTransformUtils::replace_with_empty_view	pointer membership test: ObOptimizerUtil::remove_item	OB_FAIL(ObOptimizerUtil::remove_item(stmt->get_semi_infos(),
+src/sql/rewrite/ob_transform_utils.cpp	6225	ObTransformUtils::append_hashset	pointer cast to integer used as a key	uint64_t key = reinterpret_cast<uint64_t>(expr);
+src/sql/rewrite/ob_transform_utils.cpp	6251	ObTransformUtils::find_hashset	pointer cast to integer used as a key	uint64_t key = reinterpret_cast<uint64_t>(expr);
+src/sql/rewrite/ob_transform_utils.cpp	6256	ObTransformUtils::find_hashset	pointer membership test: add_var_to_array_no_dup	if (OB_FAIL(add_var_to_array_no_dup(common_exprs, expr))) {

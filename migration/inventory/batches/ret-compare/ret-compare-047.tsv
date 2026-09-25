@@ -1,0 +1,100 @@
+file	line	symbol	construct	text
+src/storage/access/ob_datum_reshape.cpp	138	ObDatumReshape::reshape_datum_vector_value	ret == OB_ITER_END	if (OB_LIKELY(OB_ITER_END == ret)) {
+src/storage/access/ob_datum_reshape.cpp	157	ObDatumReshape::reshape_datum_vector_value	ret == OB_ITER_END	if (OB_LIKELY(OB_ITER_END == ret)) {
+src/storage/access/ob_datum_reshape.cpp	301	ObDatumReshape::reshape_vector_value	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/access/ob_datum_reshape.cpp	330	ObDatumReshape::reshape_vector_value	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/access/ob_datum_reshape.cpp	356	ObDatumReshape::reshape_vector_value	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/access/ob_datum_reshape.cpp	427	ObDatumReshape::reshape_vector_value	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/access/ob_datum_reshape.cpp	455	ObDatumReshape::reshape_vector_value	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/access/ob_datum_reshape.cpp	480	ObDatumReshape::reshape_vector_value	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/access/ob_ddl_block_sample_iterator.cpp	91	ObDDLBlockSampleIterator::get_next_row	ret == OB_ITER_END	if (OB_ITER_END == ret || OB_SUCCESS == ret) {
+src/storage/access/ob_ddl_block_sample_iterator.cpp	113	ObDDLBlockSampleIterator::get_next_row	ret != OB_ITER_END	if (OB_FAIL(ret) && OB_ITER_END != ret)  {
+src/storage/access/ob_ddl_block_sample_iterator.cpp	129	ObDDLBlockSampleIterator::get_next_rows	ret == OB_ITER_END	if (OB_ITER_END == ret || OB_SUCCESS == ret) {
+src/storage/access/ob_ddl_block_sample_iterator.cpp	151	ObDDLBlockSampleIterator::get_next_rows	ret != OB_ITER_END	if (OB_FAIL(ret) && OB_ITER_END != ret)  {
+src/storage/access/ob_ddl_block_sample_iterator.cpp	184	ObDDLBlockSampleIterator::reservoir_block_sample	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/access/ob_ddl_block_sample_iterator.cpp	213	ObDDLBlockSampleIterator::reservoir_block_sample	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/access/ob_fuse_row_cache_fetcher.cpp	64	ObFuseRowCacheFetcher::get_fuse_row_cache	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/storage/access/ob_global_iterator_pool.h	148	ObGlobalIteratorGuard::~ObGlobalIteratorGuard	other variable ret_ != OB_ITER_END	node_->set_exception_occur(OB_SUCCESS != ret_ && OB_ITER_END != ret_);
+src/storage/access/ob_index_sstable_estimator.cpp	148	ObIndexBlockScanEstimator::cal_total_estimate_result	ret != OB_BEYOND_THE_RANGE	if (OB_BEYOND_THE_RANGE != ret) {
+src/storage/access/ob_index_sstable_estimator.cpp	157	ObIndexBlockScanEstimator::cal_total_estimate_result	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/access/ob_index_sstable_estimator.cpp	167	ObIndexBlockScanEstimator::cal_total_estimate_result	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/access/ob_index_sstable_estimator.cpp	228	ObIndexBlockScanEstimator::estimate_excluded_border_result	ret != OB_BEYOND_THE_RANGE	if (OB_BEYOND_THE_RANGE != ret) {
+src/storage/access/ob_index_sstable_estimator.cpp	243	ObIndexBlockScanEstimator::estimate_excluded_border_result	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/access/ob_index_sstable_estimator.cpp	259	ObIndexBlockScanEstimator::estimate_excluded_border_result	ret == OB_ITER_END	if (OB_ITER_END == ret && idx > 0) {
+src/storage/access/ob_index_sstable_estimator.cpp	267	ObIndexBlockScanEstimator::estimate_excluded_border_result	ret == OB_ITER_END	if (OB_ITER_END == ret && ratio < RANGE_ROWS_IN_AND_BORDER_RATIO_THRESHOLD) {
+src/storage/access/ob_index_sstable_estimator.cpp	269	ObIndexBlockScanEstimator::estimate_excluded_border_result	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/access/ob_index_sstable_estimator.cpp	282	ObIndexBlockScanEstimator::estimate_excluded_border_result	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/access/ob_index_sstable_estimator.cpp	323	ObIndexBlockScanEstimator::goto_next_level	ret != OB_BEYOND_THE_RANGE	if (OB_BEYOND_THE_RANGE != ret) {
+src/storage/access/ob_index_sstable_estimator.cpp	353	ObIndexBlockScanEstimator::prefetch_index_block_data	ret != OB_ENTRY_NOT_EXIST	if (OB_UNLIKELY(OB_ENTRY_NOT_EXIST != ret)) {
+src/storage/access/ob_index_sstable_estimator.cpp	395	ObIndexBlockScanEstimator::estimate_data_block_row_count	ret != OB_BEYOND_THE_RANGE	if (OB_BEYOND_THE_RANGE != ret) {
+src/storage/access/ob_index_tree_prefetcher.h	717	ObIndexTreeMultiPassPrefetcher::ObIndexTreeLevelHandle::get_next_data_row	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/access/ob_index_tree_prefetcher.h	740	ObIndexTreeMultiPassPrefetcher::ObIndexTreeLevelHandle::get_next_index_row	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/access/ob_index_tree_prefetcher.ipp	179	ObIndexTreePrefetcher::lookup_in_cache	ret != OB_ENTRY_NOT_EXIST	if (OB_UNLIKELY(OB_ENTRY_NOT_EXIST != ret)) {
+src/storage/access/ob_index_tree_prefetcher.ipp	233	ObIndexTreePrefetcher::lookup_in_index_tree	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/access/ob_index_tree_prefetcher.ipp	251	ObIndexTreePrefetcher::lookup_in_index_tree	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/access/ob_index_tree_prefetcher.ipp	320	ObIndexTreePrefetcher::check_bloom_filter	ret != OB_ENTRY_NOT_EXIST	if (OB_UNLIKELY(OB_ENTRY_NOT_EXIST != ret)) {
+src/storage/access/ob_index_tree_prefetcher.ipp	334	ObIndexTreePrefetcher::check_bloom_filter	ret != OB_ENTRY_NOT_EXIST	if (OB_UNLIKELY(OB_ENTRY_NOT_EXIST != ret)) {
+src/storage/access/ob_index_tree_prefetcher.ipp	342	ObIndexTreePrefetcher::check_bloom_filter	ret != OB_ENTRY_NOT_EXIST	if (OB_UNLIKELY(OB_ENTRY_NOT_EXIST != ret)) {
+src/storage/access/ob_index_tree_prefetcher.ipp	381	ObIndexTreePrefetcher::prefetch_block_data	ret == OB_ENTRY_NOT_EXIST	if (is_data && !need_submit_io && OB_ENTRY_NOT_EXIST == ret) {
+src/storage/access/ob_index_tree_prefetcher.ipp	602	ObIndexTreeMultiPrefetcher::multi_prefetch	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/storage/access/ob_index_tree_prefetcher.ipp	667	ObIndexTreeMultiPrefetcher::drill_down	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/access/ob_index_tree_prefetcher.ipp	1031	ObIndexTreeMultiPassPrefetcher::prefetch	ret == OB_ITER_END	if (OB_LIKELY(OB_ITER_END == ret)) {
+src/storage/access/ob_index_tree_prefetcher.ipp	1037	ObIndexTreeMultiPassPrefetcher::prefetch	ret == OB_ITER_END	if (OB_LIKELY(OB_ITER_END == ret)) {
+src/storage/access/ob_index_tree_prefetcher.ipp	1061	ObIndexTreeMultiPassPrefetcher::prefetch_index_tree	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/access/ob_index_tree_prefetcher.ipp	1109	ObIndexTreeMultiPassPrefetcher::try_add_query_range	ret != OB_BEYOND_THE_RANGE	if (OB_UNLIKELY(OB_BEYOND_THE_RANGE != ret)) {
+src/storage/access/ob_index_tree_prefetcher.ipp	1124	ObIndexTreeMultiPassPrefetcher::try_add_query_range	ret != OB_BEYOND_THE_RANGE	if (OB_UNLIKELY(OB_BEYOND_THE_RANGE != ret)) {
+src/storage/access/ob_index_tree_prefetcher.ipp	1158	ObIndexTreeMultiPassPrefetcher::prefetch_micro_data	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/access/ob_index_tree_prefetcher.ipp	1177	ObIndexTreeMultiPassPrefetcher::prefetch_micro_data	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/access/ob_index_tree_prefetcher.ipp	1199	ObIndexTreeMultiPassPrefetcher::prefetch_micro_data	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/access/ob_index_tree_prefetcher.ipp	1244	ObIndexTreeMultiPassPrefetcher::drill_down	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/access/ob_index_tree_prefetcher.ipp	1658	ObIndexTreeMultiPassPrefetcher::ObIndexTreeLevelHandle::prefetch	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/access/ob_index_tree_prefetcher.ipp	1678	ObIndexTreeMultiPassPrefetcher::ObIndexTreeLevelHandle::prefetch	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/access/ob_index_tree_prefetcher.ipp	1721	ObIndexTreeMultiPassPrefetcher::ObIndexTreeLevelHandle::forward	ret != OB_BEYOND_THE_RANGE	if (OB_UNLIKELY(OB_BEYOND_THE_RANGE != ret)) {
+src/storage/access/ob_index_tree_prefetcher.ipp	1740	ObIndexTreeMultiPassPrefetcher::ObIndexTreeLevelHandle::forward	ret != OB_BEYOND_THE_RANGE	if (OB_UNLIKELY(OB_BEYOND_THE_RANGE != ret)) {
+src/storage/access/ob_index_tree_prefetcher.ipp	1748	ObIndexTreeMultiPassPrefetcher::ObIndexTreeLevelHandle::forward	ret == OB_BEYOND_THE_RANGE	} else if (OB_LIKELY(OB_BEYOND_THE_RANGE == ret)) {
+src/storage/access/ob_multiple_get_merge.cpp	189	ObMultipleGetMerge::inner_get_next_row	ret == OB_ITER_END	if (OB_ITER_END == ret && (0 == i || reach_end)) {
+src/storage/access/ob_multiple_merge.cpp	198	ObMultipleMerge::build_extra_access_ctx	tmp_ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == tmp_ret) {
+src/storage/access/ob_multiple_merge.cpp	257	ObMultipleMerge::get_access_ctx	tmp_ret == OB_HASH_NOT_EXIST	} else if (OB_SUCCESS == tmp_ret || OB_HASH_NOT_EXIST == tmp_ret) {
+src/storage/access/ob_multiple_merge.cpp	355	ObMultipleMerge::reset_tables	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/access/ob_multiple_merge.cpp	486	ObMultipleMerge::get_next_row	ret == OB_PUSHDOWN_STATUS_CHANGED	if (OB_PUSHDOWN_STATUS_CHANGED == ret) {
+src/storage/access/ob_multiple_merge.cpp	490	ObMultipleMerge::get_next_row	ret != OB_ITER_END	} else if (OB_ITER_END != ret) {
+src/storage/access/ob_multiple_merge.cpp	522	ObMultipleMerge::get_next_row	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/access/ob_multiple_merge.cpp	547	ObMultipleMerge::get_next_rows	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/access/ob_multiple_merge.cpp	561	ObMultipleMerge::get_next_rows	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/access/ob_multiple_merge.cpp	628	ObMultipleMerge::get_next_normal_rows	ret != OB_PUSHDOWN_STATUS_CHANGED; ret != OB_ITER_END	if (OB_UNLIKELY(OB_PUSHDOWN_STATUS_CHANGED != ret && OB_ITER_END != ret)) {
+src/storage/access/ob_multiple_merge.cpp	638	ObMultipleMerge::get_next_normal_rows	ret != OB_PUSHDOWN_STATUS_CHANGED; ret != OB_ITER_END	if (OB_UNLIKELY(OB_PUSHDOWN_STATUS_CHANGED != ret && OB_ITER_END != ret)) {
+src/storage/access/ob_multiple_merge.cpp	639	ObMultipleMerge::get_next_normal_rows	ret == OB_PUSHDOWN_STATUS_CHANGED	} else if (OB_PUSHDOWN_STATUS_CHANGED == ret) {
+src/storage/access/ob_multiple_merge.cpp	684	ObMultipleMerge::get_next_normal_rows	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/access/ob_multiple_merge.cpp	736	ObMultipleMerge::get_next_aggregate_row	ret != OB_PUSHDOWN_STATUS_CHANGED; ret != OB_ITER_END	if (OB_UNLIKELY(OB_PUSHDOWN_STATUS_CHANGED != ret && OB_ITER_END != ret)) {
+src/storage/access/ob_multiple_merge.cpp	747	ObMultipleMerge::get_next_aggregate_row	ret != OB_PUSHDOWN_STATUS_CHANGED; ret != OB_ITER_END	if (OB_UNLIKELY(OB_PUSHDOWN_STATUS_CHANGED != ret && OB_ITER_END != ret)) {
+src/storage/access/ob_multiple_merge.cpp	748	ObMultipleMerge::get_next_aggregate_row	ret == OB_PUSHDOWN_STATUS_CHANGED	} else if (OB_PUSHDOWN_STATUS_CHANGED == ret) {
+src/storage/access/ob_multiple_merge.cpp	786	ObMultipleMerge::get_next_aggregate_row	ret == OB_ITER_END	if (OB_ITER_END == ret && !batch_row_store->is_end()) {
+src/storage/access/ob_multiple_merge.cpp	789	ObMultipleMerge::get_next_aggregate_row	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/access/ob_multiple_merge.cpp	799	ObMultipleMerge::get_next_aggregate_row	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/access/ob_multiple_merge.cpp	1394	ObMultipleMerge::prepare_tables_from_iterator	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/access/ob_multiple_merge.cpp	1428	ObMultipleMerge::prepare_tables_from_iterator	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/access/ob_multiple_merge.cpp	1482	ObMultipleMerge::refresh_table_on_demand	ret == OB_NOT_IMPLEMENT	if (OB_NOT_IMPLEMENT == ret) {
+src/storage/access/ob_multiple_scan_merge.cpp	111	ObMultipleScanMerge::inner_get_next_rows	ret != OB_ITER_END; ret != OB_PUSHDOWN_STATUS_CHANGED	if (OB_UNLIKELY(OB_ITER_END != ret && OB_PUSHDOWN_STATUS_CHANGED != ret)) {
+src/storage/access/ob_multiple_scan_merge.cpp	249	ObMultipleScanMerge::locate_blockscan_border	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/access/ob_multiple_scan_merge.cpp	366	ObMultipleScanMerge::advance_scan	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/access/ob_multiple_scan_merge.cpp	408	ObMultipleScanMerge::supply_consume	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/access/ob_multiple_scan_merge.cpp	409	ObMultipleScanMerge::supply_consume	ret != OB_PUSHDOWN_STATUS_CHANGED	if (OB_PUSHDOWN_STATUS_CHANGED != ret) {
+src/storage/access/ob_multiple_scan_merge.cpp	470	ObMultipleScanMerge::inner_get_next_row	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/access/ob_multiple_scan_merge.cpp	473	ObMultipleScanMerge::inner_get_next_row	ret != OB_PUSHDOWN_STATUS_CHANGED	} else if (OB_UNLIKELY(OB_PUSHDOWN_STATUS_CHANGED != ret)) {
+src/storage/access/ob_multiple_scan_merge.cpp	503	ObMultipleScanMerge::inner_get_next_row	ret != OB_ITER_END; ret != OB_PUSHDOWN_STATUS_CHANGED	if (OB_UNLIKELY(OB_ITER_END != ret && OB_PUSHDOWN_STATUS_CHANGED != ret)) {
+src/storage/access/ob_multiple_scan_merge.cpp	718	ObMultipleScanMerge::pause	ret != OB_NOT_IMPLEMENT	if (OB_UNLIKELY(ret != OB_NOT_IMPLEMENT)) {
+src/storage/access/ob_pushdown_aggregate_input.cpp	361	ObPushdownAggregateInput::try_reduce	ret != OB_NOT_SUPPORTED	if (OB_NOT_SUPPORTED != ret) {
+src/storage/access/ob_row_sample_iterator.cpp	31	ObMemtableRowSampleIterator::get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/access/ob_rows_info.cpp	227	ObRowsInfo::assign_duplicate_splitted_rows_info	call result splitted_rows_info.get_error_code() != OB_ERR_PRIMARY_KEY_DUPLICATE	} else if (OB_UNLIKELY(splitted_rows_info.get_error_code() != OB_ERR_PRIMARY_KEY_DUPLICATE ||
+src/storage/access/ob_rows_info.h	225	ObRowsInfo::set_row_conflict_error	other variable error_code == OB_ERR_PRIMARY_KEY_DUPLICATE	if (OB_ERR_PRIMARY_KEY_DUPLICATE == error_code) {
+src/storage/access/ob_sample_iter_helper.cpp	76	ObGetSampleIterHelper::can_retire_to_memtable_row_sample_	ret == OB_ITER_END	if (OB_LIKELY(OB_ITER_END == ret)) {
+src/storage/access/ob_single_merge.cpp	174	ObSingleMerge::get_and_fuse_cache_row	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/storage/access/ob_single_merge.cpp	291	ObSingleMerge::inner_get_next_row	ret == OB_ITER_END	&& OB_ITER_END == ret) {
+src/storage/access/ob_sstable_multi_version_row_iterator.cpp	105	ObSSTableMultiVersionRowGetter::inner_get_next_row	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/access/ob_sstable_multi_version_row_iterator.cpp	236	ObSSTableMultiVersionRowMultiGetter::inner_get_next_row	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/access/ob_sstable_row_getter.cpp	115	ObSSTableRowGetter::inner_get_next_row	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/access/ob_sstable_row_lock_checker.cpp	97	ObSSTableRowLockChecker::check_row_locked	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/access/ob_sstable_row_lock_checker.cpp	160	ObSSTableRowLockMultiChecker::check_row_locked	ret == OB_ITER_END	if (OB_LIKELY(OB_ITER_END == ret)) {
+src/storage/access/ob_sstable_row_lock_checker.cpp	168	ObSSTableRowLockMultiChecker::check_row_locked	ret == OB_ITER_END	if (OB_LIKELY(OB_ITER_END == ret)) {
+src/storage/access/ob_sstable_row_lock_checker.cpp	203	ObSSTableRowLockMultiChecker::fetch_row	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/access/ob_sstable_row_multi_getter.cpp	111	ObSSTableRowMultiGetter::inner_get_next_row	ret == OB_ITER_END	if (OB_LIKELY(OB_ITER_END == ret)) {

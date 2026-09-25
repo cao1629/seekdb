@@ -1,0 +1,51 @@
+file	line	symbol	construct	text
+src/sql/optimizer/ob_optimizer_util.cpp	533	ObOptimizerUtil::is_expr_equivalent	IR pointer == IR pointer	} else if (from == to) {
+src/sql/optimizer/ob_optimizer_util.cpp	577	ObOptimizerUtil::is_expr_equivalent	IR pointer == IR pointer	} else if (from == to) {
+src/sql/optimizer/ob_optimizer_util.cpp	605	ObOptimizerUtil::is_sub_expr	IR pointer == IR pointer	if (sub_expr == expr) {
+src/sql/optimizer/ob_optimizer_util.cpp	634	ObOptimizerUtil::is_sub_expr	IR pointer == IR pointer	} else if (sub_expr == expr) {
+src/sql/optimizer/ob_optimizer_util.cpp	650	ObOptimizerUtil::is_point_based_sub_expr	IR pointer == IR pointer	} else if (sub_expr == expr) {
+src/sql/optimizer/ob_optimizer_util.cpp	761	ObOptimizerUtil::is_const_expr	pointer membership test: find_item	} else if (find_item(const_exprs, expr)) {
+src/sql/optimizer/ob_optimizer_util.cpp	776	ObOptimizerUtil::compute_const_exprs	pointer membership test: add_var_to_array_no_dup	} else if (OB_FAIL(add_var_to_array_no_dup(const_exprs, const_expr))) {
+src/sql/optimizer/ob_optimizer_util.cpp	888	ObOptimizerUtil::get_expr_monotonicity_recursively	IR pointer == IR pointer	if (expr == var) {
+src/sql/optimizer/ob_optimizer_util.cpp	1565	ObOptimizerUtil::extract_equal_exec_params	pointer membership test: find_item	if (!find_item(my_params, exec_param)) {
+src/sql/optimizer/ob_optimizer_util.cpp	1578	ObOptimizerUtil::extract_equal_exec_params	pointer membership test: find_item	if (!find_item(my_params, exec_param)) {
+src/sql/optimizer/ob_optimizer_util.cpp	1874	ObOptimizerUtil::get_subquery_id	IR pointer == unresolved pointer	&& upper_stmt->get_table_item(i)->ref_query_ == stmt) {
+src/sql/optimizer/ob_optimizer_util.cpp	2190	ObOptimizerUtil::make_sort_keys	IR pointer == IR pointer	if (candi_sort_keys.at(i).expr_ == need_sort_exprs.at(sort_keys.count())) {
+src/sql/optimizer/ob_optimizer_util.cpp	2498	ObOptimizerUtil::is_exprs_unique	pointer membership test: remove_item	} else if (OB_FAIL(remove_item(fd_set_parent_exprs, extend_exprs))) {
+src/sql/optimizer/ob_optimizer_util.cpp	2599	ObOptimizerUtil::get_fd_set_parent_exprs	pointer membership test: add_var_to_array_no_dup	if (OB_FAIL(add_var_to_array_no_dup(fd_set_parent_exprs, parent_exprs->at(j)))) {
+src/sql/optimizer/ob_optimizer_util.cpp	2660	ObOptimizerUtil::deduce_determined_exprs	pointer membership test: append_exprs_no_dup (pointer identity, then same_as)	if (OB_FAIL(append_exprs_no_dup(determined_exprs, expr_fd->get_child_exprs()))) {
+src/sql/optimizer/ob_optimizer_util.cpp	2669	ObOptimizerUtil::deduce_determined_exprs	pointer membership test: append_exprs_no_dup (pointer identity, then same_as)	} else if (OB_FAIL(append_exprs_no_dup(determined_exprs, child_exprs))) {
+src/sql/optimizer/ob_optimizer_util.cpp	2680	ObOptimizerUtil::deduce_determined_exprs	pointer membership test: add_var_to_array_no_dup	if (OB_FAIL(add_var_to_array_no_dup(determined_exprs, equal_sets.at(i)->at(j)))) {
+src/sql/optimizer/ob_optimizer_util.cpp	2828	ObOptimizerUtil::enhance_fd_item_set	pointer membership test: ObOptimizerUtil::find_item	if (ObOptimizerUtil::find_item(not_null_columns, cur_expr)) {
+src/sql/optimizer/ob_optimizer_util.cpp	2896	ObOptimizerUtil::try_add_fd_item	pointer membership test: ObOptimizerUtil::find_item	} else if (ObOptimizerUtil::find_item(not_null_columns, col_expr)) {
+src/sql/optimizer/ob_optimizer_util.cpp	3077	ObOptimizerUtil::convert_subplan_scan_fd_parent_exprs	pointer membership test: add_var_to_array_no_dup	} else if (OB_FAIL(add_var_to_array_no_dup(output_exprs, expr))) {
+src/sql/optimizer/ob_optimizer_util.cpp	3780	ObOptimizerUtil::simplify_exprs	pointer membership test: find_item	if (OB_UNLIKELY(!find_item(candi_exprs, root_exprs.at(i), &expr_idx))) {
+src/sql/optimizer/ob_optimizer_util.cpp	3871	ObOptimizerUtil::simplify_ordered_exprs	pointer membership test: remove_item	} else if (OB_FAIL(remove_item(fd_set_parent_exprs, expr))) {
+src/sql/optimizer/ob_optimizer_util.cpp	3983	ObOptimizerUtil::get_subplan_const_column	pointer membership test: add_var_to_array_no_dup	} else if (OB_FAIL(add_var_to_array_no_dup(output_exprs, parent_expr))) {
+src/sql/optimizer/ob_optimizer_util.cpp	4025	ObOptimizerUtil::convert_subplan_scan_expr	pointer membership test: add_var_to_array_no_dup	} else if (OB_FAIL(add_var_to_array_no_dup(temp_exprs, expr))) {
+src/sql/optimizer/ob_optimizer_util.cpp	5437	ObOptimizerUtil::add_cast_to_set_select_expr	IR pointer == IR pointer	} else if (src_expr == new_expr) {
+src/sql/optimizer/ob_optimizer_util.cpp	6789	ObOptimizerUtil::check_exec_param_filter_exprs	pointer membership test: intersect	} else if (OB_FAIL(intersect(tmp_exec_params, filter_params, used_params))) {
+src/sql/optimizer/ob_optimizer_util.cpp	6870	ObOptimizerUtil::expr_calculable_by_exprs	pointer membership test: ObOptimizerUtil::find_item	} else if (need_check_contain && ObOptimizerUtil::find_item(dst_exprs, src_expr)) {
+src/sql/optimizer/ob_optimizer_util.cpp	7242	ObOptimizerUtil::find_expr_in_equal_sets	pointer membership test: find_item	} else if (find_item(*equal_sets.at(j), target_expr)) {
+src/sql/optimizer/ob_px_resource_analyzer.cpp	537	LogLowestCommonAncestorFinder::find_op_common_ancestor	IR pointer == IR pointer	if (parent == ancestors.at(i)) {
+src/sql/optimizer/ob_px_resource_analyzer.cpp	573	LogLowestCommonAncestorFinder::get_op_dfo	IR pointer == IR pointer	if (dfo->get_root_op() == dfo_root_op) {
+src/sql/optimizer/ob_raw_expr_check_dep.cpp	29	ObRawExprCheckDep::check_expr	pointer membership test: ObOptimizerUtil::find_item	if (ObOptimizerUtil::find_item(dep_exprs_, &expr, &idx) && OB_INVALID_INDEX != idx) {
+src/sql/optimizer/ob_sel_estimator.cpp	1695	ObBoolOpSelEstimator::create_estimator	IR pointer != IR pointer	} else if (eigen_expr != child_estimator->get_eigen_expr()) {
+src/sql/optimizer/ob_sel_estimator.cpp	1849	ObRangeSelEstimator::merge	IR pointer == IR pointer	if (column_expr_ == est_other.column_expr_) {
+src/sql/optimizer/ob_sel_estimator.cpp	2330	ObInequalJoinSelEstimator::cmp_term	IR pointer == IR pointer	if (t1.col1_ == t2.col1_ && t1.col2_ == t2.col2_) {
+src/sql/optimizer/ob_sel_estimator.cpp	2337	ObInequalJoinSelEstimator::cmp_term	IR pointer == IR pointer	} else if (t1.col1_ == t2.col2_ && t1.col2_ == t2.col1_) {
+src/sql/optimizer/ob_sel_estimator.cpp	2981	ObNormalRangeSelEstimator::merge	IR pointer == IR pointer	if (!other.is_not_op_ && expr_ == other.expr_ && range_.intersect(other.range_)) {
+src/sql/optimizer/ob_select_log_plan.cpp	178	ObSelectLogPlan::get_groupby_rollup_exprs	pointer membership test: append_array_no_dup	} else if (OB_FAIL(append_array_no_dup(group_by_exprs, tmp_exprs))) {
+src/sql/optimizer/ob_select_log_plan.cpp	2215	ObSelectLogPlan::update_set_sharding_info	pointer membership test: ObOptimizerUtil::find_item	} else if (ObOptimizerUtil::find_item(old_exprs, expr)) {
+src/sql/optimizer/ob_select_log_plan.cpp	2602	ObSelectLogPlan::create_union_all_plan	IR pointer != IR pointer	} else if (OB_FALSE_IT(need_exchange = child_op != largest_op)) {
+src/sql/optimizer/ob_select_log_plan.cpp	5129	ObSelectLogPlan::init_win_func_helper_with_hint	pointer membership test: ObOptimizerUtil::remove_item	} else if (OB_FAIL(ObOptimizerUtil::remove_item(remaining_exprs, current_exprs))) {
+src/sql/optimizer/ob_select_log_plan.cpp	7500	ObSelectLogPlan::allocate_late_materialization_join_as_top	IR pointer == unresolved pointer	if (left_child == parent->get_child(i)) {
+src/sql/optimizer/ob_select_log_plan.cpp	7779	ObSelectLogPlan::candi_allocate_order_by_if_losted	IR pointer != IR pointer	} else if (top != candidates_.candidate_plans_.at(i).plan_tree_) {
+src/sql/optimizer/ob_table_location.cpp	5023	ObTableLocation::get_list_value_node	IR pointer == IR pointer	} else if (new_filter == filter) {
+src/sql/optimizer/stat/ob_topk_hist_estimator.cpp	332	ObTopKFrequencyHistograms::add_entry	pointer cast to integer used as a key	} else if (OB_FAIL(topk_map_.set_refactored(datum_hash, reinterpret_cast<uint64_t>(item)))) {
+src/sql/optimizer/stat/ob_topk_hist_estimator.cpp	353	ObTopKFrequencyHistograms::add_entry	pointer cast to integer used as a key	} else if (OB_FAIL(topk_map_.set_refactored(obj_hash, reinterpret_cast<uint64_t>(item)))) {
+src/sql/optimizer/stat/ob_topk_hist_estimator.cpp	527	ObTopKFrequencyHistograms::shrink_memory_usage	pointer cast to integer used as a key	reinterpret_cast<uint64_t>(topk_item)))) {
+src/sql/optimizer/stat/ob_topk_hist_estimator.cpp	539	ObTopKFrequencyHistograms::shrink_memory_usage	pointer cast to integer used as a key	reinterpret_cast<uint64_t>(datum_item)))) {
+src/sql/plan_cache/ob_cache_object.cpp	249	ObPlanCacheObject::is_same_expr	IR pointer == IR pointer	is_same = (expr1 == expr2);
+src/sql/plan_cache/ob_plan_cache.h	224	ObPlanCache	container keyed by pointer: ObHashMap	typedef common::hash::ObHashMap<ObILibCacheKey*, ObILibCacheNode*> CacheKeyNodeMap;
+src/sql/printer/ob_select_stmt_printer.cpp	411	ObSelectStmtPrinter::print_order_by	IR pointer == IR pointer	} else if (order_expr == select_expr) {

@@ -1,0 +1,99 @@
+file	line	symbol	construct	text
+src/sql/optimizer/stat/ob_opt_stat_sql_service.cpp	311	ObOptStatSqlService::fetch_table_stat	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/optimizer/stat/ob_opt_stat_sql_service.cpp	391	ObOptStatSqlService::batch_fetch_table_stats	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/optimizer/stat/ob_opt_stat_sql_service.cpp	1052	ObOptStatSqlService::fetch_column_stat	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/optimizer/stat/ob_opt_stat_sql_service.cpp	1088	ObOptStatSqlService::fill_column_stat	ret == OB_HASH_NOT_EXIST	if (ret == OB_HASH_NOT_EXIST) {
+src/sql/optimizer/stat/ob_opt_stat_sql_service.cpp	1101	ObOptStatSqlService::fill_column_stat	ret == OB_ERR_NULL_VALUE	if (OB_ERR_NULL_VALUE == ret) {
+src/sql/optimizer/stat/ob_opt_stat_sql_service.cpp	1208	ObOptStatSqlService::fill_column_stat	ret == OB_ERR_NULL_VALUE	if (OB_ERR_NULL_VALUE == ret) {
+src/sql/optimizer/stat/ob_opt_stat_sql_service.cpp	1346	ObOptStatSqlService::get_valid_obj_str	ret == OB_ERR_INCORRECT_STRING_VALUE	if (OB_ERR_INCORRECT_STRING_VALUE == ret) {
+src/sql/optimizer/stat/ob_opt_stat_sql_service.cpp	1389	ObOptStatSqlService::generate_specified_keys_list_str_for_column	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/sql/optimizer/stat/ob_opt_stat_sql_service.cpp	1401	ObOptStatSqlService::generate_specified_keys_list_str_for_column	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/sql/optimizer/stat/ob_opt_stat_sql_service.cpp	1711	ObOptStatSqlService::fetch_table_rowcnt	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/optimizer/stat/ob_opt_stat_sql_service.cpp	1879	ObOptStatSqlService::fetch_system_stat	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/optimizer/stat/ob_opt_system_stat_cache.cpp	31	ObOptSystemStatCache::get_value	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/sql/optimizer/stat/ob_opt_table_stat_cache.cpp	31	ObOptTableStatCache::get_value	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/sql/optimizer/stat/ob_stats_estimator.cpp	418	ObStatsEstimator::do_estimate	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/parser/ob_parser.cpp	891	ObParser::parse_sql	ret == OB_ERR_PARSE_SQL	if (OB_ERR_PARSE_SQL == ret) {
+src/sql/parser/ob_parser.cpp	1038	ObParser::parse_	ret == OB_ERR_PARSE_SQL	if ((OB_ERR_PARSE_SQL == ret
+src/sql/parser/ob_parser.cpp	1041	ObParser::parse_	ret == OB_ERR_PARSE_SQL	(OB_ERR_PARSE_SQL == ret && is_mysql_comment)) {
+src/sql/parser/ob_parser.cpp	1128	ObParser::prepare_parse	ret == OB_ERR_PARSE_SQL	if (OB_ERR_PARSE_SQL == ret) {
+src/sql/parser/parse_node.c	679	parsenode_hash	ret == OB_PARSER_ERR_SIZE_OVERFLOW	if (ret && OB_PARSER_ERR_SIZE_OVERFLOW == *ret) {
+src/sql/parser/parse_node.c	735	parsenode_equal	ret == OB_PARSER_ERR_SIZE_OVERFLOW	if (ret && OB_PARSER_ERR_SIZE_OVERFLOW == *ret) {
+src/sql/parser/sql_parser_base.c	108	parse_sql	other variable p->extra_errno_ == OB_PARSER_ERR_NO_MEMORY	if (p->extra_errno_ == OB_PARSER_ERR_NO_MEMORY) {
+src/sql/parser/sql_parser_base.h	427	#define lookup_pl_exec_symbol	ret == OB_PARSER_ERR_NO_MEMORY	} else if (OB_PARSER_ERR_NO_MEMORY == ret) {           \
+src/sql/parser/sql_parser_base.h	606	#define check_identifier_convert_result	other variable errno == OB_PARSER_ERR_ILLEGAL_NAME	if (OB_PARSER_ERR_ILLEGAL_NAME == errno) {                                       \
+src/sql/parser/sql_parser_base.h	614	#define check_parser_size_overflow	other variable errno == OB_PARSER_ERR_SIZE_OVERFLOW	if (OB_PARSER_ERR_SIZE_OVERFLOW == errno) {                                      \
+src/sql/parser/sql_parser_mysql_mode.y	769	-	other variable result->extra_errno_ == OB_PARSER_ERR_ILLEGAL_NAME	if (OB_PARSER_ERR_ILLEGAL_NAME == result->extra_errno_) {
+src/sql/parser/sql_parser_mysql_mode.y	9195	-	other variable result->extra_errno_ == OB_PARSER_ERR_NO_MEMORY	if (OB_PARSER_ERR_NO_MEMORY == result->extra_errno_) {
+src/sql/parser/sql_parser_mysql_mode.y	10671	-	other variable result->extra_errno_ == OB_PARSER_ERR_ILLEGAL_NAME	if (OB_PARSER_ERR_ILLEGAL_NAME == result->extra_errno_) {
+src/sql/pl/ob_pl_resolver.h	428	ObPLResolver::is_object_not_exist_error	ret == OB_ERR_SP_DOES_NOT_EXIST	return OB_ERR_SP_DOES_NOT_EXIST == ret
+src/sql/pl/ob_pl_resolver.h	429	ObPLResolver::is_object_not_exist_error	ret == OB_ERR_SP_UNDECLARED_VAR	|| OB_ERR_SP_UNDECLARED_VAR == ret
+src/sql/pl/ob_pl_resolver.h	430	ObPLResolver::is_object_not_exist_error	ret == OB_ERR_SP_UNDECLARED_TYPE	|| OB_ERR_SP_UNDECLARED_TYPE == ret
+src/sql/pl/ob_pl_resolver.h	431	ObPLResolver::is_object_not_exist_error	ret == OB_ERR_PACKAGE_DOSE_NOT_EXIST	|| OB_ERR_PACKAGE_DOSE_NOT_EXIST == ret
+src/sql/pl/ob_pl_resolver.h	432	ObPLResolver::is_object_not_exist_error	ret == OB_TABLE_NOT_EXIST	|| OB_TABLE_NOT_EXIST == ret
+src/sql/pl/ob_pl_resolver.h	433	ObPLResolver::is_object_not_exist_error	ret == OB_ERR_COLUMN_NOT_FOUND	|| OB_ERR_COLUMN_NOT_FOUND == ret
+src/sql/pl/ob_pl_resolver.h	434	ObPLResolver::is_object_not_exist_error	ret == OB_ERR_BAD_DATABASE	|| OB_ERR_BAD_DATABASE == ret;
+src/sql/pl/ob_pl_resolver.h	535	ObPLResolver::is_unrecoverable_error	ret == OB_ALLOCATE_MEMORY_FAILED	return OB_ALLOCATE_MEMORY_FAILED == ret
+src/sql/pl/ob_pl_resolver.h	536	ObPLResolver::is_unrecoverable_error	ret == OB_ERR_UNEXPECTED	|| OB_ERR_UNEXPECTED == ret
+src/sql/pl/ob_pl_resolver.h	537	ObPLResolver::is_unrecoverable_error	ret == OB_EXCEED_QUERY_MEM_LIMIT	|| OB_EXCEED_QUERY_MEM_LIMIT == ret
+src/sql/pl/ob_pl_resolver.h	538	ObPLResolver::is_unrecoverable_error	ret == OB_TIMEOUT	|| OB_TIMEOUT == ret
+src/sql/pl/ob_pl_resolver.h	539	ObPLResolver::is_unrecoverable_error	ret == OB_SIZE_OVERFLOW	|| OB_SIZE_OVERFLOW == ret;
+src/sql/pl/pl_cache/ob_pl_cache_mgr.h	39	#define HANDLE_PL_CACHE_RET_VALUE	ret != OB_ERR_UNEXPECTED	if ((ret) != OB_ERR_UNEXPECTED) { \
+src/sql/plan_cache/ob_i_lib_cache_node.cpp	122	ObILibCacheNode::add_cache_obj	ret != OB_SQL_PC_PLAN_DUPLICATE	if (OB_FAIL(ret) && ret != OB_SQL_PC_PLAN_DUPLICATE) {
+src/sql/plan_cache/ob_lib_cache_object_manager.cpp	149	ObLCObjectManager::destroy_cache_obj	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/sql/plan_cache/ob_pcv_set.cpp	143	ObPCVSet::inner_get_cache_obj	ret == OB_OLD_SCHEMA_VERSION	if (OB_OLD_SCHEMA_VERSION == ret) {
+src/sql/plan_cache/ob_pcv_set.cpp	210	ObPCVSet::inner_add_cache_obj	ret == OB_SQL_PC_PLAN_DUPLICATE	if (OB_SQL_PC_PLAN_DUPLICATE == ret
+src/sql/plan_cache/ob_plan_cache.cpp	415	ObPlanCache::check_after_get_plan	ret == OB_OLD_SCHEMA_VERSION	if (OB_OLD_SCHEMA_VERSION == ret) {
+src/sql/plan_cache/ob_plan_cache.cpp	446	ObPlanCache::get_plan	ret != OB_BATCHED_MULTI_STMT_ROLLBACK	if (OB_BATCHED_MULTI_STMT_ROLLBACK != ret) {
+src/sql/plan_cache/ob_plan_cache.cpp	796	ObPlanCache::can_do_insert_batch_opt	call result session_info->get_retry_info().get_last_query_retry_err() != OB_BATCHED_MULTI_STMT_ROLLBACK	OB_BATCHED_MULTI_STMT_ROLLBACK != session_info->get_retry_info().get_last_query_retry_err()) {
+src/sql/plan_cache/ob_plan_cache.cpp	896	ObPlanCache::add_plan	ret != OB_SQL_PC_PLAN_DUPLICATE	&& OB_SQL_PC_PLAN_DUPLICATE != ret
+src/sql/plan_cache/ob_plan_cache.cpp	897	ObPlanCache::add_plan	ret != OB_PC_LOCK_CONFLICT	&& OB_PC_LOCK_CONFLICT != ret) {
+src/sql/plan_cache/ob_plan_cache.cpp	921	ObPlanCache::add_plan_cache	ret == OB_OLD_SCHEMA_VERSION	if (OB_FAIL(add_cache_obj(ctx, pc_ctx.key_, cache_obj)) && OB_OLD_SCHEMA_VERSION == ret) {
+src/sql/plan_cache/ob_plan_cache.cpp	931	ObPlanCache::add_plan_cache	ret == OB_OLD_SCHEMA_VERSION	} while (OB_OLD_SCHEMA_VERSION == ret && pc_ctx.need_retry_add_plan());
+src/sql/plan_cache/ob_plan_cache.cpp	987	ObPlanCache::add_cache_obj	other variable hash_err == OB_HASH_EXIST	if (OB_HASH_EXIST == hash_err) { //may be this node has been set by other thread。
+src/sql/plan_cache/ob_plan_cache.cpp	1049	ObPlanCache::add_cache_obj	ret != OB_SQL_PC_PLAN_DUPLICATE	if (!ctx.need_destroy_node_ && ret != OB_SQL_PC_PLAN_DUPLICATE) {
+src/sql/plan_cache/ob_plan_cache.cpp	1061	ObPlanCache::add_cache_obj	ret != OB_SQL_PC_PLAN_DUPLICATE	if (!ctx.need_destroy_node_ && ret != OB_SQL_PC_PLAN_DUPLICATE) {
+src/sql/plan_cache/ob_plan_cache.cpp	1098	ObPlanCache::get_cache_obj	ret != OB_SQL_PC_NOT_EXIST	if (OB_SQL_PC_NOT_EXIST != ret) {
+src/sql/plan_cache/ob_plan_cache.cpp	1132	ObPlanCache::get_value	switch (hash_err) case OB_HASH_NOT_EXIST	case OB_HASH_NOT_EXIST: { // return when node = NULL; ret = OB_SUCCESS;
+src/sql/plan_cache/ob_plan_cache.cpp	1377	ObPlanCache::cache_evict_by_idle	tmp_ret == OB_ITER_END	if (OB_ITER_END == tmp_ret) {
+src/sql/plan_cache/ob_plan_cache.cpp	1453	ObPlanCache::remove_cache_node	other variable hash_err == OB_HASH_NOT_EXIST	} else if (OB_HASH_NOT_EXIST == hash_err) {
+src/sql/plan_cache/ob_plan_cache.cpp	1891	ObPlanCache::get_ps_plan	ret == OB_OLD_SCHEMA_VERSION	if (OB_OLD_SCHEMA_VERSION == ret) {
+src/sql/plan_cache/ob_plan_cache_util.h	771	ObPlanStat::to_str_acs_sel_info	ret == OB_SIZE_OVERFLOW	if (OB_SIZE_OVERFLOW == ret) {
+src/sql/plan_cache/ob_plan_cache_value.cpp	394	ObPlanCacheValue::choose_plan	ret != OB_BATCHED_MULTI_STMT_ROLLBACK	if (OB_BATCHED_MULTI_STMT_ROLLBACK != ret) {
+src/sql/plan_cache/ob_plan_cache_value.cpp	439	ObPlanCacheValue::choose_plan	ret == OB_SQL_PC_NOT_EXIST	if (OB_SQL_PC_NOT_EXIST == ret) {
+src/sql/plan_cache/ob_plan_match_helper.cpp	82	ObPlanMatchHelper::match_plan	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/sql/plan_cache/ob_plan_set.cpp	60	ObPlanSet::get_variable_meta	ret == OB_ERR_USER_VARIABLE_UNKNOWN	if (ret == OB_ERR_USER_VARIABLE_UNKNOWN) {
+src/sql/plan_cache/ob_plan_set.cpp	340	ObPlanSet::match_multi_stmt_info	ret == OB_HASH_EXIST	if (OB_HASH_EXIST == ret) {
+src/sql/plan_cache/ob_plan_set.cpp	347	ObPlanSet::match_multi_stmt_info	ret == OB_HASH_NOT_EXIST	} else if (OB_HASH_NOT_EXIST == ret) {
+src/sql/plan_cache/ob_plan_set.cpp	1112	ObSqlPlanSet::select_plan	ret == OB_SQL_PC_NOT_EXIST	if (OB_SQL_PC_NOT_EXIST == ret) {
+src/sql/plan_cache/ob_plan_set.cpp	1209	ObSqlPlanSet::try_get_dist_plan	ret == OB_SQL_PC_NOT_EXIST	if (OB_SQL_PC_NOT_EXIST == ret) {
+src/sql/plan_cache/ob_ps_cache.cpp	342	ObPsCache::get_or_add_stmt_item	ret == OB_HASH_EXIST	} else if (OB_HASH_EXIST == ret) {
+src/sql/plan_cache/ob_ps_cache.cpp	348	ObPsCache::get_or_add_stmt_item	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {//stmt item was deleted, need to recreate}
+src/sql/plan_cache/ob_ps_cache.cpp	376	#define LOG_WARN_IGNORE_PS_NOTFOUND	ret == OB_HASH_NOT_EXIST	if (common::OB_HASH_NOT_EXIST == ret) {\
+src/sql/plan_cache/ob_ps_cache.cpp	407	ObPsCache::inner_ref_stmt_item	ret == OB_EAGAIN	if (OB_EAGAIN == ret) {
+src/sql/plan_cache/ob_ps_cache.cpp	415	ObPsCache::inner_ref_stmt_item	switch (ret) case OB_HASH_NOT_EXIST	case OB_HASH_NOT_EXIST: {
+src/sql/plan_cache/ob_ps_cache.cpp	419	ObPsCache::inner_ref_stmt_item	switch (ret) case OB_EAGAIN	case OB_EAGAIN: {
+src/sql/plan_cache/ob_ps_cache.cpp	427	ObPsCache::inner_ref_stmt_item	ret == OB_EAGAIN	} while(OB_EAGAIN == ret && retry_cnt < MAX_RETRY_CNT);
+src/sql/plan_cache/ob_ps_cache.cpp	459	ObPsCache::get_or_add_stmt_info	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/sql/plan_cache/ob_ps_cache.cpp	514	ObPsCache::erase_stmt_item	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/sql/plan_cache/ob_ps_cache.cpp	521	ObPsCache::erase_stmt_item	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/sql/plan_cache/ob_ps_cache.cpp	644	ObPsCache::add_stmt_info	ret == OB_HASH_EXIST	} else if (OB_HASH_EXIST == ret) {
+src/sql/plan_cache/ob_ps_cache.cpp	650	ObPsCache::add_stmt_info	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/sql/plan_cache/ob_ps_cache.cpp	689	ObPsCache::ref_stmt_info	ret == OB_EAGAIN	if (OB_EAGAIN == ret) {
+src/sql/plan_cache/ob_ps_cache.cpp	697	ObPsCache::ref_stmt_info	switch (ret) case OB_HASH_NOT_EXIST	case OB_HASH_NOT_EXIST: {
+src/sql/plan_cache/ob_ps_cache.cpp	701	ObPsCache::ref_stmt_info	switch (ret) case OB_EAGAIN	case OB_EAGAIN: {
+src/sql/plan_cache/ob_ps_cache.cpp	710	ObPsCache::ref_stmt_info	ret == OB_EAGAIN	} while(OB_EAGAIN == ret && retry_cnt < MAX_RETRY_CNT);
+src/sql/plan_cache/ob_ps_cache.cpp	844	ObPsCache::destroy_cached_ps	ret == OB_HASH_NOT_EXIST	if (ret == OB_HASH_NOT_EXIST) {
+src/sql/plan_cache/ob_sql_parameterization.cpp	180	ObSqlParameterization::transform_syntax_tree	ret != OB_NOT_SUPPORTED	if (OB_NOT_SUPPORTED != ret) {
+src/sql/plan_cache/ob_sql_parameterization.cpp	626	ObSqlParameterization::transform_tree	ret == OB_NOT_SUPPORTED	if (ctx.sql_info_->need_check_fp_ && ret == OB_NOT_SUPPORTED) {
+src/sql/plan_cache/ob_sql_parameterization.cpp	799	ObSqlParameterization::transform_tree	ret != OB_NOT_SUPPORTED	if (OB_NOT_SUPPORTED != ret) {
+src/sql/plan_cache/ob_sql_parameterization.cpp	996	ObSqlParameterization::parameterize_syntax_tree	ret != OB_NOT_SUPPORTED	if (OB_NOT_SUPPORTED != ret) {
+src/sql/plan_cache/ob_sql_parameterization.cpp	1017	ObSqlParameterization::parameterize_syntax_tree	ret != OB_NOT_SUPPORTED	if (OB_NOT_SUPPORTED != ret) {
+src/sql/plan_cache/ob_sql_parameterization.cpp	2531	ObSqlParameterization::formalize_sql_text	ret != OB_NOT_SUPPORTED	if (OB_NOT_SUPPORTED != ret) {
+src/sql/printer/ob_schema_printer.cpp	329	ObSchemaPrinter::print_table_definition_columns	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/sql/privilege_check/ob_ai_model_priv_util.cpp	51	ObAIServiceEndpointPrivUtil::check_ai_model_priv	ret == OB_ERR_NO_PRIVILEGE	if (OB_ERR_NO_PRIVILEGE == ret) {
+src/sql/resolver/cmd/ob_call_procedure_resolver.cpp	245	ObCallProcedureResolver::add_call_proc_info	ret == OB_SQL_PC_PLAN_DUPLICATE	if (OB_SQL_PC_PLAN_DUPLICATE == ret) {
+src/sql/resolver/cmd/ob_call_procedure_resolver.cpp	247	ObCallProcedureResolver::add_call_proc_info	ret == OB_REACH_MEMORY_LIMIT; ret == OB_SQL_PC_PLAN_SIZE_LIMIT	} else if (OB_REACH_MEMORY_LIMIT == ret || OB_SQL_PC_PLAN_SIZE_LIMIT == ret) {
+src/sql/resolver/cmd/ob_get_diagnostics_resolver.cpp	125	ObGetDiagnosticsResolver::resolve	ret == OB_ERR_BAD_FIELD_ERROR	if (OB_ERR_BAD_FIELD_ERROR == ret) {/* In SQL environment, when using non-user/system variables as condition parameters, the get diagnostic statement can be successfully executed, but it will only report a warning at runtime */
+src/sql/resolver/cmd/ob_load_data_resolver.cpp	886	ObLoadDataResolver::resolve_empty_field_or_var_list_node	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/sql/resolver/cmd/ob_load_data_resolver.cpp	1297	ObLoadDataResolver::resolve_partitions	ret == OB_UNKNOWN_PARTITION	if (OB_UNKNOWN_PARTITION == ret) {

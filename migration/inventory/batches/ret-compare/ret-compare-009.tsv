@@ -1,0 +1,101 @@
+file	line	symbol	construct	text
+src/observer/vector_index/ob_plugin_vector_index_service.cpp	142	ObPluginVectorIndexMgr::erase_complete_adapter	ret != OB_HASH_NOT_EXIST	if (ret != OB_HASH_NOT_EXIST) {
+src/observer/vector_index/ob_plugin_vector_index_service.cpp	227	ObPluginVectorIndexMgr::get_adapter_inst_	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/observer/vector_index/ob_plugin_vector_index_service.cpp	237	ObPluginVectorIndexMgr::get_adapter_inst_	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/observer/vector_index/ob_plugin_vector_index_service.cpp	305	ObPluginVectorIndexMgr::get_build_helper_inst_	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/observer/vector_index/ob_plugin_vector_index_service.cpp	392	ObPluginVectorIndexMgr::get_or_create_partial_adapter_	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/observer/vector_index/ob_plugin_vector_index_service.cpp	396	ObPluginVectorIndexMgr::get_or_create_partial_adapter_	ret != OB_HASH_EXIST	if (OB_FAIL(ret) && (OB_HASH_EXIST != ret)) {
+src/observer/vector_index/ob_plugin_vector_index_service.cpp	555	ObPluginVectorIndexService::acquire_ivf_build_helper_guard	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/observer/vector_index/ob_plugin_vector_index_service.cpp	559	ObPluginVectorIndexService::acquire_ivf_build_helper_guard	ret != OB_HASH_EXIST	if (OB_FAIL(ret) && (OB_HASH_EXIST != ret)) {
+src/observer/vector_index/ob_plugin_vector_index_service.cpp	581	ObPluginVectorIndexService::acquire_adapter_guard	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/observer/vector_index/ob_plugin_vector_index_service.cpp	585	ObPluginVectorIndexService::acquire_adapter_guard	ret != OB_HASH_EXIST	if (OB_FAIL(ret) && (OB_HASH_EXIST != ret)) {
+src/observer/vector_index/ob_plugin_vector_index_service.cpp	633	ObPluginVectorIndexMgr::check_and_merge_partial_inner	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/observer/vector_index/ob_plugin_vector_index_service.cpp	1142	ObPluginVectorIndexMgr::replace_old_adapter	tmp_ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == tmp_ret) {
+src/observer/vector_index/ob_plugin_vector_index_service.cpp	1266	ObPluginVectorIndexMgr::erase_ivf_cache_mgr	ret != OB_HASH_NOT_EXIST	if (ret != OB_HASH_NOT_EXIST) {
+src/observer/vector_index/ob_plugin_vector_index_service.cpp	1281	ObPluginVectorIndexMgr::get_ivf_cache_mgr	ret != OB_HASH_NOT_EXIST	if (ret != OB_HASH_NOT_EXIST) {
+src/observer/vector_index/ob_plugin_vector_index_service.cpp	1297	ObPluginVectorIndexMgr::get_ivf_cache_mgr_guard	ret != OB_HASH_NOT_EXIST	if (ret != OB_HASH_NOT_EXIST) {
+src/observer/vector_index/ob_plugin_vector_index_service.cpp	1313	ObPluginVectorIndexMgr::get_or_create_ivf_cache_mgr_guard	ret == OB_HASH_NOT_EXIST	if (ret == OB_HASH_NOT_EXIST) {
+src/observer/vector_index/ob_plugin_vector_index_service.cpp	1340	ObPluginVectorIndexMgr::create_ivf_cache_mgr	ret == OB_HASH_EXIST	if (ret == OB_HASH_EXIST) {
+src/observer/vector_index/ob_plugin_vector_index_service.cpp	1420	ObPluginVectorIndexService::get_ivf_aux_info	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/observer/vector_index/ob_plugin_vector_index_service.h	531	ObPluginVectorIndexService::process_ivf_aux_info	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/observer/vector_index/ob_plugin_vector_index_util.cpp	74	ObVectorQueryRowkeyIterator::get_next_row	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/observer/vector_index/ob_plugin_vector_index_util.cpp	94	ObVectorQueryRowkeyIterator::get_next_rows	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/observer/vector_index/ob_plugin_vector_index_util.cpp	400	ObPluginVectorIndexHelper::driect_merge_delta_and_snap_vids	ret == OB_HASH_EXIST	if (OB_HASH_EXIST == ret) {
+src/observer/vector_index/ob_plugin_vector_index_util.cpp	403	ObPluginVectorIndexHelper::driect_merge_delta_and_snap_vids	ret == OB_HASH_NOT_EXIST	} else if (OB_HASH_NOT_EXIST == ret) {
+src/observer/vector_index/ob_plugin_vector_index_util.cpp	467	ObPluginVectorIndexHelper::sort_merge_delta_and_snap_vids	tmp_ret == OB_HASH_EXIST	if (OB_HASH_EXIST == tmp_ret) {
+src/observer/vector_index/ob_plugin_vector_index_util.cpp	469	ObPluginVectorIndexHelper::sort_merge_delta_and_snap_vids	tmp_ret == OB_HASH_NOT_EXIST	} else if (OB_HASH_NOT_EXIST == tmp_ret) {
+src/observer/vector_index/ob_plugin_vector_index_util.cpp	483	ObPluginVectorIndexHelper::sort_merge_delta_and_snap_vids	tmp_ret == OB_HASH_EXIST	if (OB_HASH_EXIST == tmp_ret) {
+src/observer/vector_index/ob_plugin_vector_index_util.cpp	485	ObPluginVectorIndexHelper::sort_merge_delta_and_snap_vids	tmp_ret == OB_HASH_NOT_EXIST	} else if (OB_HASH_NOT_EXIST == tmp_ret) {
+src/observer/vector_index/ob_plugin_vector_index_util.cpp	502	ObPluginVectorIndexHelper::sort_merge_delta_and_snap_vids	tmp_ret == OB_HASH_EXIST	if (OB_HASH_EXIST == tmp_ret) {
+src/observer/vector_index/ob_plugin_vector_index_util.cpp	504	ObPluginVectorIndexHelper::sort_merge_delta_and_snap_vids	tmp_ret == OB_HASH_NOT_EXIST	} else if (OB_HASH_NOT_EXIST == tmp_ret) {
+src/observer/vector_index/ob_plugin_vector_index_util.cpp	520	ObPluginVectorIndexHelper::sort_merge_delta_and_snap_vids	tmp_ret == OB_HASH_EXIST	if (OB_HASH_EXIST == tmp_ret) {
+src/observer/vector_index/ob_plugin_vector_index_util.cpp	522	ObPluginVectorIndexHelper::sort_merge_delta_and_snap_vids	tmp_ret == OB_HASH_NOT_EXIST	} else if (OB_HASH_NOT_EXIST == tmp_ret) {
+src/observer/vector_index/ob_plugin_vector_index_utils.cpp	151	ObPluginVectorIndexUtils::read_object_from_data_table_iter	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/vector_index/ob_plugin_vector_index_utils.cpp	205	ObPluginVectorIndexUtils::read_object_from_vid_rowkey_table_iter	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/vector_index/ob_plugin_vector_index_utils.cpp	255	ObPluginVectorIndexUtils::read_object_from_embedded_table_iter	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/vector_index/ob_plugin_vector_index_utils.cpp	482	ObPluginVectorIndexUtils::read_vector_info	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/vector_index/ob_plugin_vector_index_utils.cpp	516	ObPluginVectorIndexUtils::read_vector_info	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/observer/vector_index/ob_plugin_vector_index_utils.cpp	564	ObPluginVectorIndexUtils::read_vector_info	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/observer/vector_index/ob_plugin_vector_index_utils.cpp	665	ObPluginVectorIndexUtils::try_sync_snapshot_memdata	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/observer/vector_index/ob_plugin_vector_index_utils.cpp	1668	ObPluginVectorIndexUtils::erase_ivf_build_helper	ret == OB_HASH_NOT_EXIST	if (ret == OB_HASH_NOT_EXIST) {
+src/observer/vector_index/ob_plugin_vector_index_utils.cpp	1750	ObPluginVectorIndexUtils::fill_mem_context_detail_info	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/observer/vector_index/ob_plugin_vector_index_utils.cpp	1757	ObPluginVectorIndexUtils::fill_mem_context_detail_info	ret == OB_HASH_EXIST	if (ret == OB_HASH_EXIST) {
+src/observer/vector_index/ob_plugin_vector_index_utils.cpp	1760	ObPluginVectorIndexUtils::fill_mem_context_detail_info	ret == OB_HASH_NOT_EXIST	} else if (ret == OB_HASH_NOT_EXIST) {
+src/observer/vector_index/ob_plugin_vector_index_utils.cpp	1819	ObPluginVectorIndexUtils::fill_ivf_mem_context_detail_info	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/observer/vector_index/ob_plugin_vector_index_utils.cpp	1826	ObPluginVectorIndexUtils::fill_ivf_mem_context_detail_info	ret == OB_HASH_EXIST	if (ret == OB_HASH_EXIST) {
+src/observer/vector_index/ob_plugin_vector_index_utils.cpp	1829	ObPluginVectorIndexUtils::fill_ivf_mem_context_detail_info	ret == OB_HASH_NOT_EXIST	} else if (ret == OB_HASH_NOT_EXIST) {
+src/observer/vector_index/ob_vector_index_async_task.cpp	394	ObVecTaskManager::check_task_status	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/observer/vector_index/ob_vector_index_async_task.cpp	409	ObVecTaskManager::check_task_status	ret == OB_EAGAIN	if (OB_EAGAIN == ret) {
+src/observer/vector_index/ob_vector_index_async_task_util.cpp	186	ObVecIndexAsyncTaskOption::add_task_ctx	ret == OB_HASH_EXIST	if (OB_HASH_EXIST == ret) {
+src/observer/vector_index/ob_vector_index_async_task_util.cpp	200	ObVecIndexAsyncTaskOption::del_task_ctx	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/observer/vector_index/ob_vector_index_async_task_util.cpp	214	ObVecIndexAsyncTaskOption::is_task_ctx_exist	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/observer/vector_index/ob_vector_index_async_task_util.cpp	508	ObVecIndexAsyncTaskUtil::update_vec_task	ret == OB_ERR_EXCLUSIVE_LOCK_CONFLICT	if (ret == OB_ERR_EXCLUSIVE_LOCK_CONFLICT) {
+src/observer/vector_index/ob_vector_index_async_task_util.cpp	553	ObVecIndexAsyncTaskUtil::resume_task_from_inner_table	ret != OB_TABLET_NOT_EXIST	if (OB_TABLET_NOT_EXIST != ret) {
+src/observer/vector_index/ob_vector_index_async_task_util.cpp	597	ObVecIndexAsyncTaskUtil::resume_task_from_inner_table	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/observer/vector_index/ob_vector_index_async_task_util.cpp	638	ObVecIndexAsyncTaskUtil::read_vec_tasks	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/observer/vector_index/ob_vector_index_async_task_util.cpp	742	ObVecIndexAsyncTaskUtil::add_sys_task	ret == OB_ENTRY_EXIST	if (OB_ENTRY_EXIST == ret) {
+src/observer/vector_index/ob_vector_index_async_task_util.cpp	1113	ObVecIndexATaskUpdIterator::get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/vector_index/ob_vector_index_async_task_util.cpp	1119	ObVecIndexATaskUpdIterator::get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/vector_index/ob_vector_index_async_task_util.cpp	1144	ObVecIndexAsyncTask::do_work	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/observer/vector_index/ob_vector_index_async_task_util.cpp	1319	ObVecIndexAsyncTask::process_data_for_index	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/vector_index/ob_vector_index_async_task_util.cpp	1329	ObVecIndexAsyncTask::process_data_for_index	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/vector_index/ob_vector_index_async_task_util.cpp	1428	ObVecIndexAsyncTask::process_data_for_index	ret == OB_ITER_END	if (ret == OB_ITER_END) {
+src/observer/vector_index/ob_vector_index_async_task_util.cpp	1785	ObVecIndexAsyncTask::get_old_snapshot_data	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/vector_index/ob_vector_index_async_task_util.cpp	1836	ObVecIndexAsyncTask::get_old_snapshot_data	ret == OB_ITER_END	if (ret == OB_ITER_END) {
+src/observer/vector_index/ob_vector_index_async_task_util.cpp	1869	ObVecIndexAsyncTask::delete_tablet_data	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/vector_index/ob_vector_index_async_task_util.cpp	1882	ObVecIndexAsyncTask::delete_tablet_data	ret == OB_ITER_END	if (ret == OB_ITER_END) {
+src/observer/vector_index/ob_vector_index_async_task_util.cpp	1895	ObVecIndexAsyncTask::delete_tablet_data	ret == OB_ITER_END	if (ret == OB_ITER_END) {
+src/observer/vector_index/ob_vector_index_i_task_executor.cpp	224	ObVecITaskExecutor::clear_task_ctx	ret != OB_ENTRY_NOT_EXIST	if (ret != OB_ENTRY_NOT_EXIST) {
+src/observer/vector_index/ob_vector_index_util.cpp	112	validate_vsag_create_index_param	ret == OB_INVALID_ARGUMENT; ret == OB_NOT_SUPPORTED	if (OB_FAIL(ret) && (OB_INVALID_ARGUMENT == ret || OB_NOT_SUPPORTED == ret)) {
+src/observer/vector_index/ob_vector_index_util.cpp	1490	ObVectorIndexUtil::determine_vid_type	ret == OB_ERR_INDEX_KEY_NOT_FOUND	if (OB_ERR_INDEX_KEY_NOT_FOUND == ret) {
+src/observer/vector_index/ob_vector_index_util.cpp	2947	ObVectorIndexUtil::check_index_param	ret == OB_HASH_EXIST	if (ret == OB_HASH_EXIST) {
+src/observer/vector_index/ob_vector_index_util.cpp	4887	ObVectorIndexUtil::get_dropping_vec_index_invisiable_table_schema	ret == OB_TABLE_NOT_EXIST	if (OB_TABLE_NOT_EXIST == ret && is_vec_inner_drop) {
+src/observer/vector_index/ob_vector_index_util.cpp	4908	ObVectorIndexUtil::check_drop_vec_indexs_ith_valid	ret == OB_ERR_INDEX_KEY_NOT_FOUND	if (OB_ERR_INDEX_KEY_NOT_FOUND == ret) {
+src/observer/virtual_table/ob_all_data_type_class_table.cpp	103	ObAllDataTypeClassTable::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/virtual_table/ob_all_data_type_table.cpp	102	ObAllDataTypeTable::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/virtual_table/ob_all_plan_cache_stat.cpp	52	ObAllPlanCacheBase::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/virtual_table/ob_all_virtual_activity_metrics.cpp	84	ObAllVirtualActivityMetric::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/virtual_table/ob_all_virtual_all_tables.cpp	220	ObAllVirtualAllTables::get_table_stats	ret == OB_ITER_END [not built]	if (OB_ITER_END == ret) {
+src/observer/virtual_table/ob_all_virtual_all_tables.cpp	244	ObAllVirtualAllTables::get_table_stats	ret == OB_HASH_EXIST [not built]	if (ret == OB_HASH_EXIST) {
+src/observer/virtual_table/ob_all_virtual_all_tables.cpp	275	ObAllVirtualAllTables::inner_get_next_row	ret != OB_ITER_END [not built]	if (OB_ITER_END != ret) {
+src/observer/virtual_table/ob_all_virtual_all_tables.cpp	333	ObAllVirtualAllTables::inner_get_next_row	other variable stat_ret != OB_HASH_NOT_EXIST [not built]	if (OB_UNLIKELY(OB_SUCCESS != stat_ret && OB_HASH_NOT_EXIST != stat_ret)) {
+src/observer/virtual_table/ob_all_virtual_all_tables.cpp	458	ObAllVirtualAllTables::inner_get_next_row	other variable err != OB_HASH_NOT_EXIST [not built]	if (OB_UNLIKELY(OB_SUCCESS != err && OB_HASH_NOT_EXIST != err)) {
+src/observer/virtual_table/ob_all_virtual_all_tables.cpp	462	ObAllVirtualAllTables::inner_get_next_row	other variable err == OB_HASH_NOT_EXIST [not built]	if (OB_HASH_NOT_EXIST == err) {
+src/observer/virtual_table/ob_all_virtual_change_stream_refresh_stat.cpp	82	ObAllVirtualChangeStreamRefreshStat::inner_get_next_row	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/observer/virtual_table/ob_all_virtual_charset.cpp	37	ObAllVirtualCharset::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/virtual_table/ob_all_virtual_checkpoint.cpp	86	ObAllVirtualCheckpointInfo::get_next_	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/virtual_table/ob_all_virtual_checkpoint.cpp	101	ObAllVirtualCheckpointInfo::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/virtual_table/ob_all_virtual_collation.cpp	37	ObAllVirtualCollation::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/virtual_table/ob_all_virtual_compaction_diagnose_info.cpp	58	ObAllVirtualCompactionDiagnoseInfo::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/virtual_table/ob_all_virtual_compaction_suggestion.cpp	57	ObAllVirtualCompactionSuggestion::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/virtual_table/ob_all_virtual_ctx_memory_info.cpp	67	ObAllVirtualCtxMemoryInfo::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/virtual_table/ob_all_virtual_ctx_memory_info.cpp	121	ObAllVirtualCtxMemoryInfo::add_row	ret == OB_SIZE_OVERFLOW	if (OB_SIZE_OVERFLOW == ret) {
+src/observer/virtual_table/ob_all_virtual_dag.cpp	118	ObAllVirtualDag::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/virtual_table/ob_all_virtual_dag.cpp	244	ObAllVirtualDagScheduler::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/virtual_table/ob_all_virtual_dag_warning_history.cpp	55	ObAllVirtualDagWarningHistory::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/virtual_table/ob_all_virtual_dml_stats.cpp	100	ObAllVirtualDMmlStats::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/virtual_table/ob_all_virtual_dtl_channel.cpp	288	ObAllVirtualDtlChannel::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/virtual_table/ob_all_virtual_dtl_interm_result_monitor.cpp	194	ObAllDtlIntermResultMonitor::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/virtual_table/ob_all_virtual_dtl_memory.cpp	137	ObAllVirtualDtlMemoryIterator::get_next_mem_pool_info	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/virtual_table/ob_all_virtual_dtl_memory.cpp	202	ObAllVirtualDtlMemory::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/virtual_table/ob_all_virtual_dump_info.cpp	121	ObAllVirtualDumpInfo::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {

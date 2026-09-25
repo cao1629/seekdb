@@ -1,0 +1,49 @@
+file	line	symbol	construct	text
+src/sql/rewrite/ob_transform_utils.cpp	6414	ObTransformUtils::replace_table_in_joined_tables	IR pointer == IR pointer	} else if (current_table == joined_tables.at(i)) {
+src/sql/rewrite/ob_transform_utils.cpp	6444	ObTransformUtils::replace_table_in_joined_tables	IR pointer == IR pointer	} else if (current_table == left_table) {
+src/sql/rewrite/ob_transform_utils.cpp	6448	ObTransformUtils::replace_table_in_joined_tables	IR pointer == IR pointer	} else if (current_table == right_table) {
+src/sql/rewrite/ob_transform_utils.cpp	7291	ObTransformUtils::convert_select_expr_to_column_expr	IR pointer == IR pointer	if (expr == inner_stmt.get_select_item(j).expr_) {
+src/sql/rewrite/ob_transform_utils.cpp	7883	ObSharedExprExtractor::do_visit	pointer cast to integer used as a key	uint64_t key = reinterpret_cast<uint64_t>(expr);
+src/sql/rewrite/ob_transform_utils.cpp	8060	ObTransformUtils::add_param_lossless_cast_constraint	IR pointer == IR pointer	} else if (OB_UNLIKELY(cast_expr == expr)) {
+src/sql/rewrite/ob_transform_utils.cpp	8101	ObTransformUtils::extract_pseudo_column_like_expr	pointer membership test: add_var_to_array_no_dup	ret = add_var_to_array_no_dup(pseudo_column_like_exprs, expr);
+src/sql/rewrite/ob_transform_utils.cpp	8596	ObTransformUtils::get_all_child_stmts	pointer membership test: ObOptimizerUtil::find_item	} else if (ObOptimizerUtil::find_item(child_stmts, table->ref_query_) ||
+src/sql/rewrite/ob_transform_utils.cpp	8597	ObTransformUtils::get_all_child_stmts	pointer membership test: ObOptimizerUtil::find_item	ObOptimizerUtil::find_item(temp_stmts, table->ref_query_)) {
+src/sql/rewrite/ob_transform_utils.cpp	8608	ObTransformUtils::get_all_child_stmts	pointer membership test: ObOptimizerUtil::find_item	if (!ObOptimizerUtil::find_item(*ignore_stmts, temp_stmts.at(i))
+src/sql/rewrite/ob_transform_utils.cpp	8615	ObTransformUtils::get_all_child_stmts	pointer cast to integer used as a key	uint64_t key = reinterpret_cast<uint64_t>(temp_stmts.at(i));
+src/sql/rewrite/ob_transform_utils.cpp	8626	ObTransformUtils::get_all_child_stmts	pointer membership test: ObOptimizerUtil::find_item	} else if (NULL != ignore_stmts && ObOptimizerUtil::find_item(*ignore_stmts, temp_stmts.at(i))) {
+src/sql/rewrite/ob_transform_utils.cpp	9016	ObTransformUtils::is_correlated_expr_isomorphic	IR pointer == IR pointer	} else if (left_expr == right_expr) {
+src/sql/rewrite/ob_transform_utils.cpp	9567	ObTransformUtils::adjust_select_item_pos	IR pointer != IR pointer	if (right_item.expr_ != right_select_exprs.at(i)) {
+src/sql/rewrite/ob_transform_utils.cpp	9769	ObTransformUtils::extract_udt_exprs	pointer membership test: add_var_to_array_no_dup	if (OB_FAIL(add_var_to_array_no_dup(udt_exprs, expr))) {
+src/sql/rewrite/ob_transform_utils.cpp	9786	ObTransformUtils::extract_udf_exprs	pointer membership test: add_var_to_array_no_dup	} else if (expr->is_udf_expr() && OB_FAIL(add_var_to_array_no_dup(udf_exprs, expr))) {
+src/sql/rewrite/ob_transform_utils.cpp	9807	ObTransformUtils::extract_json_object_exprs	pointer membership test: add_var_to_array_no_dup	} else if (OB_FAIL(add_var_to_array_no_dup(json_exprs, expr))) {
+src/sql/rewrite/ob_transform_utils.cpp	9873	ObTransformUtils::get_generated_table_item	IR pointer == unresolved pointer	} else if (table->ref_query_ == child_stmt) {
+src/sql/rewrite/ob_transform_utils.cpp	9945	ObTransformUtils::extract_joined_table_condition	IR pointer == IR pointer	} else if (table_item == target_table) {
+src/sql/rewrite/ob_transform_utils.cpp	9997	erase_calculable_expr_result	pointer cast to integer used as a key	key = reinterpret_cast<uint64_t>(expr);
+src/sql/rewrite/ob_transform_utils.cpp	10780	ObTransformUtils::get_view_column	IR pointer == IR pointer	if (select_stmt->get_select_item(i).expr_ == aggr_expr) {
+src/sql/rewrite/ob_transform_utils.cpp	11297	ObTransformUtils::check_group_by_subset	pointer membership test: ObTransformUtils::get_expr_idx	} else if (OB_FAIL(ObTransformUtils::get_expr_idx(group_exprs, expr, idx))) {
+src/sql/rewrite/ob_transform_utils.cpp	11319	ObTransformUtils::get_stmt_map_after_copy	pointer cast to integer used as a key	uint64_t key = reinterpret_cast<uint64_t>(origin_stmt);
+src/sql/rewrite/ob_transform_utils.cpp	11335	ObTransformUtils::get_stmt_map_after_copy	pointer cast to integer used as a key	key = reinterpret_cast<uint64_t>(origin_table->ref_query_);
+src/sql/rewrite/ob_transform_utils.cpp	11467	ObSelectStmtPointer::set	IR pointer == IR pointer	} else if (*stmt_group_.at(i) == stmt) {
+src/sql/rewrite/ob_transform_utils.cpp	11852	ObTransformUtils::recursive_check_pushdown_into_set_valid	pointer membership test: ObOptimizerUtil::find_item	} else if (ObOptimizerUtil::find_item(set_op_exprs, expr)) {
+src/sql/rewrite/ob_transform_utils.cpp	12068	ObTransformUtils::is_winfunc_topn_filter	pointer membership test: ObOptimizerUtil::find_item	if (!ObOptimizerUtil::find_item(winfunc_exprs, win_expr)) {
+src/sql/rewrite/ob_transform_utils.cpp	12349	ObTransformUtils::collect_split_exprs_for_view	pointer membership test: ObOptimizerUtil::remove_item	if (OB_SUCC(ret) && OB_FAIL(ObOptimizerUtil::remove_item(origin_subquery->get_condition_exprs(),
+src/sql/rewrite/ob_transform_utils.cpp	12368	ObTransformUtils::collect_split_exprs_for_view	pointer membership test: ObOptimizerUtil::remove_item	if (OB_SUCC(ret) && OB_FAIL(ObOptimizerUtil::remove_item(origin_subquery->get_semi_infos(),
+src/sql/rewrite/ob_transform_utils.cpp	12434	ObTransformUtils::collect_split_outer_conds	pointer membership test: ObOptimizerUtil::remove_item	if (OB_SUCC(ret) && OB_FAIL(ObOptimizerUtil::remove_item(outer_conditions,
+src/sql/rewrite/ob_transform_utils.cpp	12703	ObTransformUtils::check_lateral_ref_outer_table	IR pointer == unresolved pointer	} else if (join_table->left_table_ == table_item &&
+src/sql/rewrite/ob_transform_utils.cpp	12706	ObTransformUtils::check_lateral_ref_outer_table	IR pointer == unresolved pointer	} else if (join_table->right_table_ == table_item &&
+src/sql/rewrite/ob_transform_utils.cpp	12818	ObTransformUtils::inner_check_need_calc_match_score	IR pointer == IR pointer	} else if (expr == match_expr) {
+src/sql/rewrite/ob_transform_utils.cpp	12832	ObTransformUtils::inner_check_need_calc_match_score	IR pointer != IR pointer	} else if (gt_param != match_expr) {
+src/sql/rewrite/ob_transform_utils.cpp	12840	ObTransformUtils::inner_check_need_calc_match_score	IR pointer == IR pointer	if (expr->get_param_count() == 1 && expr->get_param_expr(0) == match_expr) {
+src/sql/rewrite/ob_transform_utils.cpp	12917	ObTransformUtils::check_expr_used_as_condition	pointer membership test: ObOptimizerUtil::find_item	} else if (ObOptimizerUtil::find_item(stmt->get_condition_exprs(), cur_expr)) {
+src/sql/rewrite/ob_transform_utils.cpp	12941	ObTransformUtils::inner_check_expr_used_as_condition	IR pointer == IR pointer	} else if (cur_expr == expr) {
+src/sql/rewrite/ob_transform_utils.cpp	13778	ObTransformUtils::check_projected_cols_used_for_join	pointer membership test: ObOptimizerUtil::find_item	} else if (ObOptimizerUtil::find_item(mapped_col_exprs, col)) {
+src/sql/rewrite/ob_transform_utils.cpp	13854	ObTransformUtils::can_push_dynamic_filter_to_cols	pointer membership test: ObOptimizerUtil::find_item	} else if (ObOptimizerUtil::find_item(tmp_col_exprs, sel_item.expr_)) {
+src/sql/rewrite/ob_transform_utils.cpp	13923	ObTransformUtils::collect_semi_join_stmt_ids	pointer membership test: ObOptimizerUtil::find_item	if (ObOptimizerUtil::find_item(mapped_col_exprs, candi_cols.at(j))) {
+src/sql/rewrite/ob_transform_utils.cpp	13945	ObTransformUtils::collect_semi_join_stmt_ids	pointer membership test: ObOptimizerUtil::find_item	if (ObOptimizerUtil::find_item(mapped_col_exprs, candi_cols.at(j))) {
+src/sql/rewrite/ob_transform_utils.cpp	14022	ObTransformUtils::get_parent_stmt	pointer cast to integer used as a key	} else if (OB_FALSE_IT(key = reinterpret_cast<uint64_t>(stmt))) {
+src/sql/rewrite/ob_transform_utils.cpp	14038	ObTransformUtils::get_parent_stmt	IR pointer == unresolved pointer	} else if (table_item->is_generated_table() && table_item->ref_query_ == stmt) {
+src/sql/rewrite/ob_transform_utils.h	2153	ObTransformUtils::replace_specific_expr	IR pointer == unresolved pointer	} else if (expr == other_exprs.at(i)) {
+src/sql/rewrite/ob_transform_view_merge.cpp	574	ObTransformViewMerge::check_can_be_merged	IR pointer == unresolved pointer	if ((LEFT_OUTER_JOIN == helper.parent_table->joined_type_ && helper.parent_table->right_table_ == helper.trans_table) ||
+src/sql/rewrite/ob_transform_view_merge.cpp	575	ObTransformViewMerge::check_can_be_merged	IR pointer == unresolved pointer	(RIGHT_OUTER_JOIN == helper.parent_table->joined_type_ && helper.parent_table->left_table_ == helper.trans_table)) {
+src/sql/rewrite/ob_transform_view_merge.cpp	903	ObTransformViewMerge::do_view_merge	IR pointer == unresolved pointer	} else if (joined_table->left_table_ == table_item &&
+src/sql/rewrite/ob_transform_view_merge.cpp	905	ObTransformViewMerge::do_view_merge	IR pointer == unresolved pointer	} else if (joined_table->right_table_ == table_item &&

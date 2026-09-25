@@ -1,0 +1,120 @@
+file	line	symbol	construct	text
+src/sql/optimizer/stat/ob_dbms_stats_export_import.cpp	385	ObDbmsStatsExportImport::do_execute_sql	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/optimizer/stat/ob_dbms_stats_export_import.cpp	386	ObDbmsStatsExportImport::do_execute_sql	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = trans.end(false))) {
+src/sql/optimizer/stat/ob_dbms_stats_export_import.cpp	444	ObDbmsStatsExportImport::do_import_stats	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/optimizer/stat/ob_dbms_stats_export_import.cpp	445	ObDbmsStatsExportImport::do_import_stats	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = trans.end(false))) {
+src/sql/optimizer/stat/ob_dbms_stats_export_import.cpp	450	ObDbmsStatsExportImport::do_import_stats	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/optimizer/stat/ob_dbms_stats_export_import.cpp	452	ObDbmsStatsExportImport::do_import_stats	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = client_result->close())) {
+src/sql/optimizer/stat/ob_dbms_stats_export_import.cpp	454	ObDbmsStatsExportImport::do_import_stats	merge into ret	ret = COVER_SUCC(tmp_ret);
+src/sql/optimizer/stat/ob_dbms_stats_history_manager.cpp	272	ObDbmsStatsHistoryManager::calssify_table_stat_part_ids	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/optimizer/stat/ob_dbms_stats_history_manager.cpp	274	ObDbmsStatsHistoryManager::calssify_table_stat_part_ids	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = client_result->close())) {
+src/sql/optimizer/stat/ob_dbms_stats_history_manager.cpp	276	ObDbmsStatsHistoryManager::calssify_table_stat_part_ids	merge into ret	ret = COVER_SUCC(tmp_ret);
+src/sql/optimizer/stat/ob_dbms_stats_history_manager.cpp	481	ObDbmsStatsHistoryManager::generate_having_stat_part_col_map	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/optimizer/stat/ob_dbms_stats_history_manager.cpp	483	ObDbmsStatsHistoryManager::generate_having_stat_part_col_map	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = client_result->close())) {
+src/sql/optimizer/stat/ob_dbms_stats_history_manager.cpp	485	ObDbmsStatsHistoryManager::generate_having_stat_part_col_map	merge into ret	ret = COVER_SUCC(tmp_ret);
+src/sql/optimizer/stat/ob_dbms_stats_history_manager.cpp	803	ObDbmsStatsHistoryManager::purge_stats	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/optimizer/stat/ob_dbms_stats_history_manager.cpp	804	ObDbmsStatsHistoryManager::purge_stats	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = trans.end(true))) {
+src/sql/optimizer/stat/ob_dbms_stats_history_manager.cpp	806	ObDbmsStatsHistoryManager::purge_stats	merge into ret	ret = tmp_ret;
+src/sql/optimizer/stat/ob_dbms_stats_history_manager.cpp	808	ObDbmsStatsHistoryManager::purge_stats	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/optimizer/stat/ob_dbms_stats_history_manager.cpp	809	ObDbmsStatsHistoryManager::purge_stats	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = trans.end(false))) {
+src/sql/optimizer/stat/ob_dbms_stats_history_manager.cpp	886	ObDbmsStatsHistoryManager::get_stats_history_retention_and_availability	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/optimizer/stat/ob_dbms_stats_history_manager.cpp	888	ObDbmsStatsHistoryManager::get_stats_history_retention_and_availability	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = client_result->close())) {
+src/sql/optimizer/stat/ob_dbms_stats_history_manager.cpp	890	ObDbmsStatsHistoryManager::get_stats_history_retention_and_availability	merge into ret	ret = COVER_SUCC(tmp_ret);
+src/sql/optimizer/stat/ob_dbms_stats_history_manager.cpp	922	ObDbmsStatsHistoryManager::restore_table_stats	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/optimizer/stat/ob_dbms_stats_history_manager.cpp	923	ObDbmsStatsHistoryManager::restore_table_stats	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = trans.end(false))) {
+src/sql/optimizer/stat/ob_dbms_stats_history_manager.cpp	973	ObDbmsStatsHistoryManager::fetch_table_stat_histrory	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/optimizer/stat/ob_dbms_stats_history_manager.cpp	975	ObDbmsStatsHistoryManager::fetch_table_stat_histrory	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = client_result->close())) {
+src/sql/optimizer/stat/ob_dbms_stats_history_manager.cpp	977	ObDbmsStatsHistoryManager::fetch_table_stat_histrory	merge into ret	ret = COVER_SUCC(tmp_ret);
+src/sql/optimizer/stat/ob_dbms_stats_history_manager.cpp	1070	ObDbmsStatsHistoryManager::fetch_column_stat_history	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/optimizer/stat/ob_dbms_stats_history_manager.cpp	1072	ObDbmsStatsHistoryManager::fetch_column_stat_history	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = client_result->close())) {
+src/sql/optimizer/stat/ob_dbms_stats_history_manager.cpp	1074	ObDbmsStatsHistoryManager::fetch_column_stat_history	merge into ret	ret = COVER_SUCC(tmp_ret);
+src/sql/optimizer/stat/ob_dbms_stats_history_manager.cpp	1222	ObDbmsStatsHistoryManager::fetch_histogram_stat_histroy	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/optimizer/stat/ob_dbms_stats_history_manager.cpp	1224	ObDbmsStatsHistoryManager::fetch_histogram_stat_histroy	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = client_result->close())) {
+src/sql/optimizer/stat/ob_dbms_stats_history_manager.cpp	1226	ObDbmsStatsHistoryManager::fetch_histogram_stat_histroy	merge into ret	ret = COVER_SUCC(tmp_ret);
+src/sql/optimizer/stat/ob_dbms_stats_lock_unlock.cpp	100	ObDbmsStatsLockUnlock::set_table_stats_lock	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/optimizer/stat/ob_dbms_stats_lock_unlock.cpp	101	ObDbmsStatsLockUnlock::set_table_stats_lock	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = trans.end(false))) {
+src/sql/optimizer/stat/ob_dbms_stats_lock_unlock.cpp	267	ObDbmsStatsLockUnlock::get_stat_locked_partition_ids	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/optimizer/stat/ob_dbms_stats_lock_unlock.cpp	269	ObDbmsStatsLockUnlock::get_stat_locked_partition_ids	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = client_result->close())) {
+src/sql/optimizer/stat/ob_dbms_stats_lock_unlock.cpp	271	ObDbmsStatsLockUnlock::get_stat_locked_partition_ids	merge into ret	ret = COVER_SUCC(tmp_ret);
+src/sql/optimizer/stat/ob_dbms_stats_preferences.cpp	228	ObDbmsStatsPreferences::do_get_prefs	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/optimizer/stat/ob_dbms_stats_preferences.cpp	230	ObDbmsStatsPreferences::do_get_prefs	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = client_result->close())) {
+src/sql/optimizer/stat/ob_dbms_stats_preferences.cpp	232	ObDbmsStatsPreferences::do_get_prefs	merge into ret	ret = COVER_SUCC(tmp_ret);
+src/sql/optimizer/stat/ob_dbms_stats_preferences.cpp	432	ObDbmsStatsPreferences::do_get_sys_perfs	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/optimizer/stat/ob_dbms_stats_preferences.cpp	434	ObDbmsStatsPreferences::do_get_sys_perfs	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = client_result->close())) {
+src/sql/optimizer/stat/ob_dbms_stats_preferences.cpp	436	ObDbmsStatsPreferences::do_get_sys_perfs	merge into ret	ret = COVER_SUCC(tmp_ret);
+src/sql/optimizer/stat/ob_dbms_stats_utils.cpp	334	ObDbmsStatsUtils::split_batch_write	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/optimizer/stat/ob_dbms_stats_utils.cpp	335	ObDbmsStatsUtils::split_batch_write	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = trans.end(false))) {
+src/sql/optimizer/stat/ob_dbms_stats_utils.cpp	367	ObDbmsStatsUtils::split_batch_write	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/optimizer/stat/ob_dbms_stats_utils.cpp	368	ObDbmsStatsUtils::split_batch_write	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = trans.end(false))) {
+src/sql/optimizer/stat/ob_dbms_stats_utils.cpp	1363	ObDbmsStatsUtils::check_can_async_gather_stats	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/optimizer/stat/ob_dbms_stats_utils.cpp	1365	ObDbmsStatsUtils::check_can_async_gather_stats	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = client_result->close())) {
+src/sql/optimizer/stat/ob_dbms_stats_utils.cpp	1367	ObDbmsStatsUtils::check_can_async_gather_stats	merge into ret	ret = COVER_SUCC(tmp_ret);
+src/sql/optimizer/stat/ob_dbms_stats_utils.cpp	1603	ObDbmsStatsUtils::fetch_need_cancel_async_gather_stats_task	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/optimizer/stat/ob_dbms_stats_utils.cpp	1605	ObDbmsStatsUtils::fetch_need_cancel_async_gather_stats_task	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = client_result->close())) {
+src/sql/optimizer/stat/ob_dbms_stats_utils.cpp	1607	ObDbmsStatsUtils::fetch_need_cancel_async_gather_stats_task	merge into ret	ret = COVER_SUCC(tmp_ret);
+src/sql/optimizer/stat/ob_index_stats_estimator.cpp	307	ObIndexStatsEstimator::fast_gather_index_stats	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/optimizer/stat/ob_index_stats_estimator.cpp	308	ObIndexStatsEstimator::fast_gather_index_stats	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = trans.end(false))) {
+src/sql/optimizer/stat/ob_opt_stat_manager.cpp	660	ObOptStatManager::batch_get_column_stats	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/optimizer/stat/ob_opt_stat_manager.cpp	661	ObOptStatManager::batch_get_column_stats	assign tmp_ret	if (column_id_col_evals.created() && OB_SUCCESS != (tmp_ret = column_id_col_evals.destroy())) {
+src/sql/optimizer/stat/ob_opt_stat_monitor_manager.cpp	434	ObOptStatMonitorManager::get_column_usage_from_table	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/optimizer/stat/ob_opt_stat_monitor_manager.cpp	435	ObOptStatMonitorManager::get_column_usage_from_table	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = client_result->close())) {
+src/sql/optimizer/stat/ob_opt_stat_monitor_manager.cpp	437	ObOptStatMonitorManager::get_column_usage_from_table	merge into ret	ret = COVER_SUCC(tmp_ret);
+src/sql/optimizer/stat/ob_opt_stat_monitor_manager.cpp	820	ObOptStatMonitorManager::do_get_opt_stats_expired_table_info	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/optimizer/stat/ob_opt_stat_monitor_manager.cpp	822	ObOptStatMonitorManager::do_get_opt_stats_expired_table_info	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = client_result->close())) {
+src/sql/optimizer/stat/ob_opt_stat_monitor_manager.cpp	824	ObOptStatMonitorManager::do_get_opt_stats_expired_table_info	merge into ret	ret = COVER_SUCC(tmp_ret);
+src/sql/optimizer/stat/ob_opt_stat_monitor_manager.cpp	1124	ObOptStatMonitorManager::check_table_stat_expired_by_dml_info	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/optimizer/stat/ob_opt_stat_monitor_manager.cpp	1126	ObOptStatMonitorManager::check_table_stat_expired_by_dml_info	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = client_result->close())) {
+src/sql/optimizer/stat/ob_opt_stat_monitor_manager.cpp	1128	ObOptStatMonitorManager::check_table_stat_expired_by_dml_info	merge into ret	ret = COVER_SUCC(tmp_ret);
+src/sql/optimizer/stat/ob_opt_stat_monitor_manager.cpp	1181	ObOptStatMonitorManager::do_mark_the_opt_stat_missing	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/optimizer/stat/ob_opt_stat_monitor_manager.cpp	1182	ObOptStatMonitorManager::do_mark_the_opt_stat_missing	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = trans.end(false))) {
+src/sql/optimizer/stat/ob_opt_stat_sql_service.cpp	686	ObOptStatSqlService::delete_table_stat	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/optimizer/stat/ob_opt_stat_sql_service.cpp	687	ObOptStatSqlService::delete_table_stat	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = trans.end(false))) {
+src/sql/optimizer/stat/ob_opt_stat_sql_service.cpp	751	ObOptStatSqlService::delete_column_stat	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/optimizer/stat/ob_opt_stat_sql_service.cpp	752	ObOptStatSqlService::delete_column_stat	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = trans.end(false))) {
+src/sql/optimizer/stat/ob_opt_stat_sql_service.cpp	1785	ObOptStatSqlService::update_table_stat_failed_count	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/optimizer/stat/ob_opt_stat_sql_service.cpp	1786	ObOptStatSqlService::update_table_stat_failed_count	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = trans.end(false))) {
+src/sql/optimizer/stat/ob_opt_stat_sql_service.cpp	1834	ObOptStatSqlService::update_system_stats	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/optimizer/stat/ob_opt_stat_sql_service.cpp	1835	ObOptStatSqlService::update_system_stats	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = trans.end(false))) {
+src/sql/optimizer/stat/ob_opt_stat_sql_service.cpp	1920	ObOptStatSqlService::delete_system_stats	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/optimizer/stat/ob_opt_stat_sql_service.cpp	1921	ObOptStatSqlService::delete_system_stats	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = trans.end(false))) {
+src/sql/optimizer/stat/ob_stats_estimator.cpp	424	ObStatsEstimator::do_estimate	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/optimizer/stat/ob_stats_estimator.cpp	425	ObStatsEstimator::do_estimate	assign tmp_ret	if (session_value != NULL && OB_SUCCESS != (tmp_ret = session->restore_session(*session_value))) {
+src/sql/optimizer/stat/ob_stats_estimator.cpp	427	ObStatsEstimator::do_estimate	merge into ret	ret = COVER_SUCC(tmp_ret);
+src/sql/parser/ob_parser.cpp	529	ObParser::split_start_with_pl	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/parser/ob_parser.cpp	559	ObParser::split_start_with_pl	assign tmp_ret	if (OB_FAIL(tmp_ret = parse(part, parse_result, parse_mode, false, true))) {
+src/sql/parser/ob_parser.cpp	660	ObParser::split_multiple_stmt	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/parser/ob_parser.cpp	678	ObParser::split_multiple_stmt	assign tmp_ret	if (OB_FAIL(tmp_ret = parse(part, parse_result, parse_mode, false, true))) {
+src/sql/parser/ob_parser.cpp	681	ObParser::split_multiple_stmt	assign tmp_ret	tmp_ret = OB_SUCCESS;
+src/sql/parser/ob_parser.cpp	682	ObParser::split_multiple_stmt	assign tmp_ret	tmp_ret = parse(remain_part, parse_result, parse_mode);
+src/sql/parser/parse_node.c	344	merge_tree	declare tmp_ret	int tmp_ret = 0;
+src/sql/parser/parse_node.c	345	merge_tree	assign tmp_ret	if (OB_UNLIKELY(OB_PARSER_SUCCESS != (tmp_ret = count_child(source_tree,
+src/sql/parser/parse_node.c	350	merge_tree	assign tmp_ret	if (OB_UNLIKELY(OB_PARSER_SUCCESS != (tmp_ret = merge_child(node,
+src/sql/parser/sql_parser_base.c	123	parse_sql	declare tmp_ret	int tmp_ret = -1;
+src/sql/parser/sql_parser_base.c	125	parse_sql	assign tmp_ret	tmp_ret = obsql_mysql_fast_parse(p);
+src/sql/parser/sql_parser_base.c	127	parse_sql	assign tmp_ret	tmp_ret = obsql_mysql_multi_fast_parse(p);
+src/sql/parser/sql_parser_base.c	129	parse_sql	assign tmp_ret	tmp_ret = obsql_mysql_multi_values_parse(p);
+src/sql/parser/sql_parser_base.c	131	parse_sql	assign tmp_ret	tmp_ret = obsql_mysql_yyparse(p);
+src/sql/plan_cache/ob_dist_plans.cpp	150	ObDistPlans::remove_all_plan	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/plan_cache/ob_dist_plans.cpp	154	ObDistPlans::remove_all_plan	assign tmp_ret	tmp_ret = OB_ERR_UNEXPECTED;
+src/sql/plan_cache/ob_dist_plans.cpp	161	ObDistPlans::remove_all_plan	merge into ret	ret = tmp_ret;
+src/sql/plan_cache/ob_plan_cache.cpp	398	ObPlanCache::check_after_get_plan	declare tmp_ret	int ObPlanCache::check_after_get_plan(int tmp_ret,
+src/sql/plan_cache/ob_plan_cache.cpp	402	ObPlanCache::check_after_get_plan	merge into ret	int ret = tmp_ret;
+src/sql/plan_cache/ob_plan_cache.cpp	915	ObPlanCache::add_plan_cache	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/plan_cache/ob_plan_cache.cpp	917	ObPlanCache::add_plan_cache	assign tmp_ret	&& OB_SUCCESS != (tmp_ret = remove_cache_node(pc_ctx.key_))) {
+src/sql/plan_cache/ob_plan_cache.cpp	926	ObPlanCache::add_plan_cache	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = remove_cache_node(pc_ctx.key_))) {
+src/sql/plan_cache/ob_plan_cache.cpp	927	ObPlanCache::add_plan_cache	merge into ret	ret = tmp_ret;
+src/sql/plan_cache/ob_plan_cache.cpp	1021	ObPlanCache::add_cache_obj	declare tmp_ret	int tmp_ret = cache_key_node_map_.erase_refactored(cache_key, &del_node);
+src/sql/plan_cache/ob_plan_cache.cpp	1376	ObPlanCache::cache_evict_by_idle	declare tmp_ret	int tmp_ret = cache_key_node_map_.foreach_refactored_range(op, bucket_pos, batch_end);
+src/sql/plan_cache/ob_plan_cache.cpp	2067	ObPlanCache::flush_plan_cache	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/plan_cache/ob_plan_cache.cpp	2068	ObPlanCache::flush_plan_cache	assign tmp_ret	tmp_ret = OB_E(EventTable::EN_FLUSH_PC_NOT_CLEANUP_LEAK_MEM_ERROR) OB_SUCCESS;
+src/sql/plan_cache/ob_plan_cache.cpp	2096	ObPlanCache::flush_plan_cache_by_sql_id	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/plan_cache/ob_plan_cache.cpp	2097	ObPlanCache::flush_plan_cache_by_sql_id	assign tmp_ret	tmp_ret = OB_E(EventTable::EN_FLUSH_PC_NOT_CLEANUP_LEAK_MEM_ERROR) OB_SUCCESS;
+src/sql/plan_cache/ob_plan_cache.cpp	2125	ObPlanCache::flush_lib_cache	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/plan_cache/ob_plan_cache.cpp	2126	ObPlanCache::flush_lib_cache	assign tmp_ret	tmp_ret = OB_E(EventTable::EN_FLUSH_PC_NOT_CLEANUP_LEAK_MEM_ERROR) OB_SUCCESS;
+src/sql/plan_cache/ob_plan_cache.cpp	2151	ObPlanCache::flush_lib_cache_by_ns	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/plan_cache/ob_plan_cache.cpp	2152	ObPlanCache::flush_lib_cache_by_ns	assign tmp_ret	tmp_ret = OB_E(EventTable::EN_FLUSH_PC_NOT_CLEANUP_LEAK_MEM_ERROR) OB_SUCCESS;
+src/sql/plan_cache/ob_plan_cache.cpp	2181	ObPlanCache::flush_pl_cache_single_cache_obj	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/plan_cache/ob_plan_cache.cpp	2182	ObPlanCache::flush_pl_cache_single_cache_obj	assign tmp_ret	tmp_ret = OB_E(EventTable::EN_FLUSH_PC_NOT_CLEANUP_LEAK_MEM_ERROR) OB_SUCCESS;
+src/sql/plan_cache/ob_plan_cache.cpp	2211	ObPlanCache::flush_pl_cache	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/plan_cache/ob_plan_cache.cpp	2212	ObPlanCache::flush_pl_cache	assign tmp_ret	tmp_ret = OB_E(EventTable::EN_FLUSH_PC_NOT_CLEANUP_LEAK_MEM_ERROR) OB_SUCCESS;
+src/sql/plan_cache/ob_plan_cache.h	454	ObPlanCache	declare tmp_ret	int check_after_get_plan(int tmp_ret, ObILibCacheCtx &ctx, ObILibCacheObject *cache_obj);

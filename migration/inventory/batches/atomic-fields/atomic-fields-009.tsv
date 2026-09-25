@@ -1,0 +1,51 @@
+file	line	symbol	construct	text
+src/oblib/lib/thread/ob_queue_thread.h	55	ObCond::bcond_	field volatile bool; 5 atomic accesses (ATOMIC_CAS 5)	volatile bool bcond_;
+src/oblib/lib/thread/ob_queue_thread.h	68	S2MQueueThread::ThreadConf::run_flag	volatile field volatile bool; no atomic access found	volatile bool run_flag;
+src/oblib/lib/thread/ob_queue_thread.h	69	S2MQueueThread::ThreadConf::stop_flag	volatile field volatile bool; no atomic access found	volatile bool stop_flag;
+src/oblib/lib/thread/ob_queue_thread.h	71	S2MQueueThread::ThreadConf::using_flag	volatile field volatile bool; no atomic access found	volatile bool using_flag;
+src/oblib/lib/thread/ob_queue_thread.h	72	S2MQueueThread::ThreadConf::last_active_time	volatile field volatile int64_t; no atomic access found	volatile int64_t last_active_time;
+src/oblib/lib/thread/ob_queue_thread.h	128	S2MQueueThread::thread_conf_iter_	volatile field volatile uint64_t; no atomic access found	volatile uint64_t thread_conf_iter_;
+src/oblib/lib/thread/ob_queue_thread.h	155	M2SQueueThread::run_flag_	volatile field volatile bool; no atomic access found	volatile bool run_flag_;
+src/oblib/lib/thread/ob_reentrant_thread.h	87	ObReentrantThread::stop_	field volatile bool; 1 atomic accesses (ATOMIC_LOAD 1)	volatile bool stop_;
+src/oblib/lib/thread/ob_reentrant_thread.h	89	ObReentrantThread::created_	volatile field volatile bool; no atomic access found	volatile bool created_;
+src/oblib/lib/thread/ob_thread_lease.h	125	ObThreadLease::status_	field StatusType; 5 atomic accesses (ATOMIC_CAS 4, ATOMIC_LOAD 1)	StatusType status_;
+src/oblib/lib/thread/thread.h	123	Thread::total_thread_count_	field static int64_t; 3 atomic accesses (ATOMIC_FAA 3)	static int64_t total_thread_count_;
+src/oblib/lib/thread/thread.h	137	Thread::create_ret_	field int; 4 atomic accesses (ATOMIC_STORE 3, ATOMIC_LOAD 1)	int create_ret_;
+src/oblib/lib/thread/threads.h	138	Threads::stop_	field bool; 1 atomic accesses (ATOMIC_LOAD 1)	bool stop_;
+src/oblib/lib/thread_local/ob_tsi_utils.cpp	71	itid_lock	global static bool; 2 atomic accesses (ATOMIC_BCAS 2)	static bool itid_lock = 0;
+src/oblib/lib/thread_local/ob_tsi_utils.h	36	itid_slots	global extern uint64_t; 5 atomic accesses (ATOMIC_LOAD 3, ATOMIC_BCAS 2)	extern uint64_t itid_slots[1024];
+src/oblib/lib/thread_local/ob_tsi_utils.h	38	max_itid	global extern volatile int64_t; 3 atomic accesses (ATOMIC_LOAD 3)	extern volatile int64_t max_itid;
+src/oblib/lib/thread_local/ob_tsi_utils.h	39	max_used_itid	global extern volatile int64_t; 3 atomic accesses (ATOMIC_LOAD 2, ATOMIC_STORE 1)	extern volatile int64_t max_used_itid;
+src/oblib/lib/time/ob_clock_generator.h	85	ObClockGenerator::cur_ts_	field int64_t; 4 atomic accesses (ATOMIC_LOAD 2, ATOMIC_AAF 1, ATOMIC_STORE 1)	int64_t cur_ts_;
+src/oblib/lib/time/ob_cur_time.h	26	g_cur_time	volatile global extern volatile int64_t; no atomic access found	extern volatile int64_t g_cur_time;
+src/oblib/lib/trace/ob_seq_event_recorder.h	97	ObSeqEventRecorder::next_idx_	field int64_t; 2 atomic accesses (__sync_fetch_and_add 2)	int64_t next_idx_;
+src/oblib/lib/utility/ob_macro_utils.h	802	#define REACH_TIME_INTERVAL	static or local last_time declared inside #define REACH_TIME_INTERVAL; 1 atomic accesses in the body (ATOMIC_CAS 1)	static volatile int64_t last_time = 0; \
+src/oblib/lib/utility/ob_macro_utils.h	830	#define REACH_THREAD_TIME_INTERVAL	static or local last_time declared inside #define REACH_THREAD_TIME_INTERVAL; 1 atomic accesses in the body (ATOMIC_CAS 1)	RLOCAL_STATIC(int64_t, last_time) = ObClockGenerator::getClock(); \
+src/oblib/lib/utility/ob_macro_utils.h	848	#define REACH_COUNT_PER_SEC	static or local last declared inside #define REACH_COUNT_PER_SEC; 2 atomic accesses in the body (CAS128 1, LOAD128 1)	static types::uint128_t last; \
+src/oblib/lib/utility/ob_macro_utils.h	872	#define REACH_TIME_INTERVAL_RANGE	static or local last_time declared inside #define REACH_TIME_INTERVAL_RANGE; 2 atomic accesses in the body (ATOMIC_CAS 2)	static volatile int64_t last_time = common::ObClockGenerator::getClock(); \
+src/oblib/lib/utility/ob_macro_utils.h	891	#define REACH_COUNT_INTERVAL	static or local count declared inside #define REACH_COUNT_INTERVAL; 1 atomic accesses in the body (ATOMIC_AAF 1)	static volatile int64_t count = 0; \
+src/oblib/lib/utility/ob_macro_utils.h	905	#define EXECUTE_COUNT_PER_SEC	static or local last declared inside #define EXECUTE_COUNT_PER_SEC; 2 atomic accesses in the body (CAS128 1, LOAD128 1)	static types::uint128_t last; \
+src/oblib/lib/utility/ob_tracepoint.h	207	TPSymbolTable::SymbolEntry::lock_	field int; 1 atomic accesses (__sync_bool_compare_and_swap 1); through macros TP_BCAS	int lock_;
+src/oblib/lib/utility/ob_tracepoint.h	228	EventItem::occur_	field int64_t; 1 atomic accesses (ATOMIC_VCAS 1)	int64_t occur_;            // number of occurrences
+src/oblib/lib/utility/utility.h	483	SeqLockGuard::seq_	field volatile uint64_t &; 1 atomic accesses (__sync_bool_compare_and_swap 1)	volatile uint64_t &seq_;
+src/oblib/lib/utility/utility.h	504	OnceGuard::seq_	field volatile uint64_t &; 1 atomic accesses (__sync_bool_compare_and_swap 1)	volatile uint64_t &seq_;
+src/oblib/lib/utility/utility.h	542	CountReporter::count_	field int64_t; 1 atomic accesses (__sync_add_and_fetch 1)	int64_t count_ CACHE_ALIGNED;
+src/oblib/lib/utility/utility.h	546	CountReporter::total_cost_time_	field int64_t; 1 atomic accesses (__sync_add_and_fetch 1)	int64_t total_cost_time_;
+src/oblib/lib/utility/utility.h	703	bind_core::idx	function-local static uint64_t in bind_core; 1 atomic accesses (ATOMIC_FAA 1)	static uint64_t idx = 0;
+src/oblib/lib/utility/utility.h	1296	ObMiniStat::ObStatItem::last_ts_	field int64_t; 4 atomic accesses (ATOMIC_LOAD 2, ATOMIC_SET 2)	int64_t last_ts_;
+src/oblib/lib/utility/utility.h	1297	ObMiniStat::ObStatItem::stat_count_	field int64_t; 4 atomic accesses (ATOMIC_AAF 2, ATOMIC_SET 2)	int64_t stat_count_;
+src/oblib/lib/utility/utility.h	1298	ObMiniStat::ObStatItem::accum_count_	field int64_t; 4 atomic accesses (ATOMIC_AAF 2, ATOMIC_SET 2)	int64_t accum_count_;
+src/oblib/lib/utility/utility.h	1299	ObMiniStat::ObStatItem::lock_tag_	field bool; 4 atomic accesses (ATOMIC_BCAS 4)	bool lock_tag_;
+src/oblib/lib/wait_event/ob_wait_event.h	301	ObWaitEventStat::total_timeouts_	field uint32_t; 2 atomic accesses (ATOMIC_AAF 1, ATOMIC_LOAD 1)	uint32_t total_timeouts_;
+src/oblib/lib/wait_event/ob_wait_event.h	303	ObWaitEventStat::max_wait_	field uint32_t; 4 atomic accesses (ATOMIC_LOAD 3, ATOMIC_BCAS 1)	uint32_t max_wait_;
+src/oblib/lib/wait_event/ob_wait_event.h	305	ObWaitEventStat::total_waits_	field uint64_t; 2 atomic accesses (ATOMIC_AAF 1, ATOMIC_LOAD 1)	uint64_t total_waits_;
+src/oblib/lib/wait_event/ob_wait_event.h	307	ObWaitEventStat::time_waited_	field uint64_t; 2 atomic accesses (ATOMIC_AAF 1, ATOMIC_LOAD 1)	uint64_t time_waited_;
+src/observer/change_stream/ob_change_stream_dispatcher.h	117	ObCSExecCtx::task_finish_	field int64_t; 3 atomic accesses (ATOMIC_AAF 3)	int64_t task_finish_;    // Updated atomically by workers.
+src/observer/change_stream/ob_change_stream_dispatcher.h	118	ObCSExecCtx::task_fail_	field int64_t; 6 atomic accesses (ATOMIC_AAF 4, ATOMIC_LOAD 2)	int64_t task_fail_;
+src/observer/change_stream/ob_change_stream_dispatcher.h	132	ObCSExecCtx::process_cnt_	field int64_t; 1 atomic accesses (ATOMIC_INC 1)	int64_t process_cnt_;
+src/observer/change_stream/ob_change_stream_dispatcher.h	134	ObCSExecCtx::process_time_	field int64_t; 1 atomic accesses (ATOMIC_CAS 1)	int64_t process_time_;
+src/observer/change_stream/ob_change_stream_dispatcher.h	208	ObCSDispatcher::refresh_scn_	field int64_t; 5 atomic accesses (ATOMIC_LOAD 3, ATOMIC_BCAS 1, ATOMIC_STORE 1)	int64_t refresh_scn_;
+src/observer/change_stream/ob_change_stream_dispatcher.h	214	ObCSDispatcher::next_commit_sn_	field int64_t; 3 atomic accesses (ATOMIC_BCAS 1, ATOMIC_LOAD 1, ATOMIC_STORE 1)	int64_t next_commit_sn_;    // Serial commit: next batch_sn allowed to commit (Worker spins until head).
+src/observer/change_stream/ob_change_stream_dispatcher.h	217	ObCSDispatcher::epoch_	field int64_t; 8 atomic accesses (ATOMIC_LOAD 7, ATOMIC_INC 1)	int64_t epoch_;              // Global abort epoch (atomic).  Incremented on batch failure.
+src/observer/change_stream/ob_change_stream_dispatcher.h	219	ObCSDispatcher::active_batch_count_	field int64_t; 5 atomic accesses (ATOMIC_LOAD 3, ATOMIC_DEC 1, ATOMIC_INC 1)	int64_t active_batch_count_; // Atomic count of in-flight batches.
+src/observer/change_stream/ob_cs_plugin_async_index.cpp	1196	ObCSPluginAsyncIndex::commit::last_gc_time	function-local static int64_t in ObCSPluginAsyncIndex::commit; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_STORE 1)	static int64_t last_gc_time = 0;

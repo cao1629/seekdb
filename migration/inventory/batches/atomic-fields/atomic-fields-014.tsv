@@ -1,0 +1,47 @@
+file	line	symbol	construct	text
+src/share/schema/ob_schema_mgr_cache.h	93	ObSchemaMgrItem::ref_cnt_	field int64_t; 10 atomic accesses (ATOMIC_FAA 5, ATOMIC_LOAD 3, ATOMIC_STORE 2)	int64_t ref_cnt_ CACHE_ALIGNED;
+src/share/schema/ob_schema_mgr_cache.h	94	ObSchemaMgrItem::mod_ref_cnt_	field int64_t; 7 atomic accesses (ATOMIC_FAA 5, ATOMIC_STORE 2)	int64_t mod_ref_cnt_[MOD_MAX] CACHE_ALIGNED;
+src/share/schema/ob_schema_publish_signal.h	116	ObSchemaPublishSignal::epoch_	field int64_t; 6 atomic accesses (ATOMIC_LOAD 3, ATOMIC_STORE 2, ATOMIC_INC 1)	int64_t epoch_;
+src/share/schema/ob_schema_store.h	51	ObSchemaStore::refreshed_version_	field int64_t; 2 atomic accesses (ATOMIC_LOAD 1, inc_update 1)	int64_t refreshed_version_;
+src/share/schema/ob_schema_store.h	52	ObSchemaStore::published_version_	field int64_t; 3 atomic accesses (inc_update 2, ATOMIC_LOAD 1)	int64_t published_version_;
+src/share/schema/ob_schema_store.h	53	ObSchemaStore::checked_sys_version_	field int64_t; 2 atomic accesses (ATOMIC_LOAD 1, inc_update 1)	int64_t checked_sys_version_;
+src/share/schema/ob_schema_store.h	54	ObSchemaStore::baseline_schema_version_	field int64_t; 2 atomic accesses (ATOMIC_LOAD 1, inc_update 1)	int64_t baseline_schema_version_;
+src/share/schema/ob_server_schema_service.h	979	ObServerSchemaService::schema_mgr_for_cache_	field ObSchemaMgr*; 18 atomic accesses (ATOMIC_LOAD 16, ATOMIC_STORE 2)	ObSchemaMgr* schema_mgr_for_cache_ = nullptr;
+src/share/scn.cpp	171	SCN::inc_update::new_scn	local variable SCN in SCN::inc_update; 1 atomic accesses (ATOMIC_SET 1); through member functions atomic_set	SCN new_scn;
+src/share/scn.cpp	184	SCN::dec_update::new_scn	local variable SCN in SCN::dec_update; 1 atomic accesses (ATOMIC_SET 1); through member functions atomic_set	SCN new_scn;
+src/share/scn.h	144	SCN::val_	field uint64_t; 12 atomic accesses (ATOMIC_LOAD 6, ATOMIC_VCAS 3, ATOMIC_BCAS 1, ATOMIC_SET 1, ATOMIC_STORE 1)	uint64_t val_;
+src/share/vector/ob_bit_vector.h	192	ObBitVectorImpl::data_	field WordType; 2 atomic accesses (ATOMIC_BCAS 1, ATOMIC_LOAD 1)	WordType data_[0];
+src/sql/das/ob_das_id_allocator.h	36	ObDASIDAllocator::next_id_	field int64_t; 1 atomic accesses (ATOMIC_FAA 1)	int64_t next_id_ CACHE_ALIGNED;
+src/sql/das/ob_das_parallel_handler.h	90	ObDASParallelTaskFactory::alloc_count_	field static int64_t; 1 atomic accesses (ATOMIC_FAA 1)	static int64_t alloc_count_;
+src/sql/das/ob_das_parallel_handler.h	91	ObDASParallelTaskFactory::free_count_	field static int64_t; 1 atomic accesses (ATOMIC_FAA 1)	static int64_t free_count_;
+src/sql/das/ob_das_ref.h	124	DASRefCountContext::das_task_concurrency_limit_	field int32_t; 4 atomic accesses (ATOMIC_CAS 1, ATOMIC_INC 1, ATOMIC_LOAD 1, __sync_add_and_fetch 1)	int32_t das_task_concurrency_limit_;
+src/sql/das/ob_das_ref.h	125	DASRefCountContext::err_ret_	field int; 1 atomic accesses (ATOMIC_LOAD 1)	int err_ret_;
+src/sql/dtl/ob_dtl_channel.h	248	ObDtlChannel::pins_	field int64_t; 3 atomic accesses (ATOMIC_AAF 1, ATOMIC_LOAD 1, ATOMIC_SAF 1)	int64_t pins_;
+src/sql/dtl/ob_dtl_channel.h	258	ObDtlChannel::alloc_buffer_cnt_	field int64_t; 1 atomic accesses (ATOMIC_AAF 1)	int64_t alloc_buffer_cnt_;
+src/sql/dtl/ob_dtl_channel.h	259	ObDtlChannel::free_buffer_cnt_	field int64_t; 1 atomic accesses (ATOMIC_AAF 1)	int64_t free_buffer_cnt_;
+src/sql/dtl/ob_dtl_channel.h	263	ObDtlChannel::state_	field uint64_t; 7 atomic accesses (ATOMIC_LOAD 5, ATOMIC_BCAS 2)	uint64_t state_;
+src/sql/dtl/ob_dtl_channel.h	321	ObDtlChannel::generate_id::sequence	function-local static uint64_t in ObDtlChannel::generate_id; 1 atomic accesses (ATOMIC_AAF 1)	static volatile uint64_t sequence = start_id;
+src/sql/dtl/ob_dtl_channel_mem_manager.h	90	ObDtlChannelMemManager::alloc_cnt_	field int64_t; 1 atomic accesses (ATOMIC_INC 1)	int64_t alloc_cnt_;
+src/sql/dtl/ob_dtl_channel_mem_manager.h	91	ObDtlChannelMemManager::free_cnt_	field int64_t; 1 atomic accesses (ATOMIC_INC 1)	int64_t free_cnt_;
+src/sql/dtl/ob_dtl_fc_server.h	101	ObDfc::blocked_dfc_cnt_	field int64_t; 3 atomic accesses (ATOMIC_INC 1, ATOMIC_LOAD 1, ATOMIC_SAF 1)	int64_t blocked_dfc_cnt_;
+src/sql/dtl/ob_dtl_fc_server.h	102	ObDfc::channel_total_cnt_	field int64_t; 3 atomic accesses (ATOMIC_AAF 1, ATOMIC_LOAD 1, ATOMIC_SAF 1)	int64_t channel_total_cnt_;
+src/sql/dtl/ob_dtl_flow_control.h	229	ObDtlFlowControl::block_ch_cnt_	field int64_t; 5 atomic accesses (ATOMIC_LOAD 3, ATOMIC_AAF 1, ATOMIC_SAF 1)	int64_t block_ch_cnt_;
+src/sql/dtl/ob_dtl_flow_control.h	230	ObDtlFlowControl::total_memory_size_	field int64_t; 5 atomic accesses (ATOMIC_LOAD 3, ATOMIC_AAF 1, ATOMIC_SAF 1)	int64_t total_memory_size_;
+src/sql/dtl/ob_dtl_flow_control.h	231	ObDtlFlowControl::total_buffer_cnt_	field int64_t; 6 atomic accesses (ATOMIC_LOAD 4, ATOMIC_DEC 1, ATOMIC_INC 1)	int64_t total_buffer_cnt_;
+src/sql/dtl/ob_dtl_flow_control.h	233	ObDtlFlowControl::accumulated_blocked_cnt_	field int64_t; 2 atomic accesses (ATOMIC_AAF 1, ATOMIC_LOAD 1)	int64_t accumulated_blocked_cnt_;
+src/sql/dtl/ob_dtl_flow_control.h	238	ObDtlFlowControl::blocks_	field common::ObSEArray<bool, 16>; 3 atomic accesses (ATOMIC_SET 2, ATOMIC_LOAD 1); through local references blocked	common::ObSEArray<bool, 16> blocks_;
+src/sql/dtl/ob_dtl_flow_control.h	241	ObDtlFlowControl::drain_ch_cnt_	field uint64_t; 2 atomic accesses (ATOMIC_FAA 1, ATOMIC_LOAD 1)	uint64_t drain_ch_cnt_;
+src/sql/dtl/ob_dtl_flow_control.h	271	ObDtlFlowControl::is_block::blocked	local variable bool in ObDtlFlowControl::is_block; 1 atomic accesses (ATOMIC_LOAD 1)	bool blocked = blocks_.at(idx);
+src/sql/dtl/ob_dtl_interm_result_manager.cpp	783	ref_count_	12 candidate declarations, none chosen; 1 atomic accesses in 1 files (ATOMIC_LOAD 1); first access shown	return ATOMIC_LOAD(&(entry.second->ref_count_)) <= 0;
+src/sql/dtl/ob_dtl_interm_result_manager.h	136	ObDTLMemProfileInfo::ref_count_	field int64_t; 3 atomic accesses (ATOMIC_INC 2, ATOMIC_SAF 1)	int64_t ref_count_;
+src/sql/dtl/ob_dtl_interm_result_manager.h	202	ObDTLIntermResultInfo::ref_count_	field int64_t; 3 atomic accesses (ATOMIC_INC 1, ATOMIC_LOAD 1, ATOMIC_SAF 1)	int64_t ref_count_;
+src/sql/engine/basic/ob_temp_table_access_op.h	51	ObTempTableAccessOpInput::unfinished_count_ptr_	field uint64_t; 1 atomic accesses (ATOMIC_AAF 1); through local references count_ptr	uint64_t unfinished_count_ptr_;
+src/sql/engine/cmd/ob_load_data_impl.h	238	ObPartDataFragMgr::total_row_proceduced_	field volatile int64_t; 2 atomic accesses (ATOMIC_AAF 1, ATOMIC_LOAD 1)	volatile int64_t total_row_proceduced_;
+src/sql/engine/cmd/ob_load_data_impl.h	299	ObDataFragMgr::total_alloc_cnt_	field volatile int64_t; 2 atomic accesses (ATOMIC_AAF 1, ATOMIC_LOAD 1)	volatile int64_t total_alloc_cnt_;
+src/sql/engine/cmd/ob_load_data_utils.h	77	ObParallelTaskController::processing_cnt_	field volatile int64_t; 3 atomic accesses (ATOMIC_AAF 2, ATOMIC_LOAD 1)	volatile int64_t processing_cnt_;
+src/sql/engine/cmd/ob_load_data_utils.h	139	ObConcurrentFixedCircularArray::data_	field volatile T *; 2 atomic accesses (ATOMIC_SET 1, ATOMIC_STORE 1)	volatile T *data_;
+src/sql/engine/cmd/ob_load_data_utils.h	140	ObConcurrentFixedCircularArray::head_pos_	field volatile int64_t; 3 atomic accesses (ATOMIC_LOAD 2, ATOMIC_FAA 1)	volatile int64_t head_pos_;
+src/sql/engine/cmd/ob_load_data_utils.h	141	ObConcurrentFixedCircularArray::tail_pos_	field volatile int64_t; 3 atomic accesses (ATOMIC_LOAD 2, ATOMIC_FAA 1)	volatile int64_t tail_pos_;
+src/sql/engine/cmd/ob_load_data_utils.h	147	ObLoadDataGID::GlobalLoadDataID	field static volatile int64_t; 1 atomic accesses (ATOMIC_AAF 1)	static volatile int64_t GlobalLoadDataID;
+src/sql/engine/expr/ob_expr_uuid_short.cpp	44	ObExprUuidShort::generate_uuid_short::startup_time_and_counter	function-local static uint64_t in ObExprUuidShort::generate_uuid_short; 1 atomic accesses (ATOMIC_AAF 1)	static volatile uint64_t startup_time_and_counter =
+src/sql/engine/join/ob_hash_join_op.cpp	34	ObHashJoinInput::sync_wait	atomic access through parameter sync_event (int64_t &) of ObHashJoinInput::sync_wait; the atomic object is the caller's argument; 5 atomic accesses (ATOMIC_LOAD 3, ATOMIC_INC 2)	int ObHashJoinInput::sync_wait(ObExecContext &ctx, int64_t &sync_event, EventPred pred, bool ignore_interrupt, bool is_open)

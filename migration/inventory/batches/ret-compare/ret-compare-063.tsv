@@ -1,0 +1,83 @@
+file	line	symbol	construct	text
+src/storage/scheduler/ob_dag_scheduler.cpp	380	ObITask::do_work	ret != OB_DAG_TASK_IS_SUSPENDED	if (OB_DAG_TASK_IS_SUSPENDED != ret) {
+src/storage/scheduler/ob_dag_scheduler.cpp	408	ObITask::generate_next_task	tmp_ret != OB_ITER_END	if (OB_ITER_END != tmp_ret) {
+src/storage/scheduler/ob_dag_scheduler.cpp	438	ObITask::post_generate_next_task	tmp_ret != OB_ITER_END	if (OB_ITER_END != tmp_ret) {
+src/storage/scheduler/ob_dag_scheduler.cpp	1290	ObIDagNet::add_dag_into_dag_net	call result hash_ret=dag_record_map_.get_refactored(&dag,dag_record) != OB_HASH_NOT_EXIST	} else if (OB_HASH_NOT_EXIST != (hash_ret = dag_record_map_.get_refactored(&dag, dag_record))) {
+src/storage/scheduler/ob_dag_scheduler.cpp	1954	ObDagPrioScheduler::destroy	tmp_ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != tmp_ret) {
+src/storage/scheduler/ob_dag_scheduler.cpp	2082	ObDagPrioScheduler::add_dag_into_list_and_map_	ret == OB_HASH_EXIST	if (OB_HASH_EXIST == ret) {
+src/storage/scheduler/ob_dag_scheduler.cpp	2131	ObDagPrioScheduler::inner_add_dag_	ret != OB_EAGAIN	if (OB_EAGAIN != ret) {
+src/storage/scheduler/ob_dag_scheduler.cpp	2173	ObDagPrioScheduler::schedule_one_	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/storage/scheduler/ob_dag_scheduler.cpp	2303	ObDagPrioScheduler::pop_task_from_ready_list_	tmp_ret == OB_ITER_END	if (OB_ITER_END == tmp_ret) {
+src/storage/scheduler/ob_dag_scheduler.cpp	2335	ObDagPrioScheduler::generate_next_dag_	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/scheduler/ob_dag_scheduler.cpp	2440	ObDagPrioScheduler::finish_dag_	tmp_ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != tmp_ret) {
+src/storage/scheduler/ob_dag_scheduler.cpp	2747	ObDagPrioScheduler::get_minor_exe_dag_info	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/storage/scheduler/ob_dag_scheduler.cpp	2773	ObDagPrioScheduler::add_compaction_info	tmp_ret != OB_EAGAIN	if (OB_EAGAIN != tmp_ret) {
+src/storage/scheduler/ob_dag_scheduler.cpp	2927	ObDagPrioScheduler::diagnose_dag	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/storage/scheduler/ob_dag_scheduler.cpp	3026	ObDagPrioScheduler::deal_with_finish_task	other variable error_code == OB_ALLOCATE_MEMORY_FAILED	if (OB_ALLOCATE_MEMORY_FAILED == error_code && is_mini_compaction_dag(dag->get_type())) {
+src/storage/scheduler/ob_dag_scheduler.cpp	3077	ObDagPrioScheduler::cancel_dag	other variable hash_ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != hash_ret) {
+src/storage/scheduler/ob_dag_scheduler.cpp	3112	ObDagPrioScheduler::check_dag_exist	other variable hash_ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == hash_ret) {
+src/storage/scheduler/ob_dag_scheduler.cpp	3171	ObDagPrioScheduler::try_switch	tmp_ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != tmp_ret) {
+src/storage/scheduler/ob_dag_scheduler.cpp	3305	ObDagNetScheduler::add_dag_net	ret != OB_HASH_EXIST	if (OB_HASH_EXIST != ret) {
+src/storage/scheduler/ob_dag_scheduler.cpp	3311	ObDagNetScheduler::add_dag_net	ret == OB_HASH_EXIST	if (OB_HASH_EXIST == ret) {
+src/storage/scheduler/ob_dag_scheduler.cpp	3424	ObDagNetScheduler::diagnose_dag_net	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/storage/scheduler/ob_dag_scheduler.cpp	3570	ObDagNetScheduler::check_dag_net_exist	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/storage/scheduler/ob_dag_scheduler.cpp	3593	ObDagNetScheduler::cancel_dag_net	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/storage/scheduler/ob_dag_scheduler.cpp	3877	ObDagScheduler::add_dag_net	ret != OB_HASH_EXIST	if (OB_HASH_EXIST != ret) {
+src/storage/scheduler/ob_dag_scheduler.cpp	3913	ObDagScheduler::add_dag	ret != OB_EAGAIN	if (OB_EAGAIN != ret) {
+src/storage/scheduler/ob_dag_scheduler.cpp	4281	ObDagScheduler::diagnose_dag_net	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/storage/scheduler/ob_dag_scheduler.cpp	4316	ObDagScheduler::run1	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/storage/scheduler/ob_dag_warning_history_mgr.cpp	126	ObDagWarningHistoryManager::add_dag_warning_info	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/storage/scheduler/ob_independent_dag.cpp	204	ObIndependentDag::process	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/scheduler/ob_independent_dag.cpp	334	ObIndependentDag::try_get_next_ready_task	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/scheduler/ob_independent_dag.cpp	340	ObIndependentDag::try_get_next_ready_task	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/scheduler/ob_independent_dag.cpp	358	ObIndependentDag::schedule_one	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/scheduler/ob_independent_dag.cpp	385	ObIndependentDag::wait_signal	tmp_ret != OB_TIMEOUT	if (OB_TIMEOUT != tmp_ret) {
+src/storage/scheduler/ob_independent_dag.cpp	396	ObIndependentDag::execute_task	ret != OB_DAG_TASK_IS_SUSPENDED	if (OB_DAG_TASK_IS_SUSPENDED != ret) {
+src/storage/scheduler/ob_independent_dag.cpp	402	ObIndependentDag::execute_task	ret == OB_DAG_TASK_IS_SUSPENDED	if (OB_DAG_TASK_IS_SUSPENDED == ret) {
+src/storage/scheduler/ob_independent_dag.cpp	423	ObIndependentDag::process_task	other variable task_ret == OB_DAG_TASK_IS_SUSPENDED	} else if (OB_DAG_TASK_IS_SUSPENDED == task_ret && task_is_suspended) {
+src/storage/scheduler/ob_independent_dag.cpp	443	ObIndependentDag::deal_with_finish_task	other variable error_code == OB_DAG_TASK_IS_SUSPENDED	} else if (OB_DAG_TASK_IS_SUSPENDED == error_code && OB_FAIL(deal_with_suspended_task(*task, error_code, task_is_suspended))) {
+src/storage/scheduler/ob_independent_dag.cpp	529	ObDagExecutor::run	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/slog/ob_storage_log_item.cpp	136	ObStorageLogItem::wait_flush_log	ret == OB_TIMEOUT	if (ret == OB_TIMEOUT) {
+src/storage/slog/ob_storage_log_reader.cpp	120	ObStorageLogReader::read_log	ret != OB_READ_NOTHING	if (OB_FAIL(open()) && OB_READ_NOTHING != ret) {
+src/storage/slog/ob_storage_log_reader.cpp	128	ObStorageLogReader::read_log	ret != OB_READ_NOTHING	if (OB_FAIL(get_next_log(entry, log_data, disk_addr)) && OB_READ_NOTHING != ret) {
+src/storage/slog/ob_storage_log_reader.cpp	130	ObStorageLogReader::read_log	ret == OB_READ_NOTHING	} else if (OB_READ_NOTHING == ret && OB_FAIL(check_switch_file())) {
+src/storage/slog/ob_storage_log_reader.cpp	131	ObStorageLogReader::read_log	ret != OB_READ_NOTHING; ret != OB_EAGAIN	if (OB_READ_NOTHING != ret && OB_EAGAIN != ret) {
+src/storage/slog/ob_storage_log_reader.cpp	135	ObStorageLogReader::read_log	ret == OB_EAGAIN	} while (OB_EAGAIN == ret);
+src/storage/slog/ob_storage_log_reader.cpp	165	ObStorageLogReader::check_switch_file	ret != OB_READ_NOTHING	if (OB_READ_NOTHING != ret) {
+src/storage/slog/ob_storage_log_reader.cpp	221	ObStorageLogReader::get_next_log	ret != OB_READ_NOTHING	if (OB_FAIL(get_next_batch_header(batch_header)) && OB_READ_NOTHING != ret) {
+src/storage/slog/ob_storage_log_reader.cpp	223	ObStorageLogReader::get_next_log	ret != OB_READ_NOTHING	} else if (OB_READ_NOTHING != ret && log_buffer_.get_remain_data_len() < batch_header.total_len_) {
+src/storage/slog/ob_storage_log_reader.cpp	224	ObStorageLogReader::get_next_log	ret != OB_READ_NOTHING	if (OB_FAIL(load_buf()) && OB_READ_NOTHING != ret) {
+src/storage/slog/ob_storage_log_reader.cpp	282	ObStorageLogReader::get_next_batch_header	ret != OB_READ_NOTHING	if (OB_FAIL(load_buf()) && OB_READ_NOTHING != ret) {
+src/storage/slog/ob_storage_log_reader.cpp	308	ObStorageLogReader::get_next_entry	ret != OB_READ_NOTHING	if (OB_FAIL(load_buf()) && OB_READ_NOTHING != ret) {
+src/storage/slog/ob_storage_log_replayer.cpp	187	ObStorageLogReplayer::replay	ret == OB_READ_NOTHING	if (OB_READ_NOTHING == ret) {
+src/storage/slog/ob_storage_log_replayer.cpp	288	ObStorageLogReplayer::parse_log	ret == OB_READ_NOTHING	if (OB_READ_NOTHING == ret) {
+src/storage/slog/ob_storage_log_replayer.cpp	325	ObStorageLogReplayer::check_empty_dir	ret != OB_ENTRY_NOT_EXIST	&& OB_ENTRY_NOT_EXIST != ret) {
+src/storage/slog/ob_storage_log_replayer.cpp	327	ObStorageLogReplayer::check_empty_dir	ret == OB_ENTRY_NOT_EXIST	} else if (OB_ENTRY_NOT_EXIST == ret) {
+src/storage/slog/ob_storage_logger.cpp	518	ObStorageLogger::get_start_file_id	ret != OB_ENTRY_NOT_EXIST	&& OB_ENTRY_NOT_EXIST != ret) {
+src/storage/slog/ob_storage_logger.cpp	520	ObStorageLogger::get_start_file_id	ret == OB_ENTRY_NOT_EXIST	} else if (OB_ENTRY_NOT_EXIST == ret) {
+src/storage/slog_ckpt/ob_linked_macro_block_reader.cpp	294	ObLinkedMacroBlockItemReader::get_next_item	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/slog_ckpt/ob_linked_macro_block_reader.cpp	312	ObLinkedMacroBlockItemReader::read_item_block	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/slog_ckpt/ob_linked_macro_block_reader.cpp	351	ObLinkedMacroBlockItemReader::read_item_block	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/slog_ckpt/ob_local_storage_checkpoint_reader.cpp	51	ObLocalStorageCheckpointReader::iter_read_meta_item	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/slog_ckpt/ob_local_storage_checkpoint_slog_handler.cpp	520	ObLocalStorageCheckpointSlogHandler::check_slog	tmp_ret == OB_HASH_EXIST	if (OB_HASH_EXIST == tmp_ret) {
+src/storage/slog_ckpt/ob_local_storage_checkpoint_slog_handler.cpp	523	ObLocalStorageCheckpointSlogHandler::check_slog	tmp_ret != OB_HASH_NOT_EXIST	} else if (OB_UNLIKELY(OB_HASH_NOT_EXIST != tmp_ret)) {
+src/storage/slog_ckpt/ob_local_storage_checkpoint_slog_handler.cpp	737	ObLocalStorageCheckpointSlogHandler::update_tablet_meta_addr_and_block_list	ret == OB_ALLOCATE_MEMORY_FAILED	} while (OB_ALLOCATE_MEMORY_FAILED == ret);
+src/storage/slog_ckpt/ob_local_storage_checkpoint_slog_handler.cpp	880	ObLocalStorageCheckpointSlogHandler::inner_replay_delete_tablet	ret != OB_HASH_NOT_EXIST	if (OB_FAIL(replay_tablet_disk_addr_map_.erase_refactored(map_key)) && OB_HASH_NOT_EXIST != ret) {
+src/storage/slog_ckpt/ob_local_storage_checkpoint_writer.cpp	177	ObLocalStorageCheckpointWriter::record_tablet_meta	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/slog_ckpt/ob_local_storage_checkpoint_writer.cpp	192	ObLocalStorageCheckpointWriter::record_tablet_meta	ret == OB_SERVER_OUTOF_DISK_SPACE	} while (OB_SERVER_OUTOF_DISK_SPACE == ret);
+src/storage/slog_ckpt/ob_local_storage_checkpoint_writer.cpp	237	ObLocalStorageCheckpointWriter::persist_and_copy_tablet	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/storage/slog_ckpt/ob_local_storage_checkpoint_writer.cpp	245	ObLocalStorageCheckpointWriter::persist_and_copy_tablet	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/storage/slog_ckpt/ob_local_storage_checkpoint_writer.cpp	289	ObLocalStorageCheckpointWriter::copy_tablet	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/storage/slog_ckpt/ob_local_storage_checkpoint_writer.cpp	298	ObLocalStorageCheckpointWriter::copy_tablet	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/storage/slog_ckpt/ob_local_storage_checkpoint_writer.cpp	313	ObLocalStorageCheckpointWriter::copy_tablet	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/storage/slog_ckpt/ob_local_storage_checkpoint_writer.cpp	379	ObLocalStorageCheckpointWriter::batch_compare_and_swap_tablet	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/storage/slog_ckpt/ob_local_storage_checkpoint_writer.cpp	389	ObLocalStorageCheckpointWriter::batch_compare_and_swap_tablet	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/storage/slog_ckpt/ob_local_storage_checkpoint_writer.cpp	406	ObLocalStorageCheckpointWriter::batch_compare_and_swap_tablet	ret == OB_NOT_THE_OBJECT	if (OB_NOT_THE_OBJECT == ret) {
+src/storage/slog_ckpt/ob_local_storage_checkpoint_writer.cpp	409	ObLocalStorageCheckpointWriter::batch_compare_and_swap_tablet	ret == OB_TABLET_NOT_EXIST	} else if (OB_TABLET_NOT_EXIST == ret) {
+src/storage/slog_ckpt/ob_local_storage_checkpoint_writer.cpp	425	ObLocalStorageCheckpointWriter::ignore_ret	ret == OB_ALLOCATE_MEMORY_FAILED; ret == OB_DISK_HUNG; ret == OB_TIMEOUT; ret == OB_BUF_NOT_ENOUGH	return OB_ALLOCATE_MEMORY_FAILED == ret || OB_DISK_HUNG == ret || OB_TIMEOUT == ret || OB_BUF_NOT_ENOUGH == ret;
+src/storage/slog_ckpt/ob_local_storage_checkpoint_writer.cpp	504	ObLocalStorageCheckpointWriter::get_tablet_with_addr	ret == OB_BUF_NOT_ENOUGH	if ((OB_BUF_NOT_ENOUGH == ret) && (ObTabletPoolType::TP_NORMAL == tablet_pool_type)) {
+src/storage/slog_ckpt/ob_local_storage_checkpoint_writer.cpp	506	ObLocalStorageCheckpointWriter::get_tablet_with_addr	ret == OB_BUF_NOT_ENOUGH	} else if ((OB_BUF_NOT_ENOUGH == ret) && (ObTabletPoolType::TP_NORMAL != tablet_pool_type)) {
+src/storage/slog_ckpt/ob_server_checkpoint_reader.cpp	53	ObServerCheckpointReader::read_runtime_meta_checkpoint	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/slog_ckpt/ob_startup_accel_task_handler.cpp	53	ObStartupAccelTaskHandler::init	ret != OB_INIT_TWICE	if (OB_FAIL(ret) && OB_INIT_TWICE != ret) {
+src/storage/slog_ckpt/ob_tablet_replay_create_handler.cpp	328	ObTabletReplayCreateHandler::add_task_	ret == OB_EAGAIN	if (OB_EAGAIN == ret) {
+src/storage/slog_ckpt/ob_tablet_replay_create_handler.cpp	374	ObTabletReplayCreateHandler::replay_discrete_tablets	ret == OB_TIMEOUT	} while (OB_FAIL(ret) && OB_TIMEOUT == ret && max_retry_time-- > 0);

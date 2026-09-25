@@ -1,0 +1,55 @@
+file	line	symbol	construct	text
+src/storage/access/ob_advance_scanner.h	165	ObAdvanceScanner::complete_range_	member ObDatumRange (value) of type blocksstable::ObDatumRange [not built]	blocksstable::ObDatumRange complete_range_;
+src/storage/access/ob_advance_scanner.h	166	ObAdvanceScanner::range_datums_	member ObStorageDatum (pointer) of type blocksstable::ObStorageDatum * [not built]	blocksstable::ObStorageDatum *range_datums_;
+src/storage/access/ob_aggregate_base.h	174	ObAggCellBase::result_datum_	member ObStorageDatum (value) of type blocksstable::ObStorageDatum	blocksstable::ObStorageDatum result_datum_;
+src/storage/access/ob_aggregate_base.h	175	ObAggCellBase::skip_index_datum_	member ObStorageDatum (value) of type blocksstable::ObStorageDatum	blocksstable::ObStorageDatum skip_index_datum_;
+src/storage/access/ob_aggregate_base.h	373	ObAggDatumBuf::datums_	member ObDatum (pointer) of type common::ObDatum *	common::ObDatum *datums_;
+src/storage/access/ob_aggregate_base.h	374	ObAggDatumBuf::buf_	member raw bytes (pointer) of type char *	char *buf_;
+src/storage/access/ob_aggregate_base.h	375	ObAggDatumBuf::cell_data_ptrs_	member raw bytes (pointer) of type const char **	const char **cell_data_ptrs_;
+src/storage/access/ob_aggregate_base.h	403	ObAggGroupByDatumBuf::sql_result_datums_	member ObDatum (pointer) of type common::ObDatum *	common::ObDatum *sql_result_datums_; // agg expr's datums
+src/storage/access/ob_aggregated_store.h	109	ObAggregatedStore::row_buf_	member ObDatumRow (value) of type blocksstable::ObDatumRow	blocksstable::ObDatumRow row_buf_;
+src/storage/access/ob_block_batched_row_store.h	89	ObBlockBatchedRowStore::cell_data_ptrs_	member raw bytes (pointer) of type const char **	const char **cell_data_ptrs_;
+src/storage/access/ob_block_sample_iterator.h	68	ObBlockSampleSSTableEndkeyIterator::curr_key_	member ObDatumRowkey (value) of type blocksstable::ObDatumRowkey	blocksstable::ObDatumRowkey curr_key_;
+src/storage/access/ob_block_sample_iterator.h	128	ObBlockSampleRangeIterator::ObBlockSampleEndkey::key_buf_	member raw bytes (pointer) of type char *	char *key_buf_;
+src/storage/access/ob_block_sample_iterator.h	130	ObBlockSampleRangeIterator::ObBlockSampleEndkey::key_	member ObDatumRowkey (value) of type blocksstable::ObDatumRowkey	blocksstable::ObDatumRowkey key_;
+src/storage/access/ob_block_sample_iterator.h	146	ObBlockSampleRangeIterator::sample_range_	member ObDatumRange (pointer) of type const blocksstable::ObDatumRange *	const blocksstable::ObDatumRange *sample_range_;
+src/storage/access/ob_block_sample_iterator.h	153	ObBlockSampleRangeIterator::curr_range_	member ObDatumRange (value) of type blocksstable::ObDatumRange	blocksstable::ObDatumRange curr_range_;
+src/storage/access/ob_block_sample_iterator.h	190	ObBlockSampleIterator::micro_range_	member ObDatumRange (value) of type blocksstable::ObDatumRange	blocksstable::ObDatumRange micro_range_;
+src/storage/access/ob_datum_reshape.cpp	36	ObDatumReshape::pad_datum_value	allocator in, arena view out: blocksstable::ObStorageDatum &datum_value	int ObDatumReshape::pad_datum_value(const ObObjMeta &col_type,
+src/storage/access/ob_datum_reshape.cpp	71	ObDatumReshape::reshape_datum_value	allocator in, arena view out: blocksstable::ObStorageDatum &datum_value	int ObDatumReshape::reshape_datum_value(const ObObjMeta &col_type,
+src/storage/access/ob_ddl_block_sample_iterator.h	55	ObDDLBlockSampleIterator::reservoir_	member container of ObDatumRange of type ObArray<blocksstable::ObDatumRange *>	ObArray<blocksstable::ObDatumRange *> reservoir_;
+src/storage/access/ob_index_tree_prefetcher.h	149	ObSSTableReadHandle::rowkey_	member ObDatumRowkey (pointer) of type const blocksstable::ObDatumRowkey *	const blocksstable::ObDatumRowkey *rowkey_;
+src/storage/access/ob_index_tree_prefetcher.h	150	ObSSTableReadHandle::range_	member ObDatumRange (pointer) of type const blocksstable::ObDatumRange *	const blocksstable::ObDatumRange *range_;
+src/storage/access/ob_index_tree_prefetcher.h	474	ObIndexTreeMultiPrefetcher::rowkeys_	member container of ObDatumRowkey of type const common::ObIArray<blocksstable::ObDatumRowkey> *	const common::ObIArray<blocksstable::ObDatumRowkey> *rowkeys_;
+src/storage/access/ob_index_tree_prefetcher.h	821	ObIndexTreeMultiPassPrefetcher::rowkeys_	member container of ObDatumRowkey of type const common::ObIArray<blocksstable::ObDatumRowkey> *	const common::ObIArray<blocksstable::ObDatumRowkey> *rowkeys_; // for multi get/multi exist/single exist
+src/storage/access/ob_index_tree_prefetcher.h	822	ObIndexTreeMultiPassPrefetcher::range_	member ObDatumRange (pointer) of type const blocksstable::ObDatumRange *	const blocksstable::ObDatumRange *range_; // for scan
+src/storage/access/ob_index_tree_prefetcher.h	823	ObIndexTreeMultiPassPrefetcher::ranges_	member container of ObDatumRange of type const common::ObIArray<blocksstable::ObDatumRange> *	const common::ObIArray<blocksstable::ObDatumRange> *ranges_; // for multi scan
+src/storage/access/ob_index_tree_prefetcher.h	827	ObIndexTreeMultiPassPrefetcher::border_rowkey_	member ObDatumRowkey (value) of type blocksstable::ObDatumRowkey	blocksstable::ObDatumRowkey border_rowkey_;
+src/storage/access/ob_multiple_get_merge.h	48	ObQueryRowInfo::row_	member ObDatumRow (value) of type blocksstable::ObDatumRow	blocksstable::ObDatumRow row_;
+src/storage/access/ob_multiple_get_merge.h	75	ObMultipleGetMerge::rowkeys_	member container of ObDatumRowkey of type const common::ObIArray<blocksstable::ObDatumRowkey> *	const common::ObIArray<blocksstable::ObDatumRowkey> *rowkeys_;
+src/storage/access/ob_multiple_get_merge.h	76	ObMultipleGetMerge::cow_rowkeys_	member container of ObDatumRowkey of type common::ObSEArray<blocksstable::ObDatumRowkey, common::OB_DEFAULT_MULTI_GET_ROWKEY_NUM>	common::ObSEArray<blocksstable::ObDatumRowkey, common::OB_DEFAULT_MULTI_GET_ROWKEY_NUM> cow_rowkeys_;
+src/storage/access/ob_multiple_merge.h	160	ObMultipleMerge::cur_row_	member ObDatumRow (value) of type blocksstable::ObDatumRow	blocksstable::ObDatumRow cur_row_;
+src/storage/access/ob_multiple_merge.h	161	ObMultipleMerge::unprojected_row_	member ObDatumRow (value) of type blocksstable::ObDatumRow	blocksstable::ObDatumRow unprojected_row_;
+src/storage/access/ob_multiple_merge.h	162	ObMultipleMerge::curr_rowkey_	member ObDatumRowkey (value) of type blocksstable::ObDatumRowkey	blocksstable::ObDatumRowkey curr_rowkey_;
+src/storage/access/ob_multiple_multi_scan_merge.h	48	ObMultipleMultiScanMerge::ranges_	member container of ObDatumRange of type const ObIArray<blocksstable::ObDatumRange> *	const ObIArray<blocksstable::ObDatumRange> *ranges_;
+src/storage/access/ob_multiple_multi_scan_merge.h	49	ObMultipleMultiScanMerge::cow_ranges_	member container of ObDatumRange of type common::ObSEArray<blocksstable::ObDatumRange, 32>	common::ObSEArray<blocksstable::ObDatumRange, 32> cow_ranges_;
+src/storage/access/ob_multiple_scan_merge.h	76	ObMultipleScanMerge::range_	member ObDatumRange (pointer) of type const blocksstable::ObDatumRange *	const blocksstable::ObDatumRange *range_;
+src/storage/access/ob_multiple_scan_merge.h	77	ObMultipleScanMerge::cow_range_	member ObDatumRange (value) of type blocksstable::ObDatumRange	blocksstable::ObDatumRange cow_range_;
+src/storage/access/ob_pushdown_aggregate.cpp	278	ObAggCell::pad_column_if_need	allocator in, arena view out: blocksstable::ObStorageDatum &datum	int ObAggCell::pad_column_if_need(blocksstable::ObStorageDatum &datum, common::ObIAllocator &padding_allocator, bool alloc_need_reuse)
+src/storage/access/ob_pushdown_aggregate.h	155	ObAggCell::def_datum_	member ObStorageDatum (value) of type blocksstable::ObStorageDatum	blocksstable::ObStorageDatum def_datum_;
+src/storage/access/ob_pushdown_aggregate.h	161	ObAggCell::col_datums_	member ObDatum (pointer) of type common::ObDatum *	common::ObDatum *col_datums_;
+src/storage/access/ob_pushdown_aggregate.h	163	ObAggCell::group_by_result_datum_buf_	member container of ObDatum of type ObGroupByExtendableBuf<ObDatum> *	ObGroupByExtendableBuf<ObDatum> *group_by_result_datum_buf_;
+src/storage/access/ob_pushdown_aggregate.h	496	ObSumAggCell::cast_datum_	member ObStorageDatum (value) of type blocksstable::ObStorageDatum	blocksstable::ObStorageDatum cast_datum_;
+src/storage/access/ob_pushdown_aggregate.h	497	ObSumAggCell::sum_temp_buffer_	member raw bytes (pointer) of type char *	char *sum_temp_buffer_;
+src/storage/access/ob_pushdown_aggregate.h	498	ObSumAggCell::cast_temp_buffer_	member raw bytes (pointer) of type char *	char *cast_temp_buffer_;
+src/storage/access/ob_pushdown_aggregate.h	673	ObAggSource::datums_	member ObDatum (pointer) of type const ObDatum *	const ObDatum *datums_;
+src/storage/access/ob_pushdown_aggregate_input.h	117	ObPushdownAggregateInput::row_	member ObDatumRow (pointer) of type const blocksstable::ObDatumRow *	const blocksstable::ObDatumRow *row_;
+src/storage/access/ob_pushdown_aggregate_input.h	124	ObPushdownAggregateInput::value_datums_	member ObDatum (pointer) of type common::ObDatum *	common::ObDatum *value_datums_;
+src/storage/access/ob_pushdown_aggregate_input.h	127	ObPushdownAggregateInput::min_datum_	member ObDatum (value) of type common::ObDatum	common::ObDatum min_datum_;
+src/storage/access/ob_pushdown_aggregate_input.h	128	ObPushdownAggregateInput::max_datum_	member ObDatum (value) of type common::ObDatum	common::ObDatum max_datum_;
+src/storage/access/ob_rows_info.h	307	ObRowsInfo::RowsCompare::dup_key_	member ObDatumRowkey (reference) of type blocksstable::ObDatumRowkey &	blocksstable::ObDatumRowkey &dup_key_;
+src/storage/access/ob_rows_info.h	319	ObRowsInfo::rows_	member ObDatumRow (pointer) of type blocksstable::ObDatumRow *	blocksstable::ObDatumRow *rows_;
+src/storage/access/ob_rows_info.h	355	ObRowKeysInfo::rowkeys_	member container of ObDatumRowkey of type const common::ObIArray<blocksstable::ObDatumRowkey> *	const common::ObIArray<blocksstable::ObDatumRowkey> *rowkeys_;
+src/storage/access/ob_scan_merge_loser_tree.h	29	ObScanMergeLoserTreeItem::row_	member ObDatumRow (pointer) of type const blocksstable::ObDatumRow *	const blocksstable::ObDatumRow *row_;
+src/storage/access/ob_single_merge.h	61	ObSingleMerge::rowkey_	member ObDatumRowkey (pointer) of type const blocksstable::ObDatumRowkey *	const blocksstable::ObDatumRowkey *rowkey_;
+src/storage/access/ob_single_merge.h	62	ObSingleMerge::full_row_	member ObDatumRow (value) of type blocksstable::ObDatumRow	blocksstable::ObDatumRow full_row_;

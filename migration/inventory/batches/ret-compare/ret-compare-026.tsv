@@ -1,0 +1,101 @@
+file	line	symbol	construct	text
+src/sql/das/iter/ob_das_text_retrieval_eval_node.cpp	235	ObFtsEvalNode::fts_boolean_node_create	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/sql/das/iter/ob_das_text_retrieval_iter.cpp	320	ObDASTextRetrievalIter::inner_get_next_row	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/sql/das/iter/ob_das_text_retrieval_iter.cpp	329	ObDASTextRetrievalIter::inner_get_next_row	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/sql/das/iter/ob_das_text_retrieval_iter.cpp	353	ObDASTextRetrievalIter::inner_get_next_rows	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/sql/das/iter/ob_das_text_retrieval_iter.cpp	367	ObDASTextRetrievalIter::inner_get_next_rows	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/sql/das/iter/ob_das_text_retrieval_iter.cpp	491	ObDASTextRetrievalIter::do_doc_cnt_agg	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/sql/das/iter/ob_das_text_retrieval_iter.cpp	770	ObDASTRCacheIter::inner_get_next_rows	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/sql/das/iter/ob_das_text_retrieval_iter.cpp	781	ObDASTRCacheIter::inner_get_next_rows	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/sql/das/iter/ob_das_text_retrieval_iter.cpp	797	ObDASTRCacheIter::get_next_batch_inner	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/sql/das/iter/ob_das_text_retrieval_merge_iter.cpp	513	ObDASTextRetrievalMergeIter::check_and_prepare	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/sql/das/iter/ob_das_text_retrieval_merge_iter.cpp	716	ObDASTextRetrievalMergeIter::do_total_doc_cnt	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/sql/das/iter/ob_das_text_retrieval_merge_iter.cpp	884	ObDASTRTaatIter::check_and_prepare	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/sql/das/iter/ob_das_text_retrieval_merge_iter.cpp	900	ObDASTRTaatIter::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/das/iter/ob_das_text_retrieval_merge_iter.cpp	909	ObDASTRTaatIter::inner_get_next_row	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/sql/das/iter/ob_das_text_retrieval_merge_iter.cpp	925	ObDASTRTaatIter::inner_get_next_rows	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/das/iter/ob_das_text_retrieval_merge_iter.cpp	933	ObDASTRTaatIter::inner_get_next_rows	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/sql/das/iter/ob_das_text_retrieval_merge_iter.cpp	951	ObDASTRTaatIter::get_next_batch_rows	ret == OB_ITER_END	bool clear_tag = OB_SUCC(ret) || ret == OB_ITER_END;
+src/sql/das/iter/ob_das_text_retrieval_merge_iter.cpp	969	ObDASTRTaatIter::get_next_batch_rows	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/das/iter/ob_das_text_retrieval_merge_iter.cpp	973	ObDASTRTaatIter::get_next_batch_rows	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/das/iter/ob_das_text_retrieval_merge_iter.cpp	978	ObDASTRTaatIter::get_next_batch_rows	ret == OB_ITER_END	if (OB_SUCC(ret) || OB_ITER_END == ret) {
+src/sql/das/iter/ob_das_text_retrieval_merge_iter.cpp	1193	ObDASTRTaatIter::fill_chunk_store_by_tr_iter	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/sql/das/iter/ob_das_text_retrieval_merge_iter.cpp	1235	ObDASTRTaatIter::fill_chunk_store_by_tr_iter	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/sql/das/iter/ob_das_text_retrieval_merge_iter.cpp	1255	ObDASTRTaatIter::fill_chunk_store_by_tr_iter	ret == OB_ITER_END	ret = OB_ITER_END == ret ? OB_SUCCESS : ret;
+src/sql/das/iter/ob_das_text_retrieval_merge_iter.cpp	1352	ObDASTRTaatIter::inner_load_next_hashmap	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/sql/das/iter/ob_das_text_retrieval_merge_iter.cpp	1361	ObDASTRTaatIter::inner_load_next_hashmap	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/sql/das/iter/ob_das_text_retrieval_merge_iter.cpp	1372	ObDASTRTaatIter::inner_load_next_hashmap	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/das/iter/ob_das_text_retrieval_merge_iter.cpp	1444	ObDASTRTaatLookupIter::fill_output_exprs	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/sql/das/iter/ob_das_text_retrieval_merge_iter.cpp	1491	ObDASTRTaatLookupIter::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/das/iter/ob_das_text_retrieval_merge_iter.cpp	1510	ObDASTRTaatLookupIter::inner_get_next_row	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/sql/das/iter/ob_das_text_retrieval_merge_iter.cpp	1530	ObDASTRTaatLookupIter::inner_get_next_rows	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/das/iter/ob_das_text_retrieval_merge_iter.cpp	1576	ObDASTRTaatLookupIter::inner_get_next_rows	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/sql/das/iter/ob_das_text_retrieval_merge_iter.cpp	1743	ObDASTRDaatIter::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/das/iter/ob_das_text_retrieval_merge_iter.cpp	1757	ObDASTRDaatIter::inner_get_next_row	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/sql/das/iter/ob_das_text_retrieval_merge_iter.cpp	1787	ObDASTRDaatIter::inner_get_next_rows	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/das/iter/ob_das_text_retrieval_merge_iter.cpp	1802	ObDASTRDaatIter::inner_get_next_rows	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/sql/das/iter/ob_das_text_retrieval_merge_iter.cpp	1835	ObDASTRDaatIter::inner_get_next_rows	ret == OB_ITER_END	if ((OB_SUCC(ret) || OB_ITER_END == ret) && count > 0 && OB_FAIL(project_docid())) {
+src/sql/das/iter/ob_das_text_retrieval_merge_iter.cpp	1851	ObDASTRDaatIter::pull_next_batch_rows	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/sql/das/iter/ob_das_text_retrieval_merge_iter.cpp	1884	ObDASTRDaatIter::pull_next_batch_rows_with_batch_mode	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/sql/das/iter/ob_das_text_retrieval_merge_iter.cpp	2014	ObDASTRDaatLookupIter::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/das/iter/ob_das_text_retrieval_merge_iter.cpp	2032	ObDASTRDaatLookupIter::inner_get_next_row	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/sql/das/iter/ob_das_text_retrieval_merge_iter.cpp	2053	ObDASTRDaatLookupIter::inner_get_next_rows	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/das/iter/ob_das_text_retrieval_merge_iter.cpp	2101	ObDASTRDaatLookupIter::inner_get_next_rows	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/sql/das/iter/ob_das_text_retrieval_merge_iter.cpp	2108	ObDASTRDaatLookupIter::inner_get_next_rows	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/das/iter/sparse_retrieval/ob_das_match_iter.cpp	364	ObDASMatchIter::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/das/iter/sparse_retrieval/ob_das_match_iter.cpp	402	ObDASMatchIter::inner_get_next_row	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/sql/das/iter/sparse_retrieval/ob_das_match_iter.cpp	422	ObDASMatchIter::inner_get_next_rows	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/das/iter/sparse_retrieval/ob_das_match_iter.cpp	468	ObDASMatchIter::inner_get_next_rows	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/sql/das/iter/sparse_retrieval/ob_das_match_iter.cpp	472	ObDASMatchIter::inner_get_next_rows	ret == OB_ITER_END	if (OB_SUCC(ret) || OB_ITER_END == ret) {
+src/sql/das/iter/sparse_retrieval/ob_das_match_iter.cpp	487	ObDASMatchIter::do_one_merge_round	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/sql/das/iter/sparse_retrieval/ob_das_match_iter.cpp	492	ObDASMatchIter::do_one_merge_round	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/das/iter/sparse_retrieval/ob_das_match_iter.cpp	513	ObDASMatchIter::fill_merge_heap	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/sql/das/ob_das_define.cpp	139	ObDASTableLoc::get_tablet_loc_by_id	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/sql/das/ob_das_define.cpp	145	ObDASTableLoc::get_tablet_loc_by_id	ret == OB_HASH_NOT_EXIST	} else if (OB_HASH_NOT_EXIST == ret) {
+src/sql/das/ob_das_delete_op.cpp	61	ObDASIndexDMLAdaptor::write_rows	ret != OB_TRY_LOCK_ROW_CONFLICT	if (OB_TRY_LOCK_ROW_CONFLICT != ret) {
+src/sql/das/ob_das_delete_op.cpp	70	ObDASIndexDMLAdaptor::write_rows	ret != OB_TRY_LOCK_ROW_CONFLICT	if (OB_TRY_LOCK_ROW_CONFLICT != ret) {
+src/sql/das/ob_das_delete_op.cpp	76	ObDASIndexDMLAdaptor::write_rows	ret != OB_TRY_LOCK_ROW_CONFLICT	if (OB_TRY_LOCK_ROW_CONFLICT != ret) {
+src/sql/das/ob_das_delete_op.cpp	86	ObDASIndexDMLAdaptor::write_rows	ret != OB_TRY_LOCK_ROW_CONFLICT	if (OB_TRY_LOCK_ROW_CONFLICT != ret) {
+src/sql/das/ob_das_delete_op.cpp	130	ObDASDeleteOp::open_op	ret != OB_TRY_LOCK_ROW_CONFLICT	if (OB_TRY_LOCK_ROW_CONFLICT != ret) {
+src/sql/das/ob_das_dml_ctx_define.cpp	127	ObDASDMLIterator::get_next_domain_index_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/das/ob_das_dml_ctx_define.cpp	148	ObDASDMLIterator::get_next_domain_index_rows	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/das/ob_das_dml_ctx_define.cpp	167	ObDASDMLIterator::get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/das/ob_das_dml_ctx_define.cpp	173	ObDASDMLIterator::get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/das/ob_das_dml_ctx_define.cpp	195	ObDASDMLIterator::get_next_rows	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/das/ob_das_dml_ctx_define.cpp	213	ObDASDMLIterator::get_next_rows	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/das/ob_das_dml_ctx_define.cpp	224	ObDASDMLIterator::get_next_rows	ret == OB_ITER_END	if (OB_SUCC(ret) || OB_LIKELY(OB_ITER_END == ret)) {
+src/sql/das/ob_das_dml_ctx_define.cpp	720	ObDASWriteBuffer::dump_data	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/das/ob_das_dml_ctx_define.cpp	845	ObDASWriteBuffer::Iterator::get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/das/ob_das_dml_ctx_define.cpp	866	ObDASWriteBuffer::NewRowIterator::get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/das/ob_das_domain_utils.cpp	705	ObDomainDMLIterator::get_next_domain_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/das/ob_das_domain_utils.cpp	708	ObDomainDMLIterator::get_next_domain_row	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/sql/das/ob_das_domain_utils.cpp	744	ObDomainDMLIterator::get_next_domain_rows	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/das/ob_das_domain_utils.cpp	747	ObDomainDMLIterator::get_next_domain_rows	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/sql/das/ob_das_domain_utils.cpp	1002	ObFTDMLIterator::generate_domain_rows	ret != OB_ITER_END	if (OB_FAIL(generate_ft_word_rows(store_row)) &&(ret != OB_ITER_END)) {
+src/sql/das/ob_das_domain_utils.cpp	1036	ObFTDMLIterator::generate_ft_word_rows	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/sql/das/ob_das_domain_utils.cpp	1066	ObFTDMLIterator::scan_ft_word_rows	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/das/ob_das_domain_utils.cpp	1075	ObFTDMLIterator::scan_ft_word_rows	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/das/ob_das_domain_utils.cpp	1119	ObFTDMLIterator::scan_ft_word_rows	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/sql/das/ob_das_domain_utils.cpp	1122	ObFTDMLIterator::scan_ft_word_rows	ret == OB_ITER_END	if (OB_ITER_END == ret || OB_SUCC(ret)) {
+src/sql/das/ob_das_domain_utils.cpp	1268	ObMultivalueDMLIterator::generate_domain_rows	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/sql/das/ob_das_insert_op.cpp	74	ObDASIndexDMLAdaptor::write_rows	ret != OB_TRY_LOCK_ROW_CONFLICT	if (OB_TRY_LOCK_ROW_CONFLICT != ret) {
+src/sql/das/ob_das_insert_op.cpp	123	ObDASInsertOp::insert_rows	ret != OB_TRY_LOCK_ROW_CONFLICT	if (OB_TRY_LOCK_ROW_CONFLICT != ret) {
+src/sql/das/ob_das_insert_op.cpp	163	ObDASInsertOp::insert_index_with_fetch	ret == OB_ERR_PRIMARY_KEY_DUPLICATE	if (OB_ERR_PRIMARY_KEY_DUPLICATE == ret) {
+src/sql/das/ob_das_insert_op.cpp	389	ObDASConflictIterator::get_next_row	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/das/ob_das_lock_op.cpp	94	ObDASLockOp::open_op	ret != OB_TRY_LOCK_ROW_CONFLICT	if (OB_TRY_LOCK_ROW_CONFLICT != ret) {
+src/sql/das/ob_das_ref.cpp	86	DASRefCountContext::acquire_task_execution_resource	ret == OB_SIZE_OVERFLOW	if (OB_UNLIKELY(OB_SIZE_OVERFLOW == ret)) {
+src/sql/das/ob_das_ref.cpp	143	ObDASRef::find_das_task	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/sql/das/ob_das_ref.cpp	149	ObDASRef::find_das_task	ret == OB_HASH_NOT_EXIST	} else if (OB_HASH_NOT_EXIST == ret) {
+src/sql/das/ob_das_ref.cpp	414	ObDASRef::wait_all_executing_tasks	ret != OB_TIMEOUT	if (ret != OB_TIMEOUT) {
+src/sql/das/ob_das_ref.cpp	429	ObDASRef::wait_all_executing_tasks	ret != OB_TIMEOUT	if (ret != OB_TIMEOUT) {
+src/sql/das/ob_das_ref.cpp	471	ObDASRef::close_all_task	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/das/ob_das_scan_op.cpp	1108	ObLocalIndexLookupOp::get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/das/ob_das_scan_op.cpp	1109	ObLocalIndexLookupOp::get_next_row	ret == OB_ERR_DEFENSIVE_CHECK	if (OB_ERR_DEFENSIVE_CHECK == ret) {
+src/sql/das/ob_das_scan_op.cpp	1122	ObLocalIndexLookupOp::get_next_rows	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/das/ob_das_scan_op.cpp	1123	ObLocalIndexLookupOp::get_next_rows	ret == OB_ERR_DEFENSIVE_CHECK	if (OB_ERR_DEFENSIVE_CHECK == ret) {
+src/sql/das/ob_das_scan_op.cpp	1136	ObLocalIndexLookupOp::get_next_row_from_index_table	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/das/ob_das_scan_op.cpp	1146	ObLocalIndexLookupOp::get_next_rows_from_index_table	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/das/ob_das_scan_op.cpp	1239	ObLocalIndexLookupOp::do_index_lookup	ret == OB_SNAPSHOT_DISCARDED	if (OB_SNAPSHOT_DISCARDED == ret && scan_param_.fb_snapshot_.is_valid()) {
+src/sql/das/ob_das_scan_op.cpp	1241	ObLocalIndexLookupOp::do_index_lookup	ret != OB_TRY_LOCK_ROW_CONFLICT	} else if (OB_TRY_LOCK_ROW_CONFLICT != ret) {
+src/sql/das/ob_das_scan_op.cpp	1263	ObLocalIndexLookupOp::get_next_row_from_data_table	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/das/ob_das_scan_op.cpp	1279	ObLocalIndexLookupOp::get_next_rows_from_data_table	ret == OB_ITER_END	if (OB_ITER_END == ret && count > 0) {

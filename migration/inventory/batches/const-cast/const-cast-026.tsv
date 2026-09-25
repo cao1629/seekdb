@@ -1,0 +1,79 @@
+file	line	symbol	construct	text
+src/storage/blocksstable/ob_sstable_macro_block_header.cpp	227	ObSSTableMacroBlockHeader::deserialize	const_cast<char *>	column_types_ = reinterpret_cast<ObObjMeta *>(const_cast<char *>(buf + tmp_pos));
+src/storage/blocksstable/ob_sstable_macro_block_header.cpp	232	ObSSTableMacroBlockHeader::deserialize	const_cast<char *>	column_orders_ = reinterpret_cast<ObOrderType *>(const_cast<char *>(buf + tmp_pos));
+src/storage/blocksstable/ob_sstable_macro_block_header.cpp	237	ObSSTableMacroBlockHeader::deserialize	const_cast<char *>	column_checksum_ = reinterpret_cast<int64_t *>(const_cast<char *>(buf + tmp_pos));
+src/storage/blocksstable/ob_sstable_meta.cpp	191	DEFINE_SERIALIZE(ObSSTableBasicMeta)	const_cast<ObSSTableBasicMeta *>	const_cast<ObSSTableBasicMeta *>(this)->length_ = get_serialize_size();
+src/storage/blocksstable/ob_sstable_meta.cpp	379	ObTxContext::serialize	const_cast<ObTxContext *>	const_cast<ObTxContext *>(this)->len_ = get_serialize_size();
+src/storage/blockstore/ob_object_reader_writer.cpp	342	ObObjectReadHandle::get_data	const_cast<char *>	buf = const_cast<char *>(data_buf) + header_size;
+src/storage/blockstore/ob_object_reader_writer.cpp	373	ObObjectReadHandle::get_data	const_cast<char*>	buf = const_cast<char*>(data_buf) + header_size;
+src/storage/blockstore/ob_object_reader_writer.cpp	1027	ObObjectReaderWriter::inner_write_block	const_cast<char*>	if (OB_FAIL(write_info.write_callback_->write(object_handle_, unused_logic_id, const_cast<char*>(object_info.buffer_), object_info.size_, 0/* row count,unused*/))) {
+src/storage/blockstore/ob_object_reader_writer.cpp	1157	ObObjectReaderWriter::parse_data_from_object	const_cast<char*>	buf = const_cast<char*>(block_buf) +  addr.offset() + header_size;
+src/storage/blockstore/ob_object_reader_writer.cpp	1160	ObObjectReaderWriter::parse_data_from_object	const_cast<char*>	buf = const_cast<char*>(block_buf) + addr.offset();
+src/storage/compaction/ob_partition_merger.cpp	486	write_wrong_row	const_cast<ObDatumRow &>	ObDatumRow &tmp_row = const_cast<ObDatumRow &>(row);
+src/storage/compaction/ob_partition_merger.cpp	978	ObPartitionMinorMerger::merge_single_iter	const_cast<ObDatumRow *>	const_cast<ObDatumRow *>(cur_row)->mvcc_row_flag_.set_first_multi_version_row(true);
+src/storage/compaction/ob_partition_merger.cpp	981	ObPartitionMinorMerger::merge_single_iter	const_cast<ObDatumRow *>	const_cast<ObDatumRow *>(cur_row)->mvcc_row_flag_.set_first_multi_version_row(false);
+src/storage/compaction/ob_partition_parallel_merge_ctx.cpp	506	ObParallelMergeCtx::get_major_parallel_ranges	const_cast<ObStorageDatum*>	ObStorageDatum *datums = const_cast<ObStorageDatum*>(multi_version_endkey.datums_);
+src/storage/compaction/ob_schedule_status_cache.cpp	276	ObTabletStatusCache::inner_destroy	C-style cast (void *) drops const from member medium_list_	allocator_.free((void *)medium_list_);
+src/storage/compaction/ob_tablet_merge_info.cpp	110	ObTabletMergeInfo::record_start_tx_scn_for_tx_data	C-style cast (ObTxDataMemtable*) drops const from tables_handle	} else if (OB_ISNULL(tx_data_memtable = (ObTxDataMemtable*)tables_handle.get_table(0))) {
+src/storage/compaction/ob_tablet_merge_info.cpp	118	ObTabletMergeInfo::record_start_tx_scn_for_tx_data	C-style cast (ObTxDataMinorFilter*) drops const from ctx	ObTxDataMinorFilter *compaction_filter = (ObTxDataMinorFilter*)ctx.filter_ctx_.compaction_filter_;
+src/storage/ddl/ob_complement_data_task.cpp	857	ObComplementWriteTask::get_next_chunk	const_cast<blocksstable::ObDatumRow *>	chunk_.datum_row_ = const_cast<blocksstable::ObDatumRow *>(row);
+src/storage/ddl/ob_ddl_common_storage_impl.cpp	85	check_skip_handle_lob_column	const_cast<char *>	} else if (OB_FAIL(check_lob_column_inrow(const_cast<char *>(datum.ptr_), datum.len_, lob_inrow_threshold, can_skip))) {
+src/storage/ddl/ob_ddl_common_storage_impl.cpp	139	check_skip_handle_lob_column	const_cast<char *>	if (OB_FAIL(check_lob_column_inrow(const_cast<char *>(datum.ptr_),
+src/storage/ddl/ob_ddl_common_storage_impl.cpp	152	check_skip_handle_lob_column	const_cast<char *>	if (OB_FAIL(check_lob_column_inrow(const_cast<char *>(datum.ptr_),
+src/storage/ddl/ob_ddl_common_storage_impl.cpp	341	oceanbase::storage::ObDDLStorageUtil::handle_lob_columns	const_cast<char *>	*cur_cell.first = const_cast<char *>(temp_datum.ptr_);
+src/storage/ddl/ob_ddl_common_storage_impl.cpp	1119	ObDDLStorageUtil::handle_lob_column	const_cast<char *>	ptrs[j] = const_cast<char *>(temp_datum.ptr_);
+src/storage/ddl/ob_ddl_common_storage_impl.cpp	1148	ObDDLStorageUtil::handle_lob_column	const_cast<char *>	ptrs[j] = const_cast<char *>(temp_datum.ptr_);
+src/storage/ddl/ob_ddl_common_storage_impl.cpp	1167	ObDDLStorageUtil::handle_lob_column	const_cast<char **>	if (OB_FAIL(lob_cells.push_back(std::make_pair(const_cast<char **>(&datum.ptr_), reinterpret_cast<uint32_t *>(&datum.pack_))))) {
+src/storage/ddl/ob_ddl_common_storage_impl.cpp	1202	ObDDLStorageUtil::handle_lob_column	const_cast<char *>	ptrs[j] = const_cast<char *>(datum.ptr_);
+src/storage/ddl/ob_ddl_discrete_vector.cpp	310	ObDDLDiscreteVector::_shallow_copy	const_cast<char *>	ptrs_[i] = const_cast<char *>(datum.ptr_);
+src/storage/ddl/ob_ddl_discrete_vector.cpp	322	ObDDLDiscreteVector::_shallow_copy	const_cast<char *>	ptrs_[i] = const_cast<char *>(datum.ptr_);
+src/storage/ddl/ob_ddl_merge_task_utils.cpp	105	init_datum_utils	const_cast<blocksstable::ObStorageDatumUtils *>	datum_utils = const_cast<blocksstable::ObStorageDatumUtils *>(&data_desc.get_desc().get_datum_utils());
+src/storage/ddl/ob_direct_insert.cpp	55	BorrowedIArray::BorrowedIArray	const_cast<T *>	: common::ObIArray<T>(const_cast<T *>(data), count)
+src/storage/ddl/ob_tablet_ddl_kv.cpp	69	ObBlockMetaTree::init	const_cast<blocksstable::ObStorageDatumUtils *>	datum_utils_ = const_cast<blocksstable::ObStorageDatumUtils *>(&data_desc_.get_desc().get_datum_utils());
+src/storage/ddl/ob_tablet_ddl_kv.cpp	144	ObBlockMetaTree::insert_macro_block	const_cast<ObDataMacroBlockMeta *>	ObDataMacroBlockMeta *insert_meta = const_cast<ObDataMacroBlockMeta *>(meta);
+src/storage/ddl/ob_tablet_ddl_kv.cpp	295	ObBlockMetaTree::lower_bound	const_cast<blocksstable::ObDatumRowkey *>	rowkey = const_cast<blocksstable::ObDatumRowkey *>(rowkey_wrapper.rowkey_);
+src/storage/ddl/ob_tablet_ddl_kv.cpp	339	ObBlockMetaTree::upper_bound	const_cast<blocksstable::ObDatumRowkey *>	rowkey = const_cast<blocksstable::ObDatumRowkey *>(rowkey_wrapper.rowkey_);
+src/storage/ddl/ob_tablet_fork_task.cpp	244	ObForkSnapshotRowScan::get_next_row	const_cast<ObDatumRow *>	ObDatumRow *mutable_row = const_cast<ObDatumRow *>(row);
+src/storage/ddl/ob_tablet_fork_task.cpp	435	ObTabletForkCtx::init	const_cast<ObTabletTableStore *>	} else if (OB_FAIL(const_cast<ObTabletTableStore *>(snapshot_table_store_.get_member())->get_read_tables(
+src/storage/ddl/ob_tablet_slice_row_iterator.cpp	85	ObTabletSliceRowIterator::get_next_row	const_cast<blocksstable::ObDatumRow &>	} else if (OB_FAIL(ObDDLStorageUtil::convert_to_storage_row(tablet_id_, slice_idx_, *param_, lob_writer_, arena_, const_cast<blocksstable::ObDatumRow &>(*current_row)))) {
+src/storage/ddl/ob_tablet_slice_writer.cpp	881	ObBatchSliceWriter::convert_to_storage_vector	const_cast<char *>	*cur_cell.first = const_cast<char *>(temp_datum.ptr_);
+src/storage/fts/ob_whitespace_ft_parser.cpp	100	ObSpaceFTParser::get_next_token	C-style cast (uchar *) drops const from next; C-style cast (uchar *) drops const from end	mbl = cs->cset->ctype(cs, &ctype, (uchar *)next, (uchar *)end);
+src/storage/fts/ob_whitespace_ft_parser.cpp	113	ObSpaceFTParser::get_next_token	C-style cast (uchar *) drops const from next; C-style cast (uchar *) drops const from end	mbl = cs->cset->ctype(cs, &ctype, (uchar *)next, (uchar *)end);
+src/storage/fts/utils/ob_ft_ngram_impl.cpp	113	ObFTNgramImpl::get_next_token	C-style cast (uchar *) drops const from member cur_; C-style cast (uchar *) drops const from member fulltext_end_	cs_->cset->ctype(cs_, &type, (uchar *)cur_, (uchar *)fulltext_end_);
+src/storage/lob/ob_lob_cursor.h	64	ObLobCursor::get_ptr	const_cast<ObLobCursor*>	int get_ptr(int64_t offset, int64_t len, const char *&ptr) const{ return const_cast<ObLobCursor*>(this)->get_ptr(offset, len, ptr); }
+src/storage/lob/ob_lob_data_reader.cpp	93	ObLobDataReader::read_lob_data_impl	const_cast<ObLobCommon*>	param.lob_common_ = const_cast<ObLobCommon*>(&lob_common);
+src/storage/lob/ob_lob_locator.cpp	490	ObLobLocatorHelper::build_lob_locatorv2	const_cast<ObLobCommon *>	param.lob_common_ = const_cast<ObLobCommon *>(lob_common);
+src/storage/lob/ob_lob_manager.cpp	1401	ObLobManager::write_inrow_inner	const_cast<char*>	char* new_data_ptr = const_cast<char*>(new_lob_common->get_inrow_data_ptr());
+src/storage/lob/ob_lob_manager.cpp	2707	get_json_lob_delta_serialize_size	const_cast<common::ObJsonBinUpdateCtx &>	const_cast<common::ObJsonBinUpdateCtx &>(update_context);
+src/storage/lob/ob_lob_manager.cpp	2723	serialize_json_lob_delta	const_cast<common::ObJsonBinUpdateCtx &>	const_cast<common::ObJsonBinUpdateCtx &>(update_context);
+src/storage/lob/ob_lob_tablet_dml.cpp	434	ObLobTabletDmlHelper::register_ext_info_commit_cb	const_cast<char*>	} else if (OB_FAIL(lob_disk_locator.init(const_cast<char*>(col_data.get_string().ptr()), col_data.get_string().length()))) {
+src/storage/ls/ob_ls_tablet_service.cpp	3805	ObLSTabletService::process_old_rows	const_cast<ObColDescIArray&>	ObColDescIArray &col_descs = const_cast<ObColDescIArray&>(*run_ctx.col_descs_);
+src/storage/ls/ob_ls_tablet_service.cpp	3883	ObLSTabletService::process_old_row	const_cast<ObColDescIArray&>	ObColDescIArray &col_descs = const_cast<ObColDescIArray&>(*run_ctx.col_descs_);
+src/storage/ls/ob_ls_tablet_service.cpp	4459	ObLSTabletService::dump_diag_info_for_old_row_loss	const_cast<ObColDescIArray&>	ObColDescIArray &col_descs = const_cast<ObColDescIArray&>(*run_ctx.col_descs_);
+src/storage/memtable/mvcc/ob_mvcc.h	41	TxChecksum	const_cast<TxChecksum*>	TO_STRING_KV(K_(cnt), K_(scn), "checksum", const_cast<TxChecksum*>(this)->calc());
+src/storage/memtable/ob_memtable_context.cpp	1146	ObMemtableCtx::convert_checksum_for_commit_log	C-style cast (void*) drops const from arr	checksum = ob_crc64(checksum, (void*)&arr.at(i), sizeof(uint64_t));
+src/storage/memtable/ob_memtable_iterator.cpp	260	ObMemtableScanIterator::inner_get_next_row	const_cast<ObDatumRow *>	OB_FAIL(context_->check_filtered_by_base_version(*(const_cast<ObDatumRow *>(row)))))) {
+src/storage/memtable/ob_memtable_iterator.cpp	478	ObMemtableMScanIterator::inner_get_next_row	const_cast<ObDatumRow *>	const_cast<ObDatumRow *>(row)->scan_index_ = cur_range_pos_;
+src/storage/memtable/ob_memtable_iterator.cpp	480	ObMemtableMScanIterator::inner_get_next_row	const_cast<ObDatumRow *>	OB_FAIL(context_->check_filtered_by_base_version(*(const_cast<ObDatumRow *>(row)))))) {
+src/storage/memtable/ob_memtable_key.h	37	ObMemtableKey::ObMemtableKey	const_cast<common::ObStoreRowkey *>	: rowkey_(const_cast<common::ObStoreRowkey *>(rowkey)), hash_val_(0)
+src/storage/memtable/ob_memtable_key.h	51	ObMemtableKey::encode	const_cast<common::ObStoreRowkey *>	rowkey_ = const_cast<common::ObStoreRowkey *>(rowkey);
+src/storage/memtable/ob_memtable_key.h	174	ObMemtableKey::encode	const_cast<common::ObObj &>	common::ObObj &value = const_cast<common::ObObj &>(rowkey->get_obj_ptr()[i]);
+src/storage/memtable/ob_memtable_key.h	217	ObMemtableKey::encode_without_hash	const_cast<common::ObObj &>	common::ObObj &value = const_cast<common::ObObj &>(rowkey->get_obj_ptr()[i]);
+src/storage/memtable/ob_memtable_key.h	240	ObMemtableKey::encode_without_hash	const_cast<common::ObStoreRowkey *>	rowkey_ = const_cast<common::ObStoreRowkey *>(rowkey);
+src/storage/memtable/ob_memtable_mutator.cpp	870	ObMemtableMutatorIterator::deserialize	const_cast<char *>	} else if (!buf_.set_data(const_cast<char *>(buf + pos), meta_.get_total_size())) {
+src/storage/meta_store/ob_server_storage_meta_persister.cpp	89	ObServerStorageMetaPersister::write_update_runtime_super_block_slog_	const_cast<ObServerRuntimeSuperBlock*>	*const_cast<ObServerRuntimeSuperBlock*>(&super_block));
+src/storage/meta_store/ob_server_storage_meta_persister.cpp	109	ObServerStorageMetaPersister::write_update_server_resources_slog_	const_cast<share::ObServerRuntimeConfig*>	*const_cast<share::ObServerRuntimeConfig*>(&runtime_config));
+src/storage/meta_store/ob_server_storage_meta_service.cpp	143	ObServerStorageMetaService::get_server_slogger	const_cast<ObStorageLogger *>	slogger = const_cast<ObStorageLogger *>(&server_slogger_);
+src/storage/multi_data_source/mds_ctx.h	92	MdsCtx::for_each_node_try_	const_cast<MdsNode &>	MdsNode &cast_node = const_cast<MdsNode &>(node);
+src/storage/multi_data_source/mds_node.ipp	418	UserMdsNode::fill_event_	C-style cast (void*) drops const from this (const member function)	event.obj_ptr_ = (void*)this;
+src/storage/multi_data_source/mds_row.ipp	176	DestroyOP::operator()	const_cast<UserMdsNode<K, V> &>	UserMdsNode<K, V> &cast_node = const_cast<UserMdsNode<K, V> &>(node);
+src/storage/multi_data_source/mds_table_handle.ipp	431	MdsTableHandle::set	C-style cast (void*) drops const from key	(void*)&key,
+src/storage/multi_data_source/mds_table_handle.ipp	451	MdsTableHandle::replay	C-style cast (void*) drops const from key	(void*)&key,
+src/storage/multi_data_source/mds_table_handle.ipp	489	MdsTableHandle::remove	C-style cast (void*) drops const from key	(void*)&key,
+src/storage/multi_data_source/mds_table_handle.ipp	507	MdsTableHandle::replay_remove	C-style cast (void*) drops const from key	(void*)&key,
+src/storage/multi_data_source/mds_table_handle.ipp	532	MdsTableHandle::get_latest	C-style cast (void*) drops const from key	(void*)&key,
+src/storage/multi_data_source/mds_table_handle.ipp	558	MdsTableHandle::get_latest_committed	C-style cast (void*) drops const from key	(void*)&key,
+src/storage/multi_data_source/mds_table_handle.ipp	602	MdsTableHandle::get_snapshot	C-style cast (void*) drops const from key	(void*)&key,
+src/storage/multi_data_source/mds_table_handle.ipp	652	MdsTableHandle::get_by_writer	C-style cast (void*) drops const from key	(void*)&key,
+src/storage/multi_data_source/mds_table_handle.ipp	679	MdsTableHandle::is_locked_by_others	C-style cast (void*) drops const from key	(void*)&key,
+src/storage/multi_data_source/mds_table_handler.cpp	170	ObMdsTableHandler::operator=	const_cast<ObMdsTableMgr*>	mds_table_mgr_handle_.set_mds_table_mgr(const_cast<ObMdsTableMgr*>(rhs.mds_table_mgr_handle_.get_mds_table_mgr()));

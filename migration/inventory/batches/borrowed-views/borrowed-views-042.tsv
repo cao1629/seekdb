@@ -1,0 +1,61 @@
+file	line	symbol	construct	text
+src/sql/plan_cache/ob_sql_parameterization.cpp	49	TransformTreeCtx::params_	member ParamStore (pointer) of type ParamStore *	ParamStore *params_;
+src/sql/plan_cache/ob_sql_parameterization.cpp	72	SelectItemTraverseCtx::org_expr_name_	member ObString (reference) of type const ObString &	const ObString &org_expr_name_;
+src/sql/plan_cache/ob_sql_parameterization.cpp	131	ObSqlParameterization::transform_syntax_tree	allocator in, arena view out: ParamStore &params	int ObSqlParameterization::transform_syntax_tree(ObIAllocator &allocator,
+src/sql/plan_cache/ob_sql_parameterization.cpp	929	ObSqlParameterization::parameterize_syntax_tree	allocator in, arena view out: ParamStore &params	int ObSqlParameterization::parameterize_syntax_tree(common::ObIAllocator &allocator,
+src/sql/plan_cache/ob_sql_parameterization.cpp	1525	ObSqlParameterization::formalize_fast_parameter_sql	allocator in, arena view out: ObString &dest_sql	int ObSqlParameterization::formalize_fast_parameter_sql(ObIAllocator &allocator,
+src/sql/plan_cache/ob_sql_parameterization.cpp	1583	ObSqlParameterization::formalize_sql_filter_hint	allocator in, arena view out: ObString &dest_sql	int ObSqlParameterization::formalize_sql_filter_hint(ObIAllocator &allocator,
+src/sql/plan_cache/ob_sql_parameterization.cpp	1711	ObSqlParameterization::raw_fast_parameterize_sql	allocator in, arena view out: ObString &no_param_sql	int ObSqlParameterization::raw_fast_parameterize_sql(ObIAllocator &allocator,
+src/sql/plan_cache/ob_sql_parameterization.cpp	2509	ObSqlParameterization::formalize_sql_text	allocator in, arena view out: ObString &fmt_sql	int ObSqlParameterization::formalize_sql_text(ObIAllocator &allocator, const ObString &src_sql,
+src/sql/plan_cache/ob_values_table_compression.cpp	738	ObValuesTableCompression::parser_values_row_str	allocator in, arena view out: ObString &new_no_param_sql	int ObValuesTableCompression::parser_values_row_str(ObIAllocator &allocator,
+src/sql/printer/ob_dml_stmt_printer.h	121	ObDMLStmtPrinter::buf_	member raw bytes (pointer) of type char *	char *buf_;
+src/sql/printer/ob_dml_stmt_printer.h	131	ObDMLStmtPrinter::param_store_	member ParamStore (pointer) of type const ParamStore *	const ParamStore *param_store_;
+src/sql/printer/ob_raw_expr_printer.h	169	ObRawExprPrinter::buf_	member raw bytes (pointer) of type char *	char *buf_;
+src/sql/printer/ob_raw_expr_printer.h	178	ObRawExprPrinter::param_store_	member ParamStore (pointer) of type const ParamStore *	const ParamStore *param_store_;
+src/sql/printer/ob_select_stmt_printer.h	91	ObSelectStmtPrinter::column_list_	member container of ObString of type common::ObIArray<common::ObString> *	common::ObIArray<common::ObString> *column_list_;
+src/sql/resolver/cmd/ob_alter_system_stmt.h	45	ObFlushCacheParam::sql_id_	member ObString (value) of type common::ObString	common::ObString sql_id_;
+src/sql/resolver/cmd/ob_alter_system_stmt.h	64	ObRefreshIOCalibrationParam::storage_name_	member ObString (value) of type common::ObString	common::ObString storage_name_;
+src/sql/resolver/cmd/ob_alter_system_stmt.h	251	ObCancelTaskStmt::task_id_	member ObString (value) of type common::ObString	common::ObString task_id_;
+src/sql/resolver/cmd/ob_anonymous_block_stmt.h	84	ObAnonymousBlockStmt::sql_	member ObString (value) of type ObString	ObString sql_;
+src/sql/resolver/cmd/ob_anonymous_block_stmt.h	87	ObAnonymousBlockStmt::params_	member ParamStore (pointer) of type ParamStore *	ParamStore *params_;//for ps param
+src/sql/resolver/cmd/ob_call_procedure_stmt.h	132	ObCallProcedureInfo::out_name_	member container of ObString of type ObSEArray<ObString, 32>	ObSEArray<ObString, 32> out_name_;
+src/sql/resolver/cmd/ob_call_procedure_stmt.h	134	ObCallProcedureInfo::out_type_name_	member container of ObString of type ObSEArray<ObString, 32>	ObSEArray<ObString, 32> out_type_name_;
+src/sql/resolver/cmd/ob_call_procedure_stmt.h	135	ObCallProcedureInfo::out_type_owner_	member container of ObString of type ObSEArray<ObString, 32>	ObSEArray<ObString, 32> out_type_owner_;
+src/sql/resolver/cmd/ob_call_procedure_stmt.h	143	ObCallProcedureInfo::db_name_	member ObString (value) of type ObString	ObString db_name_;
+src/sql/resolver/cmd/ob_get_diagnostics_stmt.h	92	ObGetDiagnosticsStmt::info_argument_	member container of ObString of type ObSEArray<ObString, 8>	ObSEArray<ObString, 8> info_argument_;
+src/sql/resolver/cmd/ob_get_diagnostics_stmt.h	94	ObGetDiagnosticsStmt::invalid_condition_name_	member ObString (value) of type ObString	ObString invalid_condition_name_;
+src/sql/resolver/cmd/ob_load_data_resolver.cpp	27	glob_t::gl_pathv	member raw bytes (pointer) of type char **	char **gl_pathv;
+src/sql/resolver/cmd/ob_load_data_stmt.h	46	ObLoadFileIterator::files_	member container of ObString of type common::ObSEArray<common::ObString, 16>	common::ObSEArray<common::ObString, 16> files_;
+src/sql/resolver/cmd/ob_load_data_stmt.h	111	ObLoadArgument::file_name_	member ObString (value) of type common::ObString	common::ObString file_name_;
+src/sql/resolver/cmd/ob_load_data_stmt.h	112	ObLoadArgument::database_name_	member ObString (value) of type common::ObString	common::ObString database_name_;
+src/sql/resolver/cmd/ob_load_data_stmt.h	113	ObLoadArgument::table_name_	member ObString (value) of type common::ObString	common::ObString table_name_;
+src/sql/resolver/cmd/ob_load_data_stmt.h	114	ObLoadArgument::combined_name_	member ObString (value) of type common::ObString	common::ObString combined_name_;
+src/sql/resolver/cmd/ob_load_data_stmt.h	166	ObDataInFileStruct::line_term_str_	member ObString (value) of type common::ObString	common::ObString line_term_str_;   // line teminated str
+src/sql/resolver/cmd/ob_load_data_stmt.h	167	ObDataInFileStruct::line_start_str_	member ObString (value) of type common::ObString	common::ObString line_start_str_;  // line string by
+src/sql/resolver/cmd/ob_load_data_stmt.h	168	ObDataInFileStruct::field_term_str_	member ObString (value) of type common::ObString	common::ObString field_term_str_;  // field terminated str
+src/sql/resolver/cmd/ob_load_data_stmt.h	169	ObDataInFileStruct::field_escaped_str_	member ObString (value) of type common::ObString	common::ObString field_escaped_str_;    // field escaped str, such as \, ^, just copy from parsernode data
+src/sql/resolver/cmd/ob_load_data_stmt.h	170	ObDataInFileStruct::field_enclosed_str_	member ObString (value) of type common::ObString	common::ObString field_enclosed_str_;   // field enclosed str, such as ", ', just copy from parsernode data
+src/sql/resolver/cmd/ob_load_data_stmt.h	217	ObLoadDataHint::string_values_	member ObString (value) of type ObString	ObString string_values_[TOTAL_STRING_ITEM];
+src/sql/resolver/cmd/ob_load_data_stmt.h	218	ObLoadDataHint::hint_str_	member ObString (value) of type ObString	ObString hint_str_;
+src/sql/resolver/cmd/ob_load_data_stmt.h	232	ObLoadDataStmt::FieldOrVarStruct::field_or_var_name_	member ObString (value) of type ObString	ObString field_or_var_name_;
+src/sql/resolver/cmd/ob_load_data_stmt.h	283	ObLoadDataStmt::part_names_	member container of ObString of type common::ObArray<ObString>	common::ObArray<ObString> part_names_;
+src/sql/resolver/cmd/ob_merge_table_stmt.h	69	ObMergeTableStmt::insert_sql_	member ObString (value) of type common::ObString	common::ObString insert_sql_;
+src/sql/resolver/cmd/ob_merge_table_stmt.h	70	ObMergeTableStmt::update_sql_	member ObString (value) of type common::ObString	common::ObString update_sql_;
+src/sql/resolver/cmd/ob_merge_table_stmt.h	71	ObMergeTableStmt::conflict_check_sql_	member ObString (value) of type common::ObString	common::ObString conflict_check_sql_;
+src/sql/resolver/cmd/ob_merge_table_stmt.h	72	ObMergeTableStmt::cur_db_name_	member ObString (value) of type common::ObString	common::ObString cur_db_name_;
+src/sql/resolver/cmd/ob_merge_table_stmt.h	73	ObMergeTableStmt::cur_table_name_	member ObString (value) of type common::ObString	common::ObString cur_table_name_;
+src/sql/resolver/cmd/ob_merge_table_stmt.h	74	ObMergeTableStmt::inc_db_name_	member ObString (value) of type common::ObString	common::ObString inc_db_name_;
+src/sql/resolver/cmd/ob_merge_table_stmt.h	75	ObMergeTableStmt::inc_table_name_	member ObString (value) of type common::ObString	common::ObString inc_table_name_;
+src/sql/resolver/cmd/ob_set_names_stmt.h	66	ObSetNamesStmt::charset_	member ObString (value) of type common::ObString	common::ObString charset_;
+src/sql/resolver/cmd/ob_set_names_stmt.h	67	ObSetNamesStmt::collation_	member ObString (value) of type common::ObString	common::ObString collation_;
+src/sql/resolver/cmd/ob_show_resolver.h	47	ObShowResolver::ObCheckTableInfo::db_name_	member ObString (value) of type ObString	ObString db_name_;
+src/sql/resolver/cmd/ob_show_resolver.h	48	ObShowResolver::ObCheckTableInfo::table_name_	member ObString (value) of type ObString	ObString table_name_;
+src/sql/resolver/cmd/ob_show_resolver.h	215	ObShowResolver::ObSqlStrGenerator::sql_buf_	member raw bytes (pointer) of type char *	char *sql_buf_;
+src/sql/resolver/cmd/ob_show_resolver.h	245	ObShowResolver::ObShowResolverContext::database_name_	member ObString (value) of type common::ObString	common::ObString database_name_;
+src/sql/resolver/cmd/ob_show_resolver.h	247	ObShowResolver::ObShowResolverContext::show_database_name_	member ObString (value) of type common::ObString	common::ObString show_database_name_;
+src/sql/resolver/cmd/ob_show_resolver.h	250	ObShowResolver::ObShowResolverContext::grants_user_name_	member ObString (value) of type common::ObString	common::ObString grants_user_name_;
+src/sql/resolver/cmd/ob_show_resolver.h	254	ObShowResolver::ObShowResolverContext::like_pattern_	member ObString (value) of type common::ObString	common::ObString like_pattern_;
+src/sql/resolver/cmd/ob_show_resolver.h	255	ObShowResolver::ObShowResolverContext::like_escape_	member ObString (value) of type common::ObString	common::ObString like_escape_;
+src/sql/resolver/cmd/ob_show_resolver.h	258	ObShowResolver::ObShowResolverContext::column_name_	member ObString (value) of type common::ObString	common::ObString column_name_; // used for show tables
+src/sql/resolver/cmd/ob_show_resolver.h	259	ObShowResolver::ObShowResolverContext::like_column_	member ObString (value) of type common::ObString	common::ObString like_column_; // used for the show stmt who has like clause
+src/sql/resolver/cmd/ob_show_resolver.h	283	ObShowResolver::ShowColumnInfo::display_name_	member ObString (value) of type common::ObString	common::ObString display_name_;

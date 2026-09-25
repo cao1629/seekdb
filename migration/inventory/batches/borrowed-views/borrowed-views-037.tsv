@@ -1,0 +1,61 @@
+file	line	symbol	construct	text
+src/sql/ob_sql_utils.cpp	49	ObSqlArrayExpandGuard::ObSqlArrayExpandGuard	allocator in, arena view out: ParamStore &params	ObSqlArrayExpandGuard::ObSqlArrayExpandGuard(ParamStore &params, ObIAllocator &allocator)
+src/sql/ob_sql_utils.cpp	241	ObSQLUtils::calc_const_or_calculable_expr	allocator in, arena view out: ObObj &result	int ObSQLUtils::calc_const_or_calculable_expr(
+src/sql/ob_sql_utils.cpp	313	ObSQLUtils::calc_simple_expr_without_row	allocator in, arena view out: ObObj &result	int ObSQLUtils::calc_simple_expr_without_row(
+src/sql/ob_sql_utils.cpp	381	ObSQLUtils::calc_sql_expression_without_row	allocator in, arena view out: ObObj &result	int ObSQLUtils::calc_sql_expression_without_row(
+src/sql/ob_sql_utils.cpp	434	ObSQLUtils::calc_calculable_expr	allocator in, arena view out: ObObj &result	int ObSQLUtils::calc_calculable_expr(ObSQLSessionInfo *session,
+src/sql/ob_sql_utils.cpp	456	ObSQLUtils::calc_const_expr	allocator in, arena view out: ObObj &result	int ObSQLUtils::calc_const_expr(ObExecContext &exec_ctx,
+src/sql/ob_sql_utils.cpp	476	ObSQLUtils::calc_const_expr	allocator in, arena view out: ObObj &result	int ObSQLUtils::calc_const_expr(ObSQLSessionInfo *session,
+src/sql/ob_sql_utils.cpp	494	ObSQLUtils::se_calc_const_expr	allocator in, arena view out: common::ObObj &result	int ObSQLUtils::se_calc_const_expr(ObSQLSessionInfo *session,
+src/sql/ob_sql_utils.cpp	703	ObSQLUtils::cvt_db_name_to_org	allocator in, arena view out: common::ObString &name	int ObSQLUtils::cvt_db_name_to_org(share::schema::ObSchemaGetterGuard &schema_guard,
+src/sql/ob_sql_utils.cpp	856	ObSQLUtils::check_and_copy_column_alias_name	allocator in, arena view out: ObString &name	int ObSQLUtils::check_and_copy_column_alias_name(const ObCollationType cs_type, const bool is_auto_gen,
+src/sql/ob_sql_utils.cpp	1084	ObSQLUtils::make_field_name	allocator in, arena view out: ObString &name	int ObSQLUtils::make_field_name(const char *src,
+src/sql/ob_sql_utils.cpp	1408	ObSQLUtils::get_outline_key	allocator in, arena view out: ObString &outline_key	int ObSQLUtils::get_outline_key(ObIAllocator &allocator,
+src/sql/ob_sql_utils.cpp	1535	ObSQLUtils::filter_hint_in_query_sql	allocator in, arena view out: ObString &param_sql	int ObSQLUtils::filter_hint_in_query_sql(ObIAllocator &allocator,
+src/sql/ob_sql_utils.cpp	1551	ObSQLUtils::construct_outline_sql	allocator in, arena view out: ObString &outline_sql	int ObSQLUtils::construct_outline_sql(ObIAllocator &allocator,
+src/sql/ob_sql_utils.cpp	1608	ObSQLUtils::reconstruct_sql	allocator in, arena view out: ObString &sql	int ObSQLUtils::reconstruct_sql(ObIAllocator &allocator, const ObStmt *stmt, ObString &sql,
+src/sql/ob_sql_utils.cpp	1627	ObISqlPrinter::do_print	allocator in, arena view out: ObString &result	int ObISqlPrinter::do_print(ObIAllocator &allocator, ObString &result)
+src/sql/ob_sql_utils.cpp	1973	ObSQLUtils::extract_pre_query_range	allocator in, arena view out: ObQueryRangeArray &key_ranges	int ObSQLUtils::extract_pre_query_range(const ObQueryRangeProvider &query_range_provider,
+src/sql/ob_sql_utils.cpp	1988	ObSQLUtils::extract_geo_query_range	allocator in, arena view out: ObQueryRangeArray &key_ranges	int ObSQLUtils::extract_geo_query_range(const ObQueryRangeProvider &query_range_provider,
+src/sql/ob_sql_utils.cpp	2026	ObSQLUtils::get_partition_range	allocator in, arena view out: common::ObNewRange &part_range	int ObSQLUtils::get_partition_range(ObObj *start_row_key,
+src/sql/ob_sql_utils.cpp	2085	ObSQLUtils::get_range_for_scalar	allocator in, arena view out: common::ObNewRange &part_range	int ObSQLUtils::get_range_for_scalar(ObObj *start_row_key,
+src/sql/ob_sql_utils.cpp	2415	ObSQLUtils::make_whole_range	allocator in, arena view out: ObNewRange *&whole_range	int ObSQLUtils::make_whole_range(ObIAllocator &allocator,
+src/sql/ob_sql_utils.cpp	2435	ObSQLUtils::make_whole_range	allocator in, arena view out: ObNewRange &whole_range	int ObSQLUtils::make_whole_range(ObIAllocator &allocator,
+src/sql/ob_sql_utils.cpp	2497	ObSQLUtils::copy_and_convert_string_charset	allocator in, arena view out: ObString &dst	int ObSQLUtils::copy_and_convert_string_charset(ObIAllocator& allocator,
+src/sql/ob_sql_utils.cpp	2584	ObSQLUtils::generate_new_name_with_escape_character	allocator in, arena view out: ObString &dst	int ObSQLUtils::generate_new_name_with_escape_character(
+src/sql/ob_sql_utils.cpp	2846	ObSQLUtils::generate_view_definition_for_resolve	allocator in, arena view out: ObString &view_definition	int ObSQLUtils::generate_view_definition_for_resolve(ObIAllocator &allocator,
+src/sql/ob_sql_utils.cpp	2864	ObSQLUtils::convert_sql_text_from_schema_for_resolve	allocator in, arena view out: ObString &sql_text	int ObSQLUtils::convert_sql_text_from_schema_for_resolve(ObIAllocator &allocator,
+src/sql/ob_sql_utils.cpp	2881	ObSQLUtils::convert_escape_char	allocator in, arena view out: ObString &out	int ObSQLUtils::convert_escape_char(ObIAllocator &allocator, const ObString &in, ObString &out)
+src/sql/ob_sql_utils.cpp	2907	ObSQLUtils::convert_sql_text_to_schema_for_storing	allocator in, arena view out: ObString &sql_text	int ObSQLUtils::convert_sql_text_to_schema_for_storing(ObIAllocator &allocator,
+src/sql/ob_sql_utils.cpp	3512	ObSQLUtils::create_multi_stmt_param_store	allocator in, arena view out: ParamStore &param_store	int ObSQLUtils::create_multi_stmt_param_store(common::ObIAllocator &allocator,
+src/sql/ob_sql_utils.cpp	3791	ObSQLUtils::get_outline_sql	allocator in, arena view out: ObString &outline_sql	int ObSQLUtils::get_outline_sql(const share::schema::ObOutlineInfo &outline_info, ObIAllocator &allocator,
+src/sql/ob_sql_utils.h	134	ObSqlArrayExpandGuard::array_obj_list_	member container of ArrayObjPair of type common::ObList<ArrayObjPair, common::ObIAllocator>	common::ObList<ArrayObjPair, common::ObIAllocator> array_obj_list_;
+src/sql/ob_sql_utils.h	167	ObSqlPrinter::param_store_	member ParamStore (pointer) of type const ParamStore *	const ParamStore *param_store_;
+src/sql/ob_sql_utils.h	1033	ObVirtualTableResultConverter::convert_row_	member ObNewRow (value) of type common::ObNewRow	common::ObNewRow convert_row_;
+src/sql/ob_sql_utils.h	1060	ObSqlFatalErrExtraInfoGuard::cur_sql_	member ObString (value) of type common::ObString	common::ObString cur_sql_;
+src/sql/optimizer/ob_access_path_estimation.cpp	2470	RangePartitionHelper::construct_partition_range	allocator in, arena view out: ObNewRange &part_range	int RangePartitionHelper::construct_partition_range(ObArenaAllocator &allocator,
+src/sql/optimizer/ob_dynamic_sampling.h	66	ObDSTableParam::db_name_	member ObString (value) of type ObString	ObString db_name_;
+src/sql/optimizer/ob_dynamic_sampling.h	67	ObDSTableParam::table_name_	member ObString (value) of type ObString	ObString table_name_;
+src/sql/optimizer/ob_dynamic_sampling.h	68	ObDSTableParam::alias_name_	member ObString (value) of type ObString	ObString alias_name_;
+src/sql/optimizer/ob_dynamic_sampling.h	216	ObDSStatItem::filter_string_	member ObString (value) of type ObString	ObString filter_string_;
+src/sql/optimizer/ob_dynamic_sampling.h	363	ObDynamicSampling::db_name_	member ObString (value) of type ObString	ObString db_name_;
+src/sql/optimizer/ob_dynamic_sampling.h	364	ObDynamicSampling::table_name_	member ObString (value) of type ObString	ObString table_name_;
+src/sql/optimizer/ob_dynamic_sampling.h	365	ObDynamicSampling::alias_name_	member ObString (value) of type ObString	ObString alias_name_;
+src/sql/optimizer/ob_dynamic_sampling.h	366	ObDynamicSampling::partition_list_	member ObString (value) of type ObString	ObString partition_list_;
+src/sql/optimizer/ob_dynamic_sampling.h	373	ObDynamicSampling::sample_block_	member ObString (value) of type ObString	ObString sample_block_;
+src/sql/optimizer/ob_dynamic_sampling.h	374	ObDynamicSampling::basic_hints_	member ObString (value) of type ObString	ObString basic_hints_;
+src/sql/optimizer/ob_dynamic_sampling.h	375	ObDynamicSampling::where_conditions_	member ObString (value) of type ObString	ObString where_conditions_;
+src/sql/optimizer/ob_dynamic_sampling.h	377	ObDynamicSampling::results_	member container of ObObj of type ObSEArray<ObObj, 4, common::ModulePageAllocator, true>	ObSEArray<ObObj, 4, common::ModulePageAllocator, true> results_;
+src/sql/optimizer/ob_dynamic_sampling.h	380	ObDynamicSampling::table_clause_	member ObString (value) of type ObString	ObString table_clause_;
+src/sql/optimizer/ob_index_info_cache.h	114	QueryRangeInfo::ranges_	member ObQueryRangeArray (value) of type ObQueryRangeArray	ObQueryRangeArray ranges_;
+src/sql/optimizer/ob_join_order.h	157	BaseTableOptInfo::available_index_name_	member container of ObString of type common::ObSEArray<common::ObString, 4, common::ModulePageAllocator, true>	common::ObSEArray<common::ObString, 4, common::ModulePageAllocator, true> available_index_name_;
+src/sql/optimizer/ob_join_order.h	158	BaseTableOptInfo::pruned_index_name_	member container of ObString of type common::ObSEArray<common::ObString, 4, common::ModulePageAllocator, true>	common::ObSEArray<common::ObString, 4, common::ModulePageAllocator, true> pruned_index_name_;
+src/sql/optimizer/ob_join_order.h	159	BaseTableOptInfo::unstable_index_name_	member container of ObString of type common::ObSEArray<common::ObString, 4, common::ModulePageAllocator, true>	common::ObSEArray<common::ObString, 4, common::ModulePageAllocator, true> unstable_index_name_;
+src/sql/optimizer/ob_log_del_upd.h	141	IndexDMLInfo::index_name_	member ObString (value) of type common::ObString	common::ObString index_name_;
+src/sql/optimizer/ob_log_exchange.h	236	ObLogExchange::repartition_table_name_	member ObString (value) of type ObString	ObString repartition_table_name_; //just for print plan
+src/sql/optimizer/ob_log_exchange.h	243	ObLogExchange::popular_values_	member container of ObObj of type common::ObSEArray<ObObj, 20, common::ModulePageAllocator, true>	common::ObSEArray<ObObj, 20, common::ModulePageAllocator, true> popular_values_; // for hybrid hash distr
+src/sql/optimizer/ob_log_expr_values.h	95	ObLogExprValues::table_name_	member ObString (value) of type common::ObString	common::ObString table_name_;
+src/sql/optimizer/ob_log_function_table.h	57	ObLogFunctionTable::table_name_	member ObString (value) of type common::ObString	common::ObString table_name_;
+src/sql/optimizer/ob_log_json_table.h	68	ObLogJsonTable::table_name_	member ObString (value) of type common::ObString	common::ObString table_name_;
+src/sql/optimizer/ob_log_json_table.h	75	ObLogJsonTable::namespace_arr_	member container of ObString of type common::ObSEArray<ObString, 16, common::ModulePageAllocator, true>	common::ObSEArray<ObString, 16, common::ModulePageAllocator, true> namespace_arr_;
+src/sql/optimizer/ob_log_plan.h	1807	ObLogPlan::sql_text_	member ObString (value) of type common::ObString	common::ObString sql_text_;                     // SQL string

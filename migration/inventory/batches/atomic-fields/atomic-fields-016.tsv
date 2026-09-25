@@ -1,0 +1,46 @@
+file	line	symbol	construct	text
+src/sql/engine/px/ob_granule_pump.h	121	ObGranulePumpArgs::cur_tablet_idx_	field int64_t; 1 atomic accesses (ATOMIC_FAA 1)	int64_t cur_tablet_idx_;
+src/sql/engine/px/ob_granule_pump.h	122	ObGranulePumpArgs::finish_pruning_tablet_idx_	field int64_t; 1 atomic accesses (ATOMIC_AAF 1)	int64_t finish_pruning_tablet_idx_;
+src/sql/engine/px/ob_granule_pump.h	132	ObGranulePumpArgs::lucky_one_	field bool; 1 atomic accesses (ATOMIC_CAS 1)	bool lucky_one_; // atomic, indicatee which thread is luckly to do extract query range
+src/sql/engine/px/ob_granule_pump.h	139	ObGranulePumpArgs::pump_version_	field int64_t; 3 atomic accesses (ATOMIC_CAS 1, ATOMIC_FAA 1, ATOMIC_LOAD 1)	int64_t pump_version_;
+src/sql/engine/px/ob_granule_pump.h	216	GITaskArrayItem::no_more_task_from_shared_pool_	volatile field volatile bool; no atomic access found	volatile bool no_more_task_from_shared_pool_;
+src/sql/engine/px/ob_granule_pump.h	513	ObGranulePump::fetch_task_ret_	field int; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_STORE 1)	int fetch_task_ret_;
+src/sql/engine/px/ob_px_bloom_filter.h	98	ObPxBloomFilter::bits_array_	field int64_t *; 2 atomic accesses (ATOMIC_CAS 2)	int64_t *bits_array_;          // 8-byte bit array
+src/sql/engine/px/ob_px_sqc_handler.h	54	ObPxWorkNotifier::start_worker_count_	field volatile int64_t; 1 atomic accesses (ATOMIC_AAF 1)	volatile int64_t start_worker_count_;
+src/sql/engine/px/ob_px_sqc_handler.h	55	ObPxWorkNotifier::finish_worker_count_	field volatile int64_t; 1 atomic accesses (ATOMIC_AAF 1)	volatile int64_t finish_worker_count_;
+src/sql/engine/px/ob_px_sqc_handler.h	149	ObPxSqcHandler::reference_count_	field volatile int64_t; 3 atomic accesses (ATOMIC_AAF 3)	volatile int64_t reference_count_;
+src/sql/engine/px/p2p_datahub/ob_p2p_dh_mgr.h	94	ObP2PDatahubManager::p2p_dh_id_	field int64_t; 1 atomic accesses (ATOMIC_AAF 1)	int64_t p2p_dh_id_;
+src/sql/engine/px/p2p_datahub/ob_p2p_dh_msg.h	145	ObP2PDatahubMsgBase::ref_count_	field int64_t; 3 atomic accesses (ATOMIC_AAF 1, ATOMIC_CAS 1, ATOMIC_SAF 1)	int64_t ref_count_;
+src/sql/engine/px/p2p_datahub/ob_pushdown_topn_filter_msg.h	203	ObPushDownTopNFilterMsg::data_version_	field int64_t; 4 atomic accesses (ATOMIC_LOAD 2, ATOMIC_AAF 1, ATOMIC_LOAD_ACQ 1)	int64_t data_version_;
+src/sql/engine/window_function/ob_window_function_op.h	138	ObWFParticipatorSharedInfo::ret_	field int; 1 atomic accesses (ATOMIC_SET 1)	int ret_;
+src/sql/engine/window_function/ob_window_function_op.h	140	ObWFParticipatorSharedInfo::process_cnt_	field int64_t; 2 atomic accesses (ATOMIC_AAF 1, ATOMIC_LOAD 1); through local references sync_cnt	int64_t process_cnt_;
+src/sql/monitor/ob_phy_operator_stats.h	57	ObPhyOperatorStats::op_stats_array_	field int64_t *; 3 atomic accesses (ATOMIC_LOAD 3)	int64_t *op_stats_array_;
+src/sql/monitor/ob_phy_operator_stats.h	60	ObPhyOperatorStats::execution_times_	field int64_t; 3 atomic accesses (ATOMIC_LOAD 2, ATOMIC_INC 1)	int64_t execution_times_;
+src/sql/monitor/ob_sql_stat_record.cpp	343	executions_total_	no declaration found; 2 atomic accesses in 1 files (ATOMIC_AAF 2); first access shown	(void)ATOMIC_AAF(&executions_total_, executing_record.get_is_in_retry()? 0:1 );
+src/sql/monitor/ob_sql_stat_record.cpp	344	retry_total_	no declaration found; 2 atomic accesses in 1 files (ATOMIC_AAF 2); first access shown	(void)ATOMIC_AAF(&retry_total_, executing_record.get_is_in_retry()? 1:0 );
+src/sql/monitor/ob_sql_stat_record.cpp	346	disk_reads_total_	no declaration found; 2 atomic accesses in 1 files (ATOMIC_AAF 2); first access shown	(void)ATOMIC_AAF(&disk_reads_total_, executing_record.get_disk_reads_delta());
+src/sql/monitor/ob_sql_stat_record.cpp	347	buffer_gets_total_	no declaration found; 2 atomic accesses in 1 files (ATOMIC_AAF 2); first access shown	(void)ATOMIC_AAF(&buffer_gets_total_, executing_record.get_buffer_gets_delta());
+src/sql/monitor/ob_sql_stat_record.cpp	348	elapsed_time_total_	no declaration found; 2 atomic accesses in 1 files (ATOMIC_AAF 2); first access shown	(void)ATOMIC_AAF(&elapsed_time_total_, executing_record.get_elapsed_time_delta());
+src/sql/monitor/ob_sql_stat_record.cpp	349	cpu_time_total_	no declaration found; 2 atomic accesses in 1 files (ATOMIC_AAF 2); first access shown	(void)ATOMIC_AAF(&cpu_time_total_, executing_record.get_cpu_time_delta());
+src/sql/monitor/ob_sql_stat_record.cpp	350	ccwait_total_	no declaration found; 2 atomic accesses in 1 files (ATOMIC_AAF 2); first access shown	(void)ATOMIC_AAF(&ccwait_total_, executing_record.get_ccwait_delta());
+src/sql/monitor/ob_sql_stat_record.cpp	351	userio_wait_total_	no declaration found; 2 atomic accesses in 1 files (ATOMIC_AAF 2); first access shown	(void)ATOMIC_AAF(&userio_wait_total_, executing_record.get_userio_wait_delta());
+src/sql/monitor/ob_sql_stat_record.cpp	352	apwait_total_	no declaration found; 2 atomic accesses in 1 files (ATOMIC_AAF 2); first access shown	(void)ATOMIC_AAF(&apwait_total_, executing_record.get_apwait_delta());
+src/sql/monitor/ob_sql_stat_record.cpp	353	physical_read_requests_total_	no declaration found; 2 atomic accesses in 1 files (ATOMIC_AAF 2); first access shown	(void)ATOMIC_AAF(&physical_read_requests_total_, executing_record.get_physical_read_requests_delta());
+src/sql/monitor/ob_sql_stat_record.cpp	354	physical_read_bytes_total_	no declaration found; 2 atomic accesses in 1 files (ATOMIC_AAF 2); first access shown	(void)ATOMIC_AAF(&physical_read_bytes_total_, executing_record.get_physical_read_bytes_delta());
+src/sql/monitor/ob_sql_stat_record.cpp	355	write_throttle_total_	no declaration found; 2 atomic accesses in 1 files (ATOMIC_AAF 2); first access shown	(void)ATOMIC_AAF(&write_throttle_total_, executing_record.get_write_throttle_delta());
+src/sql/monitor/ob_sql_stat_record.cpp	356	rows_processed_total_	no declaration found; 2 atomic accesses in 1 files (ATOMIC_AAF 2); first access shown	(void)ATOMIC_AAF(&rows_processed_total_, executing_record.get_rows_processed_delta());
+src/sql/monitor/ob_sql_stat_record.cpp	357	memstore_read_rows_total_	no declaration found; 2 atomic accesses in 1 files (ATOMIC_AAF 2); first access shown	(void)ATOMIC_AAF(&memstore_read_rows_total_, executing_record.get_memstore_read_rows_delta());
+src/sql/monitor/ob_sql_stat_record.cpp	358	minor_ssstore_read_rows_total_	no declaration found; 2 atomic accesses in 1 files (ATOMIC_AAF 2); first access shown	(void)ATOMIC_AAF(&minor_ssstore_read_rows_total_, executing_record.get_minor_ssstore_read_rows_delta());
+src/sql/monitor/ob_sql_stat_record.cpp	359	major_ssstore_read_rows_total_	no declaration found; 2 atomic accesses in 1 files (ATOMIC_AAF 2); first access shown	(void)ATOMIC_AAF(&major_ssstore_read_rows_total_, executing_record.get_major_ssstore_read_rows_delta());
+src/sql/monitor/ob_sql_stat_record.cpp	360	rpc_total_	no declaration found; 2 atomic accesses in 1 files (ATOMIC_AAF 2); first access shown	(void)ATOMIC_AAF(&rpc_total_, executing_record.get_rpc_delta());
+src/sql/monitor/ob_sql_stat_record.cpp	361	fetches_total_	no declaration found; 2 atomic accesses in 1 files (ATOMIC_AAF 2); first access shown	(void)ATOMIC_AAF(&fetches_total_, executing_record.get_fetches_delta());
+src/sql/monitor/ob_sql_stat_record.cpp	362	partition_total_	no declaration found; 2 atomic accesses in 1 files (ATOMIC_AAF 2); first access shown	(void)ATOMIC_AAF(&partition_total_, executing_record.get_partition_delta());
+src/sql/monitor/ob_sql_stat_record.cpp	363	nested_sql_total_	no declaration found; 2 atomic accesses in 1 files (ATOMIC_AAF 2); first access shown	(void)ATOMIC_AAF(&nested_sql_total_, executing_record.get_nested_sql_delta());
+src/sql/monitor/ob_sql_stat_record.cpp	364	plan_cache_hit_total_	no declaration found; 1 atomic accesses in 1 files (ATOMIC_AAF 1); first access shown	(void)ATOMIC_AAF(&plan_cache_hit_total_, executing_record.is_plan_cache_hit());
+src/sql/monitor/ob_sql_stat_record.h	76	ObSqlStatRecordKey::plan_hash_	field uint64_t; 1 atomic accesses (ATOMIC_STORE 1)	uint64_t plan_hash_;
+src/sql/ob_i_end_trans_callback.h	117	ObIEndTransCallback::call_counter_	field volatile uint64_t; 1 atomic accesses (ATOMIC_INC 1)	volatile uint64_t call_counter_; // Number of successful calls to ps->end_trans
+src/sql/ob_i_end_trans_callback.h	118	ObIEndTransCallback::callback_counter_	field volatile uint64_t; 1 atomic accesses (ATOMIC_INC 1)	volatile uint64_t callback_counter_; // Number of times the callback is called
+src/sql/ob_sql.h	566	ObSql::execution_id_	field volatile int64_t; 1 atomic accesses (ATOMIC_AAF 1)	volatile int64_t execution_id_ CACHE_ALIGNED;
+src/sql/ob_sql.h	567	ObSql::px_sequence_id_	field volatile uint64_t; 1 atomic accesses (ATOMIC_AAF 1)	volatile uint64_t px_sequence_id_;
+src/sql/ob_sql_utils.h	622	ObSQLUtils::get_next_ts	atomic access through parameter old_ts (int64_t &) of ObSQLUtils::get_next_ts; the atomic object is the caller's argument; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_VCAS 1)	static int64_t get_next_ts(int64_t &old_ts) {
+src/sql/pl/pl_cache/ob_pl_cache.h	324	ObPLObjectValue::runtime_schema_version_	field int64_t; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_STORE 1)	int64_t runtime_schema_version_;

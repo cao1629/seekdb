@@ -1,0 +1,49 @@
+file	line	symbol	construct	text
+src/observer/schema/ob_schema_service_sql_impl.cpp	382	ObSchemaServiceSQLImpl::get_batch_table_schema	lib::ob_sort call	lib::ob_sort(table_ids.begin(), table_ids.end(), std::greater<uint64_t>());
+src/observer/schema/ob_schema_service_sql_impl.cpp	584	ObSchemaServiceSQLImpl::get_core_table_priorities	lib::ob_sort call	lib::ob_sort(temp_table_schema_ptrs.begin(), temp_table_schema_ptrs.end(), cmp_table_id);
+src/observer/schema/ob_schema_service_sql_impl.cpp	2610	#define GET_BATCH_SCHEMAS_WITH_ALLOCATOR_FUNC_DEFINE	lib::ob_sort call	lib::ob_sort(schema_keys.begin(), schema_keys.end(), SchemaKey::cmp_with_id); \
+src/observer/schema/ob_schema_service_sql_impl.cpp	2654	#define GET_BATCH_SCHEMAS_FUNC_DEFINE	lib::ob_sort call	lib::ob_sort(schema_keys.begin(), schema_keys.end(), SchemaKey::cmp_with_id); \
+src/observer/schema/ob_schema_service_sql_impl.cpp	2858	ObSchemaServiceSQLImpl::get_batch_outlines	lib::ob_sort call	lib::ob_sort(outline_ids.begin(), outline_ids.end());
+src/observer/schema/ob_schema_service_sql_impl.cpp	2893	ObSchemaServiceSQLImpl::get_batch_routines	lib::ob_sort call	lib::ob_sort(routine_ids.begin(), routine_ids.end());
+src/observer/schema/ob_schema_service_sql_impl.cpp	2930	ObSchemaServiceSQLImpl::get_batch_users	lib::ob_sort call	lib::ob_sort(user_ids.begin(), user_ids.end());
+src/observer/schema/ob_schema_service_sql_impl.cpp	3016	ObSchemaServiceSQLImpl::get_batch_packages	lib::ob_sort call	lib::ob_sort(package_ids.begin(), package_ids.end());
+src/observer/schema/ob_schema_service_sql_impl.cpp	3050	ObSchemaServiceSQLImpl::get_batch_mock_fk_parent_tables	lib::ob_sort call	lib::ob_sort(mock_fk_parent_table_ids.begin(), mock_fk_parent_table_ids.end());
+src/observer/schema/ob_schema_service_sql_impl.cpp	3084	ObSchemaServiceSQLImpl::get_batch_triggers	lib::ob_sort call	lib::ob_sort(trigger_ids.begin(), trigger_ids.end());
+src/observer/schema/ob_schema_service_sql_impl.cpp	5125	ObSchemaServiceSQLImpl::sort_partition_array	lib::ob_sort call	lib::ob_sort(partition_schema.get_part_array(),
+src/observer/schema/ob_schema_service_sql_impl.cpp	5128	ObSchemaServiceSQLImpl::sort_partition_array	lib::ob_sort call	lib::ob_sort(partition_schema.get_hidden_part_array(),
+src/observer/schema/ob_schema_service_sql_impl.cpp	5132	ObSchemaServiceSQLImpl::sort_partition_array	lib::ob_sort call	lib::ob_sort(partition_schema.get_part_array(),
+src/observer/schema/ob_schema_service_sql_impl.cpp	5135	ObSchemaServiceSQLImpl::sort_partition_array	lib::ob_sort call	lib::ob_sort(partition_schema.get_hidden_part_array(),
+src/observer/schema/ob_schema_service_sql_impl.cpp	5139	ObSchemaServiceSQLImpl::sort_partition_array	lib::ob_sort call	lib::ob_sort(partition_schema.get_part_array(),
+src/observer/schema/ob_schema_service_sql_impl.cpp	5142	ObSchemaServiceSQLImpl::sort_partition_array	lib::ob_sort call	lib::ob_sort(partition_schema.get_hidden_part_array(),
+src/observer/schema/ob_schema_service_sql_impl.cpp	5180	ObSchemaServiceSQLImpl::sort_subpartition_array	lib::ob_sort call	lib::ob_sort(subpart_array, subpart_array + subpartition_num, ObBasePartition::less_than);
+src/observer/schema/ob_schema_service_sql_impl.cpp	5181	ObSchemaServiceSQLImpl::sort_subpartition_array	lib::ob_sort call	lib::ob_sort(partition->get_hidden_subpart_array(),
+src/observer/schema/ob_schema_service_sql_impl.cpp	5185	ObSchemaServiceSQLImpl::sort_subpartition_array	lib::ob_sort call	lib::ob_sort(subpart_array, subpart_array + subpartition_num,
+src/observer/schema/ob_schema_service_sql_impl.cpp	5187	ObSchemaServiceSQLImpl::sort_subpartition_array	lib::ob_sort call	lib::ob_sort(partition->get_hidden_subpart_array(),
+src/observer/schema/ob_schema_service_sql_impl.cpp	5191	ObSchemaServiceSQLImpl::sort_subpartition_array	lib::ob_sort call	lib::ob_sort(subpart_array, subpart_array + subpartition_num,
+src/observer/schema/ob_schema_service_sql_impl.cpp	5193	ObSchemaServiceSQLImpl::sort_subpartition_array	lib::ob_sort call	lib::ob_sort(partition->get_hidden_subpart_array(),
+src/observer/schema/ob_schema_service_sql_impl.cpp	5211	ObSchemaServiceSQLImpl::sort_subpartition_array	lib::ob_sort call	lib::ob_sort(partition_schema.get_def_subpart_array(),
+src/observer/schema/ob_schema_service_sql_impl.cpp	5215	ObSchemaServiceSQLImpl::sort_subpartition_array	lib::ob_sort call	lib::ob_sort(partition_schema.get_def_subpart_array(),
+src/observer/schema/ob_schema_service_sql_impl.cpp	5219	ObSchemaServiceSQLImpl::sort_subpartition_array	lib::ob_sort call	lib::ob_sort(partition_schema.get_def_subpart_array(),
+src/observer/vector_index/ob_hybrid_vector_refresh_task.cpp	49	ObVecEmbeddingAsyncTaskExecutor::load_task	iterate hash container returned by get_complete_adapter_map()	if (OB_FAIL(index_mgr->get_complete_adapter_map().foreach_refactored(adapter_map_func))) {
+src/observer/vector_index/ob_ivf_async_task_executor.cpp	438	ObIvfAsyncTaskExector::load_task	iterate hash container returned by get_ivf_cache_mgr_map()	if (OB_FAIL(index_mgr->get_ivf_cache_mgr_map().foreach_refactored(
+src/observer/vector_index/ob_ivf_async_task_executor.cpp	441	ObIvfAsyncTaskExector::load_task	iterate hash container aux_table_info_map (ObIvfAuxTableInfoMap)	} else if (OB_FAIL(aux_table_info_map.foreach_refactored(load_task_func))) {
+src/observer/vector_index/ob_vector_index_util.cpp	1681	ObVectorIndexUtil::get_extra_info_column_id	lib::ob_sort call	lib::ob_sort(extra_col_ids.begin(), extra_col_ids.end(), column_id_asc_compare);
+src/observer/vector_index/ob_vector_index_util.cpp	2353	-	heap declared: ObVecTidMaxHeap (ObBinaryHeap)	typedef common::ObBinaryHeap<ObVecTidCandidate, ObVecTidCandidateMaxCompare, 4> ObVecTidMaxHeap;
+src/observer/vector_index/ob_vector_index_util.cpp	2375	ObVectorIndexUtil::get_latest_avaliable_index_tids_for_hnsw	heap declared: inc_tid_heap (ObVecTidMaxHeap)	ObVecTidMaxHeap inc_tid_heap(cmp);
+src/observer/vector_index/ob_vector_index_util.cpp	2409	ObVectorIndexUtil::get_latest_avaliable_index_tids_for_hnsw	heap operation push on inc_tid_heap (ObVecTidMaxHeap)	if (OB_FAIL(inc_tid_heap.push(candidate))) {
+src/observer/virtual_table/ob_all_virtual_malloc_sample_info.cpp	52	ObMallocSampleInfo::inner_get_next_row	iterate hash container malloc_sample_map_ (ObMallocSampleMap)	it_ = malloc_sample_map_.begin();
+src/observer/virtual_table/ob_all_virtual_px_p2p_datahub.cpp	65	ObAllPxP2PDatahubTable::p2p_datahub_map_to_array	iterate hash container returned by get_map()	if (OB_FAIL(PX_P2P_DH.get_map().foreach_refactored(call))) {
+src/observer/virtual_table/ob_all_virtual_sql_stat.cpp	245	ObAllVirtualSqlStatIter::get_next_sql_stat	iterate hash container tmp_sql_stat_map_ (TmpSqlStatMap)	if (OB_ISNULL(tmp_sql_stat_map_.begin()->second)) {
+src/observer/virtual_table/ob_all_virtual_sql_stat.cpp	248	ObAllVirtualSqlStatIter::get_next_sql_stat	iterate hash container tmp_sql_stat_map_ (TmpSqlStatMap)	const ObExecutedSqlStatRecord *tmp_sql_stat_value = tmp_sql_stat_map_.begin()->second;
+src/observer/virtual_table/ob_all_virtual_sys_parameter_stat.cpp	40	ObAllVirtualSysParameterStat::inner_open	iterate hash container returned by get_container()	sys_iter_ = GCONF.get_container().begin();
+src/observer/virtual_table/ob_all_virtual_sys_parameter_stat.cpp	46	ObAllVirtualSysParameterStat::reset	iterate hash container returned by get_container()	sys_iter_ = GCONF.get_container().begin();
+src/observer/virtual_table/ob_all_virtual_vector_mem_info.cpp	48	ObAllVirtualVectorMemInfo::fill_glibc_used_info	iterate hash container malloc_sample_map_ (ObMallocSampleMap)	for (it_ = malloc_sample_map_.begin(); it_ != malloc_sample_map_.end(); ++it_) {
+src/observer/virtual_table/ob_information_global_status_table.cpp	130	ObInfoSchemaGlobalStatusTable::inner_get_next_row	iterate hash container all_status (AllStatus)	AllStatus::const_iterator it_begin = all_status.begin();
+src/observer/virtual_table/ob_information_global_status_table.cpp	131	ObInfoSchemaGlobalStatusTable::inner_get_next_row	iterate hash container through an iterator of AllStatus	AllStatus::const_iterator it_end = all_status.end();
+src/observer/virtual_table/ob_information_session_status_table.cpp	130	ObInfoSchemaSessionStatusTable::inner_get_next_row	iterate hash container all_status (AllStatus)	AllStatus::const_iterator it_begin = all_status.begin();
+src/observer/virtual_table/ob_information_session_status_table.cpp	131	ObInfoSchemaSessionStatusTable::inner_get_next_row	iterate hash container through an iterator of AllStatus	AllStatus::const_iterator it_end = all_status.end();
+src/observer/virtual_table/ob_show_grants.cpp	205	ObShowGrants::inner_get_next_row	iterate hash container priv_map (PRIV_MAP)	for (PRIV_MAP::const_iterator iter = priv_map.begin(); OB_SUCC(ret) && iter != priv_map.end(); ++iter) {
+src/observer/virtual_table/ob_show_grants.cpp	222	ObShowGrants::inner_get_next_row	iterate hash container priv_map (PRIV_MAP)	for (PRIV_MAP::const_iterator iter = priv_map.begin(); OB_SUCC(ret) && iter != priv_map.end(); ++iter) {
+src/observer/virtual_table/ob_show_grants.cpp	241	ObShowGrants::inner_get_next_row	iterate hash container priv_map (PRIV_MAP)	for (PRIV_MAP::const_iterator iter = priv_map.begin(); OB_SUCC(ret) && iter != priv_map.end(); ++iter) {
+src/observer/virtual_table/ob_show_grants.cpp	248	ObShowGrants::inner_get_next_row	lib::ob_sort call	lib::ob_sort(priv_key_array.begin(), priv_key_array.end(), PrivKey::cmp);
+src/observer/virtual_table/ob_show_grants.cpp	287	ObShowGrants::inner_get_next_row	iterate hash container priv_map (PRIV_MAP)	for (PRIV_MAP::const_iterator iter = priv_map.begin(); OB_SUCC(ret) && iter != priv_map.end(); ++iter) {

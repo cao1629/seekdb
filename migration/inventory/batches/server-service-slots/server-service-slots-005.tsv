@@ -1,0 +1,70 @@
+file	line	symbol	construct	text
+src/observer/omt/ob_server_runtime_controller.cpp	1751	ObServer::obs_destroy_modules	unbind of slot type ObDiagnoseTabletMgr	UNBIND_SERVICE(compaction::ObDiagnoseTabletMgr);
+src/observer/omt/ob_server_runtime_controller.cpp	1752	ObServer::obs_destroy_modules	unbind of slot type ObChangeStreamMgr	UNBIND_SERVICE(share::ObChangeStreamMgr);
+src/observer/omt/ob_server_runtime_controller.cpp	1753	ObServer::obs_destroy_modules	unbind of slot type ObIVectorIndexService	UNBIND_SERVICE(query::ObIVectorIndexService);
+src/observer/omt/ob_server_runtime_controller.cpp	1754	ObServer::obs_destroy_modules	unbind of slot type ObDataAccessService	UNBIND_SERVICE(sql::ObDataAccessService);
+src/observer/omt/ob_server_runtime_controller.cpp	1755	ObServer::obs_destroy_modules	unbind of slot type ObDagWarningHistoryManager	UNBIND_SERVICE(share::ObDagWarningHistoryManager);
+src/observer/omt/ob_server_runtime_controller.cpp	1756	ObServer::obs_destroy_modules	unbind of slot type ObSqlMemoryManager	UNBIND_SERVICE(sql::ObSqlMemoryManager);
+src/observer/omt/ob_server_runtime_controller.cpp	1757	ObServer::obs_destroy_modules	unbind of slot type ObIDmlService	UNBIND_SERVICE(data_plane::ObIDmlService);
+src/observer/omt/ob_server_runtime_controller.cpp	1758	ObServer::obs_destroy_modules	unbind of slot type ObCompactionProgressMgr	UNBIND_SERVICE(compaction::ObCompactionProgressMgr);
+src/observer/omt/ob_server_runtime_controller.cpp	1759	ObServer::obs_destroy_modules	unbind of slot type ObTimestampService	UNBIND_SERVICE(transaction::ObTimestampService);
+src/observer/omt/ob_server_runtime_controller.cpp	1760	ObServer::obs_destroy_modules	unbind of slot type ObITabletAutoincrementAdmin	UNBIND_SERVICE(share::ObITabletAutoincrementAdmin);
+src/observer/omt/ob_server_runtime_controller.cpp	1761	ObServer::obs_destroy_modules	unbind of slot type ObMySQLProxy	UNBIND_SERVICE(common::ObMySQLProxy);
+src/observer/omt/ob_server_runtime_controller.cpp	1762	ObServer::obs_destroy_modules	unbind of slot type ObTransIDService	UNBIND_SERVICE(transaction::ObTransIDService);
+src/observer/omt/ob_server_runtime_controller.cpp	1763	ObServer::obs_destroy_modules	unbind of slot type ObTabletRuntimeMetaUpdater	UNBIND_SERVICE(observer::ObTabletRuntimeMetaUpdater);
+src/observer/omt/ob_server_runtime_controller.cpp	1764	ObServer::obs_destroy_modules	unbind of slot type ObSSTableMergeInfoMgr	UNBIND_SERVICE(storage::ObSSTableMergeInfoMgr);
+src/observer/omt/ob_server_runtime_controller.cpp	1765	ObServer::obs_destroy_modules	unbind of slot type ObISchedulerService	UNBIND_SERVICE(query::ObISchedulerService);
+src/observer/omt/ob_server_runtime_controller.cpp	1766	ObServer::obs_destroy_modules	unbind of slot type ObRbMemMgr	UNBIND_SERVICE(common::ObRbMemMgr);
+src/observer/omt/ob_server_runtime_controller.cpp	1767	ObServer::obs_destroy_modules	unbind of slot type ObOptStatMonitorManager	UNBIND_SERVICE(common::ObOptStatMonitorManager);
+src/observer/omt/ob_server_runtime_controller.cpp	1768	ObServer::obs_destroy_modules	unbind of slot type ObCompactionMemPool	UNBIND_SERVICE(storage::ObCompactionMemPool);
+src/observer/omt/ob_server_runtime_controller.cpp	1769	ObServer::obs_destroy_modules	unbind of slot type ObIWriteContextService	UNBIND_SERVICE(data_plane::ObIWriteContextService);
+src/observer/omt/ob_server_runtime_controller.cpp	1770	ObServer::obs_destroy_modules	unbind of slot type ObIMajorFreezeCoordinator	UNBIND_SERVICE(data_plane::ObIMajorFreezeCoordinator);
+src/observer/omt/ob_server_runtime_controller.cpp	1771	ObServer::obs_destroy_modules	unbind of slot type ObDfc	UNBIND_SERVICE(sql::dtl::ObDfc);
+src/observer/omt/ob_server_runtime_controller.cpp	1772	ObServer::obs_destroy_modules	unbind of slot type ObCompactionSuggestionMgr	UNBIND_SERVICE(compaction::ObCompactionSuggestionMgr);
+src/observer/omt/ob_server_runtime_controller.cpp	1773	ObServer::obs_destroy_modules	unbind of slot type ObIAiEndpointResolver	UNBIND_SERVICE(query::ObIAiEndpointResolver);
+src/observer/omt/ob_server_runtime_controller.cpp	1774	ObServer::obs_destroy_modules	unbind of slot type ObITabletAutoincrementService	UNBIND_SERVICE(share::ObITabletAutoincrementService);
+src/observer/omt/ob_server_runtime_controller.cpp	1775	ObServer::obs_destroy_modules	unbind of slot type ObServerCompactionEventHistory	UNBIND_SERVICE(compaction::ObServerCompactionEventHistory);
+src/observer/omt/ob_server_runtime_controller.cpp	1776	ObServer::obs_destroy_modules	unbind of slot type ObResourceLimitCalculator	UNBIND_SERVICE(share::ObResourceLimitCalculator);
+src/observer/omt/ob_server_runtime_controller.cpp	1777	ObServer::obs_destroy_modules	unbind of slot type ObPsCache	UNBIND_SERVICE(sql::ObPsCache);
+src/observer/omt/ob_server_runtime_controller.cpp	1778	ObServer::obs_destroy_modules	unbind of slot type ObMultiVersionGarbageCollector	UNBIND_SERVICE(concurrency_control::ObMultiVersionGarbageCollector);
+src/observer/omt/ob_server_runtime_controller.cpp	1779	ObServer::obs_destroy_modules	unbind of slot type ObMediumChecker	UNBIND_SERVICE(compaction::ObMediumChecker);
+src/observer/omt/ob_server_runtime_controller.cpp	1780	ObServer::obs_destroy_modules	unbind of slot type ObILSRuntimeAdapter	UNBIND_SERVICE(storage::ObILSRuntimeAdapter);
+src/observer/omt/ob_server_runtime_controller.cpp	1781	ObServer::obs_destroy_modules	unbind of slot type ObCheckPointService	UNBIND_SERVICE(storage::checkpoint::ObCheckPointService);
+src/observer/omt/ob_server_runtime_controller.cpp	1782	ObServer::obs_destroy_modules	unbind of slot type ObTimestampAccess	UNBIND_SERVICE(transaction::ObTimestampAccess);
+src/observer/omt/ob_server_runtime_controller.cpp	1783	ObServer::obs_destroy_modules	unbind of slot type ObITabletScan	UNBIND_SERVICE(common::ObITabletScan);
+src/observer/omt/ob_server_runtime_controller.cpp	1784	ObServer::obs_destroy_modules	unbind of slot type ObIVirtualTableScan	UNBIND_SERVICE(common::ObIVirtualTableScan);
+src/observer/omt/ob_server_runtime_controller.cpp	1785	ObServer::obs_destroy_modules	unbind of slot type ObTabletMemtableMgrPool	UNBIND_SERVICE(storage::ObTabletMemtableMgrPool);
+src/observer/omt/ob_server_runtime_controller.cpp	1786	ObServer::obs_destroy_modules	unbind of slot type ObIStorageEstimator	UNBIND_SERVICE(data_plane::ObIStorageEstimator);
+src/observer/omt/ob_server_runtime_controller.cpp	1787	ObServer::obs_destroy_modules	unbind of slot type ObRestoreMajorFreezeService	UNBIND_SERVICE(rootserver::ObRestoreMajorFreezeService);
+src/observer/omt/ob_server_runtime_controller.cpp	1788	ObServer::obs_destroy_modules	unbind of slot type ObIRangeService	UNBIND_SERVICE(data_plane::ObIRangeService);
+src/observer/omt/ob_server_runtime_controller.cpp	1789	ObServer::obs_destroy_modules	unbind of slot type ObPrimaryMajorFreezeService	UNBIND_SERVICE(rootserver::ObPrimaryMajorFreezeService);
+src/observer/omt/ob_server_runtime_controller.cpp	1790	ObServer::obs_destroy_modules	unbind of slot type ObIOptimizerStorageService	UNBIND_SERVICE(data_plane::ObIOptimizerStorageService);
+src/observer/omt/ob_server_runtime_controller.cpp	1791	ObServer::obs_destroy_modules	unbind of slot type ObIMemoryPressureService	UNBIND_SERVICE(data_plane::ObIMemoryPressureService);
+src/observer/omt/ob_server_runtime_controller.cpp	1792	ObServer::obs_destroy_modules	unbind of slot type ObEmptyReadBucket	UNBIND_SERVICE(storage::ObEmptyReadBucket);
+src/observer/omt/ob_server_runtime_controller.cpp	1793	ObServer::obs_destroy_modules	unbind of slot type ObDDLScheduler	UNBIND_SERVICE(rootserver::ObDDLScheduler);
+src/observer/omt/ob_server_runtime_controller.cpp	1794	ObServer::obs_destroy_modules	unbind of slot type ObAiService	UNBIND_SERVICE(omt::ObAiService);
+src/observer/omt/ob_server_runtime_controller.cpp	1795	ObServer::obs_destroy_modules	unbind of slot type ObUniqueIDService	UNBIND_SERVICE(transaction::ObUniqueIDService);
+src/observer/omt/ob_server_runtime_controller.cpp	1796	ObServer::obs_destroy_modules	unbind of slot type ObSrsService	UNBIND_SERVICE(omt::ObSrsService);
+src/observer/omt/ob_server_runtime_controller.cpp	1797	ObServer::obs_destroy_modules	unbind of slot type ObIRootserverLocalRuntime	UNBIND_SERVICE(rootserver::ObIRootserverLocalRuntime);
+src/observer/omt/ob_server_runtime_controller.cpp	1798	ObServer::obs_destroy_modules	unbind of slot type ObIReadTimestampService	UNBIND_SERVICE(data_plane::ObIReadTimestampService);
+src/observer/omt/ob_server_runtime_controller.cpp	1799	ObServer::obs_destroy_modules	unbind of slot type ObPxPools	UNBIND_SERVICE(omt::ObPxPools);
+src/observer/omt/ob_server_runtime_controller.cpp	1800	ObServer::obs_destroy_modules	unbind of slot type ObILockWaitService	UNBIND_SERVICE(data_plane::ObILockWaitService);
+src/observer/omt/ob_server_runtime_controller.cpp	1801	ObServer::obs_destroy_modules	unbind of slot type ObILocalLogHandler	UNBIND_SERVICE(logservice::ObILocalLogHandler);
+src/observer/omt/ob_server_runtime_controller.cpp	1802	ObServer::obs_destroy_modules	unbind of slot type ObIInnerConnectionLockRuntime	UNBIND_SERVICE(transaction::tablelock::ObIInnerConnectionLockRuntime);
+src/observer/omt/ob_server_runtime_controller.cpp	1803	ObServer::obs_destroy_modules	unbind of slot type ObDDLServiceLauncher	UNBIND_SERVICE(rootserver::ObDDLServiceLauncher);
+src/observer/omt/ob_server_runtime_controller.cpp	1804	ObServer::obs_destroy_modules	unbind of slot type ObDBMSSchedService	UNBIND_SERVICE(rootserver::ObDBMSSchedService);
+src/observer/omt/ob_server_runtime_controller.cpp	1805	ObServer::obs_destroy_modules	unbind of slot type ObIActiveSnapshotService	UNBIND_SERVICE(query::ObIActiveSnapshotService);
+src/observer/omt/ob_srs_service.h	124	#define SRS_SERVICE	lookup of slot type ObSrsService inside #define SRS_SERVICE (0 uses of the macro)	#define SRS_SERVICE (::oceanbase::share::server_service<::oceanbase::omt::ObSrsService>())
+src/observer/omt/ob_th_worker.cpp	158	ObThWorker::process_request	lookup of slot type ObLockWaitMgr	::oceanbase::share::server_service<::oceanbase::memtable::ObLockWaitMgr>()->setup(req.get_lock_wait_node(), req.get_receive_timestamp());
+src/observer/omt/ob_th_worker.cpp	162	ObThWorker::process_request	lookup of slot type ObLockWaitMgr	bool wait_succ = ::oceanbase::share::server_service<::oceanbase::memtable::ObLockWaitMgr>()->post_process(need_retry_, need_wait_lock);
+src/observer/report/ob_tablet_meta_checker.cpp	219	ObTabletMetaChecker::check_stale_tablet_meta_rows_	lookup of slot type ObService [not built]	} else if (OB_ISNULL(::oceanbase::share::server_service<::oceanbase::observer::ObService>())) {
+src/observer/report/ob_tablet_meta_checker.cpp	230	ObTabletMetaChecker::check_stale_tablet_meta_rows_	lookup of slot type ObTabletRuntimeMetaUpdater [not built]	if (OB_FAIL(share::server_service<ObTabletRuntimeMetaUpdater>()->submit_update_task(tablet_id))) {
+src/observer/report/ob_tablet_meta_checker.cpp	255	ObTabletMetaChecker::check_tablet_not_exist_in_local_	lookup of slot type ObLSService [not built]	} else if (OB_FAIL(::oceanbase::share::server_service<::oceanbase::storage::ObLSService>()->get_ls(
+src/observer/report/ob_tablet_meta_checker.cpp	284	ObTabletMetaChecker::check_missing_or_changed_tablet_meta_rows_	lookup of slot type ObService [not built]	} else if (OB_ISNULL(::oceanbase::share::server_service<::oceanbase::observer::ObService>())) {
+src/observer/report/ob_tablet_meta_checker.cpp	286	ObTabletMetaChecker::check_missing_or_changed_tablet_meta_rows_	lookup of slot type ObLSService [not built]	} else if (OB_ISNULL(::oceanbase::share::server_service<::oceanbase::storage::ObLSService>())) {
+src/observer/report/ob_tablet_meta_checker.cpp	288	ObTabletMetaChecker::check_missing_or_changed_tablet_meta_rows_	lookup of slot type ObLSService [not built]	} else if (OB_FAIL(::oceanbase::share::server_service<::oceanbase::storage::ObLSService>()->get_ls(ls))) {
+src/observer/report/ob_tablet_meta_checker.cpp	315	ObTabletMetaChecker::check_missing_or_changed_tablet_meta_rows_	lookup of slot type ObTabletRuntimeMetaUpdater [not built]	if (OB_FAIL(share::server_service<ObTabletRuntimeMetaUpdater>()->submit_update_task(tablet_id))) {
+src/observer/report/ob_tablet_meta_checker.cpp	323	ObTabletMetaChecker::check_missing_or_changed_tablet_meta_rows_	lookup of slot type ObService [not built]	} else if (OB_FAIL(::oceanbase::share::server_service<::oceanbase::observer::ObService>()->fill_tablet_runtime_info(tablet_id,
+src/observer/report/ob_tablet_meta_checker.cpp	336	ObTabletMetaChecker::check_missing_or_changed_tablet_meta_rows_	lookup of slot type ObTabletRuntimeMetaUpdater [not built]	if (OB_FAIL(share::server_service<ObTabletRuntimeMetaUpdater>()->submit_update_task(tablet_id))) {
+src/observer/scheduler/ob_ddl_count_guard.cpp	35	ObDDLCountGuard::try_inc_ddl_count	lookup of slot type ObServerRuntimeController	omt::ObServerRuntimeController *runtime_controller = ::oceanbase::share::server_service<::oceanbase::omt::ObServerRuntimeController>();
+src/observer/scheduler/ob_ddl_count_guard.cpp	49	ObDDLCountGuard::~ObDDLCountGuard	lookup of slot type ObServerRuntimeController	omt::ObServerRuntimeController *runtime_controller = ::oceanbase::share::server_service<::oceanbase::omt::ObServerRuntimeController>();

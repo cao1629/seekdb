@@ -1,0 +1,86 @@
+file	line	symbol	construct	text
+src/storage/memtable/ob_memtable_mutator.cpp	368	ObMemtableMutatorRow::serialize	ret != OB_BUF_NOT_ENOUGH	if (OB_BUF_NOT_ENOUGH != ret || buf_len > common::OB_MAX_LOG_ALLOWED_SIZE) {
+src/storage/memtable/ob_memtable_mutator.cpp	525	ObMutatorTableLock::serialize	ret != OB_BUF_NOT_ENOUGH	if (OB_BUF_NOT_ENOUGH != ret
+src/storage/memtable/ob_memtable_mutator.cpp	650	ObMutatorWriter::append_row_kv	ret == OB_ALLOCATE_MEMORY_FAILED	if (ret == OB_ALLOCATE_MEMORY_FAILED) {
+src/storage/memtable/ob_memtable_mutator.cpp	656	ObMutatorWriter::append_row_kv	ret == OB_ALLOCATE_MEMORY_FAILED	if (ret == OB_ALLOCATE_MEMORY_FAILED) {
+src/storage/memtable/ob_memtable_mutator.cpp	667	ObMutatorWriter::append_row_kv	ret != OB_BUF_NOT_ENOUGH	if (OB_SUCCESS != ret && OB_BUF_NOT_ENOUGH != ret) {
+src/storage/memtable/ob_memtable_mutator.cpp	715	ObMutatorWriter::append_table_lock_kv	ret == OB_ALLOCATE_MEMORY_FAILED	if (ret == OB_ALLOCATE_MEMORY_FAILED) {
+src/storage/memtable/ob_memtable_mutator.cpp	726	ObMutatorWriter::append_table_lock_kv	ret == OB_ALLOCATE_MEMORY_FAILED	if (ret == OB_ALLOCATE_MEMORY_FAILED) {
+src/storage/memtable/ob_memtable_mutator.cpp	736	ObMutatorWriter::append_table_lock_kv	ret != OB_BUF_NOT_ENOUGH	if (OB_SUCCESS != ret && OB_BUF_NOT_ENOUGH != ret) {
+src/storage/memtable/ob_memtable_mutator.cpp	781	ObMutatorWriter::append_ext_info_log_kv	ret == OB_ALLOCATE_MEMORY_FAILED	if (ret == OB_ALLOCATE_MEMORY_FAILED) {
+src/storage/memtable/ob_memtable_mutator.cpp	787	ObMutatorWriter::append_ext_info_log_kv	ret == OB_ALLOCATE_MEMORY_FAILED	if (ret == OB_ALLOCATE_MEMORY_FAILED) {
+src/storage/memtable/ob_memtable_mutator.cpp	798	ObMutatorWriter::append_ext_info_log_kv	ret != OB_BUF_NOT_ENOUGH	if (OB_SUCCESS != ret && OB_BUF_NOT_ENOUGH != ret) {
+src/storage/memtable/ob_memtable_mutator.cpp	826	ObMutatorWriter::serialize	ret != OB_ENTRY_NOT_EXIST	if (OB_FAIL(ret) && OB_ENTRY_NOT_EXIST != ret) {
+src/storage/memtable/ob_memtable_mutator.cpp	933	ObMemtableMutatorIterator::iterate_next_row	ret != OB_ITER_END	if (OB_SUCCESS != ret && OB_ITER_END != ret) {
+src/storage/memtable/ob_memtable_read_row_util.cpp	94	ObReadRow::iterate_row_value_	ret == OB_ITER_END	ret = (OB_ITER_END == ret) ? OB_SUCCESS : ret;
+src/storage/memtable/ob_memtable_single_row_reader.cpp	127	ObMemtableSingleRowReader::init_a_new_range	ret != OB_ITER_END	if (OB_FAIL(ret) && OB_ITER_END != ret) {
+src/storage/memtable/ob_memtable_single_row_reader.cpp	188	ObMemtableSingleRowReader::get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/memtable/ob_memtable_single_row_reader.cpp	207	ObMemtableSingleRowReader::fill_in_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/memtable/ob_memtable_single_row_reader.cpp	222	ObMemtableSingleRowReader::inner_fill_in_next_row_	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/memtable/ob_memtable_single_row_reader.cpp	245	ObMemtableSingleRowReader::get_next_value_iter_	ret == OB_TRY_LOCK_ROW_CONFLICT; ret == OB_TRANSACTION_SET_VIOLATION	if (OB_TRY_LOCK_ROW_CONFLICT == ret || OB_TRANSACTION_SET_VIOLATION == ret) {
+src/storage/memtable/ob_memtable_single_row_reader.cpp	250	ObMemtableSingleRowReader::get_next_value_iter_	ret == OB_TRY_LOCK_ROW_CONFLICT	} else if (OB_TRY_LOCK_ROW_CONFLICT == ret) {
+src/storage/memtable/ob_memtable_single_row_reader.cpp	262	ObMemtableSingleRowReader::get_next_value_iter_	ret != OB_ITER_END	} else if (OB_ITER_END != ret) {
+src/storage/memtable/ob_redo_log_generator.cpp	150	ObFillRedoLogFunctor::fill_row_redo_	ret != OB_ENTRY_NOT_EXIST	} else if (OB_FAIL(riter->get_redo(redo)) && OB_ENTRY_NOT_EXIST != ret) {
+src/storage/memtable/ob_redo_log_generator.cpp	152	ObFillRedoLogFunctor::fill_row_redo_	ret == OB_ENTRY_NOT_EXIST	} else if (OB_ENTRY_NOT_EXIST == ret) {
+src/storage/memtable/ob_redo_log_generator.cpp	162	ObFillRedoLogFunctor::fill_row_redo_	ret != OB_BUF_NOT_ENOUGH	if (OB_BUF_NOT_ENOUGH != ret) {
+src/storage/memtable/ob_redo_log_generator.cpp	178	ObFillRedoLogFunctor::fill_table_lock_redo_	ret != OB_BUF_NOT_ENOUGH	if (OB_BUF_NOT_ENOUGH != ret) {
+src/storage/memtable/ob_redo_log_generator.cpp	191	ObFillRedoLogFunctor::fill_ext_info_redo_	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/memtable/ob_redo_log_generator.cpp	198	ObFillRedoLogFunctor::fill_ext_info_redo_	ret != OB_BUF_NOT_ENOUGH	if (OB_BUF_NOT_ENOUGH != ret) {
+src/storage/memtable/ob_row_compactor.cpp	312	ObMemtableRowCompactor::construct_compact_node_	ret == OB_ITER_END	ret = (OB_ITER_END == ret) ? OB_SUCCESS : ret;
+src/storage/memtable/ob_row_conflict_handler.cpp	90	ObRowConflictHandler::check_row_locked	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/memtable/ob_row_conflict_handler.cpp	99	ObRowConflictHandler::check_row_locked	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/memtable/ob_row_conflict_handler.cpp	154	ObRowConflictHandler::check_foreign_key_constraint	ret == OB_TRY_LOCK_ROW_CONFLICT	if (OB_TRY_LOCK_ROW_CONFLICT == ret) {
+src/storage/memtable/ob_row_conflict_handler.cpp	159	ObRowConflictHandler::check_foreign_key_constraint	ret == OB_TRANSACTION_SET_VIOLATION	} else if (OB_TRANSACTION_SET_VIOLATION == ret) {
+src/storage/meta_mem/ob_external_tablet_cnt_map.cpp	62	ObExternalTabletCntMap::check_exist	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/storage/meta_mem/ob_external_tablet_cnt_map.cpp	86	ObExternalTabletCntMap::reg_tablet	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/storage/meta_mem/ob_meta_obj_pool.h	241	ObMetaObjPool::acquire	ret != OB_ITER_END [not built]	if (OB_ITER_END != ret) {
+src/storage/meta_mem/ob_meta_obj_pool.h	248	ObMetaObjPool::acquire	ret == OB_ITER_END [not built]	if (OB_SUCC(ret) || OB_ITER_END == ret) {
+src/storage/meta_mem/ob_storage_meta_cache.cpp	462	ObStorageMetaCache::get_meta	ret != OB_ENTRY_NOT_EXIST	if (OB_UNLIKELY(OB_ENTRY_NOT_EXIST != ret)) {
+src/storage/meta_mem/ob_storage_meta_mem_mgr.cpp	342	ObStorageMetaMemMgr::print_old_chain	ret != OB_SIZE_OVERFLOW	if (OB_SIZE_OVERFLOW != ret) {
+src/storage/meta_mem/ob_storage_meta_mem_mgr.cpp	349	ObStorageMetaMemMgr::print_old_chain	ret == OB_SIZE_OVERFLOW	if (OB_SIZE_OVERFLOW == ret) {
+src/storage/meta_mem/ob_storage_meta_mem_mgr.cpp	401	ObStorageMetaMemMgr::push_table_into_gc_queue	ret == OB_ALLOCATE_MEMORY_FAILED	if (OB_ALLOCATE_MEMORY_FAILED == ret) {
+src/storage/meta_mem/ob_storage_meta_mem_mgr.cpp	408	ObStorageMetaMemMgr::push_table_into_gc_queue	ret == OB_ALLOCATE_MEMORY_FAILED	} while (OB_ALLOCATE_MEMORY_FAILED == ret
+src/storage/meta_mem/ob_storage_meta_mem_mgr.cpp	592	ObStorageMetaMemMgr::batch_gc_memtable_set_	tmp_ret != OB_NOT_RUNNING	if (OB_NOT_RUNNING != tmp_ret) {
+src/storage/meta_mem/ob_storage_meta_mem_mgr.cpp	846	ObStorageMetaMemMgr::get_min_end_scn_from_single_tablet	ret == OB_EMPTY_RESULT	if (OB_EMPTY_RESULT == ret) {
+src/storage/meta_mem/ob_storage_meta_mem_mgr.cpp	1121	ObStorageMetaMemMgr::mark_mds_table_deleted_	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/storage/meta_mem/ob_storage_meta_mem_mgr.cpp	1139	ObStorageMetaMemMgr::release_memtable_and_mds_table_for_ls_offline	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/storage/meta_mem/ob_storage_meta_mem_mgr.cpp	1203	ObStorageMetaMemMgr::acquire_tablet_from_pool	ret != OB_ALLOCATE_MEMORY_FAILED	if (OB_ALLOCATE_MEMORY_FAILED != ret) {
+src/storage/meta_mem/ob_storage_meta_mem_mgr.cpp	1245	ObStorageMetaMemMgr::acquire_tablet	ret != OB_ALLOCATE_MEMORY_FAILED	if (OB_ALLOCATE_MEMORY_FAILED != ret) {
+src/storage/meta_mem/ob_storage_meta_mem_mgr.cpp	1419	ObStorageMetaMemMgr::get_tablet	ret != OB_ENTRY_NOT_EXIST; ret != OB_ITEM_NOT_SETTED	if (OB_ENTRY_NOT_EXIST != ret && OB_ITEM_NOT_SETTED != ret) {
+src/storage/meta_mem/ob_storage_meta_mem_mgr.cpp	1442	ObStorageMetaMemMgr::get_tablet_with_filter	ret != OB_ENTRY_NOT_EXIST; ret != OB_ITEM_NOT_SETTED; ret != OB_NOT_THE_OBJECT	if (OB_ENTRY_NOT_EXIST != ret && OB_ITEM_NOT_SETTED != ret && OB_NOT_THE_OBJECT != ret) {
+src/storage/meta_mem/ob_storage_meta_mem_mgr.cpp	1466	ObStorageMetaMemMgr::get_tablet_with_allocator	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/storage/meta_mem/ob_storage_meta_mem_mgr.cpp	1685	ObStorageMetaMemMgr::push_tablet_pointer_to_fly_map_if_need_	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/storage/meta_mem/ob_storage_meta_mem_mgr.cpp	1694	ObStorageMetaMemMgr::push_tablet_pointer_to_fly_map_if_need_	ret == OB_ITEM_NOT_SETTED	if (OB_ITEM_NOT_SETTED == ret) {
+src/storage/meta_mem/ob_storage_meta_mem_mgr.cpp	2217	ObStorageMetaMemMgr::try_wash_tablet	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/meta_mem/ob_storage_meta_mem_mgr.cpp	2228	ObStorageMetaMemMgr::try_wash_tablet	ret == OB_ITER_END	if (OB_SUCC(ret) || OB_ITER_END == ret) {
+src/storage/meta_mem/ob_storage_meta_mem_mgr.cpp	2358	ObTabletPtrWithInMemObjIterator::get_next_tablet_pointer	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret){
+src/storage/meta_mem/ob_storage_meta_mem_mgr.cpp	2363	ObTabletPtrWithInMemObjIterator::get_next_tablet_pointer	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret){
+src/storage/meta_mem/ob_storage_meta_mem_mgr.cpp	2396	ObInMemoryTabletIterator::get_next_tablet	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/storage/meta_mem/ob_storage_meta_mem_mgr.h	554	ObT3mTabletMapIterator::ignore_err_code	ret == OB_ENTRY_NOT_EXIST; ret == OB_ITEM_NOT_SETTED; ret == OB_NOT_THE_OBJECT	static bool ignore_err_code(const int ret) { return OB_ENTRY_NOT_EXIST == ret || OB_ITEM_NOT_SETTED == ret || OB_NOT_THE_OBJECT == ret; }
+src/storage/meta_mem/ob_storage_meta_obj_pool.h	241	ObStorageMetaObjPool::acquire	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/meta_mem/ob_storage_meta_obj_pool.h	248	ObStorageMetaObjPool::acquire	ret == OB_ITER_END	if (OB_SUCC(ret) || OB_ITER_END == ret) {
+src/storage/meta_mem/ob_tablet_handle.cpp	252	ObTabletTableIterator::get_read_tables_from_tablet	ret == OB_ITER_END	if (OB_LIKELY(OB_ITER_END == ret)) {
+src/storage/meta_mem/ob_tablet_meta_mem_mgr.cpp	336	ObTabletMetaMemMgr::print_old_chain	ret != OB_SIZE_OVERFLOW [not built]	if (OB_SIZE_OVERFLOW != ret) {
+src/storage/meta_mem/ob_tablet_meta_mem_mgr.cpp	343	ObTabletMetaMemMgr::print_old_chain	ret == OB_SIZE_OVERFLOW [not built]	if (OB_SIZE_OVERFLOW == ret) {
+src/storage/meta_mem/ob_tablet_meta_mem_mgr.cpp	396	ObTabletMetaMemMgr::push_table_into_gc_queue	ret == OB_ALLOCATE_MEMORY_FAILED [not built]	if (OB_ALLOCATE_MEMORY_FAILED == ret) {
+src/storage/meta_mem/ob_tablet_meta_mem_mgr.cpp	403	ObTabletMetaMemMgr::push_table_into_gc_queue	ret == OB_ALLOCATE_MEMORY_FAILED [not built]	} while (OB_ALLOCATE_MEMORY_FAILED == ret
+src/storage/meta_mem/ob_tablet_meta_mem_mgr.cpp	591	ObTabletMetaMemMgr::batch_gc_memtable_set_	tmp_ret != OB_NOT_RUNNING [not built]	if (OB_NOT_RUNNING != tmp_ret) {
+src/storage/meta_mem/ob_tablet_meta_mem_mgr.cpp	849	ObTabletMetaMemMgr::get_min_end_scn_from_single_tablet	ret == OB_EMPTY_RESULT [not built]	if (OB_EMPTY_RESULT == ret) {
+src/storage/meta_mem/ob_tablet_meta_mem_mgr.cpp	1124	ObTabletMetaMemMgr::mark_mds_table_deleted_	ret == OB_ENTRY_NOT_EXIST [not built]	if (OB_ENTRY_NOT_EXIST == ret) {
+src/storage/meta_mem/ob_tablet_meta_mem_mgr.cpp	1142	ObTabletMetaMemMgr::release_memtable_and_mds_table_for_ls_offline	ret == OB_ENTRY_NOT_EXIST [not built]	if (OB_ENTRY_NOT_EXIST == ret) {
+src/storage/meta_mem/ob_tablet_meta_mem_mgr.cpp	1206	ObTabletMetaMemMgr::acquire_tablet_from_pool	ret != OB_ALLOCATE_MEMORY_FAILED [not built]	if (OB_ALLOCATE_MEMORY_FAILED != ret) {
+src/storage/meta_mem/ob_tablet_meta_mem_mgr.cpp	1249	ObTabletMetaMemMgr::acquire_tablet	ret != OB_ALLOCATE_MEMORY_FAILED [not built]	if (OB_ALLOCATE_MEMORY_FAILED != ret) {
+src/storage/meta_mem/ob_tablet_meta_mem_mgr.cpp	1426	ObTabletMetaMemMgr::get_tablet	ret != OB_ENTRY_NOT_EXIST; ret != OB_ITEM_NOT_SETTED [not built]	if (OB_ENTRY_NOT_EXIST != ret && OB_ITEM_NOT_SETTED != ret) {
+src/storage/meta_mem/ob_tablet_meta_mem_mgr.cpp	1449	ObTabletMetaMemMgr::get_tablet_with_filter	ret != OB_ENTRY_NOT_EXIST; ret != OB_ITEM_NOT_SETTED; ret != OB_NOT_THE_OBJECT [not built]	if (OB_ENTRY_NOT_EXIST != ret && OB_ITEM_NOT_SETTED != ret && OB_NOT_THE_OBJECT != ret) {
+src/storage/meta_mem/ob_tablet_meta_mem_mgr.cpp	1473	ObTabletMetaMemMgr::get_tablet_with_allocator	ret != OB_ENTRY_NOT_EXIST [not built]	if (OB_ENTRY_NOT_EXIST != ret) {
+src/storage/meta_mem/ob_tablet_meta_mem_mgr.cpp	1693	ObTabletMetaMemMgr::push_tablet_pointer_to_fly_map_if_need_	ret == OB_ENTRY_NOT_EXIST [not built]	if (OB_ENTRY_NOT_EXIST == ret) {
+src/storage/meta_mem/ob_tablet_meta_mem_mgr.cpp	1702	ObTabletMetaMemMgr::push_tablet_pointer_to_fly_map_if_need_	ret == OB_ITEM_NOT_SETTED [not built]	if (OB_ITEM_NOT_SETTED == ret) {
+src/storage/meta_mem/ob_tablet_meta_mem_mgr.cpp	2230	ObTabletMetaMemMgr::try_wash_tablet	ret != OB_ITER_END [not built]	if (OB_ITER_END != ret) {
+src/storage/meta_mem/ob_tablet_meta_mem_mgr.cpp	2241	ObTabletMetaMemMgr::try_wash_tablet	ret == OB_ITER_END [not built]	if (OB_SUCC(ret) || OB_ITER_END == ret) {
+src/storage/meta_mem/ob_tablet_meta_mem_mgr.cpp	2371	ObTabletPtrWithInMemObjIterator::get_next_tablet_pointer	ret != OB_ENTRY_NOT_EXIST [not built]	if (OB_ENTRY_NOT_EXIST != ret){
+src/storage/meta_mem/ob_tablet_meta_mem_mgr.cpp	2376	ObTabletPtrWithInMemObjIterator::get_next_tablet_pointer	ret != OB_ENTRY_NOT_EXIST [not built]	if (OB_ENTRY_NOT_EXIST != ret){
+src/storage/meta_mem/ob_tablet_meta_mem_mgr.cpp	2409	ObInMemoryTabletIterator::get_next_tablet	ret == OB_ENTRY_NOT_EXIST [not built]	if (OB_ENTRY_NOT_EXIST == ret) {
+src/storage/meta_mem/ob_tablet_meta_mem_mgr.h	553	ObT3mTabletMapIterator::ignore_err_code	ret == OB_ENTRY_NOT_EXIST; ret == OB_ITEM_NOT_SETTED; ret == OB_NOT_THE_OBJECT [not built]	static bool ignore_err_code(const int ret) { return OB_ENTRY_NOT_EXIST == ret || OB_ITEM_NOT_SETTED == ret || OB_NOT_THE_OBJECT == ret; }
+src/storage/meta_mem/ob_tablet_pointer.cpp	474	ObTabletPointer::get_mds_table	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/storage/meta_mem/ob_tablet_pointer.cpp	519	ObTabletPointer::release_memtable_and_mds_table_for_ls_offline	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/storage/meta_mem/ob_tablet_pointer.cpp	541	ObTabletPointer::release_mds_nodes_redo_scn_below	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {

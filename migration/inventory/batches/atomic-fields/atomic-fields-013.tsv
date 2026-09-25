@@ -1,0 +1,50 @@
+file	line	symbol	construct	text
+src/share/io/ob_io_struct.h	154	ObIOStat::io_count_	field uint64_t; 1 atomic accesses (ATOMIC_AAF 1)	uint64_t io_count_;
+src/share/io/ob_io_struct.h	155	ObIOStat::io_bytes_	field uint64_t; 1 atomic accesses (ATOMIC_AAF 1)	uint64_t io_bytes_;
+src/share/io/ob_io_struct.h	156	ObIOStat::io_prepare_delay_us_	field uint64_t; 1 atomic accesses (ATOMIC_AAF 1)	uint64_t io_prepare_delay_us_;
+src/share/io/ob_io_struct.h	157	ObIOStat::io_schedule_delay_us_	field uint64_t; 1 atomic accesses (ATOMIC_AAF 1)	uint64_t io_schedule_delay_us_;
+src/share/io/ob_io_struct.h	158	ObIOStat::io_submit_delay_us_	field uint64_t; 1 atomic accesses (ATOMIC_AAF 1)	uint64_t io_submit_delay_us_;
+src/share/io/ob_io_struct.h	159	ObIOStat::io_device_delay_us_	field uint64_t; 1 atomic accesses (ATOMIC_AAF 1)	uint64_t io_device_delay_us_;
+src/share/io/ob_io_struct.h	160	ObIOStat::io_total_delay_us_	field uint64_t; 1 atomic accesses (ATOMIC_AAF 1)	uint64_t io_total_delay_us_;
+src/share/io/ob_io_struct.h	197	ObIODelayArr::prepare_delay_us_	field int64_t; 3 atomic accesses (ATOMIC_FAA 1, ATOMIC_SET 1, ATOMIC_STORE 1)	int64_t prepare_delay_us_;
+src/share/io/ob_io_struct.h	198	ObIODelayArr::schedule_delay_us_	field int64_t; 3 atomic accesses (ATOMIC_FAA 1, ATOMIC_SET 1, ATOMIC_STORE 1)	int64_t schedule_delay_us_;
+src/share/io/ob_io_struct.h	199	ObIODelayArr::submit_delay_us_	field int64_t; 3 atomic accesses (ATOMIC_FAA 1, ATOMIC_SET 1, ATOMIC_STORE 1)	int64_t submit_delay_us_;
+src/share/io/ob_io_struct.h	200	ObIODelayArr::device_delay_us_	field int64_t; 3 atomic accesses (ATOMIC_FAA 1, ATOMIC_SET 1, ATOMIC_STORE 1)	int64_t device_delay_us_;
+src/share/io/ob_io_struct.h	201	ObIODelayArr::total_delay_us_	field int64_t; 3 atomic accesses (ATOMIC_FAA 1, ATOMIC_SET 1, ATOMIC_STORE 1)	int64_t total_delay_us_;
+src/share/io/ob_io_struct.h	233	ObIOGroupUsage::ObIOLastStat::avg_bw_	field int64_t; 1 atomic accesses (ATOMIC_STORE 1)	int64_t avg_bw_;
+src/share/io/ob_io_struct.h	257	ObIOGroupUsage::last_ts_	field int64_t; 3 atomic accesses (ATOMIC_BCAS 1, ATOMIC_LOAD 1, ATOMIC_STORE 1)	int64_t last_ts_;  // us
+src/share/io/ob_io_struct.h	259	ObIOGroupUsage::io_count_	field int64_t; 2 atomic accesses (ATOMIC_FAA 1, ATOMIC_SET 1)	int64_t io_count_;
+src/share/io/ob_io_struct.h	260	ObIOGroupUsage::size_	field int64_t; 2 atomic accesses (ATOMIC_FAA 1, ATOMIC_SET 1)	int64_t size_;
+src/share/io/ob_io_struct.h	368	ObAsyncIOChannel::submit_count_	field int64_t; 4 atomic accesses (ATOMIC_DEC 3, ATOMIC_INC 1)	int64_t submit_count_;
+src/share/io/ob_io_struct.h	396	ObSyncIOChannel::used_io_depth_	field int64_t; 2 atomic accesses (ATOMIC_FAA 2)	int64_t used_io_depth_;
+src/share/io/ob_io_struct.h	429	ObDeviceChannel::used_io_depth_	field int64_t; 3 atomic accesses (ATOMIC_FAS 2, ATOMIC_FAA 1)	int64_t used_io_depth_;
+src/share/io/ob_io_struct.h	470	ObIOGroupMemInfo::total_cnt_	field int64_t; 3 atomic accesses (ATOMIC_DEC 1, ATOMIC_INC 1, ATOMIC_STORE 1)	int64_t total_cnt_;
+src/share/io/ob_io_struct.h	471	ObIOGroupMemInfo::total_size_	field int64_t; 3 atomic accesses (ATOMIC_AAF 2, ATOMIC_STORE 1)	int64_t total_size_;
+src/share/io/ob_io_struct.h	555	ObIOTracer::RefLog::click_count_	field int64_t; 1 atomic accesses (ATOMIC_FAA 1)	int64_t click_count_;
+src/share/leak_checker/ob_leak_checker.h	56	ObBaseLeakChecker::total_size_	field int64_t; 3 atomic accesses (ATOMIC_DEC 1, ATOMIC_INC 1, ATOMIC_LOAD 1)	int64_t total_size_;
+src/share/log/palf/lsn.h	49	LSN::val_	field offset_t; single member of a value class; no direct atomic access, 22 atomic accesses reach it through fields and variables of type LSN, listed where their own accesses resolve	offset_t val_;
+src/share/ob_autoincrement_service.h	146	TableNode::local_sync_	field uint64_t; 8 atomic accesses (ATOMIC_BCAS 5, ATOMIC_LOAD 3); through functions with an atomic parameter atomic_update	uint64_t local_sync_;
+src/share/ob_autoincrement_service.h	162	atomic_update	atomic access through parameter v (T &) of atomic_update; the atomic object is the caller's argument; 1 atomic accesses (ATOMIC_BCAS 1)	inline void atomic_update(T &v, T new_v)
+src/share/ob_ddl_common.cpp	1151	ObDDLUtil::reach_time_interval	atomic access through parameter last_time (volatile int64_t &) of ObDDLUtil::reach_time_interval; the atomic object is the caller's argument; 1 atomic accesses (ATOMIC_CAS 1)	bool ObDDLUtil::reach_time_interval(const int64_t i, volatile int64_t &last_time)
+src/share/ob_debug_sync.h	87	ObDSActionArray::active_cnt_	volatile field volatile int64_t; no atomic access found	volatile int64_t active_cnt_;
+src/share/ob_debug_sync.h	174	ObDSEventControl::stop_	volatile field volatile bool; no atomic access found	volatile bool stop_;
+src/share/ob_debug_sync.h	216	ObDebugSync::stop_	volatile field volatile bool; no atomic access found	volatile bool stop_;
+src/share/ob_light_hashmap.h	99	ObLightHashLink::ref_	field int32_t; 2 atomic accesses (ATOMIC_FAA 1, ATOMIC_SAF 1)	int32_t ref_;
+src/share/ob_light_hashmap.h	533	ObLightHashMap::total_cnt_	field int64_t; 4 atomic accesses (ATOMIC_LOAD 2, ATOMIC_DEC 1, ATOMIC_INC 1)	int64_t total_cnt_;
+src/share/ob_max_id_cache.h	42	ObMaxIdCacheItem::min_id_	field uint64_t; 1 atomic accesses (ATOMIC_LOAD 1)	uint64_t min_id_;
+src/share/ob_occam_thread_pool.h	85	ObOccamThread::get_id_count::id_count	function-local static uint64_t in ObOccamThread::get_id_count; 1 atomic accesses (ATOMIC_AAF 1)	static uint64_t id_count = 0;
+src/share/ob_occam_thread_pool.h	146	ObOccamThread::is_stopped_	field bool; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_SET 1)	bool is_stopped_;
+src/share/ob_server_struct.h	104	ObGlobalContext::server_status_	volatile field volatile int64_t; no atomic access found	volatile int64_t server_status_;
+src/share/ob_table_range.h	71	ObScnRange::start_scn_	field SCN; 1 atomic accesses (ATOMIC_LOAD 1); through member functions atomic_get	SCN start_scn_;
+src/share/ob_table_range.h	72	ObScnRange::end_scn_	field SCN; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_VCAS 1); through member functions atomic_get, atomic_vcas	SCN end_scn_;
+src/share/ob_tablet_autoincrement_param.h	110	ObTabletCacheInterval::next_value_	field uint64_t; 3 atomic accesses (ATOMIC_CAS 1, ATOMIC_FAA 1, ATOMIC_LOAD 1)	uint64_t next_value_;
+src/share/ob_time_wheel.h	120	TimeWheelBase::scan_ticket_	field int64_t; 3 atomic accesses (ATOMIC_LOAD 2, ATOMIC_FAA 1)	int64_t scan_ticket_;
+src/share/ob_time_zone_info_manager.h	148	ObTimeZoneInfoManager::is_usable_	volatile field volatile bool; no atomic access found	volatile bool is_usable_;
+src/share/rc/ob_server_runtime.h	103	ObServerRuntimeState::role_	field ObServerRole::Role; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_STORE 1)	ObServerRole::Role role_;
+src/share/rc/ob_server_runtime.h	104	ObServerRuntimeState::write_enabled_	field int64_t; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_STORE 1)	int64_t write_enabled_;
+src/share/rc/ob_server_runtime.h	105	ObServerRuntimeState::recovery_mode_	field int64_t; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_STORE 1)	int64_t recovery_mode_;
+src/share/rc/ob_server_runtime.h	109	ObServerRuntimeState::switchover_epoch_	field int64_t; 2 atomic accesses (ATOMIC_BCAS 1, ATOMIC_LOAD 1)	int64_t switchover_epoch_;
+src/share/redolog/ob_log_file_group.h	53	ObLogFileGroup::min_file_id_	field int64_t; 4 atomic accesses (ATOMIC_LOAD 3, ATOMIC_BCAS 1)	int64_t min_file_id_;
+src/share/redolog/ob_log_file_group.h	55	ObLogFileGroup::max_file_id_	field int64_t; 4 atomic accesses (ATOMIC_LOAD 3, ATOMIC_BCAS 1)	int64_t max_file_id_;
+src/share/redolog/ob_log_file_reader.h	60	ObLogReadFdCacheItem::ref_cnt_	field int64_t; 3 atomic accesses (ATOMIC_DEC 1, ATOMIC_INC 1, ATOMIC_LOAD 1)	int64_t ref_cnt_;
+src/share/roaringbitmap/ob_rb_memory_mgr.h	71	ObRbMemMgr::vec_idx_used_	field int64_t; 3 atomic accesses (ATOMIC_AAF 1, ATOMIC_LOAD 1, ATOMIC_SAF 1)	int64_t vec_idx_used_;

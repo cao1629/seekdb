@@ -1,0 +1,58 @@
+file	line	symbol	construct	text
+src/sql/engine/set/ob_hash_except_op.h	56	ObHashExceptOp::store_rows_	member StoredRow (pointer) of type const ObChunkDatumStore::StoredRow **	const ObChunkDatumStore::StoredRow **store_rows_ = nullptr;
+src/sql/engine/set/ob_hash_set_op.h	76	ObHashSetOp::hp_infras_	member container of ObHashPartStoredRow of type ObHashPartInfrastructure<ObHashPartCols, ObHashPartStoredRow>	ObHashPartInfrastructure<ObHashPartCols, ObHashPartStoredRow> hp_infras_;
+src/sql/engine/sort/ob_sort_op_impl.cpp	2519	ObSortOpImpl::copy_to_topn_row	allocator in, arena view out: SortStoredRow *&new_row	int ObSortOpImpl::copy_to_topn_row(const common::ObIArray<ObExpr*> &exprs,
+src/sql/engine/sort/ob_sort_op_impl.cpp	2535	ObSortOpImpl::copy_to_row	allocator in, arena view out: SortStoredRow *&row	int ObSortOpImpl::copy_to_row(const common::ObIArray<ObExpr*> &exprs,
+src/sql/engine/sort/ob_sort_op_impl.cpp	2588	ObSortOpImpl::generate_new_row	allocator in, arena view out: SortStoredRow *&new_row	int ObSortOpImpl::generate_new_row(SortStoredRow *orign_row,
+src/sql/engine/sort/ob_sort_op_impl.h	211	ObSortOpChunk::row_	member StoredRow (pointer) of type const ObChunkDatumStore::StoredRow *	const ObChunkDatumStore::StoredRow *row_;
+src/sql/engine/sort/ob_sort_op_impl.h	508	ObSortOpImpl::PartHashNode::store_row_	member StoredRow (pointer) of type ObChunkDatumStore::StoredRow *	ObChunkDatumStore::StoredRow *store_row_;
+src/sql/engine/sort/ob_sort_op_impl.h	524	ObSortOpImpl::AQSItem::key_ptr_	member raw bytes (pointer) of type unsigned char *	unsigned char *key_ptr_;
+src/sql/engine/sort/ob_sort_op_impl.h	525	ObSortOpImpl::AQSItem::row_ptr_	member StoredRow (pointer) of type ObChunkDatumStore::StoredRow *	ObChunkDatumStore::StoredRow *row_ptr_;
+src/sql/engine/sort/ob_sort_op_impl.h	577	ObSortOpImpl::ObAdaptiveQS::orig_sort_rows_	member container of StoredRow of type common::ObIArray<ObChunkDatumStore::StoredRow *> &	common::ObIArray<ObChunkDatumStore::StoredRow *> &orig_sort_rows_;
+src/sql/engine/sort/ob_sort_op_impl.h	634	ObSortOpImpl::TopnHeapNode::heap_	member TopnHeap (value) of type TopnHeap	TopnHeap heap_;
+src/sql/engine/sort/ob_sort_op_impl.h	635	ObSortOpImpl::TopnHeapNode::ties_array_	member container of SortStoredRow of type common::ObArray<SortStoredRow *>	common::ObArray<SortStoredRow *> ties_array_;
+src/sql/engine/sort/ob_sort_op_impl.h	838	ObSortOpImpl::quick_sort_array_	member container of StoredRow of type common::ObArray<ObChunkDatumStore::StoredRow *>	common::ObArray<ObChunkDatumStore::StoredRow *> quick_sort_array_;
+src/sql/engine/sort/ob_sort_op_impl.h	842	ObSortOpImpl::imms_heap_	member IMMSHeap (pointer) of type IMMSHeap *	IMMSHeap *imms_heap_;
+src/sql/engine/sort/ob_sort_op_impl.h	855	ObSortOpImpl::stored_rows_	member StoredRow (pointer) of type ObChunkDatumStore::StoredRow **	ObChunkDatumStore::StoredRow **stored_rows_;
+src/sql/engine/sort/ob_sort_op_impl.h	871	ObSortOpImpl::last_ties_row_	member StoredRow (pointer) of type ObChunkDatumStore::StoredRow *	ObChunkDatumStore::StoredRow *last_ties_row_;
+src/sql/engine/sort/ob_sort_op_impl.h	878	ObSortOpImpl::rows_	member container of StoredRow of type common::ObIArray<ObChunkDatumStore::StoredRow *> *	common::ObIArray<ObChunkDatumStore::StoredRow *> *rows_;
+src/sql/engine/sort/ob_sort_op_impl.h	949	ObPrefixSortImpl::prev_row_	member StoredRow (pointer) of type const ObChunkDatumStore::StoredRow *	const ObChunkDatumStore::StoredRow *prev_row_;
+src/sql/engine/sort/ob_sort_op_impl.h	952	ObPrefixSortImpl::next_prefix_row_	member StoredRow (pointer) of type ObChunkDatumStore::StoredRow *	ObChunkDatumStore::StoredRow *next_prefix_row_;
+src/sql/engine/sort/ob_sort_op_impl.h	965	ObPrefixSortImpl::immediate_prefix_rows_	member StoredRow (pointer) of type ObChunkDatumStore::StoredRow **	ObChunkDatumStore::StoredRow **immediate_prefix_rows_;
+src/sql/engine/sort/ob_sort_op_impl.h	1028	ObUniqueSortImpl::prev_row_	member StoredRow (pointer) of type ObChunkDatumStore::StoredRow *	ObChunkDatumStore::StoredRow *prev_row_;
+src/sql/engine/subquery/ob_subplan_filter_op.h	38	DatumRow::elems_	member ObDatum (pointer) of type ObDatum *	ObDatum *elems_;
+src/sql/engine/subquery/ob_subplan_filter_op.h	135	ObSubQueryIterator::hashmap_	member container of ObDatum of type common::hash::ObHashMap<DatumRow, common::ObDatum, common::hash::NoPthreadDefendMode>	common::hash::ObHashMap<DatumRow, common::ObDatum, common::hash::NoPthreadDefendMode> hashmap_;
+src/sql/engine/subquery/ob_subplan_filter_op.h	150	ObSubQueryIterator::das_batch_params_recovery_	member container of ObObjParam of type common::ObArrayWrap<ObObjParam>	common::ObArrayWrap<ObObjParam> das_batch_params_recovery_;
+src/sql/engine/subquery/ob_subplan_filter_op.h	285	ObSubPlanFilterOp::cur_params_	member container of ObObjParam of type sql::ObTMArray<common::ObObjParam>	sql::ObTMArray<common::ObObjParam> cur_params_;
+src/sql/engine/table/ob_i_virtual_table_iterator_factory.h	40	ObCreateVirtualTableParams::key_ranges_	member container of ObNewRange of type common::ObSEArray<common::ObNewRange, 16>	common::ObSEArray<common::ObNewRange, 16> key_ranges_;
+src/sql/engine/table/ob_index_lookup_op_impl.cpp	196	ObIndexLookupOpImpl::build_trans_datum	allocator in, arena view out: ObDatum *&datum_ptr	int ObIndexLookupOpImpl::build_trans_datum(ObExpr *expr,
+src/sql/engine/table/ob_table_partition_ranges.h	45	ObPartitionScanRanges::ranges_	member container of ObNewRange of type common::ObSEArray<common::ObNewRange, 16>	common::ObSEArray<common::ObNewRange, 16> ranges_;
+src/sql/engine/table/ob_table_partition_ranges.h	81	ObMultiPartitionsRangesWarpper::main_table_rowkey_	member ObNewRow (value) of type common::ObNewRow	common::ObNewRow main_table_rowkey_;
+src/sql/engine/table/ob_table_scan_op.cpp	2437	ObTableScanOp::construct_partition_range	allocator in, arena view out: ObNewRange &part_range	int ObTableScanOp::construct_partition_range(ObArenaAllocator &allocator,
+src/sql/engine/table/ob_table_scan_op.cpp	3074	ObTableScanOp::multivalue_get_pure_data	allocator in, arena view out: const char*& data	int ObTableScanOp::multivalue_get_pure_data(
+src/sql/engine/table/ob_table_scan_op.cpp	3309	ObTableScanOp::generate_sparse_vector_index_row	allocator in, arena view out: ObDatum &docid_datum	int ObTableScanOp::generate_sparse_vector_index_row(
+src/sql/engine/table/ob_table_scan_op.cpp	3394	ObTableScanOp::get_sparse_vector_data	allocator in, arena view out: ObString &sparse_vec_data	int ObTableScanOp::get_sparse_vector_data(
+src/sql/engine/table/ob_table_scan_op.h	92	ObDomainIndexCache::dom_rows_	member ObDomainIndexRow (pointer) of type ObDomainIndexRow *	ObDomainIndexRow *dom_rows_;
+src/sql/engine/table/ob_table_scan_op.h	93	ObDomainIndexCache::rows_	member ObDatumRow (pointer) of type blocksstable::ObDatumRow *	blocksstable::ObDatumRow *rows_;
+src/sql/engine/table/ob_table_scan_op.h	122	GroupRescanParamInfo::cur_param_	member ObObjParam (value) of type common::ObObjParam	common::ObObjParam cur_param_; //current param in param store, used to restore paramstore state after the completion of group rescan.
+src/sql/engine/table/ob_table_scan_op.h	269	ObTableScanOpInput::key_ranges_	member container of ObNewRange of type common::ObSEArray<common::ObNewRange, 1>	common::ObSEArray<common::ObNewRange, 1> key_ranges_;
+src/sql/engine/table/ob_table_scan_op.h	340	ObTableScanSpec::table_name_	member ObString (value) of type common::ObString	common::ObString table_name_; // table name of the table to scan
+src/sql/engine/table/ob_table_scan_op.h	341	ObTableScanSpec::index_name_	member ObString (value) of type common::ObString	common::ObString index_name_; // name of the index to be used
+src/sql/engine/table/ob_table_scan_op.h	372	ObTableScanSpec::available_index_name_	member container of ObString of type common::ObFixedArray<common::ObString, common::ObIAllocator>	common::ObFixedArray<common::ObString, common::ObIAllocator> available_index_name_;
+src/sql/engine/table/ob_table_scan_op.h	373	ObTableScanSpec::pruned_index_name_	member container of ObString of type common::ObFixedArray<common::ObString, common::ObIAllocator>	common::ObFixedArray<common::ObString, common::ObIAllocator> pruned_index_name_;
+src/sql/engine/table/ob_table_scan_op.h	374	ObTableScanSpec::unstable_index_name_	member container of ObString of type common::ObFixedArray<common::ObString, common::ObIAllocator>	common::ObFixedArray<common::ObString, common::ObIAllocator> unstable_index_name_;
+src/sql/engine/table/ob_table_scan_op.h	425	ObTableScanSpec::parser_name_	member ObString (value) of type common::ObString	common::ObString parser_name_; // word segment for ddl.
+src/sql/engine/table/ob_table_scan_op.h	426	ObTableScanSpec::parser_properties_	member ObString (value) of type common::ObString	common::ObString parser_properties_;
+src/sql/engine/table/ob_table_scan_op.h	686	ObTableScanOp::GroupRescanParamGuard::param_store_	member ParamStore (reference) of type ParamStore &	ParamStore &param_store_;
+src/sql/engine/user_defined_function/ob_pl_user_defined_agg_function.cpp	80	ObPlAggUdfFunction::init	allocator in, arena view out: ObObjParam &pl_obj	int ObPlAggUdfFunction::init(ObSQLSessionInfo *session_info,
+src/sql/engine/window_function/ob_window_function_op.cpp	2511	ObWindowFunctionOp::merge_aggregated_result	allocator in, arena view out: ObDatum &res	int ObWindowFunctionOp::merge_aggregated_result(ObDatum &res,
+src/sql/engine/window_function/ob_window_function_op.cpp	2558	ObWindowFunctionOp::rank_add	allocator in, arena view out: ObDatum &res	int ObWindowFunctionOp::rank_add(ObDatum &res,
+src/sql/engine/window_function/ob_window_function_op.h	663	ObWindowFunctionOp::AggrCell::result_	member ObDatum (value) of type ObDatum	ObDatum result_;
+src/sql/engine/window_function/ob_window_function_op.h	1000	ObWindowFunctionOp::curr_row_collect_values_	member DatumFixedArray (value) of type DatumFixedArray	DatumFixedArray curr_row_collect_values_;
+src/sql/engine/window_function/ob_window_function_op.h	1001	ObWindowFunctionOp::all_expr_datums_copy_	member container of ObDatum of type common::ObFixedArray<ObDatum*, common::ObIAllocator>	common::ObFixedArray<ObDatum*, common::ObIAllocator> all_expr_datums_copy_;
+src/sql/engine/window_function/ob_window_function_op.h	1002	ObWindowFunctionOp::all_expr_datums_	member container of ObDatum of type common::ObFixedArray<ObDatum*, common::ObIAllocator>	common::ObFixedArray<ObDatum*, common::ObIAllocator> all_expr_datums_;
+src/sql/engine/window_function/ob_window_function_op.h	1064	ObWindowFunctionOp::hp_infras_mgr_	member HashPartInfrasMgr (value) of type HashPartInfrasMgr	HashPartInfrasMgr hp_infras_mgr_;
+src/sql/executor/ob_execute_result.h	72	ObExecuteResult::row_	member ObNewRow (value) of type mutable common::ObNewRow	mutable common::ObNewRow row_;
+src/sql/hybrid_search/ob_hybrid_search_executor.h	40	ObHybridSearchArg::table_name_	member ObString (value) of type ObString	ObString table_name_;
+src/sql/hybrid_search/ob_hybrid_search_executor.h	41	ObHybridSearchArg::search_params_	member ObString (value) of type ObString	ObString search_params_;
+src/sql/hybrid_search/ob_hybrid_search_executor.h	92	ObHybridSearchExecutor::search_params_	member ObString (value) of type ObString	ObString search_params_;

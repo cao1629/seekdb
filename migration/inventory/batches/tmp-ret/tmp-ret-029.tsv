@@ -1,0 +1,116 @@
+file	line	symbol	construct	text
+src/storage/tablet/ob_tablet_persister.cpp	705	ObTabletPersister::inc_ref_with_macro_iter	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tablet/ob_tablet_persister.cpp	706	ObTabletPersister::inc_ref_with_macro_iter	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(macro_iter.reuse())) {
+src/storage/tablet/ob_tablet_persister.cpp	968	ObTabletPersister::persist_sstable_linked_block_if_need	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tablet/ob_tablet_persister.cpp	970	ObTabletPersister::persist_sstable_linked_block_if_need	OB_TMP_FAIL (plan definition)	OB_TMP_FAIL(sstable_meta_write_ctxs.push_back(sstable_linked_write_ctx))) {
+src/storage/tablet/ob_tablet_table_store.cpp	1658	ObTabletTableStore::check_ready_for_read	declare tmp_ret	int tmp_ret = OB_TOO_MANY_SSTABLE;
+src/storage/tmp_file/ob_i_tmp_file.cpp	715	ObITmpFile::inner_write_continuous_pages_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tmp_file/ob_i_tmp_file.cpp	719	ObITmpFile::inner_write_continuous_pages_	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(tmp_ret = wbp_->free_page(fd_, page_entry_idxs[i], ObTmpFilePageUniqKey(free_page_virtual_id), unused_page_id))) {
+src/storage/tmp_file/ob_i_tmp_file.cpp	732	ObITmpFile::inner_write_continuous_pages_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tmp_file/ob_i_tmp_file.cpp	734	ObITmpFile::inner_write_continuous_pages_	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(page_idx_cache_.push(page_entry_idxs[i]))) {
+src/storage/tmp_file/ob_i_tmp_file.cpp	797	ObITmpFile::alloc_and_write_pages_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tmp_file/ob_i_tmp_file.cpp	799	ObITmpFile::alloc_and_write_pages_	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(wbp_->free_page(fd_, new_page_id, ObTmpFilePageUniqKey(new_page_virtual_id), tmp_pid))) {
+src/storage/tmp_file/ob_i_tmp_file.cpp	807	ObITmpFile::alloc_and_write_pages_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tmp_file/ob_i_tmp_file.cpp	810	ObITmpFile::alloc_and_write_pages_	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(wbp_->free_page(fd_, invalid_page_id, ObTmpFilePageUniqKey(invalid_page_virtual_id), tmp_pid))) {
+src/storage/tmp_file/ob_i_tmp_file_manager.cpp	275	ObITmpFileManager::read	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tmp_file/ob_i_tmp_file_manager.cpp	276	ObITmpFileManager::read	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(io_handle.wait())) {
+src/storage/tmp_file/ob_i_tmp_file_manager.cpp	278	ObITmpFileManager::read	merge into ret	ret = OB_SUCCESS == ret ? tmp_ret : ret;
+src/storage/tmp_file/ob_i_tmp_file_manager.cpp	307	ObITmpFileManager::pread	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tmp_file/ob_i_tmp_file_manager.cpp	308	ObITmpFileManager::pread	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(io_handle.wait())) {
+src/storage/tmp_file/ob_i_tmp_file_manager.cpp	310	ObITmpFileManager::pread	merge into ret	ret = OB_SUCCESS == ret ? tmp_ret : ret;
+src/storage/tmp_file/ob_shared_nothing_tmp_file.cpp	718	ObSharedNothingTmpFile::load_disk_tail_page_and_rewrite_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tmp_file/ob_shared_nothing_tmp_file.cpp	720	ObSharedNothingTmpFile::load_disk_tail_page_and_rewrite_	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(meta_tree_.finish_write_tail(data_item, false /*release_tail_in_disk*/))) {
+src/storage/tmp_file/ob_shared_nothing_tmp_file.cpp	726	ObSharedNothingTmpFile::load_disk_tail_page_and_rewrite_	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(wbp_->free_page(fd_, new_page_id, ObTmpFilePageUniqKey(tail_page_virtual_id), unused_page_id))) {
+src/storage/tmp_file/ob_shared_nothing_tmp_file.cpp	797	ObSharedNothingTmpFile::append_write_memory_tail_page_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tmp_file/ob_shared_nothing_tmp_file.cpp	798	ObSharedNothingTmpFile::append_write_memory_tail_page_	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(meta_tree_.finish_write_tail(rightest_data_item, false /*release_tail_in_disk*/))) {
+src/storage/tmp_file/ob_shared_nothing_tmp_file.cpp	1303	ObSharedNothingTmpFile::update_meta_after_flush	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tmp_file/ob_shared_nothing_tmp_file.cpp	1305	ObSharedNothingTmpFile::update_meta_after_flush	OB_TMP_FAIL (plan definition)	if (OB_ISNULL(data_flush_node_.get_next()) && OB_TMP_FAIL(reinsert_data_flush_node_())) {
+src/storage/tmp_file/ob_shared_nothing_tmp_file.cpp	1311	ObSharedNothingTmpFile::update_meta_after_flush	OB_TMP_FAIL (plan definition)	if (OB_ISNULL(meta_flush_node_.get_next()) && OB_TMP_FAIL(reinsert_meta_flush_node_())) {
+src/storage/tmp_file/ob_shared_nothing_tmp_file.cpp	1470	ObSharedNothingTmpFile::update_file_meta_after_flush_	declare tmp_ret	int tmp_ret = OB_ERR_UNEXPECTED;
+src/storage/tmp_file/ob_shared_nothing_tmp_file.cpp	1493	ObSharedNothingTmpFile::update_meta_tree_after_flush_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tmp_file/ob_shared_nothing_tmp_file.cpp	1508	ObSharedNothingTmpFile::update_meta_tree_after_flush_	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(meta_tree_.get_need_evict_page_num(total_need_evict_page_num,
+src/storage/tmp_file/ob_shared_nothing_tmp_file.cpp	1803	ObSharedNothingTmpFile::insert_meta_tree_item	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tmp_file/ob_shared_nothing_tmp_file.cpp	1830	ObSharedNothingTmpFile::insert_meta_tree_item	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(meta_tree_.get_need_evict_page_num(total_need_evict_page_num,
+src/storage/tmp_file/ob_shared_nothing_tmp_file.cpp	1835	ObSharedNothingTmpFile::insert_meta_tree_item	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(eviction_mgr_->add_file(true/*is_meta*/, *this))) {
+src/storage/tmp_file/ob_shared_nothing_tmp_file.cpp	1844	ObSharedNothingTmpFile::insert_meta_tree_item	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(reinsert_meta_flush_node_())) {
+src/storage/tmp_file/ob_tmp_file_cache.cpp	704	ObTmpPageCache::ObTmpCachedReadPageIOCallback::inner_process	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tmp_file/ob_tmp_file_cache.cpp	705	ObTmpPageCache::ObTmpCachedReadPageIOCallback::inner_process	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(process_page(page_keys_.at(i), value))) {
+src/storage/tmp_file/ob_tmp_file_cache.cpp	745	ObTmpPageCache::ObTmpAggregatePageIOCallback::inner_process	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tmp_file/ob_tmp_file_cache.cpp	746	ObTmpPageCache::ObTmpAggregatePageIOCallback::inner_process	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(process_page(page_infos_.at(i).first, value))) {
+src/storage/tmp_file/ob_tmp_file_flush_ctx.cpp	384	ObTmpFileFlushTask::lazy_alloc_and_fill_block_buf_for_data_page_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tmp_file/ob_tmp_file_flush_ctx.cpp	388	ObTmpFileFlushTask::lazy_alloc_and_fill_block_buf_for_data_page_	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(ObTmpBlockCache::get_instance().put_block(get_inst_handle(),
+src/storage/tmp_file/ob_tmp_file_flush_list_iterator.cpp	254	ObTmpFileFlushListIterator::cache_files_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tmp_file/ob_tmp_file_flush_list_iterator.cpp	263	ObTmpFileFlushListIterator::cache_files_	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(tmp_file->reinsert_data_flush_node())) {
+src/storage/tmp_file/ob_tmp_file_flush_manager.cpp	536	ObTmpFileFlushManager::inner_fill_block_buf_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tmp_file/ob_tmp_file_flush_manager.cpp	538	ObTmpFileFlushManager::inner_fill_block_buf_	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(flush_failed_array.push_back(record))) {
+src/storage/tmp_file/ob_tmp_file_flush_manager.cpp	555	ObTmpFileFlushManager::inner_fill_block_buf_	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(flush_ctx_.get_file_ctx_hash().erase_refactored(file.get_fd()))) {
+src/storage/tmp_file/ob_tmp_file_flush_manager.cpp	724	ObTmpFileFlushManager::drive_flush_task_retry_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tmp_file/ob_tmp_file_flush_manager.cpp	737	ObTmpFileFlushManager::drive_flush_task_retry_	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(tmp_file_block_mgr_.write_back_failed(flush_task.get_block_index()))) {
+src/storage/tmp_file/ob_tmp_file_flush_manager.cpp	880	ObTmpFileFlushManager::handle_fill_block_buf_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tmp_file/ob_tmp_file_flush_manager.cpp	1034	ObTmpFileFlushManager::update_meta_data_after_flush_for_files_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tmp_file/ob_tmp_file_flush_manager.cpp	1035	ObTmpFileFlushManager::update_meta_data_after_flush_for_files_	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(reset_flush_ctx_for_file_(file, is_meta))) {
+src/storage/tmp_file/ob_tmp_file_flush_manager.cpp	1099	ObTmpFileFlushManager::try_remove_unused_file_flush_ctx	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tmp_file/ob_tmp_file_flush_manager.cpp	1101	ObTmpFileFlushManager::try_remove_unused_file_flush_ctx	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(flush_ctx_.get_file_ctx_hash().erase_refactored(deleted_fd_arr[i]))) {
+src/storage/tmp_file/ob_tmp_file_flush_priority_manager.cpp	297	ObTmpFileFlushPriorityManager::popN_from_file_list	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tmp_file/ob_tmp_file_flush_priority_manager.cpp	303	ObTmpFileFlushPriorityManager::popN_from_file_list	assign tmp_ret	tmp_ret = OB_ERR_UNEXPECTED;
+src/storage/tmp_file/ob_tmp_file_meta_tree.cpp	231	ObSharedNothingTmpFileMetaTree::insert_items	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tmp_file/ob_tmp_file_meta_tree.cpp	232	ObSharedNothingTmpFileMetaTree::insert_items	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(finish_insert_(ret, level_origin_page_write_counts, level_new_pages))) {
+src/storage/tmp_file/ob_tmp_file_meta_tree.cpp	235	ObSharedNothingTmpFileMetaTree::insert_items	merge into ret	ret = tmp_ret;
+src/storage/tmp_file/ob_tmp_file_meta_tree.cpp	2701	ObSharedNothingTmpFileMetaTree::cache_page_for_write_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tmp_file/ob_tmp_file_meta_tree.cpp	2703	ObSharedNothingTmpFileMetaTree::cache_page_for_write_	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(wbp_->notify_load_fail(fd_, new_page_id, page_key))) {
+src/storage/tmp_file/ob_tmp_file_meta_tree.cpp	2743	ObSharedNothingTmpFileMetaTree::cache_page_for_write_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tmp_file/ob_tmp_file_meta_tree.cpp	2744	ObSharedNothingTmpFileMetaTree::cache_page_for_write_	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(wbp_->free_page(fd_, new_page_id, page_key, unused_next_page_id))) {
+src/storage/tmp_file/ob_tmp_file_page_cache_controller.cpp	172	ObTmpFilePageCacheController::invoke_swap_and_wait	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tmp_file/ob_tmp_file_page_cache_controller.cpp	173	ObTmpFilePageCacheController::invoke_swap_and_wait	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(free_swap_job_(swap_job))) {
+src/storage/truncate_info/ob_mds_info_distinct_mgr.cpp	57	ObMdsInfoDistinctMgr::init	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/truncate_info/ob_mds_info_distinct_mgr.cpp	62	ObMdsInfoDistinctMgr::init	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(ObTruncateInfoKVCacheUtil::put_truncate_info_array(cache_key, distinct_array_))) {
+src/storage/tx/ob_trans_ctx.cpp	138	ObTransCtx::set_exiting_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tx/ob_trans_ctx_mgr_v4.cpp	884	ObLSTxCtxMgr::check_with_tx_data	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tx/ob_trans_ctx_mgr_v4.cpp	885	ObLSTxCtxMgr::check_with_tx_data	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = revert_tx_ctx_without_lock(tx_ctx))) {
+src/storage/tx/ob_trans_ctx_mgr_v4.cpp	1054	ObLSTxCtxMgr::dump_single_tx_data_2_text	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tx/ob_trans_ctx_mgr_v4.cpp	1055	ObLSTxCtxMgr::dump_single_tx_data_2_text	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = revert_tx_ctx_without_lock(tx_ctx))) {
+src/storage/tx/ob_trans_ctx_mgr_v4.cpp	1194	ObTxCtxMgr::stop	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tx/ob_trans_ctx_mgr_v4.cpp	1195	ObTxCtxMgr::stop	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = stop_context_manager_(graceful))) {
+src/storage/tx/ob_trans_ctx_mgr_v4.cpp	1223	ObTxCtxMgr::wait	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tx/ob_trans_ctx_mgr_v4.cpp	1261	ObTxCtxMgr::wait	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(print_tx_ctx_())) {
+src/storage/tx/ob_trans_ctx_mgr_v4.cpp	1271	ObTxCtxMgr::destroy	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tx/ob_trans_ctx_mgr_v4.cpp	1274	ObTxCtxMgr::destroy	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(remove_context_manager_())) {
+src/storage/tx/ob_trans_ctx_mgr_v4.cpp	1416	ObTxCtxMgr::iterate_all_observer_tx_stat	merge OB_ERR_UNEXPECTED into ret through if (OB_SUCC(ret)) (continue-and-record through another variable)	ret = OB_ERR_UNEXPECTED;
+src/storage/tx/ob_trans_deadlock_adapter.cpp	490	ObTransDeadlockDetectorAdapter::lock_wait_mgr_reconstruct_detector_waiting_for_row	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tx/ob_trans_deadlock_adapter.cpp	491	ObTransDeadlockDetectorAdapter::lock_wait_mgr_reconstruct_detector_waiting_for_row	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(::oceanbase::share::server_service<::oceanbase::share::detector::ObDeadLockDetectorMgr>()->unregister_key(self_trans_id))) {
+src/storage/tx/ob_trans_deadlock_adapter.cpp	526	ObTransDeadlockDetectorAdapter::lock_wait_mgr_reconstruct_detector_waiting_for_trans	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tx/ob_trans_deadlock_adapter.cpp	527	ObTransDeadlockDetectorAdapter::lock_wait_mgr_reconstruct_detector_waiting_for_trans	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(::oceanbase::share::server_service<::oceanbase::share::detector::ObDeadLockDetectorMgr>()->unregister_key(self_trans_id))) {
+src/storage/tx/ob_trans_define_v4.cpp	1015	ObTxDesc::merge_conflict_txs_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tx/ob_trans_define_v4.cpp	1018	ObTxDesc::merge_conflict_txs_	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(add_conflict_tx_(conflict_txs.at(idx)))) {
+src/storage/tx/ob_trans_factory.cpp	91	ObTxCtxFactory::alloc	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tx/ob_trans_factory.cpp	98	ObTxCtxFactory::alloc	assign tmp_ret	tmp_ret = OB_TRANS_CTX_COUNT_REACH_LIMIT;
+src/storage/tx/ob_trans_functor.h	172	KillTxCtxFunctor::OPERATOR_V4(KillTxCtxFunctor)	declare tmp_ret (plan definition)	int tmp_ret = common::OB_SUCCESS;
+src/storage/tx/ob_trans_functor.h	176	KillTxCtxFunctor::OPERATOR_V4(KillTxCtxFunctor)	assign tmp_ret	tmp_ret = common::OB_INVALID_ARGUMENT;
+src/storage/tx/ob_trans_functor.h	295	IterateMinPrepareVersionFunctor::OPERATOR_V4(IterateMinPrepareVersionFunctor)	declare tmp_ret (plan definition)	int tmp_ret = common::OB_SUCCESS;
+src/storage/tx/ob_trans_functor.h	298	IterateMinPrepareVersionFunctor::OPERATOR_V4(IterateMinPrepareVersionFunctor)	assign tmp_ret	tmp_ret = OB_INVALID_ARGUMENT;
+src/storage/tx/ob_trans_functor.h	303	IterateMinPrepareVersionFunctor::OPERATOR_V4(IterateMinPrepareVersionFunctor)	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(tx_ctx->get_prepare_version_if_prepared(is_prepared, prepare_version))) {
+src/storage/tx/ob_trans_functor.h	381	IteratorTxIDFunctor::OPERATOR_V4(IteratorTxIDFunctor)	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tx/ob_trans_functor.h	385	IteratorTxIDFunctor::OPERATOR_V4(IteratorTxIDFunctor)	assign tmp_ret	tmp_ret = OB_INVALID_ARGUMENT;
+src/storage/tx/ob_trans_functor.h	434	IterateTxStatFunctor::OPERATOR_V4(IterateTxStatFunctor)	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tx/ob_trans_functor.h	439	IterateTxStatFunctor::OPERATOR_V4(IterateTxStatFunctor)	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(tx_ctx->get_stat_for_virtual_table(has_write_state, busy_cbs_cnt))) {
+src/storage/tx/ob_trans_functor.h	443	IterateTxStatFunctor::OPERATOR_V4(IterateTxStatFunctor)	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(tx_ctx->mt_ctx_.get_callback_list_stat(tx_stat.callback_list_stats_))) {
+src/storage/tx/ob_trans_functor.h	693	ObRemoveCallbackFunctor::OPERATOR_V4(ObRemoveCallbackFunctor)	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tx/ob_trans_functor.h	696	ObRemoveCallbackFunctor::OPERATOR_V4(ObRemoveCallbackFunctor)	assign tmp_ret	tmp_ret = OB_ERR_UNEXPECTED;
+src/storage/tx/ob_trans_functor.h	698	ObRemoveCallbackFunctor::OPERATOR_V4(ObRemoveCallbackFunctor)	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(tx_ctx->remove_callback_for_uncommited_txn(memtable_set_))) {
+src/storage/tx/ob_trans_functor.h	822	IterateTxCtxStatusFunctor::OPERATOR_V4(IterateTxCtxStatusFunctor)	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tx/ob_trans_functor.h	823	IterateTxCtxStatusFunctor::OPERATOR_V4(IterateTxCtxStatusFunctor)	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(tx_ctx->check_tx_status())) {
+src/storage/tx/ob_trans_functor.h	871	IterateTxSchedulerFunctor::operator()	declare tmp_ret (plan definition)	int tmp_ret = common::OB_SUCCESS;
+src/storage/tx/ob_trans_functor.h	875	IterateTxSchedulerFunctor::operator()	assign tmp_ret	tmp_ret = OB_INVALID_ARGUMENT;
+src/storage/tx/ob_trans_functor.h	880	IterateTxSchedulerFunctor::operator()	assign tmp_ret	tmp_ret = OB_INVALID_ARGUMENT;
+src/storage/tx/ob_trans_functor.h	890	IterateTxSchedulerFunctor::operator()	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(tx_desc->get_write_state_copy(write_state, has_write_state))) {
+src/storage/tx/ob_trans_functor.h	892	IterateTxSchedulerFunctor::operator()	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(tx_desc->get_savepoints_copy(copy_savepoints))) {
+src/storage/tx/ob_trans_functor.h	894	IterateTxSchedulerFunctor::operator()	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(tx_scheduler_stat.init(tx_desc->addr_,
+src/storage/tx/ob_trans_functor.h	914	IterateTxSchedulerFunctor::operator()	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(tx_scheduler_stat_iter_.push(tx_scheduler_stat))) {
+src/storage/tx/ob_trans_service.cpp	379	ObTransService::register_mds_into_tx	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tx/ob_trans_service.cpp	411	ObTransService::register_mds_into_tx	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(collect_tx_exec_result(tx_desc, tx_result))) {
+src/storage/tx/ob_trans_service.cpp	414	ObTransService::register_mds_into_tx	merge into ret	ret = tmp_ret;
+src/storage/tx/ob_trans_service.cpp	419	ObTransService::register_mds_into_tx	assign tmp_ret	tmp_ret = rollback_to_implicit_savepoint(tx_desc, savepoint, tx_desc.expire_ts_, true);
+src/storage/tx/ob_trans_service.cpp	466	ObTransService::register_mds_into_ctx_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tx/ob_trans_service.cpp	467	ObTransService::register_mds_into_ctx_	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = revert_store_ctx(store_ctx))) {
+src/storage/tx/ob_trans_service_v4.cpp	644	ObTransService::get_read_store_ctx	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/tx/ob_trans_service_v4.cpp	646	ObTransService::get_read_store_ctx	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(acquire_tx_ctx(*tx_desc, tx_ctx, store_ctx.ls_, false, false, exist))) {

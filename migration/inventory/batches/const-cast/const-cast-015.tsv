@@ -1,0 +1,76 @@
+file	line	symbol	construct	text
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	2337	ObAggregateProcessor::generate_group_row	const_cast<ObDatum**>	ObDatum **separator_datum = const_cast<ObDatum**>(&result->get_separator_datum());
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	2499	ObAggregateProcessor::fill_group_row	const_cast<ObDatum**>	ObDatum **separator_datum = const_cast<ObDatum**>(&result->get_separator_datum());
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	2880	ObAggregateProcessor::rollup_aggregation	const_cast<ObDatum**>	ObDatum **separator_datum = const_cast<ObDatum**>(&aggr_extra->get_separator_datum());
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	2894	ObAggregateProcessor::rollup_aggregation	const_cast<ObDatum**>	ObDatum **separator_datum = const_cast<ObDatum**>(&rollup_extra->get_separator_datum());
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	3166	ObAggregateProcessor::prepare_aggr_result	const_cast<ObDatum**>	ObDatum **separator_datum = const_cast<ObDatum**>(&extra->get_separator_datum());
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	3216	ObAggregateProcessor::prepare_aggr_result	const_cast<ObDatum &>	OB_FAIL(shadow_truncate_string_for_hist(obj_meta, const_cast<ObDatum &>(stored_row.cells()[0])))) {
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	3647	ObAggregateProcessor::process_aggr_result	const_cast<ObDatum &>	OB_FAIL(shadow_truncate_string_for_hist(obj_meta, const_cast<ObDatum &>(stored_row.cells()[0])))) {
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	4559	ObAggregateProcessor::add_calc	const_cast<ObCompactNumber &>	ObCompactNumber &cnum = const_cast<ObCompactNumber &>(
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	4588	ObAggregateProcessor::add_calc	const_cast<ObCompactNumber &>	ObCompactNumber &cnum = const_cast<ObCompactNumber &>(
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	4707	ObAggregateProcessor::calc_overflow_res_to_decimal_int	const_cast<char *>	MEMSET(const_cast<char *> (buf), 0, sizeof(int256_t)); // set to zero
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	4748	ObAggregateProcessor::sub_calc	const_cast<ObCompactNumber &>	ObCompactNumber &cnum = const_cast<ObCompactNumber &>(
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	4789	ObAggregateProcessor::sub_calc	const_cast<ObCompactNumber &>	ObCompactNumber &cnum = const_cast<ObCompactNumber &>(
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	4886	ObAggregateProcessor::init_group_extra_aggr_info	const_cast<ObDatum**>	ObDatum **separator_datum = const_cast<ObDatum**>(&extra->separator_datum_);
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	4907	ObAggregateProcessor::init_group_extra_aggr_info	const_cast<ObDatum**>	ObDatum **separator_datum = const_cast<ObDatum**>(&extra->get_separator_datum());
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	5203	ObAggregateProcessor::add_calc_batch	const_cast<ObCompactNumber &>	ObCompactNumber &cnum = const_cast<ObCompactNumber &>(
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	5244	ObAggregateProcessor::add_calc_batch	const_cast<ObCompactNumber &>	ObCompactNumber &cnum = const_cast<ObCompactNumber &>(
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	5323	ObAggregateProcessor::add_calc_batch	const_cast<uint32_t *>	const_cast<uint32_t *>(result_datum.get_number_digits()));
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	5536	ObAggregateProcessor::rollup_add_calc	const_cast<ObCompactNumber &>	ObCompactNumber &cnum = const_cast<ObCompactNumber &>(rollup_result.get_number());
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	5573	ObAggregateProcessor::rollup_add_calc	const_cast<ObCompactNumber &>	ObCompactNumber &cnum = const_cast<ObCompactNumber &>(rollup_result.get_number());
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	5684	ObAggregateProcessor::llc_add_value	const_cast<char*>	if (OB_FAIL(llc_add_value(value, const_cast<char*>(llc_bitmap_buf.ptr()), llc_bitmap_buf.length()))) {
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	5829	ObAggregateCalcFunc::add_calc	const_cast<ObCompactNumber &>	ObCompactNumber &cnum = const_cast<ObCompactNumber &>(
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	5856	ObAggregateCalcFunc::add_calc	const_cast<ObCompactNumber &>	ObCompactNumber &cnum = const_cast<ObCompactNumber &>(
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	6316	ObAggregateProcessor::compute_hybrid_hist_result	const_cast<ObDatum &>	} else if (OB_FAIL(shadow_truncate_string_for_hist(obj_meta, const_cast<ObDatum &>(stored_row->cells()[0])))) {
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	6331	ObAggregateProcessor::compute_hybrid_hist_result	const_cast<ObDatum &>	} else if (OB_FAIL(shadow_truncate_string_for_hist(obj_meta, const_cast<ObDatum &>(stored_row->cells()[0])))) {
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	7623	ObAggregateProcessor::DecIntAggFuncCtx::int_to_decimalint	const_cast<int128_t *>	*const_cast<int128_t *>(result.get_decimal_int()->int128_v_) = int_val;
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	7626	ObAggregateProcessor::DecIntAggFuncCtx::int_to_decimalint	const_cast<int256_t *>	*const_cast<int256_t *>(result.get_decimal_int()->int256_v_) = int_val;
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	7638	ObAggregateProcessor::DecIntAggFuncCtx::add_int	const_cast<int128_t *>	*const_cast<int128_t *>(result.get_decimal_int()->int128_v_) =
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	7642	ObAggregateProcessor::DecIntAggFuncCtx::add_int	const_cast<int256_t *>	*const_cast<int256_t *>(result.get_decimal_int()->int256_v_) =
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	7655	ObAggregateProcessor::DecIntAggFuncCtx::sub_int	const_cast<int128_t *>	*const_cast<int128_t *>(result.get_decimal_int()->int128_v_) =
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	7659	ObAggregateProcessor::DecIntAggFuncCtx::sub_int	const_cast<int256_t *>	*const_cast<int256_t *>(result.get_decimal_int()->int256_v_) =
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	7699	ObDecIntSumOpFunc::add	const_cast<RES_T *>	*const_cast<RES_T *>(reinterpret_cast<const RES_T *>(result.decimal_int_)) +=
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	7707	ObDecIntSumOpFunc::sub	const_cast<RES_T *>	*const_cast<RES_T *>(reinterpret_cast<const RES_T *>(result.decimal_int_)) -=
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	7715	ObDecIntSumOpFunc::store	const_cast<RES_T *>	*const_cast<RES_T *>(reinterpret_cast<const RES_T *>(result.decimal_int_)) =
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	7804	ObDecIntSumBatchOpFunc::add_batch	const_cast<RES_T *>	*const_cast<RES_T *>(reinterpret_cast<const RES_T *>(result.decimal_int_)) = accum;
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	7808	ObDecIntSumBatchOpFunc::add_batch	const_cast<RES_T *>	*const_cast<RES_T *>(reinterpret_cast<const RES_T *>(result.decimal_int_)) += accum;
+src/sql/engine/aggregate/ob_aggregate_processor.h	1364	ObAggregateProcessor::clone_cell	const_cast<char *>	void *data_ptr = const_cast<char *>(target_cell.ptr_);
+src/sql/engine/aggregate/ob_aggregate_processor.h	1428	ObAggregateProcessor::clone_aggr_cell	const_cast<char *>	memcpy(const_cast<char *> (buf), src_cell.ptr_, src_cell.len_);
+src/sql/engine/aggregate/ob_exec_hash_struct.h	251	ObExtendHashTable::set	const_cast<Bucket *>	Bucket *bucket = const_cast<Bucket *>(&locate_bucket(*buckets_, hash_val));
+src/sql/engine/aggregate/ob_exec_hash_struct.h	294	ObExtendHashTable::extend	const_cast<Bucket &>	const_cast<Bucket &>(locate_bucket(*new_buckets, old.hash_)) = old;
+src/sql/engine/aggregate/ob_groupby_op.cpp	61	ObGroupByOp::inner_open	const_cast<ObOpSpec*>	ObGroupBySpec *op_spec = static_cast<ObGroupBySpec*>(const_cast<ObOpSpec*>(&spec_));
+src/sql/engine/aggregate/ob_groupby_op.h	82	ObGroupByOp::ObGroupByOp	const_cast<ObOpSpec &>	(static_cast<ObGroupBySpec &>(const_cast<ObOpSpec &>(spec))).aggr_infos_,
+src/sql/engine/aggregate/ob_hash_groupby_op.cpp	976	ObHashGroupByOp::load_data	const_cast<ObGroupRowItem *>	const_cast<ObGroupRowItem *>(exist_curr_gr_item)->cnt_++;
+src/sql/engine/aggregate/ob_hash_groupby_op.cpp	1633	ObHashGroupByOp::load_data_batch	const_cast<ObGroupRowItem *>	const_cast<ObGroupRowItem *>(gris_per_batch_[i])->group_row_count_in_batch_ = 0;
+src/sql/engine/aggregate/ob_hash_groupby_op.cpp	1755	ObHashGroupByOp::next_batch	const_cast<ObBatchRows *>	const_cast<ObBatchRows *>(child_brs)->size_ = 0;
+src/sql/engine/aggregate/ob_hash_groupby_op.cpp	1756	ObHashGroupByOp::next_batch	const_cast<ObBatchRows *>	const_cast<ObBatchRows *>(child_brs)->end_ = true;
+src/sql/engine/aggregate/ob_hash_groupby_op.cpp	1761	ObHashGroupByOp::next_batch	const_cast<ObBatchRows *>	const_cast<ObBatchRows *>(child_brs)->size_ = read_size;
+src/sql/engine/aggregate/ob_hash_groupby_op.cpp	1762	ObHashGroupByOp::next_batch	const_cast<ObBatchRows *>	const_cast<ObBatchRows *>(child_brs)->end_ = false;
+src/sql/engine/aggregate/ob_hash_groupby_op.cpp	1764	ObHashGroupByOp::next_batch	const_cast<ObBatchRows *>	const_cast<ObBatchRows *>(child_brs)->skip_->reset(MY_SPEC.max_batch_size_);
+src/sql/engine/aggregate/ob_hash_groupby_op.cpp	1930	ObHashGroupByOp::batch_process_duplicate_data	const_cast<ObGroupRowItem *>	const_cast<ObGroupRowItem *>(exist_curr_gr_item)->cnt_++;
+src/sql/engine/aggregate/ob_hash_groupby_op.cpp	1981	ObHashGroupByOp::batch_process_duplicate_data	const_cast<ObChunkDatumStore::StoredRow**>	const_cast<ObChunkDatumStore::StoredRow**>(batch_rows_from_dump_)))) {
+src/sql/engine/aggregate/ob_hash_groupby_op.cpp	1986	ObHashGroupByOp::batch_process_duplicate_data	const_cast<ObGroupRowItem*>	curr_gr_item = const_cast<ObGroupRowItem*>(batch_row_gri_ptrs_[i]);
+src/sql/engine/aggregate/ob_hash_groupby_op.cpp	1991	ObHashGroupByOp::batch_process_duplicate_data	const_cast<ObChunkDatumStore::StoredRow*>	= const_cast<ObChunkDatumStore::StoredRow*>(batch_rows_from_dump_[i]);
+src/sql/engine/aggregate/ob_hash_groupby_op.cpp	1993	ObHashGroupByOp::batch_process_duplicate_data	const_cast<ObChunkDatumStore::StoredRow*>	= const_cast<ObChunkDatumStore::StoredRow*>(batch_rows_from_dump_[i]);
+src/sql/engine/aggregate/ob_hash_groupby_op.cpp	2089	ObHashGroupByOp::get_next_batch_distinct_rows	const_cast<ObBatchRows *>	const_cast<ObBatchRows *>(child_brs)->size_ = read_rows;
+src/sql/engine/aggregate/ob_hash_groupby_op.cpp	2090	ObHashGroupByOp::get_next_batch_distinct_rows	const_cast<ObBatchRows *>	const_cast<ObBatchRows *>(child_brs)->end_ = false;
+src/sql/engine/aggregate/ob_hash_groupby_op.cpp	2092	ObHashGroupByOp::get_next_batch_distinct_rows	const_cast<ObBatchRows *>	const_cast<ObBatchRows *>(child_brs)->skip_->reset(MY_SPEC.max_batch_size_);
+src/sql/engine/aggregate/ob_hash_groupby_op.cpp	2097	ObHashGroupByOp::get_next_batch_distinct_rows	const_cast<ObBatchRows *>	const_cast<ObBatchRows *>(child_brs)->size_ = 0;
+src/sql/engine/aggregate/ob_hash_groupby_op.cpp	2098	ObHashGroupByOp::get_next_batch_distinct_rows	const_cast<ObBatchRows *>	const_cast<ObBatchRows *>(child_brs)->end_ = true;
+src/sql/engine/aggregate/ob_hash_groupby_op.cpp	2183	ObHashGroupByOp::group_child_batch_rows	const_cast<ObGroupRowItem *>	const_cast<ObGroupRowItem *>(exist_curr_gr_item)->cnt_++;
+src/sql/engine/aggregate/ob_hash_groupby_op.cpp	2186	ObHashGroupByOp::group_child_batch_rows	const_cast<ObGroupRowItem *>	const_cast<ObGroupRowItem *>(exist_curr_gr_item)->group_row_count_in_batch_++;
+src/sql/engine/aggregate/ob_hash_groupby_op.cpp	2256	ObHashGroupByOp::group_child_batch_rows	const_cast<ObChunkDatumStore::StoredRow**>	const_cast<ObChunkDatumStore::StoredRow**>(
+src/sql/engine/aggregate/ob_hash_groupby_op.cpp	2262	ObHashGroupByOp::group_child_batch_rows	const_cast<ObGroupRowItem*>	curr_gr_item = const_cast<ObGroupRowItem*>(batch_row_gri_ptrs_[selector_array_[i]]);
+src/sql/engine/aggregate/ob_hash_groupby_op.cpp	2267	ObHashGroupByOp::group_child_batch_rows	const_cast<ObChunkDatumStore::StoredRow*>	= const_cast<ObChunkDatumStore::StoredRow*>(batch_rows_from_dump_[i]);
+src/sql/engine/aggregate/ob_hash_groupby_op.cpp	2269	ObHashGroupByOp::group_child_batch_rows	const_cast<ObChunkDatumStore::StoredRow*>	= const_cast<ObChunkDatumStore::StoredRow*>(batch_rows_from_dump_[i]);
+src/sql/engine/aggregate/ob_hash_groupby_op.cpp	2278	ObHashGroupByOp::group_child_batch_rows	const_cast<ObGroupRowItem *>	const_cast<ObGroupRowItem *>(gris_per_batch_[i])->group_row_offset_in_selector_ = group_rows_sum;
+src/sql/engine/aggregate/ob_hash_groupby_op.cpp	2300	ObHashGroupByOp::group_child_batch_rows	const_cast<ObGroupRowItem *>	selector_array_[const_cast<ObGroupRowItem *>(batch_row_gri_ptrs_[i])->group_row_offset_in_selector_++] = i;
+src/sql/engine/aggregate/ob_hash_groupby_op.cpp	2702	ObHashGroupByOp::process_popular_value	const_cast<ObGroupRowItem *>	const_cast<ObGroupRowItem *>(exist_curr_gr_item)->cnt_++;
+src/sql/engine/aggregate/ob_merge_groupby_op.cpp	241	ObMergeGroupByOp::set_rollup_expr_null	const_cast<ObExpr *>	ObExpr *null_expr = const_cast<ObExpr *>(group_id < MY_SPEC.group_exprs_.count()
+src/sql/engine/aggregate/ob_merge_groupby_op.cpp	254	ObMergeGroupByOp::rewrite_rollup_column	const_cast<ObExpr *>	diff_expr = const_cast<ObExpr *>(cur_output_group_id_ < MY_SPEC.group_exprs_.count()
+src/sql/engine/basic/ob_byte_compare_simd.cpp	38	fast_compare_simd	C-style cast (__m128i *) drops const from s	__m128i vs = _mm_loadu_si128((__m128i *)&s[0]);
+src/sql/engine/basic/ob_byte_compare_simd.cpp	39	fast_compare_simd	C-style cast (__m128i *) drops const from t	__m128i vt = _mm_loadu_si128((__m128i *)&t[0]);
+src/sql/engine/basic/ob_chunk_datum_store.cpp	94	ObChunkDatumStore::StoredRow::assign	const_cast<ObDatum*>	ObDatum* src_cells = const_cast<ObDatum*>(sr->cells());
+src/sql/engine/basic/ob_chunk_datum_store.cpp	116	ObChunkDatumStore::StoredRow::set_null	const_cast<char *>	MEMMOVE(const_cast<char *>(cells()[i].ptr_),
+src/sql/engine/basic/ob_chunk_datum_store.cpp	117	ObChunkDatumStore::StoredRow::set_null	const_cast<char *>	const_cast<char *>(cells()[i].ptr_) + len,
+src/sql/engine/basic/ob_chunk_datum_store.cpp	1855	ObChunkDatumStore::append_datum_store	const_cast<ObChunkDatumStore &>	if (OB_FAIL(const_cast<ObChunkDatumStore &>(other_store).begin(store_iter))) {

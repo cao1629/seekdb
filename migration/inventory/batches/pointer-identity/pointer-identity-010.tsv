@@ -1,0 +1,50 @@
+file	line	symbol	construct	text
+src/sql/optimizer/ob_log_plan.h	1234	ObLogPlan::is_final_root_plan	IR pointer == IR pointer	static_cast<const ObExplainStmt*>(root_stmt)->get_explain_query_stmt() == stmt_)
+src/sql/optimizer/ob_log_plan.h	1235	ObLogPlan::is_final_root_plan	IR pointer == IR pointer	|| stmt_ == root_stmt);
+src/sql/optimizer/ob_log_set.cpp	740	ObLogSet::construct_pq_set_hint	IR pointer == IR pointer	|| stmt->get_set_query(0) == left_stmt) {
+src/sql/optimizer/ob_log_set.cpp	837	ObLogSet::is_my_fixed_expr	pointer membership test: ObOptimizerUtil::find_item	is_fixed = ObOptimizerUtil::find_item(set_exprs, expr);
+src/sql/optimizer/ob_log_sort.cpp	302	ObLogSort::get_sort_output_exprs	pointer membership test: append_array_no_dup	} else if (OB_FAIL(append_array_no_dup(candi_exprs, plan->get_select_item_exprs_for_width_est()))) {
+src/sql/optimizer/ob_log_sort.cpp	305	ObLogSort::get_sort_output_exprs	pointer membership test: append_array_no_dup	} else if (OB_FAIL(append_array_no_dup(output_exprs, extracted_col_aggr_winfunc_exprs))) {
+src/sql/optimizer/ob_log_sort.cpp	489	ObLogSort::is_my_fixed_expr	IR pointer == IR pointer	} else if (T_FUN_SYS_ENCODE_SORTKEY == expr->get_expr_type() || expr == hash_sortkey_.expr_) {
+src/sql/optimizer/ob_log_subplan_filter.cpp	72	ObLogSubPlanFilter::extract_exist_style_subquery_exprs	pointer membership test: ObOptimizerUtil::find_item	} else if (ObOptimizerUtil::find_item(subquery_exprs_, param_expr) &&
+src/sql/optimizer/ob_log_subplan_filter.cpp	79	ObLogSubPlanFilter::extract_exist_style_subquery_exprs	pointer membership test: ObOptimizerUtil::find_item	} else if ((ObOptimizerUtil::find_item(subquery_exprs_, expr->get_param_expr(0)) ||
+src/sql/optimizer/ob_log_subplan_filter.cpp	80	ObLogSubPlanFilter::extract_exist_style_subquery_exprs	pointer membership test: ObOptimizerUtil::find_item	ObOptimizerUtil::find_item(subquery_exprs_, expr->get_param_expr(1))) &&
+src/sql/optimizer/ob_log_subplan_filter.cpp	114	ObLogSubPlanFilter::check_expr_contain_row_subquery	pointer membership test: ObOptimizerUtil::find_item	ObOptimizerUtil::find_item(subquery_exprs_, temp_expr)) {
+src/sql/optimizer/ob_log_subplan_filter.cpp	127	ObLogSubPlanFilter::is_my_exec_expr	pointer membership test: ObOptimizerUtil::find_item	return ObOptimizerUtil::find_item(exec_params_, expr) || is_my_onetime_expr(expr);
+src/sql/optimizer/ob_log_subplan_filter.cpp	132	ObLogSubPlanFilter::is_my_onetime_expr	pointer membership test: ObOptimizerUtil::find_item	return ObOptimizerUtil::find_item(onetime_exprs_, expr);
+src/sql/optimizer/ob_log_subplan_filter.cpp	515	ObLogSubPlanFilter::replace_nested_subquery_exprs	pointer membership test: ObOptimizerUtil::find_item	if (ObOptimizerUtil::find_item(plan->get_onetime_query_refs(), expr)) {
+src/sql/optimizer/ob_log_subplan_filter.cpp	518	ObLogSubPlanFilter::replace_nested_subquery_exprs	IR pointer == IR pointer	} else if (expr == subquery_exprs_.at(i)) {
+src/sql/optimizer/ob_log_subplan_filter.cpp	561	ObLogSubPlanFilter::allocate_startup_expr_post	pointer membership test: ObOptimizerUtil::append_exprs_no_dup (pointer identity, then same_as)	if (OB_FAIL(ObOptimizerUtil::append_exprs_no_dup(get_startup_exprs(), new_startup_exprs))) {
+src/sql/optimizer/ob_log_subplan_filter.cpp	572	ObLogSubPlanFilter::is_my_fixed_expr	pointer membership test: ObOptimizerUtil::find_item	is_fixed = ObOptimizerUtil::find_item(subquery_exprs_, expr);
+src/sql/optimizer/ob_log_subplan_filter.cpp	845	ObLogSubPlanFilter::print_push_subq_used_hint	pointer membership test: ObOptimizerUtil::find_item	&& ObOptimizerUtil::find_item(pushed_subq_stmts, child_stmt))
+src/sql/optimizer/ob_log_subplan_filter.cpp	847	ObLogSubPlanFilter::print_push_subq_used_hint	pointer membership test: ObOptimizerUtil::find_item	&& !ObOptimizerUtil::find_item(pushed_subq_stmts, child_stmt))) {
+src/sql/optimizer/ob_log_subplan_filter.cpp	865	ObLogSubPlanFilter::need_compare_batch_rescan	IR pointer != IR pointer	} else if (op1->get_op_below_exchange() != op2->get_op_below_exchange()) {
+src/sql/optimizer/ob_log_subplan_scan.cpp	138	ObLogSubPlanScan::check_output_dependance	pointer membership test: append_array_no_dup	} else if (OB_FAIL(append_array_no_dup(exprs, output_exprs_))) {
+src/sql/optimizer/ob_log_subplan_scan.cpp	147	ObLogSubPlanScan::is_my_fixed_expr	pointer membership test: ObOptimizerUtil::find_item	is_fixed = ObOptimizerUtil::find_item(access_exprs_, expr);
+src/sql/optimizer/ob_log_table_scan.cpp	273	ObLogTableScan::get_op_exprs	pointer membership test: append_array_no_dup	} else if (use_index_merge() && OB_FAIL(append_array_no_dup(all_exprs, full_filters_))) {
+src/sql/optimizer/ob_log_table_scan.cpp	353	ObLogTableScan::check_output_dependance	pointer membership test: append_array_no_dup	} else if (OB_FAIL(append_array_no_dup(exprs, output_exprs_))) {
+src/sql/optimizer/ob_log_table_scan.cpp	354	ObLogTableScan::check_output_dependance	pointer membership test: append_array_no_dup	} else if (OB_FAIL(append_array_no_dup(exprs, rowkey_exprs_))) {
+src/sql/optimizer/ob_log_table_scan.cpp	355	ObLogTableScan::check_output_dependance	pointer membership test: append_array_no_dup	} else if (OB_FAIL(append_array_no_dup(exprs, part_exprs_))) {
+src/sql/optimizer/ob_log_table_scan.cpp	356	ObLogTableScan::check_output_dependance	pointer membership test: append_array_no_dup	} else if (OB_FAIL(append_array_no_dup(exprs, spatial_exprs_))) {
+src/sql/optimizer/ob_log_table_scan.cpp	358	ObLogTableScan::check_output_dependance	pointer membership test: add_var_to_array_no_dup	&& OB_FAIL(add_var_to_array_no_dup(exprs, group_id_expr_))) {
+src/sql/optimizer/ob_log_table_scan.cpp	361	ObLogTableScan::check_output_dependance	pointer membership test: add_var_to_array_no_dup	OB_FAIL(add_var_to_array_no_dup(exprs, trans_info_expr_))) {
+src/sql/optimizer/ob_log_table_scan.cpp	494	ObLogTableScan::generate_access_exprs	pointer membership test: append_array_no_dup	} else if (OB_FAIL(append_array_no_dup(access_exprs_, rowkey_exprs_))) {
+src/sql/optimizer/ob_log_table_scan.cpp	495	ObLogTableScan::generate_access_exprs	pointer membership test: append_array_no_dup	} else if (OB_FAIL(append_array_no_dup(access_exprs_, part_exprs_))) {
+src/sql/optimizer/ob_log_table_scan.cpp	496	ObLogTableScan::generate_access_exprs	pointer membership test: append_array_no_dup	} else if (is_spatial_index_ && OB_FAIL(append_array_no_dup(access_exprs_, spatial_exprs_))) {
+src/sql/optimizer/ob_log_table_scan.cpp	497	ObLogTableScan::generate_access_exprs	pointer membership test: append_array_no_dup	} else if (OB_FAIL(append_array_no_dup(access_exprs_, domain_exprs_))) {
+src/sql/optimizer/ob_log_table_scan.cpp	500	ObLogTableScan::generate_access_exprs	pointer membership test: append_array_no_dup	} else if (OB_FAIL(append_array_no_dup(access_exprs_, temp_exprs))) {
+src/sql/optimizer/ob_log_table_scan.cpp	519	ObLogTableScan::generate_access_exprs	pointer membership test: append_array_no_dup	} else if (OB_FAIL(append_array_no_dup(access_exprs_, temp_exprs))) {
+src/sql/optimizer/ob_log_table_scan.cpp	525	ObLogTableScan::generate_access_exprs	pointer membership test: append_array_no_dup	} else if (OB_FAIL(append_array_no_dup(access_exprs_, column_exprs))) {
+src/sql/optimizer/ob_log_table_scan.cpp	803	ObLogTableScan::extract_virtual_gen_access_exprs	pointer membership test: append_array_no_dup	} else if (OB_FAIL(append_array_no_dup(access_exprs, filter_columns))) {
+src/sql/optimizer/ob_log_table_scan.cpp	808	ObLogTableScan::extract_virtual_gen_access_exprs	pointer membership test: append_array_no_dup	if (OB_FAIL(append_array_no_dup(access_exprs, get_rowkey_exprs()))) {
+src/sql/optimizer/ob_log_table_scan.cpp	809	ObLogTableScan::extract_virtual_gen_access_exprs	pointer membership test: append_array_no_dup	} else if (OB_FAIL(append_array_no_dup(access_exprs, get_part_exprs()))) {
+src/sql/optimizer/ob_log_table_scan.cpp	811	ObLogTableScan::extract_virtual_gen_access_exprs	pointer membership test: add_var_to_array_no_dup	&& OB_FAIL(add_var_to_array_no_dup(access_exprs,
+src/sql/optimizer/ob_log_table_scan.cpp	823	ObLogTableScan::extract_virtual_gen_access_exprs	pointer membership test: add_var_to_array_no_dup	if (OB_FAIL(add_var_to_array_no_dup(tmp_access_exprs, expr))) {
+src/sql/optimizer/ob_log_table_scan.cpp	920	ObLogTableScan::get_mbr_column_exprs	pointer membership test: append_array_no_dup	} else if (OB_FAIL(append_array_no_dup(mbr_exprs, temp_exprs))) {
+src/sql/optimizer/ob_log_table_scan.cpp	1170	ObLogTableScan::set_index_table_scan_filters	IR pointer == IR pointer	if (scan_pushdown_filters.at(i) == range_exprs.at(j)) {
+src/sql/optimizer/ob_log_table_scan.cpp	1229	ObLogTableScan::pick_out_query_range_exprs	IR pointer == IR pointer	if (filter_exprs.at(i) == range_exprs.at(j)) {
+src/sql/optimizer/ob_log_table_scan.cpp	2655	ObLogTableScan::print_match_annotation	IR pointer == IR pointer	if (match_exprs.at(j) == match_expr) {
+src/sql/optimizer/ob_log_table_scan.cpp	4054	ObLogTableScan::get_filter_monotonicity	IR pointer == IR pointer	if (filter == filter_monotonicity_.at(i).filter_expr_ &&
+src/sql/optimizer/ob_log_table_scan.cpp	4055	ObLogTableScan::get_filter_monotonicity	IR pointer == IR pointer	col_expr == filter_monotonicity_.at(i).col_expr_ &&
+src/sql/optimizer/ob_log_table_scan.cpp	4464	ObLogTableScan::try_adjust_scan_direction	IR pointer == IR pointer	if (path_order.expr_ == first_sortkey.expr_) {
+src/sql/optimizer/ob_log_temp_table_access.cpp	71	ObLogTempTableAccess::allocate_expr_post	pointer membership test: add_var_to_array_no_dup	} else if (!is_plan_root() && OB_FAIL(add_var_to_array_no_dup(output_exprs_, expr))) {

@@ -1,0 +1,12 @@
+file	line	symbol	construct	text
+src/sql/engine/px/ob_px_util.cpp	45	ObBaseOrderMap::~ObBaseOrderMap	iterate hash container map_ (ObHashMap)	if (OB_FAIL(map_.foreach_refactored(clear_func))) {
+src/sql/engine/px/ob_px_util.cpp	792	ObPxSqcDistributionUtil::reorder_all_partitions	lib::ob_sort call	lib::ob_sort(&dst_locations.at(0),
+src/sql/engine/px/ob_px_util.cpp	1504	ObPxAffinityByRandom::do_random	lib::ob_sort call	lib::ob_sort(tablet_hash_values_.begin(),
+src/sql/engine/px/ob_px_util.cpp	1518	ObPxAffinityByRandom::do_random	lib::ob_sort call	lib::ob_sort(tablet_hash_values_.begin(),
+src/sql/engine/px/ob_px_util.cpp	1551	ObPxAffinityByRandom::do_random	lib::ob_sort call	lib::ob_sort(tablet_hash_values_.begin(),
+src/sql/engine/px/ob_px_util.cpp	1556	ObPxAffinityByRandom::do_random	lib::ob_sort call	lib::ob_sort(tablet_hash_values_.begin(),
+src/sql/engine/px/ob_slice_calc.cpp	186	ObRepartSliceIdxCalc::get_part_id_by_one_level_sub_ch_map	iterate hash container px_repart_ch_map_ (ObPxPartChMap)	ObTabletID tablet_id(px_repart_ch_map_.begin()->first);
+src/sql/engine/px/ob_slice_calc.cpp	603	ObRepartSliceIdxCalc::build_part2tablet_id_map	iterate hash container px_repart_ch_map_ (ObPxPartChMap)	for (ObPxPartChMap::iterator iter = px_repart_ch_map_.begin(); OB_SUCC(ret) && iter != px_repart_ch_map_.end(); ++iter) {
+src/sql/engine/px/ob_slice_calc.cpp	961	ObSlaveMapPkeyRangeIdxCalc::destroy	iterate hash container part_range_map_ (ObHashMap)	if (OB_FAIL(part_range_map_.foreach_refactored(delete_fn))) {
+src/sql/engine/sort/ob_sort_op.cpp	232	ObSortOp::process_sort	member sort() call	OZ(sort_impl_.sort());
+src/sql/engine/sort/ob_sort_op.cpp	272	ObSortOp::process_sort_batch	member sort() call	OZ(sort_impl_.sort());

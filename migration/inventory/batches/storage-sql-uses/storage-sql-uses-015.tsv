@@ -1,0 +1,78 @@
+file	line	symbol	construct	text
+src/storage/ddl/ob_ddl_macro_block_write_task.cpp	33	-	using namespace sql	using namespace oceanbase::sql;
+src/storage/ddl/ob_ddl_macro_block_writer.cpp	32	-	using namespace sql	using namespace oceanbase::sql;
+src/storage/ddl/ob_ddl_nullable_vector.h	300	ObDDLNullableVector::_append_batch	sql:: use: ObBitVector	sql::ObBitVector *dest_nulls = base_->get_nulls();
+src/storage/ddl/ob_ddl_nullable_vector.h	301	ObDDLNullableVector::_append_batch	sql:: use: ObBitVector	sql::ObBitVector *src_nulls = base->get_nulls();
+src/storage/ddl/ob_ddl_nullable_vector.h	318	ObDDLNullableVector::_append_batch	sql:: use: ObBitVector	sql::ObBitVector *nulls = base_->get_nulls();
+src/storage/ddl/ob_ddl_nullable_vector.h	349	ObDDLNullableVector::_append_selective	sql:: use: ObBitVector	sql::ObBitVector *dest_nulls = base_->get_nulls();
+src/storage/ddl/ob_ddl_nullable_vector.h	350	ObDDLNullableVector::_append_selective	sql:: use: ObBitVector	sql::ObBitVector *src_nulls = base->get_nulls();
+src/storage/ddl/ob_ddl_nullable_vector.h	371	ObDDLNullableVector::_append_selective	sql:: use: ObBitVector	sql::ObBitVector *nulls = base_->get_nulls();
+src/storage/ddl/ob_ddl_nullable_vector.h	419	ObDDLNullableVector::_adapt_vector_batch	sql:: use: ObBitVector	sql::ObBitVector *nulls = vec->get_nulls();
+src/storage/ddl/ob_ddl_nullable_vector.h	431	ObDDLNullableVector::_adapt_vector_selective	sql:: use: ObBitVector	sql::ObBitVector *nulls = vec->get_nulls();
+src/storage/ddl/ob_ddl_nullable_vector.h	441	ObDDLNullableVector::set_vector	sql:: use: ObBitVector	inline void set_vector(sql::ObBitVector *nulls, const uint16_t flag)
+src/storage/ddl/ob_ddl_nullable_vector.h	450	ObDDLNullableVector	sql:: use: ObBitVector	sql::ObBitVector *vec_nulls_;
+src/storage/ddl/ob_ddl_nullable_vector.h	451	ObDDLNullableVector	sql:: use: ObBitVector	sql::ObBitVector *nulls_;
+src/storage/ddl/ob_ddl_pipeline.cpp	50	read_full_lob_string	sql:: use: ObTextStringHelper	ret = sql::ObTextStringHelper::read_real_string_data(
+src/storage/ddl/ob_ddl_pipeline.cpp	555	ObIVFCenterRowIterator::get_next_row	sql:: use: ObArrayExprUtils	if (OB_FAIL(sql::ObArrayExprUtils::set_array_res(nullptr, data_str.length(), row_allocator_, vec_res, data_str.ptr()))) {
+src/storage/ddl/ob_ddl_pipeline.cpp	631	ObIVFSq8MetaRowIterator::get_next_row	sql:: use: ObArrayExprUtils	if (OB_FAIL(sql::ObArrayExprUtils::set_array_res(nullptr, data_str.length(), row_allocator_, vec_res, data_str.ptr()))) {
+src/storage/ddl/ob_ddl_pipeline.cpp	718	ObIVFPqRowIterator::get_next_row	sql:: use: ObArrayExprUtils	if (OB_FAIL(sql::ObArrayExprUtils::set_array_res(nullptr, data_str.length(), row_allocator_, vec_res, data_str.ptr()))) {
+src/storage/ddl/ob_ddl_pipeline.cpp	1878	ObHNSWEmbeddingRowIterator::get_next_row	sql:: use: ObArrayExprUtils	if (OB_FAIL(sql::ObArrayExprUtils::set_array_res(nullptr, data_str.length(), row_allocator_, vec_res, data_str.ptr()))) {
+src/storage/ddl/ob_ddl_vector_continuous.cpp	34	-	using namespace sql	using namespace sql;
+src/storage/ddl/ob_ddl_vector_discrete.cpp	34	-	using namespace sql	using namespace sql;
+src/storage/ddl/ob_ddl_vector_fixed.cpp	34	-	using namespace sql	using namespace sql;
+src/storage/ddl/ob_ddl_vector_uniform.cpp	34	-	using namespace sql	using namespace sql;
+src/storage/ddl/ob_ddl_vector_uniform.cpp	41	ObDDLVectorUtils::new_vector_uniform	unqualified SQL name under a using declaration: ObEvalInfo	ObEvalInfo *eval_info = nullptr;
+src/storage/ddl/ob_ddl_vector_uniform.cpp	42	ObDDLVectorUtils::new_vector_uniform	unqualified SQL name under a using declaration: ObEvalInfo	if (OB_ISNULL(eval_info = OB_NEWx(ObEvalInfo, &allocator))) {
+src/storage/ddl/ob_ddl_vector_uniform.cpp	45	ObDDLVectorUtils::new_vector_uniform	unqualified SQL name under a using declaration: ObEvalInfo	MEMSET(eval_info, 0, sizeof(ObEvalInfo));
+src/storage/ddl/ob_ddl_vector_uniform_const.cpp	34	-	using namespace sql	using namespace sql;
+src/storage/ddl/ob_ddl_vector_uniform_const.cpp	41	ObDDLVectorUtils::new_vector_uniform_const	unqualified SQL name under a using declaration: ObEvalInfo	ObEvalInfo *eval_info = nullptr;
+src/storage/ddl/ob_ddl_vector_uniform_const.cpp	42	ObDDLVectorUtils::new_vector_uniform_const	unqualified SQL name under a using declaration: ObEvalInfo	if (OB_ISNULL(eval_info = OB_NEWx(ObEvalInfo, &allocator))) {
+src/storage/ddl/ob_ddl_vector_uniform_const.cpp	45	ObDDLVectorUtils::new_vector_uniform_const	unqualified SQL name under a using declaration: ObEvalInfo	MEMSET(eval_info, 0, sizeof(ObEvalInfo));
+src/storage/ddl/ob_ddl_vector_utils.cpp	37	-	using namespace sql	using namespace sql;
+src/storage/ddl/ob_ddl_vector_utils.cpp	88	ObDDLVectorUtils::prepare_vector	unqualified SQL name under a using declaration: ObBitVector	const int64_t nulls_size = ObBitVector::memory_size(max_batch_size);
+src/storage/ddl/ob_ddl_vector_utils.cpp	90	ObDDLVectorUtils::prepare_vector	unqualified SQL name under a using declaration: ObBitVector	ObBitVector *nulls = nullptr;
+src/storage/ddl/ob_ddl_vector_utils.cpp	106	ObDDLVectorUtils::prepare_vector	unqualified SQL name under a using declaration: ObBitVector	const int64_t nulls_size = ObBitVector::memory_size(max_batch_size);
+src/storage/ddl/ob_ddl_vector_utils.cpp	108	ObDDLVectorUtils::prepare_vector	unqualified SQL name under a using declaration: ObBitVector	ObBitVector *nulls = nullptr;
+src/storage/ddl/ob_ddl_vector_utils.cpp	124	ObDDLVectorUtils::prepare_vector	unqualified SQL name under a using declaration: ObBitVector	const int64_t nulls_size = ObBitVector::memory_size(max_batch_size);
+src/storage/ddl/ob_ddl_vector_utils.cpp	127	ObDDLVectorUtils::prepare_vector	unqualified SQL name under a using declaration: ObBitVector	ObBitVector *nulls = nullptr;
+src/storage/ddl/ob_delete_lob_meta_row_task.cpp	31	-	using namespace sql	using namespace sql;
+src/storage/ddl/ob_delete_lob_meta_row_task.cpp	313	ObDeleteLobMetaRowTask::init_scan_param	sql:: use: ObStoragePushdownFlag	if (OB_FAIL(table_param->convert(*table_schema, scan_param.column_ids_, sql::ObStoragePushdownFlag()))) {
+src/storage/ddl/ob_direct_load_struct.cpp	50	-	using namespace sql	using namespace oceanbase::sql;
+src/storage/ddl/ob_direct_load_struct.h	42	-	opens namespace sql (lines 42-45): storage declares SQL types here	namespace sql
+src/storage/ddl/ob_direct_load_struct.h	44	-	unqualified SQL name inside namespace sql: ObExecContext	class ObExecContext;
+src/storage/ddl/ob_direct_load_struct.h	163	ObDirectInsertRuntimeOnlyParam	sql:: use: ObExecContext	sql::ObExecContext *exec_ctx_;
+src/storage/ddl/ob_hnsw_embedmgr.cpp	74	ObEmbeddingResult::set_text	sql:: use: ObTextStringHelper	if (OB_FAIL(sql::ObTextStringHelper::read_real_string_data(
+src/storage/ddl/ob_lob_macro_block_writer.cpp	34	-	using namespace sql	using namespace oceanbase::sql;
+src/storage/ddl/ob_tablet_slice_row_iterator.cpp	30	-	using namespace sql	using namespace oceanbase::sql;
+src/storage/ddl/ob_tablet_slice_writer.cpp	38	-	using namespace sql	using namespace oceanbase::sql;
+src/storage/fts/ob_fts_doc_word_iterator.cpp	218	ObFTDocWordScanIterator::build_table_param	sql:: use: ObStoragePushdownFlag	} else if (OB_FAIL(table_param.convert(*table_schema, column_ids, sql::ObStoragePushdownFlag()))) {
+src/storage/lob/ob_lob_manager.cpp	545	ObLobManager::compare	sql:: use: ObExprUtil	if(OB_FAIL(sql::ObExprUtil::convert_string_collation(
+src/storage/lob/ob_lob_persistent_adaptor.cpp	117	ObPersistentLobApator::init_table_param	sql:: use: ObStoragePushdownFlag	} else if (OB_FAIL(meta_table_param_->convert(meta_schema, meta_column_ids, sql::ObStoragePushdownFlag()))) {
+src/storage/ls/ob_ls_tablet_service.h	70	-	opens namespace sql (lines 70-74): storage declares SQL types here	namespace sql
+src/storage/ls/ob_ls_tablet_service.h	72	-	unqualified SQL name inside namespace sql: ObDASDMLIterator	class ObDASDMLIterator;
+src/storage/ls/ob_ls_tablet_service.h	73	-	unqualified SQL name inside namespace sql: ObDASUpdIterator	class ObDASUpdIterator;
+src/storage/ob_iter_cache.cpp	92	iter_alloc	sql:: use: ObSQLSessionInfo	sql::ObSQLSessionInfo *session = THIS_WORKER.get_session();
+src/storage/ob_iter_cache.cpp	111	iter_free	sql:: use: ObSQLSessionInfo	sql::ObSQLSessionInfo *session = THIS_WORKER.get_session();
+src/storage/ob_storage_util.cpp	24	-	using namespace sql	using namespace sql;
+src/storage/ob_storage_util.cpp	129	pad_column	sql:: use: ObEvalCtx, ObExpr	int pad_column(const common::ObAccuracy accuracy, sql::ObEvalCtx &ctx, sql::ObExpr &expr)
+src/storage/ob_storage_util.cpp	132	pad_column	sql:: use: ObDatum	sql::ObDatum &datum = expr.locate_expr_datum(ctx);
+src/storage/ob_storage_util.cpp	269	check_skip_by_monotonicity	sql:: use: ObBlackFilterExecutor	sql::ObBlackFilterExecutor &filter,
+src/storage/ob_storage_util.cpp	272	check_skip_by_monotonicity	sql:: use: ObBitVector	const sql::ObBitVector &skip_bit,
+src/storage/ob_storage_util.cpp	275	check_skip_by_monotonicity	sql:: use: ObBoolMask	sql::ObBoolMask &bool_mask)
+src/storage/ob_storage_util.cpp	282	check_skip_by_monotonicity	sql:: use: PushdownFilterMonotonicity	const sql::PushdownFilterMonotonicity mono = filter.get_monotonicity();
+src/storage/ob_storage_util.cpp	285	check_skip_by_monotonicity	sql:: use: PushdownFilterMonotonicity	case sql::PushdownFilterMonotonicity::MON_ASC: {
+src/storage/ob_storage_util.cpp	288	check_skip_by_monotonicity	sql:: use: PushdownFilterMonotonicity	case sql::PushdownFilterMonotonicity::MON_DESC: {
+src/storage/ob_storage_util.cpp	303	check_skip_by_monotonicity	sql:: use: PushdownFilterMonotonicity	case sql::PushdownFilterMonotonicity::MON_EQ_ASC: {
+src/storage/ob_storage_util.cpp	306	check_skip_by_monotonicity	sql:: use: PushdownFilterMonotonicity	case sql::PushdownFilterMonotonicity::MON_EQ_DESC: {
+src/storage/ob_storage_util.cpp	388	decimal_or_number_to_int64	unqualified SQL name under a using declaration: ObDatumMeta	const ObDatumMeta &datum_meta,
+src/storage/ob_storage_util.h	43	-	opens namespace sql (lines 43-48): storage declares SQL types here	namespace sql
+src/storage/ob_storage_util.h	45	-	unqualified SQL name inside namespace sql: ObBoolMask	struct ObBoolMask;
+src/storage/ob_storage_util.h	46	-	unqualified SQL name inside namespace sql: ObBlackFilterExecutor	class ObBlackFilterExecutor;
+src/storage/ob_storage_util.h	47	-	unqualified SQL name inside namespace sql: ObDynamicFilterExecutor	class ObDynamicFilterExecutor;
+src/storage/ob_storage_util.h	68	-	sql:: use: ObEvalCtx	sql::ObEvalCtx &ctx,
+src/storage/ob_storage_util.h	69	-	sql:: use: ObExpr	sql::ObExpr &expr);
+src/storage/ob_storage_util.h	84	-	sql:: use: ObBlackFilterExecutor	int check_skip_by_monotonicity(sql::ObBlackFilterExecutor &filter,
+src/storage/ob_storage_util.h	87	-	sql:: use: ObBitVector	const sql::ObBitVector &skip_bit,
+src/storage/ob_storage_util.h	90	-	sql:: use: ObBoolMask	sql::ObBoolMask &bool_mask);
+src/storage/retrieval/ob_block_max_iter.cpp	46	ObBlockMaxScoreIterParam::init	sql:: use: ObDASIRScanCtDef	const sql::ObDASIRScanCtDef &ir_ctdef, ObIAllocator &alloc)
+src/storage/retrieval/ob_block_max_iter.cpp	80	ObBlockMaxScoreIterParam::init	sql:: use: ObDASVecAuxScanCtDef	const sql::ObDASVecAuxScanCtDef &vec_aux_ctdef, ObIAllocator &alloc)

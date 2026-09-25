@@ -1,0 +1,99 @@
+file	line	symbol	construct	text
+src/pl/ob_pl_package_manager.cpp	1137	ObPLPackageManager::get_cached_package_spec	ret == OB_HASH_NOT_EXIST	} else if (OB_HASH_NOT_EXIST == ret) {
+src/pl/ob_pl_package_manager.cpp	1195	ObPLPackageManager::get_cached_package	ret == OB_HASH_NOT_EXIST	} else if (OB_HASH_NOT_EXIST == ret) {
+src/pl/ob_pl_package_manager.cpp	1231	ObPLPackageManager::get_package_item_state	other variable hash_ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == hash_ret) {
+src/pl/ob_pl_package_manager.cpp	1402	ObPLPackageManager::add_package_to_plan_cache	ret == OB_SQL_PC_PLAN_DUPLICATE	if (OB_SQL_PC_PLAN_DUPLICATE == ret) {
+src/pl/ob_pl_package_manager.cpp	1405	ObPLPackageManager::add_package_to_plan_cache	ret == OB_REACH_MEMORY_LIMIT; ret == OB_SQL_PC_PLAN_SIZE_LIMIT	} else if (OB_REACH_MEMORY_LIMIT == ret || OB_SQL_PC_PLAN_SIZE_LIMIT == ret) {
+src/pl/ob_pl_package_manager.cpp	1485	ObPLPackageManager::destory_package_state	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/pl/ob_pl_resolver.cpp	356	ObPLResolver::resolve	ret == OB_ERR_FUNCTION_UNKNOWN	|| OB_ERR_FUNCTION_UNKNOWN == ret
+src/pl/ob_pl_resolver.cpp	357	ObPLResolver::resolve	ret == OB_ERR_SP_DOES_NOT_EXIST	|| OB_ERR_SP_DOES_NOT_EXIST == ret) {
+src/pl/ob_pl_resolver.cpp	538	ObPLResolver::resolve	ret == OB_ERR_FUNCTION_UNKNOWN	if (OB_ERR_FUNCTION_UNKNOWN == ret
+src/pl/ob_pl_resolver.cpp	539	ObPLResolver::resolve	ret == OB_ERR_SP_WRONG_ARG_NUM	|| OB_ERR_SP_WRONG_ARG_NUM == ret
+src/pl/ob_pl_resolver.cpp	540	ObPLResolver::resolve	ret == OB_ERR_SP_DOES_NOT_EXIST	|| OB_ERR_SP_DOES_NOT_EXIST == ret
+src/pl/ob_pl_resolver.cpp	541	ObPLResolver::resolve	ret == OB_ERR_GET_STACKED_DIAGNOSTICS	|| OB_ERR_GET_STACKED_DIAGNOSTICS == ret
+src/pl/ob_pl_resolver.cpp	542	ObPLResolver::resolve	ret == OB_ERR_RESIGNAL_WITHOUT_ACTIVE_HANDLER	|| OB_ERR_RESIGNAL_WITHOUT_ACTIVE_HANDLER == ret
+src/pl/ob_pl_resolver.cpp	543	ObPLResolver::resolve	ret == OB_ERR_BAD_TABLE	|| OB_ERR_BAD_TABLE == ret) {
+src/pl/ob_pl_resolver.cpp	880	ObPLResolver::resolve_sp_composite_type	ret == OB_ERR_SP_UNDECLARED_VAR	if (OB_ERR_SP_UNDECLARED_VAR == ret) {
+src/pl/ob_pl_resolver.cpp	1356	ObPLResolver::resolve_extern_type_info	ret == OB_ERR_BAD_DATABASE	if (OB_ERR_BAD_DATABASE == ret || OB_INVALID_ID == extern_type_info->type_owner_) {
+src/pl/ob_pl_resolver.cpp	1674	ObPLResolver::resolve_sp_row_type	ret == OB_ERR_SP_UNDECLARED_VAR	if (OB_ERR_SP_UNDECLARED_VAR == ret && is_data_type_name(obj_access_idents.at(i).access_name_)) {
+src/pl/ob_pl_resolver.cpp	2924	ObPLResolver::resolve_static_sql	ret == OB_ERR_TOO_BIG_DISPLAYWIDTH	if (OB_ERR_TOO_BIG_DISPLAYWIDTH == ret) {
+src/pl/ob_pl_resolver.cpp	3476	ObPLResolver::resolve_signal	ret == OB_HASH_EXIST	if (OB_HASH_EXIST == ret) {
+src/pl/ob_pl_resolver.cpp	3520	ObPLResolver::resolve_signal	ret != OB_ERR_UNEXPECTED	if (OB_ERR_UNEXPECTED != ret) {
+src/pl/ob_pl_resolver.cpp	3571	ObPLResolver::resolve_call	ret == OB_ERR_SP_DOES_NOT_EXIST	if (OB_ERR_SP_DOES_NOT_EXIST == ret) {
+src/pl/ob_pl_resolver.cpp	6903	ObPLResolver::resolve_udf_without_brackets	ret != OB_ERR_NO_PRIVILEGE	if ((OB_FAIL(ret) && ret != OB_ERR_NO_PRIVILEGE)
+src/pl/ob_pl_resolver.cpp	7033	ObPLResolver::resolve_qualified_name	ret != OB_ERR_SP_UNDECLARED_VAR	if (OB_ERR_SP_UNDECLARED_VAR != ret) {
+src/pl/ob_pl_resolver.cpp	7037	ObPLResolver::resolve_qualified_name	ret == OB_ERR_SP_UNDECLARED_VAR	if (OB_ERR_SP_UNDECLARED_VAR == ret) {
+src/pl/ob_pl_resolver.cpp	7043	ObPLResolver::resolve_qualified_name	ret == OB_ERR_SP_UNDECLARED_VAR	if (OB_ERR_SP_UNDECLARED_VAR == ret) {
+src/pl/ob_pl_resolver.cpp	7049	ObPLResolver::resolve_qualified_name	ret == OB_ERR_SP_UNDECLARED_VAR	if (OB_ERR_SP_UNDECLARED_VAR == ret) {
+src/pl/ob_pl_resolver.cpp	7050	ObPLResolver::resolve_qualified_name	ret == OB_ERR_SP_UNDECLARED_VAR	if (OB_ERR_SP_UNDECLARED_VAR == ret) {
+src/pl/ob_pl_resolver.cpp	7999	ObPLResolver::resolve_var	ret == OB_ERR_SP_DOES_NOT_EXIST	ret = (OB_ERR_SP_DOES_NOT_EXIST == ret
+src/pl/ob_pl_resolver.cpp	8000	ObPLResolver::resolve_var	ret == OB_ERR_FUNCTION_UNKNOWN	|| OB_ERR_FUNCTION_UNKNOWN == ret
+src/pl/ob_pl_resolver.cpp	8001	ObPLResolver::resolve_var	ret == OB_ERR_SP_WRONG_ARG_NUM	|| OB_ERR_SP_WRONG_ARG_NUM == ret) ? OB_ERR_SP_UNDECLARED_VAR : ret;
+src/pl/ob_pl_resolver.cpp	8442	ObPLResolver::resolve_routine	ret != OB_ERR_SP_WRONG_ARG_NUM	&& OB_ERR_SP_WRONG_ARG_NUM != ret
+src/pl/ob_pl_resolver.cpp	8443	ObPLResolver::resolve_routine	ret != OB_ERR_CALL_WRONG_ARG	&& OB_ERR_CALL_WRONG_ARG != ret
+src/pl/ob_pl_resolver.cpp	8444	ObPLResolver::resolve_routine	ret != OB_ERR_FUNC_DUP	&& OB_ERR_FUNC_DUP != ret
+src/pl/ob_pl_resolver.cpp	8445	ObPLResolver::resolve_routine	ret != OB_ERR_POSITIONAL_FOLLOW_NAME	&& OB_ERR_POSITIONAL_FOLLOW_NAME != ret
+src/pl/ob_pl_resolver.cpp	8452	ObPLResolver::resolve_routine	ret != OB_ERR_NOT_FUNC_NAME	if (OB_FAIL(ret) && OB_ERR_NOT_FUNC_NAME != ret) {
+src/pl/ob_pl_resolver.cpp	9023	ObPLResolver::resolve_into	ret == OB_ERR_VARIABLE_IS_READONLY	if (OB_ERR_VARIABLE_IS_READONLY == ret) {
+src/pl/ob_pl_resolver.cpp	9684	ObPLResolver::resolve_cursor	ret == OB_ERR_SP_CURSOR_MISMATCH	if ((OB_SUCC(ret) && OB_INVALID_INDEX == index) || OB_ERR_SP_CURSOR_MISMATCH == ret) {
+src/pl/ob_pl_resolver.cpp	10218	ObPLResolver::resolve_routine_decl_param_list	ret == OB_ERR_SP_DUP_VAR	if (OB_ERR_SP_DUP_VAR == ret) {
+src/pl/ob_pl_router.cpp	36	ObPLRouter::check_error_in_resolve	switch (code) case OB_ER_STMT_NOT_ALLOWED_IN_SF_OR_TRG	case OB_ER_STMT_NOT_ALLOWED_IN_SF_OR_TRG:
+src/pl/ob_pl_router.cpp	37	ObPLRouter::check_error_in_resolve	switch (code) case OB_ER_COMMIT_NOT_ALLOWED_IN_SF_OR_TRG	case OB_ER_COMMIT_NOT_ALLOWED_IN_SF_OR_TRG:
+src/pl/ob_pl_router.cpp	38	ObPLRouter::check_error_in_resolve	switch (code) case OB_ER_SP_NO_RETSET	case OB_ER_SP_NO_RETSET:
+src/pl/ob_pl_router.cpp	39	ObPLRouter::check_error_in_resolve	switch (code) case OB_ERR_SP_COND_MISMATCH	case OB_ERR_SP_COND_MISMATCH:
+src/pl/ob_pl_router.cpp	40	ObPLRouter::check_error_in_resolve	switch (code) case OB_ERR_SP_LILABEL_MISMATCH	case OB_ERR_SP_LILABEL_MISMATCH:
+src/pl/ob_pl_router.cpp	41	ObPLRouter::check_error_in_resolve	switch (code) case OB_ERR_SP_CURSOR_MISMATCH	case OB_ERR_SP_CURSOR_MISMATCH:
+src/pl/ob_pl_router.cpp	42	ObPLRouter::check_error_in_resolve	switch (code) case OB_ERR_SP_DUP_VAR	case OB_ERR_SP_DUP_VAR:
+src/pl/ob_pl_router.cpp	43	ObPLRouter::check_error_in_resolve	switch (code) case OB_ERR_SP_DUP_TYPE	case OB_ERR_SP_DUP_TYPE:
+src/pl/ob_pl_router.cpp	44	ObPLRouter::check_error_in_resolve	switch (code) case OB_ERR_SP_DUP_CONDITION	case OB_ERR_SP_DUP_CONDITION:
+src/pl/ob_pl_router.cpp	45	ObPLRouter::check_error_in_resolve	switch (code) case OB_ERR_SP_DUP_LABEL	case OB_ERR_SP_DUP_LABEL:
+src/pl/ob_pl_router.cpp	46	ObPLRouter::check_error_in_resolve	switch (code) case OB_ERR_SP_DUP_CURSOR	case OB_ERR_SP_DUP_CURSOR:
+src/pl/ob_pl_router.cpp	47	ObPLRouter::check_error_in_resolve	switch (code) case OB_ERR_SP_DUP_HANDLER	case OB_ERR_SP_DUP_HANDLER:
+src/pl/ob_pl_router.cpp	48	ObPLRouter::check_error_in_resolve	switch (code) case OB_ER_SP_NO_RECURSIVE_CREATE	case OB_ER_SP_NO_RECURSIVE_CREATE:
+src/pl/ob_pl_router.cpp	49	ObPLRouter::check_error_in_resolve	switch (code) case OB_ER_SP_BADRETURN	case OB_ER_SP_BADRETURN:
+src/pl/ob_pl_router.cpp	50	ObPLRouter::check_error_in_resolve	switch (code) case OB_ER_SP_BAD_CURSOR_SELECT	case OB_ER_SP_BAD_CURSOR_SELECT:
+src/pl/ob_pl_router.cpp	51	ObPLRouter::check_error_in_resolve	switch (code) case OB_ER_SP_VARCOND_AFTER_CURSHNDLR	case OB_ER_SP_VARCOND_AFTER_CURSHNDLR:
+src/pl/ob_pl_router.cpp	52	ObPLRouter::check_error_in_resolve	switch (code) case OB_ER_SP_CURSOR_AFTER_HANDLER	case OB_ER_SP_CURSOR_AFTER_HANDLER:
+src/pl/ob_pl_router.cpp	53	ObPLRouter::check_error_in_resolve	switch (code) case OB_ER_SP_BAD_SQLSTATE	case OB_ER_SP_BAD_SQLSTATE:
+src/pl/ob_pl_router.cpp	54	ObPLRouter::check_error_in_resolve	switch (code) case OB_ERR_UNKNOWN_TABLE	case OB_ERR_UNKNOWN_TABLE:
+src/pl/ob_pl_router.cpp	55	ObPLRouter::check_error_in_resolve	switch (code) case OB_ER_SP_CANT_SET_AUTOCOMMIT	case OB_ER_SP_CANT_SET_AUTOCOMMIT:
+src/pl/ob_pl_router.cpp	56	ObPLRouter::check_error_in_resolve	switch (code) case OB_ERR_UNEXPECTED	case OB_ERR_UNEXPECTED:
+src/pl/ob_pl_router.cpp	57	ObPLRouter::check_error_in_resolve	switch (code) case OB_ERR_TOO_LONG_IDENT	case OB_ERR_TOO_LONG_IDENT:
+src/pl/ob_pl_router.cpp	58	ObPLRouter::check_error_in_resolve	switch (code) case OB_ERR_PL_JSONTYPE_USAGE	case OB_ERR_PL_JSONTYPE_USAGE: {
+src/pl/ob_pl_router.cpp	62	ObPLRouter::check_error_in_resolve	switch (code) case OB_ERR_SP_UNDECLARED_VAR	case OB_ERR_SP_UNDECLARED_VAR: {
+src/pl/ob_pl_router.cpp	66	ObPLRouter::check_error_in_resolve	switch (code) case OB_ERR_NO_RETURN_IN_FUNCTION	case OB_ERR_NO_RETURN_IN_FUNCTION:
+src/pl/ob_pl_router.cpp	67	ObPLRouter::check_error_in_resolve	switch (code) case OB_ERR_REDEFINE_LABEL	case OB_ERR_REDEFINE_LABEL:
+src/pl/ob_pl_router.cpp	68	ObPLRouter::check_error_in_resolve	switch (code) case OB_ERR_STMT_NOT_ALLOW_IN_MYSQL_PROCEDRUE	case OB_ERR_STMT_NOT_ALLOW_IN_MYSQL_PROCEDRUE:
+src/pl/ob_pl_router.cpp	69	ObPLRouter::check_error_in_resolve	switch (code) case OB_ERR_TOO_BIG_PRECISION	case OB_ERR_TOO_BIG_PRECISION:
+src/pl/ob_pl_router.cpp	70	ObPLRouter::check_error_in_resolve	switch (code) case OB_ERR_TOO_BIG_SCALE	case OB_ERR_TOO_BIG_SCALE:
+src/pl/ob_pl_router.cpp	71	ObPLRouter::check_error_in_resolve	switch (code) case OB_ERR_TOO_BIG_DISPLAYWIDTH	case OB_ERR_TOO_BIG_DISPLAYWIDTH:
+src/pl/ob_pl_router.cpp	72	ObPLRouter::check_error_in_resolve	switch (code) case OB_ERR_TOO_LONG_COLUMN_LENGTH	case OB_ERR_TOO_LONG_COLUMN_LENGTH:
+src/pl/ob_pl_router.cpp	73	ObPLRouter::check_error_in_resolve	switch (code) case OB_ERR_TRIGGER_CANT_CHANGE_ROW	case OB_ERR_TRIGGER_CANT_CHANGE_ROW:
+src/pl/ob_pl_router.cpp	74	ObPLRouter::check_error_in_resolve	switch (code) case OB_ERR_SET_USAGE	case OB_ERR_SET_USAGE:
+src/pl/ob_pl_router.cpp	75	ObPLRouter::check_error_in_resolve	switch (code) case OB_ERR_COLUMN_SPEC	case OB_ERR_COLUMN_SPEC:
+src/pl/ob_pl_router.cpp	76	ObPLRouter::check_error_in_resolve	switch (code) case OB_ERR_TRIGGER_NO_SUCH_ROW	case OB_ERR_TRIGGER_NO_SUCH_ROW:
+src/pl/ob_pl_router.cpp	77	ObPLRouter::check_error_in_resolve	switch (code) case OB_ERR_SP_NO_DROP_SP	case OB_ERR_SP_NO_DROP_SP:
+src/pl/ob_pl_router.cpp	78	ObPLRouter::check_error_in_resolve	switch (code) case OB_ERR_SP_BAD_CONDITION_TYPE	case OB_ERR_SP_BAD_CONDITION_TYPE:
+src/pl/ob_pl_router.cpp	79	ObPLRouter::check_error_in_resolve	switch (code) case OB_ERR_DUP_SIGNAL_SET	case OB_ERR_DUP_SIGNAL_SET:
+src/pl/ob_pl_router.cpp	80	ObPLRouter::check_error_in_resolve	switch (code) case OB_ERR_WRONG_PARAMETERS_TO_NATIVE_FCT	case OB_ERR_WRONG_PARAMETERS_TO_NATIVE_FCT:
+src/pl/ob_pl_router.cpp	81	ObPLRouter::check_error_in_resolve	switch (code) case OB_ERR_CANNOT_UPDATE_VIRTUAL_COL_IN_TRG	case OB_ERR_CANNOT_UPDATE_VIRTUAL_COL_IN_TRG:
+src/pl/ob_pl_router.cpp	82	ObPLRouter::check_error_in_resolve	switch (code) case OB_ERR_VIEW_SELECT_CONTAIN_QUESTIONMARK	case OB_ERR_VIEW_SELECT_CONTAIN_QUESTIONMARK:
+src/pl/ob_pl_router.cpp	83	ObPLRouter::check_error_in_resolve	switch (code) case OB_ERR_VIEW_SELECT_CONTAIN_INTO	case OB_ERR_VIEW_SELECT_CONTAIN_INTO: {
+src/pl/ob_pl_stmt.cpp	1352	ObPLExternalNS::resolve_external_symbol	ret == OB_ERR_SP_UNDECLARED_TYPE	if (OB_ERR_SP_UNDECLARED_TYPE == ret) {
+src/pl/ob_pl_stmt.cpp	1404	ObPLExternalNS::resolve_external_symbol	ret == OB_ERR_SYS_VARIABLE_UNKNOWN	if (OB_ERR_SYS_VARIABLE_UNKNOWN == ret) {
+src/pl/ob_pl_type.cpp	533	ObPLDataType::set_type_info	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/pl/ob_pl_type.cpp	730	ObPLEnumSetCtx::set_enum_type_info	ret == OB_HASH_EXIST	if (OB_HASH_EXIST == ret) {
+src/pl/parser/ob_pl_parser.cpp	63	ObPLParser::parse	ret != OB_SIZE_OVERFLOW	if (OB_SIZE_OVERFLOW != ret) {
+src/pl/parser/ob_pl_parser.cpp	113	ObPLParser::parse_procedure	ret == OB_ERR_PARSE_SQL	if (OB_ERR_PARSE_SQL == ret) {
+src/pl/parser/ob_pl_parser.cpp	244	ObPLParser::parse_stmt_block	ret == OB_ERR_PARSE_SQL	if (OB_ERR_PARSE_SQL == ret && parse_ctx.is_for_preprocess_) {
+src/pl/parser/ob_pl_parser.cpp	270	ObPLParser::parse_stmt_block	ret != OB_SIZE_OVERFLOW	if (OB_SIZE_OVERFLOW != ret) {
+src/pl/parser/ob_pl_parser.cpp	282	ObPLParser::parse_stmt_block	ret == OB_NOT_SUPPORTED	if (OB_NOT_SUPPORTED == ret) {
+src/pl/parser/pl_parser_base.h	60	#define check_identifier_convert_result	other variable errno == OB_PARSER_ERR_ILLEGAL_NAME	if (OB_PARSER_ERR_ILLEGAL_NAME == errno) {                                       \
+src/pl/pl_cache/ob_pl_cache.cpp	1012	ObPLObjectSet::inner_get_cache_obj	ret == OB_OLD_SCHEMA_VERSION	if (OB_OLD_SCHEMA_VERSION == ret) {
+src/pl/pl_cache/ob_pl_cache.cpp	1033	ObPLObjectSet::inner_get_cache_obj	ret == OB_OLD_SCHEMA_VERSION	if (OB_OLD_SCHEMA_VERSION == ret) {
+src/pl/pl_cache/ob_pl_cache_mgr.cpp	55	ObPLCacheMgr::get_sys_var_in_pl_cache_str	ret == OB_BUF_NOT_ENOUGH; ret == OB_SIZE_OVERFLOW	if (OB_BUF_NOT_ENOUGH == ret || OB_SIZE_OVERFLOW ==ret) {
+src/pl/pl_cache/ob_pl_cache_mgr.cpp	63	ObPLCacheMgr::get_sys_var_in_pl_cache_str	ret == OB_BUF_NOT_ENOUGH; ret == OB_SIZE_OVERFLOW	if (i != 2 && (OB_BUF_NOT_ENOUGH == ret || OB_SIZE_OVERFLOW ==ret)) {
+src/pl/pl_cache/ob_pl_cache_mgr.cpp	96	ObPLCacheMgr::get_pl_object	ret == OB_OLD_SCHEMA_VERSION	if (OB_OLD_SCHEMA_VERSION == ret) {
+src/pl/pl_cache/ob_pl_cache_mgr.cpp	171	ObPLCacheMgr::add_pl_object	ret == OB_OLD_SCHEMA_VERSION	if (OB_FAIL(lib_cache->add_cache_obj(ctx, &pc_ctx.key_, cache_obj)) && OB_OLD_SCHEMA_VERSION == ret) {
+src/pl/pl_cache/ob_pl_cache_mgr.cpp	182	ObPLCacheMgr::add_pl_object	ret == OB_OLD_SCHEMA_VERSION	} while (OB_OLD_SCHEMA_VERSION == ret);
+src/pl/pl_cache/ob_pl_cache_mgr.cpp	231	ObPLCacheMgr::add_pl_cache	ret != OB_SQL_PC_PLAN_DUPLICATE	&& OB_SQL_PC_PLAN_DUPLICATE != ret) {

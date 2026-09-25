@@ -1,0 +1,35 @@
+file	line	symbol	construct	text
+src/data_plane/api/data_plane/access/ob_tablet_scan.h	478	ObVTableScanParam::get_schema_guard	const_cast<ObVTableScanParam *>	return const_cast<ObVTableScanParam *>(this)->get_schema_guard();
+src/data_plane/api/data_plane/vector/ob_vector_pq_coder.h	31	PQDecoder::PQDecoder	C-style cast (T*) drops const from code	PQDecoder(const uint8_t* code) : code_((T*)code) {};
+src/logservice/palf/log_block_handler.cpp	371	LogBlockHandler::inner_write_once_	const_cast<char *>	char *aligned_buf = const_cast<char *>(buf);
+src/logservice/palf/log_checksum.cpp	62	LogChecksum::acquire_accum_checksum	const_cast<int64_t *>	accum_checksum_ = common::ob_crc64(accum_checksum_, const_cast<int64_t *>(&data_checksum),
+src/logservice/palf/log_checksum.cpp	95	LogChecksum::verify_accum_checksum	const_cast<int64_t *>	new_accum_checksum = common::ob_crc64(old_accum_checksum, const_cast<int64_t *>(&data_checksum),
+src/logservice/palf/log_entry.cpp	95	DEFINE_DESERIALIZE(LogEntry)	const_cast<char *>	buf_ = header_.get_data_len() > 0 ? const_cast<char *>(buf + new_pos) : NULL;
+src/logservice/palf/log_group_entry.cpp	122	DEFINE_DESERIALIZE(LogGroupEntry)	const_cast<char *>	buf_ = header_.get_data_len() >= 0 ? const_cast<char *>(buf + new_pos) : NULL;
+src/logservice/palf/log_group_entry_header.cpp	121	LogGroupEntryHeader::calculate_log_checksum_	const_cast<char*>	curr_log_buf = const_cast<char*>(log_buf);
+src/logservice/palf/log_group_entry_header.cpp	143	LogGroupEntryHeader::calculate_log_checksum_	const_cast<char*>	curr_log_buf = const_cast<char*>(log_buf);
+src/logservice/palf/log_group_entry_header.cpp	163	LogGroupEntryHeader::calculate_log_checksum_	const_cast<char*>	curr_log_buf = const_cast<char*>(log_buf);
+src/logservice/palf/log_io_task.cpp	262	LogIOFlushMetaTask::destroy	const_cast<char*>	server_free(const_cast<char*>(buf_));
+src/logservice/palf/log_iterator_storage.cpp	256	MemoryStorage::pread	const_cast<char*>	read_buf.buf_ = const_cast<char*>(buf_) + pos;
+src/logservice/palf/log_meta_entry.cpp	118	DEFINE_DESERIALIZE(LogMetaEntry)	const_cast<char *>	buf_ = const_cast<char *>(buf + new_pos);
+src/oblib/common/cell/ob_cell_reader.cpp	89	#define READ_CHAR	C-style cast (char*) drops const from member buf_ (inside #define READ_CHAR)	value.assign_ptr((char*)(buf_ + pos_), *len); \
+src/oblib/common/cell/ob_cell_reader.cpp	107	ObCellReader::read_decimal_int	C-style cast (ObDecimalInt *) drops const from member buf_	obj.set_decimal_int(*len, *scale, (ObDecimalInt *)(buf_ + pos_));
+src/oblib/common/cell/ob_cell_reader.cpp	156	#define READ_TEXT	C-style cast (char*) drops const from member buf_ (inside #define READ_TEXT)	object.set_lob_value(obj_type, (char*)(buf_ + pos_), *len);\
+src/oblib/common/cell/ob_cell_reader.cpp	175	#define READ_BINARY	C-style cast (char*) drops const from member buf_ (inside #define READ_BINARY)	value.assign_ptr((char*)(buf_ + pos_), *len); \
+src/oblib/common/cell/ob_cell_reader.cpp	306	ObCellReader::get_cell	const_cast<char *>	const_cast<char *>(buf_ + row_start_), static_cast<int32_t>(pos_ - row_start_));
+src/oblib/common/cell/ob_cell_reader.cpp	332	ObCellReader::get_cell	const_cast<char *>	const_cast<char *>(buf_ + row_start_), static_cast<int32_t>(pos_ - row_start_));
+src/oblib/common/datum/ob_datum.h	406	ObDatum::no_cv	const_cast<T *>	inline __attribute__((always_inline)) T *no_cv(const T *ptr) { return const_cast<T *>(ptr); }
+src/oblib/common/datum/ob_datum.h	562	ObDatum::obj2datum	const_cast<char *>	ptr_ = const_cast<char *>(obj.v_.string_);
+src/oblib/common/datum/ob_datum.h	726	ObDatum::datum2obj	const_cast<ObDecimalInt *>	obj.v_.decimal_int_ = const_cast<ObDecimalInt *>(decimal_int_);
+src/oblib/common/enumset/ob_enum_set_meta.h	79	ObEnumSetMeta::destroy	const_cast<ObStrValues *>	allocator_->free(const_cast<ObStrValues *>(str_values_));
+src/oblib/common/json_type/ob_json_base.cpp	163	ObIJsonBase::add_if_missing	const_cast<ObIJsonBase*>	ObIJsonBase* cur_json = const_cast<ObIJsonBase*>(this);
+src/oblib/common/json_type/ob_json_base.cpp	258	ObIJsonBase::seek	const_cast<ObIJsonBase*>	parent_info.parent_jb_ = const_cast<ObIJsonBase*> (this);
+src/oblib/common/json_type/ob_json_base.cpp	284	ObIJsonBase::seek	const_cast<ObIJsonBase*>	parent_info.parent_jb_ = const_cast<ObIJsonBase*> (this);
+src/oblib/common/json_type/ob_json_base.cpp	933	ObIJsonBase::find_type_method	const_cast<char*>	ans_char = const_cast<char*>("null");
+src/oblib/common/json_type/ob_json_base.cpp	946	ObIJsonBase::find_type_method	const_cast<char*>	ans_char = const_cast<char*>("number");
+src/oblib/common/json_type/ob_json_base.cpp	968	ObIJsonBase::find_type_method	const_cast<char*>	ans_char = const_cast<char*>("string");
+src/oblib/common/json_type/ob_json_base.cpp	973	ObIJsonBase::find_type_method	const_cast<char*>	ans_char = const_cast<char*>("object");
+src/oblib/common/json_type/ob_json_base.cpp	978	ObIJsonBase::find_type_method	const_cast<char*>	ans_char = const_cast<char*>("array");
+src/oblib/common/json_type/ob_json_base.cpp	983	ObIJsonBase::find_type_method	const_cast<char*>	ans_char = const_cast<char*>("boolean");
+src/oblib/common/json_type/ob_json_base.cpp	2011	ObIJsonBase::is_real_json_null	const_cast<ObIJsonBase*>	ObIJsonBase* tmp = const_cast<ObIJsonBase*>(ptr);
+src/oblib/common/json_type/ob_json_base.cpp	3161	ObIJsonBase::find_filter_child	const_cast<ObIJsonBase*>	parent_info.parent_jb_ = const_cast<ObIJsonBase*> (this);

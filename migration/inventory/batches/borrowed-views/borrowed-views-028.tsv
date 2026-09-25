@@ -1,0 +1,60 @@
+file	line	symbol	construct	text
+src/sql/engine/dml/ob_dml_ctx_define.h	170	ObTriggerArg::package_spec_	member ObString (value) of type common::ObString	common::ObString package_spec_;
+src/sql/engine/dml/ob_dml_ctx_define.h	171	ObTriggerArg::package_body_	member ObString (value) of type common::ObString	common::ObString package_body_;
+src/sql/engine/dml/ob_dml_ctx_define.h	237	ObTrigDMLRtDef::tg_when_point_params_	member ParamStore (pointer) of type ParamStore *	ParamStore *tg_when_point_params_;
+src/sql/engine/dml/ob_dml_ctx_define.h	238	ObTrigDMLRtDef::tg_row_point_params_	member ParamStore (pointer) of type ParamStore *	ParamStore *tg_row_point_params_;
+src/sql/engine/dml/ob_dml_ctx_define.h	239	ObTrigDMLRtDef::tg_all_params_	member ObObjParam (pointer) of type common::ObObjParam *	common::ObObjParam *tg_all_params_;
+src/sql/engine/dml/ob_dml_ctx_define.h	240	ObTrigDMLRtDef::update_columns_	member ObObj (pointer) of type ObObj *	ObObj *update_columns_;
+src/sql/engine/dml/ob_dml_ctx_define.h	259	ObForeignKeyColumn::name_	member ObString (value) of type common::ObString	common::ObString name_;
+src/sql/engine/dml/ob_dml_ctx_define.h	337	ObForeignKeyArg::database_name_	member ObString (value) of type common::ObString	common::ObString database_name_;
+src/sql/engine/dml/ob_dml_ctx_define.h	338	ObForeignKeyArg::table_name_	member ObString (value) of type common::ObString	common::ObString table_name_;
+src/sql/engine/dml/ob_dml_ctx_define.h	383	ColumnContent::column_name_	member ObString (value) of type common::ObString	common::ObString column_name_;    // only for error message.
+src/sql/engine/dml/ob_dml_ctx_define.h	395	SeRowkeyItem::datums_	member ObDatum (pointer) of type ObDatum *	ObDatum *datums_;
+src/sql/engine/dml/ob_dml_ctx_define.h	472	ObDMLBaseRtDef::check_row_	member ObNewRow (pointer) of type ObNewRow *	ObNewRow *check_row_; //only used for tablet defensive check
+src/sql/engine/dml/ob_dml_ctx_define.h	678	ObUpdRtDef::se_rowkey_dist_ctx_	member SeRowkeyDistCtx (pointer) of type SeRowkeyDistCtx *	SeRowkeyDistCtx *se_rowkey_dist_ctx_;
+src/sql/engine/dml/ob_dml_ctx_define.h	689	ObUpdRtDef::table_rowkey_	member ObRowkey (value) of type ObRowkey	ObRowkey table_rowkey_;
+src/sql/engine/dml/ob_dml_ctx_define.h	814	ObDelRtDef::se_rowkey_dist_ctx_	member SeRowkeyDistCtx (pointer) of type SeRowkeyDistCtx *	SeRowkeyDistCtx *se_rowkey_dist_ctx_;
+src/sql/engine/dml/ob_dml_ctx_define.h	815	ObDelRtDef::table_rowkey_	member ObRowkey (value) of type ObRowkey	ObRowkey table_rowkey_;
+src/sql/engine/dml/ob_dml_ctx_define.h	868	ObMergeRtDef::rowkey_dist_ctx_	member SeRowkeyDistCtx (pointer) of type SeRowkeyDistCtx *	SeRowkeyDistCtx *rowkey_dist_ctx_;
+src/sql/engine/dml/ob_dml_ctx_define.h	869	ObMergeRtDef::table_rowkey_	member ObRowkey (value) of type ObRowkey	ObRowkey table_rowkey_;
+src/sql/engine/dml/ob_dml_ctx_define.h	1059	ObDMLModifyRowNode::new_row_	member StoredRow (pointer) of type ObChunkDatumStore::StoredRow *	ObChunkDatumStore::StoredRow *new_row_;
+src/sql/engine/dml/ob_dml_ctx_define.h	1060	ObDMLModifyRowNode::old_row_	member StoredRow (pointer) of type ObChunkDatumStore::StoredRow *	ObChunkDatumStore::StoredRow *old_row_;
+src/sql/engine/dml/ob_dml_ctx_define.h	1061	ObDMLModifyRowNode::full_row_	member StoredRow (pointer) of type ObChunkDatumStore::StoredRow *	ObChunkDatumStore::StoredRow *full_row_;
+src/sql/engine/dml/ob_dml_service.cpp	200	ObDMLService::check_geometry_type	allocator in, arena view out: ObDatum &datum	int ObDMLService::check_geometry_type(
+src/sql/engine/dml/ob_dml_service.cpp	1541	ObDMLService::init_ob_rowkey	allocator in, arena view out: ObRowkey &table_rowkey	int ObDMLService::init_ob_rowkey( ObIAllocator &allocator, const int64_t rowkey_cnt, ObRowkey &table_rowkey)
+src/sql/engine/dml/ob_fk_checker.h	118	ObForeignKeyChecker::se_rowkey_dist_ctx_	member SeRowkeyDistCtx (pointer) of type SeRowkeyDistCtx *	SeRowkeyDistCtx *se_rowkey_dist_ctx_;
+src/sql/engine/dml/ob_fk_checker.h	119	ObForeignKeyChecker::table_rowkey_	member ObRowkey (value) of type ObRowkey	ObRowkey table_rowkey_;
+src/sql/engine/dml/ob_table_modify_op.cpp	441	ForeignKeyHandle::gen_set	allocator in, arena view out: char *&buf	int ForeignKeyHandle::gen_set(ObEvalCtx &eval_ctx, char *&buf, int64_t &len, int64_t &pos,
+src/sql/engine/dml/ob_table_modify_op.cpp	450	ForeignKeyHandle::gen_where	allocator in, arena view out: char *&buf	int ForeignKeyHandle::gen_where(ObEvalCtx &eval_ctx, char *&buf, int64_t &len, int64_t &pos,
+src/sql/engine/dml/ob_table_modify_op.cpp	459	ForeignKeyHandle::gen_column_value	allocator in, arena view out: char *&buf	int ForeignKeyHandle::gen_column_value(ObEvalCtx &eval_ctx, char *&buf, int64_t &len, int64_t &pos,
+src/sql/engine/dml/ob_table_modify_op.cpp	500	ForeignKeyHandle::gen_column_null_value	allocator in, arena view out: char *&buf	int  ForeignKeyHandle::gen_column_null_value(ObEvalCtx &ctx, char *&buf, int64_t &len, int64_t &pos,
+src/sql/engine/dml/ob_table_modify_op.h	44	ForeignKeyHandle::ObFkRowResInfo::ori_datum_	member ObDatum (value) of type ObDatum	ObDatum ori_datum_;
+src/sql/engine/dml/ob_trigger_handler.cpp	738	TriggerHandle::convert_sql_type_to_pl_type	allocator in, arena view out: ObObj &src	int TriggerHandle::convert_sql_type_to_pl_type(ObSQLSessionInfo *session,
+src/sql/engine/dml/ob_trigger_handler.cpp	766	TriggerHandle::convert_pl_type_to_sql_type	allocator in, arena view out: ObObj &src	int TriggerHandle::convert_pl_type_to_sql_type(ObSQLSessionInfo *session,
+src/sql/engine/expr/ob_array_expr_utils.cpp	87	ObArrayExprUtils::vector_datum_add	allocator in, arena view out: ObDatum &res	int ObArrayExprUtils::vector_datum_add(ObExecContext &exec_ctx,
+src/sql/engine/expr/ob_array_expr_utils.cpp	353	ObArrayExprUtils::set_array_res	allocator in, arena view out: ObString &res	int ObArrayExprUtils::set_array_res(ObIArrayType *arr_obj, const int32_t res_size, ObIAllocator &allocator, ObString &res, const char *data)
+src/sql/engine/expr/ob_array_expr_utils.cpp	926	ObNestedVectorFunc::construct_param	allocator in, arena view out: ObString &str_data	int ObNestedVectorFunc::construct_param(
+src/sql/engine/expr/ob_array_expr_utils.cpp	1111	ObArrayExprUtils::get_collection_raw_data	allocator in, arena view out: ObString &bin_str	int ObArrayExprUtils::get_collection_raw_data(
+src/sql/engine/expr/ob_array_expr_utils.cpp	1132	ObArrayExprUtils::convert_to_string	allocator in, arena view out: ObString &res_str	int ObArrayExprUtils::convert_to_string(common::ObIAllocator &allocator, ObEvalCtx &ctx, const uint16_t subschema_id, const common::ObString &data, ObString &res_str)
+src/sql/engine/expr/ob_batch_eval_util.cpp	69	ObNestedArithOpBaseFunc::construct_param	allocator in, arena view out: ObString &str_data	int ObNestedArithOpBaseFunc::construct_param(ObIAllocator &alloc, ObEvalCtx &ctx, const uint16_t meta_id,
+src/sql/engine/expr/ob_batch_eval_util.cpp	75	ObNestedArithOpBaseFunc::construct_params	allocator in, arena view out: ObString &left	int ObNestedArithOpBaseFunc::construct_params(ObIAllocator &alloc, ObEvalCtx &ctx, const uint16_t left_meta_id,
+src/sql/engine/expr/ob_datum_cast.cpp	262	serialize_obnumber	allocator in, arena view out: ObString &out_str	static OB_INLINE int serialize_obnumber(number::ObNumber &nmb,
+src/sql/engine/expr/ob_datum_cast.cpp	281	ObDatumHexUtils::hex	allocator in, arena view out: ObDatum &res_datum	int ObDatumHexUtils::hex(const ObExpr &expr, const ObString &in_str, ObEvalCtx &ctx,
+src/sql/engine/expr/ob_datum_cast.cpp	1594	get_text_full_data	allocator in, arena view out: ObString &data	static int get_text_full_data(const sql::ObExpr &expr,
+src/sql/engine/expr/ob_datum_cast.cpp	1868	common_json_string	allocator in, arena view out: ObString& res_str	static int common_json_string(const ObExpr &expr,
+src/sql/engine/expr/ob_datum_cast.cpp	7793	common_json_number	allocator in, arena view out: common::ObDatum &child_res	static int common_json_number(common::ObDatum &child_res, const ObExpr &expr,
+src/sql/engine/expr/ob_datum_cast.cpp	10142	padding_char_for_cast	allocator in, arena view out: ObString &padding_res	int padding_char_for_cast(int64_t padding_cnt, const ObCollationType &padding_cs_type,
+src/sql/engine/expr/ob_datum_cast.cpp	12800	ObDatumCast::cast_obj	allocator in, arena view out: ObObj &dst_obj	int ObDatumCast::cast_obj(ObEvalCtx &ctx, ObIAllocator &alloc, const ObObjType &dst_type,
+src/sql/engine/expr/ob_expr.cpp	423	ObDatumObjParam::to_objparam	allocator in, arena view out: common::ObObjParam &obj_param	int ObDatumObjParam::to_objparam(common::ObObjParam &obj_param, ObIAllocator *allocator)
+src/sql/engine/expr/ob_expr.cpp	487	ObDatumObjParam::construct_sql_array_obj	allocator in, arena view out: ObObjParam &obj_param	int ObDatumObjParam::construct_sql_array_obj(ObObjParam &obj_param, ObIAllocator &allocator)
+src/sql/engine/expr/ob_expr_add.cpp	155	ObExprAdd::calc	allocator in, arena view out: ObObj &res	int ObExprAdd::calc(ObObj &res,
+src/sql/engine/expr/ob_expr_add.cpp	217	ObExprAdd::add_int	allocator in, arena view out: ObObj &res	int ObExprAdd::add_int(ObObj &res,
+src/sql/engine/expr/ob_expr_add.cpp	258	ObExprAdd::add_uint	allocator in, arena view out: ObObj &res	int ObExprAdd::add_uint(ObObj &res,
+src/sql/engine/expr/ob_expr_add.cpp	298	ObExprAdd::add_double	allocator in, arena view out: ObObj &res	int ObExprAdd::add_double(ObObj &res,
+src/sql/engine/expr/ob_expr_add.cpp	329	ObExprAdd::add_double_no_overflow	allocator in, arena view out: ObObj &res	int ObExprAdd::add_double_no_overflow(ObObj &res,
+src/sql/engine/expr/ob_expr_add.cpp	346	ObExprAdd::add_number	allocator in, arena view out: ObObj &res	int ObExprAdd::add_number(ObObj &res,
+src/sql/engine/expr/ob_expr_add.cpp	369	ObExprAdd::add_datetime	allocator in, arena view out: ObObj &res	int ObExprAdd::add_datetime(ObObj &res, const ObObj &left, const ObObj &right,
+src/sql/engine/expr/ob_expr_add.cpp	1047	ObDecimalNumberAddFunc::operator()	allocator in, arena view out: ObDatum &res	int operator()(ObDatum &res, const ObDatum &l, const ObDatum &r, const int64_t scale,
+src/sql/engine/expr/ob_expr_ai/ob_ai_func.h	54	ObAIFuncExprInfo::name_	member ObString (value) of type common::ObString	common::ObString name_;
+src/sql/engine/expr/ob_expr_ai/ob_ai_func.h	56	ObAIFuncExprInfo::model_	member ObString (value) of type common::ObString	common::ObString model_;
+src/sql/engine/expr/ob_expr_ai/ob_ai_func_client.h	63	ObAIFuncClient::url_	member raw bytes (pointer) of type char *	char *url_;

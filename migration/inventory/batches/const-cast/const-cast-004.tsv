@@ -1,0 +1,38 @@
+file	line	symbol	construct	text
+src/oblib/common/wide_integer/ob_wide_integer_impl.h	237	ObWideInteger::_impl::shift_left	C-style cast (void *) drops const from res; C-style cast (void *) drops const from self	if ((void *)&res != (void *)&self) {
+src/oblib/common/wide_integer/ob_wide_integer_impl.h	270	ObWideInteger::_impl::shift_right	C-style cast (void *) drops const from res; C-style cast (void *) drops const from self	if ((void *)&res != (void *)&self) {
+src/oblib/common/wide_integer/ob_wide_integer_impl.h	366	ObWideInteger::_impl::add	C-style cast (void *) drops const from res; C-style cast (void *) drops const from self	if ((void *)&res != (void *)&self) {
+src/oblib/common/wide_integer/ob_wide_integer_impl.h	401	ObWideInteger::_impl::sub	C-style cast (void *) drops const from res; C-style cast (void *) drops const from lhs	if ((void *)&res != (void *)&lhs) {
+src/oblib/common/wide_integer/ob_wide_integer_impl.h	444	ObWideInteger::_impl::sub	C-style cast (void *) drops const from res; C-style cast (void *) drops const from self	if ((void *)&res != (void *)&self) {
+src/oblib/common/wide_integer/ob_wide_integer_impl.h	491	ObWideInteger::_impl::unary_minus	C-style cast (void *) drops const from res; C-style cast (void *) drops const from self	if ((void *)&res != (void *)&self) {
+src/oblib/common/wide_integer/ob_wide_integer_impl.h	944	ObWideInteger::_impl::bitwise_and	C-style cast (void *) drops const from res; C-style cast (void *) drops const from lhs	if ((void *)&res != (void *)&lhs) {
+src/oblib/common/wide_integer/ob_wide_integer_impl.h	980	ObWideInteger::_impl::bitwise_and	C-style cast (void *) drops const from res; C-style cast (void *) drops const from self	if ((void *)&res != (void *)&self) {
+src/oblib/common/xml/ob_multi_mode_interface.h	214	ObStack::ObStack	const_cast<char*>	char* src_buf = const_cast<char*> (from.buffer_.ptr()) + i * sizeof(T);
+src/oblib/common/xml/ob_multi_mode_interface.h	215	ObStack::ObStack	const_cast<char*>	char* dst_buf = const_cast<char*> (buffer_.ptr()) + i * sizeof(T);
+src/oblib/common/xml/ob_path_parser.h	56	ObPathItem	const_cast<char*>	static constexpr char* COM_LE = const_cast<char*>("<=");
+src/oblib/common/xml/ob_path_parser.h	57	ObPathItem	const_cast<char*>	static constexpr char* COM_GE = const_cast<char*>(">=");
+src/oblib/common/xml/ob_path_parser.h	58	ObPathItem	const_cast<char*>	static constexpr char* COM_NE = const_cast<char*>("!=");
+src/oblib/common/xml/ob_path_parser.h	59	ObPathItem	const_cast<char*>	static constexpr char* OR = const_cast<char*>("or");
+src/oblib/common/xml/ob_path_parser.h	60	ObPathItem	const_cast<char*>	static constexpr char* AND = const_cast<char*>("and");
+src/oblib/common/xml/ob_path_parser.h	61	ObPathItem	const_cast<char*>	static constexpr char* DIV = const_cast<char*>("div");
+src/oblib/common/xml/ob_path_parser.h	62	ObPathItem	const_cast<char*>	static constexpr char* MOD = const_cast<char*>("mod");
+src/oblib/common/xml/ob_path_parser.h	63	ObPathItem	const_cast<char*>	static constexpr char* DOUBLE_SLASH = const_cast<char*>("//");
+src/oblib/common/xml/ob_path_parser.h	64	ObPathItem	const_cast<char*>	static constexpr char* DOUBLE_COLON = const_cast<char*>("::");
+src/oblib/common/xml/ob_path_parser.h	65	ObPathItem	const_cast<char*>	static constexpr char* DOUBLE_DOT = const_cast<char*>("..");
+src/oblib/common/xml/ob_path_parser.h	66	ObPathItem	const_cast<char*>	static constexpr char* ANCESTOR = const_cast<char*>("ancestor::");
+src/oblib/common/xml/ob_path_parser.h	67	ObPathItem	const_cast<char*>	static constexpr char* ANCESTOR_OR_SELF = const_cast<char*>("ancestor-or-self::");
+src/oblib/common/xml/ob_path_parser.h	68	ObPathItem	const_cast<char*>	static constexpr char* ATTRIBUTE = const_cast<char*>("attribute::");
+src/oblib/common/xml/ob_path_parser.h	69	ObPathItem	const_cast<char*>	static constexpr char* CHILD = const_cast<char*>("child::");
+src/oblib/common/xml/ob_path_parser.h	70	ObPathItem	const_cast<char*>	static constexpr char* DESCENDANT = const_cast<char*>("descendant::");
+src/oblib/common/xml/ob_path_parser.h	71	ObPathItem	const_cast<char*>	static constexpr char* DESCENDANT_OR_SELF = const_cast<char*>("descendant-or-self::");
+src/oblib/common/xml/ob_path_parser.h	72	ObPathItem	const_cast<char*>	static constexpr char* FOLLOWING = const_cast<char*>("following::");
+src/oblib/common/xml/ob_path_parser.h	73	ObPathItem	const_cast<char*>	static constexpr char* FOLLOWING_SIBLING = const_cast<char*>("following-sibling::");
+src/oblib/common/xml/ob_path_parser.h	74	ObPathItem	const_cast<char*>	static constexpr char* NAMESPACE = const_cast<char*>("namespace::");
+src/oblib/common/xml/ob_path_parser.h	75	ObPathItem	const_cast<char*>	static constexpr char* PARENT = const_cast<char*>("parent::");
+src/oblib/common/xml/ob_path_parser.h	76	ObPathItem	const_cast<char*>	static constexpr char* PRECEDING = const_cast<char*>("preceding::");
+src/oblib/common/xml/ob_path_parser.h	77	ObPathItem	const_cast<char*>	static constexpr char* PRECEDING_SIBLING = const_cast<char*>("preceding-sibling::");
+src/oblib/common/xml/ob_path_parser.h	78	ObPathItem	const_cast<char*>	static constexpr char* SELF = const_cast<char*>("self::");
+src/oblib/common/xml/ob_path_parser.h	79	ObPathItem	const_cast<char*>	static constexpr char* NODE = const_cast<char*>("node(");
+src/oblib/common/xml/ob_path_parser.h	80	ObPathItem	const_cast<char*>	static constexpr char* TEXT = const_cast<char*>("text(");
+src/oblib/common/xml/ob_path_parser.h	81	ObPathItem	const_cast<char*>	static constexpr char* COMMENT = const_cast<char*>("comment(");
+src/oblib/common/xml/ob_path_parser.h	82	ObPathItem	const_cast<char*>	static constexpr char* PROCESSING_INSTRUCTION = const_cast<char*>("processing-instruction(");

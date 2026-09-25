@@ -1,0 +1,51 @@
+file	line	symbol	construct	text
+src/storage/slog_ckpt/ob_server_checkpoint_slog_handler.h	102	ObServerCheckpointSlogHandler::is_writing_checkpoint_	field bool; 2 atomic accesses (ATOMIC_BCAS 1, ATOMIC_STORE 1)	bool is_writing_checkpoint_;
+src/storage/slog_ckpt/ob_tablet_replay_create_handler.h	166	ObTabletReplayCreateHandler::inflight_task_cnt_	field int64_t; 3 atomic accesses (ATOMIC_DEC 1, ATOMIC_INC 1, ATOMIC_LOAD 1)	int64_t inflight_task_cnt_;
+src/storage/slog_ckpt/ob_tablet_replay_create_handler.h	167	ObTabletReplayCreateHandler::finished_tablet_cnt_	field int64_t; 2 atomic accesses (ATOMIC_FAA 1, ATOMIC_LOAD 1)	int64_t finished_tablet_cnt_;
+src/storage/slog_ckpt/ob_tablet_replay_create_handler.h	168	ObTabletReplayCreateHandler::errcode_	field int; 5 atomic accesses (ATOMIC_LOAD 4, ATOMIC_STORE 1)	int errcode_;
+src/storage/tablelock/ob_lock_memtable.h	243	ObLockMemtable::freeze_scn_	field share::SCN; 1 atomic accesses (ATOMIC_VCAS 1); through member functions inc_update	share::SCN freeze_scn_;
+src/storage/tablelock/ob_lock_memtable.h	246	ObLockMemtable::rec_scn_	field share::SCN; 1 atomic accesses (ATOMIC_VCAS 1); through member functions dec_update	share::SCN rec_scn_;
+src/storage/tablelock/ob_lock_memtable.h	247	ObLockMemtable::pre_rec_scn_	field share::SCN; 1 atomic accesses (ATOMIC_VCAS 1); through member functions dec_update	share::SCN pre_rec_scn_;
+src/storage/tablelock/ob_lock_memtable.h	248	ObLockMemtable::max_committed_scn_	field share::SCN; 1 atomic accesses (ATOMIC_VCAS 1); through member functions inc_update	share::SCN max_committed_scn_;
+src/storage/tablelock/ob_lock_memtable.h	249	ObLockMemtable::is_frozen_	field bool; 5 atomic accesses (ATOMIC_LOAD 3, ATOMIC_STORE 2)	bool is_frozen_;
+src/storage/tablelock/ob_lock_memtable.h	250	ObLockMemtable::need_check_tablet_status_	field bool; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_STORE 1)	bool need_check_tablet_status_;
+src/storage/tablelock/ob_lock_memtable.h	252	ObLockMemtable::tablet_status_check_counter_	field int64_t; 2 atomic accesses (ATOMIC_INC 1, ATOMIC_LOAD 1)	int64_t tablet_status_check_counter_;
+src/storage/tablelock/ob_obj_lock.h	150	ObObjLockPriorityQueue::current_id_	field int64_t; 1 atomic accesses (ATOMIC_LOAD 1)	int64_t current_id_;
+src/storage/tablelock/ob_obj_lock.h	158	ObObjLockPriorityQueue::total_size_	field int64_t; 7 atomic accesses (ATOMIC_INC 4, ATOMIC_LOAD 2, ATOMIC_DEC 1)	int64_t total_size_;
+src/storage/tablelock/ob_obj_lock.h	422	ObOBJLock::row_share_	field int64_t; 2 atomic accesses (ATOMIC_DEC 1, ATOMIC_INC 1)	int64_t row_share_;
+src/storage/tablelock/ob_obj_lock.h	423	ObOBJLock::row_exclusive_	field int64_t; 2 atomic accesses (ATOMIC_DEC 1, ATOMIC_INC 1)	int64_t row_exclusive_;
+src/storage/tablelock/ob_obj_lock.h	433	ObOBJLockFactory::alloc_count_	field static int64_t; 1 atomic accesses (ATOMIC_FAA 1)	static int64_t alloc_count_;
+src/storage/tablelock/ob_obj_lock.h	434	ObOBJLockFactory::release_count_	field static int64_t; 1 atomic accesses (ATOMIC_FAA 1)	static int64_t release_count_;
+src/storage/tablet/ob_full_tablet_creator.h	60	ObFullTabletCreator::wait_create_tablets_cnt_	field int64_t; 3 atomic accesses (ATOMIC_DEC 1, ATOMIC_INC 1, ATOMIC_LOAD 1)	int64_t wait_create_tablets_cnt_; // tablets waiting to be created
+src/storage/tablet/ob_full_tablet_creator.h	61	ObFullTabletCreator::created_tablets_cnt_	field int64_t; 3 atomic accesses (ATOMIC_DEC 1, ATOMIC_INC 1, ATOMIC_LOAD 1)	int64_t created_tablets_cnt_; // tablets has been created
+src/storage/tablet/ob_tablet.h	762	ObTablet::wash_score_	field volatile int64_t; 3 atomic accesses (ATOMIC_LOAD 2, ATOMIC_CAS 1)	volatile int64_t wash_score_;                              // size: 8B, alignment: 8B
+src/storage/tablet/ob_tablet.h	763	ObTablet::ref_cnt_	field volatile int64_t; 3 atomic accesses (ATOMIC_AAF 1, ATOMIC_LOAD 1, ATOMIC_SAF 1)	volatile int64_t ref_cnt_;                                 // size: 8B, alignment: 8B
+src/storage/tablet/ob_tablet_memtable_mgr.h	155	ObTabletMemtableMgrPool::count_	field int64_t; 3 atomic accesses (ATOMIC_DEC 1, ATOMIC_INC 1, ATOMIC_LOAD 1)	int64_t count_;
+src/storage/tablet/ob_tablet_table_store_iterator.h	113	ObTableStoreIterator::memstore_retired_	field bool *; 1 atomic accesses (ATOMIC_LOAD 1); pointer whose pointee is the atomic object: ObITabletMemtable::read_barrier_ (assigned at src/storage/tablet/ob_tablet_table_store_iterator.cpp:317)	bool * memstore_retired_;
+src/storage/throttle/ob_throttle_unit.h	200	ObThrottleUnit::enable_adaptive_limit_	field bool; 1 atomic accesses (ATOMIC_STORE 1)	bool enable_adaptive_limit_;
+src/storage/throttle/ob_throttle_unit.h	201	ObThrottleUnit::config_specify_resource_limit_	field int64_t; 1 atomic accesses (ATOMIC_STORE 1)	int64_t config_specify_resource_limit_;
+src/storage/throttle/ob_throttle_unit.h	202	ObThrottleUnit::resource_limit_	field int64_t; 1 atomic accesses (ATOMIC_STORE 1)	int64_t resource_limit_;
+src/storage/throttle/ob_throttle_unit.h	203	ObThrottleUnit::sequence_num_	field int64_t; 2 atomic accesses (ATOMIC_AAF 1, ATOMIC_LOAD 1)	int64_t sequence_num_;
+src/storage/throttle/ob_throttle_unit.h	204	ObThrottleUnit::clock_	field int64_t; 4 atomic accesses (ATOMIC_LOAD 2, ATOMIC_BCAS 1, ATOMIC_SET 1)	int64_t clock_;
+src/storage/throttle/ob_throttle_unit.h	208	ObThrottleUnit::last_advance_clock_ts_us_	field int64_t; 1 atomic accesses (ATOMIC_BCAS 1)	int64_t last_advance_clock_ts_us_;
+src/storage/throttle/ob_throttle_unit.h	209	ObThrottleUnit::last_print_throttle_info_ts_	field int64_t; 1 atomic accesses (ATOMIC_BCAS 1)	int64_t last_print_throttle_info_ts_;
+src/storage/tmp_file/ob_i_tmp_file.h	333	ObITmpFile::ref_cnt_	field int64_t; 4 atomic accesses (ATOMIC_AAF 2, ATOMIC_INC 1, ATOMIC_LOAD 1)	int64_t ref_cnt_;
+src/storage/tmp_file/ob_i_tmp_file.h	342	ObITmpFile::diag_log_print_cnt_	field int64_t; 2 atomic accesses (ATOMIC_INC 1, ATOMIC_LOAD 1)	int64_t diag_log_print_cnt_;    // print diagnosis log every PRINT_LOG_FILE_SIZE
+src/storage/tmp_file/ob_sn_tmp_file_manager.h	59	ObSNTmpFileManager::current_fd_	field static int64_t; 1 atomic accesses (ATOMIC_AAF 1)	static int64_t current_fd_;
+src/storage/tmp_file/ob_sn_tmp_file_manager.h	60	ObSNTmpFileManager::current_dir_id_	field static int64_t; 1 atomic accesses (ATOMIC_AAF 1)	static int64_t current_dir_id_;
+src/storage/tmp_file/ob_tmp_file_block_manager.h	214	ObTmpFileBlockManager::block_index_generator_	field uint64_t; 1 atomic accesses (ATOMIC_AAF 1)	uint64_t block_index_generator_;
+src/storage/tmp_file/ob_tmp_file_flush_ctx.h	341	ObTmpFileFlushTask::write_block_ret_code_	field int; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_SET 1)	int write_block_ret_code_;
+src/storage/tmp_file/ob_tmp_file_flush_ctx.h	342	ObTmpFileFlushTask::io_result_ret_code_	field int; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_SET 1)	int io_result_ret_code_;
+src/storage/tmp_file/ob_tmp_file_flush_ctx.h	348	ObTmpFileFlushTask::is_write_block_executed_	field bool; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_SET 1)	bool is_write_block_executed_; // set to true if task has sent IO
+src/storage/tmp_file/ob_tmp_file_flush_ctx.h	349	ObTmpFileFlushTask::is_io_finished_	field bool; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_SET 1)	bool is_io_finished_;       // set to true if task has finished async IO
+src/storage/tmp_file/ob_tmp_file_page_cache_controller.h	73	ObTmpFilePageCacheController::flush_all_data_	field bool; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_STORE 1)	bool flush_all_data_;                   // set to true to flush all pages when shrinking write buffer pool
+src/storage/tmp_file/ob_tmp_file_page_cache_controller.h	74	ObTmpFilePageCacheController::disk_usage_limit_	field int64_t; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_SET 1)	int64_t disk_usage_limit_;              // Periodically refreshed from runtime configuration.
+src/storage/tmp_file/ob_tmp_file_thread_job.h	57	ObTmpFileSwapJob::is_inited_	field bool; 2 atomic accesses (ATOMIC_LOAD 2)	bool is_inited_;
+src/storage/tmp_file/ob_tmp_file_thread_job.h	58	ObTmpFileSwapJob::ret_code_	field int; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_SET 1)	int ret_code_;
+src/storage/tmp_file/ob_tmp_file_thread_job.h	59	ObTmpFileSwapJob::is_finished_	field bool; 3 atomic accesses (ATOMIC_LOAD 2, ATOMIC_SET 1)	bool is_finished_;
+src/storage/tmp_file/ob_tmp_file_thread_wrapper.h	97	ObTmpFileFlushThread::flushing_block_num_	field int64_t; 8 atomic accesses (ATOMIC_LOAD 5, ATOMIC_INC 2, ATOMIC_DEC 1)	int64_t flushing_block_num_;      // maintain it when ObTmpFileFlushTask is created and freed
+src/storage/tmp_file/ob_tmp_file_thread_wrapper.h	100	ObTmpFileFlushThread::wait_list_size_	field int64_t; 3 atomic accesses (ATOMIC_DEC 1, ATOMIC_INC 1, ATOMIC_LOAD 1)	int64_t wait_list_size_;
+src/storage/tmp_file/ob_tmp_file_thread_wrapper.h	101	ObTmpFileFlushThread::retry_list_size_	field int64_t; 2 atomic accesses (ATOMIC_DEC 1, ATOMIC_INC 1)	int64_t retry_list_size_;
+src/storage/tmp_file/ob_tmp_file_thread_wrapper.h	102	ObTmpFileFlushThread::finished_list_size_	field int64_t; 3 atomic accesses (ATOMIC_DEC 1, ATOMIC_INC 1, ATOMIC_LOAD 1)	int64_t finished_list_size_;
+src/storage/tmp_file/ob_tmp_file_thread_wrapper.h	160	ObTmpFileSwapThread::swap_job_num_	field int64_t; 5 atomic accesses (ATOMIC_LOAD 3, ATOMIC_DEC 1, ATOMIC_INC 1)	int64_t swap_job_num_;
+src/storage/tmp_file/ob_tmp_file_thread_wrapper.h	162	ObTmpFileSwapThread::working_list_size_	field int64_t; 6 atomic accesses (ATOMIC_LOAD 3, ATOMIC_INC 2, ATOMIC_DEC 1)	int64_t working_list_size_;

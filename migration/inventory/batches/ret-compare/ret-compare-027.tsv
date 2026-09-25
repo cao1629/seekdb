@@ -1,0 +1,92 @@
+file	line	symbol	construct	text
+src/sql/das/ob_das_tablet_mapper.cpp	459	ObDASTabletMapper::get_default_tablet_and_object_id	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/das/ob_das_tablet_mapper.cpp	522	ObDASTabletMapper::get_default_tablet_and_object_id	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/das/ob_das_tablet_mapper.cpp	565	ObDASTabletMapper::get_related_partition_id	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/das/ob_das_tablet_mapper.cpp	572	ObDASTabletMapper::get_related_partition_id	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/das/ob_das_tablet_mapper.cpp	608	ObDASTabletMapper::set_partition_id_map	ret == OB_HASH_EXIST	if (OB_LIKELY(OB_HASH_EXIST == ret)) {
+src/sql/das/ob_das_tablet_mapper.cpp	625	ObDASTabletMapper::set_partition_id_map	ret == OB_HASH_EXIST	if (OB_LIKELY(OB_HASH_EXIST == ret)) {
+src/sql/das/ob_das_tablet_mapper.cpp	641	ObDASTabletMapper::get_partition_id_map	ret == OB_HASH_NOT_EXIST	if (OB_LIKELY(OB_HASH_NOT_EXIST == ret)) {
+src/sql/das/ob_das_task.cpp	53	ObIDASTaskOp::start_das_task	ret == OB_ERR_DEFENSIVE_CHECK	if (OB_ERR_DEFENSIVE_CHECK == ret) {
+src/sql/das/ob_das_update_op.cpp	163	ObDASUpdIterator::get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/das/ob_das_update_op.cpp	181	ObDASUpdIterator::get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/das/ob_das_update_op.cpp	217	ObDASUpdIterator::get_next_rows	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/das/ob_das_update_op.cpp	239	ObDASUpdIterator::get_next_rows	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/das/ob_das_update_op.cpp	256	ObDASUpdIterator::get_next_rows	ret == OB_ITER_END	if (OB_SUCC(ret) || OB_LIKELY(OB_ITER_END == ret)) {
+src/sql/das/ob_das_update_op.cpp	308	ObDASUpdIterator::get_next_domain_index_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/das/ob_das_update_op.cpp	351	ObDASUpdIterator::get_next_domain_index_rows	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/das/ob_das_update_op.cpp	386	ObDASIndexDMLAdaptor::write_rows	ret != OB_TRY_LOCK_ROW_CONFLICT	if (OB_TRY_LOCK_ROW_CONFLICT != ret) {
+src/sql/das/ob_das_update_op.cpp	392	ObDASIndexDMLAdaptor::write_rows	ret != OB_TRY_LOCK_ROW_CONFLICT	if (OB_TRY_LOCK_ROW_CONFLICT != ret) {
+src/sql/das/ob_das_update_op.cpp	396	ObDASIndexDMLAdaptor::write_rows	ret != OB_TRY_LOCK_ROW_CONFLICT	if (OB_TRY_LOCK_ROW_CONFLICT != ret) {
+src/sql/das/ob_das_update_op.cpp	406	ObDASIndexDMLAdaptor::write_rows	ret != OB_TRY_LOCK_ROW_CONFLICT	if (OB_TRY_LOCK_ROW_CONFLICT != ret) {
+src/sql/das/ob_das_update_op.cpp	450	ObDASUpdateOp::open_op	ret != OB_TRY_LOCK_ROW_CONFLICT	if (OB_TRY_LOCK_ROW_CONFLICT != ret) {
+src/sql/das/ob_domain_id.cpp	88	ObDomainIdUtils::check_table_need_domain_id_merge	ret != OB_ERR_INDEX_KEY_NOT_FOUND	if (OB_FAIL(ddl_table_schema->get_docid_col_id(docid_col_id)) && OB_ERR_INDEX_KEY_NOT_FOUND != ret) {
+src/sql/das/ob_domain_id.cpp	89	ObDomainIdUtils::check_table_need_domain_id_merge	ret == OB_ERR_INDEX_KEY_NOT_FOUND	} else if (OB_ERR_INDEX_KEY_NOT_FOUND == ret) {
+src/sql/das/ob_domain_id.cpp	104	ObDomainIdUtils::check_table_need_domain_id_merge	ret != OB_ERR_INDEX_KEY_NOT_FOUND	if (OB_FAIL(ddl_table_schema->get_vec_index_vid_col_id(vid_col_id)) && OB_ERR_INDEX_KEY_NOT_FOUND != ret) {
+src/sql/das/ob_domain_id.cpp	105	ObDomainIdUtils::check_table_need_domain_id_merge	ret == OB_ERR_INDEX_KEY_NOT_FOUND	} else if (OB_ERR_INDEX_KEY_NOT_FOUND == ret) {
+src/sql/das/ob_domain_id.cpp	220	ObDomainIdUtils::get_domain_tid_table_by_type	ret == OB_ERR_INDEX_KEY_NOT_FOUND	if (OB_ERR_INDEX_KEY_NOT_FOUND == ret) {
+src/sql/das/ob_domain_id.cpp	261	ObDomainIdUtils::get_domain_tid_table_by_cid	ret == OB_ERR_INDEX_KEY_NOT_FOUND	if (OB_ERR_INDEX_KEY_NOT_FOUND == ret) {
+src/sql/dtl/ob_dtl_basic_channel.cpp	216	ObDtlBasicChannel::wait_response	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/sql/dtl/ob_dtl_basic_channel.cpp	296	ObDtlBasicChannel::send	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/dtl/ob_dtl_basic_channel.cpp	495	ObDtlBasicChannel::get_processed_buffer	ret == OB_EAGAIN	if (ret == OB_EAGAIN) {
+src/sql/dtl/ob_dtl_basic_channel.cpp	522	ObDtlBasicChannel::process1	ret == OB_DTL_WAIT_EAGAIN	if (OB_DTL_WAIT_EAGAIN == ret) {
+src/sql/dtl/ob_dtl_basic_channel.cpp	532	ObDtlBasicChannel::process1	ret == OB_ITER_END	if (OB_ITER_END == ret || transferred) {
+src/sql/dtl/ob_dtl_basic_channel.cpp	570	ObDtlBasicChannel::process1	ret == OB_ITER_END	} while (OB_ITER_END == ret);
+src/sql/dtl/ob_dtl_basic_channel.cpp	739	ObDtlBasicChannel::wait_unblocking	ret == OB_DTL_WAIT_EAGAIN	if (OB_DTL_WAIT_EAGAIN == ret) {
+src/sql/dtl/ob_dtl_basic_channel.cpp	911	ObDtlBasicChannel::inner_write_msg	ret != OB_BUF_NOT_ENOUGH	if (OB_BUF_NOT_ENOUGH != ret) {
+src/sql/dtl/ob_dtl_basic_channel.cpp	926	ObDtlBasicChannel::write_msg	ret == OB_BUF_NOT_ENOUGH	if (OB_BUF_NOT_ENOUGH == ret) {
+src/sql/dtl/ob_dtl_basic_channel.cpp	1149	ObDtlDatumMsgWriter::need_new_buffer	other variable write_ret_ != OB_BUF_NOT_ENOUGH	if (OB_LIKELY(OB_BUF_NOT_ENOUGH != write_ret_ && nullptr != write_buffer_)) {
+src/sql/dtl/ob_dtl_basic_channel.h	279	ObDtlDatumMsgWriter::write	ret != OB_BUF_NOT_ENOUGH	if (OB_BUF_NOT_ENOUGH != ret) {
+src/sql/dtl/ob_dtl_channel_agent.cpp	64	ObDtlBufEncoder::write_data_msg	ret != OB_BUF_NOT_ENOUGH	if (OB_BUF_NOT_ENOUGH != ret) {
+src/sql/dtl/ob_dtl_channel_agent.cpp	126	ObDtlChanAgent::inner_broadcast_row	ret != OB_BUF_NOT_ENOUGH	if (OB_BUF_NOT_ENOUGH != ret) {
+src/sql/dtl/ob_dtl_channel_agent.cpp	138	ObDtlChanAgent::broadcast_row	ret == OB_BUF_NOT_ENOUGH	if (OB_BUF_NOT_ENOUGH == ret) {
+src/sql/dtl/ob_dtl_channel_loop.cpp	153	ObDtlChannelLoop::ObDtlChannelLoopProc::process	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/dtl/ob_dtl_channel_loop.cpp	196	ObDtlChannelLoop::process_base	ret == OB_DTL_WAIT_EAGAIN	} else if (OB_DTL_WAIT_EAGAIN == ret) {
+src/sql/dtl/ob_dtl_channel_loop.cpp	205	ObDtlChannelLoop::process_base	ret == OB_DTL_WAIT_EAGAIN	} else if (OB_DTL_WAIT_EAGAIN == ret) {
+src/sql/dtl/ob_dtl_channel_loop.cpp	307	ObDtlChannelLoop::process_channels	ret == OB_DTL_WAIT_EAGAIN	for (int64_t i = 0; i != chan_cnt && ret == OB_DTL_WAIT_EAGAIN; ++i) {
+src/sql/dtl/ob_dtl_channel_loop.cpp	324	ObDtlChannelLoop::process_channels	ret == OB_ITER_END	} else if (OB_ITER_END == ret) {
+src/sql/dtl/ob_dtl_channel_loop.cpp	355	ObDtlChannelLoop::process_channel	ret == OB_DTL_WAIT_EAGAIN	if (ret == OB_DTL_WAIT_EAGAIN && use_interm_result_) {
+src/sql/dtl/ob_dtl_channel_loop.cpp	360	ObDtlChannelLoop::process_channel	ret == OB_DTL_WAIT_EAGAIN	while (OB_DTL_WAIT_EAGAIN == ret && ch != &sentinel_node_) {
+src/sql/dtl/ob_dtl_channel_loop.cpp	364	ObDtlChannelLoop::process_channel	ret == OB_DTL_WAIT_EAGAIN	} else if (OB_DTL_WAIT_EAGAIN == ret) {
+src/sql/dtl/ob_dtl_channel_mem_manager.cpp	96	ObDtlChannelMemManager::alloc	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/sql/dtl/ob_dtl_fc_server.cpp	160	ObDfc::unregister_dfc_channel	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/sql/dtl/ob_dtl_flow_control.cpp	246	ObDtlFlowControl::notify_channel_unblocking	ret == OB_ERR_SIGNALED_IN_PARALLEL_QUERY_SERVER	if (OB_ERR_SIGNALED_IN_PARALLEL_QUERY_SERVER == ret) {
+src/sql/dtl/ob_dtl_flow_control.cpp	266	ObDtlFlowControl::notify_channel_unblocking	ret == OB_ERR_SIGNALED_IN_PARALLEL_QUERY_SERVER	if (OB_ERR_SIGNALED_IN_PARALLEL_QUERY_SERVER == ret) {
+src/sql/dtl/ob_dtl_interm_result_manager.cpp	388	ObDTLIntermResultManager::generate_monitor_info_rows	ret == OB_SIZE_OVERFLOW	if (OB_SIZE_OVERFLOW == ret) {
+src/sql/dtl/ob_dtl_interm_result_manager.cpp	473	ObDTLIntermResultManager::process_interm_result_inner	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/sql/dtl/ob_dtl_interm_result_manager.cpp	504	ObDTLIntermResultManager::process_interm_result_inner	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret &&
+src/sql/dtl/ob_dtl_interm_result_manager.cpp	517	ObDTLIntermResultManager::process_interm_result_inner	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret &&
+src/sql/dtl/ob_dtl_interm_result_manager.cpp	701	ObDTLIntermResultManager::access_mem_profile	ret == OB_HASH_NOT_EXIST	} else if (ret == OB_HASH_NOT_EXIST) {
+src/sql/dtl/ob_dtl_interm_result_manager.cpp	740	ObDTLIntermResultManager::init_mem_profile	ret == OB_HASH_NOT_EXIST	} else if (ret == OB_HASH_NOT_EXIST) {
+src/sql/dtl/ob_dtl_interm_result_manager.cpp	798	ObDTLIntermResultManager::destroy_mem_profile	ret == OB_HASH_NOT_EXIST	if (ret == OB_HASH_NOT_EXIST) {
+src/sql/dtl/ob_dtl_local_channel.cpp	157	ObDtlLocalChannel::send_message	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/sql/dtl/ob_dtl_mem_manager.cpp	150	ObDtlMemManager::free	ret == OB_SIZE_OVERFLOW	if (OB_SIZE_OVERFLOW == ret) {
+src/sql/dtl/ob_dtl_memory_manager.cpp	151	ObDtlMemoryManager::free	ret == OB_SIZE_OVERFLOW [not built]	if (OB_SIZE_OVERFLOW == ret) {
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	749	ObAggregateProcessor::HashBasedDistinctExtraResult::build_distinct_data	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	779	ObAggregateProcessor::HashBasedDistinctExtraResult::build_distinct_data_for_batch	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	813	ObAggregateProcessor::HashBasedDistinctExtraResult::get_next_unique_hash_table_row	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	817	ObAggregateProcessor::HashBasedDistinctExtraResult::get_next_unique_hash_table_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	823	ObAggregateProcessor::HashBasedDistinctExtraResult::get_next_unique_hash_table_row	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	854	ObAggregateProcessor::HashBasedDistinctExtraResult::get_next_unique_hash_table_batch	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	858	ObAggregateProcessor::HashBasedDistinctExtraResult::get_next_unique_hash_table_batch	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	864	ObAggregateProcessor::HashBasedDistinctExtraResult::get_next_unique_hash_table_batch	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	2060	ObAggregateProcessor::precompute_distinct_aggr_result	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	2068	ObAggregateProcessor::precompute_distinct_aggr_result	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	2203	ObAggregateProcessor::process_aggr_result_from_distinct	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	2210	ObAggregateProcessor::process_aggr_result_from_distinct	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	2910	ObAggregateProcessor::rollup_aggregation	ret == OB_ITER_END	if (ret == OB_ITER_END) {
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	2971	ObAggregateProcessor::rollup_distinct	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	2982	ObAggregateProcessor::rollup_distinct	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	4027	ObAggregateProcessor::collect_aggr_result	ret != OB_ITER_END	if (ret != OB_ITER_END && ret != OB_SUCCESS) {
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	4082	ObAggregateProcessor::collect_aggr_result	ret != OB_ITER_END	if (ret != OB_ITER_END && ret != OB_SUCCESS) {
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	4083	ObAggregateProcessor::collect_aggr_result	ret == OB_ITER_END	} else if (ret == OB_ITER_END) {
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	4106	ObAggregateProcessor::collect_aggr_result	ret == OB_ITER_END	if (ret == OB_ITER_END && 0 == not_null_start_loc) {
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	6076	ObAggregateProcessor::get_wm_concat_result	ret != OB_ITER_END	if (ret != OB_ITER_END && ret != OB_SUCCESS) {
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	6192	ObAggregateProcessor::get_pl_agg_udf_result	ret != OB_ITER_END	if (ret != OB_ITER_END && ret != OB_SUCCESS) {
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	6358	ObAggregateProcessor::compute_hybrid_hist_result	ret != OB_ITER_END	if (ret != OB_ITER_END && ret != OB_SUCCESS) {
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	6546	ObAggregateProcessor::get_json_arrayagg_result	ret != OB_ITER_END	if (ret != OB_ITER_END && ret != OB_SUCCESS) {
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	6620	ObAggregateProcessor::get_ora_json_arrayagg_result	ret != OB_ITER_END	if (ret != OB_ITER_END && ret != OB_SUCCESS) {
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	6804	ObAggregateProcessor::get_json_objectagg_result	ret == OB_ERR_JSON_DOCUMENT_NULL_KEY	if (ret == OB_ERR_JSON_DOCUMENT_NULL_KEY) {
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	6807	ObAggregateProcessor::get_json_objectagg_result	ret != OB_ITER_END	if (ret != OB_ITER_END && ret != OB_SUCCESS) {
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	6917	ObAggregateProcessor::get_ora_json_objectagg_result	ret != OB_ITER_END	if (ret != OB_ITER_END && ret != OB_SUCCESS) {
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	7287	ObAggregateProcessor::get_asmvt_result	ret != OB_ITER_END	if (ret != OB_ITER_END && ret != OB_SUCCESS) {
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	7476	ObAggregateProcessor::get_array_agg_result	ret != OB_ITER_END	if (ret != OB_ITER_END && ret != OB_SUCCESS) {

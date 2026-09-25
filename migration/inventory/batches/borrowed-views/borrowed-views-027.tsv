@@ -1,0 +1,45 @@
+file	line	symbol	construct	text
+src/sql/engine/cmd/ob_load_data_impl.h	65	ObLoadTableColumnDesc::column_name_	member ObString (value) of type common::ObString	common::ObString column_name_;
+src/sql/engine/cmd/ob_load_data_impl.h	96	ObInsertValueGenerator::insert_header_	member ObString (value) of type ObString	ObString insert_header_;
+src/sql/engine/cmd/ob_load_data_impl.h	148	ObInsertResult::err_msg_	member ObString (value) of type common::ObString	common::ObString err_msg_;
+src/sql/engine/cmd/ob_load_data_impl.h	182	ObInsertTask::insert_stmt_head_	member ObString (value) of type common::ObString	common::ObString insert_stmt_head_;
+src/sql/engine/cmd/ob_load_data_impl.h	183	ObInsertTask::insert_value_data_	member container of ObString of type common::ObSEArray<common::ObString, COMMON_SIZE>	common::ObSEArray<common::ObString, COMMON_SIZE> insert_value_data_;
+src/sql/engine/cmd/ob_load_data_impl.h	377	ObLoadFileDataTrimer::incomplate_data_	member raw bytes (pointer) of type char *	char *incomplate_data_;
+src/sql/engine/cmd/ob_load_data_impl.h	445	ObCSVParser::cur_pos_	member raw bytes (pointer) of type char *	char *cur_pos_;
+src/sql/engine/cmd/ob_load_data_impl.h	446	ObCSVParser::cur_field_begin_pos_	member raw bytes (pointer) of type char *	char *cur_field_begin_pos_;
+src/sql/engine/cmd/ob_load_data_impl.h	447	ObCSVParser::cur_field_end_pos_	member raw bytes (pointer) of type char *	char *cur_field_end_pos_;
+src/sql/engine/cmd/ob_load_data_impl.h	448	ObCSVParser::cur_line_begin_pos_	member raw bytes (pointer) of type char *	char *cur_line_begin_pos_;
+src/sql/engine/cmd/ob_load_data_impl.h	449	ObCSVParser::buf_begin_pos_	member raw bytes (pointer) of type char *	char *buf_begin_pos_;
+src/sql/engine/cmd/ob_load_data_impl.h	450	ObCSVParser::buf_end_pos_	member raw bytes (pointer) of type char *	char *buf_end_pos_;
+src/sql/engine/cmd/ob_load_data_impl.h	451	ObCSVParser::last_end_enclosed_	member raw bytes (pointer) of type char *	char *last_end_enclosed_;
+src/sql/engine/cmd/ob_load_data_impl.h	457	ObCSVParser::values_in_line_	member container of ObString of type common::ObSEArray<ObString, 1>	common::ObSEArray<ObString, 1> values_in_line_;
+src/sql/engine/cmd/ob_load_data_impl.h	483	ObShuffleTaskHandle::row_in_file	member ObNewRow (value) of type ObNewRow	ObNewRow row_in_file;
+src/sql/engine/cmd/ob_load_data_impl.h	670	ObLoadDataSPImpl::ToolBox::insert_stmt_head_buff	member ObString (value) of type common::ObString	common::ObString insert_stmt_head_buff;
+src/sql/engine/cmd/ob_load_data_impl.h	671	ObLoadDataSPImpl::ToolBox::log_file_name	member ObString (value) of type common::ObString	common::ObString log_file_name;
+src/sql/engine/cmd/ob_load_data_impl.h	672	ObLoadDataSPImpl::ToolBox::load_info	member ObString (value) of type common::ObString	common::ObString load_info;
+src/sql/engine/cmd/ob_load_data_parser.cpp	528	ObExternalFileFormat::to_string_with_alloc	allocator in, arena view out: ObString &str	int ObExternalFileFormat::to_string_with_alloc(ObString &str, ObIAllocator &allocator, bool into_outfile) const
+src/sql/engine/cmd/ob_load_data_parser.cpp	612	ObExternalFileFormat::mock_gen_column_def	allocator in, arena view out: ObString &def	int ObExternalFileFormat::mock_gen_column_def(
+src/sql/engine/cmd/ob_table_executor.h	86	ObCreateTableExecutor::ObInsSQLPrinter::param_store_	member ParamStore (pointer) of type const ParamStore *	const ParamStore *param_store_;
+src/sql/engine/cmd/ob_variable_set_executor.cpp	657	ObVariableSetExecutor::cast_value	allocator in, arena view out: ObObj &out_val	int ObVariableSetExecutor::cast_value(ObExecContext &ctx,
+src/sql/engine/cmd/ob_vector_index_refresh.h	59	ObVectorRefreshIndexCtx::idx_parameters_	member ObString (value) of type ObString	ObString idx_parameters_;
+src/sql/engine/cmd/ob_vector_refresh_index_executor.h	41	ObVectorRefreshIndexArg::idx_name_	member ObString (value) of type ObString	ObString idx_name_;
+src/sql/engine/cmd/ob_vector_refresh_index_executor.h	42	ObVectorRefreshIndexArg::table_name_	member ObString (value) of type ObString	ObString table_name_;
+src/sql/engine/cmd/ob_vector_refresh_index_executor.h	43	ObVectorRefreshIndexArg::idx_vector_col_	member ObString (value) of type ObString	ObString idx_vector_col_;
+src/sql/engine/cmd/ob_vector_refresh_index_executor.h	44	ObVectorRefreshIndexArg::refresh_type_	member ObString (value) of type ObString	ObString refresh_type_; // COMPLETE / FAST.
+src/sql/engine/cmd/ob_vector_refresh_index_executor.h	59	ObVectorRefreshIndexInnerArg::refresh_type_	member ObString (value) of type ObString	ObString refresh_type_; // COMPLETE / FAST.
+src/sql/engine/cmd/ob_vector_refresh_index_executor.h	79	ObVectorRebuildIndexArg::idx_name_	member ObString (value) of type ObString	ObString idx_name_;
+src/sql/engine/cmd/ob_vector_refresh_index_executor.h	80	ObVectorRebuildIndexArg::table_name_	member ObString (value) of type ObString	ObString table_name_;
+src/sql/engine/cmd/ob_vector_refresh_index_executor.h	81	ObVectorRebuildIndexArg::idx_vector_col_	member ObString (value) of type ObString	ObString idx_vector_col_;
+src/sql/engine/cmd/ob_vector_refresh_index_executor.h	86	ObVectorRebuildIndexArg::idx_organization_	member ObString (value) of type ObString	ObString idx_organization_;     // DEFAULT: IN MEMORY NEIGHBOR GRAPH
+src/sql/engine/cmd/ob_vector_refresh_index_executor.h	87	ObVectorRebuildIndexArg::idx_distance_metrics_	member ObString (value) of type ObString	ObString idx_distance_metrics_; // DEFAULT: EUCLIDEAN
+src/sql/engine/cmd/ob_vector_refresh_index_executor.h	88	ObVectorRebuildIndexArg::idx_parameters_	member ObString (value) of type ObString	ObString idx_parameters_; // parameters for different vector-index algorithm
+src/sql/engine/cmd/ob_vector_refresh_index_executor.h	111	ObVectorRebuildIndexInnerArg::idx_organization_	member ObString (value) of type ObString	ObString idx_organization_;     // DEFAULT: IN MEMORY NEIGHBOR GRAPH
+src/sql/engine/cmd/ob_vector_refresh_index_executor.h	112	ObVectorRebuildIndexInnerArg::idx_distance_metrics_	member ObString (value) of type ObString	ObString idx_distance_metrics_; // DEFAULT: EUCLIDEAN
+src/sql/engine/cmd/ob_vector_refresh_index_executor.h	113	ObVectorRebuildIndexInnerArg::idx_parameters_	member ObString (value) of type ObString	ObString idx_parameters_; // parameters for different vector-index algorithm
+src/sql/engine/cmd/ob_vector_refresh_index_executor.h	205	ObVectorRefreshIndexExecutor::idx_parameters_	member ObString (value) of type ObString	ObString idx_parameters_;
+src/sql/engine/dml/ob_conflict_checker.h	65	ObRowkeyCstCtdef::constraint_name_	member ObString (value) of type ObString	ObString constraint_name_;  // Print table name when conflict
+src/sql/engine/dml/ob_conflict_checker.h	91	ObConflictValue::baseline_datum_row_	member StoredRow (pointer) of type const ObChunkDatumStore::StoredRow *	const ObChunkDatumStore::StoredRow *baseline_datum_row_;
+src/sql/engine/dml/ob_conflict_checker.h	92	ObConflictValue::current_datum_row_	member StoredRow (pointer) of type const ObChunkDatumStore::StoredRow *	const ObChunkDatumStore::StoredRow *current_datum_row_;
+src/sql/engine/dml/ob_conflict_checker.h	115	ObConflictRowMapCtx::conflict_map_	member ObConflictRowMap (value) of type ObConflictRowMap	ObConflictRowMap conflict_map_;
+src/sql/engine/dml/ob_conflict_checker.h	116	ObConflictRowMapCtx::rowkey_	member ObRowkey (pointer) of type ObRowkey *	ObRowkey *rowkey_; // temporary ObRowkey, used for map compare, reused in loop
+src/sql/engine/dml/ob_conflict_checker.h	199	ObConflictRange::rowkey_	member ObRowkey (value) of type ObRowkey	ObRowkey rowkey_;

@@ -1,0 +1,120 @@
+file	line	symbol	construct	text
+src/sql/resolver/cmd/ob_show_resolver.cpp	629	ObShowResolver::resolve	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/cmd/ob_show_resolver.cpp	1270	ObShowResolver::resolve_show_create_user	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/cmd/ob_show_resolver.cpp	1275	ObShowResolver::resolve_show_create_user	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/cmd/ob_show_resolver.cpp	1298	ObShowResolver::resolve_show_create_user	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/cmd/ob_show_resolver.cpp	1303	ObShowResolver::resolve_show_create_user	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/cmd/ob_show_resolver.cpp	1443	ObShowResolver::check_show_create_user_privilege	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/cmd/ob_show_resolver.cpp	2202	ObShowResolver::resolve_table_info	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/cmd/ob_show_resolver.cpp	2215	ObShowResolver::resolve_table_info	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/dcl/ob_alter_user_role_resolver.cpp	104	ObAlterUserRoleResolver::resolve_role_list	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; //ignore EXCEPTED ROLE not exist
+src/sql/resolver/dcl/ob_alter_user_role_resolver.cpp	151	ObAlterUserRoleResolver::resolve_role_list	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; //ignore EXCEPTED ROLE not granted to user
+src/sql/resolver/dcl/ob_dcl_resolver.cpp	222	ObDCLResolver::check_dcl_on_inner_user	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/dcl/ob_dcl_resolver.cpp	299	ObDCLResolver::resolve_user_list_node	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/dcl/ob_grant_resolver.h	241	ObGrantResolver::resolve_priv_object	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/dcl/ob_grant_resolver.h	257	ObGrantResolver::resolve_priv_object	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/dcl/ob_revoke_resolver.cpp	87	ObRevokeResolver::resolve_revoke_role_inner	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/dcl/ob_revoke_resolver.cpp	155	ObRevokeResolver::resolve_revoke_role_inner	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/dcl/ob_revoke_resolver.cpp	368	ObRevokeResolver::resolve_mysql	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/ddl/ob_alter_table_resolver.cpp	644	ObAlterTableResolver::resolve_action_list	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // change ret from OB_HASH_NOT_EXIST to OB_SUCCESS
+src/sql/resolver/ddl/ob_alter_table_resolver.cpp	646	ObAlterTableResolver::resolve_action_list	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // change ret from OB_HASH_EXIST to OB_SUCCESS
+src/sql/resolver/ddl/ob_alter_table_resolver.cpp	658	ObAlterTableResolver::resolve_action_list	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // change ret from OB_HASH_NOT_EXIST to OB_SUCCESS
+src/sql/resolver/ddl/ob_alter_table_resolver.cpp	660	ObAlterTableResolver::resolve_action_list	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // change ret from OB_HASH_EXIST to OB_SUCCESS
+src/sql/resolver/ddl/ob_alter_table_resolver.cpp	671	ObAlterTableResolver::resolve_action_list	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/ddl/ob_alter_table_resolver.cpp	4239	ObAlterTableResolver::resolve_drop_column	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/ddl/ob_alter_table_resolver.cpp	4248	ObAlterTableResolver::resolve_drop_column	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/ddl/ob_create_package_resolver.cpp	117	ObCreatePackageResolver::resolve	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/ddl/ob_create_package_resolver.cpp	132	ObCreatePackageResolver::resolve	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/ddl/ob_create_package_resolver.cpp	264	ObCreatePackageResolver::resolve	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/ddl/ob_create_package_resolver.cpp	601	ObCreatePackageBodyResolver::resolve	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/ddl/ob_create_routine_resolver.cpp	163	ObCreateRoutineResolver::resolve_sp_definer	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/ddl/ob_create_routine_resolver.cpp	394	ObCreateRoutineResolver::resolve_param_type	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/ddl/ob_create_routine_resolver.cpp	457	ObCreateRoutineResolver::resolve_param_type	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/ddl/ob_create_table_resolver.cpp	832	ObCreateTableResolver::resolve_table_elements	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/ddl/ob_create_table_resolver.cpp	2008	ObCreateTableResolver::resolve_index_name	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/ddl/ob_create_table_resolver.cpp	2148	ObCreateTableResolver::check_building_domain_index_legal	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/ddl/ob_create_view_resolver.cpp	321	ObCreateViewResolver::check_view_columns	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/ddl/ob_create_view_resolver.cpp	377	ObCreateViewResolver::get_sel_priv_tables_in_subquery	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/ddl/ob_create_view_resolver.cpp	472	ObCreateViewResolver::get_need_priv_tables	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/ddl/ob_create_view_resolver.cpp	484	ObCreateViewResolver::get_need_priv_tables	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/ddl/ob_create_view_resolver.cpp	679	ObCreateViewResolver::check_view_stmt_col_name	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/ddl/ob_create_view_resolver.cpp	684	ObCreateViewResolver::check_view_stmt_col_name	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/ddl/ob_ddl_resolver.cpp	4772	ObDDLResolver::check_column_in_check_constraint	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/ddl/ob_ddl_resolver.cpp	4774	ObDDLResolver::check_column_in_check_constraint	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/ddl/ob_ddl_resolver.cpp	5668	ObDDLResolver::resolve_foreign_key_name	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/ddl/ob_ddl_resolver.cpp	5746	ObDDLResolver::check_foreign_key_reference	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/ddl/ob_ddl_resolver.cpp	8034	ObDDLResolver::get_partition_keys_by_part_func_expr	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/ddl/ob_drop_routine_resolver.cpp	81	ObDropFunctionResolver::resolve	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/ddl/ob_fts_index_builder_util.cpp	106	ObFtsIndexBuilderUtil::determine_docid_type	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/ddl/ob_fts_index_builder_util.cpp	2404	ObMulValueIndexBuilderUtil::get_mulvalue_col	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/ddl/ob_trigger_resolver.cpp	111	ObTriggerResolver::get_drop_trigger_stmt_table_name	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/ddl/ob_trigger_resolver.cpp	168	ObTriggerResolver::resolve_sp_definer	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/ddl/ob_use_database_resolver.cpp	88	ObUseDatabaseResolver::resolve	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/dml/ob_aggr_expr_push_up_analyzer.cpp	440	ObStmtExecParamReplacer::check_need_replace	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/dml/ob_column_namespace_checker.cpp	84	ObColumnNamespaceChecker::check_table_column_namespace	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/dml/ob_column_namespace_checker.cpp	102	ObColumnNamespaceChecker::check_table_column_namespace	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/dml/ob_column_namespace_checker.cpp	427	ObColumnNamespaceChecker::find_column_in_joined_table	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/dml/ob_del_upd_resolver.cpp	406	ObDelUpdResolver::resolve_assign_columns	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/dml/ob_del_upd_resolver.cpp	2810	ObDelUpdResolver::check_insert_column_duplicate	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/dml/ob_del_upd_resolver.cpp	2815	ObDelUpdResolver::check_insert_column_duplicate	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/dml/ob_del_upd_resolver.cpp	2988	ObDelUpdResolver::replace_column_ref_for_check_constraint	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/dml/ob_delete_resolver.cpp	410	ObDeleteResolver::check_view_deletable	code chosen by a flag (ternary yields OB_SUCCESS; no error is swallowed)	ret = (has_dependent_subquery || ref_update_table) ? OB_ERR_NON_UPDATABLE_TABLE : OB_SUCCESS;
+src/sql/resolver/dml/ob_dml_resolver.cpp	466	ObDMLResolver::check_first_node_name	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/dml/ob_dml_resolver.cpp	487	ObDMLResolver::check_first_node_name	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // check fail but ignore
+src/sql/resolver/dml/ob_dml_resolver.cpp	809	ObDMLResolver::replace_col_udt_qname	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/dml/ob_dml_resolver.cpp	1975	ObDMLResolver::replace_col_ref_prefix	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/dml/ob_dml_resolver.cpp	4489	ObDMLResolver::resolve_fk_table_partition_expr	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/dml/ob_dml_resolver.cpp	5010	ObDMLResolver::resolve_all_basic_table_columns	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/dml/ob_dml_resolver.cpp	7784	ObDMLResolver::resolve_generated_table_column_item	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/dml/ob_dml_resolver.cpp	10412	ObDMLResolver::get_json_table_column_by_id	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/dml/ob_dml_resolver.cpp	11825	ObDMLResolver::fill_vec_id_expr_param	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/dml/ob_dml_resolver.cpp	12489	ObDMLResolver::resolve_match_index	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/dml/ob_dml_stmt.cpp	1304	ObDMLStmt::set_part_expr_items	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/dml/ob_dml_stmt.cpp	2262	ObDMLStmt::add_table_item	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/dml/ob_dml_stmt.cpp	2290	ObDMLStmt::add_table_item	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/dml/ob_hint.cpp	1309	ObHint::get_expr_str_in_hint	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/dml/ob_hint.cpp	1326	ObHint::is_expr_match_str	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/dml/ob_inlist_resolver.cpp	246	ObInListResolver::get_inlist_rewrite_info	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/dml/ob_insert_resolver.cpp	257	ObInsertResolver::process_values_function	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/dml/ob_insert_resolver.cpp	327	ObInsertResolver::replace_column_ref	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/dml/ob_insert_resolver.cpp	903	ObInsertResolver::mock_values_column_ref	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/dml/ob_insert_resolver.cpp	1142	ObInsertResolver::check_view_insertable	code chosen by a flag (ternary yields OB_SUCCESS; no error is swallowed)	ret = ref_update_table ? OB_ERR_NON_INSERTABLE_TABLE : OB_SUCCESS;
+src/sql/resolver/dml/ob_select_resolver.cpp	3484	ObSelectResolver::resolve_column_ref_for_having	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/dml/ob_select_resolver.cpp	3529	ObSelectResolver::resolve_column_ref_table_first	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/dml/ob_update_resolver.cpp	419	ObUpdateResolver::check_view_updatable	code chosen by a flag (ternary yields OB_SUCCESS; no error is swallowed)	ret = has_dependent_subquery ? OB_ERR_NON_UPDATABLE_TABLE : OB_SUCCESS;
+src/sql/resolver/dml/ob_update_resolver.cpp	426	ObUpdateResolver::check_view_updatable	code chosen by a flag (ternary yields OB_SUCCESS; no error is swallowed)	ret = ref_update_table ? OB_ERR_NON_UPDATABLE_TABLE : OB_SUCCESS;
+src/sql/resolver/dml/ob_update_resolver.cpp	434	ObUpdateResolver::check_view_updatable	code chosen by a flag (ternary yields OB_SUCCESS; no error is swallowed)	ret = has_non_inner_join ? OB_ERR_NON_UPDATABLE_TABLE : OB_SUCCESS;
+src/sql/resolver/expr/ob_raw_expr.cpp	383	ObRawExpr::deduce_type	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/expr/ob_raw_expr.cpp	1304	ObConstRawExpr::get_name_internal	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; //ignore mull time zone info
+src/sql/resolver/expr/ob_raw_expr.cpp	1316	ObConstRawExpr::get_name_internal	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/expr/ob_raw_expr_copier.cpp	200	ObRawExprCopier::add_expr	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/expr/ob_raw_expr_deduce_type.cpp	270	ObRawExprDeduceType::calc_result_type_with_const_arg	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/expr/ob_raw_expr_deduce_type.cpp	571	ObRawExprDeduceType::calc_result_type	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/expr/ob_raw_expr_deduce_type.h	226	ObRawExprDeduceType::try_add_cast_expr	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/expr/ob_raw_expr_part_func_checker.cpp	112	ObRawExprPartFuncChecker::visit	ret = OB_SUCCESS (line start)	ret =  OB_SUCCESS;
+src/sql/resolver/expr/ob_raw_expr_part_func_checker.cpp	179	ObRawExprPartFuncChecker::visit	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/expr/ob_raw_expr_part_func_checker.cpp	188	ObRawExprPartFuncChecker::visit	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/expr/ob_raw_expr_part_func_checker.cpp	198	ObRawExprPartFuncChecker::visit	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/expr/ob_raw_expr_part_func_checker.cpp	210	ObRawExprPartFuncChecker::visit	ret = OB_SUCCESS (line start)	ret =  OB_SUCCESS;
+src/sql/resolver/expr/ob_raw_expr_replacer.cpp	472	ObRawExprReplacer::check_need_replace	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	46	change_json_expr_res_type_if_need	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	333	ObRawExprResolverImpl::try_negate_const	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	1301	ObRawExprResolverImpl::check_pl_variable	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	6502	ObRawExprResolverImpl::process_odbc_time_literals	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/expr/ob_raw_expr_util.cpp	5810	ObRawExprUtils::build_dup_data_expr	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/expr/ob_shared_expr_resolver.cpp	212	ObSharedExprResolver::inner_get_shared_expr	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/ob_resolver_utils.cpp	1310	ObResolverUtils::pick_routine	conditional reset (ternary yields OB_SUCCESS) (statement spans lines 1310-1313)	ret = (OB_ERR_SP_WRONG_ARG_NUM == ret
+src/sql/resolver/ob_resolver_utils.cpp	1499	ObResolverUtils::resolve_sp_access_name	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/ob_resolver_utils.cpp	2733	ObResolverUtils::check_part_value_result_type	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/ob_resolver_utils.cpp	3863	ObResolverUtils::check_comment_length	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/ob_resolver_utils.cpp	5985	ObResolverUtils::get_user_var_value	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;//always return success no matter found or not
+src/sql/resolver/ob_resolver_utils.cpp	6160	ObResolverUtils::check_secure_path	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/ob_schema_checker.cpp	213	ObSchemaChecker::check_trigger_show	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/resolver/ob_schema_checker.cpp	1052	ObSchemaChecker::check_mysql_grant_role_priv	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/rewrite/ob_equal_analysis.cpp	62	ObEqualAnalysis::get_expr_idx	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/rewrite/ob_expr_range_converter.cpp	2039	ObExprRangeConverter::get_geo_range_node	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/rewrite/ob_key_part.cpp	248	ObKeyPart::collect_same_val_idxs	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/rewrite/ob_key_part.cpp	254	ObKeyPart::collect_same_val_idxs	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/rewrite/ob_key_part.cpp	454	ObInKeyPart::remove_in_dup_vals	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/rewrite/ob_query_range_define.cpp	1329	ObPreRangeGraph::recursive_generate_range_node_expr	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/rewrite/ob_query_range_define.cpp	1756	ObPreRangeGraph::is_precise_like_range	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;

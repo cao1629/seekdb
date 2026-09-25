@@ -1,0 +1,57 @@
+file	line	symbol	construct	text
+src/storage/tablelock/ob_table_lock_rpc_struct.h	284	ObLockObjsRequest::detect_param_	member ObString (value) of type ObString	ObString detect_param_;
+src/storage/tablelock/ob_table_lock_rpc_struct.h	316	ObLockTableRequest::detect_param_	member ObString (value) of type ObString	ObString detect_param_;
+src/storage/tablet/ob_mds_scan_param_helper.cpp	125	ObMdsScanParamHelper::build_key_range	allocator in, arena view out: common::ObNewRange &key_range	int ObMdsScanParamHelper::build_key_range(
+src/storage/tablet/ob_mds_scan_param_helper.cpp	156	ObMdsScanParamHelper::build_key_range	allocator in, arena view out: common::ObNewRange &key_range	int ObMdsScanParamHelper::build_key_range(
+src/storage/tablet/ob_tablet.cpp	5810	ObTablet::copy_embedded_meta_	allocator in, arena view out: char *&buf	int ObTablet::copy_embedded_meta_(
+src/storage/tablet/ob_tablet_mds_table_mini_merger.h	53	ObMdsMergeMultiVersionRowStore::shadow_row_	member ObDatumRow (value) of type blocksstable::ObDatumRow	blocksstable::ObDatumRow shadow_row_;
+src/storage/tablet/ob_tablet_mds_table_mini_merger.h	54	ObMdsMergeMultiVersionRowStore::cur_key_	member ObDatumRowkey (value) of type blocksstable::ObDatumRowkey	blocksstable::ObDatumRowkey cur_key_;
+src/storage/tablet/ob_tablet_mds_table_mini_merger.h	55	ObMdsMergeMultiVersionRowStore::last_key_	member ObDatumRowkey (value) of type blocksstable::ObDatumRowkey	blocksstable::ObDatumRowkey last_key_;
+src/storage/tablet/ob_tablet_mds_table_mini_merger.h	77	ObMdsMiniMergeOperator::cur_row_	member ObDatumRow (value) of type blocksstable::ObDatumRow	blocksstable::ObDatumRow cur_row_;
+src/storage/tablet/ob_tablet_obj_load_helper.cpp	28	ObTabletObjLoadHelper::read_from_addr	allocator in, arena view out: char *&buf	int ObTabletObjLoadHelper::read_from_addr(
+src/storage/tablet/ob_tablet_persister.h	133	ObMultiTimeStats::TimeStats::owner_	member raw bytes (pointer) of type const char *	const char *owner_;
+src/storage/tablet/ob_tablet_persister.h	136	ObMultiTimeStats::TimeStats::click_str_	member raw bytes (pointer) of type const char *	const char *click_str_[MAX_CLICK_COUNT];
+src/storage/tablet/ob_tablet_service_clog_replay_executor.h	66	ObTabletServiceClogReplayExecutor::buf_	member raw bytes (pointer) of type const char *	const char *buf_;
+src/storage/tmp_file/ob_tmp_file_cache.h	66	ObTmpBlockCacheValue::buf_	member raw bytes (pointer) of type char *	char *buf_;
+src/storage/tmp_file/ob_tmp_file_cache.h	161	ObTmpPageCacheValue::buf_	member raw bytes (pointer) of type char *	char *buf_;
+src/storage/tmp_file/ob_tmp_file_cache.h	238	ObTmpPageCache::ObITmpPageIOCallback::data_buf_	member raw bytes (pointer) of type char *	char *data_buf_;   // actual data buffer
+src/storage/tmp_file/ob_tmp_file_io_ctx.h	143	ObTmpFileIOCtx::ObIReadHandle::dest_user_read_buf_	member raw bytes (pointer) of type char *	char *dest_user_read_buf_; // user buf
+src/storage/tmp_file/ob_tmp_file_io_ctx.h	228	ObTmpFileIOCtx::buf_	member raw bytes (pointer) of type char *	char *buf_;
+src/storage/tmp_file/ob_tmp_file_io_handle.h	58	ObTmpFileIOHandle::buf_	member raw bytes (pointer) of type char *	char *buf_;
+src/storage/tmp_file/ob_tmp_file_io_info.h	38	ObTmpFileIOInfo::buf_	member raw bytes (pointer) of type char *	char *buf_;
+src/storage/tmp_file/ob_tmp_file_write_buffer_pool_entry_array.h	141	ObPageEntry::buf_	member raw bytes (pointer) of type char *	char *buf_;
+src/storage/truncate_info/ob_truncate_filter_evaluator.cpp	67	ObTruncateFilterEvaluator::Impl::CompiledPartition::low_values_	member ObStorageDatum (pointer) of type ObStorageDatum *	ObStorageDatum *low_values_;
+src/storage/truncate_info/ob_truncate_filter_evaluator.cpp	68	ObTruncateFilterEvaluator::Impl::CompiledPartition::high_values_	member ObStorageDatum (pointer) of type ObStorageDatum *	ObStorageDatum *high_values_;
+src/storage/truncate_info/ob_truncate_filter_evaluator.cpp	70	ObTruncateFilterEvaluator::Impl::CompiledPartition::list_values_	member ObStorageDatum (pointer) of type ObStorageDatum *	ObStorageDatum *list_values_;
+src/storage/tx/ob_defensive_check_mgr.h	72	SingleRowDefensiveRecord::row_	member ObDatumRow (value) of type blocksstable::ObDatumRow	blocksstable::ObDatumRow row_;
+src/storage/tx/ob_defensive_check_mgr.h	75	SingleRowDefensiveRecord::rowkey_	member ObDatumRowkey (value) of type blocksstable::ObDatumRowkey	blocksstable::ObDatumRowkey rowkey_;
+src/storage/tx/ob_keep_alive_ls_handler.h	182	ObKeepAliveLSHandler::submit_buf_	member raw bytes (pointer) of type char *	char *submit_buf_;
+src/storage/tx/ob_multi_data_source.h	168	ObMDSInnerSQLStr::mds_str_	member ObString (value) of type common::ObString	common::ObString mds_str_;
+src/storage/tx/ob_multi_data_source_tx_buffer_node.h	101	ObTxBufferNode::data_	member ObString (value) of type common::ObString	common::ObString data_;
+src/storage/tx/ob_trans_define.h	470	ObTraceInfo::app_trace_id_	member ObString (value) of type common::ObString	common::ObString app_trace_id_;
+src/storage/tx/ob_trans_functor.h	119	TxFunctorStat::functor_name_	member raw bytes (pointer) of type const char *	const char *functor_name_;
+src/storage/tx/ob_trans_log.h	99	ObTransMutatorIterator::ptr_	member raw bytes (pointer) of type const char *	const char *ptr_;
+src/storage/tx/ob_tx_big_segment_buf.h	93	ObTxBigSegmentBuf::segment_buf_	member raw bytes (pointer) of type char *	char *segment_buf_;
+src/storage/tx/ob_tx_log.h	297	ObTxRedoLog::mutator_buf_	member raw bytes (pointer) of type char *	char *mutator_buf_;              // for fill
+src/storage/tx/ob_tx_log.h	298	ObTxRedoLog::replay_mutator_buf_	member raw bytes (pointer) of type const char *	const char *replay_mutator_buf_; // for replay, only set by deserialize
+src/storage/tx/ob_tx_log.h	387	ObTxCommitInfoLogTempRef::app_trace_id_str_	member ObString (value) of type common::ObString	common::ObString app_trace_id_str_;
+src/storage/tx/ob_tx_log.h	388	ObTxCommitInfoLogTempRef::app_trace_info_	member ObString (value) of type common::ObString	common::ObString app_trace_info_;
+src/storage/tx/ob_tx_log.h	426	ObTxCommitInfoLog::app_trace_id_str_	member ObString (reference) of type common::ObString &	common::ObString &app_trace_id_str_;
+src/storage/tx/ob_tx_log.h	428	ObTxCommitInfoLog::obsolete_trace_payload_	member ObString (value) of type common::ObString	common::ObString obsolete_trace_payload_;
+src/storage/tx/ob_tx_log.h	811	ObTxAdaptiveLogBuf::buf_	member raw bytes (pointer) of type char *	char *buf_;
+src/storage/tx/ob_tx_log.h	878	ObTxLogBlock::replay_buf_	member raw bytes (pointer) of type const char *	const char *replay_buf_;
+src/storage/tx/ob_tx_print_time_guard.h	65	ObTxPrintTimeGuard::click_str_	member raw bytes (pointer) of type const char *	const char *click_str_[MAX_CLICK_COUNT];
+src/storage/tx_storage/ob_tx_leak_checker.h	198	ObReadOnlyTxDiagnoseFunctor::buf_	member raw bytes (pointer) of type char *	char *buf_;
+src/storage/tx_table/ob_tx_data_memtable.h	112	ObTxDataMemtable::TxDataFakeRowKey::rowkey_	member ObStoreRowkey (value) of type common::ObStoreRowkey	common::ObStoreRowkey rowkey_;
+src/storage/tx_table/ob_tx_data_memtable.h	113	ObTxDataMemtable::TxDataFakeRowKey::obj_array_	member ObObj (value) of type ObObj	ObObj obj_array_[OBJ_CNT];
+src/storage/tx_table/ob_tx_table_iterator.h	104	ObTxDataMemtableScanIterator::TxData2DatumRowConverter::serialize_buffer_	member raw bytes (pointer) of type char *	char *serialize_buffer_;
+src/storage/tx_table/ob_tx_table_iterator.h	108	ObTxDataMemtableScanIterator::TxData2DatumRowConverter::datum_row_	member ObDatumRow (value) of type blocksstable::ObDatumRow	blocksstable::ObDatumRow datum_row_;
+src/storage/tx_table/ob_tx_table_iterator.h	159	ObTxDataMemtableScanIterator::range_	member ObDatumRange (reference) of type const blocksstable::ObDatumRange &	const blocksstable::ObDatumRange &range_;
+src/storage/tx_table/ob_tx_table_iterator.h	169	ObTxDataMemtableScanIterator::key_datum_	member ObStorageDatum (value) of type blocksstable::ObStorageDatum	blocksstable::ObStorageDatum key_datum_;
+src/storage/tx_table/ob_tx_table_iterator.h	215	ObTxDataSingleRowGetter::key_datums_	member ObStorageDatum (value) of type blocksstable::ObStorageDatum	blocksstable::ObStorageDatum key_datums_[2];
+src/storage/tx_table/ob_tx_table_iterator.h	234	ObCommitVersionsGetter::key_datums_	member ObStorageDatum (value) of type blocksstable::ObStorageDatum	blocksstable::ObStorageDatum key_datums_[2];
+src/storage/tx_table/ob_tx_table_iterator.h	281	ObTxCtxMemtableScanIterator::row_	member ObDatumRow (value) of type blocksstable::ObDatumRow	blocksstable::ObDatumRow row_;
+src/storage/tx_table/tx_table_local_buffer.h	61	ObTxLocalBuffer::buf_	member raw bytes (pointer) of type char *	char *buf_;
+src/storage/vector_index/ob_vector_kmeans_ctx.cpp	937	ObIvfBuildHelper::init	allocator in, arena view out: ObString &init_str	int ObIvfBuildHelper::init(ObString &init_str, lib::MemoryContext &parent_mem_ctx, uint64_t *all_vsag_use_mem)
+src/storage/vector_type/ob_vector_common_util.cpp	177	ObVectorKmeansClusterHelper::set_center_id_to_string	allocator in, arena view out: ObString &str	int ObVectorKmeansClusterHelper::set_center_id_to_string(const ObCenterId &center_id, ObString &str, ObIAllocator *allocator/* = nullptr*/)
+src/storage/vector_type/ob_vector_common_util.cpp	229	ObVectorKmeansClusterHelper::set_pq_center_id_to_string	allocator in, arena view out: ObString &str	int ObVectorKmeansClusterHelper::set_pq_center_id_to_string(

@@ -1,0 +1,77 @@
+file	line	symbol	construct	text
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	113	ObRLEDecoder::pushdown_operator	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	115	ObRLEDecoder::pushdown_operator	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	118	ObRLEDecoder::pushdown_operator	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	123	ObRLEDecoder::pushdown_operator	sql:: use: ObWhiteFilterOperatorType	const sql::ObWhiteFilterOperatorType op_type = filter.get_op_type();
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	126	ObRLEDecoder::pushdown_operator	sql:: use: WHITE_OP_MAX	} else if (OB_UNLIKELY(op_type >= sql::WHITE_OP_MAX)) {
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	130	ObRLEDecoder::pushdown_operator	sql:: use: WHITE_OP_NU	case sql::WHITE_OP_NU:
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	131	ObRLEDecoder::pushdown_operator	sql:: use: WHITE_OP_NN	case sql::WHITE_OP_NN: {
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	136	ObRLEDecoder::pushdown_operator	sql:: use: WHITE_OP_EQ	case sql::WHITE_OP_EQ:
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	137	ObRLEDecoder::pushdown_operator	sql:: use: WHITE_OP_NE	case sql::WHITE_OP_NE: {
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	142	ObRLEDecoder::pushdown_operator	sql:: use: WHITE_OP_LE	case sql::WHITE_OP_LE:
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	143	ObRLEDecoder::pushdown_operator	sql:: use: WHITE_OP_LT	case sql::WHITE_OP_LT:
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	144	ObRLEDecoder::pushdown_operator	sql:: use: WHITE_OP_GE	case sql::WHITE_OP_GE:
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	145	ObRLEDecoder::pushdown_operator	sql:: use: WHITE_OP_GT	case sql::WHITE_OP_GT: {
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	150	ObRLEDecoder::pushdown_operator	sql:: use: WHITE_OP_BT	case sql::WHITE_OP_BT: {
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	155	ObRLEDecoder::pushdown_operator	sql:: use: WHITE_OP_IN	case sql::WHITE_OP_IN: {
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	157	ObRLEDecoder::pushdown_operator	sql:: use: ObDynamicFilterExecutor	if (OB_FAIL(in_operator<sql::ObDynamicFilterExecutor>(parent, col_ctx, static_cast<const sql::ObDynamicFilterExecutor &>(filter), pd_filter_info, result_bitmap))) {
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	160	ObRLEDecoder::pushdown_operator	sql:: use: ObWhiteFilterExecutor	if (OB_FAIL(in_operator<sql::ObWhiteFilterExecutor>(parent, col_ctx, filter, pd_filter_info, result_bitmap))) {
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	174	ObRLEDecoder::nu_nn_operator	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	176	ObRLEDecoder::nu_nn_operator	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	177	ObRLEDecoder::nu_nn_operator	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	186	ObRLEDecoder::nu_nn_operator	sql:: use: WHITE_OP_NU	if (sql::WHITE_OP_NU == filter.get_op_type()) {
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	192	ObRLEDecoder::nu_nn_operator	sql:: use: WHITE_OP_EQ	sql::WHITE_OP_EQ, true, pd_filter_info, result_bitmap))) {
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	193	ObRLEDecoder::nu_nn_operator	sql:: use: WHITE_OP_NN	} else if (sql::WHITE_OP_NN == filter.get_op_type()) {
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	203	ObRLEDecoder::eq_ne_operator	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	205	ObRLEDecoder::eq_ne_operator	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	206	ObRLEDecoder::eq_ne_operator	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	228	ObRLEDecoder::eq_ne_operator	sql:: use: WHITE_OP_EQ	sql::WHITE_OP_EQ, true, pd_filter_info, result_bitmap))) {
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	235	ObRLEDecoder::eq_ne_operator	sql:: use: WHITE_OP_NE	if (OB_SUCC(ret) && filter.get_op_type() == sql::WHITE_OP_NE) {
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	238	ObRLEDecoder::eq_ne_operator	sql:: use: WHITE_OP_EQ	sql::WHITE_OP_EQ, false, pd_filter_info, result_bitmap))) {
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	246	ObRLEDecoder::comparison_operator	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	248	ObRLEDecoder::comparison_operator	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	249	ObRLEDecoder::comparison_operator	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	261	ObRLEDecoder::comparison_operator	sql:: use: ObWhiteFilterOperatorType	const sql::ObWhiteFilterOperatorType op_type = filter.get_op_type();
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	267	ObRLEDecoder::comparison_operator	sql:: use: ObBitVector	char ref_bitset_buf[sql::ObBitVector::memory_size(ref_bitset_size)];
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	268	ObRLEDecoder::comparison_operator	sql:: use: ObBitVector, to_bit_vector	sql::ObBitVector *ref_bitset = sql::to_bit_vector(ref_bitset_buf);
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	292	ObRLEDecoder::bt_operator	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	294	ObRLEDecoder::bt_operator	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	295	ObRLEDecoder::bt_operator	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	301	ObRLEDecoder::bt_operator	sql:: use: WHITE_OP_BT	|| filter.get_op_type() != sql::WHITE_OP_BT)) {
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	313	ObRLEDecoder::bt_operator	sql:: use: ObBitVector	char ref_bitset_buf[sql::ObBitVector::memory_size(ref_bitset_size)];
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	314	ObRLEDecoder::bt_operator	sql:: use: ObBitVector, to_bit_vector	sql::ObBitVector *ref_bitset = sql::to_bit_vector(ref_bitset_buf);
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	341	ObRLEDecoder::in_operator	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	344	ObRLEDecoder::in_operator	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	350	ObRLEDecoder::in_operator	sql:: use: WHITE_OP_IN	|| filter.get_op_type() != sql::WHITE_OP_IN)) {
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	359	ObRLEDecoder::in_operator	sql:: use: ObBitVector	char ref_bitset_buf[sql::ObBitVector::memory_size(ref_bitset_size)];
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	360	ObRLEDecoder::in_operator	sql:: use: ObBitVector, to_bit_vector	sql::ObBitVector *ref_bitset = sql::to_bit_vector(ref_bitset_buf);
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	382	ObRLEDecoder::cmp_ref_and_set_res	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	385	ObRLEDecoder::cmp_ref_and_set_res	sql:: use: ObWhiteFilterOperatorType	const sql::ObWhiteFilterOperatorType cmp_op,
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	387	ObRLEDecoder::cmp_ref_and_set_res	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	401	ObRLEDecoder::cmp_ref_and_set_res	sql:: use: WHITE_OP_EQ	&& (ref < dict_decoder_.get_dict_header()->count_ || sql::WHITE_OP_EQ == cmp_op)) {
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	417	ObRLEDecoder::set_res_with_bitset	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	419	ObRLEDecoder::set_res_with_bitset	sql:: use: ObBitVector	const sql::ObBitVector *ref_bitset,
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	420	ObRLEDecoder::set_res_with_bitset	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_rle_decoder.h	78	ObRLEDecoder	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_rle_decoder.h	80	ObRLEDecoder	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_rle_decoder.h	83	ObRLEDecoder	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_rle_decoder.h	88	ObRLEDecoder	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_rle_decoder.h	90	ObRLEDecoder	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_rle_decoder.h	91	ObRLEDecoder	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_rle_decoder.h	95	ObRLEDecoder	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_rle_decoder.h	97	ObRLEDecoder	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_rle_decoder.h	98	ObRLEDecoder	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_rle_decoder.h	102	ObRLEDecoder	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_rle_decoder.h	104	ObRLEDecoder	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_rle_decoder.h	105	ObRLEDecoder	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_rle_decoder.h	109	ObRLEDecoder	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_rle_decoder.h	111	ObRLEDecoder	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_rle_decoder.h	112	ObRLEDecoder	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_rle_decoder.h	117	ObRLEDecoder	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_rle_decoder.h	120	ObRLEDecoder	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_rle_decoder.h	124	ObRLEDecoder	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_rle_decoder.h	127	ObRLEDecoder	sql:: use: ObWhiteFilterOperatorType	const sql::ObWhiteFilterOperatorType cmp_op,
+src/storage/blocksstable/encoding/ob_rle_decoder.h	129	ObRLEDecoder	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_rle_decoder.h	133	ObRLEDecoder	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_rle_decoder.h	135	ObRLEDecoder	sql:: use: ObBitVector	const sql::ObBitVector *ref_bitset,
+src/storage/blocksstable/encoding/ob_rle_decoder.h	136	ObRLEDecoder	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,

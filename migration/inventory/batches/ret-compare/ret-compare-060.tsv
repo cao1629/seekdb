@@ -1,0 +1,101 @@
+file	line	symbol	construct	text
+src/storage/meta_mem/ob_tablet_pointer_map.cpp	53	ObTabletPointerMap::erase	ret == OB_ENTRY_NOT_EXIST	} else if (OB_ENTRY_NOT_EXIST == ret) {
+src/storage/meta_mem/ob_tablet_pointer_map.cpp	55	ObTabletPointerMap::erase	ret == OB_ITEM_NOT_SETTED	} else if (OB_ITEM_NOT_SETTED == ret) {
+src/storage/meta_mem/ob_tablet_pointer_map.cpp	115	ObTabletPointerMap::exist	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/storage/meta_mem/ob_tablet_pointer_map.cpp	149	ObTabletPointerMap::try_get_in_memory_meta_obj	ret != OB_ENTRY_NOT_EXIST	if (common::OB_ENTRY_NOT_EXIST != ret) {
+src/storage/meta_mem/ob_tablet_pointer_map.cpp	179	ObTabletPointerMap::try_get_in_memory_meta_obj	ret != OB_ENTRY_NOT_EXIST	if (common::OB_ENTRY_NOT_EXIST != ret) {
+src/storage/meta_mem/ob_tablet_pointer_map.cpp	210	ObTabletPointerMap::try_get_in_memory_meta_obj_with_filter	ret != OB_ENTRY_NOT_EXIST	if (common::OB_ENTRY_NOT_EXIST != ret) {
+src/storage/meta_mem/ob_tablet_pointer_map.cpp	252	ObTabletPointerMap::get_meta_obj	ret == OB_ENTRY_NOT_EXIST; ret == OB_ITEM_NOT_SETTED	if (OB_ENTRY_NOT_EXIST == ret || OB_ITEM_NOT_SETTED == ret) {
+src/storage/meta_mem/ob_tablet_pointer_map.cpp	278	ObTabletPointerMap::get_meta_obj_with_filter	ret == OB_ENTRY_NOT_EXIST; ret == OB_ITEM_NOT_SETTED	if (OB_ENTRY_NOT_EXIST == ret || OB_ITEM_NOT_SETTED == ret) {
+src/storage/meta_mem/ob_tablet_pointer_map.cpp	279	ObTabletPointerMap::get_meta_obj_with_filter	ret == OB_NOT_THE_OBJECT	} else if (OB_NOT_THE_OBJECT == ret) {
+src/storage/meta_mem/ob_tablet_pointer_map.cpp	319	ObTabletPointerMap::load_and_hook_meta_obj	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/storage/meta_mem/ob_tablet_pointer_map.cpp	352	ObTabletPointerMap::load_and_hook_meta_obj	ret == OB_ITEM_NOT_MATCH	} while (OB_ITEM_NOT_MATCH == ret);
+src/storage/meta_mem/ob_tablet_pointer_map.cpp	386	ObTabletPointerMap::load_meta_obj	ret != OB_ENTRY_NOT_EXIST	if (common::OB_ENTRY_NOT_EXIST != ret) {
+src/storage/meta_mem/ob_tablet_pointer_map.cpp	426	ObTabletPointerMap::read_from_disk	ret != OB_SEARCH_NOT_FOUND	if (OB_SEARCH_NOT_FOUND != ret) {
+src/storage/meta_mem/ob_tablet_pointer_map.cpp	457	ObTabletPointerMap::load_meta_obj	ret != OB_ENTRY_NOT_EXIST	if (common::OB_ENTRY_NOT_EXIST != ret) {
+src/storage/meta_mem/ob_tablet_pointer_map.cpp	504	ObTabletPointerMap::get_meta_obj_with_external_memory	ret != OB_ENTRY_NOT_EXIST	if (common::OB_ENTRY_NOT_EXIST != ret) {
+src/storage/meta_mem/ob_tablet_pointer_map.cpp	512	ObTabletPointerMap::get_meta_obj_with_external_memory	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/storage/meta_mem/ob_tablet_pointer_map.cpp	540	ObTabletPointerMap::get_meta_obj_with_external_memory	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/storage/meta_mem/ob_tablet_pointer_map.cpp	575	ObTabletPointerMap::get_meta_obj_with_external_memory	ret == OB_ITEM_NOT_MATCH	} while (OB_ITEM_NOT_MATCH == ret);
+src/storage/meta_mem/ob_tablet_pointer_map.cpp	653	ObTabletPointerMap::compare_and_swap_addr_and_object	ret != OB_ENTRY_NOT_EXIST	if (common::OB_ENTRY_NOT_EXIST != ret) {
+src/storage/meta_mem/ob_tablet_pointer_map.cpp	751	ObTabletPointerMap::wash_meta_obj	ret == OB_ENTRY_NOT_EXIST	if (common::OB_ENTRY_NOT_EXIST == ret) {
+src/storage/meta_mem/ob_tablet_pointer_map.h	137	ObTabletPointerMap::for_each_value_store	ret != OB_EAGAIN	if (OB_FAIL(lock_guard.get_ret()) && OB_EAGAIN != ret) {
+src/storage/meta_mem/ob_tablet_pointer_map.h	139	ObTabletPointerMap::for_each_value_store	ret == OB_EAGAIN	} else if (OB_EAGAIN == ret) {
+src/storage/meta_store/ob_local_storage_meta_persister.cpp	99	ObLocalStorageMetaPersister::batch_update_tablet	ret != OB_ALLOCATE_MEMORY_FAILED	if (OB_ALLOCATE_MEMORY_FAILED != ret) {
+src/storage/meta_store/ob_local_storage_meta_persister.cpp	105	ObLocalStorageMetaPersister::batch_update_tablet	ret == OB_ALLOCATE_MEMORY_FAILED	} while (OB_ALLOCATE_MEMORY_FAILED == ret);
+src/storage/meta_store/ob_local_storage_meta_persister.cpp	221	ObLocalStorageMetaPersister::write_update_tablet_slog_	ret != OB_ALLOCATE_MEMORY_FAILED	if (OB_ALLOCATE_MEMORY_FAILED != ret) {
+src/storage/meta_store/ob_local_storage_meta_persister.cpp	227	ObLocalStorageMetaPersister::write_update_tablet_slog_	ret == OB_ALLOCATE_MEMORY_FAILED	} while (OB_ALLOCATE_MEMORY_FAILED == ret);
+src/storage/meta_store/ob_server_storage_meta_service.cpp	210	ObServerStorageMetaService::get_using_disk_space	ret == OB_SERVER_RUNTIME_NOT_READY	if (OB_SERVER_RUNTIME_NOT_READY == ret) {
+src/storage/multi_data_source/mds_for_each_map_flush_operation.cpp	36	FlushOp::operator()	ret == OB_SIZE_OVERFLOW	if (OB_SIZE_OVERFLOW == ret) {
+src/storage/multi_data_source/mds_row.ipp	298	MdsRow::construct_insert_record_user_mds_node_	ret == OB_ENTRY_EXIST	if (OB_ENTRY_EXIST == ret) {// example: repeat replay same CLOG more than one time
+src/storage/multi_data_source/mds_row.ipp	372	MdsRow::replay	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {// may replay multi times
+src/storage/multi_data_source/mds_row.ipp	465	MdsRow::get_snapshot	ret != OB_EAGAIN; ret != OB_SNAPSHOT_DISCARDED	if (OB_EAGAIN != ret && OB_SNAPSHOT_DISCARDED != ret) {
+src/storage/multi_data_source/mds_row.ipp	488	MdsRow::get_latest	ret != OB_SNAPSHOT_DISCARDED	if (OB_UNLIKELY(OB_SNAPSHOT_DISCARDED != ret)) {
+src/storage/multi_data_source/mds_row.ipp	540	MdsRow::get_latest_committed	ret != OB_SNAPSHOT_DISCARDED	if (OB_UNLIKELY(OB_SNAPSHOT_DISCARDED != ret)) {
+src/storage/multi_data_source/mds_row.ipp	567	MdsRow::get_by_writer	ret != OB_EAGAIN; ret != OB_SNAPSHOT_DISCARDED	if (OB_UNLIKELY(OB_EAGAIN != ret && OB_SNAPSHOT_DISCARDED != ret)) {
+src/storage/multi_data_source/mds_table_base.cpp	192	MdsTableBase::merge	ret != OB_EAGAIN; ret != OB_SIZE_OVERFLOW	if (OB_EAGAIN != ret && OB_SIZE_OVERFLOW != ret) {
+src/storage/multi_data_source/mds_table_handle.ipp	226	MdsTableHandle::get_latest	ret != OB_SNAPSHOT_DISCARDED	if (OB_UNLIKELY(OB_SNAPSHOT_DISCARDED != ret)) {
+src/storage/multi_data_source/mds_table_handle.ipp	251	MdsTableHandle::get_tablet_status_node	ret != OB_SNAPSHOT_DISCARDED	if (OB_UNLIKELY(OB_SNAPSHOT_DISCARDED != ret)) {
+src/storage/multi_data_source/mds_table_handle.ipp	273	MdsTableHandle::get_latest_committed	ret != OB_SNAPSHOT_DISCARDED	if (OB_UNLIKELY(OB_SNAPSHOT_DISCARDED != ret)) {
+src/storage/multi_data_source/mds_table_handle.ipp	320	MdsTableHandle::get_snapshot	ret != OB_SNAPSHOT_DISCARDED	if (OB_SNAPSHOT_DISCARDED != ret) {
+src/storage/multi_data_source/mds_table_handle.ipp	373	MdsTableHandle::get_by_writer	ret != OB_SNAPSHOT_DISCARDED	if (OB_UNLIKELY(OB_SNAPSHOT_DISCARDED != ret)) {
+src/storage/multi_data_source/mds_table_handle.ipp	538	MdsTableHandle::get_latest	ret != OB_SNAPSHOT_DISCARDED	if (OB_UNLIKELY(OB_SNAPSHOT_DISCARDED != ret)) {
+src/storage/multi_data_source/mds_table_handle.ipp	560	MdsTableHandle::get_latest_committed	ret != OB_SNAPSHOT_DISCARDED	if (OB_UNLIKELY(OB_SNAPSHOT_DISCARDED != ret)) {
+src/storage/multi_data_source/mds_table_handle.ipp	606	MdsTableHandle::get_snapshot	ret != OB_SNAPSHOT_DISCARDED	if (OB_UNLIKELY(OB_SNAPSHOT_DISCARDED != ret)) {
+src/storage/multi_data_source/mds_table_handle.ipp	658	MdsTableHandle::get_by_writer	ret != OB_SNAPSHOT_DISCARDED	if (OB_UNLIKELY(OB_SNAPSHOT_DISCARDED != ret)) {
+src/storage/multi_data_source/mds_table_impl.ipp	188	MdsTableImpl::set	ret (assigned in the comparison) == OB_ITER_END	if (OB_ITER_END == (ret = unit_tuple_.for_each(helper))) {
+src/storage/multi_data_source/mds_table_impl.ipp	302	MdsTableImpl::replay	ret (assigned in the comparison) == OB_ITER_END	if (OB_ITER_END == (ret = unit_tuple_.for_each(helper))) {
+src/storage/multi_data_source/mds_table_impl.ipp	384	MdsTableImpl::remove	ret (assigned in the comparison) == OB_ITER_END	if (OB_ITER_END == (ret = unit_tuple_.for_each(helper))) {
+src/storage/multi_data_source/mds_table_impl.ipp	466	MdsTableImpl::replay_remove	ret (assigned in the comparison) == OB_ITER_END	if (OB_ITER_END == (ret = unit_tuple_.for_each(helper))) {
+src/storage/multi_data_source/mds_table_impl.ipp	569	MdsTableImpl::get_latest	ret (assigned in the comparison) == OB_ITER_END	if (OB_ITER_END == (ret = unit_tuple_.for_each(helper))) {
+src/storage/multi_data_source/mds_table_impl.ipp	572	MdsTableImpl::get_latest	ret != OB_SNAPSHOT_DISCARDED	if (OB_UNLIKELY(OB_SNAPSHOT_DISCARDED != ret)) {
+src/storage/multi_data_source/mds_table_impl.ipp	669	MdsTableImpl::get_latest_committed	ret (assigned in the comparison) == OB_ITER_END	if (OB_ITER_END == (ret = unit_tuple_.for_each(helper))) {
+src/storage/multi_data_source/mds_table_impl.ipp	672	MdsTableImpl::get_latest_committed	ret != OB_SNAPSHOT_DISCARDED	if (OB_UNLIKELY(OB_SNAPSHOT_DISCARDED != ret)) {
+src/storage/multi_data_source/mds_table_impl.ipp	763	MdsTableImpl::get_snapshot	ret (assigned in the comparison) == OB_ITER_END	if (OB_ITER_END == (ret = unit_tuple_.for_each(helper))) {
+src/storage/multi_data_source/mds_table_impl.ipp	766	MdsTableImpl::get_snapshot	ret != OB_SNAPSHOT_DISCARDED	if (OB_UNLIKELY(OB_SNAPSHOT_DISCARDED != ret)) {
+src/storage/multi_data_source/mds_table_impl.ipp	871	MdsTableImpl::get_by_writer	ret (assigned in the comparison) == OB_ITER_END	if (OB_ITER_END == (ret = unit_tuple_.for_each(helper))) {
+src/storage/multi_data_source/mds_table_impl.ipp	874	MdsTableImpl::get_by_writer	ret != OB_SNAPSHOT_DISCARDED	if (OB_UNLIKELY(OB_SNAPSHOT_DISCARDED != ret)) {
+src/storage/multi_data_source/mds_table_impl.ipp	964	MdsTableImpl::is_locked_by_others	ret (assigned in the comparison) == OB_ITER_END	if (OB_ITER_END == (ret = unit_tuple_.for_each(helper))) {
+src/storage/multi_data_source/mds_table_impl.ipp	967	MdsTableImpl::is_locked_by_others	ret != OB_SNAPSHOT_DISCARDED	if (OB_UNLIKELY(OB_SNAPSHOT_DISCARDED != ret)) {
+src/storage/multi_data_source/mds_table_impl.ipp	1107	MdsTableImpl::flush	ret == OB_EAGAIN	if (OB_EAGAIN == ret) {
+src/storage/multi_data_source/mds_table_impl.ipp	1111	MdsTableImpl::flush	ret == OB_SIZE_OVERFLOW	} else if (OB_SIZE_OVERFLOW == ret) {// throw out
+src/storage/multi_data_source/mds_table_iterator.ipp	211	ObMdsUnitRowNodeScanIterator::get_next	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/multi_data_source/mds_table_iterator.ipp	235	ObMdsUnitRowNodeScanIterator::cache_all_nodes_in_row_	ret == OB_EAGAIN	if (OB_EAGAIN == ret) {
+src/storage/multi_data_source/mds_table_iterator.ipp	258	ObMdsUnitRowNodeScanIterator::cache_all_nodes_in_row_	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/multi_data_source/mds_table_iterator.ipp	265	ObMdsUnitRowNodeScanIterator::cache_all_nodes_in_row_	ret == OB_EAGAIN	} while (OB_EAGAIN == ret);
+src/storage/multi_data_source/mds_unit.ipp	333	MdsUnit::set	ret == OB_TIMEOUT	if (OB_TIMEOUT == ret) {
+src/storage/multi_data_source/mds_unit.ipp	394	operator()	ret != OB_SNAPSHOT_DISCARDED; ret != OB_EAGAIN	if (OB_UNLIKELY(OB_SNAPSHOT_DISCARDED != ret && OB_EAGAIN != ret)) {
+src/storage/multi_data_source/mds_unit.ipp	413	MdsUnit::get_snapshot	ret == OB_TIMEOUT	if (OB_TIMEOUT == ret) {
+src/storage/multi_data_source/mds_unit.ipp	437	operator()	ret != OB_SNAPSHOT_DISCARDED	if (OB_UNLIKELY(OB_SNAPSHOT_DISCARDED != ret)) {
+src/storage/multi_data_source/mds_unit.ipp	460	MdsUnit::get_by_writer	ret == OB_TIMEOUT	if (OB_TIMEOUT == ret) {
+src/storage/multi_data_source/mds_unit.ipp	483	MdsUnit::get_latest	ret != OB_SNAPSHOT_DISCARDED	if (OB_UNLIKELY(OB_SNAPSHOT_DISCARDED != ret)) {
+src/storage/multi_data_source/mds_unit.ipp	511	MdsUnit::get_latest_committed	ret != OB_SNAPSHOT_DISCARDED	if (OB_UNLIKELY(OB_SNAPSHOT_DISCARDED != ret)) {
+src/storage/multi_data_source/mds_unit.ipp	776	MdsUnit::set	ret == OB_TIMEOUT	if (OB_TIMEOUT == ret) {
+src/storage/multi_data_source/mds_unit.ipp	813	operator()	ret != OB_SNAPSHOT_DISCARDED	if (OB_SNAPSHOT_DISCARDED != ret) {
+src/storage/multi_data_source/mds_unit.ipp	833	MdsUnit::get_snapshot	ret == OB_TIMEOUT	if (OB_TIMEOUT == ret) {
+src/storage/multi_data_source/mds_unit.ipp	851	operator()	ret != OB_SNAPSHOT_DISCARDED	if (OB_UNLIKELY(OB_SNAPSHOT_DISCARDED != ret)) {
+src/storage/multi_data_source/mds_unit.ipp	873	MdsUnit::get_by_writer	ret == OB_TIMEOUT	if (OB_TIMEOUT == ret) {
+src/storage/multi_data_source/mds_unit.ipp	890	MdsUnit::get_latest	ret != OB_SNAPSHOT_DISCARDED	if (OB_UNLIKELY(OB_SNAPSHOT_DISCARDED != ret)) {
+src/storage/multi_data_source/mds_unit.ipp	910	MdsUnit::get_latest_committed	ret != OB_SNAPSHOT_DISCARDED	if (OB_UNLIKELY(OB_SNAPSHOT_DISCARDED != ret)) {
+src/storage/multi_data_source/ob_mds_table_merge_task.cpp	121	ObMdsTableMergeTask::process	ret != OB_EMPTY_RESULT	if (OB_EMPTY_RESULT != ret) {
+src/storage/multi_data_source/ob_mds_table_merge_task.cpp	137	ObMdsTableMergeTask::process	ret != OB_EMPTY_RESULT	if (OB_EMPTY_RESULT != ret) {
+src/storage/multi_data_source/ob_mds_table_merge_task.cpp	147	ObMdsTableMergeTask::process	ret != OB_NO_NEED_MERGE	if (OB_NO_NEED_MERGE != ret) {
+src/storage/multi_data_source/ob_mds_table_merge_task.cpp	172	ObMdsTableMergeTask::process	ret != OB_NO_NEED_MERGE	if (mds_table.is_valid() && OB_NO_NEED_MERGE != ret) {
+src/storage/multi_data_source/ob_mds_table_merge_task.cpp	203	ObMdsTableMergeTask::try_schedule_compaction_after_mds_mini	ret != OB_SIZE_OVERFLOW	if (OB_SIZE_OVERFLOW != ret) {
+src/storage/multi_data_source/ob_mds_table_merge_task.cpp	217	ObMdsTableMergeTask::check_tablet_status_for_empty_mds_table_	ret != OB_EMPTY_RESULT	if (OB_EMPTY_RESULT != ret) {
+src/storage/multi_data_source/runtime_utility/list_helper.h	247	List::for_each_node	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/multi_data_source/runtime_utility/list_helper.h	271	List::reverse_for_each_node	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/multi_data_source/runtime_utility/mds_retry_control.h	90	retry_release_lock_with_op_until_timeout	ret == OB_EAGAIN	if (OB_LIKELY(OB_EAGAIN == ret)) {
+src/storage/multi_data_source/runtime_utility/mds_retry_control.h	97	retry_release_lock_with_op_until_timeout	ret == OB_EAGAIN	} while (OB_EAGAIN == ret && ({ ob_usleep(10_ms); ++retry_param; true; }));
+src/storage/multi_data_source/runtime_utility/mds_service.cpp	207	ObMdsService::for_each_tablet_in_ls	ret != OB_ITER_END; ret != OB_EMPTY_RESULT	if (OB_ITER_END != ret && OB_EMPTY_RESULT != ret) {
+src/storage/multi_data_source/runtime_utility/mds_service.cpp	281	ObMdsService::process_with_tablet_	ret != OB_EAGAIN	if (OB_EAGAIN != ret) {
+src/storage/multi_data_source/runtime_utility/mds_service.cpp	305	ObMdsService::get_tablet_oldest_scn_	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/storage/multi_data_source/runtime_utility/mds_service.cpp	308	ObMdsService::get_tablet_oldest_scn_	ret == OB_ITEM_NOT_SETTED	} else if (OB_ITEM_NOT_SETTED == ret) {
+src/storage/multi_data_source/runtime_utility/mds_service.cpp	355	ObMdsService::try_gc_mds_table_	ret != OB_EAGAIN	if (OB_EAGAIN != ret) {
+src/storage/ob_bloom_filter_task.cpp	177	ObBloomFilterBuildTask::build_bloom_filter	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/ob_disk_usage_reporter.cpp	113	ObDiskUsageReportTask::count_server_data	ret == OB_ITER_END	if (OB_ITER_END == ret || OB_SUCCESS == ret) {
+src/storage/ob_disk_usage_reporter.cpp	174	ObDiskUsageReportTask::get_data_disk_used_size	ret != OB_HASH_NOT_EXIST	if (OB_FAIL(result_map_.get_refactored(key, size)) && OB_HASH_NOT_EXIST != ret) {
+src/storage/ob_disk_usage_reporter.cpp	176	ObDiskUsageReportTask::get_data_disk_used_size	ret == OB_HASH_NOT_EXIST	} else if (OB_HASH_NOT_EXIST == ret) {
+src/storage/ob_disk_usage_reporter.cpp	203	ObDiskUsageReportTask::delete_usage_stat	ret != OB_HASH_NOT_EXIST	if (OB_FAIL(result_map_.erase_refactored(key)) && OB_HASH_NOT_EXIST != ret) {
+src/storage/ob_disk_usage_reporter.cpp	205	ObDiskUsageReportTask::delete_usage_stat	ret == OB_HASH_NOT_EXIST	} else if (OB_HASH_NOT_EXIST == ret) {
+src/storage/ob_gc_upper_trans_helper.cpp	99	ObGCUpperTransHelper::check_need_gc_or_update_upper_trans_version	ret == OB_ITER_END	if (OB_ITER_END == ret) {

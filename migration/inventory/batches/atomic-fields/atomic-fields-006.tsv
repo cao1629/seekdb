@@ -1,0 +1,51 @@
+file	line	symbol	construct	text
+src/oblib/lib/hash/ob_multi_mod_ref_mgr.h	54	ObRef::ref_	field int32_t; 3 atomic accesses (ATOMIC_DEC 1, ATOMIC_INC 1, ATOMIC_LOAD 1)	int32_t ref_;
+src/oblib/lib/hash/ob_multi_mod_ref_mgr.h	55	ObRef::lock_	field int32; 3 atomic accesses (ATOMIC_BCAS 2, ATOMIC_STORE 1)	int32 lock_;
+src/oblib/lib/hash/ob_multi_mod_ref_mgr.h	165	ObMultiModRefMgr::is_delete_	field bool; 3 atomic accesses (ATOMIC_LOAD 2, ATOMIC_STORE 1)	bool is_delete_;
+src/oblib/lib/hash/ob_ptr_array_map.h	148	ObPtrArrayWrapper::LockGuard::lock_	field char&; 2 atomic accesses (ATOMIC_STORE 1, ATOMIC_TAS 1)	char& lock_;
+src/oblib/lib/list/ob_atomic_list.h	52	ObHeadNode::data_	field int64_t; single member of a value class; no direct atomic access, 5 atomic accesses reach it through fields and variables of type ObHeadNode, listed where their own accesses resolve	int64_t data_;
+src/oblib/lib/list/ob_atomic_list.h	108	ObAtomicList::head_	field volatile ObHeadNode; 5 atomic accesses (ATOMIC_BCAS 5); through the single member of value classes ObHeadNode::data_	volatile ObHeadNode head_;
+src/oblib/lib/list/ob_link.h	192	ObDLink::next_	field ObDLink *; 1 atomic accesses (ATOMIC_LOAD 1)	ObDLink *next_;
+src/oblib/lib/lock/ob_futex.h	129	ObFutex::sys_waiters_	field int; 2 atomic accesses (ATOMIC_DEC 1, ATOMIC_INC 1)	int sys_waiters_;
+src/oblib/lib/lock/ob_latch.h	68	ObLatchMutex::lock_	field lib::ObFutex; 6 atomic accesses (ATOMIC_BCAS 2, ATOMIC_LOAD 2, ATOMIC_CAS 1, ATOMIC_SET 1)	lib::ObFutex lock_;
+src/oblib/lib/lock/ob_latch.h	95	ObWaitProc::wait_	volatile field volatile int32_t; no atomic access found	volatile int32_t wait_;
+src/oblib/lib/lock/ob_latch.h	251	ObLatch::lock_	field volatile uint32_t; 15 atomic accesses (ATOMIC_LOAD 7, ATOMIC_BCAS 4, ATOMIC_ANDF 3, ATOMIC_AAF 1)	volatile uint32_t lock_;
+src/oblib/lib/lock/ob_latch.h	412	ObLatch::LowTryRDLock::operator()	atomic access through parameter latch (volatile uint32_t *) of ObLatch::LowTryRDLock::operator(); the atomic object is the caller's argument; 1 atomic accesses (ATOMIC_BCAS 1)	inline int ObLatch::LowTryRDLock::operator()(volatile uint32_t *latch,
+src/oblib/lib/lock/ob_latch.h	437	ObLatch::LowTryWRLock::operator()	atomic access through parameter latch (volatile uint32_t *) of ObLatch::LowTryWRLock::operator(); the atomic object is the caller's argument; 1 atomic accesses (ATOMIC_BCAS 1)	inline int ObLatch::LowTryWRLock::operator()(volatile uint32_t *latch,
+src/oblib/lib/lock/ob_qsync_lock.h	45	ObQSyncLock::write_flag_	field int64_t; 7 atomic accesses (ATOMIC_STORE 3, ATOMIC_BCAS 2, ATOMIC_LOAD 2)	int64_t write_flag_ CACHE_ALIGNED;
+src/oblib/lib/lock/ob_scond.h	63	SimpleCond::futex_	field lib::ObFutex; 2 atomic accesses (ATOMIC_FAA 1, ATOMIC_LOAD 1)	lib::ObFutex futex_;
+src/oblib/lib/lock/ob_scond.h	64	SimpleCond::n_waiters_	field uint32_t; 5 atomic accesses (ATOMIC_FAA 4, ATOMIC_LOAD 1)	uint32_t n_waiters_;
+src/oblib/lib/lock/ob_scond.h	85	SCondReadyFlag::lock_	field int; 3 atomic accesses (ATOMIC_BCAS 1, ATOMIC_LOAD 1, ATOMIC_STORE 1)	int lock_;
+src/oblib/lib/lock/ob_scond.h	98	SCondSimpleCounter::count_	field int64_t; 2 atomic accesses (ATOMIC_FAA 1, ATOMIC_TAS 1)	int64_t count_;
+src/oblib/lib/lock/ob_scond.h	108	SCondCounter::Item::count_	field int64_t; 2 atomic accesses (ATOMIC_FAA 1, ATOMIC_TAS 1)	int64_t count_ CACHE_ALIGNED;
+src/oblib/lib/lock/ob_small_spin_lock.h	197	ObSmallSpinLock::lock_	field IntType; 5 atomic accesses (ATOMIC_LOAD 3, ATOMIC_BCAS 1, ATOMIC_SET 1)	IntType lock_;
+src/oblib/lib/lock/ob_tc_ref.h	45	TCRef::born	atomic access through parameter p (int32_t*) of TCRef::born; the atomic object is the caller's argument; 1 atomic accesses (ATOMIC_AAF 1); through functions with an atomic parameter xref_	int32_t born(int32_t* p) { return xref_(p, REF_LIMIT); }
+src/oblib/lib/lock/ob_tc_ref.h	46	TCRef::end	atomic access through parameter p (int32_t*) of TCRef::end; the atomic object is the caller's argument; 1 atomic accesses (ATOMIC_AAF 1); through functions with an atomic parameter xref_	int32_t end(int32_t* p) { return xref_(p, -REF_LIMIT); }
+src/oblib/lib/lock/ob_tc_ref.h	52	TCRef::sync::p	local variable int32_t* in TCRef::sync; 1 atomic accesses (ATOMIC_AAF 1); through functions with an atomic parameter xref_	int32_t* p = NULL;
+src/oblib/lib/lock/ob_tc_ref.h	59	TCRef::sync	atomic access through parameter p (int32_t*) of TCRef::sync; the atomic object is the caller's argument; 1 atomic accesses (ATOMIC_AAF 1); through functions with an atomic parameter xref_	int32_t sync(int32_t* p) {
+src/oblib/lib/lock/ob_tc_ref.h	71	TCRef::inc_ref	atomic access through parameter p (int32_t*) of TCRef::inc_ref; the atomic object is the caller's argument; 1 atomic accesses (ATOMIC_AAF 1); through functions with an atomic parameter xref_	int32_t inc_ref(int32_t* p) {
+src/oblib/lib/lock/ob_tc_ref.h	86	TCRef::dec_ref	atomic access through parameter p (int32_t*) of TCRef::dec_ref; the atomic object is the caller's argument; 1 atomic accesses (ATOMIC_AAF 1); through functions with an atomic parameter xref_	int32_t dec_ref(int32_t* p) {
+src/oblib/lib/lock/ob_tc_ref.h	102	TCRef::inc_ref	atomic access through parameter p (int32_t*) of TCRef::inc_ref; the atomic object is the caller's argument; 1 atomic accesses (ATOMIC_AAF 1); through functions with an atomic parameter xref_	int32_t inc_ref(int32_t* p, int64_t &slot_id) {
+src/oblib/lib/lock/ob_tc_ref.h	119	TCRef::dec_ref	atomic access through parameter p (int32_t*) of TCRef::dec_ref; the atomic object is the caller's argument; 1 atomic accesses (ATOMIC_AAF 1); through functions with an atomic parameter xref_	int32_t dec_ref(int32_t* p, int64_t slot_id) {
+src/oblib/lib/lock/ob_tc_ref.h	127	TCRef::xref_	atomic access through parameter p (int32_t*) of TCRef::xref_; the atomic object is the caller's argument; 1 atomic accesses (ATOMIC_AAF 1)	int32_t xref_(int32_t* p, int32_t x) { return ATOMIC_AAF(p, x); }
+src/oblib/lib/lock/ob_tc_ref.h	135	TCRef::ref_	field int32_t **; 11 atomic accesses (ATOMIC_BCAS 5, ATOMIC_LOAD 5, ATOMIC_TAS 1); through local references slot	int32_t **ref_;
+src/oblib/lib/lock/ob_tc_rwlock.h	50	LWaitCond::futex_	field lib::ObFutex; 4 atomic accesses (ATOMIC_LOAD 2, ATOMIC_BCAS 1, ATOMIC_STORE 1); through local references ready	lib::ObFutex futex_;
+src/oblib/lib/lock/ob_tc_rwlock.h	302	TCRWLock::write_id_	field int32_t; 12 atomic accesses (ATOMIC_STORE 7, ATOMIC_LOAD 5)	int32_t write_id_;
+src/oblib/lib/lock/ob_tc_rwlock.h	303	TCRWLock::read_ref_	field int32_t; 2 atomic accesses (ATOMIC_LOAD 2)	int32_t read_ref_;
+src/oblib/lib/metrics/ob_accumulator.h	36	ObAccumulator::freeze_value_	field int64_t; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_SET 1)	int64_t freeze_value_;
+src/oblib/lib/metrics/ob_accumulator.h	37	ObAccumulator::tmp_value_	field int64_t; 2 atomic accesses (ATOMIC_AAF 1, ATOMIC_SET 1)	int64_t tmp_value_;
+src/oblib/lib/metrics/ob_counter.h	39	ObSimpleCounter::value_	field int64_t; 4 atomic accesses (ATOMIC_AAF 1, ATOMIC_LOAD 1, ATOMIC_SAF 1, ATOMIC_STORE 1)	int64_t value_;
+src/oblib/lib/metrics/ob_counter.h	73	ObCounter::Item::value_	field int64_t; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_STORE 1)	int64_t value_;
+src/oblib/lib/metrics/ob_counter.h	82	ObCounterSlotPickerByCPU::add_value	atomic access through parameter v (int64_t *) of ObCounterSlotPickerByCPU::add_value; the atomic object is the caller's argument; 1 atomic accesses (ATOMIC_FAA 1)	static inline void add_value(int64_t *v, int64_t d) { (void) ATOMIC_FAA(v, d); }
+src/oblib/lib/metrics/ob_counter.h	89	ObCounterSlotPickerByThread::add_value	atomic access through parameter v (int64_t *) of ObCounterSlotPickerByThread::add_value; the atomic object is the caller's argument; 1 atomic accesses (ATOMIC_FAA 1)	static inline void add_value(int64_t *v, int64_t d) { (void) ATOMIC_FAA(v, d); }
+src/oblib/lib/metrics/ob_ema_v2.h	55	ObExponentialMovingAverageV2::inited_	field bool; 1 atomic accesses (ATOMIC_LOAD 1)	bool inited_;  // atomic
+src/oblib/lib/metrics/ob_ema_v2.h	56	ObExponentialMovingAverageV2::ema_	field double; 3 atomic accesses (ATOMIC_LOAD64 2, ATOMIC_SET 1)	double ema_;  // atomic
+src/oblib/lib/ob_lib_config.h	39	ObLibConfig::enable_diagnose_info_	field static bool; 1 atomic accesses (ATOMIC_STORE 1)	static bool enable_diagnose_info_ CACHE_ALIGNED;
+src/oblib/lib/ob_lib_config.h	40	ObLibConfig::enable_trace_log_	field static volatile bool; 1 atomic accesses (ATOMIC_STORE 1)	static volatile bool enable_trace_log_ CACHE_ALIGNED;
+src/oblib/lib/objectpool/ob_pool.h	71	ObPool::in_use_count_	field volatile uint64_t; 2 atomic accesses (ATOMIC_DEC 1, ATOMIC_INC 1)	volatile uint64_t in_use_count_;
+src/oblib/lib/objectpool/ob_pool.h	72	ObPool::free_count_	field volatile uint64_t; 2 atomic accesses (ATOMIC_DEC 1, ATOMIC_INC 1)	volatile uint64_t free_count_;
+src/oblib/lib/objectpool/ob_pool.h	73	ObPool::total_count_	field volatile uint64_t; 1 atomic accesses (ATOMIC_INC 1)	volatile uint64_t total_count_;
+src/oblib/lib/objectpool/ob_resource_pool.h	275	ObBaseResourcePool::inner_allocated_num_	field volatile int64_t; 5 atomic accesses (ATOMIC_AAF 4, ATOMIC_LOAD 1)	volatile int64_t inner_allocated_num_;
+src/oblib/lib/objectpool/ob_resource_pool.h	276	ObBaseResourcePool::inner_used_num_	field volatile int64_t; 6 atomic accesses (ATOMIC_AAF 5, ATOMIC_LOAD 1)	volatile int64_t inner_used_num_;
+src/oblib/lib/objectpool/ob_resource_pool.h	279	ObBaseResourcePool::slice_max_used_num_	field volatile int64_t; 2 atomic accesses (ATOMIC_BCAS 1, ATOMIC_LOAD 1)	volatile int64_t slice_max_used_num_;
+src/oblib/lib/objectpool/ob_resource_pool.h	283	ObBaseResourcePool::updating_	field int32_t; 2 atomic accesses (ATOMIC_BCAS 1, ATOMIC_STORE 1)	int32_t updating_;

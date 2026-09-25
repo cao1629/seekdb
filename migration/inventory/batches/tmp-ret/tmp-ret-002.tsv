@@ -1,0 +1,120 @@
+file	line	symbol	construct	text
+src/oblib/lib/file/ob_file.cpp	218	BufferFileReader::pread_by_fd	merge OB_INVALID_ARGUMENT into ret (continue-and-record through another variable)	ret = (OB_SUCCESS == ret) ? OB_INVALID_ARGUMENT : ret;
+src/oblib/lib/file/ob_file.cpp	317	DirectFileReader::pread_by_fd	merge OB_INVALID_ARGUMENT into ret (continue-and-record through another variable)	ret = (OB_SUCCESS == ret) ? OB_INVALID_ARGUMENT : ret;
+src/oblib/lib/file/ob_file.cpp	366	IFileAppender::open	merge OB_ERROR into ret (continue-and-record through another variable)	ret = (OB_SUCCESS == ret) ? OB_ERROR : ret;
+src/oblib/lib/file/ob_file.cpp	1273	ObFileReader::read_record	merge OB_ERROR into ret (continue-and-record through another variable)	ret = (OB_SUCCESS == ret) ? OB_ERROR : ret;
+src/oblib/lib/file/ob_file.cpp	1398	ObFileAsyncAppender::ObFileAsyncAppender	declare tmp_ret	int tmp_ret = 0;
+src/oblib/lib/file/ob_file.cpp	1399	ObFileAsyncAppender::ObFileAsyncAppender	assign tmp_ret	if (0 != (tmp_ret = io_setup(AIO_MAXEVENTS, &ctx_))) {
+src/oblib/lib/file/ob_file.cpp	1567	ObFileAsyncAppender::submit_iocb_	declare tmp_ret	int tmp_ret = 0;
+src/oblib/lib/file/ob_file.cpp	1568	ObFileAsyncAppender::submit_iocb_	assign tmp_ret	if (1 != (tmp_ret = io_submit(ctx_, 1, &cb_ptr))) {
+src/oblib/lib/hash/ob_hash.h	506	HashBase::Handle::search_pre_	declare tmp_ret	int tmp_ret = -EAGAIN;
+src/oblib/lib/hash/ob_hash.h	511	HashBase::Handle::search_pre_	assign tmp_ret	if (-EAGAIN == (tmp_ret = array_.get(handle, &root_.root_, idx, (ArrayBase::val_t &)item))) {
+src/oblib/lib/hash/ob_hash.h	514	HashBase::Handle::search_pre_	assign tmp_ret	tmp_ret = -EAGAIN;
+src/oblib/lib/hash/ob_hashset.h	163	ObHashSet::exist_refactored	merge OB_HASH_EXIST into ret through if (OB_SUCC(ret)) (continue-and-record through another variable)	ret = OB_HASH_EXIST;
+src/oblib/lib/hash/ob_hashtable.h	1276	ObHashTable::set_refactored	declare tmp_ret	int tmp_ret = callback_helper(value, callback);
+src/oblib/lib/hash/ob_hashtable.h	1606	ObHashTable::deserialization	merge OB_ERR_UNEXPECTED into ret through if (OB_SUCC(ret)) (continue-and-record through another variable)	ret = OB_ERR_UNEXPECTED;
+src/oblib/lib/hash/ob_iteratable_hashmap.h	227	ObIteratableHashMap::get	declare tmp_ret	int tmp_ret = placement_hash_search<inner_key_t, N, ModulePageAllocator, auto_free>(keys_, flags_, inner_key, pos);
+src/oblib/lib/hash/ob_iteratable_hashmap.h	241	ObIteratableHashMap::get	declare tmp_ret	int tmp_ret = placement_hash_search<inner_key_t, N, ModulePageAllocator,  auto_free>(keys_, flags_, inner_key, pos);
+src/oblib/lib/hash/ob_iteratable_hashset.h	143	ObIteratableHashSet::operator=	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/oblib/lib/hash/ob_iteratable_hashset.h	148	ObIteratableHashSet::operator=	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = set_refactored(*it))) {
+src/oblib/lib/hash/ob_linear_hash_map.h	930	ObLinearHashMap::init	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/oblib/lib/hash/ob_linear_hash_map.h	931	ObLinearHashMap::init	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = destroy())) {
+src/oblib/lib/hash/ob_multi_mod_ref_mgr.h	132	ObMultiModRefMgr::print	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/oblib/lib/hash/ob_multi_mod_ref_mgr.h	139	ObMultiModRefMgr::print	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = msg.append_fmt("%s%d:%d", mod>0?",":"", mod, ref_cnt))) {
+src/oblib/lib/hash/ob_placement_hashset.h	75	ObPlacementHashSet::exist_refactored	merge OB_HASH_EXIST into ret through if (OB_SUCC(ret)) (continue-and-record through another variable)	ret = OB_HASH_EXIST;
+src/oblib/lib/hash/ob_refered_map.h	158	ObReferedMap::locate	merge OB_ERR_UNEXPECTED into ret (continue-and-record through another variable)	ret = OB_SUCCESS == ret ? OB_ERR_UNEXPECTED : ret;
+src/oblib/lib/hash/ob_refered_map.h	189	ObReferedMap::get	merge OB_ERR_UNEXPECTED into ret (continue-and-record through another variable)	ret = OB_SUCCESS == ret ? OB_ERR_UNEXPECTED : ret;
+src/oblib/lib/list/ob_dlist.h	507	deserialize_dlist	declare tmp_ret	int tmp_ret = ObDlistNodeDestoryHelper<has_normal_deserialize<DLinkNode>::has_>()(*tmp_node, allocator);
+src/oblib/lib/lock/ob_bucket_lock.cpp	228	ObBucketLock::wrlock_all	declare tmp_ret	int tmp_ret = latches_[i].wrlock(latch_id_);
+src/oblib/lib/lock/ob_bucket_lock.cpp	232	ObBucketLock::wrlock_all	merge into ret	ret = tmp_ret;
+src/oblib/lib/lock/ob_bucket_lock.cpp	328	ObMultiBucketLockGuard::~ObMultiBucketLockGuard	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/oblib/lib/lock/ob_bucket_lock.cpp	330	ObMultiBucketLockGuard::~ObMultiBucketLockGuard	assign tmp_ret	if (OB_UNLIKELY(OB_SUCCESS != (tmp_ret = lock_.unlock_latch_idx(latch_array_.at(i))))) {
+src/oblib/lib/lock/ob_bucket_lock.cpp	380	ObMultiBucketLockGuard::lock_multi_buckets	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/oblib/lib/lock/ob_bucket_lock.cpp	383	ObMultiBucketLockGuard::lock_multi_buckets	assign tmp_ret	if(OB_SUCCESS != (tmp_ret = lock_.unlock_latch_idx(latch_idx))) {
+src/oblib/lib/lock/ob_drw_lock.h	141	DRWLock::wrlock	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/oblib/lib/lock/ob_drw_lock.h	151	DRWLock::wrlock	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = latches_[i].latch_.unlock())) {
+src/oblib/lib/lock/ob_drw_lock.h	161	DRWLock::wrunlock	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/oblib/lib/lock/ob_drw_lock.h	163	DRWLock::wrunlock	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = latches_[i].latch_.unlock())) {
+src/oblib/lib/lock/ob_drw_lock.h	164	DRWLock::wrunlock	merge into ret	ret = tmp_ret;
+src/oblib/lib/lock/ob_drw_lock.h	179	DRWLock::try_wrlock	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/oblib/lib/lock/ob_drw_lock.h	189	DRWLock::try_wrlock	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = latches_[i].latch_.unlock())) {
+src/oblib/lib/lock/ob_latch.cpp	221	ObLatchWaitQueue::wait	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/oblib/lib/lock/ob_latch.cpp	262	ObLatchWaitQueue::wait	assign tmp_ret	if (ETIMEDOUT == (tmp_ret = futex_wait(&proc.wait_, 1, &ts))) {
+src/oblib/lib/lock/ob_latch.cpp	263	ObLatchWaitQueue::wait	assign tmp_ret	tmp_ret = OB_TIMEOUT;
+src/oblib/lib/lock/ob_latch.cpp	301	ObLatchWaitQueue::wait	assign tmp_ret	tmp_ret = OB_ERR_UNEXPECTED;
+src/oblib/lib/lock/ob_thread_cond.cpp	30	ObThreadCond::init	declare tmp_ret	int tmp_ret = 0;
+src/oblib/lib/lock/ob_thread_cond.cpp	35	ObThreadCond::init	assign tmp_ret	OB_UNLIKELY(0 != (tmp_ret = pthread_mutex_init(&mutex_, NULL)))) {
+src/oblib/lib/lock/ob_thread_cond.cpp	41	ObThreadCond::init	assign tmp_ret	OB_UNLIKELY(0 != (tmp_ret = pthread_cond_init(&cond_, NULL)))) {
+src/oblib/lib/lock/ob_thread_cond.cpp	82	ObThreadCond::wait_us	declare tmp_ret	int tmp_ret = 0;
+src/oblib/lib/lock/ob_thread_cond.cpp	88	ObThreadCond::wait_us	assign tmp_ret	if (OB_UNLIKELY(0 != (tmp_ret = pthread_cond_wait(&cond_, &mutex_)))) {
+src/oblib/lib/lock/ob_thread_cond.cpp	103	ObThreadCond::wait_us	assign tmp_ret	tmp_ret = pthread_cond_timedwait_relative_np(&cond_, &mutex_, &reltime);
+src/oblib/lib/lock/ob_thread_cond.cpp	116	ObThreadCond::wait_us	assign tmp_ret	if (OB_UNLIKELY(0 != (tmp_ret = gettimeofday(&curtime, NULL)))) {
+src/oblib/lib/lock/ob_thread_cond.cpp	133	ObThreadCond::wait_us	assign tmp_ret	if (OB_UNLIKELY(0 != (tmp_ret = pthread_cond_timedwait(&cond_, &mutex_, &abstime)))) {
+src/oblib/lib/lock/ob_thread_cond.h	48	ObThreadCond::lock	declare tmp_ret	int tmp_ret = 0;
+src/oblib/lib/lock/ob_thread_cond.h	52	ObThreadCond::lock	assign tmp_ret	} else if (OB_UNLIKELY(0 != (tmp_ret = pthread_mutex_lock(&mutex_)))) {
+src/oblib/lib/lock/ob_thread_cond.h	61	ObThreadCond::unlock	declare tmp_ret	int tmp_ret = 0;
+src/oblib/lib/lock/ob_thread_cond.h	65	ObThreadCond::unlock	assign tmp_ret	} else if (OB_UNLIKELY(0 != (tmp_ret = pthread_mutex_unlock(&mutex_)))) {
+src/oblib/lib/lock/ob_thread_cond.h	79	ObThreadCond::signal	declare tmp_ret	int tmp_ret = 0;
+src/oblib/lib/lock/ob_thread_cond.h	83	ObThreadCond::signal	assign tmp_ret	} else if (OB_UNLIKELY(0 != (tmp_ret = pthread_cond_signal(&cond_)))) {
+src/oblib/lib/lock/ob_thread_cond.h	92	ObThreadCond::broadcast	declare tmp_ret	int tmp_ret = 0;
+src/oblib/lib/lock/ob_thread_cond.h	96	ObThreadCond::broadcast	assign tmp_ret	} else if (OB_UNLIKELY(0 != (tmp_ret = pthread_cond_broadcast(&cond_)))) {
+src/oblib/lib/oblog/ob_log.cpp	1212	ObLogger::record_old_log_file	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/oblib/lib/oblog/ob_log.cpp	1215	ObLogger::record_old_log_file	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(get_log_files_in_dir(log_file_[type].filename_, &files))) {
+src/oblib/lib/oblog/ob_log.cpp	1218	ObLogger::record_old_log_file	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(get_log_files_in_dir(log_file_[FD_ALERT_FILE].filename_, &files))) {
+src/oblib/lib/oblog/ob_log.h	1376	ObLogger::do_log_message	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/oblib/lib/oblog/ob_log.h	1377	ObLogger::do_log_message	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(log_head(start_ts, mod_name, dba_event, OB_LOG_LEVEL_ERROR, file, line, function,
+src/oblib/lib/oblog/ob_log.h	1379	ObLogger::do_log_message	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(logdata_printf(buf, buf_len, pos,
+src/oblib/lib/stat/ob_diagnose_info.cpp	284	ObWaitEventHistory::get_next_and_compare	declare tmp_ret	int tmp_ret = OB_ITER_END;
+src/oblib/lib/stat/ob_diagnose_info.cpp	292	ObWaitEventHistory::get_next_and_compare	assign tmp_ret	tmp_ret = OB_SUCCESS;
+src/oblib/lib/stat/ob_diagnose_info.cpp	297	ObWaitEventHistory::get_next_and_compare	assign tmp_ret	tmp_ret = OB_ITER_END;
+src/oblib/lib/stat/ob_diagnose_info.cpp	300	ObWaitEventHistory::get_next_and_compare	assign tmp_ret	tmp_ret = OB_SUCCESS;
+src/oblib/lib/thread/ob_dedup_queue.cpp	405	ObDedupQueue::run1	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/oblib/lib/thread/ob_dedup_queue.cpp	416	ObDedupQueue::run1	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = task_queue_.pop(task2process)) && OB_UNLIKELY(tmp_ret != OB_ENTRY_NOT_EXIST)) {
+src/oblib/lib/thread/ob_dedup_queue.cpp	448	ObDedupQueue::run1	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = task_queue_sync_.wait(QUEUE_WAIT_TIME_MS))) {
+src/oblib/lib/thread/ob_dedup_queue.cpp	458	ObDedupQueue::run1	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = work_thread_sync_.wait(MAX_QUEUE_WAIT_TIME_MS))) {
+src/oblib/lib/thread/ob_dynamic_thread_pool.cpp	139	ObDynamicThreadPool::task_thread_idle	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/oblib/lib/thread/ob_dynamic_thread_pool.cpp	141	ObDynamicThreadPool::task_thread_idle	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = task_thread_cond_.wait(DEFAULT_CHECK_TIME_MS))) {
+src/oblib/lib/thread/ob_dynamic_thread_pool.cpp	150	ObDynamicThreadPool::run1	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/oblib/lib/thread/ob_dynamic_thread_pool.cpp	156	ObDynamicThreadPool::run1	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = check_thread_status())) {
+src/oblib/lib/thread/ob_dynamic_thread_pool.cpp	161	ObDynamicThreadPool::run1	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = cond_.wait(DEFAULT_CHECK_TIME_MS))) {
+src/oblib/lib/thread/ob_dynamic_thread_pool.cpp	169	ObDynamicThreadPool::run1	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = stop_all_threads())) {
+src/oblib/lib/thread/ob_dynamic_thread_pool.cpp	177	ObDynamicThreadPool::check_thread_status	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/oblib/lib/thread/ob_dynamic_thread_pool.cpp	188	ObDynamicThreadPool::check_thread_status	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = start_thread(thread_info))) {
+src/oblib/lib/thread/ob_dynamic_thread_pool.cpp	193	ObDynamicThreadPool::check_thread_status	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = stop_thread(thread_info))) {
+src/oblib/lib/thread/ob_dynamic_thread_pool.cpp	204	ObDynamicThreadPool::stop_all_threads	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/oblib/lib/thread/ob_dynamic_thread_pool.cpp	217	ObDynamicThreadPool::stop_all_threads	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = stop_thread(thread_info))) {
+src/oblib/lib/thread/ob_dynamic_thread_pool.cpp	219	ObDynamicThreadPool::stop_all_threads	merge into ret	ret = OB_SUCC(ret)? tmp_ret : ret;
+src/oblib/lib/thread/ob_dynamic_thread_pool.cpp	261	ObDynamicThreadPool::stop_thread	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/oblib/lib/thread/ob_dynamic_thread_pool.cpp	319	ObDynamicThreadPool::task_thread_func	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/oblib/lib/thread/ob_dynamic_thread_pool.cpp	322	ObDynamicThreadPool::task_thread_func	assign tmp_ret	tmp_ret = OB_ERR_SYS;
+src/oblib/lib/thread/ob_dynamic_thread_pool.cpp	331	ObDynamicThreadPool::task_thread_func	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = thread_info->pool_->pop_task(task))) {
+src/oblib/lib/thread/ob_dynamic_thread_pool.cpp	340	ObDynamicThreadPool::task_thread_func	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = task->process(thread_info->is_stop_))) {
+src/oblib/lib/thread/ob_queue_thread.cpp	73	ObCond::wait	declare tmp_ret	int tmp_ret = pthread_cond_wait(&cond_, &mutex_);
+src/oblib/lib/thread/ob_queue_thread.cpp	103	ObCond::timedwait	declare tmp_ret	int tmp_ret = ob_pthread_cond_timedwait_us(&cond_, &mutex_, time_us);
+src/oblib/lib/thread/ob_reentrant_thread.cpp	67	ObReentrantThread::destroy	declare tmp_ret	int tmp_ret = cond_.broadcast();
+src/oblib/lib/thread/ob_reentrant_thread.cpp	86	ObReentrantThread::logical_start	declare tmp_ret	int tmp_ret = cond_.broadcast();
+src/oblib/lib/thread/ob_reentrant_thread.cpp	102	ObReentrantThread::logical_stop	declare tmp_ret	int tmp_ret = cond_.broadcast();
+src/oblib/lib/thread/ob_reentrant_thread.cpp	183	ObReentrantThread::blocking_run	declare tmp_ret	int tmp_ret = cond_.broadcast();
+src/oblib/lib/utility/ob_macro_utils.h	656	#define OB_TMP_FAIL	OB_TMP_FAIL (plan definition)	#define OB_TMP_FAIL(statement) (OB_UNLIKELY(::oceanbase::common::OB_SUCCESS != (tmp_ret = (statement))))
+src/oblib/lib/utility/ob_macro_utils.h	657	#define COVER_SUCC	merge errcode into ret (continue-and-record through another variable)	#define COVER_SUCC(errcode) (OB_SUCCESS == ret ? errcode : ret)
+src/oblib/lib/utility/ob_smart_var.h	171	#define __SMART_VAR	assign tmp_ret	int v##tmp_ret = OB_SUCCESS;                                                           \
+src/oblib/lib/utility/ob_smart_var.h	172	#define __SMART_VAR	merge into ret	int &v##ret = !independent_of_ret ? ret : v##tmp_ret;                                  \
+src/oblib/lib/utility/utility.h	738	load_file_to_string	declare tmp_ret	int tmp_ret = close(fd);
+src/oblib/lib/utility/utility.h	741	load_file_to_string	merge into ret	ret = (OB_SUCCESS == ret) ? tmp_ret : ret;
+src/oblib/rpc/frame/ob_sql_processor.cpp	41	ObSqlProcessor::run	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/oblib/rpc/frame/ob_sql_processor.cpp	42	ObSqlProcessor::run	declare tmp_ret_2	int tmp_ret_2 = OB_SUCCESS;
+src/oblib/rpc/frame/ob_sql_processor.cpp	43	ObSqlProcessor::run	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(response(ret))) {
+src/oblib/rpc/frame/ob_sql_processor.cpp	44	ObSqlProcessor::run	merge into ret	ret = (OB_SUCCESS != ret) ? ret : tmp_ret;
+src/oblib/rpc/frame/ob_sql_processor.cpp	48	ObSqlProcessor::run	assign tmp_ret_2	if (deseri_succ && OB_UNLIKELY(OB_SUCCESS != (tmp_ret_2 = after_process(ret)))) {
+src/oblib/rpc/frame/ob_sql_processor.cpp	49	ObSqlProcessor::run	merge into ret	ret = (OB_SUCCESS != ret) ? ret : tmp_ret_2;
+src/observer/ai_service/ob_ai_service_executor.cpp	115	ObAiServiceExecutor::create_ai_model_endpoint	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/observer/ai_service/ob_ai_service_executor.cpp	116	ObAiServiceExecutor::create_ai_model_endpoint	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = trans.end(OB_SUCC(ret)))) {
+src/observer/ai_service/ob_ai_service_executor.cpp	118	ObAiServiceExecutor::create_ai_model_endpoint	merge into ret	ret = OB_SUCC(ret) ? tmp_ret : ret;
+src/observer/ai_service/ob_ai_service_executor.cpp	166	ObAiServiceExecutor::alter_ai_model_endpoint	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/observer/ai_service/ob_ai_service_executor.cpp	167	ObAiServiceExecutor::alter_ai_model_endpoint	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = trans.end(OB_SUCC(ret)))) {
+src/observer/ai_service/ob_ai_service_executor.cpp	169	ObAiServiceExecutor::alter_ai_model_endpoint	merge into ret	ret = OB_SUCC(ret) ? tmp_ret : ret;
+src/observer/ai_service/ob_ai_service_executor.cpp	202	ObAiServiceExecutor::drop_ai_model_endpoint	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/observer/ai_service/ob_ai_service_executor.cpp	203	ObAiServiceExecutor::drop_ai_model_endpoint	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = trans.end(OB_SUCC(ret)))) {
+src/observer/ai_service/ob_ai_service_executor.cpp	205	ObAiServiceExecutor::drop_ai_model_endpoint	merge into ret	ret = OB_SUCC(ret) ? tmp_ret : ret;
+src/observer/ai_service/ob_ai_service_executor.cpp	273	ObAiServiceExecutor::lock_and_fetch_endpoint_version	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/observer/ai_service/ob_ai_service_executor.cpp	286	ObAiServiceExecutor::lock_and_fetch_endpoint_version	assign tmp_ret	} else if (OB_ITER_END != (tmp_ret = result->next())) {

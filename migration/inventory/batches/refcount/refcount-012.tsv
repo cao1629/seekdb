@@ -1,0 +1,51 @@
+file	line	symbol	construct	text
+src/sql/plan_cache/ob_lib_cache_object_manager.cpp	129	ObLCObjectManager::common_free	dec_ref_count call	int64_t ref_count = cache_obj->dec_ref_count();
+src/sql/plan_cache/ob_lib_cache_object_manager.h	145	ObLCObjectManager::alloc	inc_ref_count call	cache_obj->inc_ref_count();
+src/sql/plan_cache/ob_plan_cache.cpp	210	ObNodeStatFilterOp::operator()	inc_ref_count call	idle_kv.node_->inc_ref_count();
+src/sql/plan_cache/ob_plan_cache.cpp	220	ObNodeStatFilterOp::operator()	inc_ref_count call	lc_kv.node_->inc_ref_count();
+src/sql/plan_cache/ob_plan_cache.cpp	231	ObNodeStatFilterOp::operator()	dec_ref_count call	kv.node_->dec_ref_count();
+src/sql/plan_cache/ob_plan_cache.cpp	235	ObNodeStatFilterOp::operator()	inc_ref_count call	lc_kv.node_->inc_ref_count();
+src/sql/plan_cache/ob_plan_cache.cpp	285	ObIdleEvictOp::operator()	inc_ref_count call	entry.second->inc_ref_count();
+src/sql/plan_cache/ob_plan_cache.cpp	977	ObPlanCache::add_cache_obj	dec_ref_count call	cache_node->dec_ref_count();//cache node dec ref in alloc
+src/sql/plan_cache/ob_plan_cache.cpp	981	ObPlanCache::add_cache_obj	dec_ref_count call	cache_node->dec_ref_count();//cache node dec ref in alloc
+src/sql/plan_cache/ob_plan_cache.cpp	985	ObPlanCache::add_cache_obj	inc_ref_count call	cache_node->inc_ref_count(); //inc ref count in block
+src/sql/plan_cache/ob_plan_cache.cpp	991	ObPlanCache::add_cache_obj	dec_ref_count call	cache_node->dec_ref_count(); //cache node dec ref in block
+src/sql/plan_cache/ob_plan_cache.cpp	992	ObPlanCache::add_cache_obj	dec_ref_count call	cache_node->dec_ref_count(); //cache node dec ref in alloc
+src/sql/plan_cache/ob_plan_cache.cpp	1027	ObPlanCache::add_cache_obj	dec_ref_count call	cache_node->dec_ref_count(); //cache node dec ref in block
+src/sql/plan_cache/ob_plan_cache.cpp	1028	ObPlanCache::add_cache_obj	dec_ref_count call	cache_node->dec_ref_count(); //cache node dec ref in alloc
+src/sql/plan_cache/ob_plan_cache.cpp	1039	ObPlanCache::add_cache_obj	dec_ref_count call	cache_node->dec_ref_count(); //cache node dec ref in block
+src/sql/plan_cache/ob_plan_cache.cpp	1044	ObPlanCache::add_cache_obj	dec_ref_count call	cache_node->dec_ref_count(); //cache node dec ref in block
+src/sql/plan_cache/ob_plan_cache.cpp	1045	ObPlanCache::add_cache_obj	dec_ref_count call	cache_node->dec_ref_count(); //cache node dec ref in alloc
+src/sql/plan_cache/ob_plan_cache.cpp	1073	ObPlanCache::add_cache_obj	dec_ref_count call	cache_node->dec_ref_count();
+src/sql/plan_cache/ob_plan_cache.cpp	1110	ObPlanCache::get_cache_obj	dec_ref_count call	(void)cache_node->dec_ref_count();
+src/sql/plan_cache/ob_plan_cache.cpp	1170	ObPlanCache::foreach_cache_evict	dec_ref_count call	to_evict_list->at(i).node_->dec_ref_count();
+src/sql/plan_cache/ob_plan_cache.cpp	1272	ObPlanCache::cache_evict	dec_ref_count call	idle_evict_keys.at(i).node_->dec_ref_count();
+src/sql/plan_cache/ob_plan_cache.cpp	1325	ObPlanCache::cache_evict_by_glitch_node	dec_ref_count call	co_list.at(i).node_->dec_ref_count();
+src/sql/plan_cache/ob_plan_cache.cpp	1397	ObPlanCache::cache_evict_by_idle	dec_ref_count call	to_evict.at(i).node_->dec_ref_count();
+src/sql/plan_cache/ob_plan_cache.cpp	1448	ObPlanCache::remove_cache_node	dec_ref_count call	del_node->dec_ref_count();
+src/sql/plan_cache/ob_plan_cache.cpp	1462	ObPlanCache::ref_cache_obj	ref_cache_obj definition (other name)	int ObPlanCache::ref_cache_obj(const ObCacheObjID obj_id, ObCacheObjGuard& guard)
+src/sql/plan_cache/ob_plan_cache.cpp	1476	ObPlanCache::ref_plan	ref_plan definition (other name)	int ObPlanCache::ref_plan(const ObCacheObjID plan_id, ObCacheObjGuard& guard)
+src/sql/plan_cache/ob_plan_cache.cpp	1481	ObPlanCache::ref_plan	ref_cache_obj call (other name)	if (OB_FAIL(ref_cache_obj(plan_id, guard))) {
+src/sql/plan_cache/ob_plan_cache.cpp	1493	ObPlanCache::ref_alloc_obj	ref_alloc_obj definition (other name)	int ObPlanCache::ref_alloc_obj(const ObCacheObjID obj_id, ObCacheObjGuard& guard)
+src/sql/plan_cache/ob_plan_cache.cpp	1507	ObPlanCache::ref_alloc_plan	ref_alloc_plan definition (other name)	int ObPlanCache::ref_alloc_plan(const ObCacheObjID plan_id, ObCacheObjGuard& guard)
+src/sql/plan_cache/ob_plan_cache.cpp	1512	ObPlanCache::ref_alloc_plan	ref_alloc_obj call (other name)	if (OB_FAIL(ref_alloc_obj(plan_id, guard))) {
+src/sql/plan_cache/ob_plan_cache.cpp	1532	ObPlanCache::add_cache_obj_stat	inc_ref_count call	cache_obj->inc_ref_count();
+src/sql/plan_cache/ob_plan_cache.cpp	1566	ObPlanCache::create_node_and_add_cache_obj	inc_ref_count call	cache_node->inc_ref_count();
+src/sql/plan_cache/ob_plan_cache.cpp	1577	ObPlanCache::create_node_and_add_cache_obj	dec_ref_count call	cache_node->dec_ref_count();
+src/sql/plan_cache/ob_plan_cache.h	88	ObKVEntryTraverseOp::operator()	inc_ref_count call	entry.second->inc_ref_count();
+src/sql/plan_cache/ob_plan_cache.h	278	ObPlanCache	ref_cache_obj declaration (other name)	int ref_cache_obj(const ObCacheObjID obj_id, ObCacheObjGuard& guard);
+src/sql/plan_cache/ob_plan_cache.h	279	ObPlanCache	ref_plan declaration (other name)	int ref_plan(const ObCacheObjID obj_id, ObCacheObjGuard& guard);
+src/sql/plan_cache/ob_plan_cache.h	427	ObPlanCache	ref_alloc_obj declaration (other name)	int ref_alloc_obj(const ObCacheObjID obj_id, ObCacheObjGuard& guard);
+src/sql/plan_cache/ob_plan_cache.h	428	ObPlanCache	ref_alloc_plan declaration (other name)	int ref_alloc_plan(const ObCacheObjID obj_id, ObCacheObjGuard& guard);
+src/sql/plan_cache/ob_plan_cache_callback.cpp	27	ObLibCacheAtomicOp::operator()	inc_ref_count call	entry.second->inc_ref_count();
+src/sql/plan_cache/ob_plan_cache_callback.cpp	47	ObLibCacheAtomicOp::get_value	dec_ref_count call	cache_node_->dec_ref_count();
+src/sql/plan_cache/ob_plan_cache_callback.cpp	67	ObCacheObjAtomicOp::operator()	try_inc_ref_count call (prefixed name)	if (entry.second->try_inc_ref_count()) {
+src/sql/plan_cache/ob_plan_set.cpp	44	ObPlanSet::~ObPlanSet	dec_ref_cnt call	int64_t ref_cnt = pre_cal_expr_handler_->dec_ref_cnt();
+src/sql/plan_cache/ob_plan_set.cpp	960	ObSqlPlanSet::add_cache_obj	inc_pre_expr_ref_count call (other name)	cache_object.inc_pre_expr_ref_count();
+src/sql/plan_cache/ob_pre_calc_expr_handler.h	67	PreCalcExprHandler::inc_ref_cnt	inc_ref_cnt definition	void inc_ref_cnt()
+src/sql/plan_cache/ob_pre_calc_expr_handler.h	72	PreCalcExprHandler::dec_ref_cnt	dec_ref_cnt definition	int64_t dec_ref_cnt()
+src/sql/plan_cache/ob_prepare_stmt_struct.cpp	135	ObPsStmtItem::check_erase_inc_ref_count	check_erase_inc_ref_count definition (prefixed name)	bool ObPsStmtItem::check_erase_inc_ref_count()
+src/sql/plan_cache/ob_prepare_stmt_struct.cpp	154	ObPsStmtItem::dec_ref_count	dec_ref_count definition	void ObPsStmtItem::dec_ref_count()
+src/sql/plan_cache/ob_prepare_stmt_struct.cpp	556	ObPsStmtInfo::check_erase_inc_ref_count	check_erase_inc_ref_count definition (prefixed name)	bool ObPsStmtInfo::check_erase_inc_ref_count()
+src/sql/plan_cache/ob_prepare_stmt_struct.cpp	575	ObPsStmtInfo::dec_ref_count	dec_ref_count definition	void ObPsStmtInfo::dec_ref_count()
+src/sql/plan_cache/ob_prepare_stmt_struct.cpp	626	ObPsStmtInfoGuard::~ObPsStmtInfoGuard	deref_stmt_info call (other name)	if (OB_FAIL(ps_cache_->deref_stmt_info(stmt_id_))) {

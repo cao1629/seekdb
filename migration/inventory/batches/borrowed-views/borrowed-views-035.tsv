@@ -1,0 +1,59 @@
+file	line	symbol	construct	text
+src/sql/hybrid_search/ob_query_parse.h	109	ObColumnIndexInfo::index_name_	member ObString (value) of type common::ObString	common::ObString index_name_;
+src/sql/hybrid_search/ob_query_parse.h	143	ObEsQueryInfo::query_text_	member ObString (value) of type ObString	ObString query_text_;
+src/sql/hybrid_search/ob_query_parse.h	385	ObESQueryParser::source_cols_	member container of ObString of type common::ObSEArray<common::ObString, 4, common::ModulePageAllocator, true>	common::ObSEArray<common::ObString, 4, common::ModulePageAllocator, true> source_cols_;
+src/sql/hybrid_search/ob_query_parse.h	387	ObESQueryParser::table_name_	member ObString (value) of type common::ObString	common::ObString table_name_;
+src/sql/hybrid_search/ob_query_parse.h	388	ObESQueryParser::database_name_	member ObString (value) of type common::ObString	common::ObString database_name_;
+src/sql/hybrid_search/ob_query_parse.h	389	ObESQueryParser::index_name_map_	member ColumnIndexNameMap (value) of type ColumnIndexNameMap	ColumnIndexNameMap index_name_map_;
+src/sql/hybrid_search/ob_query_parse.h	390	ObESQueryParser::user_cols_	member container of ObString of type common::ObSEArray<common::ObString, 4, common::ModulePageAllocator, true>	common::ObSEArray<common::ObString, 4, common::ModulePageAllocator, true> user_cols_;
+src/sql/hybrid_search/ob_query_parse.h	393	ObESQueryParser::out_cols_	member container of ObString of type ObIArray<ObString> *	ObIArray<ObString> *out_cols_;
+src/sql/hybrid_search/ob_query_request.h	47	ObQueryReqFromJson::score_alias_	member ObString (value) of type common::ObString	common::ObString score_alias_;
+src/sql/hybrid_search/ob_query_request.h	48	ObQueryReqFromJson::match_idxs_	member container of ObString of type common::ObSEArray<common::ObString, 4, common::ModulePageAllocator, true>	common::ObSEArray<common::ObString, 4, common::ModulePageAllocator, true> match_idxs_;
+src/sql/hybrid_search/ob_query_translator.h	40	ObRequestTranslator::buf_	member raw bytes (pointer) of type char *	char *buf_;
+src/sql/hybrid_search/ob_request_base.h	82	ObReqExpr::expr_name	member ObString (value) of type common::ObString	common::ObString expr_name;
+src/sql/hybrid_search/ob_request_base.h	83	ObReqExpr::alias_name	member ObString (value) of type common::ObString	common::ObString alias_name;
+src/sql/hybrid_search/ob_request_base.h	163	ObReqColumnExpr::table_name	member ObString (value) of type common::ObString	common::ObString table_name;
+src/sql/hybrid_search/ob_request_base.h	262	ObReqTable::table_name_	member ObString (value) of type common::ObString	common::ObString table_name_;
+src/sql/hybrid_search/ob_request_base.h	263	ObReqTable::alias_name_	member ObString (value) of type common::ObString	common::ObString alias_name_;
+src/sql/hybrid_search/ob_request_base.h	264	ObReqTable::database_name_	member ObString (value) of type common::ObString	common::ObString database_name_;
+src/sql/hybrid_search/ob_request_base.h	333	ObReqFromJson::req_hints_	member container of ObString of type common::ObSEArray<common::ObString, 4, common::ModulePageAllocator, true>	common::ObSEArray<common::ObString, 4, common::ModulePageAllocator, true> req_hints_;
+src/sql/monitor/ob_exec_stat.h	241	ObSchedInfo::sched_info_	member raw bytes (pointer) of type char *	char *sched_info_;
+src/sql/monitor/ob_exec_stat.h	332	ObAuditRecordData::user_name_	member raw bytes (pointer) of type char *	char *user_name_;
+src/sql/monitor/ob_exec_stat.h	336	ObAuditRecordData::db_name_	member raw bytes (pointer) of type char *	char *db_name_;
+src/sql/monitor/ob_exec_stat.h	339	ObAuditRecordData::sql_	member raw bytes (pointer) of type char *	char *sql_; // This memory is allocated by allocate_, and released when the record is eliminated;
+src/sql/monitor/ob_exec_stat.h	368	ObAuditRecordData::params_value_	member raw bytes (pointer) of type char *	char *params_value_;
+src/sql/monitor/ob_exec_stat_collector.cpp	38	ObExecStatCollector::get_extend_info	allocator in, arena view out: ObString &str	int ObExecStatCollector::get_extend_info(ObIAllocator &allocator, ObString &str)
+src/sql/monitor/ob_plan_info_manager.h	33	ObSqlPlanItem::operation_	member raw bytes (pointer) of type char*	char* operation_;
+src/sql/monitor/ob_plan_info_manager.h	35	ObSqlPlanItem::options_	member raw bytes (pointer) of type char*	char* options_;
+src/sql/monitor/ob_plan_info_manager.h	37	ObSqlPlanItem::object_node_	member raw bytes (pointer) of type char*	char* object_node_;
+src/sql/monitor/ob_plan_info_manager.h	40	ObSqlPlanItem::object_owner_	member raw bytes (pointer) of type char*	char* object_owner_;
+src/sql/monitor/ob_plan_info_manager.h	42	ObSqlPlanItem::object_name_	member raw bytes (pointer) of type char*	char* object_name_;
+src/sql/monitor/ob_plan_info_manager.h	44	ObSqlPlanItem::object_alias_	member raw bytes (pointer) of type char*	char* object_alias_;
+src/sql/monitor/ob_plan_info_manager.h	46	ObSqlPlanItem::object_type_	member raw bytes (pointer) of type char*	char* object_type_;
+src/sql/monitor/ob_plan_info_manager.h	48	ObSqlPlanItem::optimizer_	member raw bytes (pointer) of type char*	char* optimizer_;
+src/sql/monitor/ob_plan_info_manager.h	62	ObSqlPlanItem::other_tag_	member raw bytes (pointer) of type char*	char* other_tag_;
+src/sql/monitor/ob_plan_info_manager.h	64	ObSqlPlanItem::partition_start_	member raw bytes (pointer) of type char*	char* partition_start_;
+src/sql/monitor/ob_plan_info_manager.h	66	ObSqlPlanItem::partition_stop_	member raw bytes (pointer) of type char*	char* partition_stop_;
+src/sql/monitor/ob_plan_info_manager.h	69	ObSqlPlanItem::other_	member raw bytes (pointer) of type char*	char* other_;
+src/sql/monitor/ob_plan_info_manager.h	71	ObSqlPlanItem::distribution_	member raw bytes (pointer) of type char*	char* distribution_;
+src/sql/monitor/ob_plan_info_manager.h	76	ObSqlPlanItem::access_predicates_	member raw bytes (pointer) of type char*	char* access_predicates_;
+src/sql/monitor/ob_plan_info_manager.h	78	ObSqlPlanItem::filter_predicates_	member raw bytes (pointer) of type char*	char* filter_predicates_;
+src/sql/monitor/ob_plan_info_manager.h	80	ObSqlPlanItem::startup_predicates_	member raw bytes (pointer) of type char*	char* startup_predicates_;
+src/sql/monitor/ob_plan_info_manager.h	82	ObSqlPlanItem::projection_	member raw bytes (pointer) of type char*	char* projection_;
+src/sql/monitor/ob_plan_info_manager.h	84	ObSqlPlanItem::special_predicates_	member raw bytes (pointer) of type char*	char* special_predicates_;
+src/sql/monitor/ob_plan_info_manager.h	87	ObSqlPlanItem::qblock_name_	member raw bytes (pointer) of type char*	char* qblock_name_;
+src/sql/monitor/ob_plan_info_manager.h	89	ObSqlPlanItem::remarks_	member raw bytes (pointer) of type char*	char* remarks_;
+src/sql/monitor/ob_plan_info_manager.h	91	ObSqlPlanItem::other_xml_	member raw bytes (pointer) of type char*	char* other_xml_;
+src/sql/monitor/ob_plan_info_manager.h	124	ObLogicalPlanRawData::logical_plan_	member raw bytes (pointer) of type char *	char *logical_plan_;        //serialize and compress data
+src/sql/monitor/ob_sql_plan.h	106	PlanText::buf_	member raw bytes (pointer) of type char *	char *buf_;
+src/sql/monitor/ob_sql_plan.h	125	ObSqlPlan::PlanFormatHelper::operator_prefix_	member container of ObString of type ObSEArray<ObString, 4>	ObSEArray<ObString, 4> operator_prefix_;
+src/sql/ob_optimizer_trace_impl.h	281	LogFileAppender::identifier_	member ObString (value) of type common::ObString	common::ObString identifier_;
+src/sql/ob_optimizer_trace_impl.h	400	ObOptimizerTraceImpl::sql_id_	member ObString (value) of type common::ObString	common::ObString sql_id_;
+src/sql/ob_result_set.h	92	ObResultSet::ExternalRetrieveInfo::route_sql_	member ObString (value) of type ObString	ObString route_sql_;
+src/sql/ob_result_set.h	95	ObResultSet::ExternalRetrieveInfo::stmt_sql_	member ObString (value) of type ObString	ObString stmt_sql_;
+src/sql/ob_result_set.h	389	ObResultSet::statement_name_	member ObString (value) of type common::ObString	common::ObString statement_name_;
+src/sql/ob_result_set.h	429	ObResultSet::wild_str_	member ObString (value) of type common::ObString	common::ObString wild_str_;//uesd to save filed wildcard in COM_FIELD_LIST;
+src/sql/ob_result_set.h	430	ObResultSet::ps_sql_	member ObString (value) of type common::ObString	common::ObString ps_sql_; // for sql in pl
+src/sql/ob_result_set.h	432	ObResultSet::ps_params_	member ParamStore (value) of type common::ParamStore	common::ParamStore ps_params_; // text ps params record, used to fill into sql_audit
+src/sql/ob_scanner.h	172	ObScanner::label_	member raw bytes (pointer) of type const char *	const char *label_;
+src/sql/ob_scanner.h	184	ObScanner::extend_info_	member ObString (value) of type ObString	ObString extend_info_;

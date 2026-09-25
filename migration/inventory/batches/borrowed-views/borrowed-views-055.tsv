@@ -1,0 +1,54 @@
+file	line	symbol	construct	text
+src/storage/ls/ob_ls_tablet_service.cpp	4294	ObLSTabletService::table_refresh_row	allocator in, arena view out: blocksstable::ObDatumRow &datum_row	int ObLSTabletService::table_refresh_row(
+src/storage/memtable/mvcc/ob_mvcc_row.cpp	225	ObMvccRowFilter::datum_row_	member ObDatumRow (value) of type blocksstable::ObDatumRow	blocksstable::ObDatumRow datum_row_;
+src/storage/memtable/mvcc/ob_row_data.h	49	ObRowData::data_	member raw bytes (pointer) of type const char *	const char *data_;
+src/storage/memtable/ob_memtable.h	81	ObMTKVBuilder::dup_key	allocator in, arena view out: ObStoreRowkey *&new_key	int dup_key(ObStoreRowkey *&new_key, common::ObIAllocator &alloc, const ObStoreRowkey *key)
+src/storage/memtable/ob_memtable.h	149	ObMemtableSetArg::new_row_	member ObDatumRow (pointer) of type const blocksstable::ObDatumRow *	const blocksstable::ObDatumRow *new_row_;
+src/storage/memtable/ob_memtable.h	152	ObMemtableSetArg::old_row_	member ObDatumRow (pointer) of type const blocksstable::ObDatumRow *	const blocksstable::ObDatumRow *old_row_;
+src/storage/memtable/ob_memtable_compact_writer.h	48	ObMemtableCompactWriter::buffer_	member raw bytes (pointer) of type char *	char *buffer_;
+src/storage/memtable/ob_memtable_data.h	104	ObMemtableData::buf_	member raw bytes (pointer) of type const char *	const char *buf_;
+src/storage/memtable/ob_memtable_iterator.h	97	ObMemtableGetIterator::rowkey_	member ObDatumRowkey (pointer) of type const blocksstable::ObDatumRowkey *	const blocksstable::ObDatumRowkey *rowkey_;
+src/storage/memtable/ob_memtable_iterator.h	98	ObMemtableGetIterator::cur_row_	member ObDatumRow (value) of type blocksstable::ObDatumRow	blocksstable::ObDatumRow cur_row_;
+src/storage/memtable/ob_memtable_iterator.h	131	ObMemtableScanIterator::cur_range_	member ObDatumRange (value) of type blocksstable::ObDatumRange	blocksstable::ObDatumRange cur_range_;
+src/storage/memtable/ob_memtable_iterator.h	167	ObMemtableMGetIterator::rowkeys_	member container of ObDatumRowkey of type const common::ObIArray<blocksstable::ObDatumRowkey> *	const common::ObIArray<blocksstable::ObDatumRowkey> *rowkeys_;
+src/storage/memtable/ob_memtable_iterator.h	170	ObMemtableMGetIterator::cur_row_	member ObDatumRow (value) of type blocksstable::ObDatumRow	blocksstable::ObDatumRow cur_row_;
+src/storage/memtable/ob_memtable_iterator.h	195	ObMemtableMScanIterator::ranges_	member container of ObDatumRange of type const common::ObIArray<blocksstable::ObDatumRange> *	const common::ObIArray<blocksstable::ObDatumRange> *ranges_;
+src/storage/memtable/ob_memtable_iterator.h	271	ObMemtableMultiVersionScanIterator::row_	member ObDatumRow (value) of type blocksstable::ObDatumRow	blocksstable::ObDatumRow row_;
+src/storage/memtable/ob_memtable_key.h	280	ObMemtableKey::rowkey_	member ObStoreRowkey (pointer) of type common::ObStoreRowkey *	common::ObStoreRowkey *rowkey_;
+src/storage/memtable/ob_memtable_key.h	303	ObStoreRowkeyWrapper::rowkey_	member ObStoreRowkey (pointer) of type const common::ObStoreRowkey *	const common::ObStoreRowkey *rowkey_;
+src/storage/memtable/ob_memtable_key.h	331	ObMemtableKeyGenerator::store_rowkey_	member ObStoreRowkey (value) of type ObStoreRowkey	ObStoreRowkey store_rowkey_;
+src/storage/memtable/ob_memtable_mutator.h	133	ObMutator::rowkey_	member ObStoreRowkey (value) of type common::ObStoreRowkey	common::ObStoreRowkey rowkey_;
+src/storage/memtable/ob_memtable_single_row_reader.h	68	ObMemtableSingleRowReader::private_row_	member ObDatumRow (value) of type blocksstable::ObDatumRow	blocksstable::ObDatumRow private_row_;
+src/storage/memtable/ob_memtable_single_row_reader.h	69	ObMemtableSingleRowReader::cur_range_	member ObDatumRange (value) of type blocksstable::ObDatumRange	blocksstable::ObDatumRange cur_range_;
+src/storage/memtable/ob_memtable_util.h	85	ObFakeStoreRowKey::rowkey_	member ObStoreRowkey (value) of type common::ObStoreRowkey	common::ObStoreRowkey rowkey_;
+src/storage/memtable/ob_memtable_util.h	86	ObFakeStoreRowKey::obj_array_	member ObObj (value) of type ObObj	ObObj obj_array_[OBJ_CNT];
+src/storage/memtable/ob_redo_log_generator.h	122	ObTxFillRedoCtx::buf_	member raw bytes (pointer) of type char*	char* buf_;              // the target buffer to fill
+src/storage/meta_mem/ob_storage_meta_mem_mgr.h	117	ObTabletBufferInfo::tablet_buffer_ptr_	member raw bytes (pointer) of type char *	char *tablet_buffer_ptr_;
+src/storage/meta_mem/ob_tablet_meta_mem_mgr.h	118	ObTabletBufferInfo::tablet_buffer_ptr_	member raw bytes (pointer) of type char * [not built]	char *tablet_buffer_ptr_;
+src/storage/meta_mem/ob_tablet_pointer_map.cpp	408	ObTabletPointerMap::read_from_disk	allocator in, arena view out: char *&r_buf	int ObTabletPointerMap::read_from_disk(
+src/storage/meta_store/ob_local_storage_meta_service.cpp	200	ObLocalStorageMetaService::read_from_disk	allocator in, arena view out: char *&buf	int ObLocalStorageMetaService::read_from_disk(
+src/storage/meta_store/ob_local_storage_meta_service.cpp	217	ObLocalStorageMetaService::read_from_block	allocator in, arena view out: char *&buf	int ObLocalStorageMetaService::read_from_block(
+src/storage/multi_data_source/adapter_define/mds_dump_kv_wrapper.cpp	111	MdsDumpKVStorageAdapter::convert_to_mds_row	allocator in, arena view out: blocksstable::ObDatumRow &row	int MdsDumpKVStorageAdapter::convert_to_mds_row(
+src/storage/multi_data_source/adapter_define/mds_dump_kv_wrapper.h	98	MdsDumpKVStorageAdapter::key_	member ObString (value) of type common::ObString	common::ObString key_;
+src/storage/multi_data_source/adapter_define/mds_dump_kv_wrapper.h	101	MdsDumpKVStorageAdapter::user_data_	member ObString (value) of type common::ObString	common::ObString user_data_;
+src/storage/multi_data_source/adapter_define/mds_dump_node.h	77	MdsDumpKey::key_	member ObString (value) of type common::ObString	common::ObString key_;
+src/storage/multi_data_source/adapter_define/mds_dump_node.h	129	MdsDumpNode::user_data_	member ObString (value) of type common::ObString	common::ObString user_data_;// different user data type serialized result(may be very large, but should be less than 1.5MB)
+src/storage/multi_data_source/mds_row.ipp	787	FillVirtualInfoOP::key_str_	member ObString (value) of type ObString	ObString key_str_;
+src/storage/multi_data_source/mds_table_impl.ipp	1422	ForcelyReleaseNodesRedoScnBelowOp::reason_	member raw bytes (pointer) of type const char *	const char *reason_;
+src/storage/multi_data_source/ob_mds_event_buffer.h	225	MdsEvent::event_	member raw bytes (pointer) of type const char *	const char *event_;
+src/storage/multi_data_source/ob_mds_event_buffer.h	226	MdsEvent::info_str_	member ObString (value) of type ObString	ObString info_str_;
+src/storage/multi_data_source/ob_mds_event_buffer.h	236	MdsEvent::key_str_	member ObString (value) of type ObString	ObString key_str_;
+src/storage/ob_all_micro_block_range_iterator.h	52	ObAllMicroBlockRangeIterator::curr_key_	member ObDatumRowkey (value) of type blocksstable::ObDatumRowkey	blocksstable::ObDatumRowkey curr_key_;
+src/storage/ob_all_micro_block_range_iterator.h	53	ObAllMicroBlockRangeIterator::prev_key_	member ObDatumRowkey (value) of type blocksstable::ObDatumRowkey	blocksstable::ObDatumRowkey prev_key_;
+src/storage/ob_all_micro_block_range_iterator.h	54	ObAllMicroBlockRangeIterator::curr_key_buf_	member raw bytes (pointer) of type char *	char *curr_key_buf_;
+src/storage/ob_all_micro_block_range_iterator.h	55	ObAllMicroBlockRangeIterator::prev_key_buf_	member raw bytes (pointer) of type char *	char *prev_key_buf_;
+src/storage/ob_all_micro_block_range_iterator.h	57	ObAllMicroBlockRangeIterator::micro_range_	member ObDatumRange (value) of type blocksstable::ObDatumRange	blocksstable::ObDatumRange micro_range_;
+src/storage/ob_all_micro_block_range_iterator.h	58	ObAllMicroBlockRangeIterator::range_	member ObDatumRange (pointer) of type const blocksstable::ObDatumRange *	const blocksstable::ObDatumRange *range_;
+src/storage/ob_bloom_filter_task.h	52	ObBloomFilterBuildTask::io_buf_	member raw bytes (pointer) of type char *	char *io_buf_;
+src/storage/ob_dml_running_ctx.h	95	ObDMLRunningCtx::datum_row_	member ObDatumRow (value) of type blocksstable::ObDatumRow	blocksstable::ObDatumRow datum_row_;
+src/storage/ob_i_store.h	350	ObStoreRow::row_val_	member ObNewRow (value) of type common::ObNewRow	common::ObNewRow row_val_;
+src/storage/ob_obj_buf_array.h	111	ObObjBufArray::data_	member ObObj (pointer) of type common::ObObj *	common::ObObj *data_;
+src/storage/ob_parallel_external_sort.h	116	ObMacroBufferWriter::buf_	member raw bytes (pointer) of type char *	char *buf_;
+src/storage/ob_parallel_external_sort.h	190	ObFragmentWriterV2::buf_	member raw bytes (pointer) of type char *	char *buf_;
+src/storage/ob_parallel_external_sort.h	369	ObMacroBufferReader::buf_	member raw bytes (pointer) of type const char *	const char *buf_;
+src/storage/ob_parallel_external_sort.h	454	ObFragmentReaderV2::buf_	member raw bytes (pointer) of type char *	char *buf_[MAX_HANDLE_COUNT];

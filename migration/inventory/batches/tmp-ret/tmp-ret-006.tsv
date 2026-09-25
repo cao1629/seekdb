@@ -1,0 +1,117 @@
+file	line	symbol	construct	text
+src/pl/ob_pl.cpp	74	ObPLCtx::reset_obj	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/pl/ob_pl.cpp	76	ObPLCtx::reset_obj	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = ObUserDefinedType::destruct_obj(objects_.at(i)))) {
+src/pl/ob_pl.cpp	85	ObPLCtx::reset_obj_range_to_end	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/pl/ob_pl.cpp	88	ObPLCtx::reset_obj_range_to_end	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = ObUserDefinedType::destruct_obj(objects_.at(i)))) {
+src/pl/ob_pl.cpp	202	ObPL::execute_proc	merge OB_INVALID_ARGUMENT into ret (continue-and-record through another variable)	ret = OB_SUCCESS == ret ? OB_INVALID_ARGUMENT : ret;
+src/pl/ob_pl.cpp	382	ObPLContext::destory	declare update_ret (continue-and-record variable)	int update_ret = OB_SUCCESS;
+src/pl/ob_pl.cpp	384	ObPLContext::destory	assign update_ret (continue-and-record variable)	update_ret = session_info.update_sys_variable(SYS_VAR_LAST_INSERT_ID, last_insert_id);
+src/pl/ob_pl.cpp	386	ObPLContext::destory	assign update_ret (continue-and-record variable)	OB_SUCCESS != (update_ret = session_info.update_sys_variable(SYS_VAR_IDENTITY, last_insert_id))) {
+src/pl/ob_pl.cpp	389	ObPLContext::destory	merge update_ret into ret (continue-and-record through another variable)	ret = OB_SUCCESS == ret ? update_ret : ret;
+src/pl/ob_pl.cpp	393	ObPLContext::destory	declare pop_ret (continue-and-record variable)	int pop_ret = ObSqlTransControl::release_stash_savepoint(ctx, stash_savepoint_name);
+src/pl/ob_pl.cpp	396	ObPLContext::destory	merge pop_ret into ret (continue-and-record through another variable)	ret = OB_SUCCESS == ret ? pop_ret : ret;
+src/pl/ob_pl.cpp	405	ObPLContext::destory	merge OB_ERR_UNEXPECTED into ret (continue-and-record through another variable)	ret = OB_SUCCESS == ret ? OB_ERR_UNEXPECTED : ret;
+src/pl/ob_pl.cpp	418	ObPLContext::destory	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/pl/ob_pl.cpp	424	ObPLContext::destory	assign tmp_ret	(tmp_ret = ObSqlTransControl::rollback_savepoint(ctx, PL_IMPLICIT_SAVEPOINT))) {
+src/pl/ob_pl.cpp	435	ObPLContext::destory	assign tmp_ret	tmp_ret = implicit_end_trans(session_info, ctx, true);
+src/pl/ob_pl.cpp	440	ObPLContext::destory	merge into ret	ret = OB_SUCCESS == ret ? tmp_ret : ret;
+src/pl/ob_pl.cpp	449	ObPLContext::destory	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/pl/ob_pl.cpp	454	ObPLContext::destory	assign tmp_ret	(tmp_ret = implicit_end_trans(session_info, ctx, false, true))) {
+src/pl/ob_pl.cpp	459	ObPLContext::destory	assign tmp_ret	tmp_ret = implicit_end_trans(session_info, ctx, ret != OB_SUCCESS);
+src/pl/ob_pl.cpp	461	ObPLContext::destory	merge into ret	ret = OB_SUCCESS == ret ? tmp_ret : ret;
+src/pl/ob_pl.cpp	466	ObPLContext::destory	declare tmp_ret	int tmp_ret = session_info.store_query_string(cur_query_);
+src/pl/ob_pl.cpp	469	ObPLContext::destory	merge into ret	ret = OB_SUCCESS == ret ? tmp_ret : ret;
+src/pl/ob_pl.cpp	481	ObPLContext::destory	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/pl/ob_pl.cpp	483	ObPLContext::destory	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = ObSqlTransControl::rollback_savepoint(ctx, PL_IMPLICIT_SAVEPOINT))) {
+src/pl/ob_pl.cpp	486	ObPLContext::destory	assign tmp_ret	tmp_ret = implicit_end_trans(session_info, ctx, true);
+src/pl/ob_pl.cpp	488	ObPLContext::destory	merge into ret	ret = OB_SUCCESS == ret ? tmp_ret : ret;
+src/pl/ob_pl.cpp	492	ObPLContext::destory	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/pl/ob_pl.cpp	493	ObPLContext::destory	assign tmp_ret	tmp_ret = session_info.set_autocommit(true);
+src/pl/ob_pl.cpp	496	ObPLContext::destory	merge into ret	ret = OB_SUCCESS == ret ? tmp_ret : ret;
+src/pl/ob_pl.cpp	503	ObPLContext::destory	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/pl/ob_pl.cpp	504	ObPLContext::destory	assign tmp_ret	tmp_ret = session_info.set_autocommit(true);
+src/pl/ob_pl.cpp	507	ObPLContext::destory	merge into ret	ret = OB_SUCCESS == ret ? tmp_ret : ret;
+src/pl/ob_pl.cpp	551	ObPLContext::dec_and_check_depth	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/pl/ob_pl.cpp	552	ObPLContext::dec_and_check_depth	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = recursion_ctx_.dec_and_check_depth(package_id, routine_id))) {
+src/pl/ob_pl.cpp	555	ObPLContext::dec_and_check_depth	merge into ret	ret = OB_SUCCESS == ret && inner_call ? tmp_ret : ret;
+src/pl/ob_pl.cpp	619	ObPLContext::reset_exec_env	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/pl/ob_pl.cpp	629	ObPLContext::reset_exec_env	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = curr_env.load(*session_info_))) {
+src/pl/ob_pl.cpp	630	ObPLContext::reset_exec_env	merge into ret	ret = OB_SUCCESS == ret ? tmp_ret : ret; // Do not overwrite error code
+src/pl/ob_pl.cpp	634	ObPLContext::reset_exec_env	assign tmp_ret	} else if (OB_SUCCESS != (tmp_ret = exec_env_.store(*session_info_))) {
+src/pl/ob_pl.cpp	635	ObPLContext::reset_exec_env	merge into ret	ret = OB_SUCCESS == ret ? tmp_ret : ret; // Do not overwrite error code
+src/pl/ob_pl.cpp	702	ObPLContext::reset_role_id_array	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/pl/ob_pl.cpp	708	ObPLContext::reset_role_id_array	assign tmp_ret	tmp_ret = session_info_->set_enable_role_array(old_role_id_array_);
+src/pl/ob_pl.cpp	714	ObPLContext::reset_role_id_array	merge into ret	ret = OB_SUCCESS == ret ? tmp_ret : ret;
+src/pl/ob_pl.cpp	754	ObPLContext::reset_default_database	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/pl/ob_pl.cpp	756	ObPLContext::reset_default_database	merge OB_ERR_UNEXPECTED into ret (continue-and-record through another variable)	ret = OB_SUCCESS == ret ? OB_ERR_UNEXPECTED : ret;
+src/pl/ob_pl.cpp	759	ObPLContext::reset_default_database	assign tmp_ret	(tmp_ret = session_info_->set_default_database(database_name_.string()))) {
+src/pl/ob_pl.cpp	760	ObPLContext::reset_default_database	merge into ret	ret = OB_SUCCESS == ret ? tmp_ret : ret; // Do not overwrite error code
+src/pl/ob_pl.cpp	1310	ObPL::execute	declare tmp_ret	int tmp_ret = ret;
+src/pl/ob_pl.cpp	1322	ObPL::execute	merge into ret	ret = tmp_ret;
+src/pl/ob_pl.cpp	1996	ObPLExecState::final	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/pl/ob_pl.cpp	2018	ObPLExecState::final	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = ObUserDefinedType::destruct_objparam(*get_allocator(), get_params().at(i),
+src/pl/ob_pl.cpp	2024	ObPLExecState::final	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = ObUserDefinedType::destruct_obj(get_params().at(i),
+src/pl/ob_pl.cpp	2028	ObPLExecState::final	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = ObUserDefinedType::destruct_obj(get_params().at(i),
+src/pl/ob_pl.cpp	2038	ObPLExecState::final	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = ObUserDefinedType::destruct_objparam(*get_allocator(),
+src/pl/ob_pl.cpp	2044	ObPLExecState::final	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/pl/ob_pl.cpp	2048	ObPLExecState::final	assign tmp_ret	tmp_ret = ObSPIService::spi_get_cursor_info(&ctx_, func_.get_package_id(),
+src/pl/ob_pl.cpp	2096	ObPLExecState::final	assign tmp_ret	tmp_ret = ObUserDefinedType::destruct_objparam(*get_allocator(), result_, ctx_.exec_ctx_->get_my_session(), true);
+src/pl/ob_pl_build.cpp	488	ObPLBuilder::compile	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/pl/ob_pl_build.cpp	492	ObPLBuilder::compile	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = error_info.handle_error_info(
+src/pl/ob_pl_build.cpp	539	ObPLBuilder::compile	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/pl/ob_pl_build.cpp	547	ObPLBuilder::compile	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = error_info.handle_error_info(
+src/pl/ob_pl_build.cpp	606	ObPLBuilder::update_schema_object_dep_info	declare temp_ret	int temp_ret = OB_SUCCESS;
+src/pl/ob_pl_build.cpp	607	ObPLBuilder::update_schema_object_dep_info	assign temp_ret	if (OB_SUCCESS != (temp_ret = trans.end(OB_SUCC(ret)))) {
+src/pl/ob_pl_build.cpp	609	ObPLBuilder::update_schema_object_dep_info	merge into ret	ret = OB_SUCC(ret) ? temp_ret : ret;
+src/pl/ob_pl_build.cpp	836	ObPLBuilder::build_package	declare tmp_ret	int tmp_ret = ret;
+src/pl/ob_pl_build.cpp	857	ObPLBuilder::build_package	merge into ret	ret = tmp_ret;
+src/pl/ob_pl_interpreter.cpp	1000	exec_signal	merge OB_ERR_SIGNAL_EXCEPTION into ret through if (OB_SUCC(ret)) (continue-and-record through another variable)	ret = OB_ERR_SIGNAL_EXCEPTION;  // a non-warning SIGNAL raises
+src/pl/ob_pl_interpreter.cpp	1006	exec_signal	merge OB_ERROR into ret through if (OB_SUCC(ret)) (continue-and-record through another variable)	ret = OB_ERROR;  // a SIGNAL must raise something the handler search can see
+src/pl/ob_pl_package_manager.cpp	1286	ObPLPackageManager::get_package_item_state	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/pl/ob_pl_package_manager.cpp	1289	ObPLPackageManager::get_package_item_state	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = resolve_ctx.session_info_.del_package_state(package_id))) {
+src/pl/ob_pl_package_manager.cpp	1313	ObPLPackageManager::get_package_item_state	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = exec_env_bak.store(resolve_ctx.session_info_))) {
+src/pl/ob_pl_package_manager.cpp	1315	ObPLPackageManager::get_package_item_state	merge into ret	ret = OB_SUCCESS == ret ? tmp_ret : ret;
+src/pl/ob_pl_resolver.cpp	694	#define RESOLVE_PACKAGE_STMT	declare save_ret (continue-and-record variable)	int save_ret = OB_SUCCESS; \
+src/pl/ob_pl_resolver.cpp	700	#define RESOLVE_PACKAGE_STMT	assign save_ret (continue-and-record variable)	save_ret = ret; \
+src/pl/ob_pl_resolver.cpp	719	#define RESOLVE_PACKAGE_STMT	merge save_ret into ret (continue-and-record through another variable)	ret = OB_SUCCESS == ret ? save_ret : ret; \
+src/pl/ob_pl_resolver.cpp	5112	ObPLResolver::build_raw_expr	declare tmp_ret	int64_t tmp_ret = OB_SUCCESS;
+src/pl/ob_pl_resolver.cpp	5117	ObPLResolver::build_raw_expr	assign tmp_ret	if (OB_SUCCESS != (tmp_ret =resolve_ctx_.session_info_.get_database_id(parent_id))) {
+src/pl/ob_pl_resolver.cpp	5118	ObPLResolver::build_raw_expr	assign tmp_ret	} else if (OB_SUCCESS != (tmp_ret = ns.resolve_symbol(pkg_name,
+src/pl/ob_pl_resolver.cpp	5133	ObPLResolver::build_raw_expr	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = ns.resolve_symbol(columns.at(0).col_name_,
+src/pl/ob_pl_type.cpp	1394	ObPLCursorInfo::deep_copy	declare tmp_ret	int tmp_ret = ObUserDefinedType::destruct_obj(tmp, dest_cursor->session_info_);
+src/pl/ob_pl_type.cpp	1444	ObPLCursorInfo::close	declare close_ret (continue-and-record variable)	int close_ret = spi_result->close_result_set();
+src/pl/ob_pl_type.cpp	1447	ObPLCursorInfo::close	merge close_ret into ret (continue-and-record through another variable)	ret = (OB_SUCCESS == ret ? close_ret : ret);
+src/pl/ob_pl_type.cpp	1450	ObPLCursorInfo::close	declare reset_ret (continue-and-record variable)	int reset_ret = spi_result->reset_cursor_env(session);
+src/pl/ob_pl_type.cpp	1451	ObPLCursorInfo::close	merge reset_ret into ret (continue-and-record through another variable)	ret = (OB_SUCCESS == ret ? reset_ret : ret);
+src/pl/pl_cache/ob_pl_cache_mgr.cpp	114	ObPLCacheMgr::get_pl_object	declare tmp_ret	int tmp_ret = guard.force_early_release(lib_cache);
+src/pl/pl_cache/ob_pl_cache_mgr.cpp	176	ObPLCacheMgr::add_pl_object	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/pl/pl_cache/ob_pl_cache_mgr.cpp	177	ObPLCacheMgr::add_pl_object	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = lib_cache->remove_cache_node(&pc_ctx.key_))) {
+src/pl/pl_cache/ob_pl_cache_mgr.cpp	178	ObPLCacheMgr::add_pl_object	merge into ret	ret = tmp_ret;
+src/pl/sys_package/ob_dbms_stats.cpp	122	ObDbmsStats::gather_table_stats	declare tmp_ret	int tmp_ret = ret;
+src/pl/sys_package/ob_dbms_stats.cpp	125	ObDbmsStats::gather_table_stats	merge into ret	ret = tmp_ret;
+src/pl/sys_package/ob_dbms_stats.cpp	242	ObDbmsStats::gather_schema_stats	declare tmp_ret	int tmp_ret = ret;
+src/pl/sys_package/ob_dbms_stats.cpp	245	ObDbmsStats::gather_schema_stats	merge into ret	ret = tmp_ret;
+src/pl/sys_package/ob_dbms_stats.cpp	5114	ObDbmsStats::gather_table_stats_with_default_param	declare tmp_ret_code	int tmp_ret_code = ret;
+src/pl/sys_package/ob_dbms_stats.cpp	5123	ObDbmsStats::gather_table_stats_with_default_param	merge into ret	ret = tmp_ret_code;
+src/pl/sys_package/ob_dbms_stats.cpp	5143	ObDbmsStats::gather_table_stats_with_default_param	declare tmp_ret	int tmp_ret = ret;
+src/pl/sys_package/ob_dbms_stats.cpp	5146	ObDbmsStats::gather_table_stats_with_default_param	merge into ret	ret = tmp_ret;
+src/pl/sys_package/ob_dbms_stats.cpp	6321	ObDbmsStats::gather_table_stats_by_parts	declare temp_ret	int temp_ret = ret;
+src/pl/sys_package/ob_dbms_stats.cpp	6324	ObDbmsStats::gather_table_stats_by_parts	merge into ret	ret = temp_ret;
+src/query/vector/ob_vector_embedding_handler.cpp	1036	ObEmbeddingTask::set_phase	declare tmp_ret	int tmp_ret = wake_up();
+src/rootserver/dbms_job/ob_dbms_job_executor.cpp	73	ObDBMSJobExecutor::run_dbms_job	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/rootserver/dbms_job/ob_dbms_job_executor.cpp	79	ObDBMSJobExecutor::run_dbms_job	assign tmp_ret	if ((tmp_ret = job_utils_.update_for_end(job_info, ret, errmsg)) != OB_SUCCESS) {
+src/rootserver/dbms_job/ob_dbms_job_executor.cpp	81	ObDBMSJobExecutor::run_dbms_job	merge into ret	ret = OB_SUCCESS == ret ? tmp_ret : ret;
+src/rootserver/dbms_job/ob_dbms_job_master.cpp	299	ObDBMSJobMaster::scheduler	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/rootserver/dbms_job/ob_dbms_job_master.cpp	300	ObDBMSJobMaster::scheduler	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = scheduler_job(job_key))) {
+src/rootserver/dbms_job/ob_dbms_job_master.cpp	353	ObDBMSJobMaster::scheduler_job	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/rootserver/dbms_job/ob_dbms_job_master.cpp	355	ObDBMSJobMaster::scheduler_job	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = register_job(job_info, job_key, ignore_nextdate))) {
+src/rootserver/ddl_task/ob_constraint_task.cpp	58	ObCheckConstraintValidationTask::process	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_constraint_task.cpp	137	ObCheckConstraintValidationTask::process	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(ObSysDDLSchedulerUtil::on_sstable_complement_job_reply(
+src/rootserver/ddl_task/ob_constraint_task.cpp	187	ObForeignKeyConstraintValidationTask::process	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_constraint_task.cpp	190	ObForeignKeyConstraintValidationTask::process	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(ObSysDDLSchedulerUtil::on_sstable_complement_job_reply(
+src/rootserver/ddl_task/ob_constraint_task.cpp	307	ObForeignKeyConstraintValidationTask::check_fk_constraint_data_valid	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_constraint_task.cpp	643	ObConstraintTask::wait_trans_end	declare tmp_ret	const int tmp_ret = trans.end(need_commit);
+src/rootserver/ddl_task/ob_constraint_task.cpp	650	ObConstraintTask::wait_trans_end	merge into ret	ret = OB_SUCC(ret) ? tmp_ret : ret;
+src/rootserver/ddl_task/ob_constraint_task.cpp	822	ObConstraintTask::release_ddl_locks	declare tmp_ret	int tmp_ret = trans.end(commit);
+src/rootserver/ddl_task/ob_constraint_task.cpp	824	ObConstraintTask::release_ddl_locks	merge into ret	ret = (OB_SUCCESS == ret) ? tmp_ret : ret;
+src/rootserver/ddl_task/ob_constraint_task.cpp	835	ObConstraintTask::cleanup_impl	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;

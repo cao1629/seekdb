@@ -1,0 +1,86 @@
+file	line	symbol	construct	text
+src/storage/tx/ob_tx_ctx.cpp	640	ObTxCtx::commit	ret != OB_EAGAIN; ret != OB_TRANS_COMMITED	if (OB_FAIL(ret) && OB_EAGAIN != ret && OB_TRANS_COMMITED != ret) {
+src/storage/tx/ob_tx_ctx.cpp	680	ObTxCtx::check_modify_schema_elapsed	ret != OB_EAGAIN	if (OB_EAGAIN != ret) {
+src/storage/tx/ob_tx_ctx.cpp	722	ObTxCtx::check_modify_time_elapsed	ret != OB_EAGAIN	if (OB_EAGAIN != ret) {
+src/storage/tx/ob_tx_ctx.cpp	1210	ObTxCtx::submit_redo_log_for_freeze	ret == OB_TRANS_HAS_DECIDED; ret == OB_BLOCK_FROZEN	if (OB_TRANS_HAS_DECIDED == ret || OB_BLOCK_FROZEN == ret) {
+src/storage/tx/ob_tx_ctx.cpp	1237	ObTxCtx::submit_redo_after_write	ret == OB_EAGAIN	if (submitted_cnt > 0 && OB_EAGAIN == ret) {
+src/storage/tx/ob_tx_ctx.cpp	1251	ObTxCtx::submit_redo_after_write	ret == OB_ITER_END	if (!force && (OB_ITER_END == ret          // blocked by others, current remains
+src/storage/tx/ob_tx_ctx.cpp	1252	ObTxCtx::submit_redo_after_write	ret == OB_NEED_RETRY	|| OB_NEED_RETRY == ret     // acquire lock failed
+src/storage/tx/ob_tx_ctx.cpp	1261	ObTxCtx::submit_redo_after_write	ret == OB_TRANS_HAS_DECIDED	if (!force && (OB_TRANS_HAS_DECIDED == ret // do committing
+src/storage/tx/ob_tx_ctx.cpp	1262	ObTxCtx::submit_redo_after_write	ret == OB_BLOCK_FROZEN	|| OB_BLOCK_FROZEN == ret   // memtable logging blocked
+src/storage/tx/ob_tx_ctx.cpp	1263	ObTxCtx::submit_redo_after_write	ret == OB_EAGAIN	|| OB_EAGAIN == ret         // partial submitted or submit to log-service fail
+src/storage/tx/ob_tx_ctx.cpp	1333	ObTxCtx::prepare_for_submit_redo	ret != OB_TX_NOLOGCB	} else if (OB_FAIL(prepare_log_cb_(log_cb)) && OB_TX_NOLOGCB != ret) {
+src/storage/tx/ob_tx_ctx.cpp	1346	ObTxCtx::submit_redo_log_for_freeze_	ret != OB_BLOCK_FROZEN	if (OB_BLOCK_FROZEN != ret) {
+src/storage/tx/ob_tx_ctx.cpp	1354	ObTxCtx::submit_redo_log_for_freeze_	ret == OB_BLOCK_FROZEN	if (OB_SUCC(ret) || OB_BLOCK_FROZEN == ret) {
+src/storage/tx/ob_tx_ctx.cpp	1356	ObTxCtx::submit_redo_log_for_freeze_	ret == OB_TRANS_KILLED	if (ret == OB_TRANS_KILLED) {
+src/storage/tx/ob_tx_ctx.cpp	1401	ObTxCtx::compensate_abort_log_	ret == OB_TX_NOLOGCB	} else if (OB_TX_NOLOGCB == ret) {
+src/storage/tx/ob_tx_ctx.cpp	2106	ObTxCtx::get_gts_	ret != OB_EAGAIN	if (OB_EAGAIN != ret) {
+src/storage/tx/ob_tx_ctx.cpp	2172	ObTxCtx::gts_elapse_callback	ret != OB_EAGAIN	if (OB_FAIL(ret) && OB_EAGAIN != ret && runtime_state_.is_gts_waiting()) {
+src/storage/tx/ob_tx_ctx.cpp	2215	ObTxCtx::generate_prepare_version_	ret == OB_EAGAIN	if (OB_EAGAIN == ret) {
+src/storage/tx/ob_tx_ctx.cpp	2258	ObTxCtx::generate_commit_version_	ret != OB_EAGAIN	if (OB_EAGAIN != ret) {
+src/storage/tx/ob_tx_ctx.cpp	2354	ObTxCtx::submit_redo_commit_info_log_	ret != OB_TX_NOLOGCB	if (OB_UNLIKELY(OB_TX_NOLOGCB != ret)) {
+src/storage/tx/ob_tx_ctx.cpp	2415	ObTxCtx::submit_redo_commit_info_log_	ret == OB_BUF_NOT_ENOUGH	if (OB_BUF_NOT_ENOUGH == ret) {
+src/storage/tx/ob_tx_ctx.cpp	2418	ObTxCtx::submit_redo_commit_info_log_	ret != OB_TX_NOLOGCB	if (OB_UNLIKELY(OB_TX_NOLOGCB != ret)) {
+src/storage/tx/ob_tx_ctx.cpp	2543	ObTxCtx::submit_commit_log_	ret == OB_BUF_NOT_ENOUGH	if (OB_BUF_NOT_ENOUGH == ret) {
+src/storage/tx/ob_tx_ctx.cpp	2546	ObTxCtx::submit_commit_log_	ret != OB_TX_NOLOGCB	if (OB_UNLIKELY(OB_TX_NOLOGCB != ret)) {
+src/storage/tx/ob_tx_ctx.cpp	2580	ObTxCtx::submit_commit_log_	ret != OB_TX_NOLOGCB	if (OB_UNLIKELY(OB_TX_NOLOGCB != ret)) {
+src/storage/tx/ob_tx_ctx.cpp	2626	ObTxCtx::submit_commit_log_	ret != OB_TX_NOLOGCB	if (OB_UNLIKELY(OB_TX_NOLOGCB != ret)) {
+src/storage/tx/ob_tx_ctx.cpp	2704	ObTxCtx::submit_abort_log_	ret != OB_TX_NOLOGCB	if (OB_UNLIKELY(OB_TX_NOLOGCB != ret)) {
+src/storage/tx/ob_tx_ctx.cpp	2737	ObTxCtx::submit_clear_log_	ret != OB_TX_NOLOGCB	if (OB_UNLIKELY(OB_TX_NOLOGCB != ret)) {
+src/storage/tx/ob_tx_ctx.cpp	2773	ObTxCtx::submit_record_log_	ret != OB_TX_NOLOGCB	if (OB_UNLIKELY(OB_TX_NOLOGCB != ret)) {
+src/storage/tx/ob_tx_ctx.cpp	2824	ObTxCtx::submit_big_segment_log_	ret != OB_TX_NOLOGCB	if (OB_UNLIKELY(OB_TX_NOLOGCB != ret)) {
+src/storage/tx/ob_tx_ctx.cpp	2829	ObTxCtx::submit_big_segment_log_	ret != OB_EAGAIN; ret != OB_ITER_END	} else if (OB_EAGAIN != ret && OB_ITER_END != ret) {
+src/storage/tx/ob_tx_ctx.cpp	3053	ObTxCtx::handle_submit_log_err_	ret == OB_TX_NOLOGCB	if (OB_TX_NOLOGCB == ret) {
+src/storage/tx/ob_tx_ctx.cpp	3063	ObTxCtx::handle_submit_log_err_	ret == OB_LOG_TOO_LARGE	} else if (OB_LOG_TOO_LARGE == ret) {
+src/storage/tx/ob_tx_ctx.cpp	3066	ObTxCtx::handle_submit_log_err_	ret == OB_ERR_TOO_BIG_ROWSIZE	} else if (OB_ERR_TOO_BIG_ROWSIZE == ret) {
+src/storage/tx/ob_tx_ctx.cpp	3422	ObTxCtx::iter_next_log_for_replay	ret == OB_START_LOG_CURSOR_INVALID	if (OB_START_LOG_CURSOR_INVALID == ret) {
+src/storage/tx/ob_tx_ctx.cpp	3426	ObTxCtx::iter_next_log_for_replay	ret == OB_LOG_TOO_LARGE	} else if (OB_LOG_TOO_LARGE == ret) {
+src/storage/tx/ob_tx_ctx.cpp	3447	ObTxCtx::iter_next_log_for_replay	ret == OB_NO_NEED_UPDATE	} else if (OB_NO_NEED_UPDATE == ret) {
+src/storage/tx/ob_tx_ctx.cpp	3451	ObTxCtx::iter_next_log_for_replay	ret == OB_ITER_END	} else if (OB_ITER_END == ret) {
+src/storage/tx/ob_tx_ctx.cpp	3791	ObTxCtx::replay_rollback_to	ret != OB_EAGAIN	if (OB_FAIL(ret) && OB_EAGAIN != ret) {
+src/storage/tx/ob_tx_ctx.cpp	3801	ObTxCtx::replay_rollback_to	ret != OB_EAGAIN	if (OB_EAGAIN != ret) {
+src/storage/tx/ob_tx_ctx.cpp	4730	ObTxCtx::submit_multi_data_source_	ret != OB_TX_NOLOGCB	if (OB_UNLIKELY(OB_TX_NOLOGCB != ret)) {
+src/storage/tx/ob_tx_ctx.cpp	4739	ObTxCtx::submit_multi_data_source_	ret == OB_EMPTY_RANGE	if (OB_EMPTY_RANGE == ret) {
+src/storage/tx/ob_tx_ctx.cpp	4741	ObTxCtx::submit_multi_data_source_	ret != OB_EAGAIN	} else if (OB_SUCCESS != ret && OB_EAGAIN != ret) {
+src/storage/tx/ob_tx_ctx.cpp	4750	ObTxCtx::submit_multi_data_source_	ret == OB_LOG_TOO_LARGE	if (OB_LOG_TOO_LARGE == ret) {
+src/storage/tx/ob_tx_ctx.cpp	4803	ObTxCtx::submit_multi_data_source_	ret == OB_EMPTY_RANGE	if (OB_EMPTY_RANGE == ret) {
+src/storage/tx/ob_tx_ctx.cpp	4950	ObTxCtx::register_multi_data_source	ret == OB_TIMEOUT	ret = OB_TIMEOUT == ret ? OB_EAGAIN : ret;
+src/storage/tx/ob_tx_ctx.cpp	5024	ObTxCtx::register_multi_data_source	tmp_ret == OB_TX_NOLOGCB; tmp_ret == OB_EAGAIN	if (tmp_ret == OB_TX_NOLOGCB || tmp_ret == OB_EAGAIN) {
+src/storage/tx/ob_tx_ctx.cpp	5069	ObTxCtx::submit_pending_log_block_	ret != OB_TX_NOLOGCB	if (OB_UNLIKELY(OB_TX_NOLOGCB != ret)) {
+src/storage/tx/ob_tx_ctx.cpp	5292	ObTxCtx::check_pending_log_overflow	ret != OB_TX_PENDING_LOG_OVERFLOW	if (OB_TX_PENDING_LOG_OVERFLOW!= ret) {
+src/storage/tx/ob_tx_ctx.cpp	5532	ObTxCtx::tx_keepalive_response_	other variable status == OB_TRANS_CTX_NOT_EXIST; other variable status == OB_TRANS_ROLLBACKED	if ((OB_TRANS_CTX_NOT_EXIST == status || OB_TRANS_ROLLBACKED == status ||
+src/storage/tx/ob_tx_ctx.cpp	5533	ObTxCtx::tx_keepalive_response_	other variable status == OB_TRANS_KILLED; other variable status == OB_SERVER_RUNTIME_NOT_READY	OB_TRANS_KILLED == status || common::OB_SERVER_RUNTIME_NOT_READY == status) && can_be_recycled_()) {
+src/storage/tx/ob_tx_ctx.cpp	5540	ObTxCtx::tx_keepalive_response_	other variable status == OB_TRANS_COMMITED	} else if (OB_TRANS_COMMITED == status && can_be_recycled_() && first_scn_ >= last_scn_ /*all changes were rollbacked*/) {
+src/storage/tx/ob_tx_ctx.cpp	5615	ObTxCtx::do_local_commit_tx_	ret == OB_EAGAIN	if (OB_EAGAIN == ret) {
+src/storage/tx/ob_tx_ctx.cpp	5805	ObTxCtx::check_is_aborted_in_tx_data_	ret == OB_TRANS_CTX_NOT_EXIST	if (OB_TRANS_CTX_NOT_EXIST == ret) {
+src/storage/tx/ob_tx_ctx_log_cb_helper.cpp	120	ObTxCtx::get_log_cb_	ret == OB_TX_NOLOGCB	if (OB_TX_NOLOGCB == ret && EXECUTE_COUNT_PER_SEC(10)) {
+src/storage/tx/ob_tx_ctx_mds.cpp	113	ObTxMDSCache::alloc_mds_node	tmp_ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != tmp_ret) {
+src/storage/tx/ob_tx_ctx_mds.cpp	122	ObTxMDSCache::alloc_mds_node	tmp_ret == OB_HASH_NOT_EXIST	if (OB_SUCCESS == tmp_ret || OB_HASH_NOT_EXIST == tmp_ret) {
+src/storage/tx/ob_tx_ctx_mds.cpp	276	ObTxMDSCache::fill_mds_log	ret != OB_SIZE_OVERFLOW	if (ret != OB_SIZE_OVERFLOW) {
+src/storage/tx/ob_tx_ctx_mds.cpp	304	ObTxMDSCache::fill_mds_log	ret == OB_SIZE_OVERFLOW	if (OB_SIZE_OVERFLOW == ret) {
+src/storage/tx/ob_tx_ctx_mds.cpp	312	ObTxMDSCache::fill_mds_log	ret == OB_EAGAIN	if (OB_EAGAIN == ret) {
+src/storage/tx/ob_tx_data_functor.cpp	397	LockForReadFunctor::operator()	ret == OB_ERR_SHARED_LOCK_CONFLICT	for (int32_t i = 0; OB_ERR_SHARED_LOCK_CONFLICT == ret; i++) {
+src/storage/tx/ob_tx_log.cpp	429	ObTxRedoLog::ob_admin_dump	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/tx/ob_tx_log.cpp	997	ObTxLogBlock::get_next_log	ret != OB_LOG_TOO_LARGE	if (OB_LOG_TOO_LARGE != ret) {
+src/storage/tx/ob_tx_log.h	964	ObTxLogBlock::add_new_log	ret == OB_BUF_NOT_ENOUGH	} else if (OB_BUF_NOT_ENOUGH == ret && cb_arg_array_.empty()
+src/storage/tx/ob_tx_log_adapter.cpp	103	ObLSTxLogAdapter::submit_log	ret == OB_EAGAIN	} else if (OB_EAGAIN == ret) {
+src/storage/tx/ob_tx_log_adapter.cpp	110	ObLSTxLogAdapter::submit_log	ret == OB_EAGAIN	} while (OB_EAGAIN == ret && cur_ts < expire_us);
+src/storage/tx/ob_tx_log_operator.h	226	ObTxCtxLogOperator::prepare_generic_resource_	ret != OB_TX_NOLOGCB	if (OB_UNLIKELY(OB_TX_NOLOGCB != ret)) {
+src/storage/tx/ob_tx_log_operator.h	277	ObTxCtxLogOperator::insert_into_log_block_	ret != OB_BUF_NOT_ENOUGH	if (OB_BUF_NOT_ENOUGH != ret) {
+src/storage/tx/ob_tx_log_operator.h	372	ObTxCtxLogOperator::after_submit_log_fail_	other variable submit_ret == OB_BUF_NOT_ENOUGH	if (OB_BUF_NOT_ENOUGH == submit_ret) {
+src/storage/tx/ob_tx_log_operator.h	379	ObTxCtxLogOperator::after_submit_log_fail_	other variable submit_ret != OB_BUF_NOT_ENOUGH	if (submit_ret != OB_BUF_NOT_ENOUGH || tmp_ret != OB_SUCCESS) {
+src/storage/tx/ob_tx_log_operator.h	411	operator()	ret != OB_TX_NOLOGCB	if (OB_TX_NOLOGCB != ret) {
+src/storage/tx/ob_tx_loop_worker.cpp	249	ObTxLoopWorker::update_max_commit_ts_	ret == OB_EAGAIN	if (OB_EAGAIN == ret) {
+src/storage/tx/ob_tx_loop_worker.cpp	263	ObTxLoopWorker::update_max_commit_ts_	ret == OB_EAGAIN	} while (OB_EAGAIN == ret);
+src/storage/tx/ob_tx_redo_submitter.h	154	ObTxRedoSubmitter::parallel_submit	ret == OB_NEED_RETRY	if (OB_NEED_RETRY == ret) {
+src/storage/tx/ob_tx_redo_submitter.h	156	ObTxRedoSubmitter::parallel_submit	ret == OB_BLOCK_FROZEN	} else if (OB_BLOCK_FROZEN == ret) {
+src/storage/tx/ob_tx_redo_submitter.h	158	ObTxRedoSubmitter::parallel_submit	ret == OB_EAGAIN	} else if (OB_EAGAIN == ret) {
+src/storage/tx/ob_tx_redo_submitter.h	169	ObTxRedoSubmitter::parallel_submit	ret == OB_ENTRY_NOT_EXIST	} else if (OB_ENTRY_NOT_EXIST == ret) {
+src/storage/tx/ob_tx_redo_submitter.h	245	ObTxRedoSubmitter::_submit_redo_pipeline_	ret != OB_TX_NOLOGCB	if (OB_TX_NOLOGCB != ret) {
+src/storage/tx/ob_tx_redo_submitter.h	263	ObTxRedoSubmitter::_submit_redo_pipeline_	other variable fill_ret == OB_BUF_NOT_ENOUGH	} else if (OB_BUF_NOT_ENOUGH == fill_ret) {
+src/storage/tx/ob_tx_redo_submitter.h	275	ObTxRedoSubmitter::_submit_redo_pipeline_	other variable fill_ret == OB_BLOCK_FROZEN	} else if (OB_BLOCK_FROZEN == fill_ret) {
+src/storage/tx/ob_tx_redo_submitter.h	283	ObTxRedoSubmitter::_submit_redo_pipeline_	other variable fill_ret == OB_ITER_END	} else if (OB_ITER_END == fill_ret) {
+src/storage/tx/ob_tx_redo_submitter.h	296	ObTxRedoSubmitter::_submit_redo_pipeline_	other variable fill_ret == OB_EAGAIN	} else if (OB_EAGAIN == fill_ret) {
+src/storage/tx/ob_tx_redo_submitter.h	343	ObTxRedoSubmitter::_submit_redo_pipeline_	other variable fill_ret == OB_BLOCK_FROZEN	if (OB_UNLIKELY(display_blocked_info) && fill_ret == OB_BLOCK_FROZEN) {
+src/storage/tx/ob_tx_redo_submitter.h	426	ObTxRedoSubmitter::fill_log_block_	other variable save_ret == OB_BUF_NOT_ENOUGH	} else if (OB_UNLIKELY(real_buf_pos == 0 && (OB_BUF_NOT_ENOUGH == save_ret))) {
+src/storage/tx/ob_tx_redo_submitter.h	430	ObTxRedoSubmitter::fill_log_block_	ret != OB_ALLOCATE_MEMORY_FAILED	if (OB_ALLOCATE_MEMORY_FAILED != ret) {

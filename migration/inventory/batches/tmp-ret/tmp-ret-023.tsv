@@ -1,0 +1,103 @@
+file	line	symbol	construct	text
+src/storage/compaction/ob_medium_checker.cpp	107	ObMediumChecker::check_medium_finish_schedule	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/compaction/ob_medium_checker.cpp	145	ObMediumChecker::check_medium_finish_schedule	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(check_medium_finish(tablet_check_infos, start_idx, end_idx,
+src/storage/compaction/ob_medium_checker.cpp	171	ObMediumChecker::check_medium_finish	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/compaction/ob_medium_checker.cpp	182	ObMediumChecker::check_medium_finish	assign tmp_ret	tmp_ret = OB_ERR_UNEXPECTED;
+src/storage/compaction/ob_medium_checker.cpp	197	ObMediumChecker::check_medium_finish	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(reput_check_info(check_tablet_infos))) {
+src/storage/compaction/ob_medium_checker.cpp	220	ObMediumChecker::reput_check_info	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/compaction/ob_medium_checker.cpp	227	ObMediumChecker::reput_check_info	assign tmp_ret	if (OB_HASH_EXIST == (tmp_ret = tablet_check_set_.exist_refactored(check_info))) {
+src/storage/compaction/ob_medium_checker.cpp	232	ObMediumChecker::reput_check_info	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(tablet_check_set_.set_refactored(check_info))) {
+src/storage/compaction/ob_medium_compaction_func.cpp	422	ObMediumCompactionScheduleFunc::check_frequency	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/compaction/ob_medium_compaction_func.cpp	434	ObMediumCompactionScheduleFunc::check_frequency	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(::oceanbase::share::server_service<::oceanbase::storage::ObTabletStatMgr>()->get_queuing_cfg(tablet_id, queuing_cfg))) {
+src/storage/compaction/ob_medium_compaction_func.cpp	512	ObMediumCompactionScheduleFunc::decide_medium_snapshot	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/compaction/ob_medium_compaction_func.cpp	573	ObMediumCompactionScheduleFunc::decide_medium_snapshot	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(ls_.del_dependent_medium_tablet(tablet_id))) {
+src/storage/compaction/ob_medium_compaction_func.cpp	580	ObMediumCompactionScheduleFunc::decide_medium_snapshot	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(ADD_SUSPECT_INFO(MEDIUM_MERGE, ObDiagnoseTabletType::TYPE_MEDIUM_MERGE,
+src/storage/compaction/ob_medium_compaction_func.cpp	986	ObMediumCompactionScheduleFunc::batch_check_medium_meta_table	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/compaction/ob_medium_compaction_func.cpp	1003	ObMediumCompactionScheduleFunc::batch_check_medium_meta_table	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(tablet_infos.get(tablet_id, info))) {
+src/storage/compaction/ob_medium_compaction_func.cpp	1009	ObMediumCompactionScheduleFunc::batch_check_medium_meta_table	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(check_medium_meta_table(check_medium_scn, *info, merge_finish))) {
+src/storage/compaction/ob_medium_compaction_func.cpp	1011	ObMediumCompactionScheduleFunc::batch_check_medium_meta_table	OB_TMP_FAIL (plan definition)	OB_TMP_FAIL(finish_tablet_infos.push_back(ObTabletCheckInfo(tablet_id, check_medium_scn)))) {
+src/storage/compaction/ob_medium_compaction_mgr.cpp	366	ObTabletMediumCompactionInfoRecorder::submit_log	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/compaction/ob_medium_compaction_mgr.cpp	367	ObTabletMediumCompactionInfoRecorder::submit_log	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(submit_trans_on_mds_table(false))) {
+src/storage/compaction/ob_medium_loop.cpp	65	ObMediumLoop::loop	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/compaction/ob_medium_loop.cpp	71	ObMediumLoop::loop	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(loop_tablets(ls, func))) {
+src/storage/compaction/ob_medium_loop.cpp	80	ObMediumLoop::loop	assign tmp_ret	tmp_ret = update_report_scn_as_ls_leader(*ls, func);
+src/storage/compaction/ob_medium_loop.cpp	95	ObMediumLoop::loop_tablets	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/compaction/ob_medium_loop.cpp	121	ObMediumLoop::loop_tablets	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(func.schedule_tablet(tablet_handle, tablet_merge_finish))) {
+src/storage/compaction/ob_medium_loop.cpp	137	ObMediumLoop::add_event_and_diagnose	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/compaction/ob_medium_loop.cpp	172	ObMediumLoop::add_event_and_diagnose	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(::oceanbase::share::server_service<::oceanbase::compaction::ObCompactionProgressMgr>()->finish_progress(merge_version_))) {
+src/storage/compaction/ob_partition_merge_policy.cpp	360	ObPartitionMergePolicy::find_mini_merge_tables	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/compaction/ob_partition_merge_policy.cpp	362	ObPartitionMergePolicy::find_mini_merge_tables	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(ls.get_tablet(tablet_id, tmp_tablet_handle, 0, storage::ObMDSGetTabletMode::READ_WITHOUT_CHECK))) {
+src/storage/compaction/ob_partition_merge_policy.cpp	364	ObPartitionMergePolicy::find_mini_merge_tables	assign tmp_ret	tmp_ret = OB_ERR_UNEXPECTED;
+src/storage/compaction/ob_partition_merge_policy.cpp	511	ObPartitionMergePolicy::find_minor_merge_tables	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/compaction/ob_partition_merge_policy.cpp	604	ObPartitionMergePolicy::find_minor_merge_tables	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(ADD_SUSPECT_INFO(MINOR_MERGE, ObDiagnoseTabletType::TYPE_MINOR_MERGE,
+src/storage/compaction/ob_partition_merge_policy.cpp	778	ObPartitionMergePolicy::diagnose_table_count_unsafe	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/compaction/ob_partition_merge_policy.cpp	812	ObPartitionMergePolicy::diagnose_table_count_unsafe	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(diagnose_minor_dag(MINOR_MERGE, tablet_id, dag_str, buf_len))) {
+src/storage/compaction/ob_partition_merge_policy.cpp	814	ObPartitionMergePolicy::diagnose_table_count_unsafe	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(diagnose_minor_dag(HISTORY_MINOR_MERGE, tablet_id, dag_str, buf_len))) {
+src/storage/compaction/ob_partition_merge_policy.cpp	817	ObPartitionMergePolicy::diagnose_table_count_unsafe	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(ADD_SUSPECT_INFO(merge_type, diagnose_type,
+src/storage/compaction/ob_partition_merge_policy.cpp	1419	ObAdaptiveMergePolicy::find_adaptive_merge_tables	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/compaction/ob_partition_merge_policy.cpp	1421	ObAdaptiveMergePolicy::find_adaptive_merge_tables	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(::oceanbase::share::server_service<::oceanbase::storage::ObTabletStatMgr>()->get_queuing_cfg(tablet.get_tablet_id(), cfg))) {
+src/storage/compaction/ob_partition_merge_policy.cpp	1494	ObAdaptiveMergePolicy::get_adaptive_merge_reason	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/compaction/ob_partition_merge_policy.cpp	1509	ObAdaptiveMergePolicy::get_adaptive_merge_reason	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(check_inc_sstable_row_cnt_percentage(tablet, reason))) {
+src/storage/compaction/ob_partition_merge_policy.cpp	1513	ObAdaptiveMergePolicy::get_adaptive_merge_reason	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(check_adaptive_merge_reason(tablet, tablet_analyzer, reason))) {
+src/storage/compaction/ob_partition_merge_policy.cpp	1520	ObAdaptiveMergePolicy::get_adaptive_merge_reason	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(tablet.get_truncate_info_newest_version(truncate_newest_commit_version, truncate_info_count))) {
+src/storage/compaction/ob_partition_merge_policy.cpp	1548	ObAdaptiveMergePolicy::check_tombstone_reason	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/compaction/ob_partition_merge_policy.cpp	1559	ObAdaptiveMergePolicy::check_tombstone_reason	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(check_tombstone_situation(tablet_analyzer, reason))) {
+src/storage/compaction/ob_partition_merge_policy.cpp	1649	ObAdaptiveMergePolicy::check_adaptive_merge_reason	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/compaction/ob_partition_merge_policy.cpp	1651	ObAdaptiveMergePolicy::check_adaptive_merge_reason	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(check_tombstone_situation(tablet_analyzer, reason))) {
+src/storage/compaction/ob_partition_merge_policy.cpp	1653	ObAdaptiveMergePolicy::check_adaptive_merge_reason	OB_TMP_FAIL (plan definition)	if (AdaptiveMergeReason::NONE == reason && OB_TMP_FAIL(check_load_data_situation(tablet_analyzer, reason))) {
+src/storage/compaction/ob_partition_merge_policy.cpp	1656	ObAdaptiveMergePolicy::check_adaptive_merge_reason	OB_TMP_FAIL (plan definition)	if (AdaptiveMergeReason::NONE == reason && OB_TMP_FAIL(check_ineffecient_read(tablet_analyzer, reason))) {
+src/storage/compaction/ob_partition_merge_policy.cpp	1659	ObAdaptiveMergePolicy::check_adaptive_merge_reason	OB_TMP_FAIL (plan definition)	if (AdaptiveMergeReason::NONE == reason && OB_TMP_FAIL(check_inc_sstable_row_cnt_percentage(tablet, reason))) {
+src/storage/compaction/ob_partition_merge_policy.cpp	1676	ObAdaptiveMergePolicy::check_adaptive_merge_reason_for_event	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/compaction/ob_partition_merge_policy.cpp	1700	ObAdaptiveMergePolicy::check_adaptive_merge_reason_for_event	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(check_adaptive_merge_reason(tablet, tablet_analyzer, reason))) {
+src/storage/compaction/ob_partition_merge_progress.cpp	271	ObPartitionMergeProgress::update_estimated_finish_time	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/compaction/ob_partition_merge_progress.cpp	287	ObPartitionMergeProgress::update_estimated_finish_time	assign tmp_ret	tmp_ret = OB_ERR_UNEXPECTED;
+src/storage/compaction/ob_partition_merger.cpp	118	ObMerger::prepare_merge	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/compaction/ob_partition_merger.cpp	119	ObMerger::prepare_merge	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(trans_state_mgr_.init(CACHED_TRANS_STATE_MAX_CNT))) {
+src/storage/compaction/ob_partition_merger.cpp	588	ObPartitionMajorMerger::merge_partition	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/compaction/ob_partition_merger.cpp	589	ObPartitionMajorMerger::merge_partition	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = merge_progress_->update_merge_progress(idx,
+src/storage/compaction/ob_partition_merger.cpp	907	ObPartitionMinorMerger::merge_partition	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/compaction/ob_partition_merger.cpp	908	ObPartitionMinorMerger::merge_partition	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = merge_progress_->update_merge_progress(idx,
+src/storage/compaction/ob_partition_merger.cpp	925	ObPartitionMinorMerger::merge_partition	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/compaction/ob_partition_merger.cpp	926	ObPartitionMinorMerger::merge_partition	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(collect_merge_stat(merge_param_.static_param_.get_merge_type(),
+src/storage/compaction/ob_partition_parallel_merge_ctx.cpp	398	ObParallelMergeCtx::calc_adaptive_parallel_degree	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/compaction/ob_partition_parallel_merge_ctx.cpp	401	ObParallelMergeCtx::calc_adaptive_parallel_degree	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(::oceanbase::share::server_service<::oceanbase::share::ObDagScheduler>()->get_limit(prio, dag_worker_limit))) {
+src/storage/compaction/ob_schedule_status_cache.cpp	298	ObTabletStatusCache::check_medium_list	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/compaction/ob_schedule_status_cache.cpp	299	ObTabletStatusCache::check_medium_list	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(::oceanbase::share::server_service<::oceanbase::compaction::ObMediumChecker>()->add_tablet(
+src/storage/compaction/ob_schedule_status_cache.cpp	331	ObTabletStatusCache::update_tablet_report_status	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/compaction/ob_schedule_status_cache.cpp	334	ObTabletStatusCache::update_tablet_report_status	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(data_plane::submit_tablet_update(tablet_id, true/*need_diagnose*/))) {
+src/storage/compaction/ob_schedule_status_cache.cpp	335	ObTabletStatusCache::update_tablet_report_status	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(ls.get_tablet_svr()->update_tablet_report_status(tablet_id))) {
+src/storage/compaction/ob_schedule_tablet_func.cpp	47	ObScheduleTabletFunc::schedule_tablet	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/compaction/ob_schedule_tablet_func.cpp	69	ObScheduleTabletFunc::schedule_tablet	OB_TMP_FAIL (plan definition)	if (tablet_status_.could_schedule_new_round() && OB_TMP_FAIL(schedule_tablet_new_round(tablet_handle, false/*user_request*/))) {
+src/storage/compaction/ob_schedule_tablet_func.cpp	76	ObScheduleTabletFunc::schedule_tablet	OB_TMP_FAIL (plan definition)	&& OB_TMP_FAIL(schedule_tablet_execute(*tablet))) {
+src/storage/compaction/ob_schedule_tablet_func.cpp	85	ObScheduleTabletFunc::schedule_tablet	OB_TMP_FAIL (plan definition)	&& OB_TMP_FAIL(::oceanbase::share::server_service<::oceanbase::compaction::ObDiagnoseTabletMgr>()->add_diagnose_tablet(tablet_id,
+src/storage/compaction/ob_schedule_tablet_func.cpp	99	ObScheduleTabletFunc::schedule_tablet_new_round	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/compaction/ob_schedule_tablet_func.cpp	116	ObScheduleTabletFunc::schedule_tablet_new_round	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(clear_stat_tablets_.push_back(tablet_id))) {
+src/storage/compaction/ob_schedule_tablet_func.cpp	129	ObScheduleTabletFunc::request_schedule_new_round	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/compaction/ob_schedule_tablet_func.cpp	155	ObScheduleTabletFunc::request_schedule_new_round	OB_TMP_FAIL (plan definition)	if (OB_SUCC(ret) && schedule_flag && OB_TMP_FAIL(schedule_tablet_new_round(tablet_handle, user_request))) {
+src/storage/compaction/ob_schedule_tablet_func.cpp	222	ObScheduleTabletFunc::schedule_freeze_dag	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/compaction/ob_schedule_tablet_func.cpp	225	ObScheduleTabletFunc::schedule_freeze_dag	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(::oceanbase::share::server_service<::oceanbase::storage::ObTabletStatMgr>()->batch_clear_tablet_stat(clear_stat_tablets_))) {
+src/storage/compaction/ob_table_ckm_items.cpp	324	ObTableCkmItems::validate_column_ckm_sum	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/compaction/ob_table_ckm_items.cpp	364	ObTableCkmItems::validate_column_ckm_sum	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(ObColumnChecksumErrorOperator::insert_column_checksum_err_info(sql_proxy,
+src/storage/compaction/ob_table_ckm_items.cpp	378	ObTableCkmItems::validate_tablet_column_ckm	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/compaction/ob_table_ckm_items.cpp	460	ObTableCkmItems::validate_tablet_column_ckm	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(ObColumnChecksumErrorOperator::insert_column_checksum_err_info(sql_proxy,
+src/storage/compaction/ob_tablet_merge_ctx.cpp	155	ObTabletMiniMergeCtx::try_update_snapshot_gc_renew_target	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/compaction/ob_tablet_merge_ctx.cpp	165	ObTabletMiniMergeCtx::try_update_snapshot_gc_renew_target	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(merged_table_handle_.get_sstable(new_sstable))) {
+src/storage/compaction/ob_tablet_merge_ctx.cpp	189	ObTabletMiniMergeCtx::try_schedule_compaction_after_mini	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/compaction/ob_tablet_merge_ctx.cpp	199	ObTabletMiniMergeCtx::try_schedule_compaction_after_mini	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(ObTabletScheduler::try_schedule_adaptive_merge(
+src/storage/compaction/ob_tablet_merge_ctx.cpp	211	ObTabletMiniMergeCtx::try_schedule_compaction_after_mini	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(ObTabletScheduler::schedule_tablet_minor_merge<ObTabletMergeExecuteDag>(
+src/storage/compaction/ob_tablet_merge_ctx.cpp	253	ObTabletMiniMergeCtx::get_merge_tables	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/compaction/ob_tablet_merge_ctx.cpp	255	ObTabletMiniMergeCtx::get_merge_tables	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(get_tablet()->release_memtables(get_tablet()->get_tablet_meta().clog_checkpoint_scn_))) {
+src/storage/compaction/ob_tablet_merge_ctx.cpp	265	ObTabletMiniMergeCtx::update_tablet_directly	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/compaction/ob_tablet_merge_ctx.cpp	273	ObTabletMiniMergeCtx::update_tablet_directly	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(new_tablet_handle.get_obj()->release_memtables(new_tablet_handle.get_obj()->get_tablet_meta().clog_checkpoint_scn_))) {
+src/storage/compaction/ob_tablet_merge_ctx.cpp	359	ObTabletExeMergeCtx::prepare_compaction_filter	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/compaction/ob_tablet_merge_ctx.cpp	361	ObTabletExeMergeCtx::prepare_compaction_filter	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(get_ls()->get_tx_table_guard(guard))) {
+src/storage/compaction/ob_tablet_merge_ctx.cpp	363	ObTabletExeMergeCtx::prepare_compaction_filter	assign tmp_ret	tmp_ret = OB_ERR_UNEXPECTED;
+src/storage/compaction/ob_tablet_merge_ctx.cpp	365	ObTabletExeMergeCtx::prepare_compaction_filter	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(guard.get_recycle_scn(recycle_scn))) {
+src/storage/compaction/ob_tablet_merge_ctx.cpp	366	ObTabletExeMergeCtx::prepare_compaction_filter	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(compaction_filter->init(recycle_scn, ObTxTable::get_filter_col_idx()))) {
+src/storage/compaction/ob_tablet_merge_task.cpp	351	ObTabletMergeDag::fill_compaction_progress	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/compaction/ob_tablet_merge_task.cpp	364	ObTabletMergeDag::fill_compaction_progress	assign tmp_ret	&& OB_UNLIKELY(OB_SUCCESS != (tmp_ret = input_progress->get_progress_info(progress)))) {
+src/storage/compaction/ob_tablet_merge_task.cpp	406	ObTabletMergeDag::fill_diagnose_compaction_progress	declare tmp_ret	int64_t tmp_ret = OB_SUCCESS;
+src/storage/compaction/ob_tablet_merge_task.cpp	407	ObTabletMergeDag::fill_diagnose_compaction_progress	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(input_progress->get_progress_info(progress))) {
+src/storage/compaction/ob_tablet_merge_task.cpp	409	ObTabletMergeDag::fill_diagnose_compaction_progress	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(input_progress->diagnose_progress(progress))) {
+src/storage/compaction/ob_tablet_merge_task.cpp	757	ObTabletMergeFinishTask::process	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/compaction/ob_tablet_merge_task.cpp	796	ObTabletMergeFinishTask::record_tx_data_info	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;

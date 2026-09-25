@@ -1,0 +1,45 @@
+file	line	symbol	construct	text
+src/storage/blocksstable/ob_sstable.cpp	236	ObSSTable::init	inc_macro_ref call (other name) [on-disk block reference]	} else if (OB_FAIL(inc_macro_ref(inc_success))) {
+src/storage/blocksstable/ob_sstable.cpp	237	ObSSTable::init	dec_linked_block_ref_cnt call (other name) [on-disk block reference]	} else if (FALSE_IT(meta_->macro_info_.dec_linked_block_ref_cnt())) {
+src/storage/blocksstable/ob_sstable.cpp	263	ObSSTable::copy_from_old_sstable	inner_deep_copy_and_inc_macro_ref call (other name) [on-disk block reference]	} else if (OB_FAIL(src.inner_deep_copy_and_inc_macro_ref(allocator, sstable))) {
+src/storage/blocksstable/ob_sstable.cpp	280	ObSSTable::reset	dec_macro_ref call (other name) [on-disk block reference]	ObSSTable::dec_macro_ref(); // dec the used_size added by sstable::init()
+src/storage/blocksstable/ob_sstable.cpp	1097	ObSSTable::inc_ref	inc_ref definition	void ObSSTable::inc_ref()
+src/storage/blocksstable/ob_sstable.cpp	1100	ObSSTable::inc_ref	inc_ref call	ObITable::inc_ref();
+src/storage/blocksstable/ob_sstable.cpp	1104	ObSSTable::dec_ref	dec_ref definition	int64_t ObSSTable::dec_ref()
+src/storage/blocksstable/ob_sstable.cpp	1108	ObSSTable::dec_ref	dec_ref call	cnt = ObITable::dec_ref();
+src/storage/blocksstable/ob_sstable.cpp	1127	ObSSTable::dec_macro_ref	dec_macro_ref definition (other name) [on-disk block reference]	void ObSSTable::dec_macro_ref() const
+src/storage/blocksstable/ob_sstable.cpp	1154	ObSSTable::dec_macro_ref	dec_ref call [on-disk block reference]	if (OB_FAIL(OB_STORAGE_OBJECT_MGR.dec_ref(macro_id))) {
+src/storage/blocksstable/ob_sstable.cpp	1168	ObSSTable::dec_macro_ref	dec_ref call [on-disk block reference]	if (OB_FAIL(OB_STORAGE_OBJECT_MGR.dec_ref(macro_id))) {
+src/storage/blocksstable/ob_sstable.cpp	1178	ObSSTable::dec_macro_ref	dec_ref call [on-disk block reference]	if (OB_FAIL(OB_STORAGE_OBJECT_MGR.dec_ref(macro_id))) {
+src/storage/blocksstable/ob_sstable.cpp	1187	ObSSTable::inc_macro_ref	inc_macro_ref definition (other name) [on-disk block reference]	int ObSSTable::inc_macro_ref(bool &inc_success) const
+src/storage/blocksstable/ob_sstable.cpp	1211	ObSSTable::inc_macro_ref	inc_ref call [on-disk block reference]	} else if (OB_FAIL(OB_STORAGE_OBJECT_MGR.inc_ref(macro_id))) {
+src/storage/blocksstable/ob_sstable.cpp	1229	ObSSTable::inc_macro_ref	inc_ref call [on-disk block reference]	} else if (OB_FAIL(OB_STORAGE_OBJECT_MGR.inc_ref(macro_id))) {
+src/storage/blocksstable/ob_sstable.cpp	1247	ObSSTable::inc_macro_ref	inc_ref call [on-disk block reference]	} else if (OB_FAIL(OB_STORAGE_OBJECT_MGR.inc_ref(macro_id))) {
+src/storage/blocksstable/ob_sstable.cpp	1272	ObSSTable::inc_macro_ref	dec_ref call [on-disk block reference]	} else if (OB_TMP_FAIL(OB_STORAGE_OBJECT_MGR.dec_ref(macro_id))) {
+src/storage/blocksstable/ob_sstable.cpp	1283	ObSSTable::inc_macro_ref	dec_ref call [on-disk block reference]	} else if (OB_TMP_FAIL(OB_STORAGE_OBJECT_MGR.dec_ref(macro_id))) {
+src/storage/blocksstable/ob_sstable.cpp	1294	ObSSTable::inc_macro_ref	dec_ref call [on-disk block reference]	} else if (OB_TMP_FAIL(OB_STORAGE_OBJECT_MGR.dec_ref(macro_id))) {
+src/storage/blocksstable/ob_sstable.cpp	1591	ObSSTable::inner_deep_copy_and_inc_macro_ref	inner_deep_copy_and_inc_macro_ref definition (other name) [on-disk block reference]	int ObSSTable::inner_deep_copy_and_inc_macro_ref(
+src/storage/blocksstable/ob_sstable.cpp	1607	ObSSTable::inner_deep_copy_and_inc_macro_ref	inc_macro_ref call (other name) [on-disk block reference]	if (OB_FAIL(table->inc_macro_ref(inc_success))) {
+src/storage/blocksstable/ob_sstable.h	47	ObSSTableMetaHandle	Handle class definition	class ObSSTableMetaHandle
+src/storage/blocksstable/ob_sstable.h	131	ObSSTable	inc_ref declaration	virtual void inc_ref() override;
+src/storage/blocksstable/ob_sstable.h	132	ObSSTable	dec_ref declaration	virtual int64_t dec_ref() override;
+src/storage/blocksstable/ob_sstable.h	273	ObSSTable	inc_macro_ref declaration (other name) [on-disk block reference]	virtual int inc_macro_ref(bool &inc_success) const;
+src/storage/blocksstable/ob_sstable.h	274	ObSSTable	dec_macro_ref declaration (other name) [on-disk block reference]	virtual void dec_macro_ref() const;
+src/storage/blocksstable/ob_sstable.h	358	ObSSTable	inner_deep_copy_and_inc_macro_ref declaration (other name) [on-disk block reference]	int inner_deep_copy_and_inc_macro_ref(common::ObIAllocator &allocator, ObSSTable *&sstable) const;
+src/storage/blocksstable/ob_storage_object_handle.cpp	51	ObStorageObjectHandle::operator=	inc_ref call [on-disk block reference]	if (OB_FAIL(OB_SERVER_BLOCK_MGR.inc_ref(macro_id_))) {
+src/storage/blocksstable/ob_storage_object_handle.cpp	76	ObStorageObjectHandle::reset_macro_id	dec_ref call [on-disk block reference]	if (OB_FAIL(OB_SERVER_BLOCK_MGR.dec_ref(macro_id_))) {
+src/storage/blocksstable/ob_storage_object_handle.cpp	237	ObStorageObjectHandle::set_macro_block_id	inc_ref call [on-disk block reference]	if (OB_FAIL(OB_SERVER_BLOCK_MGR.inc_ref(macro_id_))) {
+src/storage/blocksstable/ob_storage_object_handle.h	34	ObStorageObjectHandle	Handle class definition	class ObStorageObjectHandle final
+src/storage/blockstore/ob_object_reader_writer.cpp	86	ObObjectsWriteCtx::clear	dec_ref call [on-disk block reference]	if (OB_FAIL(OB_STORAGE_OBJECT_MGR.dec_ref(block_ids_.at(i)))) {
+src/storage/blockstore/ob_object_reader_writer.cpp	115	ObObjectsWriteCtx::add_object_id	inc_ref call [on-disk block reference]	} else if (OB_FAIL(OB_STORAGE_OBJECT_MGR.inc_ref(object_id))) {
+src/storage/blockstore/ob_object_reader_writer.h	122	ObObjectBaseHandle	Handle class definition	class ObObjectBaseHandle
+src/storage/blockstore/ob_object_reader_writer.h	170	ObObjectReadHandle	Handle class definition	class ObObjectReadHandle final
+src/storage/blockstore/ob_object_reader_writer.h	206	ObObjectWriteHandle	Handle class definition : ObObjectBaseHandle	class ObObjectWriteHandle final : public ObObjectBaseHandle
+src/storage/blockstore/ob_object_reader_writer.h	217	ObObjectBatchHandle	Handle class definition : ObObjectBaseHandle	class ObObjectBatchHandle final : public ObObjectBaseHandle
+src/storage/blockstore/ob_object_reader_writer.h	231	ObObjectLinkHandle	Handle class definition : ObObjectBaseHandle	class ObObjectLinkHandle final : public ObObjectBaseHandle
+src/storage/ddl/ob_ddl_clog.cpp	80	ObDDLMacroBlockClogCb::~ObDDLMacroBlockClogCb	dec_ref call [on-disk block reference]	if (macro_block_id_.is_valid() && OB_FAIL(OB_STORAGE_OBJECT_MGR.dec_ref(macro_block_id_))) {
+src/storage/ddl/ob_ddl_clog.cpp	97	ObDDLMacroBlockClogCb::init	inc_ref call [on-disk block reference]	} else if (OB_FAIL(OB_STORAGE_OBJECT_MGR.inc_ref(macro_block_id))) {
+src/storage/ddl/ob_ddl_redo_log_writer.h	87	ObDDLCtrlSpeedItem::inc_ref	inc_ref definition	void inc_ref() { ATOMIC_INC(&ref_cnt_); }
+src/storage/ddl/ob_ddl_redo_log_writer.h	88	ObDDLCtrlSpeedItem::dec_ref	dec_ref definition	int64_t dec_ref() { return ATOMIC_SAF(&ref_cnt_, 1); }
+src/storage/ddl/ob_ddl_redo_log_writer.h	111	ObDDLCtrlSpeedHandle	Handle class definition	class ObDDLCtrlSpeedHandle final
+src/storage/ddl/ob_ddl_redo_log_writer.h	148	ObDDLRedoLogHandle	Handle struct definition	struct ObDDLRedoLogHandle final

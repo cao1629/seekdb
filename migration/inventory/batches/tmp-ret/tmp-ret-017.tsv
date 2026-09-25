@@ -1,0 +1,121 @@
+file	line	symbol	construct	text
+src/sql/engine/ob_operator.cpp	326	ObOpSpec::create_operator_recursive	merge OB_ERR_UNEXPECTED into ret (continue-and-record through another variable)	ret = OB_SUCCESS == ret ? OB_ERR_UNEXPECTED : ret;
+src/sql/engine/ob_operator.cpp	808	ObOperator::close	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/engine/ob_operator.cpp	813	ObOperator::close	assign tmp_ret	tmp_ret = SMART_CALL(check_child_closed_helper(children_[i], closed));
+src/sql/engine/ob_operator.cpp	823	ObOperator::close	merge into ret	ret = OB_SUCCESS == ret ? tmp_ret : ret;
+src/sql/engine/ob_operator.cpp	829	ObOperator::close	declare tmp_ret	int tmp_ret = inner_close();
+src/sql/engine/ob_operator.cpp	831	ObOperator::close	merge into ret	ret = tmp_ret; // overwrite child's error code.
+src/sql/engine/ob_operator.cpp	943	ObOperator::get_next_row	declare tmp_ret	int tmp_ret = do_drain_exch();
+src/sql/engine/ob_operator.cpp	1130	ObOperator::get_next_batch	declare tmp_ret	int tmp_ret = do_drain_exch();
+src/sql/engine/ob_operator.cpp	1253	ObOperator::do_drain_exch	declare tmp_ret	int tmp_ret = inner_drain_exch();
+src/sql/engine/ob_operator.cpp	1272	ObOperator::do_drain_exch	merge into ret	ret = tmp_ret;
+src/sql/engine/ob_physical_plan.cpp	1123	ObPhysicalPlan::check_pdml_affected_rows	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/engine/ob_physical_plan.cpp	1124	ObPhysicalPlan::check_pdml_affected_rows	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = print_this_plan_info(ctx))) {
+src/sql/engine/opt_statistics/ob_optimizer_stats_gathering_op.cpp	175	ObOptimizerStatsGatheringOp::inner_get_next_row	merge OB_ITER_END into ret through if (OB_SUCC(ret)) (continue-and-record through another variable)	ret = OB_ITER_END;
+src/sql/engine/pdml/static/ob_pdml_op_data_driver.cpp	133	ObPDMLOpDataDriver::get_next_row	declare tmp_ret	int tmp_ret = barrier(ctx);
+src/sql/engine/pdml/static/ob_pdml_op_data_driver.cpp	136	ObPDMLOpDataDriver::get_next_row	merge into ret	ret = tmp_ret;
+src/sql/engine/pdml/static/ob_px_multi_part_insert_op.cpp	86	ObPxMultiPartInsertOp::inner_close	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/engine/pdml/static/ob_px_multi_part_insert_op.cpp	91	ObPxMultiPartInsertOp::inner_close	merge into ret	ret = (OB_SUCCESS == tmp_ret) ? ret : tmp_ret;
+src/sql/engine/prepare/ob_execute_executor.cpp	160	ObExecuteExecutor::execute	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/engine/prepare/ob_execute_executor.cpp	161	ObExecuteExecutor::execute	assign tmp_ret	if ((tmp_ret = result_set.close()) != OB_SUCCESS) {
+src/sql/engine/prepare/ob_execute_executor.cpp	162	ObExecuteExecutor::execute	merge into ret	ret = OB_SUCCESS == ret ? tmp_ret : ret;
+src/sql/engine/prepare/ob_execute_executor.cpp	166	ObExecuteExecutor::execute	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/engine/prepare/ob_execute_executor.cpp	167	ObExecuteExecutor::execute	OB_TMP_FAIL (plan definition)	if(OB_TMP_FAIL(ctx.get_my_session()->earse_ps_stmt_id_in_use(stmt.get_prepare_id()))) {
+src/sql/engine/prepare/ob_execute_executor.cpp	169	ObExecuteExecutor::execute	merge into ret	ret = tmp_ret;
+src/sql/engine/px/exchange/ob_px_dist_transmit_op.cpp	414	ObPxDistTransmitOp::do_sm_pkey_hash_dist	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/engine/px/exchange/ob_px_dist_transmit_op.cpp	415	ObPxDistTransmitOp::do_sm_pkey_hash_dist	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = slice_idx_calc.destroy())) {
+src/sql/engine/px/exchange/ob_px_dist_transmit_op.cpp	418	ObPxDistTransmitOp::do_sm_pkey_hash_dist	merge into ret	ret = tmp_ret;
+src/sql/engine/px/exchange/ob_px_ms_coord_op.cpp	285	ObPxMSCoordOp::inner_close	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/engine/px/exchange/ob_px_ms_coord_op.cpp	286	ObPxMSCoordOp::inner_close	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = free_allocator())) {
+src/sql/engine/px/exchange/ob_px_ms_coord_op.cpp	288	ObPxMSCoordOp::inner_close	merge into ret	ret = tmp_ret;
+src/sql/engine/px/exchange/ob_px_receive_op.cpp	637	ObPxFifoReceiveOp::fetch_rows	declare tmp_ret	int tmp_ret = ctx_.fast_check_status();
+src/sql/engine/px/exchange/ob_px_receive_op.cpp	640	ObPxFifoReceiveOp::fetch_rows	merge into ret	ret = tmp_ret;
+src/sql/engine/px/exchange/ob_px_repart_transmit_op.cpp	219	ObPxRepartTransmitOp::do_repart_transmit	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/engine/px/exchange/ob_px_repart_transmit_op.cpp	220	ObPxRepartTransmitOp::do_repart_transmit	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = repart_slice_calc.destroy())) {
+src/sql/engine/px/exchange/ob_px_repart_transmit_op.cpp	223	ObPxRepartTransmitOp::do_repart_transmit	merge into ret	ret = tmp_ret;
+src/sql/engine/px/exchange/ob_px_transmit_op.cpp	427	ObPxTransmitOp::inner_close	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/engine/px/exchange/ob_px_transmit_op.cpp	428	ObPxTransmitOp::inner_close	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = ObTransmitOp::inner_close())) {
+src/sql/engine/px/exchange/ob_px_transmit_op.cpp	430	ObPxTransmitOp::inner_close	merge into ret	ret = tmp_ret;
+src/sql/engine/px/exchange/ob_px_transmit_op.h	272	ObPxTransmitOp::send_rows_one_by_one	declare tmp_ret	int tmp_ret = child_->drain_exch();
+src/sql/engine/px/exchange/ob_px_transmit_op.h	306	ObPxTransmitOp::send_rows_in_batch	declare tmp_ret	int tmp_ret = child_->drain_exch();
+src/sql/engine/px/ob_dfo_scheduler.cpp	986	ObParallelDfoScheduler::dispatch_sqc	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/engine/px/ob_dfo_scheduler.cpp	987	ObParallelDfoScheduler::dispatch_sqc	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = responses.push_back(handles.at(hidx)->result()))) {
+src/sql/engine/px/ob_dfo_scheduler.cpp	988	ObParallelDfoScheduler::dispatch_sqc	merge into ret	ret = OB_SUCCESS == ret ? tmp_ret : ret;
+src/sql/engine/px/ob_dfo_scheduler.cpp	989	ObParallelDfoScheduler::dispatch_sqc	assign tmp_ret	} else if (OB_SUCCESS != (tmp_ret = resp_rets.push_back(launch_ret))) {
+src/sql/engine/px/ob_dfo_scheduler.cpp	990	ObParallelDfoScheduler::dispatch_sqc	merge into ret	ret = OB_SUCCESS == ret ? tmp_ret : ret;
+src/sql/engine/px/ob_px_coord_op.cpp	398	ObPxCoordOp::try_clear_p2p_dh_info	declare tmp_ret	int tmp_ret = PX_P2P_DH.erase_msg_if(key, msg, is_erased);
+src/sql/engine/px/ob_px_coord_op.cpp	494	ObPxCoordOp::destroy_all_channel	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/engine/px/ob_px_coord_op.cpp	495	ObPxCoordOp::destroy_all_channel	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = msg_loop_.unregister_all_channel())) {
+src/sql/engine/px/ob_px_coord_op.cpp	526	ObPxCoordOp::destroy_all_channel	assign tmp_ret	tmp_ret = erase_dtl_interm_result();
+src/sql/engine/px/ob_px_interruption.cpp	44	ObInterruptUtil::broadcast_px	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/engine/px/ob_px_interruption.cpp	46	ObInterruptUtil::broadcast_px	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = broadcast_dfo(dfos.at(idx), int_code))) {
+src/sql/engine/px/ob_px_local_sqc_launcher.cpp	391	ObLocalFastSqcLauncher::process	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/engine/px/ob_px_local_sqc_launcher.cpp	392	ObLocalFastSqcLauncher::process	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = ObInterruptUtil::interrupt_qc(sqc_arg.sqc_, ret))) {
+src/sql/engine/px/ob_px_local_sqc_launcher.cpp	396	ObLocalFastSqcLauncher::process	declare report_ret (continue-and-record variable)	int report_ret = OB_SUCCESS;
+src/sql/engine/px/ob_px_local_sqc_launcher.cpp	398	ObLocalFastSqcLauncher::process	merge report_ret into ret (continue-and-record through another variable)	ret = OB_SUCCESS == ret ? report_ret : ret;
+src/sql/engine/px/ob_px_local_sqc_launcher.cpp	458	launch_sqc_async_local	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/engine/px/ob_px_local_sqc_launcher.cpp	459	launch_sqc_async_local	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = resp.partitions_info_.assign(p.get_result().partitions_info_))) {
+src/sql/engine/px/ob_px_local_sqc_launcher.cpp	461	launch_sqc_async_local	merge into ret	ret = OB_SUCCESS == ret ? tmp_ret : ret;
+src/sql/engine/px/ob_px_sqc_handler.cpp	253	ObPxSqcHandler::init_env	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/engine/px/ob_px_sqc_handler.cpp	262	ObPxSqcHandler::init_env	assign tmp_ret	} else if (OB_UNLIKELY(common::OB_SUCCESS != (tmp_ret = session->get_query_lock().lock()))) {
+src/sql/engine/px/ob_px_sqc_handler.cpp	286	ObPxSqcHandler::destroy_sqc	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/engine/px/ob_px_sqc_handler.cpp	287	ObPxSqcHandler::destroy_sqc	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = sub_coord_->end_ddl(false))) { //for ddl px, don't call close() again in close_direct_load()
+src/sql/engine/px/ob_px_sqc_handler.cpp	318	ObPxSqcHandler::destroy_sqc	assign tmp_ret	if (OB_UNLIKELY(OB_SUCCESS != (tmp_ret = session->get_query_lock().unlock()))) {
+src/sql/engine/px/ob_px_task_process.cpp	239	ObPxTaskProcess::execute	declare close_ret (continue-and-record variable)	int close_ret = OB_SUCCESS;
+src/sql/engine/px/ob_px_task_process.cpp	306	ObPxTaskProcess::execute	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/engine/px/ob_px_task_process.cpp	307	ObPxTaskProcess::execute	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = visitor.visit(*arg_.exec_ctx_, *arg_.op_spec_root_, setter))) {
+src/sql/engine/px/ob_px_task_process.cpp	308	ObPxTaskProcess::execute	merge into ret	ret = OB_SUCCESS == ret ? tmp_ret : ret;
+src/sql/engine/px/ob_px_task_process.cpp	311	ObPxTaskProcess::execute	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = ObInterruptUtil::interrupt_tasks(arg_.get_sqc_handler()->get_sqc_init_arg().sqc_,
+src/sql/engine/px/ob_px_task_process.cpp	315	ObPxTaskProcess::execute	assign close_ret (continue-and-record variable)	if (OB_SUCCESS != (close_ret = root->close())) {
+src/sql/engine/px/ob_px_task_process.cpp	316	ObPxTaskProcess::execute	merge close_ret into ret (continue-and-record through another variable)	ret = OB_SUCCESS == ret ? close_ret : ret;
+src/sql/engine/px/ob_px_task_process.cpp	442	ObPxTaskProcess::do_process	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/engine/px/ob_px_task_process.cpp	444	ObPxTaskProcess::do_process	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = ObInterruptUtil::interrupt_qc(arg_.task_, ret))) {
+src/sql/engine/px/ob_px_util.cpp	1339	ObPxChannelUtil::unlink_ch_set	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/engine/px/ob_px_util.cpp	1344	ObPxChannelUtil::unlink_ch_set	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = ch_set.get_channel_info(idx, ci))) {
+src/sql/engine/px/ob_px_util.cpp	1345	ObPxChannelUtil::unlink_ch_set	merge into ret	ret = tmp_ret;
+src/sql/engine/px/ob_px_util.cpp	1348	ObPxChannelUtil::unlink_ch_set	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = dtl::ObDtlChannelGroup::unlink_channel(ci))) {
+src/sql/engine/px/ob_px_util.cpp	1349	ObPxChannelUtil::unlink_ch_set	merge into ret	ret = tmp_ret;
+src/sql/engine/px/ob_px_util.cpp	1359	ObPxChannelUtil::unlink_ch_set	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = ch_set.get_channel_info(idx, ci))) {
+src/sql/engine/px/ob_px_util.cpp	1360	ObPxChannelUtil::unlink_ch_set	merge into ret	ret = tmp_ret;
+src/sql/engine/px/ob_px_util.cpp	1363	ObPxChannelUtil::unlink_ch_set	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = dtl::ObDtlChannelGroup::remove_channel(ci, ch))) {
+src/sql/engine/px/ob_px_util.cpp	1364	ObPxChannelUtil::unlink_ch_set	merge into ret	ret = tmp_ret;
+src/sql/engine/px/ob_px_util.cpp	1372	ObPxChannelUtil::unlink_ch_set	assign tmp_ret	} else if (OB_SUCCESS != (tmp_ret = chans.push_back(ch))) {
+src/sql/engine/px/ob_px_util.cpp	1373	ObPxChannelUtil::unlink_ch_set	merge into ret	ret = tmp_ret;
+src/sql/engine/px/ob_px_util.cpp	1375	ObPxChannelUtil::unlink_ch_set	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = DTL.get_dfc_server().unregister_dfc_channel(*dfc, ch))) {
+src/sql/engine/px/ob_px_util.cpp	1376	ObPxChannelUtil::unlink_ch_set	merge into ret	ret = tmp_ret;
+src/sql/engine/px/ob_px_util.cpp	1389	ObPxChannelUtil::unlink_ch_set	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = DTL.get_dfc_server().deregister_dfc(*dfc))) {
+src/sql/engine/px/ob_px_util.cpp	1390	ObPxChannelUtil::unlink_ch_set	merge into ret	ret = tmp_ret;
+src/sql/engine/px/ob_px_util.cpp	1396	ObPxChannelUtil::unlink_ch_set	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = chans.pop_back(ch))) {
+src/sql/engine/px/ob_px_util.cpp	1397	ObPxChannelUtil::unlink_ch_set	merge into ret	ret = tmp_ret;
+src/sql/engine/px/ob_slice_calc.cpp	333	ObSlaveMapRepartIdxCalcBase::destroy	declare tmp_ret	int tmp_ret = ObRepartSliceIdxCalc::destroy();
+src/sql/engine/px/ob_slice_calc.cpp	334	ObSlaveMapRepartIdxCalcBase::destroy	merge into ret	ret = (OB_SUCCESS == ret) ? tmp_ret : ret;
+src/sql/engine/px/ob_slice_calc.cpp	965	ObSlaveMapPkeyRangeIdxCalc::destroy	declare tmp_ret	int tmp_ret = ObSlaveMapRepartIdxCalcBase::destroy();
+src/sql/engine/px/ob_slice_calc.cpp	966	ObSlaveMapPkeyRangeIdxCalc::destroy	merge into ret	ret = (OB_SUCCESS == ret) ? tmp_ret : ret;
+src/sql/engine/px/ob_slice_calc.cpp	1170	ObSlaveMapPkeyHashIdxCalc::destroy	declare tmp_ret	int tmp_ret = ObSlaveMapRepartIdxCalcBase::destroy();
+src/sql/engine/px/ob_slice_calc.cpp	1171	ObSlaveMapPkeyHashIdxCalc::destroy	merge into ret	ret = (OB_SUCCESS == ret) ? tmp_ret : ret;
+src/sql/engine/px/p2p_datahub/ob_runtime_filter_msg.cpp	367	ObRFBloomFilterMsg::might_contain_batch	declare tmp_ret	int tmp_ret = bloom_filter_.might_contain(hash_values[idx], is_match);
+src/sql/engine/px/p2p_datahub/ob_runtime_filter_msg.cpp	1233	ObRFInFilterMsg::ObRFInFilterNode::operator==	declare tmp_ret	int tmp_ret = other.cmp_funcs_->at(i).cmp_func_(
+src/sql/engine/px/p2p_datahub/ob_runtime_filter_msg.cpp	1510	ObRFInFilterMsg::process_query_ranges_with_deduplicate	declare tmp_ret	int tmp_ret = OB_E(EventTable::EN_PX_MAX_IN_FILTER_QR_COUNT) OB_SUCCESS;
+src/sql/engine/px/p2p_datahub/ob_runtime_filter_msg.cpp	1602	ObRFInFilterMsg::process_query_ranges_without_deduplicate	declare tmp_ret	int tmp_ret = OB_E(EventTable::EN_PX_MAX_IN_FILTER_QR_COUNT) OB_SUCCESS;
+src/sql/engine/table/ob_table_scan_op.cpp	1509	ObTableScanOp::inner_close	declare tmp_ret	int tmp_ret = fill_storage_feedback_info();
+src/sql/engine/table/ob_table_scan_op.cpp	1622	ObTableScanOp::fill_storage_feedback_info	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/engine/table/ob_table_scan_op.cpp	1623	ObTableScanOp::fill_storage_feedback_info	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = table_row_count_list.push_back(ObTableRowCount(
+src/sql/engine/table/ob_table_scan_op.cpp	1629	ObTableScanOp::fill_storage_feedback_info	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/engine/table/ob_table_scan_op.cpp	1630	ObTableScanOp::fill_storage_feedback_info	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = table_row_count_list.push_back(ObTableRowCount(
+src/sql/engine/table/ob_table_scan_op.cpp	1815	ObTableScanOp::local_iter_reuse	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/engine/table/ob_table_scan_op.cpp	1816	ObTableScanOp::local_iter_reuse	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(scan_op->reuse_iter())) {
+src/sql/engine/table/ob_table_scan_op.cpp	3766	ObRandScanProcessor::init	declare tmp_ret	int tmp_ret = OB_E(EventTable::EN_ENABLE_RANDOM_TSC) OB_SUCCESS;
+src/sql/engine/table/ob_table_scan_with_index_back_op.cpp	233	ObTableScanWithIndexBackOp::inner_close	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/engine/table/ob_table_scan_with_index_back_op.cpp	238	ObTableScanWithIndexBackOp::inner_close	assign tmp_ret	tmp_ret = ret;
+src/sql/engine/table/ob_table_scan_with_index_back_op.cpp	241	ObTableScanWithIndexBackOp::inner_close	merge into ret	ret = (OB_SUCCESS == ret) ? tmp_ret : ret;
+src/sql/engine/window_function/ob_window_function_op.cpp	2063	ObWindowFunctionOp::partial_next_row	merge OB_ITER_END into ret (continue-and-record through another variable)	ret = OB_SUCC(ret) ? OB_ITER_END : ret;
+src/sql/engine/window_function/ob_window_function_op.cpp	2783	ObWindowFunctionOp::get_pos	declare tmp_ret	int tmp_ret = cmp_func(cur_val, *cmp_val, cmp_result, access_ctx);
+src/sql/executor/ob_cmd_executor.cpp	555	ObCmdExecutor::execute	declare tmp_ret	int tmp_ret = ret;
+src/sql/executor/ob_cmd_executor.cpp	575	ObCmdExecutor::execute	merge into ret	ret = tmp_ret;
+src/sql/executor/ob_maintain_dependency_info_task.cpp	259	ObMaintainDepInfoTaskQueue::run2	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/executor/ob_maintain_dependency_info_task.cpp	260	ObMaintainDepInfoTaskQueue::run2	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = view_info_set_.erase_refactored(view_schema.get_table_id()))) {
+src/sql/executor/ob_maintain_dependency_info_task.cpp	313	process_reference_obj_table	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/executor/ob_maintain_dependency_info_task.cpp	314	process_reference_obj_table	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = task_queue.erase_view_id_from_set(dep_obj_id))) {
+src/sql/hybrid_search/ob_hybrid_search_executor.cpp	123	ObHybridSearchExecutor::execute_search	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/hybrid_search/ob_hybrid_search_executor.cpp	124	ObHybridSearchExecutor::execute_search	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = conn->end_nested_session(saved_session, saved_conn))) {
+src/sql/hybrid_search/ob_hybrid_search_executor.cpp	126	ObHybridSearchExecutor::execute_search	merge into ret	ret = COVER_SUCC(tmp_ret);

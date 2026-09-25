@@ -1,0 +1,27 @@
+file	line	symbol	construct	text
+src/sql/code_generator/ob_static_engine_cg.cpp	701	ObStaticEngineCG::generate_calc_exprs	pointer membership test: has_exist_in_array	auto filter_func = [&](ObRawExpr *e) { return !has_exist_in_array(dep_exprs, e); };
+src/sql/code_generator/ob_static_engine_cg.cpp	721	ObStaticEngineCG::generate_calc_exprs	pointer membership test: has_exist_in_array	&& !has_exist_in_array(dep_exprs, flattened_cur_exprs_arr.at(i))
+src/sql/code_generator/ob_static_engine_cg.cpp	912	ObStaticEngineCG::generate_spec	pointer membership test: has_exist_in_array	bool is_distinct_expr = has_exist_in_array(op.get_distinct_exprs(), raw_expr);
+src/sql/code_generator/ob_static_engine_cg.cpp	1518	ObStaticEngineCG::append_child_output_no_dup	pointer membership test: has_exist_in_array	if (has_exist_in_array(sk_exprs, expr) || has_exist_in_array(addon_exprs, expr)) {
+src/sql/code_generator/ob_static_engine_cg.cpp	3331	ObStaticEngineCG::generate_spec	pointer membership test: has_exist_in_array	} else if (FALSE_IT(is_duplicate = (has_exist_in_array(spec.group_exprs_, expr)
+src/sql/code_generator/ob_static_engine_cg.cpp	3332	ObStaticEngineCG::generate_spec	pointer membership test: has_exist_in_array	|| has_exist_in_array(spec.rollup_exprs_, expr)))) {
+src/sql/code_generator/ob_static_engine_cg.cpp	4058	ObStaticEngineCG::generate_join_spec	pointer membership test: has_exist_in_array	|| !has_exist_in_array(hj_spec.get_left()->output_, left_expr)
+src/sql/code_generator/ob_static_engine_cg.cpp	4059	ObStaticEngineCG::generate_join_spec	pointer membership test: has_exist_in_array	|| !has_exist_in_array(hj_spec.get_right()->output_, right_expr)) {
+src/sql/code_generator/ob_static_engine_cg.cpp	4876	ObStaticEngineCG::fill_aggr_info	IR pointer == IR pointer	if (arg_expr == group_exprs->at(expr_idx)) {
+src/sql/code_generator/ob_static_engine_cg.cpp	4881	ObStaticEngineCG::fill_aggr_info	IR pointer == IR pointer	if (arg_expr == rollup_exprs->at(expr_idx)) {
+src/sql/code_generator/ob_static_engine_cg.cpp	4906	ObStaticEngineCG::fill_aggr_info	pointer membership test: has_exist_in_array	if (has_exist_in_array(*group_exprs, arg_expr, &expr_idx)) {
+src/sql/code_generator/ob_static_engine_cg.cpp	4910	ObStaticEngineCG::fill_aggr_info	pointer membership test: has_exist_in_array	if (expr_idx == OB_INVALID_INDEX && has_exist_in_array(*rollup_exprs, arg_expr, &expr_idx)) {
+src/sql/code_generator/ob_static_engine_cg.cpp	4934	ObStaticEngineCG::fill_aggr_info	pointer membership test: has_exist_in_array	if (has_exist_in_array(*group_exprs, rollup_exprs->at(i))){
+src/sql/code_generator/ob_static_engine_cg.cpp	5022	ObStaticEngineCG::extract_non_aggr_expr	pointer membership test: has_exist_in_array	} else if (has_exist_in_array(exist_in_child, input)
+src/sql/code_generator/ob_static_engine_cg.cpp	5023	ObStaticEngineCG::extract_non_aggr_expr	pointer membership test: has_exist_in_array	&& !has_exist_in_array(not_exist_in_aggr, input)
+src/sql/code_generator/ob_static_engine_cg.cpp	5024	ObStaticEngineCG::extract_non_aggr_expr	pointer membership test: has_exist_in_array	&& (NULL == not_exist_in_groupby || !has_exist_in_array(*not_exist_in_groupby, input))
+src/sql/code_generator/ob_static_engine_cg.cpp	5025	ObStaticEngineCG::extract_non_aggr_expr	pointer membership test: has_exist_in_array	&& (NULL == not_exist_in_rollup || !has_exist_in_array(*not_exist_in_rollup, input))) {
+src/sql/code_generator/ob_static_engine_cg.cpp	5026	ObStaticEngineCG::extract_non_aggr_expr	pointer membership test: add_var_to_array_no_dup	if (OB_FAIL(add_var_to_array_no_dup(output, input))) {
+src/sql/code_generator/ob_static_engine_cg.cpp	5028	ObStaticEngineCG::extract_non_aggr_expr	pointer membership test: has_exist_in_array	} else if (NULL != not_exist_in_groupby && has_exist_in_array(*not_exist_in_groupby, input) &&
+src/sql/code_generator/ob_static_engine_cg.cpp	5029	ObStaticEngineCG::extract_non_aggr_expr	pointer membership test: has_exist_in_array	nullptr != not_exist_in_distinct && has_exist_in_array(*not_exist_in_distinct, input)) {
+src/sql/code_generator/ob_static_engine_cg.cpp	5032	ObStaticEngineCG::extract_non_aggr_expr	pointer membership test: add_var_to_array_no_dup	if (OB_FAIL(add_var_to_array_no_dup(output, input))) {
+src/sql/code_generator/ob_static_engine_cg.cpp	5035	ObStaticEngineCG::extract_non_aggr_expr	pointer membership test: has_exist_in_array	} else if (!has_exist_in_array(not_exist_in_aggr, input)) {
+src/sql/code_generator/ob_static_engine_cg.cpp	5081	ObStaticEngineCG::generate_spec	pointer membership test: append_array_no_dup	} else if (OB_FAIL(append_array_no_dup(all_expr, spec.get_child()->output_))) {
+src/sql/code_generator/ob_static_engine_cg.cpp	5108	ObStaticEngineCG::generate_spec	pointer membership test: add_var_to_array_no_dup	OZ(add_var_to_array_no_dup(all_expr, spec.wf_aggr_status_expr_));
+src/sql/code_generator/ob_static_engine_cg.cpp	5314	ObStaticEngineCG::fil_sort_info	pointer membership test: has_exist_in_array	} else if (has_exist_in_array(all_exprs, expr, &idx)) {
+src/sql/code_generator/ob_static_engine_cg.cpp	6549	ObStaticEngineCG::generate_spec	pointer membership test: has_exist_in_array	} else if (OB_UNLIKELY(!has_exist_in_array(expand_exprs, org_expr))) {

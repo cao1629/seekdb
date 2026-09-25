@@ -1,0 +1,99 @@
+file	line	symbol	construct	text
+src/share/ob_ddl_task_executor.h	70	ObIDDLTask::in_ddl_retry_black_list	other variable ret_code == OB_SERVER_OUTOF_DISK_SPACE; other variable ret_code == OB_DISK_ERROR; other variable ret_code == OB_NOT_SUPPORTED	return common::OB_SERVER_OUTOF_DISK_SPACE == ret_code || common::OB_DISK_ERROR == ret_code || OB_NOT_SUPPORTED == ret_code
+src/share/ob_ddl_task_executor.h	71	ObIDDLTask::in_ddl_retry_black_list	other variable ret_code == OB_ERR_DATA_TOO_LONG; other variable ret_code == OB_ERR_TOO_LONG_KEY_LENGTH	|| common::OB_ERR_DATA_TOO_LONG == ret_code || common::OB_ERR_TOO_LONG_KEY_LENGTH == ret_code;
+src/share/ob_ddl_task_executor.h	75	ObIDDLTask::is_ddl_force_no_more_process	other variable ret_code == OB_STANDBY_DATABASE_READ_ONLY	return common::OB_STANDBY_DATABASE_READ_ONLY == ret_code;
+src/share/ob_ddl_task_executor.h	79	ObIDDLTask::is_timeout	other variable ret_code == OB_TIMEOUT; other variable ret_code == OB_TRANS_STMT_TIMEOUT; other variable ret_code == OB_CONNECT_ERROR	return common::OB_TIMEOUT == ret_code || common::OB_TRANS_STMT_TIMEOUT == ret_code || common::OB_CONNECT_ERROR == ret_code
+src/share/ob_ddl_task_executor.h	80	ObIDDLTask::is_timeout	other variable ret_code == OB_WAITQUEUE_TIMEOUT; other variable ret_code == OB_SESSION_NOT_FOUND; other variable ret_code == OB_TRANS_TIMEOUT	|| common::OB_WAITQUEUE_TIMEOUT == ret_code || common::OB_SESSION_NOT_FOUND == ret_code || common::OB_TRANS_TIMEOUT == ret_code
+src/share/ob_ddl_task_executor.h	81	ObIDDLTask::is_timeout	other variable ret_code == OB_TRANS_UNKNOWN; other variable ret_code == OB_GET_LOCATION_TIME_OUT; other variable ret_code == OB_PACKET_STATUS_UNKNOWN	|| common::OB_TRANS_UNKNOWN == ret_code || common::OB_GET_LOCATION_TIME_OUT == ret_code || common::OB_PACKET_STATUS_UNKNOWN == ret_code
+src/share/ob_ddl_task_executor.h	82	ObIDDLTask::is_timeout	other variable ret_code == OB_TRANS_NEED_ROLLBACK; other variable ret_code == OB_RPC_SEND_ERROR; other variable ret_code == OB_RPC_CONNECT_ERROR	|| common::OB_TRANS_NEED_ROLLBACK == ret_code || common::OB_RPC_SEND_ERROR == ret_code || common::OB_RPC_CONNECT_ERROR == ret_code
+src/share/ob_ddl_task_executor.h	83	ObIDDLTask::is_timeout	other variable ret_code == OB_RPC_POST_ERROR; other variable ret_code == OB_TRANS_ROLLBACKED; other variable ret_code == OB_TRANS_KILLED	|| common::OB_RPC_POST_ERROR == ret_code || common::OB_TRANS_ROLLBACKED == ret_code || common::OB_TRANS_KILLED == ret_code
+src/share/ob_ddl_task_executor.h	84	ObIDDLTask::is_timeout	other variable ret_code == OB_GET_LOCATION_TIME_OUT; other variable ret_code == OB_TRANS_RPC_TIMEOUT; other variable ret_code == OB_LIBEASY_ERROR	|| common::OB_GET_LOCATION_TIME_OUT == ret_code || common::OB_TRANS_RPC_TIMEOUT == ret_code || common::OB_LIBEASY_ERROR == ret_code
+src/share/ob_ddl_task_executor.h	85	ObIDDLTask::is_timeout	other variable ret_code == OB_TRANS_CTX_NOT_EXIST; other variable ret_code == OB_ERR_SESSION_INTERRUPTED	|| common::OB_TRANS_CTX_NOT_EXIST == ret_code || OB_ERR_SESSION_INTERRUPTED == ret_code;
+src/share/ob_ddl_task_executor.h	88	ObIDDLTask::is_retry	other variable ret_code == OB_EAGAIN; other variable ret_code == OB_DDL_SCHEMA_VERSION_NOT_MATCH; other variable ret_code == OB_TASK_EXPIRED; other variable ret_code == OB_NEED_RETRY	return common::OB_EAGAIN == ret_code || common::OB_DDL_SCHEMA_VERSION_NOT_MATCH == ret_code || common::OB_TASK_EXPIRED == ret_code || common::OB_NEED_RETRY == ret_code
+src/share/ob_ddl_task_executor.h	89	ObIDDLTask::is_retry	other variable ret_code == OB_ERR_SHARED_LOCK_CONFLICT; other variable ret_code == OB_SCHEMA_EAGAIN; other variable ret_code == OB_DATA_NOT_UPTODATE	|| common::OB_ERR_SHARED_LOCK_CONFLICT == ret_code || common::OB_SCHEMA_EAGAIN == ret_code || OB_DATA_NOT_UPTODATE == ret_code
+src/share/ob_ddl_task_executor.h	90	ObIDDLTask::is_retry	other variable ret_code == OB_ERR_EXCLUSIVE_LOCK_CONFLICT; other variable ret_code == OB_ERR_EXCLUSIVE_LOCK_CONFLICT	|| common::OB_ERR_EXCLUSIVE_LOCK_CONFLICT == ret_code || common::OB_ERR_EXCLUSIVE_LOCK_CONFLICT == ret_code
+src/share/ob_ddl_task_executor.h	91	ObIDDLTask::is_retry	other variable ret_code == OB_ERR_EXCLUSIVE_LOCK_CONFLICT_NOWAIT; other variable ret_code == OB_TRANS_STMT_NEED_RETRY; other variable ret_code == OB_SCHEMA_NOT_UPTODATE	|| common::OB_ERR_EXCLUSIVE_LOCK_CONFLICT_NOWAIT == ret_code || common::OB_TRANS_STMT_NEED_RETRY == ret_code || common::OB_SCHEMA_NOT_UPTODATE == ret_code
+src/share/ob_ddl_task_executor.h	92	ObIDDLTask::is_retry	other variable ret_code == OB_TRANSACTION_SET_VIOLATION; other variable ret_code == OB_TRY_LOCK_ROW_CONFLICT; other variable ret_code == OB_TRANS_CANNOT_SERIALIZE; other variable ret_code == OB_GTI_NOT_READY	|| common::OB_TRANSACTION_SET_VIOLATION == ret_code || common::OB_TRY_LOCK_ROW_CONFLICT == ret_code || common::OB_TRANS_CANNOT_SERIALIZE == ret_code || common::OB_GTI_NOT_READY == ret_code
+src/share/ob_ddl_task_executor.h	93	ObIDDLTask::is_retry	other variable ret_code == OB_TRANS_WEAK_READ_VERSION_NOT_READY; other variable ret_code == OB_REPLICA_NOT_READABLE; other variable ret_code == OB_ERR_INSUFFICIENT_PX_WORKER	|| common::OB_TRANS_WEAK_READ_VERSION_NOT_READY == ret_code || common::OB_REPLICA_NOT_READABLE == ret_code || common::OB_ERR_INSUFFICIENT_PX_WORKER == ret_code
+src/share/ob_ddl_task_executor.h	94	ObIDDLTask::is_retry	other variable ret_code == OB_EXCEED_MEM_LIMIT; other variable ret_code == OB_INACTIVE_SQL_CLIENT; other variable ret_code == OB_INACTIVE_RPC_PROXY; other variable ret_code == OB_LS_OFFLINE	|| common::OB_EXCEED_MEM_LIMIT == ret_code || common::OB_INACTIVE_SQL_CLIENT == ret_code || common::OB_INACTIVE_RPC_PROXY == ret_code || common::OB_LS_OFFLINE == ret_code;
+src/share/ob_ddl_task_executor.h	97	ObIDDLTask::is_not_exist	other variable ret_code == OB_LS_NOT_EXIST; other variable ret_code == OB_TABLET_NOT_EXIST; other variable ret_code == OB_RUNTIME_SCHEMA_NOT_READY	return common::OB_LS_NOT_EXIST == ret_code || common::OB_TABLET_NOT_EXIST == ret_code || common::OB_RUNTIME_SCHEMA_NOT_READY == ret_code
+src/share/ob_ddl_task_executor.h	98	ObIDDLTask::is_not_exist	other variable ret_code == OB_SERVER_RUNTIME_NOT_READY	|| common::OB_SERVER_RUNTIME_NOT_READY == ret_code;
+src/share/ob_ddl_task_executor.h	101	ObIDDLTask::is_stop_state	other variable ret_code == OB_NOT_INIT; other variable ret_code == OB_IN_STOP_STATE	return common::OB_NOT_INIT == ret_code || common::OB_IN_STOP_STATE == ret_code
+src/share/ob_ddl_task_executor.h	102	ObIDDLTask::is_stop_state	other variable ret_code == OB_SERVER_IS_INIT; other variable ret_code == OB_SERVER_IS_STOPPING	|| common::OB_SERVER_IS_INIT == ret_code || common::OB_SERVER_IS_STOPPING == ret_code
+src/share/ob_ddl_task_executor.h	103	ObIDDLTask::is_stop_state	other variable ret_code == OB_RS_SHUTDOWN; other variable ret_code == OB_PARTITION_IS_STOPPED	|| common::OB_RS_SHUTDOWN == ret_code || common::OB_PARTITION_IS_STOPPED == ret_code
+src/share/ob_ddl_task_executor.h	104	ObIDDLTask::is_stop_state	other variable ret_code == OB_PARTITION_IS_BLOCKED	|| common::OB_PARTITION_IS_BLOCKED == ret_code;
+src/share/ob_ddl_task_executor.h	107	ObIDDLTask::is_not_master	other variable ret_code == OB_STATE_NOT_MATCH; other variable ret_code == OB_NOT_MASTER; other variable ret_code == OB_RS_NOT_MASTER	return common::OB_STATE_NOT_MATCH == ret_code || common::OB_NOT_MASTER == ret_code || OB_RS_NOT_MASTER == ret_code
+src/share/ob_ddl_task_executor.h	108	ObIDDLTask::is_not_master	other variable ret_code == OB_GTS_NOT_READY	|| common::OB_GTS_NOT_READY == ret_code;
+src/share/ob_ddl_task_executor.h	172	ObDDLTaskExecutor::push_task	ret != OB_ENTRY_EXIST	if (common::OB_ENTRY_EXIST != ret) {
+src/share/ob_debug_sync.cpp	499	ObDSEventControl::locate	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/share/ob_debug_sync.cpp	886	ObDebugSync::execute	ret == OB_ENTRY_NOT_EXIST	} else if (OB_ENTRY_NOT_EXIST == ret) {
+src/share/ob_debug_sync.cpp	897	ObDebugSync::execute	ret == OB_ENTRY_NOT_EXIST	} else if (OB_ENTRY_NOT_EXIST == ret) {
+src/share/ob_define.h	75	is_schema_error	switch (err) case OB_ERR_BAD_DATABASE	case OB_ERR_BAD_DATABASE:
+src/share/ob_define.h	76	is_schema_error	switch (err) case OB_DATABASE_EXIST	case OB_DATABASE_EXIST:
+src/share/ob_define.h	77	is_schema_error	switch (err) case OB_TABLE_NOT_EXIST	case OB_TABLE_NOT_EXIST:
+src/share/ob_define.h	78	is_schema_error	switch (err) case OB_ERR_TABLE_EXIST	case OB_ERR_TABLE_EXIST:
+src/share/ob_define.h	79	is_schema_error	switch (err) case OB_ERR_BAD_FIELD_ERROR	case OB_ERR_BAD_FIELD_ERROR:
+src/share/ob_define.h	80	is_schema_error	switch (err) case OB_ERR_COLUMN_DUPLICATE	case OB_ERR_COLUMN_DUPLICATE:
+src/share/ob_define.h	81	is_schema_error	switch (err) case OB_ERR_USER_EXIST	case OB_ERR_USER_EXIST:
+src/share/ob_define.h	82	is_schema_error	switch (err) case OB_ERR_USER_NOT_EXIST	case OB_ERR_USER_NOT_EXIST:
+src/share/ob_define.h	83	is_schema_error	switch (err) case OB_ERR_NO_PRIVILEGE	case OB_ERR_NO_PRIVILEGE:
+src/share/ob_define.h	84	is_schema_error	switch (err) case OB_ERR_NO_DB_PRIVILEGE	case OB_ERR_NO_DB_PRIVILEGE:
+src/share/ob_define.h	85	is_schema_error	switch (err) case OB_ERR_NO_TABLE_PRIVILEGE	case OB_ERR_NO_TABLE_PRIVILEGE:
+src/share/ob_define.h	86	is_schema_error	switch (err) case OB_SCHEMA_ERROR	case OB_SCHEMA_ERROR:
+src/share/ob_define.h	87	is_schema_error	switch (err) case OB_ERR_SP_ALREADY_EXISTS	case OB_ERR_SP_ALREADY_EXISTS:
+src/share/ob_define.h	88	is_schema_error	switch (err) case OB_ERR_SP_DOES_NOT_EXIST	case OB_ERR_SP_DOES_NOT_EXIST:
+src/share/ob_define.h	89	is_schema_error	switch (err) case OB_OBJECT_NAME_NOT_EXIST	case OB_OBJECT_NAME_NOT_EXIST:
+src/share/ob_define.h	90	is_schema_error	switch (err) case OB_OBJECT_NAME_EXIST	case OB_OBJECT_NAME_EXIST:
+src/share/ob_define.h	91	is_schema_error	switch (err) case OB_SCHEMA_EAGAIN	case OB_SCHEMA_EAGAIN:
+src/share/ob_define.h	92	is_schema_error	switch (err) case OB_SCHEMA_NOT_UPTODATE	case OB_SCHEMA_NOT_UPTODATE:
+src/share/ob_define.h	93	is_schema_error	switch (err) case OB_ERR_PARALLEL_DDL_CONFLICT	case OB_ERR_PARALLEL_DDL_CONFLICT:
+src/share/ob_define.h	94	is_schema_error	switch (err) case OB_NO_PARTITION_FOR_GIVEN_VALUE_SCHEMA_ERROR	case OB_NO_PARTITION_FOR_GIVEN_VALUE_SCHEMA_ERROR:
+src/share/ob_define.h	95	is_schema_error	switch (err) case OB_DDL_RESOURCE_NOT_ENOUGH	case OB_DDL_RESOURCE_NOT_ENOUGH:
+src/share/ob_define.h	107	is_duplicate_key_err	other variable err == OB_ERR_PRIMARY_KEY_DUPLICATE	if (OB_ERR_PRIMARY_KEY_DUPLICATE == err) {
+src/share/ob_define.h	115	is_get_location_timeout_error	other variable err == OB_GET_LOCATION_TIME_OUT	return OB_GET_LOCATION_TIME_OUT == err;
+src/share/ob_define.h	122	is_partition_change_error	switch (err) case OB_PARTITION_NOT_EXIST	case OB_PARTITION_NOT_EXIST:
+src/share/ob_define.h	123	is_partition_change_error	switch (err) case OB_LOCATION_NOT_EXIST	case OB_LOCATION_NOT_EXIST:
+src/share/ob_define.h	124	is_partition_change_error	switch (err) case OB_PARTITION_IS_STOPPED	case OB_PARTITION_IS_STOPPED:
+src/share/ob_define.h	125	is_partition_change_error	switch (err) case OB_PARTITION_IS_BLOCKED	case OB_PARTITION_IS_BLOCKED:
+src/share/ob_define.h	126	is_partition_change_error	switch (err) case OB_LS_LOCATION_NOT_EXIST	case OB_LS_LOCATION_NOT_EXIST:
+src/share/ob_define.h	127	is_partition_change_error	switch (err) case OB_MAPPING_BETWEEN_TABLET_AND_LS_NOT_EXIST	case OB_MAPPING_BETWEEN_TABLET_AND_LS_NOT_EXIST:
+src/share/ob_define.h	128	is_partition_change_error	switch (err) case OB_LS_NOT_EXIST	case OB_LS_NOT_EXIST:
+src/share/ob_define.h	129	is_partition_change_error	switch (err) case OB_TABLET_NOT_EXIST	case OB_TABLET_NOT_EXIST:
+src/share/ob_define.h	141	is_server_down_error	other variable err == OB_RPC_CONNECT_ERROR; other variable err == OB_RPC_SEND_ERROR; other variable err == OB_RPC_POST_ERROR	ret = (OB_RPC_CONNECT_ERROR == err || OB_RPC_SEND_ERROR == err || OB_RPC_POST_ERROR == err);
+src/share/ob_define.h	148	is_trans_stmt_need_retry_error	other variable err == OB_TRANS_STMT_NEED_RETRY	ret = (OB_TRANS_STMT_NEED_RETRY == err);
+src/share/ob_define.h	155	is_server_status_error	other variable err == OB_SERVER_IS_INIT; other variable err == OB_SERVER_IS_STOPPING	ret = (OB_SERVER_IS_INIT == err || OB_SERVER_IS_STOPPING == err);
+src/share/ob_define.h	161	is_runtime_not_ready	other variable err == OB_SERVER_RUNTIME_NOT_READY	return OB_SERVER_RUNTIME_NOT_READY == err;
+src/share/ob_define.h	167	is_process_timeout_error	other variable err == OB_TIMEOUT	ret = (OB_TIMEOUT == err);
+src/share/ob_define.h	173	is_location_leader_not_exist_error	other variable err == OB_LOCATION_LEADER_NOT_EXIST	return OB_LOCATION_LEADER_NOT_EXIST == err
+src/share/ob_define.h	174	is_location_leader_not_exist_error	other variable err == OB_LS_LOCATION_LEADER_NOT_EXIST	|| OB_LS_LOCATION_LEADER_NOT_EXIST == err;
+src/share/ob_define.h	181	is_master_changed_error	switch (err) case OB_LOCATION_LEADER_NOT_EXIST	case OB_LOCATION_LEADER_NOT_EXIST:
+src/share/ob_define.h	182	is_master_changed_error	switch (err) case OB_LS_LOCATION_LEADER_NOT_EXIST	case OB_LS_LOCATION_LEADER_NOT_EXIST:
+src/share/ob_define.h	183	is_master_changed_error	switch (err) case OB_NOT_MASTER	case OB_NOT_MASTER:
+src/share/ob_define.h	184	is_master_changed_error	switch (err) case OB_RS_NOT_MASTER	case OB_RS_NOT_MASTER:
+src/share/ob_define.h	185	is_master_changed_error	switch (err) case OB_RS_SHUTDOWN	case OB_RS_SHUTDOWN:
+src/share/ob_define.h	197	is_timeout_err	other variable err == OB_TIMEOUT	return OB_TIMEOUT == err
+src/share/ob_define.h	198	is_timeout_err	other variable err == OB_TRANS_TIMEOUT	|| OB_TRANS_TIMEOUT == err
+src/share/ob_define.h	199	is_timeout_err	other variable err == OB_TRANS_STMT_TIMEOUT	|| OB_TRANS_STMT_TIMEOUT == err
+src/share/ob_define.h	200	is_timeout_err	other variable err == OB_TRANS_RPC_TIMEOUT	|| OB_TRANS_RPC_TIMEOUT == err;
+src/share/ob_define.h	205	is_not_supported_err	other variable err == OB_NOT_SUPPORTED	return OB_NOT_SUPPORTED == err;
+src/share/ob_define.h	210	is_try_lock_row_err	other variable err == OB_TRY_LOCK_ROW_CONFLICT	return OB_TRY_LOCK_ROW_CONFLICT == err;
+src/share/ob_define.h	215	is_transaction_set_violation_err	other variable err == OB_TRANSACTION_SET_VIOLATION	return OB_TRANSACTION_SET_VIOLATION == err;
+src/share/ob_define.h	220	is_transaction_cannot_serialize_err	other variable err == OB_TRANS_CANNOT_SERIALIZE	return OB_TRANS_CANNOT_SERIALIZE == err;
+src/share/ob_define.h	225	is_snapshot_discarded_err	other variable err == OB_SNAPSHOT_DISCARDED	return OB_SNAPSHOT_DISCARDED == err;
+src/share/ob_define.h	230	is_transaction_rpc_timeout_err	other variable err == OB_TRANS_RPC_TIMEOUT	return OB_TRANS_RPC_TIMEOUT == err;
+src/share/ob_define.h	235	is_data_not_readable_err	other variable err == OB_DATA_NOT_UPTODATE	return OB_DATA_NOT_UPTODATE == err
+src/share/ob_define.h	236	is_data_not_readable_err	other variable err == OB_REPLICA_NOT_READABLE	|| OB_REPLICA_NOT_READABLE == err
+src/share/ob_define.h	237	is_data_not_readable_err	other variable err == OB_SNAPSHOT_DISCARDED	|| OB_SNAPSHOT_DISCARDED == err;
+src/share/ob_define.h	242	is_has_no_readable_replica_err	other variable err == OB_NO_READABLE_REPLICA	return OB_NO_READABLE_REPLICA == err;
+src/share/ob_define.h	247	is_id_not_ready_err	other variable err == OB_GTS_NOT_READY; other variable err == OB_GTI_NOT_READY	return OB_GTS_NOT_READY == err || OB_GTI_NOT_READY == err;
+src/share/ob_define.h	252	is_weak_read_service_ready_err	other variable err == OB_TRANS_WEAK_READ_VERSION_NOT_READY	return OB_TRANS_WEAK_READ_VERSION_NOT_READY == err;
+src/share/ob_define.h	263	is_query_killed_return	ret == OB_ERR_QUERY_INTERRUPTED	return OB_ERR_QUERY_INTERRUPTED == ret
+src/share/ob_define.h	264	is_query_killed_return	ret == OB_DEAD_LOCK	|| OB_DEAD_LOCK == ret;
+src/share/ob_define.h	272	#define LOG_WARN_IGNORE_ITER_END	ret != OB_ITER_END	if (OB_UNLIKELY(common::OB_ITER_END != ret)) {\
+src/share/ob_device_manager.cpp	241	ObDeviceManager::get_deivce_	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/share/ob_device_manager.cpp	266	ObDeviceManager::alloc_device_and_init_	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/share/ob_device_manager.cpp	302	ObDeviceManager::get_device_	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/share/ob_dml_sql_splicer.cpp	687	ObDMLSqlSplicer::build_rows_matrix	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/share/ob_dml_sql_splicer.cpp	1180	ObDMLExecHelper::check_row_exist	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/share/ob_encryption_util.cpp	205	ObBlockCipher::encrypt	ret == OB_ERR_AES_ENCRYPT	if (OB_UNLIKELY(OB_ERR_AES_ENCRYPT == ret)) {
+src/share/ob_encryption_util.cpp	270	ObBlockCipher::decrypt	ret == OB_ERR_AES_DECRYPT	if (OB_UNLIKELY(OB_ERR_AES_DECRYPT == ret)) {

@@ -1,0 +1,101 @@
+file	line	symbol	construct	text
+src/sql/engine/expr/ob_expr_extract_value.cpp	177	ObExprExtractValue::extract_mysql_xpath_result	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/sql/engine/expr/ob_expr_extract_value.cpp	191	ObExprExtractValue::extract_mysql_xpath_result	ret == OB_ITER_END	if (ret == OB_ITER_END) {
+src/sql/engine/expr/ob_expr_extract_value.cpp	196	ObExprExtractValue::extract_mysql_xpath_result	ret == OB_NOT_IMPLEMENT	if (ret == OB_NOT_IMPLEMENT) {
+src/sql/engine/expr/ob_expr_extract_value.cpp	355	ObExprExtractValue::has_same_parent_node	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/sql/engine/expr/ob_expr_extract_value.cpp	362	ObExprExtractValue::has_same_parent_node	ret == OB_ITER_END	if (ret == OB_ITER_END) {
+src/sql/engine/expr/ob_expr_find_in_set.cpp	158	add_to_hashmap	ret == OB_HASH_NOT_EXIST	} else if (OB_LIKELY(OB_HASH_NOT_EXIST == ret)) {
+src/sql/engine/expr/ob_expr_find_in_set.cpp	226	build_hashmap	ret == OB_ERR_INCORRECT_STRING_VALUE	if (OB_UNLIKELY(OB_ERR_INCORRECT_STRING_VALUE == ret)) {
+src/sql/engine/expr/ob_expr_find_in_set.cpp	272	search_with_const_set	ret == OB_ERR_INCORRECT_STRING_VALUE	if (OB_ERR_INCORRECT_STRING_VALUE == ret) {
+src/sql/engine/expr/ob_expr_find_in_set.cpp	277	search_with_const_set	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/sql/engine/expr/ob_expr_from_base64.cpp	99	ObExprFromBase64::eval_from_base64	ret == OB_INVALID_ARGUMENT	if (OB_UNLIKELY(ret == OB_INVALID_ARGUMENT)) {
+src/sql/engine/expr/ob_expr_from_base64.cpp	149	ObExprFromBase64::eval_from_base64_batch	ret == OB_INVALID_ARGUMENT	if (OB_UNLIKELY(ret == OB_INVALID_ARGUMENT)) {
+src/sql/engine/expr/ob_expr_from_unix_time.cpp	311	ObExprFromUnixTime::get_usec_from_datum	ret == OB_DATA_OUT_OF_RANGE	if (OB_DATA_OUT_OF_RANGE == ret) {
+src/sql/engine/expr/ob_expr_func_dump.cpp	77	print_value	ret != OB_SIZE_OVERFLOW	if (OB_SIZE_OVERFLOW != ret) {
+src/sql/engine/expr/ob_expr_func_dump.cpp	82	print_value	ret != OB_SIZE_OVERFLOW	if (OB_SIZE_OVERFLOW != ret) {
+src/sql/engine/expr/ob_expr_func_dump.cpp	95	print_value	ret != OB_SIZE_OVERFLOW	if (OB_SIZE_OVERFLOW != ret) {
+src/sql/engine/expr/ob_expr_func_dump.cpp	100	print_value	ret == OB_SIZE_OVERFLOW	if (OB_SIZE_OVERFLOW == ret) {
+src/sql/engine/expr/ob_expr_get_user_var.cpp	77	ObExprGetUserVar::calc_result_type1	ret == OB_ERR_USER_VARIABLE_UNKNOWN	} else if (OB_ERR_USER_VARIABLE_UNKNOWN == ret) {
+src/sql/engine/expr/ob_expr_get_user_var.cpp	148	ObExprGetUserVar::eval_get_user_var	ret == OB_ERR_USER_VARIABLE_UNKNOWN	} else if (OB_ERR_USER_VARIABLE_UNKNOWN == ret) {
+src/sql/engine/expr/ob_expr_in.cpp	267	ObExprInHashSet::exist_refactored	ret == OB_HASH_EXIST	if (OB_HASH_EXIST == ret) {
+src/sql/engine/expr/ob_expr_in.cpp	270	ObExprInHashSet::exist_refactored	ret == OB_HASH_NOT_EXIST	} else if (OB_HASH_NOT_EXIST == ret) {
+src/sql/engine/expr/ob_expr_in.cpp	1436	ObExprInOrNotIn::eval_in_with_subquery	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/expr/ob_expr_in.cpp	1453	ObExprInOrNotIn::eval_in_with_subquery	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/expr/ob_expr_inner_decode_like.cpp	140	ObExprInnerDecodeLike::eval_inner_decode_like	ret == OB_EMPTY_RANGE	if (OB_EMPTY_RANGE == ret) {
+src/sql/engine/expr/ob_expr_inner_double_to_int.cpp	213	ObExprInnerDoubleToInt::double_to_number	ret == OB_NUMERIC_OVERFLOW	if (OB_NUMERIC_OVERFLOW == ret) {
+src/sql/engine/expr/ob_expr_inner_info_cols_printer.cpp	462	ObExprInnerInfoColsPrivPrinter::fill_col_privs	ret == OB_ERR_NO_TABLE_PRIVILEGE	} else if (OB_ERR_NO_TABLE_PRIVILEGE == ret) {
+src/sql/engine/expr/ob_expr_inner_info_cols_printer.cpp	771	ObExprInnerInfoColsColumnTypePrinter::eval_column_column_type	ret == OB_SIZE_OVERFLOW	if (OB_SIZE_OVERFLOW == ret) {
+src/sql/engine/expr/ob_expr_int_div.cpp	348	ObExprIntDiv::div_number	ret == OB_DATA_OUT_OF_RANGE	if (OB_DATA_OUT_OF_RANGE == ret) {
+src/sql/engine/expr/ob_expr_join_filter.cpp	146	ObExprJoinFilter::check_rf_ready	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/sql/engine/expr/ob_expr_join_filter.cpp	155	ObExprJoinFilter::check_rf_ready	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/sql/engine/expr/ob_expr_json_extract.cpp	129	ObExprJsonExtract::eval_json_extract	ret == OB_ERR_INVALID_TYPE_FOR_JSON	if (ret == OB_ERR_INVALID_TYPE_FOR_JSON) {
+src/sql/engine/expr/ob_expr_json_extract.cpp	131	ObExprJsonExtract::eval_json_extract	ret == OB_ERR_INVALID_JSON_CHARSET	} else if (ret == OB_ERR_INVALID_JSON_CHARSET) {
+src/sql/engine/expr/ob_expr_json_func_helper.cpp	183	ObJsonExprHelper::get_const_json_schema	ret == OB_ERR_NULL_VALUE; ret == OB_ERR_INVALID_JSON_TEXT	if (ret == OB_ERR_NULL_VALUE || ret == OB_ERR_INVALID_JSON_TEXT) { // json_str is null
+src/sql/engine/expr/ob_expr_json_func_helper.cpp	431	ObJsonExprHelper::cast_to_res	ret == OB_ERR_DATA_TOO_LONG	if (!xt_need_acc_check && (ob_is_varchar_or_char(obj_type, cs_type)) && ret == OB_ERR_DATA_TOO_LONG) {
+src/sql/engine/expr/ob_expr_json_func_helper.cpp	844	ObJsonExprHelper::find_and_add_schema_cache	ret == OB_ERR_INVALID_JSON_TEXT	if (ret == OB_ERR_INVALID_JSON_TEXT) {
+src/sql/engine/expr/ob_expr_json_func_helper.cpp	1319	ObJsonExprHelper::transform_convertible_2jsonBase	ret == OB_ERR_UNSUPPROTED_REF_IN_JSON_SCHEMA	if (flags.is_schema_ && ret == OB_ERR_UNSUPPROTED_REF_IN_JSON_SCHEMA) {
+src/sql/engine/expr/ob_expr_json_func_helper.cpp	1357	ObJsonExprHelper::transform_convertible_2jsonBase	ret == OB_ERR_UNSUPPROTED_REF_IN_JSON_SCHEMA	if (flags.is_schema_ && ret == OB_ERR_UNSUPPROTED_REF_IN_JSON_SCHEMA) {
+src/sql/engine/expr/ob_expr_json_merge_patch.cpp	206	ObExprJsonMergePatch::eval_ora_json_merge_patch	tmp_ret == OB_ERR_JSON_SYNTAX_ERROR	if (tmp_ret == OB_ERR_JSON_SYNTAX_ERROR) {
+src/sql/engine/expr/ob_expr_json_object.cpp	122	ObExprJsonObject::eval_json_object	ret == OB_ERR_JSON_DOCUMENT_NULL_KEY	if (ret == OB_ERR_JSON_DOCUMENT_NULL_KEY) {
+src/sql/engine/expr/ob_expr_json_overlaps.cpp	129	ObExprJsonOverlaps::json_overlaps_object	ret == OB_SEARCH_NOT_FOUND	if (ret == OB_SEARCH_NOT_FOUND) {
+src/sql/engine/expr/ob_expr_json_pretty.cpp	82	ObExprJsonPretty::calc	ret == OB_ERR_INVALID_JSON_TEXT	if (ret == OB_ERR_INVALID_JSON_TEXT) {
+src/sql/engine/expr/ob_expr_json_query.cpp	786	ObExprJsonQuery::doc_do_seek	ret == OB_ERR_JSON_PATH_EXPRESSION_SYNTAX_ERROR	if (ret == OB_ERR_JSON_PATH_EXPRESSION_SYNTAX_ERROR) {
+src/sql/engine/expr/ob_expr_json_query.cpp	788	ObExprJsonQuery::doc_do_seek	ret == OB_ERR_DOUBLE_TRUNCATED	} else if (ret == OB_ERR_DOUBLE_TRUNCATED) {
+src/sql/engine/expr/ob_expr_json_query.cpp	875	ObExprJsonQuery::set_result	ret == OB_OPERATE_OVERFLOW	if (ret == OB_OPERATE_OVERFLOW) {
+src/sql/engine/expr/ob_expr_json_search.cpp	57	ObExprJsonSearch::add_path_unique	ret == OB_CONFLICT_VALUE	} else if (ret == OB_CONFLICT_VALUE) { // value is already insert, set ret to success
+src/sql/engine/expr/ob_expr_json_storage_free.cpp	81	ObExprJsonStorageFree::calc	ret == OB_ERR_INVALID_JSON_TEXT	if (ret == OB_ERR_INVALID_JSON_TEXT) {
+src/sql/engine/expr/ob_expr_json_storage_size.cpp	91	ObExprJsonStorageSize::calc	ret == OB_ERR_INVALID_JSON_TEXT	if (ret == OB_ERR_INVALID_JSON_TEXT) {
+src/sql/engine/expr/ob_expr_json_type.cpp	154	ObExprJsonType::calc	ret == OB_ERR_INVALID_JSON_TEXT_IN_PARAM	if (ret == OB_ERR_INVALID_JSON_TEXT_IN_PARAM) {
+src/sql/engine/expr/ob_expr_json_unquote.cpp	104	ObExprJsonUnquote::calc	ret == OB_ERR_INVALID_JSON_TEXT_IN_PARAM	if (ret == OB_ERR_INVALID_JSON_TEXT_IN_PARAM) {
+src/sql/engine/expr/ob_expr_json_utils.cpp	382	get_cast_ret	ret == OB_ERR_UNEXPECTED_TZ_TRANSITION	if (OB_ERR_UNEXPECTED_TZ_TRANSITION == ret ||
+src/sql/engine/expr/ob_expr_json_utils.cpp	383	get_cast_ret	ret == OB_ERR_UNKNOWN_TIME_ZONE	OB_ERR_UNKNOWN_TIME_ZONE == ret) {
+src/sql/engine/expr/ob_expr_json_utils.cpp	684	cast_to_uint	ret == OB_OPERATE_OVERFLOW	if (ret == OB_OPERATE_OVERFLOW) {
+src/sql/engine/expr/ob_expr_json_utils.cpp	873	cast_to_datetime	ret == OB_ERR_NULL_VALUE	} else if (ret == OB_ERR_NULL_VALUE) {
+src/sql/engine/expr/ob_expr_json_utils.cpp	1046	cast_to_mdatetime	ret == OB_ERR_NULL_VALUE	} else if (ret == OB_ERR_NULL_VALUE) {
+src/sql/engine/expr/ob_expr_json_utils.cpp	1070	cast_to_time	ret == OB_ERR_UNEXPECTED	if (ret == OB_ERR_UNEXPECTED
+src/sql/engine/expr/ob_expr_json_utils.cpp	1593	ObJsonUtil::get_json_doc	ret == OB_ERR_JSON_OUT_OF_DEPTH	if (ret == OB_ERR_JSON_OUT_OF_DEPTH) {
+src/sql/engine/expr/ob_expr_json_valid.cpp	111	ObExprJsonValid::calc	ret == OB_ERR_INVALID_JSON_TEXT	} else if (ret == OB_ERR_INVALID_JSON_TEXT) {
+src/sql/engine/expr/ob_expr_json_valid.cpp	114	ObExprJsonValid::calc	ret == OB_ERR_JSON_OUT_OF_DEPTH	} else if (ret == OB_ERR_JSON_OUT_OF_DEPTH) {
+src/sql/engine/expr/ob_expr_json_value.cpp	533	ObExprJsonValue::doc_do_seek	ret == OB_ERR_JSON_PATH_EXPRESSION_SYNTAX_ERROR	if (ret == OB_ERR_JSON_PATH_EXPRESSION_SYNTAX_ERROR) {
+src/sql/engine/expr/ob_expr_json_value.cpp	535	ObExprJsonValue::doc_do_seek	ret == OB_ERR_DOUBLE_TRUNCATED	} else if (ret == OB_ERR_DOUBLE_TRUNCATED) {
+src/sql/engine/expr/ob_expr_json_value.cpp	672	ObExprJsonValue::get_default_value	ret == OB_OPERATE_OVERFLOW	if (ret == OB_OPERATE_OVERFLOW) {
+src/sql/engine/expr/ob_expr_lock_func.cpp	104	ObExprLockFunc::ObTimeOutCheckGuard::~ObTimeOutCheckGuard	other variable ret_ == OB_ERR_EXCLUSIVE_LOCK_CONFLICT	} else if (OB_ERR_EXCLUSIVE_LOCK_CONFLICT == ret_) {
+src/sql/engine/expr/ob_expr_lock_func.cpp	192	ObExprGetLock::get_lock	ret == OB_ERR_EXCLUSIVE_LOCK_CONFLICT	} else if (OB_ERR_EXCLUSIVE_LOCK_CONFLICT == ret) {
+src/sql/engine/expr/ob_expr_lock_func.cpp	196	ObExprGetLock::get_lock	ret == OB_ERR_QUERY_INTERRUPTED	} else if (OB_ERR_QUERY_INTERRUPTED == ret) {
+src/sql/engine/expr/ob_expr_lock_func.cpp	253	ObExprIsFreeLock::is_free_lock	ret == OB_EMPTY_RESULT	} else if (OB_EMPTY_RESULT == ret) {
+src/sql/engine/expr/ob_expr_lock_func.cpp	318	ObExprIsUsedLock::is_used_lock	ret == OB_EMPTY_RESULT	} else if (OB_EMPTY_RESULT == ret) {
+src/sql/engine/expr/ob_expr_log.cpp	69	calc_log_expr_double	ret == OB_OPERATE_OVERFLOW	if (OB_OPERATE_OVERFLOW == ret) {
+src/sql/engine/expr/ob_expr_mul.cpp	760	ObDecint128TO256::raw_op	call result l.multiply<wide::CheckOverFlow>(r,*reinterpret_cast<int12... == OB_OPERATE_OVERFLOW	if (OB_OPERATE_OVERFLOW == l.multiply<wide::CheckOverFlow>(r, *reinterpret_cast<int128_t *>(tmp_res))) {
+src/sql/engine/expr/ob_expr_obj_access.cpp	432	ObExprObjAccess::ExtraInfo::calc	ret == OB_ERR_COLLECION_NULL	if (OB_ERR_COLLECION_NULL == ret && pl::ObCollectionType::EXISTS_PROPERTY == property_type_) {
+src/sql/engine/expr/ob_expr_operator.cpp	684	ObExprOperator::aggregate_collations	ret == OB_CANT_AGGREGATE_2COLLATIONS	if (OB_CANT_AGGREGATE_2COLLATIONS == ret) {
+src/sql/engine/expr/ob_expr_operator.cpp	734	ObExprOperator::aggregate_two_collation	ret == OB_CANT_AGGREGATE_2COLLATIONS	if (OB_CANT_AGGREGATE_2COLLATIONS == ret) {
+src/sql/engine/expr/ob_expr_operator.cpp	1670	ObArithExprOperator::calc_	ret == OB_ERR_UNEXPECTED	if (OB_ERR_UNEXPECTED == ret) {
+src/sql/engine/expr/ob_expr_operator.cpp	2183	ObRelationalExprOperator::deduce_cmp_type	ret == OB_INVALID_ARGUMENT	if (ret == OB_INVALID_ARGUMENT
+src/sql/engine/expr/ob_expr_operator.cpp	2665	ObRelationalExprOperator::pl_udt_compare2	ret == OB_HASH_EXIST	if (OB_HASH_EXIST == ret) {
+src/sql/engine/expr/ob_expr_operator.cpp	2873	ObSubQueryRelationalExpr::calc_result2	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/expr/ob_expr_operator.cpp	2907	ObSubQueryRelationalExpr::calc_result2	ret == OB_ITER_END	if (OB_LIKELY(OB_ITER_END == ret)) {
+src/sql/engine/expr/ob_expr_operator.cpp	2947	ObSubQueryRelationalExpr::calc_resultN	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/expr/ob_expr_operator.cpp	2960	ObSubQueryRelationalExpr::calc_resultN	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/expr/ob_expr_operator.cpp	3096	ObSubQueryRelationalExpr::calc_result_with_none	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/expr/ob_expr_operator.cpp	3114	ObSubQueryRelationalExpr::calc_result_with_none	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/expr/ob_expr_operator.cpp	3173	ObSubQueryRelationalExpr::calc_result_with_all	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/expr/ob_expr_operator.cpp	3230	ObSubQueryRelationalExpr::calc_result_with_any	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/expr/ob_expr_operator.cpp	3357	ObSubQueryRelationalExpr::check_exists	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/sql/engine/expr/ob_expr_operator.cpp	3368	ObSubQueryRelationalExpr::check_exists	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/expr/ob_expr_operator.cpp	3515	ObSubQueryRelationalExpr::subquery_cmp_eval	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/expr/ob_expr_operator.cpp	3541	ObSubQueryRelationalExpr::subquery_cmp_eval	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/expr/ob_expr_operator.cpp	3566	ObSubQueryRelationalExpr::subquery_cmp_eval_with_none	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/expr/ob_expr_operator.cpp	3580	ObSubQueryRelationalExpr::subquery_cmp_eval_with_none	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/expr/ob_expr_operator.cpp	3617	ObSubQueryRelationalExpr::subquery_cmp_eval_with_any	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/expr/ob_expr_operator.cpp	3654	ObSubQueryRelationalExpr::subquery_cmp_eval_with_all	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/expr/ob_expr_operator.cpp	5373	ObRelationalExprOperator::try_get_inner_row_cmp_ret	other variable ret_code == OB_ERR_MAX_VALUE	if (ret_code == OB_ERR_MAX_VALUE) {
+src/sql/engine/expr/ob_expr_operator.cpp	5375	ObRelationalExprOperator::try_get_inner_row_cmp_ret	other variable ret_code == OB_ERR_MIN_VALUE	} else if (ret_code == OB_ERR_MIN_VALUE) {
+src/sql/engine/expr/ob_expr_plsql_variable.cpp	78	ObExprPLSQLVariable::calc_result_type0	ret == OB_ERR_SYS_VARIABLE_UNKNOWN	if (OB_ERR_SYS_VARIABLE_UNKNOWN == ret) {
+src/sql/engine/expr/ob_expr_plsql_variable.cpp	176	ObExprPLSQLVariable::eval_plsql_variable	ret == OB_ERR_SYS_VARIABLE_UNKNOWN	if (OB_ERR_SYS_VARIABLE_UNKNOWN == ret) {
+src/sql/engine/expr/ob_expr_prefix_pattern.cpp	109	ObExprPrefixPattern::calc_prefix_pattern	ret == OB_ERR_INCORRECT_STRING_VALUE	if (ret == OB_ERR_INCORRECT_STRING_VALUE) {
+src/sql/engine/expr/ob_expr_prefix_pattern.cpp	134	ObExprPrefixPattern::calc_prefix_pattern	ret == OB_ERR_INCORRECT_STRING_VALUE	if (ret == OB_ERR_INCORRECT_STRING_VALUE) {
+src/sql/engine/expr/ob_expr_priv_st_asewkb.cpp	94	ObExprStPrivAsEwkb::eval_priv_st_as_ewkb	ret != OB_ERR_SRS_NOT_FOUND; ret != OB_ERR_INVALID_GEOMETRY_TYPE	if (ret != OB_ERR_SRS_NOT_FOUND && ret != OB_ERR_INVALID_GEOMETRY_TYPE) {
+src/sql/engine/expr/ob_expr_priv_st_asmvtgeom.cpp	147	ObExprPrivSTAsMVTGeom::process_input_geometry	ret == OB_ERR_SRS_NOT_FOUND	if (ret == OB_ERR_SRS_NOT_FOUND) {
+src/sql/engine/expr/ob_expr_priv_st_equals.cpp	73	ObExprPrivSTEquals::get_input_geometry	ret == OB_ERR_GIS_INVALID_DATA	if (ret == OB_ERR_GIS_INVALID_DATA) {
+src/sql/engine/expr/ob_expr_priv_st_geohash.cpp	242	ObExprPrivSTGeoHash::process_input_geometry	ret == OB_ERR_GIS_INVALID_DATA	if (ret == OB_ERR_GIS_INVALID_DATA) {
+src/sql/engine/expr/ob_expr_priv_st_touches.cpp	86	ObExprPrivSTTouches::get_input_geometry	ret == OB_ERR_GIS_INVALID_DATA	if (ret == OB_ERR_GIS_INVALID_DATA) {

@@ -1,0 +1,94 @@
+file	line	symbol	construct	text
+src/data_plane/api/data_plane/scheduler/ob_dag_scheduler.h	1026	ObDagPrioScheduler::get_dag_progress	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/data_plane/api/data_plane/scheduler/ob_dag_scheduler.h	1504	ObDagScheduler::create_and_add_dag_net	ret == OB_HASH_EXIST	if (common::OB_HASH_EXIST == ret) {
+src/data_plane/api/data_plane/scheduler/ob_dag_scheduler.h	1550	ObDagScheduler::create_and_add_dag	ret != OB_SIZE_OVERFLOW; ret != OB_EAGAIN	if (common::OB_SIZE_OVERFLOW != ret && common::OB_EAGAIN != ret) {
+src/data_plane/api/data_plane/scheduler/ob_dag_scheduler.h	1575	dag_yield	ret != OB_CANCELED	if (OB_FAIL(worker->yield()) && OB_CANCELED != ret) {
+src/logservice/applyservice/ob_log_apply_service.cpp	309	ObApplyStatus::init	ret != OB_INIT_TWICE	if (OB_FAIL(ret) && (OB_INIT_TWICE != ret)) {
+src/logservice/applyservice/ob_log_apply_service.cpp	498	ObApplyStatus::try_handle_cb_queue	ret == OB_EAGAIN	if (OB_EAGAIN == ret) {
+src/logservice/applyservice/ob_log_apply_service.cpp	921	ObLogApplyService::init	ret != OB_INIT_TWICE	if ((OB_FAIL(ret)) && (OB_INIT_TWICE != ret)) {
+src/logservice/applyservice/ob_log_apply_service.cpp	1150	ObLogApplyService::push_task	ret == OB_EAGAIN	while (OB_FAIL(common::ObLinkQueueThreadPool::push(task)) && OB_EAGAIN == ret) {
+src/logservice/ob_log_handler.cpp	86	ObLogHandler::init	ret != OB_INIT_TWICE	if (OB_FAIL(ret) && OB_INIT_TWICE != ret) {
+src/logservice/ob_log_handler.cpp	213	ObLogHandler::append_imported_group	ret != OB_EAGAIN	if (OB_EAGAIN != ret) {
+src/logservice/ob_log_handler.cpp	404	ObLogHandler::append_	ret == OB_EAGAIN	} else if (OB_EAGAIN == ret) {
+src/logservice/ob_log_handler.cpp	513	ObLogHandler::get_max_decided_scn	ret != OB_STATE_NOT_MATCH	if (OB_STATE_NOT_MATCH != ret) {
+src/logservice/ob_log_handler.cpp	518	ObLogHandler::get_max_decided_scn	ret == OB_STATE_NOT_MATCH	if (OB_STATE_NOT_MATCH == ret && max_applied_scn.is_valid()) {
+src/logservice/ob_log_service.cpp	208	ObLogService::init	ret != OB_INIT_TWICE	if (OB_FAIL(ret) && OB_INIT_TWICE != ret) {
+src/logservice/ob_log_service.cpp	265	ObLogService::check_palf_exist	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret ) {
+src/logservice/palf/fixed_sliding_window.h	369	FixedSlidingWindow::truncate	ret == OB_ERR_OUT_OF_UPPER_BOUND	if (common::OB_ERR_OUT_OF_UPPER_BOUND == ret) {
+src/logservice/palf/fixed_sliding_window.h	371	FixedSlidingWindow::truncate	ret == OB_ERR_OUT_OF_LOWER_BOUND	} else if (common::OB_ERR_OUT_OF_LOWER_BOUND == ret) {
+src/logservice/palf/log_block_mgr.cpp	94	LogBlockMgr::init	ret != OB_INIT_TWICE	if (OB_FAIL(ret) && OB_INIT_TWICE != ret) {
+src/logservice/palf/log_cache.cpp	83	LogHotCache::read	ret != OB_ERR_OUT_OF_LOWER_BOUND	if (OB_ERR_OUT_OF_LOWER_BOUND != ret) {
+src/logservice/palf/log_cache.cpp	155	LogCache::read	other variable hot_ret == OB_ERR_OUT_OF_LOWER_BOUND; other variable hot_ret == OB_READ_NOTHING	} else if (OB_ERR_OUT_OF_LOWER_BOUND == hot_ret || OB_READ_NOTHING == hot_ret) {
+src/logservice/palf/log_cache.cpp	179	LogCache::read_hot_cache_	ret == OB_ERR_OUT_OF_LOWER_BOUND	} else if (OB_ERR_OUT_OF_LOWER_BOUND == ret) {
+src/logservice/palf/log_engine.cpp	149	LogEngine::init	ret != OB_INIT_TWICE	if (OB_FAIL(ret) && OB_INIT_TWICE != ret) {
+src/logservice/palf/log_engine.cpp	268	LogEngine::load	ret != OB_INIT_TWICE	if (OB_FAIL(ret) && OB_INIT_TWICE != ret) {
+src/logservice/palf/log_engine.cpp	332	LogEngine::submit_handle_submit_task	ret == OB_IN_STOP_STATE	if (OB_IN_STOP_STATE == ret) {
+src/logservice/palf/log_engine.cpp	516	LogEngine::truncate	ret != OB_ERR_OUT_OF_UPPER_BOUND	&& OB_ERR_OUT_OF_UPPER_BOUND != ret) {
+src/logservice/palf/log_engine.cpp	567	LogEngine::delete_block	ret == OB_NO_SUCH_FILE_OR_DIRECTORY	if (OB_NO_SUCH_FILE_OR_DIRECTORY == ret) {
+src/logservice/palf/log_engine.cpp	715	LogEngine::get_total_used_disk_space	ret != OB_ENTRY_NOT_EXIST	&& OB_ENTRY_NOT_EXIST != ret) {
+src/logservice/palf/log_engine.cpp	717	LogEngine::get_total_used_disk_space	ret == OB_ENTRY_NOT_EXIST	} else if (OB_ENTRY_NOT_EXIST == ret) {
+src/logservice/palf/log_engine.cpp	1032	LogEngine::try_clear_up_holes_and_check_storage_integrity_	ret != OB_ENTRY_NOT_EXIST	&& OB_ENTRY_NOT_EXIST != ret) {
+src/logservice/palf/log_engine.cpp	1034	LogEngine::try_clear_up_holes_and_check_storage_integrity_	ret == OB_ENTRY_NOT_EXIST	} else if (OB_ENTRY_NOT_EXIST == ret) {
+src/logservice/palf/log_io_task.cpp	38	push_task_into_cb_thread_pool	ret == OB_IN_STOP_STATE	if (OB_IN_STOP_STATE == ret) {
+src/logservice/palf/log_io_task.cpp	399	BatchLogIOFlushLogTask::init	ret != OB_INIT_TWICE	if (OB_FAIL(ret) && OB_INIT_TWICE != ret) {
+src/logservice/palf/log_io_task_cb_thread_pool.cpp	58	LogIOTaskCbThreadPool::init	ret != OB_INIT_TWICE	if (OB_FAIL(ret) && OB_INIT_TWICE != ret) {
+src/logservice/palf/log_io_utils.cpp	321	rename_with_retry	ret == OB_NO_SUCH_FILE_OR_DIRECTORY	if (OB_NO_SUCH_FILE_OR_DIRECTORY == ret && check_rename_success(src_name, dest_name)) {
+src/logservice/palf/log_io_utils.cpp	351	renameat_with_retry	ret == OB_NO_SUCH_FILE_OR_DIRECTORY	if (OB_NO_SUCH_FILE_OR_DIRECTORY == ret && check_renameat_success(src_dir_fd, src_name, dest_dir_fd, dest_name)) {
+src/logservice/palf/log_io_worker.cpp	92	LogIOWorker::init	ret != OB_INIT_TWICE	if (OB_FAIL(ret) && OB_INIT_TWICE != ret) {
+src/logservice/palf/log_io_worker_wrapper.cpp	60	LogIOWorkerWrapper::init	ret != OB_INIT_TWICE	if (OB_FAIL(ret) && OB_INIT_TWICE != ret) {
+src/logservice/palf/log_iterator_impl.h	245	LogIteratorImpl::parse_log_group_entry_	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/logservice/palf/log_iterator_impl.h	252	LogIteratorImpl::parse_log_group_entry_	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/logservice/palf/log_iterator_impl.h	332	LogIteratorImpl::need_clean_cache_	ret == OB_INVALID_DATA; ret == OB_CHECKSUM_ERROR	return OB_INVALID_DATA == ret || OB_CHECKSUM_ERROR == ret;
+src/logservice/palf/log_iterator_impl.h	512	LogIteratorImpl::get_next_entry_	ret == OB_BUF_NOT_ENOUGH	} else if (OB_BUF_NOT_ENOUGH == ret) {
+src/logservice/palf/log_iterator_impl.h	513	LogIteratorImpl::get_next_entry_	ret != OB_ITER_END	if (OB_FAIL(read_data_from_storage_(io_ctx)) && OB_ITER_END != ret
+src/logservice/palf/log_iterator_impl.h	514	LogIteratorImpl::get_next_entry_	ret != OB_ERR_OUT_OF_LOWER_BOUND	&& OB_ERR_OUT_OF_LOWER_BOUND != ret) {
+src/logservice/palf/log_iterator_impl.h	516	LogIteratorImpl::get_next_entry_	ret == OB_ITER_END	} else if (OB_ITER_END == ret) {
+src/logservice/palf/log_iterator_impl.h	520	LogIteratorImpl::get_next_entry_	ret == OB_ERR_OUT_OF_LOWER_BOUND	} else if (OB_ERR_OUT_OF_LOWER_BOUND == ret) {
+src/logservice/palf/log_iterator_impl.h	534	LogIteratorImpl::get_next_entry_	ret == OB_EAGAIN	} while (OB_EAGAIN == ret);
+src/logservice/palf/log_iterator_impl.h	582	LogIteratorImpl::next	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/logservice/palf/log_iterator_impl.h	612	LogIteratorImpl::next	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/logservice/palf/log_iterator_impl.h	765	LogIteratorImpl::parse_one_entry_	ret == OB_EAGAIN	} while (OB_EAGAIN == ret);
+src/logservice/palf/log_iterator_impl.h	797	LogIteratorImpl::check_is_the_last_entry	ret != OB_ITER_END	if (OB_FAIL(read_data_from_storage_(io_ctx)) && OB_ITER_END != ret) {
+src/logservice/palf/log_iterator_impl.h	799	LogIteratorImpl::check_is_the_last_entry	ret == OB_ITER_END	} else if (OB_ITER_END == ret) {
+src/logservice/palf/log_iterator_impl.h	818	LogIteratorImpl::check_is_the_last_entry	ret == OB_BUF_NOT_ENOUGH	} else if (OB_BUF_NOT_ENOUGH == ret) {
+src/logservice/palf/log_iterator_impl.h	830	LogIteratorImpl::check_is_the_last_entry	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/logservice/palf/log_iterator_impl.h	893	LogIteratorImpl::read_data_from_storage_	ret != OB_ERR_OUT_OF_UPPER_BOUND	&& OB_ERR_OUT_OF_UPPER_BOUND != ret) {
+src/logservice/palf/log_iterator_impl.h	895	LogIteratorImpl::read_data_from_storage_	ret == OB_ERR_OUT_OF_UPPER_BOUND	} else if (OB_ERR_OUT_OF_UPPER_BOUND == ret) {
+src/logservice/palf/log_loop_thread.cpp	55	LogLoopThread::init	ret != OB_INIT_TWICE	if ((OB_FAIL(ret)) && (OB_INIT_TWICE != ret)) {
+src/logservice/palf/log_reader.cpp	156	LogReader::inner_pread_	ret == OB_ALLOCATE_MEMORY_FAILED	if (OB_ALLOCATE_MEMORY_FAILED == ret) {
+src/logservice/palf/log_reader.cpp	161	LogReader::inner_pread_	ret == OB_EAGAIN	} while (OB_EAGAIN == ret);
+src/logservice/palf/log_shared_queue_thread.cpp	53	LogSharedQueueTh::init	ret != OB_INIT_TWICE	if (OB_FAIL(ret) && OB_INIT_TWICE != ret) {
+src/logservice/palf/log_shared_queue_thread.cpp	122	LogSharedQueueTh::push_submit_log_task	ret == OB_IN_STOP_STATE	if (OB_IN_STOP_STATE == ret) {
+src/logservice/palf/log_shared_queue_thread.cpp	141	LogSharedQueueTh::push_task	ret == OB_IN_STOP_STATE	if (OB_IN_STOP_STATE == ret) {
+src/logservice/palf/log_sliding_window.cpp	244	LogSlidingWindow::wait_sw_slot_ready_	ret == OB_ERR_OUT_OF_UPPER_BOUND	if (OB_ERR_OUT_OF_UPPER_BOUND == ret) {
+src/logservice/palf/log_sliding_window.cpp	252	LogSlidingWindow::wait_sw_slot_ready_	ret == OB_EAGAIN	if (OB_EAGAIN == ret) {
+src/logservice/palf/log_sliding_window.cpp	255	LogSlidingWindow::wait_sw_slot_ready_	ret == OB_EAGAIN	} while(OB_EAGAIN == ret);
+src/logservice/palf/log_sliding_window.cpp	453	LogSlidingWindow::try_freeze_prev_log_	ret == OB_ERR_OUT_OF_LOWER_BOUND	if (OB_ERR_OUT_OF_LOWER_BOUND == ret) {
+src/logservice/palf/log_sliding_window.cpp	668	LogSlidingWindow::handle_committed_log_	ret == OB_ERR_OUT_OF_LOWER_BOUND	if (OB_ERR_OUT_OF_LOWER_BOUND == ret) {
+src/logservice/palf/log_sliding_window.cpp	887	LogSlidingWindow::handle_next_submit_log_	tmp_ret == OB_IN_STOP_STATE	if (OB_IN_STOP_STATE == tmp_ret) {
+src/logservice/palf/log_sliding_window.cpp	964	LogSlidingWindow::try_freeze_last_log_task_	ret == OB_ERR_OUT_OF_LOWER_BOUND	if (OB_ERR_OUT_OF_LOWER_BOUND == ret) {
+src/logservice/palf/log_sliding_window.cpp	1030	LogSlidingWindow::try_feedback_freeze_log_task_	ret == OB_ERR_OUT_OF_LOWER_BOUND	if (OB_ERR_OUT_OF_LOWER_BOUND == ret) {
+src/logservice/palf/log_sliding_window.cpp	1033	LogSlidingWindow::try_feedback_freeze_log_task_	ret == OB_ERR_OUT_OF_UPPER_BOUND	} else if (OB_ERR_OUT_OF_UPPER_BOUND == ret) {
+src/logservice/palf/log_sliding_window.cpp	1443	LogSlidingWindow::sliding_cb	tmp_ret == OB_EAGAIN	if (OB_EAGAIN == tmp_ret) {
+src/logservice/palf/log_sliding_window.cpp	1891	LogSlidingWindow::read_data_from_buffer	ret != OB_ERR_OUT_OF_LOWER_BOUND	if (OB_ERR_OUT_OF_LOWER_BOUND != ret) {
+src/logservice/palf/log_state_mgr.cpp	86	LogStateMgr::switch_state	ret == OB_EAGAIN	if (OB_EAGAIN == ret) {
+src/logservice/palf/log_storage.cpp	355	LogStorage::truncate_prefix_blocks	ret != OB_ENTRY_NOT_EXIST	&& OB_ENTRY_NOT_EXIST != ret) {
+src/logservice/palf/log_storage.cpp	357	LogStorage::truncate_prefix_blocks	ret == OB_ENTRY_NOT_EXIST	} else if (OB_ENTRY_NOT_EXIST == ret) {
+src/logservice/palf/log_storage.cpp	367	LogStorage::truncate_prefix_blocks	ret != OB_NO_SUCH_FILE_OR_DIRECTORY	if (OB_FAIL(delete_block(i)) && OB_NO_SUCH_FILE_OR_DIRECTORY != ret) {
+src/logservice/palf/log_storage.cpp	370	LogStorage::truncate_prefix_blocks	ret == OB_NO_SUCH_FILE_OR_DIRECTORY	} else if (OB_NO_SUCH_FILE_OR_DIRECTORY == ret) {
+src/logservice/palf/log_storage.cpp	432	LogStorage::get_begin_lsn	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/logservice/palf/log_storage.cpp	559	LogStorage::do_init_	ret != OB_INIT_TWICE	if (OB_FAIL(ret) && OB_INIT_TWICE != ret) {
+src/logservice/palf/log_storage.cpp	571	LogStorage::check_read_out_of_bound_	ret != OB_ENTRY_NOT_EXIST	if (OB_FAIL(get_block_id_range(min_block_id, max_block_id)) && OB_ENTRY_NOT_EXIST != ret) {
+src/logservice/palf/log_storage.cpp	715	LogStorage::read_block_header_	ret == OB_NO_SUCH_FILE_OR_DIRECTORY	int tmp_ret = check_read_out_of_bound_(block_id, OB_NO_SUCH_FILE_OR_DIRECTORY == ret);
+src/logservice/palf/log_storage.cpp	716	LogStorage::read_block_header_	ret == OB_NO_SUCH_FILE_OR_DIRECTORY	if (OB_NO_SUCH_FILE_OR_DIRECTORY == ret
+src/logservice/palf/log_storage.cpp	717	LogStorage::read_block_header_	ret == OB_INVALID_DATA	|| OB_INVALID_DATA == ret
+src/logservice/palf/log_storage.cpp	774	LogStorage::inner_pread_	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/logservice/palf/log_storage.cpp	797	LogStorage::inner_pread_	ret == OB_NO_SUCH_FILE_OR_DIRECTORY	int tmp_ret = check_read_out_of_bound_(read_block_id, OB_NO_SUCH_FILE_OR_DIRECTORY == ret);
+src/logservice/palf/log_storage.cpp	798	LogStorage::inner_pread_	ret == OB_NO_SUCH_FILE_OR_DIRECTORY	if (OB_NO_SUCH_FILE_OR_DIRECTORY == ret
+src/logservice/palf/log_storage.h	247	LogStorage::load	ret != OB_ENTRY_NOT_EXIST	&& OB_ENTRY_NOT_EXIST != ret) {
+src/logservice/palf/log_storage.h	251	LogStorage::load	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/logservice/palf/log_storage.h	300	LogStorage::locate_log_tail_and_last_valid_entry_header_	ret == OB_ITER_END	if (OB_ITER_END == ret
+src/logservice/palf/log_storage.h	301	LogStorage::locate_log_tail_and_last_valid_entry_header_	ret == OB_CHECKSUM_ERROR; ret == OB_INVALID_DATA	|| ((OB_CHECKSUM_ERROR == ret || OB_INVALID_DATA == ret) && true == iterator.check_is_the_last_entry())) {
+src/logservice/palf/palf_env_impl.cpp	228	PalfEnvImpl::init	ret != OB_INIT_TWICE	if (OB_FAIL(ret) && OB_INIT_TWICE != ret) {
+src/logservice/palf/palf_env_impl.cpp	802	PalfEnvImpl::recycle_blocks_	ret == OB_ENTRY_NOT_EXIST; ret == OB_NO_SUCH_FILE_OR_DIRECTORY	return OB_ENTRY_NOT_EXIST == ret || OB_NO_SUCH_FILE_OR_DIRECTORY == ret
+src/logservice/palf/palf_env_impl.cpp	803	PalfEnvImpl::recycle_blocks_	ret == OB_ERR_OUT_OF_UPPER_BOUND	|| OB_ERR_OUT_OF_UPPER_BOUND == ret;

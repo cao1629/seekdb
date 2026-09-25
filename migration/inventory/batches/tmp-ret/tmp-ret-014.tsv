@@ -1,0 +1,117 @@
+file	line	symbol	construct	text
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	262	ObDASHNSWScanIter::reuse_func_lookup_iter	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	266	ObDASHNSWScanIter::reuse_func_lookup_iter	assign tmp_ret	tmp_ret = tmp_ret == OB_SUCCESS ? ret : tmp_ret;
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	275	ObDASHNSWScanIter::reuse_func_lookup_iter	merge into ret	ret = tmp_ret;
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	283	ObDASHNSWScanIter::inner_reuse	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	286	ObDASHNSWScanIter::inner_reuse	assign tmp_ret	tmp_ret = ret;
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	290	ObDASHNSWScanIter::inner_reuse	assign tmp_ret	tmp_ret = tmp_ret == OB_SUCCESS ? ret : tmp_ret;
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	294	ObDASHNSWScanIter::inner_reuse	assign tmp_ret	tmp_ret = tmp_ret == OB_SUCCESS ? ret : tmp_ret;
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	298	ObDASHNSWScanIter::inner_reuse	assign tmp_ret	tmp_ret = tmp_ret == OB_SUCCESS ? ret : tmp_ret;
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	302	ObDASHNSWScanIter::inner_reuse	assign tmp_ret	tmp_ret = tmp_ret == OB_SUCCESS ? ret : tmp_ret;
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	307	ObDASHNSWScanIter::inner_reuse	assign tmp_ret	tmp_ret = tmp_ret == OB_SUCCESS ? ret : tmp_ret;
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	312	ObDASHNSWScanIter::inner_reuse	assign tmp_ret	tmp_ret = tmp_ret == OB_SUCCESS ? ret : tmp_ret;
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	318	ObDASHNSWScanIter::inner_reuse	merge into ret	ret = tmp_ret;
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	348	ObDASHNSWScanIter::inner_release	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	351	ObDASHNSWScanIter::inner_release	assign tmp_ret	tmp_ret = ret;
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	355	ObDASHNSWScanIter::inner_release	assign tmp_ret	tmp_ret = tmp_ret == OB_SUCCESS ? ret : tmp_ret;
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	359	ObDASHNSWScanIter::inner_release	assign tmp_ret	tmp_ret = tmp_ret == OB_SUCCESS ? ret : tmp_ret;
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	363	ObDASHNSWScanIter::inner_release	assign tmp_ret	tmp_ret = tmp_ret == OB_SUCCESS ? ret : tmp_ret;
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	367	ObDASHNSWScanIter::inner_release	assign tmp_ret	tmp_ret = tmp_ret == OB_SUCCESS ? ret : tmp_ret;
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	371	ObDASHNSWScanIter::inner_release	assign tmp_ret	tmp_ret = tmp_ret == OB_SUCCESS ? ret : tmp_ret;
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	375	ObDASHNSWScanIter::inner_release	assign tmp_ret	tmp_ret = tmp_ret == OB_SUCCESS ? ret : tmp_ret;
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	379	ObDASHNSWScanIter::inner_release	assign tmp_ret	tmp_ret = tmp_ret == OB_SUCCESS ? ret : tmp_ret;
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	383	ObDASHNSWScanIter::inner_release	assign tmp_ret	tmp_ret = tmp_ret == OB_SUCCESS ? ret : tmp_ret;
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	386	ObDASHNSWScanIter::inner_release	assign tmp_ret	tmp_ret = tmp_ret == OB_SUCCESS ? ret : tmp_ret;
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	391	ObDASHNSWScanIter::inner_release	merge into ret	ret = tmp_ret;
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	1944	ObDASHNSWScanIter::get_vid_from_idx_filter	declare tmp_ret	int tmp_ret = ret;
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	1948	ObDASHNSWScanIter::get_vid_from_idx_filter	merge into ret	ret = tmp_ret;
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	3201	ObDASHNSWScanIter::get_rowkey_from_vid_rowkey_table	declare tmp_ret	int tmp_ret = ret;
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	3204	ObDASHNSWScanIter::get_rowkey_from_vid_rowkey_table	merge into ret	ret = tmp_ret;
+src/sql/das/iter/ob_das_iter.cpp	78	ObDASIter::release	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/das/iter/ob_das_iter.cpp	81	ObDASIter::release	assign tmp_ret	tmp_ret = OB_ERR_UNEXPECTED;
+src/sql/das/iter/ob_das_iter.cpp	82	ObDASIter::release	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(children_[i]->release())) {
+src/sql/das/iter/ob_das_ivf_scan_iter.cpp	273	ObDASIvfBaseScanIter::inner_release	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/das/iter/ob_das_ivf_scan_iter.cpp	276	ObDASIvfBaseScanIter::inner_release	assign tmp_ret	tmp_ret = ret;
+src/sql/das/iter/ob_das_ivf_scan_iter.cpp	280	ObDASIvfBaseScanIter::inner_release	assign tmp_ret	tmp_ret = tmp_ret == OB_SUCCESS ? ret : tmp_ret;
+src/sql/das/iter/ob_das_ivf_scan_iter.cpp	284	ObDASIvfBaseScanIter::inner_release	assign tmp_ret	tmp_ret = tmp_ret == OB_SUCCESS ? ret : tmp_ret;
+src/sql/das/iter/ob_das_ivf_scan_iter.cpp	288	ObDASIvfBaseScanIter::inner_release	assign tmp_ret	tmp_ret = tmp_ret == OB_SUCCESS ? ret : tmp_ret;
+src/sql/das/iter/ob_das_ivf_scan_iter.cpp	296	ObDASIvfBaseScanIter::inner_release	merge into ret	ret = tmp_ret;
+src/sql/das/iter/ob_das_ivf_scan_iter.cpp	692	ObDASIvfBaseScanIter::try_write_centroid_cache	declare tmp_ret	int tmp_ret = (ret == OB_ITER_END) ? OB_SUCCESS : ret;
+src/sql/das/iter/ob_das_ivf_scan_iter.cpp	695	ObDASIvfBaseScanIter::try_write_centroid_cache	merge into ret	ret = tmp_ret;
+src/sql/das/iter/ob_das_ivf_scan_iter.cpp	742	ObDASIvfBaseScanIter::get_centers_cache	declare tmp_ret	int tmp_ret = is_pq_centers ?
+src/sql/das/iter/ob_das_ivf_scan_iter.cpp	745	ObDASIvfBaseScanIter::get_centers_cache	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(tmp_ret)) {
+src/sql/das/iter/ob_das_ivf_scan_iter.cpp	1351	ObDASIvfScanIter::filter_rowkey_by_cid	declare tmp_ret	int tmp_ret = ret;
+src/sql/das/iter/ob_das_ivf_scan_iter.cpp	1355	ObDASIvfScanIter::filter_rowkey_by_cid	merge into ret	ret = tmp_ret;
+src/sql/das/iter/ob_das_ivf_scan_iter.cpp	1731	ObDASIvfPQScanIter::calc_distance_between_pq_ids_by_table	declare tmp_ret	int tmp_ret = (ret == OB_ITER_END) ? OB_SUCCESS : ret;
+src/sql/das/iter/ob_das_ivf_scan_iter.cpp	1734	ObDASIvfPQScanIter::calc_distance_between_pq_ids_by_table	merge into ret	ret = tmp_ret;
+src/sql/das/iter/ob_das_ivf_scan_iter.cpp	2220	ObDASIvfBaseScanIter::get_rowkey_brute_post	declare tmp_ret	int tmp_ret = (ret == OB_ITER_END) ? OB_SUCCESS : ret;
+src/sql/das/iter/ob_das_ivf_scan_iter.cpp	2223	ObDASIvfBaseScanIter::get_rowkey_brute_post	merge into ret	ret = tmp_ret;
+src/sql/das/iter/ob_das_ivf_scan_iter.cpp	2415	ObDASIvfPQScanIter::filter_rowkey_by_cid	declare tmp_ret	int tmp_ret = ret;
+src/sql/das/iter/ob_das_ivf_scan_iter.cpp	2419	ObDASIvfPQScanIter::filter_rowkey_by_cid	merge into ret	ret = tmp_ret;
+src/sql/das/iter/ob_das_ivf_scan_iter.cpp	2614	ObDASIvfPQScanIter::try_write_pq_centroid_cache	declare tmp_ret	int tmp_ret = (ret == OB_ITER_END) ? OB_SUCCESS : ret;
+src/sql/das/iter/ob_das_ivf_scan_iter.cpp	2617	ObDASIvfPQScanIter::try_write_pq_centroid_cache	merge into ret	ret = tmp_ret;
+src/sql/das/iter/ob_das_ivf_scan_iter.cpp	2662	ObDASIvfPQScanIter::get_pq_precomputetable_cache	declare tmp_ret	int tmp_ret = try_write_pq_precompute_table_cache(*cent_cache, is_vectorized);
+src/sql/das/iter/ob_das_ivf_scan_iter.cpp	2663	ObDASIvfPQScanIter::get_pq_precomputetable_cache	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(tmp_ret)) {
+src/sql/das/iter/ob_das_ivf_scan_iter.h	54	#define IVF_GET_NEXT_ROWS_END	declare tmp_ret	int tmp_ret = (ret == OB_ITER_END) ? OB_SUCCESS : ret;                             \
+src/sql/das/iter/ob_das_ivf_scan_iter.h	58	#define IVF_GET_NEXT_ROWS_END	merge into ret	ret = tmp_ret;                                                                   \
+src/sql/das/iter/ob_das_spiv_merge_iter.cpp	959	ObDASSPIVMergeIter::inner_release	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/das/iter/ob_das_spiv_merge_iter.cpp	967	ObDASSPIVMergeIter::inner_release	assign tmp_ret	tmp_ret = ret;
+src/sql/das/iter/ob_das_spiv_merge_iter.cpp	971	ObDASSPIVMergeIter::inner_release	assign tmp_ret	tmp_ret = tmp_ret == OB_SUCCESS ? ret : tmp_ret;
+src/sql/das/iter/ob_das_spiv_merge_iter.cpp	975	ObDASSPIVMergeIter::inner_release	assign tmp_ret	tmp_ret = tmp_ret == OB_SUCCESS ? ret : tmp_ret;
+src/sql/das/iter/ob_das_spiv_merge_iter.cpp	980	ObDASSPIVMergeIter::inner_release	assign tmp_ret	tmp_ret = tmp_ret == OB_SUCCESS ? ret : tmp_ret;
+src/sql/das/iter/ob_das_spiv_merge_iter.cpp	987	ObDASSPIVMergeIter::inner_release	merge into ret	ret = tmp_ret;
+src/sql/das/iter/ob_das_spiv_merge_iter.cpp	1381	ObDASSPIVMergeIter::do_brute_force	declare tmp_ret	int tmp_ret = ret;
+src/sql/das/iter/ob_das_spiv_merge_iter.cpp	1385	ObDASSPIVMergeIter::do_brute_force	merge into ret	ret = tmp_ret;
+src/sql/das/iter/ob_das_text_retrieval_merge_iter.cpp	78	ObIRIterLoserTreeCmp::cmp	declare tmp_ret	int tmp_ret = 0;
+src/sql/das/iter/sparse_retrieval/ob_das_match_iter.cpp	708	ObDASMatchMergeCmp::cmp	declare tmp_ret	int tmp_ret = 0;
+src/sql/das/ob_das_parallel_handler.cpp	162	ObDASParallelHandler::run	declare last_ret (continue-and-record variable)	int last_ret = OB_SUCCESS;
+src/sql/das/ob_das_parallel_handler.cpp	164	ObDASParallelHandler::run	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/das/ob_das_parallel_handler.cpp	165	ObDASParallelHandler::run	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = record_status_and_op_result(src_task_list.at(i), new_task_list.at(i)))) {
+src/sql/das/ob_das_parallel_handler.cpp	167	ObDASParallelHandler::run	assign last_ret (continue-and-record variable)	last_ret = OB_SUCCESS == last_ret ? tmp_ret : last_ret;
+src/sql/das/ob_das_parallel_handler.cpp	168	ObDASParallelHandler::run	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = new_task_list.at(i)->end_das_task())) {
+src/sql/das/ob_das_parallel_handler.cpp	170	ObDASParallelHandler::run	assign last_ret (continue-and-record variable)	last_ret = OB_SUCCESS == last_ret ? tmp_ret : last_ret;
+src/sql/das/ob_das_parallel_handler.cpp	172	ObDASParallelHandler::run	merge last_ret into ret (continue-and-record through another variable)	ret = OB_SUCCESS == ret ? last_ret : ret;
+src/sql/das/ob_das_ref.cpp	356	ObDASRef::execute_all_task	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/das/ob_das_ref.cpp	357	ObDASRef::execute_all_task	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(wait_all_executing_tasks())) {
+src/sql/das/ob_das_ref.cpp	359	ObDASRef::execute_all_task	merge into ret	ret = COVER_SUCC(tmp_ret);
+src/sql/das/ob_das_ref.cpp	375	ObDASRef::execute_all_task	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/das/ob_das_ref.cpp	376	ObDASRef::execute_all_task	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(aggregated_task->get_failed_tasks(failed_tasks))) {
+src/sql/das/ob_das_ref.cpp	397	ObDASRef::check_rcode_can_retry	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/das/ob_das_ref.cpp	398	ObDASRef::check_rcode_can_retry	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(ObQueryRetryCtrl::get_das_retry_func(ret, retry_func))) {
+src/sql/das/ob_das_ref.cpp	452	ObDASRef::close_all_task	declare last_end_ret (continue-and-record variable)	int last_end_ret = OB_SUCCESS;
+src/sql/das/ob_das_ref.cpp	455	ObDASRef::close_all_task	declare wait_ret (continue-and-record variable)	int wait_ret = OB_SUCCESS;
+src/sql/das/ob_das_ref.cpp	458	ObDASRef::close_all_task	assign wait_ret (continue-and-record variable)	if (OB_SUCCESS != (wait_ret = wait_all_executing_tasks())) {
+src/sql/das/ob_das_ref.cpp	461	ObDASRef::close_all_task	merge wait_ret into ret (continue-and-record through another variable)	ret = COVER_SUCC(wait_ret);
+src/sql/das/ob_das_ref.cpp	468	ObDASRef::close_all_task	assign last_end_ret (continue-and-record variable)	last_end_ret = (last_end_ret == OB_SUCCESS ? end_ret : last_end_ret);
+src/sql/das/ob_das_ref.cpp	474	ObDASRef::close_all_task	merge last_end_ret into ret (continue-and-record through another variable)	ret = COVER_SUCC(last_end_ret);
+src/sql/das/ob_das_ref.cpp	477	ObDASRef::close_all_task	merge OB_NOT_INIT into ret (continue-and-record through another variable)	ret = COVER_SUCC(OB_NOT_INIT);
+src/sql/das/ob_das_task.cpp	77	ObIDASTaskOp::end_das_task	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/das/ob_das_task.cpp	80	ObIDASTaskOp::end_das_task	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = release_op())) {
+src/sql/das/ob_das_task.cpp	82	ObIDASTaskOp::end_das_task	merge into ret	ret = COVER_SUCC(tmp_ret);
+src/sql/das/ob_data_access_service.cpp	111	ObDataAccessService::retry_das_task	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/das/ob_data_access_service.cpp	112	ObDataAccessService::retry_das_task	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(ObQueryRetryCtrl::get_das_retry_func(task_op.errcode_, retry_func))) {
+src/sql/das/ob_data_access_service.cpp	135	ObDataAccessService::retry_das_task	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(clear_task_exec_env(das_ref, task_op))) {
+src/sql/das/ob_data_access_service.cpp	180	ObDataAccessService::retry_das_task	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/das/ob_data_access_service.cpp	181	ObDataAccessService::retry_das_task	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(task_op.state_advance())) {
+src/sql/das/ob_data_access_service.cpp	223	ObDataAccessService::do_local_das_task	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/das/ob_data_access_service.cpp	224	ObDataAccessService::do_local_das_task	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(task_list.at(i)->state_advance())) {
+src/sql/dtl/ob_dtl.cpp	451	ObDtl::init_channel	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/dtl/ob_dtl.cpp	453	ObDtl::init_channel	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = dfc_server_.unregister_dfc_channel(*dfc, chan))) {
+src/sql/dtl/ob_dtl.cpp	454	ObDtl::init_channel	merge into ret	ret = tmp_ret;
+src/sql/dtl/ob_dtl_basic_channel.cpp	132	SendMsgResponse::wait	merge ret_ into ret (continue-and-record through another variable)	return OB_SUCCESS == ret ? ret_ : ret;
+src/sql/dtl/ob_dtl_basic_channel.cpp	271	ObDtlBasicChannel::destroy	declare tmp_ret	int tmp_ret = OB_ERR_UNEXPECTED;
+src/sql/dtl/ob_dtl_basic_channel.cpp	302	ObDtlBasicChannel::send	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/dtl/ob_dtl_basic_channel.cpp	303	ObDtlBasicChannel::send	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = flush(false))) {
+src/sql/dtl/ob_dtl_basic_channel.cpp	305	ObDtlBasicChannel::send	merge into ret	ret = tmp_ret;
+src/sql/dtl/ob_dtl_basic_channel.cpp	555	ObDtlBasicChannel::process1	declare tmp_ret	int tmp_ret = ret;
+src/sql/dtl/ob_dtl_basic_channel.cpp	556	ObDtlBasicChannel::process1	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = unblock_on_decrease_size(buffer->size()))) {
+src/sql/dtl/ob_dtl_basic_channel.cpp	557	ObDtlBasicChannel::process1	merge into ret	ret = tmp_ret;
+src/sql/dtl/ob_dtl_basic_channel.cpp	745	ObDtlBasicChannel::wait_unblocking	declare tmp_ret	int tmp_ret = THIS_WORKER.check_status();
+src/sql/dtl/ob_dtl_basic_channel.cpp	747	ObDtlBasicChannel::wait_unblocking	merge into ret	ret = tmp_ret;
+src/sql/dtl/ob_dtl_channel_agent.cpp	244	ObDtlChanAgent::destroy	declare temp_ret	int temp_ret = local_channels_.at(i)->wait_response();
+src/sql/dtl/ob_dtl_channel_agent.cpp	246	ObDtlChanAgent::destroy	merge into ret	ret = temp_ret;
+src/sql/dtl/ob_dtl_channel_loop.cpp	111	ObDtlChannelLoop::unregister_all_channel	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/dtl/ob_dtl_channel_loop.cpp	113	ObDtlChannelLoop::unregister_all_channel	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = chans_.remove(i))) {
+src/sql/dtl/ob_dtl_channel_loop.cpp	115	ObDtlChannelLoop::unregister_all_channel	merge into ret	ret = tmp_ret; // record fisrt failure reason, but continue to remove
+src/sql/dtl/ob_dtl_channel_loop.cpp	370	ObDtlChannelLoop::process_channel	declare tmp_ret	int tmp_ret = THIS_WORKER.check_status();
+src/sql/dtl/ob_dtl_channel_loop.cpp	372	ObDtlChannelLoop::process_channel	merge into ret	ret = tmp_ret;

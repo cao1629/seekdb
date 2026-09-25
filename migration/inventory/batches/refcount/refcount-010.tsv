@@ -1,0 +1,49 @@
+file	line	symbol	construct	text
+src/sql/dtl/ob_dtl_interm_result_manager.cpp	66	ObAtomicGetIntermMemProfileCall::operator()	reference-count change: ATOMIC_INC on ref_count_	ATOMIC_INC(&(mem_profile_info_->ref_count_));
+src/sql/dtl/ob_dtl_interm_result_manager.cpp	263	ObDTLIntermResultManager::insert_interm_result_info	inc_interm_result_ref_count call (other name)	inc_interm_result_ref_count(result_info);
+src/sql/dtl/ob_dtl_interm_result_manager.cpp	265	ObDTLIntermResultManager::insert_interm_result_info	dec_interm_result_ref_count call (other name)	dec_interm_result_ref_count(result_info);
+src/sql/dtl/ob_dtl_interm_result_manager.cpp	304	ObDTLIntermResultManager::free_interm_result_info	dec_mem_profile_ref_count call (other name)	if (OB_FAIL(dec_mem_profile_ref_count(mem_profile_key, mem_profile_info))) {
+src/sql/dtl/ob_dtl_interm_result_manager.cpp	318	ObDTLIntermResultManager::erase_interm_result_info	dec_interm_result_ref_count call (other name)	if (OB_FAIL(dec_interm_result_ref_count(result_info))) {
+src/sql/dtl/ob_dtl_interm_result_manager.cpp	538	ObDTLIntermResultManager::inc_interm_result_ref_count	inc_interm_result_ref_count definition (other name)	void ObDTLIntermResultManager::inc_interm_result_ref_count(ObDTLIntermResultInfo *result_info)
+src/sql/dtl/ob_dtl_interm_result_manager.cpp	541	ObDTLIntermResultManager::inc_interm_result_ref_count	inc_ref_count call	result_info->inc_ref_count();
+src/sql/dtl/ob_dtl_interm_result_manager.cpp	545	ObDTLIntermResultManager::dec_interm_result_ref_count	dec_interm_result_ref_count definition (other name)	int ObDTLIntermResultManager::dec_interm_result_ref_count(ObDTLIntermResultInfo *&result_info)
+src/sql/dtl/ob_dtl_interm_result_manager.cpp	549	ObDTLIntermResultManager::dec_interm_result_ref_count	dec_ref_count call	int64_t ref_count = result_info->dec_ref_count();
+src/sql/dtl/ob_dtl_interm_result_manager.cpp	584	ObDTLIntermResultInfoGuard::set_result_info	inc_interm_result_ref_count call (other name)	ObDTLIntermResultManager::inc_interm_result_ref_count(&result_info);
+src/sql/dtl/ob_dtl_interm_result_manager.cpp	593	ObDTLIntermResultInfoGuard::reset	dec_interm_result_ref_count call (other name)	interm_res_manager_->dec_interm_result_ref_count(result_info_);
+src/sql/dtl/ob_dtl_interm_result_manager.cpp	768	ObDTLIntermResultManager::init_mem_profile	inc_mem_profile_ref_count call (other name)	inc_mem_profile_ref_count(info);
+src/sql/dtl/ob_dtl_interm_result_manager.cpp	808	ObDTLIntermResultManager::inc_mem_profile_ref_count	inc_mem_profile_ref_count definition (other name)	void ObDTLIntermResultManager::inc_mem_profile_ref_count(ObDTLMemProfileInfo *info)
+src/sql/dtl/ob_dtl_interm_result_manager.cpp	815	ObDTLIntermResultManager::dec_mem_profile_ref_count	dec_mem_profile_ref_count definition (other name)	int ObDTLIntermResultManager::dec_mem_profile_ref_count(const ObDTLMemProfileKey &key,
+src/sql/dtl/ob_dtl_interm_result_manager.h	185	ObDTLIntermResultInfo::inc_ref_count	inc_ref_count definition	void inc_ref_count() { ATOMIC_INC(&ref_count_); }
+src/sql/dtl/ob_dtl_interm_result_manager.h	186	ObDTLIntermResultInfo::dec_ref_count	dec_ref_count definition	int64_t dec_ref_count() { return ATOMIC_SAF(&ref_count_, 1); }
+src/sql/dtl/ob_dtl_interm_result_manager.h	226	ObDTLIntermResultInfoGuard	Guard struct definition whose methods call dec_interm_result_ref_count, inc_interm_result_ref_count	struct ObDTLIntermResultInfoGuard
+src/sql/dtl/ob_dtl_interm_result_manager.h	428	ObDTLIntermResultManager	inc_interm_result_ref_count declaration (other name)	static void inc_interm_result_ref_count(ObDTLIntermResultInfo *result_info);
+src/sql/dtl/ob_dtl_interm_result_manager.h	429	ObDTLIntermResultManager	dec_interm_result_ref_count declaration (other name)	int dec_interm_result_ref_count(ObDTLIntermResultInfo *&result_info);
+src/sql/dtl/ob_dtl_interm_result_manager.h	451	ObDTLIntermResultManager	inc_mem_profile_ref_count declaration (other name)	void inc_mem_profile_ref_count(ObDTLMemProfileInfo *info);
+src/sql/dtl/ob_dtl_interm_result_manager.h	452	ObDTLIntermResultManager	dec_mem_profile_ref_count declaration (other name)	int dec_mem_profile_ref_count(const ObDTLMemProfileKey &key,
+src/sql/engine/basic/ob_temp_table_insert_op.cpp	250	ObTempTableInsertOp::init_chunk_row_store	inc_interm_result_ref_count call (other name)	dtl::ObDTLIntermResultManager::inc_interm_result_ref_count(chunk_row_store);
+src/sql/engine/basic/ob_temp_table_insert_op.cpp	320	ObTempTableInsertOp::clear_all_datum_store	dec_interm_result_ref_count call (other name)	::oceanbase::share::server_service<::oceanbase::sql::dtl::ObDTLIntermResultManager>()->dec_interm_result_ref_count(datum_store);
+src/sql/engine/cmd/ob_load_data_impl.h	466	ObShuffleTaskHandle	Handle struct definition	struct ObShuffleTaskHandle {
+src/sql/engine/cmd/ob_load_data_utils.h	180	ObLoadDataStatGuard	Guard class definition whose methods reach ObLoadDataStat::release through other functions (ObLoadDataStatGuard::ObLoadDataStatGuard > ObLoadDataStatGuard::aquire > ObLoadDataStatGuard::release > ObLoadDataStat::release)	class ObLoadDataStatGuard
+src/sql/engine/dml/ob_table_modify_op.h	38	ForeignKeyHandle	Handle class definition	class ForeignKeyHandle
+src/sql/engine/dml/ob_trigger_handler.h	30	TriggerHandle	Handle class definition	class TriggerHandle
+src/sql/engine/expr/ob_expr_ai/ob_ai_func.h	119	ObAIFuncHandle	Handle class definition	class ObAIFuncHandle
+src/sql/engine/expr/ob_expr_join_filter.cpp	55	ObExprJoinFilter::ObExprJoinFilterContext::~ObExprJoinFilterContext	dec_ref_count call	rf_msg_->dec_ref_count();
+src/sql/engine/expr/ob_expr_topn_filter.cpp	34	ObExprTopNFilterContext::~ObExprTopNFilterContext	dec_ref_count call	topn_filter_msg_->dec_ref_count();
+src/sql/engine/expr/ob_expr_topn_filter.cpp	48	ObExprTopNFilterContext::reset_for_rescan	dec_ref_count call	topn_filter_msg_->dec_ref_count();
+src/sql/engine/ob_physical_plan.cpp	852	ObPhysicalPlan::inc_pre_expr_ref_count	inc_pre_expr_ref_count definition (other name)	void ObPhysicalPlan::inc_pre_expr_ref_count()
+src/sql/engine/ob_physical_plan.cpp	857	ObPhysicalPlan::inc_pre_expr_ref_count	inc_ref_cnt call	stat_.pre_cal_expr_handler_->inc_ref_cnt();
+src/sql/engine/ob_physical_plan.cpp	861	ObPhysicalPlan::dec_pre_expr_ref_count	dec_pre_expr_ref_count definition (other name)	void ObPhysicalPlan::dec_pre_expr_ref_count()
+src/sql/engine/ob_physical_plan.cpp	866	ObPhysicalPlan::dec_pre_expr_ref_count	dec_ref_cnt call	int64_t ref_cnt = handler->dec_ref_cnt();
+src/sql/engine/ob_physical_plan.cpp	879	ObPhysicalPlan::before_cache_evicted	dec_pre_expr_ref_count call (other name)	dec_pre_expr_ref_count();
+src/sql/engine/ob_physical_plan.h	290	ObPhysicalPlan	inc_pre_expr_ref_count declaration (other name)	virtual void inc_pre_expr_ref_count() override;
+src/sql/engine/ob_physical_plan.h	291	ObPhysicalPlan	dec_pre_expr_ref_count declaration (other name)	virtual void dec_pre_expr_ref_count() override;
+src/sql/engine/px/ob_granule_iterator_op.cpp	717	ObGranuleIteratorOp::inner_close	dec_ref_count call	rf_msg_->dec_ref_count();
+src/sql/engine/px/ob_granule_iterator_op.cpp	724	ObGranuleIteratorOp::inner_close	dec_ref_count call	rf_msg->dec_ref_count();
+src/sql/engine/px/ob_px_sqc_handler.h	81	ObPxSqcHandler::release	release definition (reference-count function found by its body: changes a reference-count field)	void release(bool &all_released) {
+src/sql/engine/px/ob_px_sqc_handler.h	85	ObPxSqcHandler::inc_ref_count	inc_ref_count definition	void inc_ref_count() { ATOMIC_AAF(&reference_count_, 1); }
+src/sql/engine/px/ob_px_sqc_handler.h	86	ObPxSqcHandler::dec_ref_count	dec_ref_count definition	void dec_ref_count() { ATOMIC_AAF(&reference_count_, -1); }
+src/sql/engine/px/ob_px_sub_coord.cpp	514	ObPxSubCoord::dispatch_tasks	inc_ref_count call	sqc_arg.sqc_handler_->inc_ref_count();
+src/sql/engine/px/ob_px_sub_coord.cpp	519	ObPxSubCoord::dispatch_tasks	dec_ref_count call	sqc_arg.sqc_handler_->dec_ref_count();
+src/sql/engine/px/ob_px_worker.cpp	100	SQCHandlerGuard	Guard class definition whose methods reach ObPxSqcHandler::release through other functions (SQCHandlerGuard::~SQCHandlerGuard > ObPxSqcHandler::release_handler > ObPxSqcHandler::release)	class SQCHandlerGuard
+src/sql/engine/px/p2p_datahub/ob_p2p_dh_mgr.cpp	222	ObP2PDatahubManager::P2PMsgGetCall::operator()	inc_ref_count call	dh_msg_->inc_ref_count();
+src/sql/engine/px/p2p_datahub/ob_p2p_dh_mgr.cpp	234	ObP2PDatahubManager::P2PMsgEraseIfCall::operator()	cas_ref_count call (reference-count function found by its body)	if (1 == entry.second->cas_ref_count(1, 0)) {

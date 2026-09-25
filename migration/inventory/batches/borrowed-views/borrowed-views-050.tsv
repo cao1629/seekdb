@@ -1,0 +1,56 @@
+file	line	symbol	construct	text
+src/storage/blocksstable/index_block/ob_index_block_builder.h	107	ObIndexTreeRootCtx::last_key_	member ObDatumRowkey (value) of type ObDatumRowkey	ObDatumRowkey last_key_;
+src/storage/blocksstable/index_block/ob_index_block_builder.h	195	ObIndexTreeRootBlockDesc::buf_	member raw bytes (pointer) of type char *	char *buf_;
+src/storage/blocksstable/index_block/ob_index_block_builder.h	338	ObBaseIndexBlockBuilder::last_rowkey_	member ObDatumRowkey (value) of type ObDatumRowkey	ObDatumRowkey last_rowkey_;
+src/storage/blocksstable/index_block/ob_index_block_builder.h	402	ObDataIndexBlockBuilder::meta_row_	member ObDatumRow (value) of type ObDatumRow	ObDatumRow meta_row_;
+src/storage/blocksstable/index_block/ob_index_block_builder.h	450	ObMetaIndexBlockBuilder::last_leaf_rowkey_	member ObDatumRowkey (value) of type ObDatumRowkey	ObDatumRowkey last_leaf_rowkey_;
+src/storage/blocksstable/index_block/ob_index_block_builder.h	529	ObIndexBlockRebuilder::meta_row_	member ObDatumRow (value) of type ObDatumRow	ObDatumRow meta_row_;
+src/storage/blocksstable/index_block/ob_index_block_builder.h	573	ObSSTableIndexBuilder::ObMacroMetaIter::meta_row_	member ObDatumRow (value) of type ObDatumRow	ObDatumRow meta_row_;
+src/storage/blocksstable/index_block/ob_index_block_dumper.h	176	ObBaseIndexBlockDumper::last_rowkey_	member ObDatumRowkey (value) of type ObDatumRowkey	ObDatumRowkey last_rowkey_;
+src/storage/blocksstable/index_block/ob_index_block_dumper.h	265	ObIndexBlockLoader::io_buf_	member raw bytes (pointer) of type char *	char *io_buf_[PREFETCH_DEPTH]; // for io
+src/storage/blocksstable/index_block/ob_index_block_macro_iterator.h	32	ObMacroBlockDesc::range_	member ObDatumRange (value) of type ObDatumRange	ObDatumRange range_;
+src/storage/blocksstable/index_block/ob_index_block_macro_iterator.h	86	ObMicroIndexRowItem::endkey_	member ObDatumRowkey (pointer) of type blocksstable::ObDatumRowkey *	blocksstable::ObDatumRowkey *endkey_;
+src/storage/blocksstable/index_block/ob_index_block_macro_iterator.h	89	ObMicroIndexRowItem::agg_row_buf_	member raw bytes (pointer) of type char *	char *agg_row_buf_; //max 1024
+src/storage/blocksstable/index_block/ob_index_block_macro_iterator.h	172	ObIndexBlockMacroIterator::iter_range_	member ObDatumRange (pointer) of type const ObDatumRange *	const ObDatumRange *iter_range_;
+src/storage/blocksstable/index_block/ob_index_block_macro_iterator.h	178	ObIndexBlockMacroIterator::curr_key_	member ObDatumRowkey (value) of type ObDatumRowkey	ObDatumRowkey curr_key_;
+src/storage/blocksstable/index_block/ob_index_block_macro_iterator.h	179	ObIndexBlockMacroIterator::prev_key_	member ObDatumRowkey (value) of type ObDatumRowkey	ObDatumRowkey prev_key_;
+src/storage/blocksstable/index_block/ob_index_block_macro_iterator.h	180	ObIndexBlockMacroIterator::curr_key_buf_	member raw bytes (pointer) of type char *	char *curr_key_buf_;
+src/storage/blocksstable/index_block/ob_index_block_macro_iterator.h	181	ObIndexBlockMacroIterator::prev_key_buf_	member raw bytes (pointer) of type char *	char *prev_key_buf_;
+src/storage/blocksstable/index_block/ob_index_block_macro_iterator.h	188	ObIndexBlockMacroIterator::micro_endkeys_	member container of ObDatumRowkey of type common::ObArray<ObDatumRowkey>	common::ObArray<ObDatumRowkey> micro_endkeys_;
+src/storage/blocksstable/index_block/ob_index_block_row_scanner.cpp	100	ObIndexBlockDataTransformer::transform	allocator in, arena view out: char *&allocated_buf	int ObIndexBlockDataTransformer::transform(
+src/storage/blocksstable/index_block/ob_index_block_row_scanner.h	73	ObIndexBlockDataHeader::index_datum_array_	member ObStorageDatum (pointer) of type ObStorageDatum *	ObStorageDatum *index_datum_array_;
+src/storage/blocksstable/index_block/ob_index_block_row_scanner.h	75	ObIndexBlockDataHeader::data_buf_	member raw bytes (pointer) of type const char *	const char *data_buf_;
+src/storage/blocksstable/index_block/ob_index_block_row_scanner.h	247	ObRAWIndexBlockRowIterator::datum_row_	member ObDatumRow (pointer) of type ObDatumRow *	ObDatumRow *datum_row_;
+src/storage/blocksstable/index_block/ob_index_block_row_scanner.h	249	ObRAWIndexBlockRowIterator::endkey_	member ObDatumRowkey (value) of type ObDatumRowkey	ObDatumRowkey endkey_;
+src/storage/blocksstable/index_block/ob_index_block_row_scanner.h	400	ObIndexBlockRowScanner::rowkey_	member ObDatumRowkey (pointer) of type const ObDatumRowkey *	const ObDatumRowkey *rowkey_;
+src/storage/blocksstable/index_block/ob_index_block_row_scanner.h	401	ObIndexBlockRowScanner::range_	member ObDatumRange (pointer) of type const ObDatumRange *	const ObDatumRange *range_;
+src/storage/blocksstable/index_block/ob_index_block_row_struct.h	80	ObIndexBlockRowDesc::serialized_agg_row_buf_	member raw bytes (pointer) of type const char *	const char *serialized_agg_row_buf_;
+src/storage/blocksstable/index_block/ob_index_block_row_struct.h	82	ObIndexBlockRowDesc::row_key_	member ObDatumRowkey (value) of type ObDatumRowkey	ObDatumRowkey row_key_;
+src/storage/blocksstable/index_block/ob_index_block_row_struct.h	700	ObMicroIndexInfo::rowkey_	member ObDatumRowkey (pointer) of type const ObDatumRowkey *	const ObDatumRowkey *rowkey_;
+src/storage/blocksstable/index_block/ob_index_block_row_struct.h	701	ObMicroIndexInfo::range_	member ObDatumRange (pointer) of type const ObDatumRange *	const ObDatumRange *range_;
+src/storage/blocksstable/index_block/ob_index_block_row_struct.h	706	ObMicroIndexInfo::agg_row_buf_	member raw bytes (pointer) of type const char *	const char *agg_row_buf_;
+src/storage/blocksstable/index_block/ob_index_block_row_struct.h	821	ObMicroIndexData::agg_row_buf_	member raw bytes (pointer) of type const char *	const char *agg_row_buf_;
+src/storage/blocksstable/index_block/ob_index_block_row_struct.h	852	ObIndexBlockRowBuilder::row_	member ObDatumRow (value) of type ObDatumRow	ObDatumRow row_;
+src/storage/blocksstable/index_block/ob_index_block_row_struct.h	854	ObIndexBlockRowBuilder::data_buf_	member raw bytes (pointer) of type char *	char *data_buf_;
+src/storage/blocksstable/index_block/ob_index_block_row_struct.h	888	ObIndexBlockRowParser::pre_agg_row_buf_	member raw bytes (pointer) of type const char *	const char *pre_agg_row_buf_;
+src/storage/blocksstable/index_block/ob_index_block_tree_cursor.h	264	ObIndexBlockTreeCursor::row_	member ObDatumRow (value) of type ObDatumRow	ObDatumRow row_;
+src/storage/blocksstable/index_block/ob_index_block_tree_cursor.h	265	ObIndexBlockTreeCursor::vector_endkey_	member ObDatumRowkey (value) of type ObDatumRowkey	ObDatumRowkey vector_endkey_;
+src/storage/blocksstable/index_block/ob_macro_meta_temp_store.h	76	ObMacroMetaTempStore::StoreItem::index_block_buf_	member raw bytes (pointer) of type const char *	const char *index_block_buf_;
+src/storage/blocksstable/index_block/ob_macro_meta_temp_store.h	78	ObMacroMetaTempStore::StoreItem::macro_meta_block_buf_	member raw bytes (pointer) of type const char *	const char *macro_meta_block_buf_;
+src/storage/blocksstable/index_block/ob_macro_meta_temp_store.h	100	ObMacroMetaTempStore::datum_row_	member ObDatumRow (value) of type ObDatumRow	ObDatumRow datum_row_;
+src/storage/blocksstable/index_block/ob_macro_meta_temp_store.h	132	ObMacroMetaTempStoreIter::meta_store_fragment_	member raw bytes (pointer) of type char *	char *meta_store_fragment_;
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.cpp	41	ObSkipIndexFilterExecutor::read_aggregate_data	allocator in, arena view out: ObStorageDatum &null_count	int ObSkipIndexFilterExecutor::read_aggregate_data(const uint32_t col_idx,
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.cpp	260	ObSkipIndexFilterExecutor::pad_column	allocator in, arena view out: blocksstable::ObStorageDatum &datum	inline int ObSkipIndexFilterExecutor::pad_column(const ObObjMeta &obj_meta,
+src/storage/blocksstable/index_block/ob_sstable_index_scanner.h	76	ObSSTableIndexRow::endkey_	member ObDatumRowkey (pointer) of type const ObDatumRowkey *	const ObDatumRowkey *endkey_;
+src/storage/blocksstable/index_block/ob_sstable_index_scanner.h	77	ObSSTableIndexRow::skip_index_row_	member ObDatumRow (value) of type ObDatumRow	ObDatumRow skip_index_row_;
+src/storage/blocksstable/index_block/ob_sstable_index_scanner.h	130	ObSSTableIndexBlockLevelScanner::query_range_	member ObDatumRange (value) of type ObDatumRange	ObDatumRange query_range_;
+src/storage/blocksstable/index_block/ob_sstable_index_scanner.h	181	ObSSTableIndexScanner::scan_range_	member ObDatumRange (pointer) of type const ObDatumRange *	const ObDatumRange *scan_range_;
+src/storage/blocksstable/index_block/ob_sstable_index_scanner.h	185	ObSSTableIndexScanner::endkey_	member ObDatumRowkey (value) of type ObDatumRowkey	ObDatumRowkey endkey_;
+src/storage/blocksstable/index_block/ob_sstable_index_scanner.h	186	ObSSTableIndexScanner::rowkey_buf_	member ObDatumRow (value) of type ObDatumRow	ObDatumRow rowkey_buf_;
+src/storage/blocksstable/index_block/ob_sstable_meta_info.h	102	ObRootBlockInfo::orig_block_buf_	member raw bytes (pointer) of type const char *	const char *orig_block_buf_; // record the block buf before transform when addr_ is mem addr
+src/storage/blocksstable/index_block/ob_sstable_sec_meta_iterator.h	95	ObSSTableSecMetaIterator::query_range_	member ObDatumRange (pointer) of type const ObDatumRange *	const ObDatumRange *query_range_;
+src/storage/blocksstable/index_block/ob_sstable_sec_meta_iterator.h	99	ObSSTableSecMetaIterator::row_	member ObDatumRow (value) of type ObDatumRow	ObDatumRow row_;
+src/storage/blocksstable/ob_block_manager.cpp	1541	ObIOBenchRunner::write_buf_	member raw bytes (pointer) of type char *	char *write_buf_;
+src/storage/blocksstable/ob_block_manager.cpp	1542	ObIOBenchRunner::read_buf_	member raw bytes (pointer) of type char *	char *read_buf_;
+src/storage/blocksstable/ob_block_manager.h	120	ObMacroBlockWriteInfo::buffer_	member raw bytes (pointer) of type const char *	const char *buffer_;
+src/storage/blocksstable/ob_block_manager.h	152	ObMacroBlockReadInfo::buf_	member raw bytes (pointer) of type char *	char *buf_;

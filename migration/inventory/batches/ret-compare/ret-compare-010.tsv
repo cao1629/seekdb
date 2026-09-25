@@ -1,0 +1,101 @@
+file	line	symbol	construct	text
+src/observer/virtual_table/ob_all_virtual_engine_table.cpp	115	ObAllVirtualEngineTable::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/virtual_table/ob_all_virtual_id_service.cpp	86	ObAllVirtualIDService::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/virtual_table/ob_all_virtual_io_status.cpp	304	ObAllVirtualIOQuota::init	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/observer/virtual_table/ob_all_virtual_io_status.cpp	528	ObAllVirtualGroupIOStat::init	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/observer/virtual_table/ob_all_virtual_load_data_stat.cpp	63	ObAllVirtualLoadDataStat::inner_get_next_row	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/observer/virtual_table/ob_all_virtual_mds_event_history.cpp	86	ObAllVirtualMdsEventHistory::point_read_	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/observer/virtual_table/ob_all_virtual_mds_event_history.cpp	127	ObAllVirtualMdsEventHistory::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/virtual_table/ob_all_virtual_mds_node_stat.cpp	42	ApplyOnTabletOp::operator()	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/observer/virtual_table/ob_all_virtual_mds_node_stat.cpp	108	ObAllVirtualMdsNodeStat::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/virtual_table/ob_all_virtual_memory_info.cpp	133	ObAllVirtualMemoryInfo::inner_get_next_row	ret == OB_SIZE_OVERFLOW	if (OB_SIZE_OVERFLOW == ret) {
+src/observer/virtual_table/ob_all_virtual_memory_info.cpp	163	ObAllVirtualMemoryInfo::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/virtual_table/ob_all_virtual_memstore_info.cpp	68	ObAllVirtualMemstoreInfo::get_next_tablet	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/virtual_table/ob_all_virtual_memstore_info.cpp	91	ObAllVirtualMemstoreInfo::get_next_memtable	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/virtual_table/ob_all_virtual_memstore_info.cpp	144	ObAllVirtualMemstoreInfo::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/virtual_table/ob_all_virtual_minor_freeze_info.cpp	62	ObAllVirtualMinorFreezeInfo::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/virtual_table/ob_all_virtual_obj_lock.cpp	77	ObAllVirtualObjLock::get_next_tx_ctx	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/virtual_table/ob_all_virtual_obj_lock.cpp	100	ObAllVirtualObjLock::get_next_lock_id	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/virtual_table/ob_all_virtual_obj_lock.cpp	122	ObAllVirtualObjLock::get_next_lock_op	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/virtual_table/ob_all_virtual_obj_lock.cpp	134	ObAllVirtualObjLock::get_next_lock_op	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/virtual_table/ob_all_virtual_obj_lock.cpp	147	ObAllVirtualObjLock::get_next_lock_op	ret == OB_ITER_END	} else if (OB_ITER_END == ret) {
+src/observer/virtual_table/ob_all_virtual_obj_lock.cpp	149	ObAllVirtualObjLock::get_next_lock_op	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/virtual_table/ob_all_virtual_obj_lock.cpp	167	ObAllVirtualObjLock::get_next_lock_op_iter	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/observer/virtual_table/ob_all_virtual_obj_lock.cpp	179	ObAllVirtualObjLock::get_next_lock_op_iter	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/virtual_table/ob_all_virtual_obj_lock.cpp	205	ObAllVirtualObjLock::get_next_lock_op_iter_from_tx_ctx	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/virtual_table/ob_all_virtual_obj_lock.cpp	239	ObAllVirtualObjLock::get_next_lock_op_iter_from_lock_memtable	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/virtual_table/ob_all_virtual_obj_lock.cpp	245	ObAllVirtualObjLock::get_next_lock_op_iter_from_lock_memtable	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/observer/virtual_table/ob_all_virtual_obj_lock.cpp	281	ObAllVirtualObjLock::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/virtual_table/ob_all_virtual_outline.cpp	96	ObAllVirtualOutlineBase::is_database_recycle	ret == OB_HASH_NOT_EXIST [not built]	} else if (OB_HASH_NOT_EXIST == ret) {
+src/observer/virtual_table/ob_all_virtual_privilege.cpp	39	ObAllVirtualPrivilege::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/virtual_table/ob_all_virtual_ps_item_info.cpp	176	ObAllVirtualPsItemInfo::get_next_row	tmp_ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == tmp_ret) {
+src/observer/virtual_table/ob_all_virtual_ps_item_info.cpp	185	ObAllVirtualPsItemInfo::get_next_row	tmp_ret == OB_HASH_NOT_EXIST	} else if (OB_HASH_NOT_EXIST == tmp_ret) {
+src/observer/virtual_table/ob_all_virtual_resource_limit.cpp	53	ObResourceLimitTable::get_next_resource_info_	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/virtual_table/ob_all_virtual_resource_limit.cpp	67	ObResourceLimitTable::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/virtual_table/ob_all_virtual_resource_limit_detail.cpp	58	ObResourceLimitDetailTable::get_next_resource_limit_val_	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/virtual_table/ob_all_virtual_resource_limit_detail.cpp	65	ObResourceLimitDetailTable::get_next_resource_limit_val_	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/virtual_table/ob_all_virtual_resource_limit_detail.cpp	88	ObResourceLimitDetailTable::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/virtual_table/ob_all_virtual_scheduler_running_job.cpp	64	ObAllVirtualSchedulerRunningJob::inner_get_next_row	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/observer/virtual_table/ob_all_virtual_schema_memory.cpp	55	ObAllVirtualSchemaMemory::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/virtual_table/ob_all_virtual_schema_slot.cpp	78	ObAllVirtualSchemaSlot::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/virtual_table/ob_all_virtual_server_compaction_event_history.cpp	58	ObAllVirtualServerCompactionEventHistory::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/virtual_table/ob_all_virtual_server_compaction_progress.cpp	60	ObAllVirtualServerCompactionProgress::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/virtual_table/ob_all_virtual_session_info.cpp	68	ObAllVirtualSessionInfo::inner_get_next_row	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/observer/virtual_table/ob_all_virtual_session_ps_info.cpp	38	ObAllVirtualSessionPsInfo::inner_get_next_row	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/observer/virtual_table/ob_all_virtual_session_ps_info.cpp	47	ObAllVirtualSessionPsInfo::inner_get_next_row	ret == OB_ITER_END	if (ret == OB_ITER_END && !is_iter_end_) {
+src/observer/virtual_table/ob_all_virtual_session_ps_info.cpp	113	ObAllVirtualSessionPsInfo::fill_cells	ret == OB_EER_UNKNOWN_STMT_HANDLER	if (ret == OB_EER_UNKNOWN_STMT_HANDLER) {
+src/observer/virtual_table/ob_all_virtual_session_ps_info.cpp	198	ObAllVirtualSessionPsInfo::get_next_row_from_sessions	ret == OB_ITER_END	if (ret == OB_ITER_END) {
+src/observer/virtual_table/ob_all_virtual_session_ps_info.cpp	221	ObAllVirtualSessionPsInfo::get_next_row_from_sessions	ret != OB_ITER_END	if (ret != OB_SUCCESS && ret != OB_ITER_END) {
+src/observer/virtual_table/ob_all_virtual_session_ps_info.cpp	295	ObAllVirtualSessionPsInfo::ObSessionInfoIterator::next	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/observer/virtual_table/ob_all_virtual_show_tables.cpp	104	ObAllVirtualShowTables::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/virtual_table/ob_all_virtual_sql_plan.cpp	466	ObAllVirtualSqlPlan::dump_plans	ret == OB_OP_NOT_ALLOW	if (OB_OP_NOT_ALLOW == ret) {
+src/observer/virtual_table/ob_all_virtual_sql_stat.cpp	147	ObAllVirtualSqlStatIter::operator()	ret == OB_HASH_NOT_EXIST	} else if (OB_HASH_NOT_EXIST == ret) {
+src/observer/virtual_table/ob_all_virtual_sql_stat.cpp	178	ObAllVirtualSqlStatIter::get_next_sql_stat	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/virtual_table/ob_all_virtual_sql_stat.cpp	197	ObAllVirtualSqlStatIter::get_next_sql_stat	tmp_ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == tmp_ret) {
+src/observer/virtual_table/ob_all_virtual_sql_stat.cpp	228	ObAllVirtualSqlStatIter::get_next_sql_stat	tmp_ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == tmp_ret) {
+src/observer/virtual_table/ob_all_virtual_sql_stat.cpp	627	ObAllVirtualSqlStat::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/virtual_table/ob_all_virtual_sql_workarea_active.cpp	240	ObSqlWorkareaActive::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/virtual_table/ob_all_virtual_sql_workarea_histogram.cpp	189	ObSqlWorkareaHistogram::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/virtual_table/ob_all_virtual_sql_workarea_history_stat.cpp	262	ObSqlWorkareaHistoryStat::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/virtual_table/ob_all_virtual_sql_workarea_memory_info.cpp	194	ObSqlWorkareaMemoryInfo::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/virtual_table/ob_all_virtual_sys_task_status.cpp	65	ObAllVirtualSysTaskStatus::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/virtual_table/ob_all_virtual_sys_variable_default_value.cpp	62	ObSysVarDefaultValue::inner_get_next_row	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/observer/virtual_table/ob_all_virtual_table_mgr.cpp	96	ObAllVirtualTableMgr::get_next_tablet	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/observer/virtual_table/ob_all_virtual_table_mgr.cpp	112	ObAllVirtualTableMgr::get_next_table	ret != OB_ITER_END	if (OB_UNLIKELY(ret != OB_ITER_END)) {
+src/observer/virtual_table/ob_all_virtual_table_mgr.cpp	119	ObAllVirtualTableMgr::get_next_table	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/virtual_table/ob_all_virtual_table_mgr.cpp	149	ObAllVirtualTableMgr::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/virtual_table/ob_all_virtual_tablet_compaction_history.cpp	65	ObAllVirtualTabletCompactionHistory::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/virtual_table/ob_all_virtual_tablet_compaction_info.cpp	63	ObAllVirtualTabletCompactionInfo::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/virtual_table/ob_all_virtual_tablet_compaction_info.cpp	71	ObAllVirtualTabletCompactionInfo::inner_get_next_row	ret == OB_EAGAIN	} while(OB_EAGAIN == ret);
+src/observer/virtual_table/ob_all_virtual_tablet_compaction_progress.cpp	58	ObAllVirtualTabletCompactionProgress::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/virtual_table/ob_all_virtual_tablet_ddl_kv_info.cpp	64	ObAllVirtualTabletDDLKVInfo::get_next_ddl_kv_mgr	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/virtual_table/ob_all_virtual_tablet_ddl_kv_info.cpp	80	ObAllVirtualTabletDDLKVInfo::get_next_ddl_kv	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/virtual_table/ob_all_virtual_tablet_ddl_kv_info.cpp	109	ObAllVirtualTabletDDLKVInfo::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/virtual_table/ob_all_virtual_tablet_info.cpp	62	ObAllVirtualTabletInfo::get_next_tablet	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/virtual_table/ob_all_virtual_tablet_info.cpp	84	ObAllVirtualTabletInfo::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/virtual_table/ob_all_virtual_tablet_info.cpp	95	ObAllVirtualTabletInfo::inner_get_next_row	ret == OB_EMPTY_RESULT; ret == OB_ERR_SHARED_LOCK_CONFLICT	if (OB_EMPTY_RESULT == ret || OB_ERR_SHARED_LOCK_CONFLICT == ret) {
+src/observer/virtual_table/ob_all_virtual_tablet_pointer_status.cpp	88	ObAllVirtualTabletPtr::get_next_tablet_pointer	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/observer/virtual_table/ob_all_virtual_tablet_pointer_status.cpp	116	ObAllVirtualTabletPtr::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/virtual_table/ob_all_virtual_tablet_sstable_macro_info.cpp	198	ObAllVirtualTabletSSTableMacroInfo::get_next_macro_info	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/virtual_table/ob_all_virtual_tablet_sstable_macro_info.cpp	206	ObAllVirtualTabletSSTableMacroInfo::get_next_macro_info	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/virtual_table/ob_all_virtual_tablet_sstable_macro_info.cpp	217	ObAllVirtualTabletSSTableMacroInfo::get_next_macro_info	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/virtual_table/ob_all_virtual_tablet_sstable_macro_info.cpp	559	ObAllVirtualTabletSSTableMacroInfo::get_next_tablet	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/observer/virtual_table/ob_all_virtual_tablet_sstable_macro_info.cpp	591	ObAllVirtualTabletSSTableMacroInfo::get_next_sstable	ret != OB_ITER_END	if (OB_UNLIKELY(ret != OB_ITER_END)) {
+src/observer/virtual_table/ob_all_virtual_tablet_sstable_macro_info.cpp	598	ObAllVirtualTabletSSTableMacroInfo::get_next_sstable	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/virtual_table/ob_all_virtual_tablet_store_stat.cpp	56	ObAllVirtualTabletStoreStat::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/virtual_table/ob_all_virtual_tmp_file.cpp	71	ObAllVirtualTmpFileInfo::get_next_tmp_file_info_	ret == OB_ENTRY_NOT_EXIST; ret == OB_TIMEOUT	if (OB_ENTRY_NOT_EXIST == ret || OB_TIMEOUT == ret) {
+src/observer/virtual_table/ob_all_virtual_tmp_file.cpp	288	ObAllVirtualTmpFileInfo::inner_get_next_row	ret == OB_NOT_INIT	if (OB_NOT_INIT == ret) {
+src/observer/virtual_table/ob_all_virtual_tmp_file.cpp	302	ObAllVirtualTmpFileInfo::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/virtual_table/ob_all_virtual_tracepoint_info.cpp	111	ObAllTracepointInfo::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/virtual_table/ob_all_virtual_transaction_checkpoint.cpp	85	ObAllVirtualTransCheckpointInfo::get_next_	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/virtual_table/ob_all_virtual_transaction_checkpoint.cpp	100	ObAllVirtualTransCheckpointInfo::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/virtual_table/ob_all_virtual_transaction_freeze_checkpoint.cpp	85	ObAllVirtualFreezeCheckpointInfo::get_next_	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/virtual_table/ob_all_virtual_transaction_freeze_checkpoint.cpp	100	ObAllVirtualFreezeCheckpointInfo::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/virtual_table/ob_all_virtual_tx_data.cpp	37	ObAllVirtualTxData::inner_get_next_row	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/observer/virtual_table/ob_all_virtual_tx_data.cpp	38	ObAllVirtualTxData::inner_get_next_row	ret == OB_TRANS_CTX_NOT_EXIST	} else if (OB_TRANS_CTX_NOT_EXIST == ret) {
+src/observer/virtual_table/ob_all_virtual_tx_data_table.cpp	68	ObAllVirtualTxDataTable::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/virtual_table/ob_all_virtual_tx_lock_stat.cpp	54	ObGVTxLockStat::get_next_tx_lock_stat_iter_	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/virtual_table/ob_all_virtual_tx_lock_stat.cpp	78	ObGVTxLockStat::get_next_tx_lock_stat_	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/observer/virtual_table/ob_all_virtual_tx_lock_stat.cpp	80	ObGVTxLockStat::get_next_tx_lock_stat_	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/virtual_table/ob_all_virtual_tx_lock_stat.cpp	122	ObGVTxLockStat::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/virtual_table/ob_all_virtual_tx_scheduler_stat.cpp	87	ObGVTxSchedulerStat::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {

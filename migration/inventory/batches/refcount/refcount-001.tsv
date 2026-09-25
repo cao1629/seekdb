@@ -1,0 +1,45 @@
+file	line	symbol	construct	text
+src/data_plane/api/data_plane/fts/dict/ob_dic_loader.h	67	ObDicLoader::inc_ref	inc_ref definition	OB_INLINE int64_t inc_ref()
+src/data_plane/api/data_plane/fts/dict/ob_dic_loader.h	72	ObDicLoader::dec_ref	dec_ref definition	OB_INLINE int64_t dec_ref()
+src/data_plane/api/data_plane/fts/dict/ob_dic_loader.h	106	ObDicLoaderHandle	Handle class definition	class ObDicLoaderHandle
+src/data_plane/api/data_plane/ob_i_write_context_service.h	58	ObWriteContext::reset	release_ call (reference-count function found by its body)	release_(native_handle_);
+src/data_plane/api/data_plane/retrieval/ob_sparse_retrieval.h	256	ObSparseRetrievalHandle	Handle class definition	class ObSparseRetrievalHandle
+src/data_plane/api/data_plane/tmp_file/ob_tmp_file.h	57	ObTmpFileIOHandle	Handle class definition	class ObTmpFileIOHandle final
+src/logservice/applyservice/ob_log_apply_service.cpp	360	ObApplyStatus::inc_ref	inc_ref definition	void ObApplyStatus::inc_ref()
+src/logservice/applyservice/ob_log_apply_service.cpp	364	ObApplyStatus::dec_ref	dec_ref definition	int64_t ObApplyStatus::dec_ref()
+src/logservice/applyservice/ob_log_apply_service.cpp	741	ObApplyStatus::submit_task_to_apply_service_	inc_ref call	inc_ref(); //Add the reference count first, if the task push failed, dec_ref() is required
+src/logservice/applyservice/ob_log_apply_service.cpp	745	ObApplyStatus::submit_task_to_apply_service_	dec_ref call	dec_ref();
+src/logservice/applyservice/ob_log_apply_service.cpp	865	ObApplyStatusGuard::~ObApplyStatusGuard	dec_ref call	if (0 == apply_status_->dec_ref()) {
+src/logservice/applyservice/ob_log_apply_service.cpp	882	ObApplyStatusGuard::set_apply_status_	inc_ref call	apply_status_->inc_ref();
+src/logservice/applyservice/ob_log_apply_service.cpp	1006	ObLogApplyService::create_status	inc_ref call	apply_status->inc_ref();
+src/logservice/applyservice/ob_log_apply_service.cpp	1179	ObLogApplyService::revert_apply_status	dec_ref call	if (0 == apply_status->dec_ref()) {
+src/logservice/applyservice/ob_log_apply_service.h	158	ObApplyStatus	inc_ref declaration	void inc_ref();
+src/logservice/applyservice/ob_log_apply_service.h	159	ObApplyStatus	dec_ref declaration	int64_t dec_ref();
+src/logservice/applyservice/ob_log_apply_service.h	281	ObApplyStatusGuard	Guard class definition whose methods call dec_ref, inc_ref	class ObApplyStatusGuard
+src/logservice/ob_log_handler.cpp	76	ObLogHandler::init	inc_ref call	apply_status_->inc_ref();
+src/logservice/palf/fixed_sliding_window.h	186	FixedSlidingWindow::get	reference-count change: ATOMIC_INC on ref_	ATOMIC_INC(&(array_[idx].ref_));
+src/logservice/palf/fixed_sliding_window.h	249	FixedSlidingWindow::revert_	reference-count change: ATOMIC_SAF on ref_	if (OB_UNLIKELY(0 > (curr_ref = ATOMIC_SAF(&(array_[idx].ref_), 1)))) {
+src/logservice/palf/log_io_adapter.cpp	63	LogIODeviceWrapper::init	release_device call (reference-count function found by its body)	(void) device_manager->release_device(device_handle);
+src/logservice/palf/log_io_adapter.cpp	76	LogIODeviceWrapper::destroy	release_device call (reference-count function found by its body)	device_manager_->release_device((ObIODevice*&) log_local_device_);
+src/logservice/palf/log_sliding_window.h	202	LogSlidingWindow	inc_ref_ declaration	int inc_ref_(LogTask *log_task, const int64_t inc_val, int64_t &result);
+src/logservice/palf/log_task.cpp	394	LogTask::ref	ref definition (reference-count function found by its body: changes a reference-count field)	int64_t LogTask::ref(const int64_t val, const bool is_append_log)
+src/logservice/palf/palf_handle.h	34	PalfHandle	Handle class definition	class PalfHandle
+src/logservice/replayservice/ob_log_replay_service.cpp	391	ObLogReplayService::create_status	inc_ref call	replay_status->inc_ref();
+src/logservice/replayservice/ob_log_replay_service.cpp	936	ObLogReplayService::do_replay_task_	inc_replay_ref call (other name)	replay_log_buff->inc_replay_ref();
+src/logservice/replayservice/ob_log_replay_service.cpp	969	ObLogReplayService::revert_replay_status_	dec_ref call	if (0 == replay_status->dec_ref()) {
+src/logservice/replayservice/ob_replay_status.cpp	351	ObReplayServiceReplayTask::reset	dec_replay_ref call (other name)	} else if (0 == replay_buf->dec_replay_ref()) {
+src/logservice/replayservice/ob_replay_status.cpp	433	ObLogReplayBuffer::dec_replay_ref	dec_replay_ref definition (other name)	int64_t ObLogReplayBuffer::dec_replay_ref()
+src/logservice/replayservice/ob_replay_status.cpp	438	ObLogReplayBuffer::inc_replay_ref	inc_replay_ref definition (other name)	void ObLogReplayBuffer::inc_replay_ref()
+src/logservice/replayservice/ob_replay_status.cpp	1192	ObReplayStatus::check_replay_barrier	dec_replay_ref call (other name)	} else if ((0 == (nv = replay_log_buf->dec_replay_ref()))) {
+src/logservice/replayservice/ob_replay_status.cpp	1248	ObReplayStatus::submit_task_to_replay_service_	inc_ref call	inc_ref(); //Add the reference count first, if the task push fails, dec_ref() is required
+src/logservice/replayservice/ob_replay_status.cpp	1251	ObReplayStatus::submit_task_to_replay_service_	dec_ref call	dec_ref();
+src/logservice/replayservice/ob_replay_status.h	107	ObLogReplayBuffer	dec_replay_ref declaration (other name)	int64_t dec_replay_ref();
+src/logservice/replayservice/ob_replay_status.h	108	ObLogReplayBuffer	inc_replay_ref declaration (other name)	void inc_replay_ref();
+src/logservice/replayservice/ob_replay_status.h	523	ObReplayStatus::inc_ref	inc_ref definition	inline void inc_ref()
+src/logservice/replayservice/ob_replay_status.h	527	ObReplayStatus::dec_ref	dec_ref definition	inline int64_t dec_ref()
+src/logservice/replayservice/ob_replay_status.h	620	ObReplayStatusGuard	Guard class definition whose methods call dec_ref, inc_ref	class ObReplayStatusGuard
+src/logservice/replayservice/ob_replay_status.h	627	ObReplayStatusGuard::~ObReplayStatusGuard	dec_ref call	if (0 == replay_status_->dec_ref()) {
+src/logservice/replayservice/ob_replay_status.h	637	ObReplayStatusGuard::set_replay_status	inc_ref call	replay_status_->inc_ref();
+src/oblib/easy/io/ev.h	612	-	ev_unref declaration (other name) [vendored]	void ev_unref (EV_P);
+src/oblib/lib/alloc/ob_context_allocator.h	184	ObContextAllocatorV2::inc_ref_cnt	inc_ref_cnt definition [not built]	int64_t inc_ref_cnt(int64_t cnt) { return ATOMIC_FAA(&ref_cnt_, cnt); }
+src/oblib/lib/alloc/ob_context_allocator.h	440	ObContextAllocator::inc_ref_cnt	inc_ref_cnt definition; inc_ref_cnt call [not built]	int64_t inc_ref_cnt(int64_t cnt) { return ctx_allocator_.inc_ref_cnt(cnt); }

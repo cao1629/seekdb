@@ -1,0 +1,55 @@
+file	line	symbol	construct	text
+src/sql/resolver/ob_column_ref.h	97	ObColumnRef::database_name_	member ObString (value) of type common::ObString	common::ObString database_name_;
+src/sql/resolver/ob_column_ref.h	98	ObColumnRef::table_name_	member ObString (value) of type common::ObString	common::ObString table_name_;
+src/sql/resolver/ob_column_ref.h	99	ObColumnRef::column_name_	member ObString (value) of type common::ObString	common::ObString column_name_;
+src/sql/resolver/ob_resolver_define.h	313	ObStarExpansionInfo::column_name_list_	member container of ObString of type common::ObArray<ObString>	common::ObArray<ObString> column_name_list_;
+src/sql/resolver/ob_resolver_define.h	399	ObResolverParams::param_list_	member ParamStore (pointer) of type const ParamStore *	const ParamStore *param_list_;
+src/sql/resolver/ob_resolver_define.h	425	ObResolverParams::cur_sql_	member ObString (value) of type common::ObString	common::ObString cur_sql_;
+src/sql/resolver/ob_resolver_define.h	445	ObResolverParams::hidden_column_name_	member raw bytes (pointer) of type const char *	const char *hidden_column_name_;  // record column name for first hidden column which need check hidden_column_visable in opt_param hint
+src/sql/resolver/ob_resolver_utils.cpp	1872	ObResolverUtils::set_string_val_charset	allocator in, arena view out: ObObjParam &val	int ObResolverUtils::set_string_val_charset(ObIAllocator &allocator,
+src/sql/resolver/ob_resolver_utils.cpp	1914	ObResolverUtils::resolve_const	allocator in, arena view out: ObObjParam &val	int ObResolverUtils::resolve_const(const ParseNode *node,
+src/sql/resolver/ob_resolver_utils.cpp	4038	ObResolverUtils::create_not_null_expr_str	allocator in, arena view out: ObString &expr_str	int ObResolverUtils::create_not_null_expr_str(const ObString &column_name,
+src/sql/resolver/prepare/ob_deallocate_stmt.h	41	ObDeallocateStmt::prepare_name_	member ObString (value) of type common::ObString	common::ObString  prepare_name_;
+src/sql/resolver/prepare/ob_prepare_stmt.h	42	ObPrepareStmt::prepare_name_	member ObString (value) of type common::ObString	common::ObString prepare_name_;
+src/sql/resolver/tcl/ob_end_trans_stmt.h	41	ObEndTransStmt::hint_	member ObString (value) of type ObString	ObString hint_;
+src/sql/resolver/tcl/ob_savepoint_stmt.h	39	ObSavePointStmt::sp_name_	member ObString (value) of type common::ObString	common::ObString sp_name_;
+src/sql/resolver/tcl/ob_start_trans_stmt.h	52	ObStartTransStmt::hint_	member ObString (value) of type ObString	ObString hint_;
+src/sql/rewrite/ob_key_part.cpp	882	ObKeyPart::try_cast_value	allocator in, arena view out: ObObj &value	int ObKeyPart::try_cast_value(const ObDataTypeCastParams &dtc_params, const int64_t cur_datetime,
+src/sql/rewrite/ob_key_part.h	131	ObKeyPartPos::enum_set_values_	member container of ObString of type common::ObSArray<common::ObString>	common::ObSArray<common::ObString> enum_set_values_;
+src/sql/rewrite/ob_key_part.h	153	ObNormalKeyPart::start_	member ObObj (value) of type common::ObObj	common::ObObj start_;
+src/sql/rewrite/ob_key_part.h	155	ObNormalKeyPart::end_	member ObObj (value) of type common::ObObj	common::ObObj end_;
+src/sql/rewrite/ob_key_part.h	163	ObLikeKeyPart::pattern_	member ObObj (value) of type common::ObObj	common::ObObj pattern_;
+src/sql/rewrite/ob_key_part.h	164	ObLikeKeyPart::escape_	member ObObj (value) of type common::ObObj	common::ObObj escape_;
+src/sql/rewrite/ob_key_part.h	178	InParamMeta::vals_	member container of ObObj of type ObArray<ObObj>	ObArray<ObObj> vals_;
+src/sql/rewrite/ob_key_part.h	227	InParamValsWrapper::param_vals_	member container of ObObj of type ObSEArray<ObObj, MAX_EXTRACT_IN_COLUMN_NUMBER>	ObSEArray<ObObj, MAX_EXTRACT_IN_COLUMN_NUMBER> param_vals_;
+src/sql/rewrite/ob_key_part.h	284	ObDomainKeyPart::const_param_	member ObObj (value) of type common::ObObj	common::ObObj const_param_;
+src/sql/rewrite/ob_key_part.h	286	ObDomainKeyPart::extra_param_	member ObObj (value) of type common::ObObj	common::ObObj extra_param_;
+src/sql/rewrite/ob_query_range_define.cpp	612	ObPreRangeGraph::get_tablet_ranges	allocator in, arena view out: ObQueryRangeArray &ranges	int ObPreRangeGraph::get_tablet_ranges(common::ObIAllocator &allocator,
+src/sql/rewrite/ob_query_range_define.cpp	635	ObPreRangeGraph::get_tablet_ranges	allocator in, arena view out: ObQueryRangeArray &ranges	int ObPreRangeGraph::get_tablet_ranges(common::ObIAllocator &allocator,
+src/sql/rewrite/ob_query_range_define.cpp	649	ObPreRangeGraph::get_fast_nlj_tablet_ranges	allocator in, arena view out: ObQueryRangeArray &ranges	int ObPreRangeGraph::get_fast_nlj_tablet_ranges(ObFastFinalNLJRangeCtx &fast_nlj_range_ctx,
+src/sql/rewrite/ob_query_range_define.h	49	ObRangeWrapper::range_	member ObNewRange (pointer) of type common::ObNewRange *	common::ObNewRange *range_;
+src/sql/rewrite/ob_query_range_define.h	237	ObRangeMap::ExprFinalInfo::const_val_	member ObObj (pointer) of type common::ObObj*	common::ObObj* const_val_;
+src/sql/rewrite/ob_query_range_define.h	341	ObQueryRangeCtx::params_	member ParamStore (pointer) of type const common::ParamStore *	const common::ParamStore *params_;
+src/sql/rewrite/ob_range_generator.cpp	953	ObRangeGenerator::calc_result_value	allocator in, arena view out: ObObj &value	int ObRangeGenerator::calc_result_value(ObIAllocator &allocator,
+src/sql/rewrite/ob_range_generator.cpp	1115	ObRangeGenerator::try_cast_value	allocator in, arena view out: ObObj &value	int ObRangeGenerator::try_cast_value(ObIAllocator &allocator,
+src/sql/rewrite/ob_range_generator.h	63	ObFastFinalNLJRangeCtx::range_buffer_	member raw bytes (pointer) of type char*	char* range_buffer_;
+src/sql/rewrite/ob_range_generator.h	64	ObFastFinalNLJRangeCtx::extra_buffer_	member raw bytes (pointer) of type char*	char* extra_buffer_;
+src/sql/rewrite/ob_range_generator.h	66	ObFastFinalNLJRangeCtx::first_ranges_	member container of ObNewRange of type ObFixedArray<common::ObNewRange*, common::ObIAllocator>	ObFixedArray<common::ObNewRange*, common::ObIAllocator> first_ranges_;
+src/sql/rewrite/ob_range_generator.h	67	ObFastFinalNLJRangeCtx::cache_ranges_	member container of ObNewRange of type ObFixedArray<common::ObNewRange*, common::ObIAllocator>	ObFixedArray<common::ObNewRange*, common::ObIAllocator> cache_ranges_;
+src/sql/rewrite/ob_range_generator.h	94	ObTmpRange::start_	member ObObj (pointer) of type common::ObObj *	common::ObObj *start_;
+src/sql/rewrite/ob_range_generator.h	95	ObTmpRange::end_	member ObObj (pointer) of type common::ObObj *	common::ObObj *end_;
+src/sql/rewrite/ob_range_generator.h	118	ObTmpInParam::in_param_	member container of ObObj of type ObFixedArray<ObObj*, ObIAllocator>	ObFixedArray<ObObj*, ObIAllocator> in_param_;
+src/sql/rewrite/ob_range_generator.h	290	ObRangeGenerator::ranges_	member container of ObNewRange of type ObIArray<common::ObNewRange *> &	ObIArray<common::ObNewRange *> &ranges_;
+src/sql/rewrite/ob_range_generator.h	294	ObRangeGenerator::always_true_range_	member ObNewRange (pointer) of type common::ObNewRange *	common::ObNewRange *always_true_range_;
+src/sql/rewrite/ob_range_generator.h	295	ObRangeGenerator::always_false_range_	member ObNewRange (pointer) of type common::ObNewRange *	common::ObNewRange *always_false_range_;
+src/sql/rewrite/ob_range_graph_generator.h	67	RangeNodeConnectInfo::data_	member raw bytes (pointer) of type uint8_t*	uint8_t* data_;
+src/sql/rewrite/ob_transform_aggr_subquery.h	119	ObTransformAggrSubquery::TransStmtInfo::qb_name_	member ObString (value) of type common::ObString	common::ObString qb_name_;
+src/sql/rewrite/ob_transform_late_materialization.h	69	ObTransformLateMaterialization::ObLateMaterializationInfo::candi_index_names_	member container of ObString of type ObSEArray<ObString, 4>	ObSEArray<ObString, 4> candi_index_names_;
+src/sql/rewrite/ob_transform_rule.h	146	ObTransformerCtx::src_qb_name_	member ObString (value) of type ObString	ObString src_qb_name_;
+src/sql/rewrite/ob_transform_rule.h	165	ObTransformerCtx::inline_blacklist_	member container of ObString of type ObSEArray<ObString, 8, common::ModulePageAllocator, true>	ObSEArray<ObString, 8, common::ModulePageAllocator, true> inline_blacklist_;
+src/sql/rewrite/ob_transform_rule.h	166	ObTransformerCtx::materialize_blacklist_	member container of ObString of type ObSEArray<ObString, 8, common::ModulePageAllocator, true>	ObSEArray<ObString, 8, common::ModulePageAllocator, true> materialize_blacklist_;
+src/sql/rewrite/ob_transform_rule.h	290	ObEvalCostHelper::src_qb_name_	member ObString (value) of type ObString	ObString src_qb_name_;
+src/sql/session/ob_basic_session_info.cpp	728	ObBasicSessionInfo::get_global_sys_variable	allocator in, arena view out: ObObj &val	int ObBasicSessionInfo::get_global_sys_variable(const ObBasicSessionInfo *session,
+src/sql/session/ob_basic_session_info.cpp	744	ObBasicSessionInfo::get_global_sys_variable	allocator in, arena view out: ObObj &val	int ObBasicSessionInfo::get_global_sys_variable(ObIAllocator &calc_buf,
+src/sql/session/ob_basic_session_info.cpp	775	ObBasicSessionInfo::get_global_sys_variable	allocator in, arena view out: ObObj &val	int ObBasicSessionInfo::get_global_sys_variable(ObIAllocator &calc_buf,
+src/sql/session/ob_basic_session_info.cpp	1239	ObBasicSessionInfo::cast_sys_variable	allocator in, arena view out: ObObj &out_type	int ObBasicSessionInfo::cast_sys_variable(ObIAllocator &calc_buf,

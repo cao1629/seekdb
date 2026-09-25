@@ -1,0 +1,61 @@
+file	line	symbol	construct	text
+src/storage/lob/ob_ext_info_callback.cpp	132	ObExtInfoCallback::set	allocator in, arena view out: ObString &data	int ObExtInfoCallback::set(
+src/storage/lob/ob_ext_info_callback.h	132	ObExtInfoCallback::key_obj_	member ObObj (value) of type ObObj	ObObj key_obj_;
+src/storage/lob/ob_ext_info_callback.h	134	ObExtInfoCallback::rowkey_	member ObStoreRowkey (value) of type common::ObStoreRowkey	common::ObStoreRowkey rowkey_;
+src/storage/lob/ob_ext_info_callback.h	135	ObExtInfoCallback::mutator_row_buf_	member raw bytes (pointer) of type char *	char *mutator_row_buf_;
+src/storage/lob/ob_ext_info_callback.h	195	ObExtInfoCbRegister::ext_info_data_	member ObObj (value) of type ObObj	ObObj ext_info_data_;
+src/storage/lob/ob_ext_info_callback.h	198	ObExtInfoCbRegister::data_buffer_	member ObString (value) of type ObString	ObString data_buffer_;
+src/storage/lob/ob_lob_access_param.h	144	ObLobAccessParam::lob_locator_	member ObLobLocatorV2 (pointer) of type common::ObLobLocatorV2 *	common::ObLobLocatorV2 *lob_locator_; // should set by set_lob_locator
+src/storage/lob/ob_lob_access_param.h	203	ObLobAccessParam::ext_info_log_	member ObObj (value) of type ObObj	ObObj ext_info_log_;
+src/storage/lob/ob_lob_handler.h	98	ObLobQueryDataHandler::result_	member ObString (reference) of type ObString &	ObString &result_;
+src/storage/lob/ob_lob_iterator.h	82	ObLobInRowQueryIter::orgin_data_	member ObString (value) of type ObString	ObString orgin_data_;
+src/storage/lob/ob_lob_iterator.h	83	ObLobInRowQueryIter::remain_data_	member ObString (value) of type ObString	ObString remain_data_;
+src/storage/lob/ob_lob_iterator.h	101	ObLobOutRowQueryIter::last_data_	member ObString (value) of type ObString	ObString last_data_;
+src/storage/lob/ob_lob_iterator.h	134	ObLobPartialUpdateRowIter::delta_lob_	member ObLobLocatorV2 (value) of type ObLobLocatorV2	ObLobLocatorV2 delta_lob_;
+src/storage/lob/ob_lob_locator.h	84	ObLobLocatorHelper::rowid_objs_	member container of ObObj of type common::ObSEArray<common::ObObj, DEFAULT_LOCATOR_OBJ_ARRAY_SIZE>	common::ObSEArray<common::ObObj, DEFAULT_LOCATOR_OBJ_ARRAY_SIZE> rowid_objs_;
+src/storage/lob/ob_lob_locator.h	86	ObLobLocatorHelper::rowkey_str_	member ObString (value) of type ObString	ObString rowkey_str_; // for default values
+src/storage/lob/ob_lob_locator_struct.h	112	ObLobDiskLocatorBuilder::ptr_	member raw bytes (pointer) of type char *	char *ptr_;
+src/storage/lob/ob_lob_manager.cpp	142	ObLobManager::fill_lob_header	allocator in, arena view out: ObString &data	int ObLobManager::fill_lob_header(ObIAllocator &allocator, ObString &data, ObString &out)
+src/storage/lob/ob_lob_manager.cpp	157	ObLobManager::fill_lob_header	allocator in, arena view out: blocksstable::ObStorageDatum &datum	int ObLobManager::fill_lob_header(
+src/storage/lob/ob_lob_manager.cpp	175	ObLobManager::fill_lob_header	allocator in, arena view out: blocksstable::ObDatumRow &datum_row	int ObLobManager::fill_lob_header(ObIAllocator &allocator,
+src/storage/lob/ob_lob_manager.cpp	373	ObLobManager::query	allocator in, arena view out: ObLobLocatorV2 &locator	int ObLobManager::query(
+src/storage/lob/ob_lob_manager.cpp	1670	ObLobManager::build_lob_param	allocator in, arena view out: ObLobLocatorV2 &lob	int ObLobManager::build_lob_param(ObLobAccessParam& param,
+src/storage/lob/ob_lob_manager.cpp	2052	ObLobManager::get_delta_lob_full_data	allocator in, arena view out: common::ObLobLocatorV2 &lob_locator	int ObLobManager::get_delta_lob_full_data(common::ObLobTextIterCtx &ctx,
+src/storage/lob/ob_lob_manager.cpp	2173	ObLobManager::get_first_block	allocator in, arena view out: common::ObString &str	int ObLobManager::get_first_block(common::ObLobTextIterCtx &ctx,
+src/storage/lob/ob_lob_manager.cpp	2566	open_json_lob	allocator in, arena view out: common::ObLobLocatorV2 &locator	int open_json_lob(common::ObIAllocator &allocator,
+src/storage/lob/ob_lob_manager.cpp	2757	read_lob_to_buffer	allocator in, arena view out: common::ObLobLocatorV2 &lob	int read_lob_to_buffer(common::ObIAllocator &allocator,
+src/storage/lob/ob_lob_manager.cpp	2786	fill_lob_header	allocator in, arena view out: common::ObString &data	int fill_lob_header(common::ObIAllocator &allocator,
+src/storage/lob/ob_lob_manager.cpp	2793	fill_lob_header	allocator in, arena view out: blocksstable::ObStorageDatum &datum	int fill_lob_header(common::ObIAllocator &allocator,
+src/storage/lob/ob_lob_manager.cpp	2799	fill_lob_header	allocator in, arena view out: blocksstable::ObDatumRow &datum_row	int fill_lob_header(
+src/storage/lob/ob_lob_meta.h	152	ObLobMetaWriteResult::data_	member ObString (value) of type ObString	ObString data_;
+src/storage/lob/ob_lob_meta.h	217	ObLobMetaWriteIter::data_	member ObString (value) of type ObString	ObString data_;     // write data
+src/storage/lob/ob_lob_meta.h	223	ObLobMetaWriteIter::post_data_	member ObString (value) of type ObString	ObString post_data_;
+src/storage/lob/ob_lob_meta.h	224	ObLobMetaWriteIter::remain_buf_	member ObString (value) of type ObString	ObString remain_buf_;
+src/storage/lob/ob_lob_meta.h	225	ObLobMetaWriteIter::inner_buffer_	member ObString (value) of type ObString	ObString inner_buffer_;
+src/storage/lob/ob_lob_meta.h	278	ObLobMetaWriteRowIter::new_row_	member ObNewRow (value) of type ObNewRow	ObNewRow new_row_;
+src/storage/lob/ob_lob_meta.h	279	ObLobMetaWriteRowIter::row_cell_	member ObObj (value) of type ObObj	ObObj row_cell_[ObLobMetaUtil::LOB_META_COLUMN_CNT];
+src/storage/lob/ob_lob_meta.h	305	ObInRowLobDataSpliter::inrow_data_	member ObString (value) of type ObString	ObString inrow_data_;
+src/storage/lob/ob_lob_persistent_iterator.h	85	ObLobMetaBaseIterator::rowkey_objs_	member ObObj (value) of type ObObj	ObObj rowkey_objs_[4];
+src/storage/lob/ob_lob_persistent_iterator.h	197	ObLobPersistInsertSingleRowIter::row_	member ObDatumRow (pointer) of type blocksstable::ObDatumRow *	blocksstable::ObDatumRow *row_;
+src/storage/lob/ob_lob_persistent_iterator.h	220	ObLobPersistDeleteSingleRowIter::row_	member ObDatumRow (pointer) of type blocksstable::ObDatumRow *	blocksstable::ObDatumRow *row_;
+src/storage/lob/ob_lob_persistent_iterator.h	246	ObLobPersistUpdateSingleRowIter::old_row_	member ObDatumRow (pointer) of type blocksstable::ObDatumRow *	blocksstable::ObDatumRow *old_row_;
+src/storage/lob/ob_lob_persistent_iterator.h	247	ObLobPersistUpdateSingleRowIter::new_row_	member ObDatumRow (pointer) of type blocksstable::ObDatumRow *	blocksstable::ObDatumRow *new_row_;
+src/storage/lob/ob_lob_persistent_iterator.h	268	ObLobPersistInsertIter::new_row_	member ObDatumRow (value) of type blocksstable::ObDatumRow	blocksstable::ObDatumRow new_row_;
+src/storage/lob/ob_lob_persistent_iterator.h	289	ObLobPersistDeleteIter::new_row_	member ObDatumRow (value) of type blocksstable::ObDatumRow	blocksstable::ObDatumRow new_row_;
+src/storage/lob/ob_lob_persistent_iterator.h	315	ObLobSimplePersistInsertIter::new_row_	member ObDatumRow (value) of type blocksstable::ObDatumRow	blocksstable::ObDatumRow new_row_;
+src/storage/lob/ob_lob_seq.h	30	ObLobSeqIdDesc::seq_id_	member ObString (value) of type ObString	ObString seq_id_;
+src/storage/lob/ob_lob_seq.h	67	ObLobSeqId::seq_id_	member ObString (value) of type ObString	ObString seq_id_;
+src/storage/lob/ob_lob_seq.h	73	ObLobSeqId::buf_	member raw bytes (pointer) of type char*	char* buf_;
+src/storage/lob/ob_lob_tablet_dml.h	39	ObLobDataInsertTask::src_data_locator_	member ObLobLocatorV2 (value) of type ObLobLocatorV2	ObLobLocatorV2 src_data_locator_;
+src/storage/lob/ob_lob_tablet_dml.h	40	ObLobDataInsertTask::cur_data_locator_	member ObLobLocatorV2 (value) of type ObLobLocatorV2	ObLobLocatorV2 cur_data_locator_;
+src/storage/lob/ob_lob_util.cpp	98	ObInsertLobColumnHelper::insert_lob_column	allocator in, arena view out: blocksstable::ObStorageDatum &datum	int ObInsertLobColumnHelper::insert_lob_column(ObIAllocator &allocator,
+src/storage/lob/ob_lob_util.cpp	176	ObInsertLobColumnHelper::insert_lob_column	allocator in, arena view out: blocksstable::ObStorageDatum &datum	int ObInsertLobColumnHelper::insert_lob_column(ObIAllocator &allocator,
+src/storage/lob/ob_lob_util.cpp	258	ObInsertLobColumnHelper::delete_lob_column	allocator in, arena view out: blocksstable::ObStorageDatum &datum	int ObInsertLobColumnHelper::delete_lob_column(ObIAllocator &allocator,
+src/storage/lob/ob_lob_util.h	123	ObLobMetaInfo::seq_id_	member ObString (value) of type ObString	ObString seq_id_;
+src/storage/lob/ob_lob_util.h	128	ObLobMetaInfo::lob_data_	member ObString (value) of type ObString	ObString lob_data_;
+src/storage/lob/ob_lob_util.h	210	ObLobChunkIndex::seq_id_	member ObString (value) of type ObString	ObString seq_id_;
+src/storage/lob/ob_lob_util.h	241	ObLobChunkData::data_	member ObString (value) of type ObString	ObString data_;
+src/storage/lob/ob_lob_util.h	263	ObLobPartialData::locator_	member ObString (value) of type ObString	ObString locator_;
+src/storage/lob/ob_lob_write_buffer.h	145	ObLobWriteBuffer::inner_buffer_	member ObString (value) of type ObString	ObString inner_buffer_;
+src/storage/ls/ob_freezer.cpp	1177	FreezeDiagnoseInfo::fmt_	member raw bytes (pointer) of type const char *	const char *fmt_;
+src/storage/ls/ob_ls_reserved_snapshot_mgr.cpp	259	ObLSReservedSnapshotMgr::prepare_struct_in_lock	allocator in, arena view out: char *&clog_buf	int ObLSReservedSnapshotMgr::prepare_struct_in_lock(

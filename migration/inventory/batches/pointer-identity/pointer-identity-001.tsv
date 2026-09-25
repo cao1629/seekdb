@@ -1,0 +1,48 @@
+file	line	symbol	construct	text
+src/data_plane/api/data_plane/scheduler/ob_dag_scheduler.h	639	ObIDagNet	container keyed by pointer: ObHashMap	typedef common::hash::ObHashMap<const ObIDag *,
+src/data_plane/api/data_plane/scheduler/ob_dag_scheduler.h	892	ObDagNetScheduler	container keyed by pointer: ObHashMap	typedef common::hash::ObHashMap<const ObIDagNet*,
+src/data_plane/api/data_plane/scheduler/ob_dag_scheduler.h	1100	ObDagPrioScheduler	container keyed by pointer: ObHashMap	typedef common::hash::ObHashMap<const ObIDag *,
+src/oblib/common/mysqlclient/ob_mysql_transaction.cpp	111	ObMySQLTransaction::do_stash_query	container keyed by pointer: ObHashMap	for (hash::ObHashMap<const char*, ObSqlTransQueryStashDesc*>::iterator it = query_stash_desc_.begin();
+src/oblib/common/mysqlclient/ob_mysql_transaction.h	98	ObMySQLTransaction	container keyed by pointer: ObHashMap	hash::ObHashMap<const char*, ObSqlTransQueryStashDesc*> query_stash_desc_;
+src/oblib/lib/allocator/ob_external_ref.h	75	ObExternalRef::locate	pointer cast to integer used for hashing or a bucket choice	int64_t* locate(void* addr) { return ref_array_ + (hash((uint64_t)addr) % REF_LIMIT); }
+src/oblib/lib/allocator/ob_heavy_ref.h	97	ObHeavyRef::locate	pointer cast to integer used for hashing or a bucket choice	int64_t* locate(void* addr) { return ref_array_ + (hash((uint64_t)addr) % REF_LIMIT); }
+src/oblib/lib/allocator/ob_slice_alloc.cpp	58	ObSliceAlloc::destroy	pointer cast to integer used for hashing or a bucket choice	blk_ref_[ObBlockSlicer::hash((uint64_t)old_blk) % MAX_REF_NUM].sync();
+src/oblib/lib/allocator/ob_slice_alloc.h	381	ObSliceAlloc::alloc	pointer cast to integer used for hashing or a bucket choice	int64_t slot_idx = ObBlockSlicer::hash((uint64_t)blk) % MAX_REF_NUM;
+src/oblib/lib/allocator/ob_slice_alloc.h	392	ObSliceAlloc::alloc	pointer cast to integer used for hashing or a bucket choice	blk_ref_[ObBlockSlicer::hash((uint64_t)blk2release) % MAX_REF_NUM].sync();
+src/oblib/lib/allocator/ob_slice_alloc.h	430	ObSliceAlloc::purge_extra_cached_block	pointer cast to integer used for hashing or a bucket choice	blk_ref_[ObBlockSlicer::hash((uint64_t)old_blk) % MAX_REF_NUM].sync();
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_decompress_block.c	591	ZSTD_execSequenceLast7	pointer cast to integer compared for order (address ordering) [vendored]	if (sequence.offset > (size_t)(oLitEnd - base)) {
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_decompress_block.c	593	ZSTD_execSequenceLast7	pointer cast to integer compared for order (address ordering) [vendored]	if (sequence.offset > (size_t)(oLitEnd - vBase)) return ERROR(corruption_detected);
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_decompress_block.c	637	ZSTD_execSequence	pointer cast to integer compared for order (address ordering) [vendored]	if (sequence.offset > (size_t)(oLitEnd - prefixStart)) {
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_decompress_block.c	639	ZSTD_execSequence	pointer cast to integer compared for order (address ordering) [vendored]	if (sequence.offset > (size_t)(oLitEnd - virtualStart))
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_decompress_block.c	718	ZSTD_execSequenceLong	pointer cast to integer compared for order (address ordering) [vendored]	if (sequence.offset > (size_t)(oLitEnd - prefixStart)) {
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_decompress_block.c	720	ZSTD_execSequenceLong	pointer cast to integer compared for order (address ordering) [vendored]	if (sequence.offset > (size_t)(oLitEnd - dictStart)) return ERROR(corruption_detected);
+src/oblib/lib/hash/ob_dchash.h	39	HashNode::is_deleted	pointer cast to integer used for hashing or a bucket choice	bool is_deleted() { return is_last_bit_set((uint64_t)next_); }
+src/oblib/lib/hash/ob_hash.h	178	HashBase::DMark::is_set	pointer cast to integer used for hashing or a bucket choice	return 0 != ((uint64_t)node & DELETE_MASK);
+src/oblib/lib/hash/ob_hash.h	182	HashBase::DMark::set	pointer cast to integer used for hashing or a bucket choice	return reinterpret_cast<void *>((uint64_t)node | DELETE_MASK);
+src/oblib/lib/hash/ob_hash.h	186	HashBase::DMark::unset	pointer cast to integer used for hashing or a bucket choice	return reinterpret_cast<void *>((uint64_t)node & ~DELETE_MASK);
+src/oblib/lib/lock/ob_latch.cpp	229	ObLatchWaitQueue::wait	pointer cast to integer used for hashing or a bucket choice	uint64_t pos = reinterpret_cast<uint64_t>((&latch)) % LATCH_MAP_BUCKET_CNT;
+src/oblib/lib/lock/ob_latch.cpp	330	ObLatchWaitQueue::wake_up	pointer cast to integer used for hashing or a bucket choice	uint64_t pos = reinterpret_cast<uint64_t>((&latch)) % LATCH_MAP_BUCKET_CNT;
+src/oblib/lib/thread/ob_dedup_queue.h	166	ObDedupQueue	container keyed by pointer: ObHashMap	typedef hash::ObHashMap<const IObDedupTask *,
+src/oblib/lib/utility/ob_backtrace.cpp	86	#define addr_in_stack	pointer cast to integer compared for order (address ordering)	#define addr_in_stack(addr) (addr >= (int64_t)stack_addr && addr < (int64_t)stack_addr + stack_size)
+src/oblib/rpc/ob_lock_wait_node.cpp	85	ObLockWaitNode::compare	pointer cast to integer compared for order (address ordering)	} else if ((uint64_t)this->addr_ > (uint64_t)that->addr_) {
+src/oblib/rpc/ob_lock_wait_node.cpp	87	ObLockWaitNode::compare	pointer cast to integer compared for order (address ordering)	} else if ((uint64_t)this->addr_ < (uint64_t)that->addr_) {
+src/observer/vector_index/ob_plugin_vector_index_utils.cpp	1756	ObPluginVectorIndexUtils::fill_mem_context_detail_info	pointer cast to integer used as a key	} else if (OB_FAIL(adaptor_ptr_set.exist_refactored(reinterpret_cast<int64_t>(adaptor)))) {
+src/observer/vector_index/ob_plugin_vector_index_utils.cpp	1784	ObPluginVectorIndexUtils::fill_mem_context_detail_info	pointer cast to integer used as a key	OZ(adaptor_ptr_set.set_refactored(reinterpret_cast<int64_t>(adaptor)));
+src/observer/vector_index/ob_plugin_vector_index_utils.cpp	1825	ObPluginVectorIndexUtils::fill_ivf_mem_context_detail_info	pointer cast to integer used as a key	} else if (OB_FAIL(adaptor_ptr_set.exist_refactored(reinterpret_cast<int64_t>(adaptor)))) {
+src/observer/vector_index/ob_plugin_vector_index_utils.cpp	1835	ObPluginVectorIndexUtils::fill_ivf_mem_context_detail_info	pointer cast to integer used as a key	OZ(adaptor_ptr_set.set_refactored(reinterpret_cast<int64_t>(adaptor)));
+src/observer/virtual_table/ob_all_virtual_vector_index_info.cpp	77	ObVectorIndexInfoIterator::get_next_info	pointer cast to integer used as a key	} else if (OB_HASH_EXIST == (ret = ptr_set_.exist_refactored(reinterpret_cast<int64_t>(adapter_guard.get_adatper())))) {
+src/observer/virtual_table/ob_all_virtual_vector_index_info.cpp	81	ObVectorIndexInfoIterator::get_next_info	pointer cast to integer used as a key	if (OB_FAIL(ptr_set_.set_refactored(reinterpret_cast<int64_t>(adapter_guard.get_adatper())))) {
+src/pl/ob_pl_build.cpp	1062	ObPLBuilder::generate_package_cursors	pointer cast to integer IR identity	OZ (sql_params.push_back(reinterpret_cast<int64_t>(expr)));
+src/pl/ob_pl_resolver.cpp	3856	ObPLResolver::resolve_cparam_without_assign	pointer membership test: has_exist_in_array	CK (has_exist_in_array(func.get_exprs(), call_expr->get_expr(), &expr_idx));
+src/pl/ob_pl_resolver.cpp	3858	ObPLResolver::resolve_cparam_without_assign	pointer membership test: has_exist_in_array	OV (has_exist_in_array(func.get_exprs(), expr, &expr_idx), OB_ERR_UNEXPECTED, KPC(expr));
+src/pl/ob_pl_resolver.cpp	4137	ObPLResolver::check_cursor_formal_params	IR pointer != IR pointer	if (OB_SUCC(ret) && legal && left_default_expr != right_default_expr) {
+src/pl/ob_pl_resolver.cpp	5857	ObPLResolver::transform_var_val_to_dynamic_SQL	IR pointer == IR pointer	if(func.get_expr(using_pos) == sql->get_param_expr(param_pos)) {
+src/pl/ob_pl_resolver.cpp	5947	ObPLResolver::resolve_columns	IR pointer != IR pointer	CK (ref_expr != expr);
+src/pl/ob_pl_resolver.cpp	5953	ObPLResolver::resolve_columns	IR pointer == IR pointer	if (param_child == q_name.ref_expr_) {
+src/pl/ob_pl_resolver.cpp	6946	ObPLResolver::replace_udf_param_expr	IR pointer == unresolved pointer	} else if (udf_info.param_exprs_.at(j) == columns.at(i).ref_expr_) {
+src/pl/ob_pl_resolver.cpp	6952	ObPLResolver::replace_udf_param_expr	IR pointer == IR pointer	if (OB_SUCC(ret) && call_expr->get_expr() == columns.at(i).ref_expr_) {
+src/pl/ob_pl_resolver.cpp	8515	ObPLResolver::resolve_function	pointer cast to integer IR identity	reinterpret_cast<int64_t>(access_ident.udf_info_.ref_expr_)));
+src/pl/ob_pl_resolver.cpp	8597	ObPLResolver::resolve_construct	pointer cast to integer IR identity	reinterpret_cast<int64_t>(expr)));
+src/pl/ob_pl_resolver.cpp	8806	ObPLResolver::resolve_sys_func_access	pointer cast to integer IR identity	reinterpret_cast<int64_t>(access_ident.sys_func_expr_)));
+src/pl/ob_pl_resolver.cpp	8867	ObPLResolver::resolve_access_ident	pointer cast to integer used as an id	? reinterpret_cast<uint64_t>(access_idxs.at(cnt - 1).label_ns_)
+src/pl/ob_pl_resolver.cpp	10922	ObPLResolver::recursive_replace_expr	IR pointer == IR pointer	} else if (expr->get_param_expr(i) == qualified_name.ref_expr_) {

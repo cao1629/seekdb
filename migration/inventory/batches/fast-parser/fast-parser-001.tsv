@@ -1,0 +1,31 @@
+file	line	symbol	construct	text
+src/sql/parser/ob_fast_parser.cpp	1117	ObFastParserBase::process_hex_number	if ('\'' == next_ch) (inside if (is_quote)) -> PARAM_TOKEN; node types this function builds: T_HEX_STRING	if ('\'' == next_ch) {
+src/sql/parser/ob_fast_parser.cpp	1150	ObFastParserBase::process_hex_number	else (inside else) -> PARAM_TOKEN; node types this function builds: T_HEX_STRING	} else {
+src/sql/parser/ob_fast_parser.cpp	1154	ObFastParserBase::process_hex_number	if (OB_SUCC(ret) && PARAM_TOKEN == cur_token_type_) -> node T_HEX_STRING, lex_store_param()	if (OB_SUCC(ret) && PARAM_TOKEN == cur_token_type_) {
+src/sql/parser/ob_fast_parser.cpp	1223	ObFastParserBase::process_binary	if ('\'' == ch) (inside if (is_quote)) -> PARAM_TOKEN; node types this function builds: T_HEX_STRING	if ('\'' == ch) {
+src/sql/parser/ob_fast_parser.cpp	1235	ObFastParserBase::process_binary	else -> PARAM_TOKEN; node types this function builds: T_HEX_STRING	} else {
+src/sql/parser/ob_fast_parser.cpp	1242	ObFastParserBase::process_binary	if (OB_SUCC(ret) && PARAM_TOKEN == cur_token_type_) -> node T_HEX_STRING, lex_store_param()	if (OB_SUCC(ret) && PARAM_TOKEN == cur_token_type_) {
+src/sql/parser/ob_fast_parser.cpp	1318	ObFastParserBase::process_time_relate_type	if (T_TIME == type || T_DATE == type || T_TIMESTAMP_TZ == type || T_DATETIME == type || T_TIMESTAMP == type) (inside if ('\'' == ch || '\"' == ch)) -> process_date_related_type(); no node type is named in this function (the callee builds the node)	if (T_TIME == type || T_DATE == type || T_TIMESTAMP_TZ == type ||
+src/sql/parser/ob_fast_parser.cpp	1344	ObFastParserBase::process_date_related_type	else -> PARAM_TOKEN, node item_type, lex_store_param(); the node type is item_type, set earlier or passed in by the caller	} else {
+src/sql/parser/ob_fast_parser.cpp	1459	ObFastParserBase::process_question_mark	else -> node T_QUESTIONMARK, lex_store_param()	} else {
+src/sql/parser/ob_fast_parser.cpp	1497	ObFastParserBase::process_ps_statement	else -> node T_QUESTIONMARK	} else {
+src/sql/parser/ob_fast_parser.cpp	1515	ObFastParserBase::process_ps_statement	else (inside else > if (OB_SUCC(ret))) -> lex_store_param(); node types this function builds: T_QUESTIONMARK	} else {
+src/sql/parser/ob_fast_parser.cpp	1649	ObFastParserBase::parse_integer	if (ERANGE == err_no) (inside if ('-' == node->str_value_[0])) -> type_ = T_NUMBER	if (ERANGE == err_no) {
+src/sql/parser/ob_fast_parser.cpp	1656	ObFastParserBase::parse_integer	if (ERANGE == err_no) (inside else) -> type_ = T_NUMBER	if (ERANGE == err_no) {
+src/sql/parser/ob_fast_parser.cpp	1658	ObFastParserBase::parse_integer	else if (value > INT64_MAX) (inside else) -> type_ = T_UINT64	} else if (value > INT64_MAX) {
+src/sql/parser/ob_fast_parser.cpp	1692	ObFastParserBase::process_negative	else if (OB_FAIL(process_number(true/*has_minus*/))) (inside if (is_digit(ch))) -> process_number(); no node type is named in this function (the callee builds the node)	} else if (OB_FAIL(process_number(true/*has_minus*/))) {
+src/sql/parser/ob_fast_parser.cpp	1695	ObFastParserBase::process_negative	if (OB_FAIL(process_number(true/*has_minus*/))) (inside else if ('.' == ch && isdigit(next_char))) -> process_number(); no node type is named in this function (the callee builds the node)	if (OB_FAIL(process_number(true/*has_minus*/))) {
+src/sql/parser/ob_fast_parser.cpp	1839	ObFastParserBase::process_identifier_begin_with_t	if (-1 == is_identifier_flags(raw_sql_.cur_pos_)) (inside if (CHECK_EQ_STRNCASECMP("rue", 3))) -> PARAM_TOKEN, add_bool_type_node(); node types this function builds: T_TIMESTAMP, T_TIME	if (-1 == is_identifier_flags(raw_sql_.cur_pos_)) {
+src/sql/parser/ob_fast_parser.cpp	1845	ObFastParserBase::process_identifier_begin_with_t	if (CHECK_EQ_STRNCASECMP("imestamp", 8)) (inside else) -> item_type = T_TIMESTAMP	if (CHECK_EQ_STRNCASECMP("imestamp", 8)) {
+src/sql/parser/ob_fast_parser.cpp	1848	ObFastParserBase::process_identifier_begin_with_t	else if (CHECK_EQ_STRNCASECMP("ime", 3)) (inside else) -> item_type = T_TIME	} else if (CHECK_EQ_STRNCASECMP("ime", 3)) {
+src/sql/parser/ob_fast_parser.cpp	1853	ObFastParserBase::process_identifier_begin_with_t	if (T_INVALID != item_type) (inside else) -> process_time_relate_type(); node types this function builds: T_TIMESTAMP, T_TIME	if (T_INVALID != item_type) {
+src/sql/parser/ob_fast_parser.cpp	1882	#define CHECK_AND_PROCESS_NUMBER	else -> ADD_PARAMETERIC_NODE(); node types this function builds: T_INT, T_NUMBER, T_DOUBLE	} else { \
+src/sql/parser/ob_fast_parser.cpp	1939	ObFastParserBase::process_number	else (inside if ('e' == ch || 'E' == ch) > if (!has_digit_after_euler) > if (is_digit_first)) -> ADD_PARAMETERIC_NODE(T_NUMBER)	} else {
+src/sql/parser/ob_fast_parser.cpp	1949	ObFastParserBase::process_number	else (inside if ('e' == ch || 'E' == ch) > if (!has_digit_after_euler)) -> ADD_PARAMETERIC_NODE(T_NUMBER)	} else {
+src/sql/parser/ob_fast_parser.cpp	1958	ObFastParserBase::process_number	else (inside if ('e' == ch || 'E' == ch)) -> CHECK_AND_PROCESS_NUMBER(T_DOUBLE)	} else { // has number after euler
+src/sql/parser/ob_fast_parser.cpp	1963	ObFastParserBase::process_number	if (has_dot) (inside else) -> CHECK_AND_PROCESS_NUMBER(T_NUMBER)	if (has_dot) {
+src/sql/parser/ob_fast_parser.cpp	1965	ObFastParserBase::process_number	else (inside else) -> CHECK_AND_PROCESS_NUMBER(T_INT)	} else {
+src/sql/parser/ob_fast_parser.cpp	1969	ObFastParserBase::process_number	if (OB_SUCC(ret) && need_parameterized) -> node param_type, lex_store_param(); node types this function builds: T_INT, T_NUMBER, T_DOUBLE	if (OB_SUCC(ret) && need_parameterized) {
+src/sql/parser/ob_fast_parser.cpp	1974	ObFastParserBase::process_number	if (!is_double) (inside if (OB_SUCC(ret) && need_parameterized)) -> param_type = T_INT	if (!is_double) {
+src/sql/parser/ob_fast_parser.cpp	1996	ObFastParserBase::process_number	if (T_INT == param_type) (inside if (OB_SUCC(ret) && need_parameterized) > else) -> parse_integer(); node types this function builds: T_INT, T_NUMBER, T_DOUBLE	if (T_INT == param_type) {
+src/sql/parser/ob_fast_parser.cpp	2037	ObFastParserMysql::process_zero_identifier	if (is_hex(next_ch)) (inside if ('x' == next_ch || 'X' == next_ch)) -> process_hex_number(); no node type is named in this function (the callee builds the node)	if (is_hex(next_ch)) {

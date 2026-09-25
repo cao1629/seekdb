@@ -1,0 +1,61 @@
+file	line	symbol	construct	text
+src/share/geo/ob_geo_func_common.h	55	ObGeoNormalVal::string_	member ObString (pointer) of type const common::ObString *	const common::ObString *string_;
+src/share/geo/ob_geo_ibin.h	53	ObIWkbGeometry::data_	member ObString (value) of type ObString	ObString data_; // wkb without srid
+src/share/geo/ob_geo_mvt.h	123	mvt_agg_result::lay_name_	member ObString (value) of type common::ObString	common::ObString lay_name_;
+src/share/geo/ob_geo_mvt.h	124	mvt_agg_result::geom_name_	member ObString (value) of type common::ObString	common::ObString geom_name_;
+src/share/geo/ob_geo_mvt.h	127	mvt_agg_result::feature_id_name_	member ObString (value) of type common::ObString	common::ObString feature_id_name_;
+src/share/geo/ob_geo_mvt.h	134	mvt_agg_result::keys_	member container of ObString of type ObVector<common::ObString>	ObVector<common::ObString> keys_;
+src/share/geo/ob_geo_utils.cpp	63	ObGeoTypeUtil::get_pg_reserved_prj4text	allocator in, arena view out: ObString &prj4_param	int ObGeoTypeUtil::get_pg_reserved_prj4text(ObIAllocator *allocator, uint32_t srid, ObString &prj4_param)
+src/share/geo/ob_geo_utils.cpp	714	ObGeoTypeUtil::get_buffered_geo	allocator in, arena view out: ObString &res_wkb	int ObGeoTypeUtil::get_buffered_geo(ObArenaAllocator *allocator,
+src/share/geo/ob_geo_utils.cpp	821	ObGeoTypeUtil::add_geo_version	allocator in, arena view out: ObString &res_wkb	int ObGeoTypeUtil::add_geo_version(ObIAllocator &allocator, const ObString &src, ObString &res_wkb)
+src/share/geo/ob_geo_utils.cpp	847	ObGeoTypeUtil::to_wkb	allocator in, arena view out: ObString &res_wkb	int ObGeoTypeUtil::to_wkb(ObIAllocator &allocator,
+src/share/geo/ob_geo_utils.cpp	1469	ObGeoTypeUtil::geo_to_ewkt	allocator in, arena view out: ObString &ewkt	int ObGeoTypeUtil::geo_to_ewkt(const ObString &swkb,
+src/share/geo/ob_geo_wkb_check_visitor.h	72	ObGeoWkbCheckVisitor::wkb_	member ObString (value) of type ObString	ObString wkb_;
+src/share/geo/ob_geo_wkb_visitor.h	78	ObGeoWkbVisitor::buffer_	member ObString (pointer) of type ObString *	ObString *buffer_;
+src/share/geo/ob_srs_info.cpp	401	ObSrsItem::get_proj4_param	allocator in, arena view out: ObString &proj_param	int ObSrsItem::get_proj4_param(ObIAllocator *allocator, ObString &proj_param) const
+src/share/geo/ob_srs_info.cpp	411	ObGeographicSrs::get_proj4_param	allocator in, arena view out: ObString &proj4_param	int ObGeographicSrs::get_proj4_param(ObIAllocator *allocator, ObString &proj4_param) const
+src/share/geo/ob_srs_info.cpp	495	ObProjectedSrs::get_proj4_param	allocator in, arena view out: ObString &proj4_param	int ObProjectedSrs::get_proj4_param(ObIAllocator *allocator, ObString &proj4_param) const
+src/share/geo/ob_srs_info.h	127	ObRsAuthority::org_name	member ObString (value) of type common::ObString	common::ObString org_name;
+src/share/geo/ob_srs_info.h	128	ObRsAuthority::org_code	member ObString (value) of type common::ObString	common::ObString org_code;
+src/share/geo/ob_srs_info.h	133	ObSpheroid::name	member ObString (value) of type common::ObString	common::ObString name;
+src/share/geo/ob_srs_info.h	152	ObRsDatum::name	member ObString (value) of type common::ObString	common::ObString name;
+src/share/geo/ob_srs_info.h	160	ObPrimem::name	member ObString (value) of type common::ObString	common::ObString name;
+src/share/geo/ob_srs_info.h	169	ObRsUnit::type	member ObString (value) of type common::ObString	common::ObString type;
+src/share/geo/ob_srs_info.h	178	ObRsAxis::name	member ObString (value) of type common::ObString	common::ObString name;
+src/share/geo/ob_srs_info.h	191	ObGeographicRs::rs_name	member ObString (value) of type common::ObString	common::ObString rs_name;
+src/share/geo/ob_srs_info.h	202	ObProjection::name	member ObString (value) of type common::ObString	common::ObString name;
+src/share/geo/ob_srs_info.h	208	ObProjectionPram::name	member ObString (value) of type common::ObString	common::ObString name;
+src/share/geo/ob_srs_info.h	223	ObProjectionRs::rs_name	member ObString (value) of type common::ObString	common::ObString rs_name;
+src/share/geo/ob_srs_info.h	312	ObGeographicSrs::proj4text_	member ObString (value) of type ObString	ObString proj4text_;
+src/share/geo/ob_vector_tile.pb-c.h	80	VectorTile__Tile__Value::string_value	member raw bytes (pointer) of type char * [generated]	char *string_value;
+src/share/geo/ob_vector_tile.pb-c.h	136	VectorTile__Tile__Layer::name	member raw bytes (pointer) of type char * [generated]	char *name;
+src/share/geo/ob_vector_tile.pb-c.h	146	VectorTile__Tile__Layer::keys	member raw bytes (pointer) of type char ** [generated]	char **keys;
+src/share/geo/ob_wkb_to_json_visitor.h	117	ObWkbToJsonVisitor::right_curly_bracket_	member ObString (value) of type ObString	ObString right_curly_bracket_;
+src/share/geo/ob_wkb_to_json_visitor.h	118	ObWkbToJsonVisitor::left_curly_bracket_	member ObString (value) of type ObString	ObString left_curly_bracket_;
+src/share/geo/ob_wkb_to_json_visitor.h	119	ObWkbToJsonVisitor::left_sq_bracket_	member ObString (value) of type ObString	ObString left_sq_bracket_;
+src/share/geo/ob_wkb_to_json_visitor.h	120	ObWkbToJsonVisitor::right_sq_bracket_	member ObString (value) of type ObString	ObString right_sq_bracket_;
+src/share/geo/ob_wkt_parser.h	54	ObWktParser::ObWktTokenVal::string_val_	member ObString (value) of type ObString	ObString string_val_;
+src/share/geo/ob_wkt_parser.h	97	ObWktParser::wkt_	member raw bytes (pointer) of type const char *	const char *wkt_;
+src/share/inner_table/ob_dump_inner_table_schema.h	93	ObLoadInnerTableSchemaInfoConstructor::table_name_	member ObString (value) of type ObString	ObString table_name_;
+src/share/inner_table/ob_dump_inner_table_schema.h	94	ObLoadInnerTableSchemaInfoConstructor::rows_	member container of ObString of type ObArray<ObString>	ObArray<ObString> rows_;
+src/share/inner_table/ob_dump_inner_table_schema.h	96	ObLoadInnerTableSchemaInfoConstructor::header_	member ObString (value) of type ObString	ObString header_;
+src/share/inner_table/ob_dump_inner_table_schema.h	125	ObCoreTableLoadInfoConstructor::core_table_name_	member ObString (value) of type ObString	ObString core_table_name_;
+src/share/inner_table/ob_load_inner_table_schema.h	45	ObLoadInnerTableSchemaInfo::inner_table_name_	member raw bytes (pointer) of type const char *	const char *inner_table_name_;
+src/share/inner_table/ob_load_inner_table_schema.h	46	ObLoadInnerTableSchemaInfo::inner_table_column_names_	member raw bytes (pointer) of type const char *	const char *inner_table_column_names_;
+src/share/inner_table/ob_load_inner_table_schema.h	48	ObLoadInnerTableSchemaInfo::inner_table_rows_	member raw bytes (pointer) of type const char **	const char **inner_table_rows_;
+src/share/io/ob_io_define.cpp	322	ObIOCallback::alloc_and_copy_data	allocator in, arena view out: char *&data_buffer	int ObIOCallback::alloc_and_copy_data(const char *io_data_buffer, const int64_t data_size, common::ObIAllocator *allocator, char *&data_buffer)
+src/share/io/ob_io_define.h	260	ObSNIOInfo::buf_	member raw bytes (pointer) of type const char *	const char *buf_;
+src/share/io/ob_io_define.h	261	ObSNIOInfo::user_data_buf_	member raw bytes (pointer) of type char *	char *user_data_buf_;  // actual data buf without cb, allocated by the calling layer
+src/share/io/ob_io_define.h	440	ObIOResult::buf_	member raw bytes (pointer) of type const char *	const char *buf_;
+src/share/io/ob_io_define.h	441	ObIOResult::user_data_buf_	member raw bytes (pointer) of type char *	char *user_data_buf_; //actual data buf without cb, allocated by thpe calling layer
+src/share/io/ob_io_struct.h	119	ObIOMemoryPool::begin_ptr_	member raw bytes (pointer) of type char *	char *begin_ptr_;
+src/share/io/ob_io_struct.h	556	ObIOTracer::RefLog::click_str_	member raw bytes (pointer) of type const char *	const char *click_str_[MAX_CLICK_COUNT];
+src/share/lob/ob_lob_text_iter_context.h	36	ObLobTextIterCtx::ObLobTextIterCtx	allocator in, arena view out: ObLobLocatorV2 &locator	ObLobTextIterCtx(ObLobLocatorV2 &locator,
+src/share/lob/ob_lob_text_iter_context.h	63	ObLobTextIterCtx::buff_	member raw bytes (pointer) of type char *	char *buff_;
+src/share/lob/ob_lob_text_iter_context.h	79	ObLobTextIterCtx::locator_	member ObLobLocatorV2 (value) of type ObLobLocatorV2	ObLobLocatorV2 locator_;
+src/share/ob_admin_dump_helper.h	181	ObAdminMutatorStringArg::buf_	member raw bytes (pointer) of type char *	char *buf_;
+src/share/ob_admin_dump_helper.h	184	ObAdminMutatorStringArg::decompress_buf_	member raw bytes (pointer) of type char *	char *decompress_buf_;
+src/share/ob_core_table_proxy.h	37	ObCoreTableCell::name_	member ObString (value) of type common::ObString	common::ObString name_;
+src/share/ob_core_table_proxy.h	38	ObCoreTableCell::value_	member ObString (value) of type common::ObString	common::ObString value_;
+src/share/ob_core_table_proxy.h	251	ObCoreTableProxy::table_name_	member raw bytes (pointer) of type const char *	const char *table_name_;
+src/share/ob_ddl_args.h	65	ObDDLArg::ddl_stmt_str_	member ObString (value) of type common::ObString	common::ObString ddl_stmt_str_;

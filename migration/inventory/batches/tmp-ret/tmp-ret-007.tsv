@@ -1,0 +1,120 @@
+file	line	symbol	construct	text
+src/rootserver/ddl_task/ob_ddl_common_rs_impl.cpp	274	ObDDLTaskUtil::get_domain_index_share_table_snapshot	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_ddl_common_rs_impl.cpp	275	ObDDLTaskUtil::get_domain_index_share_table_snapshot	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = trans.end(OB_SUCC(ret)))) {
+src/rootserver/ddl_task/ob_ddl_common_rs_impl.cpp	277	ObDDLTaskUtil::get_domain_index_share_table_snapshot	merge into ret	ret = OB_SUCC(ret) ? tmp_ret : ret;
+src/rootserver/ddl_task/ob_ddl_common_rs_impl.cpp	613	ObDDLTaskUtil::obtain_snapshot	declare tmp_ret	const int tmp_ret = trans.end(need_commit);
+src/rootserver/ddl_task/ob_ddl_common_rs_impl.cpp	619	ObDDLTaskUtil::obtain_snapshot	merge into ret	ret = OB_SUCC(ret) ? tmp_ret : ret;
+src/rootserver/ddl_task/ob_ddl_common_rs_impl.cpp	866	ObDDLTaskUtil::check_and_cancel_single_replica_dag	declare saved_ret (continue-and-record variable)	int saved_ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_ddl_common_rs_impl.cpp	890	ObDDLTaskUtil::check_and_cancel_single_replica_dag	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_ddl_common_rs_impl.cpp	892	ObDDLTaskUtil::check_and_cancel_single_replica_dag	OB_TMP_FAIL (plan definition)	if (is_complement_data_dag && OB_TMP_FAIL(
+src/rootserver/ddl_task/ob_ddl_common_rs_impl.cpp	894	ObDDLTaskUtil::check_and_cancel_single_replica_dag	assign saved_ret (continue-and-record variable)	saved_ret = OB_SUCC(saved_ret) ? tmp_ret : saved_ret;
+src/rootserver/ddl_task/ob_ddl_common_rs_impl.cpp	897	ObDDLTaskUtil::check_and_cancel_single_replica_dag	OB_TMP_FAIL (plan definition)	} else if (!is_complement_data_dag && OB_TMP_FAIL(
+src/rootserver/ddl_task/ob_ddl_common_rs_impl.cpp	899	ObDDLTaskUtil::check_and_cancel_single_replica_dag	assign saved_ret (continue-and-record variable)	saved_ret = OB_SUCC(saved_ret) ? tmp_ret : saved_ret;
+src/rootserver/ddl_task/ob_ddl_common_rs_impl.cpp	918	ObDDLTaskUtil::check_and_cancel_single_replica_dag	merge saved_ret into ret (continue-and-record through another variable)	ret = OB_SUCC(ret) ? saved_ret : ret;
+src/rootserver/ddl_task/ob_ddl_redefinition_task.cpp	148	ObDDLRedefinitionSSTableBuildTask::process	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_ddl_redefinition_task.cpp	213	ObDDLRedefinitionSSTableBuildTask::process	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(ObSysDDLSchedulerUtil::on_sstable_complement_job_reply(unused_tablet_id, task_key, snapshot_version_, execution_id_, ret, info))) {
+src/rootserver/ddl_task/ob_ddl_redefinition_task.cpp	458	ObDDLRedefinitionTask::wait_data_complement	merge complete_sstable_job_ret_code_ into ret (continue-and-record through another variable)	ret = OB_SUCC(ret) ? complete_sstable_job_ret_code_ : ret;
+src/rootserver/ddl_task/ob_ddl_redefinition_task.cpp	1242	ObDDLRedefinitionTask::sync_stats_info	declare tmp_ret	int tmp_ret = trans.end(is_commit);
+src/rootserver/ddl_task/ob_ddl_redefinition_task.cpp	1246	ObDDLRedefinitionTask::sync_stats_info	merge into ret	ret = tmp_ret;
+src/rootserver/ddl_task/ob_ddl_redefinition_task.cpp	1289	ObDDLRedefinitionTask::sync_stats_info_local	declare tmp_ret	int tmp_ret = trx_lock_timeout_guard.restore();
+src/rootserver/ddl_task/ob_ddl_redefinition_task.cpp	1293	ObDDLRedefinitionTask::sync_stats_info_local	merge into ret	ret = tmp_ret;
+src/rootserver/ddl_task/ob_ddl_redefinition_task.cpp	1882	ObSyncTabletAutoincSeqCtx::call_and_process_all_tablet_autoinc_seqs	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_ddl_redefinition_task.cpp	1913	ObSyncTabletAutoincSeqCtx::call_and_process_all_tablet_autoinc_seqs	assign tmp_ret	tmp_ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_ddl_redefinition_task.cpp	1928	ObSyncTabletAutoincSeqCtx::call_and_process_all_tablet_autoinc_seqs	assign tmp_ret	tmp_ret = autoinc_param.ret_code_;
+src/rootserver/ddl_task/ob_ddl_redefinition_task.cpp	1931	ObSyncTabletAutoincSeqCtx::call_and_process_all_tablet_autoinc_seqs	assign tmp_ret	tmp_ret = autoinc_param.ret_code_;
+src/rootserver/ddl_task/ob_ddl_redefinition_task.cpp	1936	ObSyncTabletAutoincSeqCtx::call_and_process_all_tablet_autoinc_seqs	merge into ret	ret = tmp_ret;
+src/rootserver/ddl_task/ob_ddl_retry_task.cpp	347	ObDDLRetryTask::drop_schema	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_ddl_retry_task.cpp	350	ObDDLRetryTask::drop_schema	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = get_forward_user_message(rcode))) {
+src/rootserver/ddl_task/ob_ddl_scheduler.cpp	116	ObDDLTaskQueue::push_task	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_ddl_scheduler.cpp	118	ObDDLTaskQueue::push_task	assign tmp_ret	tmp_ret = common::OB_ERR_UNEXPECTED;
+src/rootserver/ddl_task/ob_ddl_scheduler.cpp	122	ObDDLTaskQueue::push_task	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = task_map_.erase_refactored(task->get_task_key()))) {
+src/rootserver/ddl_task/ob_ddl_scheduler.cpp	146	ObDDLTaskQueue::remove_task	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_ddl_scheduler.cpp	157	ObDDLTaskQueue::remove_task	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = task_id_map_.erase_refactored(task->get_ddl_task_id()))) {
+src/rootserver/ddl_task/ob_ddl_scheduler.cpp	158	ObDDLTaskQueue::remove_task	merge into ret	ret = OB_SUCCESS == ret ? tmp_ret : ret;
+src/rootserver/ddl_task/ob_ddl_scheduler.cpp	1382	ObDDLScheduler::get_task_record	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_ddl_scheduler.cpp	1384	ObDDLScheduler::get_task_record	assign tmp_ret	tmp_ret = OB_INVALID_ARGUMENT;
+src/rootserver/ddl_task/ob_ddl_scheduler.cpp	1385	ObDDLScheduler::get_task_record	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(ObDDLTaskRecordOperator::get_ddl_task_record(
+src/rootserver/ddl_task/ob_ddl_scheduler.cpp	1445	ObDDLScheduler::modify_redef_task	declare tmp_ret	int tmp_ret = trans.end(commit);
+src/rootserver/ddl_task/ob_ddl_scheduler.cpp	1447	ObDDLScheduler::modify_redef_task	merge into ret	ret = (OB_SUCCESS == ret) ? tmp_ret : ret;
+src/rootserver/ddl_task/ob_ddl_scheduler.cpp	2322	ObDDLScheduler::recover_task	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_ddl_scheduler.cpp	2360	ObDDLScheduler::recover_task	declare tmp_ret	int tmp_ret = trans.end(commit);
+src/rootserver/ddl_task/ob_ddl_scheduler.cpp	2362	ObDDLScheduler::recover_task	merge into ret	ret = (OB_SUCCESS == ret) ? tmp_ret : ret;
+src/rootserver/ddl_task/ob_ddl_scheduler.cpp	2390	ObDDLScheduler::remove_inactive_ddl_task	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_ddl_scheduler.cpp	3033	ObDDLScheduler::inner_schedule_ddl_task	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_ddl_scheduler.cpp	3036	ObDDLScheduler::inner_schedule_ddl_task	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(add_task_to_longops_mgr(ddl_task))) {
+src/rootserver/ddl_task/ob_ddl_scheduler.cpp	3045	ObDDLScheduler::inner_schedule_ddl_task	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(remove_task_from_longops_mgr(ddl_task))) {
+src/rootserver/ddl_task/ob_ddl_scheduler.cpp	3049	ObDDLScheduler::inner_schedule_ddl_task	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(add_sys_task(ddl_task))) {
+src/rootserver/ddl_task/ob_ddl_tablet_scheduler.cpp	180	ObDDLTabletScheduler::get_next_batch_tablets	merge OB_EAGAIN into ret through if (OB_SUCC(ret)) (continue-and-record through another variable)	ret = OB_EAGAIN;
+src/rootserver/ddl_task/ob_ddl_tablet_scheduler.cpp	280	ObDDLTabletScheduler::push_task_execution_id	declare tmp_ret	int tmp_ret = trans.end(commit);
+src/rootserver/ddl_task/ob_ddl_tablet_scheduler.cpp	283	ObDDLTabletScheduler::push_task_execution_id	merge into ret	ret = (OB_SUCCESS == ret) ? tmp_ret : ret;
+src/rootserver/ddl_task/ob_ddl_task.cpp	593	ObDDLTask::switch_status	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_ddl_task.cpp	599	ObDDLTask::switch_status	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(check_ddl_task_is_cancel(trace_id_, is_cancel))) {
+src/rootserver/ddl_task/ob_ddl_task.cpp	651	ObDDLTask::switch_status	declare tmp_ret	int tmp_ret = trans.end(commit);
+src/rootserver/ddl_task/ob_ddl_task.cpp	653	ObDDLTask::switch_status	merge into ret	ret = (OB_SUCCESS == ret) ? tmp_ret : ret;
+src/rootserver/ddl_task/ob_ddl_task.cpp	664	ObDDLTask::switch_status	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(inner_refresh_task_context(real_new_status))) {
+src/rootserver/ddl_task/ob_ddl_task.cpp	666	ObDDLTask::switch_status	merge into ret	ret = (OB_SUCCESS == ret) ? tmp_ret : ret;
+src/rootserver/ddl_task/ob_ddl_task.cpp	805	ObDDLTask::wait_trans_end	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_ddl_task.cpp	880	ObDDLTask::batch_release_snapshot	declare tmp_ret	int tmp_ret = trans.end(need_commit);
+src/rootserver/ddl_task/ob_ddl_task.cpp	883	ObDDLTask::batch_release_snapshot	merge into ret	ret = OB_SUCC(ret) ? tmp_ret : ret;
+src/rootserver/ddl_task/ob_ddl_task.cpp	969	ObDDLTask::push_task_execution_id	declare tmp_ret	int tmp_ret = trans.end(commit);
+src/rootserver/ddl_task/ob_ddl_task.cpp	972	ObDDLTask::push_task_execution_id	merge into ret	ret = (OB_SUCCESS == ret) ? tmp_ret : ret;
+src/rootserver/ddl_task/ob_ddl_task.cpp	1328	ObDDLWaitTransEndCtx::do_write_defensive	declare temp_ret	int temp_ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_ddl_task.cpp	1329	ObDDLWaitTransEndCtx::do_write_defensive	assign temp_ret	if (OB_SUCCESS != (temp_ret = trans.end(OB_SUCC(ret)))) {
+src/rootserver/ddl_task/ob_ddl_task.cpp	1331	ObDDLWaitTransEndCtx::do_write_defensive	merge into ret	ret = (OB_SUCC(ret)) ? temp_ret : ret;
+src/rootserver/ddl_task/ob_ddl_task.cpp	1758	send_batch_calc_rpc	declare ret_code (continue-and-record variable)	int ret_code = res.ret_codes_.at(i);
+src/rootserver/ddl_task/ob_ddl_task.cpp	1766	send_batch_calc_rpc	merge ret_code into ret (continue-and-record through another variable)	ret = OB_SUCCESS == ret ? ret_code : ret; // keep first error code
+src/rootserver/ddl_task/ob_ddl_task.cpp	2435	ObDDLTaskRecordOperator::get_or_insert_schedule_info	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_ddl_task.cpp	2437	ObDDLTaskRecordOperator::get_or_insert_schedule_info	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(trans.end(need_commit))) {
+src/rootserver/ddl_task/ob_ddl_task.cpp	2439	ObDDLTaskRecordOperator::get_or_insert_schedule_info	merge into ret	ret = OB_SUCC(ret) ? tmp_ret : ret;
+src/rootserver/ddl_task/ob_ddl_task.cpp	2589	ObDDLTaskRecordOperator::get_or_insert_tablet_schedule_info	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_ddl_task.cpp	2591	ObDDLTaskRecordOperator::get_or_insert_tablet_schedule_info	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(trans.end(need_commit))) {
+src/rootserver/ddl_task/ob_ddl_task.cpp	2593	ObDDLTaskRecordOperator::get_or_insert_tablet_schedule_info	merge into ret	ret = OB_SUCC(ret) ? tmp_ret : ret;
+src/rootserver/ddl_task/ob_drop_fts_index_task.cpp	314	ObDropFTSIndexTask::check_switch_succ	declare tmp_ret	int tmp_ret = schema_guard.get_table_schema( object_id_, data_table_schema);
+src/rootserver/ddl_task/ob_drop_fts_index_task.cpp	317	ObDropFTSIndexTask::check_switch_succ	assign tmp_ret	} else if ((tmp_ret = data_table_schema->check_has_fts_index_aux(schema_guard, has_fts_index))!= OB_SUCCESS) {
+src/rootserver/ddl_task/ob_drop_fts_index_task.cpp	318	ObDropFTSIndexTask::check_switch_succ	assign tmp_ret	} else if ((tmp_ret = data_table_schema->check_has_multivalue_index_aux(schema_guard, has_multivalue_index))!= OB_SUCCESS) {
+src/rootserver/ddl_task/ob_drop_fts_index_task.cpp	320	ObDropFTSIndexTask::check_switch_succ	assign tmp_ret	&& (tmp_ret = data_table_schema->get_fulltext_column_ids(doc_id_col_id, ft_col_id)) != OB_SUCCESS) {
+src/rootserver/ddl_task/ob_drop_fts_index_task.cpp	578	ObDropFTSIndexTask::cleanup_impl	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_drop_fts_index_task.cpp	579	ObDropFTSIndexTask::cleanup_impl	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = trans.end(OB_SUCC(ret)))) {
+src/rootserver/ddl_task/ob_drop_fts_index_task.cpp	581	ObDropFTSIndexTask::cleanup_impl	merge into ret	ret = OB_SUCC(ret) ? tmp_ret : ret;
+src/rootserver/ddl_task/ob_fts_index_build_task.cpp	574	ObFtsIndexBuildTask::prepare_aux_index_tables	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_fts_index_build_task.cpp	575	ObFtsIndexBuildTask::prepare_aux_index_tables	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = trans.end(OB_SUCC(ret)))) {
+src/rootserver/ddl_task/ob_fts_index_build_task.cpp	577	ObFtsIndexBuildTask::prepare_aux_index_tables	merge into ret	ret = OB_SUCC(ret) ? tmp_ret : ret;
+src/rootserver/ddl_task/ob_fts_index_build_task.cpp	777	ObFtsIndexBuildTask::load_dictionary	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_fts_index_build_task.cpp	778	ObFtsIndexBuildTask::load_dictionary	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = trans.end(OB_SUCC(ret)))) {
+src/rootserver/ddl_task/ob_fts_index_build_task.cpp	780	ObFtsIndexBuildTask::load_dictionary	merge into ret	ret = OB_SUCC(ret) ? tmp_ret : ret;
+src/rootserver/ddl_task/ob_fts_index_build_task.cpp	1440	ObFtsIndexBuildTask::clean_on_failed	declare tmp_ret	int tmp_ret = trans.end(true/*commit*/);
+src/rootserver/ddl_task/ob_fts_index_build_task.cpp	1442	ObFtsIndexBuildTask::clean_on_failed	merge into ret	ret = (OB_SUCCESS == ret) ? tmp_ret : ret;
+src/rootserver/ddl_task/ob_fts_index_build_task.cpp	1745	ObFtsIndexBuildTask::cleanup_impl	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_fts_index_build_task.cpp	1746	ObFtsIndexBuildTask::cleanup_impl	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = trans.end(OB_SUCC(ret)))) {
+src/rootserver/ddl_task/ob_fts_index_build_task.cpp	1748	ObFtsIndexBuildTask::cleanup_impl	merge into ret	ret = OB_SUCC(ret) ? tmp_ret : ret;
+src/rootserver/ddl_task/ob_fts_index_build_task.cpp	1820	ObFtsIndexBuildTask::wait_schema_refresh_and_trans_end	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_fts_index_build_task.cpp	1825	ObFtsIndexBuildTask::wait_schema_refresh_and_trans_end	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(switch_status(next_status, true/* enable_flt*/, ret))) {
+src/rootserver/ddl_task/ob_index_build_task.cpp	137	ObIndexSSTableBuildTask::process	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_index_build_task.cpp	170	ObIndexSSTableBuildTask::process	declare tmp_ret	int tmp_ret = ObSysDDLSchedulerUtil::on_sstable_complement_job_reply(
+src/rootserver/ddl_task/ob_index_build_task.cpp	174	ObIndexSSTableBuildTask::process	merge into ret	ret = OB_SUCCESS == ret ? tmp_ret : ret;
+src/rootserver/ddl_task/ob_index_build_task.cpp	570	ObIndexBuildTask::wait_trans_end	declare tmp_ret	const int tmp_ret = trans.end(need_commit);
+src/rootserver/ddl_task/ob_index_build_task.cpp	576	ObIndexBuildTask::wait_trans_end	merge into ret	ret = OB_SUCC(ret) ? tmp_ret : ret;
+src/rootserver/ddl_task/ob_modify_autoinc_task.cpp	54	ObUpdateAutoincSequenceTask::process	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_modify_autoinc_task.cpp	108	ObUpdateAutoincSequenceTask::process	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(ObSysDDLSchedulerUtil::notify_update_autoinc_end(task_key, max_value + 1, ret))) {
+src/rootserver/ddl_task/ob_modify_autoinc_task.cpp	272	ObModifyAutoincTask::unlock_table	declare tmp_ret	int tmp_ret = trans.end(commit);
+src/rootserver/ddl_task/ob_modify_autoinc_task.cpp	274	ObModifyAutoincTask::unlock_table	merge into ret	ret = (OB_SUCCESS == ret) ? tmp_ret : ret;
+src/rootserver/ddl_task/ob_modify_autoinc_task.cpp	351	ObModifyAutoincTask::wait_trans_end	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_rebuild_index_task.cpp	554	ObRebuildIndexTask::cleanup_impl	declare tmp_ret	int tmp_ret = trans.end(true/*commit*/);
+src/rootserver/ddl_task/ob_rebuild_index_task.cpp	557	ObRebuildIndexTask::cleanup_impl	merge into ret	ret = (OB_SUCCESS == ret) ? tmp_ret : ret;
+src/rootserver/ddl_task/ob_table_redefinition_task.cpp	336	ObTableRedefinitionTask::table_redefinition	merge complete_sstable_job_ret_code_ into ret (continue-and-record through another variable)	ret = OB_SUCC(ret) ? complete_sstable_job_ret_code_ : ret;
+src/rootserver/ddl_task/ob_table_redefinition_task.cpp	745	ObTableRedefinitionTask::take_effect	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_table_redefinition_task.cpp	747	ObTableRedefinitionTask::take_effect	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(check_take_effect_succ(has_took_effect_succ))) {
+src/rootserver/ddl_task/ob_vec_index_build_task.cpp	1503	ObVecIndexBuildTask::ChangeTaskStatusFn::operator()	declare tmp_ret	int tmp_ret = trans.end(true/*commit*/);
+src/rootserver/ddl_task/ob_vec_index_build_task.cpp	1505	ObVecIndexBuildTask::ChangeTaskStatusFn::operator()	merge into ret	ret = (OB_SUCCESS == ret) ? tmp_ret : ret;
+src/rootserver/ddl_task/ob_vec_index_build_task.cpp	1751	ObVecIndexBuildTask::cleanup_impl	declare tmp_ret	int tmp_ret = trans.end(true/*commit*/);
+src/rootserver/ddl_task/ob_vec_index_build_task.cpp	1754	ObVecIndexBuildTask::cleanup_impl	merge into ret	ret = (OB_SUCCESS == ret) ? tmp_ret : ret;
+src/rootserver/ddl_task/ob_vec_ivf_index_build_task.cpp	1446	ObVecIVFIndexBuildTask::ChangeTaskStatusFn::operator()	declare tmp_ret	int tmp_ret = trans.end(true/*commit*/);
+src/rootserver/ddl_task/ob_vec_ivf_index_build_task.cpp	1448	ObVecIVFIndexBuildTask::ChangeTaskStatusFn::operator()	merge into ret	ret = (OB_SUCCESS == ret) ? tmp_ret : ret;
+src/rootserver/ddl_task/ob_vec_ivf_index_build_task.cpp	1685	ObVecIVFIndexBuildTask::cleanup_impl	declare tmp_ret	int tmp_ret = trans.end(true/*commit*/);
+src/rootserver/ddl_task/ob_vec_ivf_index_build_task.cpp	1688	ObVecIVFIndexBuildTask::cleanup_impl	merge into ret	ret = (OB_SUCCESS == ret) ? tmp_ret : ret;
+src/rootserver/fork_table/ob_fork_database_service.cpp	337	ObDDLService::fork_database	declare tmp_ret	int tmp_ret = trans.end(commit);
+src/rootserver/fork_table/ob_fork_database_service.cpp	339	ObDDLService::fork_database	merge into ret	ret = (OB_SUCCESS == ret) ? tmp_ret : ret;
+src/rootserver/fork_table/ob_fork_table_service.cpp	377	ObDDLService::fork_table	declare tmp_ret	int tmp_ret = trans.end(commit);
+src/rootserver/fork_table/ob_fork_table_service.cpp	379	ObDDLService::fork_table	merge into ret	ret = (OB_SUCCESS == ret) ? tmp_ret : ret;
+src/rootserver/fork_table/ob_fork_table_task.cpp	563	ObForkTableTask::cleanup_impl	declare tmp_ret	int tmp_ret = trans.end(commit);
+src/rootserver/fork_table/ob_fork_table_task.cpp	565	ObForkTableTask::cleanup_impl	merge into ret	ret = (OB_SUCCESS == ret) ? tmp_ret : ret;

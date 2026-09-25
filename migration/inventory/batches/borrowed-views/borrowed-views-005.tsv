@@ -1,0 +1,57 @@
+file	line	symbol	construct	text
+src/oblib/lib/charset/ob_charset.cpp	610	ObCharset::caseup	allocator in, arena view out: ObString &dst	int ObCharset::caseup(const ObCollationType collation_type,
+src/oblib/lib/charset/ob_charset.cpp	1862	ObCharset::toupper	allocator in, arena view out: ObString &dst	int ObCharset::toupper(const ObCollationType collation_type,
+src/oblib/lib/charset/ob_charset.cpp	1893	ObCharset::tolower	allocator in, arena view out: ObString &dst	int ObCharset::tolower(const ObCollationType collation_type,
+src/oblib/lib/charset/ob_charset.cpp	1903	ObCharset::tolower	allocator in, arena view out: ObString &dst	int ObCharset::tolower(const ObCharsetInfo *cs_info,
+src/oblib/lib/charset/ob_charset.cpp	2249	ObCharset::charset_convert	allocator in, arena view out: ObString &out	int ObCharset::charset_convert(ObIAllocator &alloc,
+src/oblib/lib/charset/ob_charset.cpp	2367	ObCharset::whitespace_padding	allocator in, arena view out: ObString &result	int ObCharset::whitespace_padding(ObIAllocator &allocator,
+src/oblib/lib/charset/ob_charset.h	377	ObCharsetWrapper::description_	member raw bytes (pointer) of type const char *	const char *description_;
+src/oblib/lib/charset/ob_charset.h	838	ObStringScanner::origin_str_	member ObString (reference) of type const ObString &	const ObString &origin_str_;
+src/oblib/lib/charset/ob_charset.h	839	ObStringScanner::str_	member ObString (value) of type ObString	ObString str_;
+src/oblib/lib/charset/ob_charset.h	855	ObCharSetString::str_	member ObString (value) of type ObString	ObString str_;
+src/oblib/lib/charset/ob_charset_string_helper.h	250	ObFastStringScanner::Encoder::ptr_	member raw bytes (pointer) of type char *	char *ptr_;
+src/oblib/lib/charset/ob_charset_string_helper.h	251	ObFastStringScanner::Encoder::end_	member raw bytes (pointer) of type char *	char *end_;
+src/oblib/lib/charset/ob_ctype.h	352	OB_UNI_IDX::tab	member raw bytes (pointer) of type const uchar *	const uchar *tab;
+src/oblib/lib/charset/ob_ctype.h	366	ObCharsetInfo::csname	member raw bytes (pointer) of type const char *	const char *csname;
+src/oblib/lib/charset/ob_ctype.h	367	ObCharsetInfo::name	member raw bytes (pointer) of type const char *	const char *name;
+src/oblib/lib/charset/ob_ctype.h	368	ObCharsetInfo::comment	member raw bytes (pointer) of type const char *	const char *comment;
+src/oblib/lib/charset/ob_ctype.h	369	ObCharsetInfo::tailoring	member raw bytes (pointer) of type const char *	const char *tailoring;
+src/oblib/lib/charset/ob_ctype.h	371	ObCharsetInfo::ctype	member raw bytes (pointer) of type unsigned char *	unsigned char    *ctype;
+src/oblib/lib/charset/ob_ctype.h	372	ObCharsetInfo::to_lower	member raw bytes (pointer) of type unsigned char *	unsigned char    *to_lower;
+src/oblib/lib/charset/ob_ctype.h	373	ObCharsetInfo::to_upper	member raw bytes (pointer) of type unsigned char *	unsigned char    *to_upper;
+src/oblib/lib/charset/ob_ctype.h	374	ObCharsetInfo::sort_order	member raw bytes (pointer) of type unsigned char *	unsigned char    *sort_order;
+src/oblib/lib/charset/ob_ctype.h	379	ObCharsetInfo::state_map	member raw bytes (pointer) of type unsigned char *	unsigned char     *state_map;
+src/oblib/lib/charset/ob_ctype.h	380	ObCharsetInfo::ident_map	member raw bytes (pointer) of type unsigned char *	unsigned char     *ident_map;
+src/oblib/lib/charset/ob_ctype.h	460	ob_uni_ctype::ctype	member raw bytes (pointer) of type unsigned char *	unsigned char  *ctype;
+src/oblib/lib/charset/ob_ctype_uca.cc	165	ob_uca_scanner::sbeg	member raw bytes (pointer) of type const unsigned char * [not built]	const unsigned char *sbeg;
+src/oblib/lib/charset/ob_ctype_uca.cc	166	ob_uca_scanner::send	member raw bytes (pointer) of type const unsigned char * [not built]	const unsigned char *send;
+src/oblib/lib/charset/ob_ctype_uca.cc	172	ob_uca_scanner::sbeg_dup	member raw bytes (pointer) of type const unsigned char * [not built]	const unsigned char *sbeg_dup;
+src/oblib/lib/charset/ob_ctype_uca.cc	1275	ObCollLexem::beg	member raw bytes (pointer) of type const char * [not built]	const char *beg;
+src/oblib/lib/charset/ob_ctype_uca.cc	1276	ObCollLexem::end	member raw bytes (pointer) of type const char * [not built]	const char *end;
+src/oblib/lib/charset/ob_ctype_uca.cc	1277	ObCollLexem::prev	member raw bytes (pointer) of type const char * [not built]	const char *prev;
+src/oblib/lib/charset/ob_dtoa.cc	502	ObStackAllocator::begin	member raw bytes (pointer) of type char *	char *begin;
+src/oblib/lib/charset/ob_dtoa.cc	503	ObStackAllocator::free	member raw bytes (pointer) of type char *	char *free;
+src/oblib/lib/charset/ob_dtoa.cc	504	ObStackAllocator::end	member raw bytes (pointer) of type char *	char *end;
+src/oblib/lib/charset/ob_dtoa.cc	554	dtoa_alloc	allocator in, arena view returned: static char *	static char *dtoa_alloc(int i, ObStackAllocator *alloc)
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_compress_internal.h	233	ZSTD_CCtx_s::inBuff	member raw bytes (pointer) of type char* [vendored]	char*  inBuff;
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_compress_internal.h	238	ZSTD_CCtx_s::outBuff	member raw bytes (pointer) of type char* [vendored]	char*  outBuff;
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_decompress_internal.h	129	ZSTD_DCtx_s::inBuff	member raw bytes (pointer) of type char* [vendored]	char*  inBuff;
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_decompress_internal.h	133	ZSTD_DCtx_s::outBuff	member raw bytes (pointer) of type char* [vendored]	char*  outBuff;
+src/oblib/lib/container/ob_bitmap.h	170	ObBitmap::data_	member raw bytes (pointer) of type uint8_t *	uint8_t *data_;
+src/oblib/lib/container/ob_tuple.h	399	ObTupleBase::ExecuteAllTypeSerializeMethodFunctor::buf_	member raw bytes (pointer) of type char *	char *buf_;
+src/oblib/lib/container/ob_tuple.h	411	ObTupleBase::ExecuteAllTypeDeSerializeMethodFunctor::buf_	member raw bytes (pointer) of type const char *	const char *buf_;
+src/oblib/lib/file/ob_file.h	204	DirectFileReader::buffer_	member raw bytes (pointer) of type char *	char *buffer_;
+src/oblib/lib/file/ob_file.h	241	BufferFileAppender::buffer_	member raw bytes (pointer) of type char *	char *buffer_;
+src/oblib/lib/file/ob_file.h	283	DirectFileAppender::buffer_	member raw bytes (pointer) of type char *	char *buffer_;
+src/oblib/lib/file/ob_file.h	337	ObFileBuffer::buffer_	member raw bytes (pointer) of type char *	char *buffer_;
+src/oblib/lib/file/ob_file.h	540	ObFileAsyncAppender::AIOCB::buffer	member raw bytes (pointer) of type char *	char *buffer;
+src/oblib/lib/hash/ob_hashmap.h	127	ObHashMap::PrintFunctor::buf_	member raw bytes (pointer) of type char *	char *buf_;
+src/oblib/lib/hash/ob_link_hashmap.h	188	ObLinkHashMap::PrintFunctor::buf_	member raw bytes (pointer) of type char *	char *buf_;
+src/oblib/lib/json/ob_json.h	76	Pair::name_	member String (value) of type String	String name_;
+src/oblib/lib/json/ob_json.h	105	Value::str_	member String (value) of type String	String str_;
+src/oblib/lib/json/ob_json.h	172	Parser::Token::begin_	member raw bytes (pointer) of type const char *	const char *begin_;
+src/oblib/lib/json/ob_json.h	173	Parser::Token::end_	member raw bytes (pointer) of type const char *	const char *end_;
+src/oblib/lib/json/ob_json_print_utils.h	57	ObStdJsonConvertor::json_	member raw bytes (pointer) of type const char *	const char *json_;
+src/oblib/lib/json/ob_json_print_utils.h	58	ObStdJsonConvertor::buf_	member raw bytes (pointer) of type char *	char *buf_;
+src/oblib/lib/json/ob_yson.h	53	ObYsonToString::yson_buf_	member raw bytes (pointer) of type char *	char *yson_buf_;
+src/oblib/lib/list/ob_atomic_list.h	109	ObAtomicList::name_	member raw bytes (pointer) of type const char *	const char *name_;

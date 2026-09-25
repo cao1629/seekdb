@@ -1,0 +1,67 @@
+file	line	symbol	construct	text
+src/storage/tablelock/ob_table_lock_service.cpp	988	ObTableLockService::handle_task_result_	tmp_ret == OB_TRANS_KILLED	} else if (OB_TRANS_KILLED == tmp_ret) {
+src/storage/tablelock/ob_table_lock_service.cpp	997	ObTableLockService::handle_task_result_	ret == OB_TRY_LOCK_ROW_CONFLICT	if (OB_SUCC(ret) || ret == OB_TRY_LOCK_ROW_CONFLICT) {
+src/storage/tablelock/ob_table_lock_service.cpp	1129	ObTableLockService::batch_pre_check_lock_	other variable last_ret == OB_TRY_LOCK_ROW_CONFLICT	ret = (last_ret == OB_TRY_LOCK_ROW_CONFLICT) ?
+src/storage/tablelock/ob_table_lock_service.cpp	1138	ObTableLockService::batch_pre_check_lock_	other variable last_ret == OB_TRY_LOCK_ROW_CONFLICT	ret = (last_ret == OB_TRY_LOCK_ROW_CONFLICT) ?
+src/storage/tablelock/ob_table_lock_service.cpp	1145	ObTableLockService::batch_pre_check_lock_	ret == OB_TRY_LOCK_ROW_CONFLICT	OB_TRY_LOCK_ROW_CONFLICT == ret) {
+src/storage/tablelock/ob_table_lock_service.cpp	1149	ObTableLockService::batch_pre_check_lock_	ret == OB_TRY_LOCK_ROW_CONFLICT	if (ret == OB_TRY_LOCK_ROW_CONFLICT) {
+src/storage/tablelock/ob_table_lock_service.cpp	1717	ObTableLockService::need_retry_trans_	ret == OB_TABLET_NOT_EXIST	need_retry = need_retry || (OB_TABLET_NOT_EXIST == ret && !ctx.is_timeout());
+src/storage/tablelock/ob_table_lock_service.cpp	1727	ObTableLockService::need_retry_single_task_	ret == OB_TABLET_NOT_EXIST	need_retry = (OB_TABLET_NOT_EXIST == ret);
+src/storage/tablelock/ob_table_lock_service.cpp	1736	ObTableLockService::need_retry_whole_task_	ret == OB_SERVER_RUNTIME_NOT_READY	return (OB_SERVER_RUNTIME_NOT_READY == ret);
+src/storage/tablelock/ob_table_lock_service.cpp	1743	ObTableLockService::need_retry_partial_task_	ret == OB_TABLET_NOT_EXIST	need_retry = (OB_TABLET_NOT_EXIST == ret);
+src/storage/tablelock/ob_table_lock_service.cpp	1765	ObTableLockService::is_lock_conflict_ret_code_	ret == OB_TRY_LOCK_ROW_CONFLICT; ret == OB_ERR_EXCLUSIVE_LOCK_CONFLICT	return (OB_TRY_LOCK_ROW_CONFLICT == ret || OB_ERR_EXCLUSIVE_LOCK_CONFLICT == ret);
+src/storage/tablelock/ob_table_lock_service.cpp	1770	ObTableLockService::is_timeout_ret_code_	ret == OB_TIMEOUT; ret == OB_TRANS_TIMEOUT	return (OB_TIMEOUT == ret || OB_TRANS_TIMEOUT == ret ||
+src/storage/tablelock/ob_table_lock_service.cpp	1771	ObTableLockService::is_timeout_ret_code_	ret == OB_TRANS_STMT_TIMEOUT	OB_TRANS_STMT_TIMEOUT == ret);
+src/storage/tablelock/ob_table_lock_service.cpp	1776	ObTableLockService::is_can_retry_err_	ret == OB_TRANS_KILLED; ret == OB_OBJ_UNLOCK_CONFLICT; ret == OB_OBJ_LOCK_NOT_COMPLETED	return (OB_TRANS_KILLED == ret || OB_OBJ_UNLOCK_CONFLICT == ret || OB_OBJ_LOCK_NOT_COMPLETED == ret
+src/storage/tablelock/ob_table_lock_service.cpp	1777	ObTableLockService::is_can_retry_err_	ret == OB_TRY_LOCK_ROW_CONFLICT; ret == OB_ERR_EXCLUSIVE_LOCK_CONFLICT	|| OB_TRY_LOCK_ROW_CONFLICT == ret || OB_ERR_EXCLUSIVE_LOCK_CONFLICT == ret
+src/storage/tablelock/ob_table_lock_service.cpp	1778	ObTableLockService::is_can_retry_err_	ret == OB_TIMEOUT; ret == OB_TRANS_CTX_NOT_EXIST	|| OB_TIMEOUT == ret || OB_TRANS_CTX_NOT_EXIST == ret);
+src/storage/tablelock/ob_table_lock_service.cpp	1948	ObTableLockService::get_table_schema_	ret == OB_TABLE_NOT_EXIST	if (OB_TABLE_NOT_EXIST == ret) {
+src/storage/tablet/ob_i_tablet_mds_customized_interface.cpp	28	ObITabletMdsCustomizedInterface::get_ddl_data	ret == OB_EMPTY_RESULT	if (OB_EMPTY_RESULT == ret) {
+src/storage/tablet/ob_i_tablet_mds_customized_interface.cpp	40	ObITabletMdsCustomizedInterface::get_autoinc_seq	ret == OB_EMPTY_RESULT	if (OB_EMPTY_RESULT == ret) {
+src/storage/tablet/ob_i_tablet_mds_customized_interface.cpp	68	ObITabletMdsCustomizedInterface::get_latest_autoinc_seq	ret != OB_EMPTY_RESULT	if (OB_EMPTY_RESULT != ret) {
+src/storage/tablet/ob_i_tablet_mds_customized_interface.cpp	89	ObITabletMdsCustomizedInterface::get_ddl_complete	ret != OB_EMPTY_RESULT	if (OB_EMPTY_RESULT != ret) {
+src/storage/tablet/ob_i_tablet_mds_customized_interface.cpp	107	ObITabletMdsCustomizedInterface::get_latest_committed_tablet_status	ret != OB_EMPTY_RESULT	if (OB_EMPTY_RESULT != ret) {
+src/storage/tablet/ob_i_tablet_mds_customized_interface.cpp	125	ObITabletMdsCustomizedInterface::get_latest_binding_info	ret != OB_EMPTY_RESULT	if (OB_EMPTY_RESULT != ret) {
+src/storage/tablet/ob_i_tablet_mds_interface.cpp	47	ObITabletMdsInterface::get_tablet_status	ret != OB_EMPTY_RESULT	if (OB_EMPTY_RESULT != ret) {
+src/storage/tablet/ob_i_tablet_mds_interface.cpp	74	ObITabletMdsInterface::get_latest_tablet_status	ret != OB_EMPTY_RESULT	if (OB_EMPTY_RESULT != ret) {
+src/storage/tablet/ob_i_tablet_mds_interface.cpp	102	ObITabletMdsInterface::get_latest_ddl_data	ret != OB_EMPTY_RESULT	if (OB_EMPTY_RESULT != ret) {
+src/storage/tablet/ob_i_tablet_mds_interface.cpp	131	ObITabletMdsInterface::get_ddl_data	ret != OB_EMPTY_RESULT	if (OB_EMPTY_RESULT != ret) {
+src/storage/tablet/ob_i_tablet_mds_interface.cpp	161	ObITabletMdsInterface::get_autoinc_seq	ret != OB_EMPTY_RESULT	if (OB_EMPTY_RESULT != ret) {
+src/storage/tablet/ob_i_tablet_mds_interface.cpp	202	ObITabletMdsInterface::read_raw_data	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/tablet/ob_i_tablet_mds_interface.cpp	205	ObITabletMdsInterface::read_raw_data	tmp_ret (assigned in the comparison) != OB_ITER_END	} else if (OB_UNLIKELY(OB_ITER_END != (tmp_ret = iter.get_next_row()))) {
+src/storage/tablet/ob_i_tablet_mds_interface.ipp	79	ObITabletMdsInterface::read_data_from_cache_or_mds_sstable	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/tablet/ob_i_tablet_mds_interface.ipp	117	ObITabletMdsInterface::read_data_from_mds_sstable	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/tablet/ob_i_tablet_mds_interface.ipp	153	ObITabletMdsInterface::get_mds_data_from_tablet	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/tablet/ob_i_tablet_mds_interface.ipp	155	ObITabletMdsInterface::get_mds_data_from_tablet	ret == OB_SNAPSHOT_DISCARDED	} else if (OB_SNAPSHOT_DISCARDED == ret) {
+src/storage/tablet/ob_i_tablet_mds_interface.ipp	156	ObITabletMdsInterface::get_mds_data_from_tablet	ret == OB_EMPTY_RESULT	} else if (OB_EMPTY_RESULT == ret) {
+src/storage/tablet/ob_i_tablet_mds_interface.ipp	374	ObITabletMdsInterface::is_locked_by_others	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/storage/tablet/ob_i_tablet_mds_interface.ipp	387	ObITabletMdsInterface::is_locked_by_others	ret != OB_SNAPSHOT_DISCARDED	if (OB_SNAPSHOT_DISCARDED != ret) {
+src/storage/tablet/ob_i_tablet_mds_interface.ipp	405	ObITabletMdsInterface::is_locked_by_others	ret == OB_VERSION_NOT_MATCH	} while (ret == OB_VERSION_NOT_MATCH && is_online);
+src/storage/tablet/ob_i_tablet_mds_interface.ipp	440	ObITabletMdsInterface::get_latest	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/storage/tablet/ob_i_tablet_mds_interface.ipp	451	ObITabletMdsInterface::get_latest	ret != OB_SNAPSHOT_DISCARDED	if (OB_SNAPSHOT_DISCARDED != ret) {
+src/storage/tablet/ob_i_tablet_mds_interface.ipp	458	ObITabletMdsInterface::get_latest	ret == OB_ENTRY_NOT_EXIST; ret == OB_SNAPSHOT_DISCARDED	if (OB_ENTRY_NOT_EXIST == ret || OB_SNAPSHOT_DISCARDED == ret) {
+src/storage/tablet/ob_i_tablet_mds_interface.ipp	470	ObITabletMdsInterface::get_latest	ret == OB_SNAPSHOT_DISCARDED	if (OB_SNAPSHOT_DISCARDED == ret) {
+src/storage/tablet/ob_i_tablet_mds_interface.ipp	489	ObITabletMdsInterface::get_latest	ret == OB_VERSION_NOT_MATCH	} while (ret == OB_VERSION_NOT_MATCH && is_online);
+src/storage/tablet/ob_i_tablet_mds_interface.ipp	520	ObITabletMdsInterface::get_latest_committed	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/storage/tablet/ob_i_tablet_mds_interface.ipp	534	ObITabletMdsInterface::get_latest_committed	ret != OB_SNAPSHOT_DISCARDED	if (OB_SNAPSHOT_DISCARDED != ret) {
+src/storage/tablet/ob_i_tablet_mds_interface.ipp	541	ObITabletMdsInterface::get_latest_committed	ret == OB_ENTRY_NOT_EXIST; ret == OB_SNAPSHOT_DISCARDED	if (OB_ENTRY_NOT_EXIST == ret || OB_SNAPSHOT_DISCARDED == ret) {
+src/storage/tablet/ob_i_tablet_mds_interface.ipp	550	ObITabletMdsInterface::get_latest_committed	ret == OB_SNAPSHOT_DISCARDED	if (OB_SNAPSHOT_DISCARDED == ret) {
+src/storage/tablet/ob_i_tablet_mds_interface.ipp	566	ObITabletMdsInterface::get_latest_committed	ret == OB_VERSION_NOT_MATCH	} while (ret == OB_VERSION_NOT_MATCH && is_online);
+src/storage/tablet/ob_i_tablet_mds_interface.ipp	608	ObITabletMdsInterface::get_snapshot	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/storage/tablet/ob_i_tablet_mds_interface.ipp	619	ObITabletMdsInterface::get_snapshot	ret != OB_SNAPSHOT_DISCARDED	if (OB_SNAPSHOT_DISCARDED != ret) {
+src/storage/tablet/ob_i_tablet_mds_interface.ipp	626	ObITabletMdsInterface::get_snapshot	ret == OB_ENTRY_NOT_EXIST; ret == OB_SNAPSHOT_DISCARDED	if (OB_ENTRY_NOT_EXIST == ret || OB_SNAPSHOT_DISCARDED == ret) {
+src/storage/tablet/ob_i_tablet_mds_interface.ipp	631	ObITabletMdsInterface::get_snapshot	ret == OB_SNAPSHOT_DISCARDED	if (OB_SNAPSHOT_DISCARDED == ret) {
+src/storage/tablet/ob_i_tablet_mds_interface.ipp	651	ObITabletMdsInterface::get_snapshot	ret == OB_VERSION_NOT_MATCH	} while (ret == OB_VERSION_NOT_MATCH && is_online);
+src/storage/tablet/ob_i_tablet_mds_interface.ipp	723	ObITabletMdsInterface::fill_virtual_info_from_mds_sstable	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/storage/tablet/ob_i_tablet_mds_interface.ipp	732	ObITabletMdsInterface::fill_virtual_info_from_mds_sstable	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/tablet/ob_i_tablet_mds_interface.ipp	833	ObITabletMdsInterface::get_latest_committed_data	ret != OB_EMPTY_RESULT	if (OB_EMPTY_RESULT != ret) {
+src/storage/tablet/ob_mds_cl_range_query_iterator.h	162	ObMdsRangeQueryIterator::advance_iter	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/tablet/ob_mds_range_query_iterator.cpp	39	ObMdsRangeQueryIteratorHelper::get_mds_table	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/storage/tablet/ob_mds_range_query_iterator.h	154	ObSingleTabletMdsRangeQueryIterator::init	ret == OB_ENTRY_NOT_EXIST	if (common::OB_ENTRY_NOT_EXIST == ret) {
+src/storage/tablet/ob_mds_range_query_iterator.h	184	ObSingleTabletMdsRangeQueryIterator::advance_mds_table_iter	ret == OB_ITER_END	if (common::OB_ITER_END == ret) {
+src/storage/tablet/ob_mds_range_query_iterator.h	219	ObSingleTabletMdsRangeQueryIterator::advance_mds_sstable_iter	ret == OB_ITER_END	if (common::OB_ITER_END == ret) {
+src/storage/tablet/ob_mds_range_query_iterator.h	240	ObSingleTabletMdsRangeQueryIterator::advance_mds_sstable_iter	ret == OB_ITER_END	ret = (OB_ITER_END == ret ? OB_SUCCESS : ret);
+src/storage/tablet/ob_mds_row_iterator.cpp	122	ObMdsRowIterator::get_next_rows	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/tablet/ob_mds_row_iterator.cpp	138	ObMdsRowIterator::get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/tablet/ob_mds_row_iterator.cpp	151	ObMdsRowIterator::get_next_mds_kv	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/tablet/ob_table_store_util.cpp	1115	ObCacheSSTableHelper::try_cache_local_sstable_meta	ret != OB_BUF_NOT_ENOUGH	if (OB_UNLIKELY(OB_BUF_NOT_ENOUGH != ret)) {

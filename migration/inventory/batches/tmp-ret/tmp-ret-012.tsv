@@ -1,0 +1,118 @@
+file	line	symbol	construct	text
+src/share/cache/ob_kvcache_map.cpp	127	ObKVCacheMap::destroy	declare tmp_ret	int tmp_ret = global_hazard_station_.retire();
+src/share/cache/ob_kvcache_map.cpp	317	ObKVCacheMap::get	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/share/cache/ob_kvcache_map.cpp	328	ObKVCacheMap::get	assign tmp_ret	tmp_ret = OB_ERR_UNEXPECTED;
+src/share/cache/ob_kvcache_map.cpp	333	ObKVCacheMap::get	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(guard.get_ret())) {
+src/share/cache/ob_kvcache_map.cpp	340	ObKVCacheMap::get	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(internal_data_move(hazard_guard, prev, iter, bucket_ptr))) {
+src/share/cache/ob_kvcache_map.cpp	452	ObKVCacheMap::erase_all	declare temp_ret	int temp_ret = global_hazard_station_.retire();
+src/share/cache/ob_kvcache_map.cpp	503	ObKVCacheMap::erase_all	declare temp_ret	int temp_ret = global_hazard_station_.retire();
+src/share/cache/ob_kvcache_map.cpp	566	ObKVCacheMap::clean_garbage_node	declare temp_ret	int temp_ret = global_hazard_station_.retire();
+src/share/cache/ob_kvcache_store.cpp	361	ObKVCacheStore::wash	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/share/cache/ob_kvcache_store.cpp	427	ObKVCacheStore::wash	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(tmp_washbale_size_info_.add_washable_size(
+src/share/cache/ob_kvcache_store.cpp	483	ObKVCacheStore::flush_washable_mbs	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/share/cache/ob_kvcache_store.cpp	484	ObKVCacheStore::flush_washable_mbs	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(flush_washable_mbs(false))) {
+src/share/cache/ob_kvcache_store.cpp	590	ObKVCacheStore::try_flush_washable_mb	declare tmp_ret (plan definition)	INIT_SUCC(tmp_ret);
+src/share/cache/ob_kvcache_store.cpp	592	ObKVCacheStore::try_flush_washable_mb	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(print_memblock_info(head))) {
+src/share/cache/ob_kvcache_store.cpp	934	ObKVCacheStore::reserve_store_size	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/share/cache/ob_kvcache_store.cpp	938	ObKVCacheStore::reserve_store_size	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(sync_wash_mbs(wash_size, wash_blocks))) {
+src/share/cache/ob_kvcache_store.cpp	1001	ObKVCacheStore::pop_mb_handle_with_recovery	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/share/cache/ob_kvcache_store.cpp	1004	ObKVCacheStore::pop_mb_handle_with_recovery	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(HazardDomain::get_instance().reclaim(callback))) {
+src/share/cache/ob_kvcache_store.cpp	1015	ObKVCacheStore::pop_mb_handle_with_recovery	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/share/cache/ob_kvcache_store.cpp	1017	ObKVCacheStore::pop_mb_handle_with_recovery	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(sync_wash_mbs(block_size, wash_blocks))) {
+src/share/cache/ob_recycle_multi_kvcache.ipp	255	ObRecycleMultiKVCache::append	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/share/cache/ob_recycle_multi_kvcache.ipp	266	ObRecycleMultiKVCache::append	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(construct_assign_(key, std::forward<Value>(value), inner_mock_allocator_, p_new_node))) {
+src/share/cache/ob_recycle_multi_kvcache.ipp	276	ObRecycleMultiKVCache::append	merge into ret	ret = tmp_ret;
+src/share/config/ob_config_helper.cpp	919	ObParallelDDLControlParser::parse	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/share/config/ob_config_helper.cpp	926	ObParallelDDLControlParser::parse	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(ObModeConfigParserUitl::format_mode_str(str, str_len, buf, buf_len))) {
+src/share/config/ob_config_helper.cpp	929	ObParallelDDLControlParser::parse	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(ObModeConfigParserUitl::get_kv_list(buf, kv_list, ":"))) {
+src/share/config/ob_config_helper.cpp	946	ObParallelDDLControlParser::parse	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(ObParallelDDLControlMode::string_to_ddl_type(kv_list.at(i).first, ddl_type))) {
+src/share/config/ob_config_helper.cpp	949	ObParallelDDLControlParser::parse	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(ddl_mode.set_parallel_ddl_mode(ddl_type, mode))) {
+src/share/config/ob_server_config.cpp	91	ObServerConfig::read_config	declare temp_ret	int temp_ret = OB_SUCCESS;
+src/share/config/ob_server_config.cpp	100	ObServerConfig::read_config	assign temp_ret	temp_ret = system_config.read_config(key, *(it->second));
+src/share/config/ob_server_config.cpp	117	ObServerConfig::check_all	declare temp_ret	int temp_ret = OB_INVALID_CONFIG;
+src/share/geo/ob_geo_utils.cpp	559	ObGeoTypeUtil::construct_geometry	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/share/interrupt/ob_global_interrupt_call.cpp	235	ObGlobalInterruptManager::interrupt_async	declare tmp_ret	int tmp_ret = map_.atomic_refactored(tid_copy, updatecall);
+src/share/interrupt/ob_global_interrupt_call.cpp	236	ObGlobalInterruptManager::interrupt_async	assign tmp_ret	tmp_ret = tmp_ret == OB_HASH_NOT_EXIST ? OB_SUCCESS : tmp_ret;
+src/share/io/ob_io_calibration.cpp	421	ObIOCalibration::refresh	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/share/io/ob_io_calibration.cpp	422	ObIOCalibration::refresh	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = ObIOCalibration::get_instance().get_io_ability(io_ability))) {
+src/share/io/ob_io_manager.cpp	1075	ObIOService::print_io_status	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/share/io/ob_io_manager.cpp	1077	ObIOService::print_io_status	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(transform_usage_index_to_group_config_index(i, group_config_index))) {
+src/share/io/ob_io_manager.cpp	1108	ObIOService::print_io_status	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(failed_req_info.at(i).calc(failed_avg_size,
+src/share/io/ob_io_manager.cpp	1175	ObIOService::print_io_status	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(transform_usage_index_to_group_config_index(i, group_config_index))) {
+src/share/io/ob_io_manager.cpp	1198	ObIOService::print_io_status	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(sys_failed_req_info.at(i).calc(failed_avg_size,
+src/share/io/ob_io_struct.cpp	673	check_io_hang_errsim	declare tmp_ret	int tmp_ret = OB_E(EventTable::EN_IO_HANG_ERROR) OB_SUCCESS;
+src/share/io/ob_io_struct.cpp	1014	ObAsyncIOChannel::on_partial_retry	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/share/io/ob_io_struct.cpp	1015	ObAsyncIOChannel::on_partial_retry	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = on_failed(req, ObIORetCode(ret)))) {
+src/share/io/ob_io_struct.cpp	1039	ObAsyncIOChannel::on_full_retry	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/share/io/ob_io_struct.cpp	1040	ObAsyncIOChannel::on_full_retry	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = on_failed(req, ObIORetCode(ret)))) {
+src/share/io/ob_io_struct.cpp	1738	ObIOFaultDetector::handle	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/share/io/ob_io_struct.cpp	1739	ObIOFaultDetector::handle	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(handle.get_fs_errno(sys_io_errno))) {
+src/share/io/ob_io_struct.cpp	1956	ObIOTracer::reuse	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/share/io/ob_io_struct.cpp	1957	ObIOTracer::reuse	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(trace_map_.reuse())) {
+src/share/ob_autoincrement_service.cpp	991	ObAutoincrementService::get_local_sequence_value_	declare tmp_ret	int tmp_ret = node_map_.get(key, table_node);
+src/share/ob_autoincrement_service.cpp	1010	ObAutoincrementService::get_local_sequence_value_	merge into ret	ret = tmp_ret;
+src/share/ob_autoincrement_service.cpp	1207	ObAutoIncInnerTableProxy::next_autoinc_value	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/share/ob_autoincrement_service.cpp	1208	ObAutoIncInnerTableProxy::next_autoinc_value	assign tmp_ret	if (OB_ITER_END != (tmp_ret = result->next())) {
+src/share/ob_autoincrement_service.cpp	1212	ObAutoIncInnerTableProxy::next_autoinc_value	merge into ret	ret = tmp_ret;
+src/share/ob_autoincrement_service.cpp	1316	ObAutoIncInnerTableProxy::get_autoinc_value	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/share/ob_autoincrement_service.cpp	1317	ObAutoIncInnerTableProxy::get_autoinc_value	assign tmp_ret	if (OB_ITER_END != (tmp_ret = result->next())) {
+src/share/ob_autoincrement_service.cpp	1321	ObAutoIncInnerTableProxy::get_autoinc_value	merge into ret	ret = tmp_ret;
+src/share/ob_autoincrement_service.cpp	1458	ObAutoIncInnerTableProxy::sync_autoinc_value	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/share/ob_autoincrement_service.cpp	1459	ObAutoIncInnerTableProxy::sync_autoinc_value	assign tmp_ret	if (OB_ITER_END != (tmp_ret = result->next())) {
+src/share/ob_autoincrement_service.cpp	1463	ObAutoIncInnerTableProxy::sync_autoinc_value	merge into ret	ret = tmp_ret;
+src/share/ob_autoincrement_service.cpp	1580	ObAutoIncInnerTableProxy::read_and_push_inner_table	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/share/ob_autoincrement_service.cpp	1581	ObAutoIncInnerTableProxy::read_and_push_inner_table	assign tmp_ret	if (OB_ITER_END != (tmp_ret = result->next())) {
+src/share/ob_autoincrement_service.cpp	1585	ObAutoIncInnerTableProxy::read_and_push_inner_table	merge into ret	ret = tmp_ret;
+src/share/ob_ddl_error_message_table_operator.cpp	377	ObDDLErrorMessageTableOperator::build_ddl_error_message	declare tmp_ret_code	int tmp_ret_code = ret_code;
+src/share/ob_ddl_error_message_table_operator.cpp	384	ObDDLErrorMessageTableOperator::build_ddl_error_message	assign tmp_ret_code	tmp_ret_code = OB_ERR_DUPLICATED_UNIQUE_KEY;    // use the dedicated duplicate-key code for unique index build failures
+src/share/ob_ddl_task_executor.cpp	115	ObDDLTaskQueue::push_task	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/share/ob_ddl_task_executor.cpp	117	ObDDLTaskQueue::push_task	assign tmp_ret	tmp_ret = common::OB_ERR_UNEXPECTED;
+src/share/ob_debug_sync.cpp	534	ObDSEventControl::signal	declare tmp_ret	int tmp_ret = cond_.broadcast();
+src/share/ob_debug_sync.cpp	546	ObDSEventControl::broadcast	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/share/ob_debug_sync.cpp	562	ObDSEventControl::broadcast	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = cond_.broadcast())) {
+src/share/ob_debug_sync.cpp	637	ObDSEventControl::stop	declare tmp_ret	int tmp_ret = cond_.broadcast();
+src/share/ob_encryption_util.cpp	310	ObEncryptionUtil::init_ssl_malloc	declare tmp_ret	int tmp_ret = CRYPTO_set_mem_functions(ob_malloc_openssl, ob_realloc_openssl, ob_free_openssl);
+src/share/ob_freeze_info_proxy.cpp	58	ObFreezeInfoProxy::get_freeze_info	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/share/ob_freeze_info_proxy.cpp	64	ObFreezeInfoProxy::get_freeze_info	assign tmp_ret	} else if (OB_ITER_END != (tmp_ret = result->next())) {
+src/share/ob_freeze_info_proxy.cpp	232	ObFreezeInfoProxy::get_frozen_info_less_than	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/share/ob_freeze_info_proxy.cpp	268	ObFreezeInfoProxy::get_max_freeze_info	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/share/ob_freeze_info_proxy.cpp	276	ObFreezeInfoProxy::get_max_freeze_info	assign tmp_ret	} else if (OB_ITER_END != (tmp_ret = result->next())) {
+src/share/ob_global_stat_proxy.cpp	295	ObGlobalStatProxy::inner_get_snapshot_gc_scn_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/share/ob_global_stat_proxy.cpp	298	ObGlobalStatProxy::inner_get_snapshot_gc_scn_	assign tmp_ret	} else if (OB_ITER_END != (tmp_ret = result->next())) {
+src/share/ob_global_stat_proxy.cpp	367	ObGlobalStatProxy::select_ddl_epoch_for_update	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/share/ob_global_stat_proxy.cpp	370	ObGlobalStatProxy::select_ddl_epoch_for_update	assign tmp_ret	} else if (OB_ITER_END != (tmp_ret = result->next())) {
+src/share/ob_global_stat_proxy.cpp	605	ObGlobalStatProxy::get	merge OB_ERR_UNEXPECTED into ret through if (OB_SUCC(ret)) (continue-and-record through another variable)	ret = OB_ERR_UNEXPECTED;
+src/share/ob_max_id_cache.cpp	151	ObMaxIdCacheMgr::reset	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/share/ob_max_id_cache.cpp	154	ObMaxIdCacheMgr::reset	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(remove_cache_(runtime_cache_))) {
+src/share/ob_max_id_cache.cpp	165	ObMaxIdCacheMgr::fetch_max_id	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/share/ob_max_id_cache.cpp	185	ObMaxIdCacheMgr::fetch_max_id	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(add_runtime_cache_()) && OB_HASH_EXIST != tmp_ret) {
+src/share/ob_max_id_fetcher.cpp	249	ObMaxIdFetcher::fetch_new_max_id_from_inner_table_	declare temp_ret	int temp_ret = OB_SUCCESS;
+src/share/ob_max_id_fetcher.cpp	250	ObMaxIdFetcher::fetch_new_max_id_from_inner_table_	assign temp_ret	if (OB_SUCCESS != (temp_ret = trans.end(is_commit))) {
+src/share/ob_max_id_fetcher.cpp	252	ObMaxIdFetcher::fetch_new_max_id_from_inner_table_	merge into ret	ret = (OB_SUCCESS == ret) ? temp_ret : ret;
+src/share/ob_max_id_fetcher.cpp	273	ObMaxIdFetcher::update_server_max_id	declare temp_ret	int temp_ret = OB_SUCCESS;
+src/share/ob_max_id_fetcher.cpp	274	ObMaxIdFetcher::update_server_max_id	assign temp_ret	if (OB_SUCCESS != (temp_ret = trans.end(is_commit))) {
+src/share/ob_max_id_fetcher.cpp	276	ObMaxIdFetcher::update_server_max_id	merge into ret	ret = (OB_SUCCESS == ret) ? temp_ret : ret;
+src/share/ob_max_id_fetcher.cpp	542	ObMaxIdFetcher::batch_fetch_new_max_id_from_inner_table	declare temp_ret	int temp_ret = OB_SUCCESS;
+src/share/ob_max_id_fetcher.cpp	543	ObMaxIdFetcher::batch_fetch_new_max_id_from_inner_table	assign temp_ret	if (OB_SUCCESS != (temp_ret = trans.end(is_commit))) {
+src/share/ob_max_id_fetcher.cpp	545	ObMaxIdFetcher::batch_fetch_new_max_id_from_inner_table	merge into ret	ret = (OB_SUCCESS == ret) ? temp_ret : ret;
+src/share/ob_occam_time_guard.h	339	#define CLICK_TMP_FAIL	OB_TMP_FAIL (plan definition)	#define CLICK_TMP_FAIL(stmt) (CLICK(), OB_TMP_FAIL(stmt))
+src/share/ob_scheduled_job_utils.cpp	104	ObScheduledJobUtils::check_job_exists	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/share/ob_scheduled_job_utils.cpp	106	ObScheduledJobUtils::check_job_exists	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = client_result->close())) {
+src/share/ob_scheduled_job_utils.cpp	108	ObScheduledJobUtils::check_job_exists	merge into ret	ret = COVER_SUCC(tmp_ret);
+src/share/ob_schema_status_proxy.cpp	181	ObSchemaStatusProxy::set_runtime_schema_status	declare tmp_ret	int tmp_ret = trans.end(is_commit);
+src/share/ob_schema_status_proxy.cpp	185	ObSchemaStatusProxy::set_runtime_schema_status	merge into ret	ret = tmp_ret;
+src/share/ob_share_util.cpp	142	ObShareUtil::get_ora_rowscn	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/share/ob_share_util.cpp	145	ObShareUtil::get_ora_rowscn	assign tmp_ret	} else if (OB_ITER_END != (tmp_ret = result->next())) {
+src/share/ob_snapshot_table_proxy.cpp	447	ObSnapshotTableProxy::get_max_snapshot_info	merge OB_ERR_UNEXPECTED into ret through if (OB_SUCC(ret)) (continue-and-record through another variable)	ret = OB_ERR_UNEXPECTED;
+src/share/ob_snapshot_table_proxy.cpp	484	ObSnapshotTableProxy::get_snapshot	merge OB_ERR_UNEXPECTED into ret through if (OB_SUCC(ret)) (continue-and-record through another variable)	ret = OB_ERR_UNEXPECTED;
+src/share/ob_tablet_checksum_operator.cpp	323	ObTabletChecksumOperator::insert_or_update_tablet_checksum_items_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/share/ob_tablet_checksum_operator.cpp	324	ObTabletChecksumOperator::insert_or_update_tablet_checksum_items_	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = trans.end(false /*commit*/))) {
+src/share/ob_time_wheel.cpp	470	ObTimeWheel::destroy	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/share/ob_time_wheel.cpp	474	ObTimeWheel::destroy	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = stop())) {
+src/share/ob_time_wheel.cpp	476	ObTimeWheel::destroy	assign tmp_ret	} else if (OB_SUCCESS != (tmp_ret = wait())) {
+src/share/object/ob_obj_cast.cpp	5786	string_number	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/share/object/ob_obj_cast.cpp	5796	string_number	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = value.from(*bound_num, *params.allocator_v2_))) {
+src/share/redolog/ob_log_file_group.cpp	104	ObLogFileGroup::get_file_id_range	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/share/redolog/ob_log_file_group.cpp	108	ObLogFileGroup::get_file_id_range	assign tmp_ret	&& OB_UNLIKELY(common::OB_SUCCESS != (tmp_ret = check_file_existence(log_dir_, min_file_id, b_exist)))) {
+src/share/redolog/ob_log_file_group.cpp	118	ObLogFileGroup::get_file_id_range	assign tmp_ret	&& OB_UNLIKELY(common::OB_SUCCESS != (tmp_ret = check_file_existence(log_dir_, max_file_id, b_exist)))) {
+src/share/redolog/ob_log_file_handler.cpp	238	ObLogFileHandler::inner_read	declare tmp_ret	int tmp_ret = ret;

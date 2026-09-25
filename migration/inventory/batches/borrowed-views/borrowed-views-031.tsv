@@ -1,0 +1,61 @@
+file	line	symbol	construct	text
+src/sql/engine/expr/ob_expr_like.cpp	249	StringSearcher::pattern_	member raw bytes (pointer) of type const char *	const char *pattern_;
+src/sql/engine/expr/ob_expr_like.cpp	250	StringSearcher::pattern_end_	member raw bytes (pointer) of type const char *	const char *pattern_end_;
+src/sql/engine/expr/ob_expr_like.h	83	ObExprLike::InstrInfo::instr_starts_	member raw bytes (pointer) of type const char **	const char **instr_starts_;
+src/sql/engine/expr/ob_expr_like.h	90	ObExprLike::InstrInfo::instr_buf_	member raw bytes (pointer) of type char *	char *instr_buf_;
+src/sql/engine/expr/ob_expr_like.h	126	ObExprLike::ObExprLikeContext::last_pattern_	member raw bytes (pointer) of type char *	char *last_pattern_;
+src/sql/engine/expr/ob_expr_like.h	129	ObExprLike::ObExprLikeContext::last_escape_	member raw bytes (pointer) of type char *	char *last_escape_;
+src/sql/engine/expr/ob_expr_lob_utils.cpp	45	ObTextStringHelper::read_real_string_data	allocator in, arena view out: ObString &str	int ObTextStringHelper::read_real_string_data(
+src/sql/engine/expr/ob_expr_lob_utils.cpp	57	ObTextStringHelper::read_real_string_data	allocator in, arena view out: ObString &str	int ObTextStringHelper::read_real_string_data(
+src/sql/engine/expr/ob_expr_lob_utils.cpp	75	ObTextStringHelper::read_real_string_data	allocator in, arena view out: ObString &str	int ObTextStringHelper::read_real_string_data(
+src/sql/engine/expr/ob_expr_lob_utils.cpp	85	ObTextStringHelper::read_real_string_data	allocator in, arena view out: ObString &str	int ObTextStringHelper::read_real_string_data(
+src/sql/engine/expr/ob_expr_lob_utils.cpp	127	ob_adjust_lob_datum	allocator in, arena view out: ObDatum &out_datum	int ob_adjust_lob_datum(ObExecContext &exec_ctx,
+src/sql/engine/expr/ob_expr_lob_utils.cpp	160	ob_adjust_lob_datum	allocator in, arena view out: ObDatum &out_datum	int ob_adjust_lob_datum(ObExecContext &exec_ctx,
+src/sql/engine/expr/ob_expr_lob_utils.cpp	201	ob_adjust_lob_datum	allocator in, arena view out: ObDatum &datum	int ob_adjust_lob_datum(ObExecContext &exec_ctx,
+src/sql/engine/expr/ob_expr_lrpad.cpp	253	ObExprBaseLRpad::padding	allocator in, arena view out: char* &result	int ObExprBaseLRpad::padding(LRpadType type,
+src/sql/engine/expr/ob_expr_lrpad.cpp	370	ObExprBaseLRpad::calc_mysql_inner	allocator in, arena view out: ObDatum &res	int ObExprBaseLRpad::calc_mysql_inner(const LRpadType pad_type,
+src/sql/engine/expr/ob_expr_lrpad.cpp	453	ObExprBaseLRpad::calc_mysql	allocator in, arena view out: ObDatum &res	int ObExprBaseLRpad::calc_mysql(const LRpadType pad_type, const ObExpr &expr, ObEvalCtx &ctx,
+src/sql/engine/expr/ob_expr_map_keys.cpp	115	ObExprMapComponents::get_map_components_arr	allocator in, arena view out: ObString &map_blob	int ObExprMapComponents::get_map_components_arr(ObIAllocator &tmp_allocator,
+src/sql/engine/expr/ob_expr_minus.cpp	205	ObExprMinus::minus_int	allocator in, arena view out: ObObj &res	int ObExprMinus::minus_int(ObObj &res,
+src/sql/engine/expr/ob_expr_minus.cpp	250	ObExprMinus::minus_uint	allocator in, arena view out: ObObj &res	int ObExprMinus::minus_uint(ObObj &res,
+src/sql/engine/expr/ob_expr_minus.cpp	294	ObExprMinus::minus_double	allocator in, arena view out: ObObj &res	int ObExprMinus::minus_double(ObObj &res,
+src/sql/engine/expr/ob_expr_minus.cpp	327	ObExprMinus::minus_double_no_overflow	allocator in, arena view out: ObObj &res	int ObExprMinus::minus_double_no_overflow(ObObj &res,
+src/sql/engine/expr/ob_expr_minus.cpp	344	ObExprMinus::minus_number	allocator in, arena view out: ObObj &res	int ObExprMinus::minus_number(ObObj &res,
+src/sql/engine/expr/ob_expr_minus.cpp	366	ObExprMinus::minus_datetime	allocator in, arena view out: ObObj &res	int ObExprMinus::minus_datetime(ObObj &res, const ObObj &left, const ObObj &right,
+src/sql/engine/expr/ob_expr_minus.cpp	1057	ObDecimalNumberMinusFunc::operator()	allocator in, arena view out: ObDatum &res	int operator()(ObDatum &res, const ObDatum &l, const ObDatum &r, const int64_t scale,
+src/sql/engine/expr/ob_expr_mod.cpp	98	ObExprMod::mod_int	allocator in, arena view out: ObObj &res	int ObExprMod::mod_int(ObObj &res,
+src/sql/engine/expr/ob_expr_mod.cpp	129	ObExprMod::mod_uint	allocator in, arena view out: ObObj &res	int ObExprMod::mod_uint(ObObj &res,
+src/sql/engine/expr/ob_expr_mod.cpp	156	ObExprMod::mod_double	allocator in, arena view out: ObObj &res	int ObExprMod::mod_double(ObObj &res,
+src/sql/engine/expr/ob_expr_mod.cpp	177	ObExprMod::mod_number	allocator in, arena view out: ObObj &res	int ObExprMod::mod_number(ObObj &res,
+src/sql/engine/expr/ob_expr_mul.cpp	179	ObExprMul::mul_int	allocator in, arena view out: ObObj &res	int ObExprMul::mul_int(ObObj &res,
+src/sql/engine/expr/ob_expr_mul.cpp	224	ObExprMul::mul_uint	allocator in, arena view out: ObObj &res	int ObExprMul::mul_uint(ObObj &res,
+src/sql/engine/expr/ob_expr_mul.cpp	270	ObExprMul::mul_double	allocator in, arena view out: ObObj &res	int ObExprMul::mul_double(ObObj &res,
+src/sql/engine/expr/ob_expr_mul.cpp	302	ObExprMul::mul_double_no_overflow	allocator in, arena view out: ObObj &res	int ObExprMul::mul_double_no_overflow(ObObj &res,
+src/sql/engine/expr/ob_expr_mul.cpp	319	ObExprMul::mul_number	allocator in, arena view out: ObObj &res	int ObExprMul::mul_number(ObObj &res,
+src/sql/engine/expr/ob_expr_mul.cpp	894	ObDecimalNumberMulFunc::operator()	allocator in, arena view out: ObDatum &res	int operator()(ObDatum &res, const ObDatum &l, const ObDatum &r, const int64_t scale,
+src/sql/engine/expr/ob_expr_nullif.cpp	242	ObExprNullif::cast_param	allocator in, arena view out: ObDatum &res_datum	int ObExprNullif::cast_param(const ObExpr &src_expr, ObEvalCtx &ctx,
+src/sql/engine/expr/ob_expr_obj_access.cpp	196	ObExprObjAccess::calc_result	allocator in, arena view out: ObObj &result	int ObExprObjAccess::calc_result(ObObj &result,
+src/sql/engine/expr/ob_expr_obj_access.cpp	411	ObExprObjAccess::ExtraInfo::calc	allocator in, arena view out: ObObj &result	int ObExprObjAccess::ExtraInfo::calc(ObObj &result,
+src/sql/engine/expr/ob_expr_object_construct.cpp	75	ObExprObjectConstruct::newx	allocator in, arena view out: ObObj &result	int ObExprObjectConstruct::newx(ObEvalCtx &ctx, ObObj &result, uint64_t udt_id, ObIAllocator *alloc)
+src/sql/engine/expr/ob_expr_operator.cpp	1558	ObArithExprOperator::calc	allocator in, arena view out: ObObj &result	int ObArithExprOperator::calc(ObObj &result,
+src/sql/engine/expr/ob_expr_operator_factory.h	50	ObExprOperatorFactory::NameType::name_	member raw bytes (pointer) of type const char *	const char *name_;
+src/sql/engine/expr/ob_expr_output_pack.cpp	189	ObExprOutputPack::convert_string_value_charset	allocator in, arena view out: common::ObObj &value	int ObExprOutputPack::convert_string_value_charset(common::ObObj &value,
+src/sql/engine/expr/ob_expr_output_pack.cpp	202	ObExprOutputPack::convert_text_value_charset	allocator in, arena view out: common::ObObj& value	int ObExprOutputPack::convert_text_value_charset(common::ObObj& value,
+src/sql/engine/expr/ob_expr_output_pack.cpp	269	ObExprOutputPack::process_lob_locator_results	allocator in, arena view out: common::ObObj& value	int ObExprOutputPack::process_lob_locator_results(common::ObObj& value,
+src/sql/engine/expr/ob_expr_output_pack.cpp	393	ObExprOutputPack::process_oneline	allocator in, arena view out: ObDatum &expr_datum	int ObExprOutputPack::process_oneline(const ObExpr &expr, ObEvalCtx &ctx, ObSQLSessionInfo *session,
+src/sql/engine/expr/ob_expr_pl_integer_checker.cpp	140	ObExprPLIntegerChecker::calc	allocator in, arena view out: ObObj &result	int ObExprPLIntegerChecker::calc(ObObj &result,
+src/sql/engine/expr/ob_expr_pl_integer_checker.cpp	190	ObExprPLIntegerChecker::calc	allocator in, arena view out: ObDatum &res_datum	int ObExprPLIntegerChecker::calc(ObDatum &res_datum,
+src/sql/engine/expr/ob_expr_plsql_variable.cpp	100	ObExprPLSQLVariable::get_plsql_unit	allocator in, arena view out: common::ObObj &result	int ObExprPLSQLVariable::get_plsql_unit(common::ObObj &result,
+src/sql/engine/expr/ob_expr_plsql_variable.h	44	ObPLSQLVariableInfo::plsql_variable_	member ObString (value) of type common::ObString	common::ObString plsql_variable_;
+src/sql/engine/expr/ob_expr_plsql_variable.h	84	ObExprPLSQLVariable::plsql_variable_	member ObString (value) of type common::ObString	common::ObString plsql_variable_;
+src/sql/engine/expr/ob_expr_quote.cpp	65	ObExprQuote::calc	allocator in, arena view out: ObString &res_str	int ObExprQuote::calc(ObString &res_str, ObString str, ObCollationType coll_type,
+src/sql/engine/expr/ob_expr_regexp_context.cpp	56	ObExprRegexContext::convert_to_regexp_utf16	allocator in, arena view out: ObString &dst	int ObExprRegexContext::convert_to_regexp_utf16(ObIAllocator &alloc,
+src/sql/engine/expr/ob_expr_regexp_context.cpp	121	ObExprRegexContext::convert_from_regexp_utf16	allocator in, arena view out: ObString &dst	int ObExprRegexContext::convert_from_regexp_utf16(ObIAllocator &alloc,
+src/sql/engine/expr/ob_expr_regexp_context.cpp	339	ObExprRegexContext::substr	allocator in, arena view out: ObString &result	int ObExprRegexContext::substr(ObExprStringBuf &string_buf,
+src/sql/engine/expr/ob_expr_regexp_context.cpp	384	ObExprRegexContext::replace	allocator in, arena view out: ObString &result	int ObExprRegexContext::replace(ObExprStringBuf &string_buf,
+src/sql/engine/expr/ob_expr_regexp_context.cpp	620	ObExprRegexContext::preprocess_pattern	allocator in, arena view out: ObString &pattern	int ObExprRegexContext::preprocess_pattern(ObExprStringBuf &string_buf,
+src/sql/engine/expr/ob_expr_regexp_context.h	184	ObExprRegexContext::pattern_	member ObString (value) of type common::ObString	common::ObString pattern_;
+src/sql/engine/expr/ob_expr_repeat.cpp	112	ObExprRepeat::repeat	allocator in, arena view out: ObString &output	int ObExprRepeat::repeat(ObString &output,
+src/sql/engine/expr/ob_expr_repeat.cpp	155	ObExprRepeat::repeat_text	allocator in, arena view out: ObString &output	int ObExprRepeat::repeat_text(ObObjType res_type,
+src/sql/engine/expr/ob_expr_repeat.cpp	203	ObExprRepeat::calc	allocator in, arena view out: ObObj &result	int ObExprRepeat::calc(ObObj &result,
+src/sql/engine/expr/ob_expr_replace.cpp	99	ObExprReplace::replace	allocator in, arena view out: ObString &ret_str	int ObExprReplace::replace(ObString &ret_str,

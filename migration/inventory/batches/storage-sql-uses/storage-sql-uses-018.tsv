@@ -1,0 +1,12 @@
+file	line	symbol	construct	text
+src/storage/truncate_info/ob_truncate_partition_filter.h	46	-	opens namespace sql (lines 46-50): storage declares SQL types here	namespace sql
+src/storage/truncate_info/ob_truncate_partition_filter.h	48	-	unqualified SQL name inside namespace sql: ObPushdownFilterExecutor	class ObPushdownFilterExecutor;
+src/storage/truncate_info/ob_truncate_partition_filter.h	49	-	unqualified SQL name inside namespace sql: ObExternalPushdownFilterRuntime	class ObExternalPushdownFilterRuntime;
+src/storage/truncate_info/ob_truncate_partition_filter.h	97	ObTruncatePartitionFilter	sql:: use: ObPushdownFilterExecutor	int combine_to_filter_tree(sql::ObPushdownFilterExecutor *&root_filter);
+src/storage/truncate_info/ob_truncate_partition_filter.h	146	ObTruncatePartitionFilter	sql:: use: ObExternalPushdownFilterRuntime	sql::ObExternalPushdownFilterRuntime *pushdown_runtime_;
+src/storage/tx/ob_trans_define.cpp	26	-	using namespace sql	using namespace sql;
+src/storage/tx/ob_trans_define.h	70	-	opens namespace sql (lines 70-74): storage declares SQL types here	namespace sql
+src/storage/tx/ob_trans_define.h	72	-	unqualified SQL name inside namespace sql: ObBasicSessionInfo	class ObBasicSessionInfo;
+src/storage/tx/ob_trans_define.h	73	-	unqualified SQL name inside namespace sql: ObAuditRecordData	struct ObAuditRecordData;
+src/storage/tx/ob_trans_service.cpp	34	-	using namespace sql	using namespace sql;
+src/storage/tx/ob_tx_ctx.cpp	40	-	using namespace sql	using namespace sql;

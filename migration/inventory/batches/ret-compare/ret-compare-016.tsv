@@ -1,0 +1,101 @@
+file	line	symbol	construct	text
+src/rootserver/ob_ddl_service.cpp	174	ObDDLService::create_inner_expr_index	ret != OB_ERR_TABLE_EXIST	if (OB_ERR_TABLE_EXIST != ret) {
+src/rootserver/ob_ddl_service.cpp	287	ObDDLService::create_index_table	ret != OB_ERR_TABLE_EXIST	if (OB_ERR_TABLE_EXIST != ret) {
+src/rootserver/ob_ddl_service.cpp	384	ObDDLService::replace_table_schema_type	ret == OB_OP_NOT_ALLOW	if (OB_OP_NOT_ALLOW == ret) {
+src/rootserver/ob_ddl_service.cpp	1812	ObDDLService::generate_index_name	call result add_index_name_set.exist_refactored(index_key) == OB_HASH_EXIST	if (OB_HASH_EXIST == add_index_name_set.exist_refactored(index_key)) {
+src/rootserver/ob_ddl_service.cpp	1816	ObDDLService::generate_index_name	call result drop_index_name_set.exist_refactored(index_key) == OB_HASH_EXIST	if (OB_HASH_EXIST == drop_index_name_set.exist_refactored(index_key)) {
+src/rootserver/ob_ddl_service.cpp	1841	ObDDLService::generate_index_name	call result add_index_name_set.exist_refactored(index_key) == OB_HASH_EXIST	if (OB_HASH_EXIST == add_index_name_set.exist_refactored(index_key)) {
+src/rootserver/ob_ddl_service.cpp	1845	ObDDLService::generate_index_name	call result drop_index_name_set.exist_refactored(index_key) == OB_HASH_EXIST	if (OB_HASH_EXIST == drop_index_name_set.exist_refactored(index_key)) {
+src/rootserver/ob_ddl_service.cpp	2120	ObDDLService::check_is_change_column_order	ret == OB_ITER_END	if (ret == OB_ITER_END) {
+src/rootserver/ob_ddl_service.cpp	2568	ObDDLService::handle_drop_all_lob_columns_	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/rootserver/ob_ddl_service.cpp	3437	ObDDLService::convert_to_character	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/rootserver/ob_ddl_service.cpp	4494	ObDDLService::update_autoinc_schema	ret == OB_NO_NEED_UPDATE	if (OB_NO_NEED_UPDATE == ret) {
+src/rootserver/ob_ddl_service.cpp	4796	ObDDLService::create_aux_index_task_	ret == OB_ENTRY_EXIST	if (OB_ENTRY_EXIST == ret) {
+src/rootserver/ob_ddl_service.cpp	5107	ObDDLService::alter_table_index	ret != OB_EAGAIN	if (OB_EAGAIN != ret) {
+src/rootserver/ob_ddl_service.cpp	5158	ObDDLService::alter_table_index	call result add_index_name_set.exist_refactored(index_key) == OB_HASH_EXIST	if (OB_HASH_EXIST == add_index_name_set.exist_refactored(index_key)) {
+src/rootserver/ob_ddl_service.cpp	5161	ObDDLService::alter_table_index	call result rename_new_index_name_set.exist_refactored(index_key) == OB_HASH_EXIST	} else if (OB_HASH_EXIST == rename_new_index_name_set.exist_refactored(index_key)) {
+src/rootserver/ob_ddl_service.cpp	5166	ObDDLService::alter_table_index	call result drop_index_name_set.exist_refactored(index_key) == OB_HASH_EXIST	if (OB_HASH_EXIST == drop_index_name_set.exist_refactored(index_key)) {
+src/rootserver/ob_ddl_service.cpp	5169	ObDDLService::alter_table_index	call result rename_ori_index_name_set.exist_refactored(index_key) == OB_HASH_EXIST	} else if (OB_HASH_EXIST == rename_ori_index_name_set.exist_refactored(index_key)) {
+src/rootserver/ob_ddl_service.cpp	5271	ObDDLService::alter_table_index	call result drop_index_name_set.exist_refactored(index_key) == OB_HASH_EXIST	if (OB_HASH_EXIST == drop_index_name_set.exist_refactored(index_key)) {
+src/rootserver/ob_ddl_service.cpp	5345	ObDDLService::alter_table_index	call result drop_index_name_set.exist_refactored(index_key) == OB_HASH_EXIST	if (OB_HASH_EXIST == drop_index_name_set.exist_refactored(index_key)) {
+src/rootserver/ob_ddl_service.cpp	5348	ObDDLService::alter_table_index	call result rename_ori_index_name_set.exist_refactored(index_key) == OB_HASH_EXIST	} else if ((OB_HASH_EXIST == rename_ori_index_name_set.exist_refactored(index_key))
+src/rootserver/ob_ddl_service.cpp	5349	ObDDLService::alter_table_index	call result rename_new_index_name_set.exist_refactored(index_key) == OB_HASH_EXIST	|| (OB_HASH_EXIST == rename_new_index_name_set.exist_refactored(index_key))) {
+src/rootserver/ob_ddl_service.cpp	5370	ObDDLService::alter_table_index	call result alter_index_name_set.exist_refactored(index_key) == OB_HASH_EXIST	} else if (OB_HASH_EXIST == alter_index_name_set.exist_refactored(index_key)) {
+src/rootserver/ob_ddl_service.cpp	5432	ObDDLService::alter_table_index	call result add_index_name_set.exist_refactored(ori_index_key) == OB_HASH_EXIST	} else if (OB_FAIL(ret) || (is_exist_ori && (OB_HASH_EXIST == add_index_name_set.exist_refactored(ori_index_key)))) {
+src/rootserver/ob_ddl_service.cpp	5438	ObDDLService::alter_table_index	call result alter_index_name_set.exist_refactored(ori_index_key) == OB_HASH_EXIST	} else if (OB_FAIL(ret) || (OB_HASH_EXIST == alter_index_name_set.exist_refactored(ori_index_key))) {
+src/rootserver/ob_ddl_service.cpp	5451	ObDDLService::alter_table_index	call result drop_index_name_set.exist_refactored(new_index_key) == OB_HASH_EXIST	} else if (is_exist_new && !(OB_HASH_EXIST == drop_index_name_set.exist_refactored(new_index_key))) {
+src/rootserver/ob_ddl_service.cpp	5456	ObDDLService::alter_table_index	call result add_index_name_set.exist_refactored(new_index_key) == OB_HASH_EXIST	} else if (OB_HASH_EXIST == add_index_name_set.exist_refactored(new_index_key)) {
+src/rootserver/ob_ddl_service.cpp	5460	ObDDLService::alter_table_index	call result drop_index_name_set.exist_refactored(ori_index_key) == OB_HASH_EXIST	} else if (OB_HASH_EXIST == drop_index_name_set.exist_refactored(ori_index_key)) {
+src/rootserver/ob_ddl_service.cpp	5774	ObDDLService::gen_mock_fk_parent_table_for_drop_table	call result drop_table_set.exist_refactored(tmp_foreign_key_info.chil... == OB_HASH_EXIST	if (OB_HASH_EXIST == drop_table_set.exist_refactored(tmp_foreign_key_info.child_table_id_)) {
+src/rootserver/ob_ddl_service.cpp	6356	ObDDLService::resolve_timestamp_column	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/rootserver/ob_ddl_service.cpp	6500	ObDDLService::pre_check_orig_column_schema	call result update_column_name_set.exist_refactored(orig_column_key) == OB_HASH_EXIST	} else if (OB_HASH_EXIST == update_column_name_set.exist_refactored(orig_column_key)) {
+src/rootserver/ob_ddl_service.cpp	7999	ObDDLService::gen_alter_column_new_table_schema_offline	call result update_column_name_set.exist_refactored(orig_column_key) == OB_HASH_EXIST	if (OB_HASH_EXIST == update_column_name_set.exist_refactored(orig_column_key)) {
+src/rootserver/ob_ddl_service.cpp	8097	ObDDLService::gen_alter_column_new_table_schema_offline	call result update_column_name_set.exist_refactored(orig_column_key) == OB_HASH_EXIST	if (OB_HASH_EXIST == update_column_name_set.exist_refactored(orig_column_key)) {
+src/rootserver/ob_ddl_service.cpp	8167	ObDDLService::update_prev_id_for_add_column	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/rootserver/ob_ddl_service.cpp	8231	ObDDLService::update_prev_id_and_add_column_	ret == OB_ERR_COLUMN_DUPLICATE	if (OB_ERR_COLUMN_DUPLICATE == ret) {
+src/rootserver/ob_ddl_service.cpp	8285	ObDDLService::alter_table_column	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/rootserver/ob_ddl_service.cpp	8396	ObDDLService::alter_table_column	ret == OB_HASH_EXIST	if (OB_HASH_EXIST == ret) {
+src/rootserver/ob_ddl_service.cpp	8398	ObDDLService::alter_table_column	ret == OB_HASH_NOT_EXIST	} else if (OB_HASH_NOT_EXIST == ret) {
+src/rootserver/ob_ddl_service.cpp	8490	ObDDLService::alter_table_column	call result update_column_name_set.exist_refactored(orig_column_key) == OB_HASH_EXIST	if (OB_HASH_EXIST == update_column_name_set.exist_refactored(orig_column_key)) {
+src/rootserver/ob_ddl_service.cpp	8574	ObDDLService::alter_table_column	call result update_column_name_set.exist_refactored(orig_column_key) == OB_HASH_EXIST	if (OB_HASH_EXIST == update_column_name_set.exist_refactored(orig_column_key)) {
+src/rootserver/ob_ddl_service.cpp	8651	ObDDLService::create_aux_lob_table_if_need	ret == OB_ERR_UNEXPECTED	if (OB_ERR_UNEXPECTED == ret && is_hybrid_vector_column
+src/rootserver/ob_ddl_service.cpp	8749	ObDDLService::drop_not_null_cst_in_column_flag	call result drop_col_id.exist_refactored(column_id) != OB_HASH_EXIST	if (OB_HASH_EXIST != drop_col_id.exist_refactored(column_id)) {
+src/rootserver/ob_ddl_service.cpp	8750	ObDDLService::drop_not_null_cst_in_column_flag	ret == OB_HASH_NOT_EXIST	if (ret == OB_HASH_NOT_EXIST) {
+src/rootserver/ob_ddl_service.cpp	8859	ObDDLService::alter_table_auto_increment	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/rootserver/ob_ddl_service.cpp	9037	ObDDLService::get_partition_by_subpart_name	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/rootserver/ob_ddl_service.cpp	9120	ObDDLService::gen_inc_table_schema_for_add_subpart	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/rootserver/ob_ddl_service.cpp	9222	ObDDLService::gen_inc_table_schema_for_drop_part	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/rootserver/ob_ddl_service.cpp	9248	ObDDLService::gen_inc_table_schema_for_drop_subpart	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/rootserver/ob_ddl_service.cpp	9267	ObDDLService::gen_inc_table_schema_for_drop_subpart	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/rootserver/ob_ddl_service.cpp	9270	ObDDLService::gen_inc_table_schema_for_drop_subpart	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/rootserver/ob_ddl_service.cpp	9326	ObDDLService::gen_inc_table_schema_for_trun_part	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/rootserver/ob_ddl_service.cpp	9361	ObDDLService::gen_inc_table_schema_for_trun_subpart	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/rootserver/ob_ddl_service.cpp	11947	ObDDLService::check_alter_rename_partitions_	ret == OB_DUPLICATE_OBJECT_NAME_EXIST	if (OB_DUPLICATE_OBJECT_NAME_EXIST == ret) {
+src/rootserver/ob_ddl_service.cpp	12004	ObDDLService::check_alter_rename_subpartitions_	ret == OB_DUPLICATE_OBJECT_NAME_EXIST	if (OB_DUPLICATE_OBJECT_NAME_EXIST == ret) {
+src/rootserver/ob_ddl_service.cpp	12058	ObDDLService::check_alter_drop_partitions	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/rootserver/ob_ddl_service.cpp	12150	ObDDLService::check_alter_add_partitions	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/rootserver/ob_ddl_service.cpp	12256	ObDDLService::check_alter_add_subpartitions	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/rootserver/ob_ddl_service.cpp	12354	ObDDLService::check_add_list_partition	call result list_row_map.exist_refactored(row_key) != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != list_row_map.exist_refactored(row_key)) {
+src/rootserver/ob_ddl_service.cpp	12416	ObDDLService::check_add_list_subpartition	call result list_row_map.exist_refactored(row_key) != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != list_row_map.exist_refactored(row_key)) {
+src/rootserver/ob_ddl_service.cpp	12543	ObDDLService::alter_table	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/rootserver/ob_ddl_service.cpp	12649	ObDDLService::rename_table	other variable hash_ret != OB_HASH_EXIST; other variable hash_ret != OB_HASH_NOT_EXIST	if (OB_HASH_EXIST != hash_ret && OB_HASH_NOT_EXIST != hash_ret) {
+src/rootserver/ob_ddl_service.cpp	12651	ObDDLService::rename_table	other variable hash_ret == OB_HASH_NOT_EXIST	} else if (OB_HASH_NOT_EXIST == hash_ret) {
+src/rootserver/ob_ddl_service.cpp	12657	ObDDLService::rename_table	other variable hash_ret == OB_HASH_EXIST	} else if (OB_HASH_EXIST == hash_ret) {
+src/rootserver/ob_ddl_service.cpp	12687	ObDDLService::rename_table	call result delete_table_set.exist_refactored(from_table_item) == OB_HASH_EXIST	} else if (OB_HASH_EXIST == delete_table_set.exist_refactored(from_table_item)) {
+src/rootserver/ob_ddl_service.cpp	12821	ObDDLService::rename_table	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/rootserver/ob_ddl_service.cpp	13836	ObDDLService::gen_hidden_index_schema_columns	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/rootserver/ob_ddl_service.cpp	14104	ObDDLService::add_new_index_schema	call result add_index_name_set.exist_refactored(index_key) == OB_HASH_EXIST	if (OB_HASH_EXIST == add_index_name_set.exist_refactored(index_key)) {
+src/rootserver/ob_ddl_service.cpp	14109	ObDDLService::add_new_index_schema	call result drop_index_name_set.exist_refactored(index_key) == OB_HASH_EXIST	if (OB_HASH_EXIST == drop_index_name_set.exist_refactored(index_key)) {
+src/rootserver/ob_ddl_service.cpp	15456	ObDDLService::swap_orig_and_hidden_table_state	ret == OB_NO_NEED_UPDATE	if (OB_NO_NEED_UPDATE == ret) {
+src/rootserver/ob_ddl_service.cpp	15801	ObDDLService::cleanup_garbage	ret == OB_NO_NEED_UPDATE	if (OB_NO_NEED_UPDATE == ret) {
+src/rootserver/ob_ddl_service.cpp	15883	ObDDLService::check_db_and_table_is_exist	ret == OB_ITER_END	} else if (OB_FAIL(ret) && OB_ITER_END == ret) {
+src/rootserver/ob_ddl_service.cpp	16455	ObDDLService::new_truncate_table	ret == OB_OP_NOT_ALLOW	if (OB_OP_NOT_ALLOW == ret) {
+src/rootserver/ob_ddl_service.cpp	17345	ObDDLService::check_object_name_matches_db_name	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/rootserver/ob_ddl_service.cpp	17387	ObDDLService::get_object_name_with_origin_name_in_recyclebin	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/rootserver/ob_ddl_service.cpp	17398	ObDDLService::get_object_name_with_origin_name_in_recyclebin	call result result->next() != OB_ITER_END	} else if (OB_ITER_END != result->next()) {
+src/rootserver/ob_ddl_service.cpp	17844	ObDDLService::purge_recyclebin_objects	ret == OB_ERR_OBJECT_NOT_IN_RECYCLEBIN	if (OB_ERR_OBJECT_NOT_IN_RECYCLEBIN == ret) {
+src/rootserver/ob_ddl_service.cpp	18198	ObDDLService::drop_table	ret == OB_TABLE_NOT_EXIST; ret == OB_ERR_BAD_DATABASE	if (OB_TABLE_NOT_EXIST == ret || OB_ERR_BAD_DATABASE == ret) {
+src/rootserver/ob_ddl_service.cpp	18273	ObDDLService::drop_table	call result drop_table_set.exist_refactored(foreign_key_info.child_ta... == OB_HASH_EXIST	if (OB_HASH_EXIST == drop_table_set.exist_refactored(foreign_key_info.child_table_id_)) {
+src/rootserver/ob_ddl_service.cpp	18285	ObDDLService::drop_table	call result drop_table_set.exist_refactored(foreign_key_info.child_ta... == OB_HASH_EXIST	if (OB_HASH_EXIST == drop_table_set.exist_refactored(foreign_key_info.child_table_id_)) {
+src/rootserver/ob_ddl_service.cpp	18293	ObDDLService::drop_table	ret == OB_ERR_TABLE_IS_REFERENCED	if (OB_ERR_TABLE_IS_REFERENCED == ret) {
+src/rootserver/ob_ddl_service.cpp	18361	ObDDLService::drop_table	ret == OB_ERR_TABLE_IS_REFERENCED	if (OB_ERR_TABLE_IS_REFERENCED == ret) {
+src/rootserver/ob_ddl_service.cpp	18364	ObDDLService::drop_table	ret == OB_TABLE_NOT_EXIST; ret == OB_ERR_BAD_DATABASE	} else if (OB_TABLE_NOT_EXIST == ret || OB_ERR_BAD_DATABASE == ret) {
+src/rootserver/ob_ddl_service.cpp	18532	ObDDLService::rebuild_vec_index	ret == OB_TABLE_NOT_EXIST; ret == OB_ERR_BAD_DATABASE	if (OB_TABLE_NOT_EXIST == ret || OB_ERR_BAD_DATABASE == ret) {
+src/rootserver/ob_ddl_service.cpp	18641	ObDDLService::rebuild_index	ret == OB_TABLE_NOT_EXIST; ret == OB_ERR_BAD_DATABASE	if (OB_TABLE_NOT_EXIST == ret || OB_ERR_BAD_DATABASE == ret) {
+src/rootserver/ob_ddl_service.cpp	19301	ObDDLService::create_user	ret == OB_ERR_USER_EXIST	if (OB_ERR_USER_EXIST == ret && true == arg.if_not_exist_) {
+src/rootserver/ob_ddl_service.cpp	19332	ObDDLService::create_user	ret == OB_ERR_USER_EXIST	if (OB_ERR_USER_EXIST == ret) {
+src/rootserver/ob_ddl_service.cpp	19349	ObDDLService::create_user	ret == OB_ERR_USER_EXIST	} else if (OB_ERR_USER_EXIST == ret) {
+src/rootserver/ob_ddl_service.cpp	20447	ObDDLService::grant_or_revoke_column_priv_mysql	other variable hash_ret == OB_HASH_NOT_EXIST	if (hash_ret == OB_HASH_NOT_EXIST || hash_ret == OB_SUCCESS) {
+src/rootserver/ob_ddl_service.cpp	21719	ObDDLService::create_mysql_roles_in_trans	ret == OB_ERR_USER_EXIST	if (OB_ERR_USER_EXIST == ret) {
+src/rootserver/ob_ddl_service.cpp	22166	ObDDLSQLTransaction::lock_all_ddl_operation	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/rootserver/ob_ddl_service.cpp	22385	ObDDLService::pre_rename_mysql_columns_online	ret == OB_HASH_EXIST	if (ret == OB_HASH_EXIST) {
+src/rootserver/ob_ddl_service.cpp	22386	ObDDLService::pre_rename_mysql_columns_online	ret == OB_HASH_NOT_EXIST	} else if (ret == OB_HASH_NOT_EXIST) {
+src/rootserver/ob_ddl_service.cpp	22520	ObDDLService::drop_column_online	call result update_column_name_set.exist_refactored(orig_column_key) == OB_HASH_EXIST	} else if (OB_HASH_EXIST == update_column_name_set.exist_refactored(orig_column_key)) {
+src/rootserver/ob_ddl_service.cpp	22745	ObDDLService::pre_rename_mysql_columns_offline	call result update_column_name_set.exist_refactored(orig_column_key) == OB_HASH_EXIST	if (OB_HASH_EXIST == update_column_name_set.exist_refactored(orig_column_key)) {
+src/rootserver/ob_ddl_service.cpp	22812	ObDDLService::check_new_columns_for_index	tmp_ret == OB_HASH_EXIST	if (tmp_ret == OB_HASH_EXIST) {
+src/rootserver/ob_ddl_service.cpp	22884	ObDDLService::check_rename_first	ret == OB_HASH_NOT_EXIST	if (ret == OB_HASH_NOT_EXIST) {
+src/rootserver/ob_ddl_service.cpp	22895	ObDDLService::check_rename_first	ret == OB_HASH_EXIST; ret == OB_HASH_NOT_EXIST	if (ret == OB_HASH_EXIST || ret == OB_HASH_NOT_EXIST) {
+src/rootserver/ob_ddl_service.cpp	22896	ObDDLService::check_rename_first	ret == OB_HASH_EXIST	is_rename_first = (ret == OB_HASH_EXIST);
+src/rootserver/ob_ddl_service.cpp	23061	ObDDLService::fix_local_idx_part_name_for_add_part_	ret == OB_DUPLICATE_OBJECT_NAME_EXIST	if (OB_DUPLICATE_OBJECT_NAME_EXIST == ret) {
+src/rootserver/ob_ddl_service.cpp	23107	ObDDLService::fix_local_idx_part_name_for_add_subpart_	ret == OB_DUPLICATE_OBJECT_NAME_EXIST	if (OB_DUPLICATE_OBJECT_NAME_EXIST == ret) {
+src/rootserver/ob_ddl_service.cpp	23390	ObDDLService::drop_index_to_scheduler_	ret != OB_EAGAIN	if (OB_EAGAIN != ret) {

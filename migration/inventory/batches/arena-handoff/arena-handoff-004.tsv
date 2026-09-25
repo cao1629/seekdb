@@ -1,0 +1,30 @@
+file	line	symbol	construct	text
+src/storage/ddl/ob_ddl_merge_task.h	75	ObDDLTableMergeDag::arena_	allocator member of cross-thread class: ObArenaAllocator	ObArenaAllocator arena_;
+src/storage/ddl/ob_ddl_merge_task_v2.cpp	141	ObDDLMergePrepareTask::inner_process	hand-off of allocator-backed object assemble_task via add_task	} else if (OB_FAIL(dag->add_task(*assemble_task))) {
+src/storage/ddl/ob_ddl_merge_task_v2.h	88	ObDDLMergePrepareTask::allocator_	allocator member of cross-thread class: ObArenaAllocator	ObArenaAllocator allocator_;
+src/storage/ddl/ob_delete_lob_meta_row_task.cpp	100	ObDeleteLobMetaRowDag::create_first_task	hand-off of allocator-backed object delete_task via add_task	} else if (OB_FAIL(add_task(*delete_task))) {
+src/storage/ddl/ob_hnsw_embedmgr.cpp	634	ObEmbeddingTaskMgr::submit_batch_info	hand-off of allocator-backed object task via push_task	if (OB_FAIL(embedding_handler_->push_task(*task))) {
+src/storage/ddl/ob_tablet_fork_task.cpp	570	ObTabletForkDag::create_first_task	hand-off of allocator-backed object prepare_task via add_task	} else if (OB_FAIL(add_task(*prepare_task))) {
+src/storage/ddl/ob_tablet_fork_task.cpp	590	ObTabletForkDag::create_first_task	hand-off of allocator-backed object reuse_task via add_task	} else if (OB_FAIL(add_task(*reuse_task))) {
+src/storage/ddl/ob_tablet_fork_task.cpp	600	ObTabletForkDag::create_first_task	hand-off of allocator-backed object rewrite_task via add_task	} else if (OB_FAIL(add_task(*rewrite_task))) {
+src/storage/ddl/ob_tablet_fork_task.cpp	606	ObTabletForkDag::create_first_task	hand-off of allocator-backed object merge_task via add_task	if (FAILEDx(add_task(*merge_task))) {
+src/storage/ddl/ob_tablet_fork_task.h	231	ObTabletForkReuseTask::allocator_	allocator member of cross-thread class: common::ObArenaAllocator	common::ObArenaAllocator allocator_;
+src/storage/ddl/ob_tablet_fork_task.h	257	ObTabletForkRewriteTask::allocator_	allocator member of cross-thread class: common::ObArenaAllocator	common::ObArenaAllocator allocator_;
+src/storage/fts/dict/ob_ft_range_dict.cpp	132	DATBuilderThreadPool::all_tries_	allocator-backed container member of cross-thread class: ObVector<ObFTTrie<void> *, ObArenaAllocator> *	ObVector<ObFTTrie<void> *, ObArenaAllocator> *all_tries_;
+src/storage/lob/ob_ext_info_callback.h	128	ObExtInfoCallback::allocator_	allocator member of cross-thread class: ObIAllocator *	ObIAllocator *allocator_;
+src/storage/lob/ob_ext_info_callback.h	132	ObExtInfoCallback::key_obj_	borrowed view member of cross-thread class: ObObj	ObObj key_obj_;
+src/storage/lob/ob_ext_info_callback.h	134	ObExtInfoCallback::rowkey_	borrowed view member of cross-thread class: common::ObStoreRowkey	common::ObStoreRowkey rowkey_;
+src/storage/lob/ob_ext_info_callback.h	135	ObExtInfoCallback::mutator_row_buf_	borrowed view member of cross-thread class: char *	char *mutator_row_buf_;
+src/storage/lob/ob_lob_persistent_adaptor.cpp	433	ObPersistentLobApator::scan_with_ctx	hand-off of allocator-backed object reader via put	} else if (OB_FAIL(cache.put(key, reader))) {
+src/storage/meta_mem/ob_storage_meta_cache.cpp	535	ObStorageMetaCache::prefetch	cross-thread object constructed with an allocator: ObStorageMetaIOCallback	callback = new (buf) ObStorageMetaIOCallback(&io_allocator,
+src/storage/meta_mem/ob_storage_meta_cache.cpp	570	ObStorageMetaCache::get_meta_and_bypass_cache	cross-thread object constructed with an allocator: ObStorageMetaIOCallback	callback = new (buf) ObStorageMetaIOCallback(&io_allocator,
+src/storage/meta_mem/ob_storage_meta_cache.h	244	ObStorageMetaCache::ObStorageMetaIOCallback::arena_allocator_	allocator member of cross-thread class: common::ObSafeArenaAllocator *	common::ObSafeArenaAllocator *arena_allocator_;
+src/storage/ob_bloom_filter_task.h	51	ObBloomFilterBuildTask::allocator_	allocator member of cross-thread class: common::ObArenaAllocator	common::ObArenaAllocator allocator_;
+src/storage/ob_bloom_filter_task.h	52	ObBloomFilterBuildTask::io_buf_	borrowed view member of cross-thread class: char *	char *io_buf_;
+src/storage/slog_ckpt/ob_startup_accel_task_handler.h	59	ObStartupAccelTaskHandler::task_allocator_	allocator member of cross-thread class: common::ObFIFOAllocator	common::ObFIFOAllocator task_allocator_;
+src/storage/tablelock/ob_obj_lock.cpp	794	ObOBJLock::add_priority_task	hand-off with an allocator argument via push	} else if (OB_FAIL(priority_queue_.push(
+src/storage/tmp_file/ob_tmp_file_cache.h	66	ObTmpBlockCacheValue::buf_	borrowed view member of cross-thread class: char *	char *buf_;
+src/storage/tmp_file/ob_tmp_file_cache.h	161	ObTmpPageCacheValue::buf_	borrowed view member of cross-thread class: char *	char *buf_;
+src/storage/tmp_file/ob_tmp_file_cache.h	237	ObTmpPageCache::ObITmpPageIOCallback::allocator_	allocator member of cross-thread class: common::ObIAllocator *	common::ObIAllocator *allocator_;
+src/storage/tmp_file/ob_tmp_file_cache.h	238	ObTmpPageCache::ObITmpPageIOCallback::data_buf_	borrowed view member of cross-thread class: char *	char *data_buf_;   // actual data buffer
+src/storage/tx/ob_tx_ctx.h	616	ObTxCtx::reserve_allocator_	allocator member of cross-thread class: TransModulePageAllocator	TransModulePageAllocator reserve_allocator_;

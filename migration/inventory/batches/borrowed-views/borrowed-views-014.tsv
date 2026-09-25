@@ -1,0 +1,61 @@
+file	line	symbol	construct	text
+src/rootserver/ob_ddl_service.cpp	1144	ObDDLService::print_view_expanded_definition	allocator in, arena view out: ObString &ddl_stmt_str	int ObDDLService::print_view_expanded_definition(
+src/rootserver/ob_ddl_service.cpp	7229	ObDDLService::rebuild_constraint_check_expr	allocator in, arena view out: ObString &new_check_expr_str	int ObDDLService::rebuild_constraint_check_expr(
+src/rootserver/ob_ddl_service.cpp	13416	ObDDLService::gen_hidden_obj_name	allocator in, arena view out: ObString &hidden_obj_name	int ObDDLService::gen_hidden_obj_name(const uint64_t obj_id,
+src/rootserver/ob_ddl_service.cpp	13785	ObDDLService::gen_new_index_table_name	allocator in, arena view out: ObString &new_index_table_name	int ObDDLService::gen_new_index_table_name(
+src/rootserver/ob_ddl_service.cpp	17358	ObDDLService::get_object_name_with_origin_name_in_recyclebin	allocator in, arena view out: ObString &object_name	int ObDDLService::get_object_name_with_origin_name_in_recyclebin(const ObString &origin_table_name,
+src/rootserver/ob_runtime_ddl_service.h	52	ObSysStat::Item::name_	member raw bytes (pointer) of type const char *	const char *name_;
+src/rootserver/ob_runtime_ddl_service.h	53	ObSysStat::Item::value_	member ObObj (value) of type common::ObObj	common::ObObj value_;
+src/rootserver/ob_runtime_ddl_service.h	54	ObSysStat::Item::info_	member raw bytes (pointer) of type const char *	const char *info_;
+src/rootserver/ob_server_thread_helper.h	71	ObServerThreadHelper::thread_name_	member raw bytes (pointer) of type const char*	const char* thread_name_;
+src/rootserver/ob_system_bootstrap_service.h	48	ObSysStat::Item::name_	member raw bytes (pointer) of type const char *	const char *name_;
+src/rootserver/ob_system_bootstrap_service.h	49	ObSysStat::Item::value_	member ObObj (value) of type common::ObObj	common::ObObj value_;
+src/rootserver/ob_system_bootstrap_service.h	50	ObSysStat::Item::info_	member raw bytes (pointer) of type const char *	const char *info_;
+src/rootserver/parallel_ddl/ob_create_table_helper.h	59	ObCreateTableHelper::MockFKParentTableNameWrapper::parent_database_	member ObString (value) of type common::ObString	common::ObString parent_database_;
+src/rootserver/parallel_ddl/ob_create_table_helper.h	60	ObCreateTableHelper::MockFKParentTableNameWrapper::parent_table_	member ObString (value) of type common::ObString	common::ObString parent_table_;
+src/rootserver/parallel_ddl/ob_create_view_helper.h	82	ObCreateViewHelper::ddl_stmt_str_	member ObString (value) of type ObString	ObString ddl_stmt_str_;
+src/rootserver/parallel_ddl/ob_ddl_helper.h	220	ObDDLHelper::parallel_ddl_type_	member raw bytes (pointer) of type const char*	const char* parallel_ddl_type_;
+src/rootserver/pl_ddl/ob_pl_ddl_operator.cpp	774	ObPLDDLOperator::build_recyclebin_restore_object_name	allocator in, arena view out: ObString &object_name	int ObPLDDLOperator::build_recyclebin_restore_object_name(const SchemaType &object_schema,
+src/share/aggregate/ob_pushdown_aggregate_protocol.h	109	ObAggregateReduction::min_	member ObDatum (pointer) of type const common::ObDatum *	const common::ObDatum *min_;
+src/share/aggregate/ob_pushdown_aggregate_protocol.h	110	ObAggregateReduction::max_	member ObDatum (pointer) of type const common::ObDatum *	const common::ObDatum *max_;
+src/share/aggregate/ob_pushdown_aggregate_protocol.h	111	ObAggregateReduction::sum_	member ObDatum (pointer) of type const common::ObDatum *	const common::ObDatum *sum_;
+src/share/aggregate/ob_pushdown_aggregate_protocol.h	119	ObAggregateValueBatchView::datums_	member ObDatum (pointer) of type const common::ObDatum *	const common::ObDatum *datums_;
+src/share/ai_service/ob_ai_model_info.h	87	ObAiServiceModelInfo::name_	member ObString (value) of type ObString	ObString name_;
+src/share/ai_service/ob_ai_model_info.h	89	ObAiServiceModelInfo::model_name_	member ObString (value) of type ObString	ObString model_name_;
+src/share/ai_service/ob_ai_service_struct.cpp	184	ObAiModelEndpointInfo::encrypt_access_key_	allocator in, arena view out: ObString &encrypted_access_key	int ObAiModelEndpointInfo::encrypt_access_key_(ObIAllocator &allocator, const ObString &access_key, ObString &encrypted_access_key)
+src/share/ai_service/ob_ai_service_struct.cpp	192	ObAiModelEndpointInfo::decrypt_access_key_	allocator in, arena view out: ObString &unencrypted_access_key	int ObAiModelEndpointInfo::decrypt_access_key_(ObIAllocator &allocator, const ObString &encrypted_access_key, ObString &unencrypted_access_key) const
+src/share/ai_service/ob_ai_service_struct.cpp	221	ObAiModelEndpointInfo::get_unencrypted_access_key	allocator in, arena view out: ObString &unencrypted_access_key	int ObAiModelEndpointInfo::get_unencrypted_access_key(common::ObIAllocator &allocator, ObString &unencrypted_access_key) const
+src/share/ai_service/ob_ai_service_struct.h	91	ObAiModelEndpointInfo::name_	member ObString (value) of type ObString	ObString name_;
+src/share/ai_service/ob_ai_service_struct.h	92	ObAiModelEndpointInfo::scope_	member ObString (value) of type ObString	ObString scope_;
+src/share/ai_service/ob_ai_service_struct.h	93	ObAiModelEndpointInfo::ai_model_name_	member ObString (value) of type ObString	ObString ai_model_name_;
+src/share/ai_service/ob_ai_service_struct.h	94	ObAiModelEndpointInfo::url_	member ObString (value) of type ObString	ObString url_;
+src/share/ai_service/ob_ai_service_struct.h	95	ObAiModelEndpointInfo::access_key_	member ObString (value) of type ObString	ObString access_key_;
+src/share/ai_service/ob_ai_service_struct.h	96	ObAiModelEndpointInfo::provider_	member ObString (value) of type ObString	ObString provider_;
+src/share/ai_service/ob_ai_service_struct.h	97	ObAiModelEndpointInfo::request_model_name_	member ObString (value) of type ObString	ObString request_model_name_;
+src/share/ai_service/ob_ai_service_struct.h	98	ObAiModelEndpointInfo::parameters_	member ObString (value) of type ObString	ObString parameters_;
+src/share/ai_service/ob_ai_service_struct.h	99	ObAiModelEndpointInfo::request_transform_fn_	member ObString (value) of type ObString	ObString request_transform_fn_;
+src/share/ai_service/ob_ai_service_struct.h	100	ObAiModelEndpointInfo::response_transform_fn_	member ObString (value) of type ObString	ObString response_transform_fn_;
+src/share/cache/ob_kvcache_struct.h	103	ObKVStoreMemBlock::buffer_	member raw bytes (pointer) of type char *	char *buffer_;
+src/share/cache/ob_recycle_multi_kvcache.h	163	InnerMockAllocator::can_alloc_ptr_	member raw bytes (pointer) of type char *	char *can_alloc_ptr_;
+src/share/cache/ob_recycle_multi_kvcache.h	166	InnerMockAllocator::can_free_ptr_	member raw bytes (pointer) of type char *	char *can_free_ptr_;
+src/share/cache/ob_recycle_multi_kvcache.h	245	ObRecycleMultiKVCache::total_buffer_	member raw bytes (pointer) of type char *	char *total_buffer_;// start pointer of heap area, including hash_idx + data_bufer
+src/share/cache/ob_recycle_multi_kvcache.h	246	ObRecycleMultiKVCache::buffer_	member raw bytes (pointer) of type char *	char *buffer_;// the start pointer of recycle buffer on heap
+src/share/compaction/ob_compaction_time_guard.h	97	ObCompactionTimeGuard::log_mod_	member raw bytes (pointer) of type const char *	const char * log_mod_;
+src/share/config/ob_config.cpp	830	ObConfigStringItem::deep_copy_value_string	allocator in, arena view out: ObString &dst	int ObConfigStringItem::deep_copy_value_string(ObIAllocator &allocator, ObString &dst)
+src/share/config/ob_config.h	191	ObConfigItem::name_str_	member raw bytes (pointer) of type const char*	const char* name_str_;
+src/share/config/ob_config.h	192	ObConfigItem::info_str_	member raw bytes (pointer) of type const char*	const char* info_str_;
+src/share/config/ob_config.h	193	ObConfigItem::range_str_	member raw bytes (pointer) of type const char*	const char* range_str_;
+src/share/config/ob_config.h	839	ObConfigStringItem::optional_values_	member raw bytes (pointer) of type const char *	const char *optional_values_;
+src/share/config/ob_config.h	898	ObConfigPairs::ObConfigPair::key_	member ObString (value) of type ObString	ObString key_;
+src/share/config/ob_config.h	899	ObConfigPairs::ObConfigPair::value_	member ObString (value) of type ObString	ObString value_;
+src/share/config/ob_config_storage.cpp	156	ObConfigStorage::get_config_value	allocator in, arena view out: ObString &value	int ObConfigStorage::get_config_value(const char *name, ObString &value, common::ObIAllocator &allocator)
+src/share/datum/ob_datum_funcs_impl.h	292	datum_lob_locator_get_string	allocator in, arena view out: ObString& inrow_data	OB_INLINE int datum_lob_locator_get_string(const ObDatum &datum,
+src/share/diagnosis/ob_sql_monitor_statname.h	114	ObMonitorStat::name_	member raw bytes (pointer) of type const char *	const char *name_;
+src/share/diagnosis/ob_sql_monitor_statname.h	115	ObMonitorStat::description_	member raw bytes (pointer) of type const char *	const char *description_;
+src/share/geo/ob_geo_3d.cpp	126	ObGeometry3D::to_wkt	allocator in, arena view out: ObString &wkt	int ObGeometry3D::to_wkt(ObIAllocator &allocator, ObString &wkt, uint32_t srid/* = 0*/, int64_t maxdecimaldigits/* = -1*/, bool output_srid0/* = false*/)
+src/share/geo/ob_geo_3d.cpp	944	ObGeometry3D::to_geo_json	allocator in, arena view out: common::ObString &geo_json	int ObGeometry3D::to_geo_json(ObIAllocator *allocator, common::ObString &geo_json)
+src/share/geo/ob_geo_3d.h	86	ObGeometry3D::data_	member ObString (value) of type ObString	ObString data_; // wkb without srid
+src/share/geo/ob_geo_common.h	155	ObGeoNotImplementedException::info_	member raw bytes (pointer) of type const char *	const char *info_;         // not implemented detail type
+src/share/geo/ob_geo_common.h	178	ObGeoBufferStrategy::proj4_self_	member ObString (value) of type common::ObString	common::ObString proj4_self_;
+src/share/geo/ob_geo_common.h	179	ObGeoBufferStrategy::proj4_proj_	member ObString (value) of type common::ObString	common::ObString proj4_proj_;
+src/share/geo/ob_geo_common.h	180	ObGeoBufferStrategy::proj4_wgs84_	member ObString (value) of type common::ObString	common::ObString proj4_wgs84_;

@@ -1,0 +1,61 @@
+file	line	symbol	construct	text
+src/oblib/lib/utility/ob_print_utils.h	116	ObHexStringWrap::str_	member ObString (reference) of type const common::ObString &	const common::ObString &str_;
+src/oblib/lib/utility/ob_print_utils.h	381	ObCStringHelper::buf_	member raw bytes (pointer) of type char *	char *buf_ = reserve_buf_;
+src/oblib/lib/utility/ob_rate_limiter.h	49	ObRateLimiter::name_	member raw bytes (pointer) of type const char *	const char *name_;
+src/oblib/lib/utility/ob_tracepoint.h	226	EventItem::name_	member raw bytes (pointer) of type const char *	const char *name_;
+src/oblib/lib/utility/ob_tracepoint.h	227	EventItem::describe_	member raw bytes (pointer) of type const char *	const char *describe_;
+src/oblib/lib/utility/utility.cpp	1648	ob_alloc_printf	allocator in, arena view out: ObString &result	int ob_alloc_printf(ObString &result, ObIAllocator &alloc, const char* fmt, va_list ap)
+src/oblib/lib/utility/utility.cpp	1678	ob_alloc_printf	allocator in, arena view out: ObString &result	int ob_alloc_printf(ObString &result, ObIAllocator &alloc, const char* fmt, ...)
+src/oblib/lib/utility/utility.h	448	deep_copy_ob_string	allocator in, arena view out: ObString &dst	int deep_copy_ob_string(Allocator &allocator, const ObString &src, ObString &dst)
+src/oblib/lib/utility/utility.h	539	CountReporter::id_	member raw bytes (pointer) of type const char *	const char *id_;
+src/oblib/lib/utility/utility.h	712	load_file_to_string	allocator in, arena view out: ObString &str	int load_file_to_string(const char *path, Allocator &allocator, ObString &str)
+src/oblib/lib/utility/utility.h	974	ObTimeGuard::owner_	member raw bytes (pointer) of type const char *	const char *owner_;
+src/oblib/lib/utility/utility.h	977	ObTimeGuard::click_str_	member raw bytes (pointer) of type const char *	const char *click_str_[MAX_CLICK_COUNT];
+src/oblib/lib/utility/utility.h	1293	ObMiniStat::ObStatItem::item_	member raw bytes (pointer) of type const char *const	const char *const item_;
+src/oblib/lib/vector/ob_vsag_adaptor.cpp	200	HnswIndexHandler::dtype_	member raw bytes (pointer) of type const char *	const char *dtype_;
+src/oblib/lib/vector/ob_vsag_adaptor.cpp	201	HnswIndexHandler::metric_	member raw bytes (pointer) of type const char *	const char *metric_;
+src/oblib/lib/vector/ob_vsag_adaptor.h	54	CreateIndexParam::dtype_	member raw bytes (pointer) of type const char *	const char *dtype_ = nullptr;
+src/oblib/lib/vector/ob_vsag_adaptor.h	55	CreateIndexParam::metric_	member raw bytes (pointer) of type const char *	const char *metric_ = nullptr;
+src/oblib/rpc/ob_sql_mem_pool.h	46	ObSqlMemPool::mem_label_	member raw bytes (pointer) of type const char*	const char* mem_label_;
+src/oblib/rpc/obmysql/ob_login_info.h	116	ObHandshakeResponse::username_	member ObString (value) of type common::ObString	common::ObString username_;
+src/oblib/rpc/obmysql/ob_login_info.h	117	ObHandshakeResponse::auth_response_	member ObString (value) of type common::ObString	common::ObString auth_response_;
+src/oblib/rpc/obmysql/ob_login_info.h	118	ObHandshakeResponse::database_	member ObString (value) of type common::ObString	common::ObString database_;
+src/oblib/rpc/obmysql/ob_login_info.h	119	ObHandshakeResponse::auth_plugin_name_	member ObString (value) of type common::ObString	common::ObString auth_plugin_name_;
+src/oblib/rpc/obmysql/ob_mysql_field.h	44	ObMySQLField::dname_	member ObString (value) of type common::ObString	common::ObString dname_;
+src/oblib/rpc/obmysql/ob_mysql_field.h	45	ObMySQLField::tname_	member ObString (value) of type common::ObString	common::ObString tname_; // table name for display
+src/oblib/rpc/obmysql/ob_mysql_field.h	46	ObMySQLField::org_tname_	member ObString (value) of type common::ObString	common::ObString org_tname_; // original table name
+src/oblib/rpc/obmysql/ob_mysql_field.h	47	ObMySQLField::cname_	member ObString (value) of type common::ObString	common::ObString cname_;     // column name for display
+src/oblib/rpc/obmysql/ob_mysql_field.h	48	ObMySQLField::org_cname_	member ObString (value) of type common::ObString	common::ObString org_cname_; // original column name
+src/oblib/rpc/obmysql/ob_mysql_field.h	51	ObMySQLField::type_owner_	member ObString (value) of type common::ObString	common::ObString type_owner_; // type owner, only valid when type is MYSQL_TYPE_COMPLEX
+src/oblib/rpc/obmysql/ob_mysql_field.h	52	ObMySQLField::type_name_	member ObString (value) of type common::ObString	common::ObString type_name_; // type name, only valid when type is MYSQL_TYPE_COMPLEX
+src/oblib/rpc/obmysql/ob_mysql_packet.h	360	ObMySQLRawPacket::cdata_	member raw bytes (pointer) of type const char *	const char *cdata_;
+src/oblib/rpc/obmysql/ob_mysql_row.h	156	ObMySQLCellValue::external_data_	member raw bytes (pointer) of type const char *	const char *external_data_;
+src/oblib/rpc/obmysql/packet/ompk_auth_switch.h	46	OMPKAuthSwitch::plugin_name_	member ObString (value) of type common::ObString	common::ObString plugin_name_;
+src/oblib/rpc/obmysql/packet/ompk_auth_switch.h	47	OMPKAuthSwitch::scramble_	member ObString (value) of type common::ObString	common::ObString scramble_;
+src/oblib/rpc/obmysql/packet/ompk_error.h	50	OMPKError::sqlstate_	member ObString (value) of type common::ObString	common::ObString sqlstate_;
+src/oblib/rpc/obmysql/packet/ompk_error.h	51	OMPKError::message_	member ObString (value) of type common::ObString	common::ObString message_;
+src/oblib/rpc/obmysql/packet/ompk_local_infile.h	49	OMPKLocalInfile::filename_	member ObString (value) of type ObString	ObString filename_;
+src/oblib/rpc/obmysql/packet/ompk_ok.h	72	OMPKOK::message_	member ObString (value) of type common::ObString	common::ObString message_;
+src/oblib/rpc/obmysql/packet/ompk_ok.h	73	OMPKOK::changed_schema_	member ObString (value) of type common::ObString	common::ObString changed_schema_;
+src/oblib/rpc/obmysql/packet/ompk_string.h	44	OMPKString::str_	member ObString (value) of type common::ObString	common::ObString str_;
+src/observer/change_stream/ob_change_stream_fetcher.h	78	ObCSRedoRecord::redo_buf_	member raw bytes (pointer) of type char *	char   *redo_buf_ = nullptr;
+src/observer/change_stream/ob_cs_plugin_async_index.h	80	ObASyncIndexEvent::vec_data_	member raw bytes (pointer) of type char *	char              *vec_data_;
+src/observer/change_stream/ob_cs_plugin_async_index.h	82	ObASyncIndexEvent::part_key_datums_	member container of ObStorageDatum of type common::ObSEArray<blocksstable::ObStorageDatum, 0>	common::ObSEArray<blocksstable::ObStorageDatum, 0> part_key_datums_;
+src/observer/composition/retrieval/ob_das_legacy_tr_merge_iter.cpp	893	get_query_tokens_by_compacting_repeated_token	allocator in, arena view out: ObString &query_str	static int get_query_tokens_by_compacting_repeated_token(ObString &query_str,
+src/observer/composition/retrieval/ob_das_legacy_tr_merge_iter.cpp	959	get_query_tokens_directly	allocator in, arena view out: ObString &query_str	static int get_query_tokens_directly(ObString &query_str,
+src/observer/composition/retrieval/ob_das_legacy_tr_merge_iter.h	120	ObDASLegacyTRMergeIter::query_tokens_	member container of ObString of type ObArray<ObString>	ObArray<ObString> query_tokens_;
+src/observer/dbms_scheduler/ob_dbms_sched_job_master.h	83	ObDBMSSchedJobKey::job_name_	member ObString (value) of type common::ObString	common::ObString job_name_;
+src/observer/main.cpp	330	dl_phdr_info::dlpi_name	member raw bytes (pointer) of type const char *	const char *dlpi_name; // (Null-terminated) name of object
+src/observer/main.cpp	346	dl_phdr_info::dlpi_name	member raw bytes (pointer) of type const char *	const char *dlpi_name;
+src/observer/mysql/ob_query_driver.cpp	254	ObQueryDriver::convert_field_charset	allocator in, arena view out: ObString &dest_string	int ObQueryDriver::convert_field_charset(ObIAllocator& allocator,
+src/observer/mysql/ob_query_driver.cpp	390	ObQueryDriver::process_lob_locator_results	allocator in, arena view out: ObObj& value	int ObQueryDriver::process_lob_locator_results(ObObj& value,
+src/observer/mysql/ob_query_driver.cpp	465	ObQueryDriver::convert_text_value_charset	allocator in, arena view out: ObObj& value	int ObQueryDriver::convert_text_value_charset(ObObj& value,
+src/observer/mysql/obmp_auth_response.h	43	ObMPAuthResponse::auth_data_	member ObString (value) of type common::ObString	common::ObString auth_data_;
+src/observer/mysql/obmp_change_user.h	48	ObMPChangeUser::username_	member ObString (value) of type common::ObString	common::ObString username_;
+src/observer/mysql/obmp_change_user.h	49	ObMPChangeUser::auth_response_	member ObString (value) of type common::ObString	common::ObString auth_response_;
+src/observer/mysql/obmp_change_user.h	50	ObMPChangeUser::database_	member ObString (value) of type common::ObString	common::ObString database_;
+src/observer/mysql/obmp_connect.h	89	ObMPConnect::user_name_	member ObString (value) of type common::ObString	common::ObString user_name_;
+src/observer/mysql/obmp_connect.h	90	ObMPConnect::client_ip_	member ObString (value) of type common::ObString	common::ObString client_ip_;
+src/observer/mysql/obmp_connect.h	91	ObMPConnect::db_name_	member ObString (value) of type common::ObString	common::ObString db_name_;
+src/observer/mysql/obmp_init_db.h	45	ObMPInitDB::db_name_	member ObString (value) of type common::ObString	common::ObString db_name_;
+src/observer/mysql/obmp_ping.h	39	ObMPPing::sql_	member ObString (value) of type common::ObString	common::ObString sql_;

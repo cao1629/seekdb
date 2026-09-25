@@ -1,0 +1,25 @@
+file	line	symbol	construct	text
+src/storage/tx_table/ob_tx_ctx_table.h	109	ObTxCtxTable	acquire_ref_ declaration (other name)	int acquire_ref_();
+src/storage/tx_table/ob_tx_ctx_table.h	111	ObTxCtxTable	release_ref_ declaration (other name)	int release_ref_();
+src/storage/tx_table/ob_tx_data_cache.h	124	ObTxDataValueHandle	Handle struct definition	struct ObTxDataValueHandle {
+src/storage/tx_table/ob_tx_data_hash_map.cpp	33	ObTxDataHashMap::destroy	dec_ref call	curr->dec_ref();
+src/storage/tx_table/ob_tx_data_hash_map.cpp	88	ObTxDataHashMap::insert	inc_ref call	if (value->inc_ref() <= 0) {
+src/storage/tx_table/ob_tx_data_memtable.h	333	ObTxDataMemtable::inc_write_ref	inc_write_ref definition (other name)	int64_t inc_write_ref() { return ATOMIC_AAF(&write_ref_, 1); }
+src/storage/tx_table/ob_tx_data_memtable.h	334	ObTxDataMemtable::dec_write_ref	dec_write_ref definition (other name)	int64_t dec_write_ref() { return ATOMIC_AAF(&write_ref_, -1); }
+src/storage/tx_table/ob_tx_data_memtable_mgr.cpp	142	ObTxDataMemtableMgr::release_head_memtable_	release_head_memtable call (reference-count function found by its body)	release_head_memtable();
+src/storage/tx_table/ob_tx_data_memtable_mgr.h	38	ObTxDataMemtableWriteGuard	Guard class definition whose methods call dec_write_ref, inc_write_ref	class ObTxDataMemtableWriteGuard
+src/storage/tx_table/ob_tx_data_memtable_mgr.h	57	ObTxDataMemtableWriteGuard::push_back_table	inc_write_ref call (other name)	tx_data_memtable->inc_write_ref();
+src/storage/tx_table/ob_tx_data_memtable_mgr.h	69	ObTxDataMemtableWriteGuard::reset	dec_write_ref call (other name)	tx_data_memtable->dec_write_ref();
+src/storage/tx_table/ob_tx_table_interface.h	32	ObTxTableGuard	Guard class definition whose methods reach dec_ref through other functions (ObTxTableGuard::check_with_tx_data > ObTxTable::check_with_tx_data > ObTxTable::check_tx_data_in_tables_ > ObTxDataTable::check_with_tx_data > ObTxDataTable::check_tx_data_in_sstable_ > ObTxDataGuard::reset > dec_ref)	class ObTxTableGuard
+src/storage/vector_index/ob_vector_kmeans_ctx.cpp	971	ObIvfBuildHelper::inc_ref	inc_ref definition	void ObIvfBuildHelper::inc_ref()
+src/storage/vector_index/ob_vector_kmeans_ctx.cpp	977	ObIvfBuildHelper::dec_ref_and_check_release	dec_ref_and_check_release definition	bool ObIvfBuildHelper::dec_ref_and_check_release()
+src/storage/vector_index/ob_vector_kmeans_ctx.cpp	1326	ObKmeansBuildTaskHandler::push_task	inc_task_ref call (other name)	inc_task_ref();
+src/storage/vector_index/ob_vector_kmeans_ctx.cpp	1346	ObKmeansBuildTaskHandler::handle	dec_task_ref call (other name)	dec_task_ref();
+src/storage/vector_index/ob_vector_kmeans_ctx.cpp	1363	ObKmeansBuildTaskHandler::handle_drop	dec_task_ref call (other name)	dec_task_ref();
+src/storage/vector_index/ob_vector_kmeans_ctx.h	299	ObIvfBuildHelper	inc_ref declaration	void inc_ref();
+src/storage/vector_index/ob_vector_kmeans_ctx.h	300	ObIvfBuildHelper	dec_ref_and_check_release declaration	bool dec_ref_and_check_release();
+src/storage/vector_index/ob_vector_kmeans_ctx.h	382	ObIvfBuildHelperGuard	Guard class definition whose methods call dec_ref_and_check_release, inc_ref	class ObIvfBuildHelperGuard
+src/storage/vector_index/ob_vector_kmeans_ctx.h	391	ObIvfBuildHelperGuard::~ObIvfBuildHelperGuard	dec_ref_and_check_release call	if (helper_->dec_ref_and_check_release()) {
+src/storage/vector_index/ob_vector_kmeans_ctx.h	416	ObIvfBuildHelperGuard::set_helper	inc_ref call	(void)helper_->inc_ref();
+src/storage/vector_index/ob_vector_kmeans_ctx.h	501	ObKmeansBuildTaskHandler::inc_task_ref	inc_task_ref definition (other name)	void inc_task_ref() { ATOMIC_INC(&task_ref_cnt_); }
+src/storage/vector_index/ob_vector_kmeans_ctx.h	502	ObKmeansBuildTaskHandler::dec_task_ref	dec_task_ref definition (other name)	void dec_task_ref() { ATOMIC_DEC(&task_ref_cnt_); }

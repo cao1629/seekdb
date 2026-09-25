@@ -1,0 +1,51 @@
+file	line	symbol	construct	text
+src/sql/engine/px/p2p_datahub/ob_p2p_dh_msg.cpp	104	ObP2PDatahubMsgGuard::ObP2PDatahubMsgGuard	inc_ref_count call	msg->inc_ref_count(2);
+src/sql/engine/px/p2p_datahub/ob_p2p_dh_msg.cpp	109	ObP2PDatahubMsgGuard::~ObP2PDatahubMsgGuard	dec_msg_ref_count call (other name)	dec_msg_ref_count();
+src/sql/engine/px/p2p_datahub/ob_p2p_dh_msg.cpp	117	ObP2PDatahubMsgGuard::dec_msg_ref_count	dec_msg_ref_count definition (other name)	void ObP2PDatahubMsgGuard::dec_msg_ref_count()
+src/sql/engine/px/p2p_datahub/ob_p2p_dh_msg.cpp	120	ObP2PDatahubMsgGuard::dec_msg_ref_count	dec_ref_count call	msg_->dec_ref_count();
+src/sql/engine/px/p2p_datahub/ob_p2p_dh_msg.h	122	ObP2PDatahubMsgBase::inc_ref_count	inc_ref_count definition	void inc_ref_count(int64_t count=1) { ATOMIC_AAF(&ref_count_, count); }
+src/sql/engine/px/p2p_datahub/ob_p2p_dh_msg.h	124	ObP2PDatahubMsgBase::dec_ref_count	dec_ref_count definition	int64_t dec_ref_count() { return ATOMIC_SAF(&ref_count_, 1); }
+src/sql/engine/px/p2p_datahub/ob_p2p_dh_msg.h	125	ObP2PDatahubMsgBase::cas_ref_count	cas_ref_count definition (reference-count function found by its body: changes a reference-count field)	int64_t cas_ref_count(int64_t expect, int64_t new_val) { return ATOMIC_CAS(&ref_count_, expect, new_val); }
+src/sql/engine/px/p2p_datahub/ob_p2p_dh_msg.h	150	ObP2PDatahubMsgGuard	Guard struct definition whose methods call dec_msg_ref_count, dec_ref_count, inc_ref_count	struct ObP2PDatahubMsgGuard
+src/sql/engine/px/p2p_datahub/ob_p2p_dh_msg.h	154	ObP2PDatahubMsgGuard	dec_msg_ref_count declaration (other name)	void dec_msg_ref_count();
+src/sql/ob_sql.cpp	782	ObSql::do_add_ps_cache	deref_stmt_info call (other name)	ps_cache->deref_stmt_info(inner_stmt_id); // need to decide whether to remove
+src/sql/ob_sql.cpp	784	ObSql::do_add_ps_cache	dec_ref_count call	ps_stmt_item->dec_ref_count();
+src/sql/ob_sql.cpp	1396	ObSql::handle_ps_prepare	ref_stmt_item call (other name)	} else if (OB_FAIL(ps_cache->ref_stmt_item(ps_key, stmt_item))) {
+src/sql/ob_sql.cpp	1408	ObSql::handle_ps_prepare	ref_stmt_info call (other name)	} else if (OB_FAIL(ps_cache->ref_stmt_info(inner_stmt_id, stmt_info))) {
+src/sql/ob_sql.cpp	1442	ObSql::handle_ps_prepare	dec_ref_count call	stmt_item->dec_ref_count();
+src/sql/ob_sql.cpp	1445	ObSql::handle_ps_prepare	deref_stmt_info call (other name)	ps_cache->deref_stmt_info(inner_stmt_id); // need to decide whether to remove
+src/sql/ob_sql_trans_control.cpp	202	ObSqlTransControl::end_trans	end_trans definition (reference-count function found by its body: calls inc_session_ref)	int ObSqlTransControl::end_trans(ObSQLSessionInfo *session,
+src/sql/ob_sql_trans_control.cpp	241	ObSqlTransControl::end_trans	inc_session_ref call (other name)	if (OB_FAIL(inc_session_ref(session))) {
+src/sql/ob_sql_trans_control.cpp	450	ObSqlTransControl::do_end_trans_	inc_session_ref call (other name)	if (OB_FAIL(inc_session_ref(session))) {
+src/sql/ob_sql_trans_control.cpp	1018	ObSqlTransControl::inc_session_ref	inc_session_ref definition (other name)	int ObSqlTransControl::inc_session_ref(const ObSQLSessionInfo *session)
+src/sql/ob_sql_trans_control.cpp	1024	ObSqlTransControl::inc_session_ref	inc_session_ref call (other name)	OZ (session_mgr->inc_session_ref(session));
+src/sql/ob_sql_trans_control.h	216	ObSqlTransControl	inc_session_ref declaration (other name)	static int inc_session_ref(const ObSQLSessionInfo *session);
+src/sql/ob_sql_utils.cpp	1902	RelExprPointerChecker::add_expr	add_ref call (other name)	if (OB_FAIL(rel_array_.at(expr_id).add_ref(&expr))) {
+src/sql/optimizer/ob_insert_log_plan.cpp	1266	ObInsertLogPlan::get_all_rowkey_columns_for_ddl	set_explicited_reference call (reference-count function found by its body)	spk_expr->set_explicited_reference();
+src/sql/optimizer/ob_join_order.cpp	17261	ObJoinOrder::deduce_prefix_str_idx_expr	set_explicited_reference call (reference-count function found by its body)	prefix_col->set_explicited_reference();
+src/sql/optimizer/ob_join_order.cpp	17658	ObJoinOrder::deduce_common_gen_col_index_expr	set_explicited_reference call (reference-count function found by its body)	gen_col->set_explicited_reference();
+src/sql/optimizer/ob_log_for_update.cpp	184	ObLogForUpdate::get_for_update_dependant_exprs	set_explicited_reference call (reference-count function found by its body)	dep_exprs.at(i)->set_explicited_reference();
+src/sql/optimizer/ob_log_plan.cpp	10698	ObLogPlan::get_table_for_update_info	set_explicited_reference call (reference-count function found by its body)	temp_rowkeys.at(i)->set_explicited_reference();
+src/sql/optimizer/ob_log_plan.cpp	10713	ObLogPlan::get_table_for_update_info	set_explicited_reference call (reference-count function found by its body)	tmp_partkey_exprs.at(i)->set_explicited_reference();
+src/sql/optimizer/ob_log_plan.cpp	10845	ObLogPlan::get_part_exprs	set_part_key_reference call (reference-count function found by its body)	part_expr->set_part_key_reference();
+src/sql/optimizer/ob_log_plan.cpp	10848	ObLogPlan::get_part_exprs	set_part_key_reference call (reference-count function found by its body)	subpart_expr->set_part_key_reference();
+src/sql/optimizer/ob_select_log_plan.cpp	7212	ObSelectLogPlan::adjust_late_materialization_stmt_structure	set_explicited_reference call (reference-count function found by its body)	rowkeys.at(i)->set_explicited_reference();
+src/sql/optimizer/stat/ob_opt_column_stat_cache.h	55	ObOptColumnStatHandle	Handle class definition	class ObOptColumnStatHandle
+src/sql/optimizer/stat/ob_opt_ds_stat_cache.h	37	ObOptDSStatHandle	Handle struct definition	struct ObOptDSStatHandle
+src/sql/optimizer/stat/ob_opt_system_stat_cache.h	37	ObOptSystemStatHandle	Handle struct definition	struct ObOptSystemStatHandle
+src/sql/optimizer/stat/ob_opt_table_stat_cache.h	37	ObOptTableStatHandle	Handle struct definition	struct ObOptTableStatHandle
+src/sql/plan_cache/ob_cache_object.h	167	ObPlanCacheObject	inc_pre_expr_ref_count declaration (other name)	virtual void inc_pre_expr_ref_count() = 0;
+src/sql/plan_cache/ob_cache_object.h	168	ObPlanCacheObject	dec_pre_expr_ref_count declaration (other name)	virtual void dec_pre_expr_ref_count() = 0;
+src/sql/plan_cache/ob_cache_object_factory.h	71	ObCacheObjGuard	Guard class definition whose methods reach dec_ref_count through other functions (ObCacheObjGuard::force_early_release > ObCacheObjectFactory::free > ObCacheObjectFactory::inner_free > ObPlanCache::free_cache_obj > ObLCObjectManager::free > ObLCObjectManager::common_free > dec_ref_count)	class ObCacheObjGuard {
+src/sql/plan_cache/ob_i_lib_cache_node.cpp	96	ObILibCacheNode::get_cache_obj	inc_ref_count call	obj->inc_ref_count();
+src/sql/plan_cache/ob_i_lib_cache_node.cpp	118	ObILibCacheNode::add_cache_obj	inc_ref_count call	obj->inc_ref_count();
+src/sql/plan_cache/ob_i_lib_cache_node.cpp	192	ObILibCacheNode::inc_ref_count	inc_ref_count definition	int64_t ObILibCacheNode::inc_ref_count()
+src/sql/plan_cache/ob_i_lib_cache_node.cpp	197	ObILibCacheNode::dec_ref_count	dec_ref_count definition	int64_t ObILibCacheNode::dec_ref_count()
+src/sql/plan_cache/ob_i_lib_cache_node.h	159	ObILibCacheNode	inc_ref_count declaration	int64_t inc_ref_count();
+src/sql/plan_cache/ob_i_lib_cache_node.h	160	ObILibCacheNode	dec_ref_count declaration	int64_t dec_ref_count();
+src/sql/plan_cache/ob_i_lib_cache_object.cpp	96	ObILibCacheObject::inc_ref_count	inc_ref_count definition	int64_t ObILibCacheObject::inc_ref_count()
+src/sql/plan_cache/ob_i_lib_cache_object.cpp	101	ObILibCacheObject::try_inc_ref_count	try_inc_ref_count definition (prefixed name)	bool ObILibCacheObject::try_inc_ref_count()
+src/sql/plan_cache/ob_i_lib_cache_object.cpp	110	ObILibCacheObject::dec_ref_count	dec_ref_count definition	int64_t ObILibCacheObject::dec_ref_count()
+src/sql/plan_cache/ob_i_lib_cache_object.h	68	ObILibCacheObject	inc_ref_count declaration	int64_t inc_ref_count();
+src/sql/plan_cache/ob_i_lib_cache_object.h	69	ObILibCacheObject	try_inc_ref_count declaration (prefixed name)	bool try_inc_ref_count();
+src/sql/plan_cache/ob_i_lib_cache_object.h	100	ObILibCacheObject	dec_ref_count declaration	int64_t dec_ref_count();

@@ -1,0 +1,46 @@
+file	line	symbol	construct	text
+src/storage/allocator/ob_vector_allocator.cpp	142	ObVectorMemContext::alloc	budget error raised: OB_ERR_VSAG_MEM_LIMIT_EXCEEDED	ret = OB_ERR_VSAG_MEM_LIMIT_EXCEEDED;
+src/storage/blocksstable/index_block/ob_index_block_builder.cpp	1749	ObSSTableIndexBuilder::is_retriable_error	-4013 handled (case label)	case OB_ALLOCATE_MEMORY_FAILED:
+src/storage/blocksstable/ob_block_manager.cpp	935	ObBlockManager::mark_and_sweep	-4013 handled (compared against)	if (OB_ALLOCATE_MEMORY_FAILED == ret) {
+src/storage/blocksstable/ob_macro_block_writer.cpp	2443	ObMacroBlockWriter::create_mem_pre_warmer	variable initialized to -4013 (not a raise)	int tmp_ret = OB_ALLOCATE_MEMORY_FAILED; // use tmp_ret, allow not pre warm mem block cache
+src/storage/blocksstable/ob_macro_block_writer.cpp	2448	ObMacroBlockWriter::create_mem_pre_warmer	variable initialized to -4013 (not a raise)	int tmp_ret = OB_ALLOCATE_MEMORY_FAILED; // use tmp_ret, allow not pre warm mem block cache
+src/storage/blocksstable/ob_micro_block_cache.cpp	397	ObIMicroBlockIOCallback::alloc_data_buf	micro block cache FIFO: owner, limit, hand-out or retry	for (int64_t i = 1; OB_ISNULL(data_buffer_) && i <= ALLOC_BUF_RETRY_TIMES; i++) {
+src/storage/blocksstable/ob_micro_block_cache.cpp	398	ObIMicroBlockIOCallback::alloc_data_buf	micro block cache FIFO: owner, limit, hand-out or retry	ob_usleep(ALLOC_BUF_RETRY_INTERVAL * i);
+src/storage/blocksstable/ob_micro_block_cache.cpp	402	ObIMicroBlockIOCallback::alloc_data_buf	budget-backed -4013: micro block cache FIFO (4GB)	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/storage/blocksstable/ob_micro_block_cache.cpp	503	ObIMicroBlockIOCallback::read_block_and_copy	budget-backed -4013: micro block cache FIFO (4GB)	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/storage/blocksstable/ob_micro_block_cache.cpp	683	ObMultiDataBlockIOCallback::set_io_ctx	budget-backed -4013: micro block cache FIFO (4GB)	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/storage/blocksstable/ob_micro_block_cache.cpp	699	ObMultiDataBlockIOCallback::alloc_result	budget-backed -4013: micro block cache FIFO (4GB)	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/storage/blocksstable/ob_micro_block_cache.cpp	707	ObMultiDataBlockIOCallback::alloc_result	budget-backed -4013: micro block cache FIFO (4GB)	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/storage/blocksstable/ob_micro_block_cache.cpp	715	ObMultiDataBlockIOCallback::alloc_result	budget-backed -4013: micro block cache FIFO (4GB)	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/storage/blocksstable/ob_micro_block_cache.cpp	847	ObIMicroBlockCache::prefetch	micro block cache FIFO: owner, limit, hand-out or retry	callback->allocator_ = allocator;
+src/storage/blocksstable/ob_micro_block_cache.cpp	1006	ObDataMicroBlockCache::init	micro block cache FIFO: owner, limit, hand-out or retry	const int64_t mem_limit = 4 * 1024 * 1024 * 1024LL;
+src/storage/blocksstable/ob_micro_block_cache.cpp	1009	ObDataMicroBlockCache::init	micro block cache FIFO: owner, limit, hand-out or retry	} else if (OB_FAIL(allocator_.init(mem_limit, OB_MALLOC_MIDDLE_BLOCK_SIZE, OB_MALLOC_MIDDLE_BLOCK_SIZE))) {
+src/storage/blocksstable/ob_micro_block_cache.cpp	1011	ObDataMicroBlockCache::init	micro block cache FIFO: owner, limit, hand-out or retry	allocator_.set_attr(ObMemAttr(ObModIds::OB_SSTABLE_MICRO_BLOCK_ALLOCATOR));
+src/storage/blocksstable/ob_micro_block_cache.cpp	1019	ObDataMicroBlockCache::destroy	micro block cache FIFO: owner, limit, hand-out or retry	allocator_.destroy();
+src/storage/blocksstable/ob_micro_block_cache.cpp	1036	ObDataMicroBlockCache::prefetch_multi_block	budget-backed -4013: micro block cache FIFO (4GB), allocator obtained from allocator_	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/storage/blocksstable/ob_micro_block_cache.cpp	1039	ObDataMicroBlockCache::prefetch_multi_block	micro block cache FIFO: owner, limit, hand-out or retry	callback->allocator_ = allocator;
+src/storage/blocksstable/ob_micro_block_cache.cpp	1075	ObDataMicroBlockCache::load_block	micro block cache FIFO: owner, limit, hand-out or retry	callback->allocator_ = allocator;
+src/storage/blocksstable/ob_micro_block_cache.cpp	1118	ObDataMicroBlockCache::get_allocator	micro block cache FIFO: owner, limit, hand-out or retry	allocator = &allocator_;
+src/storage/blocksstable/ob_micro_block_cache.cpp	1332	ObIndexMicroBlockCache::load_block	micro block cache FIFO: owner, limit, hand-out or retry	callback->allocator_ = allocator;
+src/storage/blocksstable/ob_micro_block_cache.h	292	ObIMicroBlockIOCallback	micro block cache FIFO: owner, limit, hand-out or retry	static const int64_t ALLOC_BUF_RETRY_INTERVAL = 100 * 1000;
+src/storage/blocksstable/ob_micro_block_cache.h	293	ObIMicroBlockIOCallback	micro block cache FIFO: owner, limit, hand-out or retry	static const int64_t ALLOC_BUF_RETRY_TIMES = 3;
+src/storage/blocksstable/ob_micro_block_cache.h	297	ObIMicroBlockIOCallback	micro block cache FIFO: owner, limit, hand-out or retry	common::ObIAllocator *allocator_;
+src/storage/blocksstable/ob_micro_block_cache.h	509	ObDataMicroBlockCache	micro block cache FIFO: owner, limit, hand-out or retry	common::ObConcurrentFIFOAllocator allocator_;
+src/storage/blocksstable/ob_shared_macro_block_manager.cpp	463	ObSharedMacroBlockMgr::defragment	-4013 handled (compared against)	} else if (OB_ALLOCATE_MEMORY_FAILED != ret
+src/storage/blocksstable/ob_sstable.cpp	1124	ObSSTable::ignore_ret	-4013 handled (compared against)	return OB_ALLOCATE_MEMORY_FAILED == ret || OB_TIMEOUT == ret || OB_DISK_HUNG == ret;
+src/storage/compaction/ob_compaction_diagnose.h	149	ObIDiagnoseInfo::deep_copy	-4013 handled (compared against)	if (OB_ALLOCATE_MEMORY_FAILED != ret) {
+src/storage/compaction/ob_compaction_diagnose.h	320	ObIDiagnoseInfoMgr::alloc_and_add	-4013 handled (compared against)	OB_ALLOCATE_MEMORY_FAILED == input_info->deep_copy(allocator_, info)) {
+src/storage/compaction/ob_compaction_memory_context.cpp	223	ObCompactionBuffer::reuse	variable initialized to -4013 (not a raise)	int ret = OB_ALLOCATE_MEMORY_FAILED;
+src/storage/compaction/ob_compaction_memory_pool.cpp	307	ObCompactionMemPool::alloc	budget error handled (compared against or case label): OB_EXCEED_MEM_LIMIT	if (OB_EXCEED_MEM_LIMIT != ret) {
+src/storage/compaction/ob_compaction_memory_pool.cpp	431	ObCompactionMemPool::expand	budget error raised: OB_EXCEED_MEM_LIMIT	ret = OB_EXCEED_MEM_LIMIT;
+src/storage/compaction/ob_medium_compaction_mgr.cpp	159	ObTabletMediumCompactionInfoRecorder::submit_medium_compaction_info	-4013 handled (compared against)	if (OB_ALLOCATE_MEMORY_FAILED == ret || OB_BLOCK_FROZEN == ret) {
+src/storage/compaction/ob_partition_merger.cpp	598	ObPartitionMajorMerger::merge_partition	-4013 handled (compared against)	if (OB_ALLOCATE_MEMORY_FAILED != ret && GCONF._enable_compaction_diagnose) {
+src/storage/compaction/ob_partition_merger.cpp	917	ObPartitionMinorMerger::merge_partition	-4013 handled (compared against)	if (OB_ALLOCATE_MEMORY_FAILED != ret && GCONF._enable_compaction_diagnose) {
+src/storage/compaction/ob_tablet_merge_task.cpp	935	ObTabletMergeTask::process	-4013 handled (compared against)	if (OB_ALLOCATE_MEMORY_FAILED == ret || OB_TIMEOUT == ret || OB_IO_ERROR == ret) {
+src/storage/ddl/ob_ddl_common_storage_impl.cpp	744	oceanbase::storage::ObDDLStorageUtil::ddl_get_tablet	-4013 handled (compared against)	if (OB_ALLOCATE_MEMORY_FAILED == ret) {
+src/storage/ls/ob_ls.cpp	1459	ObLS::tablet_freeze	-4013 handled (compared against)	is_retry_code = OB_EAGAIN == ret || OB_MINOR_FREEZE_NOT_ALLOW == ret || OB_ALLOCATE_MEMORY_FAILED == ret;
+src/storage/ls/ob_ls_tablet_service.cpp	518	ObLSTabletService::refresh_tablet_addr	-4013 handled (compared against)	} else if (OB_ALLOCATE_MEMORY_FAILED == ret) {
+src/storage/ls/ob_ls_tablet_service.cpp	1248	ObLSTabletService::get_tablet_with_timeout	-4013 handled (compared against)	while (OB_ALLOCATE_MEMORY_FAILED == ret && ObClockGenerator::getClock() < retry_timeout_us) {
+src/storage/ls/ob_ls_tablet_service.cpp	1251	ObLSTabletService::get_tablet_with_timeout	-4013 handled (compared against)	if (OB_ALLOCATE_MEMORY_FAILED == ret) {
+src/storage/memtable/mvcc/ob_keybtree.cpp	1629	ObKeyBtree::insert_or_get	-4013 handled (compared against)	} else if (OB_ALLOCATE_MEMORY_FAILED == ret) {
+src/storage/memtable/ob_memtable.cpp	946	ObMemtable::replay_row	-4013 handled (compared against)	if (OB_ALLOCATE_MEMORY_FAILED != ret || REACH_TIME_INTERVAL(1 * 1000 * 1000)) {

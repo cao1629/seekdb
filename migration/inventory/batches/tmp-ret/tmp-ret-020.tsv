@@ -1,0 +1,112 @@
+file	line	symbol	construct	text
+src/sql/plan_cache/ob_plan_match_helper.cpp	99	ObPlanMatchHelper::match_plan	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/plan_cache/ob_plan_match_helper.cpp	100	ObPlanMatchHelper::match_plan	assign tmp_ret	if (OB_UNLIKELY(OB_SUCCESS != (tmp_ret = pwj_map.destroy()))) {
+src/sql/plan_cache/ob_ps_cache.cpp	242	ObPsCache::deref_ps_stmt	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/plan_cache/ob_ps_cache.cpp	839	ObPsCache::destroy_cached_ps	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/plan_cache/ob_ps_cache.cpp	857	ObPsCache::destroy_cached_ps	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = erase_stmt_item(inner_stmt_id, stmt_info->get_sql_key()))) {
+src/sql/plan_cache/ob_sql_parameterization.cpp	945	ObSqlParameterization::parameterize_syntax_tree	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/plan_cache/ob_sql_parameterization.cpp	946	ObSqlParameterization::parameterize_syntax_tree	assign tmp_ret	tmp_ret = OB_E(EventTable::EN_SQL_PARAM_FP_NP_NOT_SAME_ERROR) OB_SUCCESS;
+src/sql/resolver/cmd/ob_load_data_resolver.cpp	469	ObLoadDataResolver::resolve_hints	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/resolver/cmd/ob_load_data_resolver.cpp	473	ObLoadDataResolver::resolve_hints	assign tmp_ret	} else if (OB_UNLIKELY(tmp_ret = OB_LOGGER.parse_check(str, length))) {
+src/sql/resolver/cmd/ob_show_resolver.cpp	1248	ObShowResolver::resolve_show_create_user	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/resolver/cmd/ob_show_resolver.cpp	1269	ObShowResolver::resolve_show_create_user	assign tmp_ret	tmp_ret = OB_USER_NOT_EXIST;
+src/sql/resolver/cmd/ob_show_resolver.cpp	1274	ObShowResolver::resolve_show_create_user	assign tmp_ret	tmp_ret = OB_USER_NOT_EXIST;
+src/sql/resolver/cmd/ob_show_resolver.cpp	1297	ObShowResolver::resolve_show_create_user	assign tmp_ret	tmp_ret = OB_USER_NOT_EXIST;
+src/sql/resolver/cmd/ob_show_resolver.cpp	1302	ObShowResolver::resolve_show_create_user	assign tmp_ret	tmp_ret = OB_USER_NOT_EXIST;
+src/sql/resolver/ddl/ob_create_package_resolver.cpp	269	ObCreatePackageResolver::resolve	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/resolver/ddl/ob_create_package_resolver.cpp	270	ObCreatePackageResolver::resolve	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = session_info_->set_default_database(old_database_name.string()))) {
+src/sql/resolver/ddl/ob_create_package_resolver.cpp	271	ObCreatePackageResolver::resolve	merge into ret	ret = OB_SUCCESS == ret ? tmp_ret : ret;
+src/sql/resolver/ddl/ob_create_routine_resolver.cpp	750	ObCreateRoutineResolver::resolve_impl	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/resolver/ddl/ob_create_routine_resolver.cpp	751	ObCreateRoutineResolver::resolve_impl	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = session_info_->set_default_database(old_database_name.string()))) {
+src/sql/resolver/ddl/ob_create_routine_resolver.cpp	752	ObCreateRoutineResolver::resolve_impl	merge into ret	ret = OB_SUCCESS == ret ? tmp_ret : ret; // Do not overwrite error code
+src/sql/resolver/ddl/ob_create_view_resolver.cpp	568	ObCreateViewResolver::check_privilege_needed	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/resolver/ddl/ob_create_view_resolver.cpp	569	ObCreateViewResolver::check_privilege_needed	assign tmp_ret	if (OB_UNLIKELY(OB_SUCCESS != (tmp_ret = select_tables.destroy()))) {
+src/sql/resolver/ddl/ob_create_view_resolver.cpp	571	ObCreateViewResolver::check_privilege_needed	merge into ret	ret = COVER_SUCC(tmp_ret);
+src/sql/resolver/ddl/ob_create_view_resolver.cpp	575	ObCreateViewResolver::check_privilege_needed	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/resolver/ddl/ob_create_view_resolver.cpp	576	ObCreateViewResolver::check_privilege_needed	assign tmp_ret	if (OB_UNLIKELY(OB_SUCCESS != (tmp_ret = any_tables.destroy()))) {
+src/sql/resolver/ddl/ob_create_view_resolver.cpp	578	ObCreateViewResolver::check_privilege_needed	merge into ret	ret = COVER_SUCC(tmp_ret);
+src/sql/resolver/ddl/ob_ddl_resolver.cpp	1337	ObDDLResolver::resolve_table_option	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/resolver/ddl/ob_ddl_resolver.cpp	1339	ObDDLResolver::resolve_table_option	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(err_msg.append_fmt("Table mode %s is", table_mode_str.ptr()))) {
+src/sql/resolver/dml/ob_dml_resolver.cpp	4295	ObDMLResolver::do_expand_view	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/resolver/dml/ob_dml_resolver.cpp	4301	ObDMLResolver::do_expand_view	assign tmp_ret	tmp_ret = OB_ERR_UNEXPECTED;
+src/sql/resolver/dml/ob_dml_resolver.cpp	4302	ObDMLResolver::do_expand_view	assign tmp_ret	} else if (OB_SUCCESS != (tmp_ret = ObSQLUtils::async_recompile_view(
+src/sql/resolver/dml/ob_dml_resolver.cpp	4307	ObDMLResolver::do_expand_view	assign tmp_ret	tmp_ret = OB_SUCCESS; //ignore
+src/sql/resolver/dml/ob_dml_resolver.cpp	4311	ObDMLResolver::do_expand_view	merge into ret	ret = tmp_ret;
+src/sql/resolver/dml/ob_dml_resolver.cpp	8047	ObDMLResolver::generate_ddl_sample_info_if_needed	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/resolver/dml/ob_dml_resolver.cpp	8048	ObDMLResolver::generate_ddl_sample_info_if_needed	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = upper_insert_resolver_->get_ddl_schema_in_insert_into_select_clause(ddl_table_schema))) {
+src/sql/resolver/dml/ob_dml_resolver.cpp	10729	ObDMLResolver::resolve_basic_table_with_cte	declare tmp_ret	int tmp_ret = ret;
+src/sql/resolver/dml/ob_dml_resolver.cpp	10741	ObDMLResolver::resolve_basic_table_with_cte	merge into ret	ret = tmp_ret;
+src/sql/resolver/dml/ob_dml_resolver.cpp	11817	ObDMLResolver::fill_vec_id_expr_param	declare tmp_ret	int tmp_ret = ret;
+src/sql/resolver/dml/ob_dml_resolver.cpp	11827	ObDMLResolver::fill_vec_id_expr_param	merge into ret	ret = tmp_ret;
+src/sql/resolver/dml/ob_group_by_checker.cpp	392	ObGroupByChecker::check_select_stmt	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/resolver/dml/ob_group_by_checker.cpp	394	ObGroupByChecker::check_select_stmt	assign tmp_ret	tmp_ret = cur_stmts_.pop_back(pop_stmt);
+src/sql/resolver/dml/ob_group_by_checker.cpp	397	ObGroupByChecker::check_select_stmt	merge into ret	ret = tmp_ret;
+src/sql/resolver/dml/ob_hint.cpp	233	ObGlobalHint::merge_log_level_hint	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/resolver/dml/ob_hint.cpp	239	ObGlobalHint::merge_log_level_hint	assign tmp_ret	} else if (OB_UNLIKELY(tmp_ret = OB_LOGGER.parse_check(log_level.ptr(), log_level.length()))) {
+src/sql/resolver/dml/ob_standard_group_checker.cpp	104	ObStandardGroupChecker::expr_exists_in_group_by	declare tmp_ret	int tmp_ret;
+src/sql/resolver/dml/ob_stmt_expr_visitor.cpp	129	ObSharedExprChecker::is_shared_expr	declare tmp_ret	int tmp_ret = shared_expr_set_.exist_refactored(key);
+src/sql/resolver/dml/ob_stmt_expr_visitor.cpp	133	ObSharedExprChecker::is_shared_expr	merge into ret	ret = tmp_ret;
+src/sql/resolver/expr/ob_raw_expr_replacer.cpp	447	ObRawExprReplacer::check_skip_expr	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/resolver/expr/ob_raw_expr_replacer.cpp	452	ObRawExprReplacer::check_skip_expr	assign tmp_ret	} else if (OB_HASH_EXIST == (tmp_ret = to_exprs_.exist_refactored(key))) {
+src/sql/resolver/expr/ob_raw_expr_replacer.cpp	455	ObRawExprReplacer::check_skip_expr	merge into ret	ret = tmp_ret;
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	5116	ObRawExprResolverImpl::process_fun_sys_node	declare temp_ret	int temp_ret = ret;
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	5123	ObRawExprResolverImpl::process_fun_sys_node	merge into ret	ret = temp_ret;
+src/sql/resolver/ob_resolver_utils.cpp	2117	ObResolverUtils::resolve_const	declare tmp_ret	int tmp_ret = OB_E(EventTable::EN_ENABLE_ORA_DECINT_CONST) OB_SUCCESS;
+src/sql/resolver/ob_resolver_utils.cpp	5837	ObResolverUtils::uv_mysql_insertable_join	declare tmp_ret	int tmp_ret = uv_check_basic(*item->ref_query_, is_insert);
+src/sql/resolver/ob_resolver_utils.cpp	5842	ObResolverUtils::uv_mysql_insertable_join	merge into ret	ret = tmp_ret;
+src/sql/resolver/ob_resolver_utils.cpp	6950	ObResolverUtils::fast_get_param_type	declare tmp_ret	int tmp_ret = OB_E(EventTable::EN_ENABLE_ORA_DECINT_CONST) OB_SUCCESS;
+src/sql/resolver/ob_stmt_resolver.cpp	83	ObStmtResolver::resolve_table_relation_node_v2	declare tmp_ret	int tmp_ret = ObSQLUtils::check_and_convert_table_name(cs_type, perserve_lettercase, table_name);
+src/sql/resolver/ob_stmt_resolver.cpp	124	ObStmtResolver::resolve_table_relation_node_v2	merge into ret	ret = tmp_ret;
+src/sql/resolver/ob_stmt_resolver.cpp	127	ObStmtResolver::resolve_table_relation_node_v2	merge into ret	ret = tmp_ret;
+src/sql/rewrite/ob_range_generator.cpp	1809	ObRangeGenerator::get_coveredby_tmp_geo_param	declare tmp_ret	int tmp_ret = cellid_set.destroy();
+src/sql/rewrite/ob_transform_groupby_pushdown.cpp	804	ObTransformGroupByPushdown::get_new_select_expr_of_non_basic_child	merge OB_ERR_UNEXPECTED into ret through if (OB_SUCC(ret)) (continue-and-record through another variable)	ret = OB_ERR_UNEXPECTED;
+src/sql/rewrite/ob_transform_pre_process.cpp	505	ObTransformPreProcess::has_new_exec_param	declare tmp_ret	int tmp_ret = param_set.exist_refactored(key);
+src/sql/rewrite/ob_transform_pre_process.cpp	509	ObTransformPreProcess::has_new_exec_param	merge into ret	ret = tmp_ret;
+src/sql/rewrite/ob_transform_pre_process.cpp	3231	ObTransformPreProcess::transform_outerjoin_exprs	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/rewrite/ob_transform_pre_process.cpp	3232	ObTransformPreProcess::transform_outerjoin_exprs	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = expr_set.destroy())) {
+src/sql/rewrite/ob_transform_pre_process.cpp	3233	ObTransformPreProcess::transform_outerjoin_exprs	merge into ret	ret = COVER_SUCC(tmp_ret);
+src/sql/rewrite/ob_transform_utils.cpp	6193	ObTransformUtils::extract_shared_exprs	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/rewrite/ob_transform_utils.cpp	6194	ObTransformUtils::extract_shared_exprs	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = expr_set.destroy())) {
+src/sql/rewrite/ob_transform_utils.cpp	6195	ObTransformUtils::extract_shared_exprs	merge into ret	ret = COVER_SUCC(tmp_ret);
+src/sql/rewrite/ob_transform_utils.cpp	7881	ObSharedExprExtractor::do_visit	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/rewrite/ob_transform_utils.cpp	7892	ObSharedExprExtractor::do_visit	assign tmp_ret	tmp_ret = first_stmt_expr_set_.exist_refactored(key);
+src/sql/rewrite/ob_transform_utils.cpp	7909	ObSharedExprExtractor::do_visit	merge into ret	ret = tmp_ret;
+src/sql/rewrite/ob_transform_utils.cpp	10073	ObTransformUtils::check_static_expr_has_warning	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/rewrite/ob_transform_utils.cpp	10091	ObTransformUtils::check_static_expr_has_warning	assign tmp_ret	tmp_ret = ObSQLUtils::calc_simple_expr_without_row(ctx->session_info_,
+src/sql/rewrite/ob_transform_utils.cpp	10099	ObTransformUtils::check_static_expr_has_warning	merge into ret	ret = tmp_ret;
+src/sql/rewrite/ob_transformer_impl.cpp	896	ObTransformerImpl::verify_all_expr_types	declare tmp_ret	int64_t tmp_ret = (OB_E(EventTable::EN_CHECK_EXPR_FORMALIZE) OB_SUCCESS);
+src/sql/session/ob_basic_session_info.cpp	4625	ObBasicSessionInfo::stmt_restore_session	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/session/ob_basic_session_info.cpp	4627	ObBasicSessionInfo::stmt_restore_session	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(tx_result_.merge_result(saved_value.tx_result_))) {
+src/sql/session/ob_basic_session_info.cpp	4629	ObBasicSessionInfo::stmt_restore_session	merge into ret	ret = COVER_SUCC(tmp_ret);
+src/sql/session/ob_basic_session_info.cpp	4631	ObBasicSessionInfo::stmt_restore_session	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(base_restore_session(saved_value))) {
+src/sql/session/ob_basic_session_info.cpp	4633	ObBasicSessionInfo::stmt_restore_session	merge into ret	ret = COVER_SUCC(tmp_ret);
+src/sql/session/ob_basic_session_info.cpp	4674	ObBasicSessionInfo::trans_restore_session	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/session/ob_basic_session_info.cpp	4681	ObBasicSessionInfo::trans_restore_session	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(tx_result_.assign(saved_value.tx_result_))) {
+src/sql/session/ob_basic_session_info.cpp	4683	ObBasicSessionInfo::trans_restore_session	merge into ret	ret = COVER_SUCC(tmp_ret);
+src/sql/session/ob_basic_session_info.cpp	4693	ObBasicSessionInfo::trans_restore_session	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(base_restore_session(saved_value))) {
+src/sql/session/ob_basic_session_info.cpp	4695	ObBasicSessionInfo::trans_restore_session	merge into ret	ret = COVER_SUCC(tmp_ret);
+src/sql/session/ob_piece_cache.cpp	169	ObPieceCache::close_all	declare tmp_ret	int64_t tmp_ret = remove_piece(key, session);
+src/sql/session/ob_piece_cache.cpp	171	ObPieceCache::close_all	merge into ret	ret = ret == OB_SUCCESS ? tmp_ret : ret;
+src/sql/session/ob_sql_session_info.cpp	276	ObSQLSessionInfo::reset	declare temp_ret	int temp_ret = OB_SUCCESS;
+src/sql/session/ob_sql_session_info.cpp	502	ObSQLSessionInfo::destroy	declare temp_ret	int temp_ret = drop_temp_tables();
+src/sql/session/ob_sql_session_info.cpp	518	ObSQLSessionInfo::destroy	declare temp_ret	int temp_ret = pl_cursor_cache_.close_all(*this);
+src/sql/session/ob_sql_session_info.cpp	524	ObSQLSessionInfo::destroy	declare temp_ret	int temp_ret = piece_cache_->close_all(*this);
+src/sql/session/ob_sql_session_info.cpp	557	ObSQLSessionInfo::close_ps_stmt	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/session/ob_sql_session_info.cpp	558	ObSQLSessionInfo::close_ps_stmt	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = remove_ps_session_info(client_stmt_id))) {
+src/sql/session/ob_sql_session_info.cpp	559	ObSQLSessionInfo::close_ps_stmt	merge into ret	ret = tmp_ret;
+src/sql/session/ob_sql_session_info.cpp	1007	ObSQLSessionInfo::add_cursor	declare tmp_ret	int tmp_ret = close_cursor(cursor);
+src/sql/session/ob_sql_session_info.cpp	1008	ObSQLSessionInfo::add_cursor	merge into ret	ret = OB_SUCCESS == ret ? tmp_ret : ret;
+src/sql/session/ob_sql_session_info.cpp	1522	ObSQLSessionInfo::ObCachedRuntimeConfig::refresh	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/session/ob_sql_session_info.cpp	1530	ObSQLSessionInfo::ObCachedRuntimeConfig::refresh	assign tmp_ret	tmp_ret = OB_ERR_UNEXPECTED;
+src/sql/session/ob_sql_session_mgr.cpp	387	ObSQLSessionMgr::kill_query	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/session/ob_sql_session_mgr.cpp	389	ObSQLSessionMgr::kill_query	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = ObSqlTransControl::kill_query_session(session, status))) {
+src/sql/session/ob_sql_session_mgr.cpp	425	ObSQLSessionMgr::kill_session	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/session/ob_sql_session_mgr.cpp	427	ObSQLSessionMgr::kill_session	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = ObSqlTransControl::kill_query_session(
+src/sql/session/ob_sql_session_mgr.cpp	438	ObSQLSessionMgr::kill_session	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = ObSqlTransControl::kill_tx_on_session_killed(&session))) {
+src/sql/session/ob_sql_session_mgr.cpp	541	ObSQLSessionMgr::CheckSessionFunctor::operator()	declare tmp_ret	int tmp_ret;
+src/sql/session/ob_sql_session_mgr.cpp	542	ObSQLSessionMgr::CheckSessionFunctor::operator()	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = sess_mgr_->kill_idle_timeout_tx(sess_info))) {
+src/sql/session/ob_sql_session_mgr.cpp	556	ObSQLSessionMgr::CheckSessionFunctor::operator()	declare tmp_ret	int64_t tmp_ret = (OB_E(EventTable::EN_SQL_HUNG_DETECT) OB_SUCCESS);
+src/sql/session/ob_system_variable.cpp	1820	ObSysVarOnCheckFuncs::check_default_lob_inrow_threshold	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/session/ob_system_variable.cpp	1824	ObSysVarOnCheckFuncs::check_default_lob_inrow_threshold	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = databuff_printf(error_msg, ERROR_MSG_LENGTH,
+src/sql/session/ob_system_variable.cpp	2153	ObSysVarOnUpdateFuncs::start_trans_by_set_trans_char_	declare save_ret (continue-and-record variable)	int save_ret = ret;
+src/sql/session/ob_system_variable.cpp	2162	ObSysVarOnUpdateFuncs::start_trans_by_set_trans_char_	merge save_ret into ret (continue-and-record through another variable)	ret = COVER_SUCC(save_ret);

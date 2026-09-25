@@ -1,0 +1,61 @@
+file	line	symbol	construct	text
+src/sql/engine/join/ob_hash_join_op.h	610	ObHashJoinOp::HistItem::store_row_	member ObHashJoinStoredJoinRow (pointer) of type ObHashJoinStoredJoinRow *	ObHashJoinStoredJoinRow *store_row_;
+src/sql/engine/join/ob_hash_join_op.h	1173	ObHashJoinOp::cur_tuple_	member ObHashJoinStoredJoinRow (pointer) of type ObHashJoinStoredJoinRow *	ObHashJoinStoredJoinRow *cur_tuple_; // null or last matched tuple
+src/sql/engine/join/ob_hash_join_op.h	1174	ObHashJoinOp::cur_left_row_	member ObNewRow (value) of type common::ObNewRow	common::ObNewRow cur_left_row_; // like cur_row_ in operator, get row from rowstore
+src/sql/engine/join/ob_hash_join_op.h	1195	ObHashJoinOp::left_read_row_	member ObHashJoinStoredJoinRow (pointer) of type const ObHashJoinStoredJoinRow *	const ObHashJoinStoredJoinRow *left_read_row_;
+src/sql/engine/join/ob_hash_join_op.h	1196	ObHashJoinOp::right_read_row_	member ObHashJoinStoredJoinRow (pointer) of type const ObHashJoinStoredJoinRow *	const ObHashJoinStoredJoinRow *right_read_row_;
+src/sql/engine/join/ob_hash_join_op.h	1229	ObHashJoinOp::hj_part_stored_rows_	member ObHashJoinStoredJoinRow (pointer) of type const ObHashJoinStoredJoinRow **	const ObHashJoinStoredJoinRow **hj_part_stored_rows_;
+src/sql/engine/join/ob_hash_join_op.h	1232	ObHashJoinOp::right_hj_part_stored_rows_	member ObHashJoinStoredJoinRow (pointer) of type const ObHashJoinStoredJoinRow **	const ObHashJoinStoredJoinRow **right_hj_part_stored_rows_;
+src/sql/engine/join/ob_hash_join_op.h	1235	ObHashJoinOp::cur_tuples_	member ObHashJoinStoredJoinRow (pointer) of type ObHashJoinStoredJoinRow **	ObHashJoinStoredJoinRow **cur_tuples_;
+src/sql/engine/join/ob_hash_join_op.h	1238	ObHashJoinOp::hj_part_added_rows_	member ObHashJoinStoredJoinRow (pointer) of type ObHashJoinStoredJoinRow **	ObHashJoinStoredJoinRow **hj_part_added_rows_;
+src/sql/engine/join/ob_merge_join_op.h	285	ObMergeJoinOp::ChildBatchFetcher::backup_datums_	member container of ObDatum of type ObSEArray<ObDatum *, 256>	ObSEArray<ObDatum *, 256> backup_datums_;
+src/sql/engine/join/ob_merge_join_op.h	515	ObMergeJoinOp::stored_row_	member StoredRow (pointer) of type ObChunkDatumStore::StoredRow *	ObChunkDatumStore::StoredRow *stored_row_;
+src/sql/engine/join/ob_nested_loop_join_op.h	201	ObNestedLoopJoinOp::stored_rows_	member StoredRow (pointer) of type ObChunkDatumStore::StoredRow **	ObChunkDatumStore::StoredRow **stored_rows_;
+src/sql/engine/ob_exec_context.h	159	ObDiagnosisManager::col_names_	member container of ObString of type common::ObArray<ObString>	common::ObArray<ObString> col_names_;
+src/sql/engine/ob_exec_context.h	160	ObDiagnosisManager::cur_file_url_	member ObString (value) of type ObString	ObString cur_file_url_;
+src/sql/engine/ob_exec_context.h	211	ObUserLoggingCtx::column_name_	member ObString (pointer) of type const ObString *	const ObString *column_name_;
+src/sql/engine/ob_exec_context.h	862	ObExecContext::output_row_	member ObNewRow (pointer) of type ObNewRow *	ObNewRow *output_row_;
+src/sql/engine/ob_exec_context.h	874	ObExecContext::frames_	member raw bytes (pointer) of type char **	char **frames_;
+src/sql/engine/ob_exec_context.h	877	ObExecContext::ori_frames_	member raw bytes (pointer) of type char **	char **ori_frames_;
+src/sql/engine/ob_exec_context.h	1066	ObTempExprCtxReplaceGuard::frames_	member raw bytes (pointer) of type char **	char **frames_;
+src/sql/engine/ob_physical_plan_ctx.h	519	ObPhysicalPlanCtx::cur_time_	member ObObj (value) of type common::ObObj	common::ObObj cur_time_;//used for session
+src/sql/engine/ob_physical_plan_ctx.h	523	ObPhysicalPlanCtx::param_store_	member ParamStore (value) of type ParamStore	ParamStore param_store_;
+src/sql/engine/ob_sql_mem_mgr_processor.h	230	ObSqlMemMgrProcessor::dummy_ptr_	member raw bytes (pointer) of type char *	char *dummy_ptr_;
+src/sql/engine/ob_subschema_ctx.h	130	ObSubSchemaReverseKey::str_signature_	member ObString (value) of type ObString	ObString str_signature_;
+src/sql/engine/px/datahub/components/ob_dh_range_dist_wf.cpp	146	ObRDWFPartialInfo::dup_store_row	allocator in, arena view returned: ObStoredDatumRow *	ObStoredDatumRow *ObRDWFPartialInfo::dup_store_row(common::ObArenaAllocator &alloc,
+src/sql/engine/px/datahub/components/ob_dh_range_dist_wf.h	67	ObRDWFPartialInfo::first_row_	member ObStoredDatumRow (pointer) of type ObStoredDatumRow *	ObStoredDatumRow *first_row_;
+src/sql/engine/px/datahub/components/ob_dh_range_dist_wf.h	68	ObRDWFPartialInfo::last_row_	member ObStoredDatumRow (pointer) of type ObStoredDatumRow *	ObStoredDatumRow *last_row_;
+src/sql/engine/px/datahub/components/ob_dh_winbuf.h	66	ObWinbufPieceMsg::row_	member ObNewRow (value) of type ObNewRow	ObNewRow row_;
+src/sql/engine/px/datahub/components/ob_dh_winbuf.h	67	ObWinbufPieceMsg::datum_row_	member StoredRow (pointer) of type ObChunkDatumStore::StoredRow *	ObChunkDatumStore::StoredRow *datum_row_;
+src/sql/engine/px/exchange/ob_px_ms_receive_op.h	239	ObPxMSReceiveOp::Compare::rows_	member container of StoredRow of type const common::ObIArray<const ObChunkDatumStore::StoredRow*> *	const common::ObIArray<const ObChunkDatumStore::StoredRow*> *rows_;
+src/sql/engine/px/exchange/ob_px_ms_receive_op.h	271	ObPxMSReceiveOp::row_heap_	member container of StoredRow of type ObRowHeap<ObDatumRowCompare, ObChunkDatumStore::StoredRow>	ObRowHeap<ObDatumRowCompare, ObChunkDatumStore::StoredRow> row_heap_;
+src/sql/engine/px/exchange/ob_px_ordered_coord_op.h	162	ObPxOrderedCoordOp::stored_rows_	member StoredRow (pointer) of type const ObChunkDatumStore::StoredRow **	const ObChunkDatumStore::StoredRow **stored_rows_;
+src/sql/engine/px/exchange/ob_px_receive_op.h	176	ObPxReceiveOp::stored_rows_	member StoredRow (pointer) of type const ObChunkDatumStore::StoredRow **	const ObChunkDatumStore::StoredRow **stored_rows_;
+src/sql/engine/px/exchange/ob_row_heap.h	44	ObRowComparer::rows_	member container of ObNewRow of type const common::ObIArray<const common::ObNewRow*> *	const common::ObIArray<const common::ObNewRow*> *rows_;
+src/sql/engine/px/exchange/ob_row_heap.h	70	ObDatumRowCompare::rows_	member container of StoredRow of type const common::ObIArray<const ObChunkDatumStore::StoredRow*> *	const common::ObIArray<const ObChunkDatumStore::StoredRow*> *rows_;
+src/sql/engine/px/ob_dfo.h	113	ObQCMonitoringInfo::cur_sql_	member ObString (value) of type common::ObString	common::ObString cur_sql_;
+src/sql/engine/px/ob_dfo.h	661	ObDfo::query_sql_	member ObString (value) of type ObString	ObString query_sql_;
+src/sql/engine/px/ob_granule_pump.h	133	ObGranulePumpArgs::query_range_by_runtime_filter_	member container of ObNewRange of type ObSEArray<ObNewRange, 16>	ObSEArray<ObNewRange, 16> query_range_by_runtime_filter_;
+src/sql/engine/px/ob_granule_pump.h	163	ObGITaskSet::ObGITaskInfo::range_	member ObNewRange (value) of type common::ObNewRange	common::ObNewRange range_;
+src/sql/engine/px/ob_granule_task_info.h	43	ObGranuleTaskInfo::ranges_	member container of ObNewRange of type common::ObSEArray<common::ObNewRange, 1>	common::ObSEArray<common::ObNewRange, 1> ranges_;
+src/sql/engine/px/ob_px_coord_op.h	156	ObPxCoordOp::query_sql_	member ObString (value) of type ObString	ObString query_sql_;
+src/sql/engine/px/ob_px_row_store.h	175	ObPxNewRow::des_row_buf_	member raw bytes (pointer) of type char *	char *des_row_buf_; // Used to point to the serialized content of row_ during deserialization
+src/sql/engine/px/ob_px_row_store.h	177	ObPxNewRow::row_	member ObNewRow (pointer) of type const common::ObNewRow *	const common::ObNewRow *row_; // Serialize row_ before serialization, used for serialization
+src/sql/engine/px/ob_px_util.h	51	ObExprExtraSerializeInfo::current_time_	member ObObj (pointer) of type common::ObObj *	common::ObObj *current_time_;
+src/sql/engine/px/p2p_datahub/ob_p2p_dh_msg.cpp	70	ObP2PDatahubMsgBase::fill_empty_query_range	allocator in, arena view out: ObNewRange &query_range	int ObP2PDatahubMsgBase::fill_empty_query_range(const ObPxQueryRangeInfo &query_range_info,
+src/sql/engine/px/p2p_datahub/ob_pushdown_topn_filter_msg.h	201	ObPushDownTopNFilterMsg::heap_top_datums_	member container of ObDatum of type ObFixedArray<ObDatum, common::ObIAllocator>	ObFixedArray<ObDatum, common::ObIAllocator> heap_top_datums_;
+src/sql/engine/px/p2p_datahub/ob_runtime_filter_msg.h	179	ObRFRangeFilterMsg::lower_bounds_	member container of ObDatum of type ObFixedArray<ObDatum, common::ObIAllocator>	ObFixedArray<ObDatum, common::ObIAllocator> lower_bounds_;
+src/sql/engine/px/p2p_datahub/ob_runtime_filter_msg.h	180	ObRFRangeFilterMsg::upper_bounds_	member container of ObDatum of type ObFixedArray<ObDatum, common::ObIAllocator>	ObFixedArray<ObDatum, common::ObIAllocator> upper_bounds_;
+src/sql/engine/px/p2p_datahub/ob_runtime_filter_msg.h	186	ObRFRangeFilterMsg::query_range_	member ObNewRange (value) of type ObNewRange	ObNewRange query_range_; // not need to serialize
+src/sql/engine/px/p2p_datahub/ob_runtime_filter_msg.h	212	ObRFInFilterMsg::ObRFInFilterNode::row_	member container of ObDatum of type ObIArray<ObDatum> *	ObIArray<ObDatum> *row_;
+src/sql/engine/px/p2p_datahub/ob_runtime_filter_msg.h	292	ObRFInFilterMsg::serial_rows_	member container of ObDatum of type ObSArray<ObFixedArray<ObDatum, common::ObIAllocator> *>	ObSArray<ObFixedArray<ObDatum, common::ObIAllocator> *> serial_rows_;
+src/sql/engine/px/p2p_datahub/ob_runtime_filter_msg.h	294	ObRFInFilterMsg::cur_row_	member container of ObDatum of type ObFixedArray<ObDatum, common::ObIAllocator>	ObFixedArray<ObDatum, common::ObIAllocator> cur_row_;
+src/sql/engine/px/p2p_datahub/ob_runtime_filter_msg.h	299	ObRFInFilterMsg::query_range_	member container of ObNewRange of type ObSEArray<ObNewRange, 16>	ObSEArray<ObNewRange, 16> query_range_; // not need to serialize
+src/sql/engine/recursive_cte/ob_fake_cte_table_op.h	106	ObFakeCTETableOp::pump_row_	member StoredRow (pointer) of type const ObChunkDatumStore::StoredRow*	const ObChunkDatumStore::StoredRow* pump_row_;
+src/sql/engine/recursive_cte/ob_fake_cte_table_op.h	110	ObFakeCTETableOp::bulk_rows_	member container of StoredRow of type common::ObArray<ObChunkDatumStore::StoredRow *>	common::ObArray<ObChunkDatumStore::StoredRow *> bulk_rows_;
+src/sql/engine/recursive_cte/ob_search_method_op.cpp	379	ObBreadthFirstSearchBulkOp::save_to_store_row	allocator in, arena view out: ObChunkDatumStore::StoredRow *&store_row	int ObBreadthFirstSearchBulkOp::save_to_store_row(ObIAllocator &allocator,
+src/sql/engine/recursive_cte/ob_search_method_op.h	44	ObSearchMethodOp::_BreadthFirstSearchTreeNode::stored_row_	member StoredRow (pointer) of type ObChunkDatumStore::StoredRow*	ObChunkDatumStore::StoredRow* stored_row_;
+src/sql/engine/recursive_cte/ob_search_method_op.h	61	ObSearchMethodOp::_TreeNode::stored_row_	member StoredRow (pointer) of type ObChunkDatumStore::StoredRow*	ObChunkDatumStore::StoredRow* stored_row_;
+src/sql/engine/recursive_cte/ob_search_method_op.h	90	ObSearchMethodOp::input_rows_	member container of StoredRow of type common::ObArray<ObChunkDatumStore::StoredRow *>	common::ObArray<ObChunkDatumStore::StoredRow *> input_rows_;
+src/sql/engine/recursive_cte/ob_search_method_op.h	91	ObSearchMethodOp::recycle_rows_	member container of StoredRow of type common::ObArray<ObChunkDatumStore::StoredRow*>	common::ObArray<ObChunkDatumStore::StoredRow*> recycle_rows_;
+src/sql/engine/recursive_cte/ob_search_method_op.h	184	ObBreadthFirstSearchBulkOp::last_iter_input_rows_	member container of StoredRow of type common::ObArray<ObChunkDatumStore::StoredRow *>	common::ObArray<ObChunkDatumStore::StoredRow *> last_iter_input_rows_;

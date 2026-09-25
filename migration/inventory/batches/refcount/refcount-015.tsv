@@ -1,0 +1,34 @@
+file	line	symbol	construct	text
+src/storage/blocksstable/index_block/ob_index_block_builder.cpp	242	ObSSTableMergeRes::reset	dec_ref call [on-disk block reference]	if (OB_FAIL(OB_STORAGE_OBJECT_MGR.dec_ref(block_id))) {
+src/storage/blocksstable/index_block/ob_index_block_builder.cpp	248	ObSSTableMergeRes::reset	dec_ref call [on-disk block reference]	if (OB_FAIL(OB_STORAGE_OBJECT_MGR.dec_ref(block_id))) {
+src/storage/blocksstable/index_block/ob_index_block_builder.cpp	318	ObSSTableMergeRes::assign	inc_ref call [on-disk block reference]	} else if (OB_FAIL(OB_STORAGE_OBJECT_MGR.inc_ref(block_id))) {
+src/storage/blocksstable/index_block/ob_index_block_builder.cpp	333	ObSSTableMergeRes::assign	inc_ref call [on-disk block reference]	} else if (OB_FAIL(OB_STORAGE_OBJECT_MGR.inc_ref(block_id))) {
+src/storage/blocksstable/index_block/ob_sstable_meta_info.cpp	730	ObSSTableMacroInfo::dec_linked_block_ref_cnt	dec_linked_block_ref_cnt definition (other name) [on-disk block reference]	void ObSSTableMacroInfo::dec_linked_block_ref_cnt()
+src/storage/blocksstable/index_block/ob_sstable_meta_info.cpp	742	ObSSTableMacroInfo::dec_linked_block_ref_cnt	dec_ref call [on-disk block reference]	if (OB_FAIL(OB_STORAGE_OBJECT_MGR.dec_ref(macro_id))) {
+src/storage/blocksstable/index_block/ob_sstable_meta_info.h	246	ObSSTableMacroInfo	dec_linked_block_ref_cnt declaration (other name) [on-disk block reference]	void dec_linked_block_ref_cnt();
+src/storage/blocksstable/ob_block_manager.cpp	484	ObBlockManager::get_macro_block_info	reference-count change: ++ on ref_cnt_	block_info.ref_cnt_++;
+src/storage/blocksstable/ob_block_manager.cpp	499	ObBlockManager::get_macro_block_info	dec_ref call	if (OB_TMP_FAIL(dec_ref(macro_id))) {
+src/storage/blocksstable/ob_block_manager.cpp	622	ObBlockManager::inc_ref	inc_ref definition [on-disk block reference]	int ObBlockManager::inc_ref(const MacroBlockId &macro_id) {
+src/storage/blocksstable/ob_block_manager.cpp	662	ObBlockManager::dec_ref	dec_ref definition [on-disk block reference]	int ObBlockManager::dec_ref(const MacroBlockId &macro_id) {
+src/storage/blocksstable/ob_block_manager.h	233	ObBlockManager	inc_ref declaration [on-disk block reference]	int inc_ref(const MacroBlockId &macro_id);
+src/storage/blocksstable/ob_block_manager.h	234	ObBlockManager	dec_ref declaration [on-disk block reference]	int dec_ref(const MacroBlockId &macro_id);
+src/storage/blocksstable/ob_fuse_row_cache.h	104	ObFuseRowValueHandle	Handle struct definition	struct ObFuseRowValueHandle
+src/storage/blocksstable/ob_macro_block_handle.cpp	53	ObMacroBlockHandle::operator=	inc_ref call [on-disk block reference]	if (OB_FAIL(OB_SERVER_BLOCK_MGR.inc_ref(macro_id_))) {
+src/storage/blocksstable/ob_macro_block_handle.cpp	78	ObMacroBlockHandle::reset_macro_id	dec_ref call [on-disk block reference]	if (OB_FAIL(OB_STORAGE_OBJECT_MGR.dec_ref(macro_id_))) {
+src/storage/blocksstable/ob_macro_block_handle.cpp	208	ObMacroBlockHandle::set_macro_block_id	inc_ref call [on-disk block reference]	if (OB_FAIL(OB_SERVER_BLOCK_MGR.inc_ref(macro_id_))) {
+src/storage/blocksstable/ob_macro_block_handle.cpp	238	ObStorageObjectsHandle::add	inc_ref call [on-disk block reference]	if (OB_FAIL(OB_STORAGE_OBJECT_MGR.inc_ref(macro_id))) {
+src/storage/blocksstable/ob_macro_block_handle.cpp	256	ObStorageObjectsHandle::reset	dec_ref call [on-disk block reference]	if (OB_SUCCESS != (tmp_ret = OB_STORAGE_OBJECT_MGR.dec_ref(macro_id_list_.at(i)))) {
+src/storage/blocksstable/ob_macro_block_handle.h	32	ObMacroBlockHandle	Handle class definition	class ObMacroBlockHandle final
+src/storage/blocksstable/ob_macro_block_handle.h	62	ObStorageObjectsHandle	Handle class definition	class ObStorageObjectsHandle final
+src/storage/blocksstable/ob_macro_block_struct.cpp	41	ObMacroBlocksWriteCtx::clear	dec_ref call [on-disk block reference]	if (OB_FAIL(OB_STORAGE_OBJECT_MGR.dec_ref(macro_block_list_.at(i)))) {
+src/storage/blocksstable/ob_macro_block_struct.cpp	107	ObMacroBlocksWriteCtx::get_macro_id_array	inc_ref call [on-disk block reference]	} else if (OB_FAIL(OB_STORAGE_OBJECT_MGR.inc_ref(block_id))) {
+src/storage/blocksstable/ob_macro_block_struct.cpp	122	ObMacroBlocksWriteCtx::add_macro_block_id	inc_ref call [on-disk block reference]	if (OB_FAIL(OB_STORAGE_OBJECT_MGR.inc_ref(macro_block_id))) {
+src/storage/blocksstable/ob_macro_block_struct.cpp	138	ObMacroBlocksWriteCtx::pop_macro_block_id	dec_ref call [on-disk block reference]	} else if (OB_FAIL(OB_STORAGE_OBJECT_MGR.dec_ref(macro_block_id))) {
+src/storage/blocksstable/ob_micro_block_cache.h	122	ObMicroBlockBufferHandle	Handle class definition	class ObMicroBlockBufferHandle
+src/storage/blocksstable/ob_object_manager.cpp	174	ObObjectManager::inc_ref	inc_ref definition [on-disk block reference]	int ObObjectManager::inc_ref(const MacroBlockId &object_id) const
+src/storage/blocksstable/ob_object_manager.cpp	180	ObObjectManager::inc_ref	inc_ref call [on-disk block reference]	ret = OB_SERVER_BLOCK_MGR.inc_ref(object_id);
+src/storage/blocksstable/ob_object_manager.cpp	185	ObObjectManager::dec_ref	dec_ref definition [on-disk block reference]	int ObObjectManager::dec_ref(const MacroBlockId &object_id) const
+src/storage/blocksstable/ob_object_manager.cpp	191	ObObjectManager::dec_ref	dec_ref call [on-disk block reference]	ret = OB_SERVER_BLOCK_MGR.dec_ref(object_id);
+src/storage/blocksstable/ob_object_manager.h	92	ObObjectManager	inc_ref declaration [on-disk block reference]	int inc_ref(const MacroBlockId &object_id) const;
+src/storage/blocksstable/ob_object_manager.h	93	ObObjectManager	dec_ref declaration [on-disk block reference]	int dec_ref(const MacroBlockId &object_id) const;
+src/storage/blocksstable/ob_row_cache.h	92	ObRowValueHandle	Handle struct definition	struct ObRowValueHandle

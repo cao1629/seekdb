@@ -1,0 +1,74 @@
+file	line	symbol	construct	text
+src/sql/rewrite/ob_stmt_comparer.cpp	513	ObStmtComparer::check_stmt_containment	const_cast<ObSelectStmt*>	} else if (FALSE_IT(first_sel = const_cast<ObSelectStmt*>(static_cast<const ObSelectStmt*>(first)))) {
+src/sql/rewrite/ob_stmt_comparer.cpp	515	ObStmtComparer::check_stmt_containment	const_cast<ObSelectStmt*>	} else if (FALSE_IT(second_sel = const_cast<ObSelectStmt*>(static_cast<const ObSelectStmt*>(second)))) {
+src/sql/rewrite/ob_transform_join_elimination.cpp	3454	ObTransformJoinElimination::construct_eliminated_table	const_cast<TableItem *>	} else if (OB_FAIL(trans_table.push_back(const_cast<TableItem *>(table)))) {
+src/sql/rewrite/ob_transform_left_join_to_anti.cpp	575	ObTransformLeftJoinToAnti::construct_trans_table_list	const_cast<TableItem *>	} else if (OB_FAIL(trans_table.push_back(const_cast<TableItem *>(table)))) {
+src/sql/rewrite/ob_transform_or_expansion.cpp	1118	ObTransformOrExpansion::get_expect_ordering	const_cast<ObDMLStmt&>	} else if (OB_FAIL(const_cast<ObDMLStmt&>(stmt).get_stmt_equal_sets(equal_sets, alloc, true, true))) {
+src/sql/rewrite/ob_transform_or_expansion.cpp	1188	ObTransformOrExpansion::check_upd_del_stmt_validity	const_cast<ObDelUpdStmt&>	if (OB_FAIL(const_cast<ObDelUpdStmt&>(stmt).get_dml_table_infos(table_infos))) {
+src/sql/rewrite/ob_transform_or_expansion.cpp	1425	ObTransformOrExpansion::inner_get_common_columns_in_condition	const_cast<ObRawExpr*>	} else if (OB_FAIL(add_var_to_array_no_dup(cols, const_cast<ObRawExpr*>(param)))) {
+src/sql/rewrite/ob_transform_or_expansion.cpp	1429	ObTransformOrExpansion::inner_get_common_columns_in_condition	const_cast<ObRawExpr*>	if (OB_FAIL(ObOptimizerUtil::compute_const_exprs(const_cast<ObRawExpr*>(expr),
+src/sql/rewrite/ob_transform_predicate_move_around.cpp	188	ObTransformPredicateMoveAround::need_transform	const_cast<ObDMLStmt &>	const_cast<ObDMLStmt &>(stmt),
+src/sql/rewrite/ob_transform_predicate_move_around.cpp	208	ObTransformPredicateMoveAround::check_outline_valid_to_transform	const_cast<ObDMLStmt *>	if (OB_FAIL(get_stmt_to_trans(const_cast<ObDMLStmt *>(&stmt), views))) {
+src/sql/rewrite/ob_transform_predicate_move_around.cpp	230	ObTransformPredicateMoveAround::check_outline_valid_to_transform	const_cast<ObHint *>	if (OB_FAIL(applied_hints_.push_back(const_cast<ObHint *>(trans_hint)))) {
+src/sql/rewrite/ob_transform_predicate_move_around.cpp	1616	ObTransformPredicateMoveAround::pullup_predicates_from_const_select	const_cast<ObRawExpr*>	const_cast<ObRawExpr*>(real_parent_expr),
+src/sql/rewrite/ob_transform_predicate_move_around.cpp	1625	ObTransformPredicateMoveAround::pullup_predicates_from_const_select	const_cast<ObRawExpr*>	generated_expr, const_cast<ObRawExpr*>(real_parent_expr), child_expr))) {
+src/sql/rewrite/ob_transform_simplify_expr.cpp	439	ObTransformSimplifyExpr::replace_cmp_null_condition	const_cast<ObRawExpr*>	ObExprConstraint cons(const_cast<ObRawExpr*>(null_expr_lists.at(i)),
+src/sql/rewrite/ob_transform_utils.cpp	1074	ObTransformUtils::replace_expr	const_cast<ObIArray<ObRawExpr*>&>	const_cast<ObIArray<ObRawExpr*>&>(other_exprs).at(idx) = NULL;
+src/sql/rewrite/ob_transform_utils.cpp	1081	ObTransformUtils::replace_expr	const_cast<ObIArray<ObRawExpr*>&>	const_cast<ObIArray<ObRawExpr*>&>(other_exprs).at(idx) = NULL;
+src/sql/rewrite/ob_transform_utils.cpp	1087	ObTransformUtils::replace_expr	const_cast<ObIArray<ObRawExpr*>&>	const_cast<ObIArray<ObRawExpr*>&>(other_exprs).at(idx) = temp_old_expr;
+src/sql/rewrite/ob_transform_utils.cpp	1878	ObTransformUtils::is_expr_not_null	const_cast<ObRawExpr*>	OB_FAIL(constraints->push_back(const_cast<ObRawExpr*>(expr)))) {
+src/sql/rewrite/ob_transform_utils.cpp	1939	ObTransformUtils::is_const_expr_not_null	const_cast<ObRawExpr *>	} else if (OB_FAIL(check_error_free_expr(const_cast<ObRawExpr *>(expr), is_error_free))) {
+src/sql/rewrite/ob_transform_utils.cpp	3080	ObTransformUtils::is_match_index	const_cast<ObRawExpr*>	if (OB_ISNULL(condition_expr = const_cast<ObRawExpr*>(stmt->get_condition_expr(i)))) {
+src/sql/rewrite/ob_transform_utils.cpp	3388	ObTransformUtils::check_foreign_primary_join	const_cast<ObForeignKeyInfo&>	foreign_key_info = &(const_cast<ObForeignKeyInfo&>(cur_info));
+src/sql/rewrite/ob_transform_utils.cpp	3435	ObTransformUtils::check_foreign_primary_join	const_cast<ObForeignKeyInfo&>	foreign_key_info = &(const_cast<ObForeignKeyInfo&>(cur_info));
+src/sql/rewrite/ob_transform_utils.cpp	7190	ObTransformUtils::check_limit_value	const_cast<ObRawExpr*>	} else if (OB_FAIL(ObRawExprUtils::extract_params(const_cast<ObRawExpr*>(limit_expr), params))) {
+src/sql/rewrite/ob_transform_utils.cpp	10231	ObTransformUtils::construct_trans_table	const_cast<TableItem *>	} else if (OB_FAIL(trans_tables.push_back(const_cast<TableItem *>(table)))) {
+src/sql/rewrite/ob_transform_utils.cpp	11135	ObTransformUtils::get_column_node_from_table	const_cast<TableItem *>	tab_item = const_cast<TableItem *>(tmp_table_item);
+src/sql/rewrite/ob_transform_utils.cpp	13910	ObTransformUtils::collect_semi_join_stmt_ids	const_cast<ObRawExpr*>	ObRawExpr *cond = const_cast<ObRawExpr*>(parent_stmt.get_condition_expr(i));
+src/sql/rewrite/ob_transform_win_magic.cpp	125	ObTransformWinMagic::construct_trans_table	const_cast<TableItem *>	} else if (OB_FAIL(trans_table.push_back(const_cast<TableItem *>(table)))) {
+src/sql/session/ob_basic_session_info.cpp	703	ObBasicSessionInfo::get_database_name	const_cast<char*>	str_ret.assign_ptr(const_cast<char*>(thread_data_.database_name_),
+src/sql/session/ob_basic_session_info.cpp	832	ObBasicSessionInfo::init_system_variables	const_cast<char*>	name.assign_ptr(const_cast<char*>(ObSysVariables::get_name(i).ptr()),
+src/sql/session/ob_basic_session_info.cpp	5105	ObBasicSessionInfo::ensure_sys_var_loaded	const_cast<ObBasicSessionInfo*>	ObBasicSessionInfo *mutable_this = const_cast<ObBasicSessionInfo*>(this);
+src/sql/session/ob_basic_session_info.h	1864	ObBasicSessionInfo::get_current_query_string	const_cast<char *>	str_ret.assign_ptr(const_cast<char *>(thread_data_.cur_query_), static_cast<int64_t>(thread_data_.cur_query_len_));
+src/sql/session/ob_basic_session_info.h	1871	ObBasicSessionInfo::get_top_query_string	const_cast<char *>	str_ret.assign_ptr(const_cast<char *>(thread_data_.top_query_), static_cast<int32_t>(thread_data_.top_query_len_));
+src/storage/access/ob_micro_block_handle_mgr.cpp	253	ObMicroBlockDataHandle::try_release_loaded_block	const_cast<char *>	char *data_buf = const_cast<char *>(loaded_block_data_.get_buf());
+src/storage/access/ob_pushdown_aggregate.cpp	2218	ObSumAggCell::eval_number_batch	const_cast<uint32_t *>	const_cast<uint32_t *>(result_datum_.get_number_digits()));
+src/storage/access/ob_pushdown_aggregate.h	677	#define DATUM_TO_DECIMAL_INT	const_cast<type *>	*const_cast<type *>(reinterpret_cast<const type*>(datum.get_decimal_int()))
+src/storage/access/ob_pushdown_aggregate.h	730	ObSumAggCell::eval_int_inner	const_cast<common::number::ObCompactNumber &>	common::number::ObCompactNumber &cnum = const_cast<common::number::ObCompactNumber &>(result_datum.get_number());
+src/storage/access/ob_pushdown_aggregate.h	795	ObSumAggCell::eval_uint_inner	const_cast<common::number::ObCompactNumber &>	common::number::ObCompactNumber &cnum = const_cast<common::number::ObCompactNumber &>(result_datum.get_number());
+src/storage/access/ob_sstable_multi_version_row_iterator.cpp	269	ObSSTableMultiVersionRowMultiGetter::inner_get_next_row	const_cast<ObDatumRow*>	(const_cast<ObDatumRow*> (row))->scan_index_ = range_idx_;
+src/storage/access/ob_sstable_row_getter.cpp	120	ObSSTableRowGetter::inner_get_next_row	const_cast<ObDatumRow *>	ObDatumRow &datum_row = *const_cast<ObDatumRow *>(store_row);
+src/storage/access/ob_sstable_row_lock_checker.cpp	244	ObSSTableRowLockMultiChecker::open_cur_data_block	const_cast<ObRowsInfo *>	auto *rows_info = const_cast<ObRowsInfo *>(micro_info.rows_info_);
+src/storage/access/ob_sstable_row_multi_getter.cpp	123	ObSSTableRowMultiGetter::inner_get_next_row	const_cast<ObDatumRow *>	ObDatumRow &datum_row = *const_cast<ObDatumRow *>(store_row);
+src/storage/access/ob_sstable_row_scanner.ipp	336	ObSSTableRowScanner::inner_get_next_row	const_cast<ObDatumRow *>	ObDatumRow &datum_row = *const_cast<ObDatumRow *>(store_row);
+src/storage/access/ob_sstable_row_scanner.ipp	392	ObSSTableRowScanner::fetch_row	const_cast<ObDatumRow*>	(const_cast<ObDatumRow*> (store_row))->scan_index_ = read_handle.range_idx_;
+src/storage/access/ob_sstable_row_whole_scanner.cpp	328	ObSSTableRowWholeScanner::inner_get_next_row	const_cast<blocksstable::ObDatumRow *>	const_cast<blocksstable::ObDatumRow *>(row)->scan_index_ = 0;
+src/storage/access/ob_store_row_iterator.h	194	ObQueryRowIterator::get_next_row	const_cast<blocksstable::ObDatumRow *&>	return get_next_row(const_cast<blocksstable::ObDatumRow *&>(row));
+src/storage/access/ob_table_scan_range.cpp	46	#define RESET_SCAN_RANGES	const_cast<ObStorageDatum *>	allocator_->free(const_cast<ObStorageDatum *>(range.get_start_key().datums_)); \
+src/storage/access/ob_table_scan_range.cpp	49	#define RESET_SCAN_RANGES	const_cast<ObStorageDatum *>	allocator_->free(const_cast<ObStorageDatum *>(range.get_end_key().datums_));   \
+src/storage/access/ob_table_scan_range.cpp	59	ObTableScanRange::reset	const_cast<ObStorageDatum *>	allocator_->free(const_cast<ObStorageDatum *>(rowkeys_.at(i).datums_));
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	178	ObConstDecoder::batch_decode_without_dict	const_cast<char *>	MEMCPY(const_cast<char *>(datums[i].ptr_), datums[0].ptr_, datums[0].len_);
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	185	ObConstDecoder::batch_decode_without_dict	const_cast<char *>	MEMCPY(const_cast<char *>(datums[i].ptr_), datums[0].ptr_, datums[0].len_);
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	51	DictFixBatchDecodeFunc_T::dict_fix_batch_decode_func	const_cast<char *>	ENCODING_ADAPT_MEMCPY(const_cast<char *>(datum.ptr_), base_data + fixed_len * ref, fixed_len);
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	83	DictFixBatchDecodeFunc_T::dict_fix_batch_decode_func	const_cast<char *>	*reinterpret_cast<DatumType *>(const_cast<char *>(datum.ptr_)) = input[ref];
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	117	DictVarBatchDecodeFunc_T::dict_var_batch_decode_func	const_cast<char *>	ENCODING_ADAPT_MEMCPY(const_cast<char *>(datum.ptr_), base_data + offset, data_len);
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	231	ObDictDecoder::decode	const_cast<ObDictMetaHeader *>	const_cast<ObDictMetaHeader *>(meta_header_)) + ctx.col_header_->length_;
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	401	ObDictDecoder::batch_decode	const_cast<ObDictMetaHeader *>	const_cast<ObDictMetaHeader *>(meta_header_)) + ctx.col_header_->length_;
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	430	ObDictDecoder::batch_decode	const_cast<ObDictMetaHeader *>	const_cast<ObDictMetaHeader *>(meta_header_)) + ctx.col_header_->length_;
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	584	ObDictDecoder::get_null_count	const_cast<ObDictMetaHeader *>	const_cast<ObDictMetaHeader *>(meta_header_)) + ctx.col_header_->length_;
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	645	ObDictDecoder::pushdown_operator	const_cast<ObDictMetaHeader *>	const_cast<ObDictMetaHeader *>(meta_header_)) + col_ctx.col_header_->length_;
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	1305	ObDictDecoder::set_res_with_bitmap	const_cast<ObDictMetaHeader *>	const_cast<ObDictMetaHeader *>(meta_header_)) + col_ctx.col_header_->length_;
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	1450	ObDictDecoder::read_reference	const_cast<ObDictMetaHeader *>	const_cast<ObDictMetaHeader *>(meta_header_)) + ctx.col_header_->length_;
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	1495	ObDictDecoder::check_has_null	const_cast<ObDictMetaHeader *>	const_cast<ObDictMetaHeader *>(meta_header_)) + meta_length;
+src/storage/blocksstable/encoding/ob_encoding_bitset.h	593	ObBitMapMetaReader::read	const_cast<char *>	ref = BitSet::get_ref(reinterpret_cast<uint64_t *>(const_cast<char *>(buf)), row_id);
+src/storage/blocksstable/encoding/ob_encoding_bitset.h	601	ObBitMapMetaReader::read	const_cast<char *>	const_cast<char *>(buf + meta->ext_offset_)),
+src/storage/blocksstable/encoding/ob_encoding_bitset.h	634	ObBitMapMetaReader::read_exc_cell	const_cast<char *>	(const_cast<char *>(buf + meta->data_offset_)),
+src/storage/blocksstable/encoding/ob_encoding_bitset.h	638	ObBitMapMetaReader::read_exc_cell	const_cast<char *>	MEMCPY(const_cast<char *>(datum.ptr_), &v, datum_len);
+src/storage/blocksstable/encoding/ob_encoding_bitset.h	647	ObBitMapMetaReader::read_exc_cell	const_cast<char *>	MEMCPY(const_cast<char *>(datum.ptr_), &v, datum_len);
+src/storage/blocksstable/encoding/ob_encoding_bitset.h	672	ObBitMapMetaReader::read_exc_cell	const_cast<char *>	MEMCPY(const_cast<char *>(datum.ptr_), buf + meta->data_offset_ + offset, sizeof(ObNumberDesc));
+src/storage/blocksstable/encoding/ob_encoding_bitset.h	676	ObBitMapMetaReader::read_exc_cell	const_cast<char *>	MEMCPY(const_cast<char *>(datum.ptr_) + sizeof(ObNumberDesc),
+src/storage/blocksstable/encoding/ob_encoding_bitset.h	679	ObBitMapMetaReader::read_exc_cell	const_cast<char *>	MEMCPY(const_cast<char *>(datum.ptr_) + sizeof(ObNumberDesc),
+src/storage/blocksstable/encoding/ob_encoding_bitset.h	713	ObBitMapMetaReader::read_exc_cell	const_cast<char *>	MEMCPY(const_cast<char *>(datum.ptr_), buf + meta->data_offset_ + offset, cell_len);
+src/storage/blocksstable/encoding/ob_encoding_bitset.h	774	ObBitMapMetaReader::read_exc_cell	const_cast<char *>	MEMCPY(const_cast<char *>(datum.ptr_), buf + meta->data_offset_ + offset, size);
+src/storage/blocksstable/encoding/ob_encoding_bitset.h	837	ObBitMapExcValReadCellFunc::read_exc_cell	const_cast<char *>	reinterpret_cast<unsigned char *>(const_cast<char *>(buf + meta->data_offset_)),
+src/storage/blocksstable/encoding/ob_encoding_bitset.h	875	ObBitMapExcValDecodeFunc::decode	const_cast<char *>	const_cast<char *>(store_data + meta->ext_offset_)),

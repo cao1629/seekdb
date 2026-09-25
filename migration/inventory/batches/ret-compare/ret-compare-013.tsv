@@ -1,0 +1,100 @@
+file	line	symbol	construct	text
+src/pl/sys_package/ob_dbms_ai_service.cpp	99	ObDBMSAiService::create_ai_model_endpoint	ret == OB_ERR_NO_PRIVILEGE	if (OB_ERR_NO_PRIVILEGE == ret) {
+src/pl/sys_package/ob_dbms_ai_service.cpp	137	ObDBMSAiService::alter_ai_model_endpoint	ret == OB_ERR_NO_PRIVILEGE	if (OB_ERR_NO_PRIVILEGE == ret) {
+src/pl/sys_package/ob_dbms_ai_service.cpp	174	ObDBMSAiService::drop_ai_model_endpoint	ret == OB_ERR_NO_PRIVILEGE	if (OB_ERR_NO_PRIVILEGE == ret) {
+src/pl/sys_package/ob_dbms_ai_service.cpp	241	ObDBMSAiService::create_ai_model	ret == OB_ERR_NO_PRIVILEGE	if (OB_ERR_NO_PRIVILEGE == ret) {
+src/pl/sys_package/ob_dbms_ai_service.cpp	301	ObDBMSAiService::drop_ai_model	ret == OB_ERR_NO_PRIVILEGE	if (OB_ERR_NO_PRIVILEGE == ret) {
+src/pl/sys_package/ob_dbms_space.cpp	294	ObDbmsSpace::inner_get_compressed_ratio	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/pl/sys_package/ob_dbms_space.cpp	315	ObDbmsSpace::extract_total_compression_ratio	ret == OB_ERR_NULL_VALUE	if (ret == OB_ERR_NULL_VALUE) {
+src/pl/sys_package/ob_dbms_space.cpp	502	ObDbmsSpace::get_each_tablet_size	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/pl/sys_package/ob_dbms_space.cpp	547	ObDbmsSpace::get_each_tablet_size	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/pl/sys_package/ob_dbms_space.cpp	572	ObDbmsSpace::extract_tablet_size	ret == OB_ERR_NULL_VALUE	if (ret == OB_ERR_NULL_VALUE) {
+src/pl/sys_package/ob_dbms_space.cpp	578	ObDbmsSpace::extract_tablet_size	ret == OB_ERR_NULL_VALUE	if (ret == OB_ERR_NULL_VALUE) {
+src/pl/sys_package/ob_dbms_space.cpp	610	ObDbmsSpace::extract_tablet_size	ret == OB_ERR_NULL_VALUE	if (ret == OB_ERR_NULL_VALUE) {
+src/pl/sys_package/ob_dbms_space.cpp	617	ObDbmsSpace::extract_tablet_size	ret == OB_ERR_NULL_VALUE	if (ret == OB_ERR_NULL_VALUE) {
+src/pl/sys_package/ob_dbms_space.cpp	623	ObDbmsSpace::extract_tablet_size	ret == OB_ERR_NULL_VALUE	if (ret == OB_ERR_NULL_VALUE) {
+src/pl/sys_package/ob_dbms_space.cpp	629	ObDbmsSpace::extract_tablet_size	ret == OB_ERR_NULL_VALUE	if (ret == OB_ERR_NULL_VALUE) {
+src/pl/sys_package/ob_dbms_stats.cpp	121	ObDbmsStats::gather_table_stats	ret == OB_TIMEOUT	if (ret == OB_SUCCESS || ret == OB_TIMEOUT) {
+src/pl/sys_package/ob_dbms_stats.cpp	222	ObDbmsStats::gather_schema_stats	ret == OB_ERR_DBMS_STATS_PL	if (OB_ERR_DBMS_STATS_PL == ret) {
+src/pl/sys_package/ob_dbms_stats.cpp	241	ObDbmsStats::gather_schema_stats	ret == OB_TIMEOUT	if (ret == OB_SUCCESS || ret == OB_TIMEOUT) {
+src/pl/sys_package/ob_dbms_stats.cpp	259	ObDbmsStats::gather_schema_stats	ret == OB_TABLE_NOT_EXIST	ret = ret == OB_TABLE_NOT_EXIST ? OB_SUCCESS : ret;//skip table not exist in schema stats op.
+src/pl/sys_package/ob_dbms_stats.cpp	877	ObDbmsStats::delete_schema_stats	ret == OB_ERR_DBMS_STATS_PL	if (OB_ERR_DBMS_STATS_PL == ret) {
+src/pl/sys_package/ob_dbms_stats.cpp	889	ObDbmsStats::delete_schema_stats	ret == OB_TABLE_NOT_EXIST	ret = ret == OB_TABLE_NOT_EXIST ? OB_SUCCESS : ret;//skip table not exist in schema stats op.
+src/pl/sys_package/ob_dbms_stats.cpp	1299	ObDbmsStats::export_schema_stats	ret == OB_TABLE_NOT_EXIST	ret = ret == OB_TABLE_NOT_EXIST ? OB_SUCCESS : ret;//skip table not exist in schema stats op.
+src/pl/sys_package/ob_dbms_stats.cpp	1609	ObDbmsStats::import_schema_stats	ret == OB_ERR_DBMS_STATS_PL	if (OB_ERR_DBMS_STATS_PL == ret) {
+src/pl/sys_package/ob_dbms_stats.cpp	1620	ObDbmsStats::import_schema_stats	ret == OB_TABLE_NOT_EXIST	ret = ret == OB_TABLE_NOT_EXIST ? OB_SUCCESS : ret;//skip table not exist in schema stats op.
+src/pl/sys_package/ob_dbms_stats.cpp	1874	ObDbmsStats::lock_schema_stats	ret == OB_TABLE_NOT_EXIST	ret = ret == OB_TABLE_NOT_EXIST ? OB_SUCCESS : ret;//skip table not exist in schema stats op.
+src/pl/sys_package/ob_dbms_stats.cpp	2060	ObDbmsStats::unlock_schema_stats	ret == OB_TABLE_NOT_EXIST	ret = ret == OB_TABLE_NOT_EXIST ? OB_SUCCESS : ret;//skip table not exist in schema stats op.
+src/pl/sys_package/ob_dbms_stats.cpp	2217	ObDbmsStats::restore_schema_stats	ret == OB_ERR_DBMS_STATS_PL	if (OB_ERR_DBMS_STATS_PL == ret) {
+src/pl/sys_package/ob_dbms_stats.cpp	2229	ObDbmsStats::restore_schema_stats	ret == OB_TABLE_NOT_EXIST	ret = ret == OB_TABLE_NOT_EXIST ? OB_SUCCESS : ret;//skip table not exist in schema stats op.
+src/pl/sys_package/ob_dbms_stats.cpp	2740	ObDbmsStats::async_gather_stats_job_proc	ret != OB_ERR_DBMS_STATS_PL	is_can_async_gather = (ret != OB_ERR_DBMS_STATS_PL);
+src/pl/sys_package/ob_dbms_stats.cpp	2752	ObDbmsStats::async_gather_stats_job_proc	ret == OB_TIMEOUT	ret = ret == OB_TIMEOUT ? OB_SUCCESS : ret;
+src/pl/sys_package/ob_dbms_stats.cpp	4112	ObDbmsStats::parse_size_clause	ret == OB_INTEGER_PRECISION_OVERFLOW	if (OB_INTEGER_PRECISION_OVERFLOW == ret) {
+src/pl/sys_package/ob_dbms_stats.cpp	4113	ObDbmsStats::parse_size_clause	ret == OB_NUMERIC_OVERFLOW	} else if (OB_NUMERIC_OVERFLOW == ret) {
+src/pl/sys_package/ob_dbms_stats.cpp	4792	ObDbmsStats::gather_database_stats_job_proc	ret == OB_TIMEOUT	ret = ret == OB_TIMEOUT ? OB_SUCCESS : ret;
+src/pl/sys_package/ob_dbms_stats.cpp	4883	ObDbmsStats::do_gather_table_stats	ret == OB_ERR_QUERY_INTERRUPTED	if (OB_ERR_QUERY_INTERRUPTED == ret) {
+src/pl/sys_package/ob_dbms_stats.cpp	4884	ObDbmsStats::do_gather_table_stats	ret == OB_TABLE_NOT_EXIST; ret == OB_TIMEOUT	} else if (OB_TABLE_NOT_EXIST == ret || OB_TIMEOUT == ret) {
+src/pl/sys_package/ob_dbms_stats.cpp	4955	ObDbmsStats::append_part_id_if_valid	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/pl/sys_package/ob_dbms_stats.cpp	5116	ObDbmsStats::gather_table_stats_with_default_param	ret != OB_ERR_INTERRUPTED	(OB_ERR_INTERRUPTED != ret && !failed_part_and_subpart_ids.empty()) &&
+src/pl/sys_package/ob_dbms_stats.cpp	5142	ObDbmsStats::gather_table_stats_with_default_param	ret == OB_TIMEOUT	if (ret == OB_SUCCESS || ret == OB_TIMEOUT) {
+src/pl/sys_package/ob_dbms_stats.cpp	6139	ObDbmsStats::do_async_gather_table_stats	ret == OB_ERR_QUERY_INTERRUPTED	if (OB_ERR_QUERY_INTERRUPTED == ret) {
+src/pl/sys_package/ob_dbms_stats.cpp	6140	ObDbmsStats::do_async_gather_table_stats	ret == OB_TABLE_NOT_EXIST; ret == OB_TIMEOUT	} else if (OB_TABLE_NOT_EXIST == ret || OB_TIMEOUT == ret) {
+src/query/api/query/engine/basic/ob_pushdown_filter.h	1039	ObWhiteFilterParamHashSet::exist_refactored	ret == OB_HASH_EXIST	if (OB_HASH_EXIST == ret) {
+src/query/api/query/engine/basic/ob_pushdown_filter.h	1042	ObWhiteFilterParamHashSet::exist_refactored	ret == OB_HASH_NOT_EXIST	} else if (OB_HASH_NOT_EXIST == ret) {
+src/query/api/query/engine/basic/ob_pushdown_filter.h	1579	ObPushdownFilterExecutor::init_array_param	ret != OB_SIZE_OVERFLOW	if (OB_UNLIKELY(OB_SIZE_OVERFLOW != ret)) {
+src/query/api/query/engine/ob_operator.h	533	ObOperator::get_next_batch_with_onlyone_row	ret == OB_ITER_END	if (ret == OB_ITER_END) {
+src/query/api/query/vector/ob_vector_index_cache.h	293	ObIvfCacheMgr::get_or_create_cache_node	ret == OB_HASH_NOT_EXIST	if (ret == OB_HASH_NOT_EXIST) {
+src/query/api/query/vector/ob_vector_index_cache.h	299	ObIvfCacheMgr::get_or_create_cache_node	ret == OB_HASH_EXIST	if (ret == OB_HASH_EXIST) {
+src/query/protocol/ob_mysql_protocol_util.cpp	325	ObSMUtils::build_cell_value	ret == OB_SIZE_OVERFLOW	if (OB_SIZE_OVERFLOW == ret) {
+src/query/protocol/ob_mysql_protocol_util.cpp	568	ObSMUtils::build_cell_value	ret == OB_SIZE_OVERFLOW	if (OB_SIZE_OVERFLOW == ret) {
+src/query/vector/ob_vector_embedding_handler.cpp	501	ObEmbeddingTask::reschedule	ret == OB_EAGAIN	if (ret == OB_EAGAIN) { // task queue is full, will retry
+src/query/vector/ob_vector_embedding_handler.cpp	609	ObEmbeddingTask::check_async_progress	ret == OB_NEED_RETRY	if (ret == OB_NEED_RETRY) {
+src/query/vector/ob_vector_embedding_handler.cpp	1291	ObEmbeddingTaskHandler::push_task	ret != OB_EAGAIN	if (ret != OB_EAGAIN) {
+src/rootserver/dbms_job/ob_dbms_job_master.cpp	289	ObDBMSJobMaster::scheduler	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/rootserver/dbms_job/ob_dbms_job_master.cpp	421	ObDBMSJobMaster::register_jobs	other variable tmp == OB_HASH_EXIST	if (OB_HASH_EXIST == tmp) {
+src/rootserver/dbms_job/ob_dbms_job_utils.cpp	208	#define EXTRACT_TIMESTAMP_FIELD_MYSQL_SKIP_RET	ret == OB_ERR_COLUMN_NOT_FOUND	} else if (OB_ERR_COLUMN_NOT_FOUND == ret) {                        \
+src/rootserver/dbms_job/ob_dbms_job_utils.cpp	218	#define EXTRACT_NUMBER_FIELD_MYSQL_SKIP_RET	ret == OB_ERR_NULL_VALUE; ret == OB_ERR_COLUMN_NOT_FOUND	if (OB_ERR_NULL_VALUE == ret || OB_ERR_COLUMN_NOT_FOUND == ret) {   \
+src/rootserver/dbms_job/ob_dbms_job_utils.cpp	267	ObDBMSJobUtils::get_dbms_job_info	call result result.get_result()->next() != OB_ITER_END	if (OB_SUCC(ret) && (result.get_result()->next()) != OB_ITER_END) {
+src/rootserver/dbms_job/ob_dbms_job_utils.cpp	271	ObDBMSJobUtils::get_dbms_job_info	ret == OB_ITER_END	} else if (OB_ITER_END == ret) {
+src/rootserver/dbms_job/ob_dbms_job_utils.cpp	299	ObDBMSJobUtils::get_dbms_job_infos_in_runtime	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/rootserver/dbms_job/ob_dbms_job_utils.cpp	307	ObDBMSJobUtils::get_dbms_job_infos_in_runtime	ret == OB_ITER_END	ret = OB_ITER_END == ret ? OB_SUCCESS : ret;
+src/rootserver/dbms_job/ob_dbms_job_utils.cpp	360	ObDBMSJobUtils::calc_execute_at	ret == OB_ERR_NULL_VALUE	if (OB_ERR_NULL_VALUE == ret) {
+src/rootserver/ddl_task/ob_column_redefinition_task.cpp	261	ObColumnRedefinitionTask::copy_table_indexes	ret == OB_ENTRY_EXIST	if (OB_ENTRY_EXIST == ret) {
+src/rootserver/ddl_task/ob_column_redefinition_task.cpp	279	ObColumnRedefinitionTask::copy_table_indexes	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/rootserver/ddl_task/ob_column_redefinition_task.cpp	449	ObColumnRedefinitionTask::copy_table_dependent_objects	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/rootserver/ddl_task/ob_column_redefinition_task.cpp	506	ObColumnRedefinitionTask::take_effect	ret == OB_TIMEOUT; ret == OB_NOT_MASTER	if (OB_TIMEOUT == ret || OB_NOT_MASTER == ret) {
+src/rootserver/ddl_task/ob_column_redefinition_task.cpp	513	ObColumnRedefinitionTask::take_effect	ret == OB_NOT_MASTER	if (OB_NOT_MASTER == ret) {
+src/rootserver/ddl_task/ob_column_redefinition_task.cpp	530	ObColumnRedefinitionTask::take_effect	ret == OB_TIMEOUT	if (OB_TIMEOUT == ret) {
+src/rootserver/ddl_task/ob_column_redefinition_task.cpp	664	ObColumnRedefinitionTask::collect_longops_stat	ret == OB_SIZE_OVERFLOW	if (ret == OB_SIZE_OVERFLOW) {
+src/rootserver/ddl_task/ob_column_redefinition_task.cpp	673	ObColumnRedefinitionTask::collect_longops_stat	ret == OB_SIZE_OVERFLOW	if (ret == OB_SIZE_OVERFLOW) {
+src/rootserver/ddl_task/ob_constraint_task.cpp	114	ObCheckConstraintValidationTask::process	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/rootserver/ddl_task/ob_constraint_task.cpp	129	ObCheckConstraintValidationTask::process	ret == OB_ERR_ADD_CHECK_CONSTRAINT_VIOLATED	if (OB_ERR_ADD_CHECK_CONSTRAINT_VIOLATED == ret) {
+src/rootserver/ddl_task/ob_constraint_task.cpp	406	ObForeignKeyConstraintValidationTask::check_fk_constraint_data_valid	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/rootserver/ddl_task/ob_constraint_task.cpp	583	ObConstraintTask::release_snapshot	ret == OB_TABLE_NOT_EXIST; ret == OB_RUNTIME_SCHEMA_NOT_READY	if (OB_TABLE_NOT_EXIST == ret || OB_RUNTIME_SCHEMA_NOT_READY == ret) {
+src/rootserver/ddl_task/ob_constraint_task.cpp	636	ObConstraintTask::wait_trans_end	ret == OB_SNAPSHOT_DISCARDED	if (OB_SNAPSHOT_DISCARDED == ret) {
+src/rootserver/ddl_task/ob_constraint_task.cpp	652	ObConstraintTask::wait_trans_end	ret == OB_SNAPSHOT_DISCARDED	ret = OB_SNAPSHOT_DISCARDED == ret ? OB_SUCCESS : ret;
+src/rootserver/ddl_task/ob_constraint_task.cpp	826	ObConstraintTask::release_ddl_locks	ret == OB_TABLE_NOT_EXIST	if (OB_TABLE_NOT_EXIST == ret) {
+src/rootserver/ddl_task/ob_constraint_task.cpp	937	ObConstraintTask::report_check_constraint_error_code	other variable ret_code_ == OB_ERR_ADD_CHECK_CONSTRAINT_VIOLATED	} else if (OB_ERR_ADD_CHECK_CONSTRAINT_VIOLATED == ret_code_
+src/rootserver/ddl_task/ob_constraint_task.cpp	938	ObConstraintTask::report_check_constraint_error_code	other variable ret_code_ == OB_ERR_NOT_NULL_CONSTRAINT_VIOLATED	|| OB_ERR_NOT_NULL_CONSTRAINT_VIOLATED == ret_code_) {
+src/rootserver/ddl_task/ob_constraint_task.cpp	981	ObConstraintTask::report_foreign_key_constraint_error_code	other variable ret_code_ == OB_ERR_ORPHANED_CHILD_RECORD_EXISTS	} else if (OB_ERR_ORPHANED_CHILD_RECORD_EXISTS == ret_code_) {
+src/rootserver/ddl_task/ob_constraint_task.cpp	1107	ObConstraintTask::set_check_constraint_validated	ret == OB_TABLE_NOT_EXIST	if (OB_TABLE_NOT_EXIST == ret) {
+src/rootserver/ddl_task/ob_constraint_task.cpp	1141	ObConstraintTask::set_check_constraint_validated	ret == OB_ERR_CONTRAINT_NOT_FOUND	if (OB_ERR_CONTRAINT_NOT_FOUND == ret) {
+src/rootserver/ddl_task/ob_constraint_task.cpp	1159	ObConstraintTask::set_check_constraint_validated	ret == OB_NO_NEED_UPDATE	if (OB_NO_NEED_UPDATE == ret) {
+src/rootserver/ddl_task/ob_constraint_task.cpp	1263	ObConstraintTask::rollback_failed_check_constraint	ret == OB_TABLE_NOT_EXIST; ret == OB_ERR_CONTRAINT_NOT_FOUND	if (OB_TABLE_NOT_EXIST == ret || OB_ERR_CONTRAINT_NOT_FOUND == ret) {
+src/rootserver/ddl_task/ob_constraint_task.cpp	1303	ObConstraintTask::rollback_failed_check_constraint	ret == OB_TABLE_NOT_EXIST; ret == OB_ERR_CANT_DROP_FIELD_OR_KEY; ret == OB_ERR_CONTRAINT_NOT_FOUND	if (OB_TABLE_NOT_EXIST == ret || OB_ERR_CANT_DROP_FIELD_OR_KEY == ret || OB_ERR_CONTRAINT_NOT_FOUND == ret) {
+src/rootserver/ddl_task/ob_constraint_task.cpp	1308	ObConstraintTask::rollback_failed_check_constraint	ret == OB_NO_NEED_UPDATE	if (OB_NO_NEED_UPDATE == ret) {
+src/rootserver/ddl_task/ob_constraint_task.cpp	1332	ObConstraintTask::rollback_failed_foregin_key	ret == OB_TABLE_NOT_EXIST; ret == OB_ERR_CONTRAINT_NOT_FOUND	if (OB_TABLE_NOT_EXIST == ret || OB_ERR_CONTRAINT_NOT_FOUND == ret) {
+src/rootserver/ddl_task/ob_constraint_task.cpp	1370	ObConstraintTask::rollback_failed_foregin_key	ret == OB_NO_NEED_UPDATE	if (OB_NO_NEED_UPDATE == ret) {
+src/rootserver/ddl_task/ob_constraint_task.cpp	1447	ObConstraintTask::rollback_failed_add_not_null_columns	ret == OB_TABLE_NOT_EXIST; ret == OB_ERR_CANT_DROP_FIELD_OR_KEY	if (OB_TABLE_NOT_EXIST == ret || OB_ERR_CANT_DROP_FIELD_OR_KEY == ret) {
+src/rootserver/ddl_task/ob_ddl_common_rs_impl.cpp	268	ObDDLTaskUtil::get_domain_index_share_table_snapshot	ret == OB_SNAPSHOT_DISCARDED	if (OB_SNAPSHOT_DISCARDED == ret) {
+src/rootserver/ddl_task/ob_ddl_common_rs_impl.cpp	367	ObDDLTaskUtil::generate_build_replica_sql	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/rootserver/ddl_task/ob_ddl_common_rs_impl.cpp	418	ObDDLTaskUtil::generate_build_replica_sql	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/rootserver/ddl_task/ob_ddl_common_rs_impl.cpp	606	ObDDLTaskUtil::obtain_snapshot	ret == OB_SNAPSHOT_DISCARDED	if (OB_SNAPSHOT_DISCARDED == ret) {
+src/rootserver/ddl_task/ob_ddl_common_rs_impl.cpp	624	ObDDLTaskUtil::obtain_snapshot	ret == OB_SNAPSHOT_DISCARDED	if (OB_SNAPSHOT_DISCARDED == ret) {
+src/rootserver/ddl_task/ob_ddl_common_rs_impl.cpp	687	ObDDLTaskUtil::obtain_snapshot	ret == OB_SNAPSHOT_DISCARDED	if (OB_SNAPSHOT_DISCARDED == ret) {
+src/rootserver/ddl_task/ob_ddl_common_rs_impl.cpp	763	ObDDLTaskUtil::check_need_update_domain_index_share_table_snapshot	ret == OB_ERR_INDEX_KEY_NOT_FOUND	if (ret == OB_ERR_INDEX_KEY_NOT_FOUND) {
+src/rootserver/ddl_task/ob_ddl_common_rs_impl.cpp	770	ObDDLTaskUtil::check_need_update_domain_index_share_table_snapshot	ret == OB_ERR_INDEX_KEY_NOT_FOUND	if (OB_ERR_INDEX_KEY_NOT_FOUND == ret) {
+src/rootserver/ddl_task/ob_ddl_common_rs_impl.cpp	924	ObDDLTaskUtil::check_and_cancel_single_replica_dag	ret == OB_TABLE_NOT_EXIST	} else if (OB_TABLE_NOT_EXIST == ret
+src/rootserver/ddl_task/ob_ddl_common_rs_impl.cpp	925	ObDDLTaskUtil::check_and_cancel_single_replica_dag	ret == OB_RUNTIME_SCHEMA_NOT_READY	|| OB_RUNTIME_SCHEMA_NOT_READY == ret
+src/rootserver/ddl_task/ob_ddl_common_rs_impl.cpp	1026	ObDDLTaskUtil::get_task_tablet_slice_count	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/rootserver/ddl_task/ob_ddl_common_rs_impl.cpp	1116	ObDDLTaskUtil::check_table_empty	ret == OB_ITER_END	if (OB_ITER_END == ret) {

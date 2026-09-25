@@ -1,0 +1,96 @@
+file	line	symbol	construct	text
+src/sql/engine/ob_operator.cpp	620	ObOperator::open	ret != OB_TRY_LOCK_ROW_CONFLICT; ret != OB_TRANSACTION_SET_VIOLATION	if (OB_TRY_LOCK_ROW_CONFLICT != ret && OB_TRANSACTION_SET_VIOLATION != ret) {
+src/sql/engine/ob_operator.cpp	641	ObOperator::open	ret != OB_TRY_LOCK_ROW_CONFLICT; ret != OB_TRANSACTION_SET_VIOLATION	if (OB_TRY_LOCK_ROW_CONFLICT != ret && OB_TRANSACTION_SET_VIOLATION != ret) {
+src/sql/engine/ob_operator.cpp	729	ObOperator::rescan	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/ob_operator.cpp	774	ObOperator::switch_iterator	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/ob_operator.cpp	912	ObOperator::get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/ob_operator.cpp	941	ObOperator::get_next_row	ret == OB_ITER_END	} else if (OB_ITER_END == ret) {
+src/sql/engine/ob_operator.cpp	951	ObOperator::get_next_row	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/ob_operator.cpp	1322	ObOperator::get_next_row_vectorizely	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/sql/engine/ob_physical_plan.cpp	416	ObPhysicalPlan::check_if_is_expired_by_error	other variable error_code == OB_TIMEOUT	return common::OB_TIMEOUT == error_code
+src/sql/engine/ob_physical_plan.cpp	417	ObPhysicalPlan::check_if_is_expired_by_error	other variable error_code == OB_TRANS_STMT_TIMEOUT	|| common::OB_TRANS_STMT_TIMEOUT == error_code
+src/sql/engine/ob_physical_plan.cpp	418	ObPhysicalPlan::check_if_is_expired_by_error	other variable error_code == OB_SESSION_KILLED	|| common::OB_SESSION_KILLED == error_code
+src/sql/engine/ob_physical_plan.cpp	419	ObPhysicalPlan::check_if_is_expired_by_error	other variable error_code == OB_ERR_QUERY_INTERRUPTED	|| common::OB_ERR_QUERY_INTERRUPTED == error_code
+src/sql/engine/ob_physical_plan.cpp	420	ObPhysicalPlan::check_if_is_expired_by_error	other variable error_code == OB_ERR_SESSION_INTERRUPTED	|| common::OB_ERR_SESSION_INTERRUPTED == error_code;
+src/sql/engine/ob_physical_plan.cpp	1007	ObPhysicalPlan::update_cache_obj_stat	ret == OB_SIZE_OVERFLOW	if (OB_SIZE_OVERFLOW == ret) {
+src/sql/engine/ob_physical_plan_ctx.cpp	826	ObPhysicalPlanCtx::get_sqludt_meta_by_subschema_id	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/sql/engine/ob_physical_plan_ctx.cpp	856	ObPhysicalPlanCtx::get_sqludt_meta_by_subschema_id	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/sql/engine/ob_physical_plan_ctx.cpp	886	ObPhysicalPlanCtx::get_enumset_meta_by_subschema_id	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/sql/engine/ob_physical_plan_ctx.cpp	920	ObPhysicalPlanCtx::get_subschema_id_by_udt_id	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/sql/engine/ob_physical_plan_ctx.cpp	931	ObPhysicalPlanCtx::get_subschema_id_by_udt_id	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/sql/engine/ob_physical_plan_ctx.cpp	1020	ObPhysicalPlanCtx::get_subschema_id_by_type_info	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/sql/engine/ob_physical_plan_ctx.cpp	1055	ObPhysicalPlanCtx::inner_get_subschema_id_by_type_info	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/sql/engine/ob_sql_memory_manager.cpp	632	ObSqlMemoryManager::try_fill_workarea_stat	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/sql/engine/ob_sql_memory_manager.cpp	664	ObSqlMemoryManager::new_and_fill_workarea_stat	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/sql/engine/ob_subschema_ctx.cpp	390	ObSubSchemaCtx::set_subschema	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/sql/engine/ob_subschema_ctx.cpp	395	ObSubSchemaCtx::set_subschema	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/sql/engine/ob_subschema_ctx.cpp	402	ObSubSchemaCtx::set_subschema	ret == OB_HASH_EXIST	if (OB_HASH_EXIST == ret) {
+src/sql/engine/ob_subschema_ctx.cpp	412	ObSubSchemaCtx::set_subschema	ret == OB_HASH_EXIST	if (OB_HASH_EXIST == ret) {
+src/sql/engine/ob_subschema_ctx.cpp	457	ObSubSchemaCtx::get_subschema_id_by_typedef	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/sql/engine/opt_statistics/ob_optimizer_stats_gathering_op.cpp	166	ObOptimizerStatsGatheringOp::inner_get_next_row	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/opt_statistics/ob_optimizer_stats_gathering_op.cpp	259	ObOptimizerStatsGatheringOp::get_tab_stat_by_key	ret != OB_HASH_NOT_EXIST	if (OB_UNLIKELY(OB_HASH_NOT_EXIST != ret)) {
+src/sql/engine/opt_statistics/ob_optimizer_stats_gathering_op.cpp	282	ObOptimizerStatsGatheringOp::get_col_stat_by_key	ret != OB_HASH_NOT_EXIST	if (OB_UNLIKELY(OB_HASH_NOT_EXIST != ret)) {
+src/sql/engine/opt_statistics/ob_optimizer_stats_gathering_op.cpp	401	ObOptimizerStatsGatheringOp::merge_tab_stat	ret != OB_HASH_NOT_EXIST	if (OB_UNLIKELY(OB_HASH_NOT_EXIST != ret)) {
+src/sql/engine/opt_statistics/ob_optimizer_stats_gathering_op.cpp	432	ObOptimizerStatsGatheringOp::merge_col_stat	ret != OB_HASH_NOT_EXIST	if (OB_UNLIKELY(OB_HASH_NOT_EXIST != ret)) {
+src/sql/engine/pdml/static/ob_pdml_op_batch_row_cache.cpp	41	ObPDMLOpRowIterator::get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/pdml/static/ob_pdml_op_batch_row_cache.cpp	168	ObPDMLOpBatchRowCache::add_row	ret != OB_EXCEED_MEM_LIMIT	if (OB_EXCEED_MEM_LIMIT != ret) {
+src/sql/engine/pdml/static/ob_pdml_op_batch_row_cache.cpp	170	ObPDMLOpBatchRowCache::add_row	ret (assigned in the comparison) == OB_HASH_NOT_EXIST	} else if (OB_UNLIKELY(OB_HASH_NOT_EXIST == (ret = pstore_map_.get_refactored(tablet_id, row_store)))) {
+src/sql/engine/pdml/static/ob_pdml_op_batch_row_cache.cpp	181	ObPDMLOpBatchRowCache::add_row	ret != OB_EXCEED_MEM_LIMIT	if (OB_EXCEED_MEM_LIMIT != ret) {
+src/sql/engine/pdml/static/ob_pdml_op_data_driver.cpp	132	ObPDMLOpDataDriver::get_next_row	ret == OB_ITER_END	if (with_barrier_ && (OB_ITER_END == ret || OB_SUCCESS == ret)) {
+src/sql/engine/pdml/static/ob_pdml_op_data_driver.cpp	143	ObPDMLOpDataDriver::get_next_row	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/pdml/static/ob_pdml_op_data_driver.cpp	174	ObPDMLOpDataDriver::fill_cache_unitl_cache_full_or_child_iter_end	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/pdml/static/ob_pdml_op_data_driver.cpp	184	ObPDMLOpDataDriver::fill_cache_unitl_cache_full_or_child_iter_end	ret == OB_EXCEED_MEM_LIMIT	if (!with_barrier_ && OB_EXCEED_MEM_LIMIT == ret) {
+src/sql/engine/pdml/static/ob_pdml_op_data_driver.cpp	202	ObPDMLOpDataDriver::fill_cache_unitl_cache_full_or_child_iter_end	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/pdml/static/ob_pdml_op_data_driver.cpp	315	ObPDMLOpDataDriver::next_row_from_cache_for_returning	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/pdml/static/ob_pdml_op_data_driver.cpp	326	ObPDMLOpDataDriver::next_row_from_cache_for_returning	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/pdml/static/ob_px_multi_part_delete_op.cpp	84	ObPxMultiPartDeleteOp::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/pdml/static/ob_px_multi_part_delete_op.cpp	95	ObPxMultiPartDeleteOp::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/pdml/static/ob_px_multi_part_delete_op.cpp	130	ObPxMultiPartDeleteOp::read_row	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/sql/engine/pdml/static/ob_px_multi_part_delete_op.cpp	179	ObPxMultiPartDeleteOp::write_rows	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/pdml/static/ob_px_multi_part_delete_op.cpp	190	ObPxMultiPartDeleteOp::write_rows	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/pdml/static/ob_px_multi_part_insert_op.cpp	59	ObPxMultiPartInsertOp::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/pdml/static/ob_px_multi_part_insert_op.cpp	70	ObPxMultiPartInsertOp::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/pdml/static/ob_px_multi_part_insert_op.cpp	107	ObPxMultiPartInsertOp::read_row	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/sql/engine/pdml/static/ob_px_multi_part_insert_op.cpp	157	ObPxMultiPartInsertOp::write_rows	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/pdml/static/ob_px_multi_part_insert_op.cpp	168	ObPxMultiPartInsertOp::write_rows	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/pdml/static/ob_px_multi_part_update_op.cpp	56	ObPxMultiPartUpdateOp::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/pdml/static/ob_px_multi_part_update_op.cpp	67	ObPxMultiPartUpdateOp::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/pdml/static/ob_px_multi_part_update_op.cpp	121	ObPxMultiPartUpdateOp::read_row	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/sql/engine/pdml/static/ob_px_multi_part_update_op.cpp	171	ObPxMultiPartUpdateOp::write_rows	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/pdml/static/ob_px_multi_part_update_op.cpp	182	ObPxMultiPartUpdateOp::write_rows	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/pdml/static/ob_px_sstable_insert_op.cpp	189	ObPxMultiPartSSTableInsertOp::get_next_row_from_child	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/pdml/static/ob_px_sstable_insert_op.cpp	394	ObPxMultiPartSSTableInsertOp::write_heap_slice_by_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/pdml/static/ob_px_sstable_insert_op.cpp	429	ObPxMultiPartSSTableInsertOp::get_or_create_heap_writer	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/sql/engine/pdml/static/ob_px_sstable_insert_op.cpp	476	ObPxMultiPartSSTableInsertOp::write_ordered_slice_by_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/prepare/ob_prepare_executor.cpp	65	ObPrepareExecutor::execute	ret == OB_EER_UNKNOWN_STMT_HANDLER	if (OB_EER_UNKNOWN_STMT_HANDLER == ret) {
+src/sql/engine/px/datahub/components/ob_dh_sample.cpp	477	ObDynamicSamplePieceMsgCtx::split_range	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/px/exchange/ob_px_dist_transmit_op.cpp	597	ObPxDistTransmitOp::add_row_for_piece_msg	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/px/exchange/ob_px_fifo_coord_op.cpp	109	ObPxFifoCoordOp::inner_get_next_batch	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/px/exchange/ob_px_fifo_coord_op.cpp	196	ObPxFifoCoordOp::fetch_rows	ret == OB_DTL_WAIT_EAGAIN	if (OB_DTL_WAIT_EAGAIN == ret) {
+src/sql/engine/px/exchange/ob_px_fifo_coord_op.cpp	198	ObPxFifoCoordOp::fetch_rows	ret != OB_ITER_END	} else if (OB_ITER_END != ret) {
+src/sql/engine/px/exchange/ob_px_fifo_coord_op.cpp	227	ObPxFifoCoordOp::fetch_rows	ret == OB_ITER_END	if (ret == OB_ITER_END && !iter_end_) {
+src/sql/engine/px/exchange/ob_px_fifo_coord_op.cpp	231	ObPxFifoCoordOp::fetch_rows	ret == OB_ERR_SIGNALED_IN_PARALLEL_QUERY_SERVER	if ((OB_ERR_SIGNALED_IN_PARALLEL_QUERY_SERVER == ret
+src/sql/engine/px/exchange/ob_px_fifo_coord_op.cpp	232	ObPxFifoCoordOp::fetch_rows	ret == OB_GOT_SIGNAL_ABORTING	|| OB_GOT_SIGNAL_ABORTING == ret)
+src/sql/engine/px/exchange/ob_px_ms_coord_op.cpp	365	ObPxMSCoordOp::inner_get_next_row	ret == OB_DTL_WAIT_EAGAIN	if (OB_DTL_WAIT_EAGAIN == ret) {
+src/sql/engine/px/exchange/ob_px_ms_coord_op.cpp	375	ObPxMSCoordOp::inner_get_next_row	ret != OB_ITER_END	} else if (OB_ITER_END != ret) {
+src/sql/engine/px/exchange/ob_px_ms_coord_op.cpp	404	ObPxMSCoordOp::inner_get_next_row	ret == OB_ITER_END	if (ret == OB_ITER_END) {
+src/sql/engine/px/exchange/ob_px_ms_coord_op.cpp	410	ObPxMSCoordOp::inner_get_next_row	ret == OB_ERR_SIGNALED_IN_PARALLEL_QUERY_SERVER	if ((OB_ERR_SIGNALED_IN_PARALLEL_QUERY_SERVER == ret
+src/sql/engine/px/exchange/ob_px_ms_coord_op.cpp	411	ObPxMSCoordOp::inner_get_next_row	ret == OB_GOT_SIGNAL_ABORTING	|| OB_GOT_SIGNAL_ABORTING == ret)
+src/sql/engine/px/exchange/ob_px_ms_coord_op.cpp	426	ObPxMSCoordOp::next_row	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/px/exchange/ob_px_ms_receive_op.cpp	210	ObPxMSReceiveOp::LocalOrderInput::get_row	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/sql/engine/px/exchange/ob_px_ms_receive_op.cpp	329	ObPxMSReceiveOp::GlobalOrderInput::get_one_row_from_channels	ret == OB_DTL_WAIT_EAGAIN	if (OB_DTL_WAIT_EAGAIN == ret) {
+src/sql/engine/px/exchange/ob_px_ms_receive_op.cpp	581	ObPxMSReceiveOp::inner_get_next_row	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/px/exchange/ob_px_ms_receive_op.cpp	634	ObPxMSReceiveOp::get_one_row_from_channels	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/px/exchange/ob_px_ms_receive_op.cpp	696	ObPxMSReceiveOp::get_all_rows_from_channels	ret == OB_DTL_WAIT_EAGAIN	if (OB_DTL_WAIT_EAGAIN == ret) {
+src/sql/engine/px/exchange/ob_px_ordered_coord_op.cpp	193	ObPxOrderedCoordOp::inner_get_next_row	ret == OB_DTL_WAIT_EAGAIN	if (OB_DTL_WAIT_EAGAIN == ret) {
+src/sql/engine/px/exchange/ob_px_ordered_coord_op.cpp	200	ObPxOrderedCoordOp::inner_get_next_row	ret != OB_ITER_END	} else if (OB_ITER_END != ret) {
+src/sql/engine/px/exchange/ob_px_ordered_coord_op.cpp	229	ObPxOrderedCoordOp::inner_get_next_row	ret == OB_ITER_END	if (ret == OB_ITER_END && !iter_end_) {
+src/sql/engine/px/exchange/ob_px_ordered_coord_op.cpp	233	ObPxOrderedCoordOp::inner_get_next_row	ret == OB_ERR_SIGNALED_IN_PARALLEL_QUERY_SERVER	if ((OB_ERR_SIGNALED_IN_PARALLEL_QUERY_SERVER == ret
+src/sql/engine/px/exchange/ob_px_ordered_coord_op.cpp	234	ObPxOrderedCoordOp::inner_get_next_row	ret == OB_GOT_SIGNAL_ABORTING	|| OB_GOT_SIGNAL_ABORTING == ret)
+src/sql/engine/px/exchange/ob_px_ordered_coord_op.cpp	249	ObPxOrderedCoordOp::next_row	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/px/exchange/ob_px_ordered_coord_op.cpp	332	ObPxOrderedCoordOp::inner_get_next_batch	ret == OB_DTL_WAIT_EAGAIN	if (OB_DTL_WAIT_EAGAIN == ret) {
+src/sql/engine/px/exchange/ob_px_ordered_coord_op.cpp	339	ObPxOrderedCoordOp::inner_get_next_batch	ret != OB_ITER_END	} else if (OB_ITER_END != ret) {
+src/sql/engine/px/exchange/ob_px_ordered_coord_op.cpp	368	ObPxOrderedCoordOp::inner_get_next_batch	ret == OB_ITER_END	if (ret == OB_ITER_END) {
+src/sql/engine/px/exchange/ob_px_ordered_coord_op.cpp	380	ObPxOrderedCoordOp::inner_get_next_batch	ret == OB_ERR_SIGNALED_IN_PARALLEL_QUERY_SERVER	if ((OB_ERR_SIGNALED_IN_PARALLEL_QUERY_SERVER == ret
+src/sql/engine/px/exchange/ob_px_ordered_coord_op.cpp	381	ObPxOrderedCoordOp::inner_get_next_batch	ret == OB_GOT_SIGNAL_ABORTING	|| OB_GOT_SIGNAL_ABORTING == ret)
+src/sql/engine/px/exchange/ob_px_ordered_coord_op.cpp	397	ObPxOrderedCoordOp::next_rows	ret == OB_ITER_END	if (OB_ITER_END == ret) {

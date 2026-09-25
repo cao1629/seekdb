@@ -1,0 +1,89 @@
+file	line	symbol	construct	text
+src/sql/resolver/ob_resolver_utils.cpp	1310	ObResolverUtils::pick_routine	ret == OB_ERR_SP_WRONG_ARG_NUM	ret = (OB_ERR_SP_WRONG_ARG_NUM == ret
+src/sql/resolver/ob_resolver_utils.cpp	1311	ObResolverUtils::pick_routine	ret == OB_ERR_SP_UNDECLARED_VAR	|| OB_ERR_SP_UNDECLARED_VAR == ret
+src/sql/resolver/ob_resolver_utils.cpp	1312	ObResolverUtils::pick_routine	ret == OB_ERR_EXPRESSION_WRONG_TYPE	|| OB_ERR_EXPRESSION_WRONG_TYPE == ret
+src/sql/resolver/ob_resolver_utils.cpp	1313	ObResolverUtils::pick_routine	ret == OB_ERR_INVALID_TYPE_FOR_OP	|| OB_ERR_INVALID_TYPE_FOR_OP == ret) ? OB_SUCCESS : ret;
+src/sql/resolver/ob_resolver_utils.cpp	2142	ObResolverUtils::resolve_const	ret == OB_INTEGER_PRECISION_OVERFLOW	if (OB_INTEGER_PRECISION_OVERFLOW == ret) {
+src/sql/resolver/ob_resolver_utils.cpp	2143	ObResolverUtils::resolve_const	ret == OB_NUMERIC_OVERFLOW	} else if (OB_NUMERIC_OVERFLOW == ret) {
+src/sql/resolver/ob_resolver_utils.cpp	2732	ObResolverUtils::check_part_value_result_type	ret == OB_DATA_OUT_OF_RANGE	if (ret == OB_DATA_OUT_OF_RANGE) {
+src/sql/resolver/ob_resolver_utils.cpp	3660	ObResolverUtils::resolve_generated_column_expr	ret == OB_ERR_ONLY_PURE_FUNC_CANBE_VIRTUAL_COLUMN_EXPRESSION	if (OB_ERR_ONLY_PURE_FUNC_CANBE_VIRTUAL_COLUMN_EXPRESSION == ret
+src/sql/resolver/ob_resolver_utils.cpp	5839	ObResolverUtils::uv_mysql_insertable_join	tmp_ret == OB_ERR_NON_INSERTABLE_TABLE	if (tmp_ret == OB_ERR_NON_INSERTABLE_TABLE) {
+src/sql/resolver/ob_resolver_utils.cpp	5982	ObResolverUtils::get_user_var_value	ret == OB_ERR_USER_VARIABLE_UNKNOWN	} else if (OB_ERR_USER_VARIABLE_UNKNOWN == ret) {
+src/sql/resolver/ob_resolver_utils.cpp	6113	ObResolverUtils::check_secure_path	ret == OB_ERR_NO_PRIVILEGE	if (OB_ERR_NO_PRIVILEGE == ret) {
+src/sql/resolver/ob_resolver_utils.cpp	6116	ObResolverUtils::check_secure_path	ret == OB_ERR_NO_PRIVILEGE	for (int i = 0; OB_ERR_NO_PRIVILEGE == ret && i < list_size; i++) {
+src/sql/resolver/ob_resolver_utils.cpp	6167	ObResolverUtils::check_secure_path	ret == OB_ERR_NO_PRIVILEGE	if (OB_ERR_NO_PRIVILEGE == ret) {
+src/sql/resolver/ob_resolver_utils.h	37	#define LOG_WARN_IGNORE_COL_NOTFOUND	ret == OB_ERR_BAD_FIELD_ERROR	if (common::OB_ERR_BAD_FIELD_ERROR == ret) {\
+src/sql/resolver/ob_stmt_resolver.cpp	85	ObStmtResolver::resolve_table_relation_node_v2	tmp_ret == OB_ERR_TOO_LONG_IDENT	if (OB_SUCCESS == tmp_ret || OB_ERR_TOO_LONG_IDENT == tmp_ret
+src/sql/resolver/ob_stmt_resolver.cpp	87	ObStmtResolver::resolve_table_relation_node_v2	tmp_ret == OB_WRONG_TABLE_NAME	OB_WRONG_TABLE_NAME == tmp_ret)) {
+src/sql/resolver/ob_stmt_resolver.cpp	110	ObStmtResolver::resolve_table_relation_node_v2	tmp_ret == OB_ERR_TOO_LONG_IDENT; tmp_ret == OB_WRONG_TABLE_NAME	if (OB_SUCCESS == ret && (OB_ERR_TOO_LONG_IDENT == tmp_ret || OB_WRONG_TABLE_NAME == tmp_ret)) {
+src/sql/resolver/ob_stmt_resolver.cpp	122	ObStmtResolver::resolve_table_relation_node_v2	tmp_ret == OB_ERR_TOO_LONG_IDENT	} else if (OB_ERR_TOO_LONG_IDENT == tmp_ret) {
+src/sql/rewrite/ob_equal_analysis.cpp	60	ObEqualAnalysis::get_expr_idx	ret != OB_HASH_NOT_EXIST	} else if (OB_HASH_NOT_EXIST != ret) {
+src/sql/rewrite/ob_expr_range_converter.cpp	1670	ObExprRangeConverter::is_range_key	ret == OB_HASH_NOT_EXIST	} else if (OB_HASH_NOT_EXIST == ret) {
+src/sql/rewrite/ob_expr_range_converter.cpp	2038	ObExprRangeConverter::get_geo_range_node	ret == OB_NOT_INIT; ret == OB_HASH_NOT_EXIST	if (OB_NOT_INIT == ret || OB_HASH_NOT_EXIST == ret) {
+src/sql/rewrite/ob_key_part.cpp	247	ObKeyPart::collect_same_val_idxs	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/sql/rewrite/ob_key_part.cpp	253	ObKeyPart::collect_same_val_idxs	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/sql/rewrite/ob_key_part.cpp	453	ObInKeyPart::remove_in_dup_vals	ret (assigned in the comparison) == OB_HASH_EXIST	} else if (OB_HASH_EXIST == (ret = distinct_param_val_set.set_refactored(cur_param_vals, 0))) {
+src/sql/rewrite/ob_query_range_define.cpp	1328	ObPreRangeGraph::recursive_generate_range_node_expr	ret == OB_HASH_NOT_EXIST	if (OB_LIKELY(OB_HASH_NOT_EXIST == ret)) {
+src/sql/rewrite/ob_query_range_define.cpp	1755	ObPreRangeGraph::is_precise_like_range	ret == OB_EMPTY_RANGE	if (OB_EMPTY_RANGE == ret) {
+src/sql/rewrite/ob_range_generator.cpp	1277	ObRangeGenerator::merge_and_remove_ranges	ret (assigned in the comparison) == OB_HASH_EXIST	if (OB_HASH_EXIST == (ret = range_set.set_refactored(range_wrapper, 0))) {
+src/sql/rewrite/ob_range_generator.cpp	1648	ObRangeGenerator::get_intersects_tmp_geo_param	ret == OB_INVALID_ARGUMENT	if (ret == OB_INVALID_ARGUMENT) {
+src/sql/rewrite/ob_range_generator.cpp	1650	ObRangeGenerator::get_intersects_tmp_geo_param	ret == OB_ERR_GIS_INVALID_DATA	} else if (ret == OB_ERR_GIS_INVALID_DATA) {
+src/sql/rewrite/ob_range_generator.cpp	1774	ObRangeGenerator::get_coveredby_tmp_geo_param	other variable hash_ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == hash_ret) {
+src/sql/rewrite/ob_range_generator.cpp	1784	ObRangeGenerator::get_coveredby_tmp_geo_param	other variable hash_ret == OB_HASH_NOT_EXIST	if (hash_ret == OB_HASH_NOT_EXIST) {
+src/sql/rewrite/ob_range_generator.cpp	1787	ObRangeGenerator::get_coveredby_tmp_geo_param	other variable hash_ret != OB_HASH_EXIST	} else if (OB_HASH_EXIST != hash_ret) {
+src/sql/rewrite/ob_range_generator.cpp	1791	ObRangeGenerator::get_coveredby_tmp_geo_param	other variable hash_ret != OB_HASH_EXIST	} else if (OB_HASH_EXIST != hash_ret) {
+src/sql/rewrite/ob_range_graph_generator.cpp	66	ObRangeGraphGenerator::generate_range_graph	ret == OB_ERR_QUERY_RANGE_MEMORY_EXHAUSTED	if (OB_FAIL(ret) && OB_ERR_QUERY_RANGE_MEMORY_EXHAUSTED == ret) {
+src/sql/rewrite/ob_range_graph_generator.cpp	1309	ObRangeGraphGenerator::crop_final_range_node	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/sql/rewrite/ob_range_graph_generator.cpp	1353	ObRangeGraphGenerator::crop_final_range_node	ret (assigned in the comparison) == OB_HASH_EXIST	if (OB_HASH_EXIST == (ret = shared_ranges.exist_refactored(reinterpret_cast<uint64_t>(cur_node)))) {
+src/sql/rewrite/ob_range_graph_generator.cpp	1357	ObRangeGraphGenerator::crop_final_range_node	ret == OB_HASH_NOT_EXIST	} else if (OB_HASH_NOT_EXIST == ret) {
+src/sql/rewrite/ob_transform_const_propagate.cpp	1339	ObTransformConstPropagate::check_cast_const_expr	ret == OB_ERR_INVALID_TYPE_FOR_OP	if (OB_ERR_INVALID_TYPE_FOR_OP == ret) {  // rewrite should not happened instead of failed a error
+src/sql/rewrite/ob_transform_const_propagate.cpp	1365	ObTransformConstPropagate::check_cast_const_expr	ret == OB_ERR_INVALID_DATATYPE	if (OB_ERR_INVALID_DATATYPE == ret) {  // rewrite should not happened instead of failed a error
+src/sql/rewrite/ob_transform_const_propagate.cpp	2250	ObTransformConstPropagate::acquire_pullup_infos	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/sql/rewrite/ob_transform_const_propagate.cpp	2287	ObTransformConstPropagate::collect_from_pullup_const_infos	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/sql/rewrite/ob_transform_expr_pullup.cpp	261	ObExprNodeMap::add_expr_map	ret == OB_HASH_NOT_EXIST	if (OB_SUCCESS == ret || OB_HASH_NOT_EXIST == ret) {
+src/sql/rewrite/ob_transform_expr_pullup.cpp	306	ObExprNodeMap::get_ref_count	ret == OB_HASH_NOT_EXIST	} else if (OB_HASH_NOT_EXIST == ret) {
+src/sql/rewrite/ob_transform_or_expansion.cpp	2802	ObTransformOrExpansion::merge_expr_class	ret == OB_SIZE_OVERFLOW	if (OB_SIZE_OVERFLOW == ret) {
+src/sql/rewrite/ob_transform_pre_process.cpp	485	ObTransformPreProcess::add_exec_params	ret == OB_HASH_EXIST	if (OB_HASH_EXIST == ret) {
+src/sql/rewrite/ob_transform_pre_process.cpp	506	ObTransformPreProcess::has_new_exec_param	tmp_ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == tmp_ret) {
+src/sql/rewrite/ob_transform_pre_process.cpp	508	ObTransformPreProcess::has_new_exec_param	tmp_ret != OB_HASH_EXIST	} else if (OB_UNLIKELY(OB_HASH_EXIST != tmp_ret)) {
+src/sql/rewrite/ob_transform_pre_process.cpp	3337	ObTransformPreProcess::do_remove_shared_expr	call result expr_set.exist_refactored(key) == OB_HASH_EXIST	OB_HASH_EXIST == expr_set.exist_refactored(key) &&
+src/sql/rewrite/ob_transform_predicate_move_around.cpp	3025	ObTransformPredicateMoveAround::acquire_transform_params	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/sql/rewrite/ob_transform_simplify_expr.cpp	2399	ObTransformSimplifyExpr::do_push_not	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/sql/rewrite/ob_transform_temp_table.cpp	561	ObTransformTempTable::check_has_stmt	ret == OB_HASH_NOT_EXIST	if (ret == OB_HASH_NOT_EXIST) {
+src/sql/rewrite/ob_transform_temp_table.cpp	919	ObTransformTempTable::get_non_correlated_subquery	ret == OB_HASH_EXIST	if (ret == OB_HASH_EXIST) {
+src/sql/rewrite/ob_transform_temp_table.cpp	939	ObTransformTempTable::get_non_correlated_subquery	ret == OB_HASH_EXIST	if (ret == OB_HASH_EXIST) {
+src/sql/rewrite/ob_transform_utils.cpp	6229	ObTransformUtils::append_hashset	call result expr_set.exist_refactored(key) == OB_HASH_EXIST	} else if (OB_HASH_EXIST == expr_set.exist_refactored(key)) {
+src/sql/rewrite/ob_transform_utils.cpp	6255	ObTransformUtils::find_hashset	call result expr_set.exist_refactored(key) == OB_HASH_EXIST	} else if (OB_HASH_EXIST == expr_set.exist_refactored(key)) {
+src/sql/rewrite/ob_transform_utils.cpp	7893	ObSharedExprExtractor::do_visit	tmp_ret == OB_HASH_EXIST	if (tmp_ret == OB_HASH_EXIST) {
+src/sql/rewrite/ob_transform_utils.cpp	7896	ObSharedExprExtractor::do_visit	ret == OB_HASH_EXIST	if (OB_HASH_EXIST == ret) {
+src/sql/rewrite/ob_transform_utils.cpp	7903	ObSharedExprExtractor::do_visit	tmp_ret == OB_HASH_NOT_EXIST	} else if (tmp_ret == OB_HASH_NOT_EXIST) { // OB_HASH_NOT_EXISTS
+src/sql/rewrite/ob_transform_utils.cpp	9999	erase_calculable_expr_result	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/sql/rewrite/ob_transform_utils.cpp	11343	ObTransformUtils::get_stmt_map_after_copy	ret == OB_HASH_NOT_EXIST	if (ret == OB_HASH_NOT_EXIST) {
+src/sql/rewrite/ob_transform_utils.cpp	14024	ObTransformUtils::get_parent_stmt	ret == OB_HASH_NOT_EXIST	if (ret == OB_HASH_NOT_EXIST) {
+src/sql/rewrite/ob_transformer_impl.cpp	898	ObTransformerImpl::verify_all_expr_types	tmp_ret == OB_ERR_UNEXPECTED	bool report_error = check_expr_type && (OB_ERR_UNEXPECTED == tmp_ret);
+src/sql/session/ob_basic_session_info.cpp	911	ObBasicSessionInfo::update_query_sensitive_system_variable	ret == OB_RUNTIME_SCHEMA_NOT_READY	if (OB_RUNTIME_SCHEMA_NOT_READY == ret) {
+src/sql/session/ob_basic_session_info.cpp	924	ObBasicSessionInfo::update_query_sensitive_system_variable	ret == OB_ERR_SYS_VARIABLE_UNKNOWN	if (OB_ERR_SYS_VARIABLE_UNKNOWN == ret) {
+src/sql/session/ob_basic_session_info.cpp	1440	ObBasicSessionInfo::gen_sys_var_in_pc_str	ret == OB_BUF_NOT_ENOUGH; ret == OB_SIZE_OVERFLOW	if (OB_BUF_NOT_ENOUGH == ret || OB_SIZE_OVERFLOW ==ret) {
+src/sql/session/ob_basic_session_info.cpp	1448	ObBasicSessionInfo::gen_sys_var_in_pc_str	ret == OB_BUF_NOT_ENOUGH; ret == OB_SIZE_OVERFLOW	if (i != 2 && (OB_BUF_NOT_ENOUGH == ret || OB_SIZE_OVERFLOW ==ret)) {
+src/sql/session/ob_basic_session_info.cpp	3337	OB_DEF_SERIALIZE(ObBasicSessionInfo)	ret != OB_HASH_NOT_EXIST	if (OB_SUCCESS != ret && OB_HASH_NOT_EXIST != ret) {
+src/sql/session/ob_basic_session_info.cpp	3772	OB_DEF_SERIALIZE_SIZE(ObBasicSessionInfo)	ret != OB_HASH_NOT_EXIST	if (OB_SUCCESS != ret && OB_HASH_NOT_EXIST != ret) {
+src/sql/session/ob_basic_session_info.cpp	4752	ObBasicSessionInfo::set_time_zone	ret != OB_ERR_UNKNOWN_TIME_ZONE	if (ret != OB_ERR_UNKNOWN_TIME_ZONE) {
+src/sql/session/ob_basic_session_info.cpp	4758	ObBasicSessionInfo::set_time_zone	ret == OB_ERR_UNKNOWN_TIME_ZONE	if (OB_ERR_UNKNOWN_TIME_ZONE == ret) {
+src/sql/session/ob_basic_session_info.cpp	4784	ObBasicSessionInfo::set_time_zone	ret == OB_ERR_UNKNOWN_TIME_ZONE	if (OB_ERR_UNKNOWN_TIME_ZONE == ret) {
+src/sql/session/ob_basic_session_info.cpp	4791	ObBasicSessionInfo::set_time_zone	ret != OB_ERR_UNKNOWN_TIME_ZONE	if (ret != OB_ERR_UNKNOWN_TIME_ZONE) {
+src/sql/session/ob_piece_cache.cpp	188	ObPieceCache::get_piece	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/sql/session/ob_sql_session_info.cpp	777	ObSQLSessionInfo::get_prepare_id	ret == OB_HASH_NOT_EXIST	if (ret == OB_HASH_NOT_EXIST) {
+src/sql/session/ob_sql_session_info.cpp	791	ObSQLSessionInfo::add_prepare	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/sql/session/ob_sql_session_info.cpp	814	ObSQLSessionInfo::get_ps_session_info	ret == OB_HASH_NOT_EXIST	if (ret == OB_HASH_NOT_EXIST) {
+src/sql/session/ob_sql_session_info.cpp	847	ObSQLSessionInfo::check_ps_stmt_id_in_use	call result in_use_ps_stmt_id_set_.exist_refactored(stmt_id) == OB_HASH_EXIST	} else if (!in_use_ps_stmt_id_set_.empty() && OB_HASH_EXIST == in_use_ps_stmt_id_set_.exist_refactored(stmt_id)) {
+src/sql/session/ob_sql_session_info.cpp	903	ObSQLSessionInfo::prepare_ps_stmt	ret == OB_HASH_NOT_EXIST	} else if (OB_HASH_NOT_EXIST == ret) {
+src/sql/session/ob_sql_session_info.cpp	1526	ObSQLSessionInfo::ObCachedRuntimeConfig::refresh	ret == OB_ERR_UNEXPECTED	if (ret == OB_ERR_UNEXPECTED) {
+src/sql/session/ob_sql_session_info.h	518	ObSQLSessionInfo::visit_ps_session_info	ret == OB_HASH_NOT_EXIST	if (ret == OB_HASH_NOT_EXIST) {
+src/sql/session/ob_sql_session_info.h	533	ObSQLSessionInfo::update_ps_session_info_safety	ret == OB_HASH_NOT_EXIST	if (ret == OB_HASH_NOT_EXIST) {
+src/sql/session/ob_sql_session_mgr.cpp	249	ObSQLSessionMgr::create_sessid	other variable probe_ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == probe_ret) {
+src/sql/session/ob_sql_session_mgr.cpp	252	ObSQLSessionMgr::create_sessid	other variable probe_ret == OB_HASH_EXIST	} else if (OB_HASH_EXIST == probe_ret) {
+src/sql/session/ob_sql_session_mgr.cpp	289	ObSQLSessionMgr::create_session	ret == OB_ENTRY_EXIST	if (OB_ENTRY_EXIST == ret) {
+src/sql/session/ob_sql_session_mgr.cpp	511	ObSQLSessionMgr::CheckSessionFunctor::operator()	ret != OB_EAGAIN	if (OB_UNLIKELY(OB_EAGAIN != ret)) {
+src/sql/session/ob_sql_session_mgr.cpp	517	ObSQLSessionMgr::CheckSessionFunctor::operator()	ret != OB_EAGAIN	if (OB_UNLIKELY(OB_EAGAIN != ret)) {
+src/sql/session/ob_sql_session_mgr.cpp	557	ObSQLSessionMgr::CheckSessionFunctor::operator()	tmp_ret == OB_ERROR	int64_t timeout_multiplier = OB_ERROR == tmp_ret ? 2 : std::max(static_cast<int64_t>(1), std::abs(tmp_ret));
+src/sql/session/ob_sql_session_mgr.cpp	802	is_session_alive	ret == OB_ENTRY_NOT_EXIST	if (common::OB_ENTRY_NOT_EXIST == ret) {

@@ -1,0 +1,72 @@
+file	line	symbol	construct	text
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	515	ObRawDecoder::pushdown_operator	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	517	ObRawDecoder::pushdown_operator	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	520	ObRawDecoder::pushdown_operator	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	524	ObRawDecoder::pushdown_operator	sql:: use: ObWhiteFilterOperatorType	const sql::ObWhiteFilterOperatorType op_type = filter.get_op_type();
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	532	ObRawDecoder::pushdown_operator	sql:: use: WHITE_OP_MAX	} else if (OB_UNLIKELY(op_type >= sql::WHITE_OP_MAX)){
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	539	ObRawDecoder::pushdown_operator	sql:: use: WHITE_OP_NU	case sql::WHITE_OP_NU: {
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	542	ObRawDecoder::pushdown_operator	sql:: use: WHITE_OP_NN	case sql::WHITE_OP_NN: {
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	547	ObRawDecoder::pushdown_operator	sql:: use: WHITE_OP_EQ	case sql::WHITE_OP_EQ:
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	548	ObRawDecoder::pushdown_operator	sql:: use: WHITE_OP_NE	case sql::WHITE_OP_NE:
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	549	ObRawDecoder::pushdown_operator	sql:: use: WHITE_OP_GT	case sql::WHITE_OP_GT:
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	550	ObRawDecoder::pushdown_operator	sql:: use: WHITE_OP_GE	case sql::WHITE_OP_GE:
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	551	ObRawDecoder::pushdown_operator	sql:: use: WHITE_OP_LT	case sql::WHITE_OP_LT:
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	552	ObRawDecoder::pushdown_operator	sql:: use: WHITE_OP_LE	case sql::WHITE_OP_LE: {
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	570	ObRawDecoder::pushdown_operator	sql:: use: WHITE_OP_IN	case sql::WHITE_OP_IN: {
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	576	ObRawDecoder::pushdown_operator	sql:: use: WHITE_OP_BT	case sql::WHITE_OP_BT: {
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	592	ObRawDecoder::check_fast_filter_valid	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	674	ObRawDecoder::get_is_null_bitmap	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	696	ObRawDecoder::comparison_operator	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	700	ObRawDecoder::comparison_operator	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	701	ObRawDecoder::comparison_operator	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	725	ObRawDecoder::fast_binary_comparison_operator	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	728	ObRawDecoder::fast_binary_comparison_operator	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	747	ObRawDecoder::fast_binary_comparison_operator	sql:: use: ObWhiteFilterOperatorType	const sql::ObWhiteFilterOperatorType &op_type = filter.get_op_type();
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	751	ObRawDecoder::fast_binary_comparison_operator	sql:: use: WHITE_OP_EQ	if (sql::WHITE_OP_EQ == op_type) {
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	753	ObRawDecoder::fast_binary_comparison_operator	sql:: use: WHITE_OP_NE	} else if (sql::WHITE_OP_NE == op_type) {
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	761	ObRawDecoder::fast_binary_comparison_operator	sql:: use: WHITE_OP_GT, WHITE_OP_GE	if (sql::WHITE_OP_GT == op_type || sql::WHITE_OP_GE == op_type) {
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	767	ObRawDecoder::fast_binary_comparison_operator	sql:: use: WHITE_OP_LT, WHITE_OP_LE	if (sql::WHITE_OP_LT == op_type || sql::WHITE_OP_LE == op_type) {
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	775	ObRawDecoder::fast_binary_comparison_operator	sql:: use: WHITE_OP_LT, WHITE_OP_LE	if (sql::WHITE_OP_LT == op_type || sql::WHITE_OP_LE == op_type
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	776	ObRawDecoder::fast_binary_comparison_operator	sql:: use: WHITE_OP_NE	|| sql::WHITE_OP_NE == op_type) {
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	800	ObRawDecoder::fast_datum_comparison_operator	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	801	ObRawDecoder::fast_datum_comparison_operator	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	852	ObRawDecoder::bt_operator	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	856	ObRawDecoder::bt_operator	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	857	ObRawDecoder::bt_operator	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	876	ObRawDecoder::in_operator	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	880	ObRawDecoder::in_operator	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	881	ObRawDecoder::in_operator	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	903	ObRawDecoder::traverse_all_data	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	906	ObRawDecoder::traverse_all_data	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	907	ObRawDecoder::traverse_all_data	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	1005	ObRawDecoder::ObRawDecoderFilterCmpFunc::operator()	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	1019	ObRawDecoder::ObRawDecoderFilterBetweenFunc::operator()	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	1039	ObRawDecoder::ObRawDecoderFilterInFunc::operator()	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	1134	RawCompareFunctionProducer::produce	sql:: use: ObWhiteFilterOperatorType	const sql::ObWhiteFilterOperatorType op_type)
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	1140	RawCompareFunctionProducer::produce	sql:: use: ObWhiteFilterOperatorType	case sql::ObWhiteFilterOperatorType::WHITE_OP_EQ:
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	1151	RawCompareFunctionProducer::produce	sql:: use: ObWhiteFilterOperatorType	case sql::ObWhiteFilterOperatorType::WHITE_OP_LE:
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	1163	RawCompareFunctionProducer::produce	sql:: use: ObWhiteFilterOperatorType	case sql::ObWhiteFilterOperatorType::WHITE_OP_LT:
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	1174	RawCompareFunctionProducer::produce	sql:: use: ObWhiteFilterOperatorType	case sql::ObWhiteFilterOperatorType::WHITE_OP_GE:
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	1185	RawCompareFunctionProducer::produce	sql:: use: ObWhiteFilterOperatorType	case sql::ObWhiteFilterOperatorType::WHITE_OP_GT:
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	1196	RawCompareFunctionProducer::produce	sql:: use: ObWhiteFilterOperatorType	case sql::ObWhiteFilterOperatorType::WHITE_OP_NE:
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	1215	RawCompareFunctionProducer::produce_with_null	sql:: use: ObWhiteFilterOperatorType	const sql::ObWhiteFilterOperatorType op_type)
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	1221	RawCompareFunctionProducer::produce_with_null	sql:: use: ObWhiteFilterOperatorType	case sql::ObWhiteFilterOperatorType::WHITE_OP_EQ:
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	1232	RawCompareFunctionProducer::produce_with_null	sql:: use: ObWhiteFilterOperatorType	case sql::ObWhiteFilterOperatorType::WHITE_OP_LE:
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	1243	RawCompareFunctionProducer::produce_with_null	sql:: use: ObWhiteFilterOperatorType	case sql::ObWhiteFilterOperatorType::WHITE_OP_LT:
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	1254	RawCompareFunctionProducer::produce_with_null	sql:: use: ObWhiteFilterOperatorType	case sql::ObWhiteFilterOperatorType::WHITE_OP_GE:
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	1265	RawCompareFunctionProducer::produce_with_null	sql:: use: ObWhiteFilterOperatorType	case sql::ObWhiteFilterOperatorType::WHITE_OP_GT:
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	1276	RawCompareFunctionProducer::produce_with_null	sql:: use: ObWhiteFilterOperatorType	case sql::ObWhiteFilterOperatorType::WHITE_OP_NE:
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	1299	RawCompareFunctionFactory::RawCompareFunctionFactory	sql:: use: ObWhiteFilterOperatorType	RawCompareFunctionProducer<0, 0>::produce(static_cast<sql::ObWhiteFilterOperatorType>(k));
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	1301	RawCompareFunctionFactory::RawCompareFunctionFactory	sql:: use: ObWhiteFilterOperatorType	RawCompareFunctionProducer<0, 1>::produce(static_cast<sql::ObWhiteFilterOperatorType>(k));
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	1303	RawCompareFunctionFactory::RawCompareFunctionFactory	sql:: use: ObWhiteFilterOperatorType	RawCompareFunctionProducer<0, 2>::produce(static_cast<sql::ObWhiteFilterOperatorType>(k));
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	1305	RawCompareFunctionFactory::RawCompareFunctionFactory	sql:: use: ObWhiteFilterOperatorType	RawCompareFunctionProducer<0, 3>::produce(static_cast<sql::ObWhiteFilterOperatorType>(k));
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	1307	RawCompareFunctionFactory::RawCompareFunctionFactory	sql:: use: ObWhiteFilterOperatorType	RawCompareFunctionProducer<1, 0>::produce(static_cast<sql::ObWhiteFilterOperatorType>(k));
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	1309	RawCompareFunctionFactory::RawCompareFunctionFactory	sql:: use: ObWhiteFilterOperatorType	RawCompareFunctionProducer<1, 1>::produce(static_cast<sql::ObWhiteFilterOperatorType>(k));
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	1311	RawCompareFunctionFactory::RawCompareFunctionFactory	sql:: use: ObWhiteFilterOperatorType	RawCompareFunctionProducer<1, 2>::produce(static_cast<sql::ObWhiteFilterOperatorType>(k));
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	1313	RawCompareFunctionFactory::RawCompareFunctionFactory	sql:: use: ObWhiteFilterOperatorType	RawCompareFunctionProducer<1, 3>::produce(static_cast<sql::ObWhiteFilterOperatorType>(k));
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	1318	RawCompareFunctionFactory::RawCompareFunctionFactory	sql:: use: ObWhiteFilterOperatorType	static_cast<sql::ObWhiteFilterOperatorType>(k));
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	1320	RawCompareFunctionFactory::RawCompareFunctionFactory	sql:: use: ObWhiteFilterOperatorType	static_cast<sql::ObWhiteFilterOperatorType>(k));
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	1322	RawCompareFunctionFactory::RawCompareFunctionFactory	sql:: use: ObWhiteFilterOperatorType	static_cast<sql::ObWhiteFilterOperatorType>(k));
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	1324	RawCompareFunctionFactory::RawCompareFunctionFactory	sql:: use: ObWhiteFilterOperatorType	static_cast<sql::ObWhiteFilterOperatorType>(k));
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	1337	RawCompareFunctionFactory::get_cmp_function	sql:: use: ObWhiteFilterOperatorType	const sql::ObWhiteFilterOperatorType op_type)
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	1350	RawCompareFunctionFactory::get_cmp_function_with_null	sql:: use: ObWhiteFilterOperatorType	const sql::ObWhiteFilterOperatorType op_type)

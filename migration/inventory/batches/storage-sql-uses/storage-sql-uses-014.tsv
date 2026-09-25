@@ -1,0 +1,81 @@
+file	line	symbol	construct	text
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.h	54	ObSkipIndexFilterExecutor	sql:: use: ObPhysicalFilterExecutor	sql::ObPhysicalFilterExecutor &filter,
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.h	62	ObSkipIndexFilterExecutor	sql:: use: ObWhiteFilterExecutor	sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.h	82	ObSkipIndexFilterExecutor	sql:: use: ObWhiteFilterExecutor	int eq_operator(const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.h	87	ObSkipIndexFilterExecutor	sql:: use: ObBoolMask	sql::ObBoolMask &fal_desc);
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.h	89	ObSkipIndexFilterExecutor	sql:: use: ObWhiteFilterExecutor	int ne_operator(const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.h	94	ObSkipIndexFilterExecutor	sql:: use: ObBoolMask	sql::ObBoolMask &fal_desc);
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.h	95	ObSkipIndexFilterExecutor	sql:: use: ObWhiteFilterExecutor	int gt_operator(const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.h	100	ObSkipIndexFilterExecutor	sql:: use: ObBoolMask	sql::ObBoolMask &fal_desc);
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.h	102	ObSkipIndexFilterExecutor	sql:: use: ObWhiteFilterExecutor	int ge_operator(const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.h	107	ObSkipIndexFilterExecutor	sql:: use: ObBoolMask	sql::ObBoolMask &fal_desc);
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.h	109	ObSkipIndexFilterExecutor	sql:: use: ObWhiteFilterExecutor	int lt_operator(const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.h	114	ObSkipIndexFilterExecutor	sql:: use: ObBoolMask	sql::ObBoolMask &fal_desc);
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.h	116	ObSkipIndexFilterExecutor	sql:: use: ObWhiteFilterExecutor	int le_operator(const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.h	121	ObSkipIndexFilterExecutor	sql:: use: ObBoolMask	sql::ObBoolMask &fal_desc);
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.h	123	ObSkipIndexFilterExecutor	sql:: use: ObWhiteFilterExecutor	int bt_operator(const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.h	128	ObSkipIndexFilterExecutor	sql:: use: ObBoolMask	sql::ObBoolMask &fal_desc);
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.h	130	ObSkipIndexFilterExecutor	sql:: use: ObWhiteFilterExecutor	int in_operator(const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.h	135	ObSkipIndexFilterExecutor	sql:: use: ObBoolMask	sql::ObBoolMask &fal_desc);
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.h	140	ObSkipIndexFilterExecutor	sql:: use: ObBlackFilterExecutor	sql::ObBlackFilterExecutor &filter,
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.h	146	ObSkipIndexFilterExecutor	sql:: use: ObBitVector	sql::ObBitVector *skip_bit_;      // to be compatible with the black filter filter() method
+src/storage/blocksstable/ob_imicro_block_reader.cpp	148	ObIMicroBlockReader::validate_filter_info	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/ob_imicro_block_reader.cpp	149	ObIMicroBlockReader::validate_filter_info	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor &filter,
+src/storage/blocksstable/ob_imicro_block_reader.h	34	-	opens namespace sql (lines 34-39): storage declares SQL types here	namespace sql
+src/storage/blocksstable/ob_imicro_block_reader.h	36	-	unqualified SQL name inside namespace sql: PushdownFilterInfo	struct PushdownFilterInfo;
+src/storage/blocksstable/ob_imicro_block_reader.h	37	-	unqualified SQL name inside namespace sql: ObPushdownFilterExecutor	class ObPushdownFilterExecutor;
+src/storage/blocksstable/ob_imicro_block_reader.h	38	-	unqualified SQL name inside namespace sql: ObWhiteFilterExecutor	class ObWhiteFilterExecutor;
+src/storage/blocksstable/ob_imicro_block_reader.h	441	ObIMicroBlockReader	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/ob_imicro_block_reader.h	468	ObIMicroBlockReader	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/ob_imicro_block_reader.h	469	ObIMicroBlockReader	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor &filter,
+src/storage/blocksstable/ob_micro_block_reader.cpp	654	ObMicroBlockReader::filter_pushdown_filter	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/ob_micro_block_reader.cpp	655	ObMicroBlockReader::filter_pushdown_filter	sql:: use: ObPushdownFilterExecutor	sql::ObPushdownFilterExecutor &filter,
+src/storage/blocksstable/ob_micro_block_reader.cpp	656	ObMicroBlockReader::filter_pushdown_filter	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/ob_micro_block_reader.cpp	676	ObMicroBlockReader::filter_pushdown_filter	sql:: use: ColumnParamFixedArray	const sql::ColumnParamFixedArray &col_params = filter.get_col_params();
+src/storage/blocksstable/ob_micro_block_reader.cpp	729	ObMicroBlockReader::filter_pushdown_filter	sql:: use: ObPhysicalFilterExecutor	sql::ObPhysicalFilterExecutor &physical_filter = static_cast<sql::ObPhysicalFilterExecutor &>(filter);
+src/storage/blocksstable/ob_micro_block_reader.cpp	737	ObMicroBlockReader::filter_pushdown_filter	sql:: use: ObWhiteFilterExecutor	sql::ObWhiteFilterExecutor &white_filter = static_cast<sql::ObWhiteFilterExecutor &>(filter);
+src/storage/blocksstable/ob_micro_block_reader.cpp	836	ObMicroBlockReader::get_rows	sql:: use: ObExprPtrIArray	sql::ObExprPtrIArray &exprs,
+src/storage/blocksstable/ob_micro_block_reader.cpp	837	ObMicroBlockReader::get_rows	sql:: use: ObEvalCtx	sql::ObEvalCtx &eval_ctx)
+src/storage/blocksstable/ob_micro_block_reader.h	99	ObMicroBlockReader	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/ob_micro_block_reader.h	100	ObMicroBlockReader	sql:: use: ObPushdownFilterExecutor	sql::ObPushdownFilterExecutor &filter,
+src/storage/blocksstable/ob_micro_block_reader.h	101	ObMicroBlockReader	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/ob_micro_block_reader.h	119	ObMicroBlockReader	sql:: use: ObExprPtrIArray	sql::ObExprPtrIArray &exprs,
+src/storage/blocksstable/ob_micro_block_reader.h	120	ObMicroBlockReader	sql:: use: ObEvalCtx	sql::ObEvalCtx &eval_ctx);
+src/storage/blocksstable/ob_micro_block_row_scanner.cpp	460	ObIMicroBlockRowScanner::apply_black_filter_batch	sql:: use: ObPushdownFilterExecutor	sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/ob_micro_block_row_scanner.cpp	461	ObIMicroBlockRowScanner::apply_black_filter_batch	sql:: use: ObBlackFilterExecutor	sql::ObBlackFilterExecutor &filter,
+src/storage/blocksstable/ob_micro_block_row_scanner.cpp	462	ObIMicroBlockRowScanner::apply_black_filter_batch	sql:: use: PushdownFilterInfo	sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/ob_micro_block_row_scanner.cpp	529	ObIMicroBlockRowScanner::get_rows_for_old_format	sql:: use: ObExprPtrIArray	sql::ObExprPtrIArray &exprs,
+src/storage/blocksstable/ob_micro_block_row_scanner.cpp	535	ObIMicroBlockRowScanner::get_rows_for_old_format	sql:: use: ObEvalCtx	sql::ObEvalCtx &eval_ctx = param_->op_->get_eval_ctx();
+src/storage/blocksstable/ob_micro_block_row_scanner.cpp	583	ObIMicroBlockRowScanner::filter_pushdown_filter	sql:: use: ObPushdownFilterExecutor	sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/ob_micro_block_row_scanner.cpp	584	ObIMicroBlockRowScanner::filter_pushdown_filter	sql:: use: ObPushdownFilterExecutor	sql::ObPushdownFilterExecutor *filter,
+src/storage/blocksstable/ob_micro_block_row_scanner.cpp	585	ObIMicroBlockRowScanner::filter_pushdown_filter	sql:: use: PushdownFilterInfo	sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/ob_micro_block_row_scanner.cpp	605	ObIMicroBlockRowScanner::filter_pushdown_filter	sql:: use: ObPhysicalFilterExecutor	sql::ObPhysicalFilterExecutor *physical_filter = static_cast<sql::ObPhysicalFilterExecutor *>(filter);
+src/storage/blocksstable/ob_micro_block_row_scanner.cpp	612	ObIMicroBlockRowScanner::filter_pushdown_filter	sql:: use: ObBlackFilterExecutor	sql::ObBlackFilterExecutor *black_filter = static_cast<sql::ObBlackFilterExecutor *>(filter);
+src/storage/blocksstable/ob_micro_block_row_scanner.cpp	629	ObIMicroBlockRowScanner::filter_pushdown_filter	sql:: use: ObWhiteFilterExecutor	*static_cast<sql::ObWhiteFilterExecutor *>(filter),
+src/storage/blocksstable/ob_micro_block_row_scanner.cpp	685	ObIMicroBlockRowScanner::filter_micro_block_in_blockscan	sql:: use: PushdownFilterInfo	int ObIMicroBlockRowScanner::filter_micro_block_in_blockscan(sql::PushdownFilterInfo &pd_filter_info)
+src/storage/blocksstable/ob_micro_block_row_scanner.cpp	901	ObIMicroBlockRowScanner::get_filter_result	sql:: use: PushdownFilterInfo	sql::PushdownFilterInfo &pd_filter_info = block_row_store_->get_pd_filter_info();
+src/storage/blocksstable/ob_micro_block_row_scanner.cpp	2124	filter_micro_block	sql:: use: ObPushdownFilterExecutor	sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/ob_micro_block_row_scanner.cpp	2125	filter_micro_block	sql:: use: ObPushdownFilterExecutor	sql::ObPushdownFilterExecutor &filter,
+src/storage/blocksstable/ob_micro_block_row_scanner.cpp	2126	filter_micro_block	sql:: use: PushdownFilterInfo	sql::PushdownFilterInfo &filter_info,
+src/storage/blocksstable/ob_micro_block_row_scanner.h	71	ObIMicroBlockRowScanner	sql:: use: PushdownFilterInfo	int filter_micro_block_in_blockscan(sql::PushdownFilterInfo &pd_filter_info);
+src/storage/blocksstable/ob_micro_block_row_scanner.h	73	ObIMicroBlockRowScanner	sql:: use: ObPushdownFilterExecutor	sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/ob_micro_block_row_scanner.h	74	ObIMicroBlockRowScanner	sql:: use: ObPushdownFilterExecutor	sql::ObPushdownFilterExecutor *filter,
+src/storage/blocksstable/ob_micro_block_row_scanner.h	75	ObIMicroBlockRowScanner	sql:: use: PushdownFilterInfo	sql::PushdownFilterInfo &filter_info,
+src/storage/blocksstable/ob_micro_block_row_scanner.h	118	ObIMicroBlockRowScanner	sql:: use: ObExprPtrIArray	sql::ObExprPtrIArray &exprs,
+src/storage/blocksstable/ob_micro_block_row_scanner.h	173	ObIMicroBlockRowScanner	sql:: use: ObPushdownFilterExecutor	sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/ob_micro_block_row_scanner.h	174	ObIMicroBlockRowScanner	sql:: use: ObBlackFilterExecutor	sql::ObBlackFilterExecutor &filter,
+src/storage/blocksstable/ob_micro_block_row_scanner.h	175	ObIMicroBlockRowScanner	sql:: use: PushdownFilterInfo	sql::PushdownFilterInfo &pd_filter_info,
+src/storage/compaction/ob_partition_merge_fuser.h	30	-	opens namespace sql (lines 30-33): storage declares SQL types here	namespace sql
+src/storage/compaction/ob_partition_merge_fuser.h	32	-	unqualified SQL name inside namespace sql: ObTempExpr	struct ObTempExpr;
+src/storage/ddl/ob_complement_data_task.cpp	42	-	using namespace sql	using namespace sql;
+src/storage/ddl/ob_ddl_batch_rows.cpp	28	-	using namespace sql	using namespace sql;
+src/storage/ddl/ob_ddl_batch_rows.cpp	72	ObDDLBatchRows::init	unqualified SQL name under a using declaration: ObBitVector	const ObBitVector *col_nullables, const int64_t max_batch_size,
+src/storage/ddl/ob_ddl_batch_rows.cpp	112	ObDDLBatchRows::init_vectors	unqualified SQL name under a using declaration: ObBitVector	const ObBitVector *col_nullables, int64_t max_batch_size)
+src/storage/ddl/ob_ddl_batch_rows.h	68	ObDDLBatchRows	sql:: use: ObBitVector	const sql::ObBitVector *col_nullables, const int64_t max_batch_size,
+src/storage/ddl/ob_ddl_batch_rows.h	115	ObDDLBatchRows	sql:: use: ObBitVector	const sql::ObBitVector *col_nullables, int64_t max_batch_size);
+src/storage/ddl/ob_ddl_common_storage_impl.cpp	54	-	using namespace sql	using namespace oceanbase::sql;
+src/storage/ddl/ob_ddl_common_storage_impl.cpp	102	check_skip_handle_lob_column	unqualified SQL name under a using declaration: ObBitVector	ObBitVector *nulls = continuous_vec->get_nulls();
+src/storage/ddl/ob_ddl_common_storage_impl.cpp	120	check_skip_handle_lob_column	unqualified SQL name under a using declaration: ObBitVector	ObBitVector *nulls = discrete_vec->get_nulls();
+src/storage/ddl/ob_ddl_common_storage_impl.cpp	879	new_discrete_vector	unqualified SQL name under a using declaration: ObBitVector	const int64_t nulls_size = ObBitVector::memory_size(max_batch_size);
+src/storage/ddl/ob_ddl_common_storage_impl.cpp	882	new_discrete_vector	unqualified SQL name under a using declaration: ObBitVector	ObBitVector *nulls = nullptr;
+src/storage/ddl/ob_ddl_independent_dag.cpp	32	-	using namespace sql	using namespace oceanbase::sql;

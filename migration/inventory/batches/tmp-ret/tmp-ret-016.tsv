@@ -1,0 +1,112 @@
+file	line	symbol	construct	text
+src/sql/engine/dml/ob_table_insert_op.cpp	273	ObTableInsertOp::write_rows_post_proc	declare sync_ret (continue-and-record variable)	int sync_ret = OB_SUCCESS;
+src/sql/engine/dml/ob_table_insert_op.cpp	274	ObTableInsertOp::write_rows_post_proc	assign sync_ret (continue-and-record variable)	if (OB_SUCCESS != (sync_ret = plan_ctx->sync_last_value_to_store())) {
+src/sql/engine/dml/ob_table_insert_op.cpp	278	ObTableInsertOp::write_rows_post_proc	merge sync_ret into ret through if (OB_SUCC(ret)) (continue-and-record through another variable)	ret = sync_ret;
+src/sql/engine/dml/ob_table_insert_op.cpp	370	ObTableInsertOp::inner_close	declare close_ret (continue-and-record variable)	int close_ret = ObTableModifyOp::inner_close();
+src/sql/engine/dml/ob_table_insert_op.cpp	371	ObTableInsertOp::inner_close	merge close_ret into ret (continue-and-record through another variable)	return (OB_SUCCESS == ret) ? close_ret : ret;
+src/sql/engine/dml/ob_table_insert_up_op.cpp	239	ObTableInsertUpOp::inner_close	declare close_ret (continue-and-record variable)	int close_ret = OB_SUCCESS;
+src/sql/engine/dml/ob_table_insert_up_op.cpp	245	ObTableInsertUpOp::inner_close	assign close_ret (continue-and-record variable)	close_ret = (upd_rtctx_.das_ref_.close_all_task());
+src/sql/engine/dml/ob_table_insert_up_op.cpp	250	ObTableInsertUpOp::inner_close	merge close_ret into ret (continue-and-record through another variable)	ret = OB_SUCCESS == ret ? close_ret : ret;
+src/sql/engine/dml/ob_table_insert_up_op.cpp	252	ObTableInsertUpOp::inner_close	assign close_ret (continue-and-record variable)	close_ret = ObTableModifyOp::inner_close();
+src/sql/engine/dml/ob_table_insert_up_op.cpp	253	ObTableInsertUpOp::inner_close	merge close_ret into ret (continue-and-record through another variable)	return (OB_SUCCESS == ret) ? close_ret : ret;
+src/sql/engine/dml/ob_table_modify_op.cpp	285	ForeignKeyHandle::check_exist_inner_sql	declare close_ret (continue-and-record variable)	int close_ret = res.get_result()->close();
+src/sql/engine/dml/ob_table_modify_op.cpp	289	ForeignKeyHandle::check_exist_inner_sql	merge close_ret into ret through if (OB_SUCC(ret)) (continue-and-record through another variable)	ret = close_ret;
+src/sql/engine/dml/ob_table_modify_op.cpp	293	ForeignKeyHandle::check_exist_inner_sql	declare end_ret (continue-and-record variable)	int end_ret = op.end_nested_session();
+src/sql/engine/dml/ob_table_modify_op.cpp	297	ForeignKeyHandle::check_exist_inner_sql	merge end_ret into ret through if (OB_SUCC(ret)) (continue-and-record through another variable)	ret = end_ret;
+src/sql/engine/dml/ob_table_modify_op.cpp	369	ForeignKeyHandle::cascade	declare end_ret (continue-and-record variable)	int end_ret = op.end_nested_session();
+src/sql/engine/dml/ob_table_modify_op.cpp	373	ForeignKeyHandle::cascade	merge end_ret into ret through if (OB_SUCC(ret)) (continue-and-record through another variable)	ret = end_ret;
+src/sql/engine/dml/ob_table_modify_op.cpp	428	ForeignKeyHandle::set_null	declare end_ret (continue-and-record variable)	int end_ret = op.end_nested_session();
+src/sql/engine/dml/ob_table_modify_op.cpp	432	ForeignKeyHandle::set_null	merge end_ret into ret through if (OB_SUCC(ret)) (continue-and-record through another variable)	ret = end_ret;
+src/sql/engine/dml/ob_table_replace_op.cpp	253	ObTableReplaceOp::inner_close	declare close_ret (continue-and-record variable)	int close_ret = OB_SUCCESS;
+src/sql/engine/dml/ob_table_replace_op.cpp	258	ObTableReplaceOp::inner_close	assign close_ret (continue-and-record variable)	close_ret = (replace_rtctx_.das_ref_.close_all_task());
+src/sql/engine/dml/ob_table_replace_op.cpp	263	ObTableReplaceOp::inner_close	merge close_ret into ret (continue-and-record through another variable)	ret = OB_SUCCESS == ret ? close_ret : ret;
+src/sql/engine/dml/ob_table_replace_op.cpp	265	ObTableReplaceOp::inner_close	assign close_ret (continue-and-record variable)	close_ret = ObTableModifyOp::inner_close();
+src/sql/engine/dml/ob_table_replace_op.cpp	266	ObTableReplaceOp::inner_close	merge close_ret into ret (continue-and-record through another variable)	return (OB_SUCCESS == ret) ? close_ret : ret;
+src/sql/engine/dml/ob_table_update_op.cpp	154	ObTableUpdateOp::inner_close	declare close_ret (continue-and-record variable)	int  close_ret = ObTableModifyOp::inner_close();
+src/sql/engine/dml/ob_table_update_op.cpp	155	ObTableUpdateOp::inner_close	merge close_ret into ret (continue-and-record through another variable)	return (OB_SUCCESS == ret) ? close_ret : ret;
+src/sql/engine/dml/ob_trigger_handler.cpp	230	TriggerHandle::init_param_old_row	declare tmp_ret	int tmp_ret = pl::ObUserDefinedType::destruct_obj(dst);
+src/sql/engine/dml/ob_trigger_handler.cpp	309	TriggerHandle::init_param_new_row	declare tmp_ret	int tmp_ret = pl::ObUserDefinedType::destruct_obj(dst);
+src/sql/engine/expr/ob_datum_cast.cpp	1001	common_string_number	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/engine/expr/ob_datum_cast.cpp	1012	common_string_number	assign tmp_ret	tmp_ret = OB_ERR_UNEXPECTED;
+src/sql/engine/expr/ob_datum_cast.cpp	1013	common_string_number	assign tmp_ret	} else if (OB_SUCCESS != (tmp_ret = nmb.from(*bound_num, alloc))) {
+src/sql/engine/expr/ob_expr_column_conv.cpp	172	ObExprColumnConv::convert_skip_null_check	merge OB_ERR_UNEXPECTED into ret (continue-and-record through another variable)	ret = COVER_SUCC(OB_ERR_UNEXPECTED);
+src/sql/engine/expr/ob_expr_date_add.cpp	244	ObExprDateAdjust::calc_date_adjust	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/engine/expr/ob_expr_date_add.cpp	245	ObExprDateAdjust::calc_date_adjust	assign tmp_ret	if (OB_SUCCESS != (tmp_ret =
+src/sql/engine/expr/ob_expr_date_add.cpp	256	ObExprDateAdjust::calc_date_adjust	merge into ret	ret = tmp_ret;
+src/sql/engine/expr/ob_expr_encode_sortkey.cpp	101	ObExprEncodeSortkey::eval_encode_sortkey	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/engine/expr/ob_expr_encode_sortkey.cpp	102	ObExprEncodeSortkey::eval_encode_sortkey	assign tmp_ret	tmp_ret = OB_E(EventTable::EN_DISABLE_ENCODESORTKEY_OPT) OB_SUCCESS;
+src/sql/engine/expr/ob_expr_encode_sortkey.cpp	224	ObExprEncodeSortkey::eval_encode_sortkey_batch	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/engine/expr/ob_expr_encode_sortkey.cpp	225	ObExprEncodeSortkey::eval_encode_sortkey_batch	assign tmp_ret	tmp_ret = OB_E(EventTable::EN_DISABLE_ENCODESORTKEY_OPT) OB_SUCCESS;
+src/sql/engine/expr/ob_expr_extract_value.cpp	208	ObExprExtractValue::extract_mysql_xpath_result	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/engine/expr/ob_expr_extract_value.cpp	209	ObExprExtractValue::extract_mysql_xpath_result	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = xpath_iter.close())) {
+src/sql/engine/expr/ob_expr_extract_value.cpp	211	ObExprExtractValue::extract_mysql_xpath_result	merge into ret	ret = COVER_SUCC(tmp_ret);
+src/sql/engine/expr/ob_expr_inner_double_to_int.cpp	219	ObExprInnerDoubleToInt::double_to_number	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/engine/expr/ob_expr_inner_double_to_int.cpp	229	ObExprInnerDoubleToInt::double_to_number	assign tmp_ret	tmp_ret = OB_ERR_UNEXPECTED;
+src/sql/engine/expr/ob_expr_inner_double_to_int.cpp	230	ObExprInnerDoubleToInt::double_to_number	assign tmp_ret	} else if (OB_SUCCESS != (tmp_ret = number.from(*bound_num, alloc))) {
+src/sql/engine/expr/ob_expr_int_div.cpp	50	#define REPORT_OUT_OF_RANGE_ERROR	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;\
+src/sql/engine/expr/ob_expr_int_div.cpp	51	#define REPORT_OUT_OF_RANGE_ERROR	assign tmp_ret	if (OB_UNLIKELY((tmp_ret = databuff_printf(expr_str, \
+src/sql/engine/expr/ob_expr_int_div.cpp	57	#define REPORT_OUT_OF_RANGE_ERROR	merge into ret	ret = tmp_ret;\
+src/sql/engine/expr/ob_expr_json_merge_patch.cpp	200	ObExprJsonMergePatch::eval_ora_json_merge_patch	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/engine/expr/ob_expr_json_merge_patch.cpp	203	ObExprJsonMergePatch::eval_ora_json_merge_patch	assign tmp_ret	} else if ((tmp_ret = ObJsonExprHelper::get_json_doc(expr, ctx, temp_allocator, 1, j_patch_node, has_null, true, false)) != OB_SUCCESS) {
+src/sql/engine/expr/ob_expr_json_merge_patch.cpp	204	ObExprJsonMergePatch::eval_ora_json_merge_patch	merge into ret	ret = tmp_ret;
+src/sql/engine/expr/ob_expr_json_value.cpp	200	ObExprJsonValue::eval_json_value	declare temp_ret	int temp_ret = get_default_empty_error_value(expr, &param_ctx->json_param_, ctx);
+src/sql/engine/expr/ob_expr_json_value.cpp	203	ObExprJsonValue::eval_json_value	merge into ret	ret = temp_ret;
+src/sql/engine/expr/ob_expr_json_value.cpp	622	ObExprJsonValue::try_set_error_val	declare temp_ret	int temp_ret = OB_SUCCESS;
+src/sql/engine/expr/ob_expr_json_value.cpp	626	ObExprJsonValue::try_set_error_val	merge into ret	ret = temp_ret;
+src/sql/engine/expr/ob_expr_like.cpp	383	ObExprLike::check_pattern_valid	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/engine/expr/ob_expr_like.cpp	386	ObExprLike::check_pattern_valid	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = exec_ctx->create_expr_op_ctx(like_id, like_ctx))) {
+src/sql/engine/expr/ob_expr_object_construct.cpp	206	ObExprObjectConstruct::eval_object_construct	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/engine/expr/ob_expr_object_construct.cpp	208	ObExprObjectConstruct::eval_object_construct	assign tmp_ret	tmp_ret = ctx.exec_ctx_.init_pl_ctx();
+src/sql/engine/expr/ob_expr_object_construct.cpp	211	ObExprObjectConstruct::eval_object_construct	assign tmp_ret	tmp_ret = ctx.exec_ctx_.get_pl_ctx()->add(result);
+src/sql/engine/expr/ob_expr_object_construct.cpp	217	ObExprObjectConstruct::eval_object_construct	merge into ret	ret = OB_SUCCESS == ret ? tmp_ret : ret;
+src/sql/engine/expr/ob_expr_str_to_date.cpp	248	calc	declare tmp_ret	int tmp_ret = ret;
+src/sql/engine/expr/ob_expr_str_to_date.cpp	267	calc	merge into ret	ret = tmp_ret;
+src/sql/engine/expr/ob_expr_str_to_date.cpp	270	calc	merge into ret	ret = set_error_code(tmp_ret, date_str);
+src/sql/engine/expr/ob_expr_udf.cpp	789	ObExprUDF::eval_udf	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/engine/expr/ob_expr_udf.cpp	796	ObExprUDF::eval_udf	assign tmp_ret	if ((tmp_ret = pl::ObUserDefinedType::destruct_obj(result, ctx.exec_ctx_.get_my_session())) != OB_SUCCESS) {
+src/sql/engine/expr/ob_expr_udf.cpp	800	ObExprUDF::eval_udf	assign tmp_ret	if ((tmp_ret = pl::ObUserDefinedType::destruct_obj(tmp_result, ctx.exec_ctx_.get_my_session())) != OB_SUCCESS) {
+src/sql/engine/expr/ob_expr_udf.cpp	802	ObExprUDF::eval_udf	merge into ret	ret = OB_SUCCESS == ret ? tmp_ret : ret;
+src/sql/engine/expr/ob_expr_update_xml.cpp	250	ObExprUpdateXml::update_xml_tree_mysql	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/engine/expr/ob_expr_update_xml.cpp	251	ObExprUpdateXml::update_xml_tree_mysql	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = xpath_iter.close())) {
+src/sql/engine/expr/ob_expr_update_xml.cpp	253	ObExprUpdateXml::update_xml_tree_mysql	merge into ret	ret = COVER_SUCC(tmp_ret);
+src/sql/engine/expr/ob_infix_expression.cpp	264	ObInfixExpression::calc	merge OB_ERR_UNEXPECTED into ret (continue-and-record through another variable)	ret = COVER_SUCC(OB_ERR_UNEXPECTED);
+src/sql/engine/expr/ob_infix_expression.cpp	447	ObInfixExpression::eval	merge OB_ERR_UNEXPECTED into ret (continue-and-record through another variable)	ret = COVER_SUCC(OB_ERR_UNEXPECTED);
+src/sql/engine/expr/ob_pl_expr_subquery.cpp	216	ObExprOpSubQueryInPl::eval_subquery	declare close_ret (continue-and-record variable)	int64_t close_ret = spi_result.get_result_set()->close();
+src/sql/engine/expr/ob_pl_expr_subquery.cpp	219	ObExprOpSubQueryInPl::eval_subquery	merge close_ret into ret (continue-and-record through another variable)	ret = OB_SUCCESS == ret ? close_ret : ret;
+src/sql/engine/join/ob_hash_join_op.cpp	970	ObHashJoinOp::get_next_left_row_na	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/engine/join/ob_hash_join_op.cpp	971	ObHashJoinOp::get_next_left_row_na	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = left_->drain_exch())) {
+src/sql/engine/join/ob_hash_join_op.cpp	973	ObHashJoinOp::get_next_left_row_na	merge into ret	ret = tmp_ret;
+src/sql/engine/join/ob_hash_join_op.cpp	1062	ObHashJoinOp::get_next_left_row_batch_na	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/engine/join/ob_hash_join_op.cpp	1063	ObHashJoinOp::get_next_left_row_batch_na	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = left_->drain_exch())) {
+src/sql/engine/join/ob_hash_join_op.cpp	1065	ObHashJoinOp::get_next_left_row_batch_na	merge into ret	ret = tmp_ret;
+src/sql/engine/join/ob_hash_join_op.cpp	3417	ObHashJoinOp::get_next_right_batch_na	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/engine/join/ob_hash_join_op.cpp	3419	ObHashJoinOp::get_next_right_batch_na	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = recursive_postprocess())) {
+src/sql/engine/join/ob_hash_join_op.cpp	3421	ObHashJoinOp::get_next_right_batch_na	merge into ret	ret = tmp_ret;
+src/sql/engine/join/ob_hash_join_op.cpp	3488	ObHashJoinOp::get_next_right_batch	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/engine/join/ob_hash_join_op.cpp	3490	ObHashJoinOp::get_next_right_batch	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = recursive_postprocess())) {
+src/sql/engine/join/ob_hash_join_op.cpp	3492	ObHashJoinOp::get_next_right_batch	merge into ret	ret = tmp_ret;
+src/sql/engine/join/ob_hash_join_op.cpp	3538	ObHashJoinOp::get_next_right_row	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/engine/join/ob_hash_join_op.cpp	3539	ObHashJoinOp::get_next_right_row	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = recursive_postprocess())) {
+src/sql/engine/join/ob_hash_join_op.cpp	3541	ObHashJoinOp::get_next_right_row	merge into ret	ret = tmp_ret;
+src/sql/engine/join/ob_hash_join_op.cpp	3615	ObHashJoinOp::get_next_right_row_na	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/engine/join/ob_hash_join_op.cpp	3616	ObHashJoinOp::get_next_right_row_na	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = recursive_postprocess())) {
+src/sql/engine/join/ob_hash_join_op.cpp	3618	ObHashJoinOp::get_next_right_row_na	merge into ret	ret = tmp_ret;
+src/sql/engine/join/ob_hash_join_op.cpp	3926	ObHashJoinOp::read_right_operate	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/engine/join/ob_hash_join_op.cpp	3929	ObHashJoinOp::read_right_operate	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = nest_loop_process(need_not_read_right))) {
+src/sql/engine/join/ob_hash_join_op.cpp	3930	ObHashJoinOp::read_right_operate	merge into ret	ret = tmp_ret;
+src/sql/engine/join/ob_hash_join_op.cpp	3934	ObHashJoinOp::read_right_operate	assign tmp_ret	} else if (OB_SUCCESS != (tmp_ret = adaptive_process(need_not_read_right))) {
+src/sql/engine/join/ob_hash_join_op.cpp	3935	ObHashJoinOp::read_right_operate	merge into ret	ret = tmp_ret;
+src/sql/engine/join/ob_hash_join_op.cpp	3950	ObHashJoinOp::read_right_operate	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/engine/join/ob_hash_join_op.cpp	3951	ObHashJoinOp::read_right_operate	assign tmp_ret	if (!postprocessed_left_ && OB_SUCCESS != (tmp_ret = recursive_postprocess())) {
+src/sql/engine/join/ob_hash_join_op.cpp	3952	ObHashJoinOp::read_right_operate	merge into ret	ret = tmp_ret;
+src/sql/engine/join/ob_nested_loop_join_op.cpp	194	ObNestedLoopJoinOp::do_drain_exch_multi_lvel_bnlj	declare tmp_ret	int tmp_ret = inner_drain_exch();
+src/sql/engine/join/ob_nested_loop_join_op.cpp	200	ObNestedLoopJoinOp::do_drain_exch_multi_lvel_bnlj	merge into ret	ret = tmp_ret;
+src/sql/engine/ob_exec_context.cpp	681	ObExecContext::check_status	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/engine/ob_exec_context.cpp	682	ObExecContext::check_status	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = check_extra_status())) {
+src/sql/engine/ob_exec_context.cpp	685	ObExecContext::check_status	merge into ret	ret = tmp_ret;
+src/sql/engine/ob_exec_context.cpp	711	ObExecContext::check_status_ignore_interrupt	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/engine/ob_exec_context.cpp	712	ObExecContext::check_status_ignore_interrupt	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = check_extra_status())) {
+src/sql/engine/ob_exec_context.cpp	714	ObExecContext::check_status_ignore_interrupt	merge into ret	ret = tmp_ret;
+src/sql/engine/ob_exec_context.cpp	1046	ObExecContext::check_extra_status	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/engine/ob_exec_context.cpp	1048	ObExecContext::check_extra_status	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = it->check())) {
+src/sql/engine/ob_exec_context.cpp	1052	ObExecContext::check_extra_status	merge into ret	ret = OB_SUCC(ret) ? tmp_ret : ret;

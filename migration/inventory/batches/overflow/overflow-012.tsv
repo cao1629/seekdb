@@ -1,0 +1,20 @@
+file	line	symbol	construct	text
+src/sql/rewrite/ob_transform_simplify_groupby.cpp	1238	ObTransformSimplifyGroupby::check_aggr_win_can_be_removed	check: raises OB_DATA_OUT_OF_RANGE	ret = OB_DATA_OUT_OF_RANGE;
+src/sql/rewrite/ob_transform_simplify_winfunc.cpp	170	ObTransformSimplifyWinfunc::check_aggr_win_can_be_removed	check: raises OB_DATA_OUT_OF_RANGE	ret = OB_DATA_OUT_OF_RANGE;
+src/storage/access/ob_pushdown_aggregate.cpp	469	ObCountAggCell::eval_index_info	unchecked: arithmetic on a signed value getter	row_count_ += index_info.get_row_count() - skip_index_datum_.get_int();
+src/storage/access/ob_pushdown_aggregate.cpp	495	eval_batch_for_count	unchecked: arithmetic on a signed value getter	result_datum.set_int(result_datum.get_int() + 1);
+src/storage/access/ob_pushdown_aggregate.cpp	509	eval_batch_for_count	unchecked: arithmetic on a signed value getter	result_datum.set_int(result_datum.get_int() + 1);
+src/storage/access/ob_pushdown_aggregate.cpp	524	eval_batch_for_count	unchecked: arithmetic on a signed value getter	result_datum.set_int(result_datum.get_int() + 1);
+src/storage/access/ob_pushdown_aggregate.cpp	553	ObCountAggCell::eval_batch_in_group_by	unchecked: arithmetic on a signed value getter	result_datum.set_int(result_datum.get_int() + 1);
+src/storage/access/ob_pushdown_aggregate.cpp	1330	ObSumOpSizeAggCell::eval_index_info	unchecked: arithmetic on signed value null_count	total_size_ += (index_info.get_row_count() - null_count) * op_size_ + null_count * sizeof(ObDatum);
+src/storage/access/ob_pushdown_aggregate.h	694	ObSumAggCell::eval_int_inner	unchecked: arithmetic checked for overflow only afterwards by is_int_add_out_of_range	int64_t sum_int = datum_int + new_int;
+src/storage/access/ob_pushdown_aggregate.h	695	ObSumAggCell::eval_int_inner	check: helper is_int_add_out_of_range	if (query::ObArithmeticOverflow::is_int_add_out_of_range(datum_int, new_int, sum_int)) {
+src/storage/access/ob_pushdown_aggregate.h	702	ObSumAggCell::eval_int_inner	unchecked: arithmetic on signed value new_int	DATUM_TO_CONST_DECIMAL_INT(result_datum, RES_T) + datum_int + new_int;
+src/storage/access/ob_pushdown_aggregate.h	726	ObSumAggCell::eval_int_inner	unchecked: arithmetic checked for overflow only afterwards by is_int_add_out_of_range	int64_t sum_int = datum_int + new_int;
+src/storage/access/ob_pushdown_aggregate.h	727	ObSumAggCell::eval_int_inner	check: helper is_int_add_out_of_range	if (query::ObArithmeticOverflow::is_int_add_out_of_range(datum_int, new_int, sum_int)) {
+src/storage/access/ob_pushdown_aggregate.h	759	ObSumAggCell::eval_uint_inner	unchecked: arithmetic checked for overflow only afterwards by is_uint_add_out_of_range	uint64_t sum_uint = datum_uint + new_uint;
+src/storage/access/ob_pushdown_aggregate.h	760	ObSumAggCell::eval_uint_inner	check: helper is_uint_add_out_of_range	if (query::ObArithmeticOverflow::is_uint_add_out_of_range(datum_uint, new_uint, sum_uint)) {
+src/storage/access/ob_pushdown_aggregate.h	767	ObSumAggCell::eval_uint_inner	unchecked: arithmetic on unsigned value new_uint	DATUM_TO_CONST_DECIMAL_INT(result_datum_, RES_T) + datum_uint + new_uint;
+src/storage/access/ob_pushdown_aggregate.h	791	ObSumAggCell::eval_uint_inner	unchecked: arithmetic checked for overflow only afterwards by is_uint_add_out_of_range	uint64_t sum_uint = datum_uint + new_uint;
+src/storage/access/ob_pushdown_aggregate.h	792	ObSumAggCell::eval_uint_inner	check: helper is_uint_add_out_of_range	if (query::ObArithmeticOverflow::is_uint_add_out_of_range(datum_uint, new_uint, sum_uint)) {
+src/storage/blocksstable/encoding/ob_multi_prefix_tree.cpp	336	ObMultiPrefixTree::add_node	check: raises OB_DATA_OUT_OF_RANGE	ret = OB_DATA_OUT_OF_RANGE;

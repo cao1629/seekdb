@@ -1,0 +1,46 @@
+file	line	symbol	construct	text
+src/sql/engine/aggregate/ob_hash_groupby_op.cpp	1309	ObHashGroupByOp::setup_dump_env	iterate hash container local_group_rows_ (ObGroupRowHashTable)	if (OB_FAIL(local_group_rows_.foreach(cb_func))) {
+src/sql/engine/aggregate/ob_hash_groupby_op.cpp	2569	ObHashGroupByOp::init_popular_values	iterate hash container popular_map_ (ObHashMap)	common::hash::ObHashMap<uint64_t, uint64_t, hash::NoPthreadDefendMode>::iterator iter = popular_map_.begin();
+src/sql/engine/aggregate/ob_hash_groupby_op.cpp	2574	ObHashGroupByOp::init_popular_values	iterate hash container through an iterator of ObHashMap	common::hash::ObHashMap<uint64_t, uint64_t, hash::NoPthreadDefendMode>::iterator iter_tmp = iter;
+src/sql/engine/aggregate/ob_hash_groupby_op.cpp	2616	ObHashGroupByOp::popular_value_detect	std::make_heap call	std::make_heap(popular_array_temp.begin(), popular_array_temp.end(),
+src/sql/engine/aggregate/ob_hash_groupby_op.cpp	2621	ObHashGroupByOp::popular_value_detect	std::pop_heap call	std::pop_heap(popular_array_temp.begin(), popular_array_temp.end(), group_row_items_greater);
+src/sql/engine/aggregate/ob_hash_groupby_op.cpp	2623	ObHashGroupByOp::popular_value_detect	std::push_heap call	std::push_heap(popular_array_temp.begin(), popular_array_temp.end(),
+src/sql/engine/aggregate/ob_hash_groupby_op.cpp	2632	ObHashGroupByOp::popular_value_detect	iterate hash container local_group_rows_ (ObGroupRowHashTable)	if (OB_FAIL(local_group_rows_.foreach (cb_func))) {
+src/sql/engine/aggregate/ob_hash_groupby_op.cpp	2675	ObHashGroupByOp::check_popular_values_validity	iterate hash container local_group_rows_ (ObGroupRowHashTable)	if (OB_FAIL(local_group_rows_.foreach (cb_func))) {
+src/sql/engine/basic/ob_hash_partitioning_infrastructure_op.h	2780	ObHashPartInfrastructure::dump_preprocess_part	iterate hash container hash_table_ (ObHashPartitionExtendHashTable)	if (OB_FAIL(hash_table_.foreach(func))) {
+src/sql/engine/basic/ob_pushdown_filter.cpp	1966	ObWhiteFilterExecutor::init_in_eval_datums	lib::ob_sort call	lib::ob_sort(datum_params_.begin(), datum_params_.end(), cmp);
+src/sql/engine/basic/ob_pushdown_filter.cpp	2483	ObDynamicFilterExecutor::try_preparing_data	lib::ob_sort call	lib::ob_sort(datum_params_.begin(), datum_params_.end(), cmp);
+src/sql/engine/basic/ob_stat_collector_op.cpp	224	ObStatCollectorOp::generate_sample_partition_range	member sort() call	if (OB_FAIL(sort_impl_.sort())) {
+src/sql/engine/cmd/ob_load_data_impl.cpp	849	ObLoadDataSPImpl::exec_shuffle	iterate hash container part_buf_mgr (ObArrayHashMap)	if (OB_FAIL(part_buf_mgr.for_each(save_frag))) {
+src/sql/engine/cmd/ob_load_data_impl.cpp	856	ObLoadDataSPImpl::exec_shuffle	iterate hash container part_buf_mgr (ObArrayHashMap)	part_buf_mgr.for_each(free_frag);
+src/sql/engine/cmd/ob_load_data_utils.cpp	268	ObGlobalLoadDataStatMap::get_all_job_status	iterate hash container map_ (HASH_MAP)	OZ (map_.foreach_refactored(job_status_op));
+src/sql/engine/cmd/ob_partition_executor_utils.cpp	293	ObPartitionExecutorUtils::cast_list_expr_to_obj	lib::ob_sort call	lib::ob_sort(subpartition_array,
+src/sql/engine/cmd/ob_partition_executor_utils.cpp	802	ObPartitionExecutorUtils::sort_list_paritition_if_need	lib::ob_sort call	lib::ob_sort(partition_array,
+src/sql/engine/dml/ob_table_insert_up_op.cpp	1094	ObTableInsertUpOp::prepare_final_insert_up_task	iterate hash container primary_map (ObConflictRowMap)	ObConflictRowMap::iterator start_row_iter = primary_map->begin();
+src/sql/engine/dml/ob_table_insert_up_op.cpp	1095	ObTableInsertUpOp::prepare_final_insert_up_task	iterate hash container through an iterator of ObConflictRowMap	ObConflictRowMap::iterator end_row_iter = primary_map->end();
+src/sql/engine/dml/ob_table_replace_op.cpp	738	ObTableReplaceOp::do_delete	iterate hash container primary_map (ObConflictRowMap)	ObConflictRowMap::iterator start_row_iter = primary_map->begin();
+src/sql/engine/dml/ob_table_replace_op.cpp	739	ObTableReplaceOp::do_delete	iterate hash container through an iterator of ObConflictRowMap	ObConflictRowMap::iterator end_row_iter = primary_map->end();
+src/sql/engine/dml/ob_table_replace_op.cpp	760	ObTableReplaceOp::do_insert	iterate hash container primary_map (ObConflictRowMap)	ObConflictRowMap::iterator start_row_iter = primary_map->begin();
+src/sql/engine/dml/ob_table_replace_op.cpp	761	ObTableReplaceOp::do_insert	iterate hash container through an iterator of ObConflictRowMap	ObConflictRowMap::iterator end_row_iter = primary_map->end();
+src/sql/engine/expr/ob_expr_array_sortby.cpp	173	ObExprArraySortby::index_sort	lib::ob_sort call	lib::ob_sort(sort_idx, sort_idx + arr_size, cmp);
+src/sql/engine/expr/ob_expr_json_object.cpp	131	ObExprJsonObject::eval_json_object	member stable_sort() call	j_obj.stable_sort();
+src/sql/engine/expr/ob_expr_json_query.cpp	476	ObExprJsonQuery::set_multivalue_result	lib::ob_sort call	lib::ob_sort(obj_array, obj_array + element_count, cmp);
+src/sql/engine/ob_exec_context.cpp	376	ObExecContext::~ObExecContext	iterate hash container temp_expr_ctx_map_ (ObHashMap)	for (hash::ObHashMap<int64_t, int64_t>::iterator it = temp_expr_ctx_map_.begin();
+src/sql/engine/pdml/static/ob_pdml_op_batch_row_cache.cpp	203	ObPDMLOpBatchRowCache::get_part_id_array	iterate hash container pstore_map_ (PartitionStoreMap)	PartitionStoreMap::const_iterator iter = pstore_map_.begin();
+src/sql/engine/pdml/static/ob_pdml_op_batch_row_cache.cpp	274	ObPDMLOpBatchRowCache::free_datum_store_memory	iterate hash container pstore_map_ (PartitionStoreMap)	PartitionStoreMap::iterator iter = pstore_map_.begin();
+src/sql/engine/pdml/static/ob_pdml_op_batch_row_cache.cpp	331	ObPDMLOpBatchRowCache::dump_all_datum_store	iterate hash container pstore_map_ (PartitionStoreMap)	PartitionStoreMap::iterator iter = pstore_map_.begin();
+src/sql/engine/pdml/static/ob_px_sstable_insert_op.cpp	136	ObPxMultiPartSSTableInsertOp::destroy	iterate hash container heap_tablet_writer_map_ (TabletWriterMap)	TabletWriterMap::iterator iter = heap_tablet_writer_map_.begin();
+src/sql/engine/pdml/static/ob_px_sstable_insert_op.cpp	409	ObPxMultiPartSSTableInsertOp::write_heap_slice_by_row	iterate hash container heap_tablet_writer_map_ (TabletWriterMap)	TabletWriterMap::iterator iter = heap_tablet_writer_map_.begin();
+src/sql/engine/px/datahub/components/ob_dh_range_dist_wf.cpp	259	ObRDWFPieceMsgCtx::send_whole_msg	lib::ob_sort call	lib::ob_sort(infos_.begin(), infos_.end(), [](ObRDWFPartialInfo *l,
+src/sql/engine/px/datahub/components/ob_dh_sample.cpp	525	ObDynamicSamplePieceMsgCtx::sort_row_store	member sort() call	if (OB_FAIL(sort_impl_.sort())) {
+src/sql/engine/px/exchange/ob_px_dist_transmit_op.cpp	748	ObPxDistTransmitOp::setup_sampled_rows_output	lib::ob_sort call	lib::ob_sort(sampled_rows2transmit_.begin(), sampled_rows2transmit_.end(),
+src/sql/engine/px/exchange/ob_px_ms_coord_op.h	92	ObPxMSCoordOp::ObMsgReceiveFilter::ObMsgReceiveFilter	heap declared: heap (ObRowHeap)	ObMsgReceiveFilter(ObRowHeap<ObMaxDatumRowCompare, ObChunkDatumStore::LastStoredRow> &heap)
+src/sql/engine/px/exchange/ob_px_ms_coord_op.h	115	ObPxMSCoordOp::ObMsgReceiveFilter	heap declared: heap_ (ObRowHeap)	ObRowHeap<ObMaxDatumRowCompare, ObChunkDatumStore::LastStoredRow> &heap_;
+src/sql/engine/px/exchange/ob_px_ms_coord_op.h	175	ObPxMSCoordOp	heap declared: row_heap_ (ObRowHeap)	ObRowHeap<ObMaxDatumRowCompare, ObChunkDatumStore::LastStoredRow> row_heap_;
+src/sql/engine/px/exchange/ob_px_ms_receive_op.h	271	ObPxMSReceiveOp	heap declared: row_heap_ (ObRowHeap)	ObRowHeap<ObDatumRowCompare, ObChunkDatumStore::StoredRow> row_heap_;
+src/sql/engine/px/exchange/ob_row_heap.h	226	ObRowHeap::push	heap operation definition: ObRowHeap::push	int ObRowHeap<COMPARE, ROW>::push(const ROW *row)
+src/sql/engine/px/exchange/ob_row_heap.h	248	ObRowHeap::push	std::push_heap call	std::push_heap(&row_idx_.at(0),
+src/sql/engine/px/exchange/ob_row_heap.h	258	ObRowHeap::pop	heap operation definition: ObRowHeap::pop	int ObRowHeap<COMPARE, ROW>::pop(const ROW *&row)
+src/sql/engine/px/exchange/ob_row_heap.h	267	ObRowHeap::pop	std::pop_heap call	} else if (FALSE_IT(std::pop_heap(&row_idx_.at(0),
+src/sql/engine/px/ob_granule_pump.cpp	249	ObGITaskSet::construct_taskset	lib::ob_sort call	lib::ob_sort(gi_task_set_.begin(), gi_task_set_.end(), compare_fun);
+src/sql/engine/px/ob_granule_pump.cpp	843	ObGranuleSplitter::get_query_range	lib::ob_sort call	lib::ob_sort(scan_ranges.begin(), scan_ranges.end(), ObNewRangeCmp());

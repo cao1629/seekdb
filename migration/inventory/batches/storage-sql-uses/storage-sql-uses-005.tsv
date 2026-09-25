@@ -1,0 +1,67 @@
+file	line	symbol	construct	text
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	237	ObConstDecoder::pushdown_operator	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	239	ObConstDecoder::pushdown_operator	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	242	ObConstDecoder::pushdown_operator	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	247	ObConstDecoder::pushdown_operator	sql:: use: ObWhiteFilterOperatorType	const sql::ObWhiteFilterOperatorType op_type = filter.get_op_type();
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	250	ObConstDecoder::pushdown_operator	sql:: use: WHITE_OP_MAX	} else if (OB_UNLIKELY(op_type >= sql::WHITE_OP_MAX)) {
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	259	ObConstDecoder::pushdown_operator	sql:: use: WHITE_OP_NU	case sql::WHITE_OP_NU:
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	260	ObConstDecoder::pushdown_operator	sql:: use: WHITE_OP_NN	case sql::WHITE_OP_NN: {
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	265	ObConstDecoder::pushdown_operator	sql:: use: WHITE_OP_EQ	case sql::WHITE_OP_EQ:
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	266	ObConstDecoder::pushdown_operator	sql:: use: WHITE_OP_NE	case sql::WHITE_OP_NE:
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	267	ObConstDecoder::pushdown_operator	sql:: use: WHITE_OP_LT	case sql::WHITE_OP_LT:
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	268	ObConstDecoder::pushdown_operator	sql:: use: WHITE_OP_GE	case sql::WHITE_OP_GE:
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	269	ObConstDecoder::pushdown_operator	sql:: use: WHITE_OP_GT	case sql::WHITE_OP_GT:
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	270	ObConstDecoder::pushdown_operator	sql:: use: WHITE_OP_LE	case sql::WHITE_OP_LE: {
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	275	ObConstDecoder::pushdown_operator	sql:: use: WHITE_OP_BT	case sql::WHITE_OP_BT: {
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	280	ObConstDecoder::pushdown_operator	sql:: use: WHITE_OP_IN	case sql::WHITE_OP_IN: {
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	282	ObConstDecoder::pushdown_operator	sql:: use: ObDynamicFilterExecutor	if (OB_FAIL(in_operator<sql::ObDynamicFilterExecutor>(col_ctx, static_cast<const sql::ObDynamicFilterExecutor &>(filter), pd_filter_info, result_bitmap))) {
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	285	ObConstDecoder::pushdown_operator	sql:: use: ObWhiteFilterExecutor	if (OB_FAIL(in_operator<sql::ObWhiteFilterExecutor>(col_ctx, filter, pd_filter_info, result_bitmap))) {
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	300	ObConstDecoder::const_only_operator	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	301	ObConstDecoder::const_only_operator	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	323	ObConstDecoder::const_only_operator	sql:: use: WHITE_OP_NU	case sql::WHITE_OP_NU: {
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	330	ObConstDecoder::const_only_operator	sql:: use: WHITE_OP_NN	case sql::WHITE_OP_NN: {
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	337	ObConstDecoder::const_only_operator	sql:: use: WHITE_OP_EQ	case sql::WHITE_OP_EQ:
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	338	ObConstDecoder::const_only_operator	sql:: use: WHITE_OP_NE	case sql::WHITE_OP_NE:
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	339	ObConstDecoder::const_only_operator	sql:: use: WHITE_OP_GT	case sql::WHITE_OP_GT:
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	340	ObConstDecoder::const_only_operator	sql:: use: WHITE_OP_LT	case sql::WHITE_OP_LT:
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	341	ObConstDecoder::const_only_operator	sql:: use: WHITE_OP_GE	case sql::WHITE_OP_GE:
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	342	ObConstDecoder::const_only_operator	sql:: use: WHITE_OP_LE	case sql::WHITE_OP_LE: {
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	356	ObConstDecoder::const_only_operator	sql:: use: WHITE_OP_BT	case sql::WHITE_OP_BT: {
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	359	ObConstDecoder::const_only_operator	sql:: use: WHITE_OP_LE	ObGetFilterCmpRetFunc get_le_cmp_ret = get_filter_cmp_ret_func(sql::WHITE_OP_LE);
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	360	ObConstDecoder::const_only_operator	sql:: use: WHITE_OP_GE	ObGetFilterCmpRetFunc get_ge_cmp_ret = get_filter_cmp_ret_func(sql::WHITE_OP_GE);
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	372	ObConstDecoder::const_only_operator	sql:: use: WHITE_OP_IN	case sql::WHITE_OP_IN: {
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	399	ObConstDecoder::nu_nn_operator	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	400	ObConstDecoder::nu_nn_operator	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	434	ObConstDecoder::nu_nn_operator	sql:: use: WHITE_OP_NN	if (OB_SUCC(ret) && filter.get_op_type() == sql::WHITE_OP_NN) {
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	444	ObConstDecoder::comparison_operator	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	445	ObConstDecoder::comparison_operator	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	451	ObConstDecoder::comparison_operator	sql:: use: WHITE_OP_NE	|| filter.get_op_type() > sql::WHITE_OP_NE
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	455	ObConstDecoder::comparison_operator	sql:: use: ObWhiteFilterOperatorType	const sql::ObWhiteFilterOperatorType op_type = filter.get_op_type();
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	491	ObConstDecoder::comparison_operator	sql:: use: ObBitVector	char ref_bitset_buf[sql::ObBitVector::memory_size(ref_bitset_size)];
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	492	ObConstDecoder::comparison_operator	sql:: use: ObBitVector, to_bit_vector	sql::ObBitVector *ref_bitset = sql::to_bit_vector(ref_bitset_buf);
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	529	ObConstDecoder::bt_operator	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	530	ObConstDecoder::bt_operator	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	570	ObConstDecoder::bt_operator	sql:: use: ObBitVector	char ref_bitset_buf[sql::ObBitVector::memory_size(ref_bitset_size)];
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	571	ObConstDecoder::bt_operator	sql:: use: ObBitVector, to_bit_vector	sql::ObBitVector *ref_bitset = sql::to_bit_vector(ref_bitset_buf);
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	609	ObConstDecoder::in_operator	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	615	ObConstDecoder::in_operator	sql:: use: WHITE_OP_IN	|| filter.get_op_type() != sql::WHITE_OP_IN)) {
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	644	ObConstDecoder::in_operator	sql:: use: ObBitVector	char ref_bitset_buf[sql::ObBitVector::memory_size(ref_bitset_size)];
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	645	ObConstDecoder::in_operator	sql:: use: ObBitVector, to_bit_vector	sql::ObBitVector *ref_bitset = sql::to_bit_vector(ref_bitset_buf);
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	682	ObConstDecoder::traverse_refs_and_set_res	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	702	ObConstDecoder::set_res_with_bitset	sql:: use: ObBitVector	const sql::ObBitVector *ref_bitset,
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	704	ObConstDecoder::set_res_with_bitset	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_const_decoder.h	74	ObConstDecoder	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_const_decoder.h	76	ObConstDecoder	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_const_decoder.h	79	ObConstDecoder	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_const_decoder.h	108	ObConstDecoder	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_const_decoder.h	109	ObConstDecoder	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_const_decoder.h	114	ObConstDecoder	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_const_decoder.h	115	ObConstDecoder	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_const_decoder.h	120	ObConstDecoder	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_const_decoder.h	121	ObConstDecoder	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_const_decoder.h	126	ObConstDecoder	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_const_decoder.h	127	ObConstDecoder	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_const_decoder.h	134	ObConstDecoder	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_const_decoder.h	141	ObConstDecoder	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_const_decoder.h	146	ObConstDecoder	sql:: use: ObBitVector	const sql::ObBitVector *ref_bitset,
+src/storage/blocksstable/encoding/ob_const_decoder.h	148	ObConstDecoder	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,

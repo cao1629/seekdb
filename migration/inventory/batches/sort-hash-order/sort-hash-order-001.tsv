@@ -1,0 +1,44 @@
+file	line	symbol	construct	text
+src/data_plane/api/data_plane/vector/ob_vector_common_util.h	81	ObSPIVFixedSizeHeap::push	heap operation definition: ObSPIVFixedSizeHeap::push	int push(T &item)
+src/data_plane/api/data_plane/vector/ob_vector_common_util.h	96	ObSPIVFixedSizeHeap::pop	heap operation definition: ObSPIVFixedSizeHeap::pop	int pop() { return heap_.pop(); }
+src/data_plane/api/data_plane/vector/ob_vector_common_util.h	98	ObSPIVFixedSizeHeap::top	heap operation definition: ObSPIVFixedSizeHeap::top	T& top() { return heap_.top(); }
+src/data_plane/api/data_plane/vector/ob_vector_common_util.h	104	ObSPIVFixedSizeHeap	heap declared: heap_ (ObBinaryHeap)	ObBinaryHeap<T, CompareFunctor, 16> heap_;
+src/data_plane/api/data_plane/vector/ob_vector_common_util.h	235	ObVectorKmeansClusterHelper	heap declared: CenterMaxHeap (ObBinaryHeap)	typedef common::ObBinaryHeap<HeapCenterItem, MaxHeapCompare, 64> CenterMaxHeap;
+src/data_plane/api/data_plane/vector/ob_vector_common_util.h	236	ObVectorKmeansClusterHelper	heap declared: CenterMinHeap (ObBinaryHeap)	typedef common::ObBinaryHeap<HeapCenterItem, MinHeapCompare, 64> CenterMinHeap;
+src/data_plane/api/data_plane/vector/ob_vector_common_util.h	240	ObVectorKmeansClusterHelper	heap declared: max_heap_ (CenterMaxHeap)	CenterMaxHeap max_heap_;
+src/data_plane/api/data_plane/vector/ob_vector_common_util.h	409	ObVectorCenterClusterHelper	heap declared: CenterHeap (ObBinaryHeap)	typedef common::ObBinaryHeap<HeapCenterItemTemp, HeapCompare, 64> CenterHeap;
+src/data_plane/api/data_plane/vector/ob_vector_common_util.h	418	ObVectorCenterClusterHelper	heap declared: heap_ (CenterHeap)	CenterHeap heap_;
+src/data_plane/api/data_plane/vector/ob_vector_common_util.h	582	ObVectorCenterClusterHelper::push_center	heap operation push on heap_ (CenterHeap)	} else if (OB_FAIL(heap_.push(item))) {
+src/data_plane/api/data_plane/vector/ob_vector_common_util.h	587	ObVectorCenterClusterHelper::push_center	heap operation top on heap_ (CenterHeap)	const HeapCenterItemTemp &top = heap_.top();
+src/data_plane/api/data_plane/vector/ob_vector_common_util.h	607	ObVectorCenterClusterHelper::push_center	heap operation replace_top on heap_ (CenterHeap)	} else if (OB_FAIL(heap_.replace_top(new_top))) {
+src/data_plane/api/data_plane/vector/ob_vector_common_util.h	625	ObVectorCenterClusterHelper::get_nearest_probe_center_ids	heap operation top on heap_ (CenterHeap)	const HeapCenterItemTemp &cur_top = heap_.top();
+src/data_plane/api/data_plane/vector/ob_vector_common_util.h	633	ObVectorCenterClusterHelper::get_nearest_probe_center_ids	heap operation pop on heap_ (CenterHeap)	} else if (OB_FAIL(heap_.pop())) {
+src/data_plane/api/data_plane/vector/ob_vector_common_util.h	690	ObVectorCenterClusterHelper::get_nearest_probe_centers	heap operation top on heap_ (CenterHeap)	const HeapCenterItemTemp &cur_top = heap_.top();
+src/data_plane/api/data_plane/vector/ob_vector_common_util.h	697	ObVectorCenterClusterHelper::get_nearest_probe_centers	heap operation pop on heap_ (CenterHeap)	} else if (OB_FAIL(heap_.pop())) {
+src/data_plane/api/data_plane/vector/ob_vector_common_util.h	715	ObVectorCenterClusterHelper::get_nearest_probe_centers_vec_dist	heap operation top on heap_ (CenterHeap)	const HeapCenterItemTemp &cur_top = heap_.top();
+src/data_plane/api/data_plane/vector/ob_vector_common_util.h	725	ObVectorCenterClusterHelper::get_nearest_probe_centers_vec_dist	heap operation pop on heap_ (CenterHeap)	} else if (OB_FAIL(heap_.pop())) {
+src/oblib/common/json_type/ob_json_parse.cpp	316	ObRapidJsonHandler::is_end_object_or_array	member stable_sort() call	obj->stable_sort();
+src/oblib/common/json_type/ob_json_tree.cpp	679	ObJsonObject::add	sort() call on this object	sort();
+src/oblib/common/json_type/ob_json_tree.cpp	693	ObJsonObject::add	sort() call on this object	sort();
+src/oblib/common/json_type/ob_json_tree.cpp	697	ObJsonObject::add	sort() call on this object	sort();
+src/oblib/common/json_type/ob_json_tree.cpp	722	ObJsonObject::rename_key	sort() call on this object	sort();
+src/oblib/common/json_type/ob_json_tree.cpp	734	ObJsonObject::sort	sort function definition: ObJsonObject::sort	void ObJsonObject::sort()
+src/oblib/common/json_type/ob_json_tree.cpp	737	ObJsonObject::sort	lib::ob_sort call	lib::ob_sort(object_array_.begin(), object_array_.end(), cmp);
+src/oblib/common/json_type/ob_json_tree.cpp	740	ObJsonObject::stable_sort	sort function definition: ObJsonObject::stable_sort	void ObJsonObject::stable_sort()
+src/oblib/common/json_type/ob_json_tree.cpp	743	ObJsonObject::stable_sort	std::stable_sort call	std::stable_sort(object_array_.begin(), object_array_.end(), cmp);
+src/oblib/common/log/ob_log_dir_scanner.cpp	182	ObLogDirScanner::search_log_dir_	lib::ob_sort call	lib::ob_sort(log_files.begin(), log_files.end());
+src/oblib/common/mysqlclient/ob_mysql_transaction.cpp	43	ObMySQLTransaction::~ObMySQLTransaction	iterate hash container query_stash_desc_ (ObHashMap)	for (auto &it : query_stash_desc_) {
+src/oblib/common/mysqlclient/ob_mysql_transaction.cpp	111	ObMySQLTransaction::do_stash_query	iterate hash container query_stash_desc_ (ObHashMap)	for (hash::ObHashMap<const char*, ObSqlTransQueryStashDesc*>::iterator it = query_stash_desc_.begin();
+src/oblib/common/xml/ob_binary_aggregate.cpp	384	ObJsonBinAggSerializer::do_json_sort	std::stable_sort call	std::stable_sort(key_info_.begin(), key_info_.end(), cmp);
+src/oblib/common/xml/ob_tree_base.cpp	634	ObLibContainerNode::do_sort	std::stable_sort call	std::stable_sort(sorted_children_->begin(), sorted_children_->end(), cmp);
+src/oblib/common/xml/ob_tree_base.cpp	638	ObLibContainerNode::sort	sort function definition: ObLibContainerNode::sort	void ObLibContainerNode::sort()
+src/oblib/common/xml/ob_tree_base.cpp	642	ObLibContainerNode::sort	std::stable_sort call	std::stable_sort(sorted_children_->begin(), sorted_children_->end(), cmp);
+src/oblib/common/xml/ob_tree_base.cpp	872	ObLibContainerNode::append_into_sorted_container	sort() call on this object	sort();
+src/oblib/common/xml/ob_xml_tree.cpp	631	ObXmlElement::Validate_XML_Tree_Legitimacy	iterate hash container ns_map (NsMap)	for (NsMap::iterator it = ns_map.begin(); OB_SUCC(ret) && it != ns_map.end(); it++) {
+src/oblib/common/xml/ob_xpath.cpp	1580	ObPathVarObject::add	lib::ob_sort call	lib::ob_sort(object_array_.begin(), object_array_.end(), cmp);
+src/oblib/lib/alloc/memory_dump.cpp	281	ObMemoryDump::print_malloc_sample_info	iterate hash container map (ObMallocSampleMap)	for (ObMallocSampleIter it = map.begin(); OB_SUCC(ret) && it != map.end(); ++it) {
+src/oblib/lib/alloc/memory_dump.cpp	764	ObMemoryDump::handle	lib::ob_sort call	lib::ob_sort(chunks_, chunks_ + cnt);
+src/oblib/lib/alloc/memory_dump.h	199	ObMemoryDump::load_malloc_sample_map	iterate hash container map (ObMallocSampleMap)	for (lib::ObMallocSampleMap::iterator it = map.begin(); OB_SUCC(ret) && it != map.end();
+src/oblib/lib/alloc/ob_context_allocator.cpp	118	ObContextAllocatorV2::iter_label	lib::ob_sort call [not built]	lib::ob_sort(items, items + item_cnt,
+src/oblib/lib/alloc/ob_ctx_allocator.cpp	117	ObCtxAllocatorState::iter_label	lib::ob_sort call	lib::ob_sort(items, items + item_cnt,
+src/oblib/lib/charset/ob_ctype_simple.cc	1131	create_fromuni	qsort call	qsort(&idx, PLANE_NUM, sizeof(uni_idx), &pcmp);

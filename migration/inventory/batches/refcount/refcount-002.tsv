@@ -1,0 +1,48 @@
+file	line	symbol	construct	text
+src/oblib/lib/allocator/ob_external_ref.h	39	ObExternalRef::acquire	acquire definition (reference-count function found by its body: calls xref)	void* acquire(void** paddr) {
+src/oblib/lib/allocator/ob_external_ref.h	42	ObExternalRef::acquire	xref call (other name)	xref((addr = load_ptr(paddr)), 1);
+src/oblib/lib/allocator/ob_external_ref.h	46	ObExternalRef::acquire	xref call (other name)	xref(addr, -1);
+src/oblib/lib/allocator/ob_external_ref.h	50	ObExternalRef::acquire	xref call (other name)	xref(addr, -1);
+src/oblib/lib/allocator/ob_external_ref.h	54	ObExternalRef::release	release definition (reference-count function found by its body: calls xref)	void release(void* addr) {
+src/oblib/lib/allocator/ob_external_ref.h	56	ObExternalRef::release	xref call (other name)	xref(addr, -1);
+src/oblib/lib/allocator/ob_external_ref.h	72	ObExternalRef::xref	xref definition (other name)	void xref(void* addr, int x) { ATOMIC_FAA(locate(addr), x); }
+src/oblib/lib/allocator/ob_fifo_allocator.cpp	324	ObFIFOAllocator::alloc_new_normal_page	reference-count change: -- on ref_count_	current_using_->ref_count_--;
+src/oblib/lib/allocator/ob_fifo_allocator.cpp	358	ObFIFOAllocator::try_alloc	reference-count change: ++ on ref_count_	current_using_->ref_count_++;
+src/oblib/lib/allocator/ob_fifo_allocator.cpp	435	ObFIFOAllocator::free_normal	reference-count change: -- on ref_count_	page->ref_count_--;
+src/oblib/lib/allocator/ob_hazard_ref.cpp	24	HazardRef::acquire_ref	acquire_ref definition (other name)	uint64_t *HazardRef::acquire_ref()
+src/oblib/lib/allocator/ob_hazard_ref.cpp	46	HazardRef::release_ref	release_ref definition (other name)	void HazardRef::release_ref(uint64_t *ref)
+src/oblib/lib/allocator/ob_hazard_ref.h	55	HazardRef	acquire_ref declaration (other name)	uint64_t *acquire_ref();
+src/oblib/lib/allocator/ob_hazard_ref.h	56	HazardRef	release_ref declaration (other name)	void release_ref(uint64_t *ref);
+src/oblib/lib/allocator/ob_hazard_ref.h	238	HazardHandle	Handle class definition	class HazardHandle
+src/oblib/lib/allocator/ob_hazard_ref.h	244	HazardHandle::acquire_ref	acquire_ref definition (other name)	uint64_t* acquire_ref()
+src/oblib/lib/allocator/ob_hazard_ref.h	246	HazardHandle::acquire_ref	acquire_ref call (other name)	return (ref_ = href_.acquire_ref());
+src/oblib/lib/allocator/ob_hazard_ref.h	248	HazardHandle::release_ref	release_ref definition (other name)	void release_ref()
+src/oblib/lib/allocator/ob_hazard_ref.h	251	HazardHandle::release_ref	release_ref call (other name)	href_.release_ref(ref_);
+src/oblib/lib/allocator/ob_hazard_ref.h	260	RetireListHandle	Handle class definition	class RetireListHandle
+src/oblib/lib/allocator/ob_heavy_ref.h	47	ObHeavyRef::protect	xref call (other name)	xref((addr = load_ptr(paddr)), 1);
+src/oblib/lib/allocator/ob_heavy_ref.h	51	ObHeavyRef::protect	xref call (other name)	xref(addr, -1);
+src/oblib/lib/allocator/ob_heavy_ref.h	55	ObHeavyRef::protect	xref call (other name)	xref(addr, -1);
+src/oblib/lib/allocator/ob_heavy_ref.h	61	ObHeavyRef::unprotect	xref call (other name)	xref(addr, -1);
+src/oblib/lib/allocator/ob_heavy_ref.h	69	ObHeavyRef::acquire	acquire definition (reference-count function found by its body: changes a reference-count field)	RefPtr* acquire(RefPtr** paddr) {
+src/oblib/lib/allocator/ob_heavy_ref.h	77	ObHeavyRef::release	release definition (reference-count function found by its body: changes a reference-count field)	void release(RefPtr* addr) {
+src/oblib/lib/allocator/ob_heavy_ref.h	84	ObHeavyRef::retire	retire definition (reference-count function found by its body: changes a reference-count field)	void retire(RefPtr* ptr) {
+src/oblib/lib/allocator/ob_heavy_ref.h	94	ObHeavyRef::xref	xref definition (other name)	void xref(void* addr, int x) { ATOMIC_FAA(locate(addr), x); }
+src/oblib/lib/allocator/ob_qsync.h	45	ObQSyncImpl::acquire_ref	acquire_ref definition (other name)	int64_t acquire_ref()
+src/oblib/lib/allocator/ob_qsync.h	48	ObQSyncImpl::acquire_ref	add_ref call (other name)	const int64_t new_ref = add_ref(idx, 1);
+src/oblib/lib/allocator/ob_qsync.h	54	ObQSyncImpl::release_ref	release_ref definition (other name)	void release_ref()
+src/oblib/lib/allocator/ob_qsync.h	56	ObQSyncImpl::release_ref	release_ref call (other name)	release_ref(get_id() % ref_num_);
+src/oblib/lib/allocator/ob_qsync.h	58	ObQSyncImpl::release_ref	release_ref definition (other name)	void release_ref(int64_t idx)
+src/oblib/lib/allocator/ob_qsync.h	60	ObQSyncImpl::release_ref	add_ref call (other name)	const int64_t new_ref = add_ref(idx, -1);
+src/oblib/lib/allocator/ob_qsync.h	91	ObQSyncImpl::add_ref	add_ref definition (other name)	int64_t add_ref(int64_t idx, int64_t x)
+src/oblib/lib/allocator/ob_qsync.h	125	QSyncCriticalGuard	Guard struct definition whose methods call release_ref	struct QSyncCriticalGuard
+src/oblib/lib/allocator/ob_qsync.h	127	QSyncCriticalGuard::QSyncCriticalGuard	acquire_ref call (other name)	explicit QSyncCriticalGuard(ObQSync& qsync): qsync_(qsync), ref_(qsync.acquire_ref()) {}
+src/oblib/lib/allocator/ob_qsync.h	128	QSyncCriticalGuard::~QSyncCriticalGuard	release_ref call (other name)	~QSyncCriticalGuard() { qsync_.release_ref(ref_); }
+src/oblib/lib/allocator/ob_qsync.h	186	DynamicQSyncCriticalGuard	Guard struct definition whose methods call release_ref	struct DynamicQSyncCriticalGuard
+src/oblib/lib/allocator/ob_qsync.h	188	DynamicQSyncCriticalGuard::DynamicQSyncCriticalGuard	acquire_ref call (other name)	explicit DynamicQSyncCriticalGuard(ObDynamicQSync& qsync): qsync_(qsync), ref_(qsync.acquire_ref()) {}
+src/oblib/lib/allocator/ob_qsync.h	189	DynamicQSyncCriticalGuard::~DynamicQSyncCriticalGuard	release_ref call (other name)	~DynamicQSyncCriticalGuard() { qsync_.release_ref(ref_); }
+src/oblib/lib/allocator/ob_simple_fifo_alloc.h	58	ObFifoBlock::free_item	reference-count change: ATOMIC_AAF on ref_	bool free_item(Item* p) { return 0 == ATOMIC_AAF(&ref_, -p->size_); }
+src/oblib/lib/allocator/ob_simple_fifo_alloc.h	63	ObFifoBlock::retire	retire definition (reference-count function found by its body: changes a reference-count field)	bool retire(int64_t val) { return 0 == ATOMIC_AAF(&ref_, val); }
+src/oblib/lib/allocator/ob_slice_alloc.h	36	ObSimpleSync::ref	ref definition (reference-count function found by its body: changes a reference-count field)	int32_t ref(int32_t x) { return ATOMIC_AAF(&ref_, x); }
+src/oblib/lib/allocator/ob_vslice_alloc.h	64	ObBlockVSlicer::alloc_item	reference-count change: ATOMIC_FAA on ref_	ATOMIC_FAA(&ref_, alloc_size);
+src/oblib/lib/allocator/ob_vslice_alloc.h	72	ObBlockVSlicer::free_item	reference-count change: ATOMIC_AAF on ref_	int64_t nv = ATOMIC_AAF(&ref_, -p->size_);
+src/oblib/lib/allocator/ob_vslice_alloc.h	80	ObBlockVSlicer::retire	retire definition (reference-count function found by its body: changes a reference-count field)	bool retire() { return 0 == ATOMIC_AAF(&ref_, -K); }

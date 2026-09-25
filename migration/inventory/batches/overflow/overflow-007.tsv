@@ -1,0 +1,51 @@
+file	line	symbol	construct	text
+src/sql/engine/expr/ob_expr_add.cpp	229	ObExprAdd::add_int	unchecked: arithmetic on signed value left_i	res.set_int(left_i + right_i);
+src/sql/engine/expr/ob_expr_add.cpp	230	ObExprAdd::add_int	check: helper is_int_int_out_of_range	if (OB_UNLIKELY(is_int_int_out_of_range(left_i, right_i, res.get_int()))) {
+src/sql/engine/expr/ob_expr_add.cpp	231	ObExprAdd::add_int	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_add.cpp	242	ObExprAdd::add_int	unchecked: arithmetic on signed value left_i	res.set_uint64(left_i + right_i);
+src/sql/engine/expr/ob_expr_add.cpp	243	ObExprAdd::add_int	check: helper is_int_uint_out_of_range	if (OB_UNLIKELY(is_int_uint_out_of_range(left_i, right_i, res.get_uint64()))) {
+src/sql/engine/expr/ob_expr_add.cpp	244	ObExprAdd::add_int	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_add.cpp	267	ObExprAdd::add_uint	unchecked: arithmetic on unsigned value left_i	res.set_uint64(left_i + right_i);
+src/sql/engine/expr/ob_expr_add.cpp	271	ObExprAdd::add_uint	check: helper is_uint_uint_out_of_range	if (OB_UNLIKELY(is_uint_uint_out_of_range(left_i, right_i, res.get_uint64()))) {
+src/sql/engine/expr/ob_expr_add.cpp	272	ObExprAdd::add_uint	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_add.cpp	283	ObExprAdd::add_uint	check: helper is_int_uint_out_of_range	if (OB_UNLIKELY(is_int_uint_out_of_range(right_i, left_i, res.get_uint64()))) {
+src/sql/engine/expr/ob_expr_add.cpp	284	ObExprAdd::add_uint	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_add.cpp	376	ObExprAdd::add_datetime	unchecked: arithmetic on signed value left_i	int64_t round_value = left_i + right_i;
+src/sql/engine/expr/ob_expr_add.cpp	386	ObExprAdd::add_datetime	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_add.cpp	551	ObIntIntBatchAddRaw::raw_op	unchecked: arithmetic on signed value l	res = l + r;
+src/sql/engine/expr/ob_expr_add.cpp	557	ObIntIntBatchAddRaw::raw_check	check: helper is_int_int_out_of_range	if (OB_UNLIKELY(ObExprAdd::is_int_int_out_of_range(l, r, res))) {
+src/sql/engine/expr/ob_expr_add.cpp	559	ObIntIntBatchAddRaw::raw_check	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_add.cpp	587	ObIntUIntBatchAddRaw::raw_op	unchecked: arithmetic on signed value l	res = l + r;
+src/sql/engine/expr/ob_expr_add.cpp	593	ObIntUIntBatchAddRaw::raw_check	check: helper is_int_uint_out_of_range	if (OB_UNLIKELY(ObExprAdd::is_int_uint_out_of_range(l, r, res))) {
+src/sql/engine/expr/ob_expr_add.cpp	595	ObIntUIntBatchAddRaw::raw_check	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_add.cpp	623	ObUIntUIntBatchAddRaw::raw_op	unchecked: arithmetic on unsigned value l	res = l + r;
+src/sql/engine/expr/ob_expr_add.cpp	629	ObUIntUIntBatchAddRaw::raw_check	check: helper is_uint_uint_out_of_range	if (OB_UNLIKELY(ObExprAdd::is_uint_uint_out_of_range(l, r, res))) {
+src/sql/engine/expr/ob_expr_add.cpp	631	ObUIntUIntBatchAddRaw::raw_check	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_add.cpp	659	ObUIntIntBatchAddRaw::raw_op	unchecked: arithmetic on unsigned value l	res = l + r;
+src/sql/engine/expr/ob_expr_add.cpp	665	ObUIntIntBatchAddRaw::raw_check	check: helper is_int_uint_out_of_range	if (OB_UNLIKELY(ObExprAdd::is_int_uint_out_of_range(r, l, res))) {
+src/sql/engine/expr/ob_expr_add.cpp	667	ObUIntIntBatchAddRaw::raw_check	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_add.cpp	896	ObNumberDatetimeAddFunc::operator()	unchecked: arithmetic on signed value right_i	int64_t round_value = left_i + right_i;
+src/sql/engine/expr/ob_expr_add.cpp	906	ObNumberDatetimeAddFunc::operator()	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_add.cpp	948	ObDatetimeDatetimeAddFunc::operator()	unchecked: arithmetic on signed value left_i	int64_t round_value = left_i + right_i;
+src/sql/engine/expr/ob_expr_add.cpp	958	ObDatetimeDatetimeAddFunc::operator()	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_add.cpp	1004	ObDecimalIntBatchAddRawWithCheck::raw_check	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_add.h	56	ObExprAdd::is_add_out_of_range	check: helper is_add_out_of_range (definition)	OB_INLINE static bool is_add_out_of_range(T1 val1, T2 val2, T3 &res)
+src/sql/engine/expr/ob_expr_add.h	58	ObExprAdd::is_add_out_of_range	check: __builtin_*_overflow	return __builtin_add_overflow(val1, val2, &res);
+src/sql/engine/expr/ob_expr_add.h	60	ObExprAdd::is_int_int_out_of_range	check: helper is_int_int_out_of_range (definition)	OB_INLINE static bool is_int_int_out_of_range(int64_t val1, int64_t val2, int64_t res)
+src/sql/engine/expr/ob_expr_add.h	72	ObExprAdd::is_int_uint_out_of_range	check: helper is_int_uint_out_of_range (definition)	OB_INLINE static bool is_int_uint_out_of_range(int64_t val1, uint64_t val2, uint64_t res)
+src/sql/engine/expr/ob_expr_add.h	84	ObExprAdd::is_uint_uint_out_of_range	check: helper is_uint_uint_out_of_range (definition)	OB_INLINE static bool is_uint_uint_out_of_range(uint64_t val1, uint64_t val2, uint64_t res)
+src/sql/engine/expr/ob_expr_array_difference.cpp	118	ObExprArrayDifference::calc_difference	unchecked: arithmetic on a signed value getter	this_elem.get_int() - last_elem.get_int(),
+src/sql/engine/expr/ob_expr_array_difference.cpp	121	ObExprArrayDifference::calc_difference	unchecked: arithmetic on a signed value getter	} else if (OB_FAIL(array_obj->push_back(this_elem.get_int() - last_elem.get_int()))) {
+src/sql/engine/expr/ob_expr_array_position.cpp	219	ObExprArrayPosition::array_position	unchecked: arithmetic on signed value val	ObIArrayType *val = NULL;
+src/sql/engine/expr/ob_expr_array_range.cpp	139	ObExprArrayRange::eval_array_range	unchecked: arithmetic on signed value param_end	interval = abs(param_end - param_start);
+src/sql/engine/expr/ob_expr_array_range.cpp	162	ObExprArrayRange::eval_array_range	unchecked: arithmetic on signed value param_start	arr_data[i] = param_start + i * param_step;
+src/sql/engine/expr/ob_expr_array_slice.cpp	245	ObExprArraySlice::get_subarray	check: limit comparison	if (len > INT64_MAX - offset) {
+src/sql/engine/expr/ob_expr_atan2.cpp	86	calc_atan2_expr	check: raises OB_NUMERIC_OVERFLOW	ret = OB_NUMERIC_OVERFLOW;
+src/sql/engine/expr/ob_expr_concat_ws.cpp	125	ObExprConcatWs::calc	unchecked: arithmetic checked for overflow only afterwards by is_int_int_out_of_range	tmp_alloc_len = alloc_len + word.length();
+src/sql/engine/expr/ob_expr_concat_ws.cpp	126	ObExprConcatWs::calc	check: helper is_int_int_out_of_range	if (ObExprAdd::is_int_int_out_of_range(alloc_len, word.length(), tmp_alloc_len)) {
+src/sql/engine/expr/ob_expr_concat_ws.cpp	127	ObExprConcatWs::calc	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_concat_ws.cpp	135	ObExprConcatWs::calc	check: helper is_multi_overflow64	if (is_multi_overflow64(words.count()-1, sep_str.length())) {
+src/sql/engine/expr/ob_expr_concat_ws.cpp	136	ObExprConcatWs::calc	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_concat_ws.cpp	140	ObExprConcatWs::calc	check: helper is_int_int_out_of_range	if (ObExprAdd::is_int_int_out_of_range(alloc_len, all_sep_str_len, tmp_alloc_len)) {
+src/sql/engine/expr/ob_expr_concat_ws.cpp	141	ObExprConcatWs::calc	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_conv.cpp	115	ObExprConv::eval_conv	unchecked: arithmetic on signed value from_base	dec = ObCharset::strntoll(str.ptr(), str.length(), -from_base, &err);

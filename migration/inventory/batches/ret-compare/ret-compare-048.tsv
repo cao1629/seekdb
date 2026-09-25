@@ -1,0 +1,96 @@
+file	line	symbol	construct	text
+src/storage/access/ob_sstable_row_scanner.ipp	269	ObSSTableRowScanner::open_cur_data_block	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/access/ob_sstable_row_scanner.ipp	323	ObSSTableRowScanner::inner_get_next_row	ret == OB_ITER_END	if (OB_LIKELY(OB_ITER_END == ret)) {
+src/storage/access/ob_sstable_row_scanner.ipp	328	ObSSTableRowScanner::inner_get_next_row	ret != OB_PUSHDOWN_STATUS_CHANGED	} else if (OB_UNLIKELY(OB_PUSHDOWN_STATUS_CHANGED != ret)) {
+src/storage/access/ob_sstable_row_scanner.ipp	363	ObSSTableRowScanner::fetch_row	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/access/ob_sstable_row_scanner.ipp	376	ObSSTableRowScanner::fetch_row	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/access/ob_sstable_row_scanner.ipp	386	ObSSTableRowScanner::fetch_row	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/access/ob_sstable_row_scanner.ipp	432	ObSSTableRowScanner::get_next_rows	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/access/ob_sstable_row_scanner.ipp	437	ObSSTableRowScanner::get_next_rows	ret != OB_PUSHDOWN_STATUS_CHANGED	} else if (OB_UNLIKELY(OB_PUSHDOWN_STATUS_CHANGED != ret)) {
+src/storage/access/ob_sstable_row_scanner.ipp	464	ObSSTableRowScanner::fetch_rows	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/access/ob_sstable_row_scanner.ipp	480	ObSSTableRowScanner::fetch_rows	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/access/ob_sstable_row_scanner.ipp	485	ObSSTableRowScanner::fetch_rows	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/access/ob_sstable_row_scanner.ipp	518	ObSSTableRowScanner::get_next_rowkey	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/access/ob_sstable_row_whole_scanner.cpp	212	ObSSTableRowWholeScanner::inner_open	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/access/ob_sstable_row_whole_scanner.cpp	215	ObSSTableRowWholeScanner::inner_open	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/access/ob_sstable_row_whole_scanner.cpp	219	ObSSTableRowWholeScanner::inner_open	ret == OB_ITER_END	if (OB_SUCCESS == ret || OB_ITER_END == ret) {
+src/storage/access/ob_sstable_row_whole_scanner.cpp	280	ObSSTableRowWholeScanner::open	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/access/ob_sstable_row_whole_scanner.cpp	285	ObSSTableRowWholeScanner::open	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/access/ob_sstable_row_whole_scanner.cpp	320	ObSSTableRowWholeScanner::inner_get_next_row	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/access/ob_sstable_row_whole_scanner.cpp	322	ObSSTableRowWholeScanner::inner_get_next_row	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/access/ob_sstable_row_whole_scanner.cpp	341	ObSSTableRowWholeScanner::open_next_valid_micro_block	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/access/ob_sstable_row_whole_scanner.cpp	345	ObSSTableRowWholeScanner::open_next_valid_micro_block	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/access/ob_sstable_row_whole_scanner.cpp	385	ObSSTableRowWholeScanner::prefetch	ret == OB_ITER_END	if (OB_LIKELY(OB_ITER_END == ret)) {
+src/storage/access/ob_sstable_row_whole_scanner.cpp	502	ObSSTableRowWholeScanner::open_micro_block	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/access/ob_sstable_row_whole_scanner.cpp	548	ObSSTableRowWholeScanner::recycle_last_rowkey_in_micro_block	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/access/ob_store_row_iterator.h	218	ObQueryRowIterator::get_next_rows	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/access/ob_table_param.cpp	319	#define GET_FROM_ARRAY_OR_MAP	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {                 \
+src/storage/access/ob_table_read_info.cpp	325	ObTableReadInfo::init	ret != OB_INIT_TWICE	if (OB_FAIL(ret) && OB_INIT_TWICE != ret) {
+src/storage/access/ob_table_scan_iterator.cpp	611	ObTableScanIterator::get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/access/ob_table_scan_iterator.cpp	617	ObTableScanIterator::get_next_row	ret == OB_ITER_END	if (OB_SUCC(ret) || OB_ITER_END == ret) {
+src/storage/access/ob_table_scan_iterator.cpp	642	ObTableScanIterator::get_next_rows	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/access/ob_table_scan_iterator.cpp	648	ObTableScanIterator::get_next_rows	ret == OB_ITER_END	if (OB_SUCC(ret) || OB_ITER_END == ret) {
+src/storage/access/ob_vector_store.cpp	169	ObVectorStore::check_agg_mask	ret == OB_HASH_EXIST	if (OB_HASH_EXIST == ret) {
+src/storage/access/ob_vector_store.cpp	172	ObVectorStore::check_agg_mask	ret == OB_HASH_NOT_EXIST	} else if (OB_HASH_NOT_EXIST == ret) {
+src/storage/access/ob_vector_store.cpp	207	ObVectorStore::check_need_group_by	ret == OB_HASH_EXIST	if (OB_HASH_EXIST == ret) {
+src/storage/access/ob_vector_store.cpp	209	ObVectorStore::check_need_group_by	ret == OB_HASH_NOT_EXIST	} else if (OB_HASH_NOT_EXIST == ret) {
+src/storage/access/ob_vector_store.cpp	290	ObVectorStore::fill_rows	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/access/ob_vector_store.cpp	294	ObVectorStore::fill_rows	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/access/ob_vector_store.cpp	321	ObVectorStore::fill_output_rows	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/access/ob_vector_store.cpp	378	ObVectorStore::fill_group_by_rows	ret == OB_ITER_END	if (OB_LIKELY(OB_ITER_END == ret)) {
+src/storage/access/ob_vector_store.cpp	420	ObVectorStore::check_can_group_by	ret != OB_NOT_SUPPORTED	if (OB_UNLIKELY(OB_NOT_SUPPORTED != ret)) {
+src/storage/access/ob_vector_store.cpp	471	ObVectorStore::do_group_by	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/access/ob_vector_store.cpp	483	ObVectorStore::do_group_by	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.cpp	254	ObIntegerBaseDiffDecoder::pushdown_operator	ret != OB_NOT_SUPPORTED	if (OB_UNLIKELY(OB_NOT_SUPPORTED != ret)) {
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.cpp	261	ObIntegerBaseDiffDecoder::pushdown_operator	ret != OB_NOT_SUPPORTED	if (OB_UNLIKELY(OB_NOT_SUPPORTED != ret)) {
+src/storage/blocksstable/encoding/ob_micro_block_decoder.cpp	1597	ObMicroBlockDecoder::filter_pushdown_filter	ret == OB_NOT_SUPPORTED	if (OB_LIKELY(ret == OB_NOT_SUPPORTED)) {
+src/storage/blocksstable/encoding/ob_micro_block_encoder.cpp	388	ObMicroBlockEncoder::append_row	ret != OB_BUF_NOT_ENOUGH	if (OB_UNLIKELY(OB_BUF_NOT_ENOUGH != ret)) {
+src/storage/blocksstable/encoding/ob_micro_block_encoder.cpp	645	ObMicroBlockEncoder::build_block	ret == OB_BUF_NOT_ENOUGH	if (OB_BUF_NOT_ENOUGH == ret) {
+src/storage/blocksstable/encoding/ob_micro_block_encoder.cpp	935	ObMicroBlockEncoder::copy_and_append_row	ret != OB_BUF_NOT_ENOUGH	if (OB_UNLIKELY(OB_BUF_NOT_ENOUGH != ret)) {
+src/storage/blocksstable/encoding/ob_micro_block_encoder.cpp	962	ObMicroBlockEncoder::copy_and_append_row	ret != OB_BUF_NOT_ENOUGH	if (OB_UNLIKELY(OB_BUF_NOT_ENOUGH != ret)) {
+src/storage/blocksstable/encoding/ob_multi_prefix_tree.cpp	216	ObMultiPrefixTree::try_previous_length	ret != OB_DATA_OUT_OF_RANGE	if (OB_DATA_OUT_OF_RANGE != ret) {
+src/storage/blocksstable/encoding/ob_multi_prefix_tree.cpp	248	ObMultiPrefixTree::build_tree	ret == OB_DATA_OUT_OF_RANGE	if (OB_LIKELY(OB_DATA_OUT_OF_RANGE == ret)) {
+src/storage/blocksstable/encoding/ob_multi_prefix_tree.cpp	286	ObMultiPrefixTree::traverse_by_level	ret == OB_DATA_OUT_OF_RANGE	if (OB_LIKELY(OB_DATA_OUT_OF_RANGE == ret)) {
+src/storage/blocksstable/encoding/ob_multi_prefix_tree.cpp	310	ObMultiPrefixTree::traverse_by_level	ret != OB_DATA_OUT_OF_RANGE	if (OB_DATA_OUT_OF_RANGE != ret) {
+src/storage/blocksstable/index_block/ob_clustered_index_block_writer.cpp	499	ObClusteredIndexBlockWriter::make_clustered_index_micro_block_with_reuse	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/blocksstable/index_block/ob_ddl_index_block_row_iterator.cpp	119	ObDDLIndexBlockRowIterator::locate_key	ret != OB_BEYOND_THE_RANGE	if (OB_UNLIKELY(OB_BEYOND_THE_RANGE != ret)) {
+src/storage/blocksstable/index_block/ob_ddl_index_block_row_iterator.cpp	180	ObDDLIndexBlockRowIterator::locate_range	ret != OB_BEYOND_THE_RANGE	if (OB_BEYOND_THE_RANGE != ret) {
+src/storage/blocksstable/index_block/ob_ddl_index_block_row_iterator.cpp	207	ObDDLIndexBlockRowIterator::skip_to_next_valid_position	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/blocksstable/index_block/ob_ddl_index_block_row_iterator.cpp	342	ObDDLIndexBlockRowIterator::get_next	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/blocksstable/index_block/ob_ddl_index_block_row_iterator.cpp	376	ObDDLIndexBlockRowIterator::get_next_meta	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/blocksstable/index_block/ob_ddl_index_block_row_iterator.cpp	423	ObDDLIndexBlockRowIterator::get_index_row_count	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/blocksstable/index_block/ob_index_block_aggregator.cpp	330	ObColMaxAggregator::eval	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/blocksstable/index_block/ob_index_block_aggregator.cpp	344	ObColMaxAggregator::eval	ret != OB_ITER_END	} else if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/blocksstable/index_block/ob_index_block_aggregator.cpp	500	ObColMinAggregator::eval	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/blocksstable/index_block/ob_index_block_aggregator.cpp	514	ObColMinAggregator::eval	ret != OB_ITER_END	} else if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/blocksstable/index_block/ob_index_block_aggregator.cpp	599	ObColSumAggregator::eval	ret == OB_INTEGER_PRECISION_OVERFLOW; ret == OB_DECIMAL_PRECISION_OVERFLOW; ret == OB_NUMERIC_OVERFLOW	if (OB_INTEGER_PRECISION_OVERFLOW == ret || OB_DECIMAL_PRECISION_OVERFLOW == ret || OB_NUMERIC_OVERFLOW == ret) {
+src/storage/blocksstable/index_block/ob_index_block_aggregator.cpp	624	ObColSumAggregator::eval	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/blocksstable/index_block/ob_index_block_aggregator.cpp	630	ObColSumAggregator::eval	ret == OB_INTEGER_PRECISION_OVERFLOW; ret == OB_DECIMAL_PRECISION_OVERFLOW; ret == OB_NUMERIC_OVERFLOW	if (OB_INTEGER_PRECISION_OVERFLOW == ret || OB_DECIMAL_PRECISION_OVERFLOW == ret || OB_NUMERIC_OVERFLOW == ret) {
+src/storage/blocksstable/index_block/ob_index_block_aggregator.cpp	640	ObColSumAggregator::eval	ret != OB_ITER_END	} else if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/blocksstable/index_block/ob_index_block_aggregator.cpp	986	ObBM25ParamAggregator::eval	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/blocksstable/index_block/ob_index_block_aggregator.cpp	987	ObBM25ParamAggregator::eval	call result doc_length_iter.get_next(doc_length_datum) != OB_ITER_END	} else if (OB_ITER_END != doc_length_iter.get_next(doc_length_datum)) {
+src/storage/blocksstable/index_block/ob_index_block_aggregator.cpp	995	ObBM25ParamAggregator::eval	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/blocksstable/index_block/ob_index_block_builder.cpp	722	ObSSTableIndexBuilder::ObMacroMetaIter::get_next_macro_block	ret != OB_ITER_END	if (OB_UNLIKELY(ret != OB_ITER_END)) {
+src/storage/blocksstable/index_block/ob_index_block_builder.cpp	896	ObSSTableIndexBuilder::merge_index_tree_from_meta_block	ret != OB_ITER_END	if (OB_UNLIKELY(ret != OB_ITER_END)) {
+src/storage/blocksstable/index_block/ob_index_block_builder.cpp	926	ObSSTableIndexBuilder::merge_index_tree_from_meta_block	ret != OB_ITER_END	if (OB_UNLIKELY(ret != OB_ITER_END)) {
+src/storage/blocksstable/index_block/ob_index_block_builder.cpp	989	ObSSTableIndexBuilder::merge_index_tree_from_all_mem_index_block	ret != OB_ITER_END	if (OB_UNLIKELY(ret != OB_ITER_END)) {
+src/storage/blocksstable/index_block/ob_index_block_builder.cpp	1004	ObSSTableIndexBuilder::merge_index_tree_from_all_mem_index_block	ret != OB_ITER_END	if (OB_UNLIKELY(ret != OB_ITER_END)) {
+src/storage/blocksstable/index_block/ob_index_block_builder.cpp	1075	ObSSTableIndexBuilder::build_meta_tree_from_all_mem_meta_block	ret != OB_ITER_END	if (OB_UNLIKELY(ret != OB_ITER_END)) {
+src/storage/blocksstable/index_block/ob_index_block_builder.cpp	1084	ObSSTableIndexBuilder::build_meta_tree_from_all_mem_meta_block	ret != OB_ITER_END	if (OB_UNLIKELY(ret != OB_ITER_END)) {
+src/storage/blocksstable/index_block/ob_index_block_builder.cpp	1117	ObSSTableIndexBuilder::build_meta_tree_from_meta_block	ret != OB_ITER_END	if (OB_UNLIKELY(ret != OB_ITER_END)) {
+src/storage/blocksstable/index_block/ob_index_block_builder.cpp	1133	ObSSTableIndexBuilder::build_meta_tree_from_meta_block	ret != OB_ITER_END	if (OB_UNLIKELY(ret != OB_ITER_END)) {
+src/storage/blocksstable/index_block/ob_index_block_builder.cpp	1748	ObSSTableIndexBuilder::is_retriable_error	switch (ret_code) case OB_TIMEOUT	case OB_TIMEOUT:
+src/storage/blocksstable/index_block/ob_index_block_builder.cpp	1749	ObSSTableIndexBuilder::is_retriable_error	switch (ret_code) case OB_ALLOCATE_MEMORY_FAILED	case OB_ALLOCATE_MEMORY_FAILED:
+src/storage/blocksstable/index_block/ob_index_block_builder.cpp	1750	ObSSTableIndexBuilder::is_retriable_error	switch (ret_code) case OB_EAGAIN	case OB_EAGAIN:
+src/storage/blocksstable/index_block/ob_index_block_builder.cpp	1751	ObSSTableIndexBuilder::is_retriable_error	switch (ret_code) case OB_IO_ERROR	case OB_IO_ERROR:
+src/storage/blocksstable/index_block/ob_index_block_builder.cpp	1865	ObBaseIndexBlockBuilder::append_row	ret != OB_BUF_NOT_ENOUGH	if (OB_UNLIKELY(OB_BUF_NOT_ENOUGH != ret)) {
+src/storage/blocksstable/index_block/ob_index_block_builder.cpp	2311	ObBaseIndexBlockBuilder::insert_and_update_index_tree	ret != OB_BUF_NOT_ENOUGH	if (OB_FAIL(ret) && OB_BUF_NOT_ENOUGH != ret) {
+src/storage/blocksstable/index_block/ob_index_block_builder.cpp	2524	ObDataIndexBlockBuilder::insert_and_update_index_tree	ret != OB_BUF_NOT_ENOUGH	if (OB_UNLIKELY(OB_BUF_NOT_ENOUGH != ret)) {
+src/storage/blocksstable/index_block/ob_index_block_builder.cpp	2649	ObDataIndexBlockBuilder::append_row	ret != OB_BUF_NOT_ENOUGH	if (OB_BUF_NOT_ENOUGH != ret) {
+src/storage/blocksstable/index_block/ob_index_block_builder.cpp	2826	ObDataIndexBlockBuilder::append_index_micro_block_and_macro_meta	ret == OB_BUF_NOT_ENOUGH	if (OB_FAIL(ret) && OB_BUF_NOT_ENOUGH == ret) {
+src/storage/blocksstable/index_block/ob_index_block_builder.cpp	3045	ObMetaIndexBlockBuilder::append_leaf_row	ret != OB_BUF_NOT_ENOUGH	if (OB_UNLIKELY(OB_BUF_NOT_ENOUGH != ret)) {
+src/storage/blocksstable/index_block/ob_index_block_builder.cpp	3089	ObMetaIndexBlockBuilder::close	other variable tp_ret == OB_SIZE_OVERFLOW	if (OB_SIZE_OVERFLOW == tp_ret) {
+src/storage/blocksstable/index_block/ob_index_block_builder.cpp	3092	ObMetaIndexBlockBuilder::close	other variable tp_ret == OB_BUF_NOT_ENOUGH	} else if (OB_BUF_NOT_ENOUGH == tp_ret) {
+src/storage/blocksstable/index_block/ob_index_block_dual_meta_iterator.cpp	89	ObDualMacroMetaIterator::get_next_macro_block	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/blocksstable/index_block/ob_index_block_dual_meta_iterator.cpp	96	ObDualMacroMetaIterator::get_next_macro_block	ret != OB_ITER_END	} else if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/blocksstable/index_block/ob_index_block_dual_meta_iterator.cpp	99	ObDualMacroMetaIterator::get_next_macro_block	tmp_ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != tmp_ret)) {

@@ -1,0 +1,90 @@
+file	line	symbol	construct	text
+src/rootserver/ddl_task/ob_index_build_task.cpp	496	ObIndexBuildTask::check_health	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // allow clean up
+src/rootserver/ddl_task/ob_index_build_task.cpp	578	ObIndexBuildTask::wait_trans_end	conditional reset (ternary yields OB_SUCCESS)	ret = OB_SNAPSHOT_DISCARDED == ret ? OB_SUCCESS : ret;
+src/rootserver/ddl_task/ob_index_build_task.cpp	650	ObIndexBuildTask::release_snapshot	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_index_build_task.cpp	656	ObIndexBuildTask::release_snapshot	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_index_build_task.cpp	669	ObIndexBuildTask::release_snapshot	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_index_build_task.cpp	675	ObIndexBuildTask::release_snapshot	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_index_build_task.cpp	779	ObIndexBuildTask::wait_and_send_local_partition_build_task	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_index_build_task.cpp	781	ObIndexBuildTask::wait_and_send_local_partition_build_task	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_index_build_task.cpp	878	ObIndexBuildTask::wait_data_complement	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // retry
+src/rootserver/ddl_task/ob_modify_autoinc_task.cpp	385	ObModifyAutoincTask::wait_trans_end	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_modify_autoinc_task.cpp	534	ObModifyAutoincTask::check_health	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // allow clean up
+src/rootserver/ddl_task/ob_rebuild_index_task.cpp	480	ObRebuildIndexTask::check_ddl_task_finish	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_table_redefinition_task.cpp	314	ObTableRedefinitionTask::table_redefinition	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // retry
+src/rootserver/ddl_task/ob_table_redefinition_task.cpp	465	ObTableRedefinitionTask::copy_table_indexes	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_table_redefinition_task.cpp	651	ObTableRedefinitionTask::copy_table_dependent_objects	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_table_redefinition_task.cpp	660	ObTableRedefinitionTask::copy_table_dependent_objects	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_table_redefinition_task.cpp	670	ObTableRedefinitionTask::copy_table_dependent_objects	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_table_redefinition_task.cpp	722	ObTableRedefinitionTask::take_effect	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_table_redefinition_task.cpp	729	ObTableRedefinitionTask::take_effect	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_table_redefinition_task.cpp	749	ObTableRedefinitionTask::take_effect	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_table_redefinition_task.cpp	1065	ObTableRedefinitionTask::collect_longops_stat	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_table_redefinition_task.cpp	1074	ObTableRedefinitionTask::collect_longops_stat	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_vec_index_build_task.cpp	369	ObVecIndexBuildTask::check_health	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // allow clean up
+src/rootserver/ddl_task/ob_vec_index_build_task.cpp	539	ObVecIndexBuildTask::prepare	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_vec_index_build_task.cpp	609	ObVecIndexBuildTask::prepare_rowkey_vid_table	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_vec_index_build_task.cpp	658	ObVecIndexBuildTask::prepare_aux_index_tables	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_vec_index_build_task.cpp	746	ObVecIndexBuildTask::prepare_vid_rowkey_table	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_vec_index_build_task.cpp	850	ObVecIndexBuildTask::CheckTaskStatusFn::operator()	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_vec_index_build_task.cpp	901	ObVecIndexBuildTask::wait_aux_table_complement	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // reach max dump count
+src/rootserver/ddl_task/ob_vec_index_build_task.cpp	924	ObVecIndexBuildTask::wait_aux_table_complement	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // allow clean up
+src/rootserver/ddl_task/ob_vec_index_build_task.cpp	1390	ObVecIndexBuildTask::collect_longops_stat	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_vec_index_build_task.cpp	1412	ObVecIndexBuildTask::collect_longops_stat	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_vec_index_build_task.cpp	1434	ObVecIndexBuildTask::collect_longops_stat	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_vec_index_build_task.cpp	1496	ObVecIndexBuildTask::ChangeTaskStatusFn::operator()	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_vec_index_build_task.cpp	1533	ObVecIndexBuildTask::clean_on_failed	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // reach max dump count
+src/rootserver/ddl_task/ob_vec_index_build_task.cpp	1653	ObVecIndexBuildTask::wait_drop_index_finish	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_vec_index_build_task.cpp	1708	ObVecIndexBuildTask::validate_checksum	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_vec_ivf_index_build_task.cpp	345	ObVecIVFIndexBuildTask::check_health	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // allow clean up
+src/rootserver/ddl_task/ob_vec_ivf_index_build_task.cpp	582	ObVecIVFIndexBuildTask::prepare	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_vec_ivf_index_build_task.cpp	711	ObVecIVFIndexBuildTask::prepare_aux_index_tables	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_vec_ivf_index_build_task.cpp	762	ObVecIVFIndexBuildTask::prepare_sq_meta_table	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_vec_ivf_index_build_task.cpp	798	ObVecIVFIndexBuildTask::prepare_pq_centroid_table	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_vec_ivf_index_build_task.cpp	848	ObVecIVFIndexBuildTask::prepare_centroid_table	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_vec_ivf_index_build_task.cpp	875	ObVecIVFIndexBuildTask::CheckTaskStatusFn::operator()	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_vec_ivf_index_build_task.cpp	925	ObVecIVFIndexBuildTask::wait_aux_table_complement	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // reach max dump count
+src/rootserver/ddl_task/ob_vec_ivf_index_build_task.cpp	941	ObVecIVFIndexBuildTask::wait_aux_table_complement	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // allow clean up
+src/rootserver/ddl_task/ob_vec_ivf_index_build_task.cpp	1439	ObVecIVFIndexBuildTask::ChangeTaskStatusFn::operator()	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_vec_ivf_index_build_task.cpp	1476	ObVecIVFIndexBuildTask::clean_on_failed	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // reach max dump count
+src/rootserver/ddl_task/ob_vec_ivf_index_build_task.cpp	1595	ObVecIVFIndexBuildTask::wait_drop_index_finish	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_vec_ivf_index_build_task.cpp	1642	ObVecIVFIndexBuildTask::validate_checksum	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/fork_table/ob_fork_table_helper.cpp	386	ObForkTableHelper::copy_table_autoinc_seq_info_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/fork_table/ob_fork_table_util.cpp	120	ObForkTableUtil::collect_complete_domain_index_schemas	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/fork_table/ob_fork_table_util.cpp	437	ObForkTableUtil::obtain_snapshot	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/freeze/ob_checksum_validator.cpp	89	ObChecksumValidator::deal_with_special_table_at_last	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/freeze/ob_checksum_validator.cpp	118	ObChecksumValidator::get_table_compaction_info	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/freeze/ob_checksum_validator.cpp	176	ObChecksumValidator::get_tablet_ids	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/freeze/ob_checksum_validator.cpp	209	ObChecksumValidator::validate_checksum	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/freeze/ob_checksum_validator.cpp	260	ObChecksumValidator::validate_local_tablet_checksum	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/freeze/ob_checksum_validator.cpp	284	ObChecksumValidator::update_table_compaction_info_by_tablet	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/freeze/ob_checksum_validator.cpp	290	ObChecksumValidator::update_table_compaction_info_by_tablet	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/freeze/ob_checksum_validator.cpp	461	ObChecksumValidator::handle_index_table	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/freeze/ob_checksum_validator.cpp	561	ObChecksumValidator::verify_table_index	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // clear errno
+src/rootserver/freeze/ob_checksum_validator.cpp	594	ObChecksumValidator::build_ckm_item_for_fts	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/freeze/ob_freeze_info_detector.cpp	122	ObMajorMergeInfoDetector::runTimerTask	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/freeze/ob_freeze_info_detector.cpp	127	ObMajorMergeInfoDetector::runTimerTask	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/freeze/ob_freeze_info_detector.cpp	132	ObMajorMergeInfoDetector::runTimerTask	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/freeze/ob_freeze_info_detector.cpp	136	ObMajorMergeInfoDetector::runTimerTask	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/freeze/ob_freeze_info_detector.cpp	141	ObMajorMergeInfoDetector::runTimerTask	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/freeze/ob_freeze_info_detector.cpp	219	ObMajorMergeInfoDetector::can_start_work	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/freeze/ob_major_freeze_coordinator_adapter.cpp	98	ObMajorFreezeCoordinatorAdapter::collect_major_merge_diagnostics	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/freeze/ob_major_freeze_coordinator_adapter.cpp	112	ObMajorFreezeCoordinatorAdapter::collect_major_merge_diagnostics	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/freeze/ob_major_merge_info_manager.cpp	151	ObMajorMergeInfoManager::generate_frozen_scn	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/freeze/ob_major_merge_progress_checker.cpp	231	ObMajorMergeProgressChecker::check_table_merge_progress	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/freeze/ob_major_merge_progress_checker.cpp	249	ObMajorMergeProgressChecker::check_table_merge_progress	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/freeze/ob_major_merge_progress_checker.cpp	302	ObMajorMergeProgressChecker::update_table_compaction_info_by_tablet	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/freeze/ob_major_merge_progress_checker.cpp	307	ObMajorMergeProgressChecker::update_table_compaction_info_by_tablet	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/freeze/ob_major_merge_progress_checker.cpp	358	ObMajorMergeProgressChecker::get_tablet_ids	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/freeze/ob_major_merge_progress_checker.cpp	611	ObMajorMergeProgressChecker::check_index_and_rest_table	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // clear errno
+src/rootserver/freeze/ob_major_merge_progress_checker.cpp	684	ObMajorMergeProgressChecker::check_progress	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/freeze/ob_major_merge_progress_checker.cpp	760	ObMajorMergeProgressChecker::deal_with_rest_data_table	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/freeze/ob_major_merge_progress_checker.cpp	794	ObMajorMergeProgressChecker::set_table_compaction_info_status	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/freeze/ob_major_merge_progress_checker.cpp	881	ObMajorMergeProgressChecker::loop_index_ckm_validate_array	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/freeze/ob_major_merge_progress_checker.cpp	927	ObMajorMergeProgressChecker::get_idx_ckm_and_validate	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/freeze/ob_major_merge_progress_checker.cpp	989	ObMajorMergeProgressChecker::generate_tablet_status_map	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/freeze/ob_major_merge_progress_checker.cpp	1078	ObMajorMergeProgressChecker::prepare_fts_group	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/freeze/ob_major_merge_scheduler.cpp	150	ObMajorMergeScheduler::run3	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // ignore ret, continue
+src/rootserver/freeze/ob_major_merge_scheduler.cpp	323	ObMajorMergeScheduler::do_one_round_major_merge	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ob_create_index_on_empty_table_helper.cpp	51	ObCreateIndexOnEmptyTableHelper::check_create_index_on_empty_table_opt	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ob_ddl_operator.cpp	2775	ObDDLOperator::drop_obj_privs	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;

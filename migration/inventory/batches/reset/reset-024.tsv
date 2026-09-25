@@ -1,0 +1,121 @@
+file	line	symbol	construct	text
+src/storage/memtable/mvcc/ob_keybtree.cpp	1228	BtreeIterator::scan_batch	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/memtable/mvcc/ob_keybtree.cpp	1378	BtreeRawIterator::estimate_key_count	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/memtable/mvcc/ob_keybtree_deps.h	532	WriteHandle::find_path	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/memtable/mvcc/ob_multi_version_iterator.cpp	216	ObMultiVersionValueIterator::check_next_sql_sequence	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/memtable/mvcc/ob_mvcc_engine.cpp	125	ObMvccEngine::get	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/memtable/mvcc/ob_mvcc_engine.cpp	237	ObMvccEngine::check_row_locked	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/memtable/mvcc/ob_mvcc_trans_ctx.cpp	948	ObTransCallbackMgr::fill_from_one_list	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // no callback to fill
+src/storage/memtable/mvcc/ob_mvcc_trans_ctx.cpp	1274	ObTransCallbackMgr::get_memtable_key_arr	ret = OB_SUCCESS (after other code on the line)	if (OB_ITER_STOP == ret) { ret = OB_SUCCESS; }
+src/storage/memtable/mvcc/ob_mvcc_trans_ctx.cpp	1947	ObMvccRowCallback::link_trans_node	ret = OB_SUCCESS (after other code on the line)	bool ret = OB_SUCCESS;
+src/storage/memtable/mvcc/ob_query_engine.cpp	390	ObQueryEngine::estimate_size	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/memtable/mvcc/ob_query_engine.cpp	446	ObQueryEngine::split_range	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/memtable/mvcc/ob_query_engine.cpp	626	ObQueryEngine::estimate_row_count	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/memtable/mvcc/ob_query_engine.cpp	635	ObQueryEngine::estimate_row_count	conditional reset (ternary yields OB_SUCCESS)	ret = OB_ITER_END == ret ? OB_SUCCESS : ret;
+src/storage/memtable/ob_memtable.cpp	264	ObMemtable::safe_to_destroy	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/memtable/ob_memtable.cpp	271	ObMemtable::safe_to_destroy	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/memtable/ob_memtable.cpp	1148	ObMemtable::after_check_row_locked_on_frozen_stores_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/memtable/ob_memtable.cpp	1744	ObMemtable::get_split_ranges	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/memtable/ob_memtable.cpp	2545	ObMemtable::batch_mvcc_write_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/memtable/ob_memtable_context.cpp	710	ObMemtableCtx::get_memtable_key_arr	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/memtable/ob_memtable_iterator.cpp	471	ObMemtableMScanIterator::inner_get_next_row	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;  // rewrite error code
+src/storage/memtable/ob_memtable_iterator.cpp	982	ObMemtableMultiVersionScanIterator::iterate_uncommitted_row_value_	conditional reset (ternary yields OB_SUCCESS)	ret = (OB_ITER_END == ret) ? OB_SUCCESS : ret;
+src/storage/memtable/ob_memtable_iterator.cpp	1023	ObMemtableMultiVersionScanIterator::iterate_compacted_row_value_	conditional reset (ternary yields OB_SUCCESS)	ret = (OB_ITER_END == ret) ? OB_SUCCESS : ret;
+src/storage/memtable/ob_memtable_iterator.cpp	1090	ObMemtableMultiVersionScanIterator::iterate_multi_version_row_value_	conditional reset (ternary yields OB_SUCCESS)	ret = (OB_ITER_END == ret) ? OB_SUCCESS : ret;
+src/storage/memtable/ob_memtable_read_row_util.cpp	94	ObReadRow::iterate_row_value_	conditional reset (ternary yields OB_SUCCESS)	ret = (OB_ITER_END == ret) ? OB_SUCCESS : ret;
+src/storage/memtable/ob_redo_log_generator.cpp	153	ObFillRedoLogFunctor::fill_row_redo_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/memtable/ob_redo_log_generator.cpp	194	ObFillRedoLogFunctor::fill_ext_info_redo_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/memtable/ob_row_compactor.cpp	312	ObMemtableRowCompactor::construct_compact_node_	conditional reset (ternary yields OB_SUCCESS)	ret = (OB_ITER_END == ret) ? OB_SUCCESS : ret;
+src/storage/memtable/ob_row_conflict_handler.cpp	100	ObRowConflictHandler::check_row_locked	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/meta_mem/ob_external_tablet_cnt_map.cpp	63	ObExternalTabletCntMap::check_exist	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/meta_mem/ob_external_tablet_cnt_map.cpp	87	ObExternalTabletCntMap::reg_tablet	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/meta_mem/ob_storage_meta_mem_mgr.cpp	350	ObStorageMetaMemMgr::print_old_chain	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/meta_mem/ob_storage_meta_mem_mgr.cpp	735	ObStorageMetaMemMgr::gc_tablets_in_queue	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // continue to gc other tablet
+src/storage/meta_mem/ob_storage_meta_mem_mgr.cpp	848	ObStorageMetaMemMgr::get_min_end_scn_from_single_tablet	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/meta_mem/ob_storage_meta_mem_mgr.cpp	1140	ObStorageMetaMemMgr::release_memtable_and_mds_table_for_ls_offline	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/meta_mem/ob_storage_meta_mem_mgr.cpp	1686	ObStorageMetaMemMgr::push_tablet_pointer_to_fly_map_if_need_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/meta_mem/ob_storage_meta_mem_mgr.cpp	1695	ObStorageMetaMemMgr::push_tablet_pointer_to_fly_map_if_need_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/meta_mem/ob_storage_meta_mem_mgr.cpp	2397	ObInMemoryTabletIterator::get_next_tablet	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/meta_mem/ob_tablet_handle.cpp	253	ObTabletTableIterator::get_read_tables_from_tablet	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/meta_mem/ob_tablet_meta_mem_mgr.cpp	344	ObTabletMetaMemMgr::print_old_chain	ret = OB_SUCCESS (line start) [not built]	ret = OB_SUCCESS;
+src/storage/meta_mem/ob_tablet_meta_mem_mgr.cpp	738	ObTabletMetaMemMgr::gc_tablets_in_queue	ret = OB_SUCCESS (line start) [not built]	ret = OB_SUCCESS; // continue to gc other tablet
+src/storage/meta_mem/ob_tablet_meta_mem_mgr.cpp	851	ObTabletMetaMemMgr::get_min_end_scn_from_single_tablet	ret = OB_SUCCESS (line start) [not built]	ret = OB_SUCCESS;
+src/storage/meta_mem/ob_tablet_meta_mem_mgr.cpp	1143	ObTabletMetaMemMgr::release_memtable_and_mds_table_for_ls_offline	ret = OB_SUCCESS (line start) [not built]	ret = OB_SUCCESS;
+src/storage/meta_mem/ob_tablet_meta_mem_mgr.cpp	1694	ObTabletMetaMemMgr::push_tablet_pointer_to_fly_map_if_need_	ret = OB_SUCCESS (line start) [not built]	ret = OB_SUCCESS;
+src/storage/meta_mem/ob_tablet_meta_mem_mgr.cpp	1703	ObTabletMetaMemMgr::push_tablet_pointer_to_fly_map_if_need_	ret = OB_SUCCESS (line start) [not built]	ret = OB_SUCCESS;
+src/storage/meta_mem/ob_tablet_meta_mem_mgr.cpp	2410	ObInMemoryTabletIterator::get_next_tablet	ret = OB_SUCCESS (line start) [not built]	ret = OB_SUCCESS;
+src/storage/meta_mem/ob_tablet_pointer.cpp	520	ObTabletPointer::release_memtable_and_mds_table_for_ls_offline	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/meta_mem/ob_tablet_pointer.cpp	542	ObTabletPointer::release_mds_nodes_redo_scn_below	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/meta_mem/ob_tablet_pointer.cpp	550	ObTabletPointer::release_mds_nodes_redo_scn_below	errsim injection point (ternary yields OB_SUCCESS when the tracepoint is off; not a reset)	ret = EN_RELEASE_MDS_NODE_FAILED ? : OB_SUCCESS;
+src/storage/meta_mem/ob_tablet_pointer_map.cpp	54	ObTabletPointerMap::erase	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;  // ignore ret error, may be creating failure or has been erased.
+src/storage/meta_mem/ob_tablet_pointer_map.cpp	57	ObTabletPointerMap::erase	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;  // ignore ret error, may be creating failure.
+src/storage/meta_mem/ob_tablet_pointer_map.cpp	116	ObTabletPointerMap::exist	ret = OB_SUCCESS (line start)	ret = common::OB_SUCCESS;
+src/storage/meta_mem/ob_tablet_pointer_map.cpp	670	ObTabletPointerMap::compare_and_swap_addr_and_object	ret = OB_SUCCESS (line start)	ret = common::OB_SUCCESS;
+src/storage/meta_mem/ob_tablet_pointer_map.cpp	752	ObTabletPointerMap::wash_meta_obj	ret = OB_SUCCESS (line start)	ret = common::OB_SUCCESS;
+src/storage/meta_mem/ob_tablet_pointer_map.h	142	ObTabletPointerMap::for_each_value_store	ret = OB_SUCCESS (line start)	ret = common::OB_SUCCESS;
+src/storage/meta_store/ob_server_storage_meta_service.cpp	211	ObServerStorageMetaService::get_using_disk_space	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/multi_data_source/mds_row.ipp	299	MdsRow::construct_insert_record_user_mds_node_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/multi_data_source/mds_row.ipp	373	MdsRow::replay	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/multi_data_source/mds_table_impl.ipp	77	MdsTableImpl::~MdsTableImpl	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/multi_data_source/mds_table_impl.ipp	189	MdsTableImpl::set	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/multi_data_source/mds_table_impl.ipp	303	MdsTableImpl::replay	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/multi_data_source/mds_table_impl.ipp	385	MdsTableImpl::remove	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/multi_data_source/mds_table_impl.ipp	467	MdsTableImpl::replay_remove	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/multi_data_source/mds_table_impl.ipp	570	MdsTableImpl::get_latest	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/multi_data_source/mds_table_impl.ipp	670	MdsTableImpl::get_latest_committed	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/multi_data_source/mds_table_impl.ipp	764	MdsTableImpl::get_snapshot	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/multi_data_source/mds_table_impl.ipp	872	MdsTableImpl::get_by_writer	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/multi_data_source/mds_table_impl.ipp	965	MdsTableImpl::is_locked_by_others	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/multi_data_source/mds_table_impl.ipp	1110	MdsTableImpl::flush	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/multi_data_source/mds_table_iterator.ipp	260	ObMdsUnitRowNodeScanIterator::cache_all_nodes_in_row_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/multi_data_source/ob_mds_event_buffer.h	259	ObMdsEventBuffer::Singleton::init	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/multi_data_source/ob_mds_table_merge_dag.cpp	76	ObMdsTableMergeDag::create_first_task	errsim injection point (ternary yields OB_SUCCESS when the tracepoint is off; not a reset)	ret = EN_SKIP_MERGE_MDS_TABEL ? : OB_SUCCESS;
+src/storage/multi_data_source/ob_mds_table_merge_dag.cpp	79	ObMdsTableMergeDag::create_first_task	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/multi_data_source/ob_mds_table_merge_task.cpp	145	ObMdsTableMergeTask::process	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/multi_data_source/runtime_utility/list_helper.h	248	List::for_each_node	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/multi_data_source/runtime_utility/list_helper.h	272	List::reverse_for_each_node	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/multi_data_source/runtime_utility/mds_service.cpp	210	ObMdsService::for_each_tablet_in_ls	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/multi_data_source/runtime_utility/mds_service.cpp	306	ObMdsService::get_tablet_oldest_scn_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/multi_data_source/runtime_utility/mds_service.cpp	309	ObMdsService::get_tablet_oldest_scn_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/ob_disk_usage_reporter.cpp	114	ObDiskUsageReportTask::count_server_data	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/ob_disk_usage_reporter.cpp	177	ObDiskUsageReportTask::get_data_disk_used_size	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/ob_disk_usage_reporter.cpp	206	ObDiskUsageReportTask::delete_usage_stat	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/ob_dml_running_ctx.cpp	293	ObDMLRunningCtx::check_runtime_schema_version	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/ob_gc_upper_trans_helper.cpp	100	ObGCUpperTransHelper::check_need_gc_or_update_upper_trans_version	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/ob_i_memtable_mgr.h	109	MemtableMgrLock::try_wrlock	code chosen by a flag (ternary yields OB_SUCCESS; no error is swallowed) (statement spans lines 109-110)	ret = static_cast<common::SpinRWLock *>(lock_)->try_wrlock()
+src/storage/ob_i_memtable_mgr.h	128	MemtableMgrLock::try_rdlock	code chosen by a flag (ternary yields OB_SUCCESS; no error is swallowed) (statement spans lines 128-129)	ret = static_cast<common::SpinRWLock *>(lock_)->try_rdlock()
+src/storage/ob_i_store.cpp	177	ObStoreCtx::get_all_tables	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/ob_parallel_external_sort.h	560	ObFragmentReaderV2::prefetch	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/ob_parallel_external_sort.h	857	ObFragmentMerge::build_heap	ret = OB_SUCCESS (line start)	ret = common::OB_SUCCESS;
+src/storage/ob_parallel_external_sort.h	1246	ObExternalSortRound::do_one_run	ret = OB_SUCCESS (line start)	ret = common::OB_SUCCESS;
+src/storage/ob_parallel_external_sort.h	1822	ObExternalSort::do_sort	ret = OB_SUCCESS (line start)	ret = common::OB_SUCCESS;
+src/storage/ob_parallel_external_sort.h	1963	ObExternalSort::transfer_final_sorted_fragment_iter	ret = OB_SUCCESS (line start)	ret = common::OB_SUCCESS;
+src/storage/ob_partition_range_spliter.cpp	72	ObIndexBlockTreeTraverser::handle_overflow_ranges	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/ob_partition_range_spliter.cpp	148	ObIndexBlockTreeTraverser::goto_next_level_node	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/ob_partition_range_spliter.cpp	231	ObIndexBlockTreeTraverser::inner_node_traverse	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/ob_partition_range_spliter.cpp	306	ObIndexBlockTreeTraverser::inner_node_traverse	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/ob_partition_range_spliter.cpp	416	ObIndexBlockTreeTraverser::PathNodeCaches::prefetch	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/ob_partition_range_spliter.cpp	889	ObPartitionMultiRangeSpliter::get_tables	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/ob_partition_range_spliter.cpp	1337	ObPartitionMultiRangeSpliter::build_heap	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/ob_partition_range_spliter.cpp	1448	ObPartitionMultiRangeSpliter::do_task_split_algorithm	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/ob_partition_range_spliter.cpp	2285	ObPartitionIncrementalRangeSpliter::check_is_incremental	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/ob_partition_range_spliter.cpp	2395	ObPartitionIncrementalRangeSpliter::get_ranges_by_inc_data	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/ob_protected_memtable_mgr_handle.h	63	#define DELEGATE_FOR_MEMTABLE_MGR	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; \
+src/storage/ob_storage_clog_recorder.cpp	223	ObIStorageClogRecorder::replay_clog	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/ob_storage_clog_recorder.cpp	308	ObIStorageClogRecorder::replay_get_tablet_handle	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/ob_storage_schema.cpp	958	ObStorageSchema::get_column_default_checksums	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/ob_storage_schema_recorder.cpp	127	ObStorageSchemaRecorder::inner_replay_clog	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/ob_storage_table_guard.cpp	227	ObStorageTableGuard::double_check_get_memtable_for_replay_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/ob_storage_table_guard.cpp	231	ObStorageTableGuard::double_check_get_memtable_for_replay_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/ob_storage_table_guard.cpp	319	ObStorageTableGuard::check_freeze_to_inc_write_ref	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/ob_storage_table_guard.cpp	373	ObStorageTableGuard::check_freeze_to_inc_write_ref	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/ob_tablet_autoinc_seq_service.cpp	288	ObTabletAutoincSeqService::replay_update_tablet_autoinc_seq	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/ob_tablet_autoincrement_service.cpp	334	ObTabletAutoincrementService::clear_tablet_autoinc_seq_cache	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/ob_tablet_stat_mgr.cpp	697	ObTabletStatMgr::inner_clear_tablet_stat	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/ob_tablet_stat_mgr.cpp	749	ObTabletStatMgr::update_tablet_stream	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/ob_tablet_stat_mgr.cpp	943	ObTabletStatMgr::get_queuing_cfg	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/retrieval/ob_block_stat_iter.cpp	89	ObBlockStatIterator::SSTableIter::next	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/retrieval/ob_block_stat_iter.cpp	107	ObBlockStatIterator::MemTableIter::next	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/retrieval/ob_block_stat_iter.cpp	419	ObBlockStatIterator::prepare_scan_tables	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/retrieval/ob_block_stat_iter.cpp	591	ObBlockStatIterator::next_baseline_range	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/storage/retrieval/ob_inv_idx_param_estimator.cpp	71	ObTextAvgDocLenEstimator::estimate_avg_doc_len	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;

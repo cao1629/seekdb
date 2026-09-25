@@ -1,0 +1,48 @@
+file	line	symbol	construct	text
+src/sql/plan_cache/ob_plan_cache_util.h	419	ObTableScanStat::query_range_row_count_	field int64_t; 1 atomic accesses (ATOMIC_STORE 1)	int64_t query_range_row_count_;
+src/sql/plan_cache/ob_plan_cache_util.h	420	ObTableScanStat::indexback_row_count_	field int64_t; 1 atomic accesses (ATOMIC_STORE 1)	int64_t indexback_row_count_;
+src/sql/plan_cache/ob_plan_cache_util.h	421	ObTableScanStat::output_row_count_	field int64_t; 1 atomic accesses (ATOMIC_STORE 1)	int64_t output_row_count_;
+src/sql/plan_cache/ob_plan_cache_util.h	455	ObTableRowCount::op_id_	field int64_t; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_STORE 1)	int64_t op_id_;
+src/sql/plan_cache/ob_plan_cache_util.h	456	ObTableRowCount::row_count_	field int64_t; 3 atomic accesses (ATOMIC_AAF 1, ATOMIC_LOAD 1, ATOMIC_STORE 1)	int64_t row_count_;
+src/sql/plan_cache/ob_plan_cache_util.h	478	ObVecIndexExecCtx::cur_path_	field uint8_t; 1 atomic accesses (ATOMIC_STORE 1)	uint8_t cur_path_;               // cur path
+src/sql/plan_cache/ob_plan_cache_util.h	479	ObVecIndexExecCtx::pre_filter_chosen_times_	field int64_t; 2 atomic accesses (ATOMIC_INC 1, ATOMIC_STORE 1)	int64_t pre_filter_chosen_times_; // times of changing to pre-filter
+src/sql/plan_cache/ob_plan_cache_util.h	480	ObVecIndexExecCtx::iter_filter_chosen_times_	field int64_t; 2 atomic accesses (ATOMIC_INC 1, ATOMIC_STORE 1)	int64_t iter_filter_chosen_times_;// times of changing to iter-filter
+src/sql/plan_cache/ob_plan_cache_util.h	481	ObVecIndexExecCtx::in_filter_chosen_times_	field int64_t; 2 atomic accesses (ATOMIC_INC 1, ATOMIC_STORE 1)	int64_t in_filter_chosen_times_;  // times of changing toin-filter
+src/sql/plan_cache/ob_plan_cache_util.h	482	ObVecIndexExecCtx::record_count_	field int32_t; 2 atomic accesses (ATOMIC_INC 1, ATOMIC_STORE 1)	int32_t record_count_;            // window size
+src/sql/plan_cache/ob_plan_cache_util.h	510	ObPlanStat::last_active_time_	field int64_t; 1 atomic accesses (ATOMIC_STORE 1)	int64_t  last_active_time_;     // plan last hit time
+src/sql/plan_cache/ob_plan_cache_util.h	511	ObPlanStat::hit_count_	field uint64_t; 4 atomic accesses (ATOMIC_INC 2, ATOMIC_STORE 2)	uint64_t hit_count_;            // plan hit count
+src/sql/plan_cache/ob_plan_cache_util.h	513	ObPlanStat::slow_count_	field uint64_t; 1 atomic accesses (ATOMIC_INC 1)	uint64_t slow_count_;           // plan execution slow count
+src/sql/plan_cache/ob_plan_cache_util.h	514	ObPlanStat::slowest_exec_time_	field int64_t; 1 atomic accesses (ATOMIC_STORE 1)	int64_t  slowest_exec_time_;    // plan execution slowest time
+src/sql/plan_cache/ob_plan_cache_util.h	515	ObPlanStat::slowest_exec_usec_	field uint64_t; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_STORE 1)	uint64_t slowest_exec_usec_;    // plan execution slowest usec
+src/sql/plan_cache/ob_plan_cache_util.h	519	ObPlanStat::execute_times_	field int64_t; 1 atomic accesses (ATOMIC_AAF 1)	int64_t execute_times_;        // Execution count under SUCC
+src/sql/plan_cache/ob_plan_cache_util.h	520	ObPlanStat::disk_reads_	field int64_t; 1 atomic accesses (ATOMIC_AAF 1)	int64_t disk_reads_;           // physical read count
+src/sql/plan_cache/ob_plan_cache_util.h	521	ObPlanStat::direct_writes_	field int64_t; 1 atomic accesses (ATOMIC_AAF 1)	int64_t direct_writes_;        // physical write count
+src/sql/plan_cache/ob_plan_cache_util.h	522	ObPlanStat::buffer_gets_	field int64_t; 1 atomic accesses (ATOMIC_AAF 1)	int64_t buffer_gets_;          // logical read count
+src/sql/plan_cache/ob_plan_cache_util.h	523	ObPlanStat::application_wait_time_	field int64_t; 1 atomic accesses (ATOMIC_AAF 1)	int64_t application_wait_time_; // application class wait event total wait time, mainly lock
+src/sql/plan_cache/ob_plan_cache_util.h	524	ObPlanStat::concurrency_wait_time_	field int64_t; 1 atomic accesses (ATOMIC_AAF 1)	int64_t concurrency_wait_time_; //concurrency class total wait time for wait events, mainly latch
+src/sql/plan_cache/ob_plan_cache_util.h	525	ObPlanStat::user_io_wait_time_	field int64_t; 1 atomic accesses (ATOMIC_AAF 1)	int64_t user_io_wait_time_;     // user io class wait event total wait time, mainly block cache miss
+src/sql/plan_cache/ob_plan_cache_util.h	526	ObPlanStat::rows_processed_	field int64_t; 1 atomic accesses (ATOMIC_AAF 1)	int64_t rows_processed_;        // return row count
+src/sql/plan_cache/ob_plan_cache_util.h	527	ObPlanStat::elapsed_time_	field int64_t; 2 atomic accesses (ATOMIC_AAF 2)	int64_t elapsed_time_;          // execution time rt
+src/sql/plan_cache/ob_plan_cache_util.h	528	ObPlanStat::total_process_time_	field int64_t; 2 atomic accesses (ATOMIC_AAF 2)	int64_t total_process_time_;    // Total process time
+src/sql/plan_cache/ob_plan_cache_util.h	529	ObPlanStat::cpu_time_	field int64_t; 2 atomic accesses (ATOMIC_AAF 2)	int64_t cpu_time_;              // CPU time, which can currently be obtained by subtracting the total wait time of all wait events from the execution time
+src/sql/plan_cache/ob_plan_cache_util.h	530	ObPlanStat::delayed_px_querys_	field int64_t; 1 atomic accesses (ATOMIC_INC 1)	int64_t delayed_px_querys_;    // px query retries after being put back in the queue
+src/sql/plan_cache/ob_plan_cache_util.h	556	ObPlanStat::timeout_count_	field int64_t; 1 atomic accesses (ATOMIC_INC 1)	int64_t timeout_count_; // Timeout count
+src/sql/plan_cache/ob_plan_cache_util.h	566	ObPlanStat::first_exec_row_count_	field int64_t; 5 atomic accesses (ATOMIC_LOAD 3, ATOMIC_STORE 1, ATOMIC_VCAS 1)	int64_t first_exec_row_count_;
+src/sql/plan_cache/ob_plan_cache_util.h	567	ObPlanStat::first_exec_usec_	field int64_t; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_STORE 1)	int64_t first_exec_usec_;
+src/sql/plan_cache/ob_plan_cache_util.h	568	ObPlanStat::sample_times_	field int64_t; 5 atomic accesses (ATOMIC_STORE 3, ATOMIC_AAF 1, ATOMIC_LOAD 1)	int64_t sample_times_;
+src/sql/plan_cache/ob_plan_cache_util.h	569	ObPlanStat::sample_exec_row_count_	field int64_t; 3 atomic accesses (ATOMIC_STORE 2, ATOMIC_AAF 1)	int64_t sample_exec_row_count_;
+src/sql/plan_cache/ob_plan_cache_util.h	570	ObPlanStat::sample_exec_usec_	field int64_t; 3 atomic accesses (ATOMIC_STORE 2, ATOMIC_AAF 1)	int64_t sample_exec_usec_;
+src/sql/plan_cache/ob_plan_cache_util.h	582	ObPlanStat::bf_filter_cnt_	field int64_t; 1 atomic accesses (ATOMIC_AAF 1)	int64_t bf_filter_cnt_; // indicates the number of times bloomfilter successfully filtered the request
+src/sql/plan_cache/ob_plan_cache_util.h	583	ObPlanStat::bf_access_cnt_	field int64_t; 1 atomic accesses (ATOMIC_AAF 1)	int64_t bf_access_cnt_; // indicates the number of bloomfilter accesses
+src/sql/plan_cache/ob_plan_cache_util.h	584	ObPlanStat::fuse_row_cache_hit_cnt_	field int64_t; 1 atomic accesses (ATOMIC_AAF 1)	int64_t fuse_row_cache_hit_cnt_; // indicates the number of fuse row cache hits
+src/sql/plan_cache/ob_plan_cache_util.h	585	ObPlanStat::fuse_row_cache_miss_cnt_	field int64_t; 1 atomic accesses (ATOMIC_AAF 1)	int64_t fuse_row_cache_miss_cnt_; // indicates the number of fuse row cache misses
+src/sql/plan_cache/ob_plan_cache_util.h	586	ObPlanStat::row_cache_hit_cnt_	field int64_t; 1 atomic accesses (ATOMIC_AAF 1)	int64_t row_cache_hit_cnt_; // indicates the number of row cache hits
+src/sql/plan_cache/ob_plan_cache_util.h	587	ObPlanStat::row_cache_miss_cnt_	field int64_t; 1 atomic accesses (ATOMIC_AAF 1)	int64_t row_cache_miss_cnt_; // indicates the number of row cache misses
+src/sql/plan_cache/ob_plan_cache_util.h	588	ObPlanStat::cache_stat_update_times_	field int64_t; 1 atomic accesses (ATOMIC_AAF 1)	int64_t cache_stat_update_times_; // indicates the number of times cache statistics are updated, used to control the frequency of updating the cache access strategy
+src/sql/plan_cache/ob_plan_cache_value.h	364	ObPlanCacheValue::runtime_schema_version_	field int64_t; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_STORE 1)	int64_t runtime_schema_version_;
+src/sql/plan_cache/ob_pre_calc_expr_handler.h	81	PreCalcExprHandler::ref_cnt_	field volatile int64_t; 3 atomic accesses (ATOMIC_AAF 1, ATOMIC_LOAD64 1, ATOMIC_SAF 1)	volatile int64_t ref_cnt_;
+src/sql/plan_cache/ob_prepare_stmt_struct.h	104	ObPsStmtItem::ref_count_	field volatile int64_t; 4 atomic accesses (ATOMIC_LOAD 2, ATOMIC_BCAS 1, ATOMIC_SAF 1)	volatile int64_t ref_count_;
+src/sql/plan_cache/ob_prepare_stmt_struct.h	113	ObPsStmtItem::accounted_size_	field int64_t; 3 atomic accesses (ATOMIC_LOAD 1, ATOMIC_STORE 1, ATOMIC_TAS 1)	int64_t accounted_size_;
+src/sql/plan_cache/ob_prepare_stmt_struct.h	236	ObPsStmtInfo::ref_count_	field volatile int64_t; 6 atomic accesses (ATOMIC_LOAD 3, ATOMIC_BCAS 1, ATOMIC_DEC 1, ATOMIC_VCAS 1)	volatile int64_t ref_count_;
+src/sql/plan_cache/ob_prepare_stmt_struct.h	248	ObPsStmtInfo::is_expired_	field bool; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_STORE 1)	bool is_expired_;
+src/sql/plan_cache/ob_prepare_stmt_struct.h	268	ObPsStmtInfo::accounted_size_	field int64_t; 3 atomic accesses (ATOMIC_LOAD 1, ATOMIC_STORE 1, ATOMIC_TAS 1)	int64_t accounted_size_;

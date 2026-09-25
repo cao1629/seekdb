@@ -1,0 +1,35 @@
+file	line	symbol	construct	text
+src/share/cache/ob_kvcache_inst_map.h	60	ObKVMemBlockList::ref_cnt_	field int64_t; 3 atomic accesses (ATOMIC_AAF 1, ATOMIC_LOAD 1, ATOMIC_SAF 1)	int64_t ref_cnt_;
+src/share/cache/ob_kvcache_inst_map.h	69	ObKVCacheInst::is_delete_	field bool; 1 atomic accesses (ATOMIC_LOAD 1)	bool is_delete_;
+src/share/cache/ob_kvcache_inst_map.h	71	ObKVCacheInst::ref_cnt_	field int64_t; 4 atomic accesses (ATOMIC_AAF 1, ATOMIC_DEC 1, ATOMIC_LOAD 1, ATOMIC_SAF 1)	int64_t ref_cnt_;
+src/share/cache/ob_kvcache_map.h	106	ObKVCacheMap::Bucket::nodes_	field Node **; 1 atomic accesses (ATOMIC_SET 1); through accessors get_bucket_node; through local references bucket_ptr	Node **nodes_;
+src/share/cache/ob_kvcache_store.h	235	ObKVCacheStore::cur_mb_num_	field int64_t; 2 atomic accesses (ATOMIC_BCAS 1, ATOMIC_LOAD 1)	int64_t cur_mb_num_;
+src/share/cache/ob_kvcache_store.h	238	ObKVCacheStore::cache_memory_limit_	field int64_t; 5 atomic accesses (ATOMIC_STORE 3, ATOMIC_LOAD 2)	int64_t cache_memory_limit_;
+src/share/cache/ob_kvcache_store.h	243	ObKVCacheStore::active_mb_handles_	field ObKVMemBlockHandle *; 1 atomic accesses (ATOMIC_BCAS 1); through accessors get_curr_mb	ObKVMemBlockHandle *active_mb_handles_[MAX_POLICY];
+src/share/cache/ob_kvcache_store.h	252	ObKVCacheStore::tmp_washbale_size_info_	field ObWashableSizeInfo; 1 atomic accesses (ATOMIC_LOAD 1); through functions with an atomic parameter copy_from	ObWashableSizeInfo tmp_washbale_size_info_;
+src/share/cache/ob_kvcache_struct.h	101	ObKVStoreMemBlock::atomic_pos_	field AtomicInt64; 3 atomic accesses (ATOMIC_BCAS 2, ATOMIC_LOAD 1); through the single member of value classes AtomicInt64::atomic	AtomicInt64 atomic_pos_;
+src/share/cache/ob_kvcache_struct.h	117	ObKVMemBlockHandle::mem_block_	volatile field ObKVStoreMemBlock * volatile; no atomic access found	ObKVStoreMemBlock * volatile mem_block_;
+src/share/cache/ob_kvcache_struct.h	119	ObKVMemBlockHandle::get_cnt_	field int64_t; 8 atomic accesses (ATOMIC_AAF 4, ATOMIC_SAF 4)	int64_t get_cnt_;
+src/share/cache/ob_kvcache_struct.h	120	ObKVMemBlockHandle::recent_get_cnt_	field int64_t; 2 atomic accesses (ATOMIC_STORE 2)	int64_t recent_get_cnt_;
+src/share/cache/ob_kvcache_struct.h	122	ObKVMemBlockHandle::kv_cnt_	field int64_t; 6 atomic accesses (ATOMIC_SAF 4, ATOMIC_AAF 2)	int64_t kv_cnt_;
+src/share/cache/ob_kvcache_struct.h	123	ObKVMemBlockHandle::seq_num_	field int64_t; 4 atomic accesses (ATOMIC_INC 1, ATOMIC_LOAD 1, ATOMIC_LOAD_RLX 1, ATOMIC_STORE_RLX 1)	int64_t seq_num_;
+src/share/cache/ob_kvcache_struct.h	125	ObKVMemBlockHandle::status_	field ObKVMBHandleStatus; 6 atomic accesses (ATOMIC_BCAS 2, ATOMIC_STORE_RLX 2, ATOMIC_LOAD 1, ATOMIC_LOAD_RLX 1)	ObKVMBHandleStatus status_;
+src/share/cache/ob_kvcache_struct.h	192	ObKVCacheStatus::kv_cnt_	field int64_t; 9 atomic accesses (ATOMIC_SAF 6, ATOMIC_LOAD 2, ATOMIC_AAF 1)	int64_t kv_cnt_;
+src/share/cache/ob_kvcache_struct.h	193	ObKVCacheStatus::store_size_	field int64_t; 13 atomic accesses (ATOMIC_LOAD 6, ATOMIC_SAF 4, ATOMIC_AAF 2, ATOMIC_BCAS 1)	int64_t store_size_;
+src/share/cache/ob_kvcache_struct.h	194	ObKVCacheStatus::retired_size_	field int64_t; 1 atomic accesses (ATOMIC_FAA 1)	int64_t retired_size_;
+src/share/cache/ob_kvcache_struct.h	195	ObKVCacheStatus::lru_mb_cnt_	field int64_t; 5 atomic accesses (ATOMIC_LOAD 3, ATOMIC_AAF 1, ATOMIC_SAF 1)	int64_t lru_mb_cnt_;
+src/share/cache/ob_kvcache_struct.h	196	ObKVCacheStatus::lfu_mb_cnt_	field int64_t; 5 atomic accesses (ATOMIC_LOAD 3, ATOMIC_AAF 1, ATOMIC_SAF 1)	int64_t lfu_mb_cnt_;
+src/share/config/ob_server_config.h	122	ObServerConfig::global_version_	field int64_t; 1 atomic accesses (ATOMIC_AAF 1)	int64_t global_version_;
+src/share/interrupt/ob_global_interrupt_call.h	148	ObInterruptChecker::ref_count_	field int64_t; 2 atomic accesses (ATOMIC_AAF 1, ATOMIC_INC 1)	int64_t ref_count_;
+src/share/io/ob_io_define.h	327	ObIOTimeLog::callback_enqueue_ts_	volatile field volatile int64_t; no atomic access found	volatile int64_t callback_enqueue_ts_;
+src/share/io/ob_io_define.h	328	ObIOTimeLog::callback_dequeue_ts_	volatile field volatile int64_t; no atomic access found	volatile int64_t callback_dequeue_ts_;
+src/share/io/ob_io_define.h	329	ObIOTimeLog::callback_finish_ts_	volatile field volatile int64_t; no atomic access found	volatile int64_t callback_finish_ts_;
+src/share/io/ob_io_define.h	345	ObIORetCode::io_ret_	field int; 1 atomic accesses (ATOMIC_LOAD 1)	int io_ret_;
+src/share/io/ob_io_define.h	428	ObIOResult::is_finished_	field bool; 3 atomic accesses (ATOMIC_STORE 2, ATOMIC_LOAD 1)	bool is_finished_;
+src/share/io/ob_io_define.h	430	ObIOResult::has_estimated_	field bool; 1 atomic accesses (ATOMIC_CAS 1)	bool has_estimated_;
+src/share/io/ob_io_define.h	431	ObIOResult::result_ref_cnt_	field volatile int32_t; 2 atomic accesses (ATOMIC_FAA 1, ATOMIC_SAF 1)	volatile int32_t result_ref_cnt_; //for io_result and io_handle
+src/share/io/ob_io_define.h	432	ObIOResult::out_ref_cnt_	field volatile int32_t; 2 atomic accesses (ATOMIC_INC 1, ATOMIC_SAF 1)	volatile int32_t out_ref_cnt_; //for io_handle
+src/share/io/ob_io_define.h	511	ObIORequest::ref_cnt_	field volatile int32_t; 2 atomic accesses (ATOMIC_FAA 1, ATOMIC_SAF 1)	volatile int32_t ref_cnt_;
+src/share/io/ob_io_manager.h	184	ObIOService::is_working_	field bool; 3 atomic accesses (ATOMIC_STORE 2, ATOMIC_LOAD 1)	bool is_working_;
+src/share/io/ob_io_manager.h	185	ObIOService::ref_cnt_	field int64_t; 3 atomic accesses (ATOMIC_INC 1, ATOMIC_LOAD 1, ATOMIC_SAF 1)	int64_t ref_cnt_;
+src/share/io/ob_io_struct.cpp	86	clear_io_hang_errsim	global static int; 2 atomic accesses (ATOMIC_FAA 1, ATOMIC_LOAD 1)	static int clear_io_hang_errsim;

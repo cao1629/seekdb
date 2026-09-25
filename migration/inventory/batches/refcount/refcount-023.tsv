@@ -1,0 +1,51 @@
+file	line	symbol	construct	text
+src/storage/tablet/ob_tablet.cpp	2220	ObTablet::inc_table_store_ref_cnt	inc_table_store_ref_cnt definition (other name) [on-disk block reference]	int ObTablet::inc_table_store_ref_cnt(bool &inc_success)
+src/storage/tablet/ob_tablet.cpp	2229	ObTablet::inc_table_store_ref_cnt	inc_macro_ref call (other name) [on-disk block reference]	} else if (OB_FAIL(table_store_wrapper.get_member()->inc_macro_ref())) {
+src/storage/tablet/ob_tablet.cpp	2236	ObTablet::dec_table_store_ref_cnt	dec_table_store_ref_cnt definition (other name) [on-disk block reference]	void ObTablet::dec_table_store_ref_cnt()
+src/storage/tablet/ob_tablet.cpp	2248	ObTablet::dec_table_store_ref_cnt	dec_macro_ref call (other name) [on-disk block reference]	table_store_wrapper.get_member()->dec_macro_ref();
+src/storage/tablet/ob_tablet.cpp	2253	ObTablet::inc_addr_ref_cnt	inc_addr_ref_cnt definition (other name) [on-disk block reference]	int ObTablet::inc_addr_ref_cnt(const ObMetaDiskAddr &addr, bool &inc_success)
+src/storage/tablet/ob_tablet.cpp	2262	ObTablet::inc_addr_ref_cnt	inc_ref call [on-disk block reference]	} else if (OB_FAIL(OB_STORAGE_OBJECT_MGR.inc_ref(macro_id))) {
+src/storage/tablet/ob_tablet.cpp	2270	ObTablet::dec_addr_ref_cnt	dec_addr_ref_cnt definition (other name) [on-disk block reference]	void ObTablet::dec_addr_ref_cnt(const ObMetaDiskAddr &addr)
+src/storage/tablet/ob_tablet.cpp	2278	ObTablet::dec_addr_ref_cnt	dec_ref call [on-disk block reference]	} else if (OB_FAIL(OB_STORAGE_OBJECT_MGR.dec_ref(macro_id))) {
+src/storage/tablet/ob_tablet.cpp	2283	ObTablet::inc_linked_block_ref_cnt	inc_linked_block_ref_cnt definition (other name) [on-disk block reference]	int ObTablet::inc_linked_block_ref_cnt(const ObMetaDiskAddr &head_addr, bool &inc_success)
+src/storage/tablet/ob_tablet.cpp	2301	ObTablet::inc_linked_block_ref_cnt	inc_ref call [on-disk block reference]	} else if (OB_FAIL(OB_STORAGE_OBJECT_MGR.inc_ref(macro_id))) {
+src/storage/tablet/ob_tablet.cpp	2314	ObTablet::inc_linked_block_ref_cnt	dec_ref call [on-disk block reference]	} else if (OB_TMP_FAIL(OB_STORAGE_OBJECT_MGR.dec_ref(macro_id))) {
+src/storage/tablet/ob_tablet.cpp	2325	ObTablet::dec_linked_block_ref_cnt	dec_linked_block_ref_cnt definition (other name) [on-disk block reference]	void ObTablet::dec_linked_block_ref_cnt(const ObMetaDiskAddr &head_addr)
+src/storage/tablet/ob_tablet.cpp	2344	ObTablet::dec_linked_block_ref_cnt	dec_ref call [on-disk block reference]	} else if (OB_FAIL(OB_STORAGE_OBJECT_MGR.dec_ref(macro_id))) {
+src/storage/tablet/ob_tablet.cpp	4875	ObTablet::add_memtable	inc_ref call	table->inc_ref();
+src/storage/tablet/ob_tablet.cpp	4917	ObTablet::assign_memtables	inc_ref call	memtable->inc_ref();
+src/storage/tablet/ob_tablet.cpp	4942	ObTablet::assign_ddl_kvs	inc_ref call	ddl_kv->inc_ref();
+src/storage/tablet/ob_tablet.cpp	4956	ObTablet::reset_memtable	dec_ref call	const int64_t ref_cnt = memtables_[i]->dec_ref();
+src/storage/tablet/ob_tablet.cpp	5043	ObTablet::pull_ddl_memtables	inc_ref call	ddl_kv->inc_ref();
+src/storage/tablet/ob_tablet.cpp	5066	ObTablet::reset_ddl_memtables	dec_ref call	const int64_t ref_cnt = ddl_kv->dec_ref();
+src/storage/tablet/ob_tablet.h	146	ObTablet::ObDDLKvMgrHandle	Handle alias of ObMetaObjGuard<ObTabletDDLKvMgr>	typedef ObMetaObjGuard<ObTabletDDLKvMgr> ObDDLKvMgrHandle;
+src/storage/tablet/ob_tablet.h	160	ObTablet	inc_ref declaration	void inc_ref();
+src/storage/tablet/ob_tablet.h	161	ObTablet	dec_ref declaration	int64_t dec_ref();
+src/storage/tablet/ob_tablet.h	249	ObTablet	dec_macro_ref_cnt declaration (other name) [on-disk block reference]	void dec_macro_ref_cnt();
+src/storage/tablet/ob_tablet.h	250	ObTablet	inc_macro_ref_cnt declaration (other name) [on-disk block reference]	int inc_macro_ref_cnt();
+src/storage/tablet/ob_tablet.h	319	ObTablet	release_ref_cnt declaration (other name) [on-disk block reference]	int release_ref_cnt(
+src/storage/tablet/ob_tablet.h	324	ObTablet	inc_snapshot_ref_cnt declaration (other name) [on-disk block reference]	int inc_snapshot_ref_cnt(
+src/storage/tablet/ob_tablet.h	580	ObTablet	dec_ref_with_aggregated_info declaration [on-disk block reference]	void dec_ref_with_aggregated_info();
+src/storage/tablet/ob_tablet.h	581	ObTablet	dec_ref_without_aggregated_info declaration [on-disk block reference]	void dec_ref_without_aggregated_info();
+src/storage/tablet/ob_tablet.h	582	ObTablet	dec_ref_with_macro_iter declaration [on-disk block reference]	void dec_ref_with_macro_iter(ObMacroInfoIterator &macro_iter) const;
+src/storage/tablet/ob_tablet.h	583	ObTablet	inner_inc_macro_ref_cnt declaration (other name) [on-disk block reference]	int inner_inc_macro_ref_cnt();
+src/storage/tablet/ob_tablet.h	584	ObTablet	inc_ref_with_aggregated_info declaration [on-disk block reference]	int inc_ref_with_aggregated_info();
+src/storage/tablet/ob_tablet.h	585	ObTablet	inc_ref_without_aggregated_info declaration [on-disk block reference]	int inc_ref_without_aggregated_info();
+src/storage/tablet/ob_tablet.h	586	ObTablet	inc_ref_with_macro_iter declaration [on-disk block reference]	int inc_ref_with_macro_iter(ObMacroInfoIterator &macro_iter, bool &inc_success) const;
+src/storage/tablet/ob_tablet.h	587	ObTablet	dec_table_store_ref_cnt declaration (other name) [on-disk block reference]	void dec_table_store_ref_cnt();
+src/storage/tablet/ob_tablet.h	588	ObTablet	inc_table_store_ref_cnt declaration (other name) [on-disk block reference]	int inc_table_store_ref_cnt(bool &inc_success);
+src/storage/tablet/ob_tablet.h	589	ObTablet	inc_addr_ref_cnt declaration (other name) [on-disk block reference]	static int inc_addr_ref_cnt(const ObMetaDiskAddr &addr, bool &inc_success);
+src/storage/tablet/ob_tablet.h	590	ObTablet	dec_addr_ref_cnt declaration (other name) [on-disk block reference]	static void dec_addr_ref_cnt(const ObMetaDiskAddr &addr);
+src/storage/tablet/ob_tablet.h	591	ObTablet	inc_linked_block_ref_cnt declaration (other name) [on-disk block reference]	static int inc_linked_block_ref_cnt(const ObMetaDiskAddr &head_addr, bool &inc_success);
+src/storage/tablet/ob_tablet.h	592	ObTablet	dec_linked_block_ref_cnt declaration (other name) [on-disk block reference]	static void dec_linked_block_ref_cnt(const ObMetaDiskAddr &head_addr);
+src/storage/tablet/ob_tablet.h	853	ObTablet::inc_ref	inc_ref definition	inline void ObTablet::inc_ref()
+src/storage/tablet/ob_tablet.h	862	ObTablet::dec_ref	dec_ref definition	inline int64_t ObTablet::dec_ref()
+src/storage/tablet/ob_tablet_memtable_mgr.cpp	682	ObTabletMemtableMgr::release_head_memtable_	release_head_memtable call (reference-count function found by its body)	release_head_memtable();
+src/storage/tablet/ob_tablet_memtable_mgr.cpp	754	ObTabletMemtableMgr::clean_tail_memtable_	release_tail_memtable call (reference-count function found by its body)	ObIMemtableMgr::release_tail_memtable();
+src/storage/tablet/ob_tablet_persister.cpp	419	ObTabletPersister::copy_from_old_tablet	inc_macro_ref_cnt call (other name) [on-disk block reference]	if (OB_FAIL(new_handle.get_obj()->inc_macro_ref_cnt())) {
+src/storage/tablet/ob_tablet_persister.cpp	682	ObTabletPersister::persist_aggregated_meta	inc_ref_with_macro_iter call [on-disk block reference]	} else if (OB_FAIL(inc_ref_with_macro_iter(*new_tablet, macro_iter))) {
+src/storage/tablet/ob_tablet_persister.cpp	690	ObTabletPersister::inc_ref_with_macro_iter	inc_ref_with_macro_iter definition [on-disk block reference]	int ObTabletPersister::inc_ref_with_macro_iter(ObTablet &tablet, ObMacroInfoIterator &macro_iter)
+src/storage/tablet/ob_tablet_persister.cpp	697	ObTabletPersister::inc_ref_with_macro_iter	inc_addr_ref_cnt call (other name) [on-disk block reference]	if (OB_FAIL(ObTablet::inc_addr_ref_cnt(tablet_addr, inc_tablet_macro_ref_success))) {
+src/storage/tablet/ob_tablet_persister.cpp	698	ObTabletPersister::inc_ref_with_macro_iter	inc_ref_with_macro_iter call [on-disk block reference]	} else if (OB_FAIL(tablet.inc_ref_with_macro_iter(macro_iter, inc_other_macro_ref_success))) {
+src/storage/tablet/ob_tablet_persister.cpp	702	ObTabletPersister::inc_ref_with_macro_iter	dec_addr_ref_cnt call (other name) [on-disk block reference]	ObTablet::dec_addr_ref_cnt(tablet_addr);
+src/storage/tablet/ob_tablet_persister.cpp	708	ObTabletPersister::inc_ref_with_macro_iter	dec_ref_with_macro_iter call [on-disk block reference]	tablet.dec_ref_with_macro_iter(macro_iter);

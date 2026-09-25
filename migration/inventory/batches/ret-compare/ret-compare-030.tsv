@@ -1,0 +1,90 @@
+file	line	symbol	construct	text
+src/sql/engine/cmd/ob_get_diagnostics_executor.cpp	386	ObGetDiagnosticsExecutor::execute	ret == OB_ERR_INVALID_CONDITION_NUMBER	if (OB_ERR_INVALID_CONDITION_NUMBER == ret) {
+src/sql/engine/cmd/ob_get_diagnostics_executor.cpp	389	ObGetDiagnosticsExecutor::execute	ret == OB_ERR_USER_VARIABLE_UNKNOWN; ret == OB_OBJ_TYPE_ERROR	} else if (OB_ERR_USER_VARIABLE_UNKNOWN == ret || OB_OBJ_TYPE_ERROR == ret) {
+src/sql/engine/cmd/ob_get_diagnostics_executor.cpp	392	ObGetDiagnosticsExecutor::execute	ret == OB_ERR_BAD_FIELD_ERROR	} else if (OB_ERR_BAD_FIELD_ERROR == ret) {
+src/sql/engine/cmd/ob_get_diagnostics_executor.cpp	431	ObGetDiagnosticsExecutor::execute	ret == OB_ERR_INVALID_CONDITION_NUMBER	if (OB_ERR_INVALID_CONDITION_NUMBER == ret) {
+src/sql/engine/cmd/ob_get_diagnostics_executor.cpp	434	ObGetDiagnosticsExecutor::execute	ret == OB_ERR_USER_VARIABLE_UNKNOWN; ret == OB_OBJ_TYPE_ERROR	} else if (OB_ERR_USER_VARIABLE_UNKNOWN == ret || OB_OBJ_TYPE_ERROR == ret) {
+src/sql/engine/cmd/ob_get_diagnostics_executor.cpp	437	ObGetDiagnosticsExecutor::execute	ret == OB_ERR_BAD_FIELD_ERROR	} else if (OB_ERR_BAD_FIELD_ERROR == ret) {
+src/sql/engine/cmd/ob_index_executor.cpp	230	ObCreateIndexExecutor::sync_check_index_status	ret == OB_SESSION_KILLED	|| OB_SESSION_KILLED == ret) {
+src/sql/engine/cmd/ob_index_executor.cpp	233	ObCreateIndexExecutor::sync_check_index_status	ret == OB_ERR_QUERY_INTERRUPTED; ret == OB_SESSION_KILLED	&& (OB_ERR_QUERY_INTERRUPTED == ret || OB_SESSION_KILLED == ret)) {
+src/sql/engine/cmd/ob_kill_executor.cpp	37	ObKillExecutor::execute	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/sql/engine/cmd/ob_kill_executor.cpp	43	ObKillExecutor::execute	ret == OB_UNKNOWN_CONNECTION	if (OB_UNKNOWN_CONNECTION == ret) {
+src/sql/engine/cmd/ob_kill_executor.cpp	45	ObKillExecutor::execute	ret == OB_ERR_KILL_DENIED	} else if (OB_ERR_KILL_DENIED == ret) {
+src/sql/engine/cmd/ob_kill_session_arg.cpp	107	ObKillSessionArg::calculate_sessid	ret == OB_ERR_TRUNCATED_WRONG_VALUE_FOR_FIELD	ret = OB_ERR_TRUNCATED_WRONG_VALUE_FOR_FIELD == ret ? OB_SUCCESS : ret;
+src/sql/engine/cmd/ob_load_data_file_reader.cpp	349	ObPacketStreamFileReader::read	other variable terminate_ret == OB_ERR_SESSION_INTERRUPTED	ret = OB_ERR_SESSION_INTERRUPTED == terminate_ret ? OB_SESSION_KILLED : terminate_ret;
+src/sql/engine/cmd/ob_load_data_impl.cpp	1326	ObLoadDataSPImpl::execute	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/cmd/ob_load_data_impl.cpp	1427	ObPartDataFragMgr::clear	call result queue_.pop(link) != OB_EAGAIN	while (OB_SUCC(ret) && OB_EAGAIN != queue_.pop(link)) {
+src/sql/engine/cmd/ob_load_data_impl.cpp	1454	ObPartDataFragMgr::next_insert_task	call result queue_.top(link) == OB_EAGAIN	while (OB_EAGAIN == queue_.top(link)) { YieldProcessor(); }
+src/sql/engine/cmd/ob_load_data_impl.cpp	1456	ObPartDataFragMgr::next_insert_task	call result queue_.top(link) == OB_EAGAIN	while (OB_EAGAIN == queue_.top(link)) { pause(); }
+src/sql/engine/cmd/ob_load_data_impl.cpp	2091	ObLoadDataSPImpl::ToolBox::init	ret == OB_SIZE_OVERFLOW	if (OB_SIZE_OVERFLOW == ret) {
+src/sql/engine/cmd/ob_load_data_impl.cpp	2172	ObLoadDataSPImpl::ToolBox::init_file_size	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/cmd/ob_load_data_parser.cpp	541	ObExternalFileFormat::to_string_with_alloc	ret == OB_SIZE_OVERFLOW	} while (OB_SIZE_OVERFLOW == ret);
+src/sql/engine/cmd/ob_partition_executor_utils.cpp	561	ObPartitionExecutorUtils::expr_cal_and_cast	ret != OB_ERR_UNEXPECTED	} else if (OB_ERR_UNEXPECTED != ret) {
+src/sql/engine/cmd/ob_partition_executor_utils.cpp	657	ObPartitionExecutorUtils::expr_cal_and_cast_with_check_varchar_len	ret == OB_ERR_DATA_TOO_LONG	if (ret == OB_ERR_DATA_TOO_LONG) {
+src/sql/engine/cmd/ob_partition_executor_utils.cpp	666	ObPartitionExecutorUtils::expr_cal_and_cast_with_check_varchar_len	ret != OB_ERR_UNEXPECTED	} else if (OB_ERR_UNEXPECTED != ret) {
+src/sql/engine/cmd/ob_routine_executor.cpp	52	ObCreateRoutineExecutor::execute	ret == OB_ERR_SP_ALREADY_EXISTS	if(crt_routine_arg.with_if_not_exist_ && ret == OB_ERR_SP_ALREADY_EXISTS) {
+src/sql/engine/cmd/ob_table_executor.cpp	392	ObCreateTableExecutor::execute_ctas	ret == OB_EAGAIN	if (OB_EAGAIN == ret) {
+src/sql/engine/cmd/ob_table_executor.cpp	421	ObCreateTableExecutor::execute_ctas	ret == OB_ERR_TABLE_EXIST	if (OB_ERR_TABLE_EXIST == ret && create_table_arg.if_not_exist_) {
+src/sql/engine/cmd/ob_table_executor.cpp	1049	ObAlterTableExecutor::calc_range_part_high_bound	ret != OB_ERR_UNEXPECTED	} else if (OB_ERR_UNEXPECTED != ret) {
+src/sql/engine/cmd/ob_table_executor.cpp	1176	ObAlterTableExecutor::calc_list_part_rows	ret != OB_ERR_UNEXPECTED	} else if (OB_ERR_UNEXPECTED != ret) {
+src/sql/engine/cmd/ob_table_executor.cpp	1723	ObTruncateTableExecutor::execute	ret == OB_TRY_LOCK_ROW_CONFLICT; ret == OB_TIMEOUT; ret == OB_NOT_MASTER	if ((OB_TRY_LOCK_ROW_CONFLICT == ret || OB_TIMEOUT == ret || OB_NOT_MASTER == ret
+src/sql/engine/cmd/ob_table_executor.cpp	1724	ObTruncateTableExecutor::execute	ret == OB_RS_NOT_MASTER; ret == OB_RS_SHUTDOWN; ret == OB_SERVER_RUNTIME_NOT_READY	|| OB_RS_NOT_MASTER == ret || OB_RS_SHUTDOWN == ret || OB_SERVER_RUNTIME_NOT_READY == ret) && timeout_ctx.get_timeout() > 0) {
+src/sql/engine/cmd/ob_trigger_executor.cpp	77	ObCreateTriggerExecutor::execute	ret == OB_ERR_PARALLEL_DDL_CONFLICT	if (OB_ERR_PARALLEL_DDL_CONFLICT == ret) {
+src/sql/engine/cmd/ob_trigger_executor.cpp	81	ObCreateTriggerExecutor::execute	ret == OB_ERR_TRIGGER_ALREADY_EXIST	if(arg.with_if_not_exist_ && ret == OB_ERR_TRIGGER_ALREADY_EXIST) {
+src/sql/engine/cmd/ob_trigger_executor.cpp	147	ObCreateTriggerExecutor::analyze_dependencies	ret != OB_ERR_UNEXPECTED	if (OB_FAIL(ret) && ret != OB_ERR_UNEXPECTED) {
+src/sql/engine/cmd/ob_variable_set_executor.cpp	161	ObVariableSetExecutor::execute	ret == OB_ERR_SYS_VARIABLE_UNKNOWN	if (OB_ERR_SYS_VARIABLE_UNKNOWN == ret) {
+src/sql/engine/cmd/ob_variable_set_executor.cpp	207	ObVariableSetExecutor::execute	other variable ret_ac == OB_ERR_WRONG_VALUE_FOR_VAR	if (OB_ERR_WRONG_VALUE_FOR_VAR == ret_ac) {
+src/sql/engine/cmd/ob_variable_set_executor.cpp	209	ObVariableSetExecutor::execute	other variable ret_ac == OB_OP_NOT_ALLOW	} else if (OB_OP_NOT_ALLOW == ret_ac) {
+src/sql/engine/cmd/ob_variable_set_executor.cpp	211	ObVariableSetExecutor::execute	other variable ret_ac == OB_ERR_UNEXPECTED	} else if (OB_ERR_UNEXPECTED == ret_ac) {
+src/sql/engine/cmd/ob_variable_set_executor.cpp	242	ObVariableSetExecutor::execute	ret == OB_NOT_SUPPORTED	if(ret == OB_NOT_SUPPORTED) {
+src/sql/engine/cmd/ob_variable_set_executor.cpp	372	ObVariableSetExecutor::execute_subquery_expr	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/cmd/ob_variable_set_executor.cpp	587	ObVariableSetExecutor::global_variable_timezone_formalize	ret != OB_ERR_UNKNOWN_TIME_ZONE	if (ret != OB_ERR_UNKNOWN_TIME_ZONE) {
+src/sql/engine/cmd/ob_variable_set_executor.cpp	643	ObVariableSetExecutor::check_and_convert_sys_var	ret == OB_ERR_WRONG_TYPE_FOR_VAR	if (OB_ERR_WRONG_TYPE_FOR_VAR == ret) {
+src/sql/engine/cmd/ob_variable_set_executor.cpp	648	ObVariableSetExecutor::check_and_convert_sys_var	ret == OB_ERR_WRONG_TYPE_FOR_VAR	if (OB_ERR_WRONG_TYPE_FOR_VAR == ret) {
+src/sql/engine/cmd/ob_vector_index_refresh.cpp	202	ObVectorIndexRefresher::lock_domain_table_for_refresh	ret != OB_TRY_LOCK_ROW_CONFLICT	if (OB_UNLIKELY(OB_TRY_LOCK_ROW_CONFLICT != ret)) {
+src/sql/engine/cmd/ob_vector_index_refresh.cpp	371	ObVectorIndexRefresher::do_refresh	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/cmd/ob_vector_index_refresh.cpp	380	ObVectorIndexRefresher::do_refresh	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/cmd/ob_vector_refresh_index_executor.cpp	415	ObVectorRefreshIndexExecutor::is_refresh_retry_ret_code	other variable ret_code == OB_OLD_SCHEMA_VERSION; other variable ret_code == OB_EAGAIN	return OB_OLD_SCHEMA_VERSION == ret_code || OB_EAGAIN == ret_code ||
+src/sql/engine/cmd/ob_vector_refresh_index_executor.cpp	416	ObVectorRefreshIndexExecutor::is_refresh_retry_ret_code	other variable ret_code == OB_INVALID_QUERY_TIMESTAMP	OB_INVALID_QUERY_TIMESTAMP == ret_code ||
+src/sql/engine/cmd/ob_vector_refresh_index_executor.cpp	417	ObVectorRefreshIndexExecutor::is_refresh_retry_ret_code	other variable ret_code == OB_TASK_EXPIRED	OB_TASK_EXPIRED == ret_code || is_master_changed_error(ret_code) ||
+src/sql/engine/cmd/ob_vector_refresh_index_executor.cpp	604	ObVectorRefreshIndexExecutor::do_refresh	ret == OB_EAGAIN	if (ret == OB_EAGAIN) {
+src/sql/engine/cmd/ob_vector_refresh_index_executor.cpp	689	ObVectorRefreshIndexExecutor::do_rebuild	ret == OB_EAGAIN	if (ret == OB_EAGAIN) {
+src/sql/engine/dml/ob_conflict_checker.cpp	394	ObConflictChecker::build_base_conflict_map	ret == OB_HASH_EXIST	if (OB_HASH_EXIST == ret && 0 == i) {
+src/sql/engine/dml/ob_conflict_checker.cpp	436	ObConflictChecker::check_duplicate_rowkey	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/sql/engine/dml/ob_conflict_checker.cpp	674	ObConflictChecker::add_lookup_range_no_dup	ret == OB_HASH_EXIST	if (OB_HASH_EXIST == ret) {
+src/sql/engine/dml/ob_conflict_checker.cpp	676	ObConflictChecker::add_lookup_range_no_dup	ret == OB_HASH_NOT_EXIST	} else if (OB_HASH_NOT_EXIST == ret) {
+src/sql/engine/dml/ob_conflict_checker.cpp	824	ObConflictChecker::do_lookup_and_build_base_map	ret == OB_ITER_END	ret = OB_ITER_END == ret ? OB_SUCCESS : ret;
+src/sql/engine/dml/ob_conflict_checker.cpp	838	ObConflictChecker::get_next_row_from_data_table	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/dml/ob_conflict_checker.cpp	840	ObConflictChecker::get_next_row_from_data_table	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/dml/ob_dml_service.cpp	327	ObDMLService::check_rowkey_whether_distinct	ret == OB_HASH_EXIST	if (OB_HASH_EXIST == ret) {
+src/sql/engine/dml/ob_dml_service.cpp	330	ObDMLService::check_rowkey_whether_distinct	ret == OB_HASH_NOT_EXIST	} else if (OB_HASH_NOT_EXIST == ret) {
+src/sql/engine/dml/ob_dml_service.cpp	2289	ObDMLService::log_user_error_inner	ret == OB_DATA_OUT_OF_RANGE	if (OB_DATA_OUT_OF_RANGE == ret) {
+src/sql/engine/dml/ob_dml_service.cpp	2297	ObDMLService::log_user_error_inner	ret == OB_ERR_DATA_TOO_LONG	} else if (OB_ERR_DATA_TOO_LONG == ret) {
+src/sql/engine/dml/ob_dml_service.cpp	2305	ObDMLService::log_user_error_inner	ret == OB_ERR_VALUE_LARGER_THAN_ALLOWED	} else if (OB_ERR_VALUE_LARGER_THAN_ALLOWED == ret) {
+src/sql/engine/dml/ob_dml_service.cpp	2307	ObDMLService::log_user_error_inner	ret == OB_INVALID_DATE_VALUE; ret == OB_INVALID_DATE_FORMAT	} else if (OB_INVALID_DATE_VALUE == ret || OB_INVALID_DATE_FORMAT == ret) {
+src/sql/engine/dml/ob_dml_service.cpp	2320	ObDMLService::log_user_error_inner	ret == OB_ERR_TRUNCATED_WRONG_VALUE_FOR_FIELD; ret == OB_INVALID_NUMERIC	} else if (OB_ERR_TRUNCATED_WRONG_VALUE_FOR_FIELD == ret || OB_INVALID_NUMERIC == ret) {
+src/sql/engine/dml/ob_dml_service.cpp	2339	ObDMLService::log_user_error_inner	ret == OB_ERR_WARN_DATA_OUT_OF_RANGE	} else if (OB_ERR_WARN_DATA_OUT_OF_RANGE == ret) {
+src/sql/engine/dml/ob_dml_service.cpp	2347	ObDMLService::log_user_error_inner	ret == OB_ERR_DATA_TRUNCATED; ret == OB_ERR_DOUBLE_TRUNCATED	} else if (OB_ERR_DATA_TRUNCATED == ret || OB_ERR_DOUBLE_TRUNCATED == ret) {
+src/sql/engine/dml/ob_dml_service.h	497	ObDASIndexDMLAdaptor::write_tablet_with_ignore	ret == OB_ERR_PRIMARY_KEY_DUPLICATE	if (common::OB_ERR_PRIMARY_KEY_DUPLICATE == ret) {
+src/sql/engine/dml/ob_dml_service.h	507	ObDASIndexDMLAdaptor::write_tablet_with_ignore	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/dml/ob_fk_checker.cpp	88	ObForeignKeyChecker::get_scan_result_count	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/dml/ob_fk_checker.cpp	90	ObForeignKeyChecker::get_scan_result_count	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/dml/ob_fk_checker.cpp	99	ObForeignKeyChecker::get_scan_result_count	ret == OB_ITER_END	ret = OB_ITER_END == ret ? OB_SUCCESS : ret;
+src/sql/engine/dml/ob_fk_checker.cpp	122	ObForeignKeyChecker::do_fk_check_single_row	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/dml/ob_fk_checker.cpp	187	ObForeignKeyChecker::calc_lookup_tablet_loc	ret == OB_NO_PARTITION_FOR_GIVEN_VALUE	if (OB_NO_PARTITION_FOR_GIVEN_VALUE == ret) {
+src/sql/engine/dml/ob_fk_checker.cpp	392	ObForeignKeyChecker::build_primary_table_range	ret == OB_DATA_OUT_OF_RANGE	if (ret == OB_DATA_OUT_OF_RANGE) {
+src/sql/engine/dml/ob_fk_checker.cpp	408	ObForeignKeyChecker::build_primary_table_range	ret == OB_HASH_EXIST	if (OB_HASH_EXIST == ret) {
+src/sql/engine/dml/ob_fk_checker.cpp	411	ObForeignKeyChecker::build_primary_table_range	ret == OB_HASH_NOT_EXIST	} else if (OB_HASH_NOT_EXIST == ret) {
+src/sql/engine/dml/ob_fk_checker.cpp	474	ObForeignKeyChecker::build_index_table_range	ret == OB_DATA_OUT_OF_RANGE	if (ret == OB_DATA_OUT_OF_RANGE) {
+src/sql/engine/dml/ob_fk_checker.cpp	496	ObForeignKeyChecker::build_index_table_range	ret == OB_HASH_EXIST	if (OB_HASH_EXIST == ret) {
+src/sql/engine/dml/ob_fk_checker.cpp	499	ObForeignKeyChecker::build_index_table_range	ret == OB_HASH_NOT_EXIST	} else if (OB_HASH_NOT_EXIST == ret) {
+src/sql/engine/dml/ob_fk_checker.cpp	567	ObForeignKeyChecker::build_index_table_range_need_shadow_column	ret == OB_DATA_OUT_OF_RANGE	if (ret == OB_DATA_OUT_OF_RANGE) {
+src/sql/engine/dml/ob_table_insert_op.cpp	258	ObTableInsertOp::write_rows_post_proc	ret == OB_ERR_PRIMARY_KEY_DUPLICATE	if (OB_ERR_PRIMARY_KEY_DUPLICATE == ret) {
+src/sql/engine/dml/ob_table_insert_up_op.cpp	449	ObTableInsertUpOp::do_insert_up_cache	ret == OB_ITER_END	ret = OB_ITER_END == ret ? OB_SUCCESS : ret;
+src/sql/engine/dml/ob_table_insert_up_op.cpp	840	ObTableInsertUpOp::get_next_row_from_child	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/dml/ob_table_insert_up_op.cpp	916	ObTableInsertUpOp::load_batch_insert_up_rows	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/dml/ob_table_insert_up_op.cpp	942	ObTableInsertUpOp::load_batch_insert_up_rows	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/dml/ob_table_insert_up_op.cpp	1025	ObTableInsertUpOp::get_next_conflict_rowkey	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/dml/ob_table_insert_up_op.cpp	1039	ObTableInsertUpOp::get_next_conflict_rowkey	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/dml/ob_table_insert_up_op.cpp	1062	ObTableInsertUpOp::fetch_conflict_rowkey	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/dml/ob_table_insert_up_op.cpp	1067	ObTableInsertUpOp::fetch_conflict_rowkey	ret == OB_ITER_END	ret = (ret == OB_ITER_END ? OB_SUCCESS : ret);

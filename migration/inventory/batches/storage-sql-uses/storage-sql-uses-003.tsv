@@ -1,0 +1,81 @@
+file	line	symbol	construct	text
+src/storage/access/ob_sample_filter.cpp	29	ObSampleFilterExecutor::ObSampleFilterExecutor	sql:: use: ObPushdownOperator	sql::ObPushdownOperator &op,
+src/storage/access/ob_sample_filter.cpp	30	ObSampleFilterExecutor::ObSampleFilterExecutor	sql:: use: PushdownExecutorType	sql::PushdownExecutorType type)
+src/storage/access/ob_sample_filter.cpp	60	ObTrivalSampleFilterExecutor::ObTrivalSampleFilterExecutor	sql:: use: ObPushdownOperator	sql::ObPushdownOperator &op)
+src/storage/access/ob_sample_filter.cpp	61	ObTrivalSampleFilterExecutor::ObTrivalSampleFilterExecutor	sql:: use: PushdownExecutorType	: ObSampleFilterExecutor(alloc, filter, op, sql::PushdownExecutorType::TRIVAL_SAMPLE_FILTER_EXECUTOR),
+src/storage/access/ob_sample_filter.cpp	112	ObTrivalSampleFilterExecutor::apply_sample_filter	sql:: use: PushdownFilterInfo	sql::PushdownFilterInfo &filter_info,
+src/storage/access/ob_sample_filter.cpp	148	ObHybridSampleFilterExecutor::ObHybridSampleFilterExecutor	sql:: use: ObPushdownOperator	sql::ObPushdownOperator &op)
+src/storage/access/ob_sample_filter.cpp	149	ObHybridSampleFilterExecutor::ObHybridSampleFilterExecutor	sql:: use: PushdownExecutorType	: ObSampleFilterExecutor(alloc, filter, op, sql::PushdownExecutorType::HYBRID_SAMPLE_FILTER_EXECUTOR),
+src/storage/access/ob_sample_filter.cpp	470	ObHybridSampleFilterExecutor::check_range_filtered	sql:: use: ObBoolMaskType	index_info.set_filter_constant_type(sql::ObBoolMaskType::ALWAYS_FALSE);
+src/storage/access/ob_sample_filter.cpp	514	ObHybridSampleFilterExecutor::apply_sample_filter	sql:: use: PushdownFilterInfo	sql::PushdownFilterInfo &filter_info,
+src/storage/access/ob_sample_filter.cpp	601	ObRowSampleFilter::init	sql:: use: ObPushdownOperator	sql::ObPushdownOperator *op,
+src/storage/access/ob_sample_filter.cpp	611	ObRowSampleFilter::init	sql:: use: ObPushdownFilterFactory	sql::ObPushdownFilterFactory filter_factory(allocator);
+src/storage/access/ob_sample_filter.cpp	612	ObRowSampleFilter::init	sql:: use: PushdownFilterType	if (OB_FAIL(filter_factory.alloc(sql::PushdownFilterType::SAMPLE_FILTER, 0, sample_node_))) {
+src/storage/access/ob_sample_filter.cpp	614	ObRowSampleFilter::init	sql:: use: PushdownExecutorType	if (OB_FAIL(filter_factory.alloc(sql::PushdownExecutorType::TRIVAL_SAMPLE_FILTER_EXECUTOR, 0, *sample_node_, sample_filter_, *op))) {
+src/storage/access/ob_sample_filter.cpp	617	ObRowSampleFilter::init	sql:: use: PushdownExecutorType	if (OB_FAIL(filter_factory.alloc(sql::PushdownExecutorType::HYBRID_SAMPLE_FILTER_EXECUTOR, 0, *sample_node_, sample_filter_, *op))) {
+src/storage/access/ob_sample_filter.cpp	629	ObRowSampleFilter::combine_to_filter_tree	sql:: use: ObPushdownFilterExecutor	int ObRowSampleFilter::combine_to_filter_tree(sql::ObPushdownFilterExecutor *&root_filter)
+src/storage/access/ob_sample_filter.cpp	637	ObRowSampleFilter::combine_to_filter_tree	sql:: use: ObPushdownFilterFactory	sql::ObPushdownFilterFactory filter_factory(allocator_);
+src/storage/access/ob_sample_filter.cpp	638	ObRowSampleFilter::combine_to_filter_tree	sql:: use: PushdownFilterType	if (nullptr == filter_node_ && OB_FAIL(filter_factory.alloc(sql::PushdownFilterType::AND_FILTER, 2, filter_node_))) {
+src/storage/access/ob_sample_filter.cpp	639	ObRowSampleFilter::combine_to_filter_tree	sql:: use: PushdownExecutorType	} else if (nullptr == filter_ && OB_FAIL(filter_factory.alloc(sql::PushdownExecutorType::AND_FILTER_EXECUTOR, 2, *filter_node_, filter_, root_filter->get_op()))) {
+src/storage/access/ob_sample_filter.cpp	653	ObRowSampleFilterFactory::build_sample_filter	sql:: use: ObPushdownOperator	sql::ObPushdownOperator *op,
+src/storage/access/ob_sample_filter.cpp	697	alloc_sample_filter_node	sql:: use: ObPushdownFilterNode	sql::ObPushdownFilterNode *&filter_node)
+src/storage/access/ob_sample_filter.cpp	707	alloc_sample_filter_node	sql:: use: ObPushdownFilterNode	void *children = allocator.alloc(child_count * sizeof(sql::ObPushdownFilterNode *));
+src/storage/access/ob_sample_filter.cpp	712	alloc_sample_filter_node	sql:: use: ObPushdownFilterNode	filter_node->childs_ = reinterpret_cast<sql::ObPushdownFilterNode **>(children);
+src/storage/access/ob_sample_filter.cpp	718	alloc_sample_filter_node	sql:: use: PushdownFilterType	filter_node->set_type(sql::PushdownFilterType::SAMPLE_FILTER);
+src/storage/access/ob_sample_filter.cpp	726	alloc_sample_filter_executor	sql:: use: ObPushdownFilterNode	sql::ObPushdownFilterNode &filter_node,
+src/storage/access/ob_sample_filter.cpp	727	alloc_sample_filter_executor	sql:: use: ObPushdownFilterExecutor	sql::ObPushdownFilterExecutor *&filter_executor,
+src/storage/access/ob_sample_filter.cpp	728	alloc_sample_filter_executor	sql:: use: ObPushdownOperator	sql::ObPushdownOperator &op,
+src/storage/access/ob_sample_filter.cpp	729	alloc_sample_filter_executor	sql:: use: PushdownExecutorType	sql::PushdownExecutorType type)
+src/storage/access/ob_sample_filter.cpp	741	alloc_sample_filter_executor	sql:: use: ObPushdownFilterExecutor	void *children = allocator.alloc(child_count * sizeof(sql::ObPushdownFilterExecutor *));
+src/storage/access/ob_sample_filter.cpp	747	alloc_sample_filter_executor	sql:: use: ObPushdownFilterExecutor	child_count, reinterpret_cast<sql::ObPushdownFilterExecutor **>(children));
+src/storage/access/ob_sample_filter.cpp	757	alloc_hybrid_sample_filter_executor	sql:: use: ObPushdownFilterNode	sql::ObPushdownFilterNode &filter_node,
+src/storage/access/ob_sample_filter.cpp	758	alloc_hybrid_sample_filter_executor	sql:: use: ObPushdownFilterExecutor	sql::ObPushdownFilterExecutor *&filter_executor,
+src/storage/access/ob_sample_filter.cpp	759	alloc_hybrid_sample_filter_executor	sql:: use: ObPushdownOperator	sql::ObPushdownOperator &op)
+src/storage/access/ob_sample_filter.cpp	763	alloc_hybrid_sample_filter_executor	sql:: use: PushdownExecutorType	sql::PushdownExecutorType::HYBRID_SAMPLE_FILTER_EXECUTOR);
+src/storage/access/ob_sample_filter.cpp	769	alloc_trival_sample_filter_executor	sql:: use: ObPushdownFilterNode	sql::ObPushdownFilterNode &filter_node,
+src/storage/access/ob_sample_filter.cpp	770	alloc_trival_sample_filter_executor	sql:: use: ObPushdownFilterExecutor	sql::ObPushdownFilterExecutor *&filter_executor,
+src/storage/access/ob_sample_filter.cpp	771	alloc_trival_sample_filter_executor	sql:: use: ObPushdownOperator	sql::ObPushdownOperator &op)
+src/storage/access/ob_sample_filter.cpp	775	alloc_trival_sample_filter_executor	sql:: use: PushdownExecutorType	sql::PushdownExecutorType::TRIVAL_SAMPLE_FILTER_EXECUTOR);
+src/storage/access/ob_sample_filter.h	177	ObPushdownSampleFilterNode	sql:: use: ObPushdownFilterNode	class ObPushdownSampleFilterNode : public sql::ObPushdownFilterNode
+src/storage/access/ob_sample_filter.h	181	ObPushdownSampleFilterNode::ObPushdownSampleFilterNode	sql:: use: ObPushdownFilterNode, PushdownFilterType	: sql::ObPushdownFilterNode(alloc, sql::PushdownFilterType::SAMPLE_FILTER)
+src/storage/access/ob_sample_filter.h	185	ObSampleFilterExecutor	sql:: use: ObPushdownFilterExecutor	class ObSampleFilterExecutor : public sql::ObPushdownFilterExecutor
+src/storage/access/ob_sample_filter.h	191	ObSampleFilterExecutor	sql:: use: ObPushdownOperator	sql::ObPushdownOperator &op,
+src/storage/access/ob_sample_filter.h	192	ObSampleFilterExecutor	sql:: use: PushdownExecutorType	sql::PushdownExecutorType type);
+src/storage/access/ob_sample_filter.h	213	ObSampleFilterExecutor	sql:: use: PushdownFilterInfo	sql::PushdownFilterInfo &filter_info,
+src/storage/access/ob_sample_filter.h	226	ObSampleFilterExecutor::get_op	sql:: use: ObPushdownOperator	OB_INLINE sql::ObPushdownOperator & get_op() override
+src/storage/access/ob_sample_filter.h	254	ObTrivalSampleFilterExecutor	sql:: use: ObPushdownOperator	sql::ObPushdownOperator &op);
+src/storage/access/ob_sample_filter.h	264	ObTrivalSampleFilterExecutor	sql:: use: PushdownFilterInfo	sql::PushdownFilterInfo &filter_info,
+src/storage/access/ob_sample_filter.h	311	ObHybridSampleFilterExecutor	sql:: use: ObPushdownOperator	sql::ObPushdownOperator &op);
+src/storage/access/ob_sample_filter.h	332	ObHybridSampleFilterExecutor	sql:: use: PushdownFilterInfo	sql::PushdownFilterInfo &filter_info,
+src/storage/access/ob_sample_filter.h	424	ObRowSampleFilter	sql:: use: ObPushdownOperator	sql::ObPushdownOperator *op,
+src/storage/access/ob_sample_filter.h	427	ObRowSampleFilter	sql:: use: ObPushdownFilterExecutor	int combine_to_filter_tree(sql::ObPushdownFilterExecutor *&root_filter);
+src/storage/access/ob_sample_filter.h	428	ObRowSampleFilter::get_sample_executor	sql:: use: ObPushdownFilterExecutor	OB_INLINE sql::ObPushdownFilterExecutor *get_sample_executor()
+src/storage/access/ob_sample_filter.h	443	ObRowSampleFilter	sql:: use: ObPushdownFilterExecutor	sql::ObPushdownFilterExecutor *sample_filter_;
+src/storage/access/ob_sample_filter.h	444	ObRowSampleFilter	sql:: use: ObPushdownFilterNode	sql::ObPushdownFilterNode *sample_node_;
+src/storage/access/ob_sample_filter.h	445	ObRowSampleFilter	sql:: use: ObPushdownFilterExecutor	sql::ObPushdownFilterExecutor *filter_;
+src/storage/access/ob_sample_filter.h	446	ObRowSampleFilter	sql:: use: ObPushdownFilterNode	sql::ObPushdownFilterNode *filter_node_;
+src/storage/access/ob_sample_filter.h	456	ObRowSampleFilterFactory	sql:: use: ObPushdownOperator	sql::ObPushdownOperator *op,
+src/storage/access/ob_sstable_index_filter.cpp	31	ObSSTableIndexFilter::init	sql:: use: ObPushdownFilterExecutor	sql::ObPushdownFilterExecutor &pushdown_filter,
+src/storage/access/ob_sstable_index_filter.cpp	65	ObSSTableIndexFilter::check_range	sql:: use: ObBoolMask	sql::ObBoolMask bm;
+src/storage/access/ob_sstable_index_filter.cpp	127	ObSSTableIndexFilter::build_skipping_filter_nodes	sql:: use: ObPushdownFilterExecutor	sql::ObPushdownFilterExecutor &filter)
+src/storage/access/ob_sstable_index_filter.cpp	132	ObSSTableIndexFilter::build_skipping_filter_nodes	sql:: use: ObPushdownFilterExecutor	sql::ObPushdownFilterExecutor **children = filter.get_childs();
+src/storage/access/ob_sstable_index_filter.cpp	146	ObSSTableIndexFilter::extract_skipping_filter_from_tree	sql:: use: ObPushdownFilterExecutor	sql::ObPushdownFilterExecutor &filter)
+src/storage/access/ob_sstable_index_filter.cpp	149	ObSSTableIndexFilter::extract_skipping_filter_from_tree	sql:: use: ObPhysicalFilterExecutor	sql::ObPhysicalFilterExecutor &physical_filter = static_cast<sql::ObPhysicalFilterExecutor &>(filter);
+src/storage/access/ob_sstable_index_filter.cpp	150	ObSSTableIndexFilter::extract_skipping_filter_from_tree	sql:: use: ObBlackFilterExecutor	if (physical_filter.is_filter_white_node() || static_cast<sql::ObBlackFilterExecutor &>(physical_filter).is_monotonic()) {
+src/storage/access/ob_sstable_index_filter.cpp	161	ObSSTableIndexFilter::find_skipping_index	sql:: use: ObPhysicalFilterExecutor	sql::ObPhysicalFilterExecutor &filter,
+src/storage/access/ob_sstable_index_filter.cpp	196	ObSSTableIndexFilter::find_useful_skipping_filter	sql:: use: ObPhysicalFilterExecutor	sql::ObPhysicalFilterExecutor &filter)
+src/storage/access/ob_sstable_index_filter.cpp	216	ObSSTableIndexFilterFactory::build_sstable_index_filter	sql:: use: ObPushdownFilterExecutor	sql::ObPushdownFilterExecutor &pushdown_filter,
+src/storage/access/ob_sstable_index_filter.cpp	253	ObSSTableIndexFilterExtracter::extract_skipping_filter	sql:: use: ObPhysicalFilterExecutor	const sql::ObPhysicalFilterExecutor &filter,
+src/storage/access/ob_sstable_index_filter.h	52	ObSkippingFilterNode	sql:: use: ObPhysicalFilterExecutor	sql::ObPhysicalFilterExecutor *filter_;
+src/storage/access/ob_sstable_index_filter.h	72	ObSSTableIndexFilter	sql:: use: ObPushdownFilterExecutor	sql::ObPushdownFilterExecutor &pushdown_filter,
+src/storage/access/ob_sstable_index_filter.h	89	ObSSTableIndexFilter::get_pushdown_filter	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *get_pushdown_filter() { return pushdown_filter_; }
+src/storage/access/ob_sstable_index_filter.h	101	ObSSTableIndexFilter	sql:: use: ObPushdownFilterExecutor	sql::ObPushdownFilterExecutor &filter);
+src/storage/access/ob_sstable_index_filter.h	104	ObSSTableIndexFilter	sql:: use: ObPushdownFilterExecutor	sql::ObPushdownFilterExecutor &filter);
+src/storage/access/ob_sstable_index_filter.h	107	ObSSTableIndexFilter	sql:: use: ObPhysicalFilterExecutor	sql::ObPhysicalFilterExecutor &filter,
+src/storage/access/ob_sstable_index_filter.h	111	ObSSTableIndexFilter	sql:: use: ObPhysicalFilterExecutor	sql::ObPhysicalFilterExecutor &filter);
+src/storage/access/ob_sstable_index_filter.h	114	ObSSTableIndexFilter	sql:: use: ObPushdownFilterExecutor	sql::ObPushdownFilterExecutor *pushdown_filter_;
+src/storage/access/ob_sstable_index_filter.h	124	ObSSTableIndexFilterFactory	sql:: use: ObPushdownFilterExecutor	sql::ObPushdownFilterExecutor &pushdown_filter,
+src/storage/access/ob_sstable_index_filter.h	135	ObSSTableIndexFilterExtracter	sql:: use: ObPhysicalFilterExecutor	const sql::ObPhysicalFilterExecutor &filter,
+src/storage/access/ob_sstable_row_scanner.ipp	257	ObSSTableRowScanner::open_cur_data_block	sql:: use: ObPushdownFilterExecutor	sql::ObPushdownFilterExecutor *filter = block_row_store_->get_pd_filter();
+src/storage/access/ob_table_access_context.cpp	215	ObTableAccessContext::init	sql:: use: ObStoragePushdownFlag	static_cast<sql::ObStoragePushdownFlag>(scan_param.pd_storage_flag_).is_enable_prefetch_limiting(),
+src/storage/access/ob_table_access_context.h	181	ObTableAccessContext::get_sample_executor	sql:: use: ObPushdownFilterExecutor	inline sql::ObPushdownFilterExecutor *get_sample_executor() {

@@ -1,0 +1,100 @@
+file	line	symbol	construct	text
+src/storage/ddl/ob_ddl_merge_task.cpp	224	ObDDLTableMergeDag::prepare_full_direct_load_ddl_kvs	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/storage/ddl/ob_ddl_merge_task.cpp	293	ObDDLTableMergeDag::ignore_warning	other variable dag_ret_ == OB_LS_NOT_EXIST	return OB_LS_NOT_EXIST == dag_ret_
+src/storage/ddl/ob_ddl_merge_task.cpp	294	ObDDLTableMergeDag::ignore_warning	other variable dag_ret_ == OB_TABLET_NOT_EXIST	|| OB_TABLET_NOT_EXIST == dag_ret_
+src/storage/ddl/ob_ddl_merge_task.cpp	295	ObDDLTableMergeDag::ignore_warning	other variable dag_ret_ == OB_TASK_EXPIRED	|| OB_TASK_EXPIRED == dag_ret_
+src/storage/ddl/ob_ddl_merge_task.cpp	296	ObDDLTableMergeDag::ignore_warning	other variable dag_ret_ == OB_EAGAIN	|| OB_EAGAIN == dag_ret_
+src/storage/ddl/ob_ddl_merge_task.cpp	297	ObDDLTableMergeDag::ignore_warning	other variable dag_ret_ == OB_NEED_RETRY	|| OB_NEED_RETRY == dag_ret_;
+src/storage/ddl/ob_ddl_merge_task.cpp	443	ObDDLTableMergeTask::merge_full_direct_load_ddl_kvs_for_sn	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/storage/ddl/ob_ddl_merge_task.cpp	470	ObDDLTableMergeTask::merge_full_direct_load_ddl_kvs_for_sn	ret != OB_EAGAIN	if (OB_EAGAIN != ret) {
+src/storage/ddl/ob_ddl_merge_task.cpp	542	ObTabletDDLUtil::check_data_continue	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/ddl/ob_ddl_merge_task.cpp	806	get_sstables	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/ddl/ob_ddl_merge_task.cpp	908	ObDDLMacroBlockIterator::get_next	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/ddl/ob_ddl_merge_task.cpp	914	ObDDLMacroBlockIterator::get_next	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/ddl/ob_ddl_merge_task_utils.cpp	62	ObDDLMergeTaskUtils::check_idempodency	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/storage/ddl/ob_ddl_merge_task_utils.cpp	214	ObDDLMergeTaskUtils::freeze_ddl_kv	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/storage/ddl/ob_ddl_merge_task_utils.cpp	295	ObDDLMergeTaskUtils::get_ddl_tables_from_dump_tables	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/ddl/ob_ddl_merge_task_utils.cpp	481	ObDDLMergeTaskUtils::get_sorted_meta_array	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/ddl/ob_ddl_pipeline.cpp	84	ObIDDLPipeline::process	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/storage/ddl/ob_ddl_pipeline.cpp	904	ObHNSWIndexAppendBufferOperator::append_row_file	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/ddl/ob_ddl_pipeline.cpp	1014	ObHNSWIndexBuildOperator::serialize_vector_index	ret == OB_NOT_INIT	if (OB_NOT_INIT == ret) {
+src/storage/ddl/ob_ddl_pipeline.cpp	1103	ObVectorIndexWriteMacroBaseOperator::write	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/storage/ddl/ob_ddl_pipeline.cpp	1112	ObVectorIndexWriteMacroBaseOperator::write	ret == OB_ITER_END	if (ret == OB_ITER_END) {
+src/storage/ddl/ob_ddl_pipeline.cpp	1159	ObIVFIndexAppendBufferBaseOperator::append_row_file	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/ddl/ob_ddl_pipeline.cpp	1557	ObHNSWEmbeddingOperator::execute	ret == OB_EAGAIN	if (OB_EAGAIN == ret) {
+src/storage/ddl/ob_ddl_pipeline.cpp	1565	ObHNSWEmbeddingOperator::execute	ret == OB_EAGAIN	if (OB_EAGAIN == ret) {
+src/storage/ddl/ob_ddl_pipeline.cpp	1623	ObHNSWEmbeddingOperator::get_ready_results	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/ddl/ob_ddl_pipeline.cpp	1661	ObHNSWEmbeddingOperator::process_input_chunk	ret == OB_EAGAIN	if (OB_EAGAIN == ret) {
+src/storage/ddl/ob_ddl_pipeline.cpp	1735	ObHNSWEmbeddingOperator::get_next_batch_from_tmp_files	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/ddl/ob_ddl_pipeline.cpp	1788	ObHNSWEmbeddingOperator::flush_current_batch	ret == OB_EAGAIN	if (OB_EAGAIN == ret) {
+src/storage/ddl/ob_ddl_pipeline.cpp	1985	ObHNSWEmbeddingWriteMacroOperator::execute	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/storage/ddl/ob_ddl_pipeline.cpp	1990	ObHNSWEmbeddingWriteMacroOperator::execute	ret == OB_ITER_END	if (ret == OB_ITER_END) {
+src/storage/ddl/ob_ddl_redo_log_replayer.cpp	67	ObDDLRedoLogReplayer::replay_redo	ret == OB_NO_NEED_UPDATE	if (OB_NO_NEED_UPDATE == ret) {
+src/storage/ddl/ob_ddl_redo_log_replayer.cpp	69	ObDDLRedoLogReplayer::replay_redo	ret != OB_EAGAIN	} else if (OB_EAGAIN != ret) {
+src/storage/ddl/ob_ddl_redo_log_replayer.cpp	91	ObDDLRedoLogReplayer::replay_table_fork_freeze	ret == OB_TABLET_NOT_EXIST; ret == OB_NO_NEED_UPDATE; ret == OB_TASK_EXPIRED	if (OB_TABLET_NOT_EXIST == ret || OB_NO_NEED_UPDATE == ret || OB_TASK_EXPIRED == ret) {
+src/storage/ddl/ob_ddl_redo_log_replayer.cpp	93	ObDDLRedoLogReplayer::replay_table_fork_freeze	ret != OB_EAGAIN	} else if (OB_EAGAIN != ret) {
+src/storage/ddl/ob_ddl_redo_log_replayer.cpp	117	ObDDLRedoLogReplayer::replay_table_fork_start	ret == OB_TABLET_NOT_EXIST; ret == OB_NO_NEED_UPDATE; ret == OB_TASK_EXPIRED	if (OB_TABLET_NOT_EXIST == ret || OB_NO_NEED_UPDATE == ret || OB_TASK_EXPIRED == ret) {
+src/storage/ddl/ob_ddl_redo_log_replayer.cpp	119	ObDDLRedoLogReplayer::replay_table_fork_start	ret != OB_EAGAIN	} else if (OB_EAGAIN != ret) {
+src/storage/ddl/ob_ddl_redo_log_replayer.cpp	142	ObDDLRedoLogReplayer::replay_table_fork_finish	ret == OB_TABLET_NOT_EXIST; ret == OB_NO_NEED_UPDATE; ret == OB_TASK_EXPIRED	if (OB_TABLET_NOT_EXIST == ret || OB_NO_NEED_UPDATE == ret || OB_TASK_EXPIRED == ret) {
+src/storage/ddl/ob_ddl_redo_log_replayer.cpp	144	ObDDLRedoLogReplayer::replay_table_fork_finish	ret != OB_EAGAIN	} else if (OB_EAGAIN != ret) {
+src/storage/ddl/ob_ddl_redo_log_writer.cpp	144	ObDDLCtrlSpeedItem::do_sleep	tmp_ret == OB_ITER_END	if (OB_ITER_END == tmp_ret) {
+src/storage/ddl/ob_ddl_redo_log_writer.cpp	261	ObDDLCtrlSpeedHandle::limit_and_sleep	ret != OB_INIT_TWICE	if (OB_INIT_TWICE != ret) {
+src/storage/ddl/ob_ddl_redo_log_writer.cpp	280	ObDDLCtrlSpeedHandle::refresh	ret == OB_SERVER_RUNTIME_NOT_READY; ret == OB_IN_STOP_STATE	} else if (OB_SERVER_RUNTIME_NOT_READY == ret || OB_IN_STOP_STATE == ret) {
+src/storage/ddl/ob_ddl_replay_executor.cpp	153	ObDDLRedoReplayExecutor::do_replay_	ret == OB_SERVER_OUTOF_DISK_SPACE	if (OB_SERVER_OUTOF_DISK_SPACE == ret) {
+src/storage/ddl/ob_ddl_replay_executor.cpp	222	ObDDLRedoReplayExecutor::do_full_replay_	ret != OB_EAGAIN	if (OB_EAGAIN != ret) {
+src/storage/ddl/ob_ddl_replay_executor.cpp	274	ObDDLRedoReplayExecutor::do_full_replay_	ret == OB_ENTRY_EXIST	if (OB_ENTRY_EXIST == ret && is_idem_type(redo_info.type_))  {
+src/storage/ddl/ob_ddl_replay_executor.cpp	278	ObDDLRedoReplayExecutor::do_full_replay_	ret == OB_TASK_EXPIRED	} else if (OB_TASK_EXPIRED == ret) {
+src/storage/ddl/ob_ddl_replay_executor.cpp	402	ObTabletForkStartReplayExecutor::do_replay_	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/storage/ddl/ob_ddl_replay_executor.cpp	408	ObTabletForkStartReplayExecutor::do_replay_	ret != OB_SIZE_OVERFLOW; ret != OB_EAGAIN	if (OB_SIZE_OVERFLOW != ret && OB_EAGAIN != ret) {
+src/storage/ddl/ob_ddl_replay_executor.cpp	410	ObTabletForkStartReplayExecutor::do_replay_	ret == OB_EAGAIN	} else if (OB_EAGAIN == ret) {
+src/storage/ddl/ob_ddl_replay_executor.cpp	460	ObTabletForkFinishReplayExecutor::do_replay_	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/storage/ddl/ob_ddl_replay_executor.cpp	466	ObTabletForkFinishReplayExecutor::do_replay_	ret != OB_SIZE_OVERFLOW; ret != OB_EAGAIN	if (OB_SIZE_OVERFLOW != ret && OB_EAGAIN != ret) {
+src/storage/ddl/ob_ddl_replay_executor.cpp	468	ObTabletForkFinishReplayExecutor::do_replay_	ret == OB_EAGAIN	} else if (OB_EAGAIN == ret) {
+src/storage/ddl/ob_ddl_row_tmp_file.cpp	144	ObDDLRowFile::get_next_batch	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/ddl/ob_ddl_struct.cpp	260	ObDDLKVPendingGuard::set_macro_block	ret == OB_EAGAIN	while ((OB_SUCCESS == ret || OB_EAGAIN == ret) && try_count < MAX_RETRY_COUNT) {
+src/storage/ddl/ob_ddl_struct.cpp	271	ObDDLKVPendingGuard::set_macro_block	ret == OB_EAGAIN	if (OB_EAGAIN == ret) {
+src/storage/ddl/ob_ddl_tablet_context.cpp	76	ObDDLSlice::~ObDDLSlice	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/storage/ddl/ob_ddl_tablet_context.cpp	117	ObDDLSlice::push_chunk	ret != OB_TIMEOUT	if (OB_UNLIKELY(OB_TIMEOUT != ret)) {
+src/storage/ddl/ob_ddl_tablet_context.cpp	136	ObDDLSlice::pop_chunk	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/storage/ddl/ob_ddl_tablet_context.cpp	303	ObDDLTabletContext::get_or_create_slice	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/storage/ddl/ob_ddl_tablet_context.cpp	309	ObDDLTabletContext::get_or_create_slice	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/storage/ddl/ob_ddl_tablet_context.cpp	314	ObDDLTabletContext::get_or_create_slice	ret != OB_HASH_NOT_EXIST	} else if (OB_HASH_NOT_EXIST != ret) {
+src/storage/ddl/ob_ddl_vector_utils.cpp	302	ObDDLVectorUtils::reshape_storage_vector	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/ddl/ob_delete_lob_meta_row_task.cpp	107	ObDeleteLobMetaRowDag::ignore_warning	other variable dag_ret_ == OB_EAGAIN	return OB_EAGAIN == dag_ret_
+src/storage/ddl/ob_delete_lob_meta_row_task.cpp	108	ObDeleteLobMetaRowDag::ignore_warning	other variable dag_ret_ == OB_NEED_RETRY	|| OB_NEED_RETRY == dag_ret_
+src/storage/ddl/ob_delete_lob_meta_row_task.cpp	109	ObDeleteLobMetaRowDag::ignore_warning	other variable dag_ret_ == OB_TASK_EXPIRED	|| OB_TASK_EXPIRED == dag_ret_;
+src/storage/ddl/ob_delete_lob_meta_row_task.cpp	357	ObDeleteLobMetaRowTask::process	ret == OB_SNAPSHOT_DISCARDED	if (OB_SNAPSHOT_DISCARDED == ret && scan_param.fb_snapshot_.is_valid()) {
+src/storage/ddl/ob_delete_lob_meta_row_task.cpp	359	ObDeleteLobMetaRowTask::process	ret != OB_TRY_LOCK_ROW_CONFLICT	} else if (OB_TRY_LOCK_ROW_CONFLICT != ret) {
+src/storage/ddl/ob_delete_lob_meta_row_task.cpp	367	ObDeleteLobMetaRowTask::process	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/ddl/ob_delete_lob_meta_row_task.cpp	379	ObDeleteLobMetaRowTask::process	ret == OB_ITER_END	if (ret == OB_ITER_END) {
+src/storage/ddl/ob_direct_load_struct.cpp	119	ObLobMetaRowIterator::get_next_row	ret != OB_ITER_END	if (OB_UNLIKELY(ret != OB_ITER_END)) {
+src/storage/ddl/ob_hnsw_embedmgr.cpp	586	ObEmbeddingTaskMgr::submit_batch_info	ret == OB_EAGAIN	if (OB_EAGAIN == ret) {
+src/storage/ddl/ob_lob_macro_block_writer.cpp	141	ObLobMacroBlockWriter::write	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/ddl/ob_tablet_copy_util.cpp	58	ObTabletCopyUtil::get_clipped_storage_schema_on_demand	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/storage/ddl/ob_tablet_ddl_kv.cpp	125	ObBlockMetaTree::destroy_tree_value	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/ddl/ob_tablet_ddl_kv.cpp	203	ObBlockMetaTree::get_sorted_meta_array	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/ddl/ob_tablet_ddl_kv.cpp	251	ObBlockMetaTree::exist	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/storage/ddl/ob_tablet_ddl_kv.cpp	286	ObBlockMetaTree::lower_bound	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/ddl/ob_tablet_ddl_kv.cpp	330	ObBlockMetaTree::upper_bound	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/ddl/ob_tablet_ddl_kv.cpp	416	ObBlockMetaTree::locate_range	ret == OB_BEYOND_THE_RANGE	if (OB_BEYOND_THE_RANGE == ret) {
+src/storage/ddl/ob_tablet_ddl_kv.cpp	439	ObBlockMetaTree::locate_range	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/ddl/ob_tablet_ddl_kv.cpp	471	ObBlockMetaTree::locate_range	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/ddl/ob_tablet_ddl_kv.cpp	514	ObBlockMetaTree::skip_to_next_valid_position	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/ddl/ob_tablet_ddl_kv.cpp	546	ObBlockMetaTree::get_next_tree_value	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/ddl/ob_tablet_ddl_kv.cpp	584	ObBlockMetaTree::get_last_rowkey	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/storage/ddl/ob_tablet_ddl_kv.cpp	952	ObDDLKV::set_macro_block	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/storage/ddl/ob_tablet_ddl_kv.cpp	1059	ObDDLKV::prepare_sstable	ret != OB_EAGAIN	if (OB_EAGAIN != ret) {
+src/storage/ddl/ob_tablet_ddl_kv.cpp	1116	ObDDLKV::wait_pending	ret == OB_STATE_NOT_MATCH	if (OB_STATE_NOT_MATCH == ret) {
+src/storage/ddl/ob_tablet_ddl_kv_mgr.cpp	168	ObTabletDDLKvMgr::rdlock	ret == OB_TIMEOUT	if (OB_TIMEOUT == ret) {
+src/storage/ddl/ob_tablet_ddl_kv_mgr.cpp	181	ObTabletDDLKvMgr::wrlock	ret == OB_TIMEOUT	if (OB_TIMEOUT == ret) {
+src/storage/ddl/ob_tablet_ddl_kv_mgr.cpp	392	ObTabletDDLKvMgr::freeze_ddl_kv	ret != OB_EAGAIN	if (OB_EAGAIN != ret) {
+src/storage/ddl/ob_tablet_ddl_kv_mgr.cpp	564	ObTabletDDLKvMgr::alloc_ddl_kv	ret == OB_EAGAIN	if (OB_EAGAIN == ret) {
+src/storage/ddl/ob_tablet_ddl_kv_mgr.cpp	750	ObDDLMacroIdemChecker::check_block_exist	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/storage/ddl/ob_tablet_fork_task.cpp	223	ObForkSnapshotRowScan::get_next_row	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/ddl/ob_tablet_fork_task.cpp	542	ObTabletForkDag::init_by_param	ret != OB_NEED_RETRY	if (OB_NEED_RETRY != ret) {
+src/storage/ddl/ob_tablet_fork_task.cpp	1032	ObTabletForkRewriteTask::process_rewrite_sstable_task	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/ddl/ob_tablet_fork_task.cpp	1395	ObTabletForkUtil::get_participants	ret == OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END == ret)) {
+src/storage/ddl/ob_tablet_fork_task.cpp	1451	ObTabletForkUtil::try_schedule_fork_dags	ret != OB_SIZE_OVERFLOW; ret != OB_EAGAIN	if (OB_SIZE_OVERFLOW != ret && OB_EAGAIN != ret) {
+src/storage/ddl/ob_tablet_fork_task.cpp	1454	ObTabletForkUtil::try_schedule_fork_dags	ret == OB_EAGAIN	} else if (OB_EAGAIN == ret) {
+src/storage/ddl/ob_tablet_fork_task.cpp	1493	ObTabletForkUtil::freeze_tablet	ret == OB_EAGAIN	if (OB_EAGAIN == ret) {
+src/storage/ddl/ob_tablet_slice_row_iterator.cpp	89	ObTabletSliceRowIterator::get_next_row	ret == OB_ITER_END	if (OB_ITER_END == ret && nullptr != lob_writer_) {

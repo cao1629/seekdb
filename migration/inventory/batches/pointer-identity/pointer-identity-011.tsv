@@ -1,0 +1,48 @@
+file	line	symbol	construct	text
+src/sql/optimizer/ob_log_topk.cpp	76	ObLogTopk::get_topk_output_exprs	pointer membership test: append_array_no_dup	} else if (OB_FAIL(append_array_no_dup(candi_exprs, plan->get_select_item_exprs_for_width_est()))) {
+src/sql/optimizer/ob_log_topk.cpp	79	ObLogTopk::get_topk_output_exprs	pointer membership test: append_array_no_dup	} else if (OB_FAIL(append_array_no_dup(output_exprs, extracted_col_aggr_winfunc_exprs))) {
+src/sql/optimizer/ob_log_values_table_access.cpp	212	ObLogValuesTableAccess::is_my_fixed_expr	pointer membership test: ObOptimizerUtil::find_item	is_fixed = ObOptimizerUtil::find_item(column_exprs_, expr);
+src/sql/optimizer/ob_log_window_function.cpp	255	ObLogWindowFunction::get_winfunc_output_exprs	pointer membership test: append_array_no_dup	} else if (OB_FAIL(append_array_no_dup(candi_exprs, plan->get_select_item_exprs_for_width_est()))) {
+src/sql/optimizer/ob_log_window_function.cpp	256	ObLogWindowFunction::get_winfunc_output_exprs	pointer membership test: append_array_no_dup	} else if (OB_FAIL(append_array_no_dup(candi_exprs, plan->get_orderby_exprs_for_width_est()))) {
+src/sql/optimizer/ob_log_window_function.cpp	259	ObLogWindowFunction::get_winfunc_output_exprs	pointer membership test: append_array_no_dup	} else if (OB_FAIL(append_array_no_dup(output_exprs, extracted_col_aggr_winfunc_exprs))) {
+src/sql/optimizer/ob_log_window_function.cpp	598	ObLogWindowFunction::inner_replace_op_exprs	IR pointer == IR pointer	} else if (win_expr == win_exprs_.at(i)) {
+src/sql/optimizer/ob_log_window_function.cpp	626	ObLogWindowFunction::is_my_fixed_expr	IR pointer == IR pointer	is_fixed = ObOptimizerUtil::find_item(win_exprs_, expr) || expr == wf_aggr_status_expr_;
+src/sql/optimizer/ob_log_window_function.cpp	626	ObLogWindowFunction::is_my_fixed_expr	pointer membership test: ObOptimizerUtil::find_item	is_fixed = ObOptimizerUtil::find_item(win_exprs_, expr) || expr == wf_aggr_status_expr_;
+src/sql/optimizer/ob_logical_operator.cpp	255	ObAllocExprContext::find	pointer cast to integer used as a key	} else if (OB_FAIL(expr_map_.get_refactored(reinterpret_cast<uint64_t>(expr),
+src/sql/optimizer/ob_logical_operator.cpp	262	ObAllocExprContext::find	IR pointer != IR pointer	OB_UNLIKELY(expr != expr_producers_.at(idx).expr_)) {
+src/sql/optimizer/ob_logical_operator.cpp	276	ObAllocExprContext::add	pointer cast to integer used as a key	} else if (OB_FAIL(expr_map_.set_refactored(reinterpret_cast<uint64_t>(producer.expr_),
+src/sql/optimizer/ob_logical_operator.cpp	287	ObAllocExprContext::add_flattern_expr	pointer cast to integer used as a key	if (OB_FAIL(flattern_expr_map_.get_refactored(reinterpret_cast<uint64_t>(expr),
+src/sql/optimizer/ob_logical_operator.cpp	292	ObAllocExprContext::add_flattern_expr	pointer cast to integer used as a key	if (OB_FAIL(flattern_expr_map_.set_refactored(reinterpret_cast<uint64_t>(expr),
+src/sql/optimizer/ob_logical_operator.cpp	299	ObAllocExprContext::add_flattern_expr	pointer cast to integer used as a key	} else if (OB_FAIL(flattern_expr_map_.set_refactored(reinterpret_cast<uint64_t>(expr),
+src/sql/optimizer/ob_logical_operator.cpp	313	ObAllocExprContext::get_expr_ref_cnt	pointer cast to integer used as a key	if (OB_FAIL(flattern_expr_map_.get_refactored(reinterpret_cast<uint64_t>(expr),
+src/sql/optimizer/ob_logical_operator.cpp	433	FilterCompare::get_selectivity	IR pointer == IR pointer	if (predicate_selectivities_.at(i).expr_ == expr) {
+src/sql/optimizer/ob_logical_operator.cpp	1638	ObLogicalOperator::get_op_exprs	pointer membership test: append_array_no_dup	if (OB_FAIL(append_array_no_dup(all_exprs, get_filter_exprs()))) {
+src/sql/optimizer/ob_logical_operator.cpp	1639	ObLogicalOperator::get_op_exprs	pointer membership test: append_array_no_dup	} else if (OB_FAIL(append_array_no_dup(all_exprs, get_startup_exprs()))) {
+src/sql/optimizer/ob_logical_operator.cpp	1640	ObLogicalOperator::get_op_exprs	pointer membership test: append_array_no_dup	} else if (is_plan_root() && OB_FAIL(append_array_no_dup(all_exprs, get_output_exprs()))) {
+src/sql/optimizer/ob_logical_operator.cpp	1773	ObLogicalOperator::add_expr_to_ctx	pointer membership test: ObOptimizerUtil::find_item	if (ObOptimizerUtil::find_item(shared_exprs, expr)) {
+src/sql/optimizer/ob_logical_operator.cpp	1829	ObLogicalOperator::extract_non_const_exprs	pointer membership test: add_var_to_array_no_dup	} else if (OB_FAIL(add_var_to_array_no_dup(non_const_exprs, expr))) {
+src/sql/optimizer/ob_logical_operator.cpp	1852	ObLogicalOperator::extract_shared_exprs	pointer membership test: add_var_to_array_no_dup	} else if (OB_FAIL(add_var_to_array_no_dup(shard_exprs, raw_expr))) {
+src/sql/optimizer/ob_logical_operator.cpp	1855	ObLogicalOperator::extract_shared_exprs	pointer membership test: ObOptimizerUtil::find_item	if (!ObOptimizerUtil::find_item(ctx.inseparable_exprs_, raw_expr) &&
+src/sql/optimizer/ob_logical_operator.cpp	2040	ObLogicalOperator::allocate_expr_post	pointer membership test: add_var_to_array_no_dup	if (OB_FAIL(add_var_to_array_no_dup(output_exprs_, expr))) {
+src/sql/optimizer/ob_logical_operator.cpp	2155	ObLogicalOperator::is_child_output_exprs	pointer membership test: ObOptimizerUtil::find_item	ObOptimizerUtil::find_item(get_child(i)->get_output_exprs(), expr)) {
+src/sql/optimizer/ob_logical_operator.cpp	3020	ObLogicalOperator::check_output_dependance	pointer membership test: append_array_no_dup	} else if (OB_FAIL(append_array_no_dup(exprs, output_exprs_))) {
+src/sql/optimizer/ob_logical_operator.cpp	3914	ObLogicalOperator::allocate_startup_expr_post	pointer membership test: ObOptimizerUtil::append_exprs_no_dup (pointer identity, then same_as)	if (OB_FAIL(ObOptimizerUtil::append_exprs_no_dup(get_startup_exprs(), new_startup_exprs))) {
+src/sql/optimizer/ob_logical_operator.cpp	3953	AllocGIContext::is_op_set_pw	IR pointer == IR pointer	return pw_op_ptr_ == op_ptr;
+src/sql/optimizer/ob_logical_operator.cpp	4319	ObLogicalOperator::check_can_extract_query_range_by_rf	IR pointer == IR pointer	if (join_use_expr == range_column_expr
+src/sql/optimizer/ob_logical_operator.cpp	4576	ObLogicalOperator::check_sort_key_can_pushdown_to_tsc_for_gby	pointer membership test: is_contain	if (!is_contain(group_by_exprs, candidate_sk_expr)) {
+src/sql/optimizer/ob_logical_operator.cpp	4612	ObLogicalOperator::check_sort_key_can_pushdown_to_tsc_for_winfunc	pointer membership test: is_contain	} else if (!is_contain(partition_exprs, candidate_sk_expr)) {
+src/sql/optimizer/ob_logical_operator.cpp	4859	ObLogicalOperator::allocate_normal_join_filter	IR pointer == unresolved pointer	if (node->get_parent()->get_child(i) == node) {
+src/sql/optimizer/ob_logical_operator.cpp	5443	ObLogicalOperator::collect_batch_exec_param	pointer membership test: ObOptimizerUtil::find_item	if (!ObOptimizerUtil::find_item(exec_params, param.expr_)) {
+src/sql/optimizer/ob_logical_operator.cpp	5742	ObLogicalOperator::check_op_orderding_used_by_parent	IR pointer == unresolved pointer	} else if (OB_FALSE_IT(inherit_child_ordering = child == parent->get_child(inherit_child_ordering_index))) {
+src/sql/optimizer/ob_opt_selectivity.cpp	90	OptSelectivityCtx::ExprDeduceInfo::add_antecedent	pointer membership test: ObOptimizerUtil::append_exprs_no_dup (pointer identity, then same_as)	return ObOptimizerUtil::append_exprs_no_dup(antecedent_, exprs);
+src/sql/optimizer/ob_opt_selectivity.cpp	969	OptTableMetas::get_dynamic_expr_meta	IR pointer == IR pointer	if (expr == dynamic_expr_metas_.at(i).get_expr()) {
+src/sql/optimizer/ob_opt_selectivity.cpp	1093	ObOptSelectivity::calculate_selectivity	pointer membership test: ObOptimizerUtil::append_exprs_no_dup (pointer identity, then same_as)	} else if (OB_FAIL(ObOptimizerUtil::append_exprs_no_dup(predicates, input_predicates))) {
+src/sql/optimizer/ob_opt_selectivity.cpp	2757	ObOptSelectivity::check_expr_in_distinct_helper	pointer membership test: ObOptimizerUtil::find_item	found = ObOptimizerUtil::find_item(helpers.at(j).exprs_, col_expr);
+src/sql/optimizer/ob_opt_selectivity.cpp	2878	ObOptSelectivity::classify_exprs	pointer membership test: add_var_to_array_no_dup	if (OB_FAIL(add_var_to_array_no_dup(special_exprs, expr))) {
+src/sql/optimizer/ob_opt_selectivity.cpp	2914	ObOptSelectivity::add_expr_to_distinct_helper	pointer membership test: add_var_to_array_no_dup	if (OB_SUCC(ret) && OB_FAIL(add_var_to_array_no_dup(helper->exprs_, expr))) {
+src/sql/optimizer/ob_opt_selectivity.cpp	3241	ObOptSelectivity::filter_column_by_equal_set	pointer membership test: add_var_to_array_no_dup	} else if (OB_FAIL(add_var_to_array_no_dup(filtered_exprs, filtered_expr))) {
+src/sql/optimizer/ob_opt_selectivity.cpp	3272	ObOptSelectivity::get_min_ndv_by_equal_set	pointer membership test: ObOptimizerUtil::find_item	} else if (!ObOptimizerUtil::find_item(*equal_set, col_expr)) {
+src/sql/optimizer/ob_opt_selectivity.cpp	3496	ObOptSelectivity::get_qual_selectivity	IR pointer == IR pointer	if (all_predicate_sel.at(i).expr_ == qual) {
+src/sql/optimizer/ob_optimizer.cpp	194	ObOptimizer::get_cte_optimization_cost	IR pointer == IR pointer	} else if (cte_query == temp_table_info->table_query_) {
+src/sql/optimizer/ob_optimizer.h	173	ObExprSelPair::operator==	IR pointer == IR pointer	{ return expr_ == rhs.expr_ && represent_range_exprs_ == rhs.represent_range_exprs_; }
+src/sql/optimizer/ob_optimizer_context.h	617	ObOptimizerContext::get_temp_table_plan	IR pointer == IR pointer	table_query == temp_table_infos_.at(i)->table_query_) {

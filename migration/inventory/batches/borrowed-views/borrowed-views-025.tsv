@@ -1,0 +1,59 @@
+file	line	symbol	construct	text
+src/sql/dtl/ob_dtl_interm_result_manager.h	347	ObAtomicAppendBlockCall::block_buf_	member raw bytes (pointer) of type char*	char* block_buf_;
+src/sql/dtl/ob_dtl_interm_result_manager.h	371	ObAtomicAppendPartBlockCall::block_buf_	member raw bytes (pointer) of type char*	char* block_buf_;
+src/sql/dtl/ob_dtl_linked_buffer.h	544	ObDtlLinkedBuffer::buf_	member raw bytes (pointer) of type char *	char * buf_;
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	5720	ObAggregateProcessor::llc_init_empty	allocator in, arena view out: char *&llc_map	int ObAggregateProcessor::llc_init_empty(char *&llc_map, int64_t &llc_map_size, common::ObIAllocator &alloc)
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	5806	ObAggregateCalcFunc::add_calc	allocator in, arena view out: ObDatum &result_datum	int ObAggregateCalcFunc::add_calc(const ObDatum &left_value, const ObDatum &right_value,
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	5952	ObAggregateCalcFunc::clone_number_cell	allocator in, arena view out: ObDatum &target_cell	int ObAggregateCalcFunc::clone_number_cell(const ObNumber &src_number,
+src/sql/engine/aggregate/ob_aggregate_processor.h	373	ObAggregateProcessor::ObSigResultHolder::datums_	member ObDatum (pointer) of type ObDatum *	ObDatum *datums_;
+src/sql/engine/aggregate/ob_aggregate_processor.h	415	ObAggregateProcessor::HashBasedDistinctExtraResult::hp_infras_mgr_	member HashPartInfrasMgr (pointer) of type HashPartInfrasMgr *	HashPartInfrasMgr *hp_infras_mgr_;
+src/sql/engine/aggregate/ob_aggregate_processor.h	416	ObAggregateProcessor::HashBasedDistinctExtraResult::hp_infras_	member HashPartInfras (pointer) of type HashPartInfras *	HashPartInfras *hp_infras_;
+src/sql/engine/aggregate/ob_aggregate_processor.h	507	ObAggregateProcessor::GroupConcatExtraResult::separator_datum_	member ObDatum (pointer) of type ObDatum *	ObDatum *separator_datum_;
+src/sql/engine/aggregate/ob_aggregate_processor.h	631	ObAggregateProcessor::AggrCell::iter_result_	member ObDatum (value) of type ObDatum	ObDatum iter_result_;
+src/sql/engine/aggregate/ob_aggregate_processor.h	640	ObAggregateProcessor::AggrCell::collect_buf_	member raw bytes (pointer) of type char *	char *collect_buf_;
+src/sql/engine/aggregate/ob_aggregate_processor.h	643	ObAggregateProcessor::AggrCell::advance_collect_result_	member ObDatum (value) of type ObDatum	ObDatum advance_collect_result_;
+src/sql/engine/aggregate/ob_aggregate_processor.h	740	ObAggregateProcessor::GroupRow::groupby_store_row_	member StoredRow (pointer) of type ObChunkDatumStore::StoredRow *	ObChunkDatumStore::StoredRow *groupby_store_row_;
+src/sql/engine/aggregate/ob_aggregate_processor.h	1275	ObAggregateProcessor::cur_batch_group_buf_	member raw bytes (pointer) of type char *	char *cur_batch_group_buf_;
+src/sql/engine/aggregate/ob_aggregate_processor.h	1283	ObAggregateProcessor::concat_str_buf_	member raw bytes (pointer) of type char *	char *concat_str_buf_;
+src/sql/engine/aggregate/ob_aggregate_processor.h	1302	ObAggregateProcessor::hp_infras_mgr_	member HashPartInfrasMgr (pointer) of type HashPartInfrasMgr *	HashPartInfrasMgr *hp_infras_mgr_;
+src/sql/engine/aggregate/ob_exec_hash_struct.h	368	ObHashCols::row_	member ObNewRow (pointer) of type const common::ObNewRow *	const common::ObNewRow *row_;
+src/sql/engine/aggregate/ob_exec_hash_struct.h	369	ObHashCols::stored_row_	member StoredRow (pointer) of type const common::ObRowStore::StoredRow *	const common::ObRowStore::StoredRow *stored_row_;
+src/sql/engine/aggregate/ob_hash_distinct_op.h	89	ObHashDistinctOp::hp_infras_	member container of ObHashPartStoredRow of type ObHashPartInfrastructure<ObHashPartCols, ObHashPartStoredRow>	ObHashPartInfrastructure<ObHashPartCols, ObHashPartStoredRow> hp_infras_;
+src/sql/engine/aggregate/ob_hash_groupby_op.h	44	LlcEstimate::llc_map_	member ObString (value) of type ObString	ObString llc_map_;
+src/sql/engine/aggregate/ob_hash_groupby_op.h	131	ObGroupRowItem::groupby_store_row_	member StoredRow (pointer) of type ObChunkDatumStore::StoredRow *	ObChunkDatumStore::StoredRow *groupby_store_row_;
+src/sql/engine/aggregate/ob_hash_groupby_op.h	569	ObHashGroupByOp::ObGroupRowArray::groupby_datums_	member ObDatum (pointer) of type ObDatum *	ObDatum *groupby_datums_[2];
+src/sql/engine/aggregate/ob_hash_groupby_op.h	599	ObHashGroupByOp::cur_group_item_buf_	member raw bytes (pointer) of type char *	char *cur_group_item_buf_;
+src/sql/engine/aggregate/ob_hash_groupby_op.h	617	ObHashGroupByOp::batch_rows_from_dump_	member StoredRow (pointer) of type const ObChunkDatumStore::StoredRow **	const ObChunkDatumStore::StoredRow **batch_rows_from_dump_;
+src/sql/engine/aggregate/ob_hash_groupby_op.h	637	ObHashGroupByOp::distinct_data_set_	member container of ObHashPartStoredRow of type ObHashPartInfrastructure<ObHashPartCols, ObHashPartStoredRow>	ObHashPartInfrastructure<ObHashPartCols, ObHashPartStoredRow> distinct_data_set_;
+src/sql/engine/aggregate/ob_merge_groupby_op.h	195	ObMergeGroupByOp::hp_infras_mgr_	member HashPartInfrasMgr (value) of type HashPartInfrasMgr	HashPartInfrasMgr hp_infras_mgr_;
+src/sql/engine/aggregate/ob_pushdown_aggregate_program.cpp	333	ObOwnedAggregateDatum::datum_	member ObDatum (value) of type common::ObDatum	common::ObDatum datum_;
+src/sql/engine/aggregate/ob_pushdown_aggregate_program.cpp	334	ObOwnedAggregateDatum::buffer_	member raw bytes (pointer) of type char *	char *buffer_;
+src/sql/engine/aggregate/ob_scalar_aggregate_op.h	75	ObScalarAggregateOp::hp_infras_mgr_	member HashPartInfrasMgr (value) of type HashPartInfrasMgr	HashPartInfrasMgr hp_infras_mgr_;
+src/sql/engine/basic/chunk_store/ob_block_iwriter.h	116	ObBlockIWriter::last_row_pos_	member raw bytes (pointer) of type const char *	const char *last_row_pos_;
+src/sql/engine/basic/chunk_store/ob_chunk_block.h	149	WriterBufferHandler::buf_	member raw bytes (pointer) of type char *	char * buf_;
+src/sql/engine/basic/chunk_store/ob_chunk_block.h	162	BatchCtx::datums_	member ObDatum (pointer) of type const ObDatum **	const ObDatum **datums_;
+src/sql/engine/basic/chunk_store/ob_chunk_block.h	163	BatchCtx::stored_rows_	member StoredRow (pointer) of type ObChunkDatumStore::StoredRow **	ObChunkDatumStore::StoredRow **stored_rows_;
+src/sql/engine/basic/chunk_store/ob_compact_block_reader.h	83	ObCompactBlockReader::CurRowInfo::buf_	member raw bytes (pointer) of type const char *	const char *buf_;
+src/sql/engine/basic/chunk_store/ob_compact_block_reader.h	153	ObCompactBlockReader::sr_buffer_	member raw bytes (pointer) of type char *	char *sr_buffer_;
+src/sql/engine/basic/chunk_store/ob_compact_block_writer.h	75	ObCompactBlockWriter::CurRowInfo::buf_	member raw bytes (pointer) of type char *	char *buf_;
+src/sql/engine/basic/chunk_store/ob_compact_block_writer.h	180	ObCompactBlockWriter::last_stored_row_	member StoredRow (pointer) of type ObChunkDatumStore::StoredRow *	ObChunkDatumStore::StoredRow *last_stored_row_;
+src/sql/engine/basic/ob_chunk_datum_store.cpp	209	ObChunkDatumStore::StoredRow::build	allocator in, arena view out: StoredRow *&sr	int ObChunkDatumStore::StoredRow::build(StoredRow *&sr,
+src/sql/engine/basic/ob_chunk_datum_store.h	308	ObChunkDatumStore::LastStoredRow::store_row_	member StoredRow (pointer) of type StoredRow *	StoredRow *store_row_;
+src/sql/engine/basic/ob_chunk_datum_store.h	314	ObChunkDatumStore::LastStoredRow::pre_alloc_row1_	member StoredRow (pointer) of type StoredRow *	StoredRow *pre_alloc_row1_;
+src/sql/engine/basic/ob_chunk_datum_store.h	315	ObChunkDatumStore::LastStoredRow::pre_alloc_row2_	member StoredRow (pointer) of type StoredRow *	StoredRow *pre_alloc_row2_;
+src/sql/engine/basic/ob_chunk_datum_store.h	426	ObChunkDatumStore::ShadowStoredRow::store_row_	member StoredRow (pointer) of type StoredRow *	StoredRow *store_row_;
+src/sql/engine/basic/ob_chunk_datum_store.h	628	ObChunkDatumStore::BlockBuffer::data_	member raw bytes (pointer) of type char *	char *data_;
+src/sql/engine/basic/ob_chunk_datum_store.h	834	ObChunkDatumStore::Iterator::chunk_mem_	member raw bytes (pointer) of type char*	char* chunk_mem_;
+src/sql/engine/basic/ob_chunk_datum_store.h	929	ObChunkDatumStore::BatchCtx::datums_	member ObDatum (pointer) of type const ObDatum **	const ObDatum **datums_;
+src/sql/engine/basic/ob_chunk_datum_store.h	930	ObChunkDatumStore::BatchCtx::stored_rows_	member StoredRow (pointer) of type StoredRow **	StoredRow **stored_rows_;
+src/sql/engine/basic/ob_chunk_datum_store.h	1146	ObChunkDatumStore::label_	member raw bytes (pointer) of type const char *	const char *label_;
+src/sql/engine/basic/ob_chunk_row_store.h	204	ObChunkRowStore::BlockBuffer::data_	member raw bytes (pointer) of type char *	char *data_;
+src/sql/engine/basic/ob_chunk_row_store.h	254	ObChunkRowStore::RowIterator::row_	member ObNewRow (value) of type common::ObNewRow	common::ObNewRow row_;
+src/sql/engine/basic/ob_chunk_row_store.h	306	ObChunkRowStore::ChunkIterator::chunk_mem_	member raw bytes (pointer) of type char*	char* chunk_mem_;
+src/sql/engine/basic/ob_chunk_row_store.h	476	ObChunkRowStore::label_	member raw bytes (pointer) of type const char *	const char *label_;
+src/sql/engine/basic/ob_expr_values_op.h	56	ObExprValuesSpec::column_names_	member container of ObString of type common::ObFixedArray<common::ObString, common::ObIAllocator>	common::ObFixedArray<common::ObString, common::ObIAllocator> column_names_;
+src/sql/engine/basic/ob_expr_values_op.h	58	ObExprValuesSpec::str_values_array_	member container of ObStrValues of type common::ObFixedArray<ObStrValues, common::ObIAllocator>	common::ObFixedArray<ObStrValues, common::ObIAllocator> str_values_array_;
+src/sql/engine/basic/ob_external_file_writer.h	57	ObExternalFileWriter::url_	member ObString (value) of type ObString	ObString url_;
+src/sql/engine/basic/ob_external_file_writer.h	109	ObCsvFileWriter::buf_	member raw bytes (pointer) of type char *	char *buf_;
+src/sql/engine/basic/ob_function_table_op.h	68	ObFunctionTableOp::value_	member ObObj (value) of type common::ObObj	common::ObObj value_;
+src/sql/engine/basic/ob_group_join_buffer.h	60	ObBatchRowDatums::datums_	member ObDatum (pointer) of type ObDatum *	ObDatum *datums_;

@@ -1,0 +1,60 @@
+file	line	symbol	construct	text
+src/sql/optimizer/ob_log_select_into.h	177	ObLogSelectInto::outfile_name_	member ObObj (value) of type common::ObObj	common::ObObj outfile_name_;
+src/sql/optimizer/ob_log_select_into.h	178	ObLogSelectInto::field_str_	member ObObj (value) of type common::ObObj	common::ObObj field_str_;
+src/sql/optimizer/ob_log_select_into.h	179	ObLogSelectInto::line_str_	member ObObj (value) of type common::ObObj	common::ObObj line_str_;
+src/sql/optimizer/ob_log_select_into.h	181	ObLogSelectInto::user_vars_	member container of ObString of type common::ObSEArray<common::ObString, 16, common::ModulePageAllocator, true>	common::ObSEArray<common::ObString, 16, common::ModulePageAllocator, true> user_vars_;
+src/sql/optimizer/ob_log_select_into.h	182	ObLogSelectInto::closed_cht_	member ObObj (value) of type common::ObObj	common::ObObj closed_cht_;
+src/sql/optimizer/ob_log_select_into.h	187	ObLogSelectInto::escaped_cht_	member ObObj (value) of type common::ObObj	common::ObObj escaped_cht_;
+src/sql/optimizer/ob_log_select_into.h	190	ObLogSelectInto::external_properties_	member ObString (value) of type common::ObString	common::ObString external_properties_;
+src/sql/optimizer/ob_log_subplan_scan.h	51	ObLogSubPlanScan::subquery_name_	member ObString (value) of type common::ObString	common::ObString subquery_name_;
+src/sql/optimizer/ob_log_table_scan.h	339	ObVecIndexInfo::vec_index_name_	member ObString (value) of type ObString	ObString vec_index_name_;
+src/sql/optimizer/ob_log_table_scan.h	1092	ObLogTableScan::table_name_	member ObString (value) of type common::ObString	common::ObString table_name_;
+src/sql/optimizer/ob_log_table_scan.h	1093	ObLogTableScan::index_name_	member ObString (value) of type common::ObString	common::ObString index_name_;
+src/sql/optimizer/ob_log_table_scan.h	1152	ObLogTableScan::ranges_	member ObRangesArray (value) of type ObRangesArray	ObRangesArray ranges_;//For explain. Code generator and executor cannot use this.
+src/sql/optimizer/ob_log_temp_table_access.h	59	ObLogTempTableAccess::temp_table_name_	member ObString (value) of type common::ObString	common::ObString temp_table_name_;
+src/sql/optimizer/ob_log_temp_table_access.h	60	ObLogTempTableAccess::access_name_	member ObString (value) of type common::ObString	common::ObString access_name_;
+src/sql/optimizer/ob_log_temp_table_insert.h	47	ObLogTempTableInsert::temp_table_name_	member ObString (value) of type common::ObString	common::ObString temp_table_name_;
+src/sql/optimizer/ob_log_values_table_access.h	65	ObLogValuesTableAccess::table_name_	member ObString (value) of type common::ObString	common::ObString table_name_;
+src/sql/optimizer/ob_logical_operator.h	520	ObExchangeInfo::repartition_table_name_	member ObString (value) of type ObString	ObString repartition_table_name_;
+src/sql/optimizer/ob_logical_operator.h	527	ObExchangeInfo::popular_values_	member container of ObObj of type common::ObSEArray<ObObj, 20>	common::ObSEArray<ObObj, 20> popular_values_;
+src/sql/optimizer/ob_opt_est_cost_model.h	246	ObCostTableScanInfo::ranges_	member ObRangesArray (value) of type ObRangesArray	ObRangesArray ranges_;  // all the ranges
+src/sql/optimizer/ob_opt_est_utils.cpp	174	ObOptEstUtils::get_expr_value	allocator in, arena view out: ObObj &value	int ObOptEstUtils::get_expr_value(const ParamStore *params,
+src/sql/optimizer/ob_opt_est_utils.cpp	843	ObOptEstObjToScalar::get_string_sort_key	allocator in, arena view out: common::ObString &sort_key	int ObOptEstObjToScalar::get_string_sort_key(ObIAllocator &alloc, ObCollationType cs_type,
+src/sql/optimizer/ob_opt_selectivity.cpp	2592	ObOptSelectivity::get_column_query_range	allocator in, arena view out: ObQueryRangeArray &ranges	int ObOptSelectivity::get_column_query_range(const OptSelectivityCtx &ctx,
+src/sql/optimizer/ob_opt_selectivity.h	374	OptColumnMeta::min_val_	member ObObj (value) of type ObObj	ObObj min_val_;
+src/sql/optimizer/ob_opt_selectivity.h	375	OptColumnMeta::max_val_	member ObObj (value) of type ObObj	ObObj max_val_;
+src/sql/optimizer/ob_opt_selectivity.h	681	OptSelInfo::min_	member ObObj (value) of type ObObj	ObObj min_;
+src/sql/optimizer/ob_opt_selectivity.h	682	OptSelInfo::max_	member ObObj (value) of type ObObj	ObObj max_;
+src/sql/optimizer/ob_opt_selectivity.h	1271	ObHistEqualSelHelper::compare_value_	member ObObj (value) of type ObObj	ObObj compare_value_;
+src/sql/optimizer/ob_opt_selectivity.h	1299	ObHistRangeSelHelper::ranges_	member ObQueryRangeArray (value) of type ObQueryRangeArray	ObQueryRangeArray ranges_;
+src/sql/optimizer/ob_opt_selectivity.h	1300	ObHistRangeSelHelper::hist_min_value_	member ObObj (value) of type ObObj	ObObj hist_min_value_;
+src/sql/optimizer/ob_opt_selectivity.h	1301	ObHistRangeSelHelper::hist_max_value_	member ObObj (value) of type ObObj	ObObj hist_max_value_;
+src/sql/optimizer/ob_optimizer_context.h	736	ObOptimizerContext::params_	member ParamStore (pointer) of type const ParamStore *	const ParamStore *params_;
+src/sql/optimizer/ob_optimizer_context.h	794	ObOptimizerContext::plan_notes_	member ObPlanNotes (value) of type ObPlanNotes	ObPlanNotes plan_notes_;
+src/sql/optimizer/ob_sel_estimator.h	59	SimpleRange::start_	member ObObj (value) of type ObObj	ObObj start_;
+src/sql/optimizer/ob_sel_estimator.h	60	SimpleRange::end_	member ObObj (value) of type ObObj	ObObj end_;
+src/sql/optimizer/ob_sel_estimator.h	503	ObIsSelEstimator::right_const_obj_	member ObObj (value) of type common::ObObj	common::ObObj right_const_obj_;
+src/sql/optimizer/ob_table_location.cpp	3674	ObTableLocation::init_row	allocator in, arena view out: ObNewRow &row	int ObTableLocation::init_row(
+src/sql/optimizer/ob_table_location.h	76	ValueItemExpr::obj_	member ObObj (value) of type ObObj	ObObj obj_;
+src/sql/optimizer/ob_table_location.h	81	ValueItemExpr::enum_set_values_	member ObString (pointer) of type common::ObString *	common::ObString *enum_set_values_;
+src/sql/optimizer/ob_table_location.h	207	ObPLFuncValueNode::ParamValuePair::obj_value_	member ObObj (value) of type common::ObObj	common::ObObj obj_value_;
+src/sql/optimizer/ob_table_location.h	287	ObListPartMapKey::row_	member ObNewRow (value) of type common::ObNewRow	common::ObNewRow row_;
+src/sql/optimizer/stat/ob_dbms_stats_copy_table_stats.h	55	ObCopyPartInfo::pre_part_upper_bound_	member ObObj (value) of type common::ObObj	common::ObObj pre_part_upper_bound_;
+src/sql/optimizer/stat/ob_dbms_stats_copy_table_stats.h	56	ObCopyPartInfo::part_lower_bound_	member ObObj (value) of type common::ObObj	common::ObObj part_lower_bound_;
+src/sql/optimizer/stat/ob_dbms_stats_copy_table_stats.h	57	ObCopyPartInfo::part_upper_bound_	member ObObj (value) of type common::ObObj	common::ObObj part_upper_bound_;
+src/sql/optimizer/stat/ob_dbms_stats_copy_table_stats.h	58	ObCopyPartInfo::src_part_lower_bound_	member ObObj (value) of type common::ObObj	common::ObObj src_part_lower_bound_;
+src/sql/optimizer/stat/ob_dbms_stats_copy_table_stats.h	105	CopyTableStatHelper::owner_	member ObString (value) of type ObString	ObString owner_;
+src/sql/optimizer/stat/ob_dbms_stats_copy_table_stats.h	106	CopyTableStatHelper::table_name_	member ObString (value) of type ObString	ObString table_name_;
+src/sql/optimizer/stat/ob_dbms_stats_copy_table_stats.h	107	CopyTableStatHelper::srcpart_name_	member ObString (value) of type ObString	ObString srcpart_name_;
+src/sql/optimizer/stat/ob_dbms_stats_copy_table_stats.h	108	CopyTableStatHelper::dstpart_name_	member ObString (value) of type ObString	ObString dstpart_name_;
+src/sql/optimizer/stat/ob_dbms_stats_export_import.cpp	1186	ObDbmsStatsExportImport::convert_bin_hex_raw_to_obj	allocator in, arena view out: ObObj &dst_obj	int ObDbmsStatsExportImport::convert_bin_hex_raw_to_obj(ObIAllocator &allocator,
+src/sql/optimizer/stat/ob_dbms_stats_export_import.cpp	1194	ObDbmsStatsExportImport::convert_bin_hex_text_to_obj	allocator in, arena view out: ObObj &dst_obj	int ObDbmsStatsExportImport::convert_bin_hex_text_to_obj(
+src/sql/optimizer/stat/ob_dbms_stats_preferences.cpp	63	ObDbmsStatsPreferences::get_prefs	allocator in, arena view out: ObObj &result	int ObDbmsStatsPreferences::get_prefs(ObMySQLProxy *mysql_proxy,
+src/sql/optimizer/stat/ob_dbms_stats_preferences.cpp	192	ObDbmsStatsPreferences::do_get_prefs	allocator in, arena view out: ObObj &result	int ObDbmsStatsPreferences::do_get_prefs(ObMySQLProxy *mysql_proxy,
+src/sql/optimizer/stat/ob_dbms_stats_preferences.h	58	ObStatPrefs::pvalue_	member ObString (value) of type ObString	ObString pvalue_;
+src/sql/optimizer/stat/ob_dbms_stats_utils.cpp	782	ObDbmsStatsUtils::truncate_string_for_opt_stats	allocator in, arena view out: ObObj *&new_obj	int ObDbmsStatsUtils::truncate_string_for_opt_stats(const ObObj *old_obj,
+src/sql/optimizer/stat/ob_dbms_stats_utils.cpp	844	ObDbmsStatsUtils::truncate_string_for_opt_stats	allocator in, arena view out: ObObj &obj	int ObDbmsStatsUtils::truncate_string_for_opt_stats(
+src/sql/optimizer/stat/ob_hybrid_hist_estimator.cpp	586	ObHybridHistograms::build_prefix_str_datum_for_lob	allocator in, arena view out: ObDatum &new_datum	int ObHybridHistograms::build_prefix_str_datum_for_lob(ObIAllocator &allocator,
+src/sql/optimizer/stat/ob_hybrid_hist_estimator.h	45	BucketNode::ep_val_	member ObObj (value) of type ObObj	ObObj ep_val_;
+src/sql/optimizer/stat/ob_index_stats_estimator.cpp	134	ObIndexStatsEstimator::fill_index_group_by_info	allocator in, arena view out: ObString &calc_part_id_str	int ObIndexStatsEstimator::fill_index_group_by_info(ObIAllocator &allocator,
+src/sql/optimizer/stat/ob_min_max_estimator.cpp	56	ObStatMinMaxSubquery::decode	allocator in, arena view out: ObObj &obj	int ObStatMinMaxSubquery::decode(

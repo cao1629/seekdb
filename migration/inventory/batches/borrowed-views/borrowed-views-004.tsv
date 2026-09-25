@@ -1,0 +1,58 @@
+file	line	symbol	construct	text
+src/oblib/common/xml/ob_path_parser.h	150	ObPathParser::expression_	member ObString (value) of type ObString	ObString expression_;
+src/oblib/common/xml/ob_path_parser.h	151	ObPathParser::default_ns_	member ObString (value) of type ObString	ObString default_ns_;
+src/oblib/common/xml/ob_xml_parser.h	221	ObLibXml2SaxParser::xml_text_	member ObString (value) of type ObString	ObString xml_text_;
+src/oblib/common/xml/ob_xml_tree.h	342	ObXmlElement::prefix_	member ObString (value) of type ObString	ObString prefix_;
+src/oblib/common/xml/ob_xml_tree.h	344	ObXmlElement::tag_info_	member ObString (value) of type ObString	ObString tag_info_;
+src/oblib/common/xml/ob_xml_tree.h	399	ObXmlDocument::version_	member ObString (value) of type ObString	ObString version_;
+src/oblib/common/xml/ob_xml_tree.h	400	ObXmlDocument::encoding_	member ObString (value) of type ObString	ObString encoding_;
+src/oblib/common/xml/ob_xml_tree.h	473	ObXmlAttribute::prefix_	member ObString (value) of type ObString	ObString prefix_;
+src/oblib/common/xml/ob_xml_tree.h	476	ObXmlAttribute::name_	member ObString (value) of type ObString	ObString name_;  // key
+src/oblib/common/xml/ob_xml_tree.h	477	ObXmlAttribute::value_	member ObString (value) of type ObString	ObString value_;  // value
+src/oblib/common/xml/ob_xml_tree.h	525	ObXmlText::text_	member ObString (value) of type ObString	ObString text_;
+src/oblib/common/xml/ob_xml_util.cpp	203	ObXmlUtil::to_string	allocator in, arena view out: char *&out	int ObXmlUtil::to_string(ObIAllocator &allocator, double &in, char *&out)
+src/oblib/common/xml/ob_xml_util.cpp	228	ObXmlUtil::to_string	allocator in, arena view out: char *&out	int ObXmlUtil::to_string(ObIAllocator &allocator, bool &in, char *&out)
+src/oblib/common/xml/ob_xml_util.cpp	240	ObXmlUtil::to_string	allocator in, arena view out: char *&out	int ObXmlUtil::to_string(ObIAllocator &allocator, ObNodeTypeAndContent *in, char *&out)
+src/oblib/common/xml/ob_xml_util.cpp	645	ObXmlUtil::revert_escape_character	allocator in, arena view out: ObString &input_str	int ObXmlUtil::revert_escape_character(ObIAllocator &allocator, ObString &input_str, ObString &output_str)
+src/oblib/common/xml/ob_xml_util.h	128	ObNsPair::key_	member ObString (value) of type common::ObString	common::ObString key_;
+src/oblib/common/xml/ob_xml_util.h	129	ObNsPair::value_	member ObString (value) of type common::ObString	common::ObString value_;
+src/oblib/common/xml/ob_xpath.cpp	240	ObPathLocationNode::set_check_ns_by_nodetest	allocator in, arena view out: ObString& default_ns	int ObPathLocationNode::set_check_ns_by_nodetest(ObIAllocator *allocator, ObString& default_ns)
+src/oblib/common/xml/ob_xpath.h	373	ObPathStr::name_	member raw bytes (pointer) of type const char*	const char* name_;
+src/oblib/common/xml/ob_xpath.h	511	ObPathVarPair::key_	member ObString (value) of type common::ObString	common::ObString key_;
+src/oblib/common/xml/ob_xpath.h	512	ObPathVarPair::value_	member ObDatum (pointer) of type ObDatum *	ObDatum *value_;
+src/oblib/common/xml/ob_xpath.h	943	ObPathExprIter::path_	member ObString (value) of type ObString	ObString path_;
+src/oblib/common/xml/ob_xpath.h	944	ObPathExprIter::default_ns_	member ObString (value) of type ObString	ObString default_ns_;
+src/oblib/easy/io/easy_io_struct.h	263	easy_client_t::server_name	member raw bytes (pointer) of type char * [vendored]	char                    *server_name;
+src/oblib/easy/io/easy_io_struct.h	646	easy_thread_pool_t::last	member raw bytes (pointer) of type char * [vendored]	char                    *last;
+src/oblib/easy/io/easy_io_struct.h	664	easy_file_task_t::buffer	member raw bytes (pointer) of type char * [vendored]	char                    *buffer;
+src/oblib/easy/io/easy_io_struct.h	677	easy_ssl_ctx_t::file	member raw bytes (pointer) of type char * [vendored]	char                    *file;
+src/oblib/easy/io/easy_io_struct.h	685	easy_ssl_ctx_t::certificate	member raw bytes (pointer) of type char * [vendored]	char                    *certificate;//server-cert
+src/oblib/easy/io/easy_io_struct.h	686	easy_ssl_ctx_t::certificate_key	member raw bytes (pointer) of type char * [vendored]	char                    *certificate_key;//server-key
+src/oblib/easy/io/easy_io_struct.h	687	easy_ssl_ctx_t::dhparam	member raw bytes (pointer) of type char * [vendored]	char                    *dhparam;
+src/oblib/easy/io/easy_io_struct.h	688	easy_ssl_ctx_t::client_certificate	member raw bytes (pointer) of type char * [vendored]	char                    *client_certificate;//root ca
+src/oblib/easy/io/easy_io_struct.h	689	easy_ssl_ctx_t::crl	member raw bytes (pointer) of type char * [vendored]	char                    *crl;
+src/oblib/easy/io/easy_io_struct.h	690	easy_ssl_ctx_t::ciphers	member raw bytes (pointer) of type char * [vendored]	char                    *ciphers;
+src/oblib/easy/io/easy_io_struct.h	691	easy_ssl_ctx_t::server_name	member raw bytes (pointer) of type char * [vendored]	char                    *server_name;
+src/oblib/easy/io/easy_io_struct.h	692	easy_ssl_ctx_t::pass_phrase_dialog	member raw bytes (pointer) of type char * [vendored]	char                    *pass_phrase_dialog;
+src/oblib/easy/io/easy_log.h	83	easy_stat_time_guard_t::procedure	member raw bytes (pointer) of type const char * [vendored]	const char *procedure;
+src/oblib/easy/io/easy_log.h	89	easy_time_guard_t::procedure	member raw bytes (pointer) of type const char * [vendored]	const char *procedure;
+src/oblib/easy/io/ev.h	361	ev_stat::path	member raw bytes (pointer) of type const char * [vendored]	const char              *path;   /* ro */
+src/oblib/easy/thread/easy_uthread.h	42	easy_uthread_t::stk	member raw bytes (pointer) of type unsigned char * [vendored]	unsigned char              *stk;
+src/oblib/easy/util/easy_buf.h	29	easy_buf_t::data	member raw bytes (pointer) of type char * [vendored]	char                    *data;
+src/oblib/easy/util/easy_buf.h	30	easy_buf_t::pos	member raw bytes (pointer) of type char * [vendored]	char                    *pos;
+src/oblib/easy/util/easy_buf.h	31	easy_buf_t::last	member raw bytes (pointer) of type char * [vendored]	char                    *last;
+src/oblib/easy/util/easy_buf.h	32	easy_buf_t::end	member raw bytes (pointer) of type char * [vendored]	char                    *end;
+src/oblib/easy/util/easy_buf.h	43	easy_buf_string_t::data	member raw bytes (pointer) of type char * [vendored]	char                    *data;
+src/oblib/easy/util/easy_pool.h	26	easy_pool_large_t::data	member raw bytes (pointer) of type uint8_t * [vendored]	uint8_t                 *data;
+src/oblib/easy/util/easy_pool.h	38	easy_pool_t::last	member raw bytes (pointer) of type uint8_t * [vendored]	uint8_t                 *last;
+src/oblib/easy/util/easy_pool.h	39	easy_pool_t::end	member raw bytes (pointer) of type uint8_t * [vendored]	uint8_t                 *end;
+src/oblib/lib/alloc/alloc_struct.h	125	ObLabel::str_	member raw bytes (pointer) of type const char *	const char *str_;
+src/oblib/lib/alloc/alloc_struct.h	553	Label::label_	member raw bytes (pointer) of type const char *	const char *label_;
+src/oblib/lib/alloc/memory_dump.h	219	ObMemoryDump::print_buf_	member raw bytes (pointer) of type char *	char *print_buf_;
+src/oblib/lib/allocator/ob_delay_free_allocator.h	52	ObDelayFreeMemBlock::end_	member raw bytes (pointer) of type char *	char *end_;
+src/oblib/lib/allocator/ob_delay_free_allocator.h	53	ObDelayFreeMemBlock::current_	member raw bytes (pointer) of type char *	char *current_;
+src/oblib/lib/allocator/ob_fifo_allocator.h	72	ObFIFOAllocator::NormalPageHeader::offset_	member raw bytes (pointer) of type char *	char *offset_;
+src/oblib/lib/allocator/ob_malloc.h	550	ObMemBuf::buf_ptr_	member raw bytes (pointer) of type char *	char *buf_ptr_;
+src/oblib/lib/allocator/ob_malloc.h	608	ObRawBufAllocatorWrapper::mem_buf_	member raw bytes (pointer) of type char *	char *mem_buf_;
+src/oblib/lib/allocator/page_arena.h	204	PageArena::Page::alloc_end_	member raw bytes (pointer) of type char *	char *alloc_end_;
+src/oblib/lib/allocator/page_arena.h	205	PageArena::Page::page_end_	member raw bytes (pointer) of type const char *	const char *page_end_;

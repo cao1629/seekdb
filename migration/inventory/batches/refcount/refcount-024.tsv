@@ -1,0 +1,48 @@
+file	line	symbol	construct	text
+src/storage/tablet/ob_tablet_persister.h	266	ObTabletPersister	inc_ref_with_macro_iter declaration [on-disk block reference]	static int inc_ref_with_macro_iter(ObTablet &tablet, ObMacroInfoIterator &macro_iter);
+src/storage/tablet/ob_tablet_table_store.cpp	422	ObTabletTableStore::inc_macro_ref	inc_macro_ref definition (other name) [on-disk block reference]	int ObTabletTableStore::inc_macro_ref() const
+src/storage/tablet/ob_tablet_table_store.cpp	434	ObTabletTableStore::inc_macro_ref	inc_macro_ref call (other name) [on-disk block reference]	&& OB_FAIL(major_tables_.inc_macro_ref(major_success))) {
+src/storage/tablet/ob_tablet_table_store.cpp	436	ObTabletTableStore::inc_macro_ref	inc_macro_ref call (other name) [on-disk block reference]	&& OB_FAIL(minor_tables_.inc_macro_ref(minor_success))) {
+src/storage/tablet/ob_tablet_table_store.cpp	438	ObTabletTableStore::inc_macro_ref	inc_macro_ref call (other name) [on-disk block reference]	&& OB_FAIL(ddl_sstables_.inc_macro_ref(ddl_success))) {
+src/storage/tablet/ob_tablet_table_store.cpp	440	ObTabletTableStore::inc_macro_ref	inc_macro_ref call (other name) [on-disk block reference]	&& OB_FAIL(meta_major_tables_.inc_macro_ref(meta_major_success))) {
+src/storage/tablet/ob_tablet_table_store.cpp	442	ObTabletTableStore::inc_macro_ref	inc_macro_ref call (other name) [on-disk block reference]	&& OB_FAIL(mds_sstables_.inc_macro_ref(mds_success))) {
+src/storage/tablet/ob_tablet_table_store.cpp	447	ObTabletTableStore::inc_macro_ref	dec_macro_ref call (other name) [on-disk block reference]	major_tables_.dec_macro_ref();
+src/storage/tablet/ob_tablet_table_store.cpp	450	ObTabletTableStore::inc_macro_ref	dec_macro_ref call (other name) [on-disk block reference]	minor_tables_.dec_macro_ref();
+src/storage/tablet/ob_tablet_table_store.cpp	453	ObTabletTableStore::inc_macro_ref	dec_macro_ref call (other name) [on-disk block reference]	ddl_sstables_.dec_macro_ref();
+src/storage/tablet/ob_tablet_table_store.cpp	456	ObTabletTableStore::inc_macro_ref	dec_macro_ref call (other name) [on-disk block reference]	meta_major_tables_.dec_macro_ref();
+src/storage/tablet/ob_tablet_table_store.cpp	459	ObTabletTableStore::inc_macro_ref	dec_macro_ref call (other name) [on-disk block reference]	mds_sstables_.dec_macro_ref();
+src/storage/tablet/ob_tablet_table_store.cpp	466	ObTabletTableStore::dec_macro_ref	dec_macro_ref definition (other name) [on-disk block reference]	void ObTabletTableStore::dec_macro_ref() const
+src/storage/tablet/ob_tablet_table_store.cpp	469	ObTabletTableStore::dec_macro_ref	dec_macro_ref call (other name) [on-disk block reference]	major_tables_.dec_macro_ref();
+src/storage/tablet/ob_tablet_table_store.cpp	472	ObTabletTableStore::dec_macro_ref	dec_macro_ref call (other name) [on-disk block reference]	minor_tables_.dec_macro_ref();
+src/storage/tablet/ob_tablet_table_store.cpp	475	ObTabletTableStore::dec_macro_ref	dec_macro_ref call (other name) [on-disk block reference]	ddl_sstables_.dec_macro_ref();
+src/storage/tablet/ob_tablet_table_store.cpp	478	ObTabletTableStore::dec_macro_ref	dec_macro_ref call (other name) [on-disk block reference]	meta_major_tables_.dec_macro_ref();
+src/storage/tablet/ob_tablet_table_store.cpp	481	ObTabletTableStore::dec_macro_ref	dec_macro_ref call (other name) [on-disk block reference]	mds_sstables_.dec_macro_ref();
+src/storage/tablet/ob_tablet_table_store.h	153	ObTabletTableStore	inc_macro_ref declaration (other name) [on-disk block reference]	int inc_macro_ref() const;
+src/storage/tablet/ob_tablet_table_store.h	154	ObTabletTableStore	dec_macro_ref declaration (other name) [on-disk block reference]	void dec_macro_ref() const;
+src/storage/throttle/ob_throttle_info.h	92	ObThrottleInfoAllocHandle	Handle struct definition	struct ObThrottleInfoAllocHandle
+src/storage/tmp_file/ob_i_tmp_file.cpp	155	ObITmpFileHandle::ObITmpFileHandle	inc_ref_cnt call	ptr_->inc_ref_cnt();
+src/storage/tmp_file/ob_i_tmp_file.cpp	171	ObITmpFileHandle::operator=	inc_ref_cnt call	ptr_->inc_ref_cnt();
+src/storage/tmp_file/ob_i_tmp_file.cpp	181	ObITmpFileHandle::reset	dec_ref_cnt call	ptr_->dec_ref_cnt(ref_cnt);
+src/storage/tmp_file/ob_i_tmp_file.cpp	202	ObITmpFileHandle::init	inc_ref_cnt call	ptr_->inc_ref_cnt();
+src/storage/tmp_file/ob_i_tmp_file.h	231	ObITmpFile::inc_ref_cnt	inc_ref_cnt definition	OB_INLINE void inc_ref_cnt() { ATOMIC_INC(&ref_cnt_); }
+src/storage/tmp_file/ob_i_tmp_file.h	232	ObITmpFile::dec_ref_cnt	dec_ref_cnt definition	OB_INLINE void dec_ref_cnt() { ATOMIC_AAF(&ref_cnt_, -1); }
+src/storage/tmp_file/ob_i_tmp_file.h	233	ObITmpFile::dec_ref_cnt	dec_ref_cnt definition	OB_INLINE void dec_ref_cnt(int64_t &ref_cnt)
+src/storage/tmp_file/ob_i_tmp_file.h	380	ObITmpFileHandle	Handle class definition	class ObITmpFileHandle
+src/storage/tmp_file/ob_shared_nothing_tmp_file.h	297	ObSNTmpFileHandle	Handle class definition : ObITmpFileHandle	class ObSNTmpFileHandle final : public ObITmpFileHandle
+src/storage/tmp_file/ob_tmp_file_block_manager.cpp	257	ObTmpFileBlock::reset	dec_ref call [on-disk block reference]	if (is_valid() && BlockState::ON_DISK == block_state_ && OB_FAIL(OB_SERVER_BLOCK_MGR.dec_ref(macro_block_id_))) {
+src/storage/tmp_file/ob_tmp_file_block_manager.cpp	328	ObTmpFileBlock::write_back_succ	inc_ref call [on-disk block reference]	} else if (OB_FAIL(OB_SERVER_BLOCK_MGR.inc_ref(macro_block_id))) {
+src/storage/tmp_file/ob_tmp_file_block_manager.cpp	373	ObTmpFileBlock::inc_ref_cnt	inc_ref_cnt definition	int ObTmpFileBlock::inc_ref_cnt()
+src/storage/tmp_file/ob_tmp_file_block_manager.cpp	387	ObTmpFileBlock::dec_ref_cnt	dec_ref_cnt definition	int ObTmpFileBlock::dec_ref_cnt(int64_t &ref_cnt)
+src/storage/tmp_file/ob_tmp_file_block_manager.cpp	443	ObTmpFileBlockHandle::ObTmpFileBlockHandle	inc_ref_cnt call	ptr_->inc_ref_cnt();
+src/storage/tmp_file/ob_tmp_file_block_manager.cpp	460	ObTmpFileBlockHandle::operator=	inc_ref_cnt call	ptr_->inc_ref_cnt();
+src/storage/tmp_file/ob_tmp_file_block_manager.cpp	472	ObTmpFileBlockHandle::reset	dec_ref_cnt call	if (OB_FAIL(ptr_->dec_ref_cnt(cur_ref_cnt))) {
+src/storage/tmp_file/ob_tmp_file_block_manager.cpp	489	ObTmpFileBlockHandle::init	inc_ref_cnt call	} else if (OB_FAIL(block->inc_ref_cnt())) {
+src/storage/tmp_file/ob_tmp_file_block_manager.h	130	ObTmpFileBlock	inc_ref_cnt declaration	int inc_ref_cnt();
+src/storage/tmp_file/ob_tmp_file_block_manager.h	131	ObTmpFileBlock	dec_ref_cnt declaration	int dec_ref_cnt(int64_t &ref_cnt);
+src/storage/tmp_file/ob_tmp_file_block_manager.h	151	ObTmpFileBlockHandle	Handle class definition	class ObTmpFileBlockHandle final
+src/storage/tmp_file/ob_tmp_file_cache.h	71	ObTmpBlockValueHandle	Handle struct definition	struct ObTmpBlockValueHandle final
+src/storage/tmp_file/ob_tmp_file_cache.h	166	ObTmpPageValueHandle	Handle struct definition	struct ObTmpPageValueHandle final
+src/storage/tmp_file/ob_tmp_file_eviction_manager.cpp	87	ObTmpFileEvictionManager::add_file	inc_ref_cnt call	file.inc_ref_cnt();
+src/storage/tmp_file/ob_tmp_file_eviction_manager.cpp	89	ObTmpFileEvictionManager::add_file	dec_ref_cnt call	file.dec_ref_cnt();
+src/storage/tmp_file/ob_tmp_file_eviction_manager.cpp	116	ObTmpFileEvictionManager::remove_file	dec_ref_cnt call	file.dec_ref_cnt();
+src/storage/tmp_file/ob_tmp_file_eviction_manager.cpp	216	ObTmpFileEvictionManager::pop_file_from_list_	dec_ref_cnt call	file->dec_ref_cnt();

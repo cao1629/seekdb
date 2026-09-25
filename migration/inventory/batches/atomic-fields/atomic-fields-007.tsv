@@ -1,0 +1,49 @@
+file	line	symbol	construct	text
+src/oblib/lib/objectpool/ob_server_object_pool.h	60	ObPoolArenaHead::all_using_cnt	field int64_t; 4 atomic accesses (ATOMIC_DEC 2, ATOMIC_INC 1, ATOMIC_LOAD 1)	int64_t all_using_cnt;
+src/oblib/lib/objectpool/ob_tc_factory.h	183	TC_FACTORY_LIST_HEAD	no declaration found; 1 atomic accesses in 1 files (__sync_bool_compare_and_swap 1); first access shown	if (__sync_bool_compare_and_swap(&TC_FACTORY_LIST_HEAD, old_v, instance)) {
+src/oblib/lib/oblog/ob_async_log_struct.h	132	ObPLogFileStruct::write_count_	field uint32_t; 1 atomic accesses (ATOMIC_AAF 1)	uint32_t write_count_;
+src/oblib/lib/oblog/ob_async_log_struct.h	133	ObPLogFileStruct::write_size_	field int64_t; 1 atomic accesses (ATOMIC_AAF 1)	int64_t write_size_;
+src/oblib/lib/oblog/ob_async_log_struct.h	134	ObPLogFileStruct::file_size_	field int64_t; 2 atomic accesses (ATOMIC_AAF 1, ATOMIC_SET 1)	int64_t file_size_;
+src/oblib/lib/oblog/ob_base_log_buffer.h	46	ObAtomicFilePos::atomic_	volatile field volatile uint64_t; no atomic access found	volatile uint64_t atomic_;
+src/oblib/lib/oblog/ob_base_log_writer.h	118	ObBaseLogWriter::is_inited_	field bool; 1 atomic accesses (ATOMIC_LOAD 1)	bool is_inited_;
+src/oblib/lib/oblog/ob_base_log_writer.h	120	ObBaseLogWriter::flush_tid_	field void *; 1 atomic accesses (ATOMIC_STORE 1); through functions with an atomic parameter ob_pthread_create	void *flush_tid_;
+src/oblib/lib/oblog/ob_base_log_writer.h	123	ObBaseLogWriter::log_items_	field ObIBaseLogItem **; 3 atomic accesses (ATOMIC_LOAD 2, ATOMIC_STORE 1)	ObIBaseLogItem **log_items_;
+src/oblib/lib/oblog/ob_base_log_writer.h	125	ObBaseLogWriter::log_item_push_idx_	field int64_t; 5 atomic accesses (ATOMIC_LOAD 4, ATOMIC_BCAS 1)	int64_t log_item_push_idx_ CACHE_ALIGNED;
+src/oblib/lib/oblog/ob_base_log_writer.h	126	ObBaseLogWriter::log_item_pop_idx_	field int64_t; 7 atomic accesses (ATOMIC_LOAD 6, ATOMIC_FAA 1)	int64_t log_item_pop_idx_ CACHE_ALIGNED;
+src/oblib/lib/oblog/ob_log.cpp	95	last_check_file_ts	global static int64_t; 1 atomic accesses (ATOMIC_BCAS 1)	static int64_t last_check_file_ts = 0; //last file sample timestamps
+src/oblib/lib/oblog/ob_log.h	884	ObLogger::can_print_	volatile field volatile bool; no atomic access found	volatile bool can_print_;//when disk has no space, logger control
+src/oblib/lib/oblog/ob_log.h	891	ObLogger::dropped_log_count_	field int64_t; 1 atomic accesses (ATOMIC_AAF 1)	int64_t dropped_log_count_[OB_LOG_LEVEL_MAX];
+src/oblib/lib/oblog/ob_log.h	893	ObLogger::alloc_wait_count_	field int64_t; 1 atomic accesses (ATOMIC_AAF 1)	int64_t alloc_wait_count_;
+src/oblib/lib/oblog/ob_log.h	894	ObLogger::alloc_drop_count_	field int64_t; 1 atomic accesses (ATOMIC_AAF 1)	int64_t alloc_drop_count_;
+src/oblib/lib/oblog/ob_log.h	895	ObLogger::alloc_success_count_	field int64_t; 1 atomic accesses (ATOMIC_AAF 1)	int64_t alloc_success_count_;
+src/oblib/lib/oblog/ob_log.h	897	ObLogger::dropped_count_	field int64_t; 2 atomic accesses (ATOMIC_AAF 2)	int64_t dropped_count_[MAX_TASK_LOG_TYPE + 1];//last one is force allow count
+src/oblib/lib/oblog/ob_log.h	898	ObLogger::written_count_	field int64_t; 2 atomic accesses (ATOMIC_AAF 2)	int64_t written_count_[MAX_TASK_LOG_TYPE + 1];
+src/oblib/lib/oblog/ob_log.h	899	ObLogger::current_written_count_	field int64_t; 4 atomic accesses (ATOMIC_AAF 2, ATOMIC_LOAD 2)	int64_t current_written_count_[MAX_TASK_LOG_TYPE + 1];
+src/oblib/lib/oblog/ob_ringbuf_log_writer.h	53	RingSpinLock::lock_	field uint8_t; 3 atomic accesses (ATOMIC_BCAS 1, ATOMIC_LOAD 1, ATOMIC_STORE 1)	uint8_t lock_;
+src/oblib/lib/oblog/ob_ringbuf_log_writer.h	107	ObRingBuf::push_	field int64_t; 3 atomic accesses (ATOMIC_LOAD 2, ATOMIC_LOAD_ACQ 1)	int64_t push_ CACHE_ALIGNED;
+src/oblib/lib/oblog/ob_ringbuf_log_writer.h	108	ObRingBuf::pop_	field int64_t; 6 atomic accesses (ATOMIC_LOAD 5, ATOMIC_STORE 1)	int64_t pop_ CACHE_ALIGNED;
+src/oblib/lib/oblog/ob_ringbuf_log_writer.h	155	ObRingBufLogWriter::ringbuf_	field ObRingBuf; 1 atomic accesses (ATOMIC_LOAD_ACQ 1)	ObRingBuf  ringbuf_;
+src/oblib/lib/oblog/ob_ringbuf_log_writer.h	158	ObRingBufLogWriter::flush_tid_	field void *; 1 atomic accesses (ATOMIC_STORE 1); through functions with an atomic parameter ob_pthread_create	void *flush_tid_;
+src/oblib/lib/oblog/ob_syslog_rate_limiter.h	83	ObSimpleRateLimiterImpl::permits_	field int64_t; 1 atomic accesses (ATOMIC_BCAS 1)	int64_t permits_;
+src/oblib/lib/oblog/ob_syslog_rate_limiter.h	151	ObSyslogSampleRateLimiter::reset_ts_	field int64_t; 2 atomic accesses (ATOMIC_BCAS 1, ATOMIC_LOAD 1)	int64_t reset_ts_;
+src/oblib/lib/oblog/ob_syslog_rate_limiter.h	152	ObSyslogSampleRateLimiter::count_	field int64_t; 3 atomic accesses (ATOMIC_AAF 2, ATOMIC_STORE 1)	int64_t count_;
+src/oblib/lib/oblog/ob_trace_log.h	113	ObTraceLogConfig::log_level_	volatile field static volatile int; no atomic access found	static volatile int log_level_;
+src/oblib/lib/profile/ob_trace_id.h	45	ObCurTraceId::SeqGenerator::seq_generator_	field static uint64_t; 1 atomic accesses (ATOMIC_FAA 1)	static uint64_t seq_generator_;
+src/oblib/lib/queue/ob_co_seq_queue.h	129	ObCoSeqQueue::next_	volatile field volatile int64_t; no atomic access found	volatile int64_t next_ CACHE_ALIGNED;
+src/oblib/lib/queue/ob_co_seq_queue.h	131	ObCoSeqQueue::items_	field volatile int64_t *; 2 atomic accesses (__sync_bool_compare_and_swap 2)	volatile int64_t *items_;
+src/oblib/lib/queue/ob_fixed_queue.h	56	ObFixedQueue::ArrayItem::data	field T *; 2 atomic accesses (ATOMIC_CAS 1, ATOMIC_SET 1); through the single member of value classes ArrayItem::data; through local references array_; single member of a value class: 8 more accesses reach it through fields and variables of type ArrayItem, listed where their own accesses resolve	T *data;
+src/oblib/lib/queue/ob_fixed_queue.h	66	ObFixedQueue::consumer_	field uint64_t; 6 atomic accesses (ATOMIC_LOAD 5, ATOMIC_CAS 1)	uint64_t consumer_ CACHE_ALIGNED;
+src/oblib/lib/queue/ob_fixed_queue.h	67	ObFixedQueue::producer_	field uint64_t; 6 atomic accesses (ATOMIC_LOAD 5, ATOMIC_CAS 1)	uint64_t producer_ CACHE_ALIGNED;
+src/oblib/lib/queue/ob_fixed_queue.h	291	ObOrderedFixedQueue::ArrayItem::idx_	field int64_t; 3 atomic accesses (ATOMIC_LOAD 2, ATOMIC_AAF 1)	int64_t idx_;
+src/oblib/lib/queue/ob_fixed_queue.h	292	ObOrderedFixedQueue::ArrayItem::data_	field T *; 2 atomic accesses (ATOMIC_CAS 1, ATOMIC_TAS 1); through local references pdata	T *data_;
+src/oblib/lib/queue/ob_fixed_queue.h	299	ObOrderedFixedQueue::consumer_	field uint64_t; 4 atomic accesses (ATOMIC_LOAD 3, ATOMIC_CAS 1)	uint64_t consumer_ CACHE_ALIGNED;
+src/oblib/lib/queue/ob_fixed_queue.h	300	ObOrderedFixedQueue::producer_	field uint64_t; 4 atomic accesses (ATOMIC_LOAD 3, ATOMIC_CAS 1)	uint64_t producer_ CACHE_ALIGNED;
+src/oblib/lib/queue/ob_lighty_queue.cpp	135	ObLightyQueue::push_bounded	atomic access through parameter limit (uint64_t) of ObLightyQueue::push_bounded; the atomic object is the caller's argument; 1 atomic accesses (ATOMIC_LOAD 1); through functions with an atomic parameter inc_if_lt	uint64_t ObLightyQueue::push_bounded(void* p, uint64_t limit)
+src/oblib/lib/queue/ob_lighty_queue.cpp	145	ObLightyQueue::inc_if_lt	atomic access through parameter addr (uint64_t *) of ObLightyQueue::inc_if_lt; the atomic object is the caller's argument; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_VCAS 1)	uint64_t ObLightyQueue::inc_if_lt(uint64_t *addr, uint64_t *limit_addr, uint64_t delta, uint64_t &limit)
+src/oblib/lib/queue/ob_lighty_queue.cpp	145	ObLightyQueue::inc_if_lt	atomic access through parameter limit_addr (uint64_t *) of ObLightyQueue::inc_if_lt; the atomic object is the caller's argument; 2 atomic accesses (ATOMIC_LOAD 2)	uint64_t ObLightyQueue::inc_if_lt(uint64_t *addr, uint64_t *limit_addr, uint64_t delta, uint64_t &limit)
+src/oblib/lib/queue/ob_lighty_queue.cpp	172	ObLightyQueue::inc_if_lt	atomic access through parameter addr (uint64_t*) of ObLightyQueue::inc_if_lt; the atomic object is the caller's argument; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_VCAS 1)	uint64_t ObLightyQueue::inc_if_lt(uint64_t* addr, uint64_t b)
+src/oblib/lib/queue/ob_lighty_queue.h	42	ObLightyCond::futex_	field lib::ObFutex; 2 atomic accesses (ATOMIC_FAA 1, ATOMIC_LOAD 1)	lib::ObFutex futex_;
+src/oblib/lib/queue/ob_lighty_queue.h	43	ObLightyCond::n_waiters_	field uint32_t; 3 atomic accesses (ATOMIC_FAA 2, ATOMIC_LOAD 1)	uint32_t n_waiters_;
+src/oblib/lib/queue/ob_lighty_queue.h	84	ObLightyQueue::data_	field void**; 3 atomic accesses (ATOMIC_BCAS 1, ATOMIC_LOAD 1, ATOMIC_TAS 1); through local references addr	void** data_;
+src/oblib/lib/queue/ob_lighty_queue.h	86	ObLightyQueue::push_	field uint64_t; 7 atomic accesses (ATOMIC_LOAD 5, ATOMIC_VCAS 2); through functions with an atomic parameter inc_if_lt	uint64_t push_ CACHE_ALIGNED;
+src/oblib/lib/queue/ob_lighty_queue.h	87	ObLightyQueue::pop_	field uint64_t; 3 atomic accesses (ATOMIC_LOAD 2, ATOMIC_FAA 1); through functions with an atomic parameter inc_if_lt	uint64_t pop_ CACHE_ALIGNED;

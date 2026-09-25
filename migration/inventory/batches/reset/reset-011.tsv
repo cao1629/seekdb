@@ -1,0 +1,111 @@
+file	line	symbol	construct	text
+src/share/schema/ob_schema_struct.cpp	353	ObSysTableChecker::check_runtime_space_table_id	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/share/schema/ob_schema_struct.cpp	383	ObSysTableChecker::check_sys_table_name	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/share/schema/ob_schema_struct.cpp	2713	ObPartitionSchema::get_partition_by_part_id	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/share/schema/ob_schema_struct.cpp	3123	ObPartitionSchema::check_partition_duplicate_with_name	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/share/schema/ob_server_schema_service.cpp	2398	ObServerSchemaService::refresh_full_schema	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/share/schema/ob_server_schema_service.cpp	2427	ObServerSchemaService::refresh_full_schema	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/share/schema/ob_server_schema_service.cpp	2727	ObServerSchemaService::refresh_increment_schema	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/share/schema/ob_sys_variable_mgr.cpp	185	ObSysVariableMgr::get_sys_variable_schema	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/share/schema/ob_table_schema.cpp	1115	ObSimpleTableSchemaV2::check_if_tablet_exists	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/share/schema/ob_table_schema.cpp	1860	ObTableSchema::alter_mysql_table_columns	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/share/schema/ob_table_schema.cpp	1866	ObTableSchema::alter_mysql_table_columns	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/share/schema/ob_table_schema.cpp	1927	ObTableSchema::reorder_column	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/share/schema/ob_table_schema.cpp	2731	ObTableSchema::generate_new_column_id_map	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/share/schema/ob_table_schema.cpp	3663	ObTableSchema::get_not_null_constraint_map	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/share/schema/ob_table_schema.cpp	4445	ObTableSchema::has_add_column_instant	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/share/schema/ob_table_schema.cpp	5048	ObTableSchema::check_functional_index_columns_depend	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/share/schema/ob_table_schema.cpp	5051	ObTableSchema::check_functional_index_columns_depend	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/share/schema/ob_table_sql_service.cpp	762	ObTableSqlService::drop_table	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/share/schema/ob_table_sql_service.cpp	1783	ObTableSqlService::check_table_history_matched_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/share/schema/ob_trigger_mgr.cpp	217	ObTriggerMgr::add_trigger	conditional reset (ternary yields OB_SUCCESS)	ret = (ret == OB_HASH_NOT_EXIST) ? OB_SUCCESS : ret;
+src/share/schema/ob_trigger_mgr.cpp	219	ObTriggerMgr::add_trigger	conditional reset (ternary yields OB_SUCCESS)	ret = (ret == OB_HASH_NOT_EXIST) ? OB_SUCCESS : ret;
+src/share/schema/ob_trigger_mgr.cpp	246	ObTriggerMgr::del_trigger	conditional reset (ternary yields OB_SUCCESS)	ret = (ret == OB_HASH_NOT_EXIST) ? OB_SUCCESS : ret;
+src/share/schema/ob_trigger_mgr.cpp	248	ObTriggerMgr::del_trigger	conditional reset (ternary yields OB_SUCCESS)	ret = (ret == OB_HASH_NOT_EXIST) ? OB_SUCCESS : ret;
+src/share/schema/ob_trigger_mgr.cpp	278	ObTriggerMgr::try_rebuild_trigger_hashmap	conditional reset (ternary yields OB_SUCCESS)	ret = OB_HASH_EXIST == hash_ret ? OB_SUCCESS : hash_ret;
+src/share/storage/ob_admin_job_table_storage.cpp	154	ObAdminJobTableStorage::get_max_job_id	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/share/storage/ob_column_checksum_error_info_table_storage.cpp	230	ObColumnChecksumErrorInfoTableStorage::get	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // No rows is acceptable
+src/share/storage/ob_sqlite_connection.cpp	290	ObSQLiteConnection::configure_connection	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;  // Not a fatal error, continue
+src/share/storage/ob_sqlite_connection.cpp	402	ObSQLiteConnection::query	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/share/storage/ob_sqlite_connection.cpp	409	ObSQLiteConnection::query	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/share/storage/ob_tablet_compaction_checksum_table_storage.cpp	155	ObTabletCompactionChecksumTableStorage::batch_get	ret = OB_SUCCESS (line start) [not built]	ret = OB_SUCCESS; // No rows is acceptable
+src/share/storage/ob_tablet_compaction_checksum_table_storage.cpp	243	ObTabletCompactionChecksumTableStorage::range_get	ret = OB_SUCCESS (line start) [not built]	ret = OB_SUCCESS; // No rows is acceptable
+src/share/storage/ob_tablet_compaction_checksum_table_storage.cpp	280	ObTabletCompactionChecksumTableStorage::get_min_compaction_scn	ret = OB_SUCCESS (line start) [not built]	ret = OB_SUCCESS; // No rows is acceptable
+src/share/storage/ob_tablet_compaction_checksum_table_storage.cpp	319	ObTabletCompactionChecksumTableStorage::get_max_row_count	ret = OB_SUCCESS (line start) [not built]	ret = OB_SUCCESS; // No rows is acceptable
+src/share/storage/ob_tablet_compaction_checksum_table_storage.cpp	373	ObTabletCompactionChecksumTableStorage::batch_check_checksum	ret = OB_SUCCESS (line start) [not built]	ret = OB_SUCCESS; // No rows means no error
+src/share/storage/ob_tablet_local_checksum_table_storage.cpp	161	ObTabletLocalChecksumTableStorage::batch_get	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // No rows is acceptable
+src/share/storage/ob_tablet_local_checksum_table_storage.cpp	201	ObTabletLocalChecksumTableStorage::get_row_count	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // No rows is acceptable
+src/share/tablet/ob_tablet_mapping_operator.cpp	346	ObTabletMappingTableOperator::construct_results_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/share/tablet/ob_tablet_meta_table_storage.cpp	152	ObTabletMetaTableStorage::batch_get	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // No rows is acceptable
+src/share/tablet/ob_tablet_meta_table_storage.cpp	347	ObTabletMetaTableStorage::get_data_size	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // No rows is acceptable, data_size remains 0
+src/share/tablet/ob_tablet_meta_table_storage.cpp	419	ObTabletMetaTableStorage::get_min_compaction_scn	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // No rows is acceptable, min_compaction_scn remains UINT64_MAX
+src/share/tablet/ob_tablet_meta_table_storage.cpp	662	ObTabletMetaTableStorage::get_tablet_ids	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // No rows is acceptable
+src/share/tablet/ob_tablet_meta_table_storage.cpp	715	ObTabletMetaTableStorage::get_tablet_ids_with_report_scn_before	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // No rows is acceptable
+src/share/tablet/ob_tablet_meta_table_storage.cpp	804	ObTabletMetaTableStorage::range_scan_for_compaction	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // No rows is acceptable
+src/share/text_analysis/ob_token_stream.cpp	401	ObTextTokenGroupNormalizer::build_grouping_map	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/code_generator/ob_column_index_provider.cpp	72	RowDesc::add_column	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/code_generator/ob_column_index_provider.cpp	77	RowDesc::add_column	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/code_generator/ob_expr_generator_impl.cpp	204	ObExprGeneratorImpl::infix_visit_child	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/code_generator/ob_expr_generator_impl.cpp	427	ObExprGeneratorImpl::visit	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/code_generator/ob_expr_generator_impl.cpp	1488	ObExprGeneratorImpl::visit	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/code_generator/ob_static_engine_cg.cpp	134	ObStaticEngineCG::generate	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/das/iter/ob_das_cache_lookup_iter.cpp	192	ObDASCacheLookupIter::inner_get_next_row	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/das/iter/ob_das_cache_lookup_iter.cpp	223	ObDASCacheLookupIter::inner_get_next_row	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/das/iter/ob_das_cache_lookup_iter.cpp	276	ObDASCacheLookupIter::inner_get_next_rows	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/das/iter/ob_das_cache_lookup_iter.cpp	311	ObDASCacheLookupIter::inner_get_next_rows	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/das/iter/ob_das_domain_id_merge_iter.cpp	505	ObDASDomainIdMergeIter::concat_row	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/das/iter/ob_das_domain_id_merge_iter.cpp	512	ObDASDomainIdMergeIter::concat_row	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/das/iter/ob_das_domain_id_merge_iter.cpp	562	ObDASDomainIdMergeIter::concat_rows	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // recover ret from iter end
+src/sql/das/iter/ob_das_domain_id_merge_iter.cpp	582	ObDASDomainIdMergeIter::concat_rows	code chosen by a flag (ternary yields OB_SUCCESS; no error is swallowed)	ret = expect_iter_end ? OB_ITER_END : OB_SUCCESS;
+src/sql/das/iter/ob_das_domain_id_merge_iter.cpp	623	ObDASDomainIdMergeIter::concat_rows	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/das/iter/ob_das_domain_id_merge_iter.cpp	1035	ObDASDomainIdMergeIter::multi_get_row	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/das/iter/ob_das_domain_id_merge_iter.cpp	1089	ObDASDomainIdMergeIter::multi_get_rows	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // recover ret from iter end
+src/sql/das/iter/ob_das_domain_id_merge_iter.cpp	1118	ObDASDomainIdMergeIter::multi_get_rows	code chosen by a flag (ternary yields OB_SUCCESS; no error is swallowed)	ret = expect_iter_end ? OB_ITER_END : OB_SUCCESS;
+src/sql/das/iter/ob_das_domain_id_merge_iter.cpp	1128	ObDASDomainIdMergeIter::multi_get_rows	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/das/iter/ob_das_domain_id_merge_iter.cpp	1186	ObDASDomainIdMergeIter::multi_get_rows	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/das/iter/ob_das_func_data_iter.cpp	255	ObDASFuncDataIter::inner_get_next_row	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/das/iter/ob_das_func_data_iter.cpp	263	ObDASFuncDataIter::inner_get_next_row	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/das/iter/ob_das_func_data_iter.cpp	291	ObDASFuncDataIter::inner_get_next_rows	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/das/iter/ob_das_func_data_iter.cpp	305	ObDASFuncDataIter::inner_get_next_rows	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/das/iter/ob_das_group_fold_iter.cpp	259	ObDASGroupFoldIter::inner_get_next_rows	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	267	ObDASHNSWScanIter::reuse_func_lookup_iter	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	287	ObDASHNSWScanIter::inner_reuse	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	291	ObDASHNSWScanIter::inner_reuse	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	295	ObDASHNSWScanIter::inner_reuse	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	299	ObDASHNSWScanIter::inner_reuse	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	303	ObDASHNSWScanIter::inner_reuse	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	308	ObDASHNSWScanIter::inner_reuse	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	313	ObDASHNSWScanIter::inner_reuse	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	352	ObDASHNSWScanIter::inner_release	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	356	ObDASHNSWScanIter::inner_release	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	360	ObDASHNSWScanIter::inner_release	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	364	ObDASHNSWScanIter::inner_release	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	368	ObDASHNSWScanIter::inner_release	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	372	ObDASHNSWScanIter::inner_release	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	376	ObDASHNSWScanIter::inner_release	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	380	ObDASHNSWScanIter::inner_release	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	707	ObDASHNSWScanIter::check_iter_filter_need_retry	code chosen by a flag (ternary yields OB_SUCCESS; no error is swallowed) (statement spans lines 707-709)	ret = (output_row_cnt <= ObVecIdxExtraInfo::MAX_HNSW_PRE_ROW_CNT_WITH_ROWKEY
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	711	ObDASHNSWScanIter::check_iter_filter_need_retry	code chosen by a flag (ternary yields OB_SUCCESS; no error is swallowed) (statement spans lines 711-713)	ret = (output_row_cnt <= ObVecIdxExtraInfo::MAX_HNSW_PRE_ROW_CNT_WITH_IDX
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	823	ObDASHNSWScanIter::process_adaptor_state	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	1256	ObDASHNSWScanIter::build_brute_force_result_iterator_bq	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	1549	ObDASHNSWScanIter::process_adaptor_state_pre_filter_with_rowkey	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	1591	ObDASHNSWScanIter::process_adaptor_state_pre_filter_with_rowkey	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	1816	ObDASHNSWScanIter::get_vid_from_idx_filter	conditional reset (ternary yields OB_SUCCESS)	ret = OB_ITER_END == ret ? OB_SUCCESS : ret;
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	1835	ObDASHNSWScanIter::get_vid_from_idx_filter	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	1895	ObDASHNSWScanIter::get_vid_from_idx_filter	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	1945	ObDASHNSWScanIter::get_vid_from_idx_filter	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	1997	ObDASHNSWScanIter::get_pk_increment_from_idx_filter	conditional reset (ternary yields OB_SUCCESS)	ret = OB_ITER_END == ret ? OB_SUCCESS : ret;
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	2040	ObDASHNSWScanIter::get_pk_increment_from_idx_filter	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	2135	ObDASHNSWScanIter::process_adaptor_state_pre_filter_with_idx_filter	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	2414	ObDASHNSWScanIter::filter_func_lookup_iter	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	2428	ObDASHNSWScanIter::add_one_relevance	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	2485	ObDASHNSWScanIter::filter_by_index_back	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	2506	ObDASHNSWScanIter::filter_by_index_back	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	2571	ObDASHNSWScanIter::post_query_vid_with_filter	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	3146	ObDASHNSWScanIter::prepare_complete_vector_data	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	3160	ObDASHNSWScanIter::prepare_complete_vector_data	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/das/iter/ob_das_index_merge_iter.cpp	581	ObDASIndexMergeIter::union_get_next_row	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/das/iter/ob_das_index_merge_iter.cpp	651	ObDASIndexMergeIter::union_get_next_rows	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/das/iter/ob_das_index_merge_iter.cpp	661	ObDASIndexMergeIter::union_get_next_rows	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/das/iter/ob_das_index_merge_iter.cpp	713	ObDASIndexMergeIter::union_get_next_rows	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/sql/das/iter/ob_das_iter_utils.cpp	2476	ObDASIterUtils::create_mvi_lookup_tree	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;

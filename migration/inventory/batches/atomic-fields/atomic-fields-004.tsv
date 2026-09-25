@@ -1,0 +1,43 @@
+file	line	symbol	construct	text
+src/oblib/lib/allocator/ob_qsync.h	70	ref_	27 candidate declarations, none chosen; 3 atomic accesses in 1 files (ATOMIC_LOAD 2, ATOMIC_AAF 1); first access shown	while(ATOMIC_LOAD(&ref->ref_) != 0)
+src/oblib/lib/allocator/ob_retire_station.h	38	QClock::ClockSlot::clock_	field uint64_t; 3 atomic accesses (ATOMIC_BCAS 1, ATOMIC_LOAD 1, ATOMIC_STORE 1)	uint64_t clock_;
+src/oblib/lib/allocator/ob_retire_station.h	110	QClock::clock_	field uint64_t; 2 atomic accesses (ATOMIC_AAF 1, ATOMIC_LOAD 1)	uint64_t clock_ CACHE_ALIGNED;
+src/oblib/lib/allocator/ob_retire_station.h	111	QClock::qclock_	field uint64_t; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_STORE 1)	uint64_t qclock_ CACHE_ALIGNED;
+src/oblib/lib/allocator/ob_retire_station.h	210	RetireStation::LockGuard::lock_	field uint64_t&; 2 atomic accesses (ATOMIC_STORE 1, ATOMIC_TAS 1)	uint64_t& lock_;
+src/oblib/lib/allocator/ob_simple_fifo_alloc.h	67	ObFifoBlock::ref_	field int64_t; 2 atomic accesses (ATOMIC_AAF 2)	int64_t ref_ CACHE_ALIGNED;
+src/oblib/lib/allocator/ob_simple_fifo_alloc.h	68	ObFifoBlock::pos_	field int64_t; 2 atomic accesses (ATOMIC_FAA 2)	int64_t pos_ CACHE_ALIGNED;
+src/oblib/lib/allocator/ob_simple_fifo_alloc.h	90	ObSimpleFifoAlloc::Arena::blk_	field Block*; 3 atomic accesses (ATOMIC_BCAS 1, ATOMIC_LOAD 1, ATOMIC_TAS 1)	Block* blk_;
+src/oblib/lib/allocator/ob_simple_fifo_alloc.h	224	ObSimpleFifoAlloc::nway_	field int; 1 atomic accesses (ATOMIC_STORE 1)	int nway_ CACHE_ALIGNED;
+src/oblib/lib/allocator/ob_simple_fifo_alloc.h	226	ObSimpleFifoAlloc::bytes_alloc_	field int64_t; 1 atomic accesses (ATOMIC_FAA 1)	int64_t bytes_alloc_;
+src/oblib/lib/allocator/ob_slice_alloc.h	43	ObSimpleSync::ref_	field int32_t; 2 atomic accesses (ATOMIC_AAF 1, ATOMIC_LOAD 1)	int32_t ref_;
+src/oblib/lib/allocator/ob_slice_alloc.h	84	ObDListWithLock::head_	field DLink; 1 atomic accesses (ATOMIC_LOAD 1); through the single member of value classes ObLink::next_	DLink head_ CACHE_ALIGNED;
+src/oblib/lib/allocator/ob_slice_alloc.h	124	ObEmbedFixedQueue::push_	field uint64_t; 1 atomic accesses (ATOMIC_FAA 1)	uint64_t push_ CACHE_ALIGNED;
+src/oblib/lib/allocator/ob_slice_alloc.h	125	ObEmbedFixedQueue::pop_	field uint64_t; 1 atomic accesses (ATOMIC_FAA 1)	uint64_t pop_ CACHE_ALIGNED;
+src/oblib/lib/allocator/ob_slice_alloc.h	127	ObEmbedFixedQueue::data_	field void*; 2 atomic accesses (ATOMIC_BCAS 1, ATOMIC_TAS 1); through local references addr	void* data_[];
+src/oblib/lib/allocator/ob_slice_alloc.h	195	ObStockCtrl::stock_	field int32_t; 9 atomic accesses (ATOMIC_VCAS 4, ATOMIC_LOAD 3, ATOMIC_AAF 1, ATOMIC_FAA 1)	int32_t stock_ CACHE_ALIGNED;
+src/oblib/lib/allocator/ob_slice_alloc.h	316	ObSliceAlloc::Arena::blk_	field Block*; 3 atomic accesses (ATOMIC_BCAS 1, ATOMIC_LOAD 1, ATOMIC_TAS 1)	Block* blk_;
+src/oblib/lib/allocator/ob_slice_alloc.h	492	ObSliceAlloc::nway_	field int; 1 atomic accesses (ATOMIC_STORE 1)	int nway_ CACHE_ALIGNED;
+src/oblib/lib/allocator/ob_vslice_alloc.h	86	ObBlockVSlicer::ref_	field int64_t; 4 atomic accesses (ATOMIC_AAF 2, ATOMIC_FAA 1, ATOMIC_LOAD 1)	int64_t ref_ CACHE_ALIGNED;
+src/oblib/lib/allocator/ob_vslice_alloc.h	87	ObBlockVSlicer::pos_	field int64_t; 2 atomic accesses (ATOMIC_FAA 2)	int64_t pos_ CACHE_ALIGNED;
+src/oblib/lib/allocator/ob_vslice_alloc.h	107	ObVSliceAlloc::Arena::blk_	field Block*; 3 atomic accesses (ATOMIC_BCAS 1, ATOMIC_LOAD 1, ATOMIC_TAS 1)	Block* blk_;
+src/oblib/lib/allocator/ob_vslice_alloc.h	284	ObVSliceAlloc::nway_	field int; 1 atomic accesses (ATOMIC_STORE 1)	int nway_ CACHE_ALIGNED;
+src/oblib/lib/atomic/ob_atomic_reference.h	28	AtomicInt64::atomic	field uint64_t; single member of a value class; no direct atomic access, 11 atomic accesses reach it through fields and variables of type AtomicInt64, listed where their own accesses resolve	uint64_t atomic;
+src/oblib/lib/atomic/ob_atomic_reference.h	55	ObAtomicReference::atomic_num_	field AtomicInt64; 8 atomic accesses (ATOMIC_BCAS 4, ATOMIC_LOAD 4); through the single member of value classes AtomicInt64::atomic	AtomicInt64 atomic_num_;
+src/oblib/lib/container/ob_bit_set.h	588	ObBitSet::bitset_word_array_	field ObSEArray<BitSetWord, MAX_BITSETWORD, BlockAllocatorT, auto_free>; 1 atomic accesses (ATOMIC_CAS 1)	ObSEArray<BitSetWord, MAX_BITSETWORD, BlockAllocatorT, auto_free> bitset_word_array_;
+src/oblib/lib/container/ob_concurrent_bitset.h	48	ObConcurrentBitset::word_array_	field uint64_t; 9 atomic accesses (ATOMIC_LOAD 5, ATOMIC_BCAS 4)	uint64_t word_array_[WORD_NUM];
+src/oblib/lib/container/ob_concurrent_bitset.h	49	ObConcurrentBitset::start_pos_	field uint64_t; 3 atomic accesses (ATOMIC_FAA 1, ATOMIC_LOAD 1, ATOMIC_STORE 1)	uint64_t start_pos_; // to record the start of 0bit
+src/oblib/lib/container/ob_ext_ring_buffer_impl.h	131	DummyRef::acquire	atomic access through parameter paddr (T**) of DummyRef::acquire; the atomic object is the caller's argument; 1 atomic accesses (ATOMIC_LOAD 1); through functions with an atomic parameter load_ptr	T* acquire(T** paddr) { return load_ptr(paddr); }
+src/oblib/lib/container/ob_ext_ring_buffer_impl.h	135	DummyRef::load_ptr	atomic access through parameter paddr (T**) of DummyRef::load_ptr; the atomic object is the caller's argument; 1 atomic accesses (ATOMIC_LOAD 1)	T* load_ptr(T** paddr) { return (T*)(((uint64_t)ATOMIC_LOAD(paddr)) & ~1ULL); }
+src/oblib/lib/container/ob_ext_ring_buffer_impl.h	840	ObExtendibleRingBufferBase::begin_sn_	field int64_t; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_STORE 1)	int64_t begin_sn_;
+src/oblib/lib/container/ob_ext_ring_buffer_impl.h	841	ObExtendibleRingBufferBase::end_sn_	field int64_t; 2 atomic accesses (ATOMIC_BCAS 1, ATOMIC_LOAD 1)	int64_t end_sn_ CACHE_ALIGNED; // Trade mem for speed.
+src/oblib/lib/container/ob_ext_ring_buffer_impl.h	843	ObExtendibleRingBufferBase::dir_	field Dir *; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_STORE 1)	Dir *dir_;
+src/oblib/lib/container/ob_id_map.h	47	ObIDMap::Node::id	volatile field volatile ID_TYPE; no atomic access found	volatile ID_TYPE id;
+src/oblib/lib/container/ob_id_map.h	48	ObIDMap::Node::stat	volatile field volatile Stat; no atomic access found	volatile Stat stat;
+src/oblib/lib/container/ob_ring_buffer.h	149	ObRingBuffer::Node::next_purge_child_	field int64_t; 3 atomic accesses (ATOMIC_LOAD 2, inc_update 1) [not built]	int64_t next_purge_child_;
+src/oblib/lib/container/ob_ring_buffer.h	153	ObRingBuffer::Node::children_	field Node *; 4 atomic accesses (ATOMIC_LOAD 2, ATOMIC_BCAS 1, ATOMIC_TAS 1); through local references pnode [not built]	Node *children_[0];
+src/oblib/lib/container/ob_ring_buffer.h	334	ObRingBuffer::start_	field int64_t; 5 atomic accesses (ATOMIC_LOAD 4, ATOMIC_BCAS 1) [not built]	int64_t start_;
+src/oblib/lib/container/ob_ring_buffer.h	335	ObRingBuffer::end_	field int64_t; 6 atomic accesses (ATOMIC_LOAD 4, ATOMIC_BCAS 2) [not built]	int64_t end_;
+src/oblib/lib/core_local/ob_core_local_storage.h	208	VAL_ARRAY_AT()	no declaration found; 1 atomic accesses in 1 files (__sync_bool_compare_and_swap 1); first access shown	} else if (!__sync_bool_compare_and_swap(&VAL_ARRAY_AT(void *, array_idx), old_val, new_val)) {
+src/oblib/lib/guard/ob_light_shared_gaurd.h	47	LightControlBlock::ref_	field int64_t; 4 atomic accesses (ATOMIC_AAF 2, ATOMIC_LOAD 2)	int64_t ref_;
+src/oblib/lib/guard/ob_shared_guard.h	193	ControlBlock::weak_count_	field int64_t; 5 atomic accesses (ATOMIC_INC 2, ATOMIC_LOAD 2, ATOMIC_AAF 1)	int64_t weak_count_;
+src/oblib/lib/guard/ob_shared_guard.h	194	ControlBlock::shared_count_	field int64_t; 7 atomic accesses (ATOMIC_LOAD 4, ATOMIC_AAF 1, ATOMIC_CAS 1, ATOMIC_INC 1)	int64_t shared_count_;

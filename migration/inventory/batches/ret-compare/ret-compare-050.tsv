@@ -1,0 +1,100 @@
+file	line	symbol	construct	text
+src/storage/blocksstable/ob_micro_block_row_scanner.cpp	205	ObIMicroBlockRowScanner::get_next_rows	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/blocksstable/ob_micro_block_row_scanner.cpp	219	ObIMicroBlockRowScanner::get_next_rows	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/blocksstable/ob_micro_block_row_scanner.cpp	239	ObIMicroBlockRowScanner::inner_get_next_row	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/blocksstable/ob_micro_block_row_scanner.cpp	243	ObIMicroBlockRowScanner::inner_get_next_row	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/blocksstable/ob_micro_block_row_scanner.cpp	269	ObIMicroBlockRowScanner::inner_get_next_row_blockscan	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/blocksstable/ob_micro_block_row_scanner.cpp	292	ObIMicroBlockRowScanner::apply_filter	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/blocksstable/ob_micro_block_row_scanner.cpp	369	ObIMicroBlockRowScanner::set_base_scan_param	ret != OB_BEYOND_THE_RANGE	if (OB_UNLIKELY(OB_BEYOND_THE_RANGE != ret)) {
+src/storage/blocksstable/ob_micro_block_row_scanner.cpp	385	ObIMicroBlockRowScanner::set_base_scan_param	ret == OB_BEYOND_THE_RANGE	if (OB_BEYOND_THE_RANGE == ret) {
+src/storage/blocksstable/ob_micro_block_row_scanner.cpp	454	ObIMicroBlockRowScanner::locate_range_pos	ret != OB_BEYOND_THE_RANGE	if (OB_BEYOND_THE_RANGE != ret) {
+src/storage/blocksstable/ob_micro_block_row_scanner.cpp	751	ObIMicroBlockRowScanner::advance_to_border	call result end_of_block() != OB_ITER_END	} else if (OB_ITER_END != end_of_block()) {
+src/storage/blocksstable/ob_micro_block_row_scanner.cpp	787	ObIMicroBlockRowScanner::check_can_group_by	ret != OB_NOT_SUPPORTED	if (OB_UNLIKELY(OB_NOT_SUPPORTED != ret)) {
+src/storage/blocksstable/ob_micro_block_row_scanner.cpp	835	ObIMicroBlockRowScanner::get_next_border_rows	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/blocksstable/ob_micro_block_row_scanner.cpp	874	ObIMicroBlockRowScanner::get_next_border_rows	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/blocksstable/ob_micro_block_row_scanner.cpp	1186	ObMultiVersionMicroBlockRowScanner::inner_get_next_row	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/blocksstable/ob_micro_block_row_scanner.cpp	1192	ObMultiVersionMicroBlockRowScanner::inner_get_next_row	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/blocksstable/ob_micro_block_row_scanner.cpp	1232	ObMultiVersionMicroBlockRowScanner::inner_get_next_row_impl	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/blocksstable/ob_micro_block_row_scanner.cpp	1241	ObMultiVersionMicroBlockRowScanner::inner_get_next_row_impl	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/blocksstable/ob_micro_block_row_scanner.cpp	1245	ObMultiVersionMicroBlockRowScanner::inner_get_next_row_impl	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/blocksstable/ob_micro_block_row_scanner.cpp	1267	ObMultiVersionMicroBlockRowScanner::inner_get_next_row_impl	ret == OB_ITER_END	if ((OB_SUCC(ret) && final_result) || OB_ITER_END == ret) {
+src/storage/blocksstable/ob_micro_block_row_scanner.cpp	1299	ObMultiVersionMicroBlockRowScanner::inner_get_next_row_impl	ret == OB_ITER_END	} else if (OB_UNLIKELY(OB_SUCCESS == ret || OB_ITER_END == ret)) {
+src/storage/blocksstable/ob_micro_block_row_scanner.cpp	1316	ObMultiVersionMicroBlockRowScanner::locate_cursor_to_read	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/blocksstable/ob_micro_block_row_scanner.cpp	1349	ObMultiVersionMicroBlockRowScanner::locate_cursor_to_read	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/blocksstable/ob_micro_block_row_scanner.cpp	1392	ObMultiVersionMicroBlockRowScanner::inner_get_next_row_directly	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/blocksstable/ob_micro_block_row_scanner.cpp	1443	ObMultiVersionMicroBlockRowScanner::inner_inner_get_next_row	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/blocksstable/ob_micro_block_row_scanner.cpp	1641	ObMultiVersionMicroBlockRowScanner::check_foreign_key	ret == OB_TRY_LOCK_ROW_CONFLICT	if (OB_TRY_LOCK_ROW_CONFLICT == ret) {
+src/storage/blocksstable/ob_micro_block_row_scanner.cpp	1838	ObMultiVersionMicroBlockRowScanner::get_store_rowkey	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/blocksstable/ob_micro_block_row_scanner.cpp	1909	ObMultiVersionMicroBlockMinorMergeRowScanner::inner_get_next_row	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/blocksstable/ob_micro_block_row_scanner.cpp	1927	ObMultiVersionMicroBlockMinorMergeRowScanner::inner_get_next_row	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/blocksstable/ob_micro_block_row_scanner.cpp	2078	ObMultiVersionMicroBlockMinorMergeRowScanner::get_first_row_mvcc_info	call result end_of_block() == OB_ITER_END	} else if (OB_ITER_END == end_of_block()) {
+src/storage/blocksstable/ob_micro_block_writer.cpp	200	ObMicroBlockWriter::append_row	ret != OB_BUF_NOT_ENOUGH	if (OB_BUF_NOT_ENOUGH != ret) {
+src/storage/blocksstable/ob_micro_block_writer.cpp	210	ObMicroBlockWriter::append_row	ret != OB_BUF_NOT_ENOUGH	if (OB_UNLIKELY(OB_BUF_NOT_ENOUGH != ret)) {
+src/storage/blocksstable/ob_micro_block_writer.cpp	283	ObMicroBlockWriter::append_hash_index	ret != OB_NOT_SUPPORTED	if (ret != OB_NOT_SUPPORTED) {
+src/storage/blocksstable/ob_micro_block_writer.cpp	395	ObMicroBlockWriter::append_row_to_hash_index	ret != OB_NOT_SUPPORTED	if (ret != OB_NOT_SUPPORTED) {
+src/storage/blocksstable/ob_micro_block_writer.cpp	414	ObMicroBlockWriter::build_hash_index_block	ret != OB_NOT_SUPPORTED	if (ret != OB_NOT_SUPPORTED) {
+src/storage/blocksstable/ob_row_cache.cpp	234	ObRowCache::get_row	ret != OB_ENTRY_NOT_EXIST	if (OB_UNLIKELY(OB_ENTRY_NOT_EXIST != ret)) {
+src/storage/blocksstable/ob_row_writer.cpp	134	ObRowWriter::write	ret != OB_BUF_NOT_ENOUGH	if (OB_BUF_NOT_ENOUGH != ret) {
+src/storage/blocksstable/ob_row_writer.cpp	140	ObRowWriter::write	ret != OB_BUF_NOT_ENOUGH	if (OB_BUF_NOT_ENOUGH != ret) {
+src/storage/blocksstable/ob_row_writer.cpp	164	ObRowWriter::write_lock_rowkey	ret == OB_BUF_NOT_ENOUGH	if (OB_FAIL(alloc_buf_and_init(OB_BUF_NOT_ENOUGH == ret))) {
+src/storage/blocksstable/ob_row_writer.cpp	170	ObRowWriter::write_lock_rowkey	ret != OB_BUF_NOT_ENOUGH	if (OB_BUF_NOT_ENOUGH != ret) {
+src/storage/blocksstable/ob_row_writer.cpp	177	ObRowWriter::write_lock_rowkey	ret == OB_BUF_NOT_ENOUGH	} while (OB_BUF_NOT_ENOUGH == ret && row_buffer_.is_buf_extendable());
+src/storage/blocksstable/ob_row_writer.cpp	179	ObRowWriter::write_lock_rowkey	ret == OB_BUF_NOT_ENOUGH	if (OB_UNLIKELY(OB_BUF_NOT_ENOUGH == ret)) {
+src/storage/blocksstable/ob_row_writer.cpp	189	ObRowWriter::write	ret == OB_BUF_NOT_ENOUGH	if (OB_FAIL(alloc_buf_and_init(OB_BUF_NOT_ENOUGH == ret))) {
+src/storage/blocksstable/ob_row_writer.cpp	196	ObRowWriter::write	ret != OB_BUF_NOT_ENOUGH	if (OB_BUF_NOT_ENOUGH != ret) {
+src/storage/blocksstable/ob_row_writer.cpp	202	ObRowWriter::write	ret != OB_BUF_NOT_ENOUGH	if (OB_BUF_NOT_ENOUGH != ret) {
+src/storage/blocksstable/ob_row_writer.cpp	209	ObRowWriter::write	ret == OB_BUF_NOT_ENOUGH	} while (OB_BUF_NOT_ENOUGH == ret && row_buffer_.is_buf_extendable());
+src/storage/blocksstable/ob_row_writer.cpp	211	ObRowWriter::write	ret == OB_BUF_NOT_ENOUGH	if (OB_UNLIKELY(OB_BUF_NOT_ENOUGH == ret)) {
+src/storage/blocksstable/ob_row_writer.cpp	230	ObRowWriter::write	ret == OB_BUF_NOT_ENOUGH	if (OB_FAIL(alloc_buf_and_init(OB_BUF_NOT_ENOUGH == ret))) {
+src/storage/blocksstable/ob_row_writer.cpp	232	ObRowWriter::write	ret != OB_BUF_NOT_ENOUGH	if (OB_BUF_NOT_ENOUGH != ret) {
+src/storage/blocksstable/ob_row_writer.cpp	238	ObRowWriter::write	ret == OB_BUF_NOT_ENOUGH	} while (OB_BUF_NOT_ENOUGH == ret && row_buffer_.is_buf_extendable());
+src/storage/blocksstable/ob_row_writer.cpp	240	ObRowWriter::write	ret == OB_BUF_NOT_ENOUGH	if (OB_UNLIKELY(OB_BUF_NOT_ENOUGH == ret)) {
+src/storage/blocksstable/ob_row_writer.cpp	280	ObRowWriter::inner_write_row	ret != OB_BUF_NOT_ENOUGH	if (OB_BUF_NOT_ENOUGH != ret) {
+src/storage/blocksstable/ob_row_writer.cpp	286	ObRowWriter::inner_write_row	ret != OB_BUF_NOT_ENOUGH	if (OB_BUF_NOT_ENOUGH != ret) {
+src/storage/blocksstable/ob_row_writer.cpp	309	ObRowWriter::inner_write_cells	ret != OB_BUF_NOT_ENOUGH	if (OB_BUF_NOT_ENOUGH != ret) {
+src/storage/blocksstable/ob_row_writer.cpp	333	ObRowWriter::append_row_and_index	ret != OB_BUF_NOT_ENOUGH	if (OB_BUF_NOT_ENOUGH != ret) {
+src/storage/blocksstable/ob_row_writer.cpp	336	ObRowWriter::append_row_and_index	ret != OB_BUF_NOT_ENOUGH	if (OB_BUF_NOT_ENOUGH != ret) {
+src/storage/blocksstable/ob_row_writer.cpp	341	ObRowWriter::append_row_and_index	ret != OB_BUF_NOT_ENOUGH	if (OB_BUF_NOT_ENOUGH != ret) {
+src/storage/blocksstable/ob_row_writer.cpp	346	ObRowWriter::append_row_and_index	ret != OB_BUF_NOT_ENOUGH	if (OB_BUF_NOT_ENOUGH != ret)  {
+src/storage/blocksstable/ob_row_writer.cpp	350	ObRowWriter::append_row_and_index	ret != OB_BUF_NOT_ENOUGH	if (OB_BUF_NOT_ENOUGH != ret) {
+src/storage/blocksstable/ob_row_writer.cpp	422	ObRowWriter::write_col_in_cluster	ret != OB_BUF_NOT_ENOUGH	if (OB_BUF_NOT_ENOUGH != ret) {
+src/storage/blocksstable/ob_row_writer.cpp	452	ObRowWriter::build_cluster	ret != OB_BUF_NOT_ENOUGH	if (OB_BUF_NOT_ENOUGH != ret) {
+src/storage/blocksstable/ob_row_writer.cpp	467	ObRowWriter::build_cluster	ret != OB_BUF_NOT_ENOUGH	if (OB_BUF_NOT_ENOUGH != ret) {
+src/storage/blocksstable/ob_row_writer.cpp	474	ObRowWriter::build_cluster	ret != OB_BUF_NOT_ENOUGH	if (OB_BUF_NOT_ENOUGH != ret) {
+src/storage/blocksstable/ob_row_writer.cpp	575	ObRowWriter::append_sparse_cell_array	ret != OB_BUF_NOT_ENOUGH	if (OB_BUF_NOT_ENOUGH != ret) {
+src/storage/blocksstable/ob_row_writer.cpp	618	ObRowWriter::append_flat_cell_array	ret != OB_BUF_NOT_ENOUGH	if (OB_BUF_NOT_ENOUGH != ret) {
+src/storage/blocksstable/ob_row_writer.cpp	708	ObRowWriter::append_column	ret != OB_BUF_NOT_ENOUGH	if (OB_BUF_NOT_ENOUGH != ret) {
+src/storage/blocksstable/ob_shared_macro_block_manager.cpp	330	ObSharedMacroBlockMgr::add_block	ret != OB_ENTRY_NOT_EXIST	if (OB_FAIL(block_used_size_.get(block_id, curr_size)) && OB_ENTRY_NOT_EXIST != ret) {
+src/storage/blocksstable/ob_shared_macro_block_manager.cpp	349	ObSharedMacroBlockMgr::free_block	ret != OB_ENTRY_NOT_EXIST	if (OB_FAIL(block_used_size_.get(block_id, curr_size)) && OB_ENTRY_NOT_EXIST != ret) {
+src/storage/blocksstable/ob_shared_macro_block_manager.cpp	372	ObSharedMacroBlockMgr::get_recyclable_blocks	call result getOp.get_execution_ret() == OB_ITER_END	if (OB_ITER_END == getOp.get_execution_ret() && MAX_RECYCLABLE_BLOCK_CNT == block_ids.count()) {
+src/storage/blocksstable/ob_shared_macro_block_manager.cpp	421	ObSharedMacroBlockMgr::defragment	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/blocksstable/ob_shared_macro_block_manager.cpp	433	ObSharedMacroBlockMgr::defragment	ret != OB_EAGAIN	if (OB_UNLIKELY(OB_EAGAIN != ret)) {
+src/storage/blocksstable/ob_shared_macro_block_manager.cpp	442	ObSharedMacroBlockMgr::defragment	ret == OB_ITER_END	if (OB_ITER_END == ret || OB_SUCC(ret)) {
+src/storage/blocksstable/ob_shared_macro_block_manager.cpp	460	ObSharedMacroBlockMgr::defragment	ret == OB_ITER_END	if (OB_ITER_END == ret || OB_SUCC(ret)) {
+src/storage/blocksstable/ob_shared_macro_block_manager.cpp	463	ObSharedMacroBlockMgr::defragment	ret != OB_ALLOCATE_MEMORY_FAILED	} else if (OB_ALLOCATE_MEMORY_FAILED != ret
+src/storage/blocksstable/ob_shared_macro_block_manager.cpp	464	ObSharedMacroBlockMgr::defragment	ret != OB_SERVER_OUTOF_DISK_SPACE	&& OB_SERVER_OUTOF_DISK_SPACE != ret
+src/storage/blocksstable/ob_shared_macro_block_manager.cpp	465	ObSharedMacroBlockMgr::defragment	ret != OB_TIMEOUT	&& OB_TIMEOUT != ret
+src/storage/blocksstable/ob_shared_macro_block_manager.cpp	466	ObSharedMacroBlockMgr::defragment	ret != OB_NOT_RUNNING	&& OB_NOT_RUNNING != ret
+src/storage/blocksstable/ob_shared_macro_block_manager.cpp	498	ObSharedMacroBlockMgr::update_tablet	ret == OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END == ret)) {
+src/storage/blocksstable/ob_shared_macro_block_manager.cpp	528	ObSharedMacroBlockMgr::update_tablet	ret == OB_TABLET_NOT_EXIST	if (OB_TABLET_NOT_EXIST == ret) {
+src/storage/blocksstable/ob_sstable.cpp	1124	ObSSTable::ignore_ret	ret == OB_ALLOCATE_MEMORY_FAILED; ret == OB_TIMEOUT; ret == OB_DISK_HUNG	return OB_ALLOCATE_MEMORY_FAILED == ret || OB_TIMEOUT == ret || OB_DISK_HUNG == ret;
+src/storage/blocksstable/ob_sstable.cpp	1209	ObSSTable::inc_macro_ref	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/blocksstable/ob_sstable.cpp	1220	ObSSTable::inc_macro_ref	ret != OB_ITER_END	if (OB_FAIL(ret) && OB_ITER_END != ret) {
+src/storage/blocksstable/ob_sstable.cpp	1227	ObSSTable::inc_macro_ref	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/blocksstable/ob_sstable.cpp	1238	ObSSTable::inc_macro_ref	ret != OB_ITER_END	if (OB_FAIL(ret) && OB_ITER_END != ret) {
+src/storage/blocksstable/ob_sstable.cpp	1245	ObSSTable::inc_macro_ref	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/storage/blocksstable/ob_sstable.cpp	1256	ObSSTable::inc_macro_ref	ret == OB_ITER_END	if (OB_SUCCESS == ret || OB_ITER_END == ret) {
+src/storage/blocksstable/ob_sstable.cpp	1260	ObSSTable::inc_macro_ref	ret == OB_ITER_END	if ((OB_SUCC(ret) || OB_LIKELY(OB_ITER_END == ret))
+src/storage/checkpoint/ob_checkpoint_executor.cpp	238	ObCheckpointExecutor::update_clog_checkpoint	ret == OB_NOT_INIT	if (OB_NOT_INIT == ret) {
+src/storage/checkpoint/ob_checkpoint_executor.cpp	241	ObCheckpointExecutor::update_clog_checkpoint	ret == OB_NEED_RETRY; ret == OB_ENTRY_NOT_EXIST	} else if (OB_NEED_RETRY == ret || OB_ENTRY_NOT_EXIST == ret) {
+src/storage/checkpoint/ob_checkpoint_executor.cpp	277	ObCheckpointExecutor::advance_checkpoint_by_flush	ret != OB_EAGAIN	if (OB_EAGAIN != ret) {
+src/storage/checkpoint/ob_data_checkpoint.cpp	424	ObDataCheckpoint::ls_frozen_to_active_	ret == OB_NOT_RUNNING	if (OB_NOT_RUNNING == ret && is_empty()) {
+src/storage/checkpoint/ob_data_checkpoint.cpp	481	ObDataCheckpoint::ls_frozen_to_prepare_	ret == OB_NOT_RUNNING	if (OB_NOT_RUNNING == ret && is_empty()) {
+src/storage/checkpoint/ob_data_checkpoint.cpp	496	ObDataCheckpoint::ls_frozen_to_prepare_	ret == OB_EAGAIN	if (OB_EAGAIN == ret) {
+src/storage/checkpoint/ob_data_checkpoint.cpp	620	ObDataCheckpoint::traversal_flush_	tmp_ret != OB_SIZE_OVERFLOW	for (int64_t i = 0; OB_SIZE_OVERFLOW != tmp_ret && i < flush_tasks.count(); i++) {
+src/storage/checkpoint/ob_data_checkpoint.cpp	625	ObDataCheckpoint::traversal_flush_	tmp_ret != OB_NO_NEED_UPDATE	&& tmp_ret != OB_NO_NEED_UPDATE) {
+src/storage/checkpoint/ob_data_checkpoint.cpp	664	ObDataCheckpoint::unlink_	ret == OB_EAGAIN	} while (OB_EAGAIN == ret);
+src/storage/checkpoint/ob_data_checkpoint.cpp	680	ObDataCheckpoint::finish_freeze	ret != OB_EAGAIN	if (OB_EAGAIN != ret) {
+src/storage/checkpoint/ob_data_checkpoint.cpp	687	ObDataCheckpoint::finish_freeze	ret != OB_EAGAIN	if (OB_EAGAIN != ret) {
+src/storage/checkpoint/ob_data_checkpoint.cpp	697	ObDataCheckpoint::finish_freeze	ret != OB_EAGAIN	if (OB_EAGAIN != ret) {
+src/storage/checkpoint/ob_data_checkpoint.cpp	707	ObDataCheckpoint::finish_freeze	ret == OB_EAGAIN	} while (OB_EAGAIN == ret);

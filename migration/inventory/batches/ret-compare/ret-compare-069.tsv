@@ -1,0 +1,76 @@
+file	line	symbol	construct	text
+src/storage/tx/ob_trans_ctx_mgr_v4.cpp	81	ObLSTxCtxIterator::get_next_tx_ctx	ret == OB_TRANS_CTX_NOT_EXIST	if (OB_TRANS_CTX_NOT_EXIST == ret) {
+src/storage/tx/ob_trans_ctx_mgr_v4.cpp	120	ObLSTxCtxIterator::get_next_tx_id_	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/tx/ob_trans_ctx_mgr_v4.cpp	131	ObLSTxCtxIterator::get_next_tx_id_	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/storage/tx/ob_trans_ctx_mgr_v4.cpp	319	ObLSTxCtxMgr::create_tx_ctx_	ret == OB_ENTRY_EXIST	if (OB_ENTRY_EXIST == ret) {
+src/storage/tx/ob_trans_ctx_mgr_v4.cpp	418	ObLSTxCtxMgr::get_tx_ctx_	ret == OB_ENTRY_NOT_EXIST	} else if (OB_ENTRY_NOT_EXIST == ret) {
+src/storage/tx/ob_trans_ctx_mgr_v4.cpp	461	ObLSTxCtxMgr::get_tx_ctx_directly_from_hash_map	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/storage/tx/ob_trans_ctx_mgr_v4.cpp	868	ObLSTxCtxMgr::check_with_tx_data	ret == OB_TRANS_CTX_NOT_EXIST	if (ret == OB_TRANS_CTX_NOT_EXIST) {
+src/storage/tx/ob_trans_ctx_mgr_v4.cpp	878	ObLSTxCtxMgr::check_with_tx_data	ret == OB_TRANS_CTX_NOT_EXIST	if (OB_TRANS_CTX_NOT_EXIST == ret) {
+src/storage/tx/ob_trans_ctx_mgr_v4.cpp	1038	ObLSTxCtxMgr::dump_single_tx_data_2_text	ret == OB_TRANS_CTX_NOT_EXIST	if (ret == OB_TRANS_CTX_NOT_EXIST) {
+src/storage/tx/ob_trans_ctx_mgr_v4.cpp	1048	ObLSTxCtxMgr::dump_single_tx_data_2_text	ret == OB_TRANS_CTX_NOT_EXIST	if (OB_TRANS_CTX_NOT_EXIST == ret) {
+src/storage/tx/ob_trans_ctx_mgr_v4.cpp	1242	ObTxCtxMgr::wait	ret == OB_EAGAIN	if (OB_EAGAIN == ret) {
+src/storage/tx/ob_trans_ctx_mgr_v4.cpp	1534	ObTxCtxMgr::remove_context_manager	ret == OB_EAGAIN	need_retry = (OB_EAGAIN == ret);
+src/storage/tx/ob_trans_ctx_mgr_v4.cpp	1555	ObTxCtxMgr::remove_context_manager	ret == OB_EAGAIN	} else if (OB_EAGAIN == ret) {
+src/storage/tx/ob_trans_deadlock_adapter.cpp	435	ObTransDeadlockDetectorAdapter::maintain_deadlock_info_when_end_stmt	other variable context.exec_error_ != OB_TRY_LOCK_ROW_CONFLICT	} else if (++step && context.exec_error_ != OB_TRY_LOCK_ROW_CONFLICT) {
+src/storage/tx/ob_trans_deadlock_adapter.cpp	454	ObTransDeadlockDetectorAdapter::maintain_deadlock_info_when_end_stmt	other variable context.exec_error_ != OB_ITER_END	if ((OB_ITER_END != context.exec_error_)) {
+src/storage/tx/ob_trans_deadlock_adapter.cpp	619	ObTransDeadlockDetectorAdapter::unregister_from_deadlock_detector	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/storage/tx/ob_trans_define.h	1336	ObIArraySerDeTrait::deserialize	ret == OB_NOT_SUPPORTED	if (OB_NOT_SUPPORTED == ret) {
+src/storage/tx/ob_trans_define_v4.cpp	161	ObTxSavePoint::init	ret == OB_BUF_NOT_ENOUGH	if (OB_BUF_NOT_ENOUGH == ret) {
+src/storage/tx/ob_trans_define_v4.cpp	848	ObTxDesc::acq_commit_cb_lock_if_need_	ret == OB_EAGAIN	if (ret == OB_EAGAIN) {
+src/storage/tx/ob_trans_define_v4.cpp	860	ObTxDesc::acq_commit_cb_lock_if_need_	ret == OB_EAGAIN	} while (ret == OB_EAGAIN && OB_NOT_NULL(commit_cb_));
+src/storage/tx/ob_trans_functor.h	180	KillTxCtxFunctor::OPERATOR_V4(KillTxCtxFunctor)	ret == OB_TRANS_CANNOT_BE_KILLED	} else if (common::OB_TRANS_CANNOT_BE_KILLED == ret) {
+src/storage/tx/ob_trans_functor.h	216	IterateCheckTabletModifySchema::OPERATOR_V4(IterateCheckTabletModifySchema)	ret != OB_EAGAIN	if (OB_EAGAIN != ret) {
+src/storage/tx/ob_trans_functor.h	261	IterateCheckTabletModifyTimestamp::OPERATOR_V4(IterateCheckTabletModifyTimestamp)	ret != OB_EAGAIN	if (OB_EAGAIN != ret) {
+src/storage/tx/ob_trans_id_service.cpp	45	ObTransIDService::alloc_trans_id_range	ret != OB_EAGAIN	if (OB_EAGAIN != ret) {
+src/storage/tx/ob_trans_service.cpp	402	ObTransService::register_mds_into_tx	ret == OB_EAGAIN	if ((OB_EAGAIN == ret || is_id_not_ready_err(ret))
+src/storage/tx/ob_trans_service.cpp	406	ObTransService::register_mds_into_tx	ret == OB_EAGAIN	} else if (OB_EAGAIN == ret || is_id_not_ready_err(ret)) {
+src/storage/tx/ob_trans_service.cpp	409	ObTransService::register_mds_into_tx	ret == OB_EAGAIN	} while (OB_EAGAIN == ret || is_id_not_ready_err(ret));
+src/storage/tx/ob_trans_service_v4.cpp	212	ObTransService::register_commit_retry_task_	ret == OB_TIMER_TASK_HAS_SCHEDULED	if (OB_TIMER_TASK_HAS_SCHEDULED == ret) {
+src/storage/tx/ob_trans_service_v4.cpp	246	ObTransService::unregister_commit_retry_task_	ret == OB_TIMER_TASK_HAS_NOT_SCHEDULED	} else if(OB_TIMER_TASK_HAS_NOT_SCHEDULED == ret) {
+src/storage/tx/ob_trans_service_v4.cpp	367	ObTransService::handle_tx_commit_result_	switch (result) case OB_EAGAIN	case OB_EAGAIN:
+src/storage/tx/ob_trans_service_v4.cpp	368	ObTransService::handle_tx_commit_result_	switch (result) case OB_BLOCK_FROZEN	case OB_BLOCK_FROZEN:
+src/storage/tx/ob_trans_service_v4.cpp	375	ObTransService::handle_tx_commit_result_	other variable result == OB_EAGAIN	const int64_t max_delay = OB_EAGAIN == result ? 300 * 1000 : INT64_MAX;
+src/storage/tx/ob_trans_service_v4.cpp	383	ObTransService::handle_tx_commit_result_	switch (result) case OB_TRANS_COMMITED	case OB_TRANS_COMMITED:
+src/storage/tx/ob_trans_service_v4.cpp	389	ObTransService::handle_tx_commit_result_	switch (result) case OB_TRANS_KILLED	case OB_TRANS_KILLED:
+src/storage/tx/ob_trans_service_v4.cpp	390	ObTransService::handle_tx_commit_result_	switch (result) case OB_TRANS_ROLLBACKED	case OB_TRANS_ROLLBACKED:
+src/storage/tx/ob_trans_service_v4.cpp	394	ObTransService::handle_tx_commit_result_	switch (result) case OB_TRANS_TIMEOUT	case OB_TRANS_TIMEOUT:
+src/storage/tx/ob_trans_service_v4.cpp	395	ObTransService::handle_tx_commit_result_	switch (result) case OB_TRANS_STMT_TIMEOUT	case OB_TRANS_STMT_TIMEOUT:
+src/storage/tx/ob_trans_service_v4.cpp	399	ObTransService::handle_tx_commit_result_	switch (result) case OB_TRANS_UNKNOWN	case OB_TRANS_UNKNOWN:
+src/storage/tx/ob_trans_service_v4.cpp	403	ObTransService::handle_tx_commit_result_	switch (result) case OB_TRANS_CTX_NOT_EXIST	case OB_TRANS_CTX_NOT_EXIST:
+src/storage/tx/ob_trans_service_v4.cpp	438	ObTransService::handle_tx_commit_result_	other variable result != OB_TRANS_COMMITED	|| (OB_SUCCESS != result && OB_TRANS_COMMITED != result)
+src/storage/tx/ob_trans_service_v4.cpp	556	ObTransService::report_write_ctx_status	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/storage/tx/ob_trans_service_v4.cpp	573	ObTransService::report_write_ctx_status	other variable status == OB_TRANS_KILLED	if (OB_TRANS_KILLED == status)  {
+src/storage/tx/ob_trans_service_v4.cpp	624	ObTransService::get_read_store_ctx	ret == OB_TRANS_CTX_NOT_EXIST	if (OB_TRANS_CTX_NOT_EXIST == ret && !exist) {
+src/storage/tx/ob_trans_service_v4.cpp	793	ObTransService::acquire_tx_ctx	ret == OB_TRANS_CTX_NOT_EXIST	if (ret == OB_TRANS_CTX_NOT_EXIST) {
+src/storage/tx/ob_trans_service_v4.cpp	942	ObTransService::validate_snapshot_version_	ret == OB_EAGAIN	if (ret == OB_EAGAIN) {
+src/storage/tx/ob_trans_service_v4.cpp	957	ObTransService::validate_snapshot_version_	ret == OB_EAGAIN	} while (ret == OB_EAGAIN);
+src/storage/tx/ob_trans_service_v4.cpp	1005	ObTransService::sync_acquire_local_snapshot_	ret == OB_GTS_NOT_READY	if (OB_GTS_NOT_READY == ret) {
+src/storage/tx/ob_trans_service_v4.cpp	1020	ObTransService::sync_acquire_local_snapshot_	other variable tx.abort_cause_ == OB_DEAD_LOCK	ret = tx.abort_cause_ == OB_DEAD_LOCK ? OB_DEAD_LOCK : OB_TRANS_KILLED;
+src/storage/tx/ob_trans_service_v4.cpp	1045	ObTransService::acquire_local_snapshot_	ret == OB_EAGAIN	if (OB_EAGAIN == ret) {
+src/storage/tx/ob_trans_service_v4.cpp	1062	ObTransService::acquire_local_snapshot_with_retry_	ret == OB_GTS_NOT_READY	if (OB_GTS_NOT_READY == ret) {
+src/storage/tx/ob_trans_service_v4.cpp	1075	ObTransService::acquire_local_snapshot_with_retry_	ret == OB_TIMEOUT	if (OB_TIMEOUT == ret) {
+src/storage/tx/ob_trans_service_v4.cpp	1122	ObTransService::local_ls_commit_tx_	ret == OB_TRANS_CTX_NOT_EXIST	if (OB_TRANS_CTX_NOT_EXIST == ret) {
+src/storage/tx/ob_trans_service_v4.cpp	1127	ObTransService::local_ls_commit_tx_	ret == OB_TRANS_CTX_NOT_EXIST	if (OB_TRANS_CTX_NOT_EXIST == ret) {
+src/storage/tx/ob_trans_service_v4.cpp	1173	ObTransService::common_retryable_error_	ret == OB_EAGAIN	return (OB_EAGAIN == ret
+src/storage/tx/ob_trans_service_v4.cpp	1174	ObTransService::common_retryable_error_	ret == OB_NEED_RETRY	|| OB_NEED_RETRY == ret
+src/storage/tx/ob_trans_service_v4.cpp	1175	ObTransService::common_retryable_error_	ret == OB_TX_NOLOGCB	|| OB_TX_NOLOGCB == ret
+src/storage/tx/ob_trans_service_v4.cpp	1176	ObTransService::common_retryable_error_	ret == OB_PARTITION_IS_BLOCKED	|| OB_PARTITION_IS_BLOCKED == ret
+src/storage/tx/ob_trans_service_v4.cpp	1205	ObTransService::gen_trans_id	ret == OB_EAGAIN	} else if (OB_EAGAIN == ret) {
+src/storage/tx/ob_trans_service_v4.cpp	1215	ObTransService::gen_trans_id	ret == OB_EAGAIN	} while (OB_EAGAIN == ret);
+src/storage/tx/ob_trans_service_v4.cpp	1225	ObTransService::commit_need_retry_	ret == OB_BLOCK_FROZEN	return OB_BLOCK_FROZEN == ret
+src/storage/tx/ob_trans_timer.cpp	306	ObTransTimer::unregister_timeout_task	ret == OB_TIMER_TASK_HAS_NOT_SCHEDULED	if (OB_TIMER_TASK_HAS_NOT_SCHEDULED == ret) {
+src/storage/tx/ob_ts_mgr.cpp	35	ObTsMgr::get_gts	ret != OB_EAGAIN	if (OB_EAGAIN != ret) {
+src/storage/tx/ob_ts_mgr.cpp	59	ObTsMgr::get_gts_sync	ret == OB_EAGAIN	while (OB_EAGAIN == ret) {
+src/storage/tx/ob_ts_mgr.cpp	62	ObTsMgr::get_gts_sync	ret (assigned in the comparison) == OB_EAGAIN	} else if (OB_EAGAIN == (ret = get_gts(scn))) {
+src/storage/tx/ob_ts_mgr.cpp	73	ObTsMgr::wait_gts_elapse	ret == OB_EAGAIN	while (OB_EAGAIN == ret) {
+src/storage/tx/ob_ts_mgr.cpp	78	ObTsMgr::wait_gts_elapse	ret == OB_EAGAIN	if (OB_EAGAIN == ret) {
+src/storage/tx/ob_tx_api.cpp	309	ObTransService::wait_write_ctx_decided_	ret == OB_TRANS_CTX_NOT_EXIST	if (OB_TRANS_CTX_NOT_EXIST == ret) {
+src/storage/tx/ob_tx_api.cpp	384	ObTransService::rollback_tx	ret == OB_TRANS_CTX_NOT_EXIST	if (OB_TRANS_CTX_NOT_EXIST == ret) {
+src/storage/tx/ob_tx_api.cpp	495	ObTransService::commit_tx	ret == OB_TIMEOUT	ret = ret == OB_TIMEOUT ? OB_TRANS_STMT_TIMEOUT : ret;
+src/storage/tx/ob_tx_api.cpp	835	ObTransService::register_tx_snapshot_verify	ret != OB_ENTRY_NOT_EXIST	} else if (ret != OB_ENTRY_NOT_EXIST) {
+src/storage/tx/ob_tx_api.cpp	1187	ObTransService::sync_rollback_to_savepoint_	ret == OB_NEED_RETRY; ret == OB_EAGAIN; ret == OB_TX_NOLOGCB	if ((OB_NEED_RETRY == ret || OB_EAGAIN == ret || OB_TX_NOLOGCB == ret) && blockable) {
+src/storage/tx/ob_tx_api.cpp	1199	ObTransService::sync_rollback_to_savepoint_	ret == OB_NEED_RETRY; ret == OB_EAGAIN; ret == OB_TX_NOLOGCB	} while ((OB_NEED_RETRY == ret || OB_EAGAIN == ret || OB_TX_NOLOGCB == ret) && blockable);
+src/storage/tx/ob_tx_api.cpp	1451	ObTransService::rollback_savepoint_	ret == OB_TIMEOUT	if (OB_TIMEOUT == ret && ObTimeUtility::current_time() >= tx.get_expire_ts()) {
+src/storage/tx/ob_tx_api.cpp	1480	ObTransService::rollback_tx_to_savepoint_	ret == OB_TRANS_CTX_NOT_EXIST	if (OB_TRANS_CTX_NOT_EXIST == ret) {
+src/storage/tx/ob_tx_api.cpp	1484	ObTransService::rollback_tx_to_savepoint_	ret == OB_TRANS_CTX_NOT_EXIST	if (OB_TRANS_CTX_NOT_EXIST == ret) {

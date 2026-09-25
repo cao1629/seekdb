@@ -1,0 +1,50 @@
+file	line	symbol	construct	text
+src/storage/memtable/mvcc/ob_keybtree.h	267	ObKeyBtree::WriteHandle	Handle alias of WriteHandle<BtreeKey, BtreeVal>	typedef WriteHandle<BtreeKey, BtreeVal> WriteHandle;
+src/storage/memtable/mvcc/ob_keybtree.h	268	ObKeyBtree::ScanHandle	Handle alias of ScanHandle<BtreeKey, BtreeVal>	typedef ScanHandle<BtreeKey, BtreeVal> ScanHandle;
+src/storage/memtable/mvcc/ob_keybtree.h	269	ObKeyBtree::GetHandle	Handle alias of GetHandle<BtreeKey, BtreeVal>	typedef GetHandle<BtreeKey, BtreeVal> GetHandle;
+src/storage/memtable/mvcc/ob_keybtree_deps.h	66	RWLock::set_spin	reference-count change: ATOMIC_AAF on read_ref_	void set_spin() { UNUSED(ATOMIC_AAF(&read_ref_, 1)); }
+src/storage/memtable/mvcc/ob_keybtree_deps.h	95	RWLock::rdunlock	reference-count change: ATOMIC_FAA on read_ref_	void rdunlock() { UNUSED(ATOMIC_FAA(&read_ref_, -2)); }
+src/storage/memtable/mvcc/ob_keybtree_deps.h	407	BaseHandle	Handle class definition	class BaseHandle
+src/storage/memtable/mvcc/ob_keybtree_deps.h	413	BaseHandle::~BaseHandle	release_ref call (other name)	~BaseHandle() { release_ref(); }
+src/storage/memtable/mvcc/ob_keybtree_deps.h	415	BaseHandle	acquire_ref declaration (other name)	int acquire_ref();
+src/storage/memtable/mvcc/ob_keybtree_deps.h	416	BaseHandle::release_ref	release_ref definition (other name)	void release_ref()
+src/storage/memtable/mvcc/ob_keybtree_deps.h	434	GetHandle	Handle class definition : BaseHandle<BtreeKey, BtreeVal>	class GetHandle: public BaseHandle<BtreeKey, BtreeVal>
+src/storage/memtable/mvcc/ob_keybtree_deps.h	437	GetHandle::BaseHandle	Handle alias of BaseHandle<BtreeKey, BtreeVal>	typedef BaseHandle<BtreeKey, BtreeVal> BaseHandle;
+src/storage/memtable/mvcc/ob_keybtree_deps.h	447	ScanHandle	Handle class definition : BaseHandle<BtreeKey, BtreeVal>	class ScanHandle: public BaseHandle<BtreeKey, BtreeVal>
+src/storage/memtable/mvcc/ob_keybtree_deps.h	450	ScanHandle::BaseHandle	Handle alias of BaseHandle<BtreeKey, BtreeVal>	typedef BaseHandle<BtreeKey, BtreeVal> BaseHandle;
+src/storage/memtable/mvcc/ob_keybtree_deps.h	461	ScanHandle::reset	release_ref call (other name)	this->release_ref();
+src/storage/memtable/mvcc/ob_keybtree_deps.h	482	WriteHandle	Handle class definition : BaseHandle<BtreeKey, BtreeVal>	class WriteHandle: public BaseHandle<BtreeKey, BtreeVal>
+src/storage/memtable/mvcc/ob_keybtree_deps.h	485	WriteHandle::BaseHandle	Handle alias of BaseHandle<BtreeKey, BtreeVal>	typedef BaseHandle<BtreeKey, BtreeVal> BaseHandle;
+src/storage/memtable/mvcc/ob_keybtree_deps.h	591	Iterator::ScanHandle	Handle alias of ScanHandle<BtreeKey, BtreeVal>	typedef ScanHandle<BtreeKey, BtreeVal> ScanHandle;
+src/storage/memtable/mvcc/ob_mvcc_ctx.h	254	ObMvccWriteGuard	Guard class definition whose methods reach acquire_ctx_ref_ through other functions (ObMvccWriteGuard::~ObMvccWriteGuard > ObTxCtx::submit_redo_after_write > ObTxRedoSubmitter::parallel_submit > ObTxRedoSubmitter::_submit_redo_pipeline_ > ObTxRedoSubmitter::submit_log_block_out_ > ObTxCtx::submit_redo_log_out > acquire_ctx_ref_)	class ObMvccWriteGuard
+src/storage/memtable/ob_memtable.cpp	2778	ObMemtable::dec_write_ref	dec_write_ref definition (other name)	int64_t ObMemtable::dec_write_ref()
+src/storage/memtable/ob_memtable.cpp	2793	ObMemtable::dec_write_ref	dec_write_ref_ call (other name)	int64_t old_write_ref_cnt = dec_write_ref_();
+src/storage/memtable/ob_memtable.h	202	ObMemtable	dec_write_ref declaration (other name)	virtual int64_t dec_write_ref() override;
+src/storage/memtable/ob_memtable_context.cpp	199	ObMemtableCtx::inc_ref	inc_ref definition	void ObMemtableCtx::inc_ref()
+src/storage/memtable/ob_memtable_context.cpp	204	ObMemtableCtx::dec_ref	dec_ref definition	void ObMemtableCtx::dec_ref()
+src/storage/memtable/ob_memtable_context.h	335	ObMemtableCtx	inc_ref declaration	virtual void inc_ref();
+src/storage/memtable/ob_memtable_context.h	336	ObMemtableCtx	dec_ref declaration	virtual void dec_ref();
+src/storage/memtable/ob_memtable_interface.h	51	ObIMemtableCtx	inc_ref declaration	virtual void inc_ref() = 0;
+src/storage/memtable/ob_memtable_interface.h	52	ObIMemtableCtx	dec_ref declaration	virtual void dec_ref() = 0;
+src/storage/memtable/ob_memtable_interface.h	146	ObIMemtable::inc_write_ref	inc_write_ref definition (other name)	virtual int64_t inc_write_ref() { return OB_INVALID_COUNT; }
+src/storage/memtable/ob_memtable_interface.h	147	ObIMemtable::dec_write_ref	dec_write_ref definition (other name)	virtual int64_t dec_write_ref() { return OB_INVALID_COUNT; }
+src/storage/memtable/ob_memtable_interface.h	178	ObIMemtable::dec_ref	dec_ref definition; dec_ref call	virtual int64_t dec_ref() { return ObITable::dec_ref(); }
+src/storage/meta_mem/ob_meta_obj_struct.h	159	ObMetaObjGuard	Guard class definition whose methods call dec_ref, inc_ref	class ObMetaObjGuard
+src/storage/meta_mem/ob_meta_obj_struct.h	258	ObMetaObjGuard::set_obj	inc_ref call	obj_->inc_ref();
+src/storage/meta_mem/ob_meta_obj_struct.h	278	ObMetaObjGuard::set_obj	inc_ref call	obj_->inc_ref();
+src/storage/meta_mem/ob_meta_obj_struct.h	323	operator=	inc_ref call	other.obj_->inc_ref();
+src/storage/meta_mem/ob_meta_obj_struct.h	362	ObMetaObjGuard::reset_obj	dec_ref call	const int64_t ref_cnt = obj_->dec_ref();
+src/storage/meta_mem/ob_storage_meta_cache.cpp	290	ObStorageMetaValueHandle::new_value	inc_ref call	cache_value_->inc_ref();
+src/storage/meta_mem/ob_storage_meta_cache.cpp	305	ObStorageMetaValueHandle::set_cache_value	inc_ref call	value->inc_ref();
+src/storage/meta_mem/ob_storage_meta_cache.cpp	319	ObStorageMetaValueHandle::reset	dec_ref call	} else if (0 == cache_value_->dec_ref()) {
+src/storage/meta_mem/ob_storage_meta_cache.h	135	ObStorageMetaCacheValue::inc_ref	inc_ref definition	void inc_ref() { ATOMIC_INC(&ref_cnt_); }
+src/storage/meta_mem/ob_storage_meta_cache.h	136	ObStorageMetaCacheValue::dec_ref	dec_ref definition	int64_t dec_ref() { return ATOMIC_SAF(&ref_cnt_, 1); }
+src/storage/meta_mem/ob_storage_meta_cache.h	144	ObStorageMetaValueHandle	Handle class definition	class ObStorageMetaValueHandle final
+src/storage/meta_mem/ob_storage_meta_cache.h	167	ObStorageMetaHandle	Handle class definition	class ObStorageMetaHandle final
+src/storage/meta_mem/ob_storage_meta_mem_mgr.cpp	686	ObStorageMetaMemMgr::push_tablet_into_gc_queue	release_tablet call (reference-count function found by its body)	release_tablet(tablet, false/*return tablet buffer ptr after release*/);
+src/storage/meta_mem/ob_storage_meta_mem_mgr.cpp	728	ObStorageMetaMemMgr::gc_tablets_in_queue	release_tablet call (reference-count function found by its body)	release_tablet(tablet, false/* return tablet buffer ptr after release*/);
+src/storage/meta_mem/ob_storage_meta_mem_mgr.cpp	768	ObStorageMetaMemMgr::release_tablet	release_tablet definition (reference-count function found by its body: calls dec_macro_ref_cnt)	void *ObStorageMetaMemMgr::release_tablet(ObTablet *tablet, const bool return_buf_ptr_after_release)
+src/storage/meta_mem/ob_storage_meta_mem_mgr.cpp	771	ObStorageMetaMemMgr::release_tablet	dec_macro_ref_cnt call (other name) [on-disk block reference]	tablet->dec_macro_ref_cnt();
+src/storage/meta_mem/ob_storage_meta_mem_mgr.cpp	2156	ObStorageMetaMemMgr::try_wash_tablet_from_gc_queue	release_tablet call (reference-count function found by its body)	free_obj = release_tablet(tablet, true/*return tablet buffer ptr after release*/);
+src/storage/meta_mem/ob_storage_meta_mem_mgr.cpp	2158	ObStorageMetaMemMgr::try_wash_tablet_from_gc_queue	release_tablet call (reference-count function found by its body)	release_tablet(tablet, false/*return tablet buffer ptr after release*/);
+src/storage/meta_mem/ob_storage_meta_mem_mgr.h	458	ObStorageMetaMemMgr	release_tablet declaration (reference-count function found by its body)	void *release_tablet(ObTablet *tablet, const bool return_buf_ptr_after_release);

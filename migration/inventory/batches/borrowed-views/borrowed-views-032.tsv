@@ -1,0 +1,53 @@
+file	line	symbol	construct	text
+src/sql/engine/expr/ob_expr_reverse.cpp	37	ObExprReverse::do_reverse	allocator in, arena view out: ObString &res_str	int ObExprReverse::do_reverse(const ObString &input_str,
+src/sql/engine/expr/ob_expr_soundex.cpp	228	ObExprSoundex::calc	allocator in, arena view out: ObString &out	int ObExprSoundex::calc(const ObString &input, const ObCollationType intput_cs_type,
+src/sql/engine/expr/ob_expr_soundex.cpp	263	ObExprSoundex::calc_text	allocator in, arena view out: ObString &out	int ObExprSoundex::calc_text(const ObDatum &input_datum,
+src/sql/engine/expr/ob_expr_sql_udt_utils.cpp	47	ObSqlUdtUtils::convert_result_for_client	allocator in, arena view out: ObObj &value	int ObSqlUdtUtils::convert_result_for_client(ObObj &value,
+src/sql/engine/expr/ob_expr_sql_udt_utils.cpp	257	ObSqlUdtUtils::convert_sql_udt_to_string	allocator in, arena view out: ObObj &sql_udt_obj	int ObSqlUdtUtils::convert_sql_udt_to_string(ObObj &sql_udt_obj,
+src/sql/engine/expr/ob_expr_sql_udt_utils.cpp	268	ObSqlUdtUtils::convert_collection_to_string	allocator in, arena view out: ObObj &coll_obj	int ObSqlUdtUtils::convert_collection_to_string(ObExecContext &exec_ctx,
+src/sql/engine/expr/ob_expr_sql_udt_utils.h	72	ObSqlUdtNullBitMap::bitmap_	member raw bytes (pointer) of type char *	char *bitmap_;
+src/sql/engine/expr/ob_expr_st_astext.cpp	182	ObExprSTAsText::to_wkt	allocator in, arena view out: ObString &res_wkt	int ObExprSTAsText::to_wkt(ObIAllocator &allocator, ObGeometry *geo, ObString &res_wkt, const char *func_name)
+src/sql/engine/expr/ob_expr_st_geomfromewkb.cpp	230	ObExprPrivSTGeomFromEWKB::create_geo_by_ewkb	allocator in, arena view out: ObString &ewkb	int ObExprPrivSTGeomFromEWKB::create_geo_by_ewkb(ObIAllocator &allocator,
+src/sql/engine/expr/ob_expr_statement_digest.cpp	33	calc_digest_text_inner	allocator in, arena view out: ObString &digest_str	int calc_digest_text_inner(const ObString &query,
+src/sql/engine/expr/ob_expr_statement_digest.cpp	79	calc_digest_text	allocator in, arena view out: ObString &digest_str	int calc_digest_text(ObIAllocator &allocator,
+src/sql/engine/expr/ob_expr_substrb.cpp	49	ObExprSubstrb::calc	allocator in, arena view out: ObString &res_str	int ObExprSubstrb::calc(ObString &res_str, const ObString &text,
+src/sql/engine/expr/ob_expr_to_outfile_row.h	46	ObExprOutFileInfo::field_	member ObObj (value) of type common::ObObj	common::ObObj field_;
+src/sql/engine/expr/ob_expr_to_outfile_row.h	47	ObExprOutFileInfo::line_	member ObObj (value) of type common::ObObj	common::ObObj line_;
+src/sql/engine/expr/ob_expr_to_outfile_row.h	48	ObExprOutFileInfo::enclose_	member ObObj (value) of type common::ObObj	common::ObObj enclose_;
+src/sql/engine/expr/ob_expr_to_outfile_row.h	49	ObExprOutFileInfo::escape_	member ObObj (value) of type common::ObObj	common::ObObj escape_;
+src/sql/engine/expr/ob_expr_to_outfile_row.h	57	ObExprOutFileInfo::tmp_buf_	member raw bytes (pointer) of type char *	char *tmp_buf_;
+src/sql/engine/expr/ob_expr_to_outfile_row.h	59	ObExprOutFileInfo::buf_	member raw bytes (pointer) of type char *	char *buf_;
+src/sql/engine/expr/ob_expr_to_pinyin.cpp	90	convert_word_to_pinyin	allocator in, arena view returned: ObString	ObString convert_word_to_pinyin(ObIAllocator &alloc, ObString input) {
+src/sql/engine/expr/ob_expr_to_pinyin_tab.h	31	PinyinPair::pinyin	member ObString (value) of type ObString	ObString pinyin;
+src/sql/engine/expr/ob_expr_tokenize.h	72	ObExprTokenize::TokenizeParam::parser_name_	member ObString (value) of type ObString	ObString parser_name_;
+src/sql/engine/expr/ob_expr_tokenize.h	73	ObExprTokenize::TokenizeParam::properties_	member ObString (value) of type ObString	ObString properties_;
+src/sql/engine/expr/ob_expr_tokenize.h	75	ObExprTokenize::TokenizeParam::fulltext_	member ObString (value) of type ObString	ObString fulltext_;
+src/sql/engine/expr/ob_expr_trim.cpp	177	ObExprTrim::trim2	allocator in, arena view out: common::ObString &result	int ObExprTrim::trim2(common::ObString &result,
+src/sql/engine/expr/ob_expr_type_to_str.h	65	ObExprTypeToStr::str_values_	member container of ObString of type common::ObFixedArray<common::ObString, common::ObIAllocator>	common::ObFixedArray<common::ObString, common::ObIAllocator> str_values_;
+src/sql/engine/expr/ob_expr_type_to_str.h	104	ObEnumSetInfo::str_values_	member ObStrValues (value) of type ObStrValues	ObStrValues str_values_;
+src/sql/engine/expr/ob_expr_udf.cpp	147	ObExprUDF::extract_allocator_and_restore_obj	allocator in, arena view out: ObObj &new_obj	int ObExprUDF::extract_allocator_and_restore_obj(const ObObj &obj, ObObj &new_obj, ObIAllocator *&composite_allocator)
+src/sql/engine/expr/ob_expr_udf.cpp	191	ObExprUDF::process_in_params	allocator in, arena view out: ParamStore& iparams	int ObExprUDF::process_in_params(const ObObj *objs_stack,
+src/sql/engine/expr/ob_expr_udf.cpp	274	ObExprUDF::process_out_params	allocator in, arena view out: ParamStore& iparams	int ObExprUDF::process_out_params(const ObObj *objs_stack,
+src/sql/engine/expr/ob_expr_udf.cpp	303	ObExprUDF::process_singal_out_param	allocator in, arena view out: ParamStore& iparams	int ObExprUDF::process_singal_out_param(int64_t i,
+src/sql/engine/expr/ob_expr_udf.cpp	453	ObExprUDF::process_package_out_param	allocator in, arena view out: ParamStore& iparams	int ObExprUDF::process_package_out_param(int64_t idx,
+src/sql/engine/expr/ob_expr_udf.h	103	ObExprUDF::ObExprUDFCtx::params_	member ParamStore (pointer) of type ParamStore*	ParamStore* params_;
+src/sql/engine/expr/ob_expr_update_xml.h	51	ObXmlUpdateNodeInfo::update_str	member ObString (value) of type ObString	ObString update_str;
+src/sql/engine/expr/ob_expr_url_codec.cpp	56	url_decode_process	allocator in, arena view out: char *&output	int url_decode_process(char *input, int64_t len, char *&output, ObIAllocator &alloc,
+src/sql/engine/expr/ob_expr_url_codec.cpp	118	url_encode_process	allocator in, arena view out: char *&output	int url_encode_process(char *input, int64_t len, char *&output, ObIAllocator &alloc,
+src/sql/engine/expr/ob_expr_util.cpp	564	ObExprUtil::convert_string_collation	allocator in, arena view out: ObString &out_str	int ObExprUtil::convert_string_collation(const ObString &in_str,
+src/sql/engine/expr/ob_expr_util.cpp	594	ObExprUtil::convert_string_collation_for_regexp	allocator in, arena view out: ObString &out_str	int ObExprUtil::convert_string_collation_for_regexp(const ObString &in_str,
+src/sql/engine/expr/ob_expr_util.cpp	625	ObExprUtil::deep_copy_str	allocator in, arena view out: ObString &out	int ObExprUtil::deep_copy_str(const ObString &src, ObString &out, ObIAllocator &alloc)
+src/sql/engine/expr/ob_expr_vec_ivf_sq8_data_vector.cpp	88	ObExprVecIVFSQ8DataVector::cal_u8_data_vector	allocator in, arena view out: uint8_t *&res_vec	int ObExprVecIVFSQ8DataVector::cal_u8_data_vector(ObIAllocator &alloc, uint32_t size, float *min_vec, float *step_vec, float *data_vec, uint8_t *&res_vec)
+src/sql/engine/expr/ob_expr_xml_func_helper.cpp	41	ObXMLExprHelper::get_str_from_expr	allocator in, arena view out: ObString &res	int ObXMLExprHelper::get_str_from_expr(const ObExpr *expr,
+src/sql/engine/expr/ob_geo_expr_utils.cpp	531	ObGeoExprUtils::normalize_wkb	allocator in, arena view out: ObString &wkb	int ObGeoExprUtils::normalize_wkb(const ObSrsItem *srs,
+src/sql/engine/expr/ob_geo_expr_utils.cpp	1021	ObGeoExprUtils::expr_prepare_build_geometry	allocator in, arena view out: ObString &wkb	int ObGeoExprUtils::expr_prepare_build_geometry(ObExecContext &exec_ctx,
+src/sql/engine/expr/ob_geo_expr_utils.h	45	ObGeoUnit::name	member raw bytes (pointer) of type const char *	const char *name;
+src/sql/engine/expr/ob_lob_result_materializer.cpp	31	materialize_lob_result	allocator in, arena view out: common::ObObj &value	int materialize_lob_result(common::ObObj &value,
+src/sql/engine/expr/ob_pl_expr_subquery.cpp	265	ObExprOpSubQueryInPl::get_result	allocator in, arena view out: ObObj &result	int ObExprOpSubQueryInPl::get_result(void *result_set,
+src/sql/engine/expr/ob_pl_expr_subquery.h	50	ObExprPlSubQueryInfo::ps_sql_	member ObString (value) of type common::ObString	common::ObString ps_sql_;
+src/sql/engine/expr/ob_pl_expr_subquery.h	53	ObExprPlSubQueryInfo::route_sql_	member ObString (value) of type common::ObString	common::ObString route_sql_;
+src/sql/engine/expr/ob_pl_expr_subquery.h	56	ObExprPlSubQueryInfo::type_info_	member container of ObString of type common::ObSEArray<common::ObString, 4>	common::ObSEArray<common::ObString, 4> type_info_;
+src/sql/engine/expr/ob_pl_expr_subquery.h	113	ObExprOpSubQueryInPl::ps_sql_	member ObString (value) of type common::ObString	common::ObString ps_sql_;
+src/sql/engine/expr/ob_pl_expr_subquery.h	116	ObExprOpSubQueryInPl::route_sql_	member ObString (value) of type common::ObString	common::ObString route_sql_;
+src/sql/engine/expr/ob_pl_expr_subquery.h	120	ObExprOpSubQueryInPl::type_info_	member container of ObString of type common::ObSEArray<common::ObString, 4>	common::ObSEArray<common::ObString, 4> type_info_;
+src/sql/engine/expr/ob_postfix_expression.h	304	ObExpressionCalcStack::stack_	member ObObj (value) of type common::ObObj	common::ObObj stack_[STACK_SIZE];

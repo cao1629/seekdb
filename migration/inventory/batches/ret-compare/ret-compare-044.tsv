@@ -1,0 +1,92 @@
+file	line	symbol	construct	text
+src/sql/resolver/dml/ob_del_upd_resolver.cpp	816	ObDelUpdResolver::set_base_table_for_updatable_view	ret == OB_ERR_NONUPDATEABLE_COLUMN	if (OB_ERR_NONUPDATEABLE_COLUMN == ret) {
+src/sql/resolver/dml/ob_del_upd_resolver.cpp	819	ObDelUpdResolver::set_base_table_for_updatable_view	ret == OB_ERR_NON_INSERTABLE_TABLE	} else if (OB_ERR_NON_INSERTABLE_TABLE == ret) {
+src/sql/resolver/dml/ob_del_upd_resolver.cpp	822	ObDelUpdResolver::set_base_table_for_updatable_view	ret == OB_ERR_NON_UPDATABLE_TABLE	} else if (OB_ERR_NON_UPDATABLE_TABLE == ret) {
+src/sql/resolver/dml/ob_del_upd_resolver.cpp	901	ObDelUpdResolver::set_base_table_for_view	ret == OB_ERR_NON_UPDATABLE_TABLE	if (OB_ERR_NON_UPDATABLE_TABLE == ret) {
+src/sql/resolver/dml/ob_del_upd_resolver.cpp	905	ObDelUpdResolver::set_base_table_for_view	ret == OB_ERR_VIEW_DELETE_MERGE_VIEW	} else if (OB_ERR_VIEW_DELETE_MERGE_VIEW == ret) {
+src/sql/resolver/dml/ob_del_upd_resolver.cpp	951	ObDelUpdResolver::check_same_base_table	ret == OB_ERR_NONUPDATEABLE_COLUMN	if (OB_ERR_NONUPDATEABLE_COLUMN == ret) {
+src/sql/resolver/dml/ob_del_upd_resolver.cpp	954	ObDelUpdResolver::check_same_base_table	ret == OB_ERR_VIEW_MULTIUPDATE	} else if (OB_ERR_VIEW_MULTIUPDATE == ret) {
+src/sql/resolver/dml/ob_del_upd_resolver.cpp	2809	ObDelUpdResolver::check_insert_column_duplicate	ret (assigned in the comparison) == OB_HASH_EXIST	if (OB_HASH_EXIST == (ret = insert_column_ids_.exist_refactored(column_id))) {
+src/sql/resolver/dml/ob_del_upd_resolver.cpp	2812	ObDelUpdResolver::check_insert_column_duplicate	ret != OB_HASH_NOT_EXIST	} else if (OB_HASH_NOT_EXIST != ret) {
+src/sql/resolver/dml/ob_del_upd_resolver.cpp	2982	ObDelUpdResolver::replace_column_ref_for_check_constraint	ret == OB_ENTRY_NOT_EXIST	for(int64_t i = 0; i < N && OB_ENTRY_NOT_EXIST == ret; ++i) {
+src/sql/resolver/dml/ob_delete_resolver.cpp	414	ObDeleteResolver::check_view_deletable	ret == OB_ERR_NON_UPDATABLE_TABLE	if (OB_ERR_NON_UPDATABLE_TABLE == ret) {
+src/sql/resolver/dml/ob_dml_resolver.cpp	2130	ObDMLResolver::try_resolve_sql_symbol	ret == OB_ERR_BAD_FIELD_ERROR	if (OB_ERR_BAD_FIELD_ERROR == ret) {
+src/sql/resolver/dml/ob_dml_resolver.cpp	2161	ObDMLResolver::resolve_qualified_identifier	ret == OB_ERR_BAD_FIELD_ERROR	if (OB_ERR_BAD_FIELD_ERROR == ret && !q_name.access_idents_.empty()) {
+src/sql/resolver/dml/ob_dml_resolver.cpp	2202	ObDMLResolver::report_user_error_msg	ret == OB_ERR_BAD_FIELD_ERROR	if (OB_ERR_BAD_FIELD_ERROR == ret && !q_name.tbl_name_.empty()) {
+src/sql/resolver/dml/ob_dml_resolver.cpp	2220	ObDMLResolver::report_user_error_msg	ret == OB_ERR_BAD_FIELD_ERROR	if (OB_ERR_BAD_FIELD_ERROR == ret) {
+src/sql/resolver/dml/ob_dml_resolver.cpp	2224	ObDMLResolver::report_user_error_msg	ret == OB_NON_UNIQ_ERROR	} else if (OB_NON_UNIQ_ERROR == ret) {
+src/sql/resolver/dml/ob_dml_resolver.cpp	2228	ObDMLResolver::report_user_error_msg	ret == OB_ILLEGAL_REFERENCE	} else if (OB_ILLEGAL_REFERENCE == ret) {
+src/sql/resolver/dml/ob_dml_resolver.cpp	2364	ObDMLResolver::resolve_basic_table_without_cte	ret == OB_TABLE_NOT_EXIST; ret == OB_ERR_BAD_DATABASE	if (OB_TABLE_NOT_EXIST == ret || OB_ERR_BAD_DATABASE == ret) {
+src/sql/resolver/dml/ob_dml_resolver.cpp	2908	ObDMLResolver::transfer_using_to_on_expr	ret == OB_ERR_BAD_FIELD_ERROR	if (OB_ERR_BAD_FIELD_ERROR == ret) {
+src/sql/resolver/dml/ob_dml_resolver.cpp	2911	ObDMLResolver::transfer_using_to_on_expr	ret == OB_NON_UNIQ_ERROR	} else if (OB_NON_UNIQ_ERROR == ret) {
+src/sql/resolver/dml/ob_dml_resolver.cpp	4068	ObDMLResolver::resolve_base_or_alias_table_item_normal	ret == OB_TABLE_NOT_EXIST	if (OB_TABLE_NOT_EXIST == ret &&
+src/sql/resolver/dml/ob_dml_resolver.cpp	4080	ObDMLResolver::resolve_base_or_alias_table_item_normal	ret == OB_TABLE_NOT_EXIST	if (OB_TABLE_NOT_EXIST == ret ||
+src/sql/resolver/dml/ob_dml_resolver.cpp	4269	ObDMLResolver::do_expand_view	ret == OB_TABLE_NOT_EXIST; ret == OB_ERR_BAD_FIELD_ERROR; ret == OB_NON_UNIQ_ERROR	if (OB_TABLE_NOT_EXIST == ret || OB_ERR_BAD_FIELD_ERROR == ret || OB_NON_UNIQ_ERROR == ret) {
+src/sql/resolver/dml/ob_dml_resolver.cpp	4297	ObDMLResolver::do_expand_view	ret != OB_ERR_VIEW_INVALID	if (OB_UNLIKELY(OB_SUCCESS != ret && OB_ERR_VIEW_INVALID != ret)) {
+src/sql/resolver/dml/ob_dml_resolver.cpp	4298	ObDMLResolver::do_expand_view	ret == OB_ERR_VIEW_INVALID	} else if (OB_UNLIKELY(OB_ERR_VIEW_INVALID == ret)) {
+src/sql/resolver/dml/ob_dml_resolver.cpp	4306	ObDMLResolver::do_expand_view	tmp_ret == OB_ERR_TOO_LONG_COLUMN_LENGTH	if (OB_ERR_TOO_LONG_COLUMN_LENGTH == tmp_ret) {
+src/sql/resolver/dml/ob_dml_resolver.cpp	4451	ObDMLResolver::resolve_fk_table_partition_expr	ret == OB_TABLE_NOT_EXIST	if (OB_TABLE_NOT_EXIST == ret) {
+src/sql/resolver/dml/ob_dml_resolver.cpp	4488	ObDMLResolver::resolve_fk_table_partition_expr	ret == OB_ERR_TABLE_EXIST	if (ret == OB_ERR_TABLE_EXIST) {
+src/sql/resolver/dml/ob_dml_resolver.cpp	5008	ObDMLResolver::resolve_all_basic_table_columns	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/sql/resolver/dml/ob_dml_resolver.cpp	5152	ObDMLResolver::resolve_order_clause	ret == OB_ERR_AGGREGATE_ORDER_FOR_UNION	if (OB_ERR_AGGREGATE_ORDER_FOR_UNION == ret) {
+src/sql/resolver/dml/ob_dml_resolver.cpp	5643	ObDMLResolver::resolve_partitions	ret == OB_UNKNOWN_PARTITION	if (OB_UNKNOWN_PARTITION == ret) {
+src/sql/resolver/dml/ob_dml_resolver.cpp	6630	ObDMLResolver::resolve_table_relation_factor_normal	ret != OB_SCHEMA_EAGAIN	if (OB_SCHEMA_EAGAIN != ret) {
+src/sql/resolver/dml/ob_dml_resolver.cpp	6656	ObDMLResolver::check_table_exist_or_not	ret != OB_SCHEMA_EAGAIN	if (OB_SCHEMA_EAGAIN != ret) {
+src/sql/resolver/dml/ob_dml_resolver.cpp	7782	ObDMLResolver::resolve_generated_table_column_item	ret == OB_ERR_BAD_FIELD_ERROR	if (ret == OB_ERR_BAD_FIELD_ERROR) {
+src/sql/resolver/dml/ob_dml_resolver.cpp	8263	ObDMLResolver::resolve_external_name	ret == OB_ERR_SP_UNDECLARED_VAR	if (OB_ERR_SP_UNDECLARED_VAR == ret) {
+src/sql/resolver/dml/ob_dml_resolver.cpp	10638	ObDMLResolver::add_fake_schema	ret == OB_ERR_COLUMN_DUPLICATE	if (OB_ERR_COLUMN_DUPLICATE == ret) {
+src/sql/resolver/dml/ob_dml_resolver.cpp	10730	ObDMLResolver::resolve_basic_table_with_cte	ret == OB_TABLE_NOT_EXIST	if (OB_TABLE_NOT_EXIST == ret && cte_ctx_.is_with_resolver()) {
+src/sql/resolver/dml/ob_dml_resolver.cpp	10896	ObDMLResolver::resolve_with_clause_opt_alias_colnames	ret == OB_HASH_EXIST	if (OB_HASH_EXIST == ret) {
+src/sql/resolver/dml/ob_dml_resolver.cpp	12488	ObDMLResolver::resolve_match_index	ret == OB_ERR_INDEX_KEY_NOT_FOUND	if (OB_ERR_INDEX_KEY_NOT_FOUND == ret) {
+src/sql/resolver/dml/ob_dml_stmt.cpp	1303	ObDMLStmt::set_part_expr_items	ret == OB_ENTRY_EXIST	if (OB_LIKELY(OB_ENTRY_EXIST == ret)) {
+src/sql/resolver/dml/ob_dml_stmt.cpp	2261	ObDMLStmt::add_table_item	ret == OB_ERR_UNKNOWN_TABLE	if (OB_ERR_UNKNOWN_TABLE == ret) {
+src/sql/resolver/dml/ob_dml_stmt.cpp	2289	ObDMLStmt::add_table_item	ret == OB_ERR_UNKNOWN_TABLE	if (OB_ERR_UNKNOWN_TABLE == ret) {
+src/sql/resolver/dml/ob_insert_resolver.cpp	251	ObInsertResolver::process_values_function	ret == OB_ENTRY_NOT_EXIST	for (int64_t i = 0; i < N && OB_ENTRY_NOT_EXIST == ret; i++) {
+src/sql/resolver/dml/ob_insert_resolver.cpp	324	ObInsertResolver::replace_column_ref	ret == OB_ENTRY_NOT_EXIST	for(int64_t i = 0; OB_ENTRY_NOT_EXIST == ret && i < value_row->count(); i++) {
+src/sql/resolver/dml/ob_insert_resolver.cpp	331	ObInsertResolver::replace_column_ref	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/sql/resolver/dml/ob_insert_resolver.cpp	965	ObInsertResolver::resolve_column_ref_expr	ret == OB_ERR_BAD_FIELD_ERROR; ret == OB_ERR_COLUMN_NOT_FOUND	if ((OB_ERR_BAD_FIELD_ERROR == ret || OB_ERR_COLUMN_NOT_FOUND == ret) && sub_select_resolver_ != NULL) {
+src/sql/resolver/dml/ob_insert_resolver.cpp	1156	ObInsertResolver::check_view_insertable	ret == OB_ERR_NON_INSERTABLE_TABLE	if (ret == OB_ERR_NON_INSERTABLE_TABLE) {
+src/sql/resolver/dml/ob_select_resolver.cpp	221	ObSelectResolver::do_resolve_set_query_in_recursive_cte	ret == OB_ERR_NEED_INIT_BRANCH_IN_RECURSIVE_CTE	if (OB_ERR_NEED_INIT_BRANCH_IN_RECURSIVE_CTE == ret && i != n_set_child - 1) {
+src/sql/resolver/dml/ob_select_resolver.cpp	1406	ObSelectResolver::resolve_field_list	ret == OB_EER_WINDOW_NO_REDEFINE_ORDER_BY	if (OB_EER_WINDOW_NO_REDEFINE_ORDER_BY == ret
+src/sql/resolver/dml/ob_select_resolver.cpp	2765	ObSelectResolver::mock_to_named_windows	ret == OB_EER_WINDOW_NO_REDEFINE_ORDER_BY	if (OB_EER_WINDOW_NO_REDEFINE_ORDER_BY == ret && OB_NOT_NULL(win_node->children_[0])) {
+src/sql/resolver/dml/ob_select_resolver.cpp	3182	ObSelectResolver::resolve_column_ref_in_all_namespace	ret == OB_ERR_BAD_FIELD_ERROR	OB_ERR_BAD_FIELD_ERROR == ret && cur_resolver != NULL;
+src/sql/resolver/dml/ob_select_resolver.cpp	3418	ObSelectResolver::resolve_column_ref_alias_first	ret == OB_ERR_BAD_FIELD_ERROR	if (OB_ERR_BAD_FIELD_ERROR == ret) {
+src/sql/resolver/dml/ob_select_resolver.cpp	3471	ObSelectResolver::resolve_column_ref_for_having	ret == OB_ERR_BAD_FIELD_ERROR	if (OB_ERR_BAD_FIELD_ERROR == ret) {
+src/sql/resolver/dml/ob_select_resolver.cpp	3483	ObSelectResolver::resolve_column_ref_for_having	ret == OB_ERR_BAD_FIELD_ERROR	if (OB_ERR_BAD_FIELD_ERROR == ret) {
+src/sql/resolver/dml/ob_select_resolver.cpp	3513	ObSelectResolver::resolve_column_ref_table_first	ret == OB_ERR_BAD_FIELD_ERROR	if (OB_ERR_BAD_FIELD_ERROR == ret) {
+src/sql/resolver/dml/ob_select_resolver.cpp	3517	ObSelectResolver::resolve_column_ref_table_first	ret == OB_NON_UNIQ_ERROR	} else if (OB_NON_UNIQ_ERROR == ret &&
+src/sql/resolver/dml/ob_select_resolver.cpp	3528	ObSelectResolver::resolve_column_ref_table_first	ret == OB_ERR_BAD_FIELD_ERROR; ret == OB_ILLEGAL_REFERENCE	if (OB_ERR_BAD_FIELD_ERROR == ret || OB_ILLEGAL_REFERENCE == ret) {
+src/sql/resolver/dml/ob_select_resolver.cpp	3652	ObSelectResolver::resolve_column_ref_for_subquery	ret == OB_ERR_BAD_FIELD_ERROR	if (OB_ERR_BAD_FIELD_ERROR == ret && resolve_alias_for_subquery_) {
+src/sql/resolver/dml/ob_sql_hint.cpp	428	ObQueryHint::try_add_new_qb_name	ret != OB_HASH_NOT_EXIST	&& OB_UNLIKELY(OB_HASH_NOT_EXIST != ret)) {
+src/sql/resolver/dml/ob_sql_hint.cpp	429	ObQueryHint::try_add_new_qb_name	ret == OB_HASH_NOT_EXIST	} else if (OB_LIKELY(OB_HASH_NOT_EXIST == ret)) {
+src/sql/resolver/dml/ob_sql_hint.cpp	462	ObQueryHint::reset_duplicate_qb_name	ret != OB_HASH_NOT_EXIST	if (OB_UNLIKELY(OB_HASH_NOT_EXIST != ret)) {
+src/sql/resolver/dml/ob_sql_hint.cpp	618	ObQueryHint::print_stmt_hint	ret != OB_HASH_NOT_EXIST	if (OB_UNLIKELY(OB_HASH_NOT_EXIST != ret)) {
+src/sql/resolver/dml/ob_standard_group_checker.cpp	160	ObStandardGroupChecker::check_unsettled_column	ret == OB_ERR_WRONG_FIELD_WITH_GROUP	if (OB_ERR_WRONG_FIELD_WITH_GROUP == ret) {
+src/sql/resolver/dml/ob_stmt_expr_visitor.cpp	130	ObSharedExprChecker::is_shared_expr	tmp_ret == OB_HASH_EXIST	if (OB_HASH_EXIST == tmp_ret) {
+src/sql/resolver/dml/ob_stmt_expr_visitor.cpp	132	ObSharedExprChecker::is_shared_expr	tmp_ret != OB_HASH_NOT_EXIST	} else if (OB_UNLIKELY(OB_HASH_NOT_EXIST != tmp_ret)) {
+src/sql/resolver/dml/ob_stmt_expr_visitor.cpp	154	ObSharedExprChecker::do_visit	ret == OB_HASH_EXIST	if (OB_HASH_EXIST == ret) {
+src/sql/resolver/dml/ob_update_resolver.cpp	438	ObUpdateResolver::check_view_updatable	ret == OB_ERR_NON_UPDATABLE_TABLE	if (OB_ERR_NON_UPDATABLE_TABLE == ret) {
+src/sql/resolver/expr/ob_raw_expr.cpp	381	ObRawExpr::deduce_type	ret != OB_ERR_INVALID_COLUMN_NUM	OB_ERR_INVALID_COLUMN_NUM != ret &&
+src/sql/resolver/expr/ob_raw_expr.cpp	382	ObRawExpr::deduce_type	ret != OB_ERR_TOO_MANY_VALUES	OB_ERR_TOO_MANY_VALUES != ret) {
+src/sql/resolver/expr/ob_raw_expr.cpp	741	ObRawExpr::same_as	ret == OB_SIZE_OVERFLOW	if (OB_SIZE_OVERFLOW == ret) {
+src/sql/resolver/expr/ob_raw_expr.cpp	1303	ObConstRawExpr::get_name_internal	ret == OB_ERR_NULL_VALUE	if (OB_ERR_NULL_VALUE == ret) {
+src/sql/resolver/expr/ob_raw_expr.cpp	1314	ObConstRawExpr::get_name_internal	ret == OB_ERR_NULL_VALUE	if (OB_ERR_NULL_VALUE == ret) {
+src/sql/resolver/expr/ob_raw_expr.cpp	4088	ObSysFunRawExpr::check_param_num	ret == OB_ERR_PARAM_SIZE	if (OB_UNLIKELY(OB_ERR_PARAM_SIZE == ret)) {
+src/sql/resolver/expr/ob_raw_expr.cpp	4111	ObSysFunRawExpr::check_param_num	ret == OB_ERR_PARAM_SIZE	if (OB_UNLIKELY(OB_ERR_PARAM_SIZE == ret)) {
+src/sql/resolver/expr/ob_raw_expr_copier.cpp	117	ObRawExprCopier::find_in_copy_context	call result tmp=new_exprs_.exist_refactored(key) == OB_HASH_EXIST	} else if (OB_HASH_EXIST == (tmp = new_exprs_.exist_refactored(key))) {
+src/sql/resolver/expr/ob_raw_expr_copier.cpp	120	ObRawExprCopier::find_in_copy_context	other variable tmp != OB_HASH_NOT_EXIST	} else if (OB_UNLIKELY(OB_HASH_NOT_EXIST != tmp)) {
+src/sql/resolver/expr/ob_raw_expr_copier.cpp	124	ObRawExprCopier::find_in_copy_context	other variable tmp != OB_HASH_NOT_EXIST	} else if (OB_UNLIKELY(OB_HASH_NOT_EXIST != tmp)) {
+src/sql/resolver/expr/ob_raw_expr_copier.cpp	198	ObRawExprCopier::add_expr	ret != OB_HASH_EXIST	if (OB_UNLIKELY(ret != OB_HASH_EXIST)) {
+src/sql/resolver/expr/ob_raw_expr_deduce_type.cpp	554	ObRawExprDeduceType::calc_result_type	ret == OB_NOT_IMPLEMENT	if (OB_NOT_IMPLEMENT == ret) {
+src/sql/resolver/expr/ob_raw_expr_deduce_type.cpp	556	ObRawExprDeduceType::calc_result_type	ret == OB_NOT_IMPLEMENT	if (OB_NOT_IMPLEMENT == ret) {
+src/sql/resolver/expr/ob_raw_expr_replacer.cpp	452	ObRawExprReplacer::check_skip_expr	tmp_ret (assigned in the comparison) == OB_HASH_EXIST	} else if (OB_HASH_EXIST == (tmp_ret = to_exprs_.exist_refactored(key))) {
+src/sql/resolver/expr/ob_raw_expr_replacer.cpp	454	ObRawExprReplacer::check_skip_expr	tmp_ret != OB_HASH_NOT_EXIST	} else if (OB_UNLIKELY(OB_HASH_NOT_EXIST != tmp_ret)) {
+src/sql/resolver/expr/ob_raw_expr_replacer.cpp	471	ObRawExprReplacer::check_need_replace	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	940	ObRawExprResolverImpl::do_recursive_resolve	ret != OB_ERR_FUNCTION_UNKNOWN	if (ret != OB_ERR_FUNCTION_UNKNOWN) {
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	5119	ObRawExprResolverImpl::process_fun_sys_node	ret != OB_ERR_FUNCTION_UNKNOWN	if (OB_ERR_FUNCTION_UNKNOWN != ret) {
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	5138	ObRawExprResolverImpl::process_fun_sys_node	ret != OB_ERR_FUNCTION_UNKNOWN	if (OB_ERR_FUNCTION_UNKNOWN != ret) {
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	6501	ObRawExprResolverImpl::process_odbc_time_literals	ret == OB_ERR_WRONG_VALUE	if (ret == OB_ERR_WRONG_VALUE) {//invalid time str, go back default way like Mysql.
+src/sql/resolver/expr/ob_raw_expr_util.cpp	1654	ObRawExprUtils::build_generated_column_expr	ret == OB_ERR_ONLY_PURE_FUNC_CANBE_VIRTUAL_COLUMN_EXPRESSION	if (OB_ERR_ONLY_PURE_FUNC_CANBE_VIRTUAL_COLUMN_EXPRESSION == ret
+src/sql/resolver/expr/ob_raw_expr_util.cpp	1801	ObRawExprUtils::build_generated_column_expr	ret == OB_ERR_ONLY_PURE_FUNC_CANBE_VIRTUAL_COLUMN_EXPRESSION	if (OB_ERR_ONLY_PURE_FUNC_CANBE_VIRTUAL_COLUMN_EXPRESSION == ret
+src/sql/resolver/expr/ob_shared_expr_resolver.cpp	116	ObSharedExprResolver::add_new_instance	ret != OB_HASH_NOT_EXIST	if (OB_UNLIKELY(OB_HASH_NOT_EXIST != ret)) {
+src/sql/resolver/expr/ob_shared_expr_resolver.cpp	211	ObSharedExprResolver::inner_get_shared_expr	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {

@@ -1,0 +1,97 @@
+file	line	symbol	construct	text
+src/sql/engine/set/ob_merge_union_op.cpp	115	ObMergeUnionOp::get_first_row	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/set/ob_merge_union_op.cpp	122	ObMergeUnionOp::get_first_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/set/ob_merge_union_op.cpp	130	ObMergeUnionOp::get_first_row	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/set/ob_merge_union_op.cpp	183	ObMergeUnionOp::get_first_row_vectorize	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/set/ob_merge_union_op.cpp	244	ObMergeUnionOp::distinct_get_next_row	other variable cur_child_err == OB_ITER_END	if (OB_ITER_END == cur_child_err) {
+src/sql/engine/set/ob_merge_union_op.cpp	274	ObMergeUnionOp::distinct_get_next_row	other variable candidate_child_err == OB_ITER_END	if (OB_ITER_END == candidate_child_err) {
+src/sql/engine/set/ob_merge_union_op.cpp	307	ObMergeUnionOp::distinct_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/set/ob_merge_union_op.cpp	348	ObMergeUnionOp::distinct_get_next_batch	other variable candidate_child_err == OB_ITER_END	if (OB_ITER_END == candidate_child_err) {
+src/sql/engine/set/ob_merge_union_op.cpp	369	ObMergeUnionOp::distinct_get_next_batch	other variable cur_child_err == OB_ITER_END	if (OB_ITER_END == cur_child_err) {
+src/sql/engine/set/ob_merge_union_op.cpp	418	ObMergeUnionOp::distinct_get_next_batch	other variable candidate_child_err == OB_ITER_END	if (OB_ITER_END == candidate_child_err) {
+src/sql/engine/set/ob_merge_union_op.cpp	464	ObMergeUnionOp::distinct_get_next_batch	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/set/ob_merge_union_op.cpp	487	ObMergeUnionOp::distinct_get_next_batch	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/set/ob_merge_union_op.cpp	509	ObMergeUnionOp::all_get_next_row	ret == OB_ITER_END	while (OB_ITER_END == ret && next_child_op_idx_ < get_child_cnt()) {
+src/sql/engine/set/ob_merge_union_op.cpp	516	ObMergeUnionOp::all_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/set/ob_merge_union_op.cpp	566	ObMergeUnionOp::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/sort/ob_sort_op.cpp	213	ObSortOp::process_sort	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/sort/ob_sort_op.cpp	226	ObSortOp::process_sort	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/sort/ob_sort_op.cpp	229	ObSortOp::process_sort	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/sort/ob_sort_op.cpp	267	ObSortOp::process_sort_batch	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/sort/ob_sort_op.cpp	297	ObSortOp::scan_all_then_sort	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/sort/ob_sort_op.cpp	306	ObSortOp::scan_all_then_sort	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/sort/ob_sort_op.cpp	317	ObSortOp::scan_all_then_sort	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/sort/ob_sort_op.cpp	360	ObSortOp::scan_all_then_sort_batch	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/sort/ob_sort_op.cpp	372	ObSortOp::scan_all_then_sort_batch	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/sort/ob_sort_op.cpp	467	ObSortOp::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/sort/ob_sort_op.cpp	476	ObSortOp::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/sort/ob_sort_op.h	109	ObSortOp::sort_component_next_batch	ret == OB_ITER_END	if (common::OB_ITER_END == ret) {
+src/sql/engine/sort/ob_sort_op_impl.cpp	956	ObSortOpImpl::build_chunk	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/sort/ob_sort_op_impl.cpp	1550	ObSortOpImpl::do_dump	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/sort/ob_sort_op_impl.cpp	1580	ObSortOpImpl::do_dump	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/sort/ob_sort_op_impl.cpp	1716	ObSortOpImpl::build_ems_heap	ret == OB_ITER_END	if (OB_ITER_END == ret || OB_SUCCESS == ret) {
+src/sql/engine/sort/ob_sort_op_impl.cpp	1773	ObSortOpImpl::ems_heap_next	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/sort/ob_sort_op_impl.cpp	1979	ObSortOpImpl::sort	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/sort/ob_sort_op_impl.cpp	2143	ObSortOpImpl::ems_heap_next_stored_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/sort/ob_sort_op_impl.cpp	2157	ObSortOpImpl::part_heap_next_stored_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/sort/ob_sort_op_impl.cpp	2203	ObSortOpImpl::get_next_batch_stored_rows	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/sort/ob_sort_op_impl.cpp	2220	ObSortOpImpl::get_next_batch_stored_rows	ret == OB_ITER_END	if (OB_ITER_END == ret && !need_rewind_) {
+src/sql/engine/sort/ob_sort_op_impl.cpp	2232	ObSortOpImpl::get_next_batch	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/sort/ob_sort_op_impl.cpp	2823	ObPrefixSortImpl::fetch_rows	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/sort/ob_sort_op_impl.cpp	2879	ObPrefixSortImpl::get_next_row	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/sort/ob_sort_op_impl.cpp	2883	ObPrefixSortImpl::get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/sort/ob_sort_op_impl.cpp	3112	ObPrefixSortImpl::get_next_batch	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/sort/ob_sort_op_impl.cpp	3164	ObUniqueSortImpl::get_next_batch	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/sort/ob_sort_op_impl.cpp	3219	ObUniqueSortImpl::get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/sort/ob_sort_op_impl.cpp	3253	ObUniqueSortImpl::get_next_stored_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/sort/ob_sort_op_impl.h	168	ObChunkStoreWrapper::get_next_row	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/sql/engine/sort/ob_sort_op_impl.h	174	ObChunkStoreWrapper::get_next_row	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/sql/engine/sort/ob_sort_op_impl.h	371	ObSortOpImpl::get_next_row	ret == OB_ITER_END	if (OB_UNLIKELY(common::OB_ITER_END == ret) && !need_rewind_) {
+src/sql/engine/sort/ob_sort_op_impl.h	664	ObSortOpImpl::get_next_row	ret != OB_ITER_END	if (common::OB_ITER_END != ret) {
+src/sql/engine/subquery/ob_subplan_filter_op.cpp	255	ObSubQueryIterator::prepare_init_plan	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/subquery/ob_subplan_filter_op.cpp	325	ObSubQueryIterator::get_refactored	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/sql/engine/subquery/ob_subplan_filter_op.cpp	592	ObSubPlanFilterOp::switch_iterator	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/subquery/ob_subplan_filter_op.cpp	715	ObSubPlanFilterOp::inner_get_next_row	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/subquery/ob_subplan_filter_op.cpp	778	ObSubPlanFilterOp::handle_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/subquery/ob_subplan_filter_op.cpp	801	ObSubPlanFilterOp::handle_next_row	ret == OB_ITER_END	if (OB_SUCC(ret) || (has_row && OB_ITER_END == ret)) {
+src/sql/engine/subquery/ob_subplan_filter_op.cpp	828	ObSubPlanFilterOp::handle_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/subquery/ob_subplan_filter_op.cpp	908	ObSubPlanFilterOp::handle_next_batch_with_px_rescan	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/subquery/ob_subplan_filter_op.cpp	1029	ObSubPlanFilterOp::handle_next_batch_with_group_rescan	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/subquery/ob_subplan_filter_op.cpp	1289	ObSubPlanFilterOp::handle_update_set	ret != OB_ITER_END	} else if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/sql/engine/subquery/ob_subplan_filter_op.cpp	1317	ObSubPlanFilterOp::handle_update_set	ret != OB_ITER_END	} else if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/sql/engine/subquery/ob_subplan_scan_op.cpp	63	ObSubPlanScanOp::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/table/ob_block_sample_scan_op.cpp	44	ObBlockSampleScanOp::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/table/ob_ddl_block_sample_scan_op.cpp	44	ObDDLBlockSampleScanOp::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/table/ob_index_lookup_op_impl.cpp	51	ObIndexLookupOpImpl::get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/table/ob_index_lookup_op_impl.cpp	79	ObIndexLookupOpImpl::get_next_row	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/table/ob_index_lookup_op_impl.cpp	125	ObIndexLookupOpImpl::get_next_rows	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/table/ob_index_lookup_op_impl.cpp	160	ObIndexLookupOpImpl::get_next_rows	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/table/ob_row_sample_scan_op.cpp	44	ObRowSampleScanOp::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/table/ob_table_row_store_op.cpp	132	ObTableRowStoreOp::inner_get_next_row	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/sql/engine/table/ob_table_row_store_op.cpp	142	ObTableRowStoreOp::inner_get_next_row	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/sql/engine/table/ob_table_row_store_op.cpp	158	ObTableRowStoreOp::fetch_stored_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/table/ob_table_scan_op.cpp	1541	ObTableScanOp::do_init_before_get_row	ret != OB_TRY_LOCK_ROW_CONFLICT	if (OB_TRY_LOCK_ROW_CONFLICT != ret) {
+src/sql/engine/table/ob_table_scan_op.cpp	1972	ObTableScanOp::get_next_row_with_das	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/table/ob_table_scan_op.cpp	2028	ObTableScanOp::get_next_batch_with_das	ret == OB_ITER_END	if (OB_ITER_END == ret && count > 0) {
+src/sql/engine/table/ob_table_scan_op.cpp	2032	ObTableScanOp::get_next_batch_with_das	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/table/ob_table_scan_op.cpp	2080	ObTableScanOp::get_next_batch_with_das	ret == OB_ITER_END	if (OB_ITER_END == ret && count > 0) {
+src/sql/engine/table/ob_table_scan_op.cpp	2084	ObTableScanOp::get_next_batch_with_das	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/table/ob_table_scan_op.cpp	2119	ObTableScanOp::inner_get_next_row_implement	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/table/ob_table_scan_op.cpp	2138	ObTableScanOp::inner_get_next_row_for_tsc	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/table/ob_table_scan_op.cpp	2164	ObTableScanOp::inner_get_next_row_for_tsc	ret == OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END == ret && OB_NOT_NULL(scan_iter_) && scan_iter_->has_task())) {
+src/sql/engine/table/ob_table_scan_op.cpp	2236	ObTableScanOp::inner_get_next_batch_for_tsc	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/table/ob_table_scan_op.cpp	2545	ObTableScanOp::get_access_tablet_loc	ret != OB_HASH_NOT_EXIST	if (ret != OB_HASH_NOT_EXIST) {
+src/sql/engine/table/ob_table_scan_op.cpp	2967	ObTableScanOp::inner_get_next_row	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/sql/engine/table/ob_table_scan_op.cpp	2972	ObTableScanOp::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/table/ob_table_scan_op.cpp	2977	ObTableScanOp::inner_get_next_row	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/sql/engine/table/ob_table_scan_op.cpp	2982	ObTableScanOp::inner_get_next_row	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/sql/engine/table/ob_table_scan_op.cpp	2986	ObTableScanOp::inner_get_next_row	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/sql/engine/table/ob_table_scan_op.cpp	3163	ObTableScanOp::inner_get_next_multivalue_index_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/table/ob_table_scan_op.cpp	3443	ObTableScanOp::inner_get_next_spiv_index_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/table/ob_table_scan_op.cpp	3493	ObTableScanOp::inner_get_next_spatial_index_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/table/ob_table_scan_op.cpp	3632	ObTableScanOp::inner_get_next_fts_index_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/table/ob_table_scan_op.cpp	3634	ObTableScanOp::inner_get_next_fts_index_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/table/ob_table_scan_op.cpp	3637	ObTableScanOp::inner_get_next_fts_index_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/table/ob_table_scan_op.cpp	3657	ObTableScanOp::fetch_next_fts_index_rows	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/table/ob_table_scan_op.cpp	3676	ObTableScanOp::fetch_next_fts_index_rows	ret != OB_ITER_END	} else if (OB_FAIL(fts_index_.segment(ft_expr->obj_meta_, *doc_id_datum, ft)) &&OB_ITER_END != ret) {
+src/sql/engine/table/ob_table_scan_op.cpp	3677	ObTableScanOp::fetch_next_fts_index_rows	ret == OB_ITER_END	} else if (OB_ITER_END == ret) {

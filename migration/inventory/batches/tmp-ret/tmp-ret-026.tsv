@@ -1,0 +1,81 @@
+file	line	symbol	construct	text
+src/storage/meta_mem/ob_storage_meta_mem_mgr.cpp	418	ObStorageMetaMemMgr::gc_tables_in_queue	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/meta_mem/ob_storage_meta_mem_mgr.cpp	463	ObStorageMetaMemMgr::gc_tables_in_queue	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(free_tables_queue_.push(item))) {
+src/storage/meta_mem/ob_storage_meta_mem_mgr.cpp	469	ObStorageMetaMemMgr::gc_tables_in_queue	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(free_tables_queue_.push(item))) {
+src/storage/meta_mem/ob_storage_meta_mem_mgr.cpp	570	ObStorageMetaMemMgr::prepare_gc_memtable_set_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/meta_mem/ob_storage_meta_mem_mgr.cpp	571	ObStorageMetaMemMgr::prepare_gc_memtable_set_	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(tmp_memtable_set->destroy())) {
+src/storage/meta_mem/ob_storage_meta_mem_mgr.cpp	587	ObStorageMetaMemMgr::batch_gc_memtable_set_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/meta_mem/ob_storage_meta_mem_mgr.cpp	591	ObStorageMetaMemMgr::batch_gc_memtable_set_	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(ObMemtable::batch_remove_unused_callback_for_uncommited_txn(memtable_set))) {
+src/storage/meta_mem/ob_storage_meta_mem_mgr.cpp	600	ObStorageMetaMemMgr::batch_gc_memtable_set_	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(push_table_into_gc_queue((ObITable *)(set_iter->first), ObITable::TableType::DATA_MEMTABLE))) {
+src/storage/meta_mem/ob_storage_meta_mem_mgr.cpp	605	ObStorageMetaMemMgr::batch_gc_memtable_set_	OB_TMP_FAIL (plan definition)	while (OB_TMP_FAIL(memtable_set->clear())) {
+src/storage/meta_mem/ob_storage_meta_mem_mgr.cpp	620	ObStorageMetaMemMgr::batch_gc_memtable_set_	OB_TMP_FAIL (plan definition)	while (OB_TMP_FAIL(memtable_set->clear())) {
+src/storage/meta_mem/ob_storage_meta_mem_mgr.cpp	632	ObStorageMetaMemMgr::batch_gc_memtable_set_	OB_TMP_FAIL (plan definition)	while (OB_TMP_FAIL(memtable_set->clear())) {
+src/storage/meta_mem/ob_storage_meta_mem_mgr.cpp	1397	ObStorageMetaMemMgr::create_tablet	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/meta_mem/ob_storage_meta_mem_mgr.cpp	1399	ObStorageMetaMemMgr::create_tablet	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(tablet_map_.erase(key, handle))) {
+src/storage/meta_mem/ob_storage_meta_mem_mgr.cpp	1718	ObStorageMetaMemMgr::push_tablet_pointer_to_fly_map_if_need_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/meta_mem/ob_storage_meta_mem_mgr.cpp	1720	ObStorageMetaMemMgr::push_tablet_pointer_to_fly_map_if_need_	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(flying_tablet_map_.erase(dieing_tablet_key))) {
+src/storage/meta_mem/ob_storage_meta_mem_mgr.cpp	2162	ObStorageMetaMemMgr::try_wash_tablet_from_gc_queue	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/meta_mem/ob_storage_meta_mem_mgr.cpp	2163	ObStorageMetaMemMgr::try_wash_tablet_from_gc_queue	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(inner_push_tablet_into_gc_queue(tablet))) {
+src/storage/meta_mem/ob_tablet_handle.cpp	87	ObTabletHandle::reset	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS; // let tablet finish deconstruct in case some resource can't be released
+src/storage/meta_mem/ob_tablet_handle.cpp	89	ObTabletHandle::reset	assign tmp_ret	tmp_ret = OB_ERR_UNEXPECTED;
+src/storage/meta_mem/ob_tablet_handle.cpp	91	ObTabletHandle::reset	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(t3m_->dec_external_tablet_cnt(obj_->get_tablet_id().id()))) {
+src/storage/meta_mem/ob_tablet_meta_mem_mgr.cpp	413	ObTabletMetaMemMgr::gc_tables_in_queue	declare tmp_ret (plan definition) [not built]	int tmp_ret = OB_SUCCESS;
+src/storage/meta_mem/ob_tablet_meta_mem_mgr.cpp	458	ObTabletMetaMemMgr::gc_tables_in_queue	OB_TMP_FAIL (plan definition) [not built]	if (OB_TMP_FAIL(free_tables_queue_.push(item))) {
+src/storage/meta_mem/ob_tablet_meta_mem_mgr.cpp	465	ObTabletMetaMemMgr::gc_tables_in_queue	OB_TMP_FAIL (plan definition) [not built]	if (OB_TMP_FAIL(free_tables_queue_.push(item))) {
+src/storage/meta_mem/ob_tablet_meta_mem_mgr.cpp	568	ObTabletMetaMemMgr::prepare_gc_memtable_set_	declare tmp_ret (plan definition) [not built]	int tmp_ret = OB_SUCCESS;
+src/storage/meta_mem/ob_tablet_meta_mem_mgr.cpp	569	ObTabletMetaMemMgr::prepare_gc_memtable_set_	OB_TMP_FAIL (plan definition) [not built]	if (OB_TMP_FAIL(tmp_memtable_set->destroy())) {
+src/storage/meta_mem/ob_tablet_meta_mem_mgr.cpp	586	ObTabletMetaMemMgr::batch_gc_memtable_set_	declare tmp_ret (plan definition) [not built]	int tmp_ret = OB_SUCCESS;
+src/storage/meta_mem/ob_tablet_meta_mem_mgr.cpp	590	ObTabletMetaMemMgr::batch_gc_memtable_set_	OB_TMP_FAIL (plan definition) [not built]	if (OB_TMP_FAIL(ObMemtable::batch_remove_unused_callback_for_uncommited_txn(memtable_set))) {
+src/storage/meta_mem/ob_tablet_meta_mem_mgr.cpp	599	ObTabletMetaMemMgr::batch_gc_memtable_set_	OB_TMP_FAIL (plan definition) [not built]	if (OB_TMP_FAIL(push_table_into_gc_queue((ObITable *)(set_iter->first), ObITable::TableType::DATA_MEMTABLE))) {
+src/storage/meta_mem/ob_tablet_meta_mem_mgr.cpp	606	ObTabletMetaMemMgr::batch_gc_memtable_set_	OB_TMP_FAIL (plan definition) [not built]	while (OB_TMP_FAIL(memtable_set->clear())) {
+src/storage/meta_mem/ob_tablet_meta_mem_mgr.cpp	621	ObTabletMetaMemMgr::batch_gc_memtable_set_	OB_TMP_FAIL (plan definition) [not built]	while (OB_TMP_FAIL(memtable_set->clear())) {
+src/storage/meta_mem/ob_tablet_meta_mem_mgr.cpp	633	ObTabletMetaMemMgr::batch_gc_memtable_set_	OB_TMP_FAIL (plan definition) [not built]	while (OB_TMP_FAIL(memtable_set->clear())) {
+src/storage/meta_mem/ob_tablet_meta_mem_mgr.cpp	1403	ObTabletMetaMemMgr::create_tablet	declare tmp_ret (plan definition) [not built]	int tmp_ret = OB_SUCCESS;
+src/storage/meta_mem/ob_tablet_meta_mem_mgr.cpp	1405	ObTabletMetaMemMgr::create_tablet	OB_TMP_FAIL (plan definition) [not built]	if (OB_TMP_FAIL(tablet_map_.erase(key, handle))) {
+src/storage/meta_mem/ob_tablet_meta_mem_mgr.cpp	1726	ObTabletMetaMemMgr::push_tablet_pointer_to_fly_map_if_need_	declare tmp_ret (plan definition) [not built]	int tmp_ret = OB_SUCCESS;
+src/storage/meta_mem/ob_tablet_meta_mem_mgr.cpp	1728	ObTabletMetaMemMgr::push_tablet_pointer_to_fly_map_if_need_	OB_TMP_FAIL (plan definition) [not built]	if (OB_TMP_FAIL(flying_tablet_map_.erase(dieing_tablet_key))) {
+src/storage/meta_mem/ob_tablet_meta_mem_mgr.cpp	2174	ObTabletMetaMemMgr::try_wash_tablet_from_gc_queue	declare tmp_ret (plan definition) [not built]	int tmp_ret = OB_SUCCESS;
+src/storage/meta_mem/ob_tablet_meta_mem_mgr.cpp	2175	ObTabletMetaMemMgr::try_wash_tablet_from_gc_queue	OB_TMP_FAIL (plan definition) [not built]	if (OB_TMP_FAIL(inner_push_tablet_into_gc_queue(tablet))) {
+src/storage/meta_mem/ob_tablet_pointer_map.cpp	343	ObTabletPointerMap::load_and_hook_meta_obj	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/meta_mem/ob_tablet_pointer_map.cpp	344	ObTabletPointerMap::load_and_hook_meta_obj	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(meta_pointer->release_obj(t))) {
+src/storage/meta_mem/ob_tablet_pointer_map.cpp	347	ObTabletPointerMap::load_and_hook_meta_obj	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(ptr_hdl.assign(tmp_ptr_hdl))) {
+src/storage/meta_mem/ob_tablet_pointer_map.cpp	555	ObTabletPointerMap::get_meta_obj_with_external_memory	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/meta_mem/ob_tablet_pointer_map.cpp	556	ObTabletPointerMap::get_meta_obj_with_external_memory	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(ptr_hdl.assign(tmp_ptr_hdl))) {
+src/storage/multi_data_source/mds_row.ipp	413	CheckAndReadOP::operator()	merge OB_ITER_END into ret through if (OB_SUCC(ret)) (continue-and-record through another variable)	ret = OB_ITER_END;// break for_each
+src/storage/multi_data_source/ob_tablet_mds_merge_ctx.cpp	68	ObTabletMdsMinorMergeCtx::get_merge_tables	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/multi_data_source/ob_tablet_mds_merge_ctx.cpp	69	ObTabletMdsMinorMergeCtx::get_merge_tables	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(compaction_filter->init(last_major_snapshot, multi_version_start))) {
+src/storage/multi_data_source/ob_tablet_mds_merge_ctx.cpp	75	ObTabletMdsMinorMergeCtx::get_merge_tables	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(tmp_ret)) {
+src/storage/ob_dml_running_ctx.cpp	253	ObDMLRunningCtx::check_schema_version	declare tmp_ret	int tmp_ret = check_runtime_schema_version(schema_service, table_id, runtime_schema_version);
+src/storage/ob_i_pre_warmer.cpp	28	ObPreWarmerParam::init	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/ob_i_pre_warmer.cpp	42	ObPreWarmerParam::init	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(::oceanbase::share::server_service<::oceanbase::storage::ObTabletStatMgr>()
+src/storage/ob_i_store.cpp	220	ObStoreCtx::get_fork_snapshot_scn	declare tmp_ret	int tmp_ret = fork_snapshot_map_.get_refactored(tablet_id, fork_snapshot_scn);
+src/storage/ob_i_store.cpp	222	ObStoreCtx::get_fork_snapshot_scn	assign tmp_ret	tmp_ret = OB_SUCCESS;
+src/storage/ob_i_store.cpp	224	ObStoreCtx::get_fork_snapshot_scn	merge into ret	ret = tmp_ret;
+src/storage/ob_parallel_external_sort.h	1222	ObExternalSortRound::do_one_run	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/ob_parallel_external_sort.h	1265	ObExternalSortRound::do_one_run	assign tmp_ret	if (common::OB_SUCCESS != (tmp_ret = iters_[i]->clean_up())) {
+src/storage/ob_parallel_external_sort.h	1306	ObExternalSortRound::clean_up	declare tmp_ret (plan definition)	int tmp_ret = common::OB_SUCCESS;
+src/storage/ob_parallel_external_sort.h	1314	ObExternalSortRound::clean_up	assign tmp_ret	if (common::OB_SUCCESS != (tmp_ret = iters_[i]->clean_up())) {
+src/storage/ob_parallel_external_sort.h	1316	ObExternalSortRound::clean_up	merge into ret	ret = (common::OB_SUCCESS == ret) ? tmp_ret : ret;
+src/storage/ob_parallel_external_sort.h	1322	ObExternalSortRound::clean_up	assign tmp_ret	if (common::OB_SUCCESS != (tmp_ret = writer_.sync())) {
+src/storage/ob_parallel_external_sort.h	1324	ObExternalSortRound::clean_up	merge into ret	ret = (common::OB_SUCCESS == ret) ? tmp_ret : ret;
+src/storage/ob_parallel_external_sort.h	1898	ObExternalSort::clean_up	declare tmp_ret (plan definition)	int tmp_ret = common::OB_SUCCESS;
+src/storage/ob_parallel_external_sort.h	1915	ObExternalSort::clean_up	assign tmp_ret	if (sort_rounds_[i].is_inited() && common::OB_SUCCESS != (tmp_ret = sort_rounds_[i].clean_up())) {
+src/storage/ob_storage_schema_recorder.cpp	259	ObStorageSchemaRecorder::get_schema	declare tmp_ret	int tmp_ret = ret;
+src/storage/ob_tablet_autoinc_seq_service.cpp	212	ObTabletAutoincSeqService::batch_get_tablet_autoinc_seq	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/ob_tablet_autoinc_seq_service.cpp	219	ObTabletAutoincSeqService::batch_get_tablet_autoinc_seq	assign tmp_ret	tmp_ret = OB_INVALID_ARGUMENT;
+src/storage/ob_tablet_autoinc_seq_service.cpp	221	ObTabletAutoincSeqService::batch_get_tablet_autoinc_seq	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(ls->get_tablet(src_tablet_id, tablet_handle))) {
+src/storage/ob_tablet_autoinc_seq_service.cpp	224	ObTabletAutoincSeqService::batch_get_tablet_autoinc_seq	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(tablet_handle.get_obj()->get_autoinc_seq(autoinc_seq, allocator))) {
+src/storage/ob_tablet_autoinc_seq_service.cpp	225	ObTabletAutoincSeqService::batch_get_tablet_autoinc_seq	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(autoinc_seq.get_autoinc_seq_value(param.autoinc_seq_))) {
+src/storage/ob_tablet_autoinc_seq_service.cpp	247	ObTabletAutoincSeqService::batch_set_tablet_autoinc_seq	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/ob_tablet_autoinc_seq_service.cpp	252	ObTabletAutoincSeqService::batch_set_tablet_autoinc_seq	assign tmp_ret	tmp_ret = OB_INVALID_ARGUMENT;
+src/storage/ob_tablet_autoinc_seq_service.cpp	254	ObTabletAutoincSeqService::batch_set_tablet_autoinc_seq	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(ls->get_tablet(
+src/storage/ob_tablet_autoinc_seq_service.cpp	259	ObTabletAutoincSeqService::batch_set_tablet_autoinc_seq	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(tablet_handle.get_obj()->update_tablet_autoinc_seq(
+src/storage/ob_tablet_stat_mgr.cpp	456	ObTabletStreamPool::free	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/ob_tablet_stat_mgr.cpp	458	ObTabletStreamPool::free	assign tmp_ret	tmp_ret = OB_NOT_INIT;
+src/storage/ob_tablet_stat_mgr.cpp	711	ObTabletStatMgr::batch_clear_tablet_stat	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/ob_tablet_stat_mgr.cpp	723	ObTabletStatMgr::batch_clear_tablet_stat	assign tmp_ret	tmp_ret = OB_INVALID_ARGUMENT;
+src/storage/ob_tablet_stat_mgr.cpp	725	ObTabletStatMgr::batch_clear_tablet_stat	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(inner_clear_tablet_stat(key))) {
+src/storage/ob_tablet_stat_mgr.cpp	844	ObTabletStatMgr::refresh_queuing_mode	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/ob_tablet_stat_mgr.cpp	901	ObTabletStatMgr::refresh_queuing_mode	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(table_mode_map.set_refactored(table_id, tmp_mode_flag))) {
+src/storage/retrieval/ob_sparse_daat_iter.cpp	62	ObSRMergeCmp::cmp	declare tmp_ret	int tmp_ret = 0;
+src/storage/retrieval/ob_sparse_lookup_iter.cpp	299	ObSRHashLookupIter::load_results	merge OB_ERR_UNEXPECTED into ret (continue-and-record through another variable)	ret = COVER_SUCC(OB_ERR_UNEXPECTED);

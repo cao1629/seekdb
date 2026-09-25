@@ -1,0 +1,97 @@
+file	line	symbol	construct	text
+src/share/interrupt/ob_global_interrupt_call.cpp	140	ObGlobalInterruptManager::register_checker	ret (assigned in the comparison) == OB_HASH_EXIST	if (OB_HASH_EXIST == (ret = map_.set_refactored(tid, checker_node))) {
+src/share/interrupt/ob_global_interrupt_call.cpp	149	ObGlobalInterruptManager::register_checker	ret == OB_HASH_NOT_EXIST	} while (ret == OB_HASH_NOT_EXIST);
+src/share/interrupt/ob_global_interrupt_call.cpp	176	ObGlobalInterruptManager::unregister_checker	ret (assigned in the comparison) == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == (ret = map_.read_atomic(tid, get_node_call))) {
+src/share/interrupt/ob_global_interrupt_call.cpp	216	ObGlobalInterruptManager::interrupt	ret == OB_HASH_NOT_EXIST	ret = ret == OB_HASH_NOT_EXIST ? OB_SUCCESS : ret;
+src/share/interrupt/ob_global_interrupt_call.cpp	236	ObGlobalInterruptManager::interrupt_async	tmp_ret == OB_HASH_NOT_EXIST	tmp_ret = tmp_ret == OB_HASH_NOT_EXIST ? OB_SUCCESS : tmp_ret;
+src/share/io/io_schedule/ob_io_schedule_v2.cpp	32	ObIOScheduler::get_qindex	ret == OB_HASH_NOT_EXIST	if (ret == OB_HASH_NOT_EXIST) {
+src/share/io/io_schedule/ob_io_schedule_v2.cpp	73	ObIOScheduler::schedule_request	ret != OB_EAGAIN	if (OB_EAGAIN != ret) {
+src/share/io/io_schedule/ob_io_schedule_v2.cpp	79	ObIOScheduler::schedule_request	ret == OB_EAGAIN	if (OB_EAGAIN == ret) {
+src/share/io/io_schedule/ob_io_schedule_v2.cpp	85	ObIOScheduler::schedule_request	ret == OB_EAGAIN	} while (OB_EAGAIN == ret
+src/share/io/ob_io_define.cpp	725	ObIOResult::finish	other variable ret_code_.io_ret_ == OB_IO_ERROR	if (OB_UNLIKELY(OB_IO_ERROR == ret_code_.io_ret_)) {
+src/share/io/ob_io_define.cpp	1200	ObIORequest::try_alloc_buf_until_timeout	ret == OB_ALLOCATE_MEMORY_FAILED	if (OB_ALLOCATE_MEMORY_FAILED == ret) {
+src/share/io/ob_io_define.cpp	1452	ObIOHandle::wait	ret == OB_TIMEOUT	if (OB_TIMEOUT == ret) {
+src/share/io/ob_io_define.cpp	1465	ObIOHandle::wait	ret == OB_TIMEOUT	if (OB_TIMEOUT == ret) {
+src/share/io/ob_io_define.cpp	1477	ObIOHandle::wait	ret == OB_TIMEOUT; ret == OB_IO_TIMEOUT	} else if (OB_TIMEOUT == ret || OB_IO_TIMEOUT == ret) {
+src/share/io/ob_io_manager.cpp	276	ObIOManager::pread	ret == OB_TIMEOUT; ret == OB_IO_TIMEOUT	while (OB_SUCC(ret) || OB_TIMEOUT == ret || OB_IO_TIMEOUT == ret) { // wait to die
+src/share/io/ob_io_manager.cpp	278	ObIOManager::pread	ret != OB_DATA_OUT_OF_RANGE	if (OB_DATA_OUT_OF_RANGE != ret) {
+src/share/io/ob_io_manager.cpp	285	ObIOManager::pread	ret == OB_DATA_OUT_OF_RANGE	if (OB_SUCC(ret) || OB_DATA_OUT_OF_RANGE == ret) {
+src/share/io/ob_io_manager.cpp	310	ObIOManager::pwrite	ret == OB_TIMEOUT; ret == OB_IO_TIMEOUT	while (OB_SUCC(ret) || OB_TIMEOUT == ret || OB_IO_TIMEOUT == ret) { // wait to die
+src/share/io/ob_io_manager.cpp	312	ObIOManager::pwrite	ret != OB_DATA_OUT_OF_RANGE	if (OB_DATA_OUT_OF_RANGE != ret) {
+src/share/io/ob_io_manager.cpp	319	ObIOManager::pwrite	ret == OB_DATA_OUT_OF_RANGE	if (OB_SUCC(ret) || OB_DATA_OUT_OF_RANGE == ret) {
+src/share/io/ob_io_manager.cpp	728	ObIOService::alloc_and_init_result	ret == OB_ALLOCATE_MEMORY_FAILED	if (OB_ALLOCATE_MEMORY_FAILED == ret) {
+src/share/io/ob_io_manager.cpp	764	ObIOService::alloc_req_and_result	ret == OB_ALLOCATE_MEMORY_FAILED	if (OB_ALLOCATE_MEMORY_FAILED == ret) {
+src/share/io/ob_io_manager.cpp	846	ObIOService::detect_aio	ret != OB_EAGAIN	if (OB_EAGAIN != ret) {
+src/share/io/ob_io_manager.cpp	943	ObIOService::try_alloc_req_until_timeout	ret == OB_ALLOCATE_MEMORY_FAILED	if (OB_ALLOCATE_MEMORY_FAILED == ret) {
+src/share/io/ob_io_manager.cpp	970	ObIOService::try_alloc_result_until_timeout	ret == OB_ALLOCATE_MEMORY_FAILED	if (OB_ALLOCATE_MEMORY_FAILED == ret) {
+src/share/io/ob_io_struct.cpp	1134	ObSyncIOChannel::submit	ret != OB_EAGAIN	if (OB_EAGAIN != ret) {
+src/share/io/ob_io_struct.cpp	1374	ObDeviceChannel::submit	ret != OB_EAGAIN	if (OB_EAGAIN != ret) {
+src/share/io/ob_io_struct.cpp	1741	ObIOFaultDetector::handle	ret == OB_TIMEOUT; ret == OB_IO_TIMEOUT	if (OB_TIMEOUT == ret || OB_IO_TIMEOUT == ret) {
+src/share/io/ob_io_struct.cpp	1743	ObIOFaultDetector::handle	ret == OB_EAGAIN	} else if (OB_EAGAIN == ret) { //maybe channel is busy, wait and retry
+src/share/io/ob_io_struct.cpp	2042	ObIOTracer::to_string	ret == OB_HASH_EXIST	if (OB_HASH_EXIST == ret) {
+src/share/longops_mgr/ob_longops_mgr.cpp	89	ObLongopsMgr::register_longops	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/share/longops_mgr/ob_longops_mgr.cpp	117	ObLongopsMgr::unregister_longops	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/share/longops_mgr/ob_longops_mgr.cpp	238	ObLongopsIterator::get_next	ret != OB_ENTRY_NOT_EXIST	if (OB_UNLIKELY(OB_ENTRY_NOT_EXIST != ret)) {
+src/share/ob_autoincrement_service.cpp	172	TableNode::alloc_handle	ret == OB_SIZE_OVERFLOW	} else if (OB_SIZE_OVERFLOW == ret) {
+src/share/ob_autoincrement_service.cpp	297	ObAutoincrementService::get_handle	ret (assigned in the comparison) == OB_SIZE_OVERFLOW	if (OB_SIZE_OVERFLOW == (ret = table_node->alloc_handle(handle_allocator_,
+src/share/ob_autoincrement_service.cpp	373	ObAutoincrementService::refresh_local_sync_value	ret (assigned in the comparison) == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == (ret = node_map_.get(key, table_node))) {
+src/share/ob_autoincrement_service.cpp	406	ObAutoincrementService::lock_autoinc_row	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/share/ob_autoincrement_service.cpp	476	ObAutoincrementService::try_lock_autoinc_row	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/share/ob_autoincrement_service.cpp	545	ObAutoincrementService::clear_autoinc_cache	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/share/ob_autoincrement_service.cpp	611	ObAutoincrementService::get_table_node	ret != OB_ENTRY_NOT_EXIST	if (ret != OB_ENTRY_NOT_EXIST) {
+src/share/ob_autoincrement_service.cpp	617	ObAutoincrementService::get_table_node	ret (assigned in the comparison) == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == (ret = node_map_.get(key, table_node))) {
+src/share/ob_autoincrement_service.cpp	671	ObAutoincrementService::alloc_autoinc_try_lock	ret == OB_EAGAIN	if (OB_EAGAIN == ret) {
+src/share/ob_autoincrement_service.cpp	1009	ObAutoincrementService::get_local_sequence_value_	tmp_ret != OB_ENTRY_NOT_EXIST	} else if (OB_ENTRY_NOT_EXIST != tmp_ret) {
+src/share/ob_autoincrement_service.cpp	1186	ObAutoIncInnerTableProxy::next_autoinc_value	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/share/ob_autoincrement_service.cpp	1208	ObAutoIncInnerTableProxy::next_autoinc_value	tmp_ret (assigned in the comparison) != OB_ITER_END	if (OB_ITER_END != (tmp_ret = result->next())) {
+src/share/ob_autoincrement_service.cpp	1301	ObAutoIncInnerTableProxy::get_autoinc_value	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/share/ob_autoincrement_service.cpp	1317	ObAutoIncInnerTableProxy::get_autoinc_value	tmp_ret (assigned in the comparison) != OB_ITER_END	if (OB_ITER_END != (tmp_ret = result->next())) {
+src/share/ob_autoincrement_service.cpp	1392	ObAutoIncInnerTableProxy::get_autoinc_value_in_batch	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/share/ob_autoincrement_service.cpp	1447	ObAutoIncInnerTableProxy::sync_autoinc_value	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/share/ob_autoincrement_service.cpp	1459	ObAutoIncInnerTableProxy::sync_autoinc_value	tmp_ret (assigned in the comparison) != OB_ITER_END	if (OB_ITER_END != (tmp_ret = result->next())) {
+src/share/ob_autoincrement_service.cpp	1572	ObAutoIncInnerTableProxy::read_and_push_inner_table	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/share/ob_autoincrement_service.cpp	1581	ObAutoIncInnerTableProxy::read_and_push_inner_table	tmp_ret (assigned in the comparison) != OB_ITER_END	if (OB_ITER_END != (tmp_ret = result->next())) {
+src/share/ob_core_table_proxy.cpp	72	ObCoreTableProxy::Row::get_int	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/share/ob_core_table_proxy.cpp	100	ObCoreTableProxy::Row::get_uint	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/share/ob_core_table_proxy.cpp	128	ObCoreTableProxy::Row::get_varchar	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/share/ob_core_table_proxy.cpp	159	ObCoreTableProxy::Row::get_timestamp	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/share/ob_core_table_proxy.cpp	183	ObCoreTableProxy::Row::get_bool	ret != OB_ERR_NULL_VALUE	if (OB_ERR_NULL_VALUE != ret) {
+src/share/ob_core_table_proxy.cpp	199	ObCoreTableProxy::Row::get_cell	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/share/ob_core_table_proxy.cpp	272	ObCoreTableProxy::Row::update_cell	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/share/ob_core_table_proxy.cpp	393	ObCoreTableProxy::load	ret != OB_ITER_END	if (OB_SUCCESS != ret && OB_ITER_END != ret) {
+src/share/ob_core_table_proxy.cpp	476	ObCoreTableProxy::get_int	ret != OB_ERR_NULL_VALUE	if (OB_ERR_NULL_VALUE != ret) {
+src/share/ob_core_table_proxy.cpp	492	ObCoreTableProxy::get_uint	ret != OB_ERR_NULL_VALUE	if (OB_ERR_NULL_VALUE != ret) {
+src/share/ob_core_table_proxy.cpp	508	ObCoreTableProxy::get_varchar	ret != OB_ERR_NULL_VALUE	if (OB_ERR_NULL_VALUE != ret) {
+src/share/ob_core_table_proxy.cpp	525	ObCoreTableProxy::get_timestamp	ret != OB_ERR_NULL_VALUE	if (OB_ERR_NULL_VALUE != ret) {
+src/share/ob_core_table_proxy.cpp	804	ObCoreTableProxy::check_row_match	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/share/ob_core_table_proxy.cpp	835	ObCoreTableProxy::execute_incremental_update_sql	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/share/ob_core_table_proxy.cpp	930	ObCoreTableProxy::execute_update_sql	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/share/ob_ddl_checksum.cpp	164	ObDDLChecksumOperator::get_column_checksum	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/share/ob_ddl_checksum.cpp	225	ObDDLChecksumOperator::get_part_column_checksum	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/share/ob_ddl_checksum.cpp	240	ObDDLChecksumOperator::get_part_column_checksum	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/share/ob_ddl_checksum.cpp	251	ObDDLChecksumOperator::get_part_column_checksum	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/share/ob_ddl_checksum.cpp	296	ObDDLChecksumOperator::get_tablet_latest_execution_id	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/share/ob_ddl_checksum.cpp	326	ObDDLChecksumOperator::get_tablet_checksum_status	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/share/ob_ddl_common.cpp	328	ObColumnNameMap::get	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/share/ob_ddl_common.cpp	908	ObDDLUtil::get_ls_host_left_disk_space	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/share/ob_ddl_common.cpp	1139	ObDDLUtil::check_schema_version_refreshed	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/share/ob_ddl_common.cpp	1239	ObDDLUtil::check_table_column_checksum_error	ret != OB_ITER_END	} else if (OB_FAIL(result->next()) && ret != OB_ITER_END ) {
+src/share/ob_ddl_common.cpp	1240	ObDDLUtil::check_table_column_checksum_error	ret == OB_ITER_END	} else if (OB_ITER_END == ret) {
+src/share/ob_ddl_common.cpp	1370	ObCheckTabletDataComplementOp::check_task_inner_sql_session_status	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/share/ob_ddl_common.cpp	1419	ObCheckTabletDataComplementOp::check_tablet_checksum_update_status	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/share/ob_ddl_common.cpp	1538	ObCheckTabletDataComplementOp::check_and_wait_old_complement_task	ret != OB_EAGAIN	if (OB_EAGAIN != ret) {
+src/share/ob_ddl_common.h	413	is_ddl_stmt_packet_retry_err	ret == OB_EAGAIN; ret == OB_SNAPSHOT_DISCARDED; ret == OB_ERR_PARALLEL_DDL_CONFLICT	return OB_EAGAIN == ret || OB_SNAPSHOT_DISCARDED == ret || OB_ERR_PARALLEL_DDL_CONFLICT == ret
+src/share/ob_ddl_common.h	414	is_ddl_stmt_packet_retry_err	ret == OB_TRANS_KILLED; ret == OB_TRANS_ROLLBACKED	|| OB_TRANS_KILLED == ret || OB_TRANS_ROLLBACKED == ret // table lock doesn't support leader switch
+src/share/ob_ddl_common.h	415	is_ddl_stmt_packet_retry_err	ret == OB_PARTITION_IS_BLOCKED	|| OB_PARTITION_IS_BLOCKED == ret // when LS is blocking transaction writes
+src/share/ob_ddl_common.h	416	is_ddl_stmt_packet_retry_err	ret == OB_TRANS_NEED_ROLLBACK	|| OB_TRANS_NEED_ROLLBACK == ret // transaction killed by leader switch
+src/share/ob_ddl_common.h	417	is_ddl_stmt_packet_retry_err	ret == OB_DDL_RESOURCE_NOT_ENOUGH	|| OB_DDL_RESOURCE_NOT_ENOUGH == ret // runtime DDL resource not enough
+src/share/ob_ddl_common.h	565	ObDDLUtil::is_table_lock_retry_ret_code	ret == OB_TRY_LOCK_ROW_CONFLICT; ret == OB_NOT_MASTER; ret == OB_TIMEOUT	return OB_TRY_LOCK_ROW_CONFLICT == ret || OB_NOT_MASTER == ret || OB_TIMEOUT == ret
+src/share/ob_ddl_common.h	566	ObDDLUtil::is_table_lock_retry_ret_code	ret == OB_EAGAIN; ret == OB_LS_LOCATION_LEADER_NOT_EXIST; ret == OB_TRANS_CTX_NOT_EXIST	|| OB_EAGAIN == ret || OB_LS_LOCATION_LEADER_NOT_EXIST == ret || OB_TRANS_CTX_NOT_EXIST == ret;
+src/share/ob_ddl_error_message_table_operator.cpp	133	ObDDLErrorMessageTableOperator::load_ddl_user_error	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/share/ob_ddl_error_message_table_operator.cpp	193	ObDDLErrorMessageTableOperator::get_ddl_error_message	ret == OB_ITER_END	if (OB_LIKELY(OB_ITER_END == ret)) {
+src/share/ob_ddl_error_message_table_operator.cpp	251	ObDDLErrorMessageTableOperator::get_ddl_error_message	ret == OB_ITER_END	if (OB_LIKELY(OB_ITER_END == ret)) {
+src/share/ob_ddl_error_message_table_operator.cpp	311	ObDDLErrorMessageTableOperator::report_ddl_error_message	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/share/ob_ddl_error_message_table_operator.cpp	383	ObDDLErrorMessageTableOperator::build_ddl_error_message	other variable tmp_ret_code == OB_ERR_PRIMARY_KEY_DUPLICATE	if (OB_ERR_PRIMARY_KEY_DUPLICATE == tmp_ret_code) {
+src/share/ob_ddl_error_message_table_operator.cpp	395	ObDDLErrorMessageTableOperator::build_ddl_error_message	other variable tmp_ret_code == OB_ERR_DUPLICATED_UNIQUE_KEY	} else if (OB_ERR_DUPLICATED_UNIQUE_KEY == tmp_ret_code) {    //building a unique index violates the uniqueness constraint
+src/share/ob_ddl_task_executor.cpp	104	ObDDLTaskQueue::push_task	ret == OB_HASH_EXIST	if (common::OB_HASH_EXIST == ret) {
+src/share/ob_ddl_task_executor.cpp	205	ObDDLTaskExecutor::run1	ret == OB_EAGAIN	if (common::OB_EAGAIN == ret) {

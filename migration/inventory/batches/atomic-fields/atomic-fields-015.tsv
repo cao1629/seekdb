@@ -1,0 +1,46 @@
+file	line	symbol	construct	text
+src/sql/engine/join/ob_hash_join_op.h	41	ObHashTableSharedTableInfo::process_cnt_	field int64_t; 14 atomic accesses (ATOMIC_INC 7, ATOMIC_LOAD 7); through functions with an atomic parameter sync_wait; through accessors get_process_cnt	int64_t process_cnt_;
+src/sql/engine/join/ob_hash_join_op.h	42	ObHashTableSharedTableInfo::close_cnt_	field int64_t; 2 atomic accesses (ATOMIC_INC 1, ATOMIC_LOAD 1); through functions with an atomic parameter sync_wait; through accessors get_close_cnt	int64_t close_cnt_;
+src/sql/engine/join/ob_hash_join_op.h	43	ObHashTableSharedTableInfo::init_val_	field int64_t; 5 atomic accesses (ATOMIC_SET 3, ATOMIC_LOAD 2)	int64_t init_val_;
+src/sql/engine/join/ob_hash_join_op.h	44	ObHashTableSharedTableInfo::sync_val_	field int64_t; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_SET 1)	int64_t sync_val_;
+src/sql/engine/join/ob_hash_join_op.h	46	ObHashTableSharedTableInfo::ret_	field int; 1 atomic accesses (ATOMIC_SET 1)	int ret_;
+src/sql/engine/join/ob_hash_join_op.h	48	ObHashTableSharedTableInfo::read_null_in_naaj_	field bool; 4 atomic accesses (ATOMIC_LOAD 2, ATOMIC_SET 2)	bool read_null_in_naaj_;
+src/sql/engine/join/ob_hash_join_op.h	49	ObHashTableSharedTableInfo::non_preserved_side_is_not_empty_	field bool; 4 atomic accesses (ATOMIC_LOAD 2, ATOMIC_SET 2)	bool non_preserved_side_is_not_empty_;
+src/sql/engine/join/ob_hash_join_op.h	51	ObHashTableSharedTableInfo::total_memory_row_count_	field int64_t; 3 atomic accesses (ATOMIC_AAF 1, ATOMIC_LOAD 1, ATOMIC_SET 1)	int64_t total_memory_row_count_;
+src/sql/engine/join/ob_hash_join_op.h	52	ObHashTableSharedTableInfo::total_memory_size_	field int64_t; 3 atomic accesses (ATOMIC_AAF 1, ATOMIC_LOAD 1, ATOMIC_SET 1)	int64_t total_memory_size_;
+src/sql/engine/join/ob_hash_join_op.h	53	ObHashTableSharedTableInfo::open_cnt_	field int64_t; 2 atomic accesses (ATOMIC_INC 1, ATOMIC_LOAD 1); through functions with an atomic parameter sync_wait; through accessors get_open_cnt	int64_t open_cnt_;
+src/sql/engine/join/ob_hash_join_op.h	54	ObHashTableSharedTableInfo::open_ret_	field int; 3 atomic accesses (ATOMIC_LOAD 2, ATOMIC_SET 1)	int open_ret_;
+src/sql/engine/join/ob_hash_join_op.h	342	ObHashJoinOp::HTBucket::val_	field uint64_t; 2 atomic accesses (ATOMIC_BCAS 1, ATOMIC_LOAD 1)	uint64_t val_;
+src/sql/engine/join/ob_hash_join_op.h	345	ObHashJoinOp::HTBucket::stored_row_	field uint64_t; 4 atomic accesses (ATOMIC_BCAS 2, ATOMIC_LOAD 2)	uint64_t stored_row_;
+src/sql/engine/join/ob_hash_join_op.h	600	ObHashJoinOp::PartHashJoinTable::collisions_	field int64_t; 2 atomic accesses (ATOMIC_AAF 2)	int64_t collisions_;
+src/sql/engine/join/ob_hash_join_op.h	601	ObHashJoinOp::PartHashJoinTable::used_buckets_	field int64_t; 2 atomic accesses (ATOMIC_AAF 2)	int64_t used_buckets_;
+src/sql/engine/join/ob_join_filter_op.h	54	SharedJoinFilterConstructor::is_acquired_	field bool; 2 atomic accesses (ATOMIC_CAS 2)	bool is_acquired_{false};
+src/sql/engine/join/ob_join_filter_op.h	64	ObJoinFilterShareInfo::unfinished_count_ptr_	field uint64_t; 1 atomic accesses (ATOMIC_AAF 1); through local references count_ptr	uint64_t unfinished_count_ptr_; // send_filter reference count, initial value is the number of workers
+src/sql/engine/join/ob_join_filter_op.h	66	ObJoinFilterShareInfo::release_ref_ptr_	field uint64_t; 1 atomic accesses (ATOMIC_AAF 1); through local references release_ref_ptr	uint64_t release_ref_ptr_; // Release memory reference count, initial value is the number of workers.
+src/sql/engine/ob_exec_context.h	929	ObExecContext::errcode_	field int; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_STORE 1)	int errcode_;
+src/sql/engine/ob_sql_memory_manager.h	241	ObSqlWorkAreaProfile::profile_data_used_	field int64_t; 4 atomic accesses (ATOMIC_FAA 1, ATOMIC_LOAD 1, ATOMIC_SAF 1, ATOMIC_TAS 1)	int64_t profile_data_used_;
+src/sql/engine/ob_sql_memory_manager.h	242	ObSqlWorkAreaProfile::profile_total_used_	field int64_t; 3 atomic accesses (ATOMIC_FAA 1, ATOMIC_LOAD 1, ATOMIC_TAS 1)	int64_t profile_total_used_;
+src/sql/engine/ob_sql_memory_manager.h	376	ObSqlWorkAreaStat::total_executions_	field int64_t; 1 atomic accesses (ATOMIC_AAF 1)	int64_t total_executions_;      // Each worker counts as one execution
+src/sql/engine/ob_sql_memory_manager.h	377	ObSqlWorkAreaStat::optimal_executions_	field int64_t; 1 atomic accesses (ATOMIC_AAF 1)	int64_t optimal_executions_;    // Full memory execution count
+src/sql/engine/ob_sql_memory_manager.h	378	ObSqlWorkAreaStat::onepass_executions_	field int64_t; 1 atomic accesses (ATOMIC_AAF 1)	int64_t onepass_executions_;    // onepass execution count
+src/sql/engine/ob_sql_memory_manager.h	379	ObSqlWorkAreaStat::multipass_executions_	field int64_t; 1 atomic accesses (ATOMIC_AAF 1)	int64_t multipass_executions_;  // Multipass execution count
+src/sql/engine/ob_sql_memory_manager.h	479	ObSqlMemoryTracker::total_alloc_size_	field int64_t; 2 atomic accesses (ATOMIC_AAF 1, ATOMIC_SAF 1)	int64_t total_alloc_size_;
+src/sql/engine/ob_sql_memory_manager.h	480	ObSqlMemoryTracker::total_dump_size_	field int64_t; 1 atomic accesses (ATOMIC_AAF 1)	int64_t total_dump_size_;
+src/sql/engine/ob_sql_memory_manager.h	535	ObWorkareaHistogram::optimal_executions_	field int64_t; 1 atomic accesses (ATOMIC_AAF 1)	int64_t optimal_executions_;
+src/sql/engine/ob_sql_memory_manager.h	536	ObWorkareaHistogram::onepass_executions_	field int64_t; 1 atomic accesses (ATOMIC_AAF 1)	int64_t onepass_executions_;
+src/sql/engine/ob_sql_memory_manager.h	537	ObWorkareaHistogram::multipass_executions_	field int64_t; 1 atomic accesses (ATOMIC_AAF 1)	int64_t multipass_executions_;
+src/sql/engine/ob_sql_memory_manager.h	538	ObWorkareaHistogram::total_executions_	field int64_t; 1 atomic accesses (ATOMIC_AAF 1)	int64_t total_executions_;
+src/sql/engine/ob_sql_memory_manager.h	778	ObSqlMemoryManager::drift_size_	field int64_t; 4 atomic accesses (ATOMIC_AAF 2, ATOMIC_LOAD 1, ATOMIC_SAF 1)	int64_t drift_size_;
+src/sql/engine/ob_sql_memory_manager.h	779	ObSqlMemoryManager::profile_cnt_	field int64_t; 2 atomic accesses (ATOMIC_DEC 1, ATOMIC_INC 1)	int64_t profile_cnt_;
+src/sql/engine/ob_sql_memory_manager.h	781	ObSqlMemoryManager::global_bound_size_	field int64_t; 1 atomic accesses (ATOMIC_LOAD 1)	int64_t global_bound_size_;
+src/sql/engine/ob_sql_memory_manager.h	787	ObSqlMemoryManager::active_profile_used_	field int64_t; 2 atomic accesses (ATOMIC_FAA 1, ATOMIC_LOAD 1)	int64_t active_profile_used_;
+src/sql/engine/px/datahub/components/ob_dh_init_channel.h	57	ObInitChannelPieceMsg::piece_count_	field int64_t; 1 atomic accesses (ATOMIC_SET 1)	int64_t piece_count_;
+src/sql/engine/px/datahub/ob_dh_msg.h	72	ObDatahubPieceMsg::piece_count_	field uint64_t; 1 atomic accesses (ATOMIC_AAF 1)	uint64_t piece_count_; //record piece count
+src/sql/engine/px/datahub/ob_dh_msg_provider.h	47	ObPxDatahubDataProvider::dh_msg_cnt_	field volatile int64_t; 2 atomic accesses (ATOMIC_AAF 2)	volatile int64_t dh_msg_cnt_;
+src/sql/engine/px/datahub/ob_dh_msg_provider.h	48	ObPxDatahubDataProvider::rescan_cnt_	field volatile int64_t; 2 atomic accesses (ATOMIC_AAF 1, ATOMIC_LOAD 1)	volatile int64_t rescan_cnt_;
+src/sql/engine/px/exchange/ob_px_receive_op.cpp	502	ObPxReceiveOp::send_channel_ready_msg::curr_piece_cnt_ptr	local variable int64_t* in ObPxReceiveOp::send_channel_ready_msg; 3 atomic accesses (ATOMIC_LOAD 2, ATOMIC_AAF 1)	int64_t *curr_piece_cnt_ptr = nullptr;
+src/sql/engine/px/exchange/ob_px_receive_op.h	68	ObPxReceiveOpInput::init_channel_count_	field int64_t; 2 atomic accesses (ATOMIC_AAF 1, ATOMIC_LOAD 1)	int64_t init_channel_count_;
+src/sql/engine/px/ob_dfo.h	922	ObPxTask::state_	volatile field volatile int32_t; no atomic access found	volatile int32_t state_; // set by task thread
+src/sql/engine/px/ob_dfo.h	923	ObPxTask::task_co_id_	volatile field volatile uint64_t; no atomic access found	volatile uint64_t task_co_id_; /* task's coroutine id */
+src/sql/engine/px/ob_granule_iterator_op.h	96	ObGITaskReBalancer::finished_workers_	field int; 4 atomic accesses (ATOMIC_AAF 2, ATOMIC_LOAD 1, ATOMIC_SAF 1)	int finished_workers_{0};
+src/sql/engine/px/ob_granule_iterator_op.h	100	ObGITaskReBalancer::worker_paused_flags_	field bool *; 3 atomic accesses (ATOMIC_STORE 2, ATOMIC_LOAD 1)	bool *worker_paused_flags_{nullptr};

@@ -1,0 +1,37 @@
+file	line	symbol	construct	text
+src/sql/engine/expr/ob_expr_minus.cpp	217	ObExprMinus::minus_int	unchecked: arithmetic on signed value left_i	res.set_int(left_i - right_i);
+src/sql/engine/expr/ob_expr_minus.cpp	218	ObExprMinus::minus_int	check: helper is_int_int_out_of_range	if (OB_UNLIKELY(is_int_int_out_of_range(left_i, right_i, res.get_int()))) {
+src/sql/engine/expr/ob_expr_minus.cpp	219	ObExprMinus::minus_int	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_minus.cpp	232	ObExprMinus::minus_int	unchecked: arithmetic on signed value left_i	res.set_uint64(left_i - right_i);
+src/sql/engine/expr/ob_expr_minus.cpp	233	ObExprMinus::minus_int	check: helper is_int_uint_out_of_range	if (OB_UNLIKELY(is_int_uint_out_of_range(left_i, right_i, res.get_uint64()))) {
+src/sql/engine/expr/ob_expr_minus.cpp	234	ObExprMinus::minus_int	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_minus.cpp	259	ObExprMinus::minus_uint	unchecked: arithmetic on unsigned value left_i	res.set_uint64(left_i - right_i);
+src/sql/engine/expr/ob_expr_minus.cpp	263	ObExprMinus::minus_uint	check: helper is_uint_uint_out_of_range	if (OB_UNLIKELY(is_uint_uint_out_of_range(left_i, right_i, res.get_uint64()))) {
+src/sql/engine/expr/ob_expr_minus.cpp	264	ObExprMinus::minus_uint	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_minus.cpp	277	ObExprMinus::minus_uint	check: helper is_uint_int_out_of_range	if (OB_UNLIKELY(is_uint_int_out_of_range(right_i, left_i, res.get_uint64()))) {
+src/sql/engine/expr/ob_expr_minus.cpp	278	ObExprMinus::minus_uint	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_minus.cpp	374	ObExprMinus::minus_datetime	unchecked: arithmetic on signed value left_i	int64_t round_value = left_i - right_i;
+src/sql/engine/expr/ob_expr_minus.cpp	383	ObExprMinus::minus_datetime	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_minus.cpp	538	ObIntIntBatchMinusRaw::raw_op	unchecked: arithmetic on signed value l	res = l - r;
+src/sql/engine/expr/ob_expr_minus.cpp	544	ObIntIntBatchMinusRaw::raw_check	check: helper is_int_int_out_of_range	if (OB_UNLIKELY(ObExprMinus::is_int_int_out_of_range(l, r, res))) {
+src/sql/engine/expr/ob_expr_minus.cpp	546	ObIntIntBatchMinusRaw::raw_check	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_minus.cpp	575	ObIntUIntBatchMinusRaw::raw_op	unchecked: arithmetic on signed value l	res = l - r;
+src/sql/engine/expr/ob_expr_minus.cpp	581	ObIntUIntBatchMinusRaw::raw_check	check: helper is_int_uint_out_of_range	if (OB_UNLIKELY(ObExprMinus::is_int_uint_out_of_range(l, r, res))) {
+src/sql/engine/expr/ob_expr_minus.cpp	583	ObIntUIntBatchMinusRaw::raw_check	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_minus.cpp	611	ObUIntUIntBatchMinusRaw::raw_op	unchecked: arithmetic on unsigned value l	res = l - r;
+src/sql/engine/expr/ob_expr_minus.cpp	617	ObUIntUIntBatchMinusRaw::raw_check	check: helper is_uint_uint_out_of_range	if (OB_UNLIKELY(ObExprMinus::is_uint_uint_out_of_range(l, r, res))) {
+src/sql/engine/expr/ob_expr_minus.cpp	619	ObUIntUIntBatchMinusRaw::raw_check	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_minus.cpp	647	ObUIntIntBatchMinusRaw::raw_op	unchecked: arithmetic on unsigned value l	res = l - r;
+src/sql/engine/expr/ob_expr_minus.cpp	653	ObUIntIntBatchMinusRaw::raw_check	check: helper is_uint_int_out_of_range	if (OB_UNLIKELY(ObExprMinus::is_uint_int_out_of_range(r, l, res))) {
+src/sql/engine/expr/ob_expr_minus.cpp	655	ObUIntIntBatchMinusRaw::raw_check	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_minus.cpp	881	ObDatetimeNumberMinusFunc::operator()	unchecked: arithmetic on signed value left_i	int64_t round_value = left_i - right_i;
+src/sql/engine/expr/ob_expr_minus.cpp	891	ObDatetimeNumberMinusFunc::operator()	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_minus.cpp	960	ObDatetimeDatetimeMinusFunc::operator()	unchecked: arithmetic on signed value left_i	int64_t round_value = left_i - right_i;
+src/sql/engine/expr/ob_expr_minus.cpp	969	ObDatetimeDatetimeMinusFunc::operator()	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_minus.cpp	1015	ObDecimalIntBatchMinusRawWithCheck::raw_check	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_minus.h	140	ObExprMinus::is_int_int_out_of_range	check: helper is_int_int_out_of_range (definition)	OB_INLINE static bool is_int_int_out_of_range(int64_t val1, int64_t val2, int64_t res)
+src/sql/engine/expr/ob_expr_minus.h	152	ObExprMinus::is_int_uint_out_of_range	check: helper is_int_uint_out_of_range (definition)	OB_INLINE static bool is_int_uint_out_of_range(int64_t val1, uint64_t val2, uint64_t res)
+src/sql/engine/expr/ob_expr_minus.h	164	ObExprMinus::is_uint_int_out_of_range	check: helper is_uint_int_out_of_range (definition)	OB_INLINE static bool is_uint_int_out_of_range(uint64_t val1, int64_t val2, uint64_t res)
+src/sql/engine/expr/ob_expr_minus.h	176	ObExprMinus::is_uint_uint_out_of_range	check: helper is_uint_uint_out_of_range (definition)	OB_INLINE static bool is_uint_uint_out_of_range(uint64_t val1, uint64_t val2, uint64_t res)
+src/sql/engine/expr/ob_expr_mod.cpp	119	ObExprMod::mod_int	unchecked: arithmetic on signed value left_i	res.set_int(-static_cast<int64_t>(-left_i % static_cast<uint64_t>(right_i)));
+src/sql/engine/expr/ob_expr_mod.cpp	247	ObExprMod::mod_int_uint	unchecked: arithmetic on signed value left_i	datum.set_int(-static_cast<int64_t>(-left_i % right_ui));

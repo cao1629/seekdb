@@ -1,0 +1,48 @@
+file	line	symbol	construct	text
+src/sql/optimizer/ob_log_del_upd.cpp	143	IndexDMLInfo::init_assignment_info	pointer membership test: has_exist_in_array	if (has_exist_in_array(column_exprs_, assignments.at(i).column_expr_)) {
+src/sql/optimizer/ob_log_del_upd.cpp	183	IndexDMLInfo::init_column_convert_expr	IR pointer == IR pointer	if (insert_expr == assignments.at(j).column_expr_) {
+src/sql/optimizer/ob_log_del_upd.cpp	234	IndexDMLInfo::is_new_row_expr	pointer membership test: ObOptimizerUtil::find_item	bret = ObOptimizerUtil::find_item(column_convert_exprs_, expr)
+src/sql/optimizer/ob_log_del_upd.cpp	235	IndexDMLInfo::is_new_row_expr	pointer membership test: ObOptimizerUtil::find_item	|| ObOptimizerUtil::find_item(ck_cst_exprs_, expr)
+src/sql/optimizer/ob_log_del_upd.cpp	236	IndexDMLInfo::is_new_row_expr	IR pointer == IR pointer	|| lookup_part_id_expr_ == expr
+src/sql/optimizer/ob_log_del_upd.cpp	237	IndexDMLInfo::is_new_row_expr	IR pointer == IR pointer	|| new_part_id_expr_ == expr
+src/sql/optimizer/ob_log_del_upd.cpp	238	IndexDMLInfo::is_new_row_expr	IR pointer == IR pointer	|| new_rowid_expr_ == expr;
+src/sql/optimizer/ob_log_del_upd.cpp	241	IndexDMLInfo::is_new_row_expr	IR pointer == IR pointer	bret = assignments_.at(i).expr_ == expr;
+src/sql/optimizer/ob_log_del_upd.cpp	473	ObLogDelUpd::find_trans_info_producer	pointer membership test: add_var_to_array_no_dup	} else if (OB_FAIL(add_var_to_array_no_dup(produced_trans_exprs_,
+src/sql/optimizer/ob_log_del_upd.cpp	477	ObLogDelUpd::find_trans_info_producer	IR pointer == IR pointer	if (static_cast<ObLogTableScan *>(producer)->get_trans_info_expr() == index_dml_info->trans_info_expr_) {
+src/sql/optimizer/ob_log_del_upd.cpp	538	ObLogDelUpd::inner_get_op_exprs	pointer membership test: append_array_no_dup	} else if (OB_FAIL(append_array_no_dup(all_exprs, produced_trans_exprs_))) {
+src/sql/optimizer/ob_log_del_upd.cpp	575	ObLogDelUpd::get_table_columns_exprs	pointer membership test: append_array_no_dup	} else if (OB_FAIL(append_array_no_dup(all_exprs, index_dml_info->column_convert_exprs_))) {
+src/sql/optimizer/ob_log_del_upd.cpp	577	ObLogDelUpd::get_table_columns_exprs	pointer membership test: append_array_no_dup	} else if (OB_FAIL(append_array_no_dup(all_exprs, dml_columns))) {
+src/sql/optimizer/ob_log_del_upd.cpp	578	ObLogDelUpd::get_table_columns_exprs	pointer membership test: append_array_no_dup	} else if (OB_FAIL(append_array_no_dup(all_exprs, dml_values))) {
+src/sql/optimizer/ob_log_del_upd.cpp	579	ObLogDelUpd::get_table_columns_exprs	pointer membership test: append_array_no_dup	} else if (OB_FAIL(append_array_no_dup(all_exprs, index_dml_info->ck_cst_exprs_))) {
+src/sql/optimizer/ob_log_del_upd.cpp	597	ObLogDelUpd::get_table_columns_exprs	pointer membership test: add_var_to_array_no_dup	OB_FAIL(add_var_to_array_no_dup(all_exprs, column_expr->get_dependant_expr()))) {
+src/sql/optimizer/ob_log_del_upd.cpp	1329	ObLogDelUpd::is_dml_fixed_expr	pointer membership test: ObOptimizerUtil::find_item	is_fixed = ObOptimizerUtil::find_item(index_dml_info->column_exprs_, expr);
+src/sql/optimizer/ob_log_distinct.cpp	102	ObLogDistinct::get_distinct_output_exprs	pointer membership test: append_array_no_dup	} else if (OB_FAIL(append_array_no_dup(candi_exprs, plan->get_select_item_exprs_for_width_est()))) {
+src/sql/optimizer/ob_log_distinct.cpp	103	ObLogDistinct::get_distinct_output_exprs	pointer membership test: append_array_no_dup	} else if (OB_FAIL(append_array_no_dup(candi_exprs, plan->get_orderby_exprs_for_width_est()))) {
+src/sql/optimizer/ob_log_distinct.cpp	107	ObLogDistinct::get_distinct_output_exprs	pointer membership test: append_array_no_dup	} else if (OB_FAIL(append_array_no_dup(output_exprs, extracted_col_aggr_winfunc_exprs))) {
+src/sql/optimizer/ob_log_exchange.cpp	553	ObLogExchange::get_op_exprs	pointer membership test: append_array_no_dup	} else if (OB_FAIL(append_array_no_dup(all_exprs, repartition_sub_keys_))) {
+src/sql/optimizer/ob_log_exchange.cpp	562	ObLogExchange::get_op_exprs	pointer membership test: add_var_to_array_no_dup	} else if (OB_FAIL(add_var_to_array_no_dup(all_exprs, hash_dist_exprs_.at(i).expr_))) {
+src/sql/optimizer/ob_log_exchange.cpp	569	ObLogExchange::get_op_exprs	pointer membership test: add_var_to_array_no_dup	} else if (OB_FAIL(add_var_to_array_no_dup(all_exprs, sort_keys_.at(i).expr_))) {
+src/sql/optimizer/ob_log_exchange.cpp	907	ObLogExchange::is_my_fixed_expr	IR pointer == IR pointer	is_fixed = expr == calc_part_id_expr_ ||
+src/sql/optimizer/ob_log_exchange.cpp	908	ObLogExchange::is_my_fixed_expr	IR pointer == IR pointer	expr == partition_id_expr_ ||
+src/sql/optimizer/ob_log_exchange.cpp	909	ObLogExchange::is_my_fixed_expr	IR pointer == IR pointer	expr == ddl_slice_id_expr_ ||
+src/sql/optimizer/ob_log_exchange.cpp	910	ObLogExchange::is_my_fixed_expr	IR pointer == IR pointer	expr == random_expr_ ||
+src/sql/optimizer/ob_log_exchange.cpp	916	ObLogExchange::is_my_fixed_expr	IR pointer == IR pointer	is_fixed = expr == hash_dist_exprs_.at(i).expr_;
+src/sql/optimizer/ob_log_expand.cpp	41	ObLogExpand::get_plan_item_info	pointer membership test: append_array_no_dup	if (OB_FAIL(append_array_no_dup(uniq_rollup_exprs, hash_rollup_info_->expand_exprs_))) {
+src/sql/optimizer/ob_log_expand.cpp	151	ObLogExpand::get_op_exprs	pointer membership test: append_array_no_dup	} else if (OB_FAIL(append_array_no_dup(all_exprs, hash_rollup_info_->expand_exprs_))) {
+src/sql/optimizer/ob_log_expand.cpp	171	ObLogExpand::is_my_fixed_expr	IR pointer == IR pointer	is_fixed = (expr == hash_rollup_info_->rollup_grouping_id_);
+src/sql/optimizer/ob_log_expand.cpp	173	ObLogExpand::is_my_fixed_expr	IR pointer == unresolved pointer	is_fixed = (expr == hash_rollup_info_->expand_exprs_.at(i));
+src/sql/optimizer/ob_log_expand.cpp	176	ObLogExpand::is_my_fixed_expr	IR pointer == unresolved pointer	is_fixed = (expr == hash_rollup_info_->dup_expr_pairs_.at(i).element<1>());
+src/sql/optimizer/ob_log_expand.cpp	194	ObLogExpand::dup_and_replace_exprs_within_aggrs	pointer membership test: append_array_no_dup	} else if (OB_FAIL(append_array_no_dup(uniq_expand_exprs, rollup_exprs))) {
+src/sql/optimizer/ob_log_expand.cpp	239	ObLogExpand::find_expr	IR pointer == IR pointer	} else if (root == expected) {
+src/sql/optimizer/ob_log_expand.cpp	243	ObLogExpand::find_expr	pointer membership test: find_expr	ret = SMART_CALL(find_expr(root->get_param_expr(i), expected, found));
+src/sql/optimizer/ob_log_expand.cpp	254	ObLogExpand::find_expr_within_aggr_item	pointer membership test: find_expr	ret = find_expr(real_param_exprs.at(i), expected, found);
+src/sql/optimizer/ob_log_expand.cpp	261	ObLogExpand::find_expr_within_aggr_item	pointer membership test: find_expr	ret = find_expr(aggr_item->get_order_items().at(i).expr_, expected, found);
+src/sql/optimizer/ob_log_expand.cpp	269	ObLogExpand::replace_expr	IR pointer == IR pointer	if (root == from) { root = to; }
+src/sql/optimizer/ob_log_expand.cpp	344	ObLogExpand::compute_const_exprs	pointer membership test: has_exist_in_array	if (has_exist_in_array(hash_rollup_info_->expand_exprs_, child_const_exprs.at(i))) {
+src/sql/optimizer/ob_log_expr_values.cpp	348	ObLogExprValues::allocate_expr_post	IR pointer != IR pointer	} else if (OB_UNLIKELY(value_desc_.at(i) != column_exprs.at(0))) {
+src/sql/optimizer/ob_log_expr_values.cpp	502	ObLogExprValues::is_my_fixed_expr	pointer membership test: ObOptimizerUtil::find_item	is_fixed = ObOptimizerUtil::find_item(value_desc_, expr);
+src/sql/optimizer/ob_log_function_table.cpp	66	ObLogFunctionTable::allocate_expr_post	pointer membership test: add_var_to_array_no_dup	} else if (!is_plan_root() && OB_FAIL(add_var_to_array_no_dup(output_exprs_, value_col))) {
+src/sql/optimizer/ob_log_function_table.cpp	112	ObLogFunctionTable::is_my_fixed_expr	pointer membership test: ObOptimizerUtil::find_item	is_fixed = ObOptimizerUtil::find_item(access_exprs_, expr);
+src/sql/optimizer/ob_log_granule_iterator.cpp	261	ObLogGranuleIterator::is_rescanable	IR pointer == unresolved pointer	&& log_join->get_child(second_child) == child_op
+src/sql/optimizer/ob_log_granule_iterator.cpp	271	ObLogGranuleIterator::is_rescanable	IR pointer != unresolved pointer	if (parent_op->get_child(i) != child_op) {
+src/sql/optimizer/ob_log_granule_iterator.cpp	327	ObLogGranuleIterator::check_exist_deadlock_condition	IR pointer == unresolved pointer	if (parent_op->get_child(i) == op) {

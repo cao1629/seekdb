@@ -1,0 +1,98 @@
+file	line	symbol	construct	text
+src/sql/engine/dml/ob_table_lock_op.cpp	181	ObTableLockOp::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/dml/ob_table_lock_op.cpp	216	ObTableLockOp::submit_row_by_strategy	ret != OB_TRY_LOCK_ROW_CONFLICT	if (OB_TRY_LOCK_ROW_CONFLICT != ret
+src/sql/engine/dml/ob_table_lock_op.cpp	217	ObTableLockOp::submit_row_by_strategy	ret != OB_TRANSACTION_SET_VIOLATION	&& OB_TRANSACTION_SET_VIOLATION != ret
+src/sql/engine/dml/ob_table_lock_op.cpp	218	ObTableLockOp::submit_row_by_strategy	ret != OB_ERR_EXCLUSIVE_LOCK_CONFLICT	&& OB_ERR_EXCLUSIVE_LOCK_CONFLICT != ret) {
+src/sql/engine/dml/ob_table_lock_op.cpp	219	ObTableLockOp::submit_row_by_strategy	ret == OB_ERR_EXCLUSIVE_LOCK_CONFLICT	} else if (MY_SPEC.is_nowait() && OB_ERR_EXCLUSIVE_LOCK_CONFLICT == ret) {
+src/sql/engine/dml/ob_table_lock_op.cpp	240	ObTableLockOp::inner_get_next_batch	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/dml/ob_table_lock_op.cpp	276	ObTableLockOp::lock_one_row_post_proc	ret != OB_TRY_LOCK_ROW_CONFLICT	if (OB_TRY_LOCK_ROW_CONFLICT != ret &&
+src/sql/engine/dml/ob_table_lock_op.cpp	277	ObTableLockOp::lock_one_row_post_proc	ret != OB_TRANSACTION_SET_VIOLATION	OB_TRANSACTION_SET_VIOLATION != ret &&
+src/sql/engine/dml/ob_table_lock_op.cpp	278	ObTableLockOp::lock_one_row_post_proc	ret != OB_ERR_EXCLUSIVE_LOCK_CONFLICT	OB_ERR_EXCLUSIVE_LOCK_CONFLICT != ret) {
+src/sql/engine/dml/ob_table_lock_op.cpp	300	ObTableLockOp::write_rows_post_proc	ret != OB_TRY_LOCK_ROW_CONFLICT	if (OB_TRY_LOCK_ROW_CONFLICT != ret &&
+src/sql/engine/dml/ob_table_lock_op.cpp	301	ObTableLockOp::write_rows_post_proc	ret != OB_TRANSACTION_SET_VIOLATION	OB_TRANSACTION_SET_VIOLATION != ret &&
+src/sql/engine/dml/ob_table_lock_op.cpp	302	ObTableLockOp::write_rows_post_proc	ret != OB_ERR_EXCLUSIVE_LOCK_CONFLICT	OB_ERR_EXCLUSIVE_LOCK_CONFLICT != ret) {
+src/sql/engine/dml/ob_table_lock_op.cpp	305	ObTableLockOp::write_rows_post_proc	ret == OB_ERR_EXCLUSIVE_LOCK_CONFLICT	} else if (MY_SPEC.is_nowait() && OB_ERR_EXCLUSIVE_LOCK_CONFLICT == ret) {
+src/sql/engine/dml/ob_table_lock_op.cpp	357	ObTableLockOp::lock_row_to_das	ret != OB_TRY_LOCK_ROW_CONFLICT	if (OB_TRY_LOCK_ROW_CONFLICT != ret &&
+src/sql/engine/dml/ob_table_lock_op.cpp	358	ObTableLockOp::lock_row_to_das	ret != OB_TRANSACTION_SET_VIOLATION	OB_TRANSACTION_SET_VIOLATION != ret &&
+src/sql/engine/dml/ob_table_lock_op.cpp	359	ObTableLockOp::lock_row_to_das	ret != OB_ERR_EXCLUSIVE_LOCK_CONFLICT	OB_ERR_EXCLUSIVE_LOCK_CONFLICT != ret) {
+src/sql/engine/dml/ob_table_lock_op.cpp	360	ObTableLockOp::lock_row_to_das	ret == OB_ERR_EXCLUSIVE_LOCK_CONFLICT	} else if (MY_SPEC.is_nowait() && OB_ERR_EXCLUSIVE_LOCK_CONFLICT == ret) {
+src/sql/engine/dml/ob_table_modify_op.cpp	216	ForeignKeyHandle::check_exist_inner_sql	ret == OB_ERR_NULL_VALUE	if (OB_LIKELY(OB_ERR_NULL_VALUE == ret)) {
+src/sql/engine/dml/ob_table_modify_op.cpp	244	ForeignKeyHandle::check_exist_inner_sql	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/dml/ob_table_modify_op.cpp	258	ForeignKeyHandle::check_exist_inner_sql	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/dml/ob_table_modify_op.cpp	329	ForeignKeyHandle::cascade	ret == OB_ERR_NULL_VALUE	if (OB_LIKELY(OB_ERR_NULL_VALUE == ret)) {
+src/sql/engine/dml/ob_table_modify_op.cpp	401	ForeignKeyHandle::set_null	ret == OB_ERR_NULL_VALUE	if (OB_LIKELY(OB_ERR_NULL_VALUE == ret)) {
+src/sql/engine/dml/ob_table_modify_op.cpp	873	ObTableModifyOp::get_gi_task	ret != OB_HASH_NOT_EXIST	if (ret != OB_HASH_NOT_EXIST) {
+src/sql/engine/dml/ob_table_modify_op.cpp	1092	ObTableModifyOp::get_next_row_from_child	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/dml/ob_table_modify_op.cpp	1110	ObTableModifyOp::inner_get_next_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/dml/ob_table_replace_op.cpp	300	ObTableReplaceOp::get_next_row_from_child	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/dml/ob_table_replace_op.cpp	347	ObTableReplaceOp::load_all_replace_row	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/dml/ob_table_replace_op.cpp	379	ObTableReplaceOp::load_all_replace_row	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/dml/ob_table_replace_op.cpp	477	ObTableReplaceOp::fetch_conflict_rowkey	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/engine/dml/ob_table_replace_op.cpp	482	ObTableReplaceOp::fetch_conflict_rowkey	ret == OB_ITER_END	ret = (ret == OB_ITER_END ? OB_SUCCESS : ret);
+src/sql/engine/dml/ob_table_replace_op.cpp	520	ObTableReplaceOp::get_next_conflict_rowkey	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/engine/dml/ob_table_replace_op.cpp	720	ObTableReplaceOp::replace_conflict_row_cache	ret == OB_ITER_END	ret = OB_ITER_END == ret ? OB_SUCCESS : ret;
+src/sql/engine/dml/ob_trigger_handler.cpp	454	TriggerHandle::calc_trigger_routine	ret != OB_ERR_FUNCTION_UNKNOWN	if (OB_FAIL(ret) && OB_ERR_FUNCTION_UNKNOWN != ret
+src/sql/engine/expr/ob_datum_cast.cpp	163	get_cast_ret	ret == OB_ERR_UNEXPECTED_TZ_TRANSITION	if (OB_UNLIKELY(OB_ERR_UNEXPECTED_TZ_TRANSITION == ret) ||
+src/sql/engine/expr/ob_datum_cast.cpp	164	get_cast_ret	ret == OB_ERR_UNKNOWN_TIME_ZONE	OB_UNLIKELY(OB_ERR_UNKNOWN_TIME_ZONE == ret)) {
+src/sql/engine/expr/ob_datum_cast.cpp	198	#define SET_RES_OBJ	other variable warning == OB_ERR_TRUNCATED_WRONG_VALUE	|| OB_ERR_TRUNCATED_WRONG_VALUE == warning              \
+src/sql/engine/expr/ob_datum_cast.cpp	199	#define SET_RES_OBJ	other variable warning == OB_DATA_OUT_OF_RANGE	|| OB_DATA_OUT_OF_RANGE == warning                      \
+src/sql/engine/expr/ob_datum_cast.cpp	200	#define SET_RES_OBJ	other variable warning == OB_ERR_DATA_TRUNCATED	|| OB_ERR_DATA_TRUNCATED == warning                     \
+src/sql/engine/expr/ob_datum_cast.cpp	201	#define SET_RES_OBJ	other variable warning == OB_ERR_DOUBLE_TRUNCATED	|| OB_ERR_DOUBLE_TRUNCATED == warning                   \
+src/sql/engine/expr/ob_datum_cast.cpp	202	#define SET_RES_OBJ	other variable warning == OB_ERR_TRUNCATED_WRONG_VALUE_FOR_FIELD	|| OB_ERR_TRUNCATED_WRONG_VALUE_FOR_FIELD == warning) { \
+src/sql/engine/expr/ob_datum_cast.cpp	218	#define SET_RES_OTIMESTAMP_10BYTE	other variable warning == OB_ERR_TRUNCATED_WRONG_VALUE	|| OB_ERR_TRUNCATED_WRONG_VALUE == warning              \
+src/sql/engine/expr/ob_datum_cast.cpp	219	#define SET_RES_OTIMESTAMP_10BYTE	other variable warning == OB_DATA_OUT_OF_RANGE	|| OB_DATA_OUT_OF_RANGE == warning                      \
+src/sql/engine/expr/ob_datum_cast.cpp	220	#define SET_RES_OTIMESTAMP_10BYTE	other variable warning == OB_ERR_DATA_TRUNCATED	|| OB_ERR_DATA_TRUNCATED == warning                     \
+src/sql/engine/expr/ob_datum_cast.cpp	221	#define SET_RES_OTIMESTAMP_10BYTE	other variable warning == OB_ERR_DOUBLE_TRUNCATED	|| OB_ERR_DOUBLE_TRUNCATED == warning                   \
+src/sql/engine/expr/ob_datum_cast.cpp	222	#define SET_RES_OTIMESTAMP_10BYTE	other variable warning == OB_ERR_TRUNCATED_WRONG_VALUE_FOR_FIELD	|| OB_ERR_TRUNCATED_WRONG_VALUE_FOR_FIELD == warning) { \
+src/sql/engine/expr/ob_datum_cast.cpp	790	common_string_double	ret == OB_ERR_DATA_TRUNCATED	if (CM_IS_COLUMN_CONVERT(expr.extra_) && ret == OB_ERR_DATA_TRUNCATED) {
+src/sql/engine/expr/ob_datum_cast.cpp	958	common_string_year	other variable warning == OB_ERR_DATA_TRUNCATED	} else if (CM_IS_DEMOTE_CAST(expr.extra_) && (OB_ERR_DATA_TRUNCATED == warning)) {
+src/sql/engine/expr/ob_datum_cast.cpp	995	common_string_number	ret == OB_NUMERIC_OVERFLOW	if (OB_NUMERIC_OVERFLOW == ret) {
+src/sql/engine/expr/ob_datum_cast.cpp	1015	common_string_number	ret == OB_INVALID_NUMERIC	} else if (OB_INVALID_NUMERIC == ret) {
+src/sql/engine/expr/ob_datum_cast.cpp	1095	common_string_decimalint	ret == OB_NUMERIC_OVERFLOW	if (OB_NUMERIC_OVERFLOW == ret) {
+src/sql/engine/expr/ob_datum_cast.cpp	1119	common_string_decimalint	ret == OB_INVALID_NUMERIC	} else if (OB_INVALID_NUMERIC == ret) {
+src/sql/engine/expr/ob_datum_cast.cpp	1209	common_string_datetime	ret == OB_ERR_UNEXPECTED_TZ_TRANSITION	if (ret == OB_ERR_UNEXPECTED_TZ_TRANSITION && CM_IS_WARN_ON_FAIL(cast_mode)) {
+src/sql/engine/expr/ob_datum_cast.cpp	1251	common_string_mdatetime	ret == OB_ERR_UNEXPECTED_TZ_TRANSITION	if (ret == OB_ERR_UNEXPECTED_TZ_TRANSITION && CM_IS_WARN_ON_FAIL(cast_mode)) {
+src/sql/engine/expr/ob_datum_cast.cpp	1846	ObDataTypeCastUtil::log_user_error_warning	ret == OB_ERR_DATA_TRUNCATED	} else if (OB_ERR_DATA_TRUNCATED == ret) {
+src/sql/engine/expr/ob_datum_cast.cpp	1850	ObDataTypeCastUtil::log_user_error_warning	ret == OB_INVALID_NUMERIC	} else if (OB_INVALID_NUMERIC == ret && CM_IS_WARN_ON_FAIL(cast_mode)) {
+src/sql/engine/expr/ob_datum_cast.cpp	1856	ObDataTypeCastUtil::log_user_error_warning	ret == OB_ERR_TRUNCATED_WRONG_VALUE	if (OB_ERR_TRUNCATED_WRONG_VALUE == ret) {
+src/sql/engine/expr/ob_datum_cast.cpp	2162	common_datetime_string	ret == OB_SIZE_OVERFLOW	if (OB_SIZE_OVERFLOW == ret) {
+src/sql/engine/expr/ob_datum_cast.cpp	4825	CAST_FUNC_NAME(datetime, datetime)	ret == OB_ERR_UNEXPECTED_TZ_TRANSITION	ret = OB_ERR_UNEXPECTED_TZ_TRANSITION == ret ? OB_INVALID_DATE_VALUE : ret;
+src/sql/engine/expr/ob_datum_cast.cpp	4861	CAST_FUNC_NAME(mdatetime, datetime)	ret == OB_ERR_UNEXPECTED_TZ_TRANSITION	ret = OB_ERR_UNEXPECTED_TZ_TRANSITION == ret ? OB_INVALID_DATE_VALUE : ret;
+src/sql/engine/expr/ob_datum_cast.cpp	4893	CAST_FUNC_NAME(datetime, mdatetime)	ret == OB_ERR_UNEXPECTED_TZ_TRANSITION	ret = OB_ERR_UNEXPECTED_TZ_TRANSITION == ret ? OB_INVALID_DATE_VALUE : ret;
+src/sql/engine/expr/ob_datum_cast.cpp	8015	CAST_FUNC_NAME(json, year)	other variable warning == OB_DATA_OUT_OF_RANGE	if (warning == OB_DATA_OUT_OF_RANGE) {
+src/sql/engine/expr/ob_datum_cast.cpp	8630	CAST_FUNC_NAME(geometry, geometry)	ret == OB_ERR_GIS_INVALID_DATA	if (OB_ERR_GIS_INVALID_DATA == ret) {
+src/sql/engine/expr/ob_datum_cast.cpp	8632	CAST_FUNC_NAME(geometry, geometry)	ret == OB_ERR_GEOMETRY_PARAM_LONGITUDE_OUT_OF_RANGE	} else if (OB_ERR_GEOMETRY_PARAM_LONGITUDE_OUT_OF_RANGE == ret) {
+src/sql/engine/expr/ob_datum_cast.cpp	8638	CAST_FUNC_NAME(geometry, geometry)	ret == OB_ERR_GEOMETRY_PARAM_LATITUDE_OUT_OF_RANGE	} else if (OB_ERR_GEOMETRY_PARAM_LATITUDE_OUT_OF_RANGE == ret) {
+src/sql/engine/expr/ob_datum_cast.cpp	8822	CAST_FUNC_NAME(string, collection)	ret == OB_ERR_INVALID_VECTOR_DIM	if (ret == OB_ERR_INVALID_VECTOR_DIM) {
+src/sql/engine/expr/ob_datum_cast.cpp	9311	string_to_set	ret == OB_ERR_DATA_TRUNCATED	(OB_ERR_DATA_TRUNCATED == ret
+src/sql/engine/expr/ob_datum_cast.cpp	9312	string_to_set	other variable warning == OB_ERR_DATA_TRUNCATED	|| (OB_ERR_DATA_TRUNCATED == warning && CM_IS_WARN_ON_FAIL(cast_mode)))) {
+src/sql/engine/expr/ob_datum_cast.cpp	10191	anytype_to_varchar_char_explicit	ret == OB_ERR_DATA_TOO_LONG	if (ob_is_string_type(expr.datum_meta_.type_) && OB_ERR_DATA_TOO_LONG == ret) {
+src/sql/engine/expr/ob_datum_cast.cpp	10203	anytype_to_varchar_char_explicit	ret == OB_ERR_DATA_TOO_LONG	if (OB_LIKELY(OB_ERR_DATA_TOO_LONG == ret)) {
+src/sql/engine/expr/ob_datum_cast.cpp	11040	string_length_check	other variable warning == OB_ERR_DATA_TOO_LONG	if (OB_UNLIKELY(OB_ERR_DATA_TOO_LONG == warning)) {
+src/sql/engine/expr/ob_datum_cast.cpp	11159	string_length_check	other variable warning == OB_ERR_DATA_TOO_LONG	if (OB_UNLIKELY(OB_ERR_DATA_TOO_LONG == warning)) {
+src/sql/engine/expr/ob_expr_ai/ob_ai_func_client.cpp	287	ObAIFuncClient::send_post_batch	ret == OB_CURL_ERROR	} else if (OB_CURL_ERROR == ret) {
+src/sql/engine/expr/ob_expr_ai/ob_ai_func_utils.cpp	1309	ObAIFuncModel::call_completion	ret == OB_INVALID_DATA	if (ret == OB_INVALID_DATA) {
+src/sql/engine/expr/ob_expr_ai/ob_ai_func_utils.cpp	1488	ObAIFuncModel::call_dense_embedding_vector_v2	ret == OB_INVALID_DATA	if (ret == OB_INVALID_DATA) {
+src/sql/engine/expr/ob_expr_ai/ob_ai_func_utils.cpp	1526	ObAIFuncModel::call_rerank	ret == OB_INVALID_DATA	if (ret == OB_INVALID_DATA) {
+src/sql/engine/expr/ob_expr_autoinc_nextval.cpp	275	ObExprAutoincNextval::generate_autoinc_value	ret == OB_DATA_OUT_OF_RANGE	if (OB_UNLIKELY(OB_DATA_OUT_OF_RANGE == ret) && !is_strict_mode(my_session.get_sql_mode())) {
+src/sql/engine/expr/ob_expr_bool.cpp	116	CHECK_IS_TRUE_FUNC_NAME(other_type)	ret != OB_ERR_NULL_VALUE	if (ret != OB_ERR_NULL_VALUE) {
+src/sql/engine/expr/ob_expr_bool.cpp	209	get_bool	ret != OB_ERR_NULL_VALUE	if (ret != OB_ERR_NULL_VALUE) {
+src/sql/engine/expr/ob_expr_can_access_trigger.cpp	79	ObExprCanAccessTrigger::can_access_trigger	ret == OB_ERR_NO_TABLE_PRIVILEGE	if(OB_ERR_NO_TABLE_PRIVILEGE == ret) {
+src/sql/engine/expr/ob_expr_column_conv.cpp	380	column_convert_datum_accuracy_check	other variable warning == OB_ERR_DATA_TOO_LONG	if (OB_SUCC(ret) && OB_ERR_DATA_TOO_LONG == warning) {
+src/sql/engine/expr/ob_expr_convert_tz.cpp	64	ObExprConvertTZ::calc_convert_tz	ret == OB_ERR_UNKNOWN_TIME_ZONE	if (OB_ERR_UNKNOWN_TIME_ZONE == ret) {
+src/sql/engine/expr/ob_expr_convert_tz.cpp	167	ObExprConvertTZ::get_cvrt_tz_info	ret == OB_ERR_UNKNOWN_TIME_ZONE	if (OB_LIKELY(OB_ERR_UNKNOWN_TIME_ZONE == ret)){
+src/sql/engine/expr/ob_expr_convert_tz.cpp	173	ObExprConvertTZ::get_cvrt_tz_info	ret == OB_ERR_UNKNOWN_TIME_ZONE	if (OB_ERR_UNKNOWN_TIME_ZONE == ret && OB_SUCCESS != ret_more) {
+src/sql/engine/expr/ob_expr_convert_tz.cpp	198	ObExprConvertTZ::get_offset_by_couple_tz	ret != OB_ERR_UNKNOWN_TIME_ZONE	if (OB_ERR_UNKNOWN_TIME_ZONE != ret && OB_FAIL(ret)) {
+src/sql/engine/expr/ob_expr_convert_tz.cpp	223	ObExprConvertTZ::parse_string	ret == OB_ERR_UNKNOWN_TIME_ZONE	} else if (OB_ERR_UNKNOWN_TIME_ZONE == ret) {
+src/sql/engine/expr/ob_expr_date_add.cpp	203	ObExprDateAdjust::calc_date_adjust	ret == OB_INVALID_DATE_VALUE; ret == OB_TOO_MANY_DATETIME_PARTS	if (OB_UNLIKELY(OB_INVALID_DATE_VALUE == ret || OB_TOO_MANY_DATETIME_PARTS == ret)) {
+src/sql/engine/expr/ob_expr_date_add.cpp	205	ObExprDateAdjust::calc_date_adjust	ret == OB_TOO_MANY_DATETIME_PARTS	if (OB_TOO_MANY_DATETIME_PARTS == ret) {
+src/sql/engine/expr/ob_expr_date_add.cpp	252	ObExprDateAdjust::calc_date_adjust	tmp_ret == OB_INVALID_DATE_FORMAT	if (CM_IS_WARN_ON_FAIL(cast_mode) && OB_INVALID_DATE_FORMAT == tmp_ret) {
+src/sql/engine/expr/ob_expr_date_format.cpp	99	ObExprDateFormat::calc_date_format	ret != OB_ALLOCATE_MEMORY_FAILED	if (CM_IS_WARN_ON_FAIL(cast_mode) && OB_ALLOCATE_MEMORY_FAILED != ret) {
+src/sql/engine/expr/ob_expr_day_of_func.cpp	432	ObExprSubAddtime::calc_result2	ret != OB_ALLOCATE_MEMORY_FAILED	if (CM_IS_WARN_ON_FAIL(cast_mode) && OB_ALLOCATE_MEMORY_FAILED != ret) {
+src/sql/engine/expr/ob_expr_day_of_func.cpp	637	ObExprSubAddtime::subaddtime_varchar	ret != OB_ALLOCATE_MEMORY_FAILED	if (OB_FAIL(ret) && OB_ALLOCATE_MEMORY_FAILED != ret) {
+src/sql/engine/expr/ob_expr_demote_cast.cpp	151	ObExprDemoteCastBase::demote_cast	ret == OB_DATA_OUT_OF_RANGE; ret == OB_INVALID_DATE_VALUE	if (OB_DATA_OUT_OF_RANGE == ret || OB_INVALID_DATE_VALUE == ret
+src/sql/engine/expr/ob_expr_demote_cast.cpp	152	ObExprDemoteCastBase::demote_cast	ret == OB_ERR_DATA_TRUNCATED	|| OB_ERR_DATA_TRUNCATED == ret) {
+src/sql/engine/expr/ob_expr_encode_sortkey.cpp	156	ObExprEncodeSortkey::eval_encode_sortkey	ret != OB_BUF_NOT_ENOUGH	if (ret != OB_BUF_NOT_ENOUGH) {
+src/sql/engine/expr/ob_expr_encode_sortkey.cpp	170	ObExprEncodeSortkey::eval_encode_sortkey	ret == OB_BUF_NOT_ENOUGH	} else if (ret == OB_BUF_NOT_ENOUGH) {
+src/sql/engine/expr/ob_expr_encode_sortkey.cpp	287	ObExprEncodeSortkey::eval_encode_sortkey_batch	ret != OB_BUF_NOT_ENOUGH	if (ret != OB_BUF_NOT_ENOUGH) {
+src/sql/engine/expr/ob_expr_encode_sortkey.cpp	300	ObExprEncodeSortkey::eval_encode_sortkey_batch	ret == OB_BUF_NOT_ENOUGH	} else if (ret == OB_BUF_NOT_ENOUGH) {

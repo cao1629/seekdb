@@ -1,0 +1,38 @@
+file	line	symbol	construct	text
+src/oblib/lib/hash/ob_link_hashmap.h	43	BaseRefHandle	Handle class definition	class BaseRefHandle
+src/oblib/lib/hash/ob_link_hashmap.h	68	ZeroRefHandle	Handle class definition : BaseRefHandle	class ZeroRefHandle final : public BaseRefHandle
+src/oblib/lib/hash/ob_link_hashmap.h	74	ZeroRefHandle::born	born definition (reference-count function found by its body: changes a reference-count field)	void born(Node* node) { (void)ATOMIC_AAF(&node->uref_, BORN_REF); }
+src/oblib/lib/hash/ob_link_hashmap.h	75	ZeroRefHandle::end	end definition (reference-count function found by its body: changes a reference-count field)	int32_t end(Node* node) { return ATOMIC_AAF(&node->uref_, -BORN_REF); }
+src/oblib/lib/hash/ob_link_hashmap.h	77	ZeroRefHandle::dec	reference-count change: ATOMIC_AAF on uref_	int32_t dec(Node* node) { return ATOMIC_AAF(&node->uref_, -1); }
+src/oblib/lib/hash/ob_link_hashmap.h	81	RefHandle	Handle class definition : BaseRefHandle	class RefHandle final : public BaseRefHandle
+src/oblib/lib/hash/ob_link_hashmap.h	87	RefHandle::born	born definition (reference-count function found by its body: changes a reference-count field)	void born(Node* node) { (void)ATOMIC_AAF(&node->uref_, BORN_REF); }
+src/oblib/lib/hash/ob_link_hashmap.h	88	RefHandle::end	end definition (reference-count function found by its body: changes a reference-count field)	int32_t end(Node* node) { return ATOMIC_AAF(&node->uref_, -BORN_REF); }
+src/oblib/lib/hash/ob_link_hashmap.h	90	RefHandle::dec	reference-count change: ATOMIC_AAF on uref_	int32_t dec(Node* node) { return ATOMIC_AAF(&node->uref_, -1); }
+src/oblib/lib/hash/ob_link_hashmap.h	301	ObLinkHashMap::insert_and_get	born call (reference-count function found by its body)	ref_handle_.born(node);
+src/oblib/lib/hash/ob_link_hashmap.h	303	ObLinkHashMap::insert_and_get	xhref call (other name)	node->xhref(2);
+src/oblib/lib/hash/ob_link_hashmap.h	312	ObLinkHashMap::insert_and_get	xhref call (other name)	node->xhref(-2);
+src/oblib/lib/hash/ob_link_hashmap.h	357	ObLinkHashMap::get	try_inc_ref call (prefixed name)	if (!try_inc_ref(node)) {
+src/oblib/lib/hash/ob_link_hashmap.h	398	ObLinkHashMap::revert	dec_uref call (other name)	dec_uref(node);
+src/oblib/lib/hash/ob_link_hashmap.h	479	ObLinkHashMap::try_inc_ref	try_inc_ref definition (prefixed name)	bool try_inc_ref(HashNode* node)
+src/oblib/lib/hash/ob_link_hashmap.h	486	ObLinkHashMap::try_inc_ref	dec_uref call (other name)	dec_uref(node);
+src/oblib/lib/hash/ob_link_hashmap.h	492	ObLinkHashMap::dec_uref	dec_uref definition (other name)	void dec_uref(HashNode* node)
+src/oblib/lib/hash/ob_link_hashmap.h	496	ObLinkHashMap::dec_uref	on_uref_clean call (reference-count function found by its body)	on_uref_clean(node);
+src/oblib/lib/hash/ob_link_hashmap.h	504	ObLinkHashMap::end_uref	on_uref_clean call (reference-count function found by its body)	on_uref_clean(node);
+src/oblib/lib/hash/ob_link_hashmap.h	508	ObLinkHashMap::on_uref_clean	on_uref_clean definition (reference-count function found by its body: calls dec_href)	void on_uref_clean(HashNode* node)
+src/oblib/lib/hash/ob_link_hashmap.h	512	ObLinkHashMap::on_uref_clean	dec_href call (other name)	dec_href(node);
+src/oblib/lib/hash/ob_link_hashmap.h	515	ObLinkHashMap::dec_href	dec_href definition (other name)	void dec_href(HashNode* node)
+src/oblib/lib/hash/ob_link_hashmap.h	518	ObLinkHashMap::dec_href	xhref call (other name)	if (0 == node->xhref(-1)) {
+src/oblib/lib/hash/ob_link_hashmap.h	530	ObLinkHashMap::reclaim_nodes	dec_href call (other name)	dec_href(node);
+src/oblib/lib/hash/ob_link_hashmap.h	540	ObLinkHashMap::next_	try_inc_ref call (prefixed name)	&& !try_inc_ref(next_node = CONTAINER_OF(iter, HashNode, hash_link_)))
+src/oblib/lib/hash/ob_link_hashmap_deps.h	70	RefNode::xhref	xhref definition (other name)	OB_INLINE int32_t xhref(int32_t x) { return ATOMIC_AAF(&href_, x); }
+src/oblib/lib/hash/ob_link_hashmap_deps.h	104	AllocHandle	Handle class definition	class AllocHandle
+src/oblib/lib/hash/ob_link_hashmap_deps.h	114	CountHandle	Handle class definition	class CountHandle
+src/oblib/lib/hash/ob_multi_mod_ref_mgr.h	36	ObRef::inc	reference-count change: ATOMIC_INC on ref_	ATOMIC_INC(&ref_);
+src/oblib/lib/hash/ob_multi_mod_ref_mgr.h	39	ObRef::dec	reference-count change: ATOMIC_DEC on ref_	ATOMIC_DEC(&ref_);
+src/oblib/lib/hash/ob_refered_map.h	45	ObReferedMap::Item::ref	ref definition (reference-count function found by its body: changes a reference-count field)	void ref() { ref_cnt_++; }
+src/oblib/lib/hash/ob_refered_map.h	46	ObReferedMap::Item	unref declaration (other name)	void unref();
+src/oblib/lib/hash/ob_refered_map.h	104	ObReferedMap::Item::unref	unref definition (other name)	void ObReferedMap<K, V>::Item::unref()
+src/oblib/lib/lock/ob_qsync_lock.cpp	49	ObQSyncLock::rdunlock	release_ref call (other name)	qsync_.release_ref();
+src/oblib/lib/lock/ob_qsync_lock.cpp	84	ObQSyncLock::try_rdlock	acquire_ref call (other name)	const int64_t idx = qsync_.acquire_ref();
+src/oblib/lib/lock/ob_qsync_lock.cpp	86	ObQSyncLock::try_rdlock	release_ref call (other name)	qsync_.release_ref(idx);
+src/oblib/lib/lock/ob_qsync_lock.h	62	ObQSyncLockReadGuard	Guard class definition whose methods reach acquire_ref through other functions (ObQSyncLockReadGuard::ObQSyncLockReadGuard > ObQSyncLock::rdlock > ObQSyncLock::try_rdlock > acquire_ref)	class ObQSyncLockReadGuard

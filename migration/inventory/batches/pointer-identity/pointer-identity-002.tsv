@@ -1,0 +1,33 @@
+file	line	symbol	construct	text
+src/pl/ob_pl_stmt.cpp	1130	ObPLExternalNS::resolve_external_symbol	pointer cast to integer used as an id	? reinterpret_cast<uint64_t>(parent_ns_) : parent_ns_->get_package_id();
+src/pl/ob_pl_stmt.cpp	1740	ObPLBlockNS::resolve_local_label	pointer cast to integer used as an id	var_idx = reinterpret_cast<int64_t>(this);
+src/pl/ob_pl_stmt.cpp	1956	ObPLBlockNS::resolve_symbol	pointer cast to integer used as an id	var_idx = reinterpret_cast<int64_t>(this);
+src/pl/ob_pl_stmt.cpp	2341	ObPLBlockNS::extract_external_record_default_expr	pointer membership test: add_var_to_array_no_dup	OZ (add_var_to_array_no_dup(*obj_access_exprs_, &expr));
+src/pl/ob_pl_stmt.cpp	3065	ObPLAstUnit::add_expr	IR pointer == unresolved pointer	if (expr == exprs_.at(i)) {
+src/pl/ob_pl_type.cpp	871	ObObjAccessIdx::operator==	IR pointer == IR pointer	&& (get_sysfunc_ == other.get_sysfunc_
+src/rootserver/truncate_info/ob_truncate_info_service.cpp	294	ObTruncatePartKeyInfo::extract_col_ref_expr	pointer membership test: is_contain	if (!is_contain(exprs, part_expr) && OB_FAIL(exprs.push_back(part_expr))) {
+src/share/io/ob_io_define.h	712	ObMClockQueue::HeapCompare::operator()	pointer cast to integer compared for order (address ordering)	: (int64_t)left > (int64_t)right;
+src/share/io/ob_io_manager.cpp	409	ObIOManager::add_device_channel	pointer cast to integer used as a key	} else if (OB_FAIL(channel_map_.set_refactored(reinterpret_cast<int64_t>(device_handle), device_channel))) {
+src/share/io/ob_io_manager.cpp	429	ObIOManager::remove_device_channel	pointer cast to integer used as a key	} else if (OB_FAIL(channel_map_.erase_refactored(reinterpret_cast<int64_t>(device_handle), &device_channel))) {
+src/share/io/ob_io_manager.cpp	447	ObIOManager::get_device_channel	pointer cast to integer used as a key	} else if (OB_FAIL(channel_map_.get_refactored(reinterpret_cast<int64_t>(device_handle), device_channel))) {
+src/share/io/ob_io_struct.cpp	414	ObIOUsage::assign	pointer cast to integer compared for order (address ordering)	} else if ((int64_t)(&lock_) < (int64_t)(&other.lock_)) {
+src/share/io/ob_io_struct.cpp	2004	ObIOTracer::trace_request	pointer cast to integer used as a key	if (OB_FAIL(trace_map_.set_refactored(reinterpret_cast<int64_t>(req), trace_info))) {
+src/share/io/ob_io_struct.cpp	2016	ObIOTracer::trace_request	pointer cast to integer used as a key	if (OB_FAIL(trace_map_.atomic_refactored(reinterpret_cast<int64_t>(req), modify_fn))) {
+src/share/io/ob_io_struct.cpp	2019	ObIOTracer::trace_request	pointer cast to integer used as a key	if (OB_FAIL(trace_map_.erase_refactored(reinterpret_cast<int64_t>(req)))) {
+src/share/ob_ddl_task_executor.h	132	ObDDLTaskQueue	container keyed by pointer: ObHashSet	typedef common::hash::ObHashSet<const ObIDDLTask *,
+src/share/ob_device_manager.cpp	194	ObDeviceManager::alloc_device_	pointer cast to integer used as a key	} else if (OB_FAIL(handle_map_.set_refactored((int64_t)(device_handle), &(device_ins_[avai_idx])))) {
+src/share/ob_device_manager.cpp	351	ObDeviceManager::release_device	pointer cast to integer used as a key	} else if (OB_FAIL(handle_map_.get_refactored((int64_t)(device_handle), device_info))) {
+src/sql/code_generator/ob_column_index_provider.cpp	70	RowDesc::add_column	pointer cast to integer used as a key	ret = expr_idx_map_.get_refactored(reinterpret_cast<int64_t>(raw_expr), idx);
+src/sql/code_generator/ob_column_index_provider.cpp	74	RowDesc::add_column	pointer cast to integer used as a key	if (OB_FAIL(expr_idx_map_.set_refactored(reinterpret_cast<int64_t>(raw_expr),
+src/sql/code_generator/ob_column_index_provider.cpp	120	RowDesc::get_idx	pointer cast to integer used as a key	if (OB_FAIL(expr_idx_map_.get_refactored(reinterpret_cast<int64_t>(raw_expr), idx))) {
+src/sql/code_generator/ob_dml_cg_service.cpp	450	ObDmlCgService::adjust_unique_key_exprs	pointer membership test: add_var_to_array_no_dup	if (OB_FAIL(add_var_to_array_no_dup(tmp_exprs, tmp_expr))) {
+src/sql/code_generator/ob_dml_cg_service.cpp	453	ObDmlCgService::adjust_unique_key_exprs	pointer membership test: add_var_to_array_no_dup	if (OB_FAIL(add_var_to_array_no_dup(tmp_exprs, expr))) {
+src/sql/code_generator/ob_dml_cg_service.cpp	785	ObDmlCgService::generate_access_exprs	pointer membership test: add_var_to_array_no_dup	if (OB_FAIL(add_var_to_array_no_dup(domain_id_raw_expr, expr))) {
+src/sql/code_generator/ob_dml_cg_service.cpp	794	ObDmlCgService::generate_access_exprs	pointer membership test: add_var_to_array_no_dup	if (OB_FAIL(add_var_to_array_no_dup(access_exprs, expr))) {
+src/sql/code_generator/ob_dml_cg_service.cpp	1033	ObDmlCgService::add_geo_col_projector	pointer membership test: has_exist_in_array	if (!has_exist_in_array(full_row, column_expr, &projector_idx)) {
+src/sql/code_generator/ob_dml_cg_service.cpp	1066	ObDmlCgService::add_vec_idx_col_projector	pointer membership test: has_exist_in_array	if (!has_exist_in_array(full_row, column_expr, &pre_projector_idx)) {
+src/sql/code_generator/ob_dml_cg_service.cpp	1604	ObDmlCgService::generate_das_projector	pointer membership test: has_exist_in_array	if (!has_exist_in_array(full_row, column_expr, &projector_idx)) {
+src/sql/code_generator/ob_dml_cg_service.cpp	1637	ObDmlCgService::generate_das_projector	pointer membership test: has_exist_in_array	if (!has_exist_in_array(full_row, column_expr, &projector_idx)) {
+src/sql/code_generator/ob_dml_cg_service.cpp	2115	ObDmlCgService::generate_dml_base_ctdef	pointer membership test: has_exist_in_array	if (has_exist_in_array(dml_op.get_produced_trans_exprs(), index_dml_info.trans_info_expr_)) {
+src/sql/code_generator/ob_dml_cg_service.cpp	2496	ObDmlCgService::convert_upd_assign_infos	pointer membership test: has_exist_in_array	} else if (!has_exist_in_array(index_dml_info.column_exprs_, col, &idx)) {
+src/sql/code_generator/ob_dml_cg_service.cpp	3286	ObDmlCgService::generate_rowkey_domain_access_expr	pointer membership test: add_var_to_array_no_dup	if (OB_FAIL(add_var_to_array_no_dup(access_exprs, static_cast<ObRawExpr *>(expr)))) {

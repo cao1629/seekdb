@@ -1,0 +1,56 @@
+file	line	symbol	construct	text
+src/share/schema/ob_schema_struct.cpp	1093	ObSchema::str2string_array	const_cast<char *>	item_str = strtok_r((NULL == item_str ? const_cast<char *>(str) : NULL), ";", &save_ptr);
+src/share/schema/ob_schema_struct.cpp	2509	ObPartitionSchema::inner_add_partition	const_cast<T *>	part_array[part_num] = const_cast<T *>(&part);
+src/share/schema/ob_schema_struct.cpp	3680	ObBasePartition::less_than	const_cast<ObObj*>	lrow.cells_ = const_cast<ObObj*>(lhs->high_bound_val_.get_obj_ptr());
+src/share/schema/ob_schema_struct.cpp	3685	ObBasePartition::less_than	const_cast<ObObj*>	rrow.cells_ = const_cast<ObObj*>(rhs->high_bound_val_.get_obj_ptr());
+src/share/schema/ob_schema_struct.cpp	3706	ObBasePartition::range_like_func_less_than	const_cast<ObObj*>	lrow.cells_ = const_cast<ObObj*>(lhs->high_bound_val_.get_obj_ptr());
+src/share/schema/ob_schema_struct.cpp	3711	ObBasePartition::range_like_func_less_than	const_cast<ObObj*>	rrow.cells_ = const_cast<ObObj*>(rhs->high_bound_val_.get_obj_ptr());
+src/share/schema/ob_schema_struct.cpp	3968	ObPartition::inner_add_partition	const_cast<ObSubPartition *>	part_array[part_num] = const_cast<ObSubPartition *>(&part);
+src/share/schema/ob_schema_struct.cpp	4097	ObSubPartition::less_than	const_cast<ObObj*>	lrow.cells_ = const_cast<ObObj*>(lhs->high_bound_val_.get_obj_ptr());
+src/share/schema/ob_schema_struct.cpp	4102	ObSubPartition::less_than	const_cast<ObObj*>	rrow.cells_ = const_cast<ObObj*>(rhs->high_bound_val_.get_obj_ptr());
+src/share/schema/ob_schema_struct.cpp	4877	ObPartitionUtils::get_list_tablet_and_part_id_	const_cast<ObObj*>	row.cells_ = const_cast<ObObj*>(range.start_key_.get_obj_ptr());
+src/share/schema/ob_schema_struct.cpp	5085	ObPartitionUtils::get_list_tablet_and_subpart_id_	const_cast<ObObj*>	row.cells_ = const_cast<ObObj*>(range.start_key_.get_obj_ptr());
+src/share/schema/ob_schema_struct.h	86	#define ASSIGN_CONST_STRING	const_cast<ObString &>	(const_cast<ObString &>((dst)->field)).assign(buffer + offset, (src)->field.length());\
+src/share/schema/ob_schema_struct.h	3096	ObPartitionUtils::get_end_	const_cast<common::ObObj*>	lrow.cells_ = const_cast<common::ObObj*>((*result)->high_bound_val_.get_obj_ptr());
+src/share/schema/ob_schema_struct.h	3101	ObPartitionUtils::get_end_	const_cast<common::ObObj*>	rrow.cells_ = const_cast<common::ObObj*>(end_part.high_bound_val_.get_obj_ptr());
+src/share/schema/ob_schema_struct.h	3125	ObPartitionUtils::get_end_	const_cast<ObObj*>	lrow.cells_ = const_cast<ObObj*>(end_part.high_bound_val_.get_obj_ptr());
+src/share/schema/ob_schema_struct.h	3130	ObPartitionUtils::get_end_	const_cast<ObObj*>	rrow.cells_ = const_cast<ObObj*>(partition_array[end_pos]->low_bound_val_.get_obj_ptr());
+src/share/schema/ob_table_schema.cpp	2166	ObTableSchema::add_partition_key	const_cast<ObColumnSchemaV2 *>	if (NULL == (column = const_cast<ObColumnSchemaV2 *>(get_column_schema(column_name)))) {
+src/share/schema/ob_table_schema.cpp	2178	ObTableSchema::add_partition_key	const_cast<ObColumnSchemaV2 *>	if (NULL == (column = const_cast<ObColumnSchemaV2 *>(get_column_schema(column_id)))) {
+src/share/schema/ob_table_schema.cpp	2207	ObTableSchema::add_subpartition_key	const_cast<ObColumnSchemaV2 *>	if (NULL == (column = const_cast<ObColumnSchemaV2 *>(get_column_schema(column_name)))) {
+src/share/schema/ob_table_sql_service.cpp	1943	ObTableSqlService::delete_single_constraint	const_cast<ObTableSchema &>	const_cast<ObTableSchema &>(new_table_schema).get_constraint(
+src/sql/code_generator/ob_dml_cg_service.cpp	321	ObDmlCgService::generate_update_ctdef	const_cast<ObColumnRefRawExpr*>	const_cast<ObColumnRefRawExpr*>(col),
+src/sql/code_generator/ob_dml_cg_service.cpp	485	ObDmlCgService::get_table_unique_key_exprs	const_cast<ObRawExpr *>	} else if (FALSE_IT(stmt_id_expr = const_cast<ObRawExpr *>(op.get_stmt_id_expr()))) {
+src/sql/code_generator/ob_dml_cg_service.cpp	2483	ObDmlCgService::convert_upd_assign_infos	const_cast<ObColumnRefRawExpr*>	ObColumnRefRawExpr *col = const_cast<ObColumnRefRawExpr*>(assigns.at(i).column_expr_);
+src/sql/code_generator/ob_dml_cg_service.cpp	2655	ObDmlCgService::convert_insert_new_row_exprs	const_cast<ObRawExpr*>	if (OB_FAIL(new_row.push_back(const_cast<ObRawExpr*>(column_convert)))) {
+src/sql/code_generator/ob_expr_generator_impl.h	177	ObExprGeneratorImpl::gen_expression_with_row_desc	const_cast<ObRawExpr&>	if (OB_FAIL(expr_generator.generate(const_cast<ObRawExpr&>(*raw_expr), *expression))) {
+src/sql/code_generator/ob_static_engine_cg.cpp	1928	ObStaticEngineCG::generate_spec	const_cast<ObRawExpr *>	ObRawExpr *stmt_id_expr = const_cast<ObRawExpr *>(op.get_stmt_id_expr());
+src/sql/code_generator/ob_static_engine_cg.cpp	2259	ObStaticEngineCG::generate_spec	const_cast<ObRawExpr *>	ObRawExpr *stmt_id_expr = const_cast<ObRawExpr *>(op.get_stmt_id_expr());
+src/sql/code_generator/ob_static_engine_cg.cpp	3804	ObStaticEngineCG::generate_param_spec	const_cast<ObExpr **>	*const_cast<ObExpr **>(&setter.dst_)));
+src/sql/code_generator/ob_static_engine_cg.cpp	4568	ObStaticEngineCG::generate_spec	const_cast<ObExecContext *>	ObSqlCtx *sql_ctx = const_cast<ObExecContext *>(exec_ctx)->get_sql_ctx();
+src/sql/code_generator/ob_static_engine_expr_cg.cpp	69	ObStaticEngineExprCG::generate	const_cast<ObIArray<ObRawExpr *> &>	const_cast<ObIArray<ObRawExpr *> &>(flattened_raw_exprs.get_expr_array())))) {
+src/sql/code_generator/ob_static_engine_expr_cg.cpp	184	ObStaticEngineExprCG::generate_rt_expr	const_cast<ObRawExpr *>	} else if (OB_FAIL(exprs.push_back(const_cast<ObRawExpr *>(&raw_expr)))) {
+src/sql/code_generator/ob_static_engine_expr_cg.cpp	721	ObStaticEngineExprCG::cg_frame_layout_vector_version	const_cast<ObRawExpr **>	const_cast<ObRawExpr **>(exprs.get_data() + expr_start_pos),
+src/sql/code_generator/ob_static_engine_expr_cg.cpp	815	ObStaticEngineExprCG::cg_frame_layout	const_cast<ObRawExpr **>	const_cast<ObRawExpr **>(exprs.get_data() + expr_start_pos),
+src/sql/code_generator/ob_static_engine_expr_cg.cpp	1519	ObStaticEngineExprCG::gen_expr_with_row_desc	const_cast<ObRawExpr *>	OZ(expr_cg.generate(const_cast<ObRawExpr *>(expr), flattened_raw_exprs, *temp_expr));
+src/sql/code_generator/ob_tsc_cg_service.cpp	57	ObTscCgService::generate_tsc_ctdef	const_cast<ObExecContext *>	ObSqlCtx *sql_ctx = const_cast<ObExecContext *>(exec_ctx)->get_sql_ctx();
+src/sql/code_generator/ob_tsc_cg_service.cpp	286	ObTscCgService::calc_enable_use_simplified_scan	const_cast<ObDASScanCtDef*>	vid_rowkey_ctdef = const_cast<ObDASScanCtDef*>(aux_lookup_ctdef->get_lookup_scan_ctdef());
+src/sql/code_generator/ob_tsc_cg_service.cpp	323	ObTscCgService::calc_enable_use_simplified_scan	const_cast<ObDASVecAuxScanCtDef*>	ObDASVecAuxScanCtDef* tmp_vec_scan_def = const_cast<ObDASVecAuxScanCtDef*>(vec_scan_def);
+src/sql/code_generator/ob_tsc_cg_service.cpp	708	ObTscCgService::extract_das_access_exprs	const_cast<ObLogTableScan &>	OB_FAIL(const_cast<ObLogTableScan &>(op).extract_pushdown_filters(nonpushdown_filters,
+src/sql/code_generator/ob_tsc_cg_service.cpp	745	ObTscCgService::extract_das_access_exprs	const_cast<ObRawExpr*>	OB_FAIL(add_var_to_array_no_dup(access_exprs, const_cast<ObRawExpr*>(group_id_expr)))) {
+src/sql/code_generator/ob_tsc_cg_service.cpp	831	ObTscCgService::extract_tsc_access_columns	const_cast<ObLogTableScan &>	} else if (OB_FAIL(const_cast<ObLogTableScan &>(op).extract_pushdown_filters(tsc_exprs, //non-pushdown filters
+src/sql/code_generator/ob_tsc_cg_service.cpp	1233	ObTscCgService::extract_das_output_column_ids	const_cast<ObRawExpr*>	OB_FAIL(das_output_cols.push_back(const_cast<ObRawExpr*>(op.get_group_id_expr())))) {
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	467	ObDASHNSWScanIter::calc_dis_by_vid	const_cast<ObObj&>	ObRowkey vid_rowkey(&const_cast<ObObj&>(vid_obj), 1);
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	745	ObDASHNSWScanIter::reset_filter_path	const_cast<ObPlanStat*>	} else if (OB_FALSE_IT(plan_stat = const_cast<ObPlanStat*>(&(plan_ctx->get_phy_plan()->stat_)))) {
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	1144	ObDASHNSWScanIter::query_brute_force_distances	const_cast<char*>	if (OB_FAIL(adaptor->vsag_query_vids(reinterpret_cast<float *>(const_cast<char*>(search_vec.ptr())),
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	1146	ObDASHNSWScanIter::query_brute_force_distances	const_cast<char*>	} else if (OB_FAIL(adaptor->vsag_query_vids(reinterpret_cast<float *>(const_cast<char*>(search_vec.ptr())),
+src/sql/das/iter/ob_das_iter_utils.cpp	2912	ObDASIterUtils::create_cache_lookup_sub_tree	C-style cast (ObDASAttachCtDef*) drops const from the result of get_doc_id_scan_ctdef()	} else if (OB_FAIL(lookup_param.index_scan_proj_exprs_.assign(((ObDASAttachCtDef*)aux_lookup_ctdef->get_doc_id_scan_ctdef())->result_output_))) {
+src/sql/das/ob_das_dml_ctx_define.cpp	667	ObDASWriteBuffer::dump_data	const_cast<ObDASWriteBuffer*>	if (OB_FAIL(const_cast<ObDASWriteBuffer*>(this)->begin(write_iter_tmp))) {
+src/sql/das/ob_das_dml_vec_iter.h	30	ObVecIndexDMLIterator	const_cast<char*>	static constexpr char* VEC_DELTA_INSERT = const_cast<char*>("I");
+src/sql/das/ob_das_dml_vec_iter.h	31	ObVecIndexDMLIterator	const_cast<char*>	static constexpr char* VEC_DELTA_DELETE = const_cast<char*>("D");
+src/sql/das/ob_das_dml_vec_iter.h	119	ObHybridVecLogDMLIterator	const_cast<char*>	static constexpr char* VEC_DELTA_INSERT = const_cast<char*>("I");
+src/sql/das/ob_das_dml_vec_iter.h	120	ObHybridVecLogDMLIterator	const_cast<char*>	static constexpr char* VEC_DELTA_DELETE = const_cast<char*>("D");
+src/sql/das/ob_das_tablet_mapper.cpp	381	ObDASTabletMapper::get_tablet_and_object_id	const_cast<ObObj*>	ObRowkey rowkey(const_cast<ObObj*>(&value), 1);
+src/sql/das/ob_das_task.h	401	DASRtRefEncoder::encode	const_cast<T*>	ObDASBaseRtDef *rtdef = const_cast<T*>(val);
+src/sql/das/ob_das_utils.cpp	87	ObDASUtils::get_related_tablet_loc	const_cast<ObDASTabletLoc*>	ret_tablet_loc = const_cast<ObDASTabletLoc*>(&tablet_loc);
+src/sql/das/ob_data_access_service.cpp	90	ObDataAccessService::refresh_task_location_info	const_cast<ObDASTabletLoc*>	ObDASTabletLoc *tablet_loc = const_cast<ObDASTabletLoc*>(task_op.get_tablet_loc());

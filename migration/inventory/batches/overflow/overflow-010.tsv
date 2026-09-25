@@ -1,0 +1,51 @@
+file	line	symbol	construct	text
+src/sql/engine/expr/ob_expr_mul.cpp	191	ObExprMul::mul_int	check: helper is_multi_overflow64	if (OB_UNLIKELY(is_multi_overflow64(left_i, right_i))) {
+src/sql/engine/expr/ob_expr_mul.cpp	192	ObExprMul::mul_int	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_mul.cpp	202	ObExprMul::mul_int	unchecked: arithmetic on signed value left_i	res.set_int(left_i * right_i);
+src/sql/engine/expr/ob_expr_mul.cpp	206	ObExprMul::mul_int	check: helper is_int_uint_mul_out_of_range	if (OB_UNLIKELY(is_int_uint_mul_out_of_range(left_i, right_i))) {
+src/sql/engine/expr/ob_expr_mul.cpp	207	ObExprMul::mul_int	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_mul.cpp	217	ObExprMul::mul_int	unchecked: arithmetic on signed value left_i	res.set_uint64(left_i * right_i);
+src/sql/engine/expr/ob_expr_mul.cpp	236	ObExprMul::mul_uint	check: helper is_uint_uint_mul_out_of_range	if (OB_UNLIKELY(is_uint_uint_mul_out_of_range(left_i, right_i))) {
+src/sql/engine/expr/ob_expr_mul.cpp	237	ObExprMul::mul_uint	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_mul.cpp	248	ObExprMul::mul_uint	unchecked: arithmetic on unsigned value left_i	res.set_uint64(left_i * right_i);
+src/sql/engine/expr/ob_expr_mul.cpp	252	ObExprMul::mul_uint	check: helper is_int_uint_mul_out_of_range	if (OB_UNLIKELY(is_int_uint_mul_out_of_range(right_i, left_i))) {
+src/sql/engine/expr/ob_expr_mul.cpp	253	ObExprMul::mul_uint	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_mul.cpp	263	ObExprMul::mul_uint	unchecked: arithmetic on unsigned value left_i	res.set_uint64(left_i * right_i);
+src/sql/engine/expr/ob_expr_mul.cpp	347	ObIntIntBatchMulRaw::raw_op	unchecked: arithmetic on signed value l	res = l * r;
+src/sql/engine/expr/ob_expr_mul.cpp	354	ObIntIntBatchMulRaw::raw_check	check: helper is_mul_out_of_range	if (OB_UNLIKELY(ObExprMul::is_mul_out_of_range(l, r, res))) {
+src/sql/engine/expr/ob_expr_mul.cpp	356	ObIntIntBatchMulRaw::raw_check	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_mul.cpp	383	ObIntUIntBatchMulRaw::raw_op	unchecked: arithmetic on signed value l	res = l * r;
+src/sql/engine/expr/ob_expr_mul.cpp	389	ObIntUIntBatchMulRaw::raw_check	check: helper is_int_uint_mul_out_of_range	if (OB_UNLIKELY(ObExprMul::is_int_uint_mul_out_of_range(l, r))) {
+src/sql/engine/expr/ob_expr_mul.cpp	391	ObIntUIntBatchMulRaw::raw_check	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_mul.cpp	418	ObUIntIntBatchMulRaw::raw_op	unchecked: arithmetic on unsigned value l	res = l * r;
+src/sql/engine/expr/ob_expr_mul.cpp	424	ObUIntIntBatchMulRaw::raw_check	check: helper is_int_uint_mul_out_of_range	if (OB_UNLIKELY(ObExprMul::is_int_uint_mul_out_of_range(r, l))) {
+src/sql/engine/expr/ob_expr_mul.cpp	426	ObUIntIntBatchMulRaw::raw_check	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_mul.cpp	453	ObUIntUIntBatchMulRaw::raw_op	unchecked: arithmetic on unsigned value l	res = l * r;
+src/sql/engine/expr/ob_expr_mul.cpp	459	ObUIntUIntBatchMulRaw::raw_check	check: helper is_uint_uint_mul_out_of_range	if (OB_UNLIKELY(ObExprMul::is_uint_uint_mul_out_of_range(l, r))) {
+src/sql/engine/expr/ob_expr_mul.cpp	461	ObUIntUIntBatchMulRaw::raw_check	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_mul.cpp	729	ObDecimalIntBatchMulRawWithCheck::raw_check	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_mul.cpp	746	ObDecimalIntBatchMulRawWithRoundCheck::raw_check	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_mul.h	182	ObExprMul::is_mul_out_of_range	check: helper is_mul_out_of_range (definition)	OB_INLINE static bool is_mul_out_of_range(T1 val1, T2 val2, T3 &res)
+src/sql/engine/expr/ob_expr_mul.h	184	ObExprMul::is_mul_out_of_range	check: __builtin_*_overflow	return __builtin_mul_overflow(val1, val2, &res);
+src/sql/engine/expr/ob_expr_mul.h	186	ObExprMul::is_int_uint_mul_out_of_range	check: helper is_int_uint_mul_out_of_range (definition)	OB_INLINE static bool is_int_uint_mul_out_of_range(int64_t val1, uint64_t val2)
+src/sql/engine/expr/ob_expr_mul.h	192	ObExprMul::is_int_uint_mul_out_of_range	check: helper is_uint_uint_mul_out_of_range	overflow = is_uint_uint_mul_out_of_range(static_cast<uint64_t>(val1), val2);
+src/sql/engine/expr/ob_expr_mul.h	196	ObExprMul::is_uint_uint_mul_out_of_range	check: helper is_uint_uint_mul_out_of_range (definition)	OB_INLINE static bool is_uint_uint_mul_out_of_range(uint64_t val1, uint64_t val2)
+src/sql/engine/expr/ob_expr_mul.h	200	ObExprMul::is_uint_uint_mul_out_of_range	check: __builtin_*_overflow	overflow = __builtin_umulll_overflow(val1, val2, &res);
+src/sql/engine/expr/ob_expr_neg.cpp	88	DEF_EVAL_NEG_FUNC(ObIntTC)	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_neg.cpp	90	DEF_EVAL_NEG_FUNC(ObIntTC)	unchecked: arithmetic on a signed value getter	expr_datum.set_int(-param->get_int());
+src/sql/engine/expr/ob_expr_neg.cpp	103	DEF_EVAL_NEG_FUNC(ObUIntTC)	check: limit comparison	if (param->get_uint64() > (1UL + INT64_MAX)) {
+src/sql/engine/expr/ob_expr_neg.cpp	104	DEF_EVAL_NEG_FUNC(ObUIntTC)	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_neg.cpp	106	DEF_EVAL_NEG_FUNC(ObUIntTC)	unchecked: arithmetic on an unsigned value getter	expr_datum.set_int(-param->get_uint64());
+src/sql/engine/expr/ob_expr_period_diff.cpp	155	ObExprPeriodAdd::calc	unchecked: arithmetic on signed value rvalue	int64_t res_months = lyear * MONS_PER_YEAR + lmonth + rvalue;
+src/sql/engine/expr/ob_expr_pl_integer_checker.cpp	102	#define GET_VALUE_AND_CHECK	check: raises OB_NUMERIC_OVERFLOW	ret = OB_NUMERIC_OVERFLOW;                                \
+src/sql/engine/expr/ob_expr_pl_integer_checker.cpp	133	ObExprPLIntegerChecker::check_range	check: helper CHECK_OVERFLOW	CHECK_OVERFLOW(pls_range.get_lower(), pls_range.get_upper());
+src/sql/engine/expr/ob_expr_priv_st_asmvtgeom.cpp	182	ObExprPrivSTAsMVTGeom::process_input_geometry	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_priv_st_asmvtgeom.cpp	196	ObExprPrivSTAsMVTGeom::process_input_geometry	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_priv_st_geohash.cpp	270	ObExprPrivSTGeoHash::process_input_geometry	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_priv_st_makeenvelope.cpp	117	ObExprPrivSTMakeEnvelope::read_args	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_priv_st_point.cpp	136	ObExprPrivSTPoint::eval_priv_st_point	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_priv_st_transform.cpp	118	ObExprPrivSTTransform::eval_priv_st_transform	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_priv_st_transform.cpp	168	ObExprPrivSTTransform::eval_priv_st_transform	check: raises OB_OPERATE_OVERFLOW	ret = OB_OPERATE_OVERFLOW;
+src/sql/engine/expr/ob_expr_randstr.cpp	99	ObExprRandstr::calc_random_str	unchecked: arithmetic on signed value seed_val	seed_val = (seed_val * 1103515245 + 12345) & ((1U << 31) - 1);
+src/sql/engine/expr/ob_expr_repeat.cpp	127	ObExprRepeat::repeat	check: limit comparison	if ((length > max_result_size / count) || (length > INT_MAX / count)) {
+src/sql/engine/expr/ob_expr_repeat.cpp	176	ObExprRepeat::repeat_text	check: limit comparison	if ((length > max_result_size / count) || (length > INT_MAX / count)) {

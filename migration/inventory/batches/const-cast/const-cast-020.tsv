@@ -1,0 +1,69 @@
+file	line	symbol	construct	text
+src/sql/engine/set/ob_hash_except_op.cpp	274	ObHashExceptOp::get_next_batch_from_hashtable	const_cast<const ObChunkDatumStore::StoredRow**> (adds const only)	const_cast<const ObChunkDatumStore::StoredRow**>(store_rows_)))) {
+src/sql/engine/sort/ob_sort_op_impl.cpp	793	ObSortOpImpl::init	const_cast<common::ObIArray<ObChunkDatumStore::StoredRow *> &>	rows_ = &(const_cast<common::ObIArray<ObChunkDatumStore::StoredRow *> &>
+src/sql/engine/sort/ob_sort_op_impl.cpp	1500	ObSortOpImpl::do_partition_topn_sort	const_cast<common::ObIArray<ObChunkDatumStore::StoredRow *> &>	ObIArray<ObChunkDatumStore::StoredRow *> &heap_rows = (const_cast<common::ObIArray<ObChunkDatumStore::StoredRow *> &>
+src/sql/engine/sort/ob_sort_op_impl.cpp	2059	ObSortOpImpl::locate_current_heap	const_cast<common::ObIArray<ObChunkDatumStore::StoredRow *> &>	rows_ = &(const_cast<common::ObIArray<ObChunkDatumStore::StoredRow *> &>
+src/sql/engine/sort/ob_sort_op_impl.cpp	2213	ObSortOpImpl::get_next_batch_stored_rows	const_cast<ObChunkDatumStore::StoredRow *>	stored_rows_[read_rows++] = const_cast<ObChunkDatumStore::StoredRow *>(sr);
+src/sql/engine/sort/ob_sort_op_impl.cpp	2237	ObSortOpImpl::get_next_batch	const_cast<const ObChunkDatumStore::StoredRow **> (adds const only)	const_cast<const ObChunkDatumStore::StoredRow **>(stored_rows_), read_rows);
+src/sql/engine/sort/ob_sort_op_impl.cpp	2344	ObSortOpImpl::add_heap_sort_batch	const_cast<ObChunkDatumStore::StoredRow *>	stored_rows_[i] = const_cast<ObChunkDatumStore::StoredRow *>(store_row);
+src/sql/engine/sort/ob_sort_op_impl.cpp	2346	ObSortOpImpl::add_heap_sort_batch	const_cast<ObChunkDatumStore::StoredRow *>	stored_rows_[i] = const_cast<ObChunkDatumStore::StoredRow *>(topn_heap_->heap_.top());
+src/sql/engine/sort/ob_sort_op_impl.cpp	2398	ObSortOpImpl::add_part_heap_sort_batch	const_cast<ObChunkDatumStore::StoredRow *>	stored_rows_[i] = const_cast<ObChunkDatumStore::StoredRow *>(store_row);
+src/sql/engine/sort/ob_sort_op_impl.cpp	2400	ObSortOpImpl::add_part_heap_sort_batch	const_cast<ObChunkDatumStore::StoredRow *>	stored_rows_[i] = const_cast<ObChunkDatumStore::StoredRow *>(topn_heap_->heap_.top());
+src/sql/engine/sort/ob_sort_op_impl.cpp	2762	ObPrefixSortImpl::init	const_cast<ObSortFieldCollation*>	const_cast<ObSortFieldCollation*>(&sort_collations->at(0) + prefix_pos), cnt);
+src/sql/engine/sort/ob_sort_op_impl.cpp	2764	ObPrefixSortImpl::init	const_cast<ObSortCmpFunc*>	const_cast<ObSortCmpFunc*>(&sort_cmp_funs->at(0) + prefix_pos), cnt);
+src/sql/engine/sort/ob_sort_op_impl.cpp	3134	ObPrefixSortImpl::get_next_batch	const_cast<const ObChunkDatumStore::StoredRow **> (adds const only)	const_cast<const ObChunkDatumStore::StoredRow **>(stored_rows_), read_rows);
+src/sql/engine/sort/ob_sort_op_impl.cpp	3204	ObUniqueSortImpl::get_next_batch	const_cast<const ObChunkDatumStore::StoredRow **> (adds const only)	const_cast<const ObChunkDatumStore::StoredRow **>(stored_rows_), tmp_read_rows);
+src/sql/engine/user_defined_function/ob_pl_user_defined_agg_function.cpp	210	ObPlAggUdfFunction::process_calc_pl_agg_udf	const_cast<ObObj*>	} else if (OB_FAIL(process_obj_params(const_cast<ObObj*>(obj_params), param_num))) {
+src/sql/engine/window_function/ob_window_function_op.cpp	435	ObWindowFunctionOp::get_param_int_value	const_cast<number::ObCompactNumber &>	number::ObCompactNumber &cnum = const_cast<number::ObCompactNumber &>(
+src/sql/engine/window_function/ob_window_function_op.cpp	1115	ObWindowFunctionOp::init	const_cast<WFInfoFixedArray *>	WFInfoFixedArray &wf_infos = *const_cast<WFInfoFixedArray *>(&MY_SPEC.wf_infos_);
+src/sql/engine/window_function/ob_window_function_op.cpp	1396	ObWindowFunctionOp::inner_rescan	const_cast<WFInfoFixedArray *>	const_cast<WFInfoFixedArray *>(&MY_SPEC.wf_infos_)->at(0).partition_exprs_.count();
+src/sql/engine/window_function/ob_window_function_op.cpp	2338	ObWindowFunctionOp::rd_fetch_patch	const_cast<ObRDWFWholeMsg *>	ObRDWFWholeMsg *m = const_cast<ObRDWFWholeMsg *>(whole_msg);
+src/sql/engine/window_function/ob_window_function_op.cpp	2395	ObWindowFunctionOp::copy_datum_row	const_cast<char *>	char *base = const_cast<char *>(row.payload_);
+src/sql/engine/window_function/ob_window_function_op.cpp	2470	ObWindowFunctionOp::parallel_winbuf_process	const_cast<ObRADatumStore::StoredRow *>	ObRADatumStore::StoredRow *new_row = const_cast<
+src/sql/engine/window_function/ob_window_function_op.cpp	3074	ObWindowFunctionOp::calc_part_exprs_hash	const_cast<ObDatum *>	datum = const_cast<ObDatum *>(&row_->cells()[i]);
+src/sql/engine/window_function/ob_window_function_op.h	889	ObWindowFunctionOp::get_all_expr	const_cast<ExprFixedArray *>	{ return *const_cast<ExprFixedArray *>(&(MY_SPEC.all_expr_)); }
+src/sql/hybrid_search/ob_query_parse.h	189	ObEsQueryInfo::get_top_query_info	const_cast<ObEsQueryInfo *>	ObEsQueryInfo *top_query_info = const_cast<ObEsQueryInfo *>(this);
+src/sql/monitor/ob_exec_stat.h	255	ObAuditRecordData::assign	C-style cast (void*) drops const from from	MEMCPY((void*)this, (void*)&from, sizeof(from));
+src/sql/monitor/ob_sql_stat_record.cpp	321	ObExecutingSqlStatRecord::move_to_sqlstat_cache	const_cast<ObExecutedSqlStatRecord *>	ObExecutedSqlStatRecord *sql_stat_value = const_cast<ObExecutedSqlStatRecord *>(&(plan->sql_stat_record_value_));
+src/sql/ob_optimizer_trace_impl.cpp	420	ObOptimizerTraceImpl::append	const_cast<ObLogicalOperator*>	if (OB_FAIL(sql_plan.print_sql_plan(const_cast<ObLogicalOperator*>(target_plan->get_plan_root()),
+src/sql/ob_optimizer_trace_impl.cpp	443	ObOptimizerTraceImpl::append	const_cast<ObLogicalOperator*>	if (OB_FAIL(sql_plan.print_sql_plan(const_cast<ObLogicalOperator*>(plan_top),
+src/sql/ob_optimizer_trace_impl.h	429	ObOptimizerTraceImpl::append	const_cast<ObRawExpr*>	if (OB_FAIL(expr_printer.do_print(const_cast<ObRawExpr*>(raw_expr), T_NONE_SCOPE))) {
+src/sql/ob_spi.cpp	1205	ObSPIService::spi_set_package_variable	const_cast<ObObj *>	ObObj result = *const_cast<ObObj *>(&value);
+src/sql/ob_spi.cpp	1297	ObSPIService::spi_set_variable	const_cast<ObObjParam *>	ObObjParam result = *const_cast<ObObjParam *>(value);
+src/sql/ob_spi.cpp	4203	ObSPIService::construct_exec_params	const_cast<ObObjMeta&>	OX (const_cast<ObObjMeta&>(result.get_meta()).set_extend_type(result_type.get_extend_type()));
+src/sql/ob_sql.cpp	700	ObSql::fill_result_set	const_cast<common::ParamsFieldIArray *>	result.set_p_param_fileds(const_cast<common::ParamsFieldIArray *>(&sql_meta.get_param_fields()));
+src/sql/ob_sql.cpp	701	ObSql::fill_result_set	const_cast<common::ParamsFieldIArray *>	result.set_p_column_fileds(const_cast<common::ParamsFieldIArray *>(&sql_meta.get_column_fields()));
+src/sql/ob_sql.cpp	1036	ObSql::prepare_pl_sql	const_cast<ObString &>	ObString trimed_stmt = const_cast<ObString &>(sql).trim();
+src/sql/ob_sql.cpp	1343	ObSql::handle_ps_prepare	const_cast<ObString &>	ObString trimed_stmt = const_cast<ObString &>(stmt).trim();
+src/sql/ob_sql.cpp	1475	ObSql::add_param_to_param_store	const_cast<ObObjParam &>	const_cast<ObObjParam &>(param).set_param_meta();
+src/sql/ob_sql.cpp	1933	ObSql::handle_text_query	const_cast<ObString &>	ObString trimed_stmt = const_cast<ObString &>(stmt).trim();
+src/sql/ob_sql.cpp	2893	ObSql::init_exec_context	const_cast<ObSqlCtx*>	exec_ctx.set_sql_ctx(const_cast<ObSqlCtx*>(&context));
+src/sql/ob_sql_utils.cpp	85	ObSQLUtils::check_enable_decimalint	const_cast<ObSQLSessionInfo *>	enable_decimalint = (const_cast<ObSQLSessionInfo *>(session)->is_enable_decimal_int_type());
+src/sql/ob_sql_utils.cpp	943	ObSQLUtils::check_enable_mysql_compatible_dates	const_cast<sql::ObSQLSessionInfo *>	} else if ((const_cast<sql::ObSQLSessionInfo *>(session))->is_enable_mysql_compatible_dates()) {
+src/sql/ob_sql_utils.cpp	2299	ObSQLUtils::merge_solidified_vars_into_type_ctx	const_cast<ObTZInfoMap *>	*(const_cast<ObTZInfoMap *>(tz_info_map))))) {
+src/sql/ob_sql_utils.cpp	3505	ObSQLUtils::add_calc_failure_constraint	const_cast<ObRawExpr*>	ObExprConstraint cons(const_cast<ObRawExpr*>(raw_expr), PRE_CALC_ERROR);
+src/sql/optimizer/ob_del_upd_log_plan.cpp	1756	ObDelUpdLogPlan::add_extra_dependency_table	const_cast<ObDelUpdStmt *>	ObDelUpdStmt *del_upd_stmt = const_cast<ObDelUpdStmt *>(get_stmt());
+src/sql/optimizer/ob_dynamic_sampling.cpp	233	ObDynamicSampling::add_ds_stat_items_by_dml_info	const_cast<ObOptDSStat*>	const_cast<ObOptDSStat*>(ds_result_items.at(i).stat_handle_.stat_)->set_stat_expired_time(
+src/sql/optimizer/ob_join_order.cpp	1595	ObJoinOrder::create_one_access_path	const_cast<ObPreRangeGraph*>	ap->pre_range_graph_ = const_cast<ObPreRangeGraph*>(range_info.get_pre_range_graph());
+src/sql/optimizer/ob_join_order.cpp	5470	ObJoinOrder::compute_vec_idx_path_relationship	const_cast<AccessPath*>; const_cast<AccessPath*>	const_cast<AccessPath*>(&first_path) : const_cast<AccessPath*>(&second_path);
+src/sql/optimizer/ob_join_order.cpp	5472	ObJoinOrder::compute_vec_idx_path_relationship	const_cast<AccessPath*>; const_cast<AccessPath*>	const_cast<AccessPath*>(&second_path) : const_cast<AccessPath*>(&first_path);
+src/sql/optimizer/ob_join_order.cpp	5490	ObJoinOrder::compute_vec_idx_path_relationship	const_cast<AccessPath*>; const_cast<AccessPath*>	const_cast<AccessPath*>(&first_path) : const_cast<AccessPath*>(&second_path);
+src/sql/optimizer/ob_join_order.cpp	7630	JoinPath::do_re_estimate_cost	const_cast<Path*>	Path *left_path = const_cast<Path*>(left_path_);
+src/sql/optimizer/ob_join_order.cpp	7631	JoinPath::do_re_estimate_cost	const_cast<Path*>	Path *right_path = const_cast<Path*>(right_path_);
+src/sql/optimizer/ob_join_order.cpp	8055	JoinPath::cost_hash_join	const_cast<Path*>	Path *right_path = const_cast<Path*>(right_path_);
+src/sql/optimizer/ob_join_order.cpp	9245	ObJoinOrder::init_join_order	const_cast<ObJoinOrder*>	if (OB_FAIL(merge_conflict_detectors(const_cast<ObJoinOrder*>(left_tree),
+src/sql/optimizer/ob_join_order.cpp	9246	ObJoinOrder::init_join_order	const_cast<ObJoinOrder*>	const_cast<ObJoinOrder*>(right_tree),
+src/sql/optimizer/ob_join_order.cpp	17249	ObJoinOrder::deduce_prefix_str_idx_expr	const_cast<ObRawExpr*>	const_cast<ObRawExpr*>(substr_expr),
+src/sql/optimizer/ob_log_del_upd.cpp	184	IndexDMLInfo::init_column_convert_expr	const_cast<ObRawExpr *>	insert_expr = const_cast<ObRawExpr *>(assignments.at(j).expr_);
+src/sql/optimizer/ob_log_del_upd.cpp	213	IndexDMLInfo::convert_old_row_exprs	const_cast<ObColumnRefRawExpr*>	ObColumnRefRawExpr *col_expr = const_cast<ObColumnRefRawExpr*>(columns.at(i));
+src/sql/optimizer/ob_log_del_upd.cpp	613	ObLogDelUpd::allocate_expr_post	const_cast<ObRawExpr*>	if (OB_FAIL(mark_expr_produced(const_cast<ObRawExpr*>(expr_producer.expr_), branch_id_, id_, ctx))) {
+src/sql/optimizer/ob_log_exchange.cpp	839	ObLogExchange::check_expr_is_need	const_cast<ObRawExpr *>	if (OB_FAIL(ObRawExprUtils::extract_params(const_cast<ObRawExpr *>(expr), params))) {
+src/sql/optimizer/ob_log_plan.cpp	190	ObLogPlan::to_string	const_cast<ObLogicalOperator*>	if (OB_FAIL(sql_plan.print_sql_plan(const_cast<ObLogicalOperator*>(target_plan->get_plan_root()),
+src/sql/optimizer/ob_log_plan.cpp	2573	ObLogPlan::allocate_join_path	const_cast<Path*>	Path *left_path = const_cast<Path*>(join_path->left_path_);
+src/sql/optimizer/ob_log_plan.cpp	2574	ObLogPlan::allocate_join_path	const_cast<Path*>	Path *right_path = const_cast<Path*>(join_path->right_path_);
+src/sql/optimizer/ob_log_plan.cpp	4752	ObLogPlan::init_hash_rollup_info	const_cast<ObIArray<ObRawExpr *> &>	const_cast<ObIArray<ObRawExpr *> &>(rollup_exprs),
+src/sql/optimizer/ob_log_plan.cpp	4753	ObLogPlan::init_hash_rollup_info	const_cast<ObIArray<ObRawExpr *> &>	const_cast<ObIArray<ObRawExpr *> &>(groupby_exprs),
+src/sql/optimizer/ob_log_plan.cpp	9430	ObLogPlan::adjust_final_plan_info	const_cast<ObDelUpdStmt*>	ObDelUpdStmt *stmt = const_cast<ObDelUpdStmt* >(plan->get_stmt());
+src/sql/optimizer/ob_log_plan.cpp	9479	ObLogPlan::adjust_final_plan_info	const_cast<ObSelectStmt*>	ObSelectStmt *stmt = const_cast<ObSelectStmt* >(plan->get_stmt());
+src/sql/optimizer/ob_log_table_scan.cpp	812	ObLogTableScan::extract_virtual_gen_access_exprs	const_cast<ObRawExpr *>	const_cast<ObRawExpr *>(get_group_id_expr())))) {
+src/sql/optimizer/ob_opt_est_utils.cpp	348	ObOptEstUtils::if_expr_value_equal	const_cast<ObRawExpr *>; const_cast<ObRawExpr *>	ObOpRawExpr equal_expr(const_cast<ObRawExpr *>(&first_expr), const_cast<ObRawExpr *>(&second_expr), T_OP_EQ);

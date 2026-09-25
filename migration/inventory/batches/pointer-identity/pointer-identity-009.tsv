@@ -1,0 +1,51 @@
+file	line	symbol	construct	text
+src/sql/optimizer/ob_log_group_by.cpp	99	ObLogGroupBy::get_op_exprs	pointer membership test: append_array_no_dup	} else if (OB_FAIL(append_array_no_dup(all_exprs, rollup_exprs_))) {
+src/sql/optimizer/ob_log_group_by.cpp	365	ObLogGroupBy::get_gby_output_exprs	pointer membership test: append_array_no_dup	} else if (OB_FAIL(append_array_no_dup(candi_exprs, plan->get_winfunc_exprs_for_width_est()))) {
+src/sql/optimizer/ob_log_group_by.cpp	366	ObLogGroupBy::get_gby_output_exprs	pointer membership test: append_array_no_dup	} else if (OB_FAIL(append_array_no_dup(candi_exprs, plan->get_select_item_exprs_for_width_est()))) {
+src/sql/optimizer/ob_log_group_by.cpp	367	ObLogGroupBy::get_gby_output_exprs	pointer membership test: append_array_no_dup	} else if (OB_FAIL(append_array_no_dup(candi_exprs, plan->get_orderby_exprs_for_width_est()))) {
+src/sql/optimizer/ob_log_group_by.cpp	370	ObLogGroupBy::get_gby_output_exprs	pointer membership test: append_array_no_dup	} else if (OB_FAIL(append_array_no_dup(output_exprs, extracted_col_or_aggr_exprs))) {
+src/sql/optimizer/ob_log_group_by.cpp	588	ObLogGroupBy::compute_op_ordering	IR pointer == IR pointer	child->get_op_ordering().at(i).expr_ == group_exprs_.at(i)) {
+src/sql/optimizer/ob_log_group_by.cpp	706	ObLogGroupBy::set_three_stage_info	pointer membership test: ObOptimizerUtil::find_item	} else if (!ObOptimizerUtil::find_item(group_exprs_,
+src/sql/optimizer/ob_log_group_by.cpp	721	ObLogGroupBy::is_my_fixed_expr	pointer membership test: ObOptimizerUtil::find_item	is_fixed = ObOptimizerUtil::find_item(aggr_exprs_, expr) ||
+src/sql/optimizer/ob_log_group_by.cpp	722	ObLogGroupBy::is_my_fixed_expr	pointer membership test: ObOptimizerUtil::find_item	ObOptimizerUtil::find_item(rollup_exprs_, expr) ||
+src/sql/optimizer/ob_log_group_by.cpp	723	ObLogGroupBy::is_my_fixed_expr	IR pointer == IR pointer	expr == three_stage_info_.aggr_code_expr_ ||
+src/sql/optimizer/ob_log_insert.cpp	286	ObLogInsert::get_constraint_info_exprs	pointer membership test: append_array_no_dup	} else if (OB_FAIL(append_array_no_dup(all_exprs, temp_exprs))) {
+src/sql/optimizer/ob_log_join.cpp	74	ObLogJoin::get_op_exprs	pointer membership test: append_array_no_dup	} else if (OB_FAIL(append_array_no_dup(all_exprs, join_filters_))) {
+src/sql/optimizer/ob_log_join.cpp	1036	ObLogJoin::is_my_exec_expr	pointer membership test: ObOptimizerUtil::find_item	return ObOptimizerUtil::find_item(nl_params_, expr);
+src/sql/optimizer/ob_log_join.cpp	1067	ObLogJoin::allocate_startup_expr_post	pointer membership test: ObOptimizerUtil::append_exprs_no_dup (pointer identity, then same_as)	if (OB_FAIL(ObOptimizerUtil::append_exprs_no_dup(get_startup_exprs(), new_startup_exprs))) {
+src/sql/optimizer/ob_log_json_table.cpp	55	ObLogJsonTable::allocate_expr_post	pointer membership test: add_var_to_array_no_dup	} else if (!is_plan_root() && OB_FAIL(add_var_to_array_no_dup(output_exprs_, value_col))) {
+src/sql/optimizer/ob_log_plan.cpp	662	ObLogPlan::pre_process_quals	pointer membership test: ObOptimizerUtil::find_item	if (ObOptimizerUtil::find_item(push_subq_exprs_, qual)) {
+src/sql/optimizer/ob_log_plan.cpp	937	ObLogPlan::init_width_estimation_info	pointer membership test: append_array_no_dup	if (OB_FAIL(append_array_no_dup(groupby_rollup_exprs_, select_stmt->get_group_exprs()))) {
+src/sql/optimizer/ob_log_plan.cpp	938	ObLogPlan::init_width_estimation_info	pointer membership test: append_array_no_dup	} else if (OB_FAIL(append_array_no_dup(groupby_rollup_exprs_, select_stmt->get_rollup_exprs()))) {
+src/sql/optimizer/ob_log_plan.cpp	939	ObLogPlan::init_width_estimation_info	pointer membership test: append_array_no_dup	} else if (OB_FAIL(append_array_no_dup(having_exprs_, select_stmt->get_having_exprs()))) {
+src/sql/optimizer/ob_log_plan.cpp	952	ObLogPlan::init_width_estimation_info	pointer membership test: add_var_to_array_no_dup	} else if (OB_FAIL(add_var_to_array_no_dup(winfunc_exprs_, partition_by_expr))) {
+src/sql/optimizer/ob_log_plan.cpp	959	ObLogPlan::init_width_estimation_info	pointer membership test: add_var_to_array_no_dup	} else if (OB_FAIL(add_var_to_array_no_dup(winfunc_exprs_, orderby_item.expr_))) {
+src/sql/optimizer/ob_log_plan.cpp	971	ObLogPlan::init_width_estimation_info	pointer membership test: add_var_to_array_no_dup	} else if (OB_FAIL(add_var_to_array_no_dup(select_item_exprs_, select_item.expr_))) {
+src/sql/optimizer/ob_log_plan.cpp	985	ObLogPlan::init_width_estimation_info	pointer membership test: add_var_to_array_no_dup	} else if (OB_FAIL(add_var_to_array_no_dup(orderby_exprs_, orderby_item.expr_))) {
+src/sql/optimizer/ob_log_plan.cpp	1956	ObLogPlan::inner_remove_redundancy_pred	IR pointer != IR pointer	cur_expr->get_param_expr(0) != cur_expr->get_param_expr(1)) {
+src/sql/optimizer/ob_log_plan.cpp	2180	ObLogPlan::get_subplan	IR pointer == IR pointer	} else if (get_subplans().at(i)->init_expr_ == expr) {
+src/sql/optimizer/ob_log_plan.cpp	2888	ObLogPlan::get_join_path_keys	pointer membership test: append_array_no_dup	} else if (OB_FAIL(append_array_no_dup(conditions, join_path.right_path_->pushdown_filters_))) {
+src/sql/optimizer/ob_log_plan.cpp	3560	ObLogPlan::init_candidate_plans	pointer membership test: append_array_no_dup	} else if (OB_FAIL(append_array_no_dup(root->get_startup_exprs(),
+src/sql/optimizer/ob_log_plan.cpp	4210	ObLogPlan::perform_group_by_pushdown	IR pointer == unresolved pointer	if (group_replaced_exprs_.at(k).first == from) {
+src/sql/optimizer/ob_log_plan.cpp	4244	ObLogPlan::try_to_generate_pullup_aggr	IR pointer != unresolved pointer	if (group_replaced_exprs_.at(i).first != old_aggr) {
+src/sql/optimizer/ob_log_plan.cpp	4842	ObLogPlan::get_three_stage_groupby_number_of_copies	IR pointer == IR pointer	find = distinct_aggrs.at(j)->get_param_expr(k) == aggr->get_param_expr(k);
+src/sql/optimizer/ob_log_plan.cpp	7315	ObLogPlan::generate_subplan_filter_info	pointer membership test: append_array_no_dup	} else if (OB_FAIL(append_array_no_dup(onetime_query_refs, tmp))) {
+src/sql/optimizer/ob_log_plan.cpp	7316	ObLogPlan::generate_subplan_filter_info	pointer membership test: append_array_no_dup	} else if (OB_FAIL(append_array_no_dup(candi_query_refs, tmp))) {
+src/sql/optimizer/ob_log_plan.cpp	7338	ObLogPlan::generate_subplan_filter_info	pointer membership test: ObOptimizerUtil::find_item	if (ObOptimizerUtil::find_item(onetime_query_refs, candi_query_refs.at(i))) {
+src/sql/optimizer/ob_log_plan.cpp	7581	ObLogPlan::compute_subplan_filter_random_shuffle_info	pointer membership test: add_var_to_array_no_dup	if (OB_FAIL(add_var_to_array_no_dup(exec_raw_params, params.at(i)->get_ref_expr()))) {
+src/sql/optimizer/ob_log_plan.cpp	7801	ObLogPlan::get_subplan_filter_normal_equal_keys	IR pointer == IR pointer	} else if (child->get_plan()->get_stmt() == right_stmt) {
+src/sql/optimizer/ob_log_plan.cpp	8157	ObLogPlan::init_onetime_subquery_info	pointer membership test: ObOptimizerUtil::find_item	} else if (ObOptimizerUtil::find_item(func_table_exprs, expr)) {
+src/sql/optimizer/ob_log_plan.cpp	8159	ObLogPlan::init_onetime_subquery_info	pointer membership test: ObOptimizerUtil::find_item	} else if (ObOptimizerUtil::find_item(json_table_exprs, expr)) {
+src/sql/optimizer/ob_log_plan.cpp	8264	ObLogPlan::create_onetime_param	pointer membership test: ObOptimizerUtil::find_item	} else if (ObOptimizerUtil::find_item(onetime_query_refs_, expr)) {
+src/sql/optimizer/ob_log_plan.cpp	8266	ObLogPlan::create_onetime_param	pointer membership test: ObOptimizerUtil::find_item	} else if (ObOptimizerUtil::find_item(onetime_list, expr)) {
+src/sql/optimizer/ob_log_plan.cpp	8302	ObLogPlan::extract_onetime_exprs	pointer membership test: ObOptimizerUtil::find_item	if (!ObOptimizerUtil::find_item(onetime_query_refs_, expr, &idx)) {
+src/sql/optimizer/ob_log_plan.cpp	8313	ObLogPlan::extract_onetime_exprs	pointer membership test: ObOptimizerUtil::find_item	bool has_exists = ObOptimizerUtil::find_item(get_onetime_exprs(), exec_param);
+src/sql/optimizer/ob_log_plan.cpp	9645	ObLogPlan::gen_das_table_location_info	pointer membership test: append_array_no_dup	} else if (OB_FAIL(append_array_no_dup(all_filters, table_scan->get_range_conditions()))) {
+src/sql/optimizer/ob_log_plan.cpp	9646	ObLogPlan::gen_das_table_location_info	pointer membership test: append_array_no_dup	} else if (OB_FAIL(append_array_no_dup(all_filters, table_scan->get_filter_exprs()))) {
+src/sql/optimizer/ob_log_plan.cpp	10317	ObLogPlan::add_subquery_filter	pointer membership test: ObOptimizerUtil::is_subset	} else if (!ObOptimizerUtil::is_subset(onetime_exprs, onetime_params_)) {
+src/sql/optimizer/ob_log_plan.cpp	10648	ObLogPlan::get_part_column_exprs	pointer membership test: append_array_no_dup	} else if (OB_FAIL(append_array_no_dup(part_exprs, temp_exprs))) {
+src/sql/optimizer/ob_log_plan.cpp	11975	ObLogPlan::prepare_text_retrieval_scan	IR pointer != unresolved pointer	} else if (OB_UNLIKELY(match_against != static_cast<ObMatchFunRawExpr *>(scan_match_exprs.at(0)))) {
+src/sql/optimizer/ob_log_plan.cpp	11997	ObLogPlan::prepare_text_retrieval_scan	IR pointer != IR pointer	if (curr_filter != match_pred) {
+src/sql/optimizer/ob_log_plan.cpp	12060	ObLogPlan::prepare_text_retrieval_match_score	IR pointer == IR pointer	} else if (prev_match_expr == curr_match_expr && FALSE_IT(column_boost_idx = column_boost_idx + 1)) {
+src/sql/optimizer/ob_log_plan.cpp	12061	ObLogPlan::prepare_text_retrieval_match_score	IR pointer != IR pointer	} else if (prev_match_expr != curr_match_expr && FALSE_IT(column_boost_idx = 0)) {
+src/sql/optimizer/ob_log_plan.cpp	12684	ObLogPlan::try_push_topn_into_text_retrieval_scan	IR pointer == IR pointer	sort_keys.at(0).expr_ == table_scan->get_text_retrieval_info().match_expr_) {

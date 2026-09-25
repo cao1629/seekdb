@@ -1,0 +1,57 @@
+file	line	symbol	construct	text
+src/query/api/query/vector/ob_vector_embedding_handler.h	70	ObEmbeddingTaskInfo::model_name_	member ObString (value) of type ObString	ObString model_name_;
+src/query/api/query/vector/ob_vector_embedding_handler.h	71	ObEmbeddingTaskInfo::model_url_	member ObString (value) of type ObString	ObString model_url_;
+src/query/api/query/vector/ob_vector_embedding_handler.h	75	ObEmbeddingTaskInfo::error_message_	member ObString (value) of type ObString	ObString error_message_;
+src/query/api/query/vector/ob_vector_embedding_handler.h	76	ObEmbeddingTaskInfo::http_error_message_	member ObString (value) of type ObString	ObString http_error_message_;
+src/query/api/query/vector/ob_vector_embedding_handler.h	283	ObEmbeddingTask::HttpResponseData::data	member raw bytes (pointer) of type char *	char *data;
+src/query/api/query/vector/ob_vector_embedding_handler.h	314	ObEmbeddingTask::model_url_	member ObString (value) of type ObString	ObString model_url_;
+src/query/api/query/vector/ob_vector_embedding_handler.h	315	ObEmbeddingTask::model_name_	member ObString (value) of type ObString	ObString model_name_;
+src/query/api/query/vector/ob_vector_embedding_handler.h	316	ObEmbeddingTask::provider_	member ObString (value) of type ObString	ObString provider_;
+src/query/api/query/vector/ob_vector_embedding_handler.h	318	ObEmbeddingTask::user_key_	member ObString (value) of type ObString	ObString user_key_;
+src/query/api/query/vector/ob_vector_embedding_handler.h	320	ObEmbeddingTask::input_chunks_	member container of ObString of type ObArray<ObString>	ObArray<ObString> input_chunks_;
+src/query/api/query/vector/ob_vector_embedding_handler.h	340	ObEmbeddingTask::http_error_message_	member ObString (value) of type ObString	ObString http_error_message_;
+src/query/api/query/vector/ob_vector_embedding_handler.h	342	ObEmbeddingTask::internal_error_message_	member ObString (value) of type ObString	ObString internal_error_message_;
+src/query/api/query/vector/ob_vector_embedding_handler.h	353	ObEmbeddingTask::http_response_data_	member raw bytes (pointer) of type char *	char *http_response_data_;
+src/query/api/query/vector/ob_vector_index_adaptor.h	140	ObVectorParamData::vectors_	member ObObj (pointer) of type ObObj *	ObObj *vectors_; // need do init by yourself
+src/query/api/query/vector/ob_vector_index_adaptor.h	141	ObVectorParamData::vids_	member ObObj (pointer) of type ObObj *	ObObj *vids_;
+src/query/api/query/vector/ob_vector_index_adaptor.h	224	ObHnswBitmapFilter::bitmap_	member raw bytes (pointer) of type uint8_t *	uint8_t *bitmap_; // byte_array
+src/query/api/query/vector/ob_vector_index_adaptor.h	228	ObHnswBitmapFilter::rk_range_	member container of ObNewRange of type ObArray<const ObNewRange *>	ObArray<const ObNewRange *> rk_range_;
+src/query/api/query/vector/ob_vector_index_adaptor.h	232	ObHnswBitmapFilter::extra_buffer_	member raw bytes (pointer) of type char *	char *extra_buffer_;
+src/query/api/query/vector/ob_vector_index_adaptor.h	233	ObHnswBitmapFilter::tmp_objs_	member ObObj (pointer) of type ObObj *	ObObj *tmp_objs_;
+src/query/api/query/vector/ob_vector_index_adaptor.h	382	ObVectorQueryConditions::query_vector_	member ObString (value) of type ObString	ObString query_vector_;
+src/query/api/query/vector/ob_vector_index_adaptor.h	937	ObPluginVectorIndexAdaptor::index_identity_	member ObString (value) of type ObString	ObString index_identity_; // identify multi indexes on one table & column, generate unique uint64 to save memory?
+src/query/api/query/vector/ob_vector_index_adaptor.h	944	ObPluginVectorIndexAdaptor::snapshot_key_prefix_	member ObString (value) of type ObString	ObString snapshot_key_prefix_; // name rule: TabletID_SCN
+src/query/api/query/vector/ob_vector_index_serialize.h	47	ObStreamBuf::data_	member raw bytes (pointer) of type char *	char *data_;
+src/query/api/query/vector/ob_vector_index_util.h	972	ObVecIdxSnapshotDataWriteCtx::vals_	member container of ObString of type ObArray<ObString>	ObArray<ObString> vals_;
+src/query/api/query/vector/ob_vector_index_util.h	1033	ObVecExtraInfoPtr::buf_	member raw bytes (pointer) of type const char **	const char **buf_;
+src/query/api/query/vector/ob_vector_index_util.h	1054	ObVecExtraInfoObj::ptr_	member raw bytes (pointer) of type const char *	const char *ptr_;
+src/query/api/query/vector/ob_vector_index_util.h	1117	ObVecTidCandidate::index_prefix_	member ObString (value) of type ObString	ObString index_prefix_;
+src/query/api/query/vector/ob_vector_query_result.h	73	ObVectorQueryRowkeyIterator::rowkeys_	member container of ObRowkey of type ObIArray<common::ObRowkey> *	ObIArray<common::ObRowkey> *rowkeys_;
+src/query/api/query/vector/ob_vector_query_result.h	124	ObVectorQueryVidIterator::row_	member ObNewRow (pointer) of type ObNewRow *	ObNewRow *row_;
+src/query/api/query/vector/ob_vector_query_result.h	125	ObVectorQueryVidIterator::obj_	member ObObj (pointer) of type ObObj *	ObObj *obj_;
+src/rootserver/dbms_job/ob_dbms_job_utils.h	112	ObDBMSJobInfo::lowner_	member ObString (value) of type common::ObString	common::ObString lowner_;
+src/rootserver/dbms_job/ob_dbms_job_utils.h	113	ObDBMSJobInfo::powner_	member ObString (value) of type common::ObString	common::ObString powner_;
+src/rootserver/dbms_job/ob_dbms_job_utils.h	114	ObDBMSJobInfo::cowner_	member ObString (value) of type common::ObString	common::ObString cowner_;
+src/rootserver/dbms_job/ob_dbms_job_utils.h	120	ObDBMSJobInfo::interval_	member ObString (value) of type common::ObString	common::ObString interval_;
+src/rootserver/dbms_job/ob_dbms_job_utils.h	123	ObDBMSJobInfo::what_	member ObString (value) of type common::ObString	common::ObString what_;
+src/rootserver/dbms_job/ob_dbms_job_utils.h	124	ObDBMSJobInfo::nlsenv_	member ObString (value) of type common::ObString	common::ObString nlsenv_;
+src/rootserver/dbms_job/ob_dbms_job_utils.h	125	ObDBMSJobInfo::charenv_	member ObString (value) of type common::ObString	common::ObString charenv_;
+src/rootserver/dbms_job/ob_dbms_job_utils.h	127	ObDBMSJobInfo::exec_env_	member ObString (value) of type common::ObString	common::ObString exec_env_;
+src/rootserver/ddl_task/ob_ddl_common_rs_impl.cpp	933	ObDDLTaskUtil::generate_partition_names	allocator in, arena view out: ObString &partition_names	int ObDDLTaskUtil::generate_partition_names(const common::ObIArray<ObString> &partition_names_array, common::ObIAllocator &allocator, ObString &partition_names)
+src/rootserver/ddl_task/ob_ddl_retry_task.h	71	ObDDLRetryTask::forward_user_message_	member ObString (value) of type common::ObString	common::ObString forward_user_message_;
+src/rootserver/ddl_task/ob_ddl_scheduler.h	163	ObPrepareAlterTableArgParam::ddl_stmt_str_	member ObString (value) of type common::ObString	common::ObString ddl_stmt_str_;
+src/rootserver/ddl_task/ob_ddl_scheduler.h	164	ObPrepareAlterTableArgParam::orig_table_name_	member ObString (value) of type common::ObString	common::ObString orig_table_name_;
+src/rootserver/ddl_task/ob_ddl_scheduler.h	165	ObPrepareAlterTableArgParam::orig_database_name_	member ObString (value) of type common::ObString	common::ObString orig_database_name_;
+src/rootserver/ddl_task/ob_ddl_scheduler.h	166	ObPrepareAlterTableArgParam::target_database_name_	member ObString (value) of type common::ObString	common::ObString target_database_name_;
+src/rootserver/ddl_task/ob_ddl_scheduler.h	185	ObRedefCallback::infos_	member container of ObString of type common::hash::ObHashMap<ObString, bool> *	common::hash::ObHashMap<ObString, bool> *infos_;
+src/rootserver/ddl_task/ob_ddl_task.cpp	2444	convert_sql_rowkey	allocator in, arena view out: sql::ObPxTabletRange::DatumKey &sql_key	static int convert_sql_rowkey(
+src/rootserver/ddl_task/ob_ddl_task.cpp	2487	convert_storage_rowkey	allocator in, arena view out: ObDatumRowkey &storage_key	static int convert_storage_rowkey(
+src/rootserver/ddl_task/ob_ddl_task.h	104	ObDDLTaskRecord::message_	member ObString (value) of type ObString	ObString message_;
+src/rootserver/ddl_task/ob_ddl_task.h	108	ObDDLTaskRecord::ddl_stmt_str_	member ObString (value) of type ObString	ObString ddl_stmt_str_;
+src/rootserver/ddl_task/ob_ddl_task.h	163	ObFTSDDLChildTaskInfo::index_name_	member ObString (value) of type common::ObString	common::ObString index_name_;
+src/rootserver/ddl_task/ob_ddl_task.h	195	ObVecIndexDDLChildTaskInfo::index_name_	member ObString (value) of type common::ObString	common::ObString index_name_;
+src/rootserver/ddl_task/ob_ddl_task.h	740	ObDDLTask::ddl_stmt_str_	member ObString (value) of type ObString	ObString ddl_stmt_str_;
+src/rootserver/ddl_task/ob_rebuild_index_task.h	108	ObRebuildIndexTask::target_object_name_	member ObString (value) of type ObString	ObString target_object_name_;
+src/rootserver/freeze/ob_major_freeze_util.h	63	ObFreezeTimeGuard::file_	member raw bytes (pointer) of type const char * const	const char * const file_;
+src/rootserver/freeze/ob_major_freeze_util.h	65	ObFreezeTimeGuard::func_name_	member raw bytes (pointer) of type const char * const	const char * const func_name_;
+src/rootserver/freeze/ob_major_freeze_util.h	66	ObFreezeTimeGuard::log_mod_	member raw bytes (pointer) of type const char * const	const char * const log_mod_;

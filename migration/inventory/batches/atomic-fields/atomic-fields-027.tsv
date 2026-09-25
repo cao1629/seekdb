@@ -1,0 +1,45 @@
+file	line	symbol	construct	text
+src/storage/tx/ob_trans_define.h	828	ObElrTransInfo::result_	field int; 2 atomic accesses (ATOMIC_BCAS 1, ATOMIC_LOAD 1)	int result_;
+src/storage/tx/ob_trans_define.h	977	ObPartitionAuditInfo::base_row_count_	field int64_t; 1 atomic accesses (ATOMIC_SET 1)	int64_t base_row_count_;
+src/storage/tx/ob_trans_define.h	1206	ObTxExecInfo::prepare_version_	field share::SCN; 1 atomic accesses (ATOMIC_STORE 1); through member functions atomic_store	share::SCN prepare_version_;
+src/storage/tx/ob_trans_define.h	1211	ObTxExecInfo::max_submitted_seq_no_	field ObTxSEQ; 1 atomic accesses (inc_update 1); through member functions inc_update	ObTxSEQ max_submitted_seq_no_;
+src/storage/tx/ob_trans_define.h	1216	ObTxExecInfo::need_checksum_	field bool; 4 atomic accesses (ATOMIC_LOAD 3, ATOMIC_STORE 1)	bool need_checksum_;
+src/storage/tx/ob_trans_define.h	1218	ObTxExecInfo::serial_final_scn_	field share::SCN; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_SET 1); through member functions atomic_load, atomic_set	share::SCN serial_final_scn_;
+src/storage/tx/ob_trans_define_v4.h	205	ObTxDesc::op_sn_	field uint64_t; 1 atomic accesses (ATOMIC_AAF 1)	uint64_t op_sn_;                     // Tx level operation sequence No
+src/storage/tx/ob_trans_define_v4.h	220	ObTxDesc::state_	field State; 2 atomic accesses (ATOMIC_LOAD_ACQ 1, ATOMIC_STORE_REL 1)	} state_;
+src/storage/tx/ob_trans_define_v4.h	289	ObTxDesc::cb_tid_	field int64_t; 2 atomic accesses (ATOMIC_LOAD_ACQ 1, ATOMIC_STORE_REL 1)	int64_t cb_tid_;                  // commit callback thread id
+src/storage/tx/ob_trans_define_v4.h	610	ObTxDescMgr::ObTxDescAlloc::alloc_cnt_	field int64_t; 3 atomic accesses (ATOMIC_DEC 1, ATOMIC_INC 1, ATOMIC_LOAD 1)	int64_t alloc_cnt_;
+src/storage/tx/ob_trans_factory.cpp	208	alloc_count_	10 candidate declarations, none chosen; 6 atomic accesses in 1 files (ATOMIC_FAA 6); through macros MAKE_FACTORY_CLASS_IMPLEMENT_USE_RP_ALLOC > MAKE_FACTORY_CLASS_IMPLEMENT; first access shown	MAKE_FACTORY_CLASS_IMPLEMENT_USE_RP_ALLOC(ClogBuf, ObModIds::OB_TRANS_CLOG_BUF)
+src/storage/tx/ob_trans_factory.cpp	208	release_count_	5 candidate declarations, none chosen; 6 atomic accesses in 1 files (ATOMIC_FAA 6); through macros MAKE_FACTORY_CLASS_IMPLEMENT_USE_RP_ALLOC > MAKE_FACTORY_CLASS_IMPLEMENT; first access shown	MAKE_FACTORY_CLASS_IMPLEMENT_USE_RP_ALLOC(ClogBuf, ObModIds::OB_TRANS_CLOG_BUF)
+src/storage/tx/ob_trans_factory.h	54	ObTxCtxFactory::active_tx_ctx_count_	field static int64_t; 4 atomic accesses (ATOMIC_FAA 2, ATOMIC_LOAD 2)	static int64_t active_tx_ctx_count_;
+src/storage/tx/ob_trans_factory.h	55	ObTxCtxFactory::total_release_tx_ctx_count_	field static int64_t; 2 atomic accesses (ATOMIC_FAA 1, ATOMIC_STORE 1)	static int64_t total_release_tx_ctx_count_;
+src/storage/tx/ob_trans_factory.h	75	TransObjFactory::alloc_count_	field int64_t; 1 atomic accesses (ATOMIC_FAA 1)	int64_t alloc_count_;
+src/storage/tx/ob_trans_factory.h	76	TransObjFactory::release_count_	field int64_t; 1 atomic accesses (ATOMIC_FAA 1)	int64_t release_count_;
+src/storage/tx/ob_trans_factory.h	138	ObLSTxCtxMgrFactory::alloc_count_	field static int64_t; 1 atomic accesses (ATOMIC_FAA 1)	static int64_t alloc_count_;
+src/storage/tx/ob_trans_factory.h	139	ObLSTxCtxMgrFactory::release_count_	field static int64_t; 1 atomic accesses (ATOMIC_FAA 1)	static int64_t release_count_;
+src/storage/tx/ob_trans_service.h	198	ObTransService::input_queue_count_	field uint32_t; 2 atomic accesses (ATOMIC_FAA 1, ATOMIC_STORE 1)	uint32_t input_queue_count_;
+src/storage/tx/ob_trans_service.h	199	ObTransService::output_queue_count_	field uint32_t; 2 atomic accesses (ATOMIC_FAA 1, ATOMIC_STORE 1)	uint32_t output_queue_count_;
+src/storage/tx/ob_trans_service.h	208	ObTransService::tx_debug_seq_	field int64_t; 1 atomic accesses (ATOMIC_AAF 1)	int64_t tx_debug_seq_;
+src/storage/tx/ob_trans_submit_log_cb.h	156	ObTxLogCb::is_callbacked_	field bool; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_STORE 1)	bool is_callbacked_;
+src/storage/tx/ob_trans_submit_log_cb.h	157	ObTxLogCb::is_busy_	field bool; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_STORE 1)	bool is_busy_;
+src/storage/tx/ob_trans_version_mgr.h	68	ObTransVersionMgr::publish_version_	field int64_t; 4 atomic accesses (ATOMIC_LOAD 3, ATOMIC_BCAS 1)	int64_t publish_version_;
+src/storage/tx/ob_trans_version_mgr.h	69	ObTransVersionMgr::local_trans_version_	field int64_t; 5 atomic accesses (ATOMIC_LOAD 4, ATOMIC_BCAS 1)	int64_t local_trans_version_;
+src/storage/tx/ob_tx_ctx.h	597	ObTxCtx::is_inited_	field bool; 1 atomic accesses (ATOMIC_LOAD 1)	bool is_inited_;
+src/storage/tx/ob_tx_ctx.h	608	ObTxCtx::pending_write_	field int; 2 atomic accesses (ATOMIC_AAF 1, ATOMIC_SAF 1)	int pending_write_;
+src/storage/tx/ob_tx_ctx.h	654	ObTxCtx::rec_log_ts_	field share::SCN; 8 atomic accesses (ATOMIC_STORE 7, ATOMIC_LOAD 1); through member functions atomic_load, atomic_store	share::SCN rec_log_ts_;
+src/storage/tx/ob_tx_ctx.h	655	ObTxCtx::prev_rec_log_ts_	field share::SCN; 3 atomic accesses (ATOMIC_STORE 2, ATOMIC_LOAD 1); through member functions atomic_load, atomic_store	share::SCN prev_rec_log_ts_;
+src/storage/tx/ob_tx_ctx.h	673	ObTxCtx::is_submitting_redo_log_for_freeze_	field bool; 2 atomic accesses (ATOMIC_STORE 2)	bool is_submitting_redo_log_for_freeze_;
+src/storage/tx/ob_tx_data_define.h	230	ObTxCommitData::state_	field int32_t; 7 atomic accesses (ATOMIC_LOAD 7)	int32_t state_;
+src/storage/tx/ob_tx_data_define.h	231	ObTxCommitData::commit_version_	field share::SCN; 7 atomic accesses (ATOMIC_LOAD 6, ATOMIC_STORE 1); through member functions atomic_load, atomic_store	share::SCN commit_version_;
+src/storage/tx/ob_tx_data_define.h	232	ObTxCommitData::start_scn_	field share::SCN; 3 atomic accesses (ATOMIC_LOAD 2, ATOMIC_STORE 1); through member functions atomic_load, atomic_store	share::SCN start_scn_;
+src/storage/tx/ob_tx_data_define.h	233	ObTxCommitData::end_scn_	field share::SCN; 8 atomic accesses (ATOMIC_LOAD 7, ATOMIC_STORE 1); through member functions atomic_load, atomic_store	share::SCN end_scn_;
+src/storage/tx/ob_tx_data_define.h	364	ObTxData::ref_cnt_	field int64_t; 2 atomic accesses (ATOMIC_AAF 1, ATOMIC_SAF 1)	int64_t ref_cnt_;
+src/storage/tx/ob_tx_data_op.h	159	ObTxDataOp::ref_cnt_	field int64_t; 2 atomic accesses (ATOMIC_AAF 1, ATOMIC_SAF 1)	int64_t ref_cnt_;
+src/storage/tx/ob_tx_elr_handler.h	60	ObTxELRHandler::elr_prepared_state_	field TxELRState; 3 atomic accesses (ATOMIC_STORE 2, ATOMIC_LOAD 1)	TxELRState elr_prepared_state_;
+src/storage/tx/ob_tx_timestamp_waiter.h	75	ObTxTimestampWaiter::running_	field bool; 4 atomic accesses (ATOMIC_STORE 3, ATOMIC_LOAD 1)	bool running_;
+src/storage/tx/ob_tx_timestamp_waiter.h	76	ObTxTimestampWaiter::latest_gts_	field uint64_t; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_STORE 1)	uint64_t latest_gts_;
+src/storage/tx/ob_tx_version_mgr.h	79	ObTxVersionMgr::max_commit_ts_	field share::SCN; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_VCAS 1); through member functions atomic_get, inc_update	share::SCN max_commit_ts_ CACHE_ALIGNED;
+src/storage/tx/ob_tx_version_mgr.h	80	ObTxVersionMgr::max_elr_commit_ts_	field share::SCN; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_VCAS 1); through member functions atomic_get, inc_update	share::SCN max_elr_commit_ts_ CACHE_ALIGNED;
+src/storage/tx/ob_tx_version_mgr.h	81	ObTxVersionMgr::max_read_ts_	field share::SCN; 1 atomic accesses (ATOMIC_VCAS 1); through member functions inc_update	share::SCN max_read_ts_ CACHE_ALIGNED;
+src/storage/tx_storage/ob_empty_shell_task.h	63	ObTabletEmptyShellHandler::is_trigger_	field bool; 2 atomic accesses (ATOMIC_LOAD 1, ATOMIC_STORE 1)	bool is_trigger_;
+src/storage/tx_storage/ob_empty_shell_task.h	64	ObTabletEmptyShellHandler::stopped_	field bool; 3 atomic accesses (ATOMIC_STORE 2, ATOMIC_LOAD 1)	bool stopped_;

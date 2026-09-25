@@ -1,0 +1,37 @@
+file	line	symbol	construct	text
+src/storage/tmp_file/ob_tmp_file_flush_priority_manager.cpp	150	ObTmpFileFlushPriorityManager::insert_flush_list_	inc_ref_cnt call	file.inc_ref_cnt();
+src/storage/tmp_file/ob_tmp_file_flush_priority_manager.cpp	152	ObTmpFileFlushPriorityManager::insert_flush_list_	dec_ref_cnt call	file.dec_ref_cnt();
+src/storage/tmp_file/ob_tmp_file_flush_priority_manager.cpp	271	ObTmpFileFlushPriorityManager::remove_file	dec_ref_cnt call	file.dec_ref_cnt();
+src/storage/tmp_file/ob_tmp_file_flush_priority_manager.cpp	307	ObTmpFileFlushPriorityManager::popN_from_file_list	dec_ref_cnt call	file->dec_ref_cnt(); // ref_cnt of flush list
+src/storage/tmp_file/ob_tmp_file_io_ctx.h	131	ObTmpFileIOCtx::ObIReadHandle	Handle struct definition	struct ObIReadHandle
+src/storage/tmp_file/ob_tmp_file_io_ctx.h	148	ObTmpFileIOCtx::ObIOReadHandle	Handle struct definition : ObIReadHandle	struct ObIOReadHandle final : public ObIReadHandle
+src/storage/tmp_file/ob_tmp_file_io_ctx.h	165	ObTmpFileIOCtx::ObBlockCacheHandle	Handle struct definition : ObIReadHandle	struct ObBlockCacheHandle final : public ObIReadHandle
+src/storage/tmp_file/ob_tmp_file_io_ctx.h	184	ObTmpFileIOCtx::ObPageCacheHandle	Handle struct definition : ObIReadHandle	struct ObPageCacheHandle final : public ObIReadHandle
+src/storage/tmp_file/ob_tmp_file_io_handle.h	29	ObTmpFileIOHandle	Handle class definition	class ObTmpFileIOHandle final
+src/storage/truncate_info/ob_truncate_info_kv_cache.h	65	ObTruncateInfoValueHandle	Handle struct definition	struct ObTruncateInfoValueHandle final
+src/storage/tx/ob_trans_ctx.cpp	245	ObTransCtx::register_timeout_task_	acquire_ctx_ref_ call (other name)	} else if (OB_FAIL(acquire_ctx_ref_())) {
+src/storage/tx/ob_trans_ctx.cpp	325	ObTransCtx::release_ctx_ref	release_ctx_ref definition (other name)	void ObTransCtx::release_ctx_ref()
+src/storage/tx/ob_trans_ctx.h	143	ObTransCtx::acquire_ctx_ref	acquire_ctx_ref definition (other name); acquire_ctx_ref_ call (other name)	int acquire_ctx_ref() { return acquire_ctx_ref_(); }
+src/storage/tx/ob_trans_ctx.h	144	ObTransCtx	release_ctx_ref declaration (other name)	void release_ctx_ref();
+src/storage/tx/ob_trans_ctx.h	180	ObTransCtx::acquire_ctx_ref_	acquire_ctx_ref_ definition (other name)	int acquire_ctx_ref_()
+src/storage/tx/ob_trans_ctx.h	182	ObTransCtx::acquire_ctx_ref_	inc_ref call	ObLightHashLink::inc_ref(1);
+src/storage/tx/ob_trans_ctx.h	185	ObTransCtx::release_ctx_ref_	release_ctx_ref_ definition (other name)	void release_ctx_ref_()
+src/storage/tx/ob_trans_ctx.h	187	ObTransCtx::release_ctx_ref_	dec_ref call	ObLightHashLink::dec_ref(1);
+src/storage/tx/ob_trans_ctx_lock.h	99	CtxLockGuard	Guard class definition whose methods reach release_ctx_ref through other functions (CtxLockGuard::reset > CtxLock::unlock_ctx > CtxLock::after_unlock > ObTransCtx::after_unlock > ObTxCommitCallback::callback > release_ctx_ref)	class CtxLockGuard
+src/storage/tx/ob_trans_define_v4.cpp	1527	ObTxDescMgr::alloc	inc_ref call	OX(tx_desc->inc_ref(1));
+src/storage/tx/ob_trans_define_v4.cpp	1586	ObTxDescMgr::acquire_tx_ref	acquire_tx_ref definition (other name)	int ObTxDescMgr::acquire_tx_ref(const ObTransID &trans_id)
+src/storage/tx/ob_trans_define_v4.cpp	1595	ObTxDescMgr::release_tx_ref	release_tx_ref definition (other name)	int ObTxDescMgr::release_tx_ref(ObTxDesc *tx_desc)
+src/storage/tx/ob_trans_define_v4.h	541	ObTxDescMgr	acquire_tx_ref declaration (other name)	int acquire_tx_ref(const ObTransID &trans_id);
+src/storage/tx/ob_trans_define_v4.h	542	ObTxDescMgr	release_tx_ref declaration (other name)	int release_tx_ref(ObTxDesc *tx_desc);
+src/storage/tx/ob_trans_define_v4.h	617	ObTxDescMgr::force_release	dec_ref call	if (tx.dec_ref(1) == 0) {
+src/storage/tx/ob_trans_end_trans_callback.cpp	35	ObTxCommitCallback::reset	release_ctx_ref call (other name)	tx_ctx_->release_ctx_ref();
+src/storage/tx/ob_trans_end_trans_callback.cpp	54	ObTxCommitCallback::link	acquire_ctx_ref call (other name)	tx_ctx->acquire_ctx_ref();
+src/storage/tx/ob_trans_end_trans_callback.cpp	81	ObTxCommitCallback::callback	release_ctx_ref call (other name)	tx_ctx_->release_ctx_ref();
+src/storage/tx/ob_trans_service_v4.cpp	207	ObTransService::register_commit_retry_task_	acquire_tx_ref call (other name)	if (OB_FAIL(tx_desc_mgr_.acquire_tx_ref(tx.tx_id_))) {
+src/storage/tx/ob_trans_service_v4.cpp	756	ObTransService::get_write_store_ctx	end_access call (reference-count function found by its body)	if (access_started) { tx_ctx->end_access(); }
+src/storage/tx/ob_trans_service_v4.cpp	911	ObTransService::revert_store_ctx	end_access call (reference-count function found by its body)	tx_ctx->end_access();
+src/storage/tx/ob_trans_service_v4.h	25	-	release_tx_ref declaration (other name)	int release_tx_ref(ObTxDesc &tx);
+src/storage/tx/ob_trans_timer.cpp	167	ObTxTimeoutTask::runTimerTask	release_tx_ref call (other name)	DEFER({ txs->release_tx_ref(*tx_desc); });
+src/storage/tx/ob_tx_api.cpp	661	ObTransService::direct_execute_commit_cb_	inc_ref call	tx.inc_ref(1);
+src/storage/tx/ob_tx_api.cpp	1603	ObTransService::release_tx_ref	release_tx_ref definition (other name)	int ObTransService::release_tx_ref(ObTxDesc &tx)
+src/storage/tx/ob_tx_api.cpp	1605	ObTransService::release_tx_ref	release_tx_ref call (other name)	return tx_desc_mgr_.release_tx_ref(&tx);

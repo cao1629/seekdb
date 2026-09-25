@@ -1,0 +1,51 @@
+file	line	symbol	construct	text
+src/share/cache/ob_recycle_multi_kvcache.ipp	215	ObRecycleMultiKVCache::construct_assign_	-4013 handled (compared against)	if (OB_ALLOCATE_MEMORY_FAILED == ret) {
+src/share/cache/ob_recycle_multi_kvcache.ipp	267	ObRecycleMultiKVCache::append	-4013 handled (compared against)	if (OB_ALLOCATE_MEMORY_FAILED == tmp_ret) {
+src/share/cache/ob_recycle_multi_kvcache.ipp	285	ObRecycleMultiKVCache::append	-4013 handled (compared against)	} while (OB_SUCC(ret) && OB_ALLOCATE_MEMORY_FAILED == tmp_ret);
+src/share/io/ob_io_define.cpp	1088	ObIORequest::alloc_aligned_io_buf	budget-backed -4013: IO allocator	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/share/io/ob_io_define.cpp	1200	ObIORequest::try_alloc_buf_until_timeout	-4013 handled (compared against)	if (OB_ALLOCATE_MEMORY_FAILED == ret) {
+src/share/io/ob_io_manager.cpp	402	ObIOManager::add_device_channel	bounded allocator not named in the plan: IO manager FIFO (a general out-of-memory under Decision 12 unless the design names it a budget owner)	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/share/io/ob_io_manager.cpp	728	ObIOService::alloc_and_init_result	-4013 handled (compared against)	if (OB_ALLOCATE_MEMORY_FAILED == ret) {
+src/share/io/ob_io_manager.cpp	764	ObIOService::alloc_req_and_result	-4013 handled (compared against)	if (OB_ALLOCATE_MEMORY_FAILED == ret) {
+src/share/io/ob_io_manager.cpp	943	ObIOService::try_alloc_req_until_timeout	-4013 handled (compared against)	if (OB_ALLOCATE_MEMORY_FAILED == ret) {
+src/share/io/ob_io_manager.cpp	970	ObIOService::try_alloc_result_until_timeout	-4013 handled (compared against)	if (OB_ALLOCATE_MEMORY_FAILED == ret) {
+src/share/io/ob_io_manager.cpp	993	ObIOService::alloc_io_request	budget-backed -4013: IO allocator	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/share/io/ob_io_manager.cpp	1007	ObIOService::alloc_io_result	budget-backed -4013: IO allocator	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/share/io/ob_io_struct.cpp	235	ObIOAllocator::alloc	budget-backed -4013: IO allocator	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/share/io/ob_io_struct.h	600	ObIOAllocator::alloc	budget-backed -4013: IO allocator	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/share/ob_ddl_sim_point_define.h	49	-	errsim injection point raising -4013 (simulation point)	DDL_SIM_POINT_DEFINE(SIM_TYPE_DDL, HEART_BEAT_UPDATE_ACTIVE_TIME, 16, "heart beat mgr update task active time", RET_ERR(OB_ALLOCATE_MEMORY_FAILED))
+src/share/ob_ddl_sim_point_define.h	68	-	errsim injection point raising -4013 (simulation point)	DDL_SIM_POINT_DEFINE(SIM_TYPE_DDL, PROCESS_CHILD_TASK_FINISH_FAILED, 36, "process child task finish failed", RET_ERR(OB_ALLOCATE_MEMORY_FAILED))
+src/share/ob_ddl_sim_point_define.h	72	-	errsim injection point raising -4013 (simulation point)	DDL_SIM_POINT_DEFINE(SIM_TYPE_DDL, LOCAL_BUILD_EXECUTOR_BUILD_FAILED, 40, "local build executor build failed", RET_ERR(OB_ALLOCATE_MEMORY_FAILED))
+src/share/ob_ddl_sim_point_define.h	74	-	errsim injection point raising -4013 (simulation point)	DDL_SIM_POINT_DEFINE(SIM_TYPE_DDL, REDEF_SSTABLE_BULD_TASK_INIT_FAILED, 42, "redef sstable build task init failed", RET_ERR(OB_EAGAIN, OB_ALLOCATE_MEMORY_FAILED))
+src/share/ob_ddl_sim_point_define.h	75	-	errsim injection point raising -4013 (simulation point)	DDL_SIM_POINT_DEFINE(SIM_TYPE_DDL, REDEF_SSTABLE_BULD_TASK_PROCESS_FAILED, 43, "redef sstable build task process failed", RET_ERR(OB_ALLOCATE_MEMORY_FAILED))
+src/share/ob_ddl_sim_point_define.h	91	-	errsim injection point raising -4013 (simulation point)	DDL_SIM_POINT_DEFINE(SIM_TYPE_DDL, REDEF_TASK_CHECK_REBUILD_CONSTRAINT_FAILED, 60, "redef task check rebuild constraint failed", RET_ERR(OB_ALLOCATE_MEMORY_FAILED, OB_EAGAIN))
+src/share/ob_ddl_sim_point_define.h	142	-	errsim injection point raising -4013 (simulation point)	DDL_SIM_POINT_DEFINE(SIM_TYPE_DDL, UNIQUE_INDEX_CHECKER_GENERATE_INDEX_OUTPUT_PARAM_FAILED, 113, "unique index checker generate index output param failed", RET_ERR(OB_ALLOCATE_MEMORY_FAILED))
+src/share/ob_ddl_task_executor.cpp	92	ObDDLTaskQueue::push_task	bounded allocator not named in the plan: DDL task executor FIFO (1GB) (a general out-of-memory under Decision 12 unless the design names it a budget owner)	ret = common::OB_ALLOCATE_MEMORY_FAILED;
+src/share/ob_ddl_task_executor.cpp	95	ObDDLTaskQueue::push_task	bounded allocator not named in the plan: DDL task executor FIFO (1GB) (a general out-of-memory under Decision 12 unless the design names it a budget owner)	ret = common::OB_ALLOCATE_MEMORY_FAILED;
+src/share/ob_ddl_task_executor.h	94	ObIDDLTask::is_retry	budget error handled (compared against or case label): OB_EXCEED_MEM_LIMIT	|| common::OB_EXCEED_MEM_LIMIT == ret_code || common::OB_INACTIVE_SQL_CLIENT == ret_code || common::OB_INACTIVE_RPC_PROXY == ret_code || common::OB_LS_OFFLINE == ret_code;
+src/share/redolog/ob_log_file_handler.cpp	236	ObLogFileHandler::inner_read	-4013 handled (compared against)	} else if (OB_ALLOCATE_MEMORY_FAILED == ret) {
+src/share/roaringbitmap/ob_rb_memory_mgr.cpp	55	roaring_malloc	variable initialized to -4013 (not a raise)	int ret = OB_ALLOCATE_MEMORY_FAILED;
+src/share/schema/ob_multi_version_schema_service.cpp	1407	ObMultiVersionSchemaService::alloc_and_put_schema_mgr_	errsim injection point raising -4013	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/share/schema/ob_multi_version_schema_service.cpp	1410	ObMultiVersionSchemaService::alloc_and_put_schema_mgr_	errsim injection point raising -4013	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/share/schema/ob_multi_version_schema_service.cpp	1461	ObMultiVersionSchemaService::switch_allocator_	errsim injection point raising -4013	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/share/schema/ob_multi_version_schema_service.cpp	1474	ObMultiVersionSchemaService::switch_allocator_	errsim injection point raising -4013	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/share/schema/ob_multi_version_schema_service.cpp	2063	ObMultiVersionSchemaService::try_gc_allocator_when_add_schema_	errsim injection point raising -4013	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/share/schema/ob_schema_mem_mgr.cpp	125	ObSchemaMemMgr::alloc_schema_mgr	errsim injection point raising -4013	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/share/schema/ob_schema_mem_mgr.cpp	205	ObSchemaMemMgr::free_schema_mgr	errsim injection point raising -4013	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/sql/das/iter/ob_das_ivf_scan_iter.cpp	735	ObDASIvfBaseScanIter::get_centers_cache	-4013 handled (compared against)	if (ret == OB_ALLOCATE_MEMORY_FAILED) {
+src/sql/das/iter/ob_das_ivf_scan_iter.cpp	2656	ObDASIvfPQScanIter::get_pq_precomputetable_cache	-4013 handled (compared against)	if (ret == OB_ALLOCATE_MEMORY_FAILED) {
+src/sql/das/iter/ob_das_text_retrieval_merge_iter.cpp	210	ObDASTextRetrievalMergeIter::build_query_tokens	logical -4013, not a named plan case (provisional: no allocation call and no null test in the governing condition)	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/sql/engine/basic/ob_chunk_datum_store.cpp	743	ObChunkDatumStore::dump	budget error raised: OB_EXCEED_MEM_LIMIT	ret = OB_EXCEED_MEM_LIMIT;
+src/sql/engine/basic/ob_chunk_datum_store.cpp	825	ObChunkDatumStore::switch_block	budget error handled (compared against or case label): OB_EXCEED_MEM_LIMIT	if (OB_EXCEED_MEM_LIMIT != ret) {
+src/sql/engine/basic/ob_chunk_datum_store.cpp	862	ObChunkDatumStore::ensure_write_blk	budget error handled (compared against or case label): OB_EXCEED_MEM_LIMIT	if (OB_FAIL(switch_block(Block::min_buf_size(row_size))) && OB_EXCEED_MEM_LIMIT != ret) {
+src/sql/engine/basic/ob_chunk_datum_store.cpp	910	ObChunkDatumStore::add_row	budget error handled (compared against or case label): OB_EXCEED_MEM_LIMIT	if (OB_EXCEED_MEM_LIMIT != ret) {
+src/sql/engine/basic/ob_chunk_datum_store.cpp	1377	ObChunkDatumStore::finish_add_row	budget error handled (compared against or case label): OB_EXCEED_MEM_LIMIT	if (need_dump && OB_FAIL(dump(false, true)) && OB_EXCEED_MEM_LIMIT != ret) {
+src/sql/engine/basic/ob_chunk_row_store.cpp	487	ObChunkRowStore::dump	budget error raised: OB_EXCEED_MEM_LIMIT	ret = OB_EXCEED_MEM_LIMIT;
+src/sql/engine/basic/ob_chunk_row_store.cpp	557	ObChunkRowStore::switch_block	budget error handled (compared against or case label): OB_EXCEED_MEM_LIMIT	if (OB_EXCEED_MEM_LIMIT != ret) {
+src/sql/engine/basic/ob_chunk_row_store.cpp	626	ObChunkRowStore::add_row	budget error handled (compared against or case label): OB_EXCEED_MEM_LIMIT	if (OB_FAIL(switch_block(min_buf_size)) && OB_EXCEED_MEM_LIMIT != ret) {
+src/sql/engine/basic/ob_chunk_row_store.cpp	683	ObChunkRowStore::copy_row	budget error handled (compared against or case label): OB_EXCEED_MEM_LIMIT	if (OB_FAIL(switch_block(min_buf_size)) && OB_EXCEED_MEM_LIMIT != ret) {
+src/sql/engine/basic/ob_chunk_row_store.cpp	716	ObChunkRowStore::finish_add_row	budget error handled (compared against or case label): OB_EXCEED_MEM_LIMIT	if (need_dump && OB_FAIL(dump(false, true)) && OB_EXCEED_MEM_LIMIT != ret) {
+src/sql/engine/basic/ob_hash_partitioning_infrastructure_op.h	1700	ObHashPartInfrastructure::create_dumped_partitions	logical -4013 (plan case: hash-join partition depth)	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/sql/engine/basic/ob_hash_partitioning_infrastructure_op.h	2709	ObHashPartInfrastructure::process_dump	budget-backed -4013: SQL work-area spill	ret = OB_ALLOCATE_MEMORY_FAILED;
+src/sql/engine/basic/ob_temp_block_store.cpp	189	ObTempBlockStore::finish_add_row	budget error handled (compared against or case label): OB_EXCEED_MEM_LIMIT	if (need_dump && OB_FAIL(dump(true)) && OB_EXCEED_MEM_LIMIT != ret) {
+src/sql/engine/basic/ob_temp_block_store.cpp	1099	ObTempBlockStore::dump	budget error raised: OB_EXCEED_MEM_LIMIT	ret = OB_EXCEED_MEM_LIMIT;

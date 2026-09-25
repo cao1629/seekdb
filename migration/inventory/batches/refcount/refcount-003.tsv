@@ -1,0 +1,48 @@
+file	line	symbol	construct	text
+src/oblib/lib/atomic/ob_atomic_reference.cpp	48	ObAtomicReference::inc_ref_cnt	inc_ref_cnt definition	int ObAtomicReference::inc_ref_cnt()
+src/oblib/lib/atomic/ob_atomic_reference.cpp	76	ObAtomicReference::check_seq_num_and_inc_ref_cnt	check_seq_num_and_inc_ref_cnt definition (prefixed name)	int ObAtomicReference::check_seq_num_and_inc_ref_cnt(const uint32_t seq_num)
+src/oblib/lib/atomic/ob_atomic_reference.cpp	105	ObAtomicReference::check_and_inc_ref_cnt	check_and_inc_ref_cnt definition (prefixed name)	int ObAtomicReference::check_and_inc_ref_cnt()
+src/oblib/lib/atomic/ob_atomic_reference.cpp	134	ObAtomicReference::dec_ref_cnt_and_inc_seq_num	dec_ref_cnt_and_inc_seq_num definition	int ObAtomicReference::dec_ref_cnt_and_inc_seq_num(uint32_t &ref_cnt)
+src/oblib/lib/atomic/ob_atomic_reference.h	48	ObAtomicReference	inc_ref_cnt declaration	int inc_ref_cnt();
+src/oblib/lib/atomic/ob_atomic_reference.h	49	ObAtomicReference	check_seq_num_and_inc_ref_cnt declaration (prefixed name)	int check_seq_num_and_inc_ref_cnt(const uint32_t seq_num);
+src/oblib/lib/atomic/ob_atomic_reference.h	50	ObAtomicReference	check_and_inc_ref_cnt declaration (prefixed name)	int check_and_inc_ref_cnt();
+src/oblib/lib/atomic/ob_atomic_reference.h	51	ObAtomicReference	dec_ref_cnt_and_inc_seq_num declaration	int dec_ref_cnt_and_inc_seq_num(uint32_t &ref_cnt);
+src/oblib/lib/guard/ob_light_shared_gaurd.h	43	LightControlBlock::inc_ref	inc_ref definition	void inc_ref() { OB_ASSERT(ATOMIC_LOAD(&ref_) > 0); ATOMIC_AAF(&ref_, 1); }
+src/oblib/lib/guard/ob_light_shared_gaurd.h	44	LightControlBlock::dec_ref	dec_ref definition	int64_t dec_ref() { return ATOMIC_AAF(&ref_, -1); }
+src/oblib/lib/guard/ob_light_shared_gaurd.h	99	ObLightSharedPtr::assign	inc_ref call	rhs.ctrl_ptr_->inc_ref();
+src/oblib/lib/guard/ob_light_shared_gaurd.h	109	ObLightSharedPtr::reset	dec_ref call	if (0 == ctrl_ptr_->dec_ref()) {
+src/oblib/lib/hash/ob_darray.h	150	ReadRef::add_ref	add_ref definition (other name)	void add_ref(void *wlock)
+src/oblib/lib/hash/ob_darray.h	228	NestLessRWLockHandler::try_rdlock	add_ref call (other name)	ref.add_ref(write_uid);
+src/oblib/lib/hash/ob_darray.h	556	ArrayBase::BaseHandle	Handle class definition	class BaseHandle
+src/oblib/lib/hash/ob_darray.h	566	ArrayBase::BaseHandle::~BaseHandle	release_ref call (other name)	virtual ~BaseHandle() { release_ref(); }
+src/oblib/lib/hash/ob_darray.h	568	ArrayBase::BaseHandle::acquire_ref	acquire_ref definition (other name)	int acquire_ref()
+src/oblib/lib/hash/ob_darray.h	570	ArrayBase::BaseHandle::acquire_ref	acquire_ref call (other name)	return (NULL == hazard_handle_.acquire_ref()) ? -EOVERFLOW : 0;
+src/oblib/lib/hash/ob_darray.h	572	ArrayBase::BaseHandle::release_ref	release_ref definition (other name)	void release_ref()
+src/oblib/lib/hash/ob_darray.h	574	ArrayBase::BaseHandle::release_ref	release_ref call (other name)	hazard_handle_.release_ref();
+src/oblib/lib/hash/ob_darray.h	616	ArrayBase::Handle	Handle class definition : BaseHandle	class Handle: public BaseHandle
+src/oblib/lib/hash/ob_darray.h	757	ArrayBase::get	acquire_ref call (other name)	} else if (0 != (err = handle.acquire_ref())) {
+src/oblib/lib/hash/ob_darray.h	771	ArrayBase::insert	acquire_ref call (other name)	} else if (0 != (err = handle.acquire_ref())) {
+src/oblib/lib/hash/ob_darray.h	778	ArrayBase::insert	release_ref call (other name)	handle.release_ref();
+src/oblib/lib/hash/ob_darray.h	790	ArrayBase::del	acquire_ref call (other name)	} else if (0 != (err = handle.acquire_ref())) {
+src/oblib/lib/hash/ob_darray.h	796	ArrayBase::del	release_ref call (other name)	handle.release_ref();
+src/oblib/lib/hash/ob_dchash.h	210	DCHash::Handle	Handle class definition	class Handle
+src/oblib/lib/hash/ob_dchash.h	219	DCHash::Handle::search_pre	acquire_ref call (other name)	acquire_ref();
+src/oblib/lib/hash/ob_dchash.h	228	DCHash::Handle::retire	retire definition (reference-count function found by its body: calls release_ref)	void retire(int err, int64_t x) {
+src/oblib/lib/hash/ob_dchash.h	233	DCHash::Handle::retire	release_ref call (other name)	release_ref();
+src/oblib/lib/hash/ob_dchash.h	241	DCHash::Handle::acquire_ref	acquire_ref definition (other name); acquire_ref call (other name)	void acquire_ref() { ref_ = qsync_.acquire_ref(); }
+src/oblib/lib/hash/ob_dchash.h	242	DCHash::Handle::release_ref	release_ref definition (other name); release_ref call (other name)	void release_ref() { qsync_.release_ref(ref_); }
+src/oblib/lib/hash/ob_dchash.h	321	DCHash::next	acquire_ref call (other name)	get_global_dchash_qsync().acquire_ref();
+src/oblib/lib/hash/ob_dchash.h	327	DCHash::next	release_ref call (other name)	get_global_dchash_qsync().release_ref();
+src/oblib/lib/hash/ob_hash.h	159	HashBase::IKVRCallback::ref_key_value	ref_key_value definition (other name)	virtual void ref_key_value(key_t &key, val_t &value)
+src/oblib/lib/hash/ob_hash.h	172	HashBase::ArrayHandle	Handle alias of ArrayBase::Handle	typedef ArrayBase::Handle ArrayHandle;
+src/oblib/lib/hash/ob_hash.h	296	HashBase::BaseHandle	Handle class definition	class BaseHandle
+src/oblib/lib/hash/ob_hash.h	305	HashBase::BaseHandle::BaseHandle	acquire_ref call (other name)	acquire_ref();
+src/oblib/lib/hash/ob_hash.h	307	HashBase::BaseHandle::~BaseHandle	release_ref call (other name)	virtual ~BaseHandle() { release_ref(); }
+src/oblib/lib/hash/ob_hash.h	345	HashBase::BaseHandle::acquire_ref	acquire_ref definition (other name)	int acquire_ref()
+src/oblib/lib/hash/ob_hash.h	347	HashBase::BaseHandle::acquire_ref	acquire_ref call (other name)	return (NULL == hazard_handle_.acquire_ref()) ? -EOVERFLOW : 0;
+src/oblib/lib/hash/ob_hash.h	349	HashBase::BaseHandle::release_ref	release_ref definition (other name)	void release_ref()
+src/oblib/lib/hash/ob_hash.h	351	HashBase::BaseHandle::release_ref	release_ref call (other name)	hazard_handle_.release_ref();
+src/oblib/lib/hash/ob_hash.h	360	HashBase::Handle	Handle class definition : BaseHandle	class Handle: public BaseHandle
+src/oblib/lib/hash/ob_hashutils.h	1453	SimpleAllocer::alloc	reference-count change: ++ on ref_cnt	node->block->ref_cnt++;
+src/oblib/lib/hash/ob_hashutils.h	1472	SimpleAllocer::alloc	reference-count change: ++ on ref_cnt	block->ref_cnt++;
+src/oblib/lib/hash/ob_hashutils.h	1497	SimpleAllocer::free	reference-count change: -- on ref_cnt	block->ref_cnt--;

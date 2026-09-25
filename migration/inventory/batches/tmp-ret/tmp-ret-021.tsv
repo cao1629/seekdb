@@ -1,0 +1,118 @@
+file	line	symbol	construct	text
+src/sql/tablelock/ob_lock_executor.cpp	103	ObLockContext::destroy	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/tablelock/ob_lock_executor.cpp	111	ObLockContext::destroy	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(implicit_end_trans_(*session_info, ctx, is_rollback))) {
+src/sql/tablelock/ob_lock_executor.cpp	113	ObLockContext::destroy	merge into ret	ret = COVER_SUCC(tmp_ret);
+src/sql/tablelock/ob_lock_executor.cpp	116	ObLockContext::destroy	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(close_inner_conn_())) {
+src/sql/tablelock/ob_lock_executor.cpp	118	ObLockContext::destroy	merge into ret	ret = COVER_SUCC(tmp_ret);
+src/sql/tablelock/ob_lock_executor.cpp	121	ObLockContext::destroy	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(session_info->end_inner_tx_session(saved_session_))) {
+src/sql/tablelock/ob_lock_executor.cpp	123	ObLockContext::destroy	merge into ret	ret = COVER_SUCC(tmp_ret);
+src/sql/tablelock/ob_lock_executor.cpp	132	ObLockContext::destroy	assign tmp_ret	tmp_ret = session_info->update_sys_variable(share::SYS_VAR_LAST_INSERT_ID, last_insert_id);
+src/sql/tablelock/ob_lock_executor.cpp	134	ObLockContext::destroy	OB_TMP_FAIL (plan definition)	OB_TMP_FAIL(session_info->update_sys_variable(share::SYS_VAR_IDENTITY, last_insert_id))) {
+src/sql/tablelock/ob_lock_executor.cpp	137	ObLockContext::destroy	merge into ret	ret = COVER_SUCC(tmp_ret);
+src/sql/tablelock/ob_lock_executor.cpp	147	ObLockContext::destroy	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(session_info->set_autocommit(true))) {
+src/sql/tablelock/ob_lock_executor.cpp	148	ObLockContext::destroy	merge into ret	ret = COVER_SUCC(tmp_ret);
+src/sql/tablelock/ob_lock_executor.cpp	417	ObUnLockExecutor::execute	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/tablelock/ob_lock_executor.cpp	473	ObUnLockExecutor::execute_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/tablelock/ob_lock_executor.cpp	499	ObUnLockExecutor::execute_	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(stack_ctx.destroy(ctx, is_rollback))) {
+src/sql/tablelock/ob_lock_executor.cpp	501	ObUnLockExecutor::execute_	merge into ret	COVER_SUCC(tmp_ret);
+src/sql/tablelock/ob_lock_executor.cpp	518	ObUnLockExecutor::execute_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/tablelock/ob_lock_executor.cpp	540	ObUnLockExecutor::execute_	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(stack_ctx.destroy(ctx, is_rollback))) {
+src/sql/tablelock/ob_lock_executor.cpp	542	ObUnLockExecutor::execute_	merge into ret	COVER_SUCC(tmp_ret);
+src/sql/tablelock/ob_lock_func_executor.cpp	43	ObGetLockExecutor::execute	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/tablelock/ob_lock_func_executor.cpp	66	ObGetLockExecutor::execute	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(stack_ctx1.destroy(ctx, is_rollback))) {
+src/sql/tablelock/ob_lock_func_executor.cpp	68	ObGetLockExecutor::execute	merge into ret	COVER_SUCC(tmp_ret);
+src/sql/tablelock/ob_lock_func_executor.cpp	86	ObGetLockExecutor::execute	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(stack_ctx2.destroy(ctx, is_rollback))) {
+src/sql/tablelock/ob_lock_func_executor.cpp	88	ObGetLockExecutor::execute	merge into ret	COVER_SUCC(tmp_ret);
+src/sql/tablelock/ob_lock_func_executor.cpp	169	ObReleaseLockExecutor::execute	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/tablelock/ob_lock_func_executor.cpp	205	ObReleaseLockExecutor::execute	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(stack_ctx.destroy(ctx, is_rollback))) {
+src/sql/tablelock/ob_lock_func_executor.cpp	207	ObReleaseLockExecutor::execute	merge into ret	COVER_SUCC(tmp_ret);
+src/sql/tablelock/ob_mysql_lock_table_executor.cpp	41	ObMySQLLockTableExecutor::execute	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/sql/tablelock/ob_mysql_lock_table_executor.cpp	68	ObMySQLLockTableExecutor::execute	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(stack_ctx.destroy(ctx, is_rollback))) {
+src/sql/tablelock/ob_mysql_lock_table_executor.cpp	70	ObMySQLLockTableExecutor::execute	merge into ret	COVER_SUCC(tmp_ret);
+src/standby/control/ob_standby_role_transition_service.cpp	120	prepare_primary_id_services	declare tmp_ret	const int tmp_ret = trans_id_service->prepare_next_number(0);
+src/standby/control/ob_standby_role_transition_service.cpp	124	prepare_primary_id_services	merge into ret	ret = tmp_ret;
+src/standby/control/ob_standby_role_transition_service.cpp	129	prepare_primary_id_services	declare tmp_ret	const int tmp_ret = timestamp_service->prepare_next_number(
+src/standby/control/ob_standby_role_transition_service.cpp	134	prepare_primary_id_services	merge into ret	ret = tmp_ret;
+src/standby/control/ob_standby_role_transition_service.cpp	156	stop_recovery_tasks	declare tmp_ret	int tmp_ret = log_sync_service.stop();
+src/standby/control/ob_standby_role_transition_service.cpp	158	stop_recovery_tasks	merge into ret	ret = tmp_ret;
+src/standby/control/ob_standby_role_transition_service.cpp	161	stop_recovery_tasks	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = schema_refresh_trigger.stop())) {
+src/standby/control/ob_standby_role_transition_service.cpp	163	stop_recovery_tasks	merge into ret	ret = tmp_ret;
+src/standby/control/ob_standby_role_transition_service.cpp	167	stop_recovery_tasks	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = log_sync_service.wait())) {
+src/standby/control/ob_standby_role_transition_service.cpp	169	stop_recovery_tasks	merge into ret	ret = tmp_ret;
+src/standby/control/ob_standby_role_transition_service.cpp	173	stop_recovery_tasks	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = schema_refresh_trigger.wait())) {
+src/standby/control/ob_standby_role_transition_service.cpp	175	stop_recovery_tasks	merge into ret	ret = tmp_ret;
+src/standby/ob_standby_grpc.cpp	1691	ObStandbyGrpcClient::init_ls_view_stream	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/standby/ob_standby_grpc.cpp	1692	ObStandbyGrpcClient::init_ls_view_stream	OB_TMP_FAIL (plan definition)	if(OB_TMP_FAIL(restore::ObRestoreHelperCtxUtil::close_reader(ls_view_ctx.ls_view_reader_, grpc_client))) {
+src/standby/restore/ob_physical_copy_task.cpp	142	ObPhysicalCopyTask::process	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/standby/restore/ob_physical_copy_task.cpp	177	ObPhysicalCopyTask::process	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = record_server_event_())) {
+src/standby/restore/ob_sstable_copy_finish_task.cpp	408	ObSSTableCopyFinishTask::process	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/standby/restore/ob_standby_restore_macro_block_writer.cpp	213	ObStandbyRestoreMacroBlockWriter::process	declare tmp_ret	int tmp_ret = write_handle.wait();
+src/standby/restore/ob_standby_restore_macro_block_writer.cpp	217	ObStandbyRestoreMacroBlockWriter::process	merge into ret	ret = tmp_ret;
+src/standby/restore/ob_tablet_copy_finish_task.cpp	148	ObTabletCopyFinishTask::process	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/standby/restore/ob_tablet_copy_finish_task.cpp	151	ObTabletCopyFinishTask::process	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = param_.copy_tablet_ctx_->get_copy_tablet_record_extra_info(extra_info))) {
+src/standby/restore/ob_tablet_copy_finish_task.cpp	156	ObTabletCopyFinishTask::process	assign tmp_ret	} else if (OB_SUCCESS != (tmp_ret = common::databuff_print_multi_objs(extra_info_str,
+src/standby/standby_module.cpp	229	StandbyModule::Impl::stop	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/standby/standby_module.cpp	241	StandbyModule::Impl::stop	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = schema_refresh_trigger_.stop())) {
+src/standby/standby_module.cpp	244	StandbyModule::Impl::stop	merge into ret	ret = tmp_ret;
+src/standby/standby_module.cpp	253	StandbyModule::Impl::wait	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/standby/standby_module.cpp	257	StandbyModule::Impl::wait	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = schema_refresh_trigger_.wait())) {
+src/standby/standby_module.cpp	260	StandbyModule::Impl::wait	merge into ret	ret = tmp_ret;
+src/standby/standby_module.cpp	359	StandbyModule::Impl::prepare_service_start	declare tmp_ret	const int tmp_ret = host_->report_bootstrap_telemetry();
+src/standby/standby_module_disabled.cpp	89	StandbyModule::Impl::prepare_service_start	declare tmp_ret	const int tmp_ret = host_->report_bootstrap_telemetry();
+src/storage/access/ob_fuse_row_cache_fetcher.cpp	86	ObFuseRowCacheFetcher::put_fuse_row_cache	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/access/ob_fuse_row_cache_fetcher.cpp	89	ObFuseRowCacheFetcher::put_fuse_row_cache	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = row_cache_value.init(row, read_snapshot_version_))) {
+src/storage/access/ob_fuse_row_cache_fetcher.cpp	90	ObFuseRowCacheFetcher::put_fuse_row_cache	assign tmp_ret	} else if (OB_SUCCESS != (tmp_ret = ObStorageCacheSuite::get_instance().get_fuse_row_cache().put_row(cache_key, row_cache_value))) {
+src/storage/access/ob_index_tree_prefetcher.ipp	1632	ObIndexTreeMultiPassPrefetcher::ObIndexTreeLevelHandle::prefetch	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/access/ob_multiple_merge.cpp	128	ObMultipleMerge::init	merge OB_ERR_UNEXPECTED into ret through if (OB_SUCC(ret)) (continue-and-record through another variable)	ret = OB_ERR_UNEXPECTED;
+src/storage/access/ob_multiple_merge.cpp	197	ObMultipleMerge::build_extra_access_ctx	declare tmp_ret	int tmp_ret = extra_access_ctx_.get_refactored(fork_src_tablet_id, fork_ctx);
+src/storage/access/ob_multiple_merge.cpp	200	ObMultipleMerge::build_extra_access_ctx	assign tmp_ret	tmp_ret = OB_SUCCESS;
+src/storage/access/ob_multiple_merge.cpp	202	ObMultipleMerge::build_extra_access_ctx	merge into ret	ret = tmp_ret;
+src/storage/access/ob_multiple_merge.cpp	254	ObMultipleMerge::get_access_ctx	declare tmp_ret	int tmp_ret = extra_access_ctx_.get_refactored(tablet_id, access_ctx);
+src/storage/access/ob_multiple_merge.cpp	261	ObMultipleMerge::get_access_ctx	merge into ret	ret = tmp_ret;
+src/storage/access/ob_multiple_merge.cpp	303	ObMultipleMerge::switch_table	merge OB_ERR_UNEXPECTED into ret through if (OB_SUCC(ret)) (continue-and-record through another variable)	ret = OB_ERR_UNEXPECTED;
+src/storage/access/ob_multiple_merge.cpp	813	ObMultipleMerge::report_tablet_stat	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/access/ob_multiple_merge.cpp	824	ObMultipleMerge::report_tablet_stat	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(::oceanbase::share::server_service<::oceanbase::storage::ObTabletStatMgr>()->report_stat(tablet_stat, report_succ))) {
+src/storage/access/ob_pushdown_aggregate_input.cpp	465	ObPushdownAggregateInput::read_values	merge OB_ERR_UNEXPECTED into ret through if (OB_SUCC(ret)) (continue-and-record through another variable)	ret = OB_ERR_UNEXPECTED;
+src/storage/access/ob_sample_iter_helper.cpp	127	ObGetSampleIterHelper::get_memtable_sample_ranges_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/access/ob_sample_iter_helper.cpp	130	ObGetSampleIterHelper::get_memtable_sample_ranges_	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(memtable->split_ranges_for_sample(table_scan_range_.get_ranges().at(0),
+src/storage/access/ob_sample_iter_helper.cpp	139	ObGetSampleIterHelper::get_memtable_sample_ranges_	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(sample_ranges.push_back(single_memtable_sample_ranges.at(range_idx)))) {
+src/storage/access/ob_single_merge.cpp	277	ObSingleMerge::inner_get_next_row	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/access/ob_single_merge.cpp	278	ObSingleMerge::inner_get_next_row	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = fuse_row_cache_fetcher_.put_fuse_row_cache(*rowkey_, full_row_))) {
+src/storage/access/ob_table_scan_iterator.cpp	618	ObTableScanIterator::get_next_row	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/access/ob_table_scan_iterator.cpp	619	ObTableScanIterator::get_next_row	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(check_txn_status_if_read_uncommitted_())) {
+src/storage/access/ob_table_scan_iterator.cpp	620	ObTableScanIterator::get_next_row	merge into ret	ret = tmp_ret;
+src/storage/access/ob_table_scan_iterator.cpp	649	ObTableScanIterator::get_next_rows	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/access/ob_table_scan_iterator.cpp	650	ObTableScanIterator::get_next_rows	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(check_txn_status_if_read_uncommitted_())) {
+src/storage/access/ob_table_scan_iterator.cpp	651	ObTableScanIterator::get_next_rows	merge into ret	ret = tmp_ret;
+src/storage/blocksstable/encoding/ob_const_encoder.cpp	131	ObConstEncoder::calc_size	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/blocksstable/encoding/ob_const_encoder.cpp	135	ObConstEncoder::calc_size	assign tmp_ret	tmp_ret = get_cell_len(*const_list_header_->datum_, size);
+src/storage/blocksstable/encoding/ob_micro_block_encoder.cpp	251	ObMicroBlockEncoder::dump_diagnose_info	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/blocksstable/encoding/ob_micro_block_encoder.cpp	277	ObMicroBlockEncoder::dump_diagnose_info	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(tmp_checksum_helper.cal_row_checksum(datum_row.storage_datums_, column_cnt))) {
+src/storage/blocksstable/encoding/ob_micro_block_encoder.cpp	1141	ObMicroBlockEncoder::prescan	declare temp_ret	int temp_ret = OB_SUCCESS;
+src/storage/blocksstable/encoding/ob_micro_block_encoder.cpp	1142	ObMicroBlockEncoder::prescan	assign temp_ret	if (OB_SUCCESS != (temp_ret = hashtable_factory_.recycle(false, ht))) {
+src/storage/blocksstable/encoding/ob_micro_block_encoder.cpp	1144	ObMicroBlockEncoder::prescan	assign temp_ret	if (OB_SUCCESS != (temp_ret = multi_prefix_tree_factory_.recycle(prefix_tree))) {
+src/storage/blocksstable/index_block/ob_index_block_builder.cpp	1900	ObBaseIndexBlockBuilder::close	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/blocksstable/index_block/ob_index_block_builder.cpp	1999	ObBaseIndexBlockBuilder::append_index_micro_block	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/blocksstable/index_block/ob_index_block_builder.cpp	2792	ObDataIndexBlockBuilder::append_index_micro_block_and_macro_meta	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/blocksstable/index_block/ob_index_block_dual_meta_iterator.cpp	98	ObDualMacroMetaIterator::get_next_macro_block	declare tmp_ret	int tmp_ret = sec_meta_iter_.get_next(*macro_meta);
+src/storage/blocksstable/index_block/ob_sstable_meta_info.cpp	718	ObSSTableMacroInfo::persist_block_ids	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/blocksstable/index_block/ob_sstable_meta_info.cpp	719	ObSSTableMacroInfo::persist_block_ids	OB_TMP_FAIL (plan definition)	if (!block_writer.is_closed() && OB_TMP_FAIL(block_writer.close())) {
+src/storage/blocksstable/index_block/ob_sstable_meta_info.cpp	723	ObSSTableMacroInfo::persist_block_ids	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(linked_block_write_ctx.add_object_id(block_writer.get_meta_block_list().at(i)))) {
+src/storage/blocksstable/ob_block_manager.cpp	271	ObBlockManager::inner_alloc_block	declare tmp_ret	const int tmp_ret = extend_file_size_if_need();
+src/storage/blocksstable/ob_block_manager.cpp	498	ObBlockManager::get_macro_block_info	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/blocksstable/ob_block_manager.cpp	499	ObBlockManager::get_macro_block_info	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(dec_ref(macro_id))) {
+src/storage/blocksstable/ob_block_manager.cpp	1341	ObBlockManager::InspectBadBlockTask::check_block	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/blocksstable/ob_block_manager.cpp	1343	ObBlockManager::InspectBadBlockTask::check_block	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = databuff_printf(
+src/storage/blocksstable/ob_block_manager.cpp	1347	ObBlockManager::InspectBadBlockTask::check_block	assign tmp_ret	(tmp_ret = blk_mgr_.report_bad_block(macro_id, ret, error_msg,
+src/storage/blocksstable/ob_block_manager.cpp	1769	ObIOBenchController::start_io_bench	declare tmp_ret	const int tmp_ret = running_mutex_.unlock();
+src/storage/blocksstable/ob_macro_block_handle.cpp	167	ObMacroBlockHandle::async_write	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/blocksstable/ob_macro_block_handle.cpp	168	ObMacroBlockHandle::async_write	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(OB_SERVER_BLOCK_MGR.update_write_time(macro_id_))) {
+src/storage/blocksstable/ob_macro_block_handle.cpp	186	ObMacroBlockHandle::wait	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/blocksstable/ob_macro_block_handle.cpp	187	ObMacroBlockHandle::wait	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = report_bad_block())) {
+src/storage/blocksstable/ob_macro_block_handle.cpp	253	ObStorageObjectsHandle::reset	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/blocksstable/ob_macro_block_handle.cpp	256	ObStorageObjectsHandle::reset	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = OB_STORAGE_OBJECT_MGR.dec_ref(macro_id_list_.at(i)))) {
+src/storage/blocksstable/ob_macro_block_writer.cpp	1295	ObMacroBlockWriter::append_index_micro_block	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/blocksstable/ob_macro_block_writer.cpp	1333	ObMacroBlockWriter::build_micro_block	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/blocksstable/ob_macro_block_writer.cpp	2409	ObMacroBlockWriter::init_pre_warmer	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/storage/blocksstable/ob_macro_block_writer.cpp	2443	ObMacroBlockWriter::create_mem_pre_warmer	declare tmp_ret	int tmp_ret = OB_ALLOCATE_MEMORY_FAILED; // use tmp_ret, allow not pre warm mem block cache
+src/storage/blocksstable/ob_macro_block_writer.cpp	2448	ObMacroBlockWriter::create_mem_pre_warmer	declare tmp_ret	int tmp_ret = OB_ALLOCATE_MEMORY_FAILED; // use tmp_ret, allow not pre warm mem block cache

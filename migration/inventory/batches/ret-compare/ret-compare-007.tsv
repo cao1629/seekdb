@@ -1,0 +1,87 @@
+file	line	symbol	construct	text
+src/observer/ob_server.cpp	535	ObServer::submit_px_task	ret == OB_SIZE_OVERFLOW	if (OB_SIZE_OVERFLOW == ret) {
+src/observer/ob_server.cpp	545	ObServer::submit_px_task	ret == OB_SIZE_OVERFLOW	} while (OB_SIZE_OVERFLOW == ret);
+src/observer/ob_server.cpp	1169	ObServer::start	tmp_ret != OB_SERVER_RUNTIME_NOT_READY	} else if (OB_SERVER_RUNTIME_NOT_READY != tmp_ret) {
+src/observer/ob_server.cpp	1337	ObServer::initialize_server_runtime	ret == OB_SERVER_RUNTIME_NOT_READY	if (OB_SERVER_RUNTIME_NOT_READY == ret) {
+src/observer/ob_server.cpp	1386	ObServer::wait_for_server_runtime	ret == OB_EAGAIN	if (OB_EAGAIN == ret) {
+src/observer/ob_server.cpp	2692	ObServer::ObCTASCleanUp::operator()	ret != OB_EAGAIN	if (OB_UNLIKELY(OB_EAGAIN != ret)) {
+src/observer/ob_server_schema_updater.cpp	244	ObServerSchemaUpdater::process_async_refresh_tasks	tmp_ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != tmp_ret) {
+src/observer/ob_server_schema_updater.cpp	269	ObServerSchemaUpdater::try_release_schema	ret != OB_EAGAIN	if (OB_EAGAIN != ret) {
+src/observer/ob_server_schema_updater.cpp	285	ObServerSchemaUpdater::async_refresh_schema	ret != OB_EAGAIN	if (OB_EAGAIN != ret) {
+src/observer/ob_service.cpp	382	ObService::calc_column_checksum_request	tmp_ret == OB_EAGAIN	if (OB_EAGAIN == tmp_ret) {
+src/observer/ob_service.cpp	384	ObService::calc_column_checksum_request	tmp_ret == OB_SIZE_OVERFLOW	} else if (OB_SIZE_OVERFLOW == tmp_ret) {
+src/observer/ob_service.cpp	462	ObService::handle_tablet_freeze_req_	ret == OB_EAGAIN	if (OB_EAGAIN == ret) {
+src/observer/ob_service.cpp	489	ObService::server_freeze_	ret == OB_ENTRY_EXIST	if (OB_ENTRY_EXIST == ret) {
+src/observer/ob_service.cpp	559	ObService::check_modify_time_elapsed	tmp_ret != OB_EAGAIN	if (OB_EAGAIN != tmp_ret) {
+src/observer/ob_service.cpp	939	ObService::build_ddl_local	ret == OB_EAGAIN	if (OB_EAGAIN == ret) {
+src/observer/ob_service.cpp	941	ObService::build_ddl_local	ret == OB_SIZE_OVERFLOW	} else if (OB_SIZE_OVERFLOW == ret) {
+src/observer/ob_service.cpp	956	ObService::build_ddl_local	other variable saved_ret == OB_EAGAIN	ret = OB_EAGAIN == saved_ret ? OB_SUCCESS : ret;
+src/observer/ob_service.cpp	957	ObService::build_ddl_local	other variable saved_ret == OB_SIZE_OVERFLOW	ret = OB_SIZE_OVERFLOW == saved_ret ? OB_EAGAIN : ret;
+src/observer/ob_service.cpp	971	ObService::build_ddl_local	ret == OB_EAGAIN	if (OB_EAGAIN == ret) {
+src/observer/ob_service.cpp	973	ObService::build_ddl_local	ret == OB_SIZE_OVERFLOW	} else if (OB_SIZE_OVERFLOW == ret) {
+src/observer/ob_service.cpp	1078	ObService::inner_fill_tablet_info_	ret != OB_TABLET_NOT_EXIST	if (OB_TABLET_NOT_EXIST != ret) {
+src/observer/ob_service.cpp	1104	ObService::fill_tablet_runtime_info	ret != OB_LS_NOT_EXIST	if (OB_LS_NOT_EXIST != ret) {
+src/observer/ob_service.cpp	1116	ObService::fill_tablet_runtime_info	ret != OB_TABLET_NOT_EXIST	if (OB_TABLET_NOT_EXIST != ret) {
+src/observer/ob_srv_deliver.cpp	49	dispatch_req	ret == OB_SIZE_OVERFLOW	if (OB_SIZE_OVERFLOW == ret) {
+src/observer/ob_srv_deliver.cpp	114	ObSrvDeliver::deliver_mysql_request	ret == OB_SIZE_OVERFLOW	if (OB_SIZE_OVERFLOW == ret) {
+src/observer/ob_system_package_load_task.cpp	97	ObSystemPackageLoadTask::load_system_package_	ret == OB_ENTRY_NOT_EXIST	if (ret == OB_ENTRY_NOT_EXIST) {
+src/observer/ob_system_package_load_task.cpp	147	ObSystemPackageLoadTask::wait_system_package_ready	tmp_ret (assigned in the comparison) != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != (tmp_ret = ADMIN_JOB_FIND(LOAD_MYSQL_SYS_PACKAGE, job_id))) {
+src/observer/ob_tablet_runtime_meta_updater.cpp	305	ObTabletRuntimeMetaUpdater::add_task_	ret == OB_EAGAIN	if (OB_EAGAIN == ret) {
+src/observer/ob_tablet_runtime_meta_updater.cpp	479	ObTabletRuntimeMetaUpdater::generate_tasks_	ret == OB_EAGAIN	if (OB_EAGAIN == ret) {
+src/observer/ob_tablet_runtime_meta_updater.cpp	485	ObTabletRuntimeMetaUpdater::generate_tasks_	ret != OB_SERVER_RUNTIME_NOT_READY; ret != OB_LS_NOT_EXIST; ret != OB_TABLET_NOT_EXIST	} else if (OB_SERVER_RUNTIME_NOT_READY != ret && OB_LS_NOT_EXIST != ret && OB_TABLET_NOT_EXIST != ret) {
+src/observer/ob_tablet_runtime_meta_updater.cpp	486	ObTabletRuntimeMetaUpdater::generate_tasks_	ret == OB_SERVER_RUNTIME_NOT_READY	} else if (OB_SERVER_RUNTIME_NOT_READY == ret) {
+src/observer/ob_uniq_task_queue.h	330	ObUniqTaskQueue::add	ret == OB_HASH_EXIST	if (common::OB_HASH_EXIST == ret) {
+src/observer/ob_uniq_task_queue.h	595	ObUniqTaskQueue::get_group	ret != OB_HASH_EXIST	if (OB_FAIL(group_map_.set_refactored(group_id, new_group)) && common::OB_HASH_EXIST != ret) {
+src/observer/ob_uniq_task_queue.h	605	ObUniqTaskQueue::get_group	ret == OB_HASH_EXIST	} else if (common::OB_HASH_EXIST == ret) {
+src/observer/ob_uniq_task_queue.h	623	ObUniqTaskQueue::try_lock	ret == OB_HASH_EXIST	if (common::OB_HASH_EXIST == ret) {
+src/observer/omt/ob_server_runtime.cpp	69	ObPxPools::get_or_create	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/observer/omt/ob_server_runtime.cpp	84	ObPxPools::create_pool	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/observer/omt/ob_server_runtime_controller.cpp	249	ObServerRuntimeController::wait	call result runtime_->try_wait() == OB_EAGAIN	while (OB_EAGAIN == runtime_->try_wait()) {
+src/observer/omt/ob_server_runtime_controller.cpp	1129	ObIOManager::print_service_status	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/observer/omt/ob_srs_service.cpp	125	ObSrsService::refresh_sys_srs	ret == OB_ERR_EMPTY_QUERY	if (ret == OB_ERR_EMPTY_QUERY) {
+src/observer/omt/ob_srs_service.cpp	178	ObSrsCacheSnapShot::get_srs_item	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/observer/omt/ob_srs_service.cpp	232	ObSrsService::fetch_all_srs	ret == OB_ERR_SRS_NOT_FOUND	if (ret == OB_ERR_SRS_NOT_FOUND) {
+src/observer/omt/ob_srs_service.cpp	243	ObSrsService::fetch_all_srs	ret == OB_ITER_END	if (ret == OB_ITER_END) {
+src/observer/omt/ob_th_worker.cpp	295	ObThWorker::worker	ret == OB_ENTRY_NOT_EXIST	} else if (OB_ENTRY_NOT_EXIST == ret) {
+src/observer/report/ob_tablet_meta_checker.cpp	192	ObTabletMetaChecker::build_tablet_meta_row_map_	ret != OB_ITER_END [not built]	if (OB_ITER_END != ret) {
+src/observer/report/ob_tablet_meta_checker.cpp	202	ObTabletMetaChecker::build_tablet_meta_row_map_	ret == OB_ITER_END [not built]	if (OB_ITER_END == ret) {
+src/observer/report/ob_tablet_meta_checker.cpp	264	ObTabletMetaChecker::check_tablet_not_exist_in_local_	ret == OB_TABLET_NOT_EXIST; ret == OB_ENTRY_NOT_EXIST [not built]	if (OB_TABLET_NOT_EXIST == ret || OB_ENTRY_NOT_EXIST == ret) {
+src/observer/report/ob_tablet_meta_checker.cpp	305	ObTabletMetaChecker::check_missing_or_changed_tablet_meta_rows_	ret != OB_ITER_END [not built]	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/observer/report/ob_tablet_meta_checker.cpp	313	ObTabletMetaChecker::check_missing_or_changed_tablet_meta_rows_	ret == OB_HASH_NOT_EXIST [not built]	if (OB_HASH_NOT_EXIST == ret) { // not exist in table while exist in local
+src/observer/report/ob_tablet_meta_checker.cpp	326	ObTabletMetaChecker::check_missing_or_changed_tablet_meta_rows_	ret == OB_EAGAIN [not built]	if (OB_EAGAIN == ret) {
+src/observer/report/ob_tablet_meta_checker.cpp	343	ObTabletMetaChecker::check_missing_or_changed_tablet_meta_rows_	ret == OB_ITER_END [not built]	if (OB_ITER_END == ret) {
+src/observer/schema/ob_schema_retrieve_utils.ipp	109	ObSchemaRetrieveUtils::retrieve_table_schema	ret != OB_ITER_END	if (ret != common::OB_ITER_END) {
+src/observer/schema/ob_schema_retrieve_utils.ipp	152	ObSchemaRetrieveUtils::retrieve_schema	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/schema/ob_schema_retrieve_utils.ipp	249	ObSchemaRetrieveUtils::retrieve_table_schema	ret == OB_ITER_END	if (ret == common::OB_ITER_END) { //no record
+src/observer/schema/ob_schema_retrieve_utils.ipp	262	ObSchemaRetrieveUtils::retrieve_table_schema	ret (assigned in the comparison) != OB_ITER_END	if (OB_ITER_END != (ret = result.next())) {
+src/observer/schema/ob_schema_retrieve_utils.ipp	550	ObSchemaRetrieveUtils::retrieve_schema	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/schema/ob_schema_retrieve_utils.ipp	665	ObSchemaRetrieveUtils::retrieve_subpart_schema	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/schema/ob_schema_retrieve_utils.ipp	710	ObSchemaRetrieveUtils::retrieve_subpart_schema	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/observer/schema/ob_schema_retrieve_utils.ipp	773	ObSchemaRetrieveUtils::retrieve_constraint_column_info	ret != OB_ITER_END	if (ret != common::OB_ITER_END) {
+src/observer/schema/ob_schema_retrieve_utils.ipp	799	ObSchemaRetrieveUtils::retrieve_recycle_object	ret != OB_ITER_END	if (ret != common::OB_ITER_END) {
+src/observer/schema/ob_schema_retrieve_utils.ipp	1311	ObSchemaRetrieveUtils::retrieve_role_grantee_map_schema	ret != OB_ITER_END	if (ret != common::OB_ITER_END) {
+src/observer/schema/ob_schema_retrieve_utils.ipp	1726	ObSchemaRetrieveUtils::fill_trigger_schema	ret == OB_ERR_NULL_VALUE	if (OB_ERR_NULL_VALUE == ret) {
+src/observer/schema/ob_schema_retrieve_utils.ipp	1884	ObSchemaRetrieveUtils::retrieve_system_variable	ret == OB_ERR_SYS_VARIABLE_UNKNOWN	if (common::OB_ERR_SYS_VARIABLE_UNKNOWN == ret) {
+src/observer/schema/ob_schema_retrieve_utils.ipp	1894	ObSchemaRetrieveUtils::retrieve_system_variable	ret != OB_ITER_END	if (ret != common::OB_ITER_END) {
+src/observer/schema/ob_schema_retrieve_utils.ipp	1960	#define RETRIEVE_SCHEMA_FUNC_DEFINE	ret != OB_ITER_END	if (ret != common::OB_ITER_END) {                                                \
+src/observer/schema/ob_schema_retrieve_utils.ipp	2001	ObSchemaRetrieveUtils::retrieve_routine_schema	ret != OB_ITER_END	if (ret != common::OB_ITER_END) {
+src/observer/schema/ob_schema_retrieve_utils.ipp	2030	ObSchemaRetrieveUtils::retrieve_trigger_list	ret == OB_ITER_END	if (common::OB_ITER_END == ret) {
+src/observer/schema/ob_schema_retrieve_utils.ipp	2064	ObSchemaRetrieveUtils::retrieve_routine_param_schema	ret == OB_ITER_END	if (common::OB_ITER_END == ret) {
+src/observer/schema/ob_schema_retrieve_utils.ipp	2096	ObSchemaRetrieveUtils::retrieve_db_priv_schema	ret != OB_ITER_END	if (ret != common::OB_ITER_END) {
+src/observer/schema/ob_schema_retrieve_utils.ipp	2144	ObSchemaRetrieveUtils::retrieve_obj_priv_schema_inner	ret != OB_ITER_END	if (ret != common::OB_ITER_END) {
+src/observer/schema/ob_schema_retrieve_utils.ipp	2196	ObSchemaRetrieveUtils::retrieve_sys_priv_schema_inner	ret != OB_ITER_END	if (ret != common::OB_ITER_END) {
+src/observer/schema/ob_schema_retrieve_utils.ipp	2287	ObSchemaRetrieveUtils::retrieve_table_priv_schema	ret != OB_ITER_END	if (ret != common::OB_ITER_END) {
+src/observer/schema/ob_schema_retrieve_utils.ipp	2321	ObSchemaRetrieveUtils::retrieve_routine_priv_schema	ret != OB_ITER_END	if (ret != common::OB_ITER_END) {
+src/observer/schema/ob_schema_retrieve_utils.ipp	2352	ObSchemaRetrieveUtils::retrieve_column_priv_schema	ret != OB_ITER_END	if (ret != common::OB_ITER_END) {
+src/observer/schema/ob_schema_retrieve_utils.ipp	2441	ObSchemaRetrieveUtils::retrieve_obj_mysql_priv_schema	ret != OB_ITER_END	if (ret != common::OB_ITER_END) {
+src/observer/schema/ob_schema_retrieve_utils.ipp	2831	ObSchemaRetrieveUtils::fill_base_part_info	ret == OB_ERR_NULL_VALUE	if (OB_ERR_NULL_VALUE == ret) {
+src/observer/schema/ob_schema_retrieve_utils.ipp	2841	ObSchemaRetrieveUtils::fill_base_part_info	ret == OB_ERR_NULL_VALUE	if (OB_ERR_NULL_VALUE == ret) {
+src/observer/schema/ob_schema_retrieve_utils.ipp	2882	ObSchemaRetrieveUtils::retrieve_aux_tables	ret != OB_ITER_END	if (ret != common::OB_ITER_END) {
+src/observer/schema/ob_schema_retrieve_utils.ipp	2910	ObSchemaRetrieveUtils::retrieve_schema_version	ret != OB_ITER_END	if (ret != common::OB_ITER_END) {
+src/observer/schema/ob_schema_retrieve_utils.ipp	2952	ObSchemaRetrieveUtils::retrieve_mock_fk_parent_table_schema_column	ret != OB_ITER_END	if (ret != common::OB_ITER_END) {
+src/observer/schema/ob_schema_retrieve_utils.ipp	2984	ObSchemaRetrieveUtils::retrieve_foreign_key_info	ret != OB_ITER_END	if (ret != common::OB_ITER_END) {
+src/observer/schema/ob_schema_retrieve_utils.ipp	3016	ObSchemaRetrieveUtils::retrieve_foreign_key_column_info	ret != OB_ITER_END	if (ret != common::OB_ITER_END) {
+src/observer/schema/ob_schema_retrieve_utils.ipp	3109	ObSchemaRetrieveUtils::retrieve_simple_foreign_key_info	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/observer/schema/ob_schema_retrieve_utils.ipp	3183	ObSchemaRetrieveUtils::retrieve_simple_constraint_info	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/observer/schema/ob_schema_retrieve_utils.ipp	3274	ObSchemaRetrieveUtils::retrieve_object_list	ret == OB_ITER_END	if (common::OB_ITER_END == ret) {
+src/observer/schema/ob_schema_retrieve_utils.ipp	3312	ObSchemaRetrieveUtils::retrieve_table_latest_schema_versions	ret == OB_ITER_END	if (ret == common::OB_ITER_END) {

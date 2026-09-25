@@ -1,0 +1,120 @@
+file	line	symbol	construct	text
+src/logservice/applyservice/ob_log_apply_service.cpp	1231	ObLogApplyService::handle	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/logservice/applyservice/ob_log_apply_service.cpp	1232	ObLogApplyService::handle	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = push_task(task_to_handle))) {
+src/logservice/ob_log_allocator_mgr.cpp	160	ObLogAllocatorMgr::update_memory_limit	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/logservice/ob_log_allocator_mgr.cpp	172	ObLogAllocatorMgr::update_memory_limit	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(get_allocator_(log_allocator))) {
+src/logservice/ob_log_handler.cpp	486	ObLogHandler::is_replay_enabled	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/logservice/ob_log_handler.cpp	489	ObLogHandler::is_replay_enabled	assign tmp_ret	} else if (OB_SUCCESS != (tmp_ret = replay_service_->is_enabled(bool_ret))) {
+src/logservice/ob_server_log_block_mgr.cpp	362	ObServerLogBlockMgr::allocate_block_at_	declare tmp_ret	int tmp_ret = convert_sys_errno();
+src/logservice/ob_server_log_block_mgr.cpp	364	ObServerLogBlockMgr::allocate_block_at_	merge into ret	ret = (OB_SUCCESS == ret ? tmp_ret : ret);
+src/logservice/palf/log_engine.cpp	576	LogEngine::delete_block	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/logservice/palf/log_engine.cpp	577	LogEngine::delete_block	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = get_block_min_scn(next_block_id + 1, next_block_max_scn))) {
+src/logservice/palf/log_io_worker.cpp	172	LogIOWorker::handle_io_task_with_throttling_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/logservice/palf/log_io_worker.cpp	174	LogIOWorker::handle_io_task_with_throttling_	assign tmp_ret	&& OB_SUCCESS != (tmp_ret = throttle_->throttling(throttling_size, need_purging_throttling_func_, palf_env_impl_))) {
+src/logservice/palf/log_io_worker.cpp	191	LogIOWorker::handle_io_task_with_throttling_	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = throttle_->after_append_log(throttling_size))) {
+src/logservice/palf/log_io_worker.cpp	280	LogIOWorker::reduce_io_task_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/logservice/palf/log_io_worker.cpp	285	LogIOWorker::reduce_io_task_	assign tmp_ret	tmp_ret = OB_ERR_UNEXPECTED;
+src/logservice/palf/log_io_worker.cpp	295	LogIOWorker::reduce_io_task_	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = batch_io_task_mgr_.insert(flush_log_task))) {
+src/logservice/palf/log_io_worker.cpp	297	LogIOWorker::reduce_io_task_	assign tmp_ret	} else if (OB_SUCCESS == (tmp_ret = queue_.pop(task))) {
+src/logservice/palf/log_reader.cpp	125	LogReader::pread	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/logservice/palf/log_reader.cpp	126	LogReader::pread	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(io_adapter_->close(io_fd))) {
+src/logservice/palf/log_reader.cpp	128	LogReader::pread	merge into ret	ret = OB_SUCCESS == ret ? tmp_ret : ret;
+src/logservice/palf/log_sliding_window.cpp	79	LogSlidingWindow::destroy	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/logservice/palf/log_sliding_window.cpp	206	LogSlidingWindow::can_submit_new_log_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/logservice/palf/log_sliding_window.cpp	217	LogSlidingWindow::can_submit_new_log_	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = lsn_allocator_.get_curr_end_lsn(curr_end_lsn))) {
+src/logservice/palf/log_sliding_window.cpp	327	LogSlidingWindow::submit_log	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/logservice/palf/log_sliding_window.cpp	328	LogSlidingWindow::submit_log	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = try_feedback_freeze_log_task_(log_id))) {
+src/logservice/palf/log_sliding_window.cpp	882	LogSlidingWindow::handle_next_submit_log_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/logservice/palf/log_sliding_window.cpp	883	LogSlidingWindow::handle_next_submit_log_	OB_TMP_FAIL (plan definition)	while (OB_TMP_FAIL(log_engine_->submit_handle_submit_task())) {
+src/logservice/palf/log_sliding_window.cpp	986	LogSlidingWindow::try_freeze_last_log_task_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/logservice/palf/log_sliding_window.cpp	987	LogSlidingWindow::try_freeze_last_log_task_	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = log_task->try_freeze(expected_end_lsn))) {
+src/logservice/palf/log_sliding_window.cpp	1162	LogSlidingWindow::after_flush_log	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/logservice/palf/log_sliding_window.cpp	1163	LogSlidingWindow::after_flush_log	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = try_feedback_freeze_log_task_(next_log_id))) {
+src/logservice/palf/log_sliding_window.cpp	1440	LogSlidingWindow::sliding_cb	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/logservice/palf/log_sliding_window.cpp	1442	LogSlidingWindow::sliding_cb	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = palf_fs_cb_->update_end_lsn(log_end_lsn, log_max_scn))) {
+src/logservice/palf/log_sliding_window.cpp	1505	LogSlidingWindow::is_all_log_flushed_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/logservice/palf/log_sliding_window.cpp	1509	LogSlidingWindow::is_all_log_flushed_	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = lsn_allocator_.get_curr_end_lsn(curr_end_lsn))) {
+src/logservice/palf/log_storage.cpp	533	LogStorage::do_init_	declare tmp_ret	int tmp_ret = 0;
+src/logservice/palf/log_storage.cpp	535	LogStorage::do_init_	assign tmp_ret	if (0 > (tmp_ret =
+src/logservice/palf/log_storage.cpp	715	LogStorage::read_block_header_	declare tmp_ret	int tmp_ret = check_read_out_of_bound_(block_id, OB_NO_SUCH_FILE_OR_DIRECTORY == ret);
+src/logservice/palf/log_storage.cpp	719	LogStorage::read_block_header_	merge into ret	ret = tmp_ret;
+src/logservice/palf/log_storage.cpp	797	LogStorage::inner_pread_	declare tmp_ret	int tmp_ret = check_read_out_of_bound_(read_block_id, OB_NO_SUCH_FILE_OR_DIRECTORY == ret);
+src/logservice/palf/log_storage.cpp	800	LogStorage::inner_pread_	merge into ret	ret = tmp_ret;
+src/logservice/palf/palf_callback_wrapper.cpp	48	PalfFSCbWrapper::update_end_lsn	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/logservice/palf/palf_callback_wrapper.cpp	55	PalfFSCbWrapper::update_end_lsn	assign tmp_ret	} else if (OB_SUCCESS != (tmp_ret = cb->update_end_lsn(end_lsn, end_scn))) {
+src/logservice/palf/palf_env_impl.cpp	521	PalfEnvImpl::try_recycle_blocks	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/logservice/palf/palf_env_impl.cpp	526	PalfEnvImpl::try_recycle_blocks	assign tmp_ret	} else if (OB_SUCCESS != (tmp_ret = log_io_worker_wrapper_.notify_need_writing_throttling(disk_options_wrapper_.need_throttling()))) {
+src/logservice/palf/palf_env_impl.cpp	572	PalfEnvImpl::try_recycle_blocks	declare tmp_ret	int tmp_ret = OB_LOG_OUTOF_DISK_SPACE;
+src/logservice/palf/palf_env_impl.cpp	950	PalfEnvImpl::period_calc_disk_usage	declare tmp_ret	int tmp_ret = OB_LOG_OUTOF_DISK_SPACE;
+src/logservice/replayservice/ob_log_replay_service.cpp	243	ObLogReplayService::start	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/logservice/replayservice/ob_log_replay_service.cpp	244	ObLogReplayService::start	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = replay_stat_.start())) {
+src/logservice/replayservice/ob_log_replay_service.cpp	361	ObLogReplayService::handle	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/logservice/replayservice/ob_log_replay_service.cpp	362	ObLogReplayService::handle	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = submit_task(task_to_handle))) {
+src/logservice/replayservice/ob_log_replay_service.cpp	1056	ObLogReplayService::fetch_and_submit_single_log_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/logservice/replayservice/ob_log_replay_service.cpp	1141	ObLogReplayService::handle_submit_task_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/logservice/replayservice/ob_log_replay_service.cpp	1168	ObLogReplayService::handle_submit_task_	declare tmp_ret	int tmp_ret = OB_E(EventTable::EN_REPLAY_SERVICE_SUBMIT_TASK_SLEEP) OB_SUCCESS;
+src/logservice/replayservice/ob_log_replay_service.cpp	1185	ObLogReplayService::handle_submit_task_	assign tmp_ret	if (OB_SUCCESS !=(tmp_ret = replay_status->batch_push_all_task_queue())) {
+src/logservice/replayservice/ob_log_replay_service.cpp	1213	ObLogReplayService::handle_submit_task_	assign tmp_ret	if (OB_SUCCESS !=(tmp_ret = replay_status->batch_push_all_task_queue())) {
+src/logservice/replayservice/ob_log_replay_service.cpp	1316	ObLogReplayService::submit_log_replay_task_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/logservice/replayservice/ob_log_replay_service.cpp	1331	ObLogReplayService::submit_log_replay_task_	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = replay_status.set_post_barrier_finished(replay_task.lsn_))) {
+src/logservice/replayservice/ob_log_replay_service.cpp	1333	ObLogReplayService::submit_log_replay_task_	merge into ret	ret = tmp_ret;
+src/logservice/replayservice/ob_replay_status.cpp	95	ObReplayServiceSubmitTask::init	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/logservice/replayservice/ob_replay_status.cpp	112	ObReplayServiceSubmitTask::init	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = iterator_.next())) {
+src/logservice/replayservice/ob_replay_status.cpp	231	ObReplayServiceSubmitTask::next_log	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/logservice/replayservice/ob_replay_status.cpp	233	ObReplayServiceSubmitTask::next_log	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = iterator_.next(replayable_point, next_min_scn,
+src/logservice/replayservice/ob_replay_status.cpp	794	ObReplayStatus::enable_local_replay	declare tmp_ret	int tmp_ret = OB_E(EventTable::EN_REPLAY_SERVICE_SUBMIT_TASK_SLEEP) OB_SUCCESS;
+src/oblib/common/json_type/ob_json_base.cpp	6422	ObJsonBaseUtil::sort_array_pointer	declare tmp_ret	int tmp_ret = vec.insert_unique(tmp, insert_pos, Array_less(), Array_equal());
+src/oblib/common/json_type/ob_json_base.cpp	6424	ObJsonBaseUtil::sort_array_pointer	merge into ret	ret = COVER_SUCC(tmp_ret);
+src/oblib/common/json_type/ob_json_schema.cpp	466	ObJsonSchemaTree::union_schema_def	merge OB_ERR_WRONG_VALUE into ret through if (OB_SUCC(ret)) (continue-and-record through another variable)	ret = OB_ERR_WRONG_VALUE;
+src/oblib/common/json_type/ob_json_schema.cpp	476	ObJsonSchemaTree::union_schema_def	merge OB_ERR_WRONG_VALUE into ret through if (OB_SUCC(ret)) (continue-and-record through another variable)	ret = OB_ERR_WRONG_VALUE;
+src/oblib/common/json_type/ob_json_schema.cpp	488	ObJsonSchemaTree::union_schema_def	merge OB_ERR_WRONG_VALUE into ret through if (OB_SUCC(ret)) (continue-and-record through another variable)	ret = OB_ERR_WRONG_VALUE;
+src/oblib/common/json_type/ob_json_schema.cpp	498	ObJsonSchemaTree::union_schema_def	merge OB_ERR_WRONG_VALUE into ret through if (OB_SUCC(ret)) (continue-and-record through another variable)	ret = OB_ERR_WRONG_VALUE;
+src/oblib/common/json_type/ob_json_schema.cpp	514	ObJsonSchemaTree::union_schema_def	merge OB_ERR_WRONG_VALUE into ret through if (OB_SUCC(ret)) (continue-and-record through another variable)	ret = OB_ERR_WRONG_VALUE;
+src/oblib/common/json_type/ob_json_schema.cpp	525	ObJsonSchemaTree::union_schema_def	merge OB_ERR_WRONG_VALUE into ret through if (OB_SUCC(ret)) (continue-and-record through another variable)	ret = OB_ERR_WRONG_VALUE;
+src/oblib/common/json_type/ob_json_schema.cpp	544	ObJsonSchemaTree::union_schema_def	merge OB_ERR_WRONG_VALUE into ret through if (OB_SUCC(ret)) (continue-and-record through another variable)	ret = OB_ERR_WRONG_VALUE;
+src/oblib/common/mysqlclient/ob_mysql_transaction.cpp	134	ObMySQLTransaction::handle_trans_in_the_end	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/oblib/common/mysqlclient/ob_mysql_transaction.cpp	135	ObMySQLTransaction::handle_trans_in_the_end	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(end(OB_SUCCESS == err_no))) {
+src/oblib/common/mysqlclient/ob_mysql_transaction.cpp	137	ObMySQLTransaction::handle_trans_in_the_end	merge into ret	ret = OB_SUCCESS == err_no ? tmp_ret : err_no;
+src/oblib/common/mysqlclient/ob_mysql_transaction.cpp	179	ObMySQLTransaction::end	declare tmp_ret	int tmp_ret = do_stash_query();
+src/oblib/common/number/ob_number_v2.cpp	189	ObNumber::from_	declare warning (continue-and-record variable)	int warning = OB_SUCCESS;
+src/oblib/common/number/ob_number_v2.cpp	193	ObNumber::from_	merge warning into ret through if (OB_SUCC(ret)) (continue-and-record through another variable)	ret = warning;
+src/oblib/common/number/ob_number_v2.cpp	2340	ObNumber::format_v1	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;//used for iteration of get_next_digit
+src/oblib/common/number/ob_number_v2.cpp	2342	ObNumber::format_v1	assign tmp_ret	&& OB_SUCCESS == (tmp_ret = di.get_next_digit(digit, from_integer, last_decimal))) {
+src/oblib/common/number/ob_number_v2.cpp	2372	ObNumber::format_v1	merge into ret	ret = (OB_ITER_END == tmp_ret) ? OB_SUCCESS : tmp_ret;
+src/oblib/common/number/ob_number_v2.h	1456	ObNumber::from	declare warning (continue-and-record variable)	int warning = OB_SUCCESS;
+src/oblib/common/number/ob_number_v2.h	1460	ObNumber::from	merge warning into ret through if (OB_SUCC(ret)) (continue-and-record through another variable)	ret = warning;
+src/oblib/common/number/ob_number_v2.h	1473	ObNumber::from_v1	declare warning (continue-and-record variable)	int warning = OB_SUCCESS;
+src/oblib/common/number/ob_number_v2.h	1477	ObNumber::from_v1	merge warning into ret through if (OB_SUCC(ret)) (continue-and-record through another variable)	ret = warning;
+src/oblib/common/number/ob_number_v2.h	1490	ObNumber::from_v2	declare warning (continue-and-record variable)	int warning = OB_SUCCESS;
+src/oblib/common/number/ob_number_v2.h	1494	ObNumber::from_v2	merge warning into ret through if (OB_SUCC(ret)) (continue-and-record through another variable)	ret = warning;
+src/oblib/common/number/ob_number_v2.h	1507	ObNumber::from_v3	declare warning (continue-and-record variable)	int warning = OB_SUCCESS;
+src/oblib/common/number/ob_number_v2.h	1511	ObNumber::from_v3	merge warning into ret through if (OB_SUCC(ret)) (continue-and-record through another variable)	ret = warning;
+src/oblib/common/number/ob_number_v2.h	1526	ObNumber::from_sci	declare warning (continue-and-record variable)	int warning = OB_SUCCESS;
+src/oblib/common/number/ob_number_v2.h	1530	ObNumber::from_sci	merge warning into ret through if (OB_SUCC(ret)) (continue-and-record through another variable)	ret = warning;
+src/oblib/common/number/ob_number_v2.h	1563	ObNumber::from	declare warning (continue-and-record variable)	int warning = OB_SUCCESS;
+src/oblib/common/number/ob_number_v2.h	1567	ObNumber::from	merge warning into ret through if (OB_SUCC(ret)) (continue-and-record through another variable)	ret = warning;
+src/oblib/common/rowkey/ob_rowkey.cpp	531	ObRowkey::murmurhash	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/oblib/common/rowkey/ob_rowkey.cpp	534	ObRowkey::murmurhash	assign tmp_ret	tmp_ret = OB_INVALID_DATA;
+src/oblib/common/rowkey/ob_rowkey.cpp	539	ObRowkey::murmurhash	assign tmp_ret	tmp_ret = obj_ptr_[0].hash(ret, ret);
+src/oblib/common/rowkey/ob_rowkey.cpp	542	ObRowkey::murmurhash	assign tmp_ret	tmp_ret = obj_ptr_[i].hash(ret, ret);
+src/oblib/common/rowkey/ob_rowkey.h	303	ObRowkey::get_deep_copy_size	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/oblib/common/rowkey/ob_rowkey.h	308	ObRowkey::get_deep_copy_size	assign tmp_ret	tmp_ret = OB_INVALID_DATA;
+src/oblib/common/rowkey/ob_rowkey_info.cpp	137	ObRowkeyInfo::get_column	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/oblib/common/rowkey/ob_rowkey_info.cpp	139	ObRowkeyInfo::get_column	assign tmp_ret	tmp_ret = OB_INVALID_ARGUMENT;
+src/oblib/common/rowkey/ob_rowkey_info.cpp	142	ObRowkeyInfo::get_column	assign tmp_ret	tmp_ret = OB_INVALID_DATA;
+src/oblib/common/xml/ob_xml_util.cpp	582	ObXmlUtil::dfs_xml_text_node	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/oblib/common/xml/ob_xml_util.cpp	583	ObXmlUtil::dfs_xml_text_node	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = xpath_iter.close())) {
+src/oblib/common/xml/ob_xml_util.cpp	585	ObXmlUtil::dfs_xml_text_node	merge into ret	ret = COVER_SUCC(tmp_ret);
+src/oblib/lib/allocator/ob_simple_fifo_alloc.h	130	ObSimpleFifoAlloc::alloc	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/oblib/lib/allocator/ob_simple_fifo_alloc.h	148	ObSimpleFifoAlloc::alloc	assign tmp_ret	tmp_ret = OB_ALLOCATE_MEMORY_FAILED;
+src/oblib/lib/allocator/ob_slice_alloc.h	354	ObSliceAlloc::alloc	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/oblib/lib/allocator/ob_slice_alloc.h	357	ObSliceAlloc::alloc	assign tmp_ret	tmp_ret = OB_ERR_UNEXPECTED;
+src/oblib/lib/allocator/ob_slice_alloc.h	372	ObSliceAlloc::alloc	assign tmp_ret	tmp_ret = OB_ALLOCATE_MEMORY_FAILED;
+src/oblib/lib/allocator/ob_vslice_alloc.h	169	ObVSliceAlloc::alloc	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/oblib/lib/allocator/ob_vslice_alloc.h	189	ObVSliceAlloc::alloc	assign tmp_ret	tmp_ret = OB_ALLOCATE_MEMORY_FAILED;
+src/oblib/lib/container/ob_ext_ring_buffer_impl.h	729	ObExtendibleRingBufferBase::do_set_	merge OB_EAGAIN into ret (continue-and-record through another variable)	ret = (ret == OB_SUCCESS) ? OB_EAGAIN : ret;
+src/oblib/lib/container/ob_id_map.h	173	ObIDMap::assign	merge OB_ALLOCATE_MEMORY_FAILED into ret (continue-and-record through another variable)	ret = (OB_SUCCESS == ret) ? OB_ALLOCATE_MEMORY_FAILED : ret;
+src/oblib/lib/container/ob_id_map.h	256	ObIDMap::revert	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/oblib/lib/container/ob_id_map.h	257	ObIDMap::revert	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = free_list_.push(&(array_[pos])))) {
+src/oblib/lib/container/ob_id_map.h	281	ObIDMap::erase	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/oblib/lib/container/ob_id_map.h	282	ObIDMap::erase	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = free_list_.push(&(array_[pos])))) {
