@@ -1389,7 +1389,8 @@ def create_phase_contracts(
         "--host-work-directory", str(run_directory / "mysqltest-host"),
     )
     try:
-        run_mysqltest_phase.resolve_host_binaries(os.environ)
+        run_mysqltest_phase.resolve_host_binaries(
+            os.environ, REPOSITORY_ROOT)
     except run_mysqltest_phase.MysqltestPhaseError:
         mysqltest_host_readiness = (
             "mysqltest host gate requires local host executables")

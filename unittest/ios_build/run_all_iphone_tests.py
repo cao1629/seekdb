@@ -75,7 +75,8 @@ def validate_mysqltest_host_gate(
     if "mysqltest" not in suites:
         return None
     try:
-        return run_mysqltest_phase.resolve_host_binaries(environment)
+        return run_mysqltest_phase.resolve_host_binaries(
+            environment, REPOSITORY_ROOT)
     except run_mysqltest_phase.MysqltestPhaseError as error:
         raise IphoneTestCliError(
             "mysqltest host gate prerequisites are unavailable") from error

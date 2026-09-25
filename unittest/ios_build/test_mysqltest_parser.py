@@ -657,6 +657,104 @@ int main(int argc, char **argv) {
                 with self.assertRaises(phase.MysqltestPhaseError):
                     phase.resolve_host_binaries(environment)
 
+    def test_host_binaries_default_to_repository_canonical_outputs(self):
+        """Discover only the three canonical current-repository executables."""
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve()
+            expected = {
+                "seekdb": root / "build_release/src/observer/seekdb",
+                "obclient": root / "deps/3rd/u01/obclient/bin/obclient",
+                "mysqltest": root / "deps/3rd/u01/obclient/bin/mysqltest",
+            }
+            for name, path in expected.items():
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_text(name, encoding="utf-8")
+                path.chmod(0o700)
+
+            self.assertEqual(
+                expected, phase.resolve_host_binaries({}, root))
+
+    def test_partial_host_binary_environment_uses_canonical_missing_values(self):
+        """Keep each explicit executable and default only its missing peers."""
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve()
+            canonical = {
+                "seekdb": root / "build_release/src/observer/seekdb",
+                "obclient": root / "deps/3rd/u01/obclient/bin/obclient",
+                "mysqltest": root / "deps/3rd/u01/obclient/bin/mysqltest",
+            }
+            for name, path in canonical.items():
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_text(name, encoding="utf-8")
+                path.chmod(0o700)
+            explicit = root / "explicit-seekdb"
+            explicit.write_text("explicit", encoding="utf-8")
+            explicit.chmod(0o700)
+
+            resolved = phase.resolve_host_binaries(
+                {"SEEKDB_IPHONE_HOST_SEEKDB": str(explicit)}, root)
+
+            self.assertEqual(explicit, resolved["seekdb"])
+            self.assertEqual(canonical["obclient"], resolved["obclient"])
+            self.assertEqual(canonical["mysqltest"], resolved["mysqltest"])
+
+    def test_invalid_explicit_host_binary_never_falls_back_to_canonical(self):
+        """Treat a supplied invalid path as an error even if its default exists."""
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve()
+            for path in (
+                    root / "build_release/src/observer/seekdb",
+                    root / "deps/3rd/u01/obclient/bin/obclient",
+                    root / "deps/3rd/u01/obclient/bin/mysqltest"):
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_text("binary", encoding="utf-8")
+                path.chmod(0o700)
+            with self.assertRaises(phase.MysqltestPhaseError):
+                phase.resolve_host_binaries(
+                    {"SEEKDB_IPHONE_HOST_SEEKDB": str(root / "missing")},
+                    root)
+
+    def test_canonical_host_binary_symlink_is_rejected(self):
+        """Never accept a linked canonical executable or search for another one."""
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve()
+            target = root / "target"
+            target.write_text("binary", encoding="utf-8")
+            target.chmod(0o700)
+            seekdb = root / "build_release/src/observer/seekdb"
+            seekdb.parent.mkdir(parents=True)
+            seekdb.symlink_to(target)
+            for path in (
+                    root / "deps/3rd/u01/obclient/bin/obclient",
+                    root / "deps/3rd/u01/obclient/bin/mysqltest"):
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_text("binary", encoding="utf-8")
+                path.chmod(0o700)
+            with self.assertRaises(phase.MysqltestPhaseError):
+                phase.resolve_host_binaries({}, root)
+
+    def test_missing_canonical_host_binary_never_searches_path_or_checkout(self):
+        """Fail preflight instead of searching PATH or a neighboring checkout."""
+        with tempfile.TemporaryDirectory() as directory:
+            parent = Path(directory).resolve()
+            root = parent / "current"
+            sibling = parent / "sibling"
+            path_bin = parent / "bin"
+            root.mkdir()
+            path_bin.mkdir()
+            for name in ("seekdb", "obclient", "mysqltest"):
+                executable = path_bin / name
+                executable.write_text(name, encoding="utf-8")
+                executable.chmod(0o700)
+            sibling_seekdb = sibling / "build_release/src/observer/seekdb"
+            sibling_seekdb.parent.mkdir(parents=True)
+            sibling_seekdb.write_text("seekdb", encoding="utf-8")
+            sibling_seekdb.chmod(0o700)
+
+            with self.assertRaises(phase.MysqltestPhaseError):
+                phase.resolve_host_binaries(
+                    {"PATH": str(path_bin)}, root)
+
     @unittest.skipUnless(hasattr(os, "fork"), "requires process groups")
     def test_controlled_host_runner_kills_term_ignoring_descendants(self):
         """A shared deadline must reap a runner and every inherited child."""

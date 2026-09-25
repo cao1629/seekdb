@@ -21,7 +21,8 @@ wrapper 正常执行后，`seekdb-jemalloc-sys` 的 native configure 仍会在�
 时被系统以 SIGKILL 9 终止。`deps/external/cmake/Jemalloc.cmake` 现在只对
 `OB_MACOS27` 的单一 ARM64 host 生成
 `JEMALLOC_SYS_CONFIGURE_ARGS=...\n--host=aarch64-apple-darwin`，让 vendored
-autoconf 使用显式 Darwin host contract；普通 macOS、macOS 27 x86_64、iOS 的
+autoconf 在 initial runtime probe 失败后切到 cross mode，并跳过后续 runtime
+probes；它不是完全不生成或不运行 initial probe。普通 macOS、macOS 27 x86_64、iOS 的
 `aarch64-apple-ios` 配置和 Android 均不继承该参数。focused contract 通过真实
 CMake custom command 与 recording Cargo 验证最终环境；本次没有重启或修改正在
 生成的 `build_release`，完整 host release 重试结果仍需另行记录。
@@ -126,7 +127,27 @@ xcrun devicectl device install app --device "$DEVICE_ID" "$APP_PATH"
 
 ### Standalone mysqltest 阶段
 
-`./run.iphone.test.sh --suite mysqltest` 现在注册三个有序边界：独立 host mysqltest gate、每个已审查 lossless source 的设备 case，以及不可省略的通用 SQL/同目录 restart gate。入口不接受预先准备的 JSON 作为执行证明；同一次受锁 runner 流程会调用受跟踪的 host runner，先执行精确 272 个 CI-selected case，再 merge 并独立复核本机三项 executable bytes。调用者只需提供本机实际 host executable：
+`./run.iphone.test.sh --suite mysqltest` 现在注册三个有序边界：独立 host mysqltest gate、每个已审查 lossless source 的设备 case，以及不可省略的通用 SQL/同目录 restart gate。入口不接受预先准备的 JSON 作为执行证明；同一次受锁 runner 流程会调用受跟踪的 host runner，先执行精确 272 个 CI-selected case，再 merge 并独立复核本机三项 executable bytes。
+
+每项 host executable 都先读取对应的显式环境变量；未设置的项只回退到当前
+repository root 内以下固定路径，不扫描其他 checkout，也不搜索 `PATH`：
+
+```text
+build_release/src/observer/seekdb
+deps/3rd/u01/obclient/bin/obclient
+deps/3rd/u01/obclient/bin/mysqltest
+```
+
+当前机器的三个 canonical 产物均已存在，因此常规入口不再需要重复填写三项 host
+环境变量：
+
+```bash
+./run.iphone.test.sh
+# 只选择本阶段时：
+./run.iphone.test.sh --suite mysqltest
+```
+
+如需覆盖其中一项或多项，仍可显式提供：
 
 ```bash
 SEEKDB_IPHONE_HOST_SEEKDB=/absolute/path/to/seekdb \
@@ -134,6 +155,17 @@ SEEKDB_IPHONE_HOST_OBCLIENT=/absolute/path/to/obclient \
 SEEKDB_IPHONE_HOST_MYSQLTEST=/absolute/path/to/mysqltest \
   ./run.iphone.test.sh --suite mysqltest
 ```
+
+显式值一旦提供就必须是可执行的 regular non-symlink file；无效显式值不会静默
+回退。canonical 产物缺失或无效也会在设备发现、build、签名和安装之前 preflight
+失败。首次准备三个产物的受支持命令为：
+
+```bash
+./build.sh release --init --make
+```
+
+依赖已初始化后的增量命令为 `./build.sh release --make`。`--init` 可能联网下载固定
+依赖并写入仓库构建目录，不由 standalone runner 隐式执行。
 
 这是真实完整 host mysqltest，不是静态检查，耗时取决于 272 个 case 和重试；任一 host evidence/binary/corpus 问题都会在 iOS build、签名、安装或设备发现前停止。
 

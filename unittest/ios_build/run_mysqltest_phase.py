@@ -25,6 +25,11 @@ HOST_BINARY_ENVIRONMENTS = {
     "obclient": "SEEKDB_IPHONE_HOST_OBCLIENT",
     "mysqltest": "SEEKDB_IPHONE_HOST_MYSQLTEST",
 }
+HOST_BINARY_CANONICAL_PATHS = {
+    "seekdb": Path("build_release/src/observer/seekdb"),
+    "obclient": Path("deps/3rd/u01/obclient/bin/obclient"),
+    "mysqltest": Path("deps/3rd/u01/obclient/bin/mysqltest"),
+}
 
 
 @dataclass(frozen=True)
@@ -156,14 +161,20 @@ def validate_host_gate(
     }
 
 
-def resolve_host_binaries(environment: Mapping[str, str]) -> dict[str, Path]:
-    """Resolve explicit local host executables without accepting evidence paths."""
+def resolve_host_binaries(
+        environment: Mapping[str, str],
+        repository_root: Path = None) -> dict[str, Path]:
+    """Resolve explicit or canonical current-repository host executables."""
+    if repository_root is None:
+        repository_root = Path(__file__).resolve().parents[2]
+    repository_root = Path(repository_root).expanduser().absolute()
     binaries = {}
     for name, variable in HOST_BINARY_ENVIRONMENTS.items():
         value = environment.get(variable)
-        if not value:
-            raise MysqltestPhaseError("host mysqltest binaries are unavailable")
-        path = Path(value).expanduser().absolute()
+        if value:
+            path = Path(value).expanduser().absolute()
+        else:
+            path = repository_root / HOST_BINARY_CANONICAL_PATHS[name]
         try:
             metadata = path.lstat()
         except OSError as error:
@@ -515,7 +526,8 @@ def main(
     options = parse_args(arguments)
     try:
         local_environment = os.environ if environment is None else environment
-        binaries = resolve_host_binaries(local_environment)
+        binaries = resolve_host_binaries(
+            local_environment, options.repo_root)
         payload = validate_host_gate(
             options.repo_root,
             options.host_work_directory / "host-result.json", binaries)

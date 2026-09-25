@@ -133,7 +133,7 @@ include("{ROOT}/deps/external/cmake/Jemalloc.cmake")
         return json.loads(record.read_text(encoding="utf-8"))
 
     def test_macos27_arm64_jemalloc_uses_explicit_darwin_host(self):
-        """Prevent host configure probes in the macOS 27 arm64 build."""
+        """Switch to cross mode after the initial macOS 27 runtime probe fails."""
         environment = self._record_jemalloc_environment(macos27=True)
 
         self.assertIn("--host=aarch64-apple-darwin",

@@ -32,9 +32,20 @@
   ARM64 时向 `JEMALLOC_SYS_CONFIGURE_ARGS` 追加
   `--host=aarch64-apple-darwin`；普通 macOS、macOS 27 x86_64、既有 iOS
   `--host=aarch64-apple-ios` 及 Android 保持不变。新增 focused 测试用真实 CMake
-  生成并执行 Cargo custom command，检查 fake Cargo 最终收到的环境。本轮没有
+  生成并执行 Cargo custom command，检查 fake Cargo 最终收到的环境。该 host
+  参数让 autoconf 在 initial runtime probe 失败后切换 cross mode并跳过后续 runtime
+  probes，并非完全不运行 initial probe。本轮没有
   触碰正在生成的 `build_release`，也未运行完整 host build、真实 272 case、签名或
   真机测试。
+- mysqltest host binary resolver 现在逐项优先显式
+  `SEEKDB_IPHONE_HOST_SEEKDB`、`SEEKDB_IPHONE_HOST_OBCLIENT`、
+  `SEEKDB_IPHONE_HOST_MYSQLTEST`；缺失项只尝试当前 repository root 的固定
+  `build_release/src/observer/seekdb` 与
+  `deps/3rd/u01/obclient/bin/{obclient,mysqltest}`。它不搜索 `PATH` 或相邻 checkout，
+  显式无效值不回退，所有路径继续要求 executable regular non-symlink 并由 host
+  evidence 绑定实际 bytes。当前机器 canonical 产物齐全，所以常规入口只需
+  `./run.iphone.test.sh`；缺失时仍在任何设备/build/sign/install 前失败，首次准备命令
+  为 `./build.sh release --init --make`，不会由 standalone runner 隐式执行。
 
 ## 2026-09-25：standalone runner stages 1–4 adapter
 

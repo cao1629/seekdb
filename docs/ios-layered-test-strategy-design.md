@@ -116,6 +116,12 @@ terminates the complete runner process group and then invokes the tracked
 `sdb.py destroy` command against only that run's identity-marked instance. This
 cleanup is independently bounded because seekdb intentionally runs in a
 detached session and cannot be reclaimed by killing the host runner group.
+Each host executable uses its explicit environment override when present;
+otherwise the gate checks only the current repository's canonical release and
+obclient output paths. Missing or invalid canonical outputs fail preflight.
+The resolver never searches `PATH` or neighboring checkouts, and an invalid
+explicit override never falls back silently. Regular-file, non-symlink,
+executable, byte-identity, corpus, and source-commit checks remain mandatory.
 
 ## Rust Validation
 
