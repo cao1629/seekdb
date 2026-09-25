@@ -507,3 +507,25 @@ python3 deps/ios-build/build.py --jobs 4 vsag
   `O_NOFOLLOW` 创建/打开，预建 symlink 或非目录立即失败。tracked runner 的 run 与
   merge 子进程共用 absolute deadline，并各自在独立 process group 中运行；timeout、
   SIGINT 或异常会先 TERM 整组、有界 drain，再 KILL/reap，避免遗留 seekdb/mysqltest。
+
+## 2026-09-25：standalone 试运行与 iOS clean 修复
+
+- current-HEAD standalone 试运行完整执行 272 个 host mysqltest case，结果为
+  272/272 通过、无失败 case；修复 host validator 的排序契约后，merged evidence
+  按 runner 配置顺序完成最终校验。该结果属于 macOS host gate，不是真机结果。
+- App 准备阶段首次因 Mac 数据卷仅余约 8.4 GiB 触发默认 10 GiB 空间门禁。通过
+  CMake `clean` 清理可重建的 `build_ios_arm64_production` 产物后，空间恢复到约
+  12 GiB；保留 `build_release` 及 mysqltest evidence，未清理 iPhone 数据。
+- 该 clean 暴露既有 CMake 缺陷：Git 跟踪的 cbindgen 产物
+  `rust/sql-nio/include/nio.h` 被声明为 Cargo custom command 的 `BYPRODUCTS`，因此
+  生成的 `cmake_clean.cmake` 会删除源码树头文件。随后 Cargo 复用缓存且 C++ object
+  与 Rust target 并行，`oblib_rpc` 和 `ob_server` 报 `nio.h file not found`；实际
+  compile flags 已包含正确的 Rust include 目录。
+- 修复删除源码头的 `BYPRODUCTS` 所有权，保留其 tracked-source 契约，并增加静态
+  回归测试防止 clean 再次接管该文件。TDD 用例先准确失败，再在修复后通过；重新
+  configure 后的 `sql_nio_build` clean 清单只包含 build-tree target/archive。
+- 使用仓库内 Cargo/Rustup 缓存、固定 Rust 1.98.1、LLDB rustc wrapper、iphoneos
+  SDK、ARM64、最低 iOS 18.0、hook-on profile 重新执行真实构建，
+  `seekdb_ios_link_check` 达到 100% 并成功链接。完整 iOS Python suite 为 297/297
+  通过；本条只记录 build gate 修复，尚未把当前源码 revision 的后续真机阶段记为
+  通过。

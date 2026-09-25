@@ -165,7 +165,6 @@ endif()
 
 add_custom_command(
   OUTPUT "${RUST_STATICLIB}"
-  BYPRODUCTS "${RUST_INCLUDE_DIR}/nio.h"
   COMMAND "${CMAKE_COMMAND}" -E env ${_rust_build_env}
           "${CARGO}" build ${_cargo_profile_flag} ${_cargo_target_args}
           ${_cargo_feature_args}

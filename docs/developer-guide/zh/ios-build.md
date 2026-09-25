@@ -426,3 +426,21 @@ Apple 管理的证书和设备描述文件保存在系统凭证目录，不复�
 `unittest/ios_build/sql_probe.cpp` 覆盖表达式与持久计数、二进制键大小写及排序、JSON、BLOB、无符号读取、字符串数组、唯一键原子失败、事务回滚、`FOR UPDATE`、乐观版本更新以及三类 CHECK 约束。`ios_probe.lifecycle` 永不由套件清理；每轮只清空无外键的 `feature_matrix` 与 `feature_event` fixture。完整规则见 `unittest/ios_build/README.md`。
 
 2026-09-24 的通用套件已重新编译、签名并在真机完整执行。成功轮次 1、4、5、6、7 的 JSONL 各含 36 个成功 step 和最终完成记录；状态文件均为 `Stopped/result=0`、`sql_verified=true`，持久计数依次为 0、1、2、3、4。中间两轮暴露 fixture 清理对 affected rows 的错误假设，修复后连续四轮通过。旧设备 JSONL 属于已删除的专属套件证据，不能重命名为本次结果。
+
+## 2026-09-25 standalone 试运行状态
+
+当前 runner 已在 macOS 完成 current-HEAD 的 272/272 host mysqltest，并通过按 runner
+配置顺序核验的 merged evidence gate。随后 App 准备构建发现两个环境/构建问题：
+
+1. Mac 数据卷剩余空间约 8.4 GiB，低于构建脚本默认 10 GiB 门禁。使用 CMake
+   `clean` 仅清理可重建的 production iOS build 产物后恢复到约 12 GiB；该数值不是
+   iPhone 剩余空间。
+2. clean 将 Git 跟踪的 `rust/sql-nio/include/nio.h` 删除。原因是该源码树头文件被
+   错误列入 Cargo custom command 的 `BYPRODUCTS`。include path 本身存在，但 C++
+   object 与 Rust build 可并行，Cargo 缓存也不保证在头文件缺失时重跑 cbindgen。
+
+现已移除该源码头的 CMake clean 所有权，并增加回归测试。重新 configure 后生成的
+`sql_nio_build` clean 规则不再包含 `nio.h`；使用 runner 同一组仓库内 Cargo/Rustup、
+LLDB wrapper、hook-on profile 和 iphoneos ARM64 参数，`seekdb_ios_link_check` 已完整
+链接通过。完整 iOS Python suite 为 297/297 通过。当前 revision 尚需继续完成 App
+签名/安装和后续真机 phase，不能把本节的链接通过解释为全部真机测试完成。
