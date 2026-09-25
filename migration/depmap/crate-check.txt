@@ -1,0 +1,373 @@
+# crate check: the map's edges condensed to the crates of /Users/colin/seekdb-dev/migrate-to-rust/migration/design/evidence/rulebook/crates/crates-design.tsv (a forwarding header counts as its target, an umbrella header as itself; a copy of another header (aliases.tsv) as the header it copies; the placements of /Users/colin/seekdb-dev/migrate-to-rust/migration/depmap/core-placements.txt override the map, a line range by the lines each edge names; edges between live files) and checked against /Users/colin/seekdb-dev/migrate-to-rust/migration/design/evidence/rulebook/crates/allowed-design.tsv and the crate pairs the design's edge scripts counted (/Users/colin/seekdb-dev/migrate-to-rust/migration/design/evidence/rulebook/crates/out/crate_view.json, /Users/colin/seekdb-dev/migrate-to-rust/migration/design/evidence/rulebook/crates/out/link_edges.json)
+# classes: listed (on the row; crates from ob-runtime on, sql-nio aside, may also use ob-errno and ob-base); upward-named (to a later crate, a pair the design counted, so ARCHITECTURE 1.2 gives it one of the five fixes); gone (an include out of kept island code that the island's row does not allow, which compiles against the frozen header, or a seekdb edge not on its row: ARCHITECTURE 1.2); upward-unnamed and not-listed (findings: the design neither allows nor names them); uses-dropped and uses-deferred (findings: translated code that uses x-dropped or standby code); dropped, deferred (edges out of x-dropped or standby code, which is not translated); unmapped (no crate-map row). Edges out of kept island code by definition or link count against the island crate's row; an include of a C header a Rust crate's build.rs writes (rust-header) counts against that crate
+[pairs by class]
+listed	338 pairs	11840 edges
+upward-named	107 pairs	994 edges
+gone	6 pairs	10 edges
+upward-unnamed	6 pairs	6 edges
+not-listed	1 pairs	1 edges
+uses-dropped	7 pairs	22 edges
+uses-deferred	1 pairs	1 edges
+dropped	0 pairs	0 edges
+deferred	7 pairs	183 edges
+unmapped	0 pairs	0 edges
+edges not counted (a file outside the reference build)	158
+[findings: edges the design neither allows nor names as a cut it removes]
+upward-unnamed	ob-schema -> storage-api	src/share/ob_rpc_struct.h -> src/share/ob_est_row_count_record.h	include	L40
+upward-unnamed	storage-api -> storage-tablet	src/sql/engine/basic/ob_pushdown_filter.cpp -> src/data_plane/api/data_plane/lob/ob_lob_value.h	include	L27
+upward-unnamed	storage-api -> sql-ir	src/sql/engine/basic/ob_pushdown_filter.cpp -> src/sql/resolver/expr/ob_raw_expr_util.h	include	L31
+upward-unnamed	storage-api -> sql-engine	src/sql/engine/basic/ob_pushdown_filter.cpp -> src/sql/engine/aggregate/ob_pushdown_aggregate_program.h	include	L30
+upward-unnamed	storage-api -> sql-codegen	src/sql/engine/basic/ob_pushdown_filter.cpp -> src/sql/code_generator/ob_static_engine_cg.h	include	L32
+upward-unnamed	sql-exec -> sql-nio	src/query/api/query/protocol/ob_mysql_rust_row.h -> rust/sql-nio/include/nio.h	rust-header	rust-header
+not-listed	sql-codegen -> storage-sstable	src/sql/code_generator/ob_tsc_cg_service.h -> src/data_plane/api/data_plane/blocksstable/ob_index_block_util.h	include	L19
+uses-dropped	ob-base -> x-dropped	src/oblib/lib/signal/ob_libunwind.c -> src/oblib/easy/util/easy_string.h	include	L21{defined(__x86_64__) && !defined(_WIN32)}
+uses-dropped	ob-base -> x-dropped	src/oblib/lib/signal/ob_signal_utils.h -> src/oblib/easy/util/easy_string.h	include	L36
+uses-dropped	ob-base -> x-dropped	src/oblib/lib/utility/utility.h -> src/oblib/easy/include/easy_define.h	include	L39
+uses-dropped	ob-runtime -> x-dropped	src/oblib/lib/net/ob_addr.h -> src/oblib/easy/util/easy_inet.h	include	L21
+uses-dropped	ob-runtime -> x-dropped	src/oblib/lib/thread/thread.h -> src/oblib/easy/io/easy_io_struct.h	include	L25
+uses-dropped	ob-runtime -> x-dropped	src/oblib/rpc/frame/ob_net_easy.cpp -> src/oblib/easy/io/easy_io.h	definition	defs=3 easy_baseth_self; L93 easy_baseth_self declared at L197; L155 easy_connection_str declared at L57; L416 easy_request_addbuf declared at L104
+uses-dropped	ob-runtime -> x-dropped	src/oblib/rpc/frame/ob_net_easy.cpp -> src/oblib/easy/io/easy_io.h	include	L19
+uses-dropped	ob-runtime -> x-dropped	src/oblib/rpc/frame/ob_net_easy.cpp -> src/oblib/easy/io/easy_log.h	definition	defs=4 easy_fnv_hash; L69 easy_fnv_hash declared at L59; L83 easy_log_level declared at L49; L85 easy_log_format declared at L50; +1 more from the source
+uses-dropped	ob-runtime -> x-dropped	src/oblib/rpc/frame/ob_net_easy.cpp -> src/oblib/easy/util/easy_buf.h	definition	defs=1 easy_buf_set_data; L404 easy_buf_set_data declared at L50
+uses-dropped	ob-runtime -> x-dropped	src/oblib/rpc/frame/ob_net_easy.cpp -> src/oblib/easy/util/easy_inet.h	definition	defs=2 easy_inet_addr_to_str; L97 easy_inet_addr_to_str declared at L17; L123 easy_inet_atoe declared at L24
+uses-dropped	ob-runtime -> x-dropped	src/oblib/rpc/frame/ob_net_easy.cpp -> src/oblib/easy/util/easy_mod_stat.h	definition	defs=1 easy_cur_mod_stat; L95 easy_cur_mod_stat declared at L15
+uses-dropped	ob-runtime -> x-dropped	src/oblib/rpc/frame/ob_net_easy.cpp -> src/oblib/easy/util/easy_pool.h	definition	defs=1 easy_pool_alloc_ex; L437 easy_pool_alloc_ex declared at L60
+uses-dropped	ob-runtime -> x-dropped	src/oblib/rpc/frame/ob_net_easy.cpp -> src/oblib/easy/util/easy_string.h	definition	defs=3 easy_string_toupper; L220 easy_string_toupper declared at L15; L234 easy_vsnprintf declared at L21
+uses-dropped	ob-runtime -> x-dropped	src/oblib/rpc/frame/ob_net_easy.cpp -> src/oblib/easy/util/easy_time.h	definition	defs=1 get_cpufreq_khz
+uses-dropped	ob-runtime -> x-dropped	src/share/cache/ob_recycle_multi_kvcache.h -> src/oblib/easy/util/easy_time.h	include	L88
+uses-dropped	ob-share -> x-dropped	src/oblib/common/mysqlclient/ob_mysql_global.h -> src/oblib/easy/include/easy_define.h	include	L21
+uses-dropped	storage-tablet -> x-dropped	src/storage/multi_data_source/ob_mds_event_buffer.h -> src/oblib/easy/util/easy_time.h	include	L27
+uses-dropped	sql-expr -> x-dropped	src/sql/engine/expr/ob_expr_json_search.cpp -> src/oblib/easy/util/easy_string.h	include	L19
+uses-dropped	sql-expr -> x-dropped	src/sql/engine/expr/ob_expr_regexp_context.h -> src/oblib/easy/include/easy_define.h	include	L19
+uses-dropped	observer -> x-dropped	src/observer/mysql/obmp_connect.cpp -> src/oblib/easy/util/easy_mod_stat.h	include	L21
+uses-dropped	observer -> x-dropped	src/observer/ob_srv_deliver.cpp -> src/oblib/easy/util/easy_mod_stat.h	include	L22
+uses-dropped	seekdb -> x-dropped	src/observer/ob_signal_handle.h -> src/oblib/easy/include/easy_define.h	include	L22{defined(_WIN32)}
+uses-deferred	observer -> standby	src/observer/ob_server.cpp -> src/standby/standby_module.h	include	L96
+[unmapped files]
+bazel/probes/easy_public_interface_probe.cpp	not in the reference build
+bazel/probes/logservice_public_interface_probe.cpp	not in the reference build
+bazel/probes/oblib_interface_probe.cpp	not in the reference build
+bazel/probes/transitive_storage_header_probe.cpp	not in the reference build
+bazel/sanity_abort.cpp	not in the reference build
+include/android_compat.h	not in the reference build
+tools/codestyle/sample/ob_style_example.cpp	not in the reference build
+tools/codestyle/sample/ob_style_example.h	not in the reference build
+tools/ob_error/test/test_ob_error.cpp	not in the reference build
+[crate cycles over every edge between live mapped crates, island edges included]
+34 crates	ob-base ob-simd ob-runtime ob-values ob-values-doc ob-share ob-schema geo-sys vsag-sys ob-log storage-api storage-sstable storage-tx storage-tablet storage-engine storage-search sql-parse-tree sql-parser-sys sql-session sql-ir sql-exec sql-expr sql-das sql-engine sql-parser sql-resolver sql-rewrite sql-optimizer sql-codegen sql pl rootserver observer seekdb
+[crate cycles left after removing the upward edges the design names and the gone edges]
+18 crates	ob-schema storage-api storage-sstable storage-tx storage-tablet storage-engine storage-search sql-session sql-ir sql-exec sql-expr sql-das sql-engine sql-parser sql-resolver sql-rewrite sql-optimizer sql-codegen
+  ob-schema -> storage-api	src/share/ob_rpc_struct.h -> src/share/ob_est_row_count_record.h	include
+  sql-codegen -> storage-sstable	src/sql/code_generator/ob_tsc_cg_service.h -> src/data_plane/api/data_plane/blocksstable/ob_index_block_util.h	include
+  storage-api -> sql-codegen	src/sql/engine/basic/ob_pushdown_filter.cpp -> src/sql/code_generator/ob_static_engine_cg.h	include
+  storage-api -> sql-engine	src/sql/engine/basic/ob_pushdown_filter.cpp -> src/sql/engine/aggregate/ob_pushdown_aggregate_program.h	include
+  storage-api -> sql-ir	src/sql/engine/basic/ob_pushdown_filter.cpp -> src/sql/resolver/expr/ob_raw_expr_util.h	include
+  storage-api -> storage-tablet	src/sql/engine/basic/ob_pushdown_filter.cpp -> src/data_plane/api/data_plane/lob/ob_lob_value.h	include
+[upward crate pairs the design counted that the map does not show]
+ob-base -> ob-share	link_edges.json
+ob-errno -> ob-base	crate_view.json,link_edges.json
+ob-errno -> ob-runtime	link_edges.json
+ob-errno -> ob-schema	link_edges.json
+ob-errno -> ob-share	link_edges.json
+ob-errno -> ob-values	link_edges.json
+ob-runtime -> geo-sys	link_edges.json
+ob-runtime -> ob-schema	crate_view.json
+ob-runtime -> observer	link_edges.json
+ob-schema -> rootserver	link_edges.json
+ob-share -> geo-sys	link_edges.json
+ob-values -> ob-schema	link_edges.json
+ob-values -> observer	link_edges.json
+ob-values-doc -> geo-sys	link_edges.json
+pl -> observer	link_edges.json
+rootserver -> observer	link_edges.json
+sql -> observer	link_edges.json
+sql -> rootserver	link_edges.json
+sql-codegen -> observer	link_edges.json
+sql-codegen -> pl	link_edges.json
+sql-codegen -> sql	link_edges.json
+sql-das -> observer	link_edges.json
+sql-das -> sql-parser	link_edges.json
+sql-engine -> observer	link_edges.json
+sql-engine -> sql-parser	link_edges.json
+sql-exec -> sql-parser	link_edges.json
+sql-expr -> sql-codegen	link_edges.json
+sql-ir -> sql-engine	link_edges.json
+sql-optimizer -> observer	link_edges.json
+sql-resolver -> observer	link_edges.json
+storage-engine -> observer	link_edges.json
+storage-engine -> sql-expr	link_edges.json
+storage-search -> sql	link_edges.json
+storage-search -> sql-ir	link_edges.json
+storage-search -> sql-parser	link_edges.json
+storage-sstable -> sql-expr	link_edges.json
+storage-sstable -> storage-search	link_edges.json
+storage-tablet -> observer	link_edges.json
+storage-tablet -> sql-expr	link_edges.json
+storage-tablet -> sql-parser	link_edges.json
+storage-tablet -> sql-session	link_edges.json
+storage-tx -> sql	link_edges.json
+storage-tx -> sql-session	link_edges.json
+[definition edges crossing crates (a definition outside its declaring file's crate)]
+storage-tablet -> storage-api	src/data_plane/ob_parallel_range_task_planner.cpp -> src/data_plane/api/data_plane/access/ob_parallel_range_task_planner.h	defs=1 oceanbase::data_plane::ObParallelRangeTaskPlanner
+storage-tablet -> storage-api	src/data_plane/ob_tablet_scan.cpp -> src/data_plane/api/data_plane/access/ob_tablet_scan.h	defs=19 oceanbase::common::ObLimitParam
+ob-values -> ob-base	src/oblib/common/ob_obj_deep_copy.cpp -> src/oblib/lib/utility/utility.h	defs=2 oceanbase::common::deep_copy_obj
+ob-values -> ob-base	src/oblib/common/timezone/ob_time_convert.cpp -> src/oblib/lib/trace/ob_trace_event.h	defs=1 oceanbase::common::trace_event_datetime_to_str
+ob-runtime -> ob-base	src/oblib/lib/thread/ob_thread_hook.cpp -> src/oblib/lib/lock/ob_futex.h	defs=1 futex_hook; L172{defined(_WIN32)} futex_hook declared at L43 (no DWARF definition); L218{defined(__APPLE__)} futex_hook declared at L43
+ob-runtime -> ob-base	src/oblib/lib/thread/ob_thread_hook.cpp -> src/oblib/lib/ob_define.h	defs=1 ob_pthread_cond_timedwait_us
+ob-base -> ob-values	src/oblib/lib/utility/ob_hang_fatal_error.cpp -> src/oblib/lib/charset/ob_ctype.h	defs=1 right_to_die_or_duty_to_live_c
+ob-runtime -> x-dropped	src/oblib/rpc/frame/ob_net_easy.cpp -> src/oblib/easy/io/easy_io.h	defs=3 easy_baseth_self; L93 easy_baseth_self declared at L197; L155 easy_connection_str declared at L57; L416 easy_request_addbuf declared at L104
+ob-runtime -> x-dropped	src/oblib/rpc/frame/ob_net_easy.cpp -> src/oblib/easy/io/easy_log.h	defs=4 easy_fnv_hash; L69 easy_fnv_hash declared at L59; L83 easy_log_level declared at L49; L85 easy_log_format declared at L50; +1 more from the source
+ob-runtime -> x-dropped	src/oblib/rpc/frame/ob_net_easy.cpp -> src/oblib/easy/util/easy_buf.h	defs=1 easy_buf_set_data; L404 easy_buf_set_data declared at L50
+ob-runtime -> x-dropped	src/oblib/rpc/frame/ob_net_easy.cpp -> src/oblib/easy/util/easy_inet.h	defs=2 easy_inet_addr_to_str; L97 easy_inet_addr_to_str declared at L17; L123 easy_inet_atoe declared at L24
+ob-runtime -> x-dropped	src/oblib/rpc/frame/ob_net_easy.cpp -> src/oblib/easy/util/easy_mod_stat.h	defs=1 easy_cur_mod_stat; L95 easy_cur_mod_stat declared at L15
+ob-runtime -> x-dropped	src/oblib/rpc/frame/ob_net_easy.cpp -> src/oblib/easy/util/easy_pool.h	defs=1 easy_pool_alloc_ex; L437 easy_pool_alloc_ex declared at L60
+ob-runtime -> x-dropped	src/oblib/rpc/frame/ob_net_easy.cpp -> src/oblib/easy/util/easy_string.h	defs=3 easy_string_toupper; L220 easy_string_toupper declared at L15; L234 easy_vsnprintf declared at L21
+ob-runtime -> x-dropped	src/oblib/rpc/frame/ob_net_easy.cpp -> src/oblib/easy/util/easy_time.h	defs=1 get_cpufreq_khz
+observer -> ob-runtime	src/oblib/rpc/ob_sql_request_operator.cpp -> src/oblib/rpc/ob_sql_request_operator.h	defs=14 oceanbase::rpc::ObSqlRequestOperator; L212 oceanbase::rpc::global_sql_req_operator declared at L80
+seekdb -> ob-base	src/observer/main.cpp -> src/oblib/lib/ob_abort.h	defs=1 ob_abort; L313{defined(_WIN32)} ob_abort declared at L31 (no DWARF definition)
+observer -> sql	src/observer/mysql/ob_mysql_end_trans_cb.cpp -> src/sql/ob_mysql_end_trans_cb.h	defs=15 oceanbase::observer::ObSqlEndTransCb
+observer -> sql-exec	src/observer/mysql/obmp_packet_sender.cpp -> src/query/api/query/protocol/ob_mysql_packet_sender.h	defs=29 oceanbase::observer::ObMPPacketSender
+observer -> ob-share	src/observer/ob_ex_rpc.cpp -> src/share/ob_ex_rpc.h	defs=2 oceanbase::ex_rpc::async_call_internal
+observer -> ob-share	src/observer/ob_inner_sql_connection.cpp -> src/oblib/common/mysqlclient/ob_mysql_proxy.h	defs=1 oceanbase::common::create_inner_sql_connection_for_proxy; L1459 oceanbase::common::create_inner_sql_connection_for_proxy declared at L33
+observer -> sql-exec	src/observer/ob_inner_sql_connection.cpp -> src/query/api/query/session/ob_inner_sql_connection_access.h	defs=5 oceanbase::query::ObInnerSQLConnectionAccess
+observer -> sql-exec	src/observer/ob_req_time_service.cpp -> src/query/api/query/runtime/ob_request_time_guard.h	defs=3 oceanbase::observer::ObReqTimeInfo
+observer -> storage-tablet	src/observer/ob_tablet_runtime_meta_updater.cpp -> src/data_plane/api/data_plane/report/ob_tablet_report.h	defs=4 oceanbase::data_plane::get_stalled_tablet_update_tasks
+observer -> ob-runtime	src/observer/omt/ob_server_runtime_controller.cpp -> src/share/io/ob_io_manager.h	defs=1 oceanbase::common::ObIOManager
+observer -> sql-das	src/observer/vector_index/ob_plugin_vector_index_adaptor.cpp -> src/query/api/query/vector/ob_vector_index_adaptor.h	defs=114 oceanbase::share::ObPluginVectorIndexAdaptor; L361 oceanbase::share::free_memdata_resource declared at L1008; L391 oceanbase::share::free_hnswsq_array_data declared at L1007; L410 oceanbase::
+observer -> storage-search	src/observer/vector_index/ob_plugin_vector_index_adaptor.cpp -> src/query/api/query/vector/ob_vector_index_util.h	defs=8 oceanbase::share::ObVectorIndexParam
+observer -> sql-das	src/observer/vector_index/ob_plugin_vector_index_serialize.cpp -> src/query/api/query/vector/ob_vector_index_serialize.h	defs=14 oceanbase::share::ObIStreamBuf
+observer -> sql-das	src/observer/vector_index/ob_plugin_vector_index_util.cpp -> src/query/api/query/vector/ob_vector_query_result.h	defs=13 oceanbase::share::ObVectorQueryVidIterator
+observer -> storage-search	src/observer/vector_index/ob_vector_index_async_task.cpp -> src/data_plane/api/data_plane/vector/ob_i_vector_index_runtime.h	defs=2 oceanbase::data_plane::process_vector_index_embedding_task
+observer -> sql-das	src/observer/vector_index/ob_vector_index_ivf_cache_mgr.cpp -> src/query/api/query/vector/ob_vector_index_cache.h	defs=32 oceanbase::share::ObIvfCacheMgr
+observer -> sql-das	src/observer/vector_index/ob_vector_index_param.cpp -> src/query/api/query/vector/ob_vector_index_param.h	defs=7 oceanbase::share::ObVectorIndexQueryParam
+observer -> storage-search	src/observer/vector_index/ob_vector_refresh_transaction.cpp -> src/data_plane/api/data_plane/vector/ob_vector_refresh_transaction.h	defs=12 oceanbase::data_plane::ObVectorRefreshTransaction
+pl -> sql-parse-tree	src/pl/ob_pl_stmt.cpp -> src/query/api/query/parser/parse_node.h	defs=1 lookup_pl_symbol
+sql-parser -> sql-parse-tree	src/pl/parser/ob_pl_parser.cpp -> src/query/api/query/parser/parse_node.h	defs=1 obpl_parser_check_stack_overflow; L28 obpl_parser_check_stack_overflow declared at L401
+sql-parser -> pl	src/pl/parser/ob_pl_parser.cpp -> src/sql/pl/parser/ob_pl_parser.h	defs=5 oceanbase::pl::ObPLParser
+pl -> sql-optimizer	src/pl/sys_package/ob_dbms_space.cpp -> src/query/api/query/optimizer/stat/ob_optimizer_stat_service.h	defs=2 oceanbase::query::ObOptimizerStatService
+rootserver -> storage-tablet	src/rootserver/ob_local_management_service.cpp -> src/data_plane/api/data_plane/ddl/ob_ddl_coordinator.h	defs=4 oceanbase::data_plane::rebuild_vector_index
+rootserver -> storage-tablet	src/rootserver/ob_local_management_service.cpp -> src/data_plane/api/data_plane/ddl/ob_ddl_schedule.h	defs=1 oceanbase::data_plane::load_idempotent_ddl_tablet_slice_counts
+ob-runtime -> ob-base	src/share/config/ob_server_config.cpp -> src/oblib/lib/cpu/ob_cpu_topology.h	defs=1 oceanbase::common::get_cpu_count
+ob-schema -> ob-share	src/share/ob_ddl_common.cpp -> src/share/ob_ddl_task_serialize_field.h	defs=8 oceanbase::share::ObDDLTaskSerializeField
+ob-share -> ob-values	src/share/ob_lob_access_utils.cpp -> src/share/lob/ob_lob_text_iter_context.h	defs=2 oceanbase::common::ObLobTextIterCtx
+ob-share -> ob-base	src/share/ob_task_define.cpp -> src/oblib/lib/oblog/ob_log.h	defs=1 oceanbase::common::allow_next_syslog
+ob-runtime -> ob-base	src/share/rc/ob_context.cpp -> src/oblib/lib/rc/ob_rc.h	defs=1 oceanbase::lib::current_resource_owner_id; L26 oceanbase::lib::current_resource_owner_id declared at L27
+sql-das -> sql-exec	src/sql/das/iter/ob_das_scan_iter.cpp -> src/query/api/query/das/ob_das_iter_access.h	defs=7 oceanbase::query::das_scan_advance
+sql-das -> sql-exec	src/sql/das/iter/ob_das_text_retrieval_eval_node.cpp -> src/query/api/query/das/ob_fts_eval_node_access.h	defs=2 oceanbase::query::evaluate_fts_boolean
+sql-das -> sql-engine	src/sql/das/ob_das_delete_op.cpp -> src/sql/engine/dml/ob_dml_service.h	defs=1 oceanbase::sql::ObDASIndexDMLAdaptor; L48 oceanbase::sql::ObDASIndexDMLAdaptor::write_rows declared at L301 (no DWARF definition)
+sql-das -> sql-engine	src/sql/das/ob_das_insert_op.cpp -> src/sql/engine/dml/ob_dml_service.h	defs=1 oceanbase::sql::ObDASIndexDMLAdaptor; L50 oceanbase::sql::ObDASIndexDMLAdaptor::write_rows declared at L301 (no DWARF definition)
+sql-das -> sql-exec	src/sql/das/ob_das_ir_define.cpp -> src/query/api/query/das/ob_block_max_spec_access.h	defs=2 oceanbase::query::get_text_block_max_column
+sql-das -> sql-exec	src/sql/das/ob_das_ir_define.cpp -> src/query/api/query/das/ob_das_id_protocol.h	defs=9 oceanbase::sql::ObDocIdExt
+sql-das -> sql-engine	src/sql/das/ob_das_update_op.cpp -> src/sql/engine/dml/ob_dml_service.h	defs=1 oceanbase::sql::ObDASIndexDMLAdaptor; L372 oceanbase::sql::ObDASIndexDMLAdaptor::write_rows declared at L301 (no DWARF definition)
+sql-das -> sql-exec	src/sql/das/ob_das_vec_define.cpp -> src/query/api/query/das/ob_block_max_spec_access.h	defs=2 oceanbase::query::get_vector_block_max_column
+sql-engine -> sql-exec	src/sql/engine/basic/ob_batch_result_holder.cpp -> src/query/api/query/engine/basic/ob_batch_result_holder.h	defs=5 oceanbase::sql::ObBatchResultHolder
+sql -> sql-exec	src/sql/engine/cmd/ob_ddl_executor_util.cpp -> src/query/api/query/engine/cmd/ob_ddl_execution.h	defs=2 oceanbase::query::ObDDLExecution
+sql -> sql-exec	src/sql/engine/cmd/ob_load_data_parser.cpp -> src/query/api/query/engine/cmd/ob_load_data_parser.h	defs=27 oceanbase::sql::ObExternalFileFormat::StringData; L34 oceanbase::sql::ObExternalFileFormat::FORMAT_TYPE_STR declared at L944 (no DWARF definition); L442 oceanbase::sql::compression_algorithm_t
+sql-expr -> sql-exec	src/sql/engine/expr/ob_array_expr_utils.cpp -> src/query/api/query/engine/expr/ob_array_expr_utils.h	defs=35 oceanbase::sql::ObArrayExprUtils; L36 oceanbase::sql::ObArrayExprUtils::DEFAULT_CAST_TYPE_STR declared at L51 (no DWARF definition); L995 oceanbase::sql::ObArrayExprUtils::raw_check_add declar
+sql-expr -> sql-exec	src/sql/engine/expr/ob_datum_cast.cpp -> src/query/api/query/engine/expr/ob_decimal_int_scale.h	defs=2 oceanbase::query::ObDecimalIntScale
+sql-expr -> sql-exec	src/sql/engine/expr/ob_expr_ai/ob_ai_func_utils.cpp -> src/query/api/query/engine/expr/ob_ai_model_resolver.h	defs=1 oceanbase::query::ObAIModelResolver
+sql-expr -> sql-exec	src/sql/engine/expr/ob_expr_array_map.cpp -> src/query/api/query/engine/expr/ob_expr_array_map.h	defs=20 oceanbase::sql::ObExprArrayMapCommon
+sql-expr -> sql-exec	src/sql/engine/expr/ob_expr_bm25.cpp -> src/query/api/query/engine/expr/ob_expr_bm25.h	defs=7 oceanbase::sql::ObExprBM25
+sql-expr -> sql-exec	src/sql/engine/expr/ob_expr_cmp_func.cpp -> src/query/api/query/engine/expr/ob_expr_cmp_func.h	defs=4 oceanbase::sql::ObExprCmpFuncsHelper
+sql-expr -> sql-exec	src/sql/engine/expr/ob_expr_extra_info_factory.cpp -> src/query/api/query/engine/expr/ob_expr_extra_info_factory.h	defs=3 oceanbase::sql::ObExprExtraInfoFactory; L51 oceanbase::sql::ObExprExtraInfoFactory::ALLOC_FUNS_ declared at L30 (no DWARF definition)
+sql-expr -> sql-exec	src/sql/engine/expr/ob_expr_in.cpp -> src/query/api/query/engine/expr/ob_expr_in.h	defs=53 oceanbase::sql::ObExprInOrNotIn; L55 oceanbase::sql::Row::equal_key declared at L57 (no DWARF definition); L93 oceanbase::sql::Row::hash_key declared at L57 (no DWARF definition); L119 oceanba
+sql-expr -> sql-exec	src/sql/engine/expr/ob_expr_lob_utils.cpp -> src/query/api/query/engine/expr/ob_expr_lob_utils.h	defs=4 oceanbase::sql::ObTextStringHelper
+sql-expr -> sql-exec	src/sql/engine/expr/ob_expr_operator.cpp -> src/query/api/query/engine/expr/ob_expr_operator.h	defs=177 oceanbase::sql::ObExprOperator; L1426 oceanbase::sql::ObExprOperator::enumset_calc_types_ declared at L304 (no DWARF definition); L4709 oceanbase::sql::ObMinMaxExprOperator::calc_without_cast
+sql-expr -> sql-exec	src/sql/engine/expr/ob_expr_operator.cpp -> src/query/api/query/engine/expr/ob_expr_res_type.h	defs=3 oceanbase::sql::ObExprResType
+sql-expr -> sql-exec	src/sql/engine/expr/ob_expr_util.cpp -> src/query/api/query/engine/expr/ob_expr_util.h	defs=33 oceanbase::sql::ObExprUtil
+sql-exec -> sql-optimizer	src/sql/engine/ob_exec_context.cpp -> src/query/api/query/optimizer/ob_optimizer_location_defs.h	defs=8 oceanbase::sql::GroupPWJTabletIdInfo
+sql-engine -> sql-exec	src/sql/engine/px/ob_px_dtl_msg.cpp -> src/query/api/query/engine/px/ob_px_tablet_range.h	defs=10 oceanbase::sql::ObPxTabletRange
+sql-engine -> sql-exec	src/sql/engine/px/ob_px_op_size_factor.cpp -> src/query/api/query/engine/px/ob_px_op_size_factor.h	defs=6 oceanbase::sql::PxOpSizeFactor
+sql-engine -> sql-exec	src/sql/engine/sort/ob_sort_op_impl.cpp -> src/query/api/query/engine/basic/ob_encoded_sort_row.h	defs=1 oceanbase::query::sort_encoded_rows; L3338 oceanbase::query::sort_encoded_rows declared at L55
+sql -> sql-exec	src/sql/ob_sql_define.cpp -> src/query/api/query/ob_sql_define.h	defs=4 oceanbase::sql::ObPQDistributeMethod
+sql-ir -> sql-exec	src/sql/ob_sql_utils.cpp -> src/query/api/query/ob_sql_name_service.h	defs=3 oceanbase::query::ObSQLNameService
+sql-ir -> sql-parse-tree	src/sql/ob_sql_utils.cpp -> src/query/api/query/parser/parse_node.h	defs=1 check_stack_overflow_c; L1964 check_stack_overflow_c declared at L461
+pl -> sql-ir	src/sql/pl/ob_routine_param_type.cpp -> src/sql/pl/ob_pl_type.h	defs=1 oceanbase::pl::get_pl_data_type
+sql -> sql-exec	src/sql/plan_cache/ob_lib_cache_register.cpp -> src/query/api/query/plan_cache/ob_lib_cache_register.h	defs=10 oceanbase::sql::ObLibCacheRegister; L32 oceanbase::sql::ObLibCacheRegister::CO_ALLOC declared at L55 (no DWARF definition); L33 oceanbase::sql::ObLibCacheRegister::CN_ALLOC declared at L55 (no
+sql-ir -> sql-exec	src/sql/resolver/expr/ob_raw_expr.cpp -> src/query/api/query/resolver/ob_raw_expr_traits.h	defs=1 oceanbase::query::is_topn_filter; L6438 oceanbase::query::is_topn_filter declared at L29
+sql-resolver -> sql-exec	src/sql/resolver/ob_schema_checker.cpp -> src/query/api/query/resolver/ob_schema_lookup.h	defs=5 oceanbase::query::ObSchemaLookup
+sql-session -> sql-exec	src/sql/session/ob_local_session_var.cpp -> src/query/api/query/session/ob_local_session_var.h	defs=8 oceanbase::sql::ObLocalSessionVarHelper; L30 oceanbase::sql::ObLocalSessionVarHelper::ALL_LOCAL_VARS declared at L31 (no DWARF definition)
+sql-session -> sql-exec	src/sql/session/ob_session_inner_sql.cpp -> src/query/api/query/session/ob_session_inner_sql.h	defs=8 oceanbase::query::ObSessionInnerSql
+sql-session -> sql-exec	src/sql/session/ob_sql_session_info.cpp -> src/query/api/query/session/ob_session_access.h	defs=23 oceanbase::query::ObSessionAccess
+sql-session -> sql-exec	src/sql/session/ob_sql_session_mgr.cpp -> src/query/api/query/session/ob_deadlock_session.h	defs=10 oceanbase::query::ObDeadlockSessionGuard
+sql -> sql-exec	src/sql/tablelock/ob_lock_executor.cpp -> src/query/api/query/tablelock/ob_table_lock_runtime.h	defs=1 oceanbase::query::release_locks_for_dead_owner
+storage-tablet -> storage-api	src/storage/access/ob_block_row_store.cpp -> src/query/api/query/engine/basic/ob_pushdown_filter.h	defs=1 oceanbase::sql::PushdownFilterInfo
+storage-tablet -> storage-api	src/storage/access/ob_data_access_retry.cpp -> src/data_plane/api/data_plane/access/ob_data_access_retry.h	defs=1 oceanbase::data_plane::ObDataAccessRetry
+storage-tablet -> storage-api	src/storage/access/ob_datum_reshape.cpp -> src/data_plane/api/data_plane/access/ob_datum_reshape.h	defs=4 oceanbase::data_plane::ObDatumReshape
+storage-tablet -> storage-api	src/storage/access/ob_dml_param.cpp -> src/data_plane/api/data_plane/access/ob_table_scan_param.h	defs=3 oceanbase::storage::ScanResumePoint
+storage-tablet -> sql-exec	src/storage/access/ob_dml_param.cpp -> src/query/api/query/engine/basic/ob_row_to_expr_projector.h	defs=5 oceanbase::storage::ObRow2ExprsProjector
+storage-tablet -> storage-api	src/storage/access/ob_sample_filter.cpp -> src/data_plane/api/data_plane/access/ob_sample_filter_factory.h	defs=3 oceanbase::data_plane::alloc_hybrid_sample_filter_executor; L695 oceanbase::data_plane::alloc_sample_filter_node declared at L39; L754 oceanbase::data_plane::alloc_hybrid_sample_filter_executor
+storage-tablet -> storage-api	src/storage/access/ob_table_param.cpp -> src/data_plane/api/data_plane/access/ob_table_param.h	defs=44 oceanbase::share::schema::ObTableParam
+storage-tablet -> storage-api	src/storage/access/ob_table_scan_iterator.cpp -> src/data_plane/api/data_plane/access/ob_table_scan_access.h	defs=2 oceanbase::data_plane::table_scan_next_datum_row
+storage-sstable -> storage-api	src/storage/blocksstable/ob_datum_row.cpp -> src/data_plane/api/data_plane/blocksstable/ob_datum_row.h	defs=34 oceanbase::blocksstable::ObDatumRow; L531 oceanbase::blocksstable::format_dml_str declared at L69; L548 oceanbase::blocksstable::format_mvcc_str declared at L232
+storage-sstable -> storage-api	src/storage/blocksstable/ob_datum_row_utils.cpp -> src/data_plane/api/data_plane/blocksstable/ob_datum_row_factory.h	defs=2 oceanbase::data_plane::create_datum_row
+storage-sstable -> storage-api	src/storage/blocksstable/ob_micro_block_row_scanner.cpp -> src/data_plane/api/data_plane/access/ob_micro_block_filter.h	defs=1 oceanbase::data_plane::filter_micro_block
+storage-sstable -> storage-api	src/storage/blocksstable/ob_storage_datum.cpp -> src/data_plane/api/data_plane/blocksstable/ob_storage_datum.h	defs=5 oceanbase::blocksstable::ObStorageDatumBuffer
+storage-sstable -> storage-api	src/storage/blocksstable/ob_storage_datum.cpp -> src/data_plane/api/data_plane/blocksstable/ob_storage_datum_utils.h	defs=9 oceanbase::blocksstable::ObStorageDatumUtils
+storage-engine -> storage-tablet	src/storage/ddl/ob_ddl_seq_generator.cpp -> src/data_plane/api/data_plane/ddl/ob_ddl_seq_generator.h	defs=10 oceanbase::storage::ObDDLSeqGenerator
+storage-engine -> storage-tablet	src/storage/ddl/ob_direct_insert.cpp -> src/data_plane/api/data_plane/ddl/ob_direct_insert.h	defs=3 oceanbase::data_plane::ObDirectInsertOrchestrator
+storage-tx -> storage-api	src/storage/memtable/ob_concurrent_control.cpp -> src/data_plane/api/data_plane/memtable/ob_write_flag.h	defs=6 oceanbase::concurrent_control::ObWriteFlag
+storage-tx -> storage-api	src/storage/memtable/ob_lock_wait_mgr.cpp -> src/data_plane/api/data_plane/transaction/ob_lock_wait_stat.h	defs=2 oceanbase::data_plane::begin_lock_wait_request
+storage-tablet -> storage-tx	src/storage/multi_data_source/runtime_utility/mds_service.cpp -> src/storage/allocator/ob_mds_allocator.h	defs=1 oceanbase::share::ObMdsAllocator
+storage-tablet -> storage-tx	src/storage/multi_data_source/runtime_utility/mds_service.cpp -> src/storage/allocator/ob_vector_allocator.h	defs=1 oceanbase::share::ObVectorAllocator
+storage-tablet -> storage-api	src/storage/ob_iter_cache.cpp -> src/data_plane/api/data_plane/ob_iter_cache_api.h	defs=2 oceanbase::data_plane::create_iter_cache
+storage-tablet -> storage-api	src/storage/ob_order_perserving_encoder.cpp -> src/data_plane/api/data_plane/ob_order_perserving_encoder.h	defs=19 oceanbase::share::ObOrderPerservingEncoder
+storage-tablet -> storage-api	src/storage/ob_table_dml_param.cpp -> src/data_plane/api/data_plane/access/ob_dml_table_plan.h	defs=54 oceanbase::data_plane::ObDmlTableView
+storage-search -> storage-api	src/storage/retrieval/ob_sparse_vector_block_source.cpp -> src/data_plane/api/data_plane/access/ob_table_scan_access.h	defs=1 oceanbase::data_plane::create_sparse_vector_block_source
+storage-tx -> storage-tablet	src/storage/tablelock/ob_session_table_lock.cpp -> src/data_plane/api/data_plane/tablelock/ob_session_table_lock.h	defs=12 oceanbase::data_plane::acquire_mysql_table_lock; L310 oceanbase::data_plane::session_lock_owners_equal declared at L122; L339 oceanbase::data_plane::get_persisted_lock_owner_session declared a
+storage-tx -> storage-tablet	src/storage/tablelock/ob_table_lock_service.cpp -> src/data_plane/api/data_plane/tablelock/ob_table_lock.h	defs=2 oceanbase::data_plane::lock_partition_or_subpartition
+storage-sstable -> storage-tablet	src/storage/tmp_file/ob_tmp_file_manager.cpp -> src/data_plane/api/data_plane/tmp_file/ob_tmp_file.h	defs=23 oceanbase::data_plane::ObTmpFileIOHandle; L478 oceanbase::data_plane::tmp_file_aio_read declared at L82
+storage-tx -> storage-api	src/storage/tx/ob_trans_deadlock_adapter.cpp -> src/data_plane/api/data_plane/transaction/ob_deadlock.h	defs=4 oceanbase::data_plane::finish_transaction_deadlock
+storage-tx -> storage-api	src/storage/tx/ob_trans_define.cpp -> src/data_plane/api/data_plane/transaction/ob_transaction_isolation.h	defs=3 oceanbase::transaction::ObTransIsolation; L99 oceanbase::transaction::ObTransIsolation::LEVEL_NAME declared at L27 (no DWARF definition)
+storage-tx -> storage-api	src/storage/tx/ob_trans_define_v4.cpp -> src/data_plane/api/data_plane/transaction/ob_tx_exec_result.h	defs=21 oceanbase::transaction::ObTxExecResult
+storage-tx -> storage-api	src/storage/tx/ob_trans_define_v4.cpp -> src/data_plane/api/data_plane/transaction/ob_tx_options.h	defs=10 oceanbase::transaction::ObTxParam
+storage-tx -> storage-api	src/storage/tx/ob_trans_define_v4.cpp -> src/data_plane/api/data_plane/transaction/ob_tx_read_snapshot.h	defs=31 oceanbase::transaction::ObTxReadSnapshot
+storage-tx -> storage-api	src/storage/tx/ob_tx_api.cpp -> src/data_plane/api/data_plane/transaction/ob_i_transaction_service.h	defs=2 oceanbase::data_plane::force_release_tx_when_tenant_gone
+storage-tx -> storage-api	src/storage/tx/ob_tx_api.cpp -> src/data_plane/api/data_plane/transaction/ob_tx_control.h	defs=10 oceanbase::data_plane::abort_transaction
+storage-tx -> storage-api	src/storage/tx/ob_tx_api.cpp -> src/data_plane/api/data_plane/transaction/ob_tx_desc_access.h	defs=25 oceanbase::data_plane::ObTxDescLogView
+storage-tx -> storage-api	src/storage/tx/ob_tx_api.cpp -> src/data_plane/api/data_plane/transaction/ob_tx_desc_lifecycle.h	defs=2 oceanbase::data_plane::clone_tx_desc
+storage-tablet -> storage-tx	src/storage/tx_storage/ob_ls_service.cpp -> src/storage/allocator/ob_mds_allocator.h	defs=1 oceanbase::share::ObMdsThrottleGuard
+storage-tablet -> storage-tx	src/storage/tx_storage/ob_ls_service.cpp -> src/storage/allocator/ob_tx_data_allocator.h	defs=3 oceanbase::share::ObTxDataAllocator
+storage-tablet -> storage-tx	src/storage/tx_storage/ob_memstore_freezer.cpp -> src/storage/allocator/ob_memstore_allocator.h	defs=5 oceanbase::share::ObMemstoreAllocator
+storage-tablet -> storage-tx	src/storage/tx_storage/ob_memstore_freezer.cpp -> src/storage/allocator/ob_shared_memory_allocator_mgr.h	defs=1 oceanbase::share::ObSharedMemAllocMgr
+storage-search -> ob-simd	src/storage/vector_type/ob_sparse_vector_ip_distance.cpp -> src/data_plane/api/data_plane/vector/ob_sparse_vector_ip_distance.h	defs=1 oceanbase::common::ObSparseVectorIpDistance
+storage-search -> ob-simd	src/storage/vector_type/ob_vector_cosine_distance.cpp -> src/data_plane/api/data_plane/vector/ob_vector_cosine_distance.h	defs=2 oceanbase::common::ObVectorCosineDistance
+storage-search -> ob-simd	src/storage/vector_type/ob_vector_ip_distance.cpp -> src/data_plane/api/data_plane/vector/ob_vector_ip_distance.h	defs=2 oceanbase::common::ObVectorIpDistance
+storage-search -> ob-simd	src/storage/vector_type/ob_vector_l2_distance.cpp -> src/data_plane/api/data_plane/vector/ob_vector_l2_distance.h	defs=6 oceanbase::common::ObVectorL2Distance; L123 oceanbase::common::ObVectorL2Distance::distance_four_codes declared at L31 (no DWARF definition); L141 oceanbase::common::ObVectorL2Distance::distanc
+[units whose files fall in more than one crate (the unit goes where its source goes, unless a placement moves a file)]
+src/data_plane/api/data_plane/blocksstable/ob_datum_row_iterator	storage-api	src/data_plane/api/data_plane/blocksstable/ob_datum_row_iterator.h:storage-api,src/storage/blocksstable/ob_datum_row_iterator.h:storage-api
+src/data_plane/ob_parallel_range_task_planner	storage-tablet	src/data_plane/api/data_plane/access/ob_parallel_range_task_planner.h:storage-tablet,src/data_plane/ob_parallel_range_task_planner.cpp:storage-tablet
+src/data_plane/ob_tablet_scan	storage-tablet	src/data_plane/api/data_plane/access/ob_tablet_scan.h:storage-api,src/data_plane/ob_tablet_scan.cpp:storage-tablet
+src/oblib/lib/thread/ob_thread_hook	ob-runtime	src/oblib/lib/lock/ob_futex.cpp:ob-runtime,src/oblib/lib/lock/ob_futex.h:ob-runtime,src/oblib/lib/thread/ob_thread_hook.cpp:ob-runtime
+src/oblib/lib/utility/utility	ob-base	src/oblib/common/ob_obj_deep_copy.cpp:ob-base,src/oblib/lib/utility/utility.cpp:ob-base,src/oblib/lib/utility/utility.h:ob-base
+src/oblib/rpc/frame/ob_net_easy	ob-runtime	src/oblib/easy/io/easy_io.h:x-dropped,src/oblib/easy/io/easy_log.h:x-dropped,src/oblib/easy/util/easy_buf.h:x-dropped,src/oblib/easy/util/easy_inet.h:x-dropped,src/oblib/easy/util/easy_mod_stat.h:x-dropped,src/oblib/easy/util/easy_pool.h:x-dropped,src/oblib/easy/util/easy_string.h:x-dropped,src/oblib/easy/util/easy_time.h:x-dropped,src/oblib/rpc/frame/ob_net_easy.cpp:ob-runtime
+src/oblib/rpc/ob_sql_request_operator	observer	src/oblib/rpc/ob_sql_request_operator.cpp:observer,src/oblib/rpc/ob_sql_request_operator.h:ob-runtime
+src/observer/mysql/ob_mysql_end_trans_cb	observer	src/observer/mysql/ob_mysql_end_trans_cb.cpp:observer,src/sql/ob_mysql_end_trans_cb.h:observer
+src/observer/mysql/obmp_packet_sender	observer	src/observer/mysql/obmp_packet_sender.cpp:observer,src/query/api/query/protocol/ob_mysql_packet_sender.h:observer
+src/observer/ob_ex_rpc	observer	src/observer/ob_ex_rpc.cpp:observer,src/share/ob_ex_rpc.h:observer
+src/observer/ob_inner_sql_connection	observer	src/observer/ob_inner_sql_connection.cpp:observer,src/observer/ob_inner_sql_connection.h:observer,src/query/api/query/session/ob_inner_sql_connection_access.h:observer
+src/observer/ob_req_time_service	observer	src/observer/ob_req_time_service.cpp:observer,src/observer/ob_req_time_service.h:observer,src/query/api/query/runtime/ob_request_time_guard.h:observer
+src/observer/ob_tablet_runtime_meta_updater	observer	src/data_plane/api/data_plane/report/ob_tablet_report.h:observer,src/observer/ob_tablet_runtime_meta_updater.cpp:observer,src/observer/ob_tablet_runtime_meta_updater.h:observer
+src/observer/vector_index/ob_plugin_vector_index_adaptor	observer	src/observer/vector_index/ob_plugin_vector_index_adaptor.cpp:observer,src/query/api/query/vector/ob_vector_index_adaptor.h:observer
+src/observer/vector_index/ob_plugin_vector_index_serialize	observer	src/observer/vector_index/ob_plugin_vector_index_serialize.cpp:observer,src/query/api/query/vector/ob_vector_index_serialize.h:observer
+src/observer/vector_index/ob_plugin_vector_index_util	observer	src/observer/vector_index/ob_plugin_vector_index_util.cpp:observer,src/query/api/query/vector/ob_vector_query_result.h:observer
+src/observer/vector_index/ob_vector_index_async_task	observer	src/data_plane/api/data_plane/vector/ob_i_vector_index_runtime.h:observer,src/observer/vector_index/ob_vector_index_async_task.cpp:observer,src/observer/vector_index/ob_vector_index_async_task.h:observer
+src/observer/vector_index/ob_vector_index_ivf_cache_mgr	observer	src/observer/vector_index/ob_vector_index_ivf_cache_mgr.cpp:observer,src/query/api/query/vector/ob_vector_index_cache.h:observer
+src/observer/vector_index/ob_vector_index_param	observer	src/observer/vector_index/ob_vector_index_param.cpp:observer,src/observer/vector_index/ob_vector_index_param.h:observer,src/query/api/query/vector/ob_vector_index_param.h:observer
+src/observer/vector_index/ob_vector_refresh_transaction	observer	src/data_plane/api/data_plane/vector/ob_vector_refresh_transaction.h:observer,src/observer/vector_index/ob_vector_refresh_transaction.cpp:observer
+src/pl/ob_pl_type	sql-ir	src/pl/ob_pl_type.cpp:sql-ir,src/pl/ob_pl_type.h:sql-ir,src/sql/pl/ob_pl_type.h:sql-ir,src/sql/pl/ob_routine_param_type.cpp:sql-ir
+src/pl/parser/ob_pl_parser	sql-parser	src/pl/parser/ob_pl_parser.cpp:sql-parser,src/pl/parser/ob_pl_parser.h:sql-parser,src/sql/pl/parser/ob_pl_parser.h:sql-parser
+src/pl/sys_package/ob_dbms_space	pl	src/pl/sys_package/ob_dbms_space.cpp:pl,src/pl/sys_package/ob_dbms_space.h:pl,src/query/api/query/optimizer/stat/ob_optimizer_stat_service.h:pl,src/sql/pl/sys_package/ob_dbms_space.h:pl
+src/rootserver/ob_local_management_service	rootserver	src/data_plane/api/data_plane/ddl/ob_ddl_coordinator.h:rootserver,src/data_plane/api/data_plane/ddl/ob_ddl_schedule.h:rootserver,src/rootserver/ob_local_management_service.cpp:rootserver,src/rootserver/ob_local_management_service.h:rootserver
+src/share/ob_ddl_common	ob-schema	src/share/ob_ddl_common.cpp:ob-schema,src/share/ob_ddl_common.h:ob-schema,src/share/ob_ddl_task_serialize_field.h:ob-schema
+src/share/ob_lob_access_utils	ob-share	src/share/lob/ob_lob_text_iter_context.h:ob-share,src/share/ob_lob_access_utils.cpp:ob-share,src/share/ob_lob_access_utils.h:ob-share
+src/sql/das/iter/ob_das_scan_iter	sql-das	src/query/api/query/das/ob_das_iter_access.h:sql-das,src/sql/das/iter/ob_das_scan_iter.cpp:sql-das,src/sql/das/iter/ob_das_scan_iter.h:sql-das
+src/sql/das/iter/ob_das_text_retrieval_eval_node	sql-das	src/query/api/query/das/ob_fts_eval_node_access.h:sql-das,src/sql/das/iter/ob_das_text_retrieval_eval_node.cpp:sql-das,src/sql/das/iter/ob_das_text_retrieval_eval_node.h:sql-das
+src/sql/das/ob_das_ir_define	sql-das	src/query/api/query/das/ob_block_max_spec_access.h:sql-das,src/query/api/query/das/ob_das_id_protocol.h:sql-das,src/sql/das/ob_das_ir_define.cpp:sql-das,src/sql/das/ob_das_ir_define.h:sql-das
+src/sql/engine/basic/ob_batch_result_holder	sql-engine	src/query/api/query/engine/basic/ob_batch_result_holder.h:sql-engine,src/sql/engine/basic/ob_batch_result_holder.cpp:sql-engine,src/sql/engine/basic/ob_batch_result_holder.h:sql-engine
+src/sql/engine/cmd/ob_ddl_executor_util	sql	src/query/api/query/engine/cmd/ob_ddl_execution.h:sql,src/sql/engine/cmd/ob_ddl_executor_util.cpp:sql,src/sql/engine/cmd/ob_ddl_executor_util.h:sql
+src/sql/engine/cmd/ob_load_data_parser	sql	src/query/api/query/engine/cmd/ob_load_data_parser.h:sql,src/sql/engine/cmd/ob_load_data_parser.cpp:sql,src/sql/engine/cmd/ob_load_data_parser.h:sql
+src/sql/engine/expr/ob_array_expr_utils	sql-expr	src/query/api/query/engine/expr/ob_array_expr_utils.h:sql-expr,src/sql/engine/expr/ob_array_expr_utils.cpp:sql-expr,src/sql/engine/expr/ob_array_expr_utils.h:sql-expr
+src/sql/engine/expr/ob_datum_cast	sql-expr	src/query/api/query/engine/expr/ob_decimal_int_scale.h:sql-expr,src/sql/engine/expr/ob_datum_cast.cpp:sql-expr,src/sql/engine/expr/ob_datum_cast.h:sql-expr
+src/sql/engine/expr/ob_expr_ai/ob_ai_func_utils	sql-expr	src/query/api/query/engine/expr/ob_ai_model_resolver.h:sql-expr,src/sql/engine/expr/ob_expr_ai/ob_ai_func_utils.cpp:sql-expr,src/sql/engine/expr/ob_expr_ai/ob_ai_func_utils.h:sql-expr
+src/sql/engine/expr/ob_expr_array_map	sql-expr	src/query/api/query/engine/expr/ob_expr_array_map.h:sql-expr,src/sql/engine/expr/ob_expr_array_map.cpp:sql-expr,src/sql/engine/expr/ob_expr_array_map.h:sql-expr
+src/sql/engine/expr/ob_expr_bm25	sql-expr	src/query/api/query/engine/expr/ob_expr_bm25.h:sql-expr,src/sql/engine/expr/ob_expr_bm25.cpp:sql-expr,src/sql/engine/expr/ob_expr_bm25.h:sql-expr
+src/sql/engine/expr/ob_expr_cmp_func	sql-expr	src/query/api/query/engine/expr/ob_expr_cmp_func.h:sql-expr,src/sql/engine/expr/ob_expr_cmp_func.cpp:sql-expr,src/sql/engine/expr/ob_expr_cmp_func.h:sql-expr,src/sql/engine/expr/ob_expr_cmp_func.ipp:sql-expr
+src/sql/engine/expr/ob_expr_extra_info_factory	sql-expr	src/query/api/query/engine/expr/ob_expr_extra_info_factory.h:sql-expr,src/sql/engine/expr/ob_expr_extra_info_factory.cpp:sql-expr,src/sql/engine/expr/ob_expr_extra_info_factory.h:sql-expr
+src/sql/engine/expr/ob_expr_in	sql-expr	src/query/api/query/engine/expr/ob_expr_in.h:sql-expr,src/sql/engine/expr/ob_expr_in.cpp:sql-expr,src/sql/engine/expr/ob_expr_in.h:sql-expr
+src/sql/engine/expr/ob_expr_lob_utils	sql-expr	src/query/api/query/engine/expr/ob_expr_lob_utils.h:sql-expr,src/sql/engine/expr/ob_expr_lob_utils.cpp:sql-expr,src/sql/engine/expr/ob_expr_lob_utils.h:sql-expr
+src/sql/engine/expr/ob_expr_operator	sql-expr	src/query/api/query/engine/expr/ob_expr_operator.h:sql-expr,src/query/api/query/engine/expr/ob_expr_res_type.h:sql-expr,src/sql/engine/expr/ob_expr_operator.cpp:sql-expr,src/sql/engine/expr/ob_expr_operator.h:sql-expr,src/sql/engine/expr/ob_expr_res_type.h:sql-expr
+src/sql/engine/expr/ob_expr_util	sql-expr	src/query/api/query/engine/expr/ob_expr_util.h:sql-expr,src/sql/engine/expr/ob_expr_util.cpp:sql-expr,src/sql/engine/expr/ob_expr_util.h:sql-expr
+src/sql/engine/ob_exec_context	sql-exec	src/query/api/query/engine/ob_exec_context_access.h:sql-exec,src/query/api/query/optimizer/ob_optimizer_location_defs.h:sql-exec,src/sql/engine/ob_exec_context.cpp:sql-exec,src/sql/engine/ob_exec_context.h:sql-exec
+src/sql/engine/px/ob_px_dtl_msg	sql-engine	src/query/api/query/engine/px/ob_px_tablet_range.h:sql-engine,src/sql/engine/px/ob_px_dtl_msg.cpp:sql-engine,src/sql/engine/px/ob_px_dtl_msg.h:sql-engine
+src/sql/engine/px/ob_px_op_size_factor	sql-engine	src/query/api/query/engine/px/ob_px_op_size_factor.h:sql-engine,src/sql/engine/px/ob_px_op_size_factor.cpp:sql-engine,src/sql/engine/px/ob_px_op_size_factor.h:sql-engine
+src/sql/engine/sort/ob_sort_op_impl	sql-engine	src/query/api/query/engine/basic/ob_encoded_sort_row.h:sql-engine,src/sql/engine/sort/ob_sort_op_impl.cpp:sql-engine,src/sql/engine/sort/ob_sort_op_impl.h:sql-engine
+src/sql/ob_sql_define	sql	src/query/api/query/ob_sql_define.h:sql,src/sql/ob_sql_define.cpp:sql,src/sql/ob_sql_define.h:sql
+src/sql/ob_sql_utils	sql-ir	src/query/api/query/ob_sql_name_service.h:sql-ir,src/sql/ob_sql_utils.cpp:sql-ir,src/sql/ob_sql_utils.h:sql-ir
+src/sql/parser/parse_node	sql-parse-tree	src/query/api/query/parser/parse_node.h:sql-parse-tree,src/sql/parser/parse_node.c:sql-parser-sys,src/sql/parser/parse_node.h:sql-parse-tree
+src/sql/plan_cache/ob_lib_cache_register	sql	src/query/api/query/plan_cache/ob_lib_cache_register.h:sql,src/sql/plan_cache/ob_lib_cache_register.cpp:sql,src/sql/plan_cache/ob_lib_cache_register.h:sql
+src/sql/resolver/expr/ob_raw_expr	sql-ir	src/query/api/query/resolver/ob_raw_expr_traits.h:sql-ir,src/sql/resolver/expr/ob_raw_expr.cpp:sql-ir,src/sql/resolver/expr/ob_raw_expr.h:sql-ir
+src/sql/resolver/ob_schema_checker	sql-resolver	src/query/api/query/resolver/ob_schema_lookup.h:sql-resolver,src/sql/resolver/ob_schema_checker.cpp:sql-resolver,src/sql/resolver/ob_schema_checker.h:sql-resolver
+src/sql/session/ob_local_session_var	sql-session	src/query/api/query/session/ob_local_session_var.h:sql-session,src/sql/session/ob_local_session_var.cpp:sql-session,src/sql/session/ob_local_session_var.h:sql-session
+src/sql/session/ob_session_inner_sql	sql-session	src/query/api/query/session/ob_session_inner_sql.h:sql-session,src/sql/session/ob_session_inner_sql.cpp:sql-session
+src/sql/session/ob_sql_session_info	sql-session	src/query/api/query/session/ob_session_access.h:sql-session,src/sql/session/ob_sql_session_info.cpp:sql-session,src/sql/session/ob_sql_session_info.h:sql-session
+src/sql/session/ob_sql_session_mgr	sql-session	src/query/api/query/session/ob_deadlock_session.h:sql-session,src/sql/session/ob_sql_session_mgr.cpp:sql-session,src/sql/session/ob_sql_session_mgr.h:sql-session
+src/sql/tablelock/ob_lock_executor	sql	src/query/api/query/tablelock/ob_table_lock_runtime.h:sql,src/sql/tablelock/ob_lock_executor.cpp:sql,src/sql/tablelock/ob_lock_executor.h:sql
+src/storage/access/ob_data_access_retry	storage-tablet	src/data_plane/api/data_plane/access/ob_data_access_retry.h:storage-tablet,src/storage/access/ob_data_access_retry.cpp:storage-tablet
+src/storage/access/ob_datum_reshape	storage-tablet	src/data_plane/api/data_plane/access/ob_datum_reshape.h:storage-tablet,src/storage/access/ob_datum_reshape.cpp:storage-tablet
+src/storage/access/ob_dml_param	storage-tablet	src/data_plane/api/data_plane/access/ob_table_scan_param.h:storage-tablet,src/query/api/query/engine/basic/ob_row_to_expr_projector.h:storage-tablet,src/storage/access/ob_dml_param.cpp:storage-tablet,src/storage/access/ob_dml_param.h:storage-tablet
+src/storage/access/ob_sample_filter	storage-tablet	src/data_plane/api/data_plane/access/ob_sample_filter_factory.h:storage-tablet,src/storage/access/ob_sample_filter.cpp:storage-tablet,src/storage/access/ob_sample_filter.h:storage-tablet
+src/storage/access/ob_table_param	storage-tablet	src/data_plane/api/data_plane/access/ob_table_param.h:storage-tablet,src/storage/access/ob_table_param.cpp:storage-tablet,src/storage/access/ob_table_param.h:storage-tablet
+src/storage/access/ob_table_scan_iterator	storage-tablet	src/data_plane/api/data_plane/access/ob_table_scan_access.h:storage-tablet,src/storage/access/ob_table_scan_iterator.cpp:storage-tablet,src/storage/access/ob_table_scan_iterator.h:storage-tablet,src/storage/retrieval/ob_sparse_vector_block_source.cpp:storage-tablet
+src/storage/blocksstable/ob_datum_row	storage-sstable	src/data_plane/api/data_plane/blocksstable/ob_datum_row.h:storage-sstable,src/storage/blocksstable/ob_datum_row.cpp:storage-sstable,src/storage/blocksstable/ob_datum_row.h:storage-sstable
+src/storage/blocksstable/ob_datum_row_utils	storage-sstable	src/data_plane/api/data_plane/blocksstable/ob_datum_row_factory.h:storage-sstable,src/storage/blocksstable/ob_datum_row_utils.cpp:storage-sstable,src/storage/blocksstable/ob_datum_row_utils.h:storage-sstable
+src/storage/blocksstable/ob_micro_block_row_scanner	storage-sstable	src/data_plane/api/data_plane/access/ob_micro_block_filter.h:storage-sstable,src/storage/blocksstable/ob_micro_block_row_scanner.cpp:storage-sstable,src/storage/blocksstable/ob_micro_block_row_scanner.h:storage-sstable
+src/storage/blocksstable/ob_storage_datum	storage-sstable	src/data_plane/api/data_plane/blocksstable/ob_storage_datum.h:storage-sstable,src/data_plane/api/data_plane/blocksstable/ob_storage_datum_utils.h:storage-sstable,src/storage/blocksstable/ob_storage_datum.cpp:storage-sstable,src/storage/blocksstable/ob_storage_datum.h:storage-sstable
+src/storage/ddl/ob_ddl_seq_generator	storage-engine	src/data_plane/api/data_plane/ddl/ob_ddl_seq_generator.h:storage-engine,src/storage/ddl/ob_ddl_seq_generator.cpp:storage-engine,src/storage/ddl/ob_ddl_seq_generator.h:storage-engine
+src/storage/ddl/ob_direct_insert	storage-engine	src/data_plane/api/data_plane/ddl/ob_direct_insert.h:storage-engine,src/storage/ddl/ob_direct_insert.cpp:storage-engine
+src/storage/memtable/ob_concurrent_control	storage-tx	src/data_plane/api/data_plane/memtable/ob_write_flag.h:storage-tx,src/storage/memtable/ob_concurrent_control.cpp:storage-tx,src/storage/memtable/ob_concurrent_control.h:storage-tx
+src/storage/memtable/ob_lock_wait_mgr	storage-tx	src/data_plane/api/data_plane/transaction/ob_lock_wait_stat.h:storage-tx,src/storage/memtable/ob_lock_wait_mgr.cpp:storage-tx,src/storage/memtable/ob_lock_wait_mgr.h:storage-tx
+src/storage/ob_iter_cache	storage-tablet	src/data_plane/api/data_plane/ob_iter_cache_api.h:storage-tablet,src/storage/ob_iter_cache.cpp:storage-tablet,src/storage/ob_iter_cache.h:storage-tablet
+src/storage/ob_order_perserving_encoder	storage-tablet	src/data_plane/api/data_plane/ob_order_perserving_encoder.h:storage-tablet,src/storage/ob_order_perserving_encoder.cpp:storage-tablet,src/storage/ob_order_perserving_encoder.h:storage-tablet
+src/storage/ob_table_dml_param	storage-tablet	src/data_plane/api/data_plane/access/ob_dml_table_plan.h:storage-tablet,src/storage/access/ob_dml_table_plan_access.h:storage-tablet,src/storage/ob_table_dml_param.cpp:storage-tablet,src/storage/ob_table_dml_param.h:storage-tablet
+src/storage/tablelock/ob_session_table_lock	storage-tx	src/data_plane/api/data_plane/tablelock/ob_session_table_lock.h:storage-tx,src/storage/tablelock/ob_session_table_lock.cpp:storage-tx
+src/storage/tablelock/ob_table_lock_service	storage-tx	src/data_plane/api/data_plane/tablelock/ob_table_lock.h:storage-tx,src/storage/tablelock/ob_table_lock_service.cpp:storage-tx,src/storage/tablelock/ob_table_lock_service.h:storage-tx
+src/storage/tmp_file/ob_tmp_file_manager	storage-sstable	src/data_plane/api/data_plane/tmp_file/ob_tmp_file.h:storage-sstable,src/storage/tmp_file/ob_tmp_file_manager.cpp:storage-sstable,src/storage/tmp_file/ob_tmp_file_manager.h:storage-sstable
+src/storage/tx/ob_trans_deadlock_adapter	storage-tx	src/data_plane/api/data_plane/transaction/ob_deadlock.h:storage-tx,src/storage/tx/ob_trans_deadlock_adapter.cpp:storage-tx,src/storage/tx/ob_trans_deadlock_adapter.h:storage-tx
+src/storage/tx/ob_trans_define	storage-tx	src/data_plane/api/data_plane/transaction/ob_transaction_isolation.h:storage-tx,src/storage/tx/ob_trans_define.cpp:storage-tx,src/storage/tx/ob_trans_define.h:storage-tx
+src/storage/tx/ob_trans_define_v4	storage-tx	src/data_plane/api/data_plane/transaction/ob_tx_exec_result.h:storage-tx,src/data_plane/api/data_plane/transaction/ob_tx_options.h:storage-tx,src/data_plane/api/data_plane/transaction/ob_tx_read_snapshot.h:storage-tx,src/storage/tx/ob_trans_define_v4.cpp:storage-tx,src/storage/tx/ob_trans_define_v4.h:storage-tx
+src/storage/tx/ob_tx_api	storage-tx	src/data_plane/api/data_plane/transaction/ob_i_transaction_service.h:storage-tx,src/data_plane/api/data_plane/transaction/ob_tx_control.h:storage-tx,src/data_plane/api/data_plane/transaction/ob_tx_desc_access.h:storage-tx,src/data_plane/api/data_plane/transaction/ob_tx_desc_lifecycle.h:storage-tx,src/storage/tx/ob_tx_api.cpp:storage-tx,src/storage/tx/ob_tx_api.h:storage-tx
+src/storage/vector_type/ob_sparse_vector_ip_distance	storage-search	src/data_plane/api/data_plane/vector/ob_sparse_vector_ip_distance.h:ob-simd,src/storage/vector_type/ob_sparse_vector_ip_distance.cpp:storage-search,src/storage/vector_type/ob_sparse_vector_ip_distance.h:storage-search
+src/storage/vector_type/ob_vector_cosine_distance	storage-search	src/data_plane/api/data_plane/vector/ob_vector_cosine_distance.h:ob-simd,src/storage/vector_type/ob_vector_cosine_distance.cpp:storage-search,src/storage/vector_type/ob_vector_cosine_distance.h:storage-search
+src/storage/vector_type/ob_vector_ip_distance	storage-search	src/data_plane/api/data_plane/vector/ob_vector_ip_distance.h:ob-simd,src/storage/vector_type/ob_vector_ip_distance.cpp:storage-search,src/storage/vector_type/ob_vector_ip_distance.h:storage-search
+src/storage/vector_type/ob_vector_l1_distance	storage-search	src/data_plane/api/data_plane/vector/ob_vector_l1_distance.h:ob-simd,src/storage/vector_type/ob_vector_l1_distance.cpp:storage-search,src/storage/vector_type/ob_vector_l1_distance.h:storage-search
+src/storage/vector_type/ob_vector_l2_distance	storage-search	src/data_plane/api/data_plane/vector/ob_vector_l2_distance.h:ob-simd,src/storage/vector_type/ob_vector_l2_distance.cpp:storage-search,src/storage/vector_type/ob_vector_l2_distance.h:storage-search
+[gone edges (rows for the edge ledger)]
+seekdb -> ob-share	src/observer/main.cpp -> src/share/ob_encryption_util.h	include
+seekdb -> ob-share	src/observer/main.cpp -> src/share/ob_version.h	include
+seekdb -> ob-share	src/observer/ob_command_line_parser.cpp -> src/share/ob_version.h	include
+seekdb -> ob-share	src/observer/ob_signal_handle.h -> src/share/ob_thread_pool.h	include
+seekdb -> sql	src/observer/ob_signal_handle.cpp -> src/sql/ob_sql_init.h	include
+seekdb -> storage-tablet	src/observer/ob_signal_handle.cpp -> src/storage/tx_storage/ob_memory_printer.h	include
+sql-parser-sys -> ob-schema	src/sql/parser/sql_parser_base.h -> src/share/schema/ob_priv_type.h	from-island
+sql-parser-sys -> pl	src/pl/parser/pl_parser_base.h -> src/pl/parser/parse_stmt_item_type.h	from-island
+sql-parser-sys -> pl	src/pl/parser/pl_parser_base.h -> src/pl/parser/parse_stmt_node.h	from-island
+sql-parser-sys -> sql	src/sql/parser/sql_parser_base.h -> src/sql/ob_trans_character.h	from-island
+[placement level: each file counted in the crate its manifest row writes it to (its unit's crate, an island file in its island crate, an x-dropped or standby file in that crate, a placed file or line range in its placement's crate)]
+listed	349 pairs	11003 edges
+upward-named	119 pairs	1068 edges
+gone	6 pairs	10 edges
+upward-unnamed	10 pairs	15 edges
+not-listed	3 pairs	3 edges
+uses-dropped	7 pairs	22 edges
+uses-deferred	1 pairs	1 edges
+dropped	0 pairs	0 edges
+deferred	7 pairs	183 edges
+unmapped	0 pairs	0 edges
+upward-unnamed	ob-schema -> storage-api	1 edges	src/share/ob_rpc_struct.h -> src/share/ob_est_row_count_record.h (include)
+upward-unnamed	storage-api -> storage-sstable	3 edges	src/sql/engine/basic/ob_pushdown_filter.cpp -> src/data_plane/api/data_plane/access/ob_micro_block_filter.h (include); src/sql/engine/basic/ob_pushdown_filter.cpp -> src/data_plane/api/data_plane/blocksstable/ob_datum_row.h (include); src/storage/blocksstable/ob_datum_row_iterator.h -> src/storage/blocksstable/ob_datum_row.h (include)
+upward-unnamed	storage-api -> storage-tx	2 edges	src/data_plane/api/data_plane/ob_i_dml_service.h -> src/data_plane/api/data_plane/memtable/ob_write_flag.h (include); src/data_plane/api/data_plane/ob_i_write_context_service.h -> src/data_plane/api/data_plane/memtable/ob_write_flag.h (include)
+upward-unnamed	storage-api -> storage-tablet	3 edges	src/sql/engine/basic/ob_pushdown_filter.cpp -> src/data_plane/api/data_plane/access/ob_datum_reshape.h (include); src/sql/engine/basic/ob_pushdown_filter.cpp -> src/data_plane/api/data_plane/access/ob_sample_filter_factory.h (include); src/sql/engine/basic/ob_pushdown_filter.cpp -> src/data_plane/api/data_plane/lob/ob_lob_value.h (include)
+upward-unnamed	storage-api -> sql-ir	1 edges	src/sql/engine/basic/ob_pushdown_filter.cpp -> src/sql/resolver/expr/ob_raw_expr_util.h (include)
+upward-unnamed	storage-api -> sql-engine	1 edges	src/sql/engine/basic/ob_pushdown_filter.cpp -> src/sql/engine/aggregate/ob_pushdown_aggregate_program.h (include)
+upward-unnamed	storage-api -> sql-codegen	1 edges	src/sql/engine/basic/ob_pushdown_filter.cpp -> src/sql/code_generator/ob_static_engine_cg.h (include)
+upward-unnamed	storage-tx -> pl	1 edges	src/storage/memtable/ob_memtable.cpp -> src/query/api/query/optimizer/stat/ob_optimizer_stat_service.h (include)
+upward-unnamed	storage-tablet -> sql-ir	1 edges	src/storage/access/ob_table_param.cpp -> src/query/api/query/resolver/ob_raw_expr_traits.h (include)
+upward-unnamed	sql-exec -> sql-nio	1 edges	src/query/api/query/protocol/ob_mysql_rust_row.h -> rust/sql-nio/include/nio.h (rust-header)
+not-listed	sql-exec -> storage-tx	1 edges	src/sql/engine/ob_physical_plan_ctx.h -> src/data_plane/api/data_plane/transaction/ob_tx_options.h (include)
+not-listed	sql-parser -> ob-schema	1 edges	src/sql/pl/parser/ob_pl_parser.h -> src/share/schema/ob_trigger_info.h (include)
+not-listed	sql-codegen -> storage-sstable	1 edges	src/sql/code_generator/ob_tsc_cg_service.h -> src/data_plane/api/data_plane/blocksstable/ob_index_block_util.h (include)
+uses-dropped	ob-base -> x-dropped	3 edges	src/oblib/lib/signal/ob_libunwind.c -> src/oblib/easy/util/easy_string.h (include); src/oblib/lib/signal/ob_signal_utils.h -> src/oblib/easy/util/easy_string.h (include); src/oblib/lib/utility/utility.h -> src/oblib/easy/include/easy_define.h (include)
+uses-dropped	ob-runtime -> x-dropped	12 edges	src/oblib/lib/net/ob_addr.h -> src/oblib/easy/util/easy_inet.h (include); src/oblib/lib/thread/thread.h -> src/oblib/easy/io/easy_io_struct.h (include); src/oblib/rpc/frame/ob_net_easy.cpp -> src/oblib/easy/io/easy_io.h (definition)
+uses-dropped	ob-share -> x-dropped	1 edges	src/oblib/common/mysqlclient/ob_mysql_global.h -> src/oblib/easy/include/easy_define.h (include)
+uses-dropped	storage-tablet -> x-dropped	1 edges	src/storage/multi_data_source/ob_mds_event_buffer.h -> src/oblib/easy/util/easy_time.h (include)
+uses-dropped	sql-expr -> x-dropped	2 edges	src/sql/engine/expr/ob_expr_json_search.cpp -> src/oblib/easy/util/easy_string.h (include); src/sql/engine/expr/ob_expr_regexp_context.h -> src/oblib/easy/include/easy_define.h (include)
+uses-dropped	observer -> x-dropped	2 edges	src/observer/mysql/obmp_connect.cpp -> src/oblib/easy/util/easy_mod_stat.h (include); src/observer/ob_srv_deliver.cpp -> src/oblib/easy/util/easy_mod_stat.h (include)
+uses-dropped	seekdb -> x-dropped	1 edges	src/observer/ob_signal_handle.h -> src/oblib/easy/include/easy_define.h (include)
+uses-deferred	observer -> standby	1 edges	src/observer/ob_server.cpp -> src/standby/standby_module.h (include)
+crate cycles over every edge	ob-base ob-simd ob-runtime ob-values ob-values-doc ob-share ob-schema geo-sys vsag-sys ob-log storage-api storage-sstable storage-tx storage-tablet storage-engine storage-search sql-parse-tree sql-parser-sys sql-session sql-ir sql-exec sql-expr sql-das sql-engine sql-parser sql-resolver sql-rewrite sql-optimizer sql-codegen sql pl rootserver observer seekdb
+crate cycles left after the design's cuts	ob-schema storage-api storage-sstable storage-tx storage-tablet storage-engine storage-search sql-session sql-ir sql-exec sql-expr sql-das sql-engine sql-parser sql-resolver sql-rewrite sql-optimizer sql-codegen sql pl
+[edge ledger]
+rows the ledger needs (ledger-needed.tsv: one per crate pair and target file, at the placement level, for every edge of classes upward-named, upward-unnamed, not-listed, gone, uses-dropped, uses-deferred)	658
+ledger file	/Users/colin/seekdb-dev/migrate-to-rust/migration/crate-edges.tsv	absent
+rows without a ledger row that names a fix	658

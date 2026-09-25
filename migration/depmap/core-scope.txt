@@ -1,0 +1,56 @@
+# pattern	subsystem	design
+src/oblib/lib/alloc/	foundation substrate	s1-crates-core.md 2.1 rule 1; ARCHITECTURE 1.3
+src/oblib/lib/allocator/	foundation substrate	s1-crates-core.md 2.1 rule 1; ARCHITECTURE 1.3
+src/oblib/lib/container/	foundation substrate	s1-crates-core.md 2.1 rule 1; ARCHITECTURE 1.3
+src/oblib/lib/hash/	foundation substrate	s1-crates-core.md 2.1 rule 1; ARCHITECTURE 1.3
+src/oblib/lib/string/	foundation substrate	s1-crates-core.md 2.1 rule 1; ARCHITECTURE 1.3
+src/oblib/lib/rc/	foundation substrate	s1-crates-core.md 2.1 rule 1; ARCHITECTURE 1.3
+src/oblib/lib/lock/	foundation substrate	s1-crates-core.md 2.1 rule 1; ARCHITECTURE 1.3
+src/oblib/lib/atomic/	foundation substrate	s1-crates-core.md 2.1 rule 1; ARCHITECTURE 1.3
+src/oblib/lib/list/	foundation substrate	s1-crates-core.md 2.1 rule 1; ARCHITECTURE 1.3
+src/oblib/lib/queue/	foundation substrate	s1-crates-core.md 2.1 rule 1; ARCHITECTURE 1.3
+src/oblib/lib/thread/	runtime	s1-crates-core.md 2.1 rule 1; ARCHITECTURE 1.3
+src/oblib/lib/utility/	runtime	s1-crates-core.md 2.1 rule 1; ARCHITECTURE 1.3
+src/share/io/	runtime	s1-crates-core.md 2.1 rule 1; ARCHITECTURE 1.3
+src/oblib/lib/file/	runtime	s1-crates-core.md 2.1 rule 1; ARCHITECTURE 1.3
+src/oblib/lib/restore/	runtime	s1-crates-core.md 2.1 rule 1; ARCHITECTURE 1.3
+src/share/cache/	runtime	s1-crates-core.md 2.1 rule 1; ARCHITECTURE 1.3
+src/storage/scheduler/	runtime	s1-crates-core.md 2.1 rule 1; ARCHITECTURE 1.3
+src/data_plane/api/data_plane/scheduler/	runtime	s1-crates-core.md 2.1 rule 1; ARCHITECTURE 1.3
+src/oblib/common/object/	value and datum types	s1-crates-core.md 2.1 rule 1; ARCHITECTURE 1.3
+src/oblib/common/datum/	value and datum types	s1-crates-core.md 2.1 rule 1; ARCHITECTURE 1.3
+src/share/datum/	value and datum types	s1-crates-core.md 2.1 rule 1; ARCHITECTURE 1.3
+src/share/rc/	value and datum types	s1-crates-core.md 2.1 rule 1; ARCHITECTURE 1.3
+src/sql/resolver/expr/	statement IR	s1-crates-core.md 2.1 rule 1; ARCHITECTURE 1.3
+src/sql/resolver/dml/*stmt*	statement IR	s1-crates-core.md 2.1 rule 1; ARCHITECTURE 1.3
+src/query/api/query/engine/	execution framework	s1-crates-core.md 2.1 rule 1; ARCHITECTURE 1.3
+src/sql/engine/ob_operator*	execution framework	s1-crates-core.md 2.1 rule 1; ARCHITECTURE 1.3
+src/sql/engine/ob_exec_context*	execution framework	s1-crates-core.md 2.1 rule 1; ARCHITECTURE 1.3
+src/sql/engine/ob_physical_plan*	execution framework	s1-crates-core.md 2.1 rule 1; ARCHITECTURE 1.3
+src/sql/engine/expr/ob_expr_frame_info*	execution framework	s1-crates-core.md 2.1 rule 1; ARCHITECTURE 1.3
+src/sql/engine/basic/ob_pushdown_filter*	execution framework	s1-crates-core.md 2.1 rule 1; ARCHITECTURE 1.3
+src/sql/code_generator/	execution framework	s1-crates-core.md 2.1 rule 1; ARCHITECTURE 1.3
+src/storage/tablet/	storage and transaction core	s1-crates-core.md 2.1 rule 1; ARCHITECTURE 1.3
+src/storage/meta_mem/	storage and transaction core	s1-crates-core.md 2.1 rule 1; ARCHITECTURE 1.3
+src/storage/memtable/	storage and transaction core	s1-crates-core.md 2.1 rule 1; ARCHITECTURE 1.3
+src/storage/tx/	storage and transaction core	s1-crates-core.md 2.1 rule 1; ARCHITECTURE 1.3
+src/storage/multi_data_source/	storage and transaction core	s1-crates-core.md 2.1 rule 1; ARCHITECTURE 1.3
+src/storage/tx_table/	storage and transaction core	s1-crates-core.md 2.1 rule 1; ARCHITECTURE 1.3
+src/data_plane/api/data_plane/access/	storage and transaction core	s1-crates-core.md 2.1 rule 1; ARCHITECTURE 1.3
+src/share/schema/	schema object model	s1-crates-core.md 2.1 rule 1; ARCHITECTURE 1.3
+src/observer/schema/	schema object model	s1-crates-core.md 2.1 rule 1; ARCHITECTURE 1.3
+src/storage/access/	storage entry points	s1-crates-core.md 2.1 rule 1; ARCHITECTURE 1.3
+src/storage/tx_storage/	storage entry points	s1-crates-core.md 2.1 rule 1; ARCHITECTURE 1.3
+src/storage/ls/	storage entry points	s1-crates-core.md 2.1 rule 1; ARCHITECTURE 1.3
+src/storage/blocksstable/	core build: sstable formats	s1-crates-core.md 2.1 rule 1; ARCHITECTURE 1.3
+src/logservice/	core build: WAL	s1-crates-core.md 2.1 rule 1; ARCHITECTURE 1.3
+src/storage/slog/	core build: recovery	s1-crates-core.md 2.1 rule 1; ARCHITECTURE 1.3
+src/storage/slog_ckpt/	core build: recovery	s1-crates-core.md 2.1 rule 1; ARCHITECTURE 1.3
+src/storage/checkpoint/	core build: recovery	s1-crates-core.md 2.1 rule 1; ARCHITECTURE 1.3
+src/storage/meta_store/	core build: recovery	s1-crates-core.md 2.1 rule 1; ARCHITECTURE 1.3
+src/data_plane/api/data_plane/ob_i_storage_estimator.h	storage API	s6-storage.md 1: ObIStorageEstimator is core API in storage-api
+src/data_plane/api/data_plane/ob_i_optimizer_storage_service.h	storage API	s6-storage.md 1: ObIOptimizerStorageService is core API in storage-api
+src/share/ob_est_row_count_record.	storage API	s6-storage.md 1: ObEstRowCountRecord is core API in storage-api
+src/share/aggregate/ob_pushdown_aggregate_protocol.h	storage API	s5-execution.md 1; ARCHITECTURE 5: the aggregate protocol traits are core API in storage-api
+src/share/vector/ob_bit_vector.h	value and datum types	s5-execution.md 1-2; ARCHITECTURE 5: ObBitVector belongs to the datum API of ob-values
+src/query/api/query/parser/	parse tree	ARCHITECTURE 1.1 row 21 (tier core) and 4.2; s4-sql-front.md 1.1: ParseTree, ParseNode, ParseResult and ObItemType

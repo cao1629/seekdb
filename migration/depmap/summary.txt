@@ -98,7 +98,7 @@ local declarations (variables)	9
 (declaring file, symbol, defining file) facts confirmed by the reference build	103
 link facts whose definition is in a generated or vendored file (no edge)	4	src/share/datum/ob_str_datum_funcs_compilation/ob_str_datum_funcs_all.cpp<-1 src/sql/engine/expr/ob_expr_str_cmp_func_compile/ob_expr_str_cmp_func_all.cpp<-1 src/sql/parser/type_name.c<-2
 unresolved names (defined outside the map)	35	__llvm_profile_set_filename __real_memcmp __real_memcpy __real_memmove __real_memset __real_strcpy __real_strncasecmp __real_strncpy __real_vsnprintf __real_vsprintf __ulock_wait __ulock_wake free malloc memalign mysql_special_syspack_file_list mysql_syspack_file_list obpl_mysql_yy_delete_buffer obpl_mysql_yy_scan_bytes obpl_mysql_yy_switch_to_buffer obpl_mysql_yylex_init_extra obpl_mysql_yyparse obsql_fts_yyparse obsql_mysql_fast_parse obsql_mysql_multi_fast_parse obsql_mysql_multi_values_parse obsql_mysql_yy_delete_buffer obsql_mysql_yy_scan_bytes obsql_mysql_yy_switch_to_buffer obsql_mysql_yylex_destroy obsql_mysql_yylex_init_extra obsql_mysql_yyparse opterr syspack_source_contents syspack_source_count
-link edges	79
+link edges	48
 
 [check against the compiler's own record]
 objects whose DWARF line tables were compared with the include closure of their sources	364
@@ -110,18 +110,20 @@ definitions in a unity-built file whose declaring header its own includes do not
   src/storage/tx/ob_trans_service_v4.cpp -> src/storage/tx/ob_trans_service_v4.h	defs=45 oceanbase::transaction::ObTransService	build_release/src/storage/CMakeFiles/ob_storage.dir/Unity/unity_ob_storage_ob_storage_tx_1_c___cxx.cxx
 
 [edges]
-definition	2982
-include	24614
-link	79
-own-header	2773
-via-generated	119
-total rows	30567
+definition	2898
+from-island	98
+include	23994
+island	570
+link	48
+own-header	2704
+via-generated	117
+total rows	30429
 distinct (from, to) pairs	24996
 
 [units]
 rules	same stem in one directory; forwarder with its target; a declaring header group with no implementation file joins its main implementer; an implementation file with no header joins the header it implements most; these merges count only definitions the reference build compiles (DWARF, or source definitions outside any #if branch in a file the build reaches)
 merges from definition edges	196
-definition edges left between different units (declared in one unit, defined in another)	64
+definition edges left between different units (declared in one unit, defined in another)	60
   src/oblib/common/timezone/localtime.c -> src/oblib/common/timezone/private.h	defs=7 ctime; L1456 localtime declared at L289 (no DWARF definition); L1467 localtime_r declared at L290 (no DWARF definition); L1514 gmtime declared at L287 (no DWARF definition); +5 more from the source
   src/oblib/common/timezone/ob_time_convert.cpp -> src/oblib/lib/trace/ob_trace_event.h	defs=1 oceanbase::common::trace_event_datetime_to_str
   src/oblib/common/wide_integer/ob_wide_integer_str_funcs.h -> src/oblib/common/wide_integer/ob_wide_integer.h	defs=1 oceanbase::common::wide::ObWideInteger
@@ -166,10 +168,6 @@ definition edges left between different units (declared in one unit, defined in 
   src/sql/optimizer/stat/ob_dbms_stats_executor.cpp -> src/query/api/query/optimizer/stat/ob_stat_define.h	defs=1 oceanbase::common::ObOptStat
   src/sql/optimizer/stat/ob_opt_stat_monitor_manager.cpp -> src/query/api/query/optimizer/stat/ob_optimizer_stat_service.h	defs=1 oceanbase::query::ObOptimizerStatService
   src/sql/parser/ob_memory_tracker_wrapper.cpp -> src/query/api/query/parser/parse_node.h	defs=2 check_mem_status; L20 check_mem_status declared at L402 (no DWARF definition); L25 try_check_mem_status declared at L403 (no DWARF definition)
-  src/sql/parser/parse_node.c -> src/pl/parser/pl_parser_base.h	defs=2 count_child; L212 count_child declared at L112; L268 merge_child declared at L113
-  src/sql/parser/parse_node.c -> src/sql/parser/sql_parser_base.h	defs=6 copy_expr_string
-  src/sql/parser/sql_parser_base.c -> src/pl/parser/pl_parser_base.h	defs=1 parse_sql_stmt
-  src/sql/parser/sql_parser_base.c -> src/query/api/query/parser/parse_node.h	defs=3 parse_init; L60 parse_terminate declared at L387
   src/sql/resolver/dml/ob_insert_stmt.cpp -> src/sql/resolver/dml/ob_del_upd_stmt.h	defs=1 oceanbase::sql::ObUniqueConstraintInfo
   src/standby/standby_module_disabled.cpp -> src/standby/standby_module.h	defs=13 oceanbase::standby::StandbyModule; L141 oceanbase::standby::StandbyModule::StandbyModule declared at L29 (no DWARF definition); L142 oceanbase::standby::StandbyModule::~StandbyModule declared at L29 (no DWARF definition); L144 oceanbase::standby::StandbyModule::init declared at L29 (no DWARF definition); +10 more from the source
   src/storage/access/ob_block_row_store.cpp -> src/query/api/query/engine/basic/ob_pushdown_filter.h	defs=1 oceanbase::sql::PushdownFilterInfo
@@ -190,35 +188,90 @@ units	3513
 units reached by the reference build	3422
 files per unit	1:656 2:2686 3:145 4:15 5:7 6:1 7:2 9:1
 largest units by files	src/oblib/rpc/frame/ob_net_easy=9 src/oblib/lib/charset/ob_ctype_simple=7 src/storage/ddl/ob_ddl_vector_utils=7 src/storage/tx/ob_tx_api=6 src/oblib/lib/oblog/ob_log=5 src/rootserver/ob_ddl_service=5 src/share/schema/ob_schema_getter_guard=5 src/sql/engine/expr/ob_expr=5
+header copies (aliases.tsv: a header with the same include guard as a header of another unit; C++ sees one of them in any translation unit, so the copy is translated once, as the kept one)	2	src/data_plane/api/data_plane/blocksstable/ob_index_block_util.h=src/storage/blocksstable/index_block/ob_index_block_util.h src/objit/include/objit/common/ob_item_type.h=src/query/api/query/parser/ob_item_type.h
+  of them with different declarations (the kept header's are the ones C++ code uses)	1	OCEANBASE_SQL_OB_ITEM_TYPE_H_:src/objit/include/objit/common/ob_item_type.h,src/query/api/query/parser/ob_item_type.h
+design placements (/Users/colin/seekdb-dev/migrate-to-rust/migration/depmap/core-placements.txt)	20 rows: 9 whole files, 11 line ranges
 
 [migration order]
-batches (strongly connected sets of units)	347
-levels	9
-unit-level cycles	3
-unit-level cycle sizes (units)	3164 3 2
-units in cycles	3169
-files in cycles	6140
+batches (strongly connected sets of units)	1033
+levels	23
+unit-level cycles	19
+unit-level cycle sizes (units)	2147 196 55 33 17 17 9 3 2 2 2 2 2 2 2 2 2 2 2
+units in cycles	2499
+files in cycles	5004
 unit-level, counting only edges out of non-implementation files	3416 batches, 107 levels, cycle sizes 46 15 7 7 7 4 3 3 3 3 2 2 2 2 2 2 2 2 2
-file-level order (order-files.txt)	6380 batches, 90 levels
+file-level order (order-files.txt)	6537 batches, 107 levels
 
 [file-level cycles]
 over include edges	27 cycles, 69 files, sizes 8 7 4 3 3 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
-over all edge kinds	37 cycles, 244 files, sizes 154 8 7 4 3 3 3 3 3 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+over all edge kinds	35 cycles, 85 files, sizes 8 7 4 3 3 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
 
 [directory-level cycles]
-include edges between live files	9 cycles; sizes (dirs/files) 110/4100 38/442 18/595 13/139 8/493 5/44 4/120 3/42 3/50
+include edges between live files	9 cycles; sizes (dirs/files) 110/4100 38/442 17/418 13/139 8/493 5/44 4/120 3/42 3/50
   largest cycle by top directory	src/pl=4 src/rootserver=7 src/sql=57 src/storage=42
-all edge kinds, all files	1 cycles; sizes (dirs/files) 291/6499
-  largest cycle by top directory	src/data_plane=19 src/logservice=5 src/objit=1 src/oblib=74 src/observer=10 src/pl=4 src/query=23 src/rootserver=8 src/share=40 src/sql=58 src/standby=3 src/storage=46
+all edge kinds, all files	1 cycles; sizes (dirs/files) 290/6495
+  largest cycle by top directory	src/data_plane=19 src/logservice=5 src/objit=1 src/oblib=73 src/observer=10 src/pl=4 src/query=23 src/rootserver=8 src/share=40 src/sql=58 src/standby=3 src/storage=46
 module-level (src/<module>) cycles over live include edges	1
   cycle	src/pl src/rootserver src/sql src/storage
-    src/pl -> src/sql	90	src/pl/ob_pl.cpp->src/sql/engine/dml/ob_trigger_handler.h src/pl/ob_pl.cpp->src/sql/engine/expr/ob_expr_column_conv.h src/pl/ob_pl.cpp->src/sql/engine/expr/ob_expr_pl_integer_checker.h src/pl/ob_pl.cpp->src/sql/ob_spi.h
+    src/pl -> src/sql	86	src/pl/ob_pl.cpp->src/sql/engine/dml/ob_trigger_handler.h src/pl/ob_pl.cpp->src/sql/engine/expr/ob_expr_column_conv.h src/pl/ob_pl.cpp->src/sql/engine/expr/ob_expr_pl_integer_checker.h src/pl/ob_pl.cpp->src/sql/ob_spi.h
     src/rootserver -> src/pl	3	src/rootserver/ddl_task/ob_ddl_redefinition_task.cpp->src/pl/sys_package/ob_dbms_stats.h src/rootserver/ob_ddl_operator.cpp->src/pl/pl_cache/ob_pl_cache_mgr.h src/rootserver/pl_ddl/ob_pl_ddl_operator.cpp->src/pl/pl_cache/ob_pl_cache_mgr.h
     src/rootserver -> src/sql	54	src/rootserver/ddl_task/ob_ddl_common_rs_impl.cpp->src/sql/engine/px/ob_px_dtl_msg.h src/rootserver/ddl_task/ob_ddl_common_rs_impl.cpp->src/sql/ob_sql_utils.h src/rootserver/ddl_task/ob_ddl_common_rs_impl.cpp->src/sql/resolver/ddl/ob_ddl_resolver.h src/rootserver/ddl_task/ob_ddl_common_rs_impl.cpp->src/sql/resolver/ddl/ob_fts_index_builder_util.h
     src/rootserver -> src/storage	79	src/rootserver/ddl_task/ob_constraint_task.cpp->src/storage/ddl/ob_ddl_lock.h src/rootserver/ddl_task/ob_ddl_common_rs_impl.cpp->src/storage/ob_storage_rpc_arg.h src/rootserver/ddl_task/ob_ddl_common_rs_impl.cpp->src/storage/tablet/ob_tablet_binding_helper.h src/rootserver/ddl_task/ob_ddl_common_rs_impl.cpp->src/storage/tx/ob_ts_mgr.h
     src/sql -> src/storage	2	src/sql/engine/px/ob_px_sub_coord.cpp->src/storage/ddl/ob_ddl_direct_load_utils.h src/sql/engine/px/ob_px_sub_coord.cpp->src/storage/ddl/ob_ddl_insert_dag.h
     src/storage -> src/rootserver	1	src/storage/ddl/ob_ddl_insert_dag.cpp->src/rootserver/ddl_task/ob_ddl_task.h
     src/storage -> src/sql	1	src/storage/ddl/ob_tablet_slice_writer.cpp->src/sql/engine/ob_batch_rows.h
+
+[islands]
+island map	/Users/colin/seekdb-dev/migrate-to-rust/migration/depmap/islands.txt
+island files in the map	191	geo-sys=173 sql-parser-sys=14 vsag-sys=4
+  src/oblib/lib/compress/zstd_1_3_8/zstd_src	ob-clib-sys	0 map files
+  src/oblib/lib/vector/ob_vector_util	vsag-sys	2 map files
+  src/oblib/lib/vector/ob_vsag_adaptor	vsag-sys	2 map files
+  src/pl/parser/pl_non_reserved_keywords_mysql_mode.c	sql-parser-sys	1 map files
+  src/pl/parser/pl_parser_base	sql-parser-sys	2 map files
+  src/pl/parser/pl_parser_mysql_mode_	sql-parser-sys	0 map files
+  src/share/geo	geo-sys	173 map files
+  src/share/geo/ob_geo_mvt.	-	2 map files
+  src/share/geo/ob_vector_tile.pb-c	-	0 map files
+  src/share/geo/ob_wkb_to_json_bin_visitor	-	2 map files
+  src/sql/parser/fts_base	sql-parser-sys	2 map files
+  src/sql/parser/fts_parse	sql-parser-sys	2 map files
+  src/sql/parser/ftsblex_lex	sql-parser-sys	0 map files
+  src/sql/parser/ftsparser_tab	sql-parser-sys	0 map files
+  src/sql/parser/non_reserved_keywords_mysql_mode.c	sql-parser-sys	1 map files
+  src/sql/parser/ob_non_reserved_keywords	sql-parser-sys	2 map files
+  src/sql/parser/parse_define.h	sql-parser-sys	1 map files
+  src/sql/parser/parse_node.c	sql-parser-sys	1 map files
+  src/sql/parser/sql_parser_base	sql-parser-sys	2 map files
+  src/sql/parser/sql_parser_mysql_mode_	sql-parser-sys	0 map files
+  src/sql/parser/type_name.c	sql-parser-sys	0 map files
+units whose files are all island files	110
+units with island and other files	1	src/sql/parser/parse_node(src/query/api/query/parser/parse_node.h,src/sql/parser/parse_node.h)
+edges into island files (kind island)	570	from definition=82 include=530 link=26 own-header=68 via-generated=1
+edges from island files to other files (kind from-island)	98	from definition=2 include=90 link=5 own-header=1 via-generated=1
+rule	island and from-island edges take no part in the unit order, the header order or the crate order, since kept island code is not translated; in the crate check an edge into an island file counts against the including crate's row, an edge out of an island file by definition or link counts against the island crate's row, and an include out of an island file is gone (the kept code compiles against the frozen header); island edges take part in the crate cycles
+
+[crate-level]
+crate map	/Users/colin/seekdb-dev/migrate-to-rust/migration/design/evidence/rulebook/crates/crates-design.tsv
+allowed rows	/Users/colin/seekdb-dev/migrate-to-rust/migration/design/evidence/rulebook/crates/allowed-design.tsv
+crate pairs the design's edge scripts counted	/Users/colin/seekdb-dev/migrate-to-rust/migration/design/evidence/rulebook/crates/out/crate_view.json, /Users/colin/seekdb-dev/migrate-to-rust/migration/design/evidence/rulebook/crates/out/link_edges.json
+files per crate	(unmapped)=9 geo-sys=175 ob-base=407 ob-errno=5 ob-log=135 ob-runtime=227 ob-schema=125 ob-share=266 ob-simd=10 ob-values=164 ob-values-doc=62 observer=509 pl=92 rootserver=200 seekdb=5 sql=199 sql-codegen=19 sql-das=114 sql-engine=357 sql-exec=156 sql-expr=914 sql-ir=82 sql-optimizer=212 sql-parse-tree=5 sql-parser=10 sql-parser-sys=25 sql-resolver=282 sql-rewrite=95 sql-session=19 standby=50 storage-api=95 storage-engine=201 storage-search=160 storage-sstable=286 storage-tablet=608 storage-tx=266 vsag-sys=6 x-dropped=35
+unmapped files	9	bazel/probes/easy_public_interface_probe.cpp bazel/probes/logservice_public_interface_probe.cpp bazel/probes/oblib_interface_probe.cpp bazel/probes/transitive_storage_header_probe.cpp bazel/sanity_abort.cpp include/android_compat.h tools/codestyle/sample/ob_style_example.cpp tools/codestyle/sample/ob_style_example.h tools/ob_error/test/test_ob_error.cpp
+edges between live files in different crates, by class	listed=338/11840 upward-named=107/994 gone=6/10 upward-unnamed=6/6 not-listed=1/1 uses-dropped=7/22 uses-deferred=1/1 dropped=0/0 deferred=7/183 unmapped=0/0
+  (pairs/edges; edges touching a file outside the reference build not counted: 158)
+edges the design neither allows nor names as a cut	30 in 15 pairs	ob-base->x-dropped ob-runtime->x-dropped ob-schema->storage-api ob-share->x-dropped observer->standby observer->x-dropped seekdb->x-dropped sql-codegen->storage-sstable sql-exec->sql-nio sql-expr->x-dropped storage-api->sql-codegen storage-api->sql-engine storage-api->sql-ir storage-api->storage-tablet storage-tablet->x-dropped
+crate cycles over every edge between live mapped crates	1; sizes 34
+crate cycles left after the design's cuts	1; ob-schema storage-api storage-sstable storage-tx storage-tablet storage-engine storage-search sql-session sql-ir sql-exec sql-expr sql-das sql-engine sql-parser sql-resolver sql-rewrite sql-optimizer sql-codegen
+includes of a C header a Rust crate's build.rs writes, counted against that crate	rust/sql-nio/include/nio.h=sql-nio
+upward pairs the design counted that the map does not show	43
+definition edges crossing crates	126
+units whose files fall in more than one crate	87
+placement level (each file in the crate its manifest row writes it to), by class	listed=349/11003 upward-named=119/1068 gone=6/10 upward-unnamed=10/15 not-listed=3/3 uses-dropped=7/22 uses-deferred=1/1 dropped=0/0 deferred=7/183 unmapped=0/0
+placement level: edges the design neither allows nor names as a cut	41 in 21 pairs
+placement level: crate cycles over every edge	1; sizes 34
+placement level: crate cycles left after the design's cuts	1; ob-schema storage-api storage-sstable storage-tx storage-tablet storage-engine storage-search sql-session sql-ir sql-exec sql-expr sql-das sql-engine sql-parser sql-resolver sql-rewrite sql-optimizer sql-codegen sql pl
+edge ledger: rows needed (ledger-needed.tsv)	658; ledger file /Users/colin/seekdb-dev/migrate-to-rust/migration/crate-edges.tsv absent; rows without a fix	658
+crate order (order-crates.txt)	37 crates with units, 3461 batches; cycles inside crates	ob-base=14,2 ob-runtime=3,2 ob-values=2 storage-tx=4,3,3,2 storage-tablet=7,2 sql-expr=7 sql-engine=2,2 sql=2,2 pl=7 rootserver=2 standby=3
 
 [generated]
 checked-in generated files	38

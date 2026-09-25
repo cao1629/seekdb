@@ -34,6 +34,7 @@ HEADER_EXTS = {".h", ".hpp", ".hxx"}
 SKIP_DIRS = {".git", "build", "vendor", "third_party", "node_modules"}
 SKIP_TOP_DIRS = {"deps", "rust"}
 SKIP_DIR_PREFIX = "build_"
+KIT_DIR = "migration"
 VENDORED = (
     ("src/oblib/lib/compress/zstd_1_3_8/zstd_src/", "zstd 1.3.8 upstream source"),
     ("src/oblib/easy/", "upstream libev header (io/ev.h); the easy_* headers are maintained in this repo"),
@@ -1351,6 +1352,115 @@ def condense(nodes, edges):
     return comps, comp_of, level
 
 
+ISLAND_KINDS = ("island", "from-island")
+EDGE_KINDS = ("include", "definition", "link", "own-header", "via-generated", "island", "from-island",
+              "rust-header")
+SOURCE_RANK = {".cpp": 0, ".cc": 0, ".c": 0, ".cxx": 0, ".h": 1, ".hpp": 1, ".hxx": 1, ".ipp": 2}
+UNMAPPED = "(unmapped)"
+EDGE_CLASSES = ("listed", "upward-named", "gone", "upward-unnamed", "not-listed", "uses-dropped", "uses-deferred",
+                "dropped", "deferred", "unmapped")
+FINDING_CLASSES = ("upward-unnamed", "not-listed", "uses-dropped", "uses-deferred", "unmapped")
+LEDGER_CLASSES = ("upward-named", "upward-unnamed", "not-listed", "gone", "uses-dropped", "uses-deferred")
+CYCLE_SKIP_CLASSES = ("dropped", "deferred", "unmapped", "uses-dropped", "uses-deferred")
+EV_LINK_RE = re.compile(r"^L(\d+)(?:\{[^}]*\})? \S+ defined at L(\d+)")
+EV_DECL_RE = re.compile(r"^L(\d+)(?:\{[^}]*\})? .* declared at L(\d+)")
+EV_LINE_RE = re.compile(r"^L(\d+)")
+GUARD_TOP_RE = re.compile(r"^\s*#\s*(?:ifndef\s+(\w+)|if\s+!\s*defined\s*\(?\s*(\w+)\s*\)?)\s*\n\s*#\s*define\s+(\w+)")
+INCLUDE_DIRECTIVE_LINE_RE = re.compile(r"^[ \t]*#[ \t]*include\b[^\n]*$", re.M)
+BUILD_RS_RE = re.compile(r"(?:^|\s|;)rust/([^/\s]+)/build\.rs\b")
+
+
+def load_prefix_map(path):
+    rows = []
+    with open(path, encoding="utf-8") as f:
+        for line in f:
+            line = line.rstrip("\n")
+            if not line.strip() or line.lstrip().startswith("#"):
+                continue
+            parts = [p.strip() for p in line.split("\t")]
+            rows.append((parts[0].rstrip("/"), parts[1] if len(parts) > 1 else "", parts[2] if len(parts) > 2 else ""))
+    rows.sort(key=lambda r: (-len(r[0]), r[0]))
+    return rows
+
+
+def load_allowed(path):
+    order = []
+    rows = {}
+    with open(path, encoding="utf-8") as f:
+        for line in f:
+            line = line.rstrip("\n")
+            if not line.strip() or line.startswith("#"):
+                continue
+            crate, _, rest = line.partition("\t")
+            order.append(crate.strip())
+            rows[crate.strip()] = set(rest.split())
+    idx = {c: i for i, c in enumerate(order)}
+    for crate in order:
+        if "ob-runtime" in idx and idx[crate] >= idx["ob-runtime"] and crate != "sql-nio":
+            rows[crate] |= {"ob-errno", "ob-base"}
+    return order, rows
+
+
+def load_named_pairs(paths):
+    named = defaultdict(set)
+    for path in paths:
+        with open(path, encoding="utf-8") as f:
+            data = json.load(f)
+        for a, b, n in data.get("edges", ()):
+            if n:
+                named[(a, b)].add(posixpath.basename(path))
+    return named
+
+
+def load_placements(path):
+    rows = []
+    if not path or not os.path.isfile(path):
+        return rows
+    with open(path, encoding="utf-8") as f:
+        for no, line in enumerate(f, 1):
+            line = line.rstrip("\n")
+            if not line.strip() or line.lstrip().startswith("#"):
+                continue
+            cols = [c.strip() for c in line.split("\t")]
+            m = re.match(r"^(.*?):(\d+)-(\d+)$", cols[0])
+            src, rng = (m.group(1), (int(m.group(2)), int(m.group(3)))) if m else (cols[0], None)
+            module = cols[2] if len(cols) > 2 and cols[2] not in ("", "-") else ""
+            rows.append((src, rng, cols[1] if len(cols) > 1 else "", module, cols[3] if len(cols) > 3 else "", no))
+    return rows
+
+
+def load_ledger(path):
+    rows = {}
+    if not path or not os.path.isfile(path):
+        return None
+    with open(path, encoding="utf-8") as f:
+        header = None
+        for line in f:
+            cols = line.rstrip("\n").split("\t")
+            if header is None:
+                header = cols
+                continue
+            if len(cols) >= 3:
+                rows[(cols[0], cols[1], cols[2])] = cols
+    return rows
+
+
+def evidence_lines(kind, ev):
+    if kind in ("link",):
+        m = EV_LINK_RE.match(ev)
+        if m:
+            return int(m.group(1)), int(m.group(2))
+    elif kind == "definition":
+        m = EV_DECL_RE.match(ev)
+        if m:
+            return int(m.group(1)), int(m.group(2))
+        return None, None
+    elif kind == "own-header":
+        return None, None
+    m = EV_LINE_RE.match(ev)
+    return (int(m.group(1)) if m else None), None
+
+
 class Context:
     def __init__(self, quote, angle, system, frameworks):
         self.quote = quote
@@ -1373,6 +1483,29 @@ class DepMap:
         self.t_start = time.time()
         self.isfile_cache = {}
         self.resolve_cache = {}
+        self.isdir_cache = {}
+        self.island_of = {}
+        self.island_rows = []
+        self.island_stats = Counter()
+        self.island_orig = {}
+        self.alias_of = {}
+        self.alias_rows = []
+        self.guard_conflicts = []
+        self.placements = []
+
+    def is_dir(self, rel):
+        r = self.isdir_cache.get(rel)
+        if r is None:
+            r = os.path.isdir(os.path.join(self.root, rel))
+            self.isdir_cache[rel] = r
+        return r
+
+    def prefix_match(self, rows, path):
+        for row in rows:
+            prefix = row[0]
+            if path == prefix or path.startswith(prefix + "/") or (not self.is_dir(prefix) and path.startswith(prefix)):
+                return row
+        return None
 
     def isfile(self, p):
         r = self.isfile_cache.get(p)
@@ -1386,7 +1519,7 @@ class DepMap:
                              stdout=subprocess.PIPE, check=True)
         files = set()
         for p in res.stdout.decode("utf-8", "surrogateescape").split("\0"):
-            if p and os.path.isfile(os.path.join(self.root, p)):
+            if p and not p.startswith(KIT_DIR + "/") and os.path.isfile(os.path.join(self.root, p)):
                 files.add(p)
         self.tracked = files
         self.lower_index = {p.lower(): p for p in sorted(files)}
@@ -1758,6 +1891,7 @@ class DepMap:
         self.misses = []
         self.ctx_dependent = []
         self.generated_includers = defaultdict(set)
+        self.generated_lines = defaultdict(set)
         self.forwarder_target = {}
         self.umbrella = {}
         self.forwarder_elsewhere = {}
@@ -1814,6 +1948,7 @@ class DepMap:
                     elif klass == "generated":
                         other_targets.add(target)
                         self.generated_includers[target].add(key)
+                        self.generated_lines[target].add((key, line))
                         for ci, k2, t2 in res:
                             if k2 == "generated" and t2 == target:
                                 for b in sorted(gen_targets(target, ci)):
@@ -2338,7 +2473,148 @@ class DepMap:
         self.links()
         self.build_units()
         self.compiler_check()
+        self.mark_islands()
+        self.load_design_placements()
+        self.find_aliases()
         self.elapsed = time.time() - t0
+
+    def mark_islands(self):
+        if not self.args.islands or not os.path.isfile(self.args.islands):
+            return
+        self.island_rows = load_prefix_map(self.args.islands)
+        for n in sorted(self.nodes):
+            row = self.prefix_match(self.island_rows, n)
+            if row and row[1] != "-":
+                self.island_of[n] = row[1]
+        edges = {}
+        for (a, b, kind), evs in self.edges.items():
+            via = None
+            if kind == "via-generated":
+                for ev in evs:
+                    if " via " in ev:
+                        row = self.prefix_match(self.island_rows, ev.split(" via ", 1)[1])
+                        if row and row[1] != "-":
+                            via = row[1]
+            if b in self.island_of or (via and a not in self.island_of):
+                nk = "island"
+            elif a in self.island_of:
+                nk = "from-island"
+            else:
+                nk = kind
+            if nk != kind:
+                evs = ["%s %s" % (kind, ev) for ev in evs]
+                self.island_stats[(nk, kind)] += 1
+                self.island_orig.setdefault((a, b, nk), set()).add(kind)
+            prev = edges.get((a, b, nk))
+            if prev is None:
+                edges[(a, b, nk)] = list(evs)
+            else:
+                prev.extend(ev for ev in evs if ev not in prev)
+        self.edges = edges
+        self.cross_unit_defs = sum(1 for (a, b, k) in self.edges
+                                   if k == "definition" and self.unit_of[a] != self.unit_of[b])
+
+    def load_design_placements(self):
+        self.placements = []
+        rows = load_placements(self.args.placements)
+        errors = []
+        for src, rng, crate, module, design, no in rows:
+            if src not in self.nodes:
+                errors.append("%s:%d: %s is not a map file" % (self.args.placements, no, src))
+                continue
+            if rng is not None:
+                n = self.scans[src][0] + 1
+                if not (1 <= rng[0] <= rng[1] <= n):
+                    errors.append("%s:%d: %s:%d-%d is outside the file's %d lines" % (
+                        self.args.placements, no, src, rng[0], rng[1], n))
+                    continue
+            self.placements.append((src, rng, crate, module, design))
+        if errors:
+            for e in errors:
+                print("ERROR: " + e, file=sys.stderr)
+            sys.exit(1)
+
+    def header_guard(self, key):
+        with open(self.abs_of(key), "rb") as f:
+            text = f.read().decode("utf-8", "surrogateescape")
+        clean = LEX_RE.sub(_lex_sub, text)
+        m = GUARD_TOP_RE.search(clean)
+        if not m:
+            return None, clean
+        name = m.group(1) or m.group(2)
+        if name != m.group(3) or clean[:m.start()].strip():
+            return None, clean
+        return name, clean
+
+    def find_aliases(self):
+        self.alias_of = {}
+        self.alias_rows = []
+        self.guard_conflicts = []
+        by_guard = defaultdict(list)
+        bodies = {}
+        for n in sorted(self.nodes):
+            if ext_of(n) not in HEADER_LIKE or n not in self.live or n in self.island_of:
+                continue
+            g, clean = self.header_guard(n)
+            if g is None:
+                continue
+            by_guard[g].append(n)
+            bodies[n] = " ".join(INCLUDE_DIRECTIVE_LINE_RE.sub(" ", clean).split())
+        order = []
+        if self.args.allowed and os.path.isfile(self.args.allowed):
+            order, _ = load_allowed(self.args.allowed)
+        rank = {c: i for i, c in enumerate(order)}
+        crate_rows = load_prefix_map(self.args.crate_map) if self.args.crate_map and \
+            os.path.isfile(self.args.crate_map) else []
+        into = defaultdict(list)
+        for e in self.edges:
+            into[e[1]].append(e)
+
+        def defined_here(f):
+            u = self.unit_of[f]
+            return any(kind == "definition" and self.unit_of.get(a) == u and ext_of(a) in IMPL_EXTS
+                       for (a, _, kind) in into.get(f, ()))
+
+        def includers(f):
+            return len({a for (a, _, kind) in into.get(f, ()) if kind == "include" and self.unit_of.get(a) !=
+                        self.unit_of[f]})
+
+        def crate_rank(f):
+            row = self.prefix_match(crate_rows, f) if crate_rows else None
+            return rank.get(row[1], len(rank)) if row else len(rank)
+
+        ident = re.compile(r"[A-Za-z_]\w*")
+        for g, files in sorted(by_guard.items()):
+            if len({self.unit_of[f] for f in files}) < 2:
+                continue
+            with_defs = [f for f in files if defined_here(f)]
+            if len(with_defs) == 1:
+                canon, why = with_defs[0], "the copy whose unit defines its declarations"
+            else:
+                canon = sorted(files, key=lambda f: (-includers(f), crate_rank(f), f))[0]
+                why = "the copy other units include most, then the one in the earliest crate of the table"
+            for f in sorted(files):
+                if f == canon or self.unit_of[f] == self.unit_of[canon]:
+                    continue
+                if bodies[f] == bodies[canon]:
+                    same = "the same declarations"
+                else:
+                    ka, kb = set(ident.findall(bodies[f])), set(ident.findall(bodies[canon]))
+                    only_f, only_c = sorted(ka - kb), sorted(kb - ka)
+                    same = "declarations that differ (only in the copy: %s; only in the kept header: %s)" % (
+                        " ".join(only_f[:8]) + (" +%d more" % (len(only_f) - 8) if len(only_f) > 8 else "") or "-",
+                        " ".join(only_c[:8]) + (" +%d more" % (len(only_c) - 8) if len(only_c) > 8 else "") or "-")
+                    self.guard_conflicts.append((g, sorted([f, canon])))
+                self.alias_of[f] = canon
+                self.alias_rows.append((f, canon, g, "same include guard %s, so C++ sees one of the two in any "
+                                        "translation unit, with %s; %s is kept: %s" % (g, same, canon, why)))
+
+    def unit_source(self, uid):
+        files = self.units[uid]
+        cands = [f for f in files if f not in self.island_of] or list(files)
+        own = [f for f in cands if stem_of(f) == uid and f not in self.forwarder_target]
+        pool = own or [f for f in cands if f not in self.forwarder_target] or cands
+        return sorted(pool, key=lambda p: (SOURCE_RANK.get(ext_of(p), 3), p))[0]
 
     def closure(self, starts, ci):
         seen = set()
@@ -2393,7 +2669,9 @@ class DepMap:
     def unit_graph(self):
         uedges = set()
         for (a, b, kind) in self.edges:
-            ua, ub = self.unit_of[a], self.unit_of[b]
+            if kind in ISLAND_KINDS:
+                continue
+            ua, ub = self.unit_of[a], self.unit_of[self.alias_of.get(b, b)]
             if ua != ub:
                 uedges.add((ua, ub))
         return uedges
@@ -2415,6 +2693,10 @@ class DepMap:
             rows.append("%s\t%s\t%d\t%s\t%s\n" % (uid, ",".join(files), lines, self.class_key(uid, files),
                                                   "yes" if live else "no"))
         self.write("units.tsv", "".join(rows))
+        rows = ["alias\tkept\tguard\trule\n"]
+        for f, canon, g, why in sorted(self.alias_rows):
+            rows.append("%s\t%s\t%s\t%s\n" % (f, canon, g, why))
+        self.write("aliases.tsv", "".join(rows))
         uedges = self.unit_graph()
         comps, comp_of, level = condense(self.units.keys(), uedges)
         order = sorted(range(len(comps)), key=lambda ci: (level[ci], comps[ci][0]))
@@ -2432,7 +2714,7 @@ class DepMap:
         inc_edges = {(a, b) for (a, b, k) in self.edges if k == "include"}
         fcomps, _, _ = condense(file_nodes, inc_edges)
         fcycles = sorted((c for c in fcomps if len(c) > 1), key=lambda c: (-len(c), c[0]))
-        all_edges = {(a, b) for (a, b, k) in self.edges}
+        all_edges = {(a, b) for (a, b, k) in self.edges if k not in ISLAND_KINDS}
         acomps, _, alevel = condense(file_nodes, all_edges)
         acycles = sorted((c for c in acomps if len(c) > 1), key=lambda c: (-len(c), c[0]))
         forder = sorted(range(len(acomps)), key=lambda ci: (alevel[ci], acomps[ci][0]))
@@ -2444,11 +2726,13 @@ class DepMap:
         self.file_order = (len(acomps), fnlevels)
         hedges = set()
         for (a, b, k) in self.edges:
-            if ext_of(a) not in IMPL_EXTS and self.unit_of[a] != self.unit_of[b]:
-                hedges.add((self.unit_of[a], self.unit_of[b]))
+            ub = self.unit_of[self.alias_of.get(b, b)]
+            if k not in ISLAND_KINDS and ext_of(a) not in IMPL_EXTS and self.unit_of[a] != ub:
+                hedges.add((self.unit_of[a], ub))
         hcomps, _, hlevel = condense(self.units.keys(), hedges)
         self.header_unit_order = (len(hcomps), (max(hlevel) + 1) if hlevel else 0,
                                   sorted((len(c) for c in hcomps if len(c) > 1), reverse=True))
+        self.header_edges = hedges
         self.write("cycles-files.txt",
                    "# file-level strongly connected components over include edges only: %d, %d files\n"
                    % (len(fcycles), sum(len(c) for c in fcycles))
@@ -2458,7 +2742,8 @@ class DepMap:
                    + "".join("all\t" + "\t".join(c) + "\n" for c in acycles))
         self.file_cycles = (fcycles, acycles)
         self.dir_report = self.directory_level(inc_edges, all_edges)
-        self.crate_report = self.crate_level(all_edges) if self.args.crate_map else None
+        self.crate_report = (self.crate_level() if self.args.crate_map and os.path.isfile(self.args.crate_map)
+                             and os.path.isfile(self.args.allowed) else None)
         rows = ["defining_file\tdeclaring_file\tdefinitions\tscopes\n"]
         for (a, b), (n, top, _, _) in sorted(self.defpairs.items()):
             if a in self.nodes and b in self.nodes:
@@ -2516,50 +2801,299 @@ class DepMap:
         report["modules"] = (mcyc, medges)
         return report
 
-    def crate_level(self, all_edges):
-        mapping = []
-        with open(self.args.crate_map, encoding="utf-8") as f:
-            for l in f:
-                l = l.strip()
-                if not l or l.startswith("#"):
-                    continue
-                parts = l.split("\t") if "\t" in l else l.split()
-                mapping.append((parts[0].rstrip("/"), parts[1]))
-        mapping.sort(key=lambda kv: -len(kv[0]))
+    def generator_of(self, p):
+        kind, how = self.generated[p]
+        if kind == "marker":
+            return self.generator_for(p, os.path.join(self.root, p))
+        return ";".join(sorted({h.split("output named at ")[1].split(":")[0]
+                               for h in how.split("; ") if "output named at" in h}))
+
+    def crate_level(self):
+        rows = load_prefix_map(self.args.crate_map)
+        order, allowed = load_allowed(self.args.allowed)
+        idx = {c: i for i, c in enumerate(order)}
+        design_files = [p for p in self.args.design_edges if os.path.isfile(p)]
+        named = load_named_pairs(design_files)
+
+        def resolve(p):
+            seen = set()
+            while p in self.forwarder_target and p not in self.umbrella and p not in seen:
+                seen.add(p)
+                p = self.forwarder_target[p]
+            return p
 
         def crate_of(p):
-            for prefix, crate in mapping:
-                if p == prefix or p.startswith(prefix + "/"):
-                    return crate
-            return "(unmapped)"
+            row = self.prefix_match(rows, p)
+            return row[1] if row else UNMAPPED
 
-        files = sorted(self.nodes)
-        crate_files = Counter(crate_of(f) for f in files)
-        cedges = defaultdict(list)
-        for a, b in sorted(all_edges):
-            ca, cb = crate_of(a), crate_of(b)
-            if ca != cb:
-                cedges[(ca, cb)].append((a, b))
-        comps, _, level = condense(crate_files.keys(), set(cedges))
-        cyc = sorted((c for c in comps if len(c) > 1), key=lambda c: (-len(c), c[0]))
-        rows = ["from_crate\tto_crate\tfile_edges\texample\n"]
-        for (a, b), lst in sorted(cedges.items()):
-            rows.append("%s\t%s\t%d\t%s -> %s\n" % (a, b, len(lst), lst[0][0], lst[0][1]))
-        self.write("crate-edges.tsv", "".join(rows))
-        split = sorted((a, b) for (a, b, k) in self.edges if k == "definition" and crate_of(a) != crate_of(b))
-        units_split = sorted({u for u, fs in self.units.items() if len({crate_of(f) for f in fs}) > 1})
-        text = ["# crate-level strongly connected components: %d\n" % len(cyc)]
-        for c in cyc:
-            inner = sorted((k, len(v)) for k, v in cedges.items() if k[0] in c and k[1] in c)
-            text.append("%d crates\t%s\t%s\n" % (len(c), "\t".join(c),
-                                                 " ".join("%s->%s:%d" % (a, b, n) for (a, b), n in inner)))
-        text.append("# definition edges crossing crates (an inherent impl outside its type's crate): %d\n" % len(split))
-        text.extend("definition\t%s\t%s\n" % e for e in split)
-        text.append("# units whose files fall in more than one crate: %d\n" % len(units_split))
-        text.extend("unit\t%s\t%s\n" % (u, ",".join("%s:%s" % (f, crate_of(f)) for f in self.units[u]))
-                    for u in units_split)
-        self.write("cycles-crates.txt", "".join(text))
-        return (crate_files, cedges, cyc, split, units_split)
+        def crate_key(c):
+            return (idx.get(c, len(idx)), c)
+
+        whole = {}
+        ranges = defaultdict(list)
+        for src, rng, crate, module, design in self.placements:
+            if rng is None:
+                whole[src] = crate
+            else:
+                ranges[src].append((rng[0], rng[1], crate))
+
+        def map_crate(f, seen=()):
+            f = resolve(f)
+            if f in whole:
+                return whole[f]
+            if f in self.alias_of and f not in seen:
+                return map_crate(self.alias_of[f], seen + (f,))
+            return crate_of(f)
+
+        placed = {}
+        for u in self.units:
+            src = self.unit_source(u)
+            placed[u] = whole.get(src, crate_of(src))
+
+        def place_crate(f, seen=()):
+            if f in self.island_of:
+                return self.island_of[f]
+            if f in whole:
+                return whole[f]
+            if crate_of(f) in ("x-dropped", "standby"):
+                return crate_of(f)
+            if f in self.alias_of and f not in seen:
+                return place_crate(self.alias_of[f], seen + (f,))
+            return placed[self.unit_of[f]]
+
+        fcrate = {f: map_crate(f) for f in self.nodes}
+        pcrate = {f: place_crate(f) for f in self.nodes}
+        known = set(idx) | {"x-dropped", "standby"}
+        rust_header = {}
+        for g in self.generated:
+            m = BUILD_RS_RE.search(" " + self.generator_of(g))
+            if m and m.group(1) in idx:
+                rust_header[g] = m.group(1)
+
+        def at_line(base, f, line):
+            if line is not None:
+                for a, b, c in ranges.get(f, ()):
+                    if a <= line <= b:
+                        return c
+            return base[f]
+
+        def classify(ca, cb):
+            if ca not in known or cb not in known:
+                return "unmapped"
+            if ca == "x-dropped":
+                return "dropped"
+            if ca == "standby":
+                return "deferred"
+            if cb == "x-dropped":
+                return "uses-dropped"
+            if cb == "standby":
+                return "uses-deferred"
+            if cb in allowed.get(ca, ()):
+                return "listed"
+            if ca == "seekdb":
+                return "gone"
+            if idx[cb] > idx[ca]:
+                return "upward-named" if (ca, cb) in named else "upward-unnamed"
+            return "not-listed"
+
+        def collect(base):
+            seen = {}
+            not_live = set()
+            for (a, b, k), evs in sorted(self.edges.items()):
+                if a not in self.live or b not in self.live:
+                    if base[a] != base[b]:
+                        not_live.add((a, b, k))
+                    continue
+                for ev in evs:
+                    ok, body = k, ev
+                    if k in ISLAND_KINDS:
+                        ok, _, body = ev.partition(" ")
+                    fl, tl = evidence_lines(ok, body)
+                    ca, cb = at_line(base, a, fl), at_line(base, b, tl)
+                    if ca == cb:
+                        continue
+                    c = classify(ca, cb)
+                    if k == "from-island" and ok not in ("link", "definition") and c != "listed":
+                        c = "gone"
+                    key = (a, b, k, ca, cb)
+                    if key not in seen:
+                        seen[key] = (c, "%s:%s -> %s:%s" % (a, fl or "", b, tl or ""))
+            for g, cb in sorted(rust_header.items()):
+                for key_file, line in sorted(self.generated_lines.get(g, ())):
+                    if key_file not in self.nodes:
+                        continue
+                    if key_file not in self.live:
+                        if base[key_file] != cb:
+                            not_live.add((key_file, g, "rust-header"))
+                        continue
+                    ca = at_line(base, key_file, line)
+                    if ca == cb:
+                        continue
+                    key = (key_file, self.display(g), "rust-header", ca, cb)
+                    if key not in seen:
+                        seen[key] = (classify(ca, cb), "%s:%d -> %s (generated by rust/%s/build.rs)" % (
+                            key_file, line, self.display(g), cb))
+            facts = [(a, b, k, ca, cb, c, ex) for (a, b, k, ca, cb), (c, ex) in seen.items()]
+            by_class = defaultdict(list)
+            for a, b, k, ca, cb, c, ex in facts:
+                by_class[c].append((ca, cb, a, b, k))
+            raw = {(ca, cb) for a, b, k, ca, cb, c, ex in facts if c not in CYCLE_SKIP_CLASSES}
+            left = {(ca, cb) for a, b, k, ca, cb, c, ex in facts if c in ("listed", "upward-unnamed", "not-listed")}
+            nodes = sorted({c for pr in raw for c in pr}, key=crate_key)
+            rcyc = [sorted(c, key=crate_key) for c in condense(nodes, raw)[0] if len(c) > 1]
+            lcyc = [sorted(c, key=crate_key) for c in condense(nodes, left)[0] if len(c) > 1]
+            return facts, by_class, rcyc, lcyc, len(not_live)
+
+        facts, by_class, rcyc, lcyc, not_live = collect(fcrate)
+        pfacts, p_by_class, prcyc, plcyc, _ = collect(pcrate)
+        pairs = defaultdict(lambda: defaultdict(list))
+        for a, b, k, ca, cb, c, ex in facts:
+            pairs[(ca, cb)][k].append((a, b, c))
+        out = ["from_crate\tto_crate\tclass\tedges\t%s\texamples\n" % "\t".join(EDGE_KINDS)]
+        for (ca, cb) in sorted(pairs, key=lambda p: (crate_key(p[0]), crate_key(p[1]))):
+            kinds = pairs[(ca, cb)]
+            classes = sorted({c for lst in kinds.values() for _, _, c in lst}, key=EDGE_CLASSES.index)
+            ex = ["%s -> %s (%s)" % (a, b, k) for k in EDGE_KINDS for a, b, _ in kinds.get(k, ())[:2]]
+            out.append("%s\t%s\t%s\t%d\t%s\t%s\n" % (
+                ca, cb, "+".join(classes), sum(len(v) for v in kinds.values()),
+                "\t".join(str(len(kinds.get(k, ()))) for k in EDGE_KINDS), "; ".join(ex[:3])))
+        self.write("crate-edges.tsv", "".join(out))
+
+        ledger = load_ledger(self.args.ledger)
+        need = defaultdict(lambda: [set(), Counter(), []])
+        for a, b, k, ca, cb, c, ex in pfacts:
+            if c not in LEDGER_CLASSES:
+                continue
+            what = resolve(b) if b in self.nodes else b
+            entry = need[(ca, cb, what)]
+            entry[0].add((a, b, k))
+            entry[1][c] += 1
+            if len(entry[2]) < 3:
+                entry[2].append("%s (%s)" % (ex, k))
+        lrows = ["from\tto\twhat\tcount\tclass\texamples\tin_ledger\n"]
+        missing_rows = 0
+        for (ca, cb, what) in sorted(need, key=lambda x: (crate_key(x[0]), crate_key(x[1]), x[2])):
+            edges, classes, exs = need[(ca, cb, what)]
+            present = ledger is not None and (ca, cb, what) in ledger and len(ledger[(ca, cb, what)]) > 4 \
+                and ledger[(ca, cb, what)][4].strip() not in ("", "-")
+            if not present:
+                missing_rows += 1
+            lrows.append("%s\t%s\t%s\t%d\t%s\t%s\t%s\n" % (
+                ca, cb, what, len(edges), "+".join(sorted(classes, key=EDGE_CLASSES.index)), "; ".join(exs),
+                "yes" if present else "no"))
+        self.write("ledger-needed.tsv", "".join(lrows))
+        ledger_rows = (len(need), missing_rows, ledger is not None)
+
+        split_defs = sorted((a, b) for (a, b, k) in self.edges
+                            if k == "definition" and fcrate[a] != fcrate[b] and a in self.live and b in self.live)
+        split_units = sorted(u for u, fs in self.units.items() if len({fcrate[f] for f in fs}) > 1)
+        missing = sorted((a, b) for (a, b) in named if a in idx and b in idx and idx[b] > idx[a]
+                         and (a, b) not in pairs)
+        unmapped = sorted(f for f in self.nodes if fcrate[f] == UNMAPPED)
+
+        text = ["# crate check: the map's edges condensed to the crates of %s (a forwarding header counts as its "
+                "target, an umbrella header as itself; a copy of another header (aliases.tsv) as the header it "
+                "copies; the placements of %s override the map, a line range by the lines each edge names; "
+                "edges between live files) and checked against %s and the crate pairs the design's edge scripts "
+                "counted (%s)\n"
+                % (self.args.crate_map, self.args.placements or "-", self.args.allowed,
+                   ", ".join(design_files) or "none")]
+        text.append("# classes: listed (on the row; crates from ob-runtime on, sql-nio aside, may also use ob-errno "
+                    "and ob-base); upward-named (to a later crate, a pair the design counted, so ARCHITECTURE 1.2 "
+                    "gives it one of the five fixes); gone (an include out of kept island code that the island's row does "
+                    "not allow, which compiles against the frozen header, or a seekdb edge not on its row: "
+                    "ARCHITECTURE 1.2); upward-unnamed "
+                    "and not-listed (findings: the design neither allows nor names them); uses-dropped and "
+                    "uses-deferred (findings: translated code that uses x-dropped or standby code); dropped, deferred "
+                    "(edges out of x-dropped or standby code, which is not translated); unmapped (no crate-map row). "
+                    "Edges out of kept island code by definition or link count against the island crate's row; "
+                    "an include of a C header a Rust crate's build.rs writes (rust-header) counts against that "
+                    "crate\n")
+        text.append("[pairs by class]\n")
+        for c in EDGE_CLASSES:
+            lst = by_class.get(c, [])
+            text.append("%s\t%d pairs\t%d edges\n" % (c, len({(x[0], x[1]) for x in lst}), len(lst)))
+        text.append("edges not counted (a file outside the reference build)\t%d\n" % not_live)
+        text.append("[findings: edges the design neither allows nor names as a cut it removes]\n")
+        for c in FINDING_CLASSES:
+            for ca, cb, a, b, k in sorted(by_class.get(c, []), key=lambda x: (crate_key(x[0]), crate_key(x[1]),
+                                                                                x[2], x[3])):
+                evs = self.edges.get((a, b, k), ["rust-header"])
+                text.append("%s\t%s -> %s\t%s -> %s\t%s\t%s\n" % (c, ca, cb, a, b, k, "; ".join(evs)[:300]))
+        text.append("[unmapped files]\n")
+        text.extend("%s\t%s\n" % (f, "live" if f in self.live else "not in the reference build") for f in unmapped)
+        text.append("[crate cycles over every edge between live mapped crates, island edges included]\n")
+        for c in rcyc:
+            text.append("%d crates\t%s\n" % (len(c), " ".join(c)))
+        text.append("[crate cycles left after removing the upward edges the design names and the gone edges]\n")
+        for c in lcyc:
+            cs = set(c)
+            text.append("%d crates\t%s\n" % (len(c), " ".join(c)))
+            for ca, cb, a, b, k in sorted(x for cl in ("upward-unnamed", "not-listed") for x in by_class.get(cl, [])
+                                          if x[0] in cs and x[1] in cs):
+                text.append("  %s -> %s\t%s -> %s\t%s\n" % (ca, cb, a, b, k))
+        text.append("[upward crate pairs the design counted that the map does not show]\n")
+        text.extend("%s -> %s\t%s\n" % (a, b, ",".join(sorted(named[(a, b)]))) for a, b in missing)
+        text.append("[definition edges crossing crates (a definition outside its declaring file's crate)]\n")
+        text.extend("%s -> %s\t%s -> %s\t%s\n" % (fcrate[a], fcrate[b], a, b,
+                                                  "; ".join(self.edges[(a, b, "definition")])[:200])
+                    for a, b in split_defs)
+        text.append("[units whose files fall in more than one crate (the unit goes where its source goes, unless a "
+                    "placement moves a file)]\n")
+        text.extend("%s\t%s\t%s\n" % (u, placed[u], ",".join("%s:%s" % (f, pcrate[f]) for f in self.units[u]))
+                    for u in split_units)
+        text.append("[gone edges (rows for the edge ledger)]\n")
+        for ca, cb, a, b, k in sorted(by_class.get("gone", [])):
+            text.append("%s -> %s\t%s -> %s\t%s\n" % (ca, cb, a, b, k))
+        text.append("[placement level: each file counted in the crate its manifest row writes it to (its unit's "
+                    "crate, an island file in its island crate, an x-dropped or standby file in that crate, a placed "
+                    "file or line range in its placement's crate)]\n")
+        for c in EDGE_CLASSES:
+            lst = p_by_class.get(c, [])
+            text.append("%s\t%d pairs\t%d edges\n" % (c, len({(x[0], x[1]) for x in lst}), len(lst)))
+        for c in FINDING_CLASSES:
+            grouped = defaultdict(list)
+            for x in p_by_class.get(c, []):
+                grouped[(x[0], x[1])].append(x)
+            for (ca, cb) in sorted(grouped, key=lambda q: (crate_key(q[0]), crate_key(q[1]))):
+                lst = grouped[(ca, cb)]
+                text.append("%s\t%s -> %s\t%d edges\t%s\n" % (c, ca, cb, len(lst), "; ".join(
+                    "%s -> %s (%s)" % (a, b, k) for _, _, a, b, k in lst[:3])))
+        text.append("crate cycles over every edge\t%s\n" % (" | ".join(" ".join(c) for c in prcyc) or "none"))
+        text.append("crate cycles left after the design's cuts\t%s\n" % (" | ".join(" ".join(c) for c in plcyc)
+                                                                      or "none"))
+        text.append("[edge ledger]\n")
+        text.append("rows the ledger needs (ledger-needed.tsv: one per crate pair and target file, at the placement "
+                    "level, for every edge of classes %s)\t%d\n" % (", ".join(LEDGER_CLASSES), ledger_rows[0]))
+        text.append("ledger file\t%s\t%s\n" % (self.args.ledger or "-", "present" if ledger_rows[2] else "absent"))
+        text.append("rows without a ledger row that names a fix\t%d\n" % ledger_rows[1])
+        self.write("crate-check.txt", "".join(text))
+
+        text = ["# migration order for the redesign: the crates in the order of %s, and inside each crate its units "
+                "(placed by their source file) in dependency order over the edges out of their non-implementation "
+                "files that stay inside the crate; one batch per line, dependencies first; island edges excluded\n"
+                % os.path.basename(self.args.allowed)]
+        tail = ("x-dropped", "standby", UNMAPPED)
+        used = set(placed.values())
+        sequence = order + sorted(c for c in used if c not in idx and c not in tail) + [c for c in tail if c in used]
+        crate_orders = []
+        for crate in sequence:
+            us = sorted(u for u, c in placed.items() if c == crate)
+            uset = set(us)
+            comps, _, lv = condense(us, {(a, b) for (a, b) in self.header_edges if a in uset and b in uset})
+            seq = sorted(range(len(comps)), key=lambda ci: (lv[ci], comps[ci][0]))
+            cyc = sorted((len(c) for c in comps if len(c) > 1), reverse=True)
+            levels = (max(lv) + 1) if lv else 0
+            crate_orders.append((crate, len(us), len(comps), levels, cyc))
+            text.append("# crate %s: %d units, %d batches, %d levels, cycles %s\n"
+                        % (crate, len(us), len(comps), levels, " ".join(str(x) for x in cyc) or "none"))
+            text.extend("\t".join(comps[ci]) + "\n" for ci in seq)
+        self.write("order-crates.txt", "".join(text))
+        return {"crate_files": Counter(fcrate.values()), "by_class": by_class, "rcyc": rcyc, "lcyc": lcyc,
+                "split_defs": split_defs, "split_units": split_units, "missing": missing, "unmapped": unmapped,
+                "not_live": not_live, "crate_orders": crate_orders, "design_files": design_files,
+                "p_by_class": p_by_class, "prcyc": prcyc, "plcyc": plcyc, "ledger": ledger_rows,
+                "rust_header": rust_header}
 
     def write_generated(self):
         rows = ["path\tstatus\tlines\tincluders\thow_identified\tgenerator\tplan\n"]
@@ -2746,6 +3280,14 @@ class DepMap:
         w("files per unit\t%s\n" % " ".join("%d:%d" % kv for kv in sorted(Counter(n for n, _ in sizes).items())))
         largest = sorted(sizes, key=lambda x: (-x[0], x[1]))[:8]
         w("largest units by files\t%s\n" % " ".join("%s=%d" % (k, n) for n, k in largest))
+        w("header copies (aliases.tsv: a header with the same include guard as a header of another unit; C++ sees "
+          "one of them in any translation unit, so the copy is translated once, as the kept one)\t%d\t%s\n" % (
+              len(self.alias_rows), " ".join("%s=%s" % (f, c) for f, c, _, _ in sorted(self.alias_rows))))
+        w("  of them with different declarations (the kept header's are the ones C++ code uses)\t%d\t%s\n" % (
+            len(self.guard_conflicts), " ".join("%s:%s" % (g, ",".join(fs)) for g, fs in self.guard_conflicts)))
+        w("design placements (%s)\t%d rows: %d whole files, %d line ranges\n" % (
+            self.args.placements, len(self.placements), sum(1 for x in self.placements if x[1] is None),
+            sum(1 for x in self.placements if x[1] is not None)))
         comps, cycles, nlevels = self.unit_comps
         w("\n[migration order]\n")
         w("batches (strongly connected sets of units)\t%d\n" % len(comps))
@@ -2781,16 +3323,76 @@ class DepMap:
             for (ma, mb), lst in sorted(medges.items()):
                 if ma in cs and mb in cs:
                     w("    %s -> %s\t%d\t%s\n" % (ma, mb, len(lst), " ".join("%s->%s" % e for e in sorted(lst)[:4])))
+        if self.island_rows:
+            w("\n[islands]\n")
+            w("island map\t%s\n" % self.args.islands)
+            w("island files in the map\t%d\t%s\n" % (len(self.island_of), " ".join(
+                "%s=%d" % kv for kv in sorted(Counter(self.island_of.values()).items()))))
+            per_row = Counter()
+            for f in self.nodes:
+                row = self.prefix_match(self.island_rows, f)
+                if row:
+                    per_row[row[0]] += 1
+            for prefix, crate, _ in sorted(self.island_rows):
+                w("  %s\t%s\t%d map files\n" % (prefix, crate, per_row[prefix]))
+            whole = sorted(u for u, fs in self.units.items() if all(f in self.island_of for f in fs))
+            mixed = sorted(u for u, fs in self.units.items()
+                           if any(f in self.island_of for f in fs) and not all(f in self.island_of for f in fs))
+            w("units whose files are all island files\t%d\n" % len(whole))
+            w("units with island and other files\t%d\t%s\n" % (len(mixed), " ".join(
+                "%s(%s)" % (u, ",".join(f for f in self.units[u] if f not in self.island_of)) for u in mixed)))
+            for nk, label in (("island", "edges into island files (kind island)"),
+                              ("from-island", "edges from island files to other files (kind from-island)")):
+                w("%s\t%d\tfrom %s\n" % (label, sum(1 for (_, _, k) in self.edges if k == nk), " ".join(
+                    "%s=%d" % (k, n) for (k2, k), n in sorted(self.island_stats.items()) if k2 == nk)))
+            w("rule\tisland and from-island edges take no part in the unit order, the header order or the crate "
+              "order, since kept island code is not translated; in the crate check an edge into an island file "
+              "counts against the including crate's row, an edge out of an island file by definition or link "
+              "counts against the island crate's row, and an include out of an island file is gone (the kept code "
+              "compiles against the frozen header); island edges take part in the crate cycles\n")
         if self.crate_report:
-            crate_files, cedges, cyc, split, units_split = self.crate_report
+            r = self.crate_report
             w("\n[crate-level]\n")
-            w("mapping\t%s\n" % self.args.crate_map)
-            w("crates\t%d\n" % len(crate_files))
-            w("unmapped files\t%d\n" % crate_files.get("(unmapped)", 0))
-            w("crate edges\t%d\n" % len(cedges))
-            w("crate-level cycles\t%d; sizes %s\n" % (len(cyc), " ".join(str(len(c)) for c in cyc)))
-            w("definition edges crossing crates\t%d\n" % len(split))
-            w("units split across crates\t%d\n" % len(units_split))
+            w("crate map\t%s\n" % self.args.crate_map)
+            w("allowed rows\t%s\n" % self.args.allowed)
+            w("crate pairs the design's edge scripts counted\t%s\n" % (", ".join(r["design_files"]) or "none"))
+            w("files per crate\t%s\n" % " ".join("%s=%d" % kv for kv in sorted(r["crate_files"].items())))
+            w("unmapped files\t%d\t%s\n" % (len(r["unmapped"]), " ".join(
+                "%s%s" % (f, "" if f not in self.live else "(live)") for f in r["unmapped"])))
+            w("edges between live files in different crates, by class\t%s\n" % " ".join(
+                "%s=%d/%d" % (c, len({(x[0], x[1]) for x in r["by_class"].get(c, [])}), len(r["by_class"].get(c, [])))
+                for c in EDGE_CLASSES))
+            w("  (pairs/edges; edges touching a file outside the reference build not counted: %d)\n" % r["not_live"])
+            finds = [x for c in FINDING_CLASSES for x in r["by_class"].get(c, [])]
+            w("edges the design neither allows nor names as a cut\t%d in %d pairs\t%s\n" % (
+                len(finds), len({(x[0], x[1]) for x in finds}),
+                " ".join(sorted({"%s->%s" % (x[0], x[1]) for x in finds}))))
+            w("crate cycles over every edge between live mapped crates\t%d; sizes %s\n" % (
+                len(r["rcyc"]), " ".join(str(len(c)) for c in r["rcyc"]) or "-"))
+            w("crate cycles left after the design's cuts\t%d; %s\n" % (
+                len(r["lcyc"]), " | ".join(" ".join(c) for c in r["lcyc"]) or "-"))
+            w("includes of a C header a Rust crate's build.rs writes, counted against that crate\t%s\n" % (
+                " ".join("%s=%s" % kv for kv in sorted(r["rust_header"].items())) or "-"))
+            w("upward pairs the design counted that the map does not show\t%d\n" % len(r["missing"]))
+            w("definition edges crossing crates\t%d\n" % len(r["split_defs"]))
+            w("units whose files fall in more than one crate\t%d\n" % len(r["split_units"]))
+            pf = [x for c in FINDING_CLASSES for x in r["p_by_class"].get(c, [])]
+            w("placement level (each file in the crate its manifest row writes it to), by class\t%s\n" % " ".join(
+                "%s=%d/%d" % (c, len({(x[0], x[1]) for x in r["p_by_class"].get(c, [])}),
+                              len(r["p_by_class"].get(c, []))) for c in EDGE_CLASSES))
+            w("placement level: edges the design neither allows nor names as a cut\t%d in %d pairs\n" % (
+                len(pf), len({(x[0], x[1]) for x in pf})))
+            w("placement level: crate cycles over every edge\t%d; sizes %s\n" % (
+                len(r["prcyc"]), " ".join(str(len(c)) for c in r["prcyc"]) or "-"))
+            w("placement level: crate cycles left after the design's cuts\t%d; %s\n" % (
+                len(r["plcyc"]), " | ".join(" ".join(c) for c in r["plcyc"]) or "-"))
+            need, missing_rows, present = r["ledger"]
+            w("edge ledger: rows needed (ledger-needed.tsv)\t%d; ledger file %s %s; rows without a fix\t%d\n" % (
+                need, self.args.ledger, "present" if present else "absent", missing_rows))
+            co = r["crate_orders"]
+            w("crate order (order-crates.txt)\t%d crates with units, %d batches; cycles inside crates\t%s\n" % (
+                sum(1 for x in co if x[1]), sum(x[2] for x in co),
+                " ".join("%s=%s" % (x[0], ",".join(str(s) for s in x[4])) for x in co if x[4]) or "none"))
         w("\n[generated]\n")
         w("checked-in generated files\t%d\n" % len(self.generated))
         w("\n[misses]\n")
@@ -2839,8 +3441,17 @@ def main():
     ap.add_argument("--build", default=os.path.join(os.path.dirname(default_root), "ref-834bbee1e", "build_release"))
     ap.add_argument("--build-src", default=None)
     ap.add_argument("--out", default=os.path.join(default_root, "migration", "depmap"))
-    ap.add_argument("--crate-map", default=None)
-    ap.add_argument("--jobs", type=int, default=min(6, os.cpu_count() or 1))
+    design_crates = os.path.join(default_root, "migration", "design", "evidence", "rulebook", "crates")
+    signed_map = os.path.join(default_root, "migration", "crates.tsv")
+    ap.add_argument("--crate-map", default=signed_map if os.path.isfile(signed_map)
+                    else os.path.join(design_crates, "crates-design.tsv"))
+    ap.add_argument("--allowed", default=os.path.join(design_crates, "allowed-design.tsv"))
+    ap.add_argument("--design-edges", nargs="*", default=[os.path.join(design_crates, "out", "crate_view.json"),
+                                                          os.path.join(design_crates, "out", "link_edges.json")])
+    ap.add_argument("--islands", default=os.path.join(default_root, "migration", "depmap", "islands.txt"))
+    ap.add_argument("--placements", default=os.path.join(default_root, "migration", "depmap", "core-placements.txt"))
+    ap.add_argument("--ledger", default=os.path.join(default_root, "migration", "crate-edges.tsv"))
+    ap.add_argument("--jobs", type=int, default=min(4, os.cpu_count() or 1))
     ap.add_argument("--no-dwarf", action="store_true")
     ap.add_argument("--trial", nargs="*", default=None)
     args = ap.parse_args()

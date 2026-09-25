@@ -1,0 +1,257 @@
+unit_id	reason	files	rule
+src/share/mysql_errno	generated	src/share/mysql_errno.h	exclusions.txt: ARCHITECTURE 1.4; s1-crates-core.md 5.5 rule 1: the error catalog is generated into ob-errno by gen_errno.pl's Rust back end
+src/share/ob_errno	generated	src/share/ob_errno.def	exclusions.txt: ARCHITECTURE 1.4; s1-crates-core.md 5.5 rule 1: the input of gen_errno.pl, read unchanged by its Rust back end
+tools/ob_error/src/os_errno	generated	tools/ob_error/src/os_errno.def	exclusions.txt: ARCHITECTURE 1.4; s1-crates-core.md 5.3 rule 9: gen_os_errno.pl's Rust back end writes the ob_error tool's os_errno table
+src/oblib/lib/alloc/malloc_hook_extended	dead	src/oblib/lib/alloc/malloc_hook_extended.cpp	not compiled by the reference build
+src/oblib/lib/guard/ob_scope_guard	dead	src/oblib/lib/guard/ob_scope_guard.h	not compiled by the reference build
+src/oblib/lib/list/ob_link	dead	src/oblib/lib/list/ob_link.h	not compiled by the reference build
+src/oblib/lib/stat/mock_diagnostic_info	dead	src/oblib/lib/stat/mock_diagnostic_info.cpp	not compiled by the reference build
+src/oblib/lib/stat/ob_di_list	dead	src/oblib/lib/stat/ob_di_list.h	not compiled by the reference build
+src/oblib/lib/lds/ob_lds_constructor	dead	src/oblib/lib/lds/ob_lds_constructor.hpp	not compiled by the reference build
+src/oblib/lib/metrics/ob_ema_v2	dead	src/oblib/lib/metrics/ob_ema_v2.h	not compiled by the reference build
+src/oblib/lib/checksum/ob_crc16	dead	src/oblib/lib/checksum/ob_crc16.h	not compiled by the reference build
+src/oblib/lib/metrics/ob_accumulator	dead	src/oblib/lib/metrics/ob_accumulator.h	not compiled by the reference build
+src/oblib/lib/container/ob_paringheap	dead	src/oblib/lib/container/ob_paringheap.h	not compiled by the reference build
+src/oblib/lib/container/ob_ring_buffer	dead	src/oblib/lib/container/ob_ring_buffer.h	not compiled by the reference build
+src/oblib/lib/string/ob_sensitive_string	dead	src/oblib/lib/string/ob_sensitive_string.h	not compiled by the reference build
+src/oblib/lib/allocator/ob_simple_fifo_alloc	dead	src/oblib/lib/allocator/ob_simple_fifo_alloc.h	not compiled by the reference build
+src/oblib/lib/hash/ob_refered_map	dead	src/oblib/lib/hash/ob_refered_map.h	not compiled by the reference build
+src/oblib/lib/alloc/ob_context_allocator	dead	src/oblib/lib/alloc/ob_context_allocator.cpp,src/oblib/lib/alloc/ob_context_allocator.h	not compiled by the reference build
+src/oblib/lib/hash/ob_multi_mod_ref_mgr	dead	src/oblib/lib/hash/ob_multi_mod_ref_mgr.h	not compiled by the reference build
+src/oblib/lib/container/ob_mask_set2	dead	src/oblib/lib/container/ob_mask_set2.h	not compiled by the reference build
+src/oblib/lib/container/ob_ring_array	dead	src/oblib/lib/container/ob_ring_array.h	not compiled by the reference build
+src/oblib/lib/compress/zstd_1_3_8/ob_empty	dead	src/oblib/lib/compress/zstd_1_3_8/ob_empty.c	not compiled by the reference build
+src/oblib/rpc/frame/ob_net_easy	dropped	src/oblib/easy/io/easy_io.h	crate map: x-dropped
+src/oblib/rpc/frame/ob_net_easy	dropped	src/oblib/easy/io/easy_log.h	crate map: x-dropped
+src/oblib/rpc/frame/ob_net_easy	dropped	src/oblib/easy/util/easy_buf.h	crate map: x-dropped
+src/oblib/rpc/frame/ob_net_easy	dropped	src/oblib/easy/util/easy_inet.h	crate map: x-dropped
+src/oblib/rpc/frame/ob_net_easy	dropped	src/oblib/easy/util/easy_mod_stat.h	crate map: x-dropped
+src/oblib/rpc/frame/ob_net_easy	dropped	src/oblib/easy/util/easy_pool.h	crate map: x-dropped
+src/oblib/rpc/frame/ob_net_easy	dropped	src/oblib/easy/util/easy_string.h	crate map: x-dropped
+src/oblib/rpc/frame/ob_net_easy	dropped	src/oblib/easy/util/easy_time.h	crate map: x-dropped
+src/oblib/rpc/frame/ob_rpc_checksum	dead	src/oblib/rpc/frame/ob_rpc_checksum.cpp,src/oblib/rpc/frame/ob_rpc_checksum.h	not compiled by the reference build
+src/oblib/rpc/ob_lib_sql_shims	dead	src/oblib/rpc/ob_lib_sql_shims.cpp	not compiled by the reference build
+src/oblib/lib/file/config	dead	src/oblib/lib/file/config.cpp,src/oblib/lib/file/config.h	not compiled by the reference build
+src/share/rc/ob_server_runtime_support	dead	src/share/rc/ob_server_runtime_support.cpp,src/share/rc/ob_server_runtime_support.h	not compiled by the reference build
+src/oblib/lib/thread/ob_test_util	dead	src/oblib/lib/thread/ob_test_util.h	not compiled by the reference build
+src/oblib/common/timezone/localtime	dead	src/oblib/common/timezone/localtime.c	not compiled by the reference build
+src/oblib/common/timezone/ob_time_format	dead	src/oblib/common/timezone/ob_time_format.h	not compiled by the reference build
+src/oblib/common/timezone/private	dead	src/oblib/common/timezone/private.h	not compiled by the reference build
+src/oblib/common/timezone/tzfile	dead	src/oblib/common/timezone/tzfile.h	not compiled by the reference build
+src/oblib/lib/charset/ob_ctype_uca	dead	src/oblib/lib/charset/ob_ctype_uca.cc	not compiled by the reference build
+src/oblib/common/timezone/ob_timezone_info	dropped	src/oblib/common/timezone/ob_timezone_info.cpp:26-38988	exclusions.txt: TIME_ZONE_NAMES and TIME_ZONE_TRANS are read nowhere: the only other lines naming them are their declarations, src/oblib/common/timezone/ob_timezone_info.h:293-294
+src/oblib/grpc/ob_grpc_context	deferred	src/oblib/grpc/ob_grpc_context.cpp,src/oblib/grpc/ob_grpc_context.h	exclusions.txt: ARCHITECTURE 1.4 and 7.4: gRPC and protobuf leave with standby, which is deferred
+src/oblib/grpc/ob_grpc_server	deferred	src/oblib/grpc/ob_grpc_server.cpp,src/oblib/grpc/ob_grpc_server.h	exclusions.txt: ARCHITECTURE 1.4 and 7.4: gRPC and protobuf leave with standby, which is deferred
+src/share/compaction/ob_ckm_error_tablet_info	dead	src/share/compaction/ob_ckm_error_tablet_info.h	not compiled by the reference build
+src/share/ob_i_mem_limit_getter	dead	src/share/ob_i_mem_limit_getter.h	not compiled by the reference build
+src/share/table/ob_ttl_schedule	dead	src/share/table/ob_ttl_schedule.h	not compiled by the reference build
+src/share/unit/ob_server_resource_config	dead	src/share/unit/ob_server_resource_config.cpp,src/share/unit/ob_server_resource_config.h	not compiled by the reference build
+src/share/ob_tablet_compaction_checksum_operator	dead	src/share/ob_tablet_compaction_checksum_operator.h	not compiled by the reference build
+src/share/storage/ob_tablet_compaction_checksum_table_storage	dead	src/share/storage/ob_tablet_compaction_checksum_table_storage.cpp,src/share/storage/ob_tablet_compaction_checksum_table_storage.h	not compiled by the reference build
+src/share/schema/ob_context_type	dead	src/share/schema/ob_context_type.h	not compiled by the reference build
+src/share/geo/ob_geo	island	src/share/geo/ob_geo.cpp,src/share/geo/ob_geo.h	islands.txt src/share/geo
+src/share/geo/ob_geo_3d	island	src/share/geo/ob_geo_3d.cpp,src/share/geo/ob_geo_3d.h	islands.txt src/share/geo
+src/share/geo/ob_geo_affine_visitor	island	src/share/geo/ob_geo_affine_visitor.cpp,src/share/geo/ob_geo_affine_visitor.h	islands.txt src/share/geo
+src/share/geo/ob_geo_bin	island	src/share/geo/ob_geo_bin.cpp,src/share/geo/ob_geo_bin.h	islands.txt src/share/geo
+src/share/geo/ob_geo_bin_iter	island	src/share/geo/ob_geo_bin_iter.h,src/share/geo/ob_geo_bin_iter.ipp	islands.txt src/share/geo
+src/share/geo/ob_geo_bin_traits	island	src/share/geo/ob_geo_bin_traits.h	islands.txt src/share/geo
+src/share/geo/ob_geo_box_clip_visitor	island	src/share/geo/ob_geo_box_clip_visitor.cpp,src/share/geo/ob_geo_box_clip_visitor.h	islands.txt src/share/geo
+src/share/geo/ob_geo_cache	island	src/share/geo/ob_geo_cache.cpp,src/share/geo/ob_geo_cache.h	islands.txt src/share/geo
+src/share/geo/ob_geo_cache_linestring	island	src/share/geo/ob_geo_cache_linestring.cpp,src/share/geo/ob_geo_cache_linestring.h	islands.txt src/share/geo
+src/share/geo/ob_geo_cache_point	island	src/share/geo/ob_geo_cache_point.cpp,src/share/geo/ob_geo_cache_point.h	islands.txt src/share/geo
+src/share/geo/ob_geo_cache_polygon	island	src/share/geo/ob_geo_cache_polygon.cpp,src/share/geo/ob_geo_cache_polygon.h	islands.txt src/share/geo
+src/share/geo/ob_geo_check_empty_visitor	island	src/share/geo/ob_geo_check_empty_visitor.h	islands.txt src/share/geo
+src/share/geo/ob_geo_close_ring_visitor	island	src/share/geo/ob_geo_close_ring_visitor.cpp,src/share/geo/ob_geo_close_ring_visitor.h	islands.txt src/share/geo
+src/share/geo/ob_geo_common	island	src/share/geo/ob_geo_common.cpp,src/share/geo/ob_geo_common.h	islands.txt src/share/geo
+src/share/geo/ob_geo_coordinate_range_visitor	island	src/share/geo/ob_geo_coordinate_range_visitor.cpp,src/share/geo/ob_geo_coordinate_range_visitor.h	islands.txt src/share/geo
+src/share/geo/ob_geo_denormalize_visitor	island	src/share/geo/ob_geo_denormalize_visitor.cpp,src/share/geo/ob_geo_denormalize_visitor.h	islands.txt src/share/geo
+src/share/geo/ob_geo_dispatcher	island	src/share/geo/ob_geo_dispatcher.h	islands.txt src/share/geo
+src/share/geo/ob_geo_elevation_visitor	island	src/share/geo/ob_geo_elevation_visitor.cpp,src/share/geo/ob_geo_elevation_visitor.h	islands.txt src/share/geo
+src/share/geo/ob_geo_func_area	island	src/share/geo/ob_geo_func_area.cpp,src/share/geo/ob_geo_func_area.h	islands.txt src/share/geo
+src/share/geo/ob_geo_func_box	island	src/share/geo/ob_geo_func_box.cpp,src/share/geo/ob_geo_func_box.h	islands.txt src/share/geo
+src/share/geo/ob_geo_func_buffer	island	src/share/geo/ob_geo_func_buffer.cpp,src/share/geo/ob_geo_func_buffer.h	islands.txt src/share/geo
+src/share/geo/ob_geo_func_centroid	island	src/share/geo/ob_geo_func_centroid.cpp,src/share/geo/ob_geo_func_centroid.h	islands.txt src/share/geo
+src/share/geo/ob_geo_func_common	island	src/share/geo/ob_geo_func_common.h	islands.txt src/share/geo
+src/share/geo/ob_geo_func_correct	island	src/share/geo/ob_geo_func_correct.cpp,src/share/geo/ob_geo_func_correct.h	islands.txt src/share/geo
+src/share/geo/ob_geo_func_covered_by1	island	src/share/geo/ob_geo_func_covered_by1.cpp	islands.txt src/share/geo
+src/share/geo/ob_geo_func_covered_by2	island	src/share/geo/ob_geo_func_covered_by.h,src/share/geo/ob_geo_func_covered_by2.cpp	islands.txt src/share/geo
+src/share/geo/ob_geo_func_covered_by_helper	island	src/share/geo/ob_geo_func_covered_by_helper.ipp	islands.txt src/share/geo
+src/share/geo/ob_geo_func_crosses1	island	src/share/geo/ob_geo_func_crosses1.cpp	islands.txt src/share/geo
+src/share/geo/ob_geo_func_crosses2	island	src/share/geo/ob_geo_func_crosses.h,src/share/geo/ob_geo_func_crosses2.cpp	islands.txt src/share/geo
+src/share/geo/ob_geo_func_crosses_helper	island	src/share/geo/ob_geo_func_crosses_helper.ipp	islands.txt src/share/geo
+src/share/geo/ob_geo_func_difference1	island	src/share/geo/ob_geo_func_difference1.cpp	islands.txt src/share/geo
+src/share/geo/ob_geo_func_difference2	island	src/share/geo/ob_geo_func_difference2.cpp	islands.txt src/share/geo
+src/share/geo/ob_geo_func_difference3	island	src/share/geo/ob_geo_func_difference.h,src/share/geo/ob_geo_func_difference3.cpp	islands.txt src/share/geo
+src/share/geo/ob_geo_func_difference_helper	island	src/share/geo/ob_geo_func_difference_helper.ipp	islands.txt src/share/geo
+src/share/geo/ob_geo_func_disjoint	island	src/share/geo/ob_geo_func_disjoint.cpp,src/share/geo/ob_geo_func_disjoint.h	islands.txt src/share/geo
+src/share/geo/ob_geo_func_dissolve_polygon	island	src/share/geo/ob_geo_func_dissolve_polygon.cpp,src/share/geo/ob_geo_func_dissolve_polygon.h	islands.txt src/share/geo
+src/share/geo/ob_geo_func_distance	island	src/share/geo/ob_geo_func_distance.cpp,src/share/geo/ob_geo_func_distance.h	islands.txt src/share/geo
+src/share/geo/ob_geo_func_distance_sphere	island	src/share/geo/ob_geo_func_distance_sphere.cpp,src/share/geo/ob_geo_func_distance_sphere.h	islands.txt src/share/geo
+src/share/geo/ob_geo_func_envelope	island	src/share/geo/ob_geo_func_envelope.cpp,src/share/geo/ob_geo_func_envelope.h	islands.txt src/share/geo
+src/share/geo/ob_geo_func_equals1	island	src/share/geo/ob_geo_func_equals1.cpp	islands.txt src/share/geo
+src/share/geo/ob_geo_func_equals2	island	src/share/geo/ob_geo_func_equals2.cpp	islands.txt src/share/geo
+src/share/geo/ob_geo_func_equals3	island	src/share/geo/ob_geo_func_equals.h,src/share/geo/ob_geo_func_equals3.cpp	islands.txt src/share/geo
+src/share/geo/ob_geo_func_equals_helper	island	src/share/geo/ob_geo_func_equals_helper.ipp	islands.txt src/share/geo
+src/share/geo/ob_geo_func_intersects	island	src/share/geo/ob_geo_func_intersects.cpp,src/share/geo/ob_geo_func_intersects.h	islands.txt src/share/geo
+src/share/geo/ob_geo_func_isvalid	island	src/share/geo/ob_geo_func_isvalid.cpp,src/share/geo/ob_geo_func_isvalid.h	islands.txt src/share/geo
+src/share/geo/ob_geo_func_length	island	src/share/geo/ob_geo_func_length.cpp,src/share/geo/ob_geo_func_length.h	islands.txt src/share/geo
+src/share/geo/ob_geo_func_overlaps1	island	src/share/geo/ob_geo_func_overlaps1.cpp	islands.txt src/share/geo
+src/share/geo/ob_geo_func_overlaps2	island	src/share/geo/ob_geo_func_overlaps2.cpp	islands.txt src/share/geo
+src/share/geo/ob_geo_func_overlaps3	island	src/share/geo/ob_geo_func_overlaps.h,src/share/geo/ob_geo_func_overlaps3.cpp	islands.txt src/share/geo
+src/share/geo/ob_geo_func_overlaps_helper	island	src/share/geo/ob_geo_func_overlaps_helper.ipp	islands.txt src/share/geo
+src/share/geo/ob_geo_func_register	island	src/share/geo/ob_geo_func_register.h	islands.txt src/share/geo
+src/share/geo/ob_geo_func_symdifference1	island	src/share/geo/ob_geo_func_symdifference1.cpp	islands.txt src/share/geo
+src/share/geo/ob_geo_func_symdifference2	island	src/share/geo/ob_geo_func_symdifference.h,src/share/geo/ob_geo_func_symdifference2.cpp	islands.txt src/share/geo
+src/share/geo/ob_geo_func_symdifference3	island	src/share/geo/ob_geo_func_symdifference3.cpp	islands.txt src/share/geo
+src/share/geo/ob_geo_func_symdifference_helper	island	src/share/geo/ob_geo_func_symdifference_helper.ipp	islands.txt src/share/geo
+src/share/geo/ob_geo_func_touches1	island	src/share/geo/ob_geo_func_touches1.cpp	islands.txt src/share/geo
+src/share/geo/ob_geo_func_touches2	island	src/share/geo/ob_geo_func_touches2.cpp	islands.txt src/share/geo
+src/share/geo/ob_geo_func_touches3	island	src/share/geo/ob_geo_func_touches.h,src/share/geo/ob_geo_func_touches3.cpp	islands.txt src/share/geo
+src/share/geo/ob_geo_func_touches_helper	island	src/share/geo/ob_geo_func_touches_helper.ipp	islands.txt src/share/geo
+src/share/geo/ob_geo_func_transform	island	src/share/geo/ob_geo_func_transform.cpp,src/share/geo/ob_geo_func_transform.h	islands.txt src/share/geo
+src/share/geo/ob_geo_func_union1	island	src/share/geo/ob_geo_func_union1.cpp	islands.txt src/share/geo
+src/share/geo/ob_geo_func_union2	island	src/share/geo/ob_geo_func_union.h,src/share/geo/ob_geo_func_union2.cpp	islands.txt src/share/geo
+src/share/geo/ob_geo_func_union_helper	island	src/share/geo/ob_geo_func_union_helper.ipp	islands.txt src/share/geo
+src/share/geo/ob_geo_func_utils	island	src/share/geo/ob_geo_func_utils.cpp,src/share/geo/ob_geo_func_utils.h	islands.txt src/share/geo
+src/share/geo/ob_geo_func_within1	island	src/share/geo/ob_geo_func_within1.cpp	islands.txt src/share/geo
+src/share/geo/ob_geo_func_within2	island	src/share/geo/ob_geo_func_within.h,src/share/geo/ob_geo_func_within2.cpp	islands.txt src/share/geo
+src/share/geo/ob_geo_func_within_helper	island	src/share/geo/ob_geo_func_within_helper.ipp	islands.txt src/share/geo
+src/share/geo/ob_geo_grid_visitor	island	src/share/geo/ob_geo_grid_visitor.cpp,src/share/geo/ob_geo_grid_visitor.h	islands.txt src/share/geo
+src/share/geo/ob_geo_ibin	island	src/share/geo/ob_geo_ibin.cpp,src/share/geo/ob_geo_ibin.h	islands.txt src/share/geo
+src/share/geo/ob_geo_interior_point_visitor	island	src/share/geo/ob_geo_interior_point_visitor.cpp,src/share/geo/ob_geo_interior_point_visitor.h	islands.txt src/share/geo
+src/share/geo/ob_geo_latlong_check_visitor	island	src/share/geo/ob_geo_latlong_check_visitor.cpp,src/share/geo/ob_geo_latlong_check_visitor.h	islands.txt src/share/geo
+src/share/geo/ob_geo_longtitude_correct_visitor	island	src/share/geo/ob_geo_longtitude_correct_visitor.cpp,src/share/geo/ob_geo_longtitude_correct_visitor.h	islands.txt src/share/geo
+src/share/geo/ob_geo_mvt_encode_visitor	island	src/share/geo/ob_geo_mvt_encode_visitor.cpp,src/share/geo/ob_geo_mvt_encode_visitor.h	islands.txt src/share/geo
+src/share/geo/ob_geo_normalize_visitor	island	src/share/geo/ob_geo_normalize_visitor.cpp,src/share/geo/ob_geo_normalize_visitor.h	islands.txt src/share/geo
+src/share/geo/ob_geo_point_location_visitor	island	src/share/geo/ob_geo_point_location_visitor.cpp,src/share/geo/ob_geo_point_location_visitor.h	islands.txt src/share/geo
+src/share/geo/ob_geo_reverse_coordinate_visitor	island	src/share/geo/ob_geo_reverse_coordinate_visitor.cpp,src/share/geo/ob_geo_reverse_coordinate_visitor.h	islands.txt src/share/geo
+src/share/geo/ob_geo_rstar_tree	island	src/share/geo/ob_geo_rstar_tree.h	islands.txt src/share/geo
+src/share/geo/ob_geo_segment_collect_visitor	island	src/share/geo/ob_geo_segment_collect_visitor.cpp,src/share/geo/ob_geo_segment_collect_visitor.h	islands.txt src/share/geo
+src/share/geo/ob_geo_segment_intersect_analyzer	island	src/share/geo/ob_geo_segment_intersect_analyzer.cpp,src/share/geo/ob_geo_segment_intersect_analyzer.h	islands.txt src/share/geo
+src/share/geo/ob_geo_simplify_visitor	island	src/share/geo/ob_geo_simplify_visitor.cpp,src/share/geo/ob_geo_simplify_visitor.h	islands.txt src/share/geo
+src/share/geo/ob_geo_to_s2_visitor	island	src/share/geo/ob_geo_to_s2_visitor.cpp,src/share/geo/ob_geo_to_s2_visitor.h	islands.txt src/share/geo
+src/share/geo/ob_geo_to_tree_visitor	island	src/share/geo/ob_geo_to_tree_visitor.cpp,src/share/geo/ob_geo_to_tree_visitor.h	islands.txt src/share/geo
+src/share/geo/ob_geo_to_wkt_visitor	island	src/share/geo/ob_geo_to_wkt_visitor.cpp,src/share/geo/ob_geo_to_wkt_visitor.h	islands.txt src/share/geo
+src/share/geo/ob_geo_topology_calculate	island	src/share/geo/ob_geo_topology_calculate.cpp,src/share/geo/ob_geo_topology_calculate.h	islands.txt src/share/geo
+src/share/geo/ob_geo_tree	island	src/share/geo/ob_geo_tree.cpp,src/share/geo/ob_geo_tree.h	islands.txt src/share/geo
+src/share/geo/ob_geo_tree_traits	island	src/share/geo/ob_geo_tree_traits.h	islands.txt src/share/geo
+src/share/geo/ob_geo_utils	island	src/share/geo/ob_geo_utils.cpp,src/share/geo/ob_geo_utils.h	islands.txt src/share/geo
+src/share/geo/ob_geo_vertex_collect_visitor	island	src/share/geo/ob_geo_vertex_collect_visitor.cpp,src/share/geo/ob_geo_vertex_collect_visitor.h	islands.txt src/share/geo
+src/share/geo/ob_geo_visitor	island	src/share/geo/ob_geo_visitor.cpp,src/share/geo/ob_geo_visitor.h	islands.txt src/share/geo
+src/share/geo/ob_geo_wkb_check_visitor	island	src/share/geo/ob_geo_wkb_check_visitor.cpp,src/share/geo/ob_geo_wkb_check_visitor.h	islands.txt src/share/geo
+src/share/geo/ob_geo_wkb_size_visitor	island	src/share/geo/ob_geo_wkb_size_visitor.cpp,src/share/geo/ob_geo_wkb_size_visitor.h	islands.txt src/share/geo
+src/share/geo/ob_geo_wkb_visitor	island	src/share/geo/ob_geo_wkb_visitor.cpp,src/share/geo/ob_geo_wkb_visitor.h	islands.txt src/share/geo
+src/share/geo/ob_geo_zoom_in_visitor	island	src/share/geo/ob_geo_zoom_in_visitor.cpp,src/share/geo/ob_geo_zoom_in_visitor.h	islands.txt src/share/geo
+src/share/geo/ob_geometry_cast	island	src/share/geo/ob_geometry_cast.cpp,src/share/geo/ob_geometry_cast.h	islands.txt src/share/geo
+src/share/geo/ob_point_location_analyzer	island	src/share/geo/ob_point_location_analyzer.cpp,src/share/geo/ob_point_location_analyzer.h	islands.txt src/share/geo
+src/share/geo/ob_s2adapter	island	src/share/geo/ob_s2adapter.cpp,src/share/geo/ob_s2adapter.h	islands.txt src/share/geo
+src/share/geo/ob_srs_info	island	src/share/geo/ob_srs_info.cpp,src/share/geo/ob_srs_info.h	islands.txt src/share/geo
+src/share/geo/ob_srs_provider	island	src/share/geo/ob_srs_provider.h	islands.txt src/share/geo
+src/share/geo/ob_srs_wkt_parser	island	src/share/geo/ob_srs_wkt_parser.cpp,src/share/geo/ob_srs_wkt_parser.h	islands.txt src/share/geo
+src/share/geo/ob_wkb_byte_order_visitor	island	src/share/geo/ob_wkb_byte_order_visitor.cpp,src/share/geo/ob_wkb_byte_order_visitor.h	islands.txt src/share/geo
+src/share/geo/ob_wkb_to_json_visitor	island	src/share/geo/ob_wkb_to_json_visitor.cpp,src/share/geo/ob_wkb_to_json_visitor.h	islands.txt src/share/geo
+src/share/geo/ob_wkt_parser	island	src/share/geo/ob_wkt_parser.cpp,src/share/geo/ob_wkt_parser.h	islands.txt src/share/geo
+src/oblib/lib/vector/ob_vector_util	island	src/oblib/lib/vector/ob_vector_util.cpp,src/oblib/lib/vector/ob_vector_util.h	islands.txt src/oblib/lib/vector/ob_vector_util
+src/oblib/lib/vector/ob_vsag_adaptor	island	src/oblib/lib/vector/ob_vsag_adaptor.cpp,src/oblib/lib/vector/ob_vsag_adaptor.h	islands.txt src/oblib/lib/vector/ob_vsag_adaptor
+src/data_plane/api/data_plane/blocksstable/ob_index_block_util	dropped	src/data_plane/api/data_plane/blocksstable/ob_index_block_util.h	aliases.tsv: a copy of src/storage/blocksstable/index_block/ob_index_block_util.h (include guard OCEANBASE_BLOCKSSTABLE_OB_INDEX_BLOCK_UTIL_), translated once as that file
+src/data_plane/api/data_plane/ob_i_data_validation_service	dead	src/data_plane/api/data_plane/ob_i_data_validation_service.h	not compiled by the reference build
+src/data_plane/api/data_plane/transaction/ob_transaction_statistic	dead	src/data_plane/api/data_plane/transaction/ob_transaction_statistic.h	not compiled by the reference build
+src/storage/tx/ob_trans_log	dead	src/storage/tx/ob_trans_log.h	not compiled by the reference build
+src/storage/memtable/ob_memtable_ctx_obj_pool	dead	src/storage/memtable/ob_memtable_ctx_obj_pool.h	not compiled by the reference build
+src/storage/access/ob_advance_scanner	dead	src/storage/access/ob_advance_scanner.cpp,src/storage/access/ob_advance_scanner.h	not compiled by the reference build
+src/storage/ob_tablet_local_status	deferred	src/standby/restore/ob_standby_restore_tablet_status.h	crate map: standby (ARCHITECTURE 7.4)
+src/storage/meta_mem/ob_meta_obj_pool	dead	src/storage/meta_mem/ob_meta_obj_pool.cpp,src/storage/meta_mem/ob_meta_obj_pool.h	not compiled by the reference build
+src/storage/ob_micro_block_handle_mgr	dead	src/storage/ob_micro_block_handle_mgr.h	not compiled by the reference build
+src/storage/meta_mem/ob_tablet_meta_mem_mgr	dead	src/storage/meta_mem/ob_tablet_meta_mem_mgr.cpp,src/storage/meta_mem/ob_tablet_meta_mem_mgr.h	not compiled by the reference build
+src/storage/testing/ob_storage_test_errors	dead	src/storage/testing/ob_storage_test_errors.h	not compiled by the reference build
+src/storage/fts/dict/ob_ik_dic	data	src/storage/fts/dict/ob_ik_dic.cpp:32-275939	exclusions.txt: s6-storage.md 6.1: the IK main dictionary's words become a text file read with include_str!
+src/storage/fts/dict/ob_ik_dic	data	src/storage/fts/dict/ob_ik_dic.cpp:275951-276003	exclusions.txt: s6-storage.md 6.1: the IK quantifier list's words become a text file read with include_str!
+src/storage/fts/dict/ob_ik_dic	data	src/storage/fts/dict/ob_ik_dic.cpp:276014-276017	exclusions.txt: s6-storage.md 6.1: the IK stop-word list's words become a text file read with include_str!
+src/sql/parser/parse_node	island	src/sql/parser/parse_node.c	islands.txt src/sql/parser/parse_node.c
+src/pl/parser/pl_non_reserved_keywords_mysql_mode	island	src/pl/parser/pl_non_reserved_keywords_mysql_mode.c,src/pl/parser/pl_parser_base.c,src/pl/parser/pl_parser_base.h	islands.txt src/pl/parser/pl_non_reserved_keywords_mysql_mode.c,src/pl/parser/pl_parser_base
+src/sql/parser/fts_base	island	src/sql/parser/fts_base.c,src/sql/parser/fts_base.h	islands.txt src/sql/parser/fts_base
+src/sql/parser/fts_parse	island	src/sql/parser/fts_parse.c,src/sql/parser/fts_parse.h	islands.txt src/sql/parser/fts_parse
+src/sql/parser/non_reserved_keywords_mysql_mode	island	src/sql/parser/non_reserved_keywords_mysql_mode.c,src/sql/parser/ob_non_reserved_keywords.c,src/sql/parser/ob_non_reserved_keywords.h	islands.txt src/sql/parser/non_reserved_keywords_mysql_mode.c,src/sql/parser/ob_non_reserved_keywords
+src/sql/parser/ob_memory_tracker_wrapper	dead	src/sql/parser/ob_memory_tracker_wrapper.cpp,src/sql/parser/ob_memory_tracker_wrapper.h	not compiled by the reference build
+src/sql/parser/parse_define	island	src/sql/parser/parse_define.h	islands.txt src/sql/parser/parse_define.h
+src/sql/parser/sql_parser_base	island	src/sql/parser/sql_parser_base.c,src/sql/parser/sql_parser_base.h	islands.txt src/sql/parser/sql_parser_base
+src/objit/include/objit/common/ob_item_type	dropped	src/objit/include/objit/common/ob_item_type.h	aliases.tsv: a copy of src/query/api/query/parser/ob_item_type.h (include guard OCEANBASE_SQL_OB_ITEM_TYPE_H_), translated once as that file
+src/query/api/query/monitor/ob_ra_queue	dead	src/query/api/query/monitor/ob_ra_queue.h	not compiled by the reference build
+src/query/api/query/split/ob_split_range_sampler	dead	src/query/api/query/split/ob_split_range_sampler.h	not compiled by the reference build
+src/sql/engine/expr/ob_expr_compatiable_promotion	dead	src/sql/engine/expr/ob_expr_compatiable_promotion.map	not compiled by the reference build
+src/sql/engine/direct_load/table_load/ob_table_load_context_service	dead	src/sql/engine/direct_load/table_load/ob_table_load_context_service.h	not compiled by the reference build
+src/sql/dtl/ob_dtl_memory_manager	dead	src/sql/dtl/ob_dtl_memory_manager.cpp,src/sql/dtl/ob_dtl_memory_manager.h	not compiled by the reference build
+src/sql/resolver/cmd/ob_sql_category	dead	src/sql/resolver/cmd/ob_sql_category.def	not compiled by the reference build
+src/sql/resolver/cmd/ob_sql_topic	dead	src/sql/resolver/cmd/ob_sql_topic.def	not compiled by the reference build
+src/sql/bazel_pilot/optimizer_private_header_probe	dead	src/sql/bazel_pilot/optimizer_private_header_probe.cpp	not compiled by the reference build
+src/sql/bazel_pilot/optimizer_public_interface_probe	dead	src/sql/bazel_pilot/optimizer_public_interface_probe.cpp	not compiled by the reference build
+src/sql/bazel_pilot/prepare_public_interface_probe	dead	src/sql/bazel_pilot/prepare_public_interface_probe.cpp	not compiled by the reference build
+src/sql/bazel_pilot/sql_parser_driver_private_header_probe	dead	src/sql/bazel_pilot/sql_parser_driver_private_header_probe.cpp	not compiled by the reference build
+src/sql/bazel_pilot/sql_parser_driver_public_interface_probe	dead	src/sql/bazel_pilot/sql_parser_driver_public_interface_probe.cpp	not compiled by the reference build
+src/sql/bazel_pilot/undeclared_resolver_header_probe	dead	src/sql/bazel_pilot/undeclared_resolver_header_probe.cpp	not compiled by the reference build
+src/rootserver/ob_runtime_event_def	dead	src/rootserver/ob_runtime_event_def.h	not compiled by the reference build
+src/rootserver/ob_system_bootstrap_service	dead	src/rootserver/ob_system_bootstrap_service.h	not compiled by the reference build
+src/observer/dbms_scheduler/ob_dbms_sched_func_type	dead	src/observer/dbms_scheduler/ob_dbms_sched_func_type.h	not compiled by the reference build
+src/observer/report/ob_tablet_meta_checker	dead	src/observer/report/ob_tablet_meta_checker.cpp,src/observer/report/ob_tablet_meta_checker.h	not compiled by the reference build
+src/observer/virtual_table/ob_all_virtual_all_tables	dead	src/observer/virtual_table/ob_all_virtual_all_tables.cpp	not compiled by the reference build
+src/observer/vector_index/ob_vector_index_async_task_scheduler	dead	src/observer/vector_index/ob_vector_index_async_task_scheduler.cpp,src/observer/vector_index/ob_vector_index_async_task_scheduler.h	not compiled by the reference build
+src/observer/virtual_table/ob_all_virtual_outline	dead	src/observer/virtual_table/ob_all_virtual_outline.cpp,src/observer/virtual_table/ob_all_virtual_outline.h	not compiled by the reference build
+src/observer/virtual_table/ob_all_virtual_concurrent_limit_sql	dead	src/observer/virtual_table/ob_all_virtual_concurrent_limit_sql.cpp,src/observer/virtual_table/ob_all_virtual_concurrent_limit_sql.h	not compiled by the reference build
+src/oblib/easy/include/easy_define	dropped	src/oblib/easy/include/easy_define.h	crate map: x-dropped
+src/oblib/lib/codec/ob_fast_bp_func	dropped	src/oblib/lib/codec/ob_fast_bp_func.cpp,src/oblib/lib/codec/ob_fast_bp_func.h	crate map: x-dropped
+src/oblib/lib/codec/ob_fast_delta	dropped	src/oblib/lib/codec/ob_fast_delta.cpp,src/oblib/lib/codec/ob_fast_delta.h	crate map: x-dropped
+src/oblib/lib/codec/ob_sse_to_neon	dropped	src/oblib/lib/codec/ob_sse_to_neon.h	crate map: x-dropped
+src/oblib/easy/include/easy_atomic	dropped	src/oblib/easy/include/easy_atomic.h	crate map: x-dropped
+src/oblib/easy/include/easy_list	dropped	src/oblib/easy/include/easy_list.h	crate map: x-dropped
+src/oblib/easy/util/easy_util	dropped	src/oblib/easy/util/easy_util.h	crate map: x-dropped
+src/oblib/lib/codec/ob_bp_helpers	dropped	src/oblib/lib/codec/ob_bp_helpers.h	crate map: x-dropped
+src/oblib/lib/codec/ob_bp_util	dropped	src/oblib/lib/codec/ob_bp_util.h	crate map: x-dropped
+src/oblib/easy/thread/easy_uthread	dropped	src/oblib/easy/thread/easy_uthread.h	crate map: x-dropped
+src/oblib/easy/util/easy_array	dropped	src/oblib/easy/util/easy_array.h	crate map: x-dropped
+src/oblib/easy/util/easy_hash	dropped	src/oblib/easy/util/easy_hash.h	crate map: x-dropped
+src/oblib/lib/codec/ob_codecs	dropped	src/oblib/lib/codec/ob_codecs.h	crate map: x-dropped
+src/oblib/easy/io/easy_io_struct	dropped	src/oblib/easy/io/easy_io_struct.h	crate map: x-dropped
+src/oblib/lib/codec/ob_composite_codec	dropped	src/oblib/lib/codec/ob_composite_codec.h	crate map: x-dropped
+src/oblib/lib/codec/ob_simd_fixed_pfor	dropped	src/oblib/lib/codec/ob_simd_fixed_pfor.h	crate map: x-dropped
+src/oblib/lib/codec/ob_tiered_codec	dropped	src/oblib/lib/codec/ob_tiered_codec.h	crate map: x-dropped
+src/oblib/lib/codec/ob_universal_compression	dropped	src/oblib/lib/codec/ob_universal_compression.h	crate map: x-dropped
+src/oblib/easy/io/easy_baseth_pool	dropped	src/oblib/easy/io/easy_baseth_pool.h	crate map: x-dropped
+src/oblib/easy/io/easy_summary	dropped	src/oblib/easy/io/easy_summary.h	crate map: x-dropped
+src/oblib/lib/codec/ob_delta_zigzag_pfor	dropped	src/oblib/lib/codec/ob_delta_zigzag_pfor.h	crate map: x-dropped
+src/oblib/lib/codec/ob_delta_zigzag_rle	dropped	src/oblib/lib/codec/ob_delta_zigzag_rle.h	crate map: x-dropped
+src/oblib/lib/codec/ob_double_delta_zigzag_pfor	dropped	src/oblib/lib/codec/ob_double_delta_zigzag_pfor.h	crate map: x-dropped
+src/oblib/lib/codec/ob_double_delta_zigzag_rle	dropped	src/oblib/lib/codec/ob_double_delta_zigzag_rle.h	crate map: x-dropped
+src/oblib/lib/codec/ob_xor_fixed_pfor	dropped	src/oblib/lib/codec/ob_xor_fixed_pfor.h	crate map: x-dropped
+src/standby/control/ob_standby_role_transition_service	deferred	src/standby/control/ob_standby_role_transition_service.cpp,src/standby/control/ob_standby_role_transition_service.h	crate map: standby (ARCHITECTURE 7.4)
+src/standby/control/ob_standby_timestamp_provider	deferred	src/standby/control/ob_standby_timestamp_provider.cpp,src/standby/control/ob_standby_timestamp_provider.h	crate map: standby (ARCHITECTURE 7.4)
+src/standby/control/standby_state_store	deferred	src/standby/control/standby_state_store.cpp,src/standby/control/standby_state_store.h	crate map: standby (ARCHITECTURE 7.4)
+src/standby/ob_standby_bootstrap_service	deferred	src/standby/ob_standby_bootstrap_service.cpp,src/standby/ob_standby_bootstrap_service.h	crate map: standby (ARCHITECTURE 7.4)
+src/standby/ob_standby_log_sync_service	deferred	src/standby/ob_standby_log_sync_service.cpp,src/standby/ob_standby_log_sync_service.h	crate map: standby (ARCHITECTURE 7.4)
+src/standby/ob_standby_palf_base_info	deferred	src/standby/ob_standby_palf_base_info.cpp,src/standby/ob_standby_palf_base_info.h	crate map: standby (ARCHITECTURE 7.4)
+src/standby/ob_standby_schema_refresh_trigger	deferred	src/standby/ob_standby_schema_refresh_trigger.cpp,src/standby/ob_standby_schema_refresh_trigger.h	crate map: standby (ARCHITECTURE 7.4)
+src/standby/ob_standby_source_util	deferred	src/standby/ob_standby_source_util.cpp,src/standby/ob_standby_source_util.h	crate map: standby (ARCHITECTURE 7.4)
+src/standby/restore/ob_standby_restore_rpc	deferred	src/standby/restore/ob_standby_restore_rpc.cpp,src/standby/restore/ob_standby_restore_rpc.h,src/standby/restore/ob_standby_restore_storage_struct.h	crate map: standby (ARCHITECTURE 7.4)
+src/standby/restore/ob_storage_restore_struct	deferred	src/standby/restore/ob_storage_restore_struct.cpp,src/standby/restore/ob_storage_restore_struct.h	crate map: standby (ARCHITECTURE 7.4)
+src/standby/standby_host	deferred	src/standby/standby_host.h	crate map: standby (ARCHITECTURE 7.4)
+src/standby/standby_module_disabled	deferred	src/standby/standby_module_disabled.cpp	crate map: standby (ARCHITECTURE 7.4)
+src/standby/ob_standby_grpc	deferred	src/standby/ob_standby_grpc.cpp,src/standby/ob_standby_grpc.h,src/standby/ob_standby_grpc_service.h	crate map: standby (ARCHITECTURE 7.4)
+src/standby/ob_standby_grpc_stream_util	deferred	src/standby/ob_standby_grpc_stream_util.cpp,src/standby/ob_standby_grpc_stream_util.h	crate map: standby (ARCHITECTURE 7.4)
+src/standby/restore/ob_standby_restore_reader	deferred	src/standby/restore/ob_standby_restore_reader.cpp,src/standby/restore/ob_standby_restore_reader.h	crate map: standby (ARCHITECTURE 7.4)
+src/standby/standby_module	deferred	src/standby/standby_module.cpp,src/standby/standby_module.h	crate map: standby (ARCHITECTURE 7.4)
+src/standby/restore/ob_physical_copy_ctx	deferred	src/standby/restore/ob_physical_copy_ctx.cpp,src/standby/restore/ob_physical_copy_ctx.h	crate map: standby (ARCHITECTURE 7.4)
+src/standby/restore/ob_restore_helper_ctx	deferred	src/standby/restore/ob_restore_helper_ctx.cpp,src/standby/restore/ob_restore_helper_ctx.h	crate map: standby (ARCHITECTURE 7.4)
+src/standby/restore/ob_standby_restore_tablet_builder	deferred	src/standby/restore/ob_standby_restore_tablet_builder.cpp,src/standby/restore/ob_standby_restore_tablet_builder.h	crate map: standby (ARCHITECTURE 7.4)
+src/standby/restore/ob_restore_helper	deferred	src/standby/restore/ob_restore_helper.cpp,src/standby/restore/ob_restore_helper.h	crate map: standby (ARCHITECTURE 7.4)
+src/standby/restore/ob_sstable_copy_finish_task	deferred	src/standby/restore/ob_sstable_copy_finish_task.cpp,src/standby/restore/ob_sstable_copy_finish_task.h	crate map: standby (ARCHITECTURE 7.4)
+src/standby/restore/ob_physical_copy_task	deferred	src/standby/restore/ob_physical_copy_task.cpp,src/standby/restore/ob_physical_copy_task.h	crate map: standby (ARCHITECTURE 7.4)
+src/standby/restore/ob_standby_restore_macro_block_writer	deferred	src/standby/restore/ob_standby_restore_macro_block_writer.cpp,src/standby/restore/ob_standby_restore_macro_block_writer.h	crate map: standby (ARCHITECTURE 7.4)
+src/standby/restore/ob_tablet_copy_finish_task	deferred	src/standby/restore/ob_tablet_copy_finish_task.cpp,src/standby/restore/ob_tablet_copy_finish_task.h	crate map: standby (ARCHITECTURE 7.4)
+src/standby/restore/ob_standby_sstable_copier	deferred	src/standby/restore/ob_standby_sstable_copier.cpp,src/standby/restore/ob_standby_sstable_copier.h	crate map: standby (ARCHITECTURE 7.4)
+bazel/probes/easy_public_interface_probe	dead	bazel/probes/easy_public_interface_probe.cpp	not compiled by the reference build
+bazel/probes/logservice_public_interface_probe	dead	bazel/probes/logservice_public_interface_probe.cpp	not compiled by the reference build
+bazel/probes/oblib_interface_probe	dead	bazel/probes/oblib_interface_probe.cpp	not compiled by the reference build
+bazel/probes/transitive_storage_header_probe	dead	bazel/probes/transitive_storage_header_probe.cpp	not compiled by the reference build
+bazel/sanity_abort	dead	bazel/sanity_abort.cpp	not compiled by the reference build
+include/android_compat	dead	include/android_compat.h	not compiled by the reference build
+tools/codestyle/sample/ob_style_example	dead	tools/codestyle/sample/ob_style_example.cpp,tools/codestyle/sample/ob_style_example.h	not compiled by the reference build
+tools/ob_error/test/test_ob_error	dead	tools/ob_error/test/test_ob_error.cpp	not compiled by the reference build

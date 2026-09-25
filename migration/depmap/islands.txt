@@ -1,0 +1,22 @@
+# prefix	crate	design
+src/share/geo	geo-sys	s7-islands-unsafe.md 7.1 and 7.3; ARCHITECTURE 9.1 and 9.3; default 32: share/geo with boost.geometry and S2 stays C++, compiled from src/
+src/share/geo/ob_geo_mvt.	-	s7-islands-unsafe.md 7.1; ARCHITECTURE 9.3: MVT's tile building and protobuf packing move to sql-engine
+src/share/geo/ob_vector_tile.pb-c	-	s7-islands-unsafe.md 7.1: MVT's protobuf-c code is generated and not translated
+src/share/geo/ob_wkb_to_json_bin_visitor	-	s7-islands-unsafe.md 7.1 and 7.7; ARCHITECTURE 9.3: GeoJSON's JSON-binary writing moves to Rust
+src/oblib/lib/vector/ob_vsag_adaptor	vsag-sys	s7-islands-unsafe.md 7.1 and 7.4; ARCHITECTURE 9.1; default 32: the vsag adaptor stays C++
+src/oblib/lib/vector/ob_vector_util	vsag-sys	s7-islands-unsafe.md 7.1 and 7.4: compiled unchanged because ObVsagLogger subclasses vsag::Logger
+src/sql/parser/sql_parser_base	sql-parser-sys	s7-islands-unsafe.md 7.1 and 7.5; ARCHITECTURE 9.1 and 9.2; defaults 17 and 32: the parser's C core
+src/sql/parser/parse_node.c	sql-parser-sys	s7-islands-unsafe.md 7.1 and 7.5; ARCHITECTURE 9.2; defaults 17 and 32: the parser's C core
+src/pl/parser/pl_parser_base	sql-parser-sys	s7-islands-unsafe.md 7.1 and 7.5; ARCHITECTURE 9.1; defaults 17 and 32: the PL grammar's C core
+src/sql/parser/fts_parse	sql-parser-sys	s7-islands-unsafe.md 7.1; ARCHITECTURE 9.1; defaults 17 and 32: the fulltext grammar's C core
+src/sql/parser/fts_base	sql-parser-sys	s7-islands-unsafe.md 7.1; ARCHITECTURE 9.1; defaults 17 and 32: the fulltext grammar's C core
+src/sql/parser/non_reserved_keywords_mysql_mode.c	sql-parser-sys	s7-islands-unsafe.md 7.1: the keyword files
+src/sql/parser/ob_non_reserved_keywords	sql-parser-sys	s7-islands-unsafe.md 7.1: the keyword files
+src/pl/parser/pl_non_reserved_keywords_mysql_mode.c	sql-parser-sys	s7-islands-unsafe.md 7.1: the keyword files
+src/sql/parser/parse_define.h	sql-parser-sys	s7-islands-unsafe.md 7.1: the C core's error constants, included by sql_parser_base.h, pl_parser_base.h and ob_non_reserved_keywords.c
+src/sql/parser/sql_parser_mysql_mode_	sql-parser-sys	s7-islands-unsafe.md 7.1 rule 3; ARCHITECTURE 1.4 and 9.2; default 5: bison and flex output, copied from the reference build
+src/pl/parser/pl_parser_mysql_mode_	sql-parser-sys	s7-islands-unsafe.md 7.1 rule 3; ARCHITECTURE 1.4 and 9.2; default 5: bison and flex output, copied from the reference build
+src/sql/parser/ftsblex_lex	sql-parser-sys	s7-islands-unsafe.md 7.1 rule 3; ARCHITECTURE 1.4 and 9.2; default 5: flex output, copied from the reference build
+src/sql/parser/ftsparser_tab	sql-parser-sys	s7-islands-unsafe.md 7.1 rule 3; ARCHITECTURE 1.4 and 9.2; default 5: bison output, copied from the reference build
+src/sql/parser/type_name.c	sql-parser-sys	s7-islands-unsafe.md 7.1 rule 3; ARCHITECTURE 1.4 and 9.2; default 5: gen_type_name.sh output, copied from the reference build
+src/oblib/lib/compress/zstd_1_3_8/zstd_src	ob-clib-sys	s7-islands-unsafe.md 7.1 and 7.6 rule 4; ARCHITECTURE 1.4: zstd 1.3.8, vendored C, compiled from src/ and linked partially

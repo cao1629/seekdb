@@ -5,7 +5,6 @@ bazel/probes	src/oblib/easy/io	1
 bazel/probes	src/oblib/easy/util	1
 bazel/probes	src/oblib/lib/compress	1
 bazel/probes	src/oblib/lib/restore	1
-bazel/probes	src/oblib/lib/vector	1
 bazel/probes	src/oblib/rpc/frame	1
 bazel/probes	src/storage	1
 src/data_plane	src/data_plane/api/data_plane/access	2
@@ -34,7 +33,6 @@ src/data_plane/api/data_plane/access	src/oblib/lib/literals	1
 src/data_plane/api/data_plane/access	src/oblib/lib/string	1
 src/data_plane/api/data_plane/access	src/oblib/lib/utility	5
 src/data_plane/api/data_plane/access	src/share	2
-src/data_plane/api/data_plane/access	src/share/geo	1
 src/data_plane/api/data_plane/access	src/share/schema	4
 src/data_plane/api/data_plane/access	src/share/transaction	1
 src/data_plane/api/data_plane/blocksstable	src/data_plane/api/data_plane/meta	1
@@ -454,7 +452,6 @@ src/oblib/lib/hash	src/oblib/lib/queue	3
 src/oblib/lib/hash	src/oblib/lib/string	2
 src/oblib/lib/hash	src/oblib/lib/thread_local	2
 src/oblib/lib/hash	src/oblib/lib/utility	13
-src/oblib/lib/hash	src/sql/parser	1
 src/oblib/lib/hash_func	src/oblib/lib/utility	1
 src/oblib/lib/json	src/oblib/lib	2
 src/oblib/lib/json	src/oblib/lib/allocator	1
@@ -644,11 +641,6 @@ src/oblib/lib/utility	src/oblib/lib/resource	1
 src/oblib/lib/utility	src/oblib/lib/string	4
 src/oblib/lib/utility	src/oblib/lib/thread	1
 src/oblib/lib/utility	src/oblib/lib/time	4
-src/oblib/lib/vector	src/oblib/lib	1
-src/oblib/lib/vector	src/oblib/lib/allocator	1
-src/oblib/lib/vector	src/oblib/lib/oblog	1
-src/oblib/lib/vector	src/oblib/lib/string	1
-src/oblib/lib/vector	src/oblib/lib/utility	1
 src/oblib/lib/wait_event	src/oblib/lib	1
 src/oblib/lib/wait_event	src/oblib/lib/stat	1
 src/oblib/lib/wait_event	src/oblib/lib/utility	2
@@ -815,7 +807,6 @@ src/observer/change_stream	src/oblib/lib/oblog	6
 src/observer/change_stream	src/oblib/lib/thread	3
 src/observer/change_stream	src/oblib/lib/time	1
 src/observer/change_stream	src/oblib/lib/utility	3
-src/observer/change_stream	src/oblib/lib/vector	1
 src/observer/change_stream	src/observer	1
 src/observer/change_stream	src/observer/vector_index	4
 src/observer/change_stream	src/share	12
@@ -938,7 +929,6 @@ src/observer/omt	src/rootserver/ddl_task	1
 src/observer/omt	src/rootserver/freeze	1
 src/observer/omt	src/share	12
 src/observer/omt	src/share/ai_service	1
-src/observer/omt	src/share/geo	4
 src/observer/omt	src/share/interrupt	2
 src/observer/omt	src/share/io	1
 src/observer/omt	src/share/rc	11
@@ -1002,7 +992,6 @@ src/observer/vector_index	src/oblib/lib/file	1
 src/observer/vector_index	src/oblib/lib/lock	2
 src/observer/vector_index	src/oblib/lib/string	2
 src/observer/vector_index	src/oblib/lib/thread	1
-src/observer/vector_index	src/oblib/lib/vector	1
 src/observer/vector_index	src/observer	1
 src/observer/vector_index	src/observer/dbms_scheduler	1
 src/observer/vector_index	src/observer/omt	1
@@ -1073,7 +1062,6 @@ src/observer/virtual_table	src/rootserver	1
 src/observer/virtual_table	src/share	33
 src/observer/virtual_table	src/share/cache	2
 src/observer/virtual_table	src/share/config	4
-src/observer/virtual_table	src/share/geo	1
 src/observer/virtual_table	src/share/io	4
 src/observer/virtual_table	src/share/longops_mgr	1
 src/observer/virtual_table	src/share/object	1
@@ -1143,11 +1131,8 @@ src/pl	src/sql/resolver/dml	1
 src/pl	src/sql/resolver/expr	4
 src/pl	src/sql/rewrite	1
 src/pl	src/sql/session	3
-src/pl/parser	src/oblib/lib	1
-src/pl/parser	src/oblib/lib/charset	1
 src/pl/parser	src/pl	1
 src/pl/parser	src/query/api/query/parser	1
-src/pl/parser	src/sql/parser	6
 src/pl/parser	src/sql/pl/parser	4
 src/pl/pl_cache	src/pl	3
 src/pl/pl_cache	src/share	1
@@ -1343,7 +1328,6 @@ src/query/api/query/vector	src/oblib/lib/oblog	2
 src/query/api/query/vector	src/oblib/lib/string	1
 src/query/api/query/vector	src/oblib/lib/thread	1
 src/query/api/query/vector	src/oblib/lib/utility	2
-src/query/api/query/vector	src/oblib/lib/vector	1
 src/query/api/query/vector	src/query/api/query/engine/expr	3
 src/query/api/query/vector	src/query/api/query/engine/vector	1
 src/query/api/query/vector	src/share	3
@@ -1694,22 +1678,13 @@ src/share/datum/ob_datum_funcs_compilation	src/oblib/common/object	1
 src/share/datum/ob_datum_funcs_compilation	src/share/datum	3
 src/share/datum/ob_datum_funcs_compilation	src/share/vector	1
 src/share/geo	src/oblib/common/json_type	2
-src/share/geo	src/oblib/common/mysqlclient	4
-src/share/geo	src/oblib/common/number	1
-src/share/geo	src/oblib/common/object	4
-src/share/geo	src/oblib/common/udt	1
-src/share/geo	src/oblib/lib/allocator	4
-src/share/geo	src/oblib/lib/charset	1
-src/share/geo	src/oblib/lib/container	12
-src/share/geo	src/oblib/lib/function	2
-src/share/geo	src/oblib/lib/geometry	2
-src/share/geo	src/oblib/lib/hash	3
-src/share/geo	src/oblib/lib/oblog	8
-src/share/geo	src/oblib/lib/string	13
-src/share/geo	src/oblib/lib/utility	11
+src/share/geo	src/oblib/lib/allocator	1
+src/share/geo	src/oblib/lib/container	1
+src/share/geo	src/oblib/lib/hash	1
+src/share/geo	src/oblib/lib/string	1
 src/share/geo	src/share	1
 src/share/geo	src/share/object	1
-src/share/geo	src/share/rc	5
+src/share/geo	src/share/rc	1
 src/share/inner_table	src/share	6
 src/share/inner_table	src/share/schema	3
 src/share/interrupt	src/oblib/lib	1
@@ -1778,7 +1753,6 @@ src/share/object	src/oblib/lib/string	3
 src/share/object	src/oblib/lib/utility	2
 src/share/object	src/share	6
 src/share/object	src/share/datum	1
-src/share/object	src/share/geo	3
 src/share/parameter	src/oblib/lib/utility	1
 src/share/rc	src/oblib/lib	5
 src/share/rc	src/oblib/lib/allocator	1
@@ -1937,7 +1911,6 @@ src/sql	src/query/api/query/protocol	2
 src/sql	src/query/api/query/runtime	1
 src/sql	src/share	15
 src/sql	src/share/config	2
-src/sql	src/share/geo	2
 src/sql	src/share/object	1
 src/sql	src/share/rc	5
 src/sql	src/share/rpc	1
@@ -1955,7 +1928,7 @@ src/sql	src/sql/executor	5
 src/sql	src/sql/monitor	2
 src/sql	src/sql/monitor/show_trace	3
 src/sql	src/sql/optimizer	9
-src/sql	src/sql/parser	2
+src/sql	src/sql/parser	1
 src/sql	src/sql/pl	9
 src/sql	src/sql/plan_cache	13
 src/sql	src/sql/printer	6
@@ -2022,7 +1995,6 @@ src/sql/das	src/query/api/query/vector	4
 src/sql/das	src/share	11
 src/sql/das	src/share/autoincrement	1
 src/sql/das	src/share/datum	1
-src/sql/das	src/share/geo	3
 src/sql/das	src/share/location_cache	2
 src/sql/das	src/share/rc	9
 src/sql/das	src/share/rpc	1
@@ -2066,7 +2038,6 @@ src/sql/das/iter	src/sql/engine/expr	16
 src/sql/das/iter	src/sql/engine/sort	1
 src/sql/das/iter	src/sql/engine/table	1
 src/sql/das/iter	src/sql/optimizer	1
-src/sql/das/iter	src/sql/parser	2
 src/sql/das/iter	src/sql/resolver/ddl	1
 src/sql/das/iter/sparse_retrieval	src/oblib/lib/container	1
 src/sql/das/iter/sparse_retrieval	src/sql/das	2
@@ -2298,7 +2269,6 @@ src/sql/engine/dml	src/query/api/query/session	1
 src/sql/engine/dml	src/query/api/query/vector	1
 src/sql/engine/dml	src/share	1
 src/sql/engine/dml	src/share/autoincrement	1
-src/sql/engine/dml	src/share/geo	1
 src/sql/engine/dml	src/share/rc	2
 src/sql/engine/dml	src/sql	1
 src/sql/engine/dml	src/sql/das	16
@@ -2359,7 +2329,7 @@ src/sql/engine/expr	src/query/api/query/vector	6
 src/sql/engine/expr	src/share	35
 src/sql/engine/expr	src/share/autoincrement	2
 src/sql/engine/expr	src/share/datum	4
-src/sql/engine/expr	src/share/geo	111
+src/sql/engine/expr	src/share/geo	1
 src/sql/engine/expr	src/share/interrupt	1
 src/sql/engine/expr	src/share/object	50
 src/sql/engine/expr	src/share/rc	4
@@ -2579,7 +2549,6 @@ src/sql/engine/table	src/oblib/common/row	1
 src/sql/engine/table	src/oblib/lib/container	2
 src/sql/engine/table	src/query/api/query/engine/expr	1
 src/sql/engine/table	src/share	3
-src/sql/engine/table	src/share/geo	2
 src/sql/engine/table	src/share/schema	2
 src/sql/engine/table	src/sql	1
 src/sql/engine/table	src/sql/das	9
@@ -2751,20 +2720,17 @@ src/sql/optimizer/stat	src/sql/pl/sys_package	2
 src/sql/optimizer/stat	src/sql/plan_cache	1
 src/sql/optimizer/stat	src/sql/session	4
 src/sql/parser	src/data_plane/api/data_plane/vector	1
-src/sql/parser	src/oblib/lib	3
+src/sql/parser	src/oblib/lib	2
 src/sql/parser	src/oblib/lib/allocator	3
-src/sql/parser	src/oblib/lib/charset	5
+src/sql/parser	src/oblib/lib/charset	4
 src/sql/parser	src/oblib/lib/container	1
 src/sql/parser	src/oblib/lib/hash_func	1
 src/sql/parser	src/oblib/lib/oblog	1
 src/sql/parser	src/oblib/lib/string	2
-src/sql/parser	src/oblib/lib/utility	12
-src/sql/parser	src/pl/parser	2
-src/sql/parser	src/query/api/query/parser	5
+src/sql/parser	src/oblib/lib/utility	7
+src/sql/parser	src/query/api/query/parser	3
 src/sql/parser	src/share	4
-src/sql/parser	src/share/schema	1
-src/sql/parser	src/sql	1
-src/sql/parser	src/sql/executor	3
+src/sql/parser	src/sql/executor	2
 src/sql/parser	src/sql/pl/parser	1
 src/sql/parser	src/sql/plan_cache	1
 src/sql/pl	src/data_plane/api/data_plane/transaction	1
@@ -3069,7 +3035,6 @@ src/sql/rewrite	src/oblib/lib/rc	1
 src/sql/rewrite	src/oblib/lib/utility	7
 src/sql/rewrite	src/query/api/query/vector	1
 src/sql/rewrite	src/share	3
-src/sql/rewrite	src/share/geo	5
 src/sql/rewrite	src/share/object	1
 src/sql/rewrite	src/share/schema	1
 src/sql/rewrite	src/sql	9
@@ -3312,7 +3277,6 @@ src/storage/allocator	src/oblib/lib/lock	2
 src/storage/allocator	src/oblib/lib/queue	1
 src/storage/allocator	src/oblib/lib/task	1
 src/storage/allocator	src/oblib/lib/utility	2
-src/storage/allocator	src/oblib/lib/vector	1
 src/storage/allocator	src/share	2
 src/storage/allocator	src/share/config	2
 src/storage/allocator	src/share/rc	5
@@ -4212,6 +4176,5 @@ src/storage/vector_type	src/oblib/common/object	2
 src/storage/vector_type	src/oblib/lib	2
 src/storage/vector_type	src/oblib/lib/oblog	2
 src/storage/vector_type	src/oblib/lib/utility	2
-src/storage/vector_type	src/share/geo	1
 tools/ob_error/src	src/share	1
 tools/ob_error/test	tools/ob_error/src	1

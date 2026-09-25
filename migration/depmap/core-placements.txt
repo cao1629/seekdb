@@ -1,0 +1,21 @@
+# source	crate	module	design
+src/oblib/rpc/ob_sql_request_operator.h	ob-runtime	-	s1-crates-core.md 1.5 rule 7; ARCHITECTURE 1.1 (sql-nio paragraph); RULEBOOK 4 home modules: SQL_REQ_OP (ob_sql_request_operator.h:80-81) becomes the trait ObSqlRequestOperator in ob-runtime, a RuntimeContext cell; the rest of its unit moves to observer with the nio.h glue
+src/data_plane/api/data_plane/access/ob_tablet_scan.h	storage-api	-	s5-execution.md 1; ARCHITECTURE 1.2 fix 2: ObVTableScanParam (:355) and the trait ObITabletScan (:493) belong to storage-api, the lower crate; src/data_plane/ob_tablet_scan.cpp, which implements the trait, stays in storage-tablet
+src/storage/access/ob_index_sstable_estimator.h:31-44	storage-api	-	s6-storage.md 1; ARCHITECTURE 1.2 fix 1; RULEBOOK 4 home modules: ObPartitionEst is a core item written in storage-api; the rest of its unit (the index walk) goes to storage-sstable
+src/sql/ob_sql_context.h:550-742	sql-ir	-	RULEBOOK 4 home modules; s4-sql-front.md 2.3 rule 5 and 3.1: ObQueryCtx is one of the compile stores, held with ObStmtFactory in sql-ir
+src/sql/ob_sql_context.cpp:498-520	sql-ir	-	RULEBOOK 4 home modules: the member functions of ObQueryCtx (see the line above)
+src/data_plane/api/data_plane/vector/ob_vector_l2_distance.h	ob-simd	-	ARCHITECTURE 1.1 row 4; s7-islands-unsafe.md 7.10 rule 2: the vector distance kernels, NEON and scalar, are written in ob-simd, the only crate where their unsafe may appear; the storage/vector_type .cpp units stay in storage-search
+src/data_plane/api/data_plane/vector/ob_vector_ip_distance.h	ob-simd	-	ARCHITECTURE 1.1 row 4; s7-islands-unsafe.md 7.10 rule 2 (see ob_vector_l2_distance.h)
+src/data_plane/api/data_plane/vector/ob_vector_cosine_distance.h	ob-simd	-	ARCHITECTURE 1.1 row 4; s7-islands-unsafe.md 7.10 rule 2 (see ob_vector_l2_distance.h)
+src/data_plane/api/data_plane/vector/ob_vector_l1_distance.h	ob-simd	-	ARCHITECTURE 1.1 row 4; s7-islands-unsafe.md 7.10 rule 2 (see ob_vector_l2_distance.h)
+src/data_plane/api/data_plane/vector/ob_sparse_vector_ip_distance.h	ob-simd	-	ARCHITECTURE 1.1 row 4; s7-islands-unsafe.md 7.10 rule 2 (see ob_vector_l2_distance.h)
+src/sql/parser/parse_node.c:58-175	sql-parse-tree	parse_node	s4-sql-front.md 1.1 and 1.3; ARCHITECTURE 4.2: get_deep_copy_size, deep_copy_parse_node_base and deep_copy_parse_node become ParseTree methods (to_owned_node); parse_node.c stays compiled as island C
+src/sql/parser/parse_node.c:180-210	sql-parse-tree	parse_node	s4-sql-front.md 1.1 and 1.2 rule 5: new_node, with the same starting values (parse_node.c:195-196)
+src/sql/parser/parse_node.c:368-414	sql-parse-tree	parse_node	s4-sql-front.md 1.1 and 1.2 rule 5: new_terminal_node, new_non_terminal_node, new_list_node
+src/sql/parser/parse_node.c:652-745	sql-parse-tree	parse_node	s4-sql-front.md 1.1 and 1.3; ARCHITECTURE 4.2: parsenode_hash and parsenode_equal keep the C field order
+src/sql/parser/parse_node.c:826-979	sql-parse-tree	parse_node	s4-sql-front.md 1.1: nodename_equal, push_back_child, push_front_child, append_child and their helper get_need_reserve_capacity
+src/oblib/lib/hash/ob_hashutils.h:84-92	sql-parse-tree	parse_node	s4-sql-front.md 1.3: the C declarations of parsenode_hash and parsenode_equal, which the ParseTree methods replace
+src/oblib/lib/hash/ob_hashutils.h:729-745	sql-parse-tree	parse_node	s4-sql-front.md 1.3: the ParseNode* equal_to traits become ParseTree methods
+src/oblib/lib/hash/ob_hashutils.h:818-835	sql-parse-tree	parse_node	s4-sql-front.md 1.3: the ParseNode* hash_func traits become ParseTree methods
+src/share/geo/ob_wkb_to_json_bin_visitor.h	geo-sys	-	s7-islands-unsafe.md 7.1 and 7.3 (Output entries); ARCHITECTURE 9.3: the GeoJSON traversal stays in the island as new C++ under rust/geo-sys/cpp/ and sends events through obgeo_rs_json_event; this module is the Rust handler behind that callback, which builds the JSON binary
+src/share/geo/ob_wkb_to_json_bin_visitor.cpp	geo-sys	-	s7-islands-unsafe.md 7.1 and 7.3 (see ob_wkb_to_json_bin_visitor.h)

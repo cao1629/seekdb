@@ -2,3 +2,4 @@
 !*.patch
 __pycache__/
 *.pyc
+decl-index/

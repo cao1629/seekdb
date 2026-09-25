@@ -1,0 +1,9 @@
+# source	reason	design
+src/share/mysql_errno.h	generated	ARCHITECTURE 1.4; s1-crates-core.md 5.5 rule 1: the error catalog is generated into ob-errno by gen_errno.pl's Rust back end
+src/share/ob_errno.def	generated	ARCHITECTURE 1.4; s1-crates-core.md 5.5 rule 1: the input of gen_errno.pl, read unchanged by its Rust back end
+tools/ob_error/src/os_errno.def	generated	ARCHITECTURE 1.4; s1-crates-core.md 5.3 rule 9: gen_os_errno.pl's Rust back end writes the ob_error tool's os_errno table
+src/oblib/grpc	deferred	ARCHITECTURE 1.4 and 7.4: gRPC and protobuf leave with standby, which is deferred
+src/storage/fts/dict/ob_ik_dic.cpp:32-275939	data	s6-storage.md 6.1: the IK main dictionary's words become a text file read with include_str!
+src/storage/fts/dict/ob_ik_dic.cpp:275951-276003	data	s6-storage.md 6.1: the IK quantifier list's words become a text file read with include_str!
+src/storage/fts/dict/ob_ik_dic.cpp:276014-276017	data	s6-storage.md 6.1: the IK stop-word list's words become a text file read with include_str!
+src/oblib/common/timezone/ob_timezone_info.cpp:26-38988	dropped	TIME_ZONE_NAMES and TIME_ZONE_TRANS are read nowhere: the only other lines naming them are their declarations, src/oblib/common/timezone/ob_timezone_info.h:293-294
