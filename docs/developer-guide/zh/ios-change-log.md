@@ -104,6 +104,16 @@
   也不 rmtree。真实 tiny Mach-O 将 managed PID 延迟 30 秒的回归已验证 immediate destroy
   返回 0、instance 删除且 launcher/LLDB/target 在 `ps` 中均无条目；未运行 272 case、
   iOS build、签名或真机。
+- macOS sdb process identity 不再经 `ps args` 与 `shlex` 重建；改用 ctypes `sysctl`
+  `KERN_PROCARGS2`，严格按 bounded native argc、exec path 与 NUL-delimited argv 解析，完整
+  保留空参数、空格、引号和 Unicode，并对 PID 消失、permission、截断和非法 payload
+  fail-closed。真实含特殊字符的 launcher/binary/base-dir 与空 `--parameter` 已通过
+  start→durable marker→stop/destroy 全链验证。detached spawn 到 marker durable 现在也是
+  完整 ownership transaction：父进程在 Popen 返回临界区阻塞 TERM/INT/HUP，child exec
+  前恢复原 signal mask；signal 或包括 KeyboardInterrupt 的任意 BaseException 会根据
+  in-memory/durable marker ownership 回滚。真实子进程分别在 spawn-return 与 marker
+  persistence 窗口注入 TERM/INT，均返回 143/130，marker 不残留且 launcher/LLDB/target
+  在 `ps` 中无条目；未运行 272 case、iOS build、签名或真机。
 
 ## 2026-09-25：standalone runner stages 1–4 adapter
 

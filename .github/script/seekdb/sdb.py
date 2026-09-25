@@ -4,10 +4,11 @@
 from __future__ import print_function
 
 import argparse
+import ctypes
+import errno
 import json
 import os
 import secrets
-import shlex
 import signal
 import shutil
 import stat
@@ -30,6 +31,24 @@ INSTANCE_MARKER_HEADER = "seekdb-instance-v1"
 LAUNCHER_MARKER_NAME = ".sdb-launcher.json"
 LAUNCHER_MARKER_VERSION = 1
 LAUNCHER_MARKER_MAX_BYTES = 64 * 1024
+MACOS_CTL_KERN = 1
+MACOS_KERN_ARGMAX = 8
+MACOS_KERN_PROCARGS2 = 49
+MAX_PROCESS_ARGUMENT_BYTES = 4 * 1024 * 1024
+MAX_PROCESS_ARGUMENT_COUNT = 65536
+START_HANDLED_SIGNALS = tuple(
+    item for item in (signal.SIGTERM, signal.SIGINT, signal.SIGHUP)
+    if item is not None)
+_START_PENDING_SIGNAL = 0
+
+
+class _StartTermination(BaseException):
+    """Interrupt launcher ownership setup after an external signal."""
+
+    def __init__(self, signum):
+        """Record the signal whose conventional shell status is required."""
+        super().__init__(signum)
+        self.signum = signum
 
 
 def _error(message):
@@ -38,6 +57,62 @@ def _error(message):
 
 def _warning(message):
     print("[sdb][WARN] {}".format(message), file=sys.stderr)
+
+
+def _handle_start_signal(signum, _frame):
+    """Record one signal and interrupt the launcher ownership transaction."""
+    global _START_PENDING_SIGNAL
+    if _START_PENDING_SIGNAL:
+        return
+    _START_PENDING_SIGNAL = signum
+    raise _StartTermination(signum)
+
+
+def _install_start_signal_handlers():
+    """Install transaction handlers while their signals remain blocked."""
+    global _START_PENDING_SIGNAL
+    _START_PENDING_SIGNAL = 0
+    original_mask = signal.pthread_sigmask(
+        signal.SIG_BLOCK, START_HANDLED_SIGNALS)
+    previous = {}
+    try:
+        for signum in START_HANDLED_SIGNALS:
+            previous[signum] = signal.signal(signum, _handle_start_signal)
+    except BaseException:
+        for signum, handler in previous.items():
+            signal.signal(signum, handler)
+        signal.pthread_sigmask(signal.SIG_SETMASK, original_mask)
+        raise
+    return previous, original_mask
+
+
+def _block_and_collect_start_signals():
+    """Block transaction signals and consume one pending termination signal."""
+    global _START_PENDING_SIGNAL
+    signal.pthread_sigmask(signal.SIG_BLOCK, START_HANDLED_SIGNALS)
+    termination_signal = _START_PENDING_SIGNAL
+    pending = set(signal.sigpending()).intersection(START_HANDLED_SIGNALS)
+    for signum in sorted(pending):
+        signal.sigwait({signum})
+        if not termination_signal:
+            termination_signal = signum
+    return termination_signal
+
+
+def _restore_start_signal_handlers(previous):
+    """Restore every transaction handler while signals remain blocked."""
+    global _START_PENDING_SIGNAL
+    first_error = None
+    for signum, handler in previous.items():
+        try:
+            signal.signal(signum, handler)
+        except BaseException as exc:
+            if first_error is None:
+                first_error = exc
+    if first_error is None:
+        _START_PENDING_SIGNAL = 0
+        return
+    raise first_error
 
 
 def _base_dir(value):
@@ -150,16 +225,25 @@ def build_start_command(args, base_dir):
     return command
 
 
-def spawn_detached(command, base_dir, console):
+def spawn_detached(command, base_dir, console, child_signal_mask=None):
+    """Spawn a detached process with an explicit inherited signal mask."""
     if os.name == "nt":
         raise RuntimeError("Windows is not supported yet")
-    return subprocess.Popen(
-        command,
-        cwd=str(base_dir),
-        stdout=console,
-        stderr=subprocess.STDOUT,
-        start_new_session=True,
-    )
+
+    def restore_child_signal_mask():
+        """Restore the pre-transaction mask immediately before child exec."""
+        if child_signal_mask is not None:
+            signal.pthread_sigmask(signal.SIG_SETMASK, child_signal_mask)
+
+    options = {
+        "cwd": str(base_dir),
+        "stdout": console,
+        "stderr": subprocess.STDOUT,
+        "start_new_session": True,
+    }
+    if child_signal_mask is not None:
+        options["preexec_fn"] = restore_child_signal_mask
+    return subprocess.Popen(command, **options)
 
 
 def read_process_start_identity(pid):
@@ -215,7 +299,7 @@ def _launcher_record(process, command, base_dir, expected_binary):
     previous_arguments = None
     start_identity = None
     while time.monotonic() < deadline:
-        arguments = read_process_arguments(process.pid)
+        process_executable, arguments = read_process_identity(process.pid)
         start_identity = read_process_start_identity(process.pid)
         if arguments and arguments[1:] == list(command)[1:] and start_identity \
                 and arguments == previous_arguments:
@@ -230,7 +314,7 @@ def _launcher_record(process, command, base_dir, expected_binary):
         "version": LAUNCHER_MARKER_VERSION,
         "pid": process.pid,
         "start_identity": start_identity,
-        "process_executable": str(_executable_path(arguments[0])),
+        "process_executable": str(process_executable),
         "launcher_executable": str(_executable_path(command[1])),
         "target_binary": str(expected_binary.resolve()),
         "base_dir": str(base_dir),
@@ -262,8 +346,7 @@ def _validate_launcher_record(record, base_dir, expected_binary):
             or record["target_binary"] != str(expected_binary.resolve()):
         raise RuntimeError("launcher marker does not match this instance")
     expected_base_argument = "--base-dir={}".format(base_dir)
-    if len(argv) < 6 or _executable_path(argv[0]) != Path(
-            record["process_executable"]) \
+    if len(argv) < 6 or not Path(record["process_executable"]).is_absolute() \
             or _executable_path(argv[1]) != Path(record["launcher_executable"]) \
             or argv[2:4] != ["--binary", record["target_binary"]] \
             or expected_base_argument not in argv:
@@ -374,9 +457,10 @@ def remove_launcher_marker(base_dir):
 
 def _launcher_process_matches(record):
     """Return whether a live process still has the recorded launcher identity."""
-    arguments = read_process_arguments(record["pid"])
+    process_executable, arguments = read_process_identity(record["pid"])
     start_identity = read_process_start_identity(record["pid"])
-    return arguments == record["argv"] \
+    return process_executable == Path(record["process_executable"]) \
+        and arguments == record["argv"] \
         and start_identity == record["start_identity"]
 
 
@@ -418,17 +502,109 @@ def _cleanup_new_launcher(process, _command, start_identity=None):
         raise RuntimeError("new launcher did not finish cleanup")
 
 
-def _remove_owned_launcher_marker(base_dir, expected_binary, expected_record):
-    """Remove a failed start marker only when it is exactly the new record."""
-    try:
+def _abort_launcher_start(process, command, base_dir, expected_binary, record):
+    """Roll back either in-memory or durable ownership of one new launcher."""
+    persisted = None
+    if record is not None:
         persisted = read_launcher_marker(base_dir, expected_binary)
-    except FileNotFoundError:
+    if persisted is not None:
+        if persisted != record:
+            _cleanup_new_launcher(
+                process, command, record.get("start_identity"))
+            raise RuntimeError("launcher marker is owned by a different start")
+        terminate_launcher_record(persisted)
+        remove_launcher_marker(base_dir)
         return
-    if persisted is None:
-        return
-    if persisted != expected_record:
-        raise RuntimeError("launcher marker is owned by a different start")
-    remove_launcher_marker(base_dir)
+    _cleanup_new_launcher(
+        process, command,
+        record.get("start_identity") if record else None)
+
+
+def _command_start_with_launcher(args, base_dir, log_dir, command):
+    """Start one launcher inside an interrupt-safe ownership transaction."""
+    previous_handlers, original_mask = _install_start_signal_handlers()
+    process = None
+    record = None
+    caught_error = None
+    termination_signal = 0
+    completed = False
+    expected_binary = _executable_path(args.binary)
+    try:
+        try:
+            signal.pthread_sigmask(signal.SIG_SETMASK, original_mask)
+            prepare_instance_directory(base_dir, expected_binary)
+            log_dir.mkdir(parents=True, exist_ok=True)
+            signal.pthread_sigmask(signal.SIG_BLOCK, START_HANDLED_SIGNALS)
+            try:
+                with (log_dir / "console.log").open("ab") as console:
+                    process = spawn_detached(
+                        command, base_dir, console,
+                        child_signal_mask=original_mask)
+            finally:
+                signal.pthread_sigmask(signal.SIG_SETMASK, original_mask)
+            record = _launcher_record(
+                process, command, base_dir, expected_binary)
+            write_launcher_marker(base_dir, record)
+            completed = True
+        except _StartTermination as exc:
+            termination_signal = exc.signum
+        except BaseException as exc:
+            caught_error = exc
+    finally:
+        cleanup_error = None
+        ownership_aborted = False
+        try:
+            pending_signal = _block_and_collect_start_signals()
+            if not termination_signal:
+                termination_signal = pending_signal
+            if process is not None \
+                    and (termination_signal or caught_error or not completed):
+                _abort_launcher_start(
+                    process, command, base_dir, expected_binary, record)
+                ownership_aborted = True
+        except BaseException as exc:
+            cleanup_error = exc
+            if process is not None and not ownership_aborted:
+                try:
+                    signal.pthread_sigmask(
+                        signal.SIG_BLOCK, START_HANDLED_SIGNALS)
+                    _abort_launcher_start(
+                        process, command, base_dir, expected_binary, record)
+                    ownership_aborted = True
+                except BaseException as rollback_exc:
+                    cleanup_error = rollback_exc
+        restore_error = None
+        try:
+            _restore_start_signal_handlers(previous_handlers)
+        except BaseException as exc:
+            restore_error = exc
+            if process is not None and not ownership_aborted:
+                try:
+                    _abort_launcher_start(
+                        process, command, base_dir, expected_binary, record)
+                    ownership_aborted = True
+                except BaseException as rollback_exc:
+                    cleanup_error = rollback_exc
+            try:
+                _restore_start_signal_handlers(previous_handlers)
+            except BaseException as retry_exc:
+                restore_error = retry_exc
+        finally:
+            signal.pthread_sigmask(signal.SIG_SETMASK, original_mask)
+        if cleanup_error is not None:
+            raise cleanup_error
+        if restore_error is not None:
+            raise restore_error
+
+    if termination_signal:
+        return 128 + termination_signal
+    if caught_error is not None:
+        if isinstance(caught_error, (OSError, RuntimeError, ValueError)):
+            _error("failed to start seekdb: {}".format(caught_error))
+            return 1
+        raise caught_error
+    print("started pid={}".format(process.pid))
+    return 0
 
 
 def command_start(args):
@@ -436,25 +612,14 @@ def command_start(args):
     log_dir = base_dir / "log"
     command = build_start_command(args, base_dir)
 
+    if getattr(args, "launcher", None):
+        return _command_start_with_launcher(args, base_dir, log_dir, command)
+
     try:
         prepare_instance_directory(base_dir, _executable_path(args.binary))
         log_dir.mkdir(parents=True, exist_ok=True)
         with (log_dir / "console.log").open("ab") as console:
             process = spawn_detached(command, base_dir, console)
-        if getattr(args, "launcher", None):
-            record = None
-            try:
-                record = _launcher_record(
-                    process, command, base_dir, _executable_path(args.binary))
-                write_launcher_marker(base_dir, record)
-            except (OSError, RuntimeError, ValueError):
-                _cleanup_new_launcher(
-                    process, command,
-                    record.get("start_identity") if record else None)
-                if record is not None:
-                    _remove_owned_launcher_marker(
-                        base_dir, _executable_path(args.binary), record)
-                raise
     except (OSError, RuntimeError, ValueError) as exc:
         _error("failed to start seekdb: {}".format(exc))
         return 1
@@ -576,6 +741,90 @@ def wait_process_exit(pid, timeout):
     return not process_exists(pid)
 
 
+def _parse_macos_procargs(payload):
+    """Parse one bounded KERN_PROCARGS2 payload without losing argv bytes."""
+    if len(payload) > MAX_PROCESS_ARGUMENT_BYTES:
+        raise RuntimeError("process argument payload is too large")
+    integer_size = ctypes.sizeof(ctypes.c_int)
+    if len(payload) < integer_size:
+        raise RuntimeError("process arguments are truncated")
+    argc = ctypes.c_int.from_buffer_copy(payload[:integer_size]).value
+    if argc <= 0 or argc > MAX_PROCESS_ARGUMENT_COUNT:
+        raise RuntimeError("process argument count is invalid")
+
+    cursor = integer_size
+    executable_end = payload.find(b"\0", cursor)
+    if executable_end <= cursor:
+        raise RuntimeError("process executable path is invalid")
+    executable = os.fsdecode(payload[cursor:executable_end])
+    cursor = executable_end + 1
+    while cursor < len(payload) and payload[cursor] == 0:
+        cursor += 1
+    if cursor >= len(payload):
+        raise RuntimeError("process argv is missing")
+
+    arguments = []
+    for _index in range(argc):
+        argument_end = payload.find(b"\0", cursor)
+        if argument_end < 0:
+            raise RuntimeError("process argv is truncated")
+        arguments.append(os.fsdecode(payload[cursor:argument_end]))
+        cursor = argument_end + 1
+    if not arguments or not arguments[0]:
+        raise RuntimeError("process argv[0] is invalid")
+    if not Path(executable).is_absolute():
+        raise RuntimeError("process executable path is not absolute")
+    return Path(executable), arguments
+
+
+def _macos_sysctl(mib, output, output_size):
+    """Invoke sysctl with fixed integer MIB values and preserve errno."""
+    libc = ctypes.CDLL(None, use_errno=True)
+    sysctl = libc.sysctl
+    sysctl.argtypes = [
+        ctypes.POINTER(ctypes.c_int), ctypes.c_uint,
+        ctypes.c_void_p, ctypes.POINTER(ctypes.c_size_t),
+        ctypes.c_void_p, ctypes.c_size_t,
+    ]
+    sysctl.restype = ctypes.c_int
+    mib_values = (ctypes.c_int * len(mib))(*mib)
+    ctypes.set_errno(0)
+    result = sysctl(
+        mib_values, len(mib), output, ctypes.byref(output_size), None, 0)
+    return result, ctypes.get_errno(), output_size.value
+
+
+def _read_macos_process_identity(pid):
+    """Read executable and argv through the lossless KERN_PROCARGS2 interface."""
+    argument_limit = ctypes.c_int()
+    size = ctypes.c_size_t(ctypes.sizeof(argument_limit))
+    result, error_number, returned_size = _macos_sysctl(
+        (MACOS_CTL_KERN, MACOS_KERN_ARGMAX),
+        ctypes.byref(argument_limit), size)
+    if result != 0 or returned_size != ctypes.sizeof(argument_limit):
+        raise RuntimeError(
+            "failed to query the process argument limit: errno={}".format(
+                error_number))
+    if argument_limit.value <= 0 \
+            or argument_limit.value > MAX_PROCESS_ARGUMENT_BYTES:
+        raise RuntimeError("process argument limit is unsafe")
+
+    buffer = ctypes.create_string_buffer(argument_limit.value)
+    size = ctypes.c_size_t(argument_limit.value)
+    result, error_number, returned_size = _macos_sysctl(
+        (MACOS_CTL_KERN, MACOS_KERN_PROCARGS2, pid), buffer, size)
+    if result != 0:
+        if error_number == errno.ESRCH \
+                or (error_number == errno.EINVAL and not process_exists(pid)):
+            return None
+        raise RuntimeError(
+            "failed to inspect process {} arguments: errno={}".format(
+                pid, error_number))
+    if returned_size <= 0 or returned_size > argument_limit.value:
+        raise RuntimeError("process argument payload size is invalid")
+    return _parse_macos_procargs(buffer.raw[:returned_size])
+
+
 def read_process_arguments(pid):
     if os.name == "nt":
         raise RuntimeError("Windows is not supported yet")
@@ -585,43 +834,42 @@ def read_process_arguments(pid):
             command_line = Path("/proc/{}/cmdline".format(pid)).read_bytes()
         except FileNotFoundError:
             return None
-        return [
-            argument.decode("utf-8", "replace")
-            for argument in command_line.split(b"\0")
-            if argument
-        ]
+        arguments = command_line.split(b"\0")
+        if arguments and arguments[-1] == b"":
+            arguments.pop()
+        return [os.fsdecode(argument) for argument in arguments]
 
-    try:
-        result = subprocess.run(
-            ["ps", "-p", str(pid), "-ww", "-o", "args="],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.DEVNULL,
-            timeout=PROCESS_QUERY_TIMEOUT,
-            universal_newlines=True,
-            check=False,
-        )
-    except FileNotFoundError:
-        raise RuntimeError("ps is required to inspect the seekdb process")
-    if result.returncode != 0 or not result.stdout.strip():
-        return None
-    try:
-        return shlex.split(result.stdout.strip())
-    except ValueError as exc:
-        raise RuntimeError("failed to parse process {} arguments: {}".format(pid, exc))
+    if sys.platform == "darwin":
+        identity = _read_macos_process_identity(pid)
+        return None if identity is None else identity[1]
+    raise RuntimeError("process argument inspection is unsupported")
 
 
-def process_matches_instance(pid, base_dir, expected_binary):
+def read_process_identity(pid):
+    """Return the executable path and lossless argv for one live process."""
+    if sys.platform == "darwin":
+        identity = _read_macos_process_identity(pid)
+        if identity is None:
+            return None, None
+        executable, arguments = identity
+        return executable.resolve(), arguments
+
     arguments = read_process_arguments(pid)
     if not arguments:
-        return False
-
+        return None, arguments
     if sys.platform.startswith("linux"):
         try:
             executable = Path(os.readlink("/proc/{}/exe".format(pid))).resolve()
         except FileNotFoundError:
-            return False
-    else:
-        executable = _executable_path(arguments[0])
+            return None, None
+        return executable, arguments
+    raise RuntimeError("process identity inspection is unsupported")
+
+
+def process_matches_instance(pid, base_dir, expected_binary):
+    executable, arguments = read_process_identity(pid)
+    if not arguments:
+        return False
 
     expected_base_dir = "--base-dir={}".format(base_dir)
     return executable == expected_binary.resolve() and expected_base_dir in arguments

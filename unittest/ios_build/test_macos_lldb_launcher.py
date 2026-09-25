@@ -2,6 +2,7 @@
 """Contract tests for the generic macOS LLDB executable launcher."""
 
 import argparse
+import ctypes
 import importlib.util
 import json
 import os
@@ -11,6 +12,7 @@ import signal
 import subprocess
 import sys
 import tempfile
+import textwrap
 import time
 import unittest
 from unittest import mock
@@ -242,18 +244,86 @@ class MacosLldbLauncherTest(unittest.TestCase):
             self.assertEqual(
                 ["--timeout", "3.75", "--"], ready_command[4:7])
             with mock.patch.object(
-                    sdb, "read_process_arguments",
-                    return_value=[
-                        str(binary), "--base-dir={}".format(base_dir)]):
+                    sdb, "read_process_identity",
+                    return_value=(
+                        binary,
+                        [str(binary), "--base-dir={}".format(base_dir)])):
                 self.assertTrue(sdb.process_matches_instance(
                     123, base_dir, binary))
             with mock.patch.object(
-                    sdb, "read_process_arguments",
-                    return_value=[
-                        str(launch_script), "--binary", str(binary),
-                        "--base-dir={}".format(base_dir)]):
+                    sdb, "read_process_identity",
+                    return_value=(
+                        launch_script,
+                        [str(launch_script), "--binary", str(binary),
+                         "--base-dir={}".format(base_dir)])):
                 self.assertFalse(sdb.process_matches_instance(
                     123, base_dir, binary))
+
+    def test_sdb_macos_procargs_parser_preserves_opaque_argv(self):
+        """Preserve spaces, quotes, Unicode, and empty argv entries losslessly."""
+        sdb = _load_sdb()
+        arguments = [
+            "/tmp/launcher path/Python", "quoted ' launcher.py", "",
+            "snowman-☃", '--parameter=a "b"',
+        ]
+        argc = ctypes.c_int(len(arguments))
+        prefix = ctypes.string_at(
+            ctypes.byref(argc), ctypes.sizeof(argc))
+        payload = prefix + b"/tmp/launcher path/Python\0\0\0" + b"\0".join(
+            os.fsencode(value) for value in arguments) + b"\0KEY=value\0"
+
+        executable, parsed = sdb._parse_macos_procargs(payload)
+
+        self.assertEqual(Path("/tmp/launcher path/Python"), executable)
+        self.assertEqual(arguments, parsed)
+
+    def test_sdb_macos_procargs_parser_rejects_invalid_payloads(self):
+        """Reject unsafe argument counts and truncated NUL-delimited data."""
+        sdb = _load_sdb()
+
+        def encoded_argc(value):
+            """Return one native C integer for a synthetic sysctl payload."""
+            count = ctypes.c_int(value)
+            return ctypes.string_at(
+                ctypes.byref(count), ctypes.sizeof(count))
+
+        invalid = (
+            encoded_argc(0) + b"/bin/tool\0tool\0",
+            encoded_argc(sdb.MAX_PROCESS_ARGUMENT_COUNT + 1)
+            + b"/bin/tool\0tool\0",
+            encoded_argc(2) + b"/bin/tool\0\0tool\0unterminated",
+            encoded_argc(1) + b"relative-tool\0\0tool\0",
+        )
+        for payload in invalid:
+            with self.subTest(payload=payload[:24]):
+                with self.assertRaises(RuntimeError):
+                    sdb._parse_macos_procargs(payload)
+
+    @unittest.skipUnless(sys.platform == "darwin", "requires KERN_PROCARGS2")
+    def test_sdb_macos_procargs_reads_current_process_and_missing_pid(self):
+        """Read a live argv without shell parsing and classify a vanished PID."""
+        sdb = _load_sdb()
+        executable, arguments = sdb._read_macos_process_identity(os.getpid())
+        self.assertTrue(executable.is_absolute())
+        self.assertTrue(arguments)
+        if sys.argv[1:]:
+            self.assertEqual(sys.argv[1:], arguments[-len(sys.argv[1:]):])
+        elif Path(sys.argv[0]).exists():
+            self.assertEqual(
+                Path(sys.argv[0]).resolve(), Path(arguments[-1]).resolve())
+        self.assertIsNone(sdb._read_macos_process_identity(99999999))
+
+        def permission_denied(mib, output, _output_size):
+            """Return a valid ARG_MAX followed by a denied process read."""
+            if tuple(mib) == (sdb.MACOS_CTL_KERN, sdb.MACOS_KERN_ARGMAX):
+                output._obj.value = 4096
+                return 0, 0, ctypes.sizeof(ctypes.c_int)
+            return -1, 1, 0
+
+        with mock.patch.object(
+                sdb, "_macos_sysctl", side_effect=permission_denied):
+            with self.assertRaisesRegex(RuntimeError, "errno=1"):
+                sdb._read_macos_process_identity(os.getpid())
 
     def test_sdb_launcher_marker_rejects_symlink_tamper_and_pid_reuse(self):
         """Fail closed before signaling from an unsafe launcher marker."""
@@ -330,6 +400,35 @@ class MacosLldbLauncherTest(unittest.TestCase):
             cleanup.assert_called_once_with(
                 process, sdb.build_start_command(args, base_dir), "start-id")
 
+    def test_sdb_keyboard_interrupt_rolls_back_launcher_ownership(self):
+        """Clean the detached process before replaying KeyboardInterrupt."""
+        sdb = _load_sdb()
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve()
+            binary = root / "seekdb"
+            launch_script = root / "launcher.py"
+            binary.write_bytes(b"binary")
+            launch_script.write_text("launcher", encoding="utf-8")
+            base_dir = root / "instance"
+            args = argparse.Namespace(
+                base_dir=str(base_dir), binary=str(binary),
+                launcher=str(launch_script), port=2881, nodaemon=True,
+                parameter=[])
+            process = mock.Mock(pid=9912)
+            record = {"start_identity": "start-id"}
+            with mock.patch.object(
+                    sdb, "spawn_detached", return_value=process), \
+                    mock.patch.object(
+                        sdb, "_launcher_record", return_value=record), \
+                    mock.patch.object(
+                        sdb, "write_launcher_marker",
+                        side_effect=KeyboardInterrupt()), \
+                    mock.patch.object(sdb, "_cleanup_new_launcher") as cleanup:
+                with self.assertRaises(KeyboardInterrupt):
+                    sdb.command_start(args)
+            cleanup.assert_called_once_with(
+                process, sdb.build_start_command(args, base_dir), "start-id")
+
     def test_sdb_stop_handles_managed_pid_and_launcher_marker_together(self):
         """Stop both lifecycle records before reporting one instance stopped."""
         sdb = _load_sdb()
@@ -390,19 +489,112 @@ int main(int argc, char **argv) {
         sdb_script = REPOSITORY_ROOT / ".github/script/seekdb/sdb.py"
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory).resolve()
-            program = root / "delayed-seekdb"
-            base_dir = root / "instance"
+            binary_dir = root / "binary dir ' ☃"
+            binary_dir.mkdir()
+            program = binary_dir / 'delayed " seekdb'
+            launcher_dir = root / 'launcher dir " ☃'
+            launcher_dir.mkdir()
+            launcher_copy = launcher_dir / "macos ' lldb launcher.py"
+            shutil.copy2(phase.MACOS_LLDB_LAUNCHER, launcher_copy)
+            launcher_copy.chmod(0o500)
+            base_dir = root / "instance dir ' ☃"
             compiled = subprocess.run(
                 ["cc", "-x", "c", "-o", str(program), "-"],
                 input=source.encode("utf-8"), capture_output=True, check=False)
             self.assertEqual(0, compiled.returncode, compiled.stderr)
             program.chmod(0o500)
 
-            failed_base = root / "failed-instance"
+            signal_helper = root / "sdb signal injection.py"
+            signal_helper.write_text(textwrap.dedent(r'''
+                import argparse
+                import importlib.util
+                import json
+                import os
+                from pathlib import Path
+                import signal
+                import sys
+
+                repository = Path(sys.argv[1])
+                sys.path.insert(0, str(repository / "unittest/ios_build"))
+                import test_macos_lldb_launcher as contract
+                sdb_path = repository / ".github/script/seekdb/sdb.py"
+                spec = importlib.util.spec_from_file_location("signal_sdb", sdb_path)
+                sdb = importlib.util.module_from_spec(spec)
+                spec.loader.exec_module(sdb)
+                base_dir = Path(sys.argv[2])
+                binary = Path(sys.argv[3])
+                launcher_path = Path(sys.argv[4])
+                mode = sys.argv[5]
+                signum = int(sys.argv[6])
+                evidence = Path(sys.argv[7])
+
+                def capture(process):
+                    """Persist the real launcher chain before signal injection."""
+                    lldb_pid = contract._wait_for_lldb_session_leader(process.pid)
+                    target_pid = contract._wait_for_lldb_target(lldb_pid, binary)
+                    evidence.write_text(json.dumps(
+                        [process.pid, lldb_pid, target_pid]), encoding="utf-8")
+
+                original_spawn = sdb.spawn_detached
+                original_write = sdb.write_launcher_marker
+
+                def injected_spawn(
+                        command, working_directory, console,
+                        child_signal_mask=None):
+                    """Inject while command_start still blocks ownership signals."""
+                    process = original_spawn(
+                        command, working_directory, console,
+                        child_signal_mask=child_signal_mask)
+                    if mode == "spawn":
+                        capture(process)
+                        os.kill(os.getpid(), signum)
+                    return process
+
+                def injected_write(working_directory, record):
+                    """Inject immediately after the durable marker transaction."""
+                    original_write(working_directory, record)
+                    if mode == "marker":
+                        class Process:
+                            pid = record["pid"]
+                        capture(Process())
+                        os.kill(os.getpid(), signum)
+
+                sdb.spawn_detached = injected_spawn
+                sdb.write_launcher_marker = injected_write
+                options = argparse.Namespace(
+                    base_dir=str(base_dir), binary=str(binary),
+                    launcher=str(launcher_path), port=2884, nodaemon=True,
+                    parameter=["", "signal value with spaces"])
+                raise SystemExit(sdb.command_start(options))
+            '''), encoding="utf-8")
+            for mode, signum, expected_status in (
+                    ("spawn", signal.SIGTERM, 143),
+                    ("marker", signal.SIGINT, 130)):
+                signal_base = root / "{} signal instance".format(mode)
+                signal_evidence = root / "{}-signal-pids.json".format(mode)
+                interrupted = subprocess.run([
+                    sys.executable, str(signal_helper), str(REPOSITORY_ROOT),
+                    str(signal_base), str(program), str(launcher_copy), mode,
+                    str(int(signum)), str(signal_evidence),
+                ], capture_output=True, text=True, timeout=30, check=False)
+                self.assertEqual(
+                    expected_status, interrupted.returncode,
+                    interrupted.stdout + interrupted.stderr)
+                signal_pids = json.loads(
+                    signal_evidence.read_text(encoding="utf-8"))
+                self.assertFalse((
+                    signal_base / "run/.sdb-launcher.json").exists())
+                for pid in signal_pids:
+                    self.assertFalse(
+                        _pid_exists(pid),
+                        "signal-window pid {} survived".format(pid))
+
+            failed_base = root / 'failed instance " ☃'
             failed_args = argparse.Namespace(
                 base_dir=str(failed_base), binary=str(program),
-                launcher=str(phase.MACOS_LLDB_LAUNCHER), port=2882,
-                nodaemon=True, parameter=[])
+                launcher=str(launcher_copy), port=2882,
+                nodaemon=True,
+                parameter=["", 'value with spaces \' " and ☃'])
             sdb = _load_sdb()
             original_cleanup = sdb._cleanup_new_launcher
             failed_pids = []
@@ -428,12 +620,17 @@ int main(int argc, char **argv) {
             started = subprocess.run([
                 sys.executable, str(sdb_script), "start",
                 "--binary", str(program),
-                "--launcher", str(phase.MACOS_LLDB_LAUNCHER),
+                "--launcher", str(launcher_copy),
                 "--base-dir", str(base_dir), "--nodaemon",
+                "--parameter", "", "--parameter",
+                'value with spaces \' " and ☃',
             ], capture_output=True, text=True, timeout=15, check=False)
             self.assertEqual(0, started.returncode, started.stderr)
             marker_path = base_dir / "run" / ".sdb-launcher.json"
             record = json.loads(marker_path.read_text(encoding="utf-8"))
+            self.assertEqual(str(launcher_copy), record["argv"][1])
+            self.assertIn("", record["argv"])
+            self.assertIn('value with spaces \' " and ☃', record["argv"])
             launcher_pid = record["pid"]
             lldb_pid = _wait_for_lldb_session_leader(launcher_pid)
             target_pid = _wait_for_lldb_target(lldb_pid, program)
@@ -456,13 +653,13 @@ int main(int argc, char **argv) {
                     except ProcessLookupError:
                         pass
 
-            managed_base = root / "managed-instance"
+            managed_base = root / "managed instance ' ☃"
             managed_start = subprocess.run([
                 sys.executable, str(sdb_script), "start",
                 "--binary", str(program),
-                "--launcher", str(phase.MACOS_LLDB_LAUNCHER),
+                "--launcher", str(launcher_copy),
                 "--base-dir", str(managed_base), "--port", "2883",
-                "--nodaemon",
+                "--nodaemon", "--parameter", "",
             ], capture_output=True, text=True, timeout=15, check=False)
             self.assertEqual(0, managed_start.returncode, managed_start.stderr)
             managed_record = json.loads((

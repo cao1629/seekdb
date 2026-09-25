@@ -232,6 +232,14 @@ run-local snapshot 的 `--help`/`--version` 经 launcher 均不再返回 137；�
 Mach-O 的 exit 7、SIGTERM 143、SIGKILL 137 也按契约传播。该验证没有启动 272 case
 或真机阶段。
 
+macOS launcher identity 的 argv 来自 `KERN_PROCARGS2`，按 native `argc`、exec path 与
+NUL-delimited argv 有界解析，不再用会破坏引号、空格及空参数的 `ps` 文本与 shell parser；
+权限错误、PID 消失竞态、截断或非法 payload 均 fail-closed。start 的 detached spawn、
+identity 读取与 marker durable write 还是一个 signal-safe ownership transaction：父进程
+在 `Popen` 返回/赋值临界区阻塞 TERM/INT/HUP，子进程 exec 前恢复原 mask；marker 持久化
+前后的 signal 或任意 `BaseException` 都按当前内存/marker ownership 精确清理 launcher
+全链，最后恢复 handler/mask，并将外部 TERM/INT/HUP 映射为 `128+signal`。
+
 这是真实完整 host mysqltest，不是静态检查，耗时取决于 272 个 case 和重试；任一 host evidence/binary/corpus 问题都会在 iOS build、签名、安装或设备发现前停止。
 
 静态 parser 审计全部 283 个 active source，并递归覆盖 `.inc`/`.sql` 输入；循环、path escape、缺失 include 或 connection/process/topology/result rewrite/error-policy 等语义均保持 host-only/not-applicable，不能静默删除。当前设备 registry 只包含 `ios.mysqltest.empty_table`：它消费 tracked `empty_table.result`，在内部 SQL proxy 上断言 statement status、affected rows、精确计数值，并从 result-set field metadata 精确断言有序字段名 `nr,b,str` 后要求 `OB_ITER_END`。其他 parser 候选在没有完整 transcript、affected-row、warning/error-domain adapter 前均保持 host-only。
