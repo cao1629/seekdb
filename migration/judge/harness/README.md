@@ -63,3 +63,13 @@ run confirmed what the stubbed tests could not: obclient keeps an open session's
 kill, the client stops on a lost-connection error, and SHOW PARAMETERS prints the name and value
 columns the script reads. The recordings carry the script's sha256, so any later edit to the script
 means recording the C++ reference again.
+
+## The second-set options (applied 2026-09-25)
+
+`--ps-protocol`, `--compress`, `--plan-cache-stats` (with its per-instance self-check),
+`--seekdb-parameter`, `--test-dir`, and `compare --mask est` / `--mask row-order` were written on a
+copy of the runner while the injected-mutation runs used the live file, reviewed by two Opus 5.5
+runs on disjoint parts, and applied to the live runner once those runs ended. Their documentation,
+the row-order list format and the helper that builds it (`hash_order_list.py`) are in
+second-set/README.md; the whole change is second-set/runner-second-set.patch. Every default is
+unchanged, so CI behaves as before.

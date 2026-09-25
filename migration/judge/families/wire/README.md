@@ -8,11 +8,9 @@ restart_scenarios.py does), so the runner's `compare` diffs two builds unchanged
 its minimal MySQL protocol client. `known-answers.sql` holds the `CRC32()`, `COMPRESS()`,
 `UNCOMPRESS()` and `UNCOMPRESSED_LENGTH()` vectors for family 5.
 
-**Not in this directory:** item 8 also asks for a `--compress` replay of the 272 configured cases
-(PLAN.md item 8; golden-bytes-scope.md, "The compressed protocol"), a runner option that passes
-mysqltest's `-C/--compress`, the same way `--ps-protocol` does for item 4. It is not built. It belongs
-on the runner copy in migration/judge/harness/second-set/, where `--ps-protocol` was written, and item
-8 is not complete until it exists.
+**Not in this directory:** item 8's `--compress` replay of the 272 configured cases is the runner's
+`--compress` option (it passes mysqltest's `-C/--compress`), applied to the live runner on 2026-09-25
+with the rest of migration/judge/harness/second-set/runner-second-set.patch.
 
 ## What each scenario checks
 
