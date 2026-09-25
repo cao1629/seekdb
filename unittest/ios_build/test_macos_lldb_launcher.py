@@ -3,6 +3,7 @@
 
 import argparse
 import ctypes
+import fcntl
 import importlib.util
 import json
 import os
@@ -509,6 +510,57 @@ class MacosLldbLauncherTest(unittest.TestCase):
                     sdb.preflight_launcher_marker(base_dir, binary)
             self.assertTrue(marker.is_file())
 
+    def test_sdb_lifecycle_lock_is_stable_and_rejects_unsafe_objects(self):
+        """Keep one lock inode across recreation and reject unsafe lock names."""
+        sdb = _load_sdb()
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve()
+            base_dir = root / "stable-instance"
+            binary = root / "seekdb"
+            binary.write_bytes(b"binary")
+            with self.assertRaises(KeyboardInterrupt):
+                with sdb.lifecycle_lock(base_dir):
+                    first = sdb.lifecycle_lock_path(base_dir).stat()
+                    sdb.prepare_instance_directory(base_dir, binary)
+                    raise KeyboardInterrupt()
+            self.assertEqual(
+                0, sdb.command_destroy(argparse.Namespace(base_dir=str(base_dir))))
+            sdb.prepare_instance_directory(base_dir, binary)
+            with sdb.lifecycle_lock(base_dir):
+                second = sdb.lifecycle_lock_path(base_dir).stat()
+            self.assertEqual(
+                (first.st_dev, first.st_ino), (second.st_dev, second.st_ino))
+            descriptor = os.open(sdb.lifecycle_lock_path(base_dir), os.O_RDWR)
+            try:
+                fcntl.flock(descriptor, fcntl.LOCK_EX | fcntl.LOCK_NB)
+            finally:
+                os.close(descriptor)
+
+            for kind in ("symlink", "fifo", "mode"):
+                with self.subTest(kind=kind):
+                    unsafe_base = root / "{}-instance".format(kind)
+                    lock_path = sdb.lifecycle_lock_path(unsafe_base)
+                    victim = root / "{}-lock-victim".format(kind)
+                    if kind == "symlink":
+                        victim.write_text("unchanged", encoding="utf-8")
+                        lock_path.symlink_to(victim)
+                    elif kind == "fifo":
+                        os.mkfifo(lock_path)
+                    else:
+                        lock_path.write_bytes(b"tampered")
+                        lock_path.chmod(0o644)
+                    with self.assertRaises((OSError, RuntimeError)):
+                        with sdb.lifecycle_lock(unsafe_base):
+                            self.fail("unsafe lifecycle lock was accepted")
+                    if kind == "symlink":
+                        self.assertTrue(lock_path.is_symlink())
+                        self.assertEqual(
+                            "unchanged", victim.read_text(encoding="utf-8"))
+                    elif kind == "fifo":
+                        self.assertTrue(stat.S_ISFIFO(lock_path.lstat().st_mode))
+                    else:
+                        self.assertEqual(b"tampered", lock_path.read_bytes())
+
     def test_sdb_keyboard_interrupt_rolls_back_launcher_ownership(self):
         """Clean the detached process before replaying KeyboardInterrupt."""
         sdb = _load_sdb()
@@ -619,6 +671,7 @@ int main(int argc, char **argv) {
 }
 '''
         sdb_script = REPOSITORY_ROOT / ".github/script/seekdb/sdb.py"
+        sdb = _load_sdb()
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory).resolve()
             binary_dir = root / "binary dir ' ☃"
@@ -721,13 +774,150 @@ int main(int argc, char **argv) {
                         _pid_exists(pid),
                         "signal-window pid {} survived".format(pid))
 
+            lock_helper = root / "sdb lifecycle lock helper.py"
+            lock_helper.write_text(textwrap.dedent(r'''
+                import argparse
+                import importlib.util
+                import os
+                from pathlib import Path
+                import sys
+                import time
+
+                repository = Path(sys.argv[1])
+                sdb_path = repository / ".github/script/seekdb/sdb.py"
+                spec = importlib.util.spec_from_file_location("lock_sdb", sdb_path)
+                sdb = importlib.util.module_from_spec(spec)
+                spec.loader.exec_module(sdb)
+                base_dir = Path(sys.argv[2])
+                binary = Path(sys.argv[3])
+                mode = sys.argv[4]
+                ready = Path(sys.argv[5])
+                release = Path(sys.argv[6])
+                with sdb.lifecycle_lock(base_dir):
+                    if mode == "preflight":
+                        sdb.preflight_launcher_marker(base_dir, binary)
+                    else:
+                        options = argparse.Namespace(
+                            base_dir=str(base_dir), quiet=True,
+                            require_match=True)
+                        if sdb._command_stop_locked(options, base_dir) != 0:
+                            raise SystemExit(3)
+                    ready.write_text(str(os.getpid()), encoding="ascii")
+                    deadline = time.monotonic() + 20
+                    while not release.exists() and time.monotonic() < deadline:
+                        time.sleep(0.02)
+                    if not release.exists():
+                        raise SystemExit(4)
+            '''), encoding="utf-8")
+            concurrent_base = root / "concurrent instance"
+            sdb.prepare_instance_directory(concurrent_base, program)
+            concurrent_args = argparse.Namespace(
+                base_dir=str(concurrent_base), binary=str(program),
+                launcher=str(launcher_copy), port=2885, nodaemon=True,
+                parameter=[""])
+            stale_command = sdb.build_start_command(
+                concurrent_args, concurrent_base)
+            stale_record = {
+                "version": sdb.LAUNCHER_MARKER_VERSION,
+                "pid": 99999999,
+                "start_identity": "exited-concurrent-start",
+                "process_executable": str(Path(sys.executable).resolve()),
+                "launcher_executable": str(launcher_copy),
+                "target_binary": str(program),
+                "base_dir": str(concurrent_base),
+                "argv": stale_command,
+            }
+            sdb.write_launcher_marker(concurrent_base, stale_record)
+            preflight_ready = root / "preflight-ready"
+            preflight_release = root / "preflight-release"
+            preflight = subprocess.Popen([
+                sys.executable, str(lock_helper), str(REPOSITORY_ROOT),
+                str(concurrent_base), str(program), "preflight",
+                str(preflight_ready), str(preflight_release),
+            ], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+            preflight_deadline = time.monotonic() + 10
+            while (not preflight_ready.exists()
+                   and time.monotonic() < preflight_deadline):
+                if preflight.poll() is not None:
+                    output = preflight.communicate()
+                    self.fail("preflight helper failed: {}".format(
+                        "".join(output)))
+                time.sleep(0.02)
+            self.assertTrue(preflight_ready.exists())
+            first_start = subprocess.Popen([
+                sys.executable, str(sdb_script), "start",
+                "--binary", str(program), "--launcher", str(launcher_copy),
+                "--base-dir", str(concurrent_base), "--port", "2885",
+                "--nodaemon", "--parameter", "",
+            ], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+            time.sleep(0.25)
+            self.assertIsNone(first_start.poll())
+            preflight_release.write_text("release", encoding="ascii")
+            preflight_output = preflight.communicate(timeout=10)
+            self.assertEqual(0, preflight.returncode, "".join(preflight_output))
+            first_output = first_start.communicate(timeout=15)
+            self.assertEqual(0, first_start.returncode, "".join(first_output))
+            first_record = json.loads((
+                concurrent_base / "run/.sdb-launcher.json").read_text(
+                    encoding="utf-8"))
+            first_launcher_pid = first_record["pid"]
+            first_lldb_pid = _wait_for_lldb_session_leader(first_launcher_pid)
+            first_target_pid = _wait_for_lldb_target(first_lldb_pid, program)
+
+            stop_ready = root / "stop-ready"
+            stop_release = root / "stop-release"
+            stopper = subprocess.Popen([
+                sys.executable, str(lock_helper), str(REPOSITORY_ROOT),
+                str(concurrent_base), str(program), "stop",
+                str(stop_ready), str(stop_release),
+            ], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+            stop_deadline = time.monotonic() + 20
+            while not stop_ready.exists() and time.monotonic() < stop_deadline:
+                if stopper.poll() is not None:
+                    output = stopper.communicate()
+                    self.fail("stop helper failed: {}".format("".join(output)))
+                time.sleep(0.02)
+            self.assertTrue(stop_ready.exists())
+            second_start = subprocess.Popen([
+                sys.executable, str(sdb_script), "start",
+                "--binary", str(program), "--launcher", str(launcher_copy),
+                "--base-dir", str(concurrent_base), "--port", "2885",
+                "--nodaemon", "--parameter", "",
+            ], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+            time.sleep(0.25)
+            self.assertIsNone(second_start.poll())
+            stop_release.write_text("release", encoding="ascii")
+            stop_output = stopper.communicate(timeout=10)
+            self.assertEqual(0, stopper.returncode, "".join(stop_output))
+            second_output = second_start.communicate(timeout=15)
+            self.assertEqual(0, second_start.returncode, "".join(second_output))
+            second_record = json.loads((
+                concurrent_base / "run/.sdb-launcher.json").read_text(
+                    encoding="utf-8"))
+            self.assertNotEqual(first_launcher_pid, second_record["pid"])
+            for pid in (first_launcher_pid, first_lldb_pid, first_target_pid):
+                self.assertFalse(
+                    _pid_exists(pid), "old concurrent pid {} survived".format(pid))
+            second_launcher_pid = second_record["pid"]
+            second_lldb_pid = _wait_for_lldb_session_leader(second_launcher_pid)
+            second_target_pid = _wait_for_lldb_target(second_lldb_pid, program)
+            concurrent_destroy = subprocess.run([
+                sys.executable, str(sdb_script), "destroy",
+                "--base-dir", str(concurrent_base),
+            ], capture_output=True, text=True, timeout=30, check=False)
+            self.assertEqual(
+                0, concurrent_destroy.returncode, concurrent_destroy.stderr)
+            for pid in (
+                    second_launcher_pid, second_lldb_pid, second_target_pid):
+                self.assertFalse(
+                    _pid_exists(pid), "new concurrent pid {} survived".format(pid))
+
             failed_base = root / 'failed instance " ☃'
             failed_args = argparse.Namespace(
                 base_dir=str(failed_base), binary=str(program),
                 launcher=str(launcher_copy), port=2882,
                 nodaemon=True,
                 parameter=["", 'value with spaces \' " and ☃'])
-            sdb = _load_sdb()
             original_cleanup = sdb._cleanup_new_launcher
             failed_pids = []
 

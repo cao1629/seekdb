@@ -244,6 +244,13 @@ identity 读取与 marker durable write 还是一个 signal-safe ownership trans
 JSON、symlink、special file、超限或 foreign marker 都原样保留并 fail-closed。spawn 后若
 marker 写入与外部文件竞态，rollback 也固定先凭本次 `Popen` ownership 回收 launcher
 全链，再尝试解析 durable marker；marker 解析失败不能跳过进程清理，未知 marker 不删除。
+每个 canonical base-dir 还在其父目录使用基于绝对路径哈希的永久 lifecycle lock file；
+lock 以 parent dir-fd、`O_CREAT|O_NOFOLLOW` 打开，严格校验 regular、当前 owner、0600 及
+name/fd inode 一致后获取 `flock(LOCK_EX)`。因此 base-dir 被 destroy/recreate 后仍复用同一
+lock inode。start 从首次 base/marker preflight 到 spawn+durable commit，stop/destroy 从
+状态读取到 terminate、marker 删除和 rmtree 完成均持有该锁；destroy 直接调用 locked
+stop helper，避免嵌套 flock。symlink、FIFO、权限篡改等 lock object 原样保留并 fail-closed，
+所有异常与 `BaseException` 路径都关闭 fd 释放锁。
 
 这是真实完整 host mysqltest，不是静态检查，耗时取决于 272 个 case 和重试；任一 host evidence/binary/corpus 问题都会在 iOS build、签名、安装或设备发现前停止。
 

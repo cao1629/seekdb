@@ -121,6 +121,15 @@
   注入 malformed marker 时，parse failure 仍不会跳过 LLDB/target 清理，foreign marker
   原样保留，CLI 同时报告原 start error 与 rollback error。真实 race 回归确认 launcher、
   LLDB、target 均从 `ps` 消失；未运行 272 case、iOS build、签名或真机。
+- start/stop/destroy 现在共享每 base-dir 的永久 parent-owned lifecycle lock：lock 名由
+  canonical 绝对路径哈希生成，经 parent dir-fd、`O_CREAT|O_NOFOLLOW`、regular/owner/0600
+  与 name/fd inode 复核后 `flock(LOCK_EX)`，base destroy/recreate 仍复用同一 inode；
+  symlink、FIFO 和 mode tamper 均原样 fail-closed。锁覆盖所有 base/marker preflight、
+  spawn+durable commit、terminate+marker removal 与 rmtree；destroy 调用 locked stop helper
+  而不重入 flock，异常和 KeyboardInterrupt 均关闭 fd。真实双进程回归覆盖 stale preflight
+  对 new start、stop cleanup 对 new start：后操作在锁释放前保持阻塞，旧操作不会删除新
+  active marker，最终 destroy 后两代 launcher/LLDB/target 均无 `ps` 条目。未运行 272
+  case、iOS build、签名或真机。
 
 ## 2026-09-25：standalone runner stages 1–4 adapter
 

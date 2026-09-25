@@ -4,8 +4,11 @@
 from __future__ import print_function
 
 import argparse
+from contextlib import contextmanager
 import ctypes
 import errno
+import fcntl
+import hashlib
 import json
 import os
 import secrets
@@ -118,6 +121,60 @@ def _restore_start_signal_handlers(previous):
 def _base_dir(value):
     path = Path(os.path.abspath(os.path.expanduser(value)))
     return path.parent.resolve() / path.name
+
+
+def lifecycle_lock_path(base_dir):
+    """Return the stable parent-owned lock path for one absolute base-dir."""
+    digest = hashlib.sha256(os.fsencode(str(base_dir))).hexdigest()
+    return base_dir.parent / ".sdb-lifecycle-{}.lock".format(digest)
+
+
+def _validate_lifecycle_lock(metadata):
+    """Reject a non-private or non-regular lifecycle lock object."""
+    if not stat.S_ISREG(metadata.st_mode):
+        raise RuntimeError("lifecycle lock is not a regular file")
+    if metadata.st_uid != os.geteuid():
+        raise RuntimeError("lifecycle lock has an unexpected owner")
+    if stat.S_IMODE(metadata.st_mode) != 0o600:
+        raise RuntimeError("lifecycle lock permissions must be 0600")
+
+
+@contextmanager
+def lifecycle_lock(base_dir):
+    """Hold one stable descriptor-anchored exclusive instance lifecycle lock."""
+    lock_path = lifecycle_lock_path(base_dir)
+    directory_flags = os.O_RDONLY | getattr(os, "O_DIRECTORY", 0) \
+        | getattr(os, "O_NOFOLLOW", 0) | getattr(os, "O_CLOEXEC", 0)
+    parent_fd = os.open(str(lock_path.parent), directory_flags)
+    descriptor = None
+    try:
+        descriptor = os.open(
+            lock_path.name,
+            os.O_RDWR | os.O_CREAT | getattr(os, "O_NOFOLLOW", 0)
+            | getattr(os, "O_CLOEXEC", 0) | getattr(os, "O_NONBLOCK", 0),
+            0o600,
+            dir_fd=parent_fd,
+        )
+        before = os.fstat(descriptor)
+        _validate_lifecycle_lock(before)
+        fcntl.flock(descriptor, fcntl.LOCK_EX)
+        after = os.fstat(descriptor)
+        linked = os.stat(
+            lock_path.name, dir_fd=parent_fd, follow_symlinks=False)
+        _validate_lifecycle_lock(after)
+        _validate_lifecycle_lock(linked)
+        if (before.st_dev, before.st_ino) != (after.st_dev, after.st_ino) \
+                or (after.st_dev, after.st_ino) != (
+                    linked.st_dev, linked.st_ino):
+            raise RuntimeError("lifecycle lock identity changed")
+        yield descriptor
+    finally:
+        if descriptor is not None:
+            try:
+                fcntl.flock(descriptor, fcntl.LOCK_UN)
+            finally:
+                os.close(descriptor)
+        os.close(parent_fd)
 
 
 def _expand_command(value):
@@ -640,9 +697,21 @@ def _command_start_with_launcher(args, base_dir, log_dir, command):
 
 
 def command_start(args):
+    """Start one instance while holding its complete lifecycle lock."""
     base_dir = _base_dir(args.base_dir)
     log_dir = base_dir / "log"
     command = build_start_command(args, base_dir)
+
+    try:
+        with lifecycle_lock(base_dir):
+            return _command_start_locked(args, base_dir, log_dir, command)
+    except (OSError, RuntimeError, ValueError) as exc:
+        _error("failed to acquire seekdb lifecycle lock: {}".format(exc))
+        return 1
+
+
+def _command_start_locked(args, base_dir, log_dir, command):
+    """Start one instance with the caller holding its lifecycle lock."""
 
     if getattr(args, "launcher", None):
         return _command_start_with_launcher(args, base_dir, log_dir, command)
@@ -973,8 +1042,8 @@ def terminate_pid(pid, base_dir, expected_binary):
         raise RuntimeError("process {} did not exit".format(pid))
 
 
-def command_stop(args):
-    base_dir = _base_dir(args.base_dir)
+def _command_stop_locked(args, base_dir):
+    """Stop one instance with the caller holding its lifecycle lock."""
     pid_file = base_dir / "run" / "seekdb.pid"
 
     try:
@@ -1072,8 +1141,30 @@ def command_stop(args):
     return 0
 
 
-def command_destroy(args):
+def command_stop(args):
+    """Stop one instance while holding its complete lifecycle lock."""
     base_dir = _base_dir(args.base_dir)
+    try:
+        with lifecycle_lock(base_dir):
+            return _command_stop_locked(args, base_dir)
+    except (OSError, RuntimeError, ValueError) as exc:
+        _error("failed to acquire seekdb lifecycle lock: {}".format(exc))
+        return 1
+
+
+def command_destroy(args):
+    """Destroy one instance while holding its complete lifecycle lock."""
+    base_dir = _base_dir(args.base_dir)
+    try:
+        with lifecycle_lock(base_dir):
+            return _command_destroy_locked(args, base_dir)
+    except (OSError, RuntimeError, ValueError) as exc:
+        _error("failed to acquire seekdb lifecycle lock: {}".format(exc))
+        return 1
+
+
+def _command_destroy_locked(args, base_dir):
+    """Destroy one instance with the caller holding its lifecycle lock."""
     try:
         validate_base_dir(base_dir)
     except (OSError, ValueError) as exc:
@@ -1096,7 +1187,7 @@ def command_destroy(args):
     stop_args = argparse.Namespace(
         base_dir=str(base_dir), quiet=True, require_match=True
     )
-    if command_stop(stop_args) != 0:
+    if _command_stop_locked(stop_args, base_dir) != 0:
         return 1
 
     try:
