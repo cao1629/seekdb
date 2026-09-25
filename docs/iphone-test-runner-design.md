@@ -243,8 +243,13 @@ list. Missing, stale, malformed, extra, or incomplete evidence is an
 infrastructure/evidence failure and prevents later build, install, and device
 work for an explicitly selected mysqltest run.
 
-The result path is process-local environment input, never a command-line
-argument. Corpus and evidence files are bounded regular non-symlink files read
-through no-follow descriptors. Device-native mysqltest cases also require
+The standalone entry point does not accept an externally prepared result as
+execution proof. Under the selected run lock it invokes the tracked host runner
+for all selected cases, merges the slices, and independently hashes the local
+seekdb, obclient, and mysqltest executables. Corpus and evidence files are
+bounded regular non-symlink files read through no-follow descriptors.
+The complete validated evidence identity is stored in the case artifact and
+checkpoint and participates in the configuration fingerprint, so resume cannot
+replace evidence while skipping a passed host gate. Device-native cases require
 initialized server modules and exact ordered result metadata; zero executed
 SQL assertions cannot pass a case.

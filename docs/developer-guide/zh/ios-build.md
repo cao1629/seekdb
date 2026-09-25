@@ -116,12 +116,16 @@ xcrun devicectl device install app --device "$DEVICE_ID" "$APP_PATH"
 
 ### Standalone mysqltest 阶段
 
-`./run.iphone.test.sh --suite mysqltest` 现在注册三个有序边界：独立 host mysqltest gate、每个已审查 lossless source 的设备 case，以及不可省略的通用 SQL/同目录 restart gate。host gate 不在 iPhone 上伪装运行，需要先由既有 host mysqltest runner 产生覆盖精确 272 个 CI-selected case 的 JSON result，并仅在本次进程中提供路径：
+`./run.iphone.test.sh --suite mysqltest` 现在注册三个有序边界：独立 host mysqltest gate、每个已审查 lossless source 的设备 case，以及不可省略的通用 SQL/同目录 restart gate。入口不接受预先准备的 JSON 作为执行证明；同一次受锁 runner 流程会调用受跟踪的 host runner，先执行精确 272 个 CI-selected case，再 merge 并独立复核本机三项 executable bytes。调用者只需提供本机实际 host executable：
 
 ```bash
-SEEKDB_IPHONE_HOST_MYSQLTEST_RESULT=/absolute/path/to/host-result.json \
+SEEKDB_IPHONE_HOST_SEEKDB=/absolute/path/to/seekdb \
+SEEKDB_IPHONE_HOST_OBCLIENT=/absolute/path/to/obclient \
+SEEKDB_IPHONE_HOST_MYSQLTEST=/absolute/path/to/mysqltest \
   ./run.iphone.test.sh --suite mysqltest
 ```
+
+这是真实完整 host mysqltest，不是静态检查，耗时取决于 272 个 case 和重试；任一 host evidence/binary/corpus 问题都会在 iOS build、签名、安装或设备发现前停止。
 
 静态 parser 审计全部 283 个 active source，并递归覆盖 `.inc`/`.sql` 输入；循环、path escape、缺失 include 或 connection/process/topology/result rewrite/error-policy 等语义均保持 host-only/not-applicable，不能静默删除。当前设备 registry 只包含 `ios.mysqltest.empty_table`：它消费 tracked `empty_table.result`，在内部 SQL proxy 上断言 statement status、affected rows、精确计数值及空结果 column count。其他 parser 候选在没有完整 transcript、affected-row、warning/error-domain adapter 前均保持 host-only。
 
@@ -180,11 +184,11 @@ Rust 可执行文件由 PATH 或 `CARGO`、`RUSTUP` 提供；脚本也查找仓�
 
 mysqltest standalone 阶段的 host gate 现在只接受受跟踪 host runner 生成并
 封印的 merged evidence。证据绑定当前 commit、完整 `.test/.inc/.sql/.result`
-语料、host runner/config/parser、三项 host binary identity 和精确有序的 272
+语料、host runner/config/parser、三项本地 host binary identity 和精确有序的 272
 项 CI case 列表；缺失、损坏、陈旧、增删 case 或 binary identity 不一致均按
-evidence/infrastructure 失败处理，并在显式 mysqltest 运行中阻止后续构建、安装
-和真机动作。结果路径只通过 `SEEKDB_IPHONE_HOST_MYSQLTEST_RESULT` 传入，不进入
-argv；输入必须是有大小上限的 regular non-symlink 文件。
+evidence/infrastructure 失败处理，并阻止后续构建、安装和真机动作。host evidence
+只能由同一次受锁 runner 调用 tracked runner 生成，不能通过 argv 或环境导入外部
+JSON；slice/result 输入必须是有大小上限的 regular non-symlink 文件。
 
 - mysqltest 的 `empty_table` 真机适配器仅在 server modules ready 后执行，空结果
   还会独立读取并精确断言有序字段名 `nr,b,str` 和终止状态 `OB_ITER_END`；模块

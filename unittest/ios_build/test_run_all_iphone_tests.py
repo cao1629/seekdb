@@ -695,6 +695,32 @@ class RunAllIphoneTestsTest(unittest.TestCase):
         signing.assert_not_called()
         self.assertFalse(output_root.exists())
 
+    def test_configuration_fingerprint_binds_complete_host_evidence(self):
+        """Changing validated host evidence must make resume incompatible."""
+        configuration = cli.resolve_local_configuration(
+            cli.parse_args(["--suite", "inventory"]), {})
+        first = cli.configuration_fingerprint(
+            runner_suites=("mysqltest",), configuration=configuration,
+            build_identity="build", host_evidence_identity={
+                "evidence_digest": "a" * 64,
+                "source_commit": "b" * 40,
+                "corpus_digest": "c" * 64,
+                "host_build_identity": "d" * 64,
+                "run_id": "run-one",
+                "case_list_digest": "e" * 64,
+            })
+        second = cli.configuration_fingerprint(
+            runner_suites=("mysqltest",), configuration=configuration,
+            build_identity="build", host_evidence_identity={
+                "evidence_digest": "f" * 64,
+                "source_commit": "b" * 40,
+                "corpus_digest": "c" * 64,
+                "host_build_identity": "d" * 64,
+                "run_id": "run-two",
+                "case_list_digest": "e" * 64,
+            })
+        self.assertNotEqual(first, second)
+
     def test_dry_run_is_read_only_for_default_resume_and_restart(self):
         """Every dry-run lifecycle mode must leave the tree byte-for-byte intact."""
         timestamp = dt.datetime(2026, 9, 24, 10, tzinfo=UTC)

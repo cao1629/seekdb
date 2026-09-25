@@ -1270,10 +1270,29 @@ def _mysqltest_host_validator(
         except (OSError, json.JSONDecodeError) as error:
             raise PhaseEvidenceError(
                 "host mysqltest gate evidence is invalid") from error
-        if payload != {
-                "case_count": 272,
-                "execution_class": "host-only",
-                "success": True}:
+        required = {
+            "case_count", "execution_class", "success", "evidence_digest",
+            "source_commit", "corpus_digest", "host_binaries",
+            "host_build_identity",
+            "run_id", "case_list_digest",
+        }
+        if (not isinstance(payload, dict) or set(payload) != required
+                or payload.get("case_count") != 272
+                or payload.get("execution_class") != "host-only"
+                or payload.get("success") is not True
+                or any(not isinstance(payload.get(field), str)
+                       or not payload.get(field)
+                       for field in required - {
+                           "case_count", "execution_class", "success",
+                           "host_binaries"})):
+            raise PhaseEvidenceError(
+                "host mysqltest gate evidence is invalid")
+        binaries = payload["host_binaries"]
+        if (not isinstance(binaries, dict)
+                or set(binaries) != {"seekdb", "obclient", "mysqltest"}
+                or any(not isinstance(identity, dict)
+                       or set(identity) != {"sha256", "size"}
+                       for identity in binaries.values())):
             raise PhaseEvidenceError(
                 "host mysqltest gate evidence is invalid")
         return (output_path.name,)
@@ -1362,16 +1381,20 @@ def create_phase_contracts(
     mysqltest_device_cases = tuple(
         case for case in mysqltest_plan
         if case.execution_class == "device-native")
-    mysqltest_host_result = os.environ.get(
-        "SEEKDB_IPHONE_HOST_MYSQLTEST_RESULT")
     mysqltest_host_output = run_directory / "evidence-mysqltest-host.json"
     mysqltest_host_command = (
         sys.executable, str(MYSQLTEST_PHASE_SCRIPT),
         "--repo-root", str(REPOSITORY_ROOT),
         "--output", str(mysqltest_host_output),
+        "--host-work-directory", str(run_directory / "mysqltest-host"),
     )
-    mysqltest_host_readiness = None if mysqltest_host_result else (
-        "mysqltest host gate requires SEEKDB_IPHONE_HOST_MYSQLTEST_RESULT")
+    try:
+        run_mysqltest_phase.resolve_host_binaries(os.environ)
+    except run_mysqltest_phase.MysqltestPhaseError:
+        mysqltest_host_readiness = (
+            "mysqltest host gate requires local host executables")
+    else:
+        mysqltest_host_readiness = None
     try:
         production_inputs = resolve_build_inputs(configuration)
     except BuildReadinessError:

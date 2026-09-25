@@ -30,6 +30,7 @@ RESULT_MISMATCH_MESSAGES = (
 EVIDENCE_SCHEMA_VERSION = 1
 EVIDENCE_PRODUCER = "seekdb.mysqltest.host.v1"
 MAX_CORPUS_FILE_BYTES = 64 * 1024 * 1024
+MAX_EVIDENCE_FILE_BYTES = 8 * 1024 * 1024
 
 MysqltestCase = namedtuple("MysqltestCase", ("name", "test_file", "result_file"))
 
@@ -40,7 +41,8 @@ class RunnerError(RuntimeError):
 
 def _sha256_regular_file(path, maximum_size=None):
     """Hash one stable regular non-symlink file through a nofollow fd."""
-    flags = os.O_RDONLY | getattr(os, "O_CLOEXEC", 0)
+    flags = (os.O_RDONLY | getattr(os, "O_CLOEXEC", 0)
+             | getattr(os, "O_NONBLOCK", 0))
     flags |= getattr(os, "O_NOFOLLOW", 0)
     try:
         descriptor = os.open(str(path), flags)
@@ -67,6 +69,45 @@ def _sha256_regular_file(path, maximum_size=None):
                 or total != after.st_size):
             raise RunnerError("evidence input changed while hashing")
         return {"sha256": digest.hexdigest(), "size": total}
+    finally:
+        os.close(descriptor)
+
+
+def _read_json_evidence(path):
+    """Load one bounded stable regular evidence file without following links."""
+    flags = (os.O_RDONLY | getattr(os, "O_CLOEXEC", 0)
+             | getattr(os, "O_NONBLOCK", 0))
+    flags |= getattr(os, "O_NOFOLLOW", 0)
+    try:
+        descriptor = os.open(str(path), flags)
+    except OSError as exc:
+        raise RunnerError("slice evidence is unavailable") from exc
+    try:
+        before = os.fstat(descriptor)
+        if (not stat.S_ISREG(before.st_mode)
+                or before.st_size > MAX_EVIDENCE_FILE_BYTES):
+            raise RunnerError("slice evidence must be a bounded regular file")
+        chunks = []
+        total = 0
+        while True:
+            chunk = os.read(descriptor, min(
+                1024 * 1024, MAX_EVIDENCE_FILE_BYTES + 1 - total))
+            if not chunk:
+                break
+            chunks.append(chunk)
+            total += len(chunk)
+            if total > MAX_EVIDENCE_FILE_BYTES:
+                raise RunnerError("slice evidence exceeds its size bound")
+        after = os.fstat(descriptor)
+        if ((before.st_dev, before.st_ino, before.st_size, before.st_mtime_ns)
+                != (after.st_dev, after.st_ino, after.st_size,
+                    after.st_mtime_ns)):
+            raise RunnerError("slice evidence changed while reading")
+        try:
+            return json.loads(b"".join(chunks).decode("utf-8"))
+        except (UnicodeDecodeError, ValueError, RecursionError,
+                MemoryError) as exc:
+            raise RunnerError("slice evidence is invalid") from exc
     finally:
         os.close(descriptor)
 
@@ -740,9 +781,8 @@ def command_merge(args):
             results_dir / "slice_{}".format(slice_index) / "seekdb_result.json"
         )
         try:
-            with result_path.open("r", encoding="utf-8") as result_file:
-                result = json.load(result_file)
-        except (OSError, ValueError) as exc:
+            result = _read_json_evidence(result_path)
+        except RunnerError as exc:
             errors.append("slice {} result unavailable: {}".format(slice_index, exc))
             continue
 

@@ -250,6 +250,8 @@ class MysqltestParserTest(unittest.TestCase):
     def test_empty_result_contract_rejects_wrong_ordered_field_label(self):
         """Compile the standalone C++ contract and prove labels are ordered."""
         compiler = os.environ.get("CXX", "c++")
+        source = (SCRIPT_DIRECTORY / "mysqltest_device_cases.cpp").read_text(
+            encoding="utf-8")
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             harness = root / "contract.cpp"
@@ -258,6 +260,11 @@ class MysqltestParserTest(unittest.TestCase):
                 '#include "mysqltest_result_contract.h"\n'
                 '#include <array>\n'
                 '#include <string_view>\n'
+                'struct Rows {\n'
+                '  int status;\n'
+                '  int calls = 0;\n'
+                '  int next() { ++calls; return status; }\n'
+                '};\n'
                 'int main() {\n'
                 '  using seekdb::ios_test::empty_result_matches;\n'
                 '  const std::array<std::string_view, 3> expected = '
@@ -266,9 +273,17 @@ class MysqltestParserTest(unittest.TestCase):
                 '{"nr", "b", "str"};\n'
                 '  const std::array<std::string_view, 3> wrong = '
                 '{"nr", "str", "b"};\n'
-                '  return empty_result_matches(correct, expected, 9, 9) && '
-                '!empty_result_matches(wrong, expected, 9, 9) && '
-                '!empty_result_matches(correct, expected, 0, 9) ? 0 : 1;\n'
+                '  Rows good{9}; Rows bad{0};\n'
+                '  const bool accepted = empty_result_matches('
+                'correct, expected, &good, 9);\n'
+                '  const bool wrong_label = empty_result_matches('
+                'wrong, expected, &good, 9);\n'
+                '  const bool wrong_end = empty_result_matches('
+                'correct, expected, &bad, 9);\n'
+                '  const bool null_row = empty_result_matches<Rows>('
+                'correct, expected, nullptr, 9);\n'
+                '  return accepted && !wrong_label && !wrong_end && '
+                '!null_row && good.calls == 1 ? 0 : 1;\n'
                 '}\n',
                 encoding="utf-8")
             compiled = subprocess.run([
@@ -279,6 +294,12 @@ class MysqltestParserTest(unittest.TestCase):
             executed = subprocess.run(
                 [str(executable)], check=False, capture_output=True, text=True)
             self.assertEqual(0, executed.returncode, executed.stderr)
+
+        read_empty = source[source.index("bool read_empty"):
+                            source.index("int run_empty_table")]
+        self.assertNotIn("get_column_count", read_empty)
+        self.assertIn("result_set().get_field_columns", read_empty)
+        self.assertIn("empty_result_matches", read_empty)
 
     def test_host_gate_requires_exact_272_case_success(self):
         """Bind host evidence to source, corpus, binaries, and exact cases."""
@@ -291,6 +312,7 @@ class MysqltestParserTest(unittest.TestCase):
             for name in ("seekdb", "obclient", "mysqltest"):
                 path = Path(directory) / name
                 path.write_bytes((name + "-binary").encode("utf-8"))
+                path.chmod(0o700)
                 binary_paths[name] = path
             result = Path(directory) / "host.json"
             identity = host_runner.build_host_evidence_identity(
@@ -299,12 +321,14 @@ class MysqltestParserTest(unittest.TestCase):
                 identity=identity, run_id="host-run", slice_count=1,
                 executed_cases=selected, failed_cases=[], errors=[])
             result.write_text(json.dumps(payload), encoding="utf-8")
-            summary = phase.validate_host_gate(REPOSITORY_ROOT, result)
-            self.assertEqual({
-                "execution_class": "host-only",
-                "case_count": 272,
-                "success": True,
-            }, summary)
+            summary = phase.validate_host_gate(
+                REPOSITORY_ROOT, result, binary_paths)
+            self.assertEqual("host-only", summary["execution_class"])
+            self.assertEqual(272, summary["case_count"])
+            self.assertTrue(summary["success"])
+            self.assertEqual("host-run", summary["run_id"])
+            self.assertEqual(identity["host_build_identity"],
+                             summary["host_build_identity"])
 
             mutations = {
                 "stale-source": {"source_commit": "0" * 40},
@@ -320,14 +344,16 @@ class MysqltestParserTest(unittest.TestCase):
                     tampered = host_runner.seal_evidence(tampered)
                     result.write_text(json.dumps(tampered), encoding="utf-8")
                     with self.assertRaises(phase.MysqltestPhaseError):
-                        phase.validate_host_gate(REPOSITORY_ROOT, result)
+                        phase.validate_host_gate(
+                            REPOSITORY_ROOT, result, binary_paths)
 
             result.write_text(json.dumps(payload), encoding="utf-8")
             changed = result.read_text(encoding="utf-8").replace(
                 '"success": true', '"success": false')
             result.write_text(changed, encoding="utf-8")
             with self.assertRaises(phase.MysqltestPhaseError):
-                phase.validate_host_gate(REPOSITORY_ROOT, result)
+                phase.validate_host_gate(
+                    REPOSITORY_ROOT, result, binary_paths)
 
     def test_host_gate_rejects_symlink_and_oversized_evidence(self):
         """Read host evidence through one bounded nofollow regular-file fd."""
@@ -338,12 +364,105 @@ class MysqltestParserTest(unittest.TestCase):
             link = root / "link.json"
             link.symlink_to(target)
             with self.assertRaises(phase.MysqltestPhaseError):
-                phase.validate_host_gate(REPOSITORY_ROOT, link)
+                phase.validate_host_gate(REPOSITORY_ROOT, link, {})
 
             oversized = root / "oversized.json"
             oversized.write_bytes(b"{" + b" " * phase.MAX_HOST_RESULT_BYTES)
             with self.assertRaises(phase.MysqltestPhaseError):
-                phase.validate_host_gate(REPOSITORY_ROOT, oversized)
+                phase.validate_host_gate(REPOSITORY_ROOT, oversized, {})
+
+    def test_slice_reader_rejects_fifo_symlink_and_oversized_json(self):
+        """Merge inputs must be bounded stable regular nofollow files."""
+        host_runner = parser._load_host_discovery(REPOSITORY_ROOT)
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            target = root / "target.json"
+            target.write_text("{}", encoding="utf-8")
+            link = root / "link.json"
+            link.symlink_to(target)
+            fifo = root / "fifo.json"
+            os.mkfifo(fifo)
+            oversized = root / "oversized.json"
+            oversized.write_bytes(
+                b"{" + b" " * host_runner.MAX_EVIDENCE_FILE_BYTES)
+            for path in (link, fifo, oversized):
+                with self.subTest(path=path.name), self.assertRaises(
+                        host_runner.RunnerError):
+                    host_runner._read_json_evidence(path)
+
+            recursive = root / "recursive.json"
+            recursive.write_text("[" * 2000 + "]" * 2000, encoding="utf-8")
+            with self.assertRaises(host_runner.RunnerError):
+                host_runner._read_json_evidence(recursive)
+
+    def test_local_host_gate_runs_tracked_runner_before_validating(self):
+        """Generate evidence through tracked run and merge commands in one flow."""
+        selected = [
+            case.name for case in parser.discover_active_cases(REPOSITORY_ROOT)
+            if case.ci_selected]
+        host_runner = parser._load_host_discovery(REPOSITORY_ROOT)
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            binaries = {}
+            for name in ("seekdb", "obclient", "mysqltest"):
+                path = root / name
+                path.write_bytes(name.encode("utf-8"))
+                path.chmod(0o700)
+                binaries[name] = path
+            identity = host_runner.build_host_evidence_identity(
+                REPOSITORY_ROOT, binaries)
+            commands = []
+
+            def fake_run(command, **_kwargs):
+                """Materialize the exact tracked runner outputs for each command."""
+                commands.append(tuple(command))
+                if "run" in command:
+                    work = Path(command[command.index("--work-dir") + 1])
+                    work.mkdir(parents=True, exist_ok=True)
+                    payload = host_runner.build_slice_evidence(
+                        identity, 0, 1, selected, [], None)
+                    (work / "seekdb_result.json").write_text(
+                        json.dumps(payload), encoding="utf-8")
+                else:
+                    output = Path(command[command.index("--output") + 1])
+                    payload = host_runner.build_merged_evidence(
+                        identity, "runner-id", 1, selected, [], [])
+                    output.write_text(json.dumps(payload), encoding="utf-8")
+                return subprocess.CompletedProcess(command, 0, b"", b"")
+
+            summary = phase.execute_local_host_gate(
+                REPOSITORY_ROOT, root / "work", "runner-id", binaries,
+                run_command=fake_run)
+
+        self.assertEqual(2, len(commands))
+        self.assertIn(str(REPOSITORY_ROOT /
+                          ".github/script/seekdb/mysqltest_for_seekdb.py"),
+                      commands[0])
+        self.assertEqual("run", commands[0][2])
+        self.assertEqual("merge", commands[1][2])
+        self.assertEqual("runner-id", summary["run_id"])
+
+    def test_host_binary_inputs_must_be_local_regular_executables(self):
+        """Reject missing, non-executable, and symlink host binary inputs."""
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            executable = root / "tool"
+            executable.write_text("tool", encoding="utf-8")
+            executable.chmod(0o700)
+            link = root / "link"
+            link.symlink_to(executable)
+            base = {
+                variable: str(executable)
+                for variable in phase.HOST_BINARY_ENVIRONMENTS.values()
+            }
+            self.assertEqual(
+                {"seekdb", "obclient", "mysqltest"},
+                set(phase.resolve_host_binaries(base)))
+            for value in (str(link), str(root / "missing")):
+                environment = dict(base)
+                environment["SEEKDB_IPHONE_HOST_MYSQLTEST"] = value
+                with self.assertRaises(phase.MysqltestPhaseError):
+                    phase.resolve_host_binaries(environment)
 
 
 if __name__ == "__main__":

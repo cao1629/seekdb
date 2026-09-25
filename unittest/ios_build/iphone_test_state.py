@@ -538,14 +538,14 @@ def _close_run_directories(root_fd: int, run_fd: int) -> None:
 
 def create_checkpoint(
         source_commit: str, config_fingerprint: str,
-        now: dt.datetime) -> Dict[str, Any]:
+        now: dt.datetime, run_id: str = None) -> Dict[str, Any]:
     """Create a fresh schema-v1 checkpoint with immutable run identity."""
     _require_aware(now)
     timestamp = now.isoformat()
     return {
         "schema_version": SCHEMA_VERSION,
         "runner_version": RUNNER_VERSION,
-        "run_id": str(uuid.uuid4()),
+        "run_id": str(run_id or uuid.uuid4()),
         "started_at": timestamp,
         "last_resumed_at": timestamp,
         "source_commit": source_commit,
@@ -779,7 +779,7 @@ def _resume_selection(
 def _new_selection(
         output_root: Path, run_directory: Path, source_commit: str,
         config_fingerprint: str, now: dt.datetime,
-        lock: "RunLock" = None) -> RunSelection:
+        lock: "RunLock" = None, run_id: str = None) -> RunSelection:
     """Create, persist, and return a new run selection."""
     lock = lock or RunLock(output_root, run_directory)
     if not lock.targets(output_root, run_directory):
@@ -788,7 +788,8 @@ def _new_selection(
         lock.acquire()
     try:
         _backup_existing_artifacts(output_root, run_directory, now)
-        checkpoint = create_checkpoint(source_commit, config_fingerprint, now)
+        checkpoint = create_checkpoint(
+            source_commit, config_fingerprint, now, run_id=run_id)
         save_checkpoint(output_root, run_directory, checkpoint)
         return RunSelection(
             run_directory, checkpoint, resumed=False, lock=lock)
@@ -800,7 +801,8 @@ def _new_selection(
 def select_run(
         output_root: Path, mode: RunMode, source_commit: str,
         config_fingerprint: str, now: dt.datetime,
-        preparation_lock: "RunLock" = None) -> RunSelection:
+        preparation_lock: "RunLock" = None,
+        run_id: str = None) -> RunSelection:
     """Select or create a run according to default, resume, or restart mode."""
     _require_aware(now)
     root = Path(output_root).expanduser().absolute()
@@ -818,12 +820,12 @@ def select_run(
                     config_fingerprint, now, preparation_lock)
         return _new_selection(
             root, today_directory, source_commit, config_fingerprint, now,
-            preparation_lock)
+            preparation_lock, run_id)
 
     if mode == RunMode.RESTART:
         return _new_selection(
             root, today_directory, source_commit, config_fingerprint, now,
-            preparation_lock)
+            preparation_lock, run_id)
 
     if mode != RunMode.RESUME:
         raise ValueError(f"unsupported run mode: {mode}")

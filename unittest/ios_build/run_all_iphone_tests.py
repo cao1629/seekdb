@@ -70,19 +70,32 @@ class DeviceSelectionError(IphoneTestCliError):
 
 
 def validate_mysqltest_host_gate(
-        suites: Sequence[str], environment: Mapping[str, str]) -> None:
-    """Validate mysqltest host evidence before any device or build side effect."""
+        suites: Sequence[str], environment: Mapping[str, str]):
+    """Resolve required local host binaries before any device/build side effect."""
     if "mysqltest" not in suites:
-        return
-    result_path = environment.get("SEEKDB_IPHONE_HOST_MYSQLTEST_RESULT")
-    if not result_path:
-        raise IphoneTestCliError("mysqltest host gate evidence is invalid")
+        return None
     try:
-        run_mysqltest_phase.validate_host_gate(
-            REPOSITORY_ROOT, Path(result_path))
+        return run_mysqltest_phase.resolve_host_binaries(environment)
     except run_mysqltest_phase.MysqltestPhaseError as error:
         raise IphoneTestCliError(
-            "mysqltest host gate evidence is invalid") from error
+            "mysqltest host gate prerequisites are unavailable") from error
+
+
+def prepare_mysqltest_host_evidence(
+        binaries, run_directory: Path, run_id: str):
+    """Execute the tracked host runner and return its validated identity."""
+    if binaries is None:
+        return None
+    try:
+        return run_mysqltest_phase.execute_local_host_gate(
+            REPOSITORY_ROOT, run_directory / "mysqltest-host",
+            run_id, binaries)
+    except run_mysqltest_phase.MysqltestPhaseError as error:
+        raise IphoneTestCliError(
+            "mysqltest host gate execution failed") from error
+    except Exception as error:
+        raise IphoneTestCliError(
+            "mysqltest host gate execution failed") from error
 
 
 @dataclass(frozen=True)
@@ -553,7 +566,8 @@ def validate_build_identity(
 def configuration_fingerprint(
         *, runner_suites: Sequence[str],
         configuration: LocalConfiguration,
-        build_identity: str) -> str:
+        build_identity: str,
+        host_evidence_identity=None) -> str:
     """Hash evidence-affecting local inputs into one opaque resume identity."""
     device_identity = json.dumps(
         {
@@ -576,6 +590,7 @@ def configuration_fingerprint(
             "app_artifact": str(configuration.app_artifact),
             "test_hooks": configuration.test_hooks,
             "build_identity": build_identity,
+            "host_evidence_identity": host_evidence_identity or "none",
         },
         sort_keys=True,
         separators=(",", ":"),
@@ -740,7 +755,8 @@ def main(
     try:
         requires_test_app = selected_suites_require_test_app(suites)
         revision = source_commit()
-        validate_mysqltest_host_gate(suites, local_environment)
+        host_binaries = validate_mysqltest_host_gate(
+            suites, local_environment)
         if requires_test_app:
             configuration = infer_signing_configuration(configuration)
         bootstrap_redaction_run_id = f"setup-{uuid.uuid4().hex}"
@@ -748,12 +764,22 @@ def main(
             bootstrap_redaction_run_id, configuration.redaction_tokens())
         current_time = clock()
         if options.dry_run:
+            dry_path = state.preview_run_path(
+                options.output_root, _run_mode(options), current_time)
+            dry_host_identity = "dry-run-local-host-gate"
+            if state._checkpoint_exists(
+                    options.output_root, dry_path.run_directory):
+                dry_checkpoint = state.load_checkpoint(
+                    options.output_root, dry_path.run_directory)
+                dry_host_identity = dry_checkpoint.get(
+                    "mysqltest_host_evidence", dry_host_identity)
             build_identity = (
                 validate_build_identity(configuration, revision)
                 if requires_test_app else "host-only-v1")
             fingerprint = configuration_fingerprint(
                 runner_suites=suites, configuration=configuration,
-                build_identity=build_identity)
+                build_identity=build_identity,
+                host_evidence_identity=dry_host_identity)
             preview = state.preview_run(
                 options.output_root,
                 mode=_run_mode(options),
@@ -778,6 +804,20 @@ def main(
             print(
                 f"Selected iPhone test run: {path_preview.run_directory}",
                 file=stdout, flush=True)
+            existing_checkpoint = None
+            if (_run_mode(options) != state.RunMode.RESTART
+                    and state._checkpoint_exists(
+                        options.output_root, path_preview.run_directory)):
+                existing_checkpoint = state.load_checkpoint(
+                    options.output_root, path_preview.run_directory)
+            selected_run_id = (
+                existing_checkpoint["run_id"]
+                if (existing_checkpoint is not None
+                    and state._is_incomplete(existing_checkpoint))
+                else str(uuid.uuid4()))
+            host_evidence_identity = prepare_mysqltest_host_evidence(
+                host_binaries, path_preview.run_directory,
+                selected_run_id)
             if requires_test_app:
                 selected_device = select_physical_device(
                     configuration.device, discover_physical_devices())
@@ -844,7 +884,8 @@ def main(
                 build_identity = "host-only-v1"
             fingerprint = configuration_fingerprint(
                 runner_suites=suites, configuration=configuration,
-                build_identity=build_identity)
+                build_identity=build_identity,
+                host_evidence_identity=host_evidence_identity)
             selection = state.select_run(
                 options.output_root,
                 mode=_run_mode(options),
@@ -852,11 +893,24 @@ def main(
                 config_fingerprint=fingerprint,
                 now=current_time,
                 preparation_lock=preparation_lock,
+                run_id=selected_run_id,
             )
             preparation_lock = None
             if selection.run_directory != path_preview.run_directory:
                 raise IphoneTestCliError(
                     "selected run changed during artifact preparation")
+            if host_evidence_identity is not None:
+                existing_identity = selection.checkpoint.get(
+                    "mysqltest_host_evidence")
+                if (existing_identity is not None
+                        and existing_identity != host_evidence_identity):
+                    raise IphoneTestCliError(
+                        "mysqltest host evidence changed during resume")
+                selection.checkpoint["mysqltest_host_evidence"] = (
+                    host_evidence_identity)
+                state.save_checkpoint(
+                    options.output_root, selection.run_directory,
+                    selection.checkpoint)
 
         if options.dry_run:
             if requires_test_app:

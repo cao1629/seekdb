@@ -8,11 +8,19 @@ import json
 import os
 from pathlib import Path
 import stat
+import subprocess
+import sys
 from typing import Mapping, Sequence
 
 import mysqltest_parser
 
 MAX_HOST_RESULT_BYTES = 8 * 1024 * 1024
+HOST_RUN_TIMEOUT_SECONDS = 24 * 60 * 60
+HOST_BINARY_ENVIRONMENTS = {
+    "seekdb": "SEEKDB_IPHONE_HOST_SEEKDB",
+    "obclient": "SEEKDB_IPHONE_HOST_OBCLIENT",
+    "mysqltest": "SEEKDB_IPHONE_HOST_MYSQLTEST",
+}
 
 
 @dataclass(frozen=True)
@@ -65,14 +73,17 @@ def failure_filename(case: MysqltestPhaseCase) -> str:
     return f"failure-mysqltest-{slug}-{digest}.json"
 
 
-def validate_host_gate(repo_root: Path, result_path: Path) -> dict:
+def validate_host_gate(
+        repo_root: Path, result_path: Path,
+        binaries: Mapping[str, Path]) -> dict:
     """Validate identity-bound exact host mysqltest evidence."""
     selected = [
         case.name for case in mysqltest_parser.discover_active_cases(repo_root)
         if case.ci_selected]
     try:
         payload = json.loads(_read_host_result(result_path).decode("utf-8"))
-    except (OSError, UnicodeDecodeError, json.JSONDecodeError) as error:
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError,
+            RecursionError, MemoryError) as error:
         raise MysqltestPhaseError("host mysqltest result is unavailable") from error
     host = mysqltest_parser._load_host_discovery(Path(repo_root))
     required = {
@@ -83,37 +94,35 @@ def validate_host_gate(repo_root: Path, result_path: Path) -> dict:
     }
     if not isinstance(payload, dict) or set(payload) != required:
         raise MysqltestPhaseError("host mysqltest gate did not pass exact coverage")
-    binaries = payload.get("host_binaries")
+    recorded_binaries = payload.get("host_binaries")
     binary_names = ("seekdb", "obclient", "mysqltest")
-    valid_binaries = (
-        isinstance(binaries, dict) and set(binaries) == set(binary_names))
+    valid_binaries = (isinstance(recorded_binaries, dict)
+                      and set(recorded_binaries) == set(binary_names))
     if valid_binaries:
         valid_binaries = all(
-            isinstance(binaries[name], dict)
-            and set(binaries[name]) == {"sha256", "size"}
-            and isinstance(binaries[name]["sha256"], str)
-            and len(binaries[name]["sha256"]) == 64
+            isinstance(recorded_binaries[name], dict)
+            and set(recorded_binaries[name]) == {"sha256", "size"}
+            and isinstance(recorded_binaries[name]["sha256"], str)
+            and len(recorded_binaries[name]["sha256"]) == 64
             and all(character in "0123456789abcdef"
-                    for character in binaries[name]["sha256"])
-            and isinstance(binaries[name]["size"], int)
-            and binaries[name]["size"] >= 0
+                    for character in recorded_binaries[name]["sha256"])
+            and isinstance(recorded_binaries[name]["size"], int)
+            and recorded_binaries[name]["size"] >= 0
             for name in binary_names)
-    serialized = json.dumps(
-        binaries, sort_keys=True,
-        separators=(",", ":")) if valid_binaries else ""
-    build_identity = hashlib.sha256(serialized.encode("utf-8")).hexdigest()
     try:
-        current_commit = host.source_commit(repo_root)
-        current_corpus = host.mysqltest_corpus_digest(repo_root)
+        actual_identity = host.build_host_evidence_identity(
+            repo_root, binaries)
     except Exception as error:
         raise MysqltestPhaseError(
             "host mysqltest evidence identity is unavailable") from error
     if (not host.verify_evidence_digest(payload)
             or payload.get("schema_version") != host.EVIDENCE_SCHEMA_VERSION
             or payload.get("producer") != host.EVIDENCE_PRODUCER
-            or payload.get("source_commit") != current_commit
-            or payload.get("corpus_digest") != current_corpus
-            or payload.get("host_build_identity") != build_identity
+            or payload.get("source_commit") != actual_identity["source_commit"]
+            or payload.get("corpus_digest") != actual_identity["corpus_digest"]
+            or payload.get("host_build_identity")
+            != actual_identity["host_build_identity"]
+            or recorded_binaries != actual_identity["host_binaries"]
             or not valid_binaries
             or payload.get("result_kind") != "merged"
             or not isinstance(payload.get("run_id"), str)
@@ -126,16 +135,91 @@ def validate_host_gate(repo_root: Path, result_path: Path) -> dict:
             or payload.get("case_count") != len(selected)
             or payload.get("executed_cases") != selected):
         raise MysqltestPhaseError("host mysqltest gate did not pass exact coverage")
+    case_list_digest = hashlib.sha256(
+        json.dumps(selected, separators=(",", ":")).encode("utf-8")
+    ).hexdigest()
     return {
         "execution_class": "host-only",
         "case_count": len(selected),
         "success": True,
+        "evidence_digest": payload["evidence_digest"],
+        "source_commit": payload["source_commit"],
+        "corpus_digest": payload["corpus_digest"],
+        "host_binaries": payload["host_binaries"],
+        "host_build_identity": payload["host_build_identity"],
+        "run_id": payload["run_id"],
+        "case_list_digest": case_list_digest,
     }
+
+
+def resolve_host_binaries(environment: Mapping[str, str]) -> dict[str, Path]:
+    """Resolve explicit local host executables without accepting evidence paths."""
+    binaries = {}
+    for name, variable in HOST_BINARY_ENVIRONMENTS.items():
+        value = environment.get(variable)
+        if not value:
+            raise MysqltestPhaseError("host mysqltest binaries are unavailable")
+        path = Path(value).expanduser().absolute()
+        try:
+            metadata = path.lstat()
+        except OSError as error:
+            raise MysqltestPhaseError(
+                "host mysqltest binaries are unavailable") from error
+        if (not stat.S_ISREG(metadata.st_mode) or path.is_symlink()
+                or not os.access(path, os.X_OK)):
+            raise MysqltestPhaseError(
+                "host mysqltest binaries are unavailable")
+        binaries[name] = path
+    return binaries
+
+
+def execute_local_host_gate(
+        repo_root: Path, work_directory: Path, run_id: str,
+        binaries: Mapping[str, Path], run_command=subprocess.run) -> dict:
+    """Run all selected host cases and merge evidence in this runner process."""
+    repo_root = Path(repo_root)
+    work_directory = Path(work_directory)
+    slice_directory = work_directory / "slice_0"
+    slice_directory.mkdir(parents=True, exist_ok=True)
+    script = repo_root / ".github/script/seekdb/mysqltest_for_seekdb.py"
+    commands = (
+        [sys.executable, str(script), "run",
+         "--seekdb", str(binaries["seekdb"]),
+         "--obclient", str(binaries["obclient"]),
+         "--mysqltest", str(binaries["mysqltest"]),
+         "--base-dir", str(work_directory / "instance"),
+         "--work-dir", str(slice_directory),
+         "--slice-index", "0", "--slice-count", "1"],
+        [sys.executable, str(script), "merge",
+         "--results-dir", str(work_directory),
+         "--slice-count", "1", "--run-id", run_id,
+         "--output", str(work_directory / "host-result.json")],
+    )
+    for command in commands:
+        try:
+            completed = run_command(
+                command, cwd=str(repo_root), check=False,
+                stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                timeout=HOST_RUN_TIMEOUT_SECONDS)
+        except (OSError, subprocess.SubprocessError) as error:
+            raise MysqltestPhaseError(
+                "host mysqltest execution failed") from error
+        if completed.returncode != 0:
+            raise MysqltestPhaseError("host mysqltest execution failed")
+    try:
+        return validate_host_gate(
+            repo_root, work_directory / "host-result.json", binaries)
+    except MysqltestPhaseError:
+        raise
+    except Exception as error:
+        raise MysqltestPhaseError(
+            "host mysqltest evidence validation failed") from error
 
 
 def _read_host_result(path: Path) -> bytes:
     """Read one bounded stable regular evidence file without following links."""
     flags = (os.O_RDONLY | getattr(os, "O_CLOEXEC", 0)
+             | getattr(os, "O_NONBLOCK", 0)
              | getattr(os, "O_NOFOLLOW", 0))
     descriptor = os.open(str(path), flags)
     try:
@@ -182,6 +266,7 @@ def parse_args(arguments: Sequence[str] = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--repo-root", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--host-work-directory", type=Path, required=True)
     return parser.parse_args(arguments)
 
 
@@ -192,13 +277,12 @@ def main(
     options = parse_args(arguments)
     try:
         local_environment = os.environ if environment is None else environment
-        host_result = local_environment.get("SEEKDB_IPHONE_HOST_MYSQLTEST_RESULT")
-        if host_result:
-            payload = validate_host_gate(options.repo_root, Path(host_result))
-        else:
-            raise MysqltestPhaseError("host mysqltest result is unavailable")
+        binaries = resolve_host_binaries(local_environment)
+        payload = validate_host_gate(
+            options.repo_root,
+            options.host_work_directory / "host-result.json", binaries)
         _write_json(options.output, payload)
-    except MysqltestPhaseError:
+    except (MysqltestPhaseError, RecursionError, MemoryError):
         return 2
     return 0
 

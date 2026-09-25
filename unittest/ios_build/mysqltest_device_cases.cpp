@@ -89,15 +89,8 @@ bool read_empty(TestContext &context, ObISQLClient &client, const char *name,
   ObISQLClient::ReadResult result;
   int status = client.read(result, sql);
   auto *rows = status == OB_SUCCESS ? result.get_result() : nullptr;
-  if (status == OB_SUCCESS && rows == nullptr) {
-    status = oceanbase::common::OB_ERR_UNEXPECTED;
-  }
   std::array<std::string_view, 3> actual_labels;
-  if (status == OB_SUCCESS && rows->get_column_count() !=
-                                  static_cast<int64_t>(expected_labels.size())) {
-    status = oceanbase::common::OB_ERR_UNEXPECTED;
-  }
-  if (status == OB_SUCCESS) {
+  if (status == OB_SUCCESS && rows != nullptr) {
     auto *inner = static_cast<oceanbase::observer::ObInnerSQLResult *>(rows);
     const auto *fields = inner->result_set().get_field_columns();
     if (fields == nullptr || fields->count() !=
@@ -111,10 +104,9 @@ bool read_empty(TestContext &context, ObISQLClient &client, const char *name,
       }
     }
   }
-  const int iterator_status = status == OB_SUCCESS ? rows->next() : status;
   if (status == OB_SUCCESS && !empty_result_matches(
                                   actual_labels, expected_labels,
-                                  iterator_status, OB_ITER_END)) {
+                                  rows, OB_ITER_END)) {
     status = oceanbase::common::OB_ERR_UNEXPECTED;
   }
   return context.assert_equal(

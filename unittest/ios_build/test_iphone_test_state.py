@@ -48,6 +48,18 @@ class IphoneTestStateTest(unittest.TestCase):
         """Return a deterministic timezone-aware timestamp."""
         return dt.datetime(2026, 9, day, hour, 30, tzinfo=UTC)
 
+    def test_new_selection_uses_prepared_evidence_run_id(self):
+        """Bind pre-checkpoint host evidence to the checkpoint run identity."""
+        prepared_run_id = "12345678-1234-5678-1234-567812345678"
+        selection = state.select_run(
+            self.output_root, state.RunMode.DEFAULT,
+            self.source_commit, self.config_fingerprint, self.now(),
+            run_id=prepared_run_id)
+        try:
+            self.assertEqual(prepared_run_id, selection.checkpoint["run_id"])
+        finally:
+            selection.close()
+
     def new_checkpoint(self, timestamp=None, status="incomplete"):
         """Build a checkpoint with deterministic compatibility metadata."""
         checkpoint = state.create_checkpoint(
