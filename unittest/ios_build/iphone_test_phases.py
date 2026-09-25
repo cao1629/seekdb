@@ -1272,7 +1272,8 @@ def _mysqltest_host_validator(
                 "host mysqltest gate evidence is invalid") from error
         required = {
             "case_count", "execution_class", "success", "evidence_digest",
-            "source_commit", "corpus_digest", "host_binaries",
+            "source_commit", "corpus_digest", "source_host_binaries",
+            "snapshot_host_binaries",
             "host_build_identity",
             "run_id", "case_list_digest",
         }
@@ -1284,15 +1285,17 @@ def _mysqltest_host_validator(
                        or not payload.get(field)
                        for field in required - {
                            "case_count", "execution_class", "success",
-                           "host_binaries"})):
+                           "source_host_binaries", "snapshot_host_binaries"})):
             raise PhaseEvidenceError(
                 "host mysqltest gate evidence is invalid")
-        binaries = payload["host_binaries"]
-        if (not isinstance(binaries, dict)
-                or set(binaries) != {"seekdb", "obclient", "mysqltest"}
+        source_binaries = payload["source_host_binaries"]
+        snapshot_binaries = payload["snapshot_host_binaries"]
+        if (source_binaries != snapshot_binaries
+                or not isinstance(source_binaries, dict)
+                or set(source_binaries) != {"seekdb", "obclient", "mysqltest"}
                 or any(not isinstance(identity, dict)
                        or set(identity) != {"sha256", "size"}
-                       for identity in binaries.values())):
+                       for identity in source_binaries.values())):
             raise PhaseEvidenceError(
                 "host mysqltest gate evidence is invalid")
         return (output_path.name,)

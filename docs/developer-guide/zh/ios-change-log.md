@@ -52,6 +52,16 @@
   evidence 的 binary hash 同样改为 anchored parent fd 加稳定前后 identity 检查，
   不会因父路径替换而读取相邻树。显式环境变量用 key presence 判定，空字符串或
   仅空白字符属于无效 override，不能触发 canonical fallback。
+- mysqltest host executable 现在在同一 run lock 内复制为 run-local immutable
+  snapshot：随机 `O_EXCL` temp、逐文件 `fsync`/`renameat`、目录 `fsync`，最终文件与
+  目录均为 owner-only read/execute。tracked runner、`sdb.py`、seekdb、obclient 与
+  mysqltest 全部只接收 snapshot path。执行前后及 outer 返回前重算 anchored
+  source/snapshot identity 和权限；evidence/checkpoint 同时绑定两组 digest/size 且
+  必须相等，passed resume 重验同一 snapshot，source 或 snapshot 被替换均失败。
+  `chmod` 不作为恶意同 owner 的绝对防线。当前三项 canonical Mach-O 的 `otool -L`
+  仅有 `/usr/lib/`、`/System/Library/` 依赖；新增 preflight 拒绝 `@rpath` 等非系统
+  动态依赖，保证 snapshot relocation 不改变运行语义。本轮未执行真实 272 case、
+  签名或真机测试。
 
 ## 2026-09-25：standalone runner stages 1–4 adapter
 

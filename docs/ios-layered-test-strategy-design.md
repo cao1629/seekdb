@@ -128,6 +128,18 @@ canonical output. Binary identity hashing repeats anchored parent validation
 and hashes one stable file descriptor, so a parent-path replacement cannot
 redirect the evidence read. An explicit environment key with an empty or
 whitespace-only value is invalid rather than equivalent to an unset key.
+While holding the run lock, the runner atomically copies all three anchored
+source executables into a run-local `mysqltest-host/binaries` directory. Random
+exclusive temporary files, file and directory fsync, renameat, and read/execute
+only modes provide a durable snapshot; chmod is not treated as an ownership
+boundary. Every tracked execution receives only snapshot paths, while boundary
+checks recompute both current-source and snapshot identities through anchored
+fds. Evidence records both identities and requires byte-for-byte equality.
+Passed resume revalidates the same snapshot; unfinished runs create it only
+when absent or reuse it only when all identities still match. Mach-O snapshots
+must contain only `/usr/lib` or `/System/Library` dependencies, matching the
+three audited canonical binaries; relative or checkout-local dylibs fail
+preflight because snapshot relocation would otherwise change runtime meaning.
 
 ## Rust Validation
 

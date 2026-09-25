@@ -171,6 +171,23 @@ canonical 产物缺失或无效会在设备发现、build、签名和安装之�
 依赖已初始化后的增量命令为 `./build.sh release --make`。`--init` 可能联网下载固定
 依赖并写入仓库构建目录，不由 standalone runner 隐式执行。
 
+host gate 在同一个 run lock 内把三项已验证 source executable 复制到
+`mysqltest-host/binaries/` 的 run-local snapshot。复制使用随机 `O_EXCL` 临时文件、
+`fsync`、`renameat` 与目录 `fsync`；文件和 snapshot 目录随后设为 owner-only
+read/execute。tracked mysqltest runner、`sdb.py` 及其启动的 seekdb/obclient/mysqltest
+只接收 snapshot 绝对路径，不再执行原始 build/dependency 路径。每个执行边界和
+outer 返回前都会从 nofollow parent fd 重算 source 与 snapshot identity、核对权限和
+bytes；同 owner 可重新 `chmod` 并不被当作安全边界，检测依赖 run lock、anchored fd
+及前后 identity 一致性。checkpoint/case evidence 同时保存 source 与 snapshot 的
+digest/size，二者必须相等；passed resume 只重载同一 run snapshot，pending/failed
+在尚未物化时创建或严格复用它。
+
+该 snapshot 部署只支持不依赖 checkout-local 相对动态库的 Mach-O。当前三个 canonical
+产物经 `otool -L` 只包含 `/usr/lib/` 和 `/System/Library/` 依赖；runner 对 Mach-O
+snapshot 重做同一 allowlist preflight，`@rpath`、`@loader_path`、`@executable_path`
+或其他非系统依赖均 fail closed。此规则保证移动后的 executable 不会悄悄回到原始
+checkout 加载运行时依赖。
+
 这是真实完整 host mysqltest，不是静态检查，耗时取决于 272 个 case 和重试；任一 host evidence/binary/corpus 问题都会在 iOS build、签名、安装或设备发现前停止。
 
 静态 parser 审计全部 283 个 active source，并递归覆盖 `.inc`/`.sql` 输入；循环、path escape、缺失 include 或 connection/process/topology/result rewrite/error-policy 等语义均保持 host-only/not-applicable，不能静默删除。当前设备 registry 只包含 `ios.mysqltest.empty_table`：它消费 tracked `empty_table.result`，在内部 SQL proxy 上断言 statement status、affected rows、精确计数值，并从 result-set field metadata 精确断言有序字段名 `nr,b,str` 后要求 `OB_ITER_END`。其他 parser 候选在没有完整 transcript、affected-row、warning/error-domain adapter 前均保持 host-only。

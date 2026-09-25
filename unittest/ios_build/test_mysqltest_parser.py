@@ -6,6 +6,7 @@ import json
 import os
 from pathlib import Path
 import shutil
+import stat
 import subprocess
 import tempfile
 import time
@@ -464,7 +465,7 @@ class MysqltestParserTest(unittest.TestCase):
             run.assert_not_called()
 
     def test_local_host_gate_runs_tracked_runner_before_validating(self):
-        """Generate evidence through tracked run and merge commands in one flow."""
+        """Execute tracked host tools only from an identity-bound snapshot."""
         selected = [
             case.name for case in parser.discover_active_cases(REPOSITORY_ROOT)
             if case.ci_selected]
@@ -508,7 +509,192 @@ class MysqltestParserTest(unittest.TestCase):
                       commands[0])
         self.assertEqual("run", commands[0][2])
         self.assertEqual("merge", commands[1][2])
+        for option, name in (("--seekdb", "seekdb"),
+                             ("--obclient", "obclient"),
+                             ("--mysqltest", "mysqltest")):
+            value = Path(commands[0][commands[0].index(option) + 1])
+            self.assertEqual(root / "work/binaries" / name, value)
+            self.assertNotEqual(binaries[name], value)
         self.assertEqual("runner-id", summary["run_id"])
+        self.assertEqual(
+            summary["source_host_binaries"],
+            summary["snapshot_host_binaries"])
+
+    def test_source_replacement_after_snapshot_fails_only_after_snapshot_exec(self):
+        """Execute immutable bytes, then reject a changed current source identity."""
+        selected = [
+            case.name for case in parser.discover_active_cases(REPOSITORY_ROOT)
+            if case.ci_selected]
+        host_runner = parser._load_host_discovery(REPOSITORY_ROOT)
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve()
+            binaries = {}
+            for name in ("seekdb", "obclient", "mysqltest"):
+                path = root / name
+                path.write_bytes(name.encode("utf-8"))
+                path.chmod(0o700)
+                binaries[name] = path
+            executed = []
+
+            def replace_after_exec(command, _cwd, _deadline):
+                """Replace one source after observing snapshot-only argv."""
+                if "run" in command:
+                    snapshot = Path(command[command.index("--seekdb") + 1])
+                    replacement = root / "replacement"
+                    replacement.write_bytes(b"changed")
+                    replacement.chmod(0o700)
+                    replacement.replace(binaries["seekdb"])
+                    executed.append(snapshot.read_bytes())
+                    snapshot_binaries = {
+                        name: Path(command[command.index(option) + 1])
+                        for option, name in (("--seekdb", "seekdb"),
+                                             ("--obclient", "obclient"),
+                                             ("--mysqltest", "mysqltest"))
+                    }
+                    identity = host_runner.build_host_evidence_identity(
+                        REPOSITORY_ROOT, snapshot_binaries)
+                    work = Path(command[command.index("--work-dir") + 1])
+                    work.mkdir(parents=True, exist_ok=True)
+                    payload = host_runner.build_slice_evidence(
+                        identity, 0, 1, selected, [], None)
+                    (work / "seekdb_result.json").write_text(
+                        json.dumps(payload), encoding="utf-8")
+                return subprocess.CompletedProcess(command, 0, b"", b"")
+
+            with mock.patch.object(
+                    phase, "_destroy_managed_host_instance") as destroy, \
+                    self.assertRaises(phase.MysqltestPhaseError):
+                phase.execute_local_host_gate(
+                    REPOSITORY_ROOT, root / "work", "runner-id", binaries,
+                    process_runner=replace_after_exec)
+            destroy.assert_called_once()
+
+        self.assertEqual([b"seekdb"], executed)
+
+    def test_tracked_runner_executes_fake_mysqltest_from_snapshot_path(self):
+        """Pass the run-local mysqltest snapshot as subprocess argv zero."""
+        host_runner = parser._load_host_discovery(REPOSITORY_ROOT)
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve()
+            binaries = {}
+            for name in ("seekdb", "obclient", "mysqltest"):
+                path = root / name
+                path.write_bytes(name.encode("utf-8"))
+                path.chmod(0o700)
+                binaries[name] = path
+            bundle = phase.prepare_host_binary_snapshots(
+                binaries, root / "work")
+            self.assertEqual(
+                0o500, stat.S_IMODE((root / "work/binaries").stat().st_mode))
+            self.assertTrue(all(
+                stat.S_IMODE(path.stat().st_mode) == 0o500
+                for path in bundle.snapshot_paths.values()))
+            tmp_dir = root / "tmp"
+            log_dir = root / "log"
+            tmp_dir.mkdir()
+            log_dir.mkdir()
+            test_file = root / "demo.test"
+            result_file = root / "demo.result"
+            test_file.write_text("SELECT 1;\n", encoding="utf-8")
+            result_file.write_text("1\n", encoding="utf-8")
+            case = host_runner.MysqltestCase(
+                "demo", test_file, result_file)
+            args = argparse.Namespace(
+                mysqltest=bundle.snapshot_paths["mysqltest"],
+                obclient=bundle.snapshot_paths["obclient"],
+                host="127.0.0.1", port=2881,
+                base_dir=root / "instance")
+            completed = subprocess.CompletedProcess((), 0, "", "")
+            with mock.patch.object(
+                    host_runner.subprocess, "run",
+                    return_value=completed) as run, \
+                    mock.patch("builtins.print"):
+                return_code, _ = host_runner.run_case(
+                    args, root, case, tmp_dir, log_dir)
+
+        self.assertEqual(0, return_code)
+        self.assertEqual(
+            str(bundle.snapshot_paths["mysqltest"]),
+            run.call_args.args[0][0])
+
+    def test_snapshot_parent_symlink_and_binary_replacement_are_rejected(self):
+        """Reject changed snapshot bytes and linked snapshot directory parents."""
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve()
+            binaries = {}
+            for name in ("seekdb", "obclient", "mysqltest"):
+                path = root / name
+                path.write_bytes(name.encode("utf-8"))
+                path.chmod(0o700)
+                binaries[name] = path
+            bundle = phase.prepare_host_binary_snapshots(
+                binaries, root / "work")
+            snapshot = bundle.snapshot_paths["mysqltest"]
+            snapshot.chmod(0o700)
+            snapshot.write_bytes(b"changed")
+            snapshot.chmod(0o500)
+            with self.assertRaises(phase.MysqltestPhaseError):
+                phase.validate_host_binary_snapshots(bundle)
+
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve()
+            binaries = {}
+            for name in ("seekdb", "obclient", "mysqltest"):
+                path = root / name
+                path.write_bytes(name.encode("utf-8"))
+                path.chmod(0o700)
+                binaries[name] = path
+            bundle = phase.prepare_host_binary_snapshots(
+                binaries, root / "work")
+            snapshot_directory = root / "work/binaries"
+            original_directory = root / "work/original-binaries"
+            snapshot_directory.rename(original_directory)
+            snapshot_directory.symlink_to(
+                original_directory, target_is_directory=True)
+            with self.assertRaises(phase.MysqltestPhaseError):
+                phase.validate_host_binary_snapshots(bundle)
+
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve()
+            binaries = {}
+            for name in ("seekdb", "obclient", "mysqltest"):
+                path = root / name
+                path.write_bytes(name.encode("utf-8"))
+                path.chmod(0o700)
+                binaries[name] = path
+            external = root / "external"
+            external.mkdir()
+            work = root / "work"
+            work.symlink_to(external, target_is_directory=True)
+            with self.assertRaises(phase.MysqltestPhaseError):
+                phase.prepare_host_binary_snapshots(binaries, work)
+
+    def test_macho_snapshot_dependencies_must_be_system_absolute_paths(self):
+        """Fail closed when a snapshotted Mach-O needs a relative local dylib."""
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve()
+            paths = {}
+            for name in ("seekdb", "obclient", "mysqltest"):
+                path = root / name
+                path.write_bytes(b"\xcf\xfa\xed\xfe" + name.encode("utf-8"))
+                path.chmod(0o500)
+                paths[name] = path
+            system_only = subprocess.CompletedProcess(
+                (), 0,
+                b"tool:\n\t/usr/lib/libSystem.B.dylib (compatibility 1)\n",
+                b"")
+            with mock.patch.object(
+                    phase.subprocess, "run", return_value=system_only):
+                phase._validate_snapshot_macho_dependencies(paths)
+
+            local_dependency = subprocess.CompletedProcess(
+                (), 0,
+                b"tool:\n\t@rpath/liblocal.dylib (compatibility 1)\n",
+                b"")
+            with mock.patch.object(
+                    phase.subprocess, "run", return_value=local_dependency), \
+                    self.assertRaises(phase.MysqltestPhaseError):
+                phase._validate_snapshot_macho_dependencies(paths)
 
     @unittest.skipUnless(shutil.which("cc"), "requires a host C compiler")
     def test_outer_failures_destroy_detached_sdb_daemon(self):
@@ -638,7 +824,7 @@ int main(int argc, char **argv) {
     def test_host_binary_inputs_must_be_local_regular_executables(self):
         """Reject missing, non-executable, and symlink host binary inputs."""
         with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
+            root = Path(directory).resolve()
             executable = root / "tool"
             executable.write_text("tool", encoding="utf-8")
             executable.chmod(0o700)

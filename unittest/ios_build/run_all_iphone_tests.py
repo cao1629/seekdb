@@ -98,10 +98,14 @@ def prepare_mysqltest_host_evidence(
     if host_status == "passed":
         expected = checkpoint.get("mysqltest_host_evidence")
         try:
+            snapshots = run_mysqltest_phase._load_host_binary_snapshots(
+                binaries, Path(run_directory) / "mysqltest-host")
+            run_mysqltest_phase.validate_host_binary_snapshots(snapshots)
             identity = run_mysqltest_phase.validate_host_gate(
                 REPOSITORY_ROOT,
                 Path(run_directory) / "mysqltest-host/host-result.json",
-                binaries)
+                snapshots.snapshot_paths, source_binaries=binaries)
+            run_mysqltest_phase.validate_host_binary_snapshots(snapshots)
         except Exception as error:
             raise IphoneTestCliError(
                 "mysqltest host gate resume evidence is invalid") from error
@@ -110,9 +114,13 @@ def prepare_mysqltest_host_evidence(
                 "mysqltest host gate resume evidence is invalid")
         return identity
     try:
-        return run_mysqltest_phase.execute_local_host_gate(
+        identity = run_mysqltest_phase.execute_local_host_gate(
             REPOSITORY_ROOT, run_directory / "mysqltest-host",
             run_id, binaries)
+        snapshots = run_mysqltest_phase._load_host_binary_snapshots(
+            binaries, Path(run_directory) / "mysqltest-host")
+        run_mysqltest_phase.validate_host_binary_snapshots(snapshots)
+        return identity
     except run_mysqltest_phase.MysqltestPhaseError as error:
         raise IphoneTestCliError(
             "mysqltest host gate execution failed") from error

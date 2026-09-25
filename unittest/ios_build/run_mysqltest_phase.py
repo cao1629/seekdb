@@ -30,6 +30,14 @@ HOST_BINARY_CANONICAL_PATHS = {
     "obclient": Path("deps/3rd/u01/obclient/bin/obclient"),
     "mysqltest": Path("deps/3rd/u01/obclient/bin/mysqltest"),
 }
+HOST_BINARY_NAMES = ("seekdb", "obclient", "mysqltest")
+MACHO_MAGICS = {
+    b"\xfe\xed\xfa\xce", b"\xce\xfa\xed\xfe",
+    b"\xfe\xed\xfa\xcf", b"\xcf\xfa\xed\xfe",
+    b"\xca\xfe\xba\xbe", b"\xbe\xba\xfe\xca",
+    b"\xca\xfe\xba\xbf", b"\xbf\xba\xfe\xca",
+}
+SYSTEM_MACHO_DEPENDENCY_PREFIXES = ("/usr/lib/", "/System/Library/")
 
 
 @dataclass(frozen=True)
@@ -41,6 +49,16 @@ class MysqltestPhaseCase:
     execution_class: str
     failure_key: str
     requires_sql_restart_followup: bool
+
+
+@dataclass(frozen=True)
+class HostBinarySnapshots:
+    """Bind original host tools to one immutable run-local byte snapshot."""
+
+    source_paths: Mapping[str, Path]
+    snapshot_paths: Mapping[str, Path]
+    source_identity: Mapping[str, dict]
+    snapshot_identity: Mapping[str, dict]
 
 
 class MysqltestPhaseError(RuntimeError):
@@ -84,7 +102,8 @@ def failure_filename(case: MysqltestPhaseCase) -> str:
 
 def validate_host_gate(
         repo_root: Path, result_path: Path,
-        binaries: Mapping[str, Path]) -> dict:
+        binaries: Mapping[str, Path],
+        source_binaries: Mapping[str, Path] = None) -> dict:
     """Validate identity-bound exact host mysqltest evidence."""
     selected = [
         case.name for case in mysqltest_parser.discover_active_cases(repo_root)
@@ -121,6 +140,8 @@ def validate_host_gate(
     try:
         actual_identity = host.build_host_evidence_identity(
             repo_root, binaries)
+        source_identity = host.build_host_evidence_identity(
+            repo_root, source_binaries or binaries)
     except Exception as error:
         raise MysqltestPhaseError(
             "host mysqltest evidence identity is unavailable") from error
@@ -132,6 +153,7 @@ def validate_host_gate(
             or payload.get("host_build_identity")
             != actual_identity["host_build_identity"]
             or recorded_binaries != actual_identity["host_binaries"]
+            or source_identity["host_binaries"] != recorded_binaries
             or not valid_binaries
             or payload.get("result_kind") != "merged"
             or not isinstance(payload.get("run_id"), str)
@@ -154,7 +176,8 @@ def validate_host_gate(
         "evidence_digest": payload["evidence_digest"],
         "source_commit": payload["source_commit"],
         "corpus_digest": payload["corpus_digest"],
-        "host_binaries": payload["host_binaries"],
+        "source_host_binaries": source_identity["host_binaries"],
+        "snapshot_host_binaries": payload["host_binaries"],
         "host_build_identity": payload["host_build_identity"],
         "run_id": payload["run_id"],
         "case_list_digest": case_list_digest,
@@ -186,15 +209,19 @@ def resolve_host_binaries(
 
 
 def _validate_explicit_host_binary(path: Path) -> None:
-    """Validate one explicit binary while preserving its established contract."""
+    """Validate one explicit binary through its complete anchored parent chain."""
+    parent_fd = None
+    descriptor = None
     try:
-        metadata = path.lstat()
-    except OSError as error:
+        parent_fd, descriptor = _open_host_binary(path)
+    except (OSError, MysqltestPhaseError) as error:
         raise MysqltestPhaseError(
             "host mysqltest binaries are unavailable") from error
-    if (not stat.S_ISREG(metadata.st_mode) or path.is_symlink()
-            or not os.access(path, os.X_OK)):
-        raise MysqltestPhaseError("host mysqltest binaries are unavailable")
+    finally:
+        if descriptor is not None:
+            os.close(descriptor)
+        if parent_fd is not None:
+            os.close(parent_fd)
 
 
 def _validate_canonical_host_binary(
@@ -244,20 +271,327 @@ def _validate_canonical_host_binary(
             os.close(repository_fd)
 
 
+def _identity_from_open_file(descriptor: int) -> dict:
+    """Hash one stable regular executable from its already anchored file fd."""
+    before = os.fstat(descriptor)
+    if not stat.S_ISREG(before.st_mode):
+        raise MysqltestPhaseError("host mysqltest binaries are unavailable")
+    digest = hashlib.sha256()
+    total = 0
+    os.lseek(descriptor, 0, os.SEEK_SET)
+    while True:
+        chunk = os.read(descriptor, 1024 * 1024)
+        if not chunk:
+            break
+        digest.update(chunk)
+        total += len(chunk)
+    after = os.fstat(descriptor)
+    if ((before.st_dev, before.st_ino, before.st_size, before.st_mtime_ns)
+            != (after.st_dev, after.st_ino, after.st_size,
+                after.st_mtime_ns)
+            or total != after.st_size):
+        raise MysqltestPhaseError("host mysqltest binary identity changed")
+    return {"sha256": digest.hexdigest(), "size": total}
+
+
+def _open_host_binary(path: Path) -> tuple[int, int]:
+    """Open one binary and its complete real parent chain without symlinks."""
+    absolute = Path(path).expanduser().absolute()
+    parent_fd = _open_anchored_directory(absolute.parent)
+    descriptor = None
+    flags = (os.O_RDONLY | getattr(os, "O_CLOEXEC", 0)
+             | getattr(os, "O_NONBLOCK", 0)
+             | getattr(os, "O_NOFOLLOW", 0))
+    try:
+        descriptor = os.open(absolute.name, flags, dir_fd=parent_fd)
+        metadata = os.fstat(descriptor)
+        path_metadata = os.stat(
+            absolute.name, dir_fd=parent_fd, follow_symlinks=False)
+        if (not stat.S_ISREG(metadata.st_mode)
+                or (metadata.st_dev, metadata.st_ino)
+                != (path_metadata.st_dev, path_metadata.st_ino)
+                or not os.access(
+                    absolute.name, os.X_OK, dir_fd=parent_fd,
+                    follow_symlinks=False)):
+            raise MysqltestPhaseError(
+                "host mysqltest binaries are unavailable")
+        return parent_fd, descriptor
+    except BaseException:
+        if descriptor is not None:
+            os.close(descriptor)
+        os.close(parent_fd)
+        raise
+
+
+def _hash_host_binary(path: Path) -> dict:
+    """Return a stable identity after anchored executable validation."""
+    parent_fd = None
+    descriptor = None
+    try:
+        parent_fd, descriptor = _open_host_binary(path)
+        return _identity_from_open_file(descriptor)
+    except MysqltestPhaseError:
+        raise
+    except OSError as error:
+        raise MysqltestPhaseError(
+            "host mysqltest binaries are unavailable") from error
+    finally:
+        if descriptor is not None:
+            os.close(descriptor)
+        if parent_fd is not None:
+            os.close(parent_fd)
+
+
+def _hash_read_only_snapshot(path: Path) -> dict:
+    """Hash one executable snapshot and reject restored owner write access."""
+    parent_fd = None
+    descriptor = None
+    try:
+        parent_fd, descriptor = _open_host_binary(path)
+        if stat.S_IMODE(os.fstat(descriptor).st_mode) & 0o222:
+            raise MysqltestPhaseError("host mysqltest snapshot is writable")
+        return _identity_from_open_file(descriptor)
+    except MysqltestPhaseError:
+        raise
+    except OSError as error:
+        raise MysqltestPhaseError("host mysqltest snapshot is unsafe") from error
+    finally:
+        if descriptor is not None:
+            os.close(descriptor)
+        if parent_fd is not None:
+            os.close(parent_fd)
+
+
+def _load_host_binary_snapshots(
+        source_binaries: Mapping[str, Path],
+        work_directory: Path) -> HostBinarySnapshots:
+    """Load and validate a complete immutable snapshot directory."""
+    if set(source_binaries) != set(HOST_BINARY_NAMES):
+        raise MysqltestPhaseError("host mysqltest binaries are unavailable")
+    snapshot_directory = Path(work_directory).expanduser().absolute() / "binaries"
+    directory_fd = _open_anchored_directory(snapshot_directory)
+    try:
+        metadata = os.fstat(directory_fd)
+        if stat.S_IMODE(metadata.st_mode) & 0o222:
+            raise MysqltestPhaseError("host mysqltest snapshot is unsafe")
+        if set(os.listdir(directory_fd)) != set(HOST_BINARY_NAMES):
+            raise MysqltestPhaseError("host mysqltest snapshot is incomplete")
+    finally:
+        os.close(directory_fd)
+    source_paths = {
+        name: Path(source_binaries[name]).expanduser().absolute()
+        for name in HOST_BINARY_NAMES
+    }
+    snapshot_paths = {
+        name: snapshot_directory / name for name in HOST_BINARY_NAMES
+    }
+    source_identity = {
+        name: _hash_host_binary(source_paths[name]) for name in HOST_BINARY_NAMES
+    }
+    snapshot_identity = {
+        name: _hash_read_only_snapshot(snapshot_paths[name])
+        for name in HOST_BINARY_NAMES
+    }
+    if source_identity != snapshot_identity:
+        raise MysqltestPhaseError("host mysqltest source identity changed")
+    return HostBinarySnapshots(
+        source_paths, snapshot_paths, source_identity, snapshot_identity)
+
+
+def _copy_host_binary_snapshot(
+        source: Path, snapshot_fd: int, name: str) -> dict:
+    """Copy one stable source fd into a durable random temporary file."""
+    source_parent_fd = None
+    source_fd = None
+    output_fd = None
+    temporary = ".{}-{}-{}.tmp".format(
+        name, os.getpid(), secrets.token_hex(8))
+    try:
+        source_parent_fd, source_fd = _open_host_binary(source)
+        before = os.fstat(source_fd)
+        output_fd = os.open(
+            temporary,
+            os.O_WRONLY | os.O_CREAT | os.O_EXCL
+            | getattr(os, "O_NOFOLLOW", 0)
+            | getattr(os, "O_CLOEXEC", 0),
+            0o500, dir_fd=snapshot_fd)
+        digest = hashlib.sha256()
+        total = 0
+        while True:
+            chunk = os.read(source_fd, 1024 * 1024)
+            if not chunk:
+                break
+            digest.update(chunk)
+            total += len(chunk)
+            view = memoryview(chunk)
+            while view:
+                written = os.write(output_fd, view)
+                if written <= 0:
+                    raise OSError("short snapshot write")
+                view = view[written:]
+        after = os.fstat(source_fd)
+        if ((before.st_dev, before.st_ino, before.st_size, before.st_mtime_ns)
+                != (after.st_dev, after.st_ino, after.st_size,
+                    after.st_mtime_ns)
+                or total != after.st_size):
+            raise MysqltestPhaseError("host mysqltest source identity changed")
+        os.fchmod(output_fd, 0o500)
+        os.fsync(output_fd)
+        os.close(output_fd)
+        output_fd = None
+        os.rename(
+            temporary, name,
+            src_dir_fd=snapshot_fd, dst_dir_fd=snapshot_fd)
+        os.fsync(snapshot_fd)
+        return {"sha256": digest.hexdigest(), "size": total}
+    finally:
+        if output_fd is not None:
+            os.close(output_fd)
+        if source_fd is not None:
+            os.close(source_fd)
+        if source_parent_fd is not None:
+            os.close(source_parent_fd)
+        try:
+            os.unlink(temporary, dir_fd=snapshot_fd)
+        except OSError:
+            pass
+
+
+def prepare_host_binary_snapshots(
+        source_binaries: Mapping[str, Path],
+        work_directory: Path) -> HostBinarySnapshots:
+    """Create or reuse one atomic read-only host-tool snapshot bundle."""
+    work_directory = Path(work_directory).expanduser().absolute()
+    _prepare_host_workspace(work_directory)
+    try:
+        return _load_host_binary_snapshots(source_binaries, work_directory)
+    except MysqltestPhaseError:
+        work_fd = _open_anchored_directory(work_directory)
+        try:
+            try:
+                os.stat("binaries", dir_fd=work_fd, follow_symlinks=False)
+            except FileNotFoundError:
+                pass
+            else:
+                raise
+        finally:
+            os.close(work_fd)
+    work_fd = _open_anchored_directory(work_directory)
+    temporary = ".binaries-{}-{}.tmp".format(
+        os.getpid(), secrets.token_hex(8))
+    snapshot_fd = None
+    created_names = []
+    try:
+        os.mkdir(temporary, mode=0o700, dir_fd=work_fd)
+        snapshot_fd = _open_directory_at(work_fd, temporary)
+        for name in HOST_BINARY_NAMES:
+            _copy_host_binary_snapshot(
+                Path(source_binaries[name]), snapshot_fd, name)
+            created_names.append(name)
+        os.fchmod(snapshot_fd, 0o500)
+        os.fsync(snapshot_fd)
+        os.rename(
+            temporary, "binaries", src_dir_fd=work_fd, dst_dir_fd=work_fd)
+        os.fsync(work_fd)
+    except (KeyError, OSError) as error:
+        raise MysqltestPhaseError(
+            "host mysqltest snapshot preparation failed") from error
+    finally:
+        if snapshot_fd is not None:
+            os.close(snapshot_fd)
+        try:
+            temporary_fd = _open_directory_at(work_fd, temporary)
+        except OSError:
+            temporary_fd = None
+        if temporary_fd is not None:
+            try:
+                os.fchmod(temporary_fd, 0o700)
+                for name in created_names:
+                    try:
+                        os.unlink(name, dir_fd=temporary_fd)
+                    except OSError:
+                        pass
+            finally:
+                os.close(temporary_fd)
+            try:
+                os.rmdir(temporary, dir_fd=work_fd)
+            except OSError:
+                pass
+        os.close(work_fd)
+    return _load_host_binary_snapshots(source_binaries, work_directory)
+
+
+def validate_host_binary_snapshots(bundle: HostBinarySnapshots) -> None:
+    """Revalidate current source and snapshot identities against one bundle."""
+    current = _load_host_binary_snapshots(
+        bundle.source_paths,
+        next(iter(bundle.snapshot_paths.values())).parent.parent)
+    if (current.source_identity != bundle.source_identity
+            or current.snapshot_identity != bundle.snapshot_identity):
+        raise MysqltestPhaseError("host mysqltest snapshot identity changed")
+    _validate_snapshot_macho_dependencies(current.snapshot_paths)
+
+
+def _validate_snapshot_macho_dependencies(
+        snapshot_paths: Mapping[str, Path]) -> None:
+    """Reject relocatable host tools with non-system Mach-O dependencies."""
+    for name in HOST_BINARY_NAMES:
+        path = snapshot_paths[name]
+        parent_fd = None
+        descriptor = None
+        try:
+            parent_fd, descriptor = _open_host_binary(path)
+            magic = os.read(descriptor, 4)
+        except (OSError, MysqltestPhaseError) as error:
+            raise MysqltestPhaseError(
+                "host mysqltest snapshot dependency validation failed") from error
+        finally:
+            if descriptor is not None:
+                os.close(descriptor)
+            if parent_fd is not None:
+                os.close(parent_fd)
+        if magic not in MACHO_MAGICS:
+            continue
+        try:
+            completed = subprocess.run(
+                ["/usr/bin/otool", "-L", str(path)],
+                capture_output=True, check=False, timeout=30)
+        except (OSError, subprocess.SubprocessError) as error:
+            raise MysqltestPhaseError(
+                "host mysqltest snapshot dependency validation failed") from error
+        if completed.returncode != 0:
+            raise MysqltestPhaseError(
+                "host mysqltest snapshot dependency validation failed")
+        try:
+            lines = completed.stdout.decode("utf-8", errors="strict").splitlines()[1:]
+        except UnicodeDecodeError as error:
+            raise MysqltestPhaseError(
+                "host mysqltest snapshot dependency validation failed") from error
+        dependencies = [line.strip().split(" (", 1)[0] for line in lines]
+        if (not dependencies
+                or any(not dependency.startswith(
+                    SYSTEM_MACHO_DEPENDENCY_PREFIXES)
+                    for dependency in dependencies)):
+            raise MysqltestPhaseError(
+                "host mysqltest snapshot has unsupported dependencies")
+
+
 def execute_local_host_gate(
         repo_root: Path, work_directory: Path, run_id: str,
         binaries: Mapping[str, Path], process_runner=None) -> dict:
     """Run all selected host cases and merge evidence in this runner process."""
     repo_root = Path(repo_root)
     work_directory = Path(work_directory)
-    _prepare_host_workspace(work_directory)
+    snapshots = prepare_host_binary_snapshots(binaries, work_directory)
+    validate_host_binary_snapshots(snapshots)
+    execution_binaries = snapshots.snapshot_paths
     slice_directory = work_directory / "slice_0"
     script = repo_root / ".github/script/seekdb/mysqltest_for_seekdb.py"
     commands = (
         [sys.executable, str(script), "run",
-         "--seekdb", str(binaries["seekdb"]),
-         "--obclient", str(binaries["obclient"]),
-         "--mysqltest", str(binaries["mysqltest"]),
+         "--seekdb", str(execution_binaries["seekdb"]),
+         "--obclient", str(execution_binaries["obclient"]),
+         "--mysqltest", str(execution_binaries["mysqltest"]),
          "--base-dir", str(work_directory / "instance"),
          "--work-dir", str(slice_directory),
          "--slice-index", "0", "--slice-count", "1"],
@@ -269,6 +603,7 @@ def execute_local_host_gate(
     deadline = time.monotonic() + HOST_RUN_TIMEOUT_SECONDS
     process_runner = process_runner or _run_controlled_process
     try:
+        validate_host_binary_snapshots(snapshots)
         completed = process_runner(commands[0], repo_root, deadline)
     except BaseException:
         try:
@@ -283,12 +618,21 @@ def execute_local_host_gate(
             pass
         raise MysqltestPhaseError("host mysqltest execution failed")
     try:
+        validate_host_binary_snapshots(snapshots)
+    except BaseException:
+        try:
+            _destroy_managed_host_instance(repo_root, work_directory)
+        except Exception:
+            pass
+        raise
+    try:
         _destroy_managed_host_instance(repo_root, work_directory)
-    except (OSError, subprocess.SubprocessError) as error:
+    except (MysqltestPhaseError, OSError, subprocess.SubprocessError) as error:
         raise MysqltestPhaseError(
             "host mysqltest cleanup failed") from error
 
     try:
+        validate_host_binary_snapshots(snapshots)
         completed = process_runner(commands[1], repo_root, deadline)
     except (OSError, subprocess.SubprocessError) as error:
         raise MysqltestPhaseError(
@@ -296,8 +640,10 @@ def execute_local_host_gate(
     if completed.returncode != 0:
         raise MysqltestPhaseError("host mysqltest execution failed")
     try:
+        validate_host_binary_snapshots(snapshots)
         return validate_host_gate(
-            repo_root, work_directory / "host-result.json", binaries)
+            repo_root, work_directory / "host-result.json",
+            execution_binaries, source_binaries=binaries)
     except MysqltestPhaseError:
         raise
     except Exception as error:
@@ -584,9 +930,14 @@ def main(
         local_environment = os.environ if environment is None else environment
         binaries = resolve_host_binaries(
             local_environment, options.repo_root)
+        snapshots = _load_host_binary_snapshots(
+            binaries, options.host_work_directory)
+        validate_host_binary_snapshots(snapshots)
         payload = validate_host_gate(
             options.repo_root,
-            options.host_work_directory / "host-result.json", binaries)
+            options.host_work_directory / "host-result.json",
+            snapshots.snapshot_paths, source_binaries=binaries)
+        validate_host_binary_snapshots(snapshots)
         _write_json(options.output, payload)
     except (MysqltestPhaseError, RecursionError, MemoryError):
         return 2

@@ -732,7 +732,14 @@ class RunAllIphoneTestsTest(unittest.TestCase):
             "phases": [{"cases": [{
                 "id": "ios.mysqltest.host-gate", "status": "passed"}]}],
         }
+        snapshots = mock.Mock(snapshot_paths={"seekdb": Path("snapshot")})
         with tempfile.TemporaryDirectory() as directory, \
+                mock.patch.object(
+                    cli.run_mysqltest_phase, "_load_host_binary_snapshots",
+                    return_value=snapshots) as load_snapshots, \
+                mock.patch.object(
+                    cli.run_mysqltest_phase,
+                    "validate_host_binary_snapshots") as validate_snapshots, \
                 mock.patch.object(
                     cli.run_mysqltest_phase, "validate_host_gate",
                     return_value=identity) as validate, \
@@ -744,15 +751,24 @@ class RunAllIphoneTestsTest(unittest.TestCase):
                 identity["run_id"], checkpoint=checkpoint)
 
         self.assertEqual(identity, actual)
+        load_snapshots.assert_called_once()
+        self.assertEqual(2, validate_snapshots.call_count)
         validate.assert_called_once()
         execute.assert_not_called()
 
     def test_pending_or_failed_host_gate_executes_all_host_cases(self):
         """Only unfinished host gates invoke the tracked 272-case runner."""
         identity = {"run_id": "runner-id", "evidence_digest": "a" * 64}
+        snapshots = mock.Mock(snapshot_paths={"seekdb": Path("snapshot")})
         for status in ("pending", "failed"):
             with self.subTest(status=status), \
                     tempfile.TemporaryDirectory() as directory, \
+                    mock.patch.object(
+                        cli.run_mysqltest_phase, "_load_host_binary_snapshots",
+                        return_value=snapshots) as load_snapshots, \
+                    mock.patch.object(
+                        cli.run_mysqltest_phase,
+                        "validate_host_binary_snapshots") as validate_snapshots, \
                     mock.patch.object(
                         cli.run_mysqltest_phase, "validate_host_gate") as validate, \
                     mock.patch.object(
@@ -765,6 +781,8 @@ class RunAllIphoneTestsTest(unittest.TestCase):
                     "runner-id", checkpoint=checkpoint)
                 self.assertEqual(identity, actual)
                 execute.assert_called_once()
+                load_snapshots.assert_called_once()
+                validate_snapshots.assert_called_once_with(snapshots)
                 validate.assert_not_called()
 
     def test_dry_run_is_read_only_for_default_resume_and_restart(self):
