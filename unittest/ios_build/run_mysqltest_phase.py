@@ -31,12 +31,7 @@ HOST_BINARY_CANONICAL_PATHS = {
     "mysqltest": Path("deps/3rd/u01/obclient/bin/mysqltest"),
 }
 HOST_BINARY_NAMES = ("seekdb", "obclient", "mysqltest")
-MACHO_MAGICS = {
-    b"\xfe\xed\xfa\xce", b"\xce\xfa\xed\xfe",
-    b"\xfe\xed\xfa\xcf", b"\xcf\xfa\xed\xfe",
-    b"\xca\xfe\xba\xbe", b"\xbe\xba\xfe\xca",
-    b"\xca\xfe\xba\xbf", b"\xbf\xba\xfe\xca",
-}
+MACHO_MAGICS = {b"\xfe\xed\xfa\xcf", b"\xcf\xfa\xed\xfe"}
 SYSTEM_MACHO_DEPENDENCY_PREFIXES = ("/usr/lib/", "/System/Library/")
 
 
@@ -551,7 +546,8 @@ def _validate_snapshot_macho_dependencies(
             if parent_fd is not None:
                 os.close(parent_fd)
         if magic not in MACHO_MAGICS:
-            continue
+            raise MysqltestPhaseError(
+                "host mysqltest snapshot is not a supported 64-bit Mach-O")
         try:
             completed = subprocess.run(
                 ["/usr/bin/otool", "-L", str(path)],
@@ -600,6 +596,9 @@ def execute_local_host_gate(
          "--slice-count", "1", "--run-id", run_id,
          "--output", str(work_directory / "host-result.json")],
     )
+    # macOS Python has no fexecve, and a local probe could not execute an
+    # O_EXEC descriptor through /dev/fd. The documented same-UID threat model
+    # therefore relies on the run lock and checks around path-based execution.
     deadline = time.monotonic() + HOST_RUN_TIMEOUT_SECONDS
     process_runner = process_runner or _run_controlled_process
     try:

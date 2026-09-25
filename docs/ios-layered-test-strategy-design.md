@@ -140,6 +140,20 @@ when absent or reuse it only when all identities still match. Mach-O snapshots
 must contain only `/usr/lib` or `/System/Library` dependencies, matching the
 three audited canonical binaries; relative or checkout-local dylibs fail
 preflight because snapshot relocation would otherwise change runtime meaning.
+Every source and snapshot tool must be a thin 64-bit Mach-O. Scripts, ELF,
+arbitrary bytes, 32-bit Mach-O, and unparsed fat containers fail closed before
+host execution.
+
+The threat model covers path injection, symlinks, special nodes, stale inputs,
+and accidental or non-cooperating mutation. The run lock, descriptor-anchored
+I/O, immutable-by-convention modes, and pre/post identity checks make those
+fail closed. It does not claim to defeat an actively malicious same-UID process
+that replaces and restores bytes between checks: that process can also modify
+the runner, use debugger/ptrace capabilities, or clear file flags. macOS Python
+has no `fexecve`, and a local probe found that executing `/dev/fd/<fd>` opened
+with `O_EXEC` fails with `EBADF`, so there is no supported fd-to-exec handoff.
+That stronger boundary requires a privileged or separate-UID launcher and is
+outside this standalone runner's scope.
 
 ## Rust Validation
 

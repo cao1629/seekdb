@@ -62,6 +62,12 @@
   仅有 `/usr/lib/`、`/System/Library/` 依赖；新增 preflight 拒绝 `@rpath` 等非系统
   动态依赖，保证 snapshot relocation 不改变运行语义。本轮未执行真实 272 case、
   签名或真机测试。
+- source/snapshot host tools 进一步收紧为 thin 64-bit Mach-O；shebang、ELF、随机
+  bytes、32-bit 与未解析 fat Mach-O 均 fail closed。文档明确 threat model 只覆盖路径
+  注入、symlink/特殊节点、stale 与 accidental/non-cooperating mutation，不声称抵抗
+  同 UID 主动攻击者在校验间替换再恢复。同 UID 还能修改 runner、调试/ptrace 或清除
+  flags；本机 Python 无 `fexecve`，`O_EXEC` fd 经 `/dev/fd/<fd>` 执行实测返回
+  `EBADF`。更强保证需要 privileged/separate-UID isolation，超出本 runner 范围。
 
 ## 2026-09-25：standalone runner stages 1–4 adapter
 

@@ -499,9 +499,11 @@ class MysqltestParserTest(unittest.TestCase):
                     output.write_text(json.dumps(payload), encoding="utf-8")
                 return subprocess.CompletedProcess(command, 0, b"", b"")
 
-            summary = phase.execute_local_host_gate(
-                REPOSITORY_ROOT, root / "work", "runner-id", binaries,
-                process_runner=fake_run)
+            with mock.patch.object(
+                    phase, "_validate_snapshot_macho_dependencies"):
+                summary = phase.execute_local_host_gate(
+                    REPOSITORY_ROOT, root / "work", "runner-id", binaries,
+                    process_runner=fake_run)
 
         self.assertEqual(2, len(commands))
         self.assertIn(str(REPOSITORY_ROOT /
@@ -563,6 +565,8 @@ class MysqltestParserTest(unittest.TestCase):
 
             with mock.patch.object(
                     phase, "_destroy_managed_host_instance") as destroy, \
+                    mock.patch.object(
+                        phase, "_validate_snapshot_macho_dependencies"), \
                     self.assertRaises(phase.MysqltestPhaseError):
                 phase.execute_local_host_gate(
                     REPOSITORY_ROOT, root / "work", "runner-id", binaries,
@@ -695,6 +699,30 @@ class MysqltestParserTest(unittest.TestCase):
                     phase.subprocess, "run", return_value=local_dependency), \
                     self.assertRaises(phase.MysqltestPhaseError):
                 phase._validate_snapshot_macho_dependencies(paths)
+
+    def test_snapshot_rejects_non_macho_and_unsupported_binary_formats(self):
+        """Accept only thin 64-bit Mach-O host tools before dependency checks."""
+        invalid_prefixes = {
+            "shebang": b"#!/bin/sh\n",
+            "elf": b"\x7fELF\x02\x01\x01\x00",
+            "random": b"not-a-binary",
+            "macho32": b"\xce\xfa\xed\xfe",
+            "fat": b"\xca\xfe\xba\xbe",
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve()
+            for label, prefix in invalid_prefixes.items():
+                with self.subTest(format=label):
+                    case_root = root / label
+                    case_root.mkdir()
+                    paths = {}
+                    for name in ("seekdb", "obclient", "mysqltest"):
+                        path = case_root / name
+                        path.write_bytes(prefix + name.encode("utf-8"))
+                        path.chmod(0o500)
+                        paths[name] = path
+                    with self.assertRaises(phase.MysqltestPhaseError):
+                        phase._validate_snapshot_macho_dependencies(paths)
 
     @unittest.skipUnless(shutil.which("cc"), "requires a host C compiler")
     def test_outer_failures_destroy_detached_sdb_daemon(self):

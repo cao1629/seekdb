@@ -188,6 +188,16 @@ snapshot 重做同一 allowlist preflight，`@rpath`、`@loader_path`、`@execut
 或其他非系统依赖均 fail closed。此规则保证移动后的 executable 不会悄悄回到原始
 checkout 加载运行时依赖。
 
+三项 source/snapshot 必须全部是 thin 64-bit Mach-O；shebang script、ELF、随机 bytes、
+32-bit Mach-O 与未解析的 fat Mach-O 均在执行前 fail closed。安全边界针对路径注入、
+symlink/特殊节点、stale artifact，以及 accidental 或不协作的并发修改；它依靠同一
+run lock、descriptor-anchored I/O 和执行前后 identity 比对。不声称抵抗同 UID 的主动
+攻击者在两次校验间替换后恢复文件：同 UID 也可修改 runner、使用调试/ptrace 能力或
+清除文件 flags，而 macOS/Python 没有可用的 `fexecve` 将已验证 fd 直接交给进程执行。
+本机调研确认 Python `os` 没有 `fexecve`；对 `O_EXEC` fd 尝试
+`execve("/dev/fd/<fd>")` 也以 `EBADF` 拒绝。抵抗该级别攻击需要 privileged isolation
+或不同 UID 的可信 launcher，超出 standalone runner 范围。
+
 这是真实完整 host mysqltest，不是静态检查，耗时取决于 272 个 case 和重试；任一 host evidence/binary/corpus 问题都会在 iOS build、签名、安装或设备发现前停止。
 
 静态 parser 审计全部 283 个 active source，并递归覆盖 `.inc`/`.sql` 输入；循环、path escape、缺失 include 或 connection/process/topology/result rewrite/error-policy 等语义均保持 host-only/not-applicable，不能静默删除。当前设备 registry 只包含 `ios.mysqltest.empty_table`：它消费 tracked `empty_table.result`，在内部 SQL proxy 上断言 statement status、affected rows、精确计数值，并从 result-set field metadata 精确断言有序字段名 `nr,b,str` 后要求 `OB_ITER_END`。其他 parser 候选在没有完整 transcript、affected-row、warning/error-domain adapter 前均保持 host-only。
