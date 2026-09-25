@@ -550,5 +550,13 @@ python3 deps/ios-build/build.py --jobs 4 vsag
   build ID 与 hook mode。回归用例经历 RED 后通过，真实 clean build 已出现新的 `Ld` 与
   `CodeSign`，App executable 时间晚于 runtime archive，二者 marker 均为
   `6a60099e79ad/enabled`，严格 codesign 验证通过。本记录不把尚未执行的 current-HEAD
-  真机阶段记为通过。新增安装路径行为回归后，完整 iOS Python suite 为 303/303 通过；
+  真机阶段记为通过。新增安装与 resume 行为回归后，完整 iOS Python suite 为 305/305 通过；
   shell 语法、Python 编译和 `git diff --check` 同时通过。
+- 首轮 current-HEAD 真机 run 已完成 272/272 host gate、App 构建、签名和安装，并创建
+  checkpoint；`registry-smoke` 因 iPhone 连续锁屏达到 10 分钟上限，未产生真机通过
+  证据。随后 `--resume` 暴露 host evidence 已成功但 mysqltest phase 尚为 pending 时仍
+  重跑 272 项的问题。resume 现在只要 checkpoint 含同一 run 的 success preflight
+  evidence，就先重新校验 snapshot、当前 binary bytes、corpus/source 与 digest，再复用；
+  缺少成功 evidence 或 case 明确 failed 时重新执行，已有 success evidence 但重验不一致
+  时 fail-closed 终止且不覆盖可疑证据。新增 RED/GREEN 回归覆盖较早设备 phase 失败后的
+  pending host phase。

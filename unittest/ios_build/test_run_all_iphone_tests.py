@@ -756,6 +756,77 @@ class RunAllIphoneTestsTest(unittest.TestCase):
         validate.assert_called_once()
         execute.assert_not_called()
 
+    def test_pending_host_phase_reuses_completed_preflight_evidence(self):
+        """Do not rerun host cases when an earlier device phase stopped the run."""
+        identity = {
+            "run_id": "12345678-1234-5678-1234-567812345678",
+            "evidence_digest": "a" * 64,
+            "success": True,
+        }
+        checkpoint = {
+            "mysqltest_host_evidence": identity,
+            "phases": [
+                {"id": "registry-smoke", "cases": [{
+                    "id": "ios.registry.smoke", "status": "failed"}]},
+                {"id": "mysqltest", "cases": [{
+                    "id": "ios.mysqltest.host-gate", "status": "pending"}]},
+            ],
+        }
+        snapshots = mock.Mock(snapshot_paths={"seekdb": Path("snapshot")})
+        with tempfile.TemporaryDirectory() as directory, \
+                mock.patch.object(
+                    cli.run_mysqltest_phase, "_load_host_binary_snapshots",
+                    return_value=snapshots), \
+                mock.patch.object(
+                    cli.run_mysqltest_phase,
+                    "validate_host_binary_snapshots"), \
+                mock.patch.object(
+                    cli.run_mysqltest_phase, "validate_host_gate",
+                    return_value=identity), \
+                mock.patch.object(
+                    cli.run_mysqltest_phase,
+                    "execute_local_host_gate") as execute:
+            actual = cli.prepare_mysqltest_host_evidence(
+                {"seekdb": Path("seekdb")}, Path(directory),
+                identity["run_id"], checkpoint=checkpoint)
+
+        self.assertEqual(identity, actual)
+        execute.assert_not_called()
+
+    def test_failed_host_gate_overrides_successful_preflight_evidence(self):
+        """Rerun an explicitly failed host gate instead of reusing preflight."""
+        previous = {
+            "run_id": "runner-id",
+            "evidence_digest": "a" * 64,
+            "success": True,
+        }
+        replacement = dict(previous, evidence_digest="b" * 64)
+        checkpoint = {
+            "mysqltest_host_evidence": previous,
+            "phases": [{"id": "mysqltest", "cases": [{
+                "id": "ios.mysqltest.host-gate", "status": "failed"}]}],
+        }
+        snapshots = mock.Mock(snapshot_paths={"seekdb": Path("snapshot")})
+        with tempfile.TemporaryDirectory() as directory, \
+                mock.patch.object(
+                    cli.run_mysqltest_phase, "_load_host_binary_snapshots",
+                    return_value=snapshots), \
+                mock.patch.object(
+                    cli.run_mysqltest_phase,
+                    "validate_host_binary_snapshots"), \
+                mock.patch.object(
+                    cli.run_mysqltest_phase, "validate_host_gate") as validate, \
+                mock.patch.object(
+                    cli.run_mysqltest_phase, "execute_local_host_gate",
+                    return_value=replacement) as execute:
+            actual = cli.prepare_mysqltest_host_evidence(
+                {"seekdb": Path("seekdb")}, Path(directory),
+                "runner-id", checkpoint=checkpoint)
+
+        self.assertEqual(replacement, actual)
+        execute.assert_called_once()
+        validate.assert_not_called()
+
     def test_pending_or_failed_host_gate_executes_all_host_cases(self):
         """Only unfinished host gates invoke the tracked 272-case runner."""
         identity = {"run_id": "runner-id", "evidence_digest": "a" * 64}

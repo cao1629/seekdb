@@ -95,8 +95,13 @@ def prepare_mysqltest_host_evidence(
                 if case.get("id") == "ios.mysqltest.host-gate":
                     host_status = case.get("status")
                     break
-    if host_status == "passed":
-        expected = checkpoint.get("mysqltest_host_evidence")
+    expected = (checkpoint.get("mysqltest_host_evidence")
+                if isinstance(checkpoint, Mapping) else None)
+    completed_preflight = (
+        host_status == "pending"
+        and isinstance(expected, Mapping)
+        and expected.get("success") is True)
+    if host_status == "passed" or completed_preflight:
         try:
             snapshots = run_mysqltest_phase._load_host_binary_snapshots(
                 binaries, Path(run_directory) / "mysqltest-host")

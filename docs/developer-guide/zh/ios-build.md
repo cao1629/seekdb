@@ -463,4 +463,12 @@ runner 后续两次重新执行 host gate，均为 272/272 通过；这仍是 ma
 archive 均包含 `6a60099e79ad/enabled` marker，且严格签名验证通过。该结果只证明 App
 构建闭环恢复；当前提交仍需安装到已连接 iPhone，并继续完成 registry、C++、Rust、
 mysqltest 等价用例、向量、生命周期和内存压力阶段后，才能生成完整真机矩阵报告。
-安装前 fail-closed 行为测试及完整 iOS Python suite 已达到 303/303 通过。
+安装前 fail-closed 与 resume 行为测试及完整 iOS Python suite 已达到 305/305 通过。
+
+首轮真机 run 已完成 272/272 host gate 以及 App 构建、签名和安装，但 iPhone 在
+`registry-smoke` launch 窗口持续锁定，case 按 10 分钟超时停止，checkpoint 保留。
+这次恢复同时发现：当 host preflight evidence 已成功、但 mysqltest phase 因更早的设备
+phase 尚未执行时，`--resume` 会把 pending 误判为需要重跑。修复后，该场景会重新校验
+同一 run 的 binary snapshot 与完整 evidence identity 后复用；没有成功 evidence、明确
+failed 时执行完整 host gate；已有 success evidence 但 snapshot、binary、corpus、digest
+或 `run_id` 重验不一致时，resume 会 fail-closed 终止，不覆盖该 run 的可疑证据。
