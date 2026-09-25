@@ -157,6 +157,11 @@
   严格验证旧片段唯一后物化完整 golden，不修改查询实现或放宽比较。三个失败 case 在
   同一新实例上使用原 runner 参数单独复验均返回 0；完整 272 项与后续真机阶段仍需在
   新 corpus digest 上重跑。
+- 新 corpus 的完整 host gate 已实际执行 272/272，所有 case 通过且无 failed case。
+  完成后的 exact-coverage 校验暴露一个独立顺序契约问题：classification 返回名称排序，
+  runner evidence 记录配置执行顺序。两者长度和集合完全相同，却被旧 validator 当成失败。
+  validator 现先严格比较两套选择的长度和集合，再使用 runner 的真实顺序验证 evidence；
+  新增回归同时拒绝乱序、缺失和额外 case。该修复不改变任何 mysqltest 的执行或结果。
 
 ## 2026-09-25：standalone runner stages 1–4 adapter
 

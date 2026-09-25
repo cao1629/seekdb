@@ -308,11 +308,15 @@ class MysqltestParserTest(unittest.TestCase):
 
     def test_host_gate_requires_exact_272_case_success(self):
         """Bind host evidence to source, corpus, binaries, and exact cases."""
-        selected = [
+        classified_selection = [
             case.name for case in parser.discover_active_cases(REPOSITORY_ROOT)
             if case.ci_selected]
         with tempfile.TemporaryDirectory() as directory:
             host_runner = parser._load_host_discovery(REPOSITORY_ROOT)
+            execution_order = [
+                case.name for case in host_runner.discover_cases(REPOSITORY_ROOT)]
+            self.assertEqual(set(classified_selection), set(execution_order))
+            self.assertNotEqual(classified_selection, execution_order)
             directory_path = Path(directory).resolve()
             binary_paths = {}
             for name in ("seekdb", "obclient", "mysqltest"):
@@ -325,7 +329,7 @@ class MysqltestParserTest(unittest.TestCase):
                 REPOSITORY_ROOT, binary_paths)
             payload = host_runner.build_merged_evidence(
                 identity=identity, run_id="host-run", slice_count=1,
-                executed_cases=selected, failed_cases=[], errors=[])
+                executed_cases=execution_order, failed_cases=[], errors=[])
             result.write_text(json.dumps(payload), encoding="utf-8")
             summary = phase.validate_host_gate(
                 REPOSITORY_ROOT, result, binary_paths)
@@ -339,8 +343,9 @@ class MysqltestParserTest(unittest.TestCase):
             mutations = {
                 "stale-source": {"source_commit": "0" * 40},
                 "stale-corpus": {"corpus_digest": "0" * 64},
-                "missing-case": {"executed_cases": selected[:-1]},
-                "extra-case": {"executed_cases": [*selected, "extra"]},
+                "wrong-order": {"executed_cases": classified_selection},
+                "missing-case": {"executed_cases": execution_order[:-1]},
+                "extra-case": {"executed_cases": [*execution_order, "extra"]},
                 "binary-identity": {"host_build_identity": "0" * 64},
             }
             for name, change in mutations.items():
@@ -466,10 +471,9 @@ class MysqltestParserTest(unittest.TestCase):
 
     def test_local_host_gate_runs_tracked_runner_before_validating(self):
         """Execute tracked host tools only from an identity-bound snapshot."""
-        selected = [
-            case.name for case in parser.discover_active_cases(REPOSITORY_ROOT)
-            if case.ci_selected]
         host_runner = parser._load_host_discovery(REPOSITORY_ROOT)
+        selected = [
+            case.name for case in host_runner.discover_cases(REPOSITORY_ROOT)]
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory).resolve()
             binaries = {}
@@ -659,10 +663,9 @@ class MysqltestParserTest(unittest.TestCase):
 
     def test_source_replacement_after_snapshot_fails_only_after_snapshot_exec(self):
         """Execute immutable bytes, then reject a changed current source identity."""
-        selected = [
-            case.name for case in parser.discover_active_cases(REPOSITORY_ROOT)
-            if case.ci_selected]
         host_runner = parser._load_host_discovery(REPOSITORY_ROOT)
+        selected = [
+            case.name for case in host_runner.discover_cases(REPOSITORY_ROOT)]
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory).resolve()
             binaries = {}

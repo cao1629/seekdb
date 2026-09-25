@@ -104,15 +104,20 @@ def validate_host_gate(
         binaries: Mapping[str, Path],
         source_binaries: Mapping[str, Path] = None) -> dict:
     """Validate identity-bound exact host mysqltest evidence."""
-    selected = [
+    classified_selection = [
         case.name for case in mysqltest_parser.discover_active_cases(repo_root)
         if case.ci_selected]
+    host = mysqltest_parser._load_host_discovery(Path(repo_root))
+    selected = [case.name for case in host.discover_cases(Path(repo_root))]
+    if (len(classified_selection) != len(selected)
+            or set(classified_selection) != set(selected)):
+        raise MysqltestPhaseError(
+            "host mysqltest classification and execution selection differ")
     try:
         payload = json.loads(_read_host_result(result_path).decode("utf-8"))
     except (OSError, UnicodeDecodeError, json.JSONDecodeError,
             RecursionError, MemoryError) as error:
         raise MysqltestPhaseError("host mysqltest result is unavailable") from error
-    host = mysqltest_parser._load_host_discovery(Path(repo_root))
     required = {
         "schema_version", "producer", "source_commit", "corpus_digest",
         "host_build_identity", "host_binaries", "result_kind", "success",

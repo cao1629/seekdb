@@ -273,6 +273,12 @@ VSAG 制品仍按元素数量剪枝，因此共享 result 保持 Linux 基线；
 连续独立复现，三个原失败 case 已逐项通过；在新 corpus digest 上的完整 272 项尚待
 下一轮 standalone run 重新确认。
 
+新 corpus 的 standalone run 随后实际完成 272/272，case evidence 为 `success=true`、
+`failed_cases=[]`。首次收尾校验仍误报失败：classification 使用按名称排序，而 host runner
+按 `mysqltest_config.yaml` 的配置顺序执行，二者集合完全一致但顺序不同。validator 现在
+先要求两套选择的长度和集合严格一致，再以 runner 的真实顺序核验 evidence；缺失、额外或
+乱序 case 仍会失败。
+
 这是真实完整 host mysqltest，不是静态检查，耗时取决于 272 个 case 和重试；任一 host evidence/binary/corpus 问题都会在 iOS build、签名、安装或设备发现前停止。
 
 静态 parser 审计全部 283 个 active source，并递归覆盖 `.inc`/`.sql` 输入；循环、path escape、缺失 include 或 connection/process/topology/result rewrite/error-policy 等语义均保持 host-only/not-applicable，不能静默删除。当前设备 registry 只包含 `ios.mysqltest.empty_table`：它消费 tracked `empty_table.result`，在内部 SQL proxy 上断言 statement status、affected rows、精确计数值，并从 result-set field metadata 精确断言有序字段名 `nr,b,str` 后要求 `OB_ITER_END`。其他 parser 候选在没有完整 transcript、affected-row、warning/error-domain adapter 前均保持 host-only。
