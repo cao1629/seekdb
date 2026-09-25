@@ -156,9 +156,13 @@ SEEKDB_IPHONE_HOST_MYSQLTEST=/absolute/path/to/mysqltest \
   ./run.iphone.test.sh --suite mysqltest
 ```
 
-显式值一旦提供就必须是可执行的 regular non-symlink file；无效显式值不会静默
-回退。canonical 产物缺失或无效也会在设备发现、build、签名和安装之前 preflight
-失败。首次准备三个产物的受支持命令为：
+显式变量一旦出现（包括空字符串或仅空白字符）就必须给出可执行的 regular
+non-symlink file；无效显式值不会静默回退。canonical 路径从当前 repository root
+的真实目录 fd 开始逐段以 `openat`/`O_NOFOLLOW` 验证，`build_release`、`deps/3rd`
+或任一父组件是 symlink、特殊节点或发生逃逸时均拒绝；binary identity 也通过
+anchored parent fd 对稳定 regular file bytes 取 hash，避免重新按可替换父路径读取。
+canonical 产物缺失或无效会在设备发现、build、签名和安装之前 preflight 失败。
+首次准备三个产物的受支持命令为：
 
 ```bash
 ./build.sh release --init --make

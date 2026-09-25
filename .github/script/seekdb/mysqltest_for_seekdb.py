@@ -225,13 +225,19 @@ def _read_regular_bytes(path, maximum_size=None):
 
 
 def _sha256_regular_file(path, maximum_size=None):
-    """Hash one stable regular non-symlink file through a nofollow fd."""
+    """Hash one stable file through anchored parent and nofollow file fds."""
+    path = Path(path).expanduser().absolute()
     flags = (os.O_RDONLY | getattr(os, "O_CLOEXEC", 0)
              | getattr(os, "O_NONBLOCK", 0))
     flags |= getattr(os, "O_NOFOLLOW", 0)
+    directory_fd = None
+    descriptor = None
     try:
-        descriptor = os.open(str(path), flags)
+        directory_fd = _open_anchored_directory(path.parent)
+        descriptor = os.open(path.name, flags, dir_fd=directory_fd)
     except OSError as exc:
+        if directory_fd is not None:
+            os.close(directory_fd)
         raise RunnerError("evidence input is unavailable") from exc
     try:
         before = os.fstat(descriptor)
@@ -256,6 +262,7 @@ def _sha256_regular_file(path, maximum_size=None):
         return {"sha256": digest.hexdigest(), "size": total}
     finally:
         os.close(descriptor)
+        os.close(directory_fd)
 
 
 def _read_json_evidence(path):

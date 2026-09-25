@@ -170,22 +170,78 @@ def resolve_host_binaries(
     repository_root = Path(repository_root).expanduser().absolute()
     binaries = {}
     for name, variable in HOST_BINARY_ENVIRONMENTS.items():
-        value = environment.get(variable)
-        if value:
+        if variable in environment:
+            value = environment[variable]
+            if not isinstance(value, str) or not value.strip():
+                raise MysqltestPhaseError(
+                    "host mysqltest binaries are unavailable")
             path = Path(value).expanduser().absolute()
+            _validate_explicit_host_binary(path)
         else:
-            path = repository_root / HOST_BINARY_CANONICAL_PATHS[name]
-        try:
-            metadata = path.lstat()
-        except OSError as error:
-            raise MysqltestPhaseError(
-                "host mysqltest binaries are unavailable") from error
-        if (not stat.S_ISREG(metadata.st_mode) or path.is_symlink()
-                or not os.access(path, os.X_OK)):
-            raise MysqltestPhaseError(
-                "host mysqltest binaries are unavailable")
+            relative = HOST_BINARY_CANONICAL_PATHS[name]
+            _validate_canonical_host_binary(repository_root, relative)
+            path = repository_root / relative
         binaries[name] = path
     return binaries
+
+
+def _validate_explicit_host_binary(path: Path) -> None:
+    """Validate one explicit binary while preserving its established contract."""
+    try:
+        metadata = path.lstat()
+    except OSError as error:
+        raise MysqltestPhaseError(
+            "host mysqltest binaries are unavailable") from error
+    if (not stat.S_ISREG(metadata.st_mode) or path.is_symlink()
+            or not os.access(path, os.X_OK)):
+        raise MysqltestPhaseError("host mysqltest binaries are unavailable")
+
+
+def _validate_canonical_host_binary(
+        repository_root: Path, relative_path: Path) -> None:
+    """Validate one canonical binary below an anchored real repository root."""
+    parts = relative_path.parts
+    if (relative_path.is_absolute() or not parts
+            or any(part in {"", ".", ".."} for part in parts)):
+        raise MysqltestPhaseError("host mysqltest binaries are unavailable")
+    repository_fd = None
+    parent_fd = None
+    binary_fd = None
+    try:
+        repository_fd = _open_anchored_directory(repository_root)
+        parent_fd = os.dup(repository_fd)
+        for component in parts[:-1]:
+            next_fd = _open_directory_at(parent_fd, component)
+            os.close(parent_fd)
+            parent_fd = next_fd
+        flags = (os.O_RDONLY | getattr(os, "O_CLOEXEC", 0)
+                 | getattr(os, "O_NONBLOCK", 0)
+                 | getattr(os, "O_NOFOLLOW", 0))
+        binary_fd = os.open(parts[-1], flags, dir_fd=parent_fd)
+        metadata = os.fstat(binary_fd)
+        path_metadata = os.stat(
+            parts[-1], dir_fd=parent_fd, follow_symlinks=False)
+        same_file = ((metadata.st_dev, metadata.st_ino)
+                     == (path_metadata.st_dev, path_metadata.st_ino))
+        if (not stat.S_ISREG(metadata.st_mode)
+                or not same_file
+                or not os.access(
+                    parts[-1], os.X_OK, dir_fd=parent_fd,
+                    follow_symlinks=False)):
+            raise MysqltestPhaseError(
+                "host mysqltest binaries are unavailable")
+    except MysqltestPhaseError:
+        raise
+    except OSError as error:
+        raise MysqltestPhaseError(
+            "host mysqltest binaries are unavailable") from error
+    finally:
+        if binary_fd is not None:
+            os.close(binary_fd)
+        if parent_fd is not None:
+            os.close(parent_fd)
+        if repository_fd is not None:
+            os.close(repository_fd)
 
 
 def execute_local_host_gate(

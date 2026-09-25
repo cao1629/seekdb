@@ -733,6 +733,90 @@ int main(int argc, char **argv) {
             with self.assertRaises(phase.MysqltestPhaseError):
                 phase.resolve_host_binaries({}, root)
 
+    def test_canonical_host_binary_parent_symlink_is_rejected(self):
+        """Never traverse a canonical parent link into a neighboring tree."""
+        with tempfile.TemporaryDirectory() as directory:
+            parent = Path(directory).resolve()
+            root = parent / "current"
+            external = parent / "external"
+            root.mkdir()
+            external_seekdb = external / "src/observer/seekdb"
+            external_seekdb.parent.mkdir(parents=True)
+            external_seekdb.write_text("external", encoding="utf-8")
+            external_seekdb.chmod(0o700)
+            (root / "build_release").symlink_to(external, target_is_directory=True)
+            for path in (
+                    root / "deps/3rd/u01/obclient/bin/obclient",
+                    root / "deps/3rd/u01/obclient/bin/mysqltest"):
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_text("binary", encoding="utf-8")
+                path.chmod(0o700)
+
+            with self.assertRaises(phase.MysqltestPhaseError):
+                phase.resolve_host_binaries({}, root)
+
+            self.assertEqual("external", external_seekdb.read_text(encoding="utf-8"))
+
+    def test_canonical_dependency_parent_symlink_is_rejected(self):
+        """Never traverse the canonical deps/3rd chain through a link."""
+        with tempfile.TemporaryDirectory() as directory:
+            parent = Path(directory).resolve()
+            root = parent / "current"
+            external = parent / "external"
+            root.mkdir()
+            external_obclient = external / "u01/obclient/bin/obclient"
+            external_mysqltest = external / "u01/obclient/bin/mysqltest"
+            external_obclient.parent.mkdir(parents=True)
+            for path in (external_obclient, external_mysqltest):
+                path.write_text("external", encoding="utf-8")
+                path.chmod(0o700)
+            (root / "deps").mkdir()
+            (root / "deps/3rd").symlink_to(
+                external, target_is_directory=True)
+            seekdb = root / "build_release/src/observer/seekdb"
+            seekdb.parent.mkdir(parents=True)
+            seekdb.write_text("binary", encoding="utf-8")
+            seekdb.chmod(0o700)
+
+            with self.assertRaises(phase.MysqltestPhaseError):
+                phase.resolve_host_binaries({}, root)
+
+            self.assertEqual(
+                "external", external_obclient.read_text(encoding="utf-8"))
+
+    def test_empty_explicit_host_binary_never_uses_canonical_default(self):
+        """Treat empty and whitespace explicit overrides as invalid values."""
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve()
+            for path in (
+                    root / "build_release/src/observer/seekdb",
+                    root / "deps/3rd/u01/obclient/bin/obclient",
+                    root / "deps/3rd/u01/obclient/bin/mysqltest"):
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_text("binary", encoding="utf-8")
+                path.chmod(0o700)
+
+            for value in ("", "   "):
+                with self.subTest(value=value):
+                    with self.assertRaises(phase.MysqltestPhaseError):
+                        phase.resolve_host_binaries(
+                            {"SEEKDB_IPHONE_HOST_SEEKDB": value}, root)
+
+    def test_host_binary_identity_rejects_parent_symlink(self):
+        """Hash binary bytes only through an anchored nofollow parent chain."""
+        host_runner = parser._load_host_discovery(REPOSITORY_ROOT)
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve()
+            external = root / "external"
+            external.mkdir()
+            binary = external / "seekdb"
+            binary.write_bytes(b"external")
+            linked_parent = root / "linked"
+            linked_parent.symlink_to(external, target_is_directory=True)
+
+            with self.assertRaises(host_runner.RunnerError):
+                host_runner._sha256_regular_file(linked_parent / "seekdb")
+
     def test_missing_canonical_host_binary_never_searches_path_or_checkout(self):
         """Fail preflight instead of searching PATH or a neighboring checkout."""
         with tempfile.TemporaryDirectory() as directory:

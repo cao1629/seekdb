@@ -122,6 +122,12 @@ obclient output paths. Missing or invalid canonical outputs fail preflight.
 The resolver never searches `PATH` or neighboring checkouts, and an invalid
 explicit override never falls back silently. Regular-file, non-symlink,
 executable, byte-identity, corpus, and source-commit checks remain mandatory.
+Canonical lookup opens the real repository root and every relative parent with
+descriptor-anchored `openat`/`O_NOFOLLOW`; a linked or special parent is not a
+canonical output. Binary identity hashing repeats anchored parent validation
+and hashes one stable file descriptor, so a parent-path replacement cannot
+redirect the evidence read. An explicit environment key with an empty or
+whitespace-only value is invalid rather than equivalent to an unset key.
 
 ## Rust Validation
 

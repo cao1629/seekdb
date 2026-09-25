@@ -46,6 +46,12 @@
   evidence 绑定实际 bytes。当前机器 canonical 产物齐全，所以常规入口只需
   `./run.iphone.test.sh`；缺失时仍在任何设备/build/sign/install 前失败，首次准备命令
   为 `./build.sh release --init --make`，不会由 standalone runner 隐式执行。
+- canonical host binary preflight 现在从真实 repository root fd 开始，逐段使用
+  `openat`/`O_NOFOLLOW` 打开父目录并从最终 fd 检查 regular/executable；
+  `build_release`、`deps/3rd` 或更深父组件为 symlink/特殊节点时均安全拒绝。host
+  evidence 的 binary hash 同样改为 anchored parent fd 加稳定前后 identity 检查，
+  不会因父路径替换而读取相邻树。显式环境变量用 key presence 判定，空字符串或
+  仅空白字符属于无效 override，不能触发 canonical fallback。
 
 ## 2026-09-25：standalone runner stages 1–4 adapter
 
