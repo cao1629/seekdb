@@ -375,6 +375,8 @@ Items 17-20 are settled in 6.1, 6.2, 9.4 and 11. Item 21 (timing-sensitive cases
 | 39 | The logical export and import use deps/3rd's client package (`mysqldump`, `obclient`) through a wrapper script, kept in migration/scripts/ for family 15 and shipped beside the binary from the cutover | 12 item 7; s6-storage.md 4.6 |
 | 40 | From the core build's exit, a weekly `cargo check --target x86_64-unknown-linux-gnu` of the engine crates, diagnostic only; aarch64 Linux and wasm unchecked until they return | 13 |
 
+**Confirmed by the developer on 2026-09-25:** default 1 (decisions.md row 10a), default 3 (row 14a) and default 10 (row 6a), each as proposed; they take effect now.
+
 **Defaults that also change a decision or the plan.** decisions.md and PLAN.md rank above this file (RULEBOOK section 0), so for defaults 1, 3 and 10 the developer's confirmation is recorded as a decisions.md row or a PLAN amendment at sign-off, and none of them takes effect before that:
 - default 1 changes PLAN §6's core-build exit ("the 130 plain-SQL cases pass under the reduced init") to the 100 cases: a PLAN §6 amendment;
 - default 3 adds `unsafe` kinds beyond Decision 14's island shims, SIMD kernels, IO buffers and reclamation wrappers: a row amending Decision 14;

@@ -300,6 +300,7 @@ Exactly as Decision 6 (b) records:
   - row order for the about 300 SELECTs whose order comes from hash output. 00b writes these down as an explicit list of statements before any Rust code exists.
 - **How each mask works:** a named switch, off by default, validated C++ against C++. The exact run is always reported next to the masked run.
 - **At the final gate** the masked classes run exactly once more, and the remaining differences are documented for sign-off.
+- **A third mask, added 2026-09-25 (decisions.md row 6a):** family 12's -11049 line only, compared exactly up to `mem_hold=`; a named switch, off by default, validated C++ against C++ in 00b.
 - **Nothing else is tolerated.** The runner's trailing-whitespace tolerance is off for judge runs (item 1).
 - Keeping the EST numbers exact at the end would need the storage estimator's inputs (block sizes, rows per micro and macro block, freeze thresholds) kept identical. That is a design-document constraint, open until Step 1 (section 8).
 
@@ -535,7 +536,7 @@ This plan drops the report's fourth item, translating the three SQL-tier pilot f
 - **Order:** (1) foundation and runtime crates: error, arena, bytes, context, logging, config, thread and timer primitives, IO; (2) the IR; (3) the execution framework and code generator; (4) the storage boundary, the tablet/memtable/transaction core, and a single-writer WAL.
 - **Value libraries** (ObNumber, time, charset, JSON, casts) fan out as soon as the foundation API is frozen, each with differential tests against C++. Those tests also cover the OB_UNIS, ObNumber and JSON binary bytes moved out of the judge.
 - **Compile loop, then run loop, before the exit.** Prompt 04 has no compile or run step, so after the bodies are written: a compile loop in the form of prompt 05 (survey build through the build daemon, the error list sliced by crate, Opus 5.5 fixers without compiler access) until the core crates build; then a run loop in which the daemon's `--cmd` builds the binary and runs the 130 plain-SQL cases differentially under the reduced init (`--case-list migration/judge/lists/plain-sql.txt`), and Opus 5.5 fixers work from the outputs, triaged as in Step 6.
-- **Exit, signed off by the developer:** a frozen core API list; the `unsafe` count per crate, zero outside the named crates; the 130 plain-SQL cases pass under the reduced init, diffed against the C++ reference; the confirmed speed ratio holds; `cargo check` time per crate recorded.
+- **Exit, signed off by the developer:** a frozen core API list; the `unsafe` count per crate, zero outside the named crates (Decision 14 with row 14a); the 100 plain-SQL cases of decisions.md row 10a pass under the reduced init, diffed against the C++ reference; the 1.2x speed ratio holds; `cargo check` time per crate recorded.
 - **Usage:** by hand, 200-800 sessions (400-1,200 hours of attention) x 0.3-1M = 0.06-0.8B; if agents write the bodies, 550-1,050 units x 4.2 agent runs x 0.2-0.6M x 1-2 runs (disposable, then final) = 0.46-5.3B harness-counted tokens (report §6).
 
 ### Step 2b: stress-test the rules for the leaves (`prompts/03-stress-test.md`, changed)
@@ -569,7 +570,7 @@ Starts once the core API list is signed off, and may overlap the last weeks of t
 ### Step 5: run it (no kit prompt)
 
 - **Hello world:** the Rust binary bootstraps an empty `--base-dir`; sql-nio answers `select 1` on run/sql.sock; init.sql and init_user.sql run statement by statement with zero errors.
-- **Smoke:** the 272 cases' entry gate under the full init, then the 130 plain-SQL cases differentially under the full init (they already passed under the reduced init at the core build's exit). The report's third smoke stage, the bindings and seekdb-async suites, is dropped (Decision 8).
+- **Smoke:** the 272 cases' entry gate under the full init, then the 128 plain-SQL cases differentially under the full init (100 of them already passed under the reduced init at the core build's exit, decisions.md row 10a; the other 28 are first run here). The report's third smoke stage, the bindings and seekdb-async suites, is dropped (Decision 8).
 - **Usage:** 100-500 hands-on sessions x 0.3-1M = 0.03-0.5B harness-counted tokens.
 
 ### Step 6: match behavior (the 00b judge, then `prompts/06-post-parity.md`)
