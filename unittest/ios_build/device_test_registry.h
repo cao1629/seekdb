@@ -66,6 +66,9 @@ DeviceTestRegistry make_smoke_registry();
 /** Create the device registry for iOS-supported C++ behavior. */
 DeviceTestRegistry make_cpp_device_registry();
 
+/** Create lossless active mysqltest cases backed by exact result transcripts. */
+DeviceTestRegistry make_mysqltest_device_registry();
+
 #if defined(SQL_NIO_IOS_DEVICE_TESTS)
 /** Create the device registry backed by the test-only Rust C ABI. */
 DeviceTestRegistry make_rust_device_registry();

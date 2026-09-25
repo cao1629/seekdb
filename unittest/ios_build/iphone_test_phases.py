@@ -19,6 +19,7 @@ import time
 from typing import Callable, Iterable, Mapping, Optional, Sequence
 
 import iphone_test_runner as runner
+import run_mysqltest_phase
 import rustc_lldb_wrapper
 
 
@@ -26,6 +27,7 @@ REPOSITORY_ROOT = Path(__file__).resolve().parents[2]
 SCRIPT_DIRECTORY = Path(__file__).resolve().parent
 INVENTORY_SCRIPT = SCRIPT_DIRECTORY / "generate_test_inventory.py"
 DEVICE_SUITE_SCRIPT = SCRIPT_DIRECTORY / "run_device_suite.py"
+MYSQLTEST_PHASE_SCRIPT = SCRIPT_DIRECTORY / "run_mysqltest_phase.py"
 BUILD_SCRIPT = REPOSITORY_ROOT / "build.iphone.sh"
 PACKAGE_SCRIPT = REPOSITORY_ROOT / "deps/ios-build/build_app.py"
 RUSTC_WRAPPER = SCRIPT_DIRECTORY / "rustc_lldb_wrapper.py"
@@ -67,6 +69,7 @@ SQL_RESTART_CASE_IDS = {
     "registry-smoke": "ios.registry.sql.same-directory-restart",
     "cpp-device-equivalents": "ios.cpp.sql.same-directory-restart",
     "rust-device-runtime": "ios.rust.sql.same-directory-restart",
+    "mysqltest": "ios.mysqltest.sql.same-directory-restart",
 }
 REQUIRED_DEPENDENCY_ARTIFACTS = (
     "include",
@@ -1255,6 +1258,29 @@ def _production_validator(
     return validate
 
 
+def _mysqltest_host_validator(
+        output_path: Path) -> Callable[
+            [runner.SanitizedProcessResult], tuple[str, ...]]:
+    """Require a separate exact-coverage host mysqltest gate summary."""
+    def validate(
+            _process: runner.SanitizedProcessResult) -> tuple[str, ...]:
+        """Validate the bounded host-only summary without merging device claims."""
+        try:
+            payload = json.loads(output_path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError) as error:
+            raise PhaseEvidenceError(
+                "host mysqltest gate evidence is invalid") from error
+        if payload != {
+                "case_count": 272,
+                "execution_class": "host-only",
+                "success": True}:
+            raise PhaseEvidenceError(
+                "host mysqltest gate evidence is invalid")
+        return (output_path.name,)
+
+    return validate
+
+
 def _device_command(
         configuration, run_directory: Path, suite: str,
         case_id: str) -> tuple[str, ...]:
@@ -1330,6 +1356,23 @@ def create_phase_contracts(
     inventory_output = run_directory / "evidence-inventory.jsonl"
     production_build = configuration.engine_build.with_name(
         f"{configuration.engine_build.name}_production")
+    mysqltest_plan = (
+        run_mysqltest_phase.build_phase_plan(REPOSITORY_ROOT)
+        if "mysqltest" in selected else ())
+    mysqltest_device_cases = tuple(
+        case for case in mysqltest_plan
+        if case.execution_class == "device-native")
+    mysqltest_host_result = os.environ.get(
+        "SEEKDB_IPHONE_HOST_MYSQLTEST_RESULT")
+    mysqltest_host_output = run_directory / "evidence-mysqltest-host.json"
+    mysqltest_host_command = (
+        sys.executable, str(MYSQLTEST_PHASE_SCRIPT),
+        "--repo-root", str(REPOSITORY_ROOT),
+        "--output", str(mysqltest_host_output),
+        "--host-result", mysqltest_host_result or "",
+    )
+    mysqltest_host_readiness = None if mysqltest_host_result else (
+        "mysqltest host gate requires SEEKDB_IPHONE_HOST_MYSQLTEST_RESULT")
     try:
         production_inputs = resolve_build_inputs(configuration)
     except BuildReadinessError:
@@ -1427,6 +1470,34 @@ def create_phase_contracts(
             _sql_restart_contract(
                 "rust-device-runtime", configuration, run_directory,
                 source_revision, run_id, production=True),
+        ),
+        "mysqltest": (
+            PhaseCaseContract(
+                phase_id="mysqltest",
+                case_id="ios.mysqltest.host-gate",
+                execution_class="host-only",
+                command=mysqltest_host_command,
+                timeout_seconds=INVENTORY_TIMEOUT_SECONDS,
+                evidence_validator=_mysqltest_host_validator(
+                    mysqltest_host_output),
+                requires_sql_restart_followup=False,
+                readiness_error=mysqltest_host_readiness,
+            ),
+            *(PhaseCaseContract(
+                phase_id="mysqltest",
+                case_id=case.case_id,
+                execution_class="device-native",
+                command=_device_command(
+                    configuration, run_directory, "mysqltest", case.case_id),
+                timeout_seconds=DEVICE_CASE_TIMEOUT_SECONDS,
+                evidence_validator=_device_validator(
+                    run_directory, case.case_id),
+                requires_sql_restart_followup=True,
+                requires_test_app=True,
+            ) for case in mysqltest_device_cases),
+            _sql_restart_contract(
+                "mysqltest", configuration, run_directory,
+                source_revision, run_id),
         ),
     }
     return {

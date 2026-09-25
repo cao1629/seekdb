@@ -19,6 +19,24 @@
       "latest_result": "not-run",
       "evidence_path": null
     },
+    "mysqltest-device-lossless": {
+      "owning_module": "sql/mysqltest",
+      "framework": "mysqltest transcript adapter",
+      "execution_class": "device-native",
+      "device_equivalent": null,
+      "requirements": [
+        "signed physical-device App",
+        "internal SQL proxy",
+        "exact tracked result transcript"
+      ],
+      "timeout_seconds": 60,
+      "memory_class": "medium",
+      "applicability": "required",
+      "exclusion_reason": null,
+      "blocked_reason": null,
+      "latest_result": "not-run",
+      "evidence_path": null
+    },
     "obtest-legacy": {
       "owning_module": "legacy/obtest",
       "framework": "legacy obtest",
@@ -105,6 +123,13 @@
     }
   },
   "overrides": {
+    "mysqltest.active.empty_table": {
+      "device_equivalent": "ios.mysqltest.empty_table",
+      "requirements": [
+        "host seekdb server and mysqltest client",
+        "signed physical-device App for the lossless device equivalent"
+      ]
+    },
     "cpp.gtest.TestJemallocHook.CrossApiAllocationDomain": {
       "device_equivalent": null,
       "requirements": [

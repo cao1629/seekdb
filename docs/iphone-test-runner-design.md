@@ -144,6 +144,13 @@ terminal JSONL, lifecycle cleanup, and crash/Jetsam delta. The ordinary
 36-step SQL and same-directory restart gate runs after every phase that changes
 or exercises native runtime behavior.
 
+The mysqltest phase treats parsing as only a candidate-discovery step. A case
+is device-native only when its tracked `.result` is consumed by a reviewed
+device callback that validates statement status, affected rows, and result
+rows. Unsupported directives and incomplete include closure remain explicit
+host-only classifications. The 272-case host gate is separate evidence and
+cannot be substituted for device execution.
+
 The phase command registry is explicit and versioned. If a required phase
 adapter is absent, the phase records an infrastructure failure and the command
 exits nonzero. It cannot mark the phase passed by omission.

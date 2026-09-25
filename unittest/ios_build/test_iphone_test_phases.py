@@ -140,6 +140,10 @@ class IphoneTestPhasesTest(unittest.TestCase):
                 "rust-device-runtime": (
                     *RUST_CASES, "ios.rust.production.symbol-isolation",
                     SQL_RESTART_CASES["rust-device-runtime"]),
+                "mysqltest": (
+                    "ios.mysqltest.host-gate",
+                    "ios.mysqltest.empty_table",
+                    SQL_RESTART_CASES["mysqltest"]),
             },
             by_phase,
         )
@@ -170,10 +174,11 @@ class IphoneTestPhasesTest(unittest.TestCase):
             str(SCRIPT_DIR / "generate_test_inventory.py"), inventory.command)
         for phase_id in (
                 "registry-smoke", "cpp-device-equivalents",
-                "rust-device-runtime"):
+                "rust-device-runtime", "mysqltest"):
             for case in contracts[phase_id]:
                 if case.case_id in {
                         "ios.rust.production.symbol-isolation",
+                        "ios.mysqltest.host-gate",
                         *SQL_RESTART_CASES.values()}:
                     continue
                 with self.subTest(case=case.case_id):

@@ -185,6 +185,9 @@ DeviceTestRegistry make_device_registry()
   if (!registry.add_all(make_cpp_device_registry())) {
     return {};
   }
+  if (!registry.add_all(make_mysqltest_device_registry())) {
+    return {};
+  }
 #if defined(SQL_NIO_IOS_DEVICE_TESTS)
   if (!registry.add_all(make_rust_device_registry())) {
     return {};

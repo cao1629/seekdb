@@ -38,6 +38,13 @@ class TestInventory(unittest.TestCase):
         self.assertEqual(500, counts["obtest-legacy"])
         self.assertEqual(3, counts["rust-test"])
         self.assertEqual(9, counts["gtest-orphan"])
+        self.assertEqual(1, counts["mysqltest-device-lossless"])
+        self.assertEqual(
+            "ios.mysqltest.empty_table",
+            self.by_id["mysqltest.active.empty_table"]["device_equivalent"])
+        self.assertEqual(
+            "device-native",
+            self.by_id["ios.mysqltest.empty_table"]["execution_class"])
 
         tracked_python_tests = subprocess.check_output(
             ["git", "ls-files", "unittest/ios_build/test_*.py"],
@@ -205,6 +212,11 @@ class TestInventory(unittest.TestCase):
             "unittest/ios_build/generate_test_inventory.py",
             "unittest/ios_build/ios-test-classification.json",
         }.issubset(relevant))
+        self.assertIn(
+            "tools/deploy/mysql_test/include/wait_condition.inc", relevant)
+        self.assertTrue(any(
+            path.startswith("tools/deploy/mysql_test/") and path.endswith(".sql")
+            for path in relevant))
 
     def test_dirty_relevant_inputs_and_untracked_mysqltests_are_rejected(self):
         """Bind strict generation to HEAD and reject filesystem-only mysqltests."""
@@ -233,11 +245,19 @@ class TestInventory(unittest.TestCase):
             extra.write_text("select 3;\n", encoding="utf-8")
             with self.assertRaises(generate_test_inventory.InventoryError):
                 generate_test_inventory.reject_untracked_mysqltests(root)
+
             extra.unlink()
 
             result = root / "tools/deploy/mysql_test/r/mysql/tracked.result"
             result.parent.mkdir(parents=True)
             result.write_text("1\n", encoding="utf-8")
+            with self.assertRaises(generate_test_inventory.InventoryError):
+                generate_test_inventory.reject_untracked_mysqltests(root)
+            result.unlink()
+
+            include = root / "tools/deploy/mysql_test/include/untracked.inc"
+            include.parent.mkdir(parents=True)
+            include.write_text("select 4;\n", encoding="utf-8")
             with self.assertRaises(generate_test_inventory.InventoryError):
                 generate_test_inventory.reject_untracked_mysqltests(root)
 

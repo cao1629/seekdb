@@ -6,6 +6,14 @@
 
 后续每次环境设置、源码、构建脚本或 CMake 变更，同步记录日期、文件/设置、原因、具体参数、影响范围、复现命令、验证结果和剩余问题。失败尝试及撤销原因也保留。按独立功能提交时补充 commit ID，不把机器缓存、证书或密钥提交到仓库。日志与生成产物保存在仓库内；本记录及构建脚本纳入版本控制。
 
+## 2026-09-25：Task 5 mysqltest standalone adapter（host contract only）
+
+- 新增 active mysqltest parser 与独立 phase planner。静态发现继续复用现有 host runner，固定覆盖 283 个 active case、其中 272 个 CI-selected case；递归 `--source` 闭包为 316 个文件、302 条 source 指令、最大深度 2。循环、越出 `mysql_test` 根目录及缺失 include 均 fail-closed；当前 selected `fork_table.fork_table_merge` 经 `wait_condition.inc` 引用缺失的 `show_rpl_debug_info.inc`，因此明确记录为 host-only/source-unavailable。
+- parser 保留 `--error` 的数字、symbolic、逗号列表和 `0` 形态以及每条 SQL 的文件、行号与 include stack provenance。connection、process/shell、topology、parser/control、result rewrite 与 error-policy 等不能无损映射的语义均记录稳定 host-only 原因。inventory 的 relevant-input、dirty gate、untracked gate 与 corpus digest 扩展到 `.inc`/`.sql`，并继续覆盖 `.test`/`.result`。
+- 只有实际消费 tracked `.result` 且设备 C++ callback 同时断言 SQL status、affected rows、result column count/rows 的实现才能标记 device-native。当前仅 `empty_table` 达到该边界并注册为 `ios.mysqltest.empty_table`；此前静态 parser 得到的其余候选全部保守降级为 `device-transcript-unavailable`，不把“能拆出 SQL”冒充 lossless。host 272-case gate 单独读取完整 host result，不能提升为 device pass。
+- stage 5 adapter 将 host gate、逐 source device case 和强制 SQL/same-directory restart gate 注册为独立 case。checkpoint resume 只选择 failed/pending，passed 不重跑；每个 source ID 仍由既有 phase engine 生成独立 failure artifact。host gate 路径只通过进程环境 `SEEKDB_IPHONE_HOST_MYSQLTEST_RESULT` 提供，未提供时记录明确 blocked readiness。
+- 本轮仅运行 host parser/inventory/adapter contracts、Python compile 和完整 Python tests；没有执行 iOS build、签名、安装或真机 case。因此 `empty_table` 目前是已实现的设备契约，不是已取得真机 pass；真实执行及 interrupt/resume acceptance 留给审查通过后的 standalone 试运行。
+
 ## 2026-09-25：standalone runner stages 1–4 adapter
 
 - 新增 `iphone_test_phases.py`，把 inventory、registry smoke、4 个现有 C++ case、5 个现有 Rust case 和 production Rust symbol isolation 注册为稳定 adapter contract；每项显式记录 execution class、host timeout、命令、evidence validator 和 SQL/restart follow-up 要求。device runner 继续只保存 allowlist JSONL，不保存原始 CoreDevice/devicectl metadata。

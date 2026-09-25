@@ -43,6 +43,9 @@ GTEST_PATTERN = re.compile(
 CPP_DEVICE_CASE_PATTERN = re.compile(
     r'registry\.add\(\{"(ios\.cpp\.[^"]+)",\s*"cpp"'
 )
+MYSQLTEST_DEVICE_CASE_PATTERN = re.compile(
+    r'registry\.add\(\{"(ios\.mysqltest\.[^"]+)",\s*"mysqltest"'
+)
 
 
 class InventoryError(RuntimeError):
@@ -84,6 +87,12 @@ def _is_mysqltest_result_path(path):
              parts[5:7] == ("r", "mysql")))
 
 
+def _is_mysqltest_dependency_path(path):
+    """Return whether a tracked include or SQL file can affect a source case."""
+    return (path.startswith("tools/deploy/mysql_test/")
+            and path.endswith((".inc", ".sql")))
+
+
 def reject_untracked_mysqltests(repo_root):
     """Reject filesystem-only mysqltest cases/results used by the existing runner."""
     output = subprocess.check_output(
@@ -93,7 +102,9 @@ def reject_untracked_mysqltests(repo_root):
     ).decode("utf-8")
     extras = sorted(
         path for path in output.split("\0")
-        if _is_active_mysqltest_path(path) or _is_mysqltest_result_path(path)
+        if (_is_active_mysqltest_path(path)
+            or _is_mysqltest_result_path(path)
+            or _is_mysqltest_dependency_path(path))
     )
     if extras:
         raise InventoryError(
@@ -130,6 +141,8 @@ def relevant_inventory_inputs(tracked_files):
         elif path.startswith("unittest/") and path.endswith("CMakeLists.txt"):
             relevant.append(path)
         elif _is_mysqltest_result_path(path):
+            relevant.append(path)
+        elif _is_mysqltest_dependency_path(path):
             relevant.append(path)
     return sorted(set(relevant))
 
@@ -282,6 +295,20 @@ def _base_discoveries(repo_root, tracked_files):
                     "source_path": cpp_device_path,
                     "corpus": "ios-probe",
                     "case_name": case_id.removeprefix("ios.cpp."),
+                    "ci_selected": False,
+                }
+            )
+
+    mysqltest_device_path = "unittest/ios_build/mysqltest_device_cases.cpp"
+    if mysqltest_device_path in tracked_files:
+        content = (repo_root / mysqltest_device_path).read_text(encoding="utf-8")
+        for case_id in MYSQLTEST_DEVICE_CASE_PATTERN.findall(content):
+            discoveries.append(
+                {
+                    "id": case_id,
+                    "source_path": mysqltest_device_path,
+                    "corpus": "mysqltest-device-lossless",
+                    "case_name": case_id.removeprefix("ios.mysqltest."),
                     "ci_selected": False,
                 }
             )

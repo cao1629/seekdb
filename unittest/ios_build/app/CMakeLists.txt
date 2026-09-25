@@ -10,7 +10,8 @@ add_executable(SeekDBProbe MACOSX_BUNDLE
   main.mm
   ../cpp_device_tests.cpp
   ../device_evidence.cpp
-  ../device_test_registry.cpp)
+  ../device_test_registry.cpp
+  ../mysqltest_device_cases.cpp)
 if(RUST_DEVICE_TESTS)
   target_sources(SeekDBProbe PRIVATE ../rust_device_tests.cpp)
   target_compile_definitions(SeekDBProbe PRIVATE SQL_NIO_IOS_DEVICE_TESTS=1)
