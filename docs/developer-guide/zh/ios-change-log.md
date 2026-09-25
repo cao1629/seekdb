@@ -114,6 +114,13 @@
   in-memory/durable marker ownership 回滚。真实子进程分别在 spawn-return 与 marker
   persistence 窗口注入 TERM/INT，均返回 143/130，marker 不残留且 launcher/LLDB/target
   在 `ps` 中无条目；未运行 272 case、iOS build、签名或真机。
+- launcher start 在 spawn 前新增 anchored marker preflight：absent 或严格验证且进程已退出
+  的 stale marker 才可继续；active owner 拒绝 duplicate，malformed JSON、symlink、FIFO、
+  oversize 与 foreign marker 均不 spawn、不改 marker。ownership rollback 改为无条件先按
+  本次精确 `Popen` 回收 in-memory launcher，再尝试读取 durable marker；因此 spawn 后被
+  注入 malformed marker 时，parse failure 仍不会跳过 LLDB/target 清理，foreign marker
+  原样保留，CLI 同时报告原 start error 与 rollback error。真实 race 回归确认 launcher、
+  LLDB、target 均从 `ps` 消失；未运行 272 case、iOS build、签名或真机。
 
 ## 2026-09-25：standalone runner stages 1–4 adapter
 

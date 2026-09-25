@@ -9,6 +9,7 @@ import os
 from pathlib import Path
 import shutil
 import signal
+import stat
 import subprocess
 import sys
 import tempfile
@@ -400,6 +401,114 @@ class MacosLldbLauncherTest(unittest.TestCase):
             cleanup.assert_called_once_with(
                 process, sdb.build_start_command(args, base_dir), "start-id")
 
+    def test_sdb_start_rejects_unsafe_preexisting_launcher_markers(self):
+        """Reject unsafe marker objects before creating a detached process."""
+        sdb = _load_sdb()
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve()
+            binary = root / "seekdb"
+            launcher_script = root / "launcher.py"
+            binary.write_bytes(b"binary")
+            launcher_script.write_text("launcher", encoding="utf-8")
+            for kind in (
+                    "malformed", "symlink", "fifo", "oversize", "foreign"):
+                with self.subTest(kind=kind):
+                    base_dir = root / kind
+                    sdb.prepare_instance_directory(base_dir, binary)
+                    run_dir = base_dir / "run"
+                    run_dir.mkdir()
+                    marker = run_dir / sdb.LAUNCHER_MARKER_NAME
+                    victim = root / "{}-victim".format(kind)
+                    if kind == "malformed":
+                        marker.write_bytes(b"{not-json\n")
+                    elif kind == "symlink":
+                        victim.write_text("unchanged", encoding="utf-8")
+                        marker.symlink_to(victim)
+                    elif kind == "fifo":
+                        os.mkfifo(marker)
+                    elif kind == "foreign":
+                        marker.write_text(json.dumps({
+                            "version": sdb.LAUNCHER_MARKER_VERSION,
+                            "pid": 99999999,
+                            "start_identity": "foreign-start",
+                            "process_executable": str(
+                                Path(sys.executable).resolve()),
+                            "launcher_executable": str(launcher_script),
+                            "target_binary": str(root / "other-seekdb"),
+                            "base_dir": str(base_dir),
+                            "argv": [
+                                sys.executable, str(launcher_script),
+                                "--binary", str(root / "other-seekdb"), "--",
+                                "--base-dir={}".format(base_dir),
+                            ],
+                        }), encoding="utf-8")
+                    else:
+                        marker.write_bytes(
+                            b"x" * (sdb.LAUNCHER_MARKER_MAX_BYTES + 1))
+                    args = argparse.Namespace(
+                        base_dir=str(base_dir), binary=str(binary),
+                        launcher=str(launcher_script), port=2881,
+                        nodaemon=True, parameter=[])
+                    with mock.patch.object(sdb, "spawn_detached") as spawn:
+                        self.assertEqual(1, sdb.command_start(args))
+                    spawn.assert_not_called()
+                    if kind == "symlink":
+                        self.assertTrue(marker.is_symlink())
+                        self.assertEqual(
+                            "unchanged", victim.read_text(encoding="utf-8"))
+                    elif kind == "fifo":
+                        self.assertTrue(stat.S_ISFIFO(marker.lstat().st_mode))
+                    elif kind == "malformed":
+                        self.assertEqual(b"{not-json\n", marker.read_bytes())
+                    elif kind == "oversize":
+                        self.assertEqual(
+                            sdb.LAUNCHER_MARKER_MAX_BYTES + 1,
+                            marker.stat().st_size)
+                    else:
+                        self.assertIn(
+                            "other-seekdb", marker.read_text(encoding="utf-8"))
+
+    def test_sdb_preflight_cleans_exited_marker_and_rejects_duplicate(self):
+        """Remove only exited ownership and preserve a validated live owner."""
+        sdb = _load_sdb()
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve()
+            binary = root / "seekdb"
+            launcher_script = root / "launcher.py"
+            binary.write_bytes(b"binary")
+            launcher_script.write_text("launcher", encoding="utf-8")
+            base_dir = root / "instance"
+            sdb.prepare_instance_directory(base_dir, binary)
+            command = [
+                sys.executable, str(launcher_script), "--binary", str(binary),
+                "--", "--base-dir={}".format(base_dir),
+            ]
+            record = {
+                "version": sdb.LAUNCHER_MARKER_VERSION,
+                "pid": 99999999,
+                "start_identity": "exited-start",
+                "process_executable": str(Path(sys.executable).resolve()),
+                "launcher_executable": str(launcher_script),
+                "target_binary": str(binary),
+                "base_dir": str(base_dir),
+                "argv": command,
+            }
+            sdb.write_launcher_marker(base_dir, record)
+            with mock.patch.object(sdb, "process_exists", return_value=False):
+                sdb.preflight_launcher_marker(base_dir, binary)
+            marker = base_dir / "run" / sdb.LAUNCHER_MARKER_NAME
+            self.assertFalse(marker.exists())
+
+            record["pid"] = os.getpid()
+            record["start_identity"] = "live-start"
+            sdb.write_launcher_marker(base_dir, record)
+            with mock.patch.object(sdb, "process_exists", return_value=True), \
+                    mock.patch.object(
+                        sdb, "_launcher_process_matches", return_value=True):
+                with self.assertRaisesRegex(RuntimeError, "already active"):
+                    sdb.preflight_launcher_marker(base_dir, binary)
+            self.assertTrue(marker.is_file())
+
     def test_sdb_keyboard_interrupt_rolls_back_launcher_ownership(self):
         """Clean the detached process before replaying KeyboardInterrupt."""
         sdb = _load_sdb()
@@ -428,6 +537,29 @@ class MacosLldbLauncherTest(unittest.TestCase):
                     sdb.command_start(args)
             cleanup.assert_called_once_with(
                 process, sdb.build_start_command(args, base_dir), "start-id")
+
+    def test_sdb_rollback_cleans_process_before_unknown_marker_parse(self):
+        """Keep an unknown marker but always clean exact in-memory ownership."""
+        sdb = _load_sdb()
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve()
+            binary = root / "seekdb"
+            binary.write_bytes(b"binary")
+            base_dir = root / "instance"
+            sdb.prepare_instance_directory(base_dir, binary)
+            run_dir = base_dir / "run"
+            run_dir.mkdir()
+            marker = run_dir / sdb.LAUNCHER_MARKER_NAME
+            marker.write_bytes(b"{unknown-race\n")
+            process = mock.Mock(pid=9913)
+            command = ["python", "launcher"]
+            with mock.patch.object(sdb, "_cleanup_new_launcher") as cleanup:
+                with self.assertRaisesRegex(
+                        RuntimeError, "durable marker cleanup"):
+                    sdb._abort_launcher_start(
+                        process, command, base_dir, binary, None)
+            cleanup.assert_called_once_with(process, command, None)
+            self.assertEqual(b"{unknown-race\n", marker.read_bytes())
 
     def test_sdb_stop_handles_managed_pid_and_launcher_marker_together(self):
         """Stop both lifecycle records before reporting one instance stopped."""
@@ -606,9 +738,19 @@ int main(int argc, char **argv) {
                 failed_pids.extend((process.pid, lldb_pid, target_pid))
                 return original_cleanup(process, command, start_identity)
 
+            malformed_marker = b"{race-invalid-json\n"
+
+            def inject_malformed_marker(working_directory, _record):
+                """Create a foreign malformed marker after the real spawn."""
+                run_dir = working_directory / "run"
+                run_dir.mkdir(exist_ok=True)
+                (run_dir / sdb.LAUNCHER_MARKER_NAME).write_bytes(
+                    malformed_marker)
+                raise OSError("injected marker failure")
+
             with mock.patch.object(
                     sdb, "write_launcher_marker",
-                    side_effect=OSError("injected marker failure")), \
+                    side_effect=inject_malformed_marker), \
                     mock.patch.object(
                         sdb, "_cleanup_new_launcher",
                         side_effect=capture_and_cleanup):
@@ -616,6 +758,9 @@ int main(int argc, char **argv) {
             for pid in failed_pids:
                 self.assertFalse(
                     _pid_exists(pid), "failed-start pid {} survived".format(pid))
+            self.assertEqual(
+                malformed_marker,
+                (failed_base / "run" / sdb.LAUNCHER_MARKER_NAME).read_bytes())
 
             started = subprocess.run([
                 sys.executable, str(sdb_script), "start",

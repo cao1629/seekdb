@@ -410,7 +410,8 @@ def read_launcher_marker(base_dir, expected_binary):
         try:
             descriptor = os.open(
                 LAUNCHER_MARKER_NAME,
-                os.O_RDONLY | getattr(os, "O_NOFOLLOW", 0),
+                os.O_RDONLY | getattr(os, "O_NOFOLLOW", 0)
+                | getattr(os, "O_NONBLOCK", 0),
                 dir_fd=run_fd,
             )
         except FileNotFoundError:
@@ -488,6 +489,18 @@ def cleanup_launcher(base_dir, expected_binary):
     remove_launcher_marker(base_dir)
 
 
+def preflight_launcher_marker(base_dir, expected_binary):
+    """Reject a duplicate launcher or remove only a validated exited marker."""
+    record = read_launcher_marker(base_dir, expected_binary)
+    if record is None:
+        return
+    if process_exists(record["pid"]):
+        if not _launcher_process_matches(record):
+            raise RuntimeError("existing launcher marker identity is stale")
+        raise RuntimeError("a launcher is already active for this instance")
+    remove_launcher_marker(base_dir)
+
+
 def _cleanup_new_launcher(process, _command, start_identity=None):
     """Stop a just-spawned launcher when durable marker creation fails."""
     if process.poll() is not None:
@@ -504,20 +517,26 @@ def _cleanup_new_launcher(process, _command, start_identity=None):
 
 def _abort_launcher_start(process, command, base_dir, expected_binary, record):
     """Roll back either in-memory or durable ownership of one new launcher."""
-    persisted = None
-    if record is not None:
+    rollback_errors = []
+    try:
+        _cleanup_new_launcher(
+            process, command,
+            record.get("start_identity") if record else None)
+    except BaseException as exc:
+        rollback_errors.append("in-memory cleanup: {}".format(exc))
+
+    try:
         persisted = read_launcher_marker(base_dir, expected_binary)
-    if persisted is not None:
-        if persisted != record:
-            _cleanup_new_launcher(
-                process, command, record.get("start_identity"))
-            raise RuntimeError("launcher marker is owned by a different start")
-        terminate_launcher_record(persisted)
-        remove_launcher_marker(base_dir)
-        return
-    _cleanup_new_launcher(
-        process, command,
-        record.get("start_identity") if record else None)
+        if persisted is not None:
+            if record is None or persisted != record:
+                raise RuntimeError(
+                    "launcher marker is owned by a different start")
+            terminate_launcher_record(persisted)
+            remove_launcher_marker(base_dir)
+    except BaseException as exc:
+        rollback_errors.append("durable marker cleanup: {}".format(exc))
+    if rollback_errors:
+        raise RuntimeError("; ".join(rollback_errors))
 
 
 def _command_start_with_launcher(args, base_dir, log_dir, command):
@@ -533,6 +552,7 @@ def _command_start_with_launcher(args, base_dir, log_dir, command):
         try:
             signal.pthread_sigmask(signal.SIG_SETMASK, original_mask)
             prepare_instance_directory(base_dir, expected_binary)
+            preflight_launcher_marker(base_dir, expected_binary)
             log_dir.mkdir(parents=True, exist_ok=True)
             signal.pthread_sigmask(signal.SIG_BLOCK, START_HANDLED_SIGNALS)
             try:
@@ -559,18 +579,18 @@ def _command_start_with_launcher(args, base_dir, log_dir, command):
                 termination_signal = pending_signal
             if process is not None \
                     and (termination_signal or caught_error or not completed):
+                ownership_aborted = True
                 _abort_launcher_start(
                     process, command, base_dir, expected_binary, record)
-                ownership_aborted = True
         except BaseException as exc:
             cleanup_error = exc
             if process is not None and not ownership_aborted:
                 try:
                     signal.pthread_sigmask(
                         signal.SIG_BLOCK, START_HANDLED_SIGNALS)
+                    ownership_aborted = True
                     _abort_launcher_start(
                         process, command, base_dir, expected_binary, record)
-                    ownership_aborted = True
                 except BaseException as rollback_exc:
                     cleanup_error = rollback_exc
         restore_error = None
@@ -580,9 +600,9 @@ def _command_start_with_launcher(args, base_dir, log_dir, command):
             restore_error = exc
             if process is not None and not ownership_aborted:
                 try:
+                    ownership_aborted = True
                     _abort_launcher_start(
                         process, command, base_dir, expected_binary, record)
-                    ownership_aborted = True
                 except BaseException as rollback_exc:
                     cleanup_error = rollback_exc
             try:
@@ -592,9 +612,21 @@ def _command_start_with_launcher(args, base_dir, log_dir, command):
         finally:
             signal.pthread_sigmask(signal.SIG_SETMASK, original_mask)
         if cleanup_error is not None:
-            raise cleanup_error
+            if caught_error is not None:
+                caught_error = RuntimeError(
+                    "start failed: {}; rollback failed: {}".format(
+                        caught_error, cleanup_error))
+            else:
+                caught_error = cleanup_error
+            termination_signal = 0
         if restore_error is not None:
-            raise restore_error
+            if caught_error is not None:
+                caught_error = RuntimeError(
+                    "start failed: {}; signal restore failed: {}".format(
+                        caught_error, restore_error))
+            else:
+                caught_error = restore_error
+            termination_signal = 0
 
     if termination_signal:
         return 128 + termination_signal

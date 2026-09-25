@@ -239,6 +239,11 @@ identity 读取与 marker durable write 还是一个 signal-safe ownership trans
 在 `Popen` 返回/赋值临界区阻塞 TERM/INT/HUP，子进程 exec 前恢复原 mask；marker 持久化
 前后的 signal 或任意 `BaseException` 都按当前内存/marker ownership 精确清理 launcher
 全链，最后恢复 handler/mask，并将外部 TERM/INT/HUP 映射为 `128+signal`。
+任何新 spawn 前都会 anchored preflight 现有 launcher marker：只有 marker 缺失或一个已
+严格验证且进程确已退出的 stale marker 才能继续；live owner 视为 duplicate，malformed
+JSON、symlink、special file、超限或 foreign marker 都原样保留并 fail-closed。spawn 后若
+marker 写入与外部文件竞态，rollback 也固定先凭本次 `Popen` ownership 回收 launcher
+全链，再尝试解析 durable marker；marker 解析失败不能跳过进程清理，未知 marker 不删除。
 
 这是真实完整 host mysqltest，不是静态检查，耗时取决于 272 个 case 和重试；任一 host evidence/binary/corpus 问题都会在 iOS build、签名、安装或设备发现前停止。
 
