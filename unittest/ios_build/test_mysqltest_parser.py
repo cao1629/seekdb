@@ -606,6 +606,7 @@ class MysqltestParserTest(unittest.TestCase):
             args = argparse.Namespace(
                 mysqltest=bundle.snapshot_paths["mysqltest"],
                 obclient=bundle.snapshot_paths["obclient"],
+                launcher=phase.MACOS_LLDB_LAUNCHER,
                 host="127.0.0.1", port=2881,
                 base_dir=root / "instance")
             completed = subprocess.CompletedProcess((), 0, "", "")
@@ -617,9 +618,11 @@ class MysqltestParserTest(unittest.TestCase):
                     args, root, case, tmp_dir, log_dir)
 
         self.assertEqual(0, return_code)
-        self.assertEqual(
-            str(bundle.snapshot_paths["mysqltest"]),
-            run.call_args.args[0][0])
+        command = run.call_args.args[0]
+        self.assertEqual([
+            sys.executable, str(phase.MACOS_LLDB_LAUNCHER), "--binary",
+            str(bundle.snapshot_paths["mysqltest"]), "--",
+        ], command[:5])
 
     def test_snapshot_parent_symlink_and_binary_replacement_are_rejected(self):
         """Reject changed snapshot bytes and linked snapshot directory parents."""

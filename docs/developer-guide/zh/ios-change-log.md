@@ -68,6 +68,15 @@
   同 UID 主动攻击者在校验间替换再恢复。同 UID 还能修改 runner、调试/ptrace 或清除
   flags；本机 Python 无 `fexecve`，`O_EXEC` fd 经 `/dev/fd/<fd>` 执行实测返回
   `EBADF`。更强保证需要 privileged/separate-UID isolation，超出本 runner 范围。
+- 首次真实 host gate 在约 3.7 秒内失败；原始与 snapshot 三工具的只读 option 直接执行
+  均为 rc137/SIGKILL，slice evidence 为 `wait for seekdb exited with 1`。新增 tracked
+  `macos_lldb_launcher.py`：macOS 27 固定启用，较低 macOS 仅 direct probe 明确
+  SIGKILL 时启用，Linux/正常 macOS 直跑；严格复核 snapshot 与 xcrun/lldb，结构化
+  argv，准确传播 exit/signal，timeout/中断清理 process group。LLDB 诊断被隔离，目标
+  stdout/stderr 独立转发，不污染 mysqltest 判断。`sdb.py` 的 launcher prefix 不改变
+  marker/process matching 对真实 seekdb snapshot 的绑定，obclient/mysqltest 同样使用
+  prefix。focused 实测当前三个 snapshot 的 `--help`/`--version` 经 LLDB 均非 137，
+  tiny Mach-O exit 7、SIGTERM 143、SIGKILL 137 均正确；未运行 272 case 或真机。
 
 ## 2026-09-25：standalone runner stages 1–4 adapter
 

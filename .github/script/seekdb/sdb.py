@@ -118,9 +118,19 @@ def prepare_instance_directory(base_dir, binary):
         )
 
 
+def launch_prefix(launcher, binary):
+    """Return a structured optional launcher prefix for one real executable."""
+    binary = str(_executable_path(binary))
+    if not launcher:
+        return [binary]
+    return [
+        sys.executable, str(_executable_path(launcher)),
+        "--binary", binary, "--",
+    ]
+
+
 def build_start_command(args, base_dir):
-    command = [
-        str(_executable_path(args.binary)),
+    command = launch_prefix(getattr(args, "launcher", None), args.binary) + [
         "--base-dir={}".format(base_dir),
         "--port={}".format(args.port),
     ]
@@ -149,7 +159,7 @@ def command_start(args):
     command = build_start_command(args, base_dir)
 
     try:
-        prepare_instance_directory(base_dir, Path(command[0]))
+        prepare_instance_directory(base_dir, _executable_path(args.binary))
         log_dir.mkdir(parents=True, exist_ok=True)
         with (log_dir / "console.log").open("ab") as console:
             process = spawn_detached(command, base_dir, console)
@@ -162,8 +172,7 @@ def command_start(args):
 
 
 def build_ready_command(args):
-    return [
-        _expand_command(args.client),
+    return launch_prefix(getattr(args, "launcher", None), args.client) + [
         "-h",
         args.host,
         "-P",
@@ -507,6 +516,7 @@ def create_parser():
 
     start = subparsers.add_parser("start", help="start seekdb and return immediately")
     start.add_argument("--binary", required=True, help="seekdb executable")
+    start.add_argument("--launcher", help="structured executable launcher")
     start.add_argument("--base-dir", required=True, help="seekdb base directory")
     start.add_argument("--port", type=int, default=DEFAULT_PORT)
     start.add_argument(
@@ -526,6 +536,7 @@ def create_parser():
         "wait-ready", help="wait until the managed seekdb accepts SELECT 1"
     )
     ready.add_argument("--client", default="obclient", help="SQL client executable")
+    ready.add_argument("--launcher", help="structured executable launcher")
     ready.add_argument("--base-dir", required=True, help="seekdb base directory")
     ready.add_argument("--host", default="127.0.0.1")
     ready.add_argument("--port", type=int, default=DEFAULT_PORT)

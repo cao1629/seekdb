@@ -335,7 +335,9 @@ def mysqltest_corpus_digest(repo_root):
     ]
     paths.extend((
         repo_root / ".github/script/seekdb/mysqltest_for_seekdb.py",
+        repo_root / ".github/script/seekdb/sdb.py",
         repo_root / "tools/deploy/mysqltest_config.yaml",
+        repo_root / "unittest/ios_build/macos_lldb_launcher.py",
         repo_root / "unittest/ios_build/mysqltest_parser.py",
     ))
     digest = hashlib.sha256()
@@ -493,6 +495,16 @@ def run_sdb(sdb_script, command, arguments, description, cwd):
     )
 
 
+def launch_command(launcher, binary, arguments):
+    """Build one structured optional launcher command without shell parsing."""
+    if launcher is None:
+        return [str(binary), *[str(item) for item in arguments]]
+    return [
+        sys.executable, str(launcher), "--binary", str(binary), "--",
+        *[str(item) for item in arguments],
+    ]
+
+
 def destroy_instance(sdb_script, base_dir, cwd, check=True):
     command = [
         sys.executable,
@@ -516,14 +528,13 @@ def destroy_instance(sdb_script, base_dir, cwd, check=True):
     return None
 
 
-def execute_init_sql(obclient, host, port, deploy_dir):
+def execute_init_sql(obclient, host, port, deploy_dir, launcher=None):
     init_files = (
         (deploy_dir / "init.sql", "oceanbase"),
         (deploy_dir / "init_user.sql", "test"),
     )
     for sql_file, database in init_files:
-        command = [
-            str(obclient),
+        command = launch_command(launcher, obclient, [
             "-h",
             host,
             "-P",
@@ -532,7 +543,7 @@ def execute_init_sql(obclient, host, port, deploy_dir):
             "-A",
             "-c",
             "-D{}".format(database),
-        ]
+        ])
         print("+ {} < {}".format(format_command(command), sql_file), flush=True)
         try:
             with sql_file.open("rb") as sql_input:
@@ -551,6 +562,8 @@ def execute_init_sql(obclient, host, port, deploy_dir):
 
 
 def prepare_instance(args, repo_root, sdb_script, deploy_dir):
+    launcher_options = (
+        ("--launcher", args.launcher) if args.launcher else ())
     destroy_instance(sdb_script, args.base_dir, repo_root)
     run_sdb(
         sdb_script,
@@ -558,6 +571,7 @@ def prepare_instance(args, repo_root, sdb_script, deploy_dir):
         (
             "--binary",
             args.seekdb,
+            *launcher_options,
             "--base-dir",
             args.base_dir,
             "--port",
@@ -572,6 +586,7 @@ def prepare_instance(args, repo_root, sdb_script, deploy_dir):
         (
             "--client",
             args.obclient,
+            *launcher_options,
             "--base-dir",
             args.base_dir,
             "--host",
@@ -586,7 +601,8 @@ def prepare_instance(args, repo_root, sdb_script, deploy_dir):
         "wait for seekdb",
         repo_root,
     )
-    execute_init_sql(args.obclient, args.host, args.port, deploy_dir)
+    execute_init_sql(
+        args.obclient, args.host, args.port, deploy_dir, args.launcher)
 
 
 def load_configured_case_names(config_path):
@@ -723,8 +739,7 @@ def run_case(args, deploy_dir, case, tmp_dir, log_dir):
     """Run one selected case after revalidating every external output path."""
     _validate_output_tree(tmp_dir)
     _validate_output_tree(log_dir)
-    command = [
-        str(args.mysqltest),
+    command = launch_command(getattr(args, "launcher", None), args.mysqltest, [
         "--host={}".format(args.host),
         "--port={}".format(args.port),
         "--user={}".format(MYSQLTEST_USER),
@@ -737,7 +752,7 @@ def run_case(args, deploy_dir, case, tmp_dir, log_dir):
         "--result-file={}".format(case.result_file),
         "--timer-file={}".format(log_dir / "timer"),
         "--tail-lines=20",
-    ]
+    ])
     case_name = case.name
     reject_file = log_dir / (case.result_file.stem + ".reject")
     _remove_regular_file(reject_file)
@@ -870,6 +885,12 @@ def command_run(args):
     args.seekdb = absolute_path(args.seekdb)
     args.obclient = absolute_path(args.obclient)
     args.mysqltest = absolute_path(args.mysqltest)
+    if args.launcher is not None:
+        args.launcher = absolute_path(args.launcher)
+        expected_launcher = (
+            repo_root / "unittest/ios_build/macos_lldb_launcher.py").resolve()
+        if args.launcher != expected_launcher:
+            raise RunnerError("host executable launcher is not tracked")
     args.base_dir = absolute_path(args.base_dir)
     args.work_dir = absolute_path(args.work_dir)
     result_path = args.work_dir / "seekdb_result.json"
@@ -1083,6 +1104,7 @@ def create_parser():
     run.add_argument("--seekdb", required=True, help="seekdb executable")
     run.add_argument("--obclient", required=True, help="obclient executable")
     run.add_argument("--mysqltest", required=True, help="mysqltest executable")
+    run.add_argument("--launcher", type=Path, help="structured executable launcher")
     run.add_argument("--base-dir", required=True, help="seekdb base directory")
     run.add_argument("--work-dir", required=True, help="slice output directory")
     run.add_argument("--host", default="127.0.0.1")

@@ -198,6 +198,24 @@ run lock、descriptor-anchored I/O 和执行前后 identity 比对。不声称�
 `execve("/dev/fd/<fd>")` 也以 `EBADF` 拒绝。抵抗该级别攻击需要 privileged isolation
 或不同 UID 的可信 launcher，超出 standalone runner 范围。
 
+2026-09-25 的首次真实 host gate 在约 3.7 秒内失败：原始与 snapshot 的 seekdb、
+obclient、mysqltest 直接执行 `--help`/`--version` 均以 137（SIGKILL）退出，slice
+evidence 记录 `wait for seekdb exited with 1`，console 只有启动前言。tracked
+`macos_lldb_launcher.py` 现在为该 macOS 27 execution-policy 路径提供通用 launcher；
+较低版本 macOS 只在结构化 direct probe 明确返回 SIGKILL/137 时启用，Linux 与正常
+macOS 继续直跑。launcher 再次校验绝对 anchored snapshot、thin 64-bit Mach-O、系统
+dylib 和固定 `xcrun lldb`，以 argv list 传参，不经 shell；共享 timeout/中断会清理
+完整 LLDB process group，目标正常退出与 signal 映射保持准确。LLDB 自身 stdout/stderr
+丢弃，目标 stdout/stderr 通过独立继承 fd 转发，避免 debugger 文本污染 mysqltest
+结果判断。
+
+`sdb.py --launcher` 只改变结构化启动前缀；instance marker、pid inspection 与 cleanup
+仍绑定真实 seekdb snapshot 和 `--base-dir`。wait-ready obclient、init SQL obclient 和
+每个 mysqltest case 同样使用 launcher prefix。focused 只读验证已确认当前三个
+run-local snapshot 的 `--help`/`--version` 经 launcher 均不再返回 137；真实 tiny
+Mach-O 的 exit 7、SIGTERM 143、SIGKILL 137 也按契约传播。该验证没有启动 272 case
+或真机阶段。
+
 这是真实完整 host mysqltest，不是静态检查，耗时取决于 272 个 case 和重试；任一 host evidence/binary/corpus 问题都会在 iOS build、签名、安装或设备发现前停止。
 
 静态 parser 审计全部 283 个 active source，并递归覆盖 `.inc`/`.sql` 输入；循环、path escape、缺失 include 或 connection/process/topology/result rewrite/error-policy 等语义均保持 host-only/not-applicable，不能静默删除。当前设备 registry 只包含 `ios.mysqltest.empty_table`：它消费 tracked `empty_table.result`，在内部 SQL proxy 上断言 statement status、affected rows、精确计数值，并从 result-set field metadata 精确断言有序字段名 `nr,b,str` 后要求 `OB_ITER_END`。其他 parser 候选在没有完整 transcript、affected-row、warning/error-domain adapter 前均保持 host-only。

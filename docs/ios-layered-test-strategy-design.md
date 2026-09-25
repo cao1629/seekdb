@@ -155,6 +155,22 @@ with `O_EXEC` fails with `EBADF`, so there is no supported fd-to-exec handoff.
 That stronger boundary requires a privileged or separate-UID launcher and is
 outside this standalone runner's scope.
 
+On macOS 27, a tracked generic LLDB launcher handles the observed execution
+policy that kills the three otherwise valid host snapshots with SIGKILL. Older
+macOS selects it only after a structured direct probe returns SIGKILL/137;
+Linux and normal macOS remain direct. The launcher revalidates the absolute
+anchored thin-64-bit/system-linked snapshot and fixed xcrun/LLDB toolchain,
+passes every target argument as a separate argv element, maps normal and signal
+termination exactly, and boundedly reaps the LLDB process group on timeout or
+interruption. Debugger output is discarded while target stdout/stderr travels
+through separate inherited descriptors, so LLDB diagnostics cannot affect
+mysqltest result handling.
+
+The optional sdb launch prefix never replaces the real executable identity.
+The instance marker and process matcher remain bound to the seekdb snapshot and
+base directory, while seekdb startup, readiness obclient, initialization
+obclient, and mysqltest all receive the same structured launcher contract.
+
 ## Rust Validation
 
 Rust unit-test logic that exercises protocol parsing, TLS name handling, compression, and response encoding will be exposed through a test-only C ABI and linked into the signed device application. Panics must be contained at the FFI boundary and converted into a failed structured result.

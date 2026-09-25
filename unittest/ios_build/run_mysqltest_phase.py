@@ -7,15 +7,17 @@ import hashlib
 import json
 import os
 from pathlib import Path
+import platform
 import secrets
 import signal
 import stat
 import subprocess
 import sys
 import time
-from typing import Mapping, Sequence
+from typing import Mapping, Optional, Sequence
 
 import mysqltest_parser
+import macos_lldb_launcher
 
 MAX_HOST_RESULT_BYTES = 8 * 1024 * 1024
 HOST_RUN_TIMEOUT_SECONDS = 24 * 60 * 60
@@ -33,6 +35,8 @@ HOST_BINARY_CANONICAL_PATHS = {
 HOST_BINARY_NAMES = ("seekdb", "obclient", "mysqltest")
 MACHO_MAGICS = {b"\xfe\xed\xfa\xcf", b"\xcf\xfa\xed\xfe"}
 SYSTEM_MACHO_DEPENDENCY_PREFIXES = ("/usr/lib/", "/System/Library/")
+MACOS_LLDB_LAUNCHER = Path(__file__).resolve().with_name(
+    "macos_lldb_launcher.py")
 
 
 @dataclass(frozen=True)
@@ -572,6 +576,41 @@ def _validate_snapshot_macho_dependencies(
                 "host mysqltest snapshot has unsupported dependencies")
 
 
+def _select_host_executable_launcher(
+        binaries: Mapping[str, Path], process_runner=None) -> Optional[Path]:
+    """Select tracked LLDB only for macOS 27 or a direct SIGKILL probe."""
+    if sys.platform != "darwin":
+        return None
+    try:
+        major_version = int(platform.mac_ver()[0].split(".", 1)[0])
+    except (ValueError, IndexError):
+        major_version = 0
+    use_lldb = major_version >= 27
+    if not use_lldb:
+        runner = process_runner or _run_controlled_process
+        for name in HOST_BINARY_NAMES:
+            try:
+                completed = runner(
+                    [str(binaries[name]), "--help"],
+                    Path.cwd(), time.monotonic() + 10)
+            except subprocess.TimeoutExpired:
+                continue
+            if completed.returncode in {-signal.SIGKILL, 128 + signal.SIGKILL}:
+                use_lldb = True
+                break
+    if not use_lldb:
+        return None
+    try:
+        metadata = MACOS_LLDB_LAUNCHER.lstat()
+        if (MACOS_LLDB_LAUNCHER.is_symlink()
+                or not stat.S_ISREG(metadata.st_mode)):
+            raise MysqltestPhaseError("tracked LLDB launcher is unavailable")
+        macos_lldb_launcher.validate_lldb()
+    except (OSError, macos_lldb_launcher.LauncherError) as error:
+        raise MysqltestPhaseError("tracked LLDB launcher is unavailable") from error
+    return MACOS_LLDB_LAUNCHER
+
+
 def execute_local_host_gate(
         repo_root: Path, work_directory: Path, run_id: str,
         binaries: Mapping[str, Path], process_runner=None) -> dict:
@@ -581,6 +620,7 @@ def execute_local_host_gate(
     snapshots = prepare_host_binary_snapshots(binaries, work_directory)
     validate_host_binary_snapshots(snapshots)
     execution_binaries = snapshots.snapshot_paths
+    launcher = _select_host_executable_launcher(execution_binaries)
     slice_directory = work_directory / "slice_0"
     script = repo_root / ".github/script/seekdb/mysqltest_for_seekdb.py"
     commands = (
@@ -590,7 +630,8 @@ def execute_local_host_gate(
          "--mysqltest", str(execution_binaries["mysqltest"]),
          "--base-dir", str(work_directory / "instance"),
          "--work-dir", str(slice_directory),
-         "--slice-index", "0", "--slice-count", "1"],
+         "--slice-index", "0", "--slice-count", "1",
+         *(["--launcher", str(launcher)] if launcher else [])],
         [sys.executable, str(script), "merge",
          "--results-dir", str(work_directory),
          "--slice-count", "1", "--run-id", run_id,
