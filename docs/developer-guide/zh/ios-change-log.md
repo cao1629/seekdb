@@ -90,7 +90,10 @@
 - 补齐首次解除 signal mask 的 pending-signal 窗口：首次 `SIG_SETMASK` 现在也位于
   `_ExternalTermination` 捕获范围内，TERM/INT/HUP 均先恢复 handler/mask/fd 再返回
   `128+signal`。cleanup 只接受真实 `pid==pgid` 且命令含 `lldb --no-lldbinit` 的
-  session leader，并冻结 LLDB 后同时清理其 descendant/精确 target snapshot 进程。
+  session leader。target 与 debugger 分层清理：先只终止精确 target/target PGID，保持
+  LLDB/debugserver 存活并轮询到 target PID（包括 zombie）从 `ps` 完全消失，再清理
+  debugger descendants 与 LLDB group。handler restore 期间先 block TERM/INT/HUP，完整
+  恢复 handlers/pending state 后再恢复原 mask；恢复循环中的信号仍映射为 `128+signal`。
 
 ## 2026-09-25：standalone runner stages 1–4 adapter
 

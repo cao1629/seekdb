@@ -47,12 +47,11 @@ def _wait_for_pid_file(path: Path, timeout_seconds: float = 30) -> int:
 
 
 def _pid_exists(pid: int) -> bool:
-    """Return whether one process id still represents a live process."""
+    """Return whether one process id has any process-table entry, including Z."""
     completed = subprocess.run(
         ["ps", "-o", "stat=", "-p", str(pid)],
         capture_output=True, check=False, text=True)
-    state = completed.stdout.strip()
-    return bool(state) and not state.startswith("Z")
+    return bool(completed.stdout.strip())
 
 
 def _wait_for_lldb_session_leader(
@@ -301,6 +300,59 @@ class MacosLldbLauncherTest(unittest.TestCase):
         self.assertEqual(128 + signal.SIGTERM, result)
         self.assertIs(previous_term, signal.getsignal(signal.SIGTERM))
 
+    def test_signal_during_handler_restore_is_consumed_after_full_restore(self):
+        """Restore every handler and mask before reporting teardown TERM or INT."""
+        for injected_signal in (signal.SIGTERM, signal.SIGINT):
+            with self.subTest(injected_signal=injected_signal):
+                previous, original_mask = launcher._install_signal_handlers()
+                signal.pthread_sigmask(signal.SIG_SETMASK, original_mask)
+                real_signal = signal.signal
+                injected = False
+
+                def restore_and_inject(signum, handler):
+                    """Enqueue one signal while teardown holds the signal mask."""
+                    nonlocal injected
+                    result = real_signal(signum, handler)
+                    if not injected:
+                        injected = True
+                        os.kill(os.getpid(), injected_signal)
+                    return result
+
+                try:
+                    with mock.patch.object(
+                            launcher.signal, "signal",
+                            side_effect=restore_and_inject):
+                        captured = launcher._restore_signal_handlers(
+                            previous, original_mask)
+                finally:
+                    for signum, handler in previous.items():
+                        real_signal(signum, handler)
+                    signal.pthread_sigmask(
+                        signal.SIG_SETMASK, original_mask)
+
+                self.assertEqual(injected_signal, captured)
+                self.assertEqual(
+                    128 + injected_signal, 128 + captured)
+                for signum, handler in previous.items():
+                    self.assertIs(handler, signal.getsignal(signum))
+                current_mask = signal.pthread_sigmask(signal.SIG_BLOCK, set())
+                self.assertEqual(original_mask, current_mask)
+
+    def test_main_maps_a_teardown_signal_without_traceback(self):
+        """Return shell signal status when transactional restore reports INT."""
+        with mock.patch.object(
+                launcher, "_install_signal_handlers",
+                return_value=({}, set())), \
+                mock.patch.object(
+                    launcher, "validate_binary",
+                    side_effect=launcher.LauncherError("fixed")), \
+                mock.patch.object(
+                    launcher, "_restore_signal_handlers",
+                    return_value=signal.SIGINT):
+            result = launcher.main(["--binary", "/snapshot/seekdb"])
+
+        self.assertEqual(128 + signal.SIGINT, result)
+
     def test_timeout_terminates_and_kills_the_lldb_process_group(self):
         """Bound timeout cleanup even when the LLDB group ignores SIGTERM."""
         process = mock.Mock(pid=4321)
@@ -316,8 +368,7 @@ class MacosLldbLauncherTest(unittest.TestCase):
                     launcher.subprocess, "Popen",
                     return_value=process) as popen, \
                 mock.patch.object(
-                    launcher, "_descendant_process_tree",
-                    return_value=(set(), set())), \
+                    launcher, "_process_table", return_value={}), \
                 mock.patch.object(launcher.os, "killpg") as killpg:
             result = launcher.launch(
                 Path("/snapshot/seekdb"), (), timeout_seconds=1)
@@ -347,8 +398,7 @@ class MacosLldbLauncherTest(unittest.TestCase):
                 mock.patch.object(
                     launcher.subprocess, "Popen", return_value=process), \
                 mock.patch.object(
-                    launcher, "_descendant_process_tree",
-                    return_value=(set(), set())), \
+                    launcher, "_process_table", return_value={}), \
                 mock.patch.object(launcher.os, "killpg") as killpg:
             with self.assertRaises(KeyboardInterrupt):
                 launcher.launch(
@@ -366,24 +416,26 @@ class MacosLldbLauncherTest(unittest.TestCase):
         process = mock.Mock(pid=4321)
         process.wait.return_value = 0
 
+        records = {
+            5000: launcher._ProcessRecord(
+                5000, 4321, 5000, "S", "/debugger")}
         with mock.patch.object(
-                launcher, "_descendant_process_tree",
-                return_value=({5001}, {5000})), \
+                launcher, "_process_table", return_value=records), \
                 mock.patch.object(launcher.os, "kill") as kill_process, \
                 mock.patch.object(launcher.os, "killpg") as killpg:
             launcher._terminate_group(process)
 
         self.assertEqual(
             [mock.call(4321, signal.SIGSTOP),
-             mock.call(5000, signal.SIGTERM),
              mock.call(4321, signal.SIGCONT),
-             mock.call(5000, signal.SIGKILL),
+             mock.call(5000, signal.SIGTERM),
              mock.call(4321, signal.SIGTERM),
+             mock.call(5000, signal.SIGKILL),
              mock.call(4321, signal.SIGKILL)],
             killpg.call_args_list)
         self.assertEqual(
-            [mock.call(5001, signal.SIGTERM),
-             mock.call(5001, signal.SIGKILL)],
+            [mock.call(5000, signal.SIGTERM),
+             mock.call(5000, signal.SIGKILL)],
             kill_process.call_args_list)
         self.assertEqual(2, process.wait.call_count)
 
@@ -618,9 +670,10 @@ int main(int argc, char **argv) {
             lldb_pid = _wait_for_lldb_session_leader(process.pid)
             target_pid = _wait_for_lldb_target(lldb_pid, program)
             self.assertEqual(target_pid, _wait_for_pid_file(started_marker))
-            captured_pids, _captured_groups = launcher._descendant_process_tree(
-                lldb_pid, program)
-            self.assertIn(target_pid, captured_pids)
+            captured_records = launcher._process_table()
+            self.assertIn(
+                target_pid,
+                launcher._descendant_ids(lldb_pid, captured_records))
             try:
                 self.assertFalse(marker.exists())
                 process.terminate()

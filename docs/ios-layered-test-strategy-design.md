@@ -178,7 +178,11 @@ a 3570-second timeout below the outer 3600-second case limit, and readiness
 probes reserve cleanup time below each client-attempt timeout.
 The initial signal-mask restore is inside the same termination boundary.
 Cleanup identifies the actual `pid == pgid` LLDB session leader, freezes new
-launches, and terminates both its descendant tree and the exact target snapshot.
+launches, terminates only the exact target and target process group first, and
+keeps LLDB/debugserver alive until the target PID, including a zombie entry,
+has disappeared from `ps`. Only then does it terminate debugger descendants
+and the LLDB group. Handler teardown blocks TERM, INT, and HUP until all prior
+handlers and pending state are restored, then restores the original mask.
 
 The optional sdb launch prefix never replaces the real executable identity.
 The instance marker and process matcher remain bound to the seekdb snapshot and

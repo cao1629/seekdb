@@ -2,6 +2,7 @@
 """Launch one validated run-local macOS executable through LLDB."""
 
 import argparse
+from dataclasses import dataclass
 import os
 from pathlib import Path
 import signal
@@ -45,6 +46,17 @@ class _ExternalTermination(BaseException):
         self.signum = signum
 
 
+@dataclass(frozen=True)
+class _ProcessRecord:
+    """Describe one process-table row used for bounded cleanup."""
+
+    pid: int
+    parent_pid: int
+    group_id: int
+    state: str
+    command: str
+
+
 def _handle_external_signal(signum: int, _frame) -> None:
     """Record one external signal and interrupt the main-thread operation."""
     global _PENDING_SIGNAL
@@ -71,12 +83,24 @@ def _install_signal_handlers() -> tuple[dict[int, object], set[int]]:
     return previous, previous_mask
 
 
-def _restore_signal_handlers(previous: dict[int, object]) -> None:
-    """Restore caller signal handlers and clear launcher signal state."""
+def _restore_signal_handlers(
+        previous: dict[int, object], original_mask: set[int]) -> int:
+    """Transactionally restore handlers/mask and return a teardown signal."""
     global _PENDING_SIGNAL
-    for signum, handler in previous.items():
-        signal.signal(signum, handler)
-    _PENDING_SIGNAL = 0
+    signal.pthread_sigmask(signal.SIG_BLOCK, HANDLED_SIGNALS)
+    teardown_signal = _PENDING_SIGNAL
+    try:
+        for signum, handler in previous.items():
+            signal.signal(signum, handler)
+        pending = set(signal.sigpending()).intersection(HANDLED_SIGNALS)
+        for signum in sorted(pending):
+            signal.sigwait({signum})
+            if not teardown_signal:
+                teardown_signal = signum
+        _PENDING_SIGNAL = 0
+    finally:
+        signal.pthread_sigmask(signal.SIG_SETMASK, original_mask)
+    return teardown_signal
 
 
 def _directory_flags() -> int:
@@ -252,65 +276,97 @@ def lldb_command(
     ]
 
 
-def _descendant_process_tree(
-        root_pid: int, target_binary: Path = None) -> tuple[set[int], set[int]]:
-    """Return process ids and groups in the current LLDB descendant tree."""
+def _process_table() -> dict[int, _ProcessRecord]:
+    """Read one bounded process table for identity-aware cleanup."""
     try:
         completed = subprocess.run(
-            ["/bin/ps", "-axo", "pid=,ppid=,pgid=,command="],
+            ["/bin/ps", "-axo", "pid=,ppid=,pgid=,stat=,command="],
             stdout=subprocess.PIPE, stderr=subprocess.DEVNULL,
             timeout=5, check=False, text=True)
     except (OSError, subprocess.SubprocessError):
-        return set(), set()
+        return {}
     if completed.returncode != 0:
-        return set(), set()
-    children = {}
-    groups = {}
-    commands = {}
+        return {}
+    records = {}
     for line in completed.stdout.splitlines():
-        values = line.split(maxsplit=3)
-        if len(values) != 4:
+        values = line.split(maxsplit=4)
+        if len(values) != 5:
             continue
         try:
             pid, parent_pid, group_id = (
                 int(value) for value in values[:3])
         except ValueError:
             continue
-        children.setdefault(parent_pid, []).append(pid)
-        groups[pid] = group_id
-        commands[pid] = values[3]
+        records[pid] = _ProcessRecord(
+            pid, parent_pid, group_id, values[3], values[4])
+    return records
+
+
+def _descendant_ids(
+        root_pid: int, records: dict[int, _ProcessRecord]) -> set[int]:
+    """Return descendants whose current parent chain reaches one LLDB pid."""
+    children = {}
+    for record in records.values():
+        children.setdefault(record.parent_pid, []).append(record.pid)
     descendants = set()
     pending = list(children.get(root_pid, ()))
     while pending:
         pid = pending.pop()
         descendants.add(pid)
         pending.extend(children.get(pid, ()))
-    if target_binary is not None:
-        target = str(target_binary)
-        target_prefix = target + " "
-        descendants.update(
-            pid for pid, command in commands.items()
-            if command == target or command.startswith(target_prefix))
-    descendant_groups = {
-        groups[pid] for pid in descendants
-        if groups.get(pid, root_pid) != root_pid
-    }
-    return descendants, descendant_groups
+    return descendants
 
 
-def _signal_descendants(
-        process_ids: set[int], groups: set[int], signum: int) -> None:
-    """Signal every captured descendant pid and distinct process group."""
-    for process_id in process_ids:
+def _command_matches(record: _ProcessRecord, binary: Path) -> bool:
+    """Return whether one current command is the exact validated target."""
+    target = str(binary)
+    return record.command == target or record.command.startswith(target + " ")
+
+
+def _signal_records(
+        records: dict[int, _ProcessRecord], signum: int,
+        *, root_pid: int, target_binary: Path = None) -> None:
+    """Signal only records whose identity and descendant chain still match."""
+    current = _process_table()
+    descendants = _descendant_ids(root_pid, current)
+    matched = []
+    for process_id, expected in records.items():
+        actual = current.get(process_id)
+        if (actual is None or actual.group_id != expected.group_id
+                or actual.command != expected.command
+                or process_id not in descendants):
+            continue
+        if target_binary is not None and not _command_matches(
+                actual, target_binary):
+            continue
+        matched.append(actual)
+    for record in matched:
         try:
-            os.kill(process_id, signum)
+            os.kill(record.pid, signum)
         except OSError:
             pass
-    for group_id in groups:
+    for group_id in {
+            record.group_id for record in matched
+            if record.pid == record.group_id and group_id_safe(record.group_id)}:
         try:
             os.killpg(group_id, signum)
         except OSError:
             pass
+
+
+def group_id_safe(group_id: int) -> bool:
+    """Reject special process-group identifiers before sending a signal."""
+    return group_id > 1
+
+
+def _wait_pids_absent(process_ids: set[int], timeout_seconds: float) -> bool:
+    """Wait until every recorded pid is absent, including zombie entries."""
+    deadline = time.monotonic() + timeout_seconds
+    while time.monotonic() < deadline:
+        if not process_ids.intersection(_process_table()):
+            return True
+        time.sleep(0.05)
+    return not process_ids.intersection(_process_table())
 
 
 def _terminate_group(
@@ -320,18 +376,32 @@ def _terminate_group(
         os.killpg(process.pid, signal.SIGSTOP)
     except OSError:
         pass
-    descendant_pids, descendant_groups = _descendant_process_tree(
-        process.pid, target_binary)
-    _signal_descendants(
-        descendant_pids, descendant_groups, signal.SIGTERM)
+    records = _process_table()
+    descendant_ids = _descendant_ids(process.pid, records)
+    target_records = {
+        pid: records[pid] for pid in descendant_ids
+        if target_binary is not None and _command_matches(
+            records[pid], target_binary)
+    }
+    debugger_records = {
+        pid: records[pid] for pid in descendant_ids
+        if pid not in target_records
+    }
+    _signal_records(
+        target_records, signal.SIGTERM, root_pid=process.pid,
+        target_binary=target_binary)
     try:
         os.killpg(process.pid, signal.SIGCONT)
     except OSError:
         pass
-    time.sleep(TARGET_REAP_GRACE_SECONDS)
-    _signal_descendants(
-        descendant_pids, descendant_groups, signal.SIGKILL)
-    time.sleep(TARGET_REAP_GRACE_SECONDS)
+    if not _wait_pids_absent(
+            set(target_records), TARGET_REAP_GRACE_SECONDS):
+        _signal_records(
+            target_records, signal.SIGKILL, root_pid=process.pid,
+            target_binary=target_binary)
+        _wait_pids_absent(set(target_records), TARGET_REAP_GRACE_SECONDS)
+    _signal_records(
+        debugger_records, signal.SIGTERM, root_pid=process.pid)
     try:
         os.killpg(process.pid, signal.SIGTERM)
     except OSError:
@@ -340,6 +410,8 @@ def _terminate_group(
         process.wait(timeout=PROCESS_CLEANUP_GRACE_SECONDS)
     except subprocess.TimeoutExpired:
         pass
+    _signal_records(
+        debugger_records, signal.SIGKILL, root_pid=process.pid)
     try:
         os.killpg(process.pid, signal.SIGKILL)
     except OSError:
@@ -464,19 +536,31 @@ def parse_args(arguments: Sequence[str]) -> argparse.Namespace:
 def main(arguments: Sequence[str]) -> int:
     """Validate one target and dispatch it through the fixed LLDB command."""
     previous_handlers, previous_mask = _install_signal_handlers()
+    result = 125
+    termination_signal = 0
     try:
         try:
             signal.pthread_sigmask(signal.SIG_SETMASK, previous_mask)
             options = parse_args(arguments)
             binary = validate_binary(options.binary)
-            return launch(
+            result = launch(
                 binary, options.arguments, timeout_seconds=options.timeout)
         except _ExternalTermination as termination:
-            return 128 + termination.signum
+            termination_signal = termination.signum
         except (LauncherError, OSError, UnicodeError):
-            return 125
+            result = 125
     finally:
-        _restore_signal_handlers(previous_handlers)
+        while True:
+            try:
+                teardown_signal = _restore_signal_handlers(
+                    previous_handlers, previous_mask)
+                if not termination_signal:
+                    termination_signal = teardown_signal
+                break
+            except _ExternalTermination as termination:
+                if not termination_signal:
+                    termination_signal = termination.signum
+    return 128 + termination_signal if termination_signal else result
 
 
 if __name__ == "__main__":

@@ -215,7 +215,9 @@ process group 后再恢复信号，首次信号触发有界 TERM→KILL→wait�
 deadline；单个 mysqltest case 显式使用 3570 秒，小于外层 3600 秒；wait-ready 的每次
 launcher timeout 也为外层 client attempt 预留清理预算，避免外层先杀 launcher。
 首次解除 mask 本身也位于 signal 捕获范围；cleanup 先确认真实 LLDB session leader，
-冻结其 spawn，再按 descendant pid/process group 与精确 snapshot 路径清理 target。
+冻结其 spawn，先只终止精确 target/target PGID 并保留 LLDB/debugserver 完成 wait/reap；
+target PID（包括 zombie）从 `ps` 消失后才清 debugger descendants 与 LLDB group。
+handler teardown 全程 block TERM/INT/HUP，恢复全部 handlers/pending state 后才恢复原 mask。
 
 `sdb.py --launcher` 只改变结构化启动前缀；instance marker、pid inspection 与 cleanup
 仍绑定真实 seekdb snapshot 和 `--base-dir`。wait-ready obclient、init SQL obclient 和
