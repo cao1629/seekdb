@@ -324,3 +324,19 @@ python3 deps/ios-build/build.py --jobs 4 vsag
 - 正式生成默认绑定 HEAD：相关受跟踪输入存在 staged/unstaged 改动或 active mysqltest 存在未跟踪文件时立即失败。字段类型、枚举、null、相对路径、reason 互斥、commit/digest 格式均增加负向测试。常规 C++ target 数量改为从受跟踪的非 iOS unittest CMake 定义派生，不再读取 manifest 字面量。
 - 官方 focused 命令修正为 `python3 unittest/ios_build/test_inventory.py -v`；仓库目录 `unittest/` 与 Python 标准库包同名，不能使用 `python3 -m unittest unittest.ios_build...`。
 - HEAD 绑定复审补充 staged deletion 回归：relevant 路径现在从 HEAD 与 index 的并集派生，因此已从 index 删除但仍属于 HEAD 的 Rust、iOS、host Python、mysqltest 等输入不会绕过 clean gate。
+
+## 2026-09-25：mysqltest evidence 与真机契约收紧
+
+- host mysqltest runner 直接生成带 canonical digest 的 slice/merged evidence，绑定
+  source commit、完整 mysqltest source/result/include/SQL corpus、host runner/config/
+  parser 以及 seekdb、obclient、mysqltest 三项 binary identity。iPhone host gate
+  只接受精确有序的 272 项 CI executed case，拒绝手写最小 aggregate、缺项、额外项、
+  tamper、旧 commit/corpus 和 build identity 不一致。
+- corpus 与 host evidence 改用 bounded `O_NOFOLLOW` regular-file 读取，并在一次 fd
+  生命周期内核对 identity；parser 在一次分类中缓存同一 source/result/include
+  bytes，避免路径检查后换入其他内容。host result 路径只从环境读取，不进入 argv。
+- 显式 mysqltest suite 在任何设备发现、签名、build/install 前验证 host evidence；
+  缺失或损坏归类为 evidence/infrastructure 并停止。真机 `empty_table` 适配器在
+  server modules 未 ready 时明确失败，空结果精确检查 ordered `nr,b,str` metadata
+  与 `OB_ITER_END`，不再以仅列数或零执行作为通过。
+- 本轮仅执行 host focused/full tests 和静态检查，没有运行真机、签名或安装。

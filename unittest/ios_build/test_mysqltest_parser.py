@@ -2,7 +2,9 @@
 """Contract tests for lossless active mysqltest classification and adapters."""
 
 import json
+import os
 from pathlib import Path
+import subprocess
 import tempfile
 import unittest
 
@@ -97,6 +99,37 @@ class MysqltestParserTest(unittest.TestCase):
             (root / "tools/outside.inc").write_text("SELECT 1;\n", encoding="utf-8")
             with self.assertRaisesRegex(parser.MysqltestParseError, "escapes"):
                 parser.parse_test_file(root, case, "escape")
+
+    def test_sources_results_and_includes_reject_symlinks(self):
+        """Use only contained regular corpus files and never follow symlinks."""
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            mysql_root = root / "tools/deploy/mysql_test"
+            case = mysql_root / "t/demo.test"
+            result = mysql_root / "r/mysql/demo.result"
+            include = mysql_root / "include/body.inc"
+            outside = root / "outside.txt"
+            case.parent.mkdir(parents=True)
+            result.parent.mkdir(parents=True)
+            include.parent.mkdir(parents=True)
+            outside.write_text("SELECT 1;\n", encoding="utf-8")
+
+            case.symlink_to(outside)
+            with self.assertRaisesRegex(parser.MysqltestParseError, "regular"):
+                parser.parse_test_file(root, case, "demo", result_path=result)
+            case.unlink()
+
+            case.write_text("SELECT 1;\n", encoding="utf-8")
+            result.symlink_to(outside)
+            with self.assertRaisesRegex(parser.MysqltestParseError, "regular"):
+                parser.parse_test_file(root, case, "demo", result_path=result)
+            result.unlink()
+
+            case.write_text(
+                "--source mysql_test/include/body.inc\n", encoding="utf-8")
+            include.symlink_to(outside)
+            with self.assertRaisesRegex(parser.MysqltestParseError, "regular"):
+                parser.parse_test_file(root, case, "demo", result_path=result)
 
     def test_unsupported_semantics_are_explicit_not_silently_dropped(self):
         """Classify every non-lossless mysqltest feature with a stable reason."""
@@ -203,6 +236,9 @@ class MysqltestParserTest(unittest.TestCase):
         self.assertIn("make_mysqltest_device_registry", source)
         self.assertIn("expected_transcript", source)
         self.assertIn("expected_affected_rows", source)
+        self.assertIn("g_server_modules_ready", source)
+        self.assertIn("get_field_columns", source)
+        self.assertIn("cname_", source)
         for fragment in (
                 "set @@session.explicit_defaults_for_timestamp=off",
                 "select count(*) from t1", "count(*)", "nr\\tb\\tstr"):
@@ -211,20 +247,58 @@ class MysqltestParserTest(unittest.TestCase):
         self.assertIn("../mysqltest_device_cases.cpp", cmake)
         self.assertIn("mysqltest-device-lossless", manifest["classifications"])
 
+    def test_empty_result_contract_rejects_wrong_ordered_field_label(self):
+        """Compile the standalone C++ contract and prove labels are ordered."""
+        compiler = os.environ.get("CXX", "c++")
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            harness = root / "contract.cpp"
+            executable = root / "contract"
+            harness.write_text(
+                '#include "mysqltest_result_contract.h"\n'
+                '#include <array>\n'
+                '#include <string_view>\n'
+                'int main() {\n'
+                '  using seekdb::ios_test::empty_result_matches;\n'
+                '  const std::array<std::string_view, 3> expected = '
+                '{"nr", "b", "str"};\n'
+                '  const std::array<std::string_view, 3> correct = '
+                '{"nr", "b", "str"};\n'
+                '  const std::array<std::string_view, 3> wrong = '
+                '{"nr", "str", "b"};\n'
+                '  return empty_result_matches(correct, expected, 9, 9) && '
+                '!empty_result_matches(wrong, expected, 9, 9) && '
+                '!empty_result_matches(correct, expected, 0, 9) ? 0 : 1;\n'
+                '}\n',
+                encoding="utf-8")
+            compiled = subprocess.run([
+                compiler, "-std=c++17", "-I", str(SCRIPT_DIRECTORY),
+                str(harness), "-o", str(executable),
+            ], check=False, capture_output=True, text=True)
+            self.assertEqual(0, compiled.returncode, compiled.stderr)
+            executed = subprocess.run(
+                [str(executable)], check=False, capture_output=True, text=True)
+            self.assertEqual(0, executed.returncode, executed.stderr)
+
     def test_host_gate_requires_exact_272_case_success(self):
-        """Keep host mysqltest proof separate and exact before accepting it."""
+        """Bind host evidence to source, corpus, binaries, and exact cases."""
         selected = [
             case.name for case in parser.discover_active_cases(REPOSITORY_ROOT)
             if case.ci_selected]
         with tempfile.TemporaryDirectory() as directory:
+            host_runner = parser._load_host_discovery(REPOSITORY_ROOT)
+            binary_paths = {}
+            for name in ("seekdb", "obclient", "mysqltest"):
+                path = Path(directory) / name
+                path.write_bytes((name + "-binary").encode("utf-8"))
+                binary_paths[name] = path
             result = Path(directory) / "host.json"
-            result.write_text(json.dumps({
-                "success": True,
-                "error": None,
-                "failed_cases": [],
-                "case_count": 272,
-                "cases": selected,
-            }), encoding="utf-8")
+            identity = host_runner.build_host_evidence_identity(
+                REPOSITORY_ROOT, binary_paths)
+            payload = host_runner.build_merged_evidence(
+                identity=identity, run_id="host-run", slice_count=1,
+                executed_cases=selected, failed_cases=[], errors=[])
+            result.write_text(json.dumps(payload), encoding="utf-8")
             summary = phase.validate_host_gate(REPOSITORY_ROOT, result)
             self.assertEqual({
                 "execution_class": "host-only",
@@ -232,11 +306,44 @@ class MysqltestParserTest(unittest.TestCase):
                 "success": True,
             }, summary)
 
-            payload = json.loads(result.read_text(encoding="utf-8"))
-            payload["cases"] = selected[:-1]
+            mutations = {
+                "stale-source": {"source_commit": "0" * 40},
+                "stale-corpus": {"corpus_digest": "0" * 64},
+                "missing-case": {"executed_cases": selected[:-1]},
+                "extra-case": {"executed_cases": [*selected, "extra"]},
+                "binary-identity": {"host_build_identity": "0" * 64},
+            }
+            for name, change in mutations.items():
+                with self.subTest(name=name):
+                    tampered = dict(payload)
+                    tampered.update(change)
+                    tampered = host_runner.seal_evidence(tampered)
+                    result.write_text(json.dumps(tampered), encoding="utf-8")
+                    with self.assertRaises(phase.MysqltestPhaseError):
+                        phase.validate_host_gate(REPOSITORY_ROOT, result)
+
             result.write_text(json.dumps(payload), encoding="utf-8")
+            changed = result.read_text(encoding="utf-8").replace(
+                '"success": true', '"success": false')
+            result.write_text(changed, encoding="utf-8")
             with self.assertRaises(phase.MysqltestPhaseError):
                 phase.validate_host_gate(REPOSITORY_ROOT, result)
+
+    def test_host_gate_rejects_symlink_and_oversized_evidence(self):
+        """Read host evidence through one bounded nofollow regular-file fd."""
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            target = root / "target.json"
+            target.write_text("{}", encoding="utf-8")
+            link = root / "link.json"
+            link.symlink_to(target)
+            with self.assertRaises(phase.MysqltestPhaseError):
+                phase.validate_host_gate(REPOSITORY_ROOT, link)
+
+            oversized = root / "oversized.json"
+            oversized.write_bytes(b"{" + b" " * phase.MAX_HOST_RESULT_BYTES)
+            with self.assertRaises(phase.MysqltestPhaseError):
+                phase.validate_host_gate(REPOSITORY_ROOT, oversized)
 
 
 if __name__ == "__main__":

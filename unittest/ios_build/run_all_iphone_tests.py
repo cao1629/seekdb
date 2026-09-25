@@ -20,6 +20,7 @@ import uuid
 
 import iphone_test_runner as runner
 import iphone_test_state as state
+import run_mysqltest_phase
 
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[2]
@@ -66,6 +67,22 @@ class IphoneTestCliError(RuntimeError):
 
 class DeviceSelectionError(IphoneTestCliError):
     """Indicate that exactly one eligible physical iPhone was not selected."""
+
+
+def validate_mysqltest_host_gate(
+        suites: Sequence[str], environment: Mapping[str, str]) -> None:
+    """Validate mysqltest host evidence before any device or build side effect."""
+    if "mysqltest" not in suites:
+        return
+    result_path = environment.get("SEEKDB_IPHONE_HOST_MYSQLTEST_RESULT")
+    if not result_path:
+        raise IphoneTestCliError("mysqltest host gate evidence is invalid")
+    try:
+        run_mysqltest_phase.validate_host_gate(
+            REPOSITORY_ROOT, Path(result_path))
+    except run_mysqltest_phase.MysqltestPhaseError as error:
+        raise IphoneTestCliError(
+            "mysqltest host gate evidence is invalid") from error
 
 
 @dataclass(frozen=True)
@@ -722,12 +739,13 @@ def main(
     bootstrap_redaction_run_id = None
     try:
         requires_test_app = selected_suites_require_test_app(suites)
+        revision = source_commit()
+        validate_mysqltest_host_gate(suites, local_environment)
         if requires_test_app:
             configuration = infer_signing_configuration(configuration)
         bootstrap_redaction_run_id = f"setup-{uuid.uuid4().hex}"
         runner.register_runtime_redaction_tokens(
             bootstrap_redaction_run_id, configuration.redaction_tokens())
-        revision = source_commit()
         current_time = clock()
         if options.dry_run:
             build_identity = (

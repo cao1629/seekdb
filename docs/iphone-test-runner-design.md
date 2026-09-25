@@ -232,3 +232,19 @@ Implementation requires TDD coverage for:
 
 The standalone runner itself is a host-only orchestration test. Only assertions
 produced by the signed App on the physical iPhone count as device-native.
+
+## Mysqltest Host Evidence Boundary
+
+The mysqltest host gate accepts only evidence emitted by the tracked host
+runner. The sealed schema binds the current source commit, every active
+`.test`, `.inc`, `.sql`, and `.result` byte, the parser and host configuration,
+all three host executable identities, and the exact ordered CI-selected case
+list. Missing, stale, malformed, extra, or incomplete evidence is an
+infrastructure/evidence failure and prevents later build, install, and device
+work for an explicitly selected mysqltest run.
+
+The result path is process-local environment input, never a command-line
+argument. Corpus and evidence files are bounded regular non-symlink files read
+through no-follow descriptors. Device-native mysqltest cases also require
+initialized server modules and exact ordered result metadata; zero executed
+SQL assertions cannot pass a case.

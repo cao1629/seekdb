@@ -2,11 +2,12 @@
 """Parse active mysqltest sources into conservative iOS device classifications."""
 
 from dataclasses import dataclass, replace
-import functools
 import hashlib
 import importlib.util
+import os
 from pathlib import Path
 import re
+import stat
 from typing import Iterable, Optional
 
 
@@ -44,6 +45,7 @@ BARE_COMMAND = re.compile(r"^\s*([A-Za-z_][A-Za-z0-9_]*)\b")
 DEVICE_TRANSCRIPT_DIGESTS = {
     "empty_table": "731fcca0d5f83bf102ba6a3ea7b70776b706a64943c10ccf62f7c838501ffe9e",
 }
+MAX_CORPUS_FILE_BYTES = 64 * 1024 * 1024
 
 
 class MysqltestParseError(RuntimeError):
@@ -112,6 +114,84 @@ class SourceClosureAudit:
     missing_sources: tuple[str, ...]
 
 
+class _CorpusReader:
+    """Read each contained regular corpus file once through a nofollow fd."""
+
+    def __init__(self, root: Path):
+        """Bind all reads to one resolved mysql_test directory."""
+        self.root = Path(root).resolve()
+        self._bytes: dict[Path, bytes] = {}
+
+    def contained(self, path: Path) -> Path:
+        """Normalize a lexical path without following a corpus entry symlink."""
+        candidate = Path(os.path.abspath(path))
+        try:
+            relative = candidate.relative_to(self.root)
+        except ValueError as error:
+            raise MysqltestParseError(
+                "mysqltest source escapes mysql_test root") from error
+        current = self.root
+        for part in relative.parts:
+            current = current / part
+            try:
+                metadata = current.lstat()
+            except FileNotFoundError:
+                break
+            if stat.S_ISLNK(metadata.st_mode):
+                raise MysqltestParseError(
+                    "mysqltest corpus entry must be regular and non-symlink")
+        return self.root / relative
+
+    def read_bytes(self, path: Path) -> bytes:
+        """Return stable bounded bytes, rejecting type or identity changes."""
+        candidate = self.contained(path)
+        if candidate in self._bytes:
+            return self._bytes[candidate]
+        flags = os.O_RDONLY | getattr(os, "O_CLOEXEC", 0)
+        flags |= getattr(os, "O_NOFOLLOW", 0)
+        try:
+            descriptor = os.open(candidate, flags)
+        except OSError as error:
+            raise MysqltestParseError(
+                "mysqltest corpus entry must be regular and non-symlink") from error
+        try:
+            before = os.fstat(descriptor)
+            if (not stat.S_ISREG(before.st_mode)
+                    or before.st_size > MAX_CORPUS_FILE_BYTES):
+                raise MysqltestParseError(
+                    "mysqltest corpus entry must be regular and bounded")
+            chunks = []
+            remaining = MAX_CORPUS_FILE_BYTES + 1
+            while remaining > 0:
+                chunk = os.read(descriptor, min(1024 * 1024, remaining))
+                if not chunk:
+                    break
+                chunks.append(chunk)
+                remaining -= len(chunk)
+            content = b"".join(chunks)
+            after = os.fstat(descriptor)
+            identity = lambda value: (
+                value.st_dev, value.st_ino, value.st_size,
+                value.st_mtime_ns)
+            if (len(content) > MAX_CORPUS_FILE_BYTES
+                    or identity(before) != identity(after)
+                    or len(content) != after.st_size):
+                raise MysqltestParseError(
+                    "mysqltest corpus entry changed during its bounded read")
+        finally:
+            os.close(descriptor)
+        self._bytes[candidate] = content
+        return content
+
+    def read_text(self, path: Path) -> str:
+        """Decode one cached corpus byte sequence as strict UTF-8."""
+        try:
+            return self.read_bytes(path).decode("utf-8")
+        except UnicodeError as error:
+            raise MysqltestParseError(
+                "mysqltest source is unreadable") from error
+
+
 def _load_host_discovery(repo_root: Path):
     """Load the established host runner so CI selection semantics stay shared."""
     script = repo_root / ".github/script/seekdb/mysqltest_for_seekdb.py"
@@ -151,7 +231,7 @@ def discover_active_cases(repo_root: Path) -> tuple[ActiveCase, ...]:
             result = mysql_root / "r/mysql" / f"{source.stem}.result"
         else:
             result = source.parent.parent / "r/mysql" / f"{source.stem}.result"
-        return ActiveCase(name, source.resolve(), result.resolve(), name in selected)
+        return ActiveCase(name, source.absolute(), result.absolute(), name in selected)
 
     cases = tuple(sorted(
         (active_case(source) for source in sources if source.is_file()),
@@ -162,14 +242,23 @@ def discover_active_cases(repo_root: Path) -> tuple[ActiveCase, ...]:
     return cases
 
 
-def _reviewed_transcript_supported(case: ActiveCase) -> bool:
+def _reviewed_transcript_supported(
+        case: ActiveCase, reader: Optional[_CorpusReader] = None) -> bool:
     """Bind a device adapter to the exact reviewed source and result bytes."""
     expected = DEVICE_TRANSCRIPT_DIGESTS.get(case.name)
     if expected is None:
         return False
+    if reader is None:
+        mysql_root = next(
+            (parent for parent in Path(case.source_path).parents
+             if parent.name == "mysql_test"), None)
+        if mysql_root is None:
+            return False
+        reader = _CorpusReader(mysql_root)
     try:
-        content = case.source_path.read_bytes() + b"\0" + case.result_path.read_bytes()
-    except OSError:
+        content = (reader.read_bytes(case.source_path) + b"\0"
+                   + reader.read_bytes(case.result_path))
+    except MysqltestParseError:
         return False
     return hashlib.sha256(content).hexdigest() == expected
 
@@ -236,10 +325,12 @@ class _ParseState:
 
     def __init__(
             self, repo_root: Path, mysql_root: Path,
-            transcript_supported: bool = True):
+            transcript_supported: bool = True,
+            reader: Optional[_CorpusReader] = None):
         """Initialize shared directives, statements, and include bookkeeping."""
         self.repo_root = repo_root
         self.mysql_root = mysql_root
+        self.reader = reader or _CorpusReader(mysql_root)
         self.splitter = _StatementSplitter()
         self.statements: list[SqlStatement] = []
         self.directives: list[tuple[str, str, Provenance]] = []
@@ -265,12 +356,8 @@ class _ParseState:
         else:
             local = current.parent / normalized
             candidate = local if local.exists() else self.mysql_root / normalized
-        resolved = candidate.resolve()
-        try:
-            resolved.relative_to(self.mysql_root)
-        except ValueError as error:
-            raise MysqltestParseError("mysqltest source escapes mysql_test root") from error
-        if not resolved.is_file():
+        resolved = self.reader.contained(candidate)
+        if not os.path.lexists(resolved):
             detail = candidate.relative_to(self.repo_root).as_posix()
             raise MysqltestParseError(
                 "mysqltest source does not exist", detail=detail)
@@ -302,7 +389,7 @@ def _directive_reason(command: str) -> Optional[str]:
 
 def _parse_file(state: _ParseState, path: Path, stack: tuple[Path, ...]) -> None:
     """Parse one source recursively with textual include and cycle semantics."""
-    resolved = path.resolve()
+    resolved = state.reader.contained(path)
     if resolved in stack:
         raise MysqltestParseError("mysqltest source cycle detected")
     next_stack = (*stack, resolved)
@@ -310,9 +397,9 @@ def _parse_file(state: _ParseState, path: Path, stack: tuple[Path, ...]) -> None
     if stack and relative not in state.included_sources:
         state.included_sources.append(relative)
     try:
-        lines = resolved.read_text(encoding="utf-8").splitlines()
-    except (OSError, UnicodeError) as error:
-        raise MysqltestParseError("mysqltest source is unreadable") from error
+        lines = state.reader.read_text(resolved).splitlines()
+    except MysqltestParseError:
+        raise
     for line_number, line in enumerate(lines, 1):
         provenance = Provenance(
             relative, line_number,
@@ -378,13 +465,13 @@ def _find_lines(
 
 def _attach_expected_results(
         statements: tuple[SqlStatement, ...],
-        result_path: Path) -> tuple[tuple[SqlStatement, ...], Optional[str]]:
+        result_path: Path,
+        reader: _CorpusReader) -> tuple[tuple[SqlStatement, ...], Optional[str]]:
     """Bind every query-logged statement to its exact mysqltest output lines."""
     try:
-        result_lines = tuple(result_path.read_text(
-            encoding="utf-8").splitlines())
-    except (OSError, UnicodeError):
-        return statements, "result-unavailable"
+        result_lines = tuple(reader.read_text(result_path).splitlines())
+    except MysqltestParseError:
+        raise
     logged = [statement for statement in statements if statement.query_logged]
     positions = []
     cursor = 0
@@ -418,16 +505,30 @@ def parse_test_file(
         repo_root: Path, source_path: Path, name: str,
         ci_selected: bool = False,
         result_path: Optional[Path] = None,
-        transcript_supported: bool = True) -> ParsedMysqltestCase:
+        transcript_supported: bool = True,
+        reader: Optional[_CorpusReader] = None) -> ParsedMysqltestCase:
     """Parse and conservatively classify one active mysqltest source."""
-    repo_root = Path(repo_root).resolve()
+    input_root = Path(os.path.abspath(repo_root))
+    repo_root = input_root.resolve()
     mysql_root = (repo_root / "tools/deploy/mysql_test").resolve()
-    source_path = Path(source_path).resolve()
+    source_input = Path(os.path.abspath(source_path))
     try:
-        source_path.relative_to(mysql_root)
+        source_relative = source_input.relative_to(input_root)
     except ValueError as error:
         raise MysqltestParseError("active source escapes mysql_test root") from error
-    state = _ParseState(repo_root, mysql_root, transcript_supported)
+    source_path = repo_root / source_relative
+    normalized_result = None
+    if result_path is not None:
+        result_input = Path(os.path.abspath(result_path))
+        try:
+            result_relative = result_input.relative_to(input_root)
+        except ValueError as error:
+            raise MysqltestParseError(
+                "mysqltest result escapes mysql_test root") from error
+        normalized_result = repo_root / result_relative
+    reader = reader or _CorpusReader(mysql_root)
+    state = _ParseState(
+        repo_root, mysql_root, transcript_supported, reader=reader)
     _parse_file(state, source_path, ())
     if state.splitter.pending():
         state.record_unsupported("parser-control")
@@ -437,11 +538,11 @@ def parse_test_file(
     if not state.statements and transcript_supported:
         state.record_unsupported("empty-case")
     statements = tuple(state.statements)
-    if result_path is None and not state.unsupported:
+    if normalized_result is None and not state.unsupported:
         state.record_unsupported("result-unavailable")
-    elif result_path is not None and not state.unsupported:
+    elif normalized_result is not None and not state.unsupported:
         statements, result_issue = _attach_expected_results(
-            statements, Path(result_path))
+            statements, normalized_result, reader)
         if result_issue is not None:
             state.record_unsupported(result_issue)
     unsupported = tuple(sorted(state.unsupported))
@@ -462,41 +563,48 @@ def parse_test_file(
     )
 
 
-def _corpus_digest(repo_root: Path) -> str:
+def _corpus_digest(
+        repo_root: Path, reader: Optional[_CorpusReader] = None) -> str:
     """Hash every parser, source, include, SQL, and result byte that affects output."""
     repo_root = Path(repo_root).resolve()
     mysql_root = repo_root / "tools/deploy/mysql_test"
+    reader = reader or _CorpusReader(mysql_root)
+    repository_reader = _CorpusReader(repo_root)
     paths = [
         path for path in mysql_root.rglob("*")
-        if path.is_file() and path.suffix in {".test", ".inc", ".sql", ".result"}
+        if path.suffix in {".test", ".inc", ".sql", ".result"}
     ]
     paths.extend((
         repo_root / ".github/script/seekdb/mysqltest_for_seekdb.py",
+        repo_root / "tools/deploy/mysqltest_config.yaml",
         Path(__file__).resolve(),
     ))
     digest = hashlib.sha256()
     for path in sorted(set(paths)):
+        content = (reader.read_bytes(path) if path.is_relative_to(mysql_root)
+                   else repository_reader.read_bytes(path))
         digest.update(path.relative_to(repo_root).as_posix().encode("utf-8"))
         digest.update(b"\0")
-        digest.update(path.read_bytes())
+        digest.update(hashlib.sha256(content).hexdigest().encode("ascii"))
+        digest.update(b"\0")
+        digest.update(str(len(content)).encode("ascii"))
         digest.update(b"\0")
     return digest.hexdigest()
 
 
-@functools.lru_cache(maxsize=4)
-def _classify_active_corpus_cached(
-        repo_root_text: str, corpus_digest: str
+def _classify_active_corpus(
+        repo_root: Path, corpus_reader: _CorpusReader
         ) -> tuple[ParsedMysqltestCase, ...]:
-    """Parse one immutable corpus digest and reuse it within the runner process."""
-    del corpus_digest
-    repo_root = Path(repo_root_text)
+    """Parse classifications from bytes retained by one corpus reader."""
     classified = []
     for case in discover_active_cases(repo_root):
         try:
             parsed = parse_test_file(
                 repo_root, case.source_path, case.name, case.ci_selected,
                 case.result_path,
-                transcript_supported=_reviewed_transcript_supported(case))
+                transcript_supported=_reviewed_transcript_supported(
+                    case, corpus_reader),
+                reader=corpus_reader)
         except MysqltestParseError as error:
             reason = "source-rejected"
             if "cycle" in str(error):
@@ -524,8 +632,9 @@ def _classify_active_corpus_cached(
 def classify_active_corpus(repo_root: Path) -> tuple[ParsedMysqltestCase, ...]:
     """Return a complete deterministic classification of the active corpus."""
     resolved = Path(repo_root).resolve()
-    return _classify_active_corpus_cached(
-        str(resolved), _corpus_digest(resolved))
+    reader = _CorpusReader(resolved / "tools/deploy/mysql_test")
+    _corpus_digest(resolved, reader)
+    return _classify_active_corpus(resolved, reader)
 
 
 def device_cases(cases: Iterable[ParsedMysqltestCase]) -> tuple[ParsedMysqltestCase, ...]:
@@ -537,6 +646,7 @@ def audit_source_closure(repo_root: Path) -> SourceClosureAudit:
     """Count the active recursive include closure and retain missing references."""
     repo_root = Path(repo_root).resolve()
     mysql_root = (repo_root / "tools/deploy/mysql_test").resolve()
+    reader = _CorpusReader(mysql_root)
     visited: set[Path] = set()
     missing: set[str] = set()
     source_count = 0
@@ -550,10 +660,11 @@ def audit_source_closure(repo_root: Path) -> SourceClosureAudit:
             return
         visited.add(resolved)
         maximum_depth = max(maximum_depth, depth)
-        state = _ParseState(repo_root, mysql_root, transcript_supported=False)
+        state = _ParseState(
+            repo_root, mysql_root, transcript_supported=False, reader=reader)
         try:
-            lines = resolved.read_text(encoding="utf-8").splitlines()
-        except (OSError, UnicodeError):
+            lines = reader.read_text(resolved).splitlines()
+        except MysqltestParseError:
             missing.add(state.relative(resolved))
             return
         for line in lines:

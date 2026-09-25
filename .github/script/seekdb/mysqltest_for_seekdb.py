@@ -5,11 +5,13 @@ from __future__ import print_function
 
 import argparse
 from collections import Counter, namedtuple
+import hashlib
 import json
 import os
 from pathlib import Path
 import shlex
 import shutil
+import stat
 import subprocess
 import sys
 import time
@@ -25,12 +27,162 @@ RESULT_MISMATCH_MESSAGES = (
     "Result content mismatch",
     "Result length mismatch",
 )
+EVIDENCE_SCHEMA_VERSION = 1
+EVIDENCE_PRODUCER = "seekdb.mysqltest.host.v1"
+MAX_CORPUS_FILE_BYTES = 64 * 1024 * 1024
 
 MysqltestCase = namedtuple("MysqltestCase", ("name", "test_file", "result_file"))
 
 
 class RunnerError(RuntimeError):
     pass
+
+
+def _sha256_regular_file(path, maximum_size=None):
+    """Hash one stable regular non-symlink file through a nofollow fd."""
+    flags = os.O_RDONLY | getattr(os, "O_CLOEXEC", 0)
+    flags |= getattr(os, "O_NOFOLLOW", 0)
+    try:
+        descriptor = os.open(str(path), flags)
+    except OSError as exc:
+        raise RunnerError("evidence input is unavailable") from exc
+    try:
+        before = os.fstat(descriptor)
+        if (not stat.S_ISREG(before.st_mode)
+                or (maximum_size is not None and before.st_size > maximum_size)):
+            raise RunnerError("evidence input must be a bounded regular file")
+        digest = hashlib.sha256()
+        total = 0
+        while True:
+            chunk = os.read(descriptor, 1024 * 1024)
+            if not chunk:
+                break
+            total += len(chunk)
+            if maximum_size is not None and total > maximum_size:
+                raise RunnerError("evidence input exceeds its size bound")
+            digest.update(chunk)
+        after = os.fstat(descriptor)
+        if ((before.st_dev, before.st_ino, before.st_size, before.st_mtime_ns)
+                != (after.st_dev, after.st_ino, after.st_size, after.st_mtime_ns)
+                or total != after.st_size):
+            raise RunnerError("evidence input changed while hashing")
+        return {"sha256": digest.hexdigest(), "size": total}
+    finally:
+        os.close(descriptor)
+
+
+def source_commit(repo_root):
+    """Return the exact Git revision that owns one host mysqltest run."""
+    try:
+        return subprocess.check_output(
+            ["git", "rev-parse", "HEAD"], cwd=str(repo_root),
+            text=True).strip()
+    except (OSError, subprocess.CalledProcessError) as exc:
+        raise RunnerError("cannot resolve mysqltest source revision") from exc
+
+
+def mysqltest_corpus_digest(repo_root):
+    """Hash every source, include, SQL, result, config, and parser byte."""
+    repo_root = Path(repo_root).resolve()
+    mysql_root = repo_root / "tools/deploy/mysql_test"
+    paths = [
+        path for path in mysql_root.rglob("*")
+        if path.suffix in {".test", ".inc", ".sql", ".result"}
+    ]
+    paths.extend((
+        repo_root / ".github/script/seekdb/mysqltest_for_seekdb.py",
+        repo_root / "tools/deploy/mysqltest_config.yaml",
+        repo_root / "unittest/ios_build/mysqltest_parser.py",
+    ))
+    digest = hashlib.sha256()
+    for path in sorted(set(paths)):
+        identity = _sha256_regular_file(path, MAX_CORPUS_FILE_BYTES)
+        digest.update(path.relative_to(repo_root).as_posix().encode("utf-8"))
+        digest.update(b"\0")
+        digest.update(identity["sha256"].encode("ascii"))
+        digest.update(b"\0")
+        digest.update(str(identity["size"]).encode("ascii"))
+        digest.update(b"\0")
+    return digest.hexdigest()
+
+
+def build_host_evidence_identity(repo_root, binaries):
+    """Bind host evidence to source, corpus, and all executable bytes."""
+    required = ("seekdb", "obclient", "mysqltest")
+    if set(binaries) != set(required):
+        raise RunnerError("host binary identity is incomplete")
+    binary_identity = {
+        name: _sha256_regular_file(Path(binaries[name]))
+        for name in required
+    }
+    serialized = json.dumps(
+        binary_identity, sort_keys=True, separators=(",", ":"))
+    return {
+        "schema_version": EVIDENCE_SCHEMA_VERSION,
+        "producer": EVIDENCE_PRODUCER,
+        "source_commit": source_commit(repo_root),
+        "corpus_digest": mysqltest_corpus_digest(repo_root),
+        "host_build_identity": hashlib.sha256(
+            serialized.encode("utf-8")).hexdigest(),
+        "host_binaries": binary_identity,
+    }
+
+
+def seal_evidence(payload):
+    """Return a copy with a digest over every other evidence field."""
+    sealed = dict(payload)
+    sealed.pop("evidence_digest", None)
+    serialized = json.dumps(
+        sealed, ensure_ascii=False, sort_keys=True,
+        separators=(",", ":"))
+    sealed["evidence_digest"] = hashlib.sha256(
+        serialized.encode("utf-8")).hexdigest()
+    return sealed
+
+
+def verify_evidence_digest(payload):
+    """Return whether an evidence payload retains its canonical digest."""
+    if not isinstance(payload, dict):
+        return False
+    expected = payload.get("evidence_digest")
+    return (isinstance(expected, str)
+            and seal_evidence(payload).get("evidence_digest") == expected)
+
+
+def build_slice_evidence(
+        identity, slice_index, slice_count, executed_cases,
+        failed_cases, error):
+    """Create one identity-bound slice result for later strict merging."""
+    payload = dict(identity)
+    payload.update({
+        "result_kind": "slice",
+        "success": not failed_cases and error is None,
+        "slice_index": slice_index,
+        "slice_count": slice_count,
+        "case_count": len(executed_cases),
+        "executed_cases": list(executed_cases),
+        "failed_cases": list(failed_cases),
+        "error": error,
+    })
+    return seal_evidence(payload)
+
+
+def build_merged_evidence(
+        identity, run_id, slice_count, executed_cases,
+        failed_cases, errors):
+    """Create the only aggregate schema accepted by the iPhone host gate."""
+    payload = dict(identity)
+    payload.update({
+        "result_kind": "merged",
+        "success": not failed_cases and not errors,
+        "run_id": str(run_id),
+        "slice_count": slice_count,
+        "case_count": len(executed_cases),
+        "executed_cases": list(executed_cases),
+        "failed_cases": list(failed_cases),
+        "errors": list(errors),
+    })
+    return seal_evidence(payload)
 
 
 def absolute_path(value):
@@ -485,6 +637,11 @@ def command_run(args):
     selected_cases = []
     failed_cases = []
     error = None
+    identity = build_host_evidence_identity(repo_root, {
+        "seekdb": args.seekdb,
+        "obclient": args.obclient,
+        "mysqltest": args.mysqltest,
+    })
     args.work_dir.mkdir(parents=True, exist_ok=True)
 
     try:
@@ -538,15 +695,9 @@ def command_run(args):
             error = "{}; {}".format(error, cleanup_error) if error else cleanup_error
 
     success = not failed_cases and error is None
-    payload = {
-        "success": success,
-        "slice_index": args.slice_index,
-        "slice_count": args.slice_count,
-        "case_count": len(selected_cases),
-        "cases": [case.name for case in selected_cases],
-        "failed_cases": failed_cases,
-        "error": error,
-    }
+    payload = build_slice_evidence(
+        identity, args.slice_index, args.slice_count,
+        [case.name for case in selected_cases], failed_cases, error)
     write_json(result_path, payload)
     print(
         "slice {} finished: cases={}, failed={}, success={}".format(
@@ -574,6 +725,9 @@ def command_merge(args):
     failed_cases = []
     errors = []
     executed_cases = []
+    merged_identity = None
+    expected_source_commit = source_commit(repo_root)
+    expected_corpus_digest = mysqltest_corpus_digest(repo_root)
 
     try:
         expected_cases = [case.name for case in discover_cases(repo_root)]
@@ -592,12 +746,33 @@ def command_merge(args):
             errors.append("slice {} result unavailable: {}".format(slice_index, exc))
             continue
 
+        if (not verify_evidence_digest(result)
+                or result.get("schema_version") != EVIDENCE_SCHEMA_VERSION
+                or result.get("producer") != EVIDENCE_PRODUCER
+                or result.get("result_kind") != "slice"):
+            errors.append("slice {} has invalid evidence schema".format(slice_index))
+            continue
+        identity = {
+            key: result.get(key) for key in (
+                "schema_version", "producer", "source_commit",
+                "corpus_digest", "host_build_identity", "host_binaries")
+        }
+        if (identity["source_commit"] != expected_source_commit
+                or identity["corpus_digest"] != expected_corpus_digest):
+            errors.append("slice {} has stale source identity".format(slice_index))
+            continue
+        if merged_identity is None:
+            merged_identity = identity
+        elif identity != merged_identity:
+            errors.append("slice {} has mismatched host identity".format(slice_index))
+            continue
+
         if result.get("slice_index") != slice_index:
             errors.append("slice {} has invalid slice_index".format(slice_index))
         if result.get("slice_count") != args.slice_count:
             errors.append("slice {} has invalid slice_count".format(slice_index))
 
-        cases = result.get("cases")
+        cases = result.get("executed_cases")
         if not isinstance(cases, list):
             errors.append("slice {} has no case list".format(slice_index))
         else:
@@ -628,14 +803,18 @@ def command_merge(args):
 
     failed_cases = unique(failed_cases)
     success = not failed_cases and not errors
-    payload = {
-        "success": success,
-        "run_id": str(args.run_id),
-        "slice_count": args.slice_count,
-        "case_count": len(expected_cases),
-        "failed_cases": failed_cases,
-        "errors": errors,
-    }
+    if merged_identity is None:
+        merged_identity = {
+            "schema_version": EVIDENCE_SCHEMA_VERSION,
+            "producer": EVIDENCE_PRODUCER,
+            "source_commit": expected_source_commit,
+            "corpus_digest": expected_corpus_digest,
+            "host_build_identity": "",
+            "host_binaries": {},
+        }
+    payload = build_merged_evidence(
+        merged_identity, args.run_id, args.slice_count,
+        expected_cases, failed_cases, errors)
     write_json(output_path, payload)
     print(json.dumps(payload, ensure_ascii=False, sort_keys=True), flush=True)
     return 0 if success else 1

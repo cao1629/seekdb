@@ -172,6 +172,11 @@ class IphoneTestPhasesTest(unittest.TestCase):
         inventory = contracts["inventory"][0]
         self.assertIn(
             str(SCRIPT_DIR / "generate_test_inventory.py"), inventory.command)
+        mysqltest_host = contracts["mysqltest"][0]
+        self.assertNotIn("--host-result", mysqltest_host.command)
+        self.assertNotIn(
+            os.environ.get("SEEKDB_IPHONE_HOST_MYSQLTEST_RESULT", "unused"),
+            mysqltest_host.command)
         for phase_id in (
                 "registry-smoke", "cpp-device-equivalents",
                 "rust-device-runtime", "mysqltest"):

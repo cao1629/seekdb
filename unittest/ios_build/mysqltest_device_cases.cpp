@@ -1,17 +1,20 @@
 // Copyright (c) 2026 OceanBase.
 // SPDX-License-Identifier: Apache-2.0
 #include "device_test_registry.h"
+#include "mysqltest_result_contract.h"
 
 #include "common/mysqlclient/ob_mysql_proxy.h"
 #include "lib/thread/protected_stack_allocator.h"
 #include "lib/worker.h"
 #include "observer/ob_server.h"
+#include "observer/ob_inner_sql_result.h"
 #include "share/ob_errno.h"
 #include "share/rc/ob_server_runtime.h"
 
 #include <array>
 #include <cstdint>
 #include <string>
+#include <string_view>
 
 namespace seekdb::ios_test {
 namespace {
@@ -78,9 +81,10 @@ bool read_single_integer(TestContext &context, ObISQLClient &client,
   return status == OB_SUCCESS && actual == expected;
 }
 
-/** Assert an empty result while retaining the exact expected column count. */
+/** Assert an empty result and its ordered independent field metadata. */
 bool read_empty(TestContext &context, ObISQLClient &client, const char *name,
-                const char *sql, int64_t expected_columns)
+                const char *sql,
+                const std::array<std::string_view, 3> &expected_labels)
 {
   ObISQLClient::ReadResult result;
   int status = client.read(result, sql);
@@ -88,10 +92,29 @@ bool read_empty(TestContext &context, ObISQLClient &client, const char *name,
   if (status == OB_SUCCESS && rows == nullptr) {
     status = oceanbase::common::OB_ERR_UNEXPECTED;
   }
-  if (status == OB_SUCCESS && rows->get_column_count() != expected_columns) {
+  std::array<std::string_view, 3> actual_labels;
+  if (status == OB_SUCCESS && rows->get_column_count() !=
+                                  static_cast<int64_t>(expected_labels.size())) {
     status = oceanbase::common::OB_ERR_UNEXPECTED;
   }
-  if (status == OB_SUCCESS && rows->next() != OB_ITER_END) {
+  if (status == OB_SUCCESS) {
+    auto *inner = static_cast<oceanbase::observer::ObInnerSQLResult *>(rows);
+    const auto *fields = inner->result_set().get_field_columns();
+    if (fields == nullptr || fields->count() !=
+                                 static_cast<int64_t>(expected_labels.size())) {
+      status = oceanbase::common::OB_ERR_UNEXPECTED;
+    } else {
+      for (std::size_t index = 0; index < expected_labels.size(); ++index) {
+        const auto &column_name = fields->at(index).cname_;
+        actual_labels[index] = std::string_view(
+            column_name.ptr(), static_cast<std::size_t>(column_name.length()));
+      }
+    }
+  }
+  const int iterator_status = status == OB_SUCCESS ? rows->next() : status;
+  if (status == OB_SUCCESS && !empty_result_matches(
+                                  actual_labels, expected_labels,
+                                  iterator_status, OB_ITER_END)) {
     status = oceanbase::common::OB_ERR_UNEXPECTED;
   }
   return context.assert_equal(
@@ -102,9 +125,17 @@ bool read_empty(TestContext &context, ObISQLClient &client, const char *name,
 /** Run the active empty_table mysqltest source through the internal SQL proxy. */
 int run_empty_table(TestContext &context)
 {
+  constexpr std::array<std::string_view, 3> expected_labels = {
+      "nr", "b", "str"};
   oceanbase::lib::ObStackHeaderGuard stack_header;
   oceanbase::lib::Worker worker;
   oceanbase::lib::Worker::set_worker_to_thread_local(&worker);
+  if (!oceanbase::share::g_server_modules_ready) {
+    context.assert_true("server_modules_ready", false,
+                        "mysqltest requires initialized server modules");
+    oceanbase::lib::Worker::set_worker_to_thread_local(nullptr);
+    return context.failure_count();
+  }
   SERVER_MODULE_SCOPE {
     ObISQLClient &client = ObServer::get_instance().get_mysql_proxy();
     bool proceed = write_exact(context, client, "session_defaults",
@@ -120,9 +151,9 @@ int run_empty_table(TestContext &context)
     proceed = proceed && read_single_integer(
         context, client, expected_transcript[2], 0);
     proceed = proceed && read_empty(
-        context, client, "all_rows", expected_transcript[5], 3);
+        context, client, "all_rows", expected_transcript[5], expected_labels);
     proceed = proceed && read_empty(
-        context, client, "zero_limit", expected_transcript[7], 3);
+        context, client, "zero_limit", expected_transcript[7], expected_labels);
     if (proceed) {
       write_exact(context, client, "drop_after", expected_transcript[9],
                   expected_affected_rows[3]);

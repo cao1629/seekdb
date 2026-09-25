@@ -178,6 +178,18 @@ Rust 可执行文件由 PATH 或 `CARGO`、`RUSTUP` 提供；脚本也查找仓�
 
 ## 尚未完成
 
+mysqltest standalone 阶段的 host gate 现在只接受受跟踪 host runner 生成并
+封印的 merged evidence。证据绑定当前 commit、完整 `.test/.inc/.sql/.result`
+语料、host runner/config/parser、三项 host binary identity 和精确有序的 272
+项 CI case 列表；缺失、损坏、陈旧、增删 case 或 binary identity 不一致均按
+evidence/infrastructure 失败处理，并在显式 mysqltest 运行中阻止后续构建、安装
+和真机动作。结果路径只通过 `SEEKDB_IPHONE_HOST_MYSQLTEST_RESULT` 传入，不进入
+argv；输入必须是有大小上限的 regular non-symlink 文件。
+
+- mysqltest 的 `empty_table` 真机适配器仅在 server modules ready 后执行，空结果
+  还会独立读取并精确断言有序字段名 `nr,b,str` 和终止状态 `OB_ITER_END`；模块
+  未初始化或零执行不能报告通过。
+
 - 全新目录的完整依赖流水线及 Rust 宿主 build-script SIGKILL 问题；增量完整链接已通过。磁盘空间约 9.4 GiB，继续构建时仍需关注剩余空间。
 - 已新增 `seekdb_ios_run`、`seekdb_ios_request_stop`、`seekdb_ios_get_state`、`seekdb_ios_get_cleanup_status` 和 `seekdb_ios_get_cleanup_error`；`in_process_` 模式跳过服务信号线程，等待结束走 `stop()`，不走原命令行路径的 `_Exit(0)`。该路径已取得 36 步 SQL、多轮正常停止和连续持久化恢复证据。启动失败执行 stop/wait/destroy、curl cleanup 和工作目录恢复，主错误与清理错误分别记录；真机负向验收已通过。接口每进程仅允许调用一次，不可在 UI 线程调用。`BUILD_EMBED_MODE` 仍不能恢复旧 C API。
 - iOS ARM64 链接已验证 S2/Abseil ABI、OpenMP 运行库版本及 Rust sql_nio 链接修复；数学和向量功能仍需真机运行验证。

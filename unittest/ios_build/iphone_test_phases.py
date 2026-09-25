@@ -1369,7 +1369,6 @@ def create_phase_contracts(
         sys.executable, str(MYSQLTEST_PHASE_SCRIPT),
         "--repo-root", str(REPOSITORY_ROOT),
         "--output", str(mysqltest_host_output),
-        "--host-result", mysqltest_host_result or "",
     )
     mysqltest_host_readiness = None if mysqltest_host_result else (
         "mysqltest host gate requires SEEKDB_IPHONE_HOST_MYSQLTEST_RESULT")
@@ -1568,6 +1567,7 @@ def create_phase_adapters(
                 for line in SAFE_PROCESS_DIAGNOSTIC_LINES)
             category = (
                 "timeout" if process.exit_status == 124 else
+                "evidence" if contract.case_id == "ios.mysqltest.host-gate" else
                 "infrastructure" if (
                     is_launch_failure
                     or contract.case_id == PRODUCTION_ISOLATION_CASE_ID) else

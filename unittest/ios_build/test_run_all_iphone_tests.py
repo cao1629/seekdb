@@ -51,6 +51,13 @@ class CompletedCommand:
 class RunAllIphoneTestsTest(unittest.TestCase):
     """Verify launcher behavior, lifecycle parsing, and secret boundaries."""
 
+    def setUp(self):
+        """Keep unrelated CLI tests independent from external host evidence."""
+        self.host_gate = mock.patch.object(
+            cli, "validate_mysqltest_host_gate", return_value=None)
+        self.host_gate.start()
+        self.addCleanup(self.host_gate.stop)
+
     def test_shell_resolves_repository_root_forwards_arguments_and_exit(self):
         """The thin launcher must exec Python from any working directory."""
         launcher = REPOSITORY_ROOT / "run.iphone.test.sh"
@@ -660,6 +667,33 @@ class RunAllIphoneTestsTest(unittest.TestCase):
         self.assertFalse(output_root.exists())
         for secret in secrets:
             self.assertNotIn(secret, serialized)
+
+    def test_invalid_mysqltest_host_evidence_stops_before_device_or_build(self):
+        """Reject host evidence before discovery, build, signing, or install."""
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            output_root = Path(temporary_directory) / "iphone_test"
+            with mock.patch.object(
+                    cli, "source_commit", return_value="a" * 40), \
+                    mock.patch.object(
+                        cli, "validate_mysqltest_host_gate",
+                        side_effect=cli.IphoneTestCliError(
+                            "mysqltest host gate evidence is invalid")), \
+                    mock.patch.object(
+                        cli, "discover_physical_devices") as discover, \
+                    mock.patch.object(
+                        cli, "prepare_phase_artifacts") as prepare, \
+                    mock.patch.object(
+                        cli, "infer_signing_configuration") as signing:
+                status = cli.main([
+                    "--suite", "mysqltest",
+                    "--output-root", str(output_root),
+                ], environment={}, stdout=io.StringIO(), stderr=io.StringIO())
+
+        self.assertEqual(2, status)
+        discover.assert_not_called()
+        prepare.assert_not_called()
+        signing.assert_not_called()
+        self.assertFalse(output_root.exists())
 
     def test_dry_run_is_read_only_for_default_resume_and_restart(self):
         """Every dry-run lifecycle mode must leave the tree byte-for-byte intact."""
