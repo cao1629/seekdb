@@ -554,6 +554,109 @@ class MysqltestParserTest(unittest.TestCase):
                 self.assertEqual(
                     expected, run_sdb.call_args_list[0].args[2])
 
+    def test_host_runner_materializes_only_available_darwin_result_delta(self):
+        """Apply a Darwin golden delta without changing Linux results."""
+        host_runner = parser._load_host_discovery(REPOSITORY_ROOT)
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve()
+            result = root / "demo.result"
+            patch = root / "demo.darwin-patch.result"
+            tmp_dir = root / "tmp"
+            tmp_dir.mkdir()
+            result.write_text("before\nlinux\nafter\n", encoding="utf-8")
+            patch.write_text(json.dumps({
+                "schema_version": 1,
+                "replacements": [{"old": "linux", "new": "darwin"}],
+            }), encoding="utf-8")
+
+            materialized = host_runner.materialize_result_file(
+                result, tmp_dir, "darwin")
+            self.assertEqual(
+                "before\ndarwin\nafter\n",
+                materialized.read_text(encoding="utf-8"))
+            self.assertEqual(result, host_runner.materialize_result_file(
+                result, tmp_dir, "linux"))
+
+            patch.write_text(json.dumps({
+                "schema_version": 1,
+                "replacements": [{"old": "missing", "new": "darwin"}],
+            }), encoding="utf-8")
+            with self.assertRaisesRegex(
+                    host_runner.RunnerError, "not unique"):
+                host_runner.materialize_result_file(
+                    result, tmp_dir, "darwin")
+
+            patch.write_text(json.dumps({
+                "schema_version": 1,
+                "replacements": [
+                    {"old": "before", "new": "first"},
+                    {"old": "linux", "new": "second"},
+                ],
+            }), encoding="utf-8")
+            with mock.patch.object(
+                    host_runner, "MAX_PLATFORM_RESULT_REPLACEMENTS", 1), \
+                    self.assertRaisesRegex(
+                        host_runner.RunnerError, "invalid"):
+                host_runner.materialize_result_file(
+                    result, tmp_dir, "darwin")
+
+            patch.write_text(json.dumps({
+                "schema_version": 1,
+                "replacements": [{"old": "linux", "new": "expanded"}],
+            }), encoding="utf-8")
+            with mock.patch.object(
+                    host_runner, "MAX_CORPUS_FILE_BYTES", 20), \
+                    self.assertRaisesRegex(
+                        host_runner.RunnerError, "too large"):
+                host_runner.materialize_result_file(
+                    result, tmp_dir, "darwin")
+
+    def test_host_runner_uses_materialized_result_for_reject_cleanup(self):
+        """Compare and remove the reject paired with a materialized golden."""
+        host_runner = parser._load_host_discovery(REPOSITORY_ROOT)
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve()
+            test_file = root / "demo.test"
+            result_file = root / "demo.result"
+            patch_file = root / "demo.darwin-patch.result"
+            tmp_dir = root / "tmp"
+            log_dir = root / "log"
+            tmp_dir.mkdir()
+            log_dir.mkdir()
+            test_file.write_text("SELECT 1;\n", encoding="utf-8")
+            result_file.write_text("linux\n", encoding="utf-8")
+            patch_file.write_text(json.dumps({
+                "schema_version": 1,
+                "replacements": [{"old": "linux", "new": "darwin"}],
+            }), encoding="utf-8")
+            case = host_runner.MysqltestCase(
+                "demo", test_file, result_file)
+            args = argparse.Namespace(
+                mysqltest=root / "mysqltest", obclient=root / "obclient",
+                launcher=None, host="127.0.0.1", port=2881,
+                base_dir=root / "instance")
+
+            def write_reject(command, **_kwargs):
+                """Write the reject name mysqltest derives from its result path."""
+                option = next(
+                    value for value in command
+                    if value.startswith("--result-file="))
+                expected = Path(option.split("=", 1)[1])
+                reject = log_dir / (expected.stem + ".reject")
+                reject.write_text("darwin  \n", encoding="utf-8")
+                return subprocess.CompletedProcess(
+                    command, 1, "Result content mismatch\n", "")
+
+            with mock.patch.object(host_runner.sys, "platform", "darwin"), \
+                    mock.patch.object(
+                        host_runner.subprocess, "run",
+                        side_effect=write_reject):
+                return_code, _ = host_runner.run_case(
+                    args, root, case, tmp_dir, log_dir)
+
+        self.assertEqual(0, return_code)
+        self.assertEqual([], list(log_dir.glob("*.reject")))
+
     def test_source_replacement_after_snapshot_fails_only_after_snapshot_exec(self):
         """Execute immutable bytes, then reject a changed current source identity."""
         selected = [

@@ -264,6 +264,15 @@ daemon 模式，父 target 在 fork 后退出，实际服务不再受 launcher �
 兼容路径，不改变 Linux 或可直接执行 Mach-O 的普通 macOS daemon 行为。真实单变量验证
 已覆盖 start、SQL readiness 与 destroy 全链。
 
+修复后的首轮 host gate 已完整执行 272 项，其中 269 项通过。两个日期 case 的
+`real_sleep 1` 在当前 macOS ARM mysqltest 中只能保证到达下一整数秒边界，无法稳定让
+两次 `DATETIME(0)` 默认值跨秒；两次 `REPLACE` 之间现使用 2 秒等待，result 不变。
+稀疏向量 case 的三处差异来自 macOS VSAG 的累计权重质量剪枝语义；Linux ARM64 的锁定
+VSAG 制品仍按元素数量剪枝，因此共享 result 保持 Linux 基线；host runner 仅在 Darwin
+存在同名 `.darwin-patch.result` 时，以唯一旧片段校验并物化该平台 golden。macOS 输出已
+连续独立复现，三个原失败 case 已逐项通过；在新 corpus digest 上的完整 272 项尚待
+下一轮 standalone run 重新确认。
+
 这是真实完整 host mysqltest，不是静态检查，耗时取决于 272 个 case 和重试；任一 host evidence/binary/corpus 问题都会在 iOS build、签名、安装或设备发现前停止。
 
 静态 parser 审计全部 283 个 active source，并递归覆盖 `.inc`/`.sql` 输入；循环、path escape、缺失 include 或 connection/process/topology/result rewrite/error-policy 等语义均保持 host-only/not-applicable，不能静默删除。当前设备 registry 只包含 `ios.mysqltest.empty_table`：它消费 tracked `empty_table.result`，在内部 SQL proxy 上断言 statement status、affected rows、精确计数值，并从 result-set field metadata 精确断言有序字段名 `nr,b,str` 后要求 `OB_ITER_END`。其他 parser 候选在没有完整 transcript、affected-row、warning/error-domain adapter 前均保持 host-only。

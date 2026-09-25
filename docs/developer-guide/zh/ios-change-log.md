@@ -146,6 +146,17 @@
   在 LLDB target 内；不使用 launcher 的 Linux/普通 macOS 路径保持原有 daemon 语义。
   TDD 回归先精确失败于缺少该参数，修复后 focused case 与 mysqltest parser 38 项通过；
   真实 272 case 与后续真机阶段仍需由更新后的 standalone run 重新执行。
+- 修复 launcher 后的首次完整 host gate 实际执行 272/272：269 项通过，失败为
+  `type_date.type_create_time`、`type_date.type_modify_time` 与
+  `vector_index.sparse_vector_index_vsag_query`。两个日期用例暴露 macOS ARM mysqltest
+  的 `real_sleep 1` 只保证跨入下一整数秒边界，可能远短于一秒，无法稳定区分相邻
+  `DATETIME(0)`；仅将两次 `REPLACE` 之间的等待提高为 2 秒，保留原 result 与测试意图。
+  稀疏向量差异稳定集中在 `prune=true, drop_ratio_build=0.5`。锁定制品审计确认 macOS
+  VSAG 使用累计权重剪枝，而 Linux ARM64 VSAG 仍按元素数量剪枝；共享 result 保持 Linux
+  基线，新增 `.darwin-patch.result` 保存三处确定性 macOS delta。host runner 仅在 Darwin
+  严格验证旧片段唯一后物化完整 golden，不修改查询实现或放宽比较。三个失败 case 在
+  同一新实例上使用原 runner 参数单独复验均返回 0；完整 272 项与后续真机阶段仍需在
+  新 corpus digest 上重跑。
 
 ## 2026-09-25：standalone runner stages 1–4 adapter
 

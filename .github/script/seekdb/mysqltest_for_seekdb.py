@@ -32,6 +32,8 @@ EVIDENCE_SCHEMA_VERSION = 1
 EVIDENCE_PRODUCER = "seekdb.mysqltest.host.v1"
 MAX_CORPUS_FILE_BYTES = 64 * 1024 * 1024
 MAX_EVIDENCE_FILE_BYTES = 8 * 1024 * 1024
+MAX_PLATFORM_RESULT_PATCH_BYTES = 1024 * 1024
+MAX_PLATFORM_RESULT_REPLACEMENTS = 64
 
 MysqltestCase = namedtuple("MysqltestCase", ("name", "test_file", "result_file"))
 
@@ -659,6 +661,53 @@ def load_configured_case_names(config_path):
     return case_names
 
 
+def materialize_result_file(result_file, tmp_dir, platform_name=None):
+    """Apply an exact platform delta and return the materialized result path."""
+    platform_name = sys.platform if platform_name is None else platform_name
+    if platform_name != "darwin":
+        return result_file
+    patch_file = result_file.with_name(
+        "{}.darwin-patch{}".format(result_file.stem, result_file.suffix))
+    if not patch_file.exists():
+        return result_file
+    try:
+        payload = json.loads(_read_regular_bytes(
+            patch_file, MAX_PLATFORM_RESULT_PATCH_BYTES).decode("utf-8"))
+    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise RunnerError("invalid platform result patch") from exc
+    if (not isinstance(payload, dict)
+            or set(payload) != {"schema_version", "replacements"}
+            or payload["schema_version"] != 1
+            or not isinstance(payload["replacements"], list)
+            or not payload["replacements"]
+            or len(payload["replacements"])
+            > MAX_PLATFORM_RESULT_REPLACEMENTS):
+        raise RunnerError("invalid platform result patch")
+    content = _read_regular_bytes(result_file, MAX_CORPUS_FILE_BYTES)
+    for replacement in payload["replacements"]:
+        if (not isinstance(replacement, dict)
+                or set(replacement) != {"old", "new"}
+                or not isinstance(replacement["old"], str)
+                or not replacement["old"]
+                or not isinstance(replacement["new"], str)):
+            raise RunnerError("invalid platform result replacement")
+        old = replacement["old"].encode("utf-8")
+        new = replacement["new"].encode("utf-8")
+        if content.count(old) != 1:
+            raise RunnerError("platform result replacement is not unique")
+        content = content.replace(old, new, 1)
+        if len(content) > MAX_CORPUS_FILE_BYTES:
+            raise RunnerError("materialized platform result is too large")
+    output_dir = Path(tmp_dir) / "platform-results"
+    _ensure_directory(output_dir)
+    output_name = "{}-{}".format(
+        hashlib.sha256(str(result_file).encode("utf-8")).hexdigest()[:16],
+        result_file.name)
+    output_path = output_dir / output_name
+    _atomic_write_bytes(output_path, content)
+    return output_path
+
+
 def discover_cases(repo_root):
     config_path = repo_root / "tools" / "deploy" / "mysqltest_config.yaml"
     mysql_test_dir = repo_root / "tools" / "deploy" / "mysql_test"
@@ -743,6 +792,7 @@ def run_case(args, deploy_dir, case, tmp_dir, log_dir):
     """Run one selected case after revalidating every external output path."""
     _validate_output_tree(tmp_dir)
     _validate_output_tree(log_dir)
+    result_file = materialize_result_file(case.result_file, tmp_dir)
     command = launch_command(getattr(args, "launcher", None), args.mysqltest, [
         "--host={}".format(args.host),
         "--port={}".format(args.port),
@@ -753,12 +803,12 @@ def run_case(args, deploy_dir, case, tmp_dir, log_dir):
         "--logdir={}".format(log_dir),
         "--silent",
         "--test-file={}".format(case.test_file),
-        "--result-file={}".format(case.result_file),
+        "--result-file={}".format(result_file),
         "--timer-file={}".format(log_dir / "timer"),
         "--tail-lines=20",
     ], timeout_seconds=LAUNCHER_CASE_TIMEOUT)
     case_name = case.name
-    reject_file = log_dir / (case.result_file.stem + ".reject")
+    reject_file = log_dir / (result_file.stem + ".reject")
     _remove_regular_file(reject_file)
     print("[ RUN      ] {}".format(case_name), flush=True)
     started = time.monotonic()
@@ -789,7 +839,7 @@ def run_case(args, deploy_dir, case, tmp_dir, log_dir):
         and reject_file is not None
         and any(message in output for message in RESULT_MISMATCH_MESSAGES)
         and files_equal_ignoring_trailing_whitespace(
-            case.result_file, reject_file
+            result_file, reject_file
         )
     ):
         return_code = 0
