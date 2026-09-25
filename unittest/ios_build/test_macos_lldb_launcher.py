@@ -10,6 +10,7 @@ import signal
 import subprocess
 import sys
 import tempfile
+import time
 import unittest
 from unittest import mock
 
@@ -29,6 +30,51 @@ def _load_sdb():
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     return module
+
+
+def _wait_for_pid_file(path: Path, timeout_seconds: float = 30) -> int:
+    """Return a child pid after a bounded wait for its durable marker."""
+    deadline = time.monotonic() + timeout_seconds
+    while time.monotonic() < deadline:
+        try:
+            value = path.read_text(encoding="ascii").strip()
+            if value:
+                return int(value)
+        except (FileNotFoundError, ValueError):
+            pass
+        time.sleep(0.05)
+    raise AssertionError("target pid marker was not created")
+
+
+def _pid_exists(pid: int) -> bool:
+    """Return whether one process id still exists."""
+    try:
+        os.kill(pid, 0)
+    except ProcessLookupError:
+        return False
+    return True
+
+
+def _wait_for_child_pid(parent_pid: int, timeout_seconds: float = 15) -> int:
+    """Return one direct child pid after a bounded process-table wait."""
+    deadline = time.monotonic() + timeout_seconds
+    while time.monotonic() < deadline:
+        completed = subprocess.run(
+            ["ps", "-axo", "pid=,ppid="],
+            capture_output=True, check=False, text=True)
+        for line in completed.stdout.splitlines():
+            values = line.split()
+            if len(values) == 2 and int(values[1]) == parent_pid:
+                return int(values[0])
+        time.sleep(0.05)
+    raise AssertionError("launcher child process was not created")
+
+
+def _close_process_pipes(process: subprocess.Popen) -> None:
+    """Close captured process streams owned by one test parent."""
+    for stream in (process.stdout, process.stderr):
+        if stream is not None:
+            stream.close()
 
 
 class MacosLldbLauncherTest(unittest.TestCase):
@@ -62,6 +108,19 @@ class MacosLldbLauncherTest(unittest.TestCase):
                 launcher._duplicate_standard_streams()
 
         close.assert_called_once_with(31)
+
+    def test_interrupted_descriptor_cleanup_never_recloses_removed_fd(self):
+        """Remove fd ownership before close so signal cleanup cannot double-close."""
+        descriptors = [31, 32]
+        with mock.patch.object(
+                launcher.os, "close",
+                side_effect=[launcher._ExternalTermination(signal.SIGTERM),
+                             None]) as close:
+            with self.assertRaises(launcher._ExternalTermination):
+                launcher._close_descriptors(descriptors)
+            launcher._close_descriptors(descriptors)
+
+        self.assertEqual([mock.call(32), mock.call(31)], close.call_args_list)
 
     def test_direct_sigkill_probe_selects_tracked_launcher(self):
         """Use LLDB for every host tool after one direct policy SIGKILL."""
@@ -135,6 +194,13 @@ class MacosLldbLauncherTest(unittest.TestCase):
                  str(binary), "--"], command[:5])
             self.assertIn("--base-dir={}".format(base_dir), command)
             self.assertEqual(binary, sdb.read_instance_binary(base_dir))
+            ready_args = argparse.Namespace(
+                client=str(binary), launcher=str(launch_script),
+                host="127.0.0.1", port=2881, user="root")
+            ready_command = sdb.build_ready_command(
+                ready_args, launcher_timeout=3.75)
+            self.assertEqual(
+                ["--timeout", "3.75", "--"], ready_command[4:7])
             with mock.patch.object(
                     sdb, "read_process_arguments",
                     return_value=[
@@ -148,6 +214,26 @@ class MacosLldbLauncherTest(unittest.TestCase):
                         "--base-dir={}".format(base_dir)]):
                 self.assertFalse(sdb.process_matches_instance(
                     123, base_dir, binary))
+
+    def test_default_launcher_timeout_precedes_outer_host_deadline(self):
+        """Ensure the launcher owns cleanup before the outer host deadline."""
+        self.assertLess(
+            launcher.DEFAULT_TIMEOUT_SECONDS, phase.HOST_RUN_TIMEOUT_SECONDS)
+
+    def test_external_signal_before_spawn_maps_status_and_restores_handlers(self):
+        """Handle termination before child creation without changing handlers."""
+        previous = signal.getsignal(signal.SIGTERM)
+
+        def terminate_before_spawn(_value):
+            """Inject termination while the launcher validates its target."""
+            launcher._handle_external_signal(signal.SIGTERM, None)
+
+        with mock.patch.object(
+                launcher, "validate_binary", side_effect=terminate_before_spawn):
+            result = launcher.main(["--binary", "/snapshot/seekdb"])
+
+        self.assertEqual(128 + signal.SIGTERM, result)
+        self.assertIs(previous, signal.getsignal(signal.SIGTERM))
 
     def test_timeout_terminates_and_kills_the_lldb_process_group(self):
         """Bound timeout cleanup even when the LLDB group ignores SIGTERM."""
@@ -323,11 +409,140 @@ int main(int argc, char **argv) {
                 os.write(master_fd, b"tty input\n")
                 tty_stdout, tty_stderr = tty_process.communicate(timeout=90)
             finally:
+                _close_process_pipes(tty_process)
                 os.close(master_fd)
                 if slave_fd >= 0:
                     os.close(slave_fd)
             self.assertEqual(0, tty_process.returncode, tty_stderr)
             self.assertEqual(b"tty input\n", tty_stdout)
+
+    @unittest.skipUnless(
+        sys.platform == "darwin" and shutil.which("cc"),
+        "requires macOS, clang, and LLDB")
+    def test_external_term_and_interrupt_reap_lldb_and_sleeping_target(self):
+        """Map external signals only after the LLDB session is fully reaped."""
+        source = r'''
+#include <stdio.h>
+#include <unistd.h>
+int main(int argc, char **argv) {
+  FILE *marker = fopen(argv[1], "w");
+  if (marker == NULL) return 2;
+  fprintf(marker, "%d\n", getpid());
+  if (fclose(marker) != 0) return 3;
+  sleep(300);
+  return 0;
+}
+'''
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve()
+            program = root / "sleeper"
+            compiled = subprocess.run(
+                ["cc", "-x", "c", "-o", str(program), "-"],
+                input=source.encode("utf-8"), capture_output=True,
+                check=False)
+            self.assertEqual(0, compiled.returncode, compiled.stderr)
+            program.chmod(0o500)
+            for sent_signal in (signal.SIGTERM, signal.SIGINT):
+                with self.subTest(sent_signal=sent_signal):
+                    marker = root / "target-{}.pid".format(sent_signal)
+                    process = subprocess.Popen([
+                        sys.executable, str(phase.MACOS_LLDB_LAUNCHER),
+                        "--binary", str(program), "--timeout", "120", "--",
+                        str(marker),
+                    ], stdin=subprocess.DEVNULL, stdout=subprocess.PIPE,
+                       stderr=subprocess.PIPE)
+                    target_pid = _wait_for_pid_file(marker)
+                    target_group = os.getpgid(target_pid)
+                    try:
+                        os.kill(process.pid, sent_signal)
+                        stdout, stderr = process.communicate(timeout=15)
+                        self.assertEqual(
+                            128 + sent_signal, process.returncode,
+                            stdout + stderr)
+                        deadline = time.monotonic() + 5
+                        while (_pid_exists(target_pid)
+                               and time.monotonic() < deadline):
+                            time.sleep(0.05)
+                        self.assertFalse(_pid_exists(target_pid))
+                        with self.assertRaises(ProcessLookupError):
+                            os.killpg(target_group, 0)
+                    finally:
+                        if process.poll() is None:
+                            process.kill()
+                            process.wait(timeout=5)
+                        _close_process_pipes(process)
+                        try:
+                            os.killpg(target_group, signal.SIGKILL)
+                        except ProcessLookupError:
+                            pass
+
+            timeout_marker = root / "target-timeout.pid"
+            timed_out = subprocess.run([
+                sys.executable, str(phase.MACOS_LLDB_LAUNCHER),
+                "--binary", str(program), "--timeout", "3", "--",
+                str(timeout_marker),
+            ], stdin=subprocess.DEVNULL, stdout=subprocess.PIPE,
+               stderr=subprocess.PIPE, timeout=10, check=False)
+            self.assertEqual(124, timed_out.returncode, timed_out.stderr)
+            timed_out_target = _wait_for_pid_file(timeout_marker)
+            timed_out_group = os.getpgid(timed_out_target) \
+                if _pid_exists(timed_out_target) else None
+            self.assertFalse(_pid_exists(timed_out_target))
+            if timed_out_group is not None:
+                with self.assertRaises(ProcessLookupError):
+                    os.killpg(timed_out_group, 0)
+
+    @unittest.skipUnless(
+        sys.platform == "darwin" and shutil.which("cc"),
+        "requires macOS, clang, and LLDB")
+    def test_external_timeout_cleanup_before_target_creates_managed_pid(self):
+        """Reap the LLDB group when outer cleanup wins before target startup."""
+        source = r'''
+#include <stdio.h>
+#include <unistd.h>
+int main(int argc, char **argv) {
+  sleep(20);
+  FILE *marker = fopen(argv[1], "w");
+  if (marker == NULL) return 2;
+  fprintf(marker, "%d\n", getpid());
+  fclose(marker);
+  sleep(300);
+  return 0;
+}
+'''
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve()
+            program = root / "delayed-sleeper"
+            marker = root / "managed.pid"
+            compiled = subprocess.run(
+                ["cc", "-x", "c", "-o", str(program), "-"],
+                input=source.encode("utf-8"), capture_output=True,
+                check=False)
+            self.assertEqual(0, compiled.returncode, compiled.stderr)
+            program.chmod(0o500)
+            process = subprocess.Popen([
+                sys.executable, str(phase.MACOS_LLDB_LAUNCHER),
+                "--binary", str(program), "--timeout", "120", "--",
+                str(marker),
+            ], stdin=subprocess.DEVNULL, stdout=subprocess.PIPE,
+               stderr=subprocess.PIPE)
+            lldb_pid = _wait_for_child_pid(process.pid)
+            try:
+                process.terminate()
+                stdout, stderr = process.communicate(timeout=15)
+                self.assertEqual(143, process.returncode, stdout + stderr)
+                self.assertFalse(marker.exists())
+                with self.assertRaises(ProcessLookupError):
+                    os.killpg(lldb_pid, 0)
+            finally:
+                if process.poll() is None:
+                    process.kill()
+                    process.wait(timeout=5)
+                _close_process_pipes(process)
+                try:
+                    os.killpg(lldb_pid, signal.SIGKILL)
+                except ProcessLookupError:
+                    pass
 
     @unittest.skipUnless(sys.platform == "darwin", "requires macOS and LLDB")
     def test_current_host_snapshots_execute_read_only_options_via_lldb(self):

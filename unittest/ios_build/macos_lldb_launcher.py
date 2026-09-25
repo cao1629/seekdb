@@ -21,11 +21,60 @@ LC_VERSION_MIN_MACOSX = 0x24
 LC_BUILD_VERSION = 0x32
 PLATFORM_MACOS = 1
 NON_PASSTHROUGH_SIGNALS = ("SIGSTOP", "SIGTSTP", "SIGTTIN", "SIGTTOU")
-DEFAULT_TIMEOUT_SECONDS = 24 * 60 * 60
+DEFAULT_TIMEOUT_SECONDS = 23 * 60 * 60
+PROCESS_CLEANUP_GRACE_SECONDS = 0.5
+HANDLED_SIGNALS = tuple(
+    item for item in (signal.SIGTERM, signal.SIGINT, signal.SIGHUP)
+    if item is not None)
+_ACTIVE_PROCESS = None
+_PENDING_SIGNAL = 0
 
 
 class LauncherError(RuntimeError):
     """Indicate an unsafe launcher input or unavailable LLDB runtime."""
+
+
+class _ExternalTermination(BaseException):
+    """Interrupt normal control flow after an external termination signal."""
+
+    def __init__(self, signum: int):
+        """Record the signal whose conventional shell status must be returned."""
+        super().__init__(signum)
+        self.signum = signum
+
+
+def _handle_external_signal(signum: int, _frame) -> None:
+    """Record one external signal and interrupt the main-thread operation."""
+    global _PENDING_SIGNAL
+    if _PENDING_SIGNAL:
+        return
+    _PENDING_SIGNAL = signum
+    raise _ExternalTermination(signum)
+
+
+def _install_signal_handlers() -> tuple[dict[int, object], set[int]]:
+    """Install handlers while blocking their signals against setup races."""
+    global _PENDING_SIGNAL
+    _PENDING_SIGNAL = 0
+    previous_mask = signal.pthread_sigmask(signal.SIG_BLOCK, HANDLED_SIGNALS)
+    previous = {}
+    try:
+        for signum in HANDLED_SIGNALS:
+            previous[signum] = signal.signal(signum, _handle_external_signal)
+    except BaseException:
+        for signum, handler in previous.items():
+            signal.signal(signum, handler)
+        signal.pthread_sigmask(signal.SIG_SETMASK, previous_mask)
+        raise
+    return previous, previous_mask
+
+
+def _restore_signal_handlers(previous: dict[int, object]) -> None:
+    """Restore caller signal handlers and clear launcher signal state."""
+    global _PENDING_SIGNAL
+    for signum, handler in previous.items():
+        signal.signal(signum, handler)
+    _PENDING_SIGNAL = 0
 
 
 def _directory_flags() -> int:
@@ -203,7 +252,7 @@ def _terminate_group(process: subprocess.Popen) -> None:
     except ProcessLookupError:
         pass
     try:
-        process.wait(timeout=2)
+        process.wait(timeout=PROCESS_CLEANUP_GRACE_SECONDS)
     except subprocess.TimeoutExpired:
         pass
     try:
@@ -211,7 +260,7 @@ def _terminate_group(process: subprocess.Popen) -> None:
     except ProcessLookupError:
         pass
     try:
-        process.wait(timeout=2)
+        process.wait(timeout=PROCESS_CLEANUP_GRACE_SECONDS)
     except subprocess.TimeoutExpired:
         pass
 
@@ -222,11 +271,21 @@ def _duplicate_standard_streams() -> tuple[int, int, int]:
     try:
         for descriptor in (0, 1, 2):
             descriptors.append(os.dup(descriptor))
-    except OSError:
+    except BaseException:
         for descriptor in descriptors:
             os.close(descriptor)
         raise
     return tuple(descriptors)
+
+
+def _close_descriptors(descriptors: list[int]) -> None:
+    """Close owned descriptors once even if signal handling interrupts close."""
+    while descriptors:
+        descriptor = descriptors.pop()
+        try:
+            os.close(descriptor)
+        except OSError:
+            pass
 
 
 def launch(
@@ -237,33 +296,43 @@ def launch(
     environment = dict(os.environ)
     environment.setdefault(
         "DEVELOPER_DIR", "/Applications/Xcode.app/Contents/Developer")
-    (target_stdin_fd, target_stdout_fd,
-     target_stderr_fd) = _duplicate_standard_streams()
+    global _ACTIVE_PROCESS
+    descriptors = []
+    process = None
     try:
-        process = subprocess.Popen(
-            lldb_command(
-                binary, arguments,
-                target_stdin_fd=target_stdin_fd,
-                target_stdout_fd=target_stdout_fd,
-                target_stderr_fd=target_stderr_fd),
-            env=environment, stdin=subprocess.DEVNULL,
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL,
-            pass_fds=(
-                target_stdin_fd, target_stdout_fd, target_stderr_fd),
-            start_new_session=True)
-    finally:
-        os.close(target_stdin_fd)
-        os.close(target_stdout_fd)
-        os.close(target_stderr_fd)
-    try:
+        descriptors = list(_duplicate_standard_streams())
+        target_stdin_fd, target_stdout_fd, target_stderr_fd = descriptors
+        previous_mask = signal.pthread_sigmask(
+            signal.SIG_BLOCK, HANDLED_SIGNALS)
+        try:
+            process = subprocess.Popen(
+                lldb_command(
+                    binary, arguments,
+                    target_stdin_fd=target_stdin_fd,
+                    target_stdout_fd=target_stdout_fd,
+                    target_stderr_fd=target_stderr_fd),
+                env=environment, stdin=subprocess.DEVNULL,
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+                pass_fds=tuple(descriptors),
+                start_new_session=True)
+            _ACTIVE_PROCESS = process
+        finally:
+            signal.pthread_sigmask(signal.SIG_SETMASK, previous_mask)
+        _close_descriptors(descriptors)
         return_code = process.wait(timeout=timeout_seconds)
     except subprocess.TimeoutExpired:
-        _terminate_group(process)
+        if process is not None:
+            _terminate_group(process)
         return 124
     except BaseException:
-        _terminate_group(process)
+        if process is not None:
+            _terminate_group(process)
         raise
+    finally:
+        if _ACTIVE_PROCESS is process:
+            _ACTIVE_PROCESS = None
+        _close_descriptors(descriptors)
     return 128 - return_code if return_code < 0 else return_code
 
 
@@ -284,12 +353,20 @@ def parse_args(arguments: Sequence[str]) -> argparse.Namespace:
 
 def main(arguments: Sequence[str]) -> int:
     """Validate one target and dispatch it through the fixed LLDB command."""
+    previous_handlers, previous_mask = _install_signal_handlers()
     try:
-        options = parse_args(arguments)
-        binary = validate_binary(options.binary)
-        return launch(binary, options.arguments, timeout_seconds=options.timeout)
-    except (LauncherError, OSError, UnicodeError):
-        return 125
+        signal.pthread_sigmask(signal.SIG_SETMASK, previous_mask)
+        try:
+            options = parse_args(arguments)
+            binary = validate_binary(options.binary)
+            return launch(
+                binary, options.arguments, timeout_seconds=options.timeout)
+        except _ExternalTermination as termination:
+            return 128 + termination.signum
+        except (LauncherError, OSError, UnicodeError):
+            return 125
+    finally:
+        _restore_signal_handlers(previous_handlers)
 
 
 if __name__ == "__main__":

@@ -621,8 +621,11 @@ class MysqltestParserTest(unittest.TestCase):
         command = run.call_args.args[0]
         self.assertEqual([
             sys.executable, str(phase.MACOS_LLDB_LAUNCHER), "--binary",
-            str(bundle.snapshot_paths["mysqltest"]), "--",
-        ], command[:5])
+            str(bundle.snapshot_paths["mysqltest"]), "--timeout",
+            str(host_runner.LAUNCHER_CASE_TIMEOUT), "--",
+        ], command[:7])
+        self.assertLess(
+            host_runner.LAUNCHER_CASE_TIMEOUT, host_runner.CASE_TIMEOUT)
 
     def test_snapshot_parent_symlink_and_binary_replacement_are_rejected(self):
         """Reject changed snapshot bytes and linked snapshot directory parents."""

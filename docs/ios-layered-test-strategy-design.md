@@ -169,6 +169,14 @@ the caller's stdin is passed only to `process launch -i`, preserving pipe,
 file, terminal, `DEVNULL`, and EOF behavior for obclient initialization and
 other target processes.
 
+The launcher owns TERM, INT, and HUP cleanup. It blocks those signals across
+the spawn critical section, records the LLDB process group before unblocking,
+and converts the first signal into bounded TERM, KILL, and wait cleanup before
+returning `128+signal`; later signals cannot re-enter cleanup. Its 23-hour
+default precedes the 24-hour host deadline, each mysqltest invocation receives
+a 3570-second timeout below the outer 3600-second case limit, and readiness
+probes reserve cleanup time below each client-attempt timeout.
+
 The optional sdb launch prefix never replaces the real executable identity.
 The instance marker and process matcher remain bound to the seekdb snapshot and
 base directory, while seekdb startup, readiness obclient, initialization

@@ -81,6 +81,12 @@
   `process launch -i /dev/fd/<n>` 传给目标，并与 stdout/stderr fd 一起显式继承和关闭。
   真实 tiny Mach-O 覆盖 PIPE、`subprocess.run(input=...)`、SQL 文件、TTY、`DEVNULL`
   与空 EOF；timeout/SIGINT 的 process-group 清理保持不变。
+- 修复 launcher 被外层终止时遗留独立 LLDB session 的问题：顶层接管 TERM/INT/HUP，
+  spawn 临界区屏蔽信号并先记录 child，首次信号驱动有界 TERM→KILL→wait，重复信号
+  不重入，恢复 handler/fd 后分别以 143/130/129 退出。真实 sleeper 覆盖 TERM/INT
+  以及 managed pid 建立前的 outer terminate，均确认 LLDB group 与 target 消失。
+  默认 launcher timeout 调整为 23 小时（小于 24 小时 host deadline），mysqltest case
+  显式 3570 秒（小于外层 3600 秒），wait-ready client attempt 同样预留清理预算。
 
 ## 2026-09-25：standalone runner stages 1–4 adapter
 

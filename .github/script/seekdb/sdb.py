@@ -21,6 +21,7 @@ CLIENT_ATTEMPT_TIMEOUT = 5.0
 STOP_TIMEOUT = 20.0
 KILL_TIMEOUT = 5.0
 PROCESS_QUERY_TIMEOUT = 5.0
+LAUNCHER_CLEANUP_BUDGET = 1.25
 INSTANCE_MARKER_NAME = ".sdb-instance"
 INSTANCE_MARKER_HEADER = "seekdb-instance-v1"
 
@@ -118,15 +119,17 @@ def prepare_instance_directory(base_dir, binary):
         )
 
 
-def launch_prefix(launcher, binary):
+def launch_prefix(launcher, binary, launcher_timeout=None):
     """Return a structured optional launcher prefix for one real executable."""
     binary = str(_executable_path(binary))
     if not launcher:
         return [binary]
-    return [
-        sys.executable, str(_executable_path(launcher)),
-        "--binary", binary, "--",
-    ]
+    command = [
+        sys.executable, str(_executable_path(launcher)), "--binary", binary]
+    if launcher_timeout is not None:
+        command.extend(("--timeout", str(launcher_timeout)))
+    command.append("--")
+    return command
 
 
 def build_start_command(args, base_dir):
@@ -171,8 +174,10 @@ def command_start(args):
     return 0
 
 
-def build_ready_command(args):
-    return launch_prefix(getattr(args, "launcher", None), args.client) + [
+def build_ready_command(args, launcher_timeout=None):
+    return launch_prefix(
+        getattr(args, "launcher", None), args.client,
+        launcher_timeout=launcher_timeout) + [
         "-h",
         args.host,
         "-P",
@@ -188,7 +193,6 @@ def build_ready_command(args):
 
 def command_wait_ready(args):
     base_dir = _base_dir(args.base_dir)
-    command = build_ready_command(args)
     deadline = time.monotonic() + args.timeout
 
     try:
@@ -206,6 +210,13 @@ def command_wait_ready(args):
 
         remaining = deadline - time.monotonic()
         attempt_timeout = min(CLIENT_ATTEMPT_TIMEOUT, max(remaining, 0.001))
+        launcher_timeout = None
+        if args.launcher:
+            if attempt_timeout <= LAUNCHER_CLEANUP_BUDGET:
+                time.sleep(min(0.05, max(remaining, 0)))
+                continue
+            launcher_timeout = attempt_timeout - LAUNCHER_CLEANUP_BUDGET
+        command = build_ready_command(args, launcher_timeout)
         try:
             result = subprocess.run(
                 command,

@@ -18,6 +18,7 @@ import time
 
 
 CASE_TIMEOUT = 3600
+LAUNCHER_CASE_TIMEOUT = CASE_TIMEOUT - 30
 MAX_CASE_RETRIES = 3
 READY_TIMEOUT = 600
 MYSQLTEST_USER = "admin"
@@ -495,14 +496,16 @@ def run_sdb(sdb_script, command, arguments, description, cwd):
     )
 
 
-def launch_command(launcher, binary, arguments):
+def launch_command(launcher, binary, arguments, timeout_seconds=None):
     """Build one structured optional launcher command without shell parsing."""
     if launcher is None:
         return [str(binary), *[str(item) for item in arguments]]
-    return [
-        sys.executable, str(launcher), "--binary", str(binary), "--",
-        *[str(item) for item in arguments],
-    ]
+    command = [sys.executable, str(launcher), "--binary", str(binary)]
+    if timeout_seconds is not None:
+        command.extend(("--timeout", str(timeout_seconds)))
+    command.append("--")
+    command.extend(str(item) for item in arguments)
+    return command
 
 
 def destroy_instance(sdb_script, base_dir, cwd, check=True):
@@ -752,7 +755,7 @@ def run_case(args, deploy_dir, case, tmp_dir, log_dir):
         "--result-file={}".format(case.result_file),
         "--timer-file={}".format(log_dir / "timer"),
         "--tail-lines=20",
-    ])
+    ], timeout_seconds=LAUNCHER_CASE_TIMEOUT)
     case_name = case.name
     reject_file = log_dir / (case.result_file.stem + ".reject")
     _remove_regular_file(reject_file)
