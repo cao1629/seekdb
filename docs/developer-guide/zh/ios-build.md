@@ -189,6 +189,13 @@ mysqltest standalone 阶段的 host gate 现在只接受受跟踪 host runner �
 evidence/infrastructure 失败处理，并阻止后续构建、安装和真机动作。host evidence
 只能由同一次受锁 runner 调用 tracked runner 生成，不能通过 argv 或环境导入外部
 JSON；slice/result 输入必须是有大小上限的 regular non-symlink 文件。
+host runner 的 work、tmp、log、failure 和 result 写入均从逐段
+`O_NOFOLLOW` 打开的目录描述符出发；输出使用随机 `O_EXCL` 临时文件、文件与目录
+`fsync` 及同目录 `renameat`，预置 symlink、FIFO 或其他非 regular 目标会在写入前
+失败。workspace 不再预建 sdb 无法识别的空 instance 目录；host runner 正常、失败、
+超时或被中断后，外层都会以独立有界进程组调用 tracked `sdb.py destroy`，只清理
+本 run 的 marker/binary identity 匹配实例。该步骤用于回收 sdb 另开 session 的
+seekdb，不能由仅杀死 host runner process group 替代。
 
 - mysqltest 的 `empty_table` 真机适配器仅在 server modules ready 后执行，空结果
   还会独立读取并精确断言有序字段名 `nr,b,str` 和终止状态 `OB_ITER_END`；模块

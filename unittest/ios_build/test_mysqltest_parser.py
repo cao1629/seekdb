@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 """Contract tests for lossless active mysqltest classification and adapters."""
 
+import argparse
 import json
 import os
 from pathlib import Path
+import shutil
 import subprocess
 import tempfile
 import time
@@ -398,6 +400,69 @@ class MysqltestParserTest(unittest.TestCase):
             with self.assertRaises(host_runner.RunnerError):
                 host_runner._read_json_evidence(recursive)
 
+    def test_host_runner_writes_never_follow_precreated_entries(self):
+        """Reject output links and non-regular files without changing victims."""
+        host_runner = parser._load_host_discovery(REPOSITORY_ROOT)
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve()
+            victim = root / "victim"
+            victim.write_text("unchanged", encoding="utf-8")
+            output = root / "result.json"
+            output.symlink_to(victim)
+            with self.assertRaises(host_runner.RunnerError):
+                host_runner.write_json(output, {"value": 1})
+            self.assertEqual("unchanged", victim.read_text(encoding="utf-8"))
+
+            output.unlink()
+            fixed_temporary = root / "result.json.tmp"
+            fixed_temporary.symlink_to(victim)
+            host_runner.write_json(output, {"value": 2})
+            self.assertEqual("unchanged", victim.read_text(encoding="utf-8"))
+            self.assertTrue(fixed_temporary.is_symlink())
+
+            work = root / "work"
+            infrastructure = work / "failures" / "infrastructure"
+            infrastructure.mkdir(parents=True)
+            error_output = infrastructure / "error.txt"
+            error_output.symlink_to(victim)
+            args = argparse.Namespace(work_dir=work, base_dir=root / "absent")
+            with self.assertRaises(host_runner.RunnerError):
+                host_runner.save_infrastructure_failure(args, "failure")
+            self.assertEqual("unchanged", victim.read_text(encoding="utf-8"))
+
+            case_directory = work / "failures" / "demo"
+            case_directory.mkdir()
+            (case_directory / "mysqltest.log").symlink_to(victim)
+            with self.assertRaises(host_runner.RunnerError):
+                host_runner.save_case_failure(args, "demo", "failure log")
+            self.assertEqual("unchanged", victim.read_text(encoding="utf-8"))
+
+            unsafe_log = work / "mysqltest_log"
+            unsafe_log.mkdir()
+            (unsafe_log / "timer").symlink_to(victim)
+            with self.assertRaises(host_runner.RunnerError):
+                host_runner._validate_output_tree(unsafe_log)
+            self.assertEqual("unchanged", victim.read_text(encoding="utf-8"))
+
+            tmp_dir = work / "tmp"
+            tmp_dir.mkdir()
+            case_root = root / "case"
+            case_root.mkdir()
+            test_file = case_root / "demo.test"
+            result_file = case_root / "demo.result"
+            test_file.write_text("SELECT 1;\n", encoding="utf-8")
+            result_file.write_text("1\n", encoding="utf-8")
+            case = host_runner.MysqltestCase(
+                "demo", test_file, result_file)
+            run_args = argparse.Namespace(
+                mysqltest=root / "mysqltest", host="127.0.0.1", port=2881,
+                obclient=root / "obclient", base_dir=root / "instance")
+            with mock.patch.object(host_runner.subprocess, "run") as run:
+                with self.assertRaises(host_runner.RunnerError):
+                    host_runner.run_case(
+                        run_args, root, case, tmp_dir, unsafe_log)
+            run.assert_not_called()
+
     def test_local_host_gate_runs_tracked_runner_before_validating(self):
         """Generate evidence through tracked run and merge commands in one flow."""
         selected = [
@@ -445,6 +510,90 @@ class MysqltestParserTest(unittest.TestCase):
         self.assertEqual("merge", commands[1][2])
         self.assertEqual("runner-id", summary["run_id"])
 
+    @unittest.skipUnless(shutil.which("cc"), "requires a host C compiler")
+    def test_outer_failures_destroy_detached_sdb_daemon(self):
+        """Use tracked sdb cleanup after timeout, interrupt, or runner failure."""
+        source = r'''
+#include <errno.h>
+#include <signal.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/stat.h>
+#include <unistd.h>
+static void stop(int signal_number) { (void)signal_number; _exit(0); }
+int main(int argc, char **argv) {
+  const char *base = NULL;
+  for (int index = 1; index < argc; ++index) {
+    if (strncmp(argv[index], "--base-dir=", 11) == 0) base = argv[index] + 11;
+  }
+  if (base == NULL) return 2;
+  char run[4096];
+  char pid_path[4096];
+  if (snprintf(run, sizeof(run), "%s/run", base) >= (int)sizeof(run)) return 3;
+  if (mkdir(run, 0700) != 0 && errno != EEXIST) return 4;
+  if (snprintf(pid_path, sizeof(pid_path), "%s/seekdb.pid", run)
+      >= (int)sizeof(pid_path)) return 5;
+  FILE *stream = fopen(pid_path, "w");
+  if (stream == NULL) return 6;
+  fprintf(stream, "%d\n", (int)getpid());
+  fclose(stream);
+  signal(SIGTERM, stop);
+  for (;;) pause();
+}
+'''
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve()
+            c_file = root / "daemon.c"
+            binary = root / "fake-seekdb"
+            c_file.write_text(source, encoding="utf-8")
+            subprocess.run(
+                [shutil.which("cc"), str(c_file), "-o", str(binary)],
+                check=True, capture_output=True)
+            binaries = {
+                "seekdb": binary,
+                "obclient": binary,
+                "mysqltest": binary,
+            }
+            failures = (
+                subprocess.TimeoutExpired("host-runner", 1),
+                KeyboardInterrupt(),
+                RuntimeError("runner failed"),
+            )
+            for index, failure in enumerate(failures):
+                with self.subTest(failure=type(failure).__name__):
+                    work = root / "host-{}".format(index)
+                    daemon_pid = []
+
+                    def start_then_fail(_command, cwd, _deadline):
+                        """Start a detached tracked-sdb instance, then fail."""
+                        instance = work / "instance"
+                        completed = subprocess.run(
+                            [sys.executable,
+                             str(REPOSITORY_ROOT /
+                                 ".github/script/seekdb/sdb.py"),
+                             "start", "--binary", str(binary),
+                             "--base-dir", str(instance)],
+                            cwd=str(cwd), capture_output=True, check=False)
+                        self.assertEqual(
+                            0, completed.returncode, completed.stderr)
+                        pid_file = instance / "run/seekdb.pid"
+                        deadline = time.monotonic() + 3.0
+                        while (time.monotonic() < deadline
+                               and not pid_file.exists()):
+                            time.sleep(0.02)
+                        daemon_pid.append(int(
+                            pid_file.read_text(encoding="utf-8")))
+                        raise failure
+
+                    with self.assertRaises(type(failure)):
+                        phase.execute_local_host_gate(
+                            REPOSITORY_ROOT, work, "runner-id", binaries,
+                            process_runner=start_then_fail)
+                    self.assertFalse((work / "instance").exists())
+                    with self.assertRaises(ProcessLookupError):
+                        os.kill(daemon_pid[0], 0)
+
     def test_host_workspace_rejects_symlink_components(self):
         """Never create runner files through pre-existing directory symlinks."""
         unsafe_components = (
@@ -470,6 +619,21 @@ class MysqltestParserTest(unittest.TestCase):
                 with self.assertRaises(phase.MysqltestPhaseError):
                     phase._prepare_host_workspace(run / "mysqltest-host")
                 self.assertEqual([], list(external.iterdir()))
+
+    def test_host_workspace_leaves_instance_for_sdb_handshake(self):
+        """Do not create an empty base-dir that the tracked sdb cannot destroy."""
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve()
+            work = root / "mysqltest-host"
+            phase._prepare_host_workspace(work)
+            instance = work / "instance"
+            self.assertFalse(instance.exists())
+            completed = subprocess.run(
+                [sys.executable,
+                 str(REPOSITORY_ROOT / ".github/script/seekdb/sdb.py"),
+                 "destroy", "--base-dir", str(instance)],
+                cwd=str(REPOSITORY_ROOT), capture_output=True, check=False)
+            self.assertEqual(0, completed.returncode, completed.stderr)
 
     def test_host_binary_inputs_must_be_local_regular_executables(self):
         """Reject missing, non-executable, and symlink host binary inputs."""
@@ -524,6 +688,33 @@ class MysqltestParserTest(unittest.TestCase):
             else:
                 self.fail("TERM-ignoring host runner descendant survived cleanup")
 
+    @unittest.skipUnless(hasattr(os, "fork"), "requires process groups")
+    def test_controlled_host_runner_reaps_child_after_parent_exits(self):
+        """Kill a pipe-closing descendant even after its process-group leader exits."""
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            child_pid = root / "child.pid"
+            program = (
+                "import os,signal,time,pathlib; "
+                "pid=os.fork(); "
+                "(signal.signal(signal.SIGTERM,signal.SIG_IGN), "
+                "os.close(1), os.close(2), time.sleep(60)) if pid==0 else "
+                f"pathlib.Path({str(child_pid)!r}).write_text(str(pid))")
+            completed = phase._run_controlled_process(
+                [sys.executable, "-c", program], root,
+                time.monotonic() + 2.0)
+            self.assertEqual(0, completed.returncode)
+            pid = int(child_pid.read_text(encoding="utf-8"))
+            deadline = time.monotonic() + 3.0
+            while time.monotonic() < deadline:
+                try:
+                    os.kill(pid, 0)
+                except ProcessLookupError:
+                    break
+                time.sleep(0.05)
+            else:
+                self.fail("child survived after the process-group leader exited")
+
     def test_controlled_host_runner_cleans_group_on_interrupt_or_exception(self):
         """SIGINT and unexpected failures must terminate the whole process group."""
         for failure in (KeyboardInterrupt(), RuntimeError("failure")):
@@ -532,12 +723,18 @@ class MysqltestParserTest(unittest.TestCase):
                 process.communicate.side_effect = [failure, (b"", b"")]
                 with mock.patch.object(
                         phase.subprocess, "Popen", return_value=process) as popen, \
-                        mock.patch.object(phase.os, "killpg") as killpg:
+                        mock.patch.object(phase.os, "killpg") as killpg, \
+                        mock.patch.object(
+                            phase, "_process_group_exists",
+                            return_value=False):
                     with self.assertRaises(type(failure)):
                         phase._run_controlled_process(
                             ["runner"], Path.cwd(), time.monotonic() + 10)
                 self.assertTrue(popen.call_args.kwargs["start_new_session"])
-                killpg.assert_called_once_with(12345, phase.signal.SIGTERM)
+                self.assertEqual(
+                    [mock.call(12345, phase.signal.SIGTERM),
+                     mock.call(12345, phase.signal.SIGKILL)],
+                    killpg.call_args_list)
 
 
 if __name__ == "__main__":

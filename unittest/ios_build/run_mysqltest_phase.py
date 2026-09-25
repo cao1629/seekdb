@@ -7,6 +7,7 @@ import hashlib
 import json
 import os
 from pathlib import Path
+import secrets
 import signal
 import stat
 import subprocess
@@ -18,6 +19,7 @@ import mysqltest_parser
 
 MAX_HOST_RESULT_BYTES = 8 * 1024 * 1024
 HOST_RUN_TIMEOUT_SECONDS = 24 * 60 * 60
+HOST_DESTROY_TIMEOUT_SECONDS = 45
 HOST_BINARY_ENVIRONMENTS = {
     "seekdb": "SEEKDB_IPHONE_HOST_SEEKDB",
     "obclient": "SEEKDB_IPHONE_HOST_OBCLIENT",
@@ -199,14 +201,33 @@ def execute_local_host_gate(
     )
     deadline = time.monotonic() + HOST_RUN_TIMEOUT_SECONDS
     process_runner = process_runner or _run_controlled_process
-    for command in commands:
+    try:
+        completed = process_runner(commands[0], repo_root, deadline)
+    except BaseException:
         try:
-            completed = process_runner(command, repo_root, deadline)
-        except (OSError, subprocess.SubprocessError) as error:
-            raise MysqltestPhaseError(
-                "host mysqltest execution failed") from error
-        if completed.returncode != 0:
-            raise MysqltestPhaseError("host mysqltest execution failed")
+            _destroy_managed_host_instance(repo_root, work_directory)
+        except Exception:
+            pass
+        raise
+    if completed.returncode != 0:
+        try:
+            _destroy_managed_host_instance(repo_root, work_directory)
+        except Exception:
+            pass
+        raise MysqltestPhaseError("host mysqltest execution failed")
+    try:
+        _destroy_managed_host_instance(repo_root, work_directory)
+    except (OSError, subprocess.SubprocessError) as error:
+        raise MysqltestPhaseError(
+            "host mysqltest cleanup failed") from error
+
+    try:
+        completed = process_runner(commands[1], repo_root, deadline)
+    except (OSError, subprocess.SubprocessError) as error:
+        raise MysqltestPhaseError(
+            "host mysqltest execution failed") from error
+    if completed.returncode != 0:
+        raise MysqltestPhaseError("host mysqltest execution failed")
     try:
         return validate_host_gate(
             repo_root, work_directory / "host-result.json", binaries)
@@ -215,6 +236,30 @@ def execute_local_host_gate(
     except Exception as error:
         raise MysqltestPhaseError(
             "host mysqltest evidence validation failed") from error
+
+
+def _destroy_managed_host_instance(
+        repo_root: Path, work_directory: Path) -> None:
+    """Boundedly destroy only this run's identity-marked sdb instance."""
+    repo_root = Path(repo_root).expanduser().absolute()
+    work_directory = Path(work_directory).expanduser().absolute()
+    sdb_script = repo_root / ".github/script/seekdb/sdb.py"
+    try:
+        metadata = sdb_script.lstat()
+    except OSError as error:
+        raise MysqltestPhaseError("tracked sdb cleanup is unavailable") from error
+    if sdb_script.is_symlink() or not stat.S_ISREG(metadata.st_mode):
+        raise MysqltestPhaseError("tracked sdb cleanup is unavailable")
+    _prepare_host_workspace(work_directory)
+    command = [
+        sys.executable, str(sdb_script), "destroy", "--base-dir",
+        str(work_directory / "instance"),
+    ]
+    completed = _run_controlled_process(
+        command, repo_root,
+        time.monotonic() + HOST_DESTROY_TIMEOUT_SECONDS)
+    if completed.returncode != 0:
+        raise MysqltestPhaseError("tracked sdb cleanup failed")
 
 
 def _open_directory_at(parent_fd: int, name: str) -> int:
@@ -274,33 +319,67 @@ def _prepare_host_workspace(work_directory: Path) -> None:
         opened.append(slice_fd)
         opened.append(_ensure_directory_at(slice_fd, "tmp"))
         opened.append(_ensure_directory_at(slice_fd, "mysqltest_log"))
-        opened.append(_ensure_directory_at(work_fd, "instance"))
+        try:
+            instance_metadata = os.stat(
+                "instance", dir_fd=work_fd, follow_symlinks=False)
+        except FileNotFoundError:
+            instance_metadata = None
+        if (instance_metadata is not None
+                and not stat.S_ISDIR(instance_metadata.st_mode)):
+            raise MysqltestPhaseError(
+                "host mysqltest workspace is unsafe")
     finally:
         for descriptor in reversed(opened):
             os.close(descriptor)
         os.close(parent_fd)
 
 
+def _process_group_exists(process_group: int) -> bool:
+    """Return whether the original process group still has any members."""
+    try:
+        os.killpg(process_group, 0)
+    except ProcessLookupError:
+        return False
+    except PermissionError:
+        return True
+    return True
+
+
+def _wait_process_group_exit(process_group: int, deadline: float) -> bool:
+    """Boundedly wait for every process in one group to disappear."""
+    while time.monotonic() < deadline:
+        if not _process_group_exists(process_group):
+            return True
+        time.sleep(0.02)
+    return not _process_group_exists(process_group)
+
+
 def _terminate_process_group(process: subprocess.Popen) -> None:
-    """Boundedly terminate and reap a runner process group and descendants."""
+    """TERM, unconditionally KILL, and boundedly reap a whole process group."""
+    process_group = process.pid
     try:
-        os.killpg(process.pid, signal.SIGTERM)
+        os.killpg(process_group, signal.SIGTERM)
     except ProcessLookupError:
         pass
+    _wait_process_group_exit(process_group, time.monotonic() + 2.0)
     try:
-        process.communicate(timeout=2.0)
-        return
-    except subprocess.TimeoutExpired:
-        pass
-    try:
-        os.killpg(process.pid, signal.SIGKILL)
+        os.killpg(process_group, signal.SIGKILL)
     except ProcessLookupError:
         pass
     try:
         process.communicate(timeout=2.0)
     except subprocess.TimeoutExpired:
-        process.kill()
-        process.wait(timeout=2.0)
+        try:
+            process.kill()
+        except ProcessLookupError:
+            pass
+        try:
+            process.wait(timeout=2.0)
+        except subprocess.TimeoutExpired:
+            pass
+    if not _wait_process_group_exit(
+            process_group, time.monotonic() + 2.0):
+        raise subprocess.TimeoutExpired("process-group-cleanup", 6.0)
 
 
 def _run_controlled_process(
@@ -318,6 +397,8 @@ def _run_controlled_process(
     except BaseException:
         _terminate_process_group(process)
         raise
+    if _process_group_exists(process.pid):
+        _terminate_process_group(process)
     return subprocess.CompletedProcess(
         command, process.returncode, stdout, stderr)
 
@@ -362,16 +443,60 @@ def _read_host_result(path: Path) -> bytes:
 
 
 def _write_json(path: Path, payload) -> None:
-    """Atomically write deterministic phase metadata."""
-    path = Path(path)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    temporary = path.with_name(f"{path.name}.tmp-{os.getpid()}")
-    with temporary.open("w", encoding="utf-8") as stream:
-        json.dump(payload, stream, ensure_ascii=False, sort_keys=True)
-        stream.write("\n")
-        stream.flush()
-        os.fsync(stream.fileno())
-    os.replace(temporary, path)
+    """Durably write deterministic metadata through an anchored directory fd."""
+    path = Path(path).expanduser().absolute()
+    parent_fd = _open_anchored_directory(path.parent)
+    temporary = ".{}.tmp-{}-{}".format(
+        path.name, os.getpid(), secrets.token_hex(8))
+    descriptor = None
+    try:
+        try:
+            existing = os.stat(
+                path.name, dir_fd=parent_fd, follow_symlinks=False)
+        except FileNotFoundError:
+            existing = None
+        if existing is not None and not stat.S_ISREG(existing.st_mode):
+            raise MysqltestPhaseError("mysqltest phase output is unsafe")
+        descriptor = os.open(
+            temporary,
+            os.O_WRONLY | os.O_CREAT | os.O_EXCL
+            | getattr(os, "O_NOFOLLOW", 0)
+            | getattr(os, "O_CLOEXEC", 0),
+            0o600, dir_fd=parent_fd)
+        content = (json.dumps(
+            payload, ensure_ascii=False, sort_keys=True) + "\n").encode("utf-8")
+        view = memoryview(content)
+        while view:
+            written = os.write(descriptor, view)
+            if written <= 0:
+                raise OSError("short write")
+            view = view[written:]
+        os.fsync(descriptor)
+        os.close(descriptor)
+        descriptor = None
+        try:
+            existing = os.stat(
+                path.name, dir_fd=parent_fd, follow_symlinks=False)
+        except FileNotFoundError:
+            existing = None
+        if existing is not None and not stat.S_ISREG(existing.st_mode):
+            raise MysqltestPhaseError("mysqltest phase output is unsafe")
+        os.rename(
+            temporary, path.name,
+            src_dir_fd=parent_fd, dst_dir_fd=parent_fd)
+        os.fsync(parent_fd)
+    except MysqltestPhaseError:
+        raise
+    except OSError as error:
+        raise MysqltestPhaseError("mysqltest phase output is unsafe") from error
+    finally:
+        if descriptor is not None:
+            os.close(descriptor)
+        try:
+            os.unlink(temporary, dir_fd=parent_fd)
+        except OSError:
+            pass
+        os.close(parent_fd)
 
 
 def parse_args(arguments: Sequence[str] = None) -> argparse.Namespace:

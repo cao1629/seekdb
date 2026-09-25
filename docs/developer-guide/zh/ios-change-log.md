@@ -13,6 +13,19 @@
 - 只有实际消费 tracked `.result` 且设备 C++ callback 同时断言 SQL status、affected rows、result column count/rows 的实现才能标记 device-native。当前仅 `empty_table` 达到该边界并注册为 `ios.mysqltest.empty_table`；此前静态 parser 得到的其余候选全部保守降级为 `device-transcript-unavailable`，不把“能拆出 SQL”冒充 lossless。host 272-case gate 单独读取完整 host result，不能提升为 device pass。
 - stage 5 adapter 将 host gate、逐 source device case 和强制 SQL/same-directory restart gate 注册为独立 case。checkpoint resume 只选择 failed/pending，passed 不重跑；每个 source ID 仍由既有 phase engine 生成独立 failure artifact。后续安全复审已取消外部 host-result 导入，当前流程见 2026-09-25 记录。
 - 本轮仅运行 host parser/inventory/adapter contracts、Python compile 和完整 Python tests；没有执行 iOS build、签名、安装或真机 case。因此 `empty_table` 目前是已实现的设备契约，不是已取得真机 pass；真实执行及 interrupt/resume acceptance 留给审查通过后的 standalone 试运行。
+- 第五轮安全复审将 tracked host runner 的 result、failure、diagnostic、tmp 与 log
+  路径统一改为 descriptor-anchored 写入。目录逐段 `O_NOFOLLOW`；固定输出只通过
+  随机 `O_CREAT|O_EXCL` 临时 regular file、file/directory `fsync` 和同目录
+  `renameat` 发布，预置 symlink、FIFO、特殊文件或不安全父链均 fail-closed，不能
+  改写外部 victim。result comparison 与 diagnostic copy 同样通过 bounded regular
+  nofollow fd 读取。
+- host workspace 不再预建空 instance；真实 tracked `sdb.py destroy` 已验证对准备后
+  尚不存在的 instance 返回成功。受控 host runner 即使 leader 先退出、后代关闭
+  pipe 或忽略 TERM，也会在 grace 后无条件向原 PGID 发送 KILL并有界确认消失。
+  runner 异常、timeout、SIGINT 和正常 run command 返回后，外层另起受控进程组调用
+  tracked `sdb.py destroy`，只作用于本 run 的 anchored instance 与 marker/binary
+  identity；真实编译的 detached fake seekdb 回归验证 daemon、pid 和 instance 均被
+  清理。本轮未执行真实 272 case、iOS build、签名或真机。
 
 ## 2026-09-25：standalone runner stages 1–4 adapter
 

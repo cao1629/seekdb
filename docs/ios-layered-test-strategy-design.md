@@ -105,6 +105,18 @@ The preferred path is device-native execution through the internal SQL proxy. If
 
 Every migrated regression case retains its source suite and case name for traceability. Expected errors are asserted by exact seekdb error code when stable.
 
+The standalone host mysqltest gate executes the tracked runner in a dedicated
+process group and accepts only identity-bound evidence for the exact selected
+corpus. Its work, result, failure, temporary, and log paths are opened from
+anchored directory descriptors; symlinks and special files fail closed, while
+durable outputs use exclusive temporary files, `fsync`, and same-directory
+`renameat`. The phase workspace does not pre-create the sdb instance directory.
+On timeout, interruption, or another runner failure, the outer controller first
+terminates the complete runner process group and then invokes the tracked
+`sdb.py destroy` command against only that run's identity-marked instance. This
+cleanup is independently bounded because seekdb intentionally runs in a
+detached session and cannot be reclaimed by killing the host runner group.
+
 ## Rust Validation
 
 Rust unit-test logic that exercises protocol parsing, TLS name handling, compression, and response encoding will be exposed through a test-only C ABI and linked into the signed device application. Panics must be contained at the FFI boundary and converted into a failed structured result.

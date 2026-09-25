@@ -9,8 +9,8 @@ import hashlib
 import json
 import os
 from pathlib import Path
+import secrets
 import shlex
-import shutil
 import stat
 import subprocess
 import sys
@@ -37,6 +37,191 @@ MysqltestCase = namedtuple("MysqltestCase", ("name", "test_file", "result_file")
 
 class RunnerError(RuntimeError):
     pass
+
+
+def _directory_flags():
+    """Return flags for opening one real directory without link traversal."""
+    return (os.O_RDONLY | getattr(os, "O_DIRECTORY", 0)
+            | getattr(os, "O_NOFOLLOW", 0)
+            | getattr(os, "O_CLOEXEC", 0))
+
+
+def _open_anchored_directory(path, create=False):
+    """Open an absolute directory component-by-component without symlinks."""
+    absolute = Path(path).expanduser().absolute()
+    descriptor = os.open(os.path.sep, _directory_flags())
+    try:
+        for component in absolute.parts[1:]:
+            if create:
+                try:
+                    os.mkdir(component, mode=0o700, dir_fd=descriptor)
+                except FileExistsError:
+                    pass
+            next_descriptor = os.open(
+                component, _directory_flags(), dir_fd=descriptor)
+            os.close(descriptor)
+            descriptor = next_descriptor
+        return descriptor
+    except OSError as exc:
+        os.close(descriptor)
+        raise RunnerError("host runner output directory is unsafe") from exc
+
+
+def _ensure_directory(path):
+    """Create one anchored directory chain and reject links or non-directories."""
+    descriptor = _open_anchored_directory(path, create=True)
+    os.close(descriptor)
+
+
+def _validate_output_tree(path):
+    """Reject links and special files anywhere below a reused output directory."""
+    root_fd = _open_anchored_directory(path)
+
+    def validate(directory_fd):
+        """Validate one directory tree through anchored child descriptors."""
+        for name in os.listdir(directory_fd):
+            metadata = os.stat(
+                name, dir_fd=directory_fd, follow_symlinks=False)
+            if stat.S_ISREG(metadata.st_mode):
+                continue
+            if not stat.S_ISDIR(metadata.st_mode):
+                raise RunnerError("host runner output tree is unsafe")
+            child_fd = os.open(
+                name, _directory_flags(), dir_fd=directory_fd)
+            try:
+                validate(child_fd)
+            finally:
+                os.close(child_fd)
+
+    try:
+        validate(root_fd)
+    except OSError as exc:
+        raise RunnerError("host runner output tree is unsafe") from exc
+    finally:
+        os.close(root_fd)
+
+
+def _target_is_safe_regular(directory_fd, name):
+    """Reject a pre-existing output that is not a regular non-symlink file."""
+    try:
+        metadata = os.stat(name, dir_fd=directory_fd, follow_symlinks=False)
+    except FileNotFoundError:
+        return
+    except OSError as exc:
+        raise RunnerError("host runner output is unsafe") from exc
+    if not stat.S_ISREG(metadata.st_mode):
+        raise RunnerError("host runner output is unsafe")
+
+
+def _atomic_write_bytes(path, content):
+    """Durably replace one regular output through a unique nofollow temp file."""
+    path = Path(path).expanduser().absolute()
+    if not path.name or path.name in {".", ".."}:
+        raise RunnerError("host runner output is unsafe")
+    directory_fd = _open_anchored_directory(path.parent, create=True)
+    temporary_name = ".{}.tmp-{}-{}".format(
+        path.name, os.getpid(), secrets.token_hex(8))
+    descriptor = None
+    try:
+        _target_is_safe_regular(directory_fd, path.name)
+        flags = (os.O_WRONLY | os.O_CREAT | os.O_EXCL
+                 | getattr(os, "O_NOFOLLOW", 0)
+                 | getattr(os, "O_CLOEXEC", 0))
+        descriptor = os.open(
+            temporary_name, flags, 0o600, dir_fd=directory_fd)
+        view = memoryview(content)
+        while view:
+            written = os.write(descriptor, view)
+            if written <= 0:
+                raise OSError("short write")
+            view = view[written:]
+        os.fsync(descriptor)
+        os.close(descriptor)
+        descriptor = None
+        _target_is_safe_regular(directory_fd, path.name)
+        os.rename(
+            temporary_name, path.name,
+            src_dir_fd=directory_fd, dst_dir_fd=directory_fd)
+        os.fsync(directory_fd)
+    except RunnerError:
+        raise
+    except OSError as exc:
+        raise RunnerError("failed to write host runner output") from exc
+    finally:
+        if descriptor is not None:
+            os.close(descriptor)
+        try:
+            os.unlink(temporary_name, dir_fd=directory_fd)
+        except FileNotFoundError:
+            pass
+        except OSError:
+            pass
+        os.close(directory_fd)
+
+
+def _atomic_write_text(path, content):
+    """Encode and durably replace one UTF-8 output file."""
+    _atomic_write_bytes(path, content.encode("utf-8"))
+
+
+def _remove_regular_file(path):
+    """Remove one regular file through its anchored parent without following links."""
+    path = Path(path).expanduser().absolute()
+    directory_fd = _open_anchored_directory(path.parent)
+    try:
+        try:
+            metadata = os.stat(
+                path.name, dir_fd=directory_fd, follow_symlinks=False)
+        except FileNotFoundError:
+            return False
+        if not stat.S_ISREG(metadata.st_mode):
+            raise RunnerError("host runner output is unsafe")
+        os.unlink(path.name, dir_fd=directory_fd)
+        os.fsync(directory_fd)
+        return True
+    except OSError as exc:
+        raise RunnerError("failed to remove host runner output") from exc
+    finally:
+        os.close(directory_fd)
+
+
+def _read_regular_bytes(path, maximum_size=None):
+    """Read stable bytes from one regular non-symlink file."""
+    path = Path(path).expanduser().absolute()
+    directory_fd = _open_anchored_directory(path.parent)
+    descriptor = None
+    try:
+        flags = (os.O_RDONLY | getattr(os, "O_NOFOLLOW", 0)
+                 | getattr(os, "O_CLOEXEC", 0)
+                 | getattr(os, "O_NONBLOCK", 0))
+        descriptor = os.open(path.name, flags, dir_fd=directory_fd)
+        before = os.fstat(descriptor)
+        if (not stat.S_ISREG(before.st_mode)
+                or (maximum_size is not None
+                    and before.st_size > maximum_size)):
+            raise RunnerError("host runner input is unsafe")
+        chunks = []
+        total = 0
+        while True:
+            chunk = os.read(descriptor, 1024 * 1024)
+            if not chunk:
+                break
+            total += len(chunk)
+            if maximum_size is not None and total > maximum_size:
+                raise RunnerError("host runner input is too large")
+            chunks.append(chunk)
+        after = os.fstat(descriptor)
+        if ((before.st_dev, before.st_ino, before.st_size, before.st_mtime_ns)
+                != (after.st_dev, after.st_ino, after.st_size,
+                    after.st_mtime_ns)):
+            raise RunnerError("host runner input changed while reading")
+        return b"".join(chunks)
+    except OSError as exc:
+        raise RunnerError("host runner input is unavailable") from exc
+    finally:
+        if descriptor is not None:
+            os.close(descriptor)
+        os.close(directory_fd)
 
 
 def _sha256_regular_file(path, maximum_size=None):
@@ -265,9 +450,9 @@ def normalize_trailing_horizontal_whitespace(content):
 
 def files_equal_ignoring_trailing_whitespace(expected_path, actual_path):
     try:
-        expected = expected_path.read_bytes()
-        actual = actual_path.read_bytes()
-    except OSError as exc:
+        expected = _read_regular_bytes(expected_path, MAX_CORPUS_FILE_BYTES)
+        actual = _read_regular_bytes(actual_path, MAX_CORPUS_FILE_BYTES)
+    except (OSError, RunnerError) as exc:
         print(
             "warning: failed to compare mysqltest result files: {}".format(exc),
             file=sys.stderr,
@@ -528,6 +713,9 @@ def mysqltest_environment(args):
 
 
 def run_case(args, deploy_dir, case, tmp_dir, log_dir):
+    """Run one selected case after revalidating every external output path."""
+    _validate_output_tree(tmp_dir)
+    _validate_output_tree(log_dir)
     command = [
         str(args.mysqltest),
         "--host={}".format(args.host),
@@ -545,18 +733,7 @@ def run_case(args, deploy_dir, case, tmp_dir, log_dir):
     ]
     case_name = case.name
     reject_file = log_dir / (case.result_file.stem + ".reject")
-    try:
-        reject_file.unlink()
-    except FileNotFoundError:
-        pass
-    except OSError as exc:
-        print(
-            "warning: failed to remove stale reject file {}: {}".format(
-                reject_file, exc
-            ),
-            file=sys.stderr,
-        )
-        reject_file = None
+    _remove_regular_file(reject_file)
     print("[ RUN      ] {}".format(case_name), flush=True)
     started = time.monotonic()
     try:
@@ -591,15 +768,7 @@ def run_case(args, deploy_dir, case, tmp_dir, log_dir):
     ):
         return_code = 0
         trailing_whitespace_ignored = True
-        try:
-            reject_file.unlink()
-        except OSError as exc:
-            print(
-                "warning: failed to remove ignored reject file {}: {}".format(
-                    reject_file, exc
-                ),
-                file=sys.stderr,
-            )
+        _remove_regular_file(reject_file)
 
     if output and not trailing_whitespace_ignored:
         print(output, end="" if output.endswith("\n") else "\n", flush=True)
@@ -620,14 +789,29 @@ def run_case(args, deploy_dir, case, tmp_dir, log_dir):
     return return_code, output
 
 
+def _copy_diagnostic_file(source, destination):
+    """Copy one bounded regular diagnostic without following either path."""
+    content = _read_regular_bytes(source, MAX_CORPUS_FILE_BYTES)
+    _atomic_write_bytes(destination, content)
+
+
 def copy_instance_diagnostics(base_dir, destination):
-    destination.mkdir(parents=True, exist_ok=True)
+    """Copy regular instance diagnostics into anchored failure directories."""
+    _ensure_directory(destination)
     log_dir = base_dir / "log"
     if log_dir.is_dir():
-        try:
-            shutil.copytree(str(log_dir), str(destination / "seekdb_log"))
-        except OSError as exc:
-            print("warning: failed to copy seekdb logs: {}".format(exc), file=sys.stderr)
+        for source in sorted(log_dir.rglob("*")):
+            try:
+                metadata = source.lstat()
+                if not stat.S_ISREG(metadata.st_mode):
+                    continue
+                relative = source.relative_to(log_dir)
+                target = destination / "seekdb_log" / relative
+                _copy_diagnostic_file(source, target)
+            except (OSError, RunnerError) as exc:
+                print(
+                    "warning: failed to copy seekdb log: {}".format(exc),
+                    file=sys.stderr)
 
     core_dir = destination / "core"
     copied = set()
@@ -638,18 +822,17 @@ def copy_instance_diagnostics(base_dir, destination):
             if not core_file.is_file() or str(core_file) in copied:
                 continue
             copied.add(str(core_file))
-            core_dir.mkdir(parents=True, exist_ok=True)
             relative_name = "__".join(core_file.relative_to(base_dir).parts)
             try:
-                shutil.copy2(str(core_file), str(core_dir / relative_name))
-            except OSError as exc:
+                _copy_diagnostic_file(core_file, core_dir / relative_name)
+            except (OSError, RunnerError) as exc:
                 print("warning: failed to copy {}: {}".format(core_file, exc), file=sys.stderr)
 
 
 def save_case_failure(args, case_name, output):
     destination = args.work_dir / "failures" / case_name
-    destination.mkdir(parents=True, exist_ok=True)
-    (destination / "mysqltest.log").write_text(output, encoding="utf-8")
+    _ensure_directory(destination)
+    _atomic_write_text(destination / "mysqltest.log", output)
     save_instance_diagnostics(args)
 
 
@@ -661,18 +844,16 @@ def save_instance_diagnostics(args):
 
 def save_infrastructure_failure(args, message):
     destination = args.work_dir / "failures" / "infrastructure"
-    destination.mkdir(parents=True, exist_ok=True)
-    (destination / "error.txt").write_text(message + "\n", encoding="utf-8")
+    _ensure_directory(destination)
+    _atomic_write_text(destination / "error.txt", message + "\n")
     save_instance_diagnostics(args)
 
 
 def write_json(path, payload):
-    path.parent.mkdir(parents=True, exist_ok=True)
-    temporary = path.with_name(path.name + ".tmp")
-    with temporary.open("w", encoding="utf-8") as output:
-        json.dump(payload, output, ensure_ascii=False, sort_keys=True)
-        output.write("\n")
-    os.replace(str(temporary), str(path))
+    """Write canonical JSON through the anchored durable output primitive."""
+    serialized = json.dumps(
+        payload, ensure_ascii=False, sort_keys=True) + "\n"
+    _atomic_write_text(path, serialized)
 
 
 def command_run(args):
@@ -694,7 +875,7 @@ def command_run(args):
         "obclient": args.obclient,
         "mysqltest": args.mysqltest,
     })
-    args.work_dir.mkdir(parents=True, exist_ok=True)
+    _ensure_directory(args.work_dir)
 
     try:
         all_cases = discover_cases(repo_root)
@@ -702,8 +883,10 @@ def command_run(args):
         prepare_instance(args, repo_root, sdb_script, deploy_dir)
         tmp_dir = args.work_dir / "tmp"
         log_dir = args.work_dir / "mysqltest_log"
-        tmp_dir.mkdir(parents=True, exist_ok=True)
-        log_dir.mkdir(parents=True, exist_ok=True)
+        _ensure_directory(tmp_dir)
+        _ensure_directory(log_dir)
+        _validate_output_tree(tmp_dir)
+        _validate_output_tree(log_dir)
 
         for index, case in enumerate(selected_cases):
             return_code = None
