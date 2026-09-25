@@ -522,6 +522,38 @@ class MysqltestParserTest(unittest.TestCase):
             summary["source_host_binaries"],
             summary["snapshot_host_binaries"])
 
+    def test_host_runner_keeps_seekdb_attached_to_launcher(self):
+        """Keep a launched seekdb in the foreground for its full lifetime."""
+        host_runner = parser._load_host_discovery(REPOSITORY_ROOT)
+        for launcher in (Path("/tracked/launcher"), None):
+            with self.subTest(launcher=launcher):
+                args = argparse.Namespace(
+                    launcher=launcher,
+                    seekdb=Path("/snapshot/seekdb"),
+                    obclient=Path("/snapshot/obclient"),
+                    base_dir=Path("/run/instance"),
+                    host="127.0.0.1",
+                    port=2881,
+                )
+
+                with mock.patch.object(host_runner, "destroy_instance"), \
+                        mock.patch.object(host_runner, "run_sdb") as run_sdb, \
+                        mock.patch.object(host_runner, "execute_init_sql"):
+                    host_runner.prepare_instance(
+                        args, REPOSITORY_ROOT,
+                        REPOSITORY_ROOT / ".github/script/seekdb/sdb.py",
+                        REPOSITORY_ROOT / "tools/deploy")
+
+                launcher_arguments = (
+                    ("--launcher", launcher) if launcher else ())
+                expected = (
+                    "--binary", args.seekdb, *launcher_arguments,
+                    "--base-dir", args.base_dir, "--port", args.port,
+                    *(("--nodaemon",) if launcher else ()),
+                )
+                self.assertEqual(
+                    expected, run_sdb.call_args_list[0].args[2])
+
     def test_source_replacement_after_snapshot_fails_only_after_snapshot_exec(self):
         """Execute immutable bytes, then reject a changed current source identity."""
         selected = [

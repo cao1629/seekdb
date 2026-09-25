@@ -138,6 +138,14 @@
   潜在 aliases 先共享同一锁，后取得锁者再按真实 entry fail-closed。当前 APFS 上 case 与
   NFC/NFD alias、symlink 及 canonical-lock 并发回归均通过；未运行 272 case、iOS build、
   签名或真机。
+- 真实 standalone 试运行进一步暴露 LLDB 模式仍以 daemon 方式启动 seekdb：`sdb start`
+  返回成功后没有生成可持续管理的服务 PID，`wait-ready` 立即失败，272 个 case 尚未开始。
+  同一 snapshot、launcher 与临时实例的单变量复现确认，默认 daemon 模式不可用，而增加
+  `--nodaemon` 后服务在 30 秒边界内 ready，且 `destroy` 完整回收实例。tracked host runner
+  现在仅在配置 launcher 时向 `sdb start` 追加 `--nodaemon`，使真实 seekdb 全生命周期保持
+  在 LLDB target 内；不使用 launcher 的 Linux/普通 macOS 路径保持原有 daemon 语义。
+  TDD 回归先精确失败于缺少该参数，修复后 focused case 与 mysqltest parser 38 项通过；
+  真实 272 case 与后续真机阶段仍需由更新后的 standalone run 重新执行。
 
 ## 2026-09-25：standalone runner stages 1–4 adapter
 

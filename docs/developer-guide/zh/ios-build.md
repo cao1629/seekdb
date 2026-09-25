@@ -257,6 +257,13 @@ final symlink、case-insensitive alias 与 NFC/NFD Unicode alias 均拒绝。尚
 parent dev/ino 加 `NFD+casefold` comparison key 共享锁，因此潜在 APFS alias 并发创建也
 会串行；取得锁后再次复核 exact entry/dev/ino，stop 不会经 alias 删除真实 PID/marker。
 
+LLDB launcher 模式下，tracked mysqltest runner 会额外向 `sdb start` 传入
+`--nodaemon`。seekdb 必须在整个服务生命周期内保持为 LLDB 的原始 target；若沿用默认
+daemon 模式，父 target 在 fork 后退出，实际服务不再受 launcher 托管，`wait-ready` 会在
+任何 mysqltest case 执行前失败。该选项只作用于选中 launcher 的 macOS execution-policy
+兼容路径，不改变 Linux 或可直接执行 Mach-O 的普通 macOS daemon 行为。真实单变量验证
+已覆盖 start、SQL readiness 与 destroy 全链。
+
 这是真实完整 host mysqltest，不是静态检查，耗时取决于 272 个 case 和重试；任一 host evidence/binary/corpus 问题都会在 iOS build、签名、安装或设备发现前停止。
 
 静态 parser 审计全部 283 个 active source，并递归覆盖 `.inc`/`.sql` 输入；循环、path escape、缺失 include 或 connection/process/topology/result rewrite/error-policy 等语义均保持 host-only/not-applicable，不能静默删除。当前设备 registry 只包含 `ios.mysqltest.empty_table`：它消费 tracked `empty_table.result`，在内部 SQL proxy 上断言 statement status、affected rows、精确计数值，并从 result-set field metadata 精确断言有序字段名 `nr,b,str` 后要求 `OB_ITER_END`。其他 parser 候选在没有完整 transcript、affected-row、warning/error-domain adapter 前均保持 host-only。

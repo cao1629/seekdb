@@ -579,6 +579,7 @@ def prepare_instance(args, repo_root, sdb_script, deploy_dir):
             args.base_dir,
             "--port",
             args.port,
+            *(("--nodaemon",) if args.launcher else ()),
         ),
         "start seekdb",
         repo_root,
