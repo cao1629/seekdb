@@ -1,0 +1,7 @@
+step	workflow	finished	agents	subagent_tokens	tool_uses	duration_min	model	effort	note
+00b	wf_de414237-18a	2026-09-24T17:20Z	9	4715865	1555	141	claude-opus-5-5	max	item 8 wire and files, families 11 and 12 (implement, review, fix)
+00b	wf_9b79c3fd-ef2	2026-09-24T17:40Z	6	2990652	966	169	claude-opus-5-5	max	items 4, 6, 7: runner options and expression generator (implement, review, fix)
+1	wf_9fd55a59-9bf	2026-09-24T19:05Z	26	15126641	5087	291	claude-opus-5-5	max	design document draft (research, architecture, sections, integrate, review, revise)
+1	wf_9fd55a59-9bf	2026-09-24T19:05Z	26	15126641	5087	291	claude-opus-5-5	max	design document draft
+1	wf_2614ea82-d48	2026-09-24T19:10Z	12	4401837	1318	299	claude-opus-5-5	max	dependency map, 3 skeptic rounds
+1	wf_6ef13981-61d	2026-09-24T19:10Z	7	3333954	1353	298	claude-opus-5-5	max	inventory sweep, 2 skeptic rounds

@@ -15,7 +15,7 @@ the developer can overrule it at any time.
 | Entry gate and pinned reference (item 2) | judge/reference.md, judge/reference-build.patch, judge/reduced-init/ | done: 834bbee1e with `-ffp-contract=off` (364/364 compile commands); the reduced init; the flag leaves all 40 plan-bearing cases unchanged |
 | Restart script (item 3) | judge/harness/restart_scenarios.py, restart-scenarios.md | done: three kill-and-restart scenarios; SIGKILL sent by the harness; reviewed by Fable 5.1 and Opus 5.5; two runs identical |
 | Coverage map (item 10) | judge/coverage-076eb309b/ | done: 64.4% of functions in the core and the SQL tier; stands |
-| Validation (item 12) | judge/validation-834bbee1e.md; judge/mutations/ | the two passes: done; the mutations: see below |
+| Validation (item 12) | judge/validation-834bbee1e.md; judge/mutations/ | done: the two passes, and all 14 mutations caught |
 | Archive (item 13) | /Users/colin/seekdb-dev/ref-archive-834bbee1e/; judge/reference.md | done: rebuild from the archive reproduces compiler, SDK, libc++ and the plan-bearing output |
 
 ## Portable and internal-bound counts (00b step 1)
@@ -51,7 +51,7 @@ From judge/census/ (each file carries the command that produced it):
   (subquery.idx_with_const_expr_21_subquery_dilang) was explained from the source and confirmed on the
   reference (judge/investigations/subquery-datetime-rounding.md).
 - **Two reduced-init recordings** of the 128 plain-SQL cases are byte-identical (judge/recordings.tsv).
-- **Injected mutations:** pending (judge/mutations/, 14 patches).
+- **Injected mutations:** all 14 caught, each by at least one expected case (judge/mutations/README.md, "Results"). Five are caught by exactly one case (04, 05, 10, 13, 14). One extra failure under 07 (vector_index.rebuild_vector_index, a 4012 timeout with no output difference) is not counted as a catch and is not explained.
 
 ## Performance baselines (item 9)
 
@@ -61,3 +61,27 @@ each, median QPS: `oltp_point_select` 7,151 / 43,685 / 58,145 and `oltp_read_wri
 limit is the client or the Docker hop; these figures are for the C++-against-Rust ratio, not the
 machine's ceiling. Cold start 2-3 s, restart after a kill about 3.2 s (recorded, not gated). Item 9
 belongs to the second set; it is shown here because it is done.
+
+## The first sign-off (2026-09-25)
+
+Every condition of PLAN.md section 4, "00b's exit", for the first sign-off holds:
+
+| Condition | Evidence |
+|---|---|
+| Two runs of the 272 cases on 834bbee1e with `-ffp-contract=off`, retries off, every case outside the quarantine list passing | judge/validation-834bbee1e.md: 268 passed and the same 4 quarantined cases failed in each pass |
+| Each quarantined case with a stated reason | judge/quarantine.tsv (5 cases; the subquery case explained from the source and 20 diagnostic runs) |
+| Two reduced-init recordings of the plain-SQL cases, byte-identical outside the quarantine list | judge/recordings.tsv: 128 of 128 identical |
+| Every injected mutation caught, at least 10 | judge/mutations/README.md: 14 of 14, each by an expected case |
+| The 40 plan-bearing cases compared with and without the flag | 40 of 40 identical (PLAN.md section 8, item 3) |
+| The core-set items built (1, 2, 3, 10, 12, 13) | the harness table above |
+| The reference archived and rebuilt once from the archive | judge/reference.md |
+| The coverage numbers recorded, 64.4% standing | judge/coverage-076eb309b/README.md |
+
+The two items PLAN.md section 8 left for this sign-off take the plan's defaults (decisions.md row
+5c): item 6, the judge's files live as section 4, "Where the judge's files live", lays them out; item
+27, the trailing-whitespace tolerance is a named switch, on for CI and off in every judge run.
+
+Signed off by Claude on 2026-09-25 under the developer's goal directive ("直到完成迁移") and
+decisions.md row 5c; the departures are RULEBOOK.md DEV-006 (two sign-offs) and DEV-007 (the
+quarantine list). The developer may overrule it. The second sign-off (items 4, 6, 7, 8, 9 and the
+families) comes before Step 2a.
