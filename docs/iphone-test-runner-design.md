@@ -253,3 +253,12 @@ checkpoint and participates in the configuration fingerprint, so resume cannot
 replace evidence while skipping a passed host gate. Device-native cases require
 initialized server modules and exact ordered result metadata; zero executed
 SQL assertions cannot pass a case.
+
+Resume reloads a previously passed host gate only from the same locked run
+directory, using bounded no-follow reads, and revalidates its run ID, complete
+evidence identity, current source/corpus, and current local executable bytes.
+Pending or failed gates execute all host cases again. Runner work directories
+are created component-by-component through anchored no-follow directory
+descriptors. Host subprocesses run in a new process group under one shared
+deadline; timeout, interruption, and setup exceptions terminate and reap the
+whole group before the standalone runner returns.

@@ -7,9 +7,11 @@ import hashlib
 import json
 import os
 from pathlib import Path
+import signal
 import stat
 import subprocess
 import sys
+import time
 from typing import Mapping, Sequence
 
 import mysqltest_parser
@@ -175,12 +177,12 @@ def resolve_host_binaries(environment: Mapping[str, str]) -> dict[str, Path]:
 
 def execute_local_host_gate(
         repo_root: Path, work_directory: Path, run_id: str,
-        binaries: Mapping[str, Path], run_command=subprocess.run) -> dict:
+        binaries: Mapping[str, Path], process_runner=None) -> dict:
     """Run all selected host cases and merge evidence in this runner process."""
     repo_root = Path(repo_root)
     work_directory = Path(work_directory)
+    _prepare_host_workspace(work_directory)
     slice_directory = work_directory / "slice_0"
-    slice_directory.mkdir(parents=True, exist_ok=True)
     script = repo_root / ".github/script/seekdb/mysqltest_for_seekdb.py"
     commands = (
         [sys.executable, str(script), "run",
@@ -195,12 +197,11 @@ def execute_local_host_gate(
          "--slice-count", "1", "--run-id", run_id,
          "--output", str(work_directory / "host-result.json")],
     )
+    deadline = time.monotonic() + HOST_RUN_TIMEOUT_SECONDS
+    process_runner = process_runner or _run_controlled_process
     for command in commands:
         try:
-            completed = run_command(
-                command, cwd=str(repo_root), check=False,
-                stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-                timeout=HOST_RUN_TIMEOUT_SECONDS)
+            completed = process_runner(command, repo_root, deadline)
         except (OSError, subprocess.SubprocessError) as error:
             raise MysqltestPhaseError(
                 "host mysqltest execution failed") from error
@@ -216,12 +217,123 @@ def execute_local_host_gate(
             "host mysqltest evidence validation failed") from error
 
 
+def _open_directory_at(parent_fd: int, name: str) -> int:
+    """Open one direct real directory component without following a link."""
+    flags = (os.O_RDONLY | getattr(os, "O_DIRECTORY", 0)
+             | getattr(os, "O_NOFOLLOW", 0)
+             | getattr(os, "O_CLOEXEC", 0))
+    return os.open(name, flags, dir_fd=parent_fd)
+
+
+def _ensure_directory_at(parent_fd: int, name: str) -> int:
+    """Create and open one direct directory or reject an unsafe existing entry."""
+    if not name or name in {".", ".."} or "/" in name:
+        raise MysqltestPhaseError("host mysqltest workspace is unsafe")
+    try:
+        os.mkdir(name, mode=0o700, dir_fd=parent_fd)
+    except FileExistsError:
+        pass
+    try:
+        return _open_directory_at(parent_fd, name)
+    except OSError as error:
+        raise MysqltestPhaseError(
+            "host mysqltest workspace is unsafe") from error
+
+
+def _open_anchored_directory(path: Path) -> int:
+    """Open every absolute directory component with no symlink traversal."""
+    absolute = Path(path).expanduser().absolute()
+    descriptor = os.open(
+        os.path.sep, os.O_RDONLY | getattr(os, "O_DIRECTORY", 0)
+        | getattr(os, "O_CLOEXEC", 0))
+    try:
+        for component in absolute.parts[1:]:
+            next_descriptor = _open_directory_at(descriptor, component)
+            os.close(descriptor)
+            descriptor = next_descriptor
+        return descriptor
+    except OSError as error:
+        os.close(descriptor)
+        raise MysqltestPhaseError(
+            "host mysqltest workspace is unsafe") from error
+
+
+def _prepare_host_workspace(work_directory: Path) -> None:
+    """Create every tracked-runner directory below one anchored real parent."""
+    work_directory = Path(work_directory).expanduser().absolute()
+    try:
+        parent_fd = _open_anchored_directory(work_directory.parent)
+    except (OSError, MysqltestPhaseError) as error:
+        raise MysqltestPhaseError(
+            "host mysqltest workspace is unsafe") from error
+    opened = []
+    try:
+        work_fd = _ensure_directory_at(parent_fd, work_directory.name)
+        opened.append(work_fd)
+        slice_fd = _ensure_directory_at(work_fd, "slice_0")
+        opened.append(slice_fd)
+        opened.append(_ensure_directory_at(slice_fd, "tmp"))
+        opened.append(_ensure_directory_at(slice_fd, "mysqltest_log"))
+        opened.append(_ensure_directory_at(work_fd, "instance"))
+    finally:
+        for descriptor in reversed(opened):
+            os.close(descriptor)
+        os.close(parent_fd)
+
+
+def _terminate_process_group(process: subprocess.Popen) -> None:
+    """Boundedly terminate and reap a runner process group and descendants."""
+    try:
+        os.killpg(process.pid, signal.SIGTERM)
+    except ProcessLookupError:
+        pass
+    try:
+        process.communicate(timeout=2.0)
+        return
+    except subprocess.TimeoutExpired:
+        pass
+    try:
+        os.killpg(process.pid, signal.SIGKILL)
+    except ProcessLookupError:
+        pass
+    try:
+        process.communicate(timeout=2.0)
+    except subprocess.TimeoutExpired:
+        process.kill()
+        process.wait(timeout=2.0)
+
+
+def _run_controlled_process(
+        command: Sequence[str], cwd: Path,
+        deadline: float) -> subprocess.CompletedProcess:
+    """Run one command in a new process group under a shared absolute deadline."""
+    remaining = deadline - time.monotonic()
+    if remaining <= 0:
+        raise subprocess.TimeoutExpired(command, 0)
+    process = subprocess.Popen(
+        command, cwd=str(cwd), stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE, start_new_session=True)
+    try:
+        stdout, stderr = process.communicate(timeout=remaining)
+    except BaseException:
+        _terminate_process_group(process)
+        raise
+    return subprocess.CompletedProcess(
+        command, process.returncode, stdout, stderr)
+
+
 def _read_host_result(path: Path) -> bytes:
     """Read one bounded stable regular evidence file without following links."""
+    path = Path(path).expanduser().absolute()
     flags = (os.O_RDONLY | getattr(os, "O_CLOEXEC", 0)
              | getattr(os, "O_NONBLOCK", 0)
              | getattr(os, "O_NOFOLLOW", 0))
-    descriptor = os.open(str(path), flags)
+    parent_fd = _open_anchored_directory(path.parent)
+    try:
+        descriptor = os.open(path.name, flags, dir_fd=parent_fd)
+    except BaseException:
+        os.close(parent_fd)
+        raise
     try:
         before = os.fstat(descriptor)
         if not stat.S_ISREG(before.st_mode) or before.st_size > MAX_HOST_RESULT_BYTES:
@@ -246,6 +358,7 @@ def _read_host_result(path: Path) -> bytes:
         return b"".join(chunks)
     finally:
         os.close(descriptor)
+        os.close(parent_fd)
 
 
 def _write_json(path: Path, payload) -> None:

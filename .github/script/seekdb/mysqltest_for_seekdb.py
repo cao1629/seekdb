@@ -75,12 +75,22 @@ def _sha256_regular_file(path, maximum_size=None):
 
 def _read_json_evidence(path):
     """Load one bounded stable regular evidence file without following links."""
+    path = Path(path).expanduser().absolute()
     flags = (os.O_RDONLY | getattr(os, "O_CLOEXEC", 0)
              | getattr(os, "O_NONBLOCK", 0))
     flags |= getattr(os, "O_NOFOLLOW", 0)
+    directory_flags = (os.O_RDONLY | getattr(os, "O_DIRECTORY", 0)
+                       | getattr(os, "O_NOFOLLOW", 0)
+                       | getattr(os, "O_CLOEXEC", 0))
+    parent_fd = os.open(os.path.sep, directory_flags)
     try:
-        descriptor = os.open(str(path), flags)
+        for component in path.parent.parts[1:]:
+            next_fd = os.open(component, directory_flags, dir_fd=parent_fd)
+            os.close(parent_fd)
+            parent_fd = next_fd
+        descriptor = os.open(path.name, flags, dir_fd=parent_fd)
     except OSError as exc:
+        os.close(parent_fd)
         raise RunnerError("slice evidence is unavailable") from exc
     try:
         before = os.fstat(descriptor)
@@ -110,6 +120,7 @@ def _read_json_evidence(path):
             raise RunnerError("slice evidence is invalid") from exc
     finally:
         os.close(descriptor)
+        os.close(parent_fd)
 
 
 def source_commit(repo_root):

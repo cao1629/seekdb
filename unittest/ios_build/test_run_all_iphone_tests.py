@@ -721,6 +721,52 @@ class RunAllIphoneTestsTest(unittest.TestCase):
             })
         self.assertNotEqual(first, second)
 
+    def test_passed_resume_revalidates_artifact_without_rerunning_host_cases(self):
+        """A passed host gate resumes only from its bound locked-run evidence."""
+        identity = {
+            "run_id": "12345678-1234-5678-1234-567812345678",
+            "evidence_digest": "a" * 64,
+        }
+        checkpoint = {
+            "mysqltest_host_evidence": identity,
+            "phases": [{"cases": [{
+                "id": "ios.mysqltest.host-gate", "status": "passed"}]}],
+        }
+        with tempfile.TemporaryDirectory() as directory, \
+                mock.patch.object(
+                    cli.run_mysqltest_phase, "validate_host_gate",
+                    return_value=identity) as validate, \
+                mock.patch.object(
+                    cli.run_mysqltest_phase,
+                    "execute_local_host_gate") as execute:
+            actual = cli.prepare_mysqltest_host_evidence(
+                {"seekdb": Path("seekdb")}, Path(directory),
+                identity["run_id"], checkpoint=checkpoint)
+
+        self.assertEqual(identity, actual)
+        validate.assert_called_once()
+        execute.assert_not_called()
+
+    def test_pending_or_failed_host_gate_executes_all_host_cases(self):
+        """Only unfinished host gates invoke the tracked 272-case runner."""
+        identity = {"run_id": "runner-id", "evidence_digest": "a" * 64}
+        for status in ("pending", "failed"):
+            with self.subTest(status=status), \
+                    tempfile.TemporaryDirectory() as directory, \
+                    mock.patch.object(
+                        cli.run_mysqltest_phase, "validate_host_gate") as validate, \
+                    mock.patch.object(
+                        cli.run_mysqltest_phase, "execute_local_host_gate",
+                        return_value=identity) as execute:
+                checkpoint = {"phases": [{"cases": [{
+                    "id": "ios.mysqltest.host-gate", "status": status}]}]}
+                actual = cli.prepare_mysqltest_host_evidence(
+                    {"seekdb": Path("seekdb")}, Path(directory),
+                    "runner-id", checkpoint=checkpoint)
+                self.assertEqual(identity, actual)
+                execute.assert_called_once()
+                validate.assert_not_called()
+
     def test_dry_run_is_read_only_for_default_resume_and_restart(self):
         """Every dry-run lifecycle mode must leave the tree byte-for-byte intact."""
         timestamp = dt.datetime(2026, 9, 24, 10, tzinfo=UTC)

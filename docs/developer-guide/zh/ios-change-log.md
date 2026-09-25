@@ -350,3 +350,11 @@ python3 deps/ios-build/build.py --jobs 4 vsag
   `empty_table` 空结果不再调用 row-dependent column count，只从 result-set field
   metadata 断言 ordered `nr,b,str`，再要求 `next()==OB_ITER_END`；row-null、错误标签
   和错误终态均有 host C++ contract 回归。
+- 第四轮复审使 resume 按 host gate case 状态分流：passed 只从同一 locked run 目录
+  重载 evidence，并重新核对 checkpoint identity、run UUID、当前 corpus/source 和
+  当前本地 binary bytes；pending/failed 才重新执行 272 case。这样既不重复已通过
+  的长耗时 host suite，也不能换 evidence 后跳过。
+- `mysqltest-host`、slice、tmp、log、instance 等目录逐段通过 descriptor-anchored
+  `O_NOFOLLOW` 创建/打开，预建 symlink 或非目录立即失败。tracked runner 的 run 与
+  merge 子进程共用 absolute deadline，并各自在独立 process group 中运行；timeout、
+  SIGINT 或异常会先 TERM 整组、有界 drain，再 KILL/reap，避免遗留 seekdb/mysqltest。

@@ -127,9 +127,9 @@ SEEKDB_IPHONE_HOST_MYSQLTEST=/absolute/path/to/mysqltest \
 
 这是真实完整 host mysqltest，不是静态检查，耗时取决于 272 个 case 和重试；任一 host evidence/binary/corpus 问题都会在 iOS build、签名、安装或设备发现前停止。
 
-静态 parser 审计全部 283 个 active source，并递归覆盖 `.inc`/`.sql` 输入；循环、path escape、缺失 include 或 connection/process/topology/result rewrite/error-policy 等语义均保持 host-only/not-applicable，不能静默删除。当前设备 registry 只包含 `ios.mysqltest.empty_table`：它消费 tracked `empty_table.result`，在内部 SQL proxy 上断言 statement status、affected rows、精确计数值及空结果 column count。其他 parser 候选在没有完整 transcript、affected-row、warning/error-domain adapter 前均保持 host-only。
+静态 parser 审计全部 283 个 active source，并递归覆盖 `.inc`/`.sql` 输入；循环、path escape、缺失 include 或 connection/process/topology/result rewrite/error-policy 等语义均保持 host-only/not-applicable，不能静默删除。当前设备 registry 只包含 `ios.mysqltest.empty_table`：它消费 tracked `empty_table.result`，在内部 SQL proxy 上断言 statement status、affected rows、精确计数值，并从 result-set field metadata 精确断言有序字段名 `nr,b,str` 后要求 `OB_ITER_END`。其他 parser 候选在没有完整 transcript、affected-row、warning/error-domain adapter 前均保持 host-only。
 
-此阶段的 host contracts 已通过，但尚未执行本轮真机 build/launch；不要把注册状态写成设备 pass。真机执行仍要求完整 Xcode、唯一物理设备、匹配的 profile/private key、当前 HEAD test-hook App build/sign/install，以及可用的 host gate result。
+此阶段的 host contracts 已通过，但尚未执行本轮真机 build/launch；不要把注册状态写成设备 pass。真机执行仍要求完整 Xcode、唯一物理设备、匹配的 profile/private key、当前 HEAD test-hook App build/sign/install，以及上述三个可执行的本机 host binary。
 
 需要 macOS、完整 Xcode、CMake 和可执行的 rustup/cargo。默认使用 `/Applications/Xcode.app/Contents/Developer`，可设置 `DEVELOPER_DIR`，无需修改系统 xcode-select。`--init` 安装源码固定版本的 Rust、目标标准库和宿主 Bison/Flex；宿主工具自动安装目前仅支持 Apple Silicon。
 

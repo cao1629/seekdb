@@ -6,7 +6,9 @@ import os
 from pathlib import Path
 import subprocess
 import tempfile
+import time
 import unittest
+from unittest import mock
 
 
 SCRIPT_DIRECTORY = Path(__file__).resolve().parent
@@ -36,7 +38,7 @@ class MysqltestParserTest(unittest.TestCase):
     def test_recursive_source_preserves_errors_and_provenance(self):
         """Expand nested sources textually while retaining exact origin metadata."""
         with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
+            root = Path(directory).resolve()
             mysql_root = root / "tools/deploy/mysql_test"
             test = mysql_root / "t/demo.test"
             first = mysql_root / "include/first.inc"
@@ -308,13 +310,14 @@ class MysqltestParserTest(unittest.TestCase):
             if case.ci_selected]
         with tempfile.TemporaryDirectory() as directory:
             host_runner = parser._load_host_discovery(REPOSITORY_ROOT)
+            directory_path = Path(directory).resolve()
             binary_paths = {}
             for name in ("seekdb", "obclient", "mysqltest"):
-                path = Path(directory) / name
+                path = directory_path / name
                 path.write_bytes((name + "-binary").encode("utf-8"))
                 path.chmod(0o700)
                 binary_paths[name] = path
-            result = Path(directory) / "host.json"
+            result = directory_path / "host.json"
             identity = host_runner.build_host_evidence_identity(
                 REPOSITORY_ROOT, binary_paths)
             payload = host_runner.build_merged_evidence(
@@ -358,7 +361,7 @@ class MysqltestParserTest(unittest.TestCase):
     def test_host_gate_rejects_symlink_and_oversized_evidence(self):
         """Read host evidence through one bounded nofollow regular-file fd."""
         with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
+            root = Path(directory).resolve()
             target = root / "target.json"
             target.write_text("{}", encoding="utf-8")
             link = root / "link.json"
@@ -375,7 +378,7 @@ class MysqltestParserTest(unittest.TestCase):
         """Merge inputs must be bounded stable regular nofollow files."""
         host_runner = parser._load_host_discovery(REPOSITORY_ROOT)
         with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
+            root = Path(directory).resolve()
             target = root / "target.json"
             target.write_text("{}", encoding="utf-8")
             link = root / "link.json"
@@ -402,7 +405,7 @@ class MysqltestParserTest(unittest.TestCase):
             if case.ci_selected]
         host_runner = parser._load_host_discovery(REPOSITORY_ROOT)
         with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
+            root = Path(directory).resolve()
             binaries = {}
             for name in ("seekdb", "obclient", "mysqltest"):
                 path = root / name
@@ -413,7 +416,7 @@ class MysqltestParserTest(unittest.TestCase):
                 REPOSITORY_ROOT, binaries)
             commands = []
 
-            def fake_run(command, **_kwargs):
+            def fake_run(command, _cwd, _deadline):
                 """Materialize the exact tracked runner outputs for each command."""
                 commands.append(tuple(command))
                 if "run" in command:
@@ -432,7 +435,7 @@ class MysqltestParserTest(unittest.TestCase):
 
             summary = phase.execute_local_host_gate(
                 REPOSITORY_ROOT, root / "work", "runner-id", binaries,
-                run_command=fake_run)
+                process_runner=fake_run)
 
         self.assertEqual(2, len(commands))
         self.assertIn(str(REPOSITORY_ROOT /
@@ -441,6 +444,32 @@ class MysqltestParserTest(unittest.TestCase):
         self.assertEqual("run", commands[0][2])
         self.assertEqual("merge", commands[1][2])
         self.assertEqual("runner-id", summary["run_id"])
+
+    def test_host_workspace_rejects_symlink_components(self):
+        """Never create runner files through pre-existing directory symlinks."""
+        unsafe_components = (
+            ("mysqltest-host",),
+            ("mysqltest-host", "slice_0"),
+            ("mysqltest-host", "slice_0", "tmp"),
+            ("mysqltest-host", "slice_0", "mysqltest_log"),
+            ("mysqltest-host", "instance"),
+        )
+        for components in unsafe_components:
+            with self.subTest(component="/".join(components)), \
+                    tempfile.TemporaryDirectory() as directory:
+                root = Path(directory).resolve()
+                run = root / "run"
+                run.mkdir()
+                external = root / "external"
+                external.mkdir()
+                parent = run
+                for component in components[:-1]:
+                    parent = parent / component
+                    parent.mkdir()
+                (parent / components[-1]).symlink_to(external)
+                with self.assertRaises(phase.MysqltestPhaseError):
+                    phase._prepare_host_workspace(run / "mysqltest-host")
+                self.assertEqual([], list(external.iterdir()))
 
     def test_host_binary_inputs_must_be_local_regular_executables(self):
         """Reject missing, non-executable, and symlink host binary inputs."""
@@ -463,6 +492,52 @@ class MysqltestParserTest(unittest.TestCase):
                 environment["SEEKDB_IPHONE_HOST_MYSQLTEST"] = value
                 with self.assertRaises(phase.MysqltestPhaseError):
                     phase.resolve_host_binaries(environment)
+
+    @unittest.skipUnless(hasattr(os, "fork"), "requires process groups")
+    def test_controlled_host_runner_kills_term_ignoring_descendants(self):
+        """A shared deadline must reap a runner and every inherited child."""
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            child_pid = root / "child.pid"
+            program = (
+                "import os,signal,time,pathlib; "
+                "signal.signal(signal.SIGTERM, signal.SIG_IGN); "
+                "pid=os.fork(); "
+                f"path=pathlib.Path({str(child_pid)!r}); "
+                "path.write_text(str(pid)) if pid else None; "
+                "time.sleep(60)")
+            started = time.monotonic()
+            with self.assertRaises(subprocess.TimeoutExpired):
+                phase._run_controlled_process(
+                    [sys.executable, "-c", program], root,
+                    time.monotonic() + 0.4)
+            elapsed = time.monotonic() - started
+            self.assertLess(elapsed, 6.0)
+            pid = int(child_pid.read_text(encoding="utf-8"))
+            deadline = time.monotonic() + 3.0
+            while time.monotonic() < deadline:
+                try:
+                    os.kill(pid, 0)
+                except ProcessLookupError:
+                    break
+                time.sleep(0.05)
+            else:
+                self.fail("TERM-ignoring host runner descendant survived cleanup")
+
+    def test_controlled_host_runner_cleans_group_on_interrupt_or_exception(self):
+        """SIGINT and unexpected failures must terminate the whole process group."""
+        for failure in (KeyboardInterrupt(), RuntimeError("failure")):
+            with self.subTest(failure=type(failure).__name__):
+                process = mock.Mock(pid=12345, returncode=None)
+                process.communicate.side_effect = [failure, (b"", b"")]
+                with mock.patch.object(
+                        phase.subprocess, "Popen", return_value=process) as popen, \
+                        mock.patch.object(phase.os, "killpg") as killpg:
+                    with self.assertRaises(type(failure)):
+                        phase._run_controlled_process(
+                            ["runner"], Path.cwd(), time.monotonic() + 10)
+                self.assertTrue(popen.call_args.kwargs["start_new_session"])
+                killpg.assert_called_once_with(12345, phase.signal.SIGTERM)
 
 
 if __name__ == "__main__":

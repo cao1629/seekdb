@@ -82,10 +82,32 @@ def validate_mysqltest_host_gate(
 
 
 def prepare_mysqltest_host_evidence(
-        binaries, run_directory: Path, run_id: str):
-    """Execute the tracked host runner and return its validated identity."""
+        binaries, run_directory: Path, run_id: str,
+        checkpoint=None):
+    """Reuse passed locked evidence or execute pending/failed host coverage."""
     if binaries is None:
         return None
+    host_status = None
+    if isinstance(checkpoint, Mapping):
+        for phase in checkpoint.get("phases", ()):
+            for case in phase.get("cases", ()):
+                if case.get("id") == "ios.mysqltest.host-gate":
+                    host_status = case.get("status")
+                    break
+    if host_status == "passed":
+        expected = checkpoint.get("mysqltest_host_evidence")
+        try:
+            identity = run_mysqltest_phase.validate_host_gate(
+                REPOSITORY_ROOT,
+                Path(run_directory) / "mysqltest-host/host-result.json",
+                binaries)
+        except Exception as error:
+            raise IphoneTestCliError(
+                "mysqltest host gate resume evidence is invalid") from error
+        if (identity != expected or identity.get("run_id") != run_id):
+            raise IphoneTestCliError(
+                "mysqltest host gate resume evidence is invalid")
+        return identity
     try:
         return run_mysqltest_phase.execute_local_host_gate(
             REPOSITORY_ROOT, run_directory / "mysqltest-host",
@@ -817,7 +839,7 @@ def main(
                 else str(uuid.uuid4()))
             host_evidence_identity = prepare_mysqltest_host_evidence(
                 host_binaries, path_preview.run_directory,
-                selected_run_id)
+                selected_run_id, checkpoint=existing_checkpoint)
             if requires_test_app:
                 selected_device = select_physical_device(
                     configuration.device, discover_physical_devices())
