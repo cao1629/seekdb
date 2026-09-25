@@ -94,6 +94,16 @@
   LLDB/debugserver 存活并轮询到 target PID（包括 zombie）从 `ps` 完全消失，再清理
   debugger descendants 与 LLDB group。handler restore 期间先 block TERM/INT/HUP，完整
   恢复 handlers/pending state 后再恢复原 mask；恢复循环中的信号仍映射为 `128+signal`。
+- 修复 tracked `sdb.py --launcher` 在 seekdb 尚未生成 `run/seekdb.pid` 时无法回收 detached
+  launcher 的生命周期窗口。start 现在于 instance `run` 下以 descriptor-anchored、
+  `O_NOFOLLOW`、bounded regular、temp+fsync+no-replace link+directory fsync 的事务记录
+  launcher PID、process start identity、稳定完整 argv、Python executable、tracked
+  launcher、真实 seekdb snapshot 与 base-dir；写入失败会精确 TERM 本次 launcher 并等待
+  LLDB/target 全链清理。stop/destroy 在 managed PID 缺失或与 launcher marker 同时存在时
+  都严格重验 identity 后清理；PID 复用、regular tamper、symlink 均 fail-closed，不 kill
+  也不 rmtree。真实 tiny Mach-O 将 managed PID 延迟 30 秒的回归已验证 immediate destroy
+  返回 0、instance 删除且 launcher/LLDB/target 在 `ps` 中均无条目；未运行 272 case、
+  iOS build、签名或真机。
 
 ## 2026-09-25：standalone runner stages 1–4 adapter
 

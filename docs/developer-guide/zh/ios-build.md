@@ -219,8 +219,14 @@ launcher timeout 也为外层 client attempt 预留清理预算，避免外层�
 target PID（包括 zombie）从 `ps` 消失后才清 debugger descendants 与 LLDB group。
 handler teardown 全程 block TERM/INT/HUP，恢复全部 handlers/pending state 后才恢复原 mask。
 
-`sdb.py --launcher` 只改变结构化启动前缀；instance marker、pid inspection 与 cleanup
-仍绑定真实 seekdb snapshot 和 `--base-dir`。wait-ready obclient、init SQL obclient 和
+`sdb.py --launcher` 除结构化启动前缀外，还在 instance 的 `run` 目录中原子记录 detached
+launcher identity；marker 通过 descriptor-anchored、`O_NOFOLLOW`、regular-file、大小
+上限和 no-replace 写入约束，绑定 PID、process start identity、稳定完整 argv、launcher、
+真实 seekdb snapshot 与 `--base-dir`。因此 seekdb 尚未写出 managed PID 的启动窗口也能
+由 `stop`/`destroy` 精确向 launcher 发 TERM，触发其 LLDB/target 分层清理；managed PID 与
+launcher marker 同时存在时两条生命周期都必须完成。PID 复用、marker symlink 或 identity
+不匹配均 fail-closed，不发送信号也不删除 instance；marker 落盘失败则立即终止本次新
+launcher 并等待其全链退出。wait-ready obclient、init SQL obclient 和
 每个 mysqltest case 同样使用 launcher prefix。focused 只读验证已确认当前三个
 run-local snapshot 的 `--help`/`--version` 经 launcher 均不再返回 137；真实 tiny
 Mach-O 的 exit 7、SIGTERM 143、SIGKILL 137 也按契约传播。该验证没有启动 272 case

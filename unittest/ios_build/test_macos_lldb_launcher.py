@@ -3,6 +3,7 @@
 
 import argparse
 import importlib.util
+import json
 import os
 from pathlib import Path
 import shutil
@@ -253,6 +254,247 @@ class MacosLldbLauncherTest(unittest.TestCase):
                         "--base-dir={}".format(base_dir)]):
                 self.assertFalse(sdb.process_matches_instance(
                     123, base_dir, binary))
+
+    def test_sdb_launcher_marker_rejects_symlink_tamper_and_pid_reuse(self):
+        """Fail closed before signaling from an unsafe launcher marker."""
+        sdb = _load_sdb()
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve()
+            binary = root / "seekdb"
+            launch_script = root / "macos_lldb_launcher.py"
+            binary.write_bytes(b"binary")
+            launch_script.write_text("launcher", encoding="utf-8")
+            base_dir = root / "instance"
+            sdb.prepare_instance_directory(base_dir, binary)
+            command = [
+                sys.executable, str(launch_script), "--binary", str(binary),
+                "--", "--base-dir={}".format(base_dir), "--port=2881",
+            ]
+            record = {
+                "version": sdb.LAUNCHER_MARKER_VERSION,
+                "pid": os.getpid(),
+                "start_identity": "reused-process-identity",
+                "process_executable": str(Path(sys.executable).resolve()),
+                "launcher_executable": str(launch_script),
+                "target_binary": str(binary),
+                "base_dir": str(base_dir),
+                "argv": command,
+            }
+            sdb.write_launcher_marker(base_dir, record)
+            with mock.patch.object(sdb.os, "kill", wraps=os.kill) as kill:
+                with self.assertRaisesRegex(RuntimeError, "identity"):
+                    sdb.cleanup_launcher(base_dir, binary)
+                self.assertFalse(any(
+                    call.args == (os.getpid(), signal.SIGTERM)
+                    for call in kill.call_args_list))
+
+            marker = base_dir / "run" / sdb.LAUNCHER_MARKER_NAME
+            tampered = dict(record)
+            tampered["base_dir"] = str(root / "other-instance")
+            marker.write_text(json.dumps(tampered), encoding="utf-8")
+            with self.assertRaisesRegex(RuntimeError, "does not match"):
+                sdb.read_launcher_marker(base_dir, binary)
+            marker.unlink()
+            victim = root / "victim"
+            victim.write_text("unchanged", encoding="utf-8")
+            marker.symlink_to(victim)
+            with self.assertRaises(OSError):
+                sdb.read_launcher_marker(base_dir, binary)
+            self.assertEqual("unchanged", victim.read_text(encoding="utf-8"))
+
+    def test_sdb_marker_write_failure_stops_new_launcher(self):
+        """Invoke precise launcher cleanup when durable persistence fails."""
+        sdb = _load_sdb()
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve()
+            binary = root / "seekdb"
+            launch_script = root / "launcher.py"
+            binary.write_bytes(b"binary")
+            launch_script.write_text("launcher", encoding="utf-8")
+            base_dir = root / "instance"
+            args = argparse.Namespace(
+                base_dir=str(base_dir), binary=str(binary),
+                launcher=str(launch_script), port=2881, nodaemon=True,
+                parameter=[])
+            process = mock.Mock(pid=9911)
+            record = {"start_identity": "start-id"}
+            with mock.patch.object(
+                    sdb, "spawn_detached", return_value=process), \
+                    mock.patch.object(
+                        sdb, "_launcher_record", return_value=record), \
+                    mock.patch.object(
+                        sdb, "write_launcher_marker",
+                        side_effect=OSError("marker failure")), \
+                    mock.patch.object(sdb, "_cleanup_new_launcher") as cleanup:
+                self.assertEqual(1, sdb.command_start(args))
+            cleanup.assert_called_once_with(
+                process, sdb.build_start_command(args, base_dir), "start-id")
+
+    def test_sdb_stop_handles_managed_pid_and_launcher_marker_together(self):
+        """Stop both lifecycle records before reporting one instance stopped."""
+        sdb = _load_sdb()
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve()
+            binary = root / "seekdb"
+            binary.write_bytes(b"binary")
+            base_dir = root / "instance"
+            sdb.prepare_instance_directory(base_dir, binary)
+            run_dir = base_dir / "run"
+            run_dir.mkdir()
+            (run_dir / "seekdb.pid").write_text("7788\n", encoding="ascii")
+            args = argparse.Namespace(
+                base_dir=str(base_dir), quiet=True, require_match=True)
+            with mock.patch.object(
+                    sdb, "process_exists", return_value=True), \
+                    mock.patch.object(
+                        sdb, "process_matches_instance", return_value=True), \
+                    mock.patch.object(sdb, "terminate_pid") as terminate, \
+                    mock.patch.object(sdb, "cleanup_launcher") as cleanup:
+                self.assertEqual(0, sdb.command_stop(args))
+            terminate.assert_called_once_with(7788, base_dir, binary)
+            cleanup.assert_called_once_with(base_dir, binary)
+
+    @unittest.skipUnless(
+        sys.platform == "darwin" and shutil.which("cc"),
+        "requires macOS, clang, and LLDB")
+    def test_sdb_destroy_cleans_launcher_before_delayed_managed_pid(self):
+        """Destroy the full launcher chain before seekdb publishes its pid."""
+        source = r'''
+#include <stdio.h>
+#include <string.h>
+#include <unistd.h>
+int main(int argc, char **argv) {
+  const char *base = NULL;
+  int delay = 30;
+  for (int i = 1; i < argc; ++i) {
+    if (strncmp(argv[i], "--base-dir=", 11) == 0) base = argv[i] + 11;
+    if (strcmp(argv[i], "--port=2883") == 0) delay = 0;
+  }
+  if (base == NULL) return 2;
+  char path[4096];
+  snprintf(path, sizeof(path), "%s/target-started.pid", base);
+  FILE *started = fopen(path, "w");
+  if (started == NULL) return 3;
+  fprintf(started, "%d\n", getpid());
+  if (fclose(started) != 0) return 4;
+  sleep(delay);
+  snprintf(path, sizeof(path), "%s/run/seekdb.pid", base);
+  FILE *managed = fopen(path, "w");
+  if (managed == NULL) return 5;
+  fprintf(managed, "%d\n", getpid());
+  fclose(managed);
+  sleep(300);
+  return 0;
+}
+'''
+        sdb_script = REPOSITORY_ROOT / ".github/script/seekdb/sdb.py"
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve()
+            program = root / "delayed-seekdb"
+            base_dir = root / "instance"
+            compiled = subprocess.run(
+                ["cc", "-x", "c", "-o", str(program), "-"],
+                input=source.encode("utf-8"), capture_output=True, check=False)
+            self.assertEqual(0, compiled.returncode, compiled.stderr)
+            program.chmod(0o500)
+
+            failed_base = root / "failed-instance"
+            failed_args = argparse.Namespace(
+                base_dir=str(failed_base), binary=str(program),
+                launcher=str(phase.MACOS_LLDB_LAUNCHER), port=2882,
+                nodaemon=True, parameter=[])
+            sdb = _load_sdb()
+            original_cleanup = sdb._cleanup_new_launcher
+            failed_pids = []
+
+            def capture_and_cleanup(process, command, start_identity=None):
+                """Capture the real failed-start chain before normal cleanup."""
+                lldb_pid = _wait_for_lldb_session_leader(process.pid)
+                target_pid = _wait_for_lldb_target(lldb_pid, program)
+                failed_pids.extend((process.pid, lldb_pid, target_pid))
+                return original_cleanup(process, command, start_identity)
+
+            with mock.patch.object(
+                    sdb, "write_launcher_marker",
+                    side_effect=OSError("injected marker failure")), \
+                    mock.patch.object(
+                        sdb, "_cleanup_new_launcher",
+                        side_effect=capture_and_cleanup):
+                self.assertEqual(1, sdb.command_start(failed_args))
+            for pid in failed_pids:
+                self.assertFalse(
+                    _pid_exists(pid), "failed-start pid {} survived".format(pid))
+
+            started = subprocess.run([
+                sys.executable, str(sdb_script), "start",
+                "--binary", str(program),
+                "--launcher", str(phase.MACOS_LLDB_LAUNCHER),
+                "--base-dir", str(base_dir), "--nodaemon",
+            ], capture_output=True, text=True, timeout=15, check=False)
+            self.assertEqual(0, started.returncode, started.stderr)
+            marker_path = base_dir / "run" / ".sdb-launcher.json"
+            record = json.loads(marker_path.read_text(encoding="utf-8"))
+            launcher_pid = record["pid"]
+            lldb_pid = _wait_for_lldb_session_leader(launcher_pid)
+            target_pid = _wait_for_lldb_target(lldb_pid, program)
+            self.assertEqual(
+                target_pid,
+                _wait_for_pid_file(base_dir / "target-started.pid"))
+            try:
+                destroyed = subprocess.run([
+                    sys.executable, str(sdb_script), "destroy",
+                    "--base-dir", str(base_dir),
+                ], capture_output=True, text=True, timeout=30, check=False)
+                self.assertEqual(0, destroyed.returncode, destroyed.stderr)
+                self.assertFalse(base_dir.exists())
+                for pid in (launcher_pid, lldb_pid, target_pid):
+                    self.assertFalse(_pid_exists(pid), "pid {} survived".format(pid))
+            finally:
+                for pid in (launcher_pid, lldb_pid, target_pid):
+                    try:
+                        os.kill(pid, signal.SIGKILL)
+                    except ProcessLookupError:
+                        pass
+
+            managed_base = root / "managed-instance"
+            managed_start = subprocess.run([
+                sys.executable, str(sdb_script), "start",
+                "--binary", str(program),
+                "--launcher", str(phase.MACOS_LLDB_LAUNCHER),
+                "--base-dir", str(managed_base), "--port", "2883",
+                "--nodaemon",
+            ], capture_output=True, text=True, timeout=15, check=False)
+            self.assertEqual(0, managed_start.returncode, managed_start.stderr)
+            managed_record = json.loads((
+                managed_base / "run/.sdb-launcher.json").read_text(
+                    encoding="utf-8"))
+            managed_launcher_pid = managed_record["pid"]
+            managed_lldb_pid = _wait_for_lldb_session_leader(
+                managed_launcher_pid)
+            managed_target_pid = _wait_for_lldb_target(
+                managed_lldb_pid, program)
+            self.assertEqual(
+                managed_target_pid,
+                _wait_for_pid_file(managed_base / "run/seekdb.pid"))
+            try:
+                managed_destroy = subprocess.run([
+                    sys.executable, str(sdb_script), "destroy",
+                    "--base-dir", str(managed_base),
+                ], capture_output=True, text=True, timeout=30, check=False)
+                self.assertEqual(
+                    0, managed_destroy.returncode, managed_destroy.stderr)
+                self.assertFalse(managed_base.exists())
+                for pid in (managed_launcher_pid, managed_lldb_pid,
+                            managed_target_pid):
+                    self.assertFalse(
+                        _pid_exists(pid), "managed pid {} survived".format(pid))
+            finally:
+                for pid in (managed_launcher_pid, managed_lldb_pid,
+                            managed_target_pid):
+                    try:
+                        os.kill(pid, signal.SIGKILL)
+                    except ProcessLookupError:
+                        pass
 
     def test_default_launcher_timeout_precedes_outer_host_deadline(self):
         """Ensure the launcher owns cleanup before the outer host deadline."""

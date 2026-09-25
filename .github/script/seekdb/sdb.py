@@ -4,10 +4,13 @@
 from __future__ import print_function
 
 import argparse
+import json
 import os
+import secrets
 import shlex
 import signal
 import shutil
+import stat
 import subprocess
 import sys
 import time
@@ -24,6 +27,9 @@ PROCESS_QUERY_TIMEOUT = 5.0
 LAUNCHER_CLEANUP_BUDGET = 1.25
 INSTANCE_MARKER_NAME = ".sdb-instance"
 INSTANCE_MARKER_HEADER = "seekdb-instance-v1"
+LAUNCHER_MARKER_NAME = ".sdb-launcher.json"
+LAUNCHER_MARKER_VERSION = 1
+LAUNCHER_MARKER_MAX_BYTES = 64 * 1024
 
 
 def _error(message):
@@ -156,6 +162,275 @@ def spawn_detached(command, base_dir, console):
     )
 
 
+def read_process_start_identity(pid):
+    """Return a stable operating-system start identity for one live process."""
+    if sys.platform.startswith("linux"):
+        try:
+            process_stat = Path("/proc/{}/stat".format(pid)).read_text(
+                encoding="ascii")
+        except FileNotFoundError:
+            return None
+        command_end = process_stat.rfind(") ")
+        fields = process_stat[command_end + 2:].split() if command_end >= 0 else []
+        if len(fields) <= 19:
+            raise RuntimeError("invalid process stat for pid={}".format(pid))
+        return fields[19]
+
+    try:
+        result = subprocess.run(
+            ["ps", "-p", str(pid), "-ww", "-o", "lstart="],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.DEVNULL,
+            timeout=PROCESS_QUERY_TIMEOUT,
+            universal_newlines=True,
+            check=False,
+        )
+    except FileNotFoundError:
+        raise RuntimeError("ps is required to inspect the launcher process")
+    if result.returncode != 0 or not result.stdout.strip():
+        return None
+    return " ".join(result.stdout.split())
+
+
+def _open_run_directory(base_dir, create=False):
+    """Open the instance run directory without following its final component."""
+    directory_flags = os.O_RDONLY | getattr(os, "O_DIRECTORY", 0)
+    nofollow = getattr(os, "O_NOFOLLOW", 0)
+    base_fd = os.open(str(base_dir), directory_flags | nofollow)
+    try:
+        if create:
+            try:
+                os.mkdir("run", mode=0o700, dir_fd=base_fd)
+            except FileExistsError:
+                pass
+        return os.open("run", directory_flags | nofollow, dir_fd=base_fd)
+    finally:
+        os.close(base_fd)
+
+
+def _launcher_record(process, command, base_dir, expected_binary):
+    """Build the exact identity record for a newly detached launcher."""
+    deadline = time.monotonic() + PROCESS_QUERY_TIMEOUT
+    arguments = None
+    previous_arguments = None
+    start_identity = None
+    while time.monotonic() < deadline:
+        arguments = read_process_arguments(process.pid)
+        start_identity = read_process_start_identity(process.pid)
+        if arguments and arguments[1:] == list(command)[1:] and start_identity \
+                and arguments == previous_arguments:
+            break
+        previous_arguments = arguments
+        if process.poll() is not None:
+            break
+        time.sleep(0.05)
+    if not arguments or arguments[1:] != list(command)[1:] or not start_identity:
+        raise RuntimeError("failed to validate the newly started launcher")
+    return {
+        "version": LAUNCHER_MARKER_VERSION,
+        "pid": process.pid,
+        "start_identity": start_identity,
+        "process_executable": str(_executable_path(arguments[0])),
+        "launcher_executable": str(_executable_path(command[1])),
+        "target_binary": str(expected_binary.resolve()),
+        "base_dir": str(base_dir),
+        "argv": arguments,
+    }
+
+
+def _validate_launcher_record(record, base_dir, expected_binary):
+    """Validate marker structure and its binding to one managed instance."""
+    required = {
+        "version", "pid", "start_identity", "process_executable",
+        "launcher_executable", "target_binary", "base_dir", "argv",
+    }
+    if set(record) != required or record.get("version") != LAUNCHER_MARKER_VERSION:
+        raise RuntimeError("invalid launcher marker schema")
+    pid = record.get("pid")
+    argv = record.get("argv")
+    if not isinstance(pid, int) or pid <= 0 or not isinstance(argv, list) \
+            or not argv or not all(isinstance(value, str) for value in argv):
+        raise RuntimeError("invalid launcher marker identity")
+    scalar_keys = (
+        "start_identity", "process_executable", "launcher_executable",
+        "target_binary", "base_dir",
+    )
+    if not all(isinstance(record.get(key), str) and record[key]
+               for key in scalar_keys):
+        raise RuntimeError("invalid launcher marker identity")
+    if record["base_dir"] != str(base_dir) \
+            or record["target_binary"] != str(expected_binary.resolve()):
+        raise RuntimeError("launcher marker does not match this instance")
+    expected_base_argument = "--base-dir={}".format(base_dir)
+    if len(argv) < 6 or _executable_path(argv[0]) != Path(
+            record["process_executable"]) \
+            or _executable_path(argv[1]) != Path(record["launcher_executable"]) \
+            or argv[2:4] != ["--binary", record["target_binary"]] \
+            or expected_base_argument not in argv:
+        raise RuntimeError("launcher marker command is invalid")
+    return record
+
+
+def write_launcher_marker(base_dir, record):
+    """Atomically persist one launcher identity through an anchored directory."""
+    payload = (json.dumps(record, sort_keys=True, separators=(",", ":"))
+               + "\n").encode("utf-8")
+    if len(payload) > LAUNCHER_MARKER_MAX_BYTES:
+        raise RuntimeError("launcher marker is too large")
+    run_fd = _open_run_directory(base_dir, create=True)
+    temporary_name = ".sdb-launcher.{}.{}.tmp".format(
+        os.getpid(), secrets.token_hex(8))
+    descriptor = None
+    try:
+        try:
+            existing = os.stat(
+                LAUNCHER_MARKER_NAME, dir_fd=run_fd, follow_symlinks=False)
+        except FileNotFoundError:
+            existing = None
+        if existing is not None:
+            raise RuntimeError("launcher marker already exists")
+        descriptor = os.open(
+            temporary_name,
+            os.O_WRONLY | os.O_CREAT | os.O_EXCL | getattr(os, "O_NOFOLLOW", 0),
+            0o600,
+            dir_fd=run_fd,
+        )
+        with os.fdopen(descriptor, "wb", closefd=True) as stream:
+            descriptor = None
+            stream.write(payload)
+            stream.flush()
+            os.fsync(stream.fileno())
+        os.link(
+            temporary_name, LAUNCHER_MARKER_NAME,
+            src_dir_fd=run_fd, dst_dir_fd=run_fd,
+            follow_symlinks=False)
+        os.unlink(temporary_name, dir_fd=run_fd)
+        os.fsync(run_fd)
+    finally:
+        if descriptor is not None:
+            os.close(descriptor)
+        try:
+            os.unlink(temporary_name, dir_fd=run_fd)
+        except FileNotFoundError:
+            pass
+        os.close(run_fd)
+
+
+def read_launcher_marker(base_dir, expected_binary):
+    """Read a bounded regular launcher marker without following links."""
+    try:
+        run_fd = _open_run_directory(base_dir)
+    except FileNotFoundError:
+        return None
+    descriptor = None
+    try:
+        try:
+            descriptor = os.open(
+                LAUNCHER_MARKER_NAME,
+                os.O_RDONLY | getattr(os, "O_NOFOLLOW", 0),
+                dir_fd=run_fd,
+            )
+        except FileNotFoundError:
+            return None
+        metadata = os.fstat(descriptor)
+        if not stat.S_ISREG(metadata.st_mode) \
+                or metadata.st_size > LAUNCHER_MARKER_MAX_BYTES:
+            raise RuntimeError("launcher marker is not a bounded regular file")
+        payload = os.read(descriptor, LAUNCHER_MARKER_MAX_BYTES + 1)
+        if len(payload) != metadata.st_size:
+            raise RuntimeError("launcher marker changed while reading")
+        try:
+            record = json.loads(payload.decode("utf-8"))
+        except (UnicodeDecodeError, json.JSONDecodeError, RecursionError):
+            raise RuntimeError("launcher marker is invalid")
+        if not isinstance(record, dict):
+            raise RuntimeError("launcher marker is invalid")
+        return _validate_launcher_record(record, base_dir, expected_binary)
+    finally:
+        if descriptor is not None:
+            os.close(descriptor)
+        os.close(run_fd)
+
+
+def remove_launcher_marker(base_dir):
+    """Remove a regular launcher marker through its anchored run directory."""
+    try:
+        run_fd = _open_run_directory(base_dir)
+    except FileNotFoundError:
+        return
+    try:
+        try:
+            metadata = os.stat(
+                LAUNCHER_MARKER_NAME, dir_fd=run_fd, follow_symlinks=False)
+        except FileNotFoundError:
+            return
+        if not stat.S_ISREG(metadata.st_mode):
+            raise RuntimeError("launcher marker is not a regular file")
+        os.unlink(LAUNCHER_MARKER_NAME, dir_fd=run_fd)
+        os.fsync(run_fd)
+    finally:
+        os.close(run_fd)
+
+
+def _launcher_process_matches(record):
+    """Return whether a live process still has the recorded launcher identity."""
+    arguments = read_process_arguments(record["pid"])
+    start_identity = read_process_start_identity(record["pid"])
+    return arguments == record["argv"] \
+        and start_identity == record["start_identity"]
+
+
+def terminate_launcher_record(record):
+    """Terminate one revalidated launcher and wait for its layered cleanup."""
+    pid = record["pid"]
+    if not process_exists(pid):
+        return
+    if not _launcher_process_matches(record):
+        raise RuntimeError("launcher pid={} identity does not match marker".format(pid))
+    try:
+        os.kill(pid, signal.SIGTERM)
+    except ProcessLookupError:
+        return
+    if not wait_process_exit(pid, STOP_TIMEOUT):
+        raise RuntimeError("launcher pid={} did not finish cleanup".format(pid))
+
+
+def cleanup_launcher(base_dir, expected_binary):
+    """Clean a persisted launcher or safely discard its exited marker."""
+    record = read_launcher_marker(base_dir, expected_binary)
+    if record is None:
+        return
+    terminate_launcher_record(record)
+    remove_launcher_marker(base_dir)
+
+
+def _cleanup_new_launcher(process, _command, start_identity=None):
+    """Stop a just-spawned launcher when durable marker creation fails."""
+    if process.poll() is not None:
+        return
+    current_start = read_process_start_identity(process.pid)
+    if start_identity is not None and current_start != start_identity:
+        raise RuntimeError("new launcher identity changed before cleanup")
+    process.terminate()
+    try:
+        process.wait(timeout=STOP_TIMEOUT)
+    except subprocess.TimeoutExpired:
+        raise RuntimeError("new launcher did not finish cleanup")
+
+
+def _remove_owned_launcher_marker(base_dir, expected_binary, expected_record):
+    """Remove a failed start marker only when it is exactly the new record."""
+    try:
+        persisted = read_launcher_marker(base_dir, expected_binary)
+    except FileNotFoundError:
+        return
+    if persisted is None:
+        return
+    if persisted != expected_record:
+        raise RuntimeError("launcher marker is owned by a different start")
+    remove_launcher_marker(base_dir)
+
+
 def command_start(args):
     base_dir = _base_dir(args.base_dir)
     log_dir = base_dir / "log"
@@ -166,6 +441,20 @@ def command_start(args):
         log_dir.mkdir(parents=True, exist_ok=True)
         with (log_dir / "console.log").open("ab") as console:
             process = spawn_detached(command, base_dir, console)
+        if getattr(args, "launcher", None):
+            record = None
+            try:
+                record = _launcher_record(
+                    process, command, base_dir, _executable_path(args.binary))
+                write_launcher_marker(base_dir, record)
+            except (OSError, RuntimeError, ValueError):
+                _cleanup_new_launcher(
+                    process, command,
+                    record.get("start_identity") if record else None)
+                if record is not None:
+                    _remove_owned_launcher_marker(
+                        base_dir, _executable_path(args.binary), record)
+                raise
     except (OSError, RuntimeError, ValueError) as exc:
         _error("failed to start seekdb: {}".format(exc))
         return 1
@@ -409,19 +698,24 @@ def command_stop(args):
     pid_file = base_dir / "run" / "seekdb.pid"
 
     try:
+        expected_binary = read_instance_binary(base_dir)
+    except (OSError, ValueError) as exc:
+        _error("unsafe base-dir {}: {}".format(base_dir, exc))
+        return 1
+
+    try:
         pid_text = pid_file.read_text(encoding="utf-8").strip()
     except FileNotFoundError:
+        try:
+            cleanup_launcher(base_dir, expected_binary)
+        except (OSError, RuntimeError, ValueError) as exc:
+            _error("failed to stop seekdb launcher: {}".format(exc))
+            return 1
         if not getattr(args, "quiet", False):
             print("stopped")
         return 0
     except OSError as exc:
         _error("failed to read {}: {}".format(pid_file, exc))
-        return 1
-
-    try:
-        expected_binary = read_instance_binary(base_dir)
-    except (OSError, ValueError) as exc:
-        _error("unsafe base-dir {}: {}".format(base_dir, exc))
         return 1
 
     try:
@@ -431,12 +725,22 @@ def command_stop(args):
     except ValueError:
         _warning("removing invalid pid file {}: {!r}".format(pid_file, pid_text))
         remove_pid_file(pid_file)
+        try:
+            cleanup_launcher(base_dir, expected_binary)
+        except (OSError, RuntimeError, ValueError) as exc:
+            _error("failed to stop seekdb launcher: {}".format(exc))
+            return 1
         if not getattr(args, "quiet", False):
             print("stopped")
         return 0
 
     if not process_exists(pid):
         remove_pid_file(pid_file)
+        try:
+            cleanup_launcher(base_dir, expected_binary)
+        except (OSError, RuntimeError, ValueError) as exc:
+            _error("failed to stop seekdb launcher: {}".format(exc))
+            return 1
         if not getattr(args, "quiet", False):
             print("stopped")
         return 0
@@ -460,6 +764,11 @@ def command_stop(args):
             )
         )
         remove_pid_file(pid_file)
+        try:
+            cleanup_launcher(base_dir, expected_binary)
+        except (OSError, RuntimeError, ValueError) as exc:
+            _error("failed to stop seekdb launcher: {}".format(exc))
+            return 1
         if not getattr(args, "quiet", False):
             print("stopped")
         return 0
@@ -471,6 +780,12 @@ def command_stop(args):
         return 1
 
     remove_pid_file(pid_file)
+
+    try:
+        cleanup_launcher(base_dir, expected_binary)
+    except (OSError, RuntimeError, ValueError) as exc:
+        _error("failed to stop seekdb launcher: {}".format(exc))
+        return 1
 
     if not getattr(args, "quiet", False):
         print("stopped")
