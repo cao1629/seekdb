@@ -31,6 +31,16 @@ elseif(APPLE)
   if(NOT _jemalloc_osx_architectures)
     set(_jemalloc_osx_architectures "${ARCHITECTURE}")
   endif()
+  list(LENGTH _jemalloc_osx_architectures _jemalloc_osx_architecture_count)
+  if(OB_MACOS27 AND _jemalloc_osx_architecture_count EQUAL 1)
+    list(GET _jemalloc_osx_architectures 0 _jemalloc_macos27_architecture)
+    if(_jemalloc_macos27_architecture MATCHES "^(arm64|aarch64)$")
+      # Avoid executing configure probes that macOS 27 can terminate while the
+      # vendored build script is preparing the native Apple Silicon library.
+      string(APPEND _jemalloc_configure_args
+        "\n--host=aarch64-apple-darwin")
+    endif()
+  endif()
   foreach(_jemalloc_osx_architecture IN LISTS _jemalloc_osx_architectures)
     string(APPEND _jemalloc_cflags " -arch ${_jemalloc_osx_architecture}")
   endforeach()

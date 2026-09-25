@@ -26,6 +26,15 @@
   tracked `sdb.py destroy`，只作用于本 run 的 anchored instance 与 marker/binary
   identity；真实编译的 detached fake seekdb 回归验证 daemon、pid 和 instance 均被
   清理。本轮未执行真实 272 case、iOS build、签名或真机。
+- 随后的真实 macOS 27 ARM64 host release 构建在 Rust build.rs 已由 tracked LLDB
+  wrapper 正常执行后，暴露 jemalloc configure conftest 被 SIGKILL 9 的独立故障。
+  `deps/external/cmake/Jemalloc.cmake` 仅在 `OB_MACOS27` 且目标架构列表恰为单一
+  ARM64 时向 `JEMALLOC_SYS_CONFIGURE_ARGS` 追加
+  `--host=aarch64-apple-darwin`；普通 macOS、macOS 27 x86_64、既有 iOS
+  `--host=aarch64-apple-ios` 及 Android 保持不变。新增 focused 测试用真实 CMake
+  生成并执行 Cargo custom command，检查 fake Cargo 最终收到的环境。本轮没有
+  触碰正在生成的 `build_release`，也未运行完整 host build、真实 272 case、签名或
+  真机测试。
 
 ## 2026-09-25：standalone runner stages 1–4 adapter
 
