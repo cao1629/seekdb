@@ -34,7 +34,9 @@ CODE_EXTS = ('.h', '.hh', '.hpp', '.hxx', '.c', '.cc', '.cpp', '.cxx', '.ipp', '
 CATEGORIES = (
     'atomic-fields', 'refcount', 'const-cast', 'ret-compare', 'reset', 'tmp-ret', 'ret-alias', 'oom-sites',
     'server-service-slots', 'subclassed-bases', 'arena-handoff', 'borrowed-views', 'sort-hash-order',
-    'pointer-identity', 'overflow', 'float-contraction',
+    'pointer-identity', 'overflow', 'float-contraction', 'lock-guards', 'printf-calls', 'fast-parser', 'sizeof-formulas',
+    'work-area-formulas', 'memmove', 'frame-internals', 'storage-sql-uses', 'batch-end-tracepoints', 'local-expr-factories',
+    'null-arrays', 'expr-factory-callers', 'warning-buffer-sites',
 )
 
 PLAN_FIGURES = {
@@ -54,6 +56,19 @@ PLAN_FIGURES = {
     'pointer-identity': 'none (evidence: 34 pointer-keyed map sites in optimizer and rewrite)',
     'overflow': 'none (no figure in the plan)',
     'float-contraction': 'none (no figure in the plan)',
+    'lock-guards': "One row per lock declaration (RULEBOOK section 5; s8-numerics-platform.md rules 5.1, 5.3, 5.7, 5.8), outside the primitives' own directory src/oblib/lib/lock, comments and strings blanked. A lock type is an OB lock primitive (ObLatch, ObLatchMutex, ObSpinLock, lib::ObMutex, ObUtilMutex, ObFutex, SpinRWLock, TCRWLock, DRWLock, ObRWLock, ObQSyncLock, ObSmallSpinLock and ObByteLock, ObPtrSpinLock, ObRowLatch, ObBucketLock, ObBucketQSyncLock, ObRecursiveMutex, ObThreadCond, ObCond, Cond, SimpleCond, the per-CPU condition SCondTemp and its alias SCond, LWaitCond, ObMonitor, the reader-count syncs ObQSync, ObDynamicQSync and TCRef, and the no-op ObNullLock, NLock and NCond); a pthread mutex, spin lock, read-write lock or condition; libeasy's easy_spinrwlock_t; a std mutex, shared mutex or condition variable; a class derived from one of these; a class whose name ends in Lock, Latch, Mutex or Cond whose primary definition (not an explicit or partial specialization) holds a lock member by value, or that defines lock, unlock, rdlock, wrlock, try_lock or a similar operation other than an accessor that takes no argument and returns a reference or pointer (CtxLock, ObLSLock, MemtableMgrLock, the keybtree's own RWLock; ObBucketLockCond, which only holds a reference to its bucket and whose lock() and cond() return the bucket's members, is not one, so its locals are not rows); or a typedef, using alias or object-like #define of any of them (zstd's ZSTD_pthread_mutex_t; an alias declared in a class applies to that class and its file; a name that is both a lock class and an alias is the class only in the class's own file stem; a primitive with a platform typedef keeps its own kind, and the row notes the typedef: pthread_spinlock_t is a pthread_mutex_t under #ifdef __APPLE__). Names ending in Monitor are not lock words: the one synchronization monitor, obutil::ObMonitor, is a primitive, and the other classes named so are services such as ObPxTargetMonitor. Rows: every field, static member, global, function static and local declared with such a type, arrays included (a declarator list gives one row per name; a declaration inside a #define body is one row per body line and the uses of the macro are not rows; members of C structs declared with typedef struct {...} name are members of that name); every pointer or reference member or global of a lock type, which points at a lock declared elsewhere or allocated at run time; every declaration whose type holds lock objects as elements (std::pair, std::tuple, std::array and the OB and std arrays and lists: std::pair<ObBucketLock, ObBucketLock>); every member whose type is a template parameter when the type or the member name has a lock, latch, mutex or cond word, pointer and reference members included (SetLocker's t_lock &mutex_); and every integer, char or bool field, static member or global whose name has a lock, latch, mutex or spin word and that its file stem acquires with a test-and-set or compare-and-swap (ATOMIC_TAS, ATOMIC_BCAS, ATOMIC_CAS, the __sync and __atomic builtins, and macros that wrap them, such as TP_BCAS), with a guard object built on it, or with an acquire call that takes its address: a hand-made spin lock, whose atomic accesses are also rows of atomic-fields.tsv (the state fields of a lock class and the references held by a guard are left out). Instances of templates that take a lock type as a parameter are not rows: ObLightHashMap<.., SpinRWLock>, ObPool<.., ObNullLock>, and ObHashMap and ObHashSet, whose default LatchReadWriteDefendMode locks every bucket; the template's own lock member is a row (ob_light_hashmap.h:532, ob_pool.h:77, ob_hashtable.h:247), and an instance's lock follows from its template argument. Rows in libeasy and zstd carry [vendored]. Each row gives the kind (mutex, read-write lock, bucket lock, reentrant mutex, condition, spin lock, reader-count sync, no-op lock, lock class, hand-made spin lock), where it is declared, and the guard objects (a *Guard type, std::lock_guard, unique_lock; each argument of the guard that names a lock counts, a leading this does not) and lock calls (lock, unlock, rdlock, wrlock, try_*, wait, signal, pthread_*) that name it in its file stem: for a member, only those in methods of its class and its subclasses, with those through another object and those inside #define bodies given separately as not attributed; for a local or function static, those in its function; with the timed ones (a guard type with Timeout or Retry, or an argument with a time, timeout, deadline, expire, ts or us word, so ObLatchIds::SERVER_RUNTIME_LOCK is not timed) and the try ones. The guarded fields, the functions called with the lock held and the nesting order are left to the classifier. Not seen: uses through an accessor (get_lock()), locks whose type a macro pastes together, local pointers and references to locks, function parameters of lock type, lock-like classes whose names do not end in Lock, Latch, Mutex or Cond and do not derive from a primitive, and hand-made spin locks whose names have no lock word.",
+    'printf-calls': 'Every call of a printf-family function or macro, comments and strings blanked, definitions and declarations excluded (a call whose arguments are all parameter declarations is a declaration): the C library\'s printf, fprintf, dprintf, sprintf, snprintf, asprintf and their v forms; every function whose definitions end their parameters with a const char * format parameter (named like fmt or format) and ..., or pass a va_list after it; and every function-like macro that passes one of its parameters, or its variadic arguments, on as the format of such a call (BUF_PRINTF, DATA_PRINTF, _OB_LOG and the other underscore log macros, HASH_WRITE_LOG, FORWARD_USER_ERROR_MSG, the type-name printers of ob_obj_type.cpp), found to a fixed point. Where other overloads of a name are not printf-like (databuff_printf\'s object templates, add_plan_note(const ObString &), set_extra_info in other classes), each call is matched to an overload: by the receiver\'s class when the overloads sit in different classes (a call whose receiver does not resolve is counted below), then by argument count (a databuff_printf call with 3 arguments or with 5 and more can only be a printf overload), then by the argument at the format position: a string literal, a string macro, a concatenation of string macro parameters, a const char * constant, local or expression, or a char array is the printf overload (a non-const char * binds the T * template instead); a call whose argument there has a type the script does not resolve is a row marked overload not resolved. Calls count in function bodies the scanner does not recognize (explicit specializations such as ob_tuple.h\'s print_<sizeof...(T) - 1>, functions with trailing macros such as __THROW) and in the grammar actions of .y and .l files. A call inside the body of a macro that passes its format on is not a row, the macro\'s uses are; a call with a fixed format inside any other #define body is one row per body line (J_NAME, PRINT_BOUND), and that macro\'s uses are not rows. Each row gives the format as written with string literals (backslash-newline splices joined, raw string literals read), PRI* macros expanded to their macOS arm64 values and object-like macros whose body is a string literal or a concatenation of such macros (NEW_LINE, FETCH_ALL_COLUMN_SQL) resolved; a format held in a const char * constant or local initialized with literals (DIGIT_FORMAT, the array BACK_DIGIT_FORMAT, a ternary of literals) is shown with its values, and a ternary of literals as the format gives the conversions of each branch; preprocessor branches inside the argument list are resolved for macOS arm64 (_WIN32 and __linux__ off, __APPLE__ on). Then the conversions, the argument expressions after the format and each argument\'s type where the script resolves it (literals, casts, sizeof, locals and parameters, members of the enclosing class and its bases, globals and const char * constants, member and method steps through resolved classes, typedefs, functions whose return types the tree declares, a few libc functions, and macros that expand to a call, a cast or several arguments such as LEN_AND_PTR; ? where it does not), the conversions paired with the argument types, a mark when the argument count differs from what the conversions take, and marks: format not a literal, forwards a va_list, has %p, writes the server log (the underscore log macros, logdata_printf), records a user message (it reaches the client), writes stdout, stderr or a file, inside to_string. LOG_USER_ERROR, LOG_USER_WARN and LOG_USER_NOTE are not rows: their format is the catalog\'s, which s2-errors.md 2.7 and 2.11 check. The key-value log macros (LOG_WARN("msg", K(x))) are not printf calls. Not seen: calls through function pointers or std::function, formats built at run time (marked format not a literal), argument types the resolution does not reach, templates\' argument types, and whether a buffer\'s text reaches the client, which the classifier decides.',
+    'fast-parser': "Each branch of ObFastParser's lexer (src/sql/parser/ob_fast_parser.{h,cpp}: ObFastParser, ObFastParserBase, ObFastParserMysql and the macros defined in those files) that makes or selects a parameter: the innermost case label group, or if, else-if or else branch, around a statement that sets cur_token_type_ = PARAM_TOKEN, builds a node (new_node with a T_ type, add_bool_type_node, add_null_type_node, lex_store_param), assigns a T_ node type (param_type = T_INT, node->type_ = T_NUMBER), calls a function or macro with a T_ type argument (CHECK_AND_PROCESS_NUMBER(T_DOUBLE)), or calls a lexer function that does any of these, found to a fixed point (process_number, process_string, process_hex_number, process_binary, process_time_relate_type, process_negative and the rest), in its body or in its own condition (else if (OB_FAIL(process_number(true)))). One row per branch, at its header, with what it produces and the chain of branches around it. A branch whose condition only tests an error or an allocation (every part of it joined by && or || is OB_FAIL, OB_SUCC, OB_ISNULL, OB_NOT_NULL, a NULL, OB_SUCCESS or ret comparison, and it calls no lexer function that produces a parameter), or the else of such a test, is not a row: what it produces moves to the nearest enclosing branch that is one (if (OB_SUCC(ret) && PARAM_TOKEN == cur_token_type_) gets node T_HEX_STRING, the else of process_string's allocation test gives its enclosing else T_VARCHAR and lex_store_param). A branch that only sets PARAM_TOKEN names the node types its function builds (T_HEX_STRING for process_hex_number and process_binary). T_INVALID assignments are not products. Whether the grammar makes the same constant a parameter is left to the classifier, against sql_parser_mysql_mode.y. Not seen: the identifier path reached through the process_idf_func_ member-function pointer from the default case (its own branches are rows), and literal recognition in helpers that branch on nothing.",
+    'sizeof-formulas': "Proxy for s5-execution.md rule 4.9. Every sizeof in the execution code (src/sql/engine, src/sql/code_generator, src/sql/das, src/sql/dtl, src/query/api/query/engine), comments and strings blanked, whose statement names a batch size, bucket, dump, bypass, cache size, memory bound or limit, frame size, rowset, row count, partition count or shift, threshold, memory size, used, hold or data size, capacity or max size, or whose enclosing function's name says batch size, bucket, dump, bypass, memory bound, cache size, frame size, header size, memory size, memory used or partition; left out when the innermost call around it only allocates, copies, compares bytes, hashes, serializes, sets, creates, extends or resets, and in static_asserts and array dimensions. A sizeof whose statement assigns a local is followed through the function (and through the locals computed from that one, three steps deep; logging is ignored): when every later use only sizes an allocation, a copy or a memset or offsets a pointer (a buffer layout: buf + pos, mem += size, mem - begin != size), it is left out whatever its words, the same as a size written inside alloc(...); when a use reaches a statement with the decision words above or a call that decides (check_can_insert, need_dump, dump and the like), it is a row even without decision words in its own statement, and the row names the local and the statement it reaches (the subquery result cache's need_size, the frame packing's item_size). A named constant whose value is a sizeof expression (DATUM_EVAL_INFO_SIZE, FIX_SIZE_PER_PART, BIG_BLOCK_SIZE), defined in these directories, is a row at each use there that meets the same tests. One row per sizeof or constant use. Not seen: sizes that reach a decision through a member computed elsewhere (a store's mem_used_ summed per row), decision formulas outside these directories, and statements and callees whose words the vocabulary misses.",
+    'work-area-formulas': "Proxy for s5-execution.md rule 6.9, outside the work area's own files (src/sql/engine/ob_sql_mem_mgr_processor.{h,cpp}, ob_sql_memory_manager.{h,cpp}), comments and strings blanked: each call on an ObSqlMemMgrProcessor (a member, pointer or local named like mem_processor) that reports a figure to the work area: init with its cache-size argument, alloc, update_used_mem_size, update_cache_size, update_delta_used_mem_size, set_number_pass, and update_max_available_mem_size_periodically and extend_max_memory_size with the return expressions of their callbacks; each statement that compares (<, >, <=, >=) a work-area figure (get_data_size, get_mem_bound, get_max_bound, get_max_available_mem_size, get_expect_size, get_cache_size) read next to a processor, a profile or a memory context, a getter of the same class whose body only returns such a figure (get_mem_bound_size(), get_memory_limit(), found to a fixed point; a getter of another class with the same name does not count), or a local computed from either in the same function (detect_part_cnt's availble_mem_size, adjust_part_cnt's max_part_cnt): the dump and partition decisions; and in the row stores, row arrays and hash tables under src/sql/engine and src/query/api/query/engine, each comparison with the store's own mem_limit_: the stores' own dump decisions. The formula behind each reported value, often in a helper such as get_mem_used_size(), is the classifier's to follow. Not seen: memory accounted without a processor call, processors reached through a name that does not say mem_processor, and figures that reach a decision through a member or another function.",
+    'memmove': "Every MEMMOVE, memmove, std::memmove and __builtin_memmove call, comments and strings blanked, the MEMMOVE macro's own definitions and ob_memmove_safe left out, tagged by directory: src/sql/engine/expr (the 17 lines of s5-execution.md rule 3.5), the expression core under src/query/api/query/engine/expr (ObExpr's deep copy, the overlap ob_expr.h:1108 marks), and elsewhere. Calls in the C parser cores, in the grammar actions of the .y and .l files, and in vendored zstd are rows too, with their file flags. Not seen: result writes whose source may be the destination's own buffer but that copy with MEMCPY, memcpy or a loop, which rule 3.5 also covers.",
+    'frame-internals': "Lines of the operator files, the *_op.{h,cpp} and *_op_impl.{h,cpp} files under src/sql/engine (comments and strings blanked), that reach into frame internals: frames_; the frame layout members frame_idx_, datum_off_, res_buf_off_, res_buf_len_, eval_info_off_, eval_flags_off_, pvt_skip_off_, dyn_buf_header_offset_ and vector_header_off_; locate_expr_datum, locate_batch_datums, locate_datum_for_write, locate_datums_for_update, locate_param_datum and the datum-vector forms; get_evaluated_flags, get_eval_info, get_pvt_skip, get_str_res_mem, get_reset_tmp_alloc, reset_ptr_in_datum; the evaluated and projected flag setters; BatchInfoScopeGuard; the batch index and size accessors; and reinterpret_cast to ObDatum. One row per line, listing what it uses and marking the lines R05's narrower pattern matches as whole names (frames_, locate_batch_datums, locate_expr_datum, locate_datum_for_write, get_evaluated_flags, get_eval_info, get_pvt_skip, reinterpret_cast<ObDatum). A call of the operator base method clear_evaluated_flag() (on this or another operator) is marked: it clears the eval flags of the operator's own output exprs (ob_operator.h:700-705), and a line with nothing else says it is no direct frame access. Not seen: helpers outside the operator files that operators call to reach the frame (the row stores, the aggregate processor, ob_batch_eval_util.h), and frame access through local aliases of these members.",
+    'storage-sql-uses': "Lines under src/storage, comments and strings blanked, that use SQL objects: every line naming the sql namespace (sql::X, oceanbase::sql::X), with the names; every using namespace sql and using sql::X line; in a file with such a using line, every line that names without qualification a type declared at namespace scope inside namespace sql and in no other namespace (or the X of using sql::X); and each namespace sql { } block in a storage file: its opening line (with what it declares or defines), each line inside it that names such a type, and each SQL function it defines, at the function's header with its line range (ob_block_row_store.cpp defines sql::PushdownFilterInfo::init). R05's 1,070 lines were git grep over raw text, comments included. Not seen: SQL types reached through storage's own typedefs or templates, SQL functions and constants named without qualification, the lines of a defined SQL function that name no SQL type (its row gives the range), and SQL objects handed over as void pointers.",
+    'batch-end-tracepoints': "Reads of tracepoints (EventTable::EN_* through EVENT_CALL, OB_E or EVENT_CODE, and errsim points a file defines with ERRSIM_POINT_DEF and reads by name), comments and strings blanked: every read of the four tracepoints s5-execution.md rule 4.6 names (311 EN_DAS_SIMULATE_GROUP_SIZE, 1200 EN_ENABLE_NEWSORT_FORCE, 2206 EN_ENABLE_RANDOM_BATCH_SIZE, 2501 EN_CHECK_SORT_CMP), tree-wide, and their definitions in ob_tracepoint_def.h; and, in the execution side and the optimizer (src/sql, src/query, src/storage/access, src/storage/blocksstable, src/share/vector, src/share/aggregate), every other read used as a value, a switch or a number, whatever its name says, since rule 4.6 also keeps tracepoints that pick algorithms and a name can hide the effect (EN_ENABLE_RANDOM_TSC randomizes table-scan batch sizes, EN_GENERATE_PLAN_WITH_NLJ and EN_FORCE_SLAVE_MAPPING pick plans). A read counts as a number when it is negated or passed through abs (EVENT_CALL, OB_E and EVENT_CODE alike), or when the code stores it in ret, reads ret back as a number and resets ret to OB_SUCCESS (EN_ENABLE_THREE_STAGE_AGGREGATE's parity picks the algorithm). A read inside OB_FAIL or OB_SUCC is an error injection only when the branch it takes when the tracepoint fires does nothing but log, set ret or return; otherwise it is a switch that also sets ret (tracepoint 551 at ob_explain_log_plan.cpp:143). Each row says how it is read, whether init.sql sets it, what batch, row, dump, sort, hash, bypass or cache word its name has, and the statement. Reads that only inject an error into ret (ret = OB_E(..), OB_FAIL(OB_E(..)) with such a branch, return OB_E(..)) and sets (TP_SET_EVENT) are not rows. Not seen: errsim points read through another file, and effects decided far from the read.",
+    'local-expr-factories': '41 lines (s4-sql-front.md 2.3, evidence/s4-sql-front/counts2.txt)',
+    'null-arrays': "Places where an array of IR pointers holds NULL (s4-sql-front.md 2.5 rule 15), comments and strings blanked, outside the C parser cores: push_back(NULL or nullptr); an element set to NULL (x.at(i) = NULL, x[i] = NULL); prepare_allocate and prepare_allocate_and_keep_count, whose new slots hold NULL until set; and extend_param_exprs. The array must resolve to pointers of an IR type (the pointer-identity list, ObExpr included), the element type being the outermost container's first template argument (an array of arrays, ObSEArray<ObSEArray<ObLogicalOperator*, 4>, 3>, holds empty arrays, not NULL, and is left out): a local or parameter declared as a container, C array or pointer-to-pointer of them (the nearest declaration of the name before the call); a member reached through a receiver, x.member or x->member, by the declared type of x (spec.values_ in the code generator, typedefs of arrays such as ExprFixedArray expanded); a member of the enclosing class whose declared container type holds them (by class, then by file stem); a member name that holds IR pointers in at least 80% of its declarations; a getter that returns such an array in at least 80% of its declarations; or, failing those, the declared type the argument-type resolution of printf-calls finds for the receiver expression. An array that resolves to other pointers or to non-pointers is left out; in the resolver, rewrite, optimizer, code generator, printer and PL directories a push_back(NULL), NULL store or prepare_allocate on an array that does not resolve is a row marked not resolved. Parse-tree children_ stores are left out: 1.2 rule 2 already makes a NULL child None. Not seen: arrays filled by assign or copy from an array that holds NULL, NULL passed through setters such as set_param_expr, and arrays reached through chains the resolution cannot follow.",
+    'expr-factory-callers': "Every call of get_expr_factory(), comments and strings blanked, definitions and declarations excluded, in files outside src/sql/resolver, src/sql/rewrite and src/sql/optimizer (inside them RULEBOOK 2.4 makes the exec context's factory f.own()). Each row names the receiver: the exec context, an expression's own factory (2.3 rule 4), a PL AST's or package's factory, the optimizer context's, or unresolved, by the receiver's declared type when it resolves and by its name otherwise; marks a call whose result is stored into a compile context's expr_factory_ or passed to the constructor of a resolver, transformer or optimizer context (ObPLResolver, ObOptimizerContext, ObResolverParams): a hand-off to a compilation; says whether s4-sql-front.md 2.3 rule 5 counts the call among the ten hand-offs (the six in ob_sql.cpp and the four in ob_pl_build.cpp) or names it among the execution-time callers (SET, the outline executor, LOAD DATA, SPI, PL user-defined aggregates), so a row where the code and that list disagree (LOAD DATA's resolver context at ob_load_data_impl.cpp:94, the outline executor's optimizer context at ob_outline_executor.cpp:233) shows both; and gives the statement. Whether each runs at execution time or hands the factory to a compilation is the classifier's. Not seen: the exec context's factory used through a pointer cached earlier (ObRawExprFactory *f = ...; later uses of f), and calls inside the three compilation directories that run at execution time.",
+    'warning-buffer-sites': 'the 15 sites s2-errors.md 2.6 rule 5 lists',
 }
 
 GENERATED_PATH_RE = re.compile(
@@ -1915,6 +1930,7 @@ def init_worker(ctx):
                                        + r')\b')
     counted = sorted(ctx['count_macros'])
     ctx['count_macro_re'] = re.compile(r'\b(' + '|'.join(re.escape(n) for n in counted) + r')\b') if counted else None
+    init_new_lists(ctx)
 
 
 def enclosing_class(symbol):
@@ -1956,6 +1972,25 @@ def call_kind(src, i, name, prefix, paren_off):
         if t.group(1) in ('{', ':') and (typed or bare):
             return 'definition'
     return 'call'
+
+
+def body_call_kind(src, i, name, prefix, paren_off):
+    ck = call_kind(src, i, name, prefix, paren_off)
+    if ck != 'declaration' or prefix.strip() or src.dkind.get(i) in ('define', 'cont'):
+        return ck
+    if src.path.endswith(('.y', '.l')):
+        return 'call'
+    code = src.code
+    opener = block_opener(code, paren_off)
+    if opener < 0:
+        return ck
+    hs, header = header_before(code, opener)
+    h = re.sub(r'^[ \t]*#.*$', ' ', header, flags=re.M).strip()
+    if re.search(r'\)\s*(?:(?:const|volatile|noexcept|override|final|mutable|__THROW|[A-Z_][A-Z0-9_]*(?:\s*\([^()]*\))?)\s*)*$', h) \
+            and not re.match(r'(?:(?:typedef|template\s*<[^>]*>)\s+)?(?:class|struct|union|namespace|enum)\b', h) \
+            or re.fullmatch(r'(?:else|do|try)', h):
+        return 'call'
+    return ck
 
 
 def refcount_rows(src, ctx):
@@ -3643,6 +3678,19 @@ def pass_b(repo, paths):
             'arena-handoff': handoff_rows(src, ctx, stats),
             'borrowed-views': view_function_rows(src, ctx),
             'subclassed-bases': macro_invocation_rows(src, ctx),
+            'lock-guards': lock_guard_rows(src, ctx, stats),
+            'printf-calls': printf_rows(src, ctx, stats),
+            'fast-parser': fast_parser_rows(src, ctx, stats),
+            'sizeof-formulas': sizeof_rows(src, ctx, stats),
+            'work-area-formulas': work_area_rows(src, ctx),
+            'memmove': memmove_rows(src, ctx),
+            'frame-internals': frame_internal_rows(src, ctx, stats),
+            'storage-sql-uses': storage_sql_rows(src, ctx, stats),
+            'batch-end-tracepoints': tracepoint_rows(src, ctx, stats),
+            'local-expr-factories': expr_factory_decl_rows(src, ctx),
+            'null-arrays': null_array_rows(src, ctx, stats),
+            'expr-factory-callers': expr_factory_caller_rows(src, ctx),
+            'warning-buffer-sites': warning_buffer_rows(src, ctx),
         }
         for cat, items in per.items():
             for item in items:
@@ -5022,6 +5070,9 @@ def sweep(repo, paths, jobs):
         'ref_first_names': ref_names,
         'refcount_specific': frozenset(refcount_specific),
     }
+    new_ctx = new_list_context(repo, paths, jobs, classes, aliases, members, func_index, func_defs, defines, methods,
+                               method_names, ir_types)
+    ctx.update(new_ctx)
     b_results = run_parallel(pass_b, repo, paths, jobs, ctx)
     rows = collections.defaultdict(list)
     stats = collections.Counter()
@@ -5061,6 +5112,7 @@ def sweep(repo, paths, jobs):
         'hash_alias': hash_alias,
         'timing': (t1 - t0, t2 - t1), 'budget_codes': ctx['budget_codes'],
     }
+    info.update(new_ctx)
     return rows, info
 
 
@@ -5381,9 +5433,3757 @@ def derived_figures(rows, info):
     fc = clean_rows(rows.get('float-contraction', []))
     out['float-contraction'] = '(Measured: %d fma calls; %d multiply-add rows, %d of them statements over several lines.)' % (
         count_constructs(fc, r'^fma call'), count_constructs(fc, r'^multiply-add'), count_constructs(fc, r'statement spans lines'))
+    out.update(new_list_figures(rows, info))
     for cat in CATEGORIES:
         n = sum(1 for r in clean_rows(rows.get(cat, [])) if '[not built]' in r[3])
         out[cat] = out.get(cat, '') + (' %d rows are in files the build never compiles and carry [not built].' % n if n else '')
+    return out
+
+
+LOCK_PRIMITIVES = {
+    'ObLatchMutex': 'mutex', 'ObSpinLock': 'mutex', 'ObMutex': 'mutex', 'ObUtilMutex': 'mutex', 'ObFutex': 'futex',
+    'ObSmallSpinLock': 'spin lock', 'ObByteLock': 'spin lock', 'ObPtrSpinLock': 'spin lock', 'ObRowLatch': 'spin lock',
+    'ObLatch': 'read-write lock', 'SpinRWLock': 'read-write lock', 'TCRWLock': 'read-write lock',
+    'DRWLock': 'read-write lock', 'ObRWLock': 'read-write lock', 'ObQSyncLock': 'read-write lock',
+    'ObBucketLock': 'bucket lock', 'ObBucketQSyncLock': 'bucket lock', 'ObRecursiveMutex': 'reentrant mutex',
+    'ObThreadCond': 'condition', 'ObCond': 'condition', 'Cond': 'condition', 'SimpleCond': 'condition',
+    'SCondTemp': 'condition', 'LWaitCond': 'condition', 'ObMonitor': 'condition', 'ObQSync': 'reader-count sync',
+    'ObDynamicQSync': 'reader-count sync', 'TCRef': 'reader-count sync', 'ObNullLock': 'no-op lock', 'NLock': 'no-op lock',
+    'NCond': 'no-op lock', 'pthread_mutex_t': 'mutex', 'pthread_spinlock_t': 'spin lock',
+    'pthread_rwlock_t': 'read-write lock', 'pthread_cond_t': 'condition', 'easy_spinrwlock_t': 'read-write lock',
+}
+LOCK_PLATFORM_ALIASES = {'pthread_spinlock_t': 'a typedef of pthread_mutex_t under #ifdef __APPLE__, ob_platform_utils.h'}
+LOCK_ELEMENT_CONTAINER_RE = re.compile(
+    r'^(?:std::)?(?:pair|tuple|array|vector|deque|list)$|^Ob\w*(?:Array|List|Vector|Wrap)$|^ObSEArray$|^ObFixedArray$')
+LOCK_ACCESSOR_RET_RE = re.compile(r'[&*]\s*$')
+SPIN_ACQUIRE_PRIMITIVES = ('ATOMIC_TAS', 'ATOMIC_BCAS', 'ATOMIC_CAS', 'ATOMIC_VCAS', '__sync_lock_test_and_set',
+                           '__sync_bool_compare_and_swap', '__sync_val_compare_and_swap', '__atomic_test_and_set',
+                           '__atomic_compare_exchange_n', '__atomic_compare_exchange', '__atomic_exchange_n')
+SPIN_LOCK_WORDS = frozenset(('lock', 'locks', 'latch', 'mutex', 'spin', 'spinlock', 'spinlocks'))
+SPIN_LOCK_DECL_RE = re.compile(
+    r'(?<![\w:.>~#])(?P<quals>(?:(?:static|mutable|volatile|thread_local|extern|inline)\s+)*)'
+    r'(?P<type>(?:(?:unsigned|signed)\s+)?(?:u?int(?:8|16|32|64)?(?:_t)?|char|bool|long(?:\s+long)?|short|int32|int64|'
+    r'uint32|uint64|easy_atomic_t|easy_atomic32_t)(?:\s+volatile)?)\b(?P<ptr>\s*[*&]*\s*|\s+)(?P<name>[A-Za-z_]\w*)\s*'
+    r'(?P<arr>(?:\[[^\]\n;]*\]\s*)*)(?:CACHE_ALIGNED\s*)?(?P<end>[;=({,])')
+LOCK_STD_KINDS = {
+    'mutex': 'mutex', 'timed_mutex': 'mutex', 'recursive_mutex': 'reentrant mutex',
+    'recursive_timed_mutex': 'reentrant mutex', 'shared_mutex': 'read-write lock', 'shared_timed_mutex': 'read-write lock',
+    'condition_variable': 'condition', 'condition_variable_any': 'condition',
+}
+LOCK_WRAPPER_NAME_RE = re.compile(r'(?:Lock|Latch|Mutex|Cond)$')
+LOCK_OP_NAMES = frozenset(('lock', 'unlock', 'rdlock', 'wrlock', 'rdunlock', 'wrunlock', 'try_lock', 'try_rdlock',
+                           'try_wrlock'))
+LOCK_PRIMITIVE_DIR = 'src/oblib/lib/lock/'
+LOCK_NAME_TOKENS = frozenset(('lock', 'locks', 'latch', 'latches', 'mutex', 'mutexes', 'cond', 'rwlock', 'spinlock'))
+LOCK_DECL_TEMPLATE = (
+    r'(?<![\w:.>~#])(?P<quals>(?:(?:static|mutable|volatile|thread_local|extern|inline|constexpr|const)\s+)*)'
+    r'(?P<ns>(?:::\s*)?(?:[A-Za-z_]\w*\s*::\s*)*)(?P<word>%s)\b(?P<targs>\s*<(?:[^<>;{}()]|<[^<>;{}()]*>)*>)?'
+    r'(?P<cv>(?:\s+(?:const|volatile)\b)*)(?P<ptr>\s*[*&]+\s*|\s+)(?:const\s+)?(?P<name>[A-Za-z_]\w*)\s*'
+    r'(?P<arr>(?:\[[^\]\n;]*\]\s*)*)(?:(?:CACHE_ALIGNED|__attribute__\s*\(\((?:[^()]|\([^()]*\))*\)\)|'
+    r'DEF_ALIGN\s*\([^()]*\)|alignas\s*\([^()]*\))\s*)*(?P<end>[;=({,])')
+LOCK_CONTAINER_TEMPLATE = (
+    r'(?<![\w:.>~#])(?:(?:static|mutable)\s+)*(?P<outer>(?:(?:::\s*)?[A-Za-z_]\w*\s*::\s*)*[A-Za-z_]\w*)\s*'
+    r'<(?P<inner>[^;{}()]*?\b(?:%s)\b[^;{}()]*?)>\s*(?P<ptr>[*&]*)\s*(?P<name>[A-Za-z_]\w*)\s*(?P<arr>(?:\[[^\]\n;]*\]\s*)*)'
+    r'(?P<end>[;=({])')
+LOCK_GUARD_RE = re.compile(
+    r'(?<![\w:.>])((?:[A-Za-z_]\w*\s*::\s*)*\w*?(?:Guard|lock_guard|unique_lock|shared_lock|scoped_lock)\w*)\s*'
+    r'(?:<[^;{}()]*>)?\s+[A-Za-z_]\w*\s*([({])')
+LOCK_GUARD_TYPE_RE = re.compile(r'Lock|Latch|Mutex|Cond|Spin|QSync|Bucket|lock_guard|unique_lock|shared_lock|scoped_lock')
+LOCK_CALL_RE = re.compile(
+    r'([A-Za-z_]\w*)\s*(\[[^\[\];]*\]\s*)?(\(\s*\)\s*)?(?:\.|->)\s*(lock|unlock|rdlock|wrlock|rdunlock|wrunlock|wr2rdlock|'
+    r'try_lock|try_rdlock|try_wrlock|trylock|timedlock|lock_timeout|try_lock_for|try_lock_until|wait|wait_us|'
+    r'timedwait|timed_wait|signal|broadcast|notify_one|notify_all)\s*\(')
+LOCK_ACQUIRE_OPS = frozenset(('lock', 'rdlock', 'wrlock', 'try_lock', 'try_rdlock', 'try_wrlock', 'trylock', 'timedlock',
+                              'lock_timeout', 'try_lock_for', 'try_lock_until'))
+PTHREAD_LOCK_CALL_RE = re.compile(r'\bpthread_(mutex|rwlock|spin|cond)_(\w+)\s*\(\s*&?\s*([A-Za-z_][\w.\->\[\]]*)')
+TIMED_ARG_WORDS = frozenset(('time', 'timeout', 'timeouts', 'deadline', 'expire', 'expired', 'us', 'ts'))
+
+C_PRINTF_FUNCTIONS = {
+    'printf': (0, 'variadic'), 'fprintf': (1, 'variadic'), 'dprintf': (1, 'variadic'), 'sprintf': (1, 'variadic'),
+    'snprintf': (2, 'variadic'), 'asprintf': (1, 'variadic'), 'vprintf': (0, 'va_list'), 'vfprintf': (1, 'va_list'),
+    'vdprintf': (1, 'va_list'), 'vsprintf': (1, 'va_list'), 'vsnprintf': (2, 'va_list'), 'vasprintf': (1, 'va_list'),
+}
+PRINTF_SINKS = {
+    'log_message_fmt': 'server log', 'log_message_va': 'server log', 'logdata_printf': 'server log',
+    'logdata_vprintf': 'server log', 'log_user_message': 'user message', 'printf': 'standard stream',
+    'vprintf': 'standard stream', 'fprintf': 'stream', 'vfprintf': 'stream', 'dprintf': 'stream', 'vdprintf': 'stream',
+}
+PRINTF_SINK_TEXT = {
+    'server log': 'writes the server log', 'user message': 'records a user message, which reaches the client',
+    'standard stream': 'writes stdout', 'stream': 'writes a stream or file',
+}
+IDENT_PAREN_RE = re.compile(r'(?<![\w])([A-Za-z_]\w*)\s*\(')
+PRINTF_FMT_PARAM_RE = re.compile(r'\bconst\s+char\s*\*\s*(?:const\s+)?(\w*(?:fmt|format|FMT|Format)\w*)\s*$')
+PRINTF_LOG_JOIN_RE = re.compile(r'\b(_?)LOG_MACRO_JOIN\s*\(\s*USING_LOG_PREFIX\s*,\s*(_LOG\w*)\s*\)\s*\(')
+PRINTF_ATTR_RE = re.compile(
+    r'\b([A-Za-z_]\w*)\s*\((?:[^()]|\((?:[^()]|\([^()]*\))*\))*\)\s*(?:const\s*)?__attribute__\s*\(\(\s*(?:__)?format(?:__)?\s*'
+    r'\(\s*(?:__)?printf(?:__)?\s*,')
+STRING_MACRO_RE = re.compile(r'\s*#\s*define\s+\w+\s+((?:(?:u8|u|U|L)?"(?:[^"\\]|\\.)*"\s*)+)(?://.*|/\*.*\*/)?\s*$')
+STRING_PIECE_RE = re.compile(r'(?:u8|u|U|L)?R"(?P<d>[^()\\\s"]{0,16})\((?P<raw>.*?)\)(?P=d)"|'
+                             r'(?:u8|u|U|L)?"(?P<s>(?:[^"\\\n]|\\.)*)"|(?P<id>[A-Za-z_]\w*)', re.S)
+PRINTF_CONVERSION_RE = re.compile(r'%(?:%|[-+ #0\']*(?:\*|\d+)?(?:\.(?:\*|\d+))?(?:hh|h|ll|l|L|q|j|z|t)?[diouxXeEfFgGaAcspn])')
+PRI_MACRO_RE = re.compile(r'PRI([diouxX])(8|16|32|64|PTR|MAX|LEAST8|LEAST16|LEAST32|LEAST64|FAST8|FAST16|FAST32|FAST64)$')
+PRI_LENGTH = {'8': 'hh', '16': 'h', '32': '', '64': 'll', 'PTR': 'l', 'MAX': 'j'}
+
+FAST_PARSER_PATHS = ('src/sql/parser/ob_fast_parser.cpp', 'src/sql/parser/ob_fast_parser.h')
+FAST_PRODUCER_RE = re.compile(
+    r'\bcur_token_type_\s*=\s*PARAM_TOKEN\b|\bnew_node\s*\(\s*\w+\s*,\s*(\w+)\s*\)|(?<![\w.>])(\w*type\w*)\s*=\s*(T_[A-Z0-9_]+)\b|'
+    r'->\s*type_\s*=\s*(T_[A-Z0-9_]+)\b|\b(add_bool_type_node|add_null_type_node|lex_store_param)\s*\(')
+FAST_T_ARG_CALL_RE = re.compile(r'\b([A-Za-z_]\w*)\s*\(([^;{}()]*\bT_[A-Z0-9_]+\b[^;{}()]*)\)')
+FAST_NOT_CALLEES = frozenset(('if', 'while', 'for', 'switch', 'return', 'OZ', 'OX', 'OB_FAIL', 'OB_SUCC', 'OB_UNLIKELY',
+                              'OB_LIKELY', 'CK', 'OV', 'new_node'))
+FAST_NODE_HELPERS = frozenset(('new_node', 'reset_parser_node', 'lex_store_param', 'add_bool_type_node',
+                               'add_null_type_node'))
+FAST_ERROR_COND_RE = re.compile(
+    r'^\s*!?\s*(?:OB_(?:FAIL|SUCC|ISNULL|NOT_NULL)\s*\(|\(?\s*(?:NULL|nullptr|OB_SUCCESS|ret)\s*[!=]=|'
+    r'[^&|]*[!=]=\s*(?:NULL|nullptr|OB_SUCCESS|ret)\s*\)?\s*$)')
+CASE_LABELS_RE = re.compile(r'((?:\b(?:case\s[^;{}]*?[^:]:(?!:)|default\s*:(?!:))\s*)+)\s*$')
+
+SIZEOF_DIRS = ('src/sql/engine/', 'src/sql/code_generator/', 'src/sql/das/', 'src/sql/dtl/', 'src/query/api/query/engine/')
+SIZEOF_RE = re.compile(r'\bsizeof\s*(?:\.\.\.\s*)?\(')
+SIZEOF_SKIP_CALLEE_RE = re.compile(
+    r'(?i)^(?:\w*alloc\w*|malloc|calloc|realloc|reserve\w*|prepare_allocate\w*|OB_NEW\w*|new|mem(?:cpy|set|move|cmp|ccpy)|'
+    r'strn?cpy|strn?cmp|strncat|\w*printf|\w*serializ\w*|encode\w*|decode\w*|static_assert|STATIC_ASSERT|OB_ASSERT|assert|'
+    r'abort_unless|set_string|assign_ptr|from_buf|write\w*|read\w*|append\w*|copy\w*|deep_copy\w*|push_back|\w*hash\w*|crc\w*|'
+    r'ob_crc64\w*|bzero|placement_new|construct\w*|MEMSET|MEMCPY|MEMMOVE|MEMCMP|OB_UNIS\w*|LST_DO_CODE|OB_SERIALIZE\w*|'
+    r'fill\w*|get_serialize_size|set_\w+|init_buf\w*|reset\w*|create_\w+|extend|prepare\w*|resize)$')
+DECISION_WORD_RE = re.compile(
+    r'(?i)batch_size|max_batch|batch_cnt|batch_row|bucket|dump|bypass|cache_size|l2_cache|l3_cache|mem_bound|max_bound|'
+    r'mem_limit|memory_limit|max_mem|frame_size|rowset|max_row|row_cnt|row_count|part_cnt|part_shift|partition|threshold|'
+    r'mem_size|mem_used|used_size|hold_size|data_size|extend_max|capacity|max_size')
+DECISION_FUNCTION_RE = re.compile(
+    r'(?i)batch_size|bucket|dump|bypass|mem_bound|cache_size|frame_size|header_size|mem_size|mem_used|partition|part_cnt')
+
+WORK_AREA_SKIP = ('src/sql/engine/ob_sql_mem_mgr_processor.h', 'src/sql/engine/ob_sql_mem_mgr_processor.cpp',
+                  'src/sql/engine/ob_sql_memory_manager.h', 'src/sql/engine/ob_sql_memory_manager.cpp')
+WORK_AREA_CALL_RE = re.compile(
+    r'\b([A-Za-z_]\w*(?:mem_processor|mem_mgr_processor)\w*)\s*(?:\.|->)\s*(init|alloc|update_used_mem_size|'
+    r'update_cache_size|update_max_available_mem_size_periodically|extend_max_memory_size|set_number_pass|'
+    r'update_delta_used_mem_size)\s*\(')
+WORK_AREA_OWNER_PATTERN = r'mem_processor|sql_mem|profile_|mem_context'
+ROW_STORE_DIRS = ('src/sql/engine/', 'src/query/api/query/engine/')
+WORK_AREA_FIGURE_NAMES = ('get_mem_bound', 'get_max_bound', 'get_max_available_mem_size', 'get_expect_size', 'get_cache_size',
+                          'get_data_size')
+WORK_AREA_FIGURE_RE = re.compile(
+    r'\b(get_mem_bound|get_max_bound|get_max_available_mem_size|get_expect_size|get_cache_size|get_data_size)\s*\(\s*\)')
+WORK_AREA_DECISION_RE = re.compile(r'(?<![<>=!-])(?:<=|>=|<(?![<=])|>(?![>=]))(?!=)')
+
+MEMMOVE_RE = re.compile(r'(?<![\w.>])(?:std\s*::\s*)?(MEMMOVE|memmove|__builtin_memmove)\s*\(')
+MEMMOVE_PRIMITIVES = frozenset(('ob_memmove_safe',))
+
+OPERATOR_FILE_RE = re.compile(r'^src/sql/engine/.*_op(?:_impl)?\.(?:h|cpp|ipp)$')
+FRAME_INTERNAL_RE = re.compile(
+    r'\b(frames_|frame_idx_|datum_off_|res_buf_off_|res_buf_len_|eval_info_off_|eval_flags_off_|pvt_skip_off_|'
+    r'dyn_buf_header_offset_|vector_header_off_|locate_expr_datum|locate_batch_datums|locate_datum_for_write|'
+    r'locate_datums_for_update|locate_param_datum|locate_param_datumvector|locate_expr_datumvector|get_evaluated_flags|'
+    r'get_eval_info|get_pvt_skip|get_str_res_mem|get_reset_tmp_alloc|reset_ptr_in_datum|clear_evaluated_flag|'
+    r'set_evaluated_flag|set_evaluated_projected|BatchInfoScopeGuard|set_batch_idx|set_batch_size|get_batch_idx|'
+    r'get_batch_size)\b|\b(reinterpret_cast\s*<\s*(?:const\s+)?(?:common\s*::\s*)?ObDatum\b)')
+FRAME_INTERNAL_R05 = frozenset(('frames_', 'locate_batch_datums', 'locate_expr_datum', 'locate_datum_for_write',
+                                'get_evaluated_flags', 'get_eval_info', 'get_pvt_skip', 'reinterpret_cast<ObDatum'))
+
+SQL_QUALIFIED_RE = re.compile(r'(?<![\w])(?:(?:::\s*)?oceanbase\s*::\s*)?sql\s*::\s*(~?[A-Za-z_]\w*)')
+USING_SQL_RE = re.compile(
+    r'\busing\s+namespace\s+(?:::\s*)?(?:oceanbase\s*::\s*)?sql\s*;|\busing\s+(?:::\s*)?(?:oceanbase\s*::\s*)?sql\s*::\s*'
+    r'([A-Za-z_]\w*)\s*;')
+NAMESPACE_OPEN_RE = re.compile(r'\bnamespace\s+([A-Za-z_][\w:]*)\s*\{')
+SQL_NAMESPACE_OPEN_RE = re.compile(r'\bnamespace\s+(?:oceanbase\s*::\s*)?sql\s*\{')
+NS_TYPE_RE = re.compile(
+    r'\b(?:class|struct|union|enum(?:\s+class|\s+struct)?)\s+(?:(?:alignas|__attribute__|DEF_ALIGN)\s*\((?:[^()]|\([^()]*\))*\)\s*)*'
+    r'([A-Za-z_]\w*)\s*(?:final\s*)?(?::(?!:)[^;{}]*)?\{|\busing\s+([A-Za-z_]\w*)\s*=|'
+    r'\btypedef\b[^;{}]*?\b([A-Za-z_]\w*)\s*(?:\[[^\]]*\]\s*)*;')
+
+RULE_46_TRACEPOINTS = (311, 1200, 2206, 2501)
+TRACEPOINT_DEF_PATH = 'src/oblib/lib/utility/ob_tracepoint_def.h'
+TRACEPOINT_INIT_SQL = 'tools/deploy/init.sql'
+TRACEPOINT_DIRS = ('src/sql/', 'src/query/', 'src/storage/access/', 'src/storage/blocksstable/', 'src/share/vector/',
+                   'src/share/aggregate/', 'src/oblib/lib/utility/ob_sort.h')
+GLOBAL_TP_RE = re.compile(r'\bEventTable\s*::\s*(EN_\w+)')
+LOCAL_TP_DEF_RE = re.compile(r'\bERRSIM_POINT_DEF\s*\(\s*([A-Za-z_]\w*)')
+TP_SET_CALLEE_RE = re.compile(r'^(?:TP_SET\w*|TP_SWITCH_GUARD|SET_TP\w*)$')
+TP_TOPIC_RE = re.compile(r'(?i)BATCH|ROW_?COUNT|ROW_?CNT|ROWSET|GROUP_SIZE|DUMP|SORT|HASH|BYPASS|CACHE')
+
+FACTORY_DECL_RE = re.compile(
+    r'(?<![\w:.>~#])(?:(?:static|mutable)\s+)*(?:(?:::\s*)?(?:oceanbase\s*::\s*)?sql\s*::\s*)?ObRawExprFactory\s+'
+    r'([A-Za-z_]\w*)\s*([;({])')
+FACTORY_NEW_RE = re.compile(
+    r'\bOB_NEW\w*\s*\(\s*(?:(?:::\s*)?(?:oceanbase\s*::\s*)?sql\s*::\s*)?ObRawExprFactory\b|'
+    r'\bnew\s*(?:\((?:[^()]|\([^()]*\))*\)\s*)?(?:(?:::\s*)?(?:oceanbase\s*::\s*)?sql\s*::\s*)?ObRawExprFactory\s*\(')
+EXPR_FACTORY_CALL_RE = re.compile(r'\bget_expr_factory\s*\(\s*\)')
+COMPILE_CONTEXT_CTOR_RE = re.compile(
+    r'\s*(?:(?:HEAP_VAR|SMART_VAR)\s*\(\s*(?:[A-Za-z_]\w*::)*((?:Ob\w*(?:Resolver|Transformer|Optimizer)\w*|ObResolverParams|'
+    r'ObTransformerCtx|ObOptimizerContext))\s*,|(?:const\s+)?(?:[A-Za-z_]\w*::)*((?:Ob\w*(?:Resolver|Transformer|Optimizer)\w*|'
+    r'ObResolverParams|ObTransformerCtx|ObOptimizerContext))\s+[A-Za-z_]\w*\s*\()')
+DESIGN_EXEC_TIME_FACTORY_CALLERS = (
+    ('ob_variable_set_executor.cpp', 119, 127, 'SET'),
+    ('ob_outline_executor.cpp', 221, 233, 'the outline executor'),
+    ('ob_load_data_impl.cpp', 94, 94, 'LOAD DATA'),
+    ('ob_load_data_impl.cpp', 1752, 1752, 'LOAD DATA'),
+    ('ob_spi.cpp', 657, 657, 'SPI'),
+    ('ob_spi.cpp', 682, 682, 'SPI'),
+    ('ob_pl_user_defined_agg_function.cpp', 40, 50, 'PL user-defined aggregates'),
+)
+COMPILATION_DIRS = ('src/sql/resolver/', 'src/sql/rewrite/', 'src/sql/optimizer/')
+
+NULL_PUSH_RE = re.compile(r'(?:\.|->)\s*push_back\s*\(\s*(?:NULL|nullptr)\s*\)')
+NULL_ELEMENT_RE = re.compile(r'(?:(?:\.|->)\s*at\s*\((?:[^()]|\([^()]*\))*\)|\[[^\[\]]+\])\s*=\s*(?:NULL|nullptr)\s*;')
+NULL_FILL_RE = re.compile(r'(?:\.|->)\s*(prepare_allocate(?:_and_keep_count)?|extend_param_exprs)\s*\(')
+NULL_ARRAY_DIRS = ('src/sql/resolver/', 'src/sql/rewrite/', 'src/sql/optimizer/', 'src/sql/code_generator/', 'src/pl/',
+                   'src/sql/pl/', 'src/sql/printer/')
+C_POINTER_ARRAY_RE = re.compile(r'\b((?:[A-Za-z_]\w*::)*[A-Z]\w*)\s*\*\s*([A-Za-z_]\w*)\s*\[[^\]]*\]\s*[;=]')
+POINTER_ARRAY_TYPE_RE = re.compile(
+    r'\b\w*(?:Array|List|Vector|Wrap)\s*<\s*(?:const\s+)?((?:[A-Za-z_]\w*::)*[A-Za-z_]\w*)\s*\*')
+LOCAL_POINTER_ARRAY_RE = re.compile(
+    r'\b\w*(?:Array|List|Vector|Wrap)\s*<\s*(?:const\s+)?((?:[A-Za-z_]\w*::)*[A-Za-z_]\w*)\s*\*[^;{}()]*?>\s*[&*]?\s*'
+    r'([A-Za-z_]\w*)\s*[;,)=({]|\b((?:[A-Za-z_]\w*::)*[A-Z]\w*)\s*\*\s*\*\s*([A-Za-z_]\w*)\s*[;=,)]')
+NULL_ARRAY_SKIP_DIRS = ('src/sql/parser/', 'src/pl/parser/')
+IR_ARRAY_TYPE_RE = re.compile(
+    r'\b(?:ObIArray|ObSEArray|ObArray|ObFixedArray|ObSqlArray|ObArrayWrap|ObList|Ob2DArray|ObRawExprUniqueSet)\s*<\s*'
+    r'(?:const\s+)?([A-Z]\w*)\s*\*')
+
+WARNING_BUFFER_PRIMITIVES = ('src/oblib/lib/oblog/ob_warning_buffer.h', 'src/oblib/lib/oblog/ob_warning_buffer.cpp')
+WARNING_BUFFER_CALL_RE = re.compile(r'\b(ob_setup_tsi_warning_buffer|ob_setup_default_tsi_warning_buffer)\s*\(')
+WARNING_BUFFER_SCOPE_RE = re.compile(r'\bObWarningBufferIgnoreScope\s+[A-Za-z_]\w*\s*[;({]')
+WARNING_BUFFER_ASSIGN_RE = re.compile(r'\bob_get_tsi_warning_buffer\s*\(\s*\)\s*=(?!=)')
+WARNING_BUFFER_LISTED = (
+    ('obmp_base.h', 122, 128, 'the request entries, ObMPBase::setup_wb'),
+    ('obmp_base.cpp', 369, 369, 'the end of a request'),
+    ('obmp_init_db.cpp', 150, 150, 'the end of a request'),
+    ('ob_mysql_end_trans_cb.cpp', 169, 169, 'the end of a request'),
+    ('ob_mysql_end_trans_cb.cpp', 220, 220, 'the end of a request'),
+    ('ob_worker_processor.cpp', 110, 111, 'the worker entry'),
+    ('ob_req_queue_thread.cpp', 86, 87, 'the request-queue entry'),
+    ('ob_px_task_process.cpp', 100, 101, 'the PX task entry'),
+    ('ob_load_data_impl.cpp', 1188, 1188, 'an ignore scope'),
+    ('ob_spi.cpp', 4953, 4953, 'an ignore scope'),
+    ('ob_dynamic_sampling.cpp', 521, 521, 'an ignore scope'),
+    ('ob_create_package_resolver.cpp', 202, 202, 'an ignore scope'),
+    ('ob_trigger_handler.cpp', 447, 463, "the trigger call's private buffer"),
+    ('ob_transform_utils.cpp', 10088, 10096, 'a warning probe'),
+    ('ob_transform_utils.cpp', 10137, 10149, 'a warning probe'),
+)
+
+
+def aligned_blank(m):
+    s = m.group(0)
+    if s[0] == '/':
+        return re.sub(r'[^\n]', ' ', s)
+    q = min(i for i in (s.find('"'), s.find("'")) if i >= 0)
+    return s[:q + 1] + re.sub(r'[^\n]', '\x01', s[q + 1:-1]) + s[-1:]
+
+
+def aligned_view(src):
+    view = getattr(src, '_aligned', None)
+    if view is None:
+        text = '\n'.join(src.raw)
+        code = LEX_RE.sub(aligned_blank, text)
+        lines = code.split('\n')
+        starts = []
+        pos = 0
+        for line in lines:
+            starts.append(pos)
+            pos += len(line) + 1
+        view = (code, lines, starts, text)
+        src._aligned = view
+    return view
+
+
+def aligned_offset(src, ln, rx, occurrence):
+    code, lines, starts, text = aligned_view(src)
+    if ln >= len(lines):
+        return None
+    for k, m in enumerate(rx.finditer(lines[ln])):
+        if k == occurrence:
+            return starts[ln] + m.end() - 1
+    return None
+
+
+def aligned_args(code, open_paren):
+    depth = 0
+    spans = []
+    start = open_paren + 1
+    for j in range(open_paren, len(code)):
+        c = code[j]
+        if c in '([{':
+            depth += 1
+        elif c in ')]}':
+            depth -= 1
+            if depth == 0:
+                if code[start:j].strip() or spans:
+                    spans.append((start, j))
+                return spans, j
+        elif c == ',' and depth == 1:
+            spans.append((start, j))
+            start = j + 1
+        elif c == ';' and depth <= 1:
+            break
+    return spans, -1
+
+
+def collapse(text, limit=160):
+    t = ' '.join(text.replace('\x01', ' ').split())
+    return t if len(t) <= limit else t[:limit - 3].rstrip() + '...'
+
+
+def statement_span(code, pos):
+    a = pos
+    depth = 0
+    while a > 0:
+        c = code[a - 1]
+        if c == ')':
+            depth += 1
+        elif c == '(':
+            if depth == 0:
+                pass
+            else:
+                depth -= 1
+        elif c in ';{}' and depth == 0:
+            break
+        a -= 1
+    b = pos
+    depth = 0
+    n = len(code)
+    while b < n:
+        c = code[b]
+        if c == '(':
+            depth += 1
+        elif c == ')':
+            if depth > 0:
+                depth -= 1
+        elif c in ';{}' and depth == 0:
+            break
+        b += 1
+    return a, b
+
+
+def paren_depth_between(code, a, b):
+    depth = 0
+    for c in code[a:b]:
+        if c == '(':
+            depth += 1
+        elif c == ')':
+            depth -= 1
+    return depth
+
+
+def innermost_function(src, ln, off=None):
+    best = None
+    for f in src.function_spans():
+        if f[1] > ln:
+            break
+        if f[3] >= ln:
+            open_off = src.body_open.get((f[0], f[1]))
+            if open_off is None or off is not None and off <= open_off:
+                continue
+            if best is None or f[1] >= best[1]:
+                best = f
+    return best
+
+
+def innermost_class(src, ln):
+    src.scan()
+    best = None
+    for c in src.classes:
+        if c[2] <= ln <= c[3] and (best is None or c[1] >= best[1]):
+            best = c
+    return best
+
+
+def pass_e(repo, paths):
+    sql_types = set()
+    other_types = set()
+    printf_defs = []
+    wb_wrappers = []
+    lock_uses = collections.defaultdict(lambda: [0, 0, 0, 0, 0])
+    fast_funcs = []
+    attr_names = set()
+    ectx = _CTX or {}
+    spin_re = re.compile(ectx['spin_pattern']) if ectx.get('spin_pattern') else None
+    extras = {'rets': collections.defaultdict(set), 'str_consts': collections.defaultdict(set), 'sizeof_consts': [],
+              'wa_getters': []}
+    for path in paths:
+        src = read_source(repo, path)
+        code = src.code
+        stem = src.stem()
+        if 'namespace' in code:
+            namespace_types(src, sql_types, other_types)
+        if '...' in code or 'va_list' in code:
+            for fname, hl, ol, end, extra in src.function_spans():
+                info = printf_signature(extra[3])
+                if info is not None:
+                    printf_defs.append((extra[1], info[0], info[1], path, hl + 1))
+        if '__attribute__' in code and 'printf' in code:
+            for m in PRINTF_ATTR_RE.finditer(code):
+                attr_names.add(m.group(1))
+        if ('tsi_warning_buffer' in code or 'ObWarningBufferIgnoreScope' in code) and path not in WARNING_BUFFER_PRIMITIVES:
+            for fname, hl, ol, end, extra in src.function_spans():
+                open_off = src.body_open.get((fname, hl))
+                if open_off is None:
+                    continue
+                body = code[open_off:src.starts[end] + len(src.lines[end])]
+                changes = len(WARNING_BUFFER_CALL_RE.findall(body)) + len(WARNING_BUFFER_SCOPE_RE.findall(body)) \
+                    + len(WARNING_BUFFER_ASSIGN_RE.findall(body))
+                if changes == 1 and WARNING_BUFFER_CALL_RE.search(body) and body.count(';') <= 3:
+                    wb_wrappers.append((extra[1], fname, path, hl + 1))
+        if not path.startswith(LOCK_PRIMITIVE_DIR):
+            for key, counts in lock_use_counts(src, spin_re).items():
+                acc = lock_uses[(stem,) + key]
+                for k in range(5):
+                    acc[k] += counts[k]
+        if path in FAST_PARSER_PATHS:
+            fast_funcs += fast_parser_function_facts(src)
+        collect_return_types(src, extras['rets'])
+        if 'char' in code and '=' in code:
+            collect_string_constants(src, extras['str_consts'])
+        if path.startswith(SIZEOF_DIRS) and 'sizeof' in code:
+            collect_sizeof_constants(src, extras['sizeof_consts'])
+        if path.startswith(WORK_AREA_DIRS) and path not in WORK_AREA_SKIP:
+            collect_work_area_getters(src, extras['wa_getters'])
+    extras['rets'] = {k: frozenset(v) for k, v in extras['rets'].items()}
+    extras['str_consts'] = {k: frozenset(v) for k, v in extras['str_consts'].items()}
+    return sql_types, other_types, printf_defs, wb_wrappers, dict(lock_uses), fast_funcs, attr_names, extras
+
+
+TYPE_SPECIFIER_RE = re.compile(
+    r'\b(?:inline|static|virtual|extern|explicit|constexpr|friend|register|mutable|thread_local|typename|OB_INLINE|'
+    r'OB_NOINLINE|ALWAYS_INLINE|NEVER_INLINE|__inline__|__inline|OB_WARN_UNUSED_RESULT|OB_NOTHROW|OB_WEAK_SYMBOL|'
+    r'OB_NORETURN|__THROW)\b|__attribute__\s*\(\((?:[^()]|\([^()]*\))*\)\)|\bDEF_ALIGN\s*\([^()]*\)')
+STRING_CONST_DECL_RE = re.compile(
+    r'(?<![\w:.>])(?:(?:static|constexpr|extern|inline)\s+)*(?:(const)\s+)?char\s*(const\s*)?(\*\s*(?:const\s*)?)?'
+    r'((?:[A-Za-z_]\w*\s*::\s*)*[A-Za-z_]\w*)\s*(\[[^\]]*\]\s*)?=\s*')
+SIZEOF_CONST_DECL_RE = re.compile(
+    r'(?<![\w:.>])(?:(?:static|constexpr|const|inline)\s+)+(?:(?:unsigned|signed)\s+)?(?:u?int(?:8|16|32|64)?_t|int|long|'
+    r'size_t|uint32|uint64|int32|int64)\s+([A-Za-z_]\w*)\s*=\s*([^;{}]*\bsizeof\s*\([^;{}]*);')
+SIZEOF_CONST_DEFINE_RE = re.compile(r'^\s*#\s*define\s+([A-Za-z_]\w*)\s+(.*\bsizeof\s*\(.*)$')
+WORK_AREA_DIRS = ('src/sql/', 'src/query/', 'src/storage/', 'src/share/')
+
+
+def norm_type(t):
+    if t and ' or ' in t:
+        return ' or '.join(norm_type(x) for x in t.split(' or '))
+    t = TYPE_SPECIFIER_RE.sub(' ', t or '')
+    t = re.sub(r'\s*::\s*', '::', t)
+    t = re.sub(r'\s*([*&]+)\s*', r' \1', t)
+    t = re.sub(r'\s+', ' ', t).strip()
+    t = re.sub(r'^(?:::)?(?:oceanbase::)?', '', t)
+    return t
+
+
+def collect_return_types(src, rets):
+    src.scan(want_decls=True)
+    for fname, hl, ol, end, extra in src.function_spans():
+        rt = norm_type(extra[2])
+        if rt:
+            rets[(enclosing_class(fname), extra[1])].add(rt)
+    for decl in src.decls:
+        scope, chain, stmt, ln = decl[:4]
+        if '(' not in stmt:
+            continue
+        p = parse_statement(stmt)
+        if p and p[0] == 'func':
+            rt = norm_type(p[2])
+            if rt:
+                rets[(last_component(chain) if scope == 'class' and chain else '', p[1])].add(rt)
+
+
+STRING_TOKEN = (r'(?:(?:u8|u|U|L)?R"(?P<rd>[^()\\\s"]{0,16})\((?:(?!\)(?P=rd)").)*\)(?P=rd)"|'
+                r'(?:u8|u|U|L)?"(?:[^"\\\n]|\\.)*"|[A-Z_][A-Z0-9_]*\b)')
+STRING_ONLY_RE = re.compile(r'\s*(?:%s)(?:\s*(?:%s))*\s*' % (STRING_TOKEN, STRING_TOKEN.replace('rd', 'rd2')), re.S)
+
+
+def literal_values(raw, string_macros=None):
+    raw = re.sub(r'\\\r?\n', '', raw).strip()
+    while raw.startswith('(') and matching_close(raw, 0) == len(raw) - 1:
+        raw = raw[1:-1].strip()
+    if raw.startswith('{'):
+        close = matching_close(raw, 0)
+        inner = raw[1:close] if close > 0 else raw[1:]
+        out = []
+        for piece in split_top(inner):
+            out += literal_values(piece, string_macros)
+        return out
+    q = split_top_operator(raw, ('?',))
+    if q is not None:
+        colon = split_top_operator(raw[q[0] + 1:], (':',))
+        if colon is not None:
+            a = literal_values(raw[q[0] + 1:q[0] + 1 + colon[0]], string_macros)
+            b = literal_values(raw[q[0] + 2 + colon[0]:], string_macros)
+            return a + b if a and b else []
+    if not STRING_ONLY_RE.fullmatch(raw):
+        return []
+    has, value, macros = format_text(raw, string_macros)
+    return [value] if has else []
+
+
+def collect_string_constants(src, out):
+    code, lines, starts, text = aligned_view(src)
+    for m in STRING_CONST_DECL_RE.finditer(code):
+        if not (m.group(1) or m.group(2) and m.group(3)):
+            continue
+        ln = bisect.bisect_right(starts, m.start()) - 1
+        f = innermost_function(src, ln)
+        if f is not None and src.body_open.get((f[0], f[1])) is not None and ln > src.line_of(src.body_open[(f[0], f[1])]):
+            continue
+        a = m.end()
+        depth = 0
+        k = a
+        while k < len(code):
+            c = code[k]
+            if c in '([{':
+                depth += 1
+            elif c in ')]}':
+                if depth == 0:
+                    break
+                depth -= 1
+            elif c in ';,' and depth == 0:
+                break
+            k += 1
+        values = literal_values(text[a:k])
+        if values:
+            name = last_component(re.sub(r'\s+', '', m.group(4)))
+            for v in values:
+                out[name].add(v)
+
+
+def collect_sizeof_constants(src, out):
+    code = src.code
+    for m in SIZEOF_CONST_DECL_RE.finditer(code):
+        ln = src.line_of(m.start(1))
+        if innermost_function(src, ln, m.start(1)) is not None:
+            continue
+        out.append((m.group(1), src.path, ln, collapse(m.group(2), 120)))
+    for name, params, lns in define_bodies(src):
+        if params:
+            continue
+        body = ' '.join(src.lines[k].rstrip().rstrip('\\') for k in lns)
+        dm = SIZEOF_CONST_DEFINE_RE.match(body)
+        if dm:
+            out.append((dm.group(1), src.path, lns[0], collapse(dm.group(2), 120)))
+
+
+def collect_work_area_getters(src, out):
+    code = src.code
+    if 'get_mem_bound' not in code and 'get_max_bound' not in code and 'get_cache_size' not in code \
+            and 'get_expect_size' not in code and 'get_data_size' not in code and 'get_max_available_mem_size' not in code:
+        return
+    for fname, hl, ol, end, extra in src.function_spans():
+        open_off = src.body_open.get((fname, hl))
+        if open_off is None or end - hl > 6:
+            continue
+        body = code[open_off + 1:src.starts[end] + len(src.lines[end])]
+        rm = re.fullmatch(r'\s*return\s+([^;]*);\s*}\s*', body)
+        if not rm:
+            continue
+        calls = frozenset(c.group(1) for c in re.finditer(r'\b([A-Za-z_]\w*)\s*\(', rm.group(1)))
+        out.append((extra[1], enclosing_class(fname), calls, rm.group(1).strip(), src.path, hl))
+
+
+def namespace_types(src, sql_types, other_types):
+    src.scan()
+    code = src.code
+    spans = []
+    for m in NAMESPACE_OPEN_RE.finditer(code):
+        close = matching_close(code, m.end() - 1)
+        spans.append((m.end() - 1, close if close >= 0 else len(code), m.group(1).split('::')))
+    if not spans:
+        return
+    bodies = [(c[2], c[3]) for c in src.classes] + [(f[2], f[3]) for f in src.function_spans()]
+    for m in NS_TYPE_RE.finditer(code):
+        name = m.group(1) or m.group(2) or m.group(3)
+        if not name:
+            continue
+        ln = src.line_of(m.start())
+        if any(o < ln <= e for o, e in bodies):
+            continue
+        chain = []
+        for o, c, parts in spans:
+            if o < m.start() < c:
+                chain += parts
+        if not chain:
+            continue
+        if chain[-1] == 'sql':
+            sql_types.add(name)
+        else:
+            other_types.add(name)
+
+
+def printf_signature(args):
+    params = [p.strip() for p in split_top(args)]
+    if len(params) >= 2 and params[-1] == '...':
+        if PRINTF_FMT_PARAM_RE.search(params[-2].split('=', 1)[0]):
+            return len(params) - 2, 'variadic'
+        return None
+    for i, p in enumerate(params):
+        if re.search(r'\bva_list\b', p) and i > 0 and PRINTF_FMT_PARAM_RE.search(params[i - 1].split('=', 1)[0]):
+            return i - 1, 'va_list'
+    return None
+
+
+def lock_expr_name(expr):
+    e = re.sub(r'\s+', '', strip_casts(expr))
+    e = strip_outer(e)
+    e = re.sub(r'^(?:this->)+', '', e)
+    m = re.search(r'([A-Za-z_]\w*)(\(\))?(?:\[[^\[\]]*\])*$', e)
+    if not m:
+        return None
+    return m.group(1) + ('()' if m.group(2) else '')
+
+
+def lock_expr_other(expr):
+    e = re.sub(r'\s+', '', strip_casts(expr))
+    e = strip_outer(e)
+    e = re.sub(r'^(?:this->)+', '', e)
+    e = re.sub(r'(?:\[[^\[\]]*\])+$', '', e)
+    e = re.sub(r'\(\)$', '', e)
+    return bool(re.search(r'(?:\.|->)[A-Za-z_]\w*$', e))
+
+
+def timed_arg(text):
+    for word in re.findall(r'[A-Za-z_]\w*', text):
+        if TIMED_ARG_WORDS & set(name_tokens(word)):
+            return True
+    return False
+
+
+def lock_use_keys(src, off, other):
+    if other:
+        return (('other', ''),)
+    ln = src.line_of(off)
+    if src.dkind.get(ln) in ('define', 'cont'):
+        return (('stem', ''), ('macro', ''))
+    f = innermost_function(src, ln, off)
+    keys = [('stem', '')]
+    if f is not None:
+        keys.append(('func', f[0]))
+        cls = enclosing_class(f[0])
+        if cls:
+            keys.append(('class', cls))
+    return tuple(keys)
+
+
+def lock_use_counts(src, spin_re=None):
+    code = src.code
+    out = collections.defaultdict(lambda: [0, 0, 0, 0, 0])
+
+    def add(name, off, other, idx, timed=False, tried=False):
+        for key in lock_use_keys(src, off, other):
+            acc = out[(key[0], key[1], name)]
+            acc[idx] += 1
+            if timed:
+                acc[2] += 1
+            if tried:
+                acc[3] += 1
+
+    if 'Guard' in code or 'lock_guard' in code or 'unique_lock' in code:
+        for m in LOCK_GUARD_RE.finditer(code):
+            gtype = re.sub(r'\s+', '', m.group(1))
+            if not LOCK_GUARD_TYPE_RE.search(gtype.rsplit('::', 1)[-1]):
+                continue
+            args = split_call_args(code, m.start(2)) if m.group(2) == '(' else []
+            if not args:
+                continue
+            timed = bool(re.search(r'Timeout|Retry', gtype) or any(timed_arg(a) for a in args[1:]))
+            named = set()
+            for arg in args:
+                if re.fullmatch(r'\s*(?:this|nullptr|NULL|true|false|\d+\w*)\s*', arg) or timed_arg(arg) and arg is not args[0]:
+                    continue
+                name = lock_expr_name(arg)
+                if not name or name in named or re.fullmatch(r'[A-Z][A-Z0-9_]*', name):
+                    continue
+                named.add(name)
+                add(name, m.start(), lock_expr_other(arg), 0, timed=timed, tried='Try' in gtype)
+    for m in LOCK_CALL_RE.finditer(code):
+        name = m.group(1) + ('()' if m.group(3) else '')
+        op = m.group(4)
+        before = code[max(0, m.start(1) - 8):m.start(1)]
+        other = bool(re.search(r'(?:\.|->)\s*$', before)) and not re.search(r'\bthis\s*->\s*$', before)
+        timed = tried = False
+        if op in LOCK_ACQUIRE_OPS:
+            args = balanced_call_args(code, m.end() - 1)
+            timed = op in ('timedlock', 'lock_timeout', 'try_lock_for', 'try_lock_until') or timed_arg(args)
+            tried = op.startswith('try') or op == 'trylock'
+        add(name, m.start(1), other, 1, timed=timed, tried=tried)
+    if 'pthread_' in code:
+        for m in PTHREAD_LOCK_CALL_RE.finditer(code):
+            op = m.group(2)
+            if op in ('init', 'destroy') or op.startswith('attr'):
+                continue
+            name = lock_expr_name(m.group(3))
+            if not name:
+                continue
+            add(name, m.start(), lock_expr_other(m.group(3)), 1, timed='timed' in op, tried='try' in op)
+    if spin_re is not None and spin_re.search(code):
+        for m in spin_re.finditer(code):
+            args = split_call_args(code, m.end() - 1)
+            if not args:
+                continue
+            name = lock_expr_name(args[0])
+            if name and not name.endswith('()'):
+                add(name, m.start(), lock_expr_other(args[0]), 4)
+    for m in LOCK_CALL_RE.finditer(code):
+        if m.group(4) not in LOCK_ACQUIRE_OPS:
+            continue
+        args = split_call_args(code, m.end() - 1)
+        if args and args[0].lstrip().startswith('&'):
+            name = lock_expr_name(args[0])
+            if name and not name.endswith('()'):
+                add(name, m.start(), lock_expr_other(args[0]), 4)
+    return out
+
+
+def fast_parser_function_facts(src):
+    out = []
+    code = src.code
+    for fname, hl, ol, end, extra in src.function_spans():
+        open_off = src.body_open.get((fname, hl))
+        if open_off is None:
+            continue
+        body = code[open_off:src.starts[end] + len(src.lines[end])]
+        calls = frozenset(m.group(3) for m in IDENT_CALL_RE.finditer(body))
+        out.append((extra[1], fast_direct_producer(body), calls))
+    for name, params, lns in define_bodies(src):
+        body = '\n'.join(src.lines[k] for k in lns)
+        if fast_direct_producer(body):
+            out.append((name, True, frozenset()))
+    return out
+
+
+def fast_direct_producer(body):
+    for m in FAST_PRODUCER_RE.finditer(body):
+        if m.group(2) == 'cur_token_type_' or 'T_INVALID' in (m.group(3), m.group(4)):
+            continue
+        return True
+    return False
+
+
+def lock_class_facts(repo, classes, candidates, func_index):
+    by_path = collections.defaultdict(list)
+    for c in classes:
+        if c[1] in candidates:
+            by_path[c[3]].append(c)
+    held = collections.defaultdict(list)
+    sources = {}
+    for path in sorted(by_path):
+        src = read_source(repo, path)
+        src.scan(want_decls=True)
+        sources[path] = src
+        spans = []
+        for name, hl, ol, end, extra in src.classes:
+            if extra is None or extra[1] not in candidates:
+                continue
+            special = re.search(r'\b(?:class|struct|union)\s+(?:[A-Za-z_]\w*\s*::\s*)*' + re.escape(extra[1]) + r'\s*<',
+                                extra[3]) is not None
+            spans.append((name, hl, end, extra[1], special))
+        for decl in src.decls:
+            scope, chain, stmt, ln = decl[:4]
+            if scope != 'class':
+                continue
+            owner = next((sp for sp in spans if sp[0] == chain and sp[1] <= ln <= sp[2]), None)
+            if owner is None or owner[4]:
+                continue
+            p = parse_statement(stmt)
+            if not p or p[0] == 'func':
+                continue
+            typ = p[1]
+            if typ.startswith(('typedef', 'using')) or re.search(r'\btypedef\b', typ):
+                continue
+            if re.search(r'[*&]', drop_template_args(typ)):
+                continue
+            held[owner[3]].append(typ)
+    ops = collections.defaultdict(set)
+    for cls, simple, path, hl, end in func_index:
+        if simple not in LOCK_OP_NAMES or cls not in candidates:
+            continue
+        src = sources.get(path)
+        if src is None:
+            src = read_source(repo, path)
+            sources[path] = src
+        span = next((f for f in src.function_spans() if f[1] == hl and f[4][1] == simple), None)
+        if span is not None:
+            rettype, args = span[4][2] or '', (span[4][3] or '').strip()
+            if (not args or args == 'void') and LOCK_ACCESSOR_RET_RE.search(rettype):
+                continue
+        ops[cls].add(simple)
+    return held, ops
+
+
+def define_aliases(defines):
+    out = []
+    for d in defines:
+        name, params, body, path, ln, flag, texts = d
+        if params is not None:
+            continue
+        m = re.match(r'\s*#\s*define\s+\w+\s+((?:[A-Za-z_]\w*\s*::\s*)*[A-Za-z_]\w*)\s*$', body)
+        if m and m.group(1) != name:
+            out.append((name, m.group(1), path, ln, texts[0] if texts else '', flag, ''))
+    return out
+
+
+def lock_type_table(repo, classes, aliases, members, func_index, defines):
+    kinds = dict(LOCK_PRIMITIVES)
+    for name in sorted(descendants(classes, set(LOCK_PRIMITIVES)) - set(kinds)):
+        kinds[name] = 'lock subclass'
+    aliases = list(aliases) + define_aliases(defines)
+    candidates = sorted(set(c[1] for c in classes if c[1] and LOCK_WRAPPER_NAME_RE.search(c[1]) and 'Guard' not in c[1]
+                            and c[1] not in kinds and not c[3].startswith(LOCK_PRIMITIVE_DIR)))
+    held, ops = lock_class_facts(repo, classes, set(candidates), func_index)
+    wrappers = {}
+    while True:
+        alias_names = alias_closure(aliases, set(kinds))
+        known = set(kinds) | alias_names
+        added = False
+        for c in candidates:
+            if c in kinds:
+                continue
+            inner = sorted(set(w for t in held.get(c, ()) for w in re.findall(r'[A-Za-z_]\w*', t) if w in known))
+            if inner or ops.get(c):
+                kinds[c] = 'lock class'
+                wrappers[c] = ('holds ' + ', '.join(inner)) if inner else ('defines ' + ', '.join(sorted(ops[c])))
+                added = True
+        if not added:
+            break
+    class_stems = collections.defaultdict(set)
+    for c in classes:
+        if c[1] in kinds:
+            class_stems[c[1]].add(c[3].rsplit('.', 1)[0])
+    targets = collections.defaultdict(set)
+    for alias, target, path, ln, text, flag, chain in aliases:
+        targets[alias].add((chain, path, path.rsplit('.', 1)[0], outer_type(target)))
+    lockish = set(kinds)
+    changed = True
+    while changed:
+        changed = False
+        for alias in sorted(targets):
+            if alias not in lockish and any(t[3] in lockish and t[3] != alias for t in targets[alias]):
+                lockish.add(alias)
+                changed = True
+    entries = {a: tuple(sorted(v)) for a, v in targets.items() if a in lockish}
+    return kinds, wrappers, entries, {k: frozenset(v) for k, v in class_stems.items()}
+
+
+def printf_tables(printf_defs, func_defs, defines, attr_names):
+    by_name = collections.defaultdict(list)
+    for name, idx, kind, path, ln in printf_defs:
+        by_name[name].append((idx, kind))
+    funcs = {}
+    for name, (idx, kind) in C_PRINTF_FUNCTIONS.items():
+        funcs[name] = (frozenset((idx,)), kind, PRINTF_SINKS.get(name, ''), False)
+    for name in sorted(by_name):
+        entries = by_name[name]
+        if name in funcs:
+            continue
+        mixed = len(entries) < 0.8 * max(1, func_defs.get(name, 0))
+        kinds = set(k for i, k in entries)
+        funcs[name] = (frozenset(i for i, k in entries), 'va_list' if kinds == {'va_list'} else 'variadic',
+                       PRINTF_SINKS.get(name, ''), mixed)
+    macros = {}
+    function_like = [d for d in defines if d[1] is not None]
+    for _ in range(12):
+        changed = False
+        for d in function_like:
+            name, params, body = d[0], d[1], d[2]
+            if name in macros or name in funcs:
+                continue
+            found = printf_macro_format(params, body, funcs, macros)
+            if found is not None:
+                macros[name] = found
+                changed = True
+        if not changed:
+            break
+    return funcs, macros
+
+
+def printf_macro_format(params, body, funcs, macros):
+    names = [p.strip() for p in params]
+    variadic = None
+    if names and names[-1].endswith('...'):
+        variadic = len(names) - 1
+    plain = [re.sub(r'\.\.\.$', '', n).strip() for n in names]
+    head = re.match(r'\s*#\s*define\s+\w+(?:\([^)]*\))?', body)
+    text = PRINTF_LOG_JOIN_RE.sub(lambda m: ('_SQL' if m.group(1) else 'SQL') + m.group(2) + '(',
+                                  body[head.end():] if head else body)
+    for m in re.finditer(r'(?<![\w])([A-Za-z_]\w*)\s*\(', text):
+        callee = m.group(1)
+        if callee in funcs:
+            idxs, kind, sink, mixed = funcs[callee]
+            sinks = {sink} if sink else set()
+        elif callee in macros:
+            idxs, sinks = frozenset((macros[callee][0],)), set(macros[callee][1])
+        else:
+            continue
+        args = [a.strip() for a in split_top(balanced_call_args(text, m.end() - 1))]
+        if any(i < len(args) and ('""' in args[i] or "' '" in args[i]) for i in idxs):
+            continue
+        pick = None
+        for i in sorted(idxs):
+            if i < len(args):
+                a = args[i].lstrip('#').strip()
+                if a == '__VA_ARGS__' or variadic is not None and plain[variadic] and a == plain[variadic]:
+                    pick = variadic
+                    break
+                if a in plain[:len(plain) if variadic is None else variadic]:
+                    pick = plain.index(a)
+                    break
+        if pick is None and variadic is not None:
+            vi = next((i for i, a in enumerate(args) if a.lstrip('#').strip() == '__VA_ARGS__'
+                       or plain[variadic] and a.lstrip('#').strip() == plain[variadic]), None)
+            if vi is not None and vi > 0:
+                prev = args[vi - 1].strip()
+                if prev in plain[:variadic] and re.search(r'(?i)fmt|format|msg', prev):
+                    pick = plain.index(prev)
+        if pick is not None:
+            return pick, tuple(sorted(sinks)), variadic is not None and pick in (variadic, variadic - 1)
+    return None
+
+
+def tracepoint_tables(repo):
+    numbers = {}
+    names = {}
+    p = os.path.join(repo, TRACEPOINT_DEF_PATH)
+    if os.path.exists(p):
+        with open(p, encoding='utf-8', errors='replace') as fh:
+            for m in re.finditer(r'GLOBAL_ERRSIM_POINT_DEF\s*\(\s*(\d+)\s*,\s*(\w+)', fh.read()):
+                numbers[m.group(2)] = int(m.group(1))
+                names[int(m.group(1))] = m.group(2)
+    init = set()
+    p = os.path.join(repo, TRACEPOINT_INIT_SQL)
+    if os.path.exists(p):
+        with open(p, encoding='utf-8', errors='replace') as fh:
+            for m in re.finditer(r'set_tp\s+tp_no\s*=\s*(\d+)', re.sub(r'(?m)^\s*(?:--|#).*$', '', fh.read())):
+                init.add(int(m.group(1)))
+    return numbers, names, frozenset(init)
+
+
+def new_list_context(repo, paths, jobs, classes, aliases, members, func_index, func_defs, defines, methods, method_names,
+                     ir_types):
+    sql_types, other_types, printf_defs, wb_wrappers = set(), set(), [], []
+    lock_uses = collections.defaultdict(lambda: [0, 0, 0, 0, 0])
+    fast_facts = []
+    attr_names = set()
+    spin_names = set(SPIN_ACQUIRE_PRIMITIVES)
+    function_like = [d for d in defines if d[1] is not None]
+    for _ in range(4):
+        spin_call_re = re.compile(r'(?<![\w.>])(?:%s)\s*\(' % '|'.join(re.escape(n) for n in sorted(spin_names)))
+        added = set(d[0] for d in function_like if d[0] not in spin_names and spin_call_re.search(d[2]))
+        if not added:
+            break
+        spin_names |= added
+    spin_pattern = r'(?<![\w.>])(?:%s)\s*\(' % '|'.join(re.escape(n) for n in sorted(spin_names, key=lambda n: (-len(n), n)))
+    e_ctx = {'not_built': _NOT_BUILT, 'spin_pattern': spin_pattern}
+    rets = collections.defaultdict(set)
+    str_consts = collections.defaultdict(set)
+    sizeof_consts = collections.defaultdict(list)
+    wa_getters = []
+    for st, ot, pd, wb, lu, ff, an, ex in run_parallel(pass_e, repo, paths, jobs, ctx=e_ctx, init=set_ctx):
+        for k, v in ex['rets'].items():
+            rets[k] |= v
+        for k, v in ex['str_consts'].items():
+            str_consts[k] |= v
+        for name, path, ln, expr in ex['sizeof_consts']:
+            sizeof_consts[name].append((path, ln, expr))
+        wa_getters += ex['wa_getters']
+        attr_names |= an
+        sql_types |= st
+        other_types |= ot
+        printf_defs += pd
+        wb_wrappers += wb
+        for k, v in lu.items():
+            acc = lock_uses[k]
+            for i in range(5):
+                acc[i] += v[i]
+        fast_facts += ff
+    lock_use_owners = collections.defaultdict(list)
+    for stem, kind, who, name in lock_uses:
+        if kind == 'class':
+            lock_use_owners[(stem, name)].append((kind, who))
+    lock_use_owners = {k: tuple(sorted(v)) for k, v in lock_use_owners.items()}
+    kinds, wrappers, alias_entries, class_stems = lock_type_table(repo, classes, aliases, members, func_index, defines)
+    printf_funcs, printf_macros = printf_tables(printf_defs, func_defs, defines, attr_names)
+    printf_overloads = printf_overload_table(repo, printf_funcs, printf_defs, func_index)
+    member_types = collections.defaultdict(dict)
+    global_types = collections.defaultdict(list)
+    for m in members:
+        owner, nm, typ, path, ln, scope, tags, text, stem, mflag = m
+        t = norm_type(typ)
+        if re.search(r'\b' + re.escape(nm) + r'\s*\[', text or '') and not t.endswith(']'):
+            t += ' []'
+        if scope == 'class' and owner:
+            member_types[last_component(owner)].setdefault(nm, t)
+        elif scope != 'class':
+            global_types[nm].append((stem, t))
+    type_aliases = {}
+    alias_owners = collections.defaultdict(set)
+    for alias, target, path, ln, text, flag, chain in aliases:
+        owner = last_component(chain) if chain else ''
+        type_aliases.setdefault((owner, alias), norm_type(target))
+        if owner:
+            alias_owners[alias].add(owner)
+    comma_macros = {}
+    for d in defines:
+        if d[1] is None or not d[1]:
+            continue
+        head = re.match(r'\s*#\s*define\s+\w+\s*\([^)]*\)', d[2])
+        body = d[2][head.end():].strip() if head else ''
+        pieces = split_top(body)
+        if len(pieces) > 1 and all(p.strip() for p in pieces) and not re.search(r'[;{}]', body):
+            comma_macros.setdefault(d[0], (tuple(x.strip() for x in d[1]), tuple(p.strip() for p in pieces)))
+    macro_calls = {}
+    for d in defines:
+        if d[1] is None:
+            continue
+        head = re.match(r'\s*#\s*define\s+\w+\s*\([^)]*\)', d[2])
+        body = d[2][head.end():].strip() if head else ''
+        cm = re.match(r'(?:\(\s*)?(?:static_cast|reinterpret_cast)\s*<\s*([^<>]+?)\s*>\s*\(', body)
+        if cm:
+            macro_calls[d[0]] = ('cast', norm_type(cm.group(1)))
+            continue
+        cm = re.match(r'(?:::)?(?:[A-Za-z_]\w*\s*::\s*)*([A-Za-z_]\w*)\s*\(.*\)\s*$', body, re.S)
+        if cm and cm.group(1) not in ('do', 'if', 'for', 'while', 'switch'):
+            macro_calls.setdefault(d[0], ('call', cm.group(1)))
+    figure_names = set(WORK_AREA_FIGURE_NAMES)
+    wa_wrapper_rows = {}
+    for _ in range(4):
+        added = False
+        for simple, cls, calls, expr, path, hl in wa_getters:
+            if simple in wa_wrapper_rows and cls in wa_wrapper_rows[simple][0]:
+                continue
+            direct = calls & set(WORK_AREA_FIGURE_NAMES) and re.search(WORK_AREA_OWNER_PATTERN, expr)
+            if direct or calls & (set(wa_wrapper_rows) - set(WORK_AREA_FIGURE_NAMES)):
+                figure_names.add(simple)
+                prev = wa_wrapper_rows.get(simple)
+                wa_wrapper_rows[simple] = ((prev[0] if prev else frozenset()) | {cls}, expr, path, hl + 1)
+                added = True
+        if not added:
+            break
+    producers = set(n for n, direct, calls in fast_facts if direct)
+    changed = True
+    while changed:
+        changed = False
+        for n, direct, calls in fast_facts:
+            if n not in producers and calls & producers:
+                producers.add(n)
+                changed = True
+    tp_numbers, tp_names, tp_init = tracepoint_tables(repo)
+    array_getters = collections.Counter()
+    for n, rt in methods:
+        tm = IR_ARRAY_TYPE_RE.search(rt)
+        if tm and tm.group(1) in ir_types:
+            array_getters[n] += 1
+    factory_macros = set(d[0] for d in defines if FACTORY_DECL_RE.search(d[2]))
+    string_macros = {}
+    for d in defines:
+        if d[1] is not None or d[0] in string_macros:
+            continue
+        sm = STRING_MACRO_RE.match(' '.join(t.rstrip('\\').strip() for t in d[6]))
+        if sm:
+            string_macros[d[0]] = ''.join(re.findall(r'"((?:[^"\\]|\\.)*)"', sm.group(1)))
+    pending = []
+    for d in defines:
+        if d[1] is not None or d[0] in string_macros:
+            continue
+        body = ' '.join(t.rstrip('\\').strip() for t in d[6])
+        bm = re.match(r'\s*#\s*define\s+\w+\s+(.*?)\s*(?://.*|/\*.*\*/)?$', body)
+        if bm and STRING_ONLY_RE.fullmatch(bm.group(1)) \
+                and re.search(r'[A-Z_][A-Z0-9_]*', re.sub(r'"(?:[^"\\]|\\.)*"', '', bm.group(1))):
+            pending.append((d[0], bm.group(1)))
+    for _ in range(6):
+        added = False
+        for name, body in pending:
+            if name in string_macros:
+                continue
+            idents = re.findall(r'[A-Z_][A-Z0-9_]*', re.sub(r'"(?:[^"\\]|\\.)*"', '', body))
+            if all(i in string_macros for i in idents):
+                has, value, macros = format_text(body, string_macros)
+                string_macros[name] = value
+                added = True
+        if not added:
+            break
+    member_arrays = {}
+    array_aliases = {}
+    for alias, target, path, ln, text, flag, chain in aliases:
+        if POINTER_ARRAY_TYPE_RE.search(target):
+            array_aliases.setdefault(alias, target)
+    for m in members:
+        owner, nm, typ, path, ln, scope, tags, text, stem, mflag = m
+        if scope != 'class' or not owner:
+            continue
+        elem = pointer_array_elem(typ, array_aliases)
+        if elem:
+            member_arrays.setdefault(('class', last_component(owner), nm), elem)
+            member_arrays.setdefault(('stem', stem, nm), elem)
+    return {
+        'lock_kinds': kinds,
+        'lock_wrappers': wrappers,
+        'lock_alias_entries': alias_entries,
+        'lock_class_stems': class_stems,
+        'lock_uses': {k: tuple(v) for k, v in lock_uses.items()},
+        'lock_use_owners': lock_use_owners,
+        'printf_funcs': printf_funcs,
+        'printf_macros': printf_macros,
+        'fast_producers': frozenset(producers),
+        'sql_types': frozenset(sql_types - other_types),
+        'wb_wrappers': frozenset(w[0] for w in wb_wrappers),
+        'tp_numbers': tp_numbers,
+        'tp_names': tp_names,
+        'tp_init': tp_init,
+        'ir_array_getters': frozenset(n for n, c in array_getters.items() if c >= 0.8 * max(1, method_names.get(n, 0))),
+        'factory_macros': frozenset(factory_macros),
+        'member_arrays': member_arrays,
+        'string_macros': string_macros,
+        'printf_overloads': printf_overloads,
+        'func_rets': {k: ' or '.join(sorted(v)) for k, v in rets.items()},
+        'str_consts': {k: tuple(sorted(v)) for k, v in str_consts.items()},
+        'sizeof_consts': {k: tuple(v) for k, v in sizeof_consts.items()},
+        'member_types': dict(member_types),
+        'global_types': {k: tuple(v) for k, v in global_types.items()},
+        'type_aliases': type_aliases,
+        'alias_owners': {k: tuple(sorted(v)) for k, v in alias_owners.items()},
+        'comma_macros': comma_macros,
+        'macro_calls': macro_calls,
+        'wa_figures': frozenset(figure_names),
+        'wa_wrappers': wa_wrapper_rows,
+    }
+
+
+def init_new_lists(ctx):
+    words = sorted(set(ctx['lock_kinds']) | set(ctx['lock_alias_entries']) | set(LOCK_STD_KINDS),
+                   key=lambda w: (-len(w), w))
+    alt = '|'.join(re.escape(w) for w in words)
+    ctx['lock_decl_re'] = re.compile(LOCK_DECL_TEMPLATE % alt)
+    ctx['lock_container_re'] = re.compile(LOCK_CONTAINER_TEMPLATE % alt)
+    ctx['lock_hint_re'] = re.compile(r'\b(?:%s)\b' % alt)
+    ctx['printf_names'] = frozenset(ctx['printf_funcs']) | frozenset(ctx['printf_macros'])
+    wrappers = sorted(ctx['wb_wrappers'])
+    ctx['wb_wrapper_re'] = re.compile(r'(?<![\w])(%s)\s*\(' % '|'.join(re.escape(n) for n in wrappers)) if wrappers else None
+    macros = sorted(ctx['factory_macros'])
+    ctx['factory_macro_re'] = re.compile(r'(?<![\w])(%s)\b' % '|'.join(re.escape(n) for n in macros)) if macros else None
+    ctx['rule46_names'] = frozenset(ctx['tp_names'][n] for n in RULE_46_TRACEPOINTS if n in ctx['tp_names'])
+    wa = sorted(ctx.get('wa_wrappers', {}))
+    ctx['wa_figure_re'] = re.compile(r'(?<![\w])(%s)\s*\(\s*\)' % '|'.join(re.escape(n) for n in wa)) if wa else None
+    names = sorted(ctx.get('sizeof_consts', {}))
+    ctx['sizeof_const_re'] = re.compile(r'(?<![\w.>:])(%s)\b' % '|'.join(re.escape(n) for n in names)) if names else None
+
+
+def lock_alias_target(word, ctx, owner, path, stem):
+    best = None
+    lockish = ctx['lock_kinds'].keys() | ctx['lock_alias_entries'].keys() | LOCK_STD_KINDS.keys()
+    for chain, apath, astem, target in ctx['lock_alias_entries'].get(word, ()):
+        if target == word:
+            continue
+        same_file = apath == path or astem == stem
+        owner_match = bool(chain) and bool(owner) and (last_component(chain) == last_component(owner)
+                                                       or ('::' + last_component(chain) + '::') in ('::' + owner + '::'))
+        if same_file and (not chain or owner_match):
+            rank = 0
+        elif owner_match:
+            rank = 1
+        elif same_file:
+            rank = 2
+        elif not chain and distinctive_alias(word):
+            rank = 3
+        else:
+            continue
+        key = (rank, target not in lockish)
+        if best is None or key < best[0]:
+            best = (key, target)
+    return None if best is None else best[1]
+
+
+def lock_word_kind(word, ctx, owner, path, stem, depth=0):
+    in_kinds = word in ctx['lock_kinds']
+    target = lock_alias_target(word, ctx, owner, path, stem) if word in ctx['lock_alias_entries'] else None
+    if in_kinds and (target is None or stem in ctx['lock_class_stems'].get(word, ()) or word in LOCK_PLATFORM_ALIASES):
+        kind = ctx['lock_kinds'][word]
+        if kind == 'lock class':
+            kind = 'lock class (%s)' % ctx['lock_wrappers'][word]
+        return kind, word
+    if target is not None and depth <= 6:
+        inner = lock_word_kind(target, ctx, owner, path, stem, depth + 1)
+        if inner is not None:
+            return inner
+    return None
+
+
+def lock_kind_of(word, ns, ctx, owner, path, stem):
+    if word in LOCK_STD_KINDS and word not in ctx['lock_kinds'] and word not in ctx['lock_alias_entries']:
+        return (LOCK_STD_KINDS[word], word) if re.sub(r'\s+', '', ns).endswith('std::') else None
+    qual = re.sub(r'\s+', '', ns).rstrip(':')
+    k = lock_word_kind(word, ctx, qual.rsplit('::', 1)[-1] if qual and qual not in ('common', 'lib', 'oceanbase', 'share',
+                                                                                      'obsys', 'obutil', 'sql', 'storage')
+                       else owner, path, stem)
+    if k is None:
+        return None
+    kind, target = k
+    if target == word and word in LOCK_PLATFORM_ALIASES:
+        return kind, '%s (%s)' % (word, LOCK_PLATFORM_ALIASES[word])
+    return kind, word if target == word else '%s (alias of %s)' % (word, target)
+
+
+def lock_scope(src, ln, off):
+    if src.dkind.get(ln) in ('define', 'cont'):
+        return 'macro', src.dname.get(ln, ''), None
+    f = innermost_function(src, ln, off)
+    c = innermost_class(src, ln)
+    if f is not None and (c is None or f[1] >= c[1]):
+        return 'function', f[0], f
+    if c is not None:
+        return 'class', c[0], c
+    owner = anonymous_owner(src, off)
+    if owner:
+        return 'class', owner, None
+    return 'global', '', None
+
+
+def anonymous_owner(src, off):
+    code = src.code
+    opener = block_opener(code, off)
+    if opener < 0:
+        return None
+    hs, header = header_before(code, opener)
+    hm = re.search(r'(?:^|[;{}\s])(?:typedef\s+)?(struct|union|class)\s*([A-Za-z_]\w*)?\s*$', header)
+    if not hm:
+        return None
+    if hm.group(2):
+        return hm.group(2)
+    close = matching_close(code, opener)
+    if close < 0:
+        return None
+    tm = re.match(r'\s*([A-Za-z_]\w*)', code[close + 1:close + 200])
+    return tm.group(1) if tm else '(anonymous %s)' % hm.group(1)
+
+
+def lock_uses_note(ctx, stem, name, scope='stem', owner=''):
+    uses = ctx['lock_uses']
+    base = posixpath.basename(stem)
+    total = [0, 0, 0, 0]
+    if scope == 'class':
+        cls = last_component(owner)
+        bases = ctx.get('class_bases', {})
+        for kind, who in ctx['lock_use_owners'].get((stem, name), ()):
+            if kind == 'class' and (who == cls or cls in ancestors(bases, who)):
+                u = uses[(stem, kind, who, name)]
+                for k in range(4):
+                    total[k] += u[k]
+        where = 'methods of %s (%s.*)' % (cls, base)
+    elif scope == 'function':
+        u = uses.get((stem, 'func', owner, name))
+        if u:
+            total = list(u[:4])
+        where = owner
+    else:
+        u = uses.get((stem, 'stem', '', name))
+        if u:
+            total = list(u[:4])
+        where = '%s.*' % base
+    if not (total[0] or total[1]):
+        note = 'no guard or lock call names it in %s' % where
+    else:
+        parts = ['%d guards' % total[0], '%d lock calls' % total[1]]
+        if total[2]:
+            parts.append('%d timed' % total[2])
+        if total[3]:
+            parts.append('%d try' % total[3])
+        note = 'uses in %s: %s' % (where, ', '.join(parts))
+    if scope != 'function':
+        o = uses.get((stem, 'other', '', name))
+        if o and (o[0] or o[1]):
+            note += '; %d more through another object with a member of this name in %s.* (not attributed)' % (
+                o[0] + o[1], base)
+        mc = uses.get((stem, 'macro', '', name))
+        if mc and (mc[0] or mc[1]) and scope != 'macro':
+            note += '; %d more inside #define bodies in %s.* (not attributed)' % (mc[0] + mc[1], base)
+    return note
+
+
+def spin_acquires(ctx, stem, name, scope, owner):
+    uses = ctx['lock_uses']
+    n = 0
+    if scope == 'class':
+        cls = last_component(owner)
+        for kind, who in ctx['lock_use_owners'].get((stem, name), ()):
+            if kind == 'class' and who == cls:
+                n += uses[(stem, kind, who, name)][4] + uses[(stem, kind, who, name)][0]
+    else:
+        u = uses.get((stem, 'stem', '', name))
+        if u:
+            n += u[4] + u[0]
+    return n
+
+
+def lock_guard_rows(src, ctx, stats=None):
+    out = []
+    path = src.path
+    if path.startswith(LOCK_PRIMITIVE_DIR):
+        return out
+    if stats is None:
+        stats = collections.Counter()
+    code = src.code
+    if not ctx['lock_hint_re'].search(code):
+        return template_lock_rows(src, ctx) + spin_lock_rows(src, ctx)
+    stem = src.stem()
+    seen = set()
+    for m in ctx['lock_decl_re'].finditer(code):
+        off = m.start('word')
+        ln = src.line_of(off)
+        a, b = statement_span(code, off)
+        head = code[a:m.start()]
+        if paren_depth_between(code, a, m.start()) > 0 or re.search(r'\b(?:typedef|using|friend|return|new|delete|case)\b', head):
+            continue
+        if re.search(r'[=?:]\s*$', head) and not re.search(r'(?:public|private|protected)\s*:\s*$', head):
+            continue
+        kind_scope, owner_name, span = lock_scope(src, ln, off)
+        owner = owner_name if kind_scope == 'class' else ''
+        k = lock_kind_of(m.group('word'), m.group('ns'), ctx, owner, path, stem)
+        if k is None:
+            continue
+        kind, typ = k
+        name = m.group('name')
+        if name in NOT_FUNCTION_NAMES or name in ('operator', 'override', 'final'):
+            continue
+        ptr = m.group('ptr').strip()
+        end = m.group('end')
+        if end == '(':
+            if kind_scope == 'class' or ptr:
+                continue
+            args = split_call_args(code, m.end('end') - 1)
+            if not args or any(re.fullmatch(r'(?:const\s+)?[\w:<>]+(?:\s*[*&]+\s*|\s+)[A-Za-z_]\w*(?:\s*=.*)?', x) for x in args):
+                continue
+        if ptr and kind_scope in ('function',):
+            continue
+        names = [name]
+        if end == ',':
+            rest = code[m.end('end'):b]
+            for piece in split_top(rest):
+                pm = re.match(r'\s*([*&\s]*)([A-Za-z_]\w*)', piece)
+                if pm:
+                    names.append(pm.group(2))
+        for nm in names:
+            key = (ln, nm)
+            if key in seen:
+                continue
+            seen.add(key)
+            quals = m.group('quals')
+            parts = ['%s %s' % (kind, re.sub(r'\s+', '', m.group('ns')) + typ + re.sub(r'\s+', '', m.group('targs') or ''))]
+            if kind_scope == 'macro':
+                parts.append('declared inside #define %s (its uses are not rows)' % owner_name)
+                symbol = src.symbol(ln)
+            elif kind_scope == 'function':
+                parts.append(('function static in %s' if 'static' in quals else 'local in %s') % owner_name)
+                symbol = owner_name + '::' + nm
+            elif kind_scope == 'class':
+                parts.append(('static member of %s' if 'static' in quals else 'member of %s') % owner_name)
+                symbol = owner_name + '::' + nm
+            else:
+                if 'extern' in quals:
+                    continue
+                parts.append('global' + (' static' if 'static' in quals else ''))
+                symbol = nm
+            if m.group('arr').strip():
+                parts.append('array ' + re.sub(r'\s+', '', m.group('arr')))
+            if ptr:
+                parts.append(('pointer' if '*' in ptr else 'reference')
+                             + ' to a lock declared elsewhere or allocated at run time')
+            parts.append(lock_uses_note(ctx, stem, nm, kind_scope, owner_name))
+            out.append((ln, '; '.join(parts), symbol))
+    for m in ctx['lock_container_re'].finditer(code):
+        outer = re.sub(r'\s+', '', m.group('outer'))
+        if re.search(r'(?i)guard|_lock$|lock_|cast$|^std::(?:unique|shared|scoped)_lock', last_component(outer)) \
+                or last_component(outer) in ('static_cast', 'reinterpret_cast', 'const_cast', 'dynamic_cast', 'sizeof'):
+            continue
+        policy = not LOCK_ELEMENT_CONTAINER_RE.search(last_component(outer))
+        off = m.start('outer')
+        ln = src.line_of(off)
+        a, b = statement_span(code, off)
+        head = code[a:off]
+        if paren_depth_between(code, a, m.start()) > 0 or re.search(r'\b(?:typedef|using|friend|return|new)\b', head):
+            continue
+        kind_scope, owner_name, span = lock_scope(src, ln, off)
+        owner = owner_name if kind_scope == 'class' else ''
+        inner_kinds = []
+        for w in re.findall(r'[A-Za-z_]\w*', m.group('inner')):
+            k = lock_kind_of(w, '', ctx, owner, path, stem)
+            if k is not None and k[0] not in inner_kinds:
+                inner_kinds.append(k[0])
+        if not inner_kinds:
+            continue
+        nm = m.group('name')
+        if (ln, nm) in seen or m.group('end') == '(' and kind_scope == 'class':
+            continue
+        if policy:
+            stats['lock-guards policy-parameter instances'] += 1
+            continue
+        seen.add((ln, nm))
+        where = {'macro': 'declared inside #define %s' % owner_name, 'function': 'local in %s' % owner_name,
+                 'class': 'member of %s' % owner_name}.get(kind_scope, 'global')
+        symbol = src.symbol(ln) if kind_scope in ('macro', 'global') else owner_name + '::' + nm
+        if kind_scope == 'global':
+            symbol = nm
+        out.append((ln, 'container of locks (%s) %s<%s>; %s; %s' % (
+            ', '.join(inner_kinds), outer, collapse(m.group('inner'), 80), where,
+            lock_uses_note(ctx, stem, nm, kind_scope, owner_name)), symbol))
+    out += template_lock_rows(src, ctx)
+    out += spin_lock_rows(src, ctx, set(r[0] for r in out))
+    return out
+
+
+def name_tokens(name):
+    out = []
+    for part in name.split('_'):
+        out += re.findall(r'[A-Z]+(?![a-z])|[A-Z]?[a-z]+|\d+', part)
+    return [t.lower() for t in out]
+
+
+def template_lock_rows(src, ctx):
+    out = []
+    src.scan()
+    if not src.tparams:
+        return out
+    stem = src.stem()
+    for name, hl, ol, end, extra in src.classes:
+        tps = src.tparams.get((name, hl))
+        if not tps:
+            continue
+        funcs = [(f[1], f[3]) for f in src.function_spans() if hl <= f[1] <= end]
+        for ln in range(ol + 1, end + 1):
+            if any(fh <= ln <= fe for fh, fe in funcs):
+                continue
+            inner = innermost_class(src, ln)
+            owner = inner[0] if inner is not None else name
+            mm = re.match(r'\s*(?:(?:public|private|protected)\s*:\s*)?(?:mutable\s+)?(?:const\s+)?([A-Za-z_]\w*)'
+                          r'(\s*[*&]+\s*|\s+)(?:const\s+)?([A-Za-z_]\w*)\s*((?:\[[^\]]*\]\s*)*);', src.lines[ln])
+            if not mm or mm.group(1) not in tps:
+                continue
+            if not LOCK_NAME_TOKENS & set(name_tokens(mm.group(1)) + name_tokens(mm.group(3))):
+                continue
+            ptr = mm.group(2).strip()
+            if any(r[0] == ln for r in out):
+                continue
+            out.append((ln, 'lock whose type is the template parameter %s; member of %s%s%s; %s' % (
+                mm.group(1), owner, '; array ' + re.sub(r'\s+', '', mm.group(4)) if mm.group(4).strip() else '',
+                ('; %s to a lock declared elsewhere' % ('pointer' if '*' in ptr else 'reference')) if ptr else '',
+                lock_uses_note(ctx, stem, mm.group(3), 'class', owner)), owner + '::' + mm.group(3)))
+    return out
+
+
+def spin_lock_rows(src, ctx, taken=frozenset()):
+    out = []
+    code = src.code
+    if not re.search(r'(?i)lock|latch|mutex|spin', code):
+        return out
+    stem = src.stem()
+    seen = set(taken)
+    for m in SPIN_LOCK_DECL_RE.finditer(code):
+        name = m.group('name')
+        if not SPIN_LOCK_WORDS & set(name_tokens(name)):
+            continue
+        if m.group('end') == '(' or m.group('ptr').strip():
+            continue
+        off = m.start('name')
+        ln = src.line_of(off)
+        if ln in seen:
+            continue
+        a, b = statement_span(code, off)
+        head = code[a:m.start()]
+        if paren_depth_between(code, a, m.start()) > 0 or re.search(r'\b(?:typedef|using|friend|return|new|delete|case)\b', head):
+            continue
+        if re.search(r'[=?:]\s*$', head) and not re.search(r'(?:public|private|protected)\s*:\s*$', head):
+            continue
+        kind_scope, owner_name, span = lock_scope(src, ln, off)
+        quals = m.group('quals')
+        if kind_scope == 'function' and 'static' not in quals or kind_scope == 'macro':
+            continue
+        if kind_scope == 'global' and 'extern' in quals:
+            continue
+        if kind_scope == 'class' and (last_component(owner_name) in ctx['lock_kinds'] or 'Guard' in last_component(owner_name)):
+            continue
+        scope = 'class' if kind_scope == 'class' else 'stem'
+        n = spin_acquires(ctx, stem, name, scope, owner_name)
+        if not n:
+            continue
+        seen.add(ln)
+        where = {'class': ('static member of %s' if 'static' in quals else 'field of %s') % owner_name,
+                 'function': 'function static in %s' % owner_name}.get(kind_scope, 'global' + (' static' if 'static' in quals else ''))
+        typ = re.sub(r'\s+', ' ', m.group('type')).strip()
+        arr = re.sub(r'\s+', '', m.group('arr'))
+        text = ('hand-made spin lock: %s %s; %s%s; acquired at %d %s in %s by a test-and-set or compare-and-swap, a guard '
+                'object or an acquire call that takes its address; its atomic accesses are rows of atomic-fields.tsv') % (
+            typ, name, where, '; array ' + arr if arr else '', n, 'place' if n == 1 else 'places',
+            ('methods of %s (%s.*)' % (last_component(owner_name), posixpath.basename(stem))) if scope == 'class'
+            else posixpath.basename(stem) + '.*')
+        symbol = owner_name + '::' + name if kind_scope in ('class', 'function') else name
+        out.append((ln, text, symbol))
+    return out
+
+
+def pri_value(name):
+    m = PRI_MACRO_RE.match(name)
+    if not m:
+        return None
+    size = m.group(2)
+    for k in ('LEAST', 'FAST'):
+        if size.startswith(k):
+            size = size[len(k):]
+    return PRI_LENGTH.get(size, '') + m.group(1)
+
+
+def format_text(raw, string_macros=None):
+    pieces = []
+    macros = []
+    has_literal = False
+    raw = re.sub(r'\\\r?\n', '', raw)
+    for m in STRING_PIECE_RE.finditer(raw):
+        if m.group('raw') is not None:
+            pieces.append(m.group('raw'))
+            has_literal = True
+        elif m.group('s') is not None:
+            pieces.append(m.group('s'))
+            has_literal = True
+        elif m.group('id'):
+            ident = m.group('id')
+            v = pri_value(ident)
+            if v is not None:
+                pieces.append(v)
+            elif string_macros is not None and ident in string_macros:
+                pieces.append(string_macros[ident])
+                has_literal = True
+                macros.append(ident)
+            else:
+                macros.append(ident)
+    return has_literal, ''.join(pieces), macros
+
+
+ARG_INT_LITERAL_RE = re.compile(r'(?:0[xX][0-9a-fA-F]+|0[bB][01]+|\d+)([uUlL]*)')
+ARG_FLOAT_LITERAL_RE = re.compile(r'(?:\d+\.\d*|\.\d+|\d+(?=[eE]))(?:[eE][-+]?\d+)?([fFlL]?)')
+CAST_START_RE = re.compile(r'(static_cast|reinterpret_cast|const_cast|dynamic_cast)\s*<')
+TYPE_WORD_RE = re.compile(
+    r'(?:const\s+|volatile\s+)*(?:(?:unsigned|signed)\s+)?(?:u?int(?:8|16|32|64)?_t|u?int(?:8|16|32|64)|int|char|short|'
+    r'long(?:\s+long)?(?:\s+int)?|bool|float|(?:long\s+)?double|size_t|ssize_t|uintptr_t|intptr_t|ptrdiff_t|void|unsigned|'
+    r'signed|pid_t|off_t|time_t)(?:\s+const)?(?:\s*\*+(?:\s*const)?)?')
+INTEGER_RANKS = {
+    'bool': 0, 'char': 1, 'signed char': 1, 'unsigned char': 1, 'int8_t': 1, 'uint8_t': 1, 'int8': 1, 'uint8': 1,
+    'short': 2, 'unsigned short': 2, 'int16_t': 2, 'uint16_t': 2, 'int16': 2, 'uint16': 2,
+    'int': 3, 'unsigned': 3, 'unsigned int': 3, 'signed': 3, 'int32_t': 3, 'uint32_t': 3, 'int32': 3, 'uint32': 3,
+    'pid_t': 3,
+    'long': 4, 'unsigned long': 4, 'long int': 4, 'size_t': 4, 'ssize_t': 4, 'intptr_t': 4, 'uintptr_t': 4, 'ptrdiff_t': 4,
+    'off_t': 4, 'time_t': 4,
+    'long long': 5, 'unsigned long long': 5, 'long long int': 5, 'int64_t': 5, 'uint64_t': 5, 'int64': 5, 'uint64': 5,
+}
+FLOAT_TYPES = ('float', 'double', 'long double')
+LIBC_RETURN_TYPES = {
+    'abs': 'int', 'labs': 'long', 'llabs': 'long long', 'strlen': 'size_t', 'strnlen': 'size_t', 'fabs': 'double',
+    'floor': 'double', 'ceil': 'double', 'sqrt': 'double', 'pow': 'double', 'log': 'double', 'log10': 'double',
+    'exp': 'double', 'strerror': 'char *', 'getpid': 'pid_t', 'time': 'time_t', 'strchr': 'char *', 'strstr': 'char *',
+    'strdup': 'char *', 'atoi': 'int', 'atol': 'long', 'atoll': 'long long', 'strtol': 'long', 'strtoll': 'long long',
+    'strtoul': 'unsigned long', 'strtoull': 'unsigned long long', 'strtod': 'double', 'toupper': 'int', 'tolower': 'int',
+    'getenv': 'char *', 'pthread_self': 'pthread_t', 'gettid': 'pid_t', 'syscall': 'long',
+}
+ELEMENT_CONTAINER_RE = re.compile(
+    r'^(?:ObIArray|ObSEArray|ObArray|ObFixedArray|ObSqlArray|ObArrayWrap|ObList|Ob2DArray|ObVector|ObArrayImpl|'
+    r'ObSArray|vector|array|deque)$')
+
+
+def bare_type(t):
+    t = re.sub(r'\b(?:const|volatile)\b', ' ', t or '')
+    t = t.replace('&', ' ').replace('*', ' ')
+    return re.sub(r'\s+', ' ', t).strip()
+
+
+def class_of(t):
+    if not t:
+        return ''
+    b = bare_type(strip_template_args(t) if '<' in t else t)
+    return last_component(b) if b else ''
+
+
+def is_pointer(t):
+    return bool(t) and bare_type(t) != '' and '*' in drop_template_args(t)
+
+
+def char_pointer_kind(t):
+    if not t:
+        return None
+    s = re.sub(r'\s+', ' ', drop_template_args(t)).strip()
+    if '(string literal)' in t or re.fullmatch(r'(?:const char|char const) ?\[.*\]', s):
+        return 'const'
+    if re.fullmatch(r'(?:unsigned |signed )?char ?\[.*\]', s):
+        return 'mutable'
+    m = re.fullmatch(r'(const )?(?:unsigned |signed )?char( const)? \*( const)?', s)
+    if not m:
+        return None
+    return 'const' if m.group(1) or m.group(2) else 'mutable'
+
+
+def integer_rank(t):
+    b = bare_type(t)
+    b = re.sub(r'^(?:std::|common::)', '', b)
+    return INTEGER_RANKS.get(b)
+
+
+def expand_alias(t, ctx, *scopes):
+    seen = 0
+    aliases = ctx['type_aliases']
+    while t and seen < 4 and ' or ' not in t:
+        b = bare_type(t)
+        if not b or '<' in b:
+            break
+        target = None
+        if '::' in b:
+            q, last = b.rsplit('::', 1)
+            target = aliases.get((q.rsplit('::', 1)[-1], last))
+        else:
+            for sc in scopes:
+                if sc and (sc, b) in aliases:
+                    target = aliases[(sc, b)]
+                    break
+            if target is None:
+                target = aliases.get(('', b))
+            if target is None:
+                owners = ctx['alias_owners'].get(b, ())
+                if len(owners) == 1:
+                    target = aliases.get((owners[0], b))
+        if not target or target == b or integer_rank(b) is not None:
+            break
+        t = re.sub(r'(?<![\w:])' + re.escape(b) + r'(?![\w:])', target, t, count=1) if re.search(
+            r'(?<![\w:])' + re.escape(b) + r'(?![\w:])', t) else target
+        seen += 1
+    return t
+
+
+def arith_result(lt, rt):
+    if lt is None or rt is None:
+        return None
+    for ft in ('long double', 'double', 'float'):
+        if bare_type(lt) == ft or bare_type(rt) == ft:
+            return 'double' if ft == 'float' else ft
+    lr, rr = integer_rank(lt), integer_rank(rt)
+    if lr is None or rr is None:
+        return None
+    lb, rb = bare_type(lt), bare_type(rt)
+    if lr < 3:
+        lb, lr = 'int', 3
+    if rr < 3:
+        rb, rr = 'int', 3
+    if lr != rr:
+        return lb if lr > rr else rb
+    lu = lb.startswith('u') or lb.startswith('unsigned') or lb == 'size_t'
+    return lb if lu or not (rb.startswith('u') or rb.startswith('unsigned') or rb == 'size_t') else rb
+
+
+def split_top_operator(e, ops):
+    depth = 0
+    best = None
+    i = 0
+    n = len(e)
+    while i < n:
+        c = e[i]
+        if c in '"\'':
+            j = i + 1
+            while j < n and e[j] != c:
+                j += 2 if e[j] == '\\' else 1
+            i = j + 1
+            continue
+        if c in '([{':
+            depth += 1
+        elif c in ')]}':
+            depth -= 1
+        elif depth == 0:
+            for op in ops:
+                if e.startswith(op, i):
+                    prev = e[:i].rstrip()
+                    nxt = e[i + len(op):i + len(op) + 1]
+                    if op in ('<', '>') and (e.startswith(op * 2, i) or (i > 0 and e[i - 1] in '<>-') or nxt in '<>='):
+                        break
+                    if op in ('<', '>') and not (e[i - 1:i] == ' ' and nxt == ' '):
+                        break
+                    if op in ('&', '|') and (nxt == op or e[i - 1:i] == op):
+                        break
+                    if op in ('-', '+') and (nxt == op or e[i - 1:i] == op or nxt == '>' and op == '-'):
+                        break
+                    if op in ('*', '&', '-', '+') and (not prev or prev[-1] in '(,=!<>&|^~?:+-*/%[' or
+                                                       re.search(r'\b(?:return|case)$', prev)):
+                        break
+                    if op == '=' or op in ('<', '>') and nxt == '=' and op * 2 not in ops:
+                        break
+                    best = (i, op)
+                    i += len(op) - 1
+                    break
+        i += 1
+    return best
+
+
+def arg_expr_type(src, f, cls, e, ctx, off, depth=0):
+    if depth > 8 or e is None:
+        return None
+    e = e.strip()
+    while e.startswith('(') and matching_close(e, 0) == len(e) - 1:
+        e = e[1:-1].strip()
+    if not e:
+        return None
+    if re.match(r'(?:u8|u|U|L)?"', e) or (e.split()[0] in ctx['string_macros'] and format_text(e, ctx['string_macros'])[0]):
+        has, value, macros = format_text(e, ctx['string_macros'])
+        if has and not re.sub(r'(?:(?:u8|u|U|L)?"(?:[^"\\]|\\.)*"|[A-Za-z_]\w*|\s)', '', e.replace('\\\n', '')):
+            return 'const char * (string literal)'
+    if e[0] == "'":
+        return 'char'
+    if e in ('true', 'false'):
+        return 'bool'
+    if e in ('NULL', 'nullptr'):
+        return 'null pointer'
+    m = ARG_FLOAT_LITERAL_RE.fullmatch(e)
+    if m:
+        return 'float' if m.group(1) in ('f', 'F') else 'long double' if m.group(1) in ('l', 'L') else 'double'
+    m = ARG_INT_LITERAL_RE.fullmatch(e)
+    if m:
+        suf = m.group(1).lower()
+        return {'': 'int', 'l': 'long', 'll': 'long long', 'u': 'unsigned int', 'ul': 'unsigned long', 'lu': 'unsigned long',
+                'ull': 'unsigned long long', 'llu': 'unsigned long long'}.get(suf, 'int')
+    q = split_top_operator(e, ('?',))
+    if q is not None:
+        colon = split_top_operator(e[q[0] + 1:], (':',))
+        if colon is not None:
+            a = arg_expr_type(src, f, cls, e[q[0] + 1:q[0] + 1 + colon[0]], ctx, off, depth + 1)
+            b = arg_expr_type(src, f, cls, e[q[0] + 2 + colon[0]:], ctx, off, depth + 1)
+            if a and b and char_pointer_kind(a) and char_pointer_kind(b):
+                return 'const char *' if 'const' in (char_pointer_kind(a), char_pointer_kind(b)) else 'char *'
+            return a if a == b or b is None or b == 'null pointer' else (b if a is None or a == 'null pointer' else
+                                                                         arith_result(a, b) or a)
+    for ops, kind in ((('||',), 'bool'), (('&&',), 'bool'), (('|',), 'arith'), (('^',), 'arith'), (('&',), 'arith'),
+                      (('==', '!='), 'bool'), (('<=', '>=', '<', '>'), 'bool'), (('<<', '>>'), 'shift'),
+                      (('+', '-'), 'arith'), (('*', '/', '%'), 'arith')):
+        hit = split_top_operator(e, ops)
+        if hit is None:
+            continue
+        if kind == 'bool':
+            return 'bool'
+        lt = arg_expr_type(src, f, cls, e[:hit[0]], ctx, off, depth + 1)
+        if kind == 'shift':
+            return arith_result(lt, 'int') if lt else None
+        rt = arg_expr_type(src, f, cls, e[hit[0] + len(hit[1]):], ctx, off, depth + 1)
+        if hit[1] in ('+', '-') and lt and is_pointer(lt):
+            return 'ptrdiff_t' if hit[1] == '-' and rt and is_pointer(rt) else lt
+        if hit[1] == '+' and rt and is_pointer(rt):
+            return rt
+        return arith_result(lt, rt)
+    if e.startswith('!'):
+        return 'bool'
+    if e[0] in '-+~' and not e.startswith(('--', '++', '->')):
+        t = arg_expr_type(src, f, cls, e[1:], ctx, off, depth + 1)
+        return arith_result(t, 'int') if t and integer_rank(t) is not None else t
+    if e.startswith(('++', '--')):
+        return arg_expr_type(src, f, cls, e[2:], ctx, off, depth + 1)
+    if e[0] == '*':
+        t = arg_expr_type(src, f, cls, e[1:], ctx, off, depth + 1)
+        if t and is_pointer(t):
+            return re.sub(r'\s*\*(?:\s*const)?\s*$', '', drop_template_args(t) if '<' not in t else t).strip() or None
+        return None
+    if e[0] == '&':
+        t = arg_expr_type(src, f, cls, e[1:], ctx, off, depth + 1)
+        return (t.replace('&', '').strip() + ' *') if t else None
+    if e[0] == '(':
+        close = matching_close(e, 0)
+        if close > 0:
+            inner = e[1:close].strip()
+            rest = e[close + 1:].strip()
+            if rest and (TYPE_WORD_RE.fullmatch(inner) or re.fullmatch(r'(?:const\s+)?[A-Za-z_][\w:]*(?:<[^()]*>)?\s*\*+', inner)
+                         or re.fullmatch(r'(?:const\s+)?(?:[A-Za-z_]\w*::)*[A-Za-z_]\w*_t', inner)):
+                return norm_type(inner)
+    m = CAST_START_RE.match(e)
+    if m:
+        lt = m.end() - 1
+        depth_a = 0
+        j = lt
+        while j < len(e):
+            if e[j] == '<':
+                depth_a += 1
+            elif e[j] == '>':
+                depth_a -= 1
+                if depth_a == 0:
+                    break
+            j += 1
+        target = e[lt + 1:j]
+        k = j + 1
+        while k < len(e) and e[k].isspace():
+            k += 1
+        if k < len(e) and e[k] == '(':
+            close = matching_close(e, k)
+            if close > 0:
+                return chain_type(src, f, cls, norm_type(target), e[close + 1:], ctx, off, depth)
+        return norm_type(target)
+    if re.match(r'(?:sizeof|alignof|offsetof)\s*\(', e) and matching_close(e, e.index('(')) == len(e) - 1:
+        return 'size_t'
+    return postfix_type(src, f, cls, e, ctx, off, depth)
+
+
+def split_postfix(e):
+    m = re.match(r'\s*((?:::\s*)?(?:[A-Za-z_]\w*\s*(?:<[^<>()]*(?:<[^<>()]*>[^<>()]*)*>)?\s*::\s*)*~?[A-Za-z_]\w*)', e)
+    if not m:
+        return None
+    root = re.sub(r'\s+', '', m.group(1))
+    return root, e[m.end():]
+
+
+def parse_steps(rest):
+    steps = []
+    i = 0
+    n = len(rest)
+    while i < n:
+        c = rest[i]
+        if c.isspace():
+            i += 1
+            continue
+        if rest.startswith('->', i) or c == '.':
+            j = i + (2 if c == '-' else 1)
+            mm = re.match(r'\s*(?:template\s+)?(~?[A-Za-z_]\w*)', rest[j:])
+            if not mm:
+                return None
+            steps.append(('.', mm.group(1)))
+            i = j + mm.end()
+            continue
+        if c == '(':
+            close = matching_close(rest, i)
+            if close < 0:
+                return None
+            steps.append(('()', rest[i + 1:close]))
+            i = close + 1
+            continue
+        if c == '[':
+            close = matching_close(rest, i)
+            if close < 0:
+                return None
+            steps.append(('[]', rest[i + 1:close]))
+            i = close + 1
+            continue
+        if c == '<':
+            depth = 0
+            j = i
+            while j < n:
+                if rest[j] == '<':
+                    depth += 1
+                elif rest[j] == '>':
+                    depth -= 1
+                    if depth == 0:
+                        break
+                elif rest[j] in ';{}':
+                    return None
+                j += 1
+            if j >= n:
+                return None
+            i = j + 1
+            continue
+        if rest.startswith(('++', '--'), i):
+            i += 2
+            continue
+        return None
+    return steps
+
+
+def member_type(ctx, c, name):
+    if not c:
+        return None
+    bases = ctx.get('class_bases', {})
+    for k in ancestors(bases, c):
+        t = ctx['member_types'].get(k, {}).get(name)
+        if t:
+            return t
+    return None
+
+
+def method_type(ctx, c, name):
+    bases = ctx.get('class_bases', {})
+    for k in (ancestors(bases, c) if c else ['']):
+        t = ctx['func_rets'].get((k, name))
+        if t:
+            return t
+    return None
+
+
+def global_type(ctx, name, stem):
+    cands = ctx['global_types'].get(name)
+    if not cands:
+        return None
+    same = [t for s, t in cands if s == stem]
+    types = sorted(set(same or [t for s, t in cands]))
+    return types[0] if len(types) == 1 else None
+
+
+def root_type(src, f, cls, root, ctx, off, is_call):
+    name = root.split('::')[-1]
+    if '::' in root and not root.startswith('::'):
+        q = last_component(root.rsplit('::', 1)[0])
+        if is_call:
+            return method_type(ctx, q, name) or ctx['func_rets'].get(('', name))
+        return member_type(ctx, q, name) or global_type(ctx, name, src.stem())
+    if is_call:
+        if name in ctx['macro_calls']:
+            kind, val = ctx['macro_calls'][name]
+            if kind == 'cast':
+                return val
+            return method_type(ctx, cls, val) if cls and method_type(ctx, cls, val) else ctx['func_rets'].get(('', val))
+        if TYPE_WORD_RE.fullmatch(name):
+            return name
+        if cls:
+            t = method_type(ctx, cls, name)
+            if t:
+                return t
+        t = ctx['func_rets'].get(('', name))
+        if t:
+            return t
+        if name in LIBC_RETURN_TYPES:
+            return LIBC_RETURN_TYPES[name]
+        if name in ctx['member_types'] or name in ctx['class_bases']:
+            return name
+        return None
+    if name == 'this':
+        return cls + ' *' if cls else None
+    if f is not None:
+        typ, info = local_type(src, f, name, off)
+        if info is not None:
+            return typ
+    if cls:
+        t = member_type(ctx, cls, name)
+        if t:
+            return t
+    if name in ctx['str_consts']:
+        return 'const char *'
+    return global_type(ctx, name, src.stem())
+
+
+def element_type(t):
+    s = t.strip()
+    am = re.search(r'\s*\[[^\]]*\]\s*$', s)
+    if am:
+        return s[:am.start()].strip() or None
+    m = re.match(r'(?:const\s+)?((?:[A-Za-z_]\w*::)*([A-Za-z_]\w*))\s*<', s)
+    if m and ELEMENT_CONTAINER_RE.match(m.group(2)):
+        lt = s.index('<', m.start(1))
+        depth = 0
+        for j in range(lt, len(s)):
+            if s[j] == '<':
+                depth += 1
+            elif s[j] == '>':
+                depth -= 1
+                if depth == 0:
+                    break
+        args = split_top(s[lt + 1:j])
+        return norm_type(args[0]) if args else None
+    if is_pointer(s):
+        return re.sub(r'\s*\*(?:\s*const)?\s*$', '', s).strip()
+    b = bare_type(s)
+    if integer_rank(b) is not None or b in FLOAT_TYPES:
+        return b
+    if b and '<' not in s and not re.search(r'(?:Array|List|Vector|Map|Set|String|Str)$', class_of(s)):
+        return b
+    return None
+
+
+def walk_steps(t, steps, ctx, cls):
+    scope = cls
+    k = 0
+    while k < len(steps):
+        if t is None:
+            return None
+        t = expand_alias(norm_type(t), ctx, scope, cls)
+        kind, val = steps[k]
+        if kind == '.':
+            c = class_of(t)
+            if k + 1 < len(steps) and steps[k + 1][0] == '()':
+                t = method_type(ctx, c, val)
+                k += 2
+            else:
+                t = member_type(ctx, c, val)
+                k += 1
+            scope = c
+        elif kind == '[]':
+            t = element_type(t)
+            k += 1
+        else:
+            return None
+    return expand_alias(norm_type(t), ctx, scope, cls) if t else None
+
+
+def chain_type(src, f, cls, t, rest, ctx, off, depth):
+    steps = parse_steps(rest)
+    if steps is None:
+        return None
+    return walk_steps(t, steps, ctx, cls)
+
+
+def postfix_type(src, f, cls, e, ctx, off, depth):
+    sp = split_postfix(e)
+    if sp is None:
+        return None
+    root, rest = sp
+    steps = parse_steps(rest)
+    if steps is None:
+        return None
+    is_call = bool(steps) and steps[0][0] == '()'
+    t = root_type(src, f, cls, root, ctx, off, is_call)
+    if t is None:
+        return None
+    return walk_steps(t, steps[1:] if is_call else steps, ctx, cls)
+
+
+def expand_comma_macros(args, ctx):
+    out = []
+    for a in args:
+        m = re.fullmatch(r'\s*([A-Za-z_]\w*)\s*\((.*)\)\s*', a, re.S)
+        if m and m.group(1) in ctx['comma_macros']:
+            params, pieces = ctx['comma_macros'][m.group(1)]
+            actual = [x.strip() for x in split_top(m.group(2))]
+            if len(actual) == len(params):
+                for piece in pieces:
+                    for pname, val in zip(params, actual):
+                        piece = re.sub(r'(?<![\w#])' + re.escape(pname) + r'(?!\w)', val, piece)
+                    out.append(piece)
+                continue
+        out.append(a)
+    return out
+
+
+def show_type(t):
+    if t is None:
+        return '?'
+    t = t.replace('const char * (string literal)', 'string literal')
+    return re.sub(r'\s+', ' ', t).strip()
+
+
+def conversion_slots(convs):
+    slots = []
+    for c in convs:
+        if c == '%%':
+            continue
+        for _ in range(c.count('*')):
+            slots.append(c + ' width or precision')
+        slots.append(c)
+    return slots
+
+
+def argument_type_note(src, f, cls, args, convs, ctx, off):
+    types = [show_type(arg_expr_type(src, f, cls, a, ctx, off)) for a in args]
+    note = 'argument types: ' + (' | '.join(collapse(t, 60) for t in types) if types else 'none')
+    if convs is not None:
+        slots = conversion_slots(convs)
+        if len(slots) != len(args):
+            note += '; the conversions take %d argument%s, the call passes %d' % (len(slots), '' if len(slots) == 1 else 's',
+                                                                              len(args))
+        else:
+            pairs = []
+            for slot, t in zip(slots, types):
+                pairs.append('%s <- %s' % (slot, collapse(t, 50)))
+            if pairs:
+                note += '; conversion and argument pairs: ' + ', '.join(pairs)
+    return note, types
+
+
+def printf_overload_table(repo, printf_funcs, printf_defs, func_index):
+    mixed = set(n for n, v in printf_funcs.items() if v[3])
+    printf_at = {}
+    for name, idx, kind, path, ln in printf_defs:
+        if name in mixed:
+            printf_at[(path, ln - 1)] = (idx, kind)
+    table = collections.defaultdict(list)
+    sources = {}
+    for cls, simple, path, hl, end in func_index:
+        if simple not in mixed:
+            continue
+        src = sources.get(path)
+        if src is None:
+            src = read_source(repo, path)
+            sources[path] = src
+        span = next((fs for fs in src.function_spans() if fs[1] == hl and fs[4][1] == simple), None)
+        if span is None:
+            continue
+        params = [p.strip() for p in split_top(span[4][3]) if p.strip() and p.strip() != 'void']
+        pack = lambda p: p == '...' or bool(re.search(r'\.\.\.\s*[A-Za-z_]?\w*$', p))
+        variadic = bool(params) and pack(params[-1])
+        fixed = [p for p in params if not pack(p)]
+        minp = sum(1 for p in fixed if '=' not in p)
+        maxp = 1 << 30 if variadic else len(fixed)
+        pf = printf_at.get((path, hl))
+        tps = src.tparams.get((span[0], span[1]), frozenset())
+        table[simple].append((cls, minp, maxp, pf[0] if pf else None, tuple(fixed), frozenset(tps)))
+    return {k: tuple(sorted(set(v), key=lambda o: (o[0], o[1], o[2], -1 if o[3] is None else o[3], o[4]))) for k, v in
+            table.items()}
+
+
+def template_param_at(overload, idx):
+    fixed, tps = overload[4], overload[5]
+    if idx >= len(fixed):
+        return False
+    words = set(re.findall(r'[A-Za-z_]\w*', fixed[idx].split('=', 1)[0]))
+    return bool(words & set(tps))
+
+
+def format_arg_binding(src, f, cls, arg, ctx, off, others, idx):
+    if format_text(arg, ctx['string_macros'])[0]:
+        return 'printf', 'a string literal'
+    if re.fullmatch(r'\s*(?:[A-Za-z_]\w*\s+)+[A-Za-z_]\w*\s*', arg):
+        return 'printf', 'a concatenation of string macros'
+    name = re.fullmatch(r'\s*(?:[A-Za-z_]\w*\s*::\s*)*([A-Za-z_]\w*)(?:\s*\[[^\[\]]*\])?\s*', arg)
+    if name and name.group(1) in ctx['str_consts'] and not (f is not None and find_local(src, f, name.group(1), off)):
+        return 'printf', 'the const char * constant %s' % name.group(1)
+    t = arg_expr_type(src, f, cls, arg, ctx, off)
+    kind = char_pointer_kind(t)
+    if kind == 'const':
+        return 'printf', 'a %s' % show_type(t)
+    if kind == 'mutable':
+        if any(template_param_at(o, idx) for o in others):
+            return 'other', 'a char * binds the template overload'
+        return 'printf', 'a %s' % show_type(t)
+    if t is None:
+        return 'unknown', 'the type of %s is not resolved' % collapse(arg, 60)
+    if integer_rank(t) is not None or bare_type(t) in FLOAT_TYPES:
+        return 'number', show_type(t)
+    return 'other', show_type(t)
+
+
+def resolve_mixed_call(src, ctx, name, prefix, raw_args, f, cls, off):
+    overloads = list(ctx['printf_overloads'].get(name, ()))
+    if not overloads:
+        return None, 'other', 'no overload found'
+    n = len(raw_args)
+    rm = re.search(r'((?:[A-Za-z_]\w*\s*(?:\((?:[^()]|\([^()]*\))*\))?\s*(?:\[[^\[\]]*\])?\s*(?:\.|->)\s*)+)$', prefix)
+    classes = set(o[0] for o in overloads)
+    if rm:
+        recv = re.sub(r'(?:\.|->)\s*$', '', rm.group(1).strip())
+        t = arg_expr_type(src, f, cls, recv, ctx, off)
+        rc = class_of(t) if t else ''
+        if rc:
+            bases = ctx.get('class_bases', {})
+            overloads = [o for o in overloads if o[0] in ancestors(bases, rc)]
+        elif len(classes) > 1:
+            return None, 'other', 'receiver not resolved'
+    elif len(classes) > 1:
+        bases = ctx.get('class_bases', {})
+        mine = [o for o in overloads if o[0] == '' or cls and o[0] in ancestors(bases, cls)]
+        overloads = mine
+    fitting = [o for o in overloads if o[1] <= n <= o[2]]
+    pf = sorted((o for o in fitting if o[3] is not None and o[3] < n), key=lambda o: o[3])
+    others = [o for o in fitting if o[3] is None]
+    if not pf:
+        return None, 'other', 'another overload'
+    verdicts = [(o,) + format_arg_binding(src, f, cls, raw_args[o[3]], ctx, off, others, o[3]) for o in pf]
+    unknowns = sorted((x for x in verdicts if x[1] == 'unknown'), key=lambda x: -x[0][1])
+    if not others:
+        why = 'only a printf overload takes %d arguments' % n
+        for o, v, w in verdicts:
+            if v == 'printf':
+                return o[3], 'printf', why
+        if unknowns:
+            return unknowns[0][0][3], 'printf', why
+        rest = [x for x in verdicts if x[1] == 'other']
+        return (rest[0][0][3] if rest else pf[-1][3]), 'printf', why
+    for o, v, w in verdicts:
+        if v == 'printf':
+            return o[3], 'printf', 'the argument at the format position is %s' % w
+    if unknowns:
+        return unknowns[0][0][3], 'unknown', unknowns[0][2]
+    return None, 'other', 'another overload'
+    if not others:
+        for o in pf:
+            if format_arg_binding(src, f, cls, raw_args[o[3]], ctx, off, (), o[3])[0] == 'printf':
+                return o[3], 'only a printf overload takes %d arguments' % n
+        for o in pf:
+            if not re.search(r'(?i)alloc', raw_args[o[3]]):
+                return o[3], 'only a printf overload takes %d arguments' % n
+        return pf[0][3], 'only a printf overload takes %d arguments' % n
+    unknown = None
+    for o in pf:
+        verdict, why = format_arg_binding(src, f, cls, raw_args[o[3]], ctx, off, others, o[3])
+        if verdict == 'printf':
+            return o[3], 'the argument at the format position is %s' % why
+        if verdict == 'unknown':
+            unknown = why
+    if unknown:
+        return -1, unknown
+    return None, 'another overload'
+
+
+def printf_rows(src, ctx, stats):
+    out = []
+    code = src.code
+    names = ctx['printf_names']
+    funcs = ctx['printf_funcs']
+    macros = ctx['printf_macros']
+    if not any(m.group(1) in names for m in IDENT_PAREN_RE.finditer(code)):
+        return out
+    acode, alines, astarts, text = aligned_view(src)
+    smacros = ctx['string_macros']
+    for i, line in enumerate(src.lines):
+        if '(' not in line:
+            continue
+        for k, m in enumerate(IDENT_PAREN_RE.finditer(line)):
+            name = m.group(1)
+            if name not in names:
+                continue
+            in_define = src.dkind.get(i) in ('define', 'cont')
+            macro_name = src.dname.get(i, '') if in_define else ''
+            mixed = False
+            if name in macros:
+                if in_define and macro_name == name:
+                    continue
+                fmt_indexes = (macros[name][0],)
+                sinks = macros[name][1]
+                kind = 'variadic'
+                passes_args = macros[name][2]
+            else:
+                ck = body_call_kind(src, i, name, line[:m.start()], src.starts[i] + m.end() - 1)
+                if ck != 'call':
+                    continue
+                idxs, kind, sink, mixed = funcs[name]
+                fmt_indexes = tuple(sorted(idxs))
+                sinks = (sink,) if sink else ()
+                passes_args = True
+            if in_define and macro_name in macros:
+                stats['printf-calls inside forwarding macros'] += 1
+                continue
+            open_paren = aligned_offset(src, i, IDENT_PAREN_RE, k)
+            spans, close = aligned_args(acode, open_paren) if open_paren is not None else ([], -1)
+            raw_args = [text[s:e] for s, e in spans]
+            if close > open_paren and re.search(r'^[ \t]*#[ \t]*(?:if|else|elif|endif)', text[open_paren + 1:close], re.M):
+                raw_args = split_args_plain(resolve_directives(text[open_paren + 1:close]))
+                stats['printf-calls with preprocessor branches in the arguments'] += 1
+            raw_args = merge_template_splits(raw_args)
+            if looks_like_params(raw_args):
+                stats['printf-calls declarations'] += 1
+                continue
+            off = src.starts[i] + m.start()
+            f = innermost_function(src, i, off)
+            cls = enclosing_class(f[0]) if f else ''
+            overload_note = ''
+            if mixed:
+                pick, status, why = resolve_mixed_call(src, ctx, name, line[:m.start()], raw_args, f, cls, off)
+                if pick is None:
+                    stats['printf-calls other overloads'] += 1
+                    if why == 'receiver not resolved':
+                        stats['printf-calls receiver not resolved'] += 1
+                    continue
+                fmt_indexes = (pick,)
+                if status == 'unknown':
+                    stats['printf-calls overload not resolved'] += 1
+                    overload_note = 'overload not resolved (%s): a const char * there binds the printf overload, anything ' \
+                                    'else another overload' % why
+                elif not format_text(raw_args[pick], smacros)[0]:
+                    overload_note = 'the printf overload, since %s' % why
+            fmt_at = None
+            for idx in fmt_indexes:
+                if idx < len(raw_args) and format_text(raw_args[idx], smacros)[0]:
+                    fmt_at = idx
+                    break
+            if fmt_at is None and name in macros:
+                fmt_at = next((j for j, a in enumerate(raw_args) if format_text(a, smacros)[0]), None)
+            if fmt_at is None and fmt_indexes and fmt_indexes[0] < len(raw_args) and \
+                    re.fullmatch(r'\s*(?:[A-Za-z_]\w*\s+)+[A-Za-z_]\w*\s*', raw_args[fmt_indexes[0]]):
+                fmt_at = fmt_indexes[0]
+            parts = ['%s call' % name]
+            if overload_note:
+                parts.append(overload_note)
+            convs = None
+            has_p = False
+            if fmt_at is None:
+                pos = fmt_indexes[0] if fmt_indexes else 0
+                shown = collapse(raw_args[pos], 80) if pos < len(raw_args) else '(arguments not parsed)'
+                rest = raw_args[pos + 1:] if pos < len(raw_args) else []
+                const = format_constant(raw_args[pos], ctx, src, f, off) if pos < len(raw_args) else None
+                if kind == 'va_list':
+                    parts.append('forwards a va_list: the format and arguments come from the callers of %s' % src.symbol(i))
+                elif const is not None:
+                    cname, values, element = const
+                    per_value = [PRINTF_CONVERSION_RE.findall(v) for v in values]
+                    shown_values = ', '.join('"%s"' % collapse(v, 60) for v in values[:4]) + (', ...' if len(values) > 4 else '')
+                    parts.append('format is the const char * constant %s%s: %s' % (
+                        cname, ' (an element of the array)' if element else '', shown_values))
+                    if all(pv == per_value[0] for pv in per_value):
+                        convs = per_value[0]
+                        parts.append('conversions ' + (' '.join(c for c in convs if c != '%%') or 'none')
+                                     + (' (each value)' if len(values) > 1 else ''))
+                    else:
+                        parts.append('conversions by value: ' + '; '.join(' '.join(c for c in pv if c != '%%') or 'none'
+                                                                        for pv in per_value[:6]))
+                        convs = None
+                    has_p = any(c.endswith('p') for pv in per_value for c in pv)
+                else:
+                    parts.append('format not a literal: %s' % shown)
+            else:
+                has_literal, value, fmt_macros = format_text(raw_args[fmt_at], smacros)
+                alternatives = literal_values(raw_args[fmt_at], smacros) \
+                    if split_top_operator(raw_args[fmt_at], ('?',)) is not None else []
+                parts.append('format %s' % collapse(raw_args[fmt_at], 160))
+                if len(alternatives) > 1:
+                    per_value = [PRINTF_CONVERSION_RE.findall(v) for v in alternatives]
+                    has_p = any(c.endswith('p') for pv in per_value for c in pv)
+                    if all(pv == per_value[0] for pv in per_value):
+                        convs = per_value[0]
+                        parts.append('conversions ' + (' '.join(c for c in convs if c != '%%') or 'none') + ' (each branch)')
+                    else:
+                        convs = None
+                        parts.append('conversions by branch: ' + '; '.join(' '.join(c for c in pv if c != '%%') or 'none'
+                                                                         for pv in per_value))
+                else:
+                    convs = PRINTF_CONVERSION_RE.findall(value)
+                    has_p = any(c.endswith('p') for c in convs)
+                    parts.append('conversions ' + (' '.join(c for c in convs if c != '%%') or 'none'))
+                    if fmt_macros:
+                        parts.append('format uses macros ' + ', '.join(sorted(set(fmt_macros))))
+                rest = raw_args[fmt_at + 1:] if passes_args else []
+            if fmt_at is not None or kind != 'va_list':
+                parts.append('%d arguments%s' % (len(rest), (': ' + collapse(', '.join(collapse(a, 60) for a in rest), 200))
+                                                  if rest else ''))
+                if rest:
+                    note, types = argument_type_note(src, f, cls, expand_comma_macros(rest, ctx),
+                                                     None if in_define else convs, ctx, off)
+                    parts.append(note)
+                    stats['printf-calls arguments'] += len(types)
+                    stats['printf-calls arguments typed'] += sum(1 for t in types if t != '?')
+            if has_p:
+                parts.append('has %p')
+            sym = src.symbol(i)
+            if last_component(sym) == 'to_string' or sym.startswith(('DEF_TO_STRING', '#define TO_STRING', '#define DEF_TO_STRING')):
+                parts.append('inside to_string')
+            for s in sinks:
+                if s in PRINTF_SINK_TEXT:
+                    parts.append(PRINTF_SINK_TEXT[s])
+            if in_define:
+                parts.append('inside #define %s (a fixed format: its uses are not rows)' % macro_name)
+            out.append((i, '; '.join(parts)))
+    return out
+
+
+def local_type(src, f, name, off):
+    info = find_local(src, f, name, off)
+    if info is None:
+        return None, None
+    typ = norm_type(info[1])
+    if info[0] != 'param' and info[2] < len(src.lines):
+        m = re.search(r'([^;{}(),]*?)\b' + re.escape(name) + r'\b(\s*\[[^\]]*\])?', src.lines[info[2]])
+        if m and not typ.startswith('const ') and re.search(r'\bconst\b', m.group(1).split('*')[0]):
+            typ = 'const ' + typ
+        if m and m.group(2) and '*' not in typ:
+            typ = typ + ' ' + re.sub(r'\s+', '', m.group(2))
+    return typ, info
+
+
+PP_TRUE = frozenset(('__APPLE__', '__MACH__', '__aarch64__', '__arm64__', '__clang__', '__GNUC__', '__cplusplus',
+                     '__LP64__', '__unix__'))
+PP_FALSE = frozenset(('_WIN32', '_WIN64', '__linux__', '__x86_64__', '_MSC_VER', '__FreeBSD__', '__MINGW32__', '__CYGWIN__',
+                      '__i386__', '__ANDROID__', '__EMSCRIPTEN__'))
+
+
+def pp_condition(kind, expr):
+    names = re.findall(r'[A-Za-z_]\w*', expr.replace('defined', ' '))
+    if not names or any(n not in PP_TRUE and n not in PP_FALSE for n in names):
+        return None
+    if kind == 'ifdef':
+        return names[0] in PP_TRUE
+    if kind == 'ifndef':
+        return names[0] not in PP_TRUE
+    e = re.sub(r'defined\s*\(\s*(\w+)\s*\)|defined\s+(\w+)',
+               lambda m: ' True ' if (m.group(1) or m.group(2)) in PP_TRUE else ' False ', expr)
+    e = re.sub(r'\b(\w+)\b', lambda m: ' True ' if m.group(1) in PP_TRUE else ' False ' if m.group(1) in PP_FALSE
+               else m.group(1), e)
+    e = e.replace('&&', ' and ').replace('||', ' or ').replace('!', ' not ')
+    try:
+        return bool(eval(e, {'__builtins__': {}}, {'True': True, 'False': False}))
+    except Exception:
+        return None
+
+
+def resolve_directives(text):
+    out = []
+    stack = []
+    for line in text.split('\n'):
+        dm = re.match(r'[ \t]*#[ \t]*(ifdef|ifndef|if|elif|else|endif)\b(.*)$', line)
+        if not dm:
+            if all(active for active, taken in stack):
+                out.append(line)
+            continue
+        kind, rest = dm.group(1), dm.group(2)
+        if kind in ('if', 'ifdef', 'ifndef'):
+            val = pp_condition(kind, rest)
+            val = True if val is None else val
+            stack.append((val, val))
+        elif kind == 'elif' and stack:
+            active, taken = stack[-1]
+            val = pp_condition('if', rest)
+            val = (not taken) if val is None else (val and not taken)
+            stack[-1] = (val, taken or val)
+        elif kind == 'else' and stack:
+            active, taken = stack[-1]
+            stack[-1] = (not taken, True)
+        elif kind == 'endif' and stack:
+            stack.pop()
+    return '\n'.join(out)
+
+
+def split_args_plain(inner):
+    args = []
+    depth = 0
+    start = 0
+    i = 0
+    n = len(inner)
+    while i < n:
+        c = inner[i]
+        if c in '"\'':
+            j = i + 1
+            while j < n and inner[j] != c:
+                j += 2 if inner[j] == '\\' else 1
+            i = j + 1
+            continue
+        if c in '([{':
+            depth += 1
+        elif c in ')]}':
+            depth -= 1
+        elif c == ',' and depth == 0:
+            args.append(inner[start:i])
+            start = i + 1
+        i += 1
+    if inner[start:].strip() or args:
+        args.append(inner[start:])
+    return args
+
+
+def merge_template_splits(args):
+    out = []
+    for a in args:
+        if out:
+            prev = re.sub(r'"(?:[^"\\]|\\.)*"|<<|>>|->|<=|>=', ' ', out[-1])
+            if re.search(r'[A-Za-z_]\w*\s*<[^<>()]*$', prev) and prev.count('<') > prev.count('>') and '>' in a:
+                out[-1] = out[-1] + ',' + a
+                continue
+        out.append(a)
+    return out
+
+
+def looks_like_params(raw_args):
+    if not raw_args:
+        return False
+    if any(a.strip() == '...' for a in raw_args):
+        return True
+    return all(re.fullmatch(r'(?:const\s+)?(?:(?:unsigned|signed)\s+)?[A-Za-z_][\w:]*(?:\s*<[^()]*>)?(?:\s+const)?'
+                            r'(?:\s*[*&]+\s*|\s+)(?:const\s+)?[A-Za-z_]\w*(?:\s*\[[^\]]*\])?(?:\s*=.*)?',
+                            ' '.join(a.split()), re.S) for a in raw_args)
+
+
+def format_constant(arg, ctx, src=None, f=None, off=0):
+    m = re.fullmatch(r'\s*((?:[A-Za-z_]\w*\s*::\s*)*([A-Za-z_]\w*))(\s*\[[^\[\]]*\])?\s*', arg)
+    if not m:
+        return None
+    if f is not None and '::' not in m.group(1):
+        typ, info = local_type(src, f, m.group(2), off)
+        if info is not None:
+            if char_pointer_kind(typ) != 'const':
+                return None
+            acode, alines, astarts, atext = aligned_view(src)
+            values = []
+            if info[2] < len(astarts):
+                dm = re.compile(r'\b' + re.escape(m.group(2)) + r'\s*(?:\[[^\]]*\]\s*)?=\s*').search(acode, astarts[info[2]])
+                if dm and bisect.bisect_right(astarts, dm.start()) - 1 <= info[2] + 1:
+                    k = dm.end()
+                    depth = 0
+                    while k < len(acode):
+                        c = acode[k]
+                        if c in '([{':
+                            depth += 1
+                        elif c in ')]}':
+                            if depth == 0:
+                                break
+                            depth -= 1
+                        elif c in ';,' and depth == 0:
+                            break
+                        k += 1
+                    values = literal_values(atext[dm.end():k], ctx['string_macros'])
+            if not values:
+                return None
+            return m.group(2), values, bool(m.group(3))
+    if m.group(2) not in ctx['str_consts']:
+        return None
+    return re.sub(r'\s+', '', m.group(1)), list(ctx['str_consts'][m.group(2)]), bool(m.group(3))
+
+
+def aligned_body_open(src, fname, hl):
+    open_off = src.body_open.get((fname, hl))
+    if open_off is None:
+        return None
+    ln = src.line_of(open_off)
+    k = src.lines[ln][:open_off - src.starts[ln]].count('{')
+    code, lines, starts, text = aligned_view(src)
+    j = -1
+    for _ in range(k + 1):
+        j = lines[ln].find('{', j + 1)
+        if j < 0:
+            return None
+    return starts[ln] + j
+
+
+def fast_parser_rows(src, ctx, stats):
+    out = []
+    if src.path not in FAST_PARSER_PATHS:
+        return out
+    code, alines, astarts, text = aligned_view(src)
+    producers = ctx['fast_producers']
+    found = collections.OrderedDict()
+    skipped = set()
+    node_types = collections.defaultdict(list)
+    for fname, hl, ol, end, extra in src.function_spans():
+        open_off = aligned_body_open(src, fname, hl)
+        if open_off is None:
+            continue
+        body_end = astarts[end] + len(alines[end])
+        items = []
+        for m in FAST_PRODUCER_RE.finditer(code, open_off, body_end):
+            if m.group(1):
+                what = 'node %s' % m.group(1)
+            elif m.group(3):
+                if m.group(2) == 'cur_token_type_' or m.group(3) == 'T_INVALID':
+                    continue
+                what = '%s = %s' % (m.group(2), m.group(3))
+            elif m.group(4):
+                if m.group(4) == 'T_INVALID':
+                    continue
+                what = 'type_ = %s' % m.group(4)
+            elif m.group(5):
+                what = m.group(5) + '()'
+            else:
+                what = 'PARAM_TOKEN'
+            items.append((m.start(), what))
+        for m in IDENT_CALL_RE.finditer(code, open_off, body_end):
+            callee = m.group(3)
+            if callee in producers and callee != extra[1] and callee not in FAST_NODE_HELPERS:
+                types = sorted(set(t for t in re.findall(r'\bT_[A-Z0-9_]+\b', balanced_call_args(code, m.end() - 1))
+                                   if t != 'T_INVALID'))
+                items.append((m.start(3), '%s(%s)' % (callee, ', '.join(types))))
+        for m in FAST_T_ARG_CALL_RE.finditer(code, open_off, body_end):
+            if m.group(1) in FAST_NOT_CALLEES or m.group(1) in producers:
+                continue
+            types = sorted(set(t for t in re.findall(r'\bT_[A-Z0-9_]+\b', m.group(2)) if t != 'T_INVALID'))
+            if types:
+                items.append((m.start(), '%s(%s)' % (m.group(1), ', '.join(types))))
+        for pos, what in items:
+            br = fast_parser_branch(code, text, pos, open_off)
+            hops = 0
+            while br is not None and br[2] is not None and fast_error_only(br[2], producers, code, br[0]) and hops < 12:
+                skipped.add((fname, br[0]))
+                br = fast_outer_branch(code, text, br, open_off)
+                hops += 1
+            if br is None:
+                stats['fast-parser products outside any branch'] += 1
+                continue
+            start, label, cond = br
+            key = (fname, start)
+            if key not in found:
+                path = []
+                p, current = start, label
+                for _ in range(8):
+                    if current.startswith(('case ', 'default')):
+                        opener = block_opener(code, p)
+                        if opener <= open_off:
+                            break
+                        p = header_before(code, opener)[0]
+                    outer = fast_parser_branch(code, text, p, open_off)
+                    if outer is None:
+                        break
+                    path.append(outer[1])
+                    p, current = outer[0], outer[1]
+                found[key] = [bisect.bisect_right(astarts, start) - 1, label, [], list(reversed(path))]
+            if what not in found[key][2]:
+                found[key][2].append(what)
+            for t in re.findall(r'\bT_[A-Z0-9_]+\b', what):
+                if t != 'T_INVALID' and t not in node_types[fname]:
+                    node_types[fname].append(t)
+    stats['fast-parser error branches'] += len(skipped)
+    for (fname, start), (ln, label, whats, path) in found.items():
+        where = (' (inside %s)' % ' > '.join(path)) if path else ''
+        note = ''
+        if not any(re.search(r'\bT_[A-Z0-9_]+\b', w) for w in whats):
+            others = node_types.get(fname, [])
+            var = next((w.split(' ', 1)[1] for w in whats if w.startswith('node ')), None)
+            if others:
+                note = '; node types this function builds: %s' % ', '.join(others)
+            elif var:
+                note = '; the node type is %s, set earlier or passed in by the caller' % var
+            else:
+                note = '; no node type is named in this function (the callee builds the node)'
+        out.append((ln, '%s%s -> %s%s' % (label, where, ', '.join(whats), note)))
+    return out
+
+
+def fast_outer_branch(code, text, br, lo):
+    start, label = br[0], br[1]
+    p = start
+    if label.startswith(('case ', 'default')):
+        opener = block_opener(code, p)
+        if opener <= lo:
+            return None
+        p = header_before(code, opener)[0]
+    return fast_parser_branch(code, text, p, lo)
+
+
+def fast_error_only(cond, producers, code=None, pos=None):
+    c = re.sub(r'OB_(?:UN)?LIKELY\s*\(', '(', cond)
+    if re.search(r'\bT_[A-Z0-9_]+\b|\bPARAM_TOKEN\b', c):
+        return False
+    for m in IDENT_CALL_RE.finditer(c):
+        if m.group(3) in producers:
+            return False
+    parts = [c]
+    for op in ('||', '&&'):
+        nxt = []
+        for part in parts:
+            pieces = []
+            rest = part
+            while True:
+                hit = split_top_operator(rest, (op,))
+                if hit is None:
+                    pieces.append(rest)
+                    break
+                pieces.append(rest[:hit[0]])
+                rest = rest[hit[0] + 2:]
+            nxt += pieces
+        parts = nxt
+    for part in parts:
+        q = part.strip()
+        while q.startswith('(') and matching_close(q, 0) == len(q) - 1:
+            q = q[1:-1].strip()
+        q = q.lstrip('!').strip()
+        while q.startswith('(') and matching_close(q, 0) == len(q) - 1:
+            q = q[1:-1].strip()
+        if re.fullmatch(r'OB_(?:FAIL|SUCC|ISNULL|NOT_NULL)\s*\(.*\)', q, re.S) or q == 'ret':
+            continue
+        if re.fullmatch(r'.*?[!=]=\s*(?:NULL|nullptr|OB_SUCCESS|ret)', q, re.S) or \
+                re.fullmatch(r'(?:NULL|nullptr|OB_SUCCESS|ret)\s*[!=]=.*', q, re.S):
+            continue
+        return False
+    return True
+
+
+def fast_parser_branch(code, text, pos, lo):
+    p = pos
+    for _ in range(40):
+        depth = 0
+        k = p - 1
+        while k > lo:
+            c = code[k]
+            if c == ')':
+                depth += 1
+            elif c == '(':
+                if depth == 0:
+                    km = re.search(r'\b(if|while|for|switch)\s*$', code[max(lo, k - 12):k])
+                    if km and km.group(1) == 'if':
+                        top = max(lo, k - 12) + km.start()
+                        close = matching_close(code, k)
+                        head = re.search(r'\belse\s*$', code[max(lo, top - 12):top])
+                        start = max(lo, top - 12) + head.start() if head else top
+                        return start, '%s (%s)' % ('else if' if head else 'if', collapse(text[k + 1:close], 120)), \
+                            code[k + 1:close]
+                else:
+                    depth -= 1
+            elif c in ';{}' and depth == 0:
+                break
+            k -= 1
+        stmt = code[k + 1:p]
+        cm = re.match(r'\s*((?:(?:case\s[^;{}]*?[^:]:(?!:)|default\s*:(?!:))\s*)+)', stmt)
+        if cm:
+            a = k + 1 + cm.start(1)
+            return a, case_label_text(text[a:k + 1 + cm.end(1)]), None
+        im = re.match(r'\s*(else\s+)?if\s*\(', stmt)
+        if im:
+            o = k + 1 + im.end() - 1
+            close = matching_close(code, o)
+            return k + 1 + len(stmt) - len(stmt.lstrip()), '%s (%s)' % ('else if' if im.group(1) else 'if',
+                                                                       collapse(text[o + 1:close], 120)), code[o + 1:close]
+        if re.match(r'\s*else\b', stmt):
+            a = k + 1 + len(stmt) - len(stmt.lstrip())
+            return a, 'else', else_condition(code, a)
+        opener = k if k > lo and code[k] == '{' else block_opener(code, p)
+        if opener <= lo:
+            return None
+        between = code[opener + 1:p]
+        labels = [lm for lm in re.finditer(r'\b(?:case\s[^;{}]*?[^:]:(?!:)|default\s*:(?!:))', between)
+                  if between[:lm.start()].count('{') == between[:lm.start()].count('}')]
+        if labels:
+            last = labels[-1]
+            first = last
+            for lm in reversed(labels[:-1]):
+                if between[lm.end():first.start()].strip():
+                    break
+                first = lm
+            a = opener + 1 + first.start()
+            return a, case_label_text(text[a:opener + 1 + last.end()]), None
+        hs, header = header_before(code, opener)
+        kind, cond = if_condition(header)
+        if kind in ('if', 'else if'):
+            hm = re.search(r'\b(?:else\s+)?if\s*\(', code[hs:opener])
+            o = hs + hm.end() - 1
+            close = matching_close(code, o)
+            return hs + hm.start(), '%s (%s)' % (kind, collapse(text[o + 1:close], 120)), cond
+        if kind == 'else':
+            a = hs + len(header) - len(header.lstrip())
+            return a, 'else', else_condition(code, a)
+        hc = CASE_LABELS_RE.search(header)
+        if hc:
+            return hs + hc.start(1), case_label_text(text[hs + hc.start(1):hs + hc.end(1)]), None
+        if re.match(r'\s*(?:while|for|do|switch)\b', header) or not header.strip():
+            p = hs
+            continue
+        return None
+    return None
+
+
+def else_condition(code, pos):
+    j = pos - 1
+    while j >= 0 and code[j].isspace():
+        j -= 1
+    if j < 0 or code[j] != '}':
+        return None
+    ob = matching_open(code, j)
+    if ob < 0:
+        return None
+    direct, conds, top = chain_conditions(code, ob)
+    return conds[-1] if conds else None
+
+
+def case_label_text(raw):
+    labels = re.findall(r"\b(?:case\s+(?:'(?:[^'\\]|\\.)*'(?:\s*\.\.\.\s*'(?:[^'\\]|\\.)*')?|[^:]+?)\s*:(?!:)|default\s*:(?!:))",
+                        raw)
+    return ' '.join(' '.join(l.split()) for l in labels) if labels else collapse(raw, 80)
+
+
+DECISION_CALLEE_RE = re.compile(r'(?i)can_insert|check_can|need_dump|dump|bypass|spill|limit|bound|exceed|enough')
+ASSIGN_TARGET_RE = re.compile(
+    r'^\s*(?:(?:const|static|constexpr|volatile)\s+)*(?:(?:[A-Za-z_][\w:]*(?:\s*<[^;{}()]*?>)?)(?:\s*[*&]+\s*|\s+))?'
+    r'([A-Za-z_]\w*)\s*(\+=|-=|\*=|/=|=(?!=))')
+LOG_STATEMENT_RE = re.compile(r'\s*(?:[A-Z_][A-Z0-9_]*_)?LOG(?:_[A-Z]+)*\w*\s*\(|\s*_?OB_LOG\w*\s*\(')
+
+
+def without_templates(stmt):
+    s = stmt.replace('->', '  ')
+    s = re.sub(r'\b(?:static_cast|reinterpret_cast|const_cast|dynamic_cast)\s*<[^<>()]*(?:<[^<>()]*>[^<>()]*)*>', ' ', s)
+    s = re.sub(r'(?<=[\w])\s*<[\w:\s,*&]*(?:<[\w:\s,*&]*>[\w:\s,*&]*)*>(?=\s*(?:[(:&*]|\w))', ' ', s)
+    return s.replace('<<', '  ').replace('>>', '  ')
+
+
+def local_target(src, f, stmt, pos):
+    tm = ASSIGN_TARGET_RE.match(stmt)
+    if not tm or tm.group(1) in NOT_TYPE_WORDS or tm.group(1) in ('if', 'while', 'for', 'switch'):
+        return None, None
+    typ, info = local_type(src, f, tm.group(1), pos)
+    if info is None or info[0] == 'param' and tm.group(2) == '=' and '&' not in (typ or ''):
+        return (tm.group(1), typ) if info is not None else (None, None)
+    return tm.group(1), typ
+
+
+def follow_size(src, f, name, from_pos, fname, depth=0, seen=None):
+    code = src.code
+    seen = seen if seen is not None else set()
+    if name in seen or depth > 3:
+        return 'other', None
+    seen.add(name)
+    body_end = src.starts[f[3]] + len(src.lines[f[3]])
+    verdicts = []
+    decision = None
+    for m in re.finditer(r'(?<![\w.>])' + re.escape(name) + r'\b', code[from_pos:body_end]):
+        pos = from_pos + m.start()
+        sa, sb = statement_span(code, pos)
+        ustmt = code[sa:sb]
+        tm = ASSIGN_TARGET_RE.match(ustmt)
+        if tm and tm.group(1) == name and sa + tm.start(1) <= pos < sa + tm.end(1):
+            continue
+        if LOG_STATEMENT_RE.match(ustmt):
+            continue
+        callee, first = enclosing_call(code, pos)
+        if callee and SIZEOF_SKIP_CALLEE_RE.match(callee):
+            verdicts.append('alloc')
+            continue
+        rel = pos - sa
+        near = [x.group(1) for x in (re.search(r'([A-Za-z_]\w*)\s*[-+]=?\s*$', ustmt[:rel]),
+                                     re.match(r'\s*[-+]\s*([A-Za-z_]\w*)', ustmt[rel + len(name):])) if x]
+        diffs = re.findall(r'\b([a-z_]\w*)\s*-\s*([a-z_]\w*)\b', ustmt)
+        if any(pointer_kind(src, f, o, pos) for o in near if o not in NOT_TYPE_WORDS) or any(
+                pointer_kind(src, f, x, pos) and pointer_kind(src, f, y, pos) for x, y in diffs):
+            verdicts.append('alloc')
+            continue
+        if callee and DECISION_CALLEE_RE.search(callee) or DECISION_WORD_RE.search(ustmt):
+            verdicts.append('decision')
+            decision = decision or ustmt
+            continue
+        if tm and tm.group(1) != name:
+            other, otyp = local_target(src, f, ustmt, pos)
+            if other and otyp and '*' in otyp:
+                verdicts.append('alloc')
+                continue
+            if other:
+                v, d = follow_size(src, f, other, sb, fname, depth + 1, seen)
+                verdicts.append(v)
+                if v == 'decision':
+                    decision = decision or d
+                continue
+        if re.match(r'\s*return\b', ustmt):
+            if DECISION_FUNCTION_RE.search(last_component(fname)):
+                verdicts.append('decision')
+                decision = decision or ustmt
+            else:
+                verdicts.append('other')
+            continue
+        verdicts.append('other')
+    if 'decision' in verdicts:
+        return 'decision', decision
+    if verdicts and all(v == 'alloc' for v in verdicts):
+        return 'alloc', None
+    return 'other', None
+
+
+def pointer_kind(src, f, name, pos):
+    typ, info = local_type(src, f, name, pos)
+    if typ and ('*' in typ or typ.endswith(']')):
+        return 'ptr'
+    return None
+
+
+def sizeof_rows(src, ctx, stats):
+    out = []
+    if not src.path.startswith(SIZEOF_DIRS):
+        return out
+    code = src.code
+    consts = ctx.get('sizeof_consts', {})
+    const_re = ctx.get('sizeof_const_re')
+    if 'sizeof' not in code and (const_re is None or not const_re.search(code)):
+        return out
+    seen = set()
+    hits = [(m.start(), m.end() - 1, None) for m in SIZEOF_RE.finditer(code)]
+    if const_re is not None:
+        for m in const_re.finditer(code):
+            defs = consts.get(m.group(1), ())
+            if any(p == src.path and src.line_of(m.start()) == ln for p, ln, e in defs):
+                continue
+            if len(set((p, ln) for p, ln, e in defs)) != 1 and not any(p.rsplit('.', 1)[0] == src.stem() for p, ln, e in defs):
+                continue
+            hits.append((m.start(), None, m.group(1)))
+    for start, open_paren, cname in sorted(hits):
+        if open_paren is not None:
+            close = matching_close(code, open_paren)
+            if close < 0:
+                continue
+            operand = code[open_paren + 1:close].strip()
+        else:
+            operand = cname
+        ln = src.line_of(start)
+        if src.dkind.get(ln) in ('define', 'cont') and src.dname.get(ln, '').startswith(('OB_UNIS', 'DEFINE_')):
+            continue
+        a, b = statement_span(code, start)
+        stmt = code[a:b]
+        callee, first = enclosing_call(code, start)
+        if callee is not None and SIZEOF_SKIP_CALLEE_RE.match(callee):
+            stats['sizeof-formulas allocation, copy or serialization'] += 1
+            continue
+        before = code[a:start]
+        if before.count('[') > before.count(']') or re.search(r'\b(?:static_assert|STATIC_ASSERT|alignas)\b', stmt):
+            stats['sizeof-formulas allocation, copy or serialization'] += 1
+            continue
+        f = innermost_function(src, ln, start)
+        fname = f[0] if f else src.symbol(ln)
+        reach = None
+        if f is not None:
+            target, ttyp = local_target(src, f, stmt, start)
+            if target and ttyp and ('*' in ttyp or ttyp.endswith(']')):
+                stats['sizeof-formulas allocation or buffer layout through a local'] += 1
+                continue
+            if target:
+                verdict, decision = follow_size(src, f, target, b, fname)
+                if verdict == 'alloc':
+                    stats['sizeof-formulas allocation or buffer layout through a local'] += 1
+                    continue
+                if verdict == 'decision':
+                    reach = (target, decision)
+        decided = reach or DECISION_WORD_RE.search(stmt) or DECISION_FUNCTION_RE.search(
+            last_component(fname) if fname and fname != '-' else '')
+        if not decided:
+            stats['sizeof-formulas without decision words'] += 1
+            continue
+        key = (ln, operand)
+        if key in seen:
+            continue
+        seen.add(key)
+        if cname is not None:
+            p, dln, expr = consts[cname][0]
+            text = '%s (the named constant = %s, %s:%d) in: %s' % (cname, expr, posixpath.basename(p), dln + 1, collapse(stmt, 150))
+            stats['sizeof-formulas named constants'] += 1
+        else:
+            text = 'sizeof(%s) in: %s' % (re.sub(r'\s+', ' ', operand), collapse(stmt, 180))
+        if reach:
+            text += '; reaches a decision through %s: %s' % (reach[0], collapse(reach[1], 140))
+            stats['sizeof-formulas decisions through a local'] += 1
+        out.append((ln, text))
+    return out
+
+
+def full_call_args(code, open_paren):
+    close = matching_close(code, open_paren)
+    if close < 0:
+        return []
+    inner = code[open_paren + 1:close]
+    return [a.strip() for a in split_top(inner)] if inner.strip() else []
+
+
+def work_area_rows(src, ctx):
+    out = []
+    path = src.path
+    if path in WORK_AREA_SKIP:
+        return out
+    code = src.code
+    wrx = ctx.get('wa_figure_re')
+    has_limit = path.startswith(ROW_STORE_DIRS) and 'mem_limit_' in code
+    if 'mem_processor' not in code and 'get_mem_bound' not in code and 'get_max_bound' not in code and not has_limit \
+            and (wrx is None or not wrx.search(code)):
+        return out
+    for m in WORK_AREA_CALL_RE.finditer(code):
+        ln = src.line_of(m.start())
+        args = full_call_args(code, m.end() - 1)
+        method = m.group(2)
+        if method == 'init':
+            shown = 'cache size %s' % collapse(args[1], 100) if len(args) > 1 else collapse(', '.join(args), 120)
+        elif method in ('update_max_available_mem_size_periodically', 'extend_max_memory_size'):
+            lam = next((x for x in args if x.startswith('[')), '')
+            if lam:
+                rets = [collapse(r, 100) for r in re.findall(r'\breturn\b([^;]*);', lam)]
+                shown = 'callback returns %s' % ('; '.join(rets) if rets else collapse(lam, 140))
+            else:
+                shown = 'callback %s' % collapse(args[1], 100) if len(args) > 1 else collapse(', '.join(args), 140)
+        else:
+            shown = collapse(', '.join(args), 160)
+        out.append((ln, 'work-area report %s.%s: %s' % (m.group(1), method, shown)))
+    wrappers = ctx.get('wa_wrappers', {})
+    seen = set()
+    for fname, hl, ol, fend, extra in src.function_spans():
+        open_off = src.body_open.get((fname, hl))
+        if open_off is None:
+            continue
+        body_end = src.starts[fend] + len(src.lines[fend])
+        body = code[open_off:body_end]
+        if not WORK_AREA_FIGURE_RE.search(body) and (wrx is None or not wrx.search(body)) \
+                and not (has_limit and 'mem_limit_' in body):
+            continue
+        fcls = enclosing_class(fname)
+        tainted = {}
+        for _ in range(3):
+            for sm in re.finditer(r'[^;{}]+', body):
+                stmt = sm.group(0)
+                tm = ASSIGN_TARGET_RE.match(stmt)
+                if not tm or tm.group(1) in tainted or re.fullmatch(r'(?:tmp_|temp_)?ret\w*|\w*ret_code\w*', tm.group(1)):
+                    continue
+                rhs = stmt[tm.end():]
+                src_fig = work_area_figures(rhs, wrx, wrappers, fcls, ctx)
+                via = [t for t in tainted if re.search(r'(?<![\w.>])' + re.escape(t) + r'\b', rhs)]
+                if src_fig or via:
+                    tainted[tm.group(1)] = src_fig + [x for v in via for x in tainted[v] if x not in src_fig]
+        for sm in re.finditer(r'[^;{}]+', body):
+            stmt = sm.group(0)
+            a = open_off + sm.start()
+            if a in seen or not WORK_AREA_DECISION_RE.search(without_templates(stmt)):
+                continue
+            figures = work_area_figures(stmt, wrx, wrappers, fcls, ctx)
+            via = [t for t in tainted if re.search(r'(?<![\w.>])' + re.escape(t) + r'\b', stmt)
+                   and not re.match(r'\s*(?:(?:const|static)\s+)?[A-Za-z_][\w:<>]*\s+' + re.escape(t) + r'\s*=', stmt)]
+            limit = has_limit and re.search(r'(?<![\w.>])mem_limit_\b', stmt) is not None
+            if not figures and not via and not limit:
+                continue
+            seen.add(a)
+            marks = [m.start() for m in WORK_AREA_FIGURE_RE.finditer(stmt)]
+            if wrx is not None:
+                marks += [m.start() for m in wrx.finditer(stmt)]
+            marks += [m.start() for t in via for m in re.finditer(r'(?<![\w.>])' + re.escape(t) + r'\b', stmt)]
+            if limit:
+                marks += [m.start() for m in re.finditer(r'(?<![\w.>])mem_limit_\b', stmt)]
+            pos = a + (min(marks) if marks else len(stmt) - len(stmt.lstrip()))
+            ln = src.line_of(pos)
+            if figures:
+                what = 'work-area decision on %s' % ', '.join(figures)
+            elif via:
+                what = 'work-area decision through %s (from %s)' % (', '.join(sorted(via)), ', '.join(
+                    sorted(set(x for v in via for x in tainted[v]))))
+            else:
+                what = "row store's own dump decision on mem_limit_"
+            out.append((ln, '%s: %s' % (what, collapse(stmt, 180))))
+    return out
+
+
+def work_area_figures(text, wrx, wrappers, fcls='', ctx=None):
+    out = []
+    for m in WORK_AREA_FIGURE_RE.finditer(text):
+        if re.search(WORK_AREA_OWNER_PATTERN, text) and m.group(1) not in out:
+            out.append(m.group(1))
+    if wrx is not None:
+        bases = ctx.get('class_bases', {}) if ctx else {}
+        for m in wrx.finditer(text):
+            name = m.group(1)
+            if re.search(r'(?:\.|->)\s*$', text[:m.start()]):
+                continue
+            classes = wrappers.get(name, (frozenset(), '', '', 0))[0]
+            if not fcls or not (set(ancestors(bases, fcls)) & set(classes)):
+                continue
+            shown = '%s (returns %s)' % (name, collapse(wrappers[name][1], 60))
+            if shown not in out:
+                out.append(shown)
+    return out
+
+
+def memmove_rows(src, ctx):
+    out = []
+    code = src.code
+    if 'MEMMOVE' not in code and 'memmove' not in code:
+        return out
+    path = src.path
+    if path.startswith('src/sql/engine/expr/'):
+        where = 'expression code, one of the sites of s5-execution.md rule 3.5'
+    elif path.startswith('src/query/api/query/engine/expr/'):
+        where = "the expression core (ObExpr's deep copy)"
+    else:
+        where = 'outside the expression directories'
+    for i, line in enumerate(src.lines):
+        if 'emmove' not in line and 'MEMMOVE' not in line:
+            continue
+        if src.dkind.get(i) in ('define', 'cont') and src.dname.get(i) in ('MEMMOVE', 'MEMCPY', 'MEMCMP'):
+            continue
+        for m in MEMMOVE_RE.finditer(line):
+            off = src.starts[i] + m.end() - 1
+            if m.group(1) != 'MEMMOVE' and body_call_kind(src, i, m.group(1), line[:m.start()], off) != 'call':
+                continue
+            f = innermost_function(src, i, off)
+            if f is not None and f[4][1] in MEMMOVE_PRIMITIVES:
+                continue
+            args = split_call_args(code, off)
+            out.append((i, '%s(%s); %s' % (m.group(1), collapse(', '.join(args), 160), where)))
+    return out
+
+
+def frame_internal_rows(src, ctx, stats=None):
+    out = []
+    if not OPERATOR_FILE_RE.match(src.path):
+        return out
+    if stats is None:
+        stats = collections.Counter()
+    r05_raw = [t for t in FRAME_INTERNAL_R05 if t != 'reinterpret_cast<ObDatum']
+    for rline in src.raw:
+        if any(t in rline for t in r05_raw) or re.search(r'reinterpret_cast\s*<\s*(?:const\s+)?(?:common::)?ObDatum', rline):
+            stats['frame-internals R05 raw file ' + src.path] = 1
+            break
+    for i, line in enumerate(src.lines):
+        found = []
+        base_only = True
+        for m in FRAME_INTERNAL_RE.finditer(line):
+            tok = m.group(1) or 'reinterpret_cast<ObDatum'
+            if tok == 'clear_evaluated_flag' and re.match(r'\s*\(\s*\)', line[m.end():]):
+                before = line[:m.start()]
+                rm = re.search(r'([A-Za-z_]\w*)\s*(?:\.|->)\s*$', before)
+                if not re.search(r'[)\]]\s*(?:\.|->)\s*$', before) and (rm is None or re.search(r'(?i)op', rm.group(1))):
+                    tok = 'clear_evaluated_flag() (the operator base method)'
+            if not tok.startswith('clear_evaluated_flag() (the operator'):
+                base_only = False
+            if tok not in found:
+                found.append(tok)
+        if found:
+            narrow = [t for t in found if t in FRAME_INTERNAL_R05]
+            if narrow:
+                stats['frame-internals R05 whole-name file ' + src.path] = 1
+            note = '; only the operator base method ObOperator::clear_evaluated_flag() (ob_operator.h:700-705), ' \
+                   'which clears the eval flags of the operator\'s own output exprs: no direct frame access' if base_only else ''
+            if base_only:
+                stats['frame-internals base-method-only lines'] += 1
+            out.append((i, 'frame internals: %s%s%s' % (', '.join(found), '; in R05 pattern' if narrow else '', note)))
+    return out
+
+
+def storage_sql_rows(src, ctx, stats):
+    out = []
+    if not src.path.startswith('src/storage/'):
+        return out
+    code = src.code
+    has_using = False
+    using_names = set()
+    for m in USING_SQL_RE.finditer(code):
+        if m.group(1):
+            using_names.add(m.group(1))
+        else:
+            has_using = True
+    if 'sql' not in code:
+        return out
+    blocks = []
+    for m in SQL_NAMESPACE_OPEN_RE.finditer(code):
+        close = matching_close(code, m.end() - 1)
+        blocks.append((src.line_of(m.start()), src.line_of(close) if close >= 0 else len(src.lines) - 1))
+    sql_types = ctx['sql_types']
+    funcs = src.function_spans() if blocks else []
+    defined = {}
+    for fname, hl, ol, fend, extra in funcs:
+        for b0, b1 in blocks:
+            if b0 < hl and fend <= b1:
+                defined[src.name_line(fname, hl)] = (fname, hl, fend)
+    for i, line in enumerate(src.lines):
+        inside = next(((b0, b1) for b0, b1 in blocks if b0 < i < b1), None)
+        opening = next(((b0, b1) for b0, b1 in blocks if b0 == i), None)
+        if 'sql' not in line and not has_using and not using_names and inside is None and opening is None:
+            continue
+        if opening is not None:
+            inner = [d for d in defined.values() if opening[0] < d[1] <= opening[1]]
+            what = ('defines %s' % ', '.join(d[0] for d in inner)) if inner else 'declares SQL types'
+            out.append((i, 'opens namespace sql (lines %d-%d): storage %s here' % (opening[0] + 1, opening[1] + 1, what)))
+            stats['storage-sql-uses namespace sql blocks'] += 1
+            continue
+        um = USING_SQL_RE.search(line)
+        if um:
+            out.append((i, 'using ' + ('sql::' + um.group(1) if um.group(1) else 'namespace sql')))
+            continue
+        names = []
+        for m in SQL_QUALIFIED_RE.finditer(line):
+            if m.group(1) not in names:
+                names.append(m.group(1))
+        loose = []
+        if has_using or using_names or inside is not None:
+            for m in re.finditer(r'(?<![\w:.>])([A-Z]\w*)\b', line):
+                w = m.group(1)
+                if w in names or w in loose:
+                    continue
+                if w in using_names or (has_using or inside is not None) and w in sql_types:
+                    loose.append(w)
+        if names:
+            out.append((i, 'sql:: use: ' + ', '.join(names)))
+        if i in defined:
+            fname, hl, fend = defined[i]
+            out.append((i, 'defines the SQL function %s inside namespace sql (lines %d-%d)' % (fname, hl + 1, fend + 1)))
+            stats['storage-sql-uses SQL functions defined in storage'] += 1
+        elif loose:
+            if inside is not None:
+                out.append((i, 'unqualified SQL name inside namespace sql: ' + ', '.join(loose)))
+                stats['storage-sql-uses lines inside namespace sql'] += 1
+            else:
+                out.append((i, 'unqualified SQL name under a using declaration: ' + ', '.join(loose)))
+                stats['storage-sql-uses unqualified lines'] += 1
+    return out
+
+
+def tracepoint_use(code, start, end):
+    a, b = statement_span(code, start)
+    stmt = code[a:b]
+    before = code[a:start]
+    callee, first = enclosing_call(code, start)
+    if callee is not None and TP_SET_CALLEE_RE.match(callee):
+        return 'set', stmt
+    if re.search(r'-\s*(?:EVENT_CALL|OB_E|EVENT_CODE)\s*\(\s*$', before) \
+            or re.search(r'\babs\s*\(\s*(?:(?:EVENT_CALL|OB_E|EVENT_CODE)\s*\(\s*)?$', before):
+        return 'number', stmt
+    wrapper = callee
+    wpos = start
+    if wrapper in ('EVENT_CALL', 'OB_E', 'EVENT_CODE'):
+        wpos = code.rfind(wrapper, a, start)
+        wrapper, _ = enclosing_call(code, wpos)
+    if wrapper in ('OB_FAIL', 'OB_SUCC'):
+        fired = fired_branch(code, a, b, wrapper)
+        if fired is not None and not error_only_block(fired):
+            return 'switch that sets ret', stmt
+        return 'error injection', stmt
+    if re.search(r'(?<![\w.>])ret\s*=(?!=)\s*[^;]*$', before) and not re.search(r'\b(?:int|auto)\s+ret\s*=', before):
+        opener = block_opener(code, start)
+        close = matching_close(code, opener) if opener >= 0 else -1
+        after = code[b:close if close > b else b + 800]
+        after = after[:re.search(r'\breturn\b|$', after).start()]
+        if re.search(r'-\s*ret\b|\babs\s*\(\s*ret\b|\bret\s*%', after) and re.search(r'\bret\s*=\s*(?:common::)?OB_SUCCESS\b', after):
+            return 'number kept in ret', stmt
+        return 'error injection', stmt
+    if wrapper in ('OZ', 'OX', 'OV', 'CK') or re.search(r'\breturn\s*[^;]*$', before):
+        return 'error injection', stmt
+    return 'value or switch', stmt
+
+
+def fired_branch(code, a, b, wrapper):
+    if b >= len(code) or code[b] != '{' or not re.match(r'\s*(?:else\s+)?if\s*\(', code[a:b]):
+        return None
+    close = matching_close(code, b)
+    if close < 0:
+        return None
+    if wrapper == 'OB_FAIL':
+        return code[b + 1:close]
+    k = close + 1
+    parts = []
+    while True:
+        em = re.match(r'\s*else\b', code[k:])
+        if not em:
+            break
+        k += em.end()
+        im = re.match(r'\s*if\s*\(', code[k:])
+        if im:
+            o = k + im.end() - 1
+            c = matching_close(code, o)
+            if c < 0:
+                break
+            parts.append(code[o + 1:c])
+            k = c + 1
+        bm = re.match(r'\s*\{', code[k:])
+        if not bm:
+            break
+        o = k + bm.end() - 1
+        c = matching_close(code, o)
+        if c < 0:
+            break
+        parts.append(code[o + 1:c])
+        k = c + 1
+    return '\n'.join(parts)
+
+
+def error_only_block(text):
+    t = re.sub(r'\b[A-Z_]*LOG\w*\s*\((?:[^()]|\((?:[^()]|\([^()]*\))*\))*\)\s*;', ' ', text)
+    t = re.sub(r'(?<![\w.>])ret\s*=[^;]*;', ' ', t)
+    t = re.sub(r'\breturn\b[^;]*;', ' ', t)
+    t = re.sub(r'\b(?:OB_UNLIKELY|OB_LIKELY)\s*\(', '(', t)
+    return not re.search(r'[A-Za-z_]', t)
+
+
+def tracepoint_rows(src, ctx, stats):
+    out = []
+    code = src.code
+    path = src.path
+    numbers = ctx['tp_numbers']
+    rule46 = ctx['rule46_names']
+    in_scope = path.startswith(TRACEPOINT_DIRS) or path == TRACEPOINT_DIRS[-1]
+    if path == TRACEPOINT_DEF_PATH:
+        for i, line in enumerate(src.lines):
+            dm = re.search(r'GLOBAL_ERRSIM_POINT_DEF\s*\(\s*(\d+)\s*,\s*(\w+)', line)
+            if dm and dm.group(2) in rule46:
+                out.append((i, 'definition of tracepoint %s %s; named by s5-execution.md rule 4.6%s' % (
+                    dm.group(1), dm.group(2), '; set by tools/deploy/init.sql' if int(dm.group(1)) in ctx['tp_init']
+                    else '')))
+        return out
+    if 'EventTable' not in code and 'ERRSIM_POINT_DEF' not in code:
+        return out
+    local = set(m.group(1) for m in LOCAL_TP_DEF_RE.finditer(code))
+    hits = [(m.start(), m.end(), m.group(1), True) for m in GLOBAL_TP_RE.finditer(code)]
+    if local:
+        lrx = re.compile(r'(?<![\w.>:])(%s)\b(?!\s*\()' % '|'.join(re.escape(n) for n in sorted(local)))
+        for m in lrx.finditer(code):
+            if re.search(r'\bERRSIM_POINT_DEF\s*\(\s*$', code[max(0, m.start() - 40):m.start()]):
+                continue
+            hits.append((m.start(), m.end(), m.group(1), False))
+    seen = set()
+    for start, end, name, is_global in sorted(hits):
+        named = name in rule46
+        if not named and not in_scope:
+            continue
+        ln = src.line_of(start)
+        if src.dkind.get(ln) in ('define', 'cont'):
+            continue
+        use, stmt = tracepoint_use(code, start, end)
+        if use == 'set':
+            continue
+        if use == 'error injection' and not named:
+            stats['batch-end-tracepoints error injections'] += 1
+            continue
+        num = numbers.get(name)
+        if (ln, name) in seen:
+            continue
+        seen.add((ln, name))
+        if not named and not use.startswith('number') and (num is None or num not in ctx['tp_init']) and not TP_TOPIC_RE.search(name):
+            stats['batch-end-tracepoints switches whose names say nothing about batches'] += 1
+        label = ('tracepoint %d %s' % (num, name)) if num is not None else (
+            'tracepoint %s' % name if is_global else 'named errsim point %s (no number)' % name)
+        how = {'number': 'a number', 'error injection': 'a switch (error injection form)',
+               'number kept in ret': 'a number (the code stores it in ret, reads it back as a number, then resets ret to '
+                                     'OB_SUCCESS)',
+               'switch that sets ret': 'a switch (its OB_FAIL or OB_SUCC also sets ret, and the branch it takes does more '
+                                       'than return the error)'}.get(use, 'a value or switch')
+        parts = ['%s read as %s' % (label, how)]
+        if named:
+            parts.append('named by s5-execution.md rule 4.6')
+        if num is not None and num in ctx['tp_init']:
+            parts.append('set by tools/deploy/init.sql')
+        if not named and TP_TOPIC_RE.search(name):
+            parts.append('its name says %s' % TP_TOPIC_RE.search(name).group(0).lower().replace('_', ' '))
+        parts.append('statement: ' + collapse(stmt, 160))
+        out.append((ln, '; '.join(parts)))
+    return out
+
+
+def expr_factory_decl_rows(src, ctx):
+    out = []
+    code = src.code
+    if 'ObRawExprFactory' not in code and (ctx['factory_macro_re'] is None or not ctx['factory_macro_re'].search(code)):
+        return out
+    for m in FACTORY_DECL_RE.finditer(code):
+        off = m.start()
+        ln = src.line_of(off)
+        a, b = statement_span(code, off)
+        if paren_depth_between(code, a, off) > 0 or re.search(r'\b(?:typedef|using|friend|return)\b', code[a:off]):
+            continue
+        kind_scope, owner_name, span = lock_scope(src, ln, off)
+        name = m.group(1)
+        args = split_call_args(code, m.end() - 1) if m.group(2) == '(' else []
+        if m.group(2) == '(' and kind_scope == 'class':
+            continue
+        arg = collapse(', '.join(args), 100) if args else ''
+        if kind_scope == 'macro':
+            out.append((ln, 'local ObRawExprFactory %s(%s) inside #define %s (each use is a row too)' % (name, arg, owner_name)))
+        elif kind_scope == 'function':
+            tag = '; the allocator is a temporary memory context' if 'CURRENT_CONTEXT' in arg else ''
+            out.append((ln, 'local ObRawExprFactory %s(%s) in %s%s' % (name, arg, owner_name, tag), owner_name + '::' + name))
+        elif kind_scope == 'class':
+            out.append((ln, 'ObRawExprFactory member %s of %s (a factory held by value)' % (name, owner_name),
+                        owner_name + '::' + name))
+        else:
+            out.append((ln, 'global ObRawExprFactory %s(%s)' % (name, arg), name))
+    for m in FACTORY_NEW_RE.finditer(code):
+        ln = src.line_of(m.start())
+        a, b = statement_span(code, m.start())
+        out.append((ln, 'ObRawExprFactory allocated at run time: %s' % collapse(code[a:b], 160)))
+    if ctx['factory_macro_re'] is not None:
+        for m in ctx['factory_macro_re'].finditer(code):
+            ln = src.line_of(m.start())
+            if src.dkind.get(ln) in ('define', 'cont'):
+                continue
+            f = innermost_function(src, ln, m.start())
+            out.append((ln, 'local ObRawExprFactory declared by macro %s in %s' % (m.group(1), f[0] if f else '-')))
+    return out
+
+
+def expr_factory_receiver(src, ln, off, recv):
+    r = re.sub(r'\s+', '', recv)
+    root = re.match(r'\(?\*?([A-Za-z_]\w*)', r)
+    rname = root.group(1) if root else ''
+    typ = ''
+    f = innermost_function(src, ln, off)
+    if f is not None and rname:
+        info = find_local(src, f, rname, off)
+        if info is not None:
+            typ = info[1]
+    probe = typ + ' ' + r
+    if re.search(r'ObExecContext|get_exec_context\(\)|exec_ctx|\bctx_?$|^ctx\b|^\(?\*?ctx\b', probe):
+        return 'exec context'
+    if re.search(r'Ob\w*RawExpr\b|\bexpr\b', probe):
+        return "the expression's own factory (s4-sql-front.md 2.3 rule 4)"
+    if re.search(r'ObPL\w*AST|_ast\b|ast_?$', probe):
+        return "a PL AST's factory"
+    if re.search(r'(?i)package', probe):
+        return "a PL package's factory"
+    if re.search(r'optimizer_context|opt_ctx|ObOptimizerContext', probe):
+        return "the optimizer context's factory"
+    return 'receiver %s (type not resolved)' % (r or '-')
+
+
+def expr_factory_caller_rows(src, ctx):
+    out = []
+    path = src.path
+    if path.startswith(COMPILATION_DIRS):
+        return out
+    code = src.code
+    if 'get_expr_factory' not in code:
+        return out
+    for i, line in enumerate(src.lines):
+        if 'get_expr_factory' not in line:
+            continue
+        for m in EXPR_FACTORY_CALL_RE.finditer(line):
+            off = src.starts[i] + m.start()
+            paren = src.starts[i] + line.index('(', m.start())
+            ck = body_call_kind(src, i, 'get_expr_factory', line[:m.start()], paren)
+            if ck != 'call':
+                continue
+            rm = re.search(r'((?:[A-Za-z_]\w*(?:\([^()]*\))?\s*(?:\.|->)\s*)*)$', line[:m.start()])
+            recv = rm.group(1).rstrip('.->').strip() if rm else ''
+            recv = re.sub(r'(?:\.|->)\s*$', '', recv)
+            if not recv:
+                pm = re.search(r'([A-Za-z_]\w*)\s*(?:\.|->)\s*$', line[:m.start()])
+                recv = pm.group(1) if pm else ''
+            who = expr_factory_receiver(src, i, off, recv) if recv else 'no receiver (a member function of this class)'
+            a, b = statement_span(code, off)
+            stmt = code[a:b]
+            hint = ''
+            ctor = COMPILE_CONTEXT_CTOR_RE.match(stmt)
+            if re.search(r'\bexpr_factory_\s*=(?!=)', stmt):
+                hint = '; stored into a compile context (hands the factory to a compilation)'
+            elif ctor and paren_depth_between(code, a, off) >= 1:
+                hint = '; passed to the %s constructor (hands the factory to a compilation)' % (ctor.group(1) or ctor.group(2))
+            listed = design_factory_listing(path, i + 1)
+            if listed:
+                hint += '; ' + listed
+            out.append((i, 'get_expr_factory() on %s%s; statement: %s' % (who, hint, collapse(stmt, 140))))
+    return out
+
+
+def design_factory_listing(path, ln):
+    base = posixpath.basename(path)
+    if path == 'src/sql/ob_sql.cpp':
+        return 's4-sql-front.md 2.3 rule 5 counts the six calls in ob_sql.cpp among the hand-offs to a compilation'
+    if path == 'src/pl/ob_pl_build.cpp':
+        return 's4-sql-front.md 2.3 rule 5 counts the four calls in ob_pl_build.cpp among the hand-offs to a compilation'
+    for b, lo, hi, label in DESIGN_EXEC_TIME_FACTORY_CALLERS:
+        if base == b and lo <= ln <= hi:
+            return 's4-sql-front.md 2.3 rule 5 names it among the execution-time callers (%s)' % label
+    return ''
+
+
+def nested_in_template(text, pos):
+    depth = 0
+    k = pos - 1
+    lo = max(0, pos - 400)
+    while k >= lo:
+        c = text[k]
+        if c == '>':
+            depth += 1
+        elif c == '<':
+            if depth == 0:
+                return True
+            depth -= 1
+        elif c in '(;{},)' and depth == 0:
+            return False
+        k -= 1
+    return False
+
+
+def pointer_array_elem(typ, array_aliases=None):
+    t = typ
+    om = re.search(r'\b((?:[A-Za-z_]\w*::)*([A-Za-z_]\w*))\s*(<|\b)', t)
+    if om and array_aliases and om.group(2) in array_aliases and '<' not in t:
+        t = array_aliases[om.group(2)]
+    am = POINTER_ARRAY_TYPE_RE.search(t)
+    if not am:
+        return None
+    if nested_in_template(t, am.start()):
+        return '(arrays)'
+    return last_component(am.group(1))
+
+
+def local_pointer_arrays(src, f):
+    decls = []
+    if f is None:
+        return decls
+    base = src.starts[f[1]]
+    text = src.code[base:src.starts[f[3]] + len(src.lines[f[3]])]
+    for m in IR_ARRAY_DECL_RE.finditer(text):
+        decls.append((m.group(2), '(arrays)' if nested_in_template(text, m.start()) else m.group(1), base + m.start()))
+    for m in C_POINTER_ARRAY_RE.finditer(text):
+        decls.append((m.group(2), last_component(m.group(1)), base + m.start()))
+    for m in LOCAL_POINTER_ARRAY_RE.finditer(text):
+        if m.group(1):
+            decls.append((m.group(2), '(arrays)' if nested_in_template(text, m.start()) else last_component(m.group(1)),
+                          base + m.start()))
+        else:
+            decls.append((m.group(4), last_component(m.group(3)), base + m.start()))
+    decls.sort(key=lambda d: d[2])
+    return decls
+
+
+def local_array_elem(decls, name, pos):
+    best = None
+    for n, elem, off in decls:
+        if n == name and off < pos:
+            best = elem
+    if best is None:
+        for n, elem, off in decls:
+            if n == name:
+                return elem
+    return best
+
+
+def null_array_rows(src, ctx, stats):
+    out = []
+    code = src.code
+    if 'NULL' not in code and 'nullptr' not in code and 'prepare_allocate' not in code and 'extend_param_exprs' not in code:
+        return out
+    path = src.path
+    if path.startswith(NULL_ARRAY_SKIP_DIRS):
+        return out
+    ir_dir = path.startswith(NULL_ARRAY_DIRS)
+    stem = src.stem()
+    member_ir = ctx['member_ir']
+    cache = {}
+    for pattern, what in ((NULL_PUSH_RE, 'push_back(NULL)'), (NULL_ELEMENT_RE, 'element set to NULL'),
+                          (NULL_FILL_RE, None)):
+        for m in pattern.finditer(code):
+            ln = src.line_of(m.start())
+            if src.dkind.get(ln) in ('define', 'cont'):
+                continue
+            op = what or m.group(1)
+            if op == 'extend_param_exprs':
+                out.append((ln, 'extend_param_exprs: parameter slots of an expression hold NULL until set'))
+                continue
+            rm = re.search(r'((?:[A-Za-z_]\w*\s*(?:\(\s*\))?\s*(?:\.|->)\s*)*)([A-Za-z_]\w*)\s*(\(\s*\))?\s*'
+                           r'(?:\[[^\[\]]*\]\s*)?(?:(?:\.|->)\s*)?$', code[max(0, m.start() - 160):m.start()])
+            if not rm:
+                continue
+            chain = re.sub(r'(?:\.|->)\s*$', '', rm.group(1).strip())
+            recv = rm.group(2)
+            getter = bool(rm.group(3))
+            f = innermost_function(src, ln, m.start())
+            key = f[:2] if f else None
+            if key not in cache:
+                cache[key] = local_pointer_arrays(src, f)
+            local = cache[key]
+            cls = enclosing_class(f[0]) if f else ''
+            mp, ma = member_ir.get(('class', cls), (set(), set()))
+            sp, sa = member_ir.get(('stem', stem), (set(), set()))
+            if recv == 'children_':
+                stats['null-arrays parse-tree children'] += 1
+                continue
+            elem = None
+            known = None
+            if chain and chain != 'this':
+                rt = arg_expr_type(src, f, cls, chain, ctx, m.start()) if f is not None else None
+                rc = class_of(rt) if rt else ''
+                if rc:
+                    for k in ancestors(ctx.get('class_bases', {}), rc):
+                        known = ctx['member_arrays'].get(('class', k, recv))
+                        if known:
+                            break
+                    if known is None:
+                        mt = member_type(ctx, rc, recv)
+                        if mt:
+                            known = pointer_array_elem(mt) or '(not a pointer array)'
+                    if known is None and not getter:
+                        stats['null-arrays receiver member not found'] += 1
+            if known is None and not (chain and chain != 'this'):
+                known = local_array_elem(local, recv, m.start()) or ctx['member_arrays'].get(('class', cls, recv)) or \
+                    ctx['member_arrays'].get(('stem', stem, recv))
+            if getter:
+                if recv in ctx['ir_array_getters']:
+                    elem = 'returned by %s()' % recv
+            elif known is not None:
+                if known not in ctx['ir_types']:
+                    stats['null-arrays arrays of other pointers'] += 1
+                    continue
+                elem = 'of %s *' % known
+            elif recv in ma or recv in sa or recv in ctx['ir_array_members']:
+                elem = 'member array of IR pointers'
+            if elem is None and known is None and f is not None:
+                full = (chain + '.' if chain and chain != 'this' else '') + recv + ('()' if getter else '')
+                ft = arg_expr_type(src, f, cls, full, ctx, m.start())
+                if ft:
+                    fe = pointer_array_elem(ft)
+                    if fe is None or fe == '(arrays)' or fe not in ctx['ir_types']:
+                        stats['null-arrays arrays of other types (by declared type)'] += 1
+                        continue
+                    elem = 'of %s *' % fe
+            if elem is None:
+                if not ir_dir:
+                    stats['null-arrays unresolved outside IR code'] += 1
+                    continue
+                elem = 'array type not resolved'
+                stats['null-arrays not resolved in IR code'] += 1
+            if op.startswith('prepare_allocate'):
+                text = '%s on %s (%s): new slots hold NULL until set' % (op, recv, elem)
+            else:
+                text = '%s on %s (%s)' % (op, recv, elem)
+            out.append((ln, text))
+    return out
+
+
+def warning_buffer_listed(path, ln):
+    base = posixpath.basename(path)
+    for b, lo, hi, label in WARNING_BUFFER_LISTED:
+        if base == b and lo <= ln <= hi:
+            return label
+    return None
+
+
+def warning_buffer_rows(src, ctx):
+    out = []
+    path = src.path
+    if path in WARNING_BUFFER_PRIMITIVES:
+        return out
+    code = src.code
+    wrx = ctx['wb_wrapper_re']
+    if 'tsi_warning_buffer' not in code and 'ObWarningBufferIgnoreScope' not in code and (wrx is None or not wrx.search(code)):
+        return out
+    for i, line in enumerate(src.lines):
+        found = []
+        for m in WARNING_BUFFER_CALL_RE.finditer(line):
+            if body_call_kind(src, i, m.group(1), line[:m.start()], src.starts[i] + m.end() - 1) == 'call':
+                found.append('%s()' % m.group(1))
+        if WARNING_BUFFER_SCOPE_RE.search(line):
+            found.append('ObWarningBufferIgnoreScope declared')
+        if WARNING_BUFFER_ASSIGN_RE.search(line):
+            found.append('the slot assigned through ob_get_tsi_warning_buffer()')
+        via = None
+        if wrx is not None and not found:
+            for m in wrx.finditer(line):
+                if body_call_kind(src, i, m.group(1), line[:m.start()], src.starts[i] + m.end() - 1) == 'call':
+                    via = m.group(1)
+                    found.append('through %s()' % via)
+                    break
+        if not found:
+            continue
+        label = warning_buffer_listed(path, i + 1)
+        if label is None and via == 'setup_wb':
+            label = 'the request entries, through ObMPBase::setup_wb'
+        status = ('listed in s2-errors.md 2.6 (%s)' % label) if label else 'not in the list of s2-errors.md 2.6: a new site'
+        out.append((i, '%s; %s' % (', '.join(found), status)))
+    return out
+
+
+def new_list_figures(rows, info):
+    out = {}
+    stats = info['stats']
+    lg = clean_rows(rows.get('lock-guards', []))
+    special = re.compile(r'; (?:pointer|reference) to a lock|^container of locks|^lock whose type is the template parameter|'
+                         r'^hand-made spin lock')
+    plain = [r for r in lg if not special.search(r[3])]
+    out['lock-guards'] = (
+        '(Measured: %d lock types: %d primitives, %d subclasses of them, %d lock classes found by name and contents, %d names '
+        'with a typedef, using alias or #define of a lock; rows: %d declarations of a lock object (%d members or static members, '
+        '%d globals, %d locals or function statics, %d inside #define bodies; %d in vendored libeasy and zstd), %d pointer or '
+        'reference members, %d containers of locks, %d locks whose type is a template parameter (%d of them references), %d '
+        'hand-made spin locks; %d rows with no guard or lock call on the name in methods of their class or in their function; '
+        '%d with uses through another object and %d with uses inside #define bodies that are not attributed; %d with a timed '
+        'call; %d with a try call; left out: %d instances of templates that take a lock type as a parameter. The census behind '
+        'the plan figure (evidence/conc/lock_census.py) matched 479 lines at 834bbee1e: 19 in src/oblib/lib/lock, one the '
+        'predicate functor SlidingCond, and 459 that are rows here.)') % (
+        len(info['lock_kinds']), sum(1 for v in info['lock_kinds'].values() if v not in ('lock subclass', 'lock class')),
+        sum(1 for v in info['lock_kinds'].values() if v == 'lock subclass'),
+        sum(1 for v in info['lock_kinds'].values() if v == 'lock class'), len(info['lock_alias_entries']),
+        len(plain), count_constructs(plain, r'; (?:static )?member of '), count_constructs(plain, r'; global'),
+        count_constructs(plain, r'; (?:local|function static) in '), count_constructs(plain, r'declared inside #define'),
+        count_constructs(plain, r'\[vendored\]'),
+        count_constructs(lg, r'; (?:pointer|reference) to a lock declared elsewhere or allocated'),
+        count_constructs(lg, r'^container of locks'),
+        count_constructs(lg, r'^lock whose type is the template parameter'),
+        count_constructs(lg, r'^lock whose type is the template parameter.*; (?:pointer|reference) to a lock'),
+        count_constructs(lg, r'^hand-made spin lock'), count_constructs(lg, r'no guard or lock call'),
+        count_constructs(lg, r'more through another object'), count_constructs(lg, r'more inside #define bodies'),
+        count_constructs(lg, r'\d+ timed'), count_constructs(lg, r'\d+ try'),
+        stats.get('lock-guards policy-parameter instances', 0))
+    pc = clean_rows(rows.get('printf-calls', []))
+    fam = collections.Counter(r[3].split(' ', 1)[0] for r in pc)
+    top = ', '.join('%s %d' % kv for kv in sorted(fam.items(), key=lambda kv: (-kv[1], kv[0]))[:8])
+    n_args = stats.get('printf-calls arguments', 0)
+    n_typed = stats.get('printf-calls arguments typed', 0)
+    out['printf-calls'] = (
+        '(Measured: %d printf-family functions (%d with other overloads) and %d macros that pass a format on; calls by callee: '
+        '%s; %d calls matched to a printf overload by argument count, %d by the argument at the format position (%d of them '
+        'a const char * constant), %d marked overload not resolved; left out: %d calls of the other overloads, %d of them '
+        'because the receiver did not resolve to a class; %d calls whose format is not a literal; %d whose format is a '
+        'const char * constant or local shown with its values; %d that forward a va_list; %d with %%p; %d that write the '
+        'server log; %d that record a user message; %d that write stdout, stderr or a file; %d inside to_string; %d rows sit '
+        'inside #define bodies with a fixed format; %d calls inside macros that pass their format on are not rows, their uses '
+        'are; %d declarations with parameter lists left out; %d calls with preprocessor branches in their arguments; '
+        '%d of %d arguments typed (%.1f%%); %d calls pass a different number of arguments than their conversions take.)') % (
+        len(info['printf_funcs']), sum(1 for v in info['printf_funcs'].values() if v[3]), len(info['printf_macros']), top,
+        count_constructs(pc, r'the printf overload, since only a printf overload takes'),
+        count_constructs(pc, r'the printf overload, since the argument at the format position'),
+        count_constructs(pc, r'the printf overload, since the argument at the format position is the const char \* constant'),
+        count_constructs(pc, r'overload not resolved'),
+        stats.get('printf-calls other overloads', 0), stats.get('printf-calls receiver not resolved', 0),
+        count_constructs(pc, r'; format not a literal'), count_constructs(pc, r'; format is the const char \* constant'),
+        count_constructs(pc, r'; forwards a va_list'), count_constructs(pc, r'; has %p'),
+        count_constructs(pc, r'writes the server log'), count_constructs(pc, r'records a user message'),
+        count_constructs(pc, r'writes (?:stdout|a stream)'), count_constructs(pc, r'; inside to_string'),
+        count_constructs(pc, r'inside #define'), stats.get('printf-calls inside forwarding macros', 0),
+        stats.get('printf-calls declarations', 0), stats.get('printf-calls with preprocessor branches in the arguments', 0),
+        n_typed, n_args, 100.0 * n_typed / max(1, n_args), count_constructs(pc, r'the conversions take'))
+    fp = clean_rows(rows.get('fast-parser', []))
+    out['fast-parser'] = (
+        '(Measured: %d branches: %d case labels, %d if or else-if conditions, %d else branches; %d branches that only test '
+        'an error or an allocation are not rows, their products moved to the enclosing branch; %d rows that only set '
+        'PARAM_TOKEN name the node types of their function; %d lexer functions produce parameters.)') % (
+        len(fp), count_constructs(fp, r'^(?:case|default)'), count_constructs(fp, r'^(?:else )?if \('),
+        count_constructs(fp, r'^else(?! if)'), stats.get('fast-parser error branches', 0),
+        count_constructs(fp, r'-> PARAM_TOKEN; node types'), len(info['fast_producers']))
+    so = clean_rows(rows.get('sizeof-formulas', []))
+    out['sizeof-formulas'] = (
+        '(Measured: %d rows: %d sizeof in statements with decision words, %d sizeof that reach a decision through a local, '
+        '%d uses of %d named constants whose value is a sizeof expression; left out: %d that size an allocation, a copy, a '
+        'hash, serialization or an array, %d whose local only sizes an allocation or lays out a buffer, and %d in arithmetic '
+        'without decision words.)') % (
+        len(so), sum(1 for r in so if 'reaches a decision' not in r[3] and 'the named constant' not in r[3]),
+        sum(1 for r in so if 'reaches a decision' in r[3] and 'the named constant' not in r[3]),
+        count_constructs(so, r'the named constant'),
+        len(set(re.match(r'(\w+) \(the named constant', r[3]).group(1) for r in so if 'the named constant' in r[3])),
+        stats.get('sizeof-formulas allocation, copy or serialization', 0),
+        stats.get('sizeof-formulas allocation or buffer layout through a local', 0),
+        stats.get('sizeof-formulas without decision words', 0))
+    wa = clean_rows(rows.get('work-area-formulas', []))
+    methods = collections.Counter(re.search(r'\.(\w+):', r[3]).group(1) for r in wa if r[3].startswith('work-area report'))
+    out['work-area-formulas'] = (
+        '(Measured: %d report calls (%s); %d decisions that compare a work-area figure directly or through a getter of the '
+        'same class (%d getters found: %s); %d decisions through a local computed from a figure; %d comparisons with a row '
+        "store's own mem_limit_; %d files.)") % (
+        count_constructs(wa, r'^work-area report'), ', '.join('%s %d' % kv for kv in sorted(methods.items())) or 'none',
+        count_constructs(wa, r'^work-area decision on'), len(info['wa_wrappers']),
+        ', '.join(sorted(info['wa_wrappers'])) or 'none', count_constructs(wa, r'^work-area decision through'),
+        count_constructs(wa, r"^row store's own dump decision"), len(set(r[0] for r in wa)))
+    mm = clean_rows(rows.get('memmove', []))
+    out['memmove'] = (
+        '(Measured: %d in src/sql/engine/expr, the plan figure; %d in the expression core; %d elsewhere, %d of them in the '
+        'grammar files.)') % (
+        count_constructs(mm, r'rule 3\.5'), count_constructs(mm, r'expression core'),
+        count_constructs(mm, r'outside the expression directories'), sum(1 for r in mm if r[0].endswith(('.y', '.l'))))
+    fi = clean_rows(rows.get('frame-internals', []))
+    files = set(r[0] for r in fi)
+    impl = set(f for f in files if re.search(r'_op_impl\.\w+$', f))
+    base_only = [r for r in fi if 'no direct frame access' in r[3]]
+    other_files = set(r[0] for r in fi if 'no direct frame access' not in r[3])
+    r05_whole = set(r[0] for r in fi if 'in R05 pattern' in r[3])
+    r05_raw = set(k.rsplit(' ', 1)[1] for k in stats if k.startswith('frame-internals R05 raw file '))
+    op_only = lambda fs: set(f for f in fs if re.search(r'_op\.(?:h|cpp)$', f))
+    out['frame-internals'] = (
+        "(Measured: %d lines in %d operator files: %d *_op files and %d *_op_impl files (the feasibility evidence's 66 counted "
+        '*_op.{h,cpp} files only, so the equal totals are a coincidence); %d lines only call the operator base method '
+        'clear_evaluated_flag(), and without them %d files remain. R05\'s pattern, as whole names, matches %d lines in %d '
+        'files (%d of them *_op.{h,cpp}); matched as substrings of the raw text, comments included, over the *_op.{h,cpp} '
+        'files the way R05\'s grep did, it matches %d files (%d with the *_op_impl files), since locate_expr_datum is also a '
+        'prefix of locate_expr_datumvector (ob_limit_op.cpp:427, ob_select_into_op.cpp:997) and a commented-out line '
+        'counts (ob_table_scan_with_index_back_op.cpp:124).)') % (
+        len(fi), len(files), len(files - impl), len(impl), len(base_only), len(other_files),
+        count_constructs(fi, r'in R05 pattern'), len(r05_whole), len(op_only(r05_whole)), len(op_only(r05_raw)), len(r05_raw))
+    ss = clean_rows(rows.get('storage-sql-uses', []))
+    out['storage-sql-uses'] = (
+        '(Measured: %d lines with sql::, in %d files; %d lines with an unqualified SQL name under using namespace sql or '
+        'using sql::X; %d using lines; %d namespace sql blocks in storage files, with %d lines inside that name an SQL type '
+        'and %d SQL function definitions; %d SQL type names known.)') % (
+        count_constructs(ss, r'^sql:: use'), len(set(r[0] for r in ss if r[3].startswith('sql:: use'))),
+        count_constructs(ss, r'^unqualified SQL name under'), count_constructs(ss, r'^using '),
+        count_constructs(ss, r'^opens namespace sql'), count_constructs(ss, r'^unqualified SQL name inside namespace sql'),
+        count_constructs(ss, r'^defines the SQL function'), len(info['sql_types']))
+    tp = clean_rows(rows.get('batch-end-tracepoints', []))
+    other = [r for r in tp if 'rule 4.6' not in r[3]]
+    out['batch-end-tracepoints'] = (
+        '(Measured: %d rows for the tracepoints rule 4.6 names; %d other reads in the execution side and the optimizer: %d '
+        'read as a number, %d switches that also set ret, %d other values or switches; %d set by init.sql; %d whose names '
+        'have a batch, row, dump, sort, hash, bypass or cache word; left out: %d error injections.)') % (
+        count_constructs(tp, r'named by s5-execution.md rule 4\.6'), len(other),
+        sum(1 for r in other if 'read as a number' in r[3]),
+        sum(1 for r in other if 'also sets ret' in r[3]),
+        sum(1 for r in other if 'read as a value or switch' in r[3]),
+        sum(1 for r in other if 'set by tools/deploy/init.sql' in r[3]),
+        sum(1 for r in other if 'its name says' in r[3]),
+        stats.get('batch-end-tracepoints error injections', 0))
+    lf = clean_rows(rows.get('local-expr-factories', []))
+    out['local-expr-factories'] = (
+        '(Measured: %d local factories, %d of them on a temporary memory context; %d inside #define bodies; %d uses of such '
+        'macros; %d members held by value; %d allocated at run time.)') % (
+        count_constructs(lf, r'^local ObRawExprFactory \w+\(.*\) in '), count_constructs(lf, r'temporary memory context'),
+        count_constructs(lf, r'inside #define'), count_constructs(lf, r'declared by macro'),
+        count_constructs(lf, r'member'), count_constructs(lf, r'allocated at run time'))
+    na = clean_rows(rows.get('null-arrays', []))
+    out['null-arrays'] = (
+        '(Measured: %d push_back(NULL), %d elements set to NULL, %d prepare_allocate fills, %d extend_param_exprs; %d rows '
+        'whose array type is not resolved; left out: %d NULL stores and fills on arrays of other pointers or of arrays, %d on '
+        'arrays of other types found by the declared type, %d that do not resolve outside the IR directories, %d parse-tree '
+        'children_ stores.)') % (
+        count_constructs(na, r'^push_back\(NULL\)'), count_constructs(na, r'^element set to NULL'),
+        count_constructs(na, r'^prepare_allocate'), count_constructs(na, r'^extend_param_exprs'),
+        count_constructs(na, r'array type not resolved'), stats.get('null-arrays arrays of other pointers', 0),
+        stats.get('null-arrays arrays of other types (by declared type)', 0),
+        stats.get('null-arrays unresolved outside IR code', 0), stats.get('null-arrays parse-tree children', 0))
+    ef = clean_rows(rows.get('expr-factory-callers', []))
+    out['expr-factory-callers'] = (
+        '(Measured: %d on the exec context, %d on an expression, %d on a PL AST or package, %d others; %d hand the factory to '
+        'a compilation (%d stored into a compile context, %d passed to a resolver or optimizer context constructor); %d are '
+        'among the ten hand-offs s4-sql-front.md 2.3 rule 5 counts, %d among the execution-time callers it names.)') % (
+        count_constructs(ef, r'on exec context'), count_constructs(ef, r"expression's own factory"),
+        count_constructs(ef, r'PL (?:AST|package)'),
+        sum(1 for r in ef if not re.search(r"on exec context|expression's own|PL (?:AST|package)", r[3])),
+        count_constructs(ef, r'hands the factory to a compilation'),
+        count_constructs(ef, r'stored into a compile context'), count_constructs(ef, r'constructor \(hands the factory'),
+        count_constructs(ef, r'counts the (?:six|four) calls'), count_constructs(ef, r'names it among the execution-time'))
+    wb = clean_rows(rows.get('warning-buffer-sites', []))
+    out['warning-buffer-sites'] = (
+        '(Measured: %d sites listed in s2-errors.md 2.6; %d not listed (new sites); %d wrapper functions found: %s.)') % (
+        count_constructs(wb, r'listed in s2-errors'), count_constructs(wb, r'a new site'), len(info['wb_wrappers']),
+        ', '.join(sorted(info['wb_wrappers'])) or 'none')
     return out
 
 
@@ -5409,6 +9209,19 @@ DEFINITIONS = {
     'pointer-identity': 'Declarations of hash or ordered containers keyed by a pointer; inside functions, == and != where one side resolves to an IR pointer and the other is not NULL, a constant or a count (IR = transitive subclasses of ObRawExpr, ObStmt, ObDMLStmt, ObLogicalOperator, ObLogPlan, ObJoinOrder, TableItem, ColumnItem, SemiInfo, JoinedTable and ObExpr), resolved through locals, parameters, members, IR array elements and methods returning IR pointers (a name counts only if at least 80% of its declarations are IR pointers); pointer-to-integer casts (reinterpret_cast always; a C-style cast when its operand is this, an address or a name declared as a pointer), tree-wide, tagged by use: a key (the statement mentions a key or a _refactored call), an IR pointer, compared for identity or for order with another pointer value, hashed or reduced modulo a bucket count (alignment checks excluded), or used as an id; find_item/has_exist_in_array/is_contain/add_var_to_array_no_dup/find_expr/get_expr_idx and similar membership calls on IR pointers, the ones that test identity and then same_as (append_exprs_no_dup, ObTransformUtils::find_expr) marked.',
     'overflow': 'Proxy. Tree-wide: __builtin_*_overflow calls, raises of the overflow error codes unless their condition is a floating-point test (floating calls or constants such as DBL_MAX, or a floating literal) or a length or size comparison with no arithmetic, limit or helper, and arithmetic whose result is checked afterwards by an is_*_out_of_range(l, r, res) helper (the statement that computes res). In value and expression code (sql/engine/expr, aggregate, window_function, oblib/common/number, object, wide_integer, timezone and json_type, share/object, share/datum, query api expr and aggregate, and the storage pushdown aggregates): explicit checks (calls of overflow and out_of_range helpers and definitions of the integer ones, floating-point helpers and bare declarations excluded; limit comparisons next to arithmetic outside array subscripts) and unchecked + - * << on signed or unsigned datum or ObObj getters (indexed vector getters included), on integer locals initialized or assigned from them, or on the integer parameters of raw_op arithmetic kernels. Rust debug builds panic on signed and unsigned overflow alike.',
     'float-contraction': 'fma/fmaf/fmal, __builtin_fma and FMA intrinsics (x86 and NEON) tree-wide: the calls the Rust port maps to mul_add (PLAN section 3, item 3). The multiply-add rows are a fallback in case the -ffp-contract=off build of the C++ reference is dropped, since under it they all translate to a plain multiply and add: in number, expression, aggregate, window-function, optimizer and vector-kernel code (data_plane vector), statements (on one line or several) where a product term (no division in it) is added or subtracted in the same expression (not across a comparison, a logical operator, a ternary branch or an argument comma), or added with += or -=, and a double or float local or member, a floating literal, a double cast or get_double/get_float appears in that expression or in the parenthesized expression it sits in.',
+    'lock-guards': "One row per lock declaration (RULEBOOK section 5; s8-numerics-platform.md rules 5.1, 5.7, 5.8), outside the primitives' own directory src/oblib/lib/lock, comments and strings blanked. A lock type is an OB lock primitive (ObLatch, ObLatchMutex, ObSpinLock, lib::ObMutex, ObUtilMutex, ObFutex, SpinRWLock, TCRWLock, DRWLock, ObRWLock, ObQSyncLock, ObSmallSpinLock and ObByteLock, ObPtrSpinLock, ObRowLatch, ObBucketLock, ObBucketQSyncLock, ObRecursiveMutex, ObThreadCond, ObCond, Cond, SimpleCond, LWaitCond, ObMonitor, the reader-count syncs ObQSync, ObDynamicQSync and TCRef, and the no-op ObNullLock, NLock and NCond); a pthread mutex, spin lock, read-write lock or condition; a std mutex, shared mutex or condition variable; a class derived from one of these; a class whose name ends in Lock, Latch, Mutex, Cond or Monitor and that holds a lock member or defines lock, unlock, rdlock, wrlock, try_lock or a similar operation (CtxLock, ObLSLock, MemtableMgrLock, the keybtree's own RWLock); or a typedef or using alias of any of them (an alias declared in a class applies to that class and its file; a name that is both a lock class and an alias is the class only in the class's own file stem). Rows: every field, static member, global, function static and local declared with such a type, arrays included (a declarator list gives one row per name; a declaration inside a #define body is one row per body line and the uses of the macro are not rows); every pointer or reference member or global of a lock type, which points at a lock declared elsewhere or allocated at run time; every declaration whose type is a container or pair of locks (ObLightHashMap<.., SpinRWLock>, std::pair<ObBucketLock, ObBucketLock>); and every member whose type is a template parameter when the type or the member name has a lock, latch, mutex or cond word. Each row gives the kind (mutex, read-write lock, bucket lock, reentrant mutex, condition, spin lock, reader-count sync, no-op lock, lock class), where it is declared, and the guard objects (a *Guard type, std::lock_guard, unique_lock) and lock calls (lock, unlock, rdlock, wrlock, try_*, wait, signal, pthread_*) that name it in its file stem, with the timed ones (a guard type with Timeout or Retry, or a timeout argument) and the try ones. The guarded fields, the functions called with the lock held and the nesting order are left to the classifier. Not seen: uses through an accessor (get_lock()) or through another object in the counts, locks whose type a macro pastes together, local pointers and references to locks, function parameters of lock type, and lock-like classes whose names do not end in Lock, Latch, Mutex, Cond or Monitor and do not derive from a primitive.",
+    'printf-calls': 'Every call of a printf-family function or macro, comments and strings blanked, definitions and declarations excluded: the C library\'s printf, fprintf, dprintf, sprintf, snprintf, asprintf and their v forms; every function whose definitions end their parameters with a const char * format parameter (named like fmt or format) and ..., or pass a va_list after it, when at least 80% of the definitions with that name do so or the name is declared with the printf format attribute (databuff_printf, which also has template overloads that print objects: its calls count only when a string literal sits at a format position; the others are counted below); and every function-like macro that passes one of its parameters, or its variadic arguments, on as the format of such a call (BUF_PRINTF, DATA_PRINTF, _OB_LOG and the other underscore log macros, HASH_WRITE_LOG, FORWARD_USER_ERROR_MSG, the type-name printers of ob_obj_type.cpp), found to a fixed point. A call inside the body of such a macro is not a row, the macro\'s uses are; a call with a fixed format inside any other #define body is one row per body line (J_NAME, PRINT_BOUND), and that macro\'s uses are not rows. Each row gives the format as written with string literals, PRI* macros expanded to their macOS arm64 values and object-like macros whose body is a string literal (NEW_LINE) resolved, the conversions in it, the argument expressions after it, and marks: format not a literal, forwards a va_list, has %p, writes the server log (the underscore log macros, logdata_printf), records a user message (it reaches the client), writes stdout, stderr or a file, inside to_string. LOG_USER_ERROR, LOG_USER_WARN and LOG_USER_NOTE are not rows: their format is the catalog\'s, which s2-errors.md 2.7 and 2.11 check. The key-value log macros (LOG_WARN("msg", K(x))) are not printf calls. Not seen: calls through function pointers or std::function, formats built at run time or held in variables (marked format not a literal, not resolved), the argument types (the row lists expressions), and whether a buffer\'s text reaches the client, which the classifier decides.',
+    'fast-parser': "Each branch of ObFastParser's lexer (src/sql/parser/ob_fast_parser.{h,cpp}: ObFastParser, ObFastParserBase, ObFastParserMysql and the macros defined in those files) that makes or selects a parameter: the innermost case label group, or if, else-if or else branch, around a statement that sets cur_token_type_ = PARAM_TOKEN, builds a node (new_node with a T_ type, add_bool_type_node, add_null_type_node, lex_store_param), assigns a T_ node type (param_type = T_INT, node->type_ = T_NUMBER), calls a function or macro with a T_ type argument (CHECK_AND_PROCESS_NUMBER(T_DOUBLE)), or calls a lexer function that does any of these, found to a fixed point (process_number, process_string, process_hex_number, process_binary, process_time_relate_type and the rest). One row per branch, at its header, with what it produces and the chain of branches around it. A branch whose own condition only tests an error or an allocation (OB_FAIL, OB_ISNULL, a NULL, OB_SUCCESS or ret comparison), or the else of such a test, is left out; T_INVALID assignments are not products. Whether the grammar makes the same constant a parameter is left to the classifier, against sql_parser_mysql_mode.y. Not seen: the identifier path reached through the process_idf_func_ member-function pointer from the default case (its own branches are rows), and literal recognition in helpers that branch on nothing.",
+    'sizeof-formulas': "Proxy for s5-execution.md rule 4.9. Every sizeof in the execution code (src/sql/engine, src/sql/code_generator, src/sql/das, src/sql/dtl, src/query/api/query/engine), comments and strings blanked, whose statement names a batch size, bucket, dump, bypass, cache size, memory bound or limit, frame size, rowset, row count, partition count or shift, threshold, memory size, used, hold or data size, capacity or max size, or whose enclosing function's name says batch size, bucket, dump, bypass, memory bound, cache size, frame size, header size, memory size, memory used or partition; left out when the innermost call around it only allocates, copies, compares bytes, hashes, serializes, sets, creates, extends or resets, and in static_asserts and array dimensions. One row per sizeof. Not seen: sizes that reach a decision through a variable or member computed elsewhere (a store's mem_used_ summed per row), decision formulas outside these directories, and statements whose words the vocabulary misses.",
+    'work-area-formulas': "Proxy for s5-execution.md rule 6.9, outside the work area's own files (src/sql/engine/ob_sql_mem_mgr_processor.{h,cpp}, ob_sql_memory_manager.{h,cpp}), comments and strings blanked: each call on an ObSqlMemMgrProcessor (a member, pointer or local named like mem_processor) that reports a figure to the work area: init with its cache-size argument, alloc, update_used_mem_size, update_cache_size, update_delta_used_mem_size, set_number_pass, and update_max_available_mem_size_periodically and extend_max_memory_size with the return expressions of their callbacks; and each statement that compares a work-area figure (get_data_size, get_mem_bound, get_max_bound, get_max_available_mem_size, get_expect_size, get_cache_size) with <, >, <= or >= next to a processor, a profile or a memory context: the dump decisions. The formula behind each reported value, often in a helper such as get_mem_used_size(), is the classifier's to follow. Not seen: memory accounted without a processor call, and processors reached through a name that does not say mem_processor.",
+    'memmove': "Every MEMMOVE, memmove, std::memmove and __builtin_memmove call, comments and strings blanked, the MEMMOVE macro's own definitions and ob_memmove_safe left out, tagged by directory: src/sql/engine/expr (the 17 lines of s5-execution.md rule 3.5), the expression core under src/query/api/query/engine/expr (ObExpr's deep copy, the overlap ob_expr.h:1108 marks), and elsewhere. Calls in the C parser cores and in vendored zstd are rows too, with their file flags. Not seen: result writes whose source may be the destination's own buffer but that copy with MEMCPY, memcpy or a loop, which rule 3.5 also covers.",
+    'frame-internals': "Lines of the operator files, the *_op.{h,cpp} and *_op_impl.{h,cpp} files under src/sql/engine (comments and strings blanked), that reach into frame internals: frames_; the frame layout members frame_idx_, datum_off_, res_buf_off_, res_buf_len_, eval_info_off_, eval_flags_off_, pvt_skip_off_, dyn_buf_header_offset_ and vector_header_off_; locate_expr_datum, locate_batch_datums, locate_datum_for_write, locate_datums_for_update, locate_param_datum and the datum-vector forms; get_evaluated_flags, get_eval_info, get_pvt_skip, get_str_res_mem, get_reset_tmp_alloc, reset_ptr_in_datum; the evaluated and projected flag setters; BatchInfoScopeGuard; the batch index and size accessors; and reinterpret_cast to ObDatum. One row per line, listing what it uses and marking the lines R05's narrower pattern matches (frames_, locate_batch_datums, locate_expr_datum, locate_datum_for_write, get_evaluated_flags, get_eval_info, get_pvt_skip, reinterpret_cast<ObDatum). Not seen: helpers outside the operator files that operators call to reach the frame (the row stores, the aggregate processor, ob_batch_eval_util.h), and frame access through local aliases of these members.",
+    'storage-sql-uses': "Lines under src/storage, comments and strings blanked, that use SQL objects: every line naming the sql namespace (sql::X, oceanbase::sql::X), with the names; every using namespace sql and using sql::X line; and, in a file with such a using line, every line that names without qualification a type declared at namespace scope inside namespace sql and in no other namespace (or the X of using sql::X). R05's 1,070 lines were git grep over raw text, comments included. Not seen: SQL types reached through storage's own typedefs or templates, SQL functions and constants named without qualification, and SQL objects handed over as void pointers.",
+    'batch-end-tracepoints': 'Reads of tracepoints (EventTable::EN_* through EVENT_CALL, OB_E or EVENT_CODE, and errsim points a file defines with ERRSIM_POINT_DEF and reads by name), comments and strings blanked: every read of the four tracepoints s5-execution.md rule 4.6 names (311 EN_DAS_SIMULATE_GROUP_SIZE, 1200 EN_ENABLE_NEWSORT_FORCE, 2206 EN_ENABLE_RANDOM_BATCH_SIZE, 2501 EN_CHECK_SORT_CMP), tree-wide, and their definitions in ob_tracepoint_def.h; and, in the execution side (src/sql, src/query, src/storage/access, src/storage/blocksstable, src/share/vector, src/share/aggregate), every other read used as a value or a switch when tools/deploy/init.sql sets the tracepoint, when it is read as a number (negated or through abs), or when its name says batch, row count, rowset, group size, dump, sort, hash, bypass or cache. Each row says how it is read, whether init.sql sets it, and the statement. Reads that only inject an error into ret (ret = OB_E(..), OB_FAIL(OB_E(..)), return OB_E(..)) and sets (TP_SET_EVENT) are not rows. Not seen: tracepoints whose names hide their effect and that init.sql does not set, errsim points read through another file, and effects decided far from the read.',
+    'local-expr-factories': "Every ObRawExprFactory object held by value (comments and strings blanked): the local factories ObRawExprFactory x(...) of s4-sql-front.md 2.3, a declaration inside a #define body included (RESOLVE_SELECT_VIEW_STMT), and each use of such a macro; the data members that hold a factory by value (the PL resolver's proxy, the PL router, PL ASTs and cache objects, the truncate-info service, ObRTDatumArith); and factories allocated at run time (the exec context's OB_NEWx). Each row gives the constructor argument and marks a temporary memory context (CURRENT_CONTEXT). Which of the four kinds of 2.3 each is, is the classifier's. Not seen: a factory built by a raw allocation and placement new under a type alias.",
+    'null-arrays': 'Places where an array of IR pointers holds NULL (s4-sql-front.md 2.5 rule 15), comments and strings blanked, outside the C parser cores: push_back(NULL or nullptr); an element set to NULL (x.at(i) = NULL, x[i] = NULL); prepare_allocate and prepare_allocate_and_keep_count, whose new slots hold NULL until set; and extend_param_exprs. The array must resolve to pointers of an IR type (the pointer-identity list, ObExpr included): a local or parameter declared as a container, C array or pointer-to-pointer of them, a member whose declared container type holds them (by class, then by file stem), a member name that holds IR pointers in at least 80% of its declarations, or a getter that returns such an array in at least 80% of its declarations. An array that resolves to other pointers is left out; in the resolver, rewrite, optimizer, code generator, printer and PL directories a push_back(NULL) or NULL store on an array that does not resolve is a row marked not resolved. Parse-tree children_ stores are left out: 1.2 rule 2 already makes a NULL child None. Not seen: arrays filled by assign or copy from an array that holds NULL, NULL passed through setters such as set_param_expr, and arrays reached through chains the resolution cannot follow.',
+    'expr-factory-callers': "Every call of get_expr_factory(), comments and strings blanked, definitions and declarations excluded, in files outside src/sql/resolver, src/sql/rewrite and src/sql/optimizer (inside them RULEBOOK 2.4 makes the exec context's factory f.own()). Each row names the receiver: the exec context, an expression's own factory (2.3 rule 4), a PL AST's or package's factory, the optimizer context's, or unresolved, by the receiver's declared type when it resolves and by its name otherwise; marks a call whose result is stored into a compile context's expr_factory_ (a hand-off to a compilation); and gives the statement. Whether each runs at execution time or hands the factory to a compilation is the classifier's. Not seen: the exec context's factory used through a pointer cached earlier (ObRawExprFactory *f = ...; later uses of f), and calls inside the three compilation directories that run at execution time.",
+    'warning-buffer-sites': "Every site that changes the thread's warning-buffer slot, outside src/oblib/lib/oblog/ob_warning_buffer.{h,cpp}, comments and strings blanked: calls of ob_setup_tsi_warning_buffer and ob_setup_default_tsi_warning_buffer; ObWarningBufferIgnoreScope declarations; assignments through ob_get_tsi_warning_buffer(); and calls of a small wrapper whose body makes exactly one such change and at most three statements (ObMPBase::setup_wb). Each row says whether s2-errors.md 2.6 rule 5 lists the site (matched by file name and line range, the setup_wb calls as the request entries) or not, in which case it is a new site that needs an inventory decision. ob_reset_tsi_warning_buffer, which clears the buffer the slot points to, is not a slot change. Not seen: slot changes through wrappers that do more than one thing, and code in other languages or libraries that swaps the thread-local directly.",
 }
 for _cat in DEFINITIONS:
     DEFINITIONS[_cat] += NOT_BUILT_NOTE

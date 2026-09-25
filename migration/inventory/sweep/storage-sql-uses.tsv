@@ -1,0 +1,1182 @@
+file	line	symbol	construct	text
+src/storage/access/ob_aggregate_base.h	42	-	opens namespace sql (lines 42-46): storage declares SQL types here	namespace sql
+src/storage/access/ob_aggregate_base.h	44	-	unqualified SQL name inside namespace sql: ObEvalCtx	struct ObEvalCtx;
+src/storage/access/ob_aggregate_base.h	45	-	unqualified SQL name inside namespace sql: ObExpr	class ObExpr;
+src/storage/access/ob_aggregate_base.h	246	ObGroupByCellBase	sql:: use: ObEvalCtx	virtual int init(const ObTableAccessParam &param, const ObTableAccessContext &context, sql::ObEvalCtx &eval_ctx) = 0;
+src/storage/access/ob_aggregate_base.h	256	ObGroupByCellBase	sql:: use: ObEvalCtx	virtual int copy_single_output_row(sql::ObEvalCtx &ctx) = 0;
+src/storage/access/ob_aggregate_base.h	262	ObGroupByCellBase	sql:: use: ObExpr	virtual int assign_agg_cells(const sql::ObExpr *col_expr, common::ObIArray<int32_t> &agg_idxs) = 0;
+src/storage/access/ob_aggregate_base.h	338	ObGroupByCellBase	sql:: use: ObExpr	sql::ObExpr *group_by_col_expr_;
+src/storage/access/ob_aggregated_store.cpp	66	ObAggRow::init	sql:: use: ObEvalCtx	sql::ObEvalCtx &eval_ctx)
+src/storage/access/ob_aggregated_store.cpp	86	ObAggRow::init	sql:: use: ObExpr	sql::ObExpr *expr = param.output_exprs_->at(i);
+src/storage/access/ob_aggregated_store.cpp	106	ObAggRow::init	sql:: use: ObExpr	sql::ObExpr *agg_expr = param.aggregate_exprs_->at(i);
+src/storage/access/ob_aggregated_store.cpp	143	ObAggregatedStore::ObAggregatedStore	sql:: use: ObEvalCtx	ObAggregatedStore::ObAggregatedStore(const int64_t batch_size, sql::ObEvalCtx &eval_ctx, ObTableAccessContext &context)
+src/storage/access/ob_aggregated_store.cpp	493	ObAggregatedStore::get_agg_cell	sql:: use: ObExpr	int ObAggregatedStore::get_agg_cell(const sql::ObExpr *expr, ObAggCell *&agg_cell)
+src/storage/access/ob_aggregated_store.h	51	ObAggRow	sql:: use: ObEvalCtx	sql::ObEvalCtx &eval_ctx);
+src/storage/access/ob_aggregated_store.h	76	ObAggregatedStore	sql:: use: ObEvalCtx	sql::ObEvalCtx &eval_ctx,
+src/storage/access/ob_aggregated_store.h	93	ObAggregatedStore	sql:: use: ObExpr	int get_agg_cell(const sql::ObExpr *expr, ObAggCell *&agg_cell);
+src/storage/access/ob_block_batched_row_store.cpp	34	ObBlockBatchedRowStore::ObBlockBatchedRowStore	sql:: use: ObEvalCtx	sql::ObEvalCtx &eval_ctx,
+src/storage/access/ob_block_batched_row_store.h	33	-	opens namespace sql (lines 33-36): storage declares SQL types here	namespace sql
+src/storage/access/ob_block_batched_row_store.h	35	-	unqualified SQL name inside namespace sql: ObEvalCtx	class ObEvalCtx;
+src/storage/access/ob_block_batched_row_store.h	56	ObBlockBatchedRowStore	sql:: use: ObEvalCtx	sql::ObEvalCtx &eval_ctx,
+src/storage/access/ob_block_batched_row_store.h	92	ObBlockBatchedRowStore	sql:: use: ObEvalCtx	sql::ObEvalCtx &eval_ctx_;
+src/storage/access/ob_block_row_store.cpp	127	-	opens namespace sql (lines 127-189): storage defines PushdownFilterInfo::init here	namespace sql
+src/storage/access/ob_block_row_store.cpp	129	PushdownFilterInfo::init	defines the SQL function PushdownFilterInfo::init inside namespace sql (lines 129-188)	int PushdownFilterInfo::init(const storage::ObTableIterParam &iter_param,
+src/storage/access/ob_block_row_store.cpp	169	PushdownFilterInfo::init	unqualified SQL name inside namespace sql: ObBitVector	to_bit_vector(alloc.alloc(ObBitVector::memory_size(batch_size_))))) {
+src/storage/access/ob_block_row_store.h	81	ObBlockRowStore::get_pd_filter	sql:: use: ObPushdownFilterExecutor	OB_INLINE sql::ObPushdownFilterExecutor *get_pd_filter()
+src/storage/access/ob_block_row_store.h	83	ObBlockRowStore::get_pd_filter_info	sql:: use: PushdownFilterInfo	OB_INLINE sql::PushdownFilterInfo &get_pd_filter_info()
+src/storage/access/ob_block_row_store.h	107	ObBlockRowStore	sql:: use: PushdownFilterInfo	sql::PushdownFilterInfo pd_filter_info_;
+src/storage/access/ob_datum_reshape.cpp	33	-	using namespace sql	using namespace sql;
+src/storage/access/ob_datum_reshape.cpp	221	new_discrete_vector	unqualified SQL name under a using declaration: ObBitVector	const int64_t nulls_size = ObBitVector::memory_size(max_batch_size);
+src/storage/access/ob_datum_reshape.cpp	224	new_discrete_vector	unqualified SQL name under a using declaration: ObBitVector	ObBitVector *nulls = nullptr;
+src/storage/access/ob_dml_param.cpp	27	ObRow2ExprsProjector::init	sql:: use: ObExprPtrIArray	int ObRow2ExprsProjector::init(const sql::ObExprPtrIArray &exprs,
+src/storage/access/ob_dml_param.cpp	28	ObRow2ExprsProjector::init	sql:: use: ObPushdownOperator	sql::ObPushdownOperator &op,
+src/storage/access/ob_dml_param.cpp	55	ObRow2ExprsProjector::init	sql:: use: ObExpr	sql::ObExpr *e = exprs.at(i);
+src/storage/access/ob_dml_param.cpp	83	ObRow2ExprsProjector::init	sql:: use: ObExpr	sql::ObExpr *e = exprs.at(i);
+src/storage/access/ob_dml_param.cpp	161	ObRow2ExprsProjector::project	sql:: use: ObExprPtrIArray	int ObRow2ExprsProjector::project(const sql::ObExprPtrIArray &exprs,
+src/storage/access/ob_dml_param.h	32	-	opens namespace sql (lines 32-39): storage declares SQL types here	namespace sql
+src/storage/access/ob_dml_param.h	34	-	unqualified SQL name inside namespace sql: ObOperator	class ObOperator;
+src/storage/access/ob_dml_param.h	35	-	unqualified SQL name inside namespace sql: ObTableLocation	class ObTableLocation;
+src/storage/access/ob_dml_param.h	36	-	unqualified SQL name inside namespace sql: ObEvalCtx	class ObEvalCtx;
+src/storage/access/ob_dml_param.h	37	-	unqualified SQL name inside namespace sql: ObEvalInfo	class ObEvalInfo;
+src/storage/access/ob_multiple_merge.cpp	33	-	using namespace sql	using namespace sql;
+src/storage/access/ob_multiple_merge.cpp	160	ObMultipleMerge::init	unqualified SQL name under a using declaration: ObBitVector	} else if (OB_ISNULL(skip_bit_ = to_bit_vector(long_life_allocator_->alloc(ObBitVector::memory_size(batch_size))))) {
+src/storage/access/ob_multiple_merge.cpp	333	ObMultipleMerge::switch_table	unqualified SQL name under a using declaration: ObBitVector	} else if (OB_ISNULL(skip_bit_ = to_bit_vector(access_ctx_->stmt_allocator_->alloc(ObBitVector::memory_size(batch_size))))) {
+src/storage/access/ob_multiple_merge.cpp	554	ObMultipleMerge::get_next_rows	sql:: use: ObEvalCtx	sql::ObEvalCtx *eval_ctx = nullptr;
+src/storage/access/ob_multiple_merge.cpp	708	ObMultipleMerge::get_next_aggregate_row	sql:: use: ObEvalCtx	sql::ObEvalCtx &eval_ctx = access_param_->get_op()->get_eval_ctx();
+src/storage/access/ob_multiple_merge.cpp	1177	ObMultipleMerge::fuse_default	sql:: use: ObExpr	sql::ObExpr *expr = access_param_->output_exprs_->at(pos);
+src/storage/access/ob_multiple_merge.cpp	1178	ObMultipleMerge::fuse_default	sql:: use: ObDatum	sql::ObDatum &datum = expr->locate_datum_for_write(
+src/storage/access/ob_multiple_merge.cpp	1180	ObMultipleMerge::fuse_default	sql:: use: ObEvalInfo	sql::ObEvalInfo &eval_info = expr->get_eval_info(
+src/storage/access/ob_multiple_merge.cpp	1184	ObMultipleMerge::fuse_default	sql:: use: ob_adjust_lob_datum	OB_FAIL(sql::ob_adjust_lob_datum(
+src/storage/access/ob_multiple_merge.cpp	1239	ObMultipleMerge::pad_columns	sql:: use: ObExpr	sql::ObExpr *e = access_param_->output_exprs_->at(idx);
+src/storage/access/ob_multiple_merge.cpp	1262	ObMultipleMerge::fill_virtual_columns	sql:: use: ObExpr	sql::ObExpr *expr = access_param_->output_exprs_->at(pos);
+src/storage/access/ob_multiple_merge.h	179	ObMultipleMerge	sql:: use: ObBitVector	sql::ObBitVector *skip_bit_;
+src/storage/access/ob_pushdown_aggregate.cpp	89	ObAggCell::init	sql:: use: ObEvalCtx	int ObAggCell::init(const bool is_group_by, sql::ObEvalCtx *eval_ctx)
+src/storage/access/ob_pushdown_aggregate.cpp	167	ObAggCell::copy_single_output_row	sql:: use: ObEvalCtx	int ObAggCell::copy_single_output_row(sql::ObEvalCtx &ctx)
+src/storage/access/ob_pushdown_aggregate.cpp	173	ObAggCell::copy_single_output_row	sql:: use: ObDatum	sql::ObDatum &datum = basic_info_.agg_expr_->args_[0]->locate_expr_datum(ctx);
+src/storage/access/ob_pushdown_aggregate.cpp	181	ObAggCell::collect_result	sql:: use: ObEvalCtx	int ObAggCell::collect_result(sql::ObEvalCtx &ctx)
+src/storage/access/ob_pushdown_aggregate.cpp	188	ObAggCell::collect_result	sql:: use: ObEvalInfo	sql::ObEvalInfo &eval_info = basic_info_.agg_expr_->get_eval_info(ctx);
+src/storage/access/ob_pushdown_aggregate.cpp	380	ObCountAggCell::init	sql:: use: ObEvalCtx	int ObCountAggCell::init(const bool is_group_by, sql::ObEvalCtx *eval_ctx)
+src/storage/access/ob_pushdown_aggregate.cpp	586	ObCountAggCell::copy_single_output_row	sql:: use: ObEvalCtx	int ObCountAggCell::copy_single_output_row(sql::ObEvalCtx &ctx)
+src/storage/access/ob_pushdown_aggregate.cpp	594	ObCountAggCell::copy_single_output_row	sql:: use: ObDatum	sql::ObDatum &datum = basic_info_.agg_expr_->args_[0]->locate_expr_datum(ctx);
+src/storage/access/ob_pushdown_aggregate.cpp	616	ObCountAggCell::collect_result	sql:: use: ObEvalCtx	int ObCountAggCell::collect_result(sql::ObEvalCtx &ctx)
+src/storage/access/ob_pushdown_aggregate.cpp	620	ObCountAggCell::collect_result	sql:: use: ObEvalInfo	sql::ObEvalInfo &eval_info = basic_info_.agg_expr_->get_eval_info(ctx);
+src/storage/access/ob_pushdown_aggregate.cpp	655	ObMinAggCell::init	sql:: use: ObEvalCtx	int ObMinAggCell::init(const bool is_group_by, sql::ObEvalCtx *eval_ctx)
+src/storage/access/ob_pushdown_aggregate.cpp	847	ObMaxAggCell::init	sql:: use: ObEvalCtx	int ObMaxAggCell::init(const bool is_group_by, sql::ObEvalCtx *eval_ctx)
+src/storage/access/ob_pushdown_aggregate.cpp	1036	ObHyperLogLogAggCell::init	sql:: use: ObEvalCtx	int ObHyperLogLogAggCell::init(const bool is_group_by, sql::ObEvalCtx *eval_ctx)
+src/storage/access/ob_pushdown_aggregate.cpp	1128	ObHyperLogLogAggCell::collect_result	sql:: use: ObEvalCtx	int ObHyperLogLogAggCell::collect_result(sql::ObEvalCtx &ctx)
+src/storage/access/ob_pushdown_aggregate.cpp	1132	ObHyperLogLogAggCell::collect_result	sql:: use: ObEvalInfo	sql::ObEvalInfo &eval_info = basic_info_.agg_expr_->get_eval_info(ctx);
+src/storage/access/ob_pushdown_aggregate.cpp	1166	ObSumOpSizeAggCell::init	sql:: use: ObEvalCtx	int ObSumOpSizeAggCell::init(const bool is_group_by, sql::ObEvalCtx *eval_ctx)
+src/storage/access/ob_pushdown_aggregate.cpp	1339	ObSumOpSizeAggCell::collect_result	sql:: use: ObEvalCtx	int ObSumOpSizeAggCell::collect_result(sql::ObEvalCtx &ctx)
+src/storage/access/ob_pushdown_aggregate.cpp	1343	ObSumOpSizeAggCell::collect_result	sql:: use: ObEvalInfo	sql::ObEvalInfo &eval_info = basic_info_.agg_expr_->get_eval_info(ctx);
+src/storage/access/ob_pushdown_aggregate.cpp	1423	ObSumAggCell::init	sql:: use: ObEvalCtx	int ObSumAggCell::init(const bool is_group_by, sql::ObEvalCtx *eval_ctx)
+src/storage/access/ob_pushdown_aggregate.cpp	1825	ObSumAggCell::copy_single_output_row	sql:: use: ObEvalCtx	int ObSumAggCell::copy_single_output_row(sql::ObEvalCtx &ctx)
+src/storage/access/ob_pushdown_aggregate.cpp	1831	ObSumAggCell::copy_single_output_row	sql:: use: ObDatum	sql::ObDatum &datum = basic_info_.agg_expr_->args_[0]->locate_expr_datum(ctx);
+src/storage/access/ob_pushdown_aggregate.cpp	1844	ObSumAggCell::copy_int_to_number	sql:: use: ObNumStackAllocator	sql::ObNumStackAllocator<1> tmp_alloc;
+src/storage/access/ob_pushdown_aggregate.cpp	1869	ObSumAggCell::copy_uint_to_number	sql:: use: ObNumStackAllocator	sql::ObNumStackAllocator<1> tmp_alloc;
+src/storage/access/ob_pushdown_aggregate.cpp	1928	ObSumAggCell::copy_decimal_int_to_number	sql:: use: ObNumStackAllocator	sql::ObNumStackAllocator<2> tmp_alloc;
+src/storage/access/ob_pushdown_aggregate.cpp	1952	ObSumAggCell::collect_result	sql:: use: ObEvalCtx	int ObSumAggCell::collect_result(sql::ObEvalCtx &ctx)
+src/storage/access/ob_pushdown_aggregate.cpp	1956	ObSumAggCell::collect_result	sql:: use: ObEvalInfo	sql::ObEvalInfo &eval_info = basic_info_.agg_expr_->get_eval_info(ctx);
+src/storage/access/ob_pushdown_aggregate.cpp	1974	ObSumAggCell::collect_result	sql:: use: ObNumStackAllocator	sql::ObNumStackAllocator<2> tmp_alloc;
+src/storage/access/ob_pushdown_aggregate.cpp	2061	ObSumAggCell::eval_collection	sql:: use: ObArrayExprUtils	} else if (OB_FAIL(sql::ObArrayExprUtils::vector_datum_add(
+src/storage/access/ob_pushdown_aggregate.cpp	2141	ObSumAggCell::eval_decimal_int_number	sql:: use: ObNumStackAllocator	sql::ObNumStackAllocator<2> tmp_alloc;
+src/storage/access/ob_pushdown_aggregate.cpp	2222	ObSumAggCell::eval_number_batch	sql:: use: number_accumulator	if (OB_FAIL(sql::number_accumulator(src, allocator1, allocator2, result_nmb,
+src/storage/access/ob_pushdown_aggregate.cpp	2278	ObSumAggCell::eval_decimal_int_number_batch	sql:: use: ObNumStackAllocator	sql::ObNumStackAllocator<2> tmp_alloc;
+src/storage/access/ob_pushdown_aggregate.cpp	2316	ObSumAggCell::collect_result_in_group_by	sql:: use: ObNumStackAllocator	sql::ObNumStackAllocator<2> tmp_alloc;
+src/storage/access/ob_pushdown_aggregate.cpp	2454	ObFirstRowAggCell::init	sql:: use: ObEvalCtx	int ObFirstRowAggCell::init(const bool is_group_by, sql::ObEvalCtx *eval_ctx)
+src/storage/access/ob_pushdown_aggregate.cpp	2563	ObFirstRowAggCell::collect_result	sql:: use: ObEvalCtx	int ObFirstRowAggCell::collect_result(sql::ObEvalCtx &ctx)
+src/storage/access/ob_pushdown_aggregate.cpp	2623	ObPDAggFactory::alloc_cell	sql:: use: ObEvalCtx	sql::ObEvalCtx *eval_ctx)
+src/storage/access/ob_pushdown_aggregate.cpp	2743	ObGroupByCell::init	sql:: use: ObEvalCtx	int ObGroupByCell::init(const ObTableAccessParam &param, const ObTableAccessContext &context, sql::ObEvalCtx &eval_ctx)
+src/storage/access/ob_pushdown_aggregate.cpp	2763	ObGroupByCell::init	sql:: use: ObExpr	sql::ObExpr *expr = param.output_exprs_->at(i);
+src/storage/access/ob_pushdown_aggregate.cpp	2805	ObGroupByCell::init_for_single_row	sql:: use: ObEvalCtx	int ObGroupByCell::init_for_single_row(const ObTableAccessParam &param, const ObTableAccessContext &context, sql::ObEvalCtx &eval_ctx)
+src/storage/access/ob_pushdown_aggregate.cpp	2883	ObGroupByCell::copy_single_output_row	sql:: use: ObEvalCtx	int ObGroupByCell::copy_single_output_row(sql::ObEvalCtx &ctx)
+src/storage/access/ob_pushdown_aggregate.cpp	3059	ObGroupByCell::assign_agg_cells	sql:: use: ObExpr	int ObGroupByCell::assign_agg_cells(const sql::ObExpr *col_expr, common::ObIArray<int32_t> &agg_idxs)
+src/storage/access/ob_pushdown_aggregate.cpp	3080	ObGroupByCell::init_agg_cells	sql:: use: ObEvalCtx	int ObGroupByCell::init_agg_cells(const ObTableAccessParam &param, const ObTableAccessContext &context, sql::ObEvalCtx &eval_ctx, const bool is_for_single_row)
+src/storage/access/ob_pushdown_aggregate.cpp	3088	ObGroupByCell::init_agg_cells	sql:: use: ObExpr	sql::ObExpr *agg_expr = param.aggregate_exprs_->at(i);
+src/storage/access/ob_pushdown_aggregate.h	48	ObAggCellBasicInfo::ObAggCellBasicInfo	sql:: use: ObExpr	sql::ObExpr *agg_expr,
+src/storage/access/ob_pushdown_aggregate.h	84	ObAggCellBasicInfo	sql:: use: ObExpr	sql::ObExpr *agg_expr_;
+src/storage/access/ob_pushdown_aggregate.h	96	ObAggCell	sql:: use: ObEvalCtx	virtual int init(const bool is_group_by, sql::ObEvalCtx *eval_ctx);
+src/storage/access/ob_pushdown_aggregate.h	121	ObAggCell	sql:: use: ObEvalCtx	virtual int copy_single_output_row(sql::ObEvalCtx &ctx);
+src/storage/access/ob_pushdown_aggregate.h	122	ObAggCell	sql:: use: ObEvalCtx	virtual int collect_result(sql::ObEvalCtx &ctx);
+src/storage/access/ob_pushdown_aggregate.h	132	ObAggCell::get_agg_expr	sql:: use: ObExpr	OB_INLINE const sql::ObExpr *get_agg_expr() const { return basic_info_.agg_expr_; }
+src/storage/access/ob_pushdown_aggregate.h	181	ObCountAggCell	sql:: use: ObEvalCtx	virtual int init(const bool is_group_by, sql::ObEvalCtx *eval_ctx) override;
+src/storage/access/ob_pushdown_aggregate.h	203	ObCountAggCell	sql:: use: ObEvalCtx	virtual int copy_single_output_row(sql::ObEvalCtx &ctx) override;
+src/storage/access/ob_pushdown_aggregate.h	204	ObCountAggCell	sql:: use: ObEvalCtx	virtual int collect_result(sql::ObEvalCtx &ctx) override;
+src/storage/access/ob_pushdown_aggregate.h	220	ObMinAggCell	sql:: use: ObEvalCtx	virtual int init(const bool is_group_by, sql::ObEvalCtx *eval_ctx) override;
+src/storage/access/ob_pushdown_aggregate.h	254	ObMaxAggCell	sql:: use: ObEvalCtx	virtual int init(const bool is_group_by, sql::ObEvalCtx *eval_ctx) override;
+src/storage/access/ob_pushdown_aggregate.h	290	ObHyperLogLogAggCell	sql:: use: ObEvalCtx	virtual int init(const bool is_group_by, sql::ObEvalCtx *eval_ctx) override;
+src/storage/access/ob_pushdown_aggregate.h	307	ObHyperLogLogAggCell	sql:: use: ObEvalCtx	virtual int collect_result(sql::ObEvalCtx &ctx) override;
+src/storage/access/ob_pushdown_aggregate.h	315	ObHyperLogLogAggCell	sql:: use: ObExprHashFuncType	sql::ObExprHashFuncType hash_func_;
+src/storage/access/ob_pushdown_aggregate.h	333	ObSumOpSizeAggCell	sql:: use: ObEvalCtx	virtual int init(const bool is_group_by, sql::ObEvalCtx *eval_ctx) override;
+src/storage/access/ob_pushdown_aggregate.h	356	ObSumOpSizeAggCell	sql:: use: ObEvalCtx	virtual int collect_result(sql::ObEvalCtx &ctx) override;
+src/storage/access/ob_pushdown_aggregate.h	395	ObSumAggCell	sql:: use: ObEvalCtx	virtual int init(const bool is_group_by, sql::ObEvalCtx *eval_ctx) override;
+src/storage/access/ob_pushdown_aggregate.h	410	ObSumAggCell	sql:: use: ObEvalCtx	virtual int copy_single_output_row(sql::ObEvalCtx &ctx) override;
+src/storage/access/ob_pushdown_aggregate.h	411	ObSumAggCell	sql:: use: ObEvalCtx	virtual int collect_result(sql::ObEvalCtx &ctx) override;
+src/storage/access/ob_pushdown_aggregate.h	495	ObSumAggCell	sql:: use: ObExecContext	sql::ObExecContext *exec_ctx_;
+src/storage/access/ob_pushdown_aggregate.h	511	ObFirstRowAggCell	sql:: use: ObEvalCtx	virtual int init(const bool is_group_by, sql::ObEvalCtx *eval_ctx) override;
+src/storage/access/ob_pushdown_aggregate.h	541	ObFirstRowAggCell::copy_single_output_row	sql:: use: ObEvalCtx	virtual int copy_single_output_row(sql::ObEvalCtx &ctx) override
+src/storage/access/ob_pushdown_aggregate.h	546	ObFirstRowAggCell	sql:: use: ObEvalCtx	virtual int collect_result(sql::ObEvalCtx &ctx) override;
+src/storage/access/ob_pushdown_aggregate.h	580	ObPDAggFactory	sql:: use: ObEvalCtx	sql::ObEvalCtx *eval_ctx = nullptr);
+src/storage/access/ob_pushdown_aggregate.h	594	ObGroupByCell	sql:: use: ObEvalCtx	int init(const ObTableAccessParam &param, const ObTableAccessContext &context, sql::ObEvalCtx &eval_ctx) override;
+src/storage/access/ob_pushdown_aggregate.h	595	ObGroupByCell	sql:: use: ObEvalCtx	int init_for_single_row(const ObTableAccessParam &param, const ObTableAccessContext &context, sql::ObEvalCtx &eval_ctx);
+src/storage/access/ob_pushdown_aggregate.h	614	ObGroupByCell	sql:: use: ObEvalCtx	int copy_single_output_row(sql::ObEvalCtx &ctx) override;
+src/storage/access/ob_pushdown_aggregate.h	621	ObGroupByCell	sql:: use: ObExpr	int assign_agg_cells(const sql::ObExpr *col_expr, common::ObIArray<int32_t> &agg_idxs) override;
+src/storage/access/ob_pushdown_aggregate.h	638	ObGroupByCell	sql:: use: ObEvalCtx	int init_agg_cells(const ObTableAccessParam &param, const ObTableAccessContext &context, sql::ObEvalCtx &eval_ctx, const bool is_for_single_row);
+src/storage/access/ob_pushdown_aggregate.h	822	ObSumAggCell::eval_float_inner	sql:: use: ObArithExprOperator	if (OB_UNLIKELY(sql::ObArithExprOperator::is_float_out_of_range(left_f + right_f))) {
+src/storage/access/ob_sample_filter.cpp	29	ObSampleFilterExecutor::ObSampleFilterExecutor	sql:: use: ObPushdownOperator	sql::ObPushdownOperator &op,
+src/storage/access/ob_sample_filter.cpp	30	ObSampleFilterExecutor::ObSampleFilterExecutor	sql:: use: PushdownExecutorType	sql::PushdownExecutorType type)
+src/storage/access/ob_sample_filter.cpp	60	ObTrivalSampleFilterExecutor::ObTrivalSampleFilterExecutor	sql:: use: ObPushdownOperator	sql::ObPushdownOperator &op)
+src/storage/access/ob_sample_filter.cpp	61	ObTrivalSampleFilterExecutor::ObTrivalSampleFilterExecutor	sql:: use: PushdownExecutorType	: ObSampleFilterExecutor(alloc, filter, op, sql::PushdownExecutorType::TRIVAL_SAMPLE_FILTER_EXECUTOR),
+src/storage/access/ob_sample_filter.cpp	112	ObTrivalSampleFilterExecutor::apply_sample_filter	sql:: use: PushdownFilterInfo	sql::PushdownFilterInfo &filter_info,
+src/storage/access/ob_sample_filter.cpp	148	ObHybridSampleFilterExecutor::ObHybridSampleFilterExecutor	sql:: use: ObPushdownOperator	sql::ObPushdownOperator &op)
+src/storage/access/ob_sample_filter.cpp	149	ObHybridSampleFilterExecutor::ObHybridSampleFilterExecutor	sql:: use: PushdownExecutorType	: ObSampleFilterExecutor(alloc, filter, op, sql::PushdownExecutorType::HYBRID_SAMPLE_FILTER_EXECUTOR),
+src/storage/access/ob_sample_filter.cpp	470	ObHybridSampleFilterExecutor::check_range_filtered	sql:: use: ObBoolMaskType	index_info.set_filter_constant_type(sql::ObBoolMaskType::ALWAYS_FALSE);
+src/storage/access/ob_sample_filter.cpp	514	ObHybridSampleFilterExecutor::apply_sample_filter	sql:: use: PushdownFilterInfo	sql::PushdownFilterInfo &filter_info,
+src/storage/access/ob_sample_filter.cpp	601	ObRowSampleFilter::init	sql:: use: ObPushdownOperator	sql::ObPushdownOperator *op,
+src/storage/access/ob_sample_filter.cpp	611	ObRowSampleFilter::init	sql:: use: ObPushdownFilterFactory	sql::ObPushdownFilterFactory filter_factory(allocator);
+src/storage/access/ob_sample_filter.cpp	612	ObRowSampleFilter::init	sql:: use: PushdownFilterType	if (OB_FAIL(filter_factory.alloc(sql::PushdownFilterType::SAMPLE_FILTER, 0, sample_node_))) {
+src/storage/access/ob_sample_filter.cpp	614	ObRowSampleFilter::init	sql:: use: PushdownExecutorType	if (OB_FAIL(filter_factory.alloc(sql::PushdownExecutorType::TRIVAL_SAMPLE_FILTER_EXECUTOR, 0, *sample_node_, sample_filter_, *op))) {
+src/storage/access/ob_sample_filter.cpp	617	ObRowSampleFilter::init	sql:: use: PushdownExecutorType	if (OB_FAIL(filter_factory.alloc(sql::PushdownExecutorType::HYBRID_SAMPLE_FILTER_EXECUTOR, 0, *sample_node_, sample_filter_, *op))) {
+src/storage/access/ob_sample_filter.cpp	629	ObRowSampleFilter::combine_to_filter_tree	sql:: use: ObPushdownFilterExecutor	int ObRowSampleFilter::combine_to_filter_tree(sql::ObPushdownFilterExecutor *&root_filter)
+src/storage/access/ob_sample_filter.cpp	637	ObRowSampleFilter::combine_to_filter_tree	sql:: use: ObPushdownFilterFactory	sql::ObPushdownFilterFactory filter_factory(allocator_);
+src/storage/access/ob_sample_filter.cpp	638	ObRowSampleFilter::combine_to_filter_tree	sql:: use: PushdownFilterType	if (nullptr == filter_node_ && OB_FAIL(filter_factory.alloc(sql::PushdownFilterType::AND_FILTER, 2, filter_node_))) {
+src/storage/access/ob_sample_filter.cpp	639	ObRowSampleFilter::combine_to_filter_tree	sql:: use: PushdownExecutorType	} else if (nullptr == filter_ && OB_FAIL(filter_factory.alloc(sql::PushdownExecutorType::AND_FILTER_EXECUTOR, 2, *filter_node_, filter_, root_filter->get_op()))) {
+src/storage/access/ob_sample_filter.cpp	653	ObRowSampleFilterFactory::build_sample_filter	sql:: use: ObPushdownOperator	sql::ObPushdownOperator *op,
+src/storage/access/ob_sample_filter.cpp	697	alloc_sample_filter_node	sql:: use: ObPushdownFilterNode	sql::ObPushdownFilterNode *&filter_node)
+src/storage/access/ob_sample_filter.cpp	707	alloc_sample_filter_node	sql:: use: ObPushdownFilterNode	void *children = allocator.alloc(child_count * sizeof(sql::ObPushdownFilterNode *));
+src/storage/access/ob_sample_filter.cpp	712	alloc_sample_filter_node	sql:: use: ObPushdownFilterNode	filter_node->childs_ = reinterpret_cast<sql::ObPushdownFilterNode **>(children);
+src/storage/access/ob_sample_filter.cpp	718	alloc_sample_filter_node	sql:: use: PushdownFilterType	filter_node->set_type(sql::PushdownFilterType::SAMPLE_FILTER);
+src/storage/access/ob_sample_filter.cpp	726	alloc_sample_filter_executor	sql:: use: ObPushdownFilterNode	sql::ObPushdownFilterNode &filter_node,
+src/storage/access/ob_sample_filter.cpp	727	alloc_sample_filter_executor	sql:: use: ObPushdownFilterExecutor	sql::ObPushdownFilterExecutor *&filter_executor,
+src/storage/access/ob_sample_filter.cpp	728	alloc_sample_filter_executor	sql:: use: ObPushdownOperator	sql::ObPushdownOperator &op,
+src/storage/access/ob_sample_filter.cpp	729	alloc_sample_filter_executor	sql:: use: PushdownExecutorType	sql::PushdownExecutorType type)
+src/storage/access/ob_sample_filter.cpp	741	alloc_sample_filter_executor	sql:: use: ObPushdownFilterExecutor	void *children = allocator.alloc(child_count * sizeof(sql::ObPushdownFilterExecutor *));
+src/storage/access/ob_sample_filter.cpp	747	alloc_sample_filter_executor	sql:: use: ObPushdownFilterExecutor	child_count, reinterpret_cast<sql::ObPushdownFilterExecutor **>(children));
+src/storage/access/ob_sample_filter.cpp	757	alloc_hybrid_sample_filter_executor	sql:: use: ObPushdownFilterNode	sql::ObPushdownFilterNode &filter_node,
+src/storage/access/ob_sample_filter.cpp	758	alloc_hybrid_sample_filter_executor	sql:: use: ObPushdownFilterExecutor	sql::ObPushdownFilterExecutor *&filter_executor,
+src/storage/access/ob_sample_filter.cpp	759	alloc_hybrid_sample_filter_executor	sql:: use: ObPushdownOperator	sql::ObPushdownOperator &op)
+src/storage/access/ob_sample_filter.cpp	763	alloc_hybrid_sample_filter_executor	sql:: use: PushdownExecutorType	sql::PushdownExecutorType::HYBRID_SAMPLE_FILTER_EXECUTOR);
+src/storage/access/ob_sample_filter.cpp	769	alloc_trival_sample_filter_executor	sql:: use: ObPushdownFilterNode	sql::ObPushdownFilterNode &filter_node,
+src/storage/access/ob_sample_filter.cpp	770	alloc_trival_sample_filter_executor	sql:: use: ObPushdownFilterExecutor	sql::ObPushdownFilterExecutor *&filter_executor,
+src/storage/access/ob_sample_filter.cpp	771	alloc_trival_sample_filter_executor	sql:: use: ObPushdownOperator	sql::ObPushdownOperator &op)
+src/storage/access/ob_sample_filter.cpp	775	alloc_trival_sample_filter_executor	sql:: use: PushdownExecutorType	sql::PushdownExecutorType::TRIVAL_SAMPLE_FILTER_EXECUTOR);
+src/storage/access/ob_sample_filter.h	177	ObPushdownSampleFilterNode	sql:: use: ObPushdownFilterNode	class ObPushdownSampleFilterNode : public sql::ObPushdownFilterNode
+src/storage/access/ob_sample_filter.h	181	ObPushdownSampleFilterNode::ObPushdownSampleFilterNode	sql:: use: ObPushdownFilterNode, PushdownFilterType	: sql::ObPushdownFilterNode(alloc, sql::PushdownFilterType::SAMPLE_FILTER)
+src/storage/access/ob_sample_filter.h	185	ObSampleFilterExecutor	sql:: use: ObPushdownFilterExecutor	class ObSampleFilterExecutor : public sql::ObPushdownFilterExecutor
+src/storage/access/ob_sample_filter.h	191	ObSampleFilterExecutor	sql:: use: ObPushdownOperator	sql::ObPushdownOperator &op,
+src/storage/access/ob_sample_filter.h	192	ObSampleFilterExecutor	sql:: use: PushdownExecutorType	sql::PushdownExecutorType type);
+src/storage/access/ob_sample_filter.h	213	ObSampleFilterExecutor	sql:: use: PushdownFilterInfo	sql::PushdownFilterInfo &filter_info,
+src/storage/access/ob_sample_filter.h	226	ObSampleFilterExecutor::get_op	sql:: use: ObPushdownOperator	OB_INLINE sql::ObPushdownOperator & get_op() override
+src/storage/access/ob_sample_filter.h	254	ObTrivalSampleFilterExecutor	sql:: use: ObPushdownOperator	sql::ObPushdownOperator &op);
+src/storage/access/ob_sample_filter.h	264	ObTrivalSampleFilterExecutor	sql:: use: PushdownFilterInfo	sql::PushdownFilterInfo &filter_info,
+src/storage/access/ob_sample_filter.h	311	ObHybridSampleFilterExecutor	sql:: use: ObPushdownOperator	sql::ObPushdownOperator &op);
+src/storage/access/ob_sample_filter.h	332	ObHybridSampleFilterExecutor	sql:: use: PushdownFilterInfo	sql::PushdownFilterInfo &filter_info,
+src/storage/access/ob_sample_filter.h	424	ObRowSampleFilter	sql:: use: ObPushdownOperator	sql::ObPushdownOperator *op,
+src/storage/access/ob_sample_filter.h	427	ObRowSampleFilter	sql:: use: ObPushdownFilterExecutor	int combine_to_filter_tree(sql::ObPushdownFilterExecutor *&root_filter);
+src/storage/access/ob_sample_filter.h	428	ObRowSampleFilter::get_sample_executor	sql:: use: ObPushdownFilterExecutor	OB_INLINE sql::ObPushdownFilterExecutor *get_sample_executor()
+src/storage/access/ob_sample_filter.h	443	ObRowSampleFilter	sql:: use: ObPushdownFilterExecutor	sql::ObPushdownFilterExecutor *sample_filter_;
+src/storage/access/ob_sample_filter.h	444	ObRowSampleFilter	sql:: use: ObPushdownFilterNode	sql::ObPushdownFilterNode *sample_node_;
+src/storage/access/ob_sample_filter.h	445	ObRowSampleFilter	sql:: use: ObPushdownFilterExecutor	sql::ObPushdownFilterExecutor *filter_;
+src/storage/access/ob_sample_filter.h	446	ObRowSampleFilter	sql:: use: ObPushdownFilterNode	sql::ObPushdownFilterNode *filter_node_;
+src/storage/access/ob_sample_filter.h	456	ObRowSampleFilterFactory	sql:: use: ObPushdownOperator	sql::ObPushdownOperator *op,
+src/storage/access/ob_sstable_index_filter.cpp	31	ObSSTableIndexFilter::init	sql:: use: ObPushdownFilterExecutor	sql::ObPushdownFilterExecutor &pushdown_filter,
+src/storage/access/ob_sstable_index_filter.cpp	65	ObSSTableIndexFilter::check_range	sql:: use: ObBoolMask	sql::ObBoolMask bm;
+src/storage/access/ob_sstable_index_filter.cpp	127	ObSSTableIndexFilter::build_skipping_filter_nodes	sql:: use: ObPushdownFilterExecutor	sql::ObPushdownFilterExecutor &filter)
+src/storage/access/ob_sstable_index_filter.cpp	132	ObSSTableIndexFilter::build_skipping_filter_nodes	sql:: use: ObPushdownFilterExecutor	sql::ObPushdownFilterExecutor **children = filter.get_childs();
+src/storage/access/ob_sstable_index_filter.cpp	146	ObSSTableIndexFilter::extract_skipping_filter_from_tree	sql:: use: ObPushdownFilterExecutor	sql::ObPushdownFilterExecutor &filter)
+src/storage/access/ob_sstable_index_filter.cpp	149	ObSSTableIndexFilter::extract_skipping_filter_from_tree	sql:: use: ObPhysicalFilterExecutor	sql::ObPhysicalFilterExecutor &physical_filter = static_cast<sql::ObPhysicalFilterExecutor &>(filter);
+src/storage/access/ob_sstable_index_filter.cpp	150	ObSSTableIndexFilter::extract_skipping_filter_from_tree	sql:: use: ObBlackFilterExecutor	if (physical_filter.is_filter_white_node() || static_cast<sql::ObBlackFilterExecutor &>(physical_filter).is_monotonic()) {
+src/storage/access/ob_sstable_index_filter.cpp	161	ObSSTableIndexFilter::find_skipping_index	sql:: use: ObPhysicalFilterExecutor	sql::ObPhysicalFilterExecutor &filter,
+src/storage/access/ob_sstable_index_filter.cpp	196	ObSSTableIndexFilter::find_useful_skipping_filter	sql:: use: ObPhysicalFilterExecutor	sql::ObPhysicalFilterExecutor &filter)
+src/storage/access/ob_sstable_index_filter.cpp	216	ObSSTableIndexFilterFactory::build_sstable_index_filter	sql:: use: ObPushdownFilterExecutor	sql::ObPushdownFilterExecutor &pushdown_filter,
+src/storage/access/ob_sstable_index_filter.cpp	253	ObSSTableIndexFilterExtracter::extract_skipping_filter	sql:: use: ObPhysicalFilterExecutor	const sql::ObPhysicalFilterExecutor &filter,
+src/storage/access/ob_sstable_index_filter.h	52	ObSkippingFilterNode	sql:: use: ObPhysicalFilterExecutor	sql::ObPhysicalFilterExecutor *filter_;
+src/storage/access/ob_sstable_index_filter.h	72	ObSSTableIndexFilter	sql:: use: ObPushdownFilterExecutor	sql::ObPushdownFilterExecutor &pushdown_filter,
+src/storage/access/ob_sstable_index_filter.h	89	ObSSTableIndexFilter::get_pushdown_filter	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *get_pushdown_filter() { return pushdown_filter_; }
+src/storage/access/ob_sstable_index_filter.h	101	ObSSTableIndexFilter	sql:: use: ObPushdownFilterExecutor	sql::ObPushdownFilterExecutor &filter);
+src/storage/access/ob_sstable_index_filter.h	104	ObSSTableIndexFilter	sql:: use: ObPushdownFilterExecutor	sql::ObPushdownFilterExecutor &filter);
+src/storage/access/ob_sstable_index_filter.h	107	ObSSTableIndexFilter	sql:: use: ObPhysicalFilterExecutor	sql::ObPhysicalFilterExecutor &filter,
+src/storage/access/ob_sstable_index_filter.h	111	ObSSTableIndexFilter	sql:: use: ObPhysicalFilterExecutor	sql::ObPhysicalFilterExecutor &filter);
+src/storage/access/ob_sstable_index_filter.h	114	ObSSTableIndexFilter	sql:: use: ObPushdownFilterExecutor	sql::ObPushdownFilterExecutor *pushdown_filter_;
+src/storage/access/ob_sstable_index_filter.h	124	ObSSTableIndexFilterFactory	sql:: use: ObPushdownFilterExecutor	sql::ObPushdownFilterExecutor &pushdown_filter,
+src/storage/access/ob_sstable_index_filter.h	135	ObSSTableIndexFilterExtracter	sql:: use: ObPhysicalFilterExecutor	const sql::ObPhysicalFilterExecutor &filter,
+src/storage/access/ob_sstable_row_scanner.ipp	257	ObSSTableRowScanner::open_cur_data_block	sql:: use: ObPushdownFilterExecutor	sql::ObPushdownFilterExecutor *filter = block_row_store_->get_pd_filter();
+src/storage/access/ob_table_access_context.cpp	215	ObTableAccessContext::init	sql:: use: ObStoragePushdownFlag	static_cast<sql::ObStoragePushdownFlag>(scan_param.pd_storage_flag_).is_enable_prefetch_limiting(),
+src/storage/access/ob_table_access_context.h	181	ObTableAccessContext::get_sample_executor	sql:: use: ObPushdownFilterExecutor	inline sql::ObPushdownFilterExecutor *get_sample_executor() {
+src/storage/access/ob_table_access_param.h	180	ObTableIterParam	sql:: use: ObPushdownFilterExecutor	sql::ObPushdownFilterExecutor *pushdown_filter_;
+src/storage/access/ob_table_access_param.h	181	ObTableIterParam	sql:: use: ObPushdownOperator	sql::ObPushdownOperator *op_;
+src/storage/access/ob_table_access_param.h	183	ObTableIterParam	sql:: use: ObExprPtrIArray	const sql::ObExprPtrIArray *output_exprs_;
+src/storage/access/ob_table_access_param.h	184	ObTableIterParam	sql:: use: ObExprPtrIArray	const sql::ObExprPtrIArray *aggregate_exprs_;
+src/storage/access/ob_table_access_param.h	202	ObTableIterParam	sql:: use: ObStoragePushdownFlag	sql::ObStoragePushdownFlag pd_storage_flag_;
+src/storage/access/ob_table_access_param.h	240	ObTableAccessParam::get_op	sql:: use: ObPushdownOperator	OB_INLINE sql::ObPushdownOperator *get_op() { return iter_param_.op_; }
+src/storage/access/ob_table_access_param.h	241	ObTableAccessParam::get_op	sql:: use: ObPushdownOperator	OB_INLINE sql::ObPushdownOperator *get_op() const { return iter_param_.op_; }
+src/storage/access/ob_table_access_param.h	258	ObTableAccessParam	sql:: use: ObExprPtrIArray	const sql::ObExprPtrIArray *output_exprs_;
+src/storage/access/ob_table_access_param.h	259	ObTableAccessParam	sql:: use: ObExprPtrIArray	const sql::ObExprPtrIArray *aggregate_exprs_;
+src/storage/access/ob_table_access_param.h	260	ObTableAccessParam	sql:: use: ObExprPtrIArray	const sql::ObExprPtrIArray *op_filters_;
+src/storage/access/ob_table_param.cpp	814	ObTableParam::construct_columns_and_projector	sql:: use: ObStoragePushdownFlag	const sql::ObStoragePushdownFlag &pd_pushdown_flag)
+src/storage/access/ob_table_param.cpp	1047	ObTableParam::convert	sql:: use: ObStoragePushdownFlag	const sql::ObStoragePushdownFlag &pd_pushdown_flag,
+src/storage/access/ob_table_param.cpp	1078	ObTableParam::convert_group_by	sql:: use: ObStoragePushdownFlag	const sql::ObStoragePushdownFlag &pd_pushdown_flag)
+src/storage/access/ob_vector_store.cpp	32	ObVectorStore::ObVectorStore	sql:: use: ObEvalCtx	sql::ObEvalCtx &eval_ctx,
+src/storage/access/ob_vector_store.cpp	34	ObVectorStore::ObVectorStore	sql:: use: ObBitVector	sql::ObBitVector *skip_bit)
+src/storage/access/ob_vector_store.cpp	97	ObVectorStore::init	sql:: use: ObExpr	sql::ObExpr *expr = nullptr;
+src/storage/access/ob_vector_store.h	42	ObVectorStore	sql:: use: ObEvalCtx	sql::ObEvalCtx &eval_ctx,
+src/storage/access/ob_vector_store.h	44	ObVectorStore	sql:: use: ObBitVector	sql::ObBitVector *skip_bit);
+src/storage/access/ob_vector_store.h	105	ObVectorStore	sql:: use: ExprFixedArray	sql::ExprFixedArray exprs_;
+src/storage/access/ob_vector_store.h	109	ObVectorStore	sql:: use: ObExpr	sql::ObExpr *group_idx_expr_;
+src/storage/access/ob_vector_store.h	113	ObVectorStore	sql:: use: ObBitVector	sql::ObBitVector *skip_bit_;
+src/storage/access/ob_where_optimizer.cpp	38	ObWhereOptimizer::init	sql:: use: ObPushdownFilterExecutor	sql::ObPushdownFilterExecutor *filter)
+src/storage/access/ob_where_optimizer.cpp	92	ObWhereOptimizer::analyze_impl	sql:: use: ObPushdownFilterExecutor	int ObWhereOptimizer::analyze_impl(sql::ObPushdownFilterExecutor &filter, bool &reordered)
+src/storage/access/ob_where_optimizer.cpp	95	ObWhereOptimizer::analyze_impl	sql:: use: ObPushdownFilterExecutor	sql::ObPushdownFilterExecutor **children = filter.get_childs();
+src/storage/access/ob_where_optimizer.cpp	132	ObWhereOptimizer::collect_filter_info	sql:: use: ObPushdownFilterExecutor	sql::ObPushdownFilterExecutor &filter,
+src/storage/access/ob_where_optimizer.cpp	142	ObWhereOptimizer::judge_filter_whether_enable_reorder	sql:: use: ObPushdownFilterExecutor	void ObWhereOptimizer::judge_filter_whether_enable_reorder(sql::ObPushdownFilterExecutor *filter) {
+src/storage/access/ob_where_optimizer.cpp	148	ObWhereOptimizer::judge_filter_whether_enable_reorder	sql:: use: ObPushdownFilterExecutor	sql::ObPushdownFilterExecutor *child = filter->get_childs()[i];
+src/storage/access/ob_where_optimizer.h	31	ObWhereOptimizer	sql:: use: ObPushdownFilterExecutor	sql::ObPushdownFilterExecutor *filter);
+src/storage/access/ob_where_optimizer.h	49	ObWhereOptimizer::ObFilterCondition	sql:: use: ObPushdownFilterExecutor	sql::ObPushdownFilterExecutor *filter_;
+src/storage/access/ob_where_optimizer.h	69	ObWhereOptimizer	sql:: use: ObPushdownFilterExecutor	int analyze_impl(sql::ObPushdownFilterExecutor &filter, bool &reordered);
+src/storage/access/ob_where_optimizer.h	70	ObWhereOptimizer	sql:: use: ObPushdownFilterExecutor	void collect_filter_info(sql::ObPushdownFilterExecutor &filter, ObFilterCondition &filter_condition);
+src/storage/access/ob_where_optimizer.h	71	ObWhereOptimizer	sql:: use: ObPushdownFilterExecutor	void judge_filter_whether_enable_reorder(sql::ObPushdownFilterExecutor *filter);
+src/storage/access/ob_where_optimizer.h	75	ObWhereOptimizer	sql:: use: ObPushdownFilterExecutor	sql::ObPushdownFilterExecutor *filter_;
+src/storage/blocksstable/encoding/neon/ob_dict_decoder_neon.cpp	43	DictCmpRefNeonFunc_T::dict_cmp_ref_func	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/neon/ob_dict_decoder_neon.cpp	44	DictCmpRefNeonFunc_T::dict_cmp_ref_func	sql:: use: ObBitVector	sql::ObBitVector &result)
+src/storage/blocksstable/encoding/neon/ob_dict_decoder_neon.cpp	54	DictCmpRefNeonFunc_T::dict_cmp_ref_func	sql:: use: WHITE_OP_LT	if (CMP_TYPE <= sql::WHITE_OP_LT) {
+src/storage/blocksstable/encoding/neon/ob_dict_decoder_neon.cpp	75	DictCmpRefNeonFunc_T::dict_cmp_ref_func	sql:: use: WHITE_OP_GE	uint8x16_t cmp_res_cnt = neon_cmp_int<uint8x16_t, uint8x16_t, sql::WHITE_OP_GE>(data_vec, dict_cnt_vec);
+src/storage/blocksstable/encoding/neon/ob_dict_decoder_neon.cpp	84	DictCmpRefNeonFunc_T::dict_cmp_ref_func	sql:: use: WHITE_OP_GE	if (value_cmp_t<uint8_t, sql::WHITE_OP_GE>(ref_arr[row_id], casted_dict_cnt)) {
+src/storage/blocksstable/encoding/neon/ob_dict_decoder_neon.cpp	103	DictCmpRefNeonFunc_T::dict_cmp_ref_func	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/neon/ob_dict_decoder_neon.cpp	104	DictCmpRefNeonFunc_T::dict_cmp_ref_func	sql:: use: ObBitVector	sql::ObBitVector &result)
+src/storage/blocksstable/encoding/neon/ob_dict_decoder_neon.cpp	114	DictCmpRefNeonFunc_T::dict_cmp_ref_func	sql:: use: WHITE_OP_LT	if (CMP_TYPE <= sql::WHITE_OP_LT) {
+src/storage/blocksstable/encoding/neon/ob_dict_decoder_neon.cpp	134	DictCmpRefNeonFunc_T::dict_cmp_ref_func	sql:: use: WHITE_OP_GE	uint16x8_t cmp_res_cnt = neon_cmp_int<uint16x8_t, uint16x8_t, sql::WHITE_OP_GE>(data_vec, dict_cnt_vec);
+src/storage/blocksstable/encoding/neon/ob_dict_decoder_neon.cpp	142	DictCmpRefNeonFunc_T::dict_cmp_ref_func	sql:: use: WHITE_OP_GE	if (value_cmp_t<uint16_t, sql::WHITE_OP_GE>(ref_arr[row_id], casted_dict_cnt)) {
+src/storage/blocksstable/encoding/neon/ob_encoding_neon_util.h	49	neon_cmp_int	sql:: use: WHITE_OP_EQ	uint8x16_t neon_cmp_int<uint8x16_t, uint8x16_t, sql::WHITE_OP_EQ>(uint8x16_t left, uint8x16_t right)
+src/storage/blocksstable/encoding/neon/ob_encoding_neon_util.h	55	neon_cmp_int	sql:: use: WHITE_OP_EQ	uint8x16_t neon_cmp_int<uint8x16_t, int8x16_t, sql::WHITE_OP_EQ>(int8x16_t left, int8x16_t right)
+src/storage/blocksstable/encoding/neon/ob_encoding_neon_util.h	61	neon_cmp_int	sql:: use: WHITE_OP_LT	uint8x16_t neon_cmp_int<uint8x16_t, uint8x16_t, sql::WHITE_OP_LT>(uint8x16_t left, uint8x16_t right)
+src/storage/blocksstable/encoding/neon/ob_encoding_neon_util.h	67	neon_cmp_int	sql:: use: WHITE_OP_LT	uint8x16_t neon_cmp_int<uint8x16_t, int8x16_t, sql::WHITE_OP_LT>(int8x16_t left, int8x16_t right)
+src/storage/blocksstable/encoding/neon/ob_encoding_neon_util.h	73	neon_cmp_int	sql:: use: WHITE_OP_LE	uint8x16_t neon_cmp_int<uint8x16_t, uint8x16_t, sql::WHITE_OP_LE>(uint8x16_t left, uint8x16_t right)
+src/storage/blocksstable/encoding/neon/ob_encoding_neon_util.h	79	neon_cmp_int	sql:: use: WHITE_OP_LE	uint8x16_t neon_cmp_int<uint8x16_t, int8x16_t, sql::WHITE_OP_LE>(int8x16_t left, int8x16_t right)
+src/storage/blocksstable/encoding/neon/ob_encoding_neon_util.h	85	neon_cmp_int	sql:: use: WHITE_OP_GE	uint8x16_t neon_cmp_int<uint8x16_t, uint8x16_t, sql::WHITE_OP_GE>(uint8x16_t left, uint8x16_t right)
+src/storage/blocksstable/encoding/neon/ob_encoding_neon_util.h	91	neon_cmp_int	sql:: use: WHITE_OP_GE	uint8x16_t neon_cmp_int<uint8x16_t, int8x16_t, sql::WHITE_OP_GE>(int8x16_t left, int8x16_t right)
+src/storage/blocksstable/encoding/neon/ob_encoding_neon_util.h	97	neon_cmp_int	sql:: use: WHITE_OP_GT	uint8x16_t neon_cmp_int<uint8x16_t, uint8x16_t, sql::WHITE_OP_GT>(uint8x16_t left, uint8x16_t right)
+src/storage/blocksstable/encoding/neon/ob_encoding_neon_util.h	103	neon_cmp_int	sql:: use: WHITE_OP_GT	uint8x16_t neon_cmp_int<uint8x16_t, int8x16_t, sql::WHITE_OP_GT>(int8x16_t left, int8x16_t right)
+src/storage/blocksstable/encoding/neon/ob_encoding_neon_util.h	109	neon_cmp_int	sql:: use: WHITE_OP_NE	uint8x16_t neon_cmp_int<uint8x16_t, uint8x16_t, sql::WHITE_OP_NE>(uint8x16_t left, uint8x16_t right)
+src/storage/blocksstable/encoding/neon/ob_encoding_neon_util.h	115	neon_cmp_int	sql:: use: WHITE_OP_NE	uint8x16_t neon_cmp_int<uint8x16_t, int8x16_t, sql::WHITE_OP_NE>(int8x16_t left, int8x16_t right)
+src/storage/blocksstable/encoding/neon/ob_encoding_neon_util.h	122	neon_cmp_int	sql:: use: WHITE_OP_EQ	uint16x8_t neon_cmp_int<uint16x8_t, uint16x8_t, sql::WHITE_OP_EQ>(uint16x8_t left, uint16x8_t right)
+src/storage/blocksstable/encoding/neon/ob_encoding_neon_util.h	128	neon_cmp_int	sql:: use: WHITE_OP_EQ	uint16x8_t neon_cmp_int<uint16x8_t, int16x8_t, sql::WHITE_OP_EQ>(int16x8_t left, int16x8_t right)
+src/storage/blocksstable/encoding/neon/ob_encoding_neon_util.h	134	neon_cmp_int	sql:: use: WHITE_OP_LT	uint16x8_t neon_cmp_int<uint16x8_t, uint16x8_t, sql::WHITE_OP_LT>(uint16x8_t left, uint16x8_t right)
+src/storage/blocksstable/encoding/neon/ob_encoding_neon_util.h	140	neon_cmp_int	sql:: use: WHITE_OP_LT	uint16x8_t neon_cmp_int<uint16x8_t, int16x8_t, sql::WHITE_OP_LT>(int16x8_t left, int16x8_t right)
+src/storage/blocksstable/encoding/neon/ob_encoding_neon_util.h	146	neon_cmp_int	sql:: use: WHITE_OP_LE	uint16x8_t neon_cmp_int<uint16x8_t, uint16x8_t, sql::WHITE_OP_LE>(uint16x8_t left, uint16x8_t right)
+src/storage/blocksstable/encoding/neon/ob_encoding_neon_util.h	152	neon_cmp_int	sql:: use: WHITE_OP_LE	uint16x8_t neon_cmp_int<uint16x8_t, int16x8_t, sql::WHITE_OP_LE>(int16x8_t left, int16x8_t right)
+src/storage/blocksstable/encoding/neon/ob_encoding_neon_util.h	158	neon_cmp_int	sql:: use: WHITE_OP_GE	uint16x8_t neon_cmp_int<uint16x8_t, uint16x8_t, sql::WHITE_OP_GE>(uint16x8_t left, uint16x8_t right)
+src/storage/blocksstable/encoding/neon/ob_encoding_neon_util.h	164	neon_cmp_int	sql:: use: WHITE_OP_GE	uint16x8_t neon_cmp_int<uint16x8_t, int16x8_t, sql::WHITE_OP_GE>(int16x8_t left, int16x8_t right)
+src/storage/blocksstable/encoding/neon/ob_encoding_neon_util.h	170	neon_cmp_int	sql:: use: WHITE_OP_GT	uint16x8_t neon_cmp_int<uint16x8_t, uint16x8_t, sql::WHITE_OP_GT>(uint16x8_t left, uint16x8_t right)
+src/storage/blocksstable/encoding/neon/ob_encoding_neon_util.h	176	neon_cmp_int	sql:: use: WHITE_OP_GT	uint16x8_t neon_cmp_int<uint16x8_t, int16x8_t, sql::WHITE_OP_GT>(int16x8_t left, int16x8_t right)
+src/storage/blocksstable/encoding/neon/ob_encoding_neon_util.h	182	neon_cmp_int	sql:: use: WHITE_OP_NE	uint16x8_t neon_cmp_int<uint16x8_t, uint16x8_t, sql::WHITE_OP_NE>(uint16x8_t left, uint16x8_t right)
+src/storage/blocksstable/encoding/neon/ob_encoding_neon_util.h	188	neon_cmp_int	sql:: use: WHITE_OP_NE	uint16x8_t neon_cmp_int<uint16x8_t, int16x8_t, sql::WHITE_OP_NE>(int16x8_t left, int16x8_t right)
+src/storage/blocksstable/encoding/neon/ob_raw_decoder_neon.cpp	42	RawFixFilterNeonFunc_T::fix_filter_func	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/neon/ob_raw_decoder_neon.cpp	43	RawFixFilterNeonFunc_T::fix_filter_func	sql:: use: ObBitVector	sql::ObBitVector &res)
+src/storage/blocksstable/encoding/neon/ob_raw_decoder_neon.cpp	78	RawFixFilterNeonFunc_T::fix_filter_func	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/neon/ob_raw_decoder_neon.cpp	79	RawFixFilterNeonFunc_T::fix_filter_func	sql:: use: ObBitVector	sql::ObBitVector &res)
+src/storage/blocksstable/encoding/neon/ob_raw_decoder_neon.cpp	114	RawFixFilterNeonFunc_T::fix_filter_func	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/neon/ob_raw_decoder_neon.cpp	115	RawFixFilterNeonFunc_T::fix_filter_func	sql:: use: ObBitVector	sql::ObBitVector &res)
+src/storage/blocksstable/encoding/neon/ob_raw_decoder_neon.cpp	149	RawFixFilterNeonFunc_T::fix_filter_func	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/neon/ob_raw_decoder_neon.cpp	150	RawFixFilterNeonFunc_T::fix_filter_func	sql:: use: ObBitVector	sql::ObBitVector &res)
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	237	ObConstDecoder::pushdown_operator	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	239	ObConstDecoder::pushdown_operator	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	242	ObConstDecoder::pushdown_operator	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	247	ObConstDecoder::pushdown_operator	sql:: use: ObWhiteFilterOperatorType	const sql::ObWhiteFilterOperatorType op_type = filter.get_op_type();
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	250	ObConstDecoder::pushdown_operator	sql:: use: WHITE_OP_MAX	} else if (OB_UNLIKELY(op_type >= sql::WHITE_OP_MAX)) {
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	259	ObConstDecoder::pushdown_operator	sql:: use: WHITE_OP_NU	case sql::WHITE_OP_NU:
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	260	ObConstDecoder::pushdown_operator	sql:: use: WHITE_OP_NN	case sql::WHITE_OP_NN: {
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	265	ObConstDecoder::pushdown_operator	sql:: use: WHITE_OP_EQ	case sql::WHITE_OP_EQ:
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	266	ObConstDecoder::pushdown_operator	sql:: use: WHITE_OP_NE	case sql::WHITE_OP_NE:
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	267	ObConstDecoder::pushdown_operator	sql:: use: WHITE_OP_LT	case sql::WHITE_OP_LT:
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	268	ObConstDecoder::pushdown_operator	sql:: use: WHITE_OP_GE	case sql::WHITE_OP_GE:
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	269	ObConstDecoder::pushdown_operator	sql:: use: WHITE_OP_GT	case sql::WHITE_OP_GT:
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	270	ObConstDecoder::pushdown_operator	sql:: use: WHITE_OP_LE	case sql::WHITE_OP_LE: {
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	275	ObConstDecoder::pushdown_operator	sql:: use: WHITE_OP_BT	case sql::WHITE_OP_BT: {
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	280	ObConstDecoder::pushdown_operator	sql:: use: WHITE_OP_IN	case sql::WHITE_OP_IN: {
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	282	ObConstDecoder::pushdown_operator	sql:: use: ObDynamicFilterExecutor	if (OB_FAIL(in_operator<sql::ObDynamicFilterExecutor>(col_ctx, static_cast<const sql::ObDynamicFilterExecutor &>(filter), pd_filter_info, result_bitmap))) {
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	285	ObConstDecoder::pushdown_operator	sql:: use: ObWhiteFilterExecutor	if (OB_FAIL(in_operator<sql::ObWhiteFilterExecutor>(col_ctx, filter, pd_filter_info, result_bitmap))) {
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	300	ObConstDecoder::const_only_operator	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	301	ObConstDecoder::const_only_operator	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	323	ObConstDecoder::const_only_operator	sql:: use: WHITE_OP_NU	case sql::WHITE_OP_NU: {
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	330	ObConstDecoder::const_only_operator	sql:: use: WHITE_OP_NN	case sql::WHITE_OP_NN: {
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	337	ObConstDecoder::const_only_operator	sql:: use: WHITE_OP_EQ	case sql::WHITE_OP_EQ:
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	338	ObConstDecoder::const_only_operator	sql:: use: WHITE_OP_NE	case sql::WHITE_OP_NE:
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	339	ObConstDecoder::const_only_operator	sql:: use: WHITE_OP_GT	case sql::WHITE_OP_GT:
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	340	ObConstDecoder::const_only_operator	sql:: use: WHITE_OP_LT	case sql::WHITE_OP_LT:
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	341	ObConstDecoder::const_only_operator	sql:: use: WHITE_OP_GE	case sql::WHITE_OP_GE:
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	342	ObConstDecoder::const_only_operator	sql:: use: WHITE_OP_LE	case sql::WHITE_OP_LE: {
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	356	ObConstDecoder::const_only_operator	sql:: use: WHITE_OP_BT	case sql::WHITE_OP_BT: {
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	359	ObConstDecoder::const_only_operator	sql:: use: WHITE_OP_LE	ObGetFilterCmpRetFunc get_le_cmp_ret = get_filter_cmp_ret_func(sql::WHITE_OP_LE);
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	360	ObConstDecoder::const_only_operator	sql:: use: WHITE_OP_GE	ObGetFilterCmpRetFunc get_ge_cmp_ret = get_filter_cmp_ret_func(sql::WHITE_OP_GE);
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	372	ObConstDecoder::const_only_operator	sql:: use: WHITE_OP_IN	case sql::WHITE_OP_IN: {
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	399	ObConstDecoder::nu_nn_operator	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	400	ObConstDecoder::nu_nn_operator	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	434	ObConstDecoder::nu_nn_operator	sql:: use: WHITE_OP_NN	if (OB_SUCC(ret) && filter.get_op_type() == sql::WHITE_OP_NN) {
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	444	ObConstDecoder::comparison_operator	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	445	ObConstDecoder::comparison_operator	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	451	ObConstDecoder::comparison_operator	sql:: use: WHITE_OP_NE	|| filter.get_op_type() > sql::WHITE_OP_NE
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	455	ObConstDecoder::comparison_operator	sql:: use: ObWhiteFilterOperatorType	const sql::ObWhiteFilterOperatorType op_type = filter.get_op_type();
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	491	ObConstDecoder::comparison_operator	sql:: use: ObBitVector	char ref_bitset_buf[sql::ObBitVector::memory_size(ref_bitset_size)];
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	492	ObConstDecoder::comparison_operator	sql:: use: ObBitVector, to_bit_vector	sql::ObBitVector *ref_bitset = sql::to_bit_vector(ref_bitset_buf);
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	529	ObConstDecoder::bt_operator	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	530	ObConstDecoder::bt_operator	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	570	ObConstDecoder::bt_operator	sql:: use: ObBitVector	char ref_bitset_buf[sql::ObBitVector::memory_size(ref_bitset_size)];
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	571	ObConstDecoder::bt_operator	sql:: use: ObBitVector, to_bit_vector	sql::ObBitVector *ref_bitset = sql::to_bit_vector(ref_bitset_buf);
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	609	ObConstDecoder::in_operator	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	615	ObConstDecoder::in_operator	sql:: use: WHITE_OP_IN	|| filter.get_op_type() != sql::WHITE_OP_IN)) {
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	644	ObConstDecoder::in_operator	sql:: use: ObBitVector	char ref_bitset_buf[sql::ObBitVector::memory_size(ref_bitset_size)];
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	645	ObConstDecoder::in_operator	sql:: use: ObBitVector, to_bit_vector	sql::ObBitVector *ref_bitset = sql::to_bit_vector(ref_bitset_buf);
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	682	ObConstDecoder::traverse_refs_and_set_res	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	702	ObConstDecoder::set_res_with_bitset	sql:: use: ObBitVector	const sql::ObBitVector *ref_bitset,
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	704	ObConstDecoder::set_res_with_bitset	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_const_decoder.h	74	ObConstDecoder	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_const_decoder.h	76	ObConstDecoder	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_const_decoder.h	79	ObConstDecoder	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_const_decoder.h	108	ObConstDecoder	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_const_decoder.h	109	ObConstDecoder	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_const_decoder.h	114	ObConstDecoder	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_const_decoder.h	115	ObConstDecoder	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_const_decoder.h	120	ObConstDecoder	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_const_decoder.h	121	ObConstDecoder	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_const_decoder.h	126	ObConstDecoder	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_const_decoder.h	127	ObConstDecoder	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_const_decoder.h	134	ObConstDecoder	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_const_decoder.h	141	ObConstDecoder	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_const_decoder.h	146	ObConstDecoder	sql:: use: ObBitVector	const sql::ObBitVector *ref_bitset,
+src/storage/blocksstable/encoding/ob_const_decoder.h	148	ObConstDecoder	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	628	ObDictDecoder::pushdown_operator	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	630	ObDictDecoder::pushdown_operator	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	633	ObDictDecoder::pushdown_operator	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	638	ObDictDecoder::pushdown_operator	sql:: use: ObWhiteFilterOperatorType	const sql::ObWhiteFilterOperatorType op_type = filter.get_op_type();
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	641	ObDictDecoder::pushdown_operator	sql:: use: WHITE_OP_MAX	}  else if (OB_UNLIKELY(op_type >= sql::WHITE_OP_MAX)){
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	647	ObDictDecoder::pushdown_operator	sql:: use: WHITE_OP_NU	case sql::WHITE_OP_NU:
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	648	ObDictDecoder::pushdown_operator	sql:: use: WHITE_OP_NN	case sql::WHITE_OP_NN: {
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	654	ObDictDecoder::pushdown_operator	sql:: use: WHITE_OP_EQ	case sql::WHITE_OP_EQ:
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	655	ObDictDecoder::pushdown_operator	sql:: use: WHITE_OP_NE	case sql::WHITE_OP_NE: {
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	661	ObDictDecoder::pushdown_operator	sql:: use: WHITE_OP_GT	case sql::WHITE_OP_GT:
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	662	ObDictDecoder::pushdown_operator	sql:: use: WHITE_OP_GE	case sql::WHITE_OP_GE:
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	663	ObDictDecoder::pushdown_operator	sql:: use: WHITE_OP_LT	case sql::WHITE_OP_LT:
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	664	ObDictDecoder::pushdown_operator	sql:: use: WHITE_OP_LE	case sql::WHITE_OP_LE: {
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	670	ObDictDecoder::pushdown_operator	sql:: use: WHITE_OP_IN	case sql::WHITE_OP_IN: {
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	672	ObDictDecoder::pushdown_operator	sql:: use: ObDynamicFilterExecutor	if (OB_FAIL(in_operator<sql::ObDynamicFilterExecutor>(parent, col_ctx, col_data,
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	673	ObDictDecoder::pushdown_operator	sql:: use: ObDynamicFilterExecutor	static_cast<const sql::ObDynamicFilterExecutor &>(filter), pd_filter_info, result_bitmap))) {
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	676	ObDictDecoder::pushdown_operator	sql:: use: ObWhiteFilterExecutor	if (OB_FAIL(in_operator<sql::ObWhiteFilterExecutor>(parent, col_ctx, col_data,
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	682	ObDictDecoder::pushdown_operator	sql:: use: WHITE_OP_BT	case sql::WHITE_OP_BT: {
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	697	ObDictDecoder::nu_nn_operator	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	700	ObDictDecoder::nu_nn_operator	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	701	ObDictDecoder::nu_nn_operator	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	710	ObDictDecoder::nu_nn_operator	sql:: use: WHITE_OP_NU	if (sql::WHITE_OP_NU == filter.get_op_type()) {
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	716	ObDictDecoder::nu_nn_operator	sql:: use: WHITE_OP_EQ	sql::WHITE_OP_EQ, true, pd_filter_info, result_bitmap))) {
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	717	ObDictDecoder::nu_nn_operator	sql:: use: WHITE_OP_NN	} else if (sql::WHITE_OP_NN == filter.get_op_type()) {
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	727	ObDictDecoder::eq_ne_operator	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	730	ObDictDecoder::eq_ne_operator	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	731	ObDictDecoder::eq_ne_operator	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	742	ObDictDecoder::eq_ne_operator	sql:: use: ObWhiteFilterOperatorType	const sql::ObWhiteFilterOperatorType op_type = filter.get_op_type();
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	744	ObDictDecoder::eq_ne_operator	sql:: use: ObBitVector	char ref_bitset_buf[sql::ObBitVector::memory_size(ref_bitset_size)];
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	745	ObDictDecoder::eq_ne_operator	sql:: use: ObBitVector, to_bit_vector	sql::ObBitVector *ref_bitset = sql::to_bit_vector(ref_bitset_buf);
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	793	ObDictDecoder::eq_ne_operator	sql:: use: WHITE_OP_NE	if (OB_SUCC(ret) && op_type == sql::WHITE_OP_NE) {
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	796	ObDictDecoder::eq_ne_operator	sql:: use: WHITE_OP_EQ	sql::WHITE_OP_EQ, false, pd_filter_info, result_bitmap))) {
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	807	ObDictDecoder::fast_eq_ne_operator	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	808	ObDictDecoder::fast_eq_ne_operator	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	817	ObDictDecoder::fast_eq_ne_operator	sql:: use: WHITE_OP_EQ	if (sql::WHITE_OP_EQ == filter.get_op_type()) {
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	844	ObDictDecoder::comparison_operator	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	847	ObDictDecoder::comparison_operator	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	848	ObDictDecoder::comparison_operator	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	859	ObDictDecoder::comparison_operator	sql:: use: ObWhiteFilterOperatorType	const sql::ObWhiteFilterOperatorType op_type = filter.get_op_type();
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	872	ObDictDecoder::comparison_operator	sql:: use: WHITE_OP_GT	case sql::WHITE_OP_GT: {
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	884	ObDictDecoder::comparison_operator	sql:: use: WHITE_OP_GE	sql::WHITE_OP_GE, pd_filter_info, result_bitmap))) {
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	887	ObDictDecoder::comparison_operator	sql:: use: WHITE_OP_GE	sql::WHITE_OP_GE, true, pd_filter_info, result_bitmap))) {
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	891	ObDictDecoder::comparison_operator	sql:: use: WHITE_OP_LT	case sql::WHITE_OP_LT: {
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	903	ObDictDecoder::comparison_operator	sql:: use: WHITE_OP_LT	sql::WHITE_OP_LT, pd_filter_info, result_bitmap))) {
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	906	ObDictDecoder::comparison_operator	sql:: use: WHITE_OP_LT	sql::WHITE_OP_LT, true, pd_filter_info, result_bitmap))) {
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	910	ObDictDecoder::comparison_operator	sql:: use: WHITE_OP_GE	case sql::WHITE_OP_GE: {
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	922	ObDictDecoder::comparison_operator	sql:: use: WHITE_OP_GE	sql::WHITE_OP_GE, pd_filter_info, result_bitmap))) {
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	925	ObDictDecoder::comparison_operator	sql:: use: WHITE_OP_GE	sql::WHITE_OP_GE, true, pd_filter_info, result_bitmap))) {
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	929	ObDictDecoder::comparison_operator	sql:: use: WHITE_OP_LE	case sql::WHITE_OP_LE: {
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	941	ObDictDecoder::comparison_operator	sql:: use: WHITE_OP_LT	sql::WHITE_OP_LT, pd_filter_info, result_bitmap))) {
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	944	ObDictDecoder::comparison_operator	sql:: use: WHITE_OP_LT	sql::WHITE_OP_LT, true, pd_filter_info, result_bitmap))) {
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	957	ObDictDecoder::comparison_operator	sql:: use: ObBitVector	char ref_bitset_buf[sql::ObBitVector::memory_size(ref_bitset_size)];
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	958	ObDictDecoder::comparison_operator	sql:: use: ObBitVector, to_bit_vector	sql::ObBitVector *ref_bitset = sql::to_bit_vector(ref_bitset_buf);
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	981	ObDictDecoder::bt_operator	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	984	ObDictDecoder::bt_operator	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	985	ObDictDecoder::bt_operator	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	992	ObDictDecoder::bt_operator	sql:: use: WHITE_OP_BT	|| filter.get_op_type() != sql::WHITE_OP_BT
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	1040	ObDictDecoder::bt_operator	sql:: use: ObBitVector	char ref_bitset_buf[sql::ObBitVector::memory_size(ref_bitset_size)];
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	1041	ObDictDecoder::bt_operator	sql:: use: ObBitVector, to_bit_vector	sql::ObBitVector *ref_bitset = sql::to_bit_vector(ref_bitset_buf);
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	1069	ObDictDecoder::in_operator	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	1073	ObDictDecoder::in_operator	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	1079	ObDictDecoder::in_operator	sql:: use: WHITE_OP_IN	|| filter.get_op_type() != sql::WHITE_OP_IN
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	1088	ObDictDecoder::in_operator	sql:: use: ObBitVector	char ref_bitset_buf[sql::ObBitVector::memory_size(ref_bitset_size)];
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	1089	ObDictDecoder::in_operator	sql:: use: ObBitVector, to_bit_vector	sql::ObBitVector *ref_bitset = sql::to_bit_vector(ref_bitset_buf);
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	1121	#define DICT_CMP_REF_SET_RES	sql:: use: WHITE_OP_EQ	&& OB_LIKELY(ref < meta_header_->count_ || sql::WHITE_OP_EQ == cmp_op)) { \
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	1130	ObDictDecoder::cmp_ref_and_set_res	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	1134	ObDictDecoder::cmp_ref_and_set_res	sql:: use: ObWhiteFilterOperatorType	const sql::ObWhiteFilterOperatorType cmp_op,
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	1136	ObDictDecoder::cmp_ref_and_set_res	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	1171	ObDictDecoder::fast_cmp_ref_and_set_res	sql:: use: ObWhiteFilterOperatorType	const sql::ObWhiteFilterOperatorType op_type,
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	1172	ObDictDecoder::fast_cmp_ref_and_set_res	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	1195	ObDictDecoder::set_res_with_bitset	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	1198	ObDictDecoder::set_res_with_bitset	sql:: use: ObBitVector	const sql::ObBitVector *ref_bitset,
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	1199	ObDictDecoder::set_res_with_bitset	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	1225	ObDictDecoder::pushdown_operator	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	1227	ObDictDecoder::pushdown_operator	sql:: use: ObBlackFilterExecutor	sql::ObBlackFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	1230	ObDictDecoder::pushdown_operator	sql:: use: PushdownFilterInfo	sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	1296	ObDictDecoder::set_res_with_bitmap	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	1299	ObDictDecoder::set_res_with_bitmap	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	1325	ObDictDecoder::fast_to_accquire_dict_codes	sql:: use: ObBitVector	sql::ObBitVector &ref_bitset,
+src/storage/blocksstable/encoding/ob_dict_decoder.h	55	-	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_dict_decoder.h	56	-	sql:: use: ObBitVector	sql::ObBitVector &result);
+src/storage/blocksstable/encoding/ob_dict_decoder.h	107	ObDictDecoder	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_dict_decoder.h	109	ObDictDecoder	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_dict_decoder.h	112	ObDictDecoder	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_dict_decoder.h	116	ObDictDecoder	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_dict_decoder.h	118	ObDictDecoder	sql:: use: ObBlackFilterExecutor	sql::ObBlackFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_dict_decoder.h	121	ObDictDecoder	sql:: use: PushdownFilterInfo	sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_dict_decoder.h	174	ObDictDecoder	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_dict_decoder.h	177	ObDictDecoder	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_dict_decoder.h	178	ObDictDecoder	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_dict_decoder.h	182	ObDictDecoder	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_dict_decoder.h	185	ObDictDecoder	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_dict_decoder.h	186	ObDictDecoder	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_dict_decoder.h	192	ObDictDecoder	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_dict_decoder.h	193	ObDictDecoder	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_dict_decoder.h	197	ObDictDecoder	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_dict_decoder.h	200	ObDictDecoder	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_dict_decoder.h	201	ObDictDecoder	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_dict_decoder.h	205	ObDictDecoder	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_dict_decoder.h	208	ObDictDecoder	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_dict_decoder.h	209	ObDictDecoder	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_dict_decoder.h	214	ObDictDecoder	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_dict_decoder.h	218	ObDictDecoder	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_dict_decoder.h	222	ObDictDecoder	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_dict_decoder.h	226	ObDictDecoder	sql:: use: ObWhiteFilterOperatorType	const sql::ObWhiteFilterOperatorType cmp_op,
+src/storage/blocksstable/encoding/ob_dict_decoder.h	228	ObDictDecoder	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_dict_decoder.h	235	ObDictDecoder	sql:: use: ObWhiteFilterOperatorType	const sql::ObWhiteFilterOperatorType op_type,
+src/storage/blocksstable/encoding/ob_dict_decoder.h	236	ObDictDecoder	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_dict_decoder.h	240	ObDictDecoder	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_dict_decoder.h	243	ObDictDecoder	sql:: use: ObBitVector	const sql::ObBitVector *ref_bitset,
+src/storage/blocksstable/encoding/ob_dict_decoder.h	244	ObDictDecoder	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_dict_decoder.h	248	ObDictDecoder	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_dict_decoder.h	251	ObDictDecoder	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_dict_decoder.h	257	ObDictDecoder	sql:: use: ObBitVector	sql::ObBitVector &ref_bitset,
+src/storage/blocksstable/encoding/ob_dict_decoder.h	284	ObDictDecoder	sql:: use: ObBitVector	sql::ObBitVector &ref_bitset,
+src/storage/blocksstable/encoding/ob_dict_decoder.h	491	ObDictDecoder::empty_strings_equal	sql:: use: ObBitVector	sql::ObBitVector &ref_bitset,
+src/storage/blocksstable/encoding/ob_dict_decoder.h	662	DictCmpRefFunc_T::dict_cmp_ref_func	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_dict_decoder.h	663	DictCmpRefFunc_T::dict_cmp_ref_func	sql:: use: ObBitVector	sql::ObBitVector &result)
+src/storage/blocksstable/encoding/ob_dict_decoder.h	671	DictCmpRefFunc_T::dict_cmp_ref_func	sql:: use: WHITE_OP_LT	if (CMP_TYPE <= sql::WHITE_OP_LT) {
+src/storage/blocksstable/encoding/ob_dict_decoder.h	682	DictCmpRefFunc_T::dict_cmp_ref_func	sql:: use: WHITE_OP_GE	if (value_cmp_t<RefType, sql::WHITE_OP_GE>(ref_arr[row_id], casted_dict_cnt)) {
+src/storage/blocksstable/encoding/ob_dict_decoder_simd.cpp	36	DictCmpRefAVX512Func_T::dict_cmp_ref_func	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_dict_decoder_simd.cpp	37	DictCmpRefAVX512Func_T::dict_cmp_ref_func	sql:: use: ObBitVector	sql::ObBitVector &result)
+src/storage/blocksstable/encoding/ob_dict_decoder_simd.cpp	46	DictCmpRefAVX512Func_T::dict_cmp_ref_func	sql:: use: WHITE_OP_LT	if (CMP_TYPE <= sql::WHITE_OP_LT) {
+src/storage/blocksstable/encoding/ob_dict_decoder_simd.cpp	82	DictCmpRefAVX512Func_T::dict_cmp_ref_func	sql:: use: WHITE_OP_GE	if (value_cmp_t<uint8_t, sql::WHITE_OP_GE>(ref_arr[row_id], casted_dict_cnt)) {
+src/storage/blocksstable/encoding/ob_dict_decoder_simd.cpp	103	DictCmpRefAVX512Func_T::dict_cmp_ref_func	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_dict_decoder_simd.cpp	104	DictCmpRefAVX512Func_T::dict_cmp_ref_func	sql:: use: ObBitVector	sql::ObBitVector &result)
+src/storage/blocksstable/encoding/ob_dict_decoder_simd.cpp	113	DictCmpRefAVX512Func_T::dict_cmp_ref_func	sql:: use: WHITE_OP_LT	if (CMP_TYPE <= sql::WHITE_OP_LT) {
+src/storage/blocksstable/encoding/ob_dict_decoder_simd.cpp	149	DictCmpRefAVX512Func_T::dict_cmp_ref_func	sql:: use: WHITE_OP_GE	if (value_cmp_t<uint16_t, sql::WHITE_OP_GE>(ref_arr[row_id], casted_dict_cnt)) {
+src/storage/blocksstable/encoding/ob_encoding_hash_util.cpp	60	ObEncodingHashTable::create	sql:: use: ObBitVector	const int64_t vec_size = sql::ObBitVector::memory_size(node_num_);
+src/storage/blocksstable/encoding/ob_encoding_hash_util.cpp	68	ObEncodingHashTable::create	sql:: use: to_bit_vector	} else if (OB_ISNULL(skip_bit_ = sql::to_bit_vector((char *)alloc_.alloc(vec_size)))) {
+src/storage/blocksstable/encoding/ob_encoding_hash_util.h	279	ObEncodingHashTable	sql:: use: ObBitVector	sql::ObBitVector *skip_bit_;
+src/storage/blocksstable/encoding/ob_encoding_query_util.h	46	ObCmpTypeToAvxOpMap	sql:: use: WHITE_OP_EQ	template <> struct ObCmpTypeToAvxOpMap<sql::WHITE_OP_EQ> { constexpr static int value_ = 0; };
+src/storage/blocksstable/encoding/ob_encoding_query_util.h	47	ObCmpTypeToAvxOpMap	sql:: use: WHITE_OP_LT	template <> struct ObCmpTypeToAvxOpMap<sql::WHITE_OP_LT> { constexpr static int value_ = 1; };
+src/storage/blocksstable/encoding/ob_encoding_query_util.h	48	ObCmpTypeToAvxOpMap	sql:: use: WHITE_OP_LE	template <> struct ObCmpTypeToAvxOpMap<sql::WHITE_OP_LE> { constexpr static int value_ = 2; };
+src/storage/blocksstable/encoding/ob_encoding_query_util.h	49	ObCmpTypeToAvxOpMap	sql:: use: WHITE_OP_GE	template <> struct ObCmpTypeToAvxOpMap<sql::WHITE_OP_GE> { constexpr static int value_ = 5; };
+src/storage/blocksstable/encoding/ob_encoding_query_util.h	50	ObCmpTypeToAvxOpMap	sql:: use: WHITE_OP_GT	template <> struct ObCmpTypeToAvxOpMap<sql::WHITE_OP_GT> { constexpr static int value_ = 6; };
+src/storage/blocksstable/encoding/ob_encoding_query_util.h	51	ObCmpTypeToAvxOpMap	sql:: use: WHITE_OP_NE	template <> struct ObCmpTypeToAvxOpMap<sql::WHITE_OP_NE> { constexpr static int value_ = 4; };
+src/storage/blocksstable/encoding/ob_encoding_query_util.h	85	cmp_by_ret	sql:: use: WHITE_OP_EQ	template <> constexpr bool cmp_by_ret<sql::WHITE_OP_EQ>(const int cmp_ret) { return cmp_ret == 0; }
+src/storage/blocksstable/encoding/ob_encoding_query_util.h	86	cmp_by_ret	sql:: use: WHITE_OP_LE	template <> constexpr bool cmp_by_ret<sql::WHITE_OP_LE>(const int cmp_ret) { return cmp_ret <= 0; }
+src/storage/blocksstable/encoding/ob_encoding_query_util.h	87	cmp_by_ret	sql:: use: WHITE_OP_LT	template <> constexpr bool cmp_by_ret<sql::WHITE_OP_LT>(const int cmp_ret) { return cmp_ret < 0; }
+src/storage/blocksstable/encoding/ob_encoding_query_util.h	88	cmp_by_ret	sql:: use: WHITE_OP_GE	template <> constexpr bool cmp_by_ret<sql::WHITE_OP_GE>(const int cmp_ret) { return cmp_ret >= 0; }
+src/storage/blocksstable/encoding/ob_encoding_query_util.h	89	cmp_by_ret	sql:: use: WHITE_OP_GT	template <> constexpr bool cmp_by_ret<sql::WHITE_OP_GT>(const int cmp_ret) { return cmp_ret > 0; }
+src/storage/blocksstable/encoding/ob_encoding_query_util.h	90	cmp_by_ret	sql:: use: WHITE_OP_NE	template <> constexpr bool cmp_by_ret<sql::WHITE_OP_NE>(const int cmp_ret) { return cmp_ret != 0; }
+src/storage/blocksstable/encoding/ob_encoding_query_util.h	93	get_filter_cmp_ret_func	sql:: use: ObWhiteFilterOperatorType	OB_INLINE ObGetFilterCmpRetFunc get_filter_cmp_ret_func(const sql::ObWhiteFilterOperatorType cmp_type)
+src/storage/blocksstable/encoding/ob_encoding_query_util.h	96	get_filter_cmp_ret_func	sql:: use: WHITE_OP_EQ	&cmp_by_ret<sql::WHITE_OP_EQ>,
+src/storage/blocksstable/encoding/ob_encoding_query_util.h	97	get_filter_cmp_ret_func	sql:: use: WHITE_OP_LE	&cmp_by_ret<sql::WHITE_OP_LE>,
+src/storage/blocksstable/encoding/ob_encoding_query_util.h	98	get_filter_cmp_ret_func	sql:: use: WHITE_OP_LT	&cmp_by_ret<sql::WHITE_OP_LT>,
+src/storage/blocksstable/encoding/ob_encoding_query_util.h	99	get_filter_cmp_ret_func	sql:: use: WHITE_OP_GE	&cmp_by_ret<sql::WHITE_OP_GE>,
+src/storage/blocksstable/encoding/ob_encoding_query_util.h	100	get_filter_cmp_ret_func	sql:: use: WHITE_OP_GT	&cmp_by_ret<sql::WHITE_OP_GT>,
+src/storage/blocksstable/encoding/ob_encoding_query_util.h	101	get_filter_cmp_ret_func	sql:: use: WHITE_OP_NE	&cmp_by_ret<sql::WHITE_OP_NE>
+src/storage/blocksstable/encoding/ob_encoding_query_util.h	111	value_cmp_t	sql:: use: WHITE_OP_EQ	case sql::WHITE_OP_EQ:
+src/storage/blocksstable/encoding/ob_encoding_query_util.h	114	value_cmp_t	sql:: use: WHITE_OP_LE	case sql::WHITE_OP_LE:
+src/storage/blocksstable/encoding/ob_encoding_query_util.h	117	value_cmp_t	sql:: use: WHITE_OP_LT	case sql::WHITE_OP_LT:
+src/storage/blocksstable/encoding/ob_encoding_query_util.h	120	value_cmp_t	sql:: use: WHITE_OP_GE	case sql::WHITE_OP_GE:
+src/storage/blocksstable/encoding/ob_encoding_query_util.h	123	value_cmp_t	sql:: use: WHITE_OP_GT	case sql::WHITE_OP_GT:
+src/storage/blocksstable/encoding/ob_encoding_query_util.h	126	value_cmp_t	sql:: use: WHITE_OP_NE	case sql::WHITE_OP_NE:
+src/storage/blocksstable/encoding/ob_hex_string_decoder.cpp	226	ObHexStringDecoder::pushdown_operator	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_hex_string_decoder.cpp	228	ObHexStringDecoder::pushdown_operator	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_hex_string_decoder.cpp	231	ObHexStringDecoder::pushdown_operator	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_hex_string_decoder.cpp	238	ObHexStringDecoder::pushdown_operator	sql:: use: ObWhiteFilterOperatorType	const sql::ObWhiteFilterOperatorType op_type = filter.get_op_type();
+src/storage/blocksstable/encoding/ob_hex_string_decoder.cpp	241	ObHexStringDecoder::pushdown_operator	sql:: use: WHITE_OP_MAX	if (OB_UNLIKELY(op_type >= sql::WHITE_OP_MAX)
+src/storage/blocksstable/encoding/ob_hex_string_decoder.cpp	255	ObHexStringDecoder::pushdown_operator	sql:: use: WHITE_OP_NU	case sql::WHITE_OP_NU: {
+src/storage/blocksstable/encoding/ob_hex_string_decoder.cpp	258	ObHexStringDecoder::pushdown_operator	sql:: use: WHITE_OP_NN	case sql::WHITE_OP_NN: {
+src/storage/blocksstable/encoding/ob_hex_string_decoder.h	67	ObHexStringDecoder	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_hex_string_decoder.h	69	ObHexStringDecoder	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter_node,
+src/storage/blocksstable/encoding/ob_hex_string_decoder.h	72	ObHexStringDecoder	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_icolumn_decoder.cpp	32	ObIColumnDecoder::get_is_null_bitmap_from_fixed_column	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_icolumn_decoder.cpp	73	ObIColumnDecoder::get_is_null_bitmap_from_var_column	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_icolumn_decoder.h	151	ObIColumnDecoder::pushdown_operator	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_icolumn_decoder.h	153	ObIColumnDecoder::pushdown_operator	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_icolumn_decoder.h	156	ObIColumnDecoder::pushdown_operator	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_icolumn_decoder.h	164	ObIColumnDecoder::pushdown_operator	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_icolumn_decoder.h	166	ObIColumnDecoder::pushdown_operator	sql:: use: ObBlackFilterExecutor	sql::ObBlackFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_icolumn_decoder.h	169	ObIColumnDecoder::pushdown_operator	sql:: use: PushdownFilterInfo	sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_icolumn_decoder.h	195	ObIColumnDecoder	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_icolumn_decoder.h	201	ObIColumnDecoder	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_imicro_block_decoder.h	46	ObIMicroBlockDecoder	sql:: use: ObPushdownFilterExecutor	virtual int filter_pushdown_filter(const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_imicro_block_decoder.h	47	ObIMicroBlockDecoder	sql:: use: ObPhysicalFilterExecutor, PushdownFilterInfo	sql::ObPhysicalFilterExecutor &filter, const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_imicro_block_decoder.h	49	ObIMicroBlockDecoder	sql:: use: ObPushdownFilterExecutor	virtual int filter_pushdown_filter(const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_imicro_block_decoder.h	50	ObIMicroBlockDecoder	sql:: use: ObWhiteFilterExecutor, PushdownFilterInfo	sql::ObWhiteFilterExecutor &filter, const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_imicro_block_decoder.h	63	ObIMicroBlockDecoder	sql:: use: ObPushdownFilterExecutor	virtual int filter_black_filter_batch(const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_imicro_block_decoder.h	64	ObIMicroBlockDecoder	sql:: use: ObBlackFilterExecutor, PushdownFilterInfo	sql::ObBlackFilterExecutor &filter, sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.cpp	212	ObIntegerBaseDiffDecoder::pushdown_operator	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.cpp	214	ObIntegerBaseDiffDecoder::pushdown_operator	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.cpp	217	ObIntegerBaseDiffDecoder::pushdown_operator	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.cpp	222	ObIntegerBaseDiffDecoder::pushdown_operator	sql:: use: ObWhiteFilterOperatorType	const sql::ObWhiteFilterOperatorType op_type = filter.get_op_type();
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.cpp	227	ObIntegerBaseDiffDecoder::pushdown_operator	sql:: use: WHITE_OP_MAX	} else if (OB_UNLIKELY(op_type >= sql::WHITE_OP_MAX)) {
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.cpp	233	ObIntegerBaseDiffDecoder::pushdown_operator	sql:: use: WHITE_OP_NU	case sql::WHITE_OP_NU: {
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.cpp	236	ObIntegerBaseDiffDecoder::pushdown_operator	sql:: use: WHITE_OP_NN	case sql::WHITE_OP_NN: {
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.cpp	241	ObIntegerBaseDiffDecoder::pushdown_operator	sql:: use: WHITE_OP_EQ	case sql::WHITE_OP_EQ:
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.cpp	242	ObIntegerBaseDiffDecoder::pushdown_operator	sql:: use: WHITE_OP_NE	case sql::WHITE_OP_NE:
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.cpp	243	ObIntegerBaseDiffDecoder::pushdown_operator	sql:: use: WHITE_OP_GT	case sql::WHITE_OP_GT:
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.cpp	244	ObIntegerBaseDiffDecoder::pushdown_operator	sql:: use: WHITE_OP_GE	case sql::WHITE_OP_GE:
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.cpp	245	ObIntegerBaseDiffDecoder::pushdown_operator	sql:: use: WHITE_OP_LT	case sql::WHITE_OP_LT:
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.cpp	246	ObIntegerBaseDiffDecoder::pushdown_operator	sql:: use: WHITE_OP_LE	case sql::WHITE_OP_LE: {
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.cpp	259	ObIntegerBaseDiffDecoder::pushdown_operator	sql:: use: WHITE_OP_BT	case sql::WHITE_OP_BT: {
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.cpp	266	ObIntegerBaseDiffDecoder::pushdown_operator	sql:: use: WHITE_OP_IN	case sql::WHITE_OP_IN: {
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.cpp	326	ObIntegerBaseDiffDecoder::comparison_operator	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.cpp	329	ObIntegerBaseDiffDecoder::comparison_operator	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.cpp	330	ObIntegerBaseDiffDecoder::comparison_operator	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.cpp	360	ObIntegerBaseDiffDecoder::comparison_operator	sql:: use: ObWhiteFilterOperatorType	const sql::ObWhiteFilterOperatorType op_type = filter.get_op_type();
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.cpp	367	ObIntegerBaseDiffDecoder::comparison_operator	sql:: use: WHITE_OP_GE, WHITE_OP_GT, WHITE_OP_NE	if (op_type == sql::WHITE_OP_GE || op_type == sql::WHITE_OP_GT || op_type == sql::WHITE_OP_NE) {
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.cpp	439	ObIntegerBaseDiffDecoder::bt_operator	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.cpp	442	ObIntegerBaseDiffDecoder::bt_operator	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.cpp	443	ObIntegerBaseDiffDecoder::bt_operator	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.cpp	460	ObIntegerBaseDiffDecoder::bt_operator	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.cpp	481	ObIntegerBaseDiffDecoder::in_operator	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.cpp	484	ObIntegerBaseDiffDecoder::in_operator	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.cpp	485	ObIntegerBaseDiffDecoder::in_operator	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.cpp	495	ObIntegerBaseDiffDecoder::in_operator	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.cpp	507	ObIntegerBaseDiffDecoder::traverse_all_data	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.cpp	510	ObIntegerBaseDiffDecoder::traverse_all_data	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.cpp	511	ObIntegerBaseDiffDecoder::traverse_all_data	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.cpp	515	ObIntegerBaseDiffDecoder::traverse_all_data	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.h	65	ObIntegerBaseDiffDecoder	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.h	67	ObIntegerBaseDiffDecoder	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.h	70	ObIntegerBaseDiffDecoder	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.h	98	ObIntegerBaseDiffDecoder	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.h	101	ObIntegerBaseDiffDecoder	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.h	102	ObIntegerBaseDiffDecoder	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.h	106	ObIntegerBaseDiffDecoder	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.h	109	ObIntegerBaseDiffDecoder	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.h	110	ObIntegerBaseDiffDecoder	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.h	114	ObIntegerBaseDiffDecoder	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.h	117	ObIntegerBaseDiffDecoder	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.h	118	ObIntegerBaseDiffDecoder	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.h	122	ObIntegerBaseDiffDecoder	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.h	125	ObIntegerBaseDiffDecoder	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.h	126	ObIntegerBaseDiffDecoder	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.h	130	ObIntegerBaseDiffDecoder	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_micro_block_decoder.cpp	1477	ObMicroBlockDecoder::filter_pushdown_filter	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_micro_block_decoder.cpp	1478	ObMicroBlockDecoder::filter_pushdown_filter	sql:: use: ObPhysicalFilterExecutor	sql::ObPhysicalFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_micro_block_decoder.cpp	1479	ObMicroBlockDecoder::filter_pushdown_filter	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_micro_block_decoder.cpp	1498	ObMicroBlockDecoder::filter_pushdown_filter	sql:: use: ColumnParamFixedArray	const sql::ColumnParamFixedArray &col_params = filter.get_col_params();
+src/storage/blocksstable/encoding/ob_micro_block_decoder.cpp	1553	ObMicroBlockDecoder::filter_pushdown_filter	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_micro_block_decoder.cpp	1554	ObMicroBlockDecoder::filter_pushdown_filter	sql:: use: ObWhiteFilterExecutor	sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_micro_block_decoder.cpp	1555	ObMicroBlockDecoder::filter_pushdown_filter	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_micro_block_decoder.cpp	1562	ObMicroBlockDecoder::filter_pushdown_filter	sql:: use: ColumnParamFixedArray	const sql::ColumnParamFixedArray &col_params =filter.get_col_params();
+src/storage/blocksstable/encoding/ob_micro_block_decoder.cpp	1575	ObMicroBlockDecoder::filter_pushdown_filter	sql:: use: ObWhiteFilterOperatorType	const sql::ObWhiteFilterOperatorType op_type = filter.get_op_type();
+src/storage/blocksstable/encoding/ob_micro_block_decoder.cpp	1578	ObMicroBlockDecoder::filter_pushdown_filter	sql:: use: WHITE_OP_NU	op_type != sql::WHITE_OP_NU &&
+src/storage/blocksstable/encoding/ob_micro_block_decoder.cpp	1579	ObMicroBlockDecoder::filter_pushdown_filter	sql:: use: WHITE_OP_NN	op_type != sql::WHITE_OP_NN) {
+src/storage/blocksstable/encoding/ob_micro_block_decoder.cpp	1623	ObMicroBlockDecoder::filter_pushdown_retro	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_micro_block_decoder.cpp	1624	ObMicroBlockDecoder::filter_pushdown_retro	sql:: use: ObWhiteFilterExecutor	sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_micro_block_decoder.cpp	1625	ObMicroBlockDecoder::filter_pushdown_retro	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_micro_block_decoder.cpp	1636	ObMicroBlockDecoder::filter_pushdown_retro	sql:: use: WHITE_OP_MAX	} else if (OB_UNLIKELY(sql::WHITE_OP_MAX <= filter.get_op_type()
+src/storage/blocksstable/encoding/ob_micro_block_decoder.cpp	1640	ObMicroBlockDecoder::filter_pushdown_retro	sql:: use: ObWhiteFilterOperatorType	const sql::ObWhiteFilterOperatorType op_type = filter.get_op_type();
+src/storage/blocksstable/encoding/ob_micro_block_decoder.cpp	1674	ObMicroBlockDecoder::filter_black_filter_batch	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_micro_block_decoder.cpp	1675	ObMicroBlockDecoder::filter_black_filter_batch	sql:: use: ObBlackFilterExecutor	sql::ObBlackFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_micro_block_decoder.cpp	1676	ObMicroBlockDecoder::filter_black_filter_batch	sql:: use: PushdownFilterInfo	sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_micro_block_decoder.cpp	1687	ObMicroBlockDecoder::filter_black_filter_batch	sql:: use: ColumnParamFixedArray	const sql::ColumnParamFixedArray &col_params = filter.get_col_params();
+src/storage/blocksstable/encoding/ob_micro_block_decoder.h	254	ObMicroBlockDecoder	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_micro_block_decoder.h	255	ObMicroBlockDecoder	sql:: use: ObPhysicalFilterExecutor	sql::ObPhysicalFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_micro_block_decoder.h	256	ObMicroBlockDecoder	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_micro_block_decoder.h	259	ObMicroBlockDecoder	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_micro_block_decoder.h	260	ObMicroBlockDecoder	sql:: use: ObWhiteFilterExecutor	sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_micro_block_decoder.h	261	ObMicroBlockDecoder	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_micro_block_decoder.h	264	ObMicroBlockDecoder	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_micro_block_decoder.h	265	ObMicroBlockDecoder	sql:: use: ObBlackFilterExecutor	sql::ObBlackFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_micro_block_decoder.h	266	ObMicroBlockDecoder	sql:: use: PushdownFilterInfo	sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_micro_block_decoder.h	389	ObMicroBlockDecoder	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_micro_block_decoder.h	390	ObMicroBlockDecoder	sql:: use: ObWhiteFilterExecutor	sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_micro_block_decoder.h	391	ObMicroBlockDecoder	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_new_column_decoder.cpp	69	ObNewColumnCommonDecoder::pushdown_operator	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_new_column_decoder.cpp	84	ObNewColumnCommonDecoder::pushdown_operator	sql:: use: ObBlackFilterExecutor	sql::ObBlackFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_new_column_decoder.cpp	85	ObNewColumnCommonDecoder::pushdown_operator	sql:: use: PushdownFilterInfo	sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_new_column_decoder.cpp	90	ObNewColumnCommonDecoder::pushdown_operator	sql:: use: ObPhysicalFilterExecutor	sql::ObPhysicalFilterExecutor *black_filter = static_cast<sql::ObPhysicalFilterExecutor *>(&filter);
+src/storage/blocksstable/encoding/ob_new_column_decoder.h	47	ObNewColumnCommonDecoder	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_new_column_decoder.h	51	ObNewColumnCommonDecoder	sql:: use: ObBlackFilterExecutor	sql::ObBlackFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_new_column_decoder.h	52	ObNewColumnCommonDecoder	sql:: use: PushdownFilterInfo	sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_new_column_decoder.h	105	ObNewColumnDecoder::pushdown_operator	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_new_column_decoder.h	107	ObNewColumnDecoder::pushdown_operator	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_new_column_decoder.h	110	ObNewColumnDecoder::pushdown_operator	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_new_column_decoder.h	118	ObNewColumnDecoder::pushdown_operator	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_new_column_decoder.h	120	ObNewColumnDecoder::pushdown_operator	sql:: use: ObBlackFilterExecutor	sql::ObBlackFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_new_column_decoder.h	123	ObNewColumnDecoder::pushdown_operator	sql:: use: PushdownFilterInfo	sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	515	ObRawDecoder::pushdown_operator	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	517	ObRawDecoder::pushdown_operator	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	520	ObRawDecoder::pushdown_operator	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	524	ObRawDecoder::pushdown_operator	sql:: use: ObWhiteFilterOperatorType	const sql::ObWhiteFilterOperatorType op_type = filter.get_op_type();
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	532	ObRawDecoder::pushdown_operator	sql:: use: WHITE_OP_MAX	} else if (OB_UNLIKELY(op_type >= sql::WHITE_OP_MAX)){
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	539	ObRawDecoder::pushdown_operator	sql:: use: WHITE_OP_NU	case sql::WHITE_OP_NU: {
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	542	ObRawDecoder::pushdown_operator	sql:: use: WHITE_OP_NN	case sql::WHITE_OP_NN: {
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	547	ObRawDecoder::pushdown_operator	sql:: use: WHITE_OP_EQ	case sql::WHITE_OP_EQ:
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	548	ObRawDecoder::pushdown_operator	sql:: use: WHITE_OP_NE	case sql::WHITE_OP_NE:
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	549	ObRawDecoder::pushdown_operator	sql:: use: WHITE_OP_GT	case sql::WHITE_OP_GT:
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	550	ObRawDecoder::pushdown_operator	sql:: use: WHITE_OP_GE	case sql::WHITE_OP_GE:
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	551	ObRawDecoder::pushdown_operator	sql:: use: WHITE_OP_LT	case sql::WHITE_OP_LT:
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	552	ObRawDecoder::pushdown_operator	sql:: use: WHITE_OP_LE	case sql::WHITE_OP_LE: {
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	570	ObRawDecoder::pushdown_operator	sql:: use: WHITE_OP_IN	case sql::WHITE_OP_IN: {
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	576	ObRawDecoder::pushdown_operator	sql:: use: WHITE_OP_BT	case sql::WHITE_OP_BT: {
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	592	ObRawDecoder::check_fast_filter_valid	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	674	ObRawDecoder::get_is_null_bitmap	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	696	ObRawDecoder::comparison_operator	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	700	ObRawDecoder::comparison_operator	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	701	ObRawDecoder::comparison_operator	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	725	ObRawDecoder::fast_binary_comparison_operator	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	728	ObRawDecoder::fast_binary_comparison_operator	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	747	ObRawDecoder::fast_binary_comparison_operator	sql:: use: ObWhiteFilterOperatorType	const sql::ObWhiteFilterOperatorType &op_type = filter.get_op_type();
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	751	ObRawDecoder::fast_binary_comparison_operator	sql:: use: WHITE_OP_EQ	if (sql::WHITE_OP_EQ == op_type) {
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	753	ObRawDecoder::fast_binary_comparison_operator	sql:: use: WHITE_OP_NE	} else if (sql::WHITE_OP_NE == op_type) {
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	761	ObRawDecoder::fast_binary_comparison_operator	sql:: use: WHITE_OP_GT, WHITE_OP_GE	if (sql::WHITE_OP_GT == op_type || sql::WHITE_OP_GE == op_type) {
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	767	ObRawDecoder::fast_binary_comparison_operator	sql:: use: WHITE_OP_LT, WHITE_OP_LE	if (sql::WHITE_OP_LT == op_type || sql::WHITE_OP_LE == op_type) {
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	775	ObRawDecoder::fast_binary_comparison_operator	sql:: use: WHITE_OP_LT, WHITE_OP_LE	if (sql::WHITE_OP_LT == op_type || sql::WHITE_OP_LE == op_type
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	776	ObRawDecoder::fast_binary_comparison_operator	sql:: use: WHITE_OP_NE	|| sql::WHITE_OP_NE == op_type) {
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	800	ObRawDecoder::fast_datum_comparison_operator	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	801	ObRawDecoder::fast_datum_comparison_operator	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	852	ObRawDecoder::bt_operator	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	856	ObRawDecoder::bt_operator	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	857	ObRawDecoder::bt_operator	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	876	ObRawDecoder::in_operator	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	880	ObRawDecoder::in_operator	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	881	ObRawDecoder::in_operator	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	903	ObRawDecoder::traverse_all_data	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	906	ObRawDecoder::traverse_all_data	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	907	ObRawDecoder::traverse_all_data	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	1005	ObRawDecoder::ObRawDecoderFilterCmpFunc::operator()	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	1019	ObRawDecoder::ObRawDecoderFilterBetweenFunc::operator()	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	1039	ObRawDecoder::ObRawDecoderFilterInFunc::operator()	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	1134	RawCompareFunctionProducer::produce	sql:: use: ObWhiteFilterOperatorType	const sql::ObWhiteFilterOperatorType op_type)
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	1140	RawCompareFunctionProducer::produce	sql:: use: ObWhiteFilterOperatorType	case sql::ObWhiteFilterOperatorType::WHITE_OP_EQ:
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	1151	RawCompareFunctionProducer::produce	sql:: use: ObWhiteFilterOperatorType	case sql::ObWhiteFilterOperatorType::WHITE_OP_LE:
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	1163	RawCompareFunctionProducer::produce	sql:: use: ObWhiteFilterOperatorType	case sql::ObWhiteFilterOperatorType::WHITE_OP_LT:
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	1174	RawCompareFunctionProducer::produce	sql:: use: ObWhiteFilterOperatorType	case sql::ObWhiteFilterOperatorType::WHITE_OP_GE:
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	1185	RawCompareFunctionProducer::produce	sql:: use: ObWhiteFilterOperatorType	case sql::ObWhiteFilterOperatorType::WHITE_OP_GT:
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	1196	RawCompareFunctionProducer::produce	sql:: use: ObWhiteFilterOperatorType	case sql::ObWhiteFilterOperatorType::WHITE_OP_NE:
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	1215	RawCompareFunctionProducer::produce_with_null	sql:: use: ObWhiteFilterOperatorType	const sql::ObWhiteFilterOperatorType op_type)
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	1221	RawCompareFunctionProducer::produce_with_null	sql:: use: ObWhiteFilterOperatorType	case sql::ObWhiteFilterOperatorType::WHITE_OP_EQ:
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	1232	RawCompareFunctionProducer::produce_with_null	sql:: use: ObWhiteFilterOperatorType	case sql::ObWhiteFilterOperatorType::WHITE_OP_LE:
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	1243	RawCompareFunctionProducer::produce_with_null	sql:: use: ObWhiteFilterOperatorType	case sql::ObWhiteFilterOperatorType::WHITE_OP_LT:
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	1254	RawCompareFunctionProducer::produce_with_null	sql:: use: ObWhiteFilterOperatorType	case sql::ObWhiteFilterOperatorType::WHITE_OP_GE:
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	1265	RawCompareFunctionProducer::produce_with_null	sql:: use: ObWhiteFilterOperatorType	case sql::ObWhiteFilterOperatorType::WHITE_OP_GT:
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	1276	RawCompareFunctionProducer::produce_with_null	sql:: use: ObWhiteFilterOperatorType	case sql::ObWhiteFilterOperatorType::WHITE_OP_NE:
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	1299	RawCompareFunctionFactory::RawCompareFunctionFactory	sql:: use: ObWhiteFilterOperatorType	RawCompareFunctionProducer<0, 0>::produce(static_cast<sql::ObWhiteFilterOperatorType>(k));
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	1301	RawCompareFunctionFactory::RawCompareFunctionFactory	sql:: use: ObWhiteFilterOperatorType	RawCompareFunctionProducer<0, 1>::produce(static_cast<sql::ObWhiteFilterOperatorType>(k));
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	1303	RawCompareFunctionFactory::RawCompareFunctionFactory	sql:: use: ObWhiteFilterOperatorType	RawCompareFunctionProducer<0, 2>::produce(static_cast<sql::ObWhiteFilterOperatorType>(k));
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	1305	RawCompareFunctionFactory::RawCompareFunctionFactory	sql:: use: ObWhiteFilterOperatorType	RawCompareFunctionProducer<0, 3>::produce(static_cast<sql::ObWhiteFilterOperatorType>(k));
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	1307	RawCompareFunctionFactory::RawCompareFunctionFactory	sql:: use: ObWhiteFilterOperatorType	RawCompareFunctionProducer<1, 0>::produce(static_cast<sql::ObWhiteFilterOperatorType>(k));
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	1309	RawCompareFunctionFactory::RawCompareFunctionFactory	sql:: use: ObWhiteFilterOperatorType	RawCompareFunctionProducer<1, 1>::produce(static_cast<sql::ObWhiteFilterOperatorType>(k));
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	1311	RawCompareFunctionFactory::RawCompareFunctionFactory	sql:: use: ObWhiteFilterOperatorType	RawCompareFunctionProducer<1, 2>::produce(static_cast<sql::ObWhiteFilterOperatorType>(k));
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	1313	RawCompareFunctionFactory::RawCompareFunctionFactory	sql:: use: ObWhiteFilterOperatorType	RawCompareFunctionProducer<1, 3>::produce(static_cast<sql::ObWhiteFilterOperatorType>(k));
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	1318	RawCompareFunctionFactory::RawCompareFunctionFactory	sql:: use: ObWhiteFilterOperatorType	static_cast<sql::ObWhiteFilterOperatorType>(k));
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	1320	RawCompareFunctionFactory::RawCompareFunctionFactory	sql:: use: ObWhiteFilterOperatorType	static_cast<sql::ObWhiteFilterOperatorType>(k));
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	1322	RawCompareFunctionFactory::RawCompareFunctionFactory	sql:: use: ObWhiteFilterOperatorType	static_cast<sql::ObWhiteFilterOperatorType>(k));
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	1324	RawCompareFunctionFactory::RawCompareFunctionFactory	sql:: use: ObWhiteFilterOperatorType	static_cast<sql::ObWhiteFilterOperatorType>(k));
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	1337	RawCompareFunctionFactory::get_cmp_function	sql:: use: ObWhiteFilterOperatorType	const sql::ObWhiteFilterOperatorType op_type)
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	1350	RawCompareFunctionFactory::get_cmp_function_with_null	sql:: use: ObWhiteFilterOperatorType	const sql::ObWhiteFilterOperatorType op_type)
+src/storage/blocksstable/encoding/ob_raw_decoder.h	55	-	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_raw_decoder.h	56	-	sql:: use: ObBitVector	sql::ObBitVector &res);
+src/storage/blocksstable/encoding/ob_raw_decoder.h	89	RawCompareFunctionFactory	sql:: use: ObWhiteFilterOperatorType	const sql::ObWhiteFilterOperatorType op_type);
+src/storage/blocksstable/encoding/ob_raw_decoder.h	92	RawCompareFunctionFactory	sql:: use: ObWhiteFilterOperatorType	const sql::ObWhiteFilterOperatorType op_type);
+src/storage/blocksstable/encoding/ob_raw_decoder.h	170	ObRawDecoder	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_raw_decoder.h	172	ObRawDecoder	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_raw_decoder.h	175	ObRawDecoder	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_raw_decoder.h	189	ObRawDecoder	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_raw_decoder.h	212	ObRawDecoder	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_raw_decoder.h	219	ObRawDecoder	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_raw_decoder.h	222	ObRawDecoder	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_raw_decoder.h	229	ObRawDecoder	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_raw_decoder.h	230	ObRawDecoder	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_raw_decoder.h	234	ObRawDecoder	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_raw_decoder.h	238	ObRawDecoder	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_raw_decoder.h	239	ObRawDecoder	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_raw_decoder.h	243	ObRawDecoder	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_raw_decoder.h	247	ObRawDecoder	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_raw_decoder.h	248	ObRawDecoder	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_raw_decoder.h	252	ObRawDecoder	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_raw_decoder.h	256	ObRawDecoder	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_raw_decoder.h	257	ObRawDecoder	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_raw_decoder.h	262	ObRawDecoder	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_raw_decoder.h	265	ObRawDecoder	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_raw_decoder.h	266	ObRawDecoder	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_raw_decoder.h	280	ObRawDecoder::ObRawDecoderFilterCmpFunc	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_raw_decoder.h	291	ObRawDecoder::ObRawDecoderFilterBetweenFunc::ObRawDecoderFilterBetweenFunc	sql:: use: WHITE_OP_LE	get_le_cmp_ret_ = get_filter_cmp_ret_func(sql::WHITE_OP_LE);
+src/storage/blocksstable/encoding/ob_raw_decoder.h	292	ObRawDecoder::ObRawDecoderFilterBetweenFunc::ObRawDecoderFilterBetweenFunc	sql:: use: WHITE_OP_GE	get_ge_cmp_ret_ = get_filter_cmp_ret_func(sql::WHITE_OP_GE);
+src/storage/blocksstable/encoding/ob_raw_decoder.h	297	ObRawDecoder::ObRawDecoderFilterBetweenFunc	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_raw_decoder.h	311	ObRawDecoder::ObRawDecoderFilterInFunc	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_raw_decoder.h	482	RawFixFilterFunc_T::fix_filter_func	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_raw_decoder.h	483	RawFixFilterFunc_T::fix_filter_func	sql:: use: ObBitVector	sql::ObBitVector &res)
+src/storage/blocksstable/encoding/ob_raw_decoder_simd.cpp	36	RawFixFilterAVX512Func_T::fix_filter_func	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_raw_decoder_simd.cpp	37	RawFixFilterAVX512Func_T::fix_filter_func	sql:: use: ObBitVector	sql::ObBitVector &res)
+src/storage/blocksstable/encoding/ob_raw_decoder_simd.cpp	70	RawFixFilterAVX512Func_T::fix_filter_func	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_raw_decoder_simd.cpp	71	RawFixFilterAVX512Func_T::fix_filter_func	sql:: use: ObBitVector	sql::ObBitVector &res)
+src/storage/blocksstable/encoding/ob_raw_decoder_simd.cpp	104	RawFixFilterAVX512Func_T::fix_filter_func	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_raw_decoder_simd.cpp	105	RawFixFilterAVX512Func_T::fix_filter_func	sql:: use: ObBitVector	sql::ObBitVector &res)
+src/storage/blocksstable/encoding/ob_raw_decoder_simd.cpp	138	RawFixFilterAVX512Func_T::fix_filter_func	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_raw_decoder_simd.cpp	139	RawFixFilterAVX512Func_T::fix_filter_func	sql:: use: ObBitVector	sql::ObBitVector &res)
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	113	ObRLEDecoder::pushdown_operator	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	115	ObRLEDecoder::pushdown_operator	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	118	ObRLEDecoder::pushdown_operator	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	123	ObRLEDecoder::pushdown_operator	sql:: use: ObWhiteFilterOperatorType	const sql::ObWhiteFilterOperatorType op_type = filter.get_op_type();
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	126	ObRLEDecoder::pushdown_operator	sql:: use: WHITE_OP_MAX	} else if (OB_UNLIKELY(op_type >= sql::WHITE_OP_MAX)) {
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	130	ObRLEDecoder::pushdown_operator	sql:: use: WHITE_OP_NU	case sql::WHITE_OP_NU:
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	131	ObRLEDecoder::pushdown_operator	sql:: use: WHITE_OP_NN	case sql::WHITE_OP_NN: {
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	136	ObRLEDecoder::pushdown_operator	sql:: use: WHITE_OP_EQ	case sql::WHITE_OP_EQ:
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	137	ObRLEDecoder::pushdown_operator	sql:: use: WHITE_OP_NE	case sql::WHITE_OP_NE: {
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	142	ObRLEDecoder::pushdown_operator	sql:: use: WHITE_OP_LE	case sql::WHITE_OP_LE:
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	143	ObRLEDecoder::pushdown_operator	sql:: use: WHITE_OP_LT	case sql::WHITE_OP_LT:
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	144	ObRLEDecoder::pushdown_operator	sql:: use: WHITE_OP_GE	case sql::WHITE_OP_GE:
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	145	ObRLEDecoder::pushdown_operator	sql:: use: WHITE_OP_GT	case sql::WHITE_OP_GT: {
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	150	ObRLEDecoder::pushdown_operator	sql:: use: WHITE_OP_BT	case sql::WHITE_OP_BT: {
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	155	ObRLEDecoder::pushdown_operator	sql:: use: WHITE_OP_IN	case sql::WHITE_OP_IN: {
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	157	ObRLEDecoder::pushdown_operator	sql:: use: ObDynamicFilterExecutor	if (OB_FAIL(in_operator<sql::ObDynamicFilterExecutor>(parent, col_ctx, static_cast<const sql::ObDynamicFilterExecutor &>(filter), pd_filter_info, result_bitmap))) {
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	160	ObRLEDecoder::pushdown_operator	sql:: use: ObWhiteFilterExecutor	if (OB_FAIL(in_operator<sql::ObWhiteFilterExecutor>(parent, col_ctx, filter, pd_filter_info, result_bitmap))) {
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	174	ObRLEDecoder::nu_nn_operator	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	176	ObRLEDecoder::nu_nn_operator	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	177	ObRLEDecoder::nu_nn_operator	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	186	ObRLEDecoder::nu_nn_operator	sql:: use: WHITE_OP_NU	if (sql::WHITE_OP_NU == filter.get_op_type()) {
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	192	ObRLEDecoder::nu_nn_operator	sql:: use: WHITE_OP_EQ	sql::WHITE_OP_EQ, true, pd_filter_info, result_bitmap))) {
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	193	ObRLEDecoder::nu_nn_operator	sql:: use: WHITE_OP_NN	} else if (sql::WHITE_OP_NN == filter.get_op_type()) {
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	203	ObRLEDecoder::eq_ne_operator	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	205	ObRLEDecoder::eq_ne_operator	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	206	ObRLEDecoder::eq_ne_operator	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	228	ObRLEDecoder::eq_ne_operator	sql:: use: WHITE_OP_EQ	sql::WHITE_OP_EQ, true, pd_filter_info, result_bitmap))) {
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	235	ObRLEDecoder::eq_ne_operator	sql:: use: WHITE_OP_NE	if (OB_SUCC(ret) && filter.get_op_type() == sql::WHITE_OP_NE) {
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	238	ObRLEDecoder::eq_ne_operator	sql:: use: WHITE_OP_EQ	sql::WHITE_OP_EQ, false, pd_filter_info, result_bitmap))) {
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	246	ObRLEDecoder::comparison_operator	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	248	ObRLEDecoder::comparison_operator	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	249	ObRLEDecoder::comparison_operator	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	261	ObRLEDecoder::comparison_operator	sql:: use: ObWhiteFilterOperatorType	const sql::ObWhiteFilterOperatorType op_type = filter.get_op_type();
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	267	ObRLEDecoder::comparison_operator	sql:: use: ObBitVector	char ref_bitset_buf[sql::ObBitVector::memory_size(ref_bitset_size)];
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	268	ObRLEDecoder::comparison_operator	sql:: use: ObBitVector, to_bit_vector	sql::ObBitVector *ref_bitset = sql::to_bit_vector(ref_bitset_buf);
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	292	ObRLEDecoder::bt_operator	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	294	ObRLEDecoder::bt_operator	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	295	ObRLEDecoder::bt_operator	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	301	ObRLEDecoder::bt_operator	sql:: use: WHITE_OP_BT	|| filter.get_op_type() != sql::WHITE_OP_BT)) {
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	313	ObRLEDecoder::bt_operator	sql:: use: ObBitVector	char ref_bitset_buf[sql::ObBitVector::memory_size(ref_bitset_size)];
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	314	ObRLEDecoder::bt_operator	sql:: use: ObBitVector, to_bit_vector	sql::ObBitVector *ref_bitset = sql::to_bit_vector(ref_bitset_buf);
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	341	ObRLEDecoder::in_operator	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	344	ObRLEDecoder::in_operator	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	350	ObRLEDecoder::in_operator	sql:: use: WHITE_OP_IN	|| filter.get_op_type() != sql::WHITE_OP_IN)) {
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	359	ObRLEDecoder::in_operator	sql:: use: ObBitVector	char ref_bitset_buf[sql::ObBitVector::memory_size(ref_bitset_size)];
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	360	ObRLEDecoder::in_operator	sql:: use: ObBitVector, to_bit_vector	sql::ObBitVector *ref_bitset = sql::to_bit_vector(ref_bitset_buf);
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	382	ObRLEDecoder::cmp_ref_and_set_res	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	385	ObRLEDecoder::cmp_ref_and_set_res	sql:: use: ObWhiteFilterOperatorType	const sql::ObWhiteFilterOperatorType cmp_op,
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	387	ObRLEDecoder::cmp_ref_and_set_res	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	401	ObRLEDecoder::cmp_ref_and_set_res	sql:: use: WHITE_OP_EQ	&& (ref < dict_decoder_.get_dict_header()->count_ || sql::WHITE_OP_EQ == cmp_op)) {
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	417	ObRLEDecoder::set_res_with_bitset	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	419	ObRLEDecoder::set_res_with_bitset	sql:: use: ObBitVector	const sql::ObBitVector *ref_bitset,
+src/storage/blocksstable/encoding/ob_rle_decoder.cpp	420	ObRLEDecoder::set_res_with_bitset	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_rle_decoder.h	78	ObRLEDecoder	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_rle_decoder.h	80	ObRLEDecoder	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_rle_decoder.h	83	ObRLEDecoder	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_rle_decoder.h	88	ObRLEDecoder	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_rle_decoder.h	90	ObRLEDecoder	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_rle_decoder.h	91	ObRLEDecoder	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_rle_decoder.h	95	ObRLEDecoder	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_rle_decoder.h	97	ObRLEDecoder	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_rle_decoder.h	98	ObRLEDecoder	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_rle_decoder.h	102	ObRLEDecoder	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_rle_decoder.h	104	ObRLEDecoder	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_rle_decoder.h	105	ObRLEDecoder	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_rle_decoder.h	109	ObRLEDecoder	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_rle_decoder.h	111	ObRLEDecoder	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/encoding/ob_rle_decoder.h	112	ObRLEDecoder	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_rle_decoder.h	117	ObRLEDecoder	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_rle_decoder.h	120	ObRLEDecoder	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_rle_decoder.h	124	ObRLEDecoder	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_rle_decoder.h	127	ObRLEDecoder	sql:: use: ObWhiteFilterOperatorType	const sql::ObWhiteFilterOperatorType cmp_op,
+src/storage/blocksstable/encoding/ob_rle_decoder.h	129	ObRLEDecoder	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/encoding/ob_rle_decoder.h	133	ObRLEDecoder	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/encoding/ob_rle_decoder.h	135	ObRLEDecoder	sql:: use: ObBitVector	const sql::ObBitVector *ref_bitset,
+src/storage/blocksstable/encoding/ob_rle_decoder.h	136	ObRLEDecoder	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/index_block/ob_index_block_aggregator.cpp	729	ObColSumAggregator::eval_int_number	sql:: use: ObNumStackAllocator	sql::ObNumStackAllocator<1> tmp_alloc;
+src/storage/blocksstable/index_block/ob_index_block_aggregator.cpp	742	ObColSumAggregator::eval_uint_number	sql:: use: ObNumStackAllocator	sql::ObNumStackAllocator<1> tmp_alloc;
+src/storage/blocksstable/index_block/ob_index_block_aggregator.cpp	755	ObColSumAggregator::eval_decimal_int_number	sql:: use: ObNumStackAllocator	sql::ObNumStackAllocator<1> tmp_alloc;
+src/storage/blocksstable/index_block/ob_index_block_aggregator.cpp	783	ObColSumAggregator::inner_eval_number	sql:: use: ObNumStackAllocator	sql::ObNumStackAllocator<2> tmp_alloc;
+src/storage/blocksstable/index_block/ob_index_block_aggregator.cpp	804	ObColSumAggregator::eval_float	sql:: use: ObArithExprOperator	if (OB_UNLIKELY(sql::ObArithExprOperator::is_float_out_of_range(left_f + right_f))) {
+src/storage/blocksstable/index_block/ob_index_block_aggregator.cpp	1048	ObBM25ParamAggregator::do_max_score_agg	sql:: use: ObExprBM25	const double tf_score = sql::ObExprBM25::doc_token_weight(token_freq, get_norm_len(doc_length));
+src/storage/blocksstable/index_block/ob_index_block_row_struct.h	348	ObSkippingFilterResult	sql:: use: ObBoolMask	sql::ObBoolMask bool_mask_;
+src/storage/blocksstable/index_block/ob_index_block_row_struct.h	349	ObSkippingFilterResult	sql:: use: ObPushdownFilterExecutor	sql::ObPushdownFilterExecutor *filter_;
+src/storage/blocksstable/index_block/ob_index_block_row_struct.h	362	ObSkippingFilterResults::push_back	sql:: use: ObPushdownFilterExecutor	OB_INLINE void push_back(sql::ObPushdownFilterExecutor *filter)
+src/storage/blocksstable/index_block/ob_index_block_row_struct.h	597	ObMicroIndexInfo::is_filter_always_true	sql:: use: ObBoolMaskType	return sql::ObBoolMaskType::ALWAYS_TRUE == static_cast<sql::ObBoolMaskType>(filter_constant_type_);
+src/storage/blocksstable/index_block/ob_index_block_row_struct.h	601	ObMicroIndexInfo::is_filter_always_false	sql:: use: ObBoolMaskType	return sql::ObBoolMaskType::ALWAYS_FALSE == static_cast<sql::ObBoolMaskType>(filter_constant_type_);
+src/storage/blocksstable/index_block/ob_index_block_row_struct.h	605	ObMicroIndexInfo::is_filter_uncertain	sql:: use: ObBoolMaskType	return sql::ObBoolMaskType::PROBABILISTIC == static_cast<sql::ObBoolMaskType>(filter_constant_type_);
+src/storage/blocksstable/index_block/ob_index_block_row_struct.h	609	ObMicroIndexInfo::is_filter_constant	sql:: use: ObBoolMaskType	return sql::ObBoolMaskType::ALWAYS_TRUE == static_cast<sql::ObBoolMaskType>(filter_constant_type_) ||
+src/storage/blocksstable/index_block/ob_index_block_row_struct.h	610	ObMicroIndexInfo::is_filter_constant	sql:: use: ObBoolMaskType	sql::ObBoolMaskType::ALWAYS_FALSE == static_cast<sql::ObBoolMaskType>(filter_constant_type_);
+src/storage/blocksstable/index_block/ob_index_block_row_struct.h	612	ObMicroIndexInfo::set_filter_constant_type	sql:: use: ObBoolMaskType	OB_INLINE void set_filter_constant_type(const sql::ObBoolMaskType type)
+src/storage/blocksstable/index_block/ob_index_block_row_struct.h	616	ObMicroIndexInfo::get_filter_constant_type	sql:: use: ObBoolMaskType	OB_INLINE sql::ObBoolMaskType get_filter_constant_type() const
+src/storage/blocksstable/index_block/ob_index_block_row_struct.h	618	ObMicroIndexInfo::get_filter_constant_type	sql:: use: ObBoolMaskType	return static_cast<sql::ObBoolMaskType>(filter_constant_type_);
+src/storage/blocksstable/index_block/ob_index_block_row_struct.h	628	ObMicroIndexInfo::add_skipping_filter_result	sql:: use: ObPushdownFilterExecutor	OB_INLINE int add_skipping_filter_result(sql::ObPushdownFilterExecutor *filter)
+src/storage/blocksstable/index_block/ob_index_block_row_struct.h	639	ObMicroIndexInfo::apply_skipping_filter_result	sql:: use: ObPushdownFilterExecutor	OB_INLINE bool apply_skipping_filter_result(sql::ObPushdownFilterExecutor *filter)
+src/storage/blocksstable/index_block/ob_index_block_row_struct.h	665	ObMicroIndexInfo::pre_process_filter	sql:: use: ObPushdownFilterExecutor	OB_INLINE void pre_process_filter(sql::ObPushdownFilterExecutor &filter)
+src/storage/blocksstable/index_block/ob_index_block_row_struct.h	675	ObMicroIndexInfo::post_process_filter	sql:: use: ObPushdownFilterExecutor	OB_INLINE void post_process_filter(sql::ObPushdownFilterExecutor &filter)
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.cpp	31	ObSkipIndexFilterExecutor::init	sql:: use: to_bit_vector, ObBitVector	} else if (OB_ISNULL(skip_bit_ = sql::to_bit_vector(allocator->alloc(sql::ObBitVector::memory_size(batch_size))))) {
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.cpp	73	ObSkipIndexFilterExecutor::falsifiable_pushdown_filter	sql:: use: ObPhysicalFilterExecutor	sql::ObPhysicalFilterExecutor &filter,
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.cpp	88	ObSkipIndexFilterExecutor::falsifiable_pushdown_filter	sql:: use: ObDynamicFilterExecutor	sql::ObDynamicFilterExecutor &dynamic_filter =
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.cpp	89	ObSkipIndexFilterExecutor::falsifiable_pushdown_filter	sql:: use: ObDynamicFilterExecutor	static_cast<sql::ObDynamicFilterExecutor &>(filter);
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.cpp	100	ObSkipIndexFilterExecutor::falsifiable_pushdown_filter	sql:: use: ObWhiteFilterExecutor	sql::ObWhiteFilterExecutor &white_filter =
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.cpp	101	ObSkipIndexFilterExecutor::falsifiable_pushdown_filter	sql:: use: ObWhiteFilterExecutor	static_cast<sql::ObWhiteFilterExecutor &>(filter);
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.cpp	106	ObSkipIndexFilterExecutor::falsifiable_pushdown_filter	sql:: use: ObBlackFilterExecutor	sql::ObBlackFilterExecutor &black_filter =
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.cpp	107	ObSkipIndexFilterExecutor::falsifiable_pushdown_filter	sql:: use: ObBlackFilterExecutor	static_cast<sql::ObBlackFilterExecutor &>(filter);
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.cpp	126	ObSkipIndexFilterExecutor::filter_on_min_max	sql:: use: ObWhiteFilterExecutor	sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.cpp	130	ObSkipIndexFilterExecutor::filter_on_min_max	sql:: use: ObBoolMask	sql::ObBoolMask &fal_desc = filter.get_filter_bool_mask();
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.cpp	153	ObSkipIndexFilterExecutor::filter_on_min_max	sql:: use: ObWhiteFilterOperatorType	const sql::ObWhiteFilterOperatorType op_type = filter.get_op_type();
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.cpp	155	ObSkipIndexFilterExecutor::filter_on_min_max	sql:: use: WHITE_OP_NU	case sql::WHITE_OP_NU: {
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.cpp	165	ObSkipIndexFilterExecutor::filter_on_min_max	sql:: use: WHITE_OP_NN	case sql::WHITE_OP_NN: {
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.cpp	175	ObSkipIndexFilterExecutor::filter_on_min_max	sql:: use: WHITE_OP_EQ	case sql::WHITE_OP_EQ: {
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.cpp	184	ObSkipIndexFilterExecutor::filter_on_min_max	sql:: use: WHITE_OP_NE	case sql::WHITE_OP_NE: {
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.cpp	193	ObSkipIndexFilterExecutor::filter_on_min_max	sql:: use: WHITE_OP_GT	case sql::WHITE_OP_GT: {
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.cpp	202	ObSkipIndexFilterExecutor::filter_on_min_max	sql:: use: WHITE_OP_GE	case sql::WHITE_OP_GE: {
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.cpp	211	ObSkipIndexFilterExecutor::filter_on_min_max	sql:: use: WHITE_OP_LT	case sql::WHITE_OP_LT: {
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.cpp	220	ObSkipIndexFilterExecutor::filter_on_min_max	sql:: use: WHITE_OP_LE	case sql::WHITE_OP_LE: {
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.cpp	229	ObSkipIndexFilterExecutor::filter_on_min_max	sql:: use: WHITE_OP_IN	case sql::WHITE_OP_IN: {
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.cpp	238	ObSkipIndexFilterExecutor::filter_on_min_max	sql:: use: WHITE_OP_BT	case sql::WHITE_OP_BT: {
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.cpp	275	ObSkipIndexFilterExecutor::eq_operator	sql:: use: ObWhiteFilterExecutor	int ObSkipIndexFilterExecutor::eq_operator(const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.cpp	280	ObSkipIndexFilterExecutor::eq_operator	sql:: use: ObBoolMask	sql::ObBoolMask &fal_desc)
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.cpp	307	ObSkipIndexFilterExecutor::ne_operator	sql:: use: ObWhiteFilterExecutor	int ObSkipIndexFilterExecutor::ne_operator(const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.cpp	312	ObSkipIndexFilterExecutor::ne_operator	sql:: use: ObBoolMask	sql::ObBoolMask &fal_desc)
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.cpp	339	ObSkipIndexFilterExecutor::gt_operator	sql:: use: ObWhiteFilterExecutor	int ObSkipIndexFilterExecutor::gt_operator(const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.cpp	344	ObSkipIndexFilterExecutor::gt_operator	sql:: use: ObBoolMask	sql::ObBoolMask &fal_desc)
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.cpp	377	ObSkipIndexFilterExecutor::ge_operator	sql:: use: ObWhiteFilterExecutor	int ObSkipIndexFilterExecutor::ge_operator(const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.cpp	382	ObSkipIndexFilterExecutor::ge_operator	sql:: use: ObBoolMask	sql::ObBoolMask &fal_desc)
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.cpp	411	ObSkipIndexFilterExecutor::lt_operator	sql:: use: ObWhiteFilterExecutor	int ObSkipIndexFilterExecutor::lt_operator(const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.cpp	416	ObSkipIndexFilterExecutor::lt_operator	sql:: use: ObBoolMask	sql::ObBoolMask &fal_desc)
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.cpp	445	ObSkipIndexFilterExecutor::le_operator	sql:: use: ObWhiteFilterExecutor	int ObSkipIndexFilterExecutor::le_operator(const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.cpp	450	ObSkipIndexFilterExecutor::le_operator	sql:: use: ObBoolMask	sql::ObBoolMask &fal_desc)
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.cpp	482	ObSkipIndexFilterExecutor::in_operator	sql:: use: ObWhiteFilterExecutor	int ObSkipIndexFilterExecutor::in_operator(const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.cpp	487	ObSkipIndexFilterExecutor::in_operator	sql:: use: ObBoolMask	sql::ObBoolMask &fal_desc)
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.cpp	491	ObSkipIndexFilterExecutor::in_operator	sql:: use: ObExpr	const sql::ObExpr *col_expr = filter.get_filter_node().expr_;
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.cpp	526	ObSkipIndexFilterExecutor::bt_operator	sql:: use: ObWhiteFilterExecutor	int ObSkipIndexFilterExecutor::bt_operator(const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.cpp	531	ObSkipIndexFilterExecutor::bt_operator	sql:: use: ObBoolMask	sql::ObBoolMask &fal_desc)
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.cpp	567	ObSkipIndexFilterExecutor::black_filter_on_min_max	sql:: use: ObBlackFilterExecutor	sql::ObBlackFilterExecutor &filter,
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.cpp	573	ObSkipIndexFilterExecutor::black_filter_on_min_max	sql:: use: ObBoolMask	sql::ObBoolMask &fal_desc = filter.get_filter_bool_mask();
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.h	54	ObSkipIndexFilterExecutor	sql:: use: ObPhysicalFilterExecutor	sql::ObPhysicalFilterExecutor &filter,
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.h	62	ObSkipIndexFilterExecutor	sql:: use: ObWhiteFilterExecutor	sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.h	82	ObSkipIndexFilterExecutor	sql:: use: ObWhiteFilterExecutor	int eq_operator(const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.h	87	ObSkipIndexFilterExecutor	sql:: use: ObBoolMask	sql::ObBoolMask &fal_desc);
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.h	89	ObSkipIndexFilterExecutor	sql:: use: ObWhiteFilterExecutor	int ne_operator(const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.h	94	ObSkipIndexFilterExecutor	sql:: use: ObBoolMask	sql::ObBoolMask &fal_desc);
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.h	95	ObSkipIndexFilterExecutor	sql:: use: ObWhiteFilterExecutor	int gt_operator(const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.h	100	ObSkipIndexFilterExecutor	sql:: use: ObBoolMask	sql::ObBoolMask &fal_desc);
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.h	102	ObSkipIndexFilterExecutor	sql:: use: ObWhiteFilterExecutor	int ge_operator(const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.h	107	ObSkipIndexFilterExecutor	sql:: use: ObBoolMask	sql::ObBoolMask &fal_desc);
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.h	109	ObSkipIndexFilterExecutor	sql:: use: ObWhiteFilterExecutor	int lt_operator(const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.h	114	ObSkipIndexFilterExecutor	sql:: use: ObBoolMask	sql::ObBoolMask &fal_desc);
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.h	116	ObSkipIndexFilterExecutor	sql:: use: ObWhiteFilterExecutor	int le_operator(const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.h	121	ObSkipIndexFilterExecutor	sql:: use: ObBoolMask	sql::ObBoolMask &fal_desc);
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.h	123	ObSkipIndexFilterExecutor	sql:: use: ObWhiteFilterExecutor	int bt_operator(const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.h	128	ObSkipIndexFilterExecutor	sql:: use: ObBoolMask	sql::ObBoolMask &fal_desc);
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.h	130	ObSkipIndexFilterExecutor	sql:: use: ObWhiteFilterExecutor	int in_operator(const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.h	135	ObSkipIndexFilterExecutor	sql:: use: ObBoolMask	sql::ObBoolMask &fal_desc);
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.h	140	ObSkipIndexFilterExecutor	sql:: use: ObBlackFilterExecutor	sql::ObBlackFilterExecutor &filter,
+src/storage/blocksstable/index_block/ob_skip_index_filter_executor.h	146	ObSkipIndexFilterExecutor	sql:: use: ObBitVector	sql::ObBitVector *skip_bit_;      // to be compatible with the black filter filter() method
+src/storage/blocksstable/ob_imicro_block_reader.cpp	148	ObIMicroBlockReader::validate_filter_info	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/ob_imicro_block_reader.cpp	149	ObIMicroBlockReader::validate_filter_info	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor &filter,
+src/storage/blocksstable/ob_imicro_block_reader.h	34	-	opens namespace sql (lines 34-39): storage declares SQL types here	namespace sql
+src/storage/blocksstable/ob_imicro_block_reader.h	36	-	unqualified SQL name inside namespace sql: PushdownFilterInfo	struct PushdownFilterInfo;
+src/storage/blocksstable/ob_imicro_block_reader.h	37	-	unqualified SQL name inside namespace sql: ObPushdownFilterExecutor	class ObPushdownFilterExecutor;
+src/storage/blocksstable/ob_imicro_block_reader.h	38	-	unqualified SQL name inside namespace sql: ObWhiteFilterExecutor	class ObWhiteFilterExecutor;
+src/storage/blocksstable/ob_imicro_block_reader.h	441	ObIMicroBlockReader	sql:: use: ObWhiteFilterExecutor	const sql::ObWhiteFilterExecutor &filter,
+src/storage/blocksstable/ob_imicro_block_reader.h	468	ObIMicroBlockReader	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/ob_imicro_block_reader.h	469	ObIMicroBlockReader	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor &filter,
+src/storage/blocksstable/ob_micro_block_reader.cpp	654	ObMicroBlockReader::filter_pushdown_filter	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/ob_micro_block_reader.cpp	655	ObMicroBlockReader::filter_pushdown_filter	sql:: use: ObPushdownFilterExecutor	sql::ObPushdownFilterExecutor &filter,
+src/storage/blocksstable/ob_micro_block_reader.cpp	656	ObMicroBlockReader::filter_pushdown_filter	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/ob_micro_block_reader.cpp	676	ObMicroBlockReader::filter_pushdown_filter	sql:: use: ColumnParamFixedArray	const sql::ColumnParamFixedArray &col_params = filter.get_col_params();
+src/storage/blocksstable/ob_micro_block_reader.cpp	729	ObMicroBlockReader::filter_pushdown_filter	sql:: use: ObPhysicalFilterExecutor	sql::ObPhysicalFilterExecutor &physical_filter = static_cast<sql::ObPhysicalFilterExecutor &>(filter);
+src/storage/blocksstable/ob_micro_block_reader.cpp	737	ObMicroBlockReader::filter_pushdown_filter	sql:: use: ObWhiteFilterExecutor	sql::ObWhiteFilterExecutor &white_filter = static_cast<sql::ObWhiteFilterExecutor &>(filter);
+src/storage/blocksstable/ob_micro_block_reader.cpp	836	ObMicroBlockReader::get_rows	sql:: use: ObExprPtrIArray	sql::ObExprPtrIArray &exprs,
+src/storage/blocksstable/ob_micro_block_reader.cpp	837	ObMicroBlockReader::get_rows	sql:: use: ObEvalCtx	sql::ObEvalCtx &eval_ctx)
+src/storage/blocksstable/ob_micro_block_reader.h	99	ObMicroBlockReader	sql:: use: ObPushdownFilterExecutor	const sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/ob_micro_block_reader.h	100	ObMicroBlockReader	sql:: use: ObPushdownFilterExecutor	sql::ObPushdownFilterExecutor &filter,
+src/storage/blocksstable/ob_micro_block_reader.h	101	ObMicroBlockReader	sql:: use: PushdownFilterInfo	const sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/ob_micro_block_reader.h	119	ObMicroBlockReader	sql:: use: ObExprPtrIArray	sql::ObExprPtrIArray &exprs,
+src/storage/blocksstable/ob_micro_block_reader.h	120	ObMicroBlockReader	sql:: use: ObEvalCtx	sql::ObEvalCtx &eval_ctx);
+src/storage/blocksstable/ob_micro_block_row_scanner.cpp	460	ObIMicroBlockRowScanner::apply_black_filter_batch	sql:: use: ObPushdownFilterExecutor	sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/ob_micro_block_row_scanner.cpp	461	ObIMicroBlockRowScanner::apply_black_filter_batch	sql:: use: ObBlackFilterExecutor	sql::ObBlackFilterExecutor &filter,
+src/storage/blocksstable/ob_micro_block_row_scanner.cpp	462	ObIMicroBlockRowScanner::apply_black_filter_batch	sql:: use: PushdownFilterInfo	sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/ob_micro_block_row_scanner.cpp	529	ObIMicroBlockRowScanner::get_rows_for_old_format	sql:: use: ObExprPtrIArray	sql::ObExprPtrIArray &exprs,
+src/storage/blocksstable/ob_micro_block_row_scanner.cpp	535	ObIMicroBlockRowScanner::get_rows_for_old_format	sql:: use: ObEvalCtx	sql::ObEvalCtx &eval_ctx = param_->op_->get_eval_ctx();
+src/storage/blocksstable/ob_micro_block_row_scanner.cpp	583	ObIMicroBlockRowScanner::filter_pushdown_filter	sql:: use: ObPushdownFilterExecutor	sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/ob_micro_block_row_scanner.cpp	584	ObIMicroBlockRowScanner::filter_pushdown_filter	sql:: use: ObPushdownFilterExecutor	sql::ObPushdownFilterExecutor *filter,
+src/storage/blocksstable/ob_micro_block_row_scanner.cpp	585	ObIMicroBlockRowScanner::filter_pushdown_filter	sql:: use: PushdownFilterInfo	sql::PushdownFilterInfo &pd_filter_info,
+src/storage/blocksstable/ob_micro_block_row_scanner.cpp	605	ObIMicroBlockRowScanner::filter_pushdown_filter	sql:: use: ObPhysicalFilterExecutor	sql::ObPhysicalFilterExecutor *physical_filter = static_cast<sql::ObPhysicalFilterExecutor *>(filter);
+src/storage/blocksstable/ob_micro_block_row_scanner.cpp	612	ObIMicroBlockRowScanner::filter_pushdown_filter	sql:: use: ObBlackFilterExecutor	sql::ObBlackFilterExecutor *black_filter = static_cast<sql::ObBlackFilterExecutor *>(filter);
+src/storage/blocksstable/ob_micro_block_row_scanner.cpp	629	ObIMicroBlockRowScanner::filter_pushdown_filter	sql:: use: ObWhiteFilterExecutor	*static_cast<sql::ObWhiteFilterExecutor *>(filter),
+src/storage/blocksstable/ob_micro_block_row_scanner.cpp	685	ObIMicroBlockRowScanner::filter_micro_block_in_blockscan	sql:: use: PushdownFilterInfo	int ObIMicroBlockRowScanner::filter_micro_block_in_blockscan(sql::PushdownFilterInfo &pd_filter_info)
+src/storage/blocksstable/ob_micro_block_row_scanner.cpp	901	ObIMicroBlockRowScanner::get_filter_result	sql:: use: PushdownFilterInfo	sql::PushdownFilterInfo &pd_filter_info = block_row_store_->get_pd_filter_info();
+src/storage/blocksstable/ob_micro_block_row_scanner.cpp	2124	filter_micro_block	sql:: use: ObPushdownFilterExecutor	sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/ob_micro_block_row_scanner.cpp	2125	filter_micro_block	sql:: use: ObPushdownFilterExecutor	sql::ObPushdownFilterExecutor &filter,
+src/storage/blocksstable/ob_micro_block_row_scanner.cpp	2126	filter_micro_block	sql:: use: PushdownFilterInfo	sql::PushdownFilterInfo &filter_info,
+src/storage/blocksstable/ob_micro_block_row_scanner.h	71	ObIMicroBlockRowScanner	sql:: use: PushdownFilterInfo	int filter_micro_block_in_blockscan(sql::PushdownFilterInfo &pd_filter_info);
+src/storage/blocksstable/ob_micro_block_row_scanner.h	73	ObIMicroBlockRowScanner	sql:: use: ObPushdownFilterExecutor	sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/ob_micro_block_row_scanner.h	74	ObIMicroBlockRowScanner	sql:: use: ObPushdownFilterExecutor	sql::ObPushdownFilterExecutor *filter,
+src/storage/blocksstable/ob_micro_block_row_scanner.h	75	ObIMicroBlockRowScanner	sql:: use: PushdownFilterInfo	sql::PushdownFilterInfo &filter_info,
+src/storage/blocksstable/ob_micro_block_row_scanner.h	118	ObIMicroBlockRowScanner	sql:: use: ObExprPtrIArray	sql::ObExprPtrIArray &exprs,
+src/storage/blocksstable/ob_micro_block_row_scanner.h	173	ObIMicroBlockRowScanner	sql:: use: ObPushdownFilterExecutor	sql::ObPushdownFilterExecutor *parent,
+src/storage/blocksstable/ob_micro_block_row_scanner.h	174	ObIMicroBlockRowScanner	sql:: use: ObBlackFilterExecutor	sql::ObBlackFilterExecutor &filter,
+src/storage/blocksstable/ob_micro_block_row_scanner.h	175	ObIMicroBlockRowScanner	sql:: use: PushdownFilterInfo	sql::PushdownFilterInfo &pd_filter_info,
+src/storage/compaction/ob_partition_merge_fuser.h	30	-	opens namespace sql (lines 30-33): storage declares SQL types here	namespace sql
+src/storage/compaction/ob_partition_merge_fuser.h	32	-	unqualified SQL name inside namespace sql: ObTempExpr	struct ObTempExpr;
+src/storage/ddl/ob_complement_data_task.cpp	42	-	using namespace sql	using namespace sql;
+src/storage/ddl/ob_ddl_batch_rows.cpp	28	-	using namespace sql	using namespace sql;
+src/storage/ddl/ob_ddl_batch_rows.cpp	72	ObDDLBatchRows::init	unqualified SQL name under a using declaration: ObBitVector	const ObBitVector *col_nullables, const int64_t max_batch_size,
+src/storage/ddl/ob_ddl_batch_rows.cpp	112	ObDDLBatchRows::init_vectors	unqualified SQL name under a using declaration: ObBitVector	const ObBitVector *col_nullables, int64_t max_batch_size)
+src/storage/ddl/ob_ddl_batch_rows.h	68	ObDDLBatchRows	sql:: use: ObBitVector	const sql::ObBitVector *col_nullables, const int64_t max_batch_size,
+src/storage/ddl/ob_ddl_batch_rows.h	115	ObDDLBatchRows	sql:: use: ObBitVector	const sql::ObBitVector *col_nullables, int64_t max_batch_size);
+src/storage/ddl/ob_ddl_common_storage_impl.cpp	54	-	using namespace sql	using namespace oceanbase::sql;
+src/storage/ddl/ob_ddl_common_storage_impl.cpp	102	check_skip_handle_lob_column	unqualified SQL name under a using declaration: ObBitVector	ObBitVector *nulls = continuous_vec->get_nulls();
+src/storage/ddl/ob_ddl_common_storage_impl.cpp	120	check_skip_handle_lob_column	unqualified SQL name under a using declaration: ObBitVector	ObBitVector *nulls = discrete_vec->get_nulls();
+src/storage/ddl/ob_ddl_common_storage_impl.cpp	879	new_discrete_vector	unqualified SQL name under a using declaration: ObBitVector	const int64_t nulls_size = ObBitVector::memory_size(max_batch_size);
+src/storage/ddl/ob_ddl_common_storage_impl.cpp	882	new_discrete_vector	unqualified SQL name under a using declaration: ObBitVector	ObBitVector *nulls = nullptr;
+src/storage/ddl/ob_ddl_independent_dag.cpp	32	-	using namespace sql	using namespace oceanbase::sql;
+src/storage/ddl/ob_ddl_macro_block_write_task.cpp	33	-	using namespace sql	using namespace oceanbase::sql;
+src/storage/ddl/ob_ddl_macro_block_writer.cpp	32	-	using namespace sql	using namespace oceanbase::sql;
+src/storage/ddl/ob_ddl_nullable_vector.h	300	ObDDLNullableVector::_append_batch	sql:: use: ObBitVector	sql::ObBitVector *dest_nulls = base_->get_nulls();
+src/storage/ddl/ob_ddl_nullable_vector.h	301	ObDDLNullableVector::_append_batch	sql:: use: ObBitVector	sql::ObBitVector *src_nulls = base->get_nulls();
+src/storage/ddl/ob_ddl_nullable_vector.h	318	ObDDLNullableVector::_append_batch	sql:: use: ObBitVector	sql::ObBitVector *nulls = base_->get_nulls();
+src/storage/ddl/ob_ddl_nullable_vector.h	349	ObDDLNullableVector::_append_selective	sql:: use: ObBitVector	sql::ObBitVector *dest_nulls = base_->get_nulls();
+src/storage/ddl/ob_ddl_nullable_vector.h	350	ObDDLNullableVector::_append_selective	sql:: use: ObBitVector	sql::ObBitVector *src_nulls = base->get_nulls();
+src/storage/ddl/ob_ddl_nullable_vector.h	371	ObDDLNullableVector::_append_selective	sql:: use: ObBitVector	sql::ObBitVector *nulls = base_->get_nulls();
+src/storage/ddl/ob_ddl_nullable_vector.h	419	ObDDLNullableVector::_adapt_vector_batch	sql:: use: ObBitVector	sql::ObBitVector *nulls = vec->get_nulls();
+src/storage/ddl/ob_ddl_nullable_vector.h	431	ObDDLNullableVector::_adapt_vector_selective	sql:: use: ObBitVector	sql::ObBitVector *nulls = vec->get_nulls();
+src/storage/ddl/ob_ddl_nullable_vector.h	441	ObDDLNullableVector::set_vector	sql:: use: ObBitVector	inline void set_vector(sql::ObBitVector *nulls, const uint16_t flag)
+src/storage/ddl/ob_ddl_nullable_vector.h	450	ObDDLNullableVector	sql:: use: ObBitVector	sql::ObBitVector *vec_nulls_;
+src/storage/ddl/ob_ddl_nullable_vector.h	451	ObDDLNullableVector	sql:: use: ObBitVector	sql::ObBitVector *nulls_;
+src/storage/ddl/ob_ddl_pipeline.cpp	50	read_full_lob_string	sql:: use: ObTextStringHelper	ret = sql::ObTextStringHelper::read_real_string_data(
+src/storage/ddl/ob_ddl_pipeline.cpp	555	ObIVFCenterRowIterator::get_next_row	sql:: use: ObArrayExprUtils	if (OB_FAIL(sql::ObArrayExprUtils::set_array_res(nullptr, data_str.length(), row_allocator_, vec_res, data_str.ptr()))) {
+src/storage/ddl/ob_ddl_pipeline.cpp	631	ObIVFSq8MetaRowIterator::get_next_row	sql:: use: ObArrayExprUtils	if (OB_FAIL(sql::ObArrayExprUtils::set_array_res(nullptr, data_str.length(), row_allocator_, vec_res, data_str.ptr()))) {
+src/storage/ddl/ob_ddl_pipeline.cpp	718	ObIVFPqRowIterator::get_next_row	sql:: use: ObArrayExprUtils	if (OB_FAIL(sql::ObArrayExprUtils::set_array_res(nullptr, data_str.length(), row_allocator_, vec_res, data_str.ptr()))) {
+src/storage/ddl/ob_ddl_pipeline.cpp	1878	ObHNSWEmbeddingRowIterator::get_next_row	sql:: use: ObArrayExprUtils	if (OB_FAIL(sql::ObArrayExprUtils::set_array_res(nullptr, data_str.length(), row_allocator_, vec_res, data_str.ptr()))) {
+src/storage/ddl/ob_ddl_vector_continuous.cpp	34	-	using namespace sql	using namespace sql;
+src/storage/ddl/ob_ddl_vector_discrete.cpp	34	-	using namespace sql	using namespace sql;
+src/storage/ddl/ob_ddl_vector_fixed.cpp	34	-	using namespace sql	using namespace sql;
+src/storage/ddl/ob_ddl_vector_uniform.cpp	34	-	using namespace sql	using namespace sql;
+src/storage/ddl/ob_ddl_vector_uniform.cpp	41	ObDDLVectorUtils::new_vector_uniform	unqualified SQL name under a using declaration: ObEvalInfo	ObEvalInfo *eval_info = nullptr;
+src/storage/ddl/ob_ddl_vector_uniform.cpp	42	ObDDLVectorUtils::new_vector_uniform	unqualified SQL name under a using declaration: ObEvalInfo	if (OB_ISNULL(eval_info = OB_NEWx(ObEvalInfo, &allocator))) {
+src/storage/ddl/ob_ddl_vector_uniform.cpp	45	ObDDLVectorUtils::new_vector_uniform	unqualified SQL name under a using declaration: ObEvalInfo	MEMSET(eval_info, 0, sizeof(ObEvalInfo));
+src/storage/ddl/ob_ddl_vector_uniform_const.cpp	34	-	using namespace sql	using namespace sql;
+src/storage/ddl/ob_ddl_vector_uniform_const.cpp	41	ObDDLVectorUtils::new_vector_uniform_const	unqualified SQL name under a using declaration: ObEvalInfo	ObEvalInfo *eval_info = nullptr;
+src/storage/ddl/ob_ddl_vector_uniform_const.cpp	42	ObDDLVectorUtils::new_vector_uniform_const	unqualified SQL name under a using declaration: ObEvalInfo	if (OB_ISNULL(eval_info = OB_NEWx(ObEvalInfo, &allocator))) {
+src/storage/ddl/ob_ddl_vector_uniform_const.cpp	45	ObDDLVectorUtils::new_vector_uniform_const	unqualified SQL name under a using declaration: ObEvalInfo	MEMSET(eval_info, 0, sizeof(ObEvalInfo));
+src/storage/ddl/ob_ddl_vector_utils.cpp	37	-	using namespace sql	using namespace sql;
+src/storage/ddl/ob_ddl_vector_utils.cpp	88	ObDDLVectorUtils::prepare_vector	unqualified SQL name under a using declaration: ObBitVector	const int64_t nulls_size = ObBitVector::memory_size(max_batch_size);
+src/storage/ddl/ob_ddl_vector_utils.cpp	90	ObDDLVectorUtils::prepare_vector	unqualified SQL name under a using declaration: ObBitVector	ObBitVector *nulls = nullptr;
+src/storage/ddl/ob_ddl_vector_utils.cpp	106	ObDDLVectorUtils::prepare_vector	unqualified SQL name under a using declaration: ObBitVector	const int64_t nulls_size = ObBitVector::memory_size(max_batch_size);
+src/storage/ddl/ob_ddl_vector_utils.cpp	108	ObDDLVectorUtils::prepare_vector	unqualified SQL name under a using declaration: ObBitVector	ObBitVector *nulls = nullptr;
+src/storage/ddl/ob_ddl_vector_utils.cpp	124	ObDDLVectorUtils::prepare_vector	unqualified SQL name under a using declaration: ObBitVector	const int64_t nulls_size = ObBitVector::memory_size(max_batch_size);
+src/storage/ddl/ob_ddl_vector_utils.cpp	127	ObDDLVectorUtils::prepare_vector	unqualified SQL name under a using declaration: ObBitVector	ObBitVector *nulls = nullptr;
+src/storage/ddl/ob_delete_lob_meta_row_task.cpp	31	-	using namespace sql	using namespace sql;
+src/storage/ddl/ob_delete_lob_meta_row_task.cpp	313	ObDeleteLobMetaRowTask::init_scan_param	sql:: use: ObStoragePushdownFlag	if (OB_FAIL(table_param->convert(*table_schema, scan_param.column_ids_, sql::ObStoragePushdownFlag()))) {
+src/storage/ddl/ob_direct_load_struct.cpp	50	-	using namespace sql	using namespace oceanbase::sql;
+src/storage/ddl/ob_direct_load_struct.h	42	-	opens namespace sql (lines 42-45): storage declares SQL types here	namespace sql
+src/storage/ddl/ob_direct_load_struct.h	44	-	unqualified SQL name inside namespace sql: ObExecContext	class ObExecContext;
+src/storage/ddl/ob_direct_load_struct.h	163	ObDirectInsertRuntimeOnlyParam	sql:: use: ObExecContext	sql::ObExecContext *exec_ctx_;
+src/storage/ddl/ob_hnsw_embedmgr.cpp	74	ObEmbeddingResult::set_text	sql:: use: ObTextStringHelper	if (OB_FAIL(sql::ObTextStringHelper::read_real_string_data(
+src/storage/ddl/ob_lob_macro_block_writer.cpp	34	-	using namespace sql	using namespace oceanbase::sql;
+src/storage/ddl/ob_tablet_slice_row_iterator.cpp	30	-	using namespace sql	using namespace oceanbase::sql;
+src/storage/ddl/ob_tablet_slice_writer.cpp	38	-	using namespace sql	using namespace oceanbase::sql;
+src/storage/fts/ob_fts_doc_word_iterator.cpp	218	ObFTDocWordScanIterator::build_table_param	sql:: use: ObStoragePushdownFlag	} else if (OB_FAIL(table_param.convert(*table_schema, column_ids, sql::ObStoragePushdownFlag()))) {
+src/storage/lob/ob_lob_manager.cpp	545	ObLobManager::compare	sql:: use: ObExprUtil	if(OB_FAIL(sql::ObExprUtil::convert_string_collation(
+src/storage/lob/ob_lob_persistent_adaptor.cpp	117	ObPersistentLobApator::init_table_param	sql:: use: ObStoragePushdownFlag	} else if (OB_FAIL(meta_table_param_->convert(meta_schema, meta_column_ids, sql::ObStoragePushdownFlag()))) {
+src/storage/ls/ob_ls_tablet_service.h	70	-	opens namespace sql (lines 70-74): storage declares SQL types here	namespace sql
+src/storage/ls/ob_ls_tablet_service.h	72	-	unqualified SQL name inside namespace sql: ObDASDMLIterator	class ObDASDMLIterator;
+src/storage/ls/ob_ls_tablet_service.h	73	-	unqualified SQL name inside namespace sql: ObDASUpdIterator	class ObDASUpdIterator;
+src/storage/ob_iter_cache.cpp	92	iter_alloc	sql:: use: ObSQLSessionInfo	sql::ObSQLSessionInfo *session = THIS_WORKER.get_session();
+src/storage/ob_iter_cache.cpp	111	iter_free	sql:: use: ObSQLSessionInfo	sql::ObSQLSessionInfo *session = THIS_WORKER.get_session();
+src/storage/ob_storage_util.cpp	24	-	using namespace sql	using namespace sql;
+src/storage/ob_storage_util.cpp	129	pad_column	sql:: use: ObEvalCtx, ObExpr	int pad_column(const common::ObAccuracy accuracy, sql::ObEvalCtx &ctx, sql::ObExpr &expr)
+src/storage/ob_storage_util.cpp	132	pad_column	sql:: use: ObDatum	sql::ObDatum &datum = expr.locate_expr_datum(ctx);
+src/storage/ob_storage_util.cpp	269	check_skip_by_monotonicity	sql:: use: ObBlackFilterExecutor	sql::ObBlackFilterExecutor &filter,
+src/storage/ob_storage_util.cpp	272	check_skip_by_monotonicity	sql:: use: ObBitVector	const sql::ObBitVector &skip_bit,
+src/storage/ob_storage_util.cpp	275	check_skip_by_monotonicity	sql:: use: ObBoolMask	sql::ObBoolMask &bool_mask)
+src/storage/ob_storage_util.cpp	282	check_skip_by_monotonicity	sql:: use: PushdownFilterMonotonicity	const sql::PushdownFilterMonotonicity mono = filter.get_monotonicity();
+src/storage/ob_storage_util.cpp	285	check_skip_by_monotonicity	sql:: use: PushdownFilterMonotonicity	case sql::PushdownFilterMonotonicity::MON_ASC: {
+src/storage/ob_storage_util.cpp	288	check_skip_by_monotonicity	sql:: use: PushdownFilterMonotonicity	case sql::PushdownFilterMonotonicity::MON_DESC: {
+src/storage/ob_storage_util.cpp	303	check_skip_by_monotonicity	sql:: use: PushdownFilterMonotonicity	case sql::PushdownFilterMonotonicity::MON_EQ_ASC: {
+src/storage/ob_storage_util.cpp	306	check_skip_by_monotonicity	sql:: use: PushdownFilterMonotonicity	case sql::PushdownFilterMonotonicity::MON_EQ_DESC: {
+src/storage/ob_storage_util.cpp	388	decimal_or_number_to_int64	unqualified SQL name under a using declaration: ObDatumMeta	const ObDatumMeta &datum_meta,
+src/storage/ob_storage_util.h	43	-	opens namespace sql (lines 43-48): storage declares SQL types here	namespace sql
+src/storage/ob_storage_util.h	45	-	unqualified SQL name inside namespace sql: ObBoolMask	struct ObBoolMask;
+src/storage/ob_storage_util.h	46	-	unqualified SQL name inside namespace sql: ObBlackFilterExecutor	class ObBlackFilterExecutor;
+src/storage/ob_storage_util.h	47	-	unqualified SQL name inside namespace sql: ObDynamicFilterExecutor	class ObDynamicFilterExecutor;
+src/storage/ob_storage_util.h	68	-	sql:: use: ObEvalCtx	sql::ObEvalCtx &ctx,
+src/storage/ob_storage_util.h	69	-	sql:: use: ObExpr	sql::ObExpr &expr);
+src/storage/ob_storage_util.h	84	-	sql:: use: ObBlackFilterExecutor	int check_skip_by_monotonicity(sql::ObBlackFilterExecutor &filter,
+src/storage/ob_storage_util.h	87	-	sql:: use: ObBitVector	const sql::ObBitVector &skip_bit,
+src/storage/ob_storage_util.h	90	-	sql:: use: ObBoolMask	sql::ObBoolMask &bool_mask);
+src/storage/retrieval/ob_block_max_iter.cpp	46	ObBlockMaxScoreIterParam::init	sql:: use: ObDASIRScanCtDef	const sql::ObDASIRScanCtDef &ir_ctdef, ObIAllocator &alloc)
+src/storage/retrieval/ob_block_max_iter.cpp	80	ObBlockMaxScoreIterParam::init	sql:: use: ObDASVecAuxScanCtDef	const sql::ObDASVecAuxScanCtDef &vec_aux_ctdef, ObIAllocator &alloc)
+src/storage/retrieval/ob_block_max_iter.h	27	-	opens namespace sql (lines 27-31): storage declares SQL types here	namespace sql
+src/storage/retrieval/ob_block_max_iter.h	29	-	unqualified SQL name inside namespace sql: ObDASIRScanCtDef	struct ObDASIRScanCtDef;
+src/storage/retrieval/ob_block_max_iter.h	30	-	unqualified SQL name inside namespace sql: ObDASVecAuxScanCtDef	struct ObDASVecAuxScanCtDef;
+src/storage/retrieval/ob_block_max_iter.h	34	-	using sql::ObDocIdExt	using sql::ObDocIdExt;
+src/storage/retrieval/ob_block_max_iter.h	68	ObBlockMaxScoreIterParam	sql:: use: ObDASIRScanCtDef	int init(const sql::ObDASIRScanCtDef &ir_ctdef, ObIAllocator &alloc);
+src/storage/retrieval/ob_block_max_iter.h	69	ObBlockMaxScoreIterParam	sql:: use: ObDASVecAuxScanCtDef	int init(const sql::ObDASVecAuxScanCtDef &vec_aux_ctdef, ObIAllocator &alloc);
+src/storage/retrieval/ob_block_max_iter.h	134	ObBlockMaxScoreCalc::calc_max_score	sql:: use: ObExprBM25	max_score = sql::ObExprBM25::eval(
+src/storage/retrieval/ob_block_max_iter.h	209	ObBlockMaxScoreIterator	unqualified SQL name under a using declaration: ObDocIdExt	ObDocIdExt advance_doc_id_;
+src/storage/retrieval/ob_block_stat_collector.cpp	129	ObBM25MaxScoreParamCollector::collect_data_row	sql:: use: ObExprBM25	const double tf_score = sql::ObExprBM25::doc_token_weight(token_freq, norm_len);
+src/storage/retrieval/ob_block_stat_collector.cpp	151	ObBM25MaxScoreParamCollector::collect_agg_row	sql:: use: ObExprBM25	const double tf_score = sql::ObExprBM25::doc_token_weight(token_freq, norm_len);
+src/storage/retrieval/ob_i_sparse_retrieval_iter.h	31	-	opens namespace sql (lines 31-36): storage declares SQL types here	namespace sql
+src/storage/retrieval/ob_i_sparse_retrieval_iter.h	33	-	unqualified SQL name inside namespace sql: ObEvalCtx	class ObEvalCtx;
+src/storage/retrieval/ob_i_sparse_retrieval_iter.h	34	-	unqualified SQL name inside namespace sql: ObExpr	class ObExpr;
+src/storage/retrieval/ob_i_sparse_retrieval_iter.h	35	-	unqualified SQL name inside namespace sql: ObDatumMeta	struct ObDatumMeta;
+src/storage/retrieval/ob_i_sparse_retrieval_iter.h	39	-	using sql::ObDocIdExt	using sql::ObDocIdExt;
+src/storage/retrieval/ob_i_sparse_retrieval_iter.h	40	-	using sql::ObDatumMeta	using sql::ObDatumMeta;
+src/storage/retrieval/ob_i_sparse_retrieval_iter.h	41	-	using sql::ObEvalCtx	using sql::ObEvalCtx;
+src/storage/retrieval/ob_i_sparse_retrieval_iter.h	42	-	using sql::ObExpr	using sql::ObExpr;
+src/storage/retrieval/ob_i_sparse_retrieval_iter.h	126	ObSparseRetrievalMergeParam	sql:: use: ObEvalCtx	sql::ObEvalCtx *eval_ctx_;
+src/storage/retrieval/ob_i_sparse_retrieval_iter.h	127	ObSparseRetrievalMergeParam	sql:: use: ObExpr	sql::ObExpr *id_proj_expr_;
+src/storage/retrieval/ob_i_sparse_retrieval_iter.h	128	ObSparseRetrievalMergeParam	sql:: use: ObExpr	sql::ObExpr *relevance_expr_;
+src/storage/retrieval/ob_i_sparse_retrieval_iter.h	129	ObSparseRetrievalMergeParam	sql:: use: ObExpr	sql::ObExpr *relevance_proj_expr_;
+src/storage/retrieval/ob_i_sparse_retrieval_iter.h	130	ObSparseRetrievalMergeParam	sql:: use: ObExpr	sql::ObExpr *filter_expr_; // filter expr on score
+src/storage/retrieval/ob_i_sparse_retrieval_iter.h	151	ObISparseRetrievalMergeIter::set_datum_int	unqualified SQL name under a using declaration: ObDocIdExt	inline static void set_datum_int(ObDatum &datum, const ObDocIdExt &id)
+src/storage/retrieval/ob_i_sparse_retrieval_iter.h	155	ObISparseRetrievalMergeIter::set_datum_shallow	unqualified SQL name under a using declaration: ObDocIdExt	inline static void set_datum_shallow(ObDatum &datum, const ObDocIdExt &id)
+src/storage/retrieval/ob_inv_idx_param_estimator.cpp	32	ObTextAvgDocLenEstimator::estimate_avg_doc_len	sql:: use: ObExpr	sql::ObExpr &avg_doc_token_cnt_expr,
+src/storage/retrieval/ob_inv_idx_param_estimator.cpp	33	ObTextAvgDocLenEstimator::estimate_avg_doc_len	sql:: use: ObEvalCtx	sql::ObEvalCtx &eval_ctx,
+src/storage/retrieval/ob_inv_idx_param_estimator.cpp	45	ObTextAvgDocLenEstimator::estimate_avg_doc_len	sql:: use: ObNumStackAllocator	sql::ObNumStackAllocator<2> tmp_alloc;
+src/storage/retrieval/ob_inv_idx_param_estimator.cpp	90	ObTextAvgDocLenEstimator::estimate_avg_doc_len	sql:: use: ObExprBM25	const double default_avg_doc_token_cnt = sql::ObExprBM25::DEFAULT_AVG_DOC_TOKEN_CNT;
+src/storage/retrieval/ob_inv_idx_param_estimator.cpp	206	ObBM25ParamEstimator::do_estimation	sql:: use: ObEvalCtx	int ObBM25ParamEstimator::do_estimation(sql::ObEvalCtx &eval_ctx)
+src/storage/retrieval/ob_inv_idx_param_estimator.cpp	209	ObBM25ParamEstimator::do_estimation	sql:: use: ObEvalCtx	sql::ObEvalCtx::BatchInfoScopeGuard guard(eval_ctx);
+src/storage/retrieval/ob_inv_idx_param_estimator.cpp	241	ObBM25ParamEstimator::do_estimation	sql:: use: ObExprBM25	est_ctx_.avg_doc_token_cnt_expr_->locate_datum_for_write(eval_ctx).set_double(sql::ObExprBM25::DEFAULT_AVG_DOC_TOKEN_CNT);
+src/storage/retrieval/ob_inv_idx_param_estimator.cpp	242	ObBM25ParamEstimator::do_estimation	sql:: use: ObExprBM25	avg_doc_token_cnt_ = sql::ObExprBM25::DEFAULT_AVG_DOC_TOKEN_CNT;
+src/storage/retrieval/ob_inv_idx_param_estimator.cpp	245	ObBM25ParamEstimator::do_estimation	sql:: use: ObExprBM25	avg_doc_token_cnt_ = sql::ObExprBM25::DEFAULT_AVG_DOC_TOKEN_CNT;
+src/storage/retrieval/ob_inv_idx_param_estimator.h	25	-	opens namespace sql (lines 25-30): storage declares SQL types here	namespace sql
+src/storage/retrieval/ob_inv_idx_param_estimator.h	27	-	unqualified SQL name inside namespace sql: ObExpr	class ObExpr;
+src/storage/retrieval/ob_inv_idx_param_estimator.h	28	-	unqualified SQL name inside namespace sql: ObEvalCtx	class ObEvalCtx;
+src/storage/retrieval/ob_inv_idx_param_estimator.h	29	-	unqualified SQL name inside namespace sql: ObDASScanIter	class ObDASScanIter;
+src/storage/retrieval/ob_inv_idx_param_estimator.h	42	ObTextAvgDocLenEstimator	sql:: use: ObExpr, ObEvalCtx	int estimate_avg_doc_len(sql::ObExpr &avg_doc_token_cnt_expr, sql::ObEvalCtx &eval_ctx, double &result);
+src/storage/retrieval/ob_inv_idx_param_estimator.h	60	ObBM25ParamEstCtx	sql:: use: ObDASScanIter	sql::ObDASScanIter *total_doc_cnt_iter_;
+src/storage/retrieval/ob_inv_idx_param_estimator.h	61	ObBM25ParamEstCtx	sql:: use: ObExpr	sql::ObExpr *total_doc_cnt_expr_;
+src/storage/retrieval/ob_inv_idx_param_estimator.h	62	ObBM25ParamEstCtx	sql:: use: ObExpr	sql::ObExpr *avg_doc_token_cnt_expr_;
+src/storage/retrieval/ob_inv_idx_param_estimator.h	77	ObBM25ParamEstimator	sql:: use: ObEvalCtx	int do_estimation(sql::ObEvalCtx &eval_ctx);
+src/storage/retrieval/ob_sparse_bmw_iter.cpp	557	ObSRBMWIterImpl::project_rows_from_top_k_heap	sql:: use: ObBitVector	sql::ObBitVector &id_evaluated_flags = id_proj_expr->get_evaluated_flags(*eval_ctx);
+src/storage/retrieval/ob_sparse_bmw_iter.cpp	558	ObSRBMWIterImpl::project_rows_from_top_k_heap	sql:: use: ObBitVector	sql::ObBitVector *relevance_evaluated_flags = nullptr;
+src/storage/retrieval/ob_sparse_daat_iter.cpp	34	ObSRMergeCmp::init	sql:: use: ObDatumMeta	sql::ObDatumMeta id_meta,
+src/storage/retrieval/ob_sparse_daat_iter.cpp	419	ObSRDaaTIterImpl::project_results	sql:: use: ObBitVector	sql::ObBitVector &id_evaluated_flags = id_proj_expr->get_evaluated_flags(*eval_ctx);
+src/storage/retrieval/ob_sparse_daat_iter.cpp	428	ObSRDaaTIterImpl::project_results	sql:: use: ObBitVector	sql::ObBitVector &relevance_evaluated_flags = relevance_proj_expr->get_evaluated_flags(*eval_ctx);
+src/storage/retrieval/ob_sparse_daat_iter.h	46	ObSRMergeCmp	sql:: use: ObDatumMeta	int init(sql::ObDatumMeta id_meta, const ObFixedArray<const ObDatum *, ObIAllocator> *iter_ids);
+src/storage/retrieval/ob_sparse_lookup_iter.cpp	215	ObSRSortedLookupIter::project_results	sql:: use: ObBitVector	sql::ObBitVector &id_evaluated_flags = id_proj_expr->get_evaluated_flags(*eval_ctx);
+src/storage/retrieval/ob_sparse_lookup_iter.cpp	216	ObSRSortedLookupIter::project_results	sql:: use: ObBitVector	sql::ObBitVector &relevance_evaluated_flags = relevance_proj_expr->get_evaluated_flags(*eval_ctx);
+src/storage/retrieval/ob_sparse_lookup_iter.cpp	318	ObSRHashLookupIter::project_results	sql:: use: ObBitVector	sql::ObBitVector &id_evaluated_flags = id_proj_expr->get_evaluated_flags(*eval_ctx);
+src/storage/retrieval/ob_sparse_lookup_iter.cpp	319	ObSRHashLookupIter::project_results	sql:: use: ObBitVector	sql::ObBitVector &relevance_evaluated_flags = relevance_proj_expr->get_evaluated_flags(*eval_ctx);
+src/storage/retrieval/ob_sparse_taat_iter.cpp	210	ObSRTaaTIterImpl::init_chunk_stores	sql:: use: ObBitVector	} else if (OB_ISNULL(buf = iter_allocator_->alloc(sizeof(sql::ObBitVector *) * partition_cnt_))) {
+src/storage/retrieval/ob_sparse_taat_iter.cpp	213	ObSRTaaTIterImpl::init_chunk_stores	sql:: use: ObBitVector	skips_ = static_cast<sql::ObBitVector **>(buf);
+src/storage/retrieval/ob_sparse_taat_iter.cpp	235	ObSRTaaTIterImpl::init_chunk_stores	sql:: use: ObBitVector	} else if (OB_ISNULL(buf = iter_allocator_->alloc(sql::ObBitVector::memory_size(capacity)))) {
+src/storage/retrieval/ob_sparse_taat_iter.cpp	238	ObSRTaaTIterImpl::init_chunk_stores	sql:: use: ObBitVector, to_bit_vector	sql::ObBitVector *skip = sql::to_bit_vector(buf);
+src/storage/retrieval/ob_sparse_taat_iter.h	61	ObSRTaaTIterImpl	sql:: use: ObBitVector	sql::ObBitVector **skips_;
+src/storage/retrieval/ob_sparse_utils.cpp	68	ObSRDaaTBooleanRelevanceCollector::init	sql:: use: ObFtsEvalNode	sql::ObFtsEvalNode *node)
+src/storage/retrieval/ob_sparse_utils.h	24	-	opens namespace sql (lines 24-27): storage declares SQL types here	namespace sql
+src/storage/retrieval/ob_sparse_utils.h	26	-	unqualified SQL name inside namespace sql: ObFtsEvalNode	struct ObFtsEvalNode;
+src/storage/retrieval/ob_sparse_utils.h	67	ObSRDaaTBooleanRelevanceCollector	sql:: use: ObFtsEvalNode	int init(ObIAllocator *allocator, const int64_t dim_cnt, sql::ObFtsEvalNode *node);
+src/storage/retrieval/ob_sparse_utils.h	75	ObSRDaaTBooleanRelevanceCollector	sql:: use: ObFtsEvalNode	sql::ObFtsEvalNode *boolean_compute_node_;
+src/storage/retrieval/ob_spiv_daat_iter.cpp	258	ObSPIVDaaTNaiveIter::inner_get_next_rows	sql:: use: ObBitVector	sql::ObBitVector &id_evaluated_flags = id_proj_expr->get_evaluated_flags(*eval_ctx);
+src/storage/retrieval/ob_spiv_daat_iter.cpp	405	ObSPIVBMWIter::project_rows_from_result_docids	sql:: use: ObBitVector	sql::ObBitVector &id_evaluated_flags = id_proj_expr->get_evaluated_flags(*eval_ctx);
+src/storage/retrieval/ob_spiv_daat_iter.h	26	-	opens namespace sql (lines 26-29): storage declares SQL types here	namespace sql
+src/storage/retrieval/ob_spiv_daat_iter.h	28	-	unqualified SQL name inside namespace sql: ObDASScanIter	class ObDASScanIter;
+src/storage/retrieval/ob_spiv_dim_iter.h	26	-	opens namespace sql (lines 26-31): storage declares SQL types here	namespace sql
+src/storage/retrieval/ob_spiv_dim_iter.h	28	-	unqualified SQL name inside namespace sql: ObDASScanIter	class ObDASScanIter;
+src/storage/retrieval/ob_spiv_dim_iter.h	29	-	unqualified SQL name inside namespace sql: ObDASScanCtDef	class ObDASScanCtDef;
+src/storage/retrieval/ob_spiv_dim_iter.h	30	-	unqualified SQL name inside namespace sql: ObDASScanRtDef	class ObDASScanRtDef;
+src/storage/retrieval/ob_spiv_dim_iter.h	56	ObSPIVDimIterParam	sql:: use: ObDASScanIter	sql::ObDASScanIter *inv_idx_scan_iter_;
+src/storage/retrieval/ob_spiv_dim_iter.h	58	ObSPIVDimIterParam	sql:: use: ObDASScanIter	sql::ObDASScanIter *inv_idx_agg_iter_;
+src/storage/retrieval/ob_spiv_dim_iter.h	59	ObSPIVDimIterParam	sql:: use: ObExpr	sql::ObExpr *inv_idx_agg_expr_;
+src/storage/retrieval/ob_spiv_dim_iter.h	60	ObSPIVDimIterParam	sql:: use: ObExpr	sql::ObExpr *inv_scan_domain_id_expr_;
+src/storage/retrieval/ob_spiv_dim_iter.h	61	ObSPIVDimIterParam	sql:: use: ObExpr	sql::ObExpr *inv_scan_score_expr_;
+src/storage/retrieval/ob_spiv_dim_iter.h	62	ObSPIVDimIterParam	sql:: use: ObDASScanCtDef	const sql::ObDASScanCtDef *inv_idx_scan_ctdef_;
+src/storage/retrieval/ob_spiv_dim_iter.h	63	ObSPIVDimIterParam	sql:: use: ObDASScanRtDef	sql::ObDASScanRtDef *inv_idx_scan_rtdef_;
+src/storage/retrieval/ob_spiv_dim_iter.h	64	ObSPIVDimIterParam	sql:: use: ObEvalCtx	sql::ObEvalCtx *eval_ctx_;
+src/storage/retrieval/ob_spiv_dim_iter.h	128	ObSPIVDaaTDimIter	sql:: use: ObDASScanIter	sql::ObDASScanIter *inv_idx_scan_iter_;
+src/storage/retrieval/ob_spiv_dim_iter.h	129	ObSPIVDaaTDimIter	sql:: use: ObDASScanIter	sql::ObDASScanIter *inv_idx_agg_iter_;
+src/storage/retrieval/ob_spiv_dim_iter.h	130	ObSPIVDaaTDimIter	sql:: use: ObExpr	sql::ObExpr *inv_idx_agg_expr_;
+src/storage/retrieval/ob_spiv_dim_iter.h	131	ObSPIVDaaTDimIter	sql:: use: ObExpr	sql::ObExpr *inv_scan_domain_id_expr_;
+src/storage/retrieval/ob_spiv_dim_iter.h	132	ObSPIVDaaTDimIter	sql:: use: ObExpr	sql::ObExpr *inv_scan_score_expr_;
+src/storage/retrieval/ob_spiv_dim_iter.h	133	ObSPIVDaaTDimIter	sql:: use: ObDASScanCtDef	const sql::ObDASScanCtDef *inv_idx_scan_ctdef_;
+src/storage/retrieval/ob_spiv_dim_iter.h	134	ObSPIVDaaTDimIter	sql:: use: ObDASScanRtDef	sql::ObDASScanRtDef *inv_idx_scan_rtdef_;
+src/storage/retrieval/ob_spiv_dim_iter.h	135	ObSPIVDaaTDimIter	sql:: use: ObEvalCtx	sql::ObEvalCtx *eval_ctx_;
+src/storage/retrieval/ob_text_daat_iter.h	28	-	opens namespace sql (lines 28-31): storage declares SQL types here	namespace sql
+src/storage/retrieval/ob_text_daat_iter.h	30	-	unqualified SQL name inside namespace sql: ObDASScanIter	class ObDASScanIter;
+src/storage/retrieval/ob_text_daat_iter.h	39	ObTextDaaTParam::ObTextDaaTParam	sql:: use: ObMatchAgainstMode	bm25_param_est_ctx_(), mode_flag_(sql::ObMatchAgainstMode::NATURAL_LANGUAGE_MODE),
+src/storage/retrieval/ob_text_daat_iter.h	48	ObTextDaaTParam	sql:: use: ObMatchAgainstMode	sql::ObMatchAgainstMode mode_flag_;
+src/storage/retrieval/ob_text_daat_iter.h	57	ObTextDaaTIter::ObTextDaaTIter	sql:: use: ObMatchAgainstMode	mode_flag_(sql::ObMatchAgainstMode::NATURAL_LANGUAGE_MODE),
+src/storage/retrieval/ob_text_daat_iter.h	68	ObTextDaaTIter	sql:: use: ObMatchAgainstMode	sql::ObMatchAgainstMode mode_flag_;
+src/storage/retrieval/ob_text_retrieval_token_iter.cpp	81	ObTextRetrievalTokenIter::init	sql:: use: to_bit_vector	} else if (OB_ISNULL(skip_ = sql::to_bit_vector(
+src/storage/retrieval/ob_text_retrieval_token_iter.cpp	82	ObTextRetrievalTokenIter::init	sql:: use: ObBitVector	allocator_->alloc(sql::ObBitVector::memory_size(max_batch_size_))))) {
+src/storage/retrieval/ob_text_retrieval_token_iter.cpp	115	ObTextRetrievalTokenIter::init_calc_exprs_in_relevance_expr	sql:: use: ObExpr	sql::ObExpr *arg_expr = relevance_expr_->args_[i];
+src/storage/retrieval/ob_text_retrieval_token_iter.cpp	126	ObTextRetrievalTokenIter::init_calc_exprs_in_relevance_expr	sql:: use: ObExpr, ObExprBM25	sql::ObExpr *doc_length_param_expr = relevance_expr_->args_[sql::ObExprBM25::DOC_LENGTH_PARAM_IDX];
+src/storage/retrieval/ob_text_retrieval_token_iter.cpp	134	ObTextRetrievalTokenIter::init_calc_exprs_in_relevance_expr	sql:: use: ObExpr, ObExprBM25	sql::ObExpr *token_weight_param_expr = relevance_expr_->args_[sql::ObExprBM25::TOKEN_WEIGHT_PARAM_IDX];
+src/storage/retrieval/ob_text_retrieval_token_iter.cpp	159	ObTextRetrievalTokenIter::clear_row_wise_evaluated_flag	sql:: use: ObExpr	sql::ObExpr *expr = relevance_calc_exprs_.at(i);
+src/storage/retrieval/ob_text_retrieval_token_iter.cpp	226	ObTextRetrievalTokenIter::clear_batch_wise_evaluated_flag	sql:: use: ObExpr	sql::ObExpr *expr = relevance_calc_exprs_.at(i);
+src/storage/retrieval/ob_text_retrieval_token_iter.cpp	256	ObTextRetrievalTokenIter::get_next_batch	sql:: use: ObBitVector	const sql::ObBitVector *skip = NULL;
+src/storage/retrieval/ob_text_retrieval_token_iter.cpp	391	ObTextRetrievalTokenIter::estimate_token_doc_cnt	sql:: use: ObExpr, ObExprBM25	sql::ObExpr *total_doc_cnt_param_expr = relevance_expr_->args_[sql::ObExprBM25::TOTAL_DOC_CNT_PARAM_IDX];
+src/storage/retrieval/ob_text_retrieval_token_iter.cpp	397	ObTextRetrievalTokenIter::estimate_token_doc_cnt	sql:: use: ObExprBM25	max_token_relevance_ = sql::ObExprBM25::query_token_weight(token_doc_cnt_, total_doc_cnt);
+src/storage/retrieval/ob_text_retrieval_token_iter.h	26	-	opens namespace sql (lines 26-29): storage declares SQL types here	namespace sql
+src/storage/retrieval/ob_text_retrieval_token_iter.h	28	-	unqualified SQL name inside namespace sql: ObDASScanIter	class ObDASScanIter;
+src/storage/retrieval/ob_text_retrieval_token_iter.h	55	ObTextRetrievalScanIterParam	sql:: use: ObDASScanIter	sql::ObDASScanIter *inv_idx_scan_iter_;
+src/storage/retrieval/ob_text_retrieval_token_iter.h	56	ObTextRetrievalScanIterParam	sql:: use: ObDASScanIter	sql::ObDASScanIter *inv_idx_agg_iter_;
+src/storage/retrieval/ob_text_retrieval_token_iter.h	57	ObTextRetrievalScanIterParam	sql:: use: ObExpr	sql::ObExpr *inv_idx_agg_expr_;
+src/storage/retrieval/ob_text_retrieval_token_iter.h	58	ObTextRetrievalScanIterParam	sql:: use: ObEvalCtx	sql::ObEvalCtx *eval_ctx_;
+src/storage/retrieval/ob_text_retrieval_token_iter.h	59	ObTextRetrievalScanIterParam	sql:: use: ObExpr	sql::ObExpr *relevance_expr_;
+src/storage/retrieval/ob_text_retrieval_token_iter.h	60	ObTextRetrievalScanIterParam	sql:: use: ObExpr	sql::ObExpr *inv_scan_doc_length_col_;
+src/storage/retrieval/ob_text_retrieval_token_iter.h	61	ObTextRetrievalScanIterParam	sql:: use: ObExpr	sql::ObExpr *inv_scan_domain_id_col_;
+src/storage/retrieval/ob_text_retrieval_token_iter.h	81	ObTextRetrievalTokenIter::get_skip	sql:: use: ObBitVector	sql::ObBitVector *get_skip() { return skip_; }
+src/storage/retrieval/ob_text_retrieval_token_iter.h	102	ObTextRetrievalTokenIter	sql:: use: ObDASScanIter	sql::ObDASScanIter *inv_idx_scan_iter_;
+src/storage/retrieval/ob_text_retrieval_token_iter.h	103	ObTextRetrievalTokenIter	sql:: use: ObDASScanIter	sql::ObDASScanIter *inv_idx_agg_iter_;
+src/storage/retrieval/ob_text_retrieval_token_iter.h	104	ObTextRetrievalTokenIter	sql:: use: ObExpr	sql::ObExpr *inv_idx_agg_expr_;
+src/storage/retrieval/ob_text_retrieval_token_iter.h	105	ObTextRetrievalTokenIter	sql:: use: ObEvalCtx	sql::ObEvalCtx *eval_ctx_;
+src/storage/retrieval/ob_text_retrieval_token_iter.h	106	ObTextRetrievalTokenIter	sql:: use: ObExpr	sql::ObExpr *relevance_expr_;
+src/storage/retrieval/ob_text_retrieval_token_iter.h	107	ObTextRetrievalTokenIter	sql:: use: ObExpr	sql::ObExpr *inv_scan_doc_length_col_; // read from inv_scan_table
+src/storage/retrieval/ob_text_retrieval_token_iter.h	108	ObTextRetrievalTokenIter	sql:: use: ObExpr	sql::ObExpr *inv_scan_domain_id_col_; // read from inv_scan_table
+src/storage/retrieval/ob_text_retrieval_token_iter.h	109	ObTextRetrievalTokenIter	sql:: use: ObExpr	sql::ObExpr *token_weight_expr_; // fill the expr from with max_token_relevance_
+src/storage/retrieval/ob_text_retrieval_token_iter.h	110	ObTextRetrievalTokenIter	sql:: use: ObExpr	common::ObSEArray<sql::ObExpr *, 2> relevance_calc_exprs_;
+src/storage/retrieval/ob_text_retrieval_token_iter.h	111	ObTextRetrievalTokenIter	sql:: use: ObBitVector	sql::ObBitVector *skip_;
+src/storage/retrieval/ob_text_retrieval_token_iter.h	150	ObTextRetrievalDaaTTokenIter	sql:: use: ObEvalCtx	sql::ObEvalCtx *eval_ctx_;
+src/storage/retrieval/ob_text_retrieval_token_iter.h	151	ObTextRetrievalDaaTTokenIter	sql:: use: ObExpr	sql::ObExpr *relevance_expr_;
+src/storage/retrieval/ob_text_retrieval_token_iter.h	152	ObTextRetrievalDaaTTokenIter	sql:: use: ObExpr	sql::ObExpr *inv_scan_domain_id_col_;
+src/storage/retrieval/ob_text_taat_iter.h	27	-	opens namespace sql (lines 27-30): storage declares SQL types here	namespace sql
+src/storage/retrieval/ob_text_taat_iter.h	29	-	unqualified SQL name inside namespace sql: ObDASScanIter	class ObDASScanIter;
+src/storage/retrieval/ob_text_taat_iter.h	38	ObTextTaaTParam::ObTextTaaTParam	sql:: use: ObMatchAgainstMode	bm25_param_est_ctx_(), mode_flag_(sql::ObMatchAgainstMode::NATURAL_LANGUAGE_MODE),
+src/storage/retrieval/ob_text_taat_iter.h	48	ObTextTaaTParam	sql:: use: ObMatchAgainstMode	sql::ObMatchAgainstMode mode_flag_;
+src/storage/retrieval/ob_text_taat_iter.h	59	ObTextTaaTIter::ObTextTaaTIter	sql:: use: ObMatchAgainstMode	mode_flag_(sql::ObMatchAgainstMode::NATURAL_LANGUAGE_MODE),
+src/storage/retrieval/ob_text_taat_iter.h	73	ObTextTaaTIter	sql:: use: ObMatchAgainstMode	sql::ObMatchAgainstMode mode_flag_;
+src/storage/tablet/ob_mds_scan_param_helper.cpp	189	ObMdsScanParamHelper::build_table_param	sql:: use: ObStoragePushdownFlag	const sql::ObStoragePushdownFlag &pd_pushdown_flag,
+src/storage/tablet/ob_mds_scan_param_helper.h	46	-	opens namespace sql (lines 46-49): storage declares SQL types here	namespace sql
+src/storage/tablet/ob_mds_scan_param_helper.h	48	-	unqualified SQL name inside namespace sql: ObStoragePushdownFlag	struct ObStoragePushdownFlag;
+src/storage/tablet/ob_mds_scan_param_helper.h	94	ObMdsScanParamHelper	sql:: use: ObStoragePushdownFlag	const sql::ObStoragePushdownFlag &pd_pushdown_flag,
+src/storage/truncate_info/ob_truncate_filter_evaluator.cpp	578	ObTruncateFilterEvaluator::execute	sql:: use: ObExternalFilterExecutionContext	int ObTruncateFilterEvaluator::execute(sql::ObExternalFilterExecutionContext &context)
+src/storage/truncate_info/ob_truncate_filter_evaluator.h	48	ObTruncateFilterEvaluator	sql:: use: ObIExternalPushdownFilter	class ObTruncateFilterEvaluator final : public sql::ObIExternalPushdownFilter
+src/storage/truncate_info/ob_truncate_filter_evaluator.h	74	ObTruncateFilterEvaluator	sql:: use: ObExternalFilterExecutionContext	int execute(sql::ObExternalFilterExecutionContext &context) override;
+src/storage/truncate_info/ob_truncate_partition_filter.cpp	29	-	using namespace sql	using namespace sql;
+src/storage/truncate_info/ob_truncate_partition_filter.cpp	55	ObTruncatePartitionFilter::~ObTruncatePartitionFilter	sql:: use: destroy_external_pushdown_filter_runtime	sql::destroy_external_pushdown_filter_runtime(filter_allocator_, pushdown_runtime_);
+src/storage/truncate_info/ob_truncate_partition_filter.cpp	161	ObTruncatePartitionFilter::reuse	sql:: use: detach_external_pushdown_filter	sql::detach_external_pushdown_filter(*pushdown_runtime_);
+src/storage/truncate_info/ob_truncate_partition_filter.cpp	236	ObTruncatePartitionFilter::combine_to_filter_tree	sql:: use: ObPushdownFilterExecutor	int ObTruncatePartitionFilter::combine_to_filter_tree(sql::ObPushdownFilterExecutor *&root_filter)
+src/storage/truncate_info/ob_truncate_partition_filter.cpp	243	ObTruncatePartitionFilter::combine_to_filter_tree	sql:: use: attach_external_pushdown_filter	} else if (OB_FAIL(sql::attach_external_pushdown_filter(*pushdown_runtime_, root_filter))) {
+src/storage/truncate_info/ob_truncate_partition_filter.cpp	255	ObTruncatePartitionFilter::uncombined_from_pd_filter	sql:: use: detach_external_pushdown_filter	sql::detach_external_pushdown_filter(*pushdown_runtime_);
+src/storage/truncate_info/ob_truncate_partition_filter.cpp	279	ObTruncatePartitionFilter::init_truncate_filter	sql:: use: create_external_pushdown_filter_runtime	OB_FAIL(sql::create_external_pushdown_filter_runtime(
+src/storage/truncate_info/ob_truncate_partition_filter.h	46	-	opens namespace sql (lines 46-50): storage declares SQL types here	namespace sql
+src/storage/truncate_info/ob_truncate_partition_filter.h	48	-	unqualified SQL name inside namespace sql: ObPushdownFilterExecutor	class ObPushdownFilterExecutor;
+src/storage/truncate_info/ob_truncate_partition_filter.h	49	-	unqualified SQL name inside namespace sql: ObExternalPushdownFilterRuntime	class ObExternalPushdownFilterRuntime;
+src/storage/truncate_info/ob_truncate_partition_filter.h	97	ObTruncatePartitionFilter	sql:: use: ObPushdownFilterExecutor	int combine_to_filter_tree(sql::ObPushdownFilterExecutor *&root_filter);
+src/storage/truncate_info/ob_truncate_partition_filter.h	146	ObTruncatePartitionFilter	sql:: use: ObExternalPushdownFilterRuntime	sql::ObExternalPushdownFilterRuntime *pushdown_runtime_;
+src/storage/tx/ob_trans_define.cpp	26	-	using namespace sql	using namespace sql;
+src/storage/tx/ob_trans_define.h	70	-	opens namespace sql (lines 70-74): storage declares SQL types here	namespace sql
+src/storage/tx/ob_trans_define.h	72	-	unqualified SQL name inside namespace sql: ObBasicSessionInfo	class ObBasicSessionInfo;
+src/storage/tx/ob_trans_define.h	73	-	unqualified SQL name inside namespace sql: ObAuditRecordData	struct ObAuditRecordData;
+src/storage/tx/ob_trans_service.cpp	34	-	using namespace sql	using namespace sql;
+src/storage/tx/ob_tx_ctx.cpp	40	-	using namespace sql	using namespace sql;
