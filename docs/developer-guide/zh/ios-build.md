@@ -444,3 +444,23 @@ Apple 管理的证书和设备描述文件保存在系统凭证目录，不复�
 LLDB wrapper、hook-on profile 和 iphoneos ARM64 参数，`seekdb_ios_link_check` 已完整
 链接通过。完整 iOS Python suite 为 297/297 通过。当前 revision 尚需继续完成 App
 签名/安装和后续真机 phase，不能把本节的链接通过解释为全部真机测试完成。
+
+## 2026-09-26 App 重链修复与当前状态
+
+runner 后续两次重新执行 host gate，均为 272/272 通过；这仍是 macOS 结果。App 准备
+阶段发现旧 executable marker 与当前 HEAD/runtime archive 不一致。构建日志进一步证明
+两次新 App 编译都因缺少引擎头文件搜索路径而在链接前失败，旧 bundle 只是残留产物，
+没有 current-HEAD 真机 case 因此被执行。
+
+`build_app.py` 现在复用 engine cache 中已验证的 header prefix，并把 engine build root
+传给 App CMake。独立 App target 补齐与引擎头文件一致的 source/generated/dependency
+搜索路径、GNU C++20 和必要宏。由于 CMake `LINK_DEPENDS` 对 Xcode generator 不建立
+外部 archive 输入依赖，打包命令固定执行 `clean build`；完成链接后，还会在 codesign
+和安装前校验 App 实际 executable 的 source build ID 与 hook mode。若编译失败或 marker
+不一致，旧 App 不会被安装。
+
+真实 generic iOS clean build 已重新执行 `Ld` 和 `CodeSign`；App executable 与 runtime
+archive 均包含 `6a60099e79ad/enabled` marker，且严格签名验证通过。该结果只证明 App
+构建闭环恢复；当前提交仍需安装到已连接 iPhone，并继续完成 registry、C++、Rust、
+mysqltest 等价用例、向量、生命周期和内存压力阶段后，才能生成完整真机矩阵报告。
+安装前 fail-closed 行为测试及完整 iOS Python suite 已达到 303/303 通过。

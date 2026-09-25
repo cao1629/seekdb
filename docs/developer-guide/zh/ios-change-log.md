@@ -529,3 +529,26 @@ python3 deps/ios-build/build.py --jobs 4 vsag
   `seekdb_ios_link_check` 达到 100% 并成功链接。完整 iOS Python suite 为 297/297
   通过；本条只记录 build gate 修复，尚未把当前源码 revision 的后续真机阶段记为
   通过。
+
+## 2026-09-26：UIKit App 强制重链与安装前身份校验
+
+- standalone runner 两次完整执行 macOS host gate，均为 272/272 通过；两次均在
+  checkpoint 建立前的 App 准备阶段退出，因此没有任何 current-HEAD 真机 case 被记为
+  已执行。旧 App executable 的 marker 为 `08f8e21dac8c/enabled`，而 HEAD 与 runtime
+  archive 均为 `6a60099e79ad/enabled`，外层 identity gate 正确拒绝复用。
+- 调查 `.xcactivitylog` 后确认最近两次 App build 实际在编译
+  `mysqltest_device_cases.cpp` 时因 `easy_define.h` 不可见而失败，未进入链接；旧 bundle
+  只是失败后残留产物，本轮未安装。另确认 CMake `LINK_DEPENDS` 不为 Xcode generator
+  建立 response file 或外部 archive 的链接输入边，单纯更新 engine archive 可能复用旧
+  executable。
+- `build_app.py` 现在从 engine cache 取得已验证的 dependency header prefix，向独立 App
+  工程传入 engine build root；App 编译环境补齐 Easy、query API、generated、compat、
+  jemalloc 和第三方头路径，并与引擎保持 GNU C++20、`_NO_EXCEPTION` 及日志默认宏契约。
+  `get_int(0, ...)` 改为显式 `int64_t` 列索引，消除列序号与列名指针重载歧义。
+- App 包装改用 `xcodebuild clean build`，只清理独立 UIKit App 工程，不清理 engine
+  archives；链接后、验签和安装前从 `Info.plist` 解析实际 executable，并再次校验 source
+  build ID 与 hook mode。回归用例经历 RED 后通过，真实 clean build 已出现新的 `Ld` 与
+  `CodeSign`，App executable 时间晚于 runtime archive，二者 marker 均为
+  `6a60099e79ad/enabled`，严格 codesign 验证通过。本记录不把尚未执行的 current-HEAD
+  真机阶段记为通过。新增安装路径行为回归后，完整 iOS Python suite 为 303/303 通过；
+  shell 语法、Python 编译和 `git diff --check` 同时通过。

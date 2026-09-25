@@ -69,7 +69,7 @@ bool read_single_integer(TestContext &context, ObISQLClient &client,
     status = oceanbase::common::OB_ERR_UNEXPECTED;
   }
   if (status == OB_SUCCESS) {
-    status = rows->get_int(0, actual);
+    status = rows->get_int(static_cast<int64_t>(0), actual);
   }
   if (status == OB_SUCCESS && rows->next() != OB_ITER_END) {
     status = oceanbase::common::OB_ERR_UNEXPECTED;

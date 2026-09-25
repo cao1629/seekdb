@@ -3,8 +3,10 @@ project(SeekDBProbe LANGUAGES CXX OBJCXX)
 if(NOT CMAKE_SYSTEM_NAME STREQUAL "iOS")
   message(FATAL_ERROR "This probe requires the iOS SDK")
 endif()
-if(NOT EXISTS "${ENGINE_LINK_RESPONSE}" OR NOT DEVELOPMENT_TEAM)
-  message(FATAL_ERROR "Provide ENGINE_LINK_RESPONSE and DEVELOPMENT_TEAM")
+if(NOT EXISTS "${ENGINE_LINK_RESPONSE}" OR NOT IS_DIRECTORY "${ENGINE_BUILD_ROOT}"
+    OR NOT IS_DIRECTORY "${ENGINE_HEADER_INCLUDE}"
+    OR NOT DEVELOPMENT_TEAM)
+  message(FATAL_ERROR "Provide engine paths and DEVELOPMENT_TEAM")
 endif()
 add_executable(SeekDBProbe MACOSX_BUNDLE
   main.mm
@@ -18,18 +20,41 @@ if(RUST_DEVICE_TESTS)
 endif()
 target_include_directories(SeekDBProbe PRIVATE
   "${CMAKE_CURRENT_LIST_DIR}/.."
+  "${CMAKE_CURRENT_LIST_DIR}/../../.."
   "${CMAKE_CURRENT_LIST_DIR}/../../../src"
+  "${CMAKE_CURRENT_LIST_DIR}/../../../src/query/api"
+  "${CMAKE_CURRENT_LIST_DIR}/../../../src/data_plane/api"
+  "${CMAKE_CURRENT_LIST_DIR}/../../../src/objit/include"
   "${CMAKE_CURRENT_LIST_DIR}/../../../src/oblib"
+  "${CMAKE_CURRENT_LIST_DIR}/../../../src/oblib/common"
+  "${CMAKE_CURRENT_LIST_DIR}/../../../src/oblib/easy"
+  "${CMAKE_CURRENT_LIST_DIR}/../../../src/oblib/easy/include"
   "${CMAKE_CURRENT_LIST_DIR}/../../../src/observer/ios"
-  "${CMAKE_CURRENT_LIST_DIR}/../../../rust/sql-nio/include")
-target_compile_definitions(SeekDBProbe PRIVATE OB_HAVE_BUNDLED_JEMALLOC=1)
+  "${CMAKE_CURRENT_LIST_DIR}/../../../rust/sql-nio/include"
+  "${ENGINE_BUILD_ROOT}/generated"
+  "${ENGINE_BUILD_ROOT}/generated/share"
+  "${ENGINE_BUILD_ROOT}/generated/share/inner_table"
+  "${ENGINE_BUILD_ROOT}/ios-compat/include"
+  "${ENGINE_BUILD_ROOT}/third-party/jemalloc/include"
+  "${ENGINE_HEADER_INCLUDE}"
+  "${ENGINE_HEADER_INCLUDE}/libxml2"
+  "${ENGINE_HEADER_INCLUDE}/icu"
+  "${ENGINE_HEADER_INCLUDE}/icu/common"
+  "${ENGINE_HEADER_INCLUDE}/fast_float")
+target_compile_definitions(SeekDBProbe PRIVATE
+  DEFAULT_LOG_FILE_SIZE_MB=256
+  DEFAULT_LOG_LEVEL=OB_LOG_LEVEL_ERROR
+  OB_HAVE_BUNDLED_JEMALLOC=1
+  _DARWIN_C_SOURCE
+  _NO_EXCEPTION
+  OCI_LINK_RUNTIME)
 target_compile_options(SeekDBProbe PRIVATE $<$<COMPILE_LANGUAGE:OBJCXX>:-fobjc-arc>)
 target_link_options(SeekDBProbe PRIVATE "@${ENGINE_LINK_RESPONSE}")
 target_link_libraries(SeekDBProbe PRIVATE "-framework UIKit")
 set_target_properties(SeekDBProbe PROPERTIES
-  CXX_STANDARD 17
+  CXX_STANDARD 20
   CXX_STANDARD_REQUIRED YES
-  CXX_EXTENSIONS NO
+  CXX_EXTENSIONS YES
   MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_LIST_DIR}/Info.plist.in"
   MACOSX_BUNDLE_GUI_IDENTIFIER "${PROBE_BUNDLE_ID}"
   XCODE_ATTRIBUTE_PRODUCT_BUNDLE_IDENTIFIER "${PROBE_BUNDLE_ID}"

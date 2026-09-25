@@ -244,6 +244,7 @@ class MysqltestParserTest(unittest.TestCase):
         self.assertIn("g_server_modules_ready", source)
         self.assertIn("get_field_columns", source)
         self.assertIn("cname_", source)
+        self.assertIn("get_int(static_cast<int64_t>(0), actual)", source)
         for fragment in (
                 "set @@session.explicit_defaults_for_timestamp=off",
                 "select count(*) from t1", "count(*)", "nr\\tb\\tstr"):

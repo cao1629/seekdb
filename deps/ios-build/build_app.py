@@ -4,11 +4,15 @@ import argparse
 import json
 import os
 from pathlib import Path
+import plistlib
 import re
 import shlex
 import subprocess
 
 ROOT = Path(__file__).resolve().parents[2]
+ARTIFACT_MARKER = re.compile(
+    r"SEEKDB_IOS_ARTIFACT_BUILD_ID=([0-9a-f]{12});"
+    r"SEEKDB_IOS_ARTIFACT_HOOK_MODE=(enabled|disabled)")
 
 
 def engine_link_arguments(command, directory):
@@ -63,6 +67,22 @@ def require_test_hook_mode(engine, expected):
         raise ValueError(f"engine build must have SEEKDB_IOS_TEST_HOOKS {requested}")
 
 
+def engine_header_include(engine):
+    """Return the dependency include directory verified by the engine configure."""
+    cache = engine / "CMakeCache.txt"
+    if not cache.is_file():
+        raise ValueError("engine build has no CMake cache")
+    prefix = None
+    for line in cache.read_text().splitlines():
+        if line.startswith("SEEKDB_IOS_HEADER_PREFIX:") and "=" in line:
+            prefix = Path(line.split("=", 1)[1]).expanduser().resolve()
+            break
+    include = prefix / "include" if prefix is not None else None
+    if include is None or not include.is_dir():
+        raise ValueError("engine build has no valid dependency header prefix")
+    return include
+
+
 def source_build_id():
     """Return a short immutable source revision for device evidence."""
     dirty = subprocess.run(["git", "diff-index", "--quiet", "HEAD", "--"], cwd=ROOT)
@@ -76,25 +96,54 @@ def source_build_id():
     return build_id
 
 
+def _require_artifact_identity(artifact, expected_build_id, expected_hooks, kind):
+    """Verify one linked artifact marker against the requested source and mode."""
+    if not artifact.is_file():
+        raise FileNotFoundError(artifact)
+    result = subprocess.run(["/usr/bin/strings", "-a", str(artifact)], check=True,
+                            capture_output=True, text=True)
+    marker = ARTIFACT_MARKER.search(result.stdout)
+    if marker is None:
+        raise ValueError(f"{kind} has no artifact identity marker")
+    build_id, hook_mode = marker.groups()
+    if build_id != expected_build_id:
+        raise ValueError(f"{kind} belongs to a different source revision")
+    expected_mode = "enabled" if expected_hooks else "disabled"
+    if hook_mode != expected_mode:
+        raise ValueError(f"{kind} must have test hooks {expected_mode}")
+    return build_id, hook_mode
+
+
 def require_artifact_identity(engine, expected_build_id, expected_hooks):
     """Verify identity markers compiled into the linked iOS runtime archive."""
     archive = engine / "src/observer/libseekdb_ios_runtime.a"
-    if not archive.is_file():
-        raise FileNotFoundError(archive)
-    result = subprocess.run(["/usr/bin/strings", "-a", str(archive)], check=True,
-                            capture_output=True, text=True)
-    marker = re.search(
-        r"SEEKDB_IOS_ARTIFACT_BUILD_ID=([0-9a-f]{12});"
-        r"SEEKDB_IOS_ARTIFACT_HOOK_MODE=(enabled|disabled)", result.stdout)
-    if marker is None:
-        raise ValueError("iOS runtime archive has no artifact identity marker")
-    build_id, hook_mode = marker.groups()
-    if build_id != expected_build_id:
-        raise ValueError("iOS runtime archive belongs to a different source revision")
-    expected_mode = "enabled" if expected_hooks else "disabled"
-    if hook_mode != expected_mode:
-        raise ValueError(f"iOS runtime archive must have test hooks {expected_mode}")
-    return build_id, hook_mode
+    return _require_artifact_identity(
+        archive, expected_build_id, expected_hooks, "iOS runtime archive")
+
+
+def require_packaged_app_identity(app, expected_build_id, expected_hooks):
+    """Verify the packaged executable relinked the requested engine artifact."""
+    plist_path = app / "Info.plist"
+    if not plist_path.is_file():
+        raise FileNotFoundError(plist_path)
+    metadata = plistlib.loads(plist_path.read_bytes())
+    executable_name = metadata.get("CFBundleExecutable")
+    if (not isinstance(executable_name, str)
+            or re.fullmatch(r"[A-Za-z0-9._-]+", executable_name) is None):
+        raise ValueError("iOS App has an invalid executable name")
+    return _require_artifact_identity(
+        app / executable_name, expected_build_id, expected_hooks,
+        "iOS App executable")
+
+
+def xcode_build_command(build, device):
+    """Create a device build command that cannot reuse a stale linked executable."""
+    return (
+        "xcodebuild", "-project", str(build / "SeekDBProbe.xcodeproj"),
+        "-scheme", "SeekDBProbe", "-configuration", "Release",
+        "-sdk", "iphoneos", "-derivedDataPath", str(build / "DerivedData"),
+        "-destination", "id=" + device, "-allowProvisioningUpdates",
+        "-allowProvisioningDeviceRegistration", "clean", "build")
 
 
 def require_rust_archive_mode(arguments, expected_device_tests):
@@ -131,6 +180,7 @@ def main():
     if not engine.is_relative_to(ROOT):
         parser.error("engine build must remain inside the seekdb checkout")
     require_test_hook_mode(engine, options.test_hooks)
+    header_include = engine_header_include(engine)
     build_id = source_build_id()
     require_artifact_identity(engine, build_id, options.test_hooks)
     directory = engine / "src/observer"
@@ -147,16 +197,16 @@ def main():
                  "-B", str(build), "-DCMAKE_SYSTEM_NAME=iOS", "-DCMAKE_OSX_SYSROOT=iphoneos",
                  "-DCMAKE_OSX_ARCHITECTURES=arm64", "-DCMAKE_OSX_DEPLOYMENT_TARGET=18.0",
                  "-DENGINE_LINK_RESPONSE=" + str(response),
+                 "-DENGINE_BUILD_ROOT=" + str(engine),
+                 "-DENGINE_HEADER_INCLUDE=" + str(header_include),
                  "-DDEVELOPMENT_TEAM=" + options.team, "-DPROBE_BUNDLE_ID=" + options.bundle_id,
                  "-DRUST_DEVICE_TESTS=" + ("ON" if options.test_hooks else "OFF")]
     subprocess.run(configure,
                    check=True, env=environment)
-    subprocess.run(["xcodebuild", "-project", str(build / "SeekDBProbe.xcodeproj"),
-                    "-scheme", "SeekDBProbe", "-configuration", "Release", "-sdk", "iphoneos",
-                    "-derivedDataPath", str(build / "DerivedData"),
-                    "-destination", "id=" + options.device, "-allowProvisioningUpdates",
-                    "-allowProvisioningDeviceRegistration", "build"], check=True, env=environment)
+    subprocess.run(xcode_build_command(build, options.device),
+                   check=True, env=environment)
     app = build / "Release-iphoneos/SeekDBProbe.app"
+    require_packaged_app_identity(app, build_id, options.test_hooks)
     subprocess.run(["codesign", "--verify", "--deep", "--strict", str(app)], check=True)
     if options.install:
         subprocess.run(["xcrun", "devicectl", "device", "install", "app", "--device",
