@@ -385,6 +385,7 @@ the default `--file-dir`, and no `--save-instance-dir`; `git diff --quiet 834bbe
 | run03, run04 | items 2 to 4 fixed | 10 of 10 passed, about 35 s per run; `compare` exit 0, 10 of 10 identical |
 | run05 to run08 | item 1, then item 5 | 10 of 10 passed in each; `compare` exit 0 for run05 against run06 and for run07 against run08. Apart from the recorder line and item 1's new line, the recordings equal run03's |
 | **run09, run10** | item 6: the final script, sha256 26adc2354ad2d021c3e1790d015e53f82ce8b931cb37f220ef848d5b6d44795b (wire_client.py unchanged, 0cd2dd92...) | **10 of 10 passed in each, 68 s per run (6.6 to 7.1 s per scenario). `compare` exits 0: 10 of 10 identical, no recording problems (compare-run09-run10.json).** These two are the reference recordings; apart from the recorder line and the two requests item 6 adds, run09 equals run07 |
+| run11, run12 (2026-09-27) | the same script and client, unchanged (same sha256); the runner unchanged too (0b1e708d...) | 10 of 10 passed in each, 69 s per run. `compare` exits 0 for run11 against run12 (10 of 10 identical, compare-run11-run12.json) and for run09 against run11 (10 of 10 identical, with only the note that `repo_head` differs, compare-run09-run11.json). Every `.result` of run11 and run12 is byte-identical to run09's, two days later, so nothing recorded depends on the date; the manifests differ from run09's only in `repo_head` and `work_dir` |
 
 diag01 to diag04 are single instances started by hand on the same port, one at a time, to look into
 items 1 and 3; each copied the server log before `sdb.py destroy`.
@@ -459,9 +460,11 @@ What the first run confirmed as the README predicted, and what the recordings sh
   `{connection_id:4}`, `{scramble:8}` and `{scramble:12}` only in the `S` lines of the 32 greetings;
   `{scramble:20}` only in the `S` lines of the 5 auth switch requests, in the one `Z` line that holds
   an auth switch request on the compressed connection (a 48-byte frame sent as it is), and in the
-  summaries of greetings and auth switch requests; `{auth_response:20}` only in 4 `C` lines. No
-  `{unparsed_handshake:N}`, `{compressed_length}` or `{deflated_body_with_...}` occurs. Nothing else
-  varied: each pair of runs was byte-identical.
+  summaries of greetings and auth switch requests; `{auth_response:20}` only in 4 `C` lines. The 32
+  greeting summaries also name the id as `{connection_id}`, without a length. No
+  `{unparsed_handshake:N}`, `{compressed_length}`, `{deflated_body_with_...}` or digest line with
+  `masked=` occurs. Nothing else varied: each pair of runs was byte-identical. The scan was repeated
+  on 2026-09-27 over run09 with the same counts, and run11 and run12 are byte-identical to it.
 - Answers of the reference that a Rust build must reproduce, found in the recordings: a truncated gzip
   file loaded with COMPRESSION 'GZIP' ends with ERR 1062 "Duplicated primary key", not a
   decompression error (the same in all ten runs); the first statement that a session runs through the

@@ -2,7 +2,8 @@
 
 Item 8, golden bytes on the MySQL wire (PLAN.md section 4, item 8; families/wire/), unit 06-wire.
 Patch: 06-wire-ok-drops-no-backslash-escapes.patch, one .cpp file, 1 line changed.
-`git -C /Users/colin/seekdb-dev/ref-834bbee1e apply --check` passes (2026-09-25). Not built.
+`git -C /Users/colin/seekdb-dev/ref-834bbee1e apply --check` passes (2026-09-25, and again on
+2026-09-27 with only reference-build.patch's cmake/Env.cmake change in that worktree). Not built.
 
 ## What it changes
 
@@ -69,7 +70,14 @@ of `set sql_mode = default` right after them (request 40) carries 0x4022 again.
     (`set @tmp_sql_mode = @@sql_mode` ... `set @@sql_mode = @tmp_sql_mode`);
   - no combined mode includes the bit (`COMBINE_SMO_*`, ob_sql_mode.h:95-110), nor does the default
     (`SMO_DEFAULT`, :112), and the server sets the bit on a session only to restore a value the user
-    had set (ob_dynamic_sampling.cpp:1018-1020).
+    had set (ob_dynamic_sampling.cpp:1018-1020);
+  - the same profile shows the bit clear at three other places that read a session's mode and test
+    it for the bit (checked 2026-09-27 with `llvm-cov show` on each file; the three files are
+    identical at 076eb309b and 834bbee1e): in the LIKE resolver the test at src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp:3007
+    ran 266 times and its body (:3008-3009) 0 times; in dynamic sampling the test at
+    src/sql/optimizer/ob_dynamic_sampling.cpp:1018 ran 1.39k times and :1019 0 times; in LIKE's
+    evaluation, src/sql/engine/expr/ob_expr_like.cpp:817 (`if (!is_no_backslash_escapes)`) ran 2 times
+    and its body 2 times.
   So every OK packet of the 272 cases has the same bytes with and without the mutation, over the
   text protocol and under `--ps-protocol` alike.
 - **mysqltest would not show it anyway.** Its output has no place for the status word:
