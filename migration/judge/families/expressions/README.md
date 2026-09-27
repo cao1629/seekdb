@@ -6,9 +6,10 @@ and `now()` and other temporal values stored into DATETIME columns of every scal
 the corpus on the C++ reference and on the Rust build with the runner and compares the recordings
 byte for byte (harness README, "compare").
 
-The generator reads source files at 834bbee1e and, for the reach split only, the coverage profile.
-It never talks to a server. The corpus has not been run yet (the injected-mutation runs occupy the
-machine); see "Before the first comparison".
+The generator reads source files at 834bbee1e, split-rows.tsv and, for the reach split only, the
+coverage profile. It never talks to a server; split_rows.py, which writes split-rows.tsv, and
+stability.py do. The corpus was first run on 2026-09-25; what the runs found and what changed is in
+"Live check, 2026-09-25".
 
 ## Commands
 
@@ -17,6 +18,8 @@ python3 migration/judge/families/expressions/generate.py reach
 python3 migration/judge/families/expressions/generate.py cases
 python3 migration/judge/families/expressions/generate.py cases --check
 python3 migration/judge/families/expressions/generate.py check-recording --record-dir <record-dir>
+python3 migration/judge/families/expressions/split_rows.py --port <port> --work-dir <new-dir>
+python3 migration/judge/families/expressions/stability.py --port <port> --work-dir <new-dir>
 ```
 
 - `reach` reads the registry and the coverage profile and writes `expressions.tsv`. It runs
@@ -34,10 +37,22 @@ python3 migration/judge/families/expressions/generate.py check-recording --recor
 - `check-recording` reads one recording of the corpus (the runner's `--record-dir`: one
   `<case>.result` per file) and finds, for every generated statement, its echo and the `errno` line
   after it. It exits 1 when a file has no recording, when a statement or its `errno` line is not
-  found, or when a setup statement failed (the session `SET`, the creation and filling of `tm`, and
-  each unit's own setup). It also lists, without failing, the multi-row statements, type-only
-  statements and `CREATE TABLE ... AS SELECT` statements that failed (see "Before the first
-  comparison"). It was tested only in process, on a recording written by hand in mysqltest's format.
+  found, when a setup statement failed (the session `SET`, the creation and filling of `tm`, and
+  each unit's own setup), when a statement got a client error (2000-2999: the connection to the
+  server was lost, which mysqltest records like any other error before it goes on), when the check
+  that the spatial reference systems are loaded does not print 1, or when a known-answer column of
+  s8_known_0001 is not 1. It also lists, without failing, the multi-row statements, type-only
+  statements and `CREATE TABLE ... AS SELECT` statements that failed.
+- `split_rows.py` runs the corpus without splits against a running reference instance under the
+  reduced init, with every sweep over `tm` (and over `tm a, tm b`) that fails followed by one
+  statement per row (or row pair), and writes split-rows.tsv: the sweeps that fail although a row
+  other than the all-NULL one succeeds, with their failing rows. `cases` splits those sweeps (see
+  "What each statement records"), and stops if split-rows.tsv names a statement the corpus no longer
+  has; after a change to the probes, run `split_rows.py` again before `cases`. About 40 s.
+- `stability.py` runs the corpus against a running instance with every SELECT probe that reads no
+  session state repeated (`--repeats`, 3 by default), each repeat after a different unrelated
+  statement, and exits 1 if a probe's output changes between repeats: a probe that reads memory it
+  never wrote. Two recordings from two processes can agree on such a value. About 1 minute.
 - `reach` and `cases` stop with an error when a registered expression has no entry in the
   specification table (`build_specs()`), when the TSV no longer matches the registry, or when the CAST
   targets in the grammar change, so a changed source cannot silently drop coverage.
@@ -125,9 +140,11 @@ every statement is followed by `--echo errno $mysql_errno`:
 - **Result type:** `--enable_metadata` prints the column definition the server sends for each result
   column: MySQL type code, length, maximum length, nullability, flags (unsigned, binary, not null),
   decimals and character set number. This is the result type of the very statement whose value is
-  recorded, for every statement. It does not tell some types apart: a collection result is sent as
-  `MYSQL_TYPE_STRING` with no flags, like CHAR (src/query/protocol/ob_mysql_protocol_util.cpp:87), a
-  geometry result is always `MYSQL_TYPE_GEOMETRY` without its subtype or SRID, and ENUM and SET
+  recorded, for every statement: the session runs with the plan cache off ("Determinism"), so no
+  statement reuses the column definitions of an earlier one. It does not tell some types apart: a
+  collection result is sent as `MYSQL_TYPE_STRING` with no flags, like CHAR
+  (src/query/protocol/ob_mysql_protocol_util.cpp:87), a geometry result is always
+  `MYSQL_TYPE_GEOMETRY` without its subtype or SRID, and ENUM and SET
   results show only `ENUM_FLAG` or `SET_FLAG`, not their values. So the s6 files also turn 162
   expressions into columns: one `CREATE TABLE tctNN AS SELECT <expr> AS e FROM tm WHERE 1 = 0` per
   expression, so one expression that fails cannot hide the others, and one query per group of up to
@@ -170,6 +187,17 @@ every statement is followed by `--echo errno $mysql_errno`:
   split applies to `CAST(... AS JSON)` over the six text columns in s3, per row that is not valid
   JSON (`CAST_ERROR_ROWS`, ob_datum_cast.cpp:3293-3307), so the rows that are valid JSON show their
   values. 73 sweeps are split this way, into 158 single-row statements.
+- **The sweeps split from the reference's own run:** split-rows.tsv lists the sweeps that fail on the
+  reference although rows other than the all-NULL one succeed: 221 over `tm` and 35 over
+  `tm a, tm b` (found by `split_rows.py` on 2026-09-25; they hid 1,145 values). `cases` replaces each
+  by a statement over the rows that succeed (`WHERE id NOT IN (...)`, or
+  `(a.id, b.id) NOT IN ((...), ...)`) and one statement per failing row; for a join with more than 8
+  failing pairs, one statement per `a.id` that has failing pairs. A sweep that fails on every row
+  but the all-NULL one fails for its types, not its values, and is left whole.
+- **Rows left out:** a few rows make the reference read memory it never wrote, so their values
+  change from run to run or are values the reference never computed. The generator leaves them out
+  of their sweeps (`unstable_rows` in a specification, `CAST_UNSTABLE_ROWS`), with the evidence in
+  "Live check, 2026-09-25", "Not comparable".
 - **SQL NULL and the string 'NULL':** mysqltest prints both as `NULL`. `JSON_TYPE` (JSON null),
   `QUOTE` (a NULL argument), `DUMP` and `UPPER` (the JSON null of the matrix as text) can return the
   string, so their probes carry a second column, `(<expr>) IS NULL AS n`.
@@ -189,6 +217,16 @@ text, the smallest normal double, and so on).
 | strings | CHAR(16), VARCHAR(64), BINARY(4), VARBINARY(64), TINYTEXT, TEXT, MEDIUMTEXT, LONGTEXT, TINYBLOB, BLOB, MEDIUMBLOB, LONGBLOB |
 | temporal | DATE, TIME, TIME(6), DATETIME, DATETIME(6), TIMESTAMP(6), YEAR |
 | other | BIT(64), ENUM, SET, JSON, GEOMETRY, VECTOR(3), ARRAY(INT) |
+
+Each file that creates `tm` first loads the spatial reference systems, as the geometry suite does
+(tools/deploy/mysql_test/test_suite/geometry/t/st_aswkb_mysql.test:13-19): with the query and result
+logs off, it sources tools/deploy/mysql_test/test_suite/geometry/t/default_srs_data_mysql.sql when
+`oceanbase.__all_spatial_reference_systems` does not already hold 5160 rows (the file's 5159 rows
+and SRID 0 from bootstrap), then records `SELECT COUNT(*) = 5160 AS srs_loaded ...`. Without them
+every SRID other than 0 fails with 3548 "Spatial reference system is empty" (after bootstrap the
+table holds only SRID 0, `ObDDLOperator::init_srs`, and `ObSrsService::fetch_all_srs` loads nothing
+from fewer than 5152 rows, src/observer/omt/ob_srs_service.cpp:196-202). The first file of a run
+loads them in under half a second; later files find them loaded and print the same.
 
 The empty array of row 2 is the string `'[]'`: the grammar has no empty array literal (`'['
 expr_list ']'` at sql_parser_mysql_mode.y:3172 needs one expression, as do `ARRAY(...)` and
@@ -245,6 +283,10 @@ ones defined next to them in `generate.py`.
   column is filled, a `CREATE VECTOR INDEX ... WITH (type=sindi, distance=inner_product)` builds the
   index over the existing rows (the index build scan, src/sql/engine/table/ob_table_scan_op.cpp:3371),
   and an INSERT, an UPDATE and a DELETE maintain it; the queries are exact, not `APPROX`.
+- `sys_privilege_check` and `sql_mode_convert` read their arguments as a fixed type without
+  converting them, so they are probed only with arguments of a type they can read (integers for the
+  routine type of `sys_privilege_check`; values whose datum holds 8 bytes for `sql_mode_convert`).
+  "Live check, 2026-09-25", items 1 and 7, has the evidence.
 - Not generated:
   - `to_outfile_row` beyond its name call: nothing in 834bbee1e creates `T_OP_TO_OUTFILE_ROW`
     (outside its own file it appears only in the registration, ob_expr_operator_factory.cpp:773, and
@@ -262,17 +304,21 @@ ones defined next to them in `generate.py`.
 
 - **s3_cast, explicit casts (ob_datum_cast.cpp):** every one of the 40 matrix columns cast to the 14
   main targets, one per target in the grammar's `cast_data_type` rule (`BINARY`, `CHAR`,
-  `CHAR CHARACTER SET latin1`, `DATETIME(6)`, `DATE`, `TIME(6)`, `YEAR`, `NUMBER`,
+  `CHAR CHARACTER SET binary`, `DATETIME(6)`, `DATE`, `TIME(6)`, `YEAR`, `NUMBER`,
   `DECIMAL(65,30)`, `SIGNED`, `UNSIGNED`, `DOUBLE`, `FLOAT`, `JSON`); the 8 geometry targets over 7
-  source columns and NULL; 21 other spellings and precisions (`CHAR(3)`, `DATETIME(3)`,
-  `DECIMAL(10,2)`, `FIXED`, `NUMERIC`, `NCHAR`, `NATIONAL CHAR`, `FLOAT(30)`, ...) over 7 columns;
+  source columns and NULL; 21 other spellings and precisions (`CHAR(3)`, `CHAR(4) CHARSET utf8mb4`,
+  `DATETIME(3)`, `DECIMAL(10,2)`, `FIXED`, `NUMERIC`, `NCHAR`, `NATIONAL CHAR`, `FLOAT(30)`, ...) over 7
+  columns;
   the 11 literal kinds of domain `A` to the 14 main targets; two `CAST(... AS NUMBER)` results as
   sources to the 14 main targets (the grammar gives `NUMBER`, `DECIMAL`, `FIXED` and `NUMERIC` the
   same cast type); the `CONVERT` spellings; and `CAST(... AS type IGNORE)`. The grammar accepts
   `IGNORE` (`sys_view_cast_opt`, sql_parser_mysql_mode.y:2290-2296), but the resolver accepts it only
   in inner sessions, system views and SHOW statements and returns a syntax error for user SQL
   (ob_raw_expr_resolver_impl.cpp:5070-5077), so its two probes record that error. The target list is
-  parsed from the grammar, and a target added or removed there stops the generator.
+  parsed from the grammar, and a target added or removed there stops the generator. seekdb has only
+  the `utf8mb4` and `binary` character sets (`SHOW CHARACTER SET` on the reference), so the character
+  set targets use `binary` and `utf8mb4`, and `latin1` and `gbk` keep one literal probe each, which
+  records 1115 "Unknown character set".
 - **Type classes the corpus does not reach as sources:** with the defaults of 834bbee1e
   (`_enable_mysql_compatible_dates` and `_enable_decimal_int_type` both true), DATE and DATETIME
   columns and literals are `ObMySQLDateType` and `ObMySQLDateTimeType` and DECIMAL values are
@@ -349,10 +395,16 @@ Table `tn` has DATETIME(0) to DATETIME(6), TIMESTAMP(0, 3, 6), TIME(0, 3, 6) and
   session, `time_zone = '+00:00'`, `sql_mode` = the 834bbee1e default
   (`STRICT_ALL_TABLES,NO_ZERO_IN_DATE,NO_AUTO_CREATE_USER`, from the system variable default
   281018368), `timestamp = 1709214296.654321` (2024-02-29 13:44:56.654321 UTC),
-  `div_precision_increment = 4`, `block_encryption_mode = 'aes-128-ecb'` and
-  `group_concat_max_len = 1024`. `NAMES` may share a `SET` with variables: the grammar lists it
-  among the `var_and_val` items and the resolver handles it inside a variable list
-  (ob_variable_set_resolver.cpp:78).
+  `div_precision_increment = 4`, `block_encryption_mode = 'aes-128-ecb'`,
+  `group_concat_max_len = 1024` and `ob_enable_plan_cache = 0`. `NAMES` may share a `SET` with
+  variables: the grammar lists it among the `var_and_val` items and the resolver handles it inside a
+  variable list (ob_variable_set_resolver.cpp:78).
+- The plan cache is off because it made the column definitions depend on timing: with it on, a
+  statement that differs from an earlier one only in its literals reuses the earlier plan and its
+  column definitions (`quote('Hello, World!')` after `quote('')` reports length 8, not 112), and
+  whether the earlier plan was still cached depends on eviction, which runs on a timer
+  (`plan_cache_evict_interval`) while the corpus compiles about 20,000 plans. Plan cache hits are
+  family 7's.
 - The fixed session timestamp makes `NOW()` and the functions built on the statement time
   deterministic: `ObPhysicalPlanCtx::set_cur_time` uses the session timestamp when it is set.
 - Functions that read the clock or a random source are printed only as stable properties:
@@ -363,7 +415,9 @@ Table `tn` has DATETIME(0) to DATETIME(6), TIMESTAMP(0, 3, 6), TIME(0, 3, 6) and
 - Every statement that can return more than one row has `ORDER BY` (the matrix id, or both ids of a
   join, or the value); the others return one row (aggregates, lookups by key).
 - Each file is one mysqltest session, creates every table it uses and changes no global setting,
-  so files do not depend on each other or on their order; lock names are unique to the corpus.
+  so files do not depend on each other or on their order; lock names are unique to the corpus. The
+  one shared thing is the spatial reference system table: a file loads it when it is not loaded,
+  with its output off, so a file prints the same whether it loaded the table or an earlier file did.
 - Nothing depends on timing: `SLEEP` gets 0 and 0.01, `BENCHMARK` small counts, the GTID waits a
   zero timeout (both are stubs that return NULL), and the AI functions a model name that does not
   exist, so they fail before any network call.
@@ -375,26 +429,31 @@ Table `tn` has DATETIME(0) to DATETIME(6), TIMESTAMP(0, 3, 6), TIME(0, 3, 6) and
 
 | Section | Files | SQL statements | Of which probes |
 |---|---|---|---|
-| s1_unreached (291 entries, registry order) | 162 | 8,487 | 7,839 |
-| s2_reached (236 entries) | 129 | 6,702 | 6,186 |
-| s3_cast | 22 | 1,083 | 995 |
-| s4_compare | 12 | 618 | 570 |
-| s5_arith | 16 | 844 | 780 |
-| s6_store | 36 | 1,667 | 1,523 |
+| s1_unreached (291 entries, registry order) | 162 | 9,248 | 8,438 |
+| s2_reached (236 entries) | 129 | 7,027 | 6,382 |
+| s3_cast | 22 | 1,153 | 1,043 |
+| s4_compare | 12 | 645 | 585 |
+| s5_arith | 16 | 976 | 896 |
+| s6_store | 36 | 1,703 | 1,523 |
 | s7_temporal | 15 | 540 | 525 |
-| total | 392 | 19,941 | 18,418 |
+| s8_known (families/wire/known-answers.sql) | 1 | 56 | 56 |
+| total | 393 | 21,348 | 19,448 |
 
-"Probes" leaves out each file's session `SET` statement and the creation, filling and dropping of
-`tm`. Files hold about 50 probe statements; an entry larger than that is split into parts, each
+"Probes" leaves out each file's session `SET` statement, the check that the spatial reference
+systems are loaded, and the creation, filling and dropping of `tm`. Files hold about 50 probe
+statements before the splits of split-rows.tsv; an entry larger than that is split into parts, each
 repeating the entry's own setup. File names have no dot before `.test`, as `--test-dir` requires, and
 sort in the order above, unreached entries first.
 
+s8_known_0001.test is a byte copy of families/wire/known-answers.sql (the CRC32 and COMPRESS known
+answers of family 6 and item 8), which that file's README hands to this family; `cases` writes it,
+`cases --check` fails when the copy is out of date, and `check-recording` requires every
+known-answer column in its recording to be 1.
+
 ## Running the corpus
 
-`--test-dir` comes from the runner change in migration/judge/harness/second-set/. The copy there
-cannot run from its own directory (it finds tools/deploy and sdb.py from its own path), so the
-command runs the live runner once `runner-second-set.patch` is applied to it (second-set README),
-under the reduced init, retries off and the trailing-whitespace tolerance off:
+`--test-dir` is one of the second-set options of the live runner (harness/second-set/README.md).
+Under the reduced init, retries off and the trailing-whitespace tolerance off:
 
 ```
 python3 .github/script/seekdb/mysqltest_for_seekdb.py run \
@@ -409,30 +468,163 @@ python3 .github/script/seekdb/mysqltest_for_seekdb.py run \
 ```
 
 Then `compare --left <record-1> --right <record-2>`, and `generate.py check-recording --record-dir
-<record-1>` on the C++ recording.
+<record-1>` on the C++ recording. One run takes about 30 s. The runner does not fail a file when the
+server dies in it: mysqltest records the lost connection (2013, then 2006) for the rest of the file
+and exits 0, and the next file waits for the dead server until its mysqltest is killed.
+`check-recording` fails on those client errors.
 
-## Before the first comparison
+## Live check, 2026-09-25
 
-The corpus was checked offline only (Python compile, generation twice, byte comparison, the
-statement checks above). No server has parsed it. On the first two C++ recordings:
+Every run below used the archived reference (/Users/colin/seekdb-dev/ref-archive-834bbee1e/seekdb,
+sha256 db7d918001aa02c45357c37b7bc01179d08a7a01e7e16d32248d25da80282e91) with the archive's obclient
+and mysqltest, port 3892, the reduced init, `--max-retries 0 --no-ignore-trailing-whitespace`,
+`--test-dir cases` and `--record-dir`; the check that tools/deploy and sdb.py are 834bbee1e's passed
+before each. The outputs are in /Users/colin/seekdb-dev/mysqltest-runs/00b/second-set/02-expr/: one
+directory per run (`rNN`), the command in run.sh, the comparisons in compare-*.log. This unit did
+not change the runner. r01 to r03 ran the committed runner (sha256 9f417e4e13dc65e3...); from r04
+on, the runs used the live file as its owner for this round had changed it at 09:54
+(0b1e708d1ec88ffa..., which adds `compare`'s known-failure list and leaves the recording path as it
+was), so r15 to r17 ran the same runner. The
+row-by-row runs of `split_rows.py` and `stability.py` and the one-statement checks used a separate
+instance on the same port (scratch.sh), never at the same time as a run. analysis/ there holds their
+logs and the two small reproductions: pc.test (the plan cache and the column length) and stb2.test
+(`_st_buffer` with a NULL distance, repeated).
 
-- `check-recording` must exit 0: every file recorded, and `errno 0` for the session `SET`,
-  `CREATE TABLE tm`, the `INSERT INTO tm` and the setup of every unit (`ti`, `ts`, `td`, `tn`, `tsv`
-  and the others). The matrix is one `INSERT`, so a value that the server rejects empties the whole
-  table, and two C++ recordings would still agree; this check is what catches it (an earlier version
-  lost rows 1-4 in every file to a bare `[]`);
-- the two recordings must be identical, which is the check of the determinism rules above;
-- the failed statements that `check-recording` lists are reviewed. A multi-row statement over `tm`
-  that fails although some of its rows should not hides those rows: its rows go into `ERROR_ROWS`
-  (or `CAST_ERROR_ROWS`). A failed type-only statement in s5 is split per pair. A failed
-  `CREATE TABLE tctNN ... AS SELECT` leaves its expression without a column type;
-- no statement may stop or crash the reference. Direct calls of internal and rarely used
-  functions are the likeliest place; such a statement is removed from the specification table and
-  the removal is noted here.
+### Result
+
+- **Two recordings compare identical.** r15, r16 and r17 record the corpus as it now stands
+  (`test_dir_sha256` 1516b7f988e0b11b0015813f762c0156d2981b9f04a9f6692089ab456b339c80): `compare`
+  exits 0 for each of the three pairs, 393 of 393 identical, no recording problems.
+  `check-recording` exits 0 on each: 0 problems. Earlier triples were identical too, each at the
+  corpus of its day: r04-r06, r09-r11 and r12-r14.
+- **Counts (r15).** 21,348 statements: 21,292 generated statements, each followed by its `errno` line,
+  and 56 in s8_known_0001. 5,079 of the generated statements recorded an error (89 different error
+  codes) and 16,213 succeeded. 1,378 statements recorded warnings, 11,705 warning rows in all; the
+  largest count for one statement is 56, below the server's limit of 64.
+- **Known answers.** s8_known_0001 (families/wire/known-answers.sql): no error, and all 40
+  known-answer values are 1: 17 `is_known_answer` (8 CRC32, 9 COMPRESS), 4 `is_known_input`, 4
+  `is_known_answer` for the long inputs' COMPRESS md5, 4 `header_matches`, 4 `round_trip`, 2
+  `known_bytes_inflate`, `empty_is_0`, 2 `null_is_null`, `empty_stays_empty` and `is_empty`. The
+  960,000-byte input ran, and the NULL, warning and header-mismatch lines are recorded (and compare
+  identical like the rest).
+- **Stable within a session.** `stability.py --repeats 4` on the final corpus: 16,669 probes, none
+  unstable. With the four unstable probes found below put back into one file, it reports all four
+  and exits 1.
+- **Failed statements.** `check-recording` lists 2,005 failed statements on r15. After the split
+  (below) none of them is a sweep that hides a row other than the all-NULL one; they fail for their
+  types or on every value.
+
+### What the runs found and what changed
+
+1. **r01, the corpus as first generated: the reference crashed.** SIGSEGV in
+   `ObExprSysPrivilegeCheck::eval_sys_privilege_check` + 684 (crash report
+   ~/Library/Logs/DiagnosticReports/seekdb-2026-09-25-093156.ips) at
+   `SELECT sys_privilege_check('table_acc', 1, 'test', '') AS v` in s2_reached_0069; it recurs on a
+   fresh instance. `calc_result_typeN` gives the arguments their types with `set_type`, not
+   `set_calc_type` (src/sql/engine/expr/ob_expr_sys_privilege_check.cpp:53-65), so nothing converts
+   them and each datum is read as the declared type; the fourth, the routine type, is read with
+   `get_int()` (:132), and the empty string's datum has no data pointer (the faulting instruction is
+   `ldr x5, [x8]`). The specification also had the arguments out of order: they are level, database,
+   object and routine type (the information_schema views call `sys_privilege_check('table_acc',
+   D.DATABASE_NAME, T.TABLE_NAME)`). Now: `PRIVLEVEL` (the three levels, upper case, bad values),
+   `S`, `S`, `ROUTINETYPE` (integers and NULL only), the last three optional. A string routine type
+   crashes or reads past its bytes and a decimal is 4 bytes read as 8, so neither is probed. All 35
+   probes ran one by one on a separate instance without a crash.
+   The crash also showed two things about the harness: mysqltest does not fail a file when the
+   server dies in it (s2_reached_0069 "passed", recording 2013 and then 2006 for its remaining
+   statements), and the next file waited for the dead server with mysqltest at full CPU until that
+   mysqltest was killed (after 91 s). Two C++ recordings would agree on such a crash, so
+   `check-recording` now fails on any client error 2000-2999.
+2. **r01: 76 statements did not parse.** Most were meant: an argument too many where the grammar
+   fixes the form (`year(t, 1)`, `weight_string('abc', 1)`, `hash(1)`, ...), `char()`, `NOW(-1)`, and
+   `statement_digest` of text that is not SQL. Three were generator mistakes:
+   - `VECTOR_DISTANCE` and `VECTOR_SIMILARITY` with `euclidean_squared` and `hamming`: the grammar's
+     metrics are `COSINE`, `DOT`, `EUCLIDEAN` and `MANHATTAN`
+     (src/sql/parser/sql_parser_mysql_mode.y:3244-3302). Removed from domain `METRIC`.
+   - `x <=> ANY | ALL (subquery)`: the grammar has no subquery flag after `COMP_NSEQ` (:1205). The
+     resolver makes `T_OP_SQ_NSEQ` when a `<=>` operand is a subquery of more than one column
+     (src/sql/resolver/expr/ob_raw_expr_info_extractor.cpp:311-330), so `subquery_null_safe_equal`
+     is now probed with row subqueries, `(c_int, c_varchar) <=> (SELECT c_int, c_varchar ...)`.
+   - `COLLATE binary`: `BINARY` is a keyword and a collation name is `NAME_OB` or `STRING_VALUE`
+     (:5995-6007). Now `COLLATE 'binary'`, which records 1253.
+3. **r01: probes that could not reach their functions.**
+   - seekdb has only the `utf8mb4` and `binary` character sets and three collations (`SHOW
+     CHARACTER SET`, `SHOW COLLATION`). `CAST(... AS CHAR CHARACTER SET latin1)` failed with 1115
+     for all 40 columns, 11 literals and 2 derived sources, and `CHAR(4) CHARSET gbk` for 7 more. The
+     main target is now `CHAR CHARACTER SET binary`, the variant `CHAR(4) CHARSET utf8mb4`, the
+     `CONVERT ... USING` and `CREATE TABLE ... AS SELECT` probes use `binary`, and `latin1` and `gbk`
+     keep one literal probe each.
+   - 427 statements with SRID 4326 or 3857 failed with 3548 "Spatial reference system is empty",
+     because the reduced init, like the full one, loads no spatial reference systems. Every file
+     with the matrix now loads them ("The type matrix"). 3548 remains only for SRIDs that do not
+     exist (30 statements: SRID 1, and the SRIDs read from the first bytes of strings taken as
+     geometries).
+   - With them loaded, SRID 4326 reads latitude first, so the points written `POINT(116.4 39.9)`
+     failed with 3617 (latitude out of range) before the function under test ran. They are now
+     `POINT(39.9 116.4)` and `POINT(31.2 121.5)`; one probe keeps the error. `ST_Transform` to 3857
+     fails with 3742 (not supported), so the `CREATE TABLE ... AS SELECT` for its type uses 4269, and
+     4269 and 4490 (3744, no TOWGS84 clause) were added as probes.
+   - `ARRAY_SORTBY` takes one lambda argument per array (30 of its 31 probes failed with 1582): one
+     array with the one-argument lambdas now, and extras with two arrays and two-argument lambdas.
+     `AI_PROMPT`'s arguments must be strings (29 of 30 failed with 5083): typical values `'a'` and
+     `'b'` now. `POLYGON`'s typical ring had two points (3037 for all but one): a closed four-point
+     ring and a hole now.
+4. **r02 against r03: 7 files differed.**
+   - Six in the length of the column definition, in statements with a literal argument (`quote`,
+     `concat_ws`, `nullif`, `any_value`, `word_segment`, `weight_string`). With the plan cache on,
+     `SELECT quote('Hello, World!')` reuses the plan built for `SELECT quote('')` two statements
+     earlier and reports length 8 instead of 112, if that plan is still cached; eviction runs on a
+     timer while the corpus compiles about 20,000 plans. On a separate instance the pair gave 8 and
+     8 with the plan cache on, 8 and 112 with it off. The session `SET` now turns the plan cache off
+     ("Determinism"); the length is still recorded, now the statement's own.
+   - One in a value: `time_to_sec(c_json)` row 7 printed 6171066624917 in r02, 7056807275233 in r03
+     and 180891863066 in r01. Not comparable, see below; the row is left out.
+5. **r04, r05, r06: identical.**
+6. **The review of the failed statements (split_rows.py).** Without splits, 2,209 of the corpus's
+   8,349 sweeps fail (run split-rows-03). Run row by row (pair by pair for `tm a, tm b`), 1,953 fail
+   on every row but the all-NULL one, and 256 hide rows that succeed, 1,145 values in all: from
+   `year(c_double)` (rows 3 and 4 fail) to `a.c_int + b.c_ubigint` (4 of its 25 pairs overflow).
+   split-rows.tsv lists the 256;
+   `cases` splits them (+990 statements). The first version counted the pairs a join's
+   `a.id IN (...) AND b.id IN (...)` leaves out as succeeding (they return no row), which split 6
+   joins whose pairs all fail; `split_rows.py` now probes only the pairs the condition selects.
+7. **r07 against r08: s2_reached_0109 differed.** `_st_buffer(ST_GeomFromText('POINT(1 2)'),
+   c_double, 'abc')` over rows 1, 2 and 8 failed with 1210 in r07 and succeeded in r08; repeated in
+   one session it fails 1 time in 6. Not comparable, see below; row 1 is left out of the three
+   distance sweeps. A first form of `stability.py` then found `sql_mode_convert(c_varchar)` and
+   `sql_mode_convert(c_date)` changing between repeats in one session. Not comparable, see below;
+   `sql_mode_convert` is now probed only with values whose datum holds 8 bytes (integers, a double,
+   `DECIMAL(18,6)`, `TIME`, `DATETIME`, `TIMESTAMP`, `BIT`, `ENUM`) and NULL.
+8. **r09, r10, r11: identical. r12, r13, r14: identical** (after the `ST_Transform` probes of item 3).
+   **r15, r16, r17: identical** (after the correction of the split in item 6).
+
+### Not comparable
+
+The reference reads memory it never wrote in these places, so its output there is not a value to
+match. The corpus leaves them out; a C++-against-Rust comparison must not count them if they come
+back.
+
+| What | Where in the source | Evidence | In the corpus |
+|---|---|---|---|
+| JSON string that is not a time, cast to TIME | `CAST_FUNC_NAME(json, time)` declares `int64_t out_val;` without a value (src/sql/engine/expr/ob_datum_cast.cpp:7969); for a JSON string `ObIJsonBase::to_time` sets nothing when `str_to_time` fails (src/oblib/common/json_type/ob_json_base.cpp:5402-5412); the failure becomes a truncation warning under `CAST_FAIL`, and `SET_RES_OBJ` stores the value for that warning (ob_datum_cast.cpp:194-212) | `time_to_sec(c_json)` row 7 (`"str"`): 180891863066, 6171066624917, 7056807275233 in r01, r02, r03; `CAST(c_json AS TIME(6))` row 7 prints 01:11:34.963288 and `time(c_json)` 838:59:59 in every run, values nothing computed | row 7 left out of `CAST(c_json AS TIME(6))`, `CAST(c_json AS TIME)`, `CAST(c_json AS TIME(2))`, `time(c_json)`, `time_to_sec(c_json)` |
+| `_st_buffer` with a NULL distance from a column | `ObExprPrivSTBuffer::eval_priv_st_buffer` tests `geo_datum->is_null() \|\| geo_datum->is_null()` and never the distance (src/sql/engine/expr/ob_expr_st_buffer.cpp:707), then reads the NULL datum with `get_double()` (:737) | the statement over rows 1, 2 and 8 failed with 1210 in r07 and not in r08, and 1 time in 6 in one session; row 1 alone: 1 failure in 6 | row 1 left out of the sweeps of the distance over `c_double`, `c_varchar` and `c_datetime6` (a NULL literal is caught by the type check) |
+| `sql_mode_convert` of a value whose datum is not 8 bytes | `ObExprSqlModeConvert::calc_result_type1` sets no calculation type (src/sql/engine/expr/ob_expr_sql_mode_convert.cpp:38-50) and the evaluation reads the argument with `get_uint64()` (:65) | `sql_mode_convert(c_varchar)` row 3, and `sql_mode_convert(c_date)` rows 3 and 7, changed between repeats in one session (error 1235 or a list of modes) | only integers, a double, `DECIMAL(18,6)`, `TIME`, `DATETIME`, `TIMESTAMP`, `BIT`, `ENUM` and NULL |
+| `sys_privilege_check` with a routine type that is not an integer | item 1 above | the crash | only integers and NULL |
+
+`CAST_FUNC_NAME(json, datetime)`, `(json, date)` and `(json, bit)` leave their value unset on the
+same path (ob_datum_cast.cpp:7842, 7907 and 8095). The corpus's JSON-to-DATE and DATETIME probes
+print NULL on row 7 in every run (with the default MySQL-compatible dates they go through the mdate
+and mdatetime casts), and no probe casts JSON to BIT.
+
+### The mutation for the second sign-off
+
+migration/judge/mutations/second-set/02-expr-make-set-drops-last-string.patch, with its note beside
+it: `MAKE_SET` never returns its last string (an off-by-one in its bit mask,
+src/sql/engine/expr/ob_expr_make_set.cpp:98). MAKE_SET is one of the unreached entries: the 272
+configured cases never run the file, and 104 result rows of 41 statements in s1_unreached_0053 and
+s1_unreached_0054 change. Not built; the mutation stage builds and runs it.
 
 The argument meanings of the OceanBase-specific functions (arrays, maps, vectors, private `_st_`
 spatial functions, AI functions) were taken from their type-deduction code, not from documentation;
-where a guess is wrong the probes still record the error each build returns.
-
-The second sign-off also needs a caught mutation for this family (PLAN.md section 4, "00b's exit"),
-for example a changed cast rounding in ob_datum_cast.cpp.
+where a guess is wrong the probes record the error each build returns. Items 1 and 3 above corrected
+the ones the first run showed wrong.

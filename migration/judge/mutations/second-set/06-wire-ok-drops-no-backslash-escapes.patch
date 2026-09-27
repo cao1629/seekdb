@@ -1,0 +1,13 @@
+diff --git a/src/observer/mysql/obmp_packet_sender.cpp b/src/observer/mysql/obmp_packet_sender.cpp
+index 7b75b61..deaa354 100644
+--- a/src/observer/mysql/obmp_packet_sender.cpp
++++ b/src/observer/mysql/obmp_packet_sender.cpp
+@@ -808,7 +808,7 @@ int ObMPPacketSender::send_ok_packet(ObSQLSessionInfo &session, ObOKPParam &ok_p
+         = (session.is_server_status_in_transaction() ? 1 : 0);
+       flags.status_flags_.OB_SERVER_STATUS_AUTOCOMMIT = (ac ? 1 : 0);
+       flags.status_flags_.OB_SERVER_MORE_RESULTS_EXISTS = ok_param.has_more_result_;
+-      flags.status_flags_.OB_SERVER_STATUS_NO_BACKSLASH_ESCAPES = is_no_backslash_escapes;
++      flags.status_flags_.OB_SERVER_STATUS_NO_BACKSLASH_ESCAPES = 0;
+       flags.status_flags_.OB_SERVER_STATUS_CURSOR_EXISTS = ok_param.cursor_exist_ ? 1 : 0;
+       flags.status_flags_.OB_SERVER_STATUS_LAST_ROW_SENT = ok_param.send_last_row_ ? 1 : 0;
+       flags.status_flags_.OB_SERVER_PS_OUT_PARAMS = ok_param.has_pl_out_ ? 1 : 0;

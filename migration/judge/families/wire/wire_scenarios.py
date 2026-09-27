@@ -49,6 +49,8 @@ CLOSE_TIMEOUT = 10
 PROBE_TIMEOUT = 30
 GLOBAL_WAIT_TIMEOUT = 120
 GLOBAL_WAIT_INTERVAL = 0.5
+SYS_PACKAGE_PROBE = "select wire_probe_unknown_column"
+SYS_PACKAGE_WAIT_TIMEOUT = 300
 TOOL_TIMEOUT = 120
 HEX_LIMIT = 65536
 DIGEST_EDGE = 64
@@ -838,16 +840,16 @@ class Session(object):
             self.conn = None
 
 
-def probe(scenario, sql):
+def probe_response(scenario, sql):
     try:
         sock = scenario.connect()
     except OSError:
-        return None
+        return None, None
     conn = wire.Connection(sock, PROBE_TIMEOUT)
     try:
         greeting, scramble = wire.read_greeting(conn)
         if scramble is None:
-            return None
+            return None, None
         payload, _ = wire.handshake_response(
             wire.DEFAULT_CAPABILITIES,
             wire.DEFAULT_CHARSET,
@@ -860,18 +862,45 @@ def probe(scenario, sql):
         conn.send(payload, seq=(greeting.packets[0].last_seq + 1) & 0xFF)
         login = wire.read_response(conn, wire.MODE_SINGLE, wire.DEFAULT_CAPABILITIES)
         if login.outcome() != "ok":
-            return None
+            return None, None
         conn.send(wire.query_payload(sql.encode("utf-8")), seq=0)
         response = wire.read_response(conn, wire.MODE_QUERY, wire.DEFAULT_CAPABILITIES)
-        rows = [packet for packet in response.packets if packet.kind == "row"]
-        if len(rows) != 1 or not rows[0].info.get("values"):
-            return None
         conn.send(wire.command(wire.COM_QUIT), seq=0)
-        return greeting.packets[0].info["connection_id"], rows[0].info["values"][0]
+        return greeting.packets[0].info["connection_id"], response
     except (wire.ProtocolError, OSError):
-        return None
+        return None, None
     finally:
         conn.close()
+
+
+def probe(scenario, sql):
+    connection_id, response = probe_response(scenario, sql)
+    if response is None:
+        return None
+    rows = [packet for packet in response.packets if packet.kind == "row"]
+    if len(rows) != 1 or not rows[0].info.get("values"):
+        return None
+    return connection_id, rows[0].info["values"][0]
+
+
+def wait_for_sys_packages(scenario):
+    scenario.recording.line(
+        "-- waiting until {} on a new connection fails with 1054; the statement waits until "
+        "the server has loaded its system packages (these probe connections are not "
+        "recorded)".format(quoted(SYS_PACKAGE_PROBE.encode("utf-8")))
+    )
+    deadline = time.monotonic() + SYS_PACKAGE_WAIT_TIMEOUT
+    while True:
+        _, response = probe_response(scenario, SYS_PACKAGE_PROBE)
+        if response is not None and response.outcome() == "err:1054":
+            return
+        if time.monotonic() >= deadline:
+            scenario.recording.check(
+                "the probe failed with 1054 within {} seconds".format(SYS_PACKAGE_WAIT_TIMEOUT),
+                False,
+            )
+            raise ScenarioFailed("the server did not load its system packages")
+        time.sleep(GLOBAL_WAIT_INTERVAL)
 
 
 def wait_for_new_sessions(scenario, sql, expected):
@@ -944,8 +973,8 @@ TYPE_CASES = (
     ("char", "char(10)", ("'abc'", "''")),
     ("varchar", "varchar(20)", ("'hello world'", "'O''Brien'", "'tab\\there'")),
     ("varchar_utf8mb4", "varchar(10)", ("'caf\u00e9 \u20ac \U0001d11e'",)),
-    ("varchar_latin1", "varchar(10) character set latin1", ("'caf\u00e9'",)),
-    ("varchar_gbk", "varchar(10) character set gbk", ("'\u4e2d\u6587'",)),
+    ("varchar_utf8mb4_bin", "varchar(10) collate utf8mb4_bin", ("'caf\u00e9'",)),
+    ("varchar_utf8", "varchar(10) character set utf8", ("'caf\u00e9'",)),
     ("nchar", "nchar(5)", ("'ab'",)),
     ("nvarchar", "nvarchar(5)", ("'xyz'",)),
     ("binary", "binary(4)", ("x'00ff10'", "'ab'")),
@@ -998,10 +1027,26 @@ EXPRESSION_SELECTS = (
     "cast('2024-02-29' as date), cast('2024-02-29 01:02:03.5' as datetime(1)), "
     "cast('-01:02:03' as time)",
     "select cast(1 as unsigned), cast(-1 as signed), cast(1.25 as decimal(5,3)), "
-    "cast(1 as char), cast('abc' as binary), convert('abc' using latin1), _binary'abc', 1 = 1",
+    "cast(1 as char), cast('abc' as binary), convert('abc' using utf8mb4), _binary'abc', 1 = 1",
     "select cast('{\"a\": [1, 2.5, \"x\", null, true]}' as json), json_object('k', 1), "
     "json_array(1, 'a')",
     "select st_geomfromtext('POINT(1 2)'), st_astext(st_geomfromtext('POINT(1 2)'))",
+)
+REJECTED_CHARSET_STATEMENTS = (
+    (
+        "create table t_varchar_latin1 (id int primary key, v varchar(10) character set latin1)",
+        "err:1115",
+    ),
+    (
+        "create table t_varchar_gbk (id int primary key, v varchar(10) character set gbk)",
+        "err:1115",
+    ),
+    (
+        "create table t_varchar_unicode (id int primary key, "
+        "v varchar(10) collate utf8mb4_unicode_ci)",
+        "err:1273",
+    ),
+    ("select convert('abc' using latin1)", "err:1115"),
 )
 
 
@@ -1148,6 +1193,8 @@ def scenario_wire_ok_err_eof(scenario):
     query("commit")
     query("set sql_mode = 'NO_BACKSLASH_ESCAPES'")
     query("select 'a\\b'", "rows")
+    query("insert into t_ok values (40, 'a\\b', 40)")
+    query("do 1")
     query("set sql_mode = default")
     query("use test")
     query("set @u = 5")
@@ -1185,6 +1232,8 @@ def scenario_wire_text_types(scenario):
         session.query("select id, v from t_{} order by id".format(name), "rows")
     for sql in EXPRESSION_SELECTS:
         session.query(sql, "rows")
+    for sql, expect in REJECTED_CHARSET_STATEMENTS:
+        session.query(sql, expect)
     session.quit()
 
 
@@ -1214,7 +1263,7 @@ PARAMS_SECOND = (
     wire.param_double(1e100),
     wire.param_bytes(b"-0.001", wire.MYSQL_TYPE_NEWDECIMAL),
     wire.param_bytes(b""),
-    wire.param_bytes(b"", wire.MYSQL_TYPE_BLOB),
+    wire.param_bytes(b"\x7f", wire.MYSQL_TYPE_BLOB),
     wire.param_date(1000, 1, 1),
     wire.param_datetime(9999, 12, 31, 23, 59, 59),
     wire.param_time(False, 0, 0, 0, 0),
@@ -1243,6 +1292,17 @@ def scenario_wire_binary_types(scenario):
         session.execute(statement, PARAMS_FIRST)
         session.execute(statement, PARAMS_SECOND, send_types=False)
         session.execute(statement, PARAMS_NULL)
+        session.close_statement(statement)
+
+    statement = session.prepare("select ?")
+    if statement is not None:
+        session.execute(statement, (wire.param_bytes(b"", wire.MYSQL_TYPE_BLOB),), "err:4016")
+        session.execute(
+            statement, (wire.param_bytes(b"\x00\x01\xff", wire.MYSQL_TYPE_BLOB),), send_types=False
+        )
+        session.execute(
+            statement, (wire.param_bytes(b"", wire.MYSQL_TYPE_BLOB),), "err:4016", send_types=False
+        )
         session.close_statement(statement)
 
     session.query("create table t_params (id int primary key, a varchar(20), b double, c datetime(6))")
@@ -1540,6 +1600,10 @@ OUTFILE_VARIANTS = (
     ("deflate", "DEFLATE", ".deflate"),
     ("zstd", "ZSTD", ".zst"),
 )
+ZSTD_SMALL_BUFFER_DEFECT = (
+    "a defect of the reference, kept as golden bytes: when the 4096-byte output buffer "
+    "fills, the writer hands zstd the same input again from its start"
+)
 
 
 def sql_text(value):
@@ -1612,8 +1676,22 @@ def dump_file(scenario, path):
     return data
 
 
-def check_decompresses(scenario, tool, arguments, path, expected, expected_name):
+def check_decompresses(scenario, tool, arguments, path, expected, expected_name, defect=None):
     code, output = run_tool([tool] + list(arguments) + [path])
+    if defect is not None:
+        command = "{} {} {}".format(Path(str(tool)).name, " ".join(arguments), path.name)
+        scenario.recording.check("{} exits with status 0".format(command), code == 0)
+        scenario.recording.line(
+            "-- {} gives {} bytes, sha256 {}; the bytes of {}: {} ({})".format(
+                command,
+                len(output),
+                hashlib.sha256(output).hexdigest(),
+                expected_name,
+                "yes" if expected is not None and output == expected else "no",
+                defect,
+            )
+        )
+        return
     holds = code == 0 and expected is not None and output == expected
     scenario.recording.check(
         "{} {} turns {} into the bytes of {}".format(
@@ -1688,11 +1766,11 @@ def run_file_outfile(scenario):
     big_none = directory / "t_file_big_none.csv"
     session.query(outfile_statement("t_file_big", "id, h", big_none, "NONE"))
     big_plain = dump_file(scenario, big_none)
-    for label, compression, suffix, options in (
-        ("gzip", "GZIP", ".gz", ""),
-        ("gzip_buffer4k", "GZIP", ".gz", " buffer_size = 4096"),
-        ("zstd", "ZSTD", ".zst", ""),
-        ("zstd_buffer4k", "ZSTD", ".zst", " buffer_size = 4096"),
+    for label, compression, suffix, options, defect in (
+        ("gzip", "GZIP", ".gz", "", None),
+        ("gzip_buffer4k", "GZIP", ".gz", " buffer_size = 4096", None),
+        ("zstd", "ZSTD", ".zst", "", None),
+        ("zstd_buffer4k", "ZSTD", ".zst", " buffer_size = 4096", ZSTD_SMALL_BUFFER_DEFECT),
     ):
         path = directory / "t_file_big_{}.csv{}".format(label, suffix)
         session.query(outfile_statement("t_file_big", "id, h", path, compression, options))
@@ -1700,7 +1778,9 @@ def run_file_outfile(scenario):
         if compression == "GZIP":
             check_decompresses(scenario, args.gzip, ("-dc",), path, big_plain, big_none.name)
         else:
-            check_decompresses(scenario, args.zstd, ("-dcq",), path, big_plain, big_none.name)
+            check_decompresses(
+                scenario, args.zstd, ("-dcq",), path, big_plain, big_none.name, defect
+            )
 
     session.query("create table t_file_empty (id int primary key)")
     for label, compression, suffix in OUTFILE_VARIANTS:
@@ -2046,6 +2126,7 @@ def run_scenario(args, name, function):
     scenario = Scenario(args, recording, name)
     try:
         bring_up(args, recording, name)
+        wait_for_sys_packages(scenario)
         scenario.check_connection_id()
         function(scenario)
         scenario.check_identities()
@@ -2085,10 +2166,19 @@ def run_scenario(args, name, function):
 def tool_version(tool):
     if tool is None:
         return None
-    code, output = run_tool([tool, "--version"])
-    if code != 0:
+    try:
+        result = subprocess.run(
+            [str(tool), "--version"],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            timeout=TOOL_TIMEOUT,
+            check=False,
+        )
+    except (OSError, subprocess.TimeoutExpired):
         return None
-    lines = output.decode("utf-8", "replace").strip().splitlines()
+    if result.returncode != 0:
+        return None
+    lines = result.stdout.decode("utf-8", "replace").strip().splitlines()
     return lines[0] if lines else None
 
 

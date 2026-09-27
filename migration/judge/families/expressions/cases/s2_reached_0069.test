@@ -2,7 +2,20 @@
 --enable_metadata
 --enable_warnings
 --echo # s2_reached 69
-SET NAMES utf8mb4 COLLATE utf8mb4_general_ci, @@session.time_zone = '+00:00', @@session.sql_mode = 'STRICT_ALL_TABLES,NO_ZERO_IN_DATE,NO_AUTO_CREATE_USER', @@session.timestamp = 1709214296.654321, @@session.div_precision_increment = 4, @@session.block_encryption_mode = 'aes-128-ecb', @@session.group_concat_max_len = 1024;
+SET NAMES utf8mb4 COLLATE utf8mb4_general_ci, @@session.time_zone = '+00:00', @@session.sql_mode = 'STRICT_ALL_TABLES,NO_ZERO_IN_DATE,NO_AUTO_CREATE_USER', @@session.timestamp = 1709214296.654321, @@session.div_precision_increment = 4, @@session.block_encryption_mode = 'aes-128-ecb', @@session.group_concat_max_len = 1024, @@session.ob_enable_plan_cache = 0;
+--echo errno $mysql_errno
+--disable_query_log
+--disable_result_log
+--disable_warnings
+let $srs_rows = query_get_value(SELECT COUNT(*) AS c FROM oceanbase.__all_spatial_reference_systems, c, 1);
+if ($srs_rows != 5160)
+{
+  --source mysql_test/test_suite/geometry/t/default_srs_data_mysql.sql
+}
+--enable_warnings
+--enable_result_log
+--enable_query_log
+SELECT COUNT(*) = 5160 AS srs_loaded FROM oceanbase.__all_spatial_reference_systems;
 --echo errno $mysql_errno
 CREATE TABLE tm (id INT PRIMARY KEY, c_tinyint TINYINT, c_utinyint TINYINT UNSIGNED, c_smallint SMALLINT, c_mediumint MEDIUMINT, c_int INT, c_uint INT UNSIGNED, c_bigint BIGINT, c_ubigint BIGINT UNSIGNED, c_float FLOAT, c_double DOUBLE, c_dec_9_2 DECIMAL(9,2), c_dec_18_6 DECIMAL(18,6), c_dec_38_10 DECIMAL(38,10), c_dec_65_30 DECIMAL(65,30), c_char CHAR(16), c_varchar VARCHAR(64), c_binary BINARY(4), c_varbinary VARBINARY(64), c_tinytext TINYTEXT, c_text TEXT, c_mediumtext MEDIUMTEXT, c_longtext LONGTEXT, c_tinyblob TINYBLOB, c_blob BLOB, c_mediumblob MEDIUMBLOB, c_longblob LONGBLOB, c_date DATE, c_time TIME, c_time6 TIME(6), c_datetime DATETIME, c_datetime6 DATETIME(6), c_timestamp TIMESTAMP(6) NULL DEFAULT NULL, c_year YEAR, c_bit BIT(64), c_enum ENUM('a','b','c','中'), c_set SET('x','y','z'), c_json JSON, c_geom GEOMETRY, c_vec VECTOR(3), c_arr ARRAY(INT));
 --echo errno $mysql_errno
@@ -43,73 +56,73 @@ SELECT ROW_COUNT() AS v;
 DROP TABLE trc;
 --echo errno $mysql_errno
 --echo # sys_privilege_check [T_FUN_SYS_SYS_PRIVILEGE_CHECK ObExprSysPrivilegeCheck] (part 1 of 2)
-SELECT sys_privilege_check(NULL, 1, 'test', 'tm') AS v;
+SELECT sys_privilege_check(NULL, 'test', 'tm', 0) AS v;
 --echo errno $mysql_errno
-SELECT sys_privilege_check('', 1, 'test', 'tm') AS v;
+SELECT sys_privilege_check('', 'test', 'tm', 0) AS v;
 --echo errno $mysql_errno
-SELECT sys_privilege_check('Hello, World!', 1, 'test', 'tm') AS v;
+SELECT sys_privilege_check('db_acc', 'test', 'tm', 0) AS v;
 --echo errno $mysql_errno
-SELECT sys_privilege_check('héllo wörld', 1, 'test', 'tm') AS v;
+SELECT sys_privilege_check('routine_acc', 'test', 'tm', 0) AS v;
 --echo errno $mysql_errno
-SELECT sys_privilege_check('中文字符串', 1, 'test', 'tm') AS v;
+SELECT sys_privilege_check('TABLE_ACC', 'test', 'tm', 0) AS v;
 --echo errno $mysql_errno
-SELECT sys_privilege_check('x😀y', 1, 'test', 'tm') AS v;
+SELECT sys_privilege_check('bad', 'test', 'tm', 0) AS v;
 --echo errno $mysql_errno
-SELECT sys_privilege_check('12.5abc', 1, 'test', 'tm') AS v;
+SELECT sys_privilege_check(X'00FF41', 'test', 'tm', 0) AS v;
 --echo errno $mysql_errno
-SELECT sys_privilege_check(X'00FF41', 1, 'test', 'tm') AS v;
+SELECT sys_privilege_check('table_acc', NULL, 'tm', 0) AS v;
 --echo errno $mysql_errno
-SELECT sys_privilege_check('table_acc', NULL, 'test', 'tm') AS v;
+SELECT sys_privilege_check('table_acc', '', 'tm', 0) AS v;
 --echo errno $mysql_errno
-SELECT sys_privilege_check('table_acc', 0, 'test', 'tm') AS v;
+SELECT sys_privilege_check('table_acc', 'Hello, World!', 'tm', 0) AS v;
 --echo errno $mysql_errno
-SELECT sys_privilege_check('table_acc', 1, 'test', 'tm') AS v;
+SELECT sys_privilege_check('table_acc', 'héllo wörld', 'tm', 0) AS v;
 --echo errno $mysql_errno
-SELECT sys_privilege_check('table_acc', -1, 'test', 'tm') AS v;
+SELECT sys_privilege_check('table_acc', '中文字符串', 'tm', 0) AS v;
 --echo errno $mysql_errno
-SELECT sys_privilege_check('table_acc', 3, 'test', 'tm') AS v;
+SELECT sys_privilege_check('table_acc', 'x😀y', 'tm', 0) AS v;
 --echo errno $mysql_errno
-SELECT sys_privilege_check('table_acc', 100, 'test', 'tm') AS v;
+SELECT sys_privilege_check('table_acc', '12.5abc', 'tm', 0) AS v;
 --echo errno $mysql_errno
-SELECT sys_privilege_check('table_acc', 1.5, 'test', 'tm') AS v;
+SELECT sys_privilege_check('table_acc', X'00FF41', 'tm', 0) AS v;
 --echo errno $mysql_errno
-SELECT sys_privilege_check('table_acc', '2', 'test', 'tm') AS v;
+SELECT sys_privilege_check('table_acc', 'test', NULL, 0) AS v;
 --echo errno $mysql_errno
-SELECT sys_privilege_check('table_acc', 4294967297, 'test', 'tm') AS v;
+SELECT sys_privilege_check('table_acc', 'test', '', 0) AS v;
 --echo errno $mysql_errno
-SELECT sys_privilege_check('table_acc', -9223372036854775808, 'test', 'tm') AS v;
+SELECT sys_privilege_check('table_acc', 'test', 'Hello, World!', 0) AS v;
 --echo errno $mysql_errno
-SELECT sys_privilege_check('table_acc', 1, NULL, 'tm') AS v;
+SELECT sys_privilege_check('table_acc', 'test', 'héllo wörld', 0) AS v;
 --echo errno $mysql_errno
-SELECT sys_privilege_check('table_acc', 1, '', 'tm') AS v;
+SELECT sys_privilege_check('table_acc', 'test', '中文字符串', 0) AS v;
 --echo errno $mysql_errno
-SELECT sys_privilege_check('table_acc', 1, 'Hello, World!', 'tm') AS v;
+SELECT sys_privilege_check('table_acc', 'test', 'x😀y', 0) AS v;
 --echo errno $mysql_errno
-SELECT sys_privilege_check('table_acc', 1, 'héllo wörld', 'tm') AS v;
+SELECT sys_privilege_check('table_acc', 'test', '12.5abc', 0) AS v;
 --echo errno $mysql_errno
-SELECT sys_privilege_check('table_acc', 1, '中文字符串', 'tm') AS v;
+SELECT sys_privilege_check('table_acc', 'test', X'00FF41', 0) AS v;
 --echo errno $mysql_errno
-SELECT sys_privilege_check('table_acc', 1, 'x😀y', 'tm') AS v;
+SELECT sys_privilege_check('table_acc', 'test', 'tm', NULL) AS v;
 --echo errno $mysql_errno
-SELECT sys_privilege_check('table_acc', 1, '12.5abc', 'tm') AS v;
+SELECT sys_privilege_check('table_acc', 'test', 'tm', 1) AS v;
 --echo errno $mysql_errno
-SELECT sys_privilege_check('table_acc', 1, X'00FF41', 'tm') AS v;
+SELECT sys_privilege_check('table_acc', 'test', 'tm', 2) AS v;
 --echo errno $mysql_errno
-SELECT sys_privilege_check('table_acc', 1, 'test', NULL) AS v;
+SELECT sys_privilege_check('table_acc', 'test', 'tm', 3) AS v;
 --echo errno $mysql_errno
-SELECT sys_privilege_check('table_acc', 1, 'test', '') AS v;
+SELECT sys_privilege_check('table_acc', 'test', 'tm', -1) AS v;
 --echo errno $mysql_errno
-SELECT sys_privilege_check('table_acc', 1, 'test', 'Hello, World!') AS v;
+SELECT sys_privilege_check('table_acc', 'test', 'tm', 100) AS v;
 --echo errno $mysql_errno
-SELECT sys_privilege_check('table_acc', 1, 'test', 'héllo wörld') AS v;
+SELECT sys_privilege_check('table_acc', 'test', 'tm', 4294967297) AS v;
 --echo errno $mysql_errno
-SELECT sys_privilege_check('table_acc', 1, 'test', '中文字符串') AS v;
+SELECT sys_privilege_check('table_acc') AS v;
 --echo errno $mysql_errno
-SELECT sys_privilege_check('table_acc', 1, 'test', 'x😀y') AS v;
+SELECT sys_privilege_check('table_acc', 'test') AS v;
 --echo errno $mysql_errno
-SELECT sys_privilege_check('table_acc', 1, 'test', '12.5abc') AS v;
+SELECT sys_privilege_check('table_acc', 'test', 'tm') AS v;
 --echo errno $mysql_errno
-SELECT sys_privilege_check('table_acc', 1, 'test', X'00FF41') AS v;
+SELECT sys_privilege_check('table_acc', 'test', 'tm', 0) AS v;
 --echo errno $mysql_errno
 DROP TABLE tm;
 --echo errno $mysql_errno

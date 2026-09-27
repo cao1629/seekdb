@@ -84,7 +84,9 @@ goes as text (COM_QUERY), for example `SET @v = 1`, `BEGIN`, `CALL`, `EXPLAIN`, 
 `--ps-protocol` recording with a text-protocol one. A manifest written before this option has no
 `ps_protocol` key and counts as text protocol. The checked-in .result files were made over the text
 protocol, so a `--ps-protocol` run checked against them can fail where the binary protocol prints
-differently; the judge compares recordings, C++ against C++ first.
+differently; the judge compares recordings, C++ against C++ first. Family 8's live check, its case
+list, the cases that stop under the binary protocol (`compare --known-failures`) and the ways
+mysqltest prints differently there are in ../../families/ps_protocol/README.md.
 
 ### `--compress`
 

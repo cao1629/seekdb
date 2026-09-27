@@ -2,7 +2,20 @@
 --enable_metadata
 --enable_warnings
 --echo # s2_reached 24
-SET NAMES utf8mb4 COLLATE utf8mb4_general_ci, @@session.time_zone = '+00:00', @@session.sql_mode = 'STRICT_ALL_TABLES,NO_ZERO_IN_DATE,NO_AUTO_CREATE_USER', @@session.timestamp = 1709214296.654321, @@session.div_precision_increment = 4, @@session.block_encryption_mode = 'aes-128-ecb', @@session.group_concat_max_len = 1024;
+SET NAMES utf8mb4 COLLATE utf8mb4_general_ci, @@session.time_zone = '+00:00', @@session.sql_mode = 'STRICT_ALL_TABLES,NO_ZERO_IN_DATE,NO_AUTO_CREATE_USER', @@session.timestamp = 1709214296.654321, @@session.div_precision_increment = 4, @@session.block_encryption_mode = 'aes-128-ecb', @@session.group_concat_max_len = 1024, @@session.ob_enable_plan_cache = 0;
+--echo errno $mysql_errno
+--disable_query_log
+--disable_result_log
+--disable_warnings
+let $srs_rows = query_get_value(SELECT COUNT(*) AS c FROM oceanbase.__all_spatial_reference_systems, c, 1);
+if ($srs_rows != 5160)
+{
+  --source mysql_test/test_suite/geometry/t/default_srs_data_mysql.sql
+}
+--enable_warnings
+--enable_result_log
+--enable_query_log
+SELECT COUNT(*) = 5160 AS srs_loaded FROM oceanbase.__all_spatial_reference_systems;
 --echo errno $mysql_errno
 CREATE TABLE tm (id INT PRIMARY KEY, c_tinyint TINYINT, c_utinyint TINYINT UNSIGNED, c_smallint SMALLINT, c_mediumint MEDIUMINT, c_int INT, c_uint INT UNSIGNED, c_bigint BIGINT, c_ubigint BIGINT UNSIGNED, c_float FLOAT, c_double DOUBLE, c_dec_9_2 DECIMAL(9,2), c_dec_18_6 DECIMAL(18,6), c_dec_38_10 DECIMAL(38,10), c_dec_65_30 DECIMAL(65,30), c_char CHAR(16), c_varchar VARCHAR(64), c_binary BINARY(4), c_varbinary VARBINARY(64), c_tinytext TINYTEXT, c_text TEXT, c_mediumtext MEDIUMTEXT, c_longtext LONGTEXT, c_tinyblob TINYBLOB, c_blob BLOB, c_mediumblob MEDIUMBLOB, c_longblob LONGBLOB, c_date DATE, c_time TIME, c_time6 TIME(6), c_datetime DATETIME, c_datetime6 DATETIME(6), c_timestamp TIMESTAMP(6) NULL DEFAULT NULL, c_year YEAR, c_bit BIT(64), c_enum ENUM('a','b','c','中'), c_set SET('x','y','z'), c_json JSON, c_geom GEOMETRY, c_vec VECTOR(3), c_arr ARRAY(INT));
 --echo errno $mysql_errno

@@ -19,20 +19,22 @@ the server is still running, and destroys the instance, exactly as restart_scena
 requests are fixed bytes; the client logs in as `root` with an empty password unless a step says
 otherwise. Every connection ends with COM_QUIT (or a login failure) followed by a check that the server
 closes it without sending anything more, so a stray packet after the last response fails the scenario.
-Each scenario also opens one unrecorded probe connection before its first step, and checks two things
-at its end (see "Checks on the masked fields").
+Before its first step each scenario waits, on unrecorded probe connections, until the server has
+loaded its system packages ("Live check, 2026-09-25", item 1), then opens one more unrecorded probe
+connection for the connection id check, and at its end it checks two things (see "Checks on the
+masked fields").
 
 | Scenario | What it sends |
 |---|---|
 | `wire_handshake` | The greeting and login OK under the default capabilities; logins without CONNECT_WITH_DB, with the minimal 4.1 capabilities (then a multi-statement query), with PLUGIN_AUTH_LENENC_CLIENT_DATA, with client charsets 63 and 33; failed logins (unknown user 1045, unknown database 1049, wrong password 1045); `caching_sha2_password` named by the client for `root` (no switch) and for `admin` (an auth switch the client answers with the native-password reply); `admin` with the correct and a wrong native reply; an SSL request although the greeting offers no TLS (1043); a handshake response with sequence id 5; a 10-byte handshake response. After each failure, whether the server closes the connection |
 | `wire_ok_err_eof` | OK packets with affected rows, info strings, last insert ids and warning counts; ERR packets 1062, 1146, 1064, 1054, 1364, 1048, 1406 with their SQLSTATE; EOF after column definitions and rows; `SHOW WARNINGS`; status flags through BEGIN/COMMIT, autocommit off and ROLLBACK, a read-only transaction, NO_BACKSLASH_ESCAPES, `USE`; a second connection with FOUND_ROWS and without SESSION_TRACK |
-| `wire_text_types` | One table per column type seekdb accepts (68 cases, below), each with typical and edge values and a NULL row, read back with the text protocol; the DATE and DATETIME tables also hold the zero date, and the DATETIME(6) and TIME(6) tables a value whose fraction is zero; five SELECTs of expression-only types (NULL, hex and bit literals, big integer and decimal literals, date/time literals and casts, CONVERT, JSON, geometry) |
-| `wire_binary_types` | The same tables and SELECTs through COM_STMT_PREPARE and COM_STMT_EXECUTE (binary rows, with and without NULLs; the zero dates give binary length 0, a zero fraction length 7 or 8); a 14-parameter SELECT executed with types, with the types not sent again, and with every value NULL; an INSERT with parameters (OK, and 1062); COM_STMT_SEND_LONG_DATA; a cursor (CURSOR_TYPE_READ_ONLY) read with COM_STMT_FETCH, reset and fetched again; unknown statement ids; a prepare syntax error; the same text prepared twice; and on a new connection 50 prepared statements (the default `open_cursors`), the 51st failing with 5930, then one closed and the 51st prepared again |
+| `wire_text_types` | One table per column type seekdb accepts (68 cases, below), each with typical and edge values and a NULL row, read back with the text protocol; the DATE and DATETIME tables also hold the zero date, and the DATETIME(6) and TIME(6) tables a value whose fraction is zero; five SELECTs of expression-only types (NULL, hex and bit literals, big integer and decimal literals, date/time literals and casts, CONVERT, JSON, geometry); the character sets and the collation seekdb rejects (latin1 and gbk columns, 1115; a utf8mb4_unicode_ci column, 1273; `CONVERT(... USING latin1)`, 1115) |
+| `wire_binary_types` | The same tables and SELECTs through COM_STMT_PREPARE and COM_STMT_EXECUTE (binary rows, with and without NULLs; the zero dates give binary length 0, a zero fraction length 7 or 8); a 14-parameter SELECT executed with types, with the types not sent again, and with every value NULL; an empty BLOB parameter, which the reference answers with the column definitions and ERR 4016, with the types sent and not sent again; an INSERT with parameters (OK, and 1062); COM_STMT_SEND_LONG_DATA; a cursor (CURSOR_TYPE_READ_ONLY) read with COM_STMT_FETCH, reset and fetched again; unknown statement ids; a prepare syntax error; the same text prepared twice; and on a new connection 50 prepared statements (the default `open_cursors`), the 51st failing with 5930, then one closed and the 51st prepared again |
 | `wire_multi_results` | Multi-statement queries (two SELECTs; DDL, DML and a SELECT; an error in the middle; a trailing semicolon; a transaction), stored procedures returning two result sets, failing in the middle, and with an OUT parameter; CALL through the binary protocol; `CALL p_out(?)` prepared and executed, whose OUT value comes back as a result set that must carry PS_OUT_PARAMS (0x1000); a connection without MULTI_RESULTS and PS_MULTI_RESULTS |
 | `wire_large_packets` | `@@max_allowed_packet` (16777216 by default); text rows whose payload is 0xFFFFFE, exactly 0xFFFFFF (two packets, the second empty), 0x1000000 and 16777225 bytes; REPEAT one byte past the limit (1301); a two-column row of 16 MB; a 16 MB + 86 byte query (1153); then `SET GLOBAL max_allowed_packet = 67108864`, a wait until new connections see it, and on a new connection a row of exactly 2 x 0xFFFFFF bytes (three packets), the 16 MB query accepted, and a binary row of exactly 0xFFFFFF bytes |
 | `wire_commands` | COM_PING; COM_INIT_DB (OK, 1049, information_schema); COM_FIELD_LIST (all columns, a wildcard, an unknown table); COM_STMT_RESET (valid and unknown id); COM_STMT_CLOSE (valid and unknown id, each followed by a PING, since CLOSE has no answer); EXECUTE of a closed statement; COM_RESET_CONNECTION; COM_SET_OPTION off and on around a multi-statement query; COM_TIME, which the server does not implement (1235); COM_STATISTICS (a fixed string); COM_DEBUG (an EOF); COM_REFRESH with REFRESH_GRANT (OK); COM_PROCESS_KILL of connection id 2000000000, which no connection has (1094); COM_CHANGE_USER to `root`, to `admin` through the auth switch, and to `admin` with a wrong reply (1045, then the close); on a connection without PLUGIN_AUTH, COM_CHANGE_USER answered directly |
 | `wire_compressed` | The same kinds of requests on a CLIENT_COMPRESS connection: PING, small results (frames sent uncompressed), larger results (deflated frames), a request the client deflates, multi-results, an ERR, binary rows, INIT_DB, FIELD_LIST, a 100 KB result spread over several server batches, 200 rows of `md5(n)` (one batch) and 1000 rows of `md5(n)` and `sha2(n, 256)` (several batches), so the deflated frames also carry text that does not repeat, the text-protocol SELECTs of nine type tables, a 16 MB row (frames of at most 0xFFFFFF plain bytes), COM_CHANGE_USER through compressed frames |
-| `file_outfile` | A fixed 300-row table (NULLs, tab, newline, backslash, quotes, UTF-8) exported with `FORMAT = (TYPE = 'CSV', COMPRESSION = ...)` as NONE, GZIP, DEFLATE and ZSTD; the files' bytes; checks that `gzip -dc` (GZIP and DEFLATE) and `zstd -dcq` (ZSTD) give the NONE file; a 10000-row table exported as NONE, GZIP and ZSTD, each also with `BUFFER_SIZE = 4096`, with the same checks; an empty table in all four; errors (the file exists, the directory is missing, COMPRESSION 'LZ4'); and each of the four files loaded back with COMPRESSION 'AUTO' into a copy whose rows must equal the table's |
+| `file_outfile` | A fixed 300-row table (NULLs, tab, newline, backslash, quotes, UTF-8) exported with `FORMAT = (TYPE = 'CSV', COMPRESSION = ...)` as NONE, GZIP, DEFLATE and ZSTD; the files' bytes; checks that `gzip -dc` (GZIP and DEFLATE) and `zstd -dcq` (ZSTD) give the NONE file; a 10000-row table exported as NONE, GZIP and ZSTD, each also with `BUFFER_SIZE = 4096`, with the same checks, except that the reference's ZSTD file with `BUFFER_SIZE = 4096` holds some input twice, so for it the recording gives the length and sha256 of what `zstd -dcq` makes of it ("Live check, 2026-09-25", item 4); an empty table in all four; errors (the file exists, the directory is missing, COMPRESSION 'LZ4'); and each of the four files loaded back with COMPRESSION 'AUTO' into a copy whose rows must equal the table's |
 | `file_load_data` | A fixed 60-row CSV (enclosed fields, escapes, NULLs, an empty string, UTF-8) loaded as NONE, with no COMPRESSION clause, GZIP (`gzip -n -6`), DEFLATE (a zlib stream at level 6, and the gzip file), ZSTD (`zstd -3 -T1`), and AUTO for .gz, .deflate, a gzip file named .deflate, .zst, .zstd and .csv, plus two concatenated gzip members; after each load the rows, which must equal the plain load's; then COMPRESSION 'LZ4', a plain file as GZIP, a gzip file as ZSTD, and a truncated gzip file, each into its own table; `LOAD DATA LOCAL INFILE` on a connection without CLIENT_LOCAL_FILES (3948); and on connections with CLIENT_LOCAL_FILES, LOCAL loads that the client answers with the CSV in 512-byte packets, with the CSV gzip-compressed (COMPRESSION 'GZIP'), and with an empty file, the first also on a compressed connection |
 
 The 68 type cases come from the MySQL-mode `data_type` rule (src/sql/parser/sql_parser_mysql_mode.y:5323,
@@ -43,11 +45,15 @@ with the table that maps every ObObjType to a MySQL field type
 (src/query/protocol/ob_mysql_protocol_util.cpp:44-91): signed, unsigned and zerofill integers, BOOLEAN,
 FLOAT and DOUBLE (plain, unsigned, with (M,D)), DECIMAL and NUMERIC (including (65,30) and an
 integer-only precision), DATE, DATETIME, DATETIME(6), TIMESTAMP, TIMESTAMP(3), TIME, TIME(6), YEAR,
-CHAR, VARCHAR (utf8mb4 with 2-, 3- and 4-byte characters, latin1, gbk), NCHAR, NVARCHAR, BINARY,
-VARBINARY, the four TEXT and four BLOB sizes, BIT(1), BIT(12), BIT(64), ENUM, SET, JSON, the eight
-geometry types, VECTOR(3), ARRAY(INT), ARRAY(VARCHAR), INT[], MAP(INT, INT) and SPARSEVECTOR. The
-expression SELECTs reach the types no column has (ObNullType, ObHexStringType) and the literal forms
-of the temporal and decimal types.
+CHAR, VARCHAR (utf8mb4 with 2-, 3- and 4-byte characters, with COLLATE utf8mb4_bin, and with the
+alias `CHARACTER SET utf8`), NCHAR, NVARCHAR, BINARY, VARBINARY, the four TEXT and four BLOB sizes,
+BIT(1), BIT(12), BIT(64), ENUM, SET, JSON, the eight geometry types, VECTOR(3), ARRAY(INT),
+ARRAY(VARCHAR), INT[], MAP(INT, INT) and SPARSEVECTOR. seekdb knows only the character sets utf8mb4
+(with utf8 and utf8mb3 as its aliases) and binary (`ObCharset::charset_type`,
+src/oblib/lib/charset/ob_charset.cpp:1239-1251), so latin1 and gbk columns are not type cases: their
+CREATE TABLE is recorded once, as the ERR 1115 the reference sends. The expression SELECTs reach the
+types no column has (ObNullType, ObHexStringType) and the literal forms of the temporal and decimal
+types.
 
 ## Command line
 
@@ -107,6 +113,8 @@ reference again. Then, in order:
 | `F <offset> <hex>` | Bytes of a file, 32 per line, after `-- file NAME: N bytes` |
 | `-- input NAME: HOW; N bytes, sha256 X` | A file the server reads that was made by an outside tool or by Python's zlib (file_load_data). Its bytes can change with the tool, so its length and sha256 are part of the recording: a changed tool shows as a changed input line, not as a changed server answer |
 | `-- check: ...: yes` or `: no` | A check; `no` fails the scenario. An expectation that does not hold adds `-- check: request N ended as X, expected Y: no` |
+| `-- waiting until ...` | A wait on unrecorded probe connections: before every scenario's first step, until the server has loaded its system packages; in wire_large_packets, until new connections see the raised `max_allowed_packet` |
+| `-- zstd -dcq NAME gives N bytes, sha256 X; the bytes of NAME: yes` or `: no (...)` | Only for the reference's ZSTD export with `BUFFER_SIZE = 4096`, whose content is wrong ("Live check, 2026-09-25", item 4): what `zstd -dcq` makes of the file, recorded instead of checked, after a check that `zstd -dcq` exits with status 0 |
 
 A payload, frame body or file over 65536 bytes is written as `sha256=<hex> head=<first 64 bytes>
 tail=<last 64 bytes>`: the comparison stays byte for byte through the digest, only the dump is
@@ -362,58 +370,128 @@ Nothing here has run against a server (injected-mutation judge runs occupy this 
   with the same C program, with obd's libz 1.3.1, and with miniz_oxide 0.9.1 and zlib-rs 0.6.8 built
   offline from the local cargo cache (/tmp/wire-offline/ka_discriminate.py, deflate-rs/).
 
-## What still needs a live check on the reference
+## Live check, 2026-09-25
 
-After the judge run ends: two runs on the archived reference, then `compare`, then a caught mutation
-(00b's second sign-off). The runs are sequential and use the same `--file-dir` (the default; it must
-not exist before a run).
+Two runs on the archived reference, `compare`, and a mutation for the second sign-off (PLAN.md
+section 4, "00b's exit"). Every run used /Users/colin/seekdb-dev/ref-archive-834bbee1e/seekdb and
+its client/obclient, the reduced init, port 3892, `--gzip /usr/bin/gzip --zstd /opt/homebrew/bin/zstd`,
+the default `--file-dir`, and no `--save-instance-dir`; `git diff --quiet 834bbee1e -- tools/deploy
+.github/script/seekdb/sdb.py` succeeded before each. Outputs, one directory per run:
+/Users/colin/seekdb-dev/mysqltest-runs/00b/second-set/06-wire/.
+
+| Runs | Script | Result |
+|---|---|---|
+| run01, run02 | as committed (sha256 5d7fedf2...) | 7 of 10 scenarios passed; wire_text_types, wire_binary_types and file_outfile failed their own checks (items 2 to 4 below). All ten recordings (seven `.result`, three `.partial`) byte-identical between the two runs; `compare`: 7 identical, 3 failed alike |
+| run03, run04 | items 2 to 4 fixed | 10 of 10 passed, about 35 s per run; `compare` exit 0, 10 of 10 identical |
+| run05 to run08 | item 1, then item 5 | 10 of 10 passed in each; `compare` exit 0 for run05 against run06 and for run07 against run08. Apart from the recorder line and item 1's new line, the recordings equal run03's |
+| **run09, run10** | item 6: the final script, sha256 26adc2354ad2d021c3e1790d015e53f82ce8b931cb37f220ef848d5b6d44795b (wire_client.py unchanged, 0cd2dd92...) | **10 of 10 passed in each, 68 s per run (6.6 to 7.1 s per scenario). `compare` exits 0: 10 of 10 identical, no recording problems (compare-run09-run10.json).** These two are the reference recordings; apart from the recorder line and the two requests item 6 adds, run09 equals run07 |
+
+diag01 to diag04 are single instances started by hand on the same port, one at a time, to look into
+items 1 and 3; each copied the server log before `sdb.py destroy`.
+
+What changed, and why:
+
+1. **A wait for the system packages (timing).** In run01, `select nosuchcolumn from t_ok`
+   (wire_ok_err_eof) took 4.1 s to answer 1054, and wire_multi_results took 6.5 s where the other
+   scenarios took 2.5 s. An unknown name is resolved as a PL symbol too, and that resolution, like
+   the resolution of a CALL, waits until the server has loaded its system packages
+   (`ObResolverUtils::wait_for_sys_package_ready`, src/sql/resolver/ob_resolver_utils.cpp:5292-5321,
+   called at :5361 and at src/sql/resolver/cmd/ob_call_procedure_resolver.cpp:326). The packages load
+   from a timer task scheduled every 3 s: its first run creates the load job, its second loads them
+   (src/observer/ob_system_package_load_task.cpp:58, :83-111, :113-132), about 6 s after start
+   (diag03, diag04). The wait ends only when the packages are loaded or the statement's own timeout
+   (10 s by default) expires, so on a slower or busier machine those statements would record a
+   timeout error instead of their answer. Now every scenario first waits, on unrecorded probe
+   connections, until `select wire_probe_unknown_column` fails with 1054 (the probe waits in the same
+   function; at most 300 s), and records one `-- waiting until ...` line. Nothing recorded was
+   dropped: with the wait, run05 recorded exactly what run03 recorded without it.
+2. **latin1 and gbk do not exist in seekdb.** Both CREATE TABLEs failed with 1115 "Unknown character
+   set", and so did `CONVERT('abc' USING latin1)`: seekdb has only utf8mb4 (utf8 and utf8mb3 are its
+   aliases) and binary (src/oblib/lib/charset/ob_charset.cpp:1239-1251), and utf8mb4_unicode_ci fails
+   with 1273. The two type cases became `VARCHAR(10) COLLATE utf8mb4_bin` and `VARCHAR(10) CHARACTER
+   SET utf8`, the expression SELECT uses `CONVERT('abc' USING utf8mb4)`, and wire_text_types records
+   the four rejections once, as the ERR packets the reference sends (`REJECTED_CHARSET_STATEMENTS`).
+3. **An empty BLOB parameter makes the reference fail after the column definitions.** In run01 the
+   second execution of the 14-parameter SELECT, with the types not sent again, answered with the 14
+   column definitions, the EOF and then ERR 4016 "Internal error". Its tenth parameter was an empty
+   BLOB. diag01 and diag02 showed that an empty BLOB-typed parameter (BLOB or LONG_BLOB) always does
+   this, with the types sent or not, and that one of 1 or 3 bytes does not. The server logs "The query
+   has already returned partial results to the client and cannot be retried" (ob_query_driver.cpp:248).
+   The one difference between the two values in the parameter decoding is that a BLOB value becomes a
+   temporary LOB with a LOB header only when it is not empty (`set_standard_bytes_param`,
+   src/observer/mysql/obmp_stmt_execute.cpp:895-897); the function that returns -4016 was not found,
+   since the reference logs only INFO lines. The row sent without types now has a one-byte BLOB, so
+   that path records a binary row again, and the empty BLOB has its own step: `select ?` executed with
+   the empty BLOB and its type (ERR 4016), with 3 bytes and no types (a row), and empty with no types
+   (ERR 4016). The ERRs are golden bytes.
+4. **The reference's ZSTD export with `BUFFER_SIZE = 4096` is wrong.** `zstd -dcq` turned it into
+   378918 bytes instead of the 378890 of the NONE export: the 18 bytes before offset 131072 appear
+   again at 131072, and the 10 bytes before 262144 again at 262144, the 128 KiB block boundaries of
+   zstd. `ObZstdWrapper::compress_stream` hands zstd `{src, src_size, consumed_size}` but never writes
+   the input position zstd reached back into `consumed_size`
+   (src/oblib/lib/compress/zstd_1_3_8/ob_zstd_wrapper.cpp:309-335), so when the 4096-byte output
+   buffer fills and `ObCompressStreamWriter::write` calls it again
+   (src/sql/engine/basic/ob_select_into_basic.cpp:32-57), zstd gets the same input again from its
+   start. The gzip writer returns its position (ob_select_into_basic.cpp:309), and its 4096-byte
+   export is correct; the default buffer of 1 MB never fills for these files. The file is the same in
+   all ten runs (sha256 85b9cc73...), so it stays in the recording as golden bytes; only for this file
+   the check "`zstd -dcq` gives the NONE file" became a check that `zstd -dcq` exits with status 0 and
+   a recorded line with the length and sha256 of its output. A Rust build that writes a correct file
+   differs here, which is a named departure to decide, not a pass.
+5. **`gzip_version` was null in the manifest.** Apple gzip prints its version on stderr; the script
+   now reads both streams.
+6. **Two more OK packets under NO_BACKSLASH_ESCAPES.** Only the OK of the `SET` itself carried 0x0200
+   (EOF packets never do, below). wire_ok_err_eof now also runs an INSERT and `DO 1` under the mode, so
+   three OK packets carry the flag; the mutation below changes all three.
+
+What the first run confirmed as the README predicted, and what the recordings show besides:
+
+- Every other statement and expectation written from the source held on the reference: MAP,
+  SPARSEVECTOR, ARRAY, INT[] and VECTOR columns and their literals, FLOAT(7,3) and DOUBLE(12,4), the
+  zero dates, the expression SELECTs, `DO 1`, `START TRANSACTION READ ONLY`, `SET sql_mode = default`,
+  the procedures sent as one COM_QUERY, the prepared `CALL p_out(?)` with PS_OUT_PARAMS, errors 1364,
+  1406, 1235 and 1094, the COM_STATISTICS string, OUTFILE's FORMAT clause with `BUFFER_SIZE`, the LOAD
+  DATA error cases, and LOCAL INFILE with COMPRESSION 'GZIP' and on the compressed connection.
+- The probe check held in every scenario, every connection was closed by the server within 10 s with
+  nothing sent after its last response, and the `admin` logins and changes succeeded. The wait for
+  the raised `max_allowed_packet` fit in wire_large_packets' 3.0 s in all (run03, run04).
+- **The placeholders are where "The recording" says, and nowhere else** (a scan of run09):
+  `{connection_id:4}`, `{scramble:8}` and `{scramble:12}` only in the `S` lines of the 32 greetings;
+  `{scramble:20}` only in the `S` lines of the 5 auth switch requests, in the one `Z` line that holds
+  an auth switch request on the compressed connection (a 48-byte frame sent as it is), and in the
+  summaries of greetings and auth switch requests; `{auth_response:20}` only in 4 `C` lines. No
+  `{unparsed_handshake:N}`, `{compressed_length}` or `{deflated_body_with_...}` occurs. Nothing else
+  varied: each pair of runs was byte-identical.
+- Answers of the reference that a Rust build must reproduce, found in the recordings: a truncated gzip
+  file loaded with COMPRESSION 'GZIP' ends with ERR 1062 "Duplicated primary key", not a
+  decompression error (the same in all ten runs); the first statement that a session runs through the
+  SQL engine, and the first after COM_RESET_CONNECTION, reports `_nlj_batching_enabled` = ON in its OK
+  when SESSION_TRACK is on; EOF packets never carry NO_BACKSLASH_ESCAPES, since only the OK builder
+  sets it (obmp_packet_sender.cpp:811); every OK carries bit 0x0020 (the summaries use MySQL's name,
+  NO_INDEX_USED), from the OK packet's initial status 0x22 (src/oblib/rpc/obmysql/packet/ompk_ok.cpp:27);
+  a `COLLATE utf8mb4_bin` column is sent with charset 45 and the BINARY flag; and access-denied
+  messages print the client address as 'xxx.xxx.xxx.xxx', so they are fixed bytes.
+- known-answers.sql runs in family 5 as s8_known_0001; that family's live check found every
+  known-answer column 1, the 960000-byte input included (../expressions/README.md).
+
+The command for a new recording, for example of a Rust build:
 
 ```
 cd /Users/colin/seekdb-dev/migrate-to-rust
-for run in a b; do
-  python3 migration/judge/families/wire/wire_scenarios.py \
-    --seekdb /Users/colin/seekdb-dev/ref-archive-834bbee1e/seekdb \
-    --obclient /Users/colin/seekdb-dev/ref-archive-834bbee1e/client/obclient \
-    --base-dir /Users/colin/seekdb-dev/mysqltest-runs/00b/wire-$run/base \
-    --record-dir /Users/colin/seekdb-dev/mysqltest-runs/00b/wire-$run/rec \
-    --port 3891 \
-    --init-sql migration/judge/reduced-init/init.sql \
-    --init-user-sql migration/judge/reduced-init/init_user.sql \
-    --gzip /usr/bin/gzip --zstd /opt/homebrew/bin/zstd \
-    > /Users/colin/seekdb-dev/mysqltest-runs/00b/wire-$run.log 2>&1
-done
+python3 migration/judge/families/wire/wire_scenarios.py \
+  --seekdb <binary> \
+  --obclient /Users/colin/seekdb-dev/ref-archive-834bbee1e/client/obclient \
+  --base-dir <new dir>/base --record-dir <new dir>/rec --port <free judge port> \
+  --init-sql migration/judge/reduced-init/init.sql \
+  --init-user-sql migration/judge/reduced-init/init_user.sql \
+  --gzip /usr/bin/gzip --zstd /opt/homebrew/bin/zstd
 python3 .github/script/seekdb/mysqltest_for_seekdb.py compare \
-  --left /Users/colin/seekdb-dev/mysqltest-runs/00b/wire-a/rec \
-  --right /Users/colin/seekdb-dev/mysqltest-runs/00b/wire-b/rec \
-  --out /Users/colin/seekdb-dev/mysqltest-runs/00b/wire-compare.json
+  --left /Users/colin/seekdb-dev/mysqltest-runs/00b/second-set/06-wire/run09/rec \
+  --right <new dir>/rec
 ```
 
-The first run must confirm:
-
-- **Statements and expectations written from the source, not yet seen on the reference.** Every
-  `-- check: ... expected ...: no` is either a statement the reference rejects (fix the step, or keep
-  the ERR as the golden bytes and change the expectation) or an error number that differs from the one
-  expected. Most likely to need that: the MAP, SPARSEVECTOR, ARRAY, INT[] and VECTOR columns and their
-  literals, the latin1 and gbk columns, FLOAT(7,3) and DOUBLE(12,4), the zero-date rows, the expression
-  SELECTs, `DO 1`, `START TRANSACTION READ ONLY`, `SET sql_mode = default`, the stored procedures sent
-  as one COM_QUERY, the prepared `CALL p_out(?)` and its PS_OUT_PARAMS check, error numbers 1364, 1406,
-  1235 and 1094, the COM_STATISTICS string, OUTFILE's FORMAT clause with `BUFFER_SIZE`, the LOAD DATA
-  error cases, and LOCAL INFILE with COMPRESSION 'GZIP' and on the compressed connection. Any edit
-  changes the recorder sha256, so both runs are made again after it.
-- **The two recordings are identical.** A difference names a field this README did not predict to
-  vary; it gets a placeholder only if the source shows it varies between runs of one binary.
-- **The probe check holds:** `SELECT CONNECTION_ID()` equals the greeting's id on the reference (derived
-  from the source, above).
-- **Closes:** the server closes the connection after COM_QUIT on every connection, after login failures,
-  the SSL refusal, the bad handshake responses and the failed COM_CHANGE_USER, each within 10 seconds,
-  with nothing sent after the last response.
-- **The wait** after `SET GLOBAL max_allowed_packet` (at most 120 s) and the time of the whole run
-  (expected a few minutes; the type scenarios create 68 tables each).
-- **`admin` logins and changes succeed,** which checks the scramble-derived reply end to end.
-- **known-answers.sql through family 5:** a `0` in any `is_known_answer` or `is_known_input` column, a
-  failed `round_trip`, or an error on the 960000-byte input (a group_concat or UNCOMPRESS size limit the
-  source reading missed) is decided at the second sign-off; the printed values are what the Rust build
-  must match either way.
+Any edit to wire_scenarios.py or wire_client.py changes the digests at the top of every recording,
+so the reference is recorded again after it.
 
 ## Mutations for the second sign-off
 
@@ -422,8 +500,11 @@ code the port rewrites, not in the sql-nio code PLAN.md section 3 keeps (it keep
 crate and drops its two C-ABI files, row_encode.rs and response_api.rs; the C++ is ported):
 
 - src/observer/mysql/obmp_packet_sender.cpp:811: set `OB_SERVER_STATUS_NO_BACKSLASH_ESCAPES` to 0.
-  wire_ok_err_eof's OK after `SET sql_mode = 'NO_BACKSLASH_ESCAPES'` loses 0x0200; mysqltest cannot see
-  status flags, so only this family catches it.
+  The three OK packets wire_ok_err_eof receives under `SET sql_mode = 'NO_BACKSLASH_ESCAPES'` lose
+  0x0200; mysqltest cannot see status flags, and no configured case sets the mode, so only this
+  family catches it. **This is the one written for the second sign-off:**
+  ../../mutations/second-set/06-wire-ok-drops-no-backslash-escapes.patch, with its note beside it
+  (the exact packets that change, the coverage of line 811 in the 272 cases, and the commands).
 - src/query/protocol/ob_mysql_protocol_util.cpp:185: set `out.microseconds_` to 0. The binary DATETIME(6)
   and TIMESTAMP(3) values in wire_binary_types lose their fraction and go from length 11 to 7, while
   the text protocol is unchanged.

@@ -1,0 +1,12 @@
+diff --git a/src/sql/engine/expr/ob_expr_make_set.cpp b/src/sql/engine/expr/ob_expr_make_set.cpp
+--- a/src/sql/engine/expr/ob_expr_make_set.cpp
++++ b/src/sql/engine/expr/ob_expr_make_set.cpp
+@@ -95,7 +95,7 @@
+     // compute input bits representation
+     uint64_t input_bits = static_cast<uint64_t>(input_bits_dat->get_int());
+     if (expr.arg_cnt_ <= 64) {
+-      input_bits &= ((ulonglong) 1 << (expr.arg_cnt_ - 1)) - 1;
++      input_bits &= ((ulonglong) 1 << (expr.arg_cnt_ - 2)) - 1;
+     }
+     ObSEArray<ObString, 32> words;
+     for (int64_t pos = 1, temp_input_bits = input_bits; OB_SUCC(ret) && temp_input_bits > 0;

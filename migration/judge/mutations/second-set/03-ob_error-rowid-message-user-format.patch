@@ -1,0 +1,13 @@
+diff --git a/src/share/ob_errno.cpp b/src/share/ob_errno.cpp
+index fb0f475..c1dbdae 100644
+--- a/src/share/ob_errno.cpp
++++ b/src/share/ob_errno.cpp
+@@ -10058,7 +10058,7 @@ static const _error _error_OB_ROWID_TYPE_MISMATCH = {
+       .error_solution        = "Contact OceanBase Support",
+       .mysql_errno           = -1,
+       .sqlstate              = "HY000",
+-      .str_error             = "rowid type mismatch",
++      .str_error             = "rowid type mismatch, expect %.*s, got %.*s",
+       .str_user_error        = "rowid type mismatch, expect %.*s, got %.*s"
+ };
+ static const _error _error_OB_ROWID_NUM_MISMATCH = {

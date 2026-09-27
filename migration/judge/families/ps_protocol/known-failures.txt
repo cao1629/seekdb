@@ -1,0 +1,6 @@
+# Family 8: configured cases that stop under --ps-protocol on the reference, the same way in
+# every recording. compare --known-failures accepts a listed case only when both recordings
+# failed it with the same exit code, identical .partial files and the same mysqltest failure
+# lines; any other outcome fails as before. README.md in this directory gives the evidence.
+expr.func_length  # test line 54, select * from tx on an int(255) zerofill column: mysql_fetch didn't end with MYSQL_NO_DATA from statement: error: 101
+vector_index.vector_similarity  # test line 461, select cosine_similarity(?,?) under --error 1064: prepared with two parameters that mysqltest never binds, so the client fails it with 2031

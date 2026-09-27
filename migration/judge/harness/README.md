@@ -24,14 +24,21 @@ trailing whitespace ignored) exist only so CI behaves as before.
 | `--fresh-instance-per-case` | off | A new instance before every case |
 | `--save-instance-dir DIR` | `$SEEKDB_COV_PROFRAW_DIR` | Before every destroy: stop the instance the way `destroy` does, copy `log/` and `seekdb*.profraw` to `DIR/<counter>-<reason>` |
 | `--init-sql FILE`, `--init-user-sql FILE` | tools/deploy/init.sql, init_user.sql | The init files; any init failure fails the run |
-| `--record-dir DIR` | off | Records each case's actual output to `DIR/<case>.result` (a failed case's log to `DIR/<case>.partial`) with `DIR/manifest.json`; requires `--max-retries 0` |
+| `--record-dir DIR` | off | Records each case's actual output to `DIR/<case>.result` (a failed case's log to `DIR/<case>.partial`, and the `mysqltest:` message lines of its output to `failure_lines` in its `outcomes` entry) with `DIR/manifest.json`; requires `--max-retries 0` |
 | `--ignore-trailing-whitespace` / `--no-ignore-trailing-whitespace` | on | The CI tolerance for trailing spaces and tabs; off for every judge run |
 
-`compare --left DIR --right DIR [--out FILE] [--mask NAME]...` diffs two recordings byte for byte,
-refuses recordings that are unfinished, retried, failed or made from different mysqltest, obclient,
-init files, sdb.py or tools/deploy, and reports differing server binaries as a note. Masks are named
-switches, off by default; the registry is empty until the EST and hash-order masks are added
-(Decision 6). Exit 0 means every case is identical and there were no recording problems.
+`compare --left DIR --right DIR [--out FILE] [--mask NAME]... [--known-failures FILE]` diffs two
+recordings byte for byte, refuses recordings that are unfinished, retried, failed or made from
+different mysqltest, obclient, init files, sdb.py or tools/deploy, and reports differing server
+binaries as a note. Masks are named switches, off by default; the registry holds the EST and row-order
+masks of Decision 6, described in second-set/README.md. `--known-failures FILE` (off by default) names
+cases that both recordings may fail, such as family 8's cases that stop under `--ps-protocol`
+(../families/ps_protocol/README.md): a listed case passes only when both sides failed it with the same
+exit code, identical `.partial` files and the same `mysqltest:` failure lines, and only then is its
+failure not a recording problem; any other outcome of a listed case, and every failed case that is not
+listed, fails as before. Exit 0 means every case's verdict is identical (the exact result for a case
+outside the given masks' lists, the masked result for a listed one, the same failure on both sides
+for a case on the known-failures list) and there were no recording problems.
 
 Every run writes `WORK_DIR/entry-gate.json`: each init statement with its line and a status
 (succeeded, failed, not_run, unknown). Each init file goes to one obclient session, and statuses are
@@ -73,3 +80,18 @@ runs on disjoint parts, and applied to the live runner once those runs ended. Th
 the row-order list format and the helper that builds it (`hash_order_list.py`) are in
 second-set/README.md; the whole change is second-set/runner-second-set.patch. Every default is
 unchanged, so CI behaves as before.
+
+## The known-failures option (applied 2026-09-25)
+
+Family 8's first live run showed that a configured case can stop under `--ps-protocol` in the same
+way in every recording (../families/ps_protocol/README.md, "Live check, 2026-09-25"). Record mode now
+keeps the `mysqltest:` message lines of a failed case's output as `failure_lines` in the case's
+`outcomes` entry: the line that starts with `mysqltest: ` (without the time stamp mysqltest puts in
+front of it) and the lines that follow it up to the first blank line, which stops before the path
+mysqltest prints to its log. `compare --known-failures FILE` compares the cases FILE names as failures,
+as described above. Without the option `compare` prints the same lines and exits the same way as the
+runner at commit deade1391, and its JSON only gains `known_failures: null` (checked in-process on
+recordings with identical, different, one-sided and failed-alike cases); a passing case's `outcomes`
+entry is unchanged. The whole change is ../families/ps_protocol/runner-known-failures.patch,
+and ../families/ps_protocol/offline_test.py tests it (20 tests; 11 bugs put into copies of the runner
+each fail at least one of them). The 34 tests of ../families/concurrency/offline_test.py pass with it.

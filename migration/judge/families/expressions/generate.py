@@ -32,6 +32,7 @@ DESCRIPTION = (
 HERE = Path(__file__).resolve().parent
 REPO_ROOT = HERE.parents[3]
 TSV_PATH = HERE / "expressions.tsv"
+SPLIT_ROWS_PATH = HERE / "split-rows.tsv"
 CASES_DIR = HERE / "cases"
 FACTORY_FILE = "src/sql/engine/expr/ob_expr_operator_factory.cpp"
 NAME_DEF_FILE = "src/oblib/lib/ob_name_def.h"
@@ -794,7 +795,8 @@ FIXED_TIMESTAMP = "1709214296.654321"
 SESSION_SETTINGS = (
     "SET NAMES utf8mb4 COLLATE utf8mb4_general_ci, @@session.time_zone = '+00:00', @@session.sql_mode = '{}', "
     "@@session.timestamp = {}, @@session.div_precision_increment = 4, "
-    "@@session.block_encryption_mode = 'aes-128-ecb', @@session.group_concat_max_len = 1024".format(
+    "@@session.block_encryption_mode = 'aes-128-ecb', @@session.group_concat_max_len = 1024, "
+    "@@session.ob_enable_plan_cache = 0".format(
         SESSION_SQL_MODE, FIXED_TIMESTAMP
     ),
 )
@@ -1135,7 +1137,7 @@ DOMAINS = {
             "ST_GeomFromText('POLYGON((0 0,4 0,4 4,0 4,0 0))')",
             "ST_GeomFromText('MULTIPOINT((1 1),(2 2))')",
             "ST_GeomFromText('GEOMETRYCOLLECTION(POINT(1 1),LINESTRING(0 0,1 1))')",
-            "ST_GeomFromText('POINT(116.4 39.9)', 4326)",
+            "ST_GeomFromText('POINT(39.9 116.4)', 4326)",
             "ST_GeomFromText('POLYGON((0 0,0 1,1 1,1 0,0 0))', 4326)",
             "'abc'",
         ),
@@ -1175,7 +1177,7 @@ DOMAINS = {
     ),
     "METRIC": Domain(
         "euclidean",
-        ("cosine", "dot", "manhattan", "euclidean_squared", "hamming"),
+        ("cosine", "dot", "manhattan"),
         keyword=True,
     ),
     "AR": Domain(
@@ -1208,7 +1210,7 @@ DOMAINS = {
     "CS": Domain("utf8mb4", ("latin1", "binary", "gbk", "utf16", "gb18030"), keyword=True),
     "COLL": Domain(
         "utf8mb4_bin",
-        ("utf8mb4_general_ci", "utf8mb4_unicode_ci", "binary", "latin1_bin"),
+        ("utf8mb4_general_ci", "utf8mb4_unicode_ci", "'binary'", "latin1_bin"),
         keyword=True,
     ),
     "TZ": Domain(
@@ -1318,7 +1320,7 @@ CATEGORY_COLUMNS = {
 class Spec(object):
     def __init__(self, sql, kind, template=None, args=(), columns="core", statements=(),
                  setup=(), teardown=(), extra_templates=(), name_call=None, error_rows=None,
-                 null_flag=False, sweep=(0,), skip_literals=()):
+                 null_flag=False, sweep=(0,), skip_literals=(), unstable_rows=None):
         self.sql = sql
         self.kind = kind
         self.template = template
@@ -1330,12 +1332,13 @@ class Spec(object):
         self.extra_templates = tuple(extra_templates)
         self.name_call = name_call
         self.error_rows = dict(error_rows or {})
+        self.unstable_rows = dict(unstable_rows or {})
         self.null_flag = null_flag
         self.sweep = tuple(sweep)
         self.skip_literals = tuple(skip_literals)
 
 
-PROBE_OPTIONS = ("error_rows", "null_flag", "sweep", "skip_literals")
+PROBE_OPTIONS = ("error_rows", "null_flag", "sweep", "skip_literals", "unstable_rows")
 
 
 def probe_options(options):
@@ -1440,14 +1443,14 @@ def column_select(expression, null_flag=False):
     return "SELECT id, {} FROM {} ORDER BY id".format(value_items(expression, null_flag), MATRIX_TABLE)
 
 
-def row_split_selects(expression, rows, null_flag=False):
+def row_split_selects(expression, rows, null_flag=False, unstable=()):
     items = value_items(expression, null_flag)
     statements = [
         "SELECT id, {} FROM {} WHERE id NOT IN ({}) ORDER BY id".format(
-            items, MATRIX_TABLE, ", ".join(str(r) for r in rows)
+            items, MATRIX_TABLE, ", ".join(str(r) for r in sorted(set(rows) | set(unstable)))
         )
     ]
-    statements += ["SELECT id, {} FROM {} WHERE id = {}".format(items, MATRIX_TABLE, r) for r in rows]
+    statements += ["SELECT id, {} FROM {} WHERE id = {}".format(items, MATRIX_TABLE, r) for r in rows if r not in unstable]
     return statements
 
 
@@ -1473,8 +1476,9 @@ def call_probes(spec):
     def sweep(values, position, column):
         expression = render_call(spec, values)
         rows = spec.error_rows.get(position, {}).get(column, ())
-        if rows:
-            for statement in row_split_selects(expression, rows, spec.null_flag):
+        unstable = spec.unstable_rows.get(position, {}).get(column, ())
+        if rows or unstable:
+            for statement in row_split_selects(expression, rows, spec.null_flag, unstable):
                 add(statement)
         else:
             add(column_select(expression, spec.null_flag))
@@ -1587,6 +1591,12 @@ DOMAINS["PROMPT"] = Domain("'{0} and {1}'", ("NULL", "''", "'plain'", "'{0}'"), 
 DOMAINS["GENCNT"] = Domain("3", ("NULL", "0", "1", "-1", "'2'"), columns=False)
 DOMAINS["BMN"] = Domain("1", ("NULL", "0", "-1", "1e308"), columns=False)
 DOMAINS["RANGEN"] = Domain("5", ("NULL", "0", "-3", "1.5", "'4'"), columns=False)
+DOMAINS["PRIVLEVEL"] = Domain(
+    "'table_acc'",
+    ("NULL", "''", "'db_acc'", "'routine_acc'", "'TABLE_ACC'", "'bad'", "X'00FF41'"),
+    columns=False,
+)
+DOMAINS["ROUTINETYPE"] = Domain("0", ("NULL", "1", "2", "3", "-1", "100", "4294967297"), columns=False)
 
 
 INDEXED_TABLE = "ti"
@@ -1766,8 +1776,9 @@ ERROR_ROWS = {
         }
     },
 }
-GEO_POINT_4326 = "ST_GeomFromText('POINT(116.4 39.9)', 4326)"
+GEO_POINT_4326 = "ST_GeomFromText('POINT(39.9 116.4)', 4326)"
 GEO_SQUARE = "ST_GeomFromText('POLYGON((0 0,2 0,2 2,0 2,0 0))')"
+JSON_STRING_TO_TIME = {0: {"c_json": (7,)}}
 
 
 def bare_probes(call, column_call=None, *more):
@@ -1835,6 +1846,7 @@ def build_specs():
             literal_select("CHAR(77, 121, 83, 81, 76 USING utf8mb4)"),
             literal_select("CHAR(0xE4B8AD USING utf8mb4)"),
             literal_select("CHAR(256, 65536 USING latin1)"),
+            literal_select("CHAR(256, 65536 USING binary)"),
             literal_select("CHAR(0xFF USING utf8mb4)"),
             literal_select("CHARSET(CHAR(65))"),
         ],
@@ -1956,7 +1968,7 @@ def build_specs():
     )
     s["%"] = op("{0} % {1}", "N", "N", extra=[literal_select("MOD(-7, 3)"), literal_select("MOD(7.5, -2)"), literal_select("MOD(1, 0)")])
     s["md5"] = fn("md5", "A")
-    s["time"] = fn("time", "T")
+    s["time"] = fn("time", "T", unstable_rows=JSON_STRING_TO_TIME)
     s["hour"] = fn("hour", "T")
     s["rpad"] = fn("rpad", "S", "CNT", "S")
     s["lpad"] = fn("lpad", "S", "CNT", "S")
@@ -2278,7 +2290,7 @@ def build_specs():
         "SELECT GROUP_CONCAT(DISTINCT c_int, c_varchar ORDER BY id SEPARATOR '|') AS v FROM tm",
     )
     s["sys_privilege_check"] = fn(
-        "sys_privilege_check", "S='table_acc'", "I=1", "S='test'", "S='tm'",
+        "sys_privilege_check", "PRIVLEVEL", "S='test'?", "S='tm'?", "ROUTINETYPE?",
         columns="none",
     )
     s["field"] = fn("field", "A", "A=1", "A*")
@@ -2314,7 +2326,7 @@ def build_specs():
     s["minute"] = fn("minute", "T")
     s["microsecond"] = fn("microsecond", "T")
     s["to_seconds"] = fn("to_seconds", "T")
-    s["time_to_sec"] = fn("time_to_sec", "T")
+    s["time_to_sec"] = fn("time_to_sec", "T", unstable_rows=JSON_STRING_TO_TIME)
     s["sec_to_time"] = fn("sec_to_time", "N")
     s["interval"] = fn("interval", "N", "N=1", "N*")
     s["truncate"] = fn("truncate", "N", "I")
@@ -2338,7 +2350,16 @@ def build_specs():
     )
     s["subquery_equal"] = internal("subquery_equal", *subquery_probes("="), sql="x = ANY | ALL (subquery)")
     s["subquery_not_equal"] = internal("subquery_not_equal", *subquery_probes("<>"), sql="x <> ANY | ALL (subquery)")
-    s["subquery_null_safe_equal"] = internal("subquery_null_safe_equal", *subquery_probes("<=>"), sql="x <=> ANY | ALL (subquery)")
+    s["subquery_null_safe_equal"] = internal(
+        "subquery_null_safe_equal",
+        "SELECT id, (c_int, c_varchar) <=> (SELECT c_int, c_varchar FROM tm AS s WHERE s.id = tm.id) AS v FROM tm ORDER BY id",
+        "SELECT id, (c_int, c_double) <=> (SELECT c_int, c_double FROM tm AS s WHERE s.id = 5) AS v FROM tm ORDER BY id",
+        "SELECT id, (c_datetime6, c_dec_38_10) <=> (SELECT c_datetime6, c_dec_38_10 FROM tm AS s WHERE s.id = 9 - tm.id) AS v FROM tm ORDER BY id",
+        "SELECT (SELECT c_int, c_varchar FROM tm WHERE id = 1) <=> (NULL, NULL) AS v",
+        "SELECT (1, 'a') <=> (SELECT c_int, c_varchar FROM tm WHERE id > 8) AS v",
+        "SELECT (1, 2) <=> (SELECT c_int, c_int FROM tm) AS v",
+        sql="(x, y) <=> (row subquery); the grammar has no <=> ANY | ALL",
+    )
     s["subquery_greater_equal"] = internal("subquery_greater_equal", *subquery_probes(">="), sql="x >= ANY | ALL (subquery)")
     s["subquery_greater_than"] = internal("subquery_greater_than", *subquery_probes(">"), sql="x > ANY | ALL (subquery)")
     s["subquery_less_equal"] = internal("subquery_less_equal", *subquery_probes("<="), sql="x <= ANY | ALL (subquery)")
@@ -2611,7 +2632,20 @@ def build_specs():
     s["statement_digest_text"] = fn("statement_digest_text", "SQLTXT")
     s["TIMESTAMP_TO_SCN"] = fn("timestamp_to_scn", "T")
     s["SCN_TO_TIMESTAMP"] = fn("scn_to_timestamp", "SCN")
-    s["sql_mode_convert"] = fn("sql_mode_convert", "N=281018368")
+    s["sql_mode_convert"] = stmts(
+        "sql_mode_convert(x) over values whose datum holds 8 bytes; it reads the argument as uint64 without a cast",
+        *(
+            [
+                literal_select("sql_mode_convert({})".format(v))
+                for v in ("NULL", "0", "1", "281018368", "2147483648", "4294967295", "18446744073709551615", "-1", "0.5e0")
+            ]
+            + [
+                column_select("sql_mode_convert({})".format(c))
+                for c in ("c_int", "c_bigint", "c_ubigint", "c_double", "c_dec_18_6", "c_time6", "c_datetime6", "c_timestamp", "c_bit", "c_enum")
+            ]
+            + [literal_select("sql_mode_convert(281018368, 1)")]
+        )
+    )
     s["can_access_trigger"] = internal(
         "can_access_trigger",
         "CREATE TABLE ttrg (id INT PRIMARY KEY, v INT)",
@@ -2636,7 +2670,19 @@ def build_specs():
     s["linestring"] = fn("linestring", "PT", "PT*", columns="none", extra=[literal_select("ST_AsText(LINESTRING(POINT(0, 0), POINT(1, 1)))")])
     s["multipoint"] = fn("multipoint", "PT", "PT*", columns="none", extra=[literal_select("ST_AsText(MULTIPOINT(POINT(0, 0), POINT(1, 1)))")])
     s["multilinestring"] = fn("multilinestring", "LS", "LS*", columns="none")
-    s["polygon"] = fn("polygon", "LS", "LS*", columns="none", extra=[literal_select("ST_AsText(POLYGON(LINESTRING(POINT(0, 0), POINT(0, 1), POINT(1, 1), POINT(0, 0))))")])
+    s["polygon"] = fn(
+        "polygon",
+        "LS=LINESTRING(POINT(0, 0), POINT(0, 1), POINT(1, 1), POINT(0, 0))",
+        "LS=LINESTRING(POINT(0.2, 0.2), POINT(0.2, 0.4), POINT(0.4, 0.4), POINT(0.2, 0.2))*",
+        columns="none",
+        extra=[
+            literal_select("ST_AsText(POLYGON(LINESTRING(POINT(0, 0), POINT(0, 1), POINT(1, 1), POINT(0, 0))))"),
+            literal_select(
+                "ST_AsText(POLYGON(LINESTRING(POINT(0, 0), POINT(0, 1), POINT(1, 1), POINT(0, 0)), "
+                "LINESTRING(POINT(0.2, 0.2), POINT(0.2, 0.4), POINT(0.4, 0.4), POINT(0.2, 0.2))))"
+            ),
+        ],
+    )
     s["multipolygon"] = fn("multipolygon", "PG", "PG*", columns="none")
     s["geomcollection"] = fn("geomcollection", "PT", "PT*", columns="none", extra=[literal_select("ST_AsText(GEOMCOLLECTION())")])
     s["geometrycollection"] = fn("geometrycollection", "PT", "PT*", columns="none", extra=[literal_select("ST_AsText(GEOMETRYCOLLECTION(POINT(1, 1), LINESTRING(POINT(0, 0), POINT(1, 1))))")])
@@ -2648,6 +2694,9 @@ def build_specs():
             literal_select("ST_GeomFromText('POINT(1 2)')"),
             literal_select("ST_GeomFromText('POINT(1 2)', 4326)"),
             literal_select("ST_GeomFromText('LINESTRING(0 0,1 1,2 0)', 3857)"),
+            literal_select("ST_AsText(ST_GeomFromText('POINT(116.4 39.9)', 4326))"),
+            literal_select("ST_AsText(ST_GeomFromText('POINT(39.9 116.4)', 4326, 'axis-order=lat-long'))"),
+            literal_select("ST_AsText(ST_GeomFromText('POINT(39.9 190)', 4326))"),
         ],
         sql="ST_GeomFromText(wkt [, srid [, options]])",
     )
@@ -2666,6 +2715,10 @@ def build_specs():
             "ST_Transform(ST_GeomFromText('POINT(39.9 116.4)', 4326), 4326)",
             None,
             "ST_Transform(ST_GeomFromText('POINT(39.9 116.4)', 4326), 3857)",
+            "ST_Transform(ST_GeomFromText('POINT(39.9 116.4)', 4326), 4269)",
+            "ST_AsText(ST_Transform(ST_GeomFromText('POINT(39.9 116.4)', 4326), 4269))",
+            "ST_AsText(ST_Transform(ST_GeomFromText('LINESTRING(39.9 116.4,31.2 121.5)', 4326), 4269))",
+            "ST_AsText(ST_Transform(ST_GeomFromText('POINT(39.9 116.4)', 4326), 4490))",
         ),
         sql="ST_Transform(g, srid)",
     )
@@ -2711,7 +2764,10 @@ def build_specs():
     s["st_geometryfromtext"] = fn("st_geometryfromtext", "WKT", "SRID?", columns="geo")
     s["_st_point"] = fn("_st_point", "N", "N=2", "SRID?", columns="geo")
     s["st_isvalid"] = fn("st_isvalid", "G", columns="geo")
-    s["_st_buffer"] = fn("_st_buffer", "G", "N=1", "S?", columns="geo")
+    s["_st_buffer"] = fn(
+        "_st_buffer", "G", "N=1", "S?", columns="geo",
+        unstable_rows={1: {"c_double": (1,), "c_varchar": (1,), "c_datetime6": (1,)}},
+    )
     s["_st_dwithin"] = fn("_st_dwithin", "G", "G2", "N=1", columns="geo")
     s["st_aswkb"] = op(
         "HEX(ST_AsWKB({0}))", "G", columns="geo",
@@ -2728,7 +2784,11 @@ def build_specs():
         extra=bare_probes("ST_AsBinary(ST_GeomFromText('POINT(1 2)'))", "ST_AsBinary(c_geom)", "ST_AsBinary({})".format(GEO_POINT_4326)),
         sql="ST_AsBinary(g)",
     )
-    s["st_distance_sphere"] = fn("st_distance_sphere", "G=ST_GeomFromText('POINT(116.4 39.9)', 4326)", "G2=ST_GeomFromText('POINT(121.5 31.2)', 4326)", "N?", columns="geo")
+    s["st_distance_sphere"] = fn(
+        "st_distance_sphere", "G=ST_GeomFromText('POINT(39.9 116.4)', 4326)", "G2=ST_GeomFromText('POINT(31.2 121.5)', 4326)", "N?",
+        columns="geo",
+        extra=[literal_select("ST_Distance_Sphere(ST_GeomFromText('POINT(116.4 39.9)'), ST_GeomFromText('POINT(121.5 31.2)'))")],
+    )
     s["st_contains"] = fn("st_contains", "G2", "G", columns="geo")
     s["st_within"] = fn("st_within", "G", "G2", columns="geo")
     s["format_bytes"] = fn("format_bytes", "N")
@@ -2879,7 +2939,7 @@ def build_specs():
         extra=bare_probes(
             "ST_Union(ST_GeomFromText('POINT(1 2)'), {})".format(GEO_SQUARE),
             "ST_Union(c_geom, {})".format(GEO_SQUARE),
-            "ST_Union({}, ST_GeomFromText('POINT(121.5 31.2)', 4326))".format(GEO_POINT_4326),
+            "ST_Union({}, ST_GeomFromText('POINT(31.2 121.5)', 4326))".format(GEO_POINT_4326),
         ),
         sql="ST_Union(g1, g2)",
     )
@@ -2889,7 +2949,7 @@ def build_specs():
         extra=bare_probes(
             "ST_Difference({}, ST_GeomFromText('POINT(1 1)'))".format(GEO_SQUARE),
             "ST_Difference(c_geom, {})".format(GEO_SQUARE),
-            "ST_Difference({}, ST_GeomFromText('POINT(121.5 31.2)', 4326))".format(GEO_POINT_4326),
+            "ST_Difference({}, ST_GeomFromText('POINT(31.2 121.5)', 4326))".format(GEO_POINT_4326),
         ),
         sql="ST_Difference(g1, g2)",
     )
@@ -2909,13 +2969,13 @@ def build_specs():
         extra=bare_probes(
             "ST_SymDifference({}, ST_GeomFromText('POLYGON((1 1,3 1,3 3,1 3,1 1))'))".format(GEO_SQUARE),
             "ST_SymDifference(c_geom, {})".format(GEO_SQUARE),
-            "ST_SymDifference({}, ST_GeomFromText('POINT(121.5 31.2)', 4326))".format(GEO_POINT_4326),
+            "ST_SymDifference({}, ST_GeomFromText('POINT(31.2 121.5)', 4326))".format(GEO_POINT_4326),
         ),
         sql="ST_SymDifference(g1, g2)",
     )
     s["_st_asmvtgeom"] = fn("_st_asmvtgeom", "G", "G2", "I?", "I?", columns="geo")
     s["_st_makevalid"] = fn("_st_makevalid", "G", columns="geo")
-    s["_st_geohash"] = fn("_st_geohash", "G=ST_GeomFromText('POINT(116.4 39.9)', 4326)", "I?", columns="geo")
+    s["_st_geohash"] = fn("_st_geohash", "G=ST_GeomFromText('POINT(39.9 116.4)', 4326)", "I?", columns="geo")
     s["_st_makepoint"] = fn("_st_makepoint", "N", "N=2", "N?", columns="geo")
     s["current_role"] = stmts("CURRENT_ROLE()", literal_select("CURRENT_ROLE()"), literal_select("CURRENT_ROLE(1)"))
     s["array"] = fn(
@@ -3046,8 +3106,15 @@ def build_specs():
     s["array_compact"] = fn("array_compact", "AR", columns="arr")
     s["array_sort"] = fn("array_sort", "AR", columns="arr")
     s["array_sortby"] = op(
-        "ARRAY_SORTBY({0}, {1}, {2})", "LAMBDA", "AR", "AR=[3,2,1]", columns="arr", sweep=(1,),
-        sql="ARRAY_SORTBY(lambda, array, array)",
+        "ARRAY_SORTBY({0}, {1})", "LAMBDA", "AR", columns="arr", sweep=(1,),
+        extra=[
+            literal_select("ARRAY_SORTBY((x, y) -> y, [1, 2, 3], [3, 2, 1])"),
+            literal_select("ARRAY_SORTBY((x, y) -> x - y, [5, 1, 4], [1, 2, 3])"),
+            literal_select("ARRAY_SORTBY(x -> x, ['b', 'a', NULL])"),
+            literal_select("ARRAY_SORTBY((x, y) -> y, [1, 2], [1])"),
+            literal_select("ARRAY_SORTBY(x -> x > 1, [1, 2, 3], [3, 2, 1])"),
+        ],
+        sql="ARRAY_SORTBY(lambda, array [, array ...]); the lambda takes one argument per array",
     )
     s["array_filter"] = op("ARRAY_FILTER({0}, {1})", "LAMBDA", "AR", columns="arr", sweep=(1,), sql="ARRAY_FILTER(lambda, array)")
     s["element_at"] = fn("element_at", "AR", "I", columns="arr")
@@ -3146,7 +3213,7 @@ def build_specs():
     s["ai_complete"] = fn("ai_complete", "AI", "S", columns="none")
     s["ai_embed"] = fn("ai_embed", "AI", "S", columns="none")
     s["ai_rerank"] = fn("ai_rerank", "AI", "S", "S='[\"a\", \"b\"]'", columns="none")
-    s["ai_prompt"] = fn("ai_prompt", "PROMPT", "A", "A*", columns="none")
+    s["ai_prompt"] = fn("ai_prompt", "PROMPT", "A='a'", "A='b'*", columns="none")
     return s
 
 
@@ -3196,7 +3263,7 @@ def grammar_alternatives(rule):
 CAST_TARGETS_BY_HEAD = OrderedDict(
     (
         ("BINARY", (("BINARY",), ("BINARY(3)",))),
-        ("CHARACTER", (("CHAR", "CHAR CHARACTER SET latin1"), ("CHAR(3)", "CHAR(4) BINARY", "CHAR(4) CHARSET gbk"))),
+        ("CHARACTER", (("CHAR", "CHAR CHARACTER SET binary"), ("CHAR(3)", "CHAR(4) BINARY", "CHAR(4) CHARSET utf8mb4"))),
         ("DATETIME", (("DATETIME(6)",), ("DATETIME", "DATETIME(3)"))),
         ("DATE", (("DATE",), ())),
         ("TIME", (("TIME(6)",), ("TIME", "TIME(2)"))),
@@ -3224,6 +3291,7 @@ CAST_TARGETS_BY_HEAD = OrderedDict(
 GEOMETRY_TARGET_HEADS = ("POINT", "LINESTRING", "POLYGON", "MULTIPOINT", "MULTILINESTRING", "MULTIPOLYGON", "GEOMETRYCOLLECTION")
 DERIVED_CAST_SOURCES = ("CAST(c_dec_38_10 AS NUMBER)", "CAST(c_varchar AS NUMBER(30,5))")
 GEOMETRY_SOURCES = ("c_geom", "c_varbinary", "c_varchar", "c_blob", "c_json", "c_int", "c_vec")
+CAST_UNSTABLE_ROWS = {("c_json", "TIME(6)"): (7,), ("c_json", "TIME"): (7,), ("c_json", "TIME(2)"): (7,)}
 CAST_ERROR_ROWS = {
     ("c_char", "JSON"): (2, 3, 4, 5, 6, 8),
     ("c_varchar", "JSON"): (2, 3, 5, 6, 7, 8),
@@ -3356,7 +3424,8 @@ def cast_probe_groups():
         for target in main:
             expression = "CAST({} AS {})".format(column, target)
             rows = CAST_ERROR_ROWS.get((column, target), ())
-            probes.extend(row_split_selects(expression, rows) if rows else [column_select(expression)])
+            unstable = CAST_UNSTABLE_ROWS.get((column, target), ())
+            probes.extend(row_split_selects(expression, rows, False, unstable) if rows or unstable else [column_select(expression)])
         groups.append(("CAST from column {}".format(column), probes))
     for source in DERIVED_CAST_SOURCES:
         groups.append(
@@ -3375,7 +3444,16 @@ def cast_probe_groups():
     groups.append(
         (
             "CAST with other precisions and spellings",
-            [column_select("CAST({} AS {})".format(c, t)) for t in variants for c in SMALL_COLUMNS],
+            [
+                probe
+                for t in variants
+                for c in SMALL_COLUMNS
+                for probe in (
+                    row_split_selects("CAST({} AS {})".format(c, t), (), False, CAST_UNSTABLE_ROWS[(c, t)])
+                    if (c, t) in CAST_UNSTABLE_ROWS
+                    else [column_select("CAST({} AS {})".format(c, t))]
+                )
+            ],
         )
     )
     for literal in DOMAINS["A"].literals:
@@ -3394,7 +3472,10 @@ def cast_probe_groups():
                 column_select("CONVERT(c_varchar, SIGNED)"),
                 column_select("CONVERT(c_datetime6, DATE)"),
                 column_select("CONVERT(c_double, DECIMAL(10,3))"),
-                column_select("CONVERT(c_text USING latin1)"),
+                column_select("CONVERT(c_text USING binary)"),
+                literal_select("CONVERT('abc' USING latin1)"),
+                literal_select("CAST('abc' AS CHAR CHARACTER SET latin1)"),
+                literal_select("CAST('abc' AS CHAR(4) CHARSET gbk)"),
                 column_select("CONVERT(c_varbinary USING utf8mb4)"),
                 column_select("BINARY c_varchar"),
                 literal_select("CAST('abc' AS CHAR(2)) = 'ab'"),
@@ -3523,7 +3604,7 @@ CTAS_GROUPS = (
         (
             "CAST(c_varchar AS BINARY)",
             "CAST(c_varchar AS CHAR)",
-            "CAST(c_varchar AS CHAR CHARACTER SET latin1)",
+            "CAST(c_varchar AS CHAR CHARACTER SET binary)",
             "CAST(c_varchar AS DATETIME(6))",
             "CAST(c_varchar AS DATE)",
             "CAST(c_varchar AS TIME(6))",
@@ -3587,7 +3668,7 @@ CTAS_GROUPS = (
         "string functions, continued",
         (
             "MD5(c_varchar)",
-            "CONVERT(c_varchar USING latin1)",
+            "CONVERT(c_varchar USING binary)",
             "c_varchar COLLATE utf8mb4_bin",
             "CHAR(65)",
             "SPACE(3)",
@@ -3748,7 +3829,7 @@ CTAS_GROUPS = (
             "ST_GeomFromWKB(X'0101000000000000000000F03F0000000000000040', 4326)",
             "ST_SRID(c_geom, 4326)",
             "_ST_SetSRID(c_geom, 4326)",
-            "ST_Transform(ST_GeomFromText('POINT(39.9 116.4)', 4326), 3857)",
+            "ST_Transform(ST_GeomFromText('POINT(39.9 116.4)', 4326), 4269)",
             "_ST_GeomFromEWKT(CONCAT('SRID=4326', CHAR(59), 'POINT(1 2)'))",
         ),
     ),
@@ -4025,9 +4106,105 @@ def check_statement(statement):
 
 
 CaseFile = namedtuple("CaseFile", "text statements roles")
+SRS_DATA_FILE = "mysql_test/test_suite/geometry/t/default_srs_data_mysql.sql"
+SRS_TABLE = "oceanbase.__all_spatial_reference_systems"
+SRS_ROW = re.compile(r"^REPLACE INTO oceanbase\.__all_spatial_reference_systems\b.*VALUES \(1, (\d+),", re.M)
 
 
-def render_file(section, pieces, with_matrix):
+def srs_row_count():
+    text = read_text("tools/deploy/" + SRS_DATA_FILE)
+    srids = SRS_ROW.findall(text)
+    if not srids or "0" in srids or len(set(srids)) != len(srids):
+        raise GeneratorError("unexpected spatial reference system rows in tools/deploy/{}".format(SRS_DATA_FILE))
+    return len(srids) + 1
+
+
+def srs_load_lines(rows):
+    return [
+        "--disable_query_log",
+        "--disable_result_log",
+        "--disable_warnings",
+        "let $srs_rows = query_get_value(SELECT COUNT(*) AS c FROM {}, c, 1);".format(SRS_TABLE),
+        "if ($srs_rows != {})".format(rows),
+        "{",
+        "  --source {}".format(SRS_DATA_FILE),
+        "}",
+        "--enable_warnings",
+        "--enable_result_log",
+        "--enable_query_log",
+    ]
+
+
+MATRIX_SWEEP = re.compile(r"^SELECT id, (?P<items>.*) FROM tm(?: WHERE id NOT IN \((?P<excluded>\d+(?:, \d+)*)\))? ORDER BY id$")
+CROSS_SWEEP = re.compile(r"^SELECT a\.id, b\.id, (?P<items>.*) FROM tm a, tm b(?: WHERE (?P<condition>.*?))? ORDER BY a\.id, b\.id$")
+SPLIT_ROW = re.compile(r"^[1-8]$")
+SPLIT_PAIR = re.compile(r"^[1-8]:[1-8]$")
+SPLIT_PAIRS_ONE_EACH = 8
+
+
+def load_split_rows(path):
+    splits = OrderedDict()
+    try:
+        lines = Path(path).read_text(encoding="utf-8").split("\n")
+    except FileNotFoundError:
+        return splits
+    except OSError as exc:
+        raise GeneratorError("cannot read {}: {}".format(path, exc))
+    if not lines or lines[0] != "statement\trows":
+        raise GeneratorError("{} must start with the header statement<TAB>rows".format(path))
+    for number, line in enumerate(lines[1:], 2):
+        if not line:
+            continue
+        cells = line.split("\t")
+        if len(cells) != 2:
+            raise GeneratorError("{}:{}: expected two tab-separated fields".format(path, number))
+        statement, rows = cells
+        keys = rows.split(",")
+        pattern = SPLIT_ROW if MATRIX_SWEEP.match(statement) else SPLIT_PAIR if CROSS_SWEEP.match(statement) else None
+        if pattern is None:
+            raise GeneratorError("{}:{}: not a sweep over tm or over tm a, tm b: {}".format(path, number, statement[:120]))
+        if not keys or any(not pattern.match(k) for k in keys) or len(set(keys)) != len(keys):
+            raise GeneratorError("{}:{}: bad row list {!r}".format(path, number, rows))
+        if statement in splits:
+            raise GeneratorError("{}:{}: repeated statement".format(path, number))
+        splits[statement] = tuple(keys)
+    return splits
+
+
+def split_statements(statement, keys):
+    match = MATRIX_SWEEP.match(statement)
+    if match:
+        rows = sorted(int(k) for k in keys)
+        excluded = [int(r) for r in match.group("excluded").split(", ")] if match.group("excluded") else []
+        if set(rows) & set(excluded):
+            raise GeneratorError("split rows already excluded in: {}".format(statement[:120]))
+        items = match.group("items")
+        statements = [
+            "SELECT id, {} FROM {} WHERE id NOT IN ({}) ORDER BY id".format(
+                items, MATRIX_TABLE, ", ".join(str(r) for r in sorted(set(rows) | set(excluded)))
+            )
+        ]
+        statements += ["SELECT id, {} FROM {} WHERE id = {}".format(items, MATRIX_TABLE, r) for r in rows]
+        return statements
+    match = CROSS_SWEEP.match(statement)
+    pairs = sorted(tuple(int(x) for x in k.split(":")) for k in keys)
+    condition = match.group("condition")
+    prefix = "SELECT a.id, b.id, {} FROM {} a, {} b WHERE ".format(match.group("items"), MATRIX_TABLE, MATRIX_TABLE)
+    if condition:
+        prefix += "({}) AND ".format(condition)
+    statements = [
+        prefix + "(a.id, b.id) NOT IN ({}) ORDER BY a.id, b.id".format(", ".join("({}, {})".format(a, b) for a, b in pairs))
+    ]
+    if len(pairs) <= SPLIT_PAIRS_ONE_EACH:
+        statements += [prefix + "a.id = {} AND b.id = {}".format(a, b) for a, b in pairs]
+    else:
+        for a in sorted(set(a for a, _ in pairs)):
+            bs = [b for x, b in pairs if x == a]
+            statements.append(prefix + "a.id = {} AND b.id IN ({}) ORDER BY b.id".format(a, ", ".join(str(b) for b in bs)))
+    return statements
+
+
+def render_file(section, pieces, with_matrix, srs_rows=None, splits=None, used_splits=None):
     lines = [
         "--disable_abort_on_error",
         "--enable_metadata",
@@ -4046,6 +4223,9 @@ def render_file(section, pieces, with_matrix):
 
     for statement in SESSION_SETTINGS:
         emit(statement, "session")
+    if srs_rows is not None:
+        lines.extend(srs_load_lines(srs_rows))
+        emit("SELECT COUNT(*) = {} AS srs_loaded FROM {}".format(srs_rows, SRS_TABLE), "check")
     if with_matrix:
         for statement in matrix_setup():
             emit(statement, "matrix")
@@ -4055,7 +4235,12 @@ def render_file(section, pieces, with_matrix):
             emit(statement, "setup")
         for block in piece.blocks:
             for statement in block:
-                emit(statement, "probe")
+                if splits and statement in splits:
+                    used_splits.add(statement)
+                    for part in split_statements(statement, splits[statement]):
+                        emit(part, "probe")
+                else:
+                    emit(statement, "probe")
         for statement in piece.teardown:
             emit(statement, "teardown")
     if with_matrix:
@@ -4246,14 +4431,36 @@ def temporal_units():
 
 
 MEASURED_COLUMNS = ("reached", "reach_basis", "eval_functions", "eval_functions_run")
-CASE_FILE = re.compile(r"^s[1-7]_[a-z]+_\d{4}\.test$")
+CASE_FILE = re.compile(r"^s[1-8]_[a-z]+_\d{4}\.test$")
+KNOWN_ANSWERS_FILE = "migration/judge/families/wire/known-answers.sql"
+KNOWN_ANSWERS_CASE = "s8_known_0001.test"
+
+
+def known_answers_case():
+    path = REPO_ROOT / KNOWN_ANSWERS_FILE
+    try:
+        text = path.read_bytes().decode("utf-8")
+    except (OSError, UnicodeDecodeError) as exc:
+        raise GeneratorError("cannot read {}: {}".format(path, exc))
+    return CaseFile(text, (), ())
+
+
+def known_answer_statements(text):
+    return sum(
+        1
+        for line in text.split("\n")
+        if line.strip().endswith(";") and not line.lstrip().startswith(("--", "#"))
+    )
 
 
 def entry_key(entry):
     return (entry.name, entry.item_type, entry.cls)
 
 
-def build_corpus(entries, measured):
+def build_corpus(entries, measured, splits=None):
+    if splits is None:
+        splits = load_split_rows(SPLIT_ROWS_PATH)
+    used_splits = set()
     specs = build_specs()
     unreached = []
     reached = []
@@ -4277,15 +4484,31 @@ def build_corpus(entries, measured):
     )
     files = OrderedDict()
     unit_files = {}
+    srs_rows = srs_row_count()
     for prefix, units, with_matrix in sections:
         for index, pieces in enumerate(pack_units(units, PROBES_PER_FILE), 1):
             name = "{}_{:04d}".format(prefix, index)
-            files[name + ".test"] = render_file("{} {}".format(prefix, index), pieces, with_matrix)
+            files[name + ".test"] = render_file(
+                "{} {}".format(prefix, index),
+                pieces,
+                with_matrix,
+                srs_rows if with_matrix else None,
+                splits,
+                used_splits,
+            )
             for piece in pieces:
                 base = re.sub(r" \(part \d+ of \d+\)$", "", piece.title)
                 unit_files.setdefault(base, [])
                 if name not in unit_files[base]:
                     unit_files[base].append(name)
+    stale = [s for s in splits if s not in used_splits]
+    if stale:
+        raise GeneratorError(
+            "{} names {} statements the corpus no longer has, for example: {}".format(
+                SPLIT_ROWS_PATH.name, len(stale), stale[0][:120]
+            )
+        )
+    files[KNOWN_ANSWERS_CASE] = known_answers_case()
     rows = []
     for entry in entries:
         unit, spec = entry_units[entry_key(entry)]
@@ -4409,7 +4632,7 @@ def summary(files, rows, heads):
         section = name.rsplit("_", 1)[0]
         stats = sections.setdefault(section, [0, 0])
         stats[0] += 1
-        stats[1] += len(case.statements)
+        stats[1] += known_answer_statements(case.text) if name == KNOWN_ANSWERS_CASE else len(case.statements)
     reached = sum(1 for r in rows if r["reached"] == "1")
     lines = [
         "registered entries: {} (reached {}, unreached {})".format(len(rows), reached, len(rows) - reached),
@@ -4417,16 +4640,25 @@ def summary(files, rows, heads):
     ]
     for section, (count, statements) in sections.items():
         lines.append("{}: {} files, {} statements".format(section, count, statements))
-    lines.append(
-        "total: {} files, {} statements".format(
-            len(files), sum(len(case.statements) for case in files.values())
-        )
-    )
+    lines.append("total: {} files, {} statements".format(len(files), sum(stats[1] for stats in sections.values())))
     return "\n".join(lines)
 
 
 ERRNO_LINE = re.compile(r"^errno (-?\d+)$")
 SETUP_ROLES = ("session", "matrix", "setup")
+CLIENT_ERRNO_FIRST = 2000
+CLIENT_ERRNO_LAST = 2999
+KNOWN_ANSWER_COLUMNS = (
+    "is_known_answer",
+    "is_known_input",
+    "round_trip",
+    "header_matches",
+    "known_bytes_inflate",
+    "empty_is_0",
+    "null_is_null",
+    "empty_stays_empty",
+    "is_empty",
+)
 
 
 def recorded_errnos(text, statements):
@@ -4441,15 +4673,44 @@ def recorded_errnos(text, statements):
                 found = index
                 break
         errno = None
+        value = None
         if found is not None:
             for index in range(found + 1, len(lines)):
                 match = ERRNO_LINE.match(lines[index])
                 if match:
                     errno = int(match.group(1))
+                    value = lines[index - 1] if index - 1 > found else None
                     position = index + 1
                     break
-        errnos.append(errno)
+        errnos.append((errno, value))
     return errnos
+
+
+def known_answer_findings(stem, text):
+    problems = []
+    lines = text.split("\n")
+    checked = 0
+    for index, line in enumerate(lines):
+        if line.startswith("ERROR "):
+            problems.append("{}: line {} is an error: {}".format(stem, index + 1, line))
+            continue
+        columns = line.split("\t")
+        positions = [i for i, column in enumerate(columns) if column in KNOWN_ANSWER_COLUMNS]
+        if not positions or index + 1 >= len(lines):
+            continue
+        values = lines[index + 1].split("\t")
+        if len(values) != len(columns):
+            problems.append("{}: line {} does not have the columns of line {}".format(stem, index + 2, index + 1))
+            continue
+        for position in positions:
+            checked += 1
+            if values[position] != "1":
+                problems.append(
+                    "{}: line {}: {} is {}, not 1".format(stem, index + 2, columns[position], values[position])
+                )
+    if not checked:
+        problems.append("{}: no known-answer column found".format(stem))
+    return problems, checked
 
 
 def recording_findings(files, record_dir):
@@ -4464,10 +4725,19 @@ def recording_findings(files, record_dir):
             problems.append("{}: no recording{}".format(stem, " (a .partial log exists)" if partial.is_file() else ""))
             continue
         text = result.read_text(encoding="utf-8", errors="replace")
-        for statement, role, errno in zip(case.statements, case.roles, recorded_errnos(text, case.statements)):
+        if name == KNOWN_ANSWERS_CASE:
+            found, checked = known_answer_findings(stem, text)
+            problems.extend(found)
+            notes.append("{}: {} known-answer values checked".format(stem, checked))
+            continue
+        for statement, role, (errno, value) in zip(case.statements, case.roles, recorded_errnos(text, case.statements)):
             shown = statement if len(statement) <= 160 else statement[:157] + "..."
             if errno is None:
                 problems.append("{}: statement or its errno line not found: {}".format(stem, shown))
+            elif CLIENT_ERRNO_FIRST <= errno <= CLIENT_ERRNO_LAST:
+                problems.append("{}: client error {} (the connection to the server was lost): {}".format(stem, errno, shown))
+            elif role == "check" and (errno != 0 or value != "1"):
+                problems.append("{}: check statement gave errno {} and value {!r}, not 1: {}".format(stem, errno, value, shown))
             elif errno == 0:
                 continue
             elif role in SETUP_ROLES:

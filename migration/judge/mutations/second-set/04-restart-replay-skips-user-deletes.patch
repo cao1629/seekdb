@@ -1,0 +1,13 @@
+diff --git a/src/storage/memtable/ob_memtable.cpp b/src/storage/memtable/ob_memtable.cpp
+index 392f797..388a091 100644
+--- a/src/storage/memtable/ob_memtable.cpp
++++ b/src/storage/memtable/ob_memtable.cpp
+@@ -923,6 +923,8 @@ int ObMemtable::replay_row(ObStoreCtx &ctx,
+   } else if (OB_UNLIKELY(dml_flag == blocksstable::ObDmlFlag::DF_NOT_EXIST)) {
+     ret = OB_ERR_UNEXPECTED;
+     TRANS_LOG(ERROR, "Unexpected not exist trans node", K(ret), K(dml_flag), K(rowkey));
++  } else if (blocksstable::ObDmlFlag::DF_DELETE == dml_flag && key_.tablet_id_.is_user_tablet()) {
++    ret = OB_NO_NEED_UPDATE;
+   } else {
+     ObMemtableData mtd(dml_flag, row.size_, row.data_);
+     ObMemtableKey mtk;

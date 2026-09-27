@@ -1,0 +1,257 @@
+statement	rows
+SELECT id, year(c_double) AS v FROM tm ORDER BY id	3,4
+SELECT id, hour(c_double) AS v FROM tm ORDER BY id	3,4
+SELECT id, regexp_substr(c_varchar, 'b+', 2, 2, 'c') AS v FROM tm ORDER BY id	2
+SELECT id, regexp_substr(c_text, 'b+', 2, 2, 'c') AS v FROM tm ORDER BY id	2
+SELECT id, regexp_substr(c_bit, 'b+', 2, 2, 'c') AS v FROM tm ORDER BY id	4,6,8
+SELECT id, regexp_substr('abc', 'b+', c_double, 2, 'c') AS v FROM tm ORDER BY id	2,3,4,6,7,8
+SELECT id, regexp_substr('abc', 'b+', 2, c_double, 'c') AS v FROM tm ORDER BY id	2,3,6,7,8
+SELECT id, regexp_substr('abc', 'b+', 2, c_varchar, 'c') AS v FROM tm ORDER BY id	2,3,5,6,8
+SELECT id, regexp_instr(c_bit, 'b+', 2, 2, 1, 'c') AS v FROM tm ORDER BY id	4,6,8
+SELECT id, regexp_instr('abc', 'b+', c_double, 2, 1, 'c') AS v FROM tm ORDER BY id	2,3,4,6,7,8
+SELECT id, regexp_instr('abc', 'b+', 2, c_double, 1, 'c') AS v FROM tm ORDER BY id	3,6
+SELECT id, regexp_instr('abc', 'b+', 2, c_varchar, 1, 'c') AS v FROM tm ORDER BY id	6
+SELECT id, regexp_like(c_bit, 'b+', 'c') AS v FROM tm ORDER BY id	4,6,8
+SELECT id, month(c_double) AS v FROM tm ORDER BY id	3,4
+SELECT id, soundex(c_bit) AS v FROM tm ORDER BY id	4,6,8
+SELECT id, soundex(c_geom) AS v FROM tm ORDER BY id	3,4,6,7,8
+SELECT id, timediff(c_double, TIME'12:00:00') AS v FROM tm ORDER BY id	3,4
+SELECT id, maketime(2, 30, c_double) AS v FROM tm ORDER BY id	3,4
+SELECT id, maketime(2, 30, c_varchar) AS v FROM tm ORDER BY id	4
+SELECT id, left(c_bit, 2) AS v FROM tm ORDER BY id	4
+SELECT id, dayofmonth(c_double) AS v FROM tm ORDER BY id	3,4
+SELECT id, dayofweek(c_double) AS v FROM tm ORDER BY id	3,4
+SELECT id, dayofyear(c_double) AS v FROM tm ORDER BY id	3,4
+SELECT id, second(c_double) AS v FROM tm ORDER BY id	3,4
+SELECT id, minute(c_double) AS v FROM tm ORDER BY id	3,4
+SELECT id, microsecond(c_double) AS v FROM tm ORDER BY id	3,4
+SELECT id, sec_to_time(c_double) AS v FROM tm ORDER BY id	3,4
+SELECT id, timestamp(c_datetime6, TIMESTAMP'2024-02-29 13:45:56.123456') AS v FROM tm ORDER BY id	4
+SELECT id, validate_password_strength(c_varbinary) AS v FROM tm ORDER BY id	4
+SELECT id, validate_password_strength(c_bit) AS v FROM tm ORDER BY id	4,6,8
+SELECT id, validate_password_strength(c_geom) AS v FROM tm ORDER BY id	3,4,6,7,8
+SELECT id, day(c_double) AS v FROM tm ORDER BY id	3,4
+SELECT id, json_object(c_int, 1) AS v FROM tm ORDER BY id	1
+SELECT id, json_object(c_bigint, 1) AS v FROM tm ORDER BY id	1
+SELECT id, json_object(c_ubigint, 1) AS v FROM tm ORDER BY id	1
+SELECT id, json_object(c_float, 1) AS v FROM tm ORDER BY id	1
+SELECT id, json_object(c_double, 1) AS v FROM tm ORDER BY id	1
+SELECT id, json_object(c_dec_9_2, 1) AS v FROM tm ORDER BY id	1
+SELECT id, json_object(c_dec_65_30, 1) AS v FROM tm ORDER BY id	1
+SELECT id, json_object(c_varchar, 1) AS v FROM tm ORDER BY id	1
+SELECT id, json_object(c_text, 1) AS v FROM tm ORDER BY id	1
+SELECT id, json_object(c_date, 1) AS v FROM tm ORDER BY id	1
+SELECT id, json_object(c_time6, 1) AS v FROM tm ORDER BY id	1
+SELECT id, json_object(c_datetime6, 1) AS v FROM tm ORDER BY id	1
+SELECT id, json_object(c_timestamp, 1) AS v FROM tm ORDER BY id	1
+SELECT id, json_object(c_year, 1) AS v FROM tm ORDER BY id	1
+SELECT id, json_object(c_bit, 1) AS v FROM tm ORDER BY id	1
+SELECT id, json_object(c_enum, 1) AS v FROM tm ORDER BY id	1
+SELECT id, json_object(c_json, 1) AS v FROM tm ORDER BY id	1
+SELECT id, json_object(c_geom, 1) AS v FROM tm ORDER BY id	1
+SELECT id, json_schema_valid(c_json, CAST('{"a": 1, "b": [1, 2, {"c": null}]}' AS JSON)) AS v FROM tm ORDER BY id	2,3,6,7,8
+SELECT id, json_schema_valid('{"type": "object", "properties": {"a": {"type": "number"}}, "required": ["a"]}', c_varchar) AS v FROM tm ORDER BY id	2,3,5,6,7,8
+SELECT id, json_schema_validation_report(c_json, CAST('{"a": 1, "b": [1, 2, {"c": null}]}' AS JSON)) AS v FROM tm ORDER BY id	2,3,6,7,8
+SELECT id, json_schema_validation_report('{"type": "object", "properties": {"a": {"type": "number"}}, "required": ["a"]}', c_varchar) AS v FROM tm ORDER BY id	2,3,5,6,7,8
+SELECT id, json_contains(c_varchar, '1', '$.a') AS v FROM tm ORDER BY id	2,3,5,6,7,8
+SELECT id, json_contains(c_text, '1', '$.a') AS v FROM tm ORDER BY id	2,3,4,5,6,8
+SELECT id, json_contains(CAST('{"a": 1, "b": [1, 2, {"c": null}]}' AS JSON), c_varchar, '$.a') AS v FROM tm ORDER BY id	2,3,5,6,7,8
+SELECT id, json_contains_path(c_varchar, 'one', '$.a', '$.a') AS v FROM tm ORDER BY id	2,3,5,6,7,8
+SELECT id, json_contains_path(c_text, 'one', '$.a', '$.a') AS v FROM tm ORDER BY id	2,3,4,5,6,8
+SELECT id, json_depth(c_varchar) AS v FROM tm ORDER BY id	2,3,5,6,7,8
+SELECT id, json_depth(c_text) AS v FROM tm ORDER BY id	2,3,4,5,6,8
+SELECT id, json_keys(c_varchar, '$.a') AS v FROM tm ORDER BY id	2,3,5,6,7,8
+SELECT id, json_keys(c_text, '$.a') AS v FROM tm ORDER BY id	2,3,4,5,6,8
+SELECT id, json_overlaps(c_varchar, '[1, 3]') AS v FROM tm ORDER BY id	2,3,5,6,7,8
+SELECT id, json_overlaps(c_text, '[1, 3]') AS v FROM tm ORDER BY id	2,3,4,5,6,8
+SELECT id, json_overlaps(CAST('{"a": 1, "b": [1, 2, {"c": null}]}' AS JSON), c_varchar) AS v FROM tm ORDER BY id	2,3,5,6,7,8
+SELECT id, json_remove(c_varchar, '$.a', '$.a') AS v FROM tm ORDER BY id	2,3,5,6,7,8
+SELECT id, json_remove(c_text, '$.a', '$.a') AS v FROM tm ORDER BY id	2,3,4,5,6,8
+SELECT id, json_search(CAST('{"a": 1, "b": [1, 2, {"c": null}]}' AS JSON), 'one', '%1%', c_double, '$.a') AS v FROM tm ORDER BY id	3,4,5,6,7,8
+SELECT id, json_search(CAST('{"a": 1, "b": [1, 2, {"c": null}]}' AS JSON), 'one', '%1%', c_varchar, '$.a') AS v FROM tm ORDER BY id	3,4,5,6,7,8
+SELECT id, json_array_append(c_varchar, '$.b', 'v') AS v FROM tm ORDER BY id	2,3,5,6,7,8
+SELECT id, json_array_append(c_text, '$.b', 'v') AS v FROM tm ORDER BY id	2,3,4,5,6,8
+SELECT id, json_append(c_varchar, '$.b', 'v') AS v FROM tm ORDER BY id	2,3,5,6,7,8
+SELECT id, json_append(c_text, '$.b', 'v') AS v FROM tm ORDER BY id	2,3,4,5,6,8
+SELECT id, json_array_insert(c_varchar, '$.b[1]', 'v') AS v FROM tm ORDER BY id	2,3,5,6,7,8
+SELECT id, json_array_insert(c_text, '$.b[1]', 'v') AS v FROM tm ORDER BY id	2,3,4,5,6,8
+SELECT id, json_replace(c_varchar, '$.a', 'v') AS v FROM tm ORDER BY id	2,3,5,6,7,8
+SELECT id, json_replace(c_text, '$.a', 'v') AS v FROM tm ORDER BY id	2,3,4,5,6,8
+SELECT id, json_type(c_varchar) AS v, (json_type(c_varchar)) IS NULL AS n FROM tm ORDER BY id	2,3,5,6,7,8
+SELECT id, json_type(c_text) AS v, (json_type(c_text)) IS NULL AS n FROM tm ORDER BY id	2,3,4,5,6,8
+SELECT id, json_length(c_varchar, '$.a') AS v FROM tm ORDER BY id	2,3,5,6,7,8
+SELECT id, json_length(c_text, '$.a') AS v FROM tm ORDER BY id	2,3,4,5,6,8
+SELECT id, json_insert(c_varchar, '$.z', 'v') AS v FROM tm ORDER BY id	2,3,5,6,7,8
+SELECT id, json_insert(c_text, '$.z', 'v') AS v FROM tm ORDER BY id	2,3,4,5,6,8
+SELECT id, json_storage_size(c_varchar) AS v FROM tm ORDER BY id	2,3,5,6,7,8
+SELECT id, json_storage_size(c_text) AS v FROM tm ORDER BY id	2,3,4,5,6,8
+SELECT id, json_storage_free(c_varchar) AS v FROM tm ORDER BY id	2,3,5,6,7,8
+SELECT id, json_storage_free(c_text) AS v FROM tm ORDER BY id	2,3,4,5,6,8
+SELECT id, json_set(c_varchar, '$.a', 'v') AS v FROM tm ORDER BY id	2,3,5,6,7,8
+SELECT id, json_set(c_text, '$.a', 'v') AS v FROM tm ORDER BY id	2,3,4,5,6,8
+SELECT id, json_merge_preserve(c_varchar, '{"a": 2}', CAST('{"a": 1, "b": [1, 2, {"c": null}]}' AS JSON)) AS v FROM tm ORDER BY id	2,3,5,6,7,8
+SELECT id, json_merge_preserve(c_text, '{"a": 2}', CAST('{"a": 1, "b": [1, 2, {"c": null}]}' AS JSON)) AS v FROM tm ORDER BY id	2,3,4,5,6,8
+SELECT id, json_merge_preserve(CAST('{"a": 1, "b": [1, 2, {"c": null}]}' AS JSON), c_varchar, CAST('{"a": 1, "b": [1, 2, {"c": null}]}' AS JSON)) AS v FROM tm ORDER BY id	2,3,5,6,7,8
+SELECT id, json_merge_preserve(CAST('{"a": 1, "b": [1, 2, {"c": null}]}' AS JSON), '{"a": 2}', c_varchar) AS v FROM tm ORDER BY id	2,3,5,6,7,8
+SELECT id, json_merge(c_varchar, '[9]', CAST('{"a": 1, "b": [1, 2, {"c": null}]}' AS JSON)) AS v FROM tm ORDER BY id	2,3,5,6,7,8
+SELECT id, json_merge(c_text, '[9]', CAST('{"a": 1, "b": [1, 2, {"c": null}]}' AS JSON)) AS v FROM tm ORDER BY id	2,3,4,5,6,8
+SELECT id, json_merge(CAST('{"a": 1, "b": [1, 2, {"c": null}]}' AS JSON), c_varchar, CAST('{"a": 1, "b": [1, 2, {"c": null}]}' AS JSON)) AS v FROM tm ORDER BY id	2,3,5,6,7,8
+SELECT id, json_merge(CAST('{"a": 1, "b": [1, 2, {"c": null}]}' AS JSON), '[9]', c_varchar) AS v FROM tm ORDER BY id	2,3,5,6,7,8
+SELECT id, json_merge_patch(c_varchar, '{"a": null, "n": 1}', CAST('{"a": 1, "b": [1, 2, {"c": null}]}' AS JSON)) AS v FROM tm ORDER BY id	2,3,5,6,7,8
+SELECT id, json_merge_patch(c_text, '{"a": null, "n": 1}', CAST('{"a": 1, "b": [1, 2, {"c": null}]}' AS JSON)) AS v FROM tm ORDER BY id	2,3,4,5,6,8
+SELECT id, json_merge_patch(CAST('{"a": 1, "b": [1, 2, {"c": null}]}' AS JSON), c_varchar, CAST('{"a": 1, "b": [1, 2, {"c": null}]}' AS JSON)) AS v FROM tm ORDER BY id	2,3,5,6,7,8
+SELECT id, json_merge_patch(CAST('{"a": 1, "b": [1, 2, {"c": null}]}' AS JSON), '{"a": null, "n": 1}', c_varchar) AS v FROM tm ORDER BY id	2,3,5,6,7,8
+SELECT id, json_pretty(c_varchar) AS v FROM tm ORDER BY id	2,3,5,6,7,8
+SELECT id, json_pretty(c_text) AS v FROM tm ORDER BY id	2,3,4,5,6,8
+SELECT id, timestamp_to_scn(c_int) AS v FROM tm ORDER BY id	1,2,3,4,6,7,8
+SELECT id, timestamp_to_scn(c_bigint) AS v FROM tm ORDER BY id	1,2,3,4,6,7,8
+SELECT id, timestamp_to_scn(c_ubigint) AS v FROM tm ORDER BY id	1,2,3,4,5,7,8
+SELECT id, timestamp_to_scn(c_varchar) AS v FROM tm ORDER BY id	1,2,3,4,5,6,8
+SELECT id, timestamp_to_scn(c_date) AS v FROM tm ORDER BY id	1
+SELECT id, timestamp_to_scn(c_time6) AS v FROM tm ORDER BY id	1
+SELECT id, timestamp_to_scn(c_datetime6) AS v FROM tm ORDER BY id	1
+SELECT id, timestamp_to_scn(c_timestamp) AS v FROM tm ORDER BY id	1
+SELECT id, scn_to_timestamp(c_int) AS v FROM tm ORDER BY id	1,3,6,8
+SELECT id, scn_to_timestamp(c_bigint) AS v FROM tm ORDER BY id	1,3,6,8
+SELECT id, scn_to_timestamp(c_ubigint) AS v FROM tm ORDER BY id	1
+SELECT id, scn_to_timestamp(c_float) AS v FROM tm ORDER BY id	1,3,4,6
+SELECT id, scn_to_timestamp(c_double) AS v FROM tm ORDER BY id	1,3,4,6
+SELECT id, scn_to_timestamp(c_dec_9_2) AS v FROM tm ORDER BY id	1,3,6
+SELECT id, scn_to_timestamp(c_dec_65_30) AS v FROM tm ORDER BY id	1,3,4,6
+SELECT id, scn_to_timestamp(c_varchar) AS v FROM tm ORDER BY id	1,2,3,5,6,7,8
+SELECT id, scn_to_timestamp(c_varbinary) AS v FROM tm ORDER BY id	1,2,3,4,5,6,8
+SELECT id, scn_to_timestamp(c_text) AS v FROM tm ORDER BY id	1,2,3,4,5,6,8
+SELECT id, scn_to_timestamp(c_date) AS v FROM tm ORDER BY id	1
+SELECT id, scn_to_timestamp(c_time6) AS v FROM tm ORDER BY id	1,3,6
+SELECT id, scn_to_timestamp(c_datetime6) AS v FROM tm ORDER BY id	1
+SELECT id, scn_to_timestamp(c_timestamp) AS v FROM tm ORDER BY id	1
+SELECT id, scn_to_timestamp(c_year) AS v FROM tm ORDER BY id	1
+SELECT id, scn_to_timestamp(c_bit) AS v FROM tm ORDER BY id	1
+SELECT id, scn_to_timestamp(c_enum) AS v FROM tm ORDER BY id	1
+SELECT id, scn_to_timestamp(c_json) AS v FROM tm ORDER BY id	1,2,3,4,5,6,7
+SELECT id, sql_mode_convert(c_int) AS v FROM tm ORDER BY id	3,4,5,6,8
+SELECT id, sql_mode_convert(c_bigint) AS v FROM tm ORDER BY id	3,4,5,6,8
+SELECT id, sql_mode_convert(c_ubigint) AS v FROM tm ORDER BY id	4,5,6
+SELECT id, sql_mode_convert(c_double) AS v FROM tm ORDER BY id	3,4,5,6,7,8
+SELECT id, sql_mode_convert(c_dec_18_6) AS v FROM tm ORDER BY id	3,4,5,6,7,8
+SELECT id, sql_mode_convert(c_time6) AS v FROM tm ORDER BY id	3,4,5,6,7
+SELECT id, sql_mode_convert(c_bit) AS v FROM tm ORDER BY id	4,6,8
+SELECT id, bin_to_uuid(c_varchar, 1) AS v FROM tm ORDER BY id	2,3,4,5,6,7
+SELECT id, bin_to_uuid(c_time6, 1) AS v FROM tm ORDER BY id	2,3,5,7,8
+SELECT id, st_asgeojson(ST_GeomFromText('POINT(1 2)'), c_varchar, 2) AS v FROM tm ORDER BY id	4,6
+SELECT id, st_asgeojson(ST_GeomFromText('POINT(1 2)'), 2, c_varchar) AS v FROM tm ORDER BY id	4,6,7
+SELECT id, _st_geohash(c_varchar, 2) AS v FROM tm ORDER BY id	3,4,5,6,7,8
+SELECT id, _st_geohash(c_text, 2) AS v FROM tm ORDER BY id	3,4,5,6,7,8
+SELECT id, _st_geohash(c_varbinary, 2) AS v FROM tm ORDER BY id	3,4,5,6,7,8
+SELECT id, _st_makepoint(c_varchar, 2, 2) AS v FROM tm ORDER BY id	2,3,5,6,7,8
+SELECT id, _st_makepoint(c_varbinary, 2, 2) AS v FROM tm ORDER BY id	2,3,4,5,6,8
+SELECT id, _st_makepoint(2, c_varchar, 2) AS v FROM tm ORDER BY id	2,3,5,6,7,8
+SELECT id, _st_makepoint(2, 2, c_varchar) AS v FROM tm ORDER BY id	2,3,5,6,7,8
+SELECT id, VECTOR_SIMILARITY(c_arr, '[1,2,3]', euclidean) AS v FROM tm ORDER BY id	2,3,4,6,7,8
+SELECT id, l2_squared(c_arr, '[1,2,3]') AS v FROM tm ORDER BY id	2,3,4,6,7,8
+SELECT id, coalesce(c_geom, 1) AS v FROM tm ORDER BY id	1
+SELECT id, 2 DIV c_double AS v FROM tm WHERE id NOT IN (8) ORDER BY id	3,4
+SELECT id, from_unixtime(c_bit, '%Y-%m-%d %H:%i:%s.%f') AS v FROM tm WHERE id NOT IN (4) ORDER BY id	8
+SELECT id, c_bit REGEXP 'b+' AS v FROM tm ORDER BY id	4,6,8
+SELECT id, regexp_replace(c_bit, 'b+', '<X>', 2, 2, 'c') AS v FROM tm ORDER BY id	4,6,8
+SELECT id, regexp_replace('abc', 'b+', '<X>', c_double, 2, 'c') AS v FROM tm ORDER BY id	2,3,4,6,7,8
+SELECT id, regexp_replace('abc', 'b+', '<X>', 2, c_double, 'c') AS v FROM tm ORDER BY id	3,6
+SELECT id, regexp_replace('abc', 'b+', '<X>', 2, c_varchar, 'c') AS v FROM tm ORDER BY id	6
+SELECT id, DATE_ADD(TIMESTAMP'2024-02-29 13:45:56.123456', INTERVAL c_double DAY) AS v FROM tm ORDER BY id	3,4,5,8
+SELECT id, DATE_ADD(TIMESTAMP'2024-02-29 13:45:56.123456', INTERVAL c_varchar DAY) AS v FROM tm ORDER BY id	4
+SELECT id, DATE_SUB(TIMESTAMP'2024-02-29 13:45:56.123456', INTERVAL c_double DAY) AS v FROM tm ORDER BY id	3,4,5,8
+SELECT id, DATE_SUB(TIMESTAMP'2024-02-29 13:45:56.123456', INTERVAL c_varchar DAY) AS v FROM tm ORDER BY id	4
+SELECT id, date_format(c_double, '%Y-%m-%d %H:%i:%s.%f') AS v FROM tm ORDER BY id	3,4
+SELECT id, usec_to_time(c_bigint) AS v FROM tm ORDER BY id	3,4
+SELECT id, usec_to_time(c_ubigint) AS v FROM tm ORDER BY id	4,5
+SELECT id, usec_to_time(c_float) AS v FROM tm ORDER BY id	3,4
+SELECT id, usec_to_time(c_double) AS v FROM tm ORDER BY id	3,4
+SELECT id, usec_to_time(c_dec_65_30) AS v FROM tm ORDER BY id	3,4
+SELECT id, usec_to_time(c_varchar) AS v FROM tm ORDER BY id	4
+SELECT id, judge_udf1(c_int) AS v FROM tm ORDER BY id	3,4
+SELECT id, judge_udf2(c_varchar) AS v FROM tm ORDER BY id	7
+SELECT id, json_extract(c_varchar, '$.a', '$.a') AS v FROM tm ORDER BY id	2,3,5,6,7,8
+SELECT id, json_extract(c_text, '$.a', '$.a') AS v FROM tm ORDER BY id	2,3,4,5,6,8
+SELECT id, 1 MEMBER OF (c_varchar) AS v FROM tm ORDER BY id	2,3,5,6,7,8
+SELECT id, 1 MEMBER OF (c_text) AS v FROM tm ORDER BY id	2,3,4,5,6,8
+SELECT id, st_area(c_geom) AS v FROM tm ORDER BY id	2,3,4,6,7
+SELECT id, AREA(c_geom) AS v FROM tm ORDER BY id	2,3,4,6,7
+SELECT id, st_x(c_geom, 2) AS v FROM tm ORDER BY id	4,5,6,7,8
+SELECT id, st_y(c_geom, 2) AS v FROM tm ORDER BY id	4,5,6,7,8
+SELECT id, st_latitude(ST_GeomFromText('POINT(39.9 116.4)', 4326), c_double) AS v FROM tm ORDER BY id	3,4
+SELECT id, st_latitude(ST_GeomFromText('POINT(39.9 116.4)', 4326), c_varchar) AS v FROM tm ORDER BY id	4,6,7
+SELECT id, st_longitude(ST_GeomFromText('POINT(39.9 116.4)', 4326), c_double) AS v FROM tm ORDER BY id	3,4
+SELECT id, st_longitude(ST_GeomFromText('POINT(39.9 116.4)', 4326), c_varchar) AS v FROM tm ORDER BY id	4,6,7
+SELECT id, ST_AsText(ST_Buffer(ST_GeomFromText('POINT(1 2)'), c_double)) AS v FROM tm ORDER BY id	3,4,6
+SELECT id, ST_AsText(ST_Buffer(ST_GeomFromText('POINT(1 2)'), c_varchar)) AS v FROM tm ORDER BY id	4,6
+SELECT id, _st_point(c_int, 2, 4326) AS v FROM tm ORDER BY id	3,4,5
+SELECT id, _st_point(c_double, 2, 4326) AS v FROM tm ORDER BY id	3,4
+SELECT id, _st_point(c_dec_38_10, 2, 4326) AS v FROM tm ORDER BY id	3,4,5
+SELECT id, _st_point(c_varbinary, 2, 4326) AS v FROM tm ORDER BY id	2,3,4,5,6,8
+SELECT id, _st_point(2, c_double, 4326) AS v FROM tm ORDER BY id	3,4
+SELECT id, _st_buffer(ST_GeomFromText('POINT(1 2)'), c_double, 'abc') AS v FROM tm WHERE id NOT IN (1) ORDER BY id	3,4,5,6,7
+SELECT id, _st_buffer(ST_GeomFromText('POINT(1 2)'), 1, c_varchar) AS v FROM tm ORDER BY id	4,5,6,7,8
+SELECT id, _st_dwithin(ST_GeomFromText('POINT(1 2)'), ST_GeomFromText('POLYGON((0 0,2 0,2 2,0 2,0 0))'), c_double) AS v FROM tm ORDER BY id	3,6
+SELECT id, _st_dwithin(ST_GeomFromText('POINT(1 2)'), ST_GeomFromText('POLYGON((0 0,2 0,2 2,0 2,0 0))'), c_varchar) AS v FROM tm ORDER BY id	6
+SELECT id, st_distance_sphere(ST_GeomFromText('POINT(39.9 116.4)', 4326), ST_GeomFromText('POINT(31.2 121.5)', 4326), c_double) AS v FROM tm ORDER BY id	2,3,6
+SELECT id, st_distance_sphere(ST_GeomFromText('POINT(39.9 116.4)', 4326), ST_GeomFromText('POINT(31.2 121.5)', 4326), c_varchar) AS v FROM tm ORDER BY id	2,3,5,6,8
+SELECT id, st_length(c_geom, 'abc') AS v FROM tm ORDER BY id	4
+SELECT id, l2_distance(c_arr, '[1,2,3]') AS v FROM tm ORDER BY id	2,3,4,6,7,8
+SELECT id, cosine_distance(c_arr, '[1,2,3]') AS v FROM tm ORDER BY id	2,3,4,6,7,8
+SELECT id, inner_product(c_arr, '[1,2,3]') AS v FROM tm ORDER BY id	2,3,4,6,7,8
+SELECT id, negative_inner_product(c_arr, '[1,2,3]') AS v FROM tm ORDER BY id	2,3,4,6,7,8
+SELECT id, l1_distance(c_arr, '[1,2,3]') AS v FROM tm ORDER BY id	2,3,4,6,7,8
+SELECT id, VECTOR_DISTANCE(c_arr, '[1,2,3]', euclidean) AS v FROM tm ORDER BY id	2,3,4,6,7,8
+SELECT id, l2_similarity(c_arr, '[1,2,3]') AS v FROM tm ORDER BY id	2,3,4,6,7,8
+SELECT id, cosine_similarity(c_arr, '[1,2,3]') AS v FROM tm ORDER BY id	2,3,4,6,7,8
+SELECT id, inner_product_similarity(c_arr, '[1,2,3]') AS v FROM tm ORDER BY id	2,3,4,6,7,8
+SELECT id, CAST(c_double AS NUMBER) AS v FROM tm ORDER BY id	3,4
+SELECT id, CAST(c_double AS DECIMAL(65,30)) AS v FROM tm ORDER BY id	3,4
+SELECT id, ST_AsText(CAST(c_geom AS POINT)) AS v FROM tm ORDER BY id	4,5,6,7,8
+SELECT id, ST_AsText(CAST(c_geom AS LINESTRING)) AS v FROM tm ORDER BY id	2,3,7,8
+SELECT id, ST_AsText(CAST(c_geom AS POLYGON)) AS v FROM tm ORDER BY id	2,3,4,6,7,8
+SELECT id, ST_AsText(CAST(c_geom AS MULTIPOINT)) AS v FROM tm ORDER BY id	5,7,8
+SELECT id, ST_AsText(CAST(c_geom AS MULTILINESTRING)) AS v FROM tm ORDER BY id	2,3,6,7
+SELECT id, ST_AsText(CAST(c_geom AS MULTIPOLYGON)) AS v FROM tm ORDER BY id	2,3,4,6,7
+SELECT id, CAST(c_double AS NUMBER(10,2)) AS v FROM tm ORDER BY id	3,4
+SELECT id, CAST(c_double AS DECIMAL) AS v FROM tm ORDER BY id	3,4
+SELECT id, CAST(c_double AS DECIMAL(10,2)) AS v FROM tm ORDER BY id	3,4
+SELECT id, CAST(c_double AS DECIMAL(5)) AS v FROM tm ORDER BY id	3,4
+SELECT id, CAST(c_double AS FIXED(10,2)) AS v FROM tm ORDER BY id	3,4
+SELECT id, CAST(c_double AS NUMERIC(10,2)) AS v FROM tm ORDER BY id	3,4
+SELECT id, CONVERT(c_double, DECIMAL(10,3)) AS v FROM tm ORDER BY id	3,4
+SELECT a.id, b.id, a.c_vec = b.c_arr AS `=` FROM tm a, tm b ORDER BY a.id, b.id	2:2,2:3,2:4,2:6,2:7,2:8,3:2,3:3,3:4,3:6,3:7,3:8,4:2,4:3,4:4,4:6,4:7,4:8,5:2,5:3,5:4,5:6,5:7,5:8,6:2,6:3,6:4,6:6,6:7,6:8,7:2,7:3,7:4,7:6,7:7,7:8,8:2,8:3,8:4,8:6,8:7,8:8
+SELECT a.id, b.id, a.c_vec <=> b.c_arr AS `<=>` FROM tm a, tm b ORDER BY a.id, b.id	1:2,1:3,1:4,1:6,1:7,1:8,2:2,2:3,2:4,2:6,2:7,2:8,3:2,3:3,3:4,3:6,3:7,3:8,4:2,4:3,4:4,4:6,4:7,4:8,5:2,5:3,5:4,5:6,5:7,5:8,6:2,6:3,6:4,6:6,6:7,6:8,7:2,7:3,7:4,7:6,7:7,7:8,8:2,8:3,8:4,8:6,8:7,8:8
+SELECT a.id, b.id, a.c_int + b.c_ubigint AS v FROM tm a, tm b WHERE a.id IN (1, 2, 6, 7, 8) AND b.id IN (1, 2, 6, 7, 8) ORDER BY a.id, b.id	6:2,6:7,6:8,8:2
+SELECT a.id, b.id, a.c_int + b.c_year AS v FROM tm a, tm b WHERE a.id IN (1, 2, 6, 7, 8) AND b.id IN (1, 2, 6, 7, 8) ORDER BY a.id, b.id	6:2,8:2
+SELECT a.id, b.id, a.c_int + b.c_bit AS v FROM tm a, tm b WHERE a.id IN (1, 2, 6, 7, 8) AND b.id IN (1, 2, 6, 7, 8) ORDER BY a.id, b.id	6:2,8:2
+SELECT a.id, b.id, a.c_bigint + b.c_ubigint AS v FROM tm a, tm b WHERE a.id IN (1, 2, 6, 7, 8) AND b.id IN (1, 2, 6, 7, 8) ORDER BY a.id, b.id	6:2,6:7,6:8,8:2
+SELECT a.id, b.id, a.c_bigint + b.c_year AS v FROM tm a, tm b WHERE a.id IN (1, 2, 6, 7, 8) AND b.id IN (1, 2, 6, 7, 8) ORDER BY a.id, b.id	6:2,6:6,6:7,6:8,8:2
+SELECT a.id, b.id, a.c_bigint + b.c_bit AS v FROM tm a, tm b WHERE a.id IN (1, 2, 6, 7, 8) AND b.id IN (1, 2, 6, 7, 8) ORDER BY a.id, b.id	6:2,6:6,6:7,6:8,8:2
+SELECT a.id, b.id, a.c_varbinary + b.c_arr AS v FROM tm a, tm b WHERE a.id IN (1, 2, 6, 7, 8) AND b.id IN (1, 2, 6, 7, 8) ORDER BY a.id, b.id	2:6,2:7,2:8,6:1,6:2,6:6,6:7,6:8,7:2,7:6,7:8,8:2,8:6,8:8
+SELECT a.id, b.id, a.c_arr + b.c_arr AS v FROM tm a, tm b WHERE a.id IN (1, 2, 6, 7, 8) AND b.id IN (1, 2, 6, 7, 8) ORDER BY a.id, b.id	2:6,2:7,2:8,6:2,6:7,6:8,7:2,7:6,7:8,8:2,8:6,8:7
+SELECT a.id, b.id, a.c_int - b.c_ubigint AS v FROM tm a, tm b WHERE a.id IN (1, 2, 6, 7, 8) AND b.id IN (1, 2, 6, 7, 8) ORDER BY a.id, b.id	2:6,2:7,2:8,6:2,6:6,6:7,6:8,7:6,7:7,7:8,8:2,8:6,8:7,8:8
+SELECT a.id, b.id, a.c_int * b.c_ubigint AS v FROM tm a, tm b WHERE a.id IN (1, 2, 7, 8) AND b.id IN (1, 2, 7, 8) ORDER BY a.id, b.id	8:7,8:8
+SELECT a.id, b.id, a.c_int / b.c_double AS v FROM tm a, tm b WHERE a.id IN (1, 2, 5, 6, 7, 8) AND b.id IN (1, 2, 5, 6, 7, 8) ORDER BY a.id, b.id	5:8,6:8
+SELECT a.id, b.id, a.c_int - b.c_year AS v FROM tm a, tm b WHERE a.id IN (1, 2, 6, 7, 8) AND b.id IN (1, 2, 6, 7, 8) ORDER BY a.id, b.id	2:6,2:7,2:8,6:2,6:6,6:7,6:8,7:6,7:7,7:8,8:2,8:6,8:7,8:8
+SELECT a.id, b.id, a.c_int * b.c_year AS v FROM tm a, tm b WHERE a.id IN (1, 2, 7, 8) AND b.id IN (1, 2, 7, 8) ORDER BY a.id, b.id	8:7,8:8
+SELECT a.id, b.id, a.c_int - b.c_bit AS v FROM tm a, tm b WHERE a.id IN (1, 2, 6, 7, 8) AND b.id IN (1, 2, 6, 7, 8) ORDER BY a.id, b.id	2:6,2:7,2:8,6:2,6:6,6:7,6:8,7:6,7:7,7:8,8:2,8:6,8:7,8:8
+SELECT a.id, b.id, a.c_int * b.c_bit AS v FROM tm a, tm b WHERE a.id IN (1, 2, 7, 8) AND b.id IN (1, 2, 7, 8) ORDER BY a.id, b.id	8:7,8:8
+SELECT a.id, b.id, a.c_ubigint - b.c_ubigint AS v FROM tm a, tm b WHERE a.id IN (1, 2, 6, 7, 8) AND b.id IN (1, 2, 6, 7, 8) ORDER BY a.id, b.id	2:6,2:7,2:8,7:6,7:8,8:6
+SELECT a.id, b.id, a.c_ubigint / b.c_double AS v FROM tm a, tm b WHERE a.id IN (1, 2, 5, 6, 7, 8) AND b.id IN (1, 2, 5, 6, 7, 8) ORDER BY a.id, b.id	5:8,6:8
+SELECT a.id, b.id, a.c_ubigint - b.c_year AS v FROM tm a, tm b WHERE a.id IN (1, 2, 6, 7, 8) AND b.id IN (1, 2, 6, 7, 8) ORDER BY a.id, b.id	2:6,2:7,2:8,7:6,7:7,7:8,8:6,8:7,8:8
+SELECT a.id, b.id, a.c_ubigint - b.c_bit AS v FROM tm a, tm b WHERE a.id IN (1, 2, 6, 7, 8) AND b.id IN (1, 2, 6, 7, 8) ORDER BY a.id, b.id	2:6,2:7,2:8,7:6,7:7,7:8,8:6,8:7,8:8
+SELECT a.id, b.id, a.c_year - b.c_year AS v FROM tm a, tm b WHERE a.id IN (1, 2, 6, 7, 8) AND b.id IN (1, 2, 6, 7, 8) ORDER BY a.id, b.id	2:6,2:7,2:8,6:7,8:6,8:7
+SELECT a.id, b.id, a.c_year - b.c_bit AS v FROM tm a, tm b WHERE a.id IN (1, 2, 6, 7, 8) AND b.id IN (1, 2, 6, 7, 8) ORDER BY a.id, b.id	2:6,2:7,2:8,6:8,7:8,8:8
+SELECT a.id, b.id, a.c_bit - b.c_bit AS v FROM tm a, tm b WHERE a.id IN (1, 2, 6, 7, 8) AND b.id IN (1, 2, 6, 7, 8) ORDER BY a.id, b.id	2:6,2:7,2:8,6:8,7:6,7:8
+SELECT a.id, b.id, a.c_bit * b.c_bit AS v FROM tm a, tm b WHERE a.id IN (1, 2, 7, 8) AND b.id IN (1, 2, 7, 8) ORDER BY a.id, b.id	8:8
+SELECT a.id, b.id, a.c_arr - b.c_arr AS v FROM tm a, tm b WHERE a.id IN (1, 2, 6, 7, 8) AND b.id IN (1, 2, 6, 7, 8) ORDER BY a.id, b.id	2:6,2:7,2:8,6:2,6:7,6:8,7:2,7:6,7:8,8:2,8:6,8:7
+SELECT a.id, b.id, a.c_arr * b.c_arr AS v FROM tm a, tm b WHERE a.id IN (1, 2, 7, 8) AND b.id IN (1, 2, 7, 8) ORDER BY a.id, b.id	2:7,2:8,7:2,7:8,8:2,8:7
+SELECT a.id, b.id, a.c_int DIV b.c_ubigint AS v FROM tm a, tm b WHERE a.id IN (1, 2, 5, 6, 7, 8) AND b.id IN (1, 2, 5, 6, 7, 8) ORDER BY a.id, b.id	6:7,6:8
+SELECT a.id, b.id, a.c_int DIV b.c_bit AS v FROM tm a, tm b WHERE a.id IN (1, 2, 5, 6, 7, 8) AND b.id IN (1, 2, 5, 6, 7, 8) ORDER BY a.id, b.id	6:5
+SELECT a.id, b.id, a.c_ubigint DIV b.c_double AS v FROM tm a, tm b WHERE a.id IN (1, 2, 5, 6, 7, 8) AND b.id IN (1, 2, 5, 6, 7, 8) ORDER BY a.id, b.id	5:6,5:7,6:6,8:6
+SELECT a.id, b.id, a.c_ubigint DIV b.c_dec_9_2 AS v FROM tm a, tm b WHERE a.id IN (1, 2, 5, 6, 7, 8) AND b.id IN (1, 2, 5, 6, 7, 8) ORDER BY a.id, b.id	5:6,5:7,6:6,8:6
+SELECT a.id, b.id, a.c_ubigint DIV b.c_dec_38_10 AS v FROM tm a, tm b WHERE a.id IN (1, 2, 5, 6, 7, 8) AND b.id IN (1, 2, 5, 6, 7, 8) ORDER BY a.id, b.id	5:6,5:7,5:8,6:6,6:8,8:6
+SELECT a.id, b.id, a.c_ubigint DIV b.c_varchar AS v FROM tm a, tm b WHERE a.id IN (1, 2, 5, 6, 7, 8) AND b.id IN (1, 2, 5, 6, 7, 8) ORDER BY a.id, b.id	5:6,6:6
+SELECT a.id, b.id, a.c_dec_38_10 DIV b.c_dec_38_10 AS v FROM tm a, tm b WHERE a.id IN (1, 2, 5, 6, 7, 8) AND b.id IN (1, 2, 5, 6, 7, 8) ORDER BY a.id, b.id	5:8
+SELECT a.id, b.id, a.c_varchar DIV b.c_bit AS v FROM tm a, tm b WHERE a.id IN (1, 2, 5, 6, 7, 8) AND b.id IN (1, 2, 5, 6, 7, 8) ORDER BY a.id, b.id	6:5,6:6,6:7

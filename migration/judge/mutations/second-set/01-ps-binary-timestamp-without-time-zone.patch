@@ -1,0 +1,14 @@
+diff --git a/src/query/protocol/ob_mysql_protocol_util.cpp b/src/query/protocol/ob_mysql_protocol_util.cpp
+index 7920a1f..c4faff8 100644
+--- a/src/query/protocol/ob_mysql_protocol_util.cpp
++++ b/src/query/protocol/ob_mysql_protocol_util.cpp
+@@ -359,8 +359,7 @@ int ObSMUtils::build_cell_value(const ObObj &obj, MYSQL_PROTOCOL_TYPE type,
+       if (BINARY == type) {
+         ObTime ob_time(DT_TYPE_DATETIME);
+         if (OB_FAIL(ObTimeConverter::datetime_to_ob_time(
+-                obj.get_datetime(),
+-                obj.is_timestamp() ? dtc_params.tz_info_ : NULL, ob_time))) {
++                obj.get_datetime(), NULL, ob_time))) {
+         } else if (OB_UNLIKELY(!HAS_TYPE_DATE(ob_time.mode_))) {
+           ret = OB_ERR_UNEXPECTED;
+         } else {

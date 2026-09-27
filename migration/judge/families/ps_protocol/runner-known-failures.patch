@@ -1,0 +1,338 @@
+diff --git a/.github/script/seekdb/mysqltest_for_seekdb.py b/.github/script/seekdb/mysqltest_for_seekdb.py
+index 5063b3bb8..44f230d95 100755
+--- a/.github/script/seekdb/mysqltest_for_seekdb.py
++++ b/.github/script/seekdb/mysqltest_for_seekdb.py
+@@ -36,6 +36,7 @@ RESULT_MISMATCH_MESSAGES = (
+ INIT_ERROR_PATTERN = re.compile(
+     r"^ERROR(?: \d+)?(?: \([^)]*\))? at line (\d+)(?: in file: '.*')?: "
+ )
++MYSQLTEST_MESSAGE_PATTERN = re.compile(r"^(?:\[[^\]]*\] )?(mysqltest: .*)$")
+ RECORDING_INPUT_KEYS = (
+     "mysqltest_sha256",
+     "obclient_sha256",
+@@ -837,6 +838,22 @@ def store_partial_output(args, case, mysqltest_log):
+     return True
+ 
+ 
++def mysqltest_failure_lines(output):
++    lines = []
++    in_message = False
++    for raw_line in output.splitlines():
++        line = raw_line.rstrip("\r")
++        match = MYSQLTEST_MESSAGE_PATTERN.match(line)
++        if match is not None:
++            lines.append(match.group(1))
++            in_message = True
++        elif in_message and line.strip():
++            lines.append(line)
++        else:
++            in_message = False
++    return lines
++
++
+ def run_case(args, deploy_dir, case, tmp_dir, log_dir):
+     result_file = case.result_file
+     staged_result = None
+@@ -934,6 +951,10 @@ def run_case(args, deploy_dir, case, tmp_dir, log_dir):
+             "recorded": return_code == 0,
+             "partial": partial,
+         }
++        if return_code != 0:
++            args.record_outcomes[case.name]["failure_lines"] = (
++                mysqltest_failure_lines(output)
++            )
+ 
+     trailing_whitespace_ignored = False
+     if (
+@@ -1629,7 +1650,7 @@ def load_recording(directory):
+     return manifest, [str(name) for name in manifest["cases"]]
+ 
+ 
+-def recording_problems(side, manifest):
++def recording_problems(side, manifest, accepted_failures=frozenset()):
+     problems = []
+     if manifest.get("finished") is not True:
+         problems.append("{} recording did not finish".format(side))
+@@ -1648,11 +1669,17 @@ def recording_problems(side, manifest):
+     if manifest.get("error"):
+         problems.append("{} recording failed: {}".format(side, manifest["error"]))
+     if manifest.get("failed_cases"):
+-        problems.append(
+-            "{} recording has failed cases: {}".format(
+-                side, ", ".join(manifest["failed_cases"])
++        failed_cases = [
++            case_name
++            for case_name in manifest["failed_cases"]
++            if case_name not in accepted_failures
++        ]
++        if failed_cases:
++            problems.append(
++                "{} recording has failed cases: {}".format(
++                    side, ", ".join(failed_cases)
++                )
+             )
+-        )
+     if manifest.get("plan_cache_errors"):
+         problems.append(
+             "{} recording could not read the plan cache counters: {}".format(
+@@ -1840,6 +1867,96 @@ def recorded_exit_code(manifest, case_name):
+     return outcomes[case_name].get("exit_code")
+ 
+ 
++def recorded_failure_lines(manifest, case_name):
++    outcomes = manifest.get("outcomes")
++    if not isinstance(outcomes, dict) or not isinstance(outcomes.get(case_name), dict):
++        return None
++    lines = outcomes[case_name].get("failure_lines")
++    if not isinstance(lines, list) or not all(isinstance(line, str) for line in lines):
++        return None
++    return lines
++
++
++def load_known_failures(path):
++    try:
++        data = path.read_bytes()
++        text = data.decode("utf-8")
++    except (OSError, UnicodeDecodeError) as exc:
++        raise RunnerError("cannot read known failure list {}: {}".format(path, exc))
++    names = []
++    for raw_line in text.split("\n"):
++        name = raw_line.split("#", 1)[0].strip()
++        if name:
++            names.append(name)
++    if not names:
++        raise RunnerError("known failure list {} names no cases".format(path))
++    duplicates = sorted(name for name, count in Counter(names).items() if count > 1)
++    if duplicates:
++        raise RunnerError(
++            "duplicate cases in known failure list {}: {}".format(
++                path, ", ".join(duplicates)
++            )
++        )
++    return {
++        "list": str(path),
++        "list_sha256": hashlib.sha256(data).hexdigest(),
++        "cases": names,
++    }
++
++
++def judge_known_failure(entry, left_manifest, right_manifest):
++    case_name = entry["case"]
++    lines = {
++        "left": recorded_failure_lines(left_manifest, case_name),
++        "right": recorded_failure_lines(right_manifest, case_name),
++    }
++    result = {"accepted": False, "failure_lines": lines}
++    if entry["status"] != "missing":
++        result["reason"] = "recorded on both sides"
++    elif len(entry["missing_from"]) != 2:
++        result["reason"] = "failed on the {} side only".format(
++            entry["missing_from"][0]
++        )
++    elif not entry.get("failed_alike"):
++        result["reason"] = (
++            "the two failures differ in their exit codes or partial output, or "
++            "a side left no partial output"
++        )
++    elif not lines["left"] or not lines["right"]:
++        result["reason"] = "a side recorded no mysqltest failure lines"
++    elif lines["left"] != lines["right"]:
++        result["reason"] = "the mysqltest failure lines differ"
++    else:
++        result["accepted"] = True
++    return result
++
++
++def apply_known_failures(known_failures, results, left_manifest, right_manifest):
++    listed = set(known_failures["cases"])
++    report = {
++        "list": known_failures["list"],
++        "list_sha256": known_failures["list_sha256"],
++        "listed_cases": len(known_failures["cases"]),
++        "accepted": [],
++        "not_accepted": {},
++        "not_in_recordings": sorted(
++            listed - set(entry["case"] for entry in results)
++        ),
++    }
++    for entry in results:
++        if entry["case"] not in listed:
++            continue
++        entry["known_failure"] = judge_known_failure(
++            entry, left_manifest, right_manifest
++        )
++        if entry["known_failure"]["accepted"]:
++            entry["verdict"] = "failed_alike"
++            report["accepted"].append(entry["case"])
++        else:
++            report["not_accepted"][entry["case"]] = entry["known_failure"]["reason"]
++    return report
++
++
+ def split_result_lines(content):
+     lines = content.split(b"\n")
+     result = [line + b"\n" for line in lines[:-1]]
+@@ -2409,6 +2526,24 @@ def print_mask_details(entry):
+             )
+ 
+ 
++def print_known_failure(entry):
++    known_failure = entry.get("known_failure")
++    if known_failure is None:
++        return
++    if known_failure["accepted"]:
++        print(
++            "  known failure: accepted; both sides stopped with {}".format(
++                "; ".join(known_failure["failure_lines"]["left"])
++            ),
++            flush=True,
++        )
++    else:
++        print(
++            "  known failure: not accepted: {}".format(known_failure["reason"]),
++            flush=True,
++        )
++
++
+ def print_compare_entry(entry, masks):
+     if masks:
+         print(
+@@ -2431,6 +2566,7 @@ def print_compare_entry(entry, masks):
+             ),
+             flush=True,
+         )
++    print_known_failure(entry)
+     if "partial_status" in entry:
+         print(
+             "  both sides failed; partial output {}{}".format(
+@@ -2526,8 +2662,12 @@ def print_mask_statistics(statistics):
+ def command_compare(args):
+     left_dir = absolute_path(args.left)
+     right_dir = absolute_path(args.right)
++    known_failures = None
++    known_failure_report = None
+     try:
+         masks = load_masks(set(args.mask))
++        if args.known_failures:
++            known_failures = load_known_failures(absolute_path(args.known_failures))
+         left_manifest, left_names = load_recording(left_dir)
+         right_manifest, right_names = load_recording(right_dir)
+         if masks:
+@@ -2544,8 +2684,22 @@ def command_compare(args):
+             raise RunnerError(
+                 "no recorded cases in {} or {}".format(left_dir, right_dir)
+             )
+-        problems = recording_problems("left", left_manifest)
+-        problems.extend(recording_problems("right", right_manifest))
++        results = [
++            compare_case(
++                left_dir, right_dir, left_manifest, right_manifest, case_name, masks
++            )
++            for case_name in case_names
++        ]
++        accepted_failures = frozenset()
++        if known_failures is not None:
++            known_failure_report = apply_known_failures(
++                known_failures, results, left_manifest, right_manifest
++            )
++            accepted_failures = frozenset(known_failure_report["accepted"])
++        problems = recording_problems("left", left_manifest, accepted_failures)
++        problems.extend(
++            recording_problems("right", right_manifest, accepted_failures)
++        )
+         for side, manifest in (("left", left_manifest), ("right", right_manifest)):
+             if args.require_plan_cache and manifest.get("plan_cache_stats") is not True:
+                 problems.append(
+@@ -2574,12 +2728,6 @@ def command_compare(args):
+         notes = recording_differences(
+             left_manifest, right_manifest, RECORDING_NOTE_KEYS
+         )
+-        results = [
+-            compare_case(
+-                left_dir, right_dir, left_manifest, right_manifest, case_name, masks
+-            )
+-            for case_name in case_names
+-        ]
+         plan_cache_compared = (
+             left_manifest.get("plan_cache_stats") is True
+             and right_manifest.get("plan_cache_stats") is True
+@@ -2628,6 +2776,8 @@ def command_compare(args):
+             1 for entry in masked_entries if entry["mask_changed"]
+         )
+         verdict_summary = summarize_statuses(results, "verdict")
++    if known_failure_report is not None:
++        verdict_summary = summarize_statuses(results, "verdict")
+     plan_cache_summary = (
+         summarize_plan_cache(plan_cache_results) if plan_cache_compared else None
+     )
+@@ -2653,6 +2803,7 @@ def command_compare(args):
+             "ps_protocol": args.require_ps_protocol,
+             "compress": args.require_compress,
+         },
++        "known_failures": known_failure_report,
+         "recording_problems": problems,
+         "recording_notes": notes,
+         "left_manifest": left_manifest,
+@@ -2690,15 +2841,44 @@ def command_compare(args):
+         print(
+             "verdict: cases={cases}, identical={identical}, "
+             "different={different}, missing={missing} (the masked result for the "
+-            "{masked} masked cases, the exact result for the other {exact})".format(
++            "{masked} masked cases, the exact result for the other {exact}){known}".format(
+                 masked=masked_summary["cases"],
+                 exact=verdict_summary["cases"] - masked_summary["cases"],
++                known=(
++                    ""
++                    if known_failure_report is None
++                    else ", known failures accepted={}".format(
++                        len(known_failure_report["accepted"])
++                    )
++                ),
+                 **verdict_summary
+             ),
+             flush=True,
+         )
+         for statistics in mask_reports:
+             print_mask_statistics(statistics)
++    if known_failure_report is not None:
++        print(
++            "known failures: {} (sha256 {}): listed={}, accepted={}, "
++            "not_accepted={}, not_in_recordings={}".format(
++                known_failure_report["list"],
++                known_failure_report["list_sha256"],
++                known_failure_report["listed_cases"],
++                len(known_failure_report["accepted"]),
++                len(known_failure_report["not_accepted"]),
++                len(known_failure_report["not_in_recordings"]),
++            ),
++            flush=True,
++        )
++        if not masks:
++            print(
++                "verdict: cases={cases}, identical={identical}, "
++                "different={different}, missing={missing}, known failures "
++                "accepted={accepted}".format(
++                    accepted=len(known_failure_report["accepted"]), **verdict_summary
++                ),
++                flush=True,
++            )
+     if plan_cache_summary is not None:
+         print(
+             "plan cache: cases={cases}, identical={identical}, "
+@@ -2894,6 +3074,16 @@ def create_parser():
+         help="report a recording problem unless both recordings were made with "
+         "--compress",
+     )
++    compare.add_argument(
++        "--known-failures",
++        metavar="FILE",
++        help="file naming cases, one per line (# starts a comment), that both "
++        "recordings may fail: a listed case passes when it failed on both sides "
++        "with the same exit code, identical .partial files and the same "
++        "mysqltest: failure lines, and its failure is then not a recording "
++        "problem; any other outcome of a listed case, and every failed case not "
++        "listed, fails as before",
++    )
+     compare.set_defaults(handler=command_compare)
+ 
+     return parser
