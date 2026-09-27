@@ -14,7 +14,7 @@ This section of the design document turns ARCHITECTURE.md §5 (the column batch 
 | datum compare and hash function tables | ob-values | src/share/datum |
 | `ObExpr` (the plan's form), `EvalFrame`, `ExprSlot`, `ObEvalInfo`, `ObBatchRows`, the `ObOperator` trait, `ObChunkDatumStore`, `ObTempRowStore` | sql-exec (`ObExpr`'s file, src/sql/engine/expr/ob_expr.cpp, would fall to sql-expr by its directory; a map row sends it here, since `EvalFrame` names `ObExpr` and Rust allows `impl ObExpr` only in its own crate) | src/query/api/query/engine/expr/ob_expr.h:130-715, src/query/api/query/engine/ob_operator.h, the chunk stores |
 | `ObPushdownFilterNode`, `ObPushdownFilterExecutor`, `ObWhiteFilterParam`, `ObBitmap`, `ObSqlDatumInfo`, `ScanHost`, `ScanColumns`, `ObVTableScanParam`, the aggregate protocol traits | storage-api | src/query/api/query/engine/basic/ob_pushdown_filter.h, src/data_plane/api/data_plane/access/ob_tablet_scan.h, src/share/aggregate/ob_pushdown_aggregate_protocol.h |
-| `ob_sort`, `make_heap`, `push_heap`, `pop_heap`, `sort_heap`, `ObBinaryHeap`, `ObHashMap`, `ObHashSet`, `murmurhash64a`, `murmurhash2`, `fnv_hash2` | ob-base, `sort` and `hash` modules (ARCHITECTURE §14 rule 7) | src/oblib/lib/utility/ob_sort.h, the SDK's libc++ headers, src/oblib/lib/container/ob_heap.h, src/oblib/lib/hash, src/oblib/lib/hash_func/murmur_hash.{h,cpp} |
+| `ob_sort`, `make_heap`, `push_heap`, `pop_heap`, `sort_heap`, `lower_bound`, `upper_bound`, `binary_search` and their `try_` forms (part 6), `ObBinaryHeap`, `ObHashMap`, `ObHashSet`, `murmurhash64a`, `murmurhash2`, `fnv_hash2` | ob-base, `sort` and `hash` modules (ARCHITECTURE §14 rule 7) | src/oblib/lib/utility/ob_sort.h, the SDK's libc++ headers, src/oblib/lib/container/ob_heap.h, src/oblib/lib/hash, src/oblib/lib/hash_func/murmur_hash.{h,cpp} |
 | `ObSortOpImpl`, `ObAdaptiveQS`, the hash join and hash group-by tables, `ObHashPartInfrastructure` | sql-engine | src/sql/engine/{sort,join,aggregate,basic} |
 | white-filter kernels on encoded data | the C++ files stay in storage-sstable, where the map sends src/storage/blocksstable; they are core-build inputs whose encodings are free (ARCHITECTURE §6.1), so a NEON kernel exists only for an encoding the Rust sstable keeps, and then as a free function over slices in ob-simd with its scalar version, registered by storage-sstable | src/storage/blocksstable/encoding/neon (568 lines, `wc -l`): kernels over the C++ dict and raw encodings, registered into the decoders' tables (src/storage/blocksstable/encoding/ob_dict_decoder.cpp:166-189; ob_raw_decoder.cpp:218-240) and taking `sql::PushdownFilterInfo` and `ObBitVector` |
 
@@ -93,14 +93,23 @@ pub struct ObExpr {                          // in the plan: immutable, Send + S
     pub extra_info_: Option<Box<dyn ObIExprExtraInfo>>,
 }
 
-pub struct EvalFrame<'r> {                   // one per run of a plan, one per PX worker
+pub struct EvalFrame<'r> {                   // one per run of a plan, one per PX worker, one per evaluation over a kept frame state (rule 3.9)
     pub exec_ctx: &'r mut ObExecContext,
-    exprs: &'r [ObExpr],
+    exprs: &'r [ObExpr],                     // the one expression table this frame reads: ExprIdx indexes it (rule 3.10 adds indexes past its end)
+    state: FrameState,
+}
+
+pub struct FrameState {                      // what a frame owns; a cache keeps it between evaluations (rule 3.9)
     slots: Vec<ExprSlot>,
     bufs: BufTable,
     expr_ctx: Vec<Option<Box<dyn ObExprOperatorCtx>>>,
     tmp: ObArenaAllocator,                   // tmp_alloc_; counted by the request's tracker on a request thread, uncounted in a PX worker (s3-memory.md T2, H4)
     batch: BatchInfo,                        // batch_idx_, batch_size_, max_batch_size_
+}
+
+impl<'r> EvalFrame<'r> {
+    pub fn new(exec_ctx: &'r mut ObExecContext, exprs: &'r [ObExpr], state: FrameState) -> Self;
+    pub fn into_state(self) -> FrameState;
 }
 
 pub struct ExprSlot {
@@ -130,6 +139,19 @@ Fields that stand for C++ members keep the members' names, trailing `_` included
 **Rule 3.7.** `ObEvalInfo::point_to_frame_` keeps its set and clear sites (22 lines, `grep -rn point_to_frame_ src`); its only reader is the x86 AVX-512 branch of `ObBlackFilterExecutor::eval_exprs_batch` (src/sql/engine/basic/ob_pushdown_filter.cpp:2285-2286), which never runs on arm64.
 
 **Rule 3.8.** `ObEvalCtx::BatchInfoScopeGuard` (198 lines, `grep -rn BatchInfoScopeGuard src/sql src/query src/storage`) becomes a guard over the frame's batch index and sizes that restores them when dropped. Storage's direct `set_batch_idx` calls (21 lines under src/storage), which it makes as a friend class because it does not use the guard (ob_expr.h:168, :244-250), become `ScanHost::set_batch_idx`.
+
+**Rule 3.9.** Frames the C++ keeps apart from the run's own frame, over an expression table of their own, between evaluations or across nested calls, keep their state as a `FrameState` in the object that holds them; each evaluation takes the state out, builds an `EvalFrame` over it, the exec context and the expression table it belongs to, evaluates, and puts the state back on every path. There is no second frame type: expression functions take `&mut EvalFrame` only. Three kinds exist:
+- the exec context's temporary-expression contexts (`get_temp_expr_eval_ctx`, src/sql/engine/ob_exec_context.cpp:525-554; s4-sql-front.md 2.2's `TempExprCtxId`);
+- `ObRTDatumArith`'s frames over the expression table it generates, which the linear-interpolation aggregate keeps between evaluations (src/sql/engine/expr/ob_rt_datum_arith.cpp:126-158; src/sql/engine/aggregate/ob_aggregate_processor.h:315, ob_aggregate_processor.cpp:4222);
+- a PL routine's frames, which `ObPLExecState` installs in the exec context, backing up the caller's and restoring them around nested calls (src/pl/ob_pl.cpp:2747, :2761, :2768-2769).
+
+`ObTempExpr::eval` (src/sql/engine/expr/ob_expr_frame_info.cpp:576-596) takes the state out of its arena slot and builds the `EvalFrame` where it fetches the context (`get_temp_expr_eval_ctx`, :582), since `clear_expr_eval_flags` and `row_to_frame` already write the temporary frames there (:584-585), and puts the state back where `ObTempExprCtxReplaceGuard`'s scope ends (:593). The guard, which swaps the exec context's frames, frame count and expression-context store for the temporary context's and restores them in its destructor (src/sql/engine/ob_exec_context.h:1040-1070), becomes no statement; the frame reads the temporary expression's own `rt_exprs_`. When `use_temp_expr_ctx_cache_` is false, `eval` builds a local `FrameState` that drops at the end, in place of the explicit destructor call (ob_expr_frame_info.cpp:590-592). A frame built this way while the run's frame lives borrows the exec context from that frame, so the run's frame is unused until it returns, as the swapped-out C++ frames are. The datum caster is not such a frame: it works on the run's own frame (rule 3.10).
+
+**Rule 3.10.** An `ObExpr` the C++ builds outside every expression table has no position in one, so a table position (`ExprIdx`) does not name it by itself. Two kinds exist:
+- a copy of a plan expression, on the stack or in an expression context, with changed metadata or arguments: the values operators' `real_src_expr` (src/sql/engine/basic/ob_expr_values_op.cpp:486-489; src/sql/engine/basic/ob_values_table_access_op.cpp:203-206) and `ObExprColumnConvCtx::expr_` (src/sql/engine/expr/ob_expr_column_conv.cpp:764-776). It is an `ObExpr` value cloned from the plan's, owned where the C++ keeps it; it keeps its original's `slot`, so evaluating it writes where the C++ writes, and its `args_` are `ExprIdx` into the same table (the column-conv context's `args_[0] = args_[4]` included);
+- the datum caster's two cast expressions (src/sql/engine/expr/ob_datum_cast.cpp:12869-12899), whose results the C++ keeps in a frame of the caster's own, appended after the run's frames in an `ObEvalCtx` that copies the run's frame pointers (:12847, :12855, :12862-12864).
+
+The run's `FrameState` holds the expressions of the second kind and the copies a pointer reaches, with their slots, in a list after the table: an `ExprIdx` at or past the table's length names one of them, so `args_` stay `ExprIdx` and a stored pointer to such an expression (`cast_expr.args_[0] = const_cast<ObExpr*>(&src_expr)`, ob_datum_cast.cpp:13070) is its index; a function that stores the pointer it receives (`ObDatumCaster::to_type`, `setup_cast_expr`) takes the `ExprIdx`. The caster adds its two expressions where it builds them (`init`, :12828-12904) and removes them at `destroy` (:13026-13047); a copy handed to the caster is added where the C++ builds it and removed at the end of its C++ scope; a copy that nothing points to (`ObExprColumnConvCtx::expr_`) is not added. The caster evaluates through the run's `EvalFrame`, whose frames its C++ context shares, with the batch size and index that context sets (:12865-12867, and the caller's index at :12928) held by rule 3.8's guard for the call. Reached by LEAST and GREATEST (src/sql/engine/expr/ob_expr_least.cpp:196-199), NULLIF (src/sql/engine/expr/ob_expr_nullif.cpp:254-257, :280-283) through `ObEvalCtx::init_datum_caster` (src/sql/engine/expr/ob_expr.cpp:82-96), and by the two values operators, which own a caster each: INSERT ... VALUES on a cached plan (src/sql/engine/basic/ob_expr_values_op.h:93, ob_expr_values_op.cpp:206) and the VALUES table (src/sql/engine/basic/ob_values_table_access_op.h:75, ob_values_table_access_op.cpp:53, :331). The frame calls that add and remove them are fixed with the core API.
 
 ### Example: the arithmetic batch loop
 
@@ -264,7 +286,9 @@ pub trait ObOperator: Send {
 
 **Rule 4.9.** A C++ `sizeof` inside a formula that decides a batch size, a table size, a dump or a bypass is the C++ number, held in a named constant and checked by the differential tests, never `size_of` of the Rust type. `compute_max_batch_size` and `get_expr_datum_fixed_header_size` use `sizeof(ObDatum)` (12), `sizeof(ObEvalInfo)` and `MAX_FRAME_SIZE` (src/sql/code_generator/ob_static_engine_expr_cg.cpp:1745-1755; ob_static_engine_expr_cg.h:398-400); the hash join's bucket count uses `sizeof(HTBucket)`, 16 bytes (src/sql/engine/join/ob_hash_join_op.h:333-345; ob_hash_join_op.cpp:1344); the hash group-by bypass compares memory sizes with cache sizes (src/sql/engine/aggregate/ob_adaptive_bypass_ctrl.cpp:40-49).
 
-**A reviewer checks:** operators implement `inner_get_next_batch` and never rewrite the wrapper; a child's batch is read through `brs()` at each use and no borrow of it outlives a call, and each kept `const ObBatchRows *` member is the enum of rule 4.3; `detect_batch_size` matches the C++ line for line and the run uses the printed size; no decision formula uses `size_of`; nothing moves a batch end.
+Rule 4.9 covers the execution code, which is where the sizeof sweep looks (src/sql/engine, src/sql/code_generator, src/sql/das, src/sql/dtl, src/query/api/query/engine; migration/inventory/sweep/summary.tsv, `sizeof-formulas`), because there the decisions reach `rowset=`, dump rows and output order. It also covers SQL-tier code outside those directories wherever the `sizeof` feeds a plan, a statistic or output: the optimizer's widths (src/sql/optimizer/ob_opt_est_cost.cpp:572; src/sql/optimizer/ob_log_sort.cpp:287) and its online statistics (src/sql/optimizer/stat/ob_opt_osg_column_stat.cpp:203, :209). A storage-side size of an in-memory object, such as `ObSSTableMeta::get_deep_copy_size`, `sizeof(ObSSTableMeta) + get_variable_size()` (src/storage/blocksstable/ob_sstable_meta.h:287-290), measures Rust memory, which need not match the C++ byte counts (ARCHITECTURE §3.2; §17 default 9). So it is `size_of` of the Rust type plus the variable part, and `get_variable_size` keeps its C++ formula, element counts times the Rust element sizes (`count_ * sizeof(ObTxDesc)`, src/storage/blocksstable/ob_sstable_meta.cpp:501-504, becomes `count_ * size_of::<ObTxDesc>()`). A decision it feeds keeps its C++ formula over that figure, as the budgets do (ARCHITECTURE §3.2): `batch_cache_sstable_meta_` still stops when `0 > remain_size - deep_copy_size` (src/storage/tablet/ob_table_store_util.cpp:1231, :1259), which decides only how many sstable metas a tablet keeps loaded, not what a query returns. A storage figure the judge does see keeps the C++ number under its own inventory row: the estimator's inputs (RULEBOOK 2.9; s6-storage.md 2.2) and a size a SQL function returns (s6-storage.md 4.5). A `sizeof` of a type whose Rust size the design fixes to the C++ size gives the same number under either reading: `ObDatum` is 12 bytes (rule 2.1) and the integer types keep their widths, so `SUM_OPNSIZE`'s pushdown, which adds `sizeof(ObDatum)` per value in storage (src/storage/access/ob_pushdown_aggregate.cpp:1194-1214, :1229, :1235, :1305, :1330) as the SQL path does, and the optimizer sites above give the same figures. The sweep is not extended to storage.
+
+**A reviewer checks:** operators implement `inner_get_next_batch` and never rewrite the wrapper; a child's batch is read through `brs()` at each use and no borrow of it outlives a call, and each kept `const ObBatchRows *` member is the enum of rule 4.3; `detect_batch_size` matches the C++ line for line and the run uses the printed size; no decision formula of the SQL tier uses `size_of`; nothing moves a batch end.
 
 ## 5. What storage owns in a scan and what it asks SQL for (storage-api)
 
@@ -461,19 +485,27 @@ self.set_end();                           // the batch ends with the micro block
 ## 6. Sorting: same algorithms, same ties
 
 ```rust
-// ob-base, sort module
-pub fn ob_sort<T, F>(v: &mut [T], less: F) -> ObResult<()> where F: FnMut(&T, &T) -> ObResult<bool>;
-pub fn make_heap<T, F>(v: &mut [T], less: F) -> ObResult<()> where F: FnMut(&T, &T) -> ObResult<bool>;
-// push_heap, pop_heap and sort_heap take the same arguments
+// ob-base, sort module: each function in two forms (rule 6.4)
+pub fn ob_sort<T, F>(v: &mut [T], less: F) where F: FnMut(&T, &T) -> bool;
+pub fn try_ob_sort<T, F>(v: &mut [T], less: F) -> ObResult<()> where F: FnMut(&T, &T) -> ObResult<bool>;
+pub fn make_heap<T, F>(v: &mut [T], less: F) where F: FnMut(&T, &T) -> bool;
+pub fn try_make_heap<T, F>(v: &mut [T], less: F) -> ObResult<()> where F: FnMut(&T, &T) -> ObResult<bool>;
+// push_heap, pop_heap and sort_heap, and their try_ forms, take the same arguments
+pub fn lower_bound<T, K, F>(v: &[T], value: &K, less: F) -> usize where F: FnMut(&T, &K) -> bool;
+pub fn try_lower_bound<T, K, F>(v: &[T], value: &K, less: F) -> ObResult<usize> where F: FnMut(&T, &K) -> ObResult<bool>;
+pub fn upper_bound<T, K, F>(v: &[T], value: &K, less: F) -> usize where F: FnMut(&K, &T) -> bool;
+pub fn try_upper_bound<T, K, F>(v: &[T], value: &K, less: F) -> ObResult<usize> where F: FnMut(&K, &T) -> ObResult<bool>;
+// binary_search and try_binary_search: a slice, a value of its element type and a comparator of two
+// elements, called both ways round as libc++ calls it; they return bool and ObResult<bool>
 ```
 
-**Rule 6.1.** `ob_sort` transcribes, statement for statement, the SDK 26.2 libc++ `std::sort` path for a user comparator (`_LIBCPP_VERSION` 200100; MacOSX26.2.sdk/usr/include/c++/v1/__algorithm/sort.h:717-826, :881-889): sorting networks up to 5 elements, insertion sort below 24, median of three or the ninther above 128, both partition functions, the incomplete insertion sort after a balanced partition, heap sort at depth `2*log2(n)`. It leaves out the branchless partition, which `lib::ob_sort` never selects because its comparator is never `std::less` (sort.h:52-56; src/oblib/lib/utility/ob_sort.h:27-56). Moves become swaps and rotations that give the same permutation. Indexing is checked, so where the unguarded insertion sort would read before the array (the reference's hardening mode is none, R09 §2.6) Rust panics; the C++ behavior there is undefined, so no compared output depends on it. The heap functions transcribe make_heap.h, push_heap.h, pop_heap.h (Floyd's sift-down, then sift-up, pop_heap.h:33-58) and sort_heap.h. The files keep libc++'s license notice (ARCHITECTURE default 19).
+**Rule 6.1.** `ob_sort` transcribes, statement for statement, the SDK 26.2 libc++ `std::sort` path for a user comparator (`_LIBCPP_VERSION` 200100; MacOSX26.2.sdk/usr/include/c++/v1/__algorithm/sort.h:717-826, :881-889): sorting networks up to 5 elements, insertion sort below 24, median of three or the ninther above 128, both partition functions, the incomplete insertion sort after a balanced partition, heap sort at depth `2*log2(n)`. It leaves out the branchless partition, which `lib::ob_sort` never selects because its comparator is never `std::less` (sort.h:52-56; src/oblib/lib/utility/ob_sort.h:27-56). Moves become swaps and rotations that give the same permutation. Indexing is checked, so where the unguarded insertion sort would read before the array (the reference's hardening mode is none, R09 §2.6) Rust panics; the C++ behavior there is undefined, so no compared output depends on it. The heap functions transcribe make_heap.h, push_heap.h, pop_heap.h (Floyd's sift-down, then sift-up, pop_heap.h:33-58) and sort_heap.h. `lower_bound`, `upper_bound` and `binary_search` transcribe libc++'s bisection (lower_bound.h:30-47, :92-98; upper_bound.h:35-59; binary_search.h:25-28): the midpoint from `__half_positive`, the same comparisons in the same order with the same argument order. With a strict weak order any correct search gives the same position, but a comparator that answers false after an error (s2-errors.md 2.4 rule 5) sends the search wherever the comparisons made before the error lead, so every `std::lower_bound`, `std::upper_bound` and `std::binary_search` line uses them (79 lines, `grep -rnE 'std::(lower_bound|upper_bound|binary_search)\s*\(' src`), never `partition_point` or `binary_search_by`, which bisect differently. The files keep libc++'s license notice (ARCHITECTURE default 19).
 
-**Rule 6.2.** Every sort that can reach output uses it: the 169 `lib::ob_sort(` lines (`grep -rn 'lib::ob_sort(' src`), the 3 direct `std::sort` lines, the 10 heap-function lines, and the 2 `qsort` lines, whose ties are indistinguishable (empty charset planes, src/oblib/lib/charset/ob_ctype_simple.cc:1085-1131; log file names). `ob_sort` keeps tracepoint 2501's irreflexivity check (`EN_CHECK_SORT_CMP`, ob_sort.h:30-39), run when the comparator carries no state (`size_of::<F>() == 0`, the C++ `std::is_empty`).
+**Rule 6.2.** Every sort that can reach output uses it: the 169 `lib::ob_sort(` lines (`grep -rn 'lib::ob_sort(' src`), the 3 direct `std::sort` lines, the 10 heap-function lines, and the 2 `qsort` lines, whose ties are indistinguishable (empty charset planes, src/oblib/lib/charset/ob_ctype_simple.cc:1085-1131; log file names). `ob_sort` and `try_ob_sort` keep tracepoint 2501's irreflexivity check (`EN_CHECK_SORT_CMP`, ob_sort.h:30-39), run when the comparator carries no state (`size_of::<F>() == 0`, the C++ `std::is_empty`).
 
 **Rule 6.3.** The 4 `std::stable_sort` lines become `sort_by`. Each comparator is a strict weak order, so every stable sort gives the same order: JSON object keys compare by bytes, or by length and then bytes (`ObJsonKeyCompare`, src/oblib/common/json_type/ob_json_tree.h:869-885, used at ob_json_tree.cpp:743), JSON aggregation keys by length and then bytes (src/oblib/common/xml/ob_binary_aggregate.cpp:24-37), XML keys by `ObString::compare` (src/oblib/common/xml/ob_tree_base.cpp:34-46), which orders by bytes and then length (src/oblib/lib/string/ob_string.h:394-405). This settles the XML check R09 §4.5 left open.
 
-**Rule 6.4.** A comparator that keeps an error in `ret_` (31 lines in 18 files, `grep -rn 'int &ret = ret_;' src`) returns `ObResult<bool>`, and `ob_sort` stops at the first error (ARCHITECTURE §2). The C++ sorts on in address order and returns `comp_.ret_` afterwards (src/sql/engine/sort/ob_sort_op_impl.cpp:395-406, :1867-1869), so no order after an error is ever seen. Infallible comparators return `Ok`.
+**Rule 6.4.** Each function comes in two forms. A comparator that keeps an error in `ret_` (31 lines in 18 files, `grep -rn 'int &ret = ret_;' src`) and whose error the caller sees returns `ObResult<bool>` and goes to the `try_` form, which stops at the first error (ARCHITECTURE §2). The C++ sorts on in address order and returns `comp_.ret_` afterwards (src/sql/engine/sort/ob_sort_op_impl.cpp:395-406, :1867-1869), so no order after an error is ever seen. A comparator that cannot fail goes to the plain form, which takes `FnMut(..) -> bool` and returns what the C++ function returns (nothing for a sort or heap function, the position for a search), and so does the clone of a comparator whose error the C++ loses (s2-errors.md 2.4 rule 5). So no site binds a result that could never be `Err`, and `let _ =` stays where the C++ ignores a code (s2-errors.md 2.12 item 3).
 
 **Rule 6.5.** OB's own sorts are translated, not replaced: `ObAdaptiveQS` with its radix steps and only its scalar byte compare (the AVX-512 choice, ob_sort_op_impl.cpp:278-283, never runs on arm64); `ObBinaryHeap` with its root compare cache, which changes which child is picked (src/oblib/lib/container/ob_heap.h:223-264); the partition sort, prefix sort, unique sort, top-N heaps, the in-memory merge of sorted runs and the external merge.
 
@@ -541,7 +573,7 @@ impl Compare {
     }
 }
 // the call site
-let ret = ob_sort(&mut self.rows[begin..], |l, r| comp.less(l, r, &self.datum_store));
+let ret = try_ob_sort(&mut self.rows[begin..], |l, r| comp.less(l, r, &self.datum_store));
 ```
 
 The address-order branches go: the Rust sort stops where the C++ would switch to address order, and the statement fails with the same code.
@@ -670,7 +702,7 @@ The counter still moves after a failed key, as in the C++, so the function keeps
 ## 8. Inventory rows and tests this section needs
 
 Inventory rows (prompt 02):
-- each of the 169 `lib::ob_sort` lines, 3 `std::sort`, 10 heap-function, 4 `std::stable_sort` and 2 `qsort` lines: the sort used and whether the comparator can fail; the 31 `ret_` comparators;
+- each of the 169 `lib::ob_sort` lines, 3 `std::sort`, 10 heap-function, 4 `std::stable_sort`, 2 `qsort` and 79 `std::lower_bound`, `std::upper_bound` and `std::binary_search` lines: the sort or search used and whether the comparator can fail, which picks the plain or the `try_` form (rule 6.4); the 31 `ret_` comparators;
 - every OB hash container iteration (57 iterator lines and 53 `foreach_refactored` calls, plus `auto` loops, R09 §6): a value key or an address key;
 - the 17 `MEMMOVE` lines in src/sql/engine/expr and every result write whose source may be the destination's own buffer;
 - the operator files that reach into frame internals (35 by R05's pattern, 66 by the evidence's, evidence-full.md:188): which frame call each use becomes;
@@ -680,7 +712,7 @@ Inventory rows (prompt 02):
 - the tracepoints of rule 4.6.
 
 Differential tests in the core build, against the C++ compiled into a test-only binary with the reference's flags (ARCHITECTURE §10):
-- `ob_sort` and the heap functions against `std::sort`, `std::push_heap` and `std::pop_heap` compiled with the SDK 26.2 headers, on random arrays with many ties, comparing whole permutations and comparison counts; `ObBinaryHeap` and `ObAdaptiveQS` on the same inputs;
+- `ob_sort` and the heap functions against `std::sort`, `std::push_heap` and `std::pop_heap` compiled with the SDK 26.2 headers, on random arrays with many ties, comparing whole permutations and comparison counts; `ObBinaryHeap` and `ObAdaptiveQS` on the same inputs; `lower_bound`, `upper_bound` and `binary_search` against libc++'s, comparing positions and the sequence of compared elements, with comparators that start answering false after a chosen call;
 - every hash function and per-type datum hash, NaN and -0.0 included; `ObHashMap` iteration order after inserts, erases and `extend`;
 - `ObDatum`'s descriptor bits against the C++ `pack_`;
 - each white filter on each encoding against the scalar comparison, and each NEON kernel against its scalar version;

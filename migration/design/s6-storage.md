@@ -203,7 +203,7 @@ fn sample_rows(
 }
 ```
 
-The counts go out through `&mut` because the driver adds them even when the walk ended with `OB_ITER_END` (ob_query_engine.cpp:609-612); a code used as a value stays a value (ARCHITECTURE §2). The null check goes because the iterator yields a reference. The driver keeps the C++ order:
+The counts go out through `&mut` because the driver adds them even when the walk ended with `OB_ITER_END` (ob_query_engine.cpp:609-612); a code used as a value stays a value (ARCHITECTURE §2). The null check goes because the iterator yields a reference. `value.get_list_head()` stands for the C++ read of the version chain's head, which the C++ makes with no latch (src/storage/memtable/mvcc/ob_mvcc_row.h:380-382); under s8-numerics-platform.md 4 rule 5 that link sits under the row latch, so the Rust reads the head and the node's transaction id under it, in a form the memtable MVCC design of the core API sessions fixes (10.3). The driver keeps the C++ order:
 
 ```rust
 let mut ret = self.sample_rows(&mut iter, end_key, end_exclude, start_key, start_exclude,

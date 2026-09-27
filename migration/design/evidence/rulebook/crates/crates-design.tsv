@@ -96,7 +96,7 @@ src/sql/dtl	sql-engine
 src/sql/engine	sql-engine
 src/sql/engine/basic/chunk_store	sql-exec
 src/sql/engine/basic/ob_chunk_datum_store	sql-exec
-src/sql/engine/basic/ob_pushdown_filter	sql-exec
+src/sql/engine/basic/ob_pushdown_filter	storage-api
 src/sql/engine/cmd	sql
 src/sql/engine/expr	sql-expr
 src/sql/engine/expr/ob_expr_frame_info	sql-exec
@@ -210,3 +210,15 @@ src/share/storage/ob_sqlite_connection	ob-runtime
 src/sql/engine/expr/ob_expr.	sql-exec
 src/share/geo/ob_geo_mvt.	sql-engine
 src/share/geo/ob_vector_tile.pb-c	x-dropped
+src/oblib/rpc/ob_sql_request_operator.cpp	observer
+src/oblib/rpc/obmysql/ob_sql_nio_server	observer
+src/oblib/rpc/obmysql/ob_sql_sock_handler	observer
+src/oblib/rpc/obmysql/ob_sql_sock_session	observer
+src/oblib/rpc/obmysql/ob_login_info	observer
+src/oblib/rpc/obmysql/ob_mysql_packet_storage	observer
+src/query/api/query/engine/basic/ob_pushdown_filter	storage-api
+src/query/api/query/engine/basic/ob_external_pushdown_filter	storage-api
+src/storage/access/ob_index_sstable_estimator	storage-sstable
+src/share/ob_est_row_count_record	storage-api
+src/share/aggregate/ob_pushdown_aggregate_protocol	storage-api
+src/oblib/lib/container/ob_bitmap	storage-api

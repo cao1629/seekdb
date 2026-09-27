@@ -445,8 +445,8 @@ Physical standby is deferred (ARCHITECTURE default 2). The Rust build starts as 
 
 53 live hand-written files have 4,000 lines or more, 378,637 lines in all. 16 of them (95,820 lines) are core inputs, and 37 (282,817) are Step 3 splits (`big_files.py`; R12 counted 54 by `wc -l`).
 
-1. The head unit keeps the map's key and writes `<stem>.rs`. It holds the types and the header's inline functions.
-2. The pieces `<unit_id>.p01`, `.p02` and on write `<stem>_p01.rs` and on, in source order. Each piece holds `impl` blocks and functions for one contiguous range of the .cpp, cut at a function boundary, under 4,000 lines.
+1. The head unit keeps the map's key and writes `<stem>.rs`. It holds the types and the header's inline functions. A unit of more than 30,000 tokens splits too, and a head holds only the headers that fit under 4,000 lines and 30,000 tokens (2026-09-25, decisions.md row 5c: PLAN §6 sizes units at 30K tokens).
+2. The pieces `<unit_id>.p01`, `.p02` and on write `<stem>_p01.rs` and on, in source order: first the headers the head could not hold, then the .cpp and `.ipp` bodies. Each piece holds one contiguous range of one file, cut at a class or function boundary, under 4,000 lines and 30,000 tokens.
 3. Every member of a split type is `pub(crate)`, and so is every function a piece defines.
 4. A header of 4,000 lines or more is cut at class boundaries into pieces that each hold whole types. The only leaf case is share/ob_rpc_struct.h (4,032 lines).
 5. The declaration index gives each item's piece path.
@@ -459,8 +459,8 @@ Physical standby is deferred (ARCHITECTURE default 2). The Rust build starts as 
 4. `kind` is `stem` (one unit, one file), `split` (a head or a piece) or `subsystem` (core units only).
 5. `inputs` are the unit's files from migration/depmap/units.tsv, with `:<from>-<to>` line ranges for pieces.
 6. migration/core-manifest.tsv uses the same five columns and adds a sixth, `units`. `unit_id` is `core/<crate>/<module>`. `source` is the first C++ file replaced, or `-` for new code (ob-platform). `inputs` lists the files the module replaces, with line ranges where it replaces part of a file, as in manifest.tsv; `units` lists the map unit ids it replaces.
-7. migration/not-translated.tsv lists every other in-build unit with one reason: `island`, `generated`, `data`, `vendored`, `dead`, `dropped` or `deferred`.
-8. Completeness check: every in-build unit of units.tsv (3,469) must appear exactly once across manifest.tsv's `unit_id`s, core-manifest.tsv's `units` and not-translated.tsv.
+7. migration/not-translated.tsv lists every other in-build unit with one reason: `island`, `generated`, `data`, `vendored`, `dead`, `dropped` or `deferred`, and one row for each file or line range of a translated unit that is not translated (an island file, an x-dropped or standby file, a header copy, an excluded range).
+8. Completeness check: every in-build unit of units.tsv appears in at least one of manifest.tsv's `unit_id`s, core-manifest.tsv's `units` and not-translated.tsv, and every line of its files is placed exactly once across their `inputs` and `files`; the only lines placed twice are island C lines a design placement ports to Rust while the C stays compiled (2026-09-25, decisions.md row 5c). A core module the design places (migration/depmap/core-placements.txt) takes its file or line range out of the unit's own row.
 9. One unit the reference build does not compile is still translated: tools/ob_error/src/ob_error (725 lines, map `in_build = no`). Family 6 needs it (PLAN §4). A crate-map row `tools/ob_error/src`, ob-errno, `bin` sends it to rust/ob-errno/src/bin/ob_error.rs. Its os_errno table comes from gen_os_errno.pl's Rust back end (ARCHITECTURE §1.4).
 
 ### 5.4 Identifiers
