@@ -1,64 +1,198 @@
 file	line	symbol	construct	text
-src/oblib/common/json_type/ob_json_path.cpp	39	ObJsonPathItem	const_cast<char*>	static constexpr char* ABS_METH = const_cast<char*>("abs");
-src/oblib/common/json_type/ob_json_path.cpp	40	ObJsonPathItem	const_cast<char*>	static constexpr char* DATE_METH = const_cast<char*>("date");
-src/oblib/common/json_type/ob_json_path.cpp	41	ObJsonPathItem	const_cast<char*>	static constexpr char* SIZE_METH = const_cast<char*>("size");
-src/oblib/common/json_type/ob_json_path.cpp	42	ObJsonPathItem	const_cast<char*>	static constexpr char* TYPE_METH = const_cast<char*>("type");
-src/oblib/common/json_type/ob_json_path.cpp	43	ObJsonPathItem	const_cast<char*>	static constexpr char* BOOLEAN_METH = const_cast<char*>("boolean");
-src/oblib/common/json_type/ob_json_path.cpp	44	ObJsonPathItem	const_cast<char*>	static constexpr char* BOOLONLY_METH = const_cast<char*>("booleanOnly");
-src/oblib/common/json_type/ob_json_path.cpp	45	ObJsonPathItem	const_cast<char*>	static constexpr char* UPPER_METH = const_cast<char*>("upper");
-src/oblib/common/json_type/ob_json_path.cpp	46	ObJsonPathItem	const_cast<char*>	static constexpr char* CELLING_METH = const_cast<char*>("ceiling");
-src/oblib/common/json_type/ob_json_path.cpp	47	ObJsonPathItem	const_cast<char*>	static constexpr char* DOUBLE_METH = const_cast<char*>("double");
-src/oblib/common/json_type/ob_json_path.cpp	48	ObJsonPathItem	const_cast<char*>	static constexpr char* FLOOR_METH = const_cast<char*>("floor");
-src/oblib/common/json_type/ob_json_path.cpp	49	ObJsonPathItem	const_cast<char*>	static constexpr char* LENGTH_METH = const_cast<char*>("length");
-src/oblib/common/json_type/ob_json_path.cpp	50	ObJsonPathItem	const_cast<char*>	static constexpr char* LOWER_METH = const_cast<char*>("lower");
-src/oblib/common/json_type/ob_json_path.cpp	51	ObJsonPathItem	const_cast<char*>	static constexpr char* NUMBER_METH = const_cast<char*>("number");
-src/oblib/common/json_type/ob_json_path.cpp	52	ObJsonPathItem	const_cast<char*>	static constexpr char* NUMONLY_METH = const_cast<char*>("numberOnly");
-src/oblib/common/json_type/ob_json_path.cpp	53	ObJsonPathItem	const_cast<char*>	static constexpr char* STRING_METH = const_cast<char*>("string");
-src/oblib/common/json_type/ob_json_path.cpp	54	ObJsonPathItem	const_cast<char*>	static constexpr char* STRONLY_METH = const_cast<char*>("stringOnly");
-src/oblib/common/json_type/ob_json_path.cpp	55	ObJsonPathItem	const_cast<char*>	static constexpr char* TIMESTAMP_METH = const_cast<char*>("timestamp");
-src/oblib/common/json_type/ob_json_path.cpp	56	ObJsonPathItem	const_cast<char*>	static constexpr char* COMP_LIKE = const_cast<char*>(" like ");
-src/oblib/common/json_type/ob_json_path.cpp	57	ObJsonPathItem	const_cast<char*>	static constexpr char* COMP_NOT_EXISTS = const_cast<char*>("!exists(");
-src/oblib/common/json_type/ob_json_path.cpp	58	ObJsonPathItem	const_cast<char*>	static constexpr char* COMP_EXISTS = const_cast<char*>("exists(");
-src/oblib/common/json_type/ob_json_path.cpp	59	ObJsonPathItem	const_cast<char*>	static constexpr char* COMP_EQ_REGEX = const_cast<char*>(" eq_regex ");
-src/oblib/common/json_type/ob_json_path.cpp	60	ObJsonPathItem	const_cast<char*>	static constexpr char* COMP_LIKE_REGEX = const_cast<char*>(" like_regex ");
-src/oblib/common/json_type/ob_json_path.cpp	61	ObJsonPathItem	const_cast<char*>	static constexpr char* COMP_STARTS_WITH = const_cast<char*>(" starts with ");
-src/oblib/common/json_type/ob_json_path.cpp	62	ObJsonPathItem	const_cast<char*>	static constexpr char* COMP_SUBSTRING = const_cast<char*>(" has substring ");
-src/oblib/common/json_type/ob_json_path.cpp	63	ObJsonPathItem	const_cast<char*>	static constexpr char* COMP_EQUAL = const_cast<char*>(" == ");
-src/oblib/common/json_type/ob_json_path.cpp	64	ObJsonPathItem	const_cast<char*>	static constexpr char* COMP_UNEQUAL = const_cast<char*>(" != ");
-src/oblib/common/json_type/ob_json_path.cpp	65	ObJsonPathItem	const_cast<char*>	static constexpr char* COMP_LARGGER = const_cast<char*>(" > ");
-src/oblib/common/json_type/ob_json_path.cpp	66	ObJsonPathItem	const_cast<char*>	static constexpr char* COMP_LARGGER_EQUAL = const_cast<char*>(" >= ");
-src/oblib/common/json_type/ob_json_path.cpp	67	ObJsonPathItem	const_cast<char*>	static constexpr char* COMP_SMALLER = const_cast<char*>(" < ");
-src/oblib/common/json_type/ob_json_path.cpp	68	ObJsonPathItem	const_cast<char*>	static constexpr char* COMP_SMALLER_EQUAL = const_cast<char*>(" <= ");
-src/oblib/common/json_type/ob_json_path.cpp	69	ObJsonPathItem	const_cast<char*>	static constexpr char* COND_AND = const_cast<char*>(" && ");
-src/oblib/common/json_type/ob_json_path.cpp	70	ObJsonPathItem	const_cast<char*>	static constexpr char* COND_OR = const_cast<char*>(" || ");
-src/oblib/common/json_type/ob_json_path.cpp	71	ObJsonPathItem	const_cast<char*>	static constexpr char* COND_NOT = const_cast<char*>("!(");
-src/oblib/common/json_type/ob_json_path.cpp	1144	-	const_cast<char*>	const_cast<char*>("abs()"),
-src/oblib/common/json_type/ob_json_path.cpp	1145	-	const_cast<char*>	const_cast<char*>("boolean()"),
-src/oblib/common/json_type/ob_json_path.cpp	1146	-	const_cast<char*>	const_cast<char*>("booleanOnly()"),
-src/oblib/common/json_type/ob_json_path.cpp	1147	-	const_cast<char*>	const_cast<char*>("ceiling()"),
-src/oblib/common/json_type/ob_json_path.cpp	1148	-	const_cast<char*>	const_cast<char*>("date()"),
-src/oblib/common/json_type/ob_json_path.cpp	1149	-	const_cast<char*>	const_cast<char*>("double()"),
-src/oblib/common/json_type/ob_json_path.cpp	1150	-	const_cast<char*>	const_cast<char*>("floor()"),
-src/oblib/common/json_type/ob_json_path.cpp	1151	-	const_cast<char*>	const_cast<char*>("length()"),
-src/oblib/common/json_type/ob_json_path.cpp	1152	-	const_cast<char*>	const_cast<char*>("lower()"),
-src/oblib/common/json_type/ob_json_path.cpp	1153	-	const_cast<char*>	const_cast<char*>("number()"),
-src/oblib/common/json_type/ob_json_path.cpp	1154	-	const_cast<char*>	const_cast<char*>("numberOnly()"),
-src/oblib/common/json_type/ob_json_path.cpp	1155	-	const_cast<char*>	const_cast<char*>("size()"),
-src/oblib/common/json_type/ob_json_path.cpp	1156	-	const_cast<char*>	const_cast<char*>("string()"),
-src/oblib/common/json_type/ob_json_path.cpp	1157	-	const_cast<char*>	const_cast<char*>("stringOnly()"),
-src/oblib/common/json_type/ob_json_path.cpp	1158	-	const_cast<char*>	const_cast<char*>("timestamp()"),
-src/oblib/common/json_type/ob_json_path.cpp	1159	-	const_cast<char*>	const_cast<char*>("type()"),
-src/oblib/common/json_type/ob_json_path.cpp	1160	-	const_cast<char*>	const_cast<char*>("upper()")
-src/oblib/common/json_type/ob_json_path.cpp	1241	-	const_cast<char*>	const_cast<char*>(" == "),
-src/oblib/common/json_type/ob_json_path.cpp	1242	-	const_cast<char*>	const_cast<char*>(" != "),
-src/oblib/common/json_type/ob_json_path.cpp	1243	-	const_cast<char*>	const_cast<char*>(" > "),
-src/oblib/common/json_type/ob_json_path.cpp	1244	-	const_cast<char*>	const_cast<char*>(" >= "),
-src/oblib/common/json_type/ob_json_path.cpp	1245	-	const_cast<char*>	const_cast<char*>(" < "),
-src/oblib/common/json_type/ob_json_path.cpp	1246	-	const_cast<char*>	const_cast<char*>(" <= "),
-src/oblib/common/json_type/ob_json_path.cpp	1247	-	const_cast<char*>	const_cast<char*>(" has substring "),
-src/oblib/common/json_type/ob_json_path.cpp	1248	-	const_cast<char*>	const_cast<char*>(" starts with "),
-src/oblib/common/json_type/ob_json_path.cpp	1249	-	const_cast<char*>	const_cast<char*>(" like "),
-src/oblib/common/json_type/ob_json_path.cpp	1250	-	const_cast<char*>	const_cast<char*>(" like_regex "),
-src/oblib/common/json_type/ob_json_path.cpp	1251	-	const_cast<char*>	const_cast<char*>(" eq_regex "),
-src/oblib/common/json_type/ob_json_path.cpp	1252	-	const_cast<char*>	const_cast<char*>("!exists("),
-src/oblib/common/json_type/ob_json_path.cpp	1253	-	const_cast<char*>	const_cast<char*>("exists(")
+src/oblib/common/xml/ob_path_parser.h	56	ObPathItem	const_cast<char*>	static constexpr char* COM_LE = const_cast<char*>("<=");
+src/oblib/common/xml/ob_path_parser.h	57	ObPathItem	const_cast<char*>	static constexpr char* COM_GE = const_cast<char*>(">=");
+src/oblib/common/xml/ob_path_parser.h	58	ObPathItem	const_cast<char*>	static constexpr char* COM_NE = const_cast<char*>("!=");
+src/oblib/common/xml/ob_path_parser.h	59	ObPathItem	const_cast<char*>	static constexpr char* OR = const_cast<char*>("or");
+src/oblib/common/xml/ob_path_parser.h	60	ObPathItem	const_cast<char*>	static constexpr char* AND = const_cast<char*>("and");
+src/oblib/common/xml/ob_path_parser.h	61	ObPathItem	const_cast<char*>	static constexpr char* DIV = const_cast<char*>("div");
+src/oblib/common/xml/ob_path_parser.h	62	ObPathItem	const_cast<char*>	static constexpr char* MOD = const_cast<char*>("mod");
+src/oblib/common/xml/ob_path_parser.h	63	ObPathItem	const_cast<char*>	static constexpr char* DOUBLE_SLASH = const_cast<char*>("//");
+src/oblib/common/xml/ob_path_parser.h	64	ObPathItem	const_cast<char*>	static constexpr char* DOUBLE_COLON = const_cast<char*>("::");
+src/oblib/common/xml/ob_path_parser.h	65	ObPathItem	const_cast<char*>	static constexpr char* DOUBLE_DOT = const_cast<char*>("..");
+src/oblib/common/xml/ob_path_parser.h	66	ObPathItem	const_cast<char*>	static constexpr char* ANCESTOR = const_cast<char*>("ancestor::");
+src/oblib/common/xml/ob_path_parser.h	67	ObPathItem	const_cast<char*>	static constexpr char* ANCESTOR_OR_SELF = const_cast<char*>("ancestor-or-self::");
+src/oblib/common/xml/ob_path_parser.h	68	ObPathItem	const_cast<char*>	static constexpr char* ATTRIBUTE = const_cast<char*>("attribute::");
+src/oblib/common/xml/ob_path_parser.h	69	ObPathItem	const_cast<char*>	static constexpr char* CHILD = const_cast<char*>("child::");
+src/oblib/common/xml/ob_path_parser.h	70	ObPathItem	const_cast<char*>	static constexpr char* DESCENDANT = const_cast<char*>("descendant::");
+src/oblib/common/xml/ob_path_parser.h	71	ObPathItem	const_cast<char*>	static constexpr char* DESCENDANT_OR_SELF = const_cast<char*>("descendant-or-self::");
+src/oblib/common/xml/ob_path_parser.h	72	ObPathItem	const_cast<char*>	static constexpr char* FOLLOWING = const_cast<char*>("following::");
+src/oblib/common/xml/ob_path_parser.h	73	ObPathItem	const_cast<char*>	static constexpr char* FOLLOWING_SIBLING = const_cast<char*>("following-sibling::");
+src/oblib/common/xml/ob_path_parser.h	74	ObPathItem	const_cast<char*>	static constexpr char* NAMESPACE = const_cast<char*>("namespace::");
+src/oblib/common/xml/ob_path_parser.h	75	ObPathItem	const_cast<char*>	static constexpr char* PARENT = const_cast<char*>("parent::");
+src/oblib/common/xml/ob_path_parser.h	76	ObPathItem	const_cast<char*>	static constexpr char* PRECEDING = const_cast<char*>("preceding::");
+src/oblib/common/xml/ob_path_parser.h	77	ObPathItem	const_cast<char*>	static constexpr char* PRECEDING_SIBLING = const_cast<char*>("preceding-sibling::");
+src/oblib/common/xml/ob_path_parser.h	78	ObPathItem	const_cast<char*>	static constexpr char* SELF = const_cast<char*>("self::");
+src/oblib/common/xml/ob_path_parser.h	79	ObPathItem	const_cast<char*>	static constexpr char* NODE = const_cast<char*>("node(");
+src/oblib/common/xml/ob_path_parser.h	80	ObPathItem	const_cast<char*>	static constexpr char* TEXT = const_cast<char*>("text(");
+src/oblib/common/xml/ob_path_parser.h	81	ObPathItem	const_cast<char*>	static constexpr char* COMMENT = const_cast<char*>("comment(");
+src/oblib/common/xml/ob_path_parser.h	82	ObPathItem	const_cast<char*>	static constexpr char* PROCESSING_INSTRUCTION = const_cast<char*>("processing-instruction(");
+src/oblib/common/xml/ob_xpath.h	94	-	const_cast<char*>	const_cast<char*>("!("),
+src/oblib/common/xml/ob_xpath.h	95	-	const_cast<char*>	const_cast<char*>(" | "),
+src/oblib/common/xml/ob_xpath.h	96	-	const_cast<char*>	const_cast<char*>(" or "),  // json is ||
+src/oblib/common/xml/ob_xpath.h	97	-	const_cast<char*>	const_cast<char*>(" and "), // json is &&
+src/oblib/common/xml/ob_xpath.h	98	-	const_cast<char*>	const_cast<char*>(" = "),   // json is ==
+src/oblib/common/xml/ob_xpath.h	99	-	const_cast<char*>	const_cast<char*>(" != "),
+src/oblib/common/xml/ob_xpath.h	100	-	const_cast<char*>	const_cast<char*>(" <= "),
+src/oblib/common/xml/ob_xpath.h	101	-	const_cast<char*>	const_cast<char*>(" < "),
+src/oblib/common/xml/ob_xpath.h	102	-	const_cast<char*>	const_cast<char*>(" >= "),
+src/oblib/common/xml/ob_xpath.h	103	-	const_cast<char*>	const_cast<char*>(" > "),
+src/oblib/common/xml/ob_xpath.h	104	-	const_cast<char*>	const_cast<char*>(" + "),
+src/oblib/common/xml/ob_xpath.h	105	-	const_cast<char*>	const_cast<char*>(" - "),
+src/oblib/common/xml/ob_xpath.h	106	-	const_cast<char*>	const_cast<char*>(" * "),
+src/oblib/common/xml/ob_xpath.h	107	-	const_cast<char*>	const_cast<char*>(" div "),
+src/oblib/common/xml/ob_xpath.h	108	-	const_cast<char*>	const_cast<char*>(" mod "),
+src/oblib/common/xml/ob_xpath.h	150	-	const_cast<char*>	const_cast<char*>("abs("),
+src/oblib/common/xml/ob_xpath.h	151	-	const_cast<char*>	const_cast<char*>("boolean("),
+src/oblib/common/xml/ob_xpath.h	152	-	const_cast<char*>	const_cast<char*>("booleanOnly("),
+src/oblib/common/xml/ob_xpath.h	153	-	const_cast<char*>	const_cast<char*>("ceiling("),
+src/oblib/common/xml/ob_xpath.h	154	-	const_cast<char*>	const_cast<char*>("date("),
+src/oblib/common/xml/ob_xpath.h	155	-	const_cast<char*>	const_cast<char*>("double("),
+src/oblib/common/xml/ob_xpath.h	156	-	const_cast<char*>	const_cast<char*>("floor("),
+src/oblib/common/xml/ob_xpath.h	157	-	const_cast<char*>	const_cast<char*>("length("),
+src/oblib/common/xml/ob_xpath.h	158	-	const_cast<char*>	const_cast<char*>("lower("),
+src/oblib/common/xml/ob_xpath.h	159	-	const_cast<char*>	const_cast<char*>("number("),
+src/oblib/common/xml/ob_xpath.h	160	-	const_cast<char*>	const_cast<char*>("numberOnly("),
+src/oblib/common/xml/ob_xpath.h	161	-	const_cast<char*>	const_cast<char*>("size("),
+src/oblib/common/xml/ob_xpath.h	162	-	const_cast<char*>	const_cast<char*>("string("),
+src/oblib/common/xml/ob_xpath.h	163	-	const_cast<char*>	const_cast<char*>("stringOnly("),
+src/oblib/common/xml/ob_xpath.h	164	-	const_cast<char*>	const_cast<char*>("timestamp("),
+src/oblib/common/xml/ob_xpath.h	165	-	const_cast<char*>	const_cast<char*>("type("),
+src/oblib/common/xml/ob_xpath.h	166	-	const_cast<char*>	const_cast<char*>("upper("),
+src/oblib/common/xml/ob_xpath.h	167	-	const_cast<char*>	const_cast<char*>("position("),
+src/oblib/common/xml/ob_xpath.h	168	-	const_cast<char*>	const_cast<char*>("last("),
+src/oblib/common/xml/ob_xpath.h	169	-	const_cast<char*>	const_cast<char*>("count("),
+src/oblib/common/xml/ob_xpath.h	170	-	const_cast<char*>	const_cast<char*>("concat("),
+src/oblib/common/xml/ob_xpath.h	171	-	const_cast<char*>	const_cast<char*>("contains("),
+src/oblib/common/xml/ob_xpath.h	172	-	const_cast<char*>	const_cast<char*>("false("),
+src/oblib/common/xml/ob_xpath.h	173	-	const_cast<char*>	const_cast<char*>("true("),
+src/oblib/common/xml/ob_xpath.h	174	-	const_cast<char*>	const_cast<char*>("local-name("),
+src/oblib/common/xml/ob_xpath.h	175	-	const_cast<char*>	const_cast<char*>("lang("),
+src/oblib/common/xml/ob_xpath.h	176	-	const_cast<char*>	const_cast<char*>("not("),
+src/oblib/common/xml/ob_xpath.h	177	-	const_cast<char*>	const_cast<char*>("sum("),
+src/oblib/common/xml/ob_xpath.h	178	-	const_cast<char*>	const_cast<char*>("name("),
+src/oblib/common/xml/ob_xpath.h	179	-	const_cast<char*>	const_cast<char*>("namespace-uri("),
+src/oblib/common/xml/ob_xpath.h	180	-	const_cast<char*>	const_cast<char*>("normalize-space("),
+src/oblib/common/xml/ob_xpath.h	181	-	const_cast<char*>	const_cast<char*>("substring("),
+src/oblib/common/xml/ob_xpath.h	182	-	const_cast<char*>	const_cast<char*>("round("),
+src/oblib/common/xml/ob_xpath.h	285	-	const_cast<char*>	const_cast<char*>("node()"),
+src/oblib/common/xml/ob_xpath.h	286	-	const_cast<char*>	const_cast<char*>(""), // element
+src/oblib/common/xml/ob_xpath.h	287	-	const_cast<char*>	const_cast<char*>("text()"),
+src/oblib/common/xml/ob_xpath.h	288	-	const_cast<char*>	const_cast<char*>("comment()"),
+src/oblib/common/xml/ob_xpath.h	289	-	const_cast<char*>	const_cast<char*>("processing-instruction(")
+src/oblib/common/xml/ob_xpath.h	311	-	const_cast<char*>	const_cast<char*>("self::"),
+src/oblib/common/xml/ob_xpath.h	312	-	const_cast<char*>	const_cast<char*>("parent::"),
+src/oblib/common/xml/ob_xpath.h	313	-	const_cast<char*>	const_cast<char*>("ancestor::"),
+src/oblib/common/xml/ob_xpath.h	314	-	const_cast<char*>	const_cast<char*>("ancestor-or-self::"),
+src/oblib/common/xml/ob_xpath.h	315	-	const_cast<char*>	const_cast<char*>("child::"),
+src/oblib/common/xml/ob_xpath.h	316	-	const_cast<char*>	const_cast<char*>("descendant::"),
+src/oblib/common/xml/ob_xpath.h	317	-	const_cast<char*>	const_cast<char*>("descendant-or-self::"),
+src/oblib/common/xml/ob_xpath.h	318	-	const_cast<char*>	const_cast<char*>("following-sibling::"),
+src/oblib/common/xml/ob_xpath.h	319	-	const_cast<char*>	const_cast<char*>("following::"),
+src/oblib/common/xml/ob_xpath.h	320	-	const_cast<char*>	const_cast<char*>("preceding-sibling::"),
+src/oblib/common/xml/ob_xpath.h	321	-	const_cast<char*>	const_cast<char*>("preceding::"),
+src/oblib/common/xml/ob_xpath.h	322	-	const_cast<char*>	const_cast<char*>("@"),
+src/oblib/common/xml/ob_xpath.h	323	-	const_cast<char*>	const_cast<char*>("namespace::")
+src/oblib/easy/util/easy_buf.h	74	easy_buf_string_append	C-style cast (char *) drops const from value [vendored]	s->data = (char *)(value - s->len);
+src/oblib/lib/alloc/alloc_struct.h	370	AChunk::ptr2blk	C-style cast (char*) drops const from ptr; C-style cast (char*) drops const from this (const member function)	int from = (int)(((char*)ptr - (char*)this - ACHUNK_HEADER_SIZE) / ABLOCK_SIZE);
+src/oblib/lib/alloc/alloc_struct.h	434	AChunk::blk_data	C-style cast (char*) drops const from block	int32_t c_offset = (int32_t)((char*)block - data_);
+src/oblib/lib/alloc/alloc_struct.h	436	AChunk::blk_data	C-style cast (char*) drops const from this (const member function)	return (char*)this + ACHUNK_HEADER_SIZE + b_offset * ABLOCK_SIZE;
+src/oblib/lib/alloc/alloc_struct.h	492	AObject::phy_next	C-style cast (char*) drops const from this (const member function)	AObject *obj = (AObject *)((char*)this + static_cast<int32_t>(steps * AOBJECT_CELL_BYTES));
+src/oblib/lib/alloc/ob_context_allocator.h	461	ObContextAllocator::common_realloc	C-style cast (char*) drops const from ptr [not built]	obj = reinterpret_cast<AObject*>((char*)ptr - AOBJECT_HEADER_SIZE);
+src/oblib/lib/alloc/ob_ctx_allocator.h	434	ObCtxAllocator::common_realloc	C-style cast (char*) drops const from ptr	obj = reinterpret_cast<AObject*>((char*)ptr - AOBJECT_HEADER_SIZE);
+src/oblib/lib/alloc/ob_malloc_allocator.cpp	64	ObMallocAllocator::realloc	const_cast<void *>	void *old_ptr = const_cast<void *>(ptr);
+src/oblib/lib/alloc/ob_malloc_sample_struct.h	165	ObMallocSampleKey::operator==	C-style cast (char*) drops const from other	|| 0 != MEMCMP((char*)bt_, (char*)other.bt_, sizeof(bt_))) {
+src/oblib/lib/allocator/ob_malloc.h	275	TrackedAllocator::realloc	const_cast<void *>	return realloc_with_attr(const_cast<void *>(ptr), size, attr);
+src/oblib/lib/allocator/ob_malloc.h	405	ObMalloc::realloc	const_cast<void *>	return ob_realloc(const_cast<void *>(ptr), size, attr);
+src/oblib/lib/allocator/ob_malloc.h	443	MemoryContextMalloc::realloc	const_cast<void *>	return realloc_with_attr(const_cast<void *>(ptr), size, attr);
+src/oblib/lib/charset/ob_charset.cpp	292	ObCharset::strntod	const_cast<char *>	result = cs->cset->strntod(cs, const_cast<char *>(str), str_len, endptr, err);
+src/oblib/lib/charset/ob_charset.cpp	304	ObCharset::strntoll	const_cast<char*>	*end_ptr = const_cast<char*>(str);
+src/oblib/lib/charset/ob_charset.cpp	319	ObCharset::strntoull	const_cast<char*>	*end_ptr = const_cast<char*>(str);
+src/oblib/lib/charset/ob_charset.cpp	1884	ObCharset::toupper	const_cast<char*>	size_t size = cs_info->cset->caseup(cs_info, const_cast<char*>(src.ptr()), src.length(), buf, buf_len);
+src/oblib/lib/charset/ob_charset.cpp	1924	ObCharset::tolower	const_cast<char*>	size_t size = cs_info->cset->casedn(cs_info, const_cast<char*>(src.ptr()), src.length(), buf, buf_len);
+src/oblib/lib/charset/ob_charset.cpp	2361	ObCharset::trim_end_of_str	const_cast<char*>	trim_end = const_cast<char*>(end);
+src/oblib/lib/charset/ob_charset.cpp	2554	ObCharset::init_charset_by_collation_type	const_cast<ObCharsetInfo *>	ObCharsetInfo *charset_info = const_cast<ObCharsetInfo *>(get_charset_uninit(collation_type));
+src/oblib/lib/charset/ob_ctype.cc	37	ob_convert_internal	C-style cast (unsigned char*) drops const from from	if ((cnvres= (*mb_wc)(from_cs, &wc, (unsigned char*) from, from_end)) > 0) {
+src/oblib/lib/charset/ob_ctype.cc	95	ob_convert	C-style cast (uint32*) drops const from from	if ((*(uint32*)from) & 0x80808080) break;
+src/oblib/lib/charset/ob_ctype.cc	107	ob_convert	C-style cast (unsigned char*) drops const from from	} else if (*((unsigned char*) from) > 0x7F)  {
+src/oblib/lib/charset/ob_ctype_bin.cc	361	ob_hash_sort_8bit_bin	C-style cast (uchar*) drops const from key	for (; pos < (uchar*) key ; pos++)
+src/oblib/lib/charset/ob_ctype_bin.cc	368	ob_hash_sort_8bit_bin	C-style cast (void*) drops const from pos	nr1[0] = hash_algo((void*)pos, (int)(key - pos), nr1[0]);
+src/oblib/lib/charset/ob_ctype_bin.cc	380	ob_hash_sort_bin	C-style cast (unsigned char*) drops const from key	while (pos < (unsigned char*) key) {
+src/oblib/lib/charset/ob_ctype_bin.cc	387	ob_hash_sort_bin	C-style cast (void*) drops const from pos	nr1[0] = hash_algo((void*)pos, (int)(key - pos), nr1[0]);
+src/oblib/lib/charset/ob_ctype_mb.cc	310	ob_instr_mb	C-style cast (unsigned char*) drops const from b	if (!cs->coll->strnncoll(cs, (unsigned char*) b, s_length,
+src/oblib/lib/charset/ob_ctype_mb.cc	311	ob_instr_mb	C-style cast (unsigned char*) drops const from s	(unsigned char*) s, s_length, 0)) {
+src/oblib/lib/charset/ob_ctype_mb.cc	779	ob_hash_sort_mb_bin	C-style cast (unsigned char*) drops const from key	while (pos < (unsigned char*) key) {
+src/oblib/lib/charset/ob_ctype_mb.cc	786	ob_hash_sort_mb_bin	C-style cast (void*) drops const from pos	nr1[0] = hash_algo((void*)pos, length, nr1[0]);
+src/oblib/lib/charset/ob_ctype_simple.cc	282	ob_strntoll_8bit	C-style cast (char *) drops const from s	*end_ptr = (char *) s;
+src/oblib/lib/charset/ob_ctype_simple.cc	370	ob_strntoull_8bit	C-style cast (char *) drops const from s	*end_ptr = (char *) s;
+src/oblib/lib/charset/ob_ctype_simple.cc	435	ob_strntoull10rnd_8bit	C-style cast (char*) drops const from str	*end_ptr= (char*) str;
+src/oblib/lib/charset/ob_ctype_simple.cc	776	ob_hash_sort_simple	C-style cast (unsigned char*) drops const from end	for (; key < (unsigned char*) end ; key++) {
+src/oblib/lib/charset/ob_ctype_simple.cc	782	ob_hash_sort_simple	C-style cast (unsigned char*) drops const from end	while (key < (unsigned char*)end) {
+src/oblib/lib/charset/ob_ctype_simple.cc	783	ob_hash_sort_simple	C-style cast (unsigned char*) drops const from end	length = (int)((unsigned char*)end - key) > HASH_BUFFER_LENGTH ?
+src/oblib/lib/charset/ob_ctype_simple.cc	784	ob_hash_sort_simple	C-style cast (unsigned char*) drops const from end	HASH_BUFFER_LENGTH : (int)((unsigned char*)end - key);
+src/oblib/lib/charset/ob_ctype_simple.cc	808	skip_trailing_space	C-style cast (unsigned *) drops const from end	while (end > start_words && ((unsigned *)end)[-1] == SPACE_INT) {
+src/oblib/lib/charset/ob_ctype_utf8.cc	112	ob_well_formed_len_utf8mb4	C-style cast (uchar*) drops const from b; C-style cast (uchar*) drops const from e	if ((mb_len= ob_valid_mbcharlen_utf8mb4(cs, (uchar*) b, (uchar*) e)) <= 0)
+src/oblib/lib/charset/ob_ctype_utf8.cc	833	ob_hash_sort_utf8mb4	C-style cast (unsigned char*) drops const from src; C-style cast (unsigned char*) drops const from end	while ((res= ob_mb_wc_utf8mb4(cs, &wc, (unsigned char*) src, (unsigned char*) end)) > 0) {
+src/oblib/lib/charset/ob_ctype_utf8.cc	843	ob_hash_sort_utf8mb4	C-style cast (unsigned char*) drops const from src; C-style cast (unsigned char*) drops const from end	while ((res= ob_mb_wc_utf8mb4(cs, &wc, (unsigned char*) src, (unsigned char*) end)) > 0) {
+src/oblib/lib/charset/ob_dtoa.cc	362	ob_fast_strtod	C-style cast (char *) drops const from str	*end = (char *)str;
+src/oblib/lib/charset/ob_dtoa.cc	372	ob_fast_strtod	const_cast<char *>	*end = const_cast<char *>(ff_ret.ptr);
+src/oblib/lib/charset/ob_dtoa.cc	374	ob_fast_strtod	C-style cast (char *) drops const from str	*end = (char *)str;
+src/oblib/lib/charset/ob_dtoa.cc	411	ob_atof	C-style cast (char**) drops const from end	return (ob_strtod(nptr, (char**) &end, &error));
+src/oblib/lib/checksum/ob_crc64.h	111	ObBatchChecksum::fill	C-style cast (char *) drops const from pv	char *ptr = (char *)pv;
+src/oblib/lib/codec/ob_bp_util.h	154	d_slide	C-style cast (uint64_t *) drops const from ip_s [not built]	bw = (*(uint64_t *)(ip_s));
+src/oblib/lib/codec/ob_delta_zigzag_rle.h	133	ObDeltaZigzagRleInner::encode	C-style cast (UIntT *) drops const from in	UIntT *ip = (UIntT *)(in);
+src/oblib/lib/codec/ob_delta_zigzag_rle.h	134	ObDeltaZigzagRleInner::encode	C-style cast (UIntT *) drops const from in	UIntT *pp = (UIntT *)(in);
+src/oblib/lib/codec/ob_delta_zigzag_rle.h	135	ObDeltaZigzagRleInner::encode	C-style cast (UIntT *) drops const from in	UIntT *in_start = (UIntT *)(in);
+src/oblib/lib/codec/ob_double_delta_zigzag_rle.h	104	ObDoubleDeltaZigzagRleInner::encode	C-style cast (UIntT *) drops const from in	UIntT *ip = (UIntT *)(in);
+src/oblib/lib/codec/ob_double_delta_zigzag_rle.h	106	ObDoubleDeltaZigzagRleInner::encode	C-style cast (UIntT *) drops const from in	UIntT *pp = (UIntT *)(in);
+src/oblib/lib/codec/ob_double_delta_zigzag_rle.h	107	ObDoubleDeltaZigzagRleInner::encode	C-style cast (UIntT *) drops const from in	UIntT *in_start = (UIntT *)(in);
+src/oblib/lib/codec/ob_simd_fixed_pfor.h	301	ObSIMDFixedPFor::inner_do_decode	C-style cast (uint64_t *) drops const from in [not built]	uint64_t xbitmap1 = *(uint64_t *)(in);
+src/oblib/lib/codec/ob_simd_fixed_pfor.h	302	ObSIMDFixedPFor::inner_do_decode	C-style cast (uint64_t *) drops const from in [not built]	uint64_t xbitmap2 = *(uint64_t *)(in + 8);
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_compress.c	1577	ZSTD_resetCCtx_byCopyingCDict	C-style cast (U32*) drops const from cdict [vendored]	assert((U32*)cdict->matchState.chainTable == (U32*)cdict->matchState.hashTable + hSize);  /* chainTable must follow hashTable */
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_compress.c	1578	ZSTD_resetCCtx_byCopyingCDict	C-style cast (U32*) drops const from cdict [vendored]	assert((U32*)cdict->matchState.hashTable3 == (U32*)cdict->matchState.chainTable + chainSize);
+src/oblib/lib/container/ob_2d_array.h	162	Ob2DArray::inner_assign	C-style cast (void *) drops const from other	if ((void *)this != (void *)&other) {
+src/oblib/lib/container/ob_array_helper.h	209	ObArrayHelpers::at	const_cast<T *>	return const_cast<T *>(pthis->at(index));
+src/oblib/lib/container/ob_array_wrap.h	82	ObArrayWrap::ObArrayWrap	const_cast<T*>	: ObIArrayWrap<T>(const_cast<T*>(objs), num)
+src/oblib/lib/container/ob_bit_set.h	227	operator=	C-style cast (void*) drops const from other	MEMCPY((void*)bitset_word_array_, (void*)other.bitset_word_array_, sizeof(bitset_word_array_));
+src/oblib/lib/container/ob_ext_ring_buffer_impl.h	275	ObExtendibleRingBufferBase::get	const_cast<MyType*>	return const_cast<MyType*>(this)->do_get_(sn, val);
+src/oblib/lib/container/ob_ext_ring_buffer_impl.h	299	ObExtendibleRingBufferBase::begin_sn	const_cast<MyType*>	return const_cast<MyType*>(this)->load_begin_sn_();
+src/oblib/lib/container/ob_ext_ring_buffer_impl.h	303	ObExtendibleRingBufferBase::end_sn	const_cast<MyType*>	return const_cast<MyType*>(this)->load_end_sn_();
+src/oblib/lib/container/ob_raw_se_array.h	521	ObRawSEArray::assign	const_cast<ObIArray<T>*>	const_cast<ObIArray<T>*>(&other))->local_data_, N * sizeof(T));
+src/oblib/lib/container/ob_raw_se_array.h	550	ObRawSEArray::assign	const_cast<ObRawSEArray<T, LOCAL_ARRAY_SIZE, BlockAllocatorT, auto_free>*>	const_cast<ObRawSEArray<T, LOCAL_ARRAY_SIZE, BlockAllocatorT, auto_free>*>(&other)->local_data_,
+src/oblib/lib/container/ob_se_array_iterator.h	74	ObSEArrayIterator::ObSEArrayIterator	const_cast<ObSEArrayImpl<T, LOCAL_ARRAY_SIZE, BlockAllocatorT, auto_free>*>	arr_ = const_cast<ObSEArrayImpl<T, LOCAL_ARRAY_SIZE, BlockAllocatorT, auto_free>*>(arr);
+src/oblib/lib/file/ob_file.cpp	842	unintr_pwrite	C-style cast (char *) drops const from buf	write_ret = ob_pwrite(fd, (char *)buf + offset2write, length2write, offset + offset2write);
+src/oblib/lib/file/ob_file.cpp	844	unintr_pwrite	C-style cast (char *) drops const from buf	write_ret = ::pwrite(fd, (char *)buf + offset2write, length2write, offset + offset2write);
+src/oblib/lib/file/ob_file.cpp	852	unintr_pwrite	C-style cast (char *) drops const from buf	write_ret, errno, fd, (char *)buf + offset2write, length2write, offset + offset2write, retry);
+src/oblib/lib/file/ob_file.cpp	877	unintr_write	C-style cast (char *) drops const from buf	write_ret = write(fd, (char *)buf + offset2write, length2write);
+src/oblib/lib/file/ob_file.cpp	884	unintr_write	C-style cast (char *) drops const from buf	write_ret, errno, fd, (char *)buf + offset2write, length2write, offset2write, retry);
+src/oblib/lib/file/ob_file.cpp	1003	pwrite_align	C-style cast (char *) drops const from buf	MEMCPY((char *)align_buffer + buffer_pos, (char *)buf + ret, size2copy);
+src/oblib/lib/file/ob_file.cpp	1515	ObFileAsyncAppender::append	C-style cast (char *) drops const from buf	MEMCPY(iocb->buffer + iocb->buffer_pos, (char *)buf + (count - size2append), size2copy);
+src/oblib/lib/function/ob_function.h	187	-	const_cast<Derived *>	return (const_cast<Derived *>(this))->func_(std::forward<Args>(args)...);
+src/oblib/lib/guard/ob_light_shared_gaurd.h	96	ObLightSharedPtr::assign	C-style cast (void*) drops const from rhs	if ((void*)this != (void*)&rhs) {
+src/oblib/lib/guard/ob_shared_guard.h	231	ObSharedGuardFriend::create_shared_from_combined_block	const_cast<CombinedBLock<T> &>	ptr.block_ptr_.control_ptr_ = &(const_cast<CombinedBLock<T> &>(block).control_block_);
+src/oblib/lib/guard/ob_shared_guard.h	232	ObSharedGuardFriend::create_shared_from_combined_block	const_cast<CombinedBLock<T> &>	ptr.block_ptr_.data_ptr_ = &(const_cast<CombinedBLock<T> &>(block).data_block_);
+src/oblib/lib/guard/ob_shared_guard.h	283	#define UNI_PTR	const_cast<ObUniqueGuard<T> &>	#define UNI_PTR const_cast<ObUniqueGuard<T> &>(unique_guard)
+src/oblib/lib/guard/ob_unique_guard.h	251	ObUniqueGuard::swap_	const_cast<ObUniqueGuard<T>&>	const_cast<ObUniqueGuard<T>&>(rhs).data_ = data_;
+src/oblib/lib/guard/ob_unique_guard.h	254	ObUniqueGuard::swap_	const_cast<ObUniqueGuard<T>&>	const_cast<ObUniqueGuard<T>&>(rhs).allocator_ = allocator_;
+src/oblib/lib/guard/ob_unique_guard.h	257	ObUniqueGuard::swap_	const_cast<ObUniqueGuard<T>&>	const_cast<ObUniqueGuard<T>&>(rhs).deleter_ = deleter_;
+src/oblib/lib/hash/ob_hashmap.h	233	ObHashMap::get_refactored	const_cast<hashtable &>	if (OB_SUCC(const_cast<hashtable &>(ht_).get_refactored(key, pair, timeout_us))) {
+src/oblib/lib/hash/ob_hashmap.h	245	ObHashMap::get	const_cast<hashtable &>	if (OB_SUCCESS == const_cast<hashtable &>(ht_).get_refactored(key, pair)
+src/oblib/lib/hash/ob_hashmap.h	259	ObHashMap::get	const_cast<_value_type*>	return const_cast<_value_type*>(reinterpret_cast<PointerOfConstMe>(this)->get(key));
+src/oblib/lib/hash/ob_hashset.h	148	ObHashSet::get	const_cast<hashtable &>	if (OB_SUCCESS == const_cast<hashtable &>(ht_).get_refactored(key, pair)) {
+src/oblib/lib/hash/ob_hashset.h	151	ObHashSet::get	const_cast<_key_type*>	return const_cast<_key_type*>(ret);
+src/oblib/lib/hash/ob_hashset.h	161	ObHashSet::exist_refactored	const_cast<hashtable &>	ret = const_cast<hashtable &>(ht_).get_refactored(key, pair);
+src/oblib/lib/hash/ob_linear_hash_map.h	970	ObLinearHashMap::get_load_factor	const_cast<ObLinearHashMap&>	uint64_t bkt_cnt = const_cast<ObLinearHashMap&>(*this).bkt_cnt_();
+src/oblib/lib/hash/ob_linear_hash_map.h	1002	ObLinearHashMap::get	const_cast<ObLinearHashMap<Key, Value, MemMgrTag>*>	return const_cast<ObLinearHashMap<Key, Value, MemMgrTag>*>(this)->do_get_(key, value);
+src/oblib/lib/hash/ob_linear_hash_map.h	1008	ObLinearHashMap::get	const_cast<ObLinearHashMap<Key, Value, MemMgrTag>*>	return const_cast<ObLinearHashMap<Key, Value, MemMgrTag>*>(this)->do_get_(key, value, copy_inner_key);
+src/oblib/lib/hash/ob_linear_hash_map.h	2425	operator()	const_cast<const Key &> (adds const only)	ret = fn(const_cast<const Key &>(bkt->key_), bkt->value_);
+src/oblib/lib/hash/ob_linear_hash_map.h	2428	operator()	const_cast<const Key &> (adds const only)	ret = fn(const_cast<const Key &>(cur->key_), cur->value_);
+src/oblib/lib/hash/ob_linear_hash_map.h	2450	operator()	const_cast<const Key &> (adds const only)	if (fn(const_cast<const Key &>(cur->key_), cur->value_)) {
+src/oblib/lib/hash/ob_linear_hash_map.h	2461	operator()	const_cast<const Key &> (adds const only)	if (fn(const_cast<const Key &>(bkt->key_), bkt->value_)) {
+src/oblib/lib/hash/ob_link_hashmap.h	411	ObLinkHashMap::contains_key	const_cast<Hash&>	while (-EAGAIN == (hash_ret = const_cast<Hash&>(hash_).get(key, hash_link)))
+src/oblib/lib/hash/ob_pointer_hashmap.h	46	ObPointerHashArray::Iterator::operator*	const_cast<V &>	V &operator*() const { return const_cast<V &>(*pos_); }
+src/oblib/lib/hash/ob_pointer_hashmap.h	940	ObPointerHashMap::copy_from	const_cast<ObPointerHashMap &>	for (iterator it = const_cast<ObPointerHashMap &>(other).sub_maps_[i]->begin();
+src/oblib/lib/hash/ob_pointer_hashmap.h	941	ObPointerHashMap::copy_from	const_cast<ObPointerHashMap &>	it != const_cast<ObPointerHashMap &>(other).sub_maps_[i]->end(); ++it) {
+src/oblib/lib/hash/ob_ptr_array_map.h	207	ObPtrArrayWrapper::get_refactored	const_cast<Array&>	T* addr = (T*)const_cast<Array&>(array_).locate(key, /*alloc*/false);
+src/oblib/lib/hash/ob_refered_map.h	162	ObReferedMap::locate	const_cast<Item *>	const_cast<Item *>(const_value)->set_map(this);
+src/oblib/lib/hash/ob_refered_map.h	173	ObReferedMap::locate	const_cast<Item *>	value = const_cast<Item *>(const_value);
+src/oblib/lib/hash/ob_refered_map.h	187	ObReferedMap::get	const_cast<HashTable &>	} else if (OB_FAIL(const_cast<HashTable &>(hash_table_).get_refactored(key, item))
+src/oblib/lib/hash/ob_serialization.h	74	serialization	const_cast<_value &>	return (const_cast<_value &>(value)).serialization(ar);

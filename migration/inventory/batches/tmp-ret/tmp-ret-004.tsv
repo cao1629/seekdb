@@ -1,118 +1,287 @@
 file	line	symbol	construct	text
-src/observer/ob_service.cpp	361	ObService::calc_column_checksum_request	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
-src/observer/ob_service.cpp	363	ObService::calc_column_checksum_request	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(DDL_SIM(arg.task_id_, CALC_COLUMN_CHECKSUM_RPC_SLOW))) {
-src/observer/ob_service.cpp	364	ObService::calc_column_checksum_request	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(dag_scheduler->alloc_dag(dag))) {
-src/observer/ob_service.cpp	365	ObService::calc_column_checksum_request	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(dag->init(calc_item.tablet_id_,
-src/observer/ob_service.cpp	373	ObService::calc_column_checksum_request	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(dag->alloc_global_index_task_callback(calc_item.tablet_id_,
-src/observer/ob_service.cpp	379	ObService::calc_column_checksum_request	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(dag->alloc_unique_checking_prepare_task(dag->get_param(), dag->get_context()))) {
-src/observer/ob_service.cpp	380	ObService::calc_column_checksum_request	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(dag_scheduler->add_dag(dag))) {
-src/observer/ob_service.cpp	383	ObService::calc_column_checksum_request	assign tmp_ret	tmp_ret = OB_SUCCESS;
-src/observer/ob_service.cpp	385	ObService::calc_column_checksum_request	assign tmp_ret	tmp_ret = OB_EAGAIN;
-src/observer/ob_service.cpp	436	ObService::handle_server_freeze_req_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
-src/observer/ob_service.cpp	437	ObService::handle_server_freeze_req_	assign tmp_ret	if (OB_UNLIKELY(OB_SUCCESS != (tmp_ret = server_freeze_()))) {
-src/observer/ob_service.cpp	440	ObService::handle_server_freeze_req_	merge into ret	ret = tmp_ret;
-src/observer/ob_service.cpp	553	ObService::check_modify_time_elapsed	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
-src/observer/ob_service.cpp	554	ObService::check_modify_time_elapsed	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(DDL_SIM(arg.ddl_task_id_, CHECK_MODIFY_TIME_ELAPSED_SLOW))) {
-src/observer/ob_service.cpp	555	ObService::check_modify_time_elapsed	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(ls_service->get_ls(ls))) {
-src/observer/ob_service.cpp	556	ObService::check_modify_time_elapsed	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(ls->check_modify_time_elapsed(tablet_id,
-src/observer/ob_service.cpp	562	ObService::check_modify_time_elapsed	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(txs->get_max_commit_version(snapshot_version))) {
-src/observer/ob_service.cpp	599	ObService::check_schema_version_elapsed	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
-src/observer/ob_service.cpp	600	ObService::check_schema_version_elapsed	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(DDL_SIM(arg.ddl_task_id_, CHECK_SCHEMA_TRANS_END_SLOW))) {
-src/observer/ob_service.cpp	601	ObService::check_schema_version_elapsed	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(ls_service->get_ls(ls))) {
-src/observer/ob_service.cpp	602	ObService::check_schema_version_elapsed	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(ls->get_tablet(tablet_id,
-src/observer/ob_service.cpp	606	ObService::check_schema_version_elapsed	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(tablet_handle.get_obj()->check_schema_version_elapsed(arg.schema_version_,
-src/observer/ob_system_package_load_task.cpp	142	ObSystemPackageLoadTask::wait_system_package_ready	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
-src/observer/ob_system_package_load_task.cpp	147	ObSystemPackageLoadTask::wait_system_package_ready	assign tmp_ret	if (OB_ENTRY_NOT_EXIST != (tmp_ret = ADMIN_JOB_FIND(LOAD_MYSQL_SYS_PACKAGE, job_id))) {
-src/observer/ob_tablet_runtime_meta_updater.cpp	239	ObTabletRuntimeMetaUpdater::cal_thread_count_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
-src/observer/ob_tablet_runtime_meta_updater.cpp	246	ObTabletRuntimeMetaUpdater::cal_thread_count_	assign tmp_ret	tmp_ret = OB_INVALID_ARGUMENT;
-src/observer/ob_tablet_runtime_meta_updater.cpp	248	ObTabletRuntimeMetaUpdater::cal_thread_count_	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(runtime_controller->get_server_cpu(min_cpu, max_cpu))) {
-src/observer/ob_tablet_runtime_meta_updater.cpp	297	ObTabletRuntimeMetaUpdater::add_task_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
-src/observer/ob_tablet_runtime_meta_updater.cpp	310	ObTabletRuntimeMetaUpdater::add_task_	OB_TMP_FAIL (plan definition)	if (task.need_diagnose() && OB_TMP_FAIL(compaction::ADD_SUSPECT_INFO(
-src/observer/ob_tablet_runtime_meta_updater.cpp	413	ObTabletRuntimeMetaUpdater::diagnose_batch_tasks_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
-src/observer/ob_tablet_runtime_meta_updater.cpp	418	ObTabletRuntimeMetaUpdater::diagnose_batch_tasks_	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(compaction::ADD_SUSPECT_INFO(
-src/observer/ob_tablet_runtime_meta_updater.cpp	456	ObTabletRuntimeMetaUpdater::generate_tasks_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
-src/observer/ob_tablet_runtime_meta_updater.cpp	480	ObTabletRuntimeMetaUpdater::generate_tasks_	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(add_task_(*task))) {
-src/observer/ob_tablet_runtime_meta_updater.cpp	534	ObTabletRuntimeMetaUpdater::batch_process_tasks	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
-src/observer/ob_tablet_runtime_meta_updater.cpp	570	ObTabletRuntimeMetaUpdater::batch_process_tasks	assign tmp_ret	tmp_ret = do_batch_update_(start_time, update_tablet_tasks, update_tablet_infos, update_tablet_checksums);
-src/observer/ob_tablet_runtime_meta_updater.cpp	572	ObTabletRuntimeMetaUpdater::batch_process_tasks	merge into ret	ret = OB_SUCC(ret) ? tmp_ret : ret;
-src/observer/ob_tablet_runtime_meta_updater.cpp	582	ObTabletRuntimeMetaUpdater::batch_process_tasks	assign tmp_ret	tmp_ret = do_batch_remove_(start_time, remove_tablet_tasks, remove_tablet_infos);
-src/observer/ob_tablet_runtime_meta_updater.cpp	584	ObTabletRuntimeMetaUpdater::batch_process_tasks	merge into ret	ret = OB_SUCC(ret) ? tmp_ret : ret;
-src/observer/ob_tablet_runtime_meta_updater.cpp	617	ObTabletRuntimeMetaUpdater::do_batch_remove_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
-src/observer/ob_tablet_runtime_meta_updater.cpp	651	ObTabletRuntimeMetaUpdater::do_batch_remove_	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = reput_to_queue_(tasks))) {
-src/observer/ob_tablet_runtime_meta_updater.cpp	668	ObTabletRuntimeMetaUpdater::do_batch_update_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
-src/observer/ob_tablet_runtime_meta_updater.cpp	707	ObTabletRuntimeMetaUpdater::do_batch_update_	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = reput_to_queue_(tasks))) {
-src/observer/ob_uniq_task_queue.h	343	ObUniqTaskQueue::add	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
-src/observer/ob_uniq_task_queue.h	344	ObUniqTaskQueue::add	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(task_set_.erase_refactored(*stored_task))) {
-src/observer/ob_uniq_task_queue.h	356	ObUniqTaskQueue::add	declare tmp_ret (plan definition)	int tmp_ret = common::OB_SUCCESS;
-src/observer/ob_uniq_task_queue.h	358	ObUniqTaskQueue::add	assign tmp_ret	if (common::OB_SUCCESS != (tmp_ret = cond_.broadcast())) {
-src/observer/ob_uniq_task_queue.h	361	ObUniqTaskQueue::add	assign tmp_ret	if (common::OB_SUCCESS != (tmp_ret = cond_.signal())) {
-src/observer/ob_uniq_task_queue.h	464	ObUniqTaskQueue::run1	declare tmp_ret	int tmp_ret = cond_.broadcast();
-src/observer/ob_uniq_task_queue.h	487	ObUniqTaskQueue::run1	declare tmp_ret	int tmp_ret = cond_.broadcast();
-src/observer/ob_uniq_task_queue.h	506	ObUniqTaskQueue::diagnose_waiting_task	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
-src/observer/ob_uniq_task_queue.h	515	ObUniqTaskQueue::diagnose_waiting_task	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(tasks.push_back(task))) {
-src/observer/ob_uniq_task_queue.h	529	ObUniqTaskQueue::diagnose_processing_task	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
-src/observer/ob_uniq_task_queue.h	538	ObUniqTaskQueue::diagnose_processing_task	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(tasks.push_back(task))) {
-src/observer/ob_uniq_task_queue.h	635	ObUniqTaskQueue::batch_unlock	declare tmp_ret (plan definition)	int tmp_ret = common::OB_SUCCESS;
-src/observer/ob_uniq_task_queue.h	639	ObUniqTaskQueue::batch_unlock	assign tmp_ret	tmp_ret = common::OB_ERR_UNEXPECTED;
-src/observer/ob_uniq_task_queue.h	641	ObUniqTaskQueue::batch_unlock	assign tmp_ret	} else if (common::OB_SUCCESS != (tmp_ret = processing_task_set_.erase_refactored(*task))) {
-src/observer/ob_uniq_task_queue.h	644	ObUniqTaskQueue::batch_unlock	merge into ret	ret = tmp_ret;
-src/observer/omt/ob_server_runtime_controller.cpp	269	ObServerRuntimeController::destroy	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
-src/observer/omt/ob_server_runtime_controller.cpp	271	ObServerRuntimeController::destroy	assign tmp_ret	tmp_ret = ::oceanbase::share::server_service<::oceanbase::data_plane::ObIDiskReport>()->delete_usage_stat();
-src/observer/omt/ob_server_runtime_controller.cpp	364	ObServerRuntimeController::create_runtime	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
-src/observer/omt/ob_server_runtime_controller.cpp	414	ObServerRuntimeController::create_runtime	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(update_server_config())) {
-src/observer/omt/ob_server_runtime_controller.cpp	423	ObServerRuntimeController::create_runtime	assign tmp_ret	tmp_ret = OB_SUCCESS;
-src/observer/omt/ob_server_runtime_controller.cpp	438	ObServerRuntimeController::create_runtime	assign tmp_ret	tmp_ret = OB_SUCCESS;
-src/observer/omt/ob_server_runtime_controller.cpp	443	ObServerRuntimeController::create_runtime	assign tmp_ret	} else if (OB_SUCCESS != (tmp_ret = malloc_allocator->set_ctx_idle(ctx_id, 0))) {
-src/observer/omt/ob_server_runtime_controller.cpp	595	ObServerRuntimeController::update_server_config	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
-src/observer/omt/ob_server_runtime_controller.cpp	596	ObServerRuntimeController::update_server_config	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(update_palf_config())) {
-src/observer/omt/ob_server_runtime_controller.cpp	598	ObServerRuntimeController::update_server_config	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(update_dag_scheduler_config())) {
-src/observer/omt/ob_server_runtime_controller.cpp	600	ObServerRuntimeController::update_server_config	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(update_freezer_config_())) {
-src/observer/omt/ob_server_runtime_controller.cpp	602	ObServerRuntimeController::update_server_config	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(update_throttle_config_())) {
-src/observer/omt/ob_server_runtime_controller.cpp	941	ObServerRuntimeController::refresh_server_config_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
-src/observer/omt/ob_server_runtime_controller.cpp	942	ObServerRuntimeController::refresh_server_config_	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = LOG_ALLOCATOR_MGR_INSTANCE.update_memory_limit(runtime_config))) {
-src/observer/omt/ob_server_runtime_controller.cpp	1395	ObServer::obs_init_modules	merge OB_ERR_UNEXPECTED into ret through if (OB_SUCC(ret)) (continue-and-record through another variable)	ret = OB_ERR_UNEXPECTED;
-src/observer/schema/ob_schema_service_sql_impl.cpp	4936	ObSchemaServiceSQLImpl::get_ori_schema_version	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
-src/observer/schema/ob_schema_service_sql_impl.cpp	4939	ObSchemaServiceSQLImpl::get_ori_schema_version	assign tmp_ret	} else if (OB_ITER_END != (tmp_ret = result->next())) {
-src/observer/schema/ob_schema_service_sql_impl.cpp	4940	ObSchemaServiceSQLImpl::get_ori_schema_version	merge into ret	ret = OB_SUCCESS == tmp_ret ? OB_ERR_UNEXPECTED : tmp_ret;
-src/observer/schema/ob_schema_service_sql_impl.cpp	5285	ObSchemaServiceSQLImpl::get_schema_version_by_timestamp	merge OB_ERR_UNEXPECTED into ret (continue-and-record through another variable)	ret = OB_SUCC(ret) ? OB_ERR_UNEXPECTED : ret;
-src/observer/vector_index/ob_hybrid_vector_refresh_task.cpp	759	ObHybridVectorRefreshTask::delete_embedded_table	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
-src/observer/vector_index/ob_hybrid_vector_refresh_task.cpp	761	ObHybridVectorRefreshTask::delete_embedded_table	assign tmp_ret	tmp_ret = tsc_service->revert_scan_iter(scan_iter);
-src/observer/vector_index/ob_hybrid_vector_refresh_task.cpp	923	ObHybridVectorRefreshTask::after_embedding	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
-src/observer/vector_index/ob_hybrid_vector_refresh_task.cpp	925	ObHybridVectorRefreshTask::after_embedding	assign tmp_ret	tmp_ret = oas->revert_scan_iter(embedded_scan_iter);
-src/observer/vector_index/ob_hybrid_vector_refresh_task.cpp	936	ObHybridVectorRefreshTask::after_embedding	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
-src/observer/vector_index/ob_hybrid_vector_refresh_task.cpp	938	ObHybridVectorRefreshTask::after_embedding	assign tmp_ret	tmp_ret = tsc_service->revert_scan_iter(vid_rowkey_iter);
-src/observer/vector_index/ob_hybrid_vector_refresh_task.cpp	964	ObHybridVectorRefreshTask::after_embedding	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
-src/observer/vector_index/ob_hybrid_vector_refresh_task.cpp	966	ObHybridVectorRefreshTask::after_embedding	assign tmp_ret	if (OB_NOT_NULL(tx_desc) && trans_start && OB_SUCCESS != (tmp_ret = ObInsertLobColumnHelper::end_trans(tx_desc, ret != OB_SUCCESS, timeout_us))) {
-src/observer/vector_index/ob_hybrid_vector_refresh_task.cpp	967	ObHybridVectorRefreshTask::after_embedding	merge into ret	ret = tmp_ret;
-src/observer/vector_index/ob_ivf_async_task_executor.cpp	350	ObIvfAsyncTaskExector::generate_aux_table_info_map	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
-src/observer/vector_index/ob_ivf_async_task_executor.cpp	351	ObIvfAsyncTaskExector::generate_aux_table_info_map	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(aux_table_info_map.erase_refactored(key))) {
-src/observer/vector_index/ob_plugin_vector_index_adaptor.cpp	2912	ObPluginVectorIndexAdaptor::complete_index_mem_data_incremental	declare tmp_ret	int tmp_ret = tsc_service->revert_scan_iter(incr_iter);
-src/observer/vector_index/ob_plugin_vector_index_adaptor.cpp	3971	ObPluginVectorIndexAdaptor::query_result	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
-src/observer/vector_index/ob_plugin_vector_index_adaptor.cpp	3973	ObPluginVectorIndexAdaptor::query_result	assign tmp_ret	} else if ((tmp_ret = check_if_need_optimize(ctx)) != OB_SUCCESS) {
-src/observer/vector_index/ob_plugin_vector_index_adaptor.cpp	4377	ObPluginVectorIndexAdaptor::check_need_sync_to_follower_or_do_opt_task	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
-src/observer/vector_index/ob_plugin_vector_index_adaptor.cpp	4378	ObPluginVectorIndexAdaptor::check_need_sync_to_follower_or_do_opt_task	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(check_if_need_optimize())) {
-src/observer/vector_index/ob_plugin_vector_index_scheduler.cpp	519	ObPluginVectorIndexLoadScheduler::reload_runtime_task	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
-src/observer/vector_index/ob_plugin_vector_index_scheduler.cpp	521	ObPluginVectorIndexLoadScheduler::reload_runtime_task	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(check_and_load_task_executors(has_ivf_index))) {
-src/observer/vector_index/ob_plugin_vector_index_scheduler.cpp	971	ObPluginVectorIndexLoadScheduler::check_and_execute_tasks	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
-src/observer/vector_index/ob_plugin_vector_index_scheduler.cpp	973	ObPluginVectorIndexLoadScheduler::check_and_execute_tasks	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(start_task_executors())) {
-src/observer/vector_index/ob_plugin_vector_index_scheduler.cpp	1015	ObPluginVectorIndexLoadScheduler::run_task	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
-src/observer/vector_index/ob_plugin_vector_index_scheduler.cpp	1018	ObPluginVectorIndexLoadScheduler::run_task	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(resume_task_executors())) {
-src/observer/vector_index/ob_plugin_vector_index_service.cpp	1141	ObPluginVectorIndexMgr::replace_old_adapter	declare tmp_ret	int tmp_ret = complete_index_adpt_map_.get_refactored(new_adapter->get_inc_tablet_id(), old_adapter);
-src/observer/vector_index/ob_plugin_vector_index_service.cpp	1143	ObPluginVectorIndexMgr::replace_old_adapter	assign tmp_ret	tmp_ret = OB_SUCCESS;
-src/observer/vector_index/ob_plugin_vector_index_service.cpp	1147	ObPluginVectorIndexMgr::replace_old_adapter	merge into ret	ret = tmp_ret;
-src/observer/vector_index/ob_plugin_vector_index_util.cpp	466	ObPluginVectorIndexHelper::sort_merge_delta_and_snap_vids	declare tmp_ret	int tmp_ret = vid_hash_set.exist_refactored(first.vids_[i]);
-src/observer/vector_index/ob_plugin_vector_index_util.cpp	482	ObPluginVectorIndexHelper::sort_merge_delta_and_snap_vids	declare tmp_ret	int tmp_ret = vid_hash_set.exist_refactored(second.vids_[j]);
-src/observer/vector_index/ob_plugin_vector_index_util.cpp	501	ObPluginVectorIndexHelper::sort_merge_delta_and_snap_vids	declare tmp_ret	int tmp_ret = vid_hash_set.exist_refactored(first.vids_[i]);
-src/observer/vector_index/ob_plugin_vector_index_util.cpp	519	ObPluginVectorIndexHelper::sort_merge_delta_and_snap_vids	declare tmp_ret	int tmp_ret = vid_hash_set.exist_refactored(second.vids_[j]);
-src/observer/vector_index/ob_plugin_vector_index_utils.cpp	582	ObPluginVectorIndexUtils::read_vector_info	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
-src/observer/vector_index/ob_plugin_vector_index_utils.cpp	584	ObPluginVectorIndexUtils::read_vector_info	assign tmp_ret	tmp_ret = tsc_service->revert_scan_iter(vid_id_iter);
-src/observer/vector_index/ob_plugin_vector_index_utils.cpp	590	ObPluginVectorIndexUtils::read_vector_info	assign tmp_ret	tmp_ret = tsc_service->revert_scan_iter(data_iter);
-src/observer/vector_index/ob_plugin_vector_index_utils.cpp	626	ObPluginVectorIndexUtils::try_sync_vbitmap_memdata	declare tmp_ret	int tmp_ret = tsc_service->revert_scan_iter(index_id_iter);
-src/observer/vector_index/ob_plugin_vector_index_utils.cpp	753	ObPluginVectorIndexUtils::try_sync_snapshot_memdata	declare tmp_ret	int tmp_ret = tsc_service->revert_scan_iter(snapshot_idx_iter);
-src/observer/vector_index/ob_plugin_vector_index_utils.cpp	806	ObPluginVectorIndexUtils::refresh_adp_from_table	declare tmp_ret	int tmp_ret = tsc_service->revert_scan_iter(delta_buf_iter);
-src/observer/vector_index/ob_vector_index_async_task.cpp	73	ObVectorIndexHistoryTask::clear_history_task	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
-src/observer/vector_index/ob_vector_index_async_task.cpp	74	ObVectorIndexHistoryTask::clear_history_task	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = trans.end(OB_SUCC(ret)))) {
-src/observer/vector_index/ob_vector_index_async_task.cpp	76	ObVectorIndexHistoryTask::clear_history_task	merge into ret	ret = OB_SUCC(ret) ? tmp_ret : ret;
-src/observer/vector_index/ob_vector_index_async_task.cpp	101	ObVectorIndexHistoryTask::move_task_to_history_table	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
-src/observer/vector_index/ob_vector_index_async_task.cpp	102	ObVectorIndexHistoryTask::move_task_to_history_table	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = trans.end(OB_SUCC(ret)))) {
-src/observer/vector_index/ob_vector_index_async_task.cpp	104	ObVectorIndexHistoryTask::move_task_to_history_table	merge into ret	ret = OB_SUCC(ret) ? tmp_ret : ret;
+src/rootserver/ob_ddl_service.cpp	1442	ObDDLService::create_tables_in_trans	declare temp_ret	int temp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	1443	ObDDLService::create_tables_in_trans	assign temp_ret	if (OB_SUCCESS != (temp_ret = trans.end(OB_SUCC(ret)))) {
+src/rootserver/ob_ddl_service.cpp	1445	ObDDLService::create_tables_in_trans	merge into ret	ret = (OB_SUCC(ret)) ? temp_ret : ret;
+src/rootserver/ob_ddl_service.cpp	1506	ObDDLService::create_index_table_in_trans	declare temp_ret	int temp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	1507	ObDDLService::create_index_table_in_trans	assign temp_ret	if (OB_SUCCESS != (temp_ret = trans.end(OB_SUCC(ret)))) {
+src/rootserver/ob_ddl_service.cpp	1509	ObDDLService::create_index_table_in_trans	merge into ret	ret = (OB_SUCC(ret)) ? temp_ret : ret;
+src/rootserver/ob_ddl_service.cpp	4013	ObDDLService::delete_column_from_schema	declare temp_ret	int temp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	4014	ObDDLService::delete_column_from_schema	assign temp_ret	if (OB_SUCCESS != (temp_ret = trans.end(OB_SUCC(ret)))) {
+src/rootserver/ob_ddl_service.cpp	4016	ObDDLService::delete_column_from_schema	merge into ret	ret = (OB_SUCC(ret)) ? temp_ret : ret;
+src/rootserver/ob_ddl_service.cpp	4289	ObDDLService::remap_index_tablets_and_take_effect	declare temp_ret	int temp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	4290	ObDDLService::remap_index_tablets_and_take_effect	assign temp_ret	if (OB_SUCCESS != (temp_ret = trans.end(OB_SUCC(ret)))) {
+src/rootserver/ob_ddl_service.cpp	4292	ObDDLService::remap_index_tablets_and_take_effect	merge into ret	ret = (OB_SUCC(ret)) ? temp_ret : ret;
+src/rootserver/ob_ddl_service.cpp	4390	ObDDLService::switch_index_name_and_status_for_vec_index_table	declare temp_ret	int temp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	4391	ObDDLService::switch_index_name_and_status_for_vec_index_table	assign temp_ret	if (OB_SUCCESS != (temp_ret = trans.end(OB_SUCC(ret)))) {
+src/rootserver/ob_ddl_service.cpp	4393	ObDDLService::switch_index_name_and_status_for_vec_index_table	merge into ret	ret = (OB_SUCC(ret)) ? temp_ret : ret;
+src/rootserver/ob_ddl_service.cpp	4482	ObDDLService::update_autoinc_schema	declare temp_ret	int temp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	4483	ObDDLService::update_autoinc_schema	assign temp_ret	if (OB_SUCCESS != (temp_ret = trans.end(OB_SUCC(ret)))) {
+src/rootserver/ob_ddl_service.cpp	4485	ObDDLService::update_autoinc_schema	merge into ret	ret = (OB_SUCC(ret)) ? temp_ret : ret;
+src/rootserver/ob_ddl_service.cpp	4929	ObDDLService::create_aux_index	declare temp_ret	int temp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	4930	ObDDLService::create_aux_index	assign temp_ret	if (OB_SUCCESS != (temp_ret = trans.end(OB_SUCC(ret)))) {
+src/rootserver/ob_ddl_service.cpp	4932	ObDDLService::create_aux_index	merge into ret	ret = (OB_SUCC(ret)) ? temp_ret : ret;
+src/rootserver/ob_ddl_service.cpp	10760	ObDDLService::alter_table_in_trans	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	10939	ObDDLService::alter_table_in_trans	declare temp_ret	int temp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	10940	ObDDLService::alter_table_in_trans	assign temp_ret	if (OB_SUCCESS != (temp_ret = trans.end(is_commit))) {
+src/rootserver/ob_ddl_service.cpp	10942	ObDDLService::alter_table_in_trans	merge into ret	ret = is_commit ? temp_ret : ret;
+src/rootserver/ob_ddl_service.cpp	10947	ObDDLService::alter_table_in_trans	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	10952	ObDDLService::alter_table_in_trans	OB_TMP_FAIL (plan definition)	if (OB_TMP_FAIL(ObSysDDLSchedulerUtil::schedule_ddl_task(task_record))) {
+src/rootserver/ob_ddl_service.cpp	11587	ObDDLService::do_offline_ddl_in_trans	declare temp_ret	int temp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	11588	ObDDLService::do_offline_ddl_in_trans	assign temp_ret	if (OB_SUCCESS != (temp_ret = trans.end(OB_SUCC(ret)))) {
+src/rootserver/ob_ddl_service.cpp	11590	ObDDLService::do_offline_ddl_in_trans	merge into ret	ret = (OB_SUCC(ret)) ? temp_ret : ret;
+src/rootserver/ob_ddl_service.cpp	11595	ObDDLService::do_offline_ddl_in_trans	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	11597	ObDDLService::do_offline_ddl_in_trans	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(ObSysDDLSchedulerUtil::schedule_ddl_task(task_record))) {
+src/rootserver/ob_ddl_service.cpp	12520	ObDDLService::alter_table	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	12869	ObDDLService::rename_table	declare temp_ret	int temp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	12870	ObDDLService::rename_table	assign temp_ret	if (OB_SUCCESS != (temp_ret = trans.end(OB_SUCC(ret)))) {
+src/rootserver/ob_ddl_service.cpp	12872	ObDDLService::rename_table	merge into ret	ret = (OB_SUCC(ret)) ? temp_ret : ret;
+src/rootserver/ob_ddl_service.cpp	13225	ObDDLService::truncate_table_in_trans	declare temp_ret	int temp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	13226	ObDDLService::truncate_table_in_trans	assign temp_ret	if (OB_SUCCESS != (temp_ret = trans.end(OB_SUCC(ret)))) {
+src/rootserver/ob_ddl_service.cpp	13228	ObDDLService::truncate_table_in_trans	merge into ret	ret = (OB_SUCC(ret)) ? temp_ret : ret;
+src/rootserver/ob_ddl_service.cpp	13372	ObDDLService::maintain_obj_dependency_info	declare temp_ret	int temp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	13373	ObDDLService::maintain_obj_dependency_info	assign temp_ret	if (OB_SUCCESS != (temp_ret = trans.end(OB_SUCC(ret)))) {
+src/rootserver/ob_ddl_service.cpp	13375	ObDDLService::maintain_obj_dependency_info	merge into ret	ret = (OB_SUCC(ret)) ? temp_ret : ret;
+src/rootserver/ob_ddl_service.cpp	13379	ObDDLService::maintain_obj_dependency_info	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	13381	ObDDLService::maintain_obj_dependency_info	assign tmp_ret	} else if (OB_SUCCESS != (tmp_ret = publish_schema())) {
+src/rootserver/ob_ddl_service.cpp	13384	ObDDLService::maintain_obj_dependency_info	merge into ret	ret = tmp_ret;
+src/rootserver/ob_ddl_service.cpp	14538	ObDDLService::rebuild_hidden_table_index_in_trans	declare temp_ret	int temp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	14539	ObDDLService::rebuild_hidden_table_index_in_trans	assign temp_ret	if (OB_SUCCESS != (temp_ret = trans.end(OB_SUCC(ret)))) {
+src/rootserver/ob_ddl_service.cpp	14541	ObDDLService::rebuild_hidden_table_index_in_trans	merge into ret	ret = (OB_SUCC(ret)) ? temp_ret : ret;
+src/rootserver/ob_ddl_service.cpp	14545	ObDDLService::rebuild_hidden_table_index_in_trans	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	14547	ObDDLService::rebuild_hidden_table_index_in_trans	assign tmp_ret	} else if (OB_SUCCESS != (tmp_ret = publish_schema())) {
+src/rootserver/ob_ddl_service.cpp	14550	ObDDLService::rebuild_hidden_table_index_in_trans	merge into ret	ret = tmp_ret;
+src/rootserver/ob_ddl_service.cpp	14752	ObDDLService::rebuild_hidden_table_constraints_in_trans	declare temp_ret	int temp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	14753	ObDDLService::rebuild_hidden_table_constraints_in_trans	assign temp_ret	if (OB_SUCCESS != (temp_ret = trans.end(OB_SUCC(ret)))) {
+src/rootserver/ob_ddl_service.cpp	14755	ObDDLService::rebuild_hidden_table_constraints_in_trans	merge into ret	ret = (OB_SUCC(ret)) ? temp_ret : ret;
+src/rootserver/ob_ddl_service.cpp	14759	ObDDLService::rebuild_hidden_table_constraints_in_trans	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	14761	ObDDLService::rebuild_hidden_table_constraints_in_trans	assign tmp_ret	} else if (OB_SUCCESS != (tmp_ret = publish_schema())) {
+src/rootserver/ob_ddl_service.cpp	14764	ObDDLService::rebuild_hidden_table_constraints_in_trans	merge into ret	ret = tmp_ret;
+src/rootserver/ob_ddl_service.cpp	15182	ObDDLService::rebuild_hidden_table_foreign_key_in_trans	declare temp_ret	int temp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	15183	ObDDLService::rebuild_hidden_table_foreign_key_in_trans	assign temp_ret	if (OB_SUCCESS != (temp_ret = trans.end(OB_SUCC(ret)))) {
+src/rootserver/ob_ddl_service.cpp	15185	ObDDLService::rebuild_hidden_table_foreign_key_in_trans	merge into ret	ret = (OB_SUCC(ret)) ? temp_ret : ret;
+src/rootserver/ob_ddl_service.cpp	15189	ObDDLService::rebuild_hidden_table_foreign_key_in_trans	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	15191	ObDDLService::rebuild_hidden_table_foreign_key_in_trans	assign tmp_ret	} else if (OB_SUCCESS != (tmp_ret = publish_schema())) {
+src/rootserver/ob_ddl_service.cpp	15194	ObDDLService::rebuild_hidden_table_foreign_key_in_trans	merge into ret	ret = tmp_ret;
+src/rootserver/ob_ddl_service.cpp	15441	ObDDLService::swap_orig_and_hidden_table_state	declare temp_ret	int temp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	15442	ObDDLService::swap_orig_and_hidden_table_state	assign temp_ret	if (OB_SUCCESS != (temp_ret = trans.end(OB_SUCC(ret)))) {
+src/rootserver/ob_ddl_service.cpp	15444	ObDDLService::swap_orig_and_hidden_table_state	merge into ret	ret = (OB_SUCC(ret)) ? temp_ret : ret;
+src/rootserver/ob_ddl_service.cpp	15449	ObDDLService::swap_orig_and_hidden_table_state	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	15451	ObDDLService::swap_orig_and_hidden_table_state	assign tmp_ret	} else if (OB_SUCCESS != (tmp_ret = publish_schema())) {
+src/rootserver/ob_ddl_service.cpp	15454	ObDDLService::swap_orig_and_hidden_table_state	merge into ret	ret = tmp_ret;
+src/rootserver/ob_ddl_service.cpp	15593	ObDDLService::modify_hidden_table_fk_state	declare temp_ret	int temp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	15594	ObDDLService::modify_hidden_table_fk_state	assign temp_ret	if (OB_SUCCESS != (temp_ret = trans.end(OB_SUCC(ret)))) {
+src/rootserver/ob_ddl_service.cpp	15596	ObDDLService::modify_hidden_table_fk_state	merge into ret	ret = (OB_SUCC(ret)) ? temp_ret : ret;
+src/rootserver/ob_ddl_service.cpp	15600	ObDDLService::modify_hidden_table_fk_state	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	15602	ObDDLService::modify_hidden_table_fk_state	assign tmp_ret	} else if (OB_SUCCESS != (tmp_ret = publish_schema())) {
+src/rootserver/ob_ddl_service.cpp	15605	ObDDLService::modify_hidden_table_fk_state	merge into ret	ret = tmp_ret;
+src/rootserver/ob_ddl_service.cpp	15671	ObDDLService::modify_hidden_table_not_null_column_state	declare temp_ret	int temp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	15672	ObDDLService::modify_hidden_table_not_null_column_state	assign temp_ret	if (OB_SUCCESS != (temp_ret = trans.end(OB_SUCC(ret)))) {
+src/rootserver/ob_ddl_service.cpp	15674	ObDDLService::modify_hidden_table_not_null_column_state	merge into ret	ret = (OB_SUCC(ret)) ? temp_ret : ret;
+src/rootserver/ob_ddl_service.cpp	15679	ObDDLService::modify_hidden_table_not_null_column_state	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	15681	ObDDLService::modify_hidden_table_not_null_column_state	assign tmp_ret	} else if (OB_SUCCESS != (tmp_ret = publish_schema())) {
+src/rootserver/ob_ddl_service.cpp	15684	ObDDLService::modify_hidden_table_not_null_column_state	merge into ret	ret = tmp_ret;
+src/rootserver/ob_ddl_service.cpp	15787	ObDDLService::cleanup_garbage	declare temp_ret	int temp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	15788	ObDDLService::cleanup_garbage	assign temp_ret	if (OB_SUCCESS != (temp_ret = trans.end(OB_SUCC(ret)))) {
+src/rootserver/ob_ddl_service.cpp	15790	ObDDLService::cleanup_garbage	merge into ret	ret = (OB_SUCC(ret)) ? temp_ret : ret;
+src/rootserver/ob_ddl_service.cpp	15794	ObDDLService::cleanup_garbage	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	15796	ObDDLService::cleanup_garbage	assign tmp_ret	} else if (OB_SUCCESS != (tmp_ret = publish_schema())) {
+src/rootserver/ob_ddl_service.cpp	15799	ObDDLService::cleanup_garbage	merge into ret	ret = tmp_ret;
+src/rootserver/ob_ddl_service.cpp	16178	ObDDLService::new_truncate_table_in_trans	declare temp_ret	int temp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	16179	ObDDLService::new_truncate_table_in_trans	assign temp_ret	if (OB_SUCCESS != (temp_ret = trans.end(is_commit))) {
+src/rootserver/ob_ddl_service.cpp	16181	ObDDLService::new_truncate_table_in_trans	merge into ret	ret = is_commit ? temp_ret : ret;
+src/rootserver/ob_ddl_service.cpp	16185	ObDDLService::new_truncate_table_in_trans	declare tmp_ret	int tmp_ret = schema_service_->get_ddl_trans_controller().remove_task(task_id);
+src/rootserver/ob_ddl_service.cpp	17108	ObDDLService::drop_table_in_trans	declare temp_ret	int temp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	17109	ObDDLService::drop_table_in_trans	assign temp_ret	if (OB_SUCCESS != (temp_ret = trans.end(OB_SUCC(ret)))) {
+src/rootserver/ob_ddl_service.cpp	17111	ObDDLService::drop_table_in_trans	merge into ret	ret = (OB_SUCC(ret)) ? temp_ret : ret;
+src/rootserver/ob_ddl_service.cpp	17256	ObDDLService::restore_table_from_recyclebin_in_trans	declare temp_ret	int temp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	17257	ObDDLService::restore_table_from_recyclebin_in_trans	assign temp_ret	if (OB_SUCCESS != (temp_ret = trans.end(OB_SUCC(ret)))) {
+src/rootserver/ob_ddl_service.cpp	17259	ObDDLService::restore_table_from_recyclebin_in_trans	merge into ret	ret = (OB_SUCC(ret)) ? temp_ret : ret;
+src/rootserver/ob_ddl_service.cpp	17561	ObDDLService::purge_index	declare temp_ret	int temp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	17562	ObDDLService::purge_index	assign temp_ret	if (OB_SUCCESS != (temp_ret = trans.end(OB_SUCC(ret)))) {
+src/rootserver/ob_ddl_service.cpp	17564	ObDDLService::purge_index	merge into ret	ret = (OB_SUCC(ret)) ? temp_ret : ret;
+src/rootserver/ob_ddl_service.cpp	17627	ObDDLService::purge_table	declare temp_ret	int temp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	17628	ObDDLService::purge_table	assign temp_ret	if (OB_SUCCESS != (temp_ret = trans.end(OB_SUCC(ret)))) {
+src/rootserver/ob_ddl_service.cpp	17630	ObDDLService::purge_table	merge into ret	ret = (OB_SUCC(ret)) ? temp_ret : ret;
+src/rootserver/ob_ddl_service.cpp	17664	ObDDLService::restore_database_in_trans	declare temp_ret	int temp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	17665	ObDDLService::restore_database_in_trans	assign temp_ret	if (OB_SUCCESS != (temp_ret = trans.end(OB_SUCC(ret)))) {
+src/rootserver/ob_ddl_service.cpp	17667	ObDDLService::restore_database_in_trans	merge into ret	ret = (OB_SUCC(ret)) ? temp_ret : ret;
+src/rootserver/ob_ddl_service.cpp	17752	ObDDLService::purge_database	declare temp_ret	int temp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	17753	ObDDLService::purge_database	assign temp_ret	if (OB_SUCCESS != (temp_ret = trans.end(OB_SUCC(ret)))) {
+src/rootserver/ob_ddl_service.cpp	17755	ObDDLService::purge_database	merge into ret	ret = (OB_SUCC(ret)) ? temp_ret : ret;
+src/rootserver/ob_ddl_service.cpp	17881	ObDDLService::purge_recyclebin_objects	declare temp_ret	int temp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	17882	ObDDLService::purge_recyclebin_objects	assign temp_ret	if (OB_SUCCESS != (temp_ret = trans.end(OB_SUCC(ret)))) {
+src/rootserver/ob_ddl_service.cpp	17884	ObDDLService::purge_recyclebin_objects	merge into ret	ret = (OB_SUCC(ret)) ? temp_ret : ret;
+src/rootserver/ob_ddl_service.cpp	18349	ObDDLService::drop_table	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	18353	ObDDLService::drop_table	assign tmp_ret	tmp_ret = OB_ERR_UNEXPECTED;
+src/rootserver/ob_ddl_service.cpp	18354	ObDDLService::drop_table	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(admin->collect_table_cache_invalidation(
+src/rootserver/ob_ddl_service.cpp	18365	ObDDLService::drop_table	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	18367	ObDDLService::drop_table	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = log_drop_warn_or_err_msg(table_item,
+src/rootserver/ob_ddl_service.cpp	18370	ObDDLService::drop_table	merge into ret	ret = tmp_ret;
+src/rootserver/ob_ddl_service.cpp	18417	ObDDLService::drop_table	declare temp_ret	int temp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	18419	ObDDLService::drop_table	assign temp_ret	if (OB_SUCCESS != (temp_ret = trans.end(commit))) {
+src/rootserver/ob_ddl_service.cpp	18420	ObDDLService::drop_table	merge into ret	ret = (OB_SUCC(ret)) ? temp_ret : ret;
+src/rootserver/ob_ddl_service.cpp	18424	ObDDLService::drop_table	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	18425	ObDDLService::drop_table	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = publish_schema())) {
+src/rootserver/ob_ddl_service.cpp	18426	ObDDLService::drop_table	merge into ret	ret = tmp_ret;
+src/rootserver/ob_ddl_service.cpp	18433	ObDDLService::drop_table	assign tmp_ret	tmp_ret = OB_ERR_UNEXPECTED;
+src/rootserver/ob_ddl_service.cpp	18434	ObDDLService::drop_table	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(admin->invalidate_caches(
+src/rootserver/ob_ddl_service.cpp	18515	ObDDLService::rebuild_vec_index	declare temp_ret	int temp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	18516	ObDDLService::rebuild_vec_index	assign temp_ret	if (OB_SUCCESS != (temp_ret = trans.end(OB_SUCC(ret)))) {
+src/rootserver/ob_ddl_service.cpp	18518	ObDDLService::rebuild_vec_index	merge into ret	ret = OB_SUCC(ret) ? temp_ret : ret;
+src/rootserver/ob_ddl_service.cpp	18522	ObDDLService::rebuild_vec_index	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	18524	ObDDLService::rebuild_vec_index	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(ObSysDDLSchedulerUtil::schedule_ddl_task(task_record))) {
+src/rootserver/ob_ddl_service.cpp	18533	ObDDLService::rebuild_vec_index	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	18534	ObDDLService::rebuild_vec_index	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = log_rebuild_warn_or_err_msg(arg, err_table_list))) {
+src/rootserver/ob_ddl_service.cpp	18535	ObDDLService::rebuild_vec_index	merge into ret	ret = tmp_ret;
+src/rootserver/ob_ddl_service.cpp	18624	ObDDLService::rebuild_index	declare temp_ret	int temp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	18625	ObDDLService::rebuild_index	assign temp_ret	if (OB_SUCCESS != (temp_ret = trans.end(OB_SUCC(ret)))) {
+src/rootserver/ob_ddl_service.cpp	18627	ObDDLService::rebuild_index	merge into ret	ret = OB_SUCC(ret) ? temp_ret : ret;
+src/rootserver/ob_ddl_service.cpp	18631	ObDDLService::rebuild_index	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	18633	ObDDLService::rebuild_index	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(ObSysDDLSchedulerUtil::schedule_ddl_task(task_record))) {
+src/rootserver/ob_ddl_service.cpp	18642	ObDDLService::rebuild_index	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	18643	ObDDLService::rebuild_index	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = log_rebuild_warn_or_err_msg(arg, err_table_list))) {
+src/rootserver/ob_ddl_service.cpp	18644	ObDDLService::rebuild_index	merge into ret	ret = tmp_ret;
+src/rootserver/ob_ddl_service.cpp	18693	ObDDLService::drop_directly_and_create_index_schema_	declare temp_ret	int temp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	18694	ObDDLService::drop_directly_and_create_index_schema_	assign temp_ret	if (OB_SUCCESS != (temp_ret = trans.end(OB_SUCC(ret)))) {
+src/rootserver/ob_ddl_service.cpp	18696	ObDDLService::drop_directly_and_create_index_schema_	merge into ret	ret = (OB_SUCC(ret)) ? temp_ret : ret;
+src/rootserver/ob_ddl_service.cpp	18766	ObDDLService::update_index_status	declare commit_ret (continue-and-record variable)	int commit_ret = trans.end(OB_SUCC(ret));
+src/rootserver/ob_ddl_service.cpp	18769	ObDDLService::update_index_status	merge commit_ret into ret (continue-and-record through another variable)	ret = OB_SUCC(ret) ? commit_ret : ret;
+src/rootserver/ob_ddl_service.cpp	18848	ObDDLService::modify_system_variable	declare temp_ret	int temp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	18849	ObDDLService::modify_system_variable	assign temp_ret	if (OB_SUCCESS != (temp_ret = trans.end(OB_SUCC(ret)))) {
+src/rootserver/ob_ddl_service.cpp	18851	ObDDLService::modify_system_variable	merge into ret	ret = (OB_SUCC(ret)) ? temp_ret : ret;
+src/rootserver/ob_ddl_service.cpp	18931	ObDDLService::create_database	declare temp_ret	int temp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	18932	ObDDLService::create_database	assign temp_ret	if (OB_SUCCESS != (temp_ret = trans.end(OB_SUCC(ret)))) {
+src/rootserver/ob_ddl_service.cpp	18934	ObDDLService::create_database	merge into ret	ret = (OB_SUCC(ret)) ? temp_ret : ret;
+src/rootserver/ob_ddl_service.cpp	19021	ObDDLService::alter_database	declare temp_ret	int temp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	19022	ObDDLService::alter_database	assign temp_ret	if (OB_SUCCESS != (temp_ret = trans.end(OB_SUCC(ret)))) {
+src/rootserver/ob_ddl_service.cpp	19024	ObDDLService::alter_database	merge into ret	ret = (OB_SUCC(ret)) ? temp_ret : ret;
+src/rootserver/ob_ddl_service.cpp	19102	ObDDLService::drop_database	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	19106	ObDDLService::drop_database	assign tmp_ret	tmp_ret = OB_ERR_UNEXPECTED;
+src/rootserver/ob_ddl_service.cpp	19107	ObDDLService::drop_database	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(admin->collect_database_cache_invalidation(
+src/rootserver/ob_ddl_service.cpp	19115	ObDDLService::drop_database	declare temp_ret	int temp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	19116	ObDDLService::drop_database	assign temp_ret	if (OB_SUCCESS != (temp_ret = trans.end(OB_SUCC(ret)))) {
+src/rootserver/ob_ddl_service.cpp	19118	ObDDLService::drop_database	merge into ret	ret = (OB_SUCC(ret)) ? temp_ret : ret;
+src/rootserver/ob_ddl_service.cpp	19132	ObDDLService::drop_database	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	19136	ObDDLService::drop_database	assign tmp_ret	tmp_ret = OB_ERR_UNEXPECTED;
+src/rootserver/ob_ddl_service.cpp	19137	ObDDLService::drop_database	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(admin->invalidate_caches(
+src/rootserver/ob_ddl_service.cpp	19459	ObDDLService::drop_user_in_trans	declare temp_ret	int temp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	19460	ObDDLService::drop_user_in_trans	assign temp_ret	if (OB_SUCCESS != (temp_ret = trans.end(OB_SUCC(ret)))) {
+src/rootserver/ob_ddl_service.cpp	19462	ObDDLService::drop_user_in_trans	merge into ret	ret = (OB_SUCC(ret)) ? temp_ret : ret;
+src/rootserver/ob_ddl_service.cpp	19531	ObDDLService::alter_role_in_trans	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	19532	ObDDLService::alter_role_in_trans	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = trans.end(OB_SUCC(ret)))) {
+src/rootserver/ob_ddl_service.cpp	19534	ObDDLService::alter_role_in_trans	merge into ret	ret = (OB_SUCC(ret)) ? tmp_ret : ret;
+src/rootserver/ob_ddl_service.cpp	19616	ObDDLService::rename_user_in_trans	declare temp_ret	int temp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	19617	ObDDLService::rename_user_in_trans	assign temp_ret	if (OB_SUCCESS != (temp_ret = trans.end(OB_SUCC(ret)))) {
+src/rootserver/ob_ddl_service.cpp	19619	ObDDLService::rename_user_in_trans	merge into ret	ret = (OB_SUCC(ret)) ? temp_ret : ret;
+src/rootserver/ob_ddl_service.cpp	19708	ObDDLService::set_passwd_in_trans	declare temp_ret	int temp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	19709	ObDDLService::set_passwd_in_trans	assign temp_ret	if (OB_SUCCESS != (temp_ret = trans.end(OB_SUCC(ret)))) {
+src/rootserver/ob_ddl_service.cpp	19711	ObDDLService::set_passwd_in_trans	merge into ret	ret = (OB_SUCC(ret)) ? temp_ret : ret;
+src/rootserver/ob_ddl_service.cpp	19750	ObDDLService::set_max_connection_in_trans	declare temp_ret	int temp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	19751	ObDDLService::set_max_connection_in_trans	assign temp_ret	if (OB_SUCCESS != (temp_ret = trans.end(OB_SUCC(ret)))) {
+src/rootserver/ob_ddl_service.cpp	19753	ObDDLService::set_max_connection_in_trans	merge into ret	ret = (OB_SUCC(ret)) ? temp_ret : ret;
+src/rootserver/ob_ddl_service.cpp	19787	ObDDLService::alter_user_require_in_trans	declare temp_ret	int temp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	19788	ObDDLService::alter_user_require_in_trans	assign temp_ret	if (OB_SUCCESS != (temp_ret = trans.end(OB_SUCC(ret)))) {
+src/rootserver/ob_ddl_service.cpp	19790	ObDDLService::alter_user_require_in_trans	merge into ret	ret = (OB_SUCC(ret)) ? temp_ret : ret;
+src/rootserver/ob_ddl_service.cpp	20065	ObDDLService::grant	declare temp_ret	int temp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	20066	ObDDLService::grant	assign temp_ret	if (OB_SUCCESS != (temp_ret = trans.end(OB_SUCC(ret)))) {
+src/rootserver/ob_ddl_service.cpp	20068	ObDDLService::grant	merge into ret	ret = (OB_SUCC(ret)) ? temp_ret : ret;
+src/rootserver/ob_ddl_service.cpp	20083	ObDDLService::grant	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	20110	ObDDLService::grant	assign tmp_ret	tmp_ret = OB_ERR_CREATE_USER_WITH_GRANT;
+src/rootserver/ob_ddl_service.cpp	20127	ObDDLService::grant	assign tmp_ret	tmp_ret = OB_PASSWORD_WRONG;
+src/rootserver/ob_ddl_service.cpp	20173	ObDDLService::grant	merge into ret	ret = tmp_ret;
+src/rootserver/ob_ddl_service.cpp	20238	ObDDLService::revoke	declare temp_ret	int temp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	20239	ObDDLService::revoke	assign temp_ret	if (OB_SUCCESS != (temp_ret = trans.end(OB_SUCC(ret)))) {
+src/rootserver/ob_ddl_service.cpp	20241	ObDDLService::revoke	merge into ret	ret = (OB_SUCC(ret)) ? temp_ret : ret;
+src/rootserver/ob_ddl_service.cpp	20410	ObDDLService::grant_table_and_column_mysql	declare temp_ret	int temp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	20411	ObDDLService::grant_table_and_column_mysql	assign temp_ret	if (OB_SUCCESS != (temp_ret = trans.end(OB_SUCC(ret)))) {
+src/rootserver/ob_ddl_service.cpp	20413	ObDDLService::grant_table_and_column_mysql	merge into ret	ret = (OB_SUCC(ret)) ? temp_ret : ret;
+src/rootserver/ob_ddl_service.cpp	20511	ObDDLService::revoke_all	declare temp_ret	int temp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	20512	ObDDLService::revoke_all	assign temp_ret	if (OB_SUCCESS != (temp_ret = trans.end(OB_SUCC(ret)))) {
+src/rootserver/ob_ddl_service.cpp	20514	ObDDLService::revoke_all	merge into ret	ret = (OB_SUCC(ret)) ? temp_ret : ret;
+src/rootserver/ob_ddl_service.cpp	20547	ObDDLService::grant_revoke_user	declare temp_ret	int temp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	20548	ObDDLService::grant_revoke_user	assign temp_ret	if (OB_SUCCESS != (temp_ret = trans.end(OB_SUCC(ret)))) {
+src/rootserver/ob_ddl_service.cpp	20550	ObDDLService::grant_revoke_user	merge into ret	ret = (OB_SUCC(ret)) ? temp_ret : ret;
+src/rootserver/ob_ddl_service.cpp	20694	ObDDLService::alter_user_default_role	declare tmp_ret	const int tmp_ret = trans.end(OB_SUCC(ret));
+src/rootserver/ob_ddl_service.cpp	20698	ObDDLService::alter_user_default_role	merge into ret	ret = tmp_ret;
+src/rootserver/ob_ddl_service.cpp	20763	ObDDLService::lock_user_in_trans	declare temp_ret	int temp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	20764	ObDDLService::lock_user_in_trans	assign temp_ret	if (OB_SUCCESS != (temp_ret = trans.end(OB_SUCC(ret)))) {
+src/rootserver/ob_ddl_service.cpp	20766	ObDDLService::lock_user_in_trans	merge into ret	ret = (OB_SUCC(ret)) ? temp_ret : ret;
+src/rootserver/ob_ddl_service.cpp	20804	ObDDLService::grant_database	declare temp_ret	int temp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	20805	ObDDLService::grant_database	assign temp_ret	if (OB_SUCCESS != (temp_ret = trans.end(OB_SUCC(ret)))) {
+src/rootserver/ob_ddl_service.cpp	20807	ObDDLService::grant_database	merge into ret	ret = (OB_SUCC(ret)) ? temp_ret : ret;
+src/rootserver/ob_ddl_service.cpp	20844	ObDDLService::revoke_database	declare temp_ret	int temp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	20845	ObDDLService::revoke_database	assign temp_ret	if (OB_SUCCESS != (temp_ret = trans.end(OB_SUCC(ret)))) {
+src/rootserver/ob_ddl_service.cpp	20847	ObDDLService::revoke_database	merge into ret	ret = (OB_SUCC(ret)) ? temp_ret : ret;
+src/rootserver/ob_ddl_service.cpp	20918	ObDDLService::revoke_syspriv	declare temp_ret	int temp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	20919	ObDDLService::revoke_syspriv	assign temp_ret	if (OB_SUCCESS != (temp_ret = trans.end(OB_SUCC(ret)))) {
+src/rootserver/ob_ddl_service.cpp	20921	ObDDLService::revoke_syspriv	merge into ret	ret = (OB_SUCC(ret)) ? temp_ret : ret;
+src/rootserver/ob_ddl_service.cpp	21019	ObDDLService::grant_table	declare temp_ret	int temp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	21020	ObDDLService::grant_table	assign temp_ret	if (OB_SUCCESS != (temp_ret = trans.end(OB_SUCC(ret)))) {
+src/rootserver/ob_ddl_service.cpp	21022	ObDDLService::grant_table	merge into ret	ret = (OB_SUCC(ret)) ? temp_ret : ret;
+src/rootserver/ob_ddl_service.cpp	21074	ObDDLService::grant_table	declare temp_ret	int temp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	21075	ObDDLService::grant_table	assign temp_ret	if (OB_SUCCESS != (temp_ret = trans.end(OB_SUCC(ret)))) {
+src/rootserver/ob_ddl_service.cpp	21077	ObDDLService::grant_table	merge into ret	ret = (OB_SUCC(ret)) ? temp_ret : ret;
+src/rootserver/ob_ddl_service.cpp	21176	ObDDLService::revoke_table_and_column_mysql	declare temp_ret	int temp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	21177	ObDDLService::revoke_table_and_column_mysql	assign temp_ret	if (OB_SUCCESS != (temp_ret = trans.end(OB_SUCC(ret)))) {
+src/rootserver/ob_ddl_service.cpp	21179	ObDDLService::revoke_table_and_column_mysql	merge into ret	ret = (OB_SUCC(ret)) ? temp_ret : ret;
+src/rootserver/ob_ddl_service.cpp	21219	ObDDLService::revoke_table	declare temp_ret	int temp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	21220	ObDDLService::revoke_table	assign temp_ret	if (OB_SUCCESS != (temp_ret = trans.end(OB_SUCC(ret)))) {
+src/rootserver/ob_ddl_service.cpp	21222	ObDDLService::revoke_table	merge into ret	ret = (OB_SUCC(ret)) ? temp_ret : ret;
+src/rootserver/ob_ddl_service.cpp	21261	ObDDLService::revoke_routine	declare temp_ret	int temp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	21262	ObDDLService::revoke_routine	assign temp_ret	if (OB_SUCCESS != (temp_ret = trans.end(OB_SUCC(ret)))) {
+src/rootserver/ob_ddl_service.cpp	21264	ObDDLService::revoke_routine	merge into ret	ret = (OB_SUCC(ret)) ? temp_ret : ret;
+src/rootserver/ob_ddl_service.cpp	21312	ObDDLService::grant_routine	declare temp_ret	int temp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	21313	ObDDLService::grant_routine	assign temp_ret	if (OB_SUCCESS != (temp_ret = trans.end(OB_SUCC(ret)))) {
+src/rootserver/ob_ddl_service.cpp	21315	ObDDLService::grant_routine	merge into ret	ret = (OB_SUCC(ret)) ? temp_ret : ret;
+src/rootserver/ob_ddl_service.cpp	21433	ObDDLService::create_outline	declare temp_ret	int temp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	21434	ObDDLService::create_outline	assign temp_ret	if (OB_SUCCESS != (temp_ret = trans.end(OB_SUCC(ret)))) {
+src/rootserver/ob_ddl_service.cpp	21436	ObDDLService::create_outline	merge into ret	ret = (OB_SUCC(ret)) ? temp_ret : ret;
+src/rootserver/ob_ddl_service.cpp	21514	ObDDLService::alter_outline_in_trans	declare temp_ret	int temp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	21515	ObDDLService::alter_outline_in_trans	assign temp_ret	if (OB_SUCCESS != (temp_ret = trans.end(OB_SUCC(ret)))) {
+src/rootserver/ob_ddl_service.cpp	21517	ObDDLService::alter_outline_in_trans	merge into ret	ret = (OB_SUCC(ret)) ? temp_ret : ret;
+src/rootserver/ob_ddl_service.cpp	21613	ObDDLService::drop_outline	declare temp_ret	int temp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	21614	ObDDLService::drop_outline	assign temp_ret	if (OB_SUCCESS != (temp_ret = trans.end(OB_SUCC(ret)))) {
+src/rootserver/ob_ddl_service.cpp	21616	ObDDLService::drop_outline	merge into ret	ret = (OB_SUCC(ret)) ? temp_ret : ret;
+src/rootserver/ob_ddl_service.cpp	21800	ObDDLService::create_mysql_roles_in_trans	declare temp_ret	int temp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	21801	ObDDLService::create_mysql_roles_in_trans	assign temp_ret	if (OB_SUCCESS != (temp_ret = trans.end(OB_SUCC(ret)))) {
+src/rootserver/ob_ddl_service.cpp	21803	ObDDLService::create_mysql_roles_in_trans	merge into ret	ret = (OB_SUCC(ret)) ? temp_ret : ret;
+src/rootserver/ob_ddl_service.cpp	21853	ObDDLService::create_user_in_trans	declare temp_ret	int temp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	21854	ObDDLService::create_user_in_trans	assign temp_ret	if (OB_SUCCESS != (temp_ret = trans.end(OB_SUCC(ret)))) {
+src/rootserver/ob_ddl_service.cpp	21856	ObDDLService::create_user_in_trans	merge into ret	ret = (OB_SUCC(ret)) ? temp_ret : ret;
+src/rootserver/ob_ddl_service.cpp	22004	ObDDLSQLTransaction::end	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	22061	ObDDLSQLTransaction::end	assign tmp_ret	if (OB_SUCCESS != (tmp_ret = common::ObMySQLTransaction::end(commit && OB_SUCC(ret)))) {
+src/rootserver/ob_ddl_service.cpp	22064	ObDDLSQLTransaction::end	merge into ret	ret = OB_SUCC(ret) ? tmp_ret : ret;
+src/rootserver/ob_ddl_service.cpp	22120	ObDDLService::do_schema_revise	declare temp_ret	int temp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	22121	ObDDLService::do_schema_revise	assign temp_ret	if (OB_SUCCESS != (temp_ret = trans.end(OB_SUCC(ret)))) {
+src/rootserver/ob_ddl_service.cpp	22123	ObDDLService::do_schema_revise	merge into ret	ret = (OB_SUCC(ret)) ? temp_ret : ret;
+src/rootserver/ob_ddl_service.cpp	22308	ObDDLService::recompile_all_views_batch	declare temp_ret	int temp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	22309	ObDDLService::recompile_all_views_batch	assign temp_ret	if (OB_SUCCESS != (temp_ret = trans.end(OB_SUCC(ret)))) {
+src/rootserver/ob_ddl_service.cpp	22311	ObDDLService::recompile_all_views_batch	merge into ret	ret = (OB_SUCC(ret)) ? temp_ret : ret;
+src/rootserver/ob_ddl_service.cpp	22811	ObDDLService::check_new_columns_for_index	declare tmp_ret	int tmp_ret = main_table_rowkeys.exist_refactored(new_column_schemas.at(j).get_column_id());
+src/rootserver/ob_ddl_service.cpp	23232	ObDDLService::drop_lob	declare temp_ret	int temp_ret = OB_SUCCESS;
+src/rootserver/ob_ddl_service.cpp	23233	ObDDLService::drop_lob	assign temp_ret	if (OB_SUCCESS != (temp_ret = trans.end(OB_SUCC(ret)))) {
+src/rootserver/ob_ddl_service.cpp	23235	ObDDLService::drop_lob	merge into ret	ret = (OB_SUCC(ret)) ? temp_ret : ret;
+src/rootserver/ob_index_builder.cpp	157	ObIndexBuilder::drop_index_on_failed	declare temp_ret	int temp_ret = OB_SUCCESS;
+src/rootserver/ob_index_builder.cpp	158	ObIndexBuilder::drop_index_on_failed	assign temp_ret	if (OB_SUCCESS != (temp_ret = trans.end(OB_SUCC(ret)))) {
+src/rootserver/ob_index_builder.cpp	160	ObIndexBuilder::drop_index_on_failed	merge into ret	ret = (OB_SUCC(ret)) ? temp_ret : ret;
+src/rootserver/ob_index_builder.cpp	164	ObIndexBuilder::drop_index_on_failed	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/rootserver/ob_index_builder.cpp	166	ObIndexBuilder::drop_index_on_failed	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(ObSysDDLSchedulerUtil::schedule_ddl_task(task_record))) {
+src/rootserver/ob_index_builder.cpp	407	ObIndexBuilder::drop_index	declare temp_ret	int temp_ret = OB_SUCCESS;
+src/rootserver/ob_index_builder.cpp	408	ObIndexBuilder::drop_index	assign temp_ret	if (OB_SUCCESS != (temp_ret = trans.end(OB_SUCC(ret)))) {
+src/rootserver/ob_index_builder.cpp	410	ObIndexBuilder::drop_index	merge into ret	ret = (OB_SUCC(ret)) ? temp_ret : ret;
+src/rootserver/ob_index_builder.cpp	414	ObIndexBuilder::drop_index	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/rootserver/ob_index_builder.cpp	416	ObIndexBuilder::drop_index	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(ObSysDDLSchedulerUtil::schedule_ddl_task(task_record))) {
+src/rootserver/ob_index_builder.cpp	541	ObIndexBuilder::do_create_global_index	declare temp_ret	int temp_ret = OB_SUCCESS;
+src/rootserver/ob_index_builder.cpp	542	ObIndexBuilder::do_create_global_index	assign temp_ret	if (OB_SUCCESS != (temp_ret = trans.end(OB_SUCC(ret)))) {
+src/rootserver/ob_index_builder.cpp	544	ObIndexBuilder::do_create_global_index	merge into ret	ret = (OB_SUCC(ret)) ? temp_ret : ret;
+src/rootserver/ob_index_builder.cpp	548	ObIndexBuilder::do_create_global_index	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/rootserver/ob_index_builder.cpp	550	ObIndexBuilder::do_create_global_index	OB_TMP_FAIL (plan definition)	} else if (OB_TMP_FAIL(ObSysDDLSchedulerUtil::schedule_ddl_task(task_record))) {
+src/rootserver/ob_index_builder.cpp	1368	ObIndexBuilder::do_create_local_index	declare temp_ret	int temp_ret = OB_SUCCESS;
+src/rootserver/ob_index_builder.cpp	1369	ObIndexBuilder::do_create_local_index	assign temp_ret	if (OB_SUCCESS != (temp_ret = trans.end(OB_SUCC(ret)))) {
+src/rootserver/ob_index_builder.cpp	1371	ObIndexBuilder::do_create_local_index	merge into ret	ret = (OB_SUCC(ret)) ? temp_ret : ret;
+src/rootserver/ob_load_inner_table_schema_executor.cpp	103	ObLoadInnerTableSchemaExecutor::load_inner_table_schema	declare temp_ret	int temp_ret = OB_SUCCESS;
+src/rootserver/ob_load_inner_table_schema_executor.cpp	104	ObLoadInnerTableSchemaExecutor::load_inner_table_schema	assign temp_ret	if (OB_SUCCESS != (temp_ret = trans.end(OB_SUCC(ret)))) {
+src/rootserver/ob_load_inner_table_schema_executor.cpp	106	ObLoadInnerTableSchemaExecutor::load_inner_table_schema	merge into ret	ret = (OB_SUCC(ret)) ? temp_ret : ret;
+src/rootserver/ob_load_inner_table_schema_executor.cpp	128	ObLoadInnerTableSchemaExecutor::init_args_	declare tmp_ret (plan definition)	int tmp_ret = OB_SUCCESS;
+src/rootserver/ob_load_inner_table_schema_executor.cpp	159	ObLoadInnerTableSchemaExecutor::init_args_	assign tmp_ret	} else if (FALSE_IT(tmp_ret = all_table_ids.exist_refactored(table_id))) {
+src/rootserver/ob_load_inner_table_schema_executor.cpp	169	ObLoadInnerTableSchemaExecutor::init_args_	merge into ret	ret = tmp_ret;

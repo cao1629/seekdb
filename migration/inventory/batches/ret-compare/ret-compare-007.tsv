@@ -1,87 +1,301 @@
 file	line	symbol	construct	text
-src/observer/ob_server.cpp	535	ObServer::submit_px_task	ret == OB_SIZE_OVERFLOW	if (OB_SIZE_OVERFLOW == ret) {
-src/observer/ob_server.cpp	545	ObServer::submit_px_task	ret == OB_SIZE_OVERFLOW	} while (OB_SIZE_OVERFLOW == ret);
-src/observer/ob_server.cpp	1169	ObServer::start	tmp_ret != OB_SERVER_RUNTIME_NOT_READY	} else if (OB_SERVER_RUNTIME_NOT_READY != tmp_ret) {
-src/observer/ob_server.cpp	1337	ObServer::initialize_server_runtime	ret == OB_SERVER_RUNTIME_NOT_READY	if (OB_SERVER_RUNTIME_NOT_READY == ret) {
-src/observer/ob_server.cpp	1386	ObServer::wait_for_server_runtime	ret == OB_EAGAIN	if (OB_EAGAIN == ret) {
-src/observer/ob_server.cpp	2692	ObServer::ObCTASCleanUp::operator()	ret != OB_EAGAIN	if (OB_UNLIKELY(OB_EAGAIN != ret)) {
-src/observer/ob_server_schema_updater.cpp	244	ObServerSchemaUpdater::process_async_refresh_tasks	tmp_ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != tmp_ret) {
-src/observer/ob_server_schema_updater.cpp	269	ObServerSchemaUpdater::try_release_schema	ret != OB_EAGAIN	if (OB_EAGAIN != ret) {
-src/observer/ob_server_schema_updater.cpp	285	ObServerSchemaUpdater::async_refresh_schema	ret != OB_EAGAIN	if (OB_EAGAIN != ret) {
-src/observer/ob_service.cpp	382	ObService::calc_column_checksum_request	tmp_ret == OB_EAGAIN	if (OB_EAGAIN == tmp_ret) {
-src/observer/ob_service.cpp	384	ObService::calc_column_checksum_request	tmp_ret == OB_SIZE_OVERFLOW	} else if (OB_SIZE_OVERFLOW == tmp_ret) {
-src/observer/ob_service.cpp	462	ObService::handle_tablet_freeze_req_	ret == OB_EAGAIN	if (OB_EAGAIN == ret) {
-src/observer/ob_service.cpp	489	ObService::server_freeze_	ret == OB_ENTRY_EXIST	if (OB_ENTRY_EXIST == ret) {
-src/observer/ob_service.cpp	559	ObService::check_modify_time_elapsed	tmp_ret != OB_EAGAIN	if (OB_EAGAIN != tmp_ret) {
-src/observer/ob_service.cpp	939	ObService::build_ddl_local	ret == OB_EAGAIN	if (OB_EAGAIN == ret) {
-src/observer/ob_service.cpp	941	ObService::build_ddl_local	ret == OB_SIZE_OVERFLOW	} else if (OB_SIZE_OVERFLOW == ret) {
-src/observer/ob_service.cpp	956	ObService::build_ddl_local	other variable saved_ret == OB_EAGAIN	ret = OB_EAGAIN == saved_ret ? OB_SUCCESS : ret;
-src/observer/ob_service.cpp	957	ObService::build_ddl_local	other variable saved_ret == OB_SIZE_OVERFLOW	ret = OB_SIZE_OVERFLOW == saved_ret ? OB_EAGAIN : ret;
-src/observer/ob_service.cpp	971	ObService::build_ddl_local	ret == OB_EAGAIN	if (OB_EAGAIN == ret) {
-src/observer/ob_service.cpp	973	ObService::build_ddl_local	ret == OB_SIZE_OVERFLOW	} else if (OB_SIZE_OVERFLOW == ret) {
-src/observer/ob_service.cpp	1078	ObService::inner_fill_tablet_info_	ret != OB_TABLET_NOT_EXIST	if (OB_TABLET_NOT_EXIST != ret) {
-src/observer/ob_service.cpp	1104	ObService::fill_tablet_runtime_info	ret != OB_LS_NOT_EXIST	if (OB_LS_NOT_EXIST != ret) {
-src/observer/ob_service.cpp	1116	ObService::fill_tablet_runtime_info	ret != OB_TABLET_NOT_EXIST	if (OB_TABLET_NOT_EXIST != ret) {
-src/observer/ob_srv_deliver.cpp	49	dispatch_req	ret == OB_SIZE_OVERFLOW	if (OB_SIZE_OVERFLOW == ret) {
-src/observer/ob_srv_deliver.cpp	114	ObSrvDeliver::deliver_mysql_request	ret == OB_SIZE_OVERFLOW	if (OB_SIZE_OVERFLOW == ret) {
-src/observer/ob_system_package_load_task.cpp	97	ObSystemPackageLoadTask::load_system_package_	ret == OB_ENTRY_NOT_EXIST	if (ret == OB_ENTRY_NOT_EXIST) {
-src/observer/ob_system_package_load_task.cpp	147	ObSystemPackageLoadTask::wait_system_package_ready	tmp_ret (assigned in the comparison) != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != (tmp_ret = ADMIN_JOB_FIND(LOAD_MYSQL_SYS_PACKAGE, job_id))) {
-src/observer/ob_tablet_runtime_meta_updater.cpp	305	ObTabletRuntimeMetaUpdater::add_task_	ret == OB_EAGAIN	if (OB_EAGAIN == ret) {
-src/observer/ob_tablet_runtime_meta_updater.cpp	479	ObTabletRuntimeMetaUpdater::generate_tasks_	ret == OB_EAGAIN	if (OB_EAGAIN == ret) {
-src/observer/ob_tablet_runtime_meta_updater.cpp	485	ObTabletRuntimeMetaUpdater::generate_tasks_	ret != OB_SERVER_RUNTIME_NOT_READY; ret != OB_LS_NOT_EXIST; ret != OB_TABLET_NOT_EXIST	} else if (OB_SERVER_RUNTIME_NOT_READY != ret && OB_LS_NOT_EXIST != ret && OB_TABLET_NOT_EXIST != ret) {
-src/observer/ob_tablet_runtime_meta_updater.cpp	486	ObTabletRuntimeMetaUpdater::generate_tasks_	ret == OB_SERVER_RUNTIME_NOT_READY	} else if (OB_SERVER_RUNTIME_NOT_READY == ret) {
-src/observer/ob_uniq_task_queue.h	330	ObUniqTaskQueue::add	ret == OB_HASH_EXIST	if (common::OB_HASH_EXIST == ret) {
-src/observer/ob_uniq_task_queue.h	595	ObUniqTaskQueue::get_group	ret != OB_HASH_EXIST	if (OB_FAIL(group_map_.set_refactored(group_id, new_group)) && common::OB_HASH_EXIST != ret) {
-src/observer/ob_uniq_task_queue.h	605	ObUniqTaskQueue::get_group	ret == OB_HASH_EXIST	} else if (common::OB_HASH_EXIST == ret) {
-src/observer/ob_uniq_task_queue.h	623	ObUniqTaskQueue::try_lock	ret == OB_HASH_EXIST	if (common::OB_HASH_EXIST == ret) {
-src/observer/omt/ob_server_runtime.cpp	69	ObPxPools::get_or_create	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
-src/observer/omt/ob_server_runtime.cpp	84	ObPxPools::create_pool	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
-src/observer/omt/ob_server_runtime_controller.cpp	249	ObServerRuntimeController::wait	call result runtime_->try_wait() == OB_EAGAIN	while (OB_EAGAIN == runtime_->try_wait()) {
-src/observer/omt/ob_server_runtime_controller.cpp	1129	ObIOManager::print_service_status	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
-src/observer/omt/ob_srs_service.cpp	125	ObSrsService::refresh_sys_srs	ret == OB_ERR_EMPTY_QUERY	if (ret == OB_ERR_EMPTY_QUERY) {
-src/observer/omt/ob_srs_service.cpp	178	ObSrsCacheSnapShot::get_srs_item	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
-src/observer/omt/ob_srs_service.cpp	232	ObSrsService::fetch_all_srs	ret == OB_ERR_SRS_NOT_FOUND	if (ret == OB_ERR_SRS_NOT_FOUND) {
-src/observer/omt/ob_srs_service.cpp	243	ObSrsService::fetch_all_srs	ret == OB_ITER_END	if (ret == OB_ITER_END) {
-src/observer/omt/ob_th_worker.cpp	295	ObThWorker::worker	ret == OB_ENTRY_NOT_EXIST	} else if (OB_ENTRY_NOT_EXIST == ret) {
-src/observer/report/ob_tablet_meta_checker.cpp	192	ObTabletMetaChecker::build_tablet_meta_row_map_	ret != OB_ITER_END [not built]	if (OB_ITER_END != ret) {
-src/observer/report/ob_tablet_meta_checker.cpp	202	ObTabletMetaChecker::build_tablet_meta_row_map_	ret == OB_ITER_END [not built]	if (OB_ITER_END == ret) {
-src/observer/report/ob_tablet_meta_checker.cpp	264	ObTabletMetaChecker::check_tablet_not_exist_in_local_	ret == OB_TABLET_NOT_EXIST; ret == OB_ENTRY_NOT_EXIST [not built]	if (OB_TABLET_NOT_EXIST == ret || OB_ENTRY_NOT_EXIST == ret) {
-src/observer/report/ob_tablet_meta_checker.cpp	305	ObTabletMetaChecker::check_missing_or_changed_tablet_meta_rows_	ret != OB_ITER_END [not built]	if (OB_UNLIKELY(OB_ITER_END != ret)) {
-src/observer/report/ob_tablet_meta_checker.cpp	313	ObTabletMetaChecker::check_missing_or_changed_tablet_meta_rows_	ret == OB_HASH_NOT_EXIST [not built]	if (OB_HASH_NOT_EXIST == ret) { // not exist in table while exist in local
-src/observer/report/ob_tablet_meta_checker.cpp	326	ObTabletMetaChecker::check_missing_or_changed_tablet_meta_rows_	ret == OB_EAGAIN [not built]	if (OB_EAGAIN == ret) {
-src/observer/report/ob_tablet_meta_checker.cpp	343	ObTabletMetaChecker::check_missing_or_changed_tablet_meta_rows_	ret == OB_ITER_END [not built]	if (OB_ITER_END == ret) {
-src/observer/schema/ob_schema_retrieve_utils.ipp	109	ObSchemaRetrieveUtils::retrieve_table_schema	ret != OB_ITER_END	if (ret != common::OB_ITER_END) {
-src/observer/schema/ob_schema_retrieve_utils.ipp	152	ObSchemaRetrieveUtils::retrieve_schema	ret != OB_ITER_END	if (OB_ITER_END != ret) {
-src/observer/schema/ob_schema_retrieve_utils.ipp	249	ObSchemaRetrieveUtils::retrieve_table_schema	ret == OB_ITER_END	if (ret == common::OB_ITER_END) { //no record
-src/observer/schema/ob_schema_retrieve_utils.ipp	262	ObSchemaRetrieveUtils::retrieve_table_schema	ret (assigned in the comparison) != OB_ITER_END	if (OB_ITER_END != (ret = result.next())) {
-src/observer/schema/ob_schema_retrieve_utils.ipp	550	ObSchemaRetrieveUtils::retrieve_schema	ret != OB_ITER_END	if (OB_ITER_END != ret) {
-src/observer/schema/ob_schema_retrieve_utils.ipp	665	ObSchemaRetrieveUtils::retrieve_subpart_schema	ret != OB_ITER_END	if (OB_ITER_END != ret) {
-src/observer/schema/ob_schema_retrieve_utils.ipp	710	ObSchemaRetrieveUtils::retrieve_subpart_schema	ret != OB_ITER_END	if (OB_ITER_END != ret) {
-src/observer/schema/ob_schema_retrieve_utils.ipp	773	ObSchemaRetrieveUtils::retrieve_constraint_column_info	ret != OB_ITER_END	if (ret != common::OB_ITER_END) {
-src/observer/schema/ob_schema_retrieve_utils.ipp	799	ObSchemaRetrieveUtils::retrieve_recycle_object	ret != OB_ITER_END	if (ret != common::OB_ITER_END) {
-src/observer/schema/ob_schema_retrieve_utils.ipp	1311	ObSchemaRetrieveUtils::retrieve_role_grantee_map_schema	ret != OB_ITER_END	if (ret != common::OB_ITER_END) {
-src/observer/schema/ob_schema_retrieve_utils.ipp	1726	ObSchemaRetrieveUtils::fill_trigger_schema	ret == OB_ERR_NULL_VALUE	if (OB_ERR_NULL_VALUE == ret) {
-src/observer/schema/ob_schema_retrieve_utils.ipp	1884	ObSchemaRetrieveUtils::retrieve_system_variable	ret == OB_ERR_SYS_VARIABLE_UNKNOWN	if (common::OB_ERR_SYS_VARIABLE_UNKNOWN == ret) {
-src/observer/schema/ob_schema_retrieve_utils.ipp	1894	ObSchemaRetrieveUtils::retrieve_system_variable	ret != OB_ITER_END	if (ret != common::OB_ITER_END) {
-src/observer/schema/ob_schema_retrieve_utils.ipp	1960	#define RETRIEVE_SCHEMA_FUNC_DEFINE	ret != OB_ITER_END	if (ret != common::OB_ITER_END) {                                                \
-src/observer/schema/ob_schema_retrieve_utils.ipp	2001	ObSchemaRetrieveUtils::retrieve_routine_schema	ret != OB_ITER_END	if (ret != common::OB_ITER_END) {
-src/observer/schema/ob_schema_retrieve_utils.ipp	2030	ObSchemaRetrieveUtils::retrieve_trigger_list	ret == OB_ITER_END	if (common::OB_ITER_END == ret) {
-src/observer/schema/ob_schema_retrieve_utils.ipp	2064	ObSchemaRetrieveUtils::retrieve_routine_param_schema	ret == OB_ITER_END	if (common::OB_ITER_END == ret) {
-src/observer/schema/ob_schema_retrieve_utils.ipp	2096	ObSchemaRetrieveUtils::retrieve_db_priv_schema	ret != OB_ITER_END	if (ret != common::OB_ITER_END) {
-src/observer/schema/ob_schema_retrieve_utils.ipp	2144	ObSchemaRetrieveUtils::retrieve_obj_priv_schema_inner	ret != OB_ITER_END	if (ret != common::OB_ITER_END) {
-src/observer/schema/ob_schema_retrieve_utils.ipp	2196	ObSchemaRetrieveUtils::retrieve_sys_priv_schema_inner	ret != OB_ITER_END	if (ret != common::OB_ITER_END) {
-src/observer/schema/ob_schema_retrieve_utils.ipp	2287	ObSchemaRetrieveUtils::retrieve_table_priv_schema	ret != OB_ITER_END	if (ret != common::OB_ITER_END) {
-src/observer/schema/ob_schema_retrieve_utils.ipp	2321	ObSchemaRetrieveUtils::retrieve_routine_priv_schema	ret != OB_ITER_END	if (ret != common::OB_ITER_END) {
-src/observer/schema/ob_schema_retrieve_utils.ipp	2352	ObSchemaRetrieveUtils::retrieve_column_priv_schema	ret != OB_ITER_END	if (ret != common::OB_ITER_END) {
-src/observer/schema/ob_schema_retrieve_utils.ipp	2441	ObSchemaRetrieveUtils::retrieve_obj_mysql_priv_schema	ret != OB_ITER_END	if (ret != common::OB_ITER_END) {
-src/observer/schema/ob_schema_retrieve_utils.ipp	2831	ObSchemaRetrieveUtils::fill_base_part_info	ret == OB_ERR_NULL_VALUE	if (OB_ERR_NULL_VALUE == ret) {
-src/observer/schema/ob_schema_retrieve_utils.ipp	2841	ObSchemaRetrieveUtils::fill_base_part_info	ret == OB_ERR_NULL_VALUE	if (OB_ERR_NULL_VALUE == ret) {
-src/observer/schema/ob_schema_retrieve_utils.ipp	2882	ObSchemaRetrieveUtils::retrieve_aux_tables	ret != OB_ITER_END	if (ret != common::OB_ITER_END) {
-src/observer/schema/ob_schema_retrieve_utils.ipp	2910	ObSchemaRetrieveUtils::retrieve_schema_version	ret != OB_ITER_END	if (ret != common::OB_ITER_END) {
-src/observer/schema/ob_schema_retrieve_utils.ipp	2952	ObSchemaRetrieveUtils::retrieve_mock_fk_parent_table_schema_column	ret != OB_ITER_END	if (ret != common::OB_ITER_END) {
-src/observer/schema/ob_schema_retrieve_utils.ipp	2984	ObSchemaRetrieveUtils::retrieve_foreign_key_info	ret != OB_ITER_END	if (ret != common::OB_ITER_END) {
-src/observer/schema/ob_schema_retrieve_utils.ipp	3016	ObSchemaRetrieveUtils::retrieve_foreign_key_column_info	ret != OB_ITER_END	if (ret != common::OB_ITER_END) {
-src/observer/schema/ob_schema_retrieve_utils.ipp	3109	ObSchemaRetrieveUtils::retrieve_simple_foreign_key_info	ret != OB_ITER_END	if (ret != OB_ITER_END) {
-src/observer/schema/ob_schema_retrieve_utils.ipp	3183	ObSchemaRetrieveUtils::retrieve_simple_constraint_info	ret != OB_ITER_END	if (ret != OB_ITER_END) {
-src/observer/schema/ob_schema_retrieve_utils.ipp	3274	ObSchemaRetrieveUtils::retrieve_object_list	ret == OB_ITER_END	if (common::OB_ITER_END == ret) {
-src/observer/schema/ob_schema_retrieve_utils.ipp	3312	ObSchemaRetrieveUtils::retrieve_table_latest_schema_versions	ret == OB_ITER_END	if (ret == common::OB_ITER_END) {
+src/share/ob_ddl_task_executor.h	70	ObIDDLTask::in_ddl_retry_black_list	other variable ret_code == OB_SERVER_OUTOF_DISK_SPACE; other variable ret_code == OB_DISK_ERROR; other variable ret_code == OB_NOT_SUPPORTED	return common::OB_SERVER_OUTOF_DISK_SPACE == ret_code || common::OB_DISK_ERROR == ret_code || OB_NOT_SUPPORTED == ret_code
+src/share/ob_ddl_task_executor.h	71	ObIDDLTask::in_ddl_retry_black_list	other variable ret_code == OB_ERR_DATA_TOO_LONG; other variable ret_code == OB_ERR_TOO_LONG_KEY_LENGTH	|| common::OB_ERR_DATA_TOO_LONG == ret_code || common::OB_ERR_TOO_LONG_KEY_LENGTH == ret_code;
+src/share/ob_ddl_task_executor.h	75	ObIDDLTask::is_ddl_force_no_more_process	other variable ret_code == OB_STANDBY_DATABASE_READ_ONLY	return common::OB_STANDBY_DATABASE_READ_ONLY == ret_code;
+src/share/ob_ddl_task_executor.h	79	ObIDDLTask::is_timeout	other variable ret_code == OB_TIMEOUT; other variable ret_code == OB_TRANS_STMT_TIMEOUT; other variable ret_code == OB_CONNECT_ERROR	return common::OB_TIMEOUT == ret_code || common::OB_TRANS_STMT_TIMEOUT == ret_code || common::OB_CONNECT_ERROR == ret_code
+src/share/ob_ddl_task_executor.h	80	ObIDDLTask::is_timeout	other variable ret_code == OB_WAITQUEUE_TIMEOUT; other variable ret_code == OB_SESSION_NOT_FOUND; other variable ret_code == OB_TRANS_TIMEOUT	|| common::OB_WAITQUEUE_TIMEOUT == ret_code || common::OB_SESSION_NOT_FOUND == ret_code || common::OB_TRANS_TIMEOUT == ret_code
+src/share/ob_ddl_task_executor.h	81	ObIDDLTask::is_timeout	other variable ret_code == OB_TRANS_UNKNOWN; other variable ret_code == OB_GET_LOCATION_TIME_OUT; other variable ret_code == OB_PACKET_STATUS_UNKNOWN	|| common::OB_TRANS_UNKNOWN == ret_code || common::OB_GET_LOCATION_TIME_OUT == ret_code || common::OB_PACKET_STATUS_UNKNOWN == ret_code
+src/share/ob_ddl_task_executor.h	82	ObIDDLTask::is_timeout	other variable ret_code == OB_TRANS_NEED_ROLLBACK; other variable ret_code == OB_RPC_SEND_ERROR; other variable ret_code == OB_RPC_CONNECT_ERROR	|| common::OB_TRANS_NEED_ROLLBACK == ret_code || common::OB_RPC_SEND_ERROR == ret_code || common::OB_RPC_CONNECT_ERROR == ret_code
+src/share/ob_ddl_task_executor.h	83	ObIDDLTask::is_timeout	other variable ret_code == OB_RPC_POST_ERROR; other variable ret_code == OB_TRANS_ROLLBACKED; other variable ret_code == OB_TRANS_KILLED	|| common::OB_RPC_POST_ERROR == ret_code || common::OB_TRANS_ROLLBACKED == ret_code || common::OB_TRANS_KILLED == ret_code
+src/share/ob_ddl_task_executor.h	84	ObIDDLTask::is_timeout	other variable ret_code == OB_GET_LOCATION_TIME_OUT; other variable ret_code == OB_TRANS_RPC_TIMEOUT; other variable ret_code == OB_LIBEASY_ERROR	|| common::OB_GET_LOCATION_TIME_OUT == ret_code || common::OB_TRANS_RPC_TIMEOUT == ret_code || common::OB_LIBEASY_ERROR == ret_code
+src/share/ob_ddl_task_executor.h	85	ObIDDLTask::is_timeout	other variable ret_code == OB_TRANS_CTX_NOT_EXIST; other variable ret_code == OB_ERR_SESSION_INTERRUPTED	|| common::OB_TRANS_CTX_NOT_EXIST == ret_code || OB_ERR_SESSION_INTERRUPTED == ret_code;
+src/share/ob_ddl_task_executor.h	88	ObIDDLTask::is_retry	other variable ret_code == OB_EAGAIN; other variable ret_code == OB_DDL_SCHEMA_VERSION_NOT_MATCH; other variable ret_code == OB_TASK_EXPIRED; other variable ret_code == OB_NEED_RETRY	return common::OB_EAGAIN == ret_code || common::OB_DDL_SCHEMA_VERSION_NOT_MATCH == ret_code || common::OB_TASK_EXPIRED == ret_code || common::OB_NEED_RETRY == ret_code
+src/share/ob_ddl_task_executor.h	89	ObIDDLTask::is_retry	other variable ret_code == OB_ERR_SHARED_LOCK_CONFLICT; other variable ret_code == OB_SCHEMA_EAGAIN; other variable ret_code == OB_DATA_NOT_UPTODATE	|| common::OB_ERR_SHARED_LOCK_CONFLICT == ret_code || common::OB_SCHEMA_EAGAIN == ret_code || OB_DATA_NOT_UPTODATE == ret_code
+src/share/ob_ddl_task_executor.h	90	ObIDDLTask::is_retry	other variable ret_code == OB_ERR_EXCLUSIVE_LOCK_CONFLICT; other variable ret_code == OB_ERR_EXCLUSIVE_LOCK_CONFLICT	|| common::OB_ERR_EXCLUSIVE_LOCK_CONFLICT == ret_code || common::OB_ERR_EXCLUSIVE_LOCK_CONFLICT == ret_code
+src/share/ob_ddl_task_executor.h	91	ObIDDLTask::is_retry	other variable ret_code == OB_ERR_EXCLUSIVE_LOCK_CONFLICT_NOWAIT; other variable ret_code == OB_TRANS_STMT_NEED_RETRY; other variable ret_code == OB_SCHEMA_NOT_UPTODATE	|| common::OB_ERR_EXCLUSIVE_LOCK_CONFLICT_NOWAIT == ret_code || common::OB_TRANS_STMT_NEED_RETRY == ret_code || common::OB_SCHEMA_NOT_UPTODATE == ret_code
+src/share/ob_ddl_task_executor.h	92	ObIDDLTask::is_retry	other variable ret_code == OB_TRANSACTION_SET_VIOLATION; other variable ret_code == OB_TRY_LOCK_ROW_CONFLICT; other variable ret_code == OB_TRANS_CANNOT_SERIALIZE; other variable ret_code == OB_GTI_NOT_READY	|| common::OB_TRANSACTION_SET_VIOLATION == ret_code || common::OB_TRY_LOCK_ROW_CONFLICT == ret_code || common::OB_TRANS_CANNOT_SERIALIZE == ret_code || common::OB_GTI_NOT_READY == ret_code
+src/share/ob_ddl_task_executor.h	93	ObIDDLTask::is_retry	other variable ret_code == OB_TRANS_WEAK_READ_VERSION_NOT_READY; other variable ret_code == OB_REPLICA_NOT_READABLE; other variable ret_code == OB_ERR_INSUFFICIENT_PX_WORKER	|| common::OB_TRANS_WEAK_READ_VERSION_NOT_READY == ret_code || common::OB_REPLICA_NOT_READABLE == ret_code || common::OB_ERR_INSUFFICIENT_PX_WORKER == ret_code
+src/share/ob_ddl_task_executor.h	94	ObIDDLTask::is_retry	other variable ret_code == OB_EXCEED_MEM_LIMIT; other variable ret_code == OB_INACTIVE_SQL_CLIENT; other variable ret_code == OB_INACTIVE_RPC_PROXY; other variable ret_code == OB_LS_OFFLINE	|| common::OB_EXCEED_MEM_LIMIT == ret_code || common::OB_INACTIVE_SQL_CLIENT == ret_code || common::OB_INACTIVE_RPC_PROXY == ret_code || common::OB_LS_OFFLINE == ret_code;
+src/share/ob_ddl_task_executor.h	97	ObIDDLTask::is_not_exist	other variable ret_code == OB_LS_NOT_EXIST; other variable ret_code == OB_TABLET_NOT_EXIST; other variable ret_code == OB_RUNTIME_SCHEMA_NOT_READY	return common::OB_LS_NOT_EXIST == ret_code || common::OB_TABLET_NOT_EXIST == ret_code || common::OB_RUNTIME_SCHEMA_NOT_READY == ret_code
+src/share/ob_ddl_task_executor.h	98	ObIDDLTask::is_not_exist	other variable ret_code == OB_SERVER_RUNTIME_NOT_READY	|| common::OB_SERVER_RUNTIME_NOT_READY == ret_code;
+src/share/ob_ddl_task_executor.h	101	ObIDDLTask::is_stop_state	other variable ret_code == OB_NOT_INIT; other variable ret_code == OB_IN_STOP_STATE	return common::OB_NOT_INIT == ret_code || common::OB_IN_STOP_STATE == ret_code
+src/share/ob_ddl_task_executor.h	102	ObIDDLTask::is_stop_state	other variable ret_code == OB_SERVER_IS_INIT; other variable ret_code == OB_SERVER_IS_STOPPING	|| common::OB_SERVER_IS_INIT == ret_code || common::OB_SERVER_IS_STOPPING == ret_code
+src/share/ob_ddl_task_executor.h	103	ObIDDLTask::is_stop_state	other variable ret_code == OB_RS_SHUTDOWN; other variable ret_code == OB_PARTITION_IS_STOPPED	|| common::OB_RS_SHUTDOWN == ret_code || common::OB_PARTITION_IS_STOPPED == ret_code
+src/share/ob_ddl_task_executor.h	104	ObIDDLTask::is_stop_state	other variable ret_code == OB_PARTITION_IS_BLOCKED	|| common::OB_PARTITION_IS_BLOCKED == ret_code;
+src/share/ob_ddl_task_executor.h	107	ObIDDLTask::is_not_master	other variable ret_code == OB_STATE_NOT_MATCH; other variable ret_code == OB_NOT_MASTER; other variable ret_code == OB_RS_NOT_MASTER	return common::OB_STATE_NOT_MATCH == ret_code || common::OB_NOT_MASTER == ret_code || OB_RS_NOT_MASTER == ret_code
+src/share/ob_ddl_task_executor.h	108	ObIDDLTask::is_not_master	other variable ret_code == OB_GTS_NOT_READY	|| common::OB_GTS_NOT_READY == ret_code;
+src/share/ob_ddl_task_executor.h	172	ObDDLTaskExecutor::push_task	ret != OB_ENTRY_EXIST	if (common::OB_ENTRY_EXIST != ret) {
+src/share/ob_debug_sync.cpp	499	ObDSEventControl::locate	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/share/ob_debug_sync.cpp	886	ObDebugSync::execute	ret == OB_ENTRY_NOT_EXIST	} else if (OB_ENTRY_NOT_EXIST == ret) {
+src/share/ob_debug_sync.cpp	897	ObDebugSync::execute	ret == OB_ENTRY_NOT_EXIST	} else if (OB_ENTRY_NOT_EXIST == ret) {
+src/share/ob_define.h	75	is_schema_error	switch (err) case OB_ERR_BAD_DATABASE	case OB_ERR_BAD_DATABASE:
+src/share/ob_define.h	76	is_schema_error	switch (err) case OB_DATABASE_EXIST	case OB_DATABASE_EXIST:
+src/share/ob_define.h	77	is_schema_error	switch (err) case OB_TABLE_NOT_EXIST	case OB_TABLE_NOT_EXIST:
+src/share/ob_define.h	78	is_schema_error	switch (err) case OB_ERR_TABLE_EXIST	case OB_ERR_TABLE_EXIST:
+src/share/ob_define.h	79	is_schema_error	switch (err) case OB_ERR_BAD_FIELD_ERROR	case OB_ERR_BAD_FIELD_ERROR:
+src/share/ob_define.h	80	is_schema_error	switch (err) case OB_ERR_COLUMN_DUPLICATE	case OB_ERR_COLUMN_DUPLICATE:
+src/share/ob_define.h	81	is_schema_error	switch (err) case OB_ERR_USER_EXIST	case OB_ERR_USER_EXIST:
+src/share/ob_define.h	82	is_schema_error	switch (err) case OB_ERR_USER_NOT_EXIST	case OB_ERR_USER_NOT_EXIST:
+src/share/ob_define.h	83	is_schema_error	switch (err) case OB_ERR_NO_PRIVILEGE	case OB_ERR_NO_PRIVILEGE:
+src/share/ob_define.h	84	is_schema_error	switch (err) case OB_ERR_NO_DB_PRIVILEGE	case OB_ERR_NO_DB_PRIVILEGE:
+src/share/ob_define.h	85	is_schema_error	switch (err) case OB_ERR_NO_TABLE_PRIVILEGE	case OB_ERR_NO_TABLE_PRIVILEGE:
+src/share/ob_define.h	86	is_schema_error	switch (err) case OB_SCHEMA_ERROR	case OB_SCHEMA_ERROR:
+src/share/ob_define.h	87	is_schema_error	switch (err) case OB_ERR_SP_ALREADY_EXISTS	case OB_ERR_SP_ALREADY_EXISTS:
+src/share/ob_define.h	88	is_schema_error	switch (err) case OB_ERR_SP_DOES_NOT_EXIST	case OB_ERR_SP_DOES_NOT_EXIST:
+src/share/ob_define.h	89	is_schema_error	switch (err) case OB_OBJECT_NAME_NOT_EXIST	case OB_OBJECT_NAME_NOT_EXIST:
+src/share/ob_define.h	90	is_schema_error	switch (err) case OB_OBJECT_NAME_EXIST	case OB_OBJECT_NAME_EXIST:
+src/share/ob_define.h	91	is_schema_error	switch (err) case OB_SCHEMA_EAGAIN	case OB_SCHEMA_EAGAIN:
+src/share/ob_define.h	92	is_schema_error	switch (err) case OB_SCHEMA_NOT_UPTODATE	case OB_SCHEMA_NOT_UPTODATE:
+src/share/ob_define.h	93	is_schema_error	switch (err) case OB_ERR_PARALLEL_DDL_CONFLICT	case OB_ERR_PARALLEL_DDL_CONFLICT:
+src/share/ob_define.h	94	is_schema_error	switch (err) case OB_NO_PARTITION_FOR_GIVEN_VALUE_SCHEMA_ERROR	case OB_NO_PARTITION_FOR_GIVEN_VALUE_SCHEMA_ERROR:
+src/share/ob_define.h	95	is_schema_error	switch (err) case OB_DDL_RESOURCE_NOT_ENOUGH	case OB_DDL_RESOURCE_NOT_ENOUGH:
+src/share/ob_define.h	107	is_duplicate_key_err	other variable err == OB_ERR_PRIMARY_KEY_DUPLICATE	if (OB_ERR_PRIMARY_KEY_DUPLICATE == err) {
+src/share/ob_define.h	115	is_get_location_timeout_error	other variable err == OB_GET_LOCATION_TIME_OUT	return OB_GET_LOCATION_TIME_OUT == err;
+src/share/ob_define.h	122	is_partition_change_error	switch (err) case OB_PARTITION_NOT_EXIST	case OB_PARTITION_NOT_EXIST:
+src/share/ob_define.h	123	is_partition_change_error	switch (err) case OB_LOCATION_NOT_EXIST	case OB_LOCATION_NOT_EXIST:
+src/share/ob_define.h	124	is_partition_change_error	switch (err) case OB_PARTITION_IS_STOPPED	case OB_PARTITION_IS_STOPPED:
+src/share/ob_define.h	125	is_partition_change_error	switch (err) case OB_PARTITION_IS_BLOCKED	case OB_PARTITION_IS_BLOCKED:
+src/share/ob_define.h	126	is_partition_change_error	switch (err) case OB_LS_LOCATION_NOT_EXIST	case OB_LS_LOCATION_NOT_EXIST:
+src/share/ob_define.h	127	is_partition_change_error	switch (err) case OB_MAPPING_BETWEEN_TABLET_AND_LS_NOT_EXIST	case OB_MAPPING_BETWEEN_TABLET_AND_LS_NOT_EXIST:
+src/share/ob_define.h	128	is_partition_change_error	switch (err) case OB_LS_NOT_EXIST	case OB_LS_NOT_EXIST:
+src/share/ob_define.h	129	is_partition_change_error	switch (err) case OB_TABLET_NOT_EXIST	case OB_TABLET_NOT_EXIST:
+src/share/ob_define.h	141	is_server_down_error	other variable err == OB_RPC_CONNECT_ERROR; other variable err == OB_RPC_SEND_ERROR; other variable err == OB_RPC_POST_ERROR	ret = (OB_RPC_CONNECT_ERROR == err || OB_RPC_SEND_ERROR == err || OB_RPC_POST_ERROR == err);
+src/share/ob_define.h	148	is_trans_stmt_need_retry_error	other variable err == OB_TRANS_STMT_NEED_RETRY	ret = (OB_TRANS_STMT_NEED_RETRY == err);
+src/share/ob_define.h	155	is_server_status_error	other variable err == OB_SERVER_IS_INIT; other variable err == OB_SERVER_IS_STOPPING	ret = (OB_SERVER_IS_INIT == err || OB_SERVER_IS_STOPPING == err);
+src/share/ob_define.h	161	is_runtime_not_ready	other variable err == OB_SERVER_RUNTIME_NOT_READY	return OB_SERVER_RUNTIME_NOT_READY == err;
+src/share/ob_define.h	167	is_process_timeout_error	other variable err == OB_TIMEOUT	ret = (OB_TIMEOUT == err);
+src/share/ob_define.h	173	is_location_leader_not_exist_error	other variable err == OB_LOCATION_LEADER_NOT_EXIST	return OB_LOCATION_LEADER_NOT_EXIST == err
+src/share/ob_define.h	174	is_location_leader_not_exist_error	other variable err == OB_LS_LOCATION_LEADER_NOT_EXIST	|| OB_LS_LOCATION_LEADER_NOT_EXIST == err;
+src/share/ob_define.h	181	is_master_changed_error	switch (err) case OB_LOCATION_LEADER_NOT_EXIST	case OB_LOCATION_LEADER_NOT_EXIST:
+src/share/ob_define.h	182	is_master_changed_error	switch (err) case OB_LS_LOCATION_LEADER_NOT_EXIST	case OB_LS_LOCATION_LEADER_NOT_EXIST:
+src/share/ob_define.h	183	is_master_changed_error	switch (err) case OB_NOT_MASTER	case OB_NOT_MASTER:
+src/share/ob_define.h	184	is_master_changed_error	switch (err) case OB_RS_NOT_MASTER	case OB_RS_NOT_MASTER:
+src/share/ob_define.h	185	is_master_changed_error	switch (err) case OB_RS_SHUTDOWN	case OB_RS_SHUTDOWN:
+src/share/ob_define.h	197	is_timeout_err	other variable err == OB_TIMEOUT	return OB_TIMEOUT == err
+src/share/ob_define.h	198	is_timeout_err	other variable err == OB_TRANS_TIMEOUT	|| OB_TRANS_TIMEOUT == err
+src/share/ob_define.h	199	is_timeout_err	other variable err == OB_TRANS_STMT_TIMEOUT	|| OB_TRANS_STMT_TIMEOUT == err
+src/share/ob_define.h	200	is_timeout_err	other variable err == OB_TRANS_RPC_TIMEOUT	|| OB_TRANS_RPC_TIMEOUT == err;
+src/share/ob_define.h	205	is_not_supported_err	other variable err == OB_NOT_SUPPORTED	return OB_NOT_SUPPORTED == err;
+src/share/ob_define.h	210	is_try_lock_row_err	other variable err == OB_TRY_LOCK_ROW_CONFLICT	return OB_TRY_LOCK_ROW_CONFLICT == err;
+src/share/ob_define.h	215	is_transaction_set_violation_err	other variable err == OB_TRANSACTION_SET_VIOLATION	return OB_TRANSACTION_SET_VIOLATION == err;
+src/share/ob_define.h	220	is_transaction_cannot_serialize_err	other variable err == OB_TRANS_CANNOT_SERIALIZE	return OB_TRANS_CANNOT_SERIALIZE == err;
+src/share/ob_define.h	225	is_snapshot_discarded_err	other variable err == OB_SNAPSHOT_DISCARDED	return OB_SNAPSHOT_DISCARDED == err;
+src/share/ob_define.h	230	is_transaction_rpc_timeout_err	other variable err == OB_TRANS_RPC_TIMEOUT	return OB_TRANS_RPC_TIMEOUT == err;
+src/share/ob_define.h	235	is_data_not_readable_err	other variable err == OB_DATA_NOT_UPTODATE	return OB_DATA_NOT_UPTODATE == err
+src/share/ob_define.h	236	is_data_not_readable_err	other variable err == OB_REPLICA_NOT_READABLE	|| OB_REPLICA_NOT_READABLE == err
+src/share/ob_define.h	237	is_data_not_readable_err	other variable err == OB_SNAPSHOT_DISCARDED	|| OB_SNAPSHOT_DISCARDED == err;
+src/share/ob_define.h	242	is_has_no_readable_replica_err	other variable err == OB_NO_READABLE_REPLICA	return OB_NO_READABLE_REPLICA == err;
+src/share/ob_define.h	247	is_id_not_ready_err	other variable err == OB_GTS_NOT_READY; other variable err == OB_GTI_NOT_READY	return OB_GTS_NOT_READY == err || OB_GTI_NOT_READY == err;
+src/share/ob_define.h	252	is_weak_read_service_ready_err	other variable err == OB_TRANS_WEAK_READ_VERSION_NOT_READY	return OB_TRANS_WEAK_READ_VERSION_NOT_READY == err;
+src/share/ob_define.h	263	is_query_killed_return	ret == OB_ERR_QUERY_INTERRUPTED	return OB_ERR_QUERY_INTERRUPTED == ret
+src/share/ob_define.h	264	is_query_killed_return	ret == OB_DEAD_LOCK	|| OB_DEAD_LOCK == ret;
+src/share/ob_define.h	272	#define LOG_WARN_IGNORE_ITER_END	ret != OB_ITER_END	if (OB_UNLIKELY(common::OB_ITER_END != ret)) {\
+src/share/ob_device_manager.cpp	241	ObDeviceManager::get_deivce_	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/share/ob_device_manager.cpp	266	ObDeviceManager::alloc_device_and_init_	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/share/ob_device_manager.cpp	302	ObDeviceManager::get_device_	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/share/ob_dml_sql_splicer.cpp	687	ObDMLSqlSplicer::build_rows_matrix	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/share/ob_dml_sql_splicer.cpp	1180	ObDMLExecHelper::check_row_exist	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/share/ob_encryption_util.cpp	205	ObBlockCipher::encrypt	ret == OB_ERR_AES_ENCRYPT	if (OB_UNLIKELY(OB_ERR_AES_ENCRYPT == ret)) {
+src/share/ob_encryption_util.cpp	270	ObBlockCipher::decrypt	ret == OB_ERR_AES_DECRYPT	if (OB_UNLIKELY(OB_ERR_AES_DECRYPT == ret)) {
+src/share/ob_freeze_info_proxy.cpp	64	ObFreezeInfoProxy::get_freeze_info	tmp_ret (assigned in the comparison) != OB_ITER_END	} else if (OB_ITER_END != (tmp_ret = result->next())) {
+src/share/ob_freeze_info_proxy.cpp	93	ObFreezeInfoProxy::get_all_freeze_info	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/share/ob_freeze_info_proxy.cpp	101	ObFreezeInfoProxy::get_all_freeze_info	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/share/ob_freeze_info_proxy.cpp	128	ObFreezeInfoProxy::get_freeze_info_larger_or_equal_than	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/share/ob_freeze_info_proxy.cpp	136	ObFreezeInfoProxy::get_freeze_info_larger_or_equal_than	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/share/ob_freeze_info_proxy.cpp	243	ObFreezeInfoProxy::get_frozen_info_less_than	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/share/ob_freeze_info_proxy.cpp	251	ObFreezeInfoProxy::get_frozen_info_less_than	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/share/ob_freeze_info_proxy.cpp	276	ObFreezeInfoProxy::get_max_freeze_info	tmp_ret (assigned in the comparison) != OB_ITER_END	} else if (OB_ITER_END != (tmp_ret = result->next())) {
+src/share/ob_freeze_info_proxy.cpp	308	ObFreezeInfoProxy::get_min_major_available_and_larger_info_inner_	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/share/ob_freeze_info_proxy.cpp	318	ObFreezeInfoProxy::get_min_major_available_and_larger_info_inner_	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/share/ob_freeze_info_proxy.cpp	368	ObFreezeInfoProxy::get_freeze_schema_info	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/share/ob_global_merge_table_operator.cpp	54	ObGlobalMergeTableOperator::load_global_merge_info	ret != OB_ENTRY_NOT_EXIST	if (OB_FAIL(ret) && OB_ENTRY_NOT_EXIST != ret) {
+src/share/ob_global_merge_table_operator.cpp	55	ObGlobalMergeTableOperator::load_global_merge_info	ret == OB_ENTRY_NOT_EXIST	} else if (OB_ENTRY_NOT_EXIST == ret) {
+src/share/ob_global_stat_proxy.cpp	298	ObGlobalStatProxy::inner_get_snapshot_gc_scn_	tmp_ret (assigned in the comparison) != OB_ITER_END	} else if (OB_ITER_END != (tmp_ret = result->next())) {
+src/share/ob_global_stat_proxy.cpp	370	ObGlobalStatProxy::select_ddl_epoch_for_update	tmp_ret (assigned in the comparison) != OB_ITER_END	} else if (OB_ITER_END != (tmp_ret = result->next())) {
+src/share/ob_global_stat_proxy.cpp	582	ObGlobalStatProxy::get	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/share/ob_global_stat_proxy.cpp	602	ObGlobalStatProxy::get	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/share/ob_inner_table_operator.cpp	408	ObInnerTableOperator::do_lock_row_	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/share/ob_inner_table_operator.cpp	442	ObInnerTableOperator::do_get_row_	call result result->next() != OB_ITER_END	} else if (OB_ITER_END != result->next()) {
+src/share/ob_inner_table_operator.cpp	558	ObInnerTableOperator::do_get_column_	call result result->next() != OB_ITER_END	} else if (OB_ITER_END != result->next()) {
+src/share/ob_inner_table_operator.cpp	589	ObInnerTableOperator::do_get_int_column_	call result result->next() != OB_ITER_END	} else if (OB_ITER_END != result->next()) {
+src/share/ob_inner_table_operator.cpp	623	ObInnerTableOperator::do_get_string_column_	call result result->next() != OB_ITER_END	} else if (OB_ITER_END != result->next()) {
+src/share/ob_inner_table_operator.cpp	711	ObInnerTableOperator::parse_one_row_	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/share/ob_inner_table_operator.cpp	725	ObInnerTableOperator::parse_one_column_	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/share/ob_inner_table_operator.cpp	740	ObInnerTableOperator::parse_one_column_	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/share/ob_inner_table_operator.cpp	759	ObInnerTableOperator::parse_one_column_	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/share/ob_io_device_helper.cpp	110	ObGetFileSizeFunctor::func	ret != OB_NO_SUCH_FILE_OR_DIRECTORY	&& OB_NO_SUCH_FILE_OR_DIRECTORY != ret) {
+src/share/ob_io_device_helper.cpp	112	ObGetFileSizeFunctor::func	ret == OB_NO_SUCH_FILE_OR_DIRECTORY	} else if (OB_NO_SUCH_FILE_OR_DIRECTORY == ret) {
+src/share/ob_local_device.cpp	644	ObLocalDevice::mark_blocks	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/share/ob_local_device.cpp	717	ObLocalDevice::alloc_blocks	ret != OB_SERVER_OUTOF_DISK_SPACE	if (OB_FAIL(alloc_block(opts, tmp_fd)) && OB_SERVER_OUTOF_DISK_SPACE != ret) {
+src/share/ob_local_device.cpp	719	ObLocalDevice::alloc_blocks	ret == OB_SERVER_OUTOF_DISK_SPACE	} else if (OB_SERVER_OUTOF_DISK_SPACE == ret) {
+src/share/ob_max_id_cache.cpp	181	ObMaxIdCacheMgr::fetch_max_id	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret && runtime_not_inited && init_runtime_if_not_exist) {
+src/share/ob_max_id_cache.cpp	185	ObMaxIdCacheMgr::fetch_max_id	tmp_ret != OB_HASH_EXIST	if (OB_TMP_FAIL(add_runtime_cache_()) && OB_HASH_EXIST != tmp_ret) {
+src/share/ob_max_id_fetcher.cpp	211	ObMaxIdFetcher::fetch_new_max_id_from_inner_table_	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret && UINT64_MAX != initial) {
+src/share/ob_max_id_fetcher.cpp	352	ObMaxIdFetcher::fetch_max_id	ret (assigned in the comparison) != OB_ITER_END	} else if (OB_ITER_END != (ret = result->next())) {
+src/share/ob_max_id_fetcher.cpp	358	ObMaxIdFetcher::fetch_max_id	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/share/ob_max_id_fetcher.cpp	366	ObMaxIdFetcher::fetch_max_id	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/share/ob_max_id_fetcher.cpp	368	ObMaxIdFetcher::fetch_max_id	ret == OB_ITER_END	} else if (OB_ITER_END == ret && no_max_id) {
+src/share/ob_occam_thread_pool.h	385	ObOccamThreadPool::keep_fetching_task_until_stop_	ret != OB_EAGAIN	if (ret != OB_EAGAIN) { // unexcepted error
+src/share/ob_occam_thread_pool.h	404	ObOccamThreadPool::keep_fetching_task_until_stop_	ret == OB_EAGAIN	} else if (ret == OB_EAGAIN) { // all queue empty, waiting for someone commit task
+src/share/ob_scheduled_job_utils.cpp	50	ObScheduledJobUtils::get_time_zone_offset	ret != OB_ERR_UNKNOWN_TIME_ZONE	if (ret != OB_ERR_UNKNOWN_TIME_ZONE) {
+src/share/ob_scheduled_job_utils.cpp	55	ObScheduledJobUtils::get_time_zone_offset	ret == OB_ERR_UNKNOWN_TIME_ZONE	if (OB_ERR_UNKNOWN_TIME_ZONE == ret) {
+src/share/ob_scheduled_job_utils.cpp	102	ObScheduledJobUtils::check_job_exists	ret == OB_ITER_END	ret = OB_ITER_END == ret ? OB_SUCCESS : ret;
+src/share/ob_schema_status_proxy.cpp	127	ObSchemaStatusProxy::load_refresh_schema_status	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/share/ob_share_util.cpp	145	ObShareUtil::get_ora_rowscn	tmp_ret (assigned in the comparison) != OB_ITER_END	} else if (OB_ITER_END != (tmp_ret = result->next())) {
+src/share/ob_snapshot_table_proxy.cpp	346	ObSnapshotTableProxy::get_all_snapshots	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/share/ob_snapshot_table_proxy.cpp	388	ObSnapshotTableProxy::get_all_snapshots	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/share/ob_snapshot_table_proxy.cpp	440	ObSnapshotTableProxy::get_max_snapshot_info	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/share/ob_snapshot_table_proxy.cpp	445	ObSnapshotTableProxy::get_max_snapshot_info	call result result->next() != OB_ITER_END	} else if (OB_ITER_END != result->next()) {
+src/share/ob_snapshot_table_proxy.cpp	479	ObSnapshotTableProxy::get_snapshot	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/share/ob_snapshot_table_proxy.cpp	482	ObSnapshotTableProxy::get_snapshot	call result result->next() != OB_ITER_END	} else if (OB_ITER_END != result->next()) {
+src/share/ob_snapshot_table_proxy.cpp	523	ObSnapshotTableProxy::check_snapshot_exist	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/share/ob_table_access_helper.h	388	ObTableAccessHelper::read_and_convert_to_values_	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/share/ob_table_access_helper.h	432	ObTableAccessHelper::read_and_convert_to_tuples_	ret == OB_ITER_END	if (OB_ITER_END == ret && iter_times > 0) {
+src/share/ob_tablet_checksum_operator.cpp	168	ObTabletChecksumOperator::load_tablet_checksum_items	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/share/ob_tablet_checksum_operator.cpp	203	ObTabletChecksumOperator::load_tablet_checksum_items	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/share/ob_tablet_checksum_operator.cpp	401	ObTabletChecksumOperator::load_all_compaction_scn	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/share/ob_tablet_checksum_operator.cpp	415	ObTabletChecksumOperator::load_all_compaction_scn	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/share/ob_tablet_meta_table_compaction_operator.cpp	48	ObTabletMetaTableCompactionOperator::get_status	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/share/ob_tablet_meta_table_compaction_operator.cpp	383	ObTabletMetaTableCompactionOperator::inner_range_scan_for_compaction	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/share/ob_tablet_meta_table_compaction_operator.cpp	415	ObTabletMetaTableCompactionOperator::inner_get_max_tablet_id_in_range	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/share/ob_telemetry.cpp	724	get_telemetry_podman_runtime_id	ret == OB_ENTRY_NOT_EXIST	while (OB_ENTRY_NOT_EXIST == ret && line_begin < content_len) {
+src/share/ob_telemetry.cpp	823	get_telemetry_container_scope_id	other variable systemd_file_ret != OB_FILE_NOT_EXIST	if (OB_FILE_NOT_EXIST != systemd_file_ret) {
+src/share/ob_telemetry.cpp	850	get_telemetry_container_scope_id	other variable podman_ret != OB_FILE_NOT_EXIST; other variable podman_ret != OB_ENTRY_NOT_EXIST	} else if (OB_FILE_NOT_EXIST != podman_ret && OB_ENTRY_NOT_EXIST != podman_ret) {
+src/share/ob_telemetry.cpp	1479	report_telemetry	other variable read_ret == OB_FILE_NOT_EXIST; ret == OB_ENTRY_NOT_EXIST	if (OB_FILE_NOT_EXIST == read_ret || (OB_SUCCESS == read_ret && OB_ENTRY_NOT_EXIST == ret)) {
+src/share/ob_time_zone_info_manager.cpp	118	ObTimeZoneInfoManager::fetch_time_zone_info	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/share/ob_time_zone_info_manager.cpp	342	ObTimeZoneInfoManager::fill_tz_info_map	ret == OB_ERR_NULL_VALUE	if (OB_ERR_NULL_VALUE == ret) {
+src/share/ob_time_zone_info_manager.cpp	389	ObTimeZoneInfoManager::fill_tz_info_map	ret == OB_ERR_UNKNOWN_TIME_ZONE	if (OB_ERR_UNKNOWN_TIME_ZONE == ret) {
+src/share/ob_time_zone_info_manager.cpp	407	ObTimeZoneInfoManager::fill_tz_info_map	ret == OB_ITER_END	ret = OB_ITER_END == ret ? OB_SUCCESS : ret;
+src/share/ob_time_zone_info_manager.cpp	424	ObTimeZoneInfoManager::find_time_zone_info	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/share/object/ob_obj_cast.cpp	430	get_cast_ret	ret == OB_ERR_UNEXPECTED_TZ_TRANSITION	if (OB_UNLIKELY(OB_ERR_UNEXPECTED_TZ_TRANSITION == ret)
+src/share/object/ob_obj_cast.cpp	431	get_cast_ret	ret == OB_ERR_UNKNOWN_TIME_ZONE	|| OB_UNLIKELY(OB_ERR_UNKNOWN_TIME_ZONE == ret)) {
+src/share/object/ob_obj_cast.cpp	452	#define SET_RES_OBJ	other variable params.warning_ == OB_ERR_TRUNCATED_WRONG_VALUE	|| OB_ERR_TRUNCATED_WRONG_VALUE == params.warning_              \
+src/share/object/ob_obj_cast.cpp	453	#define SET_RES_OBJ	other variable params.warning_ == OB_DATA_OUT_OF_RANGE	|| OB_DATA_OUT_OF_RANGE == params.warning_                      \
+src/share/object/ob_obj_cast.cpp	454	#define SET_RES_OBJ	other variable params.warning_ == OB_ERR_DATA_TRUNCATED	|| OB_ERR_DATA_TRUNCATED == params.warning_                     \
+src/share/object/ob_obj_cast.cpp	455	#define SET_RES_OBJ	other variable params.warning_ == OB_ERR_DOUBLE_TRUNCATED	|| OB_ERR_DOUBLE_TRUNCATED == params.warning_                   \
+src/share/object/ob_obj_cast.cpp	456	#define SET_RES_OBJ	other variable params.warning_ == OB_ERR_TRUNCATED_WRONG_VALUE_FOR_FIELD	|| OB_ERR_TRUNCATED_WRONG_VALUE_FOR_FIELD == params.warning_) { \
+src/share/object/ob_obj_cast.cpp	1479	common_build_geometry	ret == OB_ERR_GIS_INVALID_DATA	if (OB_ERR_GIS_INVALID_DATA == ret && OB_NOT_NULL(cast_name)) {
+src/share/object/ob_obj_cast.cpp	1481	common_build_geometry	ret == OB_ERR_GEOMETRY_PARAM_LONGITUDE_OUT_OF_RANGE	} else if (OB_ERR_GEOMETRY_PARAM_LONGITUDE_OUT_OF_RANGE == ret && OB_NOT_NULL(cast_name)) {
+src/share/object/ob_obj_cast.cpp	1487	common_build_geometry	ret == OB_ERR_GEOMETRY_PARAM_LATITUDE_OUT_OF_RANGE	} else if (OB_ERR_GEOMETRY_PARAM_LATITUDE_OUT_OF_RANGE == ret && OB_NOT_NULL(cast_name)) {
+src/share/object/ob_obj_cast.cpp	3657	datetime_datetime	ret == OB_ERR_UNEXPECTED_TZ_TRANSITION	ret = OB_ERR_UNEXPECTED_TZ_TRANSITION == ret ? OB_INVALID_DATE_VALUE : ret;
+src/share/object/ob_obj_cast.cpp	3688	mdatetime_datetime	ret == OB_ERR_UNEXPECTED_TZ_TRANSITION	ret = OB_ERR_UNEXPECTED_TZ_TRANSITION == ret ? OB_INVALID_DATE_VALUE : ret;
+src/share/object/ob_obj_cast.cpp	3717	datetime_mdatetime	ret == OB_ERR_UNEXPECTED_TZ_TRANSITION	ret = OB_ERR_UNEXPECTED_TZ_TRANSITION == ret ? OB_INVALID_DATE_VALUE : ret;
+src/share/object/ob_obj_cast.cpp	5725	string_double	ret == OB_ERR_DATA_TRUNCATED	if (CM_IS_COLUMN_CONVERT(cast_mode) && ret == OB_ERR_DATA_TRUNCATED) {
+src/share/object/ob_obj_cast.cpp	5780	string_number	ret == OB_NUMERIC_OVERFLOW	if (ret == OB_NUMERIC_OVERFLOW) {
+src/share/object/ob_obj_cast.cpp	5798	string_number	ret == OB_INVALID_NUMERIC	} else if (OB_INVALID_NUMERIC == ret
+src/share/object/ob_obj_cast.cpp	5846	common_string_datetime	ret == OB_ERR_UNEXPECTED_TZ_TRANSITION	if (ret == OB_ERR_UNEXPECTED_TZ_TRANSITION && CM_IS_WARN_ON_FAIL(cast_mode)) {
+src/share/object/ob_obj_cast.cpp	6296	string_set	ret == OB_ERR_DATA_TRUNCATED	(OB_ERR_DATA_TRUNCATED == ret
+src/share/object/ob_obj_cast.cpp	6297	string_set	other variable params.warning_ == OB_ERR_DATA_TRUNCATED	|| (params.warning_ == OB_ERR_DATA_TRUNCATED && CM_IS_WARN_ON_FAIL(cast_mode)))) {
+src/share/object/ob_obj_cast.cpp	8465	json_year	other variable params.warning_ == OB_DATA_OUT_OF_RANGE	if (params.warning_ == OB_DATA_OUT_OF_RANGE) {
+src/share/object/ob_obj_cast.cpp	9002	geometry_geometry	ret == OB_ERR_GIS_INVALID_DATA	if (OB_ERR_GIS_INVALID_DATA == ret) {
+src/share/object/ob_obj_cast.cpp	9004	geometry_geometry	ret == OB_ERR_GEOMETRY_PARAM_LONGITUDE_OUT_OF_RANGE	} else if (OB_ERR_GEOMETRY_PARAM_LONGITUDE_OUT_OF_RANGE == ret) {
+src/share/object/ob_obj_cast.cpp	9010	geometry_geometry	ret == OB_ERR_GEOMETRY_PARAM_LATITUDE_OUT_OF_RANGE	} else if (OB_ERR_GEOMETRY_PARAM_LATITUDE_OUT_OF_RANGE == ret) {
+src/share/object/ob_obj_cast.cpp	9899	string_decimalint	ret == OB_NUMERIC_OVERFLOW	if (OB_NUMERIC_OVERFLOW == ret) {
+src/share/object/ob_obj_cast.cpp	9923	string_decimalint	ret == OB_INVALID_NUMERIC	} else if (OB_INVALID_NUMERIC == ret && OB_NOT_NULL(params.runtime_)) {
+src/share/object/ob_obj_cast.cpp	11511	string_length_check	other variable params.warning_ == OB_ERR_DATA_TOO_LONG	if (OB_UNLIKELY(OB_ERR_DATA_TOO_LONG == params.warning_)) {
+src/share/object/ob_obj_cast.cpp	12142	ObObjCaster::is_order_consistent	ret == OB_CANT_AGGREGATE_2COLLATIONS	if (OB_CANT_AGGREGATE_2COLLATIONS == ret) {
+src/share/object/ob_obj_cast.cpp	14250	ObGeoCastUtils::geo_cast_error_handle	other variable err_code == OB_ERR_INVALID_CAST_TO_GEOMETRY	if (OB_ERR_INVALID_CAST_TO_GEOMETRY == err_code) {
+src/share/object/ob_obj_cast.cpp	14254	ObGeoCastUtils::geo_cast_error_handle	other variable err_code == OB_ERR_GEOMETRY_PARAM_LONGITUDE_OUT_OF_RANGE	} else if (OB_ERR_GEOMETRY_PARAM_LONGITUDE_OUT_OF_RANGE == err_code) {
+src/share/object/ob_obj_cast.cpp	14260	ObGeoCastUtils::geo_cast_error_handle	other variable err_code == OB_ERR_GEOMETRY_PARAM_LATITUDE_OUT_OF_RANGE	} else if (OB_ERR_GEOMETRY_PARAM_LATITUDE_OUT_OF_RANGE == err_code) {
+src/share/object/ob_obj_cast.cpp	14266	ObGeoCastUtils::geo_cast_error_handle	other variable err_code == OB_ERR_GIS_INVALID_DATA	} else if (OB_ERR_GIS_INVALID_DATA == err_code) {
+src/share/object/ob_obj_cast.cpp	14268	ObGeoCastUtils::geo_cast_error_handle	other variable err_code == OB_ERR_INVALID_CAST_POLYGON_RING_DIRECTION	} else if (OB_ERR_INVALID_CAST_POLYGON_RING_DIRECTION == err_code) {
+src/share/redolog/ob_log_file_handler.cpp	218	ObLogFileHandler::inner_read	ret == OB_DATA_OUT_OF_RANGE	if (OB_DATA_OUT_OF_RANGE == ret && io_handle.get_data_size() < io_info.size_) { // partial read
+src/share/redolog/ob_log_file_handler.cpp	233	ObLogFileHandler::inner_read	ret == OB_DATA_OUT_OF_RANGE	} else if (OB_DATA_OUT_OF_RANGE == ret) {
+src/share/redolog/ob_log_file_handler.cpp	236	ObLogFileHandler::inner_read	ret == OB_ALLOCATE_MEMORY_FAILED	} else if (OB_ALLOCATE_MEMORY_FAILED == ret) {
+src/share/redolog/ob_log_file_handler.cpp	254	ObLogFileHandler::unlink	ret != OB_NO_SUCH_FILE_OR_DIRECTORY	if (OB_FAIL(LOCAL_DEVICE_INSTANCE.unlink(file_path)) && OB_NO_SUCH_FILE_OR_DIRECTORY != ret) {
+src/share/redolog/ob_log_file_handler.cpp	257	ObLogFileHandler::unlink	ret == OB_NO_SUCH_FILE_OR_DIRECTORY	} else if (OB_NO_SUCH_FILE_OR_DIRECTORY == ret) {
+src/share/redolog/ob_log_file_handler.cpp	323	ObLogFileHandler::open	ret == OB_TIMEOUT; ret == OB_EAGAIN; ret == OB_SERVER_OUTOF_DISK_SPACE	if (OB_TIMEOUT == ret || OB_EAGAIN == ret || OB_SERVER_OUTOF_DISK_SPACE == ret) {
+src/share/redolog/ob_log_file_reader.cpp	256	ObLogFileReader2::evict_fd_from_map	ret != OB_HASH_NOT_EXIST	} else if (OB_FAIL(quick_map_.erase_refactored(fd_key, &target)) && OB_HASH_NOT_EXIST != ret) {
+src/share/redolog/ob_log_file_reader.cpp	257	ObLogFileReader2::evict_fd_from_map	ret == OB_HASH_NOT_EXIST	} else if (OB_HASH_NOT_EXIST == ret) {
+src/share/redolog/ob_log_file_reader.cpp	321	ObLogFileReader2::get_fd	ret != OB_HASH_NOT_EXIST	if (OB_FAIL(try_get_cache(fd_key, ret_item)) && OB_HASH_NOT_EXIST != ret) {
+src/share/redolog/ob_log_file_reader.cpp	399	ObLogFileReader2::do_clear_work	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/share/redolog/ob_log_file_reader.cpp	448	ObLogFileReader2::put_new_item	ret != OB_HASH_EXIST	&& OB_HASH_EXIST != ret) {
+src/share/redolog/ob_log_file_reader.cpp	449	ObLogFileReader2::put_new_item	ret == OB_HASH_EXIST	} else if (OB_HASH_EXIST == ret) {
+src/share/redolog/ob_log_file_reader.cpp	496	ObLogFileReader2::try_get_cache	ret != OB_HASH_NOT_EXIST	&& OB_HASH_NOT_EXIST != ret) {
+src/share/redolog/ob_log_file_reader.cpp	497	ObLogFileReader2::try_get_cache	ret == OB_HASH_NOT_EXIST	} else if (OB_HASH_NOT_EXIST == ret) {
+src/share/resource_limit_calculator/ob_resource_limit_calculator.cpp	292	ObResourceLimitCalculator::get_runtime_logical_resource	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/share/resource_limit_calculator/ob_resource_limit_calculator.cpp	297	ObResourceLimitCalculator::get_runtime_logical_resource	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/share/schema/ob_ai_model_mgr.cpp	210	ObAiModelMgr::get_ai_model_schema	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/share/schema/ob_ai_model_mgr.cpp	238	ObAiModelMgr::get_ai_model_schema	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/share/schema/ob_ai_model_mgr.cpp	322	ObAiModelMgr::del_ai_model	other variable hash_ret != OB_HASH_NOT_EXIST	ret = OB_HASH_NOT_EXIST != hash_ret ? hash_ret : ret;
+src/share/schema/ob_ai_model_mgr.cpp	324	ObAiModelMgr::del_ai_model	other variable hash_ret != OB_HASH_NOT_EXIST	ret = OB_HASH_NOT_EXIST != hash_ret ? hash_ret : ret;
+src/share/schema/ob_ddl_epoch.cpp	152	ObDDLEpochMgr::promote_ddl_epoch	ret == OB_ENTRY_NOT_EXIST	if (ret == OB_ENTRY_NOT_EXIST) {
+src/share/schema/ob_ddl_epoch.cpp	196	ObDDLEpochMgr::promote_ddl_epoch_inner_	ret == OB_ITER_END	if (ret == OB_ITER_END) {
+src/share/schema/ob_ddl_epoch.cpp	230	ObDDLEpochMgr::check_and_lock_ddl_epoch	ret == OB_ERR_NULL_VALUE	if (OB_ERR_NULL_VALUE == ret) {
+src/share/schema/ob_dependency_info.cpp	418	ObDependencyInfo::collect_ref_infos	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/share/schema/ob_dependency_info.cpp	455	ObDependencyInfo::collect_dep_infos	ret != OB_ITER_END	if (OB_UNLIKELY(OB_ITER_END != ret)) {
+src/share/schema/ob_dependency_info.cpp	514	ObDependencyInfo::collect_all_dep_objs_inner	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/share/schema/ob_dependency_info.cpp	596	ObDependencyInfo::collect_all_dep_objs	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/share/schema/ob_dependency_info.cpp	1012	ObReferenceObjTable::get_or_add_def_obj_item	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/share/schema/ob_error_info.cpp	315	ObErrorInfo::get_error_obj_seq	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/share/schema/ob_latest_schema_guard.cpp	47	ObLatestSchemaGuard::check_inner_stat_	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/share/schema/ob_latest_schema_guard.cpp	85	ObLatestSchemaGuard::get_schema_	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/share/schema/ob_mock_fk_parent_table_mgr.cpp	202	ObMockFKParentTableMgr::rebuild_mock_fk_parent_table_hashmap	other variable hash_ret == OB_HASH_EXIST	ret = OB_HASH_EXIST == hash_ret ? OB_SUCCESS : hash_ret;
+src/share/schema/ob_mock_fk_parent_table_mgr.cpp	287	ObMockFKParentTableMgr::del_mock_fk_parent_table	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/share/schema/ob_mock_fk_parent_table_mgr.cpp	300	ObMockFKParentTableMgr::del_mock_fk_parent_table	other variable hash_ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == hash_ret) {
+src/share/schema/ob_mock_fk_parent_table_mgr.cpp	455	ObMockFKParentTableMgr::get_mock_fk_parent_table_schema_with_name	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/share/schema/ob_multi_version_schema_service.cpp	373	ObMultiVersionSchemaService::get_schema	ret != OB_ENTRY_NOT_EXIST	if (ret != OB_ENTRY_NOT_EXIST) {
+src/share/schema/ob_multi_version_schema_service.cpp	427	ObMultiVersionSchemaService::get_schema	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/share/schema/ob_multi_version_schema_service.cpp	445	ObMultiVersionSchemaService::get_schema	ret != OB_ENTRY_NOT_EXIST	if (ret != OB_ENTRY_NOT_EXIST) {
+src/share/schema/ob_multi_version_schema_service.cpp	719	ObMultiVersionSchemaService::get_runtime_schema_guard_with_version_in_inner_table	ret == OB_SCHEMA_EAGAIN	if (OB_SCHEMA_EAGAIN == ret) {
+src/share/schema/ob_multi_version_schema_service.cpp	756	ObMultiVersionSchemaService::construct_fallback_schema_mgr_	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/share/schema/ob_multi_version_schema_service.cpp	768	ObMultiVersionSchemaService::construct_fallback_schema_mgr_	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/share/schema/ob_multi_version_schema_service.cpp	857	ObMultiVersionSchemaService::add_schema_mgr_info	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/share/schema/ob_multi_version_schema_service.cpp	902	ObMultiVersionSchemaService::retry_get_schema_guard	ret != OB_SCHEMA_EAGAIN	if (OB_SCHEMA_EAGAIN != ret) {
+src/share/schema/ob_multi_version_schema_service.cpp	905	ObMultiVersionSchemaService::retry_get_schema_guard	ret != OB_SCHEMA_EAGAIN; ret != OB_NOT_INIT	if (OB_SCHEMA_EAGAIN != ret && OB_NOT_INIT != ret) {
+src/share/schema/ob_multi_version_schema_service.cpp	936	ObMultiVersionSchemaService::retry_get_schema_guard	ret != OB_HASH_NOT_EXIST	if (OB_SUCCESS != ret && OB_HASH_NOT_EXIST != ret) {
+src/share/schema/ob_multi_version_schema_service.cpp	937	ObMultiVersionSchemaService::retry_get_schema_guard	ret == OB_HASH_NOT_EXIST	} else if (OB_HASH_NOT_EXIST == ret) { // overwrite ret
+src/share/schema/ob_multi_version_schema_service.cpp	960	ObMultiVersionSchemaService::retry_get_schema_guard	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/share/schema/ob_multi_version_schema_service.cpp	982	ObMultiVersionSchemaService::retry_get_schema_guard	ret != OB_SCHEMA_EAGAIN	if (OB_SCHEMA_EAGAIN != ret) {
+src/share/schema/ob_multi_version_schema_service.cpp	985	ObMultiVersionSchemaService::retry_get_schema_guard	ret != OB_SCHEMA_EAGAIN; ret != OB_NOT_INIT	if (OB_SCHEMA_EAGAIN != ret && OB_NOT_INIT != ret) {
+src/share/schema/ob_multi_version_schema_service.cpp	1538	ObMultiVersionSchemaService::async_refresh_schema	ret == OB_EAGAIN; ret == OB_SIZE_OVERFLOW	if (OB_EAGAIN == ret || OB_SIZE_OVERFLOW == ret) {
+src/share/schema/ob_multi_version_schema_service.cpp	1947	ObMultiVersionSchemaService::try_gc_another_allocator	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/share/schema/ob_multi_version_schema_service.cpp	2015	ObMultiVersionSchemaService::try_gc_current_allocator	ret == OB_EAGAIN; ret == OB_ENTRY_NOT_EXIST	if (OB_EAGAIN == ret || OB_ENTRY_NOT_EXIST == ret) {
+src/share/schema/ob_multi_version_schema_service.cpp	2115	ObMultiVersionSchemaService::try_gc_allocator_when_add_schema_	ret == OB_EAGAIN; ret == OB_ENTRY_NOT_EXIST	if (OB_EAGAIN == ret || OB_ENTRY_NOT_EXIST == ret) {
+src/share/schema/ob_multi_version_schema_service.cpp	2314	ObMultiVersionSchemaService::get_schema_version_history	other variable hash_ret == OB_HASH_NOT_EXIST	if (hash_ret == OB_HASH_NOT_EXIST || schema_version > val.snapshot_version_) {
+src/share/schema/ob_multi_version_schema_service.cpp	2436	ObMultiVersionSchemaService::get_tablet_to_table_history	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/share/schema/ob_multi_version_schema_service.cpp	2488	ObMultiVersionSchemaService::get_tablet_to_table_history	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/share/schema/ob_multi_version_schema_service.cpp	2825	ObMultiVersionSchemaService::batch_fetch_tablet_to_table_history_	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/share/schema/ob_outline_mgr.cpp	295	ObOutlineMgr::add_outline	other variable hash_ret != OB_HASH_EXIST	if (OB_SUCCESS != hash_ret && OB_HASH_EXIST != hash_ret) {
+src/share/schema/ob_outline_mgr.cpp	304	ObOutlineMgr::add_outline	other variable hash_ret != OB_HASH_EXIST	if (OB_SUCCESS != hash_ret && OB_HASH_EXIST != hash_ret) {
+src/share/schema/ob_outline_mgr.cpp	315	ObOutlineMgr::add_outline	other variable hash_ret != OB_HASH_EXIST	if (OB_SUCCESS != hash_ret && OB_HASH_EXIST != hash_ret) {
+src/share/schema/ob_outline_mgr.cpp	325	ObOutlineMgr::add_outline	other variable hash_ret != OB_HASH_EXIST	if (OB_SUCCESS != hash_ret && OB_HASH_EXIST != hash_ret) {
+src/share/schema/ob_package_mgr.cpp	215	ObPackageMgr::add_package	other variable hash_ret != OB_HASH_EXIST	if (OB_SUCCESS != hash_ret && OB_HASH_EXIST != hash_ret) {
+src/share/schema/ob_package_mgr.cpp	223	ObPackageMgr::add_package	other variable hash_ret != OB_HASH_EXIST	if (OB_SUCCESS != hash_ret && OB_HASH_EXIST != hash_ret) {
+src/share/schema/ob_part_mgr_util.cpp	63	ObPartGetter::get_part_ids	ret == OB_ITER_END	if (OB_LIKELY(OB_ITER_END == ret)) {
+src/share/schema/ob_part_mgr_util.cpp	74	ObPartGetter::get_part_ids	ret == OB_ITER_END	if (!find && OB_ITER_END == ret) {
+src/share/schema/ob_part_mgr_util.cpp	104	ObPartGetter::get_subpart_ids	ret == OB_ITER_END	if (!find && OB_ITER_END == ret) {
+src/share/schema/ob_part_mgr_util.cpp	137	ObPartGetter::get_subpart_ids_in_partition	ret == OB_ITER_END	if (!find && OB_ITER_END == ret) {
+src/share/schema/ob_partition_schema_iter.cpp	144	ObPartitionSchemaIter::next_tablet_id	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/share/schema/ob_partition_schema_iter.cpp	177	ObPartitionSchemaIter::next_partition_info	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/share/schema/ob_partition_schema_iter.cpp	201	ObPartitionSchemaIter::next_partition_info	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/share/schema/ob_partition_schema_iter.cpp	203	ObPartitionSchemaIter::next_partition_info	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/share/schema/ob_partition_schema_iter.cpp	215	ObPartitionSchemaIter::next_partition_info	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/share/schema/ob_priv_mgr.cpp	564	ObPrivMgr::add_table_priv	other variable hash_ret != OB_HASH_EXIST	if (OB_SUCCESS != hash_ret && OB_HASH_EXIST != hash_ret) {
+src/share/schema/ob_priv_mgr.cpp	625	ObPrivMgr::add_routine_priv	other variable hash_ret != OB_HASH_EXIST	if (OB_SUCCESS != hash_ret && OB_HASH_EXIST != hash_ret) {
+src/share/schema/ob_priv_mgr.cpp	714	ObPrivMgr::del_column_priv	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/share/schema/ob_priv_mgr.cpp	735	ObPrivMgr::del_column_priv	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/share/schema/ob_priv_mgr.cpp	817	ObPrivMgr::add_obj_priv	other variable hash_ret != OB_HASH_EXIST	if (OB_SUCCESS != hash_ret && OB_HASH_EXIST != hash_ret) {
+src/share/schema/ob_priv_mgr.cpp	871	ObPrivMgr::del_routine_priv	other variable hash_ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != hash_ret) {
+src/share/schema/ob_priv_mgr.cpp	979	ObPrivMgr::get_routine_priv	other variable hash_ret != OB_HASH_NOT_EXIST	} else if (OB_HASH_NOT_EXIST != hash_ret) {
+src/share/schema/ob_priv_mgr.cpp	1672	ObPrivMgr::add_obj_mysql_priv	other variable hash_ret != OB_HASH_EXIST	if (OB_SUCCESS != hash_ret && OB_HASH_EXIST != hash_ret) {
+src/share/schema/ob_priv_mgr.cpp	1726	ObPrivMgr::get_obj_mysql_priv	other variable hash_ret != OB_HASH_NOT_EXIST	} else if (OB_HASH_NOT_EXIST != hash_ret) {
+src/share/schema/ob_priv_sql_service.cpp	355	ObPrivSqlService::gen_delete_routine_priv_sql	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/share/schema/ob_routine_mgr.cpp	244	ObRoutineMgr::add_routine	other variable hash_ret != OB_HASH_EXIST	if (OB_SUCCESS != hash_ret && OB_HASH_EXIST != hash_ret) {
+src/share/schema/ob_routine_mgr.cpp	254	ObRoutineMgr::add_routine	other variable hash_ret != OB_HASH_EXIST	if (OB_SUCCESS != hash_ret && OB_HASH_EXIST != hash_ret) {
+src/share/schema/ob_schema_cache.cpp	423	ObSchemaCache::get_schema	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/share/schema/ob_schema_cache.cpp	504	ObSchemaCache::get_tablet_cache	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/share/schema/ob_schema_cache.cpp	547	ObSchemaCache::get_schema_history_cache	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/share/schema/ob_schema_cache.cpp	637	ObSchemaFetcher::fetch_schema	ret == OB_SCHEMA_EAGAIN	if (OB_SCHEMA_EAGAIN == ret) {
+src/share/schema/ob_schema_cache.cpp	770	ObSchemaFetcher::fetch_schema	ret == OB_CONNECT_ERROR	retry = (OB_CONNECT_ERROR == ret) && retry_times++ < RETRY_TIMES_MAX;
+src/share/schema/ob_schema_getter_guard.cpp	316	ObSchemaGetterGuard::get_system_variable	ret != OB_ERR_SYS_VARIABLE_UNKNOWN	if (OB_ERR_SYS_VARIABLE_UNKNOWN != ret) {
+src/share/schema/ob_schema_getter_guard.cpp	332	ObSchemaGetterGuard::get_system_variable	ret != OB_ERR_SYS_VARIABLE_UNKNOWN	if (OB_ERR_SYS_VARIABLE_UNKNOWN != ret) {
+src/share/schema/ob_schema_getter_guard.cpp	2314	ObSchemaGetterGuard::get_schema	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/share/schema/ob_schema_getter_guard_priv.cpp	418	ObSchemaGetterGuard::check_user_priv	ret == OB_ERR_NO_PRIVILEGE	if (OB_ERR_NO_PRIVILEGE == ret) {
+src/share/schema/ob_schema_getter_guard_priv.cpp	539	ObSchemaGetterGuard::check_single_table_priv	ret == OB_ERR_NO_TABLE_PRIVILEGE	if (OB_ERR_NO_TABLE_PRIVILEGE == ret) {
+src/share/schema/ob_schema_getter_guard_priv.cpp	564	ObSchemaGetterGuard::check_single_table_priv	ret == OB_ERR_NO_COLUMN_PRIVILEGE	if (OB_ERR_NO_COLUMN_PRIVILEGE == ret) {
+src/share/schema/ob_schema_getter_guard_priv.cpp	578	ObSchemaGetterGuard::check_single_table_priv	ret == OB_ERR_NO_TABLE_PRIVILEGE	if (OB_ERR_NO_TABLE_PRIVILEGE == ret) {
+src/share/schema/ob_schema_getter_guard_priv.cpp	616	ObSchemaGetterGuard::check_single_table_priv	ret == OB_ERR_NO_COLUMN_PRIVILEGE	if (OB_ERR_NO_COLUMN_PRIVILEGE == ret) {
+src/share/schema/ob_schema_getter_guard_priv.cpp	630	ObSchemaGetterGuard::check_single_table_priv	ret == OB_ERR_NO_COLUMN_PRIVILEGE	if (ret == OB_ERR_NO_COLUMN_PRIVILEGE) {
+src/share/schema/ob_schema_getter_guard_priv.cpp	788	ObSchemaGetterGuard::check_routine_priv	ret == OB_ERR_NO_ROUTINE_PRIVILEGE	if (OB_ERR_NO_ROUTINE_PRIVILEGE == ret) {
+src/share/schema/ob_schema_getter_guard_priv.cpp	861	ObSchemaGetterGuard::check_db_priv	ret == OB_ERR_NO_DB_PRIVILEGE	if (OB_ERR_NO_DB_PRIVILEGE == ret) {

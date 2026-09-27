@@ -1,98 +1,300 @@
 file	line	symbol	construct	text
-src/rootserver/ddl_task/ob_ddl_redefinition_task.cpp	575	ObDDLRedefinitionTask::check_data_dest_tables_columns_checksum	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
-src/rootserver/ddl_task/ob_ddl_redefinition_task.cpp	663	ObDDLRedefinitionTask::add_constraint_ddl_task	ret == OB_ENTRY_EXIST	if (OB_ENTRY_EXIST == ret) {
-src/rootserver/ddl_task/ob_ddl_redefinition_task.cpp	674	ObDDLRedefinitionTask::add_constraint_ddl_task	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
-src/rootserver/ddl_task/ob_ddl_redefinition_task.cpp	767	ObDDLRedefinitionTask::add_fk_ddl_task	ret == OB_ENTRY_EXIST	if (OB_ENTRY_EXIST == ret) {
-src/rootserver/ddl_task/ob_ddl_redefinition_task.cpp	778	ObDDLRedefinitionTask::add_fk_ddl_task	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
-src/rootserver/ddl_task/ob_ddl_redefinition_task.cpp	807	ObDDLRedefinitionTask::on_child_task_finish	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
-src/rootserver/ddl_task/ob_ddl_redefinition_task.cpp	1198	ObDDLRedefinitionTask::is_stats_sync_lock_conflict	ret == OB_ERR_EXCLUSIVE_LOCK_CONFLICT	return OB_ERR_EXCLUSIVE_LOCK_CONFLICT == ret
-src/rootserver/ddl_task/ob_ddl_redefinition_task.cpp	1199	ObDDLRedefinitionTask::is_stats_sync_lock_conflict	ret == OB_ERR_SHARED_LOCK_CONFLICT	|| OB_ERR_SHARED_LOCK_CONFLICT == ret
-src/rootserver/ddl_task/ob_ddl_redefinition_task.cpp	1200	ObDDLRedefinitionTask::is_stats_sync_lock_conflict	ret == OB_TRY_LOCK_ROW_CONFLICT	|| OB_TRY_LOCK_ROW_CONFLICT == ret
-src/rootserver/ddl_task/ob_ddl_redefinition_task.cpp	1201	ObDDLRedefinitionTask::is_stats_sync_lock_conflict	ret == OB_ERR_EXCLUSIVE_LOCK_CONFLICT_NOWAIT	|| OB_ERR_EXCLUSIVE_LOCK_CONFLICT_NOWAIT == ret;
-src/rootserver/ddl_task/ob_ddl_redefinition_task.cpp	1404	ObDDLRedefinitionTask::sync_column_level_stats_info	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
-src/rootserver/ddl_task/ob_ddl_redefinition_task.cpp	1700	ObDDLRedefinitionTask::check_need_rebuild_constraint	call result new_constraints_id_set.exist_refactored(constraint_id) == OB_HASH_NOT_EXIST	need_rebuild_constraint = OB_HASH_NOT_EXIST == new_constraints_id_set.exist_refactored(constraint_id) ?
-src/rootserver/ddl_task/ob_ddl_redefinition_task.cpp	1975	ObDDLRedefinitionTask::reap_old_local_build_task	ret != OB_EAGAIN	if (OB_EAGAIN != ret) {
-src/rootserver/ddl_task/ob_ddl_redefinition_task.h	92	ObSyncTabletAutoincSeqCtx::is_error_need_retry	other variable ret_code == OB_TIMEOUT; other variable ret_code == OB_TABLET_NOT_EXIST; other variable ret_code == OB_NOT_MASTER	return common::OB_TIMEOUT == ret_code || common::OB_TABLET_NOT_EXIST == ret_code || common::OB_NOT_MASTER == ret_code ||
-src/rootserver/ddl_task/ob_ddl_redefinition_task.h	93	ObSyncTabletAutoincSeqCtx::is_error_need_retry	other variable ret_code == OB_EAGAIN; other variable ret_code == OB_LS_NOT_EXIST	common::OB_EAGAIN == ret_code || common::OB_LS_NOT_EXIST == ret_code ||
-src/rootserver/ddl_task/ob_ddl_redefinition_task.h	94	ObSyncTabletAutoincSeqCtx::is_error_need_retry	other variable ret_code == OB_MAPPING_BETWEEN_TABLET_AND_LS_NOT_EXIST	common::OB_MAPPING_BETWEEN_TABLET_AND_LS_NOT_EXIST == ret_code;
-src/rootserver/ddl_task/ob_ddl_retry_task.cpp	341	ObDDLRetryTask::drop_schema	ret == OB_TRY_LOCK_ROW_CONFLICT	if (OB_TRY_LOCK_ROW_CONFLICT == ret) {
-src/rootserver/ddl_task/ob_ddl_retry_task.h	64	ObDDLRetryTask::is_error_need_retry	other variable ret_code != OB_PARTITION_NOT_EXIST	return common::OB_PARTITION_NOT_EXIST != ret_code && ObDDLTask::is_error_need_retry(ret_code);
-src/rootserver/ddl_task/ob_ddl_scheduler.cpp	100	ObDDLTaskQueue::push_task	ret == OB_HASH_EXIST	if (common::OB_HASH_EXIST == ret) {
-src/rootserver/ddl_task/ob_ddl_scheduler.cpp	107	ObDDLTaskQueue::push_task	ret == OB_HASH_EXIST	if (common::OB_HASH_EXIST == ret) {
-src/rootserver/ddl_task/ob_ddl_scheduler.cpp	191	ObDDLTaskQueue::modify_task	ret == OB_HASH_NOT_EXIST	ret = OB_HASH_NOT_EXIST == ret ? OB_ENTRY_NOT_EXIST : ret;
-src/rootserver/ddl_task/ob_ddl_scheduler.cpp	211	ObDDLTaskQueue::modify_task	ret == OB_HASH_NOT_EXIST	ret = OB_HASH_NOT_EXIST == ret ? OB_ENTRY_NOT_EXIST : ret;
-src/rootserver/ddl_task/ob_ddl_scheduler.cpp	230	ObDDLTaskQueue::get_task	ret == OB_HASH_NOT_EXIST	ret = OB_HASH_NOT_EXIST == ret ? OB_ENTRY_NOT_EXIST : ret;
-src/rootserver/ddl_task/ob_ddl_scheduler.cpp	255	ObDDLTaskQueue::update_task_copy_deps_setting	ret == OB_HASH_NOT_EXIST	ret = OB_HASH_NOT_EXIST == ret ? OB_ENTRY_NOT_EXIST : ret;
-src/rootserver/ddl_task/ob_ddl_scheduler.cpp	280	ObDDLTaskQueue::update_task_process_schedulable	ret == OB_HASH_NOT_EXIST	ret = OB_HASH_NOT_EXIST == ret ? OB_ENTRY_NOT_EXIST : ret;
-src/rootserver/ddl_task/ob_ddl_scheduler.cpp	300	ObDDLTaskQueue::update_task_ret_code	ret == OB_HASH_NOT_EXIST	ret = OB_HASH_NOT_EXIST == ret ? OB_ENTRY_NOT_EXIST : ret;
-src/rootserver/ddl_task/ob_ddl_scheduler.cpp	327	ObDDLTaskQueue::abort_task	ret == OB_HASH_NOT_EXIST	ret = OB_HASH_NOT_EXIST == ret ? OB_ENTRY_NOT_EXIST : ret;
-src/rootserver/ddl_task/ob_ddl_scheduler.cpp	461	ObRedefCallback::modify_info	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
-src/rootserver/ddl_task/ob_ddl_scheduler.cpp	937	ObDDLScheduler::do_work	ret == OB_ENTRY_NOT_EXIST	if (common::OB_ENTRY_NOT_EXIST == ret) {
-src/rootserver/ddl_task/ob_ddl_scheduler.cpp	953	ObDDLScheduler::do_work	ret == OB_STATE_NOT_MATCH	if (OB_STATE_NOT_MATCH == ret) {
-src/rootserver/ddl_task/ob_ddl_scheduler.cpp	968	ObDDLScheduler::do_work	ret == OB_STATE_NOT_MATCH	if (OB_STATE_NOT_MATCH == ret) {
-src/rootserver/ddl_task/ob_ddl_scheduler.cpp	1008	ObDDLScheduler::create_ddl_task	ret != OB_NOT_SUPPORTED	if (OB_NOT_SUPPORTED != ret) {
-src/rootserver/ddl_task/ob_ddl_scheduler.cpp	1298	ObDDLScheduler::add_sys_task	ret == OB_ENTRY_EXIST	if (OB_ENTRY_EXIST == ret) {
-src/rootserver/ddl_task/ob_ddl_scheduler.cpp	1381	ObDDLScheduler::get_task_record	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
-src/rootserver/ddl_task/ob_ddl_scheduler.cpp	1424	ObDDLScheduler::modify_redef_task	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
-src/rootserver/ddl_task/ob_ddl_scheduler.cpp	2309	ObDDLScheduler::insert_task_record	ret == OB_ERR_PRIMARY_KEY_DUPLICATE	if (OB_ERR_PRIMARY_KEY_DUPLICATE == ret) {
-src/rootserver/ddl_task/ob_ddl_scheduler.cpp	2401	ObDDLScheduler::remove_inactive_ddl_task	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
-src/rootserver/ddl_task/ob_ddl_scheduler.cpp	2511	ObDDLScheduler::schedule_ddl_task	ret == OB_ENTRY_EXIST	if (OB_ENTRY_EXIST == ret) {
-src/rootserver/ddl_task/ob_ddl_scheduler.cpp	2529	ObDDLScheduler::schedule_build_fts_index_task	ret != OB_ENTRY_EXIST	if (OB_ENTRY_EXIST != ret) {
-src/rootserver/ddl_task/ob_ddl_scheduler.cpp	2551	ObDDLScheduler::schedule_build_vec_ivf_index_task	ret != OB_ENTRY_EXIST	if (OB_ENTRY_EXIST != ret) {
-src/rootserver/ddl_task/ob_ddl_scheduler.cpp	2573	ObDDLScheduler::schedule_build_vec_index_task	ret != OB_ENTRY_EXIST	if (OB_ENTRY_EXIST != ret) {
-src/rootserver/ddl_task/ob_ddl_scheduler.cpp	2596	ObDDLScheduler::schedule_build_index_task	ret != OB_ENTRY_EXIST	if (OB_ENTRY_EXIST != ret) {
-src/rootserver/ddl_task/ob_ddl_scheduler.cpp	2669	ObDDLScheduler::schedule_drop_primary_key_task	ret != OB_ENTRY_EXIST	if (OB_ENTRY_EXIST != ret) {
-src/rootserver/ddl_task/ob_ddl_scheduler.cpp	2693	ObDDLScheduler::schedule_table_redefinition_task	ret != OB_ENTRY_EXIST	if (OB_ENTRY_EXIST != ret) {
-src/rootserver/ddl_task/ob_ddl_scheduler.cpp	2715	ObDDLScheduler::schedule_column_redefinition_task	ret != OB_ENTRY_EXIST	if (OB_ENTRY_EXIST != ret) {
-src/rootserver/ddl_task/ob_ddl_scheduler.cpp	2739	ObDDLScheduler::schedule_ddl_retry_task	ret != OB_ENTRY_EXIST	if (OB_ENTRY_EXIST != ret) {
-src/rootserver/ddl_task/ob_ddl_scheduler.cpp	2763	ObDDLScheduler::schedule_constraint_task	ret != OB_ENTRY_EXIST	if (OB_ENTRY_EXIST != ret) {
-src/rootserver/ddl_task/ob_ddl_scheduler.cpp	2787	ObDDLScheduler::schedule_modify_autoinc_task	ret != OB_ENTRY_EXIST	if (OB_ENTRY_EXIST != ret) {
-src/rootserver/ddl_task/ob_ddl_scheduler.cpp	2811	ObDDLScheduler::schedule_drop_index_task	ret != OB_ENTRY_EXIST	if (OB_ENTRY_EXIST != ret) {
-src/rootserver/ddl_task/ob_ddl_scheduler.cpp	2837	ObDDLScheduler::schedule_drop_vec_ivf_index_task	ret != OB_ENTRY_EXIST	if (OB_ENTRY_EXIST != ret) {
-src/rootserver/ddl_task/ob_ddl_scheduler.cpp	2861	ObDDLScheduler::schedule_drop_vec_index_task	ret != OB_ENTRY_EXIST	if (OB_ENTRY_EXIST != ret) {
-src/rootserver/ddl_task/ob_ddl_scheduler.cpp	2883	ObDDLScheduler::schedule_drop_fts_index_task	ret != OB_ENTRY_EXIST	if (OB_ENTRY_EXIST != ret) {
-src/rootserver/ddl_task/ob_ddl_scheduler.cpp	2904	ObDDLScheduler::schedule_drop_lob_task	ret != OB_ENTRY_EXIST	if (OB_ENTRY_EXIST != ret) {
-src/rootserver/ddl_task/ob_ddl_scheduler.cpp	2926	ObDDLScheduler::schedule_fork_table_task	ret != OB_ENTRY_EXIST	if (OB_ENTRY_EXIST != ret) {
-src/rootserver/ddl_task/ob_ddl_scheduler.cpp	2947	ObDDLScheduler::schedule_rebuild_index_task	ret != OB_ENTRY_EXIST	if (OB_ENTRY_EXIST != ret) {
-src/rootserver/ddl_task/ob_ddl_scheduler.cpp	2973	ObDDLScheduler::add_task_to_longops_mgr	ret == OB_ENTRY_EXIST	if (OB_ENTRY_EXIST == ret) {
-src/rootserver/ddl_task/ob_ddl_scheduler.cpp	3042	ObDDLScheduler::inner_schedule_ddl_task	ret != OB_ENTRY_EXIST	if (OB_ENTRY_EXIST != ret) {
-src/rootserver/ddl_task/ob_ddl_scheduler.cpp	3081	ObDDLScheduler::on_column_checksum_calc_reply	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
-src/rootserver/ddl_task/ob_ddl_scheduler.cpp	3148	ObDDLScheduler::on_sstable_complement_job_reply	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
-src/rootserver/ddl_task/ob_ddl_scheduler.cpp	3227	ObDDLScheduler::destroy_all_tasks	ret == OB_ENTRY_NOT_EXIST	if (common::OB_ENTRY_NOT_EXIST == ret) {
-src/rootserver/ddl_task/ob_ddl_tablet_scheduler.cpp	118	ObDDLTabletScheduler::init	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
-src/rootserver/ddl_task/ob_ddl_tablet_scheduler.cpp	235	ObDDLTabletScheduler::push_tablet_execution_id	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
-src/rootserver/ddl_task/ob_ddl_tablet_scheduler.cpp	557	ObDDLTabletScheduler::check_running_task_completion_status	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
-src/rootserver/ddl_task/ob_ddl_task.cpp	625	ObDDLTask::switch_status	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
-src/rootserver/ddl_task/ob_ddl_task.cpp	669	ObDDLTask::switch_status	other variable real_ret_code == OB_CANCELED	if (OB_CANCELED == real_ret_code || ObDDLTaskStatus::FAIL == task_status_) {
-src/rootserver/ddl_task/ob_ddl_task.cpp	693	ObDDLTask::refresh_schema_version	ret != OB_SCHEMA_EAGAIN	if (OB_SCHEMA_EAGAIN != ret) {
-src/rootserver/ddl_task/ob_ddl_task.cpp	730	ObDDLTask::report_error_code	ret == OB_ITER_END	if (OB_ITER_END == ret) {     // no local build error message found, use ret_code_
-src/rootserver/ddl_task/ob_ddl_task.cpp	732	ObDDLTask::report_error_code	other variable ret_code_ == OB_ERR_DUPLICATED_UNIQUE_KEY	if (false && DDL_CREATE_INDEX != task_type_ && DDL_CREATE_PARTITIONED_LOCAL_INDEX != task_type_ && OB_ERR_DUPLICATED_UNIQUE_KEY == ret_code_) {
-src/rootserver/ddl_task/ob_ddl_task.cpp	750	ObDDLTask::report_error_code	other variable error_message.ret_code_ == OB_ERR_DUPLICATED_UNIQUE_KEY	} else if (false && DDL_CREATE_INDEX != task_type_ && DDL_CREATE_PARTITIONED_LOCAL_INDEX != task_type_ && OB_ERR_DUPLICATED_UNIQUE_KEY == error_message.ret_code_) {
-src/rootserver/ddl_task/ob_ddl_task.cpp	828	ObDDLTask::wait_trans_end	ret != OB_EAGAIN	if (OB_EAGAIN != ret) {
-src/rootserver/ddl_task/ob_ddl_task.cpp	983	ObDDLTask::calc_next_schedule_ts	other variable ret_code == OB_TIMEOUT	if (OB_TIMEOUT == ret_code) {
-src/rootserver/ddl_task/ob_ddl_task.cpp	1008	ObDDLTask::is_local_build_need_retry	other variable ret_code == OB_REPLICA_NOT_READABLE	|| OB_REPLICA_NOT_READABLE == ret_code
-src/rootserver/ddl_task/ob_ddl_task.cpp	1009	ObDDLTask::is_local_build_need_retry	other variable ret_code == OB_ERR_INSUFFICIENT_PX_WORKER	|| OB_ERR_INSUFFICIENT_PX_WORKER == ret_code) {
-src/rootserver/ddl_task/ob_ddl_task.cpp	1011	ObDDLTask::is_local_build_need_retry	other variable ret_code == OB_TABLE_NOT_EXIST	} else if (OB_TABLE_NOT_EXIST == ret_code) {
-src/rootserver/ddl_task/ob_ddl_task.cpp	1044	ObDDLTask::is_local_build_need_retry	ret == OB_TABLE_NOT_EXIST	need_retry = OB_TABLE_NOT_EXIST == ret ? false : need_retry;
-src/rootserver/ddl_task/ob_ddl_task.cpp	1763	send_batch_calc_rpc	other variable ret_code == OB_EAGAIN; other variable ret_code == OB_HASH_EXIST	} else if (OB_EAGAIN == ret_code || OB_HASH_EXIST == ret_code) { // ignore
-src/rootserver/ddl_task/ob_ddl_task.cpp	2320	ObDDLTaskRecordOperator::get_schedule_info	ret == OB_ITER_END	if (OB_ITER_END == ret) {
-src/rootserver/ddl_task/ob_ddl_task.cpp	2646	ObDDLTaskRecordOperator::check_is_adding_constraint	ret == OB_ITER_END	if (OB_ITER_END == ret) {
-src/rootserver/ddl_task/ob_ddl_task.cpp	2685	ObDDLTaskRecordOperator::check_has_long_running_ddl	ret == OB_ITER_END	if (OB_ITER_END == ret) {
-src/rootserver/ddl_task/ob_ddl_task.cpp	2755	ObDDLTaskRecordOperator::check_has_conflict_ddl	ret == OB_ITER_END	if (OB_ITER_END == ret) {
-src/rootserver/ddl_task/ob_ddl_task.cpp	2811	ObDDLTaskRecordOperator::check_rebuild_index_task_exist	ret == OB_ITER_END	if (OB_ITER_END == ret) {
-src/rootserver/ddl_task/ob_ddl_task.cpp	2915	ObDDLTaskRecordOperator::get_task_record	ret == OB_ITER_END	if (OB_ITER_END == ret) {
-src/rootserver/ddl_task/ob_ddl_task.cpp	3001	ObDDLTaskRecordOperator::check_task_id_exist	ret == OB_ITER_END	if (OB_ITER_END == ret) {
-src/rootserver/ddl_task/ob_ddl_task.cpp	3057	ObDDLTaskRecordOperator::insert_record	ret == OB_ITER_END	if (OB_ITER_END == ret) {
-src/rootserver/ddl_task/ob_ddl_task.cpp	3204	ObDDLTaskRecordOperator::select_for_update	ret == OB_ITER_END	if (OB_ITER_END == ret) {
-src/rootserver/ddl_task/ob_ddl_task.cpp	3285	ObDDLTaskRecordOperator::kill_task_inner_sql	ret == OB_ITER_END	if (OB_ITER_END == ret) {
-src/rootserver/ddl_task/ob_ddl_task.cpp	3351	ObDDLTaskRecordOperator::get_running_tasks_inner_sql	ret == OB_ITER_END	if (OB_ITER_END == ret) {
-src/rootserver/ddl_task/ob_drop_fts_index_task.cpp	415	ObDropFTSIndexTask::check_drop_index_finish	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
-src/rootserver/ddl_task/ob_drop_vec_index_task.cpp	618	ObDropVecIndexTask::check_drop_index_finish	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
-src/rootserver/ddl_task/ob_drop_vec_ivf_index_task.cpp	519	ObDropVecIVFIndexTask::check_drop_index_finish	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
-src/rootserver/ddl_task/ob_fts_index_build_task.cpp	484	ObFtsIndexBuildTask::prepare_aux_table	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
-src/rootserver/ddl_task/ob_fts_index_build_task.cpp	850	ObFtsIndexBuildTask::wait_aux_table_complement	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
-src/rootserver/ddl_task/ob_fts_index_build_task.cpp	919	ObFtsIndexBuildTask::on_child_task_finish	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
-src/rootserver/ddl_task/ob_fts_index_build_task.cpp	1278	ObFtsIndexBuildTask::get_task_status	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
-src/rootserver/ddl_task/ob_fts_index_build_task.cpp	1373	ObFtsIndexBuildTask::refresh_task_depend_map_context	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
-src/rootserver/ddl_task/ob_fts_index_build_task.cpp	1429	ObFtsIndexBuildTask::clean_on_failed	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
-src/rootserver/ddl_task/ob_fts_index_build_task.cpp	1566	ObFtsIndexBuildTask::wait_drop_index_finish	ret == OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST == ret) {
+src/sql/optimizer/stat/ob_dbms_stats_executor.cpp	69	ObDbmsStatsExecutor::gather_table_stats	ret == OB_TABLET_NOT_EXIST	if (OB_TABLET_NOT_EXIST == ret && OB_NOT_NULL(need_refresh_schema)) {
+src/sql/optimizer/stat/ob_dbms_stats_executor.cpp	177	ObDbmsStatsExecutor::gather_partition_stats	temp_ret == OB_TIMEOUT	if (temp_ret == OB_TIMEOUT && i > 0) {
+src/sql/optimizer/stat/ob_dbms_stats_executor.cpp	563	ObDbmsStatsExecutor::add_L0_L1_part_to_task	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/sql/optimizer/stat/ob_dbms_stats_executor.cpp	596	ObDbmsStatsExecutor::construct_part_to_subpart_map	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {  // first time
+src/sql/optimizer/stat/ob_dbms_stats_executor.cpp	696	ObDbmsStatsExecutor::do_gather_stats_with_retry	ret == OB_TABLE_DEFINITION_CHANGED; ret == OB_SNAPSHOT_DISCARDED	if (gather_param.sepcify_scn_ > 0 && (ret == OB_TABLE_DEFINITION_CHANGED || ret == OB_SNAPSHOT_DISCARDED)) {
+src/sql/optimizer/stat/ob_dbms_stats_executor.cpp	1331	ObDbmsStatsExecutor::update_online_stat	ret == OB_ERR_DBMS_STATS_PL	if (ret == OB_ERR_DBMS_STATS_PL) {
+src/sql/optimizer/stat/ob_dbms_stats_executor.cpp	1377	ObDbmsStatsExecutor::update_online_stat	ret == OB_ERR_EXCLUSIVE_LOCK_CONFLICT; ret == OB_ERR_SHARED_LOCK_CONFLICT	if (ret == OB_ERR_EXCLUSIVE_LOCK_CONFLICT || ret == OB_ERR_SHARED_LOCK_CONFLICT) {
+src/sql/optimizer/stat/ob_dbms_stats_executor.cpp	1702	ObDbmsStatsExecutor::check_use_single_partition_gather	ret == OB_HASH_NOT_EXIST	if (OB_LIKELY(OB_HASH_NOT_EXIST == ret)) {
+src/sql/optimizer/stat/ob_dbms_stats_executor.cpp	1714	ObDbmsStatsExecutor::check_use_single_partition_gather	ret == OB_HASH_NOT_EXIST	if (OB_LIKELY(OB_HASH_NOT_EXIST == ret)) {
+src/sql/optimizer/stat/ob_dbms_stats_executor.cpp	1730	ObDbmsStatsExecutor::check_use_single_partition_gather	ret == OB_HASH_NOT_EXIST	if (OB_LIKELY(OB_HASH_NOT_EXIST == ret)) {
+src/sql/optimizer/stat/ob_dbms_stats_export_import.cpp	115	ObDbmsStatsExportImport::drop_stat_table	ret == OB_ERR_BAD_FIELD_ERROR	if (ret == OB_ERR_BAD_FIELD_ERROR) {
+src/sql/optimizer/stat/ob_dbms_stats_export_import.cpp	428	ObDbmsStatsExportImport::do_import_stats	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/optimizer/stat/ob_dbms_stats_gather.cpp	189	ObDbmsStatsGather::init_opt_stat	ret == OB_HASH_NOT_EXIST	if (OB_LIKELY(OB_HASH_NOT_EXIST == ret)) {
+src/sql/optimizer/stat/ob_dbms_stats_history_manager.cpp	267	ObDbmsStatsHistoryManager::calssify_table_stat_part_ids	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/optimizer/stat/ob_dbms_stats_history_manager.cpp	476	ObDbmsStatsHistoryManager::generate_having_stat_part_col_map	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/optimizer/stat/ob_dbms_stats_history_manager.cpp	538	ObDbmsStatsHistoryManager::backup_having_column_stats	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/sql/optimizer/stat/ob_dbms_stats_history_manager.cpp	636	ObDbmsStatsHistoryManager::backup_no_column_stats	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/sql/optimizer/stat/ob_dbms_stats_history_manager.cpp	881	ObDbmsStatsHistoryManager::get_stats_history_retention_and_availability	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/optimizer/stat/ob_dbms_stats_history_manager.cpp	968	ObDbmsStatsHistoryManager::fetch_table_stat_histrory	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/optimizer/stat/ob_dbms_stats_history_manager.cpp	1065	ObDbmsStatsHistoryManager::fetch_column_stat_history	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/optimizer/stat/ob_dbms_stats_history_manager.cpp	1217	ObDbmsStatsHistoryManager::fetch_histogram_stat_histroy	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/optimizer/stat/ob_dbms_stats_lock_unlock.cpp	262	ObDbmsStatsLockUnlock::get_stat_locked_partition_ids	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/optimizer/stat/ob_dbms_stats_preferences.cpp	223	ObDbmsStatsPreferences::do_get_prefs	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/optimizer/stat/ob_dbms_stats_preferences.cpp	427	ObDbmsStatsPreferences::do_get_sys_perfs	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/optimizer/stat/ob_dbms_stats_utils.cpp	606	ObDbmsStatsUtils::merge_tab_stats	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/sql/optimizer/stat/ob_dbms_stats_utils.cpp	641	ObDbmsStatsUtils::merge_col_stats	ret != OB_HASH_NOT_EXIST	if (OB_UNLIKELY(OB_HASH_NOT_EXIST != ret)) {
+src/sql/optimizer/stat/ob_dbms_stats_utils.cpp	733	ObDbmsStatsUtils::get_part_infos	ret == OB_ITER_END	ret = (ret == OB_ITER_END ? OB_SUCCESS : ret);
+src/sql/optimizer/stat/ob_dbms_stats_utils.cpp	777	ObDbmsStatsUtils::get_subpart_infos	ret == OB_ITER_END	ret = (ret == OB_ITER_END ? OB_SUCCESS : ret);
+src/sql/optimizer/stat/ob_dbms_stats_utils.cpp	1268	ObDbmsStatsUtils::scale_col_stats	ret == OB_HASH_EXIST	if (OB_HASH_EXIST == ret) {
+src/sql/optimizer/stat/ob_dbms_stats_utils.cpp	1293	ObDbmsStatsUtils::scale_col_stats	ret != OB_HASH_NOT_EXIST	if (OB_UNLIKELY(OB_HASH_NOT_EXIST != ret)) {
+src/sql/optimizer/stat/ob_dbms_stats_utils.cpp	1355	ObDbmsStatsUtils::check_can_async_gather_stats	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/optimizer/stat/ob_dbms_stats_utils.cpp	1414	ObDbmsStatsUtils::build_index_part_to_table_part_maps	ret == OB_ITER_END	ret = (ret == OB_ITER_END ? OB_SUCCESS : ret);
+src/sql/optimizer/stat/ob_dbms_stats_utils.cpp	1438	ObDbmsStatsUtils::build_sub_part_maps	ret == OB_ITER_END	ret = (ret == OB_ITER_END ? OB_SUCCESS : ret);
+src/sql/optimizer/stat/ob_dbms_stats_utils.cpp	1475	ObDbmsStatsUtils::deduce_index_column_stat_to_table	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/sql/optimizer/stat/ob_dbms_stats_utils.cpp	1502	ObDbmsStatsUtils::cancel_async_gather_stats	ret != OB_ERR_DBMS_STATS_PL	if (ret != OB_ERR_DBMS_STATS_PL) {
+src/sql/optimizer/stat/ob_dbms_stats_utils.cpp	1601	ObDbmsStatsUtils::fetch_need_cancel_async_gather_stats_task	ret == OB_ITER_END	ret = OB_ITER_END == ret ? OB_SUCCESS : ret;
+src/sql/optimizer/stat/ob_dbms_stats_utils.cpp	1641	ObDbmsStatsUtils::get_all_prefix_index_text_pairs	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/sql/optimizer/stat/ob_hybrid_hist_estimator.cpp	568	ObHybridHistograms::build_hybrid_hist	ret == OB_ITER_END	if (OB_LIKELY(OB_ITER_END == ret)) {
+src/sql/optimizer/stat/ob_incremental_stat_estimator.cpp	944	ObIncrementalStatEstimator::adjust_derive_gather_histogram_param	ret == OB_HASH_NOT_EXIST	if (OB_LIKELY(OB_HASH_NOT_EXIST == ret)) {
+src/sql/optimizer/stat/ob_index_stats_estimator.cpp	271	ObIndexStatsEstimator::fast_gather_index_stats	ret == OB_HASH_NOT_EXIST	if (OB_LIKELY(OB_HASH_NOT_EXIST == ret)) {
+src/sql/optimizer/stat/ob_opt_column_stat_cache.cpp	32	ObOptColumnStatCache::get_row	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/sql/optimizer/stat/ob_opt_ds_stat_cache.cpp	31	ObOptDSStatCache::get_value	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/sql/optimizer/stat/ob_opt_stat_manager.cpp	312	ObOptStatManager::erase_column_stat	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/sql/optimizer/stat/ob_opt_stat_manager.cpp	324	ObOptStatManager::erase_table_stat	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/sql/optimizer/stat/ob_opt_stat_manager.cpp	391	ObOptStatManager::refresh_system_stat_cache	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/sql/optimizer/stat/ob_opt_stat_manager.cpp	799	ObOptStatManager::get_ds_stat	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/sql/optimizer/stat/ob_opt_stat_monitor_manager.cpp	203	ObOptStatMonitorManager::update_local_cache	ret == OB_HASH_NOT_EXIST	if (OB_LIKELY(ret == OB_HASH_NOT_EXIST)) {
+src/sql/optimizer/stat/ob_opt_stat_monitor_manager.cpp	231	ObOptStatMonitorManager::update_local_cache	ret == OB_HASH_NOT_EXIST	if (OB_LIKELY(ret == OB_HASH_NOT_EXIST)) {
+src/sql/optimizer/stat/ob_opt_stat_monitor_manager.cpp	430	ObOptStatMonitorManager::get_column_usage_from_table	ret == OB_ITER_END	if (OB_LIKELY(ret == OB_ITER_END)) {
+src/sql/optimizer/stat/ob_opt_stat_monitor_manager.cpp	818	ObOptStatMonitorManager::do_get_opt_stats_expired_table_info	ret == OB_ITER_END	ret = OB_ITER_END == ret ? OB_SUCCESS : ret;
+src/sql/optimizer/stat/ob_opt_stat_monitor_manager.cpp	968	ObOptStatMonitorManager::get_need_check_opt_stat_partition_ids	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/sql/optimizer/stat/ob_opt_stat_monitor_manager.cpp	1122	ObOptStatMonitorManager::check_table_stat_expired_by_dml_info	ret == OB_ITER_END	ret = OB_ITER_END == ret ? OB_SUCCESS : ret;
+src/sql/optimizer/stat/ob_opt_stat_service.cpp	37	ObOptStatService::get_table_stat	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/sql/optimizer/stat/ob_opt_stat_service.cpp	67	ObOptStatService::batch_get_table_stats	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/sql/optimizer/stat/ob_opt_stat_service.cpp	118	ObOptStatService::get_column_stat	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/sql/optimizer/stat/ob_opt_stat_service.cpp	144	ObOptStatService::load_table_stat_and_put_cache	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret &&
+src/sql/optimizer/stat/ob_opt_stat_service.cpp	189	ObOptStatService::batch_load_table_stats_and_put_cache	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret &&
+src/sql/optimizer/stat/ob_opt_stat_service.cpp	341	ObOptStatService::get_table_rowcnt	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/sql/optimizer/stat/ob_opt_stat_service.cpp	357	ObOptStatService::get_table_rowcnt	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/sql/optimizer/stat/ob_opt_stat_service.cpp	418	ObOptStatService::get_ds_stat	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/sql/optimizer/stat/ob_opt_stat_service.cpp	456	ObOptStatService::get_system_stat	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/sql/optimizer/stat/ob_opt_stat_service.cpp	480	ObOptStatService::load_system_stat_and_put_cache	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/sql/optimizer/stat/ob_opt_stat_sql_service.cpp	311	ObOptStatSqlService::fetch_table_stat	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/optimizer/stat/ob_opt_stat_sql_service.cpp	391	ObOptStatSqlService::batch_fetch_table_stats	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/optimizer/stat/ob_opt_stat_sql_service.cpp	1052	ObOptStatSqlService::fetch_column_stat	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/optimizer/stat/ob_opt_stat_sql_service.cpp	1088	ObOptStatSqlService::fill_column_stat	ret == OB_HASH_NOT_EXIST	if (ret == OB_HASH_NOT_EXIST) {
+src/sql/optimizer/stat/ob_opt_stat_sql_service.cpp	1101	ObOptStatSqlService::fill_column_stat	ret == OB_ERR_NULL_VALUE	if (OB_ERR_NULL_VALUE == ret) {
+src/sql/optimizer/stat/ob_opt_stat_sql_service.cpp	1208	ObOptStatSqlService::fill_column_stat	ret == OB_ERR_NULL_VALUE	if (OB_ERR_NULL_VALUE == ret) {
+src/sql/optimizer/stat/ob_opt_stat_sql_service.cpp	1346	ObOptStatSqlService::get_valid_obj_str	ret == OB_ERR_INCORRECT_STRING_VALUE	if (OB_ERR_INCORRECT_STRING_VALUE == ret) {
+src/sql/optimizer/stat/ob_opt_stat_sql_service.cpp	1389	ObOptStatSqlService::generate_specified_keys_list_str_for_column	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/sql/optimizer/stat/ob_opt_stat_sql_service.cpp	1401	ObOptStatSqlService::generate_specified_keys_list_str_for_column	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/sql/optimizer/stat/ob_opt_stat_sql_service.cpp	1711	ObOptStatSqlService::fetch_table_rowcnt	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/optimizer/stat/ob_opt_stat_sql_service.cpp	1879	ObOptStatSqlService::fetch_system_stat	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/optimizer/stat/ob_opt_system_stat_cache.cpp	31	ObOptSystemStatCache::get_value	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/sql/optimizer/stat/ob_opt_table_stat_cache.cpp	31	ObOptTableStatCache::get_value	ret != OB_ENTRY_NOT_EXIST	if (OB_ENTRY_NOT_EXIST != ret) {
+src/sql/optimizer/stat/ob_stats_estimator.cpp	418	ObStatsEstimator::do_estimate	ret != OB_ITER_END	if (OB_ITER_END != ret) {
+src/sql/parser/ob_parser.cpp	891	ObParser::parse_sql	ret == OB_ERR_PARSE_SQL	if (OB_ERR_PARSE_SQL == ret) {
+src/sql/parser/ob_parser.cpp	1038	ObParser::parse_	ret == OB_ERR_PARSE_SQL	if ((OB_ERR_PARSE_SQL == ret
+src/sql/parser/ob_parser.cpp	1041	ObParser::parse_	ret == OB_ERR_PARSE_SQL	(OB_ERR_PARSE_SQL == ret && is_mysql_comment)) {
+src/sql/parser/ob_parser.cpp	1128	ObParser::prepare_parse	ret == OB_ERR_PARSE_SQL	if (OB_ERR_PARSE_SQL == ret) {
+src/sql/parser/parse_node.c	679	parsenode_hash	ret == OB_PARSER_ERR_SIZE_OVERFLOW	if (ret && OB_PARSER_ERR_SIZE_OVERFLOW == *ret) {
+src/sql/parser/parse_node.c	735	parsenode_equal	ret == OB_PARSER_ERR_SIZE_OVERFLOW	if (ret && OB_PARSER_ERR_SIZE_OVERFLOW == *ret) {
+src/sql/parser/sql_parser_base.c	108	parse_sql	other variable p->extra_errno_ == OB_PARSER_ERR_NO_MEMORY	if (p->extra_errno_ == OB_PARSER_ERR_NO_MEMORY) {
+src/sql/parser/sql_parser_base.h	427	#define lookup_pl_exec_symbol	ret == OB_PARSER_ERR_NO_MEMORY	} else if (OB_PARSER_ERR_NO_MEMORY == ret) {           \
+src/sql/parser/sql_parser_base.h	606	#define check_identifier_convert_result	other variable errno == OB_PARSER_ERR_ILLEGAL_NAME	if (OB_PARSER_ERR_ILLEGAL_NAME == errno) {                                       \
+src/sql/parser/sql_parser_base.h	614	#define check_parser_size_overflow	other variable errno == OB_PARSER_ERR_SIZE_OVERFLOW	if (OB_PARSER_ERR_SIZE_OVERFLOW == errno) {                                      \
+src/sql/parser/sql_parser_mysql_mode.y	769	-	other variable result->extra_errno_ == OB_PARSER_ERR_ILLEGAL_NAME	if (OB_PARSER_ERR_ILLEGAL_NAME == result->extra_errno_) {
+src/sql/parser/sql_parser_mysql_mode.y	9195	-	other variable result->extra_errno_ == OB_PARSER_ERR_NO_MEMORY	if (OB_PARSER_ERR_NO_MEMORY == result->extra_errno_) {
+src/sql/parser/sql_parser_mysql_mode.y	10671	-	other variable result->extra_errno_ == OB_PARSER_ERR_ILLEGAL_NAME	if (OB_PARSER_ERR_ILLEGAL_NAME == result->extra_errno_) {
+src/sql/pl/ob_pl_resolver.h	428	ObPLResolver::is_object_not_exist_error	ret == OB_ERR_SP_DOES_NOT_EXIST	return OB_ERR_SP_DOES_NOT_EXIST == ret
+src/sql/pl/ob_pl_resolver.h	429	ObPLResolver::is_object_not_exist_error	ret == OB_ERR_SP_UNDECLARED_VAR	|| OB_ERR_SP_UNDECLARED_VAR == ret
+src/sql/pl/ob_pl_resolver.h	430	ObPLResolver::is_object_not_exist_error	ret == OB_ERR_SP_UNDECLARED_TYPE	|| OB_ERR_SP_UNDECLARED_TYPE == ret
+src/sql/pl/ob_pl_resolver.h	431	ObPLResolver::is_object_not_exist_error	ret == OB_ERR_PACKAGE_DOSE_NOT_EXIST	|| OB_ERR_PACKAGE_DOSE_NOT_EXIST == ret
+src/sql/pl/ob_pl_resolver.h	432	ObPLResolver::is_object_not_exist_error	ret == OB_TABLE_NOT_EXIST	|| OB_TABLE_NOT_EXIST == ret
+src/sql/pl/ob_pl_resolver.h	433	ObPLResolver::is_object_not_exist_error	ret == OB_ERR_COLUMN_NOT_FOUND	|| OB_ERR_COLUMN_NOT_FOUND == ret
+src/sql/pl/ob_pl_resolver.h	434	ObPLResolver::is_object_not_exist_error	ret == OB_ERR_BAD_DATABASE	|| OB_ERR_BAD_DATABASE == ret;
+src/sql/pl/ob_pl_resolver.h	535	ObPLResolver::is_unrecoverable_error	ret == OB_ALLOCATE_MEMORY_FAILED	return OB_ALLOCATE_MEMORY_FAILED == ret
+src/sql/pl/ob_pl_resolver.h	536	ObPLResolver::is_unrecoverable_error	ret == OB_ERR_UNEXPECTED	|| OB_ERR_UNEXPECTED == ret
+src/sql/pl/ob_pl_resolver.h	537	ObPLResolver::is_unrecoverable_error	ret == OB_EXCEED_QUERY_MEM_LIMIT	|| OB_EXCEED_QUERY_MEM_LIMIT == ret
+src/sql/pl/ob_pl_resolver.h	538	ObPLResolver::is_unrecoverable_error	ret == OB_TIMEOUT	|| OB_TIMEOUT == ret
+src/sql/pl/ob_pl_resolver.h	539	ObPLResolver::is_unrecoverable_error	ret == OB_SIZE_OVERFLOW	|| OB_SIZE_OVERFLOW == ret;
+src/sql/pl/pl_cache/ob_pl_cache_mgr.h	39	#define HANDLE_PL_CACHE_RET_VALUE	ret != OB_ERR_UNEXPECTED	if ((ret) != OB_ERR_UNEXPECTED) { \
+src/sql/plan_cache/ob_i_lib_cache_node.cpp	122	ObILibCacheNode::add_cache_obj	ret != OB_SQL_PC_PLAN_DUPLICATE	if (OB_FAIL(ret) && ret != OB_SQL_PC_PLAN_DUPLICATE) {
+src/sql/plan_cache/ob_lib_cache_object_manager.cpp	149	ObLCObjectManager::destroy_cache_obj	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/sql/plan_cache/ob_pcv_set.cpp	143	ObPCVSet::inner_get_cache_obj	ret == OB_OLD_SCHEMA_VERSION	if (OB_OLD_SCHEMA_VERSION == ret) {
+src/sql/plan_cache/ob_pcv_set.cpp	210	ObPCVSet::inner_add_cache_obj	ret == OB_SQL_PC_PLAN_DUPLICATE	if (OB_SQL_PC_PLAN_DUPLICATE == ret
+src/sql/plan_cache/ob_plan_cache.cpp	415	ObPlanCache::check_after_get_plan	ret == OB_OLD_SCHEMA_VERSION	if (OB_OLD_SCHEMA_VERSION == ret) {
+src/sql/plan_cache/ob_plan_cache.cpp	446	ObPlanCache::get_plan	ret != OB_BATCHED_MULTI_STMT_ROLLBACK	if (OB_BATCHED_MULTI_STMT_ROLLBACK != ret) {
+src/sql/plan_cache/ob_plan_cache.cpp	796	ObPlanCache::can_do_insert_batch_opt	call result session_info->get_retry_info().get_last_query_retry_err() != OB_BATCHED_MULTI_STMT_ROLLBACK	OB_BATCHED_MULTI_STMT_ROLLBACK != session_info->get_retry_info().get_last_query_retry_err()) {
+src/sql/plan_cache/ob_plan_cache.cpp	896	ObPlanCache::add_plan	ret != OB_SQL_PC_PLAN_DUPLICATE	&& OB_SQL_PC_PLAN_DUPLICATE != ret
+src/sql/plan_cache/ob_plan_cache.cpp	897	ObPlanCache::add_plan	ret != OB_PC_LOCK_CONFLICT	&& OB_PC_LOCK_CONFLICT != ret) {
+src/sql/plan_cache/ob_plan_cache.cpp	921	ObPlanCache::add_plan_cache	ret == OB_OLD_SCHEMA_VERSION	if (OB_FAIL(add_cache_obj(ctx, pc_ctx.key_, cache_obj)) && OB_OLD_SCHEMA_VERSION == ret) {
+src/sql/plan_cache/ob_plan_cache.cpp	931	ObPlanCache::add_plan_cache	ret == OB_OLD_SCHEMA_VERSION	} while (OB_OLD_SCHEMA_VERSION == ret && pc_ctx.need_retry_add_plan());
+src/sql/plan_cache/ob_plan_cache.cpp	987	ObPlanCache::add_cache_obj	other variable hash_err == OB_HASH_EXIST	if (OB_HASH_EXIST == hash_err) { //may be this node has been set by other thread。
+src/sql/plan_cache/ob_plan_cache.cpp	1049	ObPlanCache::add_cache_obj	ret != OB_SQL_PC_PLAN_DUPLICATE	if (!ctx.need_destroy_node_ && ret != OB_SQL_PC_PLAN_DUPLICATE) {
+src/sql/plan_cache/ob_plan_cache.cpp	1061	ObPlanCache::add_cache_obj	ret != OB_SQL_PC_PLAN_DUPLICATE	if (!ctx.need_destroy_node_ && ret != OB_SQL_PC_PLAN_DUPLICATE) {
+src/sql/plan_cache/ob_plan_cache.cpp	1098	ObPlanCache::get_cache_obj	ret != OB_SQL_PC_NOT_EXIST	if (OB_SQL_PC_NOT_EXIST != ret) {
+src/sql/plan_cache/ob_plan_cache.cpp	1132	ObPlanCache::get_value	switch (hash_err) case OB_HASH_NOT_EXIST	case OB_HASH_NOT_EXIST: { // return when node = NULL; ret = OB_SUCCESS;
+src/sql/plan_cache/ob_plan_cache.cpp	1377	ObPlanCache::cache_evict_by_idle	tmp_ret == OB_ITER_END	if (OB_ITER_END == tmp_ret) {
+src/sql/plan_cache/ob_plan_cache.cpp	1453	ObPlanCache::remove_cache_node	other variable hash_err == OB_HASH_NOT_EXIST	} else if (OB_HASH_NOT_EXIST == hash_err) {
+src/sql/plan_cache/ob_plan_cache.cpp	1891	ObPlanCache::get_ps_plan	ret == OB_OLD_SCHEMA_VERSION	if (OB_OLD_SCHEMA_VERSION == ret) {
+src/sql/plan_cache/ob_plan_cache_util.h	771	ObPlanStat::to_str_acs_sel_info	ret == OB_SIZE_OVERFLOW	if (OB_SIZE_OVERFLOW == ret) {
+src/sql/plan_cache/ob_plan_cache_value.cpp	394	ObPlanCacheValue::choose_plan	ret != OB_BATCHED_MULTI_STMT_ROLLBACK	if (OB_BATCHED_MULTI_STMT_ROLLBACK != ret) {
+src/sql/plan_cache/ob_plan_cache_value.cpp	439	ObPlanCacheValue::choose_plan	ret == OB_SQL_PC_NOT_EXIST	if (OB_SQL_PC_NOT_EXIST == ret) {
+src/sql/plan_cache/ob_plan_match_helper.cpp	82	ObPlanMatchHelper::match_plan	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/sql/plan_cache/ob_plan_set.cpp	60	ObPlanSet::get_variable_meta	ret == OB_ERR_USER_VARIABLE_UNKNOWN	if (ret == OB_ERR_USER_VARIABLE_UNKNOWN) {
+src/sql/plan_cache/ob_plan_set.cpp	340	ObPlanSet::match_multi_stmt_info	ret == OB_HASH_EXIST	if (OB_HASH_EXIST == ret) {
+src/sql/plan_cache/ob_plan_set.cpp	347	ObPlanSet::match_multi_stmt_info	ret == OB_HASH_NOT_EXIST	} else if (OB_HASH_NOT_EXIST == ret) {
+src/sql/plan_cache/ob_plan_set.cpp	1112	ObSqlPlanSet::select_plan	ret == OB_SQL_PC_NOT_EXIST	if (OB_SQL_PC_NOT_EXIST == ret) {
+src/sql/plan_cache/ob_plan_set.cpp	1209	ObSqlPlanSet::try_get_dist_plan	ret == OB_SQL_PC_NOT_EXIST	if (OB_SQL_PC_NOT_EXIST == ret) {
+src/sql/plan_cache/ob_ps_cache.cpp	342	ObPsCache::get_or_add_stmt_item	ret == OB_HASH_EXIST	} else if (OB_HASH_EXIST == ret) {
+src/sql/plan_cache/ob_ps_cache.cpp	348	ObPsCache::get_or_add_stmt_item	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {//stmt item was deleted, need to recreate}
+src/sql/plan_cache/ob_ps_cache.cpp	376	#define LOG_WARN_IGNORE_PS_NOTFOUND	ret == OB_HASH_NOT_EXIST	if (common::OB_HASH_NOT_EXIST == ret) {\
+src/sql/plan_cache/ob_ps_cache.cpp	407	ObPsCache::inner_ref_stmt_item	ret == OB_EAGAIN	if (OB_EAGAIN == ret) {
+src/sql/plan_cache/ob_ps_cache.cpp	415	ObPsCache::inner_ref_stmt_item	switch (ret) case OB_HASH_NOT_EXIST	case OB_HASH_NOT_EXIST: {
+src/sql/plan_cache/ob_ps_cache.cpp	419	ObPsCache::inner_ref_stmt_item	switch (ret) case OB_EAGAIN	case OB_EAGAIN: {
+src/sql/plan_cache/ob_ps_cache.cpp	427	ObPsCache::inner_ref_stmt_item	ret == OB_EAGAIN	} while(OB_EAGAIN == ret && retry_cnt < MAX_RETRY_CNT);
+src/sql/plan_cache/ob_ps_cache.cpp	459	ObPsCache::get_or_add_stmt_info	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/sql/plan_cache/ob_ps_cache.cpp	514	ObPsCache::erase_stmt_item	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/sql/plan_cache/ob_ps_cache.cpp	521	ObPsCache::erase_stmt_item	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/sql/plan_cache/ob_ps_cache.cpp	644	ObPsCache::add_stmt_info	ret == OB_HASH_EXIST	} else if (OB_HASH_EXIST == ret) {
+src/sql/plan_cache/ob_ps_cache.cpp	650	ObPsCache::add_stmt_info	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/sql/plan_cache/ob_ps_cache.cpp	689	ObPsCache::ref_stmt_info	ret == OB_EAGAIN	if (OB_EAGAIN == ret) {
+src/sql/plan_cache/ob_ps_cache.cpp	697	ObPsCache::ref_stmt_info	switch (ret) case OB_HASH_NOT_EXIST	case OB_HASH_NOT_EXIST: {
+src/sql/plan_cache/ob_ps_cache.cpp	701	ObPsCache::ref_stmt_info	switch (ret) case OB_EAGAIN	case OB_EAGAIN: {
+src/sql/plan_cache/ob_ps_cache.cpp	710	ObPsCache::ref_stmt_info	ret == OB_EAGAIN	} while(OB_EAGAIN == ret && retry_cnt < MAX_RETRY_CNT);
+src/sql/plan_cache/ob_ps_cache.cpp	844	ObPsCache::destroy_cached_ps	ret == OB_HASH_NOT_EXIST	if (ret == OB_HASH_NOT_EXIST) {
+src/sql/plan_cache/ob_sql_parameterization.cpp	180	ObSqlParameterization::transform_syntax_tree	ret != OB_NOT_SUPPORTED	if (OB_NOT_SUPPORTED != ret) {
+src/sql/plan_cache/ob_sql_parameterization.cpp	626	ObSqlParameterization::transform_tree	ret == OB_NOT_SUPPORTED	if (ctx.sql_info_->need_check_fp_ && ret == OB_NOT_SUPPORTED) {
+src/sql/plan_cache/ob_sql_parameterization.cpp	799	ObSqlParameterization::transform_tree	ret != OB_NOT_SUPPORTED	if (OB_NOT_SUPPORTED != ret) {
+src/sql/plan_cache/ob_sql_parameterization.cpp	996	ObSqlParameterization::parameterize_syntax_tree	ret != OB_NOT_SUPPORTED	if (OB_NOT_SUPPORTED != ret) {
+src/sql/plan_cache/ob_sql_parameterization.cpp	1017	ObSqlParameterization::parameterize_syntax_tree	ret != OB_NOT_SUPPORTED	if (OB_NOT_SUPPORTED != ret) {
+src/sql/plan_cache/ob_sql_parameterization.cpp	2531	ObSqlParameterization::formalize_sql_text	ret != OB_NOT_SUPPORTED	if (OB_NOT_SUPPORTED != ret) {
+src/sql/printer/ob_schema_printer.cpp	329	ObSchemaPrinter::print_table_definition_columns	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/sql/privilege_check/ob_ai_model_priv_util.cpp	51	ObAIServiceEndpointPrivUtil::check_ai_model_priv	ret == OB_ERR_NO_PRIVILEGE	if (OB_ERR_NO_PRIVILEGE == ret) {
+src/sql/resolver/cmd/ob_call_procedure_resolver.cpp	245	ObCallProcedureResolver::add_call_proc_info	ret == OB_SQL_PC_PLAN_DUPLICATE	if (OB_SQL_PC_PLAN_DUPLICATE == ret) {
+src/sql/resolver/cmd/ob_call_procedure_resolver.cpp	247	ObCallProcedureResolver::add_call_proc_info	ret == OB_REACH_MEMORY_LIMIT; ret == OB_SQL_PC_PLAN_SIZE_LIMIT	} else if (OB_REACH_MEMORY_LIMIT == ret || OB_SQL_PC_PLAN_SIZE_LIMIT == ret) {
+src/sql/resolver/cmd/ob_get_diagnostics_resolver.cpp	125	ObGetDiagnosticsResolver::resolve	ret == OB_ERR_BAD_FIELD_ERROR	if (OB_ERR_BAD_FIELD_ERROR == ret) {/* In SQL environment, when using non-user/system variables as condition parameters, the get diagnostic statement can be successfully executed, but it will only report a warning at runtime */
+src/sql/resolver/cmd/ob_load_data_resolver.cpp	886	ObLoadDataResolver::resolve_empty_field_or_var_list_node	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/sql/resolver/cmd/ob_load_data_resolver.cpp	1297	ObLoadDataResolver::resolve_partitions	ret == OB_UNKNOWN_PARTITION	if (OB_UNKNOWN_PARTITION == ret) {
+src/sql/resolver/cmd/ob_show_resolver.cpp	121	ObShowResolver::check_db_access_for_show_sql	ret == OB_ERR_NO_DB_PRIVILEGE	if (OB_ERR_NO_DB_PRIVILEGE == ret) {
+src/sql/resolver/cmd/ob_show_resolver.cpp	437	ObShowResolver::resolve	ret == OB_ERR_NO_DB_PRIVILEGE	if (OB_ERR_NO_DB_PRIVILEGE == ret) {
+src/sql/resolver/cmd/ob_show_resolver.cpp	628	ObShowResolver::resolve	ret == OB_ERR_NO_TABLE_PRIVILEGE	if (OB_ERR_NO_TABLE_PRIVILEGE == ret) {
+src/sql/resolver/cmd/ob_show_resolver.cpp	775	ObShowResolver::resolve	ret == OB_USER_NOT_EXIST	if (OB_USER_NOT_EXIST == ret) {
+src/sql/resolver/cmd/ob_show_resolver.cpp	1268	ObShowResolver::resolve_show_create_user	ret == OB_USER_NOT_EXIST	if (ret == OB_USER_NOT_EXIST) {
+src/sql/resolver/cmd/ob_show_resolver.cpp	1296	ObShowResolver::resolve_show_create_user	ret == OB_USER_NOT_EXIST	if (ret == OB_USER_NOT_EXIST) {
+src/sql/resolver/cmd/ob_show_resolver.cpp	1323	ObShowResolver::resolve_show_create_user	ret == OB_ERR_NO_DB_PRIVILEGE	if (OB_ERR_NO_DB_PRIVILEGE == ret) {
+src/sql/resolver/cmd/ob_show_resolver.cpp	1328	ObShowResolver::resolve_show_create_user	ret == OB_ERR_NO_TABLE_PRIVILEGE	} else if (OB_ERR_NO_TABLE_PRIVILEGE == ret) {
+src/sql/resolver/cmd/ob_show_resolver.cpp	1336	ObShowResolver::resolve_show_create_user	tmp_ret == OB_USER_NOT_EXIST	} else if (has_select_privilege && OB_USER_NOT_EXIST == tmp_ret) {
+src/sql/resolver/cmd/ob_show_resolver.cpp	1441	ObShowResolver::check_show_create_user_privilege	ret == OB_ERR_NO_DB_PRIVILEGE; ret == OB_ERR_NO_TABLE_PRIVILEGE	if (OB_ERR_NO_DB_PRIVILEGE == ret || OB_ERR_NO_TABLE_PRIVILEGE == ret) {
+src/sql/resolver/cmd/ob_show_resolver.cpp	1553	ObShowResolver::resolve_show_from_table	ret == OB_TABLE_NOT_EXIST	if (OB_TABLE_NOT_EXIST == ret) {
+src/sql/resolver/cmd/ob_show_resolver.cpp	1637	ObShowResolver::resolve_show_from_database	ret == OB_ERR_BAD_DATABASE	if (OB_ERR_BAD_DATABASE == ret) {
+src/sql/resolver/cmd/ob_show_resolver.cpp	2200	ObShowResolver::resolve_table_info	ret != OB_ERR_BAD_DATABASE	if (OB_ERR_BAD_DATABASE != ret) {
+src/sql/resolver/cmd/ob_show_resolver.cpp	2212	ObShowResolver::resolve_table_info	ret != OB_TABLE_NOT_EXIST	if (OB_TABLE_NOT_EXIST != ret) {
+src/sql/resolver/cmd/ob_show_resolver.cpp	2226	ObShowResolver::resolve_table_info	ret != OB_HASH_EXIST	if (OB_HASH_EXIST != ret) {
+src/sql/resolver/dcl/ob_alter_user_role_resolver.cpp	102	ObAlterUserRoleResolver::resolve_role_list	ret == OB_USER_NOT_EXIST	if (OB_USER_NOT_EXIST == ret) {
+src/sql/resolver/dcl/ob_alter_user_role_resolver.cpp	148	ObAlterUserRoleResolver::resolve_role_list	ret == OB_ERR_ROLE_NOT_GRANTED_TO	if (OB_ERR_ROLE_NOT_GRANTED_TO == ret) {
+src/sql/resolver/dcl/ob_alter_user_role_resolver.cpp	272	ObAlterUserRoleResolver::resolve_default_role	ret == OB_USER_NOT_EXIST	if (ret == OB_USER_NOT_EXIST) {
+src/sql/resolver/dcl/ob_alter_user_role_resolver.cpp	291	ObAlterUserRoleResolver::resolve_default_role	ret == OB_USER_NOT_EXIST	if (OB_USER_NOT_EXIST == ret || OB_ISNULL(user_info)) {
+src/sql/resolver/dcl/ob_dcl_resolver.cpp	220	ObDCLResolver::check_dcl_on_inner_user	ret == OB_USER_NOT_EXIST	if (OB_USER_NOT_EXIST == ret) {
+src/sql/resolver/dcl/ob_dcl_resolver.cpp	297	ObDCLResolver::resolve_user_list_node	ret == OB_USER_NOT_EXIST	if (OB_USER_NOT_EXIST == ret) {
+src/sql/resolver/dcl/ob_grant_resolver.cpp	185	ObGrantResolver::resolve_grant_role_to_ur	ret == OB_USER_NOT_EXIST	if (OB_USER_NOT_EXIST == ret || OB_ISNULL(grantee_info)) {
+src/sql/resolver/dcl/ob_grant_resolver.cpp	222	ObGrantResolver::resolve_grant_role_to_ur	ret == OB_USER_NOT_EXIST	if (OB_USER_NOT_EXIST == ret || OB_ISNULL(role_info)) {
+src/sql/resolver/dcl/ob_grant_resolver.h	240	ObGrantResolver::resolve_priv_object	ret == OB_TABLE_NOT_EXIST	if (OB_TABLE_NOT_EXIST == ret && !is_grant) {
+src/sql/resolver/dcl/ob_grant_resolver.h	256	ObGrantResolver::resolve_priv_object	ret == OB_ERR_SP_DOES_NOT_EXIST	if (OB_ERR_SP_DOES_NOT_EXIST == ret && !is_grant) {
+src/sql/resolver/dcl/ob_revoke_resolver.cpp	75	ObRevokeResolver::resolve_revoke_role_inner	ret == OB_USER_NOT_EXIST	if (OB_USER_NOT_EXIST == ret || OB_ISNULL(role_info)) {
+src/sql/resolver/dcl/ob_revoke_resolver.cpp	85	ObRevokeResolver::resolve_revoke_role_inner	ret == OB_PRIV_DUP	if (OB_PRIV_DUP == ret) {
+src/sql/resolver/dcl/ob_revoke_resolver.cpp	122	ObRevokeResolver::resolve_revoke_role_inner	ret == OB_USER_NOT_EXIST	if (OB_USER_NOT_EXIST == ret) {
+src/sql/resolver/dcl/ob_revoke_resolver.cpp	342	ObRevokeResolver::resolve_mysql	ret == OB_USER_NOT_EXIST	if (OB_USER_NOT_EXIST == ret) {
+src/sql/resolver/dcl/ob_revoke_stmt.cpp	86	ObRevokeStmt::add_role	call result role_id_set_.exist_refactored(role_id) == OB_HASH_EXIST	if (OB_HASH_EXIST == role_id_set_.exist_refactored(role_id)) {
+src/sql/resolver/ddl/ob_alter_table_resolver.cpp	103	ObAlterTableResolver::resolve	ret == OB_TABLE_NOT_EXIST	if (OB_TABLE_NOT_EXIST == ret) {
+src/sql/resolver/ddl/ob_alter_table_resolver.cpp	642	ObAlterTableResolver::resolve_action_list	call result reduced_visible_col_set.exist_refactored(col_key) == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == reduced_visible_col_set.exist_refactored(col_key)) {
+src/sql/resolver/ddl/ob_alter_table_resolver.cpp	656	ObAlterTableResolver::resolve_action_list	call result reduced_visible_col_set.exist_refactored(col_key) == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == reduced_visible_col_set.exist_refactored(col_key)) {
+src/sql/resolver/ddl/ob_alter_table_resolver.cpp	664	ObAlterTableResolver::resolve_action_list	ret != OB_ITER_END	if (OB_FAIL(ret) && OB_ITER_END != ret) {
+src/sql/resolver/ddl/ob_alter_table_resolver.cpp	1048	ObAlterTableResolver::get_table_schema_for_check	ret == OB_TABLE_NOT_EXIST	if (OB_TABLE_NOT_EXIST == ret) {
+src/sql/resolver/ddl/ob_alter_table_resolver.cpp	1783	ObAlterTableResolver::resolve_drop_index	ret == OB_TABLE_NOT_EXIST	if (OB_TABLE_NOT_EXIST == ret) {
+src/sql/resolver/ddl/ob_alter_table_resolver.cpp	2073	ObAlterTableResolver::resolve_exchange_partition_stmt	ret == OB_TABLE_NOT_EXIST	if (OB_TABLE_NOT_EXIST == ret) {
+src/sql/resolver/ddl/ob_alter_table_resolver.cpp	2164	ObAlterTableResolver::resolve_rename_partition	ret == OB_DUPLICATE_OBJECT_NAME_EXIST	if (OB_DUPLICATE_OBJECT_NAME_EXIST == ret) {
+src/sql/resolver/ddl/ob_alter_table_resolver.cpp	2221	ObAlterTableResolver::resolve_rename_subpartition	ret == OB_DUPLICATE_OBJECT_NAME_EXIST	if (OB_DUPLICATE_OBJECT_NAME_EXIST == ret) {
+src/sql/resolver/ddl/ob_alter_table_resolver.cpp	2292	ObAlterTableResolver::resolve_alter_index	ret == OB_TABLE_NOT_EXIST	if (OB_TABLE_NOT_EXIST == ret) {
+src/sql/resolver/ddl/ob_alter_table_resolver.cpp	3447	ObAlterTableResolver::resolve_add_column	ret == OB_HASH_EXIST	if (OB_HASH_EXIST == ret) {
+src/sql/resolver/ddl/ob_alter_table_resolver.cpp	3859	ObAlterTableResolver::resolve_change_column	ret == OB_ERR_BAD_FIELD_ERROR	if (ret == OB_ERR_BAD_FIELD_ERROR) {
+src/sql/resolver/ddl/ob_alter_table_resolver.cpp	4026	ObAlterTableResolver::resolve_modify_column	ret == OB_ERR_BAD_FIELD_ERROR	if (ret == OB_ERR_BAD_FIELD_ERROR) {
+src/sql/resolver/ddl/ob_alter_table_resolver.cpp	4236	ObAlterTableResolver::resolve_drop_column	ret == OB_HASH_EXIST	if (OB_HASH_EXIST == ret) {
+src/sql/resolver/ddl/ob_alter_table_resolver.cpp	4245	ObAlterTableResolver::resolve_drop_column	ret == OB_HASH_EXIST	if (OB_HASH_EXIST == ret) {
+src/sql/resolver/ddl/ob_alter_table_resolver.cpp	4347	ObAlterTableResolver::resolve_rename_column	ret == OB_ERR_BAD_FIELD_ERROR	if (ret == OB_ERR_BAD_FIELD_ERROR) {
+src/sql/resolver/ddl/ob_create_index_resolver.cpp	395	ObCreateIndexResolver::resolve	ret == OB_TABLE_NOT_EXIST	if (OB_TABLE_NOT_EXIST == ret) {
+src/sql/resolver/ddl/ob_create_package_resolver.cpp	116	ObCreatePackageResolver::resolve	ret == OB_ERR_PACKAGE_DOSE_NOT_EXIST	if (OB_ERR_PACKAGE_DOSE_NOT_EXIST == ret) { // may be not old package header
+src/sql/resolver/ddl/ob_create_package_resolver.cpp	531	ObCreatePackageBodyResolver::resolve	ret == OB_ERR_PACKAGE_DOSE_NOT_EXIST	if (OB_ERR_PACKAGE_DOSE_NOT_EXIST == ret) {
+src/sql/resolver/ddl/ob_create_package_resolver.cpp	596	ObCreatePackageBodyResolver::resolve	ret != OB_ERR_UNEXPECTED; ret != OB_ERR_TOO_LONG_IDENT	if (OB_FAIL(ret) && ret != OB_ERR_UNEXPECTED && ret != OB_ERR_TOO_LONG_IDENT) {
+src/sql/resolver/ddl/ob_create_table_resolver.cpp	240	ObCreateTableResolver::resolve	ret == OB_ERR_BAD_DATABASE	if (OB_ERR_BAD_DATABASE == ret) {
+src/sql/resolver/ddl/ob_create_table_resolver.cpp	496	ObCreateTableResolver::check_column_name_duplicate	call result column_name_set_.exist_refactored(column_name_key) == OB_HASH_EXIST	if (OB_HASH_EXIST  == column_name_set_.exist_refactored(column_name_key)) {
+src/sql/resolver/ddl/ob_create_table_resolver.cpp	1758	ObCreateTableResolver::resolve_index_node	call result column_name_set_.exist_refactored(column_key) == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == column_name_set_.exist_refactored(column_key)) {
+src/sql/resolver/ddl/ob_create_table_resolver.cpp	1993	ObCreateTableResolver::resolve_index_name	ret (assigned in the comparison) == OB_HASH_EXIST	if (OB_HASH_EXIST == (ret = current_index_name_set_.exist_refactored(index_key))) {
+src/sql/resolver/ddl/ob_create_table_resolver.cpp	2143	ObCreateTableResolver::check_building_domain_index_legal	ret == OB_HASH_EXIST	if (OB_HASH_EXIST == ret) {
+src/sql/resolver/ddl/ob_create_table_resolver.cpp	2147	ObCreateTableResolver::check_building_domain_index_legal	ret == OB_HASH_NOT_EXIST	} else if (OB_HASH_NOT_EXIST == ret) {
+src/sql/resolver/ddl/ob_create_view_resolver.cpp	107	ObCreateViewResolver::resolve	ret == OB_ERR_BAD_DATABASE	if (OB_ERR_BAD_DATABASE == ret) {
+src/sql/resolver/ddl/ob_create_view_resolver.cpp	318	ObCreateViewResolver::check_view_columns	ret (assigned in the comparison) == OB_HASH_EXIST	} else if (OB_HASH_EXIST == (ret = view_col_names.set_refactored(dup_col_name, 0))) {
+src/sql/resolver/ddl/ob_create_view_resolver.cpp	375	ObCreateViewResolver::get_sel_priv_tables_in_subquery	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/sql/resolver/ddl/ob_create_view_resolver.cpp	470	ObCreateViewResolver::get_need_priv_tables	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/sql/resolver/ddl/ob_create_view_resolver.cpp	482	ObCreateViewResolver::get_need_priv_tables	ret != OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST != ret) {
+src/sql/resolver/ddl/ob_create_view_resolver.cpp	607	ObCreateViewResolver::print_rebuilt_view_stmt	ret == OB_SIZE_OVERFLOW	if (OB_SIZE_OVERFLOW == ret && buf_len < OB_MAX_PACKET_LENGTH) {
+src/sql/resolver/ddl/ob_create_view_resolver.cpp	617	ObCreateViewResolver::print_rebuilt_view_stmt	ret == OB_SIZE_OVERFLOW	} while (OB_SIZE_OVERFLOW == ret && buf_len < OB_MAX_PACKET_LENGTH);
+src/sql/resolver/ddl/ob_create_view_resolver.cpp	658	ObCreateViewResolver::check_view_stmt_col_name	call result hash_ret=view_col_names.exist_refactored(dup_col_name) == OB_HASH_EXIST	} else if ((OB_HASH_EXIST == (hash_ret = view_col_names.exist_refactored(dup_col_name)))) {
+src/sql/resolver/ddl/ob_create_view_resolver.cpp	677	ObCreateViewResolver::check_view_stmt_col_name	ret == OB_WRONG_COLUMN_NAME	if (ret == OB_WRONG_COLUMN_NAME) {
+src/sql/resolver/ddl/ob_create_view_resolver.cpp	682	ObCreateViewResolver::check_view_stmt_col_name	call result hash_ret=view_col_names.exist_refactored(dup_col_name) == OB_HASH_EXIST	} else if ((OB_HASH_EXIST == (hash_ret = view_col_names.exist_refactored(dup_col_name)))) {
+src/sql/resolver/ddl/ob_create_view_resolver.cpp	715	ObCreateViewResolver::create_alias_names_auto	other variable hash_ret == OB_HASH_EXIST	while (OB_SUCC(ret) && OB_HASH_EXIST == hash_ret) {
+src/sql/resolver/ddl/ob_create_view_resolver.cpp	724	ObCreateViewResolver::create_alias_names_auto	call result hash_ret=view_col_names.exist_refactored(dup_col_name) == OB_HASH_EXIST	if (OB_HASH_EXIST == (hash_ret = view_col_names.exist_refactored(dup_col_name))) {
+src/sql/resolver/ddl/ob_ddl_resolver.cpp	926	ObDDLResolver::add_storing_column	call result storing_column_set_.exist_refactored(column_name_key) == OB_HASH_EXIST	} else if (OB_HASH_EXIST == storing_column_set_.exist_refactored(column_name_key)) {
+src/sql/resolver/ddl/ob_ddl_resolver.cpp	3344	ObDDLResolver::check_partition_name_duplicate	call result partition_name_set->exist_refactored(partition_name_key) == OB_HASH_EXIST	if (OB_HASH_EXIST == partition_name_set->exist_refactored(partition_name_key)) {
+src/sql/resolver/ddl/ob_ddl_resolver.cpp	4770	ObDDLResolver::check_column_in_check_constraint	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/sql/resolver/ddl/ob_ddl_resolver.cpp	4773	ObDDLResolver::check_column_in_check_constraint	ret == OB_HASH_EXIST	} else if (OB_HASH_EXIST == ret) {
+src/sql/resolver/ddl/ob_ddl_resolver.cpp	5057	ObDDLResolver::generate_global_index_schema	ret == OB_TABLE_NOT_EXIST	if (OB_TABLE_NOT_EXIST == ret) {
+src/sql/resolver/ddl/ob_ddl_resolver.cpp	5385	ObDDLResolver::generate_index_name	call result current_index_name_set.exist_refactored(index_key) != OB_HASH_EXIST	} else if (OB_HASH_EXIST != current_index_name_set.exist_refactored(index_key)) {
+src/sql/resolver/ddl/ob_ddl_resolver.cpp	5402	ObDDLResolver::generate_index_name	call result current_index_name_set.exist_refactored(tmp_key) != OB_HASH_EXIST	if (OB_HASH_EXIST != current_index_name_set.exist_refactored(tmp_key)) {
+src/sql/resolver/ddl/ob_ddl_resolver.cpp	5664	ObDDLResolver::resolve_foreign_key_name	ret (assigned in the comparison) == OB_HASH_EXIST	if (OB_HASH_EXIST == (ret = current_foreign_key_name_set_.exist_refactored(fk_key))) {
+src/sql/resolver/ddl/ob_ddl_resolver.cpp	5738	ObDDLResolver::check_foreign_key_reference	ret == OB_TABLE_NOT_EXIST	if (OB_TABLE_NOT_EXIST == ret) {
+src/sql/resolver/ddl/ob_ddl_resolver.cpp	5900	ObDDLResolver::create_fk_cons_name_automatically	call result hash_ret=current_foreign_key_name_set_.exist_refactored(f... == OB_HASH_EXIST	if (OB_HASH_EXIST == (hash_ret = current_foreign_key_name_set_.exist_refactored(fk_key))) {
+src/sql/resolver/ddl/ob_ddl_resolver.cpp	6141	ObDDLResolver::resolve_partition_name	ret == OB_ERR_WRONG_IDENT_NAME	if (OB_ERR_WRONG_IDENT_NAME == ret) {
+src/sql/resolver/ddl/ob_ddl_resolver.cpp	6144	ObDDLResolver::resolve_partition_name	ret == OB_ERR_TOO_LONG_IDENT	} else if (OB_ERR_TOO_LONG_IDENT == ret) {
+src/sql/resolver/ddl/ob_ddl_resolver.cpp	7586	ObDDLResolver::check_and_set_partition_names	call result partition_name_set->exist_refactored(partition_name_key) == OB_HASH_EXIST	if (OB_HASH_EXIST == partition_name_set->exist_refactored(partition_name_key)) {
+src/sql/resolver/ddl/ob_ddl_resolver.cpp	7615	ObDDLResolver::check_and_set_partition_names	call result partition_name_set->exist_refactored(partition_name_key) == OB_HASH_EXIST	if (OB_HASH_EXIST == partition_name_set->exist_refactored(partition_name_key)) {
+src/sql/resolver/ddl/ob_ddl_resolver.cpp	7681	ObDDLResolver::check_and_set_individual_subpartition_names	call result partition_name_set->exist_refactored(partition_name_key) == OB_HASH_EXIST	if (OB_HASH_EXIST == partition_name_set->exist_refactored(partition_name_key)) {
+src/sql/resolver/ddl/ob_ddl_resolver.cpp	7724	ObDDLResolver::check_and_set_individual_subpartition_names	call result partition_name_set->exist_refactored(partition_name_key) == OB_HASH_EXIST	if (OB_HASH_EXIST == partition_name_set->exist_refactored(partition_name_key)) {
+src/sql/resolver/ddl/ob_ddl_resolver.cpp	7746	ObDDLResolver::set_partition_name_in_hashset	ret == OB_HASH_FULL	if (OB_HASH_FULL == ret) {
+src/sql/resolver/ddl/ob_ddl_resolver.cpp	8033	ObDDLResolver::get_partition_keys_by_part_func_expr	ret == OB_ITER_END	if (OB_ITER_END == ret) {
+src/sql/resolver/ddl/ob_drop_index_resolver.cpp	90	ObDropIndexResolver::resolve	ret == OB_TABLE_NOT_EXIST	if (OB_TABLE_NOT_EXIST == ret) {
+src/sql/resolver/ddl/ob_drop_routine_resolver.cpp	80	ObDropFunctionResolver::resolve	ret == OB_ERR_NO_DB_SELECTED	if (OB_ERR_NO_DB_SELECTED == ret) {
+src/sql/resolver/ddl/ob_drop_table_resolver.cpp	118	ObDropTableResolver::resolve	call result table_item_set->exist_refactored(table_item) == OB_HASH_EXIST	if (OB_HASH_EXIST == table_item_set->exist_refactored(table_item)) {
+src/sql/resolver/ddl/ob_fts_index_builder_util.cpp	105	ObFtsIndexBuilderUtil::determine_docid_type	ret == OB_ERR_INDEX_KEY_NOT_FOUND	if (OB_ERR_INDEX_KEY_NOT_FOUND == ret) {
+src/sql/resolver/ddl/ob_fts_index_builder_util.cpp	1804	ObFtsIndexBuilderUtil::generate_fts_parser_property	ret == OB_NOT_SUPPORTED	if (OB_NOT_SUPPORTED == ret) {
+src/sql/resolver/ddl/ob_fts_index_builder_util.cpp	2402	ObMulValueIndexBuilderUtil::get_mulvalue_col	ret != OB_ERR_KEY_COLUMN_DOES_NOT_EXITS	if (ret != OB_ERR_KEY_COLUMN_DOES_NOT_EXITS) {
+src/sql/resolver/ddl/ob_optimize_resolver.cpp	72	ObOptimizeTableResolver::resolve	call result table_item_set->exist_refactored(table_item) == OB_HASH_EXIST	if (OB_HASH_EXIST == table_item_set->exist_refactored(table_item)) {
+src/sql/resolver/ddl/ob_trigger_resolver.cpp	107	ObTriggerResolver::get_drop_trigger_stmt_table_name	ret == OB_ERR_TRIGGER_NOT_EXIST; ret == OB_ERR_BAD_DATABASE	if (OB_ERR_TRIGGER_NOT_EXIST == ret || OB_ERR_BAD_DATABASE == ret) {
+src/sql/resolver/ddl/ob_truncate_table_resolver.cpp	84	ObTruncateTableResolver::resolve	ret == OB_TABLE_NOT_EXIST	if (NULL == orig_table_schema && OB_TABLE_NOT_EXIST == ret) {
+src/sql/resolver/dml/ob_aggr_expr_push_up_analyzer.cpp	439	ObStmtExecParamReplacer::check_need_replace	ret == OB_HASH_NOT_EXIST	if (OB_HASH_NOT_EXIST == ret) {
+src/sql/resolver/dml/ob_column_namespace_checker.cpp	83	ObColumnNamespaceChecker::check_table_column_namespace	ret == OB_ERR_BAD_FIELD_ERROR	if (OB_ERR_BAD_FIELD_ERROR == ret) {
+src/sql/resolver/dml/ob_column_namespace_checker.cpp	101	ObColumnNamespaceChecker::check_table_column_namespace	ret == OB_ERR_BAD_FIELD_ERROR	if (OB_ERR_BAD_FIELD_ERROR == ret) {
+src/sql/resolver/dml/ob_column_namespace_checker.cpp	417	ObColumnNamespaceChecker::find_column_in_joined_table	ret == OB_ERR_BAD_FIELD_ERROR	if (OB_ERR_BAD_FIELD_ERROR == ret) {
+src/sql/resolver/dml/ob_column_namespace_checker.cpp	426	ObColumnNamespaceChecker::find_column_in_joined_table	ret == OB_ERR_BAD_FIELD_ERROR	if (OB_ERR_BAD_FIELD_ERROR == ret) {
+src/sql/resolver/dml/ob_del_upd_resolver.cpp	816	ObDelUpdResolver::set_base_table_for_updatable_view	ret == OB_ERR_NONUPDATEABLE_COLUMN	if (OB_ERR_NONUPDATEABLE_COLUMN == ret) {
+src/sql/resolver/dml/ob_del_upd_resolver.cpp	819	ObDelUpdResolver::set_base_table_for_updatable_view	ret == OB_ERR_NON_INSERTABLE_TABLE	} else if (OB_ERR_NON_INSERTABLE_TABLE == ret) {
+src/sql/resolver/dml/ob_del_upd_resolver.cpp	822	ObDelUpdResolver::set_base_table_for_updatable_view	ret == OB_ERR_NON_UPDATABLE_TABLE	} else if (OB_ERR_NON_UPDATABLE_TABLE == ret) {
+src/sql/resolver/dml/ob_del_upd_resolver.cpp	901	ObDelUpdResolver::set_base_table_for_view	ret == OB_ERR_NON_UPDATABLE_TABLE	if (OB_ERR_NON_UPDATABLE_TABLE == ret) {
+src/sql/resolver/dml/ob_del_upd_resolver.cpp	905	ObDelUpdResolver::set_base_table_for_view	ret == OB_ERR_VIEW_DELETE_MERGE_VIEW	} else if (OB_ERR_VIEW_DELETE_MERGE_VIEW == ret) {
+src/sql/resolver/dml/ob_del_upd_resolver.cpp	951	ObDelUpdResolver::check_same_base_table	ret == OB_ERR_NONUPDATEABLE_COLUMN	if (OB_ERR_NONUPDATEABLE_COLUMN == ret) {
+src/sql/resolver/dml/ob_del_upd_resolver.cpp	954	ObDelUpdResolver::check_same_base_table	ret == OB_ERR_VIEW_MULTIUPDATE	} else if (OB_ERR_VIEW_MULTIUPDATE == ret) {
+src/sql/resolver/dml/ob_del_upd_resolver.cpp	2809	ObDelUpdResolver::check_insert_column_duplicate	ret (assigned in the comparison) == OB_HASH_EXIST	if (OB_HASH_EXIST == (ret = insert_column_ids_.exist_refactored(column_id))) {
+src/sql/resolver/dml/ob_del_upd_resolver.cpp	2812	ObDelUpdResolver::check_insert_column_duplicate	ret != OB_HASH_NOT_EXIST	} else if (OB_HASH_NOT_EXIST != ret) {
+src/sql/resolver/dml/ob_del_upd_resolver.cpp	2982	ObDelUpdResolver::replace_column_ref_for_check_constraint	ret == OB_ENTRY_NOT_EXIST	for(int64_t i = 0; i < N && OB_ENTRY_NOT_EXIST == ret; ++i) {
+src/sql/resolver/dml/ob_delete_resolver.cpp	414	ObDeleteResolver::check_view_deletable	ret == OB_ERR_NON_UPDATABLE_TABLE	if (OB_ERR_NON_UPDATABLE_TABLE == ret) {
+src/sql/resolver/dml/ob_dml_resolver.cpp	2130	ObDMLResolver::try_resolve_sql_symbol	ret == OB_ERR_BAD_FIELD_ERROR	if (OB_ERR_BAD_FIELD_ERROR == ret) {
+src/sql/resolver/dml/ob_dml_resolver.cpp	2161	ObDMLResolver::resolve_qualified_identifier	ret == OB_ERR_BAD_FIELD_ERROR	if (OB_ERR_BAD_FIELD_ERROR == ret && !q_name.access_idents_.empty()) {
+src/sql/resolver/dml/ob_dml_resolver.cpp	2202	ObDMLResolver::report_user_error_msg	ret == OB_ERR_BAD_FIELD_ERROR	if (OB_ERR_BAD_FIELD_ERROR == ret && !q_name.tbl_name_.empty()) {
+src/sql/resolver/dml/ob_dml_resolver.cpp	2220	ObDMLResolver::report_user_error_msg	ret == OB_ERR_BAD_FIELD_ERROR	if (OB_ERR_BAD_FIELD_ERROR == ret) {
+src/sql/resolver/dml/ob_dml_resolver.cpp	2224	ObDMLResolver::report_user_error_msg	ret == OB_NON_UNIQ_ERROR	} else if (OB_NON_UNIQ_ERROR == ret) {
+src/sql/resolver/dml/ob_dml_resolver.cpp	2228	ObDMLResolver::report_user_error_msg	ret == OB_ILLEGAL_REFERENCE	} else if (OB_ILLEGAL_REFERENCE == ret) {
+src/sql/resolver/dml/ob_dml_resolver.cpp	2364	ObDMLResolver::resolve_basic_table_without_cte	ret == OB_TABLE_NOT_EXIST; ret == OB_ERR_BAD_DATABASE	if (OB_TABLE_NOT_EXIST == ret || OB_ERR_BAD_DATABASE == ret) {
+src/sql/resolver/dml/ob_dml_resolver.cpp	2908	ObDMLResolver::transfer_using_to_on_expr	ret == OB_ERR_BAD_FIELD_ERROR	if (OB_ERR_BAD_FIELD_ERROR == ret) {
+src/sql/resolver/dml/ob_dml_resolver.cpp	2911	ObDMLResolver::transfer_using_to_on_expr	ret == OB_NON_UNIQ_ERROR	} else if (OB_NON_UNIQ_ERROR == ret) {
+src/sql/resolver/dml/ob_dml_resolver.cpp	4068	ObDMLResolver::resolve_base_or_alias_table_item_normal	ret == OB_TABLE_NOT_EXIST	if (OB_TABLE_NOT_EXIST == ret &&
+src/sql/resolver/dml/ob_dml_resolver.cpp	4080	ObDMLResolver::resolve_base_or_alias_table_item_normal	ret == OB_TABLE_NOT_EXIST	if (OB_TABLE_NOT_EXIST == ret ||
+src/sql/resolver/dml/ob_dml_resolver.cpp	4269	ObDMLResolver::do_expand_view	ret == OB_TABLE_NOT_EXIST; ret == OB_ERR_BAD_FIELD_ERROR; ret == OB_NON_UNIQ_ERROR	if (OB_TABLE_NOT_EXIST == ret || OB_ERR_BAD_FIELD_ERROR == ret || OB_NON_UNIQ_ERROR == ret) {
+src/sql/resolver/dml/ob_dml_resolver.cpp	4297	ObDMLResolver::do_expand_view	ret != OB_ERR_VIEW_INVALID	if (OB_UNLIKELY(OB_SUCCESS != ret && OB_ERR_VIEW_INVALID != ret)) {
+src/sql/resolver/dml/ob_dml_resolver.cpp	4298	ObDMLResolver::do_expand_view	ret == OB_ERR_VIEW_INVALID	} else if (OB_UNLIKELY(OB_ERR_VIEW_INVALID == ret)) {
+src/sql/resolver/dml/ob_dml_resolver.cpp	4306	ObDMLResolver::do_expand_view	tmp_ret == OB_ERR_TOO_LONG_COLUMN_LENGTH	if (OB_ERR_TOO_LONG_COLUMN_LENGTH == tmp_ret) {
+src/sql/resolver/dml/ob_dml_resolver.cpp	4451	ObDMLResolver::resolve_fk_table_partition_expr	ret == OB_TABLE_NOT_EXIST	if (OB_TABLE_NOT_EXIST == ret) {
+src/sql/resolver/dml/ob_dml_resolver.cpp	4488	ObDMLResolver::resolve_fk_table_partition_expr	ret == OB_ERR_TABLE_EXIST	if (ret == OB_ERR_TABLE_EXIST) {
+src/sql/resolver/dml/ob_dml_resolver.cpp	5008	ObDMLResolver::resolve_all_basic_table_columns	ret != OB_ITER_END	if (ret != OB_ITER_END) {
+src/sql/resolver/dml/ob_dml_resolver.cpp	5152	ObDMLResolver::resolve_order_clause	ret == OB_ERR_AGGREGATE_ORDER_FOR_UNION	if (OB_ERR_AGGREGATE_ORDER_FOR_UNION == ret) {
+src/sql/resolver/dml/ob_dml_resolver.cpp	5643	ObDMLResolver::resolve_partitions	ret == OB_UNKNOWN_PARTITION	if (OB_UNKNOWN_PARTITION == ret) {
+src/sql/resolver/dml/ob_dml_resolver.cpp	6630	ObDMLResolver::resolve_table_relation_factor_normal	ret != OB_SCHEMA_EAGAIN	if (OB_SCHEMA_EAGAIN != ret) {
+src/sql/resolver/dml/ob_dml_resolver.cpp	6656	ObDMLResolver::check_table_exist_or_not	ret != OB_SCHEMA_EAGAIN	if (OB_SCHEMA_EAGAIN != ret) {
+src/sql/resolver/dml/ob_dml_resolver.cpp	7782	ObDMLResolver::resolve_generated_table_column_item	ret == OB_ERR_BAD_FIELD_ERROR	if (ret == OB_ERR_BAD_FIELD_ERROR) {
+src/sql/resolver/dml/ob_dml_resolver.cpp	8263	ObDMLResolver::resolve_external_name	ret == OB_ERR_SP_UNDECLARED_VAR	if (OB_ERR_SP_UNDECLARED_VAR == ret) {
+src/sql/resolver/dml/ob_dml_resolver.cpp	10638	ObDMLResolver::add_fake_schema	ret == OB_ERR_COLUMN_DUPLICATE	if (OB_ERR_COLUMN_DUPLICATE == ret) {
+src/sql/resolver/dml/ob_dml_resolver.cpp	10730	ObDMLResolver::resolve_basic_table_with_cte	ret == OB_TABLE_NOT_EXIST	if (OB_TABLE_NOT_EXIST == ret && cte_ctx_.is_with_resolver()) {
+src/sql/resolver/dml/ob_dml_resolver.cpp	10896	ObDMLResolver::resolve_with_clause_opt_alias_colnames	ret == OB_HASH_EXIST	if (OB_HASH_EXIST == ret) {
+src/sql/resolver/dml/ob_dml_resolver.cpp	12488	ObDMLResolver::resolve_match_index	ret == OB_ERR_INDEX_KEY_NOT_FOUND	if (OB_ERR_INDEX_KEY_NOT_FOUND == ret) {

@@ -1,111 +1,274 @@
 file	line	symbol	construct	text
-src/oblib/common/object/ob_object.h	2824	ObObj::get_tinyint	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/common/object/ob_object.h	2834	ObObj::get_smallint	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/common/object/ob_object.h	2844	ObObj::get_mediumint	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/common/object/ob_object.h	2854	ObObj::get_int32	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/common/object/ob_object.h	2864	ObObj::get_int	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/common/object/ob_object.h	2875	ObObj::get_utinyint	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/common/object/ob_object.h	2885	ObObj::get_usmallint	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/common/object/ob_object.h	2895	ObObj::get_umediumint	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/common/object/ob_object.h	2905	ObObj::get_uint32	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/common/object/ob_object.h	2915	ObObj::get_uint64	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/common/object/ob_object.h	2925	ObObj::get_float	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/common/object/ob_object.h	2935	ObObj::get_double	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/common/object/ob_object.h	2945	ObObj::get_ufloat	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/common/object/ob_object.h	2955	ObObj::get_udouble	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/common/object/ob_object.h	2966	ObObj::get_number	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/common/object/ob_object.h	2976	ObObj::get_unumber	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/common/object/ob_object.h	2986	ObObj::get_datetime	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/common/object/ob_object.h	2996	ObObj::get_timestamp	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/common/object/ob_object.h	3006	ObObj::get_date	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/common/object/ob_object.h	3016	ObObj::get_time	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/common/object/ob_object.h	3026	ObObj::get_year	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/common/object/ob_object.h	3049	ObObj::get_string	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/common/object/ob_object.h	3052	ObObj::get_string	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/common/object/ob_object.h	3113	ObObj::get_print_string	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/common/object/ob_object.h	3116	ObObj::get_print_string	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/common/object/ob_object.h	3139	ObObj::get_char	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/common/object/ob_object.h	3142	ObObj::get_char	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/common/object/ob_object.h	3152	ObObj::get_varbinary	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/common/object/ob_object.h	3155	ObObj::get_varbinary	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/common/object/ob_object.h	3165	ObObj::get_binary	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/common/object/ob_object.h	3168	ObObj::get_binary	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/common/object/ob_object.h	3178	ObObj::get_hex_string	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/common/object/ob_object.h	3188	ObObj::get_lob_value	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/common/object/ob_object.h	3198	ObObj::get_lob_locatorv2	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/common/object/ob_object.h	3208	ObObj::get_lob_locatorv2	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/common/object/ob_object.h	3218	ObObj::get_bool	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/common/object/ob_object.h	3228	ObObj::get_ext	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/common/object/ob_object.h	3238	ObObj::get_unknown	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/common/object/ob_object.h	3248	ObObj::get_bit	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/common/object/ob_object.h	3258	ObObj::get_enum	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/common/object/ob_object.h	3268	ObObj::get_set	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/common/row/ob_row_store.cpp	632	ObRowStore::add_row_by_projector	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/common/row/ob_row_store.cpp	814	ObRowStore::assign	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/common/row/ob_row_store.cpp	853	ObRowStore::adjust_row_cells_reference	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/common/row/ob_row_store.h	303	ObRowStore::append_row_store	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/common/row/ob_row_util.cpp	45	ObRowUtil::convert	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/common/rowkey/ob_rowkey_info.cpp	233	ObRowkeyInfo::is_rowkey_column	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/common/timezone/ob_time_convert.cpp	1457	ObTimeConverter::mdate_to_datetime	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/common/timezone/ob_time_convert.cpp	2218	ObTimeConverter::str_to_ob_time_without_date	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/common/timezone/ob_time_convert.cpp	4076	ObTimeConverter::validate_time	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; //all are zero...valid !
-src/oblib/common/udt/ob_array_binary.cpp	634	ObArrayBinary::distinct	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/common/udt/ob_array_binary.cpp	670	ObArrayBinary::push_not_in_set	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/common/udt/ob_array_binary.cpp	708	ObArrayBinary::except	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/common/udt/ob_array_binary.cpp	779	ObArrayBinary::intersect	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/common/udt/ob_array_fixed_size.ipp	644	ObArrayFixedSize::distinct	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/common/udt/ob_array_fixed_size.ipp	683	ObArrayFixedSize::push_not_in_set	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/common/udt/ob_array_fixed_size.ipp	724	ObArrayFixedSize::except	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/common/udt/ob_array_fixed_size.ipp	799	ObArrayFixedSize::intersect	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/common/udt/ob_array_nested.cpp	713	ObArrayNested::except	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/common/udt/ob_vector_type.h	501	ObVectorData::distinct	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/common/udt/ob_vector_type.h	539	ObVectorData::push_not_in_set	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/common/udt/ob_vector_type.h	579	ObVectorData::except	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/common/udt/ob_vector_type.h	653	ObVectorData::intersect	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/common/wide_integer/ob_wide_integer_str_funcs.cpp	403	from_string	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/common/xml/ob_tree_base.cpp	453	ObLibContainerNode::alter_member_sort_policy	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/common/xml/ob_xml_tree.cpp	220	ObXmlNode::set_flag_by_descandant	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/common/xml/ob_xml_tree.cpp	444	ObXmlNode::get_descendant	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/common/xml/ob_xml_util.cpp	579	ObXmlUtil::dfs_xml_text_node	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/common/xml/ob_xml_util.cpp	696	ObXmlUtil::delete_dup_ns_definition	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/common/xml/ob_xml_util.cpp	724	ObXmlUtil::add_ns_def_if_necessary	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/common/xml/ob_xpath.cpp	1027	ObPathUtil::add_dup_if_missing	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/common/xml/ob_xpath.cpp	1093	ObPathFuncNode::eval_count	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/common/xml/ob_xpath.cpp	2056	ObPathUtil::filter_compare	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/common/xml/ob_xpath.cpp	2060	ObPathUtil::filter_compare	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/common/xml/ob_xpath.cpp	2200	ObPathFilterOpNode::init_right_without_filter	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/common/xml/ob_xpath.cpp	2232	ObPathFilterOpNode::init_right_with_filter	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/common/xml/ob_xpath.cpp	2461	ObPathUtil::get_seek_vec	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/lib/alloc/memory_dump.cpp	611	ObMemoryDump::handle	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/lib/allocator/ob_fixed_size_block_allocator.h	385	ObFixedSizeBlockMemoryContext::init	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/lib/charset/ob_charset.cpp	976	ObCharset::mb_wc	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/lib/charset/ob_charset.cpp	1007	ObCharset::mb_wc	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/lib/charset/ob_charset.cpp	1140	ObCharset::wc_mb	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/lib/charset/ob_charset.cpp	2317	ObCharset::charset_convert	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/lib/charset/ob_charset.cpp	2337	ObCharset::charset_convert	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/lib/charset/ob_charset.cpp	2631	ObStringScanner::next_character	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/lib/charset/ob_charset.cpp	2651	ObStringScanner::next_character	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/lib/charset/ob_charset.h	798	ObCharsetUtils::foreach_char	ret = OB_SUCCESS (line start)	ret = common::OB_SUCCESS;
-src/oblib/lib/charset/ob_charset_string_helper.h	175	ObFastStringScanner::foreach_char_prototype	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/lib/charset/ob_charset_string_helper.h	289	ObFastStringScanner::convert_charset	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/lib/container/ob_ext_ring_buffer_impl.h	657	ObExtendibleRingBufferBase::do_get_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/lib/container/ob_ext_ring_buffer_impl.h	664	ObExtendibleRingBufferBase::do_get_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/lib/container/ob_ext_ring_buffer_impl.h	714	ObExtendibleRingBufferBase::do_set_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/lib/container/ob_ext_ring_buffer_impl.h	800	ObExtendibleRingBufferBase::do_pop_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/lib/container/ob_ext_ring_buffer_impl.h	810	ObExtendibleRingBufferBase::do_pop_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // OB_SUCCESS no matter popped or not.
-src/oblib/lib/container/ob_vector.ipp	510	ObSortedVector::find	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/lib/container/ob_vector.ipp	527	ObSortedVector::find	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/lib/file/file_directory_utils.cpp	138	FileDirectoryUtils::create_directory	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/lib/file/file_directory_utils.cpp	166	FileDirectoryUtils::create_full_path	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/lib/file/file_directory_utils.cpp	169	FileDirectoryUtils::create_full_path	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/lib/hash/ob_array_hash_map.h	174	ObArrayHashMap::get	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/lib/hash/ob_array_hash_map.h	193	ObArrayHashMap::insert	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/lib/hash/ob_array_hash_map.h	219	ObArrayHashMap::update	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/lib/hash/ob_array_index_hash_set.h	110	ObArrayIndexHashSet::get_index	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/lib/hash/ob_build_in_hashmap.h	197	ObBuildInHashMap::get_refactored	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/lib/hash/ob_hashtable.h	1017	ObHashTable::internal_get	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/lib/hash/ob_hashtable.h	1060	ObHashTable::internal_erase	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/lib/hash/ob_hashtable.h	1383	ObHashTable::erase_refactored	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/lib/hash/ob_hashtable.h	1448	ObHashTable::erase_if	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/lib/hash/ob_hashtable.h	1654	ObHashTable::read_atomic	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
-src/oblib/lib/hash/ob_hashtable.h	1687	ObHashTable::atomic	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/virtual_table/ob_all_virtual_obj_lock.cpp	170	ObAllVirtualObjLock::get_next_lock_op_iter	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/virtual_table/ob_all_virtual_obj_lock.cpp	247	ObAllVirtualObjLock::get_next_lock_op_iter_from_lock_memtable	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;  // continue
+src/observer/virtual_table/ob_all_virtual_outline.cpp	97	ObAllVirtualOutlineBase::is_database_recycle	ret = OB_SUCCESS (line start) [not built]	ret = OB_SUCCESS;
+src/observer/virtual_table/ob_all_virtual_ps_stat.cpp	87	ObAllVirtualPsStat::inner_get_next_row	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/virtual_table/ob_all_virtual_resource_limit_detail.cpp	70	ObResourceLimitDetailTable::get_next_resource_limit_val_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/virtual_table/ob_all_virtual_session_ps_info.cpp	114	ObAllVirtualSessionPsInfo::fill_cells	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/virtual_table/ob_all_virtual_session_ps_info.cpp	296	ObAllVirtualSessionPsInfo::ObSessionInfoIterator::next	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/virtual_table/ob_all_virtual_sql_plan.cpp	467	ObAllVirtualSqlPlan::dump_plans	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/virtual_table/ob_all_virtual_table_mgr.cpp	115	ObAllVirtualTableMgr::get_next_table	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/virtual_table/ob_all_virtual_tablet_info.cpp	99	ObAllVirtualTabletInfo::inner_get_next_row	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/virtual_table/ob_all_virtual_tablet_sstable_macro_info.cpp	210	ObAllVirtualTabletSSTableMacroInfo::get_next_macro_info	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/virtual_table/ob_all_virtual_tablet_sstable_macro_info.cpp	594	ObAllVirtualTabletSSTableMacroInfo::get_next_sstable	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/virtual_table/ob_all_virtual_tmp_file.cpp	73	ObAllVirtualTmpFileInfo::get_next_tmp_file_info_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/virtual_table/ob_all_virtual_tmp_file.cpp	289	ObAllVirtualTmpFileInfo::inner_get_next_row	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/virtual_table/ob_all_virtual_vector_index_info.cpp	80	ObVectorIndexInfoIterator::get_next_info	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/virtual_table/ob_information_columns_table.cpp	249	ObInfoSchemaColumnsTable::iterate_table_schema_array	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/virtual_table/ob_information_columns_table.cpp	271	ObInfoSchemaColumnsTable::iterate_table_schema_array	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/virtual_table/ob_information_columns_table.cpp	336	ObInfoSchemaColumnsTable::iterate_column_schema_array	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/virtual_table/ob_information_columns_table.cpp	346	ObInfoSchemaColumnsTable::iterate_column_schema_array	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/virtual_table/ob_information_columns_table.cpp	967	ObInfoSchemaColumnsTable::fill_col_privs	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/virtual_table/ob_information_partitions_table.cpp	420	ObInfoSchemaPartitionsTable::add_partitions	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/virtual_table/ob_mysql_proc_table.cpp	468	ObMySQLProcTable::get_info_from_all_routine	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/virtual_table/ob_plan_cache_plan_explain.cpp	228	ObExpVisitor::get_property	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/virtual_table/ob_plan_cache_plan_explain.cpp	297	ObCacheObjIterator::next	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/virtual_table/ob_plan_cache_plan_explain.cpp	390	ObPlanCachePlanExplain::inner_get_next_row	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/virtual_table/ob_show_create_procedure.cpp	253	ObShowCreateProcedure::has_show_create_function_priv	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/virtual_table/ob_show_grants.cpp	53	ObShowGrants::add_priv_map	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/virtual_table/ob_show_table_status.cpp	223	ObShowTableStatus::get_table_stats	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/virtual_table/ob_show_table_status.cpp	247	ObShowTableStatus::get_table_stats	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/virtual_table/ob_table_columns.cpp	174	ObTableColumns::inner_get_next_row	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/virtual_table/ob_table_columns.cpp	242	ObTableColumns::inner_get_next_row	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/virtual_table/ob_table_columns.cpp	336	ObTableColumns::fill_col_privs	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/virtual_table/ob_table_columns.cpp	1044	ObTableColumns::set_col_attrs_according_binary_expr	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/virtual_table/ob_virtual_core_inner_table.cpp	134	ObVritualCoreInnerTable::inner_open	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/virtual_table/ob_virtual_core_inner_table.cpp	160	ObVritualCoreInnerTable::inner_open	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/observer/virtual_table/ob_virtual_outline.cpp	96	ObVirtualOutlineBase::is_database_recycle	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/pl/ob_pl.cpp	1313	ObPL::execute	ret = 0 (a reset of the error code, spelled 0)	ret = 0;
+src/pl/ob_pl.cpp	1644	ObPL::add_pl_lib_cache	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/pl/ob_pl.cpp	1649	ObPL::add_pl_lib_cache	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/pl/ob_pl.cpp	1651	ObPL::add_pl_lib_cache	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/pl/ob_pl.cpp	1654	ObPL::add_pl_lib_cache	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // add plan error, overwrite error code, ensure that plan cache failure does not affect the normal execution path
+src/pl/ob_pl.cpp	2829	ObPLExecRecursionCtx::inc_and_check_depth	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/pl/ob_pl_build.cpp	600	ObPLBuilder::update_schema_object_dep_info	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/pl/ob_pl_build.cpp	837	ObPLBuilder::build_package	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/pl/ob_pl_package_manager.cpp	278	ObPLPackageManager::read_package_sql	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/pl/ob_pl_package_manager.cpp	937	ObPLPackageManager::load_package_spec	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // cache add failed, need not fail execute path
+src/pl/ob_pl_package_manager.cpp	1048	ObPLPackageManager::load_package_body	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; //cache add failed, need not fail execute path
+src/pl/ob_pl_package_manager.cpp	1138	ObPLPackageManager::get_cached_package_spec	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/pl/ob_pl_package_manager.cpp	1196	ObPLPackageManager::get_cached_package	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/pl/ob_pl_package_manager.cpp	1404	ObPLPackageManager::add_package_to_plan_cache	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/pl/ob_pl_package_manager.cpp	1410	ObPLPackageManager::add_package_to_plan_cache	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/pl/ob_pl_package_manager.cpp	1412	ObPLPackageManager::add_package_to_plan_cache	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // add package error, overwrite error code, ensure that plan cache failure does not affect the normal execution path
+src/pl/ob_pl_package_manager.cpp	1487	ObPLPackageManager::destory_package_state	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/pl/ob_pl_resolver.cpp	701	#define RESOLVE_PACKAGE_STMT	conditional reset (ternary yields OB_SUCCESS)	ret = is_object_not_exist_error(ret) ? OB_SUCCESS : ret; \
+src/pl/ob_pl_resolver.cpp	914	ObPLResolver::resolve_sp_composite_type	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/pl/ob_pl_resolver.cpp	1357	ObPLResolver::resolve_extern_type_info	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/pl/ob_pl_resolver.cpp	1691	ObPLResolver::resolve_sp_row_type	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/pl/ob_pl_resolver.cpp	5590	ObPLResolver::resolve_expr	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/pl/ob_pl_resolver.cpp	10807	ObPLResolveCtx::get_user_type	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/pl/ob_pl_stmt.cpp	1245	ObPLExternalNS::resolve_external_symbol	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/pl/ob_pl_stmt.cpp	1251	ObPLExternalNS::resolve_external_symbol	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/pl/ob_pl_stmt.cpp	1278	ObPLExternalNS::resolve_external_symbol	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/pl/ob_pl_stmt.cpp	1354	ObPLExternalNS::resolve_external_symbol	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/pl/ob_pl_stmt.cpp	1407	ObPLExternalNS::resolve_external_symbol	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/pl/ob_pl_type.cpp	535	ObPLDataType::set_type_info	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/pl/ob_pl_type.cpp	731	ObPLEnumSetCtx::set_enum_type_info	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/pl/pl_cache/ob_pl_cache.cpp	1039	ObPLObjectSet::inner_get_cache_obj	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/pl/pl_cache/ob_pl_cache_mgr.cpp	56	ObPLCacheMgr::get_sys_var_in_pl_cache_str	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/pl/pl_cache/ob_pl_cache_mgr.cpp	64	ObPLCacheMgr::get_sys_var_in_pl_cache_str	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/pl/sys_package/ob_dbms_space.cpp	295	ObDbmsSpace::inner_get_compressed_ratio	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/pl/sys_package/ob_dbms_space.cpp	317	ObDbmsSpace::extract_total_compression_ratio	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/pl/sys_package/ob_dbms_space.cpp	503	ObDbmsSpace::get_each_tablet_size	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/pl/sys_package/ob_dbms_space.cpp	548	ObDbmsSpace::get_each_tablet_size	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/pl/sys_package/ob_dbms_space.cpp	573	ObDbmsSpace::extract_tablet_size	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/pl/sys_package/ob_dbms_space.cpp	579	ObDbmsSpace::extract_tablet_size	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/pl/sys_package/ob_dbms_space.cpp	612	ObDbmsSpace::extract_tablet_size	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/pl/sys_package/ob_dbms_space.cpp	618	ObDbmsSpace::extract_tablet_size	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/pl/sys_package/ob_dbms_space.cpp	624	ObDbmsSpace::extract_tablet_size	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/pl/sys_package/ob_dbms_space.cpp	630	ObDbmsSpace::extract_tablet_size	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/pl/sys_package/ob_dbms_stats.cpp	224	ObDbmsStats::gather_schema_stats	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/pl/sys_package/ob_dbms_stats.cpp	252	ObDbmsStats::gather_schema_stats	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/pl/sys_package/ob_dbms_stats.cpp	259	ObDbmsStats::gather_schema_stats	conditional reset (ternary yields OB_SUCCESS)	ret = ret == OB_TABLE_NOT_EXIST ? OB_SUCCESS : ret;//skip table not exist in schema stats op.
+src/pl/sys_package/ob_dbms_stats.cpp	879	ObDbmsStats::delete_schema_stats	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/pl/sys_package/ob_dbms_stats.cpp	889	ObDbmsStats::delete_schema_stats	conditional reset (ternary yields OB_SUCCESS)	ret = ret == OB_TABLE_NOT_EXIST ? OB_SUCCESS : ret;//skip table not exist in schema stats op.
+src/pl/sys_package/ob_dbms_stats.cpp	1299	ObDbmsStats::export_schema_stats	conditional reset (ternary yields OB_SUCCESS)	ret = ret == OB_TABLE_NOT_EXIST ? OB_SUCCESS : ret;//skip table not exist in schema stats op.
+src/pl/sys_package/ob_dbms_stats.cpp	1611	ObDbmsStats::import_schema_stats	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/pl/sys_package/ob_dbms_stats.cpp	1620	ObDbmsStats::import_schema_stats	conditional reset (ternary yields OB_SUCCESS)	ret = ret == OB_TABLE_NOT_EXIST ? OB_SUCCESS : ret;//skip table not exist in schema stats op.
+src/pl/sys_package/ob_dbms_stats.cpp	1874	ObDbmsStats::lock_schema_stats	conditional reset (ternary yields OB_SUCCESS)	ret = ret == OB_TABLE_NOT_EXIST ? OB_SUCCESS : ret;//skip table not exist in schema stats op.
+src/pl/sys_package/ob_dbms_stats.cpp	2060	ObDbmsStats::unlock_schema_stats	conditional reset (ternary yields OB_SUCCESS)	ret = ret == OB_TABLE_NOT_EXIST ? OB_SUCCESS : ret;//skip table not exist in schema stats op.
+src/pl/sys_package/ob_dbms_stats.cpp	2219	ObDbmsStats::restore_schema_stats	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/pl/sys_package/ob_dbms_stats.cpp	2229	ObDbmsStats::restore_schema_stats	conditional reset (ternary yields OB_SUCCESS)	ret = ret == OB_TABLE_NOT_EXIST ? OB_SUCCESS : ret;//skip table not exist in schema stats op.
+src/pl/sys_package/ob_dbms_stats.cpp	2725	ObDbmsStats::async_gather_stats_job_proc	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/pl/sys_package/ob_dbms_stats.cpp	2752	ObDbmsStats::async_gather_stats_job_proc	conditional reset (ternary yields OB_SUCCESS)	ret = ret == OB_TIMEOUT ? OB_SUCCESS : ret;
+src/pl/sys_package/ob_dbms_stats.cpp	2808	ObDbmsStats::update_stat_cache	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/pl/sys_package/ob_dbms_stats.cpp	4763	ObDbmsStats::gather_database_stats_job_proc	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/pl/sys_package/ob_dbms_stats.cpp	4792	ObDbmsStats::gather_database_stats_job_proc	conditional reset (ternary yields OB_SUCCESS)	ret = ret == OB_TIMEOUT ? OB_SUCCESS : ret;
+src/pl/sys_package/ob_dbms_stats.cpp	4887	ObDbmsStats::do_gather_table_stats	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/pl/sys_package/ob_dbms_stats.cpp	4890	ObDbmsStats::do_gather_table_stats	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/pl/sys_package/ob_dbms_stats.cpp	4956	ObDbmsStats::append_part_id_if_valid	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/pl/sys_package/ob_dbms_stats.cpp	5782	ObDbmsStats::update_system_stats_cache	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // ignore ret
+src/pl/sys_package/ob_dbms_stats.cpp	6143	ObDbmsStats::do_async_gather_table_stats	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/pl/sys_package/ob_dbms_stats.cpp	6146	ObDbmsStats::do_async_gather_table_stats	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/query/api/query/engine/basic/ob_pushdown_filter.h	1041	ObWhiteFilterParamHashSet::exist_refactored	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/query/api/query/engine/basic/ob_pushdown_filter.h	1044	ObWhiteFilterParamHashSet::exist_refactored	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/query/api/query/engine/expr/ob_expr.h	1085	ObExpr::eval_batch	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/query/api/query/engine/ob_operator.h	536	ObOperator::get_next_batch_with_onlyone_row	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/query/api/query/vector/ob_vector_index_cache.h	294	ObIvfCacheMgr::get_or_create_cache_node	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/query/vector/ob_vector_embedding_handler.cpp	503	ObEmbeddingTask::reschedule	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/query/vector/ob_vector_embedding_handler.cpp	606	ObEmbeddingTask::check_async_progress	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/query/vector/ob_vector_embedding_handler.cpp	630	ObEmbeddingTask::check_async_progress	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/query/vector/ob_vector_embedding_handler.cpp	1294	ObEmbeddingTaskHandler::push_task	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/dbms_job/ob_dbms_job_master.cpp	291	ObDBMSJobMaster::scheduler	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/dbms_job/ob_dbms_job_master.cpp	470	ObDBMSJobMaster::register_job	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/dbms_job/ob_dbms_job_utils.cpp	209	#define EXTRACT_TIMESTAMP_FIELD_MYSQL_SKIP_RET	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;                                                 \
+src/rootserver/dbms_job/ob_dbms_job_utils.cpp	219	#define EXTRACT_NUMBER_FIELD_MYSQL_SKIP_RET	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;                                                 \
+src/rootserver/dbms_job/ob_dbms_job_utils.cpp	273	ObDBMSJobUtils::get_dbms_job_info	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // job not exist, do nothing ...
+src/rootserver/dbms_job/ob_dbms_job_utils.cpp	307	ObDBMSJobUtils::get_dbms_job_infos_in_runtime	conditional reset (ternary yields OB_SUCCESS)	ret = OB_ITER_END == ret ? OB_SUCCESS : ret;
+src/rootserver/dbms_job/ob_dbms_job_utils.cpp	361	ObDBMSJobUtils::calc_execute_at	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_column_redefinition_task.cpp	262	ObColumnRedefinitionTask::copy_table_indexes	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_column_redefinition_task.cpp	450	ObColumnRedefinitionTask::copy_table_dependent_objects	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_column_redefinition_task.cpp	507	ObColumnRedefinitionTask::take_effect	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_column_redefinition_task.cpp	514	ObColumnRedefinitionTask::take_effect	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_column_redefinition_task.cpp	531	ObColumnRedefinitionTask::take_effect	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_column_redefinition_task.cpp	665	ObColumnRedefinitionTask::collect_longops_stat	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_column_redefinition_task.cpp	674	ObColumnRedefinitionTask::collect_longops_stat	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_constraint_task.cpp	115	ObCheckConstraintValidationTask::process	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_constraint_task.cpp	407	ObForeignKeyConstraintValidationTask::check_fk_constraint_data_valid	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_constraint_task.cpp	584	ObConstraintTask::release_snapshot	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_constraint_task.cpp	652	ObConstraintTask::wait_trans_end	conditional reset (ternary yields OB_SUCCESS)	ret = OB_SNAPSHOT_DISCARDED == ret ? OB_SUCCESS : ret;
+src/rootserver/ddl_task/ob_constraint_task.cpp	827	ObConstraintTask::release_ddl_locks	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_constraint_task.cpp	1160	ObConstraintTask::set_check_constraint_validated	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_constraint_task.cpp	1309	ObConstraintTask::rollback_failed_check_constraint	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_constraint_task.cpp	1371	ObConstraintTask::rollback_failed_foregin_key	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_constraint_task.cpp	1448	ObConstraintTask::rollback_failed_add_not_null_columns	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_constraint_task.cpp	1693	ObConstraintTask::check_health	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // allow clean up
+src/rootserver/ddl_task/ob_ddl_common_rs_impl.cpp	369	ObDDLTaskUtil::generate_build_replica_sql	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_ddl_common_rs_impl.cpp	420	ObDDLTaskUtil::generate_build_replica_sql	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_ddl_common_rs_impl.cpp	625	ObDDLTaskUtil::obtain_snapshot	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_ddl_common_rs_impl.cpp	765	ObDDLTaskUtil::check_need_update_domain_index_share_table_snapshot	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_ddl_common_rs_impl.cpp	772	ObDDLTaskUtil::check_need_update_domain_index_share_table_snapshot	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_ddl_common_rs_impl.cpp	927	ObDDLTaskUtil::check_and_cancel_single_replica_dag	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_ddl_common_rs_impl.cpp	1027	ObDDLTaskUtil::get_task_tablet_slice_count	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_ddl_common_rs_impl.cpp	1117	ObDDLTaskUtil::check_table_empty	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_ddl_redefinition_task.cpp	577	ObDDLRedefinitionTask::check_data_dest_tables_columns_checksum	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_ddl_redefinition_task.cpp	664	ObDDLRedefinitionTask::add_constraint_ddl_task	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_ddl_redefinition_task.cpp	768	ObDDLRedefinitionTask::add_fk_ddl_task	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_ddl_redefinition_task.cpp	1153	ObDDLRedefinitionTask::check_health	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // allow clean up
+src/rootserver/ddl_task/ob_ddl_redefinition_task.cpp	1406	ObDDLRedefinitionTask::sync_column_level_stats_info	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_ddl_retry_task.cpp	342	ObDDLRetryTask::drop_schema	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_ddl_scheduler.cpp	1010	ObDDLScheduler::create_ddl_task	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_ddl_scheduler.cpp	1299	ObDDLScheduler::add_sys_task	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_ddl_scheduler.cpp	1426	ObDDLScheduler::modify_redef_task	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_ddl_scheduler.cpp	2364	ObDDLScheduler::recover_task	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // ignore ret
+src/rootserver/ddl_task/ob_ddl_scheduler.cpp	2403	ObDDLScheduler::remove_inactive_ddl_task	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_ddl_scheduler.cpp	2512	ObDDLScheduler::schedule_ddl_task	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_ddl_scheduler.cpp	2975	ObDDLScheduler::add_task_to_longops_mgr	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_ddl_tablet_scheduler.cpp	119	ObDDLTabletScheduler::init	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_ddl_tablet_scheduler.cpp	238	ObDDLTabletScheduler::push_tablet_execution_id	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_ddl_tablet_scheduler.cpp	560	ObDDLTabletScheduler::check_running_task_completion_status	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_ddl_task.cpp	731	ObDDLTask::report_error_code	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_ddl_task.cpp	830	ObDDLTask::wait_trans_end	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_ddl_task.cpp	2647	ObDDLTaskRecordOperator::check_is_adding_constraint	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_ddl_task.cpp	2686	ObDDLTaskRecordOperator::check_has_long_running_ddl	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_ddl_task.cpp	2756	ObDDLTaskRecordOperator::check_has_conflict_ddl	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_ddl_task.cpp	2812	ObDDLTaskRecordOperator::check_rebuild_index_task_exist	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_ddl_task.cpp	2916	ObDDLTaskRecordOperator::get_task_record	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_ddl_task.cpp	3002	ObDDLTaskRecordOperator::check_task_id_exist	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_ddl_task.cpp	3058	ObDDLTaskRecordOperator::insert_record	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_ddl_task.cpp	3286	ObDDLTaskRecordOperator::kill_task_inner_sql	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_ddl_task.cpp	3352	ObDDLTaskRecordOperator::get_running_tasks_inner_sql	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_drop_fts_index_task.cpp	416	ObDropFTSIndexTask::check_drop_index_finish	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_drop_vec_index_task.cpp	619	ObDropVecIndexTask::check_drop_index_finish	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_drop_vec_ivf_index_task.cpp	520	ObDropVecIVFIndexTask::check_drop_index_finish	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_fts_index_build_task.cpp	346	ObFtsIndexBuildTask::check_health	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // allow clean up
+src/rootserver/ddl_task/ob_fts_index_build_task.cpp	435	ObFtsIndexBuildTask::prepare	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_fts_index_build_task.cpp	485	ObFtsIndexBuildTask::prepare_aux_table	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_fts_index_build_task.cpp	530	ObFtsIndexBuildTask::prepare_rowkey_doc_table	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_fts_index_build_task.cpp	851	ObFtsIndexBuildTask::wait_aux_table_complement	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_fts_index_build_task.cpp	898	ObFtsIndexBuildTask::wait_aux_table_complement	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_fts_index_build_task.cpp	1279	ObFtsIndexBuildTask::get_task_status	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_fts_index_build_task.cpp	1374	ObFtsIndexBuildTask::refresh_task_depend_map_context	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_fts_index_build_task.cpp	1431	ObFtsIndexBuildTask::clean_on_failed	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_fts_index_build_task.cpp	1567	ObFtsIndexBuildTask::wait_drop_index_finish	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_fts_index_build_task.cpp	1827	ObFtsIndexBuildTask::wait_schema_refresh_and_trans_end	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // ignore ret code
+src/rootserver/ddl_task/ob_index_build_task.cpp	496	ObIndexBuildTask::check_health	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // allow clean up
+src/rootserver/ddl_task/ob_index_build_task.cpp	578	ObIndexBuildTask::wait_trans_end	conditional reset (ternary yields OB_SUCCESS)	ret = OB_SNAPSHOT_DISCARDED == ret ? OB_SUCCESS : ret;
+src/rootserver/ddl_task/ob_index_build_task.cpp	650	ObIndexBuildTask::release_snapshot	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_index_build_task.cpp	656	ObIndexBuildTask::release_snapshot	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_index_build_task.cpp	669	ObIndexBuildTask::release_snapshot	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_index_build_task.cpp	675	ObIndexBuildTask::release_snapshot	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_index_build_task.cpp	779	ObIndexBuildTask::wait_and_send_local_partition_build_task	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_index_build_task.cpp	781	ObIndexBuildTask::wait_and_send_local_partition_build_task	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_index_build_task.cpp	878	ObIndexBuildTask::wait_data_complement	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // retry
+src/rootserver/ddl_task/ob_modify_autoinc_task.cpp	385	ObModifyAutoincTask::wait_trans_end	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_modify_autoinc_task.cpp	534	ObModifyAutoincTask::check_health	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // allow clean up
+src/rootserver/ddl_task/ob_rebuild_index_task.cpp	480	ObRebuildIndexTask::check_ddl_task_finish	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_table_redefinition_task.cpp	314	ObTableRedefinitionTask::table_redefinition	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // retry
+src/rootserver/ddl_task/ob_table_redefinition_task.cpp	465	ObTableRedefinitionTask::copy_table_indexes	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_table_redefinition_task.cpp	651	ObTableRedefinitionTask::copy_table_dependent_objects	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_table_redefinition_task.cpp	660	ObTableRedefinitionTask::copy_table_dependent_objects	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_table_redefinition_task.cpp	670	ObTableRedefinitionTask::copy_table_dependent_objects	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_table_redefinition_task.cpp	722	ObTableRedefinitionTask::take_effect	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_table_redefinition_task.cpp	729	ObTableRedefinitionTask::take_effect	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_table_redefinition_task.cpp	749	ObTableRedefinitionTask::take_effect	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_table_redefinition_task.cpp	1065	ObTableRedefinitionTask::collect_longops_stat	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_table_redefinition_task.cpp	1074	ObTableRedefinitionTask::collect_longops_stat	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_vec_index_build_task.cpp	369	ObVecIndexBuildTask::check_health	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // allow clean up
+src/rootserver/ddl_task/ob_vec_index_build_task.cpp	539	ObVecIndexBuildTask::prepare	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_vec_index_build_task.cpp	609	ObVecIndexBuildTask::prepare_rowkey_vid_table	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_vec_index_build_task.cpp	658	ObVecIndexBuildTask::prepare_aux_index_tables	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_vec_index_build_task.cpp	746	ObVecIndexBuildTask::prepare_vid_rowkey_table	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_vec_index_build_task.cpp	850	ObVecIndexBuildTask::CheckTaskStatusFn::operator()	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_vec_index_build_task.cpp	901	ObVecIndexBuildTask::wait_aux_table_complement	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // reach max dump count
+src/rootserver/ddl_task/ob_vec_index_build_task.cpp	924	ObVecIndexBuildTask::wait_aux_table_complement	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // allow clean up
+src/rootserver/ddl_task/ob_vec_index_build_task.cpp	1390	ObVecIndexBuildTask::collect_longops_stat	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_vec_index_build_task.cpp	1412	ObVecIndexBuildTask::collect_longops_stat	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_vec_index_build_task.cpp	1434	ObVecIndexBuildTask::collect_longops_stat	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_vec_index_build_task.cpp	1496	ObVecIndexBuildTask::ChangeTaskStatusFn::operator()	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_vec_index_build_task.cpp	1533	ObVecIndexBuildTask::clean_on_failed	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // reach max dump count
+src/rootserver/ddl_task/ob_vec_index_build_task.cpp	1653	ObVecIndexBuildTask::wait_drop_index_finish	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_vec_index_build_task.cpp	1708	ObVecIndexBuildTask::validate_checksum	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_vec_ivf_index_build_task.cpp	345	ObVecIVFIndexBuildTask::check_health	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // allow clean up
+src/rootserver/ddl_task/ob_vec_ivf_index_build_task.cpp	582	ObVecIVFIndexBuildTask::prepare	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_vec_ivf_index_build_task.cpp	711	ObVecIVFIndexBuildTask::prepare_aux_index_tables	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_vec_ivf_index_build_task.cpp	762	ObVecIVFIndexBuildTask::prepare_sq_meta_table	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_vec_ivf_index_build_task.cpp	798	ObVecIVFIndexBuildTask::prepare_pq_centroid_table	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_vec_ivf_index_build_task.cpp	848	ObVecIVFIndexBuildTask::prepare_centroid_table	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_vec_ivf_index_build_task.cpp	875	ObVecIVFIndexBuildTask::CheckTaskStatusFn::operator()	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_vec_ivf_index_build_task.cpp	925	ObVecIVFIndexBuildTask::wait_aux_table_complement	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // reach max dump count
+src/rootserver/ddl_task/ob_vec_ivf_index_build_task.cpp	941	ObVecIVFIndexBuildTask::wait_aux_table_complement	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // allow clean up
+src/rootserver/ddl_task/ob_vec_ivf_index_build_task.cpp	1439	ObVecIVFIndexBuildTask::ChangeTaskStatusFn::operator()	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_vec_ivf_index_build_task.cpp	1476	ObVecIVFIndexBuildTask::clean_on_failed	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // reach max dump count
+src/rootserver/ddl_task/ob_vec_ivf_index_build_task.cpp	1595	ObVecIVFIndexBuildTask::wait_drop_index_finish	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ddl_task/ob_vec_ivf_index_build_task.cpp	1642	ObVecIVFIndexBuildTask::validate_checksum	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/fork_table/ob_fork_table_helper.cpp	386	ObForkTableHelper::copy_table_autoinc_seq_info_	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/fork_table/ob_fork_table_util.cpp	120	ObForkTableUtil::collect_complete_domain_index_schemas	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/fork_table/ob_fork_table_util.cpp	437	ObForkTableUtil::obtain_snapshot	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/freeze/ob_checksum_validator.cpp	89	ObChecksumValidator::deal_with_special_table_at_last	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/freeze/ob_checksum_validator.cpp	118	ObChecksumValidator::get_table_compaction_info	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/freeze/ob_checksum_validator.cpp	176	ObChecksumValidator::get_tablet_ids	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/freeze/ob_checksum_validator.cpp	209	ObChecksumValidator::validate_checksum	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/freeze/ob_checksum_validator.cpp	260	ObChecksumValidator::validate_local_tablet_checksum	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/freeze/ob_checksum_validator.cpp	284	ObChecksumValidator::update_table_compaction_info_by_tablet	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/freeze/ob_checksum_validator.cpp	290	ObChecksumValidator::update_table_compaction_info_by_tablet	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/freeze/ob_checksum_validator.cpp	461	ObChecksumValidator::handle_index_table	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/freeze/ob_checksum_validator.cpp	561	ObChecksumValidator::verify_table_index	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // clear errno
+src/rootserver/freeze/ob_checksum_validator.cpp	594	ObChecksumValidator::build_ckm_item_for_fts	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/freeze/ob_freeze_info_detector.cpp	122	ObMajorMergeInfoDetector::runTimerTask	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/freeze/ob_freeze_info_detector.cpp	127	ObMajorMergeInfoDetector::runTimerTask	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/freeze/ob_freeze_info_detector.cpp	132	ObMajorMergeInfoDetector::runTimerTask	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/freeze/ob_freeze_info_detector.cpp	136	ObMajorMergeInfoDetector::runTimerTask	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/freeze/ob_freeze_info_detector.cpp	141	ObMajorMergeInfoDetector::runTimerTask	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/freeze/ob_freeze_info_detector.cpp	219	ObMajorMergeInfoDetector::can_start_work	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/freeze/ob_major_freeze_coordinator_adapter.cpp	98	ObMajorFreezeCoordinatorAdapter::collect_major_merge_diagnostics	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/freeze/ob_major_freeze_coordinator_adapter.cpp	112	ObMajorFreezeCoordinatorAdapter::collect_major_merge_diagnostics	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/freeze/ob_major_merge_info_manager.cpp	151	ObMajorMergeInfoManager::generate_frozen_scn	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/freeze/ob_major_merge_progress_checker.cpp	231	ObMajorMergeProgressChecker::check_table_merge_progress	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/freeze/ob_major_merge_progress_checker.cpp	249	ObMajorMergeProgressChecker::check_table_merge_progress	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/freeze/ob_major_merge_progress_checker.cpp	302	ObMajorMergeProgressChecker::update_table_compaction_info_by_tablet	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/freeze/ob_major_merge_progress_checker.cpp	307	ObMajorMergeProgressChecker::update_table_compaction_info_by_tablet	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/freeze/ob_major_merge_progress_checker.cpp	358	ObMajorMergeProgressChecker::get_tablet_ids	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/freeze/ob_major_merge_progress_checker.cpp	611	ObMajorMergeProgressChecker::check_index_and_rest_table	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // clear errno
+src/rootserver/freeze/ob_major_merge_progress_checker.cpp	684	ObMajorMergeProgressChecker::check_progress	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/freeze/ob_major_merge_progress_checker.cpp	760	ObMajorMergeProgressChecker::deal_with_rest_data_table	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/freeze/ob_major_merge_progress_checker.cpp	794	ObMajorMergeProgressChecker::set_table_compaction_info_status	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/freeze/ob_major_merge_progress_checker.cpp	881	ObMajorMergeProgressChecker::loop_index_ckm_validate_array	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/freeze/ob_major_merge_progress_checker.cpp	927	ObMajorMergeProgressChecker::get_idx_ckm_and_validate	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/freeze/ob_major_merge_progress_checker.cpp	989	ObMajorMergeProgressChecker::generate_tablet_status_map	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/freeze/ob_major_merge_progress_checker.cpp	1078	ObMajorMergeProgressChecker::prepare_fts_group	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/freeze/ob_major_merge_scheduler.cpp	150	ObMajorMergeScheduler::run3	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS; // ignore ret, continue
+src/rootserver/freeze/ob_major_merge_scheduler.cpp	323	ObMajorMergeScheduler::do_one_round_major_merge	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ob_create_index_on_empty_table_helper.cpp	51	ObCreateIndexOnEmptyTableHelper::check_create_index_on_empty_table_opt	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;
+src/rootserver/ob_ddl_operator.cpp	2775	ObDDLOperator::drop_obj_privs	ret = OB_SUCCESS (line start)	ret = OB_SUCCESS;

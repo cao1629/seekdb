@@ -1,38 +1,201 @@
 file	line	symbol	construct	text
-src/oblib/common/wide_integer/ob_wide_integer_impl.h	237	ObWideInteger::_impl::shift_left	C-style cast (void *) drops const from res; C-style cast (void *) drops const from self	if ((void *)&res != (void *)&self) {
-src/oblib/common/wide_integer/ob_wide_integer_impl.h	270	ObWideInteger::_impl::shift_right	C-style cast (void *) drops const from res; C-style cast (void *) drops const from self	if ((void *)&res != (void *)&self) {
-src/oblib/common/wide_integer/ob_wide_integer_impl.h	366	ObWideInteger::_impl::add	C-style cast (void *) drops const from res; C-style cast (void *) drops const from self	if ((void *)&res != (void *)&self) {
-src/oblib/common/wide_integer/ob_wide_integer_impl.h	401	ObWideInteger::_impl::sub	C-style cast (void *) drops const from res; C-style cast (void *) drops const from lhs	if ((void *)&res != (void *)&lhs) {
-src/oblib/common/wide_integer/ob_wide_integer_impl.h	444	ObWideInteger::_impl::sub	C-style cast (void *) drops const from res; C-style cast (void *) drops const from self	if ((void *)&res != (void *)&self) {
-src/oblib/common/wide_integer/ob_wide_integer_impl.h	491	ObWideInteger::_impl::unary_minus	C-style cast (void *) drops const from res; C-style cast (void *) drops const from self	if ((void *)&res != (void *)&self) {
-src/oblib/common/wide_integer/ob_wide_integer_impl.h	944	ObWideInteger::_impl::bitwise_and	C-style cast (void *) drops const from res; C-style cast (void *) drops const from lhs	if ((void *)&res != (void *)&lhs) {
-src/oblib/common/wide_integer/ob_wide_integer_impl.h	980	ObWideInteger::_impl::bitwise_and	C-style cast (void *) drops const from res; C-style cast (void *) drops const from self	if ((void *)&res != (void *)&self) {
-src/oblib/common/xml/ob_multi_mode_interface.h	214	ObStack::ObStack	const_cast<char*>	char* src_buf = const_cast<char*> (from.buffer_.ptr()) + i * sizeof(T);
-src/oblib/common/xml/ob_multi_mode_interface.h	215	ObStack::ObStack	const_cast<char*>	char* dst_buf = const_cast<char*> (buffer_.ptr()) + i * sizeof(T);
-src/oblib/common/xml/ob_path_parser.h	56	ObPathItem	const_cast<char*>	static constexpr char* COM_LE = const_cast<char*>("<=");
-src/oblib/common/xml/ob_path_parser.h	57	ObPathItem	const_cast<char*>	static constexpr char* COM_GE = const_cast<char*>(">=");
-src/oblib/common/xml/ob_path_parser.h	58	ObPathItem	const_cast<char*>	static constexpr char* COM_NE = const_cast<char*>("!=");
-src/oblib/common/xml/ob_path_parser.h	59	ObPathItem	const_cast<char*>	static constexpr char* OR = const_cast<char*>("or");
-src/oblib/common/xml/ob_path_parser.h	60	ObPathItem	const_cast<char*>	static constexpr char* AND = const_cast<char*>("and");
-src/oblib/common/xml/ob_path_parser.h	61	ObPathItem	const_cast<char*>	static constexpr char* DIV = const_cast<char*>("div");
-src/oblib/common/xml/ob_path_parser.h	62	ObPathItem	const_cast<char*>	static constexpr char* MOD = const_cast<char*>("mod");
-src/oblib/common/xml/ob_path_parser.h	63	ObPathItem	const_cast<char*>	static constexpr char* DOUBLE_SLASH = const_cast<char*>("//");
-src/oblib/common/xml/ob_path_parser.h	64	ObPathItem	const_cast<char*>	static constexpr char* DOUBLE_COLON = const_cast<char*>("::");
-src/oblib/common/xml/ob_path_parser.h	65	ObPathItem	const_cast<char*>	static constexpr char* DOUBLE_DOT = const_cast<char*>("..");
-src/oblib/common/xml/ob_path_parser.h	66	ObPathItem	const_cast<char*>	static constexpr char* ANCESTOR = const_cast<char*>("ancestor::");
-src/oblib/common/xml/ob_path_parser.h	67	ObPathItem	const_cast<char*>	static constexpr char* ANCESTOR_OR_SELF = const_cast<char*>("ancestor-or-self::");
-src/oblib/common/xml/ob_path_parser.h	68	ObPathItem	const_cast<char*>	static constexpr char* ATTRIBUTE = const_cast<char*>("attribute::");
-src/oblib/common/xml/ob_path_parser.h	69	ObPathItem	const_cast<char*>	static constexpr char* CHILD = const_cast<char*>("child::");
-src/oblib/common/xml/ob_path_parser.h	70	ObPathItem	const_cast<char*>	static constexpr char* DESCENDANT = const_cast<char*>("descendant::");
-src/oblib/common/xml/ob_path_parser.h	71	ObPathItem	const_cast<char*>	static constexpr char* DESCENDANT_OR_SELF = const_cast<char*>("descendant-or-self::");
-src/oblib/common/xml/ob_path_parser.h	72	ObPathItem	const_cast<char*>	static constexpr char* FOLLOWING = const_cast<char*>("following::");
-src/oblib/common/xml/ob_path_parser.h	73	ObPathItem	const_cast<char*>	static constexpr char* FOLLOWING_SIBLING = const_cast<char*>("following-sibling::");
-src/oblib/common/xml/ob_path_parser.h	74	ObPathItem	const_cast<char*>	static constexpr char* NAMESPACE = const_cast<char*>("namespace::");
-src/oblib/common/xml/ob_path_parser.h	75	ObPathItem	const_cast<char*>	static constexpr char* PARENT = const_cast<char*>("parent::");
-src/oblib/common/xml/ob_path_parser.h	76	ObPathItem	const_cast<char*>	static constexpr char* PRECEDING = const_cast<char*>("preceding::");
-src/oblib/common/xml/ob_path_parser.h	77	ObPathItem	const_cast<char*>	static constexpr char* PRECEDING_SIBLING = const_cast<char*>("preceding-sibling::");
-src/oblib/common/xml/ob_path_parser.h	78	ObPathItem	const_cast<char*>	static constexpr char* SELF = const_cast<char*>("self::");
-src/oblib/common/xml/ob_path_parser.h	79	ObPathItem	const_cast<char*>	static constexpr char* NODE = const_cast<char*>("node(");
-src/oblib/common/xml/ob_path_parser.h	80	ObPathItem	const_cast<char*>	static constexpr char* TEXT = const_cast<char*>("text(");
-src/oblib/common/xml/ob_path_parser.h	81	ObPathItem	const_cast<char*>	static constexpr char* COMMENT = const_cast<char*>("comment(");
-src/oblib/common/xml/ob_path_parser.h	82	ObPathItem	const_cast<char*>	static constexpr char* PROCESSING_INSTRUCTION = const_cast<char*>("processing-instruction(");
+src/rootserver/ob_ddl_service.cpp	3007	ObDDLService::check_alter_table_index	const_cast<ObIndexArg *>	ObIndexArg *index_arg = const_cast<ObIndexArg *>(index_arg_list.at(i));
+src/rootserver/ob_ddl_service.cpp	3545	ObDDLService::alter_table_primary_key	const_cast<ObIndexArg *>	ObIndexArg *index_arg = const_cast<ObIndexArg *>(index_arg_list.at(i));
+src/rootserver/ob_ddl_service.cpp	3941	ObDDLService::check_drop_column_with_drop_foreign_key	const_cast<ObIndexArg *>	ObIndexArg *index_arg = const_cast<ObIndexArg *>(index_arg_list.at(i));
+src/rootserver/ob_ddl_service.cpp	6574	ObDDLService::update_generated_column_schema	const_cast<ObString&>	const_cast<ObString&>(orig_column_schema.get_column_name_str()),
+src/rootserver/ob_ddl_service.cpp	8994	ObDDLService::check_can_alter_table_constraints	const_cast<ObConstraint *>	const_cast<ObConstraint *>(*iter)->set_constraint_id((*res)->get_constraint_id());
+src/rootserver/ob_ddl_service.cpp	8995	ObDDLService::check_can_alter_table_constraints	const_cast<ObConstraint *>	const_cast<ObConstraint *>(*iter)->set_constraint_type((*res)->get_constraint_type());
+src/rootserver/ob_ddl_service.cpp	9376	ObDDLService::gen_inc_table_schema_for_trun_subpart	const_cast<ObPartition*>	} else if (OB_FAIL(const_cast<ObPartition*>(inc_part)->add_partition(*orig_subpart))) {
+src/rootserver/ob_ddl_service.cpp	10242	ObDDLService::check_is_only_add_index_on_empty_table	const_cast<ObIndexArg *>	ObIndexArg *index_arg = const_cast<ObIndexArg *>(index_arg_list.at(i));
+src/rootserver/ob_ddl_service.cpp	10780	ObDDLService::alter_table_in_trans	const_cast<ObIndexArg *>	ObIndexArg *index_arg = const_cast<ObIndexArg *>(index_arg_list.at(i));
+src/rootserver/ob_ddl_service.cpp	11347	ObDDLService::check_ddl_with_primary_key_operation	const_cast<ObIndexArg *>	ObIndexArg *index_arg = const_cast<ObIndexArg *>(index_arg_list.at(i));
+src/rootserver/ob_ddl_service.cpp	13691	ObDDLService::create_user_hidden_table	const_cast<ObTableSchema*>	share::schema::ObTableSchema *table_schema = const_cast<ObTableSchema*>(schemas.at(i));
+src/rootserver/ob_ddl_service.cpp	13707	ObDDLService::create_user_hidden_table	const_cast<ObTableSchema*>	share::schema::ObTableSchema *table_schema = const_cast<ObTableSchema*>(schemas.at(i));
+src/rootserver/ob_ddl_service.cpp	14048	ObDDLService::add_new_index_schema	const_cast<ObIndexArg *>	ObIndexArg *index_arg = const_cast<ObIndexArg *>(index_arg_list.at(i));
+src/rootserver/ob_ddl_service.cpp	14990	ObDDLService::get_rebuild_foreign_key_infos	const_cast<ObIndexArg *>	ObIndexArg *index_arg = const_cast<ObIndexArg *>(index_arg_list.at(j));
+src/rootserver/ob_ddl_service.cpp	18098	ObDDLService::collect_temporary_tables_in_session	const_cast<ObDropTableArg &>	ObDropTableArg &drop_table_arg = const_cast<ObDropTableArg &>(const_drop_table_arg);
+src/rootserver/ob_local_management_service.cpp	754	ObLocalManagementService::execute_ddl_task	const_cast<obcall::ObAlterTableArg &>	const_cast<obcall::ObAlterTableArg &>(arg), obj_ids))) {
+src/rootserver/ob_local_management_service.cpp	760	ObLocalManagementService::execute_ddl_task	const_cast<obcall::ObAlterTableArg &>	const_cast<obcall::ObAlterTableArg &>(arg), obj_ids))) {
+src/rootserver/ob_local_management_service.cpp	766	ObLocalManagementService::execute_ddl_task	const_cast<obcall::ObAlterTableArg &>	const_cast<obcall::ObAlterTableArg &>(arg), obj_ids))) {
+src/rootserver/ob_local_management_service.cpp	772	ObLocalManagementService::execute_ddl_task	const_cast<obcall::ObAlterTableArg &>	const_cast<obcall::ObAlterTableArg &>(arg)))) {
+src/rootserver/ob_local_management_service.cpp	779	ObLocalManagementService::execute_ddl_task	const_cast<obcall::ObAlterTableArg &>	const_cast<obcall::ObAlterTableArg &>(arg)))) {
+src/rootserver/ob_local_management_service.cpp	785	ObLocalManagementService::execute_ddl_task	const_cast<obcall::ObAlterTableArg &>	const_cast<obcall::ObAlterTableArg &>(arg)))) {
+src/rootserver/ob_local_management_service.cpp	790	ObLocalManagementService::execute_ddl_task	const_cast<ObAlterTableArg &>	if (OB_FAIL(ddl_service_.delete_column_from_schema(const_cast<ObAlterTableArg &>(arg)))) {
+src/rootserver/ob_local_management_service.cpp	797	ObLocalManagementService::execute_ddl_task	const_cast<obcall::ObAlterTableArg &>	const_cast<obcall::ObAlterTableArg &>(arg)))) {
+src/rootserver/ob_local_management_service.cpp	802	ObLocalManagementService::execute_ddl_task	const_cast<ObAlterTableArg &>	if (OB_FAIL(ddl_service_.update_autoinc_schema(const_cast<ObAlterTableArg &>(arg)))) {
+src/rootserver/ob_local_management_service.cpp	812	ObLocalManagementService::execute_ddl_task	const_cast<ObAlterTableArg &>	if (OB_FAIL(ddl_service_.switch_index_name_and_status_for_vec_index_table(const_cast<ObAlterTableArg &>(arg)))) {
+src/rootserver/ob_local_management_service.cpp	991	ObLocalManagementService::alter_table	const_cast<ObAlterTableArg &>	ObAlterTableArg &nonconst_arg = const_cast<ObAlterTableArg &>(arg);
+src/rootserver/ob_schema2ddl_sql.cpp	78	ObSchema2DDLSql::convert	const_cast<ObColumnSchemaV2*>	(const_cast<ObColumnSchemaV2*>(column))->set_data_length(
+src/rootserver/parallel_ddl/ob_create_table_helper.cpp	394	ObCreateTableHelper::check_and_set_database_id_	const_cast<ObTableSchema&>	(void) const_cast<ObTableSchema&>(arg_.schema_).set_database_id(database_id);
+src/rootserver/parallel_ddl/ob_create_table_helper.cpp	494	ObCreateTableHelper::check_and_set_parent_table_id_	const_cast<obcall::ObCreateForeignKeyArg&>	const_cast<obcall::ObCreateForeignKeyArg&>(foreign_key_arg).parent_database_id_ = parent_database_id;
+src/rootserver/parallel_ddl/ob_create_table_helper.cpp	495	ObCreateTableHelper::check_and_set_parent_table_id_	const_cast<obcall::ObCreateForeignKeyArg&>	const_cast<obcall::ObCreateForeignKeyArg&>(foreign_key_arg).parent_table_id_ = parent_table_id;
+src/rootserver/parallel_ddl/ob_create_view_helper.cpp	104	ObCreateViewHelper::lock_and_check_database_	const_cast<ObTableSchema&>	(void) const_cast<ObTableSchema&>(arg_.schema_).set_database_id(database_id);
+src/rootserver/parallel_ddl/ob_table_helper.cpp	532	ObTableHelper::inner_generate_table_schema_	const_cast<ObConstraint &>	ObConstraint &cst = const_cast<ObConstraint &>(constraints.at(i));
+src/rootserver/parallel_ddl/ob_table_helper.cpp	576	ObTableHelper::inner_generate_aux_table_schema_	const_cast<obcall::ObCreateIndexArg&>	obcall::ObCreateIndexArg &index_arg = const_cast<obcall::ObCreateIndexArg&>(arg.index_arg_list_.at(i));
+src/rootserver/pl_ddl/ob_pl_ddl_service.cpp	95	ObPLDDLService::create_routine	const_cast<ObSArray<ObDependencyInfo> &>	ObSArray<ObDependencyInfo> &dep_infos = const_cast<ObSArray<ObDependencyInfo> &>(arg.dependency_infos_);
+src/rootserver/pl_ddl/ob_pl_ddl_service.cpp	490	ObPLDDLService::create_package	const_cast<ObSArray<ObRoutineInfo> &>	ObSArray<ObRoutineInfo> &public_routine_infos = const_cast<ObSArray<ObRoutineInfo> &>(arg.public_routine_infos_);
+src/rootserver/pl_ddl/ob_pl_ddl_service.cpp	493	ObPLDDLService::create_package	const_cast<ObSArray<ObDependencyInfo> &>	const_cast<ObSArray<ObDependencyInfo> &>(arg.dependency_infos_);
+src/rootserver/pl_ddl/ob_pl_ddl_service.cpp	788	ObPLDDLService::create_trigger	const_cast<ObErrorInfo &>	const_cast<ObErrorInfo &>(arg.error_info_),
+src/rootserver/pl_ddl/ob_pl_ddl_service.cpp	789	ObPLDDLService::create_trigger	const_cast<ObSArray<ObDependencyInfo> &>	const_cast<ObSArray<ObDependencyInfo> &>(arg.dependency_infos_),
+src/rootserver/pl_ddl/ob_pl_ddl_service.cpp	858	ObPLDDLService::drop_trigger_in_trans	const_cast<ObTriggerInfo &>	OZ (adjust_trigger_action_order(schema_guard, trans, pl_operator, const_cast<ObTriggerInfo &>(trigger_info), false));
+src/share/cache/ob_kvcache_hazard_domain.cpp	251	HazptrHolder::assign	const_cast<HazptrHolder&>	HazptrHolder& nc_other = const_cast<HazptrHolder&>(other);
+src/share/config/ob_config.cpp	73	ObConfigItem::~ObConfigItem	const_cast<ObConfigChecker*>	ObConfigChecker *ck = const_cast<ObConfigChecker*>(ck_);
+src/share/config/ob_config.cpp	92	ObConfigItem::set_value_unsafe	const_cast<char *>	} else if (OB_FAIL(databuff_printf(const_cast<char *>(ptr), value_len(), pos,
+src/share/config/ob_config.cpp	275	ObConfigStrListItem::get	const_cast<ObLatch&>	ObLatch &latch = const_cast<ObLatch&>(inner_value->rwlock_);
+src/share/config/ob_config.cpp	833	ObConfigStringItem::deep_copy_value_string	const_cast<ObLatch&>	ObLatchRGuard rd_guard(const_cast<ObLatch&>(lock_), ObLatchIds::CONFIG_LOCK);
+src/share/config/ob_config.h	131	ObConfigItem::str	const_cast<ObLatch&>	ObLatchRGuard rd_guard(const_cast<ObLatch&>(lock_), ObLatchIds::CONFIG_LOCK);
+src/share/config/ob_config.h	136	ObConfigItem::case_compare	const_cast<ObLatch&>	ObLatchRGuard rd_guard(const_cast<ObLatch&>(lock_), ObLatchIds::CONFIG_LOCK);
+src/share/config/ob_config.h	141	ObConfigItem::default_str	const_cast<ObLatch&>	ObLatchRGuard rd_guard(const_cast<ObLatch&>(lock_), ObLatchIds::CONFIG_LOCK);
+src/share/config/ob_config.h	327	ObConfigStrListItem::ObInnerConfigStrListItem::operator=	const_cast<ObLatch&>	ObLatchRGuard rd_guard(const_cast<ObLatch&>(value.rwlock_), ObLatchIds::CONFIG_LOCK);
+src/share/config/ob_config.h	343	ObConfigStrListItem::ObInnerConfigStrListItem::ObInnerConfigStrListItem	const_cast<ObLatch&>	ObLatchRGuard rd_guard(const_cast<ObLatch&>(value.rwlock_), ObLatchIds::CONFIG_LOCK);
+src/share/config/ob_config.h	792	ObConfigStringItem::operatorconstchar*	const_cast<ObLatch&>	ObLatchRGuard rd_guard(const_cast<ObLatch&>(lock_), ObLatchIds::CONFIG_LOCK);
+src/share/config/ob_config.h	797	ObConfigStringItem::get_value	const_cast<ObLatch&>	ObLatchRGuard rd_guard(const_cast<ObLatch&>(lock_), ObLatchIds::CONFIG_LOCK);
+src/share/config/ob_config.h	802	ObConfigStringItem::get_value_string	const_cast<ObLatch&>	ObLatchRGuard rd_guard(const_cast<ObLatch&>(lock_), ObLatchIds::CONFIG_LOCK);
+src/share/config/ob_config.h	807	ObConfigStringItem::case_compare	const_cast<ObLatch&>	ObLatchRGuard rd_guard(const_cast<ObLatch&>(lock_), ObLatchIds::CONFIG_LOCK);
+src/share/config/ob_config_helper.cpp	45	ObConfigConsChecker::~ObConfigConsChecker	const_cast<ObConfigChecker*>	ObConfigChecker *left = const_cast<ObConfigChecker*>(left_);
+src/share/config/ob_config_helper.cpp	49	ObConfigConsChecker::~ObConfigConsChecker	const_cast<ObConfigChecker*>	ObConfigChecker *right = const_cast<ObConfigChecker*>(right_);
+src/share/datum/ob_datum_funcs_impl.h	436	datum_varchar_hash_utf8mb4_bin	C-style cast (void*) drops const from str_ptr	ret = T::hash((void*)str_ptr, str_len, seed);
+src/share/datum/ob_datum_funcs_impl.h	443	datum_varchar_hash_utf8mb4_bin	C-style cast (void*) drops const from pos	ret = T::hash((void*)pos, length, seed);
+src/share/geo/ob_geo_3d.cpp	38	ObGeometry3D::byteorder	const_cast<char*>	uint8_t *p = reinterpret_cast<uint8_t*>(const_cast<char*>(ptr + pos));
+src/share/geo/ob_geo_3d.cpp	905	ObGeo3DReserverCoordinate::visit_pointz_start	const_cast<char *>	char *ptr = const_cast<char *>(geo->val());
+src/share/geo/ob_geo_3d.cpp	1145	ObGeo3DElevationVisitor::visit_pointz_start	const_cast<char *>	char *ptr = const_cast<char *>(geo->val());
+src/share/geo/ob_geo_3d.cpp	1169	ObGeo3DNormalizeVisitor::visit_pointz_start	const_cast<char *>	char *ptr = const_cast<char *>(geo->val());
+src/share/geo/ob_geo_3d.cpp	1203	ObGeo3DEmptyVisitor::visit_pointz_start	const_cast<char *>	char *ptr = const_cast<char *>(geo->val());
+src/share/geo/ob_geo_3d.cpp	1231	ObGeo3DLonLatChecker::visit_pointz_start	const_cast<char *>	char *ptr = const_cast<char *>(geo->val());
+src/share/geo/ob_geo_bin.cpp	30	ObWkbGeomPoint::byteorder	const_cast<ObWkbGeomPoint*>	char* ptr = reinterpret_cast<char*>(const_cast<ObWkbGeomPoint*>(this));
+src/share/geo/ob_geo_bin.cpp	37	ObWkbGeomPoint::byteorder	const_cast<ObWkbGeomPoint*>	char* ptr = reinterpret_cast<char*>(const_cast<ObWkbGeomPoint*>(this));
+src/share/geo/ob_geo_bin.cpp	45	ObWkbGeomPoint::get	const_cast<ObWkbGeomPoint*>	char* ptr = reinterpret_cast<char*>(const_cast<ObWkbGeomPoint*>(this));
+src/share/geo/ob_geo_bin.cpp	54	ObWkbGeomPoint::get	const_cast<ObWkbGeomPoint*>	char* ptr = reinterpret_cast<char*>(const_cast<ObWkbGeomPoint*>(this));
+src/share/geo/ob_geo_bin.cpp	63	ObWkbGeomPoint::set	const_cast<ObWkbGeomPoint*>	char* ptr = reinterpret_cast<char*>(const_cast<ObWkbGeomPoint*>(this));
+src/share/geo/ob_geo_bin.cpp	72	ObWkbGeomPoint::set	const_cast<ObWkbGeomPoint*>	char* ptr = reinterpret_cast<char*>(const_cast<ObWkbGeomPoint*>(this));
+src/share/geo/ob_geo_bin.cpp	89	ObWkbGeomPoint::refresh_type	const_cast<ObWkbGeomPoint*>	char* ptr = reinterpret_cast<char*>(const_cast<ObWkbGeomPoint*>(this));
+src/share/geo/ob_geo_bin.cpp	100	ObWkbGeomInnerPoint::get	const_cast<ObWkbGeomInnerPoint*>	char* ptr = reinterpret_cast<char*>(const_cast<ObWkbGeomInnerPoint*>(this));
+src/share/geo/ob_geo_bin.cpp	107	ObWkbGeomInnerPoint::get	const_cast<ObWkbGeomInnerPoint*>	char* ptr = reinterpret_cast<char*>(const_cast<ObWkbGeomInnerPoint*>(this));
+src/share/geo/ob_geo_bin.cpp	114	ObWkbGeomInnerPoint::get_x	const_cast<ObWkbGeomInnerPoint*>	char* ptr = reinterpret_cast<char*>(const_cast<ObWkbGeomInnerPoint*>(this));
+src/share/geo/ob_geo_bin.cpp	120	ObWkbGeomInnerPoint::get_y	const_cast<ObWkbGeomInnerPoint*>	char* ptr = reinterpret_cast<char*>(const_cast<ObWkbGeomInnerPoint*>(this));
+src/share/geo/ob_geo_bin.cpp	127	ObWkbGeogInnerPoint::get_x	const_cast<ObWkbGeogInnerPoint*>	char* ptr = reinterpret_cast<char*>(const_cast<ObWkbGeogInnerPoint*>(this));
+src/share/geo/ob_geo_bin.cpp	133	ObWkbGeogInnerPoint::get_y	const_cast<ObWkbGeogInnerPoint*>	char* ptr = reinterpret_cast<char*>(const_cast<ObWkbGeogInnerPoint*>(this));
+src/share/geo/ob_geo_bin.cpp	142	ObWkbGeomInnerPoint::set	const_cast<ObWkbGeomInnerPoint*>	char* ptr = reinterpret_cast<char*>(const_cast<ObWkbGeomInnerPoint*>(this));
+src/share/geo/ob_geo_bin.cpp	150	ObWkbGeomInnerPoint::set	const_cast<ObWkbGeomInnerPoint*>	char* ptr = reinterpret_cast<char*>(const_cast<ObWkbGeomInnerPoint*>(this));
+src/share/geo/ob_geo_bin.cpp	186	ObWkbGeomLineString::size	const_cast<ObWkbGeomLineString*>	char *ptr = reinterpret_cast<char*>(const_cast<ObWkbGeomLineString*>(this));
+src/share/geo/ob_geo_bin.cpp	206	ObWkbGeomLineString::get_sub_addr	const_cast<ObWkbGeomLineString*>	char *ptr = reinterpret_cast<char*>(const_cast<ObWkbGeomLineString*>(this));
+src/share/geo/ob_geo_bin.cpp	215	ObWkbGeomLinearRing::size	const_cast<ObWkbGeomLinearRing*>	char *ptr = reinterpret_cast<char*>(const_cast<ObWkbGeomLinearRing*>(this));
+src/share/geo/ob_geo_bin.cpp	233	ObWkbGeomLinearRing::get_sub_addr	const_cast<ObWkbGeomLinearRing*>	char *ptr = reinterpret_cast<char*>(const_cast<ObWkbGeomLinearRing*>(this));
+src/share/geo/ob_geo_bin.cpp	244	ObWkbGeomPolygonInnerRings::size	const_cast<ObWkbGeomPolygonInnerRings*>	char *ptr = reinterpret_cast<char*>(const_cast<ObWkbGeomPolygonInnerRings*>(this));
+src/share/geo/ob_geo_bin.cpp	267	ObWkbGeomPolygon::size	const_cast<ObWkbGeomPolygon*>	char *ptr = reinterpret_cast<char*>(const_cast<ObWkbGeomPolygon*>(this));
+src/share/geo/ob_geo_bin.cpp	282	ObWkbGeomPolygon::exterior_ring	const_cast<ObWkbGeomPolygon*>	char *ptr = reinterpret_cast<char*>(const_cast<ObWkbGeomPolygon*>(this));
+src/share/geo/ob_geo_bin.cpp	296	ObWkbGeomPolygon::inner_rings	const_cast<ObWkbGeomPolygon*>	char *ptr = reinterpret_cast<char*>(const_cast<ObWkbGeomPolygon*>(this));
+src/share/geo/ob_geo_bin.cpp	310	ObWkbGeomMultiPoint::size	const_cast<ObWkbGeomMultiPoint*>	char *ptr = reinterpret_cast<char*>(const_cast<ObWkbGeomMultiPoint*>(this));
+src/share/geo/ob_geo_bin.cpp	331	ObWkbGeomMultiPoint::get_sub_addr	const_cast<ObWkbGeomMultiPoint*>	char *ptr = reinterpret_cast<char*>(const_cast<ObWkbGeomMultiPoint*>(this));
+src/share/geo/ob_geo_bin.cpp	343	ObWkbGeomMultiLineString::size	const_cast<ObWkbGeomMultiLineString*>	char *ptr = reinterpret_cast<char*>(const_cast<ObWkbGeomMultiLineString*>(this));
+src/share/geo/ob_geo_bin.cpp	367	ObWkbGeomMultiPolygon::size	const_cast<ObWkbGeomMultiPolygon*>	char *ptr = reinterpret_cast<char*>(const_cast<ObWkbGeomMultiPolygon*>(this));
+src/share/geo/ob_geo_bin.cpp	391	ObWkbGeomCollection::size	const_cast<ObWkbGeomCollection*>	char *ptr = reinterpret_cast<char*>(const_cast<ObWkbGeomCollection*>(this));
+src/share/geo/ob_geo_bin.cpp	415	ObWkbGeomCollection::get_sub_size	const_cast<pointer>	pointer ptr = const_cast<pointer>(data) + sizeof(uint8_t);
+src/share/geo/ob_geo_bin.cpp	463	ObWkbGeomCollection::get_sub_type	const_cast<pointer>	pointer ptr = const_cast<pointer>(data) + sizeof(uint8_t);
+src/share/geo/ob_geo_bin.cpp	475	ObWkbGeogPoint::byteorder	const_cast<ObWkbGeogPoint*>	char* ptr = reinterpret_cast<char*>(const_cast<ObWkbGeogPoint*>(this));
+src/share/geo/ob_geo_bin.cpp	481	ObWkbGeogPoint::byteorder	const_cast<ObWkbGeogPoint*>	char* ptr = reinterpret_cast<char*>(const_cast<ObWkbGeogPoint*>(this));
+src/share/geo/ob_geo_bin.cpp	489	ObWkbGeogPoint::get	const_cast<ObWkbGeogPoint*>	char* ptr = reinterpret_cast<char*>(const_cast<ObWkbGeogPoint*>(this));
+src/share/geo/ob_geo_bin.cpp	498	ObWkbGeogPoint::get	const_cast<ObWkbGeogPoint*>	char* ptr = reinterpret_cast<char*>(const_cast<ObWkbGeogPoint*>(this));
+src/share/geo/ob_geo_bin.cpp	507	ObWkbGeogPoint::set	const_cast<ObWkbGeogPoint*>	char* ptr = reinterpret_cast<char*>(const_cast<ObWkbGeogPoint*>(this));
+src/share/geo/ob_geo_bin.cpp	516	ObWkbGeogPoint::set	const_cast<ObWkbGeogPoint*>	char* ptr = reinterpret_cast<char*>(const_cast<ObWkbGeogPoint*>(this));
+src/share/geo/ob_geo_bin.cpp	524	ObWkbGeogPoint::refresh_type	const_cast<ObWkbGeogPoint*>	char* ptr = reinterpret_cast<char*>(const_cast<ObWkbGeogPoint*>(this));
+src/share/geo/ob_geo_bin.cpp	542	ObWkbGeogInnerPoint::get	const_cast<ObWkbGeogInnerPoint*>	char* ptr = reinterpret_cast<char*>(const_cast<ObWkbGeogInnerPoint*>(this));
+src/share/geo/ob_geo_bin.cpp	549	ObWkbGeogInnerPoint::get	const_cast<ObWkbGeogInnerPoint*>	char* ptr = reinterpret_cast<char*>(const_cast<ObWkbGeogInnerPoint*>(this));
+src/share/geo/ob_geo_bin.cpp	557	ObWkbGeogInnerPoint::set	const_cast<ObWkbGeogInnerPoint*>	char* ptr = reinterpret_cast<char*>(const_cast<ObWkbGeogInnerPoint*>(this));
+src/share/geo/ob_geo_bin.cpp	564	ObWkbGeogInnerPoint::set	const_cast<ObWkbGeogInnerPoint*>	char* ptr = reinterpret_cast<char*>(const_cast<ObWkbGeogInnerPoint*>(this));
+src/share/geo/ob_geo_bin.cpp	590	ObWkbGeogLineString::size	const_cast<ObWkbGeogLineString*>	char *ptr = reinterpret_cast<char*>(const_cast<ObWkbGeogLineString*>(this));
+src/share/geo/ob_geo_bin.cpp	610	ObWkbGeogLineString::get_sub_addr	const_cast<ObWkbGeogLineString*>	char *ptr = reinterpret_cast<char*>(const_cast<ObWkbGeogLineString*>(this));
+src/share/geo/ob_geo_bin.cpp	619	ObWkbGeogLinearRing::size	const_cast<ObWkbGeogLinearRing*>	char *ptr = reinterpret_cast<char*>(const_cast<ObWkbGeogLinearRing*>(this));
+src/share/geo/ob_geo_bin.cpp	637	ObWkbGeogLinearRing::get_sub_addr	const_cast<ObWkbGeogLinearRing*>	char *ptr = reinterpret_cast<char*>(const_cast<ObWkbGeogLinearRing*>(this));
+src/share/geo/ob_geo_bin.cpp	648	ObWkbGeogPolygonInnerRings::size	const_cast<ObWkbGeogPolygonInnerRings*>	char *ptr = reinterpret_cast<char*>(const_cast<ObWkbGeogPolygonInnerRings*>(this));
+src/share/geo/ob_geo_bin.cpp	671	ObWkbGeogPolygon::size	const_cast<ObWkbGeogPolygon*>	char *ptr = reinterpret_cast<char*>(const_cast<ObWkbGeogPolygon*>(this));
+src/share/geo/ob_geo_bin.cpp	686	ObWkbGeogPolygon::exterior_ring	const_cast<ObWkbGeogPolygon*>	char *ptr = reinterpret_cast<char*>(const_cast<ObWkbGeogPolygon*>(this));
+src/share/geo/ob_geo_bin.cpp	700	ObWkbGeogPolygon::inner_rings	const_cast<ObWkbGeogPolygon*>	char *ptr = reinterpret_cast<char*>(const_cast<ObWkbGeogPolygon*>(this));
+src/share/geo/ob_geo_bin.cpp	714	ObWkbGeogMultiPoint::size	const_cast<ObWkbGeogMultiPoint*>	char *ptr = reinterpret_cast<char*>(const_cast<ObWkbGeogMultiPoint*>(this));
+src/share/geo/ob_geo_bin.cpp	735	ObWkbGeogMultiPoint::get_sub_addr	const_cast<ObWkbGeogMultiPoint*>	char *ptr = reinterpret_cast<char*>(const_cast<ObWkbGeogMultiPoint*>(this));
+src/share/geo/ob_geo_bin.cpp	747	ObWkbGeogMultiLineString::size	const_cast<ObWkbGeogMultiLineString*>	char *ptr = reinterpret_cast<char*>(const_cast<ObWkbGeogMultiLineString*>(this));
+src/share/geo/ob_geo_bin.cpp	770	ObWkbGeogMultiPolygon::size	const_cast<ObWkbGeogMultiPolygon*>	char *ptr = reinterpret_cast<char*>(const_cast<ObWkbGeogMultiPolygon*>(this));
+src/share/geo/ob_geo_bin.cpp	794	ObWkbGeogCollection::size	const_cast<ObWkbGeogCollection*>	char *ptr = reinterpret_cast<char*>(const_cast<ObWkbGeogCollection*>(this));
+src/share/geo/ob_geo_bin.cpp	818	ObWkbGeogCollection::get_sub_size	const_cast<pointer>	pointer ptr = const_cast<pointer>(data) + sizeof(uint8_t);
+src/share/geo/ob_geo_bin.cpp	866	ObWkbGeogCollection::get_sub_type	const_cast<pointer>	pointer ptr = const_cast<pointer>(data) + sizeof(uint8_t);
+src/share/geo/ob_geo_bin.h	200	ObWkbGeomPolygonInnerRings::ptr	const_cast<self*>	char* ptr() const { return reinterpret_cast<char*>(const_cast<self*>(this)); }
+src/share/geo/ob_geo_bin.h	297	ObWkbGeomMultiLineString::ptr	const_cast<self*>	char* ptr() const { return reinterpret_cast<char*>(const_cast<self*>(this)); }
+src/share/geo/ob_geo_bin.h	338	ObWkbGeomMultiPolygon::ptr	const_cast<self*>	char* ptr() const { return reinterpret_cast<char*>(const_cast<self*>(this)); }
+src/share/geo/ob_geo_bin.h	382	ObWkbGeomCollection::ptr	const_cast<self*>	char* ptr() const { return reinterpret_cast<char*>(const_cast<self*>(this)); }
+src/share/geo/ob_geo_bin.h	565	ObWkbGeogPolygonInnerRings::ptr	const_cast<self*>	char* ptr() const { return reinterpret_cast<char*>(const_cast<self*>(this)); }
+src/share/geo/ob_geo_bin.h	664	ObWkbGeogMultiLineString::ptr	const_cast<self*>	char* ptr() const { return reinterpret_cast<char*>(const_cast<self*>(this)); }
+src/share/geo/ob_geo_bin.h	705	ObWkbGeogMultiPolygon::ptr	const_cast<self*>	char* ptr() const { return reinterpret_cast<char*>(const_cast<self*>(this)); }
+src/share/geo/ob_geo_bin.h	749	ObWkbGeogCollection::ptr	const_cast<self*>	char* ptr() const { return reinterpret_cast<char*>(const_cast<self*>(this)); }
+src/share/geo/ob_geo_bin_iter.ipp	36	ObWkbConstIterator::ObWkbConstIterator	const_cast<owner_t*>	owner_ = const_cast<owner_t*>(owner);
+src/share/geo/ob_geo_bin_iter.ipp	178	operator*	const_cast<self*>	self* ptr = const_cast<self*>(this);
+src/share/geo/ob_geo_bin_iter.ipp	186	operator->	const_cast<self*>	self* ptr = const_cast<self*>(this);
+src/share/geo/ob_geo_bin_iter.ipp	375	ObWkbUtils::get_sub_addr_common	const_cast<typename T::pointer>	scan_ptr = reinterpret_cast<char*>(const_cast<typename T::pointer>(last_addr));
+src/share/geo/ob_geo_bin_iter.ipp	377	ObWkbUtils::get_sub_addr_common	const_cast<typename T::pointer>	scan_ptr = reinterpret_cast<char*>(const_cast<typename T::pointer>(last_addr));
+src/share/geo/ob_geo_elevation_visitor.cpp	65	ObGeoElevationExtent::add_geometry	const_cast<ObGeometry3D *>	ObGeometry3D *geo3d = const_cast<ObGeometry3D *>(reinterpret_cast<const ObGeometry3D *>(&g));
+src/share/geo/ob_geo_elevation_visitor.cpp	155	ObGeoElevationVisitor::add_geometry	const_cast<ObGeometry &>	ObGeometry3D &geo_3D = reinterpret_cast<ObGeometry3D &>(const_cast<ObGeometry &>(geo));
+src/share/geo/ob_geo_func_buffer.cpp	109	ObGeoFuncBufferImpl::eval_buffer_cartisan	const_cast<GeomIType *>	GeomIType *i_geo = const_cast<GeomIType *>(reinterpret_cast<const GeomIType *>(g));
+src/share/geo/ob_geo_func_buffer.cpp	115	ObGeoFuncBufferImpl::eval_buffer_cartisan	const_cast<GeomTreeType *>	geo_tree = const_cast<GeomTreeType *>(reinterpret_cast<const GeomTreeType *>(g));
+src/share/geo/ob_geo_func_buffer.cpp	216	ObGeoFuncBufferImpl::eval_buffer_cartisan_collection	const_cast<ObGeometry *>	} else if (OB_FAIL(ObGeoFuncUtils::ob_gc_prepare<ObCartesianGeometrycollection>(context, const_cast<ObGeometry *>(g), mpt, ml, mpo))) {
+src/share/geo/ob_geo_func_buffer.cpp	543	OB_GEO_UNARY_FUNC_BEGIN(ObGeoFuncBufferImpl, ObWkbGeogPoint, ObGeometry *)	const_cast<ObIWkbGeogPoint *>	ObIWkbGeogPoint *i_geo = const_cast<ObIWkbGeogPoint *>(reinterpret_cast<const ObIWkbGeogPoint *>(g));
+src/share/geo/ob_geo_func_centroid.cpp	56	ObGeoFuncCentroidImpl::centroid_collection	const_cast<ObGeometry *>	} else if (OB_FAIL(const_cast<ObGeometry *>(g)->do_visit(tree_visitor))) {
+src/share/geo/ob_geo_func_centroid.cpp	88	ObGeoFuncCentroidImpl::centroid_default	const_cast<char *>	geo_candidate = reinterpret_cast<GeoType *>(const_cast<char *>(g->val()));
+src/share/geo/ob_geo_func_centroid.cpp	90	ObGeoFuncCentroidImpl::centroid_default	const_cast<ObGeometry *>	geo_candidate = reinterpret_cast<GeoType *>(const_cast<ObGeometry *>(g));
+src/share/geo/ob_geo_func_correct.cpp	48	ObGeoFuncCorrectImpl::correct_default	const_cast<char *>	geo_candidate = reinterpret_cast<GeoType *>(const_cast<char *>(g->val()));
+src/share/geo/ob_geo_func_correct.cpp	50	ObGeoFuncCorrectImpl::correct_default	const_cast<ObGeometry *>	geo_candidate = reinterpret_cast<GeoType *>(const_cast<ObGeometry *>(g));
+src/share/geo/ob_geo_func_correct.cpp	68	ObGeoFuncCorrectImpl::correct_with_strategy	const_cast<char *>	geo_candidate = reinterpret_cast<GeoType *>(const_cast<char *>(g->val()));
+src/share/geo/ob_geo_func_correct.cpp	70	ObGeoFuncCorrectImpl::correct_with_strategy	const_cast<ObGeometry *>	geo_candidate = reinterpret_cast<GeoType *>(const_cast<ObGeometry *>(g));
+src/share/geo/ob_geo_func_correct.cpp	124	ObGeoFuncCorrectImpl::correct_tree_collection	const_cast<ObGeometry *>	const GeoTypeCollection *geo = reinterpret_cast<const GeoTypeCollection *>(const_cast<ObGeometry *>(g));
+src/share/geo/ob_geo_func_covered_by1.cpp	162	OB_GEO_CART_BINARY_FUNC_BEGIN(ObGeoFuncCoveredByImpl, ObWkbGeomLineString, ObWkbGeomCollec)	const_cast<ObGeometry *>	ObGeometry *geo2 = const_cast<ObGeometry *>(reinterpret_cast<const ObGeometry *>(g2));
+src/share/geo/ob_geo_func_covered_by1.cpp	199	OB_GEO_CART_BINARY_FUNC_BEGIN(ObGeoFuncCoveredByImpl, ObWkbGeomPolygon, ObWkbGeomCollectio)	const_cast<ObGeometry *>	ObGeometry *geo2 = const_cast<ObGeometry *>(reinterpret_cast<const ObGeometry *>(g2));
+src/share/geo/ob_geo_func_covered_by1.cpp	208	OB_GEO_CART_BINARY_FUNC_BEGIN(ObGeoFuncCoveredByImpl, ObWkbGeomPolygon, ObWkbGeomCollectio)	const_cast<ObWkbGeomPolygon *>	boost::geometry::correct(*const_cast<ObWkbGeomPolygon *>(geo1));
+src/share/geo/ob_geo_func_covered_by1.cpp	249	OB_GEO_CART_BINARY_FUNC_BEGIN(ObGeoFuncCoveredByImpl, ObWkbGeomMultiLineString, ObWkbGeomC)	const_cast<ObGeometry *>	ObGeometry *geo2 = const_cast<ObGeometry *>(reinterpret_cast<const ObGeometry *>(g2));
+src/share/geo/ob_geo_func_covered_by1.cpp	286	OB_GEO_CART_BINARY_FUNC_BEGIN(ObGeoFuncCoveredByImpl, ObWkbGeomMultiPolygon, ObWkbGeomColl)	const_cast<ObGeometry *>	ObGeometry *geo2 = const_cast<ObGeometry *>(reinterpret_cast<const ObGeometry *>(g2));
+src/share/geo/ob_geo_func_covered_by1.cpp	295	OB_GEO_CART_BINARY_FUNC_BEGIN(ObGeoFuncCoveredByImpl, ObWkbGeomMultiPolygon, ObWkbGeomColl)	const_cast<ObWkbGeomMultiPolygon *>	boost::geometry::correct(*const_cast<ObWkbGeomMultiPolygon *>(geo1));
+src/share/geo/ob_geo_func_covered_by1.cpp	307	OB_GEO_CART_BINARY_FUNC_BEGIN(ObGeoFuncCoveredByImpl, ObWkbGeomCollection, ObWkbGeomPoint,)	const_cast<ObGeometry *>	ObGeometry *geo1 = const_cast<ObGeometry *>(reinterpret_cast<const ObGeometry *>(g1));
+src/share/geo/ob_geo_func_covered_by1.cpp	330	OB_GEO_CART_BINARY_FUNC_BEGIN(ObGeoFuncCoveredByImpl, ObWkbGeomCollection, ObWkbGeomLineSt)	const_cast<ObGeometry *>	ObGeometry *geo1 = const_cast<ObGeometry *>(reinterpret_cast<const ObGeometry *>(g1));
+src/share/geo/ob_geo_func_covered_by1.cpp	356	OB_GEO_CART_BINARY_FUNC_BEGIN(ObGeoFuncCoveredByImpl, ObWkbGeomCollection, ObWkbGeomPolygo)	const_cast<ObGeometry *>	ObGeometry *geo1 = const_cast<ObGeometry *>(reinterpret_cast<const ObGeometry *>(g1));
+src/share/geo/ob_geo_func_covered_by1.cpp	381	OB_GEO_CART_BINARY_FUNC_BEGIN(ObGeoFuncCoveredByImpl, ObWkbGeomCollection, ObWkbGeomMultiP)	const_cast<ObGeometry *>	ObGeometry *geo1 = const_cast<ObGeometry *>(reinterpret_cast<const ObGeometry *>(g1));
+src/share/geo/ob_geo_func_covered_by1.cpp	408	OB_GEO_CART_BINARY_FUNC_BEGIN(ObGeoFuncCoveredByImpl, ObWkbGeomCollection, ObWkbGeomMultiL)	const_cast<ObGeometry *>	ObGeometry *geo1 = const_cast<ObGeometry *>(reinterpret_cast<const ObGeometry *>(g1));
+src/share/geo/ob_geo_func_covered_by1.cpp	434	OB_GEO_CART_BINARY_FUNC_BEGIN(ObGeoFuncCoveredByImpl, ObWkbGeomCollection, ObWkbGeomMultiP)	const_cast<ObGeometry *>	ObGeometry *geo1 = const_cast<ObGeometry *>(reinterpret_cast<const ObGeometry *>(g1));
+src/share/geo/ob_geo_func_covered_by1.cpp	462	OB_GEO_CART_BINARY_FUNC_BEGIN(ObGeoFuncCoveredByImpl, ObWkbGeomCollection, ObWkbGeomCollec)	const_cast<ObGeometry *>	ObGeometry *geo1 = const_cast<ObGeometry *>(reinterpret_cast<const ObGeometry *>(g1));
+src/share/geo/ob_geo_func_covered_by1.cpp	463	OB_GEO_CART_BINARY_FUNC_BEGIN(ObGeoFuncCoveredByImpl, ObWkbGeomCollection, ObWkbGeomCollec)	const_cast<ObGeometry *>	ObGeometry *geo2 = const_cast<ObGeometry *>(reinterpret_cast<const ObGeometry *>(g2));
+src/share/geo/ob_geo_func_covered_by2.cpp	186	OB_GEO_GEOG_BINARY_FUNC_BEGIN(ObGeoFuncCoveredByImpl, ObWkbGeogLineString, ObWkbGeogCollec)	const_cast<ObGeometry *>	ObGeometry *geo2 = const_cast<ObGeometry *>(reinterpret_cast<const ObGeometry *>(g2));
+src/share/geo/ob_geo_func_covered_by2.cpp	224	OB_GEO_GEOG_BINARY_FUNC_BEGIN(ObGeoFuncCoveredByImpl, ObWkbGeogPolygon, ObWkbGeogCollectio)	const_cast<ObGeometry *>	ObGeometry *geo2 = const_cast<ObGeometry *>(reinterpret_cast<const ObGeometry *>(g2));
+src/share/geo/ob_geo_func_covered_by2.cpp	236	OB_GEO_GEOG_BINARY_FUNC_BEGIN(ObGeoFuncCoveredByImpl, ObWkbGeogPolygon, ObWkbGeogCollectio)	const_cast<ObWkbGeogPolygon *>	boost::geometry::correct(*const_cast<ObWkbGeogPolygon *>(geo1), area_strategy);
+src/share/geo/ob_geo_func_covered_by2.cpp	275	OB_GEO_GEOG_BINARY_FUNC_BEGIN(ObGeoFuncCoveredByImpl, ObWkbGeogMultiLineString, ObWkbGeogC)	const_cast<ObGeometry *>	ObGeometry *geo2 = const_cast<ObGeometry *>(reinterpret_cast<const ObGeometry *>(g2));
+src/share/geo/ob_geo_func_covered_by2.cpp	312	OB_GEO_GEOG_BINARY_FUNC_BEGIN(ObGeoFuncCoveredByImpl, ObWkbGeogMultiPolygon, ObWkbGeogColl)	const_cast<ObGeometry *>	ObGeometry *geo2 = const_cast<ObGeometry *>(reinterpret_cast<const ObGeometry *>(g2));
+src/share/geo/ob_geo_func_covered_by2.cpp	324	OB_GEO_GEOG_BINARY_FUNC_BEGIN(ObGeoFuncCoveredByImpl, ObWkbGeogMultiPolygon, ObWkbGeogColl)	const_cast<ObWkbGeogMultiPolygon *>	boost::geometry::correct(*const_cast<ObWkbGeogMultiPolygon *>(geo1), area_strategy);
+src/share/geo/ob_geo_func_covered_by2.cpp	336	OB_GEO_GEOG_BINARY_FUNC_BEGIN(ObGeoFuncCoveredByImpl, ObWkbGeogCollection, ObWkbGeogPoint,)	const_cast<ObGeometry *>	ObGeometry *geo1 = const_cast<ObGeometry *>(reinterpret_cast<const ObGeometry *>(g1));
+src/share/geo/ob_geo_func_covered_by2.cpp	362	OB_GEO_GEOG_BINARY_FUNC_BEGIN(ObGeoFuncCoveredByImpl, ObWkbGeogCollection, ObWkbGeogLineSt)	const_cast<ObGeometry *>	ObGeometry *geo1 = const_cast<ObGeometry *>(reinterpret_cast<const ObGeometry *>(g1));
+src/share/geo/ob_geo_func_covered_by2.cpp	391	OB_GEO_GEOG_BINARY_FUNC_BEGIN(ObGeoFuncCoveredByImpl, ObWkbGeogCollection, ObWkbGeogPolygo)	const_cast<ObGeometry *>	ObGeometry *geo1 = const_cast<ObGeometry *>(reinterpret_cast<const ObGeometry *>(g1));
+src/share/geo/ob_geo_func_covered_by2.cpp	419	OB_GEO_GEOG_BINARY_FUNC_BEGIN(ObGeoFuncCoveredByImpl, ObWkbGeogCollection, ObWkbGeogMultiP)	const_cast<ObGeometry *>	ObGeometry *geo1 = const_cast<ObGeometry *>(reinterpret_cast<const ObGeometry *>(g1));
+src/share/geo/ob_geo_func_covered_by2.cpp	449	OB_GEO_GEOG_BINARY_FUNC_BEGIN(ObGeoFuncCoveredByImpl, ObWkbGeogCollection, ObWkbGeogMultiL)	const_cast<ObGeometry *>	ObGeometry *geo1 = const_cast<ObGeometry *>(reinterpret_cast<const ObGeometry *>(g1));
+src/share/geo/ob_geo_func_covered_by2.cpp	478	OB_GEO_GEOG_BINARY_FUNC_BEGIN(ObGeoFuncCoveredByImpl, ObWkbGeogCollection, ObWkbGeogMultiP)	const_cast<ObGeometry *>	ObGeometry *geo1 = const_cast<ObGeometry *>(reinterpret_cast<const ObGeometry *>(g1));
+src/share/geo/ob_geo_func_covered_by2.cpp	509	OB_GEO_GEOG_BINARY_FUNC_BEGIN(ObGeoFuncCoveredByImpl, ObWkbGeogCollection, ObWkbGeogCollec)	const_cast<ObGeometry *>	ObGeometry *geo1 = const_cast<ObGeometry *>(reinterpret_cast<const ObGeometry *>(g1));
+src/share/geo/ob_geo_func_covered_by2.cpp	510	OB_GEO_GEOG_BINARY_FUNC_BEGIN(ObGeoFuncCoveredByImpl, ObWkbGeogCollection, ObWkbGeogCollec)	const_cast<ObGeometry *>	ObGeometry *geo2 = const_cast<ObGeometry *>(reinterpret_cast<const ObGeometry *>(g2));
+src/share/geo/ob_geo_func_crosses_helper.ipp	336	ObGeoFuncCrossesImpl::eval_crosses_gc_gc	const_cast<ObGeometry *>	ObGeometry *geo1 = const_cast<ObGeometry *>(g1);
+src/share/geo/ob_geo_func_crosses_helper.ipp	354	ObGeoFuncCrossesImpl::eval_crosses_gc_gc	const_cast<ObGeometry *>	ObGeometry *geo2 = const_cast<ObGeometry *>(g2);
+src/share/geo/ob_geo_func_difference3.cpp	104	OB_GEO_CART_TREE_FUNC_BEGIN(ObGeoFuncDifferenceImpl, ObCartesianPolygon, ObCartesianMult)	const_cast<ObGeometry *>	result = const_cast<ObGeometry *>(reinterpret_cast<const ObGeometry *>(g1));
+src/share/geo/ob_geo_func_difference3.cpp	112	OB_GEO_CART_TREE_FUNC_BEGIN(ObGeoFuncDifferenceImpl, ObCartesianMultipolygon, ObCartesia)	const_cast<ObGeometry *>	result = const_cast<ObGeometry *>(reinterpret_cast<const ObGeometry *>(g1));
+src/share/geo/ob_geo_func_difference_helper.ipp	271	ObGeoFuncDifferenceImpl::eval_difference_gc_gc	const_cast<ObGeometry *>	ObGeometry *geo1 = const_cast<ObGeometry *>(g1);
+src/share/geo/ob_geo_func_difference_helper.ipp	370	ObGeoFuncDifferenceImpl::create_multi_type	const_cast<ObGeometry *>	res = const_cast<ObGeometry *>(g);
+src/share/geo/ob_geo_func_dissolve_polygon.cpp	36	eval_dissolve_polygon	const_cast<char *>	geo1 = reinterpret_cast<GeometryType *>(const_cast<char *>(g1->val()));
+src/share/geo/ob_geo_func_dissolve_polygon.cpp	38	eval_dissolve_polygon	const_cast<ObGeometry *>	geo1 = reinterpret_cast<GeometryType *>(const_cast<ObGeometry *>(g1));
+src/share/geo/ob_geo_func_dissolve_polygon.cpp	102	eval_dissolve_multipolygon	const_cast<char *>	geo1 = reinterpret_cast<GeometryType *>(const_cast<char *>(g1->val()));
+src/share/geo/ob_geo_func_dissolve_polygon.cpp	104	eval_dissolve_multipolygon	const_cast<ObGeometry *>	geo1 = reinterpret_cast<GeometryType *>(const_cast<ObGeometry *>(g1));
+src/share/geo/ob_geo_func_equals_helper.ipp	160	ObGeoFuncEqualsImpl::eval_equals_geometry_collection	const_cast<ObGeometry *>	if (OB_FAIL(ObGeoTypeUtil::check_empty(const_cast<ObGeometry *>(g1), is_g1_empty))) {
+src/share/geo/ob_geo_func_equals_helper.ipp	161	ObGeoFuncEqualsImpl::eval_equals_geometry_collection	const_cast<ObGeometry *>	} else if (OB_FAIL(ObGeoTypeUtil::check_empty(const_cast<ObGeometry *>(g2), is_g2_empty))) {
+src/share/geo/ob_geo_func_equals_helper.ipp	168	ObGeoFuncEqualsImpl::eval_equals_geometry_collection	const_cast<ObGeometry *>	ObGeometry *geo1 = const_cast<ObGeometry *>(reinterpret_cast<const ObGeometry *>(g1));
+src/share/geo/ob_geo_func_equals_helper.ipp	177	ObGeoFuncEqualsImpl::eval_equals_geometry_collection	const_cast<ObGeometry *>	ObGeometry *geo2 = const_cast<ObGeometry *>(reinterpret_cast<const ObGeometry *>(g2));
+src/share/geo/ob_geo_func_isvalid.cpp	38	eval_isvalid_without_strategy	const_cast<char *>	geo_condidate = reinterpret_cast<GeoType *>(const_cast<char *>(g->val()));
+src/share/geo/ob_geo_func_isvalid.cpp	40	eval_isvalid_without_strategy	const_cast<ObGeometry *>	geo_condidate = reinterpret_cast<GeoType *>(const_cast<ObGeometry *>(g));
+src/share/geo/ob_geo_func_isvalid.cpp	48	eval_isvalid_without_strategy	const_cast<ObGeoNormalVal *>	ObGeoNormalVal *ret_errno = const_cast<ObGeoNormalVal *>(context.get_val_arg(0));
+src/share/geo/ob_geo_func_isvalid.cpp	67	eval_isvalid_with_strategy	const_cast<char *>	const GeoType *geo_condidate = reinterpret_cast<const GeoType *>(const_cast<char *>(g->val()));
+src/share/geo/ob_geo_func_isvalid.cpp	71	eval_isvalid_with_strategy	const_cast<ObGeoNormalVal *>	ObGeoNormalVal *ret_errno = const_cast<ObGeoNormalVal *>(context.get_val_arg(0));
+src/share/geo/ob_geo_func_isvalid.cpp	116	ObGeoFuncIsValidImpl::eval_isvalid_geometry_collection	const_cast<char *>	const CollectonType *geo = reinterpret_cast<const CollectonType *>(const_cast<char *>(g->val()));
+src/share/geo/ob_geo_func_length.cpp	33	eval_length_without_strategy	const_cast<char *>	const GeoType *geo_condidate = reinterpret_cast<const GeoType *>(const_cast<char *>(g->val()));
+src/share/geo/ob_geo_func_length.cpp	48	eval_length_with_strategy	const_cast<char *>	const GeoType *geo_condidate = reinterpret_cast<const GeoType *>(const_cast<char *>(g->val()));
+src/share/geo/ob_geo_func_overlaps_helper.ipp	144	ObGeoFuncOverlapsImpl::eval_overlaps_gc_gc	const_cast<ObGeometry *>	ObGeometry *geo1 = const_cast<ObGeometry *>(reinterpret_cast<const ObGeometry *>(g1));
+src/share/geo/ob_geo_func_overlaps_helper.ipp	165	ObGeoFuncOverlapsImpl::eval_overlaps_gc_gc	const_cast<ObGeometry *>	ObGeometry *geo2 = const_cast<ObGeometry *>(reinterpret_cast<const ObGeometry *>(g2));
+src/share/geo/ob_geo_func_overlaps_helper.ipp	235	ObGeoFuncOverlapsImpl::eval_overlaps_gc_other	const_cast<ObGeometry *>	ObGeometry *geo1 = const_cast<ObGeometry *>(reinterpret_cast<const ObGeometry *>(g1));
+src/share/geo/ob_geo_func_overlaps_helper.ipp	254	ObGeoFuncOverlapsImpl::eval_overlaps_gc_other	const_cast<ObGeometry *>	ObGeometry *geo2 = const_cast<ObGeometry *>(g2);

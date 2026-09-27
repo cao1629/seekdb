@@ -1,57 +1,200 @@
 file	line	symbol	construct	text
-src/oblib/lib/utility/utility.cpp	430	hex_dump	C-style cast (unsigned char *) drops const from data	unsigned const char *p = (unsigned char *)data;
-src/oblib/lib/utility/utility.cpp	670	all_zero	C-style cast (int64_t *) drops const from iter	if (0 != *((int64_t *)iter)) {
-src/oblib/lib/utility/utility.cpp	2350	extract_cert_expired_time	C-style cast (void*) drops const from cert	} else if (OB_ISNULL(cbio = BIO_new_mem_buf((void*)cert, cert_len))) {
-src/oblib/rpc/frame/ob_net_easy.cpp	162	easy_connection_str	const_cast<char*>	return const_cast<char*>("null");
-src/oblib/rpc/frame/ob_net_easy.cpp	406	easy_buf_set_data	C-style cast (char *) drops const from data	b->data = (char *)data;
-src/oblib/rpc/obmysql/ob_mysql_packet.cpp	47	ObMySQLRawPacket::get_command_field	const_cast<char *>	field.assign_ptr(const_cast<char *>(cdata_ - 1 + off),
-src/oblib/rpc/obmysql/packet/ompk_error.cpp	41	OMPKError::set_message	const_cast<char *>	message_.assign(const_cast<char *>(message.ptr()), message.length());
-src/observer/change_stream/ob_cs_plugin_async_index.cpp	581	ObCSAsyncIndexProcessor::extract_vector_data_	const_cast<char *>	vec_data = const_cast<char *>(datum.ptr_);
-src/observer/change_stream/ob_cs_plugin_async_index.cpp	584	ObCSAsyncIndexProcessor::extract_vector_data_	const_cast<char *>	vec_data = const_cast<char *>(datum.ptr_) + header_len;
-src/observer/mysql/ob_mysql_end_trans_cb.cpp	258	ObSqlEndTransCb::complete_callback_locked	const_cast<char*>	ok_param.message_ = const_cast<char*>(pkt_param_.get_message());
-src/observer/mysql/ob_query_driver.cpp	171	ObQueryDriver::response_query_result	const_cast<ObNewRow*>	ObNewRow *row = const_cast<ObNewRow*>(result_row);
-src/observer/mysql/ob_sync_cmd_driver.cpp	162	ObSyncCmdDriver::response_result	const_cast<char*>	ok_param.message_ = const_cast<char*>(result.get_message());
-src/observer/mysql/ob_sync_cmd_driver.cpp	232	ObSyncCmdDriver::response_query_result	const_cast<ObNewRow*>	ObNewRow *tmp_row = const_cast<ObNewRow*>(row);
-src/observer/mysql/ob_sync_plan_driver.cpp	153	ObSyncPlanDriver::response_result	const_cast<char*>	ok_param.message_ = const_cast<char*>(result.get_message());
-src/observer/mysql/ob_sync_plan_driver.cpp	174	ObSyncPlanDriver::response_result	const_cast<char*>	ok_param.message_ = const_cast<char*>(result.get_message());
-src/observer/mysql/obmp_base.cpp	432	ObMPBase::response_row	const_cast<ObAccuracy*>	cast_ctx.res_accuracy_ = const_cast<ObAccuracy*>(&fields->at(i).accuracy_);
-src/observer/mysql/obmp_packet_sender.cpp	917	ObMPPacketSender::send_eof_packet	const_cast<ObSQLSessionInfo *>	if (OB_FAIL(send_ok_packet(*const_cast<ObSQLSessionInfo *>(&session),
-src/observer/mysql/obmp_stmt_execute.cpp	2345	ObMPStmtExecute::parse_param_value	const_cast<ObObjMeta &>	const_cast<ObObjMeta &>(param.get_param_meta()).set_collation_type(cs_type);
-src/observer/mysql/obmp_stmt_execute.cpp	2346	ObMPStmtExecute::parse_param_value	const_cast<ObObjMeta &>	const_cast<ObObjMeta &>(param.get_param_meta()).set_collation_level(CS_LEVEL_COERCIBLE);
-src/observer/ob_inner_connection_lock_util.cpp	184	#define CONVERT_TYPE_AND_DO_UNLOCK	const_cast<T &>	T &unlock_req = const_cast<T &>(lock_req);                                       \
-src/observer/ob_inner_sql_connection.cpp	611	ObInnerSQLConnection::process_audit_record	const_cast<char *>	audit_record.sql_ = const_cast<char *>(ps_sql.ptr());
-src/observer/ob_signal_handle.cpp	30	sigtimedwait	const_cast<sigset_t*>	int result = sigwait(const_cast<sigset_t*>(set), &signum);
-src/observer/ob_srv_xlator.cpp	307	ObSrvXlator::release	const_cast<ObRequest*>	ObRequest *req = const_cast<ObRequest*>(processor->get_ob_request());
-src/observer/ob_uniq_task_queue.h	351	ObUniqTaskQueue::add	const_cast<Task *>	} else if (!group->list_.add_last(const_cast<Task *>(stored_task))) {
-src/observer/ob_uniq_task_queue.h	597	ObUniqTaskQueue::get_group	const_cast<Group *>	} else if (NULL == (group = const_cast<Group *>(group_map_.get(group_id)))) {
-src/observer/ob_uniq_task_queue.h	621	ObUniqTaskQueue::try_lock	const_cast<Task&>	} else if (FALSE_IT(const_cast<Task&>(task).set_start_timestamp())) {
-src/observer/ob_win_service.cpp	190	ob_install_win_service	const_cast<char *>	desc.lpDescription = const_cast<char *>(OB_SERVICE_DESCRIPTION);
-src/observer/ob_win_service.cpp	291	ob_start_as_win_service	const_cast<char *>	{ const_cast<char *>(service_name), (LPSERVICE_MAIN_FUNCTIONA)service_main_entry },
-src/observer/schema/ob_schema_retrieve_utils.ipp	404	ObSubPartSchemaRetrieveHelper::add	const_cast<ObPartition *>	partition_ = const_cast<ObPartition *>(tmp_partition);
-src/observer/vector_index/ob_plugin_vector_index_adaptor.cpp	85	ObPluginVectorIndexAdaptor::deallocate_query_distances	const_cast<float *>	mem_data->mem_ctx_->Deallocate(const_cast<float *>(distances));
-src/observer/vector_index/ob_plugin_vector_index_adaptor.cpp	3336	ObPluginVectorIndexAdaptor::vsag_query_vids	const_cast<char*>	char *data = const_cast<char*>(vector_str.ptr());
-src/observer/vector_index/ob_plugin_vector_index_scheduler.cpp	1135	ObPluginVectorIndexLoadScheduler::replay	C-style cast (char *) drops const from buffer	} else if (OB_FAIL(ls_log.deserialize((char *)buffer, buf_size, tmp_pos))) {
-src/observer/vector_index/ob_plugin_vector_index_serialize.cpp	358	ObHNSWSerializeCallback::operator()	const_cast<char*>	ObLobLocatorV2 src_lob(const_cast<char*>(data), data_size, false); // data from vsag must has no header
-src/observer/vector_index/ob_vector_index_util.cpp	5650	ObVecExtraInfo::extra_buf_to_obj	C-style cast (int32_t *) drops const from buf	len = *(int32_t *)(buf + pos);
-src/observer/virtual_table/ob_all_virtual_schema_slot.cpp	35	ObAllVirtualSchemaSlot::release_slot_infos	const_cast<char*>	allocator.free(const_cast<char*>(ptr));
-src/observer/virtual_table/ob_gv_sql.cpp	942	ObGVSql::fill_cells	const_cast<ObPlanCache *>	common::hash::ObHashMap<ObCacheObjID, ObILibCacheObject*> &co_map = const_cast<ObPlanCache *>(&plan_cache)->get_cache_obj_mgr().get_cache_obj_map();
-src/observer/virtual_table/ob_table_columns.cpp	835	ObTableColumns::deduce_column_attributes	const_cast<SelectItem &>	ObRawExpr *&item_expr = const_cast<SelectItem &>(select_item).expr_;
-src/observer/virtual_table/ob_table_columns.cpp	1134	ObTableColumns::resolve_view_definition	const_cast<ObSQLSessionInfo*>	resolver_ctx.session_info_ = const_cast<ObSQLSessionInfo*>(session);
-src/pl/ob_pl.cpp	1947	ObPLExecCtx::get_user_type	const_cast<ObPLExecCtx *>	ObIAllocator *expr_alloc = const_cast<ObPLExecCtx *>(this)->get_top_expr_allocator();
-src/pl/ob_pl.cpp	2457	ObPLExecState::init_params	const_cast<ParamStore *>	OZ (check_routine_param_legal(const_cast<ParamStore *>(params)));
-src/pl/ob_pl.cpp	3160	ObPLFunction::get_subprogram	const_cast<ObPLFunction*>	ObPLFunction *parent = const_cast<ObPLFunction*>(this);
-src/pl/ob_pl_allocator.cpp	109	ObPLAllocator1::realloc	const_cast<void *>	newptr = ob_realloc(const_cast<void *>(ptr), size, attr);
-src/pl/ob_pl_build.cpp	160	ObPLBuilder::init_anonymous_ast	const_cast<ObObjParam&>	ObObjParam& param = const_cast<ObObjParam&>(params->at(i));
-src/pl/ob_pl_build.cpp	712	ObPLBuilder::analyze_package	const_cast<ObPLBlockNS &>	(const_cast<ObPLBlockNS &>(package_ast.get_body()->get_namespace())).set_external_ns(NULL);
-src/pl/ob_pl_build.cpp	1017	ObPLBuilder::generate_package_conditions	const_cast<ObIArray<ObPLCondition *> &>	const_cast<ObIArray<ObPLCondition *> &>(package.get_condition_table());
-src/pl/ob_pl_build.cpp	1031	ObPLBuilder::generate_package_cursors	const_cast<ObPLCursorTable &>	ObPLCursorTable &cursor_table = const_cast<ObPLCursorTable &>(package.get_cursor_table());
-src/pl/ob_pl_build.cpp	1103	ObPLBuilder::generate_package_vars	const_cast<ObIArray<ObPLVar *> &>	ObIArray<ObPLVar *> &package_var_table = const_cast<ObIArray<ObPLVar *> &>(package.get_var_table());
-src/pl/ob_pl_build.cpp	1118	ObPLBuilder::compile_types	const_cast<ObUserDefinedType *>	ObUserDefinedType *ast_type = const_cast<ObUserDefinedType *>(types.at(i));
-src/pl/ob_pl_build.cpp	1149	ObPLBuilder::compile_types	const_cast<ObIArray<ObUserDefinedType *> &>	= const_cast<ObIArray<ObUserDefinedType *> &>(unit.get_type_table());
-src/pl/ob_pl_dependency_util.cpp	77	ObPLDependencyUtil::add_dependency_object_impl	const_cast<ObPLDependencyTable &>	OZ (add_dependency_object_impl(const_cast<ObPLDependencyTable &>(*dep_tbl), obj_version));
-src/pl/ob_pl_interpreter.cpp	344	exec_block	const_cast<ObPLStmtBlock *>	const_cast<ObPLStmtBlock *>(block)->get_eh());
-src/pl/ob_pl_interpreter.cpp	407	exec_block	const_cast<ObPLStmtBlock *>	const_cast<ObPLStmtBlock *>(b)->get_eh());
-src/pl/ob_pl_interpreter.cpp	818	exec_call	const_cast<int64_t *>	int64_t *path = subpath.count() > 0 ? const_cast<int64_t *>(&subpath.at(0)) : NULL;
-src/pl/ob_pl_package.cpp	128	ObPLPackageAST::process_generic_type	const_cast<ObUserDefinedType *>	(const_cast<ObUserDefinedType *>(user_type))
-src/pl/ob_pl_package.cpp	159	ObPLPackage::init	const_cast<ObString &>	if (OB_FAIL(ob_write_string(get_allocator(), const_cast<ObString &>(package_ast.get_db_name()), db_name_))) {
-src/pl/ob_pl_package.cpp	160	ObPLPackage::init	const_cast<ObString &>	} else if (OB_FAIL(ob_write_string(get_allocator(), const_cast<ObString &>(package_ast.get_name()), name_))) {
+src/sql/optimizer/ob_log_plan.cpp	190	ObLogPlan::to_string	const_cast<ObLogicalOperator*>	if (OB_FAIL(sql_plan.print_sql_plan(const_cast<ObLogicalOperator*>(target_plan->get_plan_root()),
+src/sql/optimizer/ob_log_plan.cpp	2573	ObLogPlan::allocate_join_path	const_cast<Path*>	Path *left_path = const_cast<Path*>(join_path->left_path_);
+src/sql/optimizer/ob_log_plan.cpp	2574	ObLogPlan::allocate_join_path	const_cast<Path*>	Path *right_path = const_cast<Path*>(join_path->right_path_);
+src/sql/optimizer/ob_log_plan.cpp	4752	ObLogPlan::init_hash_rollup_info	const_cast<ObIArray<ObRawExpr *> &>	const_cast<ObIArray<ObRawExpr *> &>(rollup_exprs),
+src/sql/optimizer/ob_log_plan.cpp	4753	ObLogPlan::init_hash_rollup_info	const_cast<ObIArray<ObRawExpr *> &>	const_cast<ObIArray<ObRawExpr *> &>(groupby_exprs),
+src/sql/optimizer/ob_log_plan.cpp	9430	ObLogPlan::adjust_final_plan_info	const_cast<ObDelUpdStmt*>	ObDelUpdStmt *stmt = const_cast<ObDelUpdStmt* >(plan->get_stmt());
+src/sql/optimizer/ob_log_plan.cpp	9479	ObLogPlan::adjust_final_plan_info	const_cast<ObSelectStmt*>	ObSelectStmt *stmt = const_cast<ObSelectStmt* >(plan->get_stmt());
+src/sql/optimizer/ob_log_table_scan.cpp	812	ObLogTableScan::extract_virtual_gen_access_exprs	const_cast<ObRawExpr *>	const_cast<ObRawExpr *>(get_group_id_expr())))) {
+src/sql/optimizer/ob_opt_est_utils.cpp	348	ObOptEstUtils::if_expr_value_equal	const_cast<ObRawExpr *>; const_cast<ObRawExpr *>	ObOpRawExpr equal_expr(const_cast<ObRawExpr *>(&first_expr), const_cast<ObRawExpr *>(&second_expr), T_OP_EQ);
+src/sql/optimizer/ob_opt_selectivity.cpp	525	OptTableMeta::get_increase_rows_ratio	const_cast<double &>	const_cast<double &>(real_rows_) = rows_;
+src/sql/optimizer/ob_opt_selectivity.cpp	535	OptTableMeta::get_increase_rows_ratio	const_cast<double &>	const_cast<double &>(real_rows_) = table_meta.table_row_count_;
+src/sql/optimizer/ob_opt_selectivity.cpp	1236	ObOptSelectivity::calc_selectivity_by_dynamic_sampling	const_cast<ObOptimizerContext &>	if (OB_FAIL(ObDynamicSamplingUtils::get_ds_table_param(const_cast<ObOptimizerContext &>(ctx.get_opt_ctx()),
+src/sql/optimizer/ob_opt_selectivity.cpp	1248	ObOptSelectivity::calc_selectivity_by_dynamic_sampling	const_cast<ObOptimizerContext &>	ObDynamicSampling dynamic_sampling(const_cast<ObOptimizerContext &>(ctx.get_opt_ctx()), allocator);
+src/sql/optimizer/ob_opt_selectivity.cpp	1258	ObOptSelectivity::calc_selectivity_by_dynamic_sampling	const_cast<ObOptimizerContext &>	const_cast<ObOptimizerContext &>(ctx.get_opt_ctx()).get_failed_ds_tab_list()))) {
+src/sql/optimizer/ob_opt_selectivity.cpp	1266	ObOptSelectivity::calc_selectivity_by_dynamic_sampling	const_cast<OptTableMeta *>	const_cast<OptTableMeta *>(ds_param.table_meta_)->set_ds_level(ds_table_param.ds_level_);
+src/sql/optimizer/ob_opt_selectivity.cpp	1391	ObOptSelectivity::add_valid_ds_qual	const_cast<ObRawExpr*>	if (OB_FAIL(quals.push_back(const_cast<ObRawExpr*>(qual)))) {
+src/sql/optimizer/ob_opt_selectivity.cpp	1408	ObOptSelectivity::add_valid_ds_qual	const_cast<ObRawExpr*>	if (OB_FAIL(add_var_to_array_no_dup(ds_params.at(i).quals_, const_cast<ObRawExpr*>(qual)))) {
+src/sql/optimizer/ob_opt_selectivity.cpp	1415	ObOptSelectivity::add_valid_ds_qual	const_cast<ObRawExpr*>	if (OB_FAIL(ds_param.quals_.push_back(const_cast<ObRawExpr*>(qual)))) {
+src/sql/optimizer/ob_opt_selectivity.cpp	1584	ObOptSelectivity::get_column_range_sel	const_cast<ObRawExpr *>	if (OB_FAIL(quals.push_back(const_cast<ObRawExpr *>(&qual)))) {
+src/sql/optimizer/ob_opt_selectivity.cpp	2150	ObOptSelectivity::get_column_min_max	const_cast<OptColumnMeta *>	OptColumnMeta *column_meta = const_cast<OptColumnMeta *>(
+src/sql/optimizer/ob_opt_selectivity.cpp	2153	ObOptSelectivity::get_column_min_max	const_cast<OptSelectivityCtx&>	ObSqlSchemaGuard *schema_guard = const_cast<OptSelectivityCtx&>(ctx).get_sql_schema_guard();
+src/sql/optimizer/ob_opt_selectivity.cpp	2811	ObOptSelectivity::calculate_distinct	const_cast<ObRawExpr*>	if (OB_FAIL(expr_array.push_back(const_cast<ObRawExpr*>(&expr)))) {
+src/sql/optimizer/ob_opt_selectivity.cpp	3766	ObOptSelectivity::remove_ignorable_func_for_est_sel	const_cast<ObRawExpr *>	expr = const_cast<ObRawExpr *>(const_expr);
+src/sql/optimizer/ob_opt_selectivity.h	178	OptSelectivityCtx::get_opt_ctx	const_cast<ObOptimizerContext &>	ObOptimizerContext &get_opt_ctx() const { return const_cast<ObOptimizerContext &>(opt_ctx_); }
+src/sql/optimizer/ob_opt_selectivity.h	187	OptSelectivityCtx::get_session_info	const_cast<ObSQLSessionInfo *>	return const_cast<ObSQLSessionInfo *>(opt_ctx_.get_session_info());
+src/sql/optimizer/ob_opt_selectivity.h	195	OptSelectivityCtx::get_opt_stat_manager	const_cast<common::ObOptStatManager *>	return const_cast<common::ObOptStatManager *>(opt_ctx_.get_opt_stat_manager());
+src/sql/optimizer/ob_opt_selectivity.h	200	OptSelectivityCtx::get_allocator	const_cast<common::ObIAllocator &>	return const_cast<common::ObIAllocator &>(opt_ctx_.get_allocator());
+src/sql/optimizer/ob_optimizer_util.cpp	988	ObOptimizerUtil::get_expr_monotonicity_recursively	const_cast<ObRawExpr*>	if (OB_FAIL(ObTransformUtils::get_expr_int_value(const_cast<ObRawExpr*>(param_expr_pos), &param_store,
+src/sql/optimizer/ob_optimizer_util.cpp	1600	ObOptimizerUtil::generate_rowkey_exprs	const_cast<ObDMLStmt *>	ObDMLStmt *stmt = const_cast<ObDMLStmt *>(cstmt);
+src/sql/optimizer/ob_optimizer_util.cpp	2794	ObOptimizerUtil::add_fd_item_set_for_n2n_join	const_cast<ObFdItem *>	new_fd_item = const_cast<ObFdItem *>(fd_item);
+src/sql/optimizer/ob_optimizer_util.cpp	5090	ObOptimizerUtil::get_expr_without_lossless_cast	const_cast<ObRawExpr*>	expr = const_cast<ObRawExpr*>(tmp_expr);
+src/sql/optimizer/ob_sel_estimator.cpp	783	ObEqualSelEstimator::get_equal_sel	const_cast<ObOptimizerContext &>	if (OB_FAIL(ObOptEstUtils::if_expr_value_equal(const_cast<ObOptimizerContext &>(ctx.get_opt_ctx()),
+src/sql/optimizer/ob_sel_estimator.cpp	816	ObEqualSelEstimator::get_simple_equal_sel	const_cast<ObRawExpr*>	ObRawExpr *expr = const_cast<ObRawExpr*>(&cnt_col_expr);
+src/sql/optimizer/ob_sel_estimator.cpp	1674	ObBoolOpSelEstimator::create_estimator	const_cast<ObRawExpr *>	} else if (OB_FAIL(exprs.push_back(const_cast<ObRawExpr *>(child_expr)))) {
+src/sql/optimizer/ob_sel_estimator.cpp	1835	ObRangeSelEstimator::create_estimator	const_cast<ObRawExpr *>	if (OB_FAIL(range_estimator->range_exprs_.push_back(const_cast<ObRawExpr *>(&expr)))) {
+src/sql/optimizer/ob_sel_estimator.cpp	1890	ObSimpleJoinSelEstimator::create_estimator	const_cast<ObRawExpr *>	} else if (OB_FAIL(simple_join_estimator->join_conditions_.push_back(const_cast<ObRawExpr *>(&expr)))) {
+src/sql/optimizer/ob_select_log_plan.cpp	440	ObSelectLogPlan::inner_create_merge_rollup_plan	const_cast<EqualSets &>	const_cast<EqualSets &>(top->get_output_equal_sets()),
+src/sql/optimizer/ob_select_log_plan.cpp	1224	ObSelectLogPlan::inner_create_merge_group_plan	const_cast<EqualSets &>	const_cast<EqualSets &>(top->get_output_equal_sets()),
+src/sql/optimizer/ob_select_log_plan.cpp	1735	ObSelectLogPlan::check_need_merge_distinct_plan	const_cast<EqualSets &>	const_cast<EqualSets &>(top->get_output_equal_sets()),
+src/sql/optimizer/ob_sharding_info.h	94	ObShardingInfo::get_phy_table_location_info	const_cast<ObCandiTableLoc *>	return const_cast<ObCandiTableLoc *>
+src/sql/optimizer/ob_table_location.cpp	110	ObTableLocation::PartProjector::init_part_projector	const_cast<ObRawExpr*>	if (OB_FAIL(row_desc.add_column(const_cast<ObRawExpr*>(part_column)))) {
+src/sql/optimizer/ob_table_location.cpp	3376	ObTableLocation::calc_partition_ids_by_ranges	const_cast<ObObj*>	input_row.cells_ = const_cast<ObObj*>(range->start_key_.get_obj_ptr());
+src/sql/optimizer/ob_table_location.cpp	3474	ObTableLocation::calc_partition_ids_by_rowkey	const_cast<ObObj*>	cur_row.cells_ = const_cast<ObObj*>(rowkeys.at(i).get_obj_ptr());
+src/sql/optimizer/ob_table_location.cpp	4606	ObTableLocation::calc_partition_ids_by_range	const_cast<ObNewRange *>	} else if (OB_FAIL(dummy_query_ranges.push_back(const_cast<ObNewRange *>(range)))) {
+src/sql/optimizer/ob_table_location.cpp	4724	ObTableLocation::calc_range_by_part_expr	const_cast<ObObj *>	input_row.cells_ = const_cast<ObObj *>(range->start_key_.get_obj_ptr());
+src/sql/optimizer/ob_table_location.cpp	4737	ObTableLocation::calc_range_by_part_expr	const_cast<ObObj *>	input_row.cells_ = const_cast<ObObj *>(range->end_key_.get_obj_ptr());
+src/sql/optimizer/stat/ob_dbms_stats_copy_table_stats.cpp	414	ObDbmsStatsCopyTableStats::find_src_tab_stat	const_cast<ObOptTableStat *>	ObOptTableStat * cur_tab_stat = const_cast<ObOptTableStat *>(tab_handles.at(i).stat_);
+src/sql/optimizer/stat/ob_dbms_stats_executor.cpp	603	ObDbmsStatsExecutor::construct_part_to_subpart_map	const_cast<PartInfo*>	if (OB_FAIL(temp_subpart_infos.push_back(const_cast<PartInfo*>(&subpart)))) {
+src/sql/optimizer/stat/ob_dbms_stats_executor.cpp	613	ObDbmsStatsExecutor::construct_part_to_subpart_map	const_cast<PartInfo*>	if (OB_FAIL(part_id_to_approx_part_map.set_refactored(part.part_id_, const_cast<PartInfo*>(&part)))) {
+src/sql/optimizer/stat/ob_dbms_stats_executor.cpp	644	ObDbmsStatsExecutor::prepare_gather_stats	const_cast<ObTableStatParam&>	} else if (OB_FAIL(determine_auto_sample_table(ctx, const_cast<ObTableStatParam&>(param)))) {
+src/sql/optimizer/stat/ob_dbms_stats_executor.cpp	646	ObDbmsStatsExecutor::prepare_gather_stats	const_cast<ObTableStatParam &>	OB_FAIL(try_use_prefix_index_refine_min_max(ctx, const_cast<ObTableStatParam &>(param)))) {
+src/sql/optimizer/stat/ob_dbms_stats_gather.cpp	40	ObDbmsStatsGather::gather_stats	const_cast<ObOptStatGatherParam&>	} else if (OB_FAIL(adjust_sample_param(opt_stats, const_cast<ObOptStatGatherParam&>(param)))) {
+src/sql/optimizer/stat/ob_dbms_stats_utils.cpp	838	ObDbmsStatsUtils::truncate_string_for_opt_stats	const_cast<ObObj *>	new_obj = const_cast<ObObj *>(old_obj);
+src/sql/optimizer/stat/ob_incremental_stat_estimator.cpp	190	ObIncrementalStatEstimator::generate_all_opt_stat	const_cast<ObOptColumnStat*>	const_cast<ObOptColumnStat*>(col_handles.at(j).stat_)))) {
+src/sql/optimizer/stat/ob_opt_stat_sql_service.cpp	1265	ObOptStatSqlService::get_compressed_llc_bitmap	const_cast<char*>	comp_buf = const_cast<char*>(bitmap_buf);
+src/sql/optimizer/stat/ob_opt_stat_sql_service.cpp	1287	ObOptStatSqlService::get_decompressed_llc_bitmap	const_cast<char*>	bitmap_buf = const_cast<char*>(comp_buf);
+src/sql/parser/ob_fast_parser.cpp	1643	ObFastParserBase::parse_integer	const_cast<char *>	char *copied_str = const_cast<char *>(node->str_value_);
+src/sql/parser/parse_malloc.cpp	178	replace_invalid_character	const_cast<char *>	out_str = const_cast<char *>(str);
+src/sql/pl/ob_pl_dependency_util.h	65	ObPLDependencyGuard::ObPLDependencyGuard	const_cast<ObPLExternalNS *>	old_external_ns_ = const_cast<ObPLExternalNS *>(dst_external_ns);
+src/sql/pl/ob_pl_dependency_util.h	68	ObPLDependencyGuard::ObPLDependencyGuard	const_cast<ObPLExternalNS *>	const_cast<ObPLExternalNS *>(src_external_ns)->get_dependency_table());
+src/sql/pl/ob_pl_stmt.h	1644	ObPLStmt::get_cursor	const_cast<ObPLCursor *>	? NULL : const_cast<ObPLCursor *>(get_cursors()->at(i));
+src/sql/plan_cache/ob_plan_cache.cpp	358	ObPlanCache::init	const_cast<ObAddr &>	set_host(const_cast<ObAddr &>(GCTX.self_addr()));
+src/sql/plan_cache/ob_plan_cache.cpp	517	ObPlanCache::construct_multi_stmt_fast_parser_result	const_cast<ObString &>	ObString trimed_stmt = const_cast<ObString &>(queries->at(i)).trim();
+src/sql/plan_cache/ob_prepare_stmt_struct.cpp	371	ObPsStmtInfo::add_fixed_raw_param	const_cast<char *>	const_cast<char *>(param->node_->str_value_)[tmp_pos - 1] = '-';
+src/sql/plan_cache/ob_ps_cache.cpp	133	ObPsCache::init	const_cast<ObAddr &>	host_ = const_cast<ObAddr &>(GCTX.self_addr());
+src/sql/printer/ob_dml_stmt_printer.cpp	1577	ObDMLStmtPrinter::print_temp_table_as_cte	const_cast<ObDMLStmt*>	} else if (OB_FAIL(const_cast<ObDMLStmt*>(stmt_)->collect_temp_table_infos(temp_table_infos))) {
+src/sql/privilege_check/ob_privilege_check.cpp	1618	ObPrivilegeCheck::check_privilege	const_cast<ObSchemaGetterGuard *>	} else if (OB_FAIL(const_cast<ObSchemaGetterGuard *>(ctx.schema_guard_)->check_priv(
+src/sql/resolver/cmd/ob_anonymous_block_resolver.cpp	130	ObAnonymousBlockResolver::resolve_anonymous_block	const_cast<ObObjMeta&>	const_cast<ObObjMeta&>(param.get_param_meta()).reset();
+src/sql/resolver/cmd/ob_call_procedure_resolver.cpp	219	ObCallProcedureResolver::generate_pl_cache_ctx	const_cast<ParamStore *>	pc_ctx.cache_params_ = const_cast<ParamStore *>(params_.param_list_);
+src/sql/resolver/cmd/ob_load_data_resolver.cpp	102	ObLoadDataResolver::resolve	const_cast<ParseNode*>	ParseNode *node = const_cast<ParseNode*>(&parse_tree);
+src/sql/resolver/cmd/ob_load_data_resolver.cpp	446	ObLoadDataResolver::resolve_hints	const_cast<char *>	const_cast<char *>(node.str_value_)));
+src/sql/resolver/cmd/ob_load_data_resolver.cpp	839	ObLoadDataResolver::resolve_user_vars_node	const_cast<char*>	user_var.assign_ptr(const_cast<char*>(node.children_[0]->str_value_),
+src/sql/resolver/cmd/ob_load_data_resolver.cpp	843	ObLoadDataResolver::resolve_user_vars_node	const_cast<char*>	tmp_struct.field_or_var_name_.assign_ptr(const_cast<char*>(node.children_[0]->str_value_),
+src/sql/resolver/cmd/ob_show_resolver.cpp	1579	ObShowResolver::resolve_show_from_table	const_cast<char *>	show_table_name.assign_ptr(const_cast<char *>(relation_node->str_value_),
+src/sql/resolver/dcl/ob_alter_role_resolver.cpp	55	ObAlterRoleResolver::resolve	const_cast<ParseNode*>	ParseNode *role = const_cast<ParseNode*>(parse_tree.children_[0]);
+src/sql/resolver/dcl/ob_create_role_resolver.cpp	55	ObCreateRoleResolver::resolve	const_cast<ParseNode*>	ParseNode *role = const_cast<ParseNode*>(parse_tree.children_[0]);
+src/sql/resolver/dcl/ob_create_user_resolver.cpp	51	ObCreateUserResolver::resolve	const_cast<ParseNode*>	ParseNode *if_not_exist = const_cast<ParseNode*>(parse_tree.children_[0]);
+src/sql/resolver/dcl/ob_create_user_resolver.cpp	52	ObCreateUserResolver::resolve	const_cast<ParseNode*>	ParseNode *users = const_cast<ParseNode*>(parse_tree.children_[1]);
+src/sql/resolver/dcl/ob_create_user_resolver.cpp	53	ObCreateUserResolver::resolve	const_cast<ParseNode*>	ParseNode *require_info = const_cast<ParseNode*>(parse_tree.children_[2]);
+src/sql/resolver/dcl/ob_create_user_resolver.cpp	54	ObCreateUserResolver::resolve	const_cast<ParseNode*>	ParseNode *resource_options = const_cast<ParseNode*>(parse_tree.children_[3]);
+src/sql/resolver/dcl/ob_drop_role_resolver.cpp	54	ObDropRoleResolver::resolve	const_cast<ParseNode*>	ParseNode *users_node = const_cast<ParseNode*>(parse_tree.children_[0]);
+src/sql/resolver/dcl/ob_drop_user_resolver.cpp	37	ObDropUserResolver::resolve	const_cast<ParseNode*>	ParseNode * top_node = const_cast<ParseNode*>(&parse_tree);
+src/sql/resolver/dcl/ob_grant_resolver.cpp	103	ObGrantResolver::resolve_grant_user	const_cast<char *>	user_name.assign_ptr(const_cast<char *>(grant_user->children_[0]->str_value_),
+src/sql/resolver/dcl/ob_grant_resolver.cpp	108	ObGrantResolver::resolve_grant_user	const_cast<char *>	host_name.assign_ptr(const_cast<char *>(grant_user->children_[3]->str_value_),
+src/sql/resolver/dcl/ob_grant_resolver.cpp	125	ObGrantResolver::resolve_grant_user	const_cast<char *>	user_name.assign_ptr(const_cast<char *>(grant_user->str_value_),
+src/sql/resolver/dcl/ob_grant_resolver.cpp	300	ObGrantResolver::resolve_mysql	const_cast<ParseNode*>	ParseNode *node = const_cast<ParseNode*>(&parse_tree);
+src/sql/resolver/dcl/ob_grant_resolver.cpp	435	ObGrantResolver::resolve_mysql	const_cast<char *>	user_name.assign_ptr(const_cast<char *>(user_node->children_[0]->str_value_),
+src/sql/resolver/dcl/ob_grant_resolver.cpp	464	ObGrantResolver::resolve_mysql	const_cast<char *>	pwd.assign_ptr(const_cast<char *>(user_node->children_[1]->str_value_),
+src/sql/resolver/dcl/ob_grant_resolver.h	140	ObGrantResolver::resolve_col_names_mysql	const_cast<char *>	const_cast<char *>(child_node->str_value_)), column_name))) {
+src/sql/resolver/dcl/ob_lock_user_resolver.cpp	36	ObLockUserResolver::resolve	const_cast<ParseNode*>	ParseNode *node = const_cast<ParseNode*>(&parse_tree);
+src/sql/resolver/dcl/ob_rename_user_resolver.cpp	36	ObRenameUserResolver::resolve	const_cast<ParseNode*>	ParseNode *node = const_cast<ParseNode*>(&parse_tree);
+src/sql/resolver/dcl/ob_revoke_resolver.cpp	174	ObRevokeResolver::resolve_mysql	const_cast<ParseNode*>	ParseNode *node = const_cast<ParseNode*>(&parse_tree);
+src/sql/resolver/dcl/ob_set_password_resolver.cpp	66	ObSetPasswordResolver::resolve	const_cast<ParseNode*>	ParseNode *node = const_cast<ParseNode*>(&parse_tree);
+src/sql/resolver/ddl/ob_alter_database_resolver.cpp	41	ObAlterDatabaseResolver::resolve	const_cast<ParseNode*>	ParseNode *node = const_cast<ParseNode*>(&parse_tree);
+src/sql/resolver/ddl/ob_alter_outline_resolver.cpp	32	ObAlterOutlineResolver::resolve	const_cast<ParseNode *>	ParseNode *node = const_cast<ParseNode *>(&parse_tree);
+src/sql/resolver/ddl/ob_analyze_stmt_resolver.cpp	185	ObAnalyzeStmtResolver::resolve_mysql_column_bucket_info	const_cast<char *>	column_name.assign_ptr(const_cast<char *>(column_node->children_[i]->str_value_),
+src/sql/resolver/ddl/ob_create_database_resolver.cpp	41	ObCreateDatabaseResolver::resolve	const_cast<ParseNode*>	ParseNode *node = const_cast<ParseNode*>(&parse_tree);
+src/sql/resolver/ddl/ob_create_index_resolver.cpp	146	ObCreateIndexResolver::resolve_index_column_node	const_cast<char *>	sort_item.column_name_.assign_ptr(const_cast<char *>(col_node->children_[0]->str_value_),
+src/sql/resolver/ddl/ob_create_index_resolver.cpp	363	ObCreateIndexResolver::resolve	const_cast<ParseNode &>	ParseNode &parse_node = const_cast<ParseNode &>(parse_tree);
+src/sql/resolver/ddl/ob_create_outline_resolver.cpp	80	ObCreateOutlineResolver::resolve	const_cast<ParseNode *>	ParseNode *node = const_cast<ParseNode *>(&parse_tree);
+src/sql/resolver/ddl/ob_create_package_resolver.cpp	234	ObCreatePackageResolver::resolve	const_cast<ObPLBlockNS &>	(const_cast<ObPLBlockNS &>(package_ast.get_body()->get_namespace())).set_external_ns(NULL);
+src/sql/resolver/ddl/ob_create_table_resolver.cpp	169	ObCreateTableResolver::resolve	const_cast<ParseNode*>	ParseNode *create_table_node = const_cast<ParseNode*>(&parse_tree);
+src/sql/resolver/ddl/ob_create_table_resolver.cpp	975	ObCreateTableResolver::set_nullable_for_cta_column	const_cast<ObRawExpr *>	const_cast<ObRawExpr *>(expr),
+src/sql/resolver/ddl/ob_create_table_resolver.cpp	987	ObCreateTableResolver::set_nullable_for_cta_column	const_cast<ObRawExpr *>	const_cast<ObRawExpr *>(expr),
+src/sql/resolver/ddl/ob_create_table_resolver.cpp	1602	ObCreateTableResolver::resolve_index_node	const_cast<char *>	const_cast<char *>(index_column_node->children_[0]->str_value_),
+src/sql/resolver/ddl/ob_create_table_resolver.cpp	1765	ObCreateTableResolver::resolve_index_node	const_cast<char *>	const_cast<char *>(index_column_node->children_[0]->str_value_),
+src/sql/resolver/ddl/ob_create_table_resolver.cpp	1811	ObCreateTableResolver::resolve_index_node	const_cast<char *>	const_cast<char *>(node->children_[0]->children_[2]->str_value_),
+src/sql/resolver/ddl/ob_create_table_resolver.cpp	2196	ObCreateTableResolver::resolve_primary_key_node_in_heap_table	const_cast<char *>	column_name.assign_ptr(const_cast<char *>(key_node->str_value_), static_cast<int32_t>(key_node->str_len_));
+src/sql/resolver/ddl/ob_create_table_resolver.cpp	2299	ObCreateTableResolver::resolve_single_column_primary_key_node	const_cast<char *>	const_cast<char *>(key_node->str_value_),
+src/sql/resolver/ddl/ob_create_view_resolver.cpp	831	ObCreateViewResolver::resolve_select_node_for_force_view	const_cast<char *>	select_item.alias_name_.assign_ptr(const_cast<char *>(alias_node->str_value_),
+src/sql/resolver/ddl/ob_ddl_resolver.cpp	316	ObDDLResolver::resolve_default_value	const_cast<char *>	tmp_str.assign_ptr(const_cast<char *>(def_val->str_value_),
+src/sql/resolver/ddl/ob_ddl_resolver.cpp	332	ObDDLResolver::resolve_default_value	const_cast<char *>	tmp_str.assign_ptr(const_cast<char *>(def_val->str_value_),
+src/sql/resolver/ddl/ob_ddl_resolver.cpp	1079	ObDDLResolver::resolve_table_option	const_cast<char *>	tmp_str.assign_ptr(const_cast<char *>(option_node->children_[0]->str_value_),
+src/sql/resolver/ddl/ob_ddl_resolver.cpp	2177	ObDDLResolver::resolve_normal_column_attribute	const_cast<char *>	char *comment_ptr = const_cast<char *>(comment.ptr());
+src/sql/resolver/ddl/ob_ddl_resolver.cpp	2421	ObDDLResolver::resolve_generated_column_attribute	const_cast<char *>	char *comment_ptr = const_cast<char *>(comment.ptr());
+src/sql/resolver/ddl/ob_ddl_resolver.cpp	2555	ObDDLResolver::resolve_lob_storage_parameters	const_cast<ObColumnSchemaV2*>	column_schema = const_cast<ObColumnSchemaV2*>(create_table_stmt->get_column_schema(column_name));
+src/sql/resolver/ddl/ob_ddl_resolver.cpp	3795	ObDDLResolver::check_default_value	const_cast<ObObj*>	*const_cast<ObObj*>(tmp_res_obj)))) {
+src/sql/resolver/ddl/ob_ddl_resolver.cpp	4158	ObDDLResolver::get_udt_column_default_values	const_cast<ObObj*>	*const_cast<ObObj*>(tmp_res_obj)))) {
+src/sql/resolver/ddl/ob_ddl_resolver.cpp	7935	ObDDLResolver::resolve_semistruct_encoding_type	C-style cast (char *) drops const from option_node	ObString type_str(static_cast<int32_t>(option_node->children_[0]->str_len_), (char *)(option_node->children_[0]->str_value_));
+src/sql/resolver/ddl/ob_drop_database_resolver.cpp	43	ObDropDatabaseResolver::resolve	const_cast<ParseNode*>	ParseNode *node = const_cast<ParseNode*>(&parse_tree);
+src/sql/resolver/ddl/ob_drop_outline_resolver.cpp	30	ObDropOutlineResolver::resolve	const_cast<ParseNode *>	ParseNode *node = const_cast<ParseNode *>(&parse_tree);
+src/sql/resolver/ddl/ob_rename_table_resolver.cpp	40	ObRenameTableResolver::resolve	const_cast<ParseNode*>	ParseNode *node = const_cast<ParseNode*>(&parser_tree);
+src/sql/resolver/ddl/ob_trigger_resolver.cpp	597	ObTriggerResolver::analyze_trigger	const_cast<ObTriggerInfo&>	OX (const_cast<ObTriggerInfo&>(trigger_info).set_analyze_flag(package_body_ast.get_analyze_flag()));
+src/sql/resolver/ddl/ob_truncate_table_resolver.cpp	41	ObTruncateTableResolver::resolve	const_cast<ParseNode*>	ParseNode *node = const_cast<ParseNode*>(&parser_tree);
+src/sql/resolver/ddl/ob_use_database_resolver.cpp	41	ObUseDatabaseResolver::resolve	const_cast<ParseNode*>	ParseNode *node = const_cast<ParseNode*>(&parse_tree);
+src/sql/resolver/dml/ob_default_value_utils.cpp	287	ObDefaultValueUtils::build_default_expr_strict	const_cast<ColumnItem *>	if (OB_FAIL(build_expr_default_expr(column, const_cast<ColumnItem *>(column)->default_value_expr_, expr))) {
+src/sql/resolver/dml/ob_del_upd_resolver.cpp	270	ObDelUpdResolver::resolve_column_and_values	const_cast<ObObjParam &>	OX (const_cast<ObObjParam &>(
+src/sql/resolver/dml/ob_delete_resolver.cpp	294	ObDeleteResolver::find_delete_table_with_mysql_rule	const_cast<TableItem*>	table_item = const_cast<TableItem*>(table_items.at(0));
+src/sql/resolver/dml/ob_delete_resolver.cpp	310	ObDeleteResolver::find_delete_table_with_mysql_rule	const_cast<TableItem*>	table_item = const_cast<TableItem*>(table_items.at(i));
+src/sql/resolver/dml/ob_dml_resolver.cpp	135	ObDMLResolver::create_joined_table_item	const_cast<TableItem*>	joined_table->left_table_ = const_cast<TableItem*>(left_table);
+src/sql/resolver/dml/ob_dml_resolver.cpp	136	ObDMLResolver::create_joined_table_item	const_cast<TableItem*>	joined_table->right_table_ = const_cast<TableItem*>(right_table);
+src/sql/resolver/dml/ob_dml_resolver.cpp	918	ObDMLResolver::get_target_column_list	const_cast<TableItem *>	tab_item = const_cast<TableItem *>(tmp_table_item);
+src/sql/resolver/dml/ob_dml_resolver.cpp	1010	ObDMLResolver::resolve_sql_expr	const_cast<ParseNode&>	if (OB_SUCC(ret) && OB_FAIL(pre_process_mvt_agg(const_cast<ParseNode&>(node)))) {
+src/sql/resolver/dml/ob_dml_resolver.cpp	2859	ObDMLResolver::resolve_using_columns	const_cast<char *>	column_name.assign_ptr(const_cast<char *>(child_node->str_value_), static_cast<int32_t>(child_node->str_len_));
+src/sql/resolver/dml/ob_dml_resolver.cpp	3736	ObDMLResolver::resolve_hybrid_search_item	const_cast<ObGlobalHint&>	ObGlobalHint &global_hint = const_cast<ObGlobalHint&>(query_hint.get_global_hint());
+src/sql/resolver/dml/ob_dml_resolver.cpp	5564	ObDMLResolver::do_resolve_subquery_info	const_cast<ObSubQueryInfo&>	if (OB_FAIL(stmt->add_subquery_ref(const_cast<ObSubQueryInfo&>(subquery_info).ref_expr_))) {
+src/sql/resolver/dml/ob_dml_resolver.cpp	6481	ObDMLResolver::deduce_generated_exprs	const_cast<ObRawExpr*>	const_cast<ObRawExpr*>(substr_expr),
+src/sql/resolver/dml/ob_dml_resolver.cpp	6887	ObDMLResolver::resolve_json_table_column_name_and_path	const_cast<ParseNode *>	(const_cast<ParseNode *>(path_node))->type_ = T_CHAR;
+src/sql/resolver/dml/ob_dml_resolver.cpp	7319	ObDMLResolver::resolve_json_table_nested_column	const_cast<ParseNode*>	ParseNode* path_node = const_cast<ParseNode*>(parse_tree.children_[0]);
+src/sql/resolver/dml/ob_dml_resolver.cpp	10334	CopySchemaExpr::check_need_copy	const_cast<ObRawExpr *>	new_expr = const_cast<ObRawExpr *>(old_expr);
+src/sql/resolver/dml/ob_dml_resolver.cpp	10734	ObDMLResolver::resolve_basic_table_with_cte	const_cast<char*>	table_name.assign_ptr(const_cast<char*>(parse_tree.children_[1]->str_value_), table_len);
+src/sql/resolver/dml/ob_dml_resolver.cpp	10810	ObDMLResolver::resolve_cte_table	C-style cast (char *) drops const from alias_node	(char *) (alias_node->str_value_),
+src/sql/resolver/dml/ob_dml_resolver.cpp	10817	ObDMLResolver::resolve_cte_table	C-style cast (char *) drops const from table_node	(char *)table_node->str_value_,
+src/sql/resolver/dml/ob_dml_resolver.cpp	10955	ObDMLResolver::resolve_with_clause_subquery	C-style cast (char *) drops const from alias_node	table_name.assign_ptr((char *) (alias_node->str_value_),
+src/sql/resolver/dml/ob_dml_stmt.cpp	3194	ObDMLStmt::get_relation_exprs	const_cast<ObDMLStmt *>	if (OB_FAIL(const_cast<ObDMLStmt *>(this)->iterate_stmt_expr(visitor))) {
+src/sql/resolver/dml/ob_dml_stmt.cpp	3258	ObDMLStmt::get_column_item_by_id	const_cast<ColumnItem *>	return const_cast<ColumnItem *>(column_item);
+src/sql/resolver/dml/ob_dml_stmt.cpp	3577	ObDMLStmt::get_where_scope_conditions	const_cast<JoinedTable*>	if (OB_FAIL(iterate_joined_table_expr(const_cast<JoinedTable*>(joined_tables_.at(i)),
+src/sql/resolver/dml/ob_insert_resolver.cpp	527	ObInsertResolver::resolve_values	const_cast<char*>	view_name.assign_ptr(const_cast<char*>(table_alias_node->str_value_),
+src/sql/resolver/dml/ob_insert_resolver.cpp	881	ObInsertResolver::mock_values_column_ref	const_cast<ObColumnRefRawExpr*>	ObColumnRefRawExpr *base_column_ref = const_cast<ObColumnRefRawExpr*>(column_ref);
+src/sql/resolver/dml/ob_insert_resolver.cpp	904	ObInsertResolver::mock_values_column_ref	const_cast<ObColumnRefRawExpr*>	base_column_ref = const_cast<ObColumnRefRawExpr*>(column_ref);
+src/sql/resolver/dml/ob_insert_resolver.cpp	917	ObInsertResolver::mock_values_column_ref	const_cast<ObRawExpr *>	value_desc->set_dependant_expr(const_cast<ObRawExpr *>(column_ref->get_dependant_expr()));
+src/sql/resolver/dml/ob_select_resolver.cpp	1398	ObSelectResolver::resolve_field_list	const_cast<char *>	select_item.alias_name_.assign_ptr(const_cast<char *>(alias_node->str_value_),
+src/sql/resolver/dml/ob_select_resolver.cpp	1433	ObSelectResolver::resolve_field_list	const_cast<char *>	select_item.alias_name_.assign_ptr(const_cast<char *>(alias_node->str_value_),
+src/sql/resolver/dml/ob_select_resolver.cpp	1457	ObSelectResolver::resolve_field_list	const_cast<char *>	select_item.alias_name_.assign_ptr(const_cast<char *>(alias_node->str_value_),
+src/sql/resolver/dml/ob_select_resolver.cpp	3223	ObSelectResolver::resolve_column_ref_expr	const_cast<ObQualifiedName&>	} else  if (OB_FALSE_IT(const_cast<ObQualifiedName&>(q_name).current_resolve_level_ = current_level_)) {
+src/sql/resolver/dml/ob_select_resolver.cpp	3227	ObSelectResolver::resolve_column_ref_expr	const_cast<ObQualifiedName&>	const_cast<ObQualifiedName&>(q_name).parent_aggr_level_ = current_level_;
+src/sql/resolver/dml/ob_select_resolver.cpp	3229	ObSelectResolver::resolve_column_ref_expr	const_cast<ObQualifiedName&>	const_cast<ObQualifiedName&>(q_name).parent_aggr_level_ = parent_aggr_level_;
+src/sql/resolver/dml/ob_select_resolver.cpp	3970	ObSelectResolver::check_window_exprs	const_cast<ObIArray<ObRawExpr *>&>	const_cast<ObIArray<ObRawExpr *>&>(partition_exprs)))) {
+src/sql/resolver/dml/ob_select_stmt.h	528	ObSelectStmt::get_set_query	const_cast<ObSelectStmt *>	{ return const_cast<ObSelectStmt *>(static_cast<const ObSelectStmt&>(*this).get_set_query(index)); }
+src/sql/resolver/dml/ob_select_stmt.h	531	ObSelectStmt::get_real_stmt	const_cast<ObSelectStmt *>	{ return const_cast<ObSelectStmt *>(static_cast<const ObSelectStmt&>(*this).get_real_stmt()); }
+src/sql/resolver/dml/ob_sql_hint.cpp	133	ObQueryHint::append_hints	const_cast<ObHints*>	if (NULL == (qb_hints = const_cast<ObHints*>(stmt_id_hints))) {
+src/sql/resolver/dml/ob_sql_hint.cpp	142	ObQueryHint::append_hints	const_cast<ObHints*>	} else if (NULL != (qb_hints = const_cast<ObHints*>(get_qb_hints(cur_hint->get_qb_name())))) {
+src/sql/resolver/dml/ob_sql_hint.cpp	1108	ObStmtHint::replace_name_for_single_table_view	const_cast<ObHint*>	if (OB_ISNULL(hint = const_cast<ObHint*>(get_hint_by_idx(i)))) {
+src/sql/resolver/dml/ob_sql_hint.cpp	1154	ObStmtHint::merge_normal_hint	const_cast<ObHint*>	if (OB_FAIL(normal_hints_.push_back(const_cast<ObHint*>(final_hint)))) {
+src/sql/resolver/dml/ob_sql_hint.cpp	1157	ObStmtHint::merge_normal_hint	const_cast<ObHint*>	if (OB_FAIL(set_hint(idx, const_cast<ObHint*>(final_hint)))) {
+src/sql/resolver/expr/ob_raw_expr.cpp	3156	ObCaseOpRawExpr::get_param_expr	const_cast<ObCaseOpRawExpr *>	ObRawExpr *expr = const_cast<ObCaseOpRawExpr *>(this)->get_param_expr(index);
+src/sql/resolver/expr/ob_raw_expr_copier.cpp	103	ObRawExprCopier::check_need_copy	const_cast<ObRawExpr *>	new_expr = const_cast<ObRawExpr *>(old_expr);
+src/sql/resolver/expr/ob_raw_expr_copier.cpp	119	ObRawExprCopier::find_in_copy_context	const_cast<ObRawExpr *>	new_expr = const_cast<ObRawExpr *>(old_expr);
+src/sql/resolver/expr/ob_raw_expr_copier.cpp	145	ObRawExprCopier::copy_expr_node	const_cast<ObRawExpr *>	new_expr = const_cast<ObRawExpr *>(expr);
+src/sql/resolver/expr/ob_raw_expr_deduce_type.cpp	84	ObRawExprDeduceType::visit	const_cast<ObSQLSessionInfo *>	ObSQLSessionInfo *session = const_cast<ObSQLSessionInfo *>(my_session_);
+src/sql/resolver/expr/ob_raw_expr_deduce_type.cpp	168	ObRawExprDeduceType::visit	const_cast<ObSQLSessionInfo *>	ObSQLSessionInfo *session = const_cast<ObSQLSessionInfo *>(my_session_);
+src/sql/resolver/expr/ob_raw_expr_deduce_type.cpp	1443	ObRawExprDeduceType::visit	const_cast<ObSQLSessionInfo *>	ObSQLSessionInfo *session = const_cast<ObSQLSessionInfo *>(my_session_);
+src/sql/resolver/expr/ob_raw_expr_deduce_type.cpp	2613	ObRawExprDeduceType::set_array_agg_result_type	const_cast<ObSQLSessionInfo *>	ObSQLSessionInfo *session = const_cast<ObSQLSessionInfo *>(my_session_);
+src/sql/resolver/expr/ob_raw_expr_deduce_type.cpp	2801	ObRawExprDeduceType::add_implicit_cast	const_cast<ObExprResType *>	const_cast<ObExprResType *>(&input_types.at(idx)), ele_cnt),
+src/sql/resolver/expr/ob_raw_expr_deduce_type.cpp	2815	ObRawExprDeduceType::add_implicit_cast	const_cast<ObExprResType *>	const_cast<ObExprResType *>(&input_types.at(idx)), column_cnt), cast_mode));
+src/sql/resolver/expr/ob_raw_expr_deduce_type.cpp	2970	ObRawExprDeduceType::try_add_cast_expr_above_for_deduce_type	const_cast<ObSQLSessionInfo *>	if (OB_ISNULL(session = const_cast<ObSQLSessionInfo *>(my_session_))) {
+src/sql/resolver/expr/ob_raw_expr_deduce_type.cpp	3019	ObRawExprDeduceType::add_implicit_cast_for_op_row	const_cast<ObExprResType *>	const_cast<ObExprResType *>(&input_types.at(i * ele_row_dim)),
+src/sql/resolver/expr/ob_raw_expr_deduce_type.cpp	3065	ObRawExprDeduceType::add_implicit_cast_for_subquery	const_cast<ObRawExprResType &>	const_cast<ObRawExprResType &>(expr.get_column_types().at(i)) = new_expr->get_result_type();
+src/sql/resolver/expr/ob_raw_expr_print_visitor.cpp	41	ObRawExprPrintVisitor::to_string	const_cast<ObRawExprPrintVisitor*>	if (OB_FAIL(expr_root_.preorder_accept(*const_cast<ObRawExprPrintVisitor*>(this)))) {
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	400	ObRawExprResolverImpl::do_recursive_resolve	const_cast<ParseNode *>	ParseNode *tmp_node = const_cast<ParseNode *>(node);
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	434	ObRawExprResolverImpl::do_recursive_resolve	const_cast<ObSQLSessionInfo *>	*const_cast<ObSQLSessionInfo *>(ctx_.session_info_),
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	924	ObRawExprResolverImpl::do_recursive_resolve	const_cast<ParseNode&>	modification_type_to_int(const_cast<ParseNode&>(*node));
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	931	ObRawExprResolverImpl::do_recursive_resolve	const_cast<ParseNode&>	modification_type_to_int(const_cast<ParseNode&>(*node));
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	1883	ObRawExprResolverImpl::process_datatype_or_questionmark	const_cast<pl::ObPLVar*>	OX (const_cast<pl::ObPLVar*>(var)->set_name(pl::ObPLResolver::ANONYMOUS_INOUT_ARG));
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	1885	ObRawExprResolverImpl::process_datatype_or_questionmark	const_cast<pl::ObPLVar*>	OX (const_cast<pl::ObPLVar*>(var)->set_is_referenced(true));
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	1950	ObRawExprResolverImpl::process_datatype_or_questionmark	const_cast<pl::ObPLVar*>	OX (const_cast<pl::ObPLVar*>(var)->set_name(pl::ObPLResolver::ANONYMOUS_INOUT_ARG));
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	1952	ObRawExprResolverImpl::process_datatype_or_questionmark	const_cast<pl::ObPLVar*>	OX (const_cast<pl::ObPLVar*>(var)->set_is_referenced(true));
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	1988	ObRawExprResolverImpl::process_system_variable_node	const_cast<char *>	str.assign_ptr(const_cast<char *>(node->str_value_), static_cast<int32_t>(node->str_len_));
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	2245	ObRawExprResolverImpl::check_replace_lambda_params_node	const_cast<ParseNode *>	} else if (OB_FAIL(check_replace_lambda_params_node(params_node, const_cast<ParseNode *>(curr_node->children_[i])))) {
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	2288	ObRawExprResolverImpl::process_lambda_func_node	const_cast<ParseNode *>	}else if (OB_FAIL(check_replace_lambda_params_node(node->children_[0], const_cast<ParseNode *>(node->children_[1])))) {
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	2382	ObRawExprResolverImpl::process_left_value_node	const_cast<char *>	str.assign_ptr(const_cast<char *>(node->str_value_), static_cast<int32_t>(node->str_len_));
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	4620	ObRawExprResolverImpl::process_json_query_node	const_cast<ParseNode&>	if (OB_FAIL(change_json_expr_res_type_if_need(ctx_.expr_factory_.get_allocator(), path_str, const_cast<ParseNode&>(*returning_type), OPT_JSON_QUERY))) {
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	4760	ObRawExprResolverImpl::process_json_value_node	const_cast<ParseNode&>	if (OB_FAIL(change_json_expr_res_type_if_need(ctx_.expr_factory_.get_allocator(), path_str, const_cast<ParseNode&>(*returning_type), OPT_JSON_VALUE))) {
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	4802	ObRawExprResolverImpl::process_json_value_node	const_cast<ParseNode *>	if (OB_FAIL(expand_node(ctx_.expr_factory_.get_allocator(), const_cast<ParseNode *>(on_mismatch), 0, mismatch_arr))) {
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	5833	ObRawExprResolverImpl::process_window_function_node	const_cast<char *>	sort_str.assign_ptr(const_cast<char *>(sort_expr_node->str_value_),
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	6015	ObRawExprResolverImpl::process_bound_node	const_cast<char *>	const_cast<char *>(node->children_[0]->str_value_));
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	6289	ObRawExprResolverImpl::transform_ratio_afun_to_arg_div_sum	const_cast<ParseNode*>	const_cast<ParseNode*>(func_node)->type_ = T_FUN_SUM;
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	6306	ObRawExprResolverImpl::transform_ratio_afun_to_arg_div_sum	const_cast<ParseNode*>	divisor_node->children_[0] = const_cast<ParseNode*>(ratio_fun_node);
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	6308	ObRawExprResolverImpl::transform_ratio_afun_to_arg_div_sum	const_cast<ParseNode*>	divisor_node->children_[2] = const_cast<ParseNode*>(ratio_fun_node);
