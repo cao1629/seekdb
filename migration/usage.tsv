@@ -5,3 +5,7 @@ step	workflow	finished	agents	subagent_tokens	tool_uses	duration_min	model	effor
 1	wf_9fd55a59-9bf	2026-09-24T19:05Z	26	15126641	5087	291	claude-opus-5-5	max	design document draft
 1	wf_2614ea82-d48	2026-09-24T19:10Z	12	4401837	1318	299	claude-opus-5-5	max	dependency map, 3 skeptic rounds
 1	wf_6ef13981-61d	2026-09-24T19:10Z	7	3333954	1353	298	claude-opus-5-5	max	inventory sweep, 2 skeptic rounds
+00b	wf_7c7b4eec-546	2026-09-24T19:30Z	4	1503614	514	124	claude-opus-5-5	max	EST and row-order masks, --compress (implement, review, fix)
+1	wf_e5d2d95a-2db	2026-09-25T06:00Z	5	3183929	956	202	claude-opus-5-5	max	map closing: islands, crate check, manifests, declaration index
+1	wf_8057f85e-5fb	2026-09-25T04:35Z	7	4763501	1536	186	claude-opus-5-5	max	inventory pilot and sweep extension
+note	-	2026-09-25T05:40Z	-	-	-	-	claude-opus-5-5	max	usage limit reached with about 40-60 agents in flight across 7 workflows; all in-flight agents failed; resumed 2026-09-27
