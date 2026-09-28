@@ -1,0 +1,45 @@
+--disable_abort_on_error
+--enable_warnings
+--echo # s4_letters 2
+SET NAMES utf8mb4 COLLATE utf8mb4_general_ci, ob_enable_plan_cache = 0, ob_query_timeout = 600000000, ob_trx_timeout = 600000000;
+--echo errno $mysql_errno
+SELECT tokenize('foo.bar.baz foo@bar.baz foo#bar foo&bar foo+bar foo_bar foo-bar', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('foo.bar.baz foo@bar.baz foo#bar foo&bar foo+bar foo_bar foo-bar', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('A.B.C. U.S.A. U.K.', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('A.B.C. U.S.A. U.K.', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('x=1;y=2;z=x+y', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('x=1;y=2;z=x+y', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('if(a>b){return a;}else{return b;}', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('if(a>b){return a;}else{return b;}', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('SELECT id, name FROM users WHERE age >= 18 ORDER BY id DESC;', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('SELECT id, name FROM users WHERE age >= 18 ORDER BY id DESC;', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('The IK analyzer splits text into tokens.', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('The IK analyzer splits text into tokens.', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('MiXeD CaSe WoRdS', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('MiXeD CaSe WoRdS', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('ALLCAPS lowercase Titlecase', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('ALLCAPS lowercase Titlecase', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('a1 b22 c333 d4444', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('a1 b22 c333 d4444', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno

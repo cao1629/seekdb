@@ -1,0 +1,126 @@
+--disable_abort_on_error
+--enable_warnings
+--echo # s6_edge 1
+SET NAMES utf8mb4 COLLATE utf8mb4_general_ci, ob_enable_plan_cache = 0, ob_query_timeout = 600000000, ob_trx_timeout = 600000000;
+--echo errno $mysql_errno
+--echo # short and degenerate inputs
+SELECT tokenize('', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('', 'ik') AS t;
+--echo errno $mysql_errno
+SELECT tokenize(' ', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize(' ', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize(' ', 'ik') AS t;
+--echo errno $mysql_errno
+SELECT tokenize(' \t\n ', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize(' \t\n ', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize(' \t\n ', 'ik') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('，。！', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('，。！', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('，。！', 'ik') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('a', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('a', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('a', 'ik') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('1', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('1', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('1', 'ik') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('中', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('中', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('中', 'ik') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('ア', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('ア', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('ア', 'ik') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('가', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('가', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('가', 'ik') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('一', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('一', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('一', 'ik') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('个', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('个', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('个', 'ik') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('的', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('的', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('的', 'ik') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('ｱ', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('ｱ', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('ｱ', 'ik') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('＃', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('＃', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('＃', 'ik') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('￥', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('￥', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('￥', 'ik') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('_', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('_', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('_', 'ik') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('__', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('__', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('__', 'ik') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('a_', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('a_', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('a_', 'ik') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('_a', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('_a', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('_a', 'ik') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('的的的的的的的的的的', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('的的的的的的的的的的', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('的的的的的的的的的的', 'ik') AS t;
+--echo errno $mysql_errno

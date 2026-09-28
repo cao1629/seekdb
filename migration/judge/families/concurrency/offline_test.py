@@ -242,6 +242,35 @@ class ParallelSlicesMergeTest(Sandbox):
         self.assertEqual(report["summary"]["identical"], len(cases))
         self.assertEqual(report["recording_notes"], ["repo_head differs: left None, right {}".format("0" * 40)])
 
+    def test_the_merged_recording_keeps_the_recording_options_of_its_slices(self):
+        case_list = LISTS_DIR / "send-reap.txt"
+        options = {"ps_protocol": True, "seekdb_parameters": ["cpu_count=8"], "test_dir": None}
+
+        def with_options(index, manifest):
+            manifest.update(options)
+
+        cases, directories = self.slices(case_list, change=with_options)
+        out = self.fresh("merged-") / "rec"
+        merged = parallel_slices.merge(directories, out)
+        for key, value in options.items():
+            self.assertIn(key, merged)
+            self.assertEqual(merged[key], value)
+            self.assertEqual(manifest_of(out)[key], value)
+        self.assertNotIn("compress", merged)
+        plain = self.sequential(case_list)
+        code, report = compare(out, plain)
+        self.assertEqual(code, 1)
+        self.assertIn("ps_protocol differs: left True, right False", report["recording_problems"])
+        self.assertIn(
+            "seekdb_parameters differs: left ['cpu_count=8'], right []",
+            report["recording_problems"],
+        )
+        same = self.fresh("sequential-") / "rec"
+        write_recording(same, runner_manifest(self, cases, 0, 1, case_list, **options))
+        code, report = compare(out, same)
+        self.assertEqual(code, 0, report["recording_problems"])
+        self.assertEqual(report["summary"]["identical"], len(cases))
+
     def test_content_difference_is_reported(self):
         case_list = LISTS_DIR / "send-reap.txt"
         cases, directories = self.slices(case_list)
@@ -369,6 +398,7 @@ class FakeRunnerProcess(object):
     events = []
     lock = threading.Lock()
     change = None
+    polls_before_exit = {}
 
     def __init__(self, command, cwd=None, env=None, stdout=None, stderr=None):
         self.command = [str(item) for item in command]
@@ -383,8 +413,18 @@ class FakeRunnerProcess(object):
             FakeRunnerProcess.events.append(("start", self.slice_index))
         stdout.write("fake runner {}\n".format(self.slice_index).encode("utf-8"))
         self.sandbox = FakeRunnerProcess.sandbox
+        self.polls = 0
+        self.code = None
+
+    def poll(self):
+        if self.polls < FakeRunnerProcess.polls_before_exit.get(self.slice_index, 0):
+            self.polls += 1
+            return None
+        return self.wait()
 
     def wait(self):
+        if self.code is not None:
+            return self.code
         case_list = Path(self.values["--case-list"]) if "--case-list" in self.values else None
         count = int(self.values["--slice-count"])
         cases = selection(case_list)[self.slice_index::count]
@@ -407,14 +447,16 @@ class FakeRunnerProcess(object):
         write_recording(Path(self.values["--record-dir"]), manifest)
         with FakeRunnerProcess.lock:
             FakeRunnerProcess.events.append(("finish", self.slice_index))
-        return 0 if manifest["success"] else 1
+        self.code = 0 if manifest["success"] else 1
+        return self.code
 
 
 class ParallelSlicesRunTest(Sandbox):
-    def run_slices(self, extra, change=None):
+    def run_slices(self, extra, change=None, polls_before_exit=None):
         FakeRunnerProcess.events = []
         FakeRunnerProcess.sandbox = self
         FakeRunnerProcess.change = change
+        FakeRunnerProcess.polls_before_exit = polls_before_exit or {}
         created = []
 
         def popen(command, **kwargs):
@@ -431,7 +473,7 @@ class ParallelSlicesRunTest(Sandbox):
         ] + extra
         with mock.patch.object(parallel_slices.subprocess, "Popen", popen), mock.patch.dict(
             "os.environ", {runner.INSTANCE_SAVE_ENVIRONMENT: str(self.path("env-save"))}
-        ):
+        ), mock.patch.object(parallel_slices, "POLL_SECONDS", 0.01):
             code = quiet(parallel_slices.main, argv)
         return code, created
 
@@ -484,6 +526,22 @@ class ParallelSlicesRunTest(Sandbox):
         code, report = compare(self.path("out", "merged"), self.path("sequential"))
         self.assertEqual(code, 0, report["recording_problems"])
         self.assertEqual(report["summary"]["identical"], 6)
+
+    def test_each_slice_is_timed_at_its_own_exit(self):
+        code, created = self.run_slices(
+            ["--init", "full", "--case-list", str(LISTS_DIR / "send-reap.txt")],
+            polls_before_exit={0: 30, 1: 20, 2: 10, 3: 0},
+        )
+        self.assertEqual(code, 0)
+        finished = [index for kind, index in FakeRunnerProcess.events if kind == "finish"]
+        self.assertEqual(finished, [3, 2, 1, 0])
+        seconds = dict(
+            (entry["slice_index"], entry["seconds"])
+            for entry in json.loads(self.path("out", "parallel.json").read_text())["slices"]
+        )
+        self.assertLess(seconds[3], seconds[2])
+        self.assertLess(seconds[2], seconds[1])
+        self.assertLess(seconds[1], seconds[0])
 
     def test_serial_run_runs_one_slice_at_a_time(self):
         code, created = self.run_slices(["--init", "full", "--serial", "--case-list", str(LISTS_DIR / "send-reap.txt")])
@@ -749,11 +807,18 @@ class FakeContainer(object):
         self.commands = []
         self.parameters = None
         self.running = False
+        self.files = {}
+        self.ignore_writes = False
+        self.write_seeds = set()
 
     def docker(self, args, command, timeout=None):
         self.commands.append(list(command))
         if command[:2] == ["sysbench", "--version"]:
             return 0, (self.version + "\n").encode("utf-8")
+        if command[:2] == ["sh", "-c"]:
+            if not self.ignore_writes:
+                self.files[command[6]] = command[5]
+            return 0, b""
         if command[0] == "ldd":
             return 0, (
                 b"\tlinux-vdso.so.1 (0x0000ffff9e1e0000)\n"
@@ -762,10 +827,18 @@ class FakeContainer(object):
             )
         if command[0] == "sha256sum":
             return 0, "".join(
-                "{}  {}\n".format(hashlib.sha256(path.encode()).hexdigest(), path) for path in command[1:]
+                "{}  {}\n".format(
+                    hashlib.sha256(self.files[path].encode() if path in self.files else path.encode()).hexdigest(),
+                    path,
+                )
+                for path in command[1:]
+                if not path.startswith(sysbench_parity.WRAPPER_DIR) or path in self.files
             ).encode("utf-8")
         options = dict(item[2:].split("=", 1) for item in command[2:] if item.startswith("--") and "=" in item)
-        workload, action = command[1], command[-1]
+        script, action = command[1], command[-1]
+        if script not in self.files:
+            return 1, "FATAL: Cannot find benchmark '{}': no such built-in test, file or module\n".format(script).encode("utf-8")
+        workload = re.match(r'jit\.off\(\)\n.*\ndofile\("/usr/share/sysbench/(\w+)\.lua"\)\n$', self.files[script], re.S).group(1)
         tables = int(options["tables"])
         size = int(options["table-size"])
         if action == "prepare":
@@ -778,6 +851,12 @@ class FakeContainer(object):
         threads = int(options["threads"])
         events = int(options["events"])
         name = "{}_{}".format(workload, threads)
+        replayed = 0
+        if workload == "oltp_read_write":
+            seed = options["rand-seed"]
+            if seed in self.write_seeds:
+                replayed = events // threads
+            self.write_seeds.add(seed)
         lines = ["sysbench 1.0.20 (using system LuaJIT 2.1.0-beta3)", ""]
         lines += ["DEBUG: Worker thread (#{}) started".format(index) for index in range(threads)]
         if name == self.fatal_in:
@@ -804,6 +883,8 @@ class FakeContainer(object):
         if name == self.zero_row_write_in:
             write -= 1
             other += 1
+        write -= replayed
+        other += replayed
         total = read + write + other
         lines += [
             "SQL statistics:",
@@ -912,14 +993,14 @@ class SysbenchParityTest(Sandbox):
         rw16 = (first / "oltp_read_write_16.result").read_text()
         ps64 = (first / "oltp_point_select_64.result").read_text()
         self.assertIn(
-            "-- sysbench oltp_read_write --db-driver=mysql --mysql-user=root --mysql-db=sbtest --tables=16 "
-            "--table-size=100000 --rand-type=uniform --threads=1 prepare\n",
+            "-- sysbench /tmp/seekdb-judge-sysbench/oltp_read_write.lua --db-driver=mysql --mysql-user=root "
+            "--mysql-db=sbtest --tables=16 --table-size=100000 --rand-type=uniform --threads=1 prepare\n",
             prepare,
         )
         self.assertIn(
-            "-- sysbench oltp_read_write --db-driver=mysql --mysql-user=root --mysql-db=sbtest --tables=16 "
-            "--table-size=100000 --rand-type=uniform --db-ps-mode=disable --threads=1 --events=30000 --time=0 "
-            "--rand-seed=1 --mysql-ignore-errors=1213,1020,1205 --verbosity=5 run\n",
+            "-- sysbench /tmp/seekdb-judge-sysbench/oltp_read_write.lua --db-driver=mysql --mysql-user=root "
+            "--mysql-db=sbtest --tables=16 --table-size=100000 --rand-type=uniform --db-ps-mode=disable --threads=1 "
+            "--events=30000 --time=0 --rand-seed=4 --mysql-ignore-errors=1213,1020,1205 --verbosity=5 run\n",
             rw1,
         )
         rw_report = (
@@ -956,10 +1037,101 @@ class SysbenchParityTest(Sandbox):
             self.assertNotIn("--report-interval", " ".join(command))
             if command[-1] == "run":
                 self.assertIn("--time=0", command)
-                self.assertEqual("--db-ps-mode=disable" in command, command[1] == "oltp_read_write")
+                self.assertEqual(
+                    "--db-ps-mode=disable" in command,
+                    command[1] == "/tmp/seekdb-judge-sysbench/oltp_read_write.lua",
+                )
+            self.assertIn(command[1], (
+                "/tmp/seekdb-judge-sysbench/oltp_read_write.lua",
+                "/tmp/seekdb-judge-sysbench/oltp_point_select.lua",
+            ))
         for text in (prepare, rw1, rw16, ps64):
             self.assertNotIn("3896", text)
             self.assertNotIn("host.docker.internal", text)
+
+    def test_every_command_runs_through_a_wrapper_that_turns_the_jit_off(self):
+        container = FakeContainer(seed=1)
+        code, recording = self.run_script("one", container)
+        self.assertEqual(code, 0)
+        self.assertEqual(sorted(container.files), [
+            "/tmp/seekdb-judge-sysbench/oltp_point_select.lua",
+            "/tmp/seekdb-judge-sysbench/oltp_read_write.lua",
+        ])
+        self.assertEqual(
+            container.files["/tmp/seekdb-judge-sysbench/oltp_read_write.lua"],
+            'jit.off()\nassert(not jit.status(), "the LuaJIT compiler is still on")\n'
+            'dofile("/usr/share/sysbench/oltp_read_write.lua")\n',
+        )
+        writes = [command for command in container.commands if command[:2] == ["sh", "-c"]]
+        sysbench_runs = [
+            index for index, command in enumerate(container.commands)
+            if command[0] == "sysbench" and command[-1] in ("prepare", "run")
+        ]
+        self.assertEqual(len(writes), 2)
+        self.assertLess(
+            max(container.commands.index(command) for command in writes), min(sysbench_runs)
+        )
+        manifest = manifest_of(recording)
+        files = manifest["client"]["files_sha256"]
+        for path, text in container.files.items():
+            self.assertEqual(files[path], hashlib.sha256(text.encode("utf-8")).hexdigest())
+        self.assertEqual(manifest["sysbench"]["lua_wrappers"], container.files)
+        self.assertIn(
+            "-- client Lua: every command runs /tmp/seekdb-judge-sysbench/<workload>.lua, which turns "
+            "the LuaJIT compiler off and then runs /usr/share/sysbench/<workload>.lua\n",
+            (recording / "prepare.result").read_text(),
+        )
+        missing = FakeContainer(seed=1)
+        missing.ignore_writes = True
+        code, recording = self.run_script("two", missing)
+        self.assertEqual(code, 1)
+        self.assertFalse((recording / "manifest.json").exists())
+        self.assertEqual(missing.parameters, [])
+
+        class OtherWrapper(FakeContainer):
+            def docker(self, args, command, timeout=None):
+                result = FakeContainer.docker(self, args, command, timeout)
+                if command[:2] == ["sh", "-c"]:
+                    self.files[command[6]] = command[5].replace("jit.off()", "jit.on()")
+                return result
+
+        other = OtherWrapper(seed=1)
+        code, recording = self.run_script("three", other)
+        self.assertEqual(code, 1)
+        self.assertFalse((recording / "manifest.json").exists())
+        self.assertEqual(other.parameters, [])
+        with mock.patch.object(sysbench_parity, "WRAPPER_TEXT", sysbench_parity.WRAPPER_TEXT + "\n"):
+            code, changed = self.run_script("four", FakeContainer(seed=1))
+        self.assertEqual(code, 0)
+        self.assertNotEqual(manifest_of(changed)["client"]["digest"], manifest["client"]["digest"])
+
+    def test_each_run_has_its_own_seed(self):
+        code, recording = self.run_script("one", FakeContainer(seed=1))
+        self.assertEqual(code, 0)
+        seeds = manifest_of(recording)["sysbench"]["rand_seeds"]
+        self.assertEqual(seeds, {
+            "oltp_point_select_1": 1, "oltp_point_select_16": 2, "oltp_point_select_64": 3,
+            "oltp_read_write_1": 4, "oltp_read_write_16": 5, "oltp_read_write_64": 6,
+        })
+        for case, seed in seeds.items():
+            self.assertIn(" --rand-seed={} ".format(seed), (recording / (case + ".result")).read_text())
+        self.assertNotIn("--rand-seed", (recording / "prepare.result").read_text())
+        code, other = self.run_script("two", FakeContainer(seed=2), ["--rand-seed", "11"])
+        self.assertEqual(code, 0)
+        self.assertEqual(manifest_of(other)["sysbench"]["rand_seeds"]["oltp_read_write_64"], 16)
+        original = sysbench_parity.sysbench_options
+
+        def one_seed(args, workload, threads, command, events=None, seed=None):
+            return original(args, workload, threads, command, events, None if seed is None else 1)
+
+        with mock.patch.object(sysbench_parity, "sysbench_options", one_seed):
+            code, replayed = self.run_script("three", FakeContainer(seed=1))
+        self.assertEqual(code, 1)
+        self.assertEqual(manifest_of(replayed)["failed_cases"], ["oltp_read_write_16"])
+        self.assertIn(
+            "420000 read, 118125 write, 61875 other, 600000 total; 0 ignored errors, 0 reconnects\n",
+            (replayed / "oltp_read_write_16.partial").read_text(),
+        )
 
     def test_fatal_error_fails_the_case_and_stops_the_run(self):
         code, recording = self.run_script("one", FakeContainer(seed=1, fatal_in="oltp_read_write_16"))

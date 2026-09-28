@@ -118,3 +118,14 @@ picked up another patch shows it (the mutated ob_errno.cpp has a different sha25
 
 Checked 2026-09-25: `git -C /Users/colin/seekdb-dev/ref-834bbee1e apply --check` passes. Not built,
 as the task requires; the mutation stage builds and runs it.
+
+## Caught by (filled after the run)
+
+Caught by family 6 on 2026-09-28 (README.md in this directory). `ob_error` built with
+build_ob_error.sh from the patched tree (its build.txt: ob_errno.cpp sha256 2959f653...):
+run_ob_error_test.sh exits 1 with `status=different`, diff.txt holds only the line-82 hunk above, and
+`cmp` against 03-oberr/run1/test.result differs at line 82. The control, `ob_error` rebuilt from the
+reverted tree (ob_errno.cpp sha256 fc635746...), gives `status=identical`.
+
+The 272 configured cases on a seekdb built with the patch: only quarantined cases failed. Outputs:
+/Users/colin/seekdb-dev/mysqltest-runs/00b/second-set/mutations/03-ob_error-rowid-message-user-format/.

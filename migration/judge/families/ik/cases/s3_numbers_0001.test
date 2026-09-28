@@ -1,0 +1,126 @@
+--disable_abort_on_error
+--enable_warnings
+--echo # s3_numbers 1
+SET NAMES utf8mb4 COLLATE utf8mb4_general_ci, ob_enable_plan_cache = 0, ob_query_timeout = 600000000, ob_trx_timeout = 600000000;
+--echo errno $mysql_errno
+--echo # numbers and quantifiers
+SELECT tokenize('一二三四五六七八九十', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('一二三四五六七八九十', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('零一二三四五六七八九', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('零一二三四五六七八九', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('两千零二十四年十二月三十一日', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('两千零二十四年十二月三十一日', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('壹佰贰拾叁万肆仟伍佰陆拾柒元捌角玖分', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('壹佰贰拾叁万肆仟伍佰陆拾柒元捌角玖分', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('三百五十个 五公斤 十米 八千米 一百块钱', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('三百五十个 五公斤 十米 八千米 一百块钱', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('两杯咖啡 三只小猫 四本书 五辆汽车 六张桌子', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('两杯咖啡 三只小猫 四本书 五辆汽车 六张桌子', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('第一名 第二十三届 第3次 第100位', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('第一名 第二十三届 第3次 第100位', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('百分之八十 千分之五 三分之一 万分之一', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('百分之八十 千分之五 三分之一 万分之一', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('1个 23个 456个 7890个', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('1个 23个 456个 7890个', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('1.5公斤 3.14159 2,000,000 1,234.56元', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('1.5公斤 3.14159 2,000,000 1,234.56元', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('9点30分 2024年1月1日 12月25日', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('9点30分 2024年1月1日 12月25日', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('5.1亿人次 100%的 50%以上', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('5.1亿人次 100%的 50%以上', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('几十个 数百名 上千人 成千上万 一万多', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('几十个 数百名 上千人 成千上万 一万多', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('廿卅 卅年 廿一世纪', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('廿卅 卅年 廿一世纪', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('零点五 负三 正负零', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('零点五 负三 正负零', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('二〇二四年', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('二〇二四年', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('3千万 5万 7亿8千万', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('3千万 5万 7亿8千万', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('一二三1234五六七', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('一二三1234五六七', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('1,2,3 1.2.3 1..2 .5 5. ,5 5, 1,,2 1.,2', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('1,2,3 1.2.3 1..2 .5 5. ,5 5, 1,,2 1.,2', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('０１２３４５６７８９ １２．５ ３，０００', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('０１２３４５６７８９ １２．５ ３，０００', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('12个人 3人 5位客人 7名学生', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('12个人 3人 5位客人 7名学生', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('一个一个地 一次又一次', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('一个一个地 一次又一次', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('十二点三十分 下午三点钟 八小时 三十秒钟', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('十二点三十分 下午三点钟 八小时 三十秒钟', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('三平方公里 五立方厘米 二十世纪 五周年 一百海里', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('三平方公里 五立方厘米 二十世纪 五周年 一百海里', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('八千万 九十九 一百零一 一千零一夜', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('八千万 九十九 一百零一 一千零一夜', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('三五成群 一五一十 七七八八', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('三五成群 一五一十 七七八八', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('两个 两只 两斤 两岁', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('两个 两只 两斤 两岁', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('1000 1,000 1.000 1_000', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('1000 1,000 1.000 1_000', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('3.14.15 1,23,456 0.001 00001', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('3.14.15 1,23,456 0.001 00001', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('123abc abc123 a1b2c3 1a 1-2 1+1', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('123abc abc123 a1b2c3 1a 1-2 1+1', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno

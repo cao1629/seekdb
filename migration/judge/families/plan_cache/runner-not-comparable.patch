@@ -1,0 +1,280 @@
+diff --git a/.github/script/seekdb/mysqltest_for_seekdb.py b/.github/script/seekdb/mysqltest_for_seekdb.py
+index 44f230d95..f9193e17d 100755
+--- a/.github/script/seekdb/mysqltest_for_seekdb.py
++++ b/.github/script/seekdb/mysqltest_for_seekdb.py
+@@ -76,6 +76,12 @@ PLAN_CACHE_CHECK_PAUSE = 1
+ PLAN_CACHE_LONG_WINDOW_SECONDS = 20
+ PLAN_CACHE_FILE = "plan_cache.tsv"
+ PLAN_CACHE_HEADER = "case\thits\tmisses"
++PLAN_CACHE_COUNTS = ("hits", "misses")
++PLAN_CACHE_NOT_COMPARABLE_WORDS = {
++    "hits": ("hits",),
++    "misses": ("misses",),
++    "both": ("hits", "misses"),
++}
+ PLAN_BEARING_LIST = ("migration", "judge", "lists", "plan-bearing.txt")
+ PLAN_BEARING_LIST_SHA256 = (
+     "8566d1f37b9b9875daa2ecfbdebd44d693823fbdeda520120313660ce7c54972"
+@@ -1776,8 +1782,48 @@ def plan_cache_seconds(manifest):
+     )
+ 
+ 
++def load_plan_cache_not_comparable(path):
++    try:
++        data = path.read_bytes()
++        text = data.decode("utf-8")
++    except (OSError, UnicodeDecodeError) as exc:
++        raise RunnerError(
++            "cannot read plan cache not-comparable list {}: {}".format(path, exc)
++        )
++    cases = {}
++    duplicates = []
++    for line_number, raw_line in enumerate(text.split("\n"), 1):
++        fields = raw_line.split("#", 1)[0].split()
++        if not fields:
++            continue
++        if len(fields) != 2 or fields[1] not in PLAN_CACHE_NOT_COMPARABLE_WORDS:
++            raise RunnerError(
++                "{}:{}: expected a case and one of {}".format(
++                    path, line_number, ", ".join(PLAN_CACHE_NOT_COMPARABLE_WORDS)
++                )
++            )
++        if fields[0] in cases:
++            duplicates.append(fields[0])
++        cases[fields[0]] = PLAN_CACHE_NOT_COMPARABLE_WORDS[fields[1]]
++    if not cases:
++        raise RunnerError(
++            "plan cache not-comparable list {} names no cases".format(path)
++        )
++    if duplicates:
++        raise RunnerError(
++            "duplicate cases in plan cache not-comparable list {}: {}".format(
++                path, ", ".join(sorted(set(duplicates)))
++            )
++        )
++    return {
++        "list": str(path),
++        "list_sha256": hashlib.sha256(data).hexdigest(),
++        "cases": cases,
++    }
++
++
+ def compare_plan_cache_case(
+-    case_name, left_rows, right_rows, left_seconds, right_seconds
++    case_name, left_rows, right_rows, left_seconds, right_seconds, not_comparable=None
+ ):
+     entry = {
+         "case": case_name,
+@@ -1792,6 +1838,10 @@ def compare_plan_cache_case(
+         seconds is not None and seconds >= PLAN_CACHE_LONG_WINDOW_SECONDS
+         for seconds in entry["seconds"].values()
+     )
++    listed = None
++    if not_comparable is not None and case_name in not_comparable["cases"]:
++        listed = not_comparable["cases"][case_name]
++        entry["listed"] = list(listed)
+     missing_from = [side for side in ("left", "right") if entry[side] is None]
+     if missing_from:
+         entry["status"] = "missing"
+@@ -1799,13 +1849,22 @@ def compare_plan_cache_case(
+     elif entry["left"] == entry["right"]:
+         entry["status"] = "identical"
+     else:
+-        entry["status"] = "different"
++        differing = [
++            count
++            for count in PLAN_CACHE_COUNTS
++            if entry["left"][count] != entry["right"][count]
++        ]
++        if listed is not None and all(count in listed for count in differing):
++            entry["status"] = "not-compared"
++            entry["not_compared"] = differing
++        else:
++            entry["status"] = "different"
+     return entry
+ 
+ 
+-def summarize_plan_cache(entries):
++def summarize_plan_cache(entries, with_not_compared=False):
+     counts = Counter(entry["status"] for entry in entries)
+-    return {
++    summary = {
+         "cases": len(entries),
+         "identical": counts["identical"],
+         "different": counts["different"],
+@@ -1816,6 +1875,34 @@ def summarize_plan_cache(entries):
+             if entry["status"] == "different" and entry["timing_sensitive"]
+         ),
+     }
++    if with_not_compared:
++        summary["not_compared"] = counts["not-compared"]
++    return summary
++
++
++def plan_cache_not_comparable_report(not_comparable, entries):
++    recorded = set(entry["case"] for entry in entries)
++    listed_entries = [entry for entry in entries if "listed" in entry]
++    return {
++        "list": not_comparable["list"],
++        "list_sha256": not_comparable["list_sha256"],
++        "listed_cases": len(not_comparable["cases"]),
++        "not_compared": [
++            entry["case"]
++            for entry in listed_entries
++            if entry["status"] == "not-compared"
++        ],
++        "listed_identical": [
++            entry["case"] for entry in listed_entries if entry["status"] == "identical"
++        ],
++        "listed_different": [
++            entry["case"] for entry in listed_entries if entry["status"] == "different"
++        ],
++        "listed_missing": [
++            entry["case"] for entry in listed_entries if entry["status"] == "missing"
++        ],
++        "not_in_recordings": sorted(set(not_comparable["cases"]) - recorded),
++    }
+ 
+ 
+ def format_seconds(seconds):
+@@ -1826,7 +1913,7 @@ def print_plan_cache_entry(entry):
+     print("plan-cache {:<9} {}".format(entry["status"], entry["case"]), flush=True)
+     if entry["status"] == "missing":
+         print("  missing from {}".format(", ".join(entry["missing_from"])), flush=True)
+-    elif entry["status"] == "different":
++    elif entry["status"] in ("different", "not-compared"):
+         print(
+             "  left hits={} misses={}; right hits={} misses={}".format(
+                 entry["left"]["hits"],
+@@ -1848,6 +1935,14 @@ def print_plan_cache_entry(entry):
+             ),
+             flush=True,
+         )
++    if "listed" in entry and entry["status"] != "identical":
++        compared = [count for count in PLAN_CACHE_COUNTS if count not in entry["listed"]]
++        print(
++            "  listed as not comparable: {}; compared: {}".format(
++                ", ".join(entry["listed"]), ", ".join(compared) or "nothing"
++            ),
++            flush=True,
++        )
+ 
+ 
+ def read_recorded_file(directory, case_name, suffix):
+@@ -2664,10 +2759,16 @@ def command_compare(args):
+     right_dir = absolute_path(args.right)
+     known_failures = None
+     known_failure_report = None
++    not_comparable = None
++    not_comparable_report = None
+     try:
+         masks = load_masks(set(args.mask))
+         if args.known_failures:
+             known_failures = load_known_failures(absolute_path(args.known_failures))
++        if args.plan_cache_not_comparable:
++            not_comparable = load_plan_cache_not_comparable(
++                absolute_path(args.plan_cache_not_comparable)
++            )
+         left_manifest, left_names = load_recording(left_dir)
+         right_manifest, right_names = load_recording(right_dir)
+         if masks:
+@@ -2732,6 +2833,11 @@ def command_compare(args):
+             left_manifest.get("plan_cache_stats") is True
+             and right_manifest.get("plan_cache_stats") is True
+         )
++        if not_comparable is not None and not plan_cache_compared:
++            problems.append(
++                "--plan-cache-not-comparable needs two recordings made with "
++                "--plan-cache-stats"
++            )
+         plan_cache_results = []
+         if plan_cache_compared:
+             left_plan_cache = load_plan_cache_table(left_dir, left_names)
+@@ -2745,9 +2851,14 @@ def command_compare(args):
+                     right_plan_cache,
+                     left_seconds,
+                     right_seconds,
++                    not_comparable,
+                 )
+                 for case_name in case_names
+             ]
++        if not_comparable is not None:
++            not_comparable_report = plan_cache_not_comparable_report(
++                not_comparable, plan_cache_results
++            )
+     except RunnerError as exc:
+         print("[compare][ERROR] {}".format(exc), file=sys.stderr)
+         return 2
+@@ -2779,7 +2890,9 @@ def command_compare(args):
+     if known_failure_report is not None:
+         verdict_summary = summarize_statuses(results, "verdict")
+     plan_cache_summary = (
+-        summarize_plan_cache(plan_cache_results) if plan_cache_compared else None
++        summarize_plan_cache(plan_cache_results, not_comparable is not None)
++        if plan_cache_compared
++        else None
+     )
+     success = (
+         verdict_summary["different"] == 0
+@@ -2818,6 +2931,8 @@ def command_compare(args):
+             "cases": plan_cache_results,
+         },
+     }
++    if not_comparable is not None:
++        payload["plan_cache"]["not_comparable"] = not_comparable_report
+     if args.out:
+         write_json(absolute_path(args.out), payload)
+     print(
+@@ -2883,11 +2998,32 @@ def command_compare(args):
+         print(
+             "plan cache: cases={cases}, identical={identical}, "
+             "different={different}, missing={missing}, "
+-            "different_timing_sensitive={different_timing_sensitive}".format(
++            "different_timing_sensitive={different_timing_sensitive}{listed}".format(
++                listed=(
++                    ", not_compared={}".format(plan_cache_summary["not_compared"])
++                    if "not_compared" in plan_cache_summary
++                    else ""
++                ),
+                 **plan_cache_summary
+             ),
+             flush=True,
+         )
++    if not_comparable_report is not None:
++        print(
++            "plan cache not comparable: {} (sha256 {}): listed={}, "
++            "not_compared={}, listed_identical={}, listed_different={}, "
++            "listed_missing={}, not_in_recordings={}".format(
++                not_comparable_report["list"],
++                not_comparable_report["list_sha256"],
++                not_comparable_report["listed_cases"],
++                len(not_comparable_report["not_compared"]),
++                len(not_comparable_report["listed_identical"]),
++                len(not_comparable_report["listed_different"]),
++                len(not_comparable_report["listed_missing"]),
++                len(not_comparable_report["not_in_recordings"]),
++            ),
++            flush=True,
++        )
+     return 0 if success else 1
+ 
+ 
+@@ -3084,6 +3220,18 @@ def create_parser():
+         "problem; any other outcome of a listed case, and every failed case not "
+         "listed, fails as before",
+     )
++    compare.add_argument(
++        "--plan-cache-not-comparable",
++        metavar="FILE",
++        help="file naming cases whose plan cache counts two recordings of the "
++        "same build do not reproduce, one per line as '<case> hits', '<case> "
++        "misses' or '<case> both' (# starts a comment): a listed case whose "
++        "counts differ only in the listed counts is reported as not-compared "
++        "instead of different and does not fail the comparison; a difference "
++        "in a count that is not listed, a missing case and every case not "
++        "listed fail as before; both recordings must have been made with "
++        "--plan-cache-stats",
++    )
+     compare.set_defaults(handler=command_compare)
+ 
+     return parser

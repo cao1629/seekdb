@@ -109,4 +109,31 @@ trailing-whitespace switch do not apply; the comparison is `cmp`, byte for byte.
   other entry without this family noticing, and the 272 cases see only the codes the server raises in
   them. A sweep of `ob_error <n>` over every code in `g_all_ob_errnos`, compared build against build,
   would close that gap in seconds; it is outside family 6 as PLAN.md defines it, so it is left to the
-  second sign-off.
+  second sign-off. (Decided on 2026-09-28, below: the sweep is now part of the family.)
+
+## The sweep over the whole catalog (added 2026-09-28)
+
+A review of the second set pointed out that the 18 test lines print 15 of the 1,544 catalog entries,
+and that mutation 03 was chosen among those 15, so the family showed only that it guards the codes it
+prints. Under decisions.md row 5c the recommended option was taken: `sweep_ob_error.sh` runs
+`ob_error <n>` for every nonzero code in `g_all_ob_errnos` (src/share/ob_errno.cpp at 834bbee1e, the
+tree the judge runs from), in the table's order, and writes each command, its output and its exit
+code:
+
+```
+migration/judge/families/ob_error/sweep_ob_error.sh <dir>/ob_error <out-dir>
+```
+
+It writes `<out-dir>/sweep.result`, `codes.txt` (the codes read from the catalog), `stderr.log` and
+`manifest.txt` (the binary and catalog checksums, the code count and the sweep's sha256). C++ against
+Rust: sweep each build's `ob_error` over the same code list and compare the two sweep.result files
+with `cmp`; the list comes from the C++ catalog, so a code the Rust catalog lost prints differently.
+
+Live check (2026-09-28, /Users/colin/seekdb-dev/mysqltest-runs/00b/second-set/review/): the archived
+`ob_error` (sha256 6054d899...) swept all 1,544 codes in 6 s, every one with exit 0 and an empty
+stderr; two sweeps (oberr-sweep-1, oberr-sweep-2) are byte-identical, 13,510 lines, sha256
+`4c856fcca022d692da05aa0ecfe9f8e58f60404de6554229a8792ad3ce79f550`. `ob_error` built from the tree
+with mutation 03 applied (mut03-oberr-build, built with build_ob_error.sh and reverted; the reference
+worktree was back to reference-build.patch afterwards) differs from them in exactly one line, the
+message of code 5870 (oberr-sweep-mut03). So the sweep catches that mutation too, and any change to
+the text of another catalog entry changes the sweep in the same way.

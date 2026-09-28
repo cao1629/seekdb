@@ -1,0 +1,125 @@
+--disable_abort_on_error
+--enable_warnings
+--echo # s1_cjk 4
+SET NAMES utf8mb4 COLLATE utf8mb4_general_ci, ob_enable_plan_cache = 0, ob_query_timeout = 600000000, ob_trx_timeout = 600000000;
+--echo errno $mysql_errno
+SELECT tokenize('他说的确实在理', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('他说的确实在理', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('他说的确实在理', 'ik') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('发展中国家兔的饲养技术', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('发展中国家兔的饲养技术', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('发展中国家兔的饲养技术', 'ik') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('欢迎新老师生前来就餐', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('欢迎新老师生前来就餐', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('欢迎新老师生前来就餐', 'ik') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('这个门把手坏了请修理', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('这个门把手坏了请修理', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('这个门把手坏了请修理', 'ik') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('我们在野生动物园玩得很开心', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('我们在野生动物园玩得很开心', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('我们在野生动物园玩得很开心', 'ik') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('独立自主和平等互利的原则', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('独立自主和平等互利的原则', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('独立自主和平等互利的原则', 'ik') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('已经分房和尚未分房的同志', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('已经分房和尚未分房的同志', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('已经分房和尚未分房的同志', 'ik') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('他将来北京工作', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('他将来北京工作', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('他将来北京工作', 'ik') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('学生会宣传部举办了一场讲座', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('学生会宣传部举办了一场讲座', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('学生会宣传部举办了一场讲座', 'ik') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('北京大学生前来应聘', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('北京大学生前来应聘', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('北京大学生前来应聘', 'ik') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('使用户满意是我们的目标', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('使用户满意是我们的目标', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('使用户满意是我们的目标', 'ik') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('他从马上下来', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('他从马上下来', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('他从马上下来', 'ik') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('白天鹅在湖中游', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('白天鹅在湖中游', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('白天鹅在湖中游', 'ik') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('馆内陈列周恩来和邓颖超生前使用过的物品', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('馆内陈列周恩来和邓颖超生前使用过的物品', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('馆内陈列周恩来和邓颖超生前使用过的物品', 'ik') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('部分居民生活水平提高了', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('部分居民生活水平提高了', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('部分居民生活水平提高了', 'ik') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('人民币汇率保持基本稳定', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('人民币汇率保持基本稳定', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('人民币汇率保持基本稳定', 'ik') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('化妆和服装', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('化妆和服装', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('化妆和服装', 'ik') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('质量和服务', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('质量和服务', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('质量和服务', 'ik') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('从小学电脑', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('从小学电脑', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('从小学电脑', 'ik') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('企业家庭', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('企业家庭', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('企业家庭', 'ik') AS t;
+--echo errno $mysql_errno

@@ -135,6 +135,7 @@ COMMANDS = SILENT_COMMANDS | STATE_COMMANDS | ECHO_REWRITING_COMMANDS | frozense
         "dirty_close",
     )
 )
+SAFE_REGEX = re.compile(r"(?:[A-Za-z0-9 _:=,.*+?^$|()\[\]-]|\\[^0-9A-Za-z])*\Z")
 WARNING_LINE = re.compile(rb"(Note|Warning|Error)\t[0-9]+\t")
 INFO_PREFIXES = (b"affected rows: ", b"info: ")
 
@@ -372,8 +373,84 @@ def is_statement(item):
     return item.kind in ("sql", "eval", "send")
 
 
+def regex_could_change(pattern, flags, texts):
+    if SAFE_REGEX.match(pattern) is None or "[:" in pattern:
+        return True
+    try:
+        compiled = re.compile(pattern, flags)
+    except re.error:
+        return True
+    return any(compiled.search(text) for text in texts)
+
+
+def replace_regex_patterns(argument):
+    patterns = []
+    rest = argument.strip().rstrip(";").strip()
+    while rest:
+        if not rest.startswith("/"):
+            return None
+        parts = []
+        position = 1
+        for _ in range(2):
+            current = []
+            while position < len(rest) and rest[position] != "/":
+                if rest[position] == "\\" and position + 1 < len(rest):
+                    current.append(rest[position : position + 2])
+                    position += 2
+                    continue
+                current.append(rest[position])
+                position += 1
+            if position >= len(rest):
+                return None
+            parts.append("".join(current))
+            position += 1
+        flags = 0
+        if position < len(rest) and rest[position] == "i":
+            flags = re.IGNORECASE
+            position += 1
+        if position < len(rest) and not rest[position].isspace():
+            return None
+        patterns.append((parts[0].replace("\\/", "/"), flags))
+        rest = rest[position:].strip()
+    return patterns or None
+
+
+def replace_result_strings(argument):
+    rest = argument.strip().rstrip(";").strip()
+    if not rest or any(character in rest for character in "$\\'\"`"):
+        return None
+    tokens = rest.split()
+    if len(tokens) % 2:
+        return None
+    return tokens[0::2]
+
+
+def replace_could_change(item, texts):
+    if "$" in item.text:
+        return True
+    if item.word == "replace_regex":
+        patterns = replace_regex_patterns(item.text)
+        if patterns is None:
+            return True
+        return any(regex_could_change(pattern, flags, texts) for pattern, flags in patterns)
+    strings = replace_result_strings(item.text)
+    if strings is None:
+        return True
+    return any(string in text for string in strings for text in texts)
+
+
+def check_pending_replaces(pending, texts):
+    for item in pending:
+        if replace_could_change(item, texts):
+            raise Unresolved(
+                "a {} follows, which can rewrite the next statement's echo (test "
+                "line {})".format(item.word, item.line)
+            )
+
+
 def predict_next_output(runner, items, index):
     pending_error = False
+    pending_replaces = []
     for item in items[index + 1 :]:
         result_format = state_value(item, "result_format")
         if item.kind == "blank":
@@ -403,18 +480,27 @@ def predict_next_output(runner, items, index):
                 raise Unresolved(
                     "an eval with variables follows (test line {})".format(item.line)
                 )
-            return "echo", statement_echo(runner, item)
+            echo = statement_echo(runner, item)
+            raw = item.text + item.delimiter
+            lines = raw.split("\n")
+            stripped = [line.strip() for line in lines]
+            check_pending_replaces(
+                pending_replaces,
+                [echo.decode("utf-8"), raw, "\n".join(stripped)] + lines + stripped,
+            )
+            return "echo", echo
         word = item.word
         if word == "echo":
             if "$" in item.text or "\\" in item.text:
                 raise Unresolved(
                     "an echo with variables follows (test line {})".format(item.line)
                 )
+            check_pending_replaces(pending_replaces, [item.text])
             return "line", runner.collapse_whitespace(item.text.encode("utf-8"))
         if word in ("result_format", "explain_protocol"):
-            return "line", "{}: {}".format(word, item.text.rstrip(";").strip()).encode(
-                "utf-8"
-            )
+            line = "{}: {}".format(word, item.text.rstrip(";").strip())
+            check_pending_replaces(pending_replaces, [line])
+            return "line", line.encode("utf-8")
         if word == "connect" and pending_error:
             raise Unresolved(
                 "a connect under --error follows (test line {})".format(item.line)
@@ -422,10 +508,8 @@ def predict_next_output(runner, items, index):
         if word == "error":
             pending_error = True
         if word in ECHO_REWRITING_COMMANDS:
-            raise Unresolved(
-                "a {} follows, which can rewrite the next statement's echo (test "
-                "line {})".format(word, item.line)
-            )
+            pending_replaces.append(item)
+            continue
         if word in SILENT_COMMANDS or word in STATE_COMMANDS:
             continue
         raise Unresolved(

@@ -119,4 +119,11 @@ python3 .github/script/seekdb/mysqltest_for_seekdb.py compare \
 
 ## Caught by (filled after the run)
 
-Not run yet.
+Caught by the wire family on 2026-09-28 (README.md in this directory). wire_scenarios.py on the
+mutated build exits 0, since no check of the scenarios reads the flag; `compare` against
+06-wire/run09 exits 1 with wire_ok_err_eof `different` and the other nine scenarios identical. The
+diff is the three packets in the table above and nothing else: request 36's OK goes from status
+0x4222 to 0x4022, and the OKs of requests 38 and 39 from 0x0222 to 0x0022.
+
+The 272 configured cases on the mutated build: only quarantined cases failed. Outputs:
+/Users/colin/seekdb-dev/mysqltest-runs/00b/second-set/mutations/06-wire-ok-drops-no-backslash-escapes/.

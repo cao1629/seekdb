@@ -76,12 +76,31 @@ PLAN_CACHE_CHECK_PAUSE = 1
 PLAN_CACHE_LONG_WINDOW_SECONDS = 20
 PLAN_CACHE_FILE = "plan_cache.tsv"
 PLAN_CACHE_HEADER = "case\thits\tmisses"
+PLAN_CACHE_COUNTS = ("hits", "misses")
+PLAN_CACHE_NOT_COMPARABLE_WORDS = {
+    "hits": ("hits",),
+    "misses": ("misses",),
+    "both": ("hits", "misses"),
+}
+PLAN_CACHE_NOT_COMPARABLE_SHA256 = (
+    "586bdb8e207c5b264b8fb7b657dab0508d3e6a0444dba2a8c84f847c8d57696e"
+)
 PLAN_BEARING_LIST = ("migration", "judge", "lists", "plan-bearing.txt")
 PLAN_BEARING_LIST_SHA256 = (
     "8566d1f37b9b9875daa2ecfbdebd44d693823fbdeda520120313660ce7c54972"
 )
 HASH_ORDER_LIST = ("migration", "judge", "lists", "hash-order-selects.txt")
-HASH_ORDER_LIST_SHA256 = None
+HASH_ORDER_LIST_SHA256 = (
+    "b0b11890b9e8fcd2c46b525ef63f787d2fca8f2bdf19181bf790c3626fb68c57"
+)
+MEM_HOLD_LIST = ("migration", "judge", "lists", "mem-hold-lines.txt")
+MEM_HOLD_LIST_SHA256 = (
+    "96f430359697c458832e3d394afdc804f500cecee7a4dbdb88f7d03eb4b511b1"
+)
+MEM_HOLD_RECORDER = "migration/judge/families/memory/memory_scenarios.py"
+MEM_HOLD_PREFIX_END = b"mem_hold="
+MEM_HOLD_VALUE_PATTERN = re.compile(rb"([0-9]+)\)")
+MEM_HOLD_PLACEHOLDER = b"#"
 PLAN_TABLE_COLUMNS = (b"ID", b"OPERATOR", b"NAME", b"EST.ROWS", b"EST.TIME(us)")
 EST_VALUE_PATTERN = re.compile(rb"(?:[0-9]+|more than 1\.0e19)\Z")
 EST_PLACEHOLDER = b"#"
@@ -107,7 +126,11 @@ HashOrderStatement = namedtuple(
     "HashOrderStatement",
     ("case", "occurrence", "digest", "rows", "next", "test_line", "operators", "text"),
 )
-CompareMask = namedtuple("CompareMask", ("list_path", "list_sha256", "load", "apply"))
+CompareMask = namedtuple(
+    "CompareMask",
+    ("list_path", "list_sha256", "load", "apply", "recorder"),
+    defaults=(None,),
+)
 
 
 class RunnerError(RuntimeError):
@@ -1776,8 +1799,57 @@ def plan_cache_seconds(manifest):
     )
 
 
+def load_plan_cache_not_comparable(path):
+    try:
+        data = path.read_bytes()
+        text = data.decode("utf-8")
+    except (OSError, UnicodeDecodeError) as exc:
+        raise RunnerError(
+            "cannot read plan cache not-comparable list {}: {}".format(path, exc)
+        )
+    cases = {}
+    duplicates = []
+    for line_number, raw_line in enumerate(text.split("\n"), 1):
+        fields = raw_line.split("#", 1)[0].split()
+        if not fields:
+            continue
+        if len(fields) != 2 or fields[1] not in PLAN_CACHE_NOT_COMPARABLE_WORDS:
+            raise RunnerError(
+                "{}:{}: expected a case and one of {}".format(
+                    path, line_number, ", ".join(PLAN_CACHE_NOT_COMPARABLE_WORDS)
+                )
+            )
+        if fields[0] in cases:
+            duplicates.append(fields[0])
+        cases[fields[0]] = PLAN_CACHE_NOT_COMPARABLE_WORDS[fields[1]]
+    if not cases:
+        raise RunnerError(
+            "plan cache not-comparable list {} names no cases".format(path)
+        )
+    if duplicates:
+        raise RunnerError(
+            "duplicate cases in plan cache not-comparable list {}: {}".format(
+                path, ", ".join(sorted(set(duplicates)))
+            )
+        )
+    list_sha256 = hashlib.sha256(data).hexdigest()
+    if list_sha256 != PLAN_CACHE_NOT_COMPARABLE_SHA256:
+        raise RunnerError(
+            "plan cache not-comparable list {} has sha256 {}, but the runner pins the "
+            "signed-off {} (PLAN_CACHE_NOT_COMPARABLE_SHA256); the list changes only "
+            "together with its pinned sha256".format(
+                path, list_sha256, PLAN_CACHE_NOT_COMPARABLE_SHA256
+            )
+        )
+    return {
+        "list": str(path),
+        "list_sha256": list_sha256,
+        "cases": cases,
+    }
+
+
 def compare_plan_cache_case(
-    case_name, left_rows, right_rows, left_seconds, right_seconds
+    case_name, left_rows, right_rows, left_seconds, right_seconds, not_comparable=None
 ):
     entry = {
         "case": case_name,
@@ -1792,6 +1864,10 @@ def compare_plan_cache_case(
         seconds is not None and seconds >= PLAN_CACHE_LONG_WINDOW_SECONDS
         for seconds in entry["seconds"].values()
     )
+    listed = None
+    if not_comparable is not None and case_name in not_comparable["cases"]:
+        listed = not_comparable["cases"][case_name]
+        entry["listed"] = list(listed)
     missing_from = [side for side in ("left", "right") if entry[side] is None]
     if missing_from:
         entry["status"] = "missing"
@@ -1799,13 +1875,22 @@ def compare_plan_cache_case(
     elif entry["left"] == entry["right"]:
         entry["status"] = "identical"
     else:
-        entry["status"] = "different"
+        differing = [
+            count
+            for count in PLAN_CACHE_COUNTS
+            if entry["left"][count] != entry["right"][count]
+        ]
+        if listed is not None and all(count in listed for count in differing):
+            entry["status"] = "not-compared"
+            entry["not_compared"] = differing
+        else:
+            entry["status"] = "different"
     return entry
 
 
-def summarize_plan_cache(entries):
+def summarize_plan_cache(entries, with_not_compared=False):
     counts = Counter(entry["status"] for entry in entries)
-    return {
+    summary = {
         "cases": len(entries),
         "identical": counts["identical"],
         "different": counts["different"],
@@ -1815,6 +1900,34 @@ def summarize_plan_cache(entries):
             for entry in entries
             if entry["status"] == "different" and entry["timing_sensitive"]
         ),
+    }
+    if with_not_compared:
+        summary["not_compared"] = counts["not-compared"]
+    return summary
+
+
+def plan_cache_not_comparable_report(not_comparable, entries):
+    recorded = set(entry["case"] for entry in entries)
+    listed_entries = [entry for entry in entries if "listed" in entry]
+    return {
+        "list": not_comparable["list"],
+        "list_sha256": not_comparable["list_sha256"],
+        "listed_cases": len(not_comparable["cases"]),
+        "not_compared": [
+            entry["case"]
+            for entry in listed_entries
+            if entry["status"] == "not-compared"
+        ],
+        "listed_identical": [
+            entry["case"] for entry in listed_entries if entry["status"] == "identical"
+        ],
+        "listed_different": [
+            entry["case"] for entry in listed_entries if entry["status"] == "different"
+        ],
+        "listed_missing": [
+            entry["case"] for entry in listed_entries if entry["status"] == "missing"
+        ],
+        "not_in_recordings": sorted(set(not_comparable["cases"]) - recorded),
     }
 
 
@@ -1826,7 +1939,7 @@ def print_plan_cache_entry(entry):
     print("plan-cache {:<9} {}".format(entry["status"], entry["case"]), flush=True)
     if entry["status"] == "missing":
         print("  missing from {}".format(", ".join(entry["missing_from"])), flush=True)
-    elif entry["status"] == "different":
+    elif entry["status"] in ("different", "not-compared"):
         print(
             "  left hits={} misses={}; right hits={} misses={}".format(
                 entry["left"]["hits"],
@@ -1845,6 +1958,14 @@ def print_plan_cache_entry(entry):
                 )
                 if entry["timing_sensitive"]
                 else "",
+            ),
+            flush=True,
+        )
+    if "listed" in entry and entry["status"] != "identical":
+        compared = [count for count in PLAN_CACHE_COUNTS if count not in entry["listed"]]
+        print(
+            "  listed as not comparable: {}; compared: {}".format(
+                ", ".join(entry["listed"]), ", ".join(compared) or "nothing"
             ),
             flush=True,
         )
@@ -2330,6 +2451,61 @@ def apply_row_order_mask(case_data, left_content, right_content):
     )
 
 
+def load_mem_hold_list(path, lines):
+    scenarios = {}
+    for line_number, line in lines:
+        fields = line.split("\t")
+        if len(fields) != 2 or not fields[0] or fields[0] != fields[0].strip():
+            raise RunnerError(
+                "{}:{}: expected a scenario and a line prefix separated by one "
+                "tab".format(path, line_number)
+            )
+        prefix = fields[1].encode("utf-8")
+        if not prefix.endswith(MEM_HOLD_PREFIX_END) or prefix.count(b"mem_hold=") != 1:
+            raise RunnerError(
+                "{}:{}: the line prefix must end with mem_hold= and name it "
+                "once".format(path, line_number)
+            )
+        prefixes = scenarios.setdefault(fields[0], [])
+        if prefix in prefixes:
+            raise RunnerError(
+                "{}:{}: repeated scenario and line prefix".format(path, line_number)
+            )
+        prefixes.append(prefix)
+    if not scenarios:
+        raise RunnerError("mask list {} names no scenarios".format(path))
+    return scenarios
+
+
+def mask_mem_hold_lines(prefixes, content):
+    lines = content.split(b"\n")
+    values = []
+    for number, line in enumerate(lines):
+        for prefix in prefixes:
+            if not line.startswith(prefix):
+                continue
+            match = MEM_HOLD_VALUE_PATTERN.match(line, len(prefix))
+            if match is None:
+                continue
+            values.append(match.group(1).decode("ascii"))
+            lines[number] = (
+                line[: match.start(1)] + MEM_HOLD_PLACEHOLDER + line[match.end(1) :]
+            )
+            break
+    return b"\n".join(lines), values
+
+
+def apply_mem_hold_mask(case_data, left_content, right_content):
+    masked_left, left_values = mask_mem_hold_lines(case_data, left_content)
+    masked_right, right_values = mask_mem_hold_lines(case_data, right_content)
+    details = {
+        "left": {"masked": len(left_values), "values": left_values},
+        "right": {"masked": len(right_values), "values": right_values},
+        "values_differ": left_values != right_values,
+    }
+    return masked_left, masked_right, details
+
+
 COMPARE_MASKS = {
     "row-order": CompareMask(
         HASH_ORDER_LIST,
@@ -2342,6 +2518,13 @@ COMPARE_MASKS = {
         PLAN_BEARING_LIST_SHA256,
         load_plan_bearing_list,
         apply_est_mask,
+    ),
+    "mem-hold": CompareMask(
+        MEM_HOLD_LIST,
+        MEM_HOLD_LIST_SHA256,
+        load_mem_hold_list,
+        apply_mem_hold_mask,
+        MEM_HOLD_RECORDER,
     ),
 }
 
@@ -2367,23 +2550,25 @@ def load_masks(names):
                 )
             )
         data = mask.load(path, lines)
-        if configured_cases is None:
-            configured_cases = set(
-                case.name for case in discover_cases(runner_repo_root())
-            )
-        unknown_cases = sorted(set(data) - configured_cases)
-        if unknown_cases:
-            raise RunnerError(
-                "mask list {} names cases that are not configured: {}".format(
-                    path, ", ".join(unknown_cases)
+        if mask.recorder is None:
+            if configured_cases is None:
+                configured_cases = set(
+                    case.name for case in discover_cases(runner_repo_root())
                 )
-            )
+            unknown_cases = sorted(set(data) - configured_cases)
+            if unknown_cases:
+                raise RunnerError(
+                    "mask list {} names cases that are not configured: {}".format(
+                        path, ", ".join(unknown_cases)
+                    )
+                )
         loaded.append(
             {
                 "name": name,
                 "list": str(path),
                 "data": data,
                 "list_sha256": list_sha256,
+                "recorder": mask.recorder,
             }
         )
     return loaded
@@ -2503,6 +2688,23 @@ def print_mask_details(entry):
             ),
             flush=True,
         )
+    mem_hold = details.get("mem-hold")
+    if mem_hold:
+        if mem_hold["left"]["masked"] != 1 or mem_hold["right"]["masked"] != 1:
+            print(
+                "  mem-hold: lines masked left {}, right {}".format(
+                    mem_hold["left"]["masked"], mem_hold["right"]["masked"]
+                ),
+                flush=True,
+            )
+        if mem_hold["values_differ"]:
+            print(
+                "  mem-hold: mem_hold= left {}, right {}; masked".format(
+                    ", ".join(mem_hold["left"]["values"]) or "none",
+                    ", ".join(mem_hold["right"]["values"]) or "none",
+                ),
+                flush=True,
+            )
     for record in details.get("row-order", []):
         statement = "  row-order: echo {} of {} (test line {})".format(
             record["occurrence"], record["statement_sha256"], record["test_line"]
@@ -2616,7 +2818,18 @@ def mask_statistics(mask, results):
         "not_compared_cases": len(not_compared),
     }
     details = [entry["mask_details"][mask["name"]] for entry in compared]
-    if mask["name"] == "est":
+    if mask["name"] == "mem-hold":
+        statistics["listed_lines"] = sum(
+            len(prefixes) for prefixes in mask["data"].values()
+        )
+        for side in ("left", "right"):
+            statistics["lines_masked_" + side] = sum(
+                detail[side]["masked"] for detail in details
+            )
+        statistics["values_differ"] = sum(
+            1 for detail in details if detail["values_differ"]
+        )
+    elif mask["name"] == "est":
         for side in ("left", "right"):
             statistics["est_header_lines_" + side] = sum(
                 detail[side]["header_lines"] for detail in details
@@ -2664,10 +2877,16 @@ def command_compare(args):
     right_dir = absolute_path(args.right)
     known_failures = None
     known_failure_report = None
+    not_comparable = None
+    not_comparable_report = None
     try:
         masks = load_masks(set(args.mask))
         if args.known_failures:
             known_failures = load_known_failures(absolute_path(args.known_failures))
+        if args.plan_cache_not_comparable:
+            not_comparable = load_plan_cache_not_comparable(
+                absolute_path(args.plan_cache_not_comparable)
+            )
         left_manifest, left_names = load_recording(left_dir)
         right_manifest, right_names = load_recording(right_dir)
         if masks:
@@ -2679,6 +2898,20 @@ def command_compare(args):
                             side, manifest["test_dir"]
                         )
                     )
+                for mask in masks:
+                    if (
+                        mask["recorder"] is not None
+                        and manifest.get("recorder") != mask["recorder"]
+                    ):
+                        raise RunnerError(
+                            "--mask {} applies only to recordings made by {}; the {} "
+                            "recording was made by {}".format(
+                                mask["name"],
+                                mask["recorder"],
+                                side,
+                                manifest.get("recorder") or "the runner",
+                            )
+                        )
         case_names = unique(left_names + right_names)
         if not case_names:
             raise RunnerError(
@@ -2732,6 +2965,11 @@ def command_compare(args):
             left_manifest.get("plan_cache_stats") is True
             and right_manifest.get("plan_cache_stats") is True
         )
+        if not_comparable is not None and not plan_cache_compared:
+            problems.append(
+                "--plan-cache-not-comparable needs two recordings made with "
+                "--plan-cache-stats"
+            )
         plan_cache_results = []
         if plan_cache_compared:
             left_plan_cache = load_plan_cache_table(left_dir, left_names)
@@ -2745,9 +2983,14 @@ def command_compare(args):
                     right_plan_cache,
                     left_seconds,
                     right_seconds,
+                    not_comparable,
                 )
                 for case_name in case_names
             ]
+        if not_comparable is not None:
+            not_comparable_report = plan_cache_not_comparable_report(
+                not_comparable, plan_cache_results
+            )
     except RunnerError as exc:
         print("[compare][ERROR] {}".format(exc), file=sys.stderr)
         return 2
@@ -2779,7 +3022,9 @@ def command_compare(args):
     if known_failure_report is not None:
         verdict_summary = summarize_statuses(results, "verdict")
     plan_cache_summary = (
-        summarize_plan_cache(plan_cache_results) if plan_cache_compared else None
+        summarize_plan_cache(plan_cache_results, not_comparable is not None)
+        if plan_cache_compared
+        else None
     )
     success = (
         verdict_summary["different"] == 0
@@ -2818,6 +3063,8 @@ def command_compare(args):
             "cases": plan_cache_results,
         },
     }
+    if not_comparable is not None:
+        payload["plan_cache"]["not_comparable"] = not_comparable_report
     if args.out:
         write_json(absolute_path(args.out), payload)
     print(
@@ -2883,8 +3130,29 @@ def command_compare(args):
         print(
             "plan cache: cases={cases}, identical={identical}, "
             "different={different}, missing={missing}, "
-            "different_timing_sensitive={different_timing_sensitive}".format(
+            "different_timing_sensitive={different_timing_sensitive}{listed}".format(
+                listed=(
+                    ", not_compared={}".format(plan_cache_summary["not_compared"])
+                    if "not_compared" in plan_cache_summary
+                    else ""
+                ),
                 **plan_cache_summary
+            ),
+            flush=True,
+        )
+    if not_comparable_report is not None:
+        print(
+            "plan cache not comparable: {} (sha256 {}): listed={}, "
+            "not_compared={}, listed_identical={}, listed_different={}, "
+            "listed_missing={}, not_in_recordings={}".format(
+                not_comparable_report["list"],
+                not_comparable_report["list_sha256"],
+                not_comparable_report["listed_cases"],
+                len(not_comparable_report["not_compared"]),
+                len(not_comparable_report["listed_identical"]),
+                len(not_comparable_report["listed_different"]),
+                len(not_comparable_report["listed_missing"]),
+                len(not_comparable_report["not_in_recordings"]),
             ),
             flush=True,
         )
@@ -3052,7 +3320,9 @@ def create_parser():
         "to both sides; the exit status follows the masked result for those cases "
         "and the exact result for the others; the list must have the sha256 the "
         "runner pins for it, and recordings made with --test-dir are refused; "
+        "mem-hold applies only to recordings made by {}; "
         "repeatable; known masks: {}".format(
+            MEM_HOLD_RECORDER,
             ", ".join(sorted(COMPARE_MASKS)) or "none"
         ),
     )
@@ -3083,6 +3353,19 @@ def create_parser():
         "mysqltest: failure lines, and its failure is then not a recording "
         "problem; any other outcome of a listed case, and every failed case not "
         "listed, fails as before",
+    )
+    compare.add_argument(
+        "--plan-cache-not-comparable",
+        metavar="FILE",
+        help="file naming cases whose plan cache counts two recordings of the "
+        "same build do not reproduce, one per line as '<case> hits', '<case> "
+        "misses' or '<case> both' (# starts a comment): a listed case whose "
+        "counts differ only in the listed counts is reported as not-compared "
+        "instead of different and does not fail the comparison; a difference "
+        "in a count that is not listed, a missing case and every case not "
+        "listed fail as before; both recordings must have been made with "
+        "--plan-cache-stats; the file must have the sha256 the runner pins "
+        "(families/plan_cache/not-comparable.list)",
     )
     compare.set_defaults(handler=command_compare)
 

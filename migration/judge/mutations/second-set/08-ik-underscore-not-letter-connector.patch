@@ -1,0 +1,12 @@
+diff --git a/src/storage/fts/utils/unicode_utils.cpp b/src/storage/fts/utils/unicode_utils.cpp
+--- a/src/storage/fts/utils/unicode_utils.cpp
++++ b/src/storage/fts/utils/unicode_utils.cpp
+@@ -64,7 +64,7 @@
+   if (code > 0xFF00 && code < 0xFF5F) {
+     code -= 0xFEE0;
+   }
+-  for (int i = 0; i < ARRAYSIZEOF(LETTER_CONNECTOR); i++) {
++  for (int i = 0; i < ARRAYSIZEOF(LETTER_CONNECTOR) - 1; i++) {
+     if (code == LETTER_CONNECTOR[i]) {
+       return true;
+     }

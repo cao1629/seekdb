@@ -3,22 +3,18 @@
 # Produced 2026-09-25 from the 272 configured cases (834bbee1e's tools/deploy) by leaving out the
 #   cases that C++ recordings showed cannot be compared (README.md, "Cases that cannot be compared";
 #   /Users/colin/seekdb-dev/mysqltest-runs/00b/second-set/01-ps/rec1 to rec4).
+# Changed 2026-09-28: the seven vector_index cases that send PURGE RECYCLEBIN are back in. The
+#   reference can hang on that statement over either protocol, and ../../quarantine.tsv now lists
+#   the seven with that evidence, so they follow the quarantine rule like the other quarantined cases.
 # Quarantined cases (../../quarantine.tsv) stay in: a quarantined case is compared whenever the two
 #   C++ recordings agree on it. The cases that stop under the binary protocol stay in as well;
 #   known-failures.txt names them.
-# Left out (11):
+# Left out (4):
 #   information_schema: its format-4 selects of information_schema.tables print CREATE_TIME and UPDATE_TIME, which --replace_column hides over text but not over the binary protocol
 #   fts_index.basic_dml: its format-4 selects of hidden fulltext columns print names that hold their creation time in microseconds, which --replace_regex hides over text but not over the binary protocol
 #   fts_index.index_view: its format-3 select of information_schema.STATISTICS prints hidden fulltext column names that hold their creation time in microseconds, which --replace_regex hides over text but not over the binary protocol
 #   fts_index.online_ddl_on_table_with_fts_index: its format-3 select of the index tables prints the data table's id in their names, which --replace_regex hides over text but not over the binary protocol, and the id differs between two runs
-#   vector_index.all_virtual_vector_index_info: runs PURGE RECYCLEBIN after vector index DDL, which can hang the reference until the 1,000 s DDL timeout (4012; a table-lock retry on a DELETED tablet): it hung at test line 38 in rec1 and passed in rec2
-#   vector_index.create_table_with_vector_index: runs PURGE RECYCLEBIN after vector index DDL, which can hang the reference until the 1,000 s DDL timeout (4012; a table-lock retry on a DELETED tablet): it hung in rec4 and passed in rec3
-#   vector_index.drop_vector_index: runs PURGE RECYCLEBIN after vector index DDL, which can hang the reference until the 1,000 s DDL timeout (4012; a table-lock retry on a DELETED tablet)
-#   vector_index.rebuild_vector_index: runs PURGE RECYCLEBIN after vector index DDL, which can hang the reference until the 1,000 s DDL timeout (4012; a table-lock retry on a DELETED tablet): it hung at test line 359 in a text-protocol run (mutation 07)
-#   vector_index.vector_index_partitioned: runs PURGE RECYCLEBIN after vector index DDL, which can hang the reference until the 1,000 s DDL timeout (4012; a table-lock retry on a DELETED tablet)
-#   vector_index.vector_index_post_create: runs PURGE RECYCLEBIN after vector index DDL, which can hang the reference until the 1,000 s DDL timeout (4012; a table-lock retry on a DELETED tablet)
-#   vector_index.vector_index_rebuild: runs PURGE RECYCLEBIN after vector index DDL, which can hang the reference until the 1,000 s DDL timeout (4012; a table-lock retry on a DELETED tablet)
-# Compared (261), in configured order:
+# Compared (268), in configured order:
 a_trade_notify
 a_trade_quick
 add
@@ -263,7 +259,11 @@ type_date.type_modify_time
 type_date.updaterowkeymoditime
 update.rowkey_update_datatype_convert
 update.update_ignore
+vector_index.all_virtual_vector_index_info
+vector_index.create_table_with_vector_index
+vector_index.drop_vector_index
 vector_index.fix_rebuild_or_post_create_hung
+vector_index.rebuild_vector_index
 vector_index.sparse_vector_index_vsag_ddl
 vector_index.sparse_vector_index_vsag_query
 vector_index.vector_calc_gbk_mysql
@@ -275,6 +275,9 @@ vector_index.vector_index_ivfflat_dml
 vector_index.vector_index_ivfflat_post_create
 vector_index.vector_index_ivfflat_scan
 vector_index.vector_index_offline_ddl
+vector_index.vector_index_partitioned
+vector_index.vector_index_post_create
+vector_index.vector_index_rebuild
 vector_index.vector_ivf_index_with_filter
 vector_index.vector_similarity
 window_function.farm

@@ -1,0 +1,294 @@
+# Family 7: the plan cache counts compare --plan-cache-not-comparable does not compare, for
+#   C++ recordings made with families/plan_cache/record.sh. Hits are listed for every case: the
+#   server's own timers add hits at about 5 a second even with no statement running. Misses are
+#   compared only for the 70 cases below listed as hits: at least 3 recordings reached them, every
+#   one with the two reads under 0.1 s apart, and all of them agree on their misses; every other
+#   case is listed as both. README.md, "Which counts family 7 compares", gives the evidence.
+# Written by: python3 migration/judge/families/plan_cache/build_list.py --bound 0.1 \
+#   --recording rec1=/Users/colin/seekdb-dev/mysqltest-runs/00b/second-set/05-plan/rec1 \
+#   --recording rec2=/Users/colin/seekdb-dev/mysqltest-runs/00b/second-set/05-plan/rec2 \
+#   --recording rec3=/Users/colin/seekdb-dev/mysqltest-runs/00b/second-set/05-plan/rec3 \
+#   --recording rec4=/Users/colin/seekdb-dev/mysqltest-runs/00b/second-set/05-plan/rec4 \
+#   --recording rec5=/Users/colin/seekdb-dev/mysqltest-runs/00b/second-set/05-plan/rec5 \
+#   --recording rec6=/Users/colin/seekdb-dev/mysqltest-runs/00b/second-set/05-plan/rec6 \
+#   --recording rec7=/Users/colin/seekdb-dev/mysqltest-runs/00b/second-set/review/f7-rec7 \
+#   --out-list <this file> --out-tsv <its evidence>
+# rec1: 176 cases counted, no read times: the run from 2026-09-25 13:01:22 to 2026-09-25 14:15:40 lies outside 22:00-23:01
+# rec2: 249 cases counted, read times from work/seekdb_result.json: 23 cases whose two reads span part of 22:00-23:01
+# rec3: 0 cases counted, no read times: the run from 2026-09-27 22:15:20 to 2026-09-27 22:58:31 spans part of 22:00-23:01
+# rec4: 272 cases counted, read times from work/seekdb_result.json: 0 cases whose two reads span part of 22:00-23:01
+# rec5: 62 cases counted, no read times: the run from 2026-09-28 03:24:29 to 2026-09-28 03:43:47 lies outside 22:00-23:01
+# rec6: 171 cases counted, no read times: the run from 2026-09-28 08:41:10 to 2026-09-28 09:51:13 lies outside 22:00-23:01
+# rec7: 271 cases counted, read times from work/seekdb_result.json: 1 cases whose two reads span part of 22:00-23:01
+a_trade_notify both  # reads 0.100 s apart or more in some recording
+a_trade_quick both  # reads 0.100 s apart or more in some recording
+add both  # reads 0.100 s apart or more in some recording
+aggr_bug200109 hits  # misses agree in every recording, every read gap under 0.1 s
+alias2 hits  # misses agree in every recording, every read gap under 0.1 s
+alias3 hits  # misses agree in every recording, every read gap under 0.1 s
+bench_count_distinct both  # reads 0.100 s apart or more in some recording
+big_trans_with_mutil_redo both  # reads 0.100 s apart or more in some recording
+bug200747 both  # reads 0.100 s apart or more in some recording
+bug210026 hits  # misses agree in every recording, every read gap under 0.1 s
+bug233498_rename_table_jianming hits  # misses agree in every recording, every read gap under 0.1 s
+bug5910265_update_orderby_limit_dilang hits  # misses agree in every recording, every read gap under 0.1 s
+bug_setEmptyPwd both  # reads 0.100 s apart or more in some recording
+bulk_insert both  # reads 0.100 s apart or more in some recording
+chinese hits  # misses agree in every recording, every read gap under 0.1 s
+column_alias hits  # misses agree in every recording, every read gap under 0.1 s
+compare hits  # misses agree in every recording, every read gap under 0.1 s
+connection both  # reads 0.100 s apart or more in some recording
+count hits  # misses agree in every recording, every read gap under 0.1 s
+create_using_type hits  # misses agree in every recording, every read gap under 0.1 s
+createsql both  # reads 0.100 s apart or more in some recording
+createvarchar both  # reads 0.100 s apart or more in some recording
+datatype_java hits  # misses agree in every recording, every read gap under 0.1 s
+ddlrollback both  # reads 0.100 s apart or more in some recording
+dist_nest_loop_simple both  # reads 0.100 s apart or more in some recording
+distinct hits  # misses agree in every recording, every read gap under 0.1 s
+driver5114_bug hits  # misses agree in every recording, every read gap under 0.1 s
+duplicate_key hits  # misses agree in every recording, every read gap under 0.1 s
+empty_input hits  # misses agree in every recording, every read gap under 0.1 s
+empty_table hits  # misses agree in every recording, every read gap under 0.1 s
+escape hits  # misses agree in every recording, every read gap under 0.1 s
+except hits  # misses agree in every recording, every read gap under 0.1 s
+explain hits  # misses agree in every recording, every read gap under 0.1 s
+fin both  # reads 0.100 s apart or more in some recording
+func_group_1 both  # reads 0.100 s apart or more in some recording
+func_group_5 hits  # misses agree in every recording, every read gap under 0.1 s
+func_group_6 both  # reads 0.100 s apart or more in some recording
+func_group_7 both  # reads 0.100 s apart or more in some recording
+generated_column both  # reads 0.100 s apart or more in some recording
+get hits  # misses agree in every recording, every read gap under 0.1 s
+h hits  # misses agree in every recording, every read gap under 0.1 s
+identifier_name_length hits  # misses agree in every recording, every read gap under 0.1 s
+idx_const_basic_one_bool both  # reads 0.100 s apart or more in some recording
+idx_unique_many_idx_one_ins both  # reads 0.100 s apart or more in some recording
+index_14_hint both  # reads 0.100 s apart or more in some recording
+index_47_NULL both  # reads 0.100 s apart or more in some recording
+index_49_alias both  # reads 0.100 s apart or more in some recording
+information_schema both  # reads 0.100 s apart or more in some recording
+intersect both  # reads 0.100 s apart or more in some recording
+join_basic both  # reads 0.100 s apart or more in some recording
+join_equivalent_transfer hits  # misses agree in every recording, every read gap under 0.1 s
+join_many_table both  # reads 0.100 s apart or more in some recording
+join_many_table_single_field both  # reads 0.100 s apart or more in some recording
+join_null hits  # misses agree in every recording, every read gap under 0.1 s
+join_star hits  # misses agree in every recording, every read gap under 0.1 s
+join_using1 hits  # misses agree in every recording, every read gap under 0.1 s
+jp_length_utf8 both  # reads 0.100 s apart or more in some recording
+largetimeout hits  # misses agree in every recording, every read gap under 0.1 s
+limit hits  # misses agree in every recording, every read gap under 0.1 s
+minitest both  # reads 0.100 s apart or more in some recording
+ms_lose_rollback hits  # misses agree in every recording, every read gap under 0.1 s
+non_reserved_keyword hits  # misses agree in every recording, every read gap under 0.1 s
+outer_join_where_is_null hits  # misses agree in every recording, every read gap under 0.1 s
+parallel_insert both  # reads 0.100 s apart or more in some recording
+pk_num_boundary hits  # misses agree in every recording, every read gap under 0.1 s
+range both  # reads 0.100 s apart or more in some recording
+rename_table2 both  # reads 0.100 s apart or more in some recording
+safe_null_test hits  # misses agree in every recording, every read gap under 0.1 s
+select_basic both  # reads 0.100 s apart or more in some recording
+sfu both  # reads 0.100 s apart or more in some recording
+sfu_norow_alias both  # reads 0.100 s apart or more in some recording
+special_hook hits  # misses agree in every recording, every read gap under 0.1 s
+special_stmt hits  # misses agree in every recording, every read gap under 0.1 s
+sq_from hits  # misses agree in every recording, every read gap under 0.1 s
+sq_from_2 both  # reads 0.100 s apart or more in some recording
+sqlancer_optimizer_regressions both  # reads 0.100 s apart or more in some recording
+substring_index hits  # misses agree in every recording, every read gap under 0.1 s
+table_column_related_views both  # reads 0.100 s apart or more in some recording
+topk both  # reads 0.100 s apart or more in some recording
+trans_ac hits  # misses agree in every recording, every read gap under 0.1 s
+truncate_table both  # reads 0.100 s apart or more in some recording
+trx_4 hits  # misses agree in every recording, every read gap under 0.1 s
+trx_5 both  # reads 0.100 s apart or more in some recording
+trx_6 both  # reads 0.100 s apart or more in some recording
+trx_timeout both  # reads 0.100 s apart or more in some recording
+trx_timeout_bug both  # reads 0.100 s apart or more in some recording
+two_order_by both  # reads 0.100 s apart or more in some recording
+update_behavior both  # reads 0.100 s apart or more in some recording
+update_column_use_other hits  # misses agree in every recording, every read gap under 0.1 s
+update_delete_limit_unique_key both  # reads 0.100 s apart or more in some recording
+update_range both  # reads 0.100 s apart or more in some recording
+view both  # reads 0.100 s apart or more in some recording
+view_2 both  # reads 0.100 s apart or more in some recording
+ai_function.ai_model_ddl hits  # misses agree in every recording, every read gap under 0.1 s
+ai_function.ai_model_endpoint_ddl hits  # misses agree in every recording, every read gap under 0.1 s
+ai_function.ai_model_lower_case_name_mysql0 hits  # misses agree in every recording, every read gap under 0.1 s
+ai_function.ai_model_lower_case_name_mysql1 hits  # misses agree in every recording, every read gap under 0.1 s
+ai_function.ai_prompt both  # reads 0.100 s apart or more in some recording
+array.array_arith_op_mysql both  # reads 0.100 s apart or more in some recording
+array.array_ddl_mysql both  # reads 0.100 s apart or more in some recording
+datatype.bool hits  # misses agree in every recording, every read gap under 0.1 s
+datatype.div both  # reads 0.100 s apart or more in some recording
+datatype.minus both  # reads 0.100 s apart or more in some recording
+datatype.null2 hits  # misses agree in every recording, every read gap under 0.1 s
+datatype.replace both  # reads 0.100 s apart or more in some recording
+datatype.type_varchar_2 hits  # misses agree in every recording, every read gap under 0.1 s
+deadlock_detector.trans_deadlock_basic both  # reads 0.100 s apart or more in some recording
+delete.delete both  # reads 0.100 s apart or more in some recording
+delete.deleteV2 hits  # misses agree in every recording, every read gap under 0.1 s
+delete.delete_from_mysql both  # reads 0.100 s apart or more in some recording
+delete.delete_range both  # reads 0.100 s apart or more in some recording
+executor.basic both  # reads 0.100 s apart or more in some recording
+executor.full_join both  # reads 0.100 s apart or more in some recording
+executor.trx both  # reads 0.100 s apart or more in some recording
+expr.collation_expr both  # reads 0.100 s apart or more in some recording
+expr.expr_ceil hits  # misses agree in every recording, every read gap under 0.1 s
+expr.expr_floor hits  # misses agree in every recording, every read gap under 0.1 s
+expr.expr_instr both  # reads 0.100 s apart or more in some recording
+expr.expr_locate both  # reads 0.100 s apart or more in some recording
+expr.expr_nseq hits  # misses agree in every recording, every read gap under 0.1 s
+expr.expr_position both  # reads 0.100 s apart or more in some recording
+expr.func_equal hits  # misses agree in every recording, every read gap under 0.1 s
+expr.func_length hits  # misses agree in every recording, every read gap under 0.1 s
+expr.func_regexp both  # reads 0.100 s apart or more in some recording
+expr.mul both  # reads 0.100 s apart or more in some recording
+foreign_key.dml_147 both  # reads 0.100 s apart or more in some recording
+fork_table.fork_table_basic both  # reads 0.100 s apart or more in some recording
+fork_table.fork_table_build_data both  # reads 0.100 s apart or more in some recording
+fork_table.fork_table_chain both  # reads 0.100 s apart or more in some recording
+fork_table.fork_table_cow both  # reads 0.100 s apart or more in some recording
+fork_table.fork_table_ddl both  # reads 0.100 s apart or more in some recording
+fork_table.fork_table_error both  # reads 0.100 s apart or more in some recording
+fork_table.fork_table_fulltext both  # reads 0.100 s apart or more in some recording
+fork_table.fork_table_lock both  # reads 0.100 s apart or more in some recording
+fork_table.fork_table_merge both  # reads 0.100 s apart or more in some recording
+fork_table.fork_table_partition both  # reads 0.100 s apart or more in some recording
+fork_table.fork_table_privilege both  # reads 0.100 s apart or more in some recording
+fork_table.fork_table_snapshot both  # reads 0.100 s apart or more in some recording
+fork_table.fork_table_vector both  # reads 0.100 s apart or more in some recording
+fork_table.fork_table_with_constraints both  # reads 0.100 s apart or more in some recording
+fork_table.fork_table_with_index both  # reads 0.100 s apart or more in some recording
+fork_table.fork_table_with_lob both  # reads 0.100 s apart or more in some recording
+fts_index.basic_dml both  # reads 0.100 s apart or more in some recording
+fts_index.basic_dml_sequel both  # reads 0.100 s apart or more in some recording
+fts_index.cn_word both  # reads 0.100 s apart or more in some recording
+fts_index.create_fts_index_afterward both  # reads 0.100 s apart or more in some recording
+fts_index.create_table_with_fts_index both  # reads 0.100 s apart or more in some recording
+fts_index.domain_id_merge_with_compare_null both  # reads 0.100 s apart or more in some recording
+fts_index.drop_index both  # reads 0.100 s apart or more in some recording
+fts_index.index_view both  # reads 0.100 s apart or more in some recording
+fts_index.load_data both  # reads 0.100 s apart or more in some recording
+fts_index.offline_ddl_with_fts_index both  # reads 0.100 s apart or more in some recording
+fts_index.online_ddl_on_table_with_fts_index both  # reads 0.100 s apart or more in some recording
+fts_index.parser_properties both  # reads 0.100 s apart or more in some recording
+fts_index.partitioned_simple_query both  # reads 0.100 s apart or more in some recording
+fts_index.simple_query both  # reads 0.100 s apart or more in some recording
+fts_index.tokenize_function hits  # misses agree in every recording, every read gap under 0.1 s
+geometry.__all_tenant_spatial_reference_systems both  # reads 0.100 s apart or more in some recording
+geometry.create_spatial_index_mysql both  # reads 0.100 s apart or more in some recording
+geometry.geometry_basic_mysql both  # reads 0.100 s apart or more in some recording
+geometry.geometry_bugfix_mysql both  # reads 0.100 s apart or more in some recording
+geometry.geometry_cast_mysql both  # reads 0.100 s apart or more in some recording
+geometry.geometry_compare_mysql both  # reads 0.100 s apart or more in some recording
+geometry.geometry_ddl_dml_postgis both  # reads 0.100 s apart or more in some recording
+geometry.geometry_dml_mysql both  # reads 0.100 s apart or more in some recording
+geometry.geometry_filter_mysql both  # reads 0.100 s apart or more in some recording
+geometry.geometry_function_mysql both  # reads 0.100 s apart or more in some recording
+geometry.geometry_function_postgis both  # reads 0.100 s apart or more in some recording
+geometry.geometry_generated_col_mysql both  # reads 0.100 s apart or more in some recording
+geometry.geometry_index1_mysql both  # reads 0.100 s apart or more in some recording
+geometry.geometry_index_mysql both  # reads 0.100 s apart or more in some recording
+geometry.geometry_partition_table_mysql both  # reads 0.100 s apart or more in some recording
+geometry.geometry_type_mysql both  # reads 0.100 s apart or more in some recording
+geometry.spatial_relation_join_mysql both  # reads 0.100 s apart or more in some recording
+geometry.st_area_mysql both  # reads 0.100 s apart or more in some recording
+geometry.st_astext_mysql both  # reads 0.100 s apart or more in some recording
+geometry.st_aswkb_mysql both  # reads 0.100 s apart or more in some recording
+geometry.st_buffer_mysql both  # reads 0.100 s apart or more in some recording
+geometry.st_buffer_mysql_from_pg both  # reads 0.100 s apart or more in some recording
+geometry.st_covers_mysql both  # reads 0.100 s apart or more in some recording
+geometry.st_distance_mysql both  # reads 0.100 s apart or more in some recording
+geometry.st_distance_sphere_mysql both  # reads 0.100 s apart or more in some recording
+geometry.st_dwithin_mysql both  # reads 0.100 s apart or more in some recording
+geometry.st_geometry_columns both  # reads 0.100 s apart or more in some recording
+geometry.st_geomfromewkb_mysql both  # reads 0.100 s apart or more in some recording
+geometry.st_geomfromtext_mysql both  # reads 0.100 s apart or more in some recording
+geometry.st_geomfromwkb_mysql both  # reads 0.100 s apart or more in some recording
+geometry.st_intersects_mysql both  # reads 0.100 s apart or more in some recording
+geometry.st_intersects_mysql_from_pg both  # reads 0.100 s apart or more in some recording
+geometry.st_latitude_mysql both  # reads 0.100 s apart or more in some recording
+geometry.st_longitude_mysql both  # reads 0.100 s apart or more in some recording
+geometry.st_point_mysql both  # reads 0.100 s apart or more in some recording
+geometry.st_srid_mysql both  # reads 0.100 s apart or more in some recording
+geometry.st_transform_mysql both  # reads 0.100 s apart or more in some recording
+geometry.st_x_mysql both  # reads 0.100 s apart or more in some recording
+geometry.st_y_mysql both  # reads 0.100 s apart or more in some recording
+global_index.global_index_lookup_1 both  # reads 0.100 s apart or more in some recording
+global_index.global_index_lookup_2 both  # reads 0.100 s apart or more in some recording
+global_index.global_index_lookup_3 both  # reads 0.100 s apart or more in some recording
+global_index.global_index_lookup_4 both  # reads 0.100 s apart or more in some recording
+global_index.global_index_lookup_5 both  # reads 0.100 s apart or more in some recording
+global_index.global_index_lookup_6 both  # reads 0.100 s apart or more in some recording
+global_index.global_index_select both  # reads 0.100 s apart or more in some recording
+groupby.group_by_2 hits  # misses agree in every recording, every read gap under 0.1 s
+groupby.group_by_4 hits  # misses agree in every recording, every read gap under 0.1 s
+groupby.group_by_basic both  # reads 0.100 s apart or more in some recording
+hierarchical_query.hierarchical_basic_mysql hits  # misses agree in every recording, every read gap under 0.1 s
+histogram.dbms_stats_delete_stats both  # reads 0.100 s apart or more in some recording
+histogram.stats_farm both  # reads 0.100 s apart or more in some recording
+histogram.stats_lock_and_unlock both  # reads 0.100 s apart or more in some recording
+histogram.stats_prefs_manager both  # reads 0.100 s apart or more in some recording
+histogram.stats_set_table_stats both  # reads 0.100 s apart or more in some recording
+information_schema.information_schema_desc both  # misses differ although every read gap is under 0.1 s
+storage.rowkey_is_char hits  # misses agree in every recording, every read gap under 0.1 s
+storage.rowkey_is_int both  # reads 0.100 s apart or more in some recording
+storage.rowkey_is_null hits  # misses agree in every recording, every read gap under 0.1 s
+subquery.idx_with_const_expr_21_subquery_dilang both  # reads 0.100 s apart or more in some recording
+subquery.optimizer_subquery_bug both  # reads 0.100 s apart or more in some recording
+subquery.order_by_subquery both  # reads 0.100 s apart or more in some recording
+subquery.rqg_ob_subquery_semijoin_nested_sql_parameterization hits  # misses agree in every recording, every read gap under 0.1 s
+subquery.rqg_subquery_materialization_oop both  # reads 0.100 s apart or more in some recording
+subquery.rqg_subquery_semijoin_mismatch both  # reads 0.100 s apart or more in some recording
+subquery.rqg_subquery_semijoin_nested_timeout both  # reads 0.100 s apart or more in some recording
+subquery.spf_bug13044302 both  # reads 0.100 s apart or more in some recording
+subquery.subquery both  # reads 0.100 s apart or more in some recording
+subquery.subquery_sj_firstmatch both  # reads 0.100 s apart or more in some recording
+subquery.subquery_sj_innodb both  # reads 0.100 s apart or more in some recording
+sys_vars.tx_isolation_basic hits  # misses agree in every recording, every read gap under 0.1 s
+system_variable.autocommit both  # reads 0.100 s apart or more in some recording
+table_redefinition.alter_primary_key both  # reads 0.100 s apart or more in some recording
+table_redefinition.alter_table_with_triggers both  # reads 0.100 s apart or more in some recording
+trx.bug_different_tranid_intrx both  # reads 0.100 s apart or more in some recording
+trx.repeatable_read_transaction both  # reads 0.100 s apart or more in some recording
+trx.serializable_constrains both  # reads 0.100 s apart or more in some recording
+trx.serializable_transaction both  # reads 0.100 s apart or more in some recording
+trx.trans_weak_read both  # reads 0.100 s apart or more in some recording
+type_date.add_timestamp_column hits  # misses agree in every recording, every read gap under 0.1 s
+type_date.datetime_java hits  # misses agree in every recording, every read gap under 0.1 s
+type_date.daylight_saving_time hits  # misses agree in every recording, every read gap under 0.1 s
+type_date.expr_date_add_sub both  # reads 0.100 s apart or more in some recording
+type_date.test_select_usec_to_time hits  # misses agree in every recording, every read gap under 0.1 s
+type_date.timefuncnull hits  # misses agree in every recording, every read gap under 0.1 s
+type_date.timestamp2 hits  # misses agree in every recording, every read gap under 0.1 s
+type_date.type_create_time both  # reads 0.100 s apart or more in some recording
+type_date.type_modify_time both  # reads 0.100 s apart or more in some recording
+type_date.updaterowkeymoditime hits  # misses agree in every recording, every read gap under 0.1 s
+update.rowkey_update_datatype_convert both  # reads 0.100 s apart or more in some recording
+update.update_ignore both  # reads 0.100 s apart or more in some recording
+vector_index.all_virtual_vector_index_info both  # reads 0.100 s apart or more in some recording
+vector_index.create_table_with_vector_index both  # reached by 2 recordings
+vector_index.drop_vector_index both  # reached by 2 recordings
+vector_index.fix_rebuild_or_post_create_hung both  # reached by 2 recordings
+vector_index.rebuild_vector_index both  # reached by 2 recordings
+vector_index.sparse_vector_index_vsag_ddl both  # reached by 2 recordings
+vector_index.sparse_vector_index_vsag_query both  # reached by 2 recordings
+vector_index.vector_calc_gbk_mysql both  # reached by 2 recordings
+vector_index.vector_calc_utf8_mysql both  # reached by 2 recordings
+vector_index.vector_index_basic both  # reached by 2 recordings
+vector_index.vector_index_bugfix1 both  # reached by 2 recordings
+vector_index.vector_index_ivfflat_basic both  # reached by 2 recordings
+vector_index.vector_index_ivfflat_dml both  # reached by 2 recordings
+vector_index.vector_index_ivfflat_post_create both  # reached by 2 recordings
+vector_index.vector_index_ivfflat_scan both  # reached by 2 recordings
+vector_index.vector_index_offline_ddl both  # reached by 2 recordings
+vector_index.vector_index_partitioned both  # reached by 2 recordings
+vector_index.vector_index_post_create both  # reached by 2 recordings
+vector_index.vector_index_rebuild both  # reached by 2 recordings
+vector_index.vector_ivf_index_with_filter both  # reached by 2 recordings
+vector_index.vector_similarity both  # reached by 2 recordings
+window_function.farm both  # reached by 2 recordings
+yonyou_test.yonyou both  # reached by 2 recordings
+yonyou_test.yonyou_online_ddl both  # reached by 2 recordings

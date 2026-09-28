@@ -41,6 +41,7 @@ INIT_FILES = {
     "reduced": (REDUCED_INIT_DIR / "init.sql", REDUCED_INIT_DIR / "init_user.sql"),
 }
 DEFAULT_PORTS = "3891,3892,3893,3894"
+POLL_SECONDS = 0.2
 COPIED_KEYS = (
     "seekdb",
     "seekdb_sha256",
@@ -61,6 +62,12 @@ COPIED_KEYS = (
     "fresh_instance_per_case",
 )
 PER_SLICE_KEYS = ("repo_head",)
+RECORDING_KEYS = tuple(
+    sorted(
+        (set(runner.RECORDING_INPUT_KEYS) | set(runner.RECORDING_NOTE_KEYS))
+        - set(COPIED_KEYS)
+    )
+)
 SHARED_KEYS = tuple(
     sorted(
         (
@@ -273,6 +280,7 @@ def merge(record_dirs, out_dir):
     manifest_path = out_dir / "manifest.json"
     manifest_path.open("x").close()
     merged = dict((key, first.get(key)) for key in COPIED_KEYS)
+    merged.update((key, first[key]) for key in RECORDING_KEYS if key in first)
     for key in PER_SLICE_KEYS:
         values = [manifest.get(key) for _, manifest, _ in slices]
         merged[key] = values[0] if all(value == values[0] for value in values) else None
@@ -445,8 +453,13 @@ def command_run(args):
     else:
         for entry in entries:
             start_slice(entry, environment)
-        for entry in entries:
-            finish_slice(entry)
+        pending = list(entries)
+        while pending:
+            for entry in [item for item in pending if item["process"].poll() is not None]:
+                finish_slice(entry)
+                pending.remove(entry)
+            if pending:
+                time.sleep(POLL_SECONDS)
     wall_seconds = round(time.monotonic() - started, 3)
     merged_dir = args.out_dir / "merged"
     merged = None

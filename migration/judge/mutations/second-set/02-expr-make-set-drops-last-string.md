@@ -102,4 +102,20 @@ archived reference again first. Revert the patch afterwards.
 
 ## Caught by (filled after the run)
 
-Not run yet.
+Caught by family 5 on 2026-09-28 (README.md in this directory). The corpus recorded on the mutated
+build, compared with 02-expr/r15, exits 1 with s1_unreached_0053 and s1_unreached_0054 `different` and
+the other 391 files identical: 104 result rows in 41 statements lose their last string, as predicted
+above. The metadata lines of those 41 statements change too, but only in mysqltest's `Max length`
+column, which reports the longest value returned; type and length stay. `check-recording` finds 0
+problems.
+
+The 272 configured cases on the mutated build: only quarantined cases failed. Outputs:
+/Users/colin/seekdb-dev/mysqltest-runs/00b/second-set/mutations/02-expr-make-set-drops-last-string/.
+
+Run again on 2026-09-29, after the corpus turned the plan cache back on (families/expressions/README.md,
+"Live check, 2026-09-28: the plan cache back on"): the patch was built again in the reference
+worktree (review/mutations/build.sh; seekdb sha256 e7ee685f...; the worktree back to
+reference-build.patch afterwards), and the corpus recorded on it (review/mut02-expr, 41 s, no failed
+file). Against the new C++ recording expr-r18, `compare` exits 1: s1_unreached_0053 and
+s1_unreached_0054 `different`, the other 391 files identical. The same 41 MAKE_SET statements differ
+as before, 104 value rows and their `Max length`; `check-recording` finds 0 problems.

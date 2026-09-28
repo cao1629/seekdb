@@ -1,0 +1,13 @@
+diff --git a/src/sql/plan_cache/ob_plan_cache.cpp b/src/sql/plan_cache/ob_plan_cache.cpp
+--- a/src/sql/plan_cache/ob_plan_cache.cpp
++++ b/src/sql/plan_cache/ob_plan_cache.cpp
+@@ -1957,6 +1957,9 @@ OB_INLINE int ObPlanCache::construct_plan_cache_key(ObSQLSessionInfo &session,
+   pc_key.config_str_ = session.get_config_in_pc_str();
+   OZ (session.get_sys_var_config_hash_val(pc_key.sys_var_config_hash_val_));
+   pc_key.enable_mysql_compatible_dates_ = session.enable_mysql_compatible_dates();
++  if (!session.is_inner()) {
++    pc_key.sessid_ = session.get_sid();
++  }
+   return ret;
+ }
+ 

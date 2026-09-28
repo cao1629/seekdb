@@ -1,0 +1,89 @@
+--disable_abort_on_error
+--enable_warnings
+--echo # s6_edge 2
+SET NAMES utf8mb4 COLLATE utf8mb4_general_ci, ob_enable_plan_cache = 0, ob_query_timeout = 600000000, ob_trx_timeout = 600000000;
+--echo errno $mysql_errno
+SELECT tokenize('测试测试测试测试', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('测试测试测试测试', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('测试测试测试测试', 'ik') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('哈哈哈哈哈哈哈哈', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('哈哈哈哈哈哈哈哈', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('哈哈哈哈哈哈哈哈', 'ik') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('aaaa aaaa aaaa', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('aaaa aaaa aaaa', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('aaaa aaaa aaaa', 'ik') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('中国中国中国人民人民', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('中国中国中国人民人民', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('中国中国中国人民人民', 'ik') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('好好学习天天向上', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('好好学习天天向上', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('好好学习天天向上', 'ik') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('ABC abc Abc aBC', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('ABC abc Abc aBC', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('ABC abc Abc aBC', 'ik') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('ＡＢＣ ａｂｃ', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('ＡＢＣ ａｂｃ', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('ＡＢＣ ａｂｃ', 'ik') AS t;
+--echo errno $mysql_errno
+--echo # inputs that are not utf8mb4 text
+SELECT tokenize(NULL, 'ik') AS t;
+--echo errno $mysql_errno
+SELECT tokenize(NULL, 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS t;
+--echo errno $mysql_errno
+SELECT tokenize(_binary '中华人民共和国', 'ik') AS t;
+--echo errno $mysql_errno
+SELECT tokenize(CAST('中华人民共和国' AS BINARY), 'ik') AS t;
+--echo errno $mysql_errno
+SELECT tokenize(X'E4B8AD', 'ik') AS t;
+--echo errno $mysql_errno
+SELECT tokenize(123, 'ik') AS t;
+--echo errno $mysql_errno
+SELECT tokenize(12.5, 'ik') AS t;
+--echo errno $mysql_errno
+SELECT tokenize(_utf8mb4 X'E4B8', 'ik') AS t;
+--echo errno $mysql_errno
+SELECT tokenize(_utf8mb4 X'E4B8ADE59BBD', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS t;
+--echo errno $mysql_errno
+--echo # parser names
+SELECT tokenize('中华人民共和国', 'IK') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('中华人民共和国', ' ik ') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('中华人民共和国', _utf8mb4 'ik' COLLATE utf8mb4_bin) AS t;
+--echo errno $mysql_errno
+SELECT tokenize('中华人民共和国', CONCAT('i', 'k')) AS t;
+--echo errno $mysql_errno
+SELECT tokenize('中华人民共和国', 'ik.1') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('中华人民共和国', 'ikk') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('中华人民共和国', 'i k') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('中华人民共和国', '') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('中华人民共和国', ' ') AS t;
+--echo errno $mysql_errno
+SELECT tokenize() AS t;
+--echo errno $mysql_errno
+SELECT tokenize('中华人民共和国', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]', 'x') AS t;
+--echo errno $mysql_errno

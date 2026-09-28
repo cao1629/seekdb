@@ -64,7 +64,6 @@ STOP_SIGNALS = (signal.SIGTERM, signal.SIGINT)
 CLIENT_ERROR_PATTERN = re.compile(
     r"^ERROR (\d+) \(([0-9A-Za-z]{5})\)(?: at line \d+)?: (.*)$"
 )
-NOT_RECORDED = "<not recorded>"
 NAMED_VARYING_VALUES = {
     11049: (("mem_hold", re.compile(r"(mem_hold=)(\d+)")),),
 }
@@ -253,7 +252,6 @@ def canonical_message(code, message):
         match = pattern.search(message)
         if match is not None:
             values[name] = int(match.group(2))
-            message = message[: match.start(2)] + NOT_RECORDED + message[match.end(2) :]
     return message, values
 
 
@@ -269,10 +267,10 @@ def parse_client_error(error_output):
     return ClientError(code, match.group(2), message, values)
 
 
-def report_not_recorded(args, values):
+def report_varying(args, values):
     for name in sorted(values):
         print(
-            "not recorded: {} {}={}".format(args.scenario_name, name, values[name]),
+            "varying value: {} {}={}".format(args.scenario_name, name, values[name]),
             flush=True,
         )
 
@@ -291,7 +289,7 @@ def expect_error(args, recording, statement, expected_code):
     recording.line(
         "ERROR {} ({}): {}".format(error.code, error.sqlstate, error.message)
     )
-    report_not_recorded(args, error.values)
+    report_varying(args, error.values)
     if not recording.check(
         "the statement failed with error {}".format(expected_code),
         error.code == expected_code,
@@ -632,8 +630,8 @@ def scenario_query_memory_limit(args, recording):
     )
     recording.line(
         "-- mem_hold is the request's memory hold at the check that failed; it "
-        "follows allocator block sizes and thread-local page caches, so it is not "
-        "recorded"
+        "follows allocator block sizes and thread-local page caches, so compare "
+        "--mask mem-hold leaves the number after mem_hold= out of the comparison"
     )
     recording.check(
         "the message names mem_limit={}, {}% of memory_budget".format(
@@ -642,7 +640,7 @@ def scenario_query_memory_limit(args, recording):
         "mem_limit={},".format(QUERY_MEMORY_LIMIT_BYTES) in error.message,
     )
     recording.check(
-        "the message's mem_hold (not recorded) is at least its mem_limit",
+        "the message's mem_hold is at least its mem_limit",
         error.values.get("mem_hold", -1) >= QUERY_MEMORY_LIMIT_BYTES,
     )
     execute(args, recording, "select count(*) from t_qm;")
@@ -722,9 +720,13 @@ MEMSTORE_REFUSED_WRITES = (
     "delete from t_ms where id = 1;",
 )
 MEMSTORE_QUERY = (
-    "select memstore_used, memstore_limit from oceanbase.__all_virtual_memstore_info;"
+    "select memstore_used, memstore_limit from oceanbase.__all_virtual_memstore_info "
+    "limit 1;"
 )
-MEMSTORE_READ_REASON = "the memstore used by inner tables varies"
+MEMSTORE_READ_REASON = (
+    "__all_virtual_memstore_info never ends its rows on the reference, so a read "
+    "without limit 1 fails with 4019"
+)
 
 
 def memstore_state(args):
@@ -738,14 +740,12 @@ def memstore_state(args):
 
 
 def read_memstore(args, recording):
-    recording.line(
-        "-- read, output not recorded because {}: {}".format(
-            MEMSTORE_READ_REASON, MEMSTORE_QUERY
-        )
-    )
+    recording.line("-- read with limit 1, because {}".format(MEMSTORE_READ_REASON))
+    recording.line(MEMSTORE_QUERY)
     state = memstore_state(args)
     if state is None:
         raise ScenarioFailed("cannot read {}".format(MEMSTORE_QUERY))
+    recording.line("memstore_used={} memstore_limit={}".format(state[0], state[1]))
     return state
 
 
@@ -753,8 +753,7 @@ def scenario_memstore_below_reserve(args, recording):
     common_setup(args, recording)
     for step in MEMSTORE_BELOW_RESERVE_SETUP:
         execute(args, recording, step)
-    used, _ = read_memstore(args, recording)
-    report_not_recorded(args, {"memstore_used": used})
+    read_memstore(args, recording)
     execute(args, recording, "alter system set memstore_memory_limit = '64M';")
     for statement in MEMSTORE_REFUSED_WRITES:
         wait(recording, CHECK_CACHE_SETTLE_SECONDS, MEMSTORE_WAIT_REASON)
@@ -789,20 +788,18 @@ def scenario_memstore_fill(args, recording):
     limit_mb = (used + MB - 1) // MB + MEMSTORE_REPLAY_RESERVE_MB + MEMSTORE_MARGIN_MB
     user_limit = (limit_mb - MEMSTORE_REPLAY_RESERVE_MB) * MB
     recording.line(
-        "-- alter system set memstore_memory_limit = '<n>M'; with n, not recorded, "
-        "the memstore_used above rounded up to MB plus {} MB (the replay reserve) "
-        "plus {} MB".format(MEMSTORE_REPLAY_RESERVE_MB, MEMSTORE_MARGIN_MB)
+        "-- n is the memstore_used above rounded up to MB plus {} MB (the replay "
+        "reserve) plus {} MB".format(MEMSTORE_REPLAY_RESERVE_MB, MEMSTORE_MARGIN_MB)
     )
-    statement = "alter system set memstore_memory_limit = '{}M';".format(limit_mb)
-    code, output, error_output = run_client(args, statement, ("--table",))
-    if code != 0:
-        fail_statement(recording, [statement], code, output, error_output)
-    recording.append(output)
+    execute(
+        args,
+        recording,
+        "alter system set memstore_memory_limit = '{}M';".format(limit_mb),
+    )
     recording.line(
         "-- chunks of 1000 rows of 1000 bytes, for i = 0, 1, 2, ... until one is "
         "refused, at most {}, each after a {} s pause, longer than the 100 ms a "
-        "worker thread keeps a 'not full' answer; the number of accepted chunks is "
-        "not recorded: {}".format(
+        "worker thread keeps a 'not full' answer: {}".format(
             MEMSTORE_MAX_CHUNKS,
             MEMSTORE_CHUNK_PAUSE_SECONDS,
             MEMSTORE_CHUNK.format("1000 * i"),
@@ -822,16 +819,7 @@ def scenario_memstore_fill(args, recording):
             fail_statement(recording, [chunk], code, output, error_output)
         break
     after = memstore_state(args) if error is not None else None
-    values = {
-        "memstore_used": used,
-        "memstore_memory_limit_mb": limit_mb,
-        "accepted_chunks": accepted,
-    }
-    if after is not None:
-        values["memstore_used_after_refusal"] = after[0]
-        values["memstore_limit_after_refusal"] = after[1]
-        values["used_after_refusal_above_limit_minus_reserve"] = after[0] - user_limit
-    report_not_recorded(args, values)
+    recording.line("-- accepted chunks: {}".format(accepted))
     recording.check(
         "at least {} chunks were accepted".format(MEMSTORE_MIN_CHUNKS),
         accepted >= MEMSTORE_MIN_CHUNKS,
@@ -849,12 +837,11 @@ def scenario_memstore_fill(args, recording):
         error.code == ERROR_SERVER_RUNTIME_OUT_OF_MEM,
     ):
         raise ScenarioFailed("the refused chunk failed with {}".format(error.code))
-    recording.line(
-        "-- read right after the refused chunk, output not recorded because it "
-        "follows the memstore used above: {}".format(MEMSTORE_QUERY)
-    )
+    recording.line("-- read right after the refused chunk, with limit 1")
+    recording.line(MEMSTORE_QUERY)
     if after is None:
         raise ScenarioFailed("cannot read {}".format(MEMSTORE_QUERY))
+    recording.line("memstore_used={} memstore_limit={}".format(after[0], after[1]))
     recording.check(
         "memstore_limit is the n MB set above", after[1] == limit_mb * MB
     )

@@ -1,0 +1,112 @@
+# Row-order mask list (compare --mask row-order): the SELECTs whose rows the reference returns in an order that
+#   a hash operator decides, confirmed against the reference's plan in each statement's place in its case.
+# Produced by: python3 -B migration/judge/harness/second-set/hash_order_confirm.py confirm --tests /Users/colin/seekdb-dev/mysqltest-runs/00b/second-set/07-masks/explain-tests-t5 --recording /Users/colin/seekdb-dev/mysqltest-runs/00b/second-set/07-masks/explain-rec-t5/rec --draft-out /Users/colin/seekdb-dev/mysqltest-runs/00b/second-set/07-masks/hash-order-draft.txt --out migration/judge/lists/hash-order-selects.txt --decisions migration/judge/families/masks/hash-order-decisions.tsv
+#   which ran the helper migration/judge/harness/second-set/hash_order_list.py (sha256 a821f0873a12e62e94114bec1132f5d527039a5b55b3bdd6a952fa5070f1aa8f) over migration/judge/lists/hash-order-select-candidates.txt (sha256 7046c57804074c5b980bd74dde0105f568d1e27750d4169dfe3e138c50a9909a)
+#   against the checked-in .result files, writing the draft /Users/colin/seekdb-dev/mysqltest-runs/00b/second-set/07-masks/hash-order-draft.txt (sha256 54124208484aeb7e2e4a4bcf57b5d940e6702ba00bdb381e58d9e84e975f3f96),
+#   and read the recording /Users/colin/seekdb-dev/mysqltest-runs/00b/second-set/07-masks/explain-rec-t5/rec of the instrumented copies in /Users/colin/seekdb-dev/mysqltest-runs/00b/second-set/07-masks/explain-tests-t5,
+#   which python3 -B migration/judge/harness/second-set/hash_order_confirm.py prepare --out /Users/colin/seekdb-dev/mysqltest-runs/00b/second-set/07-masks/explain-tests-t5 made (the tool's sha256 then 2d1c74916ae4978183515c771f04caa680f582e3f7f007026008b1242045da1d, now 42b287687af8271971a009ae463427d2b98d733f0b057fc045faf08d7fddb850).
+# The recording: runner .github/script/seekdb/mysqltest_for_seekdb.py run --test-dir /Users/colin/seekdb-dev/mysqltest-runs/00b/second-set/07-masks/explain-tests-t5 --case-list /Users/colin/seekdb-dev/mysqltest-runs/00b/second-set/07-masks/explain-tests-t5.cases --record-dir /Users/colin/seekdb-dev/mysqltest-runs/00b/second-set/07-masks/explain-rec-t5/rec --max-retries 0
+#   --no-ignore-trailing-whitespace, seekdb /Users/colin/seekdb-dev/ref-archive-834bbee1e/seekdb (sha256 db7d918001aa02c45357c37b7bc01179d08a7a01e7e16d32248d25da80282e91), init tools/deploy/init.sql and tools/deploy/init_user.sql.
+# Each case's copy runs the candidate's EXPLAIN and select count(*) from (<candidate>) right before it and
+#   select found_rows() right after it. A draft line is kept when: its case's recorded output without those
+#   blocks is the checked-in .result byte for byte; a HASH operator lies on the plan's path that sets the
+#   output order (from the root through each operator that passes its input's order on, into every join input,
+#   the first input of SUBPLAN FILTER and the last of TEMP TABLE TRANSFORMATION, and stopping at SORT, TOP-N SORT,
+#   the MERGE ... DISTINCT and MERGE GROUP BY operators, SCALAR GROUP BY and merge-sort exchanges); no operator
+#   runs with dop above 1; the statement prints two rows or more; found_rows() gives that number; and
+#   select count(*), where it runs (it fails on duplicate column names), gives it too.
+# Draft lines: 608; decisions: 92 keep, 435 no-hash-order, 2 not-reproduced, 6 parallel, 73 under-two-rows.
+# Per-candidate decisions: migration/judge/families/masks/hash-order-decisions.tsv.
+# Columns (tab-separated): case, occurrence, statement_sha256, rows, next_sha256, test_line, hash_operators, statement.
+except	1	ebfec48b34e4e37d	4	5ced2a5f8970d846	38	HASH EXCEPT DISTINCT	select * from t1 except select 1,1 from t1;
+except	1	69dbd049e48f494d	2	8a38b07f2f1f6417	77	HASH EXCEPT DISTINCT	select * from t4 except select 1,0 from t4 except select 3,1 from t4;
+except	1	d2b8c94d99a024a0	3	ae1033ec2d5b4e63	90	HASH EXCEPT DISTINCT	select c2 from t5 except select c2 from t6;
+intersect	1	65812e01f289f129	3	0714927f89b77e70	82	HASH INTERSECT DISTINCT	select c2 from t5 intersect select c2 from t6;
+join_null	1	cb28050ffae6eb16	4	e77849e33bfcf83b	36	HASH JOIN	select * from t5, t6 where t5.a <=> t6.a;
+join_using1	1	109816d5f1ebbe55	3	10730fc4183deba4	25	HASH JOIN	SELECT * FROM tjuo1 JOIN (SELECT * FROM tjuo2) as tjuo2_alias on tjuo1.c1= tjuo2_alias.c1;
+join_using1	1	c986528679a05cfc	3	1b5358445942c8e6	26	HASH RIGHT OUTER JOIN	SELECT * FROM tjuo1 RIGHT JOIN (SELECT * FROM tjuo2) as tjuo2_alias USING (c1);
+join_using1	1	1b5358445942c8e6	3	1621216628fd4f31	29	HASH JOIN	SELECT * FROM tjuo1 JOIN tjuo2 on tjuo1.c1=tjuo2.c1 JOIN tjuo3 on tjuo2.c2=tjuo3.c2;
+join_using1	1	1621216628fd4f31	3	dafa4465c2fd4b0c	30	HASH RIGHT OUTER JOIN, HASH OUTER JOIN	SELECT * FROM tjuo1 RIGHT JOIN tjuo2 USING (c1) RIGHT JOIN tjuo3 USING (c2);
+join_using1	1	dafa4465c2fd4b0c	3	0228832badd9f0ec	31	HASH RIGHT OUTER JOIN, HASH OUTER JOIN	SELECT * FROM tjuo1 RIGHT JOIN (SELECT * FROM tjuo2) as tjuo2_alias USING (c1) RIGHT JOIN tjuo3 USING (c2);
+join_using1	1	bff6a5a07a1be690	3	f2bbf577faf4f8bc	32	HASH RIGHT OUTER JOIN, HASH OUTER JOIN	SELECT * FROM (SELECT * FROM tjuo1) tjuo1_alias RIGHT JOIN (SELECT * FROM tjuo2) as tjuo2_alias USING (c1) RIGHT JOIN (SELECT * FROM tjuo3) as tjuo3_alias USING (c2);
+join_using1	1	7a93bc84f6e8b4e7	3	9581660efceefccd	33	HASH RIGHT OUTER JOIN, HASH OUTER JOIN	SELECT * FROM (SELECT * FROM tjuo1) tjuo1_alias RIGHT JOIN tjuo2 USING (c1) RIGHT JOIN (SELECT * FROM tjuo3) as tjuo3_alias USING (c2);
+join_using1	1	0d9ebcf7e642d1f4	3	b78dd73439c9c92a	34	HASH RIGHT OUTER JOIN, HASH JOIN	SELECT * FROM (SELECT c2 FROM tjuo1 as i1 JOIN (SELECT * FROM tjuo2) as i2 USING (c1) ) as t12 RIGHT JOIN (SELECT * FROM tjuo3) as tjuo3_alias USING (c2);
+join_using1	1	46d0c0ddaf58097a	3	ecbbfe370e55f653	35	HASH JOIN	SELECT * FROM (SELECT c2 FROM tjuo1 as i1 JOIN (SELECT * FROM tjuo2) as i2 USING (c1) ) as t12;
+minitest	1	bc5b434e80eb9b3e	2	ec522c0d2d248d53	115	HASH DISTINCT	select distinct c2, c2+1 from t1;
+topk	1	9806429c28443fc6	5	70d97fbd9fafbd91	25	HASH GROUP BY	select /*+topk(20 6)*/ avg(c1), avg(c2), avg(c3) from t1 where c2 <10 group by c2 limit 5;
+topk	1	c042f8ce9e477744	12	4613c70a9e7317b3	112	HASH UNION DISTINCT	(select /*+topk(0 4)*/ avg(c1) from t1 where c2 <10 group by c2 order by sum(c2) limit 5) union (select /*+topk(0 10)*/ sum(c1) from t1 where c2 <10 group by c2 order by sum(c2) limit 7);
+ai_function.ai_prompt	1	e75eedae32c4f894	2	42aadd74eb32943e	187	HASH GROUP BY	select ai_prompt(a,b),sum(d) from t1 group by nr;
+ai_function.ai_prompt	1	c0545ad8e00faac3	3	67e1d5211c734147	228	HASH JOIN	select ai_prompt(t1.a) from t1 INNER JOIN t2 on t1.nr = t2.nr;
+ai_function.ai_prompt	1	0d11170353559b51	3	884259efb1627fbb	231	HASH JOIN	WITH t3 AS ( SELECT ai_prompt(t1.a) AS result FROM t1 INNER JOIN t2 ON t1.nr = t2.nr ) SELECT * FROM t3;
+executor.basic	1	b85c5fba01761414	4	68a95de82a6ba629	45	HASH JOIN	select * from t_h5_int t1, t_refered as t2 where t1.a = t2.aa;
+executor.basic	1	db32148dedf9e99d	4	68a95de82a6ba629	46	HASH JOIN	select * from t_h5_int t1, t_refered as t2 where t1.a = t2.a;
+executor.basic	1	753d28415b923aac	4	68a95de82a6ba629	47	HASH JOIN	select * from t_h5_int t1, t_refered as t2 where t1.a = t2.b;
+executor.basic	1	c13ae96cc164e87c	4	df8b4d226ad7b3a4	53	HASH JOIN	select * from t_r4_int t1, t_refered as t2 where t1.a = t2.aa;
+executor.basic	1	d13bbc02bdd30e2b	4	df8b4d226ad7b3a4	54	HASH JOIN	select * from t_r4_int t1, t_refered as t2 where t1.a = t2.a;
+executor.basic	1	2c812d0e0e573722	4	df8b4d226ad7b3a4	55	HASH JOIN	select * from t_r4_int t1, t_refered as t2 where t1.a = t2.b;
+executor.basic	1	1392f25a18dc8fd2	4	d5a1c323c6fa73d6	66	HASH JOIN	select * from t_r4_date t1, t_refered as t2 where t1.c = t2.e;
+executor.basic	1	c8163d97ddab13b7	4	528d64fa97588f19	74	HASH JOIN	select * from t_r4_datetime t1, t_refered as t2 where t1.c = t2.e;
+executor.basic	1	221f7b062abe36d2	3	e193b52ac64a56cd	81	HASH JOIN	select * from t_h5_r4_int_int_datetime t1, t_refered as t2 where t1.a = t2.a and t1.b=t2.a and t1.c = t2.c;
+executor.basic	1	009e253b9a5d1850	2	e193b52ac64a56cd	82	HASH JOIN	select * from t_h5_r4_int_int_datetime t1, t_refered as t2 where t1.a = t2.a and t1.b=t2.a and t1.c = t2.d;
+executor.basic	1	ba4decd7d8cbd22b	4	e193b52ac64a56cd	83	HASH JOIN	select * from t_h5_r4_int_int_datetime t1, t_refered as t2 where t1.a = t2.a and t1.b=t2.a and t1.c = t2.e;
+executor.basic	1	328ee305c67642c0	4	5312f9411e16cdcc	93	HASH JOIN	select * from t_r4_date t1, t_r4_date as t2 where t1.c = t2.c;
+executor.basic	1	285683e78d6df2bc	4	521c1f0f1e78ac0e	94	HASH JOIN	select * from t_r4_date t1, t_r4_datetime as t2 where t1.c = t2.c;
+executor.basic	1	4cc4dbfba12aff5f	4	3f15ed52f52b509f	95	HASH JOIN	select * from t_r4_date t1, t_r4_timestamp as t2 where t1.c = t2.c;
+executor.basic	1	76efdbdcdf5b8297	4	771c0f601166d5f7	98	HASH JOIN	select * from t_r4_datetime t1, t_r4_date as t2 where t1.c = t2.c;
+executor.basic	1	29a41bd37e183f6b	4	53f0304db75dce28	99	HASH JOIN	select * from t_r4_datetime t1, t_r4_datetime as t2 where t1.c = t2.c;
+executor.basic	1	a7a240de50a2a979	4	48d8ab200c3e1b84	100	HASH JOIN	select * from t_r4_datetime t1, t_r4_timestamp as t2 where t1.c = t2.c;
+executor.basic	2	b85c5fba01761414	4	68a95de82a6ba629	102	HASH JOIN	select * from t_h5_int t1, t_refered as t2 where t1.a = t2.aa;
+executor.basic	2	db32148dedf9e99d	4	68a95de82a6ba629	103	HASH JOIN	select * from t_h5_int t1, t_refered as t2 where t1.a = t2.a;
+executor.basic	2	753d28415b923aac	4	68a95de82a6ba629	104	HASH JOIN	select * from t_h5_int t1, t_refered as t2 where t1.a = t2.b;
+executor.basic	2	c13ae96cc164e87c	4	df8b4d226ad7b3a4	109	HASH JOIN	select * from t_r4_int t1, t_refered as t2 where t1.a = t2.aa;
+executor.basic	2	d13bbc02bdd30e2b	4	df8b4d226ad7b3a4	110	HASH JOIN	select * from t_r4_int t1, t_refered as t2 where t1.a = t2.a;
+executor.basic	2	2c812d0e0e573722	4	df8b4d226ad7b3a4	111	HASH JOIN	select * from t_r4_int t1, t_refered as t2 where t1.a = t2.b;
+executor.basic	2	1392f25a18dc8fd2	4	d5a1c323c6fa73d6	122	HASH JOIN	select * from t_r4_date t1, t_refered as t2 where t1.c = t2.e;
+executor.basic	2	c8163d97ddab13b7	4	528d64fa97588f19	130	HASH JOIN	select * from t_r4_datetime t1, t_refered as t2 where t1.c = t2.e;
+executor.basic	1	3fe798eef5f56ca2	4	e193b52ac64a56cd	132	HASH JOIN	select * from t_h5_r4_int_int t1, t_refered as t2 where t1.a = t2.a and t1.b=t2.a;
+executor.basic	1	33c2641f6715710d	4	e193b52ac64a56cd	133	HASH JOIN	select * from t_h5_r4_int_int t1, t_refered as t2 where t1.a = t2.a and t1.b=t2.aa;
+executor.basic	1	83f49fa5818c069b	4	e193b52ac64a56cd	134	HASH JOIN	select * from t_h5_r4_int_int t1, t_refered as t2 where t1.a = t2.a and t1.b=t2.b;
+executor.basic	2	221f7b062abe36d2	3	e193b52ac64a56cd	143	HASH JOIN	select * from t_h5_r4_int_int_datetime t1, t_refered as t2 where t1.a = t2.a and t1.b=t2.a and t1.c = t2.c;
+executor.basic	2	009e253b9a5d1850	2	e193b52ac64a56cd	144	HASH JOIN	select * from t_h5_r4_int_int_datetime t1, t_refered as t2 where t1.a = t2.a and t1.b=t2.a and t1.c = t2.d;
+executor.basic	2	ba4decd7d8cbd22b	4	e193b52ac64a56cd	145	HASH JOIN	select * from t_h5_r4_int_int_datetime t1, t_refered as t2 where t1.a = t2.a and t1.b=t2.a and t1.c = t2.e;
+executor.basic	2	328ee305c67642c0	4	5312f9411e16cdcc	154	HASH JOIN	select * from t_r4_date t1, t_r4_date as t2 where t1.c = t2.c;
+executor.basic	2	285683e78d6df2bc	4	521c1f0f1e78ac0e	155	HASH JOIN	select * from t_r4_date t1, t_r4_datetime as t2 where t1.c = t2.c;
+executor.basic	2	4cc4dbfba12aff5f	4	3f15ed52f52b509f	156	HASH JOIN	select * from t_r4_date t1, t_r4_timestamp as t2 where t1.c = t2.c;
+executor.basic	2	76efdbdcdf5b8297	4	771c0f601166d5f7	159	HASH JOIN	select * from t_r4_datetime t1, t_r4_date as t2 where t1.c = t2.c;
+executor.basic	2	29a41bd37e183f6b	4	53f0304db75dce28	160	HASH JOIN	select * from t_r4_datetime t1, t_r4_datetime as t2 where t1.c = t2.c;
+executor.basic	2	a7a240de50a2a979	4	48d8ab200c3e1b84	161	HASH JOIN	select * from t_r4_datetime t1, t_r4_timestamp as t2 where t1.c = t2.c;
+fts_index.partitioned_simple_query	1	7be73e654038aff5	3	5ae42aa419b0c8e9	350	HASH DISTINCT	select distinct digest from t_ir_single_column where match (detail) against ("distributed database");
+fts_index.partitioned_simple_query	1	0f0c2dbaab8d4bc3	3	5ae42aa419b0c8e9	353	HASH DISTINCT	select /*+ use_das(t_ir_single_column) */ distinct digest from t_ir_single_column where match (detail) against ("distributed database");
+fts_index.simple_query	1	7be73e654038aff5	3	5ae42aa419b0c8e9	479	HASH DISTINCT	select distinct digest from t_ir_single_column where match (detail) against ("distributed database");
+fts_index.simple_query	1	301fb8b049618f79	3	71a8ba7462e89990	482	HASH DISTINCT	select distinct digest, match (detail) against ("distributed database") > 0 from t_ir_single_column where match (detail) against ("distributed database");
+geometry.geometry_bugfix_mysql	1	7638e09ee7751979	9	e47296efb50330f9	127	HASH GROUP BY	SELECT c1,ST_Astext(c2),ST_Astext(c4) FROM tab GROUP BY c2;
+geometry.geometry_bugfix_mysql	1	e47296efb50330f9	8	f640cf14bce13c54	128	HASH GROUP BY	SELECT c1,ST_Astext(c2),ST_Astext(c4) FROM tab GROUP BY c3;
+geometry.geometry_bugfix_mysql	1	f640cf14bce13c54	9	f39c4f5dcaa2ae01	129	HASH GROUP BY	SELECT c1,ST_Astext(c2),ST_Astext(c4) FROM tab GROUP BY c4;
+geometry.geometry_bugfix_mysql	1	f39c4f5dcaa2ae01	9	4a655af6f2d8ea9d	130	HASH GROUP BY	SELECT c1,ST_Astext(c2),ST_Astext(c4) FROM tab GROUP BY c5;
+global_index.global_index_select	1	256cf5f3a69e17e8	8	6acde5aa686b36dc	60	HASH GROUP BY	select /*+index(t1 gkey1)*/ c2, sum(c3) from t1 where c2 < 10 group by c1;
+global_index.global_index_select	1	fb37fb5cdc97d922	8	6acde5aa686b36dc	61	HASH GROUP BY	select /*+index(t1 gkey2)*/ c2, sum(c3) from t1 where c2 < 10 group by c1;
+groupby.group_by_basic	1	f142f71802ef1f2e	3	f998e28685e44970	54	HASH GROUP BY	select c2, sum(c1), count(c1), avg(c1), max(c1), min(c1) from t2 group by c2;
+groupby.group_by_basic	1	448ee61fed371377	3	e35487345305cbff	220	HASH GROUP BY, HASH DISTINCT	select c2, avg(distinct c3) from t1 group by c2;
+subquery.optimizer_subquery_bug	1	86b8da97c639f4a8	3	fc330f43add6ab10	225	HASH GROUP BY	select /*+no_rewrite*/ sum((select sum(a) from t1)) from t1 group by b;
+subquery.optimizer_subquery_bug	1	880ed683f78ca26c	3	416ce0af2b431bbe	229	HASH GROUP BY	select /*+no_rewrite*/ sum((select sum(a) from t1 as t2 where t2.a = t1.a)) from t1 group by b;
+subquery.optimizer_subquery_bug	1	b6f0411bb12dc436	2	efff5a03d4d89e2d	234	HASH JOIN	select * from t1, t2 where t1.a + (select sum(b) from t3) = t2.b;
+subquery.rqg_subquery_semijoin_nested_timeout	1	d95419d96b98393b	2	93e10641f040373a	3082	HASH RIGHT SEMI JOIN	SELECT GRANDPARENT1 . col_datetime AS G1 FROM D AS GRANDPARENT1 WHERE GRANDPARENT1 . `col_varchar_10` IN ( SELECT PARENT1 . `col_varchar_10_key` AS P1 FROM LL AS PARENT1 LEFT JOIN GG AS PARENT2 ON ( PARENT1 . `pk` > PARENT2 . `col_int` ) WHERE PARENT1 . `pk` IN ( SELECT CHILD1 . `col_int_key` AS C1 FROM BB AS CHILD1 LEFT JOIN KK AS CHILD2 ON ( CHILD1 . `col_varchar_10` >= CHILD2 . `col_varchar_10_key` ) ORDER BY CHILD1 . col_datetime ) AND ( ( PARENT1 . `col_varchar_20` >= GRANDPARENT1 . `col_varchar_20_key` ) OR NOT GRANDPARENT1 . `col_date` BETWEEN '2008-10-18' AND '2006-09-15' ) ORDER BY PARENT1 . col_datetime ) AND GRANDPARENT1 . `col_varchar_10_key` >= 'm' ;
+subquery.subquery	1	4e49cc6172532095	2	d9e767771977d8e5	244	HASH JOIN	select * from (select c1+1 as a1 from t1 where t1.c2 = 2) a, t2 where a.a1 = t2.c2 or t2.c1 = ANY(select c3 from t3 where t3.c1 > a.a1);
+subquery.subquery_sj_innodb	1	4a766bacef74adc9	4	b84e71802711dada	43	HASH RIGHT SEMI JOIN	select * from t2 where b in (select a from t1);
+subquery.subquery_sj_innodb	1	c8e8e4aaab53685a	2	45764cf8e9a3023b	57	HASH RIGHT SEMI JOIN	select * from t3 where b in (select a from t1);
+vector_index.vector_calc_gbk_mysql	1	1c8817737b3aca74	4	ad1cd403e75f32f2	73	HASH GROUP BY	select c1, l2_distance(c1, '[1,1,1]') from test group by l2_distance(c1, '[1,1,1]');
+vector_index.vector_calc_gbk_mysql	1	946117aee08af30b	4	8e279a24fe192621	159	HASH GROUP BY	select sum(c1),avg(c1),count(c1) from test group by id;
+vector_index.vector_calc_gbk_mysql	1	8e279a24fe192621	4	96de6d8db2f8f6f5	160	HASH GROUP BY	select sum(c1+[1,2,3]-[1,2,3]),avg(c1+[1,2,3]-[1,2,3]),count(c1+[1,2,3]-[1,2,3]) from test group by id;
+vector_index.vector_calc_gbk_mysql	1	9fca8c5854d9a457	4	8de7c5ddddc08c4e	182	HASH GROUP BY	select id, sum(c1) = [5.2,6.3,7.4], avg(c1) = [0.1,0.2,0.3] from test group by id;
+vector_index.vector_calc_gbk_mysql	1	8de7c5ddddc08c4e	2	61709bfab662d510	183	HASH JOIN, HASH GROUP BY	select c1 from test where id in (select id from test group by id having sum(c1) = [5.2,6.3,7.4]);
+vector_index.vector_calc_gbk_mysql	1	e383bf35b24d0bc7	4	884259efb1627fbb	242	HASH GROUP BY	select c1,sum(c2),avg(c2),count(c2) from t1 group by c1;
+vector_index.vector_calc_utf8_mysql	1	1c8817737b3aca74	4	ad1cd403e75f32f2	65	HASH GROUP BY	select c1, l2_distance(c1, '[1,1,1]') from test group by l2_distance(c1, '[1,1,1]');
+vector_index.vector_calc_utf8_mysql	1	946117aee08af30b	4	8e279a24fe192621	154	HASH GROUP BY	select sum(c1),avg(c1),count(c1) from test group by id;
+vector_index.vector_calc_utf8_mysql	1	8e279a24fe192621	4	96de6d8db2f8f6f5	155	HASH GROUP BY	select sum(c1+[1,2,3]-[1,2,3]),avg(c1+[1,2,3]-[1,2,3]),count(c1+[1,2,3]-[1,2,3]) from test group by id;
+vector_index.vector_calc_utf8_mysql	1	9fca8c5854d9a457	4	8de7c5ddddc08c4e	177	HASH GROUP BY	select id, sum(c1) = [5.2,6.3,7.4], avg(c1) = [0.1,0.2,0.3] from test group by id;
+vector_index.vector_calc_utf8_mysql	1	8de7c5ddddc08c4e	2	61709bfab662d510	178	HASH JOIN, HASH GROUP BY	select c1 from test where id in (select id from test group by id having sum(c1) = [5.2,6.3,7.4]);
+vector_index.vector_calc_utf8_mysql	1	e383bf35b24d0bc7	4	884259efb1627fbb	244	HASH GROUP BY	select c1,sum(c2),avg(c2),count(c2) from t1 group by c1;
+vector_index.vector_index_ivfflat_dml	1	2de3084e33e471e5	7	5d6c862dab6aeadb	58	HASH DISTINCT	select distinct c3 from t1;
+vector_index.vector_index_ivfflat_dml	2	2de3084e33e471e5	4	5d6c862dab6aeadb	106	HASH DISTINCT	select distinct c3 from t1;
+vector_index.vector_index_ivfflat_dml	3	2de3084e33e471e5	4	5d6c862dab6aeadb	164	HASH DISTINCT	select distinct c3 from t1;
+vector_index.vector_index_ivfflat_dml	4	2de3084e33e471e5	4	5d6c862dab6aeadb	221	HASH DISTINCT	select distinct c3 from t1;

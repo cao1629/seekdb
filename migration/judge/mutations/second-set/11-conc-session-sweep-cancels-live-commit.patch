@@ -1,0 +1,13 @@
+diff --git a/src/storage/tx/ob_tx_api.cpp b/src/storage/tx/ob_tx_api.cpp
+index aef7df8..91ec7eb 100644
+--- a/src/storage/tx/ob_tx_api.cpp
++++ b/src/storage/tx/ob_tx_api.cpp
+@@ -1798,7 +1798,7 @@ ObTxCommitTimeoutState cancel_timed_out_tx_commit(
+     if (desc->is_tx_timeout()) {
+       callback = desc->cancel_commit_cb();
+       state = ObTxCommitTimeoutState::TRANSACTION;
+-    } else if (desc->is_tx_commit_timeout()) {
++    } else if (!desc->is_tx_commit_timeout()) {
+       callback = desc->cancel_commit_cb();
+       state = ObTxCommitTimeoutState::STATEMENT;
+     }

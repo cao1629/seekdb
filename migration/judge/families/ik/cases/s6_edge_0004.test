@@ -1,0 +1,52 @@
+--disable_abort_on_error
+--enable_warnings
+--echo # s6_edge 4
+SET NAMES utf8mb4 COLLATE utf8mb4_general_ci, ob_enable_plan_cache = 0, ob_query_timeout = 600000000, ob_trx_timeout = 600000000;
+--echo errno $mysql_errno
+SELECT tokenize('ABC abc Abc aBC' COLLATE utf8mb4_bin, 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('ABC abc Abc aBC' COLLATE utf8mb4_bin, 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('ABC abc Abc aBC' COLLATE utf8mb4_bin, 'ik') AS t;
+--echo errno $mysql_errno
+--echo # VARCHAR columns read from a table
+CREATE TABLE ik_s6_col (id INT PRIMARY KEY, c VARCHAR(1000), cb VARCHAR(1000) COLLATE utf8mb4_bin);
+--echo errno $mysql_errno
+INSERT INTO ik_s6_col VALUES (1, '中华人民共和国人民大会堂', '中华人民共和国人民大会堂'), (2, '南京市长江大桥', '南京市长江大桥'), (3, 'OceanBase是一款稳定的分布式数据库，支持MySQL兼容模式。', 'OceanBase是一款稳定的分布式数据库，支持MySQL兼容模式。'), (4, 'snake_case和kebab-case', 'snake_case和kebab-case'), (5, '三百五十个 五公斤 十米', '三百五十个 五公斤 十米'), (6, '', ''), (7, NULL, NULL), (8, '，。！', '，。！'), (9, '안녕하세요 세계', '안녕하세요 세계'), (10, 'ABC abc Abc aBC', 'ABC abc Abc aBC');
+--echo errno $mysql_errno
+SELECT id, tokenize(c, 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart FROM ik_s6_col WHERE c IS NOT NULL ORDER BY id;
+--echo errno $mysql_errno
+SELECT id, tokenize(cb, 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart FROM ik_s6_col WHERE cb IS NOT NULL ORDER BY id;
+--echo errno $mysql_errno
+SELECT id, tokenize(c, 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word FROM ik_s6_col WHERE c IS NOT NULL ORDER BY id;
+--echo errno $mysql_errno
+SELECT id, tokenize(cb, 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word FROM ik_s6_col WHERE cb IS NOT NULL ORDER BY id;
+--echo errno $mysql_errno
+SELECT id, tokenize(c, 'ik') AS t FROM ik_s6_col WHERE c IS NOT NULL ORDER BY id;
+--echo errno $mysql_errno
+SELECT id, tokenize(c, 'ik', '[{"additional_args": [{"ik_mode": "max_word"}]}]') AS t FROM ik_s6_col WHERE c IS NOT NULL ORDER BY id;
+--echo errno $mysql_errno
+SELECT id, tokenize(c, 'ik') AS t FROM ik_s6_col WHERE id = 7;
+--echo errno $mysql_errno
+SELECT id FROM ik_s6_col WHERE '人民' MEMBER OF (tokenize(c, 'ik', '[{"additional_args": [{"ik_mode": "max_word"}]}]')) ORDER BY id;
+--echo errno $mysql_errno
+SELECT id FROM ik_s6_col WHERE 'snake_case' MEMBER OF (tokenize(c, 'ik')) ORDER BY id;
+--echo errno $mysql_errno
+DROP TABLE ik_s6_col;
+--echo errno $mysql_errno
+--echo # a TEXT column: TOKENIZE reads the LOB locator, not the text
+CREATE TABLE ik_s6_text (id INT PRIMARY KEY, c TEXT);
+--echo errno $mysql_errno
+INSERT INTO ik_s6_text VALUES (1, '中华人民共和国'), (2, 'hello world');
+--echo errno $mysql_errno
+SELECT id, tokenize(c, 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS t FROM ik_s6_text WHERE id = 1;
+--echo errno $mysql_errno
+SELECT id, tokenize(c, 'ik') AS t FROM ik_s6_text WHERE id = 2;
+--echo errno $mysql_errno
+SELECT id, tokenize(CAST(c AS CHAR(100)), 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS t FROM ik_s6_text WHERE id = 1;
+--echo errno $mysql_errno
+DROP TABLE ik_s6_text;
+--echo errno $mysql_errno
+--echo # TOKENIZE in a generated column
+CREATE TABLE ik_s6_gen (id INT PRIMARY KEY, c VARCHAR(100), t JSON GENERATED ALWAYS AS (tokenize(c, 'ik')) STORED);
+--echo errno $mysql_errno

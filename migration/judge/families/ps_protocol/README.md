@@ -170,11 +170,11 @@ vector_index.vector_similarity's), and the comparison of rec5 with rec6 accepted
 
 ## Cases that cannot be compared
 
-cases.txt leaves these 11 out, each with its reason. Leaving a case out of family 8 does not take it
-out of the other families: over the text protocol family 1 compares it as before. Each prints, over the
-binary protocol, something that changes from run to run on the same binary, or can hang the
-reference. Two C++ recordings of the 272 cases (rec1 and rec2) differ in the first four and in the
-hang, and nowhere else outside the cases that stop (known-failures.txt).
+cases.txt leaves these 4 out, each with its reason (11 until 2026-09-28; the seven purge cases are back,
+below). Leaving a case out of family 8 does not take it out of the other families: over the text
+protocol family 1 compares it as before. Each prints, over the binary protocol, something that changes
+from run to run on the same binary. Two C++ recordings of the 272 cases (rec1 and rec2) differ in these
+four and in the purge hang, and nowhere else outside the cases that stop (known-failures.txt).
 
 - **information_schema.** Its two `select * from information_schema.tables ...` statements (test lines
   39 and 64) run in format 4 under `--replace_column 8 NULL 9 NULL 10 NULL 15 NULL 16 NULL`. Over the
@@ -194,37 +194,37 @@ hang, and nowhere else outside the cases that stop (known-failures.txt).
   runs under `--replace_regex /_[0-9]+/_*/`. Over the binary protocol the index table names print with
   the data table's id, and the id is not the same in two runs of the same cases: `__idx_503351_f101`
   in rec1, `__idx_503344_f101` in rec2.
-- **The seven vector_index cases that run `PURGE RECYCLEBIN`: the statement sometimes hangs the
-  reference.** vector_index.all_virtual_vector_index_info, create_table_with_vector_index,
-  drop_vector_index, rebuild_vector_index, vector_index_partitioned, vector_index_post_create and
-  vector_index_rebuild each drop tables with vector indexes and then send `PURGE RECYCLEBIN` (as text;
-  PURGE is not on mysqltest's list). In rec1 the first purge of all_virtual_vector_index_info (test
-  line 38) ran until the DDL timeout, 1,000 s (`_ob_ddl_timeout`,
-  src/share/parameter/ob_parameter_seed.ipp:748), and failed with `4012: Timeout` (09:55:04 to
-  10:11:53; the case took 1,064 s); in rec2 and normal1 the case passed in 61 s and 56 s. In rec4 the
-  purge of create_table_with_vector_index hung the same way (rec4/purge-hang-evidence.txt), and the run
-  was stopped there. In both hangs the table lock service retried the lock of one tablet of the purged
-  tables whose status was DELETED (`tablet is already deleted`, OB_TABLET_NOT_EXIST, tablets 200390
-  and 200358; src/storage/tablelock/ob_table_lock_local_executor.cpp:68), with no pause between tries
-  (`need_retry_partial_task_` at src/storage/tablelock/ob_table_lock_service.cpp:979 and the retry
-  loops at :1032-1049 and :1271-1287), writing about 8 MB of seekdb.log a second. Over the text
-  protocol the seven cases passed in the 18 runs of the 272 cases recorded under
-  /Users/colin/seekdb-dev/mysqltest-runs (the two validation passes, the two coverage passes and the
-  14 mutation runs) except once: rebuild_vector_index's purge (its line 359) failed with the same 4012
-  after 1,067 s in mutation 07's run, where ../../mutations/README.md leaves open whether the mutation
-  or machine load caused it. So this is a race in the reference that either protocol can hit (2 hangs
-  in the 28 runs of these cases over the binary protocol here, normal1 included, and 1 in 126 over
-  text); it is not a protocol difference. All seven are left out, the four not yet seen hanging too,
-  since they send the same statement after the same kind of DDL and each hang costs a failed
-  comparison and 17 minutes. Whether family 1 should quarantine them as well is left to the
-  orchestrator.
+- **The seven vector_index cases that run `PURGE RECYCLEBIN` were left out until 2026-09-28.**
+  vector_index.all_virtual_vector_index_info, create_table_with_vector_index, drop_vector_index,
+  rebuild_vector_index, vector_index_partitioned, vector_index_post_create and vector_index_rebuild
+  each drop tables with vector indexes and then send `PURGE RECYCLEBIN` (as text; PURGE is not on
+  mysqltest's list). In rec1 the first purge of all_virtual_vector_index_info (test line 38) ran until
+  the DDL timeout, 1,000 s (`_ob_ddl_timeout`, src/share/parameter/ob_parameter_seed.ipp:748), and
+  failed with `4012: Timeout` (09:55:04 to 10:11:53; the case took 1,064 s); in rec2 and normal1 the
+  case passed in 61 s and 56 s. In rec4 the purge of create_table_with_vector_index hung the same way
+  (rec4/purge-hang-evidence.txt), and the run was stopped there. In both hangs the table lock service
+  retried the lock of one tablet of the purged tables whose status was DELETED (`tablet is already
+  deleted`, OB_TABLET_NOT_EXIST, tablets 200390 and 200358;
+  src/storage/tablelock/ob_table_lock_local_executor.cpp:64-68), with no pause between tries
+  (`need_retry_partial_task_` at src/storage/tablelock/ob_table_lock_service.cpp:1739-1747), writing
+  about 8 MB of seekdb.log a second. It is a race in the reference that either protocol can hit, not
+  a protocol difference: over text it has since hung create_table_with_vector_index in family 7's rec2
+  and family 11's par-2, and rebuild_vector_index in first-set mutation 07's run and in the first 272
+  run of second-set mutation 01. The first cases.txt left out the two cases seen hanging here and,
+  by analogy, the five others. A review of the second set pointed out that four of those five had
+  never been seen hanging, and that three families handled the race three ways. Since 2026-09-28 the
+  seven are on ../../quarantine.tsv, with the evidence, under one rule for every family: a quarantined
+  case is compared while two C++ recordings agree on it, and a recording that stops on this hang (4012
+  on `PURGE RECYCLEBIN`, `tablet is already deleted` repeating in seekdb.log) is made again. So
+  cases.txt holds all seven again (268 cases), and the live check below records them.
 
 ## Comparing a Rust build
 
 Record the Rust build with the command above (same case list, same client, same init) and compare it
-with a C++ recording with `--require-ps-protocol --known-failures known-failures.txt`; rec5 and rec6
-(below) are such C++ recordings, usable as long as cases.txt, tools/deploy, the clients and the init
-files stay as they were. Every case of cases.txt must then be identical, or have failed alike if it is
+with a C++ recording with `--require-ps-protocol --known-failures known-failures.txt`; ps-r7 and
+ps-r8 ("Live check, 2026-09-28", below) are such C++ recordings of the current cases.txt (rec5 and rec6
+are of the 261-case list before it), usable as long as cases.txt, tools/deploy, the clients and the
+init files stay as they were. Every case of cases.txt must then be identical, or have failed alike if it is
 on known-failures.txt. What the recordings show about the binary protocol:
 - the values of every column type as the client prints them from binary cells, so a changed binary
   encoding (a width, a sign, a fraction, a time zone, a byte order) shows in any case that selects
@@ -316,11 +316,29 @@ What the first real run changed, and why:
    a compared case is hidden or masked. The list was written from rec1 and rec2 with the first four
    and vector_index.all_virtual_vector_index_info left out (267 cases, used by rec3 and rec4); when
    rec4 hung in another purge case, the other six purge cases were left out too (261 cases, rec5 and
-   rec6).
+   rec6). Since 2026-09-28 the seven are back (268 cases, "Live check, 2026-09-28").
 3. **known-failures.txt** names the two cases of change 1.
 4. **The harness README's `compare` paragraph** now describes the live runner: the second-set patch
    (commit deade1391) had made two of its sentences wrong (second-set/README.md said they would
    change with it), and it now names `--known-failures`.
+
+## Live check, 2026-09-28
+
+After the review of the second set (the seven purge cases back in, "Cases that cannot be compared"),
+by the unit that applied the reviews: the same reference, clients, full init and options as above,
+port 3892 or 3891, cases.txt of 268 cases (sha256 9c190fa9...). Outputs under
+/Users/colin/seekdb-dev/mysqltest-runs/00b/second-set/review/.
+
+| Run | When (+08:00) | Result |
+|---|---|---|
+| ps-r7 | 2026-09-28 23:46 to 2026-09-29 00:09 | 268 run, 266 recorded; the two cases of known-failures.txt stopped as before; no purge hang |
+| ps-r8 | 2026-09-29 01:24 to 01:47 | the same |
+| compare ps-r7 ps-r8 | – | exit 0: 266 identical, 0 different, 2 known failures accepted (listed=2, accepted=2), 0 recording problems |
+| compare rec5 ps-r7 | – | on the 259 cases both hold, identical; the 7 purge cases are only in ps-r7 |
+| mut01-ps | 2026-09-29 01:52 to 02:15 | mutation 01 rebuilt and recorded on this cases.txt: against ps-r7, 12 cases `different`, 254 identical, the 2 known failures accepted: caught |
+
+All five quarantined cases and the seven purge cases are identical in ps-r7 and ps-r8, so family 8
+compares them.
 
 ## The mutation for the second sign-off
 
@@ -331,5 +349,5 @@ returns moves back 8 hours, while the text branch, and so every text-protocol ca
 In the coverage profile of the 272 text-protocol cases the mutated line has 0 hits; under
 `--ps-protocol` type_date.timestamp2, type_date.datetime_java, type_date.daylight_saving_time,
 two_order_by, driver5114_bug, datatype.replace, type_date.test_select_usec_to_time, update_range
-and delete.delete_range print TIMESTAMP values through it. `git apply --check` passes in
-/Users/colin/seekdb-dev/ref-834bbee1e; it was not built here.
+and delete.delete_range print TIMESTAMP values through it. Caught on 2026-09-28 against rec5 and
+again on 2026-09-29 against ps-r7 on the 268-case list: 12 cases differ (the note beside the patch).

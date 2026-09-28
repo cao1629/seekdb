@@ -8,9 +8,12 @@ restart_scenarios.py does), so the runner's `compare` diffs two builds unchanged
 its minimal MySQL protocol client. `known-answers.sql` holds the `CRC32()`, `COMPRESS()`,
 `UNCOMPRESS()` and `UNCOMPRESSED_LENGTH()` vectors for family 5.
 
-**Not in this directory:** item 8's `--compress` replay of the 272 configured cases is the runner's
-`--compress` option (it passes mysqltest's `-C/--compress`), applied to the live runner on 2026-09-25
-with the rest of migration/judge/harness/second-set/runner-second-set.patch.
+**The `--compress` replay** of the 272 configured cases is the runner's `--compress` option (it
+passes mysqltest's `-C/--compress`), applied to the live runner on 2026-09-25 with the rest of
+migration/judge/harness/second-set/runner-second-set.patch. It had never been recorded until the
+review of the second set assigned it; since 2026-09-28 it belongs to this item, with
+`login_watch.py` here for the check that mysqltest really used the compressed protocol ("The
+--compress replay", below).
 
 ## What each scenario checks
 
@@ -495,6 +498,76 @@ python3 .github/script/seekdb/mysqltest_for_seekdb.py compare \
 
 Any edit to wire_scenarios.py or wire_client.py changes the digests at the top of every recording,
 so the reference is recorded again after it.
+
+## The --compress replay
+
+Owner: item 8 (this README), since 2026-09-28. Two C++ recordings of the 272 cases with `--compress`,
+compared with `--require-compress`, and once, a check over the server's log that mysqltest's logins
+used the compressed protocol:
+
+```
+H=/Users/colin/seekdb-dev/migrate-to-rust
+A=/Users/colin/seekdb-dev/ref-archive-834bbee1e
+python3 -B $H/migration/judge/families/wire/login_watch.py watch $RUN/instance/log/seekdb.log \
+  $RUN/logins.txt &
+python3 -u $H/.github/script/seekdb/mysqltest_for_seekdb.py run \
+  --seekdb $A/seekdb --obclient $A/client/obclient --mysqltest $A/client/mysqltest \
+  --base-dir $RUN/instance --work-dir $RUN/work --port <port> \
+  --slice-index 0 --slice-count 1 --max-retries 0 --no-ignore-trailing-whitespace \
+  --compress --record-dir $RUN/rec
+kill -TERM <the watcher>
+python3 $H/.github/script/seekdb/mysqltest_for_seekdb.py compare \
+  --left $RUN_A/rec --right $RUN_B/rec --require-compress --out $OUT/compress.json
+python3 -B $H/migration/judge/families/wire/login_watch.py check \
+  --compress $RUN_A/logins.txt --plain $PLAIN/logins.txt --out $OUT/logins.json
+```
+
+`$PLAIN` is a recording of the same cases without `--compress` (family 1's plain recording, made with
+the same watcher). `login_watch.py watch` keeps only the `MySQL LOGIN` lines of the instance's log,
+following it across log rotation and new instances, and keeps reading a rotated file until it has
+been quiet for 10 s, since the server can still write to it after the rename; so no
+`--save-instance-dir` is needed. `check` reads the successful logins (`ret=0`) and passes when: no
+line is unreadable; in the plain run no login uses the compressed protocol or asks for
+CLIENT_COMPRESS (0x20); in the `--compress` run every login that is not the runner's own `root` uses
+`OB_MYSQL_COMPRESS_CS_TYPE` with 0x20 set, every login uses it exactly when it asks for 0x20, and
+there is at least one `admin` login (mysqltest's own) and all of them are compressed. It prints the
+number of logins per user in each run but does not require them to match: the server drops an INFO
+line when its log ring buffer is full (`ObLogger::alloc_log_item` waits about 2 µs for an INFO line,
+src/oblib/lib/oblog/ob_log.cpp:1660-1690 and `get_wait_us`), which happens in the cases that log
+heavily, and the live check lost a login or two that way in each run.
+
+**Live check, 2026-09-28.** The archived reference, the archive's clients, the full init, one instance,
+`--max-retries 0 --no-ignore-trailing-whitespace`, port 3891 or 3892, by the unit that applied the
+second-set reviews (review/run272.sh; outputs under
+/Users/colin/seekdb-dev/mysqltest-runs/00b/second-set/review/):
+
+| Run or check | Result |
+|---|---|
+| cmp-c1 (2026-09-28 23:23 to 23:46, `--compress`) | 272 recorded, none failed; the manifest has `compress: true` |
+| cmp-c2 (2026-09-29 01:01 to 01:23, `--compress`) | 272 recorded, none failed |
+| compare cmp-c1 cmp-c2 `--require-compress` | exit 0: 272 identical, 0 different, 0 missing, 0 recording problems |
+| login check, cmp-c2 against the plain f1-p2 | passed. In cmp-c2 all 453 `admin` logins (mysqltest's) and the 139 `root` logins that cases open through mysqltest use `OB_MYSQL_COMPRESS_CS_TYPE` with 0x20 set (capability 2294260397 or 146776749, the plain run's 2294260365 and 146776717 plus 32); the 3 uncompressed `root` logins are the runner's obclient sessions (init.sql, init_user.sql and the readiness check); the users test_ai_user, test_user1 and test_user2 are compressed too. In f1-p2 no login is compressed |
+
+The `--compress` recordings print the same `.result` bytes as the plain ones: every case of cmp-c1 is
+identical to f1-p1's except type_date.type_modify_time, one of the two quarantined type_date cases that
+differ between the plain recordings too (../differential/README.md).
+
+Two things the first check found, and what changed. Counting logins per case (by the time of each
+login against the end of each case's mysqltest log), the two `--compress` runs agree case by case,
+and each plain run lacked one to three logins the others have, always in a case that logs heavily:
+f1-p1 in fork_table.fork_table_cow and geometry.geometry_bugfix_mysql, f1-p2 in
+fork_table.fork_table_partition. f1-p1's losses fell into log rotations that the first version of
+the watcher handled badly: it stopped reading a rotated file as soon as the new one appeared, while the
+server can still write to the old file after the rename. The watcher now keeps reading a rotated file
+until it has been quiet for 10 s (checked offline with writes to a renamed file). f1-p2, recorded
+with that version, still lacked two logins: the server itself drops an INFO line when its log ring
+buffer is full (`ObLogger::alloc_log_item`, src/oblib/lib/oblog/ob_log.cpp:1660-1690, waits about
+2 µs for an INFO line). So `check` reports the counts and does not require them to match.
+
+The `--compress` replay has no mutation of its own. The compressed protocol is framed by
+rust/sql-nio, which the port keeps as a crate (PLAN.md section 3), and no C++ code decides a login's
+protocol; a C++ change can only reach the replay through what a case prints, which family 1 compares.
+Item 8's mutation (06, below) is caught by the wire scenarios.
 
 ## Mutations for the second sign-off
 

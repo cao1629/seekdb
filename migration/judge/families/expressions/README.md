@@ -52,7 +52,9 @@ python3 migration/judge/families/expressions/stability.py --port <port> --work-d
 - `stability.py` runs the corpus against a running instance with every SELECT probe that reads no
   session state repeated (`--repeats`, 3 by default), each repeat after a different unrelated
   statement, and exits 1 if a probe's output changes between repeats: a probe that reads memory it
-  never wrote. Two recordings from two processes can agree on such a value. About 1 minute.
+  never wrote. Two recordings from two processes can agree on such a value. It turns the plan cache
+  off for its own session, so that every repeat compiles again as the first run did (a repeat that
+  found the cached plan would print fewer compile-time warnings). About 1 minute.
 - `reach` and `cases` stop with an error when a registered expression has no entry in the
   specification table (`build_specs()`), when the TSV no longer matches the registry, or when the CAST
   targets in the grammar change, so a changed source cannot silently drop coverage.
@@ -391,20 +393,28 @@ Table `tn` has DATETIME(0) to DATETIME(6), TIMESTAMP(0, 3, 6), TIME(0, 3, 6) and
 
 ## Determinism
 
-- Each file starts with one `SET` statement: `NAMES utf8mb4 COLLATE utf8mb4_general_ci` and, in the
-  session, `time_zone = '+00:00'`, `sql_mode` = the 834bbee1e default
-  (`STRICT_ALL_TABLES,NO_ZERO_IN_DATE,NO_AUTO_CREATE_USER`, from the system variable default
-  281018368), `timestamp = 1709214296.654321` (2024-02-29 13:44:56.654321 UTC),
-  `div_precision_increment = 4`, `block_encryption_mode = 'aes-128-ecb'`,
-  `group_concat_max_len = 1024` and `ob_enable_plan_cache = 0`. `NAMES` may share a `SET` with
-  variables: the grammar lists it among the `var_and_val` items and the resolver handles it inside a
-  variable list (ob_variable_set_resolver.cpp:78).
-- The plan cache is off because it made the column definitions depend on timing: with it on, a
-  statement that differs from an earlier one only in its literals reuses the earlier plan and its
-  column definitions (`quote('Hello, World!')` after `quote('')` reports length 8, not 112), and
-  whether the earlier plan was still cached depends on eviction, which runs on a timer
-  (`plan_cache_evict_interval`) while the corpus compiles about 20,000 plans. Plan cache hits are
-  family 7's.
+- Each file starts with `ALTER SYSTEM FLUSH PLAN CACHE` and then one `SET` statement: `NAMES utf8mb4
+  COLLATE utf8mb4_general_ci` and, in the session, `time_zone = '+00:00'`, `sql_mode` = the
+  834bbee1e default (`STRICT_ALL_TABLES,NO_ZERO_IN_DATE,NO_AUTO_CREATE_USER`, from the system variable
+  default 281018368), `timestamp = 1709214296.654321` (2024-02-29 13:44:56.654321 UTC),
+  `div_precision_increment = 4`, `block_encryption_mode = 'aes-128-ecb'` and
+  `group_concat_max_len = 1024`. `NAMES` may share a `SET` with variables: the grammar lists it among
+  the `var_and_val` items and the resolver handles it inside a variable list
+  (ob_variable_set_resolver.cpp:78).
+- The plan cache stays on, as it is for every client by default, so each literal probe goes the path
+  a client's statement takes: the literals are parameterized before the statement is resolved
+  (`parameterize_syntax_tree`, src/sql/ob_sql.cpp:3327, reached only when the plan lookup ran,
+  :1985 and :3258-3263), and a statement that differs from an earlier one of its file only in its
+  literals reuses the earlier plan with its column definitions (`quote('Hello, World!')` after
+  `quote('')` reports length 8, not 112). Which plan a statement finds must not depend on timing, so
+  the flush at the start of each file empties the cache (the flush is synchronous: in the probe
+  /Users/colin/seekdb-dev/mysqltest-runs/00b/second-set/review/probe-flush/rec/pcflush.result,
+  `quote('Hello, World!')` right after a flush reports its own length, 112, and `quote('')` after it
+  reuses that plan), and a file runs in well under the 30 seconds after which the
+  eviction timer drops an idle plan (`IDLE_EVICT_THRESHOLD_US`, src/sql/plan_cache/ob_plan_cache.h:483),
+  with far fewer plans than would fill the cache. So every statement's plan comes from its own file,
+  in the file's order. Until 2026-09-28 each file turned the plan cache off instead (below, "Live
+  check, 2026-09-28"). Plan cache hits themselves are family 7's.
 - The fixed session timestamp makes `NOW()` and the functions built on the statement time
   deterministic: `ObPhysicalPlanCtx::set_cur_time` uses the session timestamp when it is set.
 - Functions that read the clock or a random source are printed only as stable properties:
@@ -429,17 +439,17 @@ Table `tn` has DATETIME(0) to DATETIME(6), TIMESTAMP(0, 3, 6), TIME(0, 3, 6) and
 
 | Section | Files | SQL statements | Of which probes |
 |---|---|---|---|
-| s1_unreached (291 entries, registry order) | 162 | 9,248 | 8,438 |
-| s2_reached (236 entries) | 129 | 7,027 | 6,382 |
-| s3_cast | 22 | 1,153 | 1,043 |
-| s4_compare | 12 | 645 | 585 |
-| s5_arith | 16 | 976 | 896 |
-| s6_store | 36 | 1,703 | 1,523 |
-| s7_temporal | 15 | 540 | 525 |
+| s1_unreached (291 entries, registry order) | 162 | 9,410 | 8,438 |
+| s2_reached (236 entries) | 129 | 7,156 | 6,382 |
+| s3_cast | 22 | 1,175 | 1,043 |
+| s4_compare | 12 | 657 | 585 |
+| s5_arith | 16 | 992 | 896 |
+| s6_store | 36 | 1,739 | 1,523 |
+| s7_temporal | 15 | 555 | 525 |
 | s8_known (families/wire/known-answers.sql) | 1 | 56 | 56 |
-| total | 393 | 21,348 | 19,448 |
+| total | 393 | 21,740 | 19,448 |
 
-"Probes" leaves out each file's session `SET` statement, the check that the spatial reference
+"Probes" leaves out each file's plan cache flush and session `SET` statement, the check that the spatial reference
 systems are loaded, and the creation, filling and dropping of `tm`. Files hold about 50 probe
 statements before the splits of split-rows.tsv; an entry larger than that is split into parts, each
 repeating the entry's own setup. File names have no dot before `.test`, as `--test-dir` requires, and
@@ -616,13 +626,56 @@ same path (ob_datum_cast.cpp:7842, 7907 and 8095). The corpus's JSON-to-DATE and
 print NULL on row 7 in every run (with the default MySQL-compatible dates they go through the mdate
 and mdatetime casts), and no probe casts JSON to BIT.
 
+### Live check, 2026-09-28: the plan cache back on
+
+A review of the second set found that turning the plan cache off also turned off literal
+parameterization (ob_sql.cpp:1985, :3258-3263 and :3327), so the family no longer checked the path a
+client's statements take by default, or the reuse of a cached plan's column definitions. The corpus
+now keeps the plan cache on and flushes it at the start of every file ("Determinism"); `generate.py
+cases` adds the flush to 392 files (s8_known_0001, a copy of known-answers.sql, has no session
+statements), 21,740 statements in all, `test_dir_sha256`
+`84db8209ee4355085d2fa71d56d7e8c0fa1ceb4275dcd1cc246a97ec1374b11b`. Outputs:
+/Users/colin/seekdb-dev/mysqltest-runs/00b/second-set/review/ (expr-r18 to expr-r20, expr-split-rows,
+expr-stability, expr-stability-2, the compare-expr-* files), the same reference, clients, port 3892
+and options as before.
+
+- **split_rows.py with the plan cache on** (port 3893, a scratch instance): 8,349 sweeps, 2,209
+  failed, 256 split, and the split-rows.tsv it wrote is byte-identical to the checked-in one.
+- **stability.py** first reported 9 probes as unstable (expr-stability.log): `left('abc', 1.5)` and
+  eight `WHERE c_double = '12.5x'`-style comparisons printed their truncation warnings on the first run
+  and fewer on the repeats. That is the plan cache, not memory read without being written: the
+  warnings come from compiling, and a repeat finds the cached plan. The tool looks for probes that read
+  memory they never wrote, so it now turns the plan cache off for its own run (a hidden `SET` at the
+  top of each repeated file), so each repeat compiles again as the first run did; the corpus itself is
+  unchanged by this. With that, 16,669 probes, 3 repeats each, 0 unstable (expr-stability-2).
+- **Three recordings, r18, r19 and r20, compare identical**: `compare` exits 0 for each of the three
+  pairs, 393 of 393 identical, no recording problems; `check-recording` finds 0 problems in each
+  (2,005 failed statements to review, as before).
+- **What the parameterized path changes, against r15** (plan cache off; statement by statement,
+  leaving out the flush and the `SET`): 370 statements report other column definitions (a length
+  taken from the plan an earlier statement of the file compiled, as in the `quote` pair above), 8
+  print fewer warnings (the ones raised while compiling, for a statement that found an earlier
+  statement's plan), and 12 print another value or error message (one of them with errno 0 where r15
+  had 1210), all of them what a client sees by default:
+  - the out-of-range message shows the parameterized expression: `c_bigint - 2` fails with
+    `BIGINT value is out of range in '(-9223372036854775808 + -2)'`, where r15 printed
+    `'(-9223372036854775808 - 2)'` (s2_reached_0023, s2_reached_0024; 7 statements);
+  - `TABLE(GENERATOR('3'))` returns 3 rows, where r15 failed with 1210 "The argument should be a
+    constant integer" (s2_reached_0114), and `GENERATOR(NULL)` fails with another message;
+  - a `TIME'23:59:59.5'` literal stored into DATETIME columns of every scale gets the date
+    1970-01-01, where r15 had the session date 2024-02-29 (s7_temporal_0006, _0009 and _0013).
+  A translation that resolved literals as constants, or that did not reuse a cached plan's column
+  definitions, now shows up as a difference.
+
 ### The mutation for the second sign-off
 
 migration/judge/mutations/second-set/02-expr-make-set-drops-last-string.patch, with its note beside
 it: `MAKE_SET` never returns its last string (an off-by-one in its bit mask,
 src/sql/engine/expr/ob_expr_make_set.cpp:98). MAKE_SET is one of the unreached entries: the 272
 configured cases never run the file, and 104 result rows of 41 statements in s1_unreached_0053 and
-s1_unreached_0054 change. Not built; the mutation stage builds and runs it.
+s1_unreached_0054 change. Caught on 2026-09-28 by the corpus of that day, and again on 2026-09-29 by
+the corpus with the plan cache on: against expr-r18, those two files differ in the same 41 statements
+and 104 rows, the other 391 are identical (the note gives both runs).
 
 The argument meanings of the OceanBase-specific functions (arrays, maps, vectors, private `_st_`
 spatial functions, AI functions) were taken from their type-deduction code, not from documentation;

@@ -466,8 +466,9 @@ def scenario_restart_data(args, recording):
 
 
 PARAMETERS = (
-    ("max_syslog_file_count", "4"),
-    ("trace_log_slow_query_watermark", "'5s'"),
+    ("max_syslog_file_count", "4", False),
+    ("trace_log_slow_query_watermark", "'5s'", False),
+    ("stack_size", "'512K'", True),
 )
 KEPT_PARAMETER_COLUMNS = ("name", "value")
 
@@ -548,9 +549,10 @@ def show_parameter(args, recording, name):
 
 
 def scenario_restart_parameters(args, recording):
-    names = [name for name, _ in PARAMETERS]
+    names = [name for name, _, _ in PARAMETERS]
+    static = set(name for name, _, is_static in PARAMETERS if is_static)
     defaults = dict((name, show_parameter(args, recording, name)) for name in names)
-    for name, value in PARAMETERS:
+    for name, value, _ in PARAMETERS:
         execute(args, recording, "alter system set {} = {};".format(name, value))
     after_set = dict((name, show_parameter(args, recording, name)) for name in names)
     restart(args, recording, 1, None)
@@ -564,6 +566,17 @@ def scenario_restart_parameters(args, recording):
             and len(after_set[name]) == 1
             and len(after_restart[name]) == 1,
         )
+        if name in static:
+            recording.check(
+                "SHOW PARAMETERS still shows the old value of {} right after ALTER SYSTEM "
+                "SET, since a static parameter takes effect at the next start".format(name),
+                after_set[name] == defaults[name],
+            )
+            recording.check(
+                "{} shows the new value after restart 1".format(name),
+                after_restart[name] != defaults[name],
+            )
+            continue
         recording.check(
             "ALTER SYSTEM SET changed the value SHOW PARAMETERS shows for {}".format(
                 name

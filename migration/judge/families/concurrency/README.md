@@ -142,9 +142,11 @@ it means for a one-slice recording:
 - **Values that must be the same are required to be the same.** The input keys, `seekdb_sha256`,
   `runner_sha256`, the binary and init paths, `case_list`, `tools_deploy_status`,
   `fresh_instance_per_case` and `slice_count` must be identical in all four manifests, or the merge
-  refuses. So a merged recording always stands for one build, one set of inputs, one runner and one
-  tools/deploy, and compare's input check between the merged recording and another means what it means
-  for two one-slice recordings.
+  refuses. The merged manifest carries each input and note key the slices have (the runner's
+  `RECORDING_INPUT_KEYS` and `RECORDING_NOTE_KEYS`, read from the runner itself), so compare reads the
+  slices' values and not its defaults. So a merged recording always stands for one build, one set of
+  inputs, one runner and one tools/deploy, and compare's input check between the merged recording and
+  another means what it means for two one-slice recordings.
 - **`repo_head` is kept per slice.** compare only reports it as a note, and other work commits to this
   branch every few minutes, so the slices of a `--serial` run (about 10 minutes for the 119 cases) can
   start at different commits. The merge does not require it to match: each slice's `repo_head` is in
@@ -170,9 +172,9 @@ it means for a one-slice recording:
 
 - **Which earlier cases shared the server.** Without `--fresh-instance-per-case` the cases of a slice
   run one after another on one instance, so a case sees what earlier cases of its slice left behind,
-  and the four slices group the cases differently from one slice. Only p3 against s1 in the live check
-  below (the serial merged recording against the one-slice recording, both on this Mac with retries
-  off) shows whether that grouping changes the output. CI's four slices do not show it: CI calls the
+  and the four slices group the cases differently from one slice. Only ser-1 against seq-1 in the live
+  check below (the serial merged recording against the one-slice recording, both on this Mac with
+  retries off) shows whether that grouping changes the output. CI's four slices do not show it: CI calls the
   runner with its defaults (.github/script/seekdb/mysqltest_slice.sh:24-33, run without arguments at
   .github/workflows/seekdb.yml:305), which at 834bbee1e retry a failed case up to 3 times, each on a
   fresh instance (mysqltest_for_seekdb.py:502-510 at 834bbee1e), and ignore trailing whitespace
@@ -229,14 +231,31 @@ where the measurement would make the result depend on timing:
 |---|---|---|
 | `prepare` with `--threads=8` | `--threads=1` | With more than one thread, each prepare thread seeds its generator from libc `random()` at its own start (sb_lua.c:1517 in `cmd_worker_thread`, sb_rand.c:178-185), so which table gets which data depends on which thread starts first. With one thread, prepare runs in the main thread (sb_lua.c:1536-1550), whose generator was seeded at start-up from libc's unseeded, fixed sequence (sb_rand.c:154-158). `--rand-seed` does not reach prepare: sysbench calls `srandom(seed)` only in `print_run_mode` (sysbench.c:657-669), which only `run` calls (sysbench.c:1063), while prepare is a Lua command (sysbench.c:1487-1490) |
 | `--time=15` warm-up, then `--time=60` | no warm-up; `--events=N --time=0` | A time limit makes the amount of work depend on speed. With `--events` every run finishes exactly N events: the event counter is taken atomically (sysbench.c:696-703) and each finished event is counted once (sysbench.c:756; the report's transactions are these events, db_driver.c:1042-1043). `--time` defaults to 10 (sysbench.c:99), so it is set to 0 |
-| time-seeded | `--rand-seed=1` | With a fixed seed and one thread, the single worker's generator is fixed (sysbench.c:805), so the statement sequence is fixed |
+| time-seeded | a fixed seed per run: `--rand-seed=1` for the first run, each later run 1 more (1 to 6 by default) | With a fixed seed and one thread, the single worker's generator is fixed (sysbench.c:805), so the statement sequence is fixed. The seeds must differ between runs: each worker seeds itself from libc `random()` after `srandom(seed)` (sb_rand.c:178-185), so with one seed for every run the first worker of each run draws the same stream as the first worker of the run before, on the same tables, and its `UPDATE ... SET c=?` writes the value that row already holds, which the server reports as 0 rows changed (the live check, below) |
 | `--report-interval=10` | none | The report thread seeds its own generator from the same `random()` (sysbench.c:938), racing the worker for its values |
+| the stock script, LuaJIT compiler on | a wrapper that turns the compiler off, then runs the stock script | With the compiler on, the one-thread prepare creates sbtest2 twice and stops (below) |
 | default ignore list | `--mysql-ignore-errors=1213,1020,1205` (the default, drv_mysql.c:74-75, spelled out) and `--verbosity=5` | sysbench writes one `DEBUG: Ignoring error <code>` line per ignored error only at debug verbosity (drv_mysql.c:740); that gives the counts by code. Any other error is fatal (drv_mysql.c:766-774) |
 
 Before anything runs, the script checks that the container runs `sysbench 1.0.20` (the version this
-analysis read, from the 1.0.20 tag) and takes the sha256 of /usr/bin/sysbench, the three Lua scripts
-and every library `ldd` lists; the digest of that list is in every case's header, so a changed client
-changes every recording.
+analysis read, from the 1.0.20 tag), writes the two Lua wrappers below into the container, and takes
+the sha256 of /usr/bin/sysbench, the three Lua scripts, the two wrappers and every library `ldd`
+lists; a wrapper whose sha256 is not that of the text the script wrote stops the run before the server
+starts. The digest of that list is in every case's header, so a changed client changes every
+recording.
+
+**Every sysbench command runs with the LuaJIT compiler off.** The container's sysbench uses the
+system LuaJIT, 2.1.0-beta3 on arm64 (Ubuntu's `libluajit-5.1-2` 2.1.0~beta3+dfsg-6ubuntu0.1). With its
+compiler on, the one-thread prepare loses its place in the loop over the tables: after sbtest12 or
+sbtest13 it creates sbtest2 again and stops with `FATAL: ... error 1050 (Table 'sbtest2' already
+exists)`, three times out of three (the live check, below). perf_run.sh never showed it, because its
+prepare runs 8 threads and each thread's loop covers only 2 tables. So each command runs
+`/tmp/seekdb-judge-sysbench/<workload>.lua` in place of the stock script, a wrapper of three lines:
+`jit.off()`, an `assert` that `jit.status()` reports the compiler off, and `dofile` of
+/usr/share/sysbench/<workload>.lua. Each Lua state sysbench creates (the main one and one per worker
+thread) loads the wrapper, so the stock script runs interpreted everywhere: the wrapper changes how
+the Lua code runs, not what it does. With the compiler off the prepare creates all 16 tables in
+order. The recorded command lines name the wrapper, the case header says
+what it does, and the manifest keeps both wrappers' text under `sysbench.lua_wrappers`.
 
 ### What each case records
 
@@ -283,7 +302,9 @@ data prepare left). N is the run's `--events`.
 
 **Compared exactly: the report line and the ignored errors by code**, with the one-thread run's check:
 14N reads, 4N writes and 2N others, no ignored error and no reconnect. These numbers stay fixed as long
-as no event is run again and every write changes a row. sysbench runs a failed event again from its
+as no event is run again and every write changes a row. A write changes its row unless it stores the
+value the row already holds, which can only come from a random stream an earlier run used on the same
+tables; the per-run seeds (the table above) rule that out. sysbench runs a failed event again from its
 start (the internal sysbench.lua `thread_run`, lines 28-47) and counts every attempt's statements, and it
 counts a statement that changes no row as other, not write (drv_mysql.c:917-924). Both can happen only
 when transactions meet on a row lock, which depends on timing, and neither happened on the C++
@@ -340,7 +361,10 @@ What a session should see on the C++ reference: seekdb starts its SQL listener a
 of `ObServer::start`, after bootstrap, the configuration reload, "server runtime is ready" and "server
 metadata is ready" (src/observer/ob_server.cpp:1291), and sets `SS_SERVING` right after (:1313); a local
 root login is not refused while the status is still starting (src/observer/mysql/obmp_connect.cpp:624).
-So a session should see only 2003 (nothing listening) and then the full answer, in every round. A build
+So a session should see only the client's code for nothing listening and then the full answer, in
+every round. The archived obclient gives 2002 for that, not 2003: `ERROR 2002 (HY000): Can't connect
+to OceanBase server on '127.0.0.1' (36)`, and the live check recorded `2002 (HY000)` for both sessions
+in every round (below). A build
 that opens its port earlier and answers with an error until it is ready shows that error code, and a
 build that answers before recovery has finished shows a different result; both show up in compare.
 Whether a short phase is always hit depends on the 0.05 s pace, which is why the codes of two C++ runs
@@ -364,11 +388,12 @@ No server, client, sdb.py, mysqltest or sysbench was started, and nothing connec
   `parallel_slices.py run` and `merge`.
 - The two lists: their `#|` scripts reproduce them (the checks above); the runner's own `load_case_list`
   accepts both (119 and 6 cases; slices of 30/30/30/29 and 2/2/1/1).
-- `python3 -B migration/judge/families/concurrency/offline_test.py`: 34 tests, all passing. In the tests
-  that drive the scripts, every subprocess call other than `git`, and every TCP connection, fails the
-  test unless it is replaced by a stand-in. The port-check tests connect only to sockets they opened
-  themselves on 127.0.0.1 ports the system chose (one runs the README's one-line check in a python
-  subprocess), and the pid test uses a sleeping python process as the stand-in server.
+- `python3 -B migration/judge/families/concurrency/offline_test.py`: 34 tests, all passing (38 since the
+  live check added four, below). In the tests that drive the scripts, every subprocess call other than
+  `git`, and every TCP connection, fails the test unless it is replaced by a stand-in. The port-check
+  tests connect only to sockets they opened themselves on 127.0.0.1 ports the system chose (one runs
+  the README's one-line check in a python subprocess), and the pid test uses a sleeping python process
+  as the stand-in server.
   - Merge: recordings built with the runner's real case selection (send-reap.txt, multi-connection.txt
     and all 272 cases), merged in shuffled order, are accepted by the runner's real `compare` against a
     one-slice recording (all identical, no problems, no notes); a changed file shows as `different`.
@@ -429,81 +454,243 @@ No server, client, sdb.py, mysqltest or sysbench was started, and nothing connec
   while reading (it prints `sysbench 1.0.20` and exits; nothing was connected to). The baseline logs
   were read again for the counts above.
 
-## What still needs a live check on the reference
+## Recording a build
 
-After the injected-mutation runs have ended, with the archived reference and its client:
+The same commands record the reference again or record another build, such as the Rust one: set
+`BUILD` to its binary and `OUT` to a new directory. Nothing else may run a server on these ports, and
+the Docker container `sb` must be running.
 
 ```
 cd /Users/colin/seekdb-dev/migrate-to-rust
 git diff --quiet 834bbee1e -- tools/deploy .github/script/seekdb/sdb.py && test -z "$(git status --porcelain -- tools/deploy)" || echo "tools/deploy is not 834bbee1e's"
-REF=/Users/colin/seekdb-dev/ref-archive-834bbee1e/seekdb
+BUILD=/Users/colin/seekdb-dev/ref-archive-834bbee1e/seekdb
 CLIENT=/Users/colin/seekdb-dev/ref-archive-834bbee1e/client
-OUT=/Users/colin/seekdb-dev/mysqltest-runs/00b/family11
+REC=/Users/colin/seekdb-dev/mysqltest-runs/00b/second-set/11-conc
+OUT=/Users/colin/seekdb-dev/mysqltest-runs/<new directory>
 F=migration/judge/families/concurrency
 RUNNER=.github/script/seekdb/mysqltest_for_seekdb.py
 mkdir -p $OUT
 
-# 1. four slices at once against the existing one-slice reduced-init recording of the 128 plain-SQL cases
-python3 $F/parallel_slices.py run --seekdb $REF --obclient $CLIENT/obclient --mysqltest $CLIENT/mysqltest \
+# 1. four slices at once, reduced init, the 128 plain-SQL cases
+python3 $F/parallel_slices.py run --seekdb $BUILD --obclient $CLIENT/obclient --mysqltest $CLIENT/mysqltest \
   --out-dir $OUT/p1 --init reduced --case-list migration/judge/lists/plain-sql.txt > $OUT/p1.log 2>&1
-python3 $RUNNER compare --left $OUT/p1/merged --right /Users/colin/seekdb-dev/ref-archive-834bbee1e/recordings/a10-rec1 --out $OUT/p1-vs-a10.json
+python3 $RUNNER compare --left /Users/colin/seekdb-dev/ref-archive-834bbee1e/recordings/a10-rec1 --right $OUT/p1/merged --out $OUT/p1.json
 
-# 2. the 119 multi-connection cases, full init: in parallel, one after another, and as one slice
-python3 $F/parallel_slices.py run --seekdb $REF --obclient $CLIENT/obclient --mysqltest $CLIENT/mysqltest \
+# 2. the 119 multi-connection cases, full init: four slices at once, and as one slice
+python3 $F/parallel_slices.py run --seekdb $BUILD --obclient $CLIENT/obclient --mysqltest $CLIENT/mysqltest \
   --out-dir $OUT/p2 --init full --case-list migration/judge/lists/multi-connection.txt > $OUT/p2.log 2>&1
-python3 $F/parallel_slices.py run --seekdb $REF --obclient $CLIENT/obclient --mysqltest $CLIENT/mysqltest \
-  --out-dir $OUT/p3 --init full --case-list migration/judge/lists/multi-connection.txt --serial > $OUT/p3.log 2>&1
 python3 -B -c 'import sys; sys.path.insert(0, sys.argv[1]); import recording_common; recording_common.require_free_ports([3891])' $F && \
-python3 $RUNNER run --seekdb $REF --obclient $CLIENT/obclient --mysqltest $CLIENT/mysqltest \
+python3 $RUNNER run --seekdb $BUILD --obclient $CLIENT/obclient --mysqltest $CLIENT/mysqltest \
   --base-dir $OUT/s1/base --work-dir $OUT/s1/work --port 3891 --slice-index 0 --slice-count 1 \
   --max-retries 0 --no-ignore-trailing-whitespace --record-dir $OUT/s1/rec \
   --case-list migration/judge/lists/multi-connection.txt > $OUT/s1.log 2>&1
-python3 $RUNNER compare --left $OUT/p2/merged --right $OUT/p3/merged --out $OUT/p2-vs-p3.json
-python3 $RUNNER compare --left $OUT/p3/merged --right $OUT/s1/rec --out $OUT/p3-vs-s1.json
-python3 $RUNNER compare --left $OUT/p2/merged --right $OUT/s1/rec --out $OUT/p2-vs-s1.json
+python3 $RUNNER compare --left $REC/seq-1/rec --right $OUT/p2/merged --out $OUT/p2.json
+python3 $RUNNER compare --left $REC/seq-1/rec --right $OUT/s1/rec --out $OUT/s1.json
 
-# 3. sysbench, twice
-python3 $F/sysbench_parity.py --seekdb $REF --obclient $CLIENT/obclient \
-  --base-dir $OUT/sb1/base --record-dir $OUT/sb1/rec --port 3896 > $OUT/sb1.log 2>&1
-python3 $F/sysbench_parity.py --seekdb $REF --obclient $CLIENT/obclient \
-  --base-dir $OUT/sb2/base --record-dir $OUT/sb2/rec --port 3896 > $OUT/sb2.log 2>&1
-python3 $RUNNER compare --left $OUT/sb1/rec --right $OUT/sb2/rec --out $OUT/sb1-vs-sb2.json
+# 3. sysbench
+python3 $F/sysbench_parity.py --seekdb $BUILD --obclient $CLIENT/obclient \
+  --base-dir $OUT/sb/base --record-dir $OUT/sb/rec --port 3896 > $OUT/sb.log 2>&1
+python3 $RUNNER compare --left $REC/sb-2/rec --right $OUT/sb/rec --out $OUT/sb.json
 
-# 4. two sessions while the server starts, twice
-python3 $F/startup_connect.py --seekdb $REF --obclient $CLIENT/obclient \
-  --base-dir $OUT/st1/base --record-dir $OUT/st1/rec --port 3895 > $OUT/st1.log 2>&1
-python3 $F/startup_connect.py --seekdb $REF --obclient $CLIENT/obclient \
-  --base-dir $OUT/st2/base --record-dir $OUT/st2/rec --port 3895 > $OUT/st2.log 2>&1
-python3 $RUNNER compare --left $OUT/st1/rec --right $OUT/st2/rec --out $OUT/st1-vs-st2.json
+# 4. two sessions while the server starts
+python3 $F/startup_connect.py --seekdb $BUILD --obclient $CLIENT/obclient \
+  --base-dir $OUT/st/base --record-dir $OUT/st/rec --port 3895 > $OUT/st.log 2>&1
+python3 $RUNNER compare --left $REC/st-1/rec --right $OUT/st/rec --out $OUT/st.json
 ```
 
-What each must show, and what to do otherwise:
+The one-slice run calls the runner directly, which has no port check of its own, so the line before it
+runs the same check on 3891 and the run starts only if it passes. For a build other than the
+reference, each `compare` must find every case identical, with only the note that `seekdb_sha256`
+differs, except for the two quarantined cases (../../quarantine.tsv) that recordings of the reference
+do not reproduce ("Not comparable", in the live check below): a difference in
+subquery.idx_with_const_expr_21_subquery_dilang is not counted, and a recording in which
+vector_index.create_table_with_vector_index stops on `PURGE RECYCLEBIN` with 4012 is made again, for
+either build, as the quarantine list says.
 
-- **Every script:** if one stops because its port answers, find what holds the port
-  (`lsof -nP -iTCP:<port> -sTCP:LISTEN`) and run again when it is free; do not move one side of a
-  comparison to another port only. The one-slice run s1 calls the runner directly, which has no such
-  check, so the line before it runs the same check on 3891 and s1 starts only if it passes. No other
-  family's live check may run at the same time (see the ports section).
-- **1:** exit 0 and 128 identical against a10-rec1 (`runner_sha256` and `repo_head` may appear as notes).
-  A difference is either the grouping of cases or the load; `--serial` tells which.
-- **2:** p2 against p3 identical outside the two quarantined cases; p3 and p2 against s1 the same. p3
-  against s1 is the only evidence of whether the grouping of cases changes the output. Also that the
-  four default-sized servers started and stayed up (the slices' runner.log files, and the saved logs if
-  a save directory was given). At the validation runs' average of about 5 s a case (1,409 s for 272), s1
-  and p3 take about 10 minutes and p2 a third to a quarter of that.
-- **3:** both runs succeed and compare finds 7 identical, including the report lines of the 16- and
-  64-thread `oltp_read_write` runs. This is the first real check that prepare with one thread gives the
-  same data twice, that `--events` with `--time=0` ends at exactly N events, that seekdb accepts the
-  REGEXP, CRC32 and hint forms used, that the plan check finds k_1, that the report parser reads the live
-  output, and how long a run takes (estimated from the baseline: under 10 minutes with the default event
-  counts, most of it the one-thread `oltp_read_write` run and the one-thread prepare). If a multi-thread
-  case fails its query-count check, or the two recordings differ only in those report lines, an
-  ignorable error or a write that changed no row happened on the C++ reference: report it with both
-  manifests' `ignored_errors_by_code` and the sysbench logs, and leave the decision about the comparison
-  to the orchestrator. If prepare fails its ids check, seekdb skipped AUTO_INCREMENT values; sysbench's
-  `--auto_inc=off` would remove that dependency but departs from perf_run.sh, so that too is reported
-  rather than changed here.
-- **4:** both runs succeed and compare finds 3 identical; each session's codes should be `2003 (HY000)`
-  only. If two C++ runs differ in the codes, the phase they catch is too short to hit every time, and the
-  codes cannot be compared exactly as they are; report that before this family gates anything.
-- For the second sign-off, each piece still needs one caught mutation of the behavior it tests.
+## Live check, 2026-09-28
+
+Every run used the archived reference (/Users/colin/seekdb-dev/ref-archive-834bbee1e/seekdb, sha256
+db7d918001aa02c45357c37b7bc01179d08a7a01e7e16d32248d25da80282e91) with the archive's obclient and
+mysqltest. The outputs are in /Users/colin/seekdb-dev/mysqltest-runs/00b/second-set/11-conc/: one
+directory per run, the commands in run.sh (it checks, before every run, that tools/deploy and sdb.py
+are 834bbee1e's, that tools/deploy has no local change, and that at least 8 GiB are free on /), the
+comparisons in compare-*.log and .json (compare.sh). parallel_slices.py passes
+`--max-retries 0 --no-ignore-trailing-whitespace` to every slice, and so does the one-slice run. Ports:
+3891-3894 for the slices, 3897 for the one-slice run, 3896 for sysbench, 3895 for the start-up
+sessions, 3898 and 3899 for the diagnostics below; no other agent ran a server during the check. The
+runner was the live file (sha256 29e19d689317750c6d55e2b61e8c100ce93a4cfc5ddc86c6ec76a67d5ae188b6);
+this unit did not change it.
+
+```
+cd /Users/colin/seekdb-dev/mysqltest-runs/00b/second-set/11-conc
+./run.sh par-reduced-1   # 4 slices at once, reduced init, lists/plain-sql.txt
+./run.sh par-1           # 4 slices at once, full init, lists/multi-connection.txt
+./run.sh seq-1           # the same 119 cases as one slice, port 3897
+./run.sh ser-1           # the same 4 slices one after another (--serial)
+./run.sh par-2           # 4 slices at once again
+./run.sh sb-2; ./run.sh sb-3   # sysbench_parity.py, port 3896
+./run.sh st-1; ./run.sh st-2   # startup_connect.py, port 3895
+./compare.sh sb-2-vs-sb-3 sb-2/rec sb-3/rec      # and the other pairs below
+```
+
+### Result
+
+| Run | What | Time | Result |
+|---|---|---|---|
+| par-reduced-1 | 4 slices at once, reduced init, the 128 plain-SQL cases | 58 s | 128 recorded; against the archived one-slice recordings a10-rec1 and a10-rec2: 128 identical each, exit 0 |
+| par-1 | 4 slices at once, full init, the 119 multi-connection cases | 445 s | 119 recorded, none failed |
+| seq-1 | the 119 cases as one slice | 18.5 min | 119 recorded, none failed; against par-1: 119 identical, exit 0, no notes |
+| ser-1 | the 4 slices one after another | 20.7 min | 119 recorded, none failed; against seq-1 and against par-1: 118 identical, 1 different (subquery.idx_with_const_expr_21_subquery_dilang, quarantined; below), exit 1 |
+| par-2 | 4 slices at once, second run | 21.3 min | 118 recorded, 1 failed: vector_index.create_table_with_vector_index, whose last statement ran 1,000 s and failed with 4012 (below); against ser-1: 118 identical, 1 missing; against seq-1 and par-1: 117 identical, 1 different (the quarantined subquery case), 1 missing; exit 1 each (the failed case) |
+| sb-2, sb-3 | sysbench_parity.py, 1, 16 and 64 threads | 3 min each | 7 cases each, all checks held; sb-2 against sb-3: 7 identical, exit 0 |
+| st-1, st-2 | startup_connect.py, a first start and two restarts after a kill | 8 s each | 3 cases each, all checks held; st-1 against st-2: 3 identical, exit 0 |
+
+- **Four default-sized servers fit.** Each slice of par-reduced-1, par-1 and par-2 started one server
+  and kept it for all its cases (one `sdb.py start` per slice runner.log), except par-2's slice 2,
+  where the runner started a new one after the failed case, as it does after every failed case; the
+  four servers sized from `memory_budget`'s default ran side by side on this Mac.
+- **117 of the 119 cases are identical in all four recordings** (par-1, par-2, ser-1, seq-1),
+  histogram.stats_farm (quarantined) among them, so neither the grouping of cases into slices nor the
+  load of four servers changed their output. The two others are not comparable ("Not comparable",
+  below): subquery.idx_with_const_expr_21_subquery_dilang (quarantined) splits two against two, and
+  vector_index.create_table_with_vector_index failed once.
+- **What each start-up session saw:** `2002 (HY000)` and then the full answer, in all three rounds of
+  both runs; the second and third rounds listed `startup_probe`. Each session made 26 to 37 attempts
+  in 1.6 to 2.4 s per round (in `outcomes.<case>.details`, not in the recording).
+- **sysbench's counts are exact on the reference:** every `oltp_read_write` run of sb-2 and sb-3, at 1,
+  16 and 64 threads, reported 420,000 reads, 120,000 writes, 60,000 others, no ignored error and no
+  reconnect, and every `oltp_point_select` run 200,000 reads.
+
+### What the runs found and what changed
+
+1. **The one-thread prepare failed with the LuaJIT compiler on.** The first diagnostic run (the
+   coverage build, diag-cov-sb-failed-jit) stopped in prepare with `FATAL: mysql_drv_query() returned
+   error 1050 (Table 'sbtest2' already exists)` after creating sbtest1 to sbtest13; the server's log
+   shows the 14th CREATE TABLE naming sbtest2. On the reference (diag-prepare-1, diag_prepare.py) the
+   stock script failed the same way twice, after sbtest12, and a wrapper that turns the compiler off
+   created all 16 tables in order. sysbench_parity.py now runs every command through such a wrapper
+   ("sysbench against one build", above), writes it into the container, records its text in the
+   manifest and includes it in the client's digest, and refuses a container whose wrapper does not
+   hold that text. An offline test checks this (the wrapper's exact text, every command running it,
+   the digest changing with it, a missing or different wrapper refused before the server starts).
+2. **One seed for every run made writes change no row.** sb-1, the first recording with the wrapper,
+   failed `oltp_read_write_16`: 118,220 writes and 61,780 others instead of 120,000 and 60,000, with
+   no ignored error. The cause is the seed: each worker seeds itself from libc `random()` after
+   `srandom(seed)`, so with `--rand-seed=1` for every run the worker of the 16-thread run that started
+   first drew the same stream as the one worker of the one-thread run before it, sent the same `UPDATE
+   sbtest<n> SET c=? WHERE id=?` with the value the row already held, and the server reported 0 rows
+   changed, which sysbench counts as other. A 16-thread run straight after prepare (diag-rw-1,
+   diag_rw.py) had exact counts, since no earlier run had written with the same stream. diag-seq-1
+   (diag_seq.py, the family's sequence on a scratch instance) showed it growing with each run that
+   shares a seed with earlier ones: 1,795 such writes in the 16-thread run, 7,117 in the 64-thread
+   run, then 28,045 and 28,143 in a second round of both. diag-seq-2 gave each run its own seed: every
+   `oltp_read_write` run at 1, 16, 64, 16 and 64 threads reported exactly 120,000 writes, and a last
+   16-thread run that reused an earlier seed reported 94,617 writes. sysbench_parity.py now gives each
+   run its own seed (1 to 6 by default; the manifest keeps them as `sysbench.rand_seeds`, and the
+   recorded command lines show them). The query-count check stays as it was; an offline test checks
+   the seeds and that a reused seed fails the 16-thread case.
+3. **The merged recording dropped the runner's newer recording keys.** parallel_slices.py was written
+   before the runner gained `seekdb_parameters`, `ps_protocol`, `compress`, `plan_cache_stats`,
+   `plan_cache_read`, `test_dir` and `test_dir_sha256`. The merge already required them to be equal in
+   all slices, but left them out of the merged manifest, so `compare` read their defaults: a merge of
+   `--ps-protocol` slices would have compared as a text-protocol recording. The merged manifest now
+   carries every key of the runner's `RECORDING_INPUT_KEYS` and `RECORDING_NOTE_KEYS` that the slices
+   have; par-reduced-1 and par-1 were merged again with it (par-reduced-1-remerged, par-1-remerged):
+   every `.result` file is byte-identical and only the manifest gained those keys, and the comparisons
+   above use the re-merged recordings (the old merges compare the same way). An offline test checks
+   that a merge of `--ps-protocol` slices keeps the key and fails against a text-protocol recording.
+4. **parallel.json timed the slices in index order.** `run` waited for slice 0, then slice 1, and so on,
+   so a slice that ended while an earlier one was still running was given the earlier one's time
+   (par-1's slices 1 to 3 all show 444.59 s). It now polls all four and times each at its own exit;
+   par-2 is the first run with it. An offline test has the slices end in reverse order.
+5. **obclient's code for nothing listening is 2002, not 2003** ("Two sessions while the server
+   starts", above). Nothing else changed in startup_connect.py.
+
+### What the multi-thread sysbench runs exercise that the 272 cases do not
+
+A diagnostic run of the family's sysbench sequence against the coverage-instrumented 076eb309b build
+(diag-cov-sb, diag_cov_sysbench.py, the same commands, wrappers and seeds as sysbench_parity.py) copied
+the build's profile after each step; cov_diff.py lists the lines a step ran that the 272 cases'
+profile (/Users/colin/seekdb-dev/mysqltest-runs/cov-076eb309b/analysis/AB.profdata) never ran. The
+build's counters are not updated atomically, so a multi-thread run loses some increments, and a line
+whose count is worked out from other counters can show runs that did not happen: obmp_query.cpp's
+branch for a session without CLIENT_MULTI_STATEMENTS (lines 225-240) shows 10.1k runs, although every
+sysbench login in the server's log carried that flag. The findings below rest on counts of function
+and branch entries.
+
+- **Sessions sharing a prepared statement.** In the 16- and 64-thread `oltp_point_select` runs every
+  prepare found the statement the one-thread run had prepared: the prepare's cache-hit branch in
+  `ObSql::handle_ps_prepare` (src/sql/ob_sql.cpp:1405-1437) and `fill_result_set` ran about 1,270
+  times; the 272 cases ran it 0 times (all 30 of their prepares, over both passes, missed). The
+  reference's log of diag-seq-1 has 16 `add stmt item` lines in all, at the start of the one-thread
+  run.
+- **The session sweep meeting a commit in flight.** Every 5 seconds the session manager visits each
+  session, and for one whose explicit COMMIT is still in flight it checks the commit's deadlines
+  (`data_plane::cancel_timed_out_tx_commit`, src/storage/tx/ob_tx_api.cpp:1797-1805): 1 time in the
+  one-thread `oltp_read_write` run, 12 in the 16-thread run and 47 in the 64-thread run; 0 times in
+  the 272 cases, whose sweeps found a session in a transaction 46 times but never one committing. The
+  mutation below uses this.
+- **Row-lock conflicts are rare.** `ObMvccRow::mvcc_write` reported a write-write conflict
+  (src/storage/memtable/mvcc/ob_mvcc_row.cpp:1072) 0 times in the 16-thread run and 4 times in the
+  64-thread run, and the lock wait manager parked one request (ob_lock_wait_mgr.cpp:223), because
+  sysbench spreads its rows uniformly over 16 tables of 100,000 rows. A change to the row-lock
+  conflict path would show in this family only by chance; the multi-connection cases that wait on a
+  lock on purpose (sfu, trx.*, deadlock_detector.trans_deadlock_basic) are what cover it, in family 1
+  as well as here. Readers meeting a row whose transaction is committing are frequent (the wait in
+  `LockForReadFunctor::inner_lock_for_read`, src/storage/tx/ob_tx_data_functor.cpp:340, 149 times in
+  the 16-thread run and 762 in the 64-thread run) but the 272 cases reach that wait too (4.65k times).
+
+### Not comparable
+
+- **subquery.idx_with_const_expr_21_subquery_dilang** (one of the 119 multi-connection cases,
+  quarantined, judge/quarantine.tsv). ser-1 returned the three rows GG1 to GG3 for each of the nine
+  selects bounded by `date_add(current_timestamp(), interval -1 microsecond)` and the like (as the
+  checked-in .result does), while seq-1 and par-1 returned none. That is the cause the quarantine entry
+  states and investigations/subquery-datetime-rounding.md explains: `now()` and `current_timestamp()`
+  are truncated to the whole second, so the selects exclude the rows whenever the inserts and the
+  selects start in the same wall-clock second. It depends on the clock, not on how the cases are
+  grouped or on the load (par-2 and ser-1 returned the rows, par-1 and seq-1 did not), and the
+  quarantine rule applies: the case is compared only while two C++ recordings agree on it, and here
+  they do not.
+- **vector_index.create_table_with_vector_index** (quarantined since 2026-09-28, with the six other
+  configured cases that send `PURGE RECYCLEBIN`; ../../quarantine.tsv). In par-2 its last statement,
+  `PURGE RECYCLEBIN` (test line 232), ran for 1,000 s and failed with
+  `mysqltest: At line 232: query 'PURGE RECYCLEBIN' failed: 4012: Timeout`; the case took 8 to 9 s in
+  par-1, seq-1 and ser-1 and passed in both validation passes of the first sign-off. While the purge
+  ran, the server's worker was spinning: a `sample` of the process
+  (par-2-hang-evidence/seekdb-sample.txt) shows it in `ObPurgeRecycleBinExecutor::execute` →
+  `ObDDLService::purge_table` → `ObDDLService::lock_table` → `ObTableLockService::lock` →
+  `batch_pre_check_lock_` → `execute_lock_set_in_batches_`, and the log grew by several megabytes a
+  second (it rotated every minute or so) with the same two lines again and again: "tablet is already
+  deleted (OB_TABLET_NOT_EXIST, tablet 200480)" from `check_exist`
+  (src/storage/tablelock/ob_table_lock_local_executor.cpp:64-68) and "execute table lock task"
+  (ob_table_lock_service.cpp:1333) (par-2-hang-evidence/seekdb-log-excerpt.txt). At 13:11:55 the
+  purge's transaction reached its timeout (`tx abort ... OB_TRANS_TIMEOUT`, then `lock_table(ret=-6210)`
+  and `purge expire recycle object of runtime finished(... ret=-6210)` in the log the runner saved,
+  par-2/slice_2/work/failures/instance/seekdb_log/). `need_retry_partial_task_`
+  (ob_table_lock_service.cpp:1739-1747) retries a lock task that returns OB_TABLET_NOT_EXIST, which is
+  meant for a tablet still being created, and `check_exist` returns the same code for a tablet the GC
+  has already deleted, so the lock is retried until the transaction times out. The tablet in par-2
+  belonged to `t14_spatial`, which fork_table.fork_table_error had dropped earlier in the same slice,
+  but a leftover object from an earlier case is not needed: family 7's rec2
+  (../plan_cache/README.md), which runs every case on a fresh instance, hung in this same case on one
+  of the case's own dropped tables. So it is the case's own drops that race the tablet GC, and whether
+  the GC deleted the tablet before the purge locks it is timing. The reference hung in this case in
+  three recordings so far (par-2 here, family 7's rec2 over text, family 8's rec4 over the binary
+  protocol, ../ps_protocol/cases.txt), and the other purge cases hung in three more
+  (../../quarantine.tsv). It is a liveness failure of the reference itself; the case is compared only
+  while two C++ recordings agree on it, and a recording that stops on this hang is made again.
+
+Every other case of the four multi-connection recordings, and every case of the sysbench and start-up
+pieces, compared identical in every pair.
+
+## The mutation for the second sign-off
+
+migration/judge/mutations/second-set/11-conc-session-sweep-cancels-live-commit.patch, with its note
+beside it: the commit-deadline test in `data_plane::cancel_timed_out_tx_commit`
+(src/storage/tx/ob_tx_api.cpp:1801) is inverted, so the 5-second session sweep takes the callback of
+any commit in flight that is still within its deadline and answers the client with 4012 (statement
+timeout). Only concurrent sessions give the sweep a commit in flight: the 272 configured cases never
+reach the line (0 times in both coverage passes), while the family's `oltp_read_write` runs reach it
+dozens of times, and the first COMMIT answered with 4012 makes sysbench stop with a FATAL line, which
+fails the case and the comparison with sb-2. Caught on 2026-09-28 (../../mutations/second-set/README.md).

@@ -206,3 +206,23 @@ the same obclient and the same init files, so only the binary differs, and resta
 restart_mid_dml should compare identical. A run takes about 25 s, like the clean runs. If restart 1
 does not come back instead (`-- restart 1: stop (kill), start, ready failed`, after up to 600 s), the
 scenario still fails, but the prediction above about how replay goes on was wrong; record that.
+
+## Caught by (filled after the run)
+
+Caught by family 9 on 2026-09-28 (README.md in this directory). restart_scenarios.py on the mutated
+build exits 1 with `restart_data` in `failed_cases`. Its `.partial` ends with the three `no` checks,
+and the diff against restart-smoke/rec-1 shows what is predicted above: rows 10 and 12 back after
+restart 1, the index-only query with `4 delta`, `9 golf`, `10 hotel` and `12 juliet`, the count line
+at 13, and after restart 3 rows 5 and 11 back with the index entries `2 bravo`, `5 echo` and
+`11 india`. The `name like 'd%'` query printed row 4 twice (no error 4377). restart_parameters and
+restart_mid_dml compare identical; `compare` exits 1 with a recording problem.
+
+The 272 configured cases on the mutated build: only quarantined cases failed. Outputs:
+/Users/colin/seekdb-dev/mysqltest-runs/00b/second-set/mutations/04-restart-replay-skips-user-deletes/.
+
+Run again on 2026-09-29 after restart_parameters gained the static parameter `stack_size`
+(harness/restart-scenarios.md): the patch built again (review/mutations2/build.sh, seekdb sha256
+bce15ca3...; the worktree back to reference-build.patch afterwards; the binary deleted after its run)
+and run with the new script (review/mut04-restart-2). restart_data again ends as a `.partial` with its
+three `no` checks; against the new C++ recording rs-3, `compare` exits 1 with restart_data missing on
+the right and restart_parameters and restart_mid_dml identical.

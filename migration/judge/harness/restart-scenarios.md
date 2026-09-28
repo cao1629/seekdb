@@ -206,14 +206,15 @@ in a state where commits made after it are lost at the next kill. Probe after a 
 
 ## restart_parameters
 
-The two parameters, both cluster-level, dynamic, visible in SHOW PARAMETERS (no leading
-underscore; SHOW PARAMETERS hides those while they are at their default), and with effects that
-reach only logging:
+Three parameters, all cluster-level and visible in SHOW PARAMETERS (no leading underscore; SHOW
+PARAMETERS hides those while they are at their default). The first two are dynamic, with effects that
+reach only logging; the third, added on 2026-09-28, is static:
 
 | Parameter | Seed | Default | Set to | What it changes |
 |---|---|---|---|---|
 | `max_syslog_file_count` | src/share/parameter/ob_parameter_seed.ipp:172 | 2 | 4 | How many rotated log files are kept (log retention): ob_reload_config.cpp:35, ob_server.cpp:1926. Its checker (src/share/config/ob_config_helper.cpp:267-280) accepts 0 or any value at least `syslog_file_uncompressed_count` (default 0) |
 | `trace_log_slow_query_watermark` | src/share/parameter/ob_parameter_seed.ipp:109 | 1s | '5s' | The slow-query threshold for trace logging and plan statistics: obmp_base.cpp:105, obmp_packet_sender.cpp:767, ob_physical_plan.cpp:388, ob_trans_ctx.cpp:159 |
+| `stack_size` | src/share/parameter/ob_parameter_seed.ipp (`EditLevel::STATIC_EFFECTIVE`) | 256K | '512K' | The stack size of the server's threads, read once at start (src/observer/ob_server.cpp:1967-1973, "set stack_size" in the log): the running server keeps its stacks, and the value takes effect at the next start. A review of the second set noted that the two dynamic parameters leave the store-and-reload path of static parameters unchecked; stack_size is the one of the six static ones (enable_rpc_tls, net_thread_count, stack_size, use_ipv6, _enable_inner_session_mgr, strict_check_os_params) whose new value is harmless on this Mac |
 
 How they persist: `ALTER SYSTEM SET` reaches `ObAdminSetConfig::update_sys_config_`
 (src/rootserver/ob_system_admin_util.cpp:122), which writes the value to the config store in the
@@ -228,10 +229,13 @@ source, edit_level, default_value and isdefault (src/sql/resolver/cmd/ob_show_re
 and cannot select columns, so the script cuts the name and value columns out of obclient's table at
 the column borders and records only those, with a line saying so.
 
-Checks, for each parameter: SHOW returns exactly one row each time; the value after the SET differs
-from the default; the value after restart 1 equals the value after the SET. The checks compare
-what SHOW printed, not a hard-coded spelling, and the printed values themselves are compared
-between the two builds.
+Checks, for each parameter: SHOW returns exactly one row each time; for the two dynamic parameters,
+the value after the SET differs from the default and the value after restart 1 equals the value after
+the SET; for `stack_size`, the value right after the SET is still the default (SHOW PARAMETERS keeps
+printing the value in effect until the next start) and the value after restart 1 differs from it.
+The checks compare what SHOW printed, not a hard-coded spelling, and the printed values themselves
+are compared between the two builds, so the 256K before the restart and the 512K after it are both
+part of the recording.
 
 ## restart_mid_dml
 
@@ -321,10 +325,24 @@ nor its error text is recorded):
   matches the marker's binary and `--base-dir` and refuses one that does not; the kill sends SIGKILL
   and waits for the exit, and reports a pid that is already gone; after the kill, the real
   `sdb.py stop` exits 0 and removes the stale pid file.
-- **Not yet run against a server** (judge runs were in progress on this machine). The first real
-  run must confirm: that obclient accepts `--unbuffered` and `--disable-reconnect` (both appear in
-  its help text) and runs the open session's statements as they arrive on the pipe; that the
-  client's error at the kill is 2006 or 2013; the column names SHOW PARAMETERS prints; that
-  `show create table` and `show grants` print the same before and after a restart; that the probe
-  waits long enough; and that two runs on the C++ reference give byte-identical recordings. Then a
-  caught mutation (00b's second sign-off) shows the scenarios can fail.
+- **Against the server, 2026-09-24** (/Users/colin/seekdb-dev/mysqltest-runs/00b/restart-smoke/, the
+  archived reference, the reduced init, port 3882): two runs of 26 s and 25 s, all three scenarios
+  passed their checks, and `compare` found the two recordings identical (3 of 3, no recording
+  problems). The runs confirmed what the stubbed tests could not: obclient accepts `--unbuffered` and
+  `--disable-reconnect` and keeps an open session's transaction until the kill, the client stops on a
+  lost-connection error, SHOW PARAMETERS prints the name and value columns the script reads, and
+  `show create table` and `show grants` print the same before and after a restart. The script had
+  sha256 3dd27279... then.
+- **The caught mutation, 2026-09-28:** ../mutations/second-set/04-restart-replay-skips-user-deletes.md
+  (restart_data fails its three checks when replay skips the rows a user deleted).
+- **stack_size added, 2026-09-28/29** (the review of the second set: only dynamic parameters were
+  set). The first two runs with it (review/rs-1, rs-2) failed their `stack_size` checks, which had
+  been written for a dynamic parameter: SHOW PARAMETERS printed 256K right after `alter system set
+  stack_size = '512K'` and 512K only after restart 1, which is how a static parameter behaves. The
+  checks above were changed for it, and the script (sha256 eb5f5c31...) was run twice more on the
+  archived reference with the reduced init, port 3891 (review/rs-3 at 02:18, rs-4 at 02:18, 26 s
+  each): every check held in both, and `compare` finds the two recordings identical (3 of 3, no
+  recording problems). Mutation 04, built again (review/mutations2), still fails restart_data's three
+  checks against rs-3, and `compare` exits 1 (restart_data missing on the right, a recording
+  problem); restart_parameters and restart_mid_dml are identical. So a build that stored a static
+  parameter but did not apply it at the next start, or applied it at once, now shows.

@@ -1,0 +1,12 @@
+diff --git a/src/storage/tx_storage/ob_memstore_freezer.cpp b/src/storage/tx_storage/ob_memstore_freezer.cpp
+--- a/src/storage/tx_storage/ob_memstore_freezer.cpp
++++ b/src/storage/tx_storage/ob_memstore_freezer.cpp
+@@ -1072,7 +1072,7 @@
+       // Check once when the last memory burst or runtime state changed or the interval reaches the threshold
+       is_out_of_mem = false;
+     } else {
+-      const int64_t reserved_memstore = from_user ? REPLAY_RESERVE_MEMSTORE_BYTES : 0;
++      const int64_t reserved_memstore = from_user ? REPLAY_RESERVE_MEMSTORE_BYTES / 2 : 0;
+       ObMemstoreFreezeCtx ctx;
+       if (false == memstore_info_.is_loaded_) {
+         is_out_of_mem = false;

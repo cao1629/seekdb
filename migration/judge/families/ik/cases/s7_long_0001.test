@@ -1,0 +1,150 @@
+--disable_abort_on_error
+--enable_warnings
+--echo # s7_long 1
+SET NAMES utf8mb4 COLLATE utf8mb4_general_ci, ob_enable_plan_cache = 0, ob_query_timeout = 600000000, ob_trx_timeout = 600000000;
+--echo errno $mysql_errno
+--echo # long inputs, stored in a VARCHAR column
+CREATE TABLE ik_s7_long (id INT PRIMARY KEY, c VARCHAR(40000));
+--echo errno $mysql_errno
+--echo # 1: 1000 Chinese characters, no separator: one batch
+INSERT INTO ik_s7_long VALUES (1, REPEAT('人工智能技术发展迅速', 100));
+--echo errno $mysql_errno
+SELECT id, CHAR_LENGTH(c) AS n, tokenize(c, 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart FROM ik_s7_long WHERE id = 1;
+--echo errno $mysql_errno
+SELECT id, CHAR_LENGTH(c) AS n, tokenize(c, 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word FROM ik_s7_long WHERE id = 1;
+--echo errno $mysql_errno
+--echo # 2: a space at character 1000: one batch
+INSERT INTO ik_s7_long VALUES (2, CONCAT(REPEAT('人工智能技术发展迅速', 100), ' ', '人工智能技术发展迅速'));
+--echo errno $mysql_errno
+SELECT id, CHAR_LENGTH(c) AS n, tokenize(c, 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart FROM ik_s7_long WHERE id = 2;
+--echo errno $mysql_errno
+SELECT id, CHAR_LENGTH(c) AS n, tokenize(c, 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word FROM ik_s7_long WHERE id = 2;
+--echo errno $mysql_errno
+--echo # 3: a space at character 1001: two batches
+INSERT INTO ik_s7_long VALUES (3, CONCAT(REPEAT('人工智能技术发展迅速', 100), '人', ' ', '人工智能技术发展迅速'));
+--echo errno $mysql_errno
+SELECT id, CHAR_LENGTH(c) AS n, tokenize(c, 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart FROM ik_s7_long WHERE id = 3;
+--echo errno $mysql_errno
+SELECT id, CHAR_LENGTH(c) AS n, tokenize(c, 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word FROM ik_s7_long WHERE id = 3;
+--echo errno $mysql_errno
+--echo # 4: a space at character 1002: two batches
+INSERT INTO ik_s7_long VALUES (4, CONCAT(REPEAT('人工智能技术发展迅速', 100), '人工', ' ', '人工智能技术发展迅速'));
+--echo errno $mysql_errno
+SELECT id, CHAR_LENGTH(c) AS n, tokenize(c, 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart FROM ik_s7_long WHERE id = 4;
+--echo errno $mysql_errno
+SELECT id, CHAR_LENGTH(c) AS n, tokenize(c, 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word FROM ik_s7_long WHERE id = 4;
+--echo errno $mysql_errno
+--echo # 5: an ideographic full stop after every 10 characters
+INSERT INTO ik_s7_long VALUES (5, REPEAT('人工智能技术发展迅速。', 300));
+--echo errno $mysql_errno
+SELECT id, CHAR_LENGTH(c) AS n, tokenize(c, 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart FROM ik_s7_long WHERE id = 5;
+--echo errno $mysql_errno
+SELECT id, CHAR_LENGTH(c) AS n, tokenize(c, 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word FROM ik_s7_long WHERE id = 5;
+--echo errno $mysql_errno
+--echo # 6: a fullwidth comma after every 10 characters: not a separator
+INSERT INTO ik_s7_long VALUES (6, REPEAT('人工智能技术发展迅速，', 300));
+--echo errno $mysql_errno
+SELECT id, CHAR_LENGTH(c) AS n, tokenize(c, 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart FROM ik_s7_long WHERE id = 6;
+--echo errno $mysql_errno
+SELECT id, CHAR_LENGTH(c) AS n, tokenize(c, 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word FROM ik_s7_long WHERE id = 6;
+--echo errno $mysql_errno
+--echo # 7: English words
+INSERT INTO ik_s7_long VALUES (7, REPEAT('hello world ', 500));
+--echo errno $mysql_errno
+SELECT id, CHAR_LENGTH(c) AS n, tokenize(c, 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart FROM ik_s7_long WHERE id = 7;
+--echo errno $mysql_errno
+SELECT id, CHAR_LENGTH(c) AS n, tokenize(c, 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word FROM ik_s7_long WHERE id = 7;
+--echo errno $mysql_errno
+--echo # 8: mixed text
+INSERT INTO ik_s7_long VALUES (8, REPEAT('OceanBase数据库V4.2发布，性能提升30%。', 100));
+--echo errno $mysql_errno
+SELECT id, CHAR_LENGTH(c) AS n, tokenize(c, 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart FROM ik_s7_long WHERE id = 8;
+--echo errno $mysql_errno
+SELECT id, CHAR_LENGTH(c) AS n, tokenize(c, 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word FROM ik_s7_long WHERE id = 8;
+--echo errno $mysql_errno
+--echo # 9: one English token of 5000 letters
+INSERT INTO ik_s7_long VALUES (9, REPEAT('a', 5000));
+--echo errno $mysql_errno
+SELECT id, CHAR_LENGTH(c) AS n, tokenize(c, 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart FROM ik_s7_long WHERE id = 9;
+--echo errno $mysql_errno
+SELECT id, CHAR_LENGTH(c) AS n, tokenize(c, 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word FROM ik_s7_long WHERE id = 9;
+--echo errno $mysql_errno
+--echo # 10: one number of 3000 digits
+INSERT INTO ik_s7_long VALUES (10, REPEAT('1', 3000));
+--echo errno $mysql_errno
+SELECT id, CHAR_LENGTH(c) AS n, tokenize(c, 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart FROM ik_s7_long WHERE id = 10;
+--echo errno $mysql_errno
+SELECT id, CHAR_LENGTH(c) AS n, tokenize(c, 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word FROM ik_s7_long WHERE id = 10;
+--echo errno $mysql_errno
+--echo # 11: one fullwidth token of 2000 letters
+INSERT INTO ik_s7_long VALUES (11, REPEAT('ａ', 2000));
+--echo errno $mysql_errno
+SELECT id, CHAR_LENGTH(c) AS n, tokenize(c, 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart FROM ik_s7_long WHERE id = 11;
+--echo errno $mysql_errno
+SELECT id, CHAR_LENGTH(c) AS n, tokenize(c, 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word FROM ik_s7_long WHERE id = 11;
+--echo errno $mysql_errno
+--echo # 12: a four-character word and a space, 250 times
+INSERT INTO ik_s7_long VALUES (12, REPEAT('中国人民 ', 250));
+--echo errno $mysql_errno
+SELECT id, CHAR_LENGTH(c) AS n, tokenize(c, 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart FROM ik_s7_long WHERE id = 12;
+--echo errno $mysql_errno
+SELECT id, CHAR_LENGTH(c) AS n, tokenize(c, 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word FROM ik_s7_long WHERE id = 12;
+--echo errno $mysql_errno
+--echo # 13: the prose sentences as one paragraph
+INSERT INTO ik_s7_long VALUES (13, '今天上午，国家统计局发布了第三季度的经济数据。随着人工智能技术的快速发展，越来越多的企业开始使用大语言模型提升工作效率。春天来了，公园里的桃花和樱花竞相开放，吸引了许多市民前来踏青赏花。这家餐厅的招牌菜是红烧肉和清蒸鲈鱼，味道鲜美，价格也很实惠。数据库管理系统负责存储、检索和管理结构化数据，是信息系统的核心组件之一。分布式事务需要同时保证原子性、一致性、隔离性和持久性。全文检索通过倒排索引快速定位包含查询词的文档。他一边喝着咖啡，一边阅读关于量子计算的最新论文。气象台预报明天有中到大雨，局部地区有暴雨，请市民注意出行安全。小王昨天在超市买了三斤苹果、两瓶牛奶和一袋面包。长城是中国古代的军事防御工程，东起山海关，西至嘉峪关。会议定于下周三下午两点在三楼会议室召开，请各部门负责人准时参加。这部电影讲述了一个普通家庭在时代变迁中的悲欢离合。为了提高查询性能，优化器会根据统计信息选择代价最低的执行计划。张三和李四是大学同学，毕业后一起创办了一家软件公司。孩子们在操场上踢足球，老师在一旁认真地指导。黄河是中华民族的母亲河，发源于青藏高原的巴颜喀拉山脉。请把这份文件复印三份，然后交给财务部的刘经理。秋天的北京天高云淡，是一年中最适合旅游的季节。地铁十号线因设备故障临时停运，乘客可以换乘公交车。研究人员在深海发现了一种能够在高压环境下生存的新型微生物。图书馆新到了一批关于历史和哲学的书籍，欢迎大家借阅。这台服务器的内存使用率持续偏高，运维工程师正在排查原因。中医认为，饮食清淡、作息规律是保持身体健康的关键。奶奶每天早上都会去公园打太极拳，风雨无阻。由于连续降雨，河道水位上涨，防汛部门启动了应急预案。这篇论文提出了一种基于图神经网络的推荐算法。我们班的同学来自全国各地，有的来自东北，有的来自海南。他把钥匙忘在了办公室，只好打电话请同事帮忙送过来。新能源汽车的续航里程越来越长，充电设施也越来越完善。城市规划应当兼顾经济发展与生态环境保护。这款游戏的画面非常精美，但是操作有些复杂。考试前一天晚上，她复习到很晚才睡觉。在编译大型项目时，增量编译可以显著缩短等待时间。老张退休以后，在乡下种了一片菜园，过上了悠闲的生活。志愿者们在社区里为老年人提供免费的健康咨询服务。这座古镇保存完好，街道两旁都是明清时期的建筑。他的演讲条理清晰，赢得了台下观众的热烈掌声。公司决定明年在西南地区设立新的研发中心。夜深了，窗外的雨还在淅淅沥沥地下着。快递员说包裹已经放在小区门口的智能快递柜里了。这个季度的销售额比去年同期增长了一倍多。医生建议他每天坚持散步半小时，少吃油腻的食物。足球比赛进入加时赛后，主队终于攻入了制胜一球。我们需要对日志进行归档，以便以后排查问题。博物馆里展出了许多珍贵的青铜器和瓷器。这条高速公路连接了两座省会城市，大大缩短了通行时间。她在国外留学期间，学会了独立生活和解决问题。软件测试的目的是尽早发现缺陷，而不是证明程序没有错误。夏天的海边游客很多，沙滩上到处都是遮阳伞。事务提交之前，所有修改都只对当前会话可见。主键索引保证了每一行数据都可以被唯一地定位。这项政策的出台，受到了广大中小企业的欢迎。每逢佳节倍思亲，中秋节是家人团聚的日子。他从小就喜欢天文，梦想有一天能够成为宇航员。请不要在图书馆里大声喧哗。系统在凌晨两点自动执行数据备份任务。这家工厂引进了先进的自动化生产线，产量提高了三成。经过三年的努力，这座跨海大桥终于建成通车。虽然天气很冷，但是大家的热情一点也没有减少。缓存命中率下降之后，接口的平均响应时间明显变长。西湖的美景吸引了无数文人墨客留下诗篇。用户可以通过手机应用程序随时查询账户余额。如果输入的参数不合法，函数会返回错误码。他们计划明年春天去云南旅行，看看丽江古城和玉龙雪山。植物通过光合作用把二氧化碳和水转化为有机物。这家书店的咖啡区很安静，适合看书和写作。在并发场景下，多个线程同时修改共享变量可能导致数据竞争。足球、篮球和排球都是很受欢迎的球类运动。这座城市的地铁网络四通八达，出行十分便利。我昨天去银行办理了信用卡。这个问题可以从两个方面来分析。雨天路滑，请小心驾驶。他们是一个团结友爱的集体。请输入您的用户名和密码。我们一起去看电影吧。他因为身体原因辞去了主席职务。');
+--echo errno $mysql_errno
+SELECT id, CHAR_LENGTH(c) AS n, tokenize(c, 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart FROM ik_s7_long WHERE id = 13;
+--echo errno $mysql_errno
+SELECT id, CHAR_LENGTH(c) AS n, tokenize(c, 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word FROM ik_s7_long WHERE id = 13;
+--echo errno $mysql_errno
+--echo # 14: the paragraph seven times
+INSERT INTO ik_s7_long VALUES (14, REPEAT('今天上午，国家统计局发布了第三季度的经济数据。随着人工智能技术的快速发展，越来越多的企业开始使用大语言模型提升工作效率。春天来了，公园里的桃花和樱花竞相开放，吸引了许多市民前来踏青赏花。这家餐厅的招牌菜是红烧肉和清蒸鲈鱼，味道鲜美，价格也很实惠。数据库管理系统负责存储、检索和管理结构化数据，是信息系统的核心组件之一。分布式事务需要同时保证原子性、一致性、隔离性和持久性。全文检索通过倒排索引快速定位包含查询词的文档。他一边喝着咖啡，一边阅读关于量子计算的最新论文。气象台预报明天有中到大雨，局部地区有暴雨，请市民注意出行安全。小王昨天在超市买了三斤苹果、两瓶牛奶和一袋面包。长城是中国古代的军事防御工程，东起山海关，西至嘉峪关。会议定于下周三下午两点在三楼会议室召开，请各部门负责人准时参加。这部电影讲述了一个普通家庭在时代变迁中的悲欢离合。为了提高查询性能，优化器会根据统计信息选择代价最低的执行计划。张三和李四是大学同学，毕业后一起创办了一家软件公司。孩子们在操场上踢足球，老师在一旁认真地指导。黄河是中华民族的母亲河，发源于青藏高原的巴颜喀拉山脉。请把这份文件复印三份，然后交给财务部的刘经理。秋天的北京天高云淡，是一年中最适合旅游的季节。地铁十号线因设备故障临时停运，乘客可以换乘公交车。研究人员在深海发现了一种能够在高压环境下生存的新型微生物。图书馆新到了一批关于历史和哲学的书籍，欢迎大家借阅。这台服务器的内存使用率持续偏高，运维工程师正在排查原因。中医认为，饮食清淡、作息规律是保持身体健康的关键。奶奶每天早上都会去公园打太极拳，风雨无阻。由于连续降雨，河道水位上涨，防汛部门启动了应急预案。这篇论文提出了一种基于图神经网络的推荐算法。我们班的同学来自全国各地，有的来自东北，有的来自海南。他把钥匙忘在了办公室，只好打电话请同事帮忙送过来。新能源汽车的续航里程越来越长，充电设施也越来越完善。城市规划应当兼顾经济发展与生态环境保护。这款游戏的画面非常精美，但是操作有些复杂。考试前一天晚上，她复习到很晚才睡觉。在编译大型项目时，增量编译可以显著缩短等待时间。老张退休以后，在乡下种了一片菜园，过上了悠闲的生活。志愿者们在社区里为老年人提供免费的健康咨询服务。这座古镇保存完好，街道两旁都是明清时期的建筑。他的演讲条理清晰，赢得了台下观众的热烈掌声。公司决定明年在西南地区设立新的研发中心。夜深了，窗外的雨还在淅淅沥沥地下着。快递员说包裹已经放在小区门口的智能快递柜里了。这个季度的销售额比去年同期增长了一倍多。医生建议他每天坚持散步半小时，少吃油腻的食物。足球比赛进入加时赛后，主队终于攻入了制胜一球。我们需要对日志进行归档，以便以后排查问题。博物馆里展出了许多珍贵的青铜器和瓷器。这条高速公路连接了两座省会城市，大大缩短了通行时间。她在国外留学期间，学会了独立生活和解决问题。软件测试的目的是尽早发现缺陷，而不是证明程序没有错误。夏天的海边游客很多，沙滩上到处都是遮阳伞。事务提交之前，所有修改都只对当前会话可见。主键索引保证了每一行数据都可以被唯一地定位。这项政策的出台，受到了广大中小企业的欢迎。每逢佳节倍思亲，中秋节是家人团聚的日子。他从小就喜欢天文，梦想有一天能够成为宇航员。请不要在图书馆里大声喧哗。系统在凌晨两点自动执行数据备份任务。这家工厂引进了先进的自动化生产线，产量提高了三成。经过三年的努力，这座跨海大桥终于建成通车。虽然天气很冷，但是大家的热情一点也没有减少。缓存命中率下降之后，接口的平均响应时间明显变长。西湖的美景吸引了无数文人墨客留下诗篇。用户可以通过手机应用程序随时查询账户余额。如果输入的参数不合法，函数会返回错误码。他们计划明年春天去云南旅行，看看丽江古城和玉龙雪山。植物通过光合作用把二氧化碳和水转化为有机物。这家书店的咖啡区很安静，适合看书和写作。在并发场景下，多个线程同时修改共享变量可能导致数据竞争。足球、篮球和排球都是很受欢迎的球类运动。这座城市的地铁网络四通八达，出行十分便利。我昨天去银行办理了信用卡。这个问题可以从两个方面来分析。雨天路滑，请小心驾驶。他们是一个团结友爱的集体。请输入您的用户名和密码。我们一起去看电影吧。他因为身体原因辞去了主席职务。', 7));
+--echo errno $mysql_errno
+SELECT id, CHAR_LENGTH(c) AS n, tokenize(c, 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart FROM ik_s7_long WHERE id = 14;
+--echo errno $mysql_errno
+SELECT id, CHAR_LENGTH(c) AS n, tokenize(c, 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word FROM ik_s7_long WHERE id = 14;
+--echo errno $mysql_errno
+--echo # 15: a Chinese number and quantifier, 250 times, no separator
+INSERT INTO ik_s7_long VALUES (15, REPEAT('三百五十个', 250));
+--echo errno $mysql_errno
+SELECT id, CHAR_LENGTH(c) AS n, tokenize(c, 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart FROM ik_s7_long WHERE id = 15;
+--echo errno $mysql_errno
+SELECT id, CHAR_LENGTH(c) AS n, tokenize(c, 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word FROM ik_s7_long WHERE id = 15;
+--echo errno $mysql_errno
+--echo # 16: a number, a quantifier and a space, 400 times
+INSERT INTO ik_s7_long VALUES (16, REPEAT('3个 ', 400));
+--echo errno $mysql_errno
+SELECT id, CHAR_LENGTH(c) AS n, tokenize(c, 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart FROM ik_s7_long WHERE id = 16;
+--echo errno $mysql_errno
+SELECT id, CHAR_LENGTH(c) AS n, tokenize(c, 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word FROM ik_s7_long WHERE id = 16;
+--echo errno $mysql_errno
+--echo # 17: a space at character 1001 after short English words
+INSERT INTO ik_s7_long VALUES (17, CONCAT(REPEAT('ab ', 334), 'cd'));
+--echo errno $mysql_errno
+SELECT id, CHAR_LENGTH(c) AS n, tokenize(c, 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart FROM ik_s7_long WHERE id = 17;
+--echo errno $mysql_errno
+SELECT id, CHAR_LENGTH(c) AS n, tokenize(c, 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word FROM ik_s7_long WHERE id = 17;
+--echo errno $mysql_errno
+--echo # 18: Hangul words and spaces
+INSERT INTO ik_s7_long VALUES (18, REPEAT('한국어 ', 300));
+--echo errno $mysql_errno
+SELECT id, CHAR_LENGTH(c) AS n, tokenize(c, 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart FROM ik_s7_long WHERE id = 18;
+--echo errno $mysql_errno
+SELECT id, CHAR_LENGTH(c) AS n, tokenize(c, 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word FROM ik_s7_long WHERE id = 18;
+--echo errno $mysql_errno
+--echo # 19: emoji only
+INSERT INTO ik_s7_long VALUES (19, REPEAT('😀', 1500));
+--echo errno $mysql_errno
+SELECT id, CHAR_LENGTH(c) AS n, tokenize(c, 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart FROM ik_s7_long WHERE id = 19;
+--echo errno $mysql_errno
+SELECT id, CHAR_LENGTH(c) AS n, tokenize(c, 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word FROM ik_s7_long WHERE id = 19;
+--echo errno $mysql_errno
+--echo # 20: underscore identifiers
+INSERT INTO ik_s7_long VALUES (20, REPEAT('snake_case_name ', 200));
+--echo errno $mysql_errno
+SELECT id, CHAR_LENGTH(c) AS n, tokenize(c, 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart FROM ik_s7_long WHERE id = 20;
+--echo errno $mysql_errno
+SELECT id, CHAR_LENGTH(c) AS n, tokenize(c, 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word FROM ik_s7_long WHERE id = 20;
+--echo errno $mysql_errno
+DROP TABLE ik_s7_long;
+--echo errno $mysql_errno

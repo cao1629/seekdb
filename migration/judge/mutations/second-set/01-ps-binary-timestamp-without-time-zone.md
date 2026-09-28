@@ -91,4 +91,27 @@ python3 $H/.github/script/seekdb/mysqltest_for_seekdb.py compare \
 
 ## Caught by (filled after the run)
 
-Not run yet.
+Caught by family 8 on 2026-09-28 (README.md in this directory). The `--ps-protocol` recording of the
+final cases.txt on the mutated build, compared with 01-ps/rec5 (`--require-ps-protocol
+--known-failures`), exits 1: 12 cases `different`, 247 identical, and the 2 known failures failed
+alike and were accepted. All 251 changed lines are TIMESTAMP values printed in UTC instead of the
+session time zone: 261 values 8 hours earlier, and 16 values 8 hours later in
+type_date.datetime_java, whose second SELECT runs under `time_zone='-8:00'` (type_date.timestamp2,
+for example, prints `1993-09-01 03:00:00.123400` for `1993-09-01 11:00:00.123400`). Beyond the nine
+cases listed above, executor.basic (142 lines), fts_index.basic_dml_sequel (3) and
+groupby.group_by_basic (2) changed the same way.
+
+The 272 configured cases on the mutated build: no case outside the quarantine list failed because
+of the patch. In the first run vector_index.rebuild_vector_index failed only because its last
+statement, `PURGE RECYCLEBIN`, timed out (4012 after 1,071 s), with all 334 lines of its output equal
+to the .result; it is not counted. A second run of the 272 on the same build failed only three
+quarantined cases (type_date.type_create_time, type_date.type_modify_time and
+vector_index.sparse_vector_index_vsag_query), and rebuild_vector_index passed in 64 s. Outputs:
+/Users/colin/seekdb-dev/mysqltest-runs/00b/second-set/mutations/01-ps-binary-timestamp-without-time-zone/.
+
+Run again on 2026-09-29 with the final cases.txt of 268 cases (the seven purge cases back in;
+families/ps_protocol/README.md): the patch was built again in the reference worktree
+(review/mutations/build.sh; the worktree back to reference-build.patch afterwards; the binary deleted
+after its run) and recorded with `--ps-protocol` (review/mut01-ps, port 3891, 01:52 to 02:15).
+Against ps-r7, `compare --require-ps-protocol --known-failures` exits 1 with the same 12 cases
+`different`, 254 identical (the seven purge cases among them) and the 2 known failures accepted.

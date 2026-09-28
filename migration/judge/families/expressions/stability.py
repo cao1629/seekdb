@@ -45,10 +45,15 @@ STATEFUL = re.compile(
 )
 MARKER = re.compile(r"^## R (\d+) (\d+)$")
 END_MARKER = "## E"
+PLAN_CACHE_OFF = (
+    "--disable_query_log",
+    "SET @@session.ob_enable_plan_cache = 0;",
+    "--enable_query_log",
+)
 
 
 def repeated_text(case, repeats):
-    out = []
+    out = list(PLAN_CACHE_OFF)
     index = -1
     targets = []
     pending = None

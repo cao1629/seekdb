@@ -1,0 +1,126 @@
+--disable_abort_on_error
+--enable_warnings
+--echo # s6_edge 3
+SET NAMES utf8mb4 COLLATE utf8mb4_general_ci, ob_enable_plan_cache = 0, ob_query_timeout = 600000000, ob_trx_timeout = 600000000;
+--echo errno $mysql_errno
+--echo # the third argument
+SELECT tokenize('中华人民共和国', 'ik', '[{"output": "default"}]') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('中华人民共和国', 'ik', '[{"output": "all"}]') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('中华人民共和国', 'ik', '[{"Output": "ALL"}]') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('中华人民共和国', 'ik', '[]') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('中华人民共和国', 'ik', '[{}]') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('中华人民共和国', 'ik', '[{"additional_args": []}]') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('中华人民共和国', 'ik', '[{"additional_args": [{"ik_mode": "SMART"}]}]') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('中华人民共和国', 'ik', '[{"additional_args": [{"ik_mode": "Max_Word"}]}]') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('中华人民共和国', 'ik', '[{"additional_args": [{"ik_mode": "smart"}, {"ik_mode": "max_word"}]}]') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('中华人民共和国', 'ik', '[{"additional_args": [{"ik_mode": "max_word"}, {"ik_mode": "smart"}]}]') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('中华人民共和国', 'ik', '[{"additional_args": [{"IK_MODE": "max_word"}]}]') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('中华人民共和国', 'ik', '[{"additional_args": [{"dict_table": "x"}]}]') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('中华人民共和国', 'ik', '[{"additional_args": [{"quanitfier_table": "x"}]}]') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('中华人民共和国', 'ik', '[{"additional_args": [{"stopword_table": "y"}]}]') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('中华人民共和国', 'ik', '[{"additional_args": [{"Ik_Mode": "bad"}]}]') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('中华人民共和国', 'ik', '[{"additional_args": [{"IK_MODE": "max_word"}, {"ik_mode": "max_word"}]}]') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('中华人民共和国', 'ik', '[{"output": "all", "additional_args": [{"ik_mode": "max_word"}]}]') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('中华人民共和国', 'ik', '[{"additional_args": [{"ik_mode": "max_word"}]}, {"output": "all"}]') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('中华人民共和国', 'ik', '[{"output": "all"}, {"output": "default"}]') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('中华人民共和国', 'ik', '[{"additional_args": [{"ik_mode": ""}]}]') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('中华人民共和国', 'ik', '[{"additional_args": [{"ik_mode": null}]}]') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('中华人民共和国', 'ik', '[{"additional_args": [{"ik_mode": 123}]}]') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('中华人民共和国', 'ik', '[{"additional_args": [{"ik_mode": ["smart"]}]}]') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('中华人民共和国', 'ik', '[{"additional_args": [{"ik_mode": "bad"}]}]') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('中华人民共和国', 'ik', '[{"additional_args": [{"ik_mode": "max_word"}, {"ik_mode": 1}]}]') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('中华人民共和国', 'ik', '[{"additional_args": [{"ik_mode": "max_word", "output": "all"}]}]') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('中华人民共和国', 'ik', '[{"additional_args": {"ik_mode": "max_word"}}]') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('中华人民共和国', 'ik', '[{"additional_args": [{"min_token_size": 3}]}]') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('中华人民共和国', 'ik', '[{"additional_args": [{"quantifier_table": "x"}, {"stopword_table": "y"}]}]') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('中华人民共和国', 'ik', '[{"additional_args": [{"quantifier_table": "x"}]}]') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('中华人民共和国', 'ik', '[{"additional_args": [{"ik_mode": " smart"}]}]') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('中华人民共和国', 'ik', '[{"output": "defaults"}]') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('中华人民共和国', 'ik', '[{"case": "upper"}]') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('中华人民共和国', 'ik', '[{"stopwords": "a"}]') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('中华人民共和国', 'ik', '[{"undefined": "all"}]') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('中华人民共和国', 'ik', '{}') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('中华人民共和国', 'ik', '["all"]') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('中华人民共和国', 'ik', 'not json') AS t;
+--echo errno $mysql_errno
+--echo # the token list as a JSON value
+SELECT JSON_LENGTH(tokenize('中华人民共和国', 'ik', '[{"additional_args": [{"ik_mode": "max_word"}]}]')) AS n;
+--echo errno $mysql_errno
+SELECT '人民' MEMBER OF (tokenize('中华人民共和国', 'ik', '[{"additional_args": [{"ik_mode": "max_word"}]}]')) AS m;
+--echo errno $mysql_errno
+SELECT '人民' MEMBER OF (tokenize('中华人民共和国', 'ik')) AS m;
+--echo errno $mysql_errno
+SELECT JSON_EXTRACT(tokenize('中华人民共和国', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]'), '$.doc_len') AS d;
+--echo errno $mysql_errno
+SELECT JSON_KEYS(tokenize('中华人民共和国', 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]')) AS k;
+--echo errno $mysql_errno
+SELECT JSON_TYPE(tokenize('中华人民共和国', 'ik')) AS t;
+--echo errno $mysql_errno
+--echo # utf8mb4_bin input
+SELECT tokenize('Hello WORLD 中国' COLLATE utf8mb4_bin, 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('Hello WORLD 中国' COLLATE utf8mb4_bin, 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('Hello WORLD 中国' COLLATE utf8mb4_bin, 'ik') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('ＡＢＣ ａｂｃ Ａｂｃ' COLLATE utf8mb4_bin, 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('ＡＢＣ ａｂｃ Ａｂｃ' COLLATE utf8mb4_bin, 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('ＡＢＣ ａｂｃ Ａｂｃ' COLLATE utf8mb4_bin, 'ik') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('snake_CASE Kebab-Case' COLLATE utf8mb4_bin, 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('snake_CASE Kebab-Case' COLLATE utf8mb4_bin, 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('snake_CASE Kebab-Case' COLLATE utf8mb4_bin, 'ik') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('中华人民共和国人民大会堂' COLLATE utf8mb4_bin, 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('中华人民共和国人民大会堂' COLLATE utf8mb4_bin, 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('中华人民共和国人民大会堂' COLLATE utf8mb4_bin, 'ik') AS t;
+--echo errno $mysql_errno
+SELECT tokenize('OceanBase数据库V4.2发布' COLLATE utf8mb4_bin, 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "smart"}]}]') AS smart;
+--echo errno $mysql_errno
+SELECT tokenize('OceanBase数据库V4.2发布' COLLATE utf8mb4_bin, 'ik', '[{"output": "all"}, {"additional_args": [{"ik_mode": "max_word"}]}]') AS max_word;
+--echo errno $mysql_errno
+SELECT tokenize('OceanBase数据库V4.2发布' COLLATE utf8mb4_bin, 'ik') AS t;
+--echo errno $mysql_errno

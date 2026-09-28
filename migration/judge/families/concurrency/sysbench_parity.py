@@ -47,6 +47,13 @@ CLIENT_FILES = (
     "/usr/share/sysbench/oltp_point_select.lua",
     "/usr/share/sysbench/oltp_read_write.lua",
 )
+WORKLOADS = ("oltp_point_select", "oltp_read_write")
+WRAPPER_DIR = "/tmp/seekdb-judge-sysbench"
+WRAPPER_TEXT = (
+    "jit.off()\n"
+    "assert(not jit.status(), \"the LuaJIT compiler is still on\")\n"
+    "dofile(\"/usr/share/sysbench/{}.lua\")\n"
+)
 DOCKER_TIMEOUT = 120
 SYSBENCH_TIMEOUT = 3600
 C_SHAPE = "^[0-9]{11}(-[0-9]{11}){9} *$"
@@ -146,6 +153,30 @@ def library_paths(ldd_output):
     return paths
 
 
+def wrapper_path(workload):
+    return "{}/{}.lua".format(WRAPPER_DIR, workload)
+
+
+def wrapper_text(workload):
+    return WRAPPER_TEXT.format(workload)
+
+
+def install_wrappers(args):
+    for workload in WORKLOADS:
+        docker_text(
+            args,
+            [
+                "sh",
+                "-c",
+                'mkdir -p "$1" && printf "%s" "$2" > "$3"',
+                "sh",
+                WRAPPER_DIR,
+                wrapper_text(workload),
+                wrapper_path(workload),
+            ],
+        )
+
+
 def client_identity(args):
     version = docker_text(args, ["sysbench", "--version"]).strip()
     if version.split("\n")[0].strip() != SYSBENCH_VERSION:
@@ -154,7 +185,9 @@ def client_identity(args):
                 args.container, version, SYSBENCH_VERSION
             )
         )
-    files = list(CLIENT_FILES) + library_paths(
+    install_wrappers(args)
+    wrappers = [wrapper_path(workload) for workload in WORKLOADS]
+    files = list(CLIENT_FILES) + wrappers + library_paths(
         docker_text(args, ["ldd", "/usr/bin/sysbench"])
     )
     digests = {}
@@ -167,6 +200,14 @@ def client_identity(args):
         raise common.runner.RunnerError(
             "no sha256 for {} in container {}".format(", ".join(missing), args.container)
         )
+    for workload in WORKLOADS:
+        expected = hashlib.sha256(wrapper_text(workload).encode("utf-8")).hexdigest()
+        if digests[wrapper_path(workload)] != expected:
+            raise common.runner.RunnerError(
+                "{} in container {} does not hold the wrapper this script wrote".format(
+                    wrapper_path(workload), args.container
+                )
+            )
     listing = "".join(
         "{}  {}\n".format(digests[path], path) for path in sorted(digests)
     )
@@ -178,9 +219,9 @@ def client_identity(args):
     }
 
 
-def sysbench_options(args, workload, threads, command, events=None):
+def sysbench_options(args, workload, threads, command, events=None, seed=None):
     shown = [
-        workload,
+        wrapper_path(workload),
         "--db-driver=mysql",
         "--mysql-user=root",
         "--mysql-db={}".format(DATABASE),
@@ -195,7 +236,7 @@ def sysbench_options(args, workload, threads, command, events=None):
         shown += [
             "--events={}".format(events),
             "--time=0",
-            "--rand-seed={}".format(args.rand_seed),
+            "--rand-seed={}".format(seed),
             "--mysql-ignore-errors={}".format(IGNORED_ERRORS),
             "--verbosity=5",
         ]
@@ -234,7 +275,9 @@ def parse_sysbench(output):
 
 
 def run_sysbench(args, recording, name, workload, threads, command, events=None):
-    shown, options = sysbench_options(args, workload, threads, command, events)
+    shown, options = sysbench_options(
+        args, workload, threads, command, events, args.rand_seeds.get(name)
+    )
     recording.line("-- sysbench {}".format(" ".join(shown)))
     code, output = docker(args, ["sysbench"] + options, timeout=SYSBENCH_TIMEOUT)
     log_path = args.work_dir / "{}.sysbench.log".format(name)
@@ -470,6 +513,10 @@ def command_run(args):
         "-- client: {}, sha256 of its binary, Lua scripts and libraries: {}".format(
             SYSBENCH_VERSION, args.client["digest"]
         ),
+        "-- client Lua: every command runs {}/<workload>.lua, which turns the LuaJIT "
+        "compiler off and then runs /usr/share/sysbench/<workload>.lua".format(
+            WRAPPER_DIR
+        ),
         "-- server parameters: {}".format(", ".join(SERVER_PARAMETERS)),
     ]
     cases = [("prepare", case_prepare)]
@@ -481,6 +528,9 @@ def command_run(args):
         ("oltp_read_write_{}".format(threads), read_write_case(threads))
         for threads in args.threads
     ]
+    args.rand_seeds = dict(
+        (name, args.rand_seed + index) for index, (name, _) in enumerate(cases[1:])
+    )
     recorded = (
         "<case>.result is the case's recording when sysbench succeeded and every "
         "check held; otherwise <case>.partial is what it recorded up to the "
@@ -499,8 +549,13 @@ def command_run(args):
             "point_select_events": args.point_select_events,
             "read_write_events": args.read_write_events,
             "rand_seed": args.rand_seed,
+            "rand_seeds": args.rand_seeds,
             "mysql_ignore_errors": IGNORED_ERRORS,
             "mysql_host": args.mysql_host,
+            "lua_wrappers": dict(
+                (wrapper_path(workload), wrapper_text(workload))
+                for workload in WORKLOADS
+            ),
         },
     }
     return common.run_family(args, cases, recorded, extra, setup)
@@ -565,7 +620,8 @@ def create_parser():
         "--rand-seed",
         type=common.runner.positive_int,
         default=1,
-        help="sysbench --rand-seed for every run (default 1; 0 would seed from the clock)",
+        help="sysbench --rand-seed of the first run; each later run adds 1, so no "
+        "two runs share a seed (default 1; 0 would seed from the clock)",
     )
     return parser
 

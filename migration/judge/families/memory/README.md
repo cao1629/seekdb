@@ -41,7 +41,8 @@ python3 .github/script/seekdb/mysqltest_for_seekdb.py compare --left <rec A> --r
 The options are restart_scenarios.py's: `--seekdb`, `--obclient`, `--base-dir` (new or empty),
 `--record-dir` (new or empty), `--port` (required; use 3891-3899, 3881/3882 are the judge's),
 `--init-sql`, `--init-user-sql`, `--scenario NAME` (repeatable; scenarios always run in the fixed
-order below) and `--save-instance-dir DIR` (defaults to `$SEEKDB_COV_PROFRAW_DIR`; copies `log/`
+order below) and `--save-instance-dir DIR` (defaults to `$SEEKDB_COV_PROFRAW_DIR`; judge runs do not
+use it; copies `log/`
 before every destroy). Exit 0 means every requested scenario ran and all its checks held; 1 means
 anything else, including a stop by signal; argument errors exit 2.
 
@@ -125,20 +126,26 @@ line of a multi-line message, the time-and-trace line that `enable_rich_error_ms
 src/share/parameter/ob_parameter_seed.ipp:122-125), or a client warning. So a build whose message
 matches on its first line but carries more lines cannot record like the reference.
 
-**What is not recorded, and the rule used instead.** Everything recorded is what two runs of the same
-binary reproduce exactly. Named exceptions, each also named in the script:
+**What is recorded, and the one value the comparison leaves out.** Every value the scenarios print is
+recorded, the memstore readings of memstore_below_reserve and memstore_fill included (`memstore_used=...
+memstore_limit=...` lines, the `alter system set memstore_memory_limit = '<n>M'` statement with its n,
+and `-- accepted chunks: N`): the live check (below) found each of them the same in every run on the
+reference, so `compare` compares them exactly. Two things are special:
 
-| Value | Where | Why it is left out | What is compared instead |
+| Value | Where | What the recording holds | How it is compared |
 |---|---|---|---|
-| `mem_hold` in the -11049 message | query_memory_limit | the request's memory hold at the check that failed; it follows allocator block sizes and thread-local page caches (src/oblib/lib/rc/context.h:386-391, :600-612), so it may differ between two runs of one binary, and a port cannot be expected to reproduce allocator internals | recorded as `mem_hold=<not recorded>`; check that it is at least `mem_limit` (the condition at ob_memory_tracker.cpp:46-47). The rest of the message, including `mem_limit=10737418`, is exact |
-| `memstore_used` before the limit is set | memstore_below_reserve, memstore_fill | the memstore the inner tables hold after bootstrap and init varies | none in memstore_below_reserve (printed for the live check); in memstore_fill the limit is computed from it |
-| the `memstore_memory_limit` computed from it | memstore_fill | follows the value above | the statement is recorded as a comment naming how n is computed |
-| how many chunks were accepted before the refusal | memstore_fill | depends on the memstore used above, on 2 MB page steps and on writes by inner tables | checks: at least 6 were accepted, and one was refused within 128 |
-| `memstore_used` and `memstore_limit` read right after the refusal | memstore_fill | follow the values above | checks: `memstore_limit` is the n MB set, and `memstore_used` is above `memstore_limit` minus 100 MB by at most 8 MB |
-| the 200,000 lines of the sort query | work_area_spill | not variable, only long | the line count and sha256 of the exact output; still an exact comparison |
+| `mem_hold` in the -11049 message | query_memory_limit | the error line as the client sees it, number included, and a check that the number is at least `mem_limit` (the condition at ob_memory_tracker.cpp:46-47) | exactly without a mask; `compare --mask mem-hold` (decisions.md row 6a; ../../harness/README.md, "The runner changes of 2026-09-28") leaves out the digits after `mem_hold=` and compares the rest of the line, `mem_limit=10737418` included, and every other line exactly. It is the request's memory hold at the check that failed, which follows allocator block sizes and thread-local page caches (src/oblib/lib/rc/context.h:386-391, :600-612): the reference printed 11020166 in ten of fifteen runs and 11085702 in five |
+| the 200,000 lines of the sort query | work_area_spill | the line count and sha256 of the exact output | exactly; the lines are only long, not variable |
 
-The values left out are printed on the run's stdout as `not recorded: <scenario> <name>=<value>`, so
-the live check can see whether and how much they vary. No mask is added (Decision 6).
+The script prints the mem_hold value on its stdout as `varying value: query_memory_limit
+mem_hold=<value>`.
+
+**Reading the memstore.** `oceanbase.__all_virtual_memstore_info` never ends its rows on the reference:
+`ObAllVirtualMemstoreUsage::inner_get_next_row` returns the same row on every call and never sets
+`start_to_read_` (src/observer/virtual_table/ob_all_virtual_memstore_usage.cpp:48), so a read without a
+limit fills the scanner until it fails with `ERROR 4019 (HY000): Size overflow` (the first live run,
+below). The script reads it with `limit 1`, which returns the first row, computed fresh by
+`get_memstore_condition`. A build whose table ends after one row reads the same.
 
 ## work_area_spill
 
@@ -199,7 +206,7 @@ src/share/ob_errno.def:1880). The context and the tracker are per request
 the request's (src/sql/engine/aggregate/ob_hash_groupby_op.cpp:403-414), so its hash table counts.
 The work area goes to 100% because at 5% the group by would spill at 6.7 MB and stay below the
 10.7 MB limit. Checks: the error is 11049; the message names `mem_limit=10737418`; the
-unrecorded `mem_hold` is at least that.
+`mem_hold` is at least that.
 
 ## hash_join_depth
 
@@ -274,7 +281,7 @@ mutation ties the error to :843.
 ## memstore_below_reserve
 
 `t_ms (id, pad)` with one row written first. `alter system set writing_throttling_trigger_percentage
-= 100` (no write throttling); the script reads `memstore_used` (printed, not recorded); `alter system
+= 100` (no write throttling); the script reads `memstore_used` (recorded); `alter system
 set memstore_memory_limit = '64M'`; then an INSERT, an UPDATE and a DELETE, each after a 1 s wait,
 must each fail with 4030; `select id, pad from t_ms` still shows the first row; `alter system set
 memstore_memory_limit = '0M'` (back to 50% of the budget), wait, an INSERT succeeds and the table
@@ -303,12 +310,12 @@ reference is in; memstore_fill pins the reserve in either case.
 trigger, src/share/config/ob_config_helper.cpp:69-84, checked at
 src/rootserver/ob_local_management_service.cpp:2524-2527).
 
-1. Read `memstore_used` from `oceanbase.__all_virtual_memstore_info` (not recorded) and set
+1. Read `memstore_used` from `oceanbase.__all_virtual_memstore_info` (recorded) and set
    `memstore_memory_limit` to it, rounded up to MB, plus 100 MB plus 16 MB, so that 16-17 MB of
    writes separate the memstore from the refusal.
 2. Chunks of 1,000 rows of 1,000 bytes, each after a 0.2 s pause, until one is refused (at most 128).
    The refusal must be 4030.
-3. Right after the refusal, read `memstore_used` and `memstore_limit` again (not recorded).
+3. Right after the refusal, read `memstore_used` and `memstore_limit` again (recorded).
 4. Checks: at least 6 chunks were accepted; `memstore_limit` is the n MB set in step 1; and
    `memstore_used` is above `memstore_limit - 100 MB`, by at most 8 MB.
 5. After 1 s, an UPDATE must also fail with 4030 (no memstore freeze starts, since its trigger is 99%
@@ -484,7 +491,66 @@ started):
 - The vsag behavior above, by disassembling the linked libvsag.dylib with `otool`.
 - Every other source fact above was read at 834bbee1e in this worktree.
 
-## Live check on the reference (after the judge run ends)
+## Live check, 2026-09-28
+
+The family's first runs on a server, by the unit that applied the second-set reviews. Every run used
+the archived reference (/Users/colin/seekdb-dev/ref-archive-834bbee1e/seekdb, sha256 db7d9180...) and
+its client/obclient, the reduced init, port 3894, no `--save-instance-dir`, and the checks that
+tools/deploy and sdb.py are 834bbee1e's and that / has 8 GiB free (review/run_memory.sh). Outputs:
+/Users/colin/seekdb-dev/mysqltest-runs/00b/second-set/review/mem-N/ (run.log, times.txt, rec/) and the
+comparisons compare-mem-*.
+
+**What the first run found and what changed.**
+1. **mem-1:** work_area_spill, query_memory_limit, hash_join_depth and vector_limit passed;
+   memstore_below_reserve and memstore_fill stopped at their first memstore read with
+   `cannot read select memstore_used, memstore_limit from oceanbase.__all_virtual_memstore_info`.
+   Run by hand on a scratch instance, the read fails with `ERROR 4019 (HY000): Size overflow`: the
+   virtual table never ends its rows ("Reading the memstore", above). The read now has `limit 1`,
+   which returns the fresh row (memstore_used 20,798,160 and memstore_limit 536,870,912 on the scratch
+   instance).
+2. **mem-2 to mem-5** (the script with `limit 1`, the memstore values still printed but not
+   recorded): all six scenarios passed in each, 69 s a run. Every value the script left out came out
+   the same in all four runs: memstore_used 24,957,792 in memstore_below_reserve (below 64 MB, so
+   that scenario alone would also catch a missing reserve), and in memstore_fill memstore_used
+   22,877,976, the limit 138M, 13 accepted chunks, and after the refusal memstore_used 41,596,320
+   with memstore_limit 144,703,488, 1,750,432 bytes above the line. mem_hold was 11085702 in mem-2,
+   mem-3 and mem-4 and 11020166 in mem-1 and mem-5.
+3. **So the script now records every value but mem_hold's number exactly** (the table above), and
+   records the -11049 line with its number, which `compare --mask mem-hold` leaves out (decisions.md
+   row 6a). A review of the second set had pointed out that the values were left out on source
+   reasoning alone, and that the replacement at record time was a mask the runner did not know.
+4. **mem-6 to mem-15** (the final script; mem-10 to mem-15 after one more wording fix in a recorded
+   comment; mem-13 to mem-15 ran at 01:49-01:52 on 2026-09-29 while another instance recorded family
+   7 on port 3892): all six scenarios passed in each run. mem_hold was 11085702 in mem-9 and mem-15
+   and 11020166 in the others; every other line is the same in all of them.
+
+| Comparison | Exact | With `--mask mem-hold` |
+|---|---|---|
+| mem-2 against mem-3 (the script before the change) | exit 0, 6 identical | – |
+| mem-8 against mem-9 (mem_hold 11020166 and 11085702) | exit 1: query_memory_limit different, only in that number | exit 0: 6 identical; `mask mem-hold: listed_cases=1, compared_cases=1, not_compared_cases=0, listed_lines=1, lines_masked_left=1, lines_masked_right=1, values_differ=1` |
+| mem-10 against mem-11, mem-11 against mem-12, mem-10 against mem-12, mem-10 against mem-13, mem-13 against mem-14 (the final script) | exit 0, 6 identical | exit 0, 6 identical, one line masked on each side, `values_differ=0` |
+| mem-14 against mem-15, mem-10 against mem-15 (the final script, mem_hold 11020166 and 11085702) | exit 1: query_memory_limit different, only in that number | exit 0: 6 identical, `lines_masked_left=1, lines_masked_right=1, values_differ=1` |
+
+What the runs confirmed, against the list under "The live check as first planned": the server starts
+and inits with `memory_budget=1G` and `cpu_count=4`, and new sessions get the global query timeout;
+work_area_spill's three operators spill at 5% and are optimal at 100% with the same output;
+query_memory_limit fails with 11049 and `mem_limit=10737418`; hash_join_depth fails with 4013 after a
+multi-pass execution that `V$SQL_WORKAREA` shows; memstore_below_reserve refuses INSERT, UPDATE and
+DELETE with 4030 and writes resume after `'0M'`; memstore_fill refuses the 14th chunk with 4030,
+1.7 MB above the line; vector_limit fails with `ERROR 4013 (HY001): No memory or server runtime memory
+limit reached` and the server survives. Per scenario, about 24, 13, 13.5, 6.7, 7.9 and 3.7 s, and a
+peak resident set size under 700 MB (hash_join_depth).
+
+**The mutation:** ../../mutations/second-set/12-memory-memstore-reserve-halved.patch, with its note
+beside it (the first candidate below that pins a value this family now records exactly): the reserve
+of 100 MB that the memstore keeps from user writes is halved in
+`ObMemstoreFreezer::check_memstore_full_` (src/storage/tx_storage/ob_memstore_freezer.cpp:1075). On the
+mutated build memstore_fill accepted 47 chunks instead of 13 and stopped 51.3 MB above the line
+instead of 1.7 MB, so its distance check read `no` and the scenario ended as a `.partial`; the other
+five scenarios recorded as on the reference, and `compare --mask mem-hold` against mem-10 exits 1.
+Caught. The 272 configured cases never reach the refusal (0 hits at ob_access_service.cpp:657).
+
+## The live check as first planned (before 2026-09-28)
 
 ```
 cd /Users/colin/seekdb-dev/migrate-to-rust

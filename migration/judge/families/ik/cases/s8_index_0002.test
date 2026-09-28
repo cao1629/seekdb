@@ -1,0 +1,183 @@
+--disable_abort_on_error
+--enable_warnings
+--echo # s8_index 2
+SET NAMES utf8mb4 COLLATE utf8mb4_general_ci, ob_enable_plan_cache = 0, ob_query_timeout = 600000000, ob_trx_timeout = 600000000;
+--echo errno $mysql_errno
+--echo # an index created on a table that already holds the documents
+CREATE TABLE ik_s8_late (id INT PRIMARY KEY, c VARCHAR(4000));
+--echo errno $mysql_errno
+INSERT INTO ik_s8_late VALUES (1, '中华人民共和国人民大会堂');
+--echo errno $mysql_errno
+INSERT INTO ik_s8_late VALUES (2, '南京市长江大桥');
+--echo errno $mysql_errno
+INSERT INTO ik_s8_late VALUES (3, '研究生命起源是一个古老而又充满挑战的课题。');
+--echo errno $mysql_errno
+INSERT INTO ik_s8_late VALUES (4, '结婚的和尚未结婚的都可以报名参加。');
+--echo errno $mysql_errno
+INSERT INTO ik_s8_late VALUES (5, '乒乓球拍卖完了');
+--echo errno $mysql_errno
+INSERT INTO ik_s8_late VALUES (6, 'OceanBase是一款稳定的分布式数据库，支持MySQL兼容模式。');
+--echo errno $mysql_errno
+INSERT INTO ik_s8_late VALUES (7, '我们用Rust重写了C++代码，性能提升了30%。');
+--echo errno $mysql_errno
+INSERT INTO ik_s8_late VALUES (8, '版本号从v4.2.1升级到v4.3.0之后，查询速度快了2倍。');
+--echo errno $mysql_errno
+INSERT INTO ik_s8_late VALUES (9, '用户名admin_01登录失败了3次。');
+--echo errno $mysql_errno
+INSERT INTO ik_s8_late VALUES (10, 'camelCaseWord PascalCase snake_case kebab-case SCREAMING_SNAKE_CASE');
+--echo errno $mysql_errno
+INSERT INTO ik_s8_late VALUES (11, 'john.doe@example.com first_last@sub.domain.org');
+--echo errno $mysql_errno
+INSERT INTO ik_s8_late VALUES (12, '三百五十个 五公斤 十米 八千米 一百块钱');
+--echo errno $mysql_errno
+INSERT INTO ik_s8_late VALUES (13, '2024年第3季度营收同比增长15.6%，净利润达到3.2亿元。');
+--echo errno $mysql_errno
+INSERT INTO ik_s8_late VALUES (14, '1,2,3 1.2.3 1..2 .5 5. ,5 5, 1,,2 1.,2');
+--echo errno $mysql_errno
+INSERT INTO ik_s8_late VALUES (15, '東京は日本の首都です。こんにちは、世界！');
+--echo errno $mysql_errno
+INSERT INTO ik_s8_late VALUES (16, '안녕하세요 세계 대한민국 서울특별시');
+--echo errno $mysql_errno
+INSERT INTO ik_s8_late VALUES (17, 'ｱｲｳｴｵ ﾊﾟﾋﾟ');
+--echo errno $mysql_errno
+INSERT INTO ik_s8_late VALUES (18, 'ＡＢＣ１２３ ａ＿ｂ ａ_ｂ a＿b');
+--echo errno $mysql_errno
+INSERT INTO ik_s8_late VALUES (19, 'Hello世界，你好World！');
+--echo errno $mysql_errno
+INSERT INTO ik_s8_late VALUES (20, '床前明月光，疑是地上霜。举头望明月，低头思故乡。');
+--echo errno $mysql_errno
+INSERT INTO ik_s8_late VALUES (21, '');
+--echo errno $mysql_errno
+INSERT INTO ik_s8_late VALUES (22, NULL);
+--echo errno $mysql_errno
+INSERT INTO ik_s8_late VALUES (23, '，。！');
+--echo errno $mysql_errno
+INSERT INTO ik_s8_late VALUES (24, '😀🎉👍🏻 中国🇨🇳加油');
+--echo errno $mysql_errno
+INSERT INTO ik_s8_late VALUES (25, '的的的的的的的的的的');
+--echo errno $mysql_errno
+INSERT INTO ik_s8_late VALUES (26, '他说的确实在理');
+--echo errno $mysql_errno
+INSERT INTO ik_s8_late VALUES (27, '北京大学生前来应聘');
+--echo errno $mysql_errno
+INSERT INTO ik_s8_late VALUES (28, '发展中国家兔的饲养技术');
+--echo errno $mysql_errno
+INSERT INTO ik_s8_late VALUES (29, '已经分房和尚未分房的同志');
+--echo errno $mysql_errno
+INSERT INTO ik_s8_late VALUES (30, 'x86_64和arm64是两种常见的CPU架构。');
+--echo errno $mysql_errno
+CREATE FULLTEXT INDEX fl ON ik_s8_late(c) WITH PARSER ik PARSER_PROPERTIES=(ik_mode='max_word');
+--echo errno $mysql_errno
+SELECT id, MATCH(c) AGAINST('人民' IN BOOLEAN MODE) AS score FROM ik_s8_late WHERE MATCH(c) AGAINST('人民' IN BOOLEAN MODE) ORDER BY id;
+--echo errno $mysql_errno
+SELECT id, MATCH(c) AGAINST('人民大会堂' IN BOOLEAN MODE) AS score FROM ik_s8_late WHERE MATCH(c) AGAINST('人民大会堂' IN BOOLEAN MODE) ORDER BY id;
+--echo errno $mysql_errno
+SELECT id, MATCH(c) AGAINST('中华人民共和国' IN BOOLEAN MODE) AS score FROM ik_s8_late WHERE MATCH(c) AGAINST('中华人民共和国' IN BOOLEAN MODE) ORDER BY id;
+--echo errno $mysql_errno
+SELECT id, MATCH(c) AGAINST('共和国' IN BOOLEAN MODE) AS score FROM ik_s8_late WHERE MATCH(c) AGAINST('共和国' IN BOOLEAN MODE) ORDER BY id;
+--echo errno $mysql_errno
+SELECT id, MATCH(c) AGAINST('长江大桥' IN BOOLEAN MODE) AS score FROM ik_s8_late WHERE MATCH(c) AGAINST('长江大桥' IN BOOLEAN MODE) ORDER BY id;
+--echo errno $mysql_errno
+SELECT id, MATCH(c) AGAINST('大桥' IN BOOLEAN MODE) AS score FROM ik_s8_late WHERE MATCH(c) AGAINST('大桥' IN BOOLEAN MODE) ORDER BY id;
+--echo errno $mysql_errno
+SELECT id, MATCH(c) AGAINST('市长' IN BOOLEAN MODE) AS score FROM ik_s8_late WHERE MATCH(c) AGAINST('市长' IN BOOLEAN MODE) ORDER BY id;
+--echo errno $mysql_errno
+SELECT id, MATCH(c) AGAINST('南京市' IN BOOLEAN MODE) AS score FROM ik_s8_late WHERE MATCH(c) AGAINST('南京市' IN BOOLEAN MODE) ORDER BY id;
+--echo errno $mysql_errno
+SELECT id, MATCH(c) AGAINST('研究生' IN BOOLEAN MODE) AS score FROM ik_s8_late WHERE MATCH(c) AGAINST('研究生' IN BOOLEAN MODE) ORDER BY id;
+--echo errno $mysql_errno
+SELECT id, MATCH(c) AGAINST('生命' IN BOOLEAN MODE) AS score FROM ik_s8_late WHERE MATCH(c) AGAINST('生命' IN BOOLEAN MODE) ORDER BY id;
+--echo errno $mysql_errno
+SELECT id, MATCH(c) AGAINST('和尚' IN BOOLEAN MODE) AS score FROM ik_s8_late WHERE MATCH(c) AGAINST('和尚' IN BOOLEAN MODE) ORDER BY id;
+--echo errno $mysql_errno
+SELECT id, MATCH(c) AGAINST('尚未' IN BOOLEAN MODE) AS score FROM ik_s8_late WHERE MATCH(c) AGAINST('尚未' IN BOOLEAN MODE) ORDER BY id;
+--echo errno $mysql_errno
+SELECT id, MATCH(c) AGAINST('乒乓球' IN BOOLEAN MODE) AS score FROM ik_s8_late WHERE MATCH(c) AGAINST('乒乓球' IN BOOLEAN MODE) ORDER BY id;
+--echo errno $mysql_errno
+SELECT id, MATCH(c) AGAINST('球拍' IN BOOLEAN MODE) AS score FROM ik_s8_late WHERE MATCH(c) AGAINST('球拍' IN BOOLEAN MODE) ORDER BY id;
+--echo errno $mysql_errno
+SELECT id, MATCH(c) AGAINST('拍卖' IN BOOLEAN MODE) AS score FROM ik_s8_late WHERE MATCH(c) AGAINST('拍卖' IN BOOLEAN MODE) ORDER BY id;
+--echo errno $mysql_errno
+SELECT id, MATCH(c) AGAINST('oceanbase' IN BOOLEAN MODE) AS score FROM ik_s8_late WHERE MATCH(c) AGAINST('oceanbase' IN BOOLEAN MODE) ORDER BY id;
+--echo errno $mysql_errno
+SELECT id, MATCH(c) AGAINST('OceanBase' IN BOOLEAN MODE) AS score FROM ik_s8_late WHERE MATCH(c) AGAINST('OceanBase' IN BOOLEAN MODE) ORDER BY id;
+--echo errno $mysql_errno
+SELECT id, MATCH(c) AGAINST('mysql' IN BOOLEAN MODE) AS score FROM ik_s8_late WHERE MATCH(c) AGAINST('mysql' IN BOOLEAN MODE) ORDER BY id;
+--echo errno $mysql_errno
+SELECT id, MATCH(c) AGAINST('rust' IN BOOLEAN MODE) AS score FROM ik_s8_late WHERE MATCH(c) AGAINST('rust' IN BOOLEAN MODE) ORDER BY id;
+--echo errno $mysql_errno
+SELECT id, MATCH(c) AGAINST('c' IN BOOLEAN MODE) AS score FROM ik_s8_late WHERE MATCH(c) AGAINST('c' IN BOOLEAN MODE) ORDER BY id;
+--echo errno $mysql_errno
+SELECT id, MATCH(c) AGAINST('snake_case' IN BOOLEAN MODE) AS score FROM ik_s8_late WHERE MATCH(c) AGAINST('snake_case' IN BOOLEAN MODE) ORDER BY id;
+--echo errno $mysql_errno
+SELECT id, MATCH(c) AGAINST('안' IN BOOLEAN MODE) AS score FROM ik_s8_late WHERE MATCH(c) AGAINST('안' IN BOOLEAN MODE) ORDER BY id;
+--echo errno $mysql_errno
+SELECT id, MATCH(c) AGAINST('的' IN BOOLEAN MODE) AS score FROM ik_s8_late WHERE MATCH(c) AGAINST('的' IN BOOLEAN MODE) ORDER BY id;
+--echo errno $mysql_errno
+SELECT id, MATCH(c) AGAINST('中华人民共和国人民大会堂') AS score FROM ik_s8_late WHERE MATCH(c) AGAINST('中华人民共和国人民大会堂') ORDER BY id;
+--echo errno $mysql_errno
+SELECT id, MATCH(c) AGAINST('南京市长江大桥') AS score FROM ik_s8_late WHERE MATCH(c) AGAINST('南京市长江大桥') ORDER BY id;
+--echo errno $mysql_errno
+SELECT id, MATCH(c) AGAINST('研究生命起源') AS score FROM ik_s8_late WHERE MATCH(c) AGAINST('研究生命起源') ORDER BY id;
+--echo errno $mysql_errno
+SELECT id, MATCH(c) AGAINST('结婚的和尚') AS score FROM ik_s8_late WHERE MATCH(c) AGAINST('结婚的和尚') ORDER BY id;
+--echo errno $mysql_errno
+SELECT id, MATCH(c) AGAINST('OceanBase数据库') AS score FROM ik_s8_late WHERE MATCH(c) AGAINST('OceanBase数据库') ORDER BY id;
+--echo errno $mysql_errno
+SELECT id, MATCH(c) AGAINST('snake_case命名规范') AS score FROM ik_s8_late WHERE MATCH(c) AGAINST('snake_case命名规范') ORDER BY id;
+--echo errno $mysql_errno
+DROP TABLE ik_s8_late;
+--echo errno $mysql_errno
+--echo # a TEXT column with an IK index: the index reads the text
+CREATE TABLE ik_s8_text (id INT PRIMARY KEY, c TEXT, FULLTEXT INDEX ft(c) WITH PARSER ik);
+--echo errno $mysql_errno
+INSERT INTO ik_s8_text VALUES (1, '中华人民共和国人民大会堂');
+--echo errno $mysql_errno
+INSERT INTO ik_s8_text VALUES (2, '南京市长江大桥');
+--echo errno $mysql_errno
+INSERT INTO ik_s8_text VALUES (3, '研究生命起源是一个古老而又充满挑战的课题。');
+--echo errno $mysql_errno
+INSERT INTO ik_s8_text VALUES (4, '结婚的和尚未结婚的都可以报名参加。');
+--echo errno $mysql_errno
+INSERT INTO ik_s8_text VALUES (5, '乒乓球拍卖完了');
+--echo errno $mysql_errno
+INSERT INTO ik_s8_text VALUES (6, 'OceanBase是一款稳定的分布式数据库，支持MySQL兼容模式。');
+--echo errno $mysql_errno
+INSERT INTO ik_s8_text VALUES (7, '我们用Rust重写了C++代码，性能提升了30%。');
+--echo errno $mysql_errno
+INSERT INTO ik_s8_text VALUES (8, '版本号从v4.2.1升级到v4.3.0之后，查询速度快了2倍。');
+--echo errno $mysql_errno
+INSERT INTO ik_s8_text VALUES (9, '用户名admin_01登录失败了3次。');
+--echo errno $mysql_errno
+INSERT INTO ik_s8_text VALUES (10, 'camelCaseWord PascalCase snake_case kebab-case SCREAMING_SNAKE_CASE');
+--echo errno $mysql_errno
+INSERT INTO ik_s8_text VALUES (11, 'john.doe@example.com first_last@sub.domain.org');
+--echo errno $mysql_errno
+INSERT INTO ik_s8_text VALUES (12, '三百五十个 五公斤 十米 八千米 一百块钱');
+--echo errno $mysql_errno
+SELECT id, MATCH(c) AGAINST('人民大会堂' IN BOOLEAN MODE) AS score FROM ik_s8_text WHERE MATCH(c) AGAINST('人民大会堂' IN BOOLEAN MODE) ORDER BY id;
+--echo errno $mysql_errno
+SELECT id, MATCH(c) AGAINST('人民' IN BOOLEAN MODE) AS score FROM ik_s8_text WHERE MATCH(c) AGAINST('人民' IN BOOLEAN MODE) ORDER BY id;
+--echo errno $mysql_errno
+SELECT id, MATCH(c) AGAINST('长江大桥' IN BOOLEAN MODE) AS score FROM ik_s8_text WHERE MATCH(c) AGAINST('长江大桥' IN BOOLEAN MODE) ORDER BY id;
+--echo errno $mysql_errno
+SELECT id, MATCH(c) AGAINST('oceanbase' IN BOOLEAN MODE) AS score FROM ik_s8_text WHERE MATCH(c) AGAINST('oceanbase' IN BOOLEAN MODE) ORDER BY id;
+--echo errno $mysql_errno
+SELECT id, MATCH(c) AGAINST('snake_case' IN BOOLEAN MODE) AS score FROM ik_s8_text WHERE MATCH(c) AGAINST('snake_case' IN BOOLEAN MODE) ORDER BY id;
+--echo errno $mysql_errno
+SELECT id, MATCH(c) AGAINST('三百五十个' IN BOOLEAN MODE) AS score FROM ik_s8_text WHERE MATCH(c) AGAINST('三百五十个' IN BOOLEAN MODE) ORDER BY id;
+--echo errno $mysql_errno
+SELECT id, MATCH(c) AGAINST('2' IN BOOLEAN MODE) AS score FROM ik_s8_text WHERE MATCH(c) AGAINST('2' IN BOOLEAN MODE) ORDER BY id;
+--echo errno $mysql_errno
+SELECT id, MATCH(c) AGAINST('中华人民共和国人民大会堂') AS score FROM ik_s8_text WHERE MATCH(c) AGAINST('中华人民共和国人民大会堂') ORDER BY id;
+--echo errno $mysql_errno
+SELECT id, MATCH(c) AGAINST('南京市长江大桥') AS score FROM ik_s8_text WHERE MATCH(c) AGAINST('南京市长江大桥') ORDER BY id;
+--echo errno $mysql_errno
+SELECT id, MATCH(c) AGAINST('研究生命起源') AS score FROM ik_s8_text WHERE MATCH(c) AGAINST('研究生命起源') ORDER BY id;
+--echo errno $mysql_errno
+SELECT id, MATCH(c) AGAINST('结婚的和尚') AS score FROM ik_s8_text WHERE MATCH(c) AGAINST('结婚的和尚') ORDER BY id;
+--echo errno $mysql_errno
+SELECT id, tokenize(c, 'ik') AS t FROM ik_s8_text WHERE id = 1;
+--echo errno $mysql_errno
+DROP TABLE ik_s8_text;
+--echo errno $mysql_errno

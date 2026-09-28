@@ -1,0 +1,273 @@
+case	listed	reason	rec1_hits	rec1_misses	rec1_seconds	rec2_hits	rec2_misses	rec2_seconds	rec3_hits	rec3_misses	rec3_seconds	rec4_hits	rec4_misses	rec4_seconds	rec5_hits	rec5_misses	rec5_seconds	rec6_hits	rec6_misses	rec6_seconds	rec7_hits	rec7_misses	rec7_seconds
+a_trade_notify	both	reads 0.100 s apart or more in some recording	2861	124	4.942	2875	124	4.963				2877	126	5.180	2871	124	5.339	2870	123	4.715			
+a_trade_quick	both	reads 0.100 s apart or more in some recording	4671	124	0.559	4699	124	0.901				4679	124	0.568	4664	124	0.514	4680	124	0.580	4697	124	0.839
+add	both	reads 0.100 s apart or more in some recording	795	949	0.326	795	949	0.477				795	949	0.361	795	949	0.424	795	949	0.412	795	949	0.354
+aggr_bug200109	hits	misses agree in every recording, every read gap under 0.1 s	30	26	0.045	30	26	0.042				30	26	0.053	30	26	0.043	30	26	0.046	30	26	0.029
+alias2	hits	misses agree in every recording, every read gap under 0.1 s	131	48	0.055	133	48	0.077				132	48	0.060	132	48	0.060	132	48	0.058	132	48	0.048
+alias3	hits	misses agree in every recording, every read gap under 0.1 s	30	38	0.044	30	38	0.034				30	38	0.044	30	38	0.084	30	38	0.042	30	38	0.041
+bench_count_distinct	both	reads 0.100 s apart or more in some recording	258	34	0.085	258	34	0.074				258	34	0.073	258	34	0.115	258	34	0.058	258	34	0.065
+big_trans_with_mutil_redo	both	reads 0.100 s apart or more in some recording	2058	34	0.152	2058	34	0.158				2058	34	0.143	2058	34	0.191	2058	34	0.150	2058	34	0.143
+bug200747	both	reads 0.100 s apart or more in some recording	59	35	0.044	59	35	0.110				59	35	0.048	59	35	0.049	59	35	0.048	59	35	0.044
+bug210026	hits	misses agree in every recording, every read gap under 0.1 s	7	4	0.027	7	4	0.034				7	4	0.023	7	4	0.023	7	4	0.025	7	4	0.015
+bug233498_rename_table_jianming	hits	misses agree in every recording, every read gap under 0.1 s	88	34	0.046	88	34	0.050				88	34	0.046	88	34	0.039	88	34	0.055	88	34	0.051
+bug5910265_update_orderby_limit_dilang	hits	misses agree in every recording, every read gap under 0.1 s	98	41	0.055	98	41	0.071				98	41	0.059	98	41	0.069	98	41	0.069	98	41	0.049
+bug_setEmptyPwd	both	reads 0.100 s apart or more in some recording	34	11	9.430	42	13	9.546				41	13	9.163	33	11	9.241	43	12	9.564	42	13	9.668
+bulk_insert	both	reads 0.100 s apart or more in some recording	630	61	13.330	623	59	13.327				622	58	13.453	630	61	13.449	622	59	13.469	629	61	13.449
+chinese	hits	misses agree in every recording, every read gap under 0.1 s	32	25	0.065	32	25	0.040				32	25	0.040	32	25	0.040	32	25	0.042	32	25	0.054
+column_alias	hits	misses agree in every recording, every read gap under 0.1 s	32	31	0.041	32	31	0.045				32	31	0.041	32	31	0.042	32	31	0.043	32	31	0.035
+compare	hits	misses agree in every recording, every read gap under 0.1 s	139	44	0.053	138	44	0.057				139	44	0.057	139	44	0.061	139	44	0.065	140	44	0.053
+connection	both	reads 0.100 s apart or more in some recording	1126	34	0.134	1126	34	0.137				1125	34	0.144	1125	34	0.150	1126	34	0.395	1125	34	0.143
+count	hits	misses agree in every recording, every read gap under 0.1 s	35	30	0.038	35	30	0.049				35	30	0.056	35	30	0.042	35	30	0.032	35	30	0.036
+create_using_type	hits	misses agree in every recording, every read gap under 0.1 s	122	44	0.053	122	44	0.059				122	44	0.064	122	44	0.068	123	44	0.079	122	44	0.052
+createsql	both	reads 0.100 s apart or more in some recording	1513	69	0.198	1520	69	0.219				1522	69	0.227	1519	69	0.213	1520	69	0.211	1519	69	0.204
+createvarchar	both	reads 0.100 s apart or more in some recording	1617	104	0.230	1620	104	0.234				1623	104	0.265	1619	104	0.225	1622	104	0.230	1619	104	0.240
+datatype_java	hits	misses agree in every recording, every read gap under 0.1 s	60	40	0.047	60	40	0.073				60	40	0.050	60	40	0.044	60	40	0.052	60	40	0.061
+ddlrollback	both	reads 0.100 s apart or more in some recording	427	53	0.091	427	53	0.109				430	53	0.117	434	53	0.195	427	53	0.091	433	53	0.221
+dist_nest_loop_simple	both	reads 0.100 s apart or more in some recording	981	152	0.218	982	152	0.244				983	152	0.233	980	152	0.224	984	152	0.235	982	152	0.231
+distinct	hits	misses agree in every recording, every read gap under 0.1 s	32	26	0.037	32	26	0.057				32	26	0.042	32	26	0.032	32	26	0.041	32	26	0.037
+driver5114_bug	hits	misses agree in every recording, every read gap under 0.1 s	59	35	0.075	59	35	0.078				59	35	0.059	59	35	0.048	59	35	0.049	59	35	0.041
+duplicate_key	hits	misses agree in every recording, every read gap under 0.1 s	60	36	0.046	60	36	0.051				60	36	0.050	60	36	0.085	60	36	0.048	60	36	0.040
+empty_input	hits	misses agree in every recording, every read gap under 0.1 s	7	1	0.020	7	1	0.022				7	1	0.023	7	1	0.027	7	1	0.023	7	1	0.014
+empty_table	hits	misses agree in every recording, every read gap under 0.1 s	59	35	0.059	59	35	0.055				59	35	0.051	59	35	0.049	59	35	0.040	59	35	0.079
+escape	hits	misses agree in every recording, every read gap under 0.1 s	59	34	0.044	59	34	0.053				59	34	0.056	59	34	0.052	59	34	0.045	59	34	0.076
+except	hits	misses agree in every recording, every read gap under 0.1 s	362	63	0.076	363	63	0.089				363	63	0.084	364	63	0.088	364	63	0.083	364	63	0.086
+explain	hits	misses agree in every recording, every read gap under 0.1 s	102	55	0.075	102	55	0.057				102	55	0.059	102	55	0.061	102	55	0.062	102	55	0.058
+fin	both	reads 0.100 s apart or more in some recording	919	62	0.127	920	62	0.140				921	62	0.138	922	62	0.207	920	62	0.135	921	62	0.137
+func_group_1	both	reads 0.100 s apart or more in some recording	1042	106	0.142	1044	106	0.142				1046	105	0.150	1047	106	0.170	1044	105	0.160	1046	105	0.148
+func_group_5	hits	misses agree in every recording, every read gap under 0.1 s	140	36	0.050	139	36	0.063				139	36	0.059	139	36	0.059	139	36	0.058	139	36	0.051
+func_group_6	both	reads 0.100 s apart or more in some recording	133	40	0.057	134	40	0.053				133	40	0.059	135	40	0.060	135	40	0.061	135	40	0.108
+func_group_7	both	reads 0.100 s apart or more in some recording	1042	87	0.134	1045	87	0.143				1045	87	0.130	1043	87	0.143	1043	87	0.147	1043	87	0.126
+generated_column	both	reads 0.100 s apart or more in some recording	2887	265	3.391	2910	264	3.556				2894	265	3.503	2896	267	3.393	2891	265	3.960	2899	264	3.957
+get	hits	misses agree in every recording, every read gap under 0.1 s	60	38	0.044	60	38	0.053				60	38	0.057	60	38	0.052	60	38	0.046	60	38	0.043
+h	hits	misses agree in every recording, every read gap under 0.1 s	63	34	0.051	63	34	0.047				63	34	0.052	63	34	0.052	63	34	0.046	63	34	0.039
+identifier_name_length	hits	misses agree in every recording, every read gap under 0.1 s	421	38	0.070	423	38	0.084				421	38	0.075	421	38	0.089	423	38	0.083	423	38	0.083
+idx_const_basic_one_bool	both	reads 0.100 s apart or more in some recording	183	70	0.389	182	70	0.262				182	70	0.269	177	70	0.269	181	70	0.271	182	70	0.270
+idx_unique_many_idx_one_ins	both	reads 0.100 s apart or more in some recording	1131	131	1.342	1132	131	1.562				1123	131	1.223	1120	131	1.228	1118	131	1.223	1134	131	1.326
+index_14_hint	both	reads 0.100 s apart or more in some recording	301	64	0.248	305	64	0.824				301	64	0.726	301	64	0.687	301	64	0.523	301	64	0.397
+index_47_NULL	both	reads 0.100 s apart or more in some recording	177	94	0.270	177	94	0.272				177	94	0.266	176	94	0.275	176	94	0.280	179	94	0.362
+index_49_alias	both	reads 0.100 s apart or more in some recording	133	51	0.362	134	51	0.369				134	51	0.544	134	51	0.527	134	51	0.428	134	51	0.384
+information_schema	both	reads 0.100 s apart or more in some recording	772	145	0.220	766	145	0.217				767	145	0.227	773	145	0.229	771	145	0.250	772	145	0.224
+intersect	both	reads 0.100 s apart or more in some recording	692	88	0.121	692	88	0.123				694	88	0.147	693	88	0.131	692	88	0.131	692	88	0.120
+join_basic	both	reads 0.100 s apart or more in some recording	632	87	0.115	633	87	0.131				631	87	0.123	635	87	0.259	632	87	0.116	632	87	0.114
+join_equivalent_transfer	hits	misses agree in every recording, every read gap under 0.1 s	211	56	0.066	211	56	0.079				211	56	0.074	210	56	0.073	210	56	0.074	211	56	0.066
+join_many_table	both	reads 0.100 s apart or more in some recording	131	47	9.283	134	47	10.036				123	45	9.413	122	45	9.245	130	47	9.116	124	44	9.458
+join_many_table_single_field	both	reads 0.100 s apart or more in some recording	121	48	9.412	121	48	9.294				113	46	9.420	113	46	9.390	113	46	9.424	120	48	9.275
+join_null	hits	misses agree in every recording, every read gap under 0.1 s	248	48	0.068	249	48	0.072				248	48	0.086	248	48	0.068	251	48	0.078	248	48	0.063
+join_star	hits	misses agree in every recording, every read gap under 0.1 s	164	48	0.073	163	48	0.069				163	48	0.069	164	48	0.074	165	48	0.068	165	48	0.074
+join_using1	hits	misses agree in every recording, every read gap under 0.1 s	186	57	0.062	186	57	0.067				187	57	0.063	187	57	0.066	187	57	0.070	188	57	0.099
+jp_length_utf8	both	reads 0.100 s apart or more in some recording	1012	65	0.113	1013	65	0.121				1012	65	0.126	1014	65	0.129	1013	65	0.101	1014	65	0.111
+largetimeout	hits	misses agree in every recording, every read gap under 0.1 s	63	34	0.052	63	34	0.052				63	34	0.049	63	34	0.052	63	34	0.046	63	34	0.041
+limit	hits	misses agree in every recording, every read gap under 0.1 s	137	40	0.051	139	40	0.084				137	40	0.056	138	40	0.054	137	40	0.052	139	40	0.049
+minitest	both	reads 0.100 s apart or more in some recording	1089	173	5.360	1084	173	6.120				1088	175	5.469	1088	175	5.298	1081	173	5.331	1085	173	5.311
+ms_lose_rollback	hits	misses agree in every recording, every read gap under 0.1 s	31	22	0.035	31	22	0.037				31	22	0.039	31	22	0.038	31	22	0.057	31	22	0.032
+non_reserved_keyword	hits	misses agree in every recording, every read gap under 0.1 s	55	38	0.044	55	38	0.047				55	38	0.052	55	38	0.044	55	38	0.058	55	38	0.042
+outer_join_where_is_null	hits	misses agree in every recording, every read gap under 0.1 s	75	29	0.043	75	29	0.043				75	29	0.045				75	29	0.046	76	29	0.055
+parallel_insert	both	reads 0.100 s apart or more in some recording	176	54	7.126	185	56	8.080				176	54	7.327				184	56	7.215	177	53	7.294
+pk_num_boundary	hits	misses agree in every recording, every read gap under 0.1 s	184	46	0.073	184	46	0.085				183	46	0.079				184	46	0.075	185	46	0.075
+range	both	reads 0.100 s apart or more in some recording	724	78	0.122	730	78	0.126				728	78	0.131				728	78	0.118	729	78	0.141
+rename_table2	both	reads 0.100 s apart or more in some recording	597	54	0.093	598	54	0.098				599	54	0.109				599	54	0.101	600	54	0.100
+safe_null_test	hits	misses agree in every recording, every read gap under 0.1 s	77	62	0.055	77	62	0.078				77	62	0.060				77	62	0.054	77	62	0.056
+select_basic	both	reads 0.100 s apart or more in some recording	1260	147	0.180	1262	147	0.194				1259	147	0.178				1261	147	0.178	1263	147	0.184
+sfu	both	reads 0.100 s apart or more in some recording	40	26	1.480	40	26	1.365				40	26	1.847				40	26	1.536	40	26	1.685
+sfu_norow_alias	both	reads 0.100 s apart or more in some recording	181	53	21.044	170	51	20.059				170	51	20.102				181	53	21.046	181	53	20.030
+special_hook	hits	misses agree in every recording, every read gap under 0.1 s	12	5	0.024	12	5	0.027				12	5	0.027				12	5	0.023	12	5	0.017
+special_stmt	hits	misses agree in every recording, every read gap under 0.1 s	11	3	0.024	11	3	0.025				11	3	0.026				11	3	0.032	11	3	0.026
+sq_from	hits	misses agree in every recording, every read gap under 0.1 s	289	43	0.065	290	43	0.080				289	43	0.072				289	43	0.076	290	43	0.062
+sq_from_2	both	reads 0.100 s apart or more in some recording	468	64	0.112	473	64	0.176				471	64	0.100				471	64	0.097	473	64	0.113
+sqlancer_optimizer_regressions	both	reads 0.100 s apart or more in some recording	580	115	0.218	581	115	0.248				581	115	0.252				581	115	0.228	581	115	0.216
+substring_index	hits	misses agree in every recording, every read gap under 0.1 s	50	14	0.034	50	14	0.033				50	14	0.027				50	14	0.028	50	14	0.017
+table_column_related_views	both	reads 0.100 s apart or more in some recording	537	90	0.287	538	90	0.434				539	90	0.300				538	90	0.292	537	90	0.286
+topk	both	reads 0.100 s apart or more in some recording	275	105	0.132	276	105	0.210				276	105	0.148				276	105	0.133	276	105	0.137
+trans_ac	hits	misses agree in every recording, every read gap under 0.1 s	139	34	0.072	140	34	0.059				139	34	0.062				139	34	0.053	140	34	0.061
+truncate_table	both	reads 0.100 s apart or more in some recording	485	89	0.493	489	89	0.624				483	89	0.507				487	89	0.507	488	89	0.488
+trx_4	hits	misses agree in every recording, every read gap under 0.1 s	155	41	0.062	155	41	0.066				154	41	0.058				154	41	0.064	155	41	0.053
+trx_5	both	reads 0.100 s apart or more in some recording	301	43	0.828	298	43	0.378				298	43	0.679				301	43	0.932	299	43	0.464
+trx_6	both	reads 0.100 s apart or more in some recording	98	42	10.060	106	44	10.032				98	42	10.027				106	44	10.014	106	44	10.026
+trx_timeout	both	reads 0.100 s apart or more in some recording	165	36	32.557	166	36	32.593				165	36	32.776				166	36	32.640	165	36	32.690
+trx_timeout_bug	both	reads 0.100 s apart or more in some recording	61	31	11.309	61	31	11.269				62	30	11.391				61	31	11.305	54	28	11.383
+two_order_by	both	reads 0.100 s apart or more in some recording	439	90	0.475	441	90	0.433				439	90	0.517				439	90	0.438	441	90	0.501
+update_behavior	both	reads 0.100 s apart or more in some recording	134	48	1.300	134	48	1.243				134	48	1.335				135	48	1.225	135	48	1.338
+update_column_use_other	hits	misses agree in every recording, every read gap under 0.1 s	34	27	0.041	34	27	0.050				34	27	0.040				34	27	0.041	34	27	0.032
+update_delete_limit_unique_key	both	reads 0.100 s apart or more in some recording	182	80	0.268	190	80	0.384				182	80	0.279				187	80	0.385	188	80	0.362
+update_range	both	reads 0.100 s apart or more in some recording	590	112	0.111	591	112	0.122				591	112	0.121				593	112	0.122	594	112	0.119
+view	both	reads 0.100 s apart or more in some recording	3803	147	0.832	3808	147	0.862				3805	147	0.870				3812	147	0.857	3808	147	0.842
+view_2	both	reads 0.100 s apart or more in some recording	7596	163	3.515	7605	163	3.091				7606	165	3.653				7599	165	3.248	7607	163	3.653
+ai_function.ai_model_ddl	hits	misses agree in every recording, every read gap under 0.1 s	382	40	0.065	384	40	0.088				384	40	0.065				382	40	0.070	384	40	0.072
+ai_function.ai_model_endpoint_ddl	hits	misses agree in every recording, every read gap under 0.1 s	402	45	0.062	405	45	0.078				403	45	0.070				403	45	0.064	402	45	0.065
+ai_function.ai_model_lower_case_name_mysql0	hits	misses agree in every recording, every read gap under 0.1 s	85	30	0.059	85	30	0.048				85	30	0.047				85	30	0.045	85	30	0.051
+ai_function.ai_model_lower_case_name_mysql1	hits	misses agree in every recording, every read gap under 0.1 s	147	26	0.044	147	26	0.049				147	26	0.048				148	26	0.047	148	26	0.051
+ai_function.ai_prompt	both	reads 0.100 s apart or more in some recording	595	117	0.123	596	117	0.146				595	117	0.132				595	117	0.144	597	117	0.126
+array.array_arith_op_mysql	both	reads 0.100 s apart or more in some recording	3941	324	17.225	3951	326	16.792				3950	326	17.389				3942	324	17.972	3942	324	16.828
+array.array_ddl_mysql	both	reads 0.100 s apart or more in some recording	9862	455	3.568	9880	453	3.936				9852	455	3.410				9854	455	3.338	9862	455	3.449
+datatype.bool	hits	misses agree in every recording, every read gap under 0.1 s	139	43	0.068	139	43	0.061				138	43	0.055				139	43	0.063	140	43	0.053
+datatype.div	both	reads 0.100 s apart or more in some recording	1277	606	0.318	1277	606	0.605				1277	606	0.331				1277	606	0.346	1277	606	0.496
+datatype.minus	both	reads 0.100 s apart or more in some recording	59	1685	0.413	59	1685	0.419				59	1685	0.456				59	1685	0.438	59	1685	0.439
+datatype.null2	hits	misses agree in every recording, every read gap under 0.1 s	80	59	0.052	80	59	0.065				80	59	0.061				80	59	0.053	80	59	0.058
+datatype.replace	both	reads 0.100 s apart or more in some recording	544	79	0.100	547	79	0.121				543	79	0.104				545	79	0.134	546	79	0.103
+datatype.type_varchar_2	hits	misses agree in every recording, every read gap under 0.1 s	81	24	0.040	81	24	0.040				81	24	0.048				81	24	0.041	81	24	0.062
+deadlock_detector.trans_deadlock_basic	both	reads 0.100 s apart or more in some recording	218	53	2.695	221	58	2.767				220	53	2.618				220	58	2.838	220	53	2.611
+delete.delete	both	reads 0.100 s apart or more in some recording	1019	112	0.148	1019	112	0.155				1017	112	0.165				1017	112	0.143	1019	112	0.153
+delete.deleteV2	hits	misses agree in every recording, every read gap under 0.1 s	321	76	0.079	321	76	0.076				322	76	0.099				322	76	0.081	324	76	0.080
+delete.delete_from_mysql	both	reads 0.100 s apart or more in some recording	3525	219	0.361	3528	219	0.364				3526	219	0.364				3525	219	0.364	3537	219	0.417
+delete.delete_range	both	reads 0.100 s apart or more in some recording	638	111	0.115	641	111	0.122				645	111	0.172				640	111	0.113	641	111	0.133
+executor.basic	both	reads 0.100 s apart or more in some recording	2603	416	0.494	2601	414	0.521				2603	414	0.536				2602	411	0.500	2608	415	0.572
+executor.full_join	both	reads 0.100 s apart or more in some recording	2484	206	0.348	2486	206	0.351				2485	206	0.349				2483	206	0.343	2491	206	0.396
+executor.trx	both	reads 0.100 s apart or more in some recording	138	58	3.750	138	58	3.341				133	56	3.937				138	58	3.461	131	56	3.484
+expr.collation_expr	both	reads 0.100 s apart or more in some recording	236	201	0.096	235	201	0.094				234	201	0.101				234	201	0.101	235	201	0.098
+expr.expr_ceil	hits	misses agree in every recording, every read gap under 0.1 s	117	54	0.067	117	54	0.061				117	54	0.064				117	54	0.061	117	54	0.059
+expr.expr_floor	hits	misses agree in every recording, every read gap under 0.1 s	159	79	0.080	159	79	0.074				159	79	0.077				159	79	0.074	159	79	0.073
+expr.expr_instr	both	reads 0.100 s apart or more in some recording	95	67	4.102	96	67	4.264				88	65	4.354				87	65	4.178	96	67	4.379
+expr.expr_locate	both	reads 0.100 s apart or more in some recording	309	117	9.353	309	117	9.298				308	117	9.407				316	119	9.333	317	119	9.399
+expr.expr_nseq	hits	misses agree in every recording, every read gap under 0.1 s	80	49	0.050	80	49	0.059				80	49	0.048				80	49	0.047	80	49	0.040
+expr.expr_position	both	reads 0.100 s apart or more in some recording	102	61	4.645	102	61	4.576				102	61	4.743				94	59	4.664	102	61	4.804
+expr.func_equal	hits	misses agree in every recording, every read gap under 0.1 s	189	57	0.074	191	57	0.081				189	57	0.064				190	57	0.065	191	57	0.059
+expr.func_length	hits	misses agree in every recording, every read gap under 0.1 s	234	53	0.063	235	53	0.079				235	53	0.069				234	53	0.063	235	53	0.064
+expr.func_regexp	both	reads 0.100 s apart or more in some recording	781	96	0.186	780	96	0.211				780	96	0.196				778	96	0.163	780	96	0.171
+expr.mul	both	reads 0.100 s apart or more in some recording	997	957	0.383	998	957	0.431				997	957	0.385				997	957	0.346	998	957	0.389
+foreign_key.dml_147	both	reads 0.100 s apart or more in some recording	3271	242	0.314	3278	242	0.345				3273	242	0.320				3273	242	0.303	3273	242	0.316
+fork_table.fork_table_basic	both	reads 0.100 s apart or more in some recording	1655	143	18.201	1669	144	18.805				1653	143	18.429				1660	145	18.109	1674	145	18.412
+fork_table.fork_table_build_data	both	reads 0.100 s apart or more in some recording	795	86	39.296	796	86	39.309				797	86	39.348				794	86	39.271	798	86	39.335
+fork_table.fork_table_chain	both	reads 0.100 s apart or more in some recording	3945	152	34.372	4030	152	34.373				3912	152	34.399				3938	152	34.331	3582	152	29.408
+fork_table.fork_table_cow	both	reads 0.100 s apart or more in some recording	5137	217	113.355	5142	217	113.335				5140	217	113.334				5144	217	113.356	5152	216	113.419
+fork_table.fork_table_ddl	both	reads 0.100 s apart or more in some recording	6619	239	73.710	6568	239	73.775				6813	239	73.797				6546	239	73.730	6770	239	73.738
+fork_table.fork_table_error	both	reads 0.100 s apart or more in some recording	2735	163	2.807	2810	163	3.109				2822	163	2.999				2781	163	2.959	2793	163	2.878
+fork_table.fork_table_fulltext	both	reads 0.100 s apart or more in some recording	1033	99	3.312	1032	99	3.108				1035	97	3.300				1033	99	3.184	1033	99	3.499
+fork_table.fork_table_lock	both	reads 0.100 s apart or more in some recording	925	84	21.341	925	84	21.287				926	84	21.404				918	82	21.306	928	84	21.327
+fork_table.fork_table_merge	both	reads 0.100 s apart or more in some recording	251	78	10.358	251	78	10.351				247	76	11.410				243	76	10.347	251	78	10.368
+fork_table.fork_table_partition	both	reads 0.100 s apart or more in some recording	3138	109	17.978	2731	111	18.025				3502	109	18.485				3382	111	17.984	3707	111	17.948
+fork_table.fork_table_privilege	both	reads 0.100 s apart or more in some recording	696	75	3.047	682	75	2.907				706	75	2.931				617	75	2.811	759	75	2.948
+fork_table.fork_table_snapshot	both	reads 0.100 s apart or more in some recording	352	57	2.920	292	52	2.167				330	52	2.702				301	52	2.249	294	52	2.191
+fork_table.fork_table_vector	both	reads 0.100 s apart or more in some recording	18402	436	83.849	18581	434	83.908				18434	435	83.938				18514	435	83.870	18525	434	83.861
+fork_table.fork_table_with_constraints	both	reads 0.100 s apart or more in some recording	1037	87	2.994	967	87	2.858				1073	87	3.122				923	90	3.053	995	87	2.935
+fork_table.fork_table_with_index	both	reads 0.100 s apart or more in some recording	10317	343	37.964	9351	352	28.194				9249	347	27.937				9039	347	27.975	9165	348	27.941
+fork_table.fork_table_with_lob	both	reads 0.100 s apart or more in some recording	3379	129	12.971	3189	130	13.128				3621	130	13.027				3205	129	12.986	3147	131	13.010
+fts_index.basic_dml	both	reads 0.100 s apart or more in some recording	10401	545	2.737	10454	544	2.660				10408	544	2.783				10444	544	2.681	10460	546	2.572
+fts_index.basic_dml_sequel	both	reads 0.100 s apart or more in some recording	6076	355	1.354	6112	356	1.406				6065	354	1.231				6125	356	1.179	6108	354	1.416
+fts_index.cn_word	both	reads 0.100 s apart or more in some recording	1705	122	1.217	1716	122	1.235				1722	122	1.190				1704	122	1.118	1724	122	1.187
+fts_index.create_fts_index_afterward	both	reads 0.100 s apart or more in some recording	10357	507	8.281	10499	507	7.886				10362	507	8.317				10474	507	8.783	10483	505	8.607
+fts_index.create_table_with_fts_index	both	reads 0.100 s apart or more in some recording	1111	86	0.172	1110	86	0.177				1110	86	0.172				1111	86	0.172	1111	86	0.169
+fts_index.domain_id_merge_with_compare_null	both	reads 0.100 s apart or more in some recording	568	52	0.149	567	52	0.089				566	52	0.091				551	52	0.101	569	52	0.080
+fts_index.drop_index	both	reads 0.100 s apart or more in some recording	9261	296	5.347	9397	295	4.488				9235	293	4.602				9374	296	5.028	9353	295	4.520
+fts_index.index_view	both	reads 0.100 s apart or more in some recording	434	123	0.202	440	117	0.234				443	124	0.201				443	124	0.195	433	124	0.191
+fts_index.load_data	both	reads 0.100 s apart or more in some recording	102	58	0.157	102	58	0.158				102	58	0.164				102	58	0.160	102	58	0.153
+fts_index.offline_ddl_with_fts_index	both	reads 0.100 s apart or more in some recording	35763	1278	18.096	36450	1280	18.999				35724	1278	17.606				36467	1278	19.744	36316	1280	18.364
+fts_index.online_ddl_on_table_with_fts_index	both	reads 0.100 s apart or more in some recording	2251	148	0.582	2251	148	0.557				2253	148	0.554				2251	148	0.592	2254	148	0.565
+fts_index.parser_properties	both	reads 0.100 s apart or more in some recording	1444	129	0.790	1452	129	0.656				1422	129	0.666				1451	129	0.692	1456	129	0.720
+fts_index.partitioned_simple_query	both	reads 0.100 s apart or more in some recording	584	127	0.199	584	127	0.189				585	127	0.217				584	127	0.198	584	127	0.182
+fts_index.simple_query	both	reads 0.100 s apart or more in some recording	1660	223	0.272	1661	223	0.283				1659	223	0.302				1659	223	0.272	1661	223	0.281
+fts_index.tokenize_function	hits	misses agree in every recording, every read gap under 0.1 s	237	55	0.071	237	55	0.088				237	55	0.075				237	55	0.081	237	55	0.066
+geometry.__all_tenant_spatial_reference_systems	both	reads 0.100 s apart or more in some recording	5242	17	30.352	5242	17	29.876				5242	17	29.777				5242	17	29.856	5243	17	29.762
+geometry.create_spatial_index_mysql	both	reads 0.100 s apart or more in some recording	5747	101	30.785	5752	101	30.818				5750	101	30.891				5752	101	30.816	5754	101	30.850
+geometry.geometry_basic_mysql	both	reads 0.100 s apart or more in some recording	16295	109	30.972	16294	109	30.879				16289	109	30.944				16296	109	31.041	16289	109	30.888
+geometry.geometry_bugfix_mysql	both	reads 0.100 s apart or more in some recording	19381	412	37.846	19385	412	37.694				19368	411	37.817				19389	412	37.755	19379	412	37.809
+geometry.geometry_cast_mysql	both	reads 0.100 s apart or more in some recording	6946	182	29.998	6952	182	30.233				6948	182	30.107				6949	182	29.978	6949	182	30.239
+geometry.geometry_compare_mysql	both	reads 0.100 s apart or more in some recording	5403	192	30.226	5402	192	30.163				5402	192	30.211				5402	192	30.170	5402	192	30.194
+geometry.geometry_ddl_dml_postgis	both	reads 0.100 s apart or more in some recording	7079	139	31.624	7095	139	31.603				7091	139	31.614				7074	139	31.584	7093	139	31.572
+geometry.geometry_dml_mysql	both	reads 0.100 s apart or more in some recording	10136	334	31.225	10147	334	31.261				10133	334	31.296				10138	334	31.131	10141	334	31.312
+geometry.geometry_filter_mysql	both	reads 0.100 s apart or more in some recording	8795	268	31.980	8801	268	32.007				8798	268	32.026				8811	268	31.991	8806	268	32.071
+geometry.geometry_function_mysql	both	reads 0.100 s apart or more in some recording	5246	95	30.440	5246	95	29.483				5247	95	29.490				5246	95	30.419	5246	95	30.365
+geometry.geometry_function_postgis	both	reads 0.100 s apart or more in some recording	7398	106	30.488	7397	106	30.481				7398	106	30.554				7397	106	30.521	7398	106	30.460
+geometry.geometry_generated_col_mysql	both	reads 0.100 s apart or more in some recording	9877	315	32.110	9884	315	32.160				9850	315	31.886				9865	315	31.952	9874	315	32.195
+geometry.geometry_index1_mysql	both	reads 0.100 s apart or more in some recording	12971	288	35.193	13014	288	35.306				12966	288	34.355				13021	287	34.584	13008	288	35.084
+geometry.geometry_index_mysql	both	reads 0.100 s apart or more in some recording	17434	388	38.304	17522	388	38.426				17450	388	37.467				17532	387	38.460	17532	388	37.446
+geometry.geometry_partition_table_mysql	both	reads 0.100 s apart or more in some recording	9279	275	33.533	9294	274	33.267				9274	275	32.486							9279	275	32.394
+geometry.geometry_type_mysql	both	reads 0.100 s apart or more in some recording	6976	109	30.487	6980	109	30.477				6976	109	30.627							6981	109	30.714
+geometry.spatial_relation_join_mysql	both	reads 0.100 s apart or more in some recording	6900	164	31.365	6914	164	31.493				6895	164	31.318							6905	163	31.315
+geometry.st_area_mysql	both	reads 0.100 s apart or more in some recording	5818	91	30.224	5818	91	30.148				5820	91	30.311							5818	91	30.259
+geometry.st_astext_mysql	both	reads 0.100 s apart or more in some recording	5624	119	30.259	5623	119	30.287				5625	119	30.409							5622	119	30.361
+geometry.st_aswkb_mysql	both	reads 0.100 s apart or more in some recording				6201	186	30.409				6203	186	30.391							6202	186	30.382
+geometry.st_buffer_mysql	both	reads 0.100 s apart or more in some recording				5812	144	30.386				5812	144	30.344							5813	144	30.360
+geometry.st_buffer_mysql_from_pg	both	reads 0.100 s apart or more in some recording				5369	81	30.290				5370	81	30.297							5369	81	30.241
+geometry.st_covers_mysql	both	reads 0.100 s apart or more in some recording				5839	205	30.406				5840	205	30.494							5840	205	30.492
+geometry.st_distance_mysql	both	reads 0.100 s apart or more in some recording				6335	282	30.403				6336	282	30.402							6336	282	30.413
+geometry.st_distance_sphere_mysql	both	reads 0.100 s apart or more in some recording				5500	77	30.173				5500	77	30.171							5501	76	30.098
+geometry.st_dwithin_mysql	both	reads 0.100 s apart or more in some recording				6351	125	31.069				6351	125	31.101							6359	125	31.077
+geometry.st_geometry_columns	both	reads 0.100 s apart or more in some recording				6433	81	29.697				6433	81	29.799							6435	81	29.698
+geometry.st_geomfromewkb_mysql	both	reads 0.100 s apart or more in some recording				8536	63	30.512				8537	63	30.390							8536	63	30.521
+geometry.st_geomfromtext_mysql	both	reads 0.100 s apart or more in some recording				7981	115	30.213				7980	115	30.260							7980	115	30.234
+geometry.st_geomfromwkb_mysql	both	reads 0.100 s apart or more in some recording				5318	108	30.197				5319	108	30.144							5318	108	30.191
+geometry.st_intersects_mysql	both	reads 0.100 s apart or more in some recording				6448	275	30.595				6442	275	30.735							6452	274	30.710
+geometry.st_intersects_mysql_from_pg	both	reads 0.100 s apart or more in some recording				7992	174	31.605				7979	174	31.673							8002	173	31.560
+geometry.st_latitude_mysql	both	reads 0.100 s apart or more in some recording				5273	26	29.665				5273	26	29.638							5274	25	29.740
+geometry.st_longitude_mysql	both	reads 0.100 s apart or more in some recording				5273	26	30.341				5273	26	30.299							5275	25	30.329
+geometry.st_point_mysql	both	reads 0.100 s apart or more in some recording				5251	32	30.314				5252	32	30.304							5251	32	30.359
+geometry.st_srid_mysql	both	reads 0.100 s apart or more in some recording				5257	49	30.377				5258	49	30.346							5258	48	30.358
+geometry.st_transform_mysql	both	reads 0.100 s apart or more in some recording				5320	63	30.431				5321	63	30.354							5321	62	30.390
+geometry.st_x_mysql	both	reads 0.100 s apart or more in some recording				5447	95	30.419				5447	95	30.393							5448	94	30.407
+geometry.st_y_mysql	both	reads 0.100 s apart or more in some recording				5279	27	30.273				5278	27	30.256							5278	27	30.259
+global_index.global_index_lookup_1	both	reads 0.100 s apart or more in some recording				984	157	4.350				983	157	4.358							989	157	4.457
+global_index.global_index_lookup_2	both	reads 0.100 s apart or more in some recording				691	137	4.335				680	136	4.453							683	135	4.221
+global_index.global_index_lookup_3	both	reads 0.100 s apart or more in some recording				773	123	4.320				772	123	4.372							775	123	4.369
+global_index.global_index_lookup_4	both	reads 0.100 s apart or more in some recording				746	98	7.319				739	96	7.334							748	98	7.367
+global_index.global_index_lookup_5	both	reads 0.100 s apart or more in some recording				890	166	13.397				890	166	13.457							886	164	13.387
+global_index.global_index_lookup_6	both	reads 0.100 s apart or more in some recording				756	418	1.436				756	418	1.470							757	418	1.507
+global_index.global_index_select	both	reads 0.100 s apart or more in some recording				856	167	0.332				856	167	0.247							856	167	0.222
+groupby.group_by_2	hits	misses agree in every recording, every read gap under 0.1 s				121	49	0.065				121	49	0.060							121	49	0.056
+groupby.group_by_4	hits	misses agree in every recording, every read gap under 0.1 s				140	40	0.058				140	40	0.056							141	40	0.057
+groupby.group_by_basic	both	reads 0.100 s apart or more in some recording				1567	177	0.308				1568	177	0.319							1567	177	0.345
+hierarchical_query.hierarchical_basic_mysql	hits	misses agree in every recording, every read gap under 0.1 s				7	2	0.024				7	2	0.021							7	2	0.014
+histogram.dbms_stats_delete_stats	both	reads 0.100 s apart or more in some recording				2033	443	1.595				2034	441	1.539							2033	442	1.580
+histogram.stats_farm	both	reads 0.100 s apart or more in some recording				4723	733	25.427				4746	729	30.146							4747	729	30.131
+histogram.stats_lock_and_unlock	both	reads 0.100 s apart or more in some recording				1722	396	0.830				1717	396	0.747							1722	398	0.863
+histogram.stats_prefs_manager	both	reads 0.100 s apart or more in some recording				717	77	0.164				716	77	0.159							718	77	0.164
+histogram.stats_set_table_stats	both	reads 0.100 s apart or more in some recording				580	160	0.234				581	160	0.213							579	161	0.281
+information_schema.information_schema_desc	both	misses differ although every read gap is under 0.1 s				177	17	0.051				178	17	0.056							199	18	0.065
+storage.rowkey_is_char	hits	misses agree in every recording, every read gap under 0.1 s				308	55	0.091				308	55	0.077							308	55	0.088
+storage.rowkey_is_int	both	reads 0.100 s apart or more in some recording				486	68	0.115				485	68	0.098							486	68	0.111
+storage.rowkey_is_null	hits	misses agree in every recording, every read gap under 0.1 s				220	40	0.067				221	40	0.067							222	40	0.077
+subquery.idx_with_const_expr_21_subquery_dilang	both	reads 0.100 s apart or more in some recording				597	98	0.720				596	98	0.707							592	98	0.727
+subquery.optimizer_subquery_bug	both	reads 0.100 s apart or more in some recording				2411	199	0.430				2403	199	0.376							2413	199	0.409
+subquery.order_by_subquery	both	reads 0.100 s apart or more in some recording				318	77	0.111				316	77	0.094							318	77	0.112
+subquery.rqg_ob_subquery_semijoin_nested_sql_parameterization	hits	misses agree in every recording, every read gap under 0.1 s				248	32	0.079				248	32	0.067							248	32	0.081
+subquery.rqg_subquery_materialization_oop	both	reads 0.100 s apart or more in some recording				259	38	0.240				259	38	0.199							259	38	0.188
+subquery.rqg_subquery_semijoin_mismatch	both	reads 0.100 s apart or more in some recording				397	57	0.150				396	57	0.138							396	57	0.148
+subquery.rqg_subquery_semijoin_nested_timeout	both	reads 0.100 s apart or more in some recording				1107	55	0.192				1107	55	0.178							1107	55	0.193
+subquery.spf_bug13044302	both	reads 0.100 s apart or more in some recording				165	79	0.110				165	79	0.107							165	79	0.172
+subquery.subquery	both	reads 0.100 s apart or more in some recording				2453	284	0.400				2447	284	0.367							2452	284	0.511
+subquery.subquery_sj_firstmatch	both	reads 0.100 s apart or more in some recording				316	49	0.090				319	49	0.129							317	49	0.077
+subquery.subquery_sj_innodb	both	reads 0.100 s apart or more in some recording				1038	102	3.954				1034	102	3.219							1051	104	3.831
+sys_vars.tx_isolation_basic	hits	misses agree in every recording, every read gap under 0.1 s				174	11	0.061				173	11	0.058							178	11	0.073
+system_variable.autocommit	both	reads 0.100 s apart or more in some recording				1196	75	0.192				1188	75	0.160							1193	75	0.189
+table_redefinition.alter_primary_key	both	reads 0.100 s apart or more in some recording				3098	188	2.670				3091	188	2.622							3096	193	2.773
+table_redefinition.alter_table_with_triggers	both	reads 0.100 s apart or more in some recording				514	90	0.390				514	90	0.397							516	90	0.392
+trx.bug_different_tranid_intrx	both	reads 0.100 s apart or more in some recording				1535	92	0.180				1534	92	0.204							1542	92	0.237
+trx.repeatable_read_transaction	both	reads 0.100 s apart or more in some recording				820	74	24.894				820	74	24.949							819	74	24.352
+trx.serializable_constrains	both	reads 0.100 s apart or more in some recording				401	104	4.852				401	104	4.801							400	104	4.738
+trx.serializable_transaction	both	reads 0.100 s apart or more in some recording				822	74	24.954				820	74	25.036							824	74	25.004
+trx.trans_weak_read	both	reads 0.100 s apart or more in some recording				175	17	5.381				176	17	5.381							168	15	5.327
+type_date.add_timestamp_column	hits	misses agree in every recording, every read gap under 0.1 s				161	31	0.070				160	31	0.054							161	31	0.044
+type_date.datetime_java	hits	misses agree in every recording, every read gap under 0.1 s				212	56	0.079				211	56	0.069							211	56	0.062
+type_date.daylight_saving_time	hits	misses agree in every recording, every read gap under 0.1 s				59	34	0.049				59	34	0.051							59	34	0.038
+type_date.expr_date_add_sub	both	reads 0.100 s apart or more in some recording				671	89	0.103				670	89	0.112							670	89	0.104
+type_date.test_select_usec_to_time	hits	misses agree in every recording, every read gap under 0.1 s				61	58	0.053				61	58	0.054							61	58	0.044
+type_date.timefuncnull	hits	misses agree in every recording, every read gap under 0.1 s				38	29	0.044				38	29	0.044							38	29	0.035
+type_date.timestamp2	hits	misses agree in every recording, every read gap under 0.1 s				31	26	0.039				31	26	0.039							31	26	0.032
+type_date.type_create_time	both	reads 0.100 s apart or more in some recording				37	26	2.555				37	26	2.752							38	31	2.771
+type_date.type_modify_time	both	reads 0.100 s apart or more in some recording				39	31	3.352				39	31	3.399							47	33	3.352
+type_date.updaterowkeymoditime	hits	misses agree in every recording, every read gap under 0.1 s				191	40	0.086				189	40	0.061							191	40	0.066
+update.rowkey_update_datatype_convert	both	reads 0.100 s apart or more in some recording				469	114	0.119				467	114	0.119							469	114	0.138
+update.update_ignore	both	reads 0.100 s apart or more in some recording				2146	149	0.287				2144	149	0.292							2149	149	0.325
+vector_index.all_virtual_vector_index_info	both	reads 0.100 s apart or more in some recording				4807	277	56.104				4733	277	55.238							4827	276	56.116
+vector_index.create_table_with_vector_index	both	reached by 2 recordings										12492	527	6.874							12541	529	7.685
+vector_index.drop_vector_index	both	reached by 2 recordings										11670	316	5.188							11645	315	5.225
+vector_index.fix_rebuild_or_post_create_hung	both	reached by 2 recordings										3164	180	4.211							3165	178	4.095
+vector_index.rebuild_vector_index	both	reached by 2 recordings										15511	414	63.136							15522	414	63.115
+vector_index.sparse_vector_index_vsag_ddl	both	reached by 2 recordings										25468	523	8.008							25679	524	8.352
+vector_index.sparse_vector_index_vsag_query	both	reached by 2 recordings										13757	641	5.983							13788	642	5.850
+vector_index.vector_calc_gbk_mysql	both	reached by 2 recordings										6856	281	16.293							6882	281	23.025
+vector_index.vector_calc_utf8_mysql	both	reached by 2 recordings										6841	288	21.372							6843	288	21.274
+vector_index.vector_index_basic	both	reached by 2 recordings										20566	579	8.179							20532	581	8.639
+vector_index.vector_index_bugfix1	both	reached by 2 recordings										18531	652	9.399							18465	655	10.481
+vector_index.vector_index_ivfflat_basic	both	reached by 2 recordings										7387	420	4.576							7436	422	4.948
+vector_index.vector_index_ivfflat_dml	both	reached by 2 recordings										13512	987	14.405							13695	990	13.162
+vector_index.vector_index_ivfflat_post_create	both	reached by 2 recordings										10864	489	8.414							10938	490	7.947
+vector_index.vector_index_ivfflat_scan	both	reached by 2 recordings										4067	334	5.748							4079	334	5.857
+vector_index.vector_index_offline_ddl	both	reached by 2 recordings										39812	1277	20.287							40260	1276	20.706
+vector_index.vector_index_partitioned	both	reached by 2 recordings										18369	1094	41.913							18576	1094	42.057
+vector_index.vector_index_post_create	both	reached by 2 recordings										13980	570	7.197							14263	571	7.670
+vector_index.vector_index_rebuild	both	reached by 2 recordings										9747	364	5.239							9865	364	6.012
+vector_index.vector_ivf_index_with_filter	both	reached by 2 recordings										6160	310	4.729							6202	309	4.411
+vector_index.vector_similarity	both	reached by 2 recordings										8708	293	2.925							8749	294	3.089
+window_function.farm	both	reached by 2 recordings										116	37	0.062							116	37	0.052
+yonyou_test.yonyou	both	reached by 2 recordings										11081	515	6.979							11362	515	8.139
+yonyou_test.yonyou_online_ddl	both	reached by 2 recordings										23393	859	17.122							23791	859	18.034

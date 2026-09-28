@@ -1,0 +1,64 @@
+--disable_abort_on_error
+--enable_warnings
+--echo # s8_index 3
+SET NAMES utf8mb4 COLLATE utf8mb4_general_ci, ob_enable_plan_cache = 0, ob_query_timeout = 600000000, ob_trx_timeout = 600000000;
+--echo errno $mysql_errno
+--echo # index DDL that the IK parser refuses
+CREATE TABLE ik_s8_bad1 (id INT PRIMARY KEY, c VARCHAR(100), FULLTEXT INDEX f(c) WITH PARSER ik PARSER_PROPERTIES=(ik_mode='bad'));
+--echo errno $mysql_errno
+CREATE TABLE ik_s8_bad2 (id INT PRIMARY KEY, c VARCHAR(100), FULLTEXT INDEX f(c) WITH PARSER ik PARSER_PROPERTIES=(min_token_size=2));
+--echo errno $mysql_errno
+CREATE TABLE ik_s8_bad3 (id INT PRIMARY KEY, c VARBINARY(100), FULLTEXT INDEX f(c) WITH PARSER ik);
+--echo errno $mysql_errno
+--echo # the default mode of an IK index, and ik_mode in capitals
+CREATE TABLE ik_s8_mode (id INT PRIMARY KEY, a VARCHAR(100), b VARCHAR(100), FULLTEXT INDEX fa(a) WITH PARSER ik, FULLTEXT INDEX fb(b) WITH PARSER ik PARSER_PROPERTIES=(ik_mode='MAX_WORD'));
+--echo errno $mysql_errno
+SHOW CREATE TABLE ik_s8_mode;
+--echo errno $mysql_errno
+INSERT INTO ik_s8_mode VALUES (1, '中华人民共和国', '中华人民共和国');
+--echo errno $mysql_errno
+SELECT id, MATCH(a) AGAINST('人民' IN BOOLEAN MODE) AS score FROM ik_s8_mode WHERE MATCH(a) AGAINST('人民' IN BOOLEAN MODE) ORDER BY id;
+--echo errno $mysql_errno
+SELECT id, MATCH(b) AGAINST('人民' IN BOOLEAN MODE) AS score FROM ik_s8_mode WHERE MATCH(b) AGAINST('人民' IN BOOLEAN MODE) ORDER BY id;
+--echo errno $mysql_errno
+DROP TABLE ik_s8_mode;
+--echo errno $mysql_errno
+--echo # long documents in an index
+CREATE TABLE ik_s8_long (id INT PRIMARY KEY, cs VARCHAR(40000), cm VARCHAR(40000), FULLTEXT INDEX fs(cs) WITH PARSER ik PARSER_PROPERTIES=(ik_mode='smart'), FULLTEXT INDEX fm(cm) WITH PARSER ik PARSER_PROPERTIES=(ik_mode='max_word'));
+--echo errno $mysql_errno
+INSERT INTO ik_s8_long VALUES (1, REPEAT('中国人民 ', 250), REPEAT('中国人民 ', 250));
+--echo errno $mysql_errno
+INSERT INTO ik_s8_long VALUES (2, REPEAT('人工智能技术发展迅速。', 300), REPEAT('人工智能技术发展迅速。', 300));
+--echo errno $mysql_errno
+INSERT INTO ik_s8_long VALUES (3, REPEAT('a', 5000), REPEAT('a', 5000));
+--echo errno $mysql_errno
+INSERT INTO ik_s8_long VALUES (4, CONCAT(REPEAT('ab ', 334), 'cd'), CONCAT(REPEAT('ab ', 334), 'cd'));
+--echo errno $mysql_errno
+SELECT id, MATCH(cs) AGAINST('中国人民' IN BOOLEAN MODE) AS score FROM ik_s8_long WHERE MATCH(cs) AGAINST('中国人民' IN BOOLEAN MODE) ORDER BY id;
+--echo errno $mysql_errno
+SELECT id, MATCH(cm) AGAINST('中国人民' IN BOOLEAN MODE) AS score FROM ik_s8_long WHERE MATCH(cm) AGAINST('中国人民' IN BOOLEAN MODE) ORDER BY id;
+--echo errno $mysql_errno
+SELECT id, MATCH(cs) AGAINST('民' IN BOOLEAN MODE) AS score FROM ik_s8_long WHERE MATCH(cs) AGAINST('民' IN BOOLEAN MODE) ORDER BY id;
+--echo errno $mysql_errno
+SELECT id, MATCH(cm) AGAINST('民' IN BOOLEAN MODE) AS score FROM ik_s8_long WHERE MATCH(cm) AGAINST('民' IN BOOLEAN MODE) ORDER BY id;
+--echo errno $mysql_errno
+SELECT id, MATCH(cs) AGAINST('人工智能' IN BOOLEAN MODE) AS score FROM ik_s8_long WHERE MATCH(cs) AGAINST('人工智能' IN BOOLEAN MODE) ORDER BY id;
+--echo errno $mysql_errno
+SELECT id, MATCH(cm) AGAINST('人工智能' IN BOOLEAN MODE) AS score FROM ik_s8_long WHERE MATCH(cm) AGAINST('人工智能' IN BOOLEAN MODE) ORDER BY id;
+--echo errno $mysql_errno
+SELECT id, MATCH(cs) AGAINST('迅' IN BOOLEAN MODE) AS score FROM ik_s8_long WHERE MATCH(cs) AGAINST('迅' IN BOOLEAN MODE) ORDER BY id;
+--echo errno $mysql_errno
+SELECT id, MATCH(cm) AGAINST('迅' IN BOOLEAN MODE) AS score FROM ik_s8_long WHERE MATCH(cm) AGAINST('迅' IN BOOLEAN MODE) ORDER BY id;
+--echo errno $mysql_errno
+SELECT id, MATCH(cs) AGAINST('cd' IN BOOLEAN MODE) AS score FROM ik_s8_long WHERE MATCH(cs) AGAINST('cd' IN BOOLEAN MODE) ORDER BY id;
+--echo errno $mysql_errno
+SELECT id, MATCH(cm) AGAINST('cd' IN BOOLEAN MODE) AS score FROM ik_s8_long WHERE MATCH(cm) AGAINST('cd' IN BOOLEAN MODE) ORDER BY id;
+--echo errno $mysql_errno
+SELECT id, MATCH(cs) AGAINST('ab' IN BOOLEAN MODE) AS score FROM ik_s8_long WHERE MATCH(cs) AGAINST('ab' IN BOOLEAN MODE) ORDER BY id;
+--echo errno $mysql_errno
+SELECT id, MATCH(cm) AGAINST('ab' IN BOOLEAN MODE) AS score FROM ik_s8_long WHERE MATCH(cm) AGAINST('ab' IN BOOLEAN MODE) ORDER BY id;
+--echo errno $mysql_errno
+SELECT id, MATCH(cs) AGAINST(REPEAT('a', 5000) IN BOOLEAN MODE) AS score FROM ik_s8_long WHERE MATCH(cs) AGAINST(REPEAT('a', 5000) IN BOOLEAN MODE) ORDER BY id;
+--echo errno $mysql_errno
+DROP TABLE ik_s8_long;
+--echo errno $mysql_errno

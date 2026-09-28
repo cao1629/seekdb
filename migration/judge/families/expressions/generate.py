@@ -793,10 +793,10 @@ def classify_reach(index, entries, functions):
 SESSION_SQL_MODE = "STRICT_ALL_TABLES,NO_ZERO_IN_DATE,NO_AUTO_CREATE_USER"
 FIXED_TIMESTAMP = "1709214296.654321"
 SESSION_SETTINGS = (
+    "ALTER SYSTEM FLUSH PLAN CACHE",
     "SET NAMES utf8mb4 COLLATE utf8mb4_general_ci, @@session.time_zone = '+00:00', @@session.sql_mode = '{}', "
     "@@session.timestamp = {}, @@session.div_precision_increment = 4, "
-    "@@session.block_encryption_mode = 'aes-128-ecb', @@session.group_concat_max_len = 1024, "
-    "@@session.ob_enable_plan_cache = 0".format(
+    "@@session.block_encryption_mode = 'aes-128-ecb', @@session.group_concat_max_len = 1024".format(
         SESSION_SQL_MODE, FIXED_TIMESTAMP
     ),
 )

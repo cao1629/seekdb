@@ -1,0 +1,9 @@
+# Mask mem-hold (compare --mask mem-hold; decisions.md row 6a): the lines of family 12's recordings, made
+#   by migration/judge/families/memory/memory_scenarios.py, whose number after mem_hold= is not compared.
+# Format: <scenario><TAB><the line's exact text up to and including mem_hold=>. In a listed scenario of a
+#   recording made by that script, a line that starts with this text and goes on with digits and ')' has
+#   those digits replaced by '#'; the rest of that line and every other line stay exact.
+# Evidence (2026-09-28, the archived reference, nine runs): mem_hold was 11020166 in five runs and 11085702
+#   in four, one 64 KiB block apart; every other value the runs printed or recorded was the same in every
+#   run that reached it (families/memory/README.md, "Live check, 2026-09-28").
+query_memory_limit	ERROR 11049 (HY000): Exceed query memory limit (mem_limit=10737418, mem_hold=

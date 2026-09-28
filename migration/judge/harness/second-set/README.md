@@ -37,7 +37,8 @@ when the patch is applied, so they change with it:
 | `compare --require-ps-protocol` | off | A recording made without `--ps-protocol` is a recording problem |
 | `compare --require-compress` | off | A recording made without `--compress` is a recording problem |
 | `compare --mask est` | off | For the cases in lists/plan-bearing.txt, also compares with the EST.ROWS and EST.TIME(us) cells of every plan table replaced by `#` (family 3); the list must have the sha256 the runner pins |
-| `compare --mask row-order` | off | For the statements in lists/hash-order-selects.txt, also compares with their result rows sorted (family 4); refused until the runner pins the confirmed list's sha256 |
+| `compare --mask row-order` | off | For the statements in lists/hash-order-selects.txt, also compares with their result rows sorted (family 4); the list must have the sha256 the runner pins (pinned 2026-09-28) |
+| `compare --mask mem-hold` | off | For recordings made by families/memory/memory_scenarios.py only: in the line lists/mem-hold-lines.txt names, also compares with the number after `mem_hold=` replaced by `#` (family 12, decisions.md row 6a); the list must have the sha256 the runner pins (added 2026-09-28, ../README.md, "The runner changes of 2026-09-28") |
 
 Every judge run still passes `--max-retries 0 --no-ignore-trailing-whitespace`. With `$H`, `$REF` and
 `$CLI` as in PLAN.md section 10, one C++ recording for family 7 is:
@@ -61,8 +62,7 @@ option, `compare` passes two plain recordings whose .result files match, so a fa
 or compressed-protocol comparison must name it.
 
 Families 3 and 4 need no special run: they compare the same recordings as family 1, once exactly
-and once with a mask, and `compare` prints both results (`--mask row-order` works once the confirmed
-list's sha256 is pinned in the runner, below):
+and once with a mask, and `compare` prints both results (../../families/masks/README.md):
 
 ```
 python3 $H/.github/script/seekdb/mysqltest_for_seekdb.py compare \
@@ -121,8 +121,14 @@ shows it for every login, so no packet capture is needed (source lines at 834bbe
   compressed frames (rust/sql-nio/src/pump.rs:93-99 and :423-424). So a login line that says
   `OB_MYSQL_COMPRESS_CS_TYPE` is a compressed connection.
 
-The first C++ `--compress` recording therefore runs with `--save-instance-dir`, and so does a plain
-recording of the same cases. The check is over every `seekdb.log*` file the two runs saved:
+The first C++ `--compress` recording therefore keeps its server log's `MySQL LOGIN` lines, and so
+does a plain recording of the same cases. Judge runs do not use `--save-instance-dir`, so since
+2026-09-28 ../../families/wire/login_watch.py does it: `login_watch.py watch` follows the instance's
+log/seekdb.log while the run goes on, across log rotation and new instances (family 7's logwatch.py
+approach), and keeps only the `MySQL LOGIN` lines; `login_watch.py check --compress ... --plain ...`
+makes the checks below over the successful logins (../../families/wire/README.md, "The --compress
+replay"), except the first: the server drops INFO lines when its log buffer is full, so the number of
+`MySQL LOGIN` lines is reported and not required to match:
 - the two runs have the same number of `MySQL LOGIN` lines;
 - in the `--compress` run, every line of a mysqltest session says
   `c/s protocol="OB_MYSQL_COMPRESS_CS_TYPE"` and has bit 0x20 set in `capability`;
@@ -236,8 +242,16 @@ counts also include inner SQL that ran between its two reads:
   `<table id>_refresh` jobs every 600 seconds and `<table id>_rebuild` jobs every 86,400 seconds, which
   vector index DDL creates (src/observer/vector_index/ob_vector_index_sched_job_utils.cpp:89 and :133).
   `--fresh-instance-per-case` removes these.
-- A case's own DDL runs inner SQL too. That is counted in the case, the same way every time, as long
-  as it finishes before the after-read.
+- A case's own DDL runs inner SQL too. That is counted in the case, but not the same way every time:
+  the family's live check found that the asynchronous schema refresh after DDL batches a different
+  number of DDL statements per round from run to run, and a DDL wait polls
+  `__all_ddl_error_message` a different number of times (../../families/plan_cache/README.md, "Why
+  two recordings of the reference differ").
+- Between 22:00 and 23:00 in the tenant's time zone (+08:00 by default), a new instance runs that
+  day's statistics maintenance window job about 20 seconds after it starts: the dbms_stats package
+  is compiled and statistics are gathered, about 11 misses and 7 hits in the case whose reads span
+  it (same section). The family's record.sh does not start a recording between 19:00 and 23:00
+  +08:00.
 
 Whether a plan is still cached also depends on the clock. The plan cache's eviction task runs every
 `plan_cache_evict_interval` (5 seconds by default, src/share/parameter/ob_parameter_seed.ipp:372),
@@ -261,10 +275,10 @@ puts `--parameter` values into its configuration in `init_config`
 (src/observer/ob_command_line_parser.cpp:346-347, src/observer/ob_server.cpp:1722-1735), the first
 step of `ObServer::init` (ob_server.cpp:634), and creates the plan cache later
 (src/observer/omt/ob_server_runtime_controller.cpp:1420), so the timer is scheduled with the new
-interval and the first eviction round would come a day after start. This is not verified: no server
-was started for this change. The first plan-cache run must confirm that seekdb.log has no `schedule
-next cache evict task` line (the task logs one every round, ob_plan_cache.cpp:2242-2246) and no
-`idle eviction collected plans` line. With the timer that slow, nothing is evicted by memory either,
+interval and the first eviction round would come a day after start. Family 7's live check confirmed
+it: none of the saved logs of its probes and recordings has a `schedule next cache evict task` line
+(the task logs one every round, ob_plan_cache.cpp:2242-2246) or an `idle eviction collected plans`
+line (../../families/plan_cache/README.md, "Live check"). With the timer that slow, nothing is evicted by memory either,
 and the plan cache stops taking new plans at its limit (`OB_REACH_MEMORY_LIMIT` in `add_plan`,
 ob_plan_cache.cpp:885-886), which does depend on memory use; so use it with
 `--fresh-instance-per-case`, as in the command above. It also means a case that changes
@@ -324,10 +338,13 @@ manifest written before this option counts as an empty list.
 
 ### The two masks and how they are switched on
 
-`compare` knows two masks, the entries of its registry `COMPARE_MASKS`: `est` (family 3) and
-`row-order` (family 4), exactly the two that Decision 6 (b) allows; a third would mean changing the
-registry in the runner, which Decision 6 does not allow. Both are off by default;
-`--mask NAME` switches one on and may be given for both. Any other name stops `compare` with an
+`compare` knows three masks, the entries of its registry `COMPARE_MASKS`: `est` (family 3) and
+`row-order` (family 4), the two that Decision 6 (b) allows, and since 2026-09-28 `mem-hold` (family
+12), the third that decisions.md row 6a added; another would mean changing the registry in the
+runner, which Decision 6 does not allow. All are off by default; `--mask NAME` switches one on and may
+be given for each. `mem-hold` is described in ../README.md, "The runner changes of 2026-09-28", and
+refuses recordings made by anything but families/memory/memory_scenarios.py; the rest of this section
+is about the other two. Any other name stops `compare` with an
 argparse error (exit 2) that names the known masks.
 
 Each mask reads its declared list from the runner's own worktree: `est` reads
@@ -340,9 +357,10 @@ change to the runner, which a reviewer sees: Decision 6 declares the masks in 00
 and allows no additions during Step 6.
 - `est` pins plan-bearing.txt as commit 5ed97a72b wrote it (sha256
   `8566d1f37b9b9875daa2ecfbdebd44d693823fbdeda520120313660ce7c54972`).
-- `row-order` pins nothing yet (`HASH_ORDER_LIST_SHA256` is `None`), so `--mask row-order` stops
-  until the confirmation step has written hash-order-selects.txt and its sha256 is pinned at the
-  sign-off.
+- `row-order` pins hash-order-selects.txt as the confirmation step wrote it on 2026-09-28 (sha256
+  `b0b11890b9e8fcd2c46b525ef63f787d2fca8f2bdf19181bf790c3626fb68c57`, 92 statements in 20 cases;
+  ../../families/masks/README.md). Until then `HASH_ORDER_LIST_SHA256` was `None` and `--mask
+  row-order` stopped with exit 2.
 
 `compare` also stops with exit 2 in three other cases:
 - a list is missing, empty or malformed;
@@ -516,8 +534,8 @@ and a statement under `--disable_result_log` off the list is only the helper, wh
 
 ### The list format: migration/judge/lists/hash-order-selects.txt
 
-The confirmation step writes it; it does not exist yet. UTF-8, one statement per line, eight fields
-separated by tabs; lines starting with `#` and blank lines are skipped.
+The confirmation step wrote it on 2026-09-28 (../../families/masks/README.md). UTF-8, one statement
+per line, eight fields separated by tabs; lines starting with `#` and blank lines are skipped.
 
 | Field | What it holds |
 |---|---|
@@ -616,9 +634,18 @@ How it places a candidate:
   `result_format: N` line, or the end of the file. The rows end where that line appears, or at
   `Warnings:` or `affected rows:` when that line comes right after the warnings. With several
   columns, every row must have the header's number of tabs.
-- `--replace_result` and `--replace_regex` rewrite the next statement's echo as well as its result,
-  so the helper cannot predict that echo. It gives up when either comes before the next output (the rows would
-  otherwise run on to a later line that holds the unchanged text).
+- `--replace_result` and `--replace_regex` rewrite the next statement's echo as well as its result.
+  Until the live stage the helper gave up whenever either came before the next output (the rows would
+  otherwise run on to a later line that holds the unchanged text). The live stage changed that: the
+  helper now gives up only when the replace could change the next output. It reads each
+  `--replace_regex` pattern (and its `i` flag) and gives up when a pattern is not made only of letters,
+  digits, spaces, `_:=,.*+?^$|()[]-` and escaped punctuation, holds `[:`, does not compile in Python,
+  or matches the next statement's echo, any of its lines, or the next `--echo` or `result_format` line;
+  and it takes the `--replace_result` from-strings and gives up when any of them occurs there, or when
+  the argument holds a quote, a backslash or a `$`. A replace with a variable always makes it give up.
+  Python's `re` stands in for mysqltest's regular expressions here, so the confirmation step's
+  found_rows() check is what catches rows placed on a wrongly predicted line; hash_order_list_test.py
+  (12 tests) covers the change, including patterns that do match the next echo.
 - After placing the rows of a plain result, it checks them once more: no row may read, with its
   whitespace collapsed, like the first line of any statement's echo in the .test or like any
   `--echo` text. Such a row means the rows ran past the result, or a row the helper cannot tell from
@@ -632,9 +659,13 @@ How it places a candidate:
   `--explain_protocol`, a `--replace_result` or `--replace_regex`, a `##` comment under any
   `--result_format` but 1, a blank line under any but 1 and 3, or any other mysqltest command.
 
-On the checked-in .result files it places 596 of the 633 candidates, in 61 cases: 403 plain results
-(233 with one column, 34 of them with two or more rows) and 193 boxed ones; 99 print no row, 297 one
-row and 200 two or more. The 37 others:
+On the checked-in .result files the helper as first written placed 596 of the 633 candidates, in 61
+cases: 403 plain results (233 with one column, 34 of them with two or more rows) and 193 boxed ones;
+99 print no row, 297 one row and 200 two or more. The helper of the live stage (sha256
+`a821f0873a12e62e94114bec1132f5d527039a5b55b3bdd6a952fa5070f1aa8f`, the one the confirmed list names)
+places 608: the 12 below that a `--replace_regex` follows are placed too, since none of their
+patterns can change the next echo, and the confirmation step dropped all 12 as no-hash-order. The 37
+that the first helper did not place:
 - 16 in subquery.idx_with_const_expr_21_subquery_dilang run under `--enable_sorted_result`, so
   mysqltest already sorts them;
 - 12 are followed by a `--replace_regex` before the next statement: delete.delete_from_mysql line
@@ -698,7 +729,10 @@ reports each case as identical, different or missing (`plan-cache <status> <case
 line, and `plan_cache` in the `--out` JSON, with each case's seconds and its `timing_sensitive`
 flag). A different or missing case fails the comparison (exit 1). A recording with
 `plan_cache_errors`, or with `plan_cache_stats` but no passed read check on every instance in
-`plan_cache_checks`, counts as a recording problem. `--require-plan-cache`, `--require-ps-protocol`
+`plan_cache_checks`, counts as a recording problem. `--plan-cache-not-comparable FILE`, added on
+2026-09-28 after family 7's live check, names the cases whose hits, misses or both two recordings of
+the reference do not reproduce; such a case is reported as `not-compared` when only the listed counts
+differ (../README.md, "The plan-cache not-comparable option"). `--require-plan-cache`, `--require-ps-protocol`
 and `--require-compress` make a recording without that option a recording problem; the `--out` JSON
 lists them under `required`.
 
