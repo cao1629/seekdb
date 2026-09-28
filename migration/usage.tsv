@@ -9,3 +9,11 @@ step	workflow	finished	agents	subagent_tokens	tool_uses	duration_min	model	effor
 1	wf_e5d2d95a-2db	2026-09-25T06:00Z	5	3183929	956	202	claude-opus-5-5	max	map closing: islands, crate check, manifests, declaration index
 1	wf_8057f85e-5fb	2026-09-25T04:35Z	7	4763501	1536	186	claude-opus-5-5	max	inventory pilot and sweep extension
 note	-	2026-09-25T05:40Z	-	-	-	-	claude-opus-5-5	max	usage limit reached with about 40-60 agents in flight across 7 workflows; all in-flight agents failed; resumed 2026-09-27
+1	wf_baf427b0-0af	2026-09-27T13:30Z	6	3647018	1201	101	claude-opus-5-5	max	amendment 1 revise and five vocabulary syncs
+1	wf_e7a6277e-a06	2026-09-27T20:00Z	4	1160738	609	168	claude-opus-5-5	max	amendment 2 ledger (reviews cut by the usage limit)
+00b	wf_c9a4e2af-543	2026-09-27T20:00Z	12	494084	269	168	claude-opus-5-5	max	live second set, resumed (plan unit cut by the usage limit)
+1	wf_c0fb6a8e-ff3	2026-09-27T20:00Z	37	8267859	2455	168	claude-opus-5-5	max	inventory tmp-ret + reset, window 2026-09-28 00:54-05:50 local
+1	wf_54240fcd-769	2026-09-27T20:00Z	37	7670865	2840	168	claude-opus-5-5	max	inventory printf-calls, same window
+1	wf_d1fb7f9b-80c	2026-09-27T20:00Z	41	6531077	2412	168	claude-opus-5-5	max	inventory ret-compare + const-cast, same window
+1	wf_58071515-1c0	2026-09-27T20:00Z	102	2513990	777	78	claude-opus-5-5	max	inventory memory group vocabularies, same window
+note	-	2026-09-27T20:00Z	-	26638613	-	-	claude-opus-5-5	max	second usage-limit hit: about 26.6M subagent tokens in about 3 hours with about 20-25 agents in flight (window from 00:54, reset 05:50 local)
