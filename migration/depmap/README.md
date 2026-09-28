@@ -1,6 +1,6 @@
 # The dependency map, the manifests and the declaration index
 
-This directory holds the dependency map of Step 1 (PLAN.md section 6, "The map"). Three scripts in migration/scripts/ write it, the three manifests beside PLAN.md and the declaration index in migration/decl-index/. The counts below come from the run of 2026-09-25 over the frozen base 834bbee1e.
+This directory holds the dependency map of Step 1 (PLAN.md section 6, "The map"). Three scripts in migration/scripts/ write it, the three manifests beside PLAN.md and the declaration index in migration/decl-index/. The counts below come from the run of 2026-09-28, after the review of design amendment 2 (migration/design/AMENDMENTS.md A2-12 to A2-19 and "A2 review"), over the frozen base 834bbee1e; the decisions and review notes of 2026-09-25 further down keep their own dates.
 
 ## How to run the three scripts
 
@@ -16,7 +16,7 @@ nice -n 10 python3 -B migration/scripts/make_manifest_seekdb.py \
 nice -n 10 python3 -B migration/scripts/decl_index.py --force --jobs 4
 ```
 
-On this Mac they take about 20 s, 4 s and 90 s. Each run writes the same bytes as the run before it.
+On this Mac they take about 25 s, 4 s and 90 s. Each run writes the same bytes as the run before it. depmap_seekdb.py also takes `--outside-build UNIT` (default tools/ob_error/src/ob_error, the unit the manifest command names), so the crate check counts the files of every unit the manifest translates.
 
 - **depmap_seekdb.py** reads every `#include` (following the 116 forwarding headers and 1 umbrella header), and turns the DWARF of the reference build's 364 objects, plus the source, into definition and link edges. It writes edges.tsv, units.tsv, order.txt, order-crates.txt, order-files.txt, the cycle files, definitions.tsv, forwarders.tsv, generated.txt, misses.tsv, aliases.tsv, crate-edges.tsv, crate-check.txt, ledger-needed.tsv and summary.txt. `--trial FILE...` prints one file's includes and edges for a hand check.
 - **make_manifest_seekdb.py** writes migration/manifest.tsv (Step 3), migration/core-manifest.tsv (the core) and migration/not-translated.tsv (RULEBOOK section 4). Without `--sub` pairs, a target's file name is the source's stem, with a trailing `_` for lib, main and mod, and `.rs`. It writes nothing and exits 1 when two rows share a target, a target is a crate root or sits under `generated/`, an in-build unit appears nowhere, or a line of an in-build unit's files is placed less or more than once.
@@ -34,7 +34,7 @@ What the scripts read besides the source tree:
 | core-placements.txt | core items the design places apart from the rest of their unit: a file or a line range, its crate, its module, and the design text that places it | all three |
 | exclusions.txt | files, prefixes and line ranges that are not translated, each with its reason and design text | make_manifest_seekdb.py |
 | aliases.tsv | written by depmap_seekdb.py: headers that are copies of a header in another unit | make_manifest_seekdb.py, decl_index.py |
-| migration/crate-edges.tsv | the edge ledger (from, to, what, count, fix, how), once written | depmap_seekdb.py |
+| migration/crate-edges.tsv | the edge ledger: from, to, what, count, fix, how, design, site, kind and items, one row per edge (AMENDMENTS.md A2-1, A2-12) | depmap_seekdb.py |
 
 ## Counts
 
@@ -48,42 +48,42 @@ What the scripts read besides the source tree:
 
 The crate check also counts 10 includes of rust/sql-nio/include/nio.h. It is the C header that sql-nio's build.rs writes, so these edges count against the sql-nio crate. Their kind is `rust-header`.
 
-**Crate edges** between live files, as crate pairs and edges. The file level uses the crate map with the design placements. The placement level puts each file in the crate its manifest row writes it to.
+**Crate edges** between counted files, as crate pairs and edges. The file level uses the crate map with the design placements. The placement level puts each file in the crate its manifest row writes it to. Since the review of amendment 2 the check counts, besides include, definition, link and island edges, a `forward` edge from a file that names a class it only forward-declares to the header that defines it, and a `generated` edge for an include of generated code, against the crate its Rust back end writes (AMENDMENTS.md A2-13); the counted files are the files the reference build compiles or reaches and every other file of a unit the manifest translates. After the placements of A2-15 and A2-18 the two levels agree:
 
 | Class | File level | Placement level |
 |---|---|---|
-| listed (on the row) | 338 / 11,840 | 349 / 11,003 |
-| upward-named (a pair the design counted; one of ARCHITECTURE §1.2's five fixes) | 107 / 994 | 119 / 1,068 |
-| gone (ARCHITECTURE §1.2) | 6 / 10 | 6 / 10 |
-| upward-unnamed (finding) | 6 / 6 | 10 / 15 |
-| not-listed (finding) | 1 / 1 | 3 / 3 |
-| uses-dropped (finding: translated code using x-dropped code) | 7 / 22 | 7 / 22 |
-| uses-deferred (finding: translated code using standby) | 1 / 1 | 1 / 1 |
-| deferred (edges out of standby) | 7 / 183 | 7 / 183 |
+| listed (on the row) | 369 / 13,047 | 369 / 13,047 |
+| upward-named (a pair the design counted; one of ARCHITECTURE §1.2's five fixes) | 111 / 1,000 | 111 / 1,000 |
+| gone (ARCHITECTURE §1.2) | 4 / 7 | 4 / 7 |
+| upward-unnamed (finding unless the ledger fixes it) | 21 / 41 | 21 / 41 |
+| not-listed (finding) | 0 / 0 | 0 / 0 |
+| uses-dropped (translated code using x-dropped code) | 7 / 16 | 7 / 16 |
+| uses-deferred (translated code using standby) | 1 / 1 | 1 / 1 |
+| dropped, deferred (edges out of x-dropped and standby code) | 2 / 2, 9 / 217 | 2 / 2, 9 / 217 |
 
-158 cross-crate edges touch a file outside the reference build and are not counted. crate-edges.tsv lists 473 crate pairs.
+171 cross-crate edges touch a file outside the counted files and are not counted. 39 classes a file names past a forward declaration have no definition in the tree (system and third-party types), and none has two defining headers. crate-edges.tsv lists 524 crate pairs.
 
 **Cycles.**
 
 - File level: 27 cycles over 69 files through include edges alone, and 35 over 85 files through all edge kinds (cycles-files.txt).
 - Unit level (order.txt): 1,033 batches in 23 levels, with 19 cycles holding 2,499 units, sizes 2,147, 196, 55, 33, 17, 17, 9, 3 and eleven of 2. These cycles form because a .cpp file includes headers from higher up.
-- Order used in the redesign: the crate order (order-crates.txt) is acyclic by design, and inside each crate the units follow only the edges out of their headers. That gives 3,461 batches over the 37 crates that hold units. The cycles left inside crates are ob-base 14 and 2, ob-runtime 3 and 2, ob-values 2, storage-tx 4, 3, 3 and 2, storage-tablet 7 and 2, sql-expr 7, sql-engine 2 and 2, sql 2 and 2, pl 7, rootserver 2 and standby 3. Over the whole map, headers alone give 3,416 batches in 107 levels, and the largest cycle has 46 units.
+- Order used in the redesign: the crate order (order-crates.txt) is acyclic by design, and inside each crate the units follow only the edges out of their headers. That gives 3,455 batches over the 38 crates that hold units. The cycles left inside crates are ob-base 14 and 2, ob-runtime 3 and 2, ob-values 2, storage-tx 4, 3, 3 and 2, storage-tablet 7 and 2, sql-expr 7, sql-engine 2 and 2, sql 2 and 2, pl 7, rootserver 2, x-dropped 7 and standby 3. Over the whole map, headers alone give 3,416 batches in 107 levels, and the largest cycle has 46 units.
 - Directory level: 9 cycles among live files through includes, the largest with 110 directories and 4,100 files. Through all edges, one cycle holds 290 directories.
-- Crate level: over every edge, island edges included, one cycle of 34 crates. After the edges the design cuts (upward-named and gone) are removed, one cycle of 18 crates is left at the file level (20 at the placement level). It runs only through the finding edges listed under "The crate check".
+- Crate level: over every edge, island edges included, one cycle of 34 crates at each level, which the design's pair-level cuts do not break. After the edge ledger's cuts no crate cycle is left at either level; that follows from a complete ledger, since the cuts leave only edges on the rows, which point to earlier crates.
 
 **Manifest rows** (`wc -l` counts the header line too):
 
 | File | Lines | Rows |
 |---|---|---|
-| migration/manifest.tsv | 2,560 | 2,559: 2,283 `stem` and 276 `split` (81 heads, 195 pieces) |
-| migration/core-manifest.tsv | 994 | 993 `subsystem` rows (75 of them pieces), 2 of them new-code modules of ob-platform |
-| migration/not-translated.tsv | 257 | 256: 242 whole units (island 110, generated 3, dead 75, dropped 27, deferred 27) and 14 parts of translated units (island 1, data 3, dropped 9, deferred 1) |
+| migration/manifest.tsv | 2,576 | 2,575: 2,280 `stem` and 295 `split` (81 heads, 214 pieces) |
+| migration/core-manifest.tsv | 1,062 | 1,061 `subsystem` rows (75 of them pieces), 2 of them new-code modules of ob-platform |
+| migration/not-translated.tsv | 256 | 255: 237 whole units (island 109, generated 3, dead 75, dropped 27, deferred 23) and 18 parts of translated units (island 3, data 3, dropped 10, deferred 2) |
 
-- 54 files of 4,000 lines or more are split (18 in core rows, 36 in Step 3 rows). No row is over 3,999 lines or 30,000 tokens (characters / 4). The largest row is core/ob-schema/ob_schema_struct.p02, at 29,949 tokens.
-- Every line of the 3,423 in-build units' files is placed exactly once across the three files. That count includes tools/ob_error/src/ob_error, which is translated though the build does not compile it. The only exception is 444 lines of src/sql/parser/parse_node.c, which are both island C and inputs of core/sql-parse-tree/parse_node.
-- core-placements.txt holds 20 placements (9 whole files, 11 line ranges) with 11 targets. 2 header copies are dropped as aliases.
+- 54 files of 4,000 lines or more are split (18 in core rows, 36 in Step 3 rows). No row is over the cap of 3,999 lines or 30,000 tokens (characters / 4) that the cut points can divide; one row, core/ob-base/utility/utility, has 4,055 lines under the token cap. The largest row is core/ob-schema/ob_schema_struct.p02, at 29,949 tokens.
+- Every line of the 3,424 in-build units' files is placed exactly once across the three files. That count includes tools/ob_error/src/ob_error, which is translated though the build does not compile it, and the disabled standby module (A2-7). The only exception is 495 lines that are island, dropped or deferred code and also inputs of a Rust row: parse_node.c's `ParseTree` ranges, the geo header's byte-order enum, and `get_cpufreq_khz` of libeasy's stand-in file (A2-16).
+- core-placements.txt holds 171 placements (25 whole files, 146 line ranges) with 80 targets: 15 of A2-4, 2 of A2-8, 16 of A2-15 and 118 of A2-18 besides the design's own. A placement may target ob-platform, a crate of new code the manifest names with `--new-module`. 2 header copies are dropped as aliases.
 
-**Declaration index.** 3,513 files, 362,074,296 bytes. The median file is 69,693 bytes, p90 is 218,364 and the largest is 1,160,002. 179 units include no in-repo header. A unit has a median of 4 one-level headers, listed in full, and 15 deeper headers, listed only in part. 3,009 units have a deeper section, and the most deeper headers any unit has is 183. 123 units whose rows write more than one module (split units and units a placement divides) also list their own headers, with the module each declaration is written to. No `// rust:` name fails `(r#)?[A-Za-z_][A-Za-z0-9_]*`, and no header reports a parse problem.
+**Declaration index.** 3,513 files, 365,588,098 bytes. The median file is 70,417 bytes, p90 is 221,416 and the largest is 1,166,791. 179 units include no in-repo header. On 2026-09-25 a unit had a median of 4 one-level headers, listed in full, and 15 deeper headers, listed only in part; 3,009 units had a deeper section, and the most deeper headers any unit had was 183. 123 units whose rows write more than one module (split units and units a placement divides) also list their own headers, with the module each declaration is written to. No `// rust:` name fails `(r#)?[A-Za-z_][A-Za-z0-9_]*`, and no header reports a parse problem.
 
 ## The island rule
 
@@ -97,30 +97,23 @@ The kept C and C++ of islands.txt is compiled from its src/ path and is never tr
 
 ## The crate check
 
-1. **The design's table.** Run from migration/design/evidence/rulebook, `python3 -B check_crate_graph.py ../../ARCHITECTURE.md crates/allowed-design.tsv` prints: `acyclic: 39 crates, 419 allowed edges, every edge points to an earlier crate; topological order found for all 39 crates; rows equal crates/allowed-design.tsv`.
-2. **The map against the table** (crate-check.txt). At the file level, 30 edges in 15 crate pairs are neither allowed nor named by the design as a cut:
-   - ob-schema to storage-api: src/share/ob_rpc_struct.h:40 includes src/share/ob_est_row_count_record.h. s6-storage.md §1 puts ObEstRowCountRecord in storage-api, and fix 1 puts the DDL argument structs that use it in ob-schema.
-   - storage-api to sql-ir, sql-engine, sql-codegen and storage-tablet: src/sql/engine/basic/ob_pushdown_filter.cpp:27-32, the SQL side of the filter executors. s5-execution.md §5 moves it behind `ScanHost`.
-   - sql-exec to sql-nio: src/query/api/query/protocol/ob_mysql_rust_row.h includes nio.h. s1-crates-core.md 1.5 rule 5's trait in sql-exec covers it.
-   - sql-codegen to storage-sstable (not-listed): src/sql/code_generator/ob_tsc_cg_service.h:19 includes the header copy of ob_index_block_util.h. The kept copy is in storage-sstable.
-   - uses-dropped, 22 edges in 7 pairs: libeasy (src/oblib/easy, x-dropped). Examples are ObAddr(const easy_addr_t&) at src/oblib/lib/net/ob_addr.h:74, thread.h:25, utility.h:39, and the easy_* functions that src/oblib/rpc/frame/ob_net_easy.cpp defines. The design drops libeasy but names nothing to replace these uses.
-   - uses-deferred, 1 edge: src/observer/ob_server.cpp:96 includes src/standby/standby_module.h.
+1. **The design's table.** Run from migration/design/evidence/rulebook, `python3 -B check_crate_graph.py ../../ARCHITECTURE.md crates/allowed-design.tsv` prints: `acyclic: 39 crates, 433 allowed edges, every edge points to an earlier crate; topological order found for all 39 crates; rows equal crates/allowed-design.tsv` (419 on 2026-09-25, 429 after amendment 2).
+2. **The map against the table and the ledger** (crate-check.txt). ledger-needed.tsv lists the 1,065 edges that need a ledger row, keyed by from crate, to crate, from file, target file and kind, at either level: 1,000 upward-named, 41 upward-unnamed, 16 uses-dropped, 7 gone and 1 uses-deferred; by kind, 796 include, 222 forward, 35 definition, 4 link, 3 island, 2 from-island, 2 generated and 1 rust-header. migration/crate-edges.tsv has one row for each, and no other:
 
-   The placement level adds sql-parser to ob-schema (ob_pl_parser.h:22), sql-exec to storage-tx (ob_physical_plan_ctx.h), storage-tx to pl (ob_memtable.cpp:20), storage-tablet to sql-ir (ob_table_param.cpp) and storage-api to storage-tx and storage-sstable (data_plane/api headers placed with their .cpp). The one crate cycle left after the design's cuts runs only through these finding edges.
-3. **The edge ledger.** migration/crate-edges.tsv does not exist yet. ledger-needed.tsv lists the 658 rows it needs, one per crate pair and target file, at the placement level:
-
-   | Class | Rows |
+   | Fix | Rows |
    |---|---|
-   | upward-named | 614 |
-   | uses-dropped | 17 |
-   | upward-unnamed | 14 |
-   | gone | 9 |
-   | not-listed | 3 |
-   | uses-deferred | 1 |
+   | 1 (a move, carried by a map row or a core placement) | 49 |
+   | 2 (a trait of the lower crate) | 243 |
+   | 3 (the storage/SQL boundary) | 85 |
+   | 4 (SQL's trait into PL) | 76 |
+   | 5 (the core API decides, out of a core crate) | 421 |
+   | gone | 53 |
+   | unused | 138 |
 
-   The script compares ledger-needed.tsv with the ledger on every run.
+   No finding is left at either level: every edge the design neither allows nor names has a row whose fix removes it.
+3. **The item checks** (AMENDMENTS.md A2-12). Each row lists in `items` what its fix acts on. The check resolves every item and requires twelve lists to be empty: unresolved items, rows without items, fix-1 items no map row or placement moves, moves to a crate the from crate may not use, items with two destinations, items the from crate may already use, constants, enums and base classes a trait is asked to carry, fix 5 out of a crate that is not core, moved items a lower crate names without a row of its own, moved lines that name what their new crate may not use, `unused` rows whose unit, includers or only-through headers name something, and `gone` rows that name no machinery.
 
-**Verdict.** The design's crate graph is acyclic. The map's crate graph is not acyclic until the ledger exists. Step 1's exit condition, "an acyclic crate graph", holds only once migration/crate-edges.tsv gives each of the 658 rows a fix, including a fix for the 30 finding edges above.
+**Verdict.** `clean`: findings 0 at both levels, no needed edge without a fix, no stale or unreadable row, no crate cycle after the ledger's cuts at either level, and every item check empty. With check_crate_graph.py's `acyclic`, Step 1's exit condition "an acyclic crate graph" holds (ARCHITECTURE §1.2). The cycle count follows from the complete ledger; the item checks are what test that the fixes fit their edges.
 
 ## Decisions taken on 2026-09-25
 
@@ -171,13 +164,23 @@ These choices were taken under decisions.md row 5c, which says to take the recom
   - a split .cpp's macros are listed for the pieces after the one that defines them;
   - the note on a spliced X-macro list names the list's own unit and module.
 
+## What the review of amendment 2 changed (2026-09-28)
+
+Two reviews found the verdict of amendment 2 clean for the wrong reason (AMENDMENTS.md, "A2 review"). The changes, each an entry of AMENDMENTS.md:
+
+- **depmap_seekdb.py**: forward-declaration and generated edges; the files of every translated unit count; the scan records each declared name's kind; the ledger's tenth column, `items`, and the twelve item checks the verdict needs (A2-12, A2-13); the forward-declaration counts in crate-check.txt.
+- **make_manifest_seekdb.py**: a placement may port lines of dropped or deferred code into a Rust row, as it may island lines, and may target a crate of new code that `--new-module` names (A2-15, A2-16).
+- **crates-design.tsv**: 22 whole-unit rows (A2-14), the two ob_monitor_node rows changed to sql-exec, the candidate tablet locations to sql-das (A2-18), and a `dir` for the table-read-info interface in storage-tablet.
+- **allowed-design.tsv**: storage-api may use ob-log, observer ob-platform, sql-session and sql-exec geo-sys (433 allowed edges).
+- **core-placements.txt**: 16 lines of A2-15 and 118 of A2-18 carry every move a fix-1 row names.
+- **migration/crate-edges.tsv**: 1,065 rows; the fixes of rows the reviews named, and of every row like them, fit their edges.
+
 ## Open items
 
-1. **Write the edge ledger**, migration/crate-edges.tsv, from ledger-needed.tsv, and give the 30 finding edges their fixes. For example: a trait or a move for ObEstRowCountRecord; the ScanHost side of ob_pushdown_filter.cpp; a `row` fix or a move for sql-codegen to storage-sstable; a replacement for easy_addr_t and the other libeasy uses; a crate for the disabled standby module.
-2. **Decide which lines move for the design's partial moves.** The SQL side of ob_pushdown_filter.cpp, ObPushdownFilterConstructor and black-filter evaluation, sits with its unit in storage-api for now. s5-execution.md §5 moves it into sql-exec behind ScanHost, but no row names its lines. "The IR's parts of ObTransformUtils", which ARCHITECTURE §1.2 fix 1 moves into sql-ir, name no lines either. The core API sessions decide both and add them to core-placements.txt.
-3. **ob_vector_op_common.h**, the NEON helpers the ob-simd kernels include, stays in storage-search. Its upward-named edge from ob-simd needs a ledger row; a fix-1 move to ob-simd is the likely one.
-4. **Section files that still describe the parser's memory-check slot** need to follow ARCHITECTURE §9.2 (decision 3): s3-memory.md T5, its table row at :434 and objection 1 at :680; s7-islands-unsafe.md 7.5 rules 2-3 and objection 6; s4-sql-front.md :795; RESOLUTIONS.md s3-1 and C-20; s1-crates-core.md 1.3 and objection 1 (ob_memory_tracker_wrapper's row, now for a dead file).
-5. **The declaration index still lacks two things RULEBOOK §0 promises a Step 3 unit**: each declaration's full Rust signature, and the parameters that RULEBOOK 2.4 adds.
-6. **PLAN §6 describes the declaration index too narrowly.** It says the index holds "the declarations its one-level includes provide"; the index now also lists what a unit's files name from deeper headers (decision 4).
-7. **Several modules of new code have no manifest row.** These are ob-epoch, ob-errno's ObError, ObResult and cfmt, the island crates' Rust wrappers, and the GeoJSON traversal as new C++ in rust/geo-sys/cpp/. Only ob-platform's libc and allocator modules have rows.
-8. **The design's figures predate these changes.** ARCHITECTURE §1.1's Lines column and s1-crates-core.md 1.3's "212 lines" come from crates-design.tsv before the rows above were added, and so do the design's crate_view.json and link_edges.json.
+1. **Queued outside the files this directory's scripts and the design's crate tables own** (AMENDMENTS.md A2-19): two RULEBOOK.md sentences, the s6-storage.md rows for the inner-table generator's output crates, a mark in the declaration index for a one-level header whose include is `unused`, and the split of ob_vector_index_util (storage-search), whose SQL-facing functions still reach the SQL tier through fix-3 and fix-2 rows.
+2. **The core API sessions' choices.** 421 fix-5 rows name the items the core API sessions write in a core crate or reach through a trait (ARCHITECTURE §1.2 fix 5), among them the SQL side of ob_pushdown_filter.cpp (s5-execution.md §5); each choice becomes a core placement or a trait before Step 2a's stubs are written.
+3. **Section files that still describe the parser's memory-check slot** need to follow ARCHITECTURE §9.2 (decision 3): s3-memory.md T5, its table row at :434 and objection 1 at :680; s7-islands-unsafe.md 7.5 rules 2-3 and objection 6; s4-sql-front.md :795; RESOLUTIONS.md s3-1 and C-20; s1-crates-core.md 1.3 and objection 1 (ob_memory_tracker_wrapper's row, now for a dead file).
+4. **The declaration index still lacks two things RULEBOOK §0 promises a Step 3 unit**: each declaration's full Rust signature, and the parameters that RULEBOOK 2.4 adds.
+5. **PLAN §6 describes the declaration index too narrowly.** It says the index holds "the declarations its one-level includes provide"; the index now also lists what a unit's files name from deeper headers (decision 4).
+6. **Several modules of new code have no manifest row.** These are ob-epoch, ob-errno's ObError, ObResult and cfmt, the island crates' Rust wrappers, and the GeoJSON traversal as new C++ in rust/geo-sys/cpp/. Only ob-platform's libc and allocator modules have rows, and ob-platform's cpufreq module, which a placement ports.
+7. **The design's link counts predate the amendments.** ARCHITECTURE §1.1's Lines column and §1.2's include count are rerun on the amended map (migration/design/evidence/amendment-2/crates/out/a2-review-a.txt, a2-review-allowed.txt); the symbol counts, crate_view.json and link_edges.json still come from the first review's map.

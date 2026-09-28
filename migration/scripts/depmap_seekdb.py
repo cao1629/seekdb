@@ -130,7 +130,22 @@ SOURCE_STATS = (
 )
 ELABORATED_WORDS = {"struct", "class", "union", "enum", "typename", "register"}
 CLASS_WORD_RE = re.compile(r"\b(?:class|struct|union)\b")
+FWD_DECL_RE = re.compile(r"^\s*(?:template\s*<[^;{}]*>\s*)?(?:class|struct|union)\s+(?:[A-Z_][A-Z0-9_]*\s+)*"
+                         r"([A-Za-z_]\w*)\s*$")
 HEADER_LIKE = HEADER_EXTS | {".ipp"}
+DEFINE_NAME_RE = re.compile(r"^[ \t]*#[ \t]*define[ \t]+([A-Za-z_]\w*)", re.M)
+ENUM_HEAD_RE = re.compile(r"\benum\b(?:\s+(?:class|struct)\b)?(?:\s+([A-Za-z_]\w*))?\s*(?::[^{;()]*)?\{")
+TYPEDEF_NAME_RE = re.compile(r"\btypedef\b([^;{}]*);")
+TYPEDEF_BODY_RE = re.compile(r"\btypedef\s+(?:struct|union|enum|class)\b[^;{}]*\{")
+USING_ALIAS_RE = re.compile(r"\busing\s+([A-Za-z_]\w*)\s*=")
+ACCESS_LABEL_RE = re.compile(r"^\s*(?:(?:public|private|protected)\s*:(?!:)\s*)+")
+IDENT_RE = re.compile(r"[A-Za-z_]\w*")
+# words that are never an item: C and C++ keywords and builtin types, and the log-level tokens the logging macros paste
+NOT_ITEMS = {"void", "bool", "char", "short", "long", "float", "double", "signed", "unsigned", "const", "volatile",
+             "static", "inline", "extern", "struct", "class", "union", "enum", "typedef", "template", "typename",
+             "virtual", "public", "private", "protected", "operator", "return", "sizeof", "namespace", "using",
+             "int8_t", "int16_t", "int32_t", "int64_t", "uint8_t", "uint16_t", "uint32_t", "uint64_t", "size_t",
+             "ERROR", "WARN", "INFO", "DEBUG", "TRACE", "EDIAG", "WDIAG", "TRUE", "FALSE", "NULL", "true", "false"}
 
 FIXED_FORMS = {0x01: 8, 0x0b: 1, 0x05: 2, 0x06: 4, 0x07: 8, 0x0c: 1, 0x11: 1, 0x12: 2, 0x13: 4,
                0x14: 8, 0x0e: 4, 0x10: 4, 0x17: 4, 0x19: 0, 0x20: 8, 0x1e: 16}
@@ -862,8 +877,12 @@ def scan_protos(text, is_c, want_uses):
             if not const_only:
                 spans.append((start, end))
 
+    fwds = []
+    skip_spans = []
+    dead_spans = []
     for pos, kind, d, arg in events:
         if kind == 1:
+            was_dead = dead
             if d == "define" and prev is not None and prev[0] == "ifndef" and pp and arg.split(" ")[0] == prev[1]:
                 pp[-1][6] = True
             prev = (d, arg)
@@ -890,6 +909,10 @@ def scan_protos(text, is_c, want_uses):
                 top = pp.pop()
                 conds.append((top[4], pos, top[5], top[6]))
                 dead = top[1]
+            if dead and not was_dead:
+                dead_spans.append([pos, len(code)])
+            elif was_dead and not dead and dead_spans:
+                dead_spans[-1][1] = pos
             continue
         if dead:
             continue
@@ -921,10 +944,18 @@ def scan_protos(text, is_c, want_uses):
             stmt_start = pos + 1
         else:
             st = scope(False)
+            seg = code[stmt_start:pos]
+            fm = FWD_DECL_RE.match(seg) if CLASS_WORD_RE.search(seg) else None
+            if fm:
+                skip_spans.append((stmt_start, pos))
+                cp = class_scope()
+                if st is not None and not st[2] and cp is not None:
+                    fwds.append((stmt_start + fm.start(1), pos, "::".join(cp + [fm.group(1)])))
+            elif st is None and ACCESS_LABEL_RE.sub("", seg).lstrip().startswith("friend"):
+                skip_spans.append((stmt_start, pos))
             if st is not None:
                 record(stmt_start, pos, False, st, True)
             else:
-                seg = code[stmt_start:pos]
                 if "extern" in seg and seg.lstrip().startswith("extern"):
                     record(stmt_start, pos, False, scope(True))
             stmt_start = pos + 1
@@ -959,7 +990,135 @@ def scan_protos(text, is_c, want_uses):
                 for p, lk, path, name, kind, sig, const_only in defs]
     out_qdefs = [(line_of(p), lk, path, qual, name, kind, sig, glob, cond_at(p))
                  for p, lk, path, qual, name, kind, sig, glob in qdefs]
-    return out, out_defs, out_qdefs, classes
+    # a class the file only forward-declares at namespace scope and names after the declaration (friend lines,
+    # other forward declarations and #if 0 code aside): (declaration line, qualified name, first use line, uses)
+    out_fwds = []
+    skip_spans.sort()
+    skip_starts = [a for a, _ in skip_spans]
+    dead_starts = [a for a, _ in dead_spans]
+
+    def inside(x, starts, spans):
+        k = bisect.bisect_right(starts, x) - 1
+        return k >= 0 and x < spans[k][1]
+
+    for p, end, qn in fwds:
+        name = qn.split("::")[-1]
+        uses = [m.start() for m in re.compile(r"\b%s\b" % re.escape(name)).finditer(code, end)
+                if not inside(m.start(), skip_starts, skip_spans) and not inside(m.start(), dead_starts, dead_spans)]
+        if uses:
+            out_fwds.append((line_of(p), qn, tuple(sorted({line_of(u) for u in uses})), len(uses)))
+    # the names the file declares or defines, with their lines (the edge ledger's items are looked up here): classes,
+    # enums and their enumerators, typedefs and aliases, macros, free functions and variables, and `Class::member`
+    # for a member defined outside its class
+    names = defaultdict(set)
+    # what each name is: function, variable, class, macro (object-like), fmacro (function-like), enum, enumerator
+    # or typedef; the ledger's check of what a trait can carry reads it
+    kinds = defaultdict(set)
+    for line, lk, path, name, kind, sig in decls:
+        names[name].add(line)
+        kinds[name].add(kind)
+    for p, lk, path, name, kind, sig, const_only in defs:
+        names[name].add(line_of(p))
+        kinds[name].add(kind)
+    for p, lk, path, qual, name, kind, sig, glob in qdefs:
+        last = (qual[-1] if qual else "") if isinstance(qual, (tuple, list)) else (qual or "").split("::")[-1]
+        if last:
+            names["%s::%s" % (last, name)].add(line_of(p))
+            kinds["%s::%s" % (last, name)].add(kind)
+    for line, cpath in classes:
+        names[cpath.split("::")[-1]].add(line)
+        kinds[cpath.split("::")[-1]].add("class")
+    for m in DEFINE_NAME_RE.finditer(clean):
+        if not inside(m.start(), dead_starts, dead_spans):
+            names[m.group(1)].add(line_of(m.start(1)))
+            if clean[m.end(1):m.end(1) + 1] == "(":
+                kinds[m.group(1)].add("fmacro")
+            else:
+                # an object-like macro whose expansion calls something (a singleton accessor) is a call; any other
+                # is a constant
+                eol = clean.find("\n", m.end(1))
+                while eol > 0 and clean[eol - 1] == "\\":
+                    eol = clean.find("\n", eol + 1)
+                body = clean[m.end(1):eol if eol > 0 else len(clean)]
+                kinds[m.group(1)].add("xmacro" if re.search(r"\w\s*\(", body) else "macro")
+    for m in ENUM_HEAD_RE.finditer(code):
+        if inside(m.start(), dead_starts, dead_spans):
+            continue
+        if m.group(1):
+            names[m.group(1)].add(line_of(m.start(1)))
+            kinds[m.group(1)].add("enum")
+        depth = 0
+        part_start = m.end()
+        for j in range(m.end(), len(code)):
+            c = code[j]
+            if c in "{([":
+                depth += 1
+            elif c in ")]" or (c == "}" and depth > 0):
+                depth -= 1
+            elif c == "}" or (c == "," and depth == 0):
+                em = re.match(r"\s*([A-Za-z_]\w*)", code[part_start:j])
+                if em:
+                    names[em.group(1)].add(line_of(part_start + em.start(1)))
+                    kinds[em.group(1)].add("enumerator")
+                part_start = j + 1
+                if c == "}":
+                    break
+    for m in TYPEDEF_NAME_RE.finditer(code):
+        if inside(m.start(), dead_starts, dead_spans):
+            continue
+        body = m.group(1)
+        fp = re.search(r"\(\s*\*\s*([A-Za-z_]\w*)\s*\)", body)
+        if fp:
+            names[fp.group(1)].add(line_of(m.start(1) + fp.start(1)))
+            kinds[fp.group(1)].add("typedef")
+            continue
+        ids = list(IDENT_RE.finditer(re.sub(r"\[[^\]]*\]", lambda x: " " * len(x.group(0)), body)))
+        if ids:
+            names[ids[-1].group(0)].add(line_of(m.start(1) + ids[-1].start()))
+            kinds[ids[-1].group(0)].add("typedef")
+    for m in TYPEDEF_BODY_RE.finditer(code):
+        if inside(m.start(), dead_starts, dead_spans):
+            continue
+        depth = 0
+        for j in range(m.end() - 1, len(code)):
+            c = code[j]
+            if c == "{":
+                depth += 1
+            elif c == "}":
+                depth -= 1
+                if depth == 0:
+                    tm = re.match(r"\s*([A-Za-z_]\w*)\s*[;,\[]", code[j + 1:j + 200])
+                    if tm:
+                        names[tm.group(1)].add(line_of(j + 1 + tm.start(1)))
+                        kinds[tm.group(1)].add("typedef")
+                    break
+    for m in USING_ALIAS_RE.finditer(code):
+        if not inside(m.start(), dead_starts, dead_spans):
+            names[m.group(1)].add(line_of(m.start(1)))
+            kinds[m.group(1)].add("typedef")
+    # the identifiers the file names outside its include lines, forward declarations, friend lines and #if 0 code
+    cut = sorted(skip_spans + [tuple(s) for s in dead_spans] +
+                 [(m.start(), m.end()) for m in INCLUDE_DIRECTIVE_LINE_RE.finditer(clean)])
+    cut_starts = [a for a, _ in cut]
+    cut_ends = []
+    reach = -1
+    for a, b in cut:
+        reach = max(reach, b)
+        cut_ends.append(reach)
+    idents = set()
+    for m in IDENT_RE.finditer(clean):
+        k = bisect.bisect_right(cut_starts, m.start()) - 1
+        if k >= 0 and m.start() < cut_ends[k]:
+            continue
+        j = m.start() - 1
+        while j >= 0 and clean[j] in " \t\n":
+            j -= 1
+        if j >= 0 and (clean[j] == "." or (clean[j] == ">" and j > 0 and clean[j - 1] == "-")):
+            continue
+        idents.add(m.group(0))
+    return (out, out_defs, out_qdefs, classes, out_fwds,
+            {k: tuple(sorted(v)) for k, v in names.items() if k not in NOT_ITEMS}, idents,
+            {k: tuple(sorted(v)) for k, v in kinds.items() if k not in NOT_ITEMS})
 
 
 def scan_file(args):
@@ -1354,13 +1513,48 @@ def condense(nodes, edges):
 
 ISLAND_KINDS = ("island", "from-island")
 EDGE_KINDS = ("include", "definition", "link", "own-header", "via-generated", "island", "from-island",
-              "rust-header")
+              "rust-header", "generated", "forward")
+# the crate a kept generator's Rust back end writes (s6-storage.md 6.1; ARCHITECTURE 1.4 and 2); any other
+# generated file counts in the crate the crate map gives its path (a build-time file under
+# <build>/generated/<p> as src/<p>), or in its island crate
+# (generator script, output file name or None for every output, the file whose include selects the output's section
+# or None, crate): the inner-table generator writes the TID/TNAME constants to ob-share, the lowest crate that names
+# them, and the SQLite statements ob_sqlite_table_schema.h selects (SQLITE_CREATE_TABLE_STATEMENTS) to ob-runtime,
+# whose config storage names them (AMENDMENTS.md A2-13; queued for s6-storage.md)
+GENERATOR_CRATES = (("generate_inner_table_schema.py", "ob_inner_table_schema_constants.h", None, "ob-share"),
+                    ("generate_inner_table_schema.py", "ob_inner_table_schema_misc.ipp",
+                     "src/share/storage/ob_sqlite_table_schema.h", "ob-runtime"),
+                    ("generate_inner_table_schema.py", None, None, "ob-schema"),
+                    ("gen_errno.pl", None, None, "ob-errno"), ("gen_os_errno.pl", None, None, "ob-errno"))
 SOURCE_RANK = {".cpp": 0, ".cc": 0, ".c": 0, ".cxx": 0, ".h": 1, ".hpp": 1, ".hxx": 1, ".ipp": 2}
 UNMAPPED = "(unmapped)"
 EDGE_CLASSES = ("listed", "upward-named", "gone", "upward-unnamed", "not-listed", "uses-dropped", "uses-deferred",
                 "dropped", "deferred", "unmapped")
 FINDING_CLASSES = ("upward-unnamed", "not-listed", "uses-dropped", "uses-deferred", "unmapped")
 LEDGER_CLASSES = ("upward-named", "upward-unnamed", "not-listed", "gone", "uses-dropped", "uses-deferred")
+LEDGER_COLUMNS = ("from", "to", "what", "count", "fix", "how", "design", "site", "kind", "items")
+LEDGER_FIXES = ("1", "2", "3", "4", "5", "gone", "unused")
+# the checks of the ledger's `items` (AMENDMENTS.md A2-12): each names a list in crate-check.txt that must be empty
+LEDGER_CHECKS = ("unresolved-items", "rows-without-items", "fix-1-not-carried", "fix-1-wrong-destination",
+                 "items-with-two-fixes", "items-that-need-no-fix", "trait-cannot-carry", "fix-5-outside-core",
+                 "moved-items-named-below", "moved-code-uses-above", "unused-rows-that-name", "gone-rows-without-items")
+# the core crates, whose APIs the core build writes by hand (ARCHITECTURE 1.1's tier column, core and core build; PLAN 6,
+# "build the core"): fix 5 applies only to edges out of them
+CORE_CRATES = ("ob-errno", "ob-base", "ob-platform", "ob-simd", "ob-epoch", "ob-runtime", "ob-values", "ob-schema",
+               "ob-log", "storage-api", "storage-sstable", "storage-tx", "storage-tablet", "sql-parse-tree", "sql-ir",
+               "sql-exec", "sql-codegen")
+# what a trait cannot carry: a constant, an enum or one of its values (a class the lower crate derives from is checked
+# separately)
+NOT_CALLS = {"macro", "enum", "enumerator"}
+UPWARD_CLASSES = ("upward-named", "upward-unnamed", "not-listed")
+ITEM_LINE_RE = re.compile(r"^([^:\s]+):(\d+)(?:-(\d+))?$")
+
+
+def itemlike(n):
+    """A name the name-based checks follow: longer than four characters, with a capital letter or an underscore
+    (so no plain word like `capacity`), and no keyword or log-level token."""
+    return len(n) > 4 and (n != n.lower() or "_" in n) and n not in NOT_ITEMS and "::" not in n
+DEFS_RE = re.compile(r"^defs=(\d+)")
 CYCLE_SKIP_CLASSES = ("dropped", "deferred", "unmapped", "uses-dropped", "uses-deferred")
 EV_LINK_RE = re.compile(r"^L(\d+)(?:\{[^}]*\})? \S+ defined at L(\d+)")
 EV_DECL_RE = re.compile(r"^L(\d+)(?:\{[^}]*\})? .* declared at L(\d+)")
@@ -1430,19 +1624,38 @@ def load_placements(path):
 
 
 def load_ledger(path):
-    rows = {}
     if not path or not os.path.isfile(path):
-        return None
+        return None, []
+    rows = {}
+    errors = []
+    header = None
     with open(path, encoding="utf-8") as f:
-        header = None
-        for line in f:
-            cols = line.rstrip("\n").split("\t")
+        for no, line in enumerate(f, 1):
+            line = line.rstrip("\n")
+            if not line.strip() or line.startswith("#"):
+                continue
+            cols = line.split("\t")
             if header is None:
                 header = cols
+                if tuple(cols[:len(LEDGER_COLUMNS)]) != LEDGER_COLUMNS:
+                    errors.append("line %d: the header is not %s" % (no, " ".join(LEDGER_COLUMNS)))
+                    return rows, errors
                 continue
-            if len(cols) >= 3:
-                rows[(cols[0], cols[1], cols[2])] = cols
-    return rows
+            if len(cols) != len(header):
+                errors.append("line %d: %d columns where the header has %d" % (no, len(cols), len(header)))
+                continue
+            row = dict(zip(header, cols))
+            key = (row["from"], row["to"], row["site"].rsplit(":", 1)[0], row["what"], row["kind"])
+            if key in rows:
+                errors.append("line %d: a second row for %s" % (no, " ".join(key)))
+                continue
+            if row["fix"] not in LEDGER_FIXES:
+                errors.append("line %d: unknown fix %r" % (no, row["fix"]))
+            elif not row["how"].strip() or not row["design"].strip():
+                errors.append("line %d: the row names no how or no design passage" % no)
+                row = dict(row, fix="")
+            rows[key] = row
+    return rows, errors
 
 
 def evidence_lines(kind, ev):
@@ -1826,11 +2039,17 @@ class DepMap:
                  ext_of(p) in IMPL_EXTS) for p in sorted(self.nodes)]
         self.scans = {}
         self.protos = {}
+        self.names = {}
+        self.idents = {}
+        self.kinds = {}
         for path, lines, includes, forwarder, classes, protos in pool.imap(scan_file, work, chunksize=16):
             key = self.key_of(path)
             self.scans[key] = (lines, includes, forwarder, classes)
             if protos is not None:
-                self.protos[key] = protos
+                self.names[key] = protos[5]
+                self.idents[key] = frozenset(sys.intern(x) for x in protos[6])
+                self.kinds[key] = protos[7]
+                self.protos[key] = protos[:5]
 
     def scan_one(self, key):
         s = self.scans.get(key)
@@ -2085,7 +2304,7 @@ class DepMap:
         class_index = defaultdict(dict)
         by_last = defaultdict(set)
         for key in sorted(self.protos):
-            decls, _, _, classes = self.protos[key]
+            decls, _, _, classes = self.protos[key][:4]
             if ext_of(key) in HEADER_LIKE:
                 for line, lk, path, name, kind, sig, _, _ in decls:
                     decl_index[(lk, path, name)].append((key, line, kind, sig))
@@ -2141,7 +2360,7 @@ class DepMap:
         free = []
         members = []
         for key in sorted(self.protos):
-            _, defs, qdefs, _ = self.protos[key]
+            _, defs, qdefs, _ = self.protos[key][:4]
             for line, lk, path, name, kind, sig, cond, _ in defs:
                 free.append((key, line, lk, path, name, kind, sig, cond))
             for line, lk, path, qual, name, kind, sig, glob, cond in qdefs:
@@ -2857,6 +3076,8 @@ class DepMap:
                 return whole[f]
             if crate_of(f) in ("x-dropped", "standby"):
                 return crate_of(f)
+            if f in self.forwarder_target and f not in self.umbrella and f not in seen:
+                return place_crate(self.forwarder_target[f], seen + (f,))
             if f in self.alias_of and f not in seen:
                 return place_crate(self.alias_of[f], seen + (f,))
             return placed[self.unit_of[f]]
@@ -2864,11 +3085,84 @@ class DepMap:
         fcrate = {f: map_crate(f) for f in self.nodes}
         pcrate = {f: place_crate(f) for f in self.nodes}
         known = set(idx) | {"x-dropped", "standby"}
+        # the files whose edges count: the files the reference build compiles or reaches, and every other file the
+        # manifest translates (a file of a unit the build compiles, a unit a whole-file design placement names, a
+        # unit named by --outside-build)
+        whole_units = {self.unit_of[src] for src in whole if src in self.unit_of}
+        counted_units = {u for u, fs in self.units.items() if any(f in self.live for f in fs)} | whole_units | \
+            {u for u in self.args.outside_build if u in self.units}
+        counted = set(self.live) | {f for u in counted_units for f in self.units[u]}
+        # an include of a generated file counts against the crate its Rust output is written to: a C header a Rust
+        # crate's build.rs writes (rust-header), or the output of a generator the design keeps (generated)
         rust_header = {}
-        for g in self.generated:
-            m = BUILD_RS_RE.search(" " + self.generator_of(g))
+        gen_crate = {}
+        gen_section = {}
+        build_base = posixpath.basename(self.build) if self.build else "build_release"
+        for g in sorted(self.generated_lines):
+            d = self.display(g)
+            gen = self.generator_of(g) if g in self.generated else self.generator_for(d, self.abs_of(g))
+            m = BUILD_RS_RE.search(" " + gen)
             if m and m.group(1) in idx:
                 rust_header[g] = m.group(1)
+                continue
+            src = d
+            if d.startswith(build_base + "/generated/"):
+                src = "src/" + d[len(build_base + "/generated/"):]
+            elif d.startswith(build_base + "/"):
+                src = d[len(build_base) + 1:]
+            base_name = posixpath.basename(d)
+            crate = next((c for needle, out_name, inc, c in GENERATOR_CRATES
+                          if needle in gen and inc is None and out_name in (None, base_name)), None)
+            for needle, out_name, inc, c in GENERATOR_CRATES:
+                if needle in gen and inc is not None and out_name == base_name:
+                    gen_section[(g, inc)] = c
+            if crate is None:
+                row = self.prefix_match(self.island_rows, src) if self.island_rows else None
+                crate = row[1] if row and row[1] != "-" else crate_of(src)
+            gen_crate[g] = (crate, gen.split(";")[0].replace("named at ", "").split(":")[0], plan_fate(gen))
+        # a class a file only forward-declares and names past the declaration counts as an edge to the file that
+        # defines the class (Rust imports the type from its crate); a file that also includes that file has the edge
+        # already, and kept island code makes no Rust edge
+        class_defs = defaultdict(dict)
+        for key, pr in self.protos.items():
+            for line, cpath in pr[3]:
+                class_defs[cpath].setdefault(key, line)
+        direct = defaultdict(set)
+        for (a, b, k) in self.edges:
+            if k in ("include", "island", "from-island"):
+                direct[a].add(self.alias_of.get(resolve(b), resolve(b)))
+        fwd_edges = defaultdict(list)
+        self.fwd_ambiguous = []
+        self.fwd_undefined = 0
+        for key in sorted(self.protos):
+            pr = self.protos[key]
+            if len(pr) < 5 or not pr[4] or key in self.island_of:
+                continue
+            for dline, qn, ulines, nuses in pr[4]:
+                defs = class_defs.get(qn)
+                if not defs:
+                    self.fwd_undefined += 1
+                    continue
+                if key in defs or self.alias_of.get(key) in defs:
+                    continue
+                cands = {}
+                for h, hl in defs.items():
+                    if h in self.nodes:
+                        cands.setdefault(self.alias_of.get(h, h), hl)
+                if len(cands) > 1:
+                    cands = {h: l for h, l in cands.items() if h in counted} or cands
+                if len(cands) > 1:
+                    cands = {h: l for h, l in cands.items() if ext_of(h) in HEADER_LIKE} or cands
+                if len(cands) > 1:
+                    same = {h: l for h, l in cands.items() if self.unit_of.get(h) == self.unit_of.get(key)}
+                    cands = same or cands
+                if len(cands) != 1:
+                    self.fwd_ambiguous.append((key, dline, qn, sorted(cands)))
+                    continue
+                (h, hl), = cands.items()
+                if h == key or h in direct[key]:
+                    continue
+                fwd_edges[(key, h)].append((dline, ulines, hl, qn.split("::")[-1], nuses))
 
         def at_line(base, f, line):
             if line is not None:
@@ -2898,9 +3192,10 @@ class DepMap:
 
         def collect(base):
             seen = {}
+            evmap = defaultdict(list)
             not_live = set()
             for (a, b, k), evs in sorted(self.edges.items()):
-                if a not in self.live or b not in self.live:
+                if a not in counted or b not in counted:
                     if base[a] != base[b]:
                         not_live.add((a, b, k))
                     continue
@@ -2912,27 +3207,62 @@ class DepMap:
                     ca, cb = at_line(base, a, fl), at_line(base, b, tl)
                     if ca == cb:
                         continue
+                    if k == "definition":
+                        # Rust declares a function where it is defined, so the code that names the declaration
+                        # needs the defining crate: the edge runs from the declaring file to the defining file
+                        c = classify(cb, ca)
+                        key = (b, a, k, cb, ca)
+                        if key not in seen:
+                            seen[key] = (c, "%s:%s -> %s:%s" % (b, tl or "", a, fl or ""))
+                        evmap[key].append((tl, ev))
+                        continue
                     c = classify(ca, cb)
                     if k == "from-island" and ok not in ("link", "definition") and c != "listed":
                         c = "gone"
                     key = (a, b, k, ca, cb)
                     if key not in seen:
                         seen[key] = (c, "%s:%s -> %s:%s" % (a, fl or "", b, tl or ""))
-            for g, cb in sorted(rust_header.items()):
+                    evmap[key].append((fl, ev))
+            gen_all = [(g, cb, "rust-header", "generated by rust/%s/build.rs" % cb)
+                       for g, cb in sorted(rust_header.items())]
+            gen_all += [(g, cb, "generated", "generated by %s, Rust output in %s" % (gen, cb))
+                        for g, (cb, gen, fate) in sorted(gen_crate.items())]
+            for g, cb0, gk, gnote in gen_all:
                 for key_file, line in sorted(self.generated_lines.get(g, ())):
-                    if key_file not in self.nodes:
+                    if key_file not in self.nodes or key_file in self.island_of:
                         continue
-                    if key_file not in self.live:
+                    cb = gen_section.get((g, key_file), cb0)
+                    note = gnote if cb == cb0 else gnote.replace("Rust output in %s" % cb0,
+                                                                 "Rust output of this section in %s" % cb)
+                    if key_file not in counted:
                         if base[key_file] != cb:
-                            not_live.add((key_file, g, "rust-header"))
+                            not_live.add((key_file, g, gk))
                         continue
                     ca = at_line(base, key_file, line)
                     if ca == cb:
                         continue
-                    key = (key_file, self.display(g), "rust-header", ca, cb)
+                    key = (key_file, self.display(g), gk, ca, cb)
                     if key not in seen:
-                        seen[key] = (classify(ca, cb), "%s:%d -> %s (generated by rust/%s/build.rs)" % (
-                            key_file, line, self.display(g), cb))
+                        seen[key] = (classify(ca, cb), "%s:%d -> %s (%s)" % (key_file, line, self.display(g), note))
+                    evmap[key].append((line, "L%d %s" % (line, note)))
+            for (a, b), uses in sorted(fwd_edges.items()):
+                if a not in counted or b not in counted:
+                    if base[a] != base[b]:
+                        not_live.add((a, b, "forward"))
+                    continue
+                for dline, ulines, hl, name, nuses in sorted(uses):
+                    cb = at_line(base, b, hl)
+                    by_crate = defaultdict(list)
+                    for uline in ulines:
+                        by_crate[at_line(base, a, uline)].append(uline)
+                    for ca, uls in sorted(by_crate.items()):
+                        if ca == cb:
+                            continue
+                        key = (a, b, "forward", ca, cb)
+                        if key not in seen:
+                            seen[key] = (classify(ca, cb), "%s:%d -> %s:%d" % (a, dline, b, hl))
+                        evmap[key].append((dline, "L%d %s forward-declared, named at L%d (%d uses), defined at L%d"
+                                           % (dline, name, uls[0], nuses, hl)))
             facts = [(a, b, k, ca, cb, c, ex) for (a, b, k, ca, cb), (c, ex) in seen.items()]
             by_class = defaultdict(list)
             for a, b, k, ca, cb, c, ex in facts:
@@ -2942,10 +3272,10 @@ class DepMap:
             nodes = sorted({c for pr in raw for c in pr}, key=crate_key)
             rcyc = [sorted(c, key=crate_key) for c in condense(nodes, raw)[0] if len(c) > 1]
             lcyc = [sorted(c, key=crate_key) for c in condense(nodes, left)[0] if len(c) > 1]
-            return facts, by_class, rcyc, lcyc, len(not_live)
+            return facts, by_class, rcyc, lcyc, len(not_live), evmap
 
-        facts, by_class, rcyc, lcyc, not_live = collect(fcrate)
-        pfacts, p_by_class, prcyc, plcyc, _ = collect(pcrate)
+        facts, by_class, rcyc, lcyc, not_live, fev = collect(fcrate)
+        pfacts, p_by_class, prcyc, plcyc, _, pev = collect(pcrate)
         pairs = defaultdict(lambda: defaultdict(list))
         for a, b, k, ca, cb, c, ex in facts:
             pairs[(ca, cb)][k].append((a, b, c))
@@ -2959,30 +3289,88 @@ class DepMap:
                 "\t".join(str(len(kinds.get(k, ()))) for k in EDGE_KINDS), "; ".join(ex[:3])))
         self.write("crate-edges.tsv", "".join(out))
 
-        ledger = load_ledger(self.args.ledger)
-        need = defaultdict(lambda: [set(), Counter(), []])
-        for a, b, k, ca, cb, c, ex in pfacts:
-            if c not in LEDGER_CLASSES:
-                continue
-            what = resolve(b) if b in self.nodes else b
-            entry = need[(ca, cb, what)]
-            entry[0].add((a, b, k))
-            entry[1][c] += 1
-            if len(entry[2]) < 3:
-                entry[2].append("%s (%s)" % (ex, k))
-        lrows = ["from\tto\twhat\tcount\tclass\texamples\tin_ledger\n"]
+        def what_of(b):
+            return resolve(b) if b in self.nodes else b
+
+        def edge_count(k, evs):
+            if k == "definition":
+                for _, ev in evs:
+                    m = DEFS_RE.match(ev)
+                    if m:
+                        return int(m.group(1))
+            return len(evs)
+
+        ledger, ledger_errors = load_ledger(self.args.ledger)
+        need = {}
+        for level, fs, evmap in (("placement", pfacts, pev), ("file", facts, fev)):
+            for a, b, k, ca, cb, c, ex in fs:
+                if c not in LEDGER_CLASSES:
+                    continue
+                evs = evmap[(a, b, k, ca, cb)]
+                entry = need.setdefault((ca, cb, a, what_of(b), k), {"count": {}, "classes": set(), "lines": set(),
+                                                                      "evs": [], "levels": set()})
+                entry["levels"].add(level)
+                entry["count"][level] = entry["count"].get(level, 0) + edge_count(k, evs)
+                entry["classes"].add(c)
+                entry["lines"].update(fl for fl, _ in evs if fl)
+                entry["evs"].extend(ev for _, ev in evs if ev not in entry["evs"])
+
+        def fix_of(row):
+            return row["fix"] if row is not None and row["fix"] in LEDGER_FIXES else None
+
+        lrows = ["from\tto\twhat\tcount\tclass\tsite\tkind\tlevel\tevidence\tfix\n"]
         missing_rows = 0
-        for (ca, cb, what) in sorted(need, key=lambda x: (crate_key(x[0]), crate_key(x[1]), x[2])):
-            edges, classes, exs = need[(ca, cb, what)]
-            present = ledger is not None and (ca, cb, what) in ledger and len(ledger[(ca, cb, what)]) > 4 \
-                and ledger[(ca, cb, what)][4].strip() not in ("", "-")
-            if not present:
+        fixed = {}
+        level_counts = Counter()
+        for key in sorted(need, key=lambda x: (crate_key(x[0]), crate_key(x[1]), x[3], x[2], x[4])):
+            ca, cb, a, what, k = key
+            entry = need[key]
+            fx = fix_of(ledger.get(key)) if ledger is not None else None
+            if fx is None:
                 missing_rows += 1
-            lrows.append("%s\t%s\t%s\t%d\t%s\t%s\t%s\n" % (
-                ca, cb, what, len(edges), "+".join(sorted(classes, key=EDGE_CLASSES.index)), "; ".join(exs),
-                "yes" if present else "no"))
+            else:
+                fixed[key] = fx
+            lines = sorted(entry["lines"])
+            evidence = "; ".join(entry["evs"])
+            level = "both" if len(entry["levels"]) == 2 else next(iter(entry["levels"]))
+            level_counts[level] += 1
+            count = entry["count"].get("placement", entry["count"].get("file", 0))
+            lrows.append("%s\t%s\t%s\t%d\t%s\t%s:%s\t%s\t%s\t%s\t%s\n" % (
+                ca, cb, what, count, "+".join(sorted(entry["classes"], key=EDGE_CLASSES.index)), a,
+                lines[0] if lines else "", k, level, evidence[:400] + (" ..." if len(evidence) > 400 else ""),
+                fx or "-"))
         self.write("ledger-needed.tsv", "".join(lrows))
-        ledger_rows = (len(need), missing_rows, ledger is not None)
+        stale = sorted(key for key in (ledger or {}) if key not in need)
+        fix_counts = Counter(fixed.values())
+        ledger_rows = (len(need), missing_rows, ledger is not None, len(ledger or {}), stale, ledger_errors,
+                       fix_counts, level_counts)
+
+        def cut_file(a, b, k, ca, cb):
+            return (ca, cb, a, what_of(b), k) in fixed
+
+        def cut_place(a, b, k, ca, cb):
+            return (ca, cb, a, what_of(b), k) in fixed
+
+        def after_cuts(fs, cut):
+            kept = {(ca, cb) for a, b, k, ca, cb, c, ex in fs if c not in CYCLE_SKIP_CLASSES and
+                    not (c in LEDGER_CLASSES and cut(a, b, k, ca, cb))}
+            nodes = sorted({c for pr in kept for c in pr}, key=crate_key)
+            return [sorted(c, key=crate_key) for c in condense(nodes, kept)[0] if len(c) > 1]
+
+        f_ledger_cyc = after_cuts(facts, cut_file)
+        p_ledger_cyc = after_cuts(pfacts, cut_place)
+        f_open = {c: [x for x in by_class.get(c, []) if not cut_file(x[2], x[3], x[4], x[0], x[1])]
+                  for c in FINDING_CLASSES}
+        p_open = {c: [x for x in p_by_class.get(c, []) if not cut_place(x[2], x[3], x[4], x[0], x[1])]
+                  for c in FINDING_CLASSES}
+        f_fixed = Counter((c, fixed[(x[0], x[1], x[2], what_of(x[3]), x[4])])
+                          for c in FINDING_CLASSES for x in by_class.get(c, []) if cut_file(x[2], x[3], x[4], x[0], x[1]))
+        p_fixed = Counter((c, fixed[(x[0], x[1], x[2], what_of(x[3]), x[4])])
+                          for c in FINDING_CLASSES for x in p_by_class.get(c, [])
+                          if cut_place(x[2], x[3], x[4], x[0], x[1]))
+        n_open = sum(len(v) for v in f_open.values()) + sum(len(v) for v in p_open.values())
+        item_report = self.ledger_item_checks(ledger or {}, need, allowed, idx, resolve, crate_of, whole, ranges,
+                                              fcrate, counted)
 
         split_defs = sorted((a, b) for (a, b, k) in self.edges
                             if k == "definition" and fcrate[a] != fcrate[b] and a in self.live and b in self.live)
@@ -2994,10 +3382,10 @@ class DepMap:
         text = ["# crate check: the map's edges condensed to the crates of %s (a forwarding header counts as its "
                 "target, an umbrella header as itself; a copy of another header (aliases.tsv) as the header it "
                 "copies; the placements of %s override the map, a line range by the lines each edge names; "
-                "edges between live files) and checked against %s and the crate pairs the design's edge scripts "
-                "counted (%s)\n"
+                "edges between live files) and checked against %s, the crate pairs the design's edge scripts "
+                "counted (%s) and the edge ledger (%s)\n"
                 % (self.args.crate_map, self.args.placements or "-", self.args.allowed,
-                   ", ".join(design_files) or "none")]
+                   ", ".join(design_files) or "none", self.args.ledger or "-")]
         text.append("# classes: listed (on the row; crates from ob-runtime on, sql-nio aside, may also use ob-errno "
                     "and ob-base); upward-named (to a later crate, a pair the design counted, so ARCHITECTURE 1.2 "
                     "gives it one of the five fixes); gone (an include out of kept island code that the island's row does "
@@ -3008,30 +3396,52 @@ class DepMap:
                     "(edges out of x-dropped or standby code, which is not translated); unmapped (no crate-map row). "
                     "Edges out of kept island code by definition or link count against the island crate's row; "
                     "an include of a C header a Rust crate's build.rs writes (rust-header) counts against that "
-                    "crate\n")
+                    "crate; a definition edge (a file that defines what another file declares) counts from the "
+                    "declaring file to the defining file, since Rust declares a function where it is defined and "
+                    "the code that names the declaration needs the defining crate; a forwarding header counts as its "
+                    "target at the placement level too. The ledger's cuts are the edges of classes %s whose ledger "
+                    "row names a fix (%s); a "
+                    "finding the ledger fixes is no longer a finding\n" % (", ".join(LEDGER_CLASSES),
+                                                                           ", ".join(LEDGER_FIXES)))
         text.append("[pairs by class]\n")
         for c in EDGE_CLASSES:
             lst = by_class.get(c, [])
             text.append("%s\t%d pairs\t%d edges\n" % (c, len({(x[0], x[1]) for x in lst}), len(lst)))
         text.append("edges not counted (a file outside the reference build)\t%d\n" % not_live)
-        text.append("[findings: edges the design neither allows nor names as a cut it removes]\n")
+        text.append("forward-declared classes a file names past the declaration and no header defines (system and "
+                    "third-party types)\t%d\n" % self.fwd_undefined)
+        text.append("forward-declared classes with more than one defining header, not counted\t%d%s\n" % (
+            len(self.fwd_ambiguous), "".join("\t%s:%d %s" % (k, dl, qn) for k, dl, qn, _ in self.fwd_ambiguous[:8])))
+        text.append("[findings: edges the design neither allows nor names as a cut it removes, and no ledger row "
+                    "fixes]\n")
         for c in FINDING_CLASSES:
-            for ca, cb, a, b, k in sorted(by_class.get(c, []), key=lambda x: (crate_key(x[0]), crate_key(x[1]),
-                                                                                x[2], x[3])):
-                evs = self.edges.get((a, b, k), ["rust-header"])
+            for ca, cb, a, b, k in sorted(f_open[c], key=lambda x: (crate_key(x[0]), crate_key(x[1]), x[2], x[3])):
+                evs = [ev for _, ev in fev.get((a, b, k, ca, cb), ())] or self.edges.get((a, b, k)) or \
+                    self.edges.get((b, a, k), [k])
                 text.append("%s\t%s -> %s\t%s -> %s\t%s\t%s\n" % (c, ca, cb, a, b, k, "; ".join(evs)[:300]))
+        text.append("[findings the edge ledger fixes, by class and fix]\n")
+        text.extend("%s\t%s\t%d edges\n" % (c, fx, n) for (c, fx), n in sorted(f_fixed.items()))
         text.append("[unmapped files]\n")
         text.extend("%s\t%s\n" % (f, "live" if f in self.live else "not in the reference build") for f in unmapped)
         text.append("[crate cycles over every edge between live mapped crates, island edges included]\n")
         for c in rcyc:
             text.append("%d crates\t%s\n" % (len(c), " ".join(c)))
-        text.append("[crate cycles left after removing the upward edges the design names and the gone edges]\n")
+        text.append("[crate cycles left after removing the upward edges the design names and the gone edges, before "
+                    "the edge ledger: the pair-level view of the design's scripts, which the ledger's cuts below "
+                    "supersede]\n")
         for c in lcyc:
             cs = set(c)
             text.append("%d crates\t%s\n" % (len(c), " ".join(c)))
             for ca, cb, a, b, k in sorted(x for cl in ("upward-unnamed", "not-listed") for x in by_class.get(cl, [])
                                           if x[0] in cs and x[1] in cs):
                 text.append("  %s -> %s\t%s -> %s\t%s\n" % (ca, cb, a, b, k))
+        text.append("[crate cycles left after the edge ledger's cuts]\n")
+        for c in f_ledger_cyc:
+            cs = set(c)
+            text.append("%d crates\t%s\n" % (len(c), " ".join(c)))
+            for a, b, k, ca, cb, cl, ex in sorted(facts):
+                if ca in cs and cb in cs and cl in LEDGER_CLASSES and not cut_file(a, b, k, ca, cb):
+                    text.append("  %s -> %s\t%s -> %s\t%s\t%s\n" % (ca, cb, a, b, k, cl))
         text.append("[upward crate pairs the design counted that the map does not show]\n")
         text.extend("%s -> %s\t%s\n" % (a, b, ",".join(sorted(named[(a, b)]))) for a, b in missing)
         text.append("[definition edges crossing crates (a definition outside its declaring file's crate)]\n")
@@ -3051,22 +3461,48 @@ class DepMap:
         for c in EDGE_CLASSES:
             lst = p_by_class.get(c, [])
             text.append("%s\t%d pairs\t%d edges\n" % (c, len({(x[0], x[1]) for x in lst}), len(lst)))
+        text.append("findings no ledger row fixes\n")
         for c in FINDING_CLASSES:
             grouped = defaultdict(list)
-            for x in p_by_class.get(c, []):
+            for x in p_open[c]:
                 grouped[(x[0], x[1])].append(x)
             for (ca, cb) in sorted(grouped, key=lambda q: (crate_key(q[0]), crate_key(q[1]))):
                 lst = grouped[(ca, cb)]
                 text.append("%s\t%s -> %s\t%d edges\t%s\n" % (c, ca, cb, len(lst), "; ".join(
                     "%s -> %s (%s)" % (a, b, k) for _, _, a, b, k in lst[:3])))
+        text.append("findings the edge ledger fixes, by class and fix\t%s\n" % (
+            "; ".join("%s %s %d" % (c, fx, n) for (c, fx), n in sorted(p_fixed.items())) or "none"))
         text.append("crate cycles over every edge\t%s\n" % (" | ".join(" ".join(c) for c in prcyc) or "none"))
-        text.append("crate cycles left after the design's cuts\t%s\n" % (" | ".join(" ".join(c) for c in plcyc)
-                                                                      or "none"))
+        text.append("crate cycles left after the design's pair-level cuts, before the ledger\t%s\n" % (
+            " | ".join(" ".join(c) for c in plcyc) or "none"))
+        text.append("crate cycles left after the edge ledger's cuts\t%s\n" % (
+            " | ".join(" ".join(c) for c in p_ledger_cyc) or "none"))
         text.append("[edge ledger]\n")
-        text.append("rows the ledger needs (ledger-needed.tsv: one per crate pair and target file, at the placement "
-                    "level, for every edge of classes %s)\t%d\n" % (", ".join(LEDGER_CLASSES), ledger_rows[0]))
-        text.append("ledger file\t%s\t%s\n" % (self.args.ledger or "-", "present" if ledger_rows[2] else "absent"))
-        text.append("rows without a ledger row that names a fix\t%d\n" % ledger_rows[1])
+        text.append("edges the ledger needs (ledger-needed.tsv: one row per edge, keyed by from crate, to crate, "
+                    "from file, target file and kind, for every edge of classes %s at the placement level or the file "
+                    "level)\t%d (%s)\n" % (", ".join(LEDGER_CLASSES), ledger_rows[0], " ".join(
+                        "%s %d" % (lv, ledger_rows[7][lv]) for lv in ("both", "placement", "file"))))
+        text.append("ledger file\t%s\t%s\t%d rows\n" % (self.args.ledger or "-",
+                                                        "present" if ledger_rows[2] else "absent", ledger_rows[3]))
+        text.append("ledger rows by fix\t%s\n" % (" ".join("%s=%d" % (fx, fix_counts[fx]) for fx in LEDGER_FIXES
+                                                          if fix_counts[fx]) or "none"))
+        text.append("needed edges without a ledger row that names a fix\t%d\n" % ledger_rows[1])
+        text.append("ledger rows that match no needed edge\t%d\n" % len(stale))
+        text.extend("  stale\t%s\n" % "\t".join(key) for key in stale[:50])
+        text.append("ledger rows the script cannot read\t%d\n" % len(ledger_errors))
+        text.extend("  error\t%s\n" % e for e in ledger_errors[:50])
+        text.extend(item_report["text"])
+        n_items = sum(len(item_report[k]) for k in LEDGER_CHECKS)
+        clean = (n_open == 0 and ledger_rows[1] == 0 and not stale and not ledger_errors and not f_ledger_cyc
+                 and not p_ledger_cyc and not any(f in self.live for f in unmapped) and n_items == 0)
+        text.append("[verdict]\n")
+        text.append("%s\tfindings no ledger row fixes %d (file level %d, placement level %d); needed edges without "
+                    "a fix %d; stale ledger rows %d; unreadable ledger rows %d; crate cycles after the ledger's cuts "
+                    "%d at the file level, %d at the placement level; ledger item checks failed %d (%s)\n" % (
+                        "clean" if clean else "not clean", n_open, sum(len(v) for v in f_open.values()),
+                        sum(len(v) for v in p_open.values()), ledger_rows[1], len(stale), len(ledger_errors),
+                        len(f_ledger_cyc), len(p_ledger_cyc), n_items,
+                        ", ".join("%s %d" % (k, len(item_report[k])) for k in LEDGER_CHECKS)))
         self.write("crate-check.txt", "".join(text))
 
         text = ["# migration order for the redesign: the crates in the order of %s, and inside each crate its units "
@@ -3093,7 +3529,313 @@ class DepMap:
                 "split_defs": split_defs, "split_units": split_units, "missing": missing, "unmapped": unmapped,
                 "not_live": not_live, "crate_orders": crate_orders, "design_files": design_files,
                 "p_by_class": p_by_class, "prcyc": prcyc, "plcyc": plcyc, "ledger": ledger_rows,
-                "rust_header": rust_header}
+                "f_ledger_cyc": f_ledger_cyc, "p_ledger_cyc": p_ledger_cyc, "clean": clean,
+                "open": (sum(len(v) for v in f_open.values()), sum(len(v) for v in p_open.values())),
+                "rust_header": rust_header, "items": {k: len(item_report[k]) for k in LEDGER_CHECKS}}
+
+    def ledger_item_checks(self, ledger, need, allowed, idx, resolve, crate_of, whole, ranges, fcrate, counted):
+        """The checks of the ledger's `items` column (AMENDMENTS.md A2-12). An item is a name the row's fix acts on,
+        looked up in the target file, then in the headers it reaches, then in the site's unit, then in the one file
+        that declares it (`Class::member` for a member defined outside its class), or `file:from-to` lines a
+        placement moves. The verdict needs every list empty: items resolve; fix 1-5 rows list items; a fix-1 item is
+        moved by a map row or a core placement, down to a crate the from crate may use or, for the from side's own
+        code, up to a crate that may use the target; an item has one destination; no fix 2-5 row names an item every
+        declaration of which the from crate may use; no fix 2-4 row asks a trait to carry a constant, an enum, an
+        enumerator or a base class of the from unit's classes; fix 5 only out of a core crate; every crate that names a
+        moved item may use its new crate, or its own row names the item; the lines a placement moves name only what
+        their new crate may use, or what the placement's module explains; an `unused` row's unit, the files that
+        include its header and may not use the target, and the headers reached only through the include name nothing
+        of a crate the from crate may not use; a `gone` row on an upward edge names the machinery the design
+        replaces."""
+        out = {k: [] for k in LEDGER_CHECKS}
+        text = []
+        inc_adj = defaultdict(set)
+        for (a, b, k) in self.edges:
+            if k == "include":
+                inc_adj[a].add(resolve(b))
+
+        def prefix(f):
+            return crate_of(resolve(f))
+
+        def at(f, line):
+            for a, b, c in ranges.get(f, ()):
+                if a <= line <= b:
+                    return c
+            return whole.get(f, crate_of(f))
+
+        def may_use(a, b):
+            return a == b or b in allowed.get(a, ())
+
+        closure_cache = {}
+
+        def closure(w, limit=400):
+            """the headers w reaches, nearest first (the first 400 for looking an item up; all of them with limit
+            None, for the unused test)"""
+            if (w, limit) in closure_cache:
+                return closure_cache[(w, limit)]
+            seen = [w]
+            seen_set = {w}
+            q = deque([w])
+            while q and (limit is None or len(seen) < limit):
+                x = q.popleft()
+                for y in sorted(inc_adj.get(x, ())):
+                    if y not in seen_set:
+                        seen_set.add(y)
+                        seen.append(y)
+                        q.append(y)
+            closure_cache[(w, limit)] = seen
+            return seen
+
+        decl_files = defaultdict(set)
+        for f, nm in self.names.items():
+            for n in nm:
+                decl_files[n].add(f)
+
+        def locate(item, cands):
+            m = ITEM_LINE_RE.match(item)
+            if m:
+                f = m.group(1)
+                return (f, tuple(range(int(m.group(2)), int(m.group(3) or m.group(2)) + 1))) if f in self.nodes \
+                    else None
+            for f in cands:
+                lines = self.names.get(f, {}).get(item)
+                if lines:
+                    return f, lines
+            # a name declared in one file only, which the unit reaches through a header the row does not name
+            only = decl_files.get(item, ())
+            if len(only) == 1:
+                f, = only
+                return f, self.names[f][item]
+            return None
+
+        rows = []
+        for key, row in sorted(ledger.items()):
+            items = [x for x in row.get("items", "-").split() if x != "-"]
+            ca, cb, a, what, k = key
+            unit_files = self.units.get(self.unit_of.get(a), [a])
+            if k in ("definition", "link"):
+                cands = [what, a] + list(unit_files)
+            else:
+                cands = closure(what) + [a] + list(unit_files)
+            locs = {}
+            for it in items:
+                if k in ("generated", "rust-header"):
+                    # a name in generated output: the generator's crate (GENERATOR_CRATES) decides where it is
+                    continue
+                loc = locate(it, cands)
+                if loc is None:
+                    out["unresolved-items"].append((key, it))
+                else:
+                    locs[it] = loc
+            if not items and row["fix"] in ("1", "2", "3", "4", "5"):
+                out["rows-without-items"].append((key, row["fix"]))
+            rows.append((key, row, items, locs, set(unit_files)))
+
+        clean_cache = {}
+
+        def clean_text(f):
+            if f not in clean_cache:
+                try:
+                    with open(self.abs_of(f), "rb") as fh:
+                        clean_cache[f] = PROTO_LEX_RE.sub(_proto_lex_sub, fh.read().decode("latin-1"))
+                except OSError:
+                    clean_cache[f] = ""
+            return clean_cache[f]
+
+        def derives_from(files, name, crate):
+            """a class head in the files, on lines their crate keeps (not moved by a placement), naming name as a
+            base"""
+            pat = re.compile(r"(?:class|struct)\s+\w+[^;{()]*?[:,]\s*(?:public|protected|private)?\s*(?:virtual\s+)?"
+                             r"(?:\w+::)*%s\b(?!\s*::)" % re.escape(name))
+            for f in files:
+                t = clean_text(f)
+                for m in pat.finditer(t):
+                    if at(f, t.count("\n", 0, m.start()) + 1) == crate:
+                        return True
+            return False
+
+        row_items = defaultdict(set)
+        for key, row, items, locs, ufiles in rows:
+            for it in items:
+                row_items[key[0]].add(it)
+
+        treat = defaultdict(set)
+        moved = {}
+        for key, row, items, locs, ufiles in rows:
+            ca, cb, a, what, k = key
+            fx = row["fix"]
+            from_files = sorted(f for f in ufiles if fcrate.get(f) == ca) or [a]
+            for it, (f, lines) in locs.items():
+                fin = sorted({at(f, l) for l in lines})
+                for c in fin:
+                    if c != prefix(f):
+                        moved[(f, it)] = c
+                if fx == "1":
+                    dests = [c for c in fin if c != prefix(f)]
+                    if not dests:
+                        out["fix-1-not-carried"].append((key, it, f))
+                        treat[(f, it)].add(("move", "not carried"))
+                        continue
+                    d = dests[0]
+                    # a move up takes the from side's code to a crate that may use the target; a move down takes the
+                    # target's code to a crate the from side may use
+                    up = prefix(f) == ca or (prefix(f) != cb and f in ufiles)
+                    ok = may_use(d, cb) if up else may_use(ca, d)
+                    if not ok:
+                        out["fix-1-wrong-destination"].append((key, it, f, d, "up" if up else "down"))
+                    treat[(f, it)].add(("move", d))
+                elif fx in ("2", "3", "4", "5"):
+                    treat[(f, it)].add(("fix %s" % fx, ""))
+                    if ITEM_LINE_RE.match(it):
+                        continue
+                    # an item every declaration of which the from crate may already use needs no fix: the row
+                    # names the wrong item or the wrong fix
+                    homes = [(h, l) for h in decl_files.get(it, ()) for l in self.names[h][it]]
+                    if homes and all(may_use(ca, at(h, l)) for h, l in homes):
+                        out["items-that-need-no-fix"].append((key, fx, it, sorted({at(h, l) for h, l in homes})))
+                        continue
+                    if fx in ("2", "3", "4"):
+                        # a trait carries calls, and objects the higher crate creates; not a constant, an enum or a
+                        # base class
+                        kd = set(self.kinds.get(f, {}).get(it, ()))
+                        if kd and kd <= NOT_CALLS:
+                            out["trait-cannot-carry"].append((key, fx, it, "/".join(sorted(kd))))
+                        elif "class" in kd and derives_from(from_files, it, ca):
+                            out["trait-cannot-carry"].append((key, fx, it, "base class"))
+            if fx == "5" and ca not in CORE_CRATES:
+                out["fix-5-outside-core"].append((key,))
+            if fx == "gone" and not items and any(c in UPWARD_CLASSES for c in need.get(key, {}).get("classes", ())) \
+                    and k not in ISLAND_KINDS:
+                out["gone-rows-without-items"].append((key,))
+        for (f, it), ts in sorted(treat.items()):
+            # an item has one home: fix-1 rows that name it agree on where it goes (B.2 of the A2 review)
+            if len({t[1] for t in ts if t[0] == "move"}) > 1:
+                out["items-with-two-fixes"].append((f, it, sorted(ts)))
+
+        # every crate that names a moved item may use its new crate, or reaches it through a ledger row that names it
+        # (checked for names declared in one file only)
+        for (f, it), d in sorted(moved.items()):
+            if "::" in it or ITEM_LINE_RE.match(it) or len(decl_files.get(it, ())) != 1:
+                continue
+            bad = defaultdict(list)
+            for g, ids in self.idents.items():
+                if g == f or it not in ids or g not in counted or g in self.island_of:
+                    continue
+                c = fcrate.get(g)
+                if c in (None, UNMAPPED, "x-dropped", "standby") or may_use(c, d) or it in row_items.get(c, ()):
+                    continue
+                bad[c].append(g)
+            for c, gs in sorted(bad.items()):
+                out["moved-items-named-below"].append((f, it, d, c, sorted(gs)[:3], len(gs)))
+
+        # the lines a placement moves name only what their new crate may use
+        texts = {}
+        # a module's placements share one design text: a name any of them explains is explained for all
+        group_design = defaultdict(set)
+        for src, rng, crate, module, design in self.placements:
+            group_design[(crate, module)] |= set(IDENT_RE.findall(design))
+        for src, rng, crate, module, design in self.placements:
+            if rng is None or src not in self.nodes or crate == whole.get(src, crate_of(src)):
+                continue
+            if src not in texts:
+                with open(self.abs_of(src), "rb") as fh:
+                    texts[src] = PROTO_LEX_RE.sub(_proto_lex_sub, fh.read().decode("latin-1")).split("\n")
+            body = "\n".join(texts[src][rng[0] - 1:rng[1]])
+            members = {x.split("::")[-1] for x, ls in self.names.get(src, {}).items()
+                       if "::" in x and any(rng[0] <= l <= rng[1] for l in ls)}
+            explained = set(IDENT_RE.findall(design)) | (group_design[(crate, module)] if module else set())
+            seen_names = set()
+            for m in IDENT_RE.finditer(body):
+                n = m.group(0)
+                if n in seen_names or not itemlike(n) or n not in decl_files:
+                    continue
+                j = m.start() - 1
+                while j >= 0 and body[j] in " \t\n":
+                    j -= 1
+                if j >= 0 and (body[j] == "." or (body[j] == ">" and j > 0 and body[j - 1] == "-")):
+                    continue
+                seen_names.add(n)
+                if n in members or n in explained:
+                    continue
+                if any(rng[0] <= l <= rng[1] for l in self.names.get(src, {}).get(n, ())):
+                    continue
+                crates = sorted({at(h, l) for h in decl_files[n] for l in self.names[h][n]})
+                if any(may_use(crate, c) for c in crates) or n in row_items.get(crate, ()):
+                    continue
+                out["moved-code-uses-above"].append(("%s:%d-%d" % (src, rng[0], rng[1]), crate, n, crates))
+
+        # an unused row's unit names nothing the target declares, nor anything above its crate that it reaches
+        # only through that include
+        for key, row, items, locs, ufiles in rows:
+            ca, cb, a, what, k = key
+            if row["fix"] != "unused" or k != "include":
+                continue
+            ids = set()
+            for f in ufiles:
+                ids |= self.idents.get(f, frozenset())
+            named = []
+            for n in sorted(self.names.get(what, {})):
+                if not itemlike(n) or n not in ids:
+                    continue
+                # a name some declaration of which the from crate may use (a placement may have moved the target's
+                # own declaration down) makes no edge through this include
+                if any(may_use(ca, at(h, l)) for h in decl_files[n] for l in self.names[h][n]):
+                    continue
+                named.append("%s (%s)" % (n, what))
+            # the headers reached only through this include
+            other = set()
+            q = deque(f for f in ufiles)
+            seen = set(ufiles)
+            while q:
+                x = q.popleft()
+                for y in inc_adj.get(x, ()):
+                    if x == a and y == what:
+                        continue
+                    if y not in seen:
+                        seen.add(y)
+                        q.append(y)
+            for h in closure(what, limit=None)[1:]:
+                if h in seen or may_use(ca, fcrate.get(h, "")):
+                    continue
+                for n in sorted(self.names.get(h, {})):
+                    if not itemlike(n) or n not in ids:
+                        continue
+                    if any(may_use(ca, at(g, l)) for g in decl_files[n] for l in self.names[g][n]):
+                        continue
+                    named.append("%s (%s)" % (n, h))
+            # files that include the from file (a header) and may not use the target's crate may name its items
+            # through it (A2-11): they are checked the same way, for the target's own declarations
+            rinc = self._rinc_cache if hasattr(self, "_rinc_cache") else None
+            if rinc is None:
+                rinc = defaultdict(set)
+                for (x0, y0, k0) in self.edges:
+                    if k0 == "include":
+                        rinc[resolve(y0)].add(x0)
+                self._rinc_cache = rinc
+            for f in ([a] if ext_of(a) in HEADER_LIKE else []):
+                for g in sorted(rinc.get(f, ())):
+                    cg = fcrate.get(g)
+                    if g in ufiles or cg in (None, UNMAPPED, "x-dropped", "standby") or may_use(cg, cb) or \
+                            what in inc_adj.get(g, ()) or g not in counted:
+                        continue
+                    gids = self.idents.get(g, frozenset())
+                    for n in sorted(self.names.get(what, {})):
+                        if not itemlike(n) or n not in gids:
+                            continue
+                        if any(may_use(cg, at(h, l)) for h in decl_files[n] for l in self.names[h][n]):
+                            continue
+                        named.append("%s (%s, named by the includer %s)" % (n, what, g))
+            if named:
+                out["unused-rows-that-name"].append((key, named[:6], len(named)))
+
+        text.append("[ledger item checks (AMENDMENTS.md A2-12); each list must be empty]\n")
+        for name in LEDGER_CHECKS:
+            text.append("%s\t%d\n" % (name, len(out[name])))
+            for x in out[name][:400]:
+                text.append("  %s\n" % "\t".join(
+                    " ".join(str(y) for y in v) if isinstance(v, tuple) else str(v) for v in x))
+        out["text"] = text
+        return out
 
     def write_generated(self):
         rows = ["path\tstatus\tlines\tincluders\thow_identified\tgenerator\tplan\n"]
@@ -3364,12 +4106,12 @@ class DepMap:
                 for c in EDGE_CLASSES))
             w("  (pairs/edges; edges touching a file outside the reference build not counted: %d)\n" % r["not_live"])
             finds = [x for c in FINDING_CLASSES for x in r["by_class"].get(c, [])]
-            w("edges the design neither allows nor names as a cut\t%d in %d pairs\t%s\n" % (
+            w("edges the design neither allows nor names as a cut, before the ledger\t%d in %d pairs\t%s\n" % (
                 len(finds), len({(x[0], x[1]) for x in finds}),
                 " ".join(sorted({"%s->%s" % (x[0], x[1]) for x in finds}))))
             w("crate cycles over every edge between live mapped crates\t%d; sizes %s\n" % (
                 len(r["rcyc"]), " ".join(str(len(c)) for c in r["rcyc"]) or "-"))
-            w("crate cycles left after the design's cuts\t%d; %s\n" % (
+            w("crate cycles left after the design's pair-level cuts, before the ledger\t%d; %s\n" % (
                 len(r["lcyc"]), " | ".join(" ".join(c) for c in r["lcyc"]) or "-"))
             w("includes of a C header a Rust crate's build.rs writes, counted against that crate\t%s\n" % (
                 " ".join("%s=%s" % kv for kv in sorted(r["rust_header"].items())) or "-"))
@@ -3380,15 +4122,22 @@ class DepMap:
             w("placement level (each file in the crate its manifest row writes it to), by class\t%s\n" % " ".join(
                 "%s=%d/%d" % (c, len({(x[0], x[1]) for x in r["p_by_class"].get(c, [])}),
                               len(r["p_by_class"].get(c, []))) for c in EDGE_CLASSES))
-            w("placement level: edges the design neither allows nor names as a cut\t%d in %d pairs\n" % (
+            w("placement level: edges the design neither allows nor names as a cut, before the ledger\t%d in %d pairs\n" % (
                 len(pf), len({(x[0], x[1]) for x in pf})))
             w("placement level: crate cycles over every edge\t%d; sizes %s\n" % (
                 len(r["prcyc"]), " ".join(str(len(c)) for c in r["prcyc"]) or "-"))
-            w("placement level: crate cycles left after the design's cuts\t%d; %s\n" % (
+            w("placement level: crate cycles left after the design's pair-level cuts, before the ledger\t%d; %s\n" % (
                 len(r["plcyc"]), " | ".join(" ".join(c) for c in r["plcyc"]) or "-"))
-            need, missing_rows, present = r["ledger"]
-            w("edge ledger: rows needed (ledger-needed.tsv)\t%d; ledger file %s %s; rows without a fix\t%d\n" % (
-                need, self.args.ledger, "present" if present else "absent", missing_rows))
+            need, missing_rows, present, nrows, stale, errors, fix_counts, _ = r["ledger"]
+            w("edge ledger: edges needed (ledger-needed.tsv)\t%d; ledger file %s %s, %d rows (%s); needed edges "
+              "without a fix\t%d; stale rows\t%d; unreadable rows\t%d\n" % (
+                  need, self.args.ledger, "present" if present else "absent", nrows,
+                  " ".join("%s=%d" % (fx, fix_counts[fx]) for fx in LEDGER_FIXES if fix_counts[fx]) or "no fixes",
+                  missing_rows, len(stale), len(errors)))
+            w("crate cycles left after the edge ledger's cuts\t%d at the file level, %d at the placement level\n" % (
+                len(r["f_ledger_cyc"]), len(r["p_ledger_cyc"])))
+            w("findings no ledger row fixes\t%d at the file level, %d at the placement level\n" % r["open"])
+            w("crate check verdict\t%s\n" % ("clean" if r["clean"] else "not clean"))
             co = r["crate_orders"]
             w("crate order (order-crates.txt)\t%d crates with units, %d batches; cycles inside crates\t%s\n" % (
                 sum(1 for x in co if x[1]), sum(x[2] for x in co),
@@ -3451,10 +4200,15 @@ def main():
     ap.add_argument("--islands", default=os.path.join(default_root, "migration", "depmap", "islands.txt"))
     ap.add_argument("--placements", default=os.path.join(default_root, "migration", "depmap", "core-placements.txt"))
     ap.add_argument("--ledger", default=os.path.join(default_root, "migration", "crate-edges.tsv"))
+    ap.add_argument("--outside-build", action="append", default=None, metavar="UNIT",
+                    help="a unit the manifest translates although the reference build does not compile it; its edges "
+                         "count (default: tools/ob_error/src/ob_error, as the manifest command of depmap/README.md)")
     ap.add_argument("--jobs", type=int, default=min(4, os.cpu_count() or 1))
     ap.add_argument("--no-dwarf", action="store_true")
     ap.add_argument("--trial", nargs="*", default=None)
     args = ap.parse_args()
+    if args.outside_build is None:
+        args.outside_build = ["tools/ob_error/src/ob_error"]
     if args.build and not os.path.isfile(os.path.join(args.build, "compile_commands.json")):
         print("no compile_commands.json under %s" % args.build, file=sys.stderr)
         sys.exit(1)

@@ -28,6 +28,8 @@ RESERVED_STEMS = {"lib", "main", "mod"}
 RESERVED_FILES = {"lib.rs", "main.rs", "mod.rs"}
 UNMAPPED = "(unmapped)"
 REASONS = ("island", "generated", "data", "vendored", "dead", "dropped", "deferred")
+# not-translated lines a placement may also port into a Rust row
+PORTABLE = ("not-translated:island", "not-translated:dropped", "not-translated:deferred")
 RUST_KEYWORDS = {"as", "break", "const", "continue", "crate", "else", "enum", "extern", "false", "fn", "for", "if",
                  "impl", "in", "let", "loop", "match", "mod", "move", "mut", "pub", "ref", "return", "self", "Self",
                  "static", "struct", "super", "trait", "true", "type", "unsafe", "use", "where", "while", "async",
@@ -343,7 +345,8 @@ class Manifest:
             if path not in self.unit_of:
                 errors.append("%s:%d: %s is not a file of any map unit" % (args.placements, no, path))
                 continue
-            if crate not in self.crate_names:
+            # a placement may port C++ lines into a crate of new code (--new-module), such as ob-platform
+            if crate not in self.crate_names and crate not in {m.partition("/")[0] for m in args.new_module}:
                 errors.append("%s:%d: crate %s is on no crate-map row" % (args.placements, no, crate))
                 continue
             if rng is not None and not (1 <= rng[0] <= rng[1] <= self.tree.lines(path)):
@@ -512,7 +515,11 @@ class Manifest:
                         ("dead", "not compiled by the reference build")
                     skipped.append((uid, reason, ",".join(files), rule))
                     continue
+                # a line range a placement names in kept island code, or in a dropped or deferred file, is
+                # ported into the placement's Rust module; the file keeps its not-translated row
                 ported = [(f, p) for f in islands for p in range_place.get(f, ())]
+                ported += [(f, p) for f in files if f not in islands and excluded.get(f)
+                           and excluded[f][1] in ("dropped", "deferred") for p in range_place.get(f, ())]
                 if not rest and not ported:
                     if islands:
                         reason, rule = "island", "islands.txt " + ",".join(sorted({self.island(f)[0]
@@ -762,7 +769,7 @@ def coverage(m, step3, core, skipped, in_build):
                 cur += diff[line]
                 if cur == 1:
                     continue
-                if cur == 2 and "not-translated:island" in kinds and any(
+                if cur == 2 and any(k in kinds for k in PORTABLE) and any(
                         a <= line <= b for w in ("core", "manifest") for a, b in kinds.get(w, ())):
                     ported += 1
                     continue
@@ -852,7 +859,8 @@ def main():
     ap.add_argument("--exclude", action="append", default=[], metavar="PATH[:FROM-TO]=REASON",
                     help="a file, a prefix or a line range that is not translated, with its reason")
     ap.add_argument("--outside-build", action="append", default=[], metavar="UNIT",
-                    help="a unit translated although the reference build does not compile it")
+                    help="a unit translated although the reference build does not compile it; a unit a whole-file "
+                         "design placement names is added without this flag")
     ap.add_argument("--new-module", action="append", default=[], metavar="CRATE/MODULE",
                     help="a core module of new code with no C++ source")
     ap.add_argument("--split-lines", type=int, default=4000)
@@ -865,6 +873,13 @@ def main():
     nt_out = args.not_translated_out or os.path.join(out_dir, "not-translated.tsv")
 
     m = Manifest(args)
+    # A unit the reference build does not compile is translated when a whole-file design placement names one of
+    # its files: the placement is the design's word that the code is kept (the disabled standby module the Rust
+    # build runs, AMENDMENTS.md A2-7).
+    placed = {path for path, rng, _, _, _ in m.placements if rng is None}
+    for uid, (files, _, built) in sorted(m.units.items()):
+        if not built and uid not in args.outside_build and any(f in placed for f in files):
+            args.outside_build.append(uid)
     m.subs = []
     for s in args.sub:
         old, sep, new = s.partition("=")
@@ -906,7 +921,7 @@ def main():
             "%s=%d" % (k, n) for k, n in sorted(Counter(s[1] for s in skipped if s[0] not in whole_units).items(),
                                                 key=lambda kv: REASONS.index(kv[0])))))
     print("map units: %d; in the reference build (with --outside-build): %d; every line of their files placed "
-          "exactly once (%d island lines also ported into a Rust row by a placement)" % (
+          "exactly once (%d island, dropped or deferred lines also ported into a Rust row by a placement)" % (
               len(m.units), len(in_build), ported))
     print("core units by subsystem (core-scope.txt; design placements): %s" % " ".join(
         "%s=%d" % kv for kv in sorted(m.subsystems.items(), key=lambda kv: -kv[1])))

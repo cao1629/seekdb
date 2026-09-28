@@ -21,14 +21,6 @@ src/oblib/lib/hash/ob_multi_mod_ref_mgr	dead	src/oblib/lib/hash/ob_multi_mod_ref
 src/oblib/lib/container/ob_mask_set2	dead	src/oblib/lib/container/ob_mask_set2.h	not compiled by the reference build
 src/oblib/lib/container/ob_ring_array	dead	src/oblib/lib/container/ob_ring_array.h	not compiled by the reference build
 src/oblib/lib/compress/zstd_1_3_8/ob_empty	dead	src/oblib/lib/compress/zstd_1_3_8/ob_empty.c	not compiled by the reference build
-src/oblib/rpc/frame/ob_net_easy	dropped	src/oblib/easy/io/easy_io.h	crate map: x-dropped
-src/oblib/rpc/frame/ob_net_easy	dropped	src/oblib/easy/io/easy_log.h	crate map: x-dropped
-src/oblib/rpc/frame/ob_net_easy	dropped	src/oblib/easy/util/easy_buf.h	crate map: x-dropped
-src/oblib/rpc/frame/ob_net_easy	dropped	src/oblib/easy/util/easy_inet.h	crate map: x-dropped
-src/oblib/rpc/frame/ob_net_easy	dropped	src/oblib/easy/util/easy_mod_stat.h	crate map: x-dropped
-src/oblib/rpc/frame/ob_net_easy	dropped	src/oblib/easy/util/easy_pool.h	crate map: x-dropped
-src/oblib/rpc/frame/ob_net_easy	dropped	src/oblib/easy/util/easy_string.h	crate map: x-dropped
-src/oblib/rpc/frame/ob_net_easy	dropped	src/oblib/easy/util/easy_time.h	crate map: x-dropped
 src/oblib/rpc/frame/ob_rpc_checksum	dead	src/oblib/rpc/frame/ob_rpc_checksum.cpp,src/oblib/rpc/frame/ob_rpc_checksum.h	not compiled by the reference build
 src/oblib/rpc/ob_lib_sql_shims	dead	src/oblib/rpc/ob_lib_sql_shims.cpp	not compiled by the reference build
 src/oblib/lib/file/config	dead	src/oblib/lib/file/config.cpp,src/oblib/lib/file/config.h	not compiled by the reference build
@@ -62,7 +54,8 @@ src/share/geo/ob_geo_cache_point	island	src/share/geo/ob_geo_cache_point.cpp,src
 src/share/geo/ob_geo_cache_polygon	island	src/share/geo/ob_geo_cache_polygon.cpp,src/share/geo/ob_geo_cache_polygon.h	islands.txt src/share/geo
 src/share/geo/ob_geo_check_empty_visitor	island	src/share/geo/ob_geo_check_empty_visitor.h	islands.txt src/share/geo
 src/share/geo/ob_geo_close_ring_visitor	island	src/share/geo/ob_geo_close_ring_visitor.cpp,src/share/geo/ob_geo_close_ring_visitor.h	islands.txt src/share/geo
-src/share/geo/ob_geo_common	island	src/share/geo/ob_geo_common.cpp,src/share/geo/ob_geo_common.h	islands.txt src/share/geo
+src/share/geo/ob_geo_common	island	src/share/geo/ob_geo_common.cpp	islands.txt src/share/geo
+src/share/geo/ob_geo_common	island	src/share/geo/ob_geo_common.h	islands.txt src/share/geo
 src/share/geo/ob_geo_coordinate_range_visitor	island	src/share/geo/ob_geo_coordinate_range_visitor.cpp,src/share/geo/ob_geo_coordinate_range_visitor.h	islands.txt src/share/geo
 src/share/geo/ob_geo_denormalize_visitor	island	src/share/geo/ob_geo_denormalize_visitor.cpp,src/share/geo/ob_geo_denormalize_visitor.h	islands.txt src/share/geo
 src/share/geo/ob_geo_dispatcher	island	src/share/geo/ob_geo_dispatcher.h	islands.txt src/share/geo
@@ -206,17 +199,26 @@ src/oblib/easy/include/easy_list	dropped	src/oblib/easy/include/easy_list.h	crat
 src/oblib/easy/util/easy_util	dropped	src/oblib/easy/util/easy_util.h	crate map: x-dropped
 src/oblib/lib/codec/ob_bp_helpers	dropped	src/oblib/lib/codec/ob_bp_helpers.h	crate map: x-dropped
 src/oblib/lib/codec/ob_bp_util	dropped	src/oblib/lib/codec/ob_bp_util.h	crate map: x-dropped
+src/oblib/easy/io/easy_baseth_pool	dropped	src/oblib/easy/io/easy_baseth_pool.h	crate map: x-dropped
+src/oblib/easy/io/easy_io_struct	dropped	src/oblib/easy/io/easy_io_struct.h	crate map: x-dropped
+src/oblib/easy/io/easy_summary	dropped	src/oblib/easy/io/easy_summary.h	crate map: x-dropped
 src/oblib/easy/thread/easy_uthread	dropped	src/oblib/easy/thread/easy_uthread.h	crate map: x-dropped
 src/oblib/easy/util/easy_array	dropped	src/oblib/easy/util/easy_array.h	crate map: x-dropped
 src/oblib/easy/util/easy_hash	dropped	src/oblib/easy/util/easy_hash.h	crate map: x-dropped
+src/oblib/rpc/frame/ob_net_easy	dropped	src/oblib/easy/io/easy_io.h	crate map: x-dropped
+src/oblib/rpc/frame/ob_net_easy	dropped	src/oblib/easy/io/easy_log.h	crate map: x-dropped
+src/oblib/rpc/frame/ob_net_easy	dropped	src/oblib/easy/util/easy_buf.h	crate map: x-dropped
+src/oblib/rpc/frame/ob_net_easy	dropped	src/oblib/easy/util/easy_inet.h	crate map: x-dropped
+src/oblib/rpc/frame/ob_net_easy	dropped	src/oblib/easy/util/easy_mod_stat.h	crate map: x-dropped
+src/oblib/rpc/frame/ob_net_easy	dropped	src/oblib/easy/util/easy_pool.h	crate map: x-dropped
+src/oblib/rpc/frame/ob_net_easy	dropped	src/oblib/easy/util/easy_string.h	crate map: x-dropped
+src/oblib/rpc/frame/ob_net_easy	dropped	src/oblib/easy/util/easy_time.h	crate map: x-dropped
+src/oblib/rpc/frame/ob_net_easy	dropped	src/oblib/rpc/frame/ob_net_easy.cpp	crate map: x-dropped
 src/oblib/lib/codec/ob_codecs	dropped	src/oblib/lib/codec/ob_codecs.h	crate map: x-dropped
-src/oblib/easy/io/easy_io_struct	dropped	src/oblib/easy/io/easy_io_struct.h	crate map: x-dropped
 src/oblib/lib/codec/ob_composite_codec	dropped	src/oblib/lib/codec/ob_composite_codec.h	crate map: x-dropped
 src/oblib/lib/codec/ob_simd_fixed_pfor	dropped	src/oblib/lib/codec/ob_simd_fixed_pfor.h	crate map: x-dropped
 src/oblib/lib/codec/ob_tiered_codec	dropped	src/oblib/lib/codec/ob_tiered_codec.h	crate map: x-dropped
 src/oblib/lib/codec/ob_universal_compression	dropped	src/oblib/lib/codec/ob_universal_compression.h	crate map: x-dropped
-src/oblib/easy/io/easy_baseth_pool	dropped	src/oblib/easy/io/easy_baseth_pool.h	crate map: x-dropped
-src/oblib/easy/io/easy_summary	dropped	src/oblib/easy/io/easy_summary.h	crate map: x-dropped
 src/oblib/lib/codec/ob_delta_zigzag_pfor	dropped	src/oblib/lib/codec/ob_delta_zigzag_pfor.h	crate map: x-dropped
 src/oblib/lib/codec/ob_delta_zigzag_rle	dropped	src/oblib/lib/codec/ob_delta_zigzag_rle.h	crate map: x-dropped
 src/oblib/lib/codec/ob_double_delta_zigzag_pfor	dropped	src/oblib/lib/codec/ob_double_delta_zigzag_pfor.h	crate map: x-dropped
@@ -224,7 +226,6 @@ src/oblib/lib/codec/ob_double_delta_zigzag_rle	dropped	src/oblib/lib/codec/ob_do
 src/oblib/lib/codec/ob_xor_fixed_pfor	dropped	src/oblib/lib/codec/ob_xor_fixed_pfor.h	crate map: x-dropped
 src/standby/control/ob_standby_role_transition_service	deferred	src/standby/control/ob_standby_role_transition_service.cpp,src/standby/control/ob_standby_role_transition_service.h	crate map: standby (ARCHITECTURE 7.4)
 src/standby/control/ob_standby_timestamp_provider	deferred	src/standby/control/ob_standby_timestamp_provider.cpp,src/standby/control/ob_standby_timestamp_provider.h	crate map: standby (ARCHITECTURE 7.4)
-src/standby/control/standby_state_store	deferred	src/standby/control/standby_state_store.cpp,src/standby/control/standby_state_store.h	crate map: standby (ARCHITECTURE 7.4)
 src/standby/ob_standby_bootstrap_service	deferred	src/standby/ob_standby_bootstrap_service.cpp,src/standby/ob_standby_bootstrap_service.h	crate map: standby (ARCHITECTURE 7.4)
 src/standby/ob_standby_log_sync_service	deferred	src/standby/ob_standby_log_sync_service.cpp,src/standby/ob_standby_log_sync_service.h	crate map: standby (ARCHITECTURE 7.4)
 src/standby/ob_standby_palf_base_info	deferred	src/standby/ob_standby_palf_base_info.cpp,src/standby/ob_standby_palf_base_info.h	crate map: standby (ARCHITECTURE 7.4)
@@ -232,12 +233,10 @@ src/standby/ob_standby_schema_refresh_trigger	deferred	src/standby/ob_standby_sc
 src/standby/ob_standby_source_util	deferred	src/standby/ob_standby_source_util.cpp,src/standby/ob_standby_source_util.h	crate map: standby (ARCHITECTURE 7.4)
 src/standby/restore/ob_standby_restore_rpc	deferred	src/standby/restore/ob_standby_restore_rpc.cpp,src/standby/restore/ob_standby_restore_rpc.h,src/standby/restore/ob_standby_restore_storage_struct.h	crate map: standby (ARCHITECTURE 7.4)
 src/standby/restore/ob_storage_restore_struct	deferred	src/standby/restore/ob_storage_restore_struct.cpp,src/standby/restore/ob_storage_restore_struct.h	crate map: standby (ARCHITECTURE 7.4)
-src/standby/standby_host	deferred	src/standby/standby_host.h	crate map: standby (ARCHITECTURE 7.4)
-src/standby/standby_module_disabled	deferred	src/standby/standby_module_disabled.cpp	crate map: standby (ARCHITECTURE 7.4)
+src/standby/standby_module	deferred	src/standby/standby_module.cpp	crate map: standby (ARCHITECTURE 7.4)
 src/standby/ob_standby_grpc	deferred	src/standby/ob_standby_grpc.cpp,src/standby/ob_standby_grpc.h,src/standby/ob_standby_grpc_service.h	crate map: standby (ARCHITECTURE 7.4)
 src/standby/ob_standby_grpc_stream_util	deferred	src/standby/ob_standby_grpc_stream_util.cpp,src/standby/ob_standby_grpc_stream_util.h	crate map: standby (ARCHITECTURE 7.4)
 src/standby/restore/ob_standby_restore_reader	deferred	src/standby/restore/ob_standby_restore_reader.cpp,src/standby/restore/ob_standby_restore_reader.h	crate map: standby (ARCHITECTURE 7.4)
-src/standby/standby_module	deferred	src/standby/standby_module.cpp,src/standby/standby_module.h	crate map: standby (ARCHITECTURE 7.4)
 src/standby/restore/ob_physical_copy_ctx	deferred	src/standby/restore/ob_physical_copy_ctx.cpp,src/standby/restore/ob_physical_copy_ctx.h	crate map: standby (ARCHITECTURE 7.4)
 src/standby/restore/ob_restore_helper_ctx	deferred	src/standby/restore/ob_restore_helper_ctx.cpp,src/standby/restore/ob_restore_helper_ctx.h	crate map: standby (ARCHITECTURE 7.4)
 src/standby/restore/ob_standby_restore_tablet_builder	deferred	src/standby/restore/ob_standby_restore_tablet_builder.cpp,src/standby/restore/ob_standby_restore_tablet_builder.h	crate map: standby (ARCHITECTURE 7.4)
