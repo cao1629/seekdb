@@ -603,3 +603,9 @@ python3 deps/ios-build/build.py --jobs 4 vsag
 - `ObServer::stop` 的 in-process 路径现在先 deactivate DDL launcher，再 stop/wait 系统包加载服务，然后才关闭 schema、SQL 和 runtime。普通独立 server 路径不改。模块为空时支持部分初始化清理。
 - 新增 native 回归直接编译生产取消 helper，后台线程持有 query lock，只有取消 DDL 后才能退出；验证 helper 不死锁、锁已释放、timer drain 已执行，另核对 helper 位于 schema/runtime stop 前。回归通过；新源码仍需重新编译和真机复验。
 - 原始设备日志、Instruments trace 和中断轮次报告保存在仓库 ignored build/test 目录，仅作为补充。上述等待链与未完成结果已写入 tracked 记录，采样中的设备/主机唯一标识不会提交。
+
+### 2026-10-04：生产 Rust 隔离证据留存
+
+- `7e0f13d22eb5` 真机运行 `1841a616-8551-4b04-ba5b-50f20df14b23` 前七阶段、23 个用例通过，当前源码 host mysqltest 272/272；最后审计发现生产符号隔离用例没有返回证据文件，整体 23/24，不能标为全通过。
+- 生产校验在真实 hook-off 标记和 Rust archive 符号检查成功后，保存运行身份、runtime/Rust/link response SHA256 和已检查符号名；审计仍要求每个用例有完整证据。增加真实文件与符号污染回归。
+- 此前挂起进程在保留日志和采样后仅对本次 Probe 执行 SIGTERM；该中断不属于正常停机通过证据。

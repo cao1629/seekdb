@@ -61,6 +61,37 @@ def _host_macho_executable_bytes() -> bytes:
 class IphoneTestPhasesTest(unittest.TestCase):
     """Require stable metadata and sanitized execution for completed phases."""
 
+    def test_production_isolation_retains_verified_evidence(self):
+        """Bind retained production proof to real archives and reject test symbols."""
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            observer = root / "src/observer"
+            observer.mkdir(parents=True)
+            source = "a" * 40
+            (root / "CMakeCache.txt").write_text("SEEKDB_IOS_TEST_HOOKS:BOOL=OFF\n")
+            archive = observer / "libseekdb_ios_runtime.a"
+            archive.write_bytes(
+                b"SEEKDB_IOS_ARTIFACT_BUILD_ID=aaaaaaaaaaaa;"
+                b"SEEKDB_IOS_ARTIFACT_HOOK_MODE=disabled")
+            rust_archive = observer / "libsql_nio.a"
+            rust_archive.write_bytes(b"production_only_symbol\n")
+            link = observer / "CMakeFiles/seekdb_ios_link_check.dir/link.txt"
+            link.parent.mkdir(parents=True)
+            link.write_text("clang -o probe libseekdb_ios_runtime.a libsql_nio.a")
+            validate = phases._production_validator(root, source, root, "current-run")
+            names = validate(None)
+            self.assertEqual(("evidence-rust-production-symbol-isolation.json",), names)
+            proof = json.loads((root / names[0]).read_text())
+            self.assertEqual(source, proof["source_commit"])
+            self.assertEqual("current-run", proof["run_id"])
+            self.assertEqual(hashlib.sha256(rust_archive.read_bytes()).hexdigest(),
+                             proof["rust_archive_sha256"])
+            (root / names[0]).unlink()
+            rust_archive.write_bytes(b"_nio_device_test_count\n")
+            with self.assertRaises(ValueError):
+                validate(None)
+            self.assertFalse((root / names[0]).exists())
+
     def configuration(self, root):
         """Return process-local device and signing inputs for one test."""
         engine = root / "build_ios_arm64"

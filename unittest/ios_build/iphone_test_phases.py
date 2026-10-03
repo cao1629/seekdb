@@ -1227,7 +1227,7 @@ def _artifact_marker(path: Path) -> Optional[tuple[bytes, bytes]]:
 
 def _production_validator(
         engine_build: Path,
-        source_revision: str) -> Callable[
+        source_revision: str, run_directory: Path, run_id: str) -> Callable[
             [runner.SanitizedProcessResult], tuple[str, ...]]:
     """Create a production marker and Rust-symbol isolation validator."""
     def validate(
@@ -1256,8 +1256,24 @@ def _production_validator(
         arguments = module.engine_link_arguments(
             link_file.read_text(encoding="utf-8"),
             engine_build / "src/observer")
-        module.require_rust_archive_mode(arguments, False)
-        return ()
+        rust_archive = module.require_rust_archive_mode(arguments, False)
+        evidence_name = "evidence-rust-production-symbol-isolation.json"
+        evidence = {
+            "schema_version": 1,
+            "run_id": run_id,
+            "source_commit": source_revision,
+            "build_id": source_revision[:12],
+            "hook_mode": "disabled",
+            "runtime_archive_sha256": _sha256_file(archive),
+            "rust_archive_sha256": _sha256_file(rust_archive),
+            "link_response_sha256": _sha256_file(link_file),
+            "rust_device_test_symbols_absent": True,
+            "checked_symbols": ["nio_device_test_count", "_nio_device_test_count"],
+        }
+        (run_directory / evidence_name).write_text(
+            json.dumps(evidence, sort_keys=True, indent=2) + "\n",
+            encoding="utf-8")
+        return (evidence_name,)
 
     return validate
 
@@ -1492,7 +1508,7 @@ def create_phase_contracts(
                 command=production_command,
                 timeout_seconds=BUILD_TIMEOUT_SECONDS,
                 evidence_validator=_production_validator(
-                    production_build, source_revision),
+                    production_build, source_revision, run_directory, run_id),
                 requires_sql_restart_followup=False,
                 invalidates_test_app=True,
                 readiness_error=production_readiness,
