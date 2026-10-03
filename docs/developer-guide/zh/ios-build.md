@@ -504,3 +504,8 @@ failed 时执行完整 host gate；已有 success evidence 但 snapshot、binary
 
 锁屏/解锁操作仍是人工验收项；有界内存测试不证明 OOM 或 Jetsam 极限。macOS
 mysqltest 的 272 项覆盖在报告中继续明确归为 host-only。
+
+完整复验曾在 mysqltest 普通 SQL 停机遇到后台系统包 DDL 的 schema retry 与 session
+cleanup 等待链。现已在 in-process 停机入口提前取消 DDL launcher、stop/wait loader，
+再关闭 schema/SQL/runtime；native 锁持有回归通过，真机及最终矩阵需要重新复验。
+此前 `86c9aafecc9f` 的专项阶段已通过，但完整轮次仍 incomplete，不能改写为通过。

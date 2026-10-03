@@ -595,3 +595,11 @@ python3 deps/ios-build/build.py --jobs 4 vsag
 
 - 专项真机运行（代码 `9efb0dc98f29`）：vector seed/restore 全部断言通过，有界内存全部断言通过，两个普通 SQL 两轮 restart gate 通过；生命周期控制失败。定位到 devicectl launch 的 bundle 后参数会被作为 App arguments 消费，导致放在末尾的 `--device` 不被解析；已把设备参数移动到 bundle 前并增加回归覆盖。
 - 向量验收进一步要求设备 EXPLAIN 包含实际命名的 VECTOR INDEX 操作，避免把仅返回正确邻居的普通扫描当作索引验证。311 项 host Python 回归通过；新增解析回归后待复验。
+
+### 完整轮次发现并修复后台 DDL 停机等待
+
+- `86c9aafecc9f` 的专项 vector/lifecycle-memory 五个门禁全部通过；完整轮次已完成 272/272 host mysqltest、前四阶段和 mysqltest 真机等价用例（17/24 门禁），但普通 SQL 首轮在 `Stopping` 持续超过八分钟。主动中断主机等待以定位问题，该轮保持 incomplete，不补写 clean-stop 或通过结果。
+- 真机日志显示 `ObServer::stop` 在停止 schema 服务和 SQL proxy 后进入 runtime session cleanup，卡在 kill session。Instruments 开启 waiting-thread sampling 的实际设备调用栈显示系统包加载任务持有内部 SQL 查询，停在 `ObDDLService::schema_retry_to_die` → publish schema；DDL launcher 尚保持 started，retry 无法退出。
+- `ObServer::stop` 的 in-process 路径现在先 deactivate DDL launcher，再 stop/wait 系统包加载服务，然后才关闭 schema、SQL 和 runtime。普通独立 server 路径不改。模块为空时支持部分初始化清理。
+- 新增 native 回归直接编译生产取消 helper，后台线程持有 query lock，只有取消 DDL 后才能退出；验证 helper 不死锁、锁已释放、timer drain 已执行，另核对 helper 位于 schema/runtime stop 前。回归通过；新源码仍需重新编译和真机复验。
+- 原始设备日志、Instruments trace 和中断轮次报告保存在仓库 ignored build/test 目录，仅作为补充。上述等待链与未完成结果已写入 tracked 记录，采样中的设备/主机唯一标识不会提交。
