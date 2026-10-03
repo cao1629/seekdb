@@ -575,3 +575,12 @@ python3 deps/ios-build/build.py --jobs 4 vsag
 - `panic_continuation` 依赖前一进程的 AtomicBool，但 runner 每 case 启动独立 App；C++ adapter 现于同次调用中先验证 intentional panic，再验证 continuation，保持两项独立注册。增加 fresh-process 编译运行回归。
 - production isolation 的独立目录默认开启 standby，完整编译后因缺少 iOS gRPC 静态库链接失败。统一 build command 显式 `OB_ENABLE_STANDBY=OFF`，与已验证的 iOS 引擎配置一致；不将缺失依赖或未执行隔离视为通过。
 - 修复后完整验证待执行。
+
+### 2026-10-04：修复后完整入口验证结果
+
+- 验证源码 HEAD：`e2e6c968374ab6bc1b3ed4207fddd164d1902dc5`；run ID：`c99e169d-bccd-47d9-8078-c6466cdc126b`，start-date 目录 `iphone_test/2026-10-04`。
+- `SEEKDB_IPHONE_HOST_JOBS=4` 的 272 项 host mysqltest 全部通过，严格合并 4 个隔离数据库分片；host gate 不算真机结果。
+- 前五阶段 18 个检查节点全部通过，包括 11 个真机注册用例、4 组普通 SQL 同目录两轮重启（每轮 36 步，previous_runs=0/1）及 production Rust symbol isolation。
+- 测试 ID 脱敏问题、Rust continuation 的跨进程状态依赖、production standby/gRPC 链接配置问题均取得修复后运行证据。并行 workspace 初始化遗漏修复后取得两轮真实 4 路精确覆盖证据。
+- 完整矩阵未通过：入口在 `vector` 返回 `required adapter is missing: vector`，最终 exit=1；`lifecycle-memory`、`final-matrix` 保持 pending。这三个阶段尚只有设计，没有执行 adapter；未跳过、未标成通过，也没有新增其真机证据。
+- 本机详细证据：上述 run 目录内的 summary、checkpoint、failure 与脱敏 JSONL。此文档记录提交不改变已验证的代码/产物身份。

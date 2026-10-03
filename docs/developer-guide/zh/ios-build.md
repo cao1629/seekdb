@@ -1,5 +1,19 @@
 # iPhone 交叉编译（实验阶段）
 
+## 2026-10-04 真机执行结果
+
+已验证源码提交 `e2e6c968374ab6bc1b3ed4207fddd164d1902dc5`（已包含上游 `76ce86fad`）。完整入口实际名称是 `./run.iphone.test.sh`。本轮命令使用 `SEEKDB_IPHONE_HOST_JOBS=4`，其他设备和签名配置仅在本机进程中提供。
+
+- 前五阶段 `inventory`、`registry-smoke`、`cpp-device-equivalents`、`rust-device-runtime`、`mysqltest` 全部通过，共 18 个检查节点。
+- 272 项 CI-selected mysqltest 在 macOS 上按 4 个隔离分片执行，合并校验精确覆盖后全部通过；这些结果不是 272 项真机测试。
+- 真机 11 项注册用例通过：1 项 registry smoke、4 项 C++、5 项 Rust、1 项 lossless mysqltest。
+- 四个阶段各自完成两轮 36-step 普通 SQL，持久计数严格为 0、1，证据终结记录 `complete=true/result=0`；执行路径包含干净停止与同目录重启。
+- 独立 hooks-off production 的 Rust 测试符号隔离通过。Rust continuation 修复后真机通过，standby 配置修复后 production 完整链接通过。
+- 完整运行仍为 **incomplete / exit=1**：`vector` 缺少 adapter，入口在该阶段报告 infrastructure failure；`lifecycle-memory` 与 `final-matrix` 同样尚无 adapter，因此保持 pending。不得宣称所有测试或完整矩阵通过。
+
+本机脱敏报告位于 `iphone_test/2026-10-04/summary.md`、`summary.json`、`checkpoint.json`，设备证据位于同目录的 `evidence-*.jsonl` 与 SQL metadata 文件。重要结论已写入本页与变更记录，忽略目录中的文件只作为补充证据。后续文档提交不改变以上已验证源码提交或产物身份。
+
+
 2026-10-04：真机执行发现 Rust continuation 的进程状态依赖，以及 production 隔离目录默认 standby 导致缺失 iOS gRPC 链接。现使 continuation 在同次调用中准备 panic，并统一显式 `OB_ENABLE_STANDBY=OFF`；29 项 registry 和 44 项构建调度回归通过，修复后完整矩阵待重跑。
 
 2026-10-03：已 rebase 到上游 `76ce86fad`；修复前新 HEAD 的 272 项 host mysqltest、305 项契约回归通过。真机 smoke 断言通过，但测试 UUID 脱敏导致主机证据校验失败，现已修复，完整矩阵待重跑。
