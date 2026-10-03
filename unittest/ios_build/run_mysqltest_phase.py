@@ -623,6 +623,8 @@ def _execute_parallel_host_slices(
     def execute_slice(index):
         """Execute one immutable-binary slice and clean its managed database."""
         workspace = work_directory / f"worker_{index}"
+        _prepare_host_workspace(workspace)
+        _prepare_host_workspace(work_directory, slice_name=f"slice_{index}")
         arguments = list(command)
         replacements = {
             "--base-dir": str(workspace / "instance"),
@@ -798,7 +800,7 @@ def _open_anchored_directory(path: Path) -> int:
             "host mysqltest workspace is unsafe") from error
 
 
-def _prepare_host_workspace(work_directory: Path) -> None:
+def _prepare_host_workspace(work_directory: Path, slice_name="slice_0") -> None:
     """Create every tracked-runner directory below one anchored real parent."""
     work_directory = Path(work_directory).expanduser().absolute()
     try:
@@ -810,7 +812,7 @@ def _prepare_host_workspace(work_directory: Path) -> None:
     try:
         work_fd = _ensure_directory_at(parent_fd, work_directory.name)
         opened.append(work_fd)
-        slice_fd = _ensure_directory_at(work_fd, "slice_0")
+        slice_fd = _ensure_directory_at(work_fd, slice_name)
         opened.append(slice_fd)
         opened.append(_ensure_directory_at(slice_fd, "tmp"))
         opened.append(_ensure_directory_at(slice_fd, "mysqltest_log"))

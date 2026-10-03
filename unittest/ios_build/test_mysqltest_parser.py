@@ -485,11 +485,13 @@ class MysqltestParserTest(unittest.TestCase):
 
         command = ["runner", "--base-dir", "original", "--work-dir", "logs",
                    "--slice-index", "0", "--slice-count", "1"]
-        with mock.patch.object(phase, "_destroy_managed_host_instance") as cleanup:
+        with mock.patch.object(phase, "_prepare_host_workspace") as prepare, \
+                mock.patch.object(phase, "_destroy_managed_host_instance") as cleanup:
             result = phase._execute_parallel_host_slices(
                 command, Path("repo"), Path("work"), 100, execute, 2)
         self.assertEqual(1, result.returncode)
         self.assertEqual(2, cleanup.call_count)
+        self.assertEqual(4, prepare.call_count)
         self.assertEqual({"2881", "2891"},
                          {item[item.index("--port") + 1] for item in commands})
         self.assertEqual({"work/worker_0/instance", "work/worker_1/instance"},
