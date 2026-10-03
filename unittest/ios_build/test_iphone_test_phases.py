@@ -144,6 +144,10 @@ class IphoneTestPhasesTest(unittest.TestCase):
                     "ios.mysqltest.host-gate",
                     "ios.mysqltest.empty_table",
                     SQL_RESTART_CASES["mysqltest"]),
+                "vector": ("ios.vector.persistence-transactions", SQL_RESTART_CASES["vector"]),
+                "lifecycle-memory": ("ios.lifecycle.background-termination-recovery",
+                                     "ios.memory.bounded-pressure", SQL_RESTART_CASES["lifecycle-memory"]),
+                "final-matrix": ("ios.final-matrix.audit",),
             },
             by_phase,
         )

@@ -74,6 +74,9 @@ DeviceTestRegistry make_mysqltest_device_registry();
 DeviceTestRegistry make_rust_device_registry();
 #endif
 
+/** Create vector recovery and bounded memory pressure device cases. */
+DeviceTestRegistry make_extended_device_registry();
+
 /** Create the complete built-in registry used by the signed test App. */
 DeviceTestRegistry make_device_registry();
 

@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 #import <UIKit/UIKit.h>
 #include "seekdb_ios.h"
+#include <cstring>
 #include "../device_test_registry.h"
 #include "../sql_probe.h"
 
@@ -24,12 +25,16 @@
 @property(nonatomic, copy) NSString *testFilter;
 @property(nonatomic, strong) NSNumber *suiteResult;
 @property(nonatomic) BOOL verificationStarted;
+@property(nonatomic, strong) NSMutableArray *lifecycleEvents;
 @end
 
 @implementation ProbeDelegate
 /** Create the foreground probe and start the engine on a dedicated thread. */
 - (void)scene:(UIScene *)scene willConnectToSession:(UISceneSession *)session options:(UISceneConnectionOptions *)options
 {
+  self.lifecycleEvents = [NSMutableArray new];
+  [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(memoryWarning:)
+      name:UIApplicationDidReceiveMemoryWarningNotification object:nil];
   self.documents = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject;
   self.initialWorkingDirectory = NSFileManager.defaultManager.currentDirectoryPath;
   self.runID = NSProcessInfo.processInfo.environment[@"SEEKDB_IOS_TEST_RUN_ID"] ?: @"ordinary-run";
@@ -67,6 +72,35 @@
   thread.name = @"seekdb-ios-probe";
   thread.stackSize = 8 * 1024 * 1024;
   [thread start];
+}
+
+/** Append a device-origin scene event and immediately persist its lifecycle state. */
+- (void)recordLifecycle:(NSString *)name
+{
+  [self.lifecycleEvents addObject:@{@"name": name, @"timestamp": @([[NSDate date] timeIntervalSince1970]),
+      @"engine_state": @(seekdb_ios_get_state())}];
+  [self refreshStatus];
+}
+/** Record the operating system foreground activation callback. */
+- (void)sceneDidBecomeActive:(UIScene *)scene { [self recordLifecycle:@"active"]; }
+/** Record the operating system background transition callback. */
+- (void)sceneDidEnterBackground:(UIScene *)scene { [self recordLifecycle:@"background"]; }
+/** Record the operating system foreground return callback. */
+- (void)sceneWillEnterForeground:(UIScene *)scene { [self recordLifecycle:@"foreground"]; }
+/** Record memory warnings without treating a warning as a successful pressure test. */
+- (void)memoryWarning:(NSNotification *)notification { [self recordLifecycle:@"memory-warning"]; }
+/** Accept a run-bound graceful-stop URL only in an explicitly controlled test launch. */
+- (void)scene:(UIScene *)scene openURLContexts:(NSSet<UIOpenURLContext *> *)contexts
+{
+  if (![NSProcessInfo.processInfo.environment[@"SEEKDB_PROBE_CONTROL"] isEqualToString:@"1"] ||
+      strcmp(seekdb_ios_get_hook_mode(), "enabled") != 0) return;
+  for (UIOpenURLContext *context in contexts) {
+    NSURL *url = context.URL;
+    if ([url.scheme isEqualToString:@"seekdb-probe"] && [url.host isEqualToString:@"stop"] &&
+        [url.lastPathComponent isEqualToString:self.runID]) {
+      [self recordLifecycle:@"stop-request"]; [self stopEngine];
+    }
+  }
 }
 
 /** Run the explicitly selected device suite and persist run-scoped JSONL evidence. */
@@ -172,6 +206,7 @@
                            @"cleanup_error": self.cleanupError ?: NSNull.null,
                            @"working_directory_restored": self.workingDirectoryRestored ?: NSNull.null,
                            @"run_id": self.runID,
+                           @"lifecycle_events": self.lifecycleEvents ?: @[],
                            @"timestamp": @([[NSDate date] timeIntervalSince1970])};
   NSError *error = nil;
   NSData *data = [NSJSONSerialization dataWithJSONObject:status options:NSJSONWritingPrettyPrinted error:&error];

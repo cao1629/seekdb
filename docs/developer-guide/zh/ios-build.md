@@ -493,3 +493,14 @@ phase 尚未执行时，`--resume` 会把 pending 误判为需要重跑。修复
 同一 run 的 binary snapshot 与完整 evidence identity 后复用；没有成功 evidence、明确
 failed 时执行完整 host gate；已有 success evidence 但 snapshot、binary、corpus、digest
 或 `run_id` 重验不一致时，resume 会 fail-closed 终止，不覆盖该 run 的可疑证据。
+
+## 2026-10-04 扩展阶段
+
+`vector`、`lifecycle-memory`、`final-matrix` 已接入 standalone runner。向量由两个
+独立 App 进程共享专属 fixture 目录验证索引恢复和事务；生命周期由真实系统 scene
+回调及拥有的 App PID 验证前后台、正常停止、SIGTERM 后恢复；有界内存压力在设备
+上实际触碰 8/32 MiB 内存页并查询 SQL/ANN。最终矩阵拒绝任何缺失、失败或没有证据
+的前序阶段。当前新增实现已完成 App 编译，尚待 current-HEAD 真机验收。
+
+锁屏/解锁操作仍是人工验收项；有界内存测试不证明 OOM 或 Jetsam 极限。macOS
+mysqltest 的 272 项覆盖在报告中继续明确归为 host-only。

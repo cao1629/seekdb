@@ -20,6 +20,7 @@ from typing import Callable, Iterable, Mapping, Optional, Sequence
 
 import iphone_test_runner as runner
 import run_mysqltest_phase
+import run_extended_iphone_tests as extended
 import rustc_lldb_wrapper
 
 
@@ -70,6 +71,8 @@ SQL_RESTART_CASE_IDS = {
     "cpp-device-equivalents": "ios.cpp.sql.same-directory-restart",
     "rust-device-runtime": "ios.rust.sql.same-directory-restart",
     "mysqltest": "ios.mysqltest.sql.same-directory-restart",
+    "vector": "ios.vector.sql.same-directory-restart",
+    "lifecycle-memory": "ios.lifecycle.sql.same-directory-restart",
 }
 REQUIRED_DEPENDENCY_ARTIFACTS = (
     "include",
@@ -1527,6 +1530,50 @@ def create_phase_contracts(
                 source_revision, run_id),
         ),
     }
+    for phase_id in ("vector", "lifecycle-memory", "final-matrix"):
+        def validate_extended(process, phase_id=phase_id):
+            """Bind independently validated extended evidence to the current runner identity."""
+            if json.loads(process.stdout) != {"run_result": 0}:
+                raise PhaseEvidenceError("extended phase command did not pass")
+            try:
+                if phase_id != "final-matrix":
+                    metadata = json.loads((run_directory / f"evidence-{phase_id}.json").read_text())
+                    if metadata.get("device_hash") != hashlib.sha256(
+                            (configuration.device or "").encode()).hexdigest():
+                        raise ValueError("extended phase device identity mismatch")
+                return extended.validate_evidence(
+                    run_directory, phase_id, run_id, source_revision)
+            except (ValueError, OSError, KeyError) as error:
+                raise PhaseEvidenceError(str(error)) from error
+
+        cases = [PhaseCaseContract(
+            phase_id=phase_id,
+            case_id={"vector": "ios.vector.persistence-transactions",
+                     "lifecycle-memory": "ios.lifecycle.background-termination-recovery",
+                     "final-matrix": "ios.final-matrix.audit"}[phase_id],
+            execution_class="host-only" if phase_id == "final-matrix" else "host-driven-device",
+            command=(sys.executable, str(SCRIPT_DIRECTORY / "run_extended_iphone_tests.py"),
+                     "--mode", phase_id, "--device", configuration.device or "",
+                     "--bundle-id", configuration.bundle_id or "",
+                     "--output-dir", str(run_directory), "--run-id", run_id,
+                     "--source-commit", source_revision),
+            timeout_seconds=1800,
+            evidence_validator=validate_extended,
+            requires_sql_restart_followup=phase_id != "final-matrix",
+            requires_test_app=phase_id != "final-matrix",
+        )]
+        if phase_id == "lifecycle-memory":
+            case_id = "ios.memory.bounded-pressure"
+            cases.append(PhaseCaseContract(
+                phase_id=phase_id, case_id=case_id, execution_class="device-native",
+                command=_device_command(configuration, run_directory, "memory", case_id),
+                timeout_seconds=DEVICE_CASE_TIMEOUT_SECONDS,
+                evidence_validator=_device_validator(run_directory, case_id),
+                requires_sql_restart_followup=True, requires_test_app=True))
+        if phase_id != "final-matrix":
+            cases.append(_sql_restart_contract(
+                phase_id, configuration, run_directory, source_revision, run_id))
+        all_contracts[phase_id] = tuple(cases)
     return {
         phase_id: cases for phase_id, cases in all_contracts.items()
         if phase_id in selected

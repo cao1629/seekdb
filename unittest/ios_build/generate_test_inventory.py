@@ -313,6 +313,15 @@ def _base_discoveries(repo_root, tracked_files):
                 }
             )
 
+    extended_path = "unittest/ios_build/extended_device_tests.cpp"
+    if extended_path in tracked_files:
+        content = (repo_root / extended_path).read_text(encoding="utf-8")
+        for case_id in re.findall(r'registry\.add\(\{"(ios\.(?:vector|memory)\.[^"]+)"', content):
+            discoveries.append({
+                "id": case_id, "source_path": extended_path, "corpus": "ios-probe",
+                "case_name": case_id, "ci_selected": False,
+            })
+
     rust_device_path = "unittest/ios_build/rust_device_tests.cpp"
     if rust_device_path in tracked_files:
         content = (repo_root / rust_device_path).read_text(encoding="utf-8")

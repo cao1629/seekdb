@@ -584,3 +584,11 @@ python3 deps/ios-build/build.py --jobs 4 vsag
 - 测试 ID 脱敏问题、Rust continuation 的跨进程状态依赖、production standby/gRPC 链接配置问题均取得修复后运行证据。并行 workspace 初始化遗漏修复后取得两轮真实 4 路精确覆盖证据。
 - 完整矩阵未通过：入口在 `vector` 返回 `required adapter is missing: vector`，最终 exit=1；`lifecycle-memory`、`final-matrix` 保持 pending。这三个阶段尚只有设计，没有执行 adapter；未跳过、未标成通过，也没有新增其真机证据。
 - 本机详细证据：上述 run 目录内的 summary、checkpoint、failure 与脱敏 JSONL。此文档记录提交不改变已验证的代码/产物身份。
+
+## 2026-10-04：补齐 vector、lifecycle-memory 和 final-matrix
+
+- 新增真机 vector 注册用例：创建三维 HNSW fixture，核对 exact/ANN/过滤查询；同一数据目录的新进程核对持久化、事务回滚/提交、更新、删除与重复查询。
+- 新增真机有界内存用例：记录 Mach phys_footprint，实际分配并触碰 8/32 MiB 页面，核对页内容及压力/释放后的 SQL、ANN 响应。此范围不代表 OOM/Jetsam 极限认证。
+- App 记录系统 scene 前后台及内存警告回调；仅显式测试控制环境和 hook-on 构建接受绑定当前 run ID 的 graceful-stop URL。生命周期适配器要求同一进程前后台恢复、正常停止、受控 SIGTERM 消失以及重启 SQL 恢复。
+- 所有设备阶段继续要求 clean-stop 证据和独立两轮普通 SQL restart gate。final-matrix 要求前七阶段全部通过、当前 source/run identity 和所有证据文件 SHA-256；缺少实现或证据时不会生成通过结果。
+- 已通过真实 iOS App 源码编译/链接；完整 current-HEAD 签名、真机执行与最终矩阵结果待后续记录。锁屏/解锁仍需人工交互，不合成自动测试结果。

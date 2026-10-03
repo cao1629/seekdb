@@ -193,6 +193,9 @@ DeviceTestRegistry make_device_registry()
     return {};
   }
 #endif
+  if (!registry.add_all(make_extended_device_registry())) {
+    return {};
+  }
   return registry;
 }
 

@@ -7,6 +7,10 @@
   <key>CFBundlePackageType</key><string>APPL</string>
   <key>CFBundleVersion</key><string>1</string>
   <key>CFBundleShortVersionString</key><string>0.1</string>
+  <key>CFBundleURLTypes</key><array><dict>
+    <key>CFBundleURLName</key><string>seekdb-probe-control</string>
+    <key>CFBundleURLSchemes</key><array><string>seekdb-probe</string></array>
+  </dict></array>
   <key>LSRequiresIPhoneOS</key><true/>
   <key>MinimumOSVersion</key><string>${CMAKE_OSX_DEPLOYMENT_TARGET}</string>
   <key>UILaunchScreen</key><dict/>
