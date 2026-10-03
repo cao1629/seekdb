@@ -1,5 +1,10 @@
 # iPhone 交叉编译（实验阶段）
 
+2026-10-03：已 rebase 到上游 `76ce86fad`；修复前新 HEAD 的 272 项 host mysqltest、305 项契约回归通过。真机 smoke 断言通过，但测试 UUID 脱敏导致主机证据校验失败，现已修复，完整矩阵待重跑。
+
+可设置 `SEEKDB_IPHONE_HOST_JOBS=4 ./run.iphone.test.sh` 并行运行 host gate；每个 slice 使用独立数据库和端口，最终仍严格核对全部 272 项覆盖。需为同时运行的数据库实例预留内存。默认 1，支持 1 至 4。
+
+
 ## 单命令 stages 1–4（2026-09-25，尚未执行新一轮真机）
 
 `./run.iphone.test.sh` 已注册 inventory、registry smoke、4 个 C++ device equivalent、5 个 Rust device case，以及独立 production Rust symbol isolation。每个 device phase 末尾都有稳定、不可选跳的普通模式 gate：在该 run 专属数据目录完成 36-step SQL 首轮和同目录 restart，并严格要求 `previous_runs=0/1`；gate 未通过时 phase/run 都不能通过。可用四个 `--suite` 只运行当前已注册阶段，runner 仍按全局顺序执行。

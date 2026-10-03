@@ -2,6 +2,7 @@
 """Build and validate the standalone mysqltest phase without merging host/device claims."""
 
 import argparse
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 import hashlib
 import json
@@ -616,12 +617,43 @@ def _select_host_executable_launcher(
     return MACOS_LLDB_LAUNCHER
 
 
+def _execute_parallel_host_slices(
+        command, repo_root, work_directory, deadline, process_runner, slice_count):
+    """Run isolated host slices on separate ports and destroy each instance."""
+    def execute_slice(index):
+        """Execute one immutable-binary slice and clean its managed database."""
+        workspace = work_directory / f"worker_{index}"
+        arguments = list(command)
+        replacements = {
+            "--base-dir": str(workspace / "instance"),
+            "--work-dir": str(work_directory / f"slice_{index}"),
+            "--slice-index": str(index), "--slice-count": str(slice_count),
+        }
+        for option, value in replacements.items():
+            arguments[arguments.index(option) + 1] = value
+        arguments.extend(["--port", str(2881 + index * 10)])
+        try:
+            return process_runner(arguments, repo_root, deadline)
+        finally:
+            _destroy_managed_host_instance(repo_root, workspace)
+
+    with ThreadPoolExecutor(max_workers=slice_count) as executor:
+        results = list(executor.map(execute_slice, range(slice_count)))
+    return subprocess.CompletedProcess(
+        command, 0 if all(result.returncode == 0 for result in results) else 1,
+        b"", b"")
+
+
 def execute_local_host_gate(
         repo_root: Path, work_directory: Path, run_id: str,
         binaries: Mapping[str, Path], process_runner=None) -> dict:
     """Run all selected host cases and merge evidence in this runner process."""
     repo_root = Path(repo_root)
     work_directory = Path(work_directory)
+    slice_value = os.environ.get("SEEKDB_IPHONE_HOST_JOBS", "1")
+    if slice_value not in {"1", "2", "3", "4"}:
+        raise MysqltestPhaseError("SEEKDB_IPHONE_HOST_JOBS must be 1 through 4")
+    slice_count = int(slice_value)
     snapshots = prepare_host_binary_snapshots(binaries, work_directory)
     validate_host_binary_snapshots(snapshots)
     execution_binaries = snapshots.snapshot_paths
@@ -639,7 +671,7 @@ def execute_local_host_gate(
          *(["--launcher", str(launcher)] if launcher else [])],
         [sys.executable, str(script), "merge",
          "--results-dir", str(work_directory),
-         "--slice-count", "1", "--run-id", run_id,
+         "--slice-count", str(slice_count), "--run-id", run_id,
          "--output", str(work_directory / "host-result.json")],
     )
     # macOS Python has no fexecve, and a local probe could not execute an
@@ -649,7 +681,12 @@ def execute_local_host_gate(
     process_runner = process_runner or _run_controlled_process
     try:
         validate_host_binary_snapshots(snapshots)
-        completed = process_runner(commands[0], repo_root, deadline)
+        if slice_count == 1:
+            completed = process_runner(commands[0], repo_root, deadline)
+        else:
+            completed = _execute_parallel_host_slices(
+                commands[0], repo_root, work_directory, deadline,
+                process_runner, slice_count)
     except BaseException:
         try:
             _destroy_managed_host_instance(repo_root, work_directory)

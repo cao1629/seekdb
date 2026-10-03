@@ -560,3 +560,11 @@ python3 deps/ios-build/build.py --jobs 4 vsag
   缺少成功 evidence 或 case 明确 failed 时重新执行，已有 success evidence 但重验不一致
   时 fail-closed 终止且不覆盖可疑证据。新增 RED/GREEN 回归覆盖较早设备 phase 失败后的
   pending host phase。
+
+## 2026-10-03：上游 rebase、签名恢复与测试入口修复
+
+- `codex/ios-layered-validation` 的 104 个本地提交无冲突 rebase 到最新上游 `76ce86fad`；旧 HEAD 保留在 `codex/ios-before-upstream-20261003`。
+- rebase 后 HEAD `585faf117`：272 项 host mysqltest 全部通过，305 项 Python 契约通过；iPhone 引擎编译、完整链接、签名和安装通过。主机与引擎构建并行进行，未将主机结果算作真机通过。
+- 旧开发描述文件于 2026-09-28 失效，通过现有 Xcode 配置更新，设备端由用户解锁并信任；凭证与设备标识不进入 Git。
+- 真机 registry smoke 的断言成功，主机证据校验发现测试 UUID 被隐私脱敏替换。普通 device suite 改用随机 32 位十六进制测试 ID，保留旧 UUID 文件名读取兼容性；设备 UUID 仍正常脱敏。增加覆盖实际 SanitizedProcessResult 到 validator 的回归测试。
+- 新增 `SEEKDB_IPHONE_HOST_JOBS=1..4`，使用已有 host slice 协议并行运行精确覆盖；各 slice 使用独立数据库目录与端口，并在成功或失败后清理。默认仍为单任务。补充并发隔离、失败清理测试。修复后完整真机验证待执行。

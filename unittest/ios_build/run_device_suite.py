@@ -15,7 +15,7 @@ import uuid
 
 
 ROOT = Path(__file__).resolve().parents[2]
-ALLOWED_EVIDENCE_NAME = re.compile(r"^device-test-[0-9a-f-]{36}\.jsonl$")
+ALLOWED_EVIDENCE_NAME = re.compile(r"^device-test-(?:[0-9a-f]{32}|[0-9a-f-]{36})\.jsonl$")
 LOCKED_RETRY_PROMPT = (
     "Unlock the iPhone and keep the screen awake; retrying…")
 LOCKED_RETRY_SECONDS = 5
@@ -648,7 +648,7 @@ def main():
         except ValueError as error:
             parser.error(str(error))
     options.output_dir.mkdir(parents=True, exist_ok=True)
-    run_id = str(uuid.uuid4())
+    run_id = uuid.uuid4().hex
     build_id = source_build_id()
     expected_cases = options.expected_case or ["ios.registry.smoke"]
     source_name = f"device-test-{run_id}.jsonl"

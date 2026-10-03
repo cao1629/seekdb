@@ -193,6 +193,19 @@ class IphoneTestPhasesTest(unittest.TestCase):
                     self.assertEqual(
                         case.case_id, case.command[case.command.index("--filter") + 1])
 
+    def test_device_summary_survives_process_redaction(self):
+        """Keep opaque test IDs usable without exposing device UUIDs."""
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            directory = Path(temporary_directory)
+            test_id = "abcdef0123456789abcdef0123456789"
+            case_id = "ios.registry.smoke"
+            (directory / f"device-test-{test_id}.jsonl").write_text("{}\n")
+            process = runner.SanitizedProcessResult.create(
+                0, json.dumps({"run_id": test_id, "run_result": 0,
+                               "case_results": {case_id: 0}}), "", "parent-run")
+            evidence = phases._device_validator(directory, case_id)(process)
+            self.assertEqual(("evidence-ios-registry-smoke.jsonl",), evidence)
+
     def test_device_execution_prepares_current_test_hook_app_once(self):
         """Build and package current HEAD rather than trusting a stale cache."""
         with tempfile.TemporaryDirectory() as temporary_directory:

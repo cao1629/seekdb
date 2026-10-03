@@ -9,6 +9,7 @@ import shutil
 import stat
 import subprocess
 import tempfile
+import threading
 import time
 import unittest
 from unittest import mock
@@ -469,6 +470,30 @@ class MysqltestParserTest(unittest.TestCase):
                     host_runner.run_case(
                         run_args, root, case, tmp_dir, unsafe_log)
             run.assert_not_called()
+
+    def test_parallel_host_slices_are_isolated_and_cleaned_on_failure(self):
+        """Run slices concurrently without sharing ports, data, or cleanup."""
+        barrier = threading.Barrier(2)
+        commands = []
+
+        def execute(command, _cwd, _deadline):
+            """Wait for both slices and fail one completed invocation."""
+            commands.append(command)
+            barrier.wait(timeout=5)
+            index = int(command[command.index("--slice-index") + 1])
+            return subprocess.CompletedProcess(command, index, b"", b"")
+
+        command = ["runner", "--base-dir", "original", "--work-dir", "logs",
+                   "--slice-index", "0", "--slice-count", "1"]
+        with mock.patch.object(phase, "_destroy_managed_host_instance") as cleanup:
+            result = phase._execute_parallel_host_slices(
+                command, Path("repo"), Path("work"), 100, execute, 2)
+        self.assertEqual(1, result.returncode)
+        self.assertEqual(2, cleanup.call_count)
+        self.assertEqual({"2881", "2891"},
+                         {item[item.index("--port") + 1] for item in commands})
+        self.assertEqual({"work/worker_0/instance", "work/worker_1/instance"},
+                         {item[item.index("--base-dir") + 1] for item in commands})
 
     def test_local_host_gate_runs_tracked_runner_before_validating(self):
         """Execute tracked host tools only from an identity-bound snapshot."""
