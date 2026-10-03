@@ -592,3 +592,6 @@ python3 deps/ios-build/build.py --jobs 4 vsag
 - App 记录系统 scene 前后台及内存警告回调；仅显式测试控制环境和 hook-on 构建接受绑定当前 run ID 的 graceful-stop URL。生命周期适配器要求同一进程前后台恢复、正常停止、受控 SIGTERM 消失以及重启 SQL 恢复。
 - 所有设备阶段继续要求 clean-stop 证据和独立两轮普通 SQL restart gate。final-matrix 要求前七阶段全部通过、当前 source/run identity 和所有证据文件 SHA-256；缺少实现或证据时不会生成通过结果。
 - 已通过真实 iOS App 源码编译/链接；完整 current-HEAD 签名、真机执行与最终矩阵结果待后续记录。锁屏/解锁仍需人工交互，不合成自动测试结果。
+
+- 专项真机运行（代码 `9efb0dc98f29`）：vector seed/restore 全部断言通过，有界内存全部断言通过，两个普通 SQL 两轮 restart gate 通过；生命周期控制失败。定位到 devicectl launch 的 bundle 后参数会被作为 App arguments 消费，导致放在末尾的 `--device` 不被解析；已把设备参数移动到 bundle 前并增加回归覆盖。
+- 向量验收进一步要求设备 EXPLAIN 包含实际命名的 VECTOR INDEX 操作，避免把仅返回正确邻居的普通扫描当作索引验证。311 项 host Python 回归通过；新增解析回归后待复验。

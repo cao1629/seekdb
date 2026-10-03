@@ -64,7 +64,7 @@ def launch(options, run_id, auto_stop):
 
 def command(options, arguments):
     """Require successful device control while suppressing raw local metadata."""
-    result = device.devicectl(arguments + ['--device', options.device])
+    result = device.devicectl(arguments[:3] + ['--device', options.device] + arguments[3:])
     if result.returncode:
         raise RuntimeError('device lifecycle control command failed')
     return result

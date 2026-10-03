@@ -20,7 +20,7 @@ namespace {
 using namespace oceanbase;
 using namespace oceanbase::common;
 const char *EXACT = "SELECT id FROM ios_extended.points ORDER BY l2_distance(v,[0.1,0,0]) LIMIT 2";
-const char *ANN = "SELECT id FROM ios_extended.points ORDER BY l2_distance(v,[0.1,0,0]) APPROXIMATE LIMIT 2";
+const char *ANN = "SELECT /*+ INDEX(points vec_idx) */ id FROM ios_extended.points ORDER BY l2_distance(v,[0.1,0,0]) APPROXIMATE LIMIT 2";
 
 /** Read one integer column, retaining database errors without recording premature assertions. */
 int integers(ObISQLClient &client, const char *sql, std::vector<int64_t> &values)
@@ -70,6 +70,27 @@ bool read(TestContext &context, ObISQLClient &client, const char *name, const ch
                              "ordered IDs must match the deterministic five-vector corpus");
 }
 
+/** Require the ANN plan to execute the named vector index rather than an exact table scan. */
+bool indexed_plan(TestContext &context, ObMySQLProxy &client)
+{
+  ObISQLClient::ReadResult result;
+  const std::string sql = std::string("EXPLAIN ") + ANN;
+  int status = client.read(result, sql.c_str());
+  auto *rows = status == OB_SUCCESS ? result.get_result() : nullptr;
+  if (status == OB_SUCCESS && rows == nullptr) status = OB_ERR_UNEXPECTED;
+  std::string plan;
+  while (status == OB_SUCCESS && (status = rows->next()) == OB_SUCCESS) {
+    ObString line;
+    status = rows->get_varchar(static_cast<int64_t>(0), line);
+    if (status == OB_SUCCESS) plan.append(line.ptr(), line.length());
+  }
+  if (status == OB_ITER_END) status = OB_SUCCESS;
+  context.assert_equal("ann.plan.status", OB_SUCCESS, status, "read the device optimizer plan");
+  return context.assert_true("ann.plan.index", status == OB_SUCCESS &&
+      plan.find("VECTOR INDEX") != std::string::npos && plan.find("vec_idx") != std::string::npos,
+      "ANN must execute the named vec_idx vector index");
+}
+
 /** Create only test-owned fixtures and a small HNSW index with exact known neighbors. */
 bool seed(TestContext &context, ObMySQLProxy &client)
 {
@@ -79,6 +100,7 @@ bool seed(TestContext &context, ObMySQLProxy &client)
       write(context, client, "insert", "INSERT INTO ios_extended.points VALUES(1,0,'[0,0,0]'),(2,1,'[1,0,0]'),(3,0,'[0,3,0]'),(4,1,'[6,0,0]'),(5,0,'[12,0,0]')", 5) &&
       read(context, client, "readback", "SELECT id FROM ios_extended.points WHERE id=1 AND l2_distance(v,[0,0,0])=0", {1}) &&
       read(context, client, "exact", EXACT, {1,2}) &&
+      indexed_plan(context, client) &&
       read(context, client, "ann", ANN, {1,2}, true) &&
       read(context, client, "filter", "SELECT id FROM ios_extended.points WHERE grp=1 ORDER BY l2_distance(v,[0.1,0,0]) APPROXIMATE LIMIT 2", {2,4}, true);
 }
@@ -87,6 +109,7 @@ bool seed(TestContext &context, ObMySQLProxy &client)
 int restore(TestContext &context, ObMySQLProxy &client)
 {
   if (!read(context, client, "persisted.rows", "SELECT id FROM ios_extended.points ORDER BY id", {1,2,3,4,5}) ||
+      !indexed_plan(context, client) ||
       !read(context, client, "persisted.ann", ANN, {1,2}, true)) return context.failure_count();
   ObMySQLTransaction transaction;
   int status = transaction.start(&client);

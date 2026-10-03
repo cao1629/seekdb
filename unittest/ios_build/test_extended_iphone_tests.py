@@ -5,6 +5,8 @@ import json
 from pathlib import Path
 import tempfile
 import unittest
+from unittest import mock
+from types import SimpleNamespace
 
 import run_extended_iphone_tests as extended
 
@@ -22,6 +24,14 @@ class ExtendedEvidenceTest(unittest.TestCase):
                         [events[0], {**events[1], 'timestamp': 0}]):
             with self.subTest(events=invalid), self.assertRaises(ValueError):
                 extended.validate_transition({'lifecycle_events': invalid})
+
+    def test_launch_device_option_precedes_application_arguments(self):
+        """Preserve devicectl launch parsing, which consumes remaining positional arguments."""
+        options = SimpleNamespace(device="owned-device")
+        with mock.patch.object(extended.device, "devicectl", return_value=SimpleNamespace(returncode=0)) as call:
+            extended.command(options, ['device', 'process', 'launch', 'com.apple.Preferences'])
+        self.assertEqual(call.call_args.args[0],
+                         ['device', 'process', 'launch', '--device', 'owned-device', 'com.apple.Preferences'])
 
     def checkpoint(self):
         """Return a complete prior-phase checkpoint for corruption regression tests."""
