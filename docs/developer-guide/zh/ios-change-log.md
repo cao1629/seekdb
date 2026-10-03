@@ -609,3 +609,11 @@ python3 deps/ios-build/build.py --jobs 4 vsag
 - `7e0f13d22eb5` 真机运行 `1841a616-8551-4b04-ba5b-50f20df14b23` 前七阶段、23 个用例通过，当前源码 host mysqltest 272/272；最后审计发现生产符号隔离用例没有返回证据文件，整体 23/24，不能标为全通过。
 - 生产校验在真实 hook-off 标记和 Rust archive 符号检查成功后，保存运行身份、runtime/Rust/link response SHA256 和已检查符号名；审计仍要求每个用例有完整证据。增加真实文件与符号污染回归。
 - 此前挂起进程在保留日志和采样后仅对本次 Probe 执行 SIGTERM；该中断不属于正常停机通过证据。
+
+### 2026-10-04：扩展阶段完整验收通过
+
+- 已验证源码 `6deac1205bd0f2c1c1b7d7e5902e23c5a4bc3401`，运行 `04e24c32-b9a4-4a6d-9083-7d27105b04be`；`SEEKDB_IPHONE_HOST_JOBS=4 ./run.iphone.test.sh --restart` exit=0。八阶段 24/24，failed/blocked/excluded/incomplete 全为 0。
+- host CI-selected mysqltest 272/272 精确覆盖，本机回归 314/314；本轮专项 vector/lifecycle-memory 另行 5/5 通过。真机 14 项注册 native 用例、六阶段各两轮 36-step 普通 SQL 及 lifecycle 的 0/1/2 计数恢复均通过。
+- production Rust 符号隔离证据已生成并由 final-matrix 检查 SHA256；全部前序用例有非空证据，审计通过。报告为 `iphone_test/2026-10-04/summary.md`、summary.json、checkpoint.json、evidence-*，属于补充证据。文档提交保留实际已验证源码身份。
+- 本轮 host `drop_vector_index` 的 PURGE RECYCLEBIN 等待约 1000 秒后返回；未跳过、缩减或伪造覆盖。该等待发生在 macOS gate，不是设备测试失败。
+- 锁屏/解锁仍需人工验收；8/32 MiB 触页压力不证明 OOM/Jetsam 极限或 RSS 全量回落。272 项 host 结果不归类为真机；24 个节点也不代表仓库所有测试已移植。

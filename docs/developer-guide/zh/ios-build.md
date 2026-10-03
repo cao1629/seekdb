@@ -2,16 +2,18 @@
 
 ## 2026-10-04 真机执行结果
 
-已验证源码提交 `e2e6c968374ab6bc1b3ed4207fddd164d1902dc5`（已包含上游 `76ce86fad`）。完整入口实际名称是 `./run.iphone.test.sh`。本轮命令使用 `SEEKDB_IPHONE_HOST_JOBS=4`，其他设备和签名配置仅在本机进程中提供。
+已验证源码提交 `6deac1205bd0f2c1c1b7d7e5902e23c5a4bc3401`（已 rebase 到上游 `76ce86fad`），运行 ID `04e24c32-b9a4-4a6d-9083-7d27105b04be`。完整入口 `./run.iphone.test.sh --restart` 成功退出（exit=0）；设置 `SEEKDB_IPHONE_HOST_JOBS=4`，设备和签名配置只在本机进程中提供。
 
-- 前五阶段 `inventory`、`registry-smoke`、`cpp-device-equivalents`、`rust-device-runtime`、`mysqltest` 全部通过，共 18 个检查节点。
-- 272 项 CI-selected mysqltest 在 macOS 上按 4 个隔离分片执行，合并校验精确覆盖后全部通过；这些结果不是 272 项真机测试。
-- 真机 11 项注册用例通过：1 项 registry smoke、4 项 C++、5 项 Rust、1 项 lossless mysqltest。
-- 四个阶段各自完成两轮 36-step 普通 SQL，持久计数严格为 0、1，证据终结记录 `complete=true/result=0`；执行路径包含干净停止与同目录重启。
-- 独立 hooks-off production 的 Rust 测试符号隔离通过。Rust continuation 修复后真机通过，standby 配置修复后 production 完整链接通过。
-- 完整运行仍为 **incomplete / exit=1**：`vector` 缺少 adapter，入口在该阶段报告 infrastructure failure；`lifecycle-memory` 与 `final-matrix` 同样尚无 adapter，因此保持 pending。不得宣称所有测试或完整矩阵通过。
+- 八阶段全部通过：inventory、registry-smoke、cpp-device-equivalents、rust-device-runtime、mysqltest、vector、lifecycle-memory、final-matrix。24/24 检查节点通过，failed/blocked/excluded/incomplete 均为 0。
+- macOS 的 272 项 CI-selected mysqltest 按四个隔离分片执行，精确覆盖 272/272；本机 Python/native 回归 314/314。这些结果不是 272 项真机测试。
+- 真机 registry 包含 14 项注册用例；向量两个进程验证真实 ANN 索引计划、持久化、事务 rollback/commit、更新删除和重复查询；生命周期验证同一进程前后台、正常停机及 SIGTERM 后新进程恢复。
+- 六个阶段各完成两轮 36-step 普通 SQL，持久计数严格为 0、1，终结记录 complete=true/result=0。生命周期额外验证计数 0/1/2，中间的有意 SIGTERM 不属于正常停机证据。
+- hooks-off production 的 Rust 符号隔离和普通 SQL 重启通过；final-matrix 校验前七阶段全部用例状态、证据存在性及 SHA256，包括生产符号隔离的运行身份和归档摘要。
+- 已修复实际出现的 in-process 停机等待链：关闭 schema/SQL/runtime 前先取消系统包 DDL launcher 并 stop/wait loader。完整轮次中的停机门禁通过。
 
-本机脱敏报告位于 `iphone_test/2026-10-04/summary.md`、`summary.json`、`checkpoint.json`，设备证据位于同目录的 `evidence-*.jsonl` 与 SQL metadata 文件。重要结论已写入本页与变更记录，忽略目录中的文件只作为补充证据。后续文档提交不改变以上已验证源码提交或产物身份。
+脱敏报告位于 `iphone_test/2026-10-04/summary.md`、summary.json、checkpoint.json 及 evidence-* 文件。重要结论保存在本页和变更记录；后续文档提交不改变以上已验证源码和产物身份。
+
+锁屏/解锁仍需人工验收；设备内存测试实际触碰 8/32 MiB 内存页并执行 SQL/ANN，不证明 OOM、Jetsam 极限或 allocator 立即归还所有页。完整矩阵是该 runner 注册范围的验收，不代表所有仓库测试均已移植到真机。
 
 
 2026-10-04：真机执行发现 Rust continuation 的进程状态依赖，以及 production 隔离目录默认 standby 导致缺失 iOS gRPC 链接。现使 continuation 在同次调用中准备 panic，并统一显式 `OB_ENABLE_STANDBY=OFF`；29 项 registry 和 44 项构建调度回归通过，修复后完整矩阵待重跑。
@@ -379,7 +381,7 @@ seekdb，不能由仅杀死 host runner process group 替代。
 - 全新目录的完整依赖流水线及 Rust 宿主 build-script SIGKILL 问题；增量完整链接已通过。磁盘空间约 9.4 GiB，继续构建时仍需关注剩余空间。
 - 已新增 `seekdb_ios_run`、`seekdb_ios_request_stop`、`seekdb_ios_get_state`、`seekdb_ios_get_cleanup_status` 和 `seekdb_ios_get_cleanup_error`；`in_process_` 模式跳过服务信号线程，等待结束走 `stop()`，不走原命令行路径的 `_Exit(0)`。该路径已取得 36 步 SQL、多轮正常停止和连续持久化恢复证据。启动失败执行 stop/wait/destroy、curl cleanup 和工作目录恢复，主错误与清理错误分别记录；真机负向验收已通过。接口每进程仅允许调用一次，不可在 UI 线程调用。`BUILD_EMBED_MODE` 仍不能恢复旧 C API。
 - iOS ARM64 链接已验证 S2/Abseil ABI、OpenMP 运行库版本及 Rust sql_nio 链接修复；数学和向量功能仍需真机运行验证。
-- App 沙箱数据目录、线程和内存限制已完成基础适配；重复停止已验证，前后台切换、锁屏恢复和内存压力仍待验证。
+- App 沙箱数据目录、线程和内存限制已完成基础适配；重复停止、前后台切换、终止后恢复及有界内存压力已验证；锁屏恢复仍需人工验收。
 - App 包装、签名、安装、36 步通用 SQL 及五轮正常停止后的持久化恢复已有真机证据；现有模拟器环境不能替代这些真机证据。
 - 当前分支没有常规 C++ 全量测试入口所需的 `unittest/CMakeLists.txt` 与 `all_tests_main.cpp`，本机也没有可用的 Linux 容器运行时；因此本页不宣称完整 C++/Linux 测试通过。
 
@@ -500,12 +502,12 @@ failed 时执行完整 host gate；已有 success evidence 但 snapshot、binary
 独立 App 进程共享专属 fixture 目录验证索引恢复和事务；生命周期由真实系统 scene
 回调及拥有的 App PID 验证前后台、正常停止、SIGTERM 后恢复；有界内存压力在设备
 上实际触碰 8/32 MiB 内存页并查询 SQL/ANN。最终矩阵拒绝任何缺失、失败或没有证据
-的前序阶段。当前新增实现已完成 App 编译，尚待 current-HEAD 真机验收。
+的前序阶段。新增实现已在上述源码版本完成真机验收，最终矩阵通过。
 
 锁屏/解锁操作仍是人工验收项；有界内存测试不证明 OOM 或 Jetsam 极限。macOS
 mysqltest 的 272 项覆盖在报告中继续明确归为 host-only。
 
 完整复验曾在 mysqltest 普通 SQL 停机遇到后台系统包 DDL 的 schema retry 与 session
 cleanup 等待链。现已在 in-process 停机入口提前取消 DDL launcher、stop/wait loader，
-再关闭 schema/SQL/runtime；native 锁持有回归通过，真机及最终矩阵需要重新复验。
+再关闭 schema/SQL/runtime；native 锁持有回归、当前源码真机全阶段与最终矩阵均已通过。
 此前 `86c9aafecc9f` 的专项阶段已通过，但完整轮次仍 incomplete，不能改写为通过。
