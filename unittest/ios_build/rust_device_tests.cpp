@@ -44,7 +44,12 @@ int run_cert_rejects(TestContext &context) { return run_rust_case(context, 0, fa
 int run_cert_formats(TestContext &context) { return run_rust_case(context, 1, false); }
 int run_tls_names(TestContext &context) { return run_rust_case(context, 2, false); }
 int run_intentional_panic(TestContext &context) { return run_rust_case(context, 3, true); }
-int run_panic_continuation(TestContext &context) { return run_rust_case(context, 4, false); }
+/** Prepare panic containment in this invocation before checking continuation. */
+int run_panic_continuation(TestContext &context)
+{
+  run_rust_case(context, 3, true);
+  return run_rust_case(context, 4, false);
+}
 
 } // namespace
 

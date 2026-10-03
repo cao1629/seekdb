@@ -1073,6 +1073,7 @@ def _build_command(
         "--headers-prefix", str(inputs.headers_prefix),
         "--jobs", "4", "--target", "seekdb_ios_link_check", "--",
         f"-DSEEKDB_IOS_TEST_HOOKS={hook_mode}",
+        "-DOB_ENABLE_STANDBY=OFF",
         f"-DCARGO={inputs.cargo}",
         f"-DRUST_TARGET_DIR={inputs.rust_target_dir}",
     )

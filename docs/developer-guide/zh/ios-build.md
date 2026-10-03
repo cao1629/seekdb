@@ -1,5 +1,7 @@
 # iPhone 交叉编译（实验阶段）
 
+2026-10-04：真机执行发现 Rust continuation 的进程状态依赖，以及 production 隔离目录默认 standby 导致缺失 iOS gRPC 链接。现使 continuation 在同次调用中准备 panic，并统一显式 `OB_ENABLE_STANDBY=OFF`；29 项 registry 和 44 项构建调度回归通过，修复后完整矩阵待重跑。
+
 2026-10-03：已 rebase 到上游 `76ce86fad`；修复前新 HEAD 的 272 项 host mysqltest、305 项契约回归通过。真机 smoke 断言通过，但测试 UUID 脱敏导致主机证据校验失败，现已修复，完整矩阵待重跑。
 
 可设置 `SEEKDB_IPHONE_HOST_JOBS=4 ./run.iphone.test.sh` 并行运行 host gate；每个 slice 使用独立数据库和端口，最终仍严格核对全部 272 项覆盖。需为同时运行的数据库实例预留内存。默认 1，支持 1 至 4。

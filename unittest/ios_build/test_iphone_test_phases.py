@@ -218,6 +218,8 @@ class IphoneTestPhasesTest(unittest.TestCase):
             def execute(command, timeout_seconds):
                 """Record commands and synthesize safe validated suite evidence."""
                 commands.append((tuple(command), timeout_seconds))
+                if "--target" in command:
+                    self.assertIn("-DOB_ENABLE_STANDBY=OFF", command)
                 if str(SCRIPT_DIR / "run_device_suite.py") not in command:
                     return runner.SanitizedProcessResult(0, "", "")
                 case_id = command[command.index("--expected-case") + 1]

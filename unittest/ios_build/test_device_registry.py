@@ -21,6 +21,42 @@ RUNNER = IOS / "run_device_suite.py"
 class DeviceRegistryNativeContractTests(unittest.TestCase):
     """Compile a host harness around the portable registry implementation."""
 
+    def test_rust_continuation_runs_in_a_fresh_process(self):
+        """Require the continuation adapter to prepare its own panic boundary."""
+        source = r'''
+            #define SQL_NIO_IOS_DEVICE_TESTS
+            #include "rust_device_tests.cpp"
+            static bool contained = false;
+            /** Return the fixed test registry size. */
+            uint32_t nio_device_test_count() { return 5; }
+            /** Populate only the metadata needed by the continuation case. */
+            uint32_t nio_device_test_case_info(uint32_t index,
+                NioDeviceTestCaseInfo *output, size_t) {
+              std::strcpy(output->id, index == 3 ?
+                  "ios.rust.device.intentional_panic" :
+                  "ios.rust.device.panic_continuation");
+              return NIO_DEVICE_TEST_OK;
+            }
+            /** Fail continuation unless a panic was caught in this process. */
+            uint32_t nio_device_test_run(uint32_t index,
+                NioDeviceTestResult *output, size_t) {
+              *output = {};
+              if (index == 3) {
+                contained = true;
+                return NIO_DEVICE_TEST_PANIC;
+              }
+              return contained ? NIO_DEVICE_TEST_OK : NIO_DEVICE_TEST_FAILED;
+            }
+            /** Run only continuation from a clean process state. */
+            int main(int, char **argv) {
+              return seekdb::ios_test::run_device_suite(
+                  seekdb::ios_test::make_rust_device_registry(), "rust",
+                  "ios.rust.device.panic_continuation", "run-1", "build-1", argv[1]);
+            }
+        '''
+        with tempfile.TemporaryDirectory() as temp:
+            self._compile_and_run(source, [str(Path(temp) / "evidence.jsonl")])
+
     def test_registry_is_stable_rejects_duplicates_and_filters_suites(self):
         """Require stable IDs, duplicate rejection, timeout metadata, and filters."""
         source = textwrap.dedent(r'''
@@ -153,7 +189,7 @@ class DeviceRegistryNativeContractTests(unittest.TestCase):
         binary = temp_path / "harness"
         harness.write_text(source)
         subprocess.run(
-            ["clang++", "-std=c++17", "-Wall", "-Wextra", "-Werror", "-I", str(IOS),
+            ["clang++", "-std=c++17", "-Wall", "-Wextra", "-Werror", "-I", str(IOS), "-I", str(ROOT / "rust/sql-nio/include"),
              str(harness), str(IOS / "device_test_registry.cpp"),
              str(IOS / "device_evidence.cpp"), "-o", str(binary)],
             check=True, capture_output=True, text=True,

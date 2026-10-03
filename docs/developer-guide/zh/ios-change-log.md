@@ -568,3 +568,10 @@ python3 deps/ios-build/build.py --jobs 4 vsag
 - 旧开发描述文件于 2026-09-28 失效，通过现有 Xcode 配置更新，设备端由用户解锁并信任；凭证与设备标识不进入 Git。
 - 真机 registry smoke 的断言成功，主机证据校验发现测试 UUID 被隐私脱敏替换。普通 device suite 改用随机 32 位十六进制测试 ID，保留旧 UUID 文件名读取兼容性；设备 UUID 仍正常脱敏。增加覆盖实际 SanitizedProcessResult 到 validator 的回归测试。
 - 新增 `SEEKDB_IPHONE_HOST_JOBS=1..4`，使用已有 host slice 协议并行运行精确覆盖；各 slice 使用独立数据库目录与端口，并在成功或失败后清理。默认仍为单任务。补充并发隔离、失败清理测试。修复后完整真机验证待执行。
+
+### 2026-10-04：独立 Rust continuation 与 production standby 配置
+
+- `77f285fe5` 的 4 路 host gate 严格合并后 272 项全部通过；307 项 Python 回归通过。iPhone registry smoke、普通 SQL 同目录两轮重启、4 项 C++ device equivalent 及其 SQL 重启 gate 通过。Rust 5 项中 4 项通过。
+- `panic_continuation` 依赖前一进程的 AtomicBool，但 runner 每 case 启动独立 App；C++ adapter 现于同次调用中先验证 intentional panic，再验证 continuation，保持两项独立注册。增加 fresh-process 编译运行回归。
+- production isolation 的独立目录默认开启 standby，完整编译后因缺少 iOS gRPC 静态库链接失败。统一 build command 显式 `OB_ENABLE_STANDBY=OFF`，与已验证的 iOS 引擎配置一致；不将缺失依赖或未执行隔离视为通过。
+- 修复后完整验证待执行。
