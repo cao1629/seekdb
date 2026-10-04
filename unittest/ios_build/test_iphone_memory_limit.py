@@ -4,6 +4,8 @@ import json
 from pathlib import Path
 import sys
 import types
+import tempfile
+from unittest import mock
 import unittest
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -37,6 +39,47 @@ class MemoryLimitEvidenceTest(unittest.TestCase):
                 pressure.jetsam_victim(self.report(**changes), 123)
         with self.assertRaises(ValueError):
             pressure.jetsam_victim(self.report().replace('298', '309'), 123)
+
+    def test_unverified_termination_still_recovers_without_claiming_success(self):
+        """Retain failure and verify recovery even when natural death lacks Jetsam proof."""
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            output = root / "evidence"
+            configuration = types.SimpleNamespace(device="private-device", bundle_id="org.probe")
+            selected = types.SimpleNamespace(identifier="private-device", profile_identifier="profile")
+
+            def stress_failure(options, round_id):
+                """Persist a partial sample, then simulate absent system termination proof."""
+                pressure.extended.save(options.output_dir / "evidence-memory-limit-progress.json", [])
+                raise RuntimeError("no matching report")
+
+            def recovery(options, round_id, previous, label):
+                """Model successful validated SQL recovery and provide its retained bytes."""
+                self.assertEqual(1, previous)
+                name = "evidence-recovery.jsonl"
+                (options.output_dir / name).write_text("complete recovery")
+                return {"state": "Stopped", "previous_runs": 1}, name
+
+            with mock.patch.object(pressure.sys, "argv", ["probe", "--output-dir", str(output)]), \
+                    mock.patch.object(pressure.cli, "REPOSITORY_ROOT", root), \
+                    mock.patch.object(pressure.cli, "source_commit", return_value="a"*40), \
+                    mock.patch.object(pressure.cli, "resolve_local_configuration", return_value=configuration), \
+                    mock.patch.object(pressure.cli, "discover_physical_devices", return_value=[]), \
+                    mock.patch.object(pressure.cli, "select_physical_device", return_value=selected), \
+                    mock.patch.object(pressure.dataclasses, "replace", return_value=configuration), \
+                    mock.patch.object(pressure.cli, "infer_signing_configuration", return_value=configuration), \
+                    mock.patch.object(pressure.phases, "prepare_test_app", return_value={}), \
+                    mock.patch.object(pressure, "stress", side_effect=stress_failure), \
+                    mock.patch.object(pressure.extended, "probe_pid", return_value=None), \
+                    mock.patch.object(pressure.extended, "launch") as launch, \
+                    mock.patch.object(pressure.extended, "sql_evidence", side_effect=recovery), \
+                    self.assertRaisesRegex(RuntimeError, "no matching report"):
+                pressure.main()
+            launch.assert_called_once()
+            result = json.loads((output / "evidence-memory-limit.json").read_text())
+            self.assertEqual("not-verified", result["outcome"])
+            self.assertTrue(result["recovery_verified"])
+            self.assertIn("evidence-recovery.jsonl", result["evidence_sha256"])
 
     def test_stale_and_impossible_pressure_checkpoints_are_rejected(self):
         """Require run/build/database binding and correctly aligned bounded allocation steps."""

@@ -624,3 +624,10 @@ python3 deps/ios-build/build.py --jobs 4 vsag
 - 新增 `run_iphone_memory_limit.py`，准备当前源码 test App，读取 device systemCrashLogs 前后快照，要求新 bug_type=298 报告中的 exact-owned PID/name 和真实 victim reason，保留脱敏指标及原报告 SHA256。仅进程消失或出现其他 App 报告不足以通过；到达上限也不算达到 OOM/Jetsam。
 - 自然 ENOMEM 分配失败与 Jetsam 分开记录；终止后以同目录新进程执行完整 SQL、验证 previous_runs=1 和正常停止。原始系统报告可能包含其他 App/设备信息，解析后不进入跟踪文档或 Git。
 - 新增三个证据回归：精确 victim/系统页大小、错误 PID/未被杀进程/非 Jetsam 拒绝、过期和不可能的压力进度拒绝；均通过。未改变设备全局内存设置、签名权限或普通 runner 默认矩阵；真机专项结果待运行。
+
+### 2026-10-04：极限首轮取证与前台保护
+
+- `dcae7218f` 首轮实际压力最后保留检查点：allocated=3355443200 bytes（3.125 GiB），phys_footprint=3501150520 bytes，os_proc_available_memory=38842056 bytes；目标进程自然退出，但等待窗口内 systemCrashLogs 没有新增匹配 Jetsam 报告，因此专项失败，不能将该退出认定为 OOM/Jetsam。首轮同目录新进程完整 SQL 通过，previous_runs=1，正常停止。
+- 该版本本机完整回归 317/317。第二轮 Console 实时日志证实 App 在启动后被迅速切后台，压力线程暂停；已通过 run-bound stop URL 请求正常停止，不将手动停止计为极限结果。
+- 新增每轮写页前的 main-thread UIKit 前台检查；离开前台记录 background-cancelled，释放 mappings，不能计为 OOM/Jetsam。失败路径现在也尝试同目录 SQL 恢复并保存 not-verified 报告，再返回非零。设备未保持前台时不自动反复加压。
+- 原始系统日志归档要求 root，本机 sudo 非交互不可用；已尝试 CoreDevice diagnostics 和现有 libimobiledevice，前者返回 DiagnoseError、后者未发现可用设备，未改权限或上传诊断。需要将解锁 iPhone 保持在专用 Probe 前台后继续专项。

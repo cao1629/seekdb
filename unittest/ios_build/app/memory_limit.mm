@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 #include "memory_limit.h"
 #include "seekdb_ios.h"
+#import <UIKit/UIKit.h>
 #include <mach/mach.h>
 #include <os/proc.h>
 #include <sys/mman.h>
@@ -15,6 +16,16 @@
 namespace {
 constexpr size_t CHUNK = 64UL * 1024 * 1024;
 constexpr size_t CEILING = 8UL * 1024 * 1024 * 1024;
+
+/** Read UIKit state on its owning thread before each resident-pressure step. */
+bool foreground()
+{
+  __block BOOL active = NO;
+  dispatch_sync(dispatch_get_main_queue(), ^{
+    active = UIApplication.sharedApplication.applicationState == UIApplicationStateActive;
+  });
+  return active;
+}
 
 /** Persist one complete checkpoint atomically and sync it before touching more pages. */
 bool checkpoint(NSString *path, NSMutableDictionary *value, NSString *state,
@@ -31,6 +42,7 @@ bool checkpoint(NSString *path, NSMutableDictionary *value, NSString *state,
   value[@"available_bytes"] = @(os_proc_available_memory());
   value[@"allocation_errno"] = @(allocationError);
   value[@"timestamp"] = @([[NSDate date] timeIntervalSince1970]);
+  value[@"foreground"] = @(foreground());
   NSData *data = [NSJSONSerialization dataWithJSONObject:value options:0 error:nil];
   if (data == nil || ![data writeToFile:path options:NSDataWritingAtomic error:nil]) return false;
   const int file = open(path.fileSystemRepresentation, O_RDONLY);
@@ -72,6 +84,10 @@ void run_memory_limit_probe(NSString *documents, NSString *runID, NSString *data
   if (!checkpoint(path, value, @"ready", 0, 0)) return;
   while (allocated < CEILING && seekdb_ios_get_state() == SEEKDB_IOS_RUNNING) {
     @autoreleasepool {
+      if (!foreground()) {
+        value[@"outcome"] = @"background-cancelled";
+        break;
+      }
       if (!checkpoint(path, value, @"allocating", allocated, allocated + CHUNK)) break;
       void *mapping = mmap(nullptr, CHUNK, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1, 0);
       if (mapping == MAP_FAILED) {

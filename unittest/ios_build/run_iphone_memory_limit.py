@@ -22,6 +22,10 @@ REASONS = {'per-process-limit', 'highwater', 'vm-pageshortage',
            'vm-thrashing', 'vm-compressor-thrashing', 'vm-compressor-space-shortage'}
 
 
+class ForegroundRequired(RuntimeError):
+    """Describe a physical foreground requirement without treating cancellation as OOM."""
+
+
 def jetsam_victim(content, pid):
     """Return allowlisted metrics only when a Jetsam report names the exact owned victim."""
     decoder = json.JSONDecoder()
@@ -131,6 +135,8 @@ def stress(options, round_id):
                     samples.append(value)
                     extended.save(options.output_dir / 'evidence-memory-limit-progress.json', samples)
                 if value['state'] == 'released':
+                    if value['outcome'] == 'background-cancelled':
+                        raise ForegroundRequired('keep the unlocked device in SeekDB Probe')
                     if value['outcome'] == 'allocation-failed' and value['allocation_errno'] == errno.ENOMEM:
                         extended.status(options, round_id, lambda item: item.get('state') == 'Stopped')
                         return {'outcome': 'allocation-enomem', 'samples': samples, 'initial_status': running}
@@ -171,19 +177,38 @@ def main():
     options.device, options.bundle_id = configuration.device, configuration.bundle_id
     options.build_id = source[:12]
     options.data_name = f'memory-limit-{run_id}'
-    result = stress(options, run_id)
+    failure = None
+    try:
+        result = stress(options, run_id)
+    except (ValueError, RuntimeError, KeyError, OSError, subprocess.TimeoutExpired) as error:
+        failure = error
+        result = {'outcome': 'not-verified', 'failure_category': type(error).__name__}
+        progress = options.output_dir / 'evidence-memory-limit-progress.json'
+        if progress.is_file():
+            result['samples'] = json.loads(progress.read_text())
+        extended.save(options.output_dir / 'evidence-memory-limit.json', {
+            **result, 'run_id': run_id, 'source_commit': source,
+            'data_name': options.data_name, 'recovery_verified': False})
     recovered_id = uuid.uuid4().hex
+    if extended.probe_pid(options) is not None:
+        extended.command(options, ['device', 'process', 'launch', '--payload-url',
+                                  f'seekdb-probe://stop/{run_id}', options.bundle_id])
+        extended.status(options, run_id, lambda item: item.get('state') == 'Stopped')
     extended.launch(options, recovered_id, 1)
     recovered, sql_file = extended.sql_evidence(options, recovered_id, 1, 'memory-limit-recovered')
-    names = ['evidence-memory-limit-progress.json', sql_file]
+    names = [sql_file]
+    if (options.output_dir / 'evidence-memory-limit-progress.json').is_file():
+        names.append('evidence-memory-limit-progress.json')
     if result['outcome'] == 'jetsam':
         names.append('evidence-memory-limit-jetsam.json')
     result.update(run_id=run_id, source_commit=source, data_name=options.data_name,
         device_hash=hashlib.sha256(options.device.encode()).hexdigest(),
-        recovered=recovered, evidence_sha256={name: extended.digest(options.output_dir / name) for name in names},
+        recovered=recovered, recovery_verified=True, evidence_sha256={name: extended.digest(options.output_dir / name) for name in names},
         limitations=['one foreground run on the current device/OS state; not a universal fixed limit',
                      'anonymous resident pressure with a running engine; not solely seekdb allocator usage'])
     extended.save(options.output_dir / 'evidence-memory-limit.json', result)
+    if failure is not None:
+        raise failure
     print(json.dumps({'run_result': 0, 'outcome': result['outcome'],
                       'last_completed_allocation_bytes': result['samples'][-1]['allocated_bytes'],
                       'recovered_previous_runs': recovered['previous_runs']}))
