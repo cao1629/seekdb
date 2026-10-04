@@ -631,3 +631,9 @@ python3 deps/ios-build/build.py --jobs 4 vsag
 - 该版本本机完整回归 317/317。第二轮 Console 实时日志证实 App 在启动后被迅速切后台，压力线程暂停；已通过 run-bound stop URL 请求正常停止，不将手动停止计为极限结果。
 - 新增每轮写页前的 main-thread UIKit 前台检查；离开前台记录 background-cancelled，释放 mappings，不能计为 OOM/Jetsam。失败路径现在也尝试同目录 SQL 恢复并保存 not-verified 报告，再返回非零。设备未保持前台时不自动反复加压。
 - 原始系统日志归档要求 root，本机 sudo 非交互不可用；已尝试 CoreDevice diagnostics 和现有 libimobiledevice，前者返回 DiagnoseError、后者未发现可用设备，未改权限或上传诊断。需要将解锁 iPhone 保持在专用 Probe 前台后继续专项。
+
+### 2026-10-04：前台保护构建验证与当前专项状态
+
+- `d4876815c` 当前 App 编译、签名和安装成功，完整本机回归 318/318。第二轮停止 URL 后状态停在 Stopping，未取得正常停机终态；后续安装完成时旧 Probe 已不在进程列表。尝试确认所有权后退出目标，但没有匹配存活 PID，未发送人为终止信号。第二轮不能计为 OOM/Jetsam 或干净停机通过。
+- 首轮脱敏汇总 `iphone_test/memory-limit/2026-10-04-first/evidence-memory-limit-first-result.json` 绑定实际被测 `dcae7218f`、压力样本和完整恢复 SQL 摘要；outcome=not-verified，recovery_verified=true。第二轮和当前保护版本不能沿用首轮峰值作验收证明。
+- OOM/Jetsam 专项尚未完成；已请求将解锁 iPhone 保持在 SeekDB Probe 前台。当前没有继续占用设备内存的 Probe，Console 临时设备日志流已停止。没有修改设备全局设置或签名权限。

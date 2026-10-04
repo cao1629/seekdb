@@ -527,4 +527,12 @@ python3 unittest/ios_build/run_iphone_memory_limit.py \
 ENOMEM 返回、系统 Jetsam 和达到安全上限分别判定；上限或超时不计为极限通过。
 系统事件必须为本轮新 Jetsam 报告、明确目标 PID/SeekDBProbe victim reason；恢复要求
 同数据库新进程完整 SQL 和干净停止。报告只给本轮设备/OS/前台状态下的观测极限，
-不宣称固定可用上限或 seekdb allocator 自身全部用量。新增专项尚待真机执行结果。
+不宣称固定可用上限或 seekdb allocator 自身全部用量。极限专项当前结果：首轮最后观测 allocated=3.125 GiB、footprint 约 3.26 GiB，进程自然
+退出但没有取得匹配新 Jetsam 报告，因此 OOM/Jetsam **未验证**；同目录 SQL 恢复及
+previous_runs=1、正常停机已验证。第二轮被快速后台切换打断，不能作为极限结果。
+
+`d4876815c` 增加离开前台即释放压力保护，以及失败轮次也保留恢复报告；当前 App
+编译、签名和安装成功，完整本机回归 318/318。需要保持解锁设备在 SeekDB Probe
+前台后继续专项。首轮脱敏报告为
+`iphone_test/memory-limit/2026-10-04-first/evidence-memory-limit-first-result.json`。
+这不改变此前完整矩阵所验证的 `6deac1205bd0` 范围及其有界内存结论。
