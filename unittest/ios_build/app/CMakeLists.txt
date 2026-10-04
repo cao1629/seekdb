@@ -10,6 +10,7 @@ if(NOT EXISTS "${ENGINE_LINK_RESPONSE}" OR NOT IS_DIRECTORY "${ENGINE_BUILD_ROOT
 endif()
 add_executable(SeekDBProbe MACOSX_BUNDLE
   main.mm
+  memory_limit.mm
   ../extended_device_tests.cpp
   ../cpp_device_tests.cpp
   ../device_evidence.cpp

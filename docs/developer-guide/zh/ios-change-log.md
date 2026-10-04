@@ -617,3 +617,10 @@ python3 deps/ios-build/build.py --jobs 4 vsag
 - production Rust 符号隔离证据已生成并由 final-matrix 检查 SHA256；全部前序用例有非空证据，审计通过。报告为 `iphone_test/2026-10-04/summary.md`、summary.json、checkpoint.json、evidence-*，属于补充证据。文档提交保留实际已验证源码身份。
 - 本轮 host `drop_vector_index` 的 PURGE RECYCLEBIN 等待约 1000 秒后返回；未跳过、缩减或伪造覆盖。该等待发生在 macOS gate，不是设备测试失败。
 - 锁屏/解锁仍需人工验收；8/32 MiB 触页压力不证明 OOM/Jetsam 极限或 RSS 全量回落。272 项 host 结果不归类为真机；24 个节点也不代表仓库所有测试已移植。
+
+### 2026-10-04：显式 OOM/Jetsam 极限专项实现
+
+- 新增 App `memory_limit.mm`，仅在 hook-enabled、普通持久化 SQL 成功且 `SEEKDB_PROBE_MEMORY_LIMIT_TEST=1` 时运行。逐步 mmap 64 MiB、逐字写入变化数据，累计上限 8 GiB；原子保存并 fsync 运行/产物/数据库身份、已完成及正在尝试的分配量、内核 phys_footprint、os_proc_available_memory、页大小和错误码。允许自然系统终止，不通过人为 SIGKILL 制造 Jetsam。
+- 新增 `run_iphone_memory_limit.py`，准备当前源码 test App，读取 device systemCrashLogs 前后快照，要求新 bug_type=298 报告中的 exact-owned PID/name 和真实 victim reason，保留脱敏指标及原报告 SHA256。仅进程消失或出现其他 App 报告不足以通过；到达上限也不算达到 OOM/Jetsam。
+- 自然 ENOMEM 分配失败与 Jetsam 分开记录；终止后以同目录新进程执行完整 SQL、验证 previous_runs=1 和正常停止。原始系统报告可能包含其他 App/设备信息，解析后不进入跟踪文档或 Git。
+- 新增三个证据回归：精确 victim/系统页大小、错误 PID/未被杀进程/非 Jetsam 拒绝、过期和不可能的压力进度拒绝；均通过。未改变设备全局内存设置、签名权限或普通 runner 默认矩阵；真机专项结果待运行。

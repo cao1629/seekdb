@@ -511,3 +511,20 @@ mysqltest 的 272 项覆盖在报告中继续明确归为 host-only。
 cleanup 等待链。现已在 in-process 停机入口提前取消 DDL launcher、stop/wait loader，
 再关闭 schema/SQL/runtime；native 锁持有回归、当前源码真机全阶段与最终矩阵均已通过。
 此前 `86c9aafecc9f` 的专项阶段已通过，但完整轮次仍 incomplete，不能改写为通过。
+
+## 显式 OOM/Jetsam 极限专项
+
+这是单独的自然终止测试，普通 `./run.iphone.test.sh` 不默认执行。保持专用 SeekDB Probe
+前台与设备解锁；脚本准备当前源码和签名产物，数据库目录每轮独立。运行配置沿用
+`SEEKDB_IPHONE_DEVICE`、`SEEKDB_IPHONE_TEAM`、`SEEKDB_IPHONE_BUNDLE_ID` 等本机环境。
+
+```bash
+python3 unittest/ios_build/run_iphone_memory_limit.py \
+  --output-dir iphone_test/memory-limit/<unique-run-directory>
+```
+
+引擎启动并完成持久化 SQL 后，以 64 MiB 步长实际写入匿名内存，最高 8 GiB。自然
+ENOMEM 返回、系统 Jetsam 和达到安全上限分别判定；上限或超时不计为极限通过。
+系统事件必须为本轮新 Jetsam 报告、明确目标 PID/SeekDBProbe victim reason；恢复要求
+同数据库新进程完整 SQL 和干净停止。报告只给本轮设备/OS/前台状态下的观测极限，
+不宣称固定可用上限或 seekdb allocator 自身全部用量。新增专项尚待真机执行结果。

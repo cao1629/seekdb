@@ -5,6 +5,7 @@
 #include <cstring>
 #include "../device_test_registry.h"
 #include "../sql_probe.h"
+#include "memory_limit.h"
 
 /** Host one engine lifecycle and persist observable status inside the sandbox. */
 @interface ProbeDelegate : UIResponder <UIWindowSceneDelegate>
@@ -166,6 +167,17 @@
     NSString *report = [self.documents stringByAppendingPathComponent:@"sql-probe-results.jsonl"];
     int result = seekdb_ios_probe_sql(report.fileSystemRepresentation, &previous);
     NSLog(@"SQL probe returned %d, previous runs %lld", result, (long long)previous);
+    const BOOL memoryLimit = result == 0 &&
+        [NSProcessInfo.processInfo.environment[@"SEEKDB_PROBE_MEMORY_LIMIT_TEST"] isEqualToString:@"1"] &&
+        strcmp(seekdb_ios_get_hook_mode(), "enabled") == 0;
+    if (memoryLimit) {
+      dispatch_sync(dispatch_get_main_queue(), ^{
+        self.sqlResult = @(result);
+        self.previousRuns = @(previous);
+        [self refreshStatus];
+      });
+      run_memory_limit_probe(self.documents, self.runID, self.dataName);
+    }
     dispatch_async(dispatch_get_main_queue(), ^{
       self.sqlResult = @(result);
       self.previousRuns = result == 0 ? @(previous) : nil;
