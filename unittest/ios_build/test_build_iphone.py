@@ -41,6 +41,11 @@ elif name == 'cmake': sys.exit(int(os.environ.get('CMAKE_EXIT', '0')))
         stub.chmod(0o755)
         for name in ("cmake", "cargo", "rustup", "xcrun"):
             (binaries / name).symlink_to(stub)
+        self.headers = self.root / "deps/3rd/usr/local/oceanbase/deps/devel"
+        for header in ("grpcpp/grpcpp.h", "rapidjson/error/en.h", "boost/version.hpp"):
+            path = self.headers / "include" / header
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.touch()
         self.log = self.root / "calls.jsonl"
         self.env = dict(os.environ, PATH=f"{binaries}:{os.environ['PATH']}",
                         CARGO=str(binaries / "cargo"), RUSTUP=str(binaries / "rustup"),
@@ -102,6 +107,30 @@ elif name == 'cmake': sys.exit(int(os.environ.get('CMAKE_EXIT', '0')))
         self.assertIn("'--simulator'", result.stdout)
         self.assertIn("'--jobs', '3'", result.stdout)
         self.assertFalse(self.log.exists())
+
+    def test_default_uses_existing_public_headers(self):
+        """Missing iOS headers must use host headers while retaining iOS libraries."""
+        result = self.run_script("--configure-only")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        call = next(call for call in self.calls() if call[0] == "cmake")
+        self.assertIn(f"-DSEEKDB_IOS_HEADER_PREFIX={self.headers}", call)
+        self.assertIn(f"-DDEP_DIR={self.root}/deps/ios/iphoneos/devel", call)
+
+    def test_complete_ios_headers_take_precedence(self):
+        """A complete target prefix must avoid the host-header fallback."""
+        target = self.root / "deps/ios/iphoneos/devel"
+        shutil.copytree(self.headers, target)
+        result = self.run_script("--configure-only")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        call = next(call for call in self.calls() if call[0] == "cmake")
+        self.assertIn(f"-DSEEKDB_IOS_HEADER_PREFIX={target}", call)
+
+    def test_missing_explicit_headers_fail_before_configuration(self):
+        """An invalid explicit prefix must fail clearly instead of silently falling back."""
+        result = self.run_script("--headers-prefix", str(self.root / "missing"))
+        self.assertEqual(result.returncode, 2)
+        self.assertIn("missing dependency headers", result.stderr)
+        self.assertFalse(any(call[0] == "cmake" for call in self.calls()))
 
     def test_invalid_arguments_fail_before_tools(self):
         """Invalid job counts must fail without initializing or compiling anything."""

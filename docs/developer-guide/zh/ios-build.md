@@ -1,5 +1,58 @@
 # iPhone 交叉编译（实验阶段）
 
+## 2026-10-06：默认脚本修复与真机操作指南
+
+直接运行 `./build.iphone.sh` 曾在编译阶段报 `grpcpp/grpcpp.h` 和 `rapidjson/error/en.h` 缺失：默认 iOS 依赖前缀尚未包含完整公共头文件。现在优先选择包含 gRPC、RapidJSON 和 Boost 头文件的 iOS 前缀，否则使用仓库已有的 `deps/3rd/usr/local/oceanbase/deps/devel` 公共头文件。显式 `--headers-prefix` 优先；缺少上述关键头文件时在 CMake 前给出具体诊断。此检查不是完整依赖验证，其他缺失仍可能由编译报告。`DEP_DIR` 始终为 iOS 库目录，公共头文件回退不会添加 macOS 库路径。
+
+首次环境需安装完整 Xcode、CMake、rustup，完成 Xcode 许可和组件初始化。公共头文件目录不存在时，需先按仓库依赖初始化流程准备头文件，或通过 `--headers-prefix PATH` 指定完整头文件前缀；`--init` 只安装宿主 parser 工具及固定 Rust target，不准备完整公共头文件。所有下载和产物应留在仓库内。
+
+```bash
+export DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer
+./build.iphone.sh --init --configure-only
+./build.iphone.sh --deps-only --jobs 4
+./build.iphone.sh --jobs 4 --target seekdb_ios_link_check
+```
+
+默认 `./build.iphone.sh` 只生成引擎静态库；安装前需构建上面的完整链接目标。安装形式是包含 seekdb 的 UIKit 测试 App，数据库运行于 App 沙箱。Xcode Settings → Accounts 登录开发账号，使用自己的 10 位 Team ID 和唯一 Bundle ID；将 iPhone 连接、信任 Mac，启用「设置 → 隐私与安全性 → 开发者模式」并按提示重启，安装和启动时保持解锁。
+
+```bash
+xcrun devicectl list devices
+python3 deps/ios-build/build_app.py --team YOURTEAMID \
+  --device YOUR_DEVICE_UDID --bundle-id org.seekdb.iosprobe.yourname --install
+```
+
+如提示开发者未信任，在「设置 → 通用 → VPN 与设备管理」信任相应开发者。签名过期后重新构建并安装；证书和私钥由 Apple 工具管理，不能提交仓库。
+
+真机 SQL 测试使用本分支已存在的通用 SQL probe，不依赖其他 worktree 的测试脚本：
+
+```bash
+xcrun devicectl device process launch --device YOUR_DEVICE_UDID \
+  --environment-variables '{"SEEKDB_PROBE_DATA_NAME":"ios-test-001","SEEKDB_PROBE_AUTO_STOP":"1"}' \
+  org.seekdb.iosprobe.yourname
+```
+
+保持 App 前台，等待界面显示 `Stopped`。自动停止可能需要数十秒。然后下载结果：
+
+```bash
+mkdir -p build_ios_arm64/device-test
+xcrun devicectl device copy from --device YOUR_DEVICE_UDID \
+  --domain-type appDataContainer --domain-identifier org.seekdb.iosprobe.yourname \
+  --source Documents/probe-status.json \
+  --destination build_ios_arm64/device-test/probe-status.json
+xcrun devicectl device copy from --device YOUR_DEVICE_UDID \
+  --domain-type appDataContainer --domain-identifier org.seekdb.iosprobe.yourname \
+  --source Documents/sql-probe-results.jsonl \
+  --destination build_ios_arm64/device-test/sql-probe-results.jsonl
+```
+
+验收必须同时满足：本次新状态为 `Stopped/result=0`、`sql_verified=true`、`sql_result=0`，本次 JSONL 最终记录为 `complete=true/result=0`。检查状态时间、`data_name` 和本次 JSONL，避免把上一次结果当作本次成功。此套件覆盖通用表达式、DDL/DML、JSON/BLOB/数组、事务提交回滚等；不代表全量 SQL、向量或所有生命周期场景已验证。
+
+持久化测试：正常停止后关闭旧 App 进程，再用完全相同的 `SEEKDB_PROBE_DATA_NAME` 启动；确认 `previous_runs` 连续递增，且每次 SQL 和停止均通过。同一进程不支持再次启动引擎。不要强制终止正在运行的引擎并算作干净停止，也不要每次换数据目录并算作恢复测试。测试仅使用专用数据目录和 `ios_probe` 表，不放用户业务数据。
+
+当前 `codex/ios-layered-validation` 分支根目录已包含 `run.iphone.test.sh`，入口依赖 `unittest/ios_build/run_all_iphone_tests.py`。本次已把 master 工作区的未提交修复移植到该分支，并将当前 checkout 切换到该分支；原 worktree 保留在原提交的 detached HEAD。可在当前仓库根目录执行 `./run.iphone.test.sh --help` 查看分层测试用法，正式测试的设备、签名配置与范围见本页后续章节。旧 worktree 的构建和测试证据仍对应其原源码，不能作为本次修改的真机验收。
+
+宿主验证命令为 `python3 -m unittest discover -s unittest/ios_build -v`，只验证脚本和链接参数，不代替真机执行。本轮最终版本 `./build.iphone.sh` 已实际构建 `oceanbase_static` 成功，退出码为 0；14 项宿主测试通过。本轮没有重新签名安装或执行真机 SQL。当前修复没有更改手机系统设置或签名配置。
+
 ## 2026-10-04 真机执行结果
 
 已验证源码提交 `6deac1205bd0f2c1c1b7d7e5902e23c5a4bc3401`（已 rebase 到上游 `76ce86fad`），运行 ID `04e24c32-b9a4-4a6d-9083-7d27105b04be`。完整入口 `./run.iphone.test.sh --restart` 成功退出（exit=0）；设置 `SEEKDB_IPHONE_HOST_JOBS=4`，设备和签名配置只在本机进程中提供。

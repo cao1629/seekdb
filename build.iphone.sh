@@ -1,6 +1,20 @@
 #!/usr/bin/env bash
 # Copyright (c) 2026 OceanBase.
 # SPDX-License-Identifier: Apache-2.0
+# Build, install, and test on an iPhone:
+# 1. Use macOS with full Xcode, CMake, and rustup installed.
+#    Dependencies: ./build.iphone.sh --deps-only
+#    Build:       ./build.iphone.sh --init --target seekdb_ios_link_check
+# 2. Sign in to Xcode > Settings > Accounts. Connect and unlock the iPhone,
+#    trust this Mac, and enable Developer Mode on the phone.
+#    Install the seekdb test app (replace the three placeholders):
+#    python3 deps/ios-build/build_app.py --team YOURTEAMID \
+#      --device YOUR_DEVICE_UDID --bundle-id YOUR_BUNDLE_ID --install
+# 3. Open SeekDB Probe on the phone; SQL tests run automatically.
+#    Wait for SQL success, then tap Stop engine and wait for Stopped.
+#    Close and reopen the app; Previous runs should increase.
+# The default build produces libraries only. Setup, device IDs, test results,
+# and automated testing details: docs/developer-guide/zh/ios-build.md
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -32,7 +46,7 @@ Experimental seekdb iOS ARM64 build. This does not package or sign an iPhone app
   --target NAME           CMake target (default: oceanbase_static)
   --build-dir PATH        Repository-local CMake build directory
   --deps-prefix PATH      iOS-built dependencies (default: deps/ios/<sdk>/devel)
-  --headers-prefix PATH   Optional header-only prefix; libraries still come from --deps-prefix
+  --headers-prefix PATH   Header prefix (auto: iOS prefix, then existing host headers)
   --deployment-target V   Minimum iOS version (default: 18.0)
   -h, --help              Show this help
 
@@ -44,6 +58,8 @@ Examples:
 Set DEVELOPER_DIR to a full Xcode Developer directory if needed.
 CARGO and RUSTUP must point to their corresponding Cargo and rustup executables.
 Rust caches, build output, and logs default to directories within this checkout.
+For signing, installation, SQL testing, and persistence checks, see the workflow
+comments at the top of this script and docs/developer-guide/zh/ios-build.md.
 Host dependency initialization supplies parser tools; its macOS libraries cannot
 be linked into iOS. The selected dependency prefix must contain iOS libraries.
 EOF
@@ -141,6 +157,29 @@ prepare_tools() {
     grep -qx "$RUST_TARGET" || fail "missing $RUST_TARGET; run with --init"
 }
 
+# Select complete public headers without adding host libraries to the iOS link path.
+prepare_headers() {
+  DEPS_PREFIX="${DEPS_PREFIX:-$ROOT/deps/ios/$SDK/devel}"
+  local host_prefix="$ROOT/deps/3rd/usr/local/oceanbase/deps/devel"
+  local candidate header missing
+  if [[ -n "$HEADERS_PREFIX" ]]; then
+    candidate="$HEADERS_PREFIX"
+  elif [[ -f "$DEPS_PREFIX/include/grpcpp/grpcpp.h" &&
+          -f "$DEPS_PREFIX/include/rapidjson/error/en.h" &&
+          -f "$DEPS_PREFIX/include/boost/version.hpp" ]]; then
+    candidate="$DEPS_PREFIX"
+  else
+    candidate="$host_prefix"
+  fi
+  missing=""
+  for header in grpcpp/grpcpp.h rapidjson/error/en.h boost/version.hpp; do
+    [[ -f "$candidate/include/$header" ]] || missing="$missing $header"
+  done
+  [[ -z "$missing" ]] || fail "missing dependency headers:$missing; provide --headers-prefix PATH with complete public headers (see docs/developer-guide/zh/ios-build.md)"
+  HEADERS_PREFIX="$candidate"
+  printf '[build.iphone.sh] headers=%s\n' "$HEADERS_PREFIX"
+}
+
 # Configure the engine and optionally compile, preserving failure logs in the build tree.
 build_engine() {
   DEPS_PREFIX="${DEPS_PREFIX:-$ROOT/deps/ios/$SDK/devel}"
@@ -174,4 +213,5 @@ if [[ "$DEPS_ONLY" == true ]]; then
   exec python3 "$ROOT/deps/ios-build/build.py" "${DEPS_ARGS[@]}"
 fi
 prepare_tools
+prepare_headers
 build_engine

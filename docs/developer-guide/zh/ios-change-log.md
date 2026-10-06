@@ -637,3 +637,22 @@ python3 deps/ios-build/build.py --jobs 4 vsag
 - `d4876815c` 当前 App 编译、签名和安装成功，完整本机回归 318/318。第二轮停止 URL 后状态停在 Stopping，未取得正常停机终态；后续安装完成时旧 Probe 已不在进程列表。尝试确认所有权后退出目标，但没有匹配存活 PID，未发送人为终止信号。第二轮不能计为 OOM/Jetsam 或干净停机通过。
 - 首轮脱敏汇总 `iphone_test/memory-limit/2026-10-04-first/evidence-memory-limit-first-result.json` 绑定实际被测 `dcae7218f`、压力样本和完整恢复 SQL 摘要；outcome=not-verified，recovery_verified=true。第二轮和当前保护版本不能沿用首轮峰值作验收证明。
 - OOM/Jetsam 专项尚未完成；已请求将解锁 iPhone 保持在 SeekDB Probe 前台。当前没有继续占用设备内存的 Probe，Console 临时设备日志流已停止。没有修改设备全局设置或签名权限。
+
+## 2026-10-06：默认构建头文件选择与操作说明
+
+- 在 master checkout 直接运行 `./build.iphone.sh`，复现 gRPC 和 RapidJSON 头文件缺失，构建退出码为 2。根因是默认将尚不完整的 iOS 库前缀同时作为公共头文件前缀。
+- `build.iphone.sh` 优先采用完整 iOS 公共头文件，否则选择仓库已有公共头文件；显式前缀优先且缺失关键头文件时提前报错。库前缀和签名配置没有改变，无 CMake/引擎源码或系统环境设置变更。
+- 脚本新增英文注释，提供环境、完整链接、App 签名安装、SQL 结果下载、正常停止及同目录持久化测试；中文步骤同步到 `ios-build.md`。
+- 新增头文件回退、iOS 前缀优先、显式错误前缀回归测试。14 项 iOS Python 测试及 Bash 语法检查通过。在移植前的 master checkout，最终版本 `./build.iphone.sh` 实际运行退出码为 0，`oceanbase_static` 完整编译成功；日志位于 `build_ios_arm64/logs/default-build-verification.log`。本轮未执行 App 签名安装或真机 SQL，不以脚本测试和静态库编译代替设备验收。
+
+- 同日简化脚本头部为环境、构建、安装、手机测试三个步骤，详细参数和结果下载留在中文指南；补充说明分层测试 runner 位于 `codex/ios-layered-validation` 独立 worktree，尚未集成到当前 `master`。此次只修改注释和文档，Bash 语法及差异格式检查通过。
+
+- 随后将上述 4 个文件的未提交修改移植至 `codex/ios-layered-validation`，保留目标分支已有的独立构建目录选项、测试和历史文档；当前仓库切换到该分支，master 提交及其原工作区修改已恢复。原分层验证 worktree 保留原提交并切换为 detached HEAD。此轮没有重新执行完整引擎构建或真机测试。
+- 移植后构建脚本的 9 项回归测试通过（包含目标分支已有的隔离构建目录测试），两份 shell 语法检查及 `git diff --check` 通过。
+
+## 2026-10-06：本地 iOS 分支收敛
+
+- 以 `codex/ios-layered-validation` 为唯一 iOS 开发分支，保留 `master`。`codex/iphone-arm64-port` 和 `codex/ios-generic-validation-before-rebase` 均停在 `60ab0316d`；`codex/ios-before-upstream-20261003` 是上游同步前的 `1f852cfdb` 快照。
+- `git cherry` 确认上游同步前快照的 104 个提交、master 的 19 个提交在当前分支均有等价补丁；旧 ARM64 分支的 14 个提交中，13 个等价，初始构建提交 `1d600e19c` 对应当前分支的 `abf486d0d`。`git range-diff` 确认差异是适配上游 macOS 27、OpenMP、jemalloc 和 zstd 分支上下文，原 iOS 行为已保留，不重放旧版本覆盖新修复。`develop` 为当前分支祖先。
+- 本次头文件选择修复、精简注释、回归测试和操作说明纳入当前分支；原分支无额外待合并代码。删除其余四个本地分支，远端分支不变。删除前的全部本地分支历史及未提交补丁保存在 Git 目录 `branch-cleanup-backups/20261006-ios-consolidation/`，bundle 已验证可读；不清理旧 worktree 的构建产物和证据。
+- 分支收敛验证：当前目录 Python 3.14.2 的全套宿主测试共 321 项，7 项失败、1 项跳过；在未修改的 `afa921578` 原 worktree 上使用同一 Python 3.14.2，29 项 registry 测试的同一 6 项失败及 JSON 深度测试的同一 1 项失败均可复现，确认非本次修复引入。原提交使用 Python 3.9.6 的这 30 项测试通过；本次修改的 9 项构建脚本测试在 Python 3.14.2 和 3.9.6 下均通过。完整测试日志及基线复验日志已存入上述本地备份目录。本轮不宣称全套测试或真机测试通过，Python 3.14 兼容性问题保留待后续处理。
