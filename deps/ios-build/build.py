@@ -333,9 +333,60 @@ def build_icu(source, build, prefix, sdk, options, environment):
     run(["make", "install"], build, cross_env)
 
 
+
+PACKAGE_OUTPUTS = {
+    "zlib": ("lib/libz.a", "include/zlib.h"),
+    "openssl": ("lib/libssl.a", "lib/libcrypto.a", "include/openssl/ssl.h"),
+    "curl": ("lib/libcurl.a", "include/curl/curl.h"),
+    "abseil": ("lib/libabsl_*.a", "include/absl/base/config.h"),
+    "s2": ("lib/libs2.a", "include/s2/s2cell.h"),
+    "roaring": ("lib/libroaring.a", "include/roaring/roaring.h"),
+    "lzma": ("lib/liblzma.a", "include/lzma.h"),
+    "libxml2": ("lib/libxml2.a", "include/libxml2/libxml/parser.h"),
+    "protobuf-c": ("lib/libprotobuf-c.a", "include/protobuf-c/protobuf-c.h"),
+    "sqlite": ("lib/sqlite/libsqlite3.a", "include/sqlite3.h"),
+    "icu": ("lib/libicuuc.a", "lib/libicui18n.a", "lib/libicudata.a", "include/unicode/utypes.h"),
+    "openmp": ("lib/libomp.a", "include/omp.h"),
+    "lapack": ("lib/liblapacke.a", "include/lapacke.h"),
+    "vsag": ("lib/vsag_lib/lib*.a", "lib/vsag_lib/libvsag_static.a", "include/vsag/vsag.h"),
+}
+
+
+def installed_output_hashes(name, prefix):
+    """Hash required installed outputs, returning no identity for missing/empty files."""
+    outputs = {}
+    for pattern in PACKAGE_OUTPUTS[name]:
+        paths = sorted(prefix.glob(pattern))
+        if not paths or any(not path.is_file() or path.stat().st_size == 0 for path in paths):
+            return None
+        for path in paths:
+            outputs[str(path.relative_to(prefix))] = hashlib.sha256(path.read_bytes()).hexdigest()
+    return outputs
+
+
+def reusable_package(marker, identity, prefix):
+    """Accept only matching build settings and unchanged installed output bytes."""
+    try:
+        recorded = json.loads(marker.read_text())
+        outputs = installed_output_hashes(identity["package"], prefix)
+        return outputs is not None and recorded == dict(identity, outputs=outputs)
+    except (OSError, ValueError, TypeError):
+        return False
+
+
+def builder_identity():
+    """Bind cache reuse to tracked dependency recipes and package version definitions."""
+    digest = hashlib.sha256()
+    for path in sorted((ROOT / "deps/ios-build").rglob("*")):
+        if path.is_file() and path.suffix in {".py", ".txt", ".cmake"}:
+            digest.update(str(path.relative_to(ROOT)).encode())
+            digest.update(path.read_bytes())
+    return digest.hexdigest()
+
 def main():
     """Select a target SDK, isolate host flags, and build only requested packages."""
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--reuse", action="store_true", help="Reuse matching verified installed packages")
     parser.add_argument("--simulator", action="store_true")
     parser.add_argument("--jobs", type=int, default=2)
     parser.add_argument("--deployment-target", default="18.0")
@@ -358,10 +409,23 @@ def main():
     prefix = ROOT / "deps/ios" / sdk_name / "devel"
     for directory in (prefix / "lib", prefix / "include"):
         directory.mkdir(parents=True, exist_ok=True)
+    recipe = builder_identity()
+    rebuilt = False
     for name in options.packages or DEFAULT_PACKAGES:
-        source = source_package(name, environment)
         build_name = name + "-" + PACKAGES[name][0] if name == "openmp" else name
         build = ROOT / "deps/ios" / sdk_name / "build" / build_name
+        identity = {
+            "package": name, "version": PACKAGES[name][0], "sha256": PACKAGES[name][2],
+            "sdk": sdk, "deployment_target": options.deployment_target,
+            "platform": sdk_name, "architecture": "arm64", "builder": recipe}
+        marker = build / "verified.json"
+        if options.reuse and not rebuilt and reusable_package(marker, identity, prefix):
+            print("Reusing verified iOS dependency: " + name, flush=True)
+            continue
+        # Rebuild downstream packages when an earlier dependency has changed.
+        rebuilt = True
+        marker.unlink(missing_ok=True)
+        source = source_package(name, environment)
         build.mkdir(parents=True, exist_ok=True)
         if name == "vsag":
             build_vsag(source, build, prefix, sdk, options, environment)
@@ -376,10 +440,10 @@ def main():
         else:
             {"zlib": build_zlib, "openssl": build_openssl, "curl": build_curl}[name](
                 source, build, prefix, sdk, options, environment)
-        (build / "verified.json").write_text(json.dumps({
-            "package": name, "version": PACKAGES[name][0], "sha256": PACKAGES[name][2],
-            "sdk": sdk, "deployment_target": options.deployment_target,
-            "platform": sdk_name, "architecture": "arm64"}, indent=2) + "\n")
+        outputs = installed_output_hashes(name, prefix)
+        if outputs is None:
+            raise RuntimeError("Missing installed dependency outputs: " + name)
+        marker.write_text(json.dumps(dict(identity, outputs=outputs), indent=2) + "\n")
 
 
 if __name__ == "__main__":

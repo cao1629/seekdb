@@ -34,7 +34,8 @@ with open(os.environ['CALL_LOG'], 'a') as out:
     out.write(json.dumps([name, *sys.argv[1:]]) + '\\n')
 if name == 'xcrun': print('/sdk')
 elif name == 'rustup':
-    if 'list' in sys.argv: print('aarch64-apple-ios\\naarch64-apple-ios-sim')
+    if 'toolchain' in sys.argv and 'list' in sys.argv: print('' if os.environ.get('RUST_MISSING') else '1.98.1-aarch64-apple-darwin')
+    elif 'list' in sys.argv: print('aarch64-apple-ios\\naarch64-apple-ios-sim')
     else: print('rustc 1.98.1')
 elif name == 'cmake': sys.exit(int(os.environ.get('CMAKE_EXIT', '0')))
 """)
@@ -46,6 +47,22 @@ elif name == 'cmake': sys.exit(int(os.environ.get('CMAKE_EXIT', '0')))
             path = self.headers / "include" / header
             path.parent.mkdir(parents=True, exist_ok=True)
             path.touch()
+        tools = self.root / "deps/3rd/usr/local/oceanbase/devtools/bin"
+        tools.mkdir(parents=True)
+        for name in ("bison", "flex"):
+            path = tools / name
+            path.write_text("#!/bin/sh\nexit 0\n")
+            path.chmod(0o755)
+        driver = self.root / "deps/ios-build/build.py"
+        driver.parent.mkdir(parents=True)
+        driver.write_text("import json, os, sys\n"
+                          "with open(os.environ['CALL_LOG'], 'a') as out: "
+                          "out.write(json.dumps(['dependencies', *sys.argv[1:]]) + '\\n')\n"
+                          "sys.exit(int(os.environ.get('DEPS_EXIT', '0')))\n")
+        initializer = self.root / "build.sh"
+        initializer.write_text("#!/bin/sh\n"
+                               "printf '%s\\n' '[\"host-init\",\"init\"]' >> \"$CALL_LOG\"\n")
+        initializer.chmod(0o755)
         self.log = self.root / "calls.jsonl"
         self.env = dict(os.environ, PATH=f"{binaries}:{os.environ['PATH']}",
                         CARGO=str(binaries / "cargo"), RUSTUP=str(binaries / "rustup"),
@@ -61,12 +78,57 @@ elif name == 'cmake': sys.exit(int(os.environ.get('CMAKE_EXIT', '0')))
         return [json.loads(line) for line in self.log.read_text().splitlines()]
 
     def test_device_build(self):
-        """Default compilation must select device SDK and the static engine target."""
+        """Default compilation must select device SDK, Debug profile, and final link validation."""
         result = self.run_script("--jobs", "2")
         self.assertEqual(result.returncode, 0, result.stderr)
         calls = [call for call in self.calls() if call[0] == "cmake"]
         self.assertIn("-DCMAKE_OSX_SYSROOT=iphoneos", calls[0])
-        self.assertEqual(calls[1][-4:], ["--target", "oceanbase_static", "--parallel", "2"])
+        self.assertEqual(calls[1][-4:], ["--target", "seekdb_ios_link_check", "--parallel", "2"])
+
+    def test_missing_rust_toolchain_installed_automatically(self):
+        """A fresh local Rust cache must not require the legacy init flag."""
+        self.env["RUST_MISSING"] = "1"
+        result = self.run_script("--configure-only")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertTrue(any(call[:3] == ["rustup", "toolchain", "install"] for call in self.calls()))
+
+    def test_explicit_dependency_prefix_is_not_modified(self):
+        """An explicitly managed dependency directory must bypass bootstrap builds."""
+        result = self.run_script("--deps-prefix", str(self.root / "deps/ios/iphoneos/devel"), "--configure-only")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertFalse(any(call[0] == "dependencies" for call in self.calls()))
+
+    def test_release_profile(self):
+        """Release must retain the supported optimized CMake configuration."""
+        result = self.run_script("release", "--configure-only")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        configure = next(call for call in self.calls() if call[0] == "cmake")
+        self.assertIn("-DCMAKE_BUILD_TYPE=RelWithDebInfo", configure)
+
+    def test_default_prepares_dependencies(self):
+        """No-option builds must prepare reusable target dependencies before CMake."""
+        result = self.run_script()
+        self.assertEqual(result.returncode, 0, result.stderr)
+        calls = self.calls()
+        dependencies = next(call for call in calls if call[0] == "dependencies")
+        self.assertIn("--reuse", dependencies)
+        configure = next(call for call in calls if call[0] == "cmake")
+        self.assertIn("-DCMAKE_BUILD_TYPE=Debug", configure)
+        self.assertLess(calls.index(dependencies), calls.index(configure))
+
+    def test_missing_host_headers_trigger_initialization(self):
+        """A fresh checkout must bootstrap host headers with the supported init command."""
+        shutil.rmtree(self.headers)
+        result = self.run_script()
+        self.assertIn(["host-init", "init"], self.calls())
+        self.assertIn("missing dependency headers", result.stderr)
+
+    def test_dependency_failure_stops_engine_configuration(self):
+        """A failed dependency build must propagate its status before engine work."""
+        self.env["DEPS_EXIT"] = "19"
+        result = self.run_script()
+        self.assertEqual(result.returncode, 19, result.stderr)
+        self.assertFalse(any(call[0] == "cmake" for call in self.calls()))
 
     def test_simulator_configuration_only(self):
         """Simulator configuration must not accidentally compile or select a device SDK."""
@@ -98,7 +160,7 @@ elif name == 'cmake': sys.exit(int(os.environ.get('CMAKE_EXIT', '0')))
     def test_dependency_only_does_not_require_rust(self):
         """Route dependency builds to the local driver without touching the engine."""
         driver = self.root / "deps/ios-build/build.py"
-        driver.parent.mkdir(parents=True)
+        driver.parent.mkdir(parents=True, exist_ok=True)
         driver.write_text("import sys; print(repr(sys.argv[1:]))\n")
         self.env["CARGO"] = "/missing/cargo"
         self.env["RUSTUP"] = "/missing/rustup"

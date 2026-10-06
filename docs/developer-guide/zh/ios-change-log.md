@@ -1,3 +1,23 @@
+## 2026-10-06 — 自动 iOS 构建入口
+
+- 同步 `build.iphone.sh` 顶部及函数注释：说明自动依赖准备、Debug/Release、缓存
+  复用、最终链接检查、显式依赖目录和 App 安装边界；此项仅修改注释。
+
+- `build.iphone.sh` 默认 Debug，支持 `debug` / `release`；Release 继续使用
+  RelWithDebInfo。顶层 CMake 仅为 iOS 开放 Debug，其他平台限制保留。
+- 默认目标改为 `seekdb_ios_link_check`，包含引擎库构建与最终链接验证；顶部说明
+  改为单命令。保留显式 target、deps-only、configure-only、init 等现有参数。
+- 自动检查 Rust 工具链/target，缺失时安装；缺少公共头文件时调用 `build.sh init`，
+  缺少 bison/flex 时复用 parser tools 初始化。iOS 库由独立依赖驱动编译。
+- 依赖驱动增加 `--reuse`，绑定原有锁定版本/下载 SHA256、平台/SDK/deployment、
+  recipe digest 和 installed output digest；失效或不完整缓存重建，并重建后续包。
+  原有依赖版本和下载校验和未改变。显式依赖目录不自动修改。
+- 真机 runner 显式使用 release，避免默认 Debug 改变现有测试性能和产物模式。
+- 验证：`test_build_iphone.py` 15 项、`test_ios_dependency_cache.py` 5 项及
+  `test_iphone_test_phases.py` 45 项通过；
+  `bash -n build.iphone.sh` 通过；本机独立目录真实 Debug / Release CMake 配置生成成功。
+  完整 Debug 编译、新机器端到端初始化及设备接受测试尚未验证。详见 ios-build.md。
+
 # iOS 移植：环境与变更记录
 
 本记录覆盖截至 2026-09-24 的本轮移植。当前验证分支 `codex/ios-generic-validation` 已 rebase 到 `upstream/master` 的 `834bbee1e`；原始 iOS 分支仍保留。入口说明见 [ios-build.md](ios-build.md)。

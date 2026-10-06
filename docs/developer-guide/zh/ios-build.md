@@ -1,3 +1,37 @@
+## 2026-10-06：自动准备依赖与构建模式
+
+```bash
+./build.iphone.sh          # 默认 Debug，自动准备依赖并完成最终链接检查
+./build.iphone.sh debug    # 与默认入口相同
+./build.iphone.sh release  # RelWithDebInfo，保留现有优化构建配置
+```
+
+默认流程检查完整 Xcode SDK、CMake、已有 Cargo/rustup，自动安装缺少的锁定 Rust
+工具链和对应 iOS target。缺少公共头文件时调用 `./build.sh init`；只有 parser tools
+缺少时复用脚本原有的 bison/flex 初始化。随后下载、校验并编译缺少的 iOS 依赖，
+配置引擎并构建 `seekdb_ios_link_check`。它依赖引擎静态库、iOS runtime、SQL probe
+和 Rust 库，最终链接能发现仅生成静态库时遗漏的符号；不在此步骤签名或安装 App。
+
+`--deps-only` 仍用于只构建 iOS 第三方依赖；`--init` 作为兼容参数保留，常规调用
+无需再填写。Mac 依赖包中的库不能链接到 iOS，Mac 初始化与 iOS 依赖构建均已纳入
+默认流程。脚本不会自动安装完整 Xcode、CMake 或初始 rustup，也不会处理 Apple
+账户授权；缺少这些基础工具时给出错误。`--configure-only` 也会先准备依赖。
+
+依赖驱动的 `--reuse` 核对 package version/source SHA256、SDK 路径、最低系统版本、
+平台、arm64、构建脚本/适配器摘要及已安装库和关键头文件摘要。缺失、空文件、变更
+或旧格式 `verified.json` 会触发重建；某包重建后，其后的依赖包也重建，避免使用旧
+链接输入。旧版本缓存首次迁移需重新构建一次。显式 `--deps-prefix` 由调用者管理，
+不会自动下载或修改，CMake 会继续校验目标平台；`--headers-prefix` 仍可单独指定。
+
+Debug 使用 CMake Debug 和 Rust `cmake-debug` profile；第三方依赖仍为 Release。
+`release` 使用 RelWithDebInfo。默认仍使用 `build_ios_arm64`（模拟器为
+`build_ios_sim_arm64`）；在同一目录切换模式会重新配置并触发必要重编译，也可用
+`--build-dir` 隔离。真机测试 runner 显式选择 release，保持原有测试构建模式。
+
+验证：脚本路由 15 项、缓存失效 5 项、真机 phase 回归 45 项通过；本机完整 Xcode 下独立目录 Debug / Release CMake
+配置与生成成功，Rust 输出指向 `aarch64-apple-ios/cmake-debug/libsql_nio.a`。
+本次未执行完整 Debug 引擎编译、全新机器端到端构建或真机测试。
+
 # iPhone 交叉编译（实验阶段）
 
 ## 2026-10-06：默认脚本修复与真机操作指南

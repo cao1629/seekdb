@@ -1070,7 +1070,7 @@ def _build_command(
         f"RUSTUP_HOME={inputs.rustup_home}",
         f"RUST_TARGET_DIR={inputs.rust_target_dir}",
         f"RUSTC_WRAPPER={RUSTC_WRAPPER}",
-        str(BUILD_SCRIPT),
+        str(BUILD_SCRIPT), "release",
         "--build-dir", str(build_directory),
         "--deps-prefix", str(inputs.deps_prefix),
         "--headers-prefix", str(inputs.headers_prefix),

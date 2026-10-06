@@ -1,20 +1,29 @@
 #!/usr/bin/env bash
 # Copyright (c) 2026 OceanBase.
 # SPDX-License-Identifier: Apache-2.0
-# Build, install, and test on an iPhone:
-# 1. Use macOS with full Xcode, CMake, and rustup installed.
-#    Dependencies: ./build.iphone.sh --deps-only
-#    Build:       ./build.iphone.sh --init --target seekdb_ios_link_check
-# 2. Sign in to Xcode > Settings > Accounts. Connect and unlock the iPhone,
-#    trust this Mac, and enable Developer Mode on the phone.
-#    Install the seekdb test app (replace the three placeholders):
+# Build seekdb for iPhone with automatic prerequisite preparation:
+# 1. Install full Xcode, CMake, and Cargo/rustup on an Apple Silicon Mac.
+#    Run ./build.iphone.sh for Debug, or ./build.iphone.sh release for RelWithDebInfo.
+#    Missing pinned Rust toolchains and iOS targets are installed automatically.
+#    Missing host headers trigger ./build.sh init; missing parser tools are prepared.
+#    iOS dependencies are downloaded, checksum-verified, and compiled as needed.
+#    Matching verified dependencies are reused; legacy verification records rebuild once.
+# 2. The default target builds engine libraries and seekdb_ios_link_check, validating
+#    the final link without signing, installing, or running an App on the phone.
+#    --deps-only builds third-party iOS dependencies without building the engine.
+#    --init remains compatible but is no longer required for normal builds.
+#    --configure-only prepares prerequisites and generates rules without compiling
+#    the engine. Explicit --deps-prefix directories remain caller-managed.
+# 3. To install the test App, sign in to Xcode > Settings > Accounts. Connect and
+#    unlock the iPhone, trust this Mac, and enable Developer Mode on the phone.
+#    Replace the three placeholders and run:
 #    python3 deps/ios-build/build_app.py --team YOURTEAMID \
 #      --device YOUR_DEVICE_UDID --bundle-id YOUR_BUNDLE_ID --install
-# 3. Open SeekDB Probe on the phone; SQL tests run automatically.
-#    Wait for SQL success, then tap Stop engine and wait for Stopped.
-#    Close and reopen the app; Previous runs should increase.
-# The default build produces libraries only. Setup, device IDs, test results,
-# and automated testing details: docs/developer-guide/zh/ios-build.md
+# 4. Open SeekDB Probe; SQL tests run automatically. Wait for SQL success, tap
+#    Stop engine, and wait for Stopped. Reopen the App; Previous runs should increase.
+# Builds, dependencies, Rust caches, and logs default to this checkout. Debug and
+# release share build_ios_arm64; use --build-dir to isolate profiles if needed.
+# For setup, signing, and automated testing, see docs/developer-guide/zh/ios-build.md.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -23,27 +32,29 @@ RUST_TARGET=aarch64-apple-ios
 BUILD_DIR="$ROOT/build_ios_arm64"
 DEPLOYMENT=18.0
 JOBS=4
-TARGET=oceanbase_static
-INITIALIZE=false
+TARGET=seekdb_ios_link_check
+BUILD_TYPE=Debug
 CONFIGURE_ONLY=false
 DEPS_ONLY=false
 DEPS_PREFIX=""
+EXPLICIT_DEPS=false
 HEADERS_PREFIX=""
 CMAKE_ARGS=()
 
 # Print supported options without requiring Xcode or any installed dependencies.
 usage() {
   cat <<'EOF'
-Usage: ./build.iphone.sh [options] [-- -DCMAKE_OPTION=value ...]
+Usage: ./build.iphone.sh [debug|release] [options] [-- -DCMAKE_OPTION=value ...]
 
 Experimental seekdb iOS ARM64 build. This does not package or sign an iPhone app.
 
+  debug / release         Engine profile (default: debug; release uses RelWithDebInfo)
   --simulator             Build for an Apple Silicon iOS simulator
-  --init                  Prepare host tools and install the pinned Rust iOS target
+  --init                  Recheck prerequisites (missing tools and dependencies are always prepared)
   --configure-only        Generate build rules without compiling
   --deps-only             Build pinned iOS dependencies, including ICU and VSAG
   --jobs N                Parallel C/C++ jobs (default: 4)
-  --target NAME           CMake target (default: oceanbase_static)
+  --target NAME           CMake target (default: seekdb_ios_link_check, including engine libraries)
   --build-dir PATH        Repository-local CMake build directory
   --deps-prefix PATH      iOS-built dependencies (default: deps/ios/<sdk>/devel)
   --headers-prefix PATH   Header prefix (auto: iOS prefix, then existing host headers)
@@ -51,9 +62,9 @@ Experimental seekdb iOS ARM64 build. This does not package or sign an iPhone app
   -h, --help              Show this help
 
 Examples:
-  ./build.iphone.sh --init --configure-only
-  ./build.iphone.sh --jobs 8
-  ./build.iphone.sh --simulator --init --jobs 8
+  ./build.iphone.sh
+  ./build.iphone.sh release
+  ./build.iphone.sh debug --simulator --jobs 8
 
 Set DEVELOPER_DIR to a full Xcode Developer directory if needed.
 CARGO and RUSTUP must point to their corresponding Cargo and rustup executables.
@@ -75,12 +86,14 @@ fail() {
 parse_args() {
   while (($#)); do
     case "$1" in
+      debug) BUILD_TYPE=Debug; shift ;;
+      release) BUILD_TYPE=RelWithDebInfo; shift ;;
       --simulator)
         SDK=iphonesimulator
         RUST_TARGET=aarch64-apple-ios-sim
         BUILD_DIR="$ROOT/build_ios_sim_arm64"
         shift ;;
-      --init) INITIALIZE=true; shift ;;
+      --init) shift ;;
       --configure-only) CONFIGURE_ONLY=true; shift ;;
       --deps-only) DEPS_ONLY=true; shift ;;
       --jobs|--target|--build-dir|--deps-prefix|--headers-prefix|--deployment-target)
@@ -89,7 +102,7 @@ parse_args() {
           --jobs) JOBS="$2" ;;
           --target) TARGET="$2" ;;
           --build-dir) BUILD_DIR="$2" ;;
-          --deps-prefix) DEPS_PREFIX="$2" ;;
+          --deps-prefix) DEPS_PREFIX="$2"; EXPLICIT_DEPS=true ;;
           --headers-prefix) HEADERS_PREFIX="$2" ;;
           --deployment-target) DEPLOYMENT="$2" ;;
         esac
@@ -127,7 +140,8 @@ prepare_host_tools() {
   done < <(grep -E '^obdevtools-(bison|flex)-[^/]+\.tar\.gz$' "$profile")
 }
 
-# Locate Apple and Rust tools without changing the system-wide Xcode selection.
+# Locate Apple/Rust tools and install missing pinned Rust components without changing
+# the system-wide Xcode selection.
 prepare_tools() {
   [[ "$(uname -s)" == Darwin ]] || fail 'iOS compilation requires macOS and Xcode'
   if [[ -z "${DEVELOPER_DIR:-}" && -d /Applications/Xcode.app/Contents/Developer ]]; then
@@ -147,9 +161,10 @@ prepare_tools() {
   export CARGO
   PINNED_RUST="$(sed -n 's/^channel = "\([^"]*\)"/\1/p' "$ROOT/rust/rust-toolchain.toml")"
   [[ -n "$PINNED_RUST" ]] || fail 'cannot read the pinned Rust toolchain'
-  if [[ "$INITIALIZE" == true ]]; then
-    prepare_host_tools
+  if ! "$RUSTUP" toolchain list | grep -q "^$PINNED_RUST[- ]"; then
     "$RUSTUP" toolchain install "$PINNED_RUST" --profile minimal --no-self-update
+  fi
+  if ! "$RUSTUP" target list --toolchain "$PINNED_RUST" --installed | grep -qx "$RUST_TARGET"; then
     "$RUSTUP" target add --toolchain "$PINNED_RUST" "$RUST_TARGET"
   fi
   "$RUSTUP" run "$PINNED_RUST" rustc --version >/dev/null || fail 'pinned rustc is unavailable or could not start; inspect the preceding error'
@@ -180,7 +195,42 @@ prepare_headers() {
   printf '[build.iphone.sh] headers=%s\n' "$HEADERS_PREFIX"
 }
 
-# Configure the engine and optionally compile, preserving failure logs in the build tree.
+# Bootstrap missing host headers/tools and reuse verified iOS dependency packages.
+prepare_dependencies() {
+  DEPS_PREFIX="${DEPS_PREFIX:-$ROOT/deps/ios/$SDK/devel}"
+  local host_prefix="$ROOT/deps/3rd/usr/local/oceanbase/deps/devel"
+  local tools="$ROOT/deps/3rd/usr/local/oceanbase/devtools/bin"
+  local headers="${HEADERS_PREFIX:-$DEPS_PREFIX}" header need_host=false
+  for header in grpcpp/grpcpp.h rapidjson/error/en.h boost/version.hpp; do
+    if [[ ! -f "$headers/include/$header" && -z "$HEADERS_PREFIX" &&
+          ! -f "$host_prefix/include/$header" ]]; then
+      need_host=true
+    fi
+  done
+  if [[ "$need_host" == true ]]; then
+    printf '[build.iphone.sh] Preparing missing host headers and tools\n'
+    "$ROOT/build.sh" init
+  elif [[ ! -x "$tools/bison" || ! -x "$tools/flex" ]]; then
+    prepare_host_tools
+  fi
+  if [[ "$EXPLICIT_DEPS" == false ]]; then
+    build_dependencies
+  else
+    printf '[build.iphone.sh] Using explicit dependency prefix: %s\n' "$DEPS_PREFIX"
+  fi
+}
+
+# Reuse matching verified iOS packages or rebuild missing/outdated packages for the SDK.
+build_dependencies() {
+  local args=(--jobs "$JOBS" --deployment-target "$DEPLOYMENT" --reuse)
+  if [[ "$SDK" == iphonesimulator ]]; then
+    args+=(--simulator)
+  fi
+  python3 "$ROOT/deps/ios-build/build.py" "${args[@]}"
+}
+
+# Configure the selected Debug/Release profile and build the requested target
+# (default: engine libraries plus final link check), retaining logs in the build tree.
 build_engine() {
   DEPS_PREFIX="${DEPS_PREFIX:-$ROOT/deps/ios/$SDK/devel}"
   mkdir -p "$BUILD_DIR/logs"
@@ -188,7 +238,7 @@ build_engine() {
   cmake -S "$ROOT" -B "$BUILD_DIR" \
     -DCMAKE_SYSTEM_NAME=iOS -DCMAKE_OSX_SYSROOT="$SDK" \
     -DCMAKE_OSX_ARCHITECTURES=arm64 -DCMAKE_OSX_DEPLOYMENT_TARGET="$DEPLOYMENT" \
-    -DCMAKE_BUILD_TYPE=RelWithDebInfo -DOB_USE_LLD=OFF -DOB_DISABLE_PIE=OFF \
+    -DCMAKE_BUILD_TYPE="$BUILD_TYPE" -DOB_USE_LLD=OFF -DOB_DISABLE_PIE=OFF \
     -DCARGO="$CARGO" -DDEP_DIR="$DEPS_PREFIX" \
     -DSEEKDB_IOS_HEADER_PREFIX="${HEADERS_PREFIX:-$DEPS_PREFIX}" \
     ${CMAKE_ARGS[@]+"${CMAKE_ARGS[@]}"} 2>&1 | tee "$BUILD_DIR/logs/configure.log"
@@ -213,5 +263,6 @@ if [[ "$DEPS_ONLY" == true ]]; then
   exec python3 "$ROOT/deps/ios-build/build.py" "${DEPS_ARGS[@]}"
 fi
 prepare_tools
+prepare_dependencies
 prepare_headers
 build_engine
