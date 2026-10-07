@@ -1,0 +1,64 @@
+{
+  "date": "2026-10-07",
+  "implementation_revision": "6f902fdab24ccefdde97c991b50faf551928b604",
+  "branch": "codex/ios-dynamic-framework",
+  "build_source_dirty": false,
+  "minimum_ios": "18.0",
+  "architecture": "arm64",
+  "test_hooks": "disabled",
+  "artifacts": {
+    "device": "build_ios_arm64/framework-6f902fdab24c/SeekDB.framework",
+    "simulator": "build_ios_sim_arm64/framework-6f902fdab24c/SeekDB.framework"
+  },
+  "host_tests": {
+    "build_iphone": 16,
+    "runtime_cleanup": 8,
+    "in_process_shutdown": 1,
+    "framework_evidence_gates": 6,
+    "total": 31,
+    "passed": true
+  },
+  "platform_runs": {
+    "device": {
+      "transport": "Connector/C over actual Unix socket",
+      "process_runs": 2,
+      "assertions_per_run": [
+        77,
+        77
+      ],
+      "previous_runs": [
+        3,
+        4
+      ],
+      "passed": true,
+      "process_alive_after_worker_exit": true,
+      "test_process_terminated_after_verification": true
+    },
+    "simulator": {
+      "transport": "Connector/C over actual Unix socket",
+      "process_runs": 2,
+      "assertions_per_run": [
+        77,
+        77
+      ],
+      "previous_runs": [
+        2,
+        3
+      ],
+      "passed": true,
+      "process_alive_after_worker_exit": true,
+      "test_process_terminated_after_verification": true
+    }
+  },
+  "quicklang_integration": "Not performed in this repository task",
+  "limitations": [
+    "One engine startup per process",
+    "Same-directory handles only",
+    "No TCP or physical standby",
+    "Process cwd changes while engine runs",
+    "No active framework dlclose",
+    "App background/App Store acceptance not verified"
+  ],
+  "source_verification_note": "Device dependency source records have current zlib and OpenSSL verification; other pre-existing static dependency archives are identified by link inventory checksums. Simulator has 14 current dependency source records.",
+  "whitespace_note": "Adaptation files pass git diff --check; copied upstream Connector/C retains original whitespace."
+}

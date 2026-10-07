@@ -24,6 +24,7 @@ iOS 系统库。build-manifest.json 记录源码提交、dirty 状态、二进�
   最后 close 后再次 open 返回 INTERNAL_ERROR。重新启动 App 进程才能重开数据库。
 - socket endpoint 是 handle 持有的借用字符串，close 后无效。长沙箱路径使用可写
   tmp 中的短 symlink alias；模拟器必要时使用宿主 /tmp。不能硬编码桌面 /tmp 路径。
+- 旧 seekdb_ios_run/request_stop 入口仍保留，不能与桌面 driver 生命周期混用。
 - 引擎运行期间使用进程工作目录，App 应使用绝对文件路径。framework 应保持加载
   至进程结束；未验证主动 dlclose 或 App 后台长期运行。
 
@@ -77,10 +78,21 @@ worker_exit=true、hook_mode=disabled，且 build_id 对应 framework 提交。�
 脚本加 --simulator，无需开发证书。两份报告可以用
 `unittest/ios_build/validate_framework_probe.py --revision FULL_SHA REPORT1 REPORT2` 验证。
 
-当前已完成双平台构建及二进制检查；真机早期完整 SQL/停止/新进程持久化报告
-绑定旧审计标记，不能代表最终实现提交。源码身份更新后的最终验证结果会记录在
-`unittest/ios_build/framework_evidence/`。尚不声明 QuickLang 集成、App Store 或后台
-运行验收通过。最初输入范围和后续授权记录见 [framework 审计](ios-framework-audit.md)。
+最终实现提交为 `6f902fdab24ccefdde97c991b50faf551928b604`。对应独立产物：
+
+- 真机：`build_ios_arm64/framework-6f902fdab24c/SeekDB.framework`。
+- 模拟器：`build_ios_sim_arm64/framework-6f902fdab24c/SeekDB.framework`。
+
+两份 manifest 均 source_dirty=false，标记与提交匹配；精确导出 32 个符号、无
+LC_RPATH、仅系统动态依赖。双平台各两次独立进程启动，均通过 77 项真实 socket
+SQL/生命周期检查及 worker_exit=true；真机 previous_runs 从 3 到 4，模拟器从 2 到 3。
+测试进程在线程退出后仍存活，确认停机证据后才终止探针。聚焦宿主测试共31项通过。
+完整报告、二进制摘要和回归诊断见
+[tracked evidence](../../../unittest/ios_build/framework_evidence/README.md)。
+后续证据/文档提交不改变上述实现；交付源码身份取 manifest 的实现提交而非旧审计标记。
+真机来源记录当前验证 zlib/OpenSSL，其他既有 native archive 以精确链接摘要标识；
+模拟器有14项当前来源验证记录。未执行完整仓库测试或 QuickLang 集成、App Store、
+后台运行验收。最初输入范围和后续授权记录见 [framework 审计](ios-framework-audit.md)。
 
 ## 2026-10-06：自动准备依赖与构建模式
 

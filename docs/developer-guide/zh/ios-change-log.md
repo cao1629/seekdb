@@ -696,3 +696,11 @@ python3 deps/ios-build/build.py --jobs 4 vsag
 - 当前限制：单引擎/进程、最终关闭后不可同进程重启、不支持 TCP/物理主备、运行期间进程cwd变更，未验证 App Groups、dlclose、App后台长期运行或 QuickLang 集成。本分支不自动合并。
 
 - allocator 定位通过模拟器 LLDB 观察到 malloc_init_state=recursible、opt_background_thread=true，构建定义未启用 JEMALLOC_BACKGROUND_THREAD。关闭 iOS background_thread 后，模拟器 77 项 SQL/生命周期断言、worker_exit=true 和进程存活通过。该修复同时覆盖既有静态 runtime；随后仍需用最终提交双平台复验。真机 OpenSSL 初始缓存缺少来源 verified.json，本轮使用既有依赖驱动单独重编 OpenSSL，补齐来源和安装输出摘要，未清除其他缓存。
+
+### 2026-10-07：提交对应的最终产物与验收
+
+- 实现提交 `6f902fdab24ccefdde97c991b50faf551928b604`，独立 codex/ios-dynamic-framework 分支。两种平台在干净源码下重新 configure/build，输出到 build_ios_arm64/framework-6f902fdab24c 和 build_ios_sim_arm64/framework-6f902fdab24c，保留旧 framework 路径供正在进行的集成读取。Info.plist、二进制 build marker、manifest 完整 revision 三者一致。
+- 双平台检查均通过：MH_DYLIB、仅 arm64、IOS/IOSSIMULATOR、minimum18、@rpath/SeekDB.framework/SeekDB、无 LC_RPATH、仅系统动态依赖、精确32导出、disabled hooks、逐字匹配桌面头文件；53个静态归档记录摘要。真机manifest有当前zlib/OpenSSL来源验证，其他预存归档仅声明精确链接摘要；模拟器14项当前来源验证。
+- 真机和模拟器各2轮独立进程动态探针，四轮各77项通过，complete/passed/worker_exit 均true。真机 previous_runs 3→4、模拟器2→3，确认新进程读取上一轮已提交数据。每轮包含真实Connector/C socket、全部25接口动态加载、事务/UTF-8/NULL/错误/分配、停止清理及同进程重开拒绝。线程退出后进程仍存活，最后只终止本任务Probe进程；没有操作QuickLang进程。
+- 31项聚焦宿主测试通过：构建入口16、runtime cleanup8、shutdown1、真实证据验收门禁6；Bash语法、Python编译、适配文件diff检查通过。原样复制的上游Connector保留原始空白，不对其作无关格式改写；未执行完整仓库测试。
+- 验收报告、source/binary摘要、源码身份、allocator回归根因和平台限制保存于 unittest/ios_build/framework_evidence；该后续证据提交不改变已验收引擎实现。未自动合并或推送，未修改QuickLang。QuickLang集成由其任务独立验收，本任务不声明集成通过。

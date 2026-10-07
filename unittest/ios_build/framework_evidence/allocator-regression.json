@@ -1,0 +1,18 @@
+{
+  "scope": "Provisional uncommitted adaptation carrying the historical audit marker; not a test of the audit commit alone",
+  "marker": "8f73e95b52cd",
+  "sql_assertions_passed": 77,
+  "worker_exit_verified": false,
+  "exception": "EXC_BAD_ACCESS / SIGSEGV in a0idalloc during pthread TSD cleanup",
+  "invalid_pointer_symbol": "je_tsd_boot_wrapper",
+  "debugger_observation": {
+    "malloc_init_state": "malloc_init_recursible",
+    "opt_background_thread": true,
+    "malloc_conf": "background_thread:true,dirty_decay_ms:1000,muzzy_decay_ms:0"
+  },
+  "build_observation": "JEMALLOC_BACKGROUND_THREAD undefined for iOS",
+  "root_cause": "Unsupported background-thread configuration left allocator bootstrap incomplete and its static wrapper installed in loading-thread TSD",
+  "fix_revision": "6f902fdab24ccefdde97c991b50faf551928b604",
+  "fix": "Disable background_thread for iOS; check loading-thread allocation bootstrap; require joinable loading-thread worker_exit in probe evidence",
+  "raw_evidence": "Ignored build_ios_arm64/device-evidence/framework-crash-102738.ips and simulator LLDB session"
+}
