@@ -712,3 +712,9 @@ python3 deps/ios-build/build.py --jobs 4 vsag
   - iphoneos: `6afe43d36b62c3b9296dbc6e6e27ffe9e0055eb20ea00dbb12e59f72cb4dbeff`，61570153 bytes。
   - iphonesimulator: `2c339aeb046afcdc7296dec1737abc20b81ada56fa174c0c80f22da586b2afe7`，63092939 bytes。
 - 此次推进只记录framework打包验证；QuickLang协调chat已自行导入最终framework并进行实际App验收，安装/启动不替代数据库和词库初始化证明。本任务未发送跨chat消息，也未将其他chat进度当作本仓库的独立测试结果。
+
+### 2026-10-07：稳定性探针与重启测试设计
+
+- 用户要求稳定性测试。新增test-only driver header与独立stability模块，复用原77项C ABI检查；engine framework仍为已验证6f902fdab24c，不改变QuickLang或生产引擎。Probe metadata新增完整测试源码revision。
+- 新增600秒前台持续事务/并发读取/连接重建/分配释放，固定数据集；10秒采样物理footprint，预热后256MiB增长限额；随后4次进程重启验证已提交counter。离开前台或采样间隔过长不通过。reader、engine和loader均需退出证据。host runner使用小JSON及run/revision身份，无调试器，不将signal9等同Jetsam，仅终止自己launch记录的PID。
+- 新增8项验收门禁host回归通过，原6项动态证据门禁通过；simulator Probe编译/打包成功。此记录是测试程序准备，尚不宣称10分钟实际稳定性通过；后续记录执行结果与限制。

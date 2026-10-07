@@ -3,6 +3,7 @@
 <plist version="1.0"><dict>
 <key>CFBundleExecutable</key><string>SeekDBFrameworkProbe</string>
 <key>CFBundleIdentifier</key><string>@PROBE_BUNDLE_ID@</string>
+<key>SeekDBProbeSourceRevision</key><string>@PROBE_SOURCE_REVISION@</string>
 <key>CFBundleName</key><string>SeekDB Framework Probe</string>
 <key>CFBundlePackageType</key><string>APPL</string>
 <key>CFBundleVersion</key><string>1</string>

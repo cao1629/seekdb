@@ -3,10 +3,11 @@ project(SeekDBFrameworkProbe LANGUAGES CXX OBJCXX)
 if(NOT CMAKE_SYSTEM_NAME STREQUAL "iOS" OR NOT EXISTS "${SEEKDB_FRAMEWORK}/SeekDB")
   message(FATAL_ERROR "Provide an iOS SDK and a verified SEEKDB_FRAMEWORK directory")
 endif()
-add_executable(SeekDBFrameworkProbe MACOSX_BUNDLE main.mm)
+add_executable(SeekDBFrameworkProbe MACOSX_BUNDLE main.mm stability.mm)
 target_include_directories(SeekDBFrameworkProbe PRIVATE
   "${SEEKDB_FRAMEWORK}/Headers" "${CMAKE_CURRENT_SOURCE_DIR}/../../../src/observer/ios")
 target_compile_options(SeekDBFrameworkProbe PRIVATE -fobjc-arc)
+target_compile_definitions(SeekDBFrameworkProbe PRIVATE PROBE_SOURCE_REVISION="${PROBE_SOURCE_REVISION}")
 target_link_libraries(SeekDBFrameworkProbe PRIVATE "-framework UIKit")
 set_target_properties(SeekDBFrameworkProbe PROPERTIES
   CXX_STANDARD 17

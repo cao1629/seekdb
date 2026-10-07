@@ -51,7 +51,9 @@ def main():
                  "-DCMAKE_SYSTEM_NAME=iOS", "-DCMAKE_OSX_ARCHITECTURES=arm64",
                  "-DCMAKE_OSX_SYSROOT=" + sdk, "-DCMAKE_OSX_DEPLOYMENT_TARGET=" + manifest["deployment_target"],
                  "-DSEEKDB_FRAMEWORK=" + str(framework), "-DPROBE_BUNDLE_ID=" + args.bundle_id,
-                 "-DDEVELOPMENT_TEAM=" + team]
+                 "-DDEVELOPMENT_TEAM=" + team,
+                 "-DPROBE_SOURCE_REVISION=" + subprocess.check_output(
+                     ["git", "-C", str(ROOT), "rev-parse", "HEAD"], text=True).strip()]
     run(configure, environment)
     run(["xcodebuild", "-project", build / "SeekDBFrameworkProbe.xcodeproj", "-scheme", "SeekDBFrameworkProbe",
          "-configuration", "Release", "-sdk", sdk, "CODE_SIGNING_ALLOWED=NO", "build"], environment)

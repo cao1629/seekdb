@@ -740,3 +740,31 @@ previous_runs=1、正常停机已验证。第二轮被快速后台切换打断�
 前台后继续专项。首轮脱敏报告为
 `iphone_test/memory-limit/2026-10-04-first/evidence-memory-limit-first-result.json`。
 这不改变此前完整矩阵所验证的 `6deac1205bd0` 范围及其有界内存结论。
+
+## 2026-10-07：动态 framework 稳定性测试
+
+新增独立 stability 探针，仍加载已交付的实现提交6f902fdab24c，不改变引擎或QuickLang。
+每个平台计划一次600秒前台持续测试，再执行4次新进程启动，共5轮。持续测试交替
+提交/回滚固定一行、核对可见值、并发只读连接每32次查询重连、循环结果/值/内存
+分配释放；数据集大小固定，避免把数据增长误判为泄漏。10秒采样一次 phys_footprint，
+预热60秒后的增长限额256MiB；记录可用内存、采样峰值、迭代延迟和客户端线程退出。
+
+App离开前台即失败；超过30秒的采样缺口也不能通过，避免后台挂起被计为有效持续
+时间。必须引擎停止、读线程和加载线程退出、全部5份report身份匹配，且后4轮读取
+同一个已提交counter。runner不附加调试器，不将signal9自动认定为Jetsam。只操作
+专用Probe，不写QuickLang仓库。无OOM极限加压、后台或App Store验收声明。
+
+```bash
+python3 unittest/ios_build/build_framework_probe.py --simulator \
+  --framework build_ios_sim_arm64/framework-6f902fdab24c/SeekDB.framework \
+  --build build_ios_sim_arm64/framework-stability-probe
+python3 unittest/ios_build/run_framework_stability.py --simulator SIMULATOR_UDID \
+  --app build_ios_sim_arm64/framework-stability-probe/Release-iphonesimulator/SeekDBFrameworkProbe.app \
+  --framework build_ios_sim_arm64/framework-6f902fdab24c/SeekDB.framework \
+  --output build_ios_sim_arm64/stability/UNIQUE_RUN --duration 600 --runs 5
+```
+
+真机先用既有profile/identity构建Probe，再将runner的--simulator改为--device，输入
+对应真机framework与App。测试需手机解锁，专用Probe保持前台。首次run执行soak，
+随后四次执行counter持久化检查。旧输出不覆盖；当前仅新增测试程序和8项验收门禁
+回归，实际10分钟结果在执行后写入tracked evidence。
