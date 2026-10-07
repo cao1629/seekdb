@@ -682,3 +682,17 @@ python3 deps/ios-build/build.py --jobs 4 vsag
 - 核实当前仓库只有静态生命周期 runtime，没有桌面完整 C driver。只读发现 QuickLang 本地缓存中的 driver 和 Connector/C，并核实 revision 与头文件一致性；未复制、下载或编译范围外源码。
 - 记录外置进程实现与 iOS singleton、参数、socket alias 的语义差异；未用内部 SQL proxy 替代外部客户端证明。详见 `ios-framework-audit.md`。
 - 本轮仅新增审计文档并更新使用状态，无引擎、CMake、签名或环境设置变更。未清理缓存或中断构建；未构建 framework，未执行动态加载、SQL、模拟器或真机验收。
+
+## 2026-10-07：动态 framework 与完整 C driver 实现
+
+- 后续获得使用现有本地 QuickLang driver/Connector 缓存授权，离线复制 Connector/C 3.4.8 到 deps/ios-driver；driver revision 086008a97d1ec1bd07ae09933a51069dad38dd08、Connector revision 46880b003653a000e9588bd73c8b1dd65088c686，保留来源与许可。没有下载引擎、bindings 或 Connector，没有修改 QuickLang。
+- 新增 SHARED FRAMEWORK 目标，完整 25 函数桌面头文件及客户端/结果/事务实现；只适配 open/close 为独立线程和同目录引用计数。8 MiB 引擎线程、一次启动/进程、最后 close 停止并 join、无 subprocess/TCP。首次初始化支持参数覆盖，重开保留持久配置，强制 socket-only 和 CPU/sql 线程限制。
+- iOS HOME 常为 /private/var 长路径且容器根不可写。socket alias 改为短 /var 表达下的 App tmp；模拟器长路径允许宿主 /tmp。readiness 使用与桌面相同的 START_SERVICE_TIME SQL，root@sys；公开连接仍 root/空密码。Connector 必须同时关闭 SSL enforce 与 verify-server-cert，否则错误 2026。
+- 构建入口默认启用 framework 时关闭测试 hooks 和物理 standby，Connector 只静态链接本仓库 iOS OpenSSL/zlib，禁用动态认证插件，导出名单隐藏引擎和 Rust 符号。平台、安装路径、最低版本、系统动态依赖、头文件、hook 和源码标记由 post-build verifier 检查。manifest 保存静态库摘要与依赖来源，打包许可/Cargo.lock。
+- 本机采用 DEVELOPER_DIR 完整 Xcode、仓库 Cargo/rustup 与已有 LLDB rustc wrapper。首次直接构建因全局 rustup Android 冲突失败；纠正环境后，9 个未经 wrapper 的旧宿主脚本因 AMFI SIGKILL 失败，移动保留至 ignored rust-cache-recovery/20261007-raw-host-scripts 后重编成功，未清理缓存。模拟器此前缺少 iOS 依赖前缀，使用仓库依赖驱动独立构建。SDK iOS/iOSSimulator 27、arm64、最低18，RelWithDebInfo。
+- 独立 UIKit scene 探针只 dlopen/dlsym；覆盖真实 Unix socket SQL、NULL/空串/中文 emoji、unsigned/floating、metadata、错误、分配、事务提交/回滚、同目录共享 handle、关闭与新进程持久化。最初真机 SQL 完成后，加载线程退出触发 jemalloc 静态 TSD wrapper 被释放的崩溃；根因是 iOS jemalloc 不支持后台线程，却继承 background_thread:true，初始化停在 recursible。iOS 改为 background_thread:false；framework constructor 检查 je_malloc/free bootstrap 成功，并加入显式 pthread_join 的 worker_exit 证据。不能只用 SQL complete=true 判断线程安全。
+- Probe App 采用既有本地 profile/identity 离线签名，未改变 Xcode 账户。Xcode 自动签名 No Accounts、手动使用 Xcode-managed profile 失败的日志保留；Python 打包器在实际 Release-iphoneos 路径嵌入并签名，避免 Xcode EFFECTIVE_PLATFORM_NAME 未展开路径错误。证书/profile/签名 entitlements 和原始日志仅在 ignored 构建目录。
+- 聚焦测试：构建入口16项、runtime cleanup 8项、in-process shutdown 1项已通过；Bash语法和diff检查通过。双平台动态二进制检查通过。最终提交对应的动态探针与持久化验证证据另行记录，不沿用旧审计 revision 报告作最终验收。
+- 当前限制：单引擎/进程、最终关闭后不可同进程重启、不支持 TCP/物理主备、运行期间进程cwd变更，未验证 App Groups、dlclose、App后台长期运行或 QuickLang 集成。本分支不自动合并。
+
+- allocator 定位通过模拟器 LLDB 观察到 malloc_init_state=recursible、opt_background_thread=true，构建定义未启用 JEMALLOC_BACKGROUND_THREAD。关闭 iOS background_thread 后，模拟器 77 项 SQL/生命周期断言、worker_exit=true 和进程存活通过。该修复同时覆盖既有静态 runtime；随后仍需用最终提交双平台复验。真机 OpenSSL 初始缓存缺少来源 verified.json，本轮使用既有依赖驱动单独重编 OpenSSL，补齐来源和安装输出摘要，未清除其他缓存。

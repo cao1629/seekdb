@@ -105,6 +105,20 @@ elif name == 'cmake': sys.exit(int(os.environ.get('CMAKE_EXIT', '0')))
         configure = next(call for call in self.calls() if call[0] == "cmake")
         self.assertIn("-DCMAKE_BUILD_TYPE=RelWithDebInfo", configure)
 
+    def test_framework_target_uses_socket_only_production_configuration(self):
+        """Package a hookless framework without unsupported standby gRPC dependencies."""
+        wrapper = self.root / "unittest/ios_build/rustc_lldb_wrapper.py"
+        wrapper.parent.mkdir(parents=True)
+        wrapper.write_text("#!/bin/sh\nexit 0\n")
+        wrapper.chmod(0o755)
+        self.env.pop("RUSTC_WRAPPER", None)
+        result = self.run_script("release", "--target", "seekdb_ios_framework")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        calls = [call for call in self.calls() if call[0] == "cmake"]
+        for flag in ("-DSEEKDB_IOS_FRAMEWORK=ON", "-DSEEKDB_IOS_TEST_HOOKS=OFF", "-DOB_ENABLE_STANDBY=OFF"):
+            self.assertIn(flag, calls[0])
+        self.assertIn("seekdb_ios_framework", calls[1])
+
     def test_default_prepares_dependencies(self):
         """No-option builds must prepare reusable target dependencies before CMake."""
         result = self.run_script()

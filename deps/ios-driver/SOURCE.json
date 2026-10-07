@@ -1,0 +1,8 @@
+{
+  "driver_revision": "086008a97d1ec1bd07ae09933a51069dad38dd08",
+  "connector_revision": "46880b003653a000e9588bd73c8b1dd65088c686",
+  "connector_version": "3.4.8",
+  "source": "Existing local QuickLang cache; copied offline on 2026-10-07",
+  "driver_adaptation": "Client/result/transaction functions retained; process management excluded; iOS lifecycle implemented locally",
+  "connector_license": "LGPL-2.1-or-later; see mariadb-connector-c/COPYING.LIB"
+}

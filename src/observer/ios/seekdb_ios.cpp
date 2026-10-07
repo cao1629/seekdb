@@ -4,6 +4,8 @@
 #include <atomic>
 #include <cstdlib>
 #include <fcntl.h>
+#include <dirent.h>
+#include <cstring>
 #include <unistd.h>
 #include <curl/curl.h>
 #include "lib/file/file_directory_utils.h"
@@ -36,7 +38,8 @@ void record_cleanup_error(int error)
 }
 
 /** Create engine-owned directories and configure a bounded, socket-only server. */
-int prepare_runtime(const char *directory, ObServerOptions &options)
+int prepare_runtime(const char *directory, ObServerOptions &options,
+                    const char *const *caller_parameters)
 {
   int ret = options.base_dir_.assign(directory);
   if (OB_SUCC(ret)) {
@@ -53,13 +56,51 @@ int prepare_runtime(const char *directory, ObServerOptions &options)
   options.in_process_ = true;
   options.nodaemon_ = true;
   const char *parameters[][2] = {
-      {"memory_budget", "1G"}, {"vector_memory_limit", "128M"}, {"log_disk_size", "2G"},
       {"mysql_port_mode", "disabled"}, {"sql_net_thread_count", "2"},
       {"cpu_count", "2"}};
   for (const auto &parameter : parameters) {
     if (OB_SUCC(ret)) {
       ret = options.parameters_.push_back(std::make_pair(
           ObString(parameter[0]), ObString(parameter[1])));
+    }
+  }
+  // Seed caller configuration only for an uninitialized data directory.
+  bool first_init = true;
+  DIR *sstable = opendir("store/sstable");
+  if (sstable != nullptr) {
+    while (dirent *entry = readdir(sstable)) {
+      if (std::strcmp(entry->d_name, ".") != 0 && std::strcmp(entry->d_name, "..") != 0) {
+        first_init = false;
+        break;
+      }
+    }
+    closedir(sstable);
+  }
+  const char *defaults[][2] = {
+      {"memory_budget", "1G"}, {"vector_memory_limit", "128M"}, {"log_disk_size", "2G"}};
+  if (first_init) {
+    for (const auto &parameter : defaults) {
+      const char *value = parameter[1];
+      for (size_t i = 0; caller_parameters != nullptr && caller_parameters[i] != nullptr; i += 2) {
+        if (std::strcmp(caller_parameters[i], parameter[0]) == 0) {
+          value = caller_parameters[i + 1];
+        }
+      }
+      if (OB_SUCC(ret)) {
+        ret = options.parameters_.push_back(std::make_pair(ObString(parameter[0]), ObString(value)));
+      }
+    }
+    for (size_t i = 0; caller_parameters != nullptr && caller_parameters[i] != nullptr; i += 2) {
+      const char *key = caller_parameters[i];
+      if (std::strcmp(key, "port") == 0 || std::strcmp(key, "memory_budget") == 0
+          || std::strcmp(key, "vector_memory_limit") == 0 || std::strcmp(key, "log_disk_size") == 0
+          || std::strcmp(key, "mysql_port_mode") == 0 || std::strcmp(key, "cpu_count") == 0
+          || std::strcmp(key, "sql_net_thread_count") == 0) {
+        continue;
+      }
+      if (OB_SUCC(ret)) {
+        ret = options.parameters_.push_back(std::make_pair(ObString(key), ObString(caller_parameters[i + 1])));
+      }
     }
   }
   return ret;
@@ -115,6 +156,11 @@ int run_runtime(ObServerOptions &options)
 
 int seekdb_ios_run(const char *absolute_directory)
 {
+  return seekdb_ios_run_with_parameters(absolute_directory, nullptr);
+}
+
+int seekdb_ios_run_with_parameters(const char *absolute_directory, const char *const *parameters)
+{
   if (absolute_directory == nullptr || absolute_directory[0] != '/') {
     return OB_INVALID_ARGUMENT;
   }
@@ -131,7 +177,7 @@ int seekdb_ios_run(const char *absolute_directory)
     ret = OB_IO_ERROR;
   } else {
     ObServerOptions options;
-    if (OB_FAIL(prepare_runtime(absolute_directory, options))) {
+    if (OB_FAIL(prepare_runtime(absolute_directory, options, parameters))) {
     } else if (curl_global_init(CURL_GLOBAL_ALL) != CURLE_OK) {
       ret = OB_ERR_UNEXPECTED;
     } else {

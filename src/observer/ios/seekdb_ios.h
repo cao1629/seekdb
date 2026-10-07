@@ -37,6 +37,9 @@ enum seekdb_ios_cleanup_status {
  */
 int seekdb_ios_run(const char *absolute_directory);
 
+/** Internal driver entry; parameter storage must remain valid until return. */
+int seekdb_ios_run_with_parameters(const char *absolute_directory, const char *const *parameters);
+
 /** Request shutdown; safe from another thread, including during startup. */
 void seekdb_ios_request_stop(void);
 

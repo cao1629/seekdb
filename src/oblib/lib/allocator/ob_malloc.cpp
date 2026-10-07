@@ -31,7 +31,8 @@
 #include <execinfo.h>
 #endif
 
-#if defined(ENABLE_SANITY)
+#if defined(ENABLE_SANITY) || (defined(OB_HAVE_BUNDLED_JEMALLOC) && defined(__APPLE__) && TARGET_OS_IPHONE)
+// The iOS jemalloc build has no background-thread support; enabling it leaves bootstrap incomplete.
 extern "C" {
 const char *je_malloc_conf =
     "background_thread:false,dirty_decay_ms:1000,muzzy_decay_ms:0";

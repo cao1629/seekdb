@@ -55,6 +55,7 @@ Experimental seekdb iOS ARM64 build. This does not package or sign an iPhone app
   --deps-only             Build pinned iOS dependencies, including ICU and VSAG
   --jobs N                Parallel C/C++ jobs (default: 4)
   --target NAME           CMake target (default: seekdb_ios_link_check, including engine libraries)
+                          seekdb_ios_framework packages the shared desktop C ABI
   --build-dir PATH        Repository-local CMake build directory
   --deps-prefix PATH      iOS-built dependencies (default: deps/ios/<sdk>/devel)
   --headers-prefix PATH   Header prefix (auto: iOS prefix, then existing host headers)
@@ -233,6 +234,13 @@ build_dependencies() {
 # (default: engine libraries plus final link check), retaining logs in the build tree.
 build_engine() {
   DEPS_PREFIX="${DEPS_PREFIX:-$ROOT/deps/ios/$SDK/devel}"
+  local framework_args=()
+  if [[ "$TARGET" == seekdb_ios_framework ]]; then
+    framework_args=(-DSEEKDB_IOS_FRAMEWORK=ON -DSEEKDB_IOS_TEST_HOOKS=OFF -DOB_ENABLE_STANDBY=OFF)
+    # Reuse the tracked host build-script launcher on macOS with AMFI restrictions.
+    export RUSTC_WRAPPER="${RUSTC_WRAPPER:-$ROOT/unittest/ios_build/rustc_lldb_wrapper.py}"
+    [[ -x "$RUSTC_WRAPPER" ]] || fail "missing executable Rust wrapper: $RUSTC_WRAPPER"
+  fi
   mkdir -p "$BUILD_DIR/logs"
   printf '[build.iphone.sh] SDK=%s target=%s dependencies=%s\n' "$SDK" "$RUST_TARGET" "$DEPS_PREFIX"
   cmake -S "$ROOT" -B "$BUILD_DIR" \
@@ -241,6 +249,7 @@ build_engine() {
     -DCMAKE_BUILD_TYPE="$BUILD_TYPE" -DOB_USE_LLD=OFF -DOB_DISABLE_PIE=OFF \
     -DCARGO="$CARGO" -DDEP_DIR="$DEPS_PREFIX" \
     -DSEEKDB_IOS_HEADER_PREFIX="${HEADERS_PREFIX:-$DEPS_PREFIX}" \
+    ${framework_args[@]+"${framework_args[@]}"} \
     ${CMAKE_ARGS[@]+"${CMAKE_ARGS[@]}"} 2>&1 | tee "$BUILD_DIR/logs/configure.log"
   if [[ "$CONFIGURE_ONLY" == false ]]; then
     local free_kib minimum_gib

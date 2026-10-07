@@ -1,9 +1,86 @@
-## 2026-10-07：动态 framework 与桌面 ABI 状态
+# iOS 构建与验证
 
-动态 `SeekDB.framework` 尚未实现或交付。当前静态 iOS runtime 只有生命周期 ABI，
-不能直接供 QuickLang 共用 macOS C driver。完整本地输入、源码范围阻碍、接口语义
-差异和后续验收条件见 [framework 输入审计](ios-framework-audit.md)。现有 SQL proxy
-测试不代表外部 socket 客户端或桌面 C ABI 验证通过。
+## 2026-10-07：动态 SeekDB.framework 与桌面 C ABI
+
+`codex/ios-dynamic-framework` 已实现进程内动态 framework。App 嵌入并加载
+`SeekDB.framework`，在专用 8 MiB 栈线程运行本地引擎；Connector/C 通过实际 Unix
+socket 发送 SQL。数据库文件位于 App 私有沙箱。未启用 App Groups 或 TCP。
+
+公开头文件与既有 macOS `seekdb.h` 逐字相同，包含全部 25 个 C 函数；另外导出
+7 个 iOS 生命周期/诊断函数。结果遍历、NULL/空 UTF-8、错误、值分配和事务沿用
+桌面 driver。引擎/Rust/Connector 与第三方库静态封装到动态 framework，运行时仅依赖
+iOS 系统库。build-manifest.json 记录源码提交、dirty 状态、二进制和头文件摘要、
+静态链接输入摘要、锁定依赖来源及导出符号；Licenses 保留本地许可文件。
+
+### 支持范围和生命周期
+
+- `seekdb_open` 接受绝对目录和以 NULL 结束的 key/value 参数对。新数据库默认
+  memory_budget=1G、vector_memory_limit=128M、log_disk_size=2G；可在首次初始化
+  覆盖。已有数据库保留持久配置。CPU/sql 线程固定为 2，mysql_port_mode 固定 disabled。
+- 非零 `port` 或非 disabled mysql_port_mode 返回 INVALID_ARGUMENT。
+- 同目录再次 open 共享运行中引擎；不同目录返回 INTERNAL_ERROR。后续 handle 的
+  参数不重新配置已运行引擎。连接应先 disconnect，再 close 所属 handle。
+- 最后一个 close 请求停止并 join 引擎，恢复进程工作目录。每个进程只能启动一次；
+  最后 close 后再次 open 返回 INTERNAL_ERROR。重新启动 App 进程才能重开数据库。
+- socket endpoint 是 handle 持有的借用字符串，close 后无效。长沙箱路径使用可写
+  tmp 中的短 symlink alias；模拟器必要时使用宿主 /tmp。不能硬编码桌面 /tmp 路径。
+- 引擎运行期间使用进程工作目录，App 应使用绝对文件路径。framework 应保持加载
+  至进程结束；未验证主动 dlclose 或 App 后台长期运行。
+
+### 构建
+
+需要完整 Xcode、CMake、固定 Rust 工具链和依赖。所有输出留在本仓库。
+
+```bash
+export DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer
+./build.iphone.sh release --target seekdb_ios_framework --jobs 2
+./build.iphone.sh release --simulator --target seekdb_ios_framework --jobs 2
+```
+
+framework 目标自动设置 SEEKDB_IOS_FRAMEWORK=ON、SEEKDB_IOS_TEST_HOOKS=OFF、
+OB_ENABLE_STANDBY=OFF。后者禁用物理主备/gRPC 路径；当前本地 iOS 依赖不提供
+其所需完整归档。Rust 使用仓库内 Cargo/rustup 目录和现有 rustc_lldb_wrapper.py
+处理本机 AMFI 对宿主 build scripts 的限制。直接调用 CMake 时也需这些环境：
+
+```bash
+export CARGO_HOME="$PWD/deps/ios/cargo"
+export RUSTUP_HOME="$PWD/deps/ios/rustup"
+export RUSTC_WRAPPER="$PWD/unittest/ios_build/rustc_lldb_wrapper.py"
+export CARGO_NET_OFFLINE=true
+cmake -S . -B build_ios_arm64 -DSEEKDB_IOS_FRAMEWORK=ON \
+  -DSEEKDB_IOS_TEST_HOOKS=OFF -DOB_ENABLE_STANDBY=OFF
+cmake --build build_ios_arm64 --target seekdb_ios_framework -j2
+```
+
+常规输出分别为 `build_ios_arm64/framework/SeekDB.framework` 和
+`build_ios_sim_arm64/framework/SeekDB.framework`。交付时保留按源码 revision 命名的
+独立快照，避免覆盖正在集成读取的产物。两种 arm64 平台不能互换。
+
+### 独立动态探针
+
+探针仅链接 UIKit，运行时 dlopen/dlsym framework，使用与桌面相同的头文件。
+真机使用既有本地 profile/identity 离线签名，不访问或修改 Xcode 账户：
+
+```bash
+python3 unittest/ios_build/build_framework_probe.py \
+  --framework build_ios_arm64/framework/SeekDB.framework \
+  --build build_ios_arm64/framework-probe \
+  --profile /path/to/existing.mobileprovision --identity YOUR_SIGNING_IDENTITY
+xcrun devicectl device install app --device YOUR_DEVICE_UDID \
+  build_ios_arm64/framework-probe/Release-iphoneos/SeekDBFrameworkProbe.app
+xcrun devicectl device process launch --device YOUR_DEVICE_UDID YOUR_PROFILE_BUNDLE_ID
+```
+
+保持 App 前台。下载 Documents/framework-probe.json，必须 complete=true、passed=true、
+worker_exit=true、hook_mode=disabled，且 build_id 对应 framework 提交。停止完成后
+退出并重新启动该探针进程，第二份报告 previous_runs 必须增加 1。模拟器使用相同
+脚本加 --simulator，无需开发证书。两份报告可以用
+`unittest/ios_build/validate_framework_probe.py --revision FULL_SHA REPORT1 REPORT2` 验证。
+
+当前已完成双平台构建及二进制检查；真机早期完整 SQL/停止/新进程持久化报告
+绑定旧审计标记，不能代表最终实现提交。源码身份更新后的最终验证结果会记录在
+`unittest/ios_build/framework_evidence/`。尚不声明 QuickLang 集成、App Store 或后台
+运行验收通过。最初输入范围和后续授权记录见 [framework 审计](ios-framework-audit.md)。
 
 ## 2026-10-06：自动准备依赖与构建模式
 
