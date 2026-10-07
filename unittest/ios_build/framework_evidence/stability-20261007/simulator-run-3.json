@@ -1,0 +1,327 @@
+{
+  "run_id" : "BC63FD99-4573-4BEA-8B0D-95D1A2166C65",
+  "stability" : {
+    "passed" : true,
+    "requested_seconds" : 0,
+    "final_counter" : 1451,
+    "mode" : "restart-persistence"
+  },
+  "build_id" : "6f902fdab24c",
+  "test_transport" : "Connector\/C over actual Unix socket",
+  "steps" : [
+    {
+      "name" : "dlopen embedded framework",
+      "passed" : true
+    },
+    {
+      "name" : "dlsym seekdb_open",
+      "passed" : true
+    },
+    {
+      "name" : "dlsym seekdb_close",
+      "passed" : true
+    },
+    {
+      "name" : "dlsym seekdb_connection_options",
+      "passed" : true
+    },
+    {
+      "name" : "dlsym seekdb_connect",
+      "passed" : true
+    },
+    {
+      "name" : "dlsym seekdb_disconnect",
+      "passed" : true
+    },
+    {
+      "name" : "dlsym seekdb_last_error",
+      "passed" : true
+    },
+    {
+      "name" : "dlsym seekdb_query",
+      "passed" : true
+    },
+    {
+      "name" : "dlsym seekdb_result_free",
+      "passed" : true
+    },
+    {
+      "name" : "dlsym seekdb_result_column_count",
+      "passed" : true
+    },
+    {
+      "name" : "dlsym seekdb_result_column_name",
+      "passed" : true
+    },
+    {
+      "name" : "dlsym seekdb_result_column_type_id",
+      "passed" : true
+    },
+    {
+      "name" : "dlsym seekdb_result_row_count",
+      "passed" : true
+    },
+    {
+      "name" : "dlsym seekdb_result_next",
+      "passed" : true
+    },
+    {
+      "name" : "dlsym seekdb_result_get_int64",
+      "passed" : true
+    },
+    {
+      "name" : "dlsym seekdb_result_get_uint64",
+      "passed" : true
+    },
+    {
+      "name" : "dlsym seekdb_result_get_float",
+      "passed" : true
+    },
+    {
+      "name" : "dlsym seekdb_result_get_str",
+      "passed" : true
+    },
+    {
+      "name" : "dlsym seekdb_trx_begin",
+      "passed" : true
+    },
+    {
+      "name" : "dlsym seekdb_trx_commit",
+      "passed" : true
+    },
+    {
+      "name" : "dlsym seekdb_trx_rollback",
+      "passed" : true
+    },
+    {
+      "name" : "dlsym seekdb_value_free",
+      "passed" : true
+    },
+    {
+      "name" : "dlsym seekdb_value_create_int64",
+      "passed" : true
+    },
+    {
+      "name" : "dlsym seekdb_value_get_int64",
+      "passed" : true
+    },
+    {
+      "name" : "dlsym seekdb_malloc",
+      "passed" : true
+    },
+    {
+      "name" : "dlsym seekdb_free",
+      "passed" : true
+    },
+    {
+      "name" : "dlsym seekdb_ios_get_state",
+      "passed" : true
+    },
+    {
+      "name" : "dlsym seekdb_ios_get_cleanup_status",
+      "passed" : true
+    },
+    {
+      "name" : "dlsym seekdb_ios_get_cleanup_error",
+      "passed" : true
+    },
+    {
+      "name" : "dlsym seekdb_ios_get_build_id",
+      "passed" : true
+    },
+    {
+      "name" : "dlsym seekdb_ios_get_hook_mode",
+      "passed" : true
+    },
+    {
+      "name" : "production hooks disabled",
+      "passed" : true
+    },
+    {
+      "name" : "capture cwd",
+      "passed" : true
+    },
+    {
+      "name" : "reject TCP",
+      "passed" : true
+    },
+    {
+      "name" : "open engine",
+      "passed" : true
+    },
+    {
+      "name" : "root Unix socket options",
+      "passed" : true
+    },
+    {
+      "name" : "share existing engine",
+      "passed" : true
+    },
+    {
+      "name" : "close shared handle",
+      "passed" : true
+    },
+    {
+      "name" : "connect root empty password",
+      "passed" : true
+    },
+    {
+      "name" : "CREATE DATABASE IF NOT EXISTS framework_probe",
+      "passed" : true
+    },
+    {
+      "name" : "free statement result",
+      "passed" : true
+    },
+    {
+      "name" : "USE framework_probe",
+      "passed" : true
+    },
+    {
+      "name" : "free statement result",
+      "passed" : true
+    },
+    {
+      "name" : "CREATE TABLE IF NOT EXISTS persistence (id BIGINT PRIMARY KEY, n BIGINT NOT NULL)",
+      "passed" : true
+    },
+    {
+      "name" : "free statement result",
+      "passed" : true
+    },
+    {
+      "name" : "INSERT IGNORE INTO persistence VALUES (1, 0)",
+      "passed" : true
+    },
+    {
+      "name" : "free statement result",
+      "passed" : true
+    },
+    {
+      "name" : "SELECT n FROM persistence WHERE id=1",
+      "passed" : true
+    },
+    {
+      "name" : "scalar traversal",
+      "passed" : true
+    },
+    {
+      "name" : "UPDATE persistence SET n=n+1 WHERE id=1",
+      "passed" : true
+    },
+    {
+      "name" : "free statement result",
+      "passed" : true
+    },
+    {
+      "name" : "DROP TABLE IF EXISTS cells",
+      "passed" : true
+    },
+    {
+      "name" : "free statement result",
+      "passed" : true
+    },
+    {
+      "name" : "CREATE TABLE cells (id BIGINT PRIMARY KEY, v VARCHAR(100) NULL)",
+      "passed" : true
+    },
+    {
+      "name" : "free statement result",
+      "passed" : true
+    },
+    {
+      "name" : "begin committed transaction",
+      "passed" : true
+    },
+    {
+      "name" : "INSERT INTO cells VALUES (1, '中文🙂'), (2, NULL), (3, '')",
+      "passed" : true
+    },
+    {
+      "name" : "free statement result",
+      "passed" : true
+    },
+    {
+      "name" : "commit transaction",
+      "passed" : true
+    },
+    {
+      "name" : "begin rolled back transaction",
+      "passed" : true
+    },
+    {
+      "name" : "INSERT INTO cells VALUES (4, 'rollback')",
+      "passed" : true
+    },
+    {
+      "name" : "free statement result",
+      "passed" : true
+    },
+    {
+      "name" : "rollback transaction",
+      "passed" : true
+    },
+    {
+      "name" : "SELECT COUNT(*) FROM cells",
+      "passed" : true
+    },
+    {
+      "name" : "scalar traversal",
+      "passed" : true
+    },
+    {
+      "name" : "rollback invisible and commit visible",
+      "passed" : true
+    },
+    {
+      "name" : "SELECT id,v FROM cells ORDER BY id",
+      "passed" : true
+    },
+    {
+      "name" : "nullable UTF-8, empty string, metadata and row traversal",
+      "passed" : true
+    },
+    {
+      "name" : "SELECT CAST(18446744073709551615 AS UNSIGNED), 1.25",
+      "passed" : true
+    },
+    {
+      "name" : "unsigned and floating results",
+      "passed" : true
+    },
+    {
+      "name" : "value ownership",
+      "passed" : true
+    },
+    {
+      "name" : "framework allocation",
+      "passed" : true
+    },
+    {
+      "name" : "SQL errors retain MySQL diagnostics",
+      "passed" : true
+    },
+    {
+      "name" : "disconnect",
+      "passed" : true
+    },
+    {
+      "name" : "close and join engine",
+      "passed" : true
+    },
+    {
+      "name" : "stopped and cleaned up",
+      "passed" : true
+    },
+    {
+      "name" : "one startup per process",
+      "passed" : true
+    }
+  ],
+  "probe_source_revision" : "9d149628cd45c839b4ed2d8c822c75c440bc21ce",
+  "passed" : true,
+  "complete" : true,
+  "hook_mode" : "disabled",
+  "previous_runs" : 6,
+  "worker_exit" : true
+}

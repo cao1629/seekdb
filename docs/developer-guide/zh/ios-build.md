@@ -768,3 +768,10 @@ python3 unittest/ios_build/run_framework_stability.py --simulator SIMULATOR_UDID
 对应真机framework与App。测试需手机解锁，专用Probe保持前台。首次run执行soak，
 随后四次执行counter持久化检查。旧输出不覆盖；当前仅新增测试程序和8项验收门禁
 回归，实际10分钟结果在执行后写入tracked evidence。
+
+### 2026-10-07：稳定性实际执行结果
+
+- 原6f902fdab24c framework，9d149628cd45测试Probe；真机iPhone17Pro/iOS27.0.1与arm64模拟器/iOS27.0均无调试器执行600秒前台测试，各5轮新进程启动全部通过。事务迭代2933/2901、并发读取5822/5721、连接建立182/179；提交计数1467/1451在后续4次重启均保持一致。每轮77项断言及worker_exit通过，reader线程成功join。
+- 10秒采样物理footprint峰值真机213.8MiB、模拟器215.5MiB，相比60秒预热基线增长约50.5/53.4MiB，低于本次256MiB门限；采样峰值不代表瞬时峰值，不宣称无泄漏。
+- 14项framework宿主门禁通过；扩跑iOS宿主347项中338通过、1跳过、3失败、5错误。设备状态mock/错误文本、mysqltest文件拒绝检查及产品名检查未通过，完整suite未通过，独立问题本轮未修复。详细范围与全部10份报告保存于`unittest/ios_build/framework_evidence/stability-20261007/README.md`。
+- 本轮只证明10分钟前台小数据集及有限并发/重启，后台、挂起恢复、24小时、大数据、高并发和整个集成App仍未验证。没有生产源代码、依赖或环境配置改变，没有操作其他App仓库；签名仍使用现有本地凭据，凭据未入库。
