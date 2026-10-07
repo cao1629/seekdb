@@ -15,7 +15,7 @@ iOS 系统库。build-manifest.json 记录源码提交、dirty 状态、二进�
 ### 支持范围和生命周期
 
 - `seekdb_open` 接受绝对目录和以 NULL 结束的 key/value 参数对。新数据库默认
-  memory_budget=1G、vector_memory_limit=128M、log_disk_size=2G；可在首次初始化
+  memory_budget=1G、vector_memory_limit=128M、log_disk_size=2G、datafile_maxsize=20G；可在首次初始化
   覆盖。已有数据库保留持久配置。CPU/sql 线程固定为 2，mysql_port_mode 固定 disabled。
 - 非零 `port` 或非 disabled mysql_port_mode 返回 INVALID_ARGUMENT。
 - 同目录再次 open 共享运行中引擎；不同目录返回 INTERNAL_ERROR。后续 handle 的
@@ -775,3 +775,9 @@ python3 unittest/ios_build/run_framework_stability.py --simulator SIMULATOR_UDID
 - 10秒采样物理footprint峰值真机213.8MiB、模拟器215.5MiB，相比60秒预热基线增长约50.5/53.4MiB，低于本次256MiB门限；采样峰值不代表瞬时峰值，不宣称无泄漏。
 - 14项framework宿主门禁通过；扩跑iOS宿主347项中338通过、1跳过、3失败、5错误。设备状态mock/错误文本、mysqltest文件拒绝检查及产品名检查未通过，完整suite未通过，独立问题本轮未修复。详细范围与全部10份报告保存于`unittest/ios_build/framework_evidence/stability-20261007/README.md`。
 - 本轮只证明10分钟前台小数据集及有限并发/重启，后台、挂起恢复、24小时、大数据、高并发和整个集成App仍未验证。没有生产源代码、依赖或环境配置改变，没有操作其他App仓库；签名仍使用现有本地凭据，凭据未入库。
+
+### 2026-10-07：iPhone 嵌入式数据文件默认上限
+
+首次初始化的iOS runtime新增`datafile_maxsize=20G`默认参数；用户显式值优先，参数只转发一次。已有数据目录仍保留持久配置，不自动把旧`1T`改为`20G`，不截断数据文件；需要时通过数据库配置显式调整。20G是数据文件自动扩容上限，不是诊断日志、redo或整个App沙箱的总配额。通用服务端参数默认仍为1T，本变更针对本仓库iPhone嵌入式入口。
+
+验证：host clang++编译并执行实际`prepare_runtime`函数体（目录及options为隔离适配器），覆盖新目录默认20G、显式8G、已有目录不传默认、已有目录不重设显式值；runtime相关9项测试通过。未运行引擎或修改手机数据。先前6f902fdab24c交付framework/ZIP未重建，仍为旧默认，使用本变更需重新构建。

@@ -77,7 +77,8 @@ int prepare_runtime(const char *directory, ObServerOptions &options,
     closedir(sstable);
   }
   const char *defaults[][2] = {
-      {"memory_budget", "1G"}, {"vector_memory_limit", "128M"}, {"log_disk_size", "2G"}};
+      {"memory_budget", "1G"}, {"vector_memory_limit", "128M"},
+      {"log_disk_size", "2G"}, {"datafile_maxsize", "20G"}};
   if (first_init) {
     for (const auto &parameter : defaults) {
       const char *value = parameter[1];
@@ -94,6 +95,7 @@ int prepare_runtime(const char *directory, ObServerOptions &options,
       const char *key = caller_parameters[i];
       if (std::strcmp(key, "port") == 0 || std::strcmp(key, "memory_budget") == 0
           || std::strcmp(key, "vector_memory_limit") == 0 || std::strcmp(key, "log_disk_size") == 0
+          || std::strcmp(key, "datafile_maxsize") == 0
           || std::strcmp(key, "mysql_port_mode") == 0 || std::strcmp(key, "cpu_count") == 0
           || std::strcmp(key, "sql_net_thread_count") == 0) {
         continue;
