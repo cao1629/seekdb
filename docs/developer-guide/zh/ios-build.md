@@ -1,3 +1,10 @@
+## 2026-10-07：动态 framework 与桌面 ABI 状态
+
+动态 `SeekDB.framework` 尚未实现或交付。当前静态 iOS runtime 只有生命周期 ABI，
+不能直接供 QuickLang 共用 macOS C driver。完整本地输入、源码范围阻碍、接口语义
+差异和后续验收条件见 [framework 输入审计](ios-framework-audit.md)。现有 SQL proxy
+测试不代表外部 socket 客户端或桌面 C ABI 验证通过。
+
 ## 2026-10-06：自动准备依赖与构建模式
 
 ```bash

@@ -676,3 +676,9 @@ python3 deps/ios-build/build.py --jobs 4 vsag
 - `git cherry` 确认上游同步前快照的 104 个提交、master 的 19 个提交在当前分支均有等价补丁；旧 ARM64 分支的 14 个提交中，13 个等价，初始构建提交 `1d600e19c` 对应当前分支的 `abf486d0d`。`git range-diff` 确认差异是适配上游 macOS 27、OpenMP、jemalloc 和 zstd 分支上下文，原 iOS 行为已保留，不重放旧版本覆盖新修复。`develop` 为当前分支祖先。
 - 本次头文件选择修复、精简注释、回归测试和操作说明纳入当前分支；原分支无额外待合并代码。删除其余四个本地分支，远端分支不变。删除前的全部本地分支历史及未提交补丁保存在 Git 目录 `branch-cleanup-backups/20261006-ios-consolidation/`，bundle 已验证可读；不清理旧 worktree 的构建产物和证据。
 - 分支收敛验证：当前目录 Python 3.14.2 的全套宿主测试共 321 项，7 项失败、1 项跳过；在未修改的 `afa921578` 原 worktree 上使用同一 Python 3.14.2，29 项 registry 测试的同一 6 项失败及 JSON 深度测试的同一 1 项失败均可复现，确认非本次修复引入。原提交使用 Python 3.9.6 的这 30 项测试通过；本次修改的 9 项构建脚本测试在 Python 3.14.2 和 3.9.6 下均通过。完整测试日志及基线复验日志已存入上述本地备份目录。本轮不宣称全套测试或真机测试通过，Python 3.14 兼容性问题保留待后续处理。
+# 2026-10-07：动态 framework 桌面 ABI 输入审计
+
+- 在干净工作区从 `1288082d49326d105d22444cb3c6c8fd7ace62ca` 创建独立 `codex/ios-dynamic-framework` 分支；未合并、推送或修改其他任务。
+- 核实当前仓库只有静态生命周期 runtime，没有桌面完整 C driver。只读发现 QuickLang 本地缓存中的 driver 和 Connector/C，并核实 revision 与头文件一致性；未复制、下载或编译范围外源码。
+- 记录外置进程实现与 iOS singleton、参数、socket alias 的语义差异；未用内部 SQL proxy 替代外部客户端证明。详见 `ios-framework-audit.md`。
+- 本轮仅新增审计文档并更新使用状态，无引擎、CMake、签名或环境设置变更。未清理缓存或中断构建；未构建 framework，未执行动态加载、SQL、模拟器或真机验收。
