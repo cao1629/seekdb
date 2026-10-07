@@ -57,6 +57,27 @@ cmake --build build_ios_arm64 --target seekdb_ios_framework -j2
 `build_ios_sim_arm64/framework/SeekDB.framework`。交付时保留按源码 revision 命名的
 独立快照，避免覆盖正在集成读取的产物。两种 arm64 平台不能互换。
 
+### 最终交付压缩包
+
+独立交付目录：`build_ios_arm64/framework-delivery-6f902fdab24c/`。
+真机与模拟器各有 ZIP、delivery.json 摘要和 README 接入说明。保留原 framework
+目录和旧缓存，不覆盖正在集成读取的文件。压缩包包含未经 App 签名的 framework；
+嵌入 App 后使用应用签名身份签名。可重复打包：
+
+```bash
+ditto -c -k --keepParent \
+  build_ios_arm64/framework-6f902fdab24c/SeekDB.framework \
+  build_ios_arm64/framework-delivery-6f902fdab24c/SeekDB-iphoneos-6f902fdab24c.zip
+ditto -c -k --keepParent \
+  build_ios_sim_arm64/framework-6f902fdab24c/SeekDB.framework \
+  build_ios_arm64/framework-delivery-6f902fdab24c/SeekDB-iphonesimulator-6f902fdab24c.zip
+```
+
+两份 ZIP 已通过 CRC、内部二进制/头文件 SHA256、提交标记和 disabled hook metadata
+核验。压缩包字节摘要见 delivery.json；重新打包的 ZIP 字节不保证完全一致，内部
+二进制摘要以 build-manifest.json 为准。不要使用旧审计标记 8f73e95b52cd 的原目录
+作为最终 App 验收输入。
+
 ### 独立动态探针
 
 探针仅链接 UIKit，运行时 dlopen/dlsym framework，使用与桌面相同的头文件。

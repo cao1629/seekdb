@@ -704,3 +704,11 @@ python3 deps/ios-build/build.py --jobs 4 vsag
 - 真机和模拟器各2轮独立进程动态探针，四轮各77项通过，complete/passed/worker_exit 均true。真机 previous_runs 3→4、模拟器2→3，确认新进程读取上一轮已提交数据。每轮包含真实Connector/C socket、全部25接口动态加载、事务/UTF-8/NULL/错误/分配、停止清理及同进程重开拒绝。线程退出后进程仍存活，最后只终止本任务Probe进程；没有操作QuickLang进程。
 - 31项聚焦宿主测试通过：构建入口16、runtime cleanup8、shutdown1、真实证据验收门禁6；Bash语法、Python编译、适配文件diff检查通过。原样复制的上游Connector保留原始空白，不对其作无关格式改写；未执行完整仓库测试。
 - 验收报告、source/binary摘要、源码身份、allocator回归根因和平台限制保存于 unittest/ios_build/framework_evidence；该后续证据提交不改变已验收引擎实现。未自动合并或推送，未修改QuickLang。QuickLang集成由其任务独立验收，本任务不声明集成通过。
+
+### 2026-10-07：双平台交付包与接入说明
+
+- 在 ignored build_ios_arm64/framework-delivery-6f902fdab24c 生成真机/模拟器独立ZIP及delivery.json、README；实现和二进制仍为6f902fdab24c，未重新编译、覆盖旧产物或修改QuickLang。打包命令同步ios-build.md。
+- 两包CRC与内部binary/header SHA256、完整源码revision、clean source标记、disabled hooks校验通过。只包含已有unsigned framework、metadata、头文件和许可，无签名凭据。各ZIP摘要：
+  - iphoneos: `6afe43d36b62c3b9296dbc6e6e27ffe9e0055eb20ea00dbb12e59f72cb4dbeff`，61570153 bytes。
+  - iphonesimulator: `2c339aeb046afcdc7296dec1737abc20b81ada56fa174c0c80f22da586b2afe7`，63092939 bytes。
+- 此次推进只记录framework打包验证；QuickLang协调chat已自行导入最终framework并进行实际App验收，安装/启动不替代数据库和词库初始化证明。本任务未发送跨chat消息，也未将其他chat进度当作本仓库的独立测试结果。
