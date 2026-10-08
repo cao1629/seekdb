@@ -730,3 +730,11 @@ python3 deps/ios-build/build.py --jobs 4 vsag
 
 - 按用户要求，在iOS `prepare_runtime` 首次初始化默认列表加入`datafile_maxsize=20G`，同时排除后续重复转发；显式配置优先，已有数据库保留持久配置，不缩减已有文件。没有修改通用服务端1T默认或运行日志大小。
 - 新增隔离host C++配置回归，执行真实prepare_runtime函数体，覆盖默认/覆盖/已有目录四种组合；9项runtime相关测试通过。无CMake、签名、依赖和系统环境变更，未重新构建framework或上手机验收。既有6f902fdab24c产物仍是旧配置，需重建后才能在App生效。
+
+### 2026-10-08：分支整合与清理
+
+- 将 `codex/ios-dynamic-framework`（`2f731a973`）快进合入 `ios/iphone13-17-iphoneOS2627-macOS27`。本地 `master`（`e9d664c6f`）的19个iOS提交经 `git cherry` 确认为等价补丁，以保留当前实现的历史合并记录其祖先关系。
+- 远端 `codex/iphone-arm64-port`（`60ab0316d`）除首个移植提交外均为等价补丁；首个提交与已移植版本 `185085e62` 经 `git range-diff` 核对，差异为上游macOS构建上下文和iOS分支适配，保留当前已适配实现并合并历史。
+- 正常合入 `upstream/master`（`1e113252b`），新增布尔谓词去重修复和对应mysqltest用例。整合提交 `87328a156` 相对动态framework分支仅修改上游修复的3个文件。四个来源分支均通过 `git merge-base --is-ancestor`。
+- 验证：`git diff --check` 通过；`python3 -m unittest discover -s unittest/ios_build -p 'test_*.py'` 运行348项，339通过、1跳过、3失败、5报错。失败涉及6项SQL重启模拟测试（locked诊断）、1项mysqltest文件输入限制和1项产品名称扫描；相关iOS实现及测试文件与整合前framework分支一致。本轮未重新编译或执行真机/模拟器验收，不声明全部测试通过。
+- 删除 detached `ios-layered-validation` worktree前确认其 `afa921578` 已为目标分支祖先且无未提交源码；ignored构建产物和证据移至仓库内 `build_ios_arm64/worktree-preserved-20261008/`。主checkout切换到目标iOS分支，保留主工作区构建输出。

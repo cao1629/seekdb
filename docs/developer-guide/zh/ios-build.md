@@ -1,5 +1,7 @@
 # iOS 构建与验证
 
+当前整合分支：`ios/iphone13-17-iphoneOS2627-macOS27`。2026-10-08已纳入动态framework、本地master、原远端ARM64移植分支历史及上游master `1e113252b`。本轮仅验证历史包含关系和宿主测试，348项中8项失败或报错、1项跳过；未重新构建或做设备验收，详见 `ios-change-log.md` 当日记录。
+
 ## 2026-10-07：动态 SeekDB.framework 与桌面 C ABI
 
 `codex/ios-dynamic-framework` 已实现进程内动态 framework。App 嵌入并加载
