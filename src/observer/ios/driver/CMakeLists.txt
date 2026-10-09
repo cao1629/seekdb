@@ -24,10 +24,10 @@ add_subdirectory("${CMAKE_SOURCE_DIR}/deps/ios-driver/mariadb-connector-c"
 
 add_library(seekdb_ios_framework SHARED EXCLUDE_FROM_ALL
   seekdb_client.c seekdb_lifecycle.cpp ../seekdb_ios.cpp seekdb.h)
-target_include_directories(seekdb_ios_framework PRIVATE
-  "${CMAKE_CURRENT_SOURCE_DIR}"
-  "${CMAKE_SOURCE_DIR}/deps/ios-driver/mariadb-connector-c/include"
-  "${CMAKE_BINARY_DIR}/ios-connector/include")
+target_include_directories(seekdb_ios_framework PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}")
+set_source_files_properties(seekdb_client.c seekdb_lifecycle.cpp PROPERTIES
+  INCLUDE_DIRECTORIES
+  "${CMAKE_SOURCE_DIR}/deps/ios-driver/mariadb-connector-c/include;${CMAKE_BINARY_DIR}/ios-connector/include")
 target_compile_definitions(seekdb_ios_framework PRIVATE
   SEEKDB_IOS_BUILD_ID="${SEEKDB_IOS_BUILD_ID}"
   SEEKDB_IOS_HOOK_MODE="disabled")
