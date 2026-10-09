@@ -9,6 +9,7 @@ import hashlib
 import json
 import os
 from pathlib import Path
+import re
 import secrets
 import shlex
 import stat
@@ -323,8 +324,11 @@ def source_commit(repo_root):
     try:
         return subprocess.check_output(
             ["git", "rev-parse", "HEAD"], cwd=str(repo_root),
-            text=True).strip()
+            stderr=subprocess.DEVNULL, text=True).strip()
     except (OSError, subprocess.CalledProcessError) as exc:
+        commit = os.environ.get("GITHUB_SHA", "")
+        if re.fullmatch(r"[0-9a-f]{40}", commit):
+            return commit
         raise RunnerError("cannot resolve mysqltest source revision") from exc
 
 

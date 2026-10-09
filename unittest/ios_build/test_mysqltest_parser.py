@@ -384,6 +384,23 @@ class MysqltestParserTest(unittest.TestCase):
             with self.assertRaises(phase.MysqltestPhaseError):
                 phase.validate_host_gate(REPOSITORY_ROOT, oversized, {})
 
+    def test_source_commit_uses_github_sha_without_git_checkout(self):
+        host_runner = parser._load_host_discovery(REPOSITORY_ROOT)
+        github_sha = "0123456789abcdef0123456789abcdef01234567"
+        head = subprocess.check_output(
+            ["git", "rev-parse", "HEAD"], cwd=str(REPOSITORY_ROOT),
+            text=True).strip()
+        with tempfile.TemporaryDirectory() as directory:
+            snapshot = Path(directory).resolve()
+            with mock.patch.dict(os.environ, {"GITHUB_SHA": github_sha}):
+                self.assertEqual(github_sha, host_runner.source_commit(snapshot))
+                self.assertEqual(head, host_runner.source_commit(REPOSITORY_ROOT))
+            for value in ("", "main", github_sha.upper(), github_sha[:-1]):
+                with self.subTest(github_sha=value), \
+                        mock.patch.dict(os.environ, {"GITHUB_SHA": value}):
+                    with self.assertRaises(host_runner.RunnerError):
+                        host_runner.source_commit(snapshot)
+
     def test_slice_reader_rejects_fifo_symlink_and_oversized_json(self):
         """Merge inputs must be bounded stable regular nofollow files."""
         host_runner = parser._load_host_discovery(REPOSITORY_ROOT)
