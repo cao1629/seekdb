@@ -1105,17 +1105,17 @@ class IphoneTestPhasesTest(unittest.TestCase):
             cargo_home = Path(environment["CARGO_HOME"]).resolve()
             rustup_home = Path(environment["RUSTUP_HOME"]).resolve()
             tools = cargo_home / "bin"
-            secret = "private-probe-output"
+            leak_marker = "private-probe-output"
             for name in ("cargo", "rustup"):
                 tool = tools / name
                 tool.write_text(
                     "#!/bin/sh\n"
                     f"[ \"$CARGO_HOME\" = \"{cargo_home}\" ] || "
-                    f"{{ echo '{secret}' >&2; exit 9; }}\n"
+                    f"{{ echo '{leak_marker}' >&2; exit 9; }}\n"
                     f"[ \"$RUSTUP_HOME\" = \"{rustup_home}\" ] || "
-                    f"{{ echo '{secret}' >&2; exit 9; }}\n"
+                    f"{{ echo '{leak_marker}' >&2; exit 9; }}\n"
                     f"case \"$PATH\" in \"{tools}\":*) ;; *) "
-                    f"echo '{secret}' >&2; exit 9;; esac\n"
+                    f"echo '{leak_marker}' >&2; exit 9;; esac\n"
                     f"echo '{name} 1.0.0'\n",
                     encoding="utf-8")
             configuration.engine_build.mkdir(parents=True)
@@ -1142,7 +1142,7 @@ class IphoneTestPhasesTest(unittest.TestCase):
         self.assertEqual(tools / "cargo", inputs.cargo)
         self.assertEqual("", stdout.getvalue())
         self.assertEqual("", stderr.getvalue())
-        self.assertNotIn(secret, stdout.getvalue() + stderr.getvalue())
+        self.assertNotIn(leak_marker, stdout.getvalue() + stderr.getvalue())
 
     def test_rustup_managed_shim_with_wrong_home_is_rejected_silently(self):
         """Reject an unusable managed tool context without exposing output."""
@@ -1151,12 +1151,12 @@ class IphoneTestPhasesTest(unittest.TestCase):
             configuration = self.configuration(root)
             environment = self.build_environment(root)
             expected_home = Path(environment["RUSTUP_HOME"]).resolve()
-            secret = "private-probe-output"
+            leak_marker = "private-probe-output"
             for name in ("cargo", "rustup"):
                 Path(environment[name.upper()]).write_text(
                     "#!/bin/sh\n"
                     f"[ \"$RUSTUP_HOME\" = \"{expected_home}\" ] || "
-                    f"{{ echo '{secret}' >&2; exit 9; }}\n"
+                    f"{{ echo '{leak_marker}' >&2; exit 9; }}\n"
                     f"echo '{name} 1.0.0'\n",
                     encoding="utf-8")
             wrong_home = root / "wrong-rustup-home"
@@ -1171,7 +1171,7 @@ class IphoneTestPhasesTest(unittest.TestCase):
                 phases.resolve_build_inputs(configuration, environment)
 
         serialized = stdout.getvalue() + stderr.getvalue() + str(error.exception)
-        self.assertNotIn(secret, serialized)
+        self.assertNotIn(leak_marker, serialized)
 
     def test_preparation_failure_diagnostics_map_only_to_fixed_codes(self):
         """Translate known internal stages without exposing arbitrary details."""
