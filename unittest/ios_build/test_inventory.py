@@ -32,11 +32,11 @@ class TestInventory(unittest.TestCase):
     def test_discovers_current_tracked_corpus(self):
         """Require the exact test-corpus counts established for this revision."""
         counts = generate_test_inventory.count_by_corpus(self.rows)
-        self.assertEqual(283, counts["mysqltest-active"])
-        self.assertEqual(272, sum(row["ci_selected"] for row in self.rows
+        self.assertEqual(284, counts["mysqltest-active"])
+        self.assertEqual(273, sum(row["ci_selected"] for row in self.rows
                                   if row["corpus"] == "mysqltest-active"))
         self.assertEqual(500, counts["obtest-legacy"])
-        self.assertEqual(3, counts["rust-test"])
+        self.assertEqual(22, counts["rust-test"])
         self.assertEqual(9, counts["gtest-orphan"])
         self.assertEqual(1, counts["mysqltest-device-lossless"])
         self.assertEqual(
@@ -75,7 +75,7 @@ class TestInventory(unittest.TestCase):
     def test_every_active_mysqltest_has_a_classification(self):
         """Require an explicit reviewed manifest decision for every active case."""
         active = [row for row in self.rows if row["corpus"] == "mysqltest-active"]
-        self.assertEqual(283, len(active))
+        self.assertEqual(284, len(active))
         self.assertTrue(all(row["classification_source"].startswith("reviewed:")
                             for row in active))
         self.assertTrue(all(row["id"].startswith("mysqltest.active.") for row in active))

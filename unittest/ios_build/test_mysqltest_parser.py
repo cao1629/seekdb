@@ -33,8 +33,8 @@ class MysqltestParserTest(unittest.TestCase):
         """Reuse the supported host runner selection without dropping active files."""
         cases = parser.discover_active_cases(REPOSITORY_ROOT)
 
-        self.assertEqual(283, len(cases))
-        self.assertEqual(272, sum(case.ci_selected for case in cases))
+        self.assertEqual(284, len(cases))
+        self.assertEqual(273, sum(case.ci_selected for case in cases))
         self.assertEqual(len(cases), len({case.name for case in cases}))
         self.assertEqual(sorted(case.name for case in cases),
                          [case.name for case in cases])
@@ -165,7 +165,7 @@ class MysqltestParserTest(unittest.TestCase):
         classified = parser.classify_active_corpus(REPOSITORY_ROOT)
         by_name = {case.name: case for case in classified}
 
-        self.assertEqual(283, len(classified))
+        self.assertEqual(284, len(classified))
         self.assertEqual("device-native", by_name["empty_table"].execution_class)
         self.assertEqual(("ios.mysqltest.empty_table",),
                          by_name["empty_table"].device_case_ids)
@@ -193,7 +193,7 @@ class MysqltestParserTest(unittest.TestCase):
         """Audit every include edge, including a selected missing dependency."""
         audit = parser.audit_source_closure(REPOSITORY_ROOT)
 
-        self.assertEqual(316, audit.file_count)
+        self.assertEqual(317, audit.file_count)
         self.assertEqual(302, audit.source_directive_count)
         self.assertEqual(2, audit.maximum_depth)
         self.assertIn(
@@ -308,7 +308,7 @@ class MysqltestParserTest(unittest.TestCase):
         self.assertIn("result_set().get_field_columns", read_empty)
         self.assertIn("empty_result_matches", read_empty)
 
-    def test_host_gate_requires_exact_272_case_success(self):
+    def test_host_gate_requires_exact_273_case_success(self):
         """Bind host evidence to source, corpus, binaries, and exact cases."""
         classified_selection = [
             case.name for case in parser.discover_active_cases(REPOSITORY_ROOT)
@@ -336,7 +336,7 @@ class MysqltestParserTest(unittest.TestCase):
             summary = phase.validate_host_gate(
                 REPOSITORY_ROOT, result, binary_paths)
             self.assertEqual("host-only", summary["execution_class"])
-            self.assertEqual(272, summary["case_count"])
+            self.assertEqual(273, summary["case_count"])
             self.assertTrue(summary["success"])
             self.assertEqual("host-run", summary["run_id"])
             self.assertEqual(identity["host_build_identity"],

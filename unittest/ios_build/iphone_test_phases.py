@@ -1298,7 +1298,7 @@ def _mysqltest_host_validator(
             "run_id", "case_list_digest",
         }
         if (not isinstance(payload, dict) or set(payload) != required
-                or payload.get("case_count") != 272
+                or payload.get("case_count") != 273
                 or payload.get("execution_class") != "host-only"
                 or payload.get("success") is not True
                 or any(not isinstance(payload.get(field), str)

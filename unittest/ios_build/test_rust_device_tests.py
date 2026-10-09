@@ -105,10 +105,9 @@ class TestRustDeviceTests(unittest.TestCase):
     def test_cmake_clean_does_not_own_tracked_rust_header(self):
         """Keep CMake clean from deleting the tracked cbindgen header."""
         rust_cmake = (ROOT / "cmake" / "Rust.cmake").read_text(encoding="utf-8")
-        self.assertNotRegex(
-            rust_cmake,
-            r'BYPRODUCTS\s+"\$\{RUST_INCLUDE_DIR\}/nio\.h"',
-        )
+        for header in (r'"\$\{SQL_NIO_INCLUDE_DIR\}/nio\.h"',
+                       r'"\$\{CONFIG_INCLUDE_DIR\}/config\.h"'):
+            self.assertNotRegex(rust_cmake, r"BYPRODUCTS[^)]*" + header)
 
     def test_archive_marker_rejects_mixed_or_wrong_modes(self):
         """Validate the runtime marker rather than trusting only CMake cache state."""

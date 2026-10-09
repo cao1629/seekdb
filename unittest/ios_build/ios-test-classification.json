@@ -585,6 +585,7 @@
     "mysqltest.active.vector_index.vector_calc_utf8_mysql": "mysqltest-active",
     "mysqltest.active.vector_index.vector_index_basic": "mysqltest-active",
     "mysqltest.active.vector_index.vector_index_bugfix1": "mysqltest-active",
+    "mysqltest.active.vector_index.vector_index_identifier_quoting": "mysqltest-active",
     "mysqltest.active.vector_index.vector_index_ivfflat_basic": "mysqltest-active",
     "mysqltest.active.vector_index.vector_index_ivfflat_dml": "mysqltest-active",
     "mysqltest.active.vector_index.vector_index_ivfflat_post_create": "mysqltest-active",

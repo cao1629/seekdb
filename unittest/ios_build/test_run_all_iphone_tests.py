@@ -828,7 +828,7 @@ class RunAllIphoneTestsTest(unittest.TestCase):
         validate.assert_not_called()
 
     def test_pending_or_failed_host_gate_executes_all_host_cases(self):
-        """Only unfinished host gates invoke the tracked 272-case runner."""
+        """Only unfinished host gates invoke the tracked 273-case runner."""
         identity = {"run_id": "runner-id", "evidence_digest": "a" * 64}
         snapshots = mock.Mock(snapshot_paths={"seekdb": Path("snapshot")})
         for status in ("pending", "failed"):

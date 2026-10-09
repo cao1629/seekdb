@@ -216,7 +216,7 @@ def _active_name(mysql_root: Path, source: Path) -> str:
 
 
 def discover_active_cases(repo_root: Path) -> tuple[ActiveCase, ...]:
-    """Discover every active file and mark the established 272-case CI set."""
+    """Discover every active file and mark the established 273-case CI set."""
     repo_root = Path(repo_root).resolve()
     mysql_root = repo_root / "tools/deploy/mysql_test"
     sources = list((mysql_root / "t").glob("*.test"))
