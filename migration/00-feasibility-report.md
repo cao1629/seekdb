@@ -162,7 +162,7 @@
 | CI 热构建（ccache 命中 64–88%） | `make` 92–181 秒 | 如 run 37760693836 |
 | 近一周 42 次编译步骤 | 143–605 秒，中位数 422 秒 | 2026-10-03 至 10-10 |
 | GitHub 托管 4 vCPU 机器，Debug 构建，`make -j4` | 2,272–3,961 秒，中位数 3,301 秒 | `compile.yml` 7 月的 22 次运行，这个工作流现已禁用 |
-| 你的 M4 笔记本冷构建 | 约 30 分钟（假设一个 M4 核约等于一个 CI 槽） | 由约 18,000 槽·秒推算 |
+| 你的 M4 笔记本冷构建 | 估计约 30 分钟（假设一个 M4 核约等于一个 CI 槽）；**2026-10-10 实测 7 分 44 秒**（`make -j6`，墙钟 464 秒，CPU 2,579 秒，基线 `7d907abfa`） | 估计由约 18,000 槽·秒推算；实测见建裁判阶段的构建记录 |
 
 - **构建系统**：CI 和开发都用 CMake（`.github/script/seekdb/compile.sh` → `build.sh release`），并且强制开 unity build（`CMakeLists.txt:118`）。216 个 unity 组覆盖 2,789 个文件，再加上单独编译的源文件；CI 日志显示一次全量构建共 366 次编译器调用。Bazel 8.2.1 被称为"权威的模块化构建图"，但 CI 不调用它。
 - **C++ 没有独立的类型检查**：没有 `-fsyntax-only` 或 clang-tidy，带 `-Werror` 的完整构建就是检查。CodeQL 的 C++ 周任务近 50 次运行没有一次成功。
@@ -184,7 +184,7 @@
 - **crate 可能被迫变大**：链接层面的循环可能迫使模块合并成更少、更大的 crate，那样最慢的 crate 编译时间会更长。
 - **内存风险（假设）**：在 16 GB 内存的笔记本上，单独编译一个 50–80 万行的 crate 可能就要几 GB 内存；release 构建（`codegen-units = 1`、`debug = true`、thin LTO）可能超过 16 GB。需要把并发降到 4–6，开发构建调高 `codegen-units`，并改用 `debug = "line-tables-only"`。
 
-> **判断 2：今天 C++ 的验证成本就是完整构建，CI 冷构建约 9–10 分钟，笔记本约 30 分钟。Rust 移植后冷 `cargo check` 估计 1–10 分钟，冷 release 10–60 分钟，下限由最大的 sql crate 决定。这不够便宜，所以第 4 步保留，用构建守护进程。** 决定性文件：`CMakeLists.txt:118`（强制 unity build）、`src/observer/CMakeLists.txt:90`（`--start-group` 链接）、`cmake/Rust.cmake`、`rust/Cargo.toml`（`codegen-units = 1`）。
+> **判断 2：今天 C++ 的验证成本就是完整构建，CI 冷构建约 9–10 分钟，笔记本实测 7 分 44 秒。Rust 移植后冷 `cargo check` 估计 1–10 分钟，冷 release 10–60 分钟，下限由最大的 sql crate 决定。这不够便宜，所以第 4 步保留，用构建守护进程。** 决定性文件：`CMakeLists.txt:118`（强制 unity build）、`src/observer/CMakeLists.txt:90`（`--start-group` 链接）、`cmake/Rust.cmake`、`rust/Cargo.toml`（`codegen-units = 1`）。
 
 ### 判断 3：测试能不能带走？
 
@@ -525,7 +525,7 @@
 
 | ID | 偏差 |
 |---|---|
-| DEV-001 | 没有在本机计时构建：这台 Mac 没有 Homebrew、cmake 和 Rust 工具链，装 Homebrew 需要 sudo。改用 CI 的实测数据作基线。 |
+| DEV-001 | 没有在本机计时构建：这台 Mac 没有 Homebrew、cmake 和 Rust 工具链，装 Homebrew 需要 sudo。改用 CI 的实测数据作基线。**已了结**：你装好 Homebrew 后，2026-10-10 在本机冷构建 `7d907abfa` 实测 7 分 44 秒（`make -j6`），需要指定 `MacOSX15.sdk`（见 `migration/judge/README.md`）。 |
 | DEV-002 | kit 规定这一步只写 `migration/cost-log.tsv`。因为你要求在新分支上做迁移，报告本身（本文件）和证据脚本（`migration/feasibility/`）也提交到了 `rust-migration` 分支。没有改动任何源码。 |
 | DEV-003 | 5 个调查子代理用的是会话默认模型 `claude-opus-5-5`。模型计划要到这个关口才定，所以调查时还没有计划可以遵循。 |
 
