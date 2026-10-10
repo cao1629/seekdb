@@ -21,9 +21,9 @@
 
 ## iOS Change Traceability
 
-- Record every iOS environment setting, source change, and CMake/build change in
-  `docs/developer-guide/zh/ios-change-log.md`; keep usage and status current in
-  `docs/developer-guide/zh/ios-build.md`.
+- Keep usage and status current in `docs/developer-guide/zh/ios-build.md`. Record the
+  reason and verification of each iOS environment, source, and CMake/build change in its
+  commit message; there is no separate iOS change log.
 - Commit reproducible scripts, dependency versions/checksums, configuration,
   verification results, and known limitations with the relevant changes.
 - Local ignored build logs are supplemental evidence, not the sole record.

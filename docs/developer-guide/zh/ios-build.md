@@ -1,8 +1,9 @@
 # iOS 构建与验证
 
-本页只写当前的 iOS 构建方式、`SeekDB.framework` 的接口和行为，以及怎么测试。每次改动的原因、
-参数和验证结果，以及已删除内容（真机测试套件、桌面 C API driver、`build.iphone.sh` 等）的历史，
-见 [iOS 移植变更记录](ios-change-log.md)。
+本页只写当前的 iOS 构建方式、`SeekDB.framework` 的接口和行为，以及怎么测试。每次改动的原因和
+验证结果写在对应的 commit message 里。已删除内容（真机测试套件、桌面 C API driver、`build.iphone.sh`
+等）的历史，以及截至 2026-10-10 的逐次变更记录，可用
+`git show dd0cf77c6:docs/developer-guide/zh/ios-change-log.md` 查看。
 
 ## 构建
 
