@@ -1,0 +1,31 @@
+module        files     lines | TierA files/lines %    | TierA|B files/lines %  |   A/KLOC   B/KLOC
+sql            2416    950948 |  26.2% /  66.5%        |  48.4% /  84.2%        |      5.9      8.1
+storage        1482    761729 |  41.8% /  45.3%        |  69.4% /  56.1%        |      6.2      5.0
+oblib           835    345913 |  50.4% /  80.1%        |  62.4% /  85.8%        |     13.3      4.5
+share           691    241216 |  29.1% /  63.5%        |  50.7% /  77.9%        |      8.3      5.7
+observer        513    133131 |  24.8% /  57.5%        |  80.5% /  90.3%        |      6.4      6.5
+rootserver      200    104508 |  23.5% /  59.4%        |  56.5% /  84.2%        |      2.0      2.1
+pl               68     39205 |  30.9% /  89.7%        |  33.8% /  93.0%        |      9.5      3.8
+logservice      124     32828 |  35.5% /  63.1%        |  67.7% /  82.9%        |      8.3      5.8
+query           115     30754 |  26.1% /  51.8%        |  54.8% /  76.1%        |      6.4     13.0
+data_plane      114     16271 |  16.7% /  46.9%        |  43.0% /  72.5%        |     27.6     13.5
+standby          51     14950 |  23.5% /  52.1%        |  64.7% /  82.3%        |      7.0      7.6
+objit             1      2487 |   0.0% /   0.0%        |   0.0% /   0.0%        |      0.0      0.0
+TOTAL          6610   2673940 |  32.9% /  61.1%        |  58.2% /  76.0%        |      7.3      6.2
+Tier A sites: 19440  Tier B sites: 16614
+per-category sites/files:
+   placement_new      sites=2074    files=722
+   ob_new_macro       sites=823     files=230
+   explicit_dtor      sites=1265    files=494
+   reinterpret_cast   sites=3692    files=762
+   c_style_ptr_cast   sites=1961    files=482
+   raw_alloc_call     sites=3023    files=937
+   mem_copy_set       sites=2739    files=792
+   atomics            sites=3062    files=471
+   flex_array         sites=76      files=52
+   asm_simd           sites=717     files=36
+   setjmp             sites=8       files=4
+   raw_ptr_member     sites=6120    files=1478
+   ptr_ref_slot       sites=9457    files=2130
+   intrusive          sites=593     files=182
+   manual_ref         sites=444     files=129

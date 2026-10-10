@@ -1,0 +1,64 @@
+edges=25017; policy-violating file edges removed=5: [('src/objit/include/objit/common/ob_item_type.h', 'src/oblib/lib/utility/ob_print_utils.h'), ('src/sql/engine/px/ob_px_sub_coord.cpp', 'src/storage/ddl/ob_ddl_direct_load_utils.h'), ('src/sql/engine/px/ob_px_sub_coord.cpp', 'src/storage/ddl/ob_ddl_insert_dag.h'), ('src/storage/ddl/ob_ddl_insert_dag.cpp', 'src/rootserver/ddl_task/ob_ddl_task.h'), ('src/storage/ddl/ob_tablet_slice_writer.cpp', 'src/sql/engine/ob_batch_rows.h')]
+[all-edges][sub] nodes=147 cyclic SCCs=5 sizes=[60, 20, 8, 4, 3]
+    size=60 lines=1906883 modules=[('src/storage', 31), ('src/sql', 18), ('src/rootserver', 7), ('src/pl', 4)] members=(root),parser,pl_cache,sys_package,(root),ddl_task,fork_table,freeze,parallel_ddl,pl_ddl,truncate_info,(root),code_generator,das,dtl,engine,executor,hybrid_search,monitor,optimizer,parser,pl,plan_cache,printer,privilege_check,resolver,rewrite,session,tablelock,(root),access,allocator,api,blocksstable,blockstore,checkpoint,compaction,concurrency_control,ddl,deadlock,fts,lob,ls,memtable,meta_mem,meta_store,multi_data_source,retrieval,scheduler,slog,slog_ckpt,tablelock,tablet,throttle,tmp_file,truncate_info,tx,tx_storage,tx_table,vector_index
+    size=20 lines=262529 modules=[('src/share', 20)] members=(root),ai_service,cache,compaction,config,datum,geo,inner_table,io,location_cache,log,object,rc,resource,roaringbitmap,schema,session,storage,system_variable,tablet
+    size=8 lines=119230 modules=[('src/observer', 8)] members=(root),ai_service,change_stream,dbms_scheduler,mysql,omt,vector_index,virtual_table
+    size=4 lines=32286 modules=[('src/logservice', 4)] members=(root),applyservice,palf,replayservice
+    size=3 lines=14899 modules=[('src/standby', 3)] members=(root),control,restore
+[all-edges][unit] nodes=3856 cyclic SCCs=33 sizes=[1792, 142, 104, 44, 33, 33, 29, 18, 9, 7, 7, 5]
+    size=1792 lines=1440494 modules=[('src/sql', 1133), ('src/storage', 581), ('src/rootserver', 76), ('src/pl', 2)]
+    size=142 lines=70970 modules=[('src/oblib', 142)]
+    size=104 lines=64855 modules=[('src/observer', 104)]
+    size=44 lines=68281 modules=[('src/share', 44)]
+    size=33 lines=16205 modules=[('src/share', 33)]
+    size=33 lines=23869 modules=[('src/logservice', 33)]
+    size=29 lines=104902 modules=[('src/oblib', 29)]
+    size=18 lines=13452 modules=[('src/share', 18)]
+[policy-clean][sub] nodes=147 cyclic SCCs=8 sizes=[30, 20, 18, 8, 7, 4, 3, 3]
+    size=30 lines=471867 modules=[('src/storage', 30)] members=(root),access,allocator,api,blocksstable,blockstore,checkpoint,compaction,concurrency_control,ddl,deadlock,lob,ls,memtable,meta_mem,meta_store,multi_data_source,retrieval,scheduler,slog,slog_ckpt,tablelock,tablet,throttle,tmp_file,truncate_info,tx,tx_storage,tx_table,vector_index
+    size=20 lines=262529 modules=[('src/share', 20)] members=(root),ai_service,cache,compaction,config,datum,geo,inner_table,io,location_cache,log,object,rc,resource,roaringbitmap,schema,session,storage,system_variable,tablet
+    size=18 lines=1002750 modules=[('src/sql', 18)] members=(root),code_generator,das,dtl,engine,executor,hybrid_search,monitor,optimizer,parser,pl,plan_cache,printer,privilege_check,resolver,rewrite,session,tablelock
+    size=8 lines=119230 modules=[('src/observer', 8)] members=(root),ai_service,change_stream,dbms_scheduler,mysql,omt,vector_index,virtual_table
+    size=7 lines=102886 modules=[('src/rootserver', 7)] members=(root),ddl_task,fork_table,freeze,parallel_ddl,pl_ddl,truncate_info
+    size=4 lines=32286 modules=[('src/logservice', 4)] members=(root),applyservice,palf,replayservice
+    size=3 lines=33664 modules=[('src/pl', 3)] members=(root),parser,pl_cache
+    size=3 lines=14899 modules=[('src/standby', 3)] members=(root),control,restore
+[policy-clean][unit] nodes=3856 cyclic SCCs=36 sizes=[1130, 573, 142, 104, 69, 44, 33, 33, 29, 18, 9, 7]
+    size=1130 lines=922913 modules=[('src/sql', 1130)]
+    size=573 lines=407240 modules=[('src/storage', 573)]
+    size=142 lines=70970 modules=[('src/oblib', 142)]
+    size=104 lines=64855 modules=[('src/observer', 104)]
+    size=69 lines=90973 modules=[('src/rootserver', 69)]
+    size=44 lines=68281 modules=[('src/share', 44)]
+    size=33 lines=16205 modules=[('src/share', 33)]
+    size=33 lines=23869 modules=[('src/logservice', 33)]
+per-module submodule structure (policy-clean graph):
+  src/data_plane   submodules=  2  largest submodule SCC=  1  (cyclic SCCs: [])
+  src/logservice   submodules=  6  largest submodule SCC=  4  (cyclic SCCs: [4])
+  src/objit        submodules=  1  largest submodule SCC=  1  (cyclic SCCs: [])
+  src/oblib        submodules=  5  largest submodule SCC=  1  (cyclic SCCs: [])
+  src/observer     submodules= 12  largest submodule SCC=  8  (cyclic SCCs: [8])
+  src/pl           submodules=  4  largest submodule SCC=  3  (cyclic SCCs: [3])
+  src/query        submodules=  4  largest submodule SCC=  1  (cyclic SCCs: [])
+  src/rootserver   submodules=  8  largest submodule SCC=  7  (cyclic SCCs: [7])
+  src/share        submodules= 44  largest submodule SCC= 20  (cyclic SCCs: [20])
+  src/sql          submodules= 19  largest submodule SCC= 18  (cyclic SCCs: [18])
+  src/standby      submodules=  3  largest submodule SCC=  3  (cyclic SCCs: [3])
+  src/storage      submodules= 33  largest submodule SCC= 30  (cyclic SCCs: [30])
+ALL src stem-units (dir+stem): units=3842 lines=2795751 median=275 p75=617 p90=1373 p99=6717 max=276123 >2000=237 >5000=55
+HAND-WRITTEN src stem-units (excl. checked-in generated, embedded-data, .y/.l): units=3792 lines=2337621 median=273 p75=607 p90=1324 p99=5849 max=25785 >2000=216 >5000=46
+hand-written unit composition={'header-only': 866, 'impl-only': 128, 'h+impl': 2783, 'other(.ipp)': 15}
+  src/data_plane   units=  114 lines=  16157 median=  74 p90=  338 max=  1631
+  src/logservice   units=   66 lines=  32705 median= 277 p90= 1262 max=  2205
+  src/objit        units=    1 lines=   2486 median=2486 p90= 2486 max=  2486
+  src/oblib        units=  555 lines= 299137 median= 269 p90= 1145 max= 10103
+  src/observer     units=  267 lines= 132632 median= 261 p90=  959 max=  7375
+  src/pl           units=   36 lines=  39137 median= 297 p90= 2608 max= 11018
+  src/query        units=  115 lines=  30639 median= 100 p90=  723 max=  2477
+  src/rootserver   units=  106 lines= 104311 median= 442 p90= 1922 max= 25785
+  src/share        units=  415 lines= 237427 median= 259 p90= 1151 max= 14797
+  src/sql          units= 1288 lines= 943882 median= 269 p90= 1611 max= 20670
+  src/standby      units=   28 lines=  14899 median= 401 p90= 1067 max=  2014
+  src/storage      units=  801 lines= 484209 median= 374 p90= 1375 max=  6810
+directory units (hand-written, src): dirs=324 median=1558 p90=20330 max=163773
+largest hand-written units=[(25785, 'src/rootserver/ob_ddl_service'), (20670, 'src/sql/optimizer/ob_join_order'), (16385, 'src/sql/rewrite/ob_transform_utils'), (14797, 'src/share/object/ob_obj_cast'), (14792, 'src/sql/optimizer/ob_log_plan'), (14313, 'src/sql/engine/expr/ob_datum_cast'), (14106, 'src/share/schema/ob_schema_struct'), (13724, 'src/sql/resolver/dml/ob_dml_resolver'), (11722, 'src/sql/resolver/expr/ob_raw_expr'), (11018, 'src/pl/ob_pl_resolver'), (10103, 'src/oblib/common/number/ob_number_v2'), (9976, 'src/sql/optimizer/ob_optimizer_util')]

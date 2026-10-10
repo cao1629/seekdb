@@ -1,0 +1,37 @@
+# checked-in generator/compiler outputs (path<TAB>generator)
+src/share/ob_errno.h	src/share/gen_errno.pl <- src/share/ob_errno.def
+src/share/ob_errno.cpp	src/share/gen_errno.pl <- src/share/ob_errno.def
+src/oblib/lib/ob_errno.h	src/share/gen_errno.pl <- src/share/ob_errno.def
+tools/ob_error/src/os_errno.h	header says generated from ob_errno.def
+tools/ob_error/src/os_errno.cpp	header says generated from ob_errno.def
+src/share/system_variable/ob_system_variable_init.h	gen_ob_sys_variables.py <- ob_system_variable_init.json
+src/share/system_variable/ob_system_variable_init.cpp	gen_ob_sys_variables.py <- ob_system_variable_init.json
+src/share/system_variable/ob_system_variable_alias.h	gen_ob_sys_variables.py
+src/share/system_variable/ob_sys_var_class_type.h	gen_ob_sys_variables.py
+src/share/system_variable/ob_sys_var_meta.h	gen_ob_sys_variables.py
+src/share/system_variable/ob_sys_var_meta.cpp	gen_ob_sys_variables.py
+src/sql/session/ob_system_variable_factory.h	gen_ob_sys_variables.py
+src/sql/session/ob_system_variable_factory.cpp	gen_ob_sys_variables.py
+src/share/datum/ob_str_datum_funcs_compilation/ob_str_datum_funcs_compilation_0.cpp	gen_str_datum_func_parts.py
+src/share/datum/ob_str_datum_funcs_compilation/ob_str_datum_funcs_compilation_1.cpp	gen_str_datum_func_parts.py
+src/share/datum/ob_str_datum_funcs_compilation/ob_str_datum_funcs_compilation_2.cpp	gen_str_datum_func_parts.py
+src/share/datum/ob_str_datum_funcs_compilation/ob_str_datum_funcs_all.cpp	gen_str_datum_func_parts.py
+src/sql/engine/expr/ob_expr_str_cmp_func_compile/ob_expr_str_cmp_func_part_0.cpp	gen_expr_str_cmp_func.py
+src/sql/engine/expr/ob_expr_str_cmp_func_compile/ob_expr_str_cmp_func_part_1.cpp	gen_expr_str_cmp_func.py
+src/sql/engine/expr/ob_expr_str_cmp_func_compile/ob_expr_str_cmp_func_part_2.cpp	gen_expr_str_cmp_func.py
+src/sql/engine/expr/ob_expr_str_cmp_func_compile/ob_expr_str_cmp_func_part_3.cpp	gen_expr_str_cmp_func.py
+src/sql/engine/expr/ob_expr_str_cmp_func_compile/ob_expr_str_cmp_func_part_4.cpp	gen_expr_str_cmp_func.py
+src/sql/engine/expr/ob_expr_str_cmp_func_compile/ob_expr_str_cmp_func_part_5.cpp	gen_expr_str_cmp_func.py
+src/sql/engine/expr/ob_expr_str_cmp_func_compile/ob_expr_str_cmp_func_part_6.cpp	gen_expr_str_cmp_func.py
+src/sql/engine/expr/ob_expr_str_cmp_func_compile/ob_expr_str_cmp_func_all.cpp	gen_expr_str_cmp_func.py
+src/oblib/lib/codec/ob_generated_scalar_bp_func.h	generate_scalar_bitpakcing.py
+src/oblib/lib/codec/ob_generated_scalar_bp_func.cpp	generate_scalar_bitpakcing.py
+src/oblib/lib/codec/ob_generated_unalign_simd_bp_func.h	generate_simd_bitpakcing.py
+src/oblib/lib/codec/ob_generated_unalign_simd_bp_func.cpp	generate_simd_bitpakcing.py
+src/oblib/grpc/standbyservice.pb.h	protoc <- src/oblib/grpc/standbyservice.proto
+src/oblib/grpc/standbyservice.pb.cc	protoc <- src/oblib/grpc/standbyservice.proto
+src/oblib/grpc/standbyservice.grpc.pb.h	grpc_cpp_plugin <- standbyservice.proto
+src/oblib/grpc/standbyservice.grpc.pb.cc	grpc_cpp_plugin <- standbyservice.proto
+src/share/geo/ob_vector_tile.pb-c.h	protoc-c
+src/share/geo/ob_vector_tile.pb-c.c	protoc-c
+rust/sql-nio/include/nio.h	cbindgen (Rust -> C header)

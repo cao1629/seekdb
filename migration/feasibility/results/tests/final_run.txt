@@ -1,0 +1,87 @@
+
+===== mysqltest ALL: 283 cases =====
+  error_directive                   138  (48.8%)
+  result_has_error_text             135  (47.7%)
+  multi_session                     127  (44.9%)
+  timing_sleep                      116  (41.0%)
+  internal_tables                    98  (34.6%)
+  hints                              60  (21.2%)
+  ob_internal_vars                   52  (18.4%)
+  alter_system_internal              42  (14.8%)
+  result_has_plan_text               42  (14.8%)
+  explain_plan                       40  (14.1%)
+  result_has_ob_storage_opts         39  (13.8%)
+  ob_timeout_vars                    31  (11.0%)
+  error_code_ob_specific             30  (10.6%)
+  ob_packages                        24  ( 8.5%)
+  alter_system_public_knob           23  ( 8.1%)
+  compaction_freeze                  22  ( 7.8%)
+  underscore_functions               17  ( 6.0%)
+  hidden_aux_objects                 15  ( 5.3%)
+  debug_errsim                       13  ( 4.6%)
+  hidden_params                      12  ( 4.2%)
+  show_ob_specific                    2  ( 0.7%)
+  shell_proc_file                     1  ( 0.4%)
+  -> tier1 internal-bound (>=1 tier1 hit): 161
+  -> tier2-only (fragile but no internals): 32
+  -> clean public SQL (no tier1/tier2 hits): 90
+  missing includes: {'include/show_rpl_debug_info.inc': 1}
+
+===== mysqltest CI-enabled: 272 cases =====
+  error_directive                   132  (48.5%)
+  result_has_error_text             129  (47.4%)
+  multi_session                     119  (43.8%)
+  timing_sleep                      110  (40.4%)
+  internal_tables                    91  (33.5%)
+  hints                              56  (20.6%)
+  ob_internal_vars                   49  (18.0%)
+  result_has_plan_text               40  (14.7%)
+  explain_plan                       39  (14.3%)
+  alter_system_internal              37  (13.6%)
+  result_has_ob_storage_opts         37  (13.6%)
+  ob_timeout_vars                    29  (10.7%)
+  error_code_ob_specific             28  (10.3%)
+  ob_packages                        23  ( 8.5%)
+  alter_system_public_knob           22  ( 8.1%)
+  compaction_freeze                  20  ( 7.4%)
+  hidden_aux_objects                 14  ( 5.1%)
+  underscore_functions               14  ( 5.1%)
+  debug_errsim                       10  ( 3.7%)
+  hidden_params                       9  ( 3.3%)
+  show_ob_specific                    2  ( 0.7%)
+  -> tier1 internal-bound (>=1 tier1 hit): 151
+  -> tier2-only (fragile but no internals): 32
+  -> clean public SQL (no tier1/tier2 hits): 89
+  missing includes: {'include/show_rpl_debug_info.inc': 1}
+
+===== obtest ALL: 500 cases =====
+  alter_system_internal             469  (93.8%)
+  timing_sleep                      426  (85.2%)
+  multi_node_or_multi_cluster       426  (85.2%)
+  internal_tables                   406  (81.2%)
+  distributed_internals             288  (57.6%)
+  ob_internal_vars                  270  (54.0%)
+  multi_session                     255  (51.0%)
+  compaction_freeze                 254  (50.8%)
+  ob_timeout_vars                   217  (43.4%)
+  process_kill_restart              164  (32.8%)
+  error_directive                   148  (29.6%)
+  debug_errsim                      141  (28.2%)
+  hidden_params                     106  (21.2%)
+  result_has_error_text             101  (20.2%)
+  hints                              61  (12.2%)
+  log_file_inspection                39  ( 7.8%)
+  error_code_ob_specific             23  ( 4.6%)
+  network_fault                      11  ( 2.2%)
+  explain_plan                       11  ( 2.2%)
+  result_has_plan_text               11  ( 2.2%)
+  result_has_ob_storage_opts          8  ( 1.6%)
+  trace_log                           5  ( 1.0%)
+  shell                               4  ( 0.8%)
+  hidden_aux_objects                  2  ( 0.4%)
+  show_ob_specific                    1  ( 0.2%)
+  ob_packages                         1  ( 0.2%)
+  -> tier1 internal-bound (>=1 tier1 hit): 499
+  -> tier2-only (fragile but no internals): 0
+  -> clean public SQL (no tier1/tier2 hits): 1
+  missing includes: {'t/rootservice/yiping_advance_user_ls_status_test_create_tenant.inc': 18, 't/quick/include/transfer_verify_balance_and_transfer_task_finished.inc': 10, 't/outline/create_tenant_for_outline.sql': 1, 't/outline/delete_tenant_of_outline.sql': 1, 't/quick/include/create_mysql_tenant_standalone.inc': 1, 't/quick/include/mysql_tenant_dml_and_select.inc': 1, 't/quick/include/mysql_tenant_dml_and_select_after_minor.inc': 1, 't/quick/include/change_tenant.inc': 1}

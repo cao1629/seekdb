@@ -1,0 +1,97 @@
+class/struct definitions parsed: 10343  distinct names: 10005
+  struct: 3578  class: 6765
+definitions declaring virtual/override (or virtual-generating macro) at depth 1: 4676
+  of which only via macro: 154
+distinct names directly polymorphic: 4636 ; incl. inheriting from polymorphic: 4879
+definitions with >=1 base: 3786
+multiple inheritance (>=2 bases): 121 ; with >=2 polymorphic bases: 99
+  top secondary bases: [('ObICheckpointSubHandler', 15), ('ObILocalLogHandler', 10), ('ObPriv', 8), ('ObIReplaySubHandler', 6), ('ObICmd', 6), ('ObDLinkBase', 5), ('ObITabletIterator', 4), ('Threads', 3), ('ObCommonCheckpoint', 3), ('IObErrorInfo', 3), ('ObPLInto', 3), ('ObDMLOpDataWriter', 3), ('ObTableModifyOp', 3), ('ObLink', 2), ('ObAdaptiveWorkerPool', 2)]
+CRTP-like (own name in base template args): 109
+    src/oblib/lib/trace/ob_trace.h:225 ObSpanCtx ['common::ObDLinkBase<ObSpanCtx>']
+    src/oblib/lib/objectpool/ob_global_factory.h:28 ObTCBlock ['common::ObDLinkBase<common::ObTCBlock>']
+    src/oblib/lib/lock/ob_latch.h:75 ObWaitProc ['ObDLinkBase<ObWaitProc>']
+    src/oblib/lib/json/ob_json.h:68 Pair ['::oceanbase::common::ObDLinkBase<Pair>']
+    src/oblib/lib/json/ob_json.h:83 Value ['common::ObDLinkBase<Value>']
+    src/oblib/lib/list/ob_dlink_node.h:143 ObDLinkNode ['ObDLinkBase<ObDLinkNode<T> >']
+    src/oblib/lib/list/ob_obj_store.h:29 ObObjNode ['ObDLinkBase<ObObjNode<T> >']
+    src/oblib/lib/allocator/ob_delay_free_allocator.h:35 ObDelayFreeMemBlock ['common::ObDLinkBase<ObDelayFreeMemBlock>']
+largest hierarchies (transitive descendants, direct children, root):
+   739 69 ObDLinkBase
+   573 43 ObExprOperator
+   406 313 ObFuncExprOperator
+   198 7 ObNewRowIterator
+   160 9 ObVirtualTableIterator
+   143 136 ObVirtualTableScannerIterator
+   91 15 ObStmtResolver
+   90 6 ObStmt
+   83 6 ObICmd
+   75 33 ObOpSpec
+   73 35 ObOperator
+   68 61 ObStringExprOperator
+   67 59 ObDDLArg
+   63 63 ObTimerTask
+   60 51 ObIAllocator
+   52 2 ObINodeWithChild
+   47 42 ObDDLStmt
+   47 6 ObGeometry
+   46 35 ObSchema
+   42 2 ObSpatialReferenceSystemBase
+   40 40 ObProjectedSrs
+   40 31 ObDDLResolver
+   39 26 ObArithOpRawType
+   39 15 ObLink
+   38 38 ObConfigChecker
+   38 8 ObIStoreRowIterator
+   37 14 ObOpInput
+   34 34 ObTransformRule
+   33 30 ObLogicalOperator
+   33 24 ObITask
+   31 25 ObPLStmt
+   31 17 ObDASIter
+   29 8 ObRawExpr
+   29 1 ObIGeoVisitor
+   28 28 ObEmptyGeoVisitor
+   28 5 ObReqProcessor
+   25 25 ObExprOperatorCtx
+   25 2 ObHint
+   24 16 ThreadPool
+   23 23 ObIGeoDispatcher
+named roots:
+  ObOperator                   direct=35   transitive=73   def=src/query/api/query/engine/ob_operator.h:363
+  ObOpSpec                     direct=33   transitive=75   def=src/query/api/query/engine/ob_operator.h:228
+  ObOpInput                    direct=14   transitive=37   def=src/query/api/query/engine/ob_operator.h:651
+  ObExprOperator               direct=43   transitive=573  def=src/query/api/query/engine/expr/ob_expr_operator.h:304
+  ObFuncExprOperator           direct=313  transitive=406  def=src/query/api/query/engine/expr/ob_expr_operator.h:1063
+  ObRawExpr                    direct=8    transitive=29   def=src/sql/resolver/expr/ob_raw_expr.h:1761
+  ObStmt                       direct=6    transitive=90   def=src/sql/resolver/ob_stmt.h:80
+  ObDMLStmt                    direct=4    transitive=7    def=src/sql/resolver/dml/ob_dml_stmt.h:561
+  ObSelectStmt                 direct=0    transitive=0    def=src/sql/resolver/dml/ob_select_stmt.h:272
+  ObLogicalOperator            direct=30   transitive=33   def=src/sql/optimizer/ob_logical_operator.h:757
+  ObLogPlan                    direct=3    transitive=6    def=src/sql/optimizer/ob_log_plan.h:164
+  ObITable                     direct=2    transitive=9    def=src/storage/ob_i_table.h:79
+  ObSSTable                    direct=1    transitive=1    def=src/storage/blocksstable/ob_sstable.h:123
+  ObIMemtable                  direct=4    transitive=6    def=src/storage/memtable/ob_memtable_interface.h:103
+  ObMemtable                   direct=0    transitive=0    def=src/storage/memtable/ob_memtable.h:177
+  ObITabletMemtable            direct=2    transitive=2    def=src/storage/ob_i_tablet_memtable.h:153
+  ObIAllocator                 direct=51   transitive=60   def=src/oblib/lib/alloc/ob_iallocator.h:66
+  ObILogAllocator              direct=1    transitive=1    def=src/logservice/ob_log_allocator.h:46
+  ObVirtualTableIterator       direct=9    transitive=160  def=src/observer/virtual_table/ob_virtual_table_iterator.h:45
+  ObITask                      direct=24   transitive=33   def=src/data_plane/api/data_plane/scheduler/ob_dag_scheduler.h:156
+  ObIDag                       direct=9    transitive=17   def=src/data_plane/api/data_plane/scheduler/ob_dag_scheduler.h:338
+  ObDLinkBase                  direct=69   transitive=739  def=src/oblib/lib/list/ob_dlink_node.h:34
+  ObLink                       direct=15   transitive=39   def=src/oblib/lib/queue/ob_link.h:29
+  ObTimerTask                  direct=63   transitive=63   def=src/oblib/lib/task/ob_timer_service.h:53
+  ObThreadPool                 direct=12   transitive=13   def=?
+  ThreadPool                   direct=16   transitive=24   def=?
+  ObSimpleThreadPool           direct=12   transitive=12   def=?
+  ObTransCtx                   direct=1    transitive=1    def=src/storage/tx/ob_trans_ctx.h:85
+  ObPartTransCtx               direct=0    transitive=0    def=?
+  ObIExtraInfo                 direct=0    transitive=0    def=?
+  ObSchema                     direct=35   transitive=46   def=src/share/schema/ob_schema_struct.h:1506
+  ObISQLClient                 direct=3    transitive=7    def=src/oblib/common/mysqlclient/ob_isql_client.h:42
+  ObIStore                     direct=0    transitive=0    def=?
+  ObStoreRowIterator           direct=5    transitive=20   def=src/storage/access/ob_store_row_iterator.h:45
+  ObNewRowIterator             direct=7    transitive=198  def=src/oblib/common/row/ob_row_iterator.h:38
+  ObDASBaseRtDef               direct=4    transitive=21   def=src/sql/das/ob_das_define.h:351
+  ObDASIterAbstract            direct=0    transitive=0    def=?
+virtual inheritance occurrences: 2

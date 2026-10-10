@@ -1,0 +1,8 @@
+src/storage/multi_data_source/compile_utility/mds_register.h
+src/storage/multi_data_source/mds_ctx.h
+src/storage/multi_data_source/mds_node.h
+src/storage/multi_data_source/mds_node.ipp
+src/storage/multi_data_source/mds_table_base.h
+src/storage/multi_data_source/ob_tablet_create_mds_ctx.h
+src/storage/multi_data_source/runtime_utility/mds_tlocal_info.h
+src/storage/tx/ob_multi_data_source.h

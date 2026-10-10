@@ -1,0 +1,62 @@
+# hash	final_class	rust_verdict	note (root cause read from diff/message)
+b4ad89151	mem:uaf	compile	arena buffer captured by raw ptr in async lambda; outlived exec_ctx allocator
+eda242c9a	mem:uaf	compile	index_schema_ on request arena freed while async DDL task runs (+plain bool done_ flag made atomic)
+6bd81a07b	mem:uaf	compile	request from stack-scoped ObRpcMemPool escapes to handler thread; early return on deliver failure
+40fcfa901	mem:uaf	compile	worker reaped/deleted before start(); intrusive list add without workers_lock_
+328253969	mem:double-free	compile	worker on list deleted by both error path and reaper (regression of 40fcfa901)
+a44c7762d	mem:dangling	compile	virtual-table row cells point into destroyed local diagnose_info
+9e2b6ba16	mem:dangling	compile	SSTable ptrs outlive local ObTableStoreIterator that pinned them
+0059d1906	mem:dangling	compile	out-param index_schema points into function-local ObSchemaGetterGuard
+9d24b8807	mem:dangling	compile	ObString members shallow-copied from caller buffers into async task
+e66776e2d	mem:uaf	compile	plan/PS cache object accessed after last ref released under concurrent eviction (found by Sanity)
+dd899675c	mem:uaf	compile	fallback schema mgr allocated from arena that concurrent refresh can rotate/reset
+a44b2526f	mem:type-confusion	compile	wrong static_cast downcast
+c68c6749a	mem:null	compile	null entries in ptr arrays dereferenced in release path
+cd0382c70	mem:dangling	compile	stale ptr members not cleared on all paths
+65997991e	mem:null	compile	deep_copy returns success with null ctx (logic mismatch underneath; Rust turns SIGSEGV into Err)
+1e4f589b8	mem:uninit	compile	uninitialized discrete ptr/len arrays read; Linux arena zero 'by accident'; memcpy(NULL,..,0) UB
+93bcb851d	mem:leak-missing-free	compile	nested type objects never freed in dtor; member uninitialized in ctor
+2f10d62cf	mem:leak-missing-free	compile	placement-new over already-constructed derived object (leak + dynamic type change)
+beeb04d0d	mem:leak-missing-free	compile	missing revert_scan_iter (RAII-dependent)
+4792ef0bd	mem:leak-missing-free	compile	missing dtor call + free of helper
+b5e98215e	mem:leak-missing-free	compile	error path misses release/free
+aa5b651e3	mem:oob	panic	heap OOB write (index i vs j)
+5aa611c00	mem:oob	panic	std::sort with non-strict-weak comparator reads past bounds (Rust sort is memory-safe for any comparator)
+9bb15300f	mem:lifetime	compile	embedding task freed while callback holds it; fix adds manual ref count (inferred)
+ea6657904	mem:lifetime	compile	destruction-order core in embedding task (inferred)
+54123f13e	mem:uaf	no	custom hazard-version reclamation logic bug frees nodes still read (would be unsafe Rust)
+251569f69	conc:data-race	compile	PX workers mutate shared exec_ctx frames while others deserialize -> crash
+62b9d1a81	conc:data-race	compile	non-thread-safe arena used by parallel tasks (+leak)
+a14cd837c	conc:data-race	compile	shared plan expr info mutated per execution by concurrent sessions (inferred)
+834bbee1e	conc:deadlock	no	latch order cycle with commit callbacks
+d700f2139	conc:deadlock	no	PX budget hold-and-wait
+cb5a24ce5	conc:deadlock	no	PX serial fast-SQC self-deadlock
+99f64253f	conc:deadlock	no	fork database snapshot deadlock
+bbb1b3fe8	conc:deadlock	no	fork table deadlock
+0caeb70dd	conc:deadlock	no	standby replay deadlock (barrier type)
+875e09fa4	conc:deadlock	no	init deadlock in lbt/addr2line
+334a6f0ee	conc:atomicity	no	TOCTOU: flag checked outside critical section
+d08a76bce	conc:atomicity	no	duplicate final commit log on retry (+VSAG length bug reported as READ_ERROR)
+1b9c722db	conc:atomicity	no	CAS retried with stale expected value -> spins forever
+d5dfc58f2	conc:starvation	no	sync_call pins 2 workers -> pool exhaustion
+752f5950d	leak:retention	no	PL per-call allocations on outer-SQL arena (~8KB/call)
+c4742e663	leak:retention	no	static SQL char* overload copies into long-lived memory
+e21d828f5	leak:retention	no	cache key mismatch -> repeated dict allocation
+50652b1e9	leak:retention	no	interpreter temps on long-lived allocator
+d53dfe923	stack-exhaustion	no	deep call chain; SMART_CALL_LARGE
+eab540598	stack-exhaustion	no	large stack objects
+59ee57d28	stack-exhaustion	no	stack overflow issues
+33bec38dc	crash:logic	no	SIGSEGV from refactor regression (remove oracle)
+dd7a0906a	crash:logic	no	trigger referencing dropped column
+18fbabda7	crash:logic	no	relative meta.db path in embedded mode
+ae6edddba	crash:platform	n/a	pre-main constructor before sanity init
+68c7338d9	crash:platform	types	Windows 32-bit st_size truncation
+b7abb6324	crash:platform	types	LLP64: __builtin_popcountl/ctzl on uint64
+89a52de4c	crash:platform	n/a	Windows ABI stack-switch asm etc.
+7bef5aa47	crash:unknown	?	embed mode coredump (cause not determined)
+b329ac7ad	crash:unknown	?	vector expr core (cause not determined)
+37b91155c	crash:unknown	?	DDL core (cause not determined)
+a2b4aa30a	crash:unknown	?	AI embedding dimension unchecked (likely OOB, inferred)
+a76f9168b	mem:null	compile	snap memdata freed then re-init can leave null; readers deref
+b5d96efaf	conc:data-race	compile	threads call fetch_info_for_dict on shared non-thread-safe container
+479fb2ad4	mem:oob	compile	handshake-response decoder used strlen() on untrusted packet bytes (over-read); lenenc int misparse

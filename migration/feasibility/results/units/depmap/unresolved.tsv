@@ -1,0 +1,119 @@
+from	include	class
+src/oblib/common/timezone/localtime.c	fcntl.h	system header spelled with quotes
+src/oblib/common/timezone/private.h	sys/types.h	system header spelled with quotes
+src/oblib/common/timezone/private.h	stdio.h	system header spelled with quotes
+src/oblib/common/timezone/private.h	errno.h	system header spelled with quotes
+src/oblib/common/timezone/private.h	string.h	system header spelled with quotes
+src/oblib/common/timezone/private.h	limits.h	system header spelled with quotes
+src/oblib/common/timezone/private.h	time.h	system header spelled with quotes
+src/oblib/common/timezone/private.h	stdlib.h	system header spelled with quotes
+src/oblib/common/timezone/private.h	libintl.h	other
+src/oblib/common/timezone/private.h	unistd.h	system header spelled with quotes
+src/oblib/common/timezone/private.h	stdint.h	system header spelled with quotes
+src/oblib/common/xml/ob_libxml2_sax_handler.cpp	libxml2/libxml/parserInternals.h	other
+src/oblib/common/xml/ob_libxml2_sax_handler.h	libxml2/libxml/parser.h	other
+src/oblib/common/xml/ob_xml_parser.cpp	libxml2/libxml/parserInternals.h	other
+src/oblib/lib/charset/ob_ctype_uca.cc	lib/charset/uca900_data.h	other
+src/oblib/lib/charset/ob_ctype_uca.cc	lib/charset/uca900_zh_data.h	other
+src/oblib/lib/charset/ob_ctype_uca.cc	lib/charset/uca900_ja_data.h	other
+src/oblib/lib/charset/ob_ctype_uca.cc	lib/charset/ob_ctype_uca_tab.h	bison/flex output (configure-time)
+src/oblib/lib/checksum/ob_crc64.cpp	arm_acle.h	other
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_ddict.c	zstd_legacy.h	other
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_decompress.c	zstd_legacy.h	other
+src/oblib/lib/utility/utility.cpp	dirent.h	system header spelled with quotes
+src/oblib/lib/vector/ob_vsag_adaptor.cpp	vsag/vsag.h	other
+src/oblib/lib/vector/ob_vsag_adaptor.cpp	vsag/errors.h	other
+src/oblib/lib/vector/ob_vsag_adaptor.cpp	vsag/dataset.h	other
+src/oblib/lib/vector/ob_vsag_adaptor.cpp	vsag/search_param.h	other
+src/oblib/lib/vector/ob_vsag_adaptor.cpp	vsag/index.h	other
+src/oblib/lib/vector/ob_vsag_adaptor.cpp	vsag/options.h	other
+src/oblib/lib/vector/ob_vsag_adaptor.cpp	vsag/factory.h	other
+src/observer/change_stream/ob_change_stream_fetcher.cpp	share/inner_table/ob_inner_table_schema_constants.h	inner-table generator (configure-time)
+src/observer/omt/ob_srs_service.cpp	share/inner_table/ob_inner_table_schema_constants.h	inner-table generator (configure-time)
+src/observer/report/ob_tablet_meta_checker.cpp	observer/report/ob_tablet_table_updater.h	other
+src/observer/vector_index/ob_vector_index_i_task_executor.cpp	share/inner_table/ob_inner_table_schema_constants.h	inner-table generator (configure-time)
+src/observer/virtual_table/ob_all_virtual_all_tables.cpp	observer/virtual_table/ob_all_virtual_all_tables.h	other
+src/observer/virtual_table/ob_virtual_table_iterator_factory.cpp	observer/virtual_table/ob_all_virtual_sqlite_tables.h	inner-table generator (configure-time)
+src/observer/virtual_table/ob_virtual_table_iterator_factory.cpp	share/inner_table/ob_inner_table_schema_misc.ipp	inner-table generator (configure-time)
+src/pl/parser/pl_non_reserved_keywords_mysql_mode.c	pl/parser/pl_parser_mysql_mode_tab.h	bison/flex output (configure-time)
+src/pl/parser/pl_parser_mysql_mode.l	pl_parser_mysql_mode_tab.h	bison/flex output (configure-time)
+src/pl/parser/pl_parser_mysql_mode.y	pl/parser/pl_parser_mysql_mode_lex.h	bison/flex output (configure-time)
+src/query/api/query/parser/parse_node.h	ob_sql_mode.h	other
+src/query/api/query/vector/ob_vector_index_adaptor.h	roaring/roaring64.h	other
+src/rootserver/ob_bootstrap.h	share/inner_table/ob_inner_table_schema.h	inner-table generator (configure-time)
+src/rootserver/ob_ddl_service.cpp	share/inner_table/ob_inner_table_schema_constants.h	inner-table generator (configure-time)
+src/rootserver/fork_table/ob_fork_table_helper.cpp	share/inner_table/ob_inner_table_schema_constants.h	inner-table generator (configure-time)
+src/rootserver/freeze/ob_checksum_validator.h	share/inner_table/ob_inner_table_schema_constants.h	inner-table generator (configure-time)
+src/share/ob_autoincrement_service.cpp	share/inner_table/ob_inner_table_schema_constants.h	inner-table generator (configure-time)
+src/share/ob_core_table_proxy.cpp	inner_table/ob_inner_table_schema.h	inner-table generator (configure-time)
+src/share/ob_ddl_error_message_table_operator.cpp	share/inner_table/ob_inner_table_schema_constants.h	inner-table generator (configure-time)
+src/share/ob_define.h	cmath	other
+src/share/ob_global_merge_table_operator.cpp	share/inner_table/ob_inner_table_schema.h	inner-table generator (configure-time)
+src/share/ob_global_stat_proxy.cpp	share/inner_table/ob_inner_table_schema_constants.h	inner-table generator (configure-time)
+src/share/ob_share_util.cpp	share/inner_table/ob_inner_table_schema_constants.h	inner-table generator (configure-time)
+src/share/ob_tablet_checksum_operator.cpp	share/inner_table/ob_inner_table_schema_constants.h	inner-table generator (configure-time)
+src/share/ob_tablet_compaction_checksum_operator.h	share/inner_table/ob_inner_table_schema_constants.h	inner-table generator (configure-time)
+src/share/ob_throttling_utils.cpp	math.h	system header spelled with quotes
+src/share/geo/ob_geo_func_transform.cpp	boost/geometry/srs/transformation.hpp	other
+src/share/geo/ob_geo_to_s2_visitor.h	s2/s2earth.h	other
+src/share/geo/ob_geo_to_s2_visitor.h	s2/s2cell.h	other
+src/share/geo/ob_geo_to_s2_visitor.h	s2/s2cap.h	other
+src/share/geo/ob_geo_to_s2_visitor.h	s2/s2latlng.h	other
+src/share/geo/ob_geo_to_s2_visitor.h	s2/s2loop.h	other
+src/share/geo/ob_geo_to_s2_visitor.h	s2/s2polyline.h	other
+src/share/geo/ob_geo_to_s2_visitor.h	s2/s2polygon.h	other
+src/share/geo/ob_geo_to_s2_visitor.h	s2/s2region_coverer.h	other
+src/share/geo/ob_geo_to_s2_visitor.h	s2/s2latlng_rect.h	other
+src/share/geo/ob_geo_to_s2_visitor.h	s2/s2latlng_rect_bounder.h	other
+src/share/geo/ob_s2adapter.h	s2/s2cell.h	other
+src/share/geo/ob_s2adapter.h	s2/s2cap.h	other
+src/share/geo/ob_s2adapter.h	s2/s2latlng.h	other
+src/share/geo/ob_s2adapter.h	s2/s2loop.h	other
+src/share/geo/ob_s2adapter.h	s2/s2polyline.h	other
+src/share/geo/ob_s2adapter.h	s2/s2polygon.h	other
+src/share/geo/ob_s2adapter.h	s2/s2region_coverer.h	other
+src/share/geo/ob_s2adapter.h	s2/s2latlng_rect.h	other
+src/share/geo/ob_srs_wkt_parser.cpp	boost/spirit/include/qi.hpp	other
+src/share/geo/ob_srs_wkt_parser.cpp	boost/spirit/include/phoenix.hpp	other
+src/share/inner_table/ob_dump_inner_table_schema.cpp	share/inner_table/ob_inner_table_schema.h	inner-table generator (configure-time)
+src/share/inner_table/ob_load_inner_table_schema.h	ob_inner_table_schema.h	inner-table generator (configure-time)
+src/share/roaringbitmap/ob_rb_memory_mgr.h	roaring/roaring.h	other
+src/share/schema/ob_ai_model_sql_service.cpp	share/inner_table/ob_inner_table_schema.h	inner-table generator (configure-time)
+src/share/schema/ob_database_sql_service.cpp	share/inner_table/ob_inner_table_schema_constants.h	inner-table generator (configure-time)
+src/share/schema/ob_multi_version_schema_service.h	share/inner_table/ob_inner_table_schema.h	inner-table generator (configure-time)
+src/share/schema/ob_outline_sql_service.cpp	share/inner_table/ob_inner_table_schema_constants.h	inner-table generator (configure-time)
+src/share/schema/ob_partition_sql_helper.cpp	share/inner_table/ob_inner_table_schema_constants.h	inner-table generator (configure-time)
+src/share/schema/ob_partition_sql_helper.h	share/inner_table/ob_inner_table_schema_constants.h	inner-table generator (configure-time)
+src/share/schema/ob_priv_sql_service.cpp	share/inner_table/ob_inner_table_schema_constants.h	inner-table generator (configure-time)
+src/share/schema/ob_schema_getter_guard.cpp	share/inner_table/ob_inner_table_schema.h	inner-table generator (configure-time)
+src/share/schema/ob_schema_getter_guard.cpp	share/inner_table/ob_inner_table_schema_constants.h	inner-table generator (configure-time)
+src/share/schema/ob_schema_mgr.cpp	share/inner_table/ob_inner_table_schema_constants.h	inner-table generator (configure-time)
+src/share/schema/ob_schema_store.cpp	share/inner_table/ob_inner_table_schema.h	inner-table generator (configure-time)
+src/share/schema/ob_schema_struct.cpp	share/inner_table/ob_inner_table_schema_misc.ipp	inner-table generator (configure-time)
+src/share/schema/ob_schema_struct.cpp	share/inner_table/ob_inner_table_schema_misc.ipp	inner-table generator (configure-time)
+src/share/schema/ob_schema_struct.cpp	share/inner_table/ob_inner_table_schema_misc.ipp	inner-table generator (configure-time)
+src/share/schema/ob_schema_struct.cpp	share/inner_table/ob_inner_table_schema_misc.ipp	inner-table generator (configure-time)
+src/share/schema/ob_schema_struct.cpp	share/inner_table/ob_inner_table_schema_misc.ipp	inner-table generator (configure-time)
+src/share/schema/ob_trigger_sql_service.cpp	share/inner_table/ob_inner_table_schema_constants.h	inner-table generator (configure-time)
+src/share/schema/ob_user_sql_service.cpp	share/inner_table/ob_inner_table_schema_constants.h	inner-table generator (configure-time)
+src/share/storage/ob_sqlite_table_schema.h	share/inner_table/ob_inner_table_schema_misc.ipp	inner-table generator (configure-time)
+src/share/tablet/ob_tablet_mapping_operator.cpp	share/inner_table/ob_inner_table_schema_constants.h	inner-table generator (configure-time)
+src/share/tablet/ob_tablet_to_table_history_operator.cpp	share/inner_table/ob_inner_table_schema_constants.h	inner-table generator (configure-time)
+src/sql/engine/cmd/ob_vector_index_refresh.cpp	share/inner_table/ob_inner_table_schema_constants.h	inner-table generator (configure-time)
+src/sql/parser/fts_parse.c	sql/parser/ftsblex_lex.h	bison/flex output (configure-time)
+src/sql/parser/fts_parse.c	sql/parser/ftsparser_tab.h	bison/flex output (configure-time)
+src/sql/parser/ftsblex.l	ftsparser_tab.h	bison/flex output (configure-time)
+src/sql/parser/ftsblex.l	ftsparser_tab.h	bison/flex output (configure-time)
+src/sql/parser/ftsparser.y	ftsparser_tab.h	bison/flex output (configure-time)
+src/sql/parser/non_reserved_keywords_mysql_mode.c	sql/parser/sql_parser_mysql_mode_tab.h	bison/flex output (configure-time)
+src/sql/parser/sql_parser_mysql_mode.l	sql_parser_mysql_mode_tab.h	bison/flex output (configure-time)
+src/sql/parser/sql_parser_mysql_mode.y	../../../src/sql/parser/sql_parser_mysql_mode_lex.h	bison/flex output (configure-time)
+src/storage/blocksstable/ob_micro_block_header.h	stdint.h	system header spelled with quotes
+src/storage/compaction/ob_compaction_util.h	stdint.h	system header spelled with quotes
+src/storage/ddl/ob_ddl_lock.cpp	share/inner_table/ob_inner_table_schema_constants.h	inner-table generator (configure-time)
+src/storage/fts/dict/ob_ft_range_dict.cpp	share/inner_table/ob_inner_table_schema_constants.h	inner-table generator (configure-time)
+src/storage/fts/dict/ob_ik_utf8_dic_loader.cpp	share/inner_table/ob_inner_table_schema_constants.h	inner-table generator (configure-time)
+src/storage/tablelock/ob_lock_utils.h	share/inner_table/ob_inner_table_schema.h	inner-table generator (configure-time)
+src/storage/tx/ob_weak_read_util.h	stdint.h	system header spelled with quotes
+tools/codestyle/sample/ob_style_example.cpp	common/ob_style_example.h	other
+tools/codestyle/sample/ob_style_example.cpp	common/errno.h	other
