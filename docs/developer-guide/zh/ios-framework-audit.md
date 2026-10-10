@@ -63,4 +63,4 @@ driver 的 `lib/src/seekdb.c` 已实现连接、结果集、事务和值接口�
 
 真机与模拟器二进制已通过 MH_DYLIB、arm64、对应 LC_BUILD_VERSION、最低 iOS 18、系统动态依赖、@rpath install name、精确导出及 disabled hook 验证。独立动态探针覆盖真实 Connector/C socket SQL、提交/回滚、NULL/空串/UTF-8、错误保存、停止和新进程持久化。最初真机报告虽已完成 SQL，却在加载线程退出时触发 jemalloc TSD 析构崩溃；根因是引擎默认 background_thread:true 与 iOS jemalloc 未编译后台线程支持不兼容，bootstrap 停在 recursible；iOS 改为 background_thread:false，并在加载线程检查 allocator bootstrap 完成，并加入显式 pthread_join 后的 worker_exit 证据要求。当前产物身份及最终设备证据以使用文档和 tracked evidence 为准。
 
-最终验收实现提交 `6f902fdab24ccefdde97c991b50faf551928b604`，真机与模拟器分别在按该短 revision 命名的 framework 目录保留独立产物。四次真实 socket 动态探针各77项及 worker_exit 均通过，跨进程持久化通过；源码身份、二进制摘要与报告见 `unittest/ios_build/framework_evidence/`。证据/文档后续提交不改变被测实现。
+最终验收实现提交 `6f902fdab24ccefdde97c991b50faf551928b604`，真机与模拟器分别在按该短 revision 命名的 framework 目录保留独立产物。四次真实 socket 动态探针各77项及 worker_exit 均通过，跨进程持久化通过；源码身份、二进制摘要与报告见 seekdb-bindings 仓库 `ios/framework_probe/framework_evidence/`（2026-10-10 从本仓库 `unittest/ios_build/framework_evidence/` 迁出，内容未变）。证据/文档后续提交不改变被测实现。

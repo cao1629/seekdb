@@ -82,24 +82,31 @@ ditto -c -k --keepParent \
 
 ### 独立动态探针
 
+2026-10-10 起，独立动态探针 App、其构建/运行/校验/稳定性脚本、宿主测试和
+2026-10-07 证据已迁到 cao1629/seekdb-bindings 的 `swift-bindings` 分支
+`ios/framework_probe/`，完整用法见该仓库 `ios/README.md`。它只通过公开 C API 和导出的
+iOS 生命周期函数测试 framework，不再读取本仓库源码；本仓库只负责构建 framework，
+以及 POST_BUILD 生成的 build-manifest.json。
+
 探针仅链接 UIKit，运行时 dlopen/dlsym framework，使用与桌面相同的头文件。
-真机使用既有本地 profile/identity 离线签名，不访问或修改 Xcode 账户：
+真机使用既有本地 profile/identity 离线签名，不访问或修改 Xcode 账户。以下命令在
+seekdb-bindings 仓库根目录执行，`SEEKDB` 指本仓库路径：
 
 ```bash
-python3 unittest/ios_build/build_framework_probe.py \
-  --framework build_ios_arm64/framework/SeekDB.framework \
-  --build build_ios_arm64/framework-probe \
+python3 ios/framework_probe/build_framework_probe.py \
+  --framework "$SEEKDB/build_ios_arm64/framework/SeekDB.framework" \
+  --build build/ios/framework-probe-device \
   --profile /path/to/existing.mobileprovision --identity YOUR_SIGNING_IDENTITY
 xcrun devicectl device install app --device YOUR_DEVICE_UDID \
-  build_ios_arm64/framework-probe/Release-iphoneos/SeekDBFrameworkProbe.app
+  build/ios/framework-probe-device/Release-iphoneos/SeekDBFrameworkProbe.app
 xcrun devicectl device process launch --device YOUR_DEVICE_UDID YOUR_PROFILE_BUNDLE_ID
 ```
 
 保持 App 前台。下载 Documents/framework-probe.json，必须 complete=true、passed=true、
 worker_exit=true、hook_mode=disabled，且 build_id 对应 framework 提交。停止完成后
 退出并重新启动该探针进程，第二份报告 previous_runs 必须增加 1。模拟器使用相同
-脚本加 --simulator，无需开发证书。两份报告可以用
-`unittest/ios_build/validate_framework_probe.py --revision FULL_SHA REPORT1 REPORT2` 验证。
+脚本加 --simulator，无需开发证书。两份报告可以用 seekdb-bindings 的
+`ios/framework_probe/validate_framework_probe.py --revision FULL_SHA REPORT1 REPORT2` 验证。
 
 最终实现提交为 `6f902fdab24ccefdde97c991b50faf551928b604`。对应独立产物：
 
@@ -110,8 +117,9 @@ worker_exit=true、hook_mode=disabled，且 build_id 对应 framework 提交。�
 LC_RPATH、仅系统动态依赖。双平台各两次独立进程启动，均通过 77 项真实 socket
 SQL/生命周期检查及 worker_exit=true；真机 previous_runs 从 3 到 4，模拟器从 2 到 3。
 测试进程在线程退出后仍存活，确认停机证据后才终止探针。聚焦宿主测试共31项通过。
-完整报告、二进制摘要和回归诊断见
-[tracked evidence](../../../unittest/ios_build/framework_evidence/README.md)。
+完整报告、二进制摘要和回归诊断见 seekdb-bindings 仓库
+`ios/framework_probe/framework_evidence/README.md`（2026-10-10 从本仓库
+`unittest/ios_build/framework_evidence` 迁出，内容未变）。
 后续证据/文档提交不改变上述实现；交付源码身份取 manifest 的实现提交而非旧审计标记。
 真机来源记录当前验证 zlib/OpenSSL，其他既有 native archive 以精确链接摘要标识；
 模拟器有14项当前来源验证记录。未执行完整仓库测试或 QuickLang 集成、App Store、
@@ -756,14 +764,17 @@ App离开前台即失败；超过30秒的采样缺口也不能通过，避免后
 同一个已提交counter。runner不附加调试器，不将signal9自动认定为Jetsam。只操作
 专用Probe，不写QuickLang仓库。无OOM极限加压、后台或App Store验收声明。
 
+以下命令在 seekdb-bindings 仓库根目录执行（2026-10-10 起脚本位于其
+`ios/framework_probe/`），`SEEKDB` 指本仓库路径：
+
 ```bash
-python3 unittest/ios_build/build_framework_probe.py --simulator \
-  --framework build_ios_sim_arm64/framework-6f902fdab24c/SeekDB.framework \
-  --build build_ios_sim_arm64/framework-stability-probe
-python3 unittest/ios_build/run_framework_stability.py --simulator SIMULATOR_UDID \
-  --app build_ios_sim_arm64/framework-stability-probe/Release-iphonesimulator/SeekDBFrameworkProbe.app \
-  --framework build_ios_sim_arm64/framework-6f902fdab24c/SeekDB.framework \
-  --output build_ios_sim_arm64/stability/UNIQUE_RUN --duration 600 --runs 5
+python3 ios/framework_probe/build_framework_probe.py --simulator \
+  --framework "$SEEKDB/build_ios_sim_arm64/framework-6f902fdab24c/SeekDB.framework" \
+  --build build/ios/framework-stability-probe
+python3 ios/framework_probe/run_framework_stability.py --simulator SIMULATOR_UDID \
+  --app build/ios/framework-stability-probe/Release-iphonesimulator/SeekDBFrameworkProbe.app \
+  --framework "$SEEKDB/build_ios_sim_arm64/framework-6f902fdab24c/SeekDB.framework" \
+  --output build/ios/stability/UNIQUE_RUN --duration 600 --runs 5
 ```
 
 真机先用既有profile/identity构建Probe，再将runner的--simulator改为--device，输入
@@ -775,7 +786,7 @@ python3 unittest/ios_build/run_framework_stability.py --simulator SIMULATOR_UDID
 
 - 原6f902fdab24c framework，9d149628cd45测试Probe；真机iPhone17Pro/iOS27.0.1与arm64模拟器/iOS27.0均无调试器执行600秒前台测试，各5轮新进程启动全部通过。事务迭代2933/2901、并发读取5822/5721、连接建立182/179；提交计数1467/1451在后续4次重启均保持一致。每轮77项断言及worker_exit通过，reader线程成功join。
 - 10秒采样物理footprint峰值真机213.8MiB、模拟器215.5MiB，相比60秒预热基线增长约50.5/53.4MiB，低于本次256MiB门限；采样峰值不代表瞬时峰值，不宣称无泄漏。
-- 14项framework宿主门禁通过；扩跑iOS宿主347项中338通过、1跳过、3失败、5错误。设备状态mock/错误文本、mysqltest文件拒绝检查及产品名检查未通过，完整suite未通过，独立问题本轮未修复。详细范围与全部10份报告保存于`unittest/ios_build/framework_evidence/stability-20261007/README.md`。
+- 14项framework宿主门禁通过；扩跑iOS宿主347项中338通过、1跳过、3失败、5错误。设备状态mock/错误文本、mysqltest文件拒绝检查及产品名检查未通过，完整suite未通过，独立问题本轮未修复。详细范围与全部10份报告保存于 seekdb-bindings 仓库`ios/framework_probe/framework_evidence/stability-20261007/README.md`（2026-10-10 从本仓库迁出）。
 - 本轮只证明10分钟前台小数据集及有限并发/重启，后台、挂起恢复、24小时、大数据、高并发和整个集成App仍未验证。没有生产源代码、依赖或环境配置改变，没有操作其他App仓库；签名仍使用现有本地凭据，凭据未入库。
 
 ### 2026-10-07：iPhone 嵌入式数据文件默认上限

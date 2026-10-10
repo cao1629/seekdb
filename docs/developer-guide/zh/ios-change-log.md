@@ -738,3 +738,19 @@ python3 deps/ios-build/build.py --jobs 4 vsag
 - 正常合入 `upstream/master`（`1e113252b`），新增布尔谓词去重修复和对应mysqltest用例。整合提交 `87328a156` 相对动态framework分支仅修改上游修复的3个文件。四个来源分支均通过 `git merge-base --is-ancestor`。
 - 验证：`git diff --check` 通过；`python3 -m unittest discover -s unittest/ios_build -p 'test_*.py'` 运行348项，339通过、1跳过、3失败、5报错。失败涉及6项SQL重启模拟测试（locked诊断）、1项mysqltest文件输入限制和1项产品名称扫描；相关iOS实现及测试文件与整合前framework分支一致。本轮未重新编译或执行真机/模拟器验收，不声明全部测试通过。
 - 删除 detached `ios-layered-validation` worktree前确认其 `afa921578` 已为目标分支祖先且无未提交源码；ignored构建产物和证据移至仓库内 `build_ios_arm64/worktree-preserved-20261008/`。主checkout切换到目标iOS分支，保留主工作区构建输出。
+
+### 2026-10-09：CI 修复、合入上游 master 与 framework 头文件冲突
+
+- `99c8ff702`：CI 的 mysqltest slice/collect 解压不含 `.git` 的源码快照，`mysqltest_for_seekdb.py` 的 `source_commit()` 执行 `git rev-parse HEAD` 失败，4 个 slice 未跑任何用例。改为无 git 仓库时使用 `GITHUB_SHA`（setup 正是 checkout 该提交），新增宿主测试。
+- `acc95c9f4`：License header 检查要求新增 C/C++/Rust 文件带完整 OceanBase Apache 2.0 header。17 个 iOS 文件的 SPDX 简写改为完整 header，10 个无 header 文件补齐；`tools/ci/check_license_headers.py` 跳过原样复制的 `deps/ios-driver/mariadb-connector-c`（LGPL-2.1）。
+- `72338ea75`：合入 master `948098e11`（Rust config crate #1457、mysqltest exclude-set #1462、新用例 #1438）。`cmake/Rust.cmake` 采用 master 的 `sql_nio`/`config` target 与变量名，保留 iOS 的 `SQL_NIO_IOS_DEVICE_TESTS`，已跟踪的 `nio.h`、`config.h` 不列入 `BYPRODUCTS`；`rust/sql-nio/cbindgen.toml` 保留 ios-device-tests defines；接受 master 删除 `ob_common_config.cpp`（Rust 配置没有 ARG_MAX 限制）。新用例按 `mysqltest-active` 分类，iOS 语料计数改为 284 active / 273 CI-selected / closure 317 文件 / Rust test 22，`iphone_test_phases.py` 的 host gate 计数改为 273。
+- `f66a53ea8`：master 新增 `rust/config/include/config.h`，`ob_config_manager.h` 以 `"config.h"` 引用；framework target 把 Connector/C 生成的同名 `config.h` 所在目录排在前面，`seekdb_ios.cpp` 报 `unknown type name 'ConfigCheckCallback'`。改为 Connector/C 的 include 目录只作用于 `seekdb_client.c` 和 `seekdb_lifecycle.cpp`。
+- `135953481`：合入 master `f432e1974`（#1468 修正 #1438 用例 `.result` 的续行缩进），无冲突。`741449e24`：CodeQL 把两个 rustup 测试里名为 `secret` 的标记字符串判为明文存储敏感数据，改名 `leak_marker`。
+- 验证：`SEEKDB_IOS_MIN_FREE_GIB=3 DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer ./build.iphone.sh release --simulator --target seekdb_ios_framework --jobs 6`（本机仅约 4 GiB 空闲，放宽脚本默认 10 GiB 门限）在 `f66a53ea8` 的源码上编译通过，verify_framework.py 通过，`libconfig.a` 已链接，导出 32 个符号；构建时 CMake 修复尚未提交，manifest 记为 `72338ea75`、`source_dirty=true`。`unittest/ios_build` 宿主 349 项，失败/报错仍是此前相同的 8 项，1 项跳过。PR #1473 的 SeekDB CI（Linux 编译和 4 个 mysqltest slice）在 `135953481` 全部通过。合入 #1468 后未重新编译 iOS；未做真机编译和真机验收。
+
+### 2026-10-10：framework 探针测试迁出到 seekdb-bindings
+
+- 动态 `SeekDB.framework` 的独立探针只通过公开 C API 和导出的 iOS 生命周期函数测试 framework，迁到 cao1629/seekdb-bindings 的 `swift-bindings` 分支 `ios/framework_probe/`（提交 `f0fb32f`，未推送）。迁出 33 个文件：`framework_probe/` App（6 个）、`build_framework_probe.py`、`run_framework_stability.py`、`validate_framework_probe.py`、`framework_stability.py`、`test_framework_probe_evidence.py`、`test_framework_stability.py` 和 `framework_evidence/`（21 个）。引擎内部设备测试、真机 runner、mysqltest 设备阶段，以及 `verify_framework.py`、`rustc_lldb_wrapper.py`、`macos_lldb_launcher.py` 等构建/CI 脚本留在本仓库。
+- 迁移后探针不再读取本仓库源码：新仓库用 `ios/framework_probe/app/seekdb_ios.h` 声明探针加载的 5 个导出函数，与本仓库 `src/observer/ios/seekdb_ios.h` 一致；framework 可以位于该仓库之外；probe revision 改取 seekdb-bindings 的 HEAD。framework 仍须带本仓库 `verify_framework.py` 写入的 build-manifest.json。
+- `ios-build.md` 的独立动态探针、稳定性章节和 `ios-framework-audit.md` 改为指向新位置；本文件更早的记录保留当时的路径。
+- 验证：seekdb-bindings 中 14 项宿主测试通过；用本仓库 `build_ios_sim_arm64/framework/SeekDB.framework`（`72338ea75`，`source_dirty=true`）为 iOS 27.0 模拟器编译探针，iPhone 17 模拟器两次独立进程运行均 77/77、`worker_exit=true`，previous_runs 3→4，`validate_framework_probe.py` 校验通过。本仓库 `unittest/ios_build` 宿主 335 项（少了迁出的 14 项），失败/报错仍是相同的 8 项，1 项跳过；产品名扫描命中的文件从 10 个降为 5 个。未运行稳定性 runner，未做真机验收。
