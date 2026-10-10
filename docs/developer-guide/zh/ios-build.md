@@ -21,6 +21,11 @@
 - `verify_framework.py` 不再写入 driver 来源记录和 driver、Connector/C 许可证，并在每次构建时
   重建 `Licenses/`，避免增量构建残留旧文件。`tools/ci/check_license_headers.py` 恢复为上游版本，
   不再需要排除第三方目录。
+- 验证（iPhone 17 模拟器 / iOS 27.0）：`2b17e74e7` 的干净构建经 seekdb-bindings 探针
+  （`26fc9cc`，用自己的 Connector/C）两次独立进程运行均 51/51 通过；600 秒、5 次启动的稳定性
+  测试通过，warmup 后内存没有增长，但 warmup 时内存比 2026-10-07 的模拟器运行高约 79 MiB，
+  原因没有查。证据在 seekdb-bindings `ios/framework_probe/framework_evidence/lifecycle-20261010/`。
+  未做真机编译和真机验收。
 - 下文 2026-10-07 章节中关于 25 个桌面 C 函数、Connector/C driver 和探针经由 framework 执行
   SQL 的描述是历史记录。
 
