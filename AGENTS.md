@@ -18,15 +18,3 @@
 
 - Prefer adding regression and correctness coverage to the repository's established test suites and test directories.
 - Avoid adding test-only or benchmark-only files under `tools/` unless the task specifically requires a reusable developer tool.
-
-## iOS Change Traceability
-
-- Keep usage and status current in `docs/developer-guide/zh/ios-build.md`. Record the
-  reason and verification of each iOS environment, source, and CMake/build change in its
-  commit message; there is no separate iOS change log.
-- Commit reproducible scripts, dependency versions/checksums, configuration,
-  verification results, and known limitations with the relevant changes.
-- Local ignored build logs are supplemental evidence, not the sole record.
-  Preserve important outcomes in tracked documentation before pushing to GitHub.
-- Keep seekdb changes and build outputs inside this repository. Never commit
-  signing credentials, private keys, downloaded toolchains, or build caches.
