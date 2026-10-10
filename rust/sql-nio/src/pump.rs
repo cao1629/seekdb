@@ -423,14 +423,7 @@ pub(crate) fn connect_pump(conn: &Arc<Conn>, handler: Handler) -> bool {
     conn.transport_caps
         .store(parsed_login.transport_caps, Ordering::Release);
     conn.mu.lock().unwrap().login = Some(parsed_login);
-    deliver_decoded_packet(
-        conn,
-        handler,
-        packet,
-        NIO_PACKET_LOGIN,
-        None,
-        current_peer_eof,
-    )
+    deliver_decoded_packet(conn, handler, packet, NIO_PACKET_LOGIN, None, current_peer_eof)
 }
 
 pub(crate) fn refuse_login(conn: &Arc<Conn>, msg: &[u8]) -> bool {

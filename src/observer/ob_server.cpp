@@ -28,7 +28,6 @@
 #include <windows.h>
 #endif
 #include <thread>
-#include <cstdlib>
 #include "observer/ob_server.h"
 #include "observer/ob_system_package_load_service.h"
 #include "rootserver/ob_ddl_service_launcher.h"
@@ -709,12 +708,6 @@ int ObServer::init(const ObServerOptions &opts, const ObPLogWriterCfg &log_cfg)
       LOG_ERROR("start timer service failed", KR(ret));
     }
   }
-#ifdef SEEKDB_IOS_TEST_HOOKS
-  if (OB_SUCC(ret) && nullptr != std::getenv("SEEKDB_IOS_TEST_FAIL_DURING_INIT")) {
-    ret = OB_ERR_UNEXPECTED;
-    LOG_WARN("injected iOS init failure after timer service startup", KR(ret));
-  }
-#endif
 
     if (OB_FAIL(ret)) {
     } else if (OB_FAIL(OB_LOG_COMPRESSOR.init())) {

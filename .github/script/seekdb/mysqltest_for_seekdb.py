@@ -344,8 +344,7 @@ def mysqltest_corpus_digest(repo_root):
         repo_root / ".github/script/seekdb/mysqltest_for_seekdb.py",
         repo_root / ".github/script/seekdb/sdb.py",
         repo_root / "tools/deploy/mysqltest_config.yaml",
-        repo_root / "unittest/ios_build/macos_lldb_launcher.py",
-        repo_root / "unittest/ios_build/mysqltest_parser.py",
+        repo_root / ".github/script/seekdb/macos_lldb_launcher.py",
     ))
     digest = hashlib.sha256()
     for path in sorted(set(paths)):
@@ -948,7 +947,7 @@ def command_run(args):
     if args.launcher is not None:
         args.launcher = absolute_path(args.launcher)
         expected_launcher = (
-            repo_root / "unittest/ios_build/macos_lldb_launcher.py").resolve()
+            repo_root / ".github/script/seekdb/macos_lldb_launcher.py").resolve()
         if args.launcher != expected_launcher:
             raise RunnerError("host executable launcher is not tracked")
     args.base_dir = absolute_path(args.base_dir)

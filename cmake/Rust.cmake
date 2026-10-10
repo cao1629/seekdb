@@ -44,12 +44,7 @@ message(STATUS "[rust] cargo: ${CARGO}")
 # Map the CMake build type to a cargo profile and its output subdirectory.
 # Debug uses the dedicated cmake-debug profile (dev codegen + panic="abort")
 # rather than plain dev, so no linked build can unwind a panic into C++.
-set(_cargo_feature_args)
-if(CMAKE_SYSTEM_NAME STREQUAL "iOS" AND SEEKDB_IOS_TEST_HOOKS)
-  set(_cargo_profile_flag "--profile" "ios-device-test")
-  set(_cargo_out_subdir "ios-device-test")
-  list(APPEND _cargo_feature_args "--features" "ios-device-tests")
-elseif(CMAKE_BUILD_TYPE STREQUAL "Debug")
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
   set(_cargo_profile_flag "--profile" "cmake-debug")
   set(_cargo_out_subdir "cmake-debug")
 else()
@@ -190,7 +185,6 @@ add_custom_command(
              "${RUST_TARGET_DIR}/include/config_checkers.h"
   COMMAND "${CMAKE_COMMAND}" -E env ${_rust_build_env}
           "${CARGO}" build ${_cargo_profile_flag} ${_cargo_target_args}
-          ${_cargo_feature_args}
           --manifest-path "${RUST_WORKSPACE_DIR}/Cargo.toml"
           --package sql-nio --package config
   COMMAND "${CMAKE_COMMAND}" -E touch "${SQL_NIO_STATICLIB}"
@@ -220,9 +214,6 @@ add_library(sql_nio INTERFACE)
 add_dependencies(sql_nio rust_staticlibs_build)
 target_include_directories(sql_nio INTERFACE "${SQL_NIO_INCLUDE_DIR}")
 target_link_libraries(sql_nio INTERFACE "${SQL_NIO_STATICLIB}" ${_rust_syslibs})
-if(CMAKE_SYSTEM_NAME STREQUAL "iOS" AND SEEKDB_IOS_TEST_HOOKS)
-  target_compile_definitions(sql_nio INTERFACE SQL_NIO_IOS_DEVICE_TESTS=1)
-endif()
 
 add_library(config INTERFACE)
 add_dependencies(config rust_staticlibs_build)

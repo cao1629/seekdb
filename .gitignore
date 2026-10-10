@@ -44,7 +44,6 @@
 .codegraph/
 /.obdev
 /.settings/
-/iphone_test/
 BROWSE
 Build (GNU)
 gtags.files
@@ -411,4 +410,3 @@ seekdb_data/
 
 # Local Python bytecode for the iOS build helpers.
 deps/ios-build/__pycache__/
-unittest/ios_build/__pycache__/

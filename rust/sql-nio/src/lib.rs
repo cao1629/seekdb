@@ -40,8 +40,6 @@ mod codec;
 mod command;
 mod compress;
 mod conn;
-#[cfg(any(test, feature = "ios-device-tests"))]
-mod device_tests;
 mod ffi_types;
 mod handshake;
 mod login;

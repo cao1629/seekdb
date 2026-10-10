@@ -176,7 +176,6 @@ else()
 endif()
 
 if(CMAKE_SYSTEM_NAME STREQUAL "iOS")
-  option(SEEKDB_IOS_TEST_HOOKS "Enable deterministic iOS runtime failure hooks" OFF)
   execute_process(
     COMMAND git rev-parse --short=12 HEAD
     WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
@@ -189,32 +188,14 @@ if(CMAKE_SYSTEM_NAME STREQUAL "iOS")
      NOT SEEKDB_IOS_BUILD_ID_LENGTH EQUAL 12)
     message(FATAL_ERROR "Cannot determine the iOS runtime source revision")
   endif()
-  set(SEEKDB_IOS_HOOK_MODE "disabled")
-  if(SEEKDB_IOS_TEST_HOOKS)
-    set(SEEKDB_IOS_HOOK_MODE "enabled")
-  endif()
   add_library(seekdb_ios_runtime STATIC EXCLUDE_FROM_ALL ios/seekdb_ios.cpp)
   target_include_directories(seekdb_ios_runtime PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/ios")
   target_compile_definitions(seekdb_ios_runtime PRIVATE
     SEEKDB_IOS_BUILD_ID="${SEEKDB_IOS_BUILD_ID}"
-    SEEKDB_IOS_HOOK_MODE="${SEEKDB_IOS_HOOK_MODE}")
+    SEEKDB_IOS_HOOK_MODE="disabled")
   target_link_libraries(seekdb_ios_runtime PUBLIC oceanbase_static sql_nio)
-  if(SEEKDB_IOS_TEST_HOOKS)
-    target_compile_definitions(seekdb_ios_runtime PRIVATE SEEKDB_IOS_TEST_HOOKS=1)
-    target_compile_definitions(seekdb_ios_runtime PUBLIC SQL_NIO_IOS_DEVICE_TESTS=1)
-    target_compile_definitions(ob_server PRIVATE SEEKDB_IOS_TEST_HOOKS=1)
-  endif()
-  add_library(seekdb_ios_sql_probe STATIC EXCLUDE_FROM_ALL
-    "${CMAKE_SOURCE_DIR}/unittest/ios_build/sql_probe.cpp")
-  target_link_libraries(seekdb_ios_sql_probe PUBLIC seekdb_ios_runtime)
-  add_executable(seekdb_ios_link_check EXCLUDE_FROM_ALL
-    "${CMAKE_SOURCE_DIR}/unittest/ios_build/link_probe.cpp")
-  target_link_libraries(seekdb_ios_link_check PRIVATE seekdb_ios_sql_probe)
   option(SEEKDB_IOS_FRAMEWORK "Build the desktop C ABI as an embedded iOS framework" OFF)
   if(SEEKDB_IOS_FRAMEWORK)
-    if(SEEKDB_IOS_TEST_HOOKS)
-      message(FATAL_ERROR "The distributable SeekDB framework requires SEEKDB_IOS_TEST_HOOKS=OFF")
-    endif()
     add_subdirectory(ios/driver)
   endif()
 endif()

@@ -2,6 +2,34 @@
 
 当前整合分支：`ios/iphone13-17-iphoneOS2627-macOS27`。2026-10-08已纳入动态framework、本地master、原远端ARM64移植分支历史及上游master `1e113252b`。本轮仅验证历史包含关系和宿主测试，348项中8项失败或报错、1项跳过；未重新构建或做设备验收，详见 `ios-change-log.md` 当日记录。
 
+## 2026-10-10：真机测试套件迁出
+
+本仓库只保留 iOS 引擎、`SeekDB.framework` 构建及其构建后校验。`unittest/ios_build`
+整个目录、`run.iphone.test.sh`、`deps/ios-build/build_app.py`、`rust/sql-nio/src/device_tests.rs`
+以及真机 runner 的设计文档已从本仓库删除，原样存放在 cao1629/seekdb-bindings
+`swift-bindings` 分支的 `ios/device_tests/`（按本仓库根目录的相对路径排列，内容对应
+本仓库 `14a930a80`）。那里只是暂存，不能直接运行。
+
+- 引擎侧一起删除：CMake 选项 `SEEKDB_IOS_TEST_HOOKS` 及 `ob_server.cpp` 中的
+  `SEEKDB_IOS_TEST_FAIL_DURING_INIT` 注入、`seekdb_ios_sql_probe` 和 `seekdb_ios_link_check`
+  target、Rust `ios-device-test` profile、`ios-device-tests` feature 及其 cbindgen defines 和
+  `nio.h` 声明。`rust/` 与上游 master 一致，`cert.rs`、`tls.rs` 的单元测试回到原文件。
+  `seekdb_ios_runtime` 静态库 target 保留，hook mode 固定为 disabled。
+- `build.iphone.sh` 默认 target 改为 `seekdb_ios_framework`。
+- 构建仍需要的三个脚本移到新位置：`verify_framework.py` 移到 `src/observer/ios/driver/`，
+  `rustc_lldb_wrapper.py` 移到 `cmake/`（不放进 `deps/ios-build/`，以免改动它就让依赖缓存
+  失效），`macos_lldb_launcher.py` 移到 `.github/script/seekdb/`。CI 的 mysqltest 语料摘要
+  随之更新，并移除 `mysqltest_parser.py`。
+- `deps/ios-build/build.py` 的依赖缓存摘要包含该目录下的 `.py` 文件，删除 `build_app.py`
+  会让已有的 iOS 依赖缓存失效一次，下次构建会从源码重编依赖。
+- `rustc_lldb_wrapper.py` 生成的 build script 启动脚本记录了 wrapper 的绝对路径。已有的
+  framework 构建目录需要先删除一次 `<构建目录>/rust-target/release`，否则 build script 仍会去
+  执行旧路径 `unittest/ios_build/rustc_lldb_wrapper.py`，以退出码 126 失败。
+- framework 的模拟器/真机验收改用 seekdb-bindings 的 `ios/framework_probe/`。
+- 下文 2026-10-10 之前的章节中，凡涉及 `run.iphone.test.sh`、`unittest/ios_build`、
+  `build_app.py`、`seekdb_ios_link_check`、测试 hooks 或 Rust device suite 的内容，都是历史
+  记录，在本仓库已无法执行。恢复真机套件需要回退本次删除提交，或直接检出 `14a930a80`。
+
 ## 2026-10-07：动态 SeekDB.framework 与桌面 C ABI
 
 `codex/ios-dynamic-framework` 已实现进程内动态 framework。App 嵌入并加载
@@ -40,18 +68,19 @@ export DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer
 ./build.iphone.sh release --simulator --target seekdb_ios_framework --jobs 2
 ```
 
-framework 目标自动设置 SEEKDB_IOS_FRAMEWORK=ON、SEEKDB_IOS_TEST_HOOKS=OFF、
-OB_ENABLE_STANDBY=OFF。后者禁用物理主备/gRPC 路径；当前本地 iOS 依赖不提供
-其所需完整归档。Rust 使用仓库内 Cargo/rustup 目录和现有 rustc_lldb_wrapper.py
-处理本机 AMFI 对宿主 build scripts 的限制。直接调用 CMake 时也需这些环境：
+2026-10-10 起 `seekdb_ios_framework` 也是 `build.iphone.sh` 的默认 target。framework 目标
+自动设置 SEEKDB_IOS_FRAMEWORK=ON、OB_ENABLE_STANDBY=OFF。后者禁用物理主备/gRPC 路径；
+当前本地 iOS 依赖不提供其所需完整归档。Rust 使用仓库内 Cargo/rustup 目录和
+`cmake/rustc_lldb_wrapper.py` 处理本机 AMFI 对宿主 build scripts 的限制。直接调用
+CMake 时也需这些环境：
 
 ```bash
 export CARGO_HOME="$PWD/deps/ios/cargo"
 export RUSTUP_HOME="$PWD/deps/ios/rustup"
-export RUSTC_WRAPPER="$PWD/unittest/ios_build/rustc_lldb_wrapper.py"
+export RUSTC_WRAPPER="$PWD/cmake/rustc_lldb_wrapper.py"
 export CARGO_NET_OFFLINE=true
 cmake -S . -B build_ios_arm64 -DSEEKDB_IOS_FRAMEWORK=ON \
-  -DSEEKDB_IOS_TEST_HOOKS=OFF -DOB_ENABLE_STANDBY=OFF
+  -DOB_ENABLE_STANDBY=OFF
 cmake --build build_ios_arm64 --target seekdb_ios_framework -j2
 ```
 

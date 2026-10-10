@@ -18,10 +18,6 @@ name = "sql_nio"
 # rlib      -> cargo test / Rust consumers.
 crate-type = ["staticlib", "rlib"]
 
-[features]
-default = []
-ios-device-tests = []
-
 [dependencies]
 # mio = epoll (Linux) / kqueue (macOS) / IOCP (Windows), no async runtime.
 # os-ext: mio::windows::NamedPipe for the per-reactor pending-pipe acceptor.

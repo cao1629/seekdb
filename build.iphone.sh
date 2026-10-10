@@ -8,19 +8,14 @@
 #    Missing host headers trigger ./build.sh init; missing parser tools are prepared.
 #    iOS dependencies are downloaded, checksum-verified, and compiled as needed.
 #    Matching verified dependencies are reused; legacy verification records rebuild once.
-# 2. The default target builds engine libraries and seekdb_ios_link_check, validating
-#    the final link without signing, installing, or running an App on the phone.
+# 2. The default target, seekdb_ios_framework, builds the dynamic SeekDB.framework
+#    and verifies it after linking, without signing, installing, or running an App.
 #    --deps-only builds third-party iOS dependencies without building the engine.
 #    --init remains compatible but is no longer required for normal builds.
 #    --configure-only prepares prerequisites and generates rules without compiling
 #    the engine. Explicit --deps-prefix directories remain caller-managed.
-# 3. To install the test App, sign in to Xcode > Settings > Accounts. Connect and
-#    unlock the iPhone, trust this Mac, and enable Developer Mode on the phone.
-#    Replace the three placeholders and run:
-#    python3 deps/ios-build/build_app.py --team YOURTEAMID \
-#      --device YOUR_DEVICE_UDID --bundle-id YOUR_BUNDLE_ID --install
-# 4. Open SeekDB Probe; SQL tests run automatically. Wait for SQL success, tap
-#    Stop engine, and wait for Stopped. Reopen the App; Previous runs should increase.
+# 3. The App that tests the framework on a Simulator or iPhone lives in
+#    cao1629/seekdb-bindings, branch swift-bindings, under ios/framework_probe.
 # Builds, dependencies, Rust caches, and logs default to this checkout. Debug and
 # release share build_ios_arm64; use --build-dir to isolate profiles if needed.
 # For setup, signing, and automated testing, see docs/developer-guide/zh/ios-build.md.
@@ -32,7 +27,7 @@ RUST_TARGET=aarch64-apple-ios
 BUILD_DIR="$ROOT/build_ios_arm64"
 DEPLOYMENT=18.0
 JOBS=4
-TARGET=seekdb_ios_link_check
+TARGET=seekdb_ios_framework
 BUILD_TYPE=Debug
 CONFIGURE_ONLY=false
 DEPS_ONLY=false
@@ -54,8 +49,8 @@ Experimental seekdb iOS ARM64 build. This does not package or sign an iPhone app
   --configure-only        Generate build rules without compiling
   --deps-only             Build pinned iOS dependencies, including ICU and VSAG
   --jobs N                Parallel C/C++ jobs (default: 4)
-  --target NAME           CMake target (default: seekdb_ios_link_check, including engine libraries)
-                          seekdb_ios_framework packages the shared desktop C ABI
+  --target NAME           CMake target (default: seekdb_ios_framework, the dynamic framework
+                          that packages the engine with the shared desktop C ABI)
   --build-dir PATH        Repository-local CMake build directory
   --deps-prefix PATH      iOS-built dependencies (default: deps/ios/<sdk>/devel)
   --headers-prefix PATH   Header prefix (auto: iOS prefix, then existing host headers)
@@ -231,14 +226,14 @@ build_dependencies() {
 }
 
 # Configure the selected Debug/Release profile and build the requested target
-# (default: engine libraries plus final link check), retaining logs in the build tree.
+# (default: the verified SeekDB.framework), retaining logs in the build tree.
 build_engine() {
   DEPS_PREFIX="${DEPS_PREFIX:-$ROOT/deps/ios/$SDK/devel}"
   local framework_args=()
   if [[ "$TARGET" == seekdb_ios_framework ]]; then
-    framework_args=(-DSEEKDB_IOS_FRAMEWORK=ON -DSEEKDB_IOS_TEST_HOOKS=OFF -DOB_ENABLE_STANDBY=OFF)
+    framework_args=(-DSEEKDB_IOS_FRAMEWORK=ON -DOB_ENABLE_STANDBY=OFF)
     # Reuse the tracked host build-script launcher on macOS with AMFI restrictions.
-    export RUSTC_WRAPPER="${RUSTC_WRAPPER:-$ROOT/unittest/ios_build/rustc_lldb_wrapper.py}"
+    export RUSTC_WRAPPER="${RUSTC_WRAPPER:-$ROOT/cmake/rustc_lldb_wrapper.py}"
     [[ -x "$RUSTC_WRAPPER" ]] || fail "missing executable Rust wrapper: $RUSTC_WRAPPER"
   fi
   mkdir -p "$BUILD_DIR/logs"

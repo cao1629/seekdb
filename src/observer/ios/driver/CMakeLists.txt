@@ -48,10 +48,10 @@ set_target_properties(seekdb_ios_framework PROPERTIES
   BUILD_WITH_INSTALL_NAME_DIR TRUE
   SKIP_BUILD_RPATH TRUE
   XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED NO
-  LINK_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/exports.txt;${CMAKE_SOURCE_DIR}/unittest/ios_build/verify_framework.py")
+  LINK_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/exports.txt;${CMAKE_CURRENT_SOURCE_DIR}/verify_framework.py")
 find_package(Python3 COMPONENTS Interpreter REQUIRED)
 add_custom_command(TARGET seekdb_ios_framework POST_BUILD
-  COMMAND "${Python3_EXECUTABLE}" "${CMAKE_SOURCE_DIR}/unittest/ios_build/verify_framework.py"
+  COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/verify_framework.py"
     --binary "$<TARGET_FILE:seekdb_ios_framework>"
     --source "${CMAKE_SOURCE_DIR}" --build "${CMAKE_BINARY_DIR}"
     --sdk "${CMAKE_OSX_SYSROOT}" --deployment "${CMAKE_OSX_DEPLOYMENT_TARGET}"
