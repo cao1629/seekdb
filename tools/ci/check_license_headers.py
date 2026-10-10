@@ -43,12 +43,6 @@ REQUIRED_SUFFIXES = frozenset(
 
 TEMPLATE_SUFFIXES = frozenset({".in", ".template", ".tpl"})
 
-VENDORED_DIRECTORIES = frozenset(
-    {
-        PurePosixPath("deps/ios-driver/mariadb-connector-c"),
-    }
-)
-
 COPYRIGHT_RE = re.compile(
     rb"Copyright\s*\(c\)\s*20\d{2}(?:\s*-\s*20\d{2})?\s+OceanBase"
     rb"(?:\s+Inc\.)?\.?",
@@ -139,8 +133,6 @@ def has_license_header(content):
 
 def is_required_source_file(path):
     pure_path = PurePosixPath(path)
-    if VENDORED_DIRECTORIES.intersection(pure_path.parents):
-        return False
     while pure_path.suffix.lower() in TEMPLATE_SUFFIXES:
         pure_path = pure_path.with_suffix("")
     return pure_path.suffix.lower() in REQUIRED_SUFFIXES

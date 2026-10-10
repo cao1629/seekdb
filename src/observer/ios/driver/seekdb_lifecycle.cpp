@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "seekdb_internal.h"
+#include "seekdb.h"
 #include "../seekdb_ios.h"
 #include <atomic>
 #include <cerrno>
@@ -23,7 +23,9 @@
 #include <mutex>
 #include <pthread.h>
 #include <string>
+#include <sys/socket.h>
 #include <sys/stat.h>
+#include <sys/time.h>
 #include <sys/un.h>
 #include <unistd.h>
 #include <vector>
@@ -42,6 +44,12 @@ __attribute__((constructor)) static void initialize_framework_allocator()
 }
 
 namespace {
+struct SeekdbHandleImpl {
+  char *db_dir;
+  char *sock_path;
+  char *socket_alias_dir;
+};
+
 /** Own one engine thread and the arguments retained for its entire lifetime. */
 struct Engine {
   std::mutex mutex;
@@ -173,45 +181,40 @@ bool prepare_socket(SeekdbHandleImpl *handle)
   return handle->sock_path != nullptr;
 }
 
-/** Test the desktop driver's service-ready view over the real MySQL socket. */
+/** Confirm that the running engine's Unix socket answers with a MySQL protocol greeting. */
 bool socket_ready(const SeekdbHandleImpl *handle)
 {
-  MYSQL *client = mysql_init(nullptr);
-  if (client == nullptr) {
+  int client = socket(AF_UNIX, SOCK_STREAM, 0);
+  if (client < 0) {
     return false;
   }
-  unsigned int timeout = 1;
-  unsigned int protocol = MYSQL_PROTOCOL_SOCKET;
-  char no_ssl = 0;
-  mysql_options(client, MYSQL_OPT_CONNECT_TIMEOUT, &timeout);
-  mysql_options(client, MYSQL_OPT_READ_TIMEOUT, &timeout);
-  mysql_options(client, MYSQL_OPT_WRITE_TIMEOUT, &timeout);
-  mysql_options(client, MYSQL_OPT_PROTOCOL, &protocol);
-  mysql_options(client, MYSQL_OPT_SSL_ENFORCE, &no_ssl);
-  mysql_options(client, MYSQL_OPT_SSL_VERIFY_SERVER_CERT, &no_ssl);
-  mysql_options(client, MYSQL_SET_CHARSET_NAME, "utf8mb4");
-  bool ready = mysql_real_connect(client, nullptr, "root@sys", "", nullptr, 0, handle->sock_path, 0) != nullptr;
-  if (ready) {
-    const char sql[] = "SELECT 1 FROM oceanbase.V$OB_SERVER_STAT WHERE START_SERVICE_TIME > 0 LIMIT 1";
-    ready = mysql_real_query(client, sql, sizeof(sql) - 1) == 0;
+  timeval timeout{1, 0};
+  setsockopt(client, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout));
+  sockaddr_un address{};
+  address.sun_family = AF_UNIX;
+  std::strncpy(address.sun_path, handle->sock_path, sizeof(address.sun_path) - 1);
+  unsigned char greeting[5] = {};
+  size_t received = 0;
+  bool ready = connect(client, reinterpret_cast<sockaddr *>(&address), sizeof(address)) == 0;
+  while (ready && received < sizeof(greeting)) {
+    ssize_t count = recv(client, greeting + received, sizeof(greeting) - received, 0);
+    ready = count > 0;
     if (ready) {
-      MYSQL_RES *rows = mysql_store_result(client);
-      ready = rows != nullptr && mysql_num_rows(rows) > 0;
-      if (rows != nullptr) {
-        mysql_free_result(rows);
-      }
+      received += static_cast<size_t>(count);
     }
   }
+  int error = errno;
+  ready = ready && greeting[3] == 0 && greeting[4] == 10;
+  close(client);
   static unsigned int failed_attempts = 0;
   if (!ready && ++failed_attempts % 50 == 1) {
-    std::fprintf(stderr, "SeekDB socket readiness: %u %s\n", mysql_errno(client), mysql_error(client));
+    std::fprintf(stderr, "SeekDB socket readiness: %zu bytes, %s\n", received, std::strerror(error));
     FILE *log = std::fopen((engine.directory + "/log/ios-driver.log").c_str(), "a");
     if (log != nullptr) {
-      std::fprintf(log, "socket readiness attempt %u: %u %s\n", failed_attempts, mysql_errno(client), mysql_error(client));
+      std::fprintf(log, "socket readiness attempt %u: %zu bytes, %s\n", failed_attempts, received, std::strerror(error));
       std::fclose(log);
     }
   }
-  mysql_close(client);
   return ready;
 }
 
@@ -302,6 +305,22 @@ int seekdb_open(const char *directory, const char **parameters, SeekdbHandle *ou
   }
   ++engine.handles;
   *out_handle = handle;
+  return SEEKDB_SUCCESS;
+}
+
+int seekdb_connection_options(SeekdbHandle opaque, SeekdbConnectionOptions *out_options)
+{
+  if (opaque == nullptr || out_options == nullptr) {
+    return SEEKDB_INVALID_ARGUMENT;
+  }
+  const auto *handle = static_cast<const SeekdbHandleImpl *>(opaque);
+  *out_options = {};
+  if (handle->sock_path == nullptr) {
+    return SEEKDB_INTERNAL_ERROR;
+  }
+  out_options->transport = SEEKDB_CONNECTION_TRANSPORT_UNIX_SOCKET;
+  out_options->endpoint = handle->sock_path;
+  out_options->user = "root";
   return SEEKDB_SUCCESS;
 }
 

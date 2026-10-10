@@ -2,6 +2,28 @@
 
 当前整合分支：`ios/iphone13-17-iphoneOS2627-macOS27`。2026-10-08已纳入动态framework、本地master、原远端ARM64移植分支历史及上游master `1e113252b`。本轮仅验证历史包含关系和宿主测试，348项中8项失败或报错、1项跳过；未重新构建或做设备验收，详见 `ios-change-log.md` 当日记录。
 
+## 2026-10-10：framework 只负责引擎生命周期，SQL 由 App 的客户端执行
+
+- `SeekDB.framework` 只启动、共享和关闭进程内引擎。公开头文件 `seekdb.h` 是桌面 `seekdb.h`
+  的子集，只声明 `seekdb_open`、`seekdb_close`、`seekdb_connection_options` 及其返回码和
+  `SeekdbConnectionOptions`；导出 10 个符号，即这 3 个函数和 7 个 `seekdb_ios_*` 函数。
+  桌面版的 connect、query、结果、事务、value、`seekdb_malloc`/`seekdb_free` 不再提供。
+- 执行 SQL 交给 App 自己选的 MySQL 协议客户端：`seekdb_connection_options` 返回
+  `transport=unix_socket`、socket 路径和用户 `root`（空密码），App 用自己的客户端连接该
+  socket。最后一个 `seekdb_close` 会停止引擎，调用前应先关闭 App 自己的连接。
+- 删除 `deps/ios-driver`（Connector/C 3.4.8 源码和 driver 来源记录）以及
+  `seekdb_client.c`、`seekdb_internal.h`、`tlog.h`。Connector/C 原样移到 cao1629/seekdb-bindings
+  `swift-bindings` 分支的 `ios/framework_probe/mariadb-connector-c/`，作为探针 App 自己的客户端；
+  探针用 seekdb 依赖构建产生的 iOS OpenSSL 和 zlib 链接它（`--deps-prefix`）。
+- `seekdb_open` 的就绪判断：引擎状态变为 RUNNING 时 `ObServer::start()` 已设置
+  `start_service_time`，之后用 POSIX socket 连接 Unix socket，收到协议版本 10 的 MySQL 握手包
+  即视为就绪；不再以 `root@sys` 登录并查询 `V$OB_SERVER_STAT`。
+- `verify_framework.py` 不再写入 driver 来源记录和 driver、Connector/C 许可证，并在每次构建时
+  重建 `Licenses/`，避免增量构建残留旧文件。`tools/ci/check_license_headers.py` 恢复为上游版本，
+  不再需要排除第三方目录。
+- 下文 2026-10-07 章节中关于 25 个桌面 C 函数、Connector/C driver 和探针经由 framework 执行
+  SQL 的描述是历史记录。
+
 ## 2026-10-10：真机测试套件迁出
 
 本仓库只保留 iOS 引擎、`SeekDB.framework` 构建及其构建后校验。`unittest/ios_build`
@@ -117,13 +139,16 @@ ditto -c -k --keepParent \
 iOS 生命周期函数测试 framework，不再读取本仓库源码；本仓库只负责构建 framework，
 以及 POST_BUILD 生成的 build-manifest.json。
 
-探针仅链接 UIKit，运行时 dlopen/dlsym framework，使用与桌面相同的头文件。
+2026-10-10 起，探针 App 链接 UIKit 和自带的 Connector/C，运行时只用 dlopen/dlsym 取得
+framework 的生命周期和诊断函数，SQL 由自带的 Connector/C 经 Unix socket 执行；构建时用
+`--deps-prefix` 提供本仓库依赖构建产生的 iOS OpenSSL 和 zlib。
 真机使用既有本地 profile/identity 离线签名，不访问或修改 Xcode 账户。以下命令在
 seekdb-bindings 仓库根目录执行，`SEEKDB` 指本仓库路径：
 
 ```bash
 python3 ios/framework_probe/build_framework_probe.py \
   --framework "$SEEKDB/build_ios_arm64/framework/SeekDB.framework" \
+  --deps-prefix "$SEEKDB/deps/ios/iphoneos/devel" \
   --build build/ios/framework-probe-device \
   --profile /path/to/existing.mobileprovision --identity YOUR_SIGNING_IDENTITY
 xcrun devicectl device install app --device YOUR_DEVICE_UDID \
@@ -799,6 +824,7 @@ App离开前台即失败；超过30秒的采样缺口也不能通过，避免后
 ```bash
 python3 ios/framework_probe/build_framework_probe.py --simulator \
   --framework "$SEEKDB/build_ios_sim_arm64/framework-6f902fdab24c/SeekDB.framework" \
+  --deps-prefix "$SEEKDB/deps/ios/iphonesimulator/devel" \
   --build build/ios/framework-stability-probe
 python3 ios/framework_probe/run_framework_stability.py --simulator SIMULATOR_UDID \
   --app build/ios/framework-stability-probe/Release-iphonesimulator/SeekDBFrameworkProbe.app \

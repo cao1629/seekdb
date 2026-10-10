@@ -154,15 +154,13 @@ def main():
         "public_header_sha256": digest(public_header),
         "dynamic_dependencies": dependencies, "static_dependencies": archive_inventory(build, source),
         "exported_symbols": sorted(actual),
-        "driver": json.loads((source / "deps/ios-driver/SOURCE.json").read_text()),
         "dependency_source_records": dependency_source_records(source, args.sdk),
         "rust_lock_sha256": digest(source / "rust/Cargo.lock"),
     }
     (binary.parent / "build-manifest.json").write_text(json.dumps(provenance, indent=2) + "\n")
     licenses = binary.parent / "Licenses"
-    licenses.mkdir(exist_ok=True)
-    shutil.copyfile(source / "deps/ios-driver/LICENSE.driver", licenses / "driver-Apache-2.0.txt")
-    shutil.copyfile(source / "deps/ios-driver/mariadb-connector-c/COPYING.LIB", licenses / "connector-LGPL-2.1.txt")
+    shutil.rmtree(licenses, ignore_errors=True)
+    licenses.mkdir()
     package_licenses(source, licenses)
     print("Verified", platform, "arm64 framework:", binary)
 
