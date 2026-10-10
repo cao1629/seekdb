@@ -21,7 +21,7 @@ insert into t1(pk) values(2);
 select pk,b from t1;
 let $value_orig= query_get_value(select * from t1, b, 1);
 replace into t1(pk) values(1);
---real_sleep 2
+--real_sleep 1
 replace into t1(pk) values(2);
 --real_sleep 1
 let $value_now= query_get_value(select * from t1, b, 1);
@@ -33,4 +33,5 @@ disable_query_log;
 --replace_column 2 searched
 eval select pk,b from t1 where b='$value_now';
 enable_query_log;
+
 
