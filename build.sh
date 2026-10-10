@@ -5,16 +5,7 @@ set -uo pipefail
 readonly TOPDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 readonly DEP_INIT_DIR="${TOPDIR}/deps/init"
 readonly DEVTOOLS_DIR="${TOPDIR}/deps/3rd/usr/local/oceanbase/devtools"
-readonly HOST_DEPS_DIR="${TOPDIR}/deps/3rd/usr/local/oceanbase/deps/devel"
-readonly IOS_DEPLOYMENT_TARGET=18.0
-readonly -a IOS_HEADERS=(grpcpp/grpcpp.h rapidjson/error/en.h boost/version.hpp)
 readonly -a ALL_ARGS=("$@")
-
-IOS_SDK=iphoneos
-IOS_RUST_TARGET=aarch64-apple-ios
-IOS_DEPS_PREFIX=""
-IOS_EXPLICIT_DEPS=false
-IOS_HEADERS_PREFIX=""
 
 function echo_log
 {
@@ -37,10 +28,10 @@ function usage
   cat <<'EOF'
 Usage:
   ./build.sh -h
-  ./build.sh init [--android | --ios [--simulator] [--deps-prefix PATH]]
+  ./build.sh init [--android | --ios [--simulator]]
   ./build.sh clean
-  ./build.sh release [--init] [--android | --ios [--simulator] [--deps-prefix PATH]] [-DName=Value ...]
-  ./build.sh release [--init] [--android | --ios [--simulator] [--deps-prefix PATH]] [-DName=Value ...] --make [MakeOptions]
+  ./build.sh release [--init] [--android | --ios [--simulator]] [-DName=Value ...]
+  ./build.sh release [--init] [--android | --ios [--simulator]] [-DName=Value ...] --make [MakeOptions]
   ./build.sh sanity [--init] [-DName=Value ...]
   ./build.sh sanity [--init] [-DName=Value ...] --make [MakeOptions]
   ./build.sh {rpm|deb|tgz} [--init] [-DName=Value ...]
@@ -55,8 +46,7 @@ Supported compatibility build:
   Host platforms: Linux and macOS. Android cross-compilation: arm64-v8a.
   iOS cross-compilation on macOS with Xcode: arm64 iPhone, or the Apple Silicon
   iOS simulator with --simulator; --make builds SeekDB.framework. For iOS,
-  --init installs the pinned Rust target and builds deps/ios-build into
-  deps/ios/<sdk>/devel; --deps-prefix uses an existing prefix instead.
+  --init also builds deps/ios-build into deps/ios/<sdk>/devel.
   iOS also accepts -DCMAKE_BUILD_TYPE=Debug.
   Windows x64 uses build.ps1.
 
@@ -124,9 +114,17 @@ function find_cmake
 
 function do_init
 {
-  local android_build=$1
+  local platform=$1
+  local android_build=false
   local start_time end_time elapsed
   local status=0
+  local -a ios_args=(--jobs "$(cpu_count)" --reuse)
+
+  if [[ "${platform}" == android ]]; then
+    android_build=true
+  elif [[ "${platform}" == ios-simulator ]]; then
+    ios_args+=(--simulator)
+  fi
 
   if [[ ! -f "${DEP_INIT_DIR}/dep_create.sh" ]]; then
     echo_err "dependency initializer not found: ${DEP_INIT_DIR}/dep_create.sh"
@@ -141,6 +139,9 @@ function do_init
   if (( status != 0 )); then
     echo_err "dependency initialization failed with status ${status}"
     return "${status}"
+  fi
+  if [[ "${platform}" == ios* ]]; then
+    python3 "${TOPDIR}/deps/ios-build/build.py" "${ios_args[@]}" || return $?
   fi
   (
     cd "${TOPDIR}/rust" &&
@@ -160,10 +161,10 @@ function release_build_dir
       printf '%s\n' "${TOPDIR}/build_android_release"
       ;;
     ios)
-      printf '%s\n' "${TOPDIR}/build_ios_arm64"
+      printf '%s\n' "${TOPDIR}/build_ios_release"
       ;;
     ios-simulator)
-      printf '%s\n' "${TOPDIR}/build_ios_sim_arm64"
+      printf '%s\n' "${TOPDIR}/build_ios_simulator_release"
       ;;
     *)
       printf '%s\n' "${TOPDIR}/build_release"
@@ -176,7 +177,7 @@ function remove_managed_build_dir
   local build_dir=$1
 
   case "${build_dir}" in
-    "${TOPDIR}/build_debug"|"${TOPDIR}/build_release"|"${TOPDIR}/build_sanity"|"${TOPDIR}/build_android_release"|"${TOPDIR}/build_ios_arm64"|"${TOPDIR}/build_ios_sim_arm64"|"${TOPDIR}/build_rpm"|"${TOPDIR}/build_deb"|"${TOPDIR}/build_tgz")
+    "${TOPDIR}/build_debug"|"${TOPDIR}/build_release"|"${TOPDIR}/build_sanity"|"${TOPDIR}/build_android_release"|"${TOPDIR}/build_ios_release"|"${TOPDIR}/build_ios_simulator_release"|"${TOPDIR}/build_rpm"|"${TOPDIR}/build_deb"|"${TOPDIR}/build_tgz")
       ;;
     *)
       fail "refusing to clean unexpected path: ${build_dir}"
@@ -229,15 +230,20 @@ function configure_cmake
       -DANDROID_SUPPORT_FLEXIBLE_PAGE_SIZES=ON
     )
   elif [[ "${platform}" == ios* ]]; then
+    local ios_sdk=iphoneos
+    if [[ "${platform}" == ios-simulator ]]; then
+      ios_sdk=iphonesimulator
+    fi
+    if [[ -z "${DEVELOPER_DIR:-}" && -d /Applications/Xcode.app/Contents/Developer ]]; then
+      export DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer
+    fi
+    if ! xcrun --sdk "${ios_sdk}" --show-sdk-path >/dev/null 2>&1; then
+      fail "iOS SDK not found: ${ios_sdk}; install Xcode or set DEVELOPER_DIR"
+    fi
     cmake_args+=(
       -DCMAKE_SYSTEM_NAME=iOS
-      "-DCMAKE_OSX_SYSROOT=${IOS_SDK}"
-      -DCMAKE_OSX_ARCHITECTURES=arm64
-      "-DCMAKE_OSX_DEPLOYMENT_TARGET=${IOS_DEPLOYMENT_TARGET}"
+      "-DCMAKE_OSX_SYSROOT=${ios_sdk}"
       -DOB_DISABLE_PIE=OFF
-      "-DCARGO=${CARGO}"
-      "-DDEP_DIR=${IOS_DEPS_PREFIX}"
-      "-DSEEKDB_IOS_HEADER_PREFIX=${IOS_HEADERS_PREFIX}"
       -DSEEKDB_IOS_FRAMEWORK=ON
       -DOB_ENABLE_STANDBY=OFF
     )
@@ -259,12 +265,13 @@ function select_platform
   local android_build=$1
   local ios_build=$2
   local simulator=$3
-  local deps_prefix=$4
 
   if [[ "${android_build}" == true && "${ios_build}" == true ]]; then
     fail "--android and --ios cannot be combined"
-  elif [[ "${ios_build}" == false && ( "${simulator}" == true || -n "${deps_prefix}" ) ]]; then
-    fail "--simulator and --deps-prefix require --ios"
+  elif [[ "${ios_build}" == false && "${simulator}" == true ]]; then
+    fail "--simulator requires --ios"
+  elif [[ "${ios_build}" == true && "$(uname -s)" != "Darwin" ]]; then
+    fail "--ios requires macOS with Xcode"
   elif [[ "${android_build}" == true ]]; then
     printf 'android\n'
   elif [[ "${simulator}" == true ]]; then
@@ -276,146 +283,6 @@ function select_platform
   fi
 }
 
-function set_ios_target
-{
-  local platform=$1
-  local deps_prefix=$2
-
-  if [[ "${platform}" == ios-simulator ]]; then
-    IOS_SDK=iphonesimulator
-    IOS_RUST_TARGET=aarch64-apple-ios-sim
-  fi
-  if [[ -n "${deps_prefix}" ]]; then
-    IOS_DEPS_PREFIX="$(cd "${deps_prefix}" && pwd)" ||
-      fail "iOS dependency prefix not found: ${deps_prefix}"
-    IOS_EXPLICIT_DEPS=true
-  else
-    IOS_DEPS_PREFIX="${TOPDIR}/deps/ios/${IOS_SDK}/devel"
-  fi
-}
-
-function prepare_ios_tools
-{
-  local install=$1
-  local cargo rustup pinned_rust
-
-  [[ "$(uname -s)" == "Darwin" ]] || fail "iOS builds require macOS and Xcode"
-  if [[ -z "${DEVELOPER_DIR:-}" && -d /Applications/Xcode.app/Contents/Developer ]]; then
-    export DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer
-  fi
-  xcrun --sdk "${IOS_SDK}" --show-sdk-path >/dev/null ||
-    fail "Xcode SDK ${IOS_SDK} not found; install Xcode or set DEVELOPER_DIR"
-  command -v cmake >/dev/null 2>&1 || fail "cmake not found; install CMake 3.20+"
-  if [[ -d "${TOPDIR}/deps/ios/cargo/bin" ]]; then
-    export PATH="${TOPDIR}/deps/ios/cargo/bin:${PATH}"
-  fi
-  cargo="${CARGO:-$(command -v cargo || true)}"
-  rustup="${RUSTUP:-$(command -v rustup || true)}"
-  [[ -x "${cargo}" && -x "${rustup}" ]] ||
-    fail "cargo and rustup not found; install rustup or set CARGO and RUSTUP"
-  export CARGO="${cargo}"
-  export CARGO_HOME="${CARGO_HOME:-${TOPDIR}/deps/ios/cargo}"
-  export RUSTUP_HOME="${RUSTUP_HOME:-${TOPDIR}/deps/ios/rustup}"
-  export PATH="$(dirname "${cargo}"):$(dirname "${rustup}"):${PATH}"
-  pinned_rust="$(sed -n 's/^channel = "\([^"]*\)"/\1/p' "${TOPDIR}/rust/rust-toolchain.toml")"
-  [[ -n "${pinned_rust}" ]] || fail "cannot read the pinned Rust toolchain from rust/rust-toolchain.toml"
-  if [[ "${install}" == true ]]; then
-    if ! "${rustup}" toolchain list | grep -q "^${pinned_rust}[- ]"; then
-      "${rustup}" toolchain install "${pinned_rust}" --profile minimal --no-self-update || return $?
-    fi
-    if ! "${rustup}" target list --toolchain "${pinned_rust}" --installed | grep -qx "${IOS_RUST_TARGET}"; then
-      "${rustup}" target add --toolchain "${pinned_rust}" "${IOS_RUST_TARGET}" || return $?
-    fi
-  fi
-  "${rustup}" run "${pinned_rust}" rustc --version >/dev/null ||
-    fail "Rust ${pinned_rust} cannot run from ${RUSTUP_HOME}; see the error above, or run with --init"
-  "${rustup}" target list --toolchain "${pinned_rust}" --installed | grep -qx "${IOS_RUST_TARGET}" ||
-    fail "Rust target ${IOS_RUST_TARGET} is not installed in ${RUSTUP_HOME}; run with --init"
-  export RUSTC_WRAPPER="${RUSTC_WRAPPER:-${TOPDIR}/cmake/rustc_lldb_wrapper.py}"
-  [[ -x "${RUSTC_WRAPPER}" ]] || fail "Rust wrapper is not executable: ${RUSTC_WRAPPER}"
-}
-
-function prepare_ios_parser_tools
-{
-  local profile="${DEP_INIT_DIR}/oceanbase.macos15.arm64.deps"
-  local repository package archive
-
-  [[ "$(uname -m)" == "arm64" ]] || fail "downloading bison and flex for iOS builds requires an Apple Silicon Mac"
-  repository="$(awk -F= '$1 == "repo" { print $2; exit }' "${profile}")"
-  mkdir -p "${TOPDIR}/deps/3rd/pkg" || return $?
-  while IFS= read -r package; do
-    archive="${TOPDIR}/deps/3rd/pkg/${package}"
-    if [[ ! -f "${archive}" ]]; then
-      curl --fail --location --retry 2 "${repository}/${package}" --output "${archive}.partial" || return $?
-      mv "${archive}.partial" "${archive}" || return $?
-    fi
-    tar -xzf "${archive}" -C "${TOPDIR}/deps/3rd" || return $?
-  done < <(grep -E '^obdevtools-(bison|flex)-[^/]+\.tar\.gz$' "${profile}")
-}
-
-function has_ios_headers
-{
-  local prefix=$1
-  local header
-
-  for header in "${IOS_HEADERS[@]}"; do
-    [[ -f "${prefix}/include/${header}" ]] || return 1
-  done
-}
-
-function prepare_ios_dependencies
-{
-  local -a args=(--jobs "$(cpu_count)" --deployment-target "${IOS_DEPLOYMENT_TARGET}" --reuse)
-
-  if ! has_ios_headers "${IOS_DEPS_PREFIX}" && ! has_ios_headers "${HOST_DEPS_DIR}"; then
-    echo_log "preparing host headers and parser tools"
-    do_init false || return $?
-  elif [[ ! -x "${DEVTOOLS_DIR}/bin/bison" || ! -x "${DEVTOOLS_DIR}/bin/flex" ]]; then
-    prepare_ios_parser_tools || return $?
-  fi
-  if [[ "${IOS_EXPLICIT_DEPS}" == true ]]; then
-    echo_log "using iOS dependencies from ${IOS_DEPS_PREFIX}"
-    return 0
-  fi
-  if [[ "${IOS_SDK}" == iphonesimulator ]]; then
-    args+=(--simulator)
-  fi
-  python3 "${TOPDIR}/deps/ios-build/build.py" "${args[@]}"
-}
-
-function prepare_ios
-{
-  local need_init=$1
-
-  prepare_ios_tools "${need_init}" || return $?
-  if [[ "${need_init}" == true ]]; then
-    prepare_ios_dependencies || return $?
-  fi
-  [[ -x "${DEVTOOLS_DIR}/bin/bison" && -x "${DEVTOOLS_DIR}/bin/flex" ]] ||
-    fail "bison and flex not found in ${DEVTOOLS_DIR}/bin; run with --init"
-  [[ -d "${IOS_DEPS_PREFIX}/lib" ]] ||
-    fail "iOS dependencies not found in ${IOS_DEPS_PREFIX}; run with --init or pass --deps-prefix"
-  if has_ios_headers "${IOS_DEPS_PREFIX}"; then
-    IOS_HEADERS_PREFIX="${IOS_DEPS_PREFIX}"
-  elif has_ios_headers "${HOST_DEPS_DIR}"; then
-    IOS_HEADERS_PREFIX="${HOST_DEPS_DIR}"
-  else
-    fail "${IOS_HEADERS[*]} not found under ${IOS_DEPS_PREFIX} or ${HOST_DEPS_DIR}; run with --init"
-  fi
-  echo_log "iOS SDK ${IOS_SDK}, dependencies ${IOS_DEPS_PREFIX}, headers ${IOS_HEADERS_PREFIX}"
-}
-
-function check_ios_free_space
-{
-  local minimum_gib="${SEEKDB_IOS_MIN_FREE_GIB:-10}"
-  local free_kib
-
-  [[ "${minimum_gib}" =~ ^[0-9]+$ ]] || fail "SEEKDB_IOS_MIN_FREE_GIB must be an integer"
-  free_kib="$(df -Pk "${TOPDIR}" | awk 'NR == 2 { print $4 }')"
-  (( free_kib >= minimum_gib * 1024 * 1024 )) ||
-    fail "less than ${minimum_gib} GiB free in ${TOPDIR}; free space or lower SEEKDB_IOS_MIN_FREE_GIB"
-}
-
 function do_release
 {
   local need_init=false
@@ -424,7 +291,6 @@ function do_release
   local android_build=false
   local ios_build=false
   local simulator=false
-  local deps_prefix=""
   local platform
   local build_dir
   local make_target=seekdb
@@ -441,14 +307,10 @@ function do_release
         ;;
       --ios)
         ios_build=true
+        make_target=seekdb_ios_framework
         ;;
       --simulator)
         simulator=true
-        ;;
-      --deps-prefix)
-        (( $# >= 2 )) || fail "--deps-prefix requires a path"
-        deps_prefix=$2
-        shift
         ;;
       --make)
         if [[ "${need_make}" == true ]]; then
@@ -482,14 +344,10 @@ function do_release
     shift
   done
 
-  platform="$(select_platform "${android_build}" "${ios_build}" "${simulator}" "${deps_prefix}")" || exit $?
+  platform="$(select_platform "${android_build}" "${ios_build}" "${simulator}")" || exit $?
   require_host
-  if [[ "${ios_build}" == true ]]; then
-    set_ios_target "${platform}" "${deps_prefix}"
-    prepare_ios "${need_init}" || exit $?
-    make_target=seekdb_ios_framework
-  elif [[ "${need_init}" == true ]]; then
-    do_init "${android_build}" || exit $?
+  if [[ "${need_init}" == true ]]; then
+    do_init "${platform}" || exit $?
   fi
 
   build_dir="$(release_build_dir "${platform}")"
@@ -502,9 +360,6 @@ function do_release
   if [[ "${need_make}" == true ]]; then
     if (( ${#make_args[@]} == 0 )); then
       make_args=(-j"$(cpu_count)")
-    fi
-    if [[ "${ios_build}" == true ]]; then
-      check_ios_free_space
     fi
     make -C "${build_dir}" "${make_args[@]}" "${make_target}"
   fi
@@ -531,7 +386,7 @@ function do_sanity
         need_make=true
         collecting_make_args=true
         ;;
-      --android|--ios|--simulator|--deps-prefix|--coverage|--ob-make)
+      --android|--ios|--simulator|--coverage|--ob-make)
         fail "$1 is outside the CMake Sanity build boundary"
         ;;
       -D*)
@@ -554,7 +409,7 @@ function do_sanity
   require_host
   [[ "$(uname -s)" == "Linux" ]] || fail "Sanity builds are supported only on Linux"
   if [[ "${need_init}" == true ]]; then
-    do_init false || exit $?
+    do_init host || exit $?
   fi
 
   configure_cmake sanity host "${build_dir}" \
@@ -612,7 +467,7 @@ function do_package
         need_make=true
         collecting_make_args=true
         ;;
-      --android|--ios|--simulator|--deps-prefix|--coverage|--ob-make)
+      --android|--ios|--simulator|--coverage|--ob-make)
         fail "$1 is outside the CMake ${package_label} compatibility boundary"
         ;;
       -D*)
@@ -642,7 +497,7 @@ function do_package
       fail "dpkg-deb is required to build a DEB package"
   fi
   if [[ "${need_init}" == true ]]; then
-    do_init false || exit $?
+    do_init host || exit $?
   fi
 
   package_cmake_args=(
@@ -689,8 +544,8 @@ function do_clean
       "${TOPDIR}/build_release" \
       "${TOPDIR}/build_sanity" \
       "${TOPDIR}/build_android_release" \
-      "${TOPDIR}/build_ios_arm64" \
-      "${TOPDIR}/build_ios_sim_arm64" \
+      "${TOPDIR}/build_ios_release" \
+      "${TOPDIR}/build_ios_simulator_release" \
       "${TOPDIR}/build_rpm" \
       "${TOPDIR}/build_deb" \
       "${TOPDIR}/build_tgz"; do
@@ -710,7 +565,6 @@ function do_init_command
   local android_build=false
   local ios_build=false
   local simulator=false
-  local deps_prefix=""
   local platform
 
   while (( $# > 0 )); do
@@ -724,25 +578,15 @@ function do_init_command
       --simulator)
         simulator=true
         ;;
-      --deps-prefix)
-        (( $# >= 2 )) || fail "--deps-prefix requires a path"
-        deps_prefix=$2
-        shift
-        ;;
       *)
         fail "unexpected init argument: $1"
         ;;
     esac
     shift
   done
-  platform="$(select_platform "${android_build}" "${ios_build}" "${simulator}" "${deps_prefix}")" || exit $?
+  platform="$(select_platform "${android_build}" "${ios_build}" "${simulator}")" || exit $?
   require_host
-  if [[ "${ios_build}" == true ]]; then
-    set_ios_target "${platform}" "${deps_prefix}"
-    prepare_ios true
-  else
-    do_init "${android_build}"
-  fi
+  do_init "${platform}"
 }
 
 function main
