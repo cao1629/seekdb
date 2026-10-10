@@ -2,6 +2,54 @@
 
 当前整合分支：`ios/iphone13-17-iphoneOS2627-macOS27`。2026-10-08已纳入动态framework、本地master、原远端ARM64移植分支历史及上游master `1e113252b`。本轮仅验证历史包含关系和宿主测试，348项中8项失败或报错、1项跳过；未重新构建或做设备验收，详见 `ios-change-log.md` 当日记录。
 
+## 2026-10-10：iOS 构建并入 build.sh
+
+`build.iphone.sh` 已删除，iOS 构建改用 `build.sh` 的 `--ios` 参数，用法与 `--android` 相同：
+`init` 准备依赖，`release` 生成构建规则，加 `--make` 才编译。
+
+```bash
+./build.sh init --ios                                # 真机：准备工具，编译 iOS 依赖
+./build.sh release --ios --make -j8                  # 编译并校验 build_ios_arm64/framework/SeekDB.framework
+./build.sh release --ios --simulator --init --make   # 模拟器：一条命令完成准备和编译
+```
+
+- `--simulator` 使用 iphonesimulator SDK 和 Rust target `aarch64-apple-ios-sim`。构建目录名不变：
+  真机 `build_ios_arm64`，模拟器 `build_ios_sim_arm64`；`./build.sh clean` 现在也会删除这两个目录。
+- `--init` 做的是 `build.iphone.sh` 原来每次构建都自动做的准备：未设置 `DEVELOPER_DIR` 时使用
+  `/Applications/Xcode.app`；找到 cargo 和 rustup（可用 `CARGO`、`RUSTUP` 指定），安装缺少的固定
+  Rust 工具链和 iOS target，Rust 缓存默认放在 `deps/ios/cargo`、`deps/ios/rustup`；iOS 依赖目录和
+  host 依赖目录里的公共头文件都不全时执行 `./build.sh init`，只缺 bison/flex 时只下载这两个包；
+  最后用 `deps/ios-build/build.py --reuse` 复用或重编 `deps/ios/<sdk>/devel` 下的依赖，并行数为
+  CPU 核数。
+- 不加 `--init` 时只检查 Xcode SDK、Rust 工具链和 target、bison/flex、依赖目录（要有 `lib/`）和
+  公共头文件，缺少时报错并提示加 `--init`。`deps/ios-build` 的配方改动后也要加 `--init`，否则会
+  继续用已有的依赖。
+- `--deps-prefix PATH` 使用已有的 iOS 依赖目录，`--init` 不再编译依赖。
+- `--make` 编译 `seekdb_ios_framework`，即原来的默认 target，链接后照常运行 `verify_framework.py`。
+  make 参数写在 `--make` 后面，默认 `-j<CPU 核数>`。编译前仍要求至少 `SEEKDB_IOS_MIN_FREE_GIB`
+  （默认 10）GiB 空闲空间，`RUSTC_WRAPPER` 仍默认为 `cmake/rustc_lldb_wrapper.py`。
+- 默认 build type 改为 RelWithDebInfo（`build.iphone.sh` 默认 Debug）。Debug 构建加
+  `-DCMAKE_BUILD_TYPE=Debug`，与 RelWithDebInfo 共用同一个构建目录。
+- iOS 的 CMake 参数与原脚本相同，另外多了 `build.sh` 对所有平台都加的 `-G "Unix Makefiles"`、
+  `-DCMAKE_EXPORT_COMPILE_COMMANDS=ON` 和 `-DOB_ENABLE_UNITY=ON`。configure 和编译输出不再写入
+  `<构建目录>/logs/`，需要时自己重定向到文件。
+- 原参数的对应关系：
+
+| `build.iphone.sh` | `build.sh` |
+|---|---|
+| `release [--simulator]` | `release --ios [--simulator] --init --make` |
+| `debug`（原默认） | 加 `-DCMAKE_BUILD_TYPE=Debug` |
+| `--configure-only` | 不加 `--make` |
+| `--deps-only` | `init --ios [--simulator]`，带 `--reuse`，只重编过期的依赖；要全部重编，直接运行 `python3 deps/ios-build/build.py [--simulator]` |
+| `--jobs N` | `--make -jN` |
+| `--deps-prefix PATH` | `--deps-prefix PATH` |
+| `-- -DNAME=VALUE` | 直接写 `-DNAME=VALUE`，放在 `--make` 前面 |
+| `--init` | 原来不做任何事，现在执行上面的准备 |
+| `--target NAME` | 删除，只编 framework。编其他 target 要在构建目录执行 make，并像 `build.sh` 一样设置 `DEVELOPER_DIR`、`CARGO_HOME`、`RUSTUP_HOME` 和 `RUSTC_WRAPPER` |
+| `--build-dir`、`--headers-prefix`、`--deployment-target` | 删除：构建目录固定，头文件自动选择，最低版本固定为 18.0 |
+
+下文各节中的 `./build.iphone.sh` 命令是历史记录，按上表换成 `build.sh`。
+
 ## 2026-10-10：framework 只负责引擎生命周期，SQL 由 App 的客户端执行
 
 - `SeekDB.framework` 只启动、共享和关闭进程内引擎。公开头文件 `seekdb.h` 是桌面 `seekdb.h`
