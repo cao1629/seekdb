@@ -1,0 +1,16 @@
+# A graceful stop/start keeps every schema object and its definition: tables with
+# secondary and unique indexes, a view, a user with its grants, rows.
+start
+sql: create table t1 (id int primary key, a varchar(20) not null, b decimal(10,2), c datetime, unique key ua (a), index ib (b))
+sql: insert into t1 values (1,'x',1.50,'2026-01-02 03:04:05'),(2,'y',2.25,'2026-02-03 04:05:06')
+sql: create view v1 as select id, a from t1 where b > 2
+sql: create user 'u1' identified by 'pw1'
+sql: grant select on test.* to 'u1'
+stop
+restart
+sql: show create table t1
+sql: show create view v1
+sql: select * from v1
+sql: show grants for 'u1'
+sql: select * from t1 order by id
+sql: insert into t1 values (3,'x',3.00,'2026-03-04 05:06:07')

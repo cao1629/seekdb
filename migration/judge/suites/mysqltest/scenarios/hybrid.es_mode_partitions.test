@@ -1,0 +1,131 @@
+# Judge scenario (area: hybrid) -- DBMS_HYBRID_SEARCH "es_mode", the ES-style
+# MATCH(col^w, ..., 'text', 'options') / score() SQL it generates, and hybrid
+# search on a partitioned table.
+#
+# Pins down, through public SQL only:
+#  - "es_mode": true / "true" turns a top-level match, multi_match or
+#    query_string into WHERE MATCH(`col`^w, ..., 'text', 'operator=or;boost=..
+#    [;minimum_should_match=n];type=best_fields') with score() as _score;
+#    term queries are unchanged; "es_mode": "maybe" fails 1210, a number 3064;
+#  - es_mode keeps single-field match scores but changes multi_match scores
+#    (the field weight ^2 multiplies inside MATCH) compared with the default;
+#  - the ES-style MATCH syntax used directly in SQL: best_fields /
+#    most_fields, field weights and boost multiply the BM25 score,
+#    minimum_should_match=n requires n query words; unknown option keys are
+#    ignored; operator=and and type=cross_fields / phrase fail 1235; score()
+#    without an ES-style MATCH fails 1235 "The position of score() is not
+#    supported" and score() inside an expression (round(score(), 6)) fails
+#    1235 "no score expr is not supported"; MATCH without the options argument
+#    or without ^w is a syntax error 1064 (scores of plain-SQL score() are
+#    shown with --replace_numeric_round 6);
+#  - on a HASH-partitioned table GET_SQL carries the partition column as
+#    `_part_col_0` and joins the full-text and vector sides on it plus
+#    __pk_increment; SEARCH (match, knn, RRF) returns the same hits as on an
+#    unpartitioned table, and DML is visible to the next search.
+# BM25 scores are unpacked with JSON_TABLE and rounded to 6 decimals.
+
+--disable_warnings
+drop table if exists hm_docs, hm_part;
+--enable_warnings
+
+create table hm_docs(id int, title varchar(100), body varchar(200), emb vector(3),
+  fulltext key ft_title(title), fulltext key ft_body(body),
+  vector index vidx(emb) with (distance=l2, type=hnsw, lib=vsag));
+insert into hm_docs values
+  (1, 'database guide', 'database systems store data', '[1,0,0]'),
+  (2, 'search guide', 'full text search engines', '[0,1,0]'),
+  (3, 'vector notes', 'vector search finds neighbors', '[0,0,1]'),
+  (4, 'hybrid guide', 'hybrid search mixes text and vector search', '[0.5,0.5,0]'),
+  (5, 'storage notes', 'storage engines write data', '[0.9,0.1,0]');
+
+--echo #
+--echo # 1. es_mode in DBMS_HYBRID_SEARCH
+--echo #
+select dbms_hybrid_search.get_sql('hm_docs', '{"query": {"match": {"body": "search"}}, "es_mode": true, "_source": ["id"]}');
+select jt.ord, jt.id, round(jt.score, 6) score
+  from json_table(dbms_hybrid_search.search('hm_docs', '{"query": {"match": {"body": "search"}}, "es_mode": true, "_source": ["id"]}'),
+       '$[*]' columns (ord for ordinality, id int path '$.id', score double path '$._score')) jt;
+select dbms_hybrid_search.get_sql('hm_docs', '{"query": {"multi_match": {"query": "search guide", "fields": ["title^2", "body"]}}, "es_mode": "true", "_source": ["id"]}');
+select jt.ord, jt.id, round(jt.score, 6) score
+  from json_table(dbms_hybrid_search.search('hm_docs', '{"query": {"multi_match": {"query": "search guide", "fields": ["title^2", "body"]}}, "es_mode": "true", "_source": ["id"]}'),
+       '$[*]' columns (ord for ordinality, id int path '$.id', score double path '$._score')) jt;
+--echo # the same multi_match without es_mode
+select dbms_hybrid_search.get_sql('hm_docs', '{"query": {"multi_match": {"query": "search guide", "fields": ["title^2", "body"]}}, "es_mode": false, "_source": ["id"]}');
+select jt.ord, jt.id, round(jt.score, 6) score
+  from json_table(dbms_hybrid_search.search('hm_docs', '{"query": {"multi_match": {"query": "search guide", "fields": ["title^2", "body"]}}, "_source": ["id"]}'),
+       '$[*]' columns (ord for ordinality, id int path '$.id', score double path '$._score')) jt;
+select dbms_hybrid_search.get_sql('hm_docs', '{"query": {"query_string": {"query": "vector search", "fields": ["body"]}}, "es_mode": true, "_source": ["id"]}');
+select jt.ord, jt.id, round(jt.score, 6) score
+  from json_table(dbms_hybrid_search.search('hm_docs', '{"query": {"query_string": {"query": "vector search", "fields": ["body"]}}, "es_mode": true, "_source": ["id"]}'),
+       '$[*]' columns (ord for ordinality, id int path '$.id', score double path '$._score')) jt;
+select dbms_hybrid_search.get_sql('hm_docs', '{"query": {"term": {"id": 3}}, "es_mode": true, "_source": ["id"]}');
+select dbms_hybrid_search.get_sql('hm_docs', '{"query": {"match": {"body": "search"}}, "knn": {"field": "emb", "k": 2, "query_vector": [0,0,1]}, "es_mode": true, "_source": ["id"]}');
+select jt.ord, jt.id, round(jt.score, 6) score
+  from json_table(dbms_hybrid_search.search('hm_docs', '{"query": {"match": {"body": "search"}}, "knn": {"field": "emb", "k": 2, "query_vector": [0,0,1]}, "es_mode": true, "_source": ["id"]}'),
+       '$[*]' columns (ord for ordinality, id int path '$.id', score double path '$._score')) jt;
+--error 1210
+select dbms_hybrid_search.get_sql('hm_docs', '{"query": {"match": {"body": "search"}}, "es_mode": "maybe"}');
+--error 3064
+select dbms_hybrid_search.get_sql('hm_docs', '{"query": {"match": {"body": "search"}}, "es_mode": 1}');
+
+--echo #
+--echo # 2. ES-style MATCH and score() in plain SQL
+--echo #
+--replace_numeric_round 6
+select id, score() s from hm_docs
+  where match(body^1, 'search', 'operator=or;boost=1;type=best_fields') order by s desc, id;
+--replace_numeric_round 6
+select id, score() s from hm_docs
+  where match(body^2.5, 'search', 'boost=2') order by s desc, id;
+--replace_numeric_round 6
+select id, score() s from hm_docs
+  where match(title^2, body^1, 'search guide', 'operator=or;boost=1;type=most_fields') order by s desc, id;
+--replace_numeric_round 6
+select id, score() s from hm_docs
+  where match(title^2, body^1, 'search guide', 'operator=or;boost=1;type=best_fields') order by s desc, id;
+--replace_numeric_round 6
+select id, score() s from hm_docs
+  where match(body^1, 'search vector', 'operator=or;minimum_should_match=2') order by s desc, id;
+--replace_numeric_round 6
+select id, score() s from hm_docs
+  where match(body^1, 'search', 'bogus=1') order by s desc, id;
+--echo # score() must be selected as is
+--error 1235
+select id, round(score(), 6) s from hm_docs
+  where match(body^1, 'search', 'operator=or;boost=1;type=best_fields');
+--error 1235
+select id, score() s from hm_docs order by id;
+--error 1235
+select id, score() s from hm_docs where match(body^1, 'search vector', 'operator=and');
+--error 1235
+select id, score() s from hm_docs where match(title^1, body^1, 'search guide', 'type=cross_fields');
+--error 1235
+select id, score() s from hm_docs where match(title^1, body^1, 'search guide', 'type=phrase');
+--error 1064
+select id, score() s from hm_docs where match(body^1, 'search');
+--error 1064
+select id, score() s from hm_docs where match(body, 'search', 'boost=1');
+
+--echo #
+--echo # 3. partitioned table
+--echo #
+create table hm_part(id int, cat int, body varchar(200), emb vector(3),
+  fulltext key ft_body(body),
+  vector index vidx(emb) with (distance=l2, type=hnsw, lib=vsag))
+  partition by hash(cat) partitions 2;
+insert into hm_part select id, id % 2, body, emb from hm_docs;
+select dbms_hybrid_search.get_sql('hm_part', '{"query": {"match": {"body": "search"}}, "knn": {"field": "emb", "k": 3, "query_vector": [0,0,1]}, "rank": {"rrf": {}}, "_source": ["id", "cat"]}');
+select dbms_hybrid_search.search('hm_part', '{"query": {"match": {"body": "search"}}, "knn": {"field": "emb", "k": 3, "query_vector": [0,0,1]}, "rank": {"rrf": {}}, "_source": ["id", "cat"]}');
+select dbms_hybrid_search.search('hm_part', '{"knn": {"field": "emb", "k": 3, "query_vector": [0,0,1]}, "_source": ["id", "cat"]}');
+select jt.ord, jt.id, round(jt.score, 6) score
+  from json_table(dbms_hybrid_search.search('hm_part', '{"query": {"match": {"body": "search"}}, "_source": ["id"]}'),
+       '$[*]' columns (ord for ordinality, id int path '$.id', score double path '$._score')) jt;
+select dbms_hybrid_search.search('hm_part', '{"query": {"term": {"cat": 1}}, "_source": ["id", "cat"]}');
+insert into hm_part values (6, 0, 'search vector vector', '[0,0.1,1]');
+delete from hm_part where id = 3;
+select dbms_hybrid_search.search('hm_part', '{"query": {"match": {"body": "vector"}}, "knn": {"field": "emb", "k": 2, "query_vector": [0,0,1]}, "rank": {"rrf": {"rank_constant": 1}}, "_source": ["id", "cat"]}');
+
+--echo #
+--echo # cleanup
+--echo #
+drop table hm_docs, hm_part;

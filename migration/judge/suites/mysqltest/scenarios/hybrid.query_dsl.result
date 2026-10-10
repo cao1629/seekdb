@@ -1,0 +1,209 @@
+drop table if exists hq_docs, hq_cos, hq_ip;
+create table hq_docs(id int, cat varchar(10), price int, title varchar(100), body varchar(200), emb vector(3),
+fulltext key ft_body(body), fulltext key ft_title(title),
+vector index vidx(emb) with (distance=l2, type=hnsw, lib=vsag));
+insert into hq_docs values
+(1, 'db', 10, 'database guide', 'database systems store data', '[1,0,0]'),
+(2, 'search', 20, 'search guide', 'full text search engines', '[0,1,0]'),
+(3, 'vector', 30, 'vector notes', 'vector search finds neighbors', '[0,0,1]'),
+(4, 'search', 40, 'hybrid guide', 'hybrid search mixes text and vector search', '[0.5,0.5,0]'),
+(5, 'db', 50, 'storage notes', 'storage engines write data', '[0.9,0.1,0]');
+#
+# 1. term / terms / range
+#
+select dbms_hybrid_search.get_sql('hq_docs', '{"query": {"term": {"cat": "db"}}, "_source": ["id"]}');
+dbms_hybrid_search.get_sql('hq_docs', '{"query": {"term": {"cat": "db"}}, "_source": ["id"]}')
+SELECT /*+ opt_param('hidden_column_visible', 'true') */`id`, (`cat` = 'db') as `_score` FROM `test`.`hq_docs` WHERE `cat` = 'db' ORDER BY `_score` DESC, `__pk_increment` LIMIT 10
+select dbms_hybrid_search.search('hq_docs', '{"query": {"term": {"cat": "db"}}, "_source": ["id"]}');
+dbms_hybrid_search.search('hq_docs', '{"query": {"term": {"cat": "db"}}, "_source": ["id"]}')
+[{"id": 1, "_score": 1}, {"id": 5, "_score": 1}]
+select dbms_hybrid_search.get_sql('hq_docs', '{"query": {"terms": {"cat": ["db", "vector"], "boost": 3}}, "_source": ["id"]}');
+dbms_hybrid_search.get_sql('hq_docs', '{"query": {"terms": {"cat": ["db", "vector"], "boost": 3}}, "_source": ["id"]}')
+SELECT /*+ opt_param('hidden_column_visible', 'true') */`id`, ((`cat` IN ('db', 'vector')) * 3) as `_score` FROM `test`.`hq_docs` WHERE `cat` IN ('db', 'vector') ORDER BY `_score` DESC, `__pk_increment` LIMIT 10
+select dbms_hybrid_search.search('hq_docs', '{"query": {"terms": {"cat": ["db", "vector"], "boost": 3}}, "_source": ["id"]}');
+dbms_hybrid_search.search('hq_docs', '{"query": {"terms": {"cat": ["db", "vector"], "boost": 3}}, "_source": ["id"]}')
+[{"id": 1, "_score": 3}, {"id": 3, "_score": 3}, {"id": 5, "_score": 3}]
+select dbms_hybrid_search.get_sql('hq_docs', '{"query": {"range": {"price": {"gte": 20, "lt": 50}}}, "_source": ["id", "price"]}');
+dbms_hybrid_search.get_sql('hq_docs', '{"query": {"range": {"price": {"gte": 20, "lt": 50}}}, "_source": ["id", "price"]}')
+SELECT /*+ opt_param('hidden_column_visible', 'true') */`id`, `price`, (`price` < 50 AND `price` >= 20) as `_score` FROM `test`.`hq_docs` WHERE `price` < 50 AND `price` >= 20 ORDER BY `_score` DESC, `__pk_increment` LIMIT 10
+select dbms_hybrid_search.search('hq_docs', '{"query": {"range": {"price": {"gte": 20, "lt": 50}}}, "_source": ["id", "price"]}');
+dbms_hybrid_search.search('hq_docs', '{"query": {"range": {"price": {"gte": 20, "lt": 50}}}, "_source": ["id", "price"]}')
+[{"id": 2, "price": 20, "_score": 1}, {"id": 3, "price": 30, "_score": 1}, {"id": 4, "price": 40, "_score": 1}]
+select dbms_hybrid_search.search('hq_docs', '{"query": {"term": {"id": 3}}}');
+dbms_hybrid_search.search('hq_docs', '{"query": {"term": {"id": 3}}}')
+[{"id": 3, "cat": "vector", "emb": "[0,0,1]", "body": "vector search finds neighbors", "price": 30, "title": "vector notes", "_score": 1}]
+#
+# 2. bool
+#
+select dbms_hybrid_search.get_sql('hq_docs', '{"query": {"bool": {"must": [{"match": {"body": "search"}}], "filter": [{"range": {"price": {"gt": 20}}}], "must_not": [{"term": {"cat": "vector"}}]}}, "_source": ["id"]}');
+dbms_hybrid_search.get_sql('hq_docs', '{"query": {"bool": {"must": [{"match": {"body": "search"}}], "filter": [{"range": {"price": {"gt": 20}}}], "must_not": [{"term": {"cat": "vector"}}]}}, "_source": ["id"]}')
+SELECT /*+ opt_param('hidden_column_visible', 'true') */`id`, match(`body`) against('search' in natural language mode) as `_score` FROM `test`.`hq_docs` WHERE match(`body`) against('search' in natural language mode) AND `price` > 20 AND NOT (`cat` = 'vector') ORDER BY `_score` DESC, `__pk_increment` LIMIT 10
+select jt.ord, jt.id, round(jt.score, 6) score
+from json_table(dbms_hybrid_search.search('hq_docs', '{"query": {"bool": {"must": [{"match": {"body": "search"}}], "filter": [{"range": {"price": {"gt": 20}}}], "must_not": [{"term": {"cat": "vector"}}]}}, "_source": ["id"]}'),
+'$[*]' columns (ord for ordinality, id int path '$.id', score double path '$._score')) jt;
+ord	id	score
+1	4	0.375427
+select dbms_hybrid_search.get_sql('hq_docs', '{"query": {"bool": {"should": [{"match": {"body": "data"}}, {"match": {"body": "vector"}}]}}, "_source": ["id"]}');
+dbms_hybrid_search.get_sql('hq_docs', '{"query": {"bool": {"should": [{"match": {"body": "data"}}, {"match": {"body": "vector"}}]}}, "_source": ["id"]}')
+SELECT /*+ opt_param('hidden_column_visible', 'true') union_merge( hq_docs ft_body ft_body)*/`id`, (match(`body`) against('data' in natural language mode) + match(`body`) against('vector' in natural language mode)) as `_score` FROM `test`.`hq_docs` WHERE match(`body`) against('data' in natural language mode) OR match(`body`) against('vector' in natural language mode) ORDER BY `_score` DESC, `__pk_increment` LIMIT 10
+select jt.ord, jt.id, round(jt.score, 6) score
+from json_table(dbms_hybrid_search.search('hq_docs', '{"query": {"bool": {"should": [{"match": {"body": "data"}}, {"match": {"body": "vector"}}]}}, "_source": ["id"]}'),
+'$[*]' columns (ord for ordinality, id int path '$.id', score double path '$._score')) jt;
+ord	id	score
+1	1	0.445927
+2	3	0.445927
+3	5	0.445927
+4	4	0.383543
+select dbms_hybrid_search.get_sql('hq_docs', '{"query": {"bool": {"filter": [{"term": {"cat": "search"}}]}}, "_source": ["id"]}');
+dbms_hybrid_search.get_sql('hq_docs', '{"query": {"bool": {"filter": [{"term": {"cat": "search"}}]}}, "_source": ["id"]}')
+SELECT /*+ opt_param('hidden_column_visible', 'true') */`id`, 0 as `_score` FROM `test`.`hq_docs` WHERE `cat` = 'search' ORDER BY `__pk_increment` LIMIT 10
+select dbms_hybrid_search.search('hq_docs', '{"query": {"bool": {"filter": [{"term": {"cat": "search"}}]}}, "_source": ["id"]}');
+dbms_hybrid_search.search('hq_docs', '{"query": {"bool": {"filter": [{"term": {"cat": "search"}}]}}, "_source": ["id"]}')
+[{"id": 2, "_score": 0}, {"id": 4, "_score": 0}]
+#
+# 3. multi_match and query_string
+#
+select dbms_hybrid_search.get_sql('hq_docs', '{"query": {"multi_match": {"query": "search guide", "fields": ["title", "body"]}}, "_source": ["id"]}');
+dbms_hybrid_search.get_sql('hq_docs', '{"query": {"multi_match": {"query": "search guide", "fields": ["title", "body"]}}, "_source": ["id"]}')
+SELECT /*+ opt_param('hidden_column_visible', 'true') */`id`, (GREATEST(match(`title`) against('search' in natural language mode), match(`body`) against('search' in natural language mode)) + GREATEST(match(`title`) against('guide' in natural language mode), match(`body`) against('guide' in natural language mode))) as `_score` FROM `test`.`hq_docs` WHERE match(`title`) against('search guide' in natural language mode) OR match(`body`) against('search guide' in natural language mode) ORDER BY `_score` DESC, `__pk_increment` LIMIT 10
+select jt.ord, jt.id, round(jt.score, 6) score
+from json_table(dbms_hybrid_search.search('hq_docs', '{"query": {"multi_match": {"query": "search guide", "fields": ["title", "body"]}}, "_source": ["id"]}'),
+'$[*]' columns (ord for ordinality, id int path '$.id', score double path '$._score')) jt;
+ord	id	score
+1	2	2.004694
+2	4	0.747048
+3	1	0.371622
+4	3	0.331325
+select dbms_hybrid_search.get_sql('hq_docs', '{"query": {"query_string": {"query": "vector search", "fields": ["body^2", "title"]}}, "_source": ["id"]}');
+dbms_hybrid_search.get_sql('hq_docs', '{"query": {"query_string": {"query": "vector search", "fields": ["body^2", "title"]}}, "_source": ["id"]}')
+SELECT /*+ opt_param('hidden_column_visible', 'true') */`id`, GREATEST(match(`body`) against('vector search' in natural language mode) * 2, match(`title`) against('vector search' in natural language mode)) as `_score` FROM `test`.`hq_docs` WHERE match(`body`) against('vector search' in natural language mode) OR match(`title`) against('vector search' in natural language mode) ORDER BY `_score` DESC, `__pk_increment` LIMIT 10
+select jt.ord, jt.id, round(jt.score, 6) score
+from json_table(dbms_hybrid_search.search('hq_docs', '{"query": {"query_string": {"query": "vector search", "fields": ["body^2", "title"]}}, "_source": ["id"]}'),
+'$[*]' columns (ord for ordinality, id int path '$.id', score double path '$._score')) jt;
+ord	id	score
+1	2	1.633072
+2	3	1.633072
+3	4	1.517940
+# relaxed JSON, ignored upper-case key
+select jt.ord, jt.id, round(jt.score, 6) score
+from json_table(dbms_hybrid_search.search('hq_docs', '{query: {match: {body: "data"}}, _source: ["id"], SIZE: 1,}'),
+'$[*]' columns (ord for ordinality, id int path '$.id', score double path '$._score')) jt;
+ord	id	score
+1	1	0.445927
+2	5	0.445927
+#
+# 4. knn options
+#
+select dbms_hybrid_search.get_sql('hq_docs', '{"knn": {"field": "emb", "k": 5, "query_vector": [1,0,0], "filter": {"term": {"cat": "search"}}}, "_source": ["id"]}');
+dbms_hybrid_search.get_sql('hq_docs', '{"knn": {"field": "emb", "k": 5, "query_vector": [1,0,0], "filter": {"term": {"cat": "search"}}}, "_source": ["id"]}')
+SELECT l2_distance(`emb`, '[1, 0, 0]') as `_distance`, `id`, round(1 / (1 + l2_distance(`emb`, '[1, 0, 0]')), 8) as `_score` FROM `test`.`hq_docs` WHERE `cat` = 'search' ORDER BY `_distance` APPROXIMATE LIMIT 5
+select dbms_hybrid_search.search('hq_docs', '{"knn": {"field": "emb", "k": 5, "query_vector": [1,0,0], "filter": {"term": {"cat": "search"}}}, "_source": ["id"]}');
+dbms_hybrid_search.search('hq_docs', '{"knn": {"field": "emb", "k": 5, "query_vector": [1,0,0], "filter": {"term": {"cat": "search"}}}, "_source": ["id"]}')
+[{"id": 4, "_score": 0.58578644}, {"id": 2, "_score": 0.41421356}]
+select dbms_hybrid_search.get_sql('hq_docs', '{"knn": {"field": "emb", "k": 5, "query_vector": [1,0,0], "similarity": 0.8}, "_source": ["id"]}');
+dbms_hybrid_search.get_sql('hq_docs', '{"knn": {"field": "emb", "k": 5, "query_vector": [1,0,0], "similarity": 0.8}, "_source": ["id"]}')
+SELECT `id`, `_score` FROM (SELECT *, l2_distance(`emb`, '[1, 0, 0]') as `_distance`, round(1 / (1 + l2_distance(`emb`, '[1, 0, 0]')), 8) as `_score` FROM `test`.`hq_docs` ORDER BY `_distance` APPROXIMATE LIMIT 5) `_vs0` WHERE `_vs0`.`_distance` <= 0.8 LIMIT 10
+select jt.id, jt.score
+from json_table(dbms_hybrid_search.search('hq_docs', '{"knn": {"field": "emb", "k": 5, "query_vector": [1,0,0], "similarity": 0.8}, "_source": ["id"]}'),
+'$[*]' columns (id int path '$.id', score double path '$._score')) jt order by jt.id;
+id	score
+1	1
+4	0.58578644
+5	0.87610064
+select dbms_hybrid_search.search('hq_docs', '{"knn": {"field": "emb", "k": 2, "query_vector": [1,0,0], "boost": 2}, "_source": ["id"]}');
+dbms_hybrid_search.search('hq_docs', '{"knn": {"field": "emb", "k": 2, "query_vector": [1,0,0], "boost": 2}, "_source": ["id"]}')
+[{"id": 1, "_score": 2.0}, {"id": 5, "_score": 1.75220128}]
+select dbms_hybrid_search.get_sql('hq_docs', '{"knn": [{"field": "emb", "k": 2, "query_vector": [1,0,0]}, {"field": "emb", "k": 2, "query_vector": [0.5,0.5,0]}], "_source": ["id"]}');
+dbms_hybrid_search.get_sql('hq_docs', '{"knn": [{"field": "emb", "k": 2, "query_vector": [1,0,0]}, {"field": "emb", "k": 2, "query_vector": [0.5,0.5,0]}], "_source": ["id"]}')
+SELECT `id`, sum(`_score`) as `_score` FROM ((SELECT /*+ opt_param('hidden_column_visible', 'true') */*, l2_distance(`emb`, '[1, 0, 0]') as `_distance`, `__pk_increment`, round(1 / (1 + l2_distance(`emb`, '[1, 0, 0]')), 8) as `_score` FROM `test`.`hq_docs` ORDER BY `_distance` APPROXIMATE LIMIT 2) UNION ALL (SELECT /*+ opt_param('hidden_column_visible', 'true') */*, l2_distance(`emb`, '[0.5, 0.5, 0]') as `_distance`, `__pk_increment`, round(1 / (1 + l2_distance(`emb`, '[0.5, 0.5, 0]')), 8) as `_score` FROM `test`.`hq_docs` ORDER BY `_distance` APPROXIMATE LIMIT 2)) GROUP BY `__pk_increment` ORDER BY `_score` DESC LIMIT 10
+select jt.id, jt.score
+from json_table(dbms_hybrid_search.search('hq_docs', '{"knn": [{"field": "emb", "k": 2, "query_vector": [1,0,0]}, {"field": "emb", "k": 2, "query_vector": [0.5,0.5,0]}], "_source": ["id"]}'),
+'$[*]' columns (id int path '$.id', score double path '$._score')) jt order by jt.id;
+id	score
+1	1
+4	1
+5	1.51479855
+#
+# 5. vector score formulas per distance
+#
+create table hq_cos(id int, body varchar(100), emb vector(2), fulltext key ftb(body),
+vector index vidx(emb) with (distance=cosine, type=hnsw, lib=vsag));
+insert into hq_cos values (1, 'apple pie', '[1,0]'), (2, 'apple tart', '[1,1]'), (3, 'pear cake', '[0,1]'), (4, 'plum jam', '[-1,0]');
+select dbms_hybrid_search.get_sql('hq_cos', '{"knn": {"field": "emb", "k": 4, "query_vector": [1,0]}, "_source": ["id"]}');
+dbms_hybrid_search.get_sql('hq_cos', '{"knn": {"field": "emb", "k": 4, "query_vector": [1,0]}, "_source": ["id"]}')
+SELECT cosine_distance(`emb`, '[1, 0]') as `_distance`, `id`, round(1 - cosine_distance(`emb`, '[1, 0]') / 2, 8) as `_score` FROM `test`.`hq_cos` ORDER BY `_distance` APPROXIMATE LIMIT 4
+select dbms_hybrid_search.search('hq_cos', '{"knn": {"field": "emb", "k": 4, "query_vector": [1,0]}, "_source": ["id"]}');
+dbms_hybrid_search.search('hq_cos', '{"knn": {"field": "emb", "k": 4, "query_vector": [1,0]}, "_source": ["id"]}')
+[{"id": 1, "_score": 1.0}, {"id": 2, "_score": 0.85355339}, {"id": 3, "_score": 0.5}, {"id": 4, "_score": 0.0}]
+create table hq_ip(id int, body varchar(100), emb vector(2), fulltext key ftb(body),
+vector index vidx(emb) with (distance=inner_product, type=hnsw, lib=vsag));
+insert into hq_ip select * from hq_cos;
+select dbms_hybrid_search.get_sql('hq_ip', '{"knn": {"field": "emb", "k": 4, "query_vector": [2,1]}, "_source": ["id"]}');
+dbms_hybrid_search.get_sql('hq_ip', '{"knn": {"field": "emb", "k": 4, "query_vector": [2,1]}, "_source": ["id"]}')
+SELECT 0 - negative_inner_product(`emb`, '[2, 1]') as `_distance`, `id`, round((case when negative_inner_product(`emb`, '[2, 1]') > 0 then 1 / (1 + negative_inner_product(`emb`, '[2, 1]')) else 1 - negative_inner_product(`emb`, '[2, 1]') end), 8) as `_score` FROM `test`.`hq_ip` ORDER BY negative_inner_product(`emb`, '[2, 1]') APPROXIMATE LIMIT 4
+select dbms_hybrid_search.search('hq_ip', '{"knn": {"field": "emb", "k": 4, "query_vector": [2,1]}, "_source": ["id"]}');
+dbms_hybrid_search.search('hq_ip', '{"knn": {"field": "emb", "k": 4, "query_vector": [2,1]}, "_source": ["id"]}')
+[{"id": 2, "_score": 4.0}, {"id": 1, "_score": 3.0}, {"id": 3, "_score": 2.0}, {"id": 4, "_score": 0.33333333}]
+select dbms_hybrid_search.get_sql('hq_docs', '{}');
+dbms_hybrid_search.get_sql('hq_docs', '{}')
+SELECT `id`, `cat`, `price`, `title`, `body`, `emb`, 1 as `_score` FROM `test`.`hq_docs` LIMIT 10
+#
+# 6. errors
+#
+select dbms_hybrid_search.search('hq_docs', NULL);
+ERROR HY000: Invalid argument
+select dbms_hybrid_search.search(NULL, '{}');
+ERROR HY000: Invalid argument
+select dbms_hybrid_search.search('hq_docs', '');
+ERROR HY000: Invalid argument
+select dbms_hybrid_search.search('hq_docs', '[1,2]');
+ERROR HY000: Invalid argument
+select dbms_hybrid_search.search('hq_docs', 'not json');
+ERROR 22032: Invalid JSON text.
+select dbms_hybrid_search.search('hq_docs', '{"query": {"match": {"body": "data"}}, "query": {"match": {"body": "vector"}}}');
+ERROR 42000: duplicate key names in JSON object
+select dbms_hybrid_search.search('hq_docs', '{"bogus": 1}');
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use
+select dbms_hybrid_search.search('hq_docs', '{"knn": {"field": "emb", "k": 3}}');
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use
+select dbms_hybrid_search.search('hq_docs', '{"query": {"match_all": {}}}');
+ERROR 0A000: Not supported feature or function
+select dbms_hybrid_search.search('hq_docs', '{"knn": {"field": "emb", "k": 3, "query_vector": [1,0,0], "foo": 1}}');
+ERROR 0A000: Not supported feature or function
+select dbms_hybrid_search.search('hq_missing', '{}');
+ERROR 42S02: Table 'test.hq_missing' doesn't exist
+select dbms_hybrid_search.get_sql('nodb.hq_docs', '{}');
+ERROR 42S02: Table 'nodb.hq_docs' doesn't exist
+select dbms_hybrid_search.search('a.b.c', '{}');
+ERROR 42000: Incorrect table name
+select dbms_hybrid_search.search('hq_docs', '{"_source": "id"}');
+ERROR HY000: invalid type given for an argument
+select dbms_hybrid_search.search('hq_docs', '{"query": "data"}');
+ERROR HY000: invalid type given for an argument
+select dbms_hybrid_search.search('hq_docs', '{"query": {"bool": {"must": {"match": {"body": "data"}}, "foo": []}}}');
+ERROR HY000: Invalid argument
+select dbms_hybrid_search.search('hq_docs', '{"query": {"bool": {"must": []}}}');
+ERROR HY000: Invalid argument
+select dbms_hybrid_search.search('hq_docs', '{"query": {"match": {"body": {"query": "data", "boost": -1}}}}');
+ERROR HY000: Invalid argument
+select dbms_hybrid_search.search('hq_docs', '{"query": {"range": {"price": {"gte": "x"}}}}');
+ERROR HY000: Invalid argument
+select dbms_hybrid_search.search('hq_docs', '{"query": {"match": {"body": "data", "operator": "and"}}}');
+ERROR HY000: Invalid argument
+select dbms_hybrid_search.search('hq_docs', '{"query": {"multi_match": {"query": "data"}}}');
+ERROR HY000: Value not found
+select dbms_hybrid_search.search('hq_docs', '{"query": {"match": {"body": "data"}}, "knn": {"field": "emb", "k": 3, "query_vector": [1,0,0]}, "rank": {"rrf": {"rank_constant": 0}}}');
+ERROR HY000: Invalid argument
+select dbms_hybrid_search.search('hq_docs', '{"query": {"match": {"body": "data"}}, "knn": {"field": "emb", "k": 3, "query_vector": [1,0,0]}, "rank": {"rrf": {"rank_window_size": 2}}, "size": 5}');
+ERROR HY000: The value should be no less than the limit
+select dbms_hybrid_search.search('hq_docs', '{"query": {"match": {"cat": "db"}}}');
+ERROR HY000: Can't find FULLTEXT index matching the column list
+select dbms_hybrid_search.get_sql('hq_docs', '{"query": {"match": {"cat": "db"}}}');
+dbms_hybrid_search.get_sql('hq_docs', '{"query": {"match": {"cat": "db"}}}')
+SELECT /*+ opt_param('hidden_column_visible', 'true') */`id`, `cat`, `price`, `title`, `body`, `emb`, match(`cat`) against('db' in natural language mode) as `_score` FROM `test`.`hq_docs` WHERE match(`cat`) against('db' in natural language mode) ORDER BY `_score` DESC, `__pk_increment` LIMIT 10
+select dbms_hybrid_search.search('hq_docs', '{"knn": {"field": "price", "k": 3, "query_vector": [1,0,0]}}');
+ERROR HY000: Invalid argument
+#
+# cleanup
+#
+drop table hq_docs, hq_cos, hq_ip;

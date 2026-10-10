@@ -1,0 +1,28 @@
+[start]
+> create table t1 (id int primary key, a varchar(20) not null, b decimal(10,2), c datetime, unique key ua (a), index ib (b))
+> insert into t1 values (1,'x',1.50,'2026-01-02 03:04:05'),(2,'y',2.25,'2026-02-03 04:05:06')
+> create view v1 as select id, a from t1 where b > 2
+> create user 'u1' identified by 'pw1'
+> grant select on test.* to 'u1'
+[stop]
+[restart]
+> show create table t1
+Table	Create Table
+t1	CREATE TABLE `t1` (\n  `id` int(11) NOT NULL,\n  `a` varchar(20) NOT NULL,\n  `b` decimal(10,2) DEFAULT NULL,\n  `c` datetime DEFAULT NULL,\n  PRIMARY KEY (`id`),\n  UNIQUE KEY `ua` (`a`) BLOCK_SIZE 16384 LOCAL,\n  KEY `ib` (`b`) BLOCK_SIZE 16384 LOCAL\n) ORGANIZATION INDEX DEFAULT CHARSET = utf8mb4 ROW_FORMAT = DYNAMIC COMPRESSION = 'zstd_1.3.8' BLOCK_SIZE = 16384 TABLET_SIZE = 134217728 PCTFREE = 0
+> show create view v1
+View	Create View	character_set_client	collation_connection
+v1	CREATE VIEW `v1` AS select `test`.`t1`.`id` AS `id`,`test`.`t1`.`a` AS `a` from `test`.`t1` where (`test`.`t1`.`b` > 2)	utf8mb4	utf8mb4_general_ci
+> select * from v1
+id	a
+2	y
+> show grants for 'u1'
+Grants for u1@%
+GRANT USAGE ON *.* TO 'u1'
+GRANT SELECT ON `test`.* TO 'u1'
+> select * from t1 order by id
+id	a	b	c
+1	x	1.50	2026-01-02 03:04:05
+2	y	2.25	2026-02-03 04:05:06
+> insert into t1 values (3,'x',3.00,'2026-03-04 05:06:07')
+ERROR 1062 (23000) at line 1: Duplicate entry 'x' for key 'ua'
+[exit 1]

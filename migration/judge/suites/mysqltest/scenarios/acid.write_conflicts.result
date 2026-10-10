@@ -1,0 +1,259 @@
+drop table if exists wc_acc;
+drop table if exists wc_oncall;
+create table wc_acc(id int primary key, bal int);
+insert into wc_acc values (1, 100), (2, 100), (3, 100);
+create table wc_oncall(doctor varchar(10) primary key, on_call int);
+insert into wc_oncall values ('alice', 1), ('bob', 1);
+#
+# 1. READ COMMITTED: lost update with literal writes
+#
+set session transaction isolation level read committed;
+set session transaction isolation level read committed;
+begin;
+select bal from wc_acc where id = 1;
+bal
+100
+begin;
+select bal from wc_acc where id = 1;
+bal
+100
+update wc_acc set bal = 110 where id = 1;
+update wc_acc set bal = 120 where id = 1;
+commit;
+commit;
+select * from wc_acc order by id;
+id	bal
+1	120
+2	100
+3	100
+#
+# 2. READ COMMITTED: v = v + n re-reads after the wait (no lost update)
+#
+begin;
+update wc_acc set bal = bal + 1 where id = 2;
+begin;
+update wc_acc set bal = bal + 10 where id = 2;
+commit;
+commit;
+select * from wc_acc order by id;
+id	bal
+1	120
+2	111
+3	100
+#
+# 3. READ COMMITTED: SELECT ... FOR UPDATE returns the latest committed row
+#
+begin;
+select bal from wc_acc where id = 3;
+bal
+100
+update wc_acc set bal = 103 where id = 3;
+select bal from wc_acc where id = 3 for update;
+bal
+103
+select bal from wc_acc where id = 3;
+bal
+103
+commit;
+#
+# 4. REPEATABLE READ: first updater wins, the loser keeps its transaction
+#
+set session transaction isolation level repeatable read;
+set session transaction isolation level repeatable read;
+begin;
+select bal from wc_acc where id = 2;
+bal
+111
+begin;
+select bal from wc_acc where id = 2;
+bal
+111
+update wc_acc set bal = bal + 5 where id = 3;
+update wc_acc set bal = bal + 1 where id = 2;
+update wc_acc set bal = bal + 100 where id = 2;
+commit;
+ERROR 25000: can't serialize access for this transaction
+select * from wc_acc order by id;
+id	bal
+1	120
+2	111
+3	108
+update wc_acc set bal = bal + 100 where id = 2;
+ERROR 25000: can't serialize access for this transaction
+select * from wc_acc where id = 2 for update;
+ERROR 25000: can't serialize access for this transaction
+commit;
+select * from wc_acc order by id;
+id	bal
+1	120
+2	112
+3	108
+#
+# 5. REPEATABLE READ: the first updater rolls back, the waiter proceeds
+#
+begin;
+update wc_acc set bal = bal + 1 where id = 2;
+begin;
+select bal from wc_acc where id = 2;
+bal
+112
+update wc_acc set bal = bal + 100 where id = 2;
+rollback;
+select bal from wc_acc where id = 2;
+bal
+212
+commit;
+select * from wc_acc order by id;
+id	bal
+1	120
+2	212
+3	108
+#
+# 6. REPEATABLE READ: rows inserted, then rows deleted, after the snapshot
+#
+begin;
+select * from wc_acc order by id;
+id	bal
+1	120
+2	212
+3	108
+insert into wc_acc values (4, 400);
+select * from wc_acc where id = 4 for update;
+id	bal
+update wc_acc set bal = bal + 1000;
+affected rows: 3
+info: Rows matched: 3  Changed: 3  Warnings: 0
+select * from wc_acc order by id;
+id	bal
+1	1120
+2	1212
+3	1108
+commit;
+select * from wc_acc order by id;
+id	bal
+1	1120
+2	1212
+3	1108
+4	400
+begin;
+select * from wc_acc order by id;
+id	bal
+1	1120
+2	1212
+3	1108
+4	400
+delete from wc_acc where id = 1;
+select * from wc_acc where id = 1 for update;
+ERROR 25000: can't serialize access for this transaction
+update wc_acc set bal = bal - 1000;
+ERROR 25000: can't serialize access for this transaction
+select * from wc_acc order by id;
+id	bal
+1	1120
+2	1212
+3	1108
+4	400
+commit;
+select * from wc_acc order by id;
+id	bal
+2	1212
+3	1108
+4	400
+#
+# 7. SERIALIZABLE: first updater wins as well
+#
+set session transaction isolation level serializable;
+set session transaction isolation level serializable;
+begin;
+select bal from wc_acc where id = 3;
+bal
+1108
+update wc_acc set bal = 300 where id = 3;
+select bal from wc_acc where id = 3;
+bal
+1108
+update wc_acc set bal = bal + 1 where id = 3;
+ERROR 25000: can't serialize access for this transaction
+update wc_acc set bal = bal + 1 where id = 4;
+commit;
+select * from wc_acc order by id;
+id	bal
+2	1212
+3	300
+4	401
+#
+# 8. write skew under SERIALIZABLE: both commit, the invariant breaks
+#
+begin;
+select sum(on_call) from wc_oncall;
+sum(on_call)
+2
+begin;
+select sum(on_call) from wc_oncall;
+sum(on_call)
+2
+update wc_oncall set on_call = 0 where doctor = 'alice';
+update wc_oncall set on_call = 0 where doctor = 'bob';
+commit;
+commit;
+select * from wc_oncall order by doctor;
+doctor	on_call
+alice	0
+bob	0
+select sum(on_call) from wc_oncall;
+sum(on_call)
+0
+#
+# 9. write skew under REPEATABLE READ
+#
+update wc_oncall set on_call = 1;
+set session transaction isolation level repeatable read;
+set session transaction isolation level repeatable read;
+begin;
+select sum(on_call) from wc_oncall;
+sum(on_call)
+2
+begin;
+select sum(on_call) from wc_oncall;
+sum(on_call)
+2
+update wc_oncall set on_call = 0 where doctor = 'bob';
+update wc_oncall set on_call = 0 where doctor = 'alice';
+commit;
+commit;
+select * from wc_oncall order by doctor;
+doctor	on_call
+alice	0
+bob	0
+#
+# 10. concurrent INSERT of the same key
+#
+set session transaction isolation level read committed;
+set session transaction isolation level read committed;
+begin;
+insert into wc_acc values (5, 5);
+begin;
+insert into wc_acc values (5, 50);
+commit;
+ERROR 23000: Duplicate entry '5' for key 'PRIMARY'
+insert into wc_acc values (7, 7);
+commit;
+begin;
+insert into wc_acc values (6, 6);
+begin;
+insert into wc_acc values (6, 60);
+rollback;
+commit;
+select * from wc_acc order by id;
+id	bal
+2	1212
+3	300
+4	401
+5	5
+6	60
+7	7
+#
+# cleanup
+#
+drop table wc_acc;
+drop table wc_oncall;

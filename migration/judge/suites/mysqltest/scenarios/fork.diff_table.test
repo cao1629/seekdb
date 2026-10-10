@@ -1,0 +1,106 @@
+# Judge scenario (area: fork) -- DIFF TABLE current AGAINST incoming.
+#
+# Pins down, through public SQL only:
+#  - the result columns are `__table`, `__flag`, then the primary-key columns
+#    in table column order (not in PRIMARY KEY declaration order), then the
+#    other columns in table order;
+#  - `__table` is the qualified 'db.table' name of the side the row comes from;
+#    `__flag` is 'INSERT' for every row, whatever the kind of difference
+#    (suspected bug, see scenarios.tsv);
+#  - a key present on one side only gives one row; a key present on both sides
+#    with any differing non-key column gives two rows, one per side; equal rows
+#    give nothing, and two identical tables give an empty result;
+#  - rows are ordered by the primary-key columns (column order) and then by
+#    `__table`, so DIFF a AGAINST b and DIFF b AGAINST a return the same rows
+#    in the same order;
+#  - values are compared NULL-safely (<=>) with each column's own semantics:
+#    NULL equals NULL; JSON compares by value (key order ignored); DECIMAL 1.50
+#    equals 1.5; trailing spaces and letter case are ignored under the default
+#    utf8mb4_general_ci collation, while VARBINARY and DOUBLE compare exactly;
+#  - a table with only key columns diffs on key presence only;
+#  - DIFF works across databases and with the current database implied, sees
+#    the session's own uncommitted changes, and works on LONGTEXT columns and
+#    on ORGANIZATION HEAP tables with a primary key.
+
+--disable_warnings
+drop table if exists df_a, df_b, df_t, df_keys, df_keys2, df_heap, df_heap2, df_lob, df_lob2;
+drop database if exists df_db2;
+--enable_warnings
+
+--echo #
+--echo # 1. result shape and order; composite key declared as (b, a)
+--echo #
+create table df_a(v varchar(10), a int, n int, b varchar(5), primary key (b, a));
+insert into df_a values ('x', 1, 1, 'k'), ('y', 2, 2, 'k'), ('z', 1, 3, 'j'), ('q', 3, 4, 'a');
+fork table df_a to df_b;
+update df_b set v = 'yy' where a = 2 and b = 'k';
+insert into df_b values ('w', 0, 9, 'm'), ('u', 1, 5, 'i');
+delete from df_b where a = 3 and b = 'a';
+diff table df_a against df_b;
+diff table df_b against df_a;
+diff table df_a against df_a;
+diff table df_b against df_b;
+
+--echo #
+--echo # 2. comparison semantics per type, across databases
+--echo #
+create table df_t(id int primary key, dec_c decimal(10,2), dt datetime, js json,
+                  tx varchar(20), sp varchar(10), vb varbinary(10), f double);
+insert into df_t values
+  (1, 1.50, '2026-01-01 00:00:00', '{"a": 1, "b": 2}', 'text', 'a', 'ab', 0.5),
+  (2, 2.00, '2026-01-02 00:00:00', '[1, 2]', 'TEXT', 'b', 'cd', 0.25),
+  (3, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+  (4, 4.00, '2026-01-04 00:00:00', '{"k": [1]}', 'four', 'd', 'ef', 4),
+  (5, 5.00, '2026-01-05 00:00:00', '{"k": 5}', 'five', 'e', 'gh', 5);
+create database df_db2;
+fork table df_t to df_db2.df_t;
+--echo # equal under the column semantics: no difference reported
+update df_db2.df_t set js = '{"b": 2, "a": 1}', dec_c = 1.5, sp = 'a  ', tx = 'TEXT' where id = 1;
+update df_db2.df_t set tx = 'text' where id = 2;
+--echo # real differences
+update df_db2.df_t set dt = '2026-01-03 00:00:00' where id = 3;
+update df_db2.df_t set vb = 'EF' where id = 4;
+update df_db2.df_t set f = 5.000000001 where id = 5;
+diff table df_t against df_db2.df_t;
+diff table test.df_t against df_db2.df_t;
+use df_db2;
+diff table df_t against test.df_t;
+use test;
+--echo # the session's own uncommitted change is part of the diff
+begin;
+update df_t set js = '{"a": 2, "b": 2}' where id = 1;
+diff table df_t against df_db2.df_t;
+rollback;
+diff table df_t against df_db2.df_t;
+
+--echo #
+--echo # 3. key-only tables
+--echo #
+create table df_keys(a int, b int, primary key (a, b));
+insert into df_keys values (1, 1), (1, 2), (2, 1);
+fork table df_keys to df_keys2;
+delete from df_keys2 where a = 1 and b = 2;
+insert into df_keys2 values (3, 3);
+diff table df_keys against df_keys2;
+
+--echo #
+--echo # 4. ORGANIZATION HEAP tables with a primary key, and LONGTEXT values
+--echo #
+create table df_heap(id int primary key, v varchar(10)) organization heap;
+create table df_heap2(id int primary key, v varchar(10)) organization heap;
+insert into df_heap values (1, 'h1'), (2, 'h2');
+insert into df_heap2 values (2, 'h2-x'), (3, 'h3');
+diff table df_heap against df_heap2;
+create table df_lob(id int primary key, v longtext);
+insert into df_lob values (1, repeat('a', 100000)), (2, repeat('b', 70000));
+fork table df_lob to df_lob2;
+update df_lob2 set v = concat(repeat('a', 99999), 'z') where id = 1;
+--echo # DIFF returns the whole LONGTEXT values; long runs are masked as <long>
+--replace_regex /[ab]{60}[ab]*/<long>/
+diff table df_lob against df_lob2;
+
+--echo #
+--echo # cleanup
+--echo #
+drop table df_a, df_b, df_t, df_keys, df_keys2, df_heap, df_heap2, df_lob, df_lob2;
+drop database df_db2;

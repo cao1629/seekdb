@@ -1,0 +1,139 @@
+# Judge scenario (area: fts) -- MATCH ... AGAINST with the default (space) parser.
+#
+# Pins down, through public SQL only:
+#  - SHOW CREATE TABLE prints the default parser and its properties;
+#  - natural-language mode (also the default): matching rows and BM25 relevance
+#    (rounded to 6 decimals) for single- and multi-word queries; a repeated
+#    query word counts once; letter case is ignored; stopwords and words
+#    shorter than 3 characters are dropped from the query ('and' is not a
+#    stopword); MATCH in the select list gives 0 for non-matching rows
+#    and NULL documents; WHERE MATCH without ORDER BY returns rows by
+#    relevance, highest first;
+#  - boolean mode: +term (required), -term (excluded), (...) groups, bare
+#    terms (optional, scores add up); a query with only -terms matches
+#    nothing; double quotes are ignored (no phrase search); the operators
+#    * ~ < > @ are syntax errors (1149);
+#  - IN MATCH PHRASE MODE matches the words adjacent and in order;
+#  - WITH QUERY EXPANSION is rejected (1235); MATCH on a column list without
+#    a matching FULLTEXT index fails with 1191; a non-constant AGAINST
+#    argument is a syntax error (1064);
+#  - MATCH over a two-column index, columns listed in either order;
+#    INSERT / UPDATE / DELETE are reflected;
+#  - the total document count used by BM25 is fixed when a statement is first
+#    planned: re-running the identical statement text after more rows are
+#    inserted reuses the old count, while a new statement text uses the new
+#    one (suspected bug, see scenarios.tsv).
+# All rows are freshly inserted (no compaction), so the BM25 statistics are
+# exact and every relevance value is reproducible.
+
+--disable_warnings
+drop table if exists fm_docs, fm_pc;
+--enable_warnings
+
+create table fm_docs(id int primary key, title varchar(100), body text,
+  fulltext key ft_body(body), fulltext key ft_title_body(title, body));
+show create table fm_docs;
+insert into fm_docs values
+  (1, 'Databases', 'database systems store data in tables'),
+  (2, 'Search', 'full text search engines index text documents'),
+  (3, 'Vectors', 'vector search finds similar vectors quickly'),
+  (4, 'Mixed', 'hybrid search combines text search and vector search'),
+  (5, 'Storage', 'the storage engine writes data to disk'),
+  (6, 'Empty', NULL),
+  (7, 'Short', 'search');
+
+--echo #
+--echo # 1. natural language mode
+--echo #
+select id, round(match(body) against('search'), 6) s from fm_docs
+  where match(body) against('search') order by s desc, id;
+select id, round(match(body) against('search' in natural language mode), 6) s from fm_docs order by id;
+select id, round(match(body) against('text search'), 6) s from fm_docs
+  where match(body) against('text search') order by s desc, id;
+select id, round(match(body) against('search search text'), 6) s from fm_docs
+  where match(body) against('search search text') order by s desc, id;
+select id, round(match(body) against('VECTOR Database'), 6) s from fm_docs
+  where match(body) against('VECTOR Database') order by s desc, id;
+--echo # stopwords and short words are dropped from the query; 'and' is no stopword
+select id from fm_docs where match(body) against('the with about');
+select id from fm_docs where match(body) against('the and to');
+select id from fm_docs where match(body) against('');
+--echo # implicit order: highest relevance first
+select id from fm_docs where match(body) against('search');
+
+--echo #
+--echo # 2. boolean mode
+--echo #
+select id from fm_docs where match(body) against('+search +text' in boolean mode) order by id;
+select id from fm_docs where match(body) against('+search -vector' in boolean mode) order by id;
+select id, round(match(body) against('search vector' in boolean mode), 6) s from fm_docs
+  where match(body) against('search vector' in boolean mode) order by s desc, id;
+select id from fm_docs where match(body) against('+(vector database) -storage' in boolean mode) order by id;
+select id from fm_docs where match(body) against('-search' in boolean mode) order by id;
+select id from fm_docs where match(body) against('"text search"' in boolean mode) order by id;
+select id from fm_docs where match(body) against('SEARCH' in boolean mode) order by id;
+--error 1149
+select id from fm_docs where match(body) against('sear*' in boolean mode);
+--error 1149
+select id from fm_docs where match(body) against('~search' in boolean mode);
+--error 1149
+select id from fm_docs where match(body) against('>search <text' in boolean mode);
+--error 1149
+select id from fm_docs where match(body) against('search@2' in boolean mode);
+
+--echo #
+--echo # 3. phrase mode
+--echo #
+select id from fm_docs where match(body) against('text search' in match phrase mode) order by id;
+select id from fm_docs where match(body) against('search text' in match phrase mode) order by id;
+select id from fm_docs where match(body) against('vector search' in match phrase mode) order by id;
+
+--echo #
+--echo # 4. unsupported forms
+--echo #
+--error 1235
+select id from fm_docs where match(body) against('search' with query expansion);
+--error 1235
+select id from fm_docs where match(body) against('search' in natural language mode with query expansion);
+--error 1191
+select id from fm_docs where match(title) against('search');
+--error 1064
+select id from fm_docs where match(body) against(title);
+
+--echo #
+--echo # 5. two-column index
+--echo #
+select id, round(match(title, body) against('databases search'), 6) s from fm_docs
+  where match(title, body) against('databases search') order by s desc, id;
+select id from fm_docs where match(title, body) against('+short' in boolean mode) order by id;
+--echo # the column list may be given in any order
+select id from fm_docs where match(body, title) against('+short' in boolean mode) order by id;
+
+--echo #
+--echo # 6. DML
+--echo #
+insert into fm_docs values (8, 'New', 'brand new search text');
+update fm_docs set body = 'nothing relevant here' where id = 7;
+delete from fm_docs where id = 2;
+select id, round(match(body) against('search' in natural language mode), 6) s from fm_docs
+  where match(body) against('search' in natural language mode) order by s desc, id;
+select id from fm_docs where match(body) against('relevant') order by id;
+update fm_docs set body = NULL where id = 8;
+select id from fm_docs where match(body) against('brand') order by id;
+
+--echo #
+--echo # 7. document count fixed at plan time
+--echo #
+create table fm_pc(id int primary key, body text, fulltext key ftb(body));
+insert into fm_pc values (1, 'alpha beta'), (2, 'alpha gamma'), (3, 'delta epsilon'), (4, 'zeta eta');
+select id, round(match(body) against('alpha'), 6) s from fm_pc where match(body) against('alpha') order by s desc, id;
+insert into fm_pc values (5, 'theta iota'), (6, 'kappa lambda'), (7, 'mu nu'), (8, 'xi omicron'), (9, 'pi rho'), (10, 'sigma tau');
+--echo # identical statement text: old document count (4)
+select id, round(match(body) against('alpha'), 6) s from fm_pc where match(body) against('alpha') order by s desc, id;
+--echo # new statement text: current document count (10)
+select id, round(match(body) against('alpha'), 6) s from fm_pc where match(body) against('alpha') order by s desc, id limit 5;
+
+--echo #
+--echo # cleanup
+--echo #
+drop table fm_docs, fm_pc;

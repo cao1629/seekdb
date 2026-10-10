@@ -1,0 +1,29 @@
+[start]
+> create table d (n int)
+> insert into d values (0),(1),(2),(3),(4),(5),(6),(7),(8),(9)
+> create table t1 (id int primary key, v varchar(32), k int, index ik (k))
+> insert into t1 values (1,'one',10),(2,'two',20),(3,'three',30)
+> update t1 set v = 'TWO' where id = 2
+> delete from t1 where id = 3
+> create table t2 (id int primary key, v varchar(32))
+> insert into t2 select a.n*1000+b.n*100+c.n*10+e.n, concat('row', a.n*1000+b.n*100+c.n*10+e.n) from d a, d b, d c, d e
+> alter table t2 add column w int default 7
+> select count(*), sum(id), sum(crc32(v)) from t2
+count(*)	sum(id)	sum(crc32(v))
+10000	49995000	21732802279480
+[kill9]
+[restart]
+> select * from t1 order by id
+id	v	k
+1	one	10
+2	TWO	20
+> select id from t1 where k >= 10 order by k
+id
+1
+2
+> select count(*), sum(id), sum(crc32(v)), sum(w) from t2
+count(*)	sum(id)	sum(crc32(v))	sum(w)
+10000	49995000	21732802279480	70000
+> show create table t1
+Table	Create Table
+t1	CREATE TABLE `t1` (\n  `id` int(11) NOT NULL,\n  `v` varchar(32) DEFAULT NULL,\n  `k` int(11) DEFAULT NULL,\n  PRIMARY KEY (`id`),\n  KEY `ik` (`k`) BLOCK_SIZE 16384 LOCAL\n) ORGANIZATION INDEX DEFAULT CHARSET = utf8mb4 ROW_FORMAT = DYNAMIC COMPRESSION = 'zstd_1.3.8' BLOCK_SIZE = 16384 TABLET_SIZE = 134217728 PCTFREE = 0

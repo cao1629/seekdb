@@ -1,0 +1,261 @@
+# [judge] b5-fts rewrite of tools/deploy/mysql_test/test_suite/fts_index/t/create_fts_index_afterward.test.
+# [judge] Every change is marked "[judge]"; see migration/judge/suites/mysqltest/rewrites/b5-fts.tsv.
+# owner: yunshan.tys
+# owner group: storage
+# description: test create fulltext index
+
+connect(sys_conn, $OBMYSQL_MS0, root@sys,,oceanbase, $OBMYSQL_PORT);
+connection sys_conn;
+
+--disable_warnings
+DROP TABLE IF EXISTS fts_table_3;
+--enable_warnings
+
+--echo ====================== basic test #1 =======================
+--echo ============= create fts index on existing table ===========
+CREATE TABLE fts_table_3 (
+  id int primary key,
+  name varchar(20));
+
+INSERT INTO fts_table_3 VALUES (1, "aaa AAA"), (2, "bbb BBB"), (3, "ccc CCC");
+
+# [judge] removed: let $data_table_id from __all_table (Tier B; this connection uses the oceanbase database).
+
+# create fulltext index:
+# [judge] removed: ALTER SYSTEM SET _ENABLE_ADD_FULLTEXT_INDEX_TO_EXISTING_TABLE = TRUE; sleep 2; (hidden
+# [judge] parameter; it only gates building multivalue indexes afterward, CREATE FULLTEXT INDEX works without it).
+CREATE FULLTEXT INDEX f101 on fts_table_3(name);
+
+SET OB_ENABLE_INDEX_DIRECT_SELECT = on;
+
+# [judge] was (Tier B): the hidden FTS columns of fts_table_3 (__all_column), the 4 hidden aux index tables
+# [judge] (__all_table), the columns of each aux table, and SELECTs reading the rowkey<->doc_id maps and the
+# [judge] word/doc_id/word_count/doc_length rows directly from the hidden aux tables, framed by query-log
+# [judge] toggles and echo headers. Public equivalents: SHOW INDEX for the index built on the existing rows,
+# [judge] and MATCH ... AGAINST with relevance for each indexed word (relevance reflects word_count 2 and
+# [judge] doc_length 2 of every row). The internal doc_id assignment has no public equivalent.
+SHOW INDEX FROM fts_table_3;
+
+select id, name, match(name) against('aaa') as score from fts_table_3 where match(name) against('aaa');
+
+select id, name, match(name) against('bbb') as score from fts_table_3 where match(name) against('bbb');
+
+select id, name, match(name) against('ccc') as score from fts_table_3 where match(name) against('ccc');
+
+--disable_warnings
+DROP TABLE IF EXISTS fts_table_3;
+--enable_warnings
+
+--echo ====================== basic test #2 =======================
+--echo ========= create fts index on table with fts index =========
+
+--disable_warnings
+DROP TABLE IF EXISTS fts_table_4;
+--enable_warnings
+
+CREATE TABLE fts_table_4 (
+  id int,
+  name varchar(20),
+  content varchar(20),
+  FULLTEXT INDEX f102(name));
+
+# [judge] removed: let $data_table_id from __all_table (Tier B).
+
+# [judge] was: hidden FTS columns of fts_table_4 from __all_column (Tier B) -> SHOW INDEX.
+SHOW INDEX FROM fts_table_4;
+
+CREATE FULLTEXT INDEX f103 on fts_table_4(content);
+
+# [judge] was: hidden FTS columns after adding f103 (__all_column), the hidden aux index tables
+# [judge] (__all_table) and the columns of each aux table (Tier B) -> SHOW INDEX.
+SHOW INDEX FROM fts_table_4;
+
+--disable_warnings
+DROP TABLE IF EXISTS fts_table_4;
+--enable_warnings
+
+--echo ====================== basic test #3 =======================
+--echo ========= create fts index afterward on partition table =========
+--disable_warnings
+DROP TABLE IF EXISTS fts_test;
+--enable_warnings 
+--result_format 4
+create table fts_test(seq_id int PRIMARY KEY, detail varchar(4096)) partition by hash(seq_id) partitions 2;
+insert into fts_test(seq_id, detail) values(1, 'test1'),(2, 'test1 test2'),(3, 'test1 test2 test3'),(4, 'test1 test2 test3 test4'),(5, 'test1 test2 test3 test4 test5');
+CREATE FULLTEXT INDEX f2030 on fts_test(detail);
+select *, match(detail) against('test1 test2') from fts_test where match(detail) against('test1 test2');
+--echo ========= create fts index afterward on subpartition table =========
+--disable_warnings
+DROP TABLE IF EXISTS fts_test;
+--enable_warnings 
+create table fts_test(seq_id int PRIMARY KEY, detail varchar(4096)) partition by range(seq_id) subpartition by hash(seq_id) subpartitions 4
+(PARTITION r1 VALUES LESS THAN(10),
+ PARTITION r2 VALUES LESS THAN(20),
+ PARTITION r3 VALUES LESS THAN(30),
+ PARTITION r4 VALUES LESS THAN(40));
+insert into fts_test(seq_id, detail) values(1, 'test1'),(2, 'test1 test2'),(3, 'test1 test2 test3'),(4, 'test1 test2 test3 test4'),(5, 'test1 test2 test3 test4 test5');
+CREATE FULLTEXT INDEX f2001 on fts_test(detail);
+select *, match(detail) against('test1 test2') from fts_test where match(detail) against('test1 test2');
+
+--echo ========= create fts index afterward on table =========
+--disable_warnings
+DROP TABLE IF EXISTS fts_test;
+--enable_warnings 
+create table fts_test(seq_id int PRIMARY KEY, detail varchar(4096));
+insert into fts_test(seq_id, detail) values(1, 'test1'),(2, 'test1 test2'),(3, 'test1 test2 test3'),(4, 'test1 test2 test3 test4'),(5, 'test1 test2 test3 test4 test5');
+CREATE FULLTEXT INDEX f200 on fts_test(detail);
+select *, match(detail) against('test1 test2') from fts_test where match(detail) against('test1 test2');
+--disable_warnings
+DROP TABLE IF EXISTS fts_test;
+--enable_warnings 
+
+--echo ========= create index with parser =========
+--disable_warnings
+DROP TABLE IF EXISTS fts_test;
+--enable_warnings
+create table fts_test(seq_id int PRIMARY KEY, detail varchar(4096));
+
+--error ER_PARSE_ERROR
+CREATE INDEX f200 on fts_test(detail) WITH PARSER ngram;
+
+--error ER_PARSE_ERROR
+CREATE SPATIAL INDEX f200 on fts_test(detail) WITH PARSER ngram;
+
+--error ER_PARSE_ERROR
+CREATE UNIQUE INDEX f200 on fts_test(detail) WITH PARSER ngram;
+
+--error ER_PARSE_ERROR
+CREATE VECTOR INDEX f200 on fts_test(detail) WITH PARSER ngram;
+
+--disable_warnings
+DROP TABLE IF EXISTS fts_test;
+--enable_warnings
+
+
+--disable_warnings
+DROP TABLE IF EXISTS fts_table_with_generated_col;
+--enable_warnings
+
+CREATE TABLE fts_table_with_generated_col(
+    c1 VARCHAR(200),
+    c2 TEXT,
+    c3 TEXT AS (CONCAT(c2, '')) VIRTUAL,
+    c4 TEXT AS (CONCAT(c2, '')) STORED
+);
+--disable_warnings
+
+--error ER_NOT_SUPPORTED_YET
+create fulltext index idx1 on fts_table_with_generated_col(c3);
+
+--error ER_NOT_SUPPORTED_YET
+alter table fts_table_with_generated_col add fulltext index idx1(c3);
+
+--error ER_NOT_SUPPORTED_YET
+create fulltext index idx1 on fts_table_with_generated_col(c4);
+
+--error ER_NOT_SUPPORTED_YET
+alter table fts_table_with_generated_col add fulltext index idx1(c4);
+
+DROP TABLE fts_table_with_generated_col;
+
+--disable_warnings
+DROP TABLE IF EXISTS fts_col_orders;
+--enable_warnings
+
+CREATE TABLE fts_col_orders(
+    a INT,
+    b VARCHAR(20),
+    c VARCHAR(20)
+);
+
+CREATE FULLTEXT INDEX fts_b_c on fts_col_orders(b, c);
+
+CREATE FULLTEXT INDEX fts_c_b on fts_col_orders(c, b);
+
+SHOW CREATE TABLE fts_col_orders;
+
+SHOW INDEX FROM fts_col_orders;
+
+# [judge] was EXPLAIN (plan text, Tier B); the statement was never executed, so it is executed now.
+SELECT * FROM fts_col_orders WHERE MATCH(b,c) AGAINST("aa");
+
+# [judge] was EXPLAIN (plan text, Tier B); executed instead.
+SELECT * FROM fts_col_orders WHERE MATCH(c,b) AGAINST("aa");
+
+--disable_warnings
+ALTER TABLE fts_col_orders ADD FULLTEXT INDEX fts_b_c2(b, c);
+--enable_warnings
+
+--disable_warnings
+ALTER TABLE fts_col_orders ADD FULLTEXT INDEX fts_c_b2(c, b);
+--enable_warnings
+
+SHOW CREATE TABLE fts_col_orders;
+
+SHOW INDEX FROM fts_col_orders;
+
+DROP TABLE fts_col_orders;
+
+--disable_warnings
+DROP TABLE IF EXISTS fts_varchar_binary;
+--enable_warnings
+
+CREATE TABLE fts_varchar_binary(a VARCHAR(255)) CHARACTER SET = binary;
+
+--error 1283
+CREATE FULLTEXT INDEX fts1 ON fts_varchar_binary(a);
+
+--error 1283
+ALTER TABLE fts_varchar_binary ADD FULLTEXT INDEX fts1(a);
+
+DROP TABLE fts_varchar_binary;
+
+CREATE TABLE fts_varchar_binary(a VARCHAR(255));
+
+CREATE FULLTEXT INDEX fts1 ON fts_varchar_binary(a);
+
+--disable_warnings
+ALTER TABLE fts_varchar_binary ADD FULLTEXT INDEX fts2(a);
+--enable_warnings
+
+DROP TABLE fts_varchar_binary;
+
+--disable_warnings
+DROP TABLE IF EXISTS fts_char_binary;
+--enable_warnings
+
+CREATE TABLE fts_char_binary(a CHAR(255)) CHARACTER SET = binary;
+
+--error 1283
+CREATE FULLTEXT INDEX fts1 ON fts_char_binary(a);
+
+--error 1283
+ALTER TABLE fts_char_binary ADD FULLTEXT INDEX fts1(a);
+
+DROP TABLE fts_char_binary;
+
+CREATE TABLE fts_char_binary(a CHAR(255));
+
+CREATE FULLTEXT INDEX fts1 ON fts_char_binary(a);
+
+--disable_warnings
+ALTER TABLE fts_char_binary ADD FULLTEXT INDEX fts2(a);
+--enable_warnings
+
+DROP TABLE fts_char_binary;
+
+
+--echo ========= create index with parser =========
+--disable_warnings
+DROP TABLE IF EXISTS fts_ik;
+--enable_warnings
+create table fts_ik(seq_id int PRIMARY KEY, detail varchar(4096));
+
+CREATE FULLTEXT INDEX f200 on fts_ik(detail) WITH PARSER ik;
+
+--disable_warnings
+DROP TABLE IF EXISTS fts_test;
+--enable_warnings
+
+
+disconnect sys_conn;

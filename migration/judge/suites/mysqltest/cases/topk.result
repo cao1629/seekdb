@@ -1,0 +1,414 @@
+drop table if exists t1;
+drop table if exists t2;
+drop table if exists t3;
+create table t1 (c1 int primary key, c2 int, c3 varchar(32)) partition by hash(c1) partitions 2;
+insert into t1 values(1,1,1),(3,3,3),(5,5,5),(7,7,7),(9,9,9),(11,11,11),(13,13,13),(15,15,15),(17,17,17),(19,19,19);
+insert into t1 values(31,1,1),(33,3,3),(35,5,5),(37,7,7),(39,9,9),(41,11,11),(43,13,13),(45,15,15),(47,17,17),(49,19,19);
+insert into t1 values(2,2,2),(4,4,4),(6,6,6),(8,8,8),(10,10,10),(12,12,12),(14,14,14),(16,16,16),(18,18,18),(20,20,20);
+insert into t1 values(32,2,2),(34,4,4),(36,6,6),(38,8,8),(40,10,10),(42,12,12),(44,14,14),(46,16,16),(48,18,18),(50,20,20);
+create table t2 (c1 int primary key, c2 int, c3 varchar(32)) partition by hash(c1) partitions 2;
+create table t3 (c1 int primary key, c2 int, c3 varchar(32)) partition by hash(c1) partitions 2;
+insert into t2 values(2,2,2),(4,4,4),(6,6,6),(8,8,8),(10,10,10),(12,12,12),(14,14,14),(16,16,16),(18,18,18),(20,20,20),(22,22,22);
+select /*+topk(20 6)*/ avg(c1), avg(c2), avg(c3) from t1 where c2 <10 group by c2  limit 5;
+avg(c1)	avg(c2)	avg(c3)
+17.0000	2.0000	2
+19.0000	4.0000	4
+21.0000	6.0000	6
+23.0000	8.0000	8
+16.0000	1.0000	1
+select @@is_result_accurate;
+@@is_result_accurate
+1
+select /*+topk(20 6)*/ avg(c1), avg(c2), avg(c3) from t1  where c2 <10 group by c2 order by avg(c1);
+avg(c1)	avg(c2)	avg(c3)
+16.0000	1.0000	1
+17.0000	2.0000	2
+18.0000	3.0000	3
+19.0000	4.0000	4
+20.0000	5.0000	5
+21.0000	6.0000	6
+22.0000	7.0000	7
+23.0000	8.0000	8
+24.0000	9.0000	9
+select @@is_result_accurate;
+@@is_result_accurate
+1
+select /*+topk(20 6)*/ avg(c1), avg(c2), avg(c3) from t1  where c2 <10 order by avg(c1) limit 5;
+avg(c1)	avg(c2)	avg(c3)
+20.0000	5.0000	5
+select @@is_result_accurate;
+@@is_result_accurate
+1
+select /*+topk(20 6)*/ avg(c1), avg(c2), avg(c3) from t1  where c2 <10 group by c2 order by avg(c1) limit 5 for update nowait;
+avg(c1)	avg(c2)	avg(c3)
+16.0000	1.0000	1
+17.0000	2.0000	2
+18.0000	3.0000	3
+19.0000	4.0000	4
+20.0000	5.0000	5
+select @@is_result_accurate;
+@@is_result_accurate
+1
+select avg(c1), avg(c2), avg(c3) from t1  where c2 <10 group by c2 order by avg(c1) limit 5;
+avg(c1)	avg(c2)	avg(c3)
+16.0000	1.0000	1
+17.0000	2.0000	2
+18.0000	3.0000	3
+19.0000	4.0000	4
+20.0000	5.0000	5
+select @@is_result_accurate;
+@@is_result_accurate
+1
+select /*+topk(20 6)*/ sql_calc_found_rows avg(c2), avg(c3)  from t1 where c2 <10 group by c2 order by avg(c1) limit 5;
+avg(c2)	avg(c3)
+1.0000	1
+2.0000	2
+3.0000	3
+4.0000	4
+5.0000	5
+select @@is_result_accurate;
+@@is_result_accurate
+1
+select /*+topk(20 6)*/  avg(c1), avg(c2), avg(c3)  from t1 where c2 <10 group by c2 order by (select c1  from t1 where c2 = 1 and c1 !=1)  limit 5;
+avg(c1)	avg(c2)	avg(c3)
+17.0000	2.0000	2
+19.0000	4.0000	4
+21.0000	6.0000	6
+23.0000	8.0000	8
+16.0000	1.0000	1
+select @@is_result_accurate;
+@@is_result_accurate
+1
+select /*+topk(20 6)*/ distinct avg(c1), avg(c2), avg(c3)  from t1 where c2 <10 group by c2 order by avg(c1) limit 5;
+avg(c1)	avg(c2)	avg(c3)
+16.0000	1.0000	1
+17.0000	2.0000	2
+18.0000	3.0000	3
+19.0000	4.0000	4
+20.0000	5.0000	5
+select @@is_result_accurate;
+@@is_result_accurate
+1
+select /*+topk(20 6)*/ sum(c1), avg(c2), group_concat(c3, c1)  from t1 where c2 <10 group by c2 order by avg(c1) limit 5;
+sum(c1)	avg(c2)	group_concat(c3, c1)
+32	1.0000	11,131
+34	2.0000	22,232
+36	3.0000	33,333
+38	4.0000	44,434
+40	5.0000	55,535
+select @@is_result_accurate;
+@@is_result_accurate
+1
+select /*+topk(20 6)*/  avg(c1), avg(c2), avg(c3) from (select *  from t1 where c2 <10) as a  group by a.c2 order by avg(a.c1) limit 5;
+avg(c1)	avg(c2)	avg(c3)
+16.0000	1.0000	1
+17.0000	2.0000	2
+18.0000	3.0000	3
+19.0000	4.0000	4
+20.0000	5.0000	5
+select @@is_result_accurate;
+@@is_result_accurate
+1
+select /*+topk(20 6)*/ distinct avg(t1.c1), avg(t1.c2), avg(t1.c3)  from t1 , t2 group by t1.c2 order by avg(t1.c1) limit 5;
+avg(t1.c1)	avg(t1.c2)	avg(t1.c3)
+16.0000	1.0000	1
+17.0000	2.0000	2
+18.0000	3.0000	3
+19.0000	4.0000	4
+20.0000	5.0000	5
+select @@is_result_accurate;
+@@is_result_accurate
+1
+select /*+topk(1 2) use_hash_aggregation*/ c3, avg(c1), sum(c2), sum(c1) + sum(c2), count(c3), min(c3), max(c1), sum(c2)/count(c1), sum(c3)/sum(c1)  from t1 where c2 <10 group by c2 order by c3 limit 1;
+c3	avg(c1)	sum(c2)	sum(c1) + sum(c2)	count(c3)	min(c3)	max(c1)	sum(c2)/count(c1)	sum(c3)/sum(c1)
+1	16.0000	2	34	2	1	31	1.0000	0.0625
+select @@is_result_accurate;
+@@is_result_accurate
+1
+select /*+topk(1 2) use_hash_aggregation*/ c3, avg(c1), sum(c2), sum(c1) + sum(c2), count(c3), min(c3), max(c1), sum(c2)/count(c1), sum(c3)/sum(c1)  from t1 where c2 <10 group by c2 order by "aaa" limit 1;
+c3	avg(c1)	sum(c2)	sum(c1) + sum(c2)	count(c3)	min(c3)	max(c1)	sum(c2)/count(c1)	sum(c3)/sum(c1)
+2	17.0000	4	38	2	2	32	2.0000	0.11764705882352941
+select @@is_result_accurate;
+@@is_result_accurate
+1
+select /*+topk(90 2) use_hash_aggregation*/ c3, avg(c1), sum(c2), sum(c1) + sum(c2), count(c3), min(c3), max(c1), sum(c2)/count(c1), sum(c3)/sum(c1)  from t1 where c2 <30 group by c2 order by c3 limit 10;
+c3	avg(c1)	sum(c2)	sum(c1) + sum(c2)	count(c3)	min(c3)	max(c1)	sum(c2)/count(c1)	sum(c3)/sum(c1)
+1	16.0000	2	34	2	1	31	1.0000	0.0625
+10	25.0000	20	70	2	10	40	10.0000	0.4
+11	26.0000	22	74	2	11	41	11.0000	0.4230769230769231
+12	27.0000	24	78	2	12	42	12.0000	0.4444444444444444
+13	28.0000	26	82	2	13	43	13.0000	0.4642857142857143
+14	29.0000	28	86	2	14	44	14.0000	0.4827586206896552
+15	30.0000	30	90	2	15	45	15.0000	0.5
+16	31.0000	32	94	2	16	46	16.0000	0.5161290322580645
+17	32.0000	34	98	2	17	47	17.0000	0.53125
+18	33.0000	36	102	2	18	48	18.0000	0.5454545454545454
+select @@is_result_accurate;
+@@is_result_accurate
+1
+select /*+topk(1 1)*/ c3, avg(c1), sum(c2), sum(c1) + sum(c2), count(c3), min(c3), max(c1), sum(c2)/count(c1), sum(c3)/sum(c1)  from t1 where c2 <10 group by c2 order by c3 limit 1;
+c3	avg(c1)	sum(c2)	sum(c1) + sum(c2)	count(c3)	min(c3)	max(c1)	sum(c2)/count(c1)	sum(c3)/sum(c1)
+1	16.0000	2	34	2	1	31	1.0000	0.0625
+select @@is_result_accurate;
+@@is_result_accurate
+1
+select /*+topk(1 1)*/ c3, avg(c1), sum(c2), sum(c1) + sum(c2), count(c3), min(c3), max(c1), sum(c2)/count(c1), sum(c3)/sum(c1)  from t1 where c2 <12 group by c2 order by c3 limit 1 offset 4;
+c3	avg(c1)	sum(c2)	sum(c1) + sum(c2)	count(c3)	min(c3)	max(c1)	sum(c2)/count(c1)	sum(c3)/sum(c1)
+3	18.0000	6	42	2	3	33	3.0000	0.16666666666666666
+select @@is_result_accurate;
+@@is_result_accurate
+1
+select /*+topk(1 1)*/ c3, avg(c1), sum(c2), sum(c1) + sum(c2), count(c3), min(c3), max(c1), sum(c2)/count(c1), sum(c3)/sum(c1)  from t1 where c2 <12 group by c2 order by c3 limit 1 offset 1000;
+c3	avg(c1)	sum(c2)	sum(c1) + sum(c2)	count(c3)	min(c3)	max(c1)	sum(c2)/count(c1)	sum(c3)/sum(c1)
+select @@is_result_accurate;
+@@is_result_accurate
+1
+select /*+topk(1 1)*/ c3, avg(c1), sum(c2), sum(c1) + sum(c2), count(c3), min(c3), max(c1), sum(c2)/count(c1), sum(c3)/sum(c1)  from t1 where c2 <10 group by c2 order by c2 limit 1;
+c3	avg(c1)	sum(c2)	sum(c1) + sum(c2)	count(c3)	min(c3)	max(c1)	sum(c2)/count(c1)	sum(c3)/sum(c1)
+1	16.0000	2	34	2	1	31	1.0000	0.0625
+select @@is_result_accurate;
+@@is_result_accurate
+1
+select /*+topk(1 1)*/ c3, avg(c1), sum(c2), sum(c1) + sum(c2), count(c3), min(c3), max(c1), sum(c2)/count(c1), sum(c3)/sum(c1)  from t1 where c2 <10 group by c2 order by c3 limit 0;
+c3	avg(c1)	sum(c2)	sum(c1) + sum(c2)	count(c3)	min(c3)	max(c1)	sum(c2)/count(c1)	sum(c3)/sum(c1)
+select @@is_result_accurate;
+@@is_result_accurate
+1
+select /*+topk(1 1)*/ c2, avg(c1), sum(c2), sum(c1) + sum(c2), count(c3), min(c3), max(c1), sum(c2)/count(c1), sum(c3)/sum(c1)  from t1 where c2 <10 group by c2 order by avg(c3), sum(c1)/sum(c2) limit 5;
+c2	avg(c1)	sum(c2)	sum(c1) + sum(c2)	count(c3)	min(c3)	max(c1)	sum(c2)/count(c1)	sum(c3)/sum(c1)
+1	16.0000	2	34	2	1	31	1.0000	0.0625
+2	17.0000	4	38	2	2	32	2.0000	0.11764705882352941
+3	18.0000	6	42	2	3	33	3.0000	0.16666666666666666
+4	19.0000	8	46	2	4	34	4.0000	0.21052631578947367
+5	20.0000	10	50	2	5	35	5.0000	0.25
+select @@is_result_accurate;
+@@is_result_accurate
+1
+select /*+topk(1 1)*/ c1, avg(c1), sum(c2), sum(c1) + sum(c2), count(c3), min(c3), max(c1), sum(c2)/count(c1), sum(c3)/sum(c1)  from t1 where c2 <10 group by c2 order by avg(c3) desc, sum(c1)/sum(c2)  limit 5;
+c1	avg(c1)	sum(c2)	sum(c1) + sum(c2)	count(c3)	min(c3)	max(c1)	sum(c2)/count(c1)	sum(c3)/sum(c1)
+9	24.0000	18	66	2	9	39	9.0000	0.375
+8	23.0000	16	62	2	8	38	8.0000	0.34782608695652173
+7	22.0000	14	58	2	7	37	7.0000	0.3181818181818182
+6	21.0000	12	54	2	6	36	6.0000	0.2857142857142857
+5	20.0000	10	50	2	5	35	5.0000	0.25
+select @@is_result_accurate;
+@@is_result_accurate
+1
+select /*+topk(1 1)*/ c2, avg(c1), sum(c2), sum(c1) + sum(c2), count(c3), min(c3), max(c1), sum(c2)/count(c1), sum(c3)/sum(c1)  from t1 where c2 <10 group by c2 order by avg(c3) desc, sum(c1)/sum(c2) + avg(c2)  limit 5;
+c2	avg(c1)	sum(c2)	sum(c1) + sum(c2)	count(c3)	min(c3)	max(c1)	sum(c2)/count(c1)	sum(c3)/sum(c1)
+9	24.0000	18	66	2	9	39	9.0000	0.375
+8	23.0000	16	62	2	8	38	8.0000	0.34782608695652173
+7	22.0000	14	58	2	7	37	7.0000	0.3181818181818182
+6	21.0000	12	54	2	6	36	6.0000	0.2857142857142857
+5	20.0000	10	50	2	5	35	5.0000	0.25
+select @@is_result_accurate;
+@@is_result_accurate
+1
+select /*+topk(1 1)*/ avg(c1), sum(c2), sum(c1) + sum(c2), count(c3), min(c3), max(c1), sum(c2)/count(c1), sum(c3)/sum(c1)  from t1 where c2 <10 group by c2 order by avg(c3) desc, sum(c1)+sum(c2)  limit 5;
+avg(c1)	sum(c2)	sum(c1) + sum(c2)	count(c3)	min(c3)	max(c1)	sum(c2)/count(c1)	sum(c3)/sum(c1)
+24.0000	18	66	2	9	39	9.0000	0.375
+23.0000	16	62	2	8	38	8.0000	0.34782608695652173
+22.0000	14	58	2	7	37	7.0000	0.3181818181818182
+21.0000	12	54	2	6	36	6.0000	0.2857142857142857
+20.0000	10	50	2	5	35	5.0000	0.25
+select @@is_result_accurate;
+@@is_result_accurate
+1
+select /*+topk(0 0)*/ c2, sum(c2), sum(c1) + sum(c2), count(c3), min(c3), max(c1), sum(c2)/count(c1), sum(c3)/sum(c1)  from t1 where c2 <12 group by c2 order by avg(c3) desc, sum(c1)+sum(c2)  limit 5;
+c2	sum(c2)	sum(c1) + sum(c2)	count(c3)	min(c3)	max(c1)	sum(c2)/count(c1)	sum(c3)/sum(c1)
+11	22	74	2	11	41	11.0000	0.4230769230769231
+10	20	70	2	10	40	10.0000	0.4
+9	18	66	2	9	39	9.0000	0.375
+8	16	62	2	8	38	8.0000	0.34782608695652173
+7	14	58	2	7	37	7.0000	0.3181818181818182
+select @@is_result_accurate;
+@@is_result_accurate
+1
+select /*+topk(0 10)*/ c2, sum(c2), sum(c1) + sum(c2), count(c3), min(c3), max(c1), sum(c2)/count(c1), sum(c3)/sum(c1)  from t1 where c2 <12 group by c2 order by avg(c3) desc, sum(c1)+sum(c2)  limit 5;
+c2	sum(c2)	sum(c1) + sum(c2)	count(c3)	min(c3)	max(c1)	sum(c2)/count(c1)	sum(c3)/sum(c1)
+11	22	74	2	11	41	11.0000	0.4230769230769231
+10	20	70	2	10	40	10.0000	0.4
+9	18	66	2	9	39	9.0000	0.375
+8	16	62	2	8	38	8.0000	0.34782608695652173
+7	14	58	2	7	37	7.0000	0.3181818181818182
+select @@is_result_accurate;
+@@is_result_accurate
+1
+select /*+topk(50 0)*/ c2, sum(c2), sum(c1) + sum(c2), count(c3), min(c3), max(c1), sum(c2)/count(c1), sum(c3)/sum(c1)  from t1 where c2 <12 group by c2 order by avg(c3) desc, sum(c1)+sum(c2)  limit 5;
+c2	sum(c2)	sum(c1) + sum(c2)	count(c3)	min(c3)	max(c1)	sum(c2)/count(c1)	sum(c3)/sum(c1)
+11	22	74	2	11	41	11.0000	0.4230769230769231
+10	20	70	2	10	40	10.0000	0.4
+9	18	66	2	9	39	9.0000	0.375
+8	16	62	2	8	38	8.0000	0.34782608695652173
+7	14	58	2	7	37	7.0000	0.3181818181818182
+select @@is_result_accurate;
+@@is_result_accurate
+1
+select /*+topk(10000 1)*/ c2, sum(c2), sum(c1) + sum(c2), count(c3), min(c3), max(c1), sum(c2)/count(c1), sum(c3)/sum(c1)  from t1 where c2 <12 group by c2 order by avg(c3) desc, sum(c1)+sum(c2)  limit 5;
+c2	sum(c2)	sum(c1) + sum(c2)	count(c3)	min(c3)	max(c1)	sum(c2)/count(c1)	sum(c3)/sum(c1)
+11	22	74	2	11	41	11.0000	0.4230769230769231
+10	20	70	2	10	40	10.0000	0.4
+9	18	66	2	9	39	9.0000	0.375
+8	16	62	2	8	38	8.0000	0.34782608695652173
+7	14	58	2	7	37	7.0000	0.3181818181818182
+select @@is_result_accurate;
+@@is_result_accurate
+1
+select /*+topk(1 10000)*/ c2, sum(c2), sum(c1) + sum(c2), count(c3), min(c3), max(c1), sum(c2)/count(c1), sum(c3)/sum(c1)  from t1 where c2 <12 group by c2 order by avg(c3) desc, sum(c1)+sum(c2)  limit 5;
+c2	sum(c2)	sum(c1) + sum(c2)	count(c3)	min(c3)	max(c1)	sum(c2)/count(c1)	sum(c3)/sum(c1)
+11	22	74	2	11	41	11.0000	0.4230769230769231
+10	20	70	2	10	40	10.0000	0.4
+9	18	66	2	9	39	9.0000	0.375
+8	16	62	2	8	38	8.0000	0.34782608695652173
+7	14	58	2	7	37	7.0000	0.3181818181818182
+select @@is_result_accurate;
+@@is_result_accurate
+1
+select * from (select /*+topk(0 4)*/ avg(c1)  from t1 where c2 <10 group by c2 order by sum(c2) limit 5) as a;
+avg(c1)
+16.0000
+17.0000
+18.0000
+19.0000
+20.0000
+select c1  from t1 where c1 < any (select /*+topk(0 4)*/ avg(c1)  from t1 where c2 <10 group by c2 order by sum(c2)  limit 5);
+c1
+2
+4
+6
+8
+10
+12
+14
+16
+18
+1
+3
+5
+7
+9
+11
+13
+15
+17
+19
+(select /*+topk(0 4)*/ avg(c1)  from t1 where c2 <10 group by c2 order by sum(c2) limit 5) union (select /*+topk(0 10)*/ sum(c1)  from t1 where c2 <10 group by c2 order by sum(c2) limit 7);
+avg(c1)
+16.0000
+17.0000
+18.0000
+19.0000
+20.0000
+32.0000
+34.0000
+36.0000
+38.0000
+40.0000
+42.0000
+44.0000
+select c1  from t1 where (select /*+topk(0 10)*/ avg(c1)  from t1 where c2 <10 group by c2 order by sum(c2) limit 1) > 1 ;
+c1
+2
+4
+6
+8
+10
+12
+14
+16
+18
+20
+32
+34
+36
+38
+40
+42
+44
+46
+48
+50
+1
+3
+5
+7
+9
+11
+13
+15
+17
+19
+31
+33
+35
+37
+39
+41
+43
+45
+47
+49
+select * from (select /*+topk(10 5)*/ c3, c1, avg(c1), sum(c2), sum(c1) + sum(c2), count(c3), min(c3), max(c1), sum(c2)/count(c1), sum(c3)/sum(c1) from t1 group by c2 order by c3 limit 7) as a left join t2 on a.c1 = t2.c1 left join t3 on t3.c1 = a.c1 order by a.c3;
+c3	c1	avg(c1)	sum(c2)	sum(c1) + sum(c2)	count(c3)	min(c3)	max(c1)	sum(c2)/count(c1)	sum(c3)/sum(c1)	c1	c2	c3	c1	c2	c3
+1	1	16.0000	2	34	2	1	31	1.0000	0.0625	NULL	NULL	NULL	NULL	NULL	NULL
+10	10	25.0000	20	70	2	10	40	10.0000	0.4	10	10	10	NULL	NULL	NULL
+11	11	26.0000	22	74	2	11	41	11.0000	0.4230769230769231	NULL	NULL	NULL	NULL	NULL	NULL
+12	12	27.0000	24	78	2	12	42	12.0000	0.4444444444444444	12	12	12	NULL	NULL	NULL
+13	13	28.0000	26	82	2	13	43	13.0000	0.4642857142857143	NULL	NULL	NULL	NULL	NULL	NULL
+14	14	29.0000	28	86	2	14	44	14.0000	0.4827586206896552	14	14	14	NULL	NULL	NULL
+15	15	30.0000	30	90	2	15	45	15.0000	0.5	NULL	NULL	NULL	NULL	NULL	NULL
+select /*+topk(1 1)*/ c2, avg(c1), sum(c2), sum(c1) + sum(c2), count(c3), min(c3), max(c1), sum(c2)/count(c1), sum(c3)/sum(c1)  from t1 where c2 <12 group by c2 order by avg(c3), sum(c1)/sum(c2) limit 5;
+c2	avg(c1)	sum(c2)	sum(c1) + sum(c2)	count(c3)	min(c3)	max(c1)	sum(c2)/count(c1)	sum(c3)/sum(c1)
+1	16.0000	2	34	2	1	31	1.0000	0.0625
+2	17.0000	4	38	2	2	32	2.0000	0.11764705882352941
+3	18.0000	6	42	2	3	33	3.0000	0.16666666666666666
+4	19.0000	8	46	2	4	34	4.0000	0.21052631578947367
+5	20.0000	10	50	2	5	35	5.0000	0.25
+select /*+topk(0 0)*/ c2, sum(c2), sum(c1) + sum(c2), count(c3), min(c3), max(c1), sum(c2)/count(c1), sum(c3)/sum(c1)  from t1 where c2 <10 group by c2 order by avg(c3) desc, sum(c1)+sum(c2)  limit 5;
+c2	sum(c2)	sum(c1) + sum(c2)	count(c3)	min(c3)	max(c1)	sum(c2)/count(c1)	sum(c3)/sum(c1)
+9	18	66	2	9	39	9.0000	0.375
+8	16	62	2	8	38	8.0000	0.34782608695652173
+7	14	58	2	7	37	7.0000	0.3181818181818182
+6	12	54	2	6	36	6.0000	0.2857142857142857
+5	10	50	2	5	35	5.0000	0.25
+select /*+topk(0 10)*/ c2, sum(c2), sum(c1) + sum(c2), count(c3), min(c3), max(c1), sum(c2)/count(c1), sum(c3)/sum(c1)  from t1 where c2 <10 group by c2 order by avg(c3) desc, sum(c1)+sum(c2)  limit 5;
+c2	sum(c2)	sum(c1) + sum(c2)	count(c3)	min(c3)	max(c1)	sum(c2)/count(c1)	sum(c3)/sum(c1)
+9	18	66	2	9	39	9.0000	0.375
+8	16	62	2	8	38	8.0000	0.34782608695652173
+7	14	58	2	7	37	7.0000	0.3181818181818182
+6	12	54	2	6	36	6.0000	0.2857142857142857
+5	10	50	2	5	35	5.0000	0.25
+select /*+topk(50 0)*/ c2, sum(c2), sum(c1) + sum(c2), count(c3), min(c3), max(c1), sum(c2)/count(c1), sum(c3)/sum(c1)  from t1 where c2 <10 group by c2 order by avg(c3) desc, sum(c1)+sum(c2)  limit 5;
+c2	sum(c2)	sum(c1) + sum(c2)	count(c3)	min(c3)	max(c1)	sum(c2)/count(c1)	sum(c3)/sum(c1)
+9	18	66	2	9	39	9.0000	0.375
+8	16	62	2	8	38	8.0000	0.34782608695652173
+7	14	58	2	7	37	7.0000	0.3181818181818182
+6	12	54	2	6	36	6.0000	0.2857142857142857
+5	10	50	2	5	35	5.0000	0.25
+select /*+topk(10000 1)*/ c2, sum(c2), sum(c1) + sum(c2), count(c3), min(c3), max(c1), sum(c2)/count(c1), sum(c3)/sum(c1)  from t1 where c2 <10 group by c2 order by avg(c3) desc, sum(c1)+sum(c2)  limit 5;
+c2	sum(c2)	sum(c1) + sum(c2)	count(c3)	min(c3)	max(c1)	sum(c2)/count(c1)	sum(c3)/sum(c1)
+9	18	66	2	9	39	9.0000	0.375
+8	16	62	2	8	38	8.0000	0.34782608695652173
+7	14	58	2	7	37	7.0000	0.3181818181818182
+6	12	54	2	6	36	6.0000	0.2857142857142857
+5	10	50	2	5	35	5.0000	0.25
+select /*+topk(1 10000)*/ c2, sum(c2), sum(c1) + sum(c2), count(c3), min(c3), max(c1), sum(c2)/count(c1), sum(c3)/sum(c1)  from t1 where c2 <10 group by c2 order by avg(c3) desc, sum(c1)+sum(c2)  limit 5;
+c2	sum(c2)	sum(c1) + sum(c2)	count(c3)	min(c3)	max(c1)	sum(c2)/count(c1)	sum(c3)/sum(c1)
+9	18	66	2	9	39	9.0000	0.375
+8	16	62	2	8	38	8.0000	0.34782608695652173
+7	14	58	2	7	37	7.0000	0.3181818181818182
+6	12	54	2	6	36	6.0000	0.2857142857142857
+5	10	50	2	5	35	5.0000	0.25
+set @@ob_enable_transformation=default;
+select * from (select /*+topk(10 5)*/ c3, c1, avg(c1), sum(c2), sum(c1) + sum(c2), count(c3), min(c3), max(c1), sum(c2)/count(c1), sum(c3)/sum(c1) from t1 group by c2 order by c3 limit 7) as a left join t2 on a.c1 = t2.c1 left join t3 on t3.c1 = a.c1;
+c3	c1	avg(c1)	sum(c2)	sum(c1) + sum(c2)	count(c3)	min(c3)	max(c1)	sum(c2)/count(c1)	sum(c3)/sum(c1)	c1	c2	c3	c1	c2	c3
+1	1	16.0000	2	34	2	1	31	1.0000	0.0625	NULL	NULL	NULL	NULL	NULL	NULL
+10	10	25.0000	20	70	2	10	40	10.0000	0.4	10	10	10	NULL	NULL	NULL
+11	11	26.0000	22	74	2	11	41	11.0000	0.4230769230769231	NULL	NULL	NULL	NULL	NULL	NULL
+12	12	27.0000	24	78	2	12	42	12.0000	0.4444444444444444	12	12	12	NULL	NULL	NULL
+13	13	28.0000	26	82	2	13	43	13.0000	0.4642857142857143	NULL	NULL	NULL	NULL	NULL	NULL
+14	14	29.0000	28	86	2	14	44	14.0000	0.4827586206896552	14	14	14	NULL	NULL	NULL
+15	15	30.0000	30	90	2	15	45	15.0000	0.5	NULL	NULL	NULL	NULL	NULL	NULL
+drop table t1;
+drop table t2;
+drop table t3;

@@ -1,0 +1,187 @@
+# Judge scenario (area: fork) -- FORK DATABASE src TO dst.
+#
+# Pins down, through public SQL only:
+#  - every base table of the source database is copied with its data, primary
+#    key, unique and secondary indexes, CHECK constraints, generated columns,
+#    partitioning and AUTO_INCREMENT position (SHOW CREATE TABLE is identical
+#    apart from foreign-key targets);
+#  - foreign keys between tables of the source database (including a
+#    self-reference) are recreated to point into the new database; a foreign
+#    key to a table in another database is dropped silently; views are not
+#    copied;
+#  - after the fork the two databases are independent: DML on either side is
+#    invisible to the other, AUTO_INCREMENT continues separately, constraints
+#    are enforced in the copy; DIFF TABLE works across the two databases;
+#  - an empty database can be forked; database names are lower-cased;
+#  - errors: unknown source 1049; existing target (also the source itself)
+#    1007; mysql / oceanbase / information_schema 1235 "fork database from
+#    system or internal database not supported"; a source containing a
+#    procedure or function 1235 "fork database containing routines
+#    (procedures/functions) not supported", a trigger 1235 "fork database
+#    containing triggers not supported", a table with a spatial index 1235
+#    "fork table on table with spatial index is not supported"; a failed fork
+#    creates no target database.
+
+--disable_warnings
+drop database if exists fdb_src;
+drop database if exists fdb_dst;
+drop database if exists fdb_other;
+drop database if exists fdb_empty;
+drop database if exists fdb_empty2;
+drop database if exists fdb_routine;
+drop database if exists fdb_routine2;
+drop database if exists fdb_func;
+drop database if exists fdb_func2;
+drop database if exists fdb_trigger;
+drop database if exists fdb_trigger2;
+drop database if exists fdb_spatial;
+drop database if exists fdb_spatial2;
+drop database if exists fdb_case;
+--enable_warnings
+
+--echo #
+--echo # 1. source database
+--echo #
+create database fdb_other;
+create table fdb_other.ref(id int primary key);
+insert into fdb_other.ref values (1), (2);
+create database fdb_src;
+create table fdb_src.p(id int primary key auto_increment, name varchar(20) not null,
+  unique key uk_name(name));
+create table fdb_src.c(id int primary key, pid int, qty int default 7,
+  constraint fk_c_p foreign key (pid) references fdb_src.p(id),
+  key k_qty(qty),
+  constraint ck_qty check (qty > 0));
+create table fdb_src.x(id int primary key, rid int,
+  constraint fk_x_ref foreign key (rid) references fdb_other.ref(id));
+create table fdb_src.tree(id int primary key, parent int,
+  constraint fk_tree foreign key (parent) references fdb_src.tree(id));
+create table fdb_src.g(id int primary key, v int, w int as (v * 2) stored)
+  partition by hash(id) partitions 2;
+insert into fdb_src.p(name) values ('a'), ('b');
+insert into fdb_src.c values (1, 1, 5), (2, 2, 6);
+insert into fdb_src.x values (1, 1);
+insert into fdb_src.tree values (1, null), (2, 1);
+insert into fdb_src.g(id, v) values (1, 10), (2, 20), (3, 30);
+create view fdb_src.v as select p.name, c.qty from fdb_src.p join fdb_src.c on p.id = c.pid;
+
+--echo #
+--echo # 2. fork and inspect the copy
+--echo #
+fork database fdb_src to fdb_dst;
+show tables from fdb_src;
+show tables from fdb_dst;
+show create table fdb_src.p;
+show create table fdb_dst.p;
+show create table fdb_dst.c;
+show create table fdb_dst.x;
+show create table fdb_dst.tree;
+show create table fdb_dst.g;
+select table_name, constraint_name, constraint_type from information_schema.table_constraints
+  where table_schema = 'fdb_dst' order by table_name, constraint_name;
+select table_name, constraint_name, column_name, referenced_table_schema, referenced_table_name,
+  referenced_column_name from information_schema.key_column_usage
+  where table_schema = 'fdb_dst' and referenced_table_name is not null
+  order by table_name, constraint_name;
+select * from fdb_dst.p order by id;
+select * from fdb_dst.c order by id;
+select * from fdb_dst.x order by id;
+select * from fdb_dst.tree order by id;
+select * from fdb_dst.g order by id;
+--error 1146
+select * from fdb_dst.v;
+
+--echo #
+--echo # 3. the two databases are independent
+--echo #
+insert into fdb_dst.p(name) values ('c');
+insert into fdb_src.p(name) values ('d');
+select * from fdb_src.p order by id;
+select * from fdb_dst.p order by id;
+--error 1452
+insert into fdb_dst.c values (3, 99, 1);
+--error 1062
+insert into fdb_dst.p(name) values ('a');
+--error 3819
+insert into fdb_dst.c values (3, 1, -1);
+--error 1451
+delete from fdb_dst.tree where id = 1;
+--echo # the cross-database foreign key was not copied
+insert into fdb_dst.x values (2, 99);
+--error 1452
+insert into fdb_src.x values (2, 99);
+delete from fdb_src.c where id = 1;
+update fdb_dst.c set qty = 50 where id = 2;
+update fdb_dst.g set v = 25 where id = 2;
+select * from fdb_src.c order by id;
+select * from fdb_dst.c order by id;
+select * from fdb_dst.g order by id;
+diff table fdb_src.c against fdb_dst.c;
+diff table fdb_src.g against fdb_dst.g;
+
+--echo #
+--echo # 4. empty database, name case
+--echo #
+create database fdb_empty;
+fork database fdb_empty to fdb_empty2;
+show databases like 'fdb_empty%';
+show tables from fdb_empty2;
+create database fdb_case;
+create table fdb_case.t(id int primary key);
+fork database FDB_CASE to FDB_Case2;
+show databases like 'fdb_case%';
+show tables from fdb_case2;
+drop database fdb_case2;
+
+--echo #
+--echo # 5. errors
+--echo #
+--error 1049
+fork database fdb_missing to fdb_missing2;
+--error 1007
+fork database fdb_src to fdb_dst;
+--error 1007
+fork database fdb_src to fdb_src;
+--error 1007
+fork database fdb_src to fdb_other;
+--error 1235
+fork database mysql to fdb_mysql2;
+--error 1235
+fork database oceanbase to fdb_ob2;
+--error 1235
+fork database information_schema to fdb_is2;
+create database fdb_routine;
+create table fdb_routine.t(id int primary key);
+create procedure fdb_routine.p1() select 1;
+--error 1235
+fork database fdb_routine to fdb_routine2;
+create database fdb_func;
+create function fdb_func.f1() returns int return 1;
+--error 1235
+fork database fdb_func to fdb_func2;
+create database fdb_trigger;
+create table fdb_trigger.t(a int primary key);
+create trigger fdb_trigger.tr before insert on fdb_trigger.t for each row set new.a = new.a + 1;
+--error 1235
+fork database fdb_trigger to fdb_trigger2;
+create database fdb_spatial;
+create table fdb_spatial.plain(id int primary key);
+create table fdb_spatial.geo(id int primary key, g geometry not null srid 0, spatial index sx(g));
+--error 1235
+fork database fdb_spatial to fdb_spatial2;
+--echo # no target database was left behind by the failed forks
+show databases like 'fdb\_%';
+
+--echo #
+--echo # cleanup
+--echo #
+drop database fdb_dst;
+drop database fdb_src;
+drop database fdb_other;
+drop database fdb_empty;
+drop database fdb_empty2;
+drop database fdb_case;
+drop database fdb_routine;
+drop database fdb_func;
+drop database fdb_trigger;
+drop database fdb_spatial;

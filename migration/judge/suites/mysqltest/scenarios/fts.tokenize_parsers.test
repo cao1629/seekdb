@@ -1,0 +1,113 @@
+# Judge scenario (area: fts) -- TOKENIZE() with every built-in parser, order-independent.
+#
+# Pins down, through public SQL only:
+#  - the token set each parser produces: space (the default; letters, digits
+#    and _ form words, lower-cased, tokens of 3..84 characters, the built-in
+#    English stopword list such as the / com / with, a CJK run is one token),
+#    beng (splits on punctuation as well), ngram (2-grams by default,
+#    ngram_token_size), ngram2 (2..3-grams by default, min/max_ngram_size),
+#    ik (smart and max_word modes);
+#  - the {"output": "all"} form: per-token counts and doc_len (the number of
+#    kept tokens, duplicates included); NULL and '' give [] / an empty result;
+#    the parser name is case- and space-insensitive;
+#  - additional_args validation and the error codes and texts of TOKENIZE:
+#    1582 wrong argument count, 1128 unknown parser, 1210 empty parser name /
+#    out-of-range sizes / unknown option key, 1235 unsupported option (case,
+#    stopwords, a property the parser does not have), 3141 invalid JSON.
+# Token order inside the JSON array is a hash-map order; this file unpacks the
+# arrays with JSON_TABLE and sorts them so only the token sets are asserted
+# (fts.tokenize_raw_order pins the raw order separately).
+
+--echo #
+--echo # 1. space (default parser)
+--echo #
+select jt.tok from json_table(tokenize('Hello World, hello the database DATABASES a an with'),
+  '$[*]' columns (tok varchar(100) path '$')) jt order by jt.tok;
+select json_unquote(json_extract(json_keys(j.e), '$[0]')) tok, json_extract(json_extract(j.e, '$.*'), '$[0]') cnt
+  from json_table(tokenize('Hello World, hello the database DATABASES a an with', 'space', '[{"output": "all"}]'),
+  '$.tokens[*]' columns (e json path '$')) j order by tok;
+select json_extract(tokenize('Hello World, hello the database DATABASES a an with', 'space', '[{"output": "all"}]'), '$.doc_len') doc_len;
+select jt.tok from json_table(tokenize('Hello, World! e-mail: foo@bar.com x1 x22 x333 snake_case_word 2026'),
+  '$[*]' columns (tok varchar(100) path '$')) jt order by jt.tok;
+select jt.tok from json_table(tokenize('hello world abcdefghijklmnopqrstuvwxyz', 'space',
+  '[{"additional_args": [{"min_token_size": 6}]}]'), '$[*]' columns (tok varchar(100) path '$')) jt order by jt.tok;
+select jt.tok from json_table(tokenize('ab abc abcdefghijkl', 'space',
+  '[{"additional_args": [{"min_token_size": 2}, {"max_token_size": 10}]}]'), '$[*]' columns (tok varchar(100) path '$')) jt order by jt.tok;
+select tokenize('中华人民共和国国歌'), tokenize('中华人民共和国国歌', 'space');
+select tokenize('abc def', 'SPACE') = tokenize('abc def', ' space '), json_length(tokenize('abc def', 'SPACE'));
+select tokenize(NULL), tokenize(''), tokenize('', 'space', '[{"output": "all"}]'), tokenize('a an the');
+select json_length(tokenize('the quick brown fox jumps over the lazy dog')),
+       'quick' member of (tokenize('the quick brown fox jumps over the lazy dog')),
+       'the' member of (tokenize('the quick brown fox jumps over the lazy dog'));
+
+--echo #
+--echo # 2. beng
+--echo #
+select jt.tok from json_table(tokenize('Hello, World! e-mail: foo@bar.com x1 x22 x333', 'beng'),
+  '$[*]' columns (tok varchar(100) path '$')) jt order by jt.tok;
+select jt.tok from json_table(tokenize('Hello, World! e-mail: foo@bar.com x1 x22 x333', 'beng',
+  '[{"additional_args": [{"min_token_size": 2}]}]'), '$[*]' columns (tok varchar(100) path '$')) jt order by jt.tok;
+
+--echo #
+--echo # 3. ngram and ngram2
+--echo #
+select jt.tok from json_table(tokenize('hello world', 'ngram'),
+  '$[*]' columns (tok varchar(100) path '$')) jt order by jt.tok;
+select json_unquote(json_extract(json_keys(j.e), '$[0]')) tok, json_extract(json_extract(j.e, '$.*'), '$[0]') cnt
+  from json_table(tokenize('banana', 'ngram', '[{"output": "all"}]'),
+  '$.tokens[*]' columns (e json path '$')) j order by tok;
+select jt.tok from json_table(tokenize('hello world', 'ngram', '[{"additional_args": [{"ngram_token_size": 3}]}]'),
+  '$[*]' columns (tok varchar(100) path '$')) jt order by jt.tok;
+select jt.tok from json_table(tokenize('a bb ccc', 'ngram', '[{"additional_args": [{"ngram_token_size": 1}]}]'),
+  '$[*]' columns (tok varchar(100) path '$')) jt order by jt.tok;
+select jt.tok from json_table(tokenize('hello world', 'ngram2'),
+  '$[*]' columns (tok varchar(100) path '$')) jt order by jt.tok;
+select jt.tok from json_table(tokenize('hello', 'ngram2', '[{"additional_args": [{"min_ngram_size": 2}, {"max_ngram_size": 4}]}]'),
+  '$[*]' columns (tok varchar(100) path '$')) jt order by jt.tok;
+select json_extract(tokenize('hello world', 'ngram2', '[{"output": "all"}]'), '$.doc_len') doc_len;
+select jt.tok from json_table(tokenize('中华人民共和国', 'ngram'),
+  '$[*]' columns (tok varchar(100) path '$')) jt order by binary jt.tok;
+
+--echo #
+--echo # 4. ik
+--echo #
+select jt.tok from json_table(tokenize('中华人民共和国国歌', 'ik'),
+  '$[*]' columns (tok varchar(100) path '$')) jt order by binary jt.tok;
+select jt.tok from json_table(tokenize('中华人民共和国国歌', 'ik', '[{"additional_args": [{"ik_mode": "max_word"}]}]'),
+  '$[*]' columns (tok varchar(100) path '$')) jt order by binary jt.tok;
+select jt.tok from json_table(tokenize('Hello 世界 2026', 'ik'),
+  '$[*]' columns (tok varchar(100) path '$')) jt order by binary jt.tok;
+
+--echo #
+--echo # 5. errors
+--echo #
+--error 1582
+select tokenize();
+--error 1582
+select tokenize('a', 'space', '[]', 'x');
+--error 1128
+select tokenize('a', 'nosuch');
+--error 1210
+select tokenize('a', '');
+--error 1235
+select tokenize('a', 'space', '[{"case": "upper"}]');
+--error 1235
+select tokenize('a', 'space', '[{"stopwords": ["a"]}]');
+--error 1210
+select tokenize('a', 'space', '[{"undefined": "all"}]');
+--error 3141
+select tokenize('a', 'space', 'not json');
+--error 1210
+select tokenize('a', 'space', '[{"additional_args": [{"min_token_size": 0}]}]');
+--error 1210
+select tokenize('a', 'space', '[{"additional_args": [{"max_token_size": 5}]}]');
+--error 1210
+select tokenize('a', 'space', '[{"additional_args": [{"min_token_size": 12}, {"max_token_size": 10}]}]');
+--error 1235
+select tokenize('a', 'ngram', '[{"additional_args": [{"min_token_size": 5}]}]');
+--error 1210
+select tokenize('a', 'ngram', '[{"additional_args": [{"ngram_token_size": 11}]}]');
+--error 1210
+select tokenize('a', 'ngram2', '[{"additional_args": [{"min_ngram_size": 4}, {"max_ngram_size": 3}]}]');
+--error 1210
+select tokenize('a', 'ik', '[{"additional_args": [{"ik_mode": "fast"}]}]');

@@ -1,0 +1,319 @@
+drop table if exists mg_base, mg_inc, mg_fail, mg_dflt, mg_theirs, mg_ours, mg_txn;
+drop table if exists mg_ins_cur, mg_ins_inc, mg_bin_cur, mg_bin_inc, mg_gen_cur, mg_gen_inc;
+#
+# 1. one base, changes on both sides
+#
+create table mg_base(id int primary key, v varchar(20), n int);
+insert into mg_base values
+(1, 'one', 1), (2, 'two', 2), (3, 'three', 3), (4, 'four', 4), (5, 'five', 5),
+(6, 'six', 6), (7, 'seven', 7), (8, 'eight', NULL), (9, 'nine', 9), (10, 'ten', 10);
+fork table mg_base to mg_inc;
+# incoming side
+update mg_inc set v = 'two-inc' where id = 2;
+update mg_inc set v = 'three-inc' where id = 3;
+update mg_inc set n = 40 where id = 4;
+delete from mg_inc where id = 5;
+update mg_inc set n = NULL where id = 9;
+update mg_inc set v = 'TEN' where id = 10;
+insert into mg_inc values (11, 'eleven-inc', 11), (13, 'thirteen-inc', 13);
+# current side
+update mg_base set v = 'one-cur' where id = 1;
+update mg_base set v = 'three-cur' where id = 3;
+update mg_base set n = 40 where id = 4;
+delete from mg_base where id = 6;
+insert into mg_base values (12, 'twelve-cur', 12), (13, 'thirteen-cur', 13);
+# one copy of current per strategy
+fork table mg_base to mg_fail;
+fork table mg_base to mg_dflt;
+fork table mg_base to mg_theirs;
+fork table mg_base to mg_ours;
+fork table mg_base to mg_txn;
+select * from mg_base order by id;
+id	v	n
+1	one-cur	1
+2	two	2
+3	three-cur	3
+4	four	40
+5	five	5
+7	seven	7
+8	eight	NULL
+9	nine	9
+10	ten	10
+12	twelve-cur	12
+13	thirteen-cur	13
+select * from mg_inc order by id;
+id	v	n
+1	one	1
+2	two-inc	2
+3	three-inc	3
+4	four	40
+6	six	6
+7	seven	7
+8	eight	NULL
+9	nine	NULL
+10	TEN	10
+11	eleven-inc	11
+13	thirteen-inc	13
+diff table mg_base against mg_inc;
+__table	__flag	id	v	n
+test.mg_base	INSERT	1	one-cur	1
+test.mg_inc	INSERT	1	one	1
+test.mg_base	INSERT	2	two	2
+test.mg_inc	INSERT	2	two-inc	2
+test.mg_base	INSERT	3	three-cur	3
+test.mg_inc	INSERT	3	three-inc	3
+test.mg_base	INSERT	5	five	5
+test.mg_inc	INSERT	6	six	6
+test.mg_base	INSERT	9	nine	9
+test.mg_inc	INSERT	9	nine	NULL
+test.mg_inc	INSERT	11	eleven-inc	11
+test.mg_base	INSERT	12	twelve-cur	12
+test.mg_base	INSERT	13	thirteen-cur	13
+test.mg_inc	INSERT	13	thirteen-inc	13
+#
+# 2. FAIL (explicit and default): 5 conflicts, nothing applied
+#
+merge table mg_inc into mg_fail strategy fail;
+ERROR HY000: MERGE TABLE: 5 conflict(s) detected. Use THEIRS or OURS strategy to resolve. FAIL strategy is not allowed
+merge table mg_inc into mg_dflt;
+ERROR HY000: MERGE TABLE: 5 conflict(s) detected. Use THEIRS or OURS strategy to resolve. FAIL strategy is not allowed
+select * from mg_fail order by id;
+id	v	n
+1	one-cur	1
+2	two	2
+3	three-cur	3
+4	four	40
+5	five	5
+7	seven	7
+8	eight	NULL
+9	nine	9
+10	ten	10
+12	twelve-cur	12
+13	thirteen-cur	13
+select * from mg_dflt order by id;
+id	v	n
+1	one-cur	1
+2	two	2
+3	three-cur	3
+4	four	40
+5	five	5
+7	seven	7
+8	eight	NULL
+9	nine	9
+10	ten	10
+12	twelve-cur	12
+13	thirteen-cur	13
+#
+# 3. THEIRS: 2 inserts (6, 11) + 5 updates (1, 2, 3, 9, 13)
+#
+merge table mg_inc into mg_theirs strategy theirs;
+affected rows: 7
+select row_count();
+row_count()
+0
+select * from mg_theirs order by id;
+id	v	n
+1	one	1
+2	two-inc	2
+3	three-inc	3
+4	four	40
+5	five	5
+6	six	6
+7	seven	7
+8	eight	NULL
+9	nine	NULL
+10	ten	10
+11	eleven-inc	11
+12	twelve-cur	12
+13	thirteen-inc	13
+# left over: only rows that exist only in current (5, 12)
+diff table mg_theirs against mg_inc;
+__table	__flag	id	v	n
+test.mg_theirs	INSERT	5	five	5
+test.mg_theirs	INSERT	12	twelve-cur	12
+# nothing conflicts any more, so FAIL now succeeds and changes nothing
+merge table mg_inc into mg_theirs strategy fail;
+affected rows: 0
+merge table mg_inc into mg_theirs;
+affected rows: 0
+select * from mg_theirs order by id;
+id	v	n
+1	one	1
+2	two-inc	2
+3	three-inc	3
+4	four	40
+5	five	5
+6	six	6
+7	seven	7
+8	eight	NULL
+9	nine	NULL
+10	ten	10
+11	eleven-inc	11
+12	twelve-cur	12
+13	thirteen-inc	13
+#
+# 4. OURS: 2 inserts (6, 11), conflicts keep current's values
+#
+merge table mg_inc into mg_ours strategy ours;
+affected rows: 2
+select * from mg_ours order by id;
+id	v	n
+1	one-cur	1
+2	two	2
+3	three-cur	3
+4	four	40
+5	five	5
+6	six	6
+7	seven	7
+8	eight	NULL
+9	nine	9
+10	ten	10
+11	eleven-inc	11
+12	twelve-cur	12
+13	thirteen-cur	13
+diff table mg_ours against mg_inc;
+__table	__flag	id	v	n
+test.mg_inc	INSERT	1	one	1
+test.mg_ours	INSERT	1	one-cur	1
+test.mg_inc	INSERT	2	two-inc	2
+test.mg_ours	INSERT	2	two	2
+test.mg_inc	INSERT	3	three-inc	3
+test.mg_ours	INSERT	3	three-cur	3
+test.mg_ours	INSERT	5	five	5
+test.mg_inc	INSERT	9	nine	NULL
+test.mg_ours	INSERT	9	nine	9
+test.mg_ours	INSERT	12	twelve-cur	12
+test.mg_inc	INSERT	13	thirteen-inc	13
+test.mg_ours	INSERT	13	thirteen-cur	13
+merge table mg_inc into mg_ours;
+ERROR HY000: MERGE TABLE: 5 conflict(s) detected. Use THEIRS or OURS strategy to resolve. FAIL strategy is not allowed
+merge table mg_inc into mg_ours strategy ours;
+affected rows: 0
+#
+# 5. MERGE inside an explicit transaction
+#
+begin;
+merge table mg_inc into mg_txn strategy theirs;
+affected rows: 7
+select count(*) from mg_txn;
+count(*)
+13
+rollback;
+select * from mg_txn order by id;
+id	v	n
+1	one-cur	1
+2	two	2
+3	three-cur	3
+4	four	40
+5	five	5
+7	seven	7
+8	eight	NULL
+9	nine	9
+10	ten	10
+12	twelve-cur	12
+13	thirteen-cur	13
+begin;
+merge table mg_inc into mg_txn strategy ours;
+insert into mg_txn values (14, 'fourteen-txn', 14);
+commit;
+select * from mg_txn order by id;
+id	v	n
+1	one-cur	1
+2	two	2
+3	three-cur	3
+4	four	40
+5	five	5
+6	six	6
+7	seven	7
+8	eight	NULL
+9	nine	9
+10	ten	10
+11	eleven-inc	11
+12	twelve-cur	12
+13	thirteen-cur	13
+14	fourteen-txn	14
+#
+# 6. FAIL without conflicts applies the inserts
+#
+create table mg_ins_cur(id int primary key, v varchar(20));
+insert into mg_ins_cur values (1, 'a'), (2, 'b');
+fork table mg_ins_cur to mg_ins_inc;
+insert into mg_ins_inc values (3, 'c'), (4, 'd');
+delete from mg_ins_inc where id = 1;
+insert into mg_ins_cur values (5, 'e');
+merge table mg_ins_inc into mg_ins_cur;
+affected rows: 2
+select * from mg_ins_cur order by id;
+id	v
+1	a
+2	b
+3	c
+4	d
+5	e
+# MERGE of a table into itself
+merge table mg_ins_cur into mg_ins_cur strategy theirs;
+affected rows: 0
+#
+# 7. collation decides what a conflict is
+#
+create table mg_bin_cur(id int primary key, v varchar(20) collate utf8mb4_bin, w varchar(20));
+insert into mg_bin_cur values (1, 'ten', 'ten'), (2, 'x', 'x');
+fork table mg_bin_cur to mg_bin_inc;
+update mg_bin_inc set v = 'TEN' where id = 1;
+update mg_bin_inc set w = 'X' where id = 2;
+diff table mg_bin_cur against mg_bin_inc;
+__table	__flag	id	v	w
+test.mg_bin_cur	INSERT	1	ten	ten
+test.mg_bin_inc	INSERT	1	TEN	ten
+merge table mg_bin_inc into mg_bin_cur;
+ERROR HY000: MERGE TABLE: 1 conflict(s) detected. Use THEIRS or OURS strategy to resolve. FAIL strategy is not allowed
+merge table mg_bin_inc into mg_bin_cur strategy theirs;
+affected rows: 1
+select * from mg_bin_cur order by id;
+id	v	w
+1	TEN	ten
+2	x	x
+select * from mg_bin_inc order by id;
+id	v	w
+1	TEN	ten
+2	x	X
+#
+# 8. generated columns are compared but recomputed
+#
+create table mg_gen_cur(a int, b int, v int,
+g int generated always as (v * 10) virtual,
+s int as (v + 1) stored,
+primary key (a, b));
+insert into mg_gen_cur(a, b, v) values (1, 1, 1), (1, 2, 2), (2, 1, 3);
+fork table mg_gen_cur to mg_gen_inc;
+update mg_gen_inc set v = 20 where a = 1 and b = 2;
+insert into mg_gen_inc(a, b, v) values (2, 2, 4);
+delete from mg_gen_inc where a = 2 and b = 1;
+diff table mg_gen_cur against mg_gen_inc;
+__table	__flag	a	b	v	g	s
+test.mg_gen_cur	INSERT	1	2	2	20	3
+test.mg_gen_inc	INSERT	1	2	20	200	21
+test.mg_gen_cur	INSERT	2	1	3	30	4
+test.mg_gen_inc	INSERT	2	2	4	40	5
+merge table mg_gen_inc into mg_gen_cur;
+ERROR HY000: MERGE TABLE: 1 conflict(s) detected. Use THEIRS or OURS strategy to resolve. FAIL strategy is not allowed
+merge table mg_gen_inc into mg_gen_cur strategy theirs;
+affected rows: 2
+select * from mg_gen_cur order by a, b;
+a	b	v	g	s
+1	1	1	10	2
+1	2	20	200	21
+2	1	3	30	4
+2	2	4	40	5
+#
+# 9. unknown strategy
+#
+merge table mg_inc into mg_ours strategy mine;
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near 'mine' at line 1
+merge table mg_inc into mg_ours strategy;
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near 'strategy' at line 1
+#
+# cleanup
+#
+drop table mg_base, mg_inc, mg_fail, mg_dflt, mg_theirs, mg_ours, mg_txn;
+drop table mg_ins_cur, mg_ins_inc, mg_bin_cur, mg_bin_inc, mg_gen_cur, mg_gen_inc;

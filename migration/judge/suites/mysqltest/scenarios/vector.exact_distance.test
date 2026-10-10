@@ -1,0 +1,83 @@
+# Judge scenario (area: vector) -- distance functions and exact (non-indexed) top-k.
+#
+# Pins down, through public SQL only:
+#  - values of l2_distance (sqrt of the sum of squares), l2_squared,
+#    l1_distance, cosine_distance (1 - cos; NULL for a zero vector),
+#    inner_product, negative_inner_product, vector_distance with its default
+#    (EUCLIDEAN) and the MANHATTAN / COSINE / DOT metrics, vector_dims and
+#    vector_norm, on string literals and on VECTOR columns; a NULL argument
+#    gives NULL;
+#  - element-wise + - * on vectors;
+#  - how VECTOR values print (shortest float32 form, no spaces, 1.0 as 1);
+#  - errors: mismatched dimensions in a function (7600 "Invalid dimension for
+#    vector."), unparsable text (3140 "Invalid JSON text."), wrong dimension
+#    on insert (7600 "inconsistent dimension: expected 3 got 2"), a
+#    non-vector string on insert (1210 "Invalid argument");
+#  - exact top-k without a vector index: ORDER BY <distance> [DESC] LIMIT k
+#    sorts NULL distances first (ascending), ties are broken here by id, and
+#    the distances are shown rounded to 6 decimals.
+
+--disable_warnings
+drop table if exists ex_pts;
+--enable_warnings
+
+--echo #
+--echo # 1. distance functions on literals
+--echo #
+select l2_distance('[1,2,3]', '[4,6,3]'), l2_squared('[1,2,3]', '[4,6,3]'), l1_distance('[1,2,3]', '[4,6,3]');
+select round(cosine_distance('[1,0]', '[0,1]'), 6), round(cosine_distance('[1,1]', '[2,2]'), 6),
+       round(cosine_distance('[1,0]', '[-1,0]'), 6), round(cosine_distance('[1,2,3]', '[4,5,6]'), 6);
+select inner_product('[1,2,3]', '[4,5,6]'), negative_inner_product('[1,2,3]', '[4,5,6]'),
+       negative_inner_product('[0,0]', '[1,1]'), inner_product('[0.5,-2]', '[4,0.25]');
+select vector_distance('[1,2,3]', '[4,6,3]'), vector_distance('[1,2,3]', '[4,6,3]', EUCLIDEAN),
+       vector_distance('[1,2,3]', '[4,6,3]', MANHATTAN), round(vector_distance('[1,2,3]', '[4,5,6]', COSINE), 6),
+       vector_distance('[1,2,3]', '[4,5,6]', DOT);
+select vector_dims('[1,2,3]'), vector_norm('[3,4]'), round(vector_norm('[1,1,1]'), 6);
+select round(l2_distance('[0.1,0.2,0.3]', '[0.3,0.2,0.1]'), 6), round(l2_squared('[0.1,0.2,0.3]', '[0.3,0.2,0.1]'), 6);
+select l2_distance(NULL, '[1,2]'), cosine_distance('[0,0]', '[1,1]'), inner_product('[1,2]', NULL), vector_dims(NULL);
+--error 7600
+select l2_distance('[1,2,3]', '[1,2]');
+--error 3140
+select l2_distance('[1,2,abc]', '[1,2,3]');
+--error 7600
+select cosine_distance('[1,2]', '[1]');
+--error 7600
+select inner_product('[1,2]', '[1]');
+
+--echo #
+--echo # 2. VECTOR columns: printing, arithmetic, insert errors
+--echo #
+create table ex_pts(id int primary key, v vector(3));
+insert into ex_pts values
+  (1, '[0,0,0]'), (2, '[1,0,0]'), (3, '[0,2,0]'), (4, '[0,0,3]'), (5, '[1,1,1]'),
+  (6, '[-1,-1,-1]'), (7, '[0.5,0.25,0.125]'), (8, NULL), (9, '[1.0, 2.50, 1e2]'), (10, '[ 0.1 ,0.2,  0.3 ]');
+select * from ex_pts order by id;
+select v + '[1,1,1]', v - '[1,1,1]', v * '[2,2,2]' from ex_pts where id = 5;
+select id, vector_dims(v), round(vector_norm(v), 6) from ex_pts order by id;
+--error 7600
+insert into ex_pts values (11, '[1,2]');
+--error 7600
+insert into ex_pts values (12, '[1,2,3,4]');
+--error 1210
+insert into ex_pts values (13, 'abc');
+
+--echo #
+--echo # 3. exact top-k without an index
+--echo #
+select id, round(l2_distance(v, '[1,1,1]'), 6) d from ex_pts order by l2_distance(v, '[1,1,1]'), id;
+select id, round(l2_distance(v, '[1,1,1]'), 6) d from ex_pts order by l2_distance(v, '[1,1,1]'), id limit 4;
+select id, round(l2_squared(v, '[1,1,1]'), 6) d from ex_pts where v is not null
+  order by l2_squared(v, '[1,1,1]'), id limit 4;
+select id, round(cosine_distance(v, '[1,1,1]'), 6) d from ex_pts order by cosine_distance(v, '[1,1,1]'), id limit 5;
+select id, round(inner_product(v, '[1,2,3]'), 6) d from ex_pts order by inner_product(v, '[1,2,3]') desc, id limit 4;
+select id, round(negative_inner_product(v, '[1,2,3]'), 6) d from ex_pts order by negative_inner_product(v, '[1,2,3]'), id limit 4;
+select id, round(l1_distance(v, '[1,1,1]'), 6) d from ex_pts where v is not null order by l1_distance(v, '[1,1,1]'), id limit 4;
+select id, round(vector_distance(v, '[1,1,1]', MANHATTAN), 6) d from ex_pts where v is not null
+  order by vector_distance(v, '[1,1,1]', MANHATTAN), id limit 4;
+select a.id, b.id, round(l2_distance(a.v, b.v), 6) d from ex_pts a join ex_pts b on a.id < b.id
+  where a.id <= 5 and b.id <= 5 order by d, a.id, b.id limit 5;
+
+--echo #
+--echo # cleanup
+--echo #
+drop table ex_pts;

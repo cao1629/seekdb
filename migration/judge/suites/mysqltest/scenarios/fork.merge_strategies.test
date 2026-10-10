@@ -1,0 +1,198 @@
+# Judge scenario (area: fork) -- MERGE TABLE incoming INTO current [STRATEGY FAIL|THEIRS|OURS].
+#
+# Pins down, through public SQL only:
+#  - MERGE is a two-way merge keyed on the primary key, with no merge base:
+#    * a key that exists only in incoming is inserted into current under every
+#      strategy (this also re-inserts rows that current deleted);
+#    * a key that exists only in current is kept under every strategy (rows
+#      deleted in incoming are never deleted from current);
+#    * a key on both sides whose non-key columns differ (NULL-safe <=>, using
+#      the column collation) is a conflict, whichever side changed it; a row
+#      changed identically on both sides is not a conflict;
+#  - FAIL, which is also the default without STRATEGY, applies nothing when
+#    there is at least one conflict and fails with 4179 "MERGE TABLE: <n>
+#    conflict(s) detected. Use THEIRS or OURS strategy to resolve. FAIL
+#    strategy is not allowed"; without conflicts it applies the inserts;
+#  - THEIRS overwrites every conflicting row of current with incoming's values;
+#    OURS keeps current's version;
+#  - the affected-rows count is inserted + updated rows, and ROW_COUNT() right
+#    after a MERGE returns 0;
+#  - MERGE joins an explicit transaction (ROLLBACK undoes it, COMMIT keeps it);
+#  - generated columns take part in the comparison but are recomputed, not
+#    copied, when rows are merged;
+#  - comparisons use the column collation: under the default
+#    utf8mb4_general_ci a case-only change ('ten' -> 'TEN') is no conflict, so
+#    THEIRS silently keeps current's 'ten' and DIFF TABLE does not list the row,
+#    while under utf8mb4_bin the same change is a conflict and THEIRS applies
+#    it (suspected bug, see scenarios.tsv);
+#  - MERGE of a table into itself is a no-op; an unknown strategy is a syntax
+#    error (1064).
+# MERGE and DIFF only need identical column definitions; the tables here are
+# made with FORK TABLE, the intended workflow.
+
+--disable_warnings
+drop table if exists mg_base, mg_inc, mg_fail, mg_dflt, mg_theirs, mg_ours, mg_txn;
+drop table if exists mg_ins_cur, mg_ins_inc, mg_bin_cur, mg_bin_inc, mg_gen_cur, mg_gen_inc;
+--enable_warnings
+
+--echo #
+--echo # 1. one base, changes on both sides
+--echo #
+create table mg_base(id int primary key, v varchar(20), n int);
+insert into mg_base values
+  (1, 'one', 1), (2, 'two', 2), (3, 'three', 3), (4, 'four', 4), (5, 'five', 5),
+  (6, 'six', 6), (7, 'seven', 7), (8, 'eight', NULL), (9, 'nine', 9), (10, 'ten', 10);
+fork table mg_base to mg_inc;
+
+--echo # incoming side
+update mg_inc set v = 'two-inc' where id = 2;
+update mg_inc set v = 'three-inc' where id = 3;
+update mg_inc set n = 40 where id = 4;
+delete from mg_inc where id = 5;
+update mg_inc set n = NULL where id = 9;
+update mg_inc set v = 'TEN' where id = 10;
+insert into mg_inc values (11, 'eleven-inc', 11), (13, 'thirteen-inc', 13);
+
+--echo # current side
+update mg_base set v = 'one-cur' where id = 1;
+update mg_base set v = 'three-cur' where id = 3;
+update mg_base set n = 40 where id = 4;
+delete from mg_base where id = 6;
+insert into mg_base values (12, 'twelve-cur', 12), (13, 'thirteen-cur', 13);
+
+--echo # one copy of current per strategy
+fork table mg_base to mg_fail;
+fork table mg_base to mg_dflt;
+fork table mg_base to mg_theirs;
+fork table mg_base to mg_ours;
+fork table mg_base to mg_txn;
+
+select * from mg_base order by id;
+select * from mg_inc order by id;
+diff table mg_base against mg_inc;
+
+--echo #
+--echo # 2. FAIL (explicit and default): 5 conflicts, nothing applied
+--echo #
+--error 4179
+merge table mg_inc into mg_fail strategy fail;
+--error 4179
+merge table mg_inc into mg_dflt;
+select * from mg_fail order by id;
+select * from mg_dflt order by id;
+
+--echo #
+--echo # 3. THEIRS: 2 inserts (6, 11) + 5 updates (1, 2, 3, 9, 13)
+--echo #
+--enable_info
+merge table mg_inc into mg_theirs strategy theirs;
+--disable_info
+select row_count();
+select * from mg_theirs order by id;
+--echo # left over: only rows that exist only in current (5, 12)
+diff table mg_theirs against mg_inc;
+--echo # nothing conflicts any more, so FAIL now succeeds and changes nothing
+--enable_info
+merge table mg_inc into mg_theirs strategy fail;
+merge table mg_inc into mg_theirs;
+--disable_info
+select * from mg_theirs order by id;
+
+--echo #
+--echo # 4. OURS: 2 inserts (6, 11), conflicts keep current's values
+--echo #
+--enable_info
+merge table mg_inc into mg_ours strategy ours;
+--disable_info
+select * from mg_ours order by id;
+diff table mg_ours against mg_inc;
+--error 4179
+merge table mg_inc into mg_ours;
+--enable_info
+merge table mg_inc into mg_ours strategy ours;
+--disable_info
+
+--echo #
+--echo # 5. MERGE inside an explicit transaction
+--echo #
+begin;
+--enable_info
+merge table mg_inc into mg_txn strategy theirs;
+--disable_info
+select count(*) from mg_txn;
+rollback;
+select * from mg_txn order by id;
+begin;
+merge table mg_inc into mg_txn strategy ours;
+insert into mg_txn values (14, 'fourteen-txn', 14);
+commit;
+select * from mg_txn order by id;
+
+--echo #
+--echo # 6. FAIL without conflicts applies the inserts
+--echo #
+create table mg_ins_cur(id int primary key, v varchar(20));
+insert into mg_ins_cur values (1, 'a'), (2, 'b');
+fork table mg_ins_cur to mg_ins_inc;
+insert into mg_ins_inc values (3, 'c'), (4, 'd');
+delete from mg_ins_inc where id = 1;
+insert into mg_ins_cur values (5, 'e');
+--enable_info
+merge table mg_ins_inc into mg_ins_cur;
+--disable_info
+select * from mg_ins_cur order by id;
+--echo # MERGE of a table into itself
+--enable_info
+merge table mg_ins_cur into mg_ins_cur strategy theirs;
+--disable_info
+
+--echo #
+--echo # 7. collation decides what a conflict is
+--echo #
+create table mg_bin_cur(id int primary key, v varchar(20) collate utf8mb4_bin, w varchar(20));
+insert into mg_bin_cur values (1, 'ten', 'ten'), (2, 'x', 'x');
+fork table mg_bin_cur to mg_bin_inc;
+update mg_bin_inc set v = 'TEN' where id = 1;
+update mg_bin_inc set w = 'X' where id = 2;
+diff table mg_bin_cur against mg_bin_inc;
+--error 4179
+merge table mg_bin_inc into mg_bin_cur;
+--enable_info
+merge table mg_bin_inc into mg_bin_cur strategy theirs;
+--disable_info
+select * from mg_bin_cur order by id;
+select * from mg_bin_inc order by id;
+
+--echo #
+--echo # 8. generated columns are compared but recomputed
+--echo #
+create table mg_gen_cur(a int, b int, v int,
+  g int generated always as (v * 10) virtual,
+  s int as (v + 1) stored,
+  primary key (a, b));
+insert into mg_gen_cur(a, b, v) values (1, 1, 1), (1, 2, 2), (2, 1, 3);
+fork table mg_gen_cur to mg_gen_inc;
+update mg_gen_inc set v = 20 where a = 1 and b = 2;
+insert into mg_gen_inc(a, b, v) values (2, 2, 4);
+delete from mg_gen_inc where a = 2 and b = 1;
+diff table mg_gen_cur against mg_gen_inc;
+--error 4179
+merge table mg_gen_inc into mg_gen_cur;
+--enable_info
+merge table mg_gen_inc into mg_gen_cur strategy theirs;
+--disable_info
+select * from mg_gen_cur order by a, b;
+
+--echo #
+--echo # 9. unknown strategy
+--echo #
+--error 1064
+merge table mg_inc into mg_ours strategy mine;
+--error 1064
+merge table mg_inc into mg_ours strategy;
+
+--echo #
+--echo # cleanup
+--echo #
+drop table mg_base, mg_inc, mg_fail, mg_dflt, mg_theirs, mg_ours, mg_txn;
+drop table mg_ins_cur, mg_ins_inc, mg_bin_cur, mg_bin_inc, mg_gen_cur, mg_gen_inc;

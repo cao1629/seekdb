@@ -1,0 +1,38 @@
+[start]
+> create table t1 (id int primary key, v varchar(20))
+> insert into t1 values (1,'a'),(2,'b'),(3,'c')
+> fork table t1 to t1_fork
+> insert into t1_fork values (4,'d')
+> update t1_fork set v = 'B' where id = 2
+> create database src
+> create table src.m (id int primary key, note varchar(20))
+> insert into src.m values (10,'ten')
+> fork database src to sandbox
+> insert into sandbox.m values (11,'eleven')
+[kill9]
+[restart]
+> select * from t1 order by id
+id	v
+1	a
+2	b
+3	c
+> select * from t1_fork order by id
+id	v
+1	a
+2	B
+3	c
+4	d
+> select * from src.m order by id
+id	note
+10	ten
+> select * from sandbox.m order by id
+id	note
+10	ten
+11	eleven
+> merge table t1_fork into t1 strategy theirs
+> select * from t1 order by id
+id	v
+1	a
+2	b
+3	c
+4	d

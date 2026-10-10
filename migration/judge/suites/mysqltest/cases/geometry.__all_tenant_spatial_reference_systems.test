@@ -1,0 +1,12 @@
+#owner: ht353245
+#owner group: shenzhen
+--echo # ----------------------------------------------------------------------
+--echo # Test of GEOMETRY __ALL_TENANT_SPATIAL_REFERENCE_SYSTEMS.
+--echo # ----------------------------------------------------------------------
+--source ../../migration/judge/suites/mysqltest/include/b1-geometry/import_default_srs_data_mysql.inc
+
+
+  
+  # judge(b1-geometry): raw internal table oceanbase.__all_spatial_reference_systems replaced by the standard view
+  # judge(b1-geometry): information_schema.ST_SPATIAL_REFERENCE_SYSTEMS (same rows; the column list is exactly the view's).
+  SELECT SRS_NAME, SRS_ID, ORGANIZATION, ORGANIZATION_COORDSYS_ID, DEFINITION, DESCRIPTION FROM information_schema.ST_SPATIAL_REFERENCE_SYSTEMS ORDER BY SRS_ID;

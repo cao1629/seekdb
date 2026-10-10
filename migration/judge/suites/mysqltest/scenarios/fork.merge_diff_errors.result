@@ -1,0 +1,117 @@
+drop table if exists er_cur, er_inc, er_nopk, er_nopk2, er_cnt, er_name, er_null, er_def, er_pk, er_type, er_order, er_hidden;
+drop table if exists er_lob, er_lob2;
+drop view if exists er_v;
+drop user if exists er_user;
+create table er_cur(id int primary key, v varchar(10) default 'x');
+insert into er_cur values (1, 'a');
+create table er_inc(id int primary key, v varchar(10) default 'x');
+insert into er_inc values (2, 'b');
+create table er_nopk(id int, v varchar(10) default 'x');
+create table er_nopk2(id int, v varchar(10) default 'x');
+create table er_cnt(id int primary key, v varchar(10) default 'x', w int);
+create table er_name(id int primary key, w varchar(10) default 'x');
+create table er_null(id int primary key, v varchar(10) not null default 'x');
+create table er_def(id int primary key, v varchar(10) default 'y');
+create table er_pk(id int, v varchar(10) default 'x', primary key (id, v));
+create table er_type(id int primary key, v varchar(11) default 'x');
+create table er_order(v varchar(10) default 'x', id int primary key);
+create view er_v as select * from er_cur;
+#
+# 1. tables without a primary key
+#
+diff table er_nopk against er_nopk2;
+ERROR 0A000: DIFF TABLE on table without primary key not supported
+merge table er_nopk2 into er_nopk;
+ERROR 0A000: MERGE TABLE on table without primary key not supported
+merge table er_nopk2 into er_nopk strategy theirs;
+ERROR 0A000: MERGE TABLE on table without primary key not supported
+#
+# 2. column definitions must be identical
+#
+diff table er_cur against er_nopk;
+ERROR HY000: Schema error
+diff table er_cur against er_cnt;
+ERROR HY000: Schema error
+diff table er_cnt against er_cur;
+ERROR HY000: Schema error
+diff table er_cur against er_name;
+ERROR HY000: Schema error
+diff table er_cur against er_null;
+ERROR HY000: Schema error
+diff table er_cur against er_def;
+ERROR HY000: Schema error
+diff table er_cur against er_pk;
+ERROR HY000: Schema error
+diff table er_cur against er_type;
+ERROR HY000: Schema error
+diff table er_cur against er_order;
+ERROR HY000: Schema error
+diff table er_cur against er_v;
+ERROR HY000: Schema error
+merge table er_type into er_cur strategy theirs;
+ERROR HY000: Schema error
+merge table er_v into er_cur;
+ERROR HY000: Schema error
+merge table er_cur into er_v;
+ERROR HY000: Schema error
+#
+# 3. missing objects
+#
+diff table er_cur against er_missing;
+ERROR 42S02: Table doesn't exist
+diff table er_missing against er_cur;
+ERROR 42S02: Table doesn't exist
+merge table er_missing into er_cur;
+ERROR 42S02: Table doesn't exist
+merge table er_cur into er_missing strategy ours;
+ERROR 42S02: Table doesn't exist
+diff table er_nodb.er_cur against er_cur;
+ERROR 42S02: Table doesn't exist
+#
+# 4. privileges
+#
+create user er_user identified by 'er_pass';
+grant select on test.er_inc to er_user;
+grant select, insert on test.er_cur to er_user;
+diff table er_cur against er_inc;
+__table	__flag	id	v
+test.er_cur	INSERT	1	a
+test.er_inc	INSERT	2	b
+merge table er_inc into er_cur strategy ours;
+ERROR 42000: UPDATE command denied to user 'er_user'@'%' for table 'er_cur'
+merge table er_cur into er_inc;
+ERROR 42000: INSERT command denied to user 'er_user'@'%' for table 'er_inc'
+# er_def has another default and er_user cannot read it: Schema error first
+diff table er_cur against er_def;
+ERROR HY000: Schema error
+create table er_hidden(id int primary key, v varchar(10) default 'x');
+diff table er_cur against er_hidden;
+ERROR 42000: SELECT command denied to user 'er_user'@'%' for table 'er_hidden'
+grant update on test.er_cur to er_user;
+merge table er_inc into er_cur strategy ours;
+affected rows: 1
+select * from er_cur order by id;
+id	v
+1	a
+2	b
+#
+# 5. LONGTEXT values
+#
+create table er_lob(id int primary key, v longtext);
+insert into er_lob values (1, repeat('a', 100000));
+fork table er_lob to er_lob2;
+update er_lob2 set v = concat(repeat('a', 99999), 'b') where id = 1;
+merge table er_lob2 into er_lob;
+ERROR HY000: MERGE TABLE: 1 conflict(s) detected. Use THEIRS or OURS strategy to resolve. FAIL strategy is not allowed
+merge table er_lob2 into er_lob strategy theirs;
+affected rows: 1
+select id, length(v), right(v, 3) from er_lob;
+id	length(v)	right(v, 3)
+1	100000	aab
+#
+# cleanup
+#
+drop user er_user;
+drop view er_v;
+drop table er_cur, er_inc, er_nopk, er_nopk2, er_cnt, er_name, er_null, er_def, er_pk, er_type, er_order, er_hidden;
+drop table er_lob, er_lob2;

@@ -1,0 +1,304 @@
+drop table if exists iso_t;
+create table iso_t(id int primary key, grp int, v int);
+insert into iso_t values (1, 1, 10), (2, 1, 20), (3, 2, 30);
+#
+# 1. isolation level variables
+#
+select @@session.transaction_isolation, @@session.tx_isolation;
+@@session.transaction_isolation	@@session.tx_isolation
+READ-COMMITTED	READ-COMMITTED
+set session transaction isolation level read uncommitted;
+select @@session.transaction_isolation, @@session.tx_isolation;
+@@session.transaction_isolation	@@session.tx_isolation
+READ-UNCOMMITTED	READ-UNCOMMITTED
+set session transaction isolation level repeatable read;
+select @@session.transaction_isolation, @@session.tx_isolation;
+@@session.transaction_isolation	@@session.tx_isolation
+REPEATABLE-READ	REPEATABLE-READ
+set session transaction isolation level serializable;
+select @@session.transaction_isolation, @@session.tx_isolation;
+@@session.transaction_isolation	@@session.tx_isolation
+SERIALIZABLE	SERIALIZABLE
+set session tx_isolation = 'READ-COMMITTED';
+select @@session.transaction_isolation, @@session.tx_isolation;
+@@session.transaction_isolation	@@session.tx_isolation
+READ-COMMITTED	READ-COMMITTED
+set session transaction_isolation = 'REPEATABLE-READ';
+select @@session.transaction_isolation, @@session.tx_isolation;
+@@session.transaction_isolation	@@session.tx_isolation
+REPEATABLE-READ	REPEATABLE-READ
+set session tx_isolation = 'FOO';
+ERROR 42000: Variable 'tx_isolation' can't be set to the value of 'FOO'
+set session transaction_isolation = 'read committed';
+ERROR 42000: Variable 'transaction_isolation' can't be set to the value of 'read committed'
+set session transaction_isolation = 2;
+ERROR 42000: Incorrect argument type to variable 'transaction_isolation'
+select @@session.transaction_isolation, @@session.tx_isolation;
+@@session.transaction_isolation	@@session.tx_isolation
+REPEATABLE-READ	REPEATABLE-READ
+set session transaction isolation level read committed;
+#
+# 2. dirty read: the uncommitted update of c1 is invisible to c2 at every level
+#
+begin;
+update iso_t set v = -1 where id = 1;
+insert into iso_t values (9, 1, -9);
+# c1 sees its own uncommitted writes
+select * from iso_t order by id;
+id	grp	v
+1	1	-1
+2	1	20
+3	2	30
+9	1	-9
+set session transaction isolation level read uncommitted;
+select * from iso_t order by id;
+id	grp	v
+1	1	10
+2	1	20
+3	2	30
+set session transaction isolation level read committed;
+select * from iso_t order by id;
+id	grp	v
+1	1	10
+2	1	20
+3	2	30
+set session transaction isolation level repeatable read;
+select * from iso_t order by id;
+id	grp	v
+1	1	10
+2	1	20
+3	2	30
+set session transaction isolation level serializable;
+select * from iso_t order by id;
+id	grp	v
+1	1	10
+2	1	20
+3	2	30
+rollback;
+select * from iso_t order by id;
+id	grp	v
+1	1	10
+2	1	20
+3	2	30
+#
+# 3. non-repeatable read and phantom under READ UNCOMMITTED
+#
+set session transaction isolation level read uncommitted;
+begin;
+select v from iso_t where id = 1;
+v
+10
+select count(*), sum(v) from iso_t where grp = 1;
+count(*)	sum(v)
+2	30
+update iso_t set v = 11 where id = 1;
+insert into iso_t values (4, 1, 40);
+select v from iso_t where id = 1;
+v
+11
+select count(*), sum(v) from iso_t where grp = 1;
+count(*)	sum(v)
+3	71
+commit;
+#
+# 4. non-repeatable read and phantom under READ COMMITTED
+#
+set session transaction isolation level read committed;
+begin;
+select v from iso_t where id = 1;
+v
+11
+select count(*), sum(v) from iso_t where grp = 1;
+count(*)	sum(v)
+3	71
+update iso_t set v = 12 where id = 1;
+insert into iso_t values (5, 1, 50);
+select v from iso_t where id = 1;
+v
+12
+select count(*), sum(v) from iso_t where grp = 1;
+count(*)	sum(v)
+4	122
+commit;
+#
+# 5. no non-repeatable read, no phantom under REPEATABLE READ
+#
+set session transaction isolation level repeatable read;
+begin;
+select v from iso_t where id = 1;
+v
+12
+select count(*), sum(v) from iso_t where grp = 1;
+count(*)	sum(v)
+4	122
+update iso_t set v = 13 where id = 1;
+insert into iso_t values (6, 1, 60);
+delete from iso_t where id = 2;
+select v from iso_t where id = 1;
+v
+12
+select count(*), sum(v) from iso_t where grp = 1;
+count(*)	sum(v)
+4	122
+select * from iso_t order by id;
+id	grp	v
+1	1	12
+2	1	20
+3	2	30
+4	1	40
+5	1	50
+# own writes are visible on top of the snapshot
+update iso_t set v = v + 1 where id = 3;
+select * from iso_t order by id;
+id	grp	v
+1	1	12
+2	1	20
+3	2	31
+4	1	40
+5	1	50
+commit;
+select * from iso_t order by id;
+id	grp	v
+1	1	13
+3	2	31
+4	1	40
+5	1	50
+6	1	60
+#
+# 6. no non-repeatable read, no phantom under SERIALIZABLE
+#
+set session transaction isolation level serializable;
+begin;
+select v from iso_t where id = 1;
+v
+13
+select count(*), sum(v) from iso_t where grp = 1;
+count(*)	sum(v)
+4	163
+update iso_t set v = 14 where id = 1;
+insert into iso_t values (7, 1, 70);
+delete from iso_t where id = 4;
+select v from iso_t where id = 1;
+v
+13
+select count(*), sum(v) from iso_t where grp = 1;
+count(*)	sum(v)
+4	163
+select * from iso_t order by id;
+id	grp	v
+1	1	13
+3	2	31
+4	1	40
+5	1	50
+6	1	60
+commit;
+select * from iso_t order by id;
+id	grp	v
+1	1	14
+3	2	31
+5	1	50
+6	1	60
+7	1	70
+#
+# 7. the snapshot is taken by the first statement, not by BEGIN
+#
+set session transaction isolation level repeatable read;
+begin;
+update iso_t set v = 15 where id = 1;
+select v from iso_t where id = 1;
+v
+15
+update iso_t set v = 16 where id = 1;
+select v from iso_t where id = 1;
+v
+15
+commit;
+select v from iso_t where id = 1;
+v
+16
+# START TRANSACTION WITH CONSISTENT SNAPSHOT does not take the snapshot
+# at START either: an update committed before the first read is seen
+start transaction with consistent snapshot;
+update iso_t set v = 151 where id = 1;
+select v from iso_t where id = 1;
+v
+151
+update iso_t set v = 152 where id = 1;
+select v from iso_t where id = 1;
+v
+151
+commit;
+#
+# 8. SET TRANSACTION without SESSION: next transaction only
+#
+set session transaction isolation level read committed;
+set transaction isolation level repeatable read;
+select @@session.transaction_isolation;
+@@session.transaction_isolation
+READ-COMMITTED
+begin;
+select v from iso_t where id = 1;
+v
+152
+update iso_t set v = 17 where id = 1;
+# still the snapshot value: this transaction runs REPEATABLE READ
+select v from iso_t where id = 1;
+v
+152
+set transaction isolation level serializable;
+ERROR 25001: Transaction characteristics can't be changed while a transaction is in progress
+commit;
+select @@session.transaction_isolation;
+@@session.transaction_isolation
+READ-COMMITTED
+begin;
+select v from iso_t where id = 1;
+v
+17
+update iso_t set v = 18 where id = 1;
+# the following transaction is back to READ COMMITTED
+select v from iso_t where id = 1;
+v
+18
+# SET SESSION inside a transaction is accepted and changes the session value
+set session transaction isolation level serializable;
+select @@session.transaction_isolation;
+@@session.transaction_isolation
+SERIALIZABLE
+commit;
+select @@session.transaction_isolation;
+@@session.transaction_isolation
+SERIALIZABLE
+set session transaction isolation level read committed;
+#
+# 9. READ ONLY transactions and autocommit=0
+#
+start transaction read only;
+select v from iso_t where id = 1;
+v
+18
+update iso_t set v = 0 where id = 1;
+ERROR 25006: Cannot execute statement in a READ ONLY transaction.
+commit;
+set autocommit = 0;
+update iso_t set v = 19 where id = 1;
+select v from iso_t where id = 1;
+v
+18
+rollback;
+select v from iso_t where id = 1;
+v
+18
+update iso_t set v = 20 where id = 1;
+select v from iso_t where id = 1;
+v
+18
+commit;
+set autocommit = 1;
+select v from iso_t where id = 1;
+v
+20
+#
+# cleanup
+#
+drop table iso_t;

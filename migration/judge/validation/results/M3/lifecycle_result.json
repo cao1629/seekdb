@@ -1,0 +1,55 @@
+{
+ "binary": "/Users/meizhi/.claude/jobs/3985849d/tmp/bin/seekdb-M3",
+ "binary_sha256": "e8019408465202dd13b6af4bf18a550d6fcc53986770bec07b1ad4e1b512d516",
+ "failed": [
+  "binary_protocol",
+  "restart_graceful"
+ ],
+ "finished": "2026-10-10T13:38:36Z",
+ "record": false,
+ "scenarios": [
+  {
+   "error": null,
+   "name": "binary_protocol",
+   "ok": false,
+   "seconds": 2.8
+  },
+  {
+   "error": null,
+   "name": "crash_committed",
+   "ok": true,
+   "seconds": 5.9
+  },
+  {
+   "error": null,
+   "name": "crash_uncommitted",
+   "ok": true,
+   "seconds": 8.3
+  },
+  {
+   "error": null,
+   "name": "fork_restart",
+   "ok": true,
+   "seconds": 5.9
+  },
+  {
+   "error": null,
+   "name": "param_persistence",
+   "ok": true,
+   "seconds": 5.8
+  },
+  {
+   "error": null,
+   "name": "restart_graceful",
+   "ok": false,
+   "seconds": 5.9
+  },
+  {
+   "error": null,
+   "name": "vector_restart",
+   "ok": true,
+   "seconds": 5.9
+  }
+ ],
+ "started": "2026-10-10T13:37:56Z"
+}

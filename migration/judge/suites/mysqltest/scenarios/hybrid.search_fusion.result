@@ -1,0 +1,150 @@
+drop table if exists hs_docs, hs_pk, hs_heap;
+create table hs_docs(id int, title varchar(100), body varchar(200), emb vector(3),
+fulltext key ft_body(body),
+vector index vidx(emb) with (distance=l2, type=hnsw, lib=vsag));
+insert into hs_docs values
+(1, 'Postgres tuning', 'database index tuning guide', '[0.9,0.1,0]'),
+(2, 'Search engines', 'full text search engine internals', '[0.1,0.9,0]'),
+(3, 'Vector search', 'vector search with hnsw graphs', '[0,0.2,0.9]'),
+(4, 'Hybrid retrieval', 'hybrid search combines text search and vector search', '[0.3,0.5,0.6]'),
+(5, 'Storage', 'storage engine writes pages to disk', '[0.8,0,0.3]'),
+(6, 'Search tips', 'search search search', '[0.2,0.8,0.2]');
+#
+# 1. full-text only
+#
+select dbms_hybrid_search.get_sql('hs_docs', '{"query": {"match": {"body": "search"}}, "_source": ["id", "title"]}');
+dbms_hybrid_search.get_sql('hs_docs', '{"query": {"match": {"body": "search"}}, "_source": ["id", "title"]}')
+SELECT /*+ opt_param('hidden_column_visible', 'true') */`id`, `title`, match(`body`) against('search' in natural language mode) as `_score` FROM `test`.`hs_docs` WHERE match(`body`) against('search' in natural language mode) ORDER BY `_score` DESC, `__pk_increment` LIMIT 10
+select jt.ord, jt.id, jt.title, round(jt.score, 6) score
+from json_table(dbms_hybrid_search.search('hs_docs', '{"query": {"match": {"body": "search"}}, "_source": ["id", "title"]}'),
+'$[*]' columns (ord for ordinality, id int path '$.id', title varchar(100) path '$.title', score double path '$._score')) jt;
+ord	id	title	score
+1	6	Search tips	0.462185
+2	4	Hybrid retrieval	0.410448
+3	3	Vector search	0.331325
+4	2	Search engines	0.314286
+# the generated SQL returns the same ranking
+SELECT /*+ opt_param('hidden_column_visible', 'true') */`id`, `title`, match(`body`) against('search' in natural language mode) as `_score` FROM `test`.`hs_docs` WHERE match(`body`) against('search' in natural language mode) ORDER BY `_score` DESC, `__pk_increment` LIMIT 10;
+id	title	_score
+6	Search tips	0.462185
+4	Hybrid retrieval	0.410448
+3	Vector search	0.331325
+2	Search engines	0.314286
+# paging
+select jt.ord, jt.id, round(jt.score, 6) score
+from json_table(dbms_hybrid_search.search('hs_docs', '{"query": {"match": {"body": "search"}}, "_source": ["id"], "size": 2, "from": 1}'),
+'$[*]' columns (ord for ordinality, id int path '$.id', score double path '$._score')) jt;
+ord	id	score
+1	4	0.410448
+2	3	0.331325
+select dbms_hybrid_search.get_sql('hs_docs', '{"query": {"match": {"body": "search"}}, "_source": ["id"], "size": 2, "from": 1}');
+dbms_hybrid_search.get_sql('hs_docs', '{"query": {"match": {"body": "search"}}, "_source": ["id"], "size": 2, "from": 1}')
+SELECT /*+ opt_param('hidden_column_visible', 'true') */`id`, match(`body`) against('search' in natural language mode) as `_score` FROM `test`.`hs_docs` WHERE match(`body`) against('search' in natural language mode) ORDER BY `_score` DESC, `__pk_increment` LIMIT 1, 2
+# no hit
+select dbms_hybrid_search.search('hs_docs', '{"query": {"match": {"body": "nomatchword"}}, "_source": ["id"]}');
+dbms_hybrid_search.search('hs_docs', '{"query": {"match": {"body": "nomatchword"}}, "_source": ["id"]}')
+NULL
+#
+# 2. vector only
+#
+select dbms_hybrid_search.get_sql('hs_docs', '{"knn": {"field": "emb", "k": 3, "query_vector": [0,0,1]}, "_source": ["id", "title"]}');
+dbms_hybrid_search.get_sql('hs_docs', '{"knn": {"field": "emb", "k": 3, "query_vector": [0,0,1]}, "_source": ["id", "title"]}')
+SELECT l2_distance(`emb`, '[0, 0, 1]') as `_distance`, `id`, `title`, round(1 / (1 + l2_distance(`emb`, '[0, 0, 1]')), 8) as `_score` FROM `test`.`hs_docs` ORDER BY `_distance` APPROXIMATE LIMIT 3
+select dbms_hybrid_search.search('hs_docs', '{"knn": {"field": "emb", "k": 3, "query_vector": [0,0,1]}, "_source": ["id", "title"]}');
+dbms_hybrid_search.search('hs_docs', '{"knn": {"field": "emb", "k": 3, "query_vector": [0,0,1]}, "_source": ["id", "title"]}')
+[{"id": 3, "title": "Vector search", "_score": 0.81725599}, {"id": 4, "title": "Hybrid retrieval", "_score": 0.58578644}, {"id": 5, "title": "Storage", "_score": 0.48472755}]
+select dbms_hybrid_search.search('hs_docs', '{"knn": {"field": "emb", "k": 3, "query_vector": [0.9,0.1,0]}, "_source": ["id"], "size": 2}');
+dbms_hybrid_search.search('hs_docs', '{"knn": {"field": "emb", "k": 3, "query_vector": [0.9,0.1,0]}, "_source": ["id"], "size": 2}')
+[{"id": 1, "_score": 1.0}, {"id": 5, "_score": 0.75094104}]
+select dbms_hybrid_search.search('hs_docs', '{"knn": {"field": "emb", "k": 6, "query_vector": [0,0,1], "boost": 2}, "_source": ["id"], "size": 4}');
+dbms_hybrid_search.search('hs_docs', '{"knn": {"field": "emb", "k": 6, "query_vector": [0,0,1], "boost": 2}, "_source": ["id"], "size": 4}')
+[{"id": 3, "_score": 1.63451198}, {"id": 4, "_score": 1.17157288}, {"id": 5, "_score": 0.9694551}, {"id": 6, "_score": 0.9307033}]
+#
+# 3. weighted hybrid (no rank clause)
+#
+select dbms_hybrid_search.get_sql('hs_docs', '{"query": {"match": {"body": "search"}}, "knn": {"field": "emb", "k": 3, "query_vector": [0,0,1]}, "_source": ["id", "title"]}');
+dbms_hybrid_search.get_sql('hs_docs', '{"query": {"match": {"body": "search"}}, "knn": {"field": "emb", "k": 3, "query_vector": [0,0,1]}, "_source": ["id", "title"]}')
+SELECT ifnull(`_fts`.`id`, `_vs`.`id`) as `id`, ifnull(`_fts`.`title`, `_vs`.`title`) as `title`, (ifnull(`_fts`.`_keyword_score`, 0) + ifnull(`_vs`.`_semantic_score`, 0)) as `_score` FROM ((SELECT /*+ opt_param('hidden_column_visible', 'true') */`__pk_increment`, `id`, `title`, match(`body`) against('search' in natural language mode) as `_keyword_score` FROM `test`.`hs_docs` WHERE match(`body`) against('search' in natural language mode) ORDER BY `_keyword_score` DESC LIMIT 200) `_fts` full join (SELECT /*+ opt_param('hidden_column_visible', 'true') */l2_distance(`emb`, '[0, 0, 1]') as `_distance`, `__pk_increment`, `id`, `title`, round(1 / (1 + l2_distance(`emb`, '[0, 0, 1]')), 8) as `_semantic_score` FROM `test`.`hs_docs` ORDER BY `_distance` APPROXIMATE LIMIT 3) `_vs` on `_fts`.`__pk_increment` = `_vs`.`__pk_increment`) ORDER BY `_score` DESC, ifnull(`_vs`.`__pk_increment`, `_fts`.`__pk_increment`) LIMIT 10
+select jt.ord, jt.id, jt.title, round(jt.score, 6) score
+from json_table(dbms_hybrid_search.search('hs_docs', '{"query": {"match": {"body": "search"}}, "knn": {"field": "emb", "k": 3, "query_vector": [0,0,1]}, "_source": ["id", "title"]}'),
+'$[*]' columns (ord for ordinality, id int path '$.id', title varchar(100) path '$.title', score double path '$._score')) jt;
+ord	id	title	score
+1	3	Vector search	1.148581
+2	4	Hybrid retrieval	0.996234
+3	5	Storage	0.484728
+4	6	Search tips	0.462185
+5	2	Search engines	0.314286
+select jt.ord, jt.id, round(jt.score, 6) score
+from json_table(dbms_hybrid_search.search('hs_docs', '{"query": {"match": {"body": "search"}}, "knn": {"field": "emb", "k": 3, "query_vector": [0,0,1]}, "_source": ["id"], "size": 3}'),
+'$[*]' columns (ord for ordinality, id int path '$.id', score double path '$._score')) jt;
+ord	id	score
+1	3	1.148581
+2	4	0.996234
+3	5	0.484728
+#
+# 4. RRF hybrid
+#
+select dbms_hybrid_search.get_sql('hs_docs', '{"query": {"match": {"body": "search"}}, "knn": {"field": "emb", "k": 3, "query_vector": [0,0,1]}, "rank": {"rrf": {}}, "_source": ["id", "title"]}');
+dbms_hybrid_search.get_sql('hs_docs', '{"query": {"match": {"body": "search"}}, "knn": {"field": "emb", "k": 3, "query_vector": [0,0,1]}, "rank": {"rrf": {}}, "_source": ["id", "title"]}')
+SELECT ifnull(`_fts`.`id`, `_vs`.`id`) as `id`, ifnull(`_fts`.`title`, `_vs`.`title`) as `title`, (ifnull(1 / (`_fts`.`_keyword_rank` + 60), 0) + ifnull(1 / (`_vs`.`_semantic_rank` + 60), 0)) as `_score` FROM ((SELECT *, RANK() over( ORDER BY `_keyword_score` DESC) as `_keyword_rank` FROM (SELECT /*+ opt_param('hidden_column_visible', 'true') */`__pk_increment`, `id`, `title`, match(`body`) against('search' in natural language mode) as `_keyword_score` FROM `test`.`hs_docs` WHERE match(`body`) against('search' in natural language mode) ORDER BY `_keyword_score` DESC LIMIT 200)) `_fts` full join (SELECT *, RANK() over( ORDER BY `_semantic_score` DESC) as `_semantic_rank` FROM (SELECT /*+ opt_param('hidden_column_visible', 'true') */l2_distance(`emb`, '[0, 0, 1]') as `_distance`, `__pk_increment`, `id`, `title`, round(1 / (1 + l2_distance(`emb`, '[0, 0, 1]')), 8) as `_semantic_score` FROM `test`.`hs_docs` ORDER BY `_distance` APPROXIMATE LIMIT 3)) `_vs` on `_fts`.`__pk_increment` = `_vs`.`__pk_increment`) ORDER BY `_score` DESC, ifnull(`_vs`.`__pk_increment`, `_fts`.`__pk_increment`) LIMIT 10
+select dbms_hybrid_search.search('hs_docs', '{"query": {"match": {"body": "search"}}, "knn": {"field": "emb", "k": 3, "query_vector": [0,0,1]}, "rank": {"rrf": {}}, "_source": ["id", "title"]}');
+dbms_hybrid_search.search('hs_docs', '{"query": {"match": {"body": "search"}}, "knn": {"field": "emb", "k": 3, "query_vector": [0,0,1]}, "rank": {"rrf": {}}, "_source": ["id", "title"]}')
+[{"id": 3, "title": "Vector search", "_score": 0.0323}, {"id": 4, "title": "Hybrid retrieval", "_score": 0.0323}, {"id": 6, "title": "Search tips", "_score": 0.0164}, {"id": 5, "title": "Storage", "_score": 0.0159}, {"id": 2, "title": "Search engines", "_score": 0.0156}]
+select dbms_hybrid_search.search('hs_docs', '{"query": {"match": {"body": "search"}}, "knn": {"field": "emb", "k": 3, "query_vector": [0,0,1]}, "rank": {"rrf": {"rank_constant": 1}}, "_source": ["id"]}');
+dbms_hybrid_search.search('hs_docs', '{"query": {"match": {"body": "search"}}, "knn": {"field": "emb", "k": 3, "query_vector": [0,0,1]}, "rank": {"rrf": {"rank_constant": 1}}, "_source": ["id"]}')
+[{"id": 3, "_score": 0.7500}, {"id": 4, "_score": 0.6667}, {"id": 6, "_score": 0.5000}, {"id": 5, "_score": 0.2500}, {"id": 2, "_score": 0.2000}]
+select dbms_hybrid_search.get_sql('hs_docs', '{"query": {"match": {"body": "search"}}, "knn": {"field": "emb", "k": 3, "query_vector": [0,0,1]}, "rank": {"rrf": {"rank_constant": 10, "rank_window_size": 4}}, "_source": ["id"], "size": 3}');
+dbms_hybrid_search.get_sql('hs_docs', '{"query": {"match": {"body": "search"}}, "knn": {"field": "emb", "k": 3, "query_vector": [0,0,1]}, "rank": {"rrf": {"rank_constant": 10, "rank_window_size": 4}}, "_source": ["id"], "size": 3}')
+SELECT ifnull(`_fts`.`id`, `_vs`.`id`) as `id`, (ifnull(1 / (`_fts`.`_keyword_rank` + 10), 0) + ifnull(1 / (`_vs`.`_semantic_rank` + 10), 0)) as `_score` FROM ((SELECT *, RANK() over( ORDER BY `_keyword_score` DESC) as `_keyword_rank` FROM (SELECT /*+ opt_param('hidden_column_visible', 'true') */`__pk_increment`, `id`, match(`body`) against('search' in natural language mode) as `_keyword_score` FROM `test`.`hs_docs` WHERE match(`body`) against('search' in natural language mode) ORDER BY `_keyword_score` DESC LIMIT 80)) `_fts` full join (SELECT *, RANK() over( ORDER BY `_semantic_score` DESC) as `_semantic_rank` FROM (SELECT /*+ opt_param('hidden_column_visible', 'true') */l2_distance(`emb`, '[0, 0, 1]') as `_distance`, `__pk_increment`, `id`, round(1 / (1 + l2_distance(`emb`, '[0, 0, 1]')), 8) as `_semantic_score` FROM `test`.`hs_docs` ORDER BY `_distance` APPROXIMATE LIMIT 3)) `_vs` on `_fts`.`__pk_increment` = `_vs`.`__pk_increment`) ORDER BY `_score` DESC, ifnull(`_vs`.`__pk_increment`, `_fts`.`__pk_increment`) LIMIT 3
+select dbms_hybrid_search.search('hs_docs', '{"query": {"match": {"body": "search"}}, "knn": {"field": "emb", "k": 3, "query_vector": [0,0,1]}, "rank": {"rrf": {"rank_constant": 10, "rank_window_size": 4}}, "_source": ["id"], "size": 3}');
+dbms_hybrid_search.search('hs_docs', '{"query": {"match": {"body": "search"}}, "knn": {"field": "emb", "k": 3, "query_vector": [0,0,1]}, "rank": {"rrf": {"rank_constant": 10, "rank_window_size": 4}}, "_source": ["id"], "size": 3}')
+[{"id": 3, "_score": 0.1678}, {"id": 4, "_score": 0.1667}, {"id": 6, "_score": 0.0909}]
+# the generated RRF SQL returns the same hits
+SELECT ifnull(`_fts`.`id`, `_vs`.`id`) as `id`, ifnull(`_fts`.`title`, `_vs`.`title`) as `title`, (ifnull(1 / (`_fts`.`_keyword_rank` + 60), 0) + ifnull(1 / (`_vs`.`_semantic_rank` + 60), 0)) as `_score` FROM ((SELECT *, RANK() over( ORDER BY `_keyword_score` DESC) as `_keyword_rank` FROM (SELECT /*+ opt_param('hidden_column_visible', 'true') */`__pk_increment`, `id`, `title`, match(`body`) against('search' in natural language mode) as `_keyword_score` FROM `test`.`hs_docs` WHERE match(`body`) against('search' in natural language mode) ORDER BY `_keyword_score` DESC LIMIT 200)) `_fts` full join (SELECT *, RANK() over( ORDER BY `_semantic_score` DESC) as `_semantic_rank` FROM (SELECT /*+ opt_param('hidden_column_visible', 'true') */l2_distance(`emb`, '[0, 0, 1]') as `_distance`, `__pk_increment`, `id`, `title`, round(1 / (1 + l2_distance(`emb`, '[0, 0, 1]')), 8) as `_semantic_score` FROM `test`.`hs_docs` ORDER BY `_distance` APPROXIMATE LIMIT 3)) `_vs` on `_fts`.`__pk_increment` = `_vs`.`__pk_increment`) ORDER BY `_score` DESC, ifnull(`_vs`.`__pk_increment`, `_fts`.`__pk_increment`) LIMIT 10;
+id	title	_score
+3	Vector search	0.0323
+4	Hybrid retrieval	0.0323
+6	Search tips	0.0164
+5	Storage	0.0159
+2	Search engines	0.0156
+# the rank clause is ignored unless both query and knn are given
+select dbms_hybrid_search.search('hs_docs', '{"knn": {"field": "emb", "k": 2, "query_vector": [0,0,1]}, "rank": {"rrf": {"rank_constant": 1}}, "_source": ["id"]}');
+dbms_hybrid_search.search('hs_docs', '{"knn": {"field": "emb", "k": 2, "query_vector": [0,0,1]}, "rank": {"rrf": {"rank_constant": 1}}, "_source": ["id"]}')
+[{"id": 3, "_score": 0.81725599}, {"id": 4, "_score": 0.58578644}]
+#
+# 5. DML is visible to the next search
+#
+insert into hs_docs values (7, 'Search vectors', 'search vector vector', '[0,0,1]');
+delete from hs_docs where id = 3;
+select dbms_hybrid_search.search('hs_docs', '{"query": {"match": {"body": "vector"}}, "knn": {"field": "emb", "k": 2, "query_vector": [0,0,1]}, "rank": {"rrf": {"rank_constant": 2}}, "_source": ["id"]}');
+dbms_hybrid_search.search('hs_docs', '{"query": {"match": {"body": "vector"}}, "knn": {"field": "emb", "k": 2, "query_vector": [0,0,1]}, "rank": {"rrf": {"rank_constant": 2}}, "_source": ["id"]}')
+[{"id": 7, "_score": 0.6667}, {"id": 4, "_score": 0.5000}]
+select dbms_hybrid_search.search('hs_docs', '{"knn": {"field": "emb", "k": 2, "query_vector": [0,0.1,1]}, "_source": ["id"]}');
+dbms_hybrid_search.search('hs_docs', '{"knn": {"field": "emb", "k": 2, "query_vector": [0,0.1,1]}, "_source": ["id"]}')
+[{"id": 7, "_score": 0.90909091}, {"id": 4, "_score": 0.60963996}]
+#
+# 6. primary keys and heap tables
+#
+create table hs_pk(id int primary key, body varchar(200), emb vector(3),
+fulltext key ft_body(body), vector index vidx(emb) with (distance=l2, type=hnsw, lib=vsag));
+select dbms_hybrid_search.search('hs_pk', '{"query": {"match": {"body": "search"}}}');
+ERROR 0A000: table with user provided primary key not supported
+select dbms_hybrid_search.get_sql('hs_pk', '{"query": {"match": {"body": "search"}}}');
+ERROR 0A000: table with user provided primary key not supported
+create table hs_heap(id int primary key, body varchar(200), emb vector(2),
+fulltext key ft_body(body),
+vector index vidx(emb) with (distance=l2, type=hnsw, lib=vsag, sync_mode=immediate)) organization heap;
+insert into hs_heap values (1, 'apple pie', '[1,0]'), (2, 'apple tart', '[1,1]'), (3, 'pear cake', '[0,1]'), (4, 'plum jam', '[-1,0]');
+select dbms_hybrid_search.get_sql('test.hs_heap', '{"query": {"match": {"body": "apple"}}, "knn": {"field": "emb", "k": 2, "query_vector": [0,1]}, "rank": {"rrf": {"rank_constant": 1}}, "_source": ["id"]}');
+dbms_hybrid_search.get_sql('test.hs_heap', '{"query": {"match": {"body": "apple"}}, "knn": {"field": "emb", "k": 2, "query_vector": [0,1]}, "rank": {"rrf": {"rank_constant": 1}}, "_source": ["id"]}')
+SELECT ifnull(`_fts`.`id`, `_vs`.`id`) as `id`, (ifnull(1 / (`_fts`.`_keyword_rank` + 1), 0) + ifnull(1 / (`_vs`.`_semantic_rank` + 1), 0)) as `_score` FROM ((SELECT *, RANK() over( ORDER BY `_keyword_score` DESC) as `_keyword_rank` FROM (SELECT /*+ opt_param('hidden_column_visible', 'true') */`__pk_increment`, `id`, match(`body`) against('apple' in natural language mode) as `_keyword_score` FROM `test`.`hs_heap` WHERE match(`body`) against('apple' in natural language mode) ORDER BY `_keyword_score` DESC LIMIT 200)) `_fts` full join (SELECT *, RANK() over( ORDER BY `_semantic_score` DESC) as `_semantic_rank` FROM (SELECT /*+ opt_param('hidden_column_visible', 'true') */l2_distance(`emb`, '[0, 1]') as `_distance`, `__pk_increment`, `id`, round(1 / (1 + l2_distance(`emb`, '[0, 1]')), 8) as `_semantic_score` FROM `test`.`hs_heap` ORDER BY `_distance` APPROXIMATE LIMIT 2)) `_vs` on `_fts`.`__pk_increment` = `_vs`.`__pk_increment`) ORDER BY `_score` DESC, ifnull(`_vs`.`__pk_increment`, `_fts`.`__pk_increment`) LIMIT 10
+select dbms_hybrid_search.search('test.hs_heap', '{"query": {"match": {"body": "apple"}}, "knn": {"field": "emb", "k": 2, "query_vector": [0,1]}, "rank": {"rrf": {"rank_constant": 1}}, "_source": ["id"]}');
+dbms_hybrid_search.search('test.hs_heap', '{"query": {"match": {"body": "apple"}}, "knn": {"field": "emb", "k": 2, "query_vector": [0,1]}, "rank": {"rrf": {"rank_constant": 1}}, "_source": ["id"]}')
+[{"id": 2, "_score": 0.8333}, {"id": 1, "_score": 0.5000}, {"id": 3, "_score": 0.5000}]
+select dbms_hybrid_search.search('hs_heap', '{"knn": {"field": "emb", "k": 3, "query_vector": [1,0]}}');
+dbms_hybrid_search.search('hs_heap', '{"knn": {"field": "emb", "k": 3, "query_vector": [1,0]}}')
+[{"id": 1, "emb": "[1,0]", "body": "apple pie", "_score": 1.0}, {"id": 2, "emb": "[1,1]", "body": "apple tart", "_score": 0.5}, {"id": 3, "emb": "[0,1]", "body": "pear cake", "_score": 0.41421356}]
+#
+# cleanup
+#
+drop table hs_docs, hs_pk, hs_heap;

@@ -1,0 +1,33 @@
+select tokenize('hello world');
+tokenize('hello world')
+["world", "hello"]
+select tokenize('Hello World, hello the database DATABASES a an');
+tokenize('Hello World, hello the database DATABASES a an')
+["databases", "world", "database", "hello"]
+select tokenize('Hello World, hello the database DATABASES a an', 'space', '[{"output": "all"}]');
+tokenize('Hello World, hello the database DATABASES a an', 'space', '[{"output": "all"}]')
+{"tokens": [{"databases": 1}, {"world": 1}, {"database": 1}, {"hello": 2}], "doc_len": 5}
+select tokenize('the quick brown fox jumps over the lazy dog');
+tokenize('the quick brown fox jumps over the lazy dog')
+["lazy", "over", "quick", "dog", "brown", "fox", "jumps"]
+select tokenize('hello world', 'ngram');
+tokenize('hello world', 'ngram')
+["lo", "he", "ll", "or", "rl", "wo", "ld", "el"]
+select tokenize('hello world', 'ngram', '[{"output": "all"}, {"additional_args": [{"ngram_token_size": 3}]}]');
+tokenize('hello world', 'ngram', '[{"output": "all"}, {"additional_args": [{"ngram_token_size": 3}]}]')
+{"tokens": [{"hel": 1}, {"rld": 1}, {"orl": 1}, {"ell": 1}, {"llo": 1}, {"wor": 1}], "doc_len": 6}
+select tokenize('hello world', 'ngram2', '[{"output": "all"}]');
+tokenize('hello world', 'ngram2', '[{"output": "all"}]')
+{"tokens": [{"hel": 1}, {"rld": 1}, {"lo": 1}, {"orl": 1}, {"he": 1}, {"ell": 1}, {"ll": 1}, {"or": 1}, {"rl": 1}, {"llo": 1}, {"wo": 1}, {"ld": 1}, {"wor": 1}, {"el": 1}], "doc_len": 14}
+select tokenize('Hello, World! e-mail: foo@bar.com x1 x22 x333', 'beng', '[{"output": "all"}]');
+tokenize('Hello, World! e-mail: foo@bar.com x1 x22 x333', 'beng', '[{"output": "all"}]')
+{"tokens": [{"x22": 1}, {"bar": 1}, {"world": 1}, {"x333": 1}, {"hello": 1}, {"mail": 1}, {"foo": 1}], "doc_len": 7}
+select tokenize('中华人民共和国国歌', 'ik');
+tokenize('中华人民共和国国歌', 'ik')
+["国歌", "中华人民共和国"]
+select tokenize('中华人民共和国国歌', 'ik', '[{"additional_args": [{"ik_mode": "max_word"}]}]');
+tokenize('中华人民共和国国歌', 'ik', '[{"additional_args": [{"ik_mode": "max_word"}]}]')
+["共和国", "人民共和国", "中华人民", "国歌", "共和", "国", "中华", "中华人民共和国", "华人", "人民"]
+select tokenize('中华人民共和国国歌', 'ngram');
+tokenize('中华人民共和国国歌', 'ngram')
+["民共", "国歌", "共和", "国国", "中华", "华人", "和国", "人民"]

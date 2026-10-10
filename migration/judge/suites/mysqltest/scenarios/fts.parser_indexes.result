@@ -1,0 +1,169 @@
+drop table if exists fp_ngram, fp_ngram2, fp_beng, fp_ik, fp_after, fp_err;
+#
+# 1. index definitions
+#
+create table fp_ngram(id int primary key, body varchar(200), fulltext key ftx(body) with parser ngram);
+create table fp_ngram2(id int primary key, body varchar(200),
+fulltext key ftx(body) with parser ngram2 parser_properties=(min_ngram_size=2, max_ngram_size=4));
+create table fp_beng(id int primary key, body varchar(200),
+fulltext key ftx(body) with parser beng parser_properties=(min_token_size=2, max_token_size=20));
+create table fp_ik(id int primary key, body varchar(200),
+fulltext key ftx(body) with parser ik parser_properties=(ik_mode='max_word'));
+show create table fp_ngram;
+Table	Create Table
+fp_ngram	CREATE TABLE `fp_ngram` (
+  `id` int(11) NOT NULL,
+  `body` varchar(200) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  FULLTEXT KEY `ftx` (`body`) WITH PARSER ngram PARSER_PROPERTIES=(ngram_token_size=2) BLOCK_SIZE 16384
+) ORGANIZATION INDEX DEFAULT CHARSET = utf8mb4 ROW_FORMAT = DYNAMIC COMPRESSION = 'zstd_1.3.8' BLOCK_SIZE = 16384 TABLET_SIZE = 134217728 PCTFREE = 0
+show create table fp_ngram2;
+Table	Create Table
+fp_ngram2	CREATE TABLE `fp_ngram2` (
+  `id` int(11) NOT NULL,
+  `body` varchar(200) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  FULLTEXT KEY `ftx` (`body`) WITH PARSER ngram2 PARSER_PROPERTIES=(min_ngram_size=2,max_ngram_size=4) BLOCK_SIZE 16384
+) ORGANIZATION INDEX DEFAULT CHARSET = utf8mb4 ROW_FORMAT = DYNAMIC COMPRESSION = 'zstd_1.3.8' BLOCK_SIZE = 16384 TABLET_SIZE = 134217728 PCTFREE = 0
+show create table fp_beng;
+Table	Create Table
+fp_beng	CREATE TABLE `fp_beng` (
+  `id` int(11) NOT NULL,
+  `body` varchar(200) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  FULLTEXT KEY `ftx` (`body`) WITH PARSER beng PARSER_PROPERTIES=(min_token_size=2,max_token_size=20) BLOCK_SIZE 16384
+) ORGANIZATION INDEX DEFAULT CHARSET = utf8mb4 ROW_FORMAT = DYNAMIC COMPRESSION = 'zstd_1.3.8' BLOCK_SIZE = 16384 TABLET_SIZE = 134217728 PCTFREE = 0
+show create table fp_ik;
+Table	Create Table
+fp_ik	CREATE TABLE `fp_ik` (
+  `id` int(11) NOT NULL,
+  `body` varchar(200) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  FULLTEXT KEY `ftx` (`body`) WITH PARSER ik PARSER_PROPERTIES=(ik_mode="max_word") BLOCK_SIZE 16384
+) ORGANIZATION INDEX DEFAULT CHARSET = utf8mb4 ROW_FORMAT = DYNAMIC COMPRESSION = 'zstd_1.3.8' BLOCK_SIZE = 16384 TABLET_SIZE = 134217728 PCTFREE = 0
+#
+# 2. ngram
+#
+insert into fp_ngram values (1, 'hello world'), (2, 'yellow fellow'), (3, 'word play'), (4, '中华人民共和国'), (5, '人民日报');
+select id, round(match(body) against('ello'), 6) s from fp_ngram where match(body) against('ello') order by s desc, id;
+id	s
+2	1.387948
+1	1.099365
+select id, round(match(body) against('wor'), 6) s from fp_ngram where match(body) against('wor') order by s desc, id;
+id	s
+3	0.804608
+1	0.732910
+select id, round(match(body) against('人民'), 6) s from fp_ngram where match(body) against('人民') order by s desc, id;
+id	s
+5	0.471490
+4	0.402304
+select id from fp_ngram where match(body) against('+he +ll' in boolean mode) order by id;
+id
+1
+select id from fp_ngram where match(body) against('el' in boolean mode) order by id;
+id
+1
+2
+select id from fp_ngram where match(body) against('ello' in boolean mode) order by id;
+id
+#
+# 3. ngram2
+#
+insert into fp_ngram2 select * from fp_ngram;
+select id, round(match(body) against('ello'), 6) s from fp_ngram2 where match(body) against('ello') order by s desc, id;
+id	s
+2	1.991674
+1	1.521039
+select id from fp_ngram2 where match(body) against('ello' in boolean mode) order by id;
+id
+1
+2
+select id from fp_ngram2 where match(body) against('hello' in boolean mode) order by id;
+id
+#
+# 4. beng
+#
+insert into fp_beng values (1, 'e-mail foo@bar.com'), (2, 'Hello, World!'), (3, 'x1 y22 z333'), (4, 'mail server');
+select id, round(match(body) against('mail'), 6) s from fp_beng where match(body) against('mail') order by s desc, id;
+id	s
+4	0.371622
+1	0.350318
+select id from fp_beng where match(body) against('x1') order by id;
+id
+3
+select id from fp_beng where match(body) against('bar.com') order by id;
+id
+1
+select id from fp_beng where match(body) against('world!') order by id;
+id
+2
+select id from fp_beng where match(body) against('foo@bar.com' in boolean mode);
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use
+#
+# 5. ik (max_word)
+#
+insert into fp_ik values (1, '中华人民共和国国歌'), (2, '人民日报社论'), (3, '共和国的历史'), (4, 'hello world');
+select id, round(match(body) against('人民'), 6) s from fp_ik where match(body) against('人民') order by s desc, id;
+id	s
+2	0.272277
+1	0.250000
+select id, round(match(body) against('共和国'), 6) s from fp_ik where match(body) against('共和国') order by s desc, id;
+id	s
+3	0.942857
+1	0.750000
+select id from fp_ik where match(body) against('hello') order by id;
+id
+4
+#
+# 6. index created on existing rows
+#
+create table fp_after(id int primary key, body varchar(200));
+insert into fp_after values (1, 'hello world'), (2, 'yellow fellow'), (3, 'word play');
+create fulltext index ftx on fp_after(body) with parser ngram parser_properties=(ngram_token_size=3);
+show create table fp_after;
+Table	Create Table
+fp_after	CREATE TABLE `fp_after` (
+  `id` int(11) NOT NULL,
+  `body` varchar(200) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  FULLTEXT KEY `ftx` (`body`) WITH PARSER ngram PARSER_PROPERTIES=(ngram_token_size=3) BLOCK_SIZE 16384
+) ORGANIZATION INDEX DEFAULT CHARSET = utf8mb4 ROW_FORMAT = DYNAMIC COMPRESSION = 'zstd_1.3.8' BLOCK_SIZE = 16384 TABLET_SIZE = 134217728 PCTFREE = 0
+select id from fp_after where match(body) against('llo') order by id;
+id
+1
+2
+select id from fp_after where match(body) against('ll' in boolean mode) order by id;
+id
+select id from fp_after where match(body) against('llo' in boolean mode) order by id;
+id
+1
+2
+#
+# 7. parser and property errors
+#
+create table fp_err(id int primary key, body varchar(100), fulltext key ftx(body) with parser jieba);
+ERROR HY000: Function jieba is not defined
+create table fp_err(id int primary key, body varchar(100), fulltext key ftx(body) with parser space parser_properties=(min_token_size=0));
+ERROR HY000: Incorrect arguments to the min_token_size must be in [1, 16]
+create table fp_err(id int primary key, body varchar(100), fulltext key ftx(body) with parser space parser_properties=(min_token_size=17));
+ERROR HY000: Incorrect arguments to the min_token_size must be in [1, 16]
+create table fp_err(id int primary key, body varchar(100), fulltext key ftx(body) with parser space parser_properties=(max_token_size=9));
+ERROR HY000: Incorrect arguments to the max_token_size must be in [10, 84]
+create table fp_err(id int primary key, body varchar(100), fulltext key ftx(body) with parser space parser_properties=(min_token_size=16, max_token_size=10));
+ERROR HY000: Incorrect arguments to the max_token_size must be equal to or greater than min_token_size
+create table fp_err(id int primary key, body varchar(100), fulltext key ftx(body) with parser ngram parser_properties=(ngram_token_size=11));
+ERROR HY000: Incorrect arguments to the ngram_token_size must be in [1, 10]
+create table fp_err(id int primary key, body varchar(100), fulltext key ftx(body) with parser ngram parser_properties=(min_token_size=3));
+ERROR 0A000: ngram config not supported
+create table fp_err(id int primary key, body varchar(100), fulltext key ftx(body) with parser ngram2 parser_properties=(min_ngram_size=4, max_ngram_size=3));
+ERROR HY000: Incorrect arguments to the max_ngram_size must be equal to or greater than min_ngram_size
+create table fp_err(id int primary key, body varchar(100), fulltext key ftx(body) with parser ik parser_properties=(ik_mode='fast'));
+ERROR HY000: Incorrect arguments to the ik_mode should be max_word or smart
+create table fp_err(id int primary key, body varchar(100), fulltext key ftx(body) with parser space parser_properties=());
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near '))' at line 1
+create table fp_err(id int primary key, body varchar(100), fulltext key ftx(body) with parser space parser_properties=(min_token_size=-1));
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near '-1))' at line 1
+#
+# cleanup
+#
+drop table fp_ngram, fp_ngram2, fp_beng, fp_ik, fp_after;

@@ -1,0 +1,657 @@
+drop table if exists t1, t2, t3, table10_key_pk_parts_1_bigint, table0_hash_pk_parts_1_bigint, table2_bigint, table10_bigint, table100_bigint, tt, `table300_bigint`, t, m;
+create table t1(a int primary key, b int, c int);
+create table t2(a int primary key, b int, c int);
+create table t3(a int primary key, b int, c int);
+CREATE TABLE `table10_key_pk_parts_1_bigint` (
+`col_varchar_16_key` varchar(16) DEFAULT NULL,
+`col_char_5_index` char(5) DEFAULT NULL,
+`col_varchar_8` varchar(8) DEFAULT NULL,
+`col_char_5` char(5) DEFAULT NULL,
+`col_bigint` bigint(20) DEFAULT NULL,
+`col_timestamp_6_key` timestamp(6) NULL DEFAULT NULL,
+`pk` bigint(20) NOT NULL,
+`col_char_20_index` char(20) DEFAULT NULL,
+`col_bigint_key` bigint(20) DEFAULT NULL,
+`col_char_20` char(20) DEFAULT NULL,
+`col_timestamp_6_index` timestamp(6) NULL DEFAULT NULL,
+`col_varchar_8_key` varchar(8) DEFAULT NULL,
+`col_char_20_key` char(20) DEFAULT NULL,
+`col_varchar_16_index` varchar(16) DEFAULT NULL,
+`col_varchar_16` varchar(16) DEFAULT NULL,
+`col_char_5_key` char(5) DEFAULT NULL,
+`col_bigint_index` bigint(20) DEFAULT NULL,
+`col_timestamp_6` timestamp(6) NULL DEFAULT NULL,
+`col_varchar_8_index` varchar(8) DEFAULT NULL,
+PRIMARY KEY (`pk`),
+KEY `idx13` (`pk`,`col_varchar_16_key`),
+KEY `idx5` (`pk`,`col_char_5_index`),
+KEY `idx16` (`pk`,`col_timestamp_6_key`),
+KEY `idx11` (`pk`,`col_char_20_index`),
+KEY `idx1` (`pk`,`col_bigint_key`),
+KEY `idx17` (`pk`,`col_timestamp_6_index`),
+KEY `idx7` (`pk`,`col_varchar_8_key`),
+KEY `idx10` (`pk`,`col_char_20_key`),
+KEY `idx14` (`pk`,`col_varchar_16_index`),
+KEY `idx4` (`pk`,`col_char_5_key`),
+KEY `idx2` (`pk`,`col_bigint_index`),
+KEY `idx8` (`pk`,`col_varchar_8_index`)
+);
+CREATE TABLE `table0_hash_pk_parts_1_bigint` (
+`col_char_20_key` char(20) DEFAULT NULL,
+`col_timestamp_6_key` timestamp(6) NULL DEFAULT NULL,
+`col_varchar_8` varchar(8) DEFAULT NULL,
+`col_varchar_16_index` varchar(16) DEFAULT NULL,
+`col_char_5` char(5) DEFAULT NULL,
+`col_char_5_key` char(5) DEFAULT NULL,
+`pk` bigint(20) NOT NULL,
+`col_varchar_8_index` varchar(8) DEFAULT NULL,
+`col_varchar_8_key` varchar(8) DEFAULT NULL,
+`col_char_20` char(20) DEFAULT NULL,
+`col_char_20_index` char(20) DEFAULT NULL,
+`col_varchar_16_key` varchar(16) DEFAULT NULL,
+`col_timestamp_6` timestamp(6) NULL DEFAULT NULL,
+`col_bigint_key` bigint(20) DEFAULT NULL,
+`col_bigint` bigint(20) DEFAULT NULL,
+`col_varchar_16` varchar(16) DEFAULT NULL,
+`col_timestamp_6_index` timestamp(6) NULL DEFAULT NULL,
+`col_bigint_index` bigint(20) DEFAULT NULL,
+`col_char_5_index` char(5) DEFAULT NULL,
+PRIMARY KEY (`pk`),
+KEY `idx10` (`pk`,`col_char_20_key`),
+KEY `idx16` (`pk`,`col_timestamp_6_key`),
+KEY `idx14` (`pk`,`col_varchar_16_index`),
+KEY `idx4` (`pk`,`col_char_5_key`),
+KEY `idx8` (`pk`,`col_varchar_8_index`),
+KEY `idx7` (`pk`,`col_varchar_8_key`),
+KEY `idx11` (`pk`,`col_char_20_index`),
+KEY `idx13` (`pk`,`col_varchar_16_key`),
+KEY `idx1` (`pk`,`col_bigint_key`),
+KEY `idx17` (`pk`,`col_timestamp_6_index`),
+KEY `idx2` (`pk`,`col_bigint_index`),
+KEY `idx5` (`pk`,`col_char_5_index`)
+);
+CREATE TABLE table2_bigint (
+col_char_20 char(20),
+col_timestamp_6 timestamp(6) NULL DEFAULT NULL,
+pk bigint,
+col_bigint bigint,
+col_decimal_20_0 decimal(20,0),
+/*Indices*/
+primary key (pk) ) ;
+CREATE TABLE table10_bigint (
+col_decimal_20_0 decimal(20,0),
+col_bigint bigint,
+col_timestamp_6 timestamp(6) NULL DEFAULT NULL,
+pk bigint,
+col_char_20 char(20),
+/*Indices*/
+primary key (pk) ) ;
+CREATE TABLE table100_bigint (
+col_decimal_20_0 decimal(20,0),
+col_bigint bigint,
+col_timestamp_6 timestamp(6) NULL DEFAULT NULL,
+col_char_20 char(20),
+pk bigint,
+/*Indices*/
+primary key (pk) ) ;
+CREATE TABLE `tt` (
+`pk` bigint(20) NOT NULL
+);
+CREATE TABLE `table300_bigint` (
+`col_datetime_index` datetime DEFAULT NULL,
+`pk` bigint(20) NOT NULL,
+`col_bigint_key` bigint(20) DEFAULT NULL,
+`col_bigint_index` bigint(20) DEFAULT NULL,
+`col_datetime_3_index` datetime(3) DEFAULT NULL,
+`col_decimal_20_0_key` decimal(20,0) DEFAULT NULL,
+`col_decimal_20_0_index` decimal(20,0) DEFAULT NULL,
+`col_timestamp_2_key` timestamp(2) NULL DEFAULT NULL,
+`col_timestamp_6` timestamp(6) NULL DEFAULT NULL,
+`col_char_20` char(20) DEFAULT NULL,
+`col_double_key` double DEFAULT NULL,
+`col_float_index` float DEFAULT NULL,
+`col_timestamp` timestamp NULL DEFAULT NULL,
+`col_bigint` bigint(20) DEFAULT NULL,
+`col_decimal_20_0` decimal(20,0) DEFAULT NULL,
+`col_timestamp_2` timestamp(2) NULL DEFAULT NULL,
+`col_datetime` datetime DEFAULT NULL,
+`col_timestamp_6_index` timestamp(6) NULL DEFAULT NULL,
+`col_float` float DEFAULT NULL,
+`col_double_index` double DEFAULT NULL,
+`col_char_20_index` char(20) DEFAULT NULL,
+`col_datetime_key` datetime DEFAULT NULL,
+`col_timestamp_key` timestamp NULL DEFAULT NULL,
+`col_timestamp_index` timestamp NULL DEFAULT NULL,
+`col_timestamp_6_key` timestamp(6) NULL DEFAULT NULL,
+`col_char_20_key` char(20) DEFAULT NULL,
+`col_float_key` float DEFAULT NULL,
+`col_timestamp_2_index` timestamp(2) NULL DEFAULT NULL,
+`col_datetime_3` datetime(3) DEFAULT NULL,
+`col_datetime_3_key` datetime(3) DEFAULT NULL,
+`col_double` double DEFAULT NULL,
+PRIMARY KEY (`pk`),
+KEY `idx20` (`pk`, `col_datetime_index`) BLOCK_SIZE 16384 GLOBAL,
+KEY `idx1` (`pk`, `col_bigint_key`) BLOCK_SIZE 16384 GLOBAL,
+KEY `idx2` (`pk`, `col_bigint_index`) BLOCK_SIZE 16384 GLOBAL,
+KEY `idx26` (`pk`, `col_datetime_3_index`) BLOCK_SIZE 16384 GLOBAL,
+KEY `idx4` (`pk`, `col_decimal_20_0_key`) BLOCK_SIZE 16384 GLOBAL,
+KEY `idx5` (`pk`, `col_decimal_20_0_index`) BLOCK_SIZE 16384 GLOBAL,
+KEY `idx28` (`pk`, `col_timestamp_2_key`) BLOCK_SIZE 16384 GLOBAL,
+KEY `idx7` (`pk`, `col_double_key`) BLOCK_SIZE 16384 GLOBAL,
+KEY `idx11` (`pk`, `col_float_index`) BLOCK_SIZE 16384 GLOBAL,
+KEY `idx17` (`pk`, `col_timestamp_6_index`) BLOCK_SIZE 16384 GLOBAL,
+KEY `idx8` (`pk`, `col_double_index`) BLOCK_SIZE 16384 GLOBAL,
+KEY `idx14` (`pk`, `col_char_20_index`) BLOCK_SIZE 16384 GLOBAL,
+KEY `idx19` (`pk`, `col_datetime_key`) BLOCK_SIZE 16384 GLOBAL,
+KEY `idx22` (`pk`, `col_timestamp_key`) BLOCK_SIZE 16384 GLOBAL,
+KEY `idx23` (`pk`, `col_timestamp_index`) BLOCK_SIZE 16384 GLOBAL,
+KEY `idx16` (`pk`, `col_timestamp_6_key`) BLOCK_SIZE 16384 GLOBAL,
+KEY `idx13` (`pk`, `col_char_20_key`) BLOCK_SIZE 16384 GLOBAL,
+KEY `idx10` (`pk`, `col_float_key`) BLOCK_SIZE 16384 GLOBAL,
+KEY `idx29` (`pk`, `col_timestamp_2_index`) BLOCK_SIZE 16384 GLOBAL,
+KEY `idx25` (`pk`, `col_datetime_3_key`) BLOCK_SIZE 16384 GLOBAL
+) ;
+CREATE TABLE `m` (
+`col_varchar_10` varchar(10) DEFAULT NULL,
+`col_varchar_20_key` varchar(20) DEFAULT NULL,
+`col_datetime_key` datetime DEFAULT NULL,
+`col_varchar_20` varchar(20) DEFAULT NULL,
+`col_int_key` int(11) DEFAULT NULL,
+`pk` int(11) NOT NULL,
+`col_int` int(11) DEFAULT NULL,
+`col_date` date DEFAULT NULL,
+`col_datetime` datetime DEFAULT NULL,
+`col_varchar_10_key` varchar(10) DEFAULT NULL,
+`col_date_key` date DEFAULT NULL,
+PRIMARY KEY (`pk`),
+KEY `idx5` (`pk`, `col_varchar_20_key`) BLOCK_SIZE 16384 GLOBAL,
+KEY `idx9` (`pk`, `col_datetime_key`) BLOCK_SIZE 16384 GLOBAL,
+KEY `idx1` (`pk`, `col_int_key`) BLOCK_SIZE 16384 GLOBAL,
+KEY `idx3` (`pk`, `col_varchar_10_key`) BLOCK_SIZE 16384 GLOBAL,
+KEY `idx7` (`pk`, `col_date_key`) BLOCK_SIZE 16384 GLOBAL
+) ;
+CREATE TABLE `t` (
+`col_varchar_20_key` varchar(20) DEFAULT NULL,
+`col_date_key` date DEFAULT NULL,
+`col_varchar_10_key` varchar(10) DEFAULT NULL,
+`col_datetime_key` datetime DEFAULT NULL,
+`col_int` int(11) DEFAULT NULL,
+`col_varchar_20` varchar(20) DEFAULT NULL,
+`col_varchar_10` varchar(10) DEFAULT NULL,
+`col_date` date DEFAULT NULL,
+`col_datetime` datetime DEFAULT NULL,
+`pk` int(11) NOT NULL,
+`col_int_key` int(11) DEFAULT NULL,
+PRIMARY KEY (`pk`),
+KEY `idx5` (`pk`, `col_varchar_20_key`) BLOCK_SIZE 16384 GLOBAL,
+KEY `idx7` (`pk`, `col_date_key`) BLOCK_SIZE 16384 GLOBAL,
+KEY `idx3` (`pk`, `col_varchar_10_key`) BLOCK_SIZE 16384 GLOBAL,
+KEY `idx9` (`pk`, `col_datetime_key`) BLOCK_SIZE 16384 GLOBAL,
+KEY `idx1` (`pk`, `col_int_key`) BLOCK_SIZE 16384 GLOBAL
+) ;
+result_format: 4
+## bug
+##
+## test non-correlated subquery
+select /*+no_rewrite*/ sum((select sum(a) from t1)) from t1;
++------------------------------+
+| sum((select sum(a) from t1)) |
++------------------------------+
+|                           18 |
++------------------------------+
+select /*+no_rewrite*/ sum((select sum(a) from t1)) from t1 group by b;
++------------------------------+
+| sum((select sum(a) from t1)) |
++------------------------------+
+|                            6 |
+|                            6 |
+|                            6 |
++------------------------------+
+
+## test correlated subquery
+select /*+no_rewrite*/ sum((select sum(a) from t1 as t2 where t2.a = t1.a)) from t1;
++------------------------------------------------------+
+| sum((select sum(a) from t1 as t2 where t2.a = t1.a)) |
++------------------------------------------------------+
+|                                                    6 |
++------------------------------------------------------+
+select /*+no_rewrite*/ sum((select sum(a) from t1 as t2 where t2.a = t1.a)) from t1 group by b;
++------------------------------------------------------+
+| sum((select sum(a) from t1 as t2 where t2.a = t1.a)) |
++------------------------------------------------------+
+|                                                    1 |
+|                                                    2 |
+|                                                    3 |
++------------------------------------------------------+
+
+## bug
+##
+##
+select * from t1, t2 where t1.a + (select sum(b) from t3) = t2.b;
++---+------+------+---+------+------+
+| a | b    | c    | a | b    | c    |
++---+------+------+---+------+------+
+| 1 |    1 |    1 | 2 |    2 |    2 |
+| 2 |    2 |    2 | 3 |    3 |    3 |
++---+------+------+---+------+------+
+select * from t1, t2 where t1.a + (select sum(b) from t3 where t1.a = t3.a) = t2.b;
++---+------+------+---+------+------+
+| a | b    | c    | a | b    | c    |
++---+------+------+---+------+------+
+| 1 |    1 |    1 | 2 |    2 |    2 |
++---+------+------+---+------+------+
+
+select (select sum(b) from t2) as temp, sum(a) from t1 group by temp;
++------+--------+
+| temp | sum(a) |
++------+--------+
+|    6 |      6 |
++------+--------+
+select (select sum(b) from t2) as temp from t1 group by temp having temp > 4;
++------+
+| temp |
++------+
+|    6 |
++------+
+select (select sum(b) from t2) as temp from t1 group by temp having temp < 4;
++------+
+| temp |
++------+
++------+
+select (select sum(b) from t2) as temp from t1 group by temp having temp > 4 and temp > (select sum(b) from t3);
++------+
+| temp |
++------+
+|    6 |
++------+
+select (select sum(b) from t2) as temp from t1 group by temp having temp > 4 and temp > (select sum(b) from t2);
++------+
+| temp |
++------+
++------+
+
+## bug
+select (select sum(b) from t2) as temp, a from t1 group by a having temp > 4;
++------+---+
+| temp | a |
++------+---+
+|    6 | 1 |
+|    6 | 2 |
+|    6 | 3 |
++------+---+
+
+## bug
+select t1.a from t1 right outer join t2 using(a) where t1.a <=> (select 4 from t1 limit 1);
++---+
+| a |
++---+
++---+
+
+## bug
+SELECT a IN (SELECT a FROM t1 ) FROM t1  LIMIT 1;
++--------------------------+
+| a IN (SELECT a FROM t1 ) |
++--------------------------+
+|                        1 |
++--------------------------+
+
+## bug
+select /*+no_rewrite*/ a, (select sum(b) from t2 where t1.a = t2.a) as agg from t1 having agg > 1 and agg < 3;
++---+------+
+| a | agg  |
++---+------+
+| 2 |    2 |
++---+------+
+
+## bug
+select (SELECT coalesce( (SELECT/*+no_rewrite*/ * FROM ( SELECT MAX( pk ) FROM table10_key_pk_parts_1_bigint WHERE CAST( CONCAT( SUBSTR( 'q' , 1, 20) , col_char_20_index ) AS CHAR) >= CAST( CONCAT( SUBSTR( 'kqqdwykxz' , 1, 20) , col_char_20_index ) AS CHAR) ORDER BY col_timestamp_6_index  , col_char_5_key ASC , col_bigint_index ASC , pk  ) TC1), (SELECT * FROM ( SELECT col_bigint FROM table0_hash_pk_parts_1_bigint WHERE ( col_char_20 NOT IN ('a' , 'b' , 'a') ) OR NOT ( col_char_20_index IN ( 'a' , 'b' , 'a' ) ) ORDER BY col_bigint DESC , col_char_20_index  , pk ASC LIMIT 1 ) TC2), 2 ));
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| (SELECT coalesce( (SELECT/*+no_rewrite*/ * FROM ( SELECT MAX( pk ) FROM table10_key_pk_parts_1_bigint WHERE CAST( CONCAT( SUBSTR( 'q' , 1, 20) , col_char_20_index ) AS CHAR) >= CAST( CONCAT( SUBSTR( 'kqqdwykxz' , 1, 20) , col_char_20_index ) AS CHAR) ORDE |
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+|                                                                                                                                                                                                                                                               5 |
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+select (SELECT coalesce( (SELECT * FROM ( SELECT MAX( pk ) FROM table10_key_pk_parts_1_bigint WHERE CAST( CONCAT( SUBSTR( 'q' , 1, 20) , col_char_20_index ) AS CHAR) >= CAST( CONCAT( SUBSTR( 'kqqdwykxz' , 1, 20) , col_char_20_index ) AS CHAR) ORDER BY col_timestamp_6_index  , col_char_5_key ASC , col_bigint_index ASC , pk  ) TC1), (SELECT * FROM ( SELECT col_bigint FROM table0_hash_pk_parts_1_bigint WHERE ( col_char_20 NOT IN ('a' , 'b' , 'a') ) OR NOT ( col_char_20_index IN ( 'a' , 'b' , 'a' ) ) ORDER BY col_bigint DESC , col_char_20_index  , pk ASC LIMIT 1 ) TC2), 2 ));
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| (SELECT coalesce( (SELECT * FROM ( SELECT MAX( pk ) FROM table10_key_pk_parts_1_bigint WHERE CAST( CONCAT( SUBSTR( 'q' , 1, 20) , col_char_20_index ) AS CHAR) >= CAST( CONCAT( SUBSTR( 'kqqdwykxz' , 1, 20) , col_char_20_index ) AS CHAR) ORDER BY col_timest |
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+|                                                                                                                                                                                                                                                               5 |
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+
+## bug
+SELECT Sum(1) FROM table10_bigint WHERE pk NOT IN (SELECT pk FROM table2_bigint WHERE pk NOT IN (SELECT col_decimal_20_0 FROM table100_bigint WHERE (SELECT (SELECT Min(10) FROM table100_bigint WHERE col_char_20 > 0)) = col_decimal_20_0));
++--------+
+| Sum(1) |
++--------+
+|      8 |
++--------+
+Warnings:
+Warning	1292	Truncated incorrect DECIMAL value: 'for'
+Warning	1292	Truncated incorrect DECIMAL value: 'on'
+Warning	1292	Truncated incorrect DECIMAL value: 'got'
+Warning	1292	Truncated incorrect DECIMAL value: 'a'
+Warning	1292	Truncated incorrect DECIMAL value: 'tmbqlwenzgckc'
+Warning	1292	Truncated incorrect DECIMAL value: 'h'
+Warning	1292	Truncated incorrect DECIMAL value: 'otmbqlwenzgckcn'
+Warning	1292	Truncated incorrect DECIMAL value: 'kotm'
+Warning	1292	Truncated incorrect DECIMAL value: 'l'
+Warning	1292	Truncated incorrect DECIMAL value: 'l'
+Warning	1292	Truncated incorrect DECIMAL value: 'about'
+Warning	1292	Truncated incorrect DECIMAL value: 'd'
+Warning	1292	Truncated incorrect DECIMAL value: 'say'
+Warning	1292	Truncated incorrect DECIMAL value: 'up'
+Warning	1292	Truncated incorrect DECIMAL value: 'p'
+Warning	1292	Truncated incorrect DECIMAL value: 'skotmbqlwen'
+Warning	1292	Truncated incorrect DECIMAL value: 'fsko'
+Warning	1292	Truncated incorrect DECIMAL value: 'd'
+Warning	1292	Truncated incorrect DECIMAL value: 'on'
+Warning	1292	Truncated incorrect DECIMAL value: 'qfskotmbqlwenzgck'
+Warning	1292	Truncated incorrect DECIMAL value: 'h'
+Warning	1292	Truncated incorrect DECIMAL value: 'why'
+Warning	1292	Truncated incorrect DECIMAL value: 'xqfskotmbqlwenzgck'
+Warning	1292	Truncated incorrect DECIMAL value: 'qxqfskotmb'
+Warning	1292	Truncated incorrect DECIMAL value: 'd'
+Warning	1292	Truncated incorrect DECIMAL value: 'yqx'
+Warning	1292	Truncated incorrect DECIMAL value: 'back'
+Warning	1292	Truncated incorrect DECIMAL value: 'ayqxqfskotmbqlw'
+Warning	1292	Truncated incorrect DECIMAL value: 'was'
+Warning	1292	Truncated incorrect DECIMAL value: 'eayqxq'
+Warning	1292	Truncated incorrect DECIMAL value: 'we'
+Warning	1292	Truncated incorrect DECIMAL value: 'p'
+Warning	1292	Truncated incorrect DECIMAL value: 's'
+Warning	1292	Truncated incorrect DECIMAL value: 'oeayq'
+Warning	1292	Truncated incorrect DECIMAL value: 'don't'
+Warning	1292	Truncated incorrect DECIMAL value: 'of'
+Warning	1292	Truncated incorrect DECIMAL value: 'about'
+Warning	1292	Truncated incorrect DECIMAL value: 'r'
+Warning	1292	Truncated incorrect DECIMAL value: 's'
+Warning	1292	Truncated incorrect DECIMAL value: 'there'
+Warning	1292	Truncated incorrect DECIMAL value: 'coeayqxqfskotmbqlwen'
+Warning	1292	Truncated incorrect DECIMAL value: 'all'
+Warning	1292	Truncated incorrect DECIMAL value: 'gcoeayqxqfsko'
+Warning	1292	Truncated incorrect DECIMAL value: 'igcoeayqxqfsk'
+Warning	1292	Truncated incorrect DECIMAL value: 'd'
+Warning	1292	Truncated incorrect DECIMAL value: 'think'
+Warning	1292	Truncated incorrect DECIMAL value: 'wigcoeayqxqfsk'
+Warning	1292	Truncated incorrect DECIMAL value: 'twigcoeayqxqfskotmbq'
+Warning	1292	Truncated incorrect DECIMAL value: 'u'
+Warning	1292	Truncated incorrect DECIMAL value: 'q'
+Warning	1292	Truncated incorrect DECIMAL value: 'go'
+Warning	1292	Truncated incorrect DECIMAL value: 'v'
+Warning	1292	Truncated incorrect DECIMAL value: 'qtwigcoeayqxq'
+Warning	1292	Truncated incorrect DECIMAL value: 'tqtwigcoe'
+Warning	1292	Truncated incorrect DECIMAL value: 'at'
+Warning	1292	Truncated incorrect DECIMAL value: 'really'
+Warning	1292	Truncated incorrect DECIMAL value: 'd'
+Warning	1292	Truncated incorrect DECIMAL value: 'ltqtwig'
+Warning	1292	Truncated incorrect DECIMAL value: 'p'
+Warning	1292	Truncated incorrect DECIMAL value: 'on'
+Warning	1292	Truncated incorrect DECIMAL value: 'bltqtw'
+SELECT coalesce( (SELECT SUM(LENGTH(TRIM(SUBSTR(SUBSTR('hizctdn', 1, 20), 1, 20)))) FROM table10_bigint WHERE pk NOT IN (SELECT pk FROM table2_bigint WHERE pk NOT IN (SELECT col_decimal_20_0 FROM table100_bigint WHERE (SELECT coalesce( (SELECT MIN(10) FROM table100_bigint WHERE col_char_20 > CAST(CONCAT(col_char_20, SUBSTR('nhizctdn', 1, 20)) AS CHAR(100)) ORDER BY pk , pk), (SELECT ROUND(FLOOR(62))), 1)) = ROUND(ABS(ROUND(FLOOR(col_decimal_20_0)))) ORDER BY pk , col_bigint , col_char_20 DESC , pk DESC) ORDER BY col_decimal_20_0 , pk DESC) ORDER BY col_bigint, col_char_20, col_decimal_20_0, col_timestamp_6, pk , pk DESC), (SELECT col_decimal_20_0 FROM table10_bigint WHERE pk < -10 ORDER BY col_bigint , pk DESC LIMIT 1), 99);
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| coalesce( (SELECT SUM(LENGTH(TRIM(SUBSTR(SUBSTR('hizctdn', 1, 20), 1, 20)))) FROM table10_bigint WHERE pk NOT IN (SELECT pk FROM table2_bigint WHERE pk NOT IN (SELECT col_decimal_20_0 FROM table100_bigint WHERE (SELECT coalesce( (SELECT MIN(10) FROM table |
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+|                                                                                                                                                                                                                                                              56 |
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+
+## bug
+SELECT pk FROM table300_bigint WHERE col_char_20 <> (SELECT ( SELECT MIN((SELECT pk FROM m WHERE  col_bigint <=> 13624)) FROM t));
++----+
+| pk |
++----+
++----+
+
+## bug
+SELECT * FROM tt AS table1 WHERE table1 . pk <> (SELECT coalesce((SELECT MAX((SELECT SUM(-100) FROM tt WHERE NOT EXISTS (SELECT * FROM tt AS table3 LEFT OUTER JOIN tt AS table4 USING (pk) WHERE table1 . pk <> 99 LIMIT 8) )) FROM tt ), 99)) ;
++----+
+| pk |
++----+
++----+
+
+## bug
+drop table if exists t1, t2;
+create table t1 (pk int);
+create table t2 (pk int, c1 char(20));
+select (select SUM(     (select SUM(c1)      from t1)     )      from t1      ) from t2;
++--------------------------------------------------------------------------+
+| (select SUM(     (select SUM(c1)      from t1)     )      from t1      ) |
++--------------------------------------------------------------------------+
+|                                                                        3 |
++--------------------------------------------------------------------------+
+select (select SUM( c1 + (select SUM(c1)      from t1)     )      from t1      ) from t2;
+ERROR HY000: Invalid use of group function
+select (select SUM(     (select SUM(c1)      from t1)     )      from t1      ) from t2;
+ERROR 21000: Subquery returns more than 1 row
+select (select SUM( c1 + (select SUM(c1)      from t1)     )      from t1      ) from t2;
+ERROR HY000: Invalid use of group function
+## bug
+drop table if exists t0;
+CREATE TABLE t0(c0 FLOAT  COMMENT 'asdf' , c1 DECIMAL ZEROFILL  NULL COMMENT 'asdf'  ) ;
+SELECT /*+ USE_HASH_AGGREGATION  */ ALL t0.c0 AS ref0 FROM t0 WHERE (CAST( EXISTS (SELECT 1 from dual wHERE FALSE) AS SIGNED)) IN (( EXISTS (SELECT 1)) XOR ( EXISTS (SELECT 1)), t0.c0, CAST("" AS SIGNED)) UNION ALL SELECT /*+ USE_HASH_AGGREGATION  */ t0.c0 AS ref0 FROM t0 WHERE (NOT ((CAST( EXISTS (SELECT 1 from dual wHERE FALSE) AS SIGNED)) IN (( EXISTS (SELECT 1)) XOR ( EXISTS (SELECT 1)), t0.c0, CAST("" AS SIGNED)))) UNION ALL SELECT /*+ USE_HASH_AGGREGATION  */ ALL t0.c0 AS ref0 FROM t0 WHERE ((CAST( EXISTS (SELECT 1 from dual wHERE FALSE) AS SIGNED)) IN (( EXISTS (SELECT 1)) XOR ( EXISTS (SELECT 1)), t0.c0, CAST("" AS SIGNED))) IS NULL;
++------+
+| ref0 |
++------+
++------+
+Warnings:
+Warning	1292	Truncated incorrect INTEGER value: ''
+
+DROP TABLE IF EXISTS T1;
+CREATE TABLE T1 (
+col_int_key int,
+col_varchar_20 varchar(20),
+col_int int,
+col_varchar_20_key varchar(20),
+col_char_20 char(20),
+col_char_20_key char(20),
+pk int,
+/*Indices*/
+primary key (pk) ) ;
+INSERT/**/ INTO T1 VALUES (4, 'ofmpdxvhqvfnyxowgqq', 7, 'jofmpdxvh', 'ojofmpdxvhqvfn', 'b', 1) ;
+
+DROP TABLE IF EXISTS T2;
+CREATE TABLE T2 (
+col_char_20_key char(20),
+col_int_key int,
+pk int,
+col_int int,
+col_varchar_20 varchar(20),
+col_varchar_20_key varchar(20),
+col_char_20 char(20),
+/*Indices*/
+primary key (pk) )  PARTITION BY hash (pk) partitions 5 ;
+INSERT/**/ INTO T2 VALUES  ('kbojofmpdxvhqvf', 4, 1, 2, 'bkbojofmpdxvhqvfnyxo', 'tbkboj', 'ttbkbo') ;
+
+DROP TABLE IF EXISTS T3;
+CREATE TABLE T3 (
+col_int int,
+col_char_20 char(20),
+col_char_20_key char(20),
+col_int_key int,
+col_varchar_20 varchar(20),
+col_varchar_20_key varchar(20),
+pk int,
+/*Indices*/
+primary key (pk) )  ;
+INSERT/**/ INTO T3 VALUES  (5, 'attbkbojofmpd', 'da', 6, 'ydatt', 'myd', 1) ;
+INSERT/**/ INTO T3 VALUES  (6, 'qmydat', 'xqmydattbkbojofmp', 5, 'qx', 'rqxqmydattb', 2) ;
+INSERT/**/ INTO T3 VALUES  (5, 'urqxqmydatt', 'ru', 2, 'trurqxqmydattbk', 'ftrurqxq', 3) ;
+
+DROP TABLE IF EXISTS T4;
+CREATE TABLE T4 (
+col_varchar_20 varchar(20),
+col_char_20_key char(20),
+col_int int,
+pk int,
+col_int_key int,
+col_varchar_20_key varchar(20),
+col_char_20 char(20),
+/*Indices*/
+primary key (pk) )  PARTITION BY hash (pk) partitions 5 ;
+INSERT/**/ INTO T4 VALUES  ('hftrurqxqmyda', 'ohftrurqx', 8, 1, 7, 'zoh', 'y') ;
+INSERT/**/ INTO T4 VALUES  ('iyzohftr', 'diyzohftrurqx', 7, 2, 9, 'ldiyzohftrurqxqmydat', 'nldiyzohftru') ;
+INSERT/**/ INTO T4 VALUES  ('vn', 'svnldiyzohftrur', 1, 3, 8, 'fsvnldiyzohf', 's') ;
+
+DROP TABLE IF EXISTS T5;
+CREATE TABLE T5 (
+col_varchar_20_key varchar(20),
+col_varchar_20 varchar(20),
+col_int_key int,
+col_char_20_key char(20),
+col_int int,
+pk int,
+col_char_20 char(20),
+/*Indices*/
+primary key (pk) )  ;
+INSERT/**/ INTO T5 VALUES  ('tsfsvnldiyzoh', 'xtsfsvnldiyzohft', 7, 'axtsfsvnldiyzoh', 7, 1, 'iaxtsfsvnldiyzohftru') ;
+INSERT/**/ INTO T5 VALUES  ('diaxtsfsv', 'bdiaxts', 3, 'lbdiax', 0, 2, 'ilbdiaxtsfsvnl') ;
+INSERT/**/ INTO T5 VALUES  ('uilbdiaxtsfsvnldiyz', 'wuilbdia', 4, 'jwuilbdiaxtsf', 1, 3, 'qj') ;
+INSERT/**/ INTO T5 VALUES  ('hq', 'shqjwuilbdiaxtsf', 5, 'q', 9, 4, 'kq') ;
+INSERT/**/ INTO T5 VALUES  ('akqshqjw', 'hakqshqjwuil', 8, 'jhakqshqjwuilbdia', 1, 5, 'sjhakqshq') ;
+
+DROP TABLE IF EXISTS T6;
+CREATE TABLE T6 (
+col_int_key int,
+pk int,
+col_varchar_20_key varchar(20),
+col_int int,
+col_char_20_key char(20),
+col_char_20 char(20),
+col_varchar_20 varchar(20),
+/*Indices*/
+primary key (pk) )  PARTITION BY hash (pk) partitions 5 ;
+INSERT/**/ INTO T6 VALUES  (4, 1, 'xsj', 8, 'ixsjhakqshqj', 'jixsjhakqshqj', 'njixsjhakqsh') ;
+INSERT/**/ INTO T6 VALUES  (2, 2, 'rnjixsjhakqshqj', 0, 'zrnjixsjhak', 'tzrnjixsjha', 'stzrnjixsjhak') ;
+INSERT/**/ INTO T6 VALUES  (8, 3, 'b', 5, 'zbstzrnjixsjhakqshq', 'bzbstzrnjixs', 'kbz') ;
+INSERT/**/ INTO T6 VALUES  (6, 4, 'ikbzbst', 1, 'jikbzbstzrnjixsjhakq', 'tjikbzbstzrnjixsj', 'ctjikbzbstzrnj') ;
+INSERT/**/ INTO T6 VALUES  (1, 5, 'lctjikbzbstzrn', 6, 'f', 'tflctjikbzbstzrn', 'ftflctjikb') ;
+
+SELECT 1 AS ref0
+FROM   t5 T11 left join t1 T12 ON T11.col_char_20 < T11.col_varchar_20_key
+WHERE  T11.pk IN (SELECT Avg(T12.col_int + 1) FROM  t6 T14);
++------+
+| ref0 |
++------+
++------+
+
+drop table t1;
+drop table t2;
+create table t1 (c1 int, c2 int);
+create table t2 (c1 int, c2 int);
+insert/**/ into t1 values (1, 1), (2, 2);
+insert/**/ into t2 values (1, 1), (2, 2);
+select * from t1 where not exists (select /*+no_unnest*/ 1 from (select 1 + t1.c1 as c1, t2.c2 as s2 from t2) v where c1 = s2 and c1 + 1 <= s2);
++------+------+
+| c1   | c2   |
++------+------+
+|    1 |    1 |
+|    2 |    2 |
++------+------+
+
+drop table t1;
+drop table t2;
+drop table t3;
+
+create table t1 (c1 int, c2 int);
+create table t2 (c1 int, c2 int);
+create table t3 (c1 int, c2 int);
+create index idx_c2 on t2(c2);
+create index idx_c1 on t2(c1);
+create index idx_t1_c1 on t1 (c1);
+
+insert/**/ into t1 values (1, 1);
+insert/**/ into t2 values (1, 1);
+insert/**/ into t3 values (1, 2);
+
+SELECT /*+use_nl(t2 v1)*/ *
+FROM
+  (SELECT /*+no_merge*, no_rewrite, full(t1)*/
+   c1,
+   (SELECT c1 FROM t3 limit 1) as s_c1,
+   (SELECT c2 FROM t3 limit 1) as s_c2
+   FROM t1) v1,
+  t2
+WHERE v1.s_c2 >= t2.c2 and v1.c1 = t2.c1;
++------+------+------+------+------+
+| c1   | s_c1 | s_c2 | c1   | c2   |
++------+------+------+------+------+
+|    1 |    1 |    2 |    1 |    1 |
++------+------+------+------+------+
+
+drop table t1;
+drop table t2;
+drop table t3;
+
+drop table if exists case_partition_10_parent, case_partition_10_set_null_parent, case6_grandparent1;
+CREATE TABLE `case_partition_10_parent` (
+  `pk` int(11) NOT NULL,
+  PRIMARY KEY (`pk`)
+) DEFAULT CHARSET = utf8mb4 ROW_FORMAT = DYNAMIC COMPRESSION = 'zstd_1.3.8' BLOCK_SIZE = 16384 TABLET_SIZE = 134217728 PCTFREE = 0
+ partition by hash(pk)
+(partition `p0`,
+partition `p1`,
+partition `p2`,
+partition `p3`,
+partition `p4`,
+partition `p5`,
+partition `p6`,
+partition `p7`);
+
+CREATE TABLE `case_partition_10_set_null_parent` (
+  `pk` int(11) NOT NULL,
+  PRIMARY KEY (`pk`)
+) DEFAULT CHARSET = utf8mb4 ROW_FORMAT = DYNAMIC COMPRESSION = 'zstd_1.3.8' BLOCK_SIZE = 16384 TABLET_SIZE = 134217728 PCTFREE = 0
+ partition by hash(pk)
+(partition `p0`,
+partition `p1`,
+partition `p2`,
+partition `p3`,
+partition `p4`,
+partition `p5`,
+partition `p6`,
+partition `p7`);
+
+CREATE TABLE `case6_grandparent1` (
+  `pk` int(11) NOT NULL,
+  PRIMARY KEY (`pk`)
+) DEFAULT CHARSET = utf8mb4 ROW_FORMAT = DYNAMIC COMPRESSION = 'zstd_1.3.8' BLOCK_SIZE = 16384 TABLET_SIZE = 134217728 PCTFREE = 0;
+
+UPDATE
+    /*+no_rewrite update_join_multi_table_complicated_multi_index_table_case_hint_with_index.yaml no_use_px */
+    case6_grandparent1 JOIN_A
+    left join (
+        select
+            /*+no_rewrite update_join_multi_table_complicated_multi_index_table_case_hint_with_index.yaml */
+            pk
+        from (
+                select
+                    /*+no_rewrite update_join_multi_table_complicated_multi_index_table_case_hint_with_index.yaml NO_USE_NL_MATERIALIZATION(B) leading(A,B) use_hash(A,B) index(A PRIMARY) index(B PRIMARY)*/
+                    B.pk,
+                    B.pk pk_alias
+                from case_partition_10_parent A
+                    right join case_partition_10_set_null_parent B on A.pk = B.pk
+                order by 1,
+                    2
+            )
+        where pk not in (-798)
+        order by 1 desc
+    ) JOIN_B ON JOIN_A.pk = JOIN_B.pk
+SET JOIN_A.pk = JOIN_A.pk,
+    JOIN_A.pk = JOIN_A.pk
+WHERE JOIN_A.pk in (
+        select
+            /*+no_rewrite update_join_multi_table_complicated_multi_index_table_case_hint_with_index.yaml */
+            pk
+        from (
+                select
+                    /*+no_rewrite update_join_multi_table_complicated_multi_index_table_case_hint_with_index.yaml NO_USE_NL_MATERIALIZATION(B) leading(A,B) use_hash(A,B) index(A PRIMARY) index(B PRIMARY)*/
+                    B.pk,
+                    B.pk pk_alias
+                from case_partition_10_parent A
+                    right join case_partition_10_set_null_parent B on A.pk = B.pk
+                order by 1,
+                    2
+            )
+        where pk not in (-798)
+        order by 1 desc
+    );
+
+drop table case_partition_10_parent, case_partition_10_set_null_parent, case6_grandparent1;

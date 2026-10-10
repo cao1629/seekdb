@@ -1,0 +1,243 @@
+DROP TABLE IF EXISTS fts_table_3;
+====================== basic test #1 =======================
+============= create fts index on existing table ===========
+CREATE TABLE fts_table_3 (
+id int primary key,
+name varchar(20));
+INSERT INTO fts_table_3 VALUES (1, "aaa AAA"), (2, "bbb BBB"), (3, "ccc CCC");
+CREATE FULLTEXT INDEX f101 on fts_table_3(name);
+SET OB_ENABLE_INDEX_DIRECT_SELECT = on;
+SHOW INDEX FROM fts_table_3;
+Table	Non_unique	Key_name	Seq_in_index	Column_name	Collation	Cardinality	Sub_part	Packed	Null	Index_type	Comment	Index_comment	Visible	Expression
+fts_table_3	0	PRIMARY	1	id	A	NULL	NULL	NULL		BTREE	available		YES	NULL
+fts_table_3	1	f101	1	name	A	NULL	NULL	NULL	YES	FULLTEXT	available		YES	NULL
+select id, name, match(name) against('aaa') as score from fts_table_3 where match(name) against('aaa');
+id	name	score
+1	aaa AAA	0.9063035260364354
+select id, name, match(name) against('bbb') as score from fts_table_3 where match(name) against('bbb');
+id	name	score
+2	bbb BBB	0.9063035260364354
+select id, name, match(name) against('ccc') as score from fts_table_3 where match(name) against('ccc');
+id	name	score
+3	ccc CCC	0.9063035260364354
+DROP TABLE IF EXISTS fts_table_3;
+====================== basic test #2 =======================
+========= create fts index on table with fts index =========
+DROP TABLE IF EXISTS fts_table_4;
+CREATE TABLE fts_table_4 (
+id int,
+name varchar(20),
+content varchar(20),
+FULLTEXT INDEX f102(name));
+SHOW INDEX FROM fts_table_4;
+Table	Non_unique	Key_name	Seq_in_index	Column_name	Collation	Cardinality	Sub_part	Packed	Null	Index_type	Comment	Index_comment	Visible	Expression
+fts_table_4	1	f102	1	name	A	NULL	NULL	NULL	YES	FULLTEXT	available		YES	NULL
+CREATE FULLTEXT INDEX f103 on fts_table_4(content);
+SHOW INDEX FROM fts_table_4;
+Table	Non_unique	Key_name	Seq_in_index	Column_name	Collation	Cardinality	Sub_part	Packed	Null	Index_type	Comment	Index_comment	Visible	Expression
+fts_table_4	1	f102	1	name	A	NULL	NULL	NULL	YES	FULLTEXT	available		YES	NULL
+fts_table_4	1	f103	1	content	A	NULL	NULL	NULL	YES	FULLTEXT	available		YES	NULL
+DROP TABLE IF EXISTS fts_table_4;
+====================== basic test #3 =======================
+========= create fts index afterward on partition table =========
+DROP TABLE IF EXISTS fts_test;
+result_format: 4
+create table fts_test(seq_id int PRIMARY KEY, detail varchar(4096)) partition by hash(seq_id) partitions 2;
+insert into fts_test(seq_id, detail) values(1, 'test1'),(2, 'test1 test2'),(3, 'test1 test2 test3'),(4, 'test1 test2 test3 test4'),(5, 'test1 test2 test3 test4 test5');
+CREATE FULLTEXT INDEX f2030 on fts_test(detail);
+select *, match(detail) against('test1 test2') from fts_test where match(detail) against('test1 test2');
++--------+-------------------------------+--------------------------------------+
+| seq_id | detail                        | match(detail) against('test1 test2') |
++--------+-------------------------------+--------------------------------------+
+|      2 | test1 test2                   |                   0.7432432432432433 |
+|      3 | test1 test2 test3             |                   0.7006369426751594 |
+|      4 | test1 test2 test3 test4       |                   0.6626506024096386 |
+|      5 | test1 test2 test3 test4 test5 |                   0.6285714285714286 |
+|      1 | test1                         |                   0.3956834532374101 |
++--------+-------------------------------+--------------------------------------+
+========= create fts index afterward on subpartition table =========
+DROP TABLE IF EXISTS fts_test;
+create table fts_test(seq_id int PRIMARY KEY, detail varchar(4096)) partition by range(seq_id) subpartition by hash(seq_id) subpartitions 4
+(PARTITION r1 VALUES LESS THAN(10),
+ PARTITION r2 VALUES LESS THAN(20),
+ PARTITION r3 VALUES LESS THAN(30),
+ PARTITION r4 VALUES LESS THAN(40));
+insert into fts_test(seq_id, detail) values(1, 'test1'),(2, 'test1 test2'),(3, 'test1 test2 test3'),(4, 'test1 test2 test3 test4'),(5, 'test1 test2 test3 test4 test5');
+CREATE FULLTEXT INDEX f2001 on fts_test(detail);
+select *, match(detail) against('test1 test2') from fts_test where match(detail) against('test1 test2');
++--------+-------------------------------+--------------------------------------+
+| seq_id | detail                        | match(detail) against('test1 test2') |
++--------+-------------------------------+--------------------------------------+
+|      2 | test1 test2                   |                   0.7432432432432433 |
+|      3 | test1 test2 test3             |                   0.7006369426751594 |
+|      4 | test1 test2 test3 test4       |                   0.6626506024096386 |
+|      5 | test1 test2 test3 test4 test5 |                   0.6285714285714286 |
+|      1 | test1                         |                   0.3956834532374101 |
++--------+-------------------------------+--------------------------------------+
+
+========= create fts index afterward on table =========
+DROP TABLE IF EXISTS fts_test;
+create table fts_test(seq_id int PRIMARY KEY, detail varchar(4096));
+insert into fts_test(seq_id, detail) values(1, 'test1'),(2, 'test1 test2'),(3, 'test1 test2 test3'),(4, 'test1 test2 test3 test4'),(5, 'test1 test2 test3 test4 test5');
+CREATE FULLTEXT INDEX f200 on fts_test(detail);
+select *, match(detail) against('test1 test2') from fts_test where match(detail) against('test1 test2');
++--------+-------------------------------+--------------------------------------+
+| seq_id | detail                        | match(detail) against('test1 test2') |
++--------+-------------------------------+--------------------------------------+
+|      2 | test1 test2                   |                   0.7432432432432433 |
+|      3 | test1 test2 test3             |                   0.7006369426751594 |
+|      4 | test1 test2 test3 test4       |                   0.6626506024096386 |
+|      5 | test1 test2 test3 test4 test5 |                   0.6285714285714286 |
+|      1 | test1                         |                   0.3956834532374101 |
++--------+-------------------------------+--------------------------------------+
+DROP TABLE IF EXISTS fts_test;
+========= create index with parser =========
+DROP TABLE IF EXISTS fts_test;
+create table fts_test(seq_id int PRIMARY KEY, detail varchar(4096));
+
+CREATE INDEX f200 on fts_test(detail) WITH PARSER ngram;
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near 'PARSER ngram' at line 1
+
+CREATE SPATIAL INDEX f200 on fts_test(detail) WITH PARSER ngram;
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near 'PARSER ngram' at line 1
+
+CREATE UNIQUE INDEX f200 on fts_test(detail) WITH PARSER ngram;
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near 'PARSER ngram' at line 1
+
+CREATE VECTOR INDEX f200 on fts_test(detail) WITH PARSER ngram;
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near 'PARSER ngram' at line 1
+
+DROP TABLE IF EXISTS fts_test;
+
+DROP TABLE IF EXISTS fts_table_with_generated_col;
+CREATE TABLE fts_table_with_generated_col(
+    c1 VARCHAR(200),
+    c2 TEXT,
+    c3 TEXT AS (CONCAT(c2, '')) VIRTUAL,
+    c4 TEXT AS (CONCAT(c2, '')) STORED
+);
+create fulltext index idx1 on fts_table_with_generated_col(c3);
+ERROR 0A000: Fulltext index on generated column is not supported
+
+alter table fts_table_with_generated_col add fulltext index idx1(c3);
+ERROR 0A000: Fulltext index on generated column is not supported
+
+create fulltext index idx1 on fts_table_with_generated_col(c4);
+ERROR 0A000: Fulltext index on generated column is not supported
+
+alter table fts_table_with_generated_col add fulltext index idx1(c4);
+ERROR 0A000: Fulltext index on generated column is not supported
+
+DROP TABLE fts_table_with_generated_col;
+
+DROP TABLE IF EXISTS fts_col_orders;
+CREATE TABLE fts_col_orders(
+    a INT,
+    b VARCHAR(20),
+    c VARCHAR(20)
+);
+
+CREATE FULLTEXT INDEX fts_b_c on fts_col_orders(b, c);
+
+CREATE FULLTEXT INDEX fts_c_b on fts_col_orders(c, b);
+
+SHOW CREATE TABLE fts_col_orders;
+Table	Create Table
+fts_col_orders	CREATE TABLE `fts_col_orders` (
+  `a` int(11) DEFAULT NULL,
+  `b` varchar(20) DEFAULT NULL,
+  `c` varchar(20) DEFAULT NULL,
+  FULLTEXT KEY `fts_b_c` (`b`, `c`) WITH PARSER space PARSER_PROPERTIES=(min_token_size=3,max_token_size=84) BLOCK_SIZE 16384,
+  FULLTEXT KEY `fts_c_b` (`c`, `b`) WITH PARSER space PARSER_PROPERTIES=(min_token_size=3,max_token_size=84) BLOCK_SIZE 16384
+) ORGANIZATION INDEX DEFAULT CHARSET = utf8mb4 ROW_FORMAT = DYNAMIC COMPRESSION = 'zstd_1.3.8' BLOCK_SIZE = 16384 TABLET_SIZE = 134217728 PCTFREE = 0
+
+SHOW INDEX FROM fts_col_orders;
+Table	Non_unique	Key_name	Seq_in_index	Column_name	Collation	Cardinality	Sub_part	Packed	Null	Index_type	Comment	Index_comment	Visible	Expression
+fts_col_orders	1	fts_b_c	1	b	A	NULL	NULL	NULL	YES	FULLTEXT	available		YES	NULL
+fts_col_orders	1	fts_b_c	2	c	A	NULL	NULL	NULL	YES	FULLTEXT	available		YES	NULL
+fts_col_orders	1	fts_c_b	1	c	A	NULL	NULL	NULL	YES	FULLTEXT	available		YES	NULL
+fts_col_orders	1	fts_c_b	2	b	A	NULL	NULL	NULL	YES	FULLTEXT	available		YES	NULL
+
+SELECT * FROM fts_col_orders WHERE MATCH(b,c) AGAINST("aa");
++------+------+------+
+| a    | b    | c    |
++------+------+------+
++------+------+------+
+
+SELECT * FROM fts_col_orders WHERE MATCH(c,b) AGAINST("aa");
++------+------+------+
+| a    | b    | c    |
++------+------+------+
++------+------+------+
+
+ALTER TABLE fts_col_orders ADD FULLTEXT INDEX fts_b_c2(b, c);
+ALTER TABLE fts_col_orders ADD FULLTEXT INDEX fts_c_b2(c, b);
+SHOW CREATE TABLE fts_col_orders;
+Table	Create Table
+fts_col_orders	CREATE TABLE `fts_col_orders` (
+  `a` int(11) DEFAULT NULL,
+  `b` varchar(20) DEFAULT NULL,
+  `c` varchar(20) DEFAULT NULL,
+  FULLTEXT KEY `fts_b_c` (`b`, `c`) WITH PARSER space PARSER_PROPERTIES=(min_token_size=3,max_token_size=84) BLOCK_SIZE 16384,
+  FULLTEXT KEY `fts_c_b` (`c`, `b`) WITH PARSER space PARSER_PROPERTIES=(min_token_size=3,max_token_size=84) BLOCK_SIZE 16384,
+  FULLTEXT KEY `fts_b_c2` (`b`, `c`) WITH PARSER space PARSER_PROPERTIES=(min_token_size=3,max_token_size=84) BLOCK_SIZE 16384,
+  FULLTEXT KEY `fts_c_b2` (`c`, `b`) WITH PARSER space PARSER_PROPERTIES=(min_token_size=3,max_token_size=84) BLOCK_SIZE 16384
+) ORGANIZATION INDEX DEFAULT CHARSET = utf8mb4 ROW_FORMAT = DYNAMIC COMPRESSION = 'zstd_1.3.8' BLOCK_SIZE = 16384 TABLET_SIZE = 134217728 PCTFREE = 0
+
+SHOW INDEX FROM fts_col_orders;
+Table	Non_unique	Key_name	Seq_in_index	Column_name	Collation	Cardinality	Sub_part	Packed	Null	Index_type	Comment	Index_comment	Visible	Expression
+fts_col_orders	1	fts_b_c	1	b	A	NULL	NULL	NULL	YES	FULLTEXT	available		YES	NULL
+fts_col_orders	1	fts_b_c	2	c	A	NULL	NULL	NULL	YES	FULLTEXT	available		YES	NULL
+fts_col_orders	1	fts_c_b	1	c	A	NULL	NULL	NULL	YES	FULLTEXT	available		YES	NULL
+fts_col_orders	1	fts_c_b	2	b	A	NULL	NULL	NULL	YES	FULLTEXT	available		YES	NULL
+fts_col_orders	1	fts_b_c2	1	b	A	NULL	NULL	NULL	YES	FULLTEXT	available		YES	NULL
+fts_col_orders	1	fts_b_c2	2	c	A	NULL	NULL	NULL	YES	FULLTEXT	available		YES	NULL
+fts_col_orders	1	fts_c_b2	1	c	A	NULL	NULL	NULL	YES	FULLTEXT	available		YES	NULL
+fts_col_orders	1	fts_c_b2	2	b	A	NULL	NULL	NULL	YES	FULLTEXT	available		YES	NULL
+
+DROP TABLE fts_col_orders;
+
+DROP TABLE IF EXISTS fts_varchar_binary;
+CREATE TABLE fts_varchar_binary(a VARCHAR(255)) CHARACTER SET = binary;
+
+CREATE FULLTEXT INDEX fts1 ON fts_varchar_binary(a);
+ERROR HY000: Column 'a' cannot be part of FULLTEXT index
+
+ALTER TABLE fts_varchar_binary ADD FULLTEXT INDEX fts1(a);
+ERROR HY000: Column 'a' cannot be part of FULLTEXT index
+
+DROP TABLE fts_varchar_binary;
+
+CREATE TABLE fts_varchar_binary(a VARCHAR(255));
+
+CREATE FULLTEXT INDEX fts1 ON fts_varchar_binary(a);
+
+ALTER TABLE fts_varchar_binary ADD FULLTEXT INDEX fts2(a);
+DROP TABLE fts_varchar_binary;
+
+DROP TABLE IF EXISTS fts_char_binary;
+CREATE TABLE fts_char_binary(a CHAR(255)) CHARACTER SET = binary;
+
+CREATE FULLTEXT INDEX fts1 ON fts_char_binary(a);
+ERROR HY000: Column 'a' cannot be part of FULLTEXT index
+
+ALTER TABLE fts_char_binary ADD FULLTEXT INDEX fts1(a);
+ERROR HY000: Column 'a' cannot be part of FULLTEXT index
+
+DROP TABLE fts_char_binary;
+
+CREATE TABLE fts_char_binary(a CHAR(255));
+
+CREATE FULLTEXT INDEX fts1 ON fts_char_binary(a);
+
+ALTER TABLE fts_char_binary ADD FULLTEXT INDEX fts2(a);
+DROP TABLE fts_char_binary;
+
+========= create index with parser =========
+DROP TABLE IF EXISTS fts_ik;
+create table fts_ik(seq_id int PRIMARY KEY, detail varchar(4096));
+
+CREATE FULLTEXT INDEX f200 on fts_ik(detail) WITH PARSER ik;
+
+DROP TABLE IF EXISTS fts_test;
+

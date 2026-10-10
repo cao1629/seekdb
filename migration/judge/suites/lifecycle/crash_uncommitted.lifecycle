@@ -1,0 +1,18 @@
+# Uncommitted work is gone after SIGKILL, committed work in the same table stays:
+# session A holds an open transaction (insert + update) when the server dies.
+start
+sql: create table t1 (id int primary key, v int)
+sql: insert into t1 values (1, 100)
+open A
+A: begin
+A: insert into t1 values (2, 200)
+A: update t1 set v = 101 where id = 1
+sql: select * from t1 order by id
+# proves session A's transaction is live and holds the row lock when the server dies
+sql: select * from t1 where id = 1 for update nowait
+kill9
+close A
+restart
+sql: select * from t1 order by id
+sql: insert into t1 values (2, 222)
+sql: select * from t1 order by id

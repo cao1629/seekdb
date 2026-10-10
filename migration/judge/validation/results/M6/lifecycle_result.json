@@ -1,0 +1,60 @@
+{
+ "binary": "/Users/meizhi/.claude/jobs/3985849d/tmp/bin/seekdb-M6",
+ "binary_sha256": "e7d8c6a347586bee22629bc57883b093c1ae804776fb7f19be5fe87ebf111d88",
+ "failed": [
+  "binary_protocol",
+  "crash_committed",
+  "crash_uncommitted",
+  "fork_restart",
+  "param_persistence",
+  "restart_graceful",
+  "vector_restart"
+ ],
+ "finished": "2026-10-10T13:40:38Z",
+ "record": false,
+ "scenarios": [
+  {
+   "error": "binary_protocol.lifecycle:5: start (sdb wait-ready exited with 1)",
+   "name": "binary_protocol",
+   "ok": false,
+   "seconds": 1.1
+  },
+  {
+   "error": "crash_committed.lifecycle:3: start (sdb wait-ready exited with 1)",
+   "name": "crash_committed",
+   "ok": false,
+   "seconds": 1.1
+  },
+  {
+   "error": "crash_uncommitted.lifecycle:3: start (sdb wait-ready exited with 1)",
+   "name": "crash_uncommitted",
+   "ok": false,
+   "seconds": 1.1
+  },
+  {
+   "error": "fork_restart.lifecycle:3: start (sdb wait-ready exited with 1)",
+   "name": "fork_restart",
+   "ok": false,
+   "seconds": 1.2
+  },
+  {
+   "error": "param_persistence.lifecycle:3: start trace_log_slow_query_watermark=3s (sdb wait-ready exited with 1)",
+   "name": "param_persistence",
+   "ok": false,
+   "seconds": 1.1
+  },
+  {
+   "error": "restart_graceful.lifecycle:3: start (sdb wait-ready exited with 1)",
+   "name": "restart_graceful",
+   "ok": false,
+   "seconds": 1.2
+  },
+  {
+   "error": "vector_restart.lifecycle:3: start (sdb wait-ready exited with 1)",
+   "name": "vector_restart",
+   "ok": false,
+   "seconds": 1.1
+  }
+ ],
+ "started": "2026-10-10T13:40:30Z"
+}

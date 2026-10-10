@@ -1,0 +1,145 @@
+# Judge scenario (area: fork) -- errors and privileges of DIFF TABLE and MERGE TABLE.
+#
+# Pins down, through public SQL only:
+#  - both statements need a primary key on the tables: 1235 "DIFF TABLE on
+#    table without primary key not supported" / "MERGE TABLE on table without
+#    primary key not supported";
+#  - both need identical visible column definitions (same count, order, name,
+#    type and length, nullability, default, key membership); any mismatch,
+#    including a view on one side, fails with 4029 "Schema error" (the more
+#    specific message the code formats is not shown to the client);
+#  - a missing table or database fails with 1146 "Table doesn't exist" without
+#    naming the table;
+#  - MERGE needs SELECT on the incoming table and SELECT, INSERT and UPDATE on
+#    the current one (1142 names the first missing privilege); DIFF needs
+#    SELECT on both; column definitions are validated before privileges, so
+#    a mismatch on a table the user cannot read still reports "Schema error";
+#  - MERGE works on LONGTEXT values (THEIRS replaces the whole value).
+
+--disable_warnings
+drop table if exists er_cur, er_inc, er_nopk, er_nopk2, er_cnt, er_name, er_null, er_def, er_pk, er_type, er_order, er_hidden;
+drop table if exists er_lob, er_lob2;
+drop view if exists er_v;
+drop user if exists er_user;
+--enable_warnings
+
+create table er_cur(id int primary key, v varchar(10) default 'x');
+insert into er_cur values (1, 'a');
+create table er_inc(id int primary key, v varchar(10) default 'x');
+insert into er_inc values (2, 'b');
+create table er_nopk(id int, v varchar(10) default 'x');
+create table er_nopk2(id int, v varchar(10) default 'x');
+create table er_cnt(id int primary key, v varchar(10) default 'x', w int);
+create table er_name(id int primary key, w varchar(10) default 'x');
+create table er_null(id int primary key, v varchar(10) not null default 'x');
+create table er_def(id int primary key, v varchar(10) default 'y');
+create table er_pk(id int, v varchar(10) default 'x', primary key (id, v));
+create table er_type(id int primary key, v varchar(11) default 'x');
+create table er_order(v varchar(10) default 'x', id int primary key);
+create view er_v as select * from er_cur;
+
+--echo #
+--echo # 1. tables without a primary key
+--echo #
+--error 1235
+diff table er_nopk against er_nopk2;
+--error 1235
+merge table er_nopk2 into er_nopk;
+--error 1235
+merge table er_nopk2 into er_nopk strategy theirs;
+
+--echo #
+--echo # 2. column definitions must be identical
+--echo #
+--error 4029
+diff table er_cur against er_nopk;
+--error 4029
+diff table er_cur against er_cnt;
+--error 4029
+diff table er_cnt against er_cur;
+--error 4029
+diff table er_cur against er_name;
+--error 4029
+diff table er_cur against er_null;
+--error 4029
+diff table er_cur against er_def;
+--error 4029
+diff table er_cur against er_pk;
+--error 4029
+diff table er_cur against er_type;
+--error 4029
+diff table er_cur against er_order;
+--error 4029
+diff table er_cur against er_v;
+--error 4029
+merge table er_type into er_cur strategy theirs;
+--error 4029
+merge table er_v into er_cur;
+--error 4029
+merge table er_cur into er_v;
+
+--echo #
+--echo # 3. missing objects
+--echo #
+--error 1146
+diff table er_cur against er_missing;
+--error 1146
+diff table er_missing against er_cur;
+--error 1146
+merge table er_missing into er_cur;
+--error 1146
+merge table er_cur into er_missing strategy ours;
+--error 1146
+diff table er_nodb.er_cur against er_cur;
+
+--echo #
+--echo # 4. privileges
+--echo #
+create user er_user identified by 'er_pass';
+grant select on test.er_inc to er_user;
+grant select, insert on test.er_cur to er_user;
+connect (eu,$OBMYSQL_MS0,er_user,er_pass,test,$OBMYSQL_PORT);
+diff table er_cur against er_inc;
+--error 1142
+merge table er_inc into er_cur strategy ours;
+--error 1142
+merge table er_cur into er_inc;
+--echo # er_def has another default and er_user cannot read it: Schema error first
+--error 4029
+diff table er_cur against er_def;
+connection default;
+create table er_hidden(id int primary key, v varchar(10) default 'x');
+connection eu;
+--error 1142
+diff table er_cur against er_hidden;
+connection default;
+grant update on test.er_cur to er_user;
+connection eu;
+--enable_info
+merge table er_inc into er_cur strategy ours;
+--disable_info
+select * from er_cur order by id;
+connection default;
+disconnect eu;
+
+--echo #
+--echo # 5. LONGTEXT values
+--echo #
+create table er_lob(id int primary key, v longtext);
+insert into er_lob values (1, repeat('a', 100000));
+fork table er_lob to er_lob2;
+update er_lob2 set v = concat(repeat('a', 99999), 'b') where id = 1;
+--error 4179
+merge table er_lob2 into er_lob;
+--enable_info
+merge table er_lob2 into er_lob strategy theirs;
+--disable_info
+select id, length(v), right(v, 3) from er_lob;
+
+--echo #
+--echo # cleanup
+--echo #
+drop user er_user;
+drop view er_v;
+drop table er_cur, er_inc, er_nopk, er_nopk2, er_cnt, er_name, er_null, er_def, er_pk, er_type, er_order, er_hidden;
+drop table er_lob, er_lob2;

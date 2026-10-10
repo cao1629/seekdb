@@ -1,0 +1,124 @@
+# Judge scenario (area: hybrid) -- DBMS_HYBRID_SEARCH.GET_SQL / SEARCH: full-text,
+# vector and fused (weighted sum and RRF) retrieval over one table.
+#
+# Pins down, through public SQL only:
+#  - the exact SQL text GET_SQL generates for a match query, a knn query, a
+#    weighted hybrid query and an RRF hybrid query (default and explicit
+#    rank_constant / rank_window_size, size, from, _source);
+#  - SEARCH returns a JSON array of hits with the _source columns plus _score,
+#    keys ordered by key length; knn scores are 1 / (1 + l2_distance) rounded
+#    to 8 decimals (1.0 prints as 1.0); no hit gives SQL NULL;
+#  - weighted fusion: _score = BM25 score + vector score, hits ordered by
+#    _score DESC then insertion order;
+#  - RRF fusion: _score = 1/(keyword_rank + c) + 1/(semantic_rank + c) with
+#    c = 60 by default; each term is a 4-decimal DECIMAL (integer division),
+#    so the JSON shows 4 decimals; documents found by one side only get one
+#    term; ties are broken by insertion order;
+#  - size limits the hits (default 10), from skips hits, knn returns at most
+#    min(k, size) rows;
+#  - the generated SQL itself runs and returns the same ranking as SEARCH;
+#  - a table with a user PRIMARY KEY is rejected (1235 "table with user
+#    provided primary key not supported") unless it is ORGANIZATION HEAP; a
+#    heap table needs SYNC_MODE=IMMEDIATE on its vector index to see rows
+#    right after they are inserted.
+# BM25 values are full doubles in the JSON, so hits with BM25 scores are
+# unpacked with JSON_TABLE (ord keeps the hit order) and rounded to 6 decimals.
+# All rows are freshly inserted (no compaction), so the BM25 statistics are
+# exact: 6 documents, 'search' in 4 of them.
+
+--disable_warnings
+drop table if exists hs_docs, hs_pk, hs_heap;
+--enable_warnings
+
+create table hs_docs(id int, title varchar(100), body varchar(200), emb vector(3),
+  fulltext key ft_body(body),
+  vector index vidx(emb) with (distance=l2, type=hnsw, lib=vsag));
+insert into hs_docs values
+  (1, 'Postgres tuning', 'database index tuning guide', '[0.9,0.1,0]'),
+  (2, 'Search engines', 'full text search engine internals', '[0.1,0.9,0]'),
+  (3, 'Vector search', 'vector search with hnsw graphs', '[0,0.2,0.9]'),
+  (4, 'Hybrid retrieval', 'hybrid search combines text search and vector search', '[0.3,0.5,0.6]'),
+  (5, 'Storage', 'storage engine writes pages to disk', '[0.8,0,0.3]'),
+  (6, 'Search tips', 'search search search', '[0.2,0.8,0.2]');
+
+--echo #
+--echo # 1. full-text only
+--echo #
+select dbms_hybrid_search.get_sql('hs_docs', '{"query": {"match": {"body": "search"}}, "_source": ["id", "title"]}');
+select jt.ord, jt.id, jt.title, round(jt.score, 6) score
+  from json_table(dbms_hybrid_search.search('hs_docs', '{"query": {"match": {"body": "search"}}, "_source": ["id", "title"]}'),
+       '$[*]' columns (ord for ordinality, id int path '$.id', title varchar(100) path '$.title', score double path '$._score')) jt;
+--echo # the generated SQL returns the same ranking
+let $hs_sql = `select dbms_hybrid_search.get_sql('hs_docs', '{"query": {"match": {"body": "search"}}, "_source": ["id", "title"]}')`;
+--replace_numeric_round 6
+eval $hs_sql;
+--echo # paging
+select jt.ord, jt.id, round(jt.score, 6) score
+  from json_table(dbms_hybrid_search.search('hs_docs', '{"query": {"match": {"body": "search"}}, "_source": ["id"], "size": 2, "from": 1}'),
+       '$[*]' columns (ord for ordinality, id int path '$.id', score double path '$._score')) jt;
+select dbms_hybrid_search.get_sql('hs_docs', '{"query": {"match": {"body": "search"}}, "_source": ["id"], "size": 2, "from": 1}');
+--echo # no hit
+select dbms_hybrid_search.search('hs_docs', '{"query": {"match": {"body": "nomatchword"}}, "_source": ["id"]}');
+
+--echo #
+--echo # 2. vector only
+--echo #
+select dbms_hybrid_search.get_sql('hs_docs', '{"knn": {"field": "emb", "k": 3, "query_vector": [0,0,1]}, "_source": ["id", "title"]}');
+select dbms_hybrid_search.search('hs_docs', '{"knn": {"field": "emb", "k": 3, "query_vector": [0,0,1]}, "_source": ["id", "title"]}');
+select dbms_hybrid_search.search('hs_docs', '{"knn": {"field": "emb", "k": 3, "query_vector": [0.9,0.1,0]}, "_source": ["id"], "size": 2}');
+select dbms_hybrid_search.search('hs_docs', '{"knn": {"field": "emb", "k": 6, "query_vector": [0,0,1], "boost": 2}, "_source": ["id"], "size": 4}');
+
+--echo #
+--echo # 3. weighted hybrid (no rank clause)
+--echo #
+select dbms_hybrid_search.get_sql('hs_docs', '{"query": {"match": {"body": "search"}}, "knn": {"field": "emb", "k": 3, "query_vector": [0,0,1]}, "_source": ["id", "title"]}');
+select jt.ord, jt.id, jt.title, round(jt.score, 6) score
+  from json_table(dbms_hybrid_search.search('hs_docs', '{"query": {"match": {"body": "search"}}, "knn": {"field": "emb", "k": 3, "query_vector": [0,0,1]}, "_source": ["id", "title"]}'),
+       '$[*]' columns (ord for ordinality, id int path '$.id', title varchar(100) path '$.title', score double path '$._score')) jt;
+select jt.ord, jt.id, round(jt.score, 6) score
+  from json_table(dbms_hybrid_search.search('hs_docs', '{"query": {"match": {"body": "search"}}, "knn": {"field": "emb", "k": 3, "query_vector": [0,0,1]}, "_source": ["id"], "size": 3}'),
+       '$[*]' columns (ord for ordinality, id int path '$.id', score double path '$._score')) jt;
+
+--echo #
+--echo # 4. RRF hybrid
+--echo #
+select dbms_hybrid_search.get_sql('hs_docs', '{"query": {"match": {"body": "search"}}, "knn": {"field": "emb", "k": 3, "query_vector": [0,0,1]}, "rank": {"rrf": {}}, "_source": ["id", "title"]}');
+select dbms_hybrid_search.search('hs_docs', '{"query": {"match": {"body": "search"}}, "knn": {"field": "emb", "k": 3, "query_vector": [0,0,1]}, "rank": {"rrf": {}}, "_source": ["id", "title"]}');
+select dbms_hybrid_search.search('hs_docs', '{"query": {"match": {"body": "search"}}, "knn": {"field": "emb", "k": 3, "query_vector": [0,0,1]}, "rank": {"rrf": {"rank_constant": 1}}, "_source": ["id"]}');
+select dbms_hybrid_search.get_sql('hs_docs', '{"query": {"match": {"body": "search"}}, "knn": {"field": "emb", "k": 3, "query_vector": [0,0,1]}, "rank": {"rrf": {"rank_constant": 10, "rank_window_size": 4}}, "_source": ["id"], "size": 3}');
+select dbms_hybrid_search.search('hs_docs', '{"query": {"match": {"body": "search"}}, "knn": {"field": "emb", "k": 3, "query_vector": [0,0,1]}, "rank": {"rrf": {"rank_constant": 10, "rank_window_size": 4}}, "_source": ["id"], "size": 3}');
+--echo # the generated RRF SQL returns the same hits
+let $hs_sql = `select dbms_hybrid_search.get_sql('hs_docs', '{"query": {"match": {"body": "search"}}, "knn": {"field": "emb", "k": 3, "query_vector": [0,0,1]}, "rank": {"rrf": {}}, "_source": ["id", "title"]}')`;
+eval $hs_sql;
+--echo # the rank clause is ignored unless both query and knn are given
+select dbms_hybrid_search.search('hs_docs', '{"knn": {"field": "emb", "k": 2, "query_vector": [0,0,1]}, "rank": {"rrf": {"rank_constant": 1}}, "_source": ["id"]}');
+
+--echo #
+--echo # 5. DML is visible to the next search
+--echo #
+insert into hs_docs values (7, 'Search vectors', 'search vector vector', '[0,0,1]');
+delete from hs_docs where id = 3;
+select dbms_hybrid_search.search('hs_docs', '{"query": {"match": {"body": "vector"}}, "knn": {"field": "emb", "k": 2, "query_vector": [0,0,1]}, "rank": {"rrf": {"rank_constant": 2}}, "_source": ["id"]}');
+select dbms_hybrid_search.search('hs_docs', '{"knn": {"field": "emb", "k": 2, "query_vector": [0,0.1,1]}, "_source": ["id"]}');
+
+--echo #
+--echo # 6. primary keys and heap tables
+--echo #
+create table hs_pk(id int primary key, body varchar(200), emb vector(3),
+  fulltext key ft_body(body), vector index vidx(emb) with (distance=l2, type=hnsw, lib=vsag));
+--error 1235
+select dbms_hybrid_search.search('hs_pk', '{"query": {"match": {"body": "search"}}}');
+--error 1235
+select dbms_hybrid_search.get_sql('hs_pk', '{"query": {"match": {"body": "search"}}}');
+create table hs_heap(id int primary key, body varchar(200), emb vector(2),
+  fulltext key ft_body(body),
+  vector index vidx(emb) with (distance=l2, type=hnsw, lib=vsag, sync_mode=immediate)) organization heap;
+insert into hs_heap values (1, 'apple pie', '[1,0]'), (2, 'apple tart', '[1,1]'), (3, 'pear cake', '[0,1]'), (4, 'plum jam', '[-1,0]');
+select dbms_hybrid_search.get_sql('test.hs_heap', '{"query": {"match": {"body": "apple"}}, "knn": {"field": "emb", "k": 2, "query_vector": [0,1]}, "rank": {"rrf": {"rank_constant": 1}}, "_source": ["id"]}');
+select dbms_hybrid_search.search('test.hs_heap', '{"query": {"match": {"body": "apple"}}, "knn": {"field": "emb", "k": 2, "query_vector": [0,1]}, "rank": {"rrf": {"rank_constant": 1}}, "_source": ["id"]}');
+select dbms_hybrid_search.search('hs_heap', '{"knn": {"field": "emb", "k": 3, "query_vector": [1,0]}}');
+
+--echo #
+--echo # cleanup
+--echo #
+drop table hs_docs, hs_pk, hs_heap;

@@ -1,0 +1,287 @@
+drop database if exists fdb_src;
+drop database if exists fdb_dst;
+drop database if exists fdb_other;
+drop database if exists fdb_empty;
+drop database if exists fdb_empty2;
+drop database if exists fdb_routine;
+drop database if exists fdb_routine2;
+drop database if exists fdb_func;
+drop database if exists fdb_func2;
+drop database if exists fdb_trigger;
+drop database if exists fdb_trigger2;
+drop database if exists fdb_spatial;
+drop database if exists fdb_spatial2;
+drop database if exists fdb_case;
+#
+# 1. source database
+#
+create database fdb_other;
+create table fdb_other.ref(id int primary key);
+insert into fdb_other.ref values (1), (2);
+create database fdb_src;
+create table fdb_src.p(id int primary key auto_increment, name varchar(20) not null,
+unique key uk_name(name));
+create table fdb_src.c(id int primary key, pid int, qty int default 7,
+constraint fk_c_p foreign key (pid) references fdb_src.p(id),
+key k_qty(qty),
+constraint ck_qty check (qty > 0));
+create table fdb_src.x(id int primary key, rid int,
+constraint fk_x_ref foreign key (rid) references fdb_other.ref(id));
+create table fdb_src.tree(id int primary key, parent int,
+constraint fk_tree foreign key (parent) references fdb_src.tree(id));
+create table fdb_src.g(id int primary key, v int, w int as (v * 2) stored)
+partition by hash(id) partitions 2;
+insert into fdb_src.p(name) values ('a'), ('b');
+insert into fdb_src.c values (1, 1, 5), (2, 2, 6);
+insert into fdb_src.x values (1, 1);
+insert into fdb_src.tree values (1, null), (2, 1);
+insert into fdb_src.g(id, v) values (1, 10), (2, 20), (3, 30);
+create view fdb_src.v as select p.name, c.qty from fdb_src.p join fdb_src.c on p.id = c.pid;
+#
+# 2. fork and inspect the copy
+#
+fork database fdb_src to fdb_dst;
+show tables from fdb_src;
+Tables_in_fdb_src
+c
+g
+p
+tree
+v
+x
+show tables from fdb_dst;
+Tables_in_fdb_dst
+c
+g
+p
+tree
+x
+show create table fdb_src.p;
+Table	Create Table
+p	CREATE TABLE `p` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(20) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_name` (`name`) BLOCK_SIZE 16384 LOCAL
+) ORGANIZATION INDEX AUTO_INCREMENT = 3 DEFAULT CHARSET = utf8mb4 ROW_FORMAT = DYNAMIC COMPRESSION = 'zstd_1.3.8' BLOCK_SIZE = 16384 TABLET_SIZE = 134217728 PCTFREE = 0
+show create table fdb_dst.p;
+Table	Create Table
+p	CREATE TABLE `p` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(20) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_name` (`name`) BLOCK_SIZE 16384 LOCAL
+) ORGANIZATION INDEX AUTO_INCREMENT = 3 DEFAULT CHARSET = utf8mb4 ROW_FORMAT = DYNAMIC COMPRESSION = 'zstd_1.3.8' BLOCK_SIZE = 16384 TABLET_SIZE = 134217728 PCTFREE = 0
+show create table fdb_dst.c;
+Table	Create Table
+c	CREATE TABLE `c` (
+  `id` int(11) NOT NULL,
+  `pid` int(11) DEFAULT NULL,
+  `qty` int(11) DEFAULT '7',
+  PRIMARY KEY (`id`),
+  CONSTRAINT `fk_c_p` FOREIGN KEY (`pid`) REFERENCES `fdb_dst`.`p`(`id`) ON UPDATE RESTRICT ON DELETE RESTRICT ,
+  KEY `k_qty` (`qty`) BLOCK_SIZE 16384 LOCAL,
+  CONSTRAINT `ck_qty` CHECK ((`qty` > 0))
+) ORGANIZATION INDEX DEFAULT CHARSET = utf8mb4 ROW_FORMAT = DYNAMIC COMPRESSION = 'zstd_1.3.8' BLOCK_SIZE = 16384 TABLET_SIZE = 134217728 PCTFREE = 0
+show create table fdb_dst.x;
+Table	Create Table
+x	CREATE TABLE `x` (
+  `id` int(11) NOT NULL,
+  `rid` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ORGANIZATION INDEX DEFAULT CHARSET = utf8mb4 ROW_FORMAT = DYNAMIC COMPRESSION = 'zstd_1.3.8' BLOCK_SIZE = 16384 TABLET_SIZE = 134217728 PCTFREE = 0
+show create table fdb_dst.tree;
+Table	Create Table
+tree	CREATE TABLE `tree` (
+  `id` int(11) NOT NULL,
+  `parent` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  CONSTRAINT `fk_tree` FOREIGN KEY (`parent`) REFERENCES `fdb_dst`.`tree`(`id`) ON UPDATE RESTRICT ON DELETE RESTRICT 
+) ORGANIZATION INDEX DEFAULT CHARSET = utf8mb4 ROW_FORMAT = DYNAMIC COMPRESSION = 'zstd_1.3.8' BLOCK_SIZE = 16384 TABLET_SIZE = 134217728 PCTFREE = 0
+show create table fdb_dst.g;
+Table	Create Table
+g	CREATE TABLE `g` (
+  `id` int(11) NOT NULL,
+  `v` int(11) DEFAULT NULL,
+  `w` int(11) GENERATED ALWAYS AS ((`v` * 2)) STORED,
+  PRIMARY KEY (`id`)
+) ORGANIZATION INDEX DEFAULT CHARSET = utf8mb4 ROW_FORMAT = DYNAMIC COMPRESSION = 'zstd_1.3.8' BLOCK_SIZE = 16384 TABLET_SIZE = 134217728 PCTFREE = 0
+ partition by hash(id)
+(partition `p0`,
+partition `p1`)
+select table_name, constraint_name, constraint_type from information_schema.table_constraints
+where table_schema = 'fdb_dst' order by table_name, constraint_name;
+table_name	constraint_name	constraint_type
+c	ck_qty	CHECK
+c	fk_c_p	FOREIGN KEY
+c	PRIMARY	PRIMARY KEY
+g	PRIMARY	PRIMARY KEY
+p	PRIMARY	PRIMARY KEY
+p	uk_name	UNIQUE
+tree	fk_tree	FOREIGN KEY
+tree	PRIMARY	PRIMARY KEY
+x	PRIMARY	PRIMARY KEY
+select table_name, constraint_name, column_name, referenced_table_schema, referenced_table_name,
+referenced_column_name from information_schema.key_column_usage
+where table_schema = 'fdb_dst' and referenced_table_name is not null
+order by table_name, constraint_name;
+table_name	constraint_name	column_name	referenced_table_schema	referenced_table_name	referenced_column_name
+c	fk_c_p	pid	fdb_dst	p	id
+tree	fk_tree	parent	fdb_dst	tree	id
+select * from fdb_dst.p order by id;
+id	name
+1	a
+2	b
+select * from fdb_dst.c order by id;
+id	pid	qty
+1	1	5
+2	2	6
+select * from fdb_dst.x order by id;
+id	rid
+1	1
+select * from fdb_dst.tree order by id;
+id	parent
+1	NULL
+2	1
+select * from fdb_dst.g order by id;
+id	v	w
+1	10	20
+2	20	40
+3	30	60
+select * from fdb_dst.v;
+ERROR 42S02: Table 'fdb_dst.v' doesn't exist
+#
+# 3. the two databases are independent
+#
+insert into fdb_dst.p(name) values ('c');
+insert into fdb_src.p(name) values ('d');
+select * from fdb_src.p order by id;
+id	name
+1	a
+2	b
+3	d
+select * from fdb_dst.p order by id;
+id	name
+1	a
+2	b
+3	c
+insert into fdb_dst.c values (3, 99, 1);
+ERROR 23000: Cannot add or update a child row: a foreign key constraint fails
+insert into fdb_dst.p(name) values ('a');
+ERROR 23000: Duplicate entry 'a' for key 'uk_name'
+insert into fdb_dst.c values (3, 1, -1);
+ERROR HY000: check constraint violated
+delete from fdb_dst.tree where id = 1;
+ERROR 23000: Cannot delete or update a parent row: a foreign key constraint fails
+# the cross-database foreign key was not copied
+insert into fdb_dst.x values (2, 99);
+insert into fdb_src.x values (2, 99);
+ERROR 23000: Cannot add or update a child row: a foreign key constraint fails
+delete from fdb_src.c where id = 1;
+update fdb_dst.c set qty = 50 where id = 2;
+update fdb_dst.g set v = 25 where id = 2;
+select * from fdb_src.c order by id;
+id	pid	qty
+2	2	6
+select * from fdb_dst.c order by id;
+id	pid	qty
+1	1	5
+2	2	50
+select * from fdb_dst.g order by id;
+id	v	w
+1	10	20
+2	25	50
+3	30	60
+diff table fdb_src.c against fdb_dst.c;
+__table	__flag	id	pid	qty
+fdb_dst.c	INSERT	1	1	5
+fdb_dst.c	INSERT	2	2	50
+fdb_src.c	INSERT	2	2	6
+diff table fdb_src.g against fdb_dst.g;
+__table	__flag	id	v	w
+fdb_dst.g	INSERT	2	25	50
+fdb_src.g	INSERT	2	20	40
+#
+# 4. empty database, name case
+#
+create database fdb_empty;
+fork database fdb_empty to fdb_empty2;
+show databases like 'fdb_empty%';
+Database (fdb_empty%)
+fdb_empty
+fdb_empty2
+show tables from fdb_empty2;
+Tables_in_fdb_empty2
+create database fdb_case;
+create table fdb_case.t(id int primary key);
+fork database FDB_CASE to FDB_Case2;
+show databases like 'fdb_case%';
+Database (fdb_case%)
+fdb_case
+fdb_case2
+show tables from fdb_case2;
+Tables_in_fdb_case2
+t
+drop database fdb_case2;
+#
+# 5. errors
+#
+fork database fdb_missing to fdb_missing2;
+ERROR 42000: Unknown database 'fdb_missing'
+fork database fdb_src to fdb_dst;
+ERROR HY000: Can't create database 'fdb_dst'; database exists
+fork database fdb_src to fdb_src;
+ERROR HY000: Can't create database 'fdb_src'; database exists
+fork database fdb_src to fdb_other;
+ERROR HY000: Can't create database 'fdb_other'; database exists
+fork database mysql to fdb_mysql2;
+ERROR 0A000: fork database from system or internal database not supported
+fork database oceanbase to fdb_ob2;
+ERROR 0A000: fork database from system or internal database not supported
+fork database information_schema to fdb_is2;
+ERROR 0A000: fork database from system or internal database not supported
+create database fdb_routine;
+create table fdb_routine.t(id int primary key);
+create procedure fdb_routine.p1() select 1;
+fork database fdb_routine to fdb_routine2;
+ERROR 0A000: fork database containing routines (procedures/functions) not supported
+create database fdb_func;
+create function fdb_func.f1() returns int return 1;
+fork database fdb_func to fdb_func2;
+ERROR 0A000: fork database containing routines (procedures/functions) not supported
+create database fdb_trigger;
+create table fdb_trigger.t(a int primary key);
+create trigger fdb_trigger.tr before insert on fdb_trigger.t for each row set new.a = new.a + 1;
+fork database fdb_trigger to fdb_trigger2;
+ERROR 0A000: fork database containing triggers not supported
+create database fdb_spatial;
+create table fdb_spatial.plain(id int primary key);
+create table fdb_spatial.geo(id int primary key, g geometry not null srid 0, spatial index sx(g));
+fork database fdb_spatial to fdb_spatial2;
+ERROR 0A000: fork table on table with spatial index is not supported
+# no target database was left behind by the failed forks
+show databases like 'fdb\_%';
+Database (fdb\_%)
+fdb_case
+fdb_dst
+fdb_empty
+fdb_empty2
+fdb_func
+fdb_other
+fdb_routine
+fdb_spatial
+fdb_src
+fdb_trigger
+#
+# cleanup
+#
+drop database fdb_dst;
+drop database fdb_src;
+drop database fdb_other;
+drop database fdb_empty;
+drop database fdb_empty2;
+drop database fdb_case;
+drop database fdb_routine;
+drop database fdb_func;
+drop database fdb_trigger;
+drop database fdb_spatial;

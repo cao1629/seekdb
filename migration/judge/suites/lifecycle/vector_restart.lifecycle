@@ -1,0 +1,13 @@
+# An HNSW vector index and its query results survive SIGKILL and restart; rows
+# written just before the crash are visible to vector search afterwards.
+start
+sql: create table v1 (id int primary key, emb vector(3), vector index vidx (emb) with (distance=L2, type=hnsw, lib=vsag, m=16, ef_construction=200, ef_search=200))
+sql: insert into v1 values (1,'[0.1,0.2,0.3]'),(2,'[0.9,0.8,0.7]'),(3,'[0.2,0.2,0.2]'),(4,'[0.5,0.4,0.6]'),(5,'[0.0,0.1,0.0]')
+sql: select id from v1 order by l2_distance(emb, '[0.1,0.2,0.25]') approximate limit 3
+sql: select id, round(l2_distance(emb, '[0.1,0.2,0.25]'), 6) from v1 order by l2_distance(emb, '[0.1,0.2,0.25]') limit 5
+sql: insert into v1 values (6,'[0.1,0.2,0.26]')
+kill9
+restart
+sql: select id from v1 order by l2_distance(emb, '[0.1,0.2,0.25]') approximate limit 3
+sql: select id, round(l2_distance(emb, '[0.1,0.2,0.25]'), 6) from v1 order by l2_distance(emb, '[0.1,0.2,0.25]') limit 6
+sql: show index from v1

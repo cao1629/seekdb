@@ -1,0 +1,21 @@
+# FORK TABLE / FORK DATABASE sandboxes and MERGE TABLE survive a crash: both the
+# source and the fork keep their own rows after SIGKILL and restart.
+start
+sql: create table t1 (id int primary key, v varchar(20))
+sql: insert into t1 values (1,'a'),(2,'b'),(3,'c')
+sql: fork table t1 to t1_fork
+sql: insert into t1_fork values (4,'d')
+sql: update t1_fork set v = 'B' where id = 2
+sql: create database src
+sql: create table src.m (id int primary key, note varchar(20))
+sql: insert into src.m values (10,'ten')
+sql: fork database src to sandbox
+sql: insert into sandbox.m values (11,'eleven')
+kill9
+restart
+sql: select * from t1 order by id
+sql: select * from t1_fork order by id
+sql: select * from src.m order by id
+sql: select * from sandbox.m order by id
+sql: merge table t1_fork into t1 strategy theirs
+sql: select * from t1 order by id

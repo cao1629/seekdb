@@ -1,0 +1,20 @@
+[start]
+> show parameters like 'trace_log_slow_query_watermark'
+name	value
+trace_log_slow_query_watermark	3s
+> alter system set trace_log_slow_query_watermark = '7s'
+> show parameters like 'trace_log_slow_query_watermark'
+name	value
+trace_log_slow_query_watermark	7s
+> set global max_connections = 777
+> select @@global.max_connections
+@@global.max_connections
+777
+[stop]
+[restart]
+> show parameters like 'trace_log_slow_query_watermark'
+name	value
+trace_log_slow_query_watermark	7s
+> select @@global.max_connections
+@@global.max_connections
+777

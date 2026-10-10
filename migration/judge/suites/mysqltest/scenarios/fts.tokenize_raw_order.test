@@ -1,0 +1,21 @@
+# Judge scenario (area: fts) -- raw TOKENIZE() output, including token order.
+#
+# Pins down, through public SQL only, the exact JSON text TOKENIZE() returns:
+# the order of tokens inside the array (and inside "tokens" for
+# {"output": "all"}), which is the iteration order of the tokenizer's hash map,
+# not text order and not sorted; the JSON formatting (", " separators,
+# {"tok": n} objects, "doc_len" last).
+# Kept apart from fts.tokenize_parsers (which asserts only the token sets) so
+# that a port reproducing the token sets but not this order fails only here.
+
+select tokenize('hello world');
+select tokenize('Hello World, hello the database DATABASES a an');
+select tokenize('Hello World, hello the database DATABASES a an', 'space', '[{"output": "all"}]');
+select tokenize('the quick brown fox jumps over the lazy dog');
+select tokenize('hello world', 'ngram');
+select tokenize('hello world', 'ngram', '[{"output": "all"}, {"additional_args": [{"ngram_token_size": 3}]}]');
+select tokenize('hello world', 'ngram2', '[{"output": "all"}]');
+select tokenize('Hello, World! e-mail: foo@bar.com x1 x22 x333', 'beng', '[{"output": "all"}]');
+select tokenize('中华人民共和国国歌', 'ik');
+select tokenize('中华人民共和国国歌', 'ik', '[{"additional_args": [{"ik_mode": "max_word"}]}]');
+select tokenize('中华人民共和国国歌', 'ngram');

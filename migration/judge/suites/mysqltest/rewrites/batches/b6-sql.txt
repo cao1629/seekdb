@@ -1,0 +1,17 @@
+array.array_arith_op_mysql
+array.array_ddl_mysql
+datatype.div
+datatype.minus
+executor.basic
+executor.full_join
+expr.collation_expr
+groupby.group_by_2
+groupby.group_by_basic
+subquery.idx_with_const_expr_21_subquery_dilang
+subquery.optimizer_subquery_bug
+subquery.rqg_ob_subquery_semijoin_nested_sql_parameterization
+subquery.rqg_subquery_semijoin_mismatch
+subquery.spf_bug13044302
+subquery.subquery
+subquery.subquery_sj_firstmatch
+subquery.subquery_sj_innodb

@@ -1,0 +1,6 @@
+# Binary protocol (COM_STMT_PREPARE / COM_STMT_EXECUTE): typed parameter decoding
+# at the limits of every integer type, decimal, double, datetime/date/negative time,
+# multibyte text, binary and NULL, plus binary result encoding of the same rows.
+# mysqltest --ps-protocol never binds parameters, so only this client covers it.
+start
+exec: stmt_params

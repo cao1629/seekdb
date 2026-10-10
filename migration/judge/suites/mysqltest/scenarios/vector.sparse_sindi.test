@@ -1,0 +1,108 @@
+# Judge scenario (area: vector) -- SPARSEVECTOR values and the SINDI index.
+#
+# Pins down, through public SQL only:
+#  - sparse literals '{dim:value, ...}': whitespace is accepted, keys print
+#    sorted with no spaces, 1.0 prints as 1, '{}' is the empty vector, a
+#    repeated key keeps the last value; malformed literals fail with 1210 and
+#    a specific message (non-integer or negative dimension, non-float value,
+#    missing '{');
+#  - inner_product / negative_inner_product on sparse vectors (0 when no
+#    dimension is shared, NULL for NULL); vector_dims counts the stored
+#    entries; l2_distance / cosine_distance fail with 5083 "Invalid data type
+#    for the operation" and vector_norm with 1210, even on an empty table;
+#  - a SINDI index (DISTANCE=INNER_PRODUCT only) with SHOW CREATE TABLE;
+#    DISTANCE=L2 on a sparse column, TYPE=HNSW on a sparse column and SINDI on
+#    a dense column are rejected with 1235;
+#  - ORDER BY negative_inner_product(col, const) APPROXIMATE LIMIT k returns
+#    the exact top-k among rows that share at least one dimension with the
+#    query; rows with a zero score or a NULL vector are never returned, so a
+#    query sharing no dimension with any row, or '{}', returns no rows (the
+#    exact query returns the zero-score rows); WHERE filters and DML are
+#    reflected immediately.
+
+--disable_warnings
+drop table if exists sp_val, sp_idx, sp_err;
+--enable_warnings
+
+--echo #
+--echo # 1. literals and functions
+--echo #
+create table sp_val(id int primary key, sv sparsevector);
+insert into sp_val values
+  (1, '{1:1, 2:2}'), (2, '{3:3}'), (3, '{}'), (4, '{1:0.5, 3:0.5, 5:5}'), (5, NULL),
+  (6, '{ 2 : 1.0 , 1:1}'), (7, '{10:0.25, 3:1.5, 1:2}'), (8, '{1:1, 1:2}');
+select * from sp_val order by id;
+select id, inner_product(sv, '{1:1, 3:1}') ip, negative_inner_product(sv, '{1:1, 3:1}') nip,
+       vector_dims(sv) dims from sp_val order by id;
+--error 1210
+insert into sp_val values (9, '{a:1}');
+--error 1210
+insert into sp_val values (10, '[1,2]');
+--error 1210
+insert into sp_val values (11, '{-1:1}');
+--error 1210
+insert into sp_val values (12, '{1:abc}');
+--error 5083
+select l2_distance(sv, '{1:1}') from sp_val where id = 1;
+--error 5083
+select cosine_distance(sv, '{1:1}') from sp_val where id = 1;
+--error 1210
+select vector_norm(sv) from sp_val where id = 1;
+delete from sp_val;
+--error 5083
+select l2_distance(sv, '{1:1}') from sp_val;
+
+--echo #
+--echo # 2. SINDI index DDL
+--echo #
+create table sp_idx(id int primary key, cat char(1), sv sparsevector,
+  vector index sidx(sv) with (distance=inner_product, type=sindi, lib=vsag));
+show create table sp_idx;
+--error 1235
+create table sp_err(id int primary key, sv sparsevector,
+  vector index sidx(sv) with (distance=l2, type=sindi, lib=vsag));
+--error 1235
+create table sp_err(id int primary key, sv sparsevector,
+  vector index sidx(sv) with (distance=inner_product, type=hnsw, lib=vsag));
+--error 1235
+create table sp_err(id int primary key, sv vector(3),
+  vector index sidx(sv) with (distance=inner_product, type=sindi, lib=vsag));
+
+--echo #
+--echo # 3. approximate top-k against exact top-k
+--echo #
+insert into sp_idx values
+  (1, 'a', '{1:0.9, 2:0.1}'), (2, 'b', '{2:0.8, 3:0.3}'), (3, 'a', '{3:0.7, 4:0.6}'),
+  (4, 'b', '{1:0.2, 4:0.9}'), (5, 'a', '{5:1.0}'), (6, 'b', '{1:0.5, 2:0.5, 3:0.5}'),
+  (7, 'a', '{2:0.05, 6:0.9}'), (8, 'b', NULL);
+select id, round(negative_inner_product(sv, '{1:1, 2:0.5}'), 6) s from sp_idx
+  order by negative_inner_product(sv, '{1:1, 2:0.5}') approx limit 4;
+select id, round(negative_inner_product(sv, '{1:1, 2:0.5}'), 6) s from sp_idx
+  order by negative_inner_product(sv, '{1:1, 2:0.5}'), id limit 5;
+select id, round(negative_inner_product(sv, '{1:1, 2:0.5}'), 6) s from sp_idx
+  order by negative_inner_product(sv, '{1:1, 2:0.5}') approx limit 10;
+select id, round(negative_inner_product(sv, '{3:1, 4:1}'), 6) s from sp_idx
+  order by negative_inner_product(sv, '{3:1, 4:1}') approximate limit 3;
+--echo # no shared dimension, empty query
+select id from sp_idx order by negative_inner_product(sv, '{9:1}') approx limit 3;
+select id, round(negative_inner_product(sv, '{9:1}'), 6) s from sp_idx
+  order by negative_inner_product(sv, '{9:1}'), id limit 3;
+select id from sp_idx order by negative_inner_product(sv, '{}') approx limit 3;
+--echo # filtered
+select id, cat, round(negative_inner_product(sv, '{3:1, 4:1}'), 6) s from sp_idx where cat = 'b'
+  order by negative_inner_product(sv, '{3:1, 4:1}') approx limit 3;
+select id, round(negative_inner_product(sv, '{3:1, 4:1}'), 6) s from sp_idx where id > 2
+  order by negative_inner_product(sv, '{3:1, 4:1}') approx limit 3;
+--echo # DML
+insert into sp_idx values (9, 'a', '{1:5}');
+update sp_idx set sv = '{7:1}' where id = 1;
+delete from sp_idx where id = 6;
+select id, round(negative_inner_product(sv, '{1:1, 2:0.5}'), 6) s from sp_idx
+  order by negative_inner_product(sv, '{1:1, 2:0.5}') approx limit 4;
+select id, round(negative_inner_product(sv, '{7:2}'), 6) s from sp_idx
+  order by negative_inner_product(sv, '{7:2}') approx limit 4;
+
+--echo #
+--echo # cleanup
+--echo #
+drop table sp_val, sp_idx;

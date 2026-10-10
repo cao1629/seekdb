@@ -1,0 +1,12 @@
+# Startup --parameter values apply, ALTER SYSTEM SET persists across a restart, and
+# SET GLOBAL on a system variable persists across a restart. (rust/config since #1457.)
+start trace_log_slow_query_watermark=3s
+sql[cols=name,value]: show parameters like 'trace_log_slow_query_watermark'
+sql: alter system set trace_log_slow_query_watermark = '7s'
+sql[cols=name,value]: show parameters like 'trace_log_slow_query_watermark'
+sql: set global max_connections = 777
+sql: select @@global.max_connections
+stop
+restart
+sql[cols=name,value]: show parameters like 'trace_log_slow_query_watermark'
+sql: select @@global.max_connections

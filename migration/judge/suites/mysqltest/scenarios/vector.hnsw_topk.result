@@ -1,0 +1,327 @@
+drop table if exists hn_l2, hn_ip, hn_cos, hn_sq, hn_bq;
+create table hn_l2(id int primary key, cat char(1), v vector(4),
+vector index vidx(v) with (distance=l2, type=hnsw, lib=vsag));
+show create table hn_l2;
+Table	Create Table
+hn_l2	CREATE TABLE `hn_l2` (
+  `id` int(11) NOT NULL,
+  `cat` char(1) DEFAULT NULL,
+  `v` VECTOR(4) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  VECTOR KEY `vidx` (`v`) WITH (DISTANCE=L2, TYPE=HNSW, LIB=VSAG, M=16, EF_CONSTRUCTION=200, EF_SEARCH=64) BLOCK_SIZE 16384
+) ORGANIZATION INDEX DEFAULT CHARSET = utf8mb4 ROW_FORMAT = DYNAMIC COMPRESSION = 'zstd_1.3.8' BLOCK_SIZE = 16384 TABLET_SIZE = 134217728 PCTFREE = 0
+insert into hn_l2 values
+(1, 'a', '[0,0,0,1]'), (2, 'b', '[12,1,0,0]'), (3, 'a', '[1,13,2,0]'), (4, 'b', '[0,2,15,1]'),
+(5, 'a', '[3,0,1,17]'), (6, 'b', '[11,12,0,2]'), (7, 'a', '[0,9,14,3]'), (8, 'b', '[2,1,11,16]'),
+(9, 'a', '[13,3,1,10]'), (10, 'b', '[9,11,12,13]'), (11, 'a', '[5,6,4,7]'), (12, 'b', '[21,19,22,18]'),
+(13, 'a', '[7,2,9,4]'), (14, 'b', '[4,15,6,1]'), (15, 'a', '[16,8,3,5]'), (16, 'b', '[6,4,18,11]');
+#
+# 1. l2: approximate = exact
+#
+select id, round(l2_distance(v, '[1,1,1,1]'), 6) d from hn_l2
+order by l2_distance(v, '[1,1,1,1]') approximate limit 5;
+id	d
+1	1.732051
+11	9.273618
+13	10.488088
+2	11.090537
+3	12.083046
+select id, round(l2_distance(v, '[1,1,1,1]'), 6) d from hn_l2
+order by l2_distance(v, '[1,1,1,1]') limit 5;
+id	d
+1	1.732051
+11	9.273618
+13	10.488088
+2	11.090537
+3	12.083046
+select id, round(l2_distance(v, '[2,12,8,1]'), 6) d from hn_l2
+order by l2_distance(v, '[2,12,8,1]') approx limit 5;
+id	d
+14	4.123106
+3	6.244998
+7	7.280110
+11	9.848858
+13	11.618950
+select id, round(l2_distance(v, '[2,12,8,1]'), 6) d from hn_l2
+order by l2_distance(v, '[2,12,8,1]') limit 5;
+id	d
+14	4.123106
+3	6.244998
+7	7.280110
+11	9.848858
+13	11.618950
+select id, round(l2_distance(v, '[0,0,20,0]'), 6) d from hn_l2
+order by l2_distance(v, '[0,0,20,0]') approx limit 3 parameters(ef_search=100);
+id	d
+4	5.477226
+7	11.224972
+16	13.304135
+select id, round(l2_distance(v, '[0,0,20,0]'), 6) d from hn_l2
+order by l2_distance(v, '[0,0,20,0]') limit 3;
+id	d
+4	5.477226
+7	11.224972
+16	13.304135
+select id, round(l2_squared(v, '[0,0,20,0]'), 6) d from hn_l2
+order by l2_squared(v, '[0,0,20,0]') approx limit 3;
+id	d
+4	30.000000
+7	126.000000
+16	177.000000
+select id, v from hn_l2 order by l2_distance(v, '[2,12,8,1]') approx limit 2 offset 1;
+id	v
+3	[1,13,2,0]
+7	[0,9,14,3]
+# cosine_distance on the l2 index: still the exact cosine answer
+select id, round(cosine_distance(v, '[1,1,1,1]'), 6) d from hn_l2
+order by cosine_distance(v, '[1,1,1,1]') approx limit 3;
+id	d
+12	0.003110
+10	0.008532
+11	0.020042
+select id, round(cosine_distance(v, '[1,1,1,1]'), 6) d from hn_l2
+order by cosine_distance(v, '[1,1,1,1]') limit 3;
+id	d
+12	0.003110
+10	0.008532
+11	0.020042
+#
+# 2. filtered top-k
+#
+select id, cat, round(l2_distance(v, '[2,12,8,1]'), 6) d from hn_l2 where cat = 'b'
+  order by l2_distance(v, '[2,12,8,1]') approx limit 3;
+id	cat	d
+14	b	4.123106
+6	b	12.083046
+4	b	12.369317
+select id, cat, round(l2_distance(v, '[2,12,8,1]'), 6) d from hn_l2 where cat = 'b'
+  order by l2_distance(v, '[2,12,8,1]') limit 3;
+id	cat	d
+14	b	4.123106
+6	b	12.083046
+4	b	12.369317
+select id, round(l2_distance(v, '[2,12,8,1]'), 6) d from hn_l2 where id between 5 and 12
+order by l2_distance(v, '[2,12,8,1]') approx limit 4;
+id	d
+7	7.280110
+11	9.848858
+6	12.083046
+10	14.491377
+select id, round(l2_distance(v, '[2,12,8,1]'), 6) d from hn_l2 where id between 5 and 12
+order by l2_distance(v, '[2,12,8,1]') limit 4;
+id	d
+7	7.280110
+11	9.848858
+6	12.083046
+10	14.491377
+select id from hn_l2 where cat = 'z' order by l2_distance(v, '[2,12,8,1]') approx limit 3;
+id
+#
+# 3. DML visibility
+#
+insert into hn_l2 values (17, 'a', '[2,12,8,2]');
+select id, round(l2_distance(v, '[2,12,8,1]'), 6) d from hn_l2
+order by l2_distance(v, '[2,12,8,1]') approx limit 3;
+id	d
+17	1.000000
+14	4.123106
+3	6.244998
+update hn_l2 set v = '[100,100,100,100]' where id = 17;
+select id, round(l2_distance(v, '[2,12,8,1]'), 6) d from hn_l2
+order by l2_distance(v, '[2,12,8,1]') approx limit 3;
+id	d
+14	4.123106
+3	6.244998
+7	7.280110
+delete from hn_l2 where id = 14;
+select id, round(l2_distance(v, '[2,12,8,1]'), 6) d from hn_l2
+order by l2_distance(v, '[2,12,8,1]') approx limit 3;
+id	d
+3	6.244998
+7	7.280110
+11	9.848858
+begin;
+insert into hn_l2 values (18, 'b', '[2,11,8,1]');
+select id, round(l2_distance(v, '[2,12,8,1]'), 6) d from hn_l2
+order by l2_distance(v, '[2,12,8,1]') approx limit 2;
+id	d
+18	1.000000
+3	6.244998
+rollback;
+select id, round(l2_distance(v, '[2,12,8,1]'), 6) d from hn_l2
+order by l2_distance(v, '[2,12,8,1]') approx limit 2;
+id	d
+3	6.244998
+7	7.280110
+# NULL vectors: excluded from APPROXIMATE, sorted first by the exact query
+insert into hn_l2 values (19, 'a', NULL);
+select id, round(l2_distance(v, '[1,1,1,1]'), 6) d from hn_l2
+order by l2_distance(v, '[1,1,1,1]') approx limit 100;
+id	d
+1	1.732051
+11	9.273618
+13	10.488088
+2	11.090537
+3	12.083046
+4	14.071247
+6	14.933185
+9	15.132746
+7	15.427249
+5	16.155494
+15	17.146428
+8	18.055470
+16	20.566964
+10	20.712315
+12	38.131352
+17	198.000000
+select id, round(l2_distance(v, '[1,1,1,1]'), 6) d from hn_l2
+order by l2_distance(v, '[1,1,1,1]') limit 3;
+id	d
+19	NULL
+1	1.732051
+11	9.273618
+select count(*) from hn_l2;
+count(*)
+17
+#
+# 4. inner_product index
+#
+create table hn_ip(id int primary key, v vector(4),
+vector index vidx(v) with (distance=inner_product, type=hnsw, lib=vsag));
+insert into hn_ip select id, v from hn_l2 where id <= 16 and id <> 14;
+insert into hn_ip values (14, '[4,15,6,1]');
+show create table hn_ip;
+Table	Create Table
+hn_ip	CREATE TABLE `hn_ip` (
+  `id` int(11) NOT NULL,
+  `v` VECTOR(4) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  VECTOR KEY `vidx` (`v`) WITH (DISTANCE=INNER_PRODUCT, TYPE=HNSW, LIB=VSAG, M=16, EF_CONSTRUCTION=200, EF_SEARCH=64) BLOCK_SIZE 16384
+) ORGANIZATION INDEX DEFAULT CHARSET = utf8mb4 ROW_FORMAT = DYNAMIC COMPRESSION = 'zstd_1.3.8' BLOCK_SIZE = 16384 TABLET_SIZE = 134217728 PCTFREE = 0
+select id, round(negative_inner_product(v, '[2,12,8,1]'), 6) d from hn_ip
+order by negative_inner_product(v, '[2,12,8,1]') approx limit 5;
+id	d
+12	-464.000000
+10	-259.000000
+14	-237.000000
+7	-223.000000
+16	-215.000000
+select id, round(negative_inner_product(v, '[2,12,8,1]'), 6) d from hn_ip
+order by negative_inner_product(v, '[2,12,8,1]') limit 5;
+id	d
+12	-464.000000
+10	-259.000000
+14	-237.000000
+7	-223.000000
+16	-215.000000
+select id, round(negative_inner_product(v, '[10,10,1,1]'), 6) d from hn_ip
+order by negative_inner_product(v, '[10,10,1,1]') approx limit 4;
+id	d
+12	-440.000000
+15	-248.000000
+6	-232.000000
+10	-225.000000
+select id, round(inner_product(v, '[10,10,1,1]'), 6) d from hn_ip
+order by inner_product(v, '[10,10,1,1]') desc approx limit 4;
+id	d
+12	440.000000
+15	248.000000
+6	232.000000
+10	225.000000
+#
+# 5. cosine index
+#
+create table hn_cos(id int primary key, v vector(4),
+vector index vidx(v) with (distance=cosine, type=hnsw, lib=vsag));
+insert into hn_cos select id, v from hn_ip;
+select id, round(cosine_distance(v, '[1,1,1,1]'), 6) d from hn_cos
+order by cosine_distance(v, '[1,1,1,1]') approx limit 5;
+id	d
+12	0.003110
+10	0.008532
+11	0.020042
+13	0.101854
+16	0.125305
+select id, round(cosine_distance(v, '[1,1,1,1]'), 6) d from hn_cos
+order by cosine_distance(v, '[1,1,1,1]') limit 5;
+id	d
+12	0.003110
+10	0.008532
+11	0.020042
+13	0.101854
+16	0.125305
+select id, round(cosine_distance(v, '[2,12,8,1]'), 6) d from hn_cos
+order by cosine_distance(v, '[2,12,8,1]') approx limit 5;
+id	d
+14	0.026051
+3	0.096174
+7	0.096492
+12	0.207653
+10	0.218001
+select id, round(cosine_distance(v, '[2,12,8,1]'), 6) d from hn_cos
+order by cosine_distance(v, '[2,12,8,1]') limit 5;
+id	d
+14	0.026051
+3	0.096174
+7	0.096492
+12	0.207653
+10	0.218001
+#
+# 6. quantized HNSW variants
+#
+create table hn_sq(id int primary key, v vector(4),
+vector index vidx(v) with (distance=l2, type=hnsw_sq, lib=vsag));
+insert into hn_sq select id, v from hn_ip;
+create table hn_bq(id int primary key, v vector(4),
+vector index vidx(v) with (distance=l2, type=hnsw_bq, lib=vsag));
+insert into hn_bq select id, v from hn_ip;
+show create table hn_sq;
+Table	Create Table
+hn_sq	CREATE TABLE `hn_sq` (
+  `id` int(11) NOT NULL,
+  `v` VECTOR(4) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  VECTOR KEY `vidx` (`v`) WITH (DISTANCE=L2, TYPE=HNSW_SQ, LIB=VSAG, M=16, EF_CONSTRUCTION=200, EF_SEARCH=64) BLOCK_SIZE 16384
+) ORGANIZATION INDEX DEFAULT CHARSET = utf8mb4 ROW_FORMAT = DYNAMIC COMPRESSION = 'zstd_1.3.8' BLOCK_SIZE = 16384 TABLET_SIZE = 134217728 PCTFREE = 0
+show create table hn_bq;
+Table	Create Table
+hn_bq	CREATE TABLE `hn_bq` (
+  `id` int(11) NOT NULL,
+  `v` VECTOR(4) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  VECTOR KEY `vidx` (`v`) WITH (DISTANCE=L2, TYPE=HNSW_BQ, LIB=VSAG, M=16, EF_CONSTRUCTION=200, EF_SEARCH=64, REFINE_TYPE=SQ8, BQ_USE_FHT=TRUE) BLOCK_SIZE 16384
+) ORGANIZATION INDEX DEFAULT CHARSET = utf8mb4 ROW_FORMAT = DYNAMIC COMPRESSION = 'zstd_1.3.8' BLOCK_SIZE = 16384 TABLET_SIZE = 134217728 PCTFREE = 0
+select id, round(l2_distance(v, '[2,12,8,1]'), 6) d from hn_sq
+order by l2_distance(v, '[2,12,8,1]') approx limit 4;
+id	d
+14	4.123106
+3	6.244998
+7	7.280110
+11	9.848858
+select id, round(l2_distance(v, '[2,12,8,1]'), 6) d from hn_bq
+order by l2_distance(v, '[2,12,8,1]') approx limit 4;
+id	d
+14	4.123106
+3	6.244998
+7	7.280110
+11	9.848858
+select id, round(l2_distance(v, '[2,12,8,1]'), 6) d from hn_bq
+order by l2_distance(v, '[2,12,8,1]') limit 4;
+id	d
+14	4.123106
+3	6.244998
+7	7.280110
+11	9.848858
+#
+# 7. errors
+#
+select id from hn_l2 order by l2_distance(v, '[1,1,1,1]') approx;
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near 'approx' at line 1
+select id from hn_l2 order by l2_distance(v, '[1,1,1,1]'), id approx limit 3;
+ERROR 0A000: Multi order by item when using vector index is not supported
+select id from hn_l2 order by l2_distance(v, '[1,1,1,1]') approx limit 3 for update;
+ERROR 0A000: FOR UPDATE with APPROXIMATE vector search is not supported
+#
+# cleanup
+#
+drop table hn_l2, hn_ip, hn_cos, hn_sq, hn_bq;

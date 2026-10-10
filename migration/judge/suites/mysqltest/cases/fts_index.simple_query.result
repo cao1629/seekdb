@@ -1,0 +1,1651 @@
+drop database if exists fts;
+create database fts;
+use fts;
+create table t_ir_single_column(
+digest varchar(512),
+detail varchar(4096),
+seq int,
+fulltext index i1(detail));
+result_format: 4
+select digest from t_ir_single_column where match (detail) against ("info to search");
++--------+
+| digest |
++--------+
++--------+
+
+select digest from t_ir_single_column where match (detail) against ("info to search") > 0.7;
++--------+
+| digest |
++--------+
++--------+
+
+select digest from t_ir_single_column where match (detail) against ("info to search") < 0.7;
++--------+
+| digest |
++--------+
++--------+
+
+select digest from t_ir_single_column where match (detail) against ("info to search") = 0.7;
++--------+
+| digest |
++--------+
++--------+
+
+select digest from t_ir_single_column where match (detail) against ("info to search") != 0.7;
++--------+
+| digest |
++--------+
++--------+
+
+select digest from t_ir_single_column where match (detail) against ("info to search") >= 0.7;
++--------+
+| digest |
++--------+
++--------+
+
+select digest from t_ir_single_column where match (detail) against ("info to search") <= 0.7;
++--------+
+| digest |
++--------+
++--------+
+
+select digest, seq from t_ir_single_column where match (detail) against ("info to search") = 0.7 and seq > 77;
++--------+------+
+| digest | seq  |
++--------+------+
++--------+------+
+
+select digest from t_ir_single_column where match (detail) against ("info to search" in natural language mode);
++--------+
+| digest |
++--------+
++--------+
+
+select digest from t_ir_single_column where match (detail) against ("info to search" in natural language mode with query expansion);
+ERROR 0A000: search modes other than NATURAL_LANGUAGE_MODE, BOOLEAN_MODE or MATCH_PHRASE_MODE not supported
+
+select digest from t_ir_single_column where match (detail) against ("info to search" in boolean mode);
++--------+
+| digest |
++--------+
++--------+
+
+select digest from t_ir_single_column where match (detail) against ("info to search" with query expansion);
+ERROR 0A000: search modes other than NATURAL_LANGUAGE_MODE, BOOLEAN_MODE or MATCH_PHRASE_MODE not supported
+
+select digest, match (detail) against ("info to search") as score from t_ir_single_column where match (detail) against ("info to search");
++--------+-------+
+| digest | score |
++--------+-------+
++--------+-------+
+
+select digest, match (detail) against ("info to search") as score
+    from t_ir_single_column
+    where match (detail) against ("info to search") and seq > 77;
++--------+-------+
+| digest | score |
++--------+-------+
++--------+-------+
+
+select digest, match (detail) against ("info to search") as score
+    from t_ir_single_column
+    where match (detail) against ("info to search") and seq > 77
+    order by seq desc;
++--------+-------+
+| digest | score |
++--------+-------+
++--------+-------+
+
+select digest, match (detail) against ("info to search") as score
+    from t_ir_single_column
+    where match (detail) against ("info to search")
+    limit 5;
++--------+-------+
+| digest | score |
++--------+-------+
++--------+-------+
+select digest, match (detail) against ("info to search") as score
+    from t_ir_single_column
+    where match (detail) against ("info to search")
+    order by seq desc
+    limit 5;
++--------+-------+
+| digest | score |
++--------+-------+
++--------+-------+
+
+select digest, match (detail) against ("info to search") as score from t_ir_single_column;
++--------+-------+
+| digest | score |
++--------+-------+
++--------+-------+
+
+select digest, match (detail) against ("info to search") as score from t_ir_single_column;
++--------+-------+
+| digest | score |
++--------+-------+
++--------+-------+
+
+select digest, match (detail) against ("info to search") as score from t_ir_single_column where score > 1;
+ERROR 42S22: Unknown column 'score' in 'where clause'
+
+select digest, match (detail) against ("info to search") as score from t_ir_single_column order by score;
++--------+-------+
+| digest | score |
++--------+-------+
++--------+-------+
+
+create table t_ir_multi_column(
+   digest varchar(512),
+   detail varchar(4096),
+   seq int,
+   fulltext index i1(digest, detail));
+
+select digest from t_ir_multi_column where match (digest, detail) against ("info to search");
++--------+
+| digest |
++--------+
++--------+
+
+select digest from t_ir_multi_column where match (detail, digest) against ("info to search");
++--------+
+| digest |
++--------+
++--------+
+
+select digest from t_ir_multi_column where match (detail) against ("info to search");
+ERROR HY000: Can't find FULLTEXT index matching the column list
+
+select digest, match (digest, detail) against ("info to search") as score from t_ir_multi_column where match (digest, detail) against ("info to search");
++--------+-------+
+| digest | score |
++--------+-------+
++--------+-------+
+
+select digest, match (digest) against ("info to search") as score from t_ir_multi_column where match (digest) against ("info to search");
+ERROR HY000: Can't find FULLTEXT index matching the column list
+
+select /*+ use_das(t_ir_multi_column) */
+    digest, match (digest, detail) against ("info to search") as score
+from
+    t_ir_multi_column
+where
+    match (digest, detail) against ("info to search");
++--------+-------+
+| digest | score |
++--------+-------+
++--------+-------+
+
+create table t_dim_table(
+    seq int,
+    log varchar(1024));
+
+select
+    t_ir_multi_column.digest, t_dim_table.seq as seq, t_dim_table.log as log , match (digest, detail) against ("info to search") as score
+from
+    t_ir_multi_column, t_dim_table
+where
+    t_ir_multi_column.seq = t_dim_table.seq and match (digest, detail) against ("info to search")
+order by
+    score desc;
++--------+------+------+-------+
+| digest | seq  | log  | score |
++--------+------+------+-------+
++--------+------+------+-------+
+
+select /*+ use_das(t_ir_multi_column) */
+    t_ir_multi_column.digest, t_dim_table.seq as seq, t_dim_table.log as log , match (digest, detail) against ("info to search") as score
+from
+    t_ir_multi_column, t_dim_table
+where
+    t_ir_multi_column.seq = t_dim_table.seq and match (digest, detail) against ("info to search")
+order by
+    score desc;
++--------+------+------+-------+
+| digest | seq  | log  | score |
++--------+------+------+-------+
++--------+------+------+-------+
+
+
+insert into t_ir_single_column (digest, detail, seq) values
+    ("Gerard Salton", "Gerard A. Gerry Salton (8 March 1927 – 28 August 1995) was a professor of Computer Science at Cornell University. Salton was perhaps the leading computer scientist working in the field of information retrieval during his time, and the father of Information Retrieval", 0),
+    ("Edgar F. Codd", "Edgar Frank Ted Codd (19 August 1923 – 18 April 2003) was an English computer scientist who, while working for IBM, invented the relational model for database management, the theoretical basis for relational databases and relational database management systems. ", 1),
+    ("Michael Stonebraker", "Michael Ralph Stonebraker (born October 11, 1943[6]) is a computer scientist specializing in database systems. Through a series of academic prototypes and commercial startups, Stonebraker's research and products are central to many relational databases. ", 2),
+    ("Geoffrey Hinton", "Geoffrey Everest Hinton CC FRS FRSC (born 6 December 1947) is a British-Canadian computer scientist and cognitive psychologist, most noted for his work on artificial neural networks.", 3),
+    ("Yann LeCun", "Yann André LeCun[1] (born 8 July 1960) is a Turing Award winning French computer scientist working primarily in the fields of machine learning, computer vision, mobile robotics and computational neuroscience.", 4),
+    ("Ken Thompson", "Kenneth Lane Thompson (born February 4, 1943) is an American pioneer of computer science. Thompson worked at Bell Labs for most of his career where he designed and implemented the original Unix operating system. ", 5),
+    ("Gordon Plotkin", "Gordon David Plotkin, FRS FRSE MAE (born 9 September 1946) is a theoretical computer scientist in the School of Informatics at the University of Edinburgh. Plotkin is probably best known for his introduction of structural operational semantics (SOS) and his work on denotational semantics.", 6),
+    ("Leslie Lamport", "Leslie B. Lamport (born February 7, 1941) is an American computer scientist and mathematician. Lamport is best known for his seminal work in distributed systems, and as the initial developer of the document preparation system LaTeX", 7);
+
+insert into t_ir_multi_column (digest, detail, seq) values
+    ("Gerard Salton", "Gerard A. Gerry Salton (8 March 1927 – 28 August 1995) was a professor of Computer Science at Cornell University. Salton was perhaps the leading computer scientist working in the field of information retrieval during his time, and the father of Information Retrieval", 0),
+    ("Edgar F. Codd", "Edgar Frank Ted Codd (19 August 1923 – 18 April 2003) was an English computer scientist who, while working for IBM, invented the relational model for database management, the theoretical basis for relational databases and relational database management systems. ", 1),
+    ("Michael Stonebraker", "Michael Ralph Stonebraker (born October 11, 1943[6]) is a computer scientist specializing in database systems. Through a series of academic prototypes and commercial startups, Stonebraker's research and products are central to many relational databases. ", 2),
+    ("Geoffrey Hinton", "Geoffrey Everest Hinton CC FRS FRSC (born 6 December 1947) is a British-Canadian computer scientist and cognitive psychologist, most noted for his work on artificial neural networks.", 3),
+    ("Yann LeCun", "Yann André LeCun[1] (born 8 July 1960) is a Turing Award winning French computer scientist working primarily in the fields of machine learning, computer vision, mobile robotics and computational neuroscience.", 4),
+    ("Ken Thompson", "Kenneth Lane Thompson (born February 4, 1943) is an American pioneer of computer science. Thompson worked at Bell Labs for most of his career where he designed and implemented the original Unix operating system. ", 5),
+    ("Gordon Plotkin", "Gordon David Plotkin, FRS FRSE MAE (born 9 September 1946) is a theoretical computer scientist in the School of Informatics at the University of Edinburgh. Plotkin is probably best known for his introduction of structural operational semantics (SOS) and his work on denotational semantics.", 6),
+    ("Leslie Lamport", "Leslie B. Lamport (born February 7, 1941) is an American computer scientist and mathematician. Lamport is best known for his seminal work in distributed systems, and as the initial developer of the document preparation system LaTeX", 7);
+
+insert into t_dim_table (seq, log) values
+    (1, "Codd log"),
+    (3, "Hinton log"),
+    (5, "Ken log"),
+    (7, "Lamport log"),
+    (9, "someone's log");
+
+set ob_enable_index_direct_select = 'ON';
+
+select seq, tokenize(detail, 'space', '[{"output": "all"}]') as detail_tokens from t_ir_single_column order by seq;
++------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| seq  | detail_tokens                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
++------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+|    0 | {"tokens": [{"cornell": 1}, {"1927": 1}, {"working": 1}, {"father": 1}, {"science": 1}, {"computer": 2}, {"scientist": 1}, {"leading": 1}, {"retrieval": 2}, {"and": 1}, {"field": 1}, {"gerry": 1}, {"professor": 1}, {"during": 1}, {"salton": 2}, {"1995": 1}, {"time": 1}, {"gerard": 1}, {"his": 1}, {"university": 1}, {"march": 1}, {"august": 1}, {"information": 2}, {"perhaps": 1}], "doc_len": 28}                                                                            |
+|    1 | {"tokens": [{"systems": 1}, {"working": 1}, {"management": 2}, {"computer": 1}, {"codd": 1}, {"scientist": 1}, {"and": 1}, {"while": 1}, {"frank": 1}, {"theoretical": 1}, {"model": 1}, {"2003": 1}, {"1923": 1}, {"edgar": 1}, {"basis": 1}, {"april": 1}, {"database": 2}, {"invented": 1}, {"relational": 3}, {"english": 1}, {"august": 1}, {"ted": 1}, {"databases": 1}, {"ibm": 1}], "doc_len": 28}                                                                               |
+|    2 | {"tokens": [{"systems": 1}, {"october": 1}, {"series": 1}, {"computer": 1}, {"products": 1}, {"scientist": 1}, {"born": 1}, {"many": 1}, {"1943": 1}, {"and": 2}, {"startups": 1}, {"prototypes": 1}, {"ralph": 1}, {"specializing": 1}, {"research": 1}, {"academic": 1}, {"through": 1}, {"stonebraker": 2}, {"database": 1}, {"relational": 1}, {"databases": 1}, {"michael": 1}, {"central": 1}, {"commercial": 1}], "doc_len": 26}                                                  |
+|    3 | {"tokens": [{"british": 1}, {"hinton": 1}, {"networks": 1}, {"most": 1}, {"psychologist": 1}, {"his": 1}, {"scientist": 1}, {"december": 1}, {"everest": 1}, {"artificial": 1}, {"computer": 1}, {"canadian": 1}, {"geoffrey": 1}, {"frs": 1}, {"cognitive": 1}, {"work": 1}, {"neural": 1}, {"1947": 1}, {"frsc": 1}, {"noted": 1}, {"born": 1}, {"and": 1}], "doc_len": 22}                                                                                                            |
+|    4 | {"tokens": [{"mobile": 1}, {"working": 1}, {"computer": 2}, {"winning": 1}, {"scientist": 1}, {"born": 1}, {"vision": 1}, {"and": 1}, {"machine": 1}, {"computational": 1}, {"primarily": 1}, {"neuroscience": 1}, {"french": 1}, {"andré": 1}, {"july": 1}, {"yann": 1}, {"robotics": 1}, {"1960": 1}, {"lecun": 1}, {"fields": 1}, {"turing": 1}, {"learning": 1}, {"award": 1}], "doc_len": 24}                                                                                       |
+|    5 | {"tokens": [{"career": 1}, {"science": 1}, {"computer": 1}, {"labs": 1}, {"operating": 1}, {"system": 1}, {"born": 1}, {"unix": 1}, {"1943": 1}, {"pioneer": 1}, {"american": 1}, {"and": 1}, {"most": 1}, {"implemented": 1}, {"bell": 1}, {"february": 1}, {"kenneth": 1}, {"his": 1}, {"thompson": 2}, {"designed": 1}, {"lane": 1}, {"original": 1}, {"worked": 1}], "doc_len": 24}                                                                                                  |
+|    6 | {"tokens": [{"operational": 1}, {"computer": 1}, {"scientist": 1}, {"born": 1}, {"and": 1}, {"work": 1}, {"plotkin": 2}, {"theoretical": 1}, {"informatics": 1}, {"sos": 1}, {"best": 1}, {"probably": 1}, {"school": 1}, {"1946": 1}, {"denotational": 1}, {"known": 1}, {"edinburgh": 1}, {"mae": 1}, {"gordon": 1}, {"his": 2}, {"structural": 1}, {"university": 1}, {"semantics": 2}, {"introduction": 1}, {"september": 1}, {"frs": 1}, {"david": 1}, {"frse": 1}], "doc_len": 31} |
+|    7 | {"tokens": [{"systems": 1}, {"distributed": 1}, {"computer": 1}, {"system": 1}, {"scientist": 1}, {"born": 1}, {"american": 1}, {"and": 2}, {"work": 1}, {"latex": 1}, {"document": 1}, {"initial": 1}, {"best": 1}, {"preparation": 1}, {"leslie": 1}, {"1941": 1}, {"known": 1}, {"developer": 1}, {"february": 1}, {"mathematician": 1}, {"his": 1}, {"seminal": 1}, {"lamport": 2}], "doc_len": 25}                                                                                  |
++------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+select seq, tokenize(digest, 'space', '[{"output": "all"}]') as digest_tokens, tokenize(detail, 'space', '[{"output": "all"}]') as detail_tokens from t_ir_multi_column order by seq;
++------+----------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| seq  | digest_tokens                                                  | detail_tokens                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
++------+----------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+|    0 | {"tokens": [{"gerard": 1}, {"salton": 1}], "doc_len": 2}       | {"tokens": [{"cornell": 1}, {"1927": 1}, {"working": 1}, {"father": 1}, {"science": 1}, {"computer": 2}, {"scientist": 1}, {"leading": 1}, {"retrieval": 2}, {"and": 1}, {"field": 1}, {"gerry": 1}, {"professor": 1}, {"during": 1}, {"salton": 2}, {"1995": 1}, {"time": 1}, {"gerard": 1}, {"his": 1}, {"university": 1}, {"march": 1}, {"august": 1}, {"information": 2}, {"perhaps": 1}], "doc_len": 28}                                                                            |
+|    1 | {"tokens": [{"edgar": 1}, {"codd": 1}], "doc_len": 2}          | {"tokens": [{"systems": 1}, {"working": 1}, {"management": 2}, {"computer": 1}, {"codd": 1}, {"scientist": 1}, {"and": 1}, {"while": 1}, {"frank": 1}, {"theoretical": 1}, {"model": 1}, {"2003": 1}, {"1923": 1}, {"edgar": 1}, {"basis": 1}, {"april": 1}, {"database": 2}, {"invented": 1}, {"relational": 3}, {"english": 1}, {"august": 1}, {"ted": 1}, {"databases": 1}, {"ibm": 1}], "doc_len": 28}                                                                               |
+|    2 | {"tokens": [{"michael": 1}, {"stonebraker": 1}], "doc_len": 2} | {"tokens": [{"systems": 1}, {"october": 1}, {"series": 1}, {"computer": 1}, {"products": 1}, {"scientist": 1}, {"born": 1}, {"many": 1}, {"1943": 1}, {"and": 2}, {"startups": 1}, {"prototypes": 1}, {"ralph": 1}, {"specializing": 1}, {"research": 1}, {"academic": 1}, {"through": 1}, {"stonebraker": 2}, {"database": 1}, {"relational": 1}, {"databases": 1}, {"michael": 1}, {"central": 1}, {"commercial": 1}], "doc_len": 26}                                                  |
+|    3 | {"tokens": [{"hinton": 1}, {"geoffrey": 1}], "doc_len": 2}     | {"tokens": [{"british": 1}, {"hinton": 1}, {"networks": 1}, {"most": 1}, {"psychologist": 1}, {"his": 1}, {"scientist": 1}, {"december": 1}, {"everest": 1}, {"artificial": 1}, {"computer": 1}, {"canadian": 1}, {"geoffrey": 1}, {"frs": 1}, {"cognitive": 1}, {"work": 1}, {"neural": 1}, {"1947": 1}, {"frsc": 1}, {"noted": 1}, {"born": 1}, {"and": 1}], "doc_len": 22}                                                                                                            |
+|    4 | {"tokens": [{"lecun": 1}, {"yann": 1}], "doc_len": 2}          | {"tokens": [{"mobile": 1}, {"working": 1}, {"computer": 2}, {"winning": 1}, {"scientist": 1}, {"born": 1}, {"vision": 1}, {"and": 1}, {"machine": 1}, {"computational": 1}, {"primarily": 1}, {"neuroscience": 1}, {"french": 1}, {"andré": 1}, {"july": 1}, {"yann": 1}, {"robotics": 1}, {"1960": 1}, {"lecun": 1}, {"fields": 1}, {"turing": 1}, {"learning": 1}, {"award": 1}], "doc_len": 24}                                                                                       |
+|    5 | {"tokens": [{"thompson": 1}, {"ken": 1}], "doc_len": 2}        | {"tokens": [{"career": 1}, {"science": 1}, {"computer": 1}, {"labs": 1}, {"operating": 1}, {"system": 1}, {"born": 1}, {"unix": 1}, {"1943": 1}, {"pioneer": 1}, {"american": 1}, {"and": 1}, {"most": 1}, {"implemented": 1}, {"bell": 1}, {"february": 1}, {"kenneth": 1}, {"his": 1}, {"thompson": 2}, {"designed": 1}, {"lane": 1}, {"original": 1}, {"worked": 1}], "doc_len": 24}                                                                                                  |
+|    6 | {"tokens": [{"gordon": 1}, {"plotkin": 1}], "doc_len": 2}      | {"tokens": [{"operational": 1}, {"computer": 1}, {"scientist": 1}, {"born": 1}, {"and": 1}, {"work": 1}, {"plotkin": 2}, {"theoretical": 1}, {"informatics": 1}, {"sos": 1}, {"best": 1}, {"probably": 1}, {"school": 1}, {"1946": 1}, {"denotational": 1}, {"known": 1}, {"edinburgh": 1}, {"mae": 1}, {"gordon": 1}, {"his": 2}, {"structural": 1}, {"university": 1}, {"semantics": 2}, {"introduction": 1}, {"september": 1}, {"frs": 1}, {"david": 1}, {"frse": 1}], "doc_len": 31} |
+|    7 | {"tokens": [{"leslie": 1}, {"lamport": 1}], "doc_len": 2}      | {"tokens": [{"systems": 1}, {"distributed": 1}, {"computer": 1}, {"system": 1}, {"scientist": 1}, {"born": 1}, {"american": 1}, {"and": 2}, {"work": 1}, {"latex": 1}, {"document": 1}, {"initial": 1}, {"best": 1}, {"preparation": 1}, {"leslie": 1}, {"1941": 1}, {"known": 1}, {"developer": 1}, {"february": 1}, {"mathematician": 1}, {"his": 1}, {"seminal": 1}, {"lamport": 2}], "doc_len": 25}                                                                                  |
++------+----------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+
+
+select digest, detail from t_ir_single_column where match (detail) against ("distributed database");
++---------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| digest              | detail                                                                                                                                                                                                                                                                   |
++---------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Leslie Lamport      | Leslie B. Lamport (born February 7, 1941) is an American computer scientist and mathematician. Lamport is best known for his seminal work in distributed systems, and as the initial developer of the document preparation system LaTeX                                  |
+| Edgar F. Codd       | Edgar Frank Ted Codd (19 August 1923 – 18 April 2003) was an English computer scientist who, while working for IBM, invented the relational model for database management, the theoretical basis for relational databases and relational database management systems.    |
+| Michael Stonebraker | Michael Ralph Stonebraker (born October 11, 1943[6]) is a computer scientist specializing in database systems. Through a series of academic prototypes and commercial startups, Stonebraker's research and products are central to many relational databases.            |
++---------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+select digest, detail from t_ir_single_column where match (detail) against ("database");
++---------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| digest              | detail                                                                                                                                                                                                                                                                   |
++---------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Edgar F. Codd       | Edgar Frank Ted Codd (19 August 1923 – 18 April 2003) was an English computer scientist who, while working for IBM, invented the relational model for database management, the theoretical basis for relational databases and relational database management systems.    |
+| Michael Stonebraker | Michael Ralph Stonebraker (born October 11, 1943[6]) is a computer scientist specializing in database systems. Through a series of academic prototypes and commercial startups, Stonebraker's research and products are central to many relational databases.            |
++---------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+select digest, detail from t_ir_single_column where match (detail) against ("computer");
++---------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| digest              | detail                                                                                                                                                                                                                                                                                            |
++---------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Yann LeCun          | Yann André LeCun[1] (born 8 July 1960) is a Turing Award winning French computer scientist working primarily in the fields of machine learning, computer vision, mobile robotics and computational neuroscience.                                                                                  |
+| Gerard Salton       | Gerard A. Gerry Salton (8 March 1927 – 28 August 1995) was a professor of Computer Science at Cornell University. Salton was perhaps the leading computer scientist working in the field of information retrieval during his time, and the father of Information Retrieval                        |
+| Geoffrey Hinton     | Geoffrey Everest Hinton CC FRS FRSC (born 6 December 1947) is a British-Canadian computer scientist and cognitive psychologist, most noted for his work on artificial neural networks.                                                                                                            |
+| Ken Thompson        | Kenneth Lane Thompson (born February 4, 1943) is an American pioneer of computer science. Thompson worked at Bell Labs for most of his career where he designed and implemented the original Unix operating system.                                                                               |
+| Leslie Lamport      | Leslie B. Lamport (born February 7, 1941) is an American computer scientist and mathematician. Lamport is best known for his seminal work in distributed systems, and as the initial developer of the document preparation system LaTeX                                                           |
+| Michael Stonebraker | Michael Ralph Stonebraker (born October 11, 1943[6]) is a computer scientist specializing in database systems. Through a series of academic prototypes and commercial startups, Stonebraker's research and products are central to many relational databases.                                     |
+| Edgar F. Codd       | Edgar Frank Ted Codd (19 August 1923 – 18 April 2003) was an English computer scientist who, while working for IBM, invented the relational model for database management, the theoretical basis for relational databases and relational database management systems.                             |
+| Gordon Plotkin      | Gordon David Plotkin, FRS FRSE MAE (born 9 September 1946) is a theoretical computer scientist in the School of Informatics at the University of Edinburgh. Plotkin is probably best known for his introduction of structural operational semantics (SOS) and his work on denotational semantics. |
++---------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+select digest, detail from t_ir_single_column where match (detail) against (1943);
++---------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| digest              | detail                                                                                                                                                                                                                                                         |
++---------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Ken Thompson        | Kenneth Lane Thompson (born February 4, 1943) is an American pioneer of computer science. Thompson worked at Bell Labs for most of his career where he designed and implemented the original Unix operating system.                                            |
+| Michael Stonebraker | Michael Ralph Stonebraker (born October 11, 1943[6]) is a computer scientist specializing in database systems. Through a series of academic prototypes and commercial startups, Stonebraker's research and products are central to many relational databases.  |
++---------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+select digest, detail from t_ir_single_column where match (detail) against (0xFF);
++--------+--------+
+| digest | detail |
++--------+--------+
++--------+--------+
+
+select digest, match (detail) against ("database") as relevance from t_ir_single_column where match (detail) against ("database") order by relevance desc;
++---------------------+--------------------+
+| digest              | relevance          |
++---------------------+--------------------+
+| Edgar F. Codd       |  0.872251111643303 |
+| Michael Stonebraker | 0.5775069173242747 |
++---------------------+--------------------+
+select digest, match (detail) against ("computer") as relevance from t_ir_single_column where match (detail) against ("computer") order by relevance desc;
++---------------------+---------------------+
+| digest              | relevance           |
++---------------------+---------------------+
+| Yann LeCun          |  0.2466367713004485 |
+| Gerard Salton       |  0.2282157676348548 |
+| Geoffrey Hinton     |  0.1676829268292683 |
+| Ken Thompson        | 0.15895953757225437 |
+| Leslie Lamport      | 0.15492957746478875 |
+| Michael Stonebraker |  0.1510989010989011 |
+| Edgar F. Codd       | 0.14397905759162308 |
+| Gordon Plotkin      | 0.13447432762836187 |
++---------------------+---------------------+
+
+select digest, match (detail) against ("computer") as relevance from t_ir_single_column where match (detail) against ("computer") > 0.12 order by relevance desc;
++---------------------+---------------------+
+| digest              | relevance           |
++---------------------+---------------------+
+| Yann LeCun          |  0.2466367713004485 |
+| Gerard Salton       |  0.2282157676348548 |
+| Geoffrey Hinton     |  0.1676829268292683 |
+| Ken Thompson        | 0.15895953757225437 |
+| Leslie Lamport      | 0.15492957746478875 |
+| Michael Stonebraker |  0.1510989010989011 |
+| Edgar F. Codd       | 0.14397905759162308 |
+| Gordon Plotkin      | 0.13447432762836187 |
++---------------------+---------------------+
+select digest, match (detail) against ("computer") as relevance from t_ir_single_column where match (detail) against ("computer") < 0.12 order by relevance desc;
++--------+-----------+
+| digest | relevance |
++--------+-----------+
++--------+-----------+
+select digest, match (detail) against ("computer") as relevance from t_ir_single_column where match (detail) against ("computer") = 0 order by relevance desc;
++--------+-----------+
+| digest | relevance |
++--------+-----------+
++--------+-----------+
+
+select digest from t_ir_single_column where match (detail) against ("");
++--------+
+| digest |
++--------+
++--------+
+
+select digest from t_ir_single_column where match (detail) against ("is");
++--------+
+| digest |
++--------+
++--------+
+
+select digest from t_ir_single_column where match (detail) against ("is is");
++--------+
+| digest |
++--------+
++--------+
+
+select count(1) from t_ir_single_column where match (detail) against ("distributed database");
++----------+
+| count(1) |
++----------+
+|        3 |
++----------+
+
+select
+    digest, match (detail) against ("computer") as relevance
+from
+    t_ir_single_column
+where
+    match (detail) against ("computer")
+order by relevance desc
+limit 4;
++-----------------+---------------------+
+| digest          | relevance           |
++-----------------+---------------------+
+| Yann LeCun      |  0.2466367713004485 |
+| Gerard Salton   |  0.2282157676348548 |
+| Geoffrey Hinton |  0.1676829268292683 |
+| Ken Thompson    | 0.15895953757225437 |
++-----------------+---------------------+
+
+select
+    max(match (detail) against ("computer")) as max_relevance, max(seq)
+from
+    t_ir_single_column
+where
+    match (detail) against ("computer");
++--------------------+----------+
+| max_relevance      | max(seq) |
++--------------------+----------+
+| 0.2466367713004485 |        7 |
++--------------------+----------+
+
+select
+    min(match (detail) against ("computer")) as min_relevance
+from
+    t_ir_single_column
+where
+    match (detail) against ("computer");
++---------------------+
+| min_relevance       |
++---------------------+
+| 0.13447432762836187 |
++---------------------+
+
+select
+    avg(match (detail) against ("computer")) as avg_relevance
+from
+    t_ir_single_column
+where
+    match (detail) against ("computer");
++--------------------+
+| avg_relevance      |
++--------------------+
+| 0.1732471083900626 |
++--------------------+
+
+select
+    digest, seq, match (detail) against ("scientist") as relevance
+from
+    t_ir_single_column
+where
+    match (detail) against ("scientist") and seq < 4;
++---------------------+------+---------------------+
+| digest              | seq  | relevance           |
++---------------------+------+---------------------+
+| Geoffrey Hinton     |    3 |  0.1676829268292683 |
+| Michael Stonebraker |    2 |  0.1510989010989011 |
+| Gerard Salton       |    0 | 0.14397905759162308 |
+| Edgar F. Codd       |    1 | 0.14397905759162308 |
++---------------------+------+---------------------+
+
+select
+    digest, seq, match (detail) against ("scientist") as relevance
+from
+    t_ir_single_column
+where
+    match (detail) against ("scientist") and seq >= 4;
++----------------+------+---------------------+
+| digest         | seq  | relevance           |
++----------------+------+---------------------+
+| Yann LeCun     |    4 | 0.15895953757225437 |
+| Leslie Lamport |    7 | 0.15492957746478875 |
+| Gordon Plotkin |    6 | 0.13447432762836187 |
++----------------+------+---------------------+
+
+select
+    digest, seq, match (detail) against ("scientist") as relevance
+from
+    t_ir_single_column
+where
+    match (detail) against ("scientist") and digest = "Ken Thompson";
++--------+------+-----------+
+| digest | seq  | relevance |
++--------+------+-----------+
++--------+------+-----------+
+
+select
+    digest, seq, match (detail) against ("scientist") as relevance
+from
+    t_ir_single_column
+where
+    match (detail) against ("scientist") and digest = "Yann LeCun";
++------------+------+---------------------+
+| digest     | seq  | relevance           |
++------------+------+---------------------+
+| Yann LeCun |    4 | 0.15895953757225437 |
++------------+------+---------------------+
+
+select
+    digest, seq, match (detail) against ("scientist") as relevance
+from
+    t_ir_single_column
+where
+    match (detail) against ("scientist") and digest like "%Ken%";
++--------+------+-----------+
+| digest | seq  | relevance |
++--------+------+-----------+
++--------+------+-----------+
+
+select
+    digest, seq, match (detail) against ("scientist") as relevance
+from
+    t_ir_single_column
+where
+    match (detail) against ("scientist") and digest like "%LeCun%";
++------------+------+---------------------+
+| digest     | seq  | relevance           |
++------------+------+---------------------+
+| Yann LeCun |    4 | 0.15895953757225437 |
++------------+------+---------------------+
+
+select
+    digest, match (detail) against ("distributed database") as relevance
+from
+    t_ir_single_column
+where
+    match (detail) against ("distributed database")
+order by
+    relevance desc;
++---------------------+--------------------+
+| digest              | relevance          |
++---------------------+--------------------+
+| Leslie Lamport      | 0.9973981429169073 |
+| Edgar F. Codd       |  0.872251111643303 |
+| Michael Stonebraker | 0.5775069173242747 |
++---------------------+--------------------+
+
+select
+    digest, match (detail) against ("relational database") as relevance
+from
+    t_ir_single_column
+where
+    match (detail) against ("relational database")
+order by
+    relevance desc;
++---------------------+--------------------+
+| digest              | relevance          |
++---------------------+--------------------+
+| Edgar F. Codd       | 1.9558207915713242 |
+| Michael Stonebraker | 1.1550138346485495 |
++---------------------+--------------------+
+
+select
+    digest, match (detail) against ("relational distributed database") as relevance
+from
+    t_ir_single_column
+where
+    match (detail) against ("relational distributed database")
+order by
+    relevance desc;
++---------------------+--------------------+
+| digest              | relevance          |
++---------------------+--------------------+
+| Edgar F. Codd       | 1.9558207915713242 |
+| Michael Stonebraker | 1.1550138346485495 |
+| Leslie Lamport      | 0.9973981429169073 |
++---------------------+--------------------+
+
+select
+    digest, match (detail) against ("distributed relational database") as relevance
+from
+    t_ir_single_column
+where
+    match (detail) against ("distributed relational database")
+order by
+    relevance desc;
++---------------------+--------------------+
+| digest              | relevance          |
++---------------------+--------------------+
+| Edgar F. Codd       | 1.9558207915713242 |
+| Michael Stonebraker | 1.1550138346485495 |
+| Leslie Lamport      | 0.9973981429169073 |
++---------------------+--------------------+
+
+select
+    digest, match (detail) against ("distributed relational database") as relevance
+from
+    t_ir_single_column
+where
+    match (detail) against ("distributed relational database")
+limit 2;
++---------------------+--------------------+
+| digest              | relevance          |
++---------------------+--------------------+
+| Edgar F. Codd       | 1.9558207915713242 |
+| Michael Stonebraker | 1.1550138346485495 |
++---------------------+--------------------+
+
+select
+    seq, digest
+from
+    t_ir_single_column
+where
+    match (detail) against ("distributed relational database")
+order by seq desc;
++------+---------------------+
+| seq  | digest              |
++------+---------------------+
+|    7 | Leslie Lamport      |
+|    2 | Michael Stonebraker |
+|    1 | Edgar F. Codd       |
++------+---------------------+
+
+select
+    seq, digest, match (detail) against ("distributed relational database") as score
+from
+    t_ir_single_column
+where
+    match (detail) against ("distributed relational database")
+order by seq desc;
++------+---------------------+--------------------+
+| seq  | digest              | score              |
++------+---------------------+--------------------+
+|    7 | Leslie Lamport      | 0.9973981429169073 |
+|    2 | Michael Stonebraker | 1.1550138346485495 |
+|    1 | Edgar F. Codd       | 1.9558207915713242 |
++------+---------------------+--------------------+
+
+select distinct 1 from t_ir_single_column where match (detail) against ("distributed database");
++---+
+| 1 |
++---+
+| 1 |
++---+
+
+select distinct digest from t_ir_single_column where match (detail) against ("distributed database");
++---------------------+
+| digest              |
++---------------------+
+| Edgar F. Codd       |
+| Michael Stonebraker |
+| Leslie Lamport      |
++---------------------+
+
+select distinct digest, match (detail) against ("distributed database") > 0 from t_ir_single_column where match (detail) against ("distributed database");
++---------------------+-----------------------------------------------------+
+| digest              | match (detail) against ("distributed database") > 0 |
++---------------------+-----------------------------------------------------+
+| Edgar F. Codd       |                                                   1 |
+| Michael Stonebraker |                                                   1 |
+| Leslie Lamport      |                                                   1 |
++---------------------+-----------------------------------------------------+
+
+select (select digest from t_ir_single_column limit 1) as d1 from t_ir_single_column where match (detail) against ("distributed database") and seq > 1 ;
++---------------+
+| d1            |
++---------------+
+| Gerard Salton |
+| Gerard Salton |
++---------------+
+
+select distinct (select digest from t_ir_single_column limit 1) as d1 from t_ir_single_column where match (detail) against ("distributed database") and seq > 1;
++---------------+
+| d1            |
++---------------+
+| Gerard Salton |
++---------------+
+
+select digest, detail from t_ir_multi_column where match (detail) against ("database");
+ERROR HY000: Can't find FULLTEXT index matching the column list
+select digest, detail from t_ir_multi_column where match (detail) against ("database");
+ERROR HY000: Can't find FULLTEXT index matching the column list
+
+select digest, detail from t_ir_multi_column where match (detail, digest) against ("distributed database");
++---------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| digest              | detail                                                                                                                                                                                                                                                                   |
++---------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Leslie Lamport      | Leslie B. Lamport (born February 7, 1941) is an American computer scientist and mathematician. Lamport is best known for his seminal work in distributed systems, and as the initial developer of the document preparation system LaTeX                                  |
+| Edgar F. Codd       | Edgar Frank Ted Codd (19 August 1923 – 18 April 2003) was an English computer scientist who, while working for IBM, invented the relational model for database management, the theoretical basis for relational databases and relational database management systems.    |
+| Michael Stonebraker | Michael Ralph Stonebraker (born October 11, 1943[6]) is a computer scientist specializing in database systems. Through a series of academic prototypes and commercial startups, Stonebraker's research and products are central to many relational databases.            |
++---------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+select /*+ use_das(t_ir_multi_column) */ digest, detail from t_ir_multi_column where match (detail, digest) against ("distributed database");
++---------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| digest              | detail                                                                                                                                                                                                                                                                   |
++---------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Leslie Lamport      | Leslie B. Lamport (born February 7, 1941) is an American computer scientist and mathematician. Lamport is best known for his seminal work in distributed systems, and as the initial developer of the document preparation system LaTeX                                  |
+| Edgar F. Codd       | Edgar Frank Ted Codd (19 August 1923 – 18 April 2003) was an English computer scientist who, while working for IBM, invented the relational model for database management, the theoretical basis for relational databases and relational database management systems.    |
+| Michael Stonebraker | Michael Ralph Stonebraker (born October 11, 1943[6]) is a computer scientist specializing in database systems. Through a series of academic prototypes and commercial startups, Stonebraker's research and products are central to many relational databases.            |
++---------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+
+select  digest, detail from t_ir_multi_column where match (detail, digest) against ("database");
++---------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| digest              | detail                                                                                                                                                                                                                                                                   |
++---------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Edgar F. Codd       | Edgar Frank Ted Codd (19 August 1923 – 18 April 2003) was an English computer scientist who, while working for IBM, invented the relational model for database management, the theoretical basis for relational databases and relational database management systems.    |
+| Michael Stonebraker | Michael Ralph Stonebraker (born October 11, 1943[6]) is a computer scientist specializing in database systems. Through a series of academic prototypes and commercial startups, Stonebraker's research and products are central to many relational databases.            |
++---------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+select /*+ use_das(t_ir_multi_column) */ digest, detail from t_ir_multi_column where match (detail, digest) against ("database");
++---------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| digest              | detail                                                                                                                                                                                                                                                                   |
++---------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Edgar F. Codd       | Edgar Frank Ted Codd (19 August 1923 – 18 April 2003) was an English computer scientist who, while working for IBM, invented the relational model for database management, the theoretical basis for relational databases and relational database management systems.    |
+| Michael Stonebraker | Michael Ralph Stonebraker (born October 11, 1943[6]) is a computer scientist specializing in database systems. Through a series of academic prototypes and commercial startups, Stonebraker's research and products are central to many relational databases.            |
++---------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+
+select digest, detail from t_ir_multi_column where match (digest, detail) against ("computer");
++---------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| digest              | detail                                                                                                                                                                                                                                                                                            |
++---------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Yann LeCun          | Yann André LeCun[1] (born 8 July 1960) is a Turing Award winning French computer scientist working primarily in the fields of machine learning, computer vision, mobile robotics and computational neuroscience.                                                                                  |
+| Gerard Salton       | Gerard A. Gerry Salton (8 March 1927 – 28 August 1995) was a professor of Computer Science at Cornell University. Salton was perhaps the leading computer scientist working in the field of information retrieval during his time, and the father of Information Retrieval                        |
+| Geoffrey Hinton     | Geoffrey Everest Hinton CC FRS FRSC (born 6 December 1947) is a British-Canadian computer scientist and cognitive psychologist, most noted for his work on artificial neural networks.                                                                                                            |
+| Ken Thompson        | Kenneth Lane Thompson (born February 4, 1943) is an American pioneer of computer science. Thompson worked at Bell Labs for most of his career where he designed and implemented the original Unix operating system.                                                                               |
+| Leslie Lamport      | Leslie B. Lamport (born February 7, 1941) is an American computer scientist and mathematician. Lamport is best known for his seminal work in distributed systems, and as the initial developer of the document preparation system LaTeX                                                           |
+| Michael Stonebraker | Michael Ralph Stonebraker (born October 11, 1943[6]) is a computer scientist specializing in database systems. Through a series of academic prototypes and commercial startups, Stonebraker's research and products are central to many relational databases.                                     |
+| Edgar F. Codd       | Edgar Frank Ted Codd (19 August 1923 – 18 April 2003) was an English computer scientist who, while working for IBM, invented the relational model for database management, the theoretical basis for relational databases and relational database management systems.                             |
+| Gordon Plotkin      | Gordon David Plotkin, FRS FRSE MAE (born 9 September 1946) is a theoretical computer scientist in the School of Informatics at the University of Edinburgh. Plotkin is probably best known for his introduction of structural operational semantics (SOS) and his work on denotational semantics. |
++---------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+select /*+ use_das(t_ir_multi_column) */ digest, detail from t_ir_multi_column where match (digest, detail) against ("computer");
++---------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| digest              | detail                                                                                                                                                                                                                                                                                            |
++---------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Yann LeCun          | Yann André LeCun[1] (born 8 July 1960) is a Turing Award winning French computer scientist working primarily in the fields of machine learning, computer vision, mobile robotics and computational neuroscience.                                                                                  |
+| Gerard Salton       | Gerard A. Gerry Salton (8 March 1927 – 28 August 1995) was a professor of Computer Science at Cornell University. Salton was perhaps the leading computer scientist working in the field of information retrieval during his time, and the father of Information Retrieval                        |
+| Geoffrey Hinton     | Geoffrey Everest Hinton CC FRS FRSC (born 6 December 1947) is a British-Canadian computer scientist and cognitive psychologist, most noted for his work on artificial neural networks.                                                                                                            |
+| Ken Thompson        | Kenneth Lane Thompson (born February 4, 1943) is an American pioneer of computer science. Thompson worked at Bell Labs for most of his career where he designed and implemented the original Unix operating system.                                                                               |
+| Leslie Lamport      | Leslie B. Lamport (born February 7, 1941) is an American computer scientist and mathematician. Lamport is best known for his seminal work in distributed systems, and as the initial developer of the document preparation system LaTeX                                                           |
+| Michael Stonebraker | Michael Ralph Stonebraker (born October 11, 1943[6]) is a computer scientist specializing in database systems. Through a series of academic prototypes and commercial startups, Stonebraker's research and products are central to many relational databases.                                     |
+| Edgar F. Codd       | Edgar Frank Ted Codd (19 August 1923 – 18 April 2003) was an English computer scientist who, while working for IBM, invented the relational model for database management, the theoretical basis for relational databases and relational database management systems.                             |
+| Gordon Plotkin      | Gordon David Plotkin, FRS FRSE MAE (born 9 September 1946) is a theoretical computer scientist in the School of Informatics at the University of Edinburgh. Plotkin is probably best known for his introduction of structural operational semantics (SOS) and his work on denotational semantics. |
++---------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+
+select digest, match (detail, digest) against ("database") as relevance from t_ir_multi_column where match (detail, digest) against ("database") order by relevance desc;
++---------------------+--------------------+
+| digest              | relevance          |
++---------------------+--------------------+
+| Edgar F. Codd       | 0.8408500716241442 |
+| Michael Stonebraker |  0.550294549492241 |
++---------------------+--------------------+
+select /*+ use_das(t_ir_multi_column) */ digest, match (detail, digest) against ("database") as relevance from t_ir_multi_column where match (detail, digest) against ("database") order by relevance desc;
++---------------------+--------------------+
+| digest              | relevance          |
++---------------------+--------------------+
+| Edgar F. Codd       | 0.8408500716241442 |
+| Michael Stonebraker |  0.550294549492241 |
++---------------------+--------------------+
+
+select digest, match (digest, detail) against ("computer") as relevance from t_ir_multi_column where match (digest, detail) against ("computer") order by relevance desc;
++---------------------+---------------------+
+| digest              | relevance           |
++---------------------+---------------------+
+| Yann LeCun          | 0.23706896551724138 |
+| Gerard Salton       | 0.22000000000000003 |
+| Geoffrey Hinton     | 0.15895953757225437 |
+| Ken Thompson        |  0.1510989010989011 |
+| Leslie Lamport      | 0.14745308310991956 |
+| Michael Stonebraker | 0.14397905759162308 |
+| Edgar F. Codd       |              0.1375 |
+| Gordon Plotkin      |  0.1288056206088993 |
++---------------------+---------------------+
+select /*+ use_das(t_ir_multi_column) */ digest, match (digest, detail) against ("computer") as relevance from t_ir_multi_column where match (digest, detail) against ("computer") order by relevance desc;
++---------------------+---------------------+
+| digest              | relevance           |
++---------------------+---------------------+
+| Yann LeCun          | 0.23706896551724138 |
+| Gerard Salton       | 0.22000000000000003 |
+| Geoffrey Hinton     | 0.15895953757225437 |
+| Ken Thompson        |  0.1510989010989011 |
+| Leslie Lamport      | 0.14745308310991956 |
+| Michael Stonebraker | 0.14397905759162308 |
+| Edgar F. Codd       |              0.1375 |
+| Gordon Plotkin      |  0.1288056206088993 |
++---------------------+---------------------+
+
+select
+    t_ir_multi_column.digest, t_dim_table.seq as seq, t_dim_table.log as log , match (digest, detail) against ("computer") as score
+from
+    t_ir_multi_column, t_dim_table
+where
+    t_ir_multi_column.seq = t_dim_table.seq and match (digest, detail) against ("computer")
+order by
+    score desc;
++-----------------+------+-------------+---------------------+
+| digest          | seq  | log         | score               |
++-----------------+------+-------------+---------------------+
+| Geoffrey Hinton |    3 | Hinton log  | 0.15895953757225437 |
+| Ken Thompson    |    5 | Ken log     |  0.1510989010989011 |
+| Leslie Lamport  |    7 | Lamport log | 0.14745308310991956 |
+| Edgar F. Codd   |    1 | Codd log    |              0.1375 |
++-----------------+------+-------------+---------------------+
+
+select /*+ use_das(t_ir_multi_column) */
+    t_ir_multi_column.digest, t_dim_table.seq as seq, t_dim_table.log as log , match (digest, detail) against ("computer") as score
+from
+    t_ir_multi_column, t_dim_table
+where
+    t_ir_multi_column.seq = t_dim_table.seq and match (digest, detail) against ("computer")
+order by
+    score desc;
++-----------------+------+-------------+---------------------+
+| digest          | seq  | log         | score               |
++-----------------+------+-------------+---------------------+
+| Geoffrey Hinton |    3 | Hinton log  | 0.15895953757225437 |
+| Ken Thompson    |    5 | Ken log     |  0.1510989010989011 |
+| Leslie Lamport  |    7 | Lamport log | 0.14745308310991956 |
+| Edgar F. Codd   |    1 | Codd log    |              0.1375 |
++-----------------+------+-------------+---------------------+
+
+select /*+ use_das(t_ir_multi_column), use_das(t_dim_table) */
+    t_ir_multi_column.digest, t_dim_table.seq as seq, t_dim_table.log as log , match (digest, detail) against ("computer") as score
+from
+    t_ir_multi_column, t_dim_table
+where
+    t_ir_multi_column.seq = t_dim_table.seq and match (digest, detail) against ("computer")
+order by
+    score desc;
++-----------------+------+-------------+---------------------+
+| digest          | seq  | log         | score               |
++-----------------+------+-------------+---------------------+
+| Geoffrey Hinton |    3 | Hinton log  | 0.15895953757225437 |
+| Ken Thompson    |    5 | Ken log     |  0.1510989010989011 |
+| Leslie Lamport  |    7 | Lamport log | 0.14745308310991956 |
+| Edgar F. Codd   |    1 | Codd log    |              0.1375 |
++-----------------+------+-------------+---------------------+
+
+select
+    t_ir_multi_column.digest, t_ir_multi_column.seq, t_dim_table.seq, t_dim_table.log as log , match (digest, detail) against ("computer") as score
+from
+    t_ir_multi_column, t_dim_table
+where
+    t_ir_multi_column.seq < t_dim_table.seq and match (digest, detail) against ("computer")
+order by
+    t_ir_multi_column.seq, t_dim_table.seq;
++---------------------+------+------+---------------+---------------------+
+| digest              | seq  | seq  | log           | score               |
++---------------------+------+------+---------------+---------------------+
+| Gerard Salton       |    0 |    1 | Codd log      | 0.22000000000000003 |
+| Gerard Salton       |    0 |    3 | Hinton log    | 0.22000000000000003 |
+| Gerard Salton       |    0 |    5 | Ken log       | 0.22000000000000003 |
+| Gerard Salton       |    0 |    7 | Lamport log   | 0.22000000000000003 |
+| Gerard Salton       |    0 |    9 | someone's log | 0.22000000000000003 |
+| Edgar F. Codd       |    1 |    3 | Hinton log    |              0.1375 |
+| Edgar F. Codd       |    1 |    5 | Ken log       |              0.1375 |
+| Edgar F. Codd       |    1 |    7 | Lamport log   |              0.1375 |
+| Edgar F. Codd       |    1 |    9 | someone's log |              0.1375 |
+| Michael Stonebraker |    2 |    3 | Hinton log    | 0.14397905759162308 |
+| Michael Stonebraker |    2 |    5 | Ken log       | 0.14397905759162308 |
+| Michael Stonebraker |    2 |    7 | Lamport log   | 0.14397905759162308 |
+| Michael Stonebraker |    2 |    9 | someone's log | 0.14397905759162308 |
+| Geoffrey Hinton     |    3 |    5 | Ken log       | 0.15895953757225437 |
+| Geoffrey Hinton     |    3 |    7 | Lamport log   | 0.15895953757225437 |
+| Geoffrey Hinton     |    3 |    9 | someone's log | 0.15895953757225437 |
+| Yann LeCun          |    4 |    5 | Ken log       | 0.23706896551724138 |
+| Yann LeCun          |    4 |    7 | Lamport log   | 0.23706896551724138 |
+| Yann LeCun          |    4 |    9 | someone's log | 0.23706896551724138 |
+| Ken Thompson        |    5 |    7 | Lamport log   |  0.1510989010989011 |
+| Ken Thompson        |    5 |    9 | someone's log |  0.1510989010989011 |
+| Gordon Plotkin      |    6 |    7 | Lamport log   |  0.1288056206088993 |
+| Gordon Plotkin      |    6 |    9 | someone's log |  0.1288056206088993 |
+| Leslie Lamport      |    7 |    9 | someone's log | 0.14745308310991956 |
++---------------------+------+------+---------------+---------------------+
+
+select /*+ use_das(t_ir_multi_column) */
+    t_ir_multi_column.digest, t_ir_multi_column.seq, t_dim_table.seq, t_dim_table.log as log , match (digest, detail) against ("computer") as score
+from
+    t_ir_multi_column, t_dim_table
+where
+    t_ir_multi_column.seq < t_dim_table.seq and match (digest, detail) against ("computer")
+order by
+    t_ir_multi_column.seq, t_dim_table.seq;
++---------------------+------+------+---------------+---------------------+
+| digest              | seq  | seq  | log           | score               |
++---------------------+------+------+---------------+---------------------+
+| Gerard Salton       |    0 |    1 | Codd log      | 0.22000000000000003 |
+| Gerard Salton       |    0 |    3 | Hinton log    | 0.22000000000000003 |
+| Gerard Salton       |    0 |    5 | Ken log       | 0.22000000000000003 |
+| Gerard Salton       |    0 |    7 | Lamport log   | 0.22000000000000003 |
+| Gerard Salton       |    0 |    9 | someone's log | 0.22000000000000003 |
+| Edgar F. Codd       |    1 |    3 | Hinton log    |              0.1375 |
+| Edgar F. Codd       |    1 |    5 | Ken log       |              0.1375 |
+| Edgar F. Codd       |    1 |    7 | Lamport log   |              0.1375 |
+| Edgar F. Codd       |    1 |    9 | someone's log |              0.1375 |
+| Michael Stonebraker |    2 |    3 | Hinton log    | 0.14397905759162308 |
+| Michael Stonebraker |    2 |    5 | Ken log       | 0.14397905759162308 |
+| Michael Stonebraker |    2 |    7 | Lamport log   | 0.14397905759162308 |
+| Michael Stonebraker |    2 |    9 | someone's log | 0.14397905759162308 |
+| Geoffrey Hinton     |    3 |    5 | Ken log       | 0.15895953757225437 |
+| Geoffrey Hinton     |    3 |    7 | Lamport log   | 0.15895953757225437 |
+| Geoffrey Hinton     |    3 |    9 | someone's log | 0.15895953757225437 |
+| Yann LeCun          |    4 |    5 | Ken log       | 0.23706896551724138 |
+| Yann LeCun          |    4 |    7 | Lamport log   | 0.23706896551724138 |
+| Yann LeCun          |    4 |    9 | someone's log | 0.23706896551724138 |
+| Ken Thompson        |    5 |    7 | Lamport log   |  0.1510989010989011 |
+| Ken Thompson        |    5 |    9 | someone's log |  0.1510989010989011 |
+| Gordon Plotkin      |    6 |    7 | Lamport log   |  0.1288056206088993 |
+| Gordon Plotkin      |    6 |    9 | someone's log |  0.1288056206088993 |
+| Leslie Lamport      |    7 |    9 | someone's log | 0.14745308310991956 |
++---------------------+------+------+---------------+---------------------+
+
+create table t_ir_multi_column_dml(
+   digest varchar(512),
+   detail varchar(4096),
+   seq int,
+   fulltext index i1(digest, detail));
+
+insert into t_ir_multi_column_dml (digest, detail, seq) values
+    ("Gerard Salton", "Gerard A. Gerry Salton (8 March 1927 – 28 August 1995) was a professor of Computer Science at Cornell University. Salton was perhaps the leading computer scientist working in the field of information retrieval during his time, and the father of Information Retrieval", 0),
+    ("Edgar F. Codd", "Edgar Frank Ted Codd (19 August 1923 – 18 April 2003) was an English computer scientist who, while working for IBM, invented the relational model for database management, the theoretical basis for relational databases and relational database management systems. ", 1),
+    ("Michael Stonebraker", "Michael Ralph Stonebraker (born October 11, 1943[6]) is a computer scientist specializing in database systems. Through a series of academic prototypes and commercial startups, Stonebraker's research and products are central to many relational databases. ", 2),
+    ("Geoffrey Hinton", "Geoffrey Everest Hinton CC FRS FRSC (born 6 December 1947) is a British-Canadian computer scientist and cognitive psychologist, most noted for his work on artificial neural networks.", 3),
+    ("Yann LeCun", "Yann André LeCun[1] (born 8 July 1960) is a Turing Award winning French computer scientist working primarily in the fields of machine learning, computer vision, mobile robotics and computational neuroscience.", 4),
+    ("Ken Thompson", "Kenneth Lane Thompson (born February 4, 1943) is an American pioneer of computer science. Thompson worked at Bell Labs for most of his career where he designed and implemented the original Unix operating system. ", 5),
+    ("Gordon Plotkin", "Gordon David Plotkin, FRS FRSE MAE (born 9 September 1946) is a theoretical computer scientist in the School of Informatics at the University of Edinburgh. Plotkin is probably best known for his introduction of structural operational semantics (SOS) and his work on denotational semantics.", 6),
+    ("Leslie Lamport", "Leslie B. Lamport (born February 7, 1941) is an American computer scientist and mathematician. Lamport is best known for his seminal work in distributed systems, and as the initial developer of the document preparation system LaTeX", 7);
+
+select digest, seq from t_ir_multi_column_dml;
++---------------------+------+
+| digest              | seq  |
++---------------------+------+
+| Gerard Salton       |    0 |
+| Edgar F. Codd       |    1 |
+| Michael Stonebraker |    2 |
+| Geoffrey Hinton     |    3 |
+| Yann LeCun          |    4 |
+| Ken Thompson        |    5 |
+| Gordon Plotkin      |    6 |
+| Leslie Lamport      |    7 |
++---------------------+------+
+
+update t_ir_multi_column_dml set digest = 'Modified Thompson' where match (detail, digest) against ("Thompson");
+select digest, seq from t_ir_multi_column_dml;
++---------------------+------+
+| digest              | seq  |
++---------------------+------+
+| Gerard Salton       |    0 |
+| Edgar F. Codd       |    1 |
+| Michael Stonebraker |    2 |
+| Geoffrey Hinton     |    3 |
+| Yann LeCun          |    4 |
+| Modified Thompson   |    5 |
+| Gordon Plotkin      |    6 |
+| Leslie Lamport      |    7 |
++---------------------+------+
+
+update t_ir_multi_column_dml set digest = 'Ken Thompson' where match (detail, digest) against ("Thompson");
+select digest, seq from t_ir_multi_column_dml;
++---------------------+------+
+| digest              | seq  |
++---------------------+------+
+| Gerard Salton       |    0 |
+| Edgar F. Codd       |    1 |
+| Michael Stonebraker |    2 |
+| Geoffrey Hinton     |    3 |
+| Yann LeCun          |    4 |
+| Ken Thompson        |    5 |
+| Gordon Plotkin      |    6 |
+| Leslie Lamport      |    7 |
++---------------------+------+
+
+select * from t_ir_multi_column_dml where match(detail, digest) against ('distributed database');
++---------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------+
+| digest              | detail                                                                                                                                                                                                                                                                   | seq  |
++---------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------+
+| Leslie Lamport      | Leslie B. Lamport (born February 7, 1941) is an American computer scientist and mathematician. Lamport is best known for his seminal work in distributed systems, and as the initial developer of the document preparation system LaTeX                                  |    7 |
+| Edgar F. Codd       | Edgar Frank Ted Codd (19 August 1923 – 18 April 2003) was an English computer scientist who, while working for IBM, invented the relational model for database management, the theoretical basis for relational databases and relational database management systems.    |    1 |
+| Michael Stonebraker | Michael Ralph Stonebraker (born October 11, 1943[6]) is a computer scientist specializing in database systems. Through a series of academic prototypes and commercial startups, Stonebraker's research and products are central to many relational databases.            |    2 |
++---------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------+
+update t_ir_multi_column_dml set digest = 'distributed database contirbuter' where match (detail, digest) against ("distributed database");
+select digest, seq from t_ir_multi_column_dml;
++----------------------------------+------+
+| digest                           | seq  |
++----------------------------------+------+
+| Gerard Salton                    |    0 |
+| distributed database contirbuter |    1 |
+| distributed database contirbuter |    2 |
+| Geoffrey Hinton                  |    3 |
+| Yann LeCun                       |    4 |
+| Ken Thompson                     |    5 |
+| Gordon Plotkin                   |    6 |
+| distributed database contirbuter |    7 |
++----------------------------------+------+
+
+select * from t_ir_multi_column_dml where match(detail, digest) against ('system research');
++----------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------+
+| digest                           | detail                                                                                                                                                                                                                                                         | seq  |
++----------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------+
+| distributed database contirbuter | Michael Ralph Stonebraker (born October 11, 1943[6]) is a computer scientist specializing in database systems. Through a series of academic prototypes and commercial startups, Stonebraker's research and products are central to many relational databases.  |    2 |
+| Ken Thompson                     | Kenneth Lane Thompson (born February 4, 1943) is an American pioneer of computer science. Thompson worked at Bell Labs for most of his career where he designed and implemented the original Unix operating system.                                            |    5 |
+| distributed database contirbuter | Leslie B. Lamport (born February 7, 1941) is an American computer scientist and mathematician. Lamport is best known for his seminal work in distributed systems, and as the initial developer of the document preparation system LaTeX                        |    7 |
++----------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------+
+delete from t_ir_multi_column_dml where match(detail, digest) against ('system research');
+select * from t_ir_multi_column_dml;
++----------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------+
+| digest                           | detail                                                                                                                                                                                                                                                                                            | seq  |
++----------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------+
+| Gerard Salton                    | Gerard A. Gerry Salton (8 March 1927 – 28 August 1995) was a professor of Computer Science at Cornell University. Salton was perhaps the leading computer scientist working in the field of information retrieval during his time, and the father of Information Retrieval                        |    0 |
+| distributed database contirbuter | Edgar Frank Ted Codd (19 August 1923 – 18 April 2003) was an English computer scientist who, while working for IBM, invented the relational model for database management, the theoretical basis for relational databases and relational database management systems.                             |    1 |
+| Geoffrey Hinton                  | Geoffrey Everest Hinton CC FRS FRSC (born 6 December 1947) is a British-Canadian computer scientist and cognitive psychologist, most noted for his work on artificial neural networks.                                                                                                            |    3 |
+| Yann LeCun                       | Yann André LeCun[1] (born 8 July 1960) is a Turing Award winning French computer scientist working primarily in the fields of machine learning, computer vision, mobile robotics and computational neuroscience.                                                                                  |    4 |
+| Gordon Plotkin                   | Gordon David Plotkin, FRS FRSE MAE (born 9 September 1946) is a theoretical computer scientist in the School of Informatics at the University of Edinburgh. Plotkin is probably best known for his introduction of structural operational semantics (SOS) and his work on denotational semantics. |    6 |
++----------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------+
+
+select * from t_ir_multi_column_dml where match(detail, digest) against ('system research');
++--------+--------+------+
+| digest | detail | seq  |
++--------+--------+------+
++--------+--------+------+
+
+select * from t_ir_multi_column_dml where match(detail, digest) against ('computer');
++----------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------+
+| digest                           | detail                                                                                                                                                                                                                                                                                            | seq  |
++----------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------+
+| Yann LeCun                       | Yann André LeCun[1] (born 8 July 1960) is a Turing Award winning French computer scientist working primarily in the fields of machine learning, computer vision, mobile robotics and computational neuroscience.                                                                                  |    4 |
+| Gerard Salton                    | Gerard A. Gerry Salton (8 March 1927 – 28 August 1995) was a professor of Computer Science at Cornell University. Salton was perhaps the leading computer scientist working in the field of information retrieval during his time, and the father of Information Retrieval                        |    0 |
+| Geoffrey Hinton                  | Geoffrey Everest Hinton CC FRS FRSC (born 6 December 1947) is a British-Canadian computer scientist and cognitive psychologist, most noted for his work on artificial neural networks.                                                                                                            |    3 |
+| distributed database contirbuter | Edgar Frank Ted Codd (19 August 1923 – 18 April 2003) was an English computer scientist who, while working for IBM, invented the relational model for database management, the theoretical basis for relational databases and relational database management systems.                             |    1 |
+| Gordon Plotkin                   | Gordon David Plotkin, FRS FRSE MAE (born 9 September 1946) is a theoretical computer scientist in the School of Informatics at the University of Edinburgh. Plotkin is probably best known for his introduction of structural operational semantics (SOS) and his work on denotational semantics. |    6 |
++----------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------+
+insert into t_ir_multi_column_dml (digest, detail, seq)
+    select * from t_ir_multi_column_dml where match(detail, digest) against ('computer');
+select * from t_ir_multi_column_dml where match(detail, digest) against ('computer');
++----------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------+
+| digest                           | detail                                                                                                                                                                                                                                                                                            | seq  |
++----------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------+
+| Yann LeCun                       | Yann André LeCun[1] (born 8 July 1960) is a Turing Award winning French computer scientist working primarily in the fields of machine learning, computer vision, mobile robotics and computational neuroscience.                                                                                  |    4 |
+| Yann LeCun                       | Yann André LeCun[1] (born 8 July 1960) is a Turing Award winning French computer scientist working primarily in the fields of machine learning, computer vision, mobile robotics and computational neuroscience.                                                                                  |    4 |
+| Gerard Salton                    | Gerard A. Gerry Salton (8 March 1927 – 28 August 1995) was a professor of Computer Science at Cornell University. Salton was perhaps the leading computer scientist working in the field of information retrieval during his time, and the father of Information Retrieval                        |    0 |
+| Gerard Salton                    | Gerard A. Gerry Salton (8 March 1927 – 28 August 1995) was a professor of Computer Science at Cornell University. Salton was perhaps the leading computer scientist working in the field of information retrieval during his time, and the father of Information Retrieval                        |    0 |
+| Geoffrey Hinton                  | Geoffrey Everest Hinton CC FRS FRSC (born 6 December 1947) is a British-Canadian computer scientist and cognitive psychologist, most noted for his work on artificial neural networks.                                                                                                            |    3 |
+| Geoffrey Hinton                  | Geoffrey Everest Hinton CC FRS FRSC (born 6 December 1947) is a British-Canadian computer scientist and cognitive psychologist, most noted for his work on artificial neural networks.                                                                                                            |    3 |
+| distributed database contirbuter | Edgar Frank Ted Codd (19 August 1923 – 18 April 2003) was an English computer scientist who, while working for IBM, invented the relational model for database management, the theoretical basis for relational databases and relational database management systems.                             |    1 |
+| distributed database contirbuter | Edgar Frank Ted Codd (19 August 1923 – 18 April 2003) was an English computer scientist who, while working for IBM, invented the relational model for database management, the theoretical basis for relational databases and relational database management systems.                             |    1 |
+| Gordon Plotkin                   | Gordon David Plotkin, FRS FRSE MAE (born 9 September 1946) is a theoretical computer scientist in the School of Informatics at the University of Edinburgh. Plotkin is probably best known for his introduction of structural operational semantics (SOS) and his work on denotational semantics. |    6 |
+| Gordon Plotkin                   | Gordon David Plotkin, FRS FRSE MAE (born 9 September 1946) is a theoretical computer scientist in the School of Informatics at the University of Edinburgh. Plotkin is probably best known for his introduction of structural operational semantics (SOS) and his work on denotational semantics. |    6 |
++----------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------+
+select * from t_ir_multi_column_dml;
++----------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------+
+| digest                           | detail                                                                                                                                                                                                                                                                                            | seq  |
++----------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------+
+| Gerard Salton                    | Gerard A. Gerry Salton (8 March 1927 – 28 August 1995) was a professor of Computer Science at Cornell University. Salton was perhaps the leading computer scientist working in the field of information retrieval during his time, and the father of Information Retrieval                        |    0 |
+| distributed database contirbuter | Edgar Frank Ted Codd (19 August 1923 – 18 April 2003) was an English computer scientist who, while working for IBM, invented the relational model for database management, the theoretical basis for relational databases and relational database management systems.                             |    1 |
+| Geoffrey Hinton                  | Geoffrey Everest Hinton CC FRS FRSC (born 6 December 1947) is a British-Canadian computer scientist and cognitive psychologist, most noted for his work on artificial neural networks.                                                                                                            |    3 |
+| Yann LeCun                       | Yann André LeCun[1] (born 8 July 1960) is a Turing Award winning French computer scientist working primarily in the fields of machine learning, computer vision, mobile robotics and computational neuroscience.                                                                                  |    4 |
+| Gordon Plotkin                   | Gordon David Plotkin, FRS FRSE MAE (born 9 September 1946) is a theoretical computer scientist in the School of Informatics at the University of Edinburgh. Plotkin is probably best known for his introduction of structural operational semantics (SOS) and his work on denotational semantics. |    6 |
+| Yann LeCun                       | Yann André LeCun[1] (born 8 July 1960) is a Turing Award winning French computer scientist working primarily in the fields of machine learning, computer vision, mobile robotics and computational neuroscience.                                                                                  |    4 |
+| Gerard Salton                    | Gerard A. Gerry Salton (8 March 1927 – 28 August 1995) was a professor of Computer Science at Cornell University. Salton was perhaps the leading computer scientist working in the field of information retrieval during his time, and the father of Information Retrieval                        |    0 |
+| Geoffrey Hinton                  | Geoffrey Everest Hinton CC FRS FRSC (born 6 December 1947) is a British-Canadian computer scientist and cognitive psychologist, most noted for his work on artificial neural networks.                                                                                                            |    3 |
+| distributed database contirbuter | Edgar Frank Ted Codd (19 August 1923 – 18 April 2003) was an English computer scientist who, while working for IBM, invented the relational model for database management, the theoretical basis for relational databases and relational database management systems.                             |    1 |
+| Gordon Plotkin                   | Gordon David Plotkin, FRS FRSE MAE (born 9 September 1946) is a theoretical computer scientist in the School of Informatics at the University of Edinburgh. Plotkin is probably best known for his introduction of structural operational semantics (SOS) and his work on denotational semantics. |    6 |
++----------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------+
+
+select digest, seq from t_ir_multi_column_dml;
++----------------------------------+------+
+| digest                           | seq  |
++----------------------------------+------+
+| Gerard Salton                    |    0 |
+| distributed database contirbuter |    1 |
+| Geoffrey Hinton                  |    3 |
+| Yann LeCun                       |    4 |
+| Gordon Plotkin                   |    6 |
+| Yann LeCun                       |    4 |
+| Gerard Salton                    |    0 |
+| Geoffrey Hinton                  |    3 |
+| distributed database contirbuter |    1 |
+| Gordon Plotkin                   |    6 |
++----------------------------------+------+
+update t_ir_multi_column_dml set seq = 
+    (select sum(seq) from t_ir_multi_column_dml where match (detail, digest) against ('Hinton'))
+where match (detail, digest) against ("Lecun");
+select digest, seq from t_ir_multi_column_dml;
++----------------------------------+------+
+| digest                           | seq  |
++----------------------------------+------+
+| Gerard Salton                    |    0 |
+| distributed database contirbuter |    1 |
+| Geoffrey Hinton                  |    3 |
+| Yann LeCun                       |    6 |
+| Gordon Plotkin                   |    6 |
+| Yann LeCun                       |    6 |
+| Gerard Salton                    |    0 |
+| Geoffrey Hinton                  |    3 |
+| distributed database contirbuter |    1 |
+| Gordon Plotkin                   |    6 |
++----------------------------------+------+
+
+delete from t_ir_multi_column_dml where match (digest, detail) against ("computer science");
+select * from t_ir_multi_column_dml;
++--------+--------+------+
+| digest | detail | seq  |
++--------+--------+------+
++--------+--------+------+
+
+drop table if exists t_ngram_tokens;
+create table t_ngram_tokens(
+  digest varchar(512),
+  detail varchar(4096),
+  seq int,
+  fulltext index i1(detail) with parser ngram);
+
+insert into t_ngram_tokens select * from t_ir_single_column;
+
+select digest, seq from t_ngram_tokens where match (detail) against ('OceanBase Database is a native, enterprise-level distributed database developed independently by the OceanBase team. It provides financial-grade high availability on commodity hardware and introduces a new city-level disaster recovery standard known as Five IDCs across Three Regions. As the worlds first distributed database to pass the TPC-C benchmark test, it can support over 1,500 nodes in a single cluster. Additionally, it features cloud-native architecture, strong consistency, and high compatibility with other popular databases such as MariaDB and MySQL. ');
++---------------------+------+
+| digest              | seq  |
++---------------------+------+
+| Michael Stonebraker |    2 |
+| Gordon Plotkin      |    6 |
+| Yann LeCun          |    4 |
+| Leslie Lamport      |    7 |
+| Gerard Salton       |    0 |
+| Edgar F. Codd       |    1 |
+| Ken Thompson        |    5 |
+| Geoffrey Hinton     |    3 |
++---------------------+------+
+
+select digest, seq from t_ngram_tokens where match (detail) against ('OceanBase Database is a native, enterprise-level distributed database developed independently by the OceanBase team. It provides financial-grade high availability on commodity hardware and introduces a new city-level disaster recovery standard known as Five IDCs across Three Regions. As the worlds first distributed database to pass the TPC-C benchmark test, it can support over 1,500 nodes in a single cluster. Additionally, it features cloud-native architecture, strong consistency, and high compatibility with other popular databases such as MariaDB and MySQL.  OceanBase Database implements a unique disaster recovery solution with five IDCs across three regions, which sets forth a new standard for lossless disaster recovery in the financial industry. OceanBase Database supports multi-active IDCs deployed across multiple regions for zone- and geo-disaster recovery, which meets the Level 6 disaster recovery requirements of the financial industry with a recovery point objective (RPO) of 0 and a recovery time objective (RTO) of less than 8 seconds.');
++---------------------+------+
+| digest              | seq  |
++---------------------+------+
+| Gordon Plotkin      |    6 |
+| Gerard Salton       |    0 |
+| Leslie Lamport      |    7 |
+| Michael Stonebraker |    2 |
+| Yann LeCun          |    4 |
+| Ken Thompson        |    5 |
+| Edgar F. Codd       |    1 |
+| Geoffrey Hinton     |    3 |
++---------------------+------+
+
+
+drop table if exists t_estimate_doc_cnt;
+create table t_estimate_doc_cnt (document varchar(200), fulltext (document));
+
+insert into t_estimate_doc_cnt (document) values
+    ('t0 t1 t2 t3 t4 t5 t6 t7 t8 t9'),
+    ('t1 t3 t5 t7 t9'),
+    ('t0 t2 t4 t6 t8'),
+    ('t3'),
+    ('t3 t6 t9'),
+    ('t1 t1 t2 t3 t5 t7'),
+    ('t1 t1 t1 t1 t1'),
+    ('t0 t1 t0 t1 t0'),
+    ('t1 t777 t3'),
+    ('t1 t777'),
+    ('t777'),
+    ('t1024');
+delete from t_estimate_doc_cnt where match (document) against ('t1024');
+analyze table t_estimate_doc_cnt;
+insert into t_estimate_doc_cnt (document) values ('t777 t1024');
+create table t_simple(
+  name varchar(512),
+  fulltext index i1(name));
+insert into t_simple values ('but and you'),
+                         ('but and'),
+                         ('and you'),
+                         ('but you'),
+                         ('and');
+select *, match (name) against ('but and you') as relevance from t_simple where match (name) against ('but and you');
++-------------+--------------------+
+| name        | relevance          |
++-------------+--------------------+
+| but and you |  1.050955414012739 |
+| but and     | 0.7432432432432433 |
+| and you     | 0.7432432432432433 |
+| but you     | 0.7432432432432433 |
+| and         | 0.3956834532374101 |
++-------------+--------------------+
+select *, match (name) against ('but') as relevance from t_simple where match (name) against ('but');
++-------------+---------------------+
+| name        | relevance           |
++-------------+---------------------+
+| but and     | 0.37162162162162166 |
+| but you     | 0.37162162162162166 |
+| but and you |  0.3503184713375797 |
++-------------+---------------------+
+select *, match (name) against ('and') as relevance from t_simple where match (name) against ('and');
++-------------+---------------------+
+| name        | relevance           |
++-------------+---------------------+
+| and         |  0.3956834532374101 |
+| but and     | 0.37162162162162166 |
+| and you     | 0.37162162162162166 |
+| but and you |  0.3503184713375797 |
++-------------+---------------------+
+select *, match (name) against ('you') as relevance from t_simple where match (name) against ('you');
++-------------+---------------------+
+| name        | relevance           |
++-------------+---------------------+
+| and you     | 0.37162162162162166 |
+| but you     | 0.37162162162162166 |
+| but and you |  0.3503184713375797 |
++-------------+---------------------+
+select *, match (name) against ('you but') as relevance from t_simple where match (name) against ('you but');
++-------------+---------------------+
+| name        | relevance           |
++-------------+---------------------+
+| but you     |  0.7432432432432433 |
+| but and you |  0.7006369426751594 |
+| but and     | 0.37162162162162166 |
+| and you     | 0.37162162162162166 |
++-------------+---------------------+
+select *, match (name) against ('but and you') as relevance from t_simple where match (name) against ('but and you') limit 3;
++-------------+--------------------+
+| name        | relevance          |
++-------------+--------------------+
+| but and you |  1.050955414012739 |
+| but and     | 0.7432432432432433 |
+| and you     | 0.7432432432432433 |
++-------------+--------------------+
+select *, match (name) against ('but and you') as relevance from t_simple where match (name) against ('but and you') limit 2 offset 2;
++---------+--------------------+
+| name    | relevance          |
++---------+--------------------+
+| but you | 0.7432432432432433 |
+| and you | 0.7432432432432433 |
++---------+--------------------+
+select *, match (name) against ('but and you') as relevance from t_simple where match (name) against ('but and you') limit 2 offset 4;
++------+--------------------+
+| name | relevance          |
++------+--------------------+
+| and  | 0.3956834532374101 |
++------+--------------------+
+
+drop table if exists t_more_data;
+create table t_more_data(
+  name varchar(512),
+  fulltext index i1(name));
+select *, match (name) against ('and') from t_more_data where match (name) against ('and') order by name;
++-------------+------------------------------+
+| name        | match (name) against ('and') |
++-------------+------------------------------+
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and         |           0.3956834532374101 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| and you     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and     |          0.37162162162162166 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
+| but and you |           0.3503184713375797 |
++-------------+------------------------------+
+select *, match (name) against ('and') from t_more_data where match (name) against ('and') limit 1 offset 2;
++------+------------------------------+
+| name | match (name) against ('and') |
++------+------------------------------+
+| and  |           0.3956834532374101 |
++------+------------------------------+
+
+create table batch_delete_test(
+  id int,
+  text varchar(100),
+  fulltext index i1(text));
+insert into batch_delete_test values(0,"test some words here you are"),(1,"test"),(2,"please there are some apples, test some words here you are"), (3, "sleep"), (4, "some words");
+delete from batch_delete_test where id < 4;
+
+create table `articles` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) DEFAULT NULL,
+  `body` text DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  FULLTEXT KEY `ft_index` (`title`, `body`));
+
+select * from articles a1,articles a2  where match(a1.title,a2.body) against("content article data") and a1.id=a2.id;
+ERROR HY000: Incorrect arguments to match against columns on different tables
+
+drop table if exists t_ir_single_column;
+drop table if exists t_ir_multi_column;
+drop table if exists t_dim_table;
+drop table if exists t_ir_multi_column_dml;
+drop table if exists t_ngram_tokens;
+drop table if exists t_estimate_doc_cnt;
+drop table if exists t_simple;
+drop table if exists t_more_data;
+drop table if exists batch_delete_test;
+drop table if exists articles;
+drop database fts;

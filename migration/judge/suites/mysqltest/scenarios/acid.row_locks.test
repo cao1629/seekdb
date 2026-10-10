@@ -1,0 +1,159 @@
+# Judge scenario (area: acid) -- row locks, lock-wait options and lock timeouts.
+#
+# Pins down, through public SQL only:
+#  - a row locked by SELECT ... FOR UPDATE (or by UPDATE / DELETE) in one
+#    session makes FOR UPDATE NOWAIT, FOR UPDATE NO_WAIT and FOR UPDATE WAIT 1
+#    in another session fail with 1205 "Lock wait timeout exceeded; try
+#    restarting transaction", while FOR UPDATE SKIP LOCKED returns the other
+#    rows and plain (non-locking) reads are never blocked;
+#  - the lock-wait limit set through the public session variable
+#    ob_trx_lock_timeout (microseconds) ends UPDATE / DELETE / FOR UPDATE waits
+#    with 1205; the error rolls back only that statement, the transaction keeps
+#    its earlier writes and can commit;
+#  - LOCK IN SHARE MODE takes a row lock that conflicts with FOR UPDATE and
+#    with another LOCK IN SHARE MODE (two share-mode readers do not coexist);
+#  - inserting a new key or locking a different row is not blocked;
+#  - locks are released at COMMIT and at ROLLBACK;
+#  - innodb_lock_wait_timeout is a mock: SET returns warning 1235 "This system
+#    variable now is mock not supported" and the value stays 50.
+# The lock timeouts are the assertions here, so they use small public values
+# (1 second); every other interleaving is an explicit statement order.
+
+connect (c1,$OBMYSQL_MS0,$OBMYSQL_USR,$OBMYSQL_PWD,test,$OBMYSQL_PORT);
+connect (c2,$OBMYSQL_MS0,$OBMYSQL_USR,$OBMYSQL_PWD,test,$OBMYSQL_PORT);
+
+connection c1;
+--disable_warnings
+drop table if exists rl_t;
+--enable_warnings
+create table rl_t(id int primary key, v int);
+insert into rl_t values (1, 10), (2, 20), (3, 30), (4, 40);
+
+--echo #
+--echo # 1. innodb_lock_wait_timeout is accepted but mocked
+--echo #
+connection c2;
+select @@session.innodb_lock_wait_timeout, @@global.innodb_lock_wait_timeout;
+set session innodb_lock_wait_timeout = 1;
+select @@session.innodb_lock_wait_timeout;
+select @@session.ob_trx_lock_timeout;
+
+--echo #
+--echo # 2. FOR UPDATE lock held by c1 on row 1
+--echo #
+connection c1;
+begin;
+select * from rl_t where id = 1 for update;
+connection c2;
+begin;
+--error 1205
+select * from rl_t where id = 1 for update nowait;
+--error 1205
+select * from rl_t where id = 1 for update no_wait;
+--error 1205
+select * from rl_t where id = 1 for update wait 1;
+--error 1205
+select * from rl_t where id in (1, 2) for update nowait;
+select * from rl_t for update skip locked;
+select * from rl_t where id = 1 for update skip locked;
+--echo # non-locking reads are not blocked and see the committed row
+select * from rl_t order by id;
+select * from rl_t where id = 1;
+--echo # rows 2..4 are now locked by c2 (SKIP LOCKED locked them)
+connection c1;
+--error 1205
+select * from rl_t where id = 2 for update nowait;
+select * from rl_t for update skip locked;
+connection c2;
+rollback;
+connection c1;
+select * from rl_t where id = 2 for update nowait;
+rollback;
+
+--echo #
+--echo # 3. ob_trx_lock_timeout ends DML waits; statement-level rollback only
+--echo #
+connection c1;
+begin;
+update rl_t set v = 11 where id = 1;
+delete from rl_t where id = 3;
+connection c2;
+set session ob_trx_lock_timeout = 1000000;
+begin;
+update rl_t set v = 21 where id = 2;
+--error 1205
+update rl_t set v = v + 1 where id = 1;
+--error 1205
+update rl_t set v = v + 1 where id in (1, 2);
+--error 1205
+delete from rl_t where id = 3;
+--error 1205
+select * from rl_t where id = 1 for update;
+--error 1205
+insert into rl_t values (3, 33);
+--echo # a new key and an unlocked row are not blocked
+insert into rl_t values (5, 50);
+select * from rl_t where id = 4 for update;
+select * from rl_t order by id;
+commit;
+set session ob_trx_lock_timeout = -1;
+connection c1;
+select * from rl_t order by id;
+commit;
+select * from rl_t order by id;
+
+--echo #
+--echo # 4. LOCK IN SHARE MODE
+--echo #
+connection c1;
+begin;
+select * from rl_t where id = 2 lock in share mode;
+connection c2;
+set session ob_trx_lock_timeout = 1000000;
+begin;
+--error 1205
+select * from rl_t where id = 2 lock in share mode;
+--error 1205
+select * from rl_t where id = 2 for update nowait;
+--error 1205
+update rl_t set v = 0 where id = 2;
+select * from rl_t where id = 4 lock in share mode;
+commit;
+set session ob_trx_lock_timeout = -1;
+connection c1;
+commit;
+
+--echo #
+--echo # 5. locks are released at COMMIT and at ROLLBACK
+--echo #
+connection c1;
+begin;
+update rl_t set v = 42 where id = 4;
+connection c2;
+begin;
+--error 1205
+select * from rl_t where id = 4 for update nowait;
+connection c1;
+commit;
+connection c2;
+select * from rl_t where id = 4 for update nowait;
+update rl_t set v = 43 where id = 4;
+connection c1;
+--error 1205
+select * from rl_t where id = 4 for update nowait;
+connection c2;
+rollback;
+connection c1;
+select * from rl_t where id = 4 for update nowait;
+commit;
+select * from rl_t order by id;
+
+--echo #
+--echo # cleanup
+--echo #
+connection c2;
+disconnect c2;
+connection c1;
+drop table rl_t;
+disconnect c1;
+connection default;

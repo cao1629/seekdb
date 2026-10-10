@@ -1,0 +1,145 @@
+# Judge scenario (area: vector) -- IVF indexes: approximate top-k against exact top-k.
+#
+# Pins down, through public SQL only:
+#  - IVF_FLAT with distance l2, inner_product and cosine, created inline on an
+#    empty table or with CREATE VECTOR INDEX on a populated one; SHOW CREATE
+#    TABLE fills in LIB=OB and SAMPLE_PER_NLIST=256 (and NBITS=8 for IVF_PQ);
+#  - with nlist (2 or 3) not above the session's ob_ivf_nprobes (default 8)
+#    every list is probed, so an IVF_FLAT APPROXIMATE top-k equals the exact
+#    top-k whatever centroids k-means picked; this holds with a WHERE filter
+#    and after INSERT / UPDATE / DELETE, and rows with a NULL vector are never
+#    returned by APPROXIMATE;
+#  - IVF_SQ8 built on existing rows ranks by its 8-bit quantized distance: the
+#    top 4 match the exact answer, ranks 5 and 6 come out swapped (exact
+#    distances 11.618950 and 12.083046);
+#  - IVF_SQ8 created on an empty table has no quantization range, so rows
+#    inserted later are not ranked by distance at all: APPROXIMATE returns
+#    rows far from the query (suspected bug, see scenarios.tsv);
+#  - IVF parameter errors: M on IVF_FLAT, M that does not divide the
+#    dimension, EF_SEARCH on IVF, NLIST out of range (all 1235).
+# IVF_PQ result order depends on randomly seeded k-means codebooks and is not
+# asserted. Distances are computed by the select list from the stored vectors,
+# rounded to 6 decimals; no two rows tie for any query used here.
+
+--disable_warnings
+drop table if exists ivf_src, ivf_l2, ivf_ip, ivf_cos, ivf_sq8, ivf_sq8_empty, ivf_pq, ivf_err;
+--enable_warnings
+
+create table ivf_src(id int primary key, cat char(1), v vector(4));
+insert into ivf_src values
+  (1, 'a', '[0,0,0,1]'), (2, 'b', '[12,1,0,0]'), (3, 'a', '[1,13,2,0]'), (4, 'b', '[0,2,15,1]'),
+  (5, 'a', '[3,0,1,17]'), (6, 'b', '[11,12,0,2]'), (7, 'a', '[0,9,14,3]'), (8, 'b', '[2,1,11,16]'),
+  (9, 'a', '[13,3,1,10]'), (10, 'b', '[9,11,12,13]'), (11, 'a', '[5,6,4,7]'), (12, 'b', '[21,19,22,18]'),
+  (13, 'a', '[7,2,9,4]'), (14, 'b', '[4,15,6,1]'), (15, 'a', '[16,8,3,5]'), (16, 'b', '[6,4,18,11]');
+select @@session.ob_ivf_nprobes;
+
+--echo #
+--echo # 1. IVF_FLAT l2, index built on existing rows
+--echo #
+create table ivf_l2(id int primary key, cat char(1), v vector(4));
+insert into ivf_l2 select * from ivf_src;
+create vector index vidx on ivf_l2(v) with (distance=l2, type=ivf_flat, nlist=3);
+show create table ivf_l2;
+select id, round(l2_distance(v, '[2,12,8,1]'), 6) d from ivf_l2
+  order by l2_distance(v, '[2,12,8,1]') approximate limit 5;
+select id, round(l2_distance(v, '[2,12,8,1]'), 6) d from ivf_l2
+  order by l2_distance(v, '[2,12,8,1]') limit 5;
+select id, round(l2_distance(v, '[1,1,1,1]'), 6) d from ivf_l2
+  order by l2_distance(v, '[1,1,1,1]') approx limit 5;
+select id, round(l2_distance(v, '[1,1,1,1]'), 6) d from ivf_l2
+  order by l2_distance(v, '[1,1,1,1]') limit 5;
+select id, round(l2_squared(v, '[0,0,20,0]'), 6) d from ivf_l2
+  order by l2_squared(v, '[0,0,20,0]') approx limit 3;
+--echo # filtered
+select id, cat, round(l2_distance(v, '[1,1,1,1]'), 6) d from ivf_l2 where cat = 'b'
+  order by l2_distance(v, '[1,1,1,1]') approx limit 3;
+select id, cat, round(l2_distance(v, '[1,1,1,1]'), 6) d from ivf_l2 where cat = 'b'
+  order by l2_distance(v, '[1,1,1,1]') limit 3;
+--echo # DML
+insert into ivf_l2 values (17, 'a', '[2,12,8,2]'), (18, 'b', NULL);
+select id, round(l2_distance(v, '[2,12,8,1]'), 6) d from ivf_l2
+  order by l2_distance(v, '[2,12,8,1]') approx limit 3;
+update ivf_l2 set v = '[100,100,100,100]' where id = 17;
+delete from ivf_l2 where id = 14;
+select id, round(l2_distance(v, '[2,12,8,1]'), 6) d from ivf_l2
+  order by l2_distance(v, '[2,12,8,1]') approx limit 3;
+select count(*) from ivf_l2;
+select count(*) from (select id from ivf_l2 order by l2_distance(v, '[2,12,8,1]') approx limit 100) t;
+
+--echo #
+--echo # 2. IVF_FLAT inner_product, created on an empty table
+--echo #
+create table ivf_ip(id int primary key, v vector(4),
+  vector index vidx(v) with (distance=inner_product, type=ivf_flat, nlist=3));
+insert into ivf_ip select id, v from ivf_src;
+show create table ivf_ip;
+select id, round(negative_inner_product(v, '[2,12,8,1]'), 6) d from ivf_ip
+  order by negative_inner_product(v, '[2,12,8,1]') approx limit 5;
+select id, round(negative_inner_product(v, '[2,12,8,1]'), 6) d from ivf_ip
+  order by negative_inner_product(v, '[2,12,8,1]') limit 5;
+select id, round(negative_inner_product(v, '[10,10,1,1]'), 6) d from ivf_ip
+  order by negative_inner_product(v, '[10,10,1,1]') approx limit 4;
+
+--echo #
+--echo # 3. IVF_FLAT cosine
+--echo #
+create table ivf_cos(id int primary key, v vector(4));
+insert into ivf_cos select id, v from ivf_src;
+create vector index vidx on ivf_cos(v) with (distance=cosine, type=ivf_flat, nlist=2, sample_per_nlist=8);
+show create table ivf_cos;
+select id, round(cosine_distance(v, '[2,12,8,1]'), 6) d from ivf_cos
+  order by cosine_distance(v, '[2,12,8,1]') approx limit 5;
+select id, round(cosine_distance(v, '[2,12,8,1]'), 6) d from ivf_cos
+  order by cosine_distance(v, '[2,12,8,1]') limit 5;
+select id, round(cosine_distance(v, '[1,1,1,1]'), 6) d from ivf_cos
+  order by cosine_distance(v, '[1,1,1,1]') approx limit 5;
+
+--echo #
+--echo # 4. IVF_SQ8 built on existing rows: quantized ranking
+--echo #
+create table ivf_sq8(id int primary key, v vector(4));
+insert into ivf_sq8 select id, v from ivf_src;
+create vector index vidx on ivf_sq8(v) with (distance=l2, type=ivf_sq8, nlist=3);
+show create table ivf_sq8;
+select id, round(l2_distance(v, '[2,12,8,1]'), 6) d from ivf_sq8
+  order by l2_distance(v, '[2,12,8,1]') approx limit 6;
+select id, round(l2_distance(v, '[2,12,8,1]'), 6) d from ivf_sq8
+  order by l2_distance(v, '[2,12,8,1]') limit 6;
+
+--echo #
+--echo # 5. IVF_SQ8 created on an empty table
+--echo #
+create table ivf_sq8_empty(id int primary key, v vector(4),
+  vector index vidx(v) with (distance=l2, type=ivf_sq8, nlist=3));
+insert into ivf_sq8_empty select id, v from ivf_src;
+select id, round(l2_distance(v, '[2,12,8,1]'), 6) d from ivf_sq8_empty
+  order by l2_distance(v, '[2,12,8,1]') approx limit 3;
+select id, round(l2_distance(v, '[2,12,8,1]'), 6) d from ivf_sq8_empty
+  order by l2_distance(v, '[2,12,8,1]') limit 3;
+
+--echo #
+--echo # 6. IVF_PQ definition and IVF parameter errors
+--echo #
+create table ivf_pq(id int primary key, v vector(4));
+insert into ivf_pq select id, v from ivf_src;
+create vector index vidx on ivf_pq(v) with (distance=l2, type=ivf_pq, nlist=3, m=2);
+show create table ivf_pq;
+select count(*) from (select id from ivf_pq order by l2_distance(v, '[2,12,8,1]') approx limit 5) t;
+create table ivf_err(id int primary key, v vector(4));
+--error 1235
+create vector index vidx on ivf_err(v) with (distance=l2, type=ivf_flat, nlist=3, m=2);
+--error 1235
+create vector index vidx on ivf_err(v) with (distance=l2, type=ivf_pq, nlist=3, m=3);
+--error 1235
+create vector index vidx on ivf_err(v) with (distance=l2, type=ivf_flat, nlist=3, ef_search=10);
+--error 1235
+create vector index vidx on ivf_err(v) with (distance=l2, type=ivf_flat, nlist=0);
+--error 1235
+create vector index vidx on ivf_err(v) with (distance=l2, type=ivf_flat, nlist=65537);
+--error 1235
+create vector index vidx on ivf_err(v) with (distance=l2, type=ivf_flat, lib=vsag);
+
+--echo #
+--echo # cleanup
+--echo #
+drop table ivf_src, ivf_l2, ivf_ip, ivf_cos, ivf_sq8, ivf_sq8_empty, ivf_pq, ivf_err;

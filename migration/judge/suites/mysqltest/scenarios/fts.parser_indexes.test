@@ -1,0 +1,117 @@
+# Judge scenario (area: fts) -- FULLTEXT indexes WITH PARSER ngram / ngram2 / beng / ik.
+#
+# Pins down, through public SQL only:
+#  - CREATE TABLE ... FULLTEXT KEY ... WITH PARSER <p> PARSER_PROPERTIES=(...)
+#    and CREATE FULLTEXT INDEX ... WITH PARSER on a populated table, with the
+#    properties SHOW CREATE TABLE prints (defaults filled in);
+#  - natural-language MATCH splits the query with the index's parser, so an
+#    ngram index finds substrings ('ello' in 'hello' and 'yellow') and CJK
+#    words, ngram2 combines 2..4-grams, beng drops punctuation and short
+#    tokens per its min_token_size, ik segments Chinese text (max_word mode);
+#    relevance values are rounded to 6 decimals;
+#  - boolean-mode terms are NOT split by the parser: on an ngram (2) index
+#    'el' matches but 'ello' does not; on an ngram2 (2..4) index 'ello'
+#    matches but 'hello' does not; '@' in a boolean query is a syntax error;
+#  - parser and property errors: unknown parser 1128 "Function jieba is not
+#    defined"; out-of-range sizes, max < min and a bad ik_mode 1210 with the
+#    property named; a property of another parser 1235 "<parser> config not
+#    supported"; an empty or negative property list is a syntax error 1064.
+
+--disable_warnings
+drop table if exists fp_ngram, fp_ngram2, fp_beng, fp_ik, fp_after, fp_err;
+--enable_warnings
+
+--echo #
+--echo # 1. index definitions
+--echo #
+create table fp_ngram(id int primary key, body varchar(200), fulltext key ftx(body) with parser ngram);
+create table fp_ngram2(id int primary key, body varchar(200),
+  fulltext key ftx(body) with parser ngram2 parser_properties=(min_ngram_size=2, max_ngram_size=4));
+create table fp_beng(id int primary key, body varchar(200),
+  fulltext key ftx(body) with parser beng parser_properties=(min_token_size=2, max_token_size=20));
+create table fp_ik(id int primary key, body varchar(200),
+  fulltext key ftx(body) with parser ik parser_properties=(ik_mode='max_word'));
+show create table fp_ngram;
+show create table fp_ngram2;
+show create table fp_beng;
+show create table fp_ik;
+
+--echo #
+--echo # 2. ngram
+--echo #
+insert into fp_ngram values (1, 'hello world'), (2, 'yellow fellow'), (3, 'word play'), (4, '中华人民共和国'), (5, '人民日报');
+select id, round(match(body) against('ello'), 6) s from fp_ngram where match(body) against('ello') order by s desc, id;
+select id, round(match(body) against('wor'), 6) s from fp_ngram where match(body) against('wor') order by s desc, id;
+select id, round(match(body) against('人民'), 6) s from fp_ngram where match(body) against('人民') order by s desc, id;
+select id from fp_ngram where match(body) against('+he +ll' in boolean mode) order by id;
+select id from fp_ngram where match(body) against('el' in boolean mode) order by id;
+select id from fp_ngram where match(body) against('ello' in boolean mode) order by id;
+
+--echo #
+--echo # 3. ngram2
+--echo #
+insert into fp_ngram2 select * from fp_ngram;
+select id, round(match(body) against('ello'), 6) s from fp_ngram2 where match(body) against('ello') order by s desc, id;
+select id from fp_ngram2 where match(body) against('ello' in boolean mode) order by id;
+select id from fp_ngram2 where match(body) against('hello' in boolean mode) order by id;
+
+--echo #
+--echo # 4. beng
+--echo #
+insert into fp_beng values (1, 'e-mail foo@bar.com'), (2, 'Hello, World!'), (3, 'x1 y22 z333'), (4, 'mail server');
+select id, round(match(body) against('mail'), 6) s from fp_beng where match(body) against('mail') order by s desc, id;
+select id from fp_beng where match(body) against('x1') order by id;
+select id from fp_beng where match(body) against('bar.com') order by id;
+select id from fp_beng where match(body) against('world!') order by id;
+--error 1149
+select id from fp_beng where match(body) against('foo@bar.com' in boolean mode);
+
+--echo #
+--echo # 5. ik (max_word)
+--echo #
+insert into fp_ik values (1, '中华人民共和国国歌'), (2, '人民日报社论'), (3, '共和国的历史'), (4, 'hello world');
+select id, round(match(body) against('人民'), 6) s from fp_ik where match(body) against('人民') order by s desc, id;
+select id, round(match(body) against('共和国'), 6) s from fp_ik where match(body) against('共和国') order by s desc, id;
+select id from fp_ik where match(body) against('hello') order by id;
+
+--echo #
+--echo # 6. index created on existing rows
+--echo #
+create table fp_after(id int primary key, body varchar(200));
+insert into fp_after values (1, 'hello world'), (2, 'yellow fellow'), (3, 'word play');
+create fulltext index ftx on fp_after(body) with parser ngram parser_properties=(ngram_token_size=3);
+show create table fp_after;
+select id from fp_after where match(body) against('llo') order by id;
+select id from fp_after where match(body) against('ll' in boolean mode) order by id;
+select id from fp_after where match(body) against('llo' in boolean mode) order by id;
+
+--echo #
+--echo # 7. parser and property errors
+--echo #
+--error 1128
+create table fp_err(id int primary key, body varchar(100), fulltext key ftx(body) with parser jieba);
+--error 1210
+create table fp_err(id int primary key, body varchar(100), fulltext key ftx(body) with parser space parser_properties=(min_token_size=0));
+--error 1210
+create table fp_err(id int primary key, body varchar(100), fulltext key ftx(body) with parser space parser_properties=(min_token_size=17));
+--error 1210
+create table fp_err(id int primary key, body varchar(100), fulltext key ftx(body) with parser space parser_properties=(max_token_size=9));
+--error 1210
+create table fp_err(id int primary key, body varchar(100), fulltext key ftx(body) with parser space parser_properties=(min_token_size=16, max_token_size=10));
+--error 1210
+create table fp_err(id int primary key, body varchar(100), fulltext key ftx(body) with parser ngram parser_properties=(ngram_token_size=11));
+--error 1235
+create table fp_err(id int primary key, body varchar(100), fulltext key ftx(body) with parser ngram parser_properties=(min_token_size=3));
+--error 1210
+create table fp_err(id int primary key, body varchar(100), fulltext key ftx(body) with parser ngram2 parser_properties=(min_ngram_size=4, max_ngram_size=3));
+--error 1210
+create table fp_err(id int primary key, body varchar(100), fulltext key ftx(body) with parser ik parser_properties=(ik_mode='fast'));
+--error 1064
+create table fp_err(id int primary key, body varchar(100), fulltext key ftx(body) with parser space parser_properties=());
+--error 1064
+create table fp_err(id int primary key, body varchar(100), fulltext key ftx(body) with parser space parser_properties=(min_token_size=-1));
+
+--echo #
+--echo # cleanup
+--echo #
+drop table fp_ngram, fp_ngram2, fp_beng, fp_ik, fp_after;

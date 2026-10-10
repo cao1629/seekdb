@@ -1,0 +1,284 @@
+# Judge scenario (area: acid) -- concurrent writers per isolation level, two sessions.
+#
+# Pins down, through public SQL only:
+#  - lost update under READ COMMITTED: two read-modify-write transactions that
+#    write literal values both commit and the later writer wins;
+#  - an UPDATE that re-reads the row (v = v + n) under READ COMMITTED waits for
+#    the row lock and then applies on top of the committed value (no lost update);
+#  - first-updater-wins under REPEATABLE READ and SERIALIZABLE: updating or
+#    locking (SELECT ... FOR UPDATE) a row changed or deleted by a transaction
+#    that committed after the snapshot fails with 6235 "can't serialize access
+#    for this transaction"; only that statement is rolled back, the transaction
+#    stays usable and commits its other writes; when the first updater rolls
+#    back instead, the waiting update succeeds;
+#  - rows inserted after a REPEATABLE READ snapshot are neither returned by
+#    SELECT ... FOR UPDATE nor touched by an UPDATE without WHERE (affected
+#    rows count only snapshot rows), while a row deleted after the snapshot
+#    makes both fail with 6235;
+#  - READ COMMITTED SELECT ... FOR UPDATE returns the latest committed version;
+#  - write skew is allowed under both REPEATABLE READ and SERIALIZABLE
+#    (two transactions read the same rows, update different rows, both commit);
+#  - a concurrent INSERT of the same primary key waits for the first inserter
+#    and then fails with 1062 if it commits, or succeeds if it rolls back.
+# Interleavings are explicit statement orders. A statement that must block is
+# sent with send, given one second (--exec sleep 1) to reach its lock wait, and
+# reaped after the other session ends; every expected value is the same whether
+# or not the statement had started waiting, so nothing depends on timing.
+
+connect (c1,$OBMYSQL_MS0,$OBMYSQL_USR,$OBMYSQL_PWD,test,$OBMYSQL_PORT);
+connect (c2,$OBMYSQL_MS0,$OBMYSQL_USR,$OBMYSQL_PWD,test,$OBMYSQL_PORT);
+
+connection c1;
+--disable_warnings
+drop table if exists wc_acc;
+drop table if exists wc_oncall;
+--enable_warnings
+create table wc_acc(id int primary key, bal int);
+insert into wc_acc values (1, 100), (2, 100), (3, 100);
+create table wc_oncall(doctor varchar(10) primary key, on_call int);
+insert into wc_oncall values ('alice', 1), ('bob', 1);
+
+--echo #
+--echo # 1. READ COMMITTED: lost update with literal writes
+--echo #
+connection c1;
+set session transaction isolation level read committed;
+connection c2;
+set session transaction isolation level read committed;
+connection c1;
+begin;
+select bal from wc_acc where id = 1;
+connection c2;
+begin;
+select bal from wc_acc where id = 1;
+connection c1;
+update wc_acc set bal = 110 where id = 1;
+connection c2;
+send update wc_acc set bal = 120 where id = 1;
+connection c1;
+--exec sleep 1
+commit;
+connection c2;
+reap;
+commit;
+select * from wc_acc order by id;
+
+--echo #
+--echo # 2. READ COMMITTED: v = v + n re-reads after the wait (no lost update)
+--echo #
+connection c1;
+begin;
+update wc_acc set bal = bal + 1 where id = 2;
+connection c2;
+begin;
+send update wc_acc set bal = bal + 10 where id = 2;
+connection c1;
+--exec sleep 1
+commit;
+connection c2;
+reap;
+commit;
+select * from wc_acc order by id;
+
+--echo #
+--echo # 3. READ COMMITTED: SELECT ... FOR UPDATE returns the latest committed row
+--echo #
+connection c2;
+begin;
+select bal from wc_acc where id = 3;
+connection c1;
+update wc_acc set bal = 103 where id = 3;
+connection c2;
+select bal from wc_acc where id = 3 for update;
+select bal from wc_acc where id = 3;
+commit;
+
+--echo #
+--echo # 4. REPEATABLE READ: first updater wins, the loser keeps its transaction
+--echo #
+connection c1;
+set session transaction isolation level repeatable read;
+connection c2;
+set session transaction isolation level repeatable read;
+connection c1;
+begin;
+select bal from wc_acc where id = 2;
+connection c2;
+begin;
+select bal from wc_acc where id = 2;
+update wc_acc set bal = bal + 5 where id = 3;
+connection c1;
+update wc_acc set bal = bal + 1 where id = 2;
+connection c2;
+send update wc_acc set bal = bal + 100 where id = 2;
+connection c1;
+--exec sleep 1
+commit;
+connection c2;
+--error 6235
+reap;
+select * from wc_acc order by id;
+--error 6235
+update wc_acc set bal = bal + 100 where id = 2;
+--error 6235
+select * from wc_acc where id = 2 for update;
+commit;
+select * from wc_acc order by id;
+
+--echo #
+--echo # 5. REPEATABLE READ: the first updater rolls back, the waiter proceeds
+--echo #
+connection c1;
+begin;
+update wc_acc set bal = bal + 1 where id = 2;
+connection c2;
+begin;
+select bal from wc_acc where id = 2;
+send update wc_acc set bal = bal + 100 where id = 2;
+connection c1;
+--exec sleep 1
+rollback;
+connection c2;
+reap;
+select bal from wc_acc where id = 2;
+commit;
+select * from wc_acc order by id;
+
+--echo #
+--echo # 6. REPEATABLE READ: rows inserted, then rows deleted, after the snapshot
+--echo #
+connection c2;
+begin;
+select * from wc_acc order by id;
+connection c1;
+insert into wc_acc values (4, 400);
+connection c2;
+select * from wc_acc where id = 4 for update;
+--enable_info
+update wc_acc set bal = bal + 1000;
+--disable_info
+select * from wc_acc order by id;
+commit;
+select * from wc_acc order by id;
+begin;
+select * from wc_acc order by id;
+connection c1;
+delete from wc_acc where id = 1;
+connection c2;
+--error 6235
+select * from wc_acc where id = 1 for update;
+--error 6235
+update wc_acc set bal = bal - 1000;
+select * from wc_acc order by id;
+commit;
+select * from wc_acc order by id;
+
+--echo #
+--echo # 7. SERIALIZABLE: first updater wins as well
+--echo #
+connection c1;
+set session transaction isolation level serializable;
+connection c2;
+set session transaction isolation level serializable;
+connection c2;
+begin;
+select bal from wc_acc where id = 3;
+connection c1;
+update wc_acc set bal = 300 where id = 3;
+connection c2;
+select bal from wc_acc where id = 3;
+--error 6235
+update wc_acc set bal = bal + 1 where id = 3;
+update wc_acc set bal = bal + 1 where id = 4;
+commit;
+select * from wc_acc order by id;
+
+--echo #
+--echo # 8. write skew under SERIALIZABLE: both commit, the invariant breaks
+--echo #
+connection c1;
+begin;
+select sum(on_call) from wc_oncall;
+connection c2;
+begin;
+select sum(on_call) from wc_oncall;
+connection c1;
+update wc_oncall set on_call = 0 where doctor = 'alice';
+connection c2;
+update wc_oncall set on_call = 0 where doctor = 'bob';
+connection c1;
+commit;
+connection c2;
+commit;
+select * from wc_oncall order by doctor;
+select sum(on_call) from wc_oncall;
+
+--echo #
+--echo # 9. write skew under REPEATABLE READ
+--echo #
+update wc_oncall set on_call = 1;
+connection c1;
+set session transaction isolation level repeatable read;
+connection c2;
+set session transaction isolation level repeatable read;
+connection c1;
+begin;
+select sum(on_call) from wc_oncall;
+connection c2;
+begin;
+select sum(on_call) from wc_oncall;
+connection c2;
+update wc_oncall set on_call = 0 where doctor = 'bob';
+connection c1;
+update wc_oncall set on_call = 0 where doctor = 'alice';
+connection c2;
+commit;
+connection c1;
+commit;
+select * from wc_oncall order by doctor;
+
+--echo #
+--echo # 10. concurrent INSERT of the same key
+--echo #
+connection c1;
+set session transaction isolation level read committed;
+connection c2;
+set session transaction isolation level read committed;
+connection c1;
+begin;
+insert into wc_acc values (5, 5);
+connection c2;
+begin;
+send insert into wc_acc values (5, 50);
+connection c1;
+--exec sleep 1
+commit;
+connection c2;
+--error 1062
+reap;
+insert into wc_acc values (7, 7);
+commit;
+connection c1;
+begin;
+insert into wc_acc values (6, 6);
+connection c2;
+begin;
+send insert into wc_acc values (6, 60);
+connection c1;
+--exec sleep 1
+rollback;
+connection c2;
+reap;
+commit;
+select * from wc_acc order by id;
+
+--echo #
+--echo # cleanup
+--echo #
+connection c2;
+disconnect c2;
+connection c1;
+drop table wc_acc;
+drop table wc_oncall;
+disconnect c1;
+connection default;

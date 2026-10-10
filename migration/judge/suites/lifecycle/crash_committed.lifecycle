@@ -1,0 +1,19 @@
+# Committed work survives SIGKILL: autocommitted DML, a 10,000-row bulk insert,
+# a secondary index and a DDL change must all be intact after crash recovery.
+start
+sql: create table d (n int)
+sql: insert into d values (0),(1),(2),(3),(4),(5),(6),(7),(8),(9)
+sql: create table t1 (id int primary key, v varchar(32), k int, index ik (k))
+sql: insert into t1 values (1,'one',10),(2,'two',20),(3,'three',30)
+sql: update t1 set v = 'TWO' where id = 2
+sql: delete from t1 where id = 3
+sql: create table t2 (id int primary key, v varchar(32))
+sql: insert into t2 select a.n*1000+b.n*100+c.n*10+e.n, concat('row', a.n*1000+b.n*100+c.n*10+e.n) from d a, d b, d c, d e
+sql: alter table t2 add column w int default 7
+sql: select count(*), sum(id), sum(crc32(v)) from t2
+kill9
+restart
+sql: select * from t1 order by id
+sql: select id from t1 where k >= 10 order by k
+sql: select count(*), sum(id), sum(crc32(v)), sum(w) from t2
+sql: show create table t1

@@ -1,0 +1,248 @@
+# Judge scenario (area: acid) -- read phenomena per isolation level, two sessions.
+#
+# Pins down, through public SQL only:
+#  - SET [SESSION] TRANSACTION ISOLATION LEVEL accepts all four levels and
+#    @@transaction_isolation / @@tx_isolation report them; invalid values are
+#    rejected (1231 for an unknown name, 1232 for a number);
+#  - SET TRANSACTION ISOLATION LEVEL (no SESSION) leaves the session value alone,
+#    applies to the next transaction only, and is rejected with 1568 inside an
+#    active transaction, while SET SESSION ... inside a transaction is accepted;
+#  - dirty read: never happens, not even under READ UNCOMMITTED;
+#  - non-repeatable read and phantom: happen under READ UNCOMMITTED and READ
+#    COMMITTED (each statement reads the latest committed data); do not happen
+#    under REPEATABLE READ and SERIALIZABLE (one snapshot per transaction, taken
+#    by the first statement), including for rows deleted after the snapshot;
+#  - START TRANSACTION WITH CONSISTENT SNAPSHOT under REPEATABLE READ still
+#    takes the snapshot at the first statement (MySQL takes it at START; see
+#    suspected_bug in scenarios.tsv);
+#  - a transaction always sees its own uncommitted writes;
+#  - START TRANSACTION READ ONLY rejects writes (1792);
+#  - with autocommit=0 a DML opens a transaction that other sessions do not see
+#    until COMMIT, and ROLLBACK discards it.
+# Every interleaving is an explicit statement order between the two sessions;
+# no expected value depends on timing.
+
+connect (c1,$OBMYSQL_MS0,$OBMYSQL_USR,$OBMYSQL_PWD,test,$OBMYSQL_PORT);
+connect (c2,$OBMYSQL_MS0,$OBMYSQL_USR,$OBMYSQL_PWD,test,$OBMYSQL_PORT);
+
+connection c1;
+--disable_warnings
+drop table if exists iso_t;
+--enable_warnings
+create table iso_t(id int primary key, grp int, v int);
+insert into iso_t values (1, 1, 10), (2, 1, 20), (3, 2, 30);
+
+--echo #
+--echo # 1. isolation level variables
+--echo #
+connection c2;
+select @@session.transaction_isolation, @@session.tx_isolation;
+set session transaction isolation level read uncommitted;
+select @@session.transaction_isolation, @@session.tx_isolation;
+set session transaction isolation level repeatable read;
+select @@session.transaction_isolation, @@session.tx_isolation;
+set session transaction isolation level serializable;
+select @@session.transaction_isolation, @@session.tx_isolation;
+set session tx_isolation = 'READ-COMMITTED';
+select @@session.transaction_isolation, @@session.tx_isolation;
+set session transaction_isolation = 'REPEATABLE-READ';
+select @@session.transaction_isolation, @@session.tx_isolation;
+--error 1231
+set session tx_isolation = 'FOO';
+--error 1231
+set session transaction_isolation = 'read committed';
+--error 1232
+set session transaction_isolation = 2;
+select @@session.transaction_isolation, @@session.tx_isolation;
+set session transaction isolation level read committed;
+
+--echo #
+--echo # 2. dirty read: the uncommitted update of c1 is invisible to c2 at every level
+--echo #
+connection c1;
+begin;
+update iso_t set v = -1 where id = 1;
+insert into iso_t values (9, 1, -9);
+--echo # c1 sees its own uncommitted writes
+select * from iso_t order by id;
+connection c2;
+set session transaction isolation level read uncommitted;
+select * from iso_t order by id;
+set session transaction isolation level read committed;
+select * from iso_t order by id;
+set session transaction isolation level repeatable read;
+select * from iso_t order by id;
+set session transaction isolation level serializable;
+select * from iso_t order by id;
+connection c1;
+rollback;
+select * from iso_t order by id;
+
+--echo #
+--echo # 3. non-repeatable read and phantom under READ UNCOMMITTED
+--echo #
+connection c2;
+set session transaction isolation level read uncommitted;
+begin;
+select v from iso_t where id = 1;
+select count(*), sum(v) from iso_t where grp = 1;
+connection c1;
+update iso_t set v = 11 where id = 1;
+insert into iso_t values (4, 1, 40);
+connection c2;
+select v from iso_t where id = 1;
+select count(*), sum(v) from iso_t where grp = 1;
+commit;
+
+--echo #
+--echo # 4. non-repeatable read and phantom under READ COMMITTED
+--echo #
+connection c2;
+set session transaction isolation level read committed;
+begin;
+select v from iso_t where id = 1;
+select count(*), sum(v) from iso_t where grp = 1;
+connection c1;
+update iso_t set v = 12 where id = 1;
+insert into iso_t values (5, 1, 50);
+connection c2;
+select v from iso_t where id = 1;
+select count(*), sum(v) from iso_t where grp = 1;
+commit;
+
+--echo #
+--echo # 5. no non-repeatable read, no phantom under REPEATABLE READ
+--echo #
+connection c2;
+set session transaction isolation level repeatable read;
+begin;
+select v from iso_t where id = 1;
+select count(*), sum(v) from iso_t where grp = 1;
+connection c1;
+update iso_t set v = 13 where id = 1;
+insert into iso_t values (6, 1, 60);
+delete from iso_t where id = 2;
+connection c2;
+select v from iso_t where id = 1;
+select count(*), sum(v) from iso_t where grp = 1;
+select * from iso_t order by id;
+--echo # own writes are visible on top of the snapshot
+update iso_t set v = v + 1 where id = 3;
+select * from iso_t order by id;
+commit;
+select * from iso_t order by id;
+
+--echo #
+--echo # 6. no non-repeatable read, no phantom under SERIALIZABLE
+--echo #
+connection c2;
+set session transaction isolation level serializable;
+begin;
+select v from iso_t where id = 1;
+select count(*), sum(v) from iso_t where grp = 1;
+connection c1;
+update iso_t set v = 14 where id = 1;
+insert into iso_t values (7, 1, 70);
+delete from iso_t where id = 4;
+connection c2;
+select v from iso_t where id = 1;
+select count(*), sum(v) from iso_t where grp = 1;
+select * from iso_t order by id;
+commit;
+select * from iso_t order by id;
+
+--echo #
+--echo # 7. the snapshot is taken by the first statement, not by BEGIN
+--echo #
+connection c2;
+set session transaction isolation level repeatable read;
+begin;
+connection c1;
+update iso_t set v = 15 where id = 1;
+connection c2;
+select v from iso_t where id = 1;
+connection c1;
+update iso_t set v = 16 where id = 1;
+connection c2;
+select v from iso_t where id = 1;
+commit;
+select v from iso_t where id = 1;
+--echo # START TRANSACTION WITH CONSISTENT SNAPSHOT does not take the snapshot
+--echo # at START either: an update committed before the first read is seen
+start transaction with consistent snapshot;
+connection c1;
+update iso_t set v = 151 where id = 1;
+connection c2;
+select v from iso_t where id = 1;
+connection c1;
+update iso_t set v = 152 where id = 1;
+connection c2;
+select v from iso_t where id = 1;
+commit;
+
+--echo #
+--echo # 8. SET TRANSACTION without SESSION: next transaction only
+--echo #
+connection c2;
+set session transaction isolation level read committed;
+set transaction isolation level repeatable read;
+select @@session.transaction_isolation;
+begin;
+select v from iso_t where id = 1;
+connection c1;
+update iso_t set v = 17 where id = 1;
+connection c2;
+--echo # still the snapshot value: this transaction runs REPEATABLE READ
+select v from iso_t where id = 1;
+--error 1568
+set transaction isolation level serializable;
+commit;
+select @@session.transaction_isolation;
+begin;
+select v from iso_t where id = 1;
+connection c1;
+update iso_t set v = 18 where id = 1;
+connection c2;
+--echo # the following transaction is back to READ COMMITTED
+select v from iso_t where id = 1;
+--echo # SET SESSION inside a transaction is accepted and changes the session value
+set session transaction isolation level serializable;
+select @@session.transaction_isolation;
+commit;
+select @@session.transaction_isolation;
+set session transaction isolation level read committed;
+
+--echo #
+--echo # 9. READ ONLY transactions and autocommit=0
+--echo #
+connection c2;
+start transaction read only;
+select v from iso_t where id = 1;
+--error 1792
+update iso_t set v = 0 where id = 1;
+commit;
+set autocommit = 0;
+update iso_t set v = 19 where id = 1;
+connection c1;
+select v from iso_t where id = 1;
+connection c2;
+rollback;
+select v from iso_t where id = 1;
+update iso_t set v = 20 where id = 1;
+connection c1;
+select v from iso_t where id = 1;
+connection c2;
+commit;
+set autocommit = 1;
+connection c1;
+select v from iso_t where id = 1;
+
+--echo #
+--echo # cleanup
+--echo #
+connection c2;
+disconnect c2;
+connection c1;
+drop table iso_t;
+disconnect c1;
+connection default;

@@ -1,0 +1,2063 @@
+{
+ "binary": "/Users/meizhi/.claude/jobs/3985849d/tmp/bin/seekdb-M3",
+ "binary_sha256": "e8019408465202dd13b6af4bf18a550d6fcc53986770bec07b1ad4e1b512d516",
+ "cases": [
+  {
+   "exit": 0,
+   "name": "a_trade_notify",
+   "ok": true,
+   "seconds": 5.857,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "a_trade_quick",
+   "ok": true,
+   "seconds": 1.494,
+   "status": "clean"
+  },
+  {
+   "exit": 1,
+   "name": "add",
+   "ok": false,
+   "seconds": 1.13,
+   "status": "clean"
+  },
+  {
+   "exit": 0,
+   "name": "aggr_bug200109",
+   "ok": true,
+   "seconds": 0.059,
+   "status": "clean"
+  },
+  {
+   "exit": 0,
+   "name": "ai_function.ai_model_ddl",
+   "ok": true,
+   "seconds": 4.592,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "ai_function.ai_model_endpoint_ddl",
+   "ok": true,
+   "seconds": 4.455,
+   "status": "portable"
+  },
+  {
+   "exit": 0,
+   "name": "ai_function.ai_model_lower_case_name_mysql0",
+   "ok": true,
+   "seconds": 4.32,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "ai_function.ai_model_lower_case_name_mysql1",
+   "ok": true,
+   "seconds": 4.577,
+   "status": "portable"
+  },
+  {
+   "exit": 0,
+   "name": "ai_function.ai_prompt",
+   "ok": true,
+   "seconds": 0.332,
+   "status": "fragile"
+  },
+  {
+   "exit": 0,
+   "name": "alias2",
+   "ok": true,
+   "seconds": 0.09,
+   "status": "clean"
+  },
+  {
+   "exit": 0,
+   "name": "alias3",
+   "ok": true,
+   "seconds": 0.073,
+   "status": "clean"
+  },
+  {
+   "exit": 0,
+   "name": "array.array_arith_op_mysql",
+   "ok": true,
+   "seconds": 14.637,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "array.array_ddl_mysql",
+   "ok": true,
+   "seconds": 6.034,
+   "status": "portable"
+  },
+  {
+   "exit": 0,
+   "name": "bench_count_distinct",
+   "ok": true,
+   "seconds": 0.13,
+   "status": "clean"
+  },
+  {
+   "exit": 0,
+   "name": "big_trans_with_mutil_redo",
+   "ok": true,
+   "seconds": 0.36,
+   "status": "fragile"
+  },
+  {
+   "exit": 0,
+   "name": "bug200747",
+   "ok": true,
+   "seconds": 0.443,
+   "status": "clean"
+  },
+  {
+   "exit": 0,
+   "name": "bug210026",
+   "ok": true,
+   "seconds": 0.017,
+   "status": "clean"
+  },
+  {
+   "exit": 0,
+   "name": "bug233498_rename_table_jianming",
+   "ok": true,
+   "seconds": 0.089,
+   "status": "clean"
+  },
+  {
+   "exit": 0,
+   "name": "bug5910265_update_orderby_limit_dilang",
+   "ok": true,
+   "seconds": 0.103,
+   "status": "clean"
+  },
+  {
+   "exit": 0,
+   "name": "bug_setEmptyPwd",
+   "ok": true,
+   "seconds": 9.791,
+   "status": "fragile"
+  },
+  {
+   "exit": 0,
+   "name": "bulk_insert",
+   "ok": true,
+   "seconds": 13.298,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "chinese",
+   "ok": true,
+   "seconds": 0.059,
+   "status": "fragile"
+  },
+  {
+   "exit": 0,
+   "name": "column_alias",
+   "ok": true,
+   "seconds": 0.058,
+   "status": "clean"
+  },
+  {
+   "exit": 0,
+   "name": "compare",
+   "ok": true,
+   "seconds": 0.109,
+   "status": "clean"
+  },
+  {
+   "exit": 0,
+   "name": "connection",
+   "ok": true,
+   "seconds": 0.265,
+   "status": "fragile"
+  },
+  {
+   "exit": 0,
+   "name": "count",
+   "ok": true,
+   "seconds": 0.073,
+   "status": "clean"
+  },
+  {
+   "exit": 0,
+   "name": "create_using_type",
+   "ok": true,
+   "seconds": 0.298,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "createsql",
+   "ok": true,
+   "seconds": 0.649,
+   "status": "portable"
+  },
+  {
+   "exit": 0,
+   "name": "createvarchar",
+   "ok": true,
+   "seconds": 1.382,
+   "status": "portable"
+  },
+  {
+   "exit": 0,
+   "name": "datatype.bool",
+   "ok": true,
+   "seconds": 0.138,
+   "status": "clean"
+  },
+  {
+   "exit": 1,
+   "name": "datatype.div",
+   "ok": false,
+   "seconds": 2.809,
+   "status": "rewritten"
+  },
+  {
+   "exit": 1,
+   "name": "datatype.minus",
+   "ok": false,
+   "seconds": 3.675,
+   "status": "portable"
+  },
+  {
+   "exit": 0,
+   "name": "datatype.null2",
+   "ok": true,
+   "seconds": 0.107,
+   "status": "clean"
+  },
+  {
+   "exit": 1,
+   "name": "datatype.replace",
+   "ok": false,
+   "seconds": 0.334,
+   "status": "clean"
+  },
+  {
+   "exit": 0,
+   "name": "datatype.type_varchar_2",
+   "ok": true,
+   "seconds": 0.059,
+   "status": "clean"
+  },
+  {
+   "exit": 0,
+   "name": "datatype_java",
+   "ok": true,
+   "seconds": 0.064,
+   "status": "clean"
+  },
+  {
+   "exit": 0,
+   "name": "ddlrollback",
+   "ok": true,
+   "seconds": 0.436,
+   "status": "clean"
+  },
+  {
+   "exit": 0,
+   "name": "deadlock_detector.trans_deadlock_basic",
+   "ok": true,
+   "seconds": 114.84,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "delete.delete",
+   "ok": true,
+   "seconds": 0.425,
+   "status": "clean"
+  },
+  {
+   "exit": 0,
+   "name": "delete.deleteV2",
+   "ok": true,
+   "seconds": 0.226,
+   "status": "clean"
+  },
+  {
+   "exit": 1,
+   "name": "delete.delete_from_mysql",
+   "ok": false,
+   "seconds": 5.089,
+   "status": "clean"
+  },
+  {
+   "exit": 1,
+   "name": "delete.delete_range",
+   "ok": false,
+   "seconds": 0.151,
+   "status": "clean"
+  },
+  {
+   "exit": 0,
+   "name": "dist_nest_loop_simple",
+   "ok": true,
+   "seconds": 0.463,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "distinct",
+   "ok": true,
+   "seconds": 0.057,
+   "status": "clean"
+  },
+  {
+   "exit": 0,
+   "name": "driver5114_bug",
+   "ok": true,
+   "seconds": 0.072,
+   "status": "clean"
+  },
+  {
+   "exit": 0,
+   "name": "duplicate_key",
+   "ok": true,
+   "seconds": 0.059,
+   "status": "clean"
+  },
+  {
+   "exit": 0,
+   "name": "empty_input",
+   "ok": true,
+   "seconds": 0.014,
+   "status": "clean"
+  },
+  {
+   "exit": 0,
+   "name": "empty_table",
+   "ok": true,
+   "seconds": 0.075,
+   "status": "clean"
+  },
+  {
+   "exit": 0,
+   "name": "escape",
+   "ok": true,
+   "seconds": 0.064,
+   "status": "clean"
+  },
+  {
+   "exit": 0,
+   "name": "except",
+   "ok": true,
+   "seconds": 0.151,
+   "status": "clean"
+  },
+  {
+   "exit": 0,
+   "name": "executor.basic",
+   "ok": true,
+   "seconds": 1.179,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "executor.full_join",
+   "ok": true,
+   "seconds": 0.795,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "executor.trx",
+   "ok": true,
+   "seconds": 3.395,
+   "status": "fragile"
+  },
+  {
+   "exit": 0,
+   "name": "explain",
+   "ok": true,
+   "seconds": 0.105,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "expr.collation_expr",
+   "ok": true,
+   "seconds": 0.178,
+   "status": "portable"
+  },
+  {
+   "exit": 0,
+   "name": "expr.expr_ceil",
+   "ok": true,
+   "seconds": 0.135,
+   "status": "clean"
+  },
+  {
+   "exit": 1,
+   "name": "expr.expr_floor",
+   "ok": false,
+   "seconds": 0.147,
+   "status": "clean"
+  },
+  {
+   "exit": 1,
+   "name": "expr.expr_instr",
+   "ok": false,
+   "seconds": 4.983,
+   "status": "fragile"
+  },
+  {
+   "exit": 1,
+   "name": "expr.expr_locate",
+   "ok": false,
+   "seconds": 9.388,
+   "status": "fragile"
+  },
+  {
+   "exit": 0,
+   "name": "expr.expr_nseq",
+   "ok": true,
+   "seconds": 0.11,
+   "status": "clean"
+  },
+  {
+   "exit": 1,
+   "name": "expr.expr_position",
+   "ok": false,
+   "seconds": 4.998,
+   "status": "fragile"
+  },
+  {
+   "exit": 0,
+   "name": "expr.func_equal",
+   "ok": true,
+   "seconds": 0.113,
+   "status": "clean"
+  },
+  {
+   "exit": 0,
+   "name": "expr.func_length",
+   "ok": true,
+   "seconds": 4.346,
+   "status": "clean"
+  },
+  {
+   "exit": 1,
+   "name": "expr.func_regexp",
+   "ok": false,
+   "seconds": 0.172,
+   "status": "fragile"
+  },
+  {
+   "exit": 1,
+   "name": "expr.mul",
+   "ok": false,
+   "seconds": 0.858,
+   "status": "clean"
+  },
+  {
+   "exit": 1,
+   "name": "fin",
+   "ok": false,
+   "seconds": 0.327,
+   "status": "clean"
+  },
+  {
+   "exit": 1,
+   "name": "foreign_key.dml_147",
+   "ok": false,
+   "seconds": 0.681,
+   "status": "clean"
+  },
+  {
+   "exit": 0,
+   "name": "fork_table.fork_table_basic",
+   "ok": true,
+   "seconds": 8.222,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "fork_table.fork_table_build_data",
+   "ok": true,
+   "seconds": 35.828,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "fork_table.fork_table_chain",
+   "ok": true,
+   "seconds": 24.507,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "fork_table.fork_table_cow",
+   "ok": true,
+   "seconds": 55.143,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "fork_table.fork_table_error",
+   "ok": true,
+   "seconds": 4.324,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "fork_table.fork_table_fulltext",
+   "ok": true,
+   "seconds": 33.204,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "fork_table.fork_table_partition",
+   "ok": true,
+   "seconds": 8.378,
+   "status": "portable"
+  },
+  {
+   "exit": 0,
+   "name": "fork_table.fork_table_privilege",
+   "ok": true,
+   "seconds": 3.245,
+   "status": "portable"
+  },
+  {
+   "exit": 0,
+   "name": "fork_table.fork_table_vector",
+   "ok": true,
+   "seconds": 134.067,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "fork_table.fork_table_with_constraints",
+   "ok": true,
+   "seconds": 8.392,
+   "status": "portable"
+  },
+  {
+   "exit": 0,
+   "name": "fork_table.fork_table_with_index",
+   "ok": true,
+   "seconds": 33.225,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "fork_table.fork_table_with_lob",
+   "ok": true,
+   "seconds": 7.445,
+   "status": "portable"
+  },
+  {
+   "exit": 1,
+   "name": "fts_index.basic_dml",
+   "ok": false,
+   "seconds": 3.712,
+   "status": "rewritten"
+  },
+  {
+   "exit": 1,
+   "name": "fts_index.basic_dml_sequel",
+   "ok": false,
+   "seconds": 1.702,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "fts_index.cn_word",
+   "ok": true,
+   "seconds": 1.323,
+   "status": "portable"
+  },
+  {
+   "exit": 0,
+   "name": "fts_index.create_fts_index_afterward",
+   "ok": true,
+   "seconds": 7.938,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "fts_index.create_table_with_fts_index",
+   "ok": true,
+   "seconds": 0.261,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "fts_index.domain_id_merge_with_compare_null",
+   "ok": true,
+   "seconds": 0.168,
+   "status": "clean"
+  },
+  {
+   "exit": 0,
+   "name": "fts_index.drop_index",
+   "ok": true,
+   "seconds": 4.084,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "fts_index.index_view",
+   "ok": true,
+   "seconds": 0.224,
+   "status": "portable"
+  },
+  {
+   "exit": 0,
+   "name": "fts_index.load_data",
+   "ok": true,
+   "seconds": 0.175,
+   "status": "fragile"
+  },
+  {
+   "exit": 0,
+   "name": "fts_index.offline_ddl_with_fts_index",
+   "ok": true,
+   "seconds": 20.556,
+   "status": "portable"
+  },
+  {
+   "exit": 0,
+   "name": "fts_index.online_ddl_on_table_with_fts_index",
+   "ok": true,
+   "seconds": 0.681,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "fts_index.parser_properties",
+   "ok": true,
+   "seconds": 0.759,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "fts_index.partitioned_simple_query",
+   "ok": true,
+   "seconds": 0.203,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "fts_index.simple_query",
+   "ok": true,
+   "seconds": 4.662,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "fts_index.tokenize_function",
+   "ok": true,
+   "seconds": 0.085,
+   "status": "fragile"
+  },
+  {
+   "exit": 0,
+   "name": "func_group_1",
+   "ok": true,
+   "seconds": 0.222,
+   "status": "portable"
+  },
+  {
+   "exit": 0,
+   "name": "func_group_5",
+   "ok": true,
+   "seconds": 0.055,
+   "status": "clean"
+  },
+  {
+   "exit": 0,
+   "name": "func_group_6",
+   "ok": true,
+   "seconds": 0.158,
+   "status": "clean"
+  },
+  {
+   "exit": 0,
+   "name": "func_group_7",
+   "ok": true,
+   "seconds": 0.234,
+   "status": "portable"
+  },
+  {
+   "exit": 1,
+   "name": "generated_column",
+   "ok": false,
+   "seconds": 4.499,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "geometry.__all_tenant_spatial_reference_systems",
+   "ok": true,
+   "seconds": 30.504,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "geometry.create_spatial_index_mysql",
+   "ok": true,
+   "seconds": 30.879,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "geometry.geometry_basic_mysql",
+   "ok": true,
+   "seconds": 31.409,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "geometry.geometry_bugfix_mysql",
+   "ok": true,
+   "seconds": 37.836,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "geometry.geometry_cast_mysql",
+   "ok": true,
+   "seconds": 30.816,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "geometry.geometry_compare_mysql",
+   "ok": true,
+   "seconds": 30.477,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "geometry.geometry_ddl_dml_postgis",
+   "ok": true,
+   "seconds": 31.804,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "geometry.geometry_dml_mysql",
+   "ok": true,
+   "seconds": 31.701,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "geometry.geometry_filter_mysql",
+   "ok": true,
+   "seconds": 32.516,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "geometry.geometry_function_mysql",
+   "ok": true,
+   "seconds": 30.453,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "geometry.geometry_function_postgis",
+   "ok": true,
+   "seconds": 30.655,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "geometry.geometry_generated_col_mysql",
+   "ok": true,
+   "seconds": 32.403,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "geometry.geometry_index1_mysql",
+   "ok": true,
+   "seconds": 35.165,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "geometry.geometry_index_mysql",
+   "ok": true,
+   "seconds": 38.214,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "geometry.geometry_partition_table_mysql",
+   "ok": true,
+   "seconds": 33.46,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "geometry.geometry_type_mysql",
+   "ok": true,
+   "seconds": 30.706,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "geometry.spatial_relation_join_mysql",
+   "ok": true,
+   "seconds": 31.805,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "geometry.st_area_mysql",
+   "ok": true,
+   "seconds": 30.555,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "geometry.st_astext_mysql",
+   "ok": true,
+   "seconds": 30.53,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "geometry.st_aswkb_mysql",
+   "ok": true,
+   "seconds": 30.593,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "geometry.st_buffer_mysql",
+   "ok": true,
+   "seconds": 30.552,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "geometry.st_buffer_mysql_from_pg",
+   "ok": true,
+   "seconds": 30.493,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "geometry.st_covers_mysql",
+   "ok": true,
+   "seconds": 30.629,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "geometry.st_distance_mysql",
+   "ok": true,
+   "seconds": 30.661,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "geometry.st_distance_sphere_mysql",
+   "ok": true,
+   "seconds": 30.496,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "geometry.st_dwithin_mysql",
+   "ok": true,
+   "seconds": 31.241,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "geometry.st_geometry_columns",
+   "ok": true,
+   "seconds": 30.555,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "geometry.st_geomfromewkb_mysql",
+   "ok": true,
+   "seconds": 30.688,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "geometry.st_geomfromtext_mysql",
+   "ok": true,
+   "seconds": 30.668,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "geometry.st_geomfromwkb_mysql",
+   "ok": true,
+   "seconds": 30.513,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "geometry.st_intersects_mysql",
+   "ok": true,
+   "seconds": 30.901,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "geometry.st_intersects_mysql_from_pg",
+   "ok": true,
+   "seconds": 32.178,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "geometry.st_latitude_mysql",
+   "ok": true,
+   "seconds": 30.527,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "geometry.st_longitude_mysql",
+   "ok": true,
+   "seconds": 30.466,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "geometry.st_point_mysql",
+   "ok": true,
+   "seconds": 30.446,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "geometry.st_srid_mysql",
+   "ok": true,
+   "seconds": 30.545,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "geometry.st_transform_mysql",
+   "ok": true,
+   "seconds": 30.502,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "geometry.st_x_mysql",
+   "ok": true,
+   "seconds": 30.611,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "geometry.st_y_mysql",
+   "ok": true,
+   "seconds": 30.604,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "get",
+   "ok": true,
+   "seconds": 0.054,
+   "status": "clean"
+  },
+  {
+   "exit": 0,
+   "name": "global_index.global_index_lookup_1",
+   "ok": true,
+   "seconds": 5.436,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "global_index.global_index_lookup_2",
+   "ok": true,
+   "seconds": 5.286,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "global_index.global_index_lookup_3",
+   "ok": true,
+   "seconds": 5.429,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "global_index.global_index_lookup_4",
+   "ok": true,
+   "seconds": 8.363,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "global_index.global_index_lookup_5",
+   "ok": true,
+   "seconds": 14.627,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "global_index.global_index_lookup_6",
+   "ok": true,
+   "seconds": 2.453,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "global_index.global_index_select",
+   "ok": true,
+   "seconds": 1.306,
+   "status": "fragile"
+  },
+  {
+   "exit": 0,
+   "name": "groupby.group_by_2",
+   "ok": true,
+   "seconds": 0.055,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "groupby.group_by_4",
+   "ok": true,
+   "seconds": 0.095,
+   "status": "clean"
+  },
+  {
+   "exit": 1,
+   "name": "groupby.group_by_basic",
+   "ok": false,
+   "seconds": 0.529,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "h",
+   "ok": true,
+   "seconds": 0.065,
+   "status": "clean"
+  },
+  {
+   "exit": 0,
+   "name": "hierarchical_query.hierarchical_basic_mysql",
+   "ok": true,
+   "seconds": 4.182,
+   "status": "clean"
+  },
+  {
+   "exit": 0,
+   "name": "histogram.dbms_stats_delete_stats",
+   "ok": true,
+   "seconds": 6.117,
+   "status": "portable"
+  },
+  {
+   "exit": 0,
+   "name": "histogram.stats_farm",
+   "ok": true,
+   "seconds": 42.005,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "histogram.stats_lock_and_unlock",
+   "ok": true,
+   "seconds": 5.038,
+   "status": "portable"
+  },
+  {
+   "exit": 0,
+   "name": "histogram.stats_prefs_manager",
+   "ok": true,
+   "seconds": 4.558,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "histogram.stats_set_table_stats",
+   "ok": true,
+   "seconds": 4.72,
+   "status": "portable"
+  },
+  {
+   "exit": 0,
+   "name": "identifier_name_length",
+   "ok": true,
+   "seconds": 0.123,
+   "status": "clean"
+  },
+  {
+   "exit": 0,
+   "name": "idx_const_basic_one_bool",
+   "ok": true,
+   "seconds": 0.385,
+   "status": "portable"
+  },
+  {
+   "exit": 0,
+   "name": "idx_unique_many_idx_one_ins",
+   "ok": true,
+   "seconds": 1.602,
+   "status": "portable"
+  },
+  {
+   "exit": 0,
+   "name": "index_14_hint",
+   "ok": true,
+   "seconds": 1.143,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "index_47_NULL",
+   "ok": true,
+   "seconds": 0.286,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "index_49_alias",
+   "ok": true,
+   "seconds": 1.119,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "information_schema",
+   "ok": true,
+   "seconds": 0.431,
+   "status": "clean"
+  },
+  {
+   "exit": 0,
+   "name": "information_schema.information_schema_desc",
+   "ok": true,
+   "seconds": 0.113,
+   "status": "portable"
+  },
+  {
+   "exit": 0,
+   "name": "intersect",
+   "ok": true,
+   "seconds": 0.351,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "join_basic",
+   "ok": true,
+   "seconds": 0.267,
+   "status": "clean"
+  },
+  {
+   "exit": 0,
+   "name": "join_equivalent_transfer",
+   "ok": true,
+   "seconds": 0.108,
+   "status": "portable"
+  },
+  {
+   "exit": 0,
+   "name": "join_many_table",
+   "ok": true,
+   "seconds": 10.086,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "join_many_table_single_field",
+   "ok": true,
+   "seconds": 10.088,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "join_null",
+   "ok": true,
+   "seconds": 0.141,
+   "status": "clean"
+  },
+  {
+   "exit": 1,
+   "name": "join_star",
+   "ok": false,
+   "seconds": 0.229,
+   "status": "portable"
+  },
+  {
+   "exit": 0,
+   "name": "join_using1",
+   "ok": true,
+   "seconds": 0.122,
+   "status": "clean"
+  },
+  {
+   "exit": 255,
+   "name": "jp_length_utf8",
+   "ok": false,
+   "seconds": 0.0,
+   "status": "clean"
+  },
+  {
+   "exit": 0,
+   "name": "largetimeout",
+   "ok": true,
+   "seconds": 0.119,
+   "status": "fragile"
+  },
+  {
+   "exit": 0,
+   "name": "limit",
+   "ok": true,
+   "seconds": 0.197,
+   "status": "clean"
+  },
+  {
+   "exit": 0,
+   "name": "minitest",
+   "ok": true,
+   "seconds": 7.028,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "ms_lose_rollback",
+   "ok": true,
+   "seconds": 0.039,
+   "status": "clean"
+  },
+  {
+   "exit": 0,
+   "name": "non_reserved_keyword",
+   "ok": true,
+   "seconds": 4.524,
+   "status": "clean"
+  },
+  {
+   "exit": 0,
+   "name": "outer_join_where_is_null",
+   "ok": true,
+   "seconds": 0.072,
+   "status": "clean"
+  },
+  {
+   "exit": 0,
+   "name": "parallel_insert",
+   "ok": true,
+   "seconds": 8.414,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "pk_num_boundary",
+   "ok": true,
+   "seconds": 0.224,
+   "status": "clean"
+  },
+  {
+   "exit": 1,
+   "name": "range",
+   "ok": false,
+   "seconds": 0.731,
+   "status": "clean"
+  },
+  {
+   "exit": 0,
+   "name": "rename_table2",
+   "ok": true,
+   "seconds": 0.268,
+   "status": "clean"
+  },
+  {
+   "exit": 0,
+   "name": "safe_null_test",
+   "ok": true,
+   "seconds": 0.128,
+   "status": "clean"
+  },
+  {
+   "exit": 0,
+   "name": "scenario.acid.isolation_read_phenomena",
+   "ok": true,
+   "seconds": 0.172,
+   "status": "scenario"
+  },
+  {
+   "exit": 0,
+   "name": "scenario.acid.row_locks",
+   "ok": true,
+   "seconds": 3.233,
+   "status": "scenario"
+  },
+  {
+   "exit": 0,
+   "name": "scenario.acid.write_conflicts",
+   "ok": true,
+   "seconds": 6.368,
+   "status": "scenario"
+  },
+  {
+   "exit": 1,
+   "name": "scenario.fork.diff_table",
+   "ok": false,
+   "seconds": 7.432,
+   "status": "scenario"
+  },
+  {
+   "exit": 0,
+   "name": "scenario.fork.fork_database",
+   "ok": true,
+   "seconds": 7.59,
+   "status": "scenario"
+  },
+  {
+   "exit": 0,
+   "name": "scenario.fork.merge_diff_errors",
+   "ok": true,
+   "seconds": 8.314,
+   "status": "scenario"
+  },
+  {
+   "exit": 0,
+   "name": "scenario.fork.merge_strategies",
+   "ok": true,
+   "seconds": 7.329,
+   "status": "scenario"
+  },
+  {
+   "exit": 0,
+   "name": "scenario.fts.match_modes",
+   "ok": true,
+   "seconds": 0.21,
+   "status": "scenario"
+  },
+  {
+   "exit": 0,
+   "name": "scenario.fts.parser_indexes",
+   "ok": true,
+   "seconds": 0.849,
+   "status": "scenario"
+  },
+  {
+   "exit": 0,
+   "name": "scenario.fts.tokenize_parsers",
+   "ok": true,
+   "seconds": 0.102,
+   "status": "scenario"
+  },
+  {
+   "exit": 0,
+   "name": "scenario.fts.tokenize_raw_order",
+   "ok": true,
+   "seconds": 0.129,
+   "status": "scenario"
+  },
+  {
+   "exit": 0,
+   "name": "scenario.hybrid.es_mode_partitions",
+   "ok": true,
+   "seconds": 3.599,
+   "status": "scenario"
+  },
+  {
+   "exit": 0,
+   "name": "scenario.hybrid.query_dsl",
+   "ok": true,
+   "seconds": 4.137,
+   "status": "scenario"
+  },
+  {
+   "exit": 0,
+   "name": "scenario.hybrid.search_fusion",
+   "ok": true,
+   "seconds": 4.575,
+   "status": "scenario"
+  },
+  {
+   "exit": 0,
+   "name": "scenario.vector.exact_distance",
+   "ok": true,
+   "seconds": 0.141,
+   "status": "scenario"
+  },
+  {
+   "exit": 0,
+   "name": "scenario.vector.hnsw_topk",
+   "ok": true,
+   "seconds": 0.485,
+   "status": "scenario"
+  },
+  {
+   "exit": 0,
+   "name": "scenario.vector.ivf_topk",
+   "ok": true,
+   "seconds": 2.764,
+   "status": "scenario"
+  },
+  {
+   "exit": 0,
+   "name": "scenario.vector.sparse_sindi",
+   "ok": true,
+   "seconds": 0.168,
+   "status": "scenario"
+  },
+  {
+   "exit": 1,
+   "name": "select_basic",
+   "ok": false,
+   "seconds": 4.432,
+   "status": "clean"
+  },
+  {
+   "exit": 0,
+   "name": "sfu",
+   "ok": true,
+   "seconds": 1.353,
+   "status": "fragile"
+  },
+  {
+   "exit": 1,
+   "name": "sfu_norow_alias",
+   "ok": false,
+   "seconds": 22.96,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "special_hook",
+   "ok": true,
+   "seconds": 0.023,
+   "status": "fragile"
+  },
+  {
+   "exit": 0,
+   "name": "special_stmt",
+   "ok": true,
+   "seconds": 0.022,
+   "status": "clean"
+  },
+  {
+   "exit": 0,
+   "name": "sq_from",
+   "ok": true,
+   "seconds": 0.116,
+   "status": "clean"
+  },
+  {
+   "exit": 0,
+   "name": "sq_from_2",
+   "ok": true,
+   "seconds": 0.335,
+   "status": "clean"
+  },
+  {
+   "exit": 0,
+   "name": "sqlancer_optimizer_regressions",
+   "ok": true,
+   "seconds": 0.344,
+   "status": "clean"
+  },
+  {
+   "exit": 0,
+   "name": "storage.rowkey_is_char",
+   "ok": true,
+   "seconds": 0.283,
+   "status": "clean"
+  },
+  {
+   "exit": 0,
+   "name": "storage.rowkey_is_int",
+   "ok": true,
+   "seconds": 0.298,
+   "status": "clean"
+  },
+  {
+   "exit": 0,
+   "name": "storage.rowkey_is_null",
+   "ok": true,
+   "seconds": 0.099,
+   "status": "clean"
+  },
+  {
+   "exit": 0,
+   "name": "subquery.idx_with_const_expr_21_subquery_dilang",
+   "ok": true,
+   "seconds": 1.813,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "subquery.optimizer_subquery_bug",
+   "ok": true,
+   "seconds": 0.743,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "subquery.order_by_subquery",
+   "ok": true,
+   "seconds": 0.167,
+   "status": "clean"
+  },
+  {
+   "exit": 0,
+   "name": "subquery.rqg_ob_subquery_semijoin_nested_sql_parameterization",
+   "ok": true,
+   "seconds": 0.085,
+   "status": "portable"
+  },
+  {
+   "exit": 0,
+   "name": "subquery.rqg_subquery_materialization_oop",
+   "ok": true,
+   "seconds": 0.215,
+   "status": "clean"
+  },
+  {
+   "exit": 0,
+   "name": "subquery.rqg_subquery_semijoin_mismatch",
+   "ok": true,
+   "seconds": 0.236,
+   "status": "rewritten"
+  },
+  {
+   "exit": 1,
+   "name": "subquery.rqg_subquery_semijoin_nested_timeout",
+   "ok": false,
+   "seconds": 0.354,
+   "status": "clean"
+  },
+  {
+   "exit": 0,
+   "name": "subquery.spf_bug13044302",
+   "ok": true,
+   "seconds": 0.208,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "subquery.subquery",
+   "ok": true,
+   "seconds": 1.339,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "subquery.subquery_sj_firstmatch",
+   "ok": true,
+   "seconds": 0.174,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "subquery.subquery_sj_innodb",
+   "ok": true,
+   "seconds": 4.594,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "substring_index",
+   "ok": true,
+   "seconds": 0.028,
+   "status": "clean"
+  },
+  {
+   "exit": 0,
+   "name": "sys_vars.tx_isolation_basic",
+   "ok": true,
+   "seconds": 0.084,
+   "status": "clean"
+  },
+  {
+   "exit": 0,
+   "name": "system_variable.autocommit",
+   "ok": true,
+   "seconds": 0.453,
+   "status": "fragile"
+  },
+  {
+   "exit": 0,
+   "name": "table_column_related_views",
+   "ok": true,
+   "seconds": 0.363,
+   "status": "portable"
+  },
+  {
+   "exit": 0,
+   "name": "table_redefinition.alter_primary_key",
+   "ok": true,
+   "seconds": 3.724,
+   "status": "clean"
+  },
+  {
+   "exit": 0,
+   "name": "table_redefinition.alter_table_with_triggers",
+   "ok": true,
+   "seconds": 0.467,
+   "status": "fragile"
+  },
+  {
+   "exit": 0,
+   "name": "topk",
+   "ok": true,
+   "seconds": 0.316,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "trans_ac",
+   "ok": true,
+   "seconds": 0.117,
+   "status": "clean"
+  },
+  {
+   "exit": 0,
+   "name": "truncate_table",
+   "ok": true,
+   "seconds": 0.664,
+   "status": "clean"
+  },
+  {
+   "exit": 0,
+   "name": "trx.bug_different_tranid_intrx",
+   "ok": true,
+   "seconds": 0.639,
+   "status": "fragile"
+  },
+  {
+   "exit": 0,
+   "name": "trx.repeatable_read_transaction",
+   "ok": true,
+   "seconds": 24.552,
+   "status": "portable"
+  },
+  {
+   "exit": 0,
+   "name": "trx.serializable_constrains",
+   "ok": true,
+   "seconds": 5.542,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "trx.serializable_transaction",
+   "ok": true,
+   "seconds": 25.03,
+   "status": "portable"
+  },
+  {
+   "exit": 0,
+   "name": "trx.trans_weak_read",
+   "ok": true,
+   "seconds": 6.874,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "trx_4",
+   "ok": true,
+   "seconds": 0.093,
+   "status": "fragile"
+  },
+  {
+   "exit": 0,
+   "name": "trx_5",
+   "ok": true,
+   "seconds": 0.438,
+   "status": "fragile"
+  },
+  {
+   "exit": 0,
+   "name": "trx_6",
+   "ok": true,
+   "seconds": 10.033,
+   "status": "fragile"
+  },
+  {
+   "exit": 0,
+   "name": "trx_timeout",
+   "ok": true,
+   "seconds": 32.497,
+   "status": "fragile"
+  },
+  {
+   "exit": 0,
+   "name": "trx_timeout_bug",
+   "ok": true,
+   "seconds": 11.347,
+   "status": "fragile"
+  },
+  {
+   "exit": 0,
+   "name": "two_order_by",
+   "ok": true,
+   "seconds": 1.315,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "type_date.add_timestamp_column",
+   "ok": true,
+   "seconds": 0.167,
+   "status": "clean"
+  },
+  {
+   "exit": 1,
+   "name": "type_date.datetime_java",
+   "ok": false,
+   "seconds": 0.419,
+   "status": "clean"
+  },
+  {
+   "exit": 1,
+   "name": "type_date.daylight_saving_time",
+   "ok": false,
+   "seconds": 0.085,
+   "status": "clean"
+  },
+  {
+   "exit": 1,
+   "name": "type_date.expr_date_add_sub",
+   "ok": false,
+   "seconds": 0.521,
+   "status": "clean"
+  },
+  {
+   "exit": 1,
+   "name": "type_date.test_select_usec_to_time",
+   "ok": false,
+   "seconds": 0.062,
+   "status": "clean"
+  },
+  {
+   "exit": 0,
+   "name": "type_date.timefuncnull",
+   "ok": true,
+   "seconds": 0.051,
+   "status": "clean"
+  },
+  {
+   "exit": 1,
+   "name": "type_date.timestamp2",
+   "ok": false,
+   "seconds": 0.102,
+   "status": "clean"
+  },
+  {
+   "exit": 0,
+   "name": "type_date.type_create_time",
+   "ok": true,
+   "seconds": 3.123,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "type_date.type_modify_time",
+   "ok": true,
+   "seconds": 4.113,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "type_date.updaterowkeymoditime",
+   "ok": true,
+   "seconds": 0.071,
+   "status": "clean"
+  },
+  {
+   "exit": 0,
+   "name": "update.rowkey_update_datatype_convert",
+   "ok": true,
+   "seconds": 0.2,
+   "status": "clean"
+  },
+  {
+   "exit": 0,
+   "name": "update.update_ignore",
+   "ok": true,
+   "seconds": 0.542,
+   "status": "clean"
+  },
+  {
+   "exit": 0,
+   "name": "update_behavior",
+   "ok": true,
+   "seconds": 2.075,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "update_column_use_other",
+   "ok": true,
+   "seconds": 0.111,
+   "status": "clean"
+  },
+  {
+   "exit": 1,
+   "name": "update_delete_limit_unique_key",
+   "ok": false,
+   "seconds": 0.424,
+   "status": "portable"
+  },
+  {
+   "exit": 1,
+   "name": "update_range",
+   "ok": false,
+   "seconds": 0.217,
+   "status": "clean"
+  },
+  {
+   "exit": 0,
+   "name": "vector_index.all_virtual_vector_index_info",
+   "ok": true,
+   "seconds": 57.154,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "vector_index.create_table_with_vector_index",
+   "ok": true,
+   "seconds": 9.058,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "vector_index.drop_vector_index",
+   "ok": true,
+   "seconds": 7.424,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "vector_index.fix_rebuild_or_post_create_hung",
+   "ok": true,
+   "seconds": 5.735,
+   "status": "fragile"
+  },
+  {
+   "exit": 0,
+   "name": "vector_index.rebuild_vector_index",
+   "ok": true,
+   "seconds": 64.316,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "vector_index.sparse_vector_index_vsag_ddl",
+   "ok": true,
+   "seconds": 9.875,
+   "status": "fragile"
+  },
+  {
+   "exit": 0,
+   "name": "vector_index.sparse_vector_index_vsag_query",
+   "ok": true,
+   "seconds": 10.311,
+   "status": "rewritten"
+  },
+  {
+   "exit": 1,
+   "name": "vector_index.vector_calc_gbk_mysql",
+   "ok": false,
+   "seconds": 27.591,
+   "status": "rewritten"
+  },
+  {
+   "exit": 1,
+   "name": "vector_index.vector_calc_utf8_mysql",
+   "ok": false,
+   "seconds": 28.38,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "vector_index.vector_index_basic",
+   "ok": true,
+   "seconds": 14.139,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "vector_index.vector_index_bugfix1",
+   "ok": true,
+   "seconds": 13.979,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "vector_index.vector_index_identifier_quoting",
+   "ok": true,
+   "seconds": 12.403,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "vector_index.vector_index_ivfflat_basic",
+   "ok": true,
+   "seconds": 8.678,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "vector_index.vector_index_ivfflat_dml",
+   "ok": true,
+   "seconds": 19.181,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "vector_index.vector_index_ivfflat_post_create",
+   "ok": true,
+   "seconds": 10.36,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "vector_index.vector_index_ivfflat_scan",
+   "ok": true,
+   "seconds": 5.731,
+   "status": "fragile"
+  },
+  {
+   "exit": 0,
+   "name": "vector_index.vector_index_offline_ddl",
+   "ok": true,
+   "seconds": 25.0,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "vector_index.vector_index_partitioned",
+   "ok": true,
+   "seconds": 47.245,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "vector_index.vector_index_post_create",
+   "ok": true,
+   "seconds": 9.462,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "vector_index.vector_index_rebuild",
+   "ok": true,
+   "seconds": 8.714,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "vector_index.vector_ivf_index_with_filter",
+   "ok": true,
+   "seconds": 6.798,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "vector_index.vector_similarity",
+   "ok": true,
+   "seconds": 6.912,
+   "status": "fragile"
+  },
+  {
+   "exit": 1,
+   "name": "view",
+   "ok": false,
+   "seconds": 1.251,
+   "status": "clean"
+  },
+  {
+   "exit": 0,
+   "name": "view_2",
+   "ok": true,
+   "seconds": 4.209,
+   "status": "rewritten"
+  },
+  {
+   "exit": 0,
+   "name": "window_function.farm",
+   "ok": true,
+   "seconds": 0.046,
+   "status": "clean"
+  },
+  {
+   "exit": 1,
+   "name": "yonyou_test.yonyou",
+   "ok": false,
+   "seconds": 12.158,
+   "status": "fragile"
+  },
+  {
+   "exit": 0,
+   "name": "yonyou_test.yonyou_online_ddl",
+   "ok": true,
+   "seconds": 21.158,
+   "status": "fragile"
+  }
+ ],
+ "error": null,
+ "failed": [
+  "add",
+  "datatype.div",
+  "datatype.minus",
+  "datatype.replace",
+  "delete.delete_from_mysql",
+  "delete.delete_range",
+  "expr.expr_floor",
+  "expr.expr_instr",
+  "expr.expr_locate",
+  "expr.expr_position",
+  "expr.func_regexp",
+  "expr.mul",
+  "fin",
+  "foreign_key.dml_147",
+  "fts_index.basic_dml",
+  "fts_index.basic_dml_sequel",
+  "generated_column",
+  "groupby.group_by_basic",
+  "join_star",
+  "jp_length_utf8",
+  "range",
+  "scenario.fork.diff_table",
+  "select_basic",
+  "sfu_norow_alias",
+  "subquery.rqg_subquery_semijoin_nested_timeout",
+  "type_date.datetime_java",
+  "type_date.daylight_saving_time",
+  "type_date.expr_date_add_sub",
+  "type_date.test_select_usec_to_time",
+  "type_date.timestamp2",
+  "update_delete_limit_unique_key",
+  "update_range",
+  "vector_index.vector_calc_gbk_mysql",
+  "vector_index.vector_calc_utf8_mysql",
+  "view",
+  "yonyou_test.yonyou"
+ ],
+ "finished": "2026-10-10T13:37:56Z",
+ "isolated": true,
+ "jobs": 3,
+ "parameters": [],
+ "passed": 251,
+ "protocol": "plain",
+ "record": false,
+ "selected": 287,
+ "started": "2026-10-10T13:18:30Z"
+}

@@ -1,0 +1,204 @@
+drop table if exists fm_docs, fm_pc;
+create table fm_docs(id int primary key, title varchar(100), body text,
+fulltext key ft_body(body), fulltext key ft_title_body(title, body));
+show create table fm_docs;
+Table	Create Table
+fm_docs	CREATE TABLE `fm_docs` (
+  `id` int(11) NOT NULL,
+  `title` varchar(100) DEFAULT NULL,
+  `body` text DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  FULLTEXT KEY `ft_body` (`body`) WITH PARSER space PARSER_PROPERTIES=(min_token_size=3,max_token_size=84) BLOCK_SIZE 16384,
+  FULLTEXT KEY `ft_title_body` (`title`, `body`) WITH PARSER space PARSER_PROPERTIES=(min_token_size=3,max_token_size=84) BLOCK_SIZE 16384
+) ORGANIZATION INDEX DEFAULT CHARSET = utf8mb4 ROW_FORMAT = DYNAMIC COMPRESSION = 'zstd_1.3.8' BLOCK_SIZE = 16384 TABLET_SIZE = 134217728 PCTFREE = 0
+insert into fm_docs values
+(1, 'Databases', 'database systems store data in tables'),
+(2, 'Search', 'full text search engines index text documents'),
+(3, 'Vectors', 'vector search finds similar vectors quickly'),
+(4, 'Mixed', 'hybrid search combines text search and vector search'),
+(5, 'Storage', 'the storage engine writes data to disk'),
+(6, 'Empty', NULL),
+(7, 'Short', 'search');
+#
+# 1. natural language mode
+#
+select id, round(match(body) against('search'), 6) s from fm_docs
+where match(body) against('search') order by s desc, id;
+id	s
+4	0.410448
+7	0.395683
+3	0.298913
+2	0.284974
+select id, round(match(body) against('search' in natural language mode), 6) s from fm_docs order by id;
+id	s
+1	0.000000
+2	0.284974
+3	0.298913
+4	0.410448
+5	0.000000
+6	0.000000
+7	0.395683
+select id, round(match(body) against('text search'), 6) s from fm_docs
+where match(body) against('text search') order by s desc, id;
+id	s
+2	1.469006
+4	1.269164
+7	0.395683
+3	0.298913
+select id, round(match(body) against('search search text'), 6) s from fm_docs
+where match(body) against('search search text') order by s desc, id;
+id	s
+2	1.469006
+4	1.269164
+7	0.395683
+3	0.298913
+select id, round(match(body) against('VECTOR Database'), 6) s from fm_docs
+where match(body) against('VECTOR Database') order by s desc, id;
+id	s
+1	1.843395
+3	0.942721
+4	0.858716
+# stopwords and short words are dropped from the query; 'and' is no stopword
+select id from fm_docs where match(body) against('the with about');
+id
+select id from fm_docs where match(body) against('the and to');
+id
+4
+select id from fm_docs where match(body) against('');
+id
+# implicit order: highest relevance first
+select id from fm_docs where match(body) against('search');
+id
+4
+7
+3
+2
+#
+# 2. boolean mode
+#
+select id from fm_docs where match(body) against('+search +text' in boolean mode) order by id;
+id
+2
+4
+select id from fm_docs where match(body) against('+search -vector' in boolean mode) order by id;
+id
+2
+7
+select id, round(match(body) against('search vector' in boolean mode), 6) s from fm_docs
+where match(body) against('search vector' in boolean mode) order by s desc, id;
+id	s
+4	1.269164
+3	1.241634
+7	0.395683
+2	0.284974
+select id from fm_docs where match(body) against('+(vector database) -storage' in boolean mode) order by id;
+id
+1
+3
+4
+select id from fm_docs where match(body) against('-search' in boolean mode) order by id;
+id
+select id from fm_docs where match(body) against('"text search"' in boolean mode) order by id;
+id
+2
+3
+4
+7
+select id from fm_docs where match(body) against('SEARCH' in boolean mode) order by id;
+id
+2
+3
+4
+7
+select id from fm_docs where match(body) against('sear*' in boolean mode);
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use
+select id from fm_docs where match(body) against('~search' in boolean mode);
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use
+select id from fm_docs where match(body) against('>search <text' in boolean mode);
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use
+select id from fm_docs where match(body) against('search@2' in boolean mode);
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use
+#
+# 3. phrase mode
+#
+select id from fm_docs where match(body) against('text search' in match phrase mode) order by id;
+id
+2
+4
+select id from fm_docs where match(body) against('search text' in match phrase mode) order by id;
+id
+select id from fm_docs where match(body) against('vector search' in match phrase mode) order by id;
+id
+3
+4
+#
+# 4. unsupported forms
+#
+select id from fm_docs where match(body) against('search' with query expansion);
+ERROR 0A000: search modes other than NATURAL_LANGUAGE_MODE, BOOLEAN_MODE or MATCH_PHRASE_MODE not supported
+select id from fm_docs where match(body) against('search' in natural language mode with query expansion);
+ERROR 0A000: search modes other than NATURAL_LANGUAGE_MODE, BOOLEAN_MODE or MATCH_PHRASE_MODE not supported
+select id from fm_docs where match(title) against('search');
+ERROR HY000: Can't find FULLTEXT index matching the column list
+select id from fm_docs where match(body) against(title);
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near ')' at line 1
+#
+# 5. two-column index
+#
+select id, round(match(title, body) against('databases search'), 6) s from fm_docs
+where match(title, body) against('databases search') order by s desc, id;
+id	s
+1	1.753229
+4	0.401460
+7	0.371622
+2	0.364238
+3	0.284974
+select id from fm_docs where match(title, body) against('+short' in boolean mode) order by id;
+id
+7
+# the column list may be given in any order
+select id from fm_docs where match(body, title) against('+short' in boolean mode) order by id;
+id
+7
+#
+# 6. DML
+#
+insert into fm_docs values (8, 'New', 'brand new search text');
+update fm_docs set body = 'nothing relevant here' where id = 7;
+delete from fm_docs where id = 2;
+select id, round(match(body) against('search' in natural language mode), 6) s from fm_docs
+where match(body) against('search' in natural language mode) order by s desc, id;
+id	s
+4	0.412606
+8	0.333067
+3	0.300485
+select id from fm_docs where match(body) against('relevant') order by id;
+id
+7
+update fm_docs set body = NULL where id = 8;
+select id from fm_docs where match(body) against('brand') order by id;
+id
+#
+# 7. document count fixed at plan time
+#
+create table fm_pc(id int primary key, body text, fulltext key ftb(body));
+insert into fm_pc values (1, 'alpha beta'), (2, 'alpha gamma'), (3, 'delta epsilon'), (4, 'zeta eta');
+select id, round(match(body) against('alpha'), 6) s from fm_pc where match(body) against('alpha') order by s desc, id;
+id	s
+1	0.371622
+2	0.371622
+insert into fm_pc values (5, 'theta iota'), (6, 'kappa lambda'), (7, 'mu nu'), (8, 'xi omicron'), (9, 'pi rho'), (10, 'sigma tau');
+# identical statement text: old document count (4)
+select id, round(match(body) against('alpha'), 6) s from fm_pc where match(body) against('alpha') order by s desc, id;
+id	s
+1	0.371622
+2	0.371622
+# new statement text: current document count (10)
+select id, round(match(body) against('alpha'), 6) s from fm_pc where match(body) against('alpha') order by s desc, id limit 5;
+id	s
+1	1.819126
+2	1.819126
+#
+# cleanup
+#
+drop table fm_docs, fm_pc;
