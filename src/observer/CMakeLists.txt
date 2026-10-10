@@ -194,7 +194,7 @@ if(CMAKE_SYSTEM_NAME STREQUAL "iOS")
     SEEKDB_IOS_BUILD_ID="${SEEKDB_IOS_BUILD_ID}"
     SEEKDB_IOS_HOOK_MODE="disabled")
   target_link_libraries(seekdb_ios_runtime PUBLIC oceanbase_static sql_nio)
-  option(SEEKDB_IOS_FRAMEWORK "Build the desktop C ABI as an embedded iOS framework" OFF)
+  option(SEEKDB_IOS_FRAMEWORK "Build SeekDB.framework, which starts and stops the in-process iOS engine" OFF)
   if(SEEKDB_IOS_FRAMEWORK)
     add_subdirectory(ios/driver)
   endif()
