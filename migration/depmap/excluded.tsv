@@ -1,0 +1,116 @@
+path	class	reason
+src/oblib/common/timezone/localtime.c	unbuilt	not in the CMake build's source lists and not included by any node
+src/oblib/easy/io/ev.h	third_party	libev header (Marc Alexander Lehmann)
+src/oblib/grpc/standbyservice.grpc.pb.cc	generated	grpc_cpp_plugin <- src/oblib/grpc/standbyservice.proto
+src/oblib/grpc/standbyservice.grpc.pb.h	generated	grpc_cpp_plugin <- src/oblib/grpc/standbyservice.proto
+src/oblib/grpc/standbyservice.pb.cc	generated	protoc <- src/oblib/grpc/standbyservice.proto
+src/oblib/grpc/standbyservice.pb.h	generated	protoc <- src/oblib/grpc/standbyservice.proto
+src/oblib/lib/alloc/ob_context_allocator.cpp	unbuilt	not in the CMake build's source lists and not included by any node
+src/oblib/lib/charset/ob_ctype_uca.cc	unbuilt	not in the CMake build's source lists and not included by any node
+src/oblib/lib/charset/ob_uctype.h	generated	generated from UnicodeData-5.0.0d9.txt (generator not in the repo)
+src/oblib/lib/codec/ob_generated_scalar_bp_func.cpp	generated	generate_scalar_bitpakcing.py
+src/oblib/lib/codec/ob_generated_scalar_bp_func.h	generated	generate_scalar_bitpakcing.py
+src/oblib/lib/codec/ob_generated_unalign_simd_bp_func.cpp	generated	generate_simd_bitpakcing.py
+src/oblib/lib/codec/ob_generated_unalign_simd_bp_func.h	generated	generate_simd_bitpakcing.py
+src/oblib/lib/compress/zstd_1_3_8/ob_empty.c	third_party	zstd 1.3.8 sources
+src/oblib/lib/compress/zstd_1_3_8/ob_zstd_compressor_1_3_8.cpp	third_party	zstd 1.3.8 sources
+src/oblib/lib/compress/zstd_1_3_8/ob_zstd_compressor_1_3_8.h	third_party	zstd 1.3.8 sources
+src/oblib/lib/compress/zstd_1_3_8/ob_zstd_wrapper.cpp	third_party	zstd 1.3.8 sources
+src/oblib/lib/compress/zstd_1_3_8/ob_zstd_wrapper.h	third_party	zstd 1.3.8 sources
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/bitstream.h	third_party	zstd 1.3.8 sources
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/compiler.h	third_party	zstd 1.3.8 sources
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/cpu.h	third_party	zstd 1.3.8 sources
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/debug.c	third_party	zstd 1.3.8 sources
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/debug.h	third_party	zstd 1.3.8 sources
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/entropy_common.c	third_party	zstd 1.3.8 sources
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/error_private.c	third_party	zstd 1.3.8 sources
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/error_private.h	third_party	zstd 1.3.8 sources
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/fse.h	third_party	zstd 1.3.8 sources
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/fse_compress.c	third_party	zstd 1.3.8 sources
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/fse_decompress.c	third_party	zstd 1.3.8 sources
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/hist.c	third_party	zstd 1.3.8 sources
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/hist.h	third_party	zstd 1.3.8 sources
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/huf.h	third_party	zstd 1.3.8 sources
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/huf_compress.c	third_party	zstd 1.3.8 sources
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/huf_decompress.c	third_party	zstd 1.3.8 sources
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/mem.h	third_party	zstd 1.3.8 sources
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/pool.c	third_party	zstd 1.3.8 sources
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/pool.h	third_party	zstd 1.3.8 sources
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/threading.c	third_party	zstd 1.3.8 sources
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/threading.h	third_party	zstd 1.3.8 sources
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/xxhash.c	third_party	zstd 1.3.8 sources
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/xxhash.h	third_party	zstd 1.3.8 sources
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd.h	third_party	zstd 1.3.8 sources
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_common.c	third_party	zstd 1.3.8 sources
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_compress.c	third_party	zstd 1.3.8 sources
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_compress_internal.h	third_party	zstd 1.3.8 sources
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_ddict.c	third_party	zstd 1.3.8 sources
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_ddict.h	third_party	zstd 1.3.8 sources
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_decompress.c	third_party	zstd 1.3.8 sources
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_decompress_block.c	third_party	zstd 1.3.8 sources
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_decompress_block.h	third_party	zstd 1.3.8 sources
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_decompress_internal.h	third_party	zstd 1.3.8 sources
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_double_fast.c	third_party	zstd 1.3.8 sources
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_double_fast.h	third_party	zstd 1.3.8 sources
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_errors.h	third_party	zstd 1.3.8 sources
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_fast.c	third_party	zstd 1.3.8 sources
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_fast.h	third_party	zstd 1.3.8 sources
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_internal.h	third_party	zstd 1.3.8 sources
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_lazy.c	third_party	zstd 1.3.8 sources
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_lazy.h	third_party	zstd 1.3.8 sources
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_ldm.c	third_party	zstd 1.3.8 sources
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_ldm.h	third_party	zstd 1.3.8 sources
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_opt.c	third_party	zstd 1.3.8 sources
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_opt.h	third_party	zstd 1.3.8 sources
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstdmt_compress.c	third_party	zstd 1.3.8 sources
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstdmt_compress.h	third_party	zstd 1.3.8 sources
+src/oblib/lib/file/config.cpp	unbuilt	not in the CMake build's source lists and not included by any node
+src/oblib/lib/hash_func/xxhash.c	third_party	xxHash (Yann Collet)
+src/oblib/lib/hash_func/xxhash.h	third_party	xxHash (Yann Collet)
+src/oblib/lib/ob_errno.h	generated	src/share/gen_errno.pl <- src/share/ob_errno.def
+src/oblib/rpc/frame/ob_rpc_checksum.cpp	unbuilt	not in the CMake build's source lists and not included by any node
+src/oblib/rpc/ob_lib_sql_shims.cpp	unbuilt	not in the CMake build's source lists and not included by any node
+src/observer/report/ob_tablet_meta_checker.cpp	unbuilt	not in the CMake build's source lists and not included by any node
+src/observer/vector_index/ob_vector_index_async_task_scheduler.cpp	unbuilt	not in the CMake build's source lists and not included by any node
+src/observer/virtual_table/ob_all_virtual_all_tables.cpp	unbuilt	not in the CMake build's source lists and not included by any node
+src/observer/virtual_table/ob_all_virtual_concurrent_limit_sql.cpp	unbuilt	not in the CMake build's source lists and not included by any node
+src/observer/virtual_table/ob_all_virtual_outline.cpp	unbuilt	not in the CMake build's source lists and not included by any node
+src/share/datum/ob_str_datum_funcs_compilation/ob_str_datum_funcs_all.cpp	generated	gen_str_datum_func_parts.py
+src/share/datum/ob_str_datum_funcs_compilation/ob_str_datum_funcs_compilation_0.cpp	generated	gen_str_datum_func_parts.py
+src/share/datum/ob_str_datum_funcs_compilation/ob_str_datum_funcs_compilation_1.cpp	generated	gen_str_datum_func_parts.py
+src/share/datum/ob_str_datum_funcs_compilation/ob_str_datum_funcs_compilation_2.cpp	generated	gen_str_datum_func_parts.py
+src/share/geo/ob_vector_tile.pb-c.c	generated	protoc-c
+src/share/geo/ob_vector_tile.pb-c.h	generated	protoc-c
+src/share/ob_cpu_share_calculator.cpp	unbuilt	not in the CMake build's source lists and not included by any node
+src/share/ob_errno.cpp	generated	src/share/gen_errno.pl <- src/share/ob_errno.def
+src/share/ob_errno.h	generated	src/share/gen_errno.pl <- src/share/ob_errno.def
+src/share/rc/ob_server_runtime_support.cpp	unbuilt	not in the CMake build's source lists and not included by any node
+src/share/storage/ob_tablet_compaction_checksum_table_storage.cpp	unbuilt	not in the CMake build's source lists and not included by any node
+src/share/system_variable/ob_sys_var_class_type.h	generated	gen_ob_sys_variables.py
+src/share/system_variable/ob_sys_var_meta.cpp	generated	gen_ob_sys_variables.py
+src/share/system_variable/ob_sys_var_meta.h	generated	gen_ob_sys_variables.py
+src/share/system_variable/ob_system_variable_alias.h	generated	gen_ob_sys_variables.py
+src/share/system_variable/ob_system_variable_init.cpp	generated	gen_ob_sys_variables.py <- ob_system_variable_init.json
+src/share/system_variable/ob_system_variable_init.h	generated	gen_ob_sys_variables.py <- ob_system_variable_init.json
+src/share/unit/ob_server_resource_config.cpp	unbuilt	not in the CMake build's source lists and not included by any node
+src/sql/bazel_pilot/optimizer_private_header_probe.cpp	unbuilt	not in the CMake build's source lists and not included by any node
+src/sql/bazel_pilot/optimizer_public_interface_probe.cpp	unbuilt	not in the CMake build's source lists and not included by any node
+src/sql/bazel_pilot/prepare_public_interface_probe.cpp	unbuilt	not in the CMake build's source lists and not included by any node
+src/sql/bazel_pilot/sql_parser_driver_private_header_probe.cpp	unbuilt	not in the CMake build's source lists and not included by any node
+src/sql/bazel_pilot/sql_parser_driver_public_interface_probe.cpp	unbuilt	not in the CMake build's source lists and not included by any node
+src/sql/bazel_pilot/undeclared_resolver_header_probe.cpp	unbuilt	not in the CMake build's source lists and not included by any node
+src/sql/dtl/ob_dtl_memory_manager.cpp	unbuilt	not in the CMake build's source lists and not included by any node
+src/sql/engine/expr/ob_expr_str_cmp_func_compile/ob_expr_str_cmp_func_all.cpp	generated	gen_expr_str_cmp_func.py
+src/sql/engine/expr/ob_expr_str_cmp_func_compile/ob_expr_str_cmp_func_part_0.cpp	generated	gen_expr_str_cmp_func.py
+src/sql/engine/expr/ob_expr_str_cmp_func_compile/ob_expr_str_cmp_func_part_1.cpp	generated	gen_expr_str_cmp_func.py
+src/sql/engine/expr/ob_expr_str_cmp_func_compile/ob_expr_str_cmp_func_part_2.cpp	generated	gen_expr_str_cmp_func.py
+src/sql/engine/expr/ob_expr_str_cmp_func_compile/ob_expr_str_cmp_func_part_3.cpp	generated	gen_expr_str_cmp_func.py
+src/sql/engine/expr/ob_expr_str_cmp_func_compile/ob_expr_str_cmp_func_part_4.cpp	generated	gen_expr_str_cmp_func.py
+src/sql/engine/expr/ob_expr_str_cmp_func_compile/ob_expr_str_cmp_func_part_5.cpp	generated	gen_expr_str_cmp_func.py
+src/sql/engine/expr/ob_expr_str_cmp_func_compile/ob_expr_str_cmp_func_part_6.cpp	generated	gen_expr_str_cmp_func.py
+src/sql/parser/ob_memory_tracker_wrapper.cpp	unbuilt	not in the CMake build's source lists and not included by any node
+src/sql/session/ob_system_variable_factory.cpp	generated	gen_ob_sys_variables.py
+src/sql/session/ob_system_variable_factory.h	generated	gen_ob_sys_variables.py
+src/storage/access/ob_advance_scanner.cpp	unbuilt	not in the CMake build's source lists and not included by any node
+src/storage/meta_mem/ob_meta_obj_pool.cpp	unbuilt	not in the CMake build's source lists and not included by any node
+src/storage/meta_mem/ob_tablet_meta_mem_mgr.cpp	unbuilt	not in the CMake build's source lists and not included by any node

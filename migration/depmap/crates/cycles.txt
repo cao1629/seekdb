@@ -1,0 +1,1 @@
+# crate = src/<module>; include-level SCCs > 1 crate: 0

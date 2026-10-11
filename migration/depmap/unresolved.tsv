@@ -1,0 +1,358 @@
+from	include	class	line
+src/oblib/common/timezone/private.h	errno.h	system header spelled with quotes	96
+src/oblib/common/timezone/private.h	libintl.h	system header spelled with quotes	103
+src/oblib/common/timezone/private.h	limits.h	system header spelled with quotes	98
+src/oblib/common/timezone/private.h	stdint.h	system header spelled with quotes	137
+src/oblib/common/timezone/private.h	stdio.h	system header spelled with quotes	95
+src/oblib/common/timezone/private.h	stdlib.h	system header spelled with quotes	100
+src/oblib/common/timezone/private.h	string.h	system header spelled with quotes	97
+src/oblib/common/timezone/private.h	sys/types.h	system header spelled with quotes	94
+src/oblib/common/timezone/private.h	time.h	system header spelled with quotes	99
+src/oblib/common/timezone/private.h	unistd.h	system header spelled with quotes	118
+src/oblib/common/xml/ob_libxml2_sax_handler.cpp	libxml2/libxml/parserInternals.h	third-party header spelled with quotes	20
+src/oblib/common/xml/ob_libxml2_sax_handler.h	libxml2/libxml/parser.h	third-party header spelled with quotes	19
+src/oblib/common/xml/ob_xml_parser.cpp	libxml2/libxml/parserInternals.h	third-party header spelled with quotes	20
+src/oblib/lib/checksum/ob_crc64.cpp	arm_acle.h	system header spelled with quotes	356
+src/oblib/lib/utility/utility.cpp	dirent.h	system header spelled with quotes	20
+src/oblib/lib/vector/ob_vsag_adaptor.cpp	vsag/dataset.h	third-party header spelled with quotes	23
+src/oblib/lib/vector/ob_vsag_adaptor.cpp	vsag/errors.h	third-party header spelled with quotes	22
+src/oblib/lib/vector/ob_vsag_adaptor.cpp	vsag/factory.h	third-party header spelled with quotes	27
+src/oblib/lib/vector/ob_vsag_adaptor.cpp	vsag/index.h	third-party header spelled with quotes	25
+src/oblib/lib/vector/ob_vsag_adaptor.cpp	vsag/options.h	third-party header spelled with quotes	26
+src/oblib/lib/vector/ob_vsag_adaptor.cpp	vsag/search_param.h	third-party header spelled with quotes	24
+src/oblib/lib/vector/ob_vsag_adaptor.cpp	vsag/vsag.h	third-party header spelled with quotes	21
+src/observer/ai_service/ob_ai_service_executor.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	17
+src/observer/ai_service/ob_ai_service_proxy.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	17
+src/observer/change_stream/ob_change_stream_fetcher.cpp	share/inner_table/ob_inner_table_schema_constants.h	configure: inner-table schema (generate_inner_table_schema.py at configure time)	30
+src/observer/change_stream/ob_cs_plugin_async_index.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/observer/dbms_scheduler/ob_dbms_sched_table_operator.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/observer/mysql/obmp_base.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/observer/mysql/obmp_packet_sender.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/observer/mysql/obmp_query.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/observer/mysql/obmp_stmt_execute.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/observer/mysql/obmp_stmt_fetch.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/observer/ob_inner_sql_connection.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/observer/ob_server.cpp	config.h	system header spelled with quotes	21
+src/observer/ob_server.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/observer/ob_server.cpp	config_checkers.h	configure: rust/config build.rs output (build time)	20
+src/observer/ob_server_duty_task.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/observer/ob_server_reload_config.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/observer/ob_server_utils.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/observer/ob_service.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	21
+src/observer/ob_srv_network_frame.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/observer/omt/ob_server_runtime.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/observer/omt/ob_server_runtime_controller.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	21
+src/observer/omt/ob_srs_service.cpp	share/inner_table/ob_inner_table_schema_constants.h	configure: inner-table schema (generate_inner_table_schema.py at configure time)	22
+src/observer/schema/ob_schema_service_sql_impl.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/observer/vector_index/ob_hybrid_vector_refresh_task.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/observer/vector_index/ob_plugin_vector_index_adaptor.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/observer/vector_index/ob_vector_index_async_task_util.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/observer/vector_index/ob_vector_index_i_task_executor.cpp	share/inner_table/ob_inner_table_schema_constants.h	configure: inner-table schema (generate_inner_table_schema.py at configure time)	19
+src/observer/vector_index/ob_vector_refresh_transaction.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/observer/virtual_table/ob_all_virtual_dtl_channel.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/observer/virtual_table/ob_all_virtual_server.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	17
+src/observer/virtual_table/ob_all_virtual_sys_parameter_stat.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/observer/virtual_table/ob_all_virtual_tablet_sstable_macro_info.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	17
+src/observer/virtual_table/ob_virtual_open_cursor_table.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/observer/virtual_table/ob_virtual_table_iterator_factory.cpp	observer/virtual_table/ob_all_virtual_sqlite_tables.h	configure: inner-table schema (generate_inner_table_schema.py at configure time)	58
+src/observer/virtual_table/ob_virtual_table_iterator_factory.cpp	share/inner_table/ob_inner_table_schema_misc.ipp	configure: inner-table schema (generate_inner_table_schema.py at configure time)	1726
+src/pl/ob_pl_build.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/pl/ob_pl_resolver.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/pl/ob_pl_type.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/pl/parser/pl_non_reserved_keywords_mysql_mode.c	pl/parser/pl_parser_mysql_mode_tab.h	configure: bison/flex output (build time)	19
+src/pl/sys_package/ob_dbms_index_manager.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/query/api/query/parser/parse_node.h	ob_sql_mode.h	alternate spelling of an existing edge	28
+src/query/api/query/vector/ob_vector_index_adaptor.h	roaring/roaring64.h	third-party header spelled with quotes	23
+src/rootserver/dbms_job/ob_dbms_job_utils.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/rootserver/ddl_task/ob_ddl_common_rs_impl.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/rootserver/ddl_task/ob_ddl_redefinition_task.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/rootserver/ddl_task/ob_fts_index_build_task.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/rootserver/ddl_task/ob_index_build_task.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/rootserver/fork_table/ob_fork_database_service.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/rootserver/fork_table/ob_fork_table_helper.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/rootserver/fork_table/ob_fork_table_helper.cpp	share/inner_table/ob_inner_table_schema_constants.h	configure: inner-table schema (generate_inner_table_schema.py at configure time)	25
+src/rootserver/fork_table/ob_fork_table_service.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/rootserver/fork_table/ob_fork_table_task.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/rootserver/freeze/ob_checksum_validator.h	share/inner_table/ob_inner_table_schema_constants.h	configure: inner-table schema (generate_inner_table_schema.py at configure time)	23
+src/rootserver/freeze/ob_daily_major_freeze_launcher.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/rootserver/freeze/ob_global_merge_manager.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/rootserver/freeze/ob_local_major_freeze.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/rootserver/freeze/ob_major_freeze_helper.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/rootserver/freeze/ob_major_merge_progress_checker.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	20
+src/rootserver/freeze/ob_major_merge_scheduler.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	20
+src/rootserver/freeze/ob_snapshot_gc_scn_renewer.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/rootserver/ob_bootstrap.h	share/inner_table/ob_inner_table_schema.h	configure: inner-table schema (generate_inner_table_schema.py at configure time)	22
+src/rootserver/ob_create_index_on_empty_table_helper.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/rootserver/ob_ddl_service.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	20
+src/rootserver/ob_ddl_service.cpp	share/inner_table/ob_inner_table_schema_constants.h	configure: inner-table schema (generate_inner_table_schema.py at configure time)	29
+src/rootserver/ob_index_builder.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/rootserver/ob_load_inner_table_schema_executor.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/rootserver/ob_local_management_service.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/rootserver/ob_partition_exchange.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/rootserver/ob_root_inspection.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	20
+src/rootserver/ob_runtime_ddl_service.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	1
+src/rootserver/ob_system_admin_util.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	22
+src/rootserver/ob_system_admin_util.cpp	config_checkers.h	configure: rust/config build.rs output (build time)	23
+src/rootserver/ob_tablet_creator.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/rootserver/ob_tablet_drop.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/rootserver/parallel_ddl/ob_create_view_helper.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/rootserver/parallel_ddl/ob_ddl_helper.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/rootserver/parallel_ddl/ob_set_comment_helper.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/share/config/ob_config_helper.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	20
+src/share/config/ob_config_manager.cpp	config.h	system header spelled with quotes	25
+src/share/config/ob_config_manager.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	23
+src/share/config/ob_config_manager.cpp	config_checkers.h	configure: rust/config build.rs output (build time)	24
+src/share/config/ob_config_manager.h	config.h	system header spelled with quotes	22
+src/share/config/ob_reload_config.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/share/config/ob_server_config.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	21
+src/share/geo/ob_geo_func_transform.cpp	boost/geometry/srs/transformation.hpp	third-party header spelled with quotes	21
+src/share/geo/ob_geo_to_s2_visitor.h	s2/s2cap.h	third-party header spelled with quotes	30
+src/share/geo/ob_geo_to_s2_visitor.h	s2/s2cell.h	third-party header spelled with quotes	29
+src/share/geo/ob_geo_to_s2_visitor.h	s2/s2earth.h	third-party header spelled with quotes	28
+src/share/geo/ob_geo_to_s2_visitor.h	s2/s2latlng.h	third-party header spelled with quotes	31
+src/share/geo/ob_geo_to_s2_visitor.h	s2/s2latlng_rect.h	third-party header spelled with quotes	36
+src/share/geo/ob_geo_to_s2_visitor.h	s2/s2latlng_rect_bounder.h	third-party header spelled with quotes	37
+src/share/geo/ob_geo_to_s2_visitor.h	s2/s2loop.h	third-party header spelled with quotes	32
+src/share/geo/ob_geo_to_s2_visitor.h	s2/s2polygon.h	third-party header spelled with quotes	34
+src/share/geo/ob_geo_to_s2_visitor.h	s2/s2polyline.h	third-party header spelled with quotes	33
+src/share/geo/ob_geo_to_s2_visitor.h	s2/s2region_coverer.h	third-party header spelled with quotes	35
+src/share/geo/ob_s2adapter.h	s2/s2cap.h	third-party header spelled with quotes	33
+src/share/geo/ob_s2adapter.h	s2/s2cell.h	third-party header spelled with quotes	32
+src/share/geo/ob_s2adapter.h	s2/s2latlng.h	third-party header spelled with quotes	34
+src/share/geo/ob_s2adapter.h	s2/s2latlng_rect.h	third-party header spelled with quotes	39
+src/share/geo/ob_s2adapter.h	s2/s2loop.h	third-party header spelled with quotes	35
+src/share/geo/ob_s2adapter.h	s2/s2polygon.h	third-party header spelled with quotes	37
+src/share/geo/ob_s2adapter.h	s2/s2polyline.h	third-party header spelled with quotes	36
+src/share/geo/ob_s2adapter.h	s2/s2region_coverer.h	third-party header spelled with quotes	38
+src/share/geo/ob_srs_wkt_parser.cpp	boost/spirit/include/phoenix.hpp	third-party header spelled with quotes	20
+src/share/geo/ob_srs_wkt_parser.cpp	boost/spirit/include/qi.hpp	third-party header spelled with quotes	19
+src/share/inner_table/ob_dump_inner_table_schema.cpp	share/inner_table/ob_inner_table_schema.h	configure: inner-table schema (generate_inner_table_schema.py at configure time)	18
+src/share/inner_table/ob_load_inner_table_schema.h	ob_inner_table_schema.h	configure: inner-table schema (generate_inner_table_schema.py at configure time)	19
+src/share/ob_autoincrement_service.cpp	share/inner_table/ob_inner_table_schema_constants.h	configure: inner-table schema (generate_inner_table_schema.py at configure time)	22
+src/share/ob_core_table_proxy.cpp	inner_table/ob_inner_table_schema.h	configure: inner-table schema (generate_inner_table_schema.py at configure time)	23
+src/share/ob_ddl_common.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/share/ob_ddl_common.h	config_bridge.h	configure: rust/config build.rs output (build time)	21
+src/share/ob_ddl_error_message_table_operator.cpp	share/inner_table/ob_inner_table_schema_constants.h	configure: inner-table schema (generate_inner_table_schema.py at configure time)	20
+src/share/ob_debug_sync.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/share/ob_define.h	cmath	system header spelled with quotes	27
+src/share/ob_global_merge_table_operator.cpp	share/inner_table/ob_inner_table_schema.h	configure: inner-table schema (generate_inner_table_schema.py at configure time)	21
+src/share/ob_global_stat_proxy.cpp	share/inner_table/ob_inner_table_schema_constants.h	configure: inner-table schema (generate_inner_table_schema.py at configure time)	21
+src/share/ob_local_device.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	36
+src/share/ob_share_util.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/share/ob_share_util.cpp	share/inner_table/ob_inner_table_schema_constants.h	configure: inner-table schema (generate_inner_table_schema.py at configure time)	19
+src/share/ob_share_util.h	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/share/ob_tablet_checksum_operator.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/share/ob_tablet_checksum_operator.cpp	share/inner_table/ob_inner_table_schema_constants.h	configure: inner-table schema (generate_inner_table_schema.py at configure time)	25
+src/share/ob_tablet_compaction_checksum_operator.h	share/inner_table/ob_inner_table_schema_constants.h	configure: inner-table schema (generate_inner_table_schema.py at configure time)	29
+src/share/ob_tablet_meta_table_compaction_operator.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/share/ob_telemetry.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	17
+src/share/ob_throttling_utils.cpp	math.h	system header spelled with quotes	19
+src/share/ob_truncated_string.h	config_bridge.h	configure: rust/config build.rs output (build time)	20
+src/share/redolog/ob_log_file_handler.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/share/roaringbitmap/ob_rb_memory_mgr.h	roaring/roaring.h	third-party header spelled with quotes	20
+src/share/schema/ob_ai_model_sql_service.cpp	share/inner_table/ob_inner_table_schema.h	configure: inner-table schema (generate_inner_table_schema.py at configure time)	21
+src/share/schema/ob_database_sql_service.cpp	share/inner_table/ob_inner_table_schema_constants.h	configure: inner-table schema (generate_inner_table_schema.py at configure time)	28
+src/share/schema/ob_multi_version_schema_service.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/share/schema/ob_multi_version_schema_service.h	share/inner_table/ob_inner_table_schema.h	configure: inner-table schema (generate_inner_table_schema.py at configure time)	28
+src/share/schema/ob_outline_sql_service.cpp	share/inner_table/ob_inner_table_schema_constants.h	configure: inner-table schema (generate_inner_table_schema.py at configure time)	20
+src/share/schema/ob_partition_sql_helper.cpp	share/inner_table/ob_inner_table_schema_constants.h	configure: inner-table schema (generate_inner_table_schema.py at configure time)	32
+src/share/schema/ob_partition_sql_helper.h	share/inner_table/ob_inner_table_schema_constants.h	configure: inner-table schema (generate_inner_table_schema.py at configure time)	28
+src/share/schema/ob_priv_sql_service.cpp	share/inner_table/ob_inner_table_schema_constants.h	configure: inner-table schema (generate_inner_table_schema.py at configure time)	41
+src/share/schema/ob_schema_getter_guard.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	21
+src/share/schema/ob_schema_getter_guard.cpp	share/inner_table/ob_inner_table_schema.h	configure: inner-table schema (generate_inner_table_schema.py at configure time)	44
+src/share/schema/ob_schema_getter_guard.cpp	share/inner_table/ob_inner_table_schema_constants.h	configure: inner-table schema (generate_inner_table_schema.py at configure time)	45
+src/share/schema/ob_schema_mgr.cpp	share/inner_table/ob_inner_table_schema_constants.h	configure: inner-table schema (generate_inner_table_schema.py at configure time)	39
+src/share/schema/ob_schema_mgr_cache.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	20
+src/share/schema/ob_schema_store.cpp	share/inner_table/ob_inner_table_schema.h	configure: inner-table schema (generate_inner_table_schema.py at configure time)	19
+src/share/schema/ob_schema_struct.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/share/schema/ob_schema_struct.cpp	share/inner_table/ob_inner_table_schema_misc.ipp	configure: inner-table schema (generate_inner_table_schema.py at configure time)	433
+src/share/schema/ob_schema_struct.cpp	share/inner_table/ob_inner_table_schema_misc.ipp	configure: inner-table schema (generate_inner_table_schema.py at configure time)	452
+src/share/schema/ob_schema_struct.cpp	share/inner_table/ob_inner_table_schema_misc.ipp	configure: inner-table schema (generate_inner_table_schema.py at configure time)	498
+src/share/schema/ob_schema_struct.cpp	share/inner_table/ob_inner_table_schema_misc.ipp	configure: inner-table schema (generate_inner_table_schema.py at configure time)	517
+src/share/schema/ob_schema_struct.cpp	share/inner_table/ob_inner_table_schema_misc.ipp	configure: inner-table schema (generate_inner_table_schema.py at configure time)	548
+src/share/schema/ob_trigger_sql_service.cpp	share/inner_table/ob_inner_table_schema_constants.h	configure: inner-table schema (generate_inner_table_schema.py at configure time)	20
+src/share/schema/ob_user_sql_service.cpp	share/inner_table/ob_inner_table_schema_constants.h	configure: inner-table schema (generate_inner_table_schema.py at configure time)	35
+src/share/storage/ob_sqlite_table_schema.h	share/inner_table/ob_inner_table_schema_misc.ipp	configure: inner-table schema (generate_inner_table_schema.py at configure time)	25
+src/share/tablet/ob_tablet_mapping_operator.cpp	share/inner_table/ob_inner_table_schema_constants.h	configure: inner-table schema (generate_inner_table_schema.py at configure time)	22
+src/share/tablet/ob_tablet_to_table_history_operator.cpp	share/inner_table/ob_inner_table_schema_constants.h	configure: inner-table schema (generate_inner_table_schema.py at configure time)	21
+src/sql/code_generator/ob_code_generator.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/sql/code_generator/ob_static_engine_cg.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/sql/das/iter/ob_das_functional_lookup_iter.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/sql/das/iter/ob_das_global_lookup_iter.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/sql/das/iter/ob_das_local_lookup_iter.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/sql/das/ob_das_domain_utils.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	17
+src/sql/das/ob_das_ref.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/sql/das/ob_das_scan_op.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/sql/das/ob_data_access_service.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/sql/dtl/ob_dtl_channel.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/sql/dtl/ob_dtl_channel_agent.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/sql/dtl/ob_dtl_channel_loop.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/sql/dtl/ob_dtl_channel_mem_manager.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/sql/dtl/ob_dtl_channel_mem_manager.h	config_bridge.h	configure: rust/config build.rs output (build time)	20
+src/sql/dtl/ob_dtl_fc_server.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/sql/dtl/ob_dtl_interm_result_manager.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/sql/dtl/ob_dtl_linked_buffer.h	config_bridge.h	configure: rust/config build.rs output (build time)	20
+src/sql/dtl/ob_dtl_mem_manager.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	20
+src/sql/dtl/ob_dtl_utils.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/sql/engine/aggregate/ob_hash_distinct_op.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/sql/engine/aggregate/ob_hash_groupby_op.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/sql/engine/aggregate/ob_merge_groupby_op.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/sql/engine/aggregate/ob_scalar_aggregate_op.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/sql/engine/basic/ob_chunk_datum_store.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/sql/engine/basic/ob_chunk_row_store.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	22
+src/sql/engine/basic/ob_material_op_impl.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/sql/engine/basic/ob_ra_datum_store.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/sql/engine/basic/ob_ra_row_store.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/sql/engine/basic/ob_temp_block_store.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/sql/engine/basic/ob_temp_table_insert_op.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/sql/engine/cmd/ob_lock_table_executor.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/sql/engine/cmd/ob_recyclebin_executor.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/sql/engine/cmd/ob_table_executor.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/sql/engine/cmd/ob_variable_set_executor.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/sql/engine/cmd/ob_vector_index_refresh.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/sql/engine/cmd/ob_vector_index_refresh.cpp	share/inner_table/ob_inner_table_schema_constants.h	configure: inner-table schema (generate_inner_table_schema.py at configure time)	22
+src/sql/engine/dml/ob_dml_service.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/sql/engine/dml/ob_table_delete_op.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/sql/engine/dml/ob_table_insert_op.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/sql/engine/dml/ob_table_update_op.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/sql/engine/expr/ob_expr_json_func_helper.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/sql/engine/expr/ob_expr_result_type_util.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/sql/engine/join/ob_hash_join_op.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/sql/engine/join/ob_merge_join_op.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/sql/engine/ob_physical_plan.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/sql/engine/ob_sql_mem_mgr_processor.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/sql/engine/ob_sql_memory_manager.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/sql/engine/pdml/static/ob_pdml_op_batch_row_cache.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/sql/engine/px/exchange/ob_px_dist_transmit_op.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/sql/engine/px/exchange/ob_px_ms_receive_op.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/sql/engine/px/ob_dfo_mgr.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/sql/engine/px/ob_granule_iterator_op.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/sql/engine/px/ob_granule_util.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/sql/engine/px/ob_px_admission.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/sql/engine/set/ob_hash_set_op.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/sql/engine/sort/ob_sort_op_impl.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/sql/engine/window_function/ob_window_function_op.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/sql/engine/window_function/ob_window_function_op.h	config_bridge.h	configure: rust/config build.rs output (build time)	20
+src/sql/executor/ob_cmd_executor.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/sql/executor/ob_maintain_dependency_info_task.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/sql/executor/ob_memory_tracker.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/sql/ob_sql.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/sql/ob_sql_trans_control.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/sql/ob_sql_utils.h	config_bridge.h	configure: rust/config build.rs output (build time)	20
+src/sql/optimizer/ob_dynamic_sampling.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/sql/optimizer/ob_join_order.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/sql/optimizer/ob_log_granule_iterator.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/sql/optimizer/ob_log_plan.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/sql/optimizer/ob_logical_operator.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/sql/optimizer/ob_optimizer.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/sql/optimizer/ob_optimizer_context.h	config_bridge.h	configure: rust/config build.rs output (build time)	20
+src/sql/optimizer/ob_optimizer_util.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/sql/parser/fts_parse.c	sql/parser/ftsblex_lex.h	configure: bison/flex output (build time)	18
+src/sql/parser/fts_parse.c	sql/parser/ftsparser_tab.h	configure: bison/flex output (build time)	19
+src/sql/parser/non_reserved_keywords_mysql_mode.c	sql/parser/sql_parser_mysql_mode_tab.h	configure: bison/flex output (build time)	19
+src/sql/plan_cache/ob_plan_cache.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/sql/plan_cache/ob_plan_cache_util.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/sql/plan_cache/ob_plan_set.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/sql/plan_cache/ob_ps_cache.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/sql/plan_cache/ob_sql_parameterization.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/sql/plan_cache/ob_values_table_compression.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/sql/resolver/cmd/ob_alter_system_resolver.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	28
+src/sql/resolver/ddl/ob_alter_table_resolver.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/sql/resolver/ddl/ob_alter_table_stmt.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	17
+src/sql/resolver/ddl/ob_create_index_resolver.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/sql/resolver/ddl/ob_create_table_resolver_base.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/sql/resolver/ddl/ob_ddl_resolver.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/sql/resolver/ddl/ob_lock_table_resolver.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/sql/resolver/ddl/ob_rename_table_stmt.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	17
+src/sql/resolver/dml/ob_dml_resolver.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/sql/resolver/expr/ob_raw_expr_type_demotion.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/sql/resolver/ob_resolver_utils.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/sql/rewrite/ob_transformer_impl.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/sql/session/ob_basic_session_info.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	20
+src/sql/session/ob_sql_session_info.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/sql/session/ob_system_variable.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/standby/control/standby_state_store.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/storage/access/ob_multiple_get_merge.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	17
+src/storage/access/ob_multiple_merge.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/storage/access/ob_single_merge.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/storage/access/ob_sstable_row_whole_scanner.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/storage/allocator/ob_mds_allocator.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/storage/allocator/ob_tx_data_allocator.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	20
+src/storage/blocksstable/index_block/ob_clustered_index_block_writer.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/storage/blocksstable/index_block/ob_index_block_builder.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/storage/blocksstable/index_block/ob_index_block_dumper.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/storage/blocksstable/index_block/ob_index_block_tree_cursor.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/storage/blocksstable/index_block/ob_sstable_meta_info.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/storage/blocksstable/ob_block_manager.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/storage/blocksstable/ob_bloom_filter_cache.h	config_bridge.h	configure: rust/config build.rs output (build time)	20
+src/storage/blocksstable/ob_data_store_desc.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/storage/blocksstable/ob_macro_block_handle.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	20
+src/storage/blocksstable/ob_macro_block_writer.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/storage/blocksstable/ob_micro_block_cache.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/storage/blocksstable/ob_micro_block_header.h	stdint.h	system header spelled with quotes	19
+src/storage/blocksstable/ob_shared_macro_block_manager.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/storage/blocksstable/ob_storage_object_handle.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/storage/compaction/ob_compaction_diagnose.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/storage/compaction/ob_compaction_util.h	stdint.h	system header spelled with quotes	19
+src/storage/compaction/ob_freeze_info_mgr.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/storage/compaction/ob_index_block_micro_iterator.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/storage/compaction/ob_medium_compaction_func.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	17
+src/storage/compaction/ob_partition_merge_policy.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	20
+src/storage/compaction/ob_partition_merger.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/storage/compaction/ob_partition_parallel_merge_ctx.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	17
+src/storage/compaction/ob_sstable_builder.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/storage/compaction/ob_tablet_scheduler.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/storage/concurrency_control/ob_multi_version_garbage_collector.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	17
+src/storage/ddl/ob_ddl_common_storage_impl.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/storage/ddl/ob_ddl_lock.cpp	share/inner_table/ob_inner_table_schema_constants.h	configure: inner-table schema (generate_inner_table_schema.py at configure time)	24
+src/storage/ddl/ob_ddl_pipeline.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/storage/ddl/ob_ddl_replay_executor.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/storage/ddl/ob_hnsw_embedmgr.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/storage/deadlock/ob_deadlock_detector_mgr.h	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/storage/deadlock/ob_lcl_scheme/ob_lcl_node.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	17
+src/storage/fts/dict/ob_dic_loader.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/storage/fts/dict/ob_ft_range_dict.cpp	share/inner_table/ob_inner_table_schema_constants.h	configure: inner-table schema (generate_inner_table_schema.py at configure time)	29
+src/storage/fts/dict/ob_ik_utf8_dic_loader.cpp	share/inner_table/ob_inner_table_schema_constants.h	configure: inner-table schema (generate_inner_table_schema.py at configure time)	21
+src/storage/lob/ob_lob_access_param.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/storage/ls/ob_ls_tablet_service.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/storage/memtable/mvcc/ob_mvcc_row.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	17
+src/storage/memtable/mvcc/ob_mvcc_trans_ctx.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	17
+src/storage/memtable/mvcc/ob_tx_callback_list.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	16
+src/storage/memtable/ob_memtable_context.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	17
+src/storage/meta_mem/ob_meta_obj_pool.h	config_bridge.h	configure: rust/config build.rs output (build time)	20
+src/storage/meta_mem/ob_storage_meta_cache.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	20
+src/storage/meta_mem/ob_storage_meta_mem_mgr.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/storage/meta_mem/ob_storage_meta_obj_pool.h	config_bridge.h	configure: rust/config build.rs output (build time)	21
+src/storage/meta_store/ob_local_storage_meta_service.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/storage/ob_bloom_filter_task.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/storage/ob_common_id_utils.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/storage/ob_dml_running_ctx.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/storage/ob_i_pre_warmer.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	17
+src/storage/ob_parallel_external_sort.h	config_bridge.h	configure: rust/config build.rs output (build time)	20
+src/storage/scheduler/ob_dag_scheduler.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/storage/slog_ckpt/ob_linked_macro_block_reader.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/storage/slog_ckpt/ob_linked_macro_block_writer.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/storage/slog_ckpt/ob_local_storage_checkpoint_writer.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/storage/tablelock/ob_lock_utils.h	share/inner_table/ob_inner_table_schema.h	configure: inner-table schema (generate_inner_table_schema.py at configure time)	20
+src/storage/tablelock/ob_obj_lock.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/storage/tablelock/ob_table_lock_service.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/storage/tablet/ob_tablet.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/storage/tablet/ob_tablet_create_mds_helper.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	17
+src/storage/tablet/ob_tablet_obj_load_helper.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	17
+src/storage/tablet/ob_tablet_persister.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/storage/throttle/ob_share_throttle_define.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/storage/tmp_file/ob_tmp_file_page_cache_controller.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/storage/tmp_file/ob_tmp_file_write_buffer_pool.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/storage/tx/ob_trans_ctx.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/storage/tx/ob_trans_service.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/storage/tx/ob_ts_mgr.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	17
+src/storage/tx/ob_tx_ctx.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/storage/tx/ob_tx_ctx_log_cb_helper.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	17
+src/storage/tx/ob_tx_elr_util.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	17
+src/storage/tx/ob_weak_read_util.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	17
+src/storage/tx/ob_weak_read_util.h	stdint.h	system header spelled with quotes	20
+src/storage/tx_storage/ob_checkpoint_service.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19
+src/storage/tx_storage/ob_memstore_freezer.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	20
+src/storage/tx_storage/ob_tx_leak_checker.h	config_bridge.h	configure: rust/config build.rs output (build time)	18
+src/storage/tx_table/ob_tx_table.cpp	config_bridge.h	configure: rust/config build.rs output (build time)	19

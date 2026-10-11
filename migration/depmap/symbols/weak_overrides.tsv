@@ -1,0 +1,7 @@
+symbol	weak_in	strong_in	weak_default_source
+request_finish_callback()	src/oblib	src/storage	src/oblib/rpc/ob_sql_request_operator.cpp:27
+oceanbase::lib::current_resource_owner_id()	src/oblib	src/share	-
+oceanbase::common::ob_strerror(int)	src/oblib	src/share	src/oblib/lib/oblog/ob_log.cpp:73
+oceanbase::common::get_cpu_count()	src/oblib	src/share	src/oblib/lib/cpu/ob_cpu_topology.cpp:27
+oceanbase::common::allow_next_syslog(long long)	src/oblib	src/share	src/oblib/lib/oblog/ob_log.cpp:68
+oceanbase::common::create_inner_sql_connection_for_proxy(bool, int, oceanbase::common::ObSharedGuard<oceanbase::common::sqlclient::ObISQLConnection>&)	src/oblib	src/observer	src/oblib/common/mysqlclient/ob_mysql_proxy.cpp:29

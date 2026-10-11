@@ -1,0 +1,199 @@
+file	line	directive	resolved_to	verdict	conditional	note
+src/observer/main.cpp	20	<stdio.h>	-	NOT_EDGE	1	system header not in repo; cond: #ifdef WITH_COVERAGE (line 19)
+src/observer/main.cpp	21	<stdlib.h>	-	NOT_EDGE	1	system header not in repo; cond: #ifdef WITH_COVERAGE (line 19)
+src/observer/main.cpp	22	<string.h>	-	NOT_EDGE	1	system header not in repo; cond: #ifdef WITH_COVERAGE (line 19)
+src/observer/main.cpp	23	<unistd.h>	-	NOT_EDGE	1	system header not in repo; cond: #ifdef WITH_COVERAGE (line 19)
+src/observer/main.cpp	51	"lib/alloc/ob_malloc_allocator.h"	src/oblib/lib/alloc/ob_malloc_allocator.h	EDGE	0	-
+src/observer/main.cpp	52	"lib/allocator/ob_malloc.h"	src/oblib/lib/allocator/ob_malloc.h	EDGE	0	-
+src/observer/main.cpp	53	"lib/file/file_directory_utils.h"	src/oblib/lib/file/file_directory_utils.h	EDGE	0	-
+src/observer/main.cpp	54	"lib/oblog/ob_easy_log.h"	src/oblib/lib/oblog/ob_easy_log.h	EDGE	0	-
+src/observer/main.cpp	55	"lib/oblog/ob_log.h"	src/oblib/lib/oblog/ob_log.h	EDGE	0	-
+src/observer/main.cpp	56	"lib/oblog/ob_warning_buffer.h"	src/oblib/lib/oblog/ob_warning_buffer.h	EDGE	0	-
+src/observer/main.cpp	57	"lib/signal/ob_signal_struct.h"	src/oblib/lib/signal/ob_signal_struct.h	EDGE	0	-
+src/observer/main.cpp	58	"lib/utility/ob_defer.h"	src/oblib/lib/utility/ob_defer.h	EDGE	0	-
+src/observer/main.cpp	59	"observer/ob_command_line_parser.h"	src/observer/ob_command_line_parser.h	EDGE	0	-
+src/observer/main.cpp	60	"observer/ob_server.h"	src/observer/ob_server.h	EDGE	0	-
+src/observer/main.cpp	61	"share/ob_encryption_util.h"	src/share/ob_encryption_util.h	EDGE	0	-
+src/observer/main.cpp	62	"observer/ob_server_utils.h"	src/observer/ob_server_utils.h	EDGE	0	-
+src/observer/main.cpp	63	"observer/ob_signal_handle.h"	src/observer/ob_signal_handle.h	EDGE	0	-
+src/observer/main.cpp	64	"share/config/ob_server_config.h"	src/share/config/ob_server_config.h	EDGE	0	-
+src/observer/main.cpp	65	"share/ob_version.h"	src/share/ob_version.h	EDGE	0	-
+src/observer/main.cpp	66	<curl/curl.h>	-	NOT_EDGE	0	third-party header not in repo
+src/observer/main.cpp	67	<stdlib.h>	-	NOT_EDGE	0	system header not in repo
+src/observer/main.cpp	69	<getopt.h>	-	NOT_EDGE	1	system header not in repo; cond: #ifndef _WIN32 (line 68)
+src/observer/main.cpp	70	<sys/mman.h>	-	NOT_EDGE	1	system header not in repo; cond: #ifndef _WIN32 (line 68)
+src/observer/main.cpp	71	<unistd.h>	-	NOT_EDGE	1	system header not in repo; cond: #ifndef _WIN32 (line 68)
+src/observer/main.cpp	74	<limits.h>	-	NOT_EDGE	1	system header not in repo; cond: #if defined(__linux__) (line 73)
+src/observer/main.cpp	75	<sys/prctl.h>	-	NOT_EDGE	1	system header not in repo; cond: #if defined(__linux__) (line 73)
+src/observer/main.cpp	77	<locale.h>	-	NOT_EDGE	0	system header not in repo
+src/observer/main.cpp	79	<stdlib.h>	-	NOT_EDGE	1	system header not in repo; cond: #ifdef __APPLE__ (line 78)
+src/observer/main.cpp	80	<mach-o/dyld.h>	-	NOT_EDGE	1	system header not in repo; cond: #ifdef __APPLE__ (line 78)
+src/observer/main.cpp	82	<malloc.h>	-	NOT_EDGE	1	system header not in repo; cond: #else of #ifdef __APPLE__ (line 78)
+src/observer/main.cpp	85	<sys/time.h>	-	NOT_EDGE	1	system header not in repo; cond: #ifndef _WIN32 (line 84)
+src/observer/main.cpp	86	<sys/resource.h>	-	NOT_EDGE	1	system header not in repo; cond: #ifndef _WIN32 (line 84)
+src/observer/main.cpp	89	<windows.h>	-	NOT_EDGE	1	system header not in repo; cond: #ifdef _WIN32 (line 88)
+src/observer/main.cpp	90	"observer/ob_win_service.h"	src/observer/ob_win_service.h	EDGE	1	cond: #ifdef _WIN32 (line 88)
+src/observer/main.cpp	96	<signal.h>	-	NOT_EDGE	1	system header not in repo; cond: #ifdef _WIN32 (line 88)
+src/observer/main.cpp	325	<dlfcn.h>	-	NOT_EDGE	1	system header not in repo; cond: #ifdef __APPLE__ (line 323)
+src/observer/main.cpp	326	<stdint.h>	-	NOT_EDGE	1	system header not in repo; cond: #ifdef __APPLE__ (line 323)
+src/observer/main.cpp	343	<stdint.h>	-	NOT_EDGE	1	system header not in repo; cond: #elif defined(_WIN32) (line 323)
+src/observer/main.cpp	356	<link.h>	-	NOT_EDGE	1	system header not in repo; cond: #else of #ifdef __APPLE__ (line 323)
+src/observer/main.cpp	357	<dlfcn.h>	-	NOT_EDGE	1	system header not in repo; cond: #else of #ifdef __APPLE__ (line 323)
+src/share/ob_io_device_helper.cpp	19	<sys/mount.h>	-	NOT_EDGE	1	system header not in repo; cond: #ifdef __APPLE__ (line 18)
+src/share/ob_io_device_helper.cpp	20	<fcntl.h>	-	NOT_EDGE	1	system header not in repo; cond: #ifdef __APPLE__ (line 18)
+src/share/ob_io_device_helper.cpp	21	<unistd.h>	-	NOT_EDGE	1	system header not in repo; cond: #ifdef __APPLE__ (line 18)
+src/share/ob_io_device_helper.cpp	29	<windows.h>	-	NOT_EDGE	1	system header not in repo; cond: #elif defined(_WIN32) (line 18)
+src/share/ob_io_device_helper.cpp	30	<io.h>	-	NOT_EDGE	1	system header not in repo; cond: #elif defined(_WIN32) (line 18)
+src/share/ob_io_device_helper.cpp	31	<fcntl.h>	-	NOT_EDGE	1	system header not in repo; cond: #elif defined(_WIN32) (line 18)
+src/share/ob_io_device_helper.cpp	32	<stdint.h>	-	NOT_EDGE	1	system header not in repo; cond: #elif defined(_WIN32) (line 18)
+src/share/ob_io_device_helper.cpp	42	"share/ob_statvfs_win32.h"	src/share/ob_statvfs_win32.h	EDGE	1	cond: #elif defined(_WIN32) (line 18)
+src/share/ob_io_device_helper.cpp	44	<sys/vfs.h>	-	NOT_EDGE	1	system header not in repo; cond: #else of #ifdef __APPLE__ (line 18)
+src/share/ob_io_device_helper.cpp	47	<sys/statvfs.h>	-	NOT_EDGE	1	system header not in repo; cond: #ifndef _WIN32 (line 46)
+src/share/ob_io_device_helper.cpp	49	"lib/restore/ob_io_device.h"	src/oblib/lib/restore/ob_io_device.h	EDGE	0	-
+src/share/ob_io_device_helper.cpp	50	"share/ob_device_manager.h"	src/share/ob_device_manager.h	EDGE	0	-
+src/share/ob_io_device_helper.cpp	51	"share/ob_io_device_helper.h"	src/share/ob_io_device_helper.h	EDGE	0	-
+src/share/ob_io_device_helper.cpp	52	"share/ob_local_device.h"	src/share/ob_local_device.h	EDGE	0	-
+src/share/ob_io_device_helper.cpp	53	"lib/utility/ob_smart_call.h"	src/oblib/lib/utility/ob_smart_call.h	EDGE	0	-
+src/share/ob_io_device_helper.cpp	-	-	src/share/ob_io_device_helper.h	EDGE	0	own_header
+src/oblib/lib/thread/thread.cpp	19	"thread.h"	src/oblib/lib/thread/thread.h	EDGE	0	-
+src/oblib/lib/thread/thread.cpp	21	<windows.h>	-	NOT_EDGE	1	system header not in repo; cond: #ifdef _WIN32 (line 20)
+src/oblib/lib/thread/thread.cpp	25	<io.h>	-	NOT_EDGE	1	system header not in repo; cond: #ifdef _WIN32 (line 20)
+src/oblib/lib/thread/thread.cpp	26	<process.h>	-	NOT_EDGE	1	system header not in repo; cond: #ifdef _WIN32 (line 20)
+src/oblib/lib/thread/thread.cpp	28	"lib/utility/ob_platform_utils.h"	src/oblib/lib/utility/ob_platform_utils.h	EDGE	0	-
+src/oblib/lib/thread/thread.cpp	29	"lib/rc/context.h"	src/oblib/lib/rc/context.h	EDGE	0	-
+src/oblib/lib/thread/thread.cpp	30	"lib/thread/protected_stack_allocator.h"	src/oblib/lib/thread/protected_stack_allocator.h	EDGE	0	-
+src/oblib/lib/thread/thread.cpp	31	"lib/utility/ob_hang_fatal_error.h"	src/oblib/lib/utility/ob_hang_fatal_error.h	EDGE	0	-
+src/oblib/lib/thread/thread.cpp	32	"lib/signal/ob_signal_struct.h"	src/oblib/lib/signal/ob_signal_struct.h	EDGE	0	-
+src/oblib/lib/thread/thread.cpp	33	"lib/thread_local/ob_tsi_factory.h"	src/oblib/lib/thread_local/ob_tsi_factory.h	EDGE	0	-
+src/oblib/lib/thread/thread.cpp	401	<mach/thread_info.h>	-	NOT_EDGE	1	system header not in repo; cond: #ifdef __APPLE__ (line 400)
+src/oblib/lib/thread/thread.cpp	402	<mach/mach.h>	-	NOT_EDGE	1	system header not in repo; cond: #ifdef __APPLE__ (line 400)
+src/oblib/lib/thread/thread.cpp	-	-	src/oblib/lib/thread/thread.h	EDGE	0	own_header
+src/share/ob_telemetry.cpp	17	"config_bridge.h"	-	NOT_EDGE	0	build-generated, untracked - produced by rust/config/build.rs:392 into the cargo target include dir (cmake/Rust.cmake:176, rust/BUILD.bazel:44); only copies are under untracked build_release/ and build_mutant/
+src/share/ob_telemetry.cpp	18	"lib/utility/utility.h"	src/oblib/lib/utility/utility.h	EDGE	0	-
+src/share/ob_telemetry.cpp	19	"lib/time/ob_time_utility.h"	src/oblib/lib/time/ob_time_utility.h	EDGE	0	-
+src/share/ob_telemetry.cpp	20	"lib/string/ob_sql_string.h"	src/oblib/lib/string/ob_sql_string.h	EDGE	0	-
+src/share/ob_telemetry.cpp	21	"lib/cpu/ob_cpu_topology.h"	src/oblib/lib/cpu/ob_cpu_topology.h	EDGE	0	-
+src/share/ob_telemetry.cpp	22	"share/config/ob_server_config.h"	src/share/config/ob_server_config.h	EDGE	0	-
+src/share/ob_telemetry.cpp	23	"share/ob_encryption_util.h"	src/share/ob_encryption_util.h	EDGE	0	-
+src/share/ob_telemetry.cpp	24	"share/ob_server_struct.h"	src/share/ob_server_struct.h	EDGE	0	-
+src/share/ob_telemetry.cpp	25	"share/ob_telemetry.h"	src/share/ob_telemetry.h	EDGE	0	-
+src/share/ob_telemetry.cpp	26	"common/ob_version_def.h"	src/oblib/common/ob_version_def.h	EDGE	0	-
+src/share/ob_telemetry.cpp	27	"common/json_type/ob_json_parse.h"	src/oblib/common/json_type/ob_json_parse.h	EDGE	0	-
+src/share/ob_telemetry.cpp	28	<curl/curl.h>	-	NOT_EDGE	0	third-party header not in repo
+src/share/ob_telemetry.cpp	29	<errno.h>	-	NOT_EDGE	0	system header not in repo
+src/share/ob_telemetry.cpp	30	<openssl/hmac.h>	-	NOT_EDGE	0	third-party header not in repo
+src/share/ob_telemetry.cpp	31	<openssl/sha.h>	-	NOT_EDGE	0	third-party header not in repo
+src/share/ob_telemetry.cpp	32	<stdlib.h>	-	NOT_EDGE	0	system header not in repo
+src/share/ob_telemetry.cpp	33	<string.h>	-	NOT_EDGE	0	system header not in repo
+src/share/ob_telemetry.cpp	34	<mutex>	-	NOT_EDGE	0	system header not in repo
+src/share/ob_telemetry.cpp	37	<direct.h>	-	NOT_EDGE	1	system header not in repo; cond: #ifdef _WIN32 (line 36)
+src/share/ob_telemetry.cpp	38	<io.h>	-	NOT_EDGE	1	system header not in repo; cond: #ifdef _WIN32 (line 36)
+src/share/ob_telemetry.cpp	39	<windows.h>	-	NOT_EDGE	1	system header not in repo; cond: #ifdef _WIN32 (line 36)
+src/share/ob_telemetry.cpp	44	<unistd.h>	-	NOT_EDGE	1	system header not in repo; cond: #else of #ifdef _WIN32 (line 36)
+src/share/ob_telemetry.cpp	46	<time.h>	-	NOT_EDGE	1	system header not in repo; cond: #else of #ifdef _WIN32 (line 36) > #ifdef __APPLE__ (line 45)
+src/share/ob_telemetry.cpp	47	<uuid/uuid.h>	-	NOT_EDGE	1	system header not in repo; cond: #else of #ifdef _WIN32 (line 36) > #ifdef __APPLE__ (line 45)
+src/share/ob_telemetry.cpp	-	-	src/share/ob_telemetry.h	EDGE	0	own_header
+src/oblib/lib/oblog/ob_log.h	40	<stdarg.h>	-	NOT_EDGE	0	system header not in repo
+src/oblib/lib/oblog/ob_log.h	41	<time.h>	-	NOT_EDGE	0	system header not in repo
+src/oblib/lib/oblog/ob_log.h	42	<stdio.h>	-	NOT_EDGE	0	system header not in repo
+src/oblib/lib/oblog/ob_log.h	44	<strings.h>	-	NOT_EDGE	1	system header not in repo; cond: #ifndef _WIN32 (line 43)
+src/oblib/lib/oblog/ob_log.h	45	<unistd.h>	-	NOT_EDGE	1	system header not in repo; cond: #ifndef _WIN32 (line 43)
+src/oblib/lib/oblog/ob_log.h	46	<sys/time.h>	-	NOT_EDGE	1	system header not in repo; cond: #ifndef _WIN32 (line 43)
+src/oblib/lib/oblog/ob_log.h	47	<sys/uio.h>	-	NOT_EDGE	1	system header not in repo; cond: #ifndef _WIN32 (line 43)
+src/oblib/lib/oblog/ob_log.h	49	<sys/types.h>	-	NOT_EDGE	0	system header not in repo
+src/oblib/lib/oblog/ob_log.h	50	<sys/stat.h>	-	NOT_EDGE	0	system header not in repo
+src/oblib/lib/oblog/ob_log.h	51	<fcntl.h>	-	NOT_EDGE	0	system header not in repo
+src/oblib/lib/oblog/ob_log.h	52	<stdlib.h>	-	NOT_EDGE	0	system header not in repo
+src/oblib/lib/oblog/ob_log.h	53	<errno.h>	-	NOT_EDGE	0	system header not in repo
+src/oblib/lib/oblog/ob_log.h	54	<deque>	-	NOT_EDGE	0	system header not in repo
+src/oblib/lib/oblog/ob_log.h	55	<string>	-	NOT_EDGE	0	system header not in repo
+src/oblib/lib/oblog/ob_log.h	56	<pthread.h>	-	NOT_EDGE	0	system header not in repo
+src/oblib/lib/oblog/ob_log.h	57	<stdint.h>	-	NOT_EDGE	0	system header not in repo
+src/oblib/lib/oblog/ob_log.h	58	<cstring>	-	NOT_EDGE	0	system header not in repo
+src/oblib/lib/oblog/ob_log.h	60	<sys/mount.h>	-	NOT_EDGE	1	system header not in repo; cond: #ifdef __APPLE__ (line 59)
+src/oblib/lib/oblog/ob_log.h	62	<sys/statfs.h>	-	NOT_EDGE	1	system header not in repo; cond: #elif defined(__linux__) (line 59)
+src/oblib/lib/oblog/ob_log.h	64	<signal.h>	-	NOT_EDGE	0	system header not in repo
+src/oblib/lib/oblog/ob_log.h	66	"lib/ob_errno.h"	src/oblib/lib/ob_errno.h	NOT_EDGE	0	resolves to excluded file: generated - target lines 17-19 "DO NOT EDIT. This file is automatically generated from ob_errno.def."; written by src/share/gen_errno.pl:199
+src/oblib/lib/oblog/ob_log.h	67	"lib/ob_abort.h"	src/oblib/lib/ob_abort.h	EDGE	0	-
+src/oblib/lib/oblog/ob_log.h	68	"ob_log_print_kv.h"	src/oblib/lib/oblog/ob_log_print_kv.h	EDGE	0	-
+src/oblib/lib/oblog/ob_log.h	69	"lib/coro/co_var.h"	src/oblib/lib/coro/co_var.h	EDGE	0	-
+src/oblib/lib/oblog/ob_log.h	71	"lib/oblog/ob_log_module.h"	src/oblib/lib/oblog/ob_log_module.h	EDGE	0	-
+src/oblib/lib/oblog/ob_log.h	72	"lib/oblog/ob_log_level.h"	src/oblib/lib/oblog/ob_log_level.h	EDGE	0	-
+src/oblib/lib/oblog/ob_log.h	73	"lib/oblog/ob_async_log_struct.h"	src/oblib/lib/oblog/ob_async_log_struct.h	EDGE	0	-
+src/oblib/lib/oblog/ob_log.h	74	"lib/oblog/ob_ringbuf_log_writer.h"	src/oblib/lib/oblog/ob_ringbuf_log_writer.h	EDGE	0	-
+src/oblib/lib/oblog/ob_log.h	75	"lib/utility/ob_defer.h"	src/oblib/lib/utility/ob_defer.h	EDGE	0	-
+src/oblib/lib/oblog/ob_log.h	76	"lib/oblog/ob_syslog_rate_limiter.h"	src/oblib/lib/oblog/ob_syslog_rate_limiter.h	EDGE	0	-
+src/oblib/lib/oblog/ob_log.h	77	"lib/utility/ob_common_utility.h"	src/oblib/lib/utility/ob_common_utility.h	EDGE	0	-
+src/oblib/lib/oblog/ob_log.h	78	"lib/oblog/ob_log_dba_event.h"	src/oblib/lib/oblog/ob_log_dba_event.h	EDGE	0	-
+src/oblib/lib/file/ob_file.cpp	17	"lib/file/ob_file.h"	src/oblib/lib/file/ob_file.h	EDGE	0	-
+src/oblib/lib/file/ob_file.cpp	19	<stdlib.h>	-	NOT_EDGE	1	system header not in repo; cond: #ifdef __APPLE__ (line 18)
+src/oblib/lib/file/ob_file.cpp	20	<fcntl.h>	-	NOT_EDGE	1	system header not in repo; cond: #ifdef __APPLE__ (line 18)
+src/oblib/lib/file/ob_file.cpp	33	<windows.h>	-	NOT_EDGE	1	system header not in repo; cond: #elif defined(_WIN32) (line 18)
+src/oblib/lib/file/ob_file.cpp	34	<fcntl.h>	-	NOT_EDGE	1	system header not in repo; cond: #elif defined(_WIN32) (line 18)
+src/oblib/lib/file/ob_file.cpp	35	<io.h>	-	NOT_EDGE	1	system header not in repo; cond: #elif defined(_WIN32) (line 18)
+src/oblib/lib/file/ob_file.cpp	36	<malloc.h>	-	NOT_EDGE	1	system header not in repo; cond: #elif defined(_WIN32) (line 18)
+src/oblib/lib/file/ob_file.cpp	-	-	src/oblib/lib/file/ob_file.h	EDGE	0	own_header
+src/oblib/grpc/standbyservice.pb.cc	-	-	-	FILE_EXCLUDED	0	generated: line 1 "// Generated by the protocol buffer compiler.  DO NOT EDIT!" and line 2 "// source: standbyservice.proto" (src/oblib/grpc/standbyservice.proto is tracked); checked-in protoc output - no repo script writes this Unix copy (src/oblib/grpc/CMakeLists.txt:26-35 runs protoc only in the WIN32 branch, into ${CMAKE_BINARY_DIR}/generated/grpc); .gitignore:384-386 ignore src/oblib/grpc/*.pb.* and :387-390 deliberately un-ignore the four standbyservice files. NOTE it IS compiled (generated-but-built, not unbuilt): src/oblib/grpc/CMakeLists.txt:42-44 non-WIN32 branch (gated by OB_ENABLE_STANDBY, option default ON at CMakeLists.txt:29, add_subdirectory(grpc) at src/oblib/CMakeLists.txt:352) and src/oblib/grpc/BUILD.bazel:11
+src/oblib/grpc/standbyservice.pb.cc	4	"standbyservice.pb.h"	src/oblib/grpc/standbyservice.pb.h	NOT_EDGE	0	resolves to excluded file: generated - target line 1 "Generated by the protocol buffer compiler.  DO NOT EDIT!" (protoc output of src/oblib/grpc/standbyservice.proto)
+src/oblib/grpc/standbyservice.pb.cc	6	<algorithm>	-	NOT_EDGE	0	system header not in repo
+src/oblib/grpc/standbyservice.pb.cc	8	<google/protobuf/io/coded_stream.h>	-	NOT_EDGE	0	third-party header not in repo
+src/oblib/grpc/standbyservice.pb.cc	9	<google/protobuf/extension_set.h>	-	NOT_EDGE	0	third-party header not in repo
+src/oblib/grpc/standbyservice.pb.cc	10	<google/protobuf/wire_format_lite.h>	-	NOT_EDGE	0	third-party header not in repo
+src/oblib/grpc/standbyservice.pb.cc	11	<google/protobuf/descriptor.h>	-	NOT_EDGE	0	third-party header not in repo
+src/oblib/grpc/standbyservice.pb.cc	12	<google/protobuf/generated_message_reflection.h>	-	NOT_EDGE	0	third-party header not in repo
+src/oblib/grpc/standbyservice.pb.cc	13	<google/protobuf/reflection_ops.h>	-	NOT_EDGE	0	third-party header not in repo
+src/oblib/grpc/standbyservice.pb.cc	14	<google/protobuf/wire_format.h>	-	NOT_EDGE	0	third-party header not in repo
+src/oblib/grpc/standbyservice.pb.cc	16	<google/protobuf/port_def.inc>	-	NOT_EDGE	0	third-party header not in repo
+src/oblib/grpc/standbyservice.pb.cc	5216	<google/protobuf/port_undef.inc>	-	NOT_EDGE	0	third-party header not in repo
+src/oblib/grpc/standbyservice.pb.cc	-	-	src/oblib/grpc/standbyservice.pb.h	NOT_EDGE	0	own_header; target is an excluded generated file (source file itself is FILE_EXCLUDED)
+src/share/system_variable/ob_sys_var_class_type.h	-	-	-	FILE_EXCLUDED	0	generated: NO marker in the file (lines 1-15 are only the Apache license) but a repo generator writes it: src/share/system_variable/gen_ob_sys_variables.py:1176 names "ob_sys_var_class_type.h", :1188 calls make_sys_var_class_type_h(pdir, ...), whose body at :591-611 emits the same guard OCEANBASE_SHARE_SYSTEM_VARIABLE_OB_SYS_VAR_CLASS_TYPE_ and "#include <stdint.h>" as file lines 17-19, and :429-434 emits the enum ObSysVarClassType body (file lines 25-27: enum ObSysVarClassType { SYS_VAR_INVALID = -1, then SYS_VAR_<NAME> = <id>). No CMake/Bazel rule runs the script (git grep finds only a comment at src/sql/session/ob_basic_session_info.cpp:49); it is run by hand and is Python-2 style (iteritems at :67), so the tracked copy is the only copy
+src/share/system_variable/ob_sys_var_class_type.h	19	<stdint.h>	-	NOT_EDGE	0	system header not in repo
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_ldm.c	-	-	-	FILE_EXCLUDED	0	third_party: vendored zstd 1.3.8 - lines 2-6 "Copyright (c) 2016-present, Yann Collet, Facebook, Inc." BSD/GPLv2 notice; directory src/oblib/lib/compress/zstd_1_3_8/zstd_src/ carries its own LICENSE. NOTE it IS compiled (third-party-but-built): in inventory SEEKDB_OBLIB_ZSTD_STANDALONE (emitted from OBLIB_STANDALONE_SOURCES['src/oblib/lib/compress/zstd_1_3_8:zstd_1_3_8_objs']) consumed by src/oblib/lib/compress/zstd_1_3_8/CMakeLists.txt:1
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_ldm.c	11	"zstd_ldm.h"	src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_ldm.h	NOT_EDGE	0	resolves to excluded file: third_party - vendored zstd 1.3.8 (header "Copyright (c) 2016-present, Yann Collet, Facebook, Inc."; dir has its own LICENSE)
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_ldm.c	12	"zstd_fast.h"	src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_fast.h	NOT_EDGE	0	resolves to excluded file: third_party - vendored zstd 1.3.8 (header "Copyright (c) 2016-present, Yann Collet, Facebook, Inc."; dir has its own LICENSE)
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_ldm.c	13	"zstd_double_fast.h"	src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_double_fast.h	NOT_EDGE	0	resolves to excluded file: third_party - vendored zstd 1.3.8 (header "Copyright (c) 2016-present, Yann Collet, Facebook, Inc."; dir has its own LICENSE)
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_ldm.c	-	-	src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_ldm.h	NOT_EDGE	0	own_header; target is an excluded third_party file (source file itself is FILE_EXCLUDED)
+src/sql/bazel_pilot/prepare_public_interface_probe.cpp	-	-	-	FILE_EXCLUDED	0	unbuilt (by the CMake + inventory-table definition): not named in any CMakeLists.txt/*.cmake; 0 hits in the output of tools/cmake/emit_bazel_source_inventory.py (run with --repo . to a temp file, grepped for the path); explicitly carved out of the SQL production inventory by src/sql/BUILD.bazel:144 (_SQL_SEPARATELY_OWNED_SOURCES) and tools/module_check/sql_source_ownership_check.py:26. CAVEAT, not "never compiled by anything": src/sql/bazel_pilot/BUILD.bazel:50-56 defines cc_library prepare_public_interface_probe (srcs this file, tags=["manual"], layering_check probe) and tools/bazel_pilot_verify.sh:158 builds that target on demand; file line 17 says "PROTOTYPE: compile-only consumer of engine/prepare public interface"
+src/sql/bazel_pilot/prepare_public_interface_probe.cpp	19	"sql/engine/prepare/ob_deallocate_executor.h"	src/sql/engine/prepare/ob_deallocate_executor.h	EDGE	0	-
+src/sql/bazel_pilot/prepare_public_interface_probe.cpp	20	"sql/engine/prepare/ob_execute_executor.h"	src/sql/engine/prepare/ob_execute_executor.h	EDGE	0	-
+src/sql/bazel_pilot/prepare_public_interface_probe.cpp	21	"sql/engine/prepare/ob_prepare_executor.h"	src/sql/engine/prepare/ob_prepare_executor.h	EDGE	0	-
+src/storage/tx/ob_id_service.cpp	17	"ob_id_service.h"	src/storage/tx/ob_id_service.h	EDGE	0	-
+src/storage/tx/ob_id_service.cpp	18	"share/rc/ob_server_runtime.h"	src/share/rc/ob_server_runtime.h	EDGE	0	-
+src/storage/tx/ob_id_service.cpp	19	"ob_timestamp_service.h"	src/storage/tx/ob_timestamp_service.h	EDGE	0	-
+src/storage/tx/ob_id_service.cpp	20	"ob_trans_id_service.h"	src/storage/tx/ob_trans_id_service.h	EDGE	0	-
+src/storage/tx/ob_id_service.cpp	21	"storage/tx_storage/ob_ls_service.h"	src/storage/tx_storage/ob_ls_service.h	EDGE	0	-
+src/storage/tx/ob_id_service.cpp	-	-	src/storage/tx/ob_id_service.h	EDGE	0	own_header
+src/sql/engine/px/ob_px_dtl_proc.cpp	19	"ob_px_dtl_proc.h"	src/sql/engine/px/ob_px_dtl_proc.h	EDGE	0	-
+src/sql/engine/px/ob_px_dtl_proc.cpp	-	-	src/sql/engine/px/ob_px_dtl_proc.h	EDGE	0	own_header
+src/sql/resolver/ddl/ob_create_routine_stmt.h	20	"lib/allocator/ob_allocator.h"	src/oblib/lib/allocator/ob_allocator.h	EDGE	0	-
+src/sql/resolver/ddl/ob_create_routine_stmt.h	21	"share/ob_rpc_struct.h"	src/share/ob_rpc_struct.h	EDGE	0	-
+src/sql/resolver/ddl/ob_create_routine_stmt.h	22	"sql/parser/parse_node.h"	src/sql/parser/parse_node.h	EDGE	0	-
+src/sql/resolver/ddl/ob_create_routine_stmt.h	23	"sql/resolver/ddl/ob_ddl_stmt.h"	src/sql/resolver/ddl/ob_ddl_stmt.h	EDGE	0	-
+src/sql/printer/ob_schema_printer.h	19	<stdint.h>	-	NOT_EDGE	0	system header not in repo
+src/sql/printer/ob_schema_printer.h	20	"share/ob_define.h"	src/share/ob_define.h	EDGE	0	-
+src/sql/printer/ob_schema_printer.h	21	"lib/container/ob_iarray.h"	src/oblib/lib/container/ob_iarray.h	EDGE	0	-
+src/sql/printer/ob_schema_printer.h	22	"share/schema/ob_schema_struct.h"	src/share/schema/ob_schema_struct.h	EDGE	0	-
+src/sql/printer/ob_schema_printer.h	23	"sql/pl/parser/ob_pl_parser.h"	src/sql/pl/parser/ob_pl_parser.h	EDGE	0	-
+src/sql/printer/ob_schema_printer.h	24	"share/schema/ob_table_schema.h"	src/share/schema/ob_table_schema.h	EDGE	0	-
+src/sql/engine/expr/ob_expr_not_equal.cpp	18	"sql/engine/expr/ob_expr_not_equal.h"	src/sql/engine/expr/ob_expr_not_equal.h	EDGE	0	-
+src/sql/engine/expr/ob_expr_not_equal.cpp	-	-	src/sql/engine/expr/ob_expr_not_equal.h	EDGE	0	own_header
+src/storage/compaction/ob_schedule_status_cache.cpp	17	"ob_schedule_status_cache.h"	src/storage/compaction/ob_schedule_status_cache.h	EDGE	0	-
+src/storage/compaction/ob_schedule_status_cache.cpp	18	"data_plane/report/ob_tablet_report.h"	src/data_plane/api/data_plane/report/ob_tablet_report.h	EDGE	0	resolved via module-local api root src/data_plane/api
+src/storage/compaction/ob_schedule_status_cache.cpp	19	"share/rc/ob_server_runtime.h"	src/share/rc/ob_server_runtime.h	EDGE	0	-
+src/storage/compaction/ob_schedule_status_cache.cpp	20	"src/storage/compaction/ob_basic_schedule_tablet_func.h"	src/storage/compaction/ob_basic_schedule_tablet_func.h	EDGE	0	resolved via repo-root include path (.), not src
+src/storage/compaction/ob_schedule_status_cache.cpp	21	"storage/compaction/ob_medium_compaction_func.h"	src/storage/compaction/ob_medium_compaction_func.h	EDGE	0	-
+src/storage/compaction/ob_schedule_status_cache.cpp	-	-	src/storage/compaction/ob_schedule_status_cache.h	EDGE	0	own_header
+src/sql/engine/px/ob_px_coord_msg_proc.h	20	"sql/engine/px/ob_dfo.h"	src/sql/engine/px/ob_dfo.h	EDGE	0	-
+src/sql/engine/px/ob_px_coord_msg_proc.h	21	"sql/engine/px/ob_px_dtl_msg.h"	src/sql/engine/px/ob_px_dtl_msg.h	EDGE	0	-
+src/sql/optimizer/ob_log_json_table.cpp	19	"sql/optimizer/ob_log_json_table.h"	src/sql/optimizer/ob_log_json_table.h	EDGE	0	-
+src/sql/optimizer/ob_log_json_table.cpp	-	-	src/sql/optimizer/ob_log_json_table.h	EDGE	0	own_header
+src/storage/retrieval/ob_text_daat_iter.h	20	"query/ob_sql_define.h"	src/query/api/query/ob_sql_define.h	EDGE	0	resolved via module-local api root src/query/api
+src/storage/retrieval/ob_text_daat_iter.h	21	"ob_inv_idx_param_estimator.h"	src/storage/retrieval/ob_inv_idx_param_estimator.h	EDGE	0	-
+src/storage/retrieval/ob_text_daat_iter.h	22	"ob_sparse_bmw_iter.h"	src/storage/retrieval/ob_sparse_bmw_iter.h	EDGE	0	-
+src/storage/retrieval/ob_text_daat_iter.h	23	"ob_sparse_daat_iter.h"	src/storage/retrieval/ob_sparse_daat_iter.h	EDGE	0	-
+src/storage/retrieval/ob_text_daat_iter.h	24	"ob_text_retrieval_token_iter.h"	src/storage/retrieval/ob_text_retrieval_token_iter.h	EDGE	0	-
+src/sql/engine/expr/ob_expr_vector_similarity.cpp	18	"sql/engine/expr/ob_expr_vector_similarity.h"	src/sql/engine/expr/ob_expr_vector_similarity.h	EDGE	0	-
+src/sql/engine/expr/ob_expr_vector_similarity.cpp	19	"sql/engine/expr/ob_array_expr_utils.h"	src/sql/engine/expr/ob_array_expr_utils.h	EDGE	0	-
+src/sql/engine/expr/ob_expr_vector_similarity.cpp	20	"data_plane/vector/ob_vector_norm.h"	src/data_plane/api/data_plane/vector/ob_vector_norm.h	EDGE	0	resolved via module-local api root src/data_plane/api
+src/sql/engine/expr/ob_expr_vector_similarity.cpp	21	"data_plane/vector/ob_vector_common_util.h"	src/data_plane/api/data_plane/vector/ob_vector_common_util.h	EDGE	0	resolved via module-local api root src/data_plane/api
+src/sql/engine/expr/ob_expr_vector_similarity.cpp	-	-	src/sql/engine/expr/ob_expr_vector_similarity.h	EDGE	0	own_header

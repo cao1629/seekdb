@@ -1,0 +1,20 @@
+src/storage/fts/dict/ob_ik_dic.cpp	adversarial: largest
+src/oblib/common/timezone/ob_timezone_info.cpp	adversarial: largest
+src/rootserver/ob_ddl_service.cpp	adversarial: largest
+src/sql/optimizer/ob_join_order.cpp	adversarial: largest
+src/share/object/ob_obj_cast.cpp	adversarial: largest
+src/oblib/common/timezone/private.h	adversarial: most preprocessor conditionals
+src/oblib/lib/charset/ob_mysql_global.h	adversarial: most preprocessor conditionals
+src/oblib/lib/charset/ob_dtoa.cc	adversarial: most preprocessor conditionals
+src/oblib/lib/utility/utility.cpp	adversarial: most preprocessor conditionals
+src/oblib/lib/utility/ob_platform_utils.h	adversarial: most preprocessor conditionals
+src/sql/code_generator/ob_static_engine_expr_cg.h	random
+src/sql/engine/expr/ob_expr.cpp	random
+src/observer/mysql/obmp_stmt_prepare.h	random
+src/sql/engine/expr/ob_expr_assign.h	random
+src/share/geo/ob_geometry_cast.cpp	random
+src/share/ob_ddl_checksum.cpp	random
+src/data_plane/api/data_plane/vector/ob_i_vector_index_runtime.h	random
+src/share/autoincrement/ob_i_tablet_autoincrement_admin.h	random
+src/observer/virtual_table/ob_all_virtual_log_stat.h	random
+src/oblib/common/xml/ob_xml_parser.cpp	random

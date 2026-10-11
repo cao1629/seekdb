@@ -1,0 +1,2 @@
+reviewer	file	kind	target	reviewer_evidence	map_evidence
+A	src/oblib/common/timezone/private.h	exclusion	-	third_party (judgement call): vendored IANA tzcode header; lines 21-24 say "This file is in the public domain, so clarified as of 1996-06-05 by Arthur David Olson" and lines 26-32 say it is "for use O	map treats it as a node

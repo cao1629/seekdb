@@ -1,0 +1,20 @@
+src/observer/main.cpp	adversarial: platform-specific
+src/share/ob_io_device_helper.cpp	adversarial: platform-specific
+src/oblib/lib/thread/thread.cpp	adversarial: platform-specific
+src/share/ob_telemetry.cpp	adversarial: platform-specific
+src/oblib/lib/oblog/ob_log.h	adversarial: platform-specific
+src/oblib/lib/file/ob_file.cpp	adversarial: platform-specific
+src/oblib/grpc/standbyservice.pb.cc	adversarial: excluded (generated)
+src/share/system_variable/ob_sys_var_class_type.h	adversarial: excluded (generated)
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_ldm.c	adversarial: excluded (third_party)
+src/sql/bazel_pilot/prepare_public_interface_probe.cpp	adversarial: excluded (unbuilt)
+src/storage/tx/ob_id_service.cpp	random
+src/sql/engine/px/ob_px_dtl_proc.cpp	random
+src/sql/resolver/ddl/ob_create_routine_stmt.h	random
+src/sql/printer/ob_schema_printer.h	random
+src/sql/engine/expr/ob_expr_not_equal.cpp	random
+src/storage/compaction/ob_schedule_status_cache.cpp	random
+src/sql/engine/px/ob_px_coord_msg_proc.h	random
+src/sql/optimizer/ob_log_json_table.cpp	random
+src/storage/retrieval/ob_text_daat_iter.h	random
+src/sql/engine/expr/ob_expr_vector_similarity.cpp	random

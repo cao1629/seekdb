@@ -1,0 +1,4 @@
+objects=340 modules={'src/data_plane': 1, 'src/logservice': 5, 'src/oblib': 49, 'src/observer': 24, 'src/pl': 10, 'src/query': 1, 'src/rootserver': 16, 'src/share': 73, 'src/sql': 113, 'src/standby': 2, 'src/storage': 46}
+module edges: ref=49 weak_override=3
+weak symbols overridden across modules=6; OB_WEAK_SYMBOL sites in src=31; sites with no cross-module override in this build=26
+symbols strongly defined in more than one module=0

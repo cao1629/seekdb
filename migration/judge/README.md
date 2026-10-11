@@ -93,4 +93,4 @@ python3 migration/judge/runner/judge.py list
 - [x] 补充覆盖：18 个场景（`suites/mysqltest/scenarios/`）、7 个生命周期场景（`suites/lifecycle/`）、二进制协议探针，以及预处理、压缩、TLS 三种协议变体。
 - [x] 第 3 步验证（原版）：两次完整运行都是 294/294。协议变体在 121 个核心用例上全部通过，预处理协议排除 3 个，原因见 `protocol/ps/exclude.tsv`。
 - [x] 第 3 步验证（注入缺陷）：10 个缺陷中，7 个针对具体行为的（M1–M4、M5b、M6c、M6d）都被抓到；M5 是等价变异；M6、M6b 让实例起不来。逐项说明见 `migration/00b-judge-report.md` 第 5.2 节，原始结果在 `validation/results/`。
-- [ ] 00b 关口：等你签字，以及对报告第 6 节各项事项的裁定。
+- [x] 00b 关口：2026-10-11 签字（“继续工作”）；报告第 6 节各项暂按默认做法执行。
