@@ -374,8 +374,6 @@ src/oblib/common/timezone/ob_timezone_info.cpp	39989	src/oblib	src/oblib/common/
 src/oblib/common/timezone/ob_timezone_info.h	781	src/oblib	src/oblib/common/timezone/ob_timezone_info
 src/oblib/common/timezone/ob_timezone_util.cpp	452	src/oblib	src/oblib/common/timezone/ob_timezone_util
 src/oblib/common/timezone/ob_timezone_util.h	103	src/oblib	src/oblib/common/timezone/ob_timezone_util
-src/oblib/common/timezone/private.h	426	src/oblib	src/oblib/common/timezone/private
-src/oblib/common/timezone/tzfile.h	194	src/oblib	src/oblib/common/timezone/tzfile
 src/oblib/common/udt/ob_array_binary.cpp	803	src/oblib	src/oblib/common/udt/ob_array_binary
 src/oblib/common/udt/ob_array_binary.h	153	src/oblib	src/oblib/common/udt/ob_array_binary
 src/oblib/common/udt/ob_array_fixed_size.h	160	src/oblib	src/oblib/common/udt/ob_array_fixed_size

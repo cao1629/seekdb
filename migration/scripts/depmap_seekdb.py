@@ -14,7 +14,8 @@ What counts
     translates: .h .hpp .ipp .inc .def .map .c .cc .cpp, minus the excluded
     classes. Excluded files are neither edges nor misses; an include of one is
     recorded in external_refs.tsv:
-      third_party  vendored libraries (THIRD_PARTY_* below)
+      third_party  vendored code: THIRD_PARTY_PREFIXES, or an upstream copyright /
+                   public-domain notice in the first 80 lines (THIRD_PARTY_NOTICE)
       generated    checked-in generator output (GENERATED below)
       unbuilt      an implementation file the CMake build's source lists do not name
                    (CMake files, and the Bazel inventory variables CMake reads through
@@ -84,11 +85,11 @@ OBLIB_ROOTS = ["rust/sql-nio/include", "src/oblib/easy", "src/oblib", "src/oblib
 THIRD_PARTY_PREFIXES = {
     "src/oblib/lib/compress/zstd_1_3_8/": "zstd 1.3.8 sources",
 }
-THIRD_PARTY_FILES = {
-    "src/oblib/lib/hash_func/xxhash.h": "xxHash (Yann Collet)",
-    "src/oblib/lib/hash_func/xxhash.c": "xxHash (Yann Collet)",
-    "src/oblib/easy/io/ev.h": "libev header (Marc Alexander Lehmann)",
-}
+# Vendored files keep their upstream notice, sometimes below the OceanBase license
+# header (tzcode, libev, xxHash): a copyright or public-domain line in the first
+# 80 lines that names nobody of OceanBase's own lineage marks the file third-party.
+THIRD_PARTY_NOTICE = re.compile(r"(?i)\bcopyright\b|\bpublic domain\b")
+OWN_NOTICE = re.compile(r"(?i)oceanbase|alibaba|ant group|antfin|apache license|www\.apache\.org")
 # Checked-in generator output (migration/feasibility/results/units/generated_checked_in.txt,
 # plus ob_uctype.h whose header says it was generated from UnicodeData).
 GENERATED = {
@@ -358,7 +359,11 @@ def classify(repo):
         if not rel.startswith("src/") or os.path.splitext(rel)[1] not in NODE_EXTS:
             continue
         third = next((why for pre, why in THIRD_PARTY_PREFIXES.items() if rel.startswith(pre)), None)
-        third = third or THIRD_PARTY_FILES.get(rel)
+        if not third:
+            for ln, line in enumerate(repo.text(rel).split("\n")[:80], 1):
+                if THIRD_PARTY_NOTICE.search(line) and not OWN_NOTICE.search(line):
+                    third = "upstream notice at line %d: %s" % (ln, line.strip().strip("/*").strip()[:100])
+                    break
         if third:
             excluded[rel] = ("third_party", third)
         elif rel in GENERATED:

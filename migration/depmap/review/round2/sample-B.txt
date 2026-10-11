@@ -1,0 +1,20 @@
+src/oblib/lib/file/file_directory_utils.cpp	adversarial: platform-specific
+src/data_plane/api/data_plane/vector/ob_vector_ip_distance.h	adversarial: platform-specific
+src/oblib/lib/cpu/ob_cpu_topology.cpp	adversarial: platform-specific
+src/oblib/lib/oblog/ob_log_compressor.cpp	adversarial: platform-specific
+src/oblib/lib/resource/achunk_mgr.cpp	adversarial: platform-specific
+src/oblib/lib/utility/ob_print_utils.h	adversarial: platform-specific
+src/share/ob_errno.h	adversarial: excluded (generated)
+src/sql/engine/expr/ob_expr_str_cmp_func_compile/ob_expr_str_cmp_func_part_2.cpp	adversarial: excluded (generated)
+src/oblib/common/timezone/localtime.c	adversarial: excluded (third_party)
+src/sql/parser/ob_memory_tracker_wrapper.cpp	adversarial: excluded (unbuilt)
+src/storage/tx_table/ob_tx_data_memtable.cpp	random
+src/storage/ob_i_pre_warmer.h	random
+src/storage/memtable/ob_lock_wait_mgr.cpp	random
+src/storage/tmp_file/ob_tmp_file_thread_job.h	random
+src/storage/ob_file_system_router.cpp	random
+src/sql/engine/px/ob_px_scheduler.h	random
+src/sql/engine/px/ob_slice_calc.h	random
+src/storage/compaction/ob_partition_parallel_merge_ctx.cpp	random
+src/sql/optimizer/ob_log_join.cpp	random
+src/sql/engine/expr/ob_expr_sql_udt_utils.cpp	random

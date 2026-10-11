@@ -1,14 +1,4 @@
 from	include	class	line
-src/oblib/common/timezone/private.h	errno.h	system header spelled with quotes	96
-src/oblib/common/timezone/private.h	libintl.h	system header spelled with quotes	103
-src/oblib/common/timezone/private.h	limits.h	system header spelled with quotes	98
-src/oblib/common/timezone/private.h	stdint.h	system header spelled with quotes	137
-src/oblib/common/timezone/private.h	stdio.h	system header spelled with quotes	95
-src/oblib/common/timezone/private.h	stdlib.h	system header spelled with quotes	100
-src/oblib/common/timezone/private.h	string.h	system header spelled with quotes	97
-src/oblib/common/timezone/private.h	sys/types.h	system header spelled with quotes	94
-src/oblib/common/timezone/private.h	time.h	system header spelled with quotes	99
-src/oblib/common/timezone/private.h	unistd.h	system header spelled with quotes	118
 src/oblib/common/xml/ob_libxml2_sax_handler.cpp	libxml2/libxml/parserInternals.h	third-party header spelled with quotes	20
 src/oblib/common/xml/ob_libxml2_sax_handler.h	libxml2/libxml/parser.h	third-party header spelled with quotes	19
 src/oblib/common/xml/ob_xml_parser.cpp	libxml2/libxml/parserInternals.h	third-party header spelled with quotes	20

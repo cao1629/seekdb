@@ -260,8 +260,6 @@ src/oblib/common/timezone/ob_time_def	ob_time_def.h	90	src/oblib
 src/oblib/common/timezone/ob_time_format	ob_time_format.h	47	src/oblib
 src/oblib/common/timezone/ob_timezone_info	ob_timezone_info.cpp,ob_timezone_info.h	40770	src/oblib
 src/oblib/common/timezone/ob_timezone_util	ob_timezone_util.cpp,ob_timezone_util.h	555	src/oblib
-src/oblib/common/timezone/private	private.h	426	src/oblib
-src/oblib/common/timezone/tzfile	tzfile.h	194	src/oblib
 src/oblib/common/udt/ob_array_binary	ob_array_binary.cpp,ob_array_binary.h	956	src/oblib
 src/oblib/common/udt/ob_array_fixed_size	ob_array_fixed_size.h,ob_array_fixed_size.ipp	985	src/oblib
 src/oblib/common/udt/ob_array_nested	ob_array_nested.cpp,ob_array_nested.h	1038	src/oblib

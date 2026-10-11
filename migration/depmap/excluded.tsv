@@ -1,6 +1,8 @@
 path	class	reason
-src/oblib/common/timezone/localtime.c	unbuilt	not in the CMake build's source lists and not included by any node
-src/oblib/easy/io/ev.h	third_party	libev header (Marc Alexander Lehmann)
+src/oblib/common/timezone/localtime.c	third_party	upstream notice at line 18: This file is in the public domain, so clarified as of
+src/oblib/common/timezone/private.h	third_party	upstream notice at line 22: This file is in the public domain, so clarified as of
+src/oblib/common/timezone/tzfile.h	third_party	upstream notice at line 22: This file is in the public domain, so clarified as of
+src/oblib/easy/io/ev.h	third_party	upstream notice at line 4: Copyright (c) 2007,2008,2009,2010 Marc Alexander Lehmann <libev@schmorp.de>
 src/oblib/grpc/standbyservice.grpc.pb.cc	generated	grpc_cpp_plugin <- src/oblib/grpc/standbyservice.proto
 src/oblib/grpc/standbyservice.grpc.pb.h	generated	grpc_cpp_plugin <- src/oblib/grpc/standbyservice.proto
 src/oblib/grpc/standbyservice.pb.cc	generated	protoc <- src/oblib/grpc/standbyservice.proto
@@ -65,8 +67,8 @@ src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_opt.h	third_party	zstd 1.3.8 sou
 src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstdmt_compress.c	third_party	zstd 1.3.8 sources
 src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstdmt_compress.h	third_party	zstd 1.3.8 sources
 src/oblib/lib/file/config.cpp	unbuilt	not in the CMake build's source lists and not included by any node
-src/oblib/lib/hash_func/xxhash.c	third_party	xxHash (Yann Collet)
-src/oblib/lib/hash_func/xxhash.h	third_party	xxHash (Yann Collet)
+src/oblib/lib/hash_func/xxhash.c	third_party	upstream notice at line 19: Copyright (C) 2012-2016, Yann Collet
+src/oblib/lib/hash_func/xxhash.h	third_party	upstream notice at line 20: Copyright (C) 2012-2016, Yann Collet.
 src/oblib/lib/ob_errno.h	generated	src/share/gen_errno.pl <- src/share/ob_errno.def
 src/oblib/rpc/frame/ob_rpc_checksum.cpp	unbuilt	not in the CMake build's source lists and not included by any node
 src/oblib/rpc/ob_lib_sql_shims.cpp	unbuilt	not in the CMake build's source lists and not included by any node

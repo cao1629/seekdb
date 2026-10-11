@@ -692,8 +692,6 @@ src/oblib/common/timezone/ob_time_format.h
 src/oblib/common/timezone/ob_timezone_info.cpp
 src/oblib/common/timezone/ob_timezone_util.h
 src/oblib/common/timezone/ob_timezone_util.cpp
-src/oblib/common/timezone/private.h
-src/oblib/common/timezone/tzfile.h
 src/oblib/common/udt/ob_array_binary.h
 src/oblib/common/udt/ob_array_binary.cpp
 src/oblib/common/udt/ob_array_fixed_size.h	src/oblib/common/udt/ob_array_fixed_size.ipp

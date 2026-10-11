@@ -1,0 +1,20 @@
+src/sql/rewrite/ob_transform_utils.cpp	adversarial: largest
+src/sql/engine/expr/ob_datum_cast.cpp	adversarial: largest
+src/sql/resolver/dml/ob_dml_resolver.cpp	adversarial: largest
+src/sql/optimizer/ob_log_plan.cpp	adversarial: largest
+src/pl/ob_pl_resolver.cpp	adversarial: largest
+src/oblib/lib/ob_define.h	adversarial: most preprocessor conditionals
+src/storage/tx/ob_tx_ctx.cpp	adversarial: most preprocessor conditionals
+src/oblib/lib/function/ob_function.h	adversarial: most preprocessor conditionals
+src/share/ob_local_device.cpp	adversarial: most preprocessor conditionals
+src/oblib/lib/allocator/ob_jemalloc.h	adversarial: most preprocessor conditionals
+src/sql/engine/expr/ob_expr_fun_values.h	random
+src/sql/dtl/ob_dtl_basic_channel.cpp	random
+src/oblib/common/ob_field.h	random
+src/share/schema/ob_list_row_values.h	random
+src/sql/engine/expr/ob_expr_database.cpp	random
+src/oblib/lib/lock/ob_mutex.h	random
+src/oblib/common/json_type/ob_json_diff.cpp	random
+src/oblib/rpc/obmysql/ob_i_cs_mem_pool.h	random
+src/share/schema/ob_schema_store.h	random
+src/sql/engine/expr/ob_expr_array_difference.cpp	random
