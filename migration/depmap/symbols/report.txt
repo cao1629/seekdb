@@ -1,4 +1,4 @@
-objects=337 modules={'src/data_plane': 1, 'src/logservice': 5, 'src/oblib': 49, 'src/observer': 24, 'src/pl': 9, 'src/query': 1, 'src/rootserver': 16, 'src/share': 73, 'src/sql': 111, 'src/standby': 2, 'src/storage': 46} skipped={'compiled from vendored sources': 26, 'partial link outside CMakeFiles': 2}
+objects=330 modules={'src/data_plane': 1, 'src/logservice': 5, 'src/oblib': 49, 'src/observer': 23, 'src/pl': 7, 'src/query': 1, 'src/rootserver': 16, 'src/share': 72, 'src/sql': 108, 'src/standby': 2, 'src/storage': 46} skipped={'compiled from build-time generated sources': 10, 'compiled from vendored sources': 23, 'partial link outside CMakeFiles': 2}
 module edges: ref=49 weak_override=3
 weak symbols overridden across modules=6; OB_WEAK_SYMBOL sites in src=31; sites with no cross-module override in this build=26
 symbols strongly defined in more than one module=0

@@ -1,0 +1,93 @@
+file	line	directive	resolved_to	verdict	conditional	note
+src/oblib/lib/utility/utility.h	21	<arpa/inet.h>	-	NOT_EDGE	1	system header not in repo
+src/oblib/lib/utility/utility.h	22	<unistd.h>	-	NOT_EDGE	1	system header not in repo
+src/oblib/lib/utility/utility.h	25	<winsock2.h>	-	NOT_EDGE	1	system header not in repo
+src/oblib/lib/utility/utility.h	26	<ws2tcpip.h>	-	NOT_EDGE	1	system header not in repo
+src/oblib/lib/utility/utility.h	27	<windows.h>	-	NOT_EDGE	1	system header not in repo
+src/oblib/lib/utility/utility.h	39	"easy_define.h"	src/oblib/easy/include/easy_define.h	EDGE	0	libeasy header under src/oblib/easy/include; file has no upstream copyright notice, treated as hand-written
+src/oblib/lib/utility/utility.h	40	"lib/allocator/ob_allocator.h"	src/oblib/lib/allocator/ob_allocator.h	EDGE	0	
+src/oblib/lib/utility/utility.h	41	"lib/lock/ob_spin_lock.h"	src/oblib/lib/lock/ob_spin_lock.h	EDGE	0	
+src/oblib/lib/utility/utility.h	42	"lib/utility/ob_print_utils.h"	src/oblib/lib/utility/ob_print_utils.h	EDGE	0	
+src/oblib/lib/utility/utility.h	43	"lib/utility/ob_utility.h"	src/oblib/lib/utility/ob_utility.h	EDGE	0	
+src/oblib/lib/utility/utility.h	44	"lib/utility/ob_backtrace.h"	src/oblib/lib/utility/ob_backtrace.h	EDGE	0	
+src/oblib/lib/utility/utility.h	45	"lib/oblog/ob_trace_log.h"	src/oblib/lib/oblog/ob_trace_log.h	EDGE	0	
+src/oblib/lib/utility/utility.h	46	"lib/container/ob_iarray.h"	src/oblib/lib/container/ob_iarray.h	EDGE	0	
+src/oblib/lib/utility/utility.h	47	"lib/allocator/ob_malloc.h"	src/oblib/lib/allocator/ob_malloc.h	EDGE	0	
+src/oblib/lib/utility/utility.h	48	"lib/time/ob_clock_generator.h"	src/oblib/lib/time/ob_clock_generator.h	EDGE	0	
+src/data_plane/api/data_plane/vector/ob_vector_cosine_distance.h	20	"lib/utility/ob_print_utils.h"	src/oblib/lib/utility/ob_print_utils.h	EDGE	0	
+src/data_plane/api/data_plane/vector/ob_vector_cosine_distance.h	21	"lib/oblog/ob_log.h"	src/oblib/lib/oblog/ob_log.h	EDGE	0	
+src/data_plane/api/data_plane/vector/ob_vector_cosine_distance.h	22	"lib/ob_define.h"	src/oblib/lib/ob_define.h	EDGE	0	
+src/data_plane/api/data_plane/vector/ob_vector_cosine_distance.h	23	"common/object/ob_obj_compare.h"	src/oblib/common/object/ob_obj_compare.h	EDGE	0	
+src/data_plane/api/data_plane/vector/ob_vector_cosine_distance.h	24	"ob_vector_op_common.h"	src/data_plane/api/data_plane/vector/ob_vector_op_common.h	EDGE	0	
+src/oblib/lib/thread/ob_thread_hook.cpp	21	"lib/thread/ob_thread_name.h"	src/oblib/lib/thread/ob_thread_name.h	EDGE	0	not conditional: the #ifndef at line 17 + #define at line 18 is this .cpp's own include guard (closed at line 265)
+src/oblib/lib/thread/ob_thread_hook.cpp	23	<sys/timeb.h>	-	NOT_EDGE	1	system header not in repo
+src/oblib/lib/thread/ob_thread_hook.cpp	25	<dlfcn.h>	-	NOT_EDGE	1	system header not in repo
+src/oblib/lib/thread/ob_thread_hook.cpp	26	<poll.h>	-	NOT_EDGE	1	system header not in repo
+src/oblib/lib/thread/ob_thread_hook.cpp	29	<sys/epoll.h>	-	NOT_EDGE	1	system header not in repo
+src/oblib/lib/thread/ob_thread_hook.cpp	30	<time.h>	-	NOT_EDGE	1	system header not in repo
+src/oblib/lib/thread/ob_thread_hook.cpp	31	<pthread.h>	-	NOT_EDGE	1	system header not in repo
+src/oblib/lib/thread/ob_thread_hook.cpp	74	<sys/event.h>	-	NOT_EDGE	1	system header not in repo
+src/oblib/lib/thread/ob_thread_hook.cpp	75	<sys/time.h>	-	NOT_EDGE	1	system header not in repo
+src/oblib/lib/thread/ob_thread_hook.cpp	76	<fcntl.h>	-	NOT_EDGE	1	system header not in repo
+src/oblib/lib/thread/ob_thread_hook.cpp	77	<unistd.h>	-	NOT_EDGE	1	system header not in repo
+src/oblib/lib/time/ob_time_utility.cpp	17	"lib/time/ob_time_utility.h"	src/oblib/lib/time/ob_time_utility.h	EDGE	0	
+src/oblib/lib/time/ob_time_utility.cpp	18	"lib/utility/ob_print_utils.h"	src/oblib/lib/utility/ob_print_utils.h	EDGE	0	
+src/oblib/lib/time/ob_time_utility.cpp	20	<mach/mach_time.h>	-	NOT_EDGE	1	system header not in repo
+src/oblib/lib/time/ob_time_utility.cpp	22	<windows.h>	-	NOT_EDGE	1	system header not in repo
+src/oblib/lib/time/ob_time_utility.cpp	23	"lib/hash/ob_hashutils.h"	src/oblib/lib/hash/ob_hashutils.h	EDGE	1	only inside #elif defined(_WIN32) branch (line 21)
+src/oblib/lib/time/ob_time_utility.cpp	-	-	src/oblib/lib/time/ob_time_utility.h	EDGE	0	own_header
+src/oblib/lib/time/ob_tsc_timestamp.h	21	<intrin.h>	-	NOT_EDGE	1	system header not in repo
+src/oblib/lib/time/ob_tsc_timestamp.h	23	<cpuid.h>	-	NOT_EDGE	1	system header not in repo
+src/oblib/lib/time/ob_tsc_timestamp.h	26	"lib/ob_define.h"	src/oblib/lib/ob_define.h	EDGE	0	
+src/oblib/lib/allocator/ob_malloc.h	19	<atomic>	-	NOT_EDGE	0	system header not in repo
+src/oblib/lib/allocator/ob_malloc.h	20	<cstddef>	-	NOT_EDGE	0	system header not in repo
+src/oblib/lib/allocator/ob_malloc.h	21	<cstdlib>	-	NOT_EDGE	0	system header not in repo
+src/oblib/lib/allocator/ob_malloc.h	22	<stdint.h>	-	NOT_EDGE	0	system header not in repo
+src/oblib/lib/allocator/ob_malloc.h	23	"lib/allocator/ob_allocator.h"	src/oblib/lib/allocator/ob_allocator.h	EDGE	0	
+src/oblib/lib/allocator/ob_malloc.h	24	"lib/utility/ob_mod_define.h"	src/oblib/lib/utility/ob_mod_define.h	EDGE	0	
+src/oblib/lib/allocator/ob_malloc.h	25	"lib/allocator/ob_jemalloc.h"	src/oblib/lib/allocator/ob_jemalloc.h	EDGE	0	
+src/oblib/lib/allocator/ob_malloc.h	26	"lib/allocator/ob_tc_malloc.h"	src/oblib/lib/allocator/ob_tc_malloc.h	EDGE	0	
+src/oblib/lib/allocator/ob_malloc.h	27	"lib/time/ob_time_utility.h"	src/oblib/lib/time/ob_time_utility.h	EDGE	0	
+src/oblib/lib/allocator/ob_malloc.h	28	"lib/alloc/ob_malloc_allocator.h"	src/oblib/lib/alloc/ob_malloc_allocator.h	EDGE	0	
+src/share/datum/ob_str_datum_funcs_compilation/ob_str_datum_funcs_all.cpp	-	-	-	FILE_EXCLUDED	0	generated (checked-in generator output, but also built): src/share/datum/ob_str_datum_funcs_compilation/gen_str_datum_func_parts.py writes it at line 151 (generate_ctrl_part, called from __main__ line 165; rm_compile_part line 89 deletes it first); running that script in an empty scratch dir reproduced this file byte-for-byte; the file itself has no DO NOT EDIT marker (only the Apache header, lines 1-15); NOT unbuilt: named in SHARE_DATUM_STANDALONE_SOURCES at src/share/share_source_inventory.bzl:580 (kind=source), consumed by SEEKDB_SHARE_DATUM_STANDALONE
+src/share/datum/ob_str_datum_funcs_compilation/ob_str_datum_funcs_all.cpp	16	"lib/charset/ob_charset.h"	src/oblib/lib/charset/ob_charset.h	EDGE	0	
+src/sql/engine/expr/ob_expr_str_cmp_func_compile/ob_expr_str_cmp_func_part_1.cpp	-	-	-	FILE_EXCLUDED	0	generated (checked-in generator output, but also built): src/sql/engine/expr/ob_expr_str_cmp_func_compile/gen_expr_str_cmp_func.py generates it (name template line 255 'ob_expr_str_cmp_func_part_%d.cpp', content render_compile_part lines 205-222 via generate_sources line 256, written by write_atomic at lines 319-320; check_sources lines 287-300 reports it as stale if it differs); running the script with --output-dir /tmp reproduced this file byte-for-byte (part 1 = DEFINED_COLLS[21:42]); the file itself has no DO NOT EDIT marker (only the Apache header, lines 1-15); NOT unbuilt: named in SQL_EXTRA_SOURCES at src/sql/sql_source_inventory.bzl:1686 (kind=source), consumed by SEEKDB_SQL_EXTRA
+src/sql/engine/expr/ob_expr_str_cmp_func_compile/ob_expr_str_cmp_func_part_1.cpp	17	"ob_expr_str_cmp_func_common.ipp"	src/sql/engine/expr/ob_expr_str_cmp_func_compile/ob_expr_str_cmp_func_common.ipp	EDGE	0	
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_ldm.h	-	-	-	FILE_EXCLUDED	0	third_party: vendored Zstandard 1.3.8; line 2 'Copyright (c) 2016-present, Yann Collet, Facebook, Inc.' and lines 5-7 BSD/GPLv2 licence text; directory has its own tracked licence file src/oblib/lib/compress/zstd_1_3_8/zstd_src/LICENSE (Facebook BSD); sibling zstd_ldm.c is built as vendored code via OBLIB_STANDALONE_SOURCES['src/oblib/lib/compress/zstd_1_3_8:zstd_1_3_8_objs']
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_ldm.h	17	"zstd_compress_internal.h"	src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_compress_internal.h	NOT_EDGE	0	resolves to excluded file: third_party (same-dir vendored zstd file, line 2 'Copyright (c) 2016-present, Yann Collet, Facebook, Inc.')
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_ldm.h	18	"zstd.h"	src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd.h	NOT_EDGE	0	resolves to excluded file: third_party (same-dir vendored zstd file, line 2 'Copyright (c) 2016-present, Yann Collet, Facebook, Inc.')
+src/share/storage/ob_tablet_compaction_checksum_table_storage.cpp	-	-	-	FILE_EXCLUDED	0	unbuilt: not named by any CMakeLists.txt or *.cmake, and not in any variable of the emit_bazel_source_inventory.py table (src/share/share_source_inventory.bzl has no entry for it; no CMake GLOB collects src/share); 'git grep ob_tablet_compaction_checksum_table_storage' over the tracked tree (excluding migration/) finds only src/share/share_header_inventory.bzl:389 (the .h as a header) and this file's own include at line 19; class ObTabletCompactionChecksumTableStorage is referenced nowhere else; every sibling *_table_storage.cpp (admin_job, column_checksum_error_info, deadlock_event_history, merge_info, tablet_local_checksum) IS in share_source_inventory.bzl, this one is the odd one out
+src/share/storage/ob_tablet_compaction_checksum_table_storage.cpp	19	"share/storage/ob_tablet_compaction_checksum_table_storage.h"	src/share/storage/ob_tablet_compaction_checksum_table_storage.h	EDGE	0	
+src/share/storage/ob_tablet_compaction_checksum_table_storage.cpp	20	"share/storage/ob_sqlite_connection.h"	src/share/storage/ob_sqlite_connection.h	EDGE	0	
+src/share/storage/ob_tablet_compaction_checksum_table_storage.cpp	21	"lib/oblog/ob_log.h"	src/oblib/lib/oblog/ob_log.h	EDGE	0	
+src/share/storage/ob_tablet_compaction_checksum_table_storage.cpp	22	"lib/utility/ob_print_utils.h"	src/oblib/lib/utility/ob_print_utils.h	EDGE	0	
+src/share/storage/ob_tablet_compaction_checksum_table_storage.cpp	23	"share/ob_tablet_compaction_checksum_operator.h"	src/share/ob_tablet_compaction_checksum_operator.h	EDGE	0	
+src/share/storage/ob_tablet_compaction_checksum_table_storage.cpp	25	"share/storage/ob_sqlite_table_schema.h"	src/share/storage/ob_sqlite_table_schema.h	EDGE	0	
+src/share/storage/ob_tablet_compaction_checksum_table_storage.cpp	-	-	src/share/storage/ob_tablet_compaction_checksum_table_storage.h	EDGE	0	own_header
+src/storage/compaction/ob_basic_schedule_tablet_func.h	18	"storage/compaction/ob_compaction_schedule_util.h"	src/storage/compaction/ob_compaction_schedule_util.h	EDGE	0	
+src/storage/compaction/ob_basic_schedule_tablet_func.h	19	"storage/compaction/ob_batch_freeze_tablets_dag.h"	src/storage/compaction/ob_batch_freeze_tablets_dag.h	EDGE	0	
+src/storage/compaction/ob_basic_schedule_tablet_func.h	20	"storage/compaction/ob_schedule_status_cache.h"	src/storage/compaction/ob_schedule_status_cache.h	EDGE	0	
+src/sql/resolver/expr/ob_raw_expr_part_func_checker.h	19	"sql/resolver/expr/ob_raw_expr.h"	src/sql/resolver/expr/ob_raw_expr.h	EDGE	0	
+src/sql/resolver/ddl/ob_recyclebin_restore_resolver.cpp	18	"sql/resolver/ddl/ob_recyclebin_restore_resolver.h"	src/sql/resolver/ddl/ob_recyclebin_restore_resolver.h	EDGE	0	
+src/sql/resolver/ddl/ob_recyclebin_restore_resolver.cpp	-	-	src/sql/resolver/ddl/ob_recyclebin_restore_resolver.h	EDGE	0	own_header
+src/storage/vector_type/ob_sparse_vector_ip_distance.h	19	"data_plane/vector/ob_sparse_vector_ip_distance.h"	src/data_plane/api/data_plane/vector/ob_sparse_vector_ip_distance.h	EDGE	0	forwarding compat header; resolved through include root src/data_plane/api (no earlier root has it)
+src/storage/ob_storage_rpc_arg.h	20	"share/ob_rpc_struct.h"	src/share/ob_rpc_struct.h	EDGE	0	
+src/storage/ob_storage_rpc_arg.h	21	"storage/tablet/ob_tablet_binding_mds_user_data.h"	src/storage/tablet/ob_tablet_binding_mds_user_data.h	EDGE	0	
+src/storage/ob_storage_rpc_arg.h	22	"storage/tablet/ob_tablet_create_delete_mds_user_data.h"	src/storage/tablet/ob_tablet_create_delete_mds_user_data.h	EDGE	0	
+src/sql/engine/expr/ob_expr_time_diff.cpp	19	"sql/engine/expr/ob_expr_time_diff.h"	src/sql/engine/expr/ob_expr_time_diff.h	EDGE	0	
+src/sql/engine/expr/ob_expr_time_diff.cpp	20	"sql/engine/ob_exec_context.h"	src/sql/engine/ob_exec_context.h	EDGE	0	
+src/sql/engine/expr/ob_expr_time_diff.cpp	21	"sql/engine/expr/ob_datum_cast.h"	src/sql/engine/expr/ob_datum_cast.h	EDGE	0	
+src/sql/engine/expr/ob_expr_time_diff.cpp	-	-	src/sql/engine/expr/ob_expr_time_diff.h	EDGE	0	own_header
+src/storage/tablet/ob_tablet_delete_mds_helper.h	20	<stdint.h>	-	NOT_EDGE	0	system header not in repo
+src/storage/tablet/ob_tablet_delete_mds_helper.h	21	"storage/tx/ob_trans_define.h"	src/storage/tx/ob_trans_define.h	EDGE	0	
+src/sql/engine/px/exchange/ob_transmit_op.cpp	19	"ob_transmit_op.h"	src/sql/engine/px/exchange/ob_transmit_op.h	EDGE	0	
+src/sql/engine/px/exchange/ob_transmit_op.cpp	-	-	src/sql/engine/px/exchange/ob_transmit_op.h	EDGE	0	own_header
+src/sql/engine/expr/ob_pl_expr_subquery.cpp	19	"ob_pl_expr_subquery.h"	src/sql/engine/expr/ob_pl_expr_subquery.h	EDGE	0	
+src/sql/engine/expr/ob_pl_expr_subquery.cpp	20	"sql/ob_query_retry_ctrl.h"	src/sql/ob_query_retry_ctrl.h	EDGE	0	
+src/sql/engine/expr/ob_pl_expr_subquery.cpp	21	"sql/pl/ob_pl_resolver.h"	src/sql/pl/ob_pl_resolver.h	EDGE	0	
+src/sql/engine/expr/ob_pl_expr_subquery.cpp	22	"sql/resolver/expr/ob_raw_expr_util.h"	src/sql/resolver/expr/ob_raw_expr_util.h	EDGE	0	
+src/sql/engine/expr/ob_pl_expr_subquery.cpp	23	"sql/engine/expr/ob_expr_lob_utils.h"	src/sql/engine/expr/ob_expr_lob_utils.h	EDGE	0	
+src/sql/engine/expr/ob_pl_expr_subquery.cpp	-	-	src/sql/engine/expr/ob_pl_expr_subquery.h	EDGE	0	own_header
+src/storage/blocksstable/ob_fuse_row_cache.h	20	"share/cache/ob_kv_storecache.h"	src/share/cache/ob_kv_storecache.h	EDGE	0	
+src/storage/blocksstable/ob_fuse_row_cache.h	21	"storage/ob_i_store.h"	src/storage/ob_i_store.h	EDGE	0	
+src/storage/blocksstable/ob_fuse_row_cache.h	22	"ob_datum_rowkey.h"	src/storage/blocksstable/ob_datum_rowkey.h	EDGE	0	

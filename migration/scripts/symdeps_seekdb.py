@@ -17,9 +17,11 @@ and turned into module-level edges:
 Symbols that are only ever defined weakly (inline functions, template
 instantiations) are not edges: their code comes from headers, which the
 include graph already covers. A module is src/<first directory> of the
-object's path below BUILD/src. Skipped: objects compiled only from vendored
-sources (an upstream notice, the rule depmap_seekdb.py uses) and partial links
-outside CMakeFiles/ that repeat their member objects.
+object's path below BUILD/src. Skipped, and listed in skipped.tsv: objects
+compiled only from untracked build-time output (the bison/flex parsers, which
+are generated code), objects compiled only from vendored sources (an upstream
+notice, the rule depmap_seekdb.py uses), and partial links outside CMakeFiles/
+that repeat their member objects.
 
 The edges describe one build configuration (this one: macOS, release);
 platform-specific code of other targets is not in it.
@@ -28,6 +30,7 @@ Outputs, in OUT (default migration/depmap/symbols)
   module_edges.tsv    from, to, kind, count, example (demangled)
   weak_overrides.tsv  symbol, weak_in, strong_in, weak_default_source (OB_WEAK_SYMBOL file:line)
   duplicates.tsv      symbols defined strongly in more than one module
+  skipped.tsv         objects left out, with the reason and their sources
   report.txt
 
 Usage
@@ -68,12 +71,12 @@ def vendored(repo, source):
     return any(THIRD_PARTY_NOTICE.search(l) and not OWN_NOTICE.search(l) for l in head)
 
 
-def objects(build, repo):
-    """(root, objects kept, skipped counts). Objects outside CMakeFiles/ are partial links
-    that repeat their member objects; objects compiled only from vendored sources are
-    third-party."""
+def objects(build, repo, tracked):
+    """(root, objects kept, skipped rows). Skipped: partial links outside CMakeFiles/ (they
+    repeat their member objects), objects compiled only from untracked build-time output
+    (bison/flex parsers: generated code), and objects compiled only from vendored sources."""
     root = os.path.join(build, "src")
-    found, skipped = [], collections.Counter()
+    found, skipped = [], []
     for dirpath, dirnames, filenames in os.walk(root):
         dirnames.sort()
         for fn in sorted(filenames):
@@ -81,13 +84,15 @@ def objects(build, repo):
                 continue
             rel = os.path.relpath(os.path.join(dirpath, fn), root).replace(os.sep, "/")
             if "/CMakeFiles/" not in rel:
-                skipped["partial link outside CMakeFiles"] += 1
+                skipped.append((rel, "partial link outside CMakeFiles", "-"))
                 continue
             sources = object_sources(root, rel, repo)
-            if sources and all(vendored(repo, s) for s in sources):
-                skipped["compiled from vendored sources"] += 1
-                continue
-            found.append(rel)
+            if sources and all(s not in tracked for s in sources):
+                skipped.append((rel, "compiled from build-time generated sources", ",".join(sources)))
+            elif sources and all(vendored(repo, s) for s in sources):
+                skipped.append((rel, "compiled from vendored sources", ",".join(sources)))
+            else:
+                found.append(rel)
     return root, found, skipped
 
 
@@ -143,7 +148,10 @@ def main():
     ap.add_argument("--out", default="migration/depmap/symbols")
     ap.add_argument("--jobs", type=int, default=6)
     args = ap.parse_args()
-    root, objs, skipped = objects(args.build, os.path.abspath(args.repo))
+    repo = os.path.abspath(args.repo)
+    tracked = set(subprocess.run(["git", "-C", repo, "ls-files", "-z"], stdout=subprocess.PIPE,
+                                 check=True).stdout.decode("utf-8", "replace").split("\0"))
+    root, objs, skipped = objects(args.build, repo, tracked)
     if not objs:
         sys.exit("no object files under %s/src" % args.build)
     module_of = {o: "src/" + o.split("/")[0] for o in objs}
@@ -203,9 +211,13 @@ def main():
         for s, mods in dups:
             f.write("%s\t%s\n" % (names[s], ",".join(mods)))
     unmatched_sites = [where for fn, where in sites if not any(re.search(r"(^|[\s:*&])" + re.escape(fn) + r"\(", names[r[0]]) for r in weak_rows)]
+    with open(os.path.join(args.out, "skipped.tsv"), "w") as f:
+        f.write("object\treason\tsources\n")
+        for row in skipped:
+            f.write("%s\t%s\t%s\n" % row)
     report = [
         "objects=%d modules=%s skipped=%s" % (len(objs), dict(sorted(collections.Counter(module_of.values()).items())),
-                                             dict(sorted(skipped.items()))),
+                                             dict(sorted(collections.Counter(r[1] for r in skipped).items()))),
         "module edges: ref=%d weak_override=%d" % (sum(1 for e in edges if e[2] == "ref"), sum(1 for e in edges if e[2] == "weak_override")),
         "weak symbols overridden across modules=%d; OB_WEAK_SYMBOL sites in src=%d; sites with no cross-module override in this build=%d" % (
             len(weak_rows), len(sites), len(unmatched_sites)),
