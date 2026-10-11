@@ -1970,7 +1970,6 @@ src/share/datum/ob_datum_funcs_compilation/ob_datum_funcs_compilation_7.cpp	25	s
 src/share/datum/ob_datum_funcs_impl.h	1591	src/share	src/share/datum/ob_datum_funcs_impl
 src/share/datum/ob_datum_util.h	139	src/share	src/share/datum/ob_datum_util
 src/share/datum/ob_defined_collations.h	46	src/share	src/share/datum/ob_defined_collations
-src/share/datum/ob_str_datum_funcs_compilation/ob_str_datum_funcs_compilation.ipp	42	src/share	src/share/datum/ob_str_datum_funcs_compilation/ob_str_datum_funcs_compilation
 src/share/diagnosis/ob_sql_monitor_statname.cpp	41	src/share	src/share/diagnosis/ob_sql_monitor_statname
 src/share/diagnosis/ob_sql_monitor_statname.h	123	src/share	src/share/diagnosis/ob_sql_monitor_statname
 src/share/geo/ob_geo.cpp	24	src/share	src/share/geo/ob_geo
@@ -3665,7 +3664,6 @@ src/sql/engine/expr/ob_expr_statement_digest.h	61	src/sql	src/sql/engine/expr/ob
 src/sql/engine/expr/ob_expr_stmt_id.cpp	67	src/sql	src/sql/engine/expr/ob_expr_stmt_id
 src/sql/engine/expr/ob_expr_stmt_id.h	44	src/sql	src/sql/engine/expr/ob_expr_stmt_id
 src/sql/engine/expr/ob_expr_str_cmp_func_compile/ob_expr_str_cmp_func_common.ipp	27	src/sql	src/sql/engine/expr/ob_expr_str_cmp_func_compile/ob_expr_str_cmp_func_common
-src/sql/engine/expr/ob_expr_str_cmp_func_compile/ob_expr_str_cmp_func_part_7.cpp	47	src/sql	src/sql/engine/expr/ob_expr_str_cmp_func_compile/ob_expr_str_cmp_func_part_7
 src/sql/engine/expr/ob_expr_str_to_date.cpp	360	src/sql	src/sql/engine/expr/ob_expr_str_to_date
 src/sql/engine/expr/ob_expr_str_to_date.h	45	src/sql	src/sql/engine/expr/ob_expr_str_to_date
 src/sql/engine/expr/ob_expr_strcmp.cpp	62	src/sql	src/sql/engine/expr/ob_expr_strcmp

@@ -1,0 +1,20 @@
+src/sql/optimizer/ob_optimizer_util.cpp	adversarial: largest
+src/sql/resolver/ddl/ob_ddl_resolver.cpp	adversarial: largest
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	adversarial: largest
+src/sql/optimizer/ob_select_log_plan.cpp	adversarial: largest
+src/share/schema/ob_schema_struct.cpp	adversarial: largest
+src/share/redolog/ob_log_definition.h	adversarial: most preprocessor conditionals
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	adversarial: most preprocessor conditionals
+src/oblib/lib/container/ob_bitmap.cpp	adversarial: most preprocessor conditionals
+src/oblib/lib/allocator/ob_malloc.cpp	adversarial: most preprocessor conditionals
+src/oblib/lib/hash/ob_hashutils.h	adversarial: most preprocessor conditionals
+src/observer/virtual_table/ob_virtual_data_access_service.cpp	random
+src/sql/engine/aggregate/ob_exec_hash_struct.h	random
+src/share/schema/ob_database_sql_service.cpp	random
+src/observer/vector_index/ob_vector_index_param.cpp	random
+src/rootserver/freeze/ob_daily_major_freeze_launcher.cpp	random
+src/oblib/lib/alloc/memory_dump.cpp	random
+src/oblib/lib/allocator/ob_small_allocator.h	random
+src/oblib/common/log/ob_log_generator.cpp	random
+src/sql/engine/expr/ob_expr_gtid.cpp	random
+src/sql/das/iter/ob_das_local_lookup_iter.h	random

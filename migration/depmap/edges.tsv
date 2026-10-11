@@ -7002,11 +7002,6 @@ src/share/datum/ob_datum_funcs_impl.h	src/share/ob_lob_access_utils.h	inc	0	20
 src/share/datum/ob_datum_funcs_impl.h	src/share/rc/ob_server_runtime.h	inc	0	21
 src/share/datum/ob_datum_util.h	src/oblib/common/object/ob_obj_type.h	inc	0	20
 src/share/datum/ob_defined_collations.h	src/oblib/lib/charset/ob_charset.h	inc	0	19
-src/share/datum/ob_str_datum_funcs_compilation/ob_str_datum_funcs_compilation.ipp	src/oblib/common/object/ob_obj_funcs.h	inc	0	23
-src/share/datum/ob_str_datum_funcs_compilation/ob_str_datum_funcs_compilation.ipp	src/share/datum/ob_datum_cmp_func_def.h	inc	0	22
-src/share/datum/ob_str_datum_funcs_compilation/ob_str_datum_funcs_compilation.ipp	src/share/datum/ob_datum_funcs.h	inc	0	21
-src/share/datum/ob_str_datum_funcs_compilation/ob_str_datum_funcs_compilation.ipp	src/share/datum/ob_datum_funcs_impl.h	inc	0	25
-src/share/datum/ob_str_datum_funcs_compilation/ob_str_datum_funcs_compilation.ipp	src/share/vector/ob_bit_vector.h	inc	0	24
 src/share/diagnosis/ob_sql_monitor_statname.cpp	src/share/diagnosis/ob_sql_monitor_statname.h	inc,own_header	0	17,36
 src/share/geo/ob_geo.cpp	src/share/geo/ob_geo.h	inc,own_header	0	18
 src/share/geo/ob_geo.h	src/oblib/common/object/ob_obj_type.h	inc	0	21
@@ -12782,7 +12777,6 @@ src/sql/engine/expr/ob_expr_stmt_id.cpp	src/sql/engine/expr/ob_expr_stmt_id.h	in
 src/sql/engine/expr/ob_expr_stmt_id.cpp	src/sql/engine/ob_exec_context.h	inc	0	20
 src/sql/engine/expr/ob_expr_stmt_id.h	src/sql/engine/expr/ob_expr_operator.h	inc	0	20
 src/sql/engine/expr/ob_expr_str_cmp_func_compile/ob_expr_str_cmp_func_common.ipp	src/sql/engine/expr/ob_expr_cmp_func.ipp	inc	0	17
-src/sql/engine/expr/ob_expr_str_cmp_func_compile/ob_expr_str_cmp_func_part_7.cpp	src/sql/engine/expr/ob_expr_str_cmp_func_compile/ob_expr_str_cmp_func_common.ipp	inc	0	17
 src/sql/engine/expr/ob_expr_str_to_date.cpp	src/sql/engine/expr/ob_expr_str_to_date.h	inc,own_header	0	18
 src/sql/engine/expr/ob_expr_str_to_date.cpp	src/sql/engine/ob_exec_context.h	inc	0	19
 src/sql/engine/expr/ob_expr_str_to_date.h	src/sql/engine/expr/ob_expr_operator.h	inc	0	20

@@ -1,0 +1,212 @@
+file	line	directive	resolved_to	verdict	conditional	note
+src/sql/rewrite/ob_transform_utils.cpp	19	"ob_transform_utils.h"	src/sql/rewrite/ob_transform_utils.h	EDGE	0	-
+src/sql/rewrite/ob_transform_utils.cpp	20	"sql/resolver/expr/ob_raw_expr_resolver_impl.h"	src/sql/resolver/expr/ob_raw_expr_resolver_impl.h	EDGE	0	-
+src/sql/rewrite/ob_transform_utils.cpp	21	"sql/rewrite/ob_equal_analysis.h"	src/sql/rewrite/ob_equal_analysis.h	EDGE	0	-
+src/sql/rewrite/ob_transform_utils.cpp	22	"sql/optimizer/ob_optimizer_util.h"	src/sql/optimizer/ob_optimizer_util.h	EDGE	0	-
+src/sql/rewrite/ob_transform_utils.cpp	23	"sql/resolver/dml/ob_select_resolver.h"	src/sql/resolver/dml/ob_select_resolver.h	EDGE	0	-
+src/sql/rewrite/ob_transform_utils.cpp	24	"sql/rewrite/ob_transform_pre_process.h"	src/sql/rewrite/ob_transform_pre_process.h	EDGE	0	-
+src/sql/rewrite/ob_transform_utils.cpp	25	"sql/rewrite/ob_expand_aggregate_utils.h"	src/sql/rewrite/ob_expand_aggregate_utils.h	EDGE	0	-
+src/sql/rewrite/ob_transform_utils.cpp	26	"sql/ob_sql_utils.h"	src/sql/ob_sql_utils.h	EDGE	0	-
+src/sql/rewrite/ob_transform_utils.cpp	27	"sql/ob_sql_context.h"	src/sql/ob_sql_context.h	EDGE	0	-
+src/sql/rewrite/ob_transform_utils.cpp	28	"sql/optimizer/stat/ob_opt_stat_manager.h"	src/sql/optimizer/stat/ob_opt_stat_manager.h	EDGE	0	-
+src/sql/rewrite/ob_transform_utils.cpp	29	"lib/oblog/ob_warning_buffer.h"	src/oblib/lib/oblog/ob_warning_buffer.h	EDGE	0	-
+src/sql/rewrite/ob_transform_utils.cpp	-	-	src/sql/rewrite/ob_transform_utils.h	EDGE	0	own_header
+src/sql/engine/expr/ob_datum_cast.cpp	20	"lib/utility/alloc_assist.h"	src/oblib/lib/utility/alloc_assist.h	EDGE	1	inside #ifdef _WIN32 (lines 19-22)
+src/sql/engine/expr/ob_datum_cast.cpp	23	"share/object/ob_decint_scale_util.h"	src/share/object/ob_decint_scale_util.h	EDGE	0	-
+src/sql/engine/expr/ob_datum_cast.cpp	24	"share/object/ob_obj_cast_util.h"	src/share/object/ob_obj_cast_util.h	EDGE	0	-
+src/sql/engine/expr/ob_datum_cast.cpp	25	"share/ob_lob_access_utils.h"	src/share/ob_lob_access_utils.h	EDGE	0	-
+src/sql/engine/expr/ob_datum_cast.cpp	26	"share/ob_json_access_utils.h"	src/share/ob_json_access_utils.h	EDGE	0	-
+src/sql/engine/expr/ob_datum_cast.cpp	27	"sql/engine/expr/ob_datum_cast.h"	src/sql/engine/expr/ob_datum_cast.h	EDGE	0	-
+src/sql/engine/expr/ob_datum_cast.cpp	28	"sql/engine/expr/ob_obj_cast_runtime.h"	src/sql/engine/expr/ob_obj_cast_runtime.h	EDGE	0	-
+src/sql/engine/expr/ob_datum_cast.cpp	29	"query/engine/expr/ob_decimal_int_scale.h"	src/query/api/query/engine/expr/ob_decimal_int_scale.h	EDGE	0	via root src/query/api
+src/sql/engine/expr/ob_datum_cast.cpp	30	"share/object/ob_array_cast.h"	src/share/object/ob_array_cast.h	EDGE	0	-
+src/sql/engine/expr/ob_datum_cast.cpp	31	"sql/engine/expr/ob_expr_json_func_helper.h"	src/sql/engine/expr/ob_expr_json_func_helper.h	EDGE	0	-
+src/sql/engine/expr/ob_datum_cast.cpp	32	"share/geo/ob_geometry_cast.h"	src/share/geo/ob_geometry_cast.h	EDGE	0	-
+src/sql/engine/expr/ob_datum_cast.cpp	33	"sql/engine/expr/ob_geo_expr_utils.h"	src/sql/engine/expr/ob_geo_expr_utils.h	EDGE	0	-
+src/sql/engine/expr/ob_datum_cast.cpp	34	"sql/engine/expr/ob_expr_sql_udt_utils.h"	src/sql/engine/expr/ob_expr_sql_udt_utils.h	EDGE	0	-
+src/sql/engine/expr/ob_datum_cast.cpp	35	"sql/engine/expr/ob_array_expr_utils.h"	src/sql/engine/expr/ob_array_expr_utils.h	EDGE	0	-
+src/sql/engine/expr/ob_datum_cast.cpp	36	"sql/engine/expr/ob_expr_xml_func_helper.h"	src/sql/engine/expr/ob_expr_xml_func_helper.h	EDGE	0	-
+src/sql/engine/expr/ob_datum_cast.cpp	37	"common/enumset/ob_enum_set_meta.h"	src/oblib/common/enumset/ob_enum_set_meta.h	EDGE	0	-
+src/sql/engine/expr/ob_datum_cast.cpp	38	"sql/engine/expr/ob_expr_type_to_str.h"	src/sql/engine/expr/ob_expr_type_to_str.h	EDGE	0	-
+src/sql/engine/expr/ob_datum_cast.cpp	39	"share/geo/ob_srs_provider.h"	src/share/geo/ob_srs_provider.h	EDGE	0	-
+src/sql/engine/expr/ob_datum_cast.cpp	13297	"sql/engine/expr/ob_datum_decint_cast.h"	src/sql/engine/expr/ob_datum_decint_cast.h	EDGE	0	-
+src/sql/engine/expr/ob_datum_cast.cpp	13308	"data_plane/lob/ob_lob_value.h"	src/data_plane/api/data_plane/lob/ob_lob_value.h	EDGE	0	via root src/data_plane/api
+src/sql/engine/expr/ob_datum_cast.cpp	-	-	src/sql/engine/expr/ob_datum_cast.h	EDGE	0	own_header
+src/sql/resolver/dml/ob_dml_resolver.cpp	18	"config_bridge.h"	-	NOT_EDGE	0	build-generated, untracked (only under build_release/rust-target/include and build_mutant/rust-target/include; emitted by rust/config/build.rs:392, BYPRODUCT in cmake/Rust.cmake:176)
+src/sql/resolver/dml/ob_dml_resolver.cpp	19	"ob_dml_resolver.h"	src/sql/resolver/dml/ob_dml_resolver.h	EDGE	0	-
+src/sql/resolver/dml/ob_dml_resolver.cpp	20	"sql/resolver/dml/ob_view_table_resolver.h"	src/sql/resolver/dml/ob_view_table_resolver.h	EDGE	0	-
+src/sql/resolver/dml/ob_dml_resolver.cpp	21	"sql/optimizer/ob_optimizer_util.h"	src/sql/optimizer/ob_optimizer_util.h	EDGE	0	-
+src/sql/resolver/dml/ob_dml_resolver.cpp	22	"sql/resolver/dml/ob_default_value_utils.h"	src/sql/resolver/dml/ob_default_value_utils.h	EDGE	0	-
+src/sql/resolver/dml/ob_dml_resolver.cpp	23	"share/schema/ob_part_mgr_util.h"	src/share/schema/ob_part_mgr_util.h	EDGE	0	-
+src/sql/resolver/dml/ob_dml_resolver.cpp	24	"sql/pl/ob_pl_package.h"	src/sql/pl/ob_pl_package.h	EDGE	0	-
+src/sql/resolver/dml/ob_dml_resolver.cpp	25	"sql/optimizer/ob_opt_est_utils.h"	src/sql/optimizer/ob_opt_est_utils.h	EDGE	0	-
+src/sql/resolver/dml/ob_dml_resolver.cpp	26	"sql/rewrite/ob_transform_utils.h"	src/sql/rewrite/ob_transform_utils.h	EDGE	0	-
+src/sql/resolver/dml/ob_dml_resolver.cpp	27	"sql/parser/ob_item_type_str.h"	src/sql/parser/ob_item_type_str.h	EDGE	0	-
+src/sql/resolver/dml/ob_dml_resolver.cpp	28	"sql/printer/ob_select_stmt_printer.h"	src/sql/printer/ob_select_stmt_printer.h	EDGE	0	-
+src/sql/resolver/dml/ob_dml_resolver.cpp	29	"sql/engine/expr/ob_expr_autoinc_nextval.h"	src/sql/engine/expr/ob_expr_autoinc_nextval.h	EDGE	0	-
+src/sql/resolver/dml/ob_dml_resolver.cpp	30	"sql/engine/expr/ob_expr_column_conv.h"	src/sql/engine/expr/ob_expr_column_conv.h	EDGE	0	-
+src/sql/resolver/dml/ob_dml_resolver.cpp	31	"sql/engine/expr/ob_expr_version.h"	src/sql/engine/expr/ob_expr_version.h	EDGE	0	-
+src/sql/resolver/dml/ob_dml_resolver.cpp	32	"sql/resolver/dml/ob_insert_resolver.h"	src/sql/resolver/dml/ob_insert_resolver.h	EDGE	0	-
+src/sql/resolver/dml/ob_dml_resolver.cpp	33	"sql/resolver/dml/ob_inlist_resolver.h"	src/sql/resolver/dml/ob_inlist_resolver.h	EDGE	0	-
+src/sql/resolver/dml/ob_dml_resolver.cpp	34	"sql/session/ob_local_session_var.h"	src/sql/session/ob_local_session_var.h	EDGE	0	-
+src/sql/resolver/dml/ob_dml_resolver.cpp	35	"sql/session/ob_basic_session_info.h"	src/sql/session/ob_basic_session_info.h	EDGE	0	-
+src/sql/resolver/dml/ob_dml_resolver.cpp	36	"sql/engine/aggregate/ob_aggregate_processor.h"	src/sql/engine/aggregate/ob_aggregate_processor.h	EDGE	0	-
+src/sql/resolver/dml/ob_dml_resolver.cpp	37	"sql/optimizer/ob_opt_selectivity.h"	src/sql/optimizer/ob_opt_selectivity.h	EDGE	0	-
+src/sql/resolver/dml/ob_dml_resolver.cpp	38	"sql/das/ob_domain_id.h"	src/sql/das/ob_domain_id.h	EDGE	0	-
+src/sql/resolver/dml/ob_dml_resolver.cpp	39	"query/vector/ob_vector_index_util.h"	src/query/api/query/vector/ob_vector_index_util.h	EDGE	0	via root src/query/api
+src/sql/resolver/dml/ob_dml_resolver.cpp	40	"sql/engine/expr/ob_expr_regexp.h"	src/sql/engine/expr/ob_expr_regexp.h	EDGE	0	-
+src/sql/resolver/dml/ob_dml_resolver.cpp	41	"sql/resolver/dcl/ob_dcl_resolver.h"	src/sql/resolver/dcl/ob_dcl_resolver.h	EDGE	0	-
+src/sql/resolver/dml/ob_dml_resolver.cpp	42	"sql/resolver/ddl/ob_ddl_resolver.h"	src/sql/resolver/ddl/ob_ddl_resolver.h	EDGE	0	-
+src/sql/resolver/dml/ob_dml_resolver.cpp	43	"sql/hybrid_search/ob_hybrid_search_executor.h"	src/sql/hybrid_search/ob_hybrid_search_executor.h	EDGE	0	-
+src/sql/resolver/dml/ob_dml_resolver.cpp	-	-	src/sql/resolver/dml/ob_dml_resolver.h	EDGE	0	own_header
+src/sql/optimizer/ob_log_plan.cpp	18	"config_bridge.h"	-	NOT_EDGE	0	build-generated, untracked (only under build_release/rust-target/include and build_mutant/rust-target/include; emitted by rust/config/build.rs:392, BYPRODUCT in cmake/Rust.cmake:176)
+src/sql/optimizer/ob_log_plan.cpp	19	"ob_log_plan.h"	src/sql/optimizer/ob_log_plan.h	EDGE	0	-
+src/sql/optimizer/ob_log_plan.cpp	20	"sql/optimizer/ob_pwj_comparer.h"	src/sql/optimizer/ob_pwj_comparer.h	EDGE	0	-
+src/sql/optimizer/ob_log_plan.cpp	21	"sql/optimizer/stat/ob_opt_stat_manager.h"	src/sql/optimizer/stat/ob_opt_stat_manager.h	EDGE	0	-
+src/sql/optimizer/ob_log_plan.cpp	22	"sql/optimizer/ob_log_table_scan.h"	src/sql/optimizer/ob_log_table_scan.h	EDGE	0	-
+src/sql/optimizer/ob_log_plan.cpp	23	"sql/optimizer/ob_log_join_filter.h"	src/sql/optimizer/ob_log_join_filter.h	EDGE	0	-
+src/sql/optimizer/ob_log_plan.cpp	24	"sql/optimizer/ob_log_sort.h"	src/sql/optimizer/ob_log_sort.h	EDGE	0	-
+src/sql/optimizer/ob_log_plan.cpp	25	"sql/optimizer/ob_log_group_by.h"	src/sql/optimizer/ob_log_group_by.h	EDGE	0	-
+src/sql/optimizer/ob_log_plan.cpp	26	"sql/optimizer/ob_log_window_function.h"	src/sql/optimizer/ob_log_window_function.h	EDGE	0	duplicate include (same directive also at line 27)
+src/sql/optimizer/ob_log_plan.cpp	27	"sql/optimizer/ob_log_window_function.h"	src/sql/optimizer/ob_log_window_function.h	EDGE	0	duplicate include (same directive also at line 26)
+src/sql/optimizer/ob_log_plan.cpp	28	"sql/optimizer/ob_log_limit.h"	src/sql/optimizer/ob_log_limit.h	EDGE	0	-
+src/sql/optimizer/ob_log_plan.cpp	29	"sql/optimizer/ob_log_subplan_scan.h"	src/sql/optimizer/ob_log_subplan_scan.h	EDGE	0	-
+src/sql/optimizer/ob_log_plan.cpp	30	"sql/optimizer/ob_log_subplan_filter.h"	src/sql/optimizer/ob_log_subplan_filter.h	EDGE	0	-
+src/sql/optimizer/ob_log_plan.cpp	31	"sql/optimizer/ob_log_material.h"	src/sql/optimizer/ob_log_material.h	EDGE	0	-
+src/sql/optimizer/ob_log_plan.cpp	32	"sql/optimizer/ob_log_select_into.h"	src/sql/optimizer/ob_log_select_into.h	EDGE	0	-
+src/sql/optimizer/ob_log_plan.cpp	33	"sql/optimizer/ob_log_expr_values.h"	src/sql/optimizer/ob_log_expr_values.h	EDGE	0	-
+src/sql/optimizer/ob_log_plan.cpp	34	"sql/optimizer/ob_log_function_table.h"	src/sql/optimizer/ob_log_function_table.h	EDGE	0	-
+src/sql/optimizer/ob_log_plan.cpp	35	"sql/optimizer/ob_log_json_table.h"	src/sql/optimizer/ob_log_json_table.h	EDGE	0	-
+src/sql/optimizer/ob_log_plan.cpp	36	"sql/rewrite/ob_transform_utils.h"	src/sql/rewrite/ob_transform_utils.h	EDGE	0	duplicate include (same directive also at line 44)
+src/sql/optimizer/ob_log_plan.cpp	37	"sql/optimizer/ob_log_exchange.h"	src/sql/optimizer/ob_log_exchange.h	EDGE	0	-
+src/sql/optimizer/ob_log_plan.cpp	38	"sql/optimizer/ob_log_values.h"	src/sql/optimizer/ob_log_values.h	EDGE	0	-
+src/sql/optimizer/ob_log_plan.cpp	39	"sql/optimizer/ob_log_temp_table_insert.h"	src/sql/optimizer/ob_log_temp_table_insert.h	EDGE	0	-
+src/sql/optimizer/ob_log_plan.cpp	40	"sql/optimizer/ob_log_temp_table_access.h"	src/sql/optimizer/ob_log_temp_table_access.h	EDGE	0	-
+src/sql/optimizer/ob_log_plan.cpp	41	"sql/optimizer/ob_log_stat_collector.h"	src/sql/optimizer/ob_log_stat_collector.h	EDGE	0	-
+src/sql/optimizer/ob_log_plan.cpp	42	"sql/optimizer/ob_insert_log_plan.h"	src/sql/optimizer/ob_insert_log_plan.h	EDGE	0	-
+src/sql/optimizer/ob_log_plan.cpp	43	"sql/optimizer/ob_log_for_update.h"	src/sql/optimizer/ob_log_for_update.h	EDGE	0	-
+src/sql/optimizer/ob_log_plan.cpp	44	"sql/rewrite/ob_transform_utils.h"	src/sql/rewrite/ob_transform_utils.h	EDGE	0	duplicate include (same directive also at line 36)
+src/sql/optimizer/ob_log_plan.cpp	45	"sql/optimizer/ob_explain_note.h"	src/sql/optimizer/ob_explain_note.h	EDGE	0	-
+src/sql/optimizer/ob_log_plan.cpp	46	"sql/optimizer/ob_log_values_table_access.h"	src/sql/optimizer/ob_log_values_table_access.h	EDGE	0	-
+src/sql/optimizer/ob_log_plan.cpp	47	"query/vector/ob_vector_index_util.h"	src/query/api/query/vector/ob_vector_index_util.h	EDGE	0	via root src/query/api
+src/sql/optimizer/ob_log_plan.cpp	48	"sql/optimizer/ob_log_expand.h"	src/sql/optimizer/ob_log_expand.h	EDGE	0	-
+src/sql/optimizer/ob_log_plan.cpp	49	"sql/resolver/ddl/ob_fts_index_builder_util.h"	src/sql/resolver/ddl/ob_fts_index_builder_util.h	EDGE	0	-
+src/sql/optimizer/ob_log_plan.cpp	50	"sql/optimizer/ob_log_insert.h"	src/sql/optimizer/ob_log_insert.h	EDGE	0	-
+src/sql/optimizer/ob_log_plan.cpp	51	"sql/ob_sql_trans_control.h"	src/sql/ob_sql_trans_control.h	EDGE	0	-
+src/sql/optimizer/ob_log_plan.cpp	-	-	src/sql/optimizer/ob_log_plan.h	EDGE	0	own_header
+src/pl/ob_pl_resolver.cpp	19	"config_bridge.h"	-	NOT_EDGE	0	build-generated, untracked (only under build_release/rust-target/include and build_mutant/rust-target/include; emitted by rust/config/build.rs:392, BYPRODUCT in cmake/Rust.cmake:176)
+src/pl/ob_pl_resolver.cpp	20	"ob_pl_resolver.h"	src/pl/ob_pl_resolver.h	EDGE	0	-
+src/pl/ob_pl_resolver.cpp	21	"share/rc/ob_server_runtime.h"	src/share/rc/ob_server_runtime.h	EDGE	0	-
+src/pl/ob_pl_resolver.cpp	22	"pl/ob_pl_router.h"	src/pl/ob_pl_router.h	EDGE	0	-
+src/pl/ob_pl_resolver.cpp	23	"pl/ob_pl_exception_handling.h"	src/pl/ob_pl_exception_handling.h	EDGE	0	-
+src/pl/ob_pl_resolver.cpp	24	"sql/parser/parse_malloc.h"	src/sql/parser/parse_malloc.h	EDGE	0	-
+src/pl/ob_pl_resolver.cpp	25	"sql/resolver/ddl/ob_ddl_resolver.h"	src/sql/resolver/ddl/ob_ddl_resolver.h	EDGE	0	-
+src/pl/ob_pl_resolver.cpp	26	"sql/resolver/dml/ob_select_resolver.h"	src/sql/resolver/dml/ob_select_resolver.h	EDGE	0	-
+src/pl/ob_pl_resolver.cpp	27	"sql/resolver/expr/ob_raw_expr_wrap_enum_set.h"	src/sql/resolver/expr/ob_raw_expr_wrap_enum_set.h	EDGE	0	-
+src/pl/ob_pl_resolver.cpp	28	"sql/rewrite/ob_transform_pre_process.h"	src/sql/rewrite/ob_transform_pre_process.h	EDGE	0	-
+src/pl/ob_pl_resolver.cpp	29	"ob_pl_build.h"	src/pl/ob_pl_build.h	EDGE	0	-
+src/pl/ob_pl_resolver.cpp	30	"pl/ob_pl_dependency_util.h"	src/pl/ob_pl_dependency_util.h	EDGE	0	-
+src/pl/ob_pl_resolver.cpp	31	"pl/ob_pl_package.h"	src/pl/ob_pl_package.h	EDGE	0	-
+src/pl/ob_pl_resolver.cpp	32	"pl/parser/parse_stmt_item_type.h"	src/pl/parser/parse_stmt_item_type.h	EDGE	0	-
+src/pl/ob_pl_resolver.cpp	-	-	src/pl/ob_pl_resolver.h	EDGE	0	own_header
+src/oblib/lib/ob_define.h	20	<stdint.h>	-	NOT_EDGE	0	system header not in repo
+src/oblib/lib/ob_define.h	21	<stdio.h>	-	NOT_EDGE	0	system header not in repo
+src/oblib/lib/ob_define.h	23	<sys/syscall.h>	-	NOT_EDGE	1	system header not in repo
+src/oblib/lib/ob_define.h	24	<unistd.h>	-	NOT_EDGE	1	system header not in repo
+src/oblib/lib/ob_define.h	25	<netinet/in.h>	-	NOT_EDGE	1	system header not in repo
+src/oblib/lib/ob_define.h	42	<winsock2.h>	-	NOT_EDGE	1	system header not in repo
+src/oblib/lib/ob_define.h	43	<ws2tcpip.h>	-	NOT_EDGE	1	system header not in repo
+src/oblib/lib/ob_define.h	44	<processthreadsapi.h>	-	NOT_EDGE	1	system header not in repo
+src/oblib/lib/ob_define.h	45	<io.h>	-	NOT_EDGE	1	system header not in repo
+src/oblib/lib/ob_define.h	46	<direct.h>	-	NOT_EDGE	1	system header not in repo
+src/oblib/lib/ob_define.h	116	<pthread.h>	-	NOT_EDGE	1	system header not in repo
+src/oblib/lib/ob_define.h	126	"lib/coro/co_var.h"	src/oblib/lib/coro/co_var.h	EDGE	0	-
+src/oblib/lib/ob_define.h	127	"lib/utility/ob_macro_utils.h"	src/oblib/lib/utility/ob_macro_utils.h	EDGE	0	-
+src/oblib/lib/ob_define.h	128	"lib/utility/alloc_assist.h"	src/oblib/lib/utility/alloc_assist.h	EDGE	0	-
+src/oblib/lib/ob_define.h	129	"lib/ob_errno.h"	src/oblib/lib/ob_errno.h	NOT_EDGE	0	resolves to excluded file: generated (src/oblib/lib/ob_errno.h:17 has a DO NOT EDIT header, automatically generated from ob_errno.def; written by src/share/gen_errno.pl:199)
+src/storage/tx/ob_tx_ctx.cpp	19	"config_bridge.h"	-	NOT_EDGE	0	build-generated, untracked (only under build_release/rust-target/include and build_mutant/rust-target/include; emitted by rust/config/build.rs:392, BYPRODUCT in cmake/Rust.cmake:176)
+src/storage/tx/ob_tx_ctx.cpp	20	"ob_tx_ctx.h"	src/storage/tx/ob_tx_ctx.h	EDGE	0	-
+src/storage/tx/ob_tx_ctx.cpp	21	"share/ob_debug_sync.h"	src/share/ob_debug_sync.h	EDGE	0	-
+src/storage/tx/ob_tx_ctx.cpp	22	"share/rc/ob_server_runtime.h"	src/share/rc/ob_server_runtime.h	EDGE	0	duplicate include (same directive also at line 30)
+src/storage/tx/ob_tx_ctx.cpp	23	"ob_tx_redo_submitter.h"	src/storage/tx/ob_tx_redo_submitter.h	EDGE	0	-
+src/storage/tx/ob_tx_ctx.cpp	24	"storage/tx/ob_trans_service.h"	src/storage/tx/ob_trans_service.h	EDGE	0	-
+src/storage/tx/ob_tx_ctx.cpp	26	"storage/multi_data_source/compile_utility/mds_register.h"	src/storage/multi_data_source/compile_utility/mds_register.h	EDGE	0	-
+src/storage/tx/ob_tx_ctx.cpp	28	"storage/allocator/ob_shared_memory_allocator_mgr.h"	src/storage/allocator/ob_shared_memory_allocator_mgr.h	EDGE	0	-
+src/storage/tx/ob_tx_ctx.cpp	29	"storage/multi_data_source/runtime_utility/mds_service.h"	src/storage/multi_data_source/runtime_utility/mds_service.h	EDGE	0	-
+src/storage/tx/ob_tx_ctx.cpp	30	"share/rc/ob_server_runtime.h"	src/share/rc/ob_server_runtime.h	EDGE	0	duplicate include (same directive also at line 22)
+src/storage/tx/ob_tx_ctx.cpp	31	"lib/utility/ob_smart_call.h"	src/oblib/lib/utility/ob_smart_call.h	EDGE	0	-
+src/storage/tx/ob_tx_ctx.cpp	32	"logservice/ob_log_service.h"	src/logservice/ob_log_service.h	EDGE	0	-
+src/storage/tx/ob_tx_ctx.cpp	33	"storage/tx/ob_tx_log_operator.h"	src/storage/tx/ob_tx_log_operator.h	EDGE	0	-
+src/storage/tx/ob_tx_ctx.cpp	34	"storage/tx/ob_tx_print_time_guard.h"	src/storage/tx/ob_tx_print_time_guard.h	EDGE	0	-
+src/storage/tx/ob_tx_ctx.cpp	-	-	src/storage/tx/ob_tx_ctx.h	EDGE	0	own_header
+src/oblib/lib/function/ob_function.h	84	<type_traits>	-	NOT_EDGE	0	system header not in repo
+src/oblib/lib/function/ob_function.h	85	<utility>	-	NOT_EDGE	0	system header not in repo
+src/oblib/lib/function/ob_function.h	86	<assert.h>	-	NOT_EDGE	0	system header not in repo
+src/oblib/lib/function/ob_function.h	87	"lib/allocator/ob_malloc.h"	src/oblib/lib/allocator/ob_malloc.h	EDGE	0	-
+src/oblib/lib/function/ob_function.h	88	"lib/oblog/ob_log_module.h"	src/oblib/lib/oblog/ob_log_module.h	EDGE	0	-
+src/oblib/lib/function/ob_function.h	89	"lib/utility/ob_print_utils.h"	src/oblib/lib/utility/ob_print_utils.h	EDGE	0	-
+src/oblib/lib/function/ob_function.h	90	"lib/allocator/ob_allocator.h"	src/oblib/lib/allocator/ob_allocator.h	EDGE	0	-
+src/share/ob_local_device.cpp	22	<stddef.h>	-	NOT_EDGE	1	system header not in repo
+src/share/ob_local_device.cpp	23	<stdint.h>	-	NOT_EDGE	1	system header not in repo
+src/share/ob_local_device.cpp	35	"ob_local_device.h"	src/share/ob_local_device.h	EDGE	0	-
+src/share/ob_local_device.cpp	36	"config_bridge.h"	-	NOT_EDGE	0	build-generated, untracked (only under build_release/rust-target/include and build_mutant/rust-target/include; emitted by rust/config/build.rs:392, BYPRODUCT in cmake/Rust.cmake:176)
+src/share/ob_local_device.cpp	37	"lib/profile/ob_trace_id.h"	src/oblib/lib/profile/ob_trace_id.h	EDGE	0	-
+src/share/ob_local_device.cpp	38	"share/config/ob_server_config.h"	src/share/config/ob_server_config.h	EDGE	0	-
+src/share/ob_local_device.cpp	39	"share/ob_io_device_helper.h"	src/share/ob_io_device_helper.h	EDGE	0	-
+src/share/ob_local_device.cpp	41	<sys/statvfs.h>	-	NOT_EDGE	1	system header not in repo
+src/share/ob_local_device.cpp	42	<unistd.h>	-	NOT_EDGE	1	system header not in repo
+src/share/ob_local_device.cpp	45	<sys/mount.h>	-	NOT_EDGE	1	system header not in repo
+src/share/ob_local_device.cpp	46	<fcntl.h>	-	NOT_EDGE	1	system header not in repo
+src/share/ob_local_device.cpp	48	<windows.h>	-	NOT_EDGE	1	system header not in repo
+src/share/ob_local_device.cpp	49	<io.h>	-	NOT_EDGE	1	system header not in repo
+src/share/ob_local_device.cpp	50	<fcntl.h>	-	NOT_EDGE	1	system header not in repo
+src/share/ob_local_device.cpp	51	<stdint.h>	-	NOT_EDGE	1	system header not in repo
+src/share/ob_local_device.cpp	52	<chrono>	-	NOT_EDGE	1	system header not in repo
+src/share/ob_local_device.cpp	54	<sys/vfs.h>	-	NOT_EDGE	1	system header not in repo
+src/share/ob_local_device.cpp	55	<linux/falloc.h>	-	NOT_EDGE	1	system header not in repo
+src/share/ob_local_device.cpp	57	<sys/vfs.h>	-	NOT_EDGE	1	system header not in repo
+src/share/ob_local_device.cpp	58	<linux/falloc.h>	-	NOT_EDGE	1	system header not in repo
+src/share/ob_local_device.cpp	59	<libaio.h>	-	NOT_EDGE	1	system header not in repo (libaio library header, Linux only)
+src/share/ob_local_device.cpp	63	<stdlib.h>	-	NOT_EDGE	1	system header not in repo
+src/share/ob_local_device.cpp	64	<functional>	-	NOT_EDGE	1	system header not in repo
+src/share/ob_local_device.cpp	65	<mutex>	-	NOT_EDGE	1	system header not in repo
+src/share/ob_local_device.cpp	66	<vector>	-	NOT_EDGE	1	system header not in repo
+src/share/ob_local_device.cpp	67	<condition_variable>	-	NOT_EDGE	1	system header not in repo
+src/share/ob_local_device.cpp	76	"share/ob_statvfs_win32.h"	src/share/ob_statvfs_win32.h	EDGE	1	nested: inside #if defined(__APPLE__) || defined(__ANDROID__) || defined(_WIN32) (lines 62-209) and inside #ifdef _WIN32 (lines 69-77)
+src/share/ob_local_device.cpp	-	-	src/share/ob_local_device.h	EDGE	0	own_header
+src/oblib/lib/allocator/ob_jemalloc.h	20	<cstddef>	-	NOT_EDGE	0	system header not in repo
+src/sql/engine/expr/ob_expr_fun_values.h	20	"sql/engine/expr/ob_expr_operator.h"	src/sql/engine/expr/ob_expr_operator.h	EDGE	0	-
+src/sql/dtl/ob_dtl_basic_channel.cpp	18	"ob_dtl_basic_channel.h"	src/sql/dtl/ob_dtl_basic_channel.h	EDGE	0	-
+src/sql/dtl/ob_dtl_basic_channel.cpp	19	"share/rc/ob_server_runtime.h"	src/share/rc/ob_server_runtime.h	EDGE	0	-
+src/sql/dtl/ob_dtl_basic_channel.cpp	20	"sql/dtl/ob_dtl_channel_loop.h"	src/sql/dtl/ob_dtl_channel_loop.h	EDGE	0	-
+src/sql/dtl/ob_dtl_basic_channel.cpp	21	"sql/engine/px/ob_px_util.h"	src/sql/engine/px/ob_px_util.h	EDGE	0	-
+src/sql/dtl/ob_dtl_basic_channel.cpp	-	-	src/sql/dtl/ob_dtl_basic_channel.h	EDGE	0	own_header
+src/oblib/common/ob_field.h	20	"lib/ob_define.h"	src/oblib/lib/ob_define.h	EDGE	0	-
+src/oblib/common/ob_field.h	21	"lib/string/ob_string.h"	src/oblib/lib/string/ob_string.h	EDGE	0	-
+src/oblib/common/ob_field.h	22	"lib/container/ob_iarray.h"	src/oblib/lib/container/ob_iarray.h	EDGE	0	-
+src/oblib/common/ob_field.h	23	"lib/container/ob_fast_array.h"	src/oblib/lib/container/ob_fast_array.h	EDGE	0	-
+src/oblib/common/ob_field.h	24	"lib/container/ob_se_array.h"	src/oblib/lib/container/ob_se_array.h	EDGE	0	-
+src/oblib/common/ob_field.h	25	"lib/container/ob_bit_set.h"	src/oblib/lib/container/ob_bit_set.h	EDGE	0	-
+src/oblib/common/ob_field.h	26	"lib/allocator/ob_allocator.h"	src/oblib/lib/allocator/ob_allocator.h	EDGE	0	-
+src/oblib/common/ob_field.h	27	"common/object/ob_object.h"	src/oblib/common/object/ob_object.h	EDGE	0	-
+src/oblib/common/ob_field.h	28	"common/ob_accuracy.h"	src/oblib/common/ob_accuracy.h	EDGE	0	-
+src/share/schema/ob_list_row_values.h	18	"common/row/ob_row.h"	src/oblib/common/row/ob_row.h	EDGE	0	-
+src/sql/engine/expr/ob_expr_database.cpp	17	"sql/engine/expr/ob_expr_database.h"	src/sql/engine/expr/ob_expr_database.h	EDGE	0	-
+src/sql/engine/expr/ob_expr_database.cpp	18	"sql/engine/ob_exec_context.h"	src/sql/engine/ob_exec_context.h	EDGE	0	-
+src/sql/engine/expr/ob_expr_database.cpp	-	-	src/sql/engine/expr/ob_expr_database.h	EDGE	0	own_header
+src/oblib/lib/lock/ob_mutex.h	20	"lib/ob_define.h"	src/oblib/lib/ob_define.h	EDGE	0	-
+src/oblib/lib/lock/ob_mutex.h	21	"lib/stat/ob_latch_define.h"	src/oblib/lib/stat/ob_latch_define.h	EDGE	0	-
+src/oblib/lib/lock/ob_mutex.h	22	"lib/lock/ob_lock_guard.h"	src/oblib/lib/lock/ob_lock_guard.h	EDGE	0	-
+src/oblib/lib/lock/ob_mutex.h	23	"lib/lock/ob_latch.h"	src/oblib/lib/lock/ob_latch.h	EDGE	0	-
+src/oblib/common/json_type/ob_json_diff.cpp	17	"ob_json_diff.h"	src/oblib/common/json_type/ob_json_diff.h	EDGE	0	-
+src/oblib/common/json_type/ob_json_diff.cpp	18	"ob_json_bin.h"	src/oblib/common/json_type/ob_json_bin.h	EDGE	0	-
+src/oblib/common/json_type/ob_json_diff.cpp	-	-	src/oblib/common/json_type/ob_json_diff.h	EDGE	0	own_header
+src/oblib/rpc/obmysql/ob_i_cs_mem_pool.h	19	<stdint.h>	-	NOT_EDGE	0	system header not in repo
+src/share/schema/ob_schema_store.h	20	"lib/hash/ob_ptr_array_map.h"	src/oblib/lib/hash/ob_ptr_array_map.h	EDGE	0	-
+src/share/schema/ob_schema_store.h	21	"share/schema/ob_schema_mgr_cache.h"	src/share/schema/ob_schema_mgr_cache.h	EDGE	0	-
+src/sql/engine/expr/ob_expr_array_difference.cpp	18	"sql/engine/expr/ob_expr_array_difference.h"	src/sql/engine/expr/ob_expr_array_difference.h	EDGE	0	-
+src/sql/engine/expr/ob_expr_array_difference.cpp	19	"common/udt/ob_array_type.h"	src/oblib/common/udt/ob_array_type.h	EDGE	0	-
+src/sql/engine/expr/ob_expr_array_difference.cpp	20	"sql/engine/expr/ob_array_expr_utils.h"	src/sql/engine/expr/ob_array_expr_utils.h	EDGE	0	-
+src/sql/engine/expr/ob_expr_array_difference.cpp	21	"sql/engine/ob_exec_context.h"	src/sql/engine/ob_exec_context.h	EDGE	0	-
+src/sql/engine/expr/ob_expr_array_difference.cpp	22	"sql/engine/expr/ob_expr_result_type_util.h"	src/sql/engine/expr/ob_expr_result_type_util.h	EDGE	0	-
+src/sql/engine/expr/ob_expr_array_difference.cpp	-	-	src/sql/engine/expr/ob_expr_array_difference.h	EDGE	0	own_header

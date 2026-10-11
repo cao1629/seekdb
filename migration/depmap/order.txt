@@ -3168,7 +3168,6 @@ src/share/datum/ob_datum_funcs_compilation/ob_datum_funcs_compilation_4.cpp
 src/share/datum/ob_datum_funcs_compilation/ob_datum_funcs_compilation_5.cpp
 src/share/datum/ob_datum_funcs_compilation/ob_datum_funcs_compilation_6.cpp
 src/share/datum/ob_datum_funcs_compilation/ob_datum_funcs_compilation_7.cpp
-src/share/datum/ob_str_datum_funcs_compilation/ob_str_datum_funcs_compilation.ipp
 src/share/diagnosis/ob_sql_monitor_statname.cpp
 src/share/geo/ob_geo.cpp
 src/share/geo/ob_geo_coordinate_range_visitor.h
@@ -4781,7 +4780,6 @@ src/sql/engine/expr/ob_expr_st_x.cpp
 src/sql/engine/expr/ob_expr_statement_digest.cpp
 src/sql/engine/expr/ob_expr_stmt_id.cpp
 src/sql/engine/expr/ob_expr_str_cmp_func_compile/ob_expr_str_cmp_func_common.ipp
-src/sql/engine/expr/ob_expr_str_cmp_func_compile/ob_expr_str_cmp_func_part_7.cpp
 src/sql/engine/expr/ob_expr_str_to_date.cpp
 src/sql/engine/expr/ob_expr_strcmp.cpp
 src/sql/engine/expr/ob_expr_string_to_array.cpp

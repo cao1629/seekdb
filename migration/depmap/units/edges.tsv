@@ -6224,11 +6224,6 @@ src/share/datum/ob_datum_funcs_impl	src/share/ob_lob_access_utils	1
 src/share/datum/ob_datum_funcs_impl	src/share/rc/ob_server_runtime	1
 src/share/datum/ob_datum_util	src/oblib/common/object/ob_obj_type	1
 src/share/datum/ob_defined_collations	src/oblib/lib/charset/ob_charset	1
-src/share/datum/ob_str_datum_funcs_compilation/ob_str_datum_funcs_compilation	src/oblib/common/object/ob_obj_funcs	1
-src/share/datum/ob_str_datum_funcs_compilation/ob_str_datum_funcs_compilation	src/share/datum/ob_datum_cmp_func_def	1
-src/share/datum/ob_str_datum_funcs_compilation/ob_str_datum_funcs_compilation	src/share/datum/ob_datum_funcs	1
-src/share/datum/ob_str_datum_funcs_compilation/ob_str_datum_funcs_compilation	src/share/datum/ob_datum_funcs_impl	1
-src/share/datum/ob_str_datum_funcs_compilation/ob_str_datum_funcs_compilation	src/share/vector/ob_bit_vector	1
 src/share/geo/ob_geo	src/oblib/common/object/ob_obj_type	1
 src/share/geo/ob_geo	src/oblib/lib/string/ob_string	1
 src/share/geo/ob_geo	src/share/geo/ob_geo_common	1
@@ -11155,7 +11150,6 @@ src/sql/engine/expr/ob_expr_statement_digest	src/sql/resolver/ob_resolver_utils	
 src/sql/engine/expr/ob_expr_stmt_id	src/sql/engine/expr/ob_expr_operator	1
 src/sql/engine/expr/ob_expr_stmt_id	src/sql/engine/ob_exec_context	1
 src/sql/engine/expr/ob_expr_str_cmp_func_compile/ob_expr_str_cmp_func_common	src/sql/engine/expr/ob_expr_cmp_func	1
-src/sql/engine/expr/ob_expr_str_cmp_func_compile/ob_expr_str_cmp_func_part_7	src/sql/engine/expr/ob_expr_str_cmp_func_compile/ob_expr_str_cmp_func_common	1
 src/sql/engine/expr/ob_expr_str_to_date	src/sql/engine/expr/ob_expr_operator	1
 src/sql/engine/expr/ob_expr_str_to_date	src/sql/engine/ob_exec_context	1
 src/sql/engine/expr/ob_expr_strcmp	src/sql/engine/expr/ob_expr_operator	1

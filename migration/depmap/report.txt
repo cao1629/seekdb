@@ -1,11 +1,11 @@
-nodes=6527 lines=2633340 edges=24514 kinds={'angle': 15, 'inc': 24484, 'own_header': 2747} conditional_edges=72
-excluded={'generated': 34, 'third_party': 58, 'unbuilt': 25}
-includes parsed={'angle_external': 1614, 'include_a': 1629, 'include_q': 25422, 'self_include': 54}
+nodes=6525 lines=2633251 edges=24508 kinds={'angle': 15, 'inc': 24478, 'own_header': 2747} conditional_edges=72
+excluded={'generated': 36, 'third_party': 58, 'unbuilt': 25}
+includes parsed={'angle_external': 1614, 'include_a': 1629, 'include_q': 25416, 'self_include': 54}
 external_refs=237 by class={'already_rust': 10, 'generated': 221, 'third_party': 6}
 unresolved quoted includes=347 by class={'alternate spelling of an existing edge': 1, 'configure: bison/flex output (build time)': 4, 'configure: inner-table schema (generate_inner_table_schema.py at configure time)': 45, 'configure: rust/config build.rs output (build time)': 254, 'system header spelled with quotes': 10, 'third-party header spelled with quotes': 33}
 implementation nodes not compiled by /Users/meizhi/seekdb-dev/seekdb/.claude/worktrees/rust-migration/build_release (other platforms or options)=5: ['src/oblib/lib/alloc/malloc_hook.cpp', 'src/oblib/lib/alloc/malloc_hook_extended.cpp', 'src/oblib/lib/stat/mock_diagnostic_info.cpp', 'src/observer/ob_win_service.cpp', 'src/standby/standby_module_disabled.cpp']
-[file] batches=6484 cycles=28 files_in_cycles=71 sizes=[8, 7, 4, 3, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2]
-[unit] units=3754 edges=21438 batches=1551 cycles=32 units_in_cycles=2235 sizes(top10)=[1129, 573, 141, 104, 69, 44, 33, 33, 29, 9]
+[file] batches=6482 cycles=28 files_in_cycles=71 sizes=[8, 7, 4, 3, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2]
+[unit] units=3752 edges=21432 batches=1549 cycles=32 units_in_cycles=2235 sizes(top10)=[1129, 573, 141, 104, 69, 44, 33, 33, 29, 9]
 [crate/include] crates=12 edges=45 cycles=[]
 [submodule] submodules=138 edges=1464 cycle sizes=[30, 18, 17, 8, 7, 4, 3, 3]
 [crate/include+link] edges=59 link edges with/across/against the include order=37/3/12; cycles=[['src/data_plane', 'src/logservice', 'src/objit', 'src/oblib', 'src/observer', 'src/pl', 'src/query', 'src/rootserver', 'src/share', 'src/sql', 'src/standby', 'src/storage']]

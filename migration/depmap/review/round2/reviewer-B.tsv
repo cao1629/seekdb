@@ -1,0 +1,122 @@
+file	line	directive	resolved_to	verdict	conditional	note
+src/oblib/lib/file/file_directory_utils.cpp	17	"lib/file/file_directory_utils.h"	src/oblib/lib/file/file_directory_utils.h	EDGE	0	tracked .h; no generated/vendored marker found; also the own_header of this file
+src/oblib/lib/file/file_directory_utils.cpp	19	"lib/utility/ob_smart_call.h"	src/oblib/lib/utility/ob_smart_call.h	EDGE	0	tracked .h; no generated/vendored marker found
+src/oblib/lib/file/file_directory_utils.cpp	20	"lib/utility/ob_hang_fatal_error.h"	src/oblib/lib/utility/ob_hang_fatal_error.h	EDGE	0	tracked .h; no generated/vendored marker found
+src/oblib/lib/file/file_directory_utils.cpp	21	"lib/utility/ob_platform_utils.h"	src/oblib/lib/utility/ob_platform_utils.h	EDGE	0	tracked hand-written platform compatibility header (_WIN32/__APPLE__/__linux__ branches)
+src/oblib/lib/file/file_directory_utils.cpp	22	"lib/string/ob_sql_string.h"	src/oblib/lib/string/ob_sql_string.h	EDGE	0	tracked .h; no generated/vendored marker found
+src/oblib/lib/file/file_directory_utils.cpp	24	<dirent.h>	-	NOT_EDGE	0	system header not in repo (POSIX)
+src/oblib/lib/file/file_directory_utils.cpp	26	<windows.h>	-	NOT_EDGE	1	system header not in repo (Windows SDK); inside #ifdef _WIN32 (if branch)
+src/oblib/lib/file/file_directory_utils.cpp	27	<direct.h>	-	NOT_EDGE	1	system header not in repo (Windows SDK); inside #ifdef _WIN32 (if branch)
+src/oblib/lib/file/file_directory_utils.cpp	28	<fcntl.h>	-	NOT_EDGE	1	system header not in repo (POSIX/Windows CRT); inside #ifdef _WIN32 (if branch)
+src/oblib/lib/file/file_directory_utils.cpp	29	<io.h>	-	NOT_EDGE	1	system header not in repo (Windows CRT); inside #ifdef _WIN32 (if branch)
+src/oblib/lib/file/file_directory_utils.cpp	40	<sys/statvfs.h>	-	NOT_EDGE	1	system header not in repo (POSIX); inside #ifdef _WIN32 (#else branch)
+src/oblib/lib/file/file_directory_utils.cpp	-	-	src/oblib/lib/file/file_directory_utils.h	EDGE	0	own_header
+src/data_plane/api/data_plane/vector/ob_vector_ip_distance.h	20	"lib/utility/ob_print_utils.h"	src/oblib/lib/utility/ob_print_utils.h	EDGE	0	tracked .h; no generated/vendored marker found
+src/data_plane/api/data_plane/vector/ob_vector_ip_distance.h	21	"lib/oblog/ob_log.h"	src/oblib/lib/oblog/ob_log.h	EDGE	0	tracked .h; no generated/vendored marker found
+src/data_plane/api/data_plane/vector/ob_vector_ip_distance.h	22	"lib/ob_define.h"	src/oblib/lib/ob_define.h	EDGE	0	tracked .h; no generated/vendored marker found
+src/data_plane/api/data_plane/vector/ob_vector_ip_distance.h	23	"common/object/ob_obj_compare.h"	src/oblib/common/object/ob_obj_compare.h	EDGE	0	tracked; found via include root src/oblib (spelling common/object/...), not via src/oblib/common
+src/data_plane/api/data_plane/vector/ob_vector_ip_distance.h	24	"ob_vector_op_common.h"	src/data_plane/api/data_plane/vector/ob_vector_op_common.h	EDGE	0	tracked .h; no generated/vendored marker found
+src/oblib/lib/cpu/ob_cpu_topology.cpp	19	"lib/cpu/ob_cpu_topology.h"	src/oblib/lib/cpu/ob_cpu_topology.h	EDGE	0	tracked .h; no generated/vendored marker found; also the own_header of this file
+src/oblib/lib/cpu/ob_cpu_topology.cpp	20	"lib/oblog/ob_log_module.h"	src/oblib/lib/oblog/ob_log_module.h	EDGE	0	tracked .h; no generated/vendored marker found
+src/oblib/lib/cpu/ob_cpu_topology.cpp	21	"lib/container/ob_bit_set.h"	src/oblib/lib/container/ob_bit_set.h	EDGE	0	tracked .h; no generated/vendored marker found
+src/oblib/lib/cpu/ob_cpu_topology.cpp	22	<cstdio>	-	NOT_EDGE	0	system header not in repo (C++ standard library)
+src/oblib/lib/cpu/ob_cpu_topology.cpp	-	-	src/oblib/lib/cpu/ob_cpu_topology.h	EDGE	0	own_header
+src/oblib/lib/oblog/ob_log_compressor.cpp	18	<dirent.h>	-	NOT_EDGE	0	system header not in repo (POSIX)
+src/oblib/lib/oblog/ob_log_compressor.cpp	20	<windows.h>	-	NOT_EDGE	1	system header not in repo (Windows SDK); inside #ifdef _WIN32 (if branch)
+src/oblib/lib/oblog/ob_log_compressor.cpp	24	<regex>	-	NOT_EDGE	1	system header not in repo (C++ standard library); inside #ifdef _WIN32 (if branch)
+src/oblib/lib/oblog/ob_log_compressor.cpp	25	<sys/utime.h>	-	NOT_EDGE	1	system header not in repo (Windows CRT); inside #ifdef _WIN32 (if branch)
+src/oblib/lib/oblog/ob_log_compressor.cpp	29	<regex.h>	-	NOT_EDGE	1	system header not in repo (POSIX); inside #ifdef _WIN32 (#else branch)
+src/oblib/lib/oblog/ob_log_compressor.cpp	30	<utime.h>	-	NOT_EDGE	1	system header not in repo (POSIX); inside #ifdef _WIN32 (#else branch)
+src/oblib/lib/oblog/ob_log_compressor.cpp	33	"lib/oblog/ob_log_compressor.h"	src/oblib/lib/oblog/ob_log_compressor.h	EDGE	0	tracked .h; no generated/vendored marker found; also the own_header of this file
+src/oblib/lib/oblog/ob_log_compressor.cpp	34	"lib/compress/ob_compressor_pool.h"	src/oblib/lib/compress/ob_compressor_pool.h	EDGE	0	tracked .h; no generated/vendored marker found
+src/oblib/lib/oblog/ob_log_compressor.cpp	-	-	src/oblib/lib/oblog/ob_log_compressor.h	EDGE	0	own_header
+src/oblib/lib/resource/achunk_mgr.cpp	19	"achunk_mgr.h"	src/oblib/lib/resource/achunk_mgr.h	EDGE	0	tracked .h; no generated/vendored marker found; also the own_header of this file
+src/oblib/lib/resource/achunk_mgr.cpp	20	"lib/profile/ob_trace_id.h"	src/oblib/lib/profile/ob_trace_id.h	EDGE	0	tracked .h; no generated/vendored marker found
+src/oblib/lib/resource/achunk_mgr.cpp	21	"lib/utility/utility.h"	src/oblib/lib/utility/utility.h	EDGE	0	tracked .h; no generated/vendored marker found
+src/oblib/lib/resource/achunk_mgr.cpp	24	<windows.h>	-	NOT_EDGE	1	system header not in repo (Windows SDK); inside #ifdef _WIN32 (if branch)
+src/oblib/lib/resource/achunk_mgr.cpp	-	-	src/oblib/lib/resource/achunk_mgr.h	EDGE	0	own_header
+src/oblib/lib/utility/ob_print_utils.h	19	"lib/ob_define.h"	src/oblib/lib/ob_define.h	EDGE	0	tracked .h; no generated/vendored marker found
+src/oblib/lib/utility/ob_print_utils.h	20	"lib/ob_name_def.h"	src/oblib/lib/ob_name_def.h	EDGE	0	tracked .h; no generated/vendored marker found
+src/oblib/lib/utility/ob_print_utils.h	21	"lib/string/ob_fixed_length_string.h"	src/oblib/lib/string/ob_fixed_length_string.h	EDGE	0	tracked .h; no generated/vendored marker found
+src/oblib/lib/utility/ob_print_utils.h	22	"lib/hash_func/murmur_hash.h"	src/oblib/lib/hash_func/murmur_hash.h	EDGE	0	tracked; treated as OceanBase code, not vendored: file carries '(C) 2010-2016 Alibaba Group Holding Limited' (line 1), Austin Appleby is credited only in comments (lines 53,58), no upstream copyright/public-domain notice
+src/oblib/lib/utility/ob_print_utils.h	23	"lib/thread_local/ob_tsi_factory.h"	src/oblib/lib/thread_local/ob_tsi_factory.h	NOT_EDGE	0	dead: the line is `//#include ...` (commented out), not a directive; target is a tracked file, so a comment-blind scan would add a false edge
+src/oblib/lib/utility/ob_print_utils.h	24	"lib/allocator/page_arena.h"	src/oblib/lib/allocator/page_arena.h	EDGE	0	tracked .h; no generated/vendored marker found
+src/oblib/lib/utility/ob_print_utils.h	25	"lib/allocator/ob_allocator.h"	src/oblib/lib/allocator/ob_allocator.h	EDGE	0	tracked .h; no generated/vendored marker found
+src/oblib/lib/utility/ob_print_utils.h	26	<type_traits>	-	NOT_EDGE	0	system header not in repo (C++ standard library)
+src/oblib/lib/utility/ob_print_utils.h	1035	"lib/utility/ob_print_kv.h"	src/oblib/lib/utility/ob_print_kv.h	EDGE	0	tracked; include sits mid-file after the J_* macro definitions but is unconditional (only the include guard 17-18 encloses it)
+src/share/ob_errno.h	-	-	-	FILE_EXCLUDED	0	generated (checked-in generator output): marker src/share/ob_errno.h:18 '// DO NOT EDIT. This file is automatically generated from `ob_errno.def'.'; writer src/share/gen_errno.pl:110 (open '>' ob_errno.h; template :111-196 incl. marker :128 and the three includes :135-137; input ob_errno.def :11); no CMake/Bazel rule runs gen_errno.pl (only comments in src/share/ob_errno.def and tools/ob_error/README.md:100 mention it); a dry-run of gen_errno.pl on a /tmp copy reproduced src/share/ob_errno.h, src/oblib/lib/ob_errno.h and src/share/ob_errno.cpp byte-identical; header file so no build-list test applies
+src/share/ob_errno.h	25	<stdint.h>	-	NOT_EDGE	0	system header not in repo (C standard library)
+src/share/ob_errno.h	26	"share/mysql_errno.h"	src/share/mysql_errno.h	EDGE	0	tracked; hand-written: no generator writes it (gen_errno.pl:136 only includes it), no license or upstream notice, OceanBase-specific comments (e.g. line 924)
+src/share/ob_errno.h	27	"lib/ob_errno.h"	src/oblib/lib/ob_errno.h	NOT_EDGE	0	resolves to excluded file: generated (DO NOT EDIT marker at src/oblib/lib/ob_errno.h:17-19; written by src/share/gen_errno.pl:199 'open > ../../src/oblib/lib/ob_errno.h', template marker :216-218; checked-in copy is byte-identical to a dry-run of the generator)
+src/sql/engine/expr/ob_expr_str_cmp_func_compile/ob_expr_str_cmp_func_part_2.cpp	-	-	-	FILE_EXCLUDED	0	generated although the file has no generated marker: written by src/sql/engine/expr/ob_expr_str_cmp_func_compile/gen_expr_str_cmp_func.py (COMPILE_UNIT_CNT=8 :199; file-name template 'ob_expr_str_cmp_func_part_%d.cpp' :255; body template render_compile_part :205-222 yields exactly this file's text; write_atomic into SCRIPT_DIR :319-320; --check mode :287-300 treats part_*.cpp as generator-owned); running the script with --output-dir under /tmp reproduces part_0..part_7 and all.cpp byte-identical; it is also BUILT (sql_source_inventory.bzl:1687 in SQL_EXTRA_SOURCES -> SEEKDB_SQL_EXTRA, emit_bazel_source_inventory.py:155, src/sql/CMakeLists.txt:3) - generated AND built
+src/sql/engine/expr/ob_expr_str_cmp_func_compile/ob_expr_str_cmp_func_part_2.cpp	17	"ob_expr_str_cmp_func_common.ipp"	src/sql/engine/expr/ob_expr_str_cmp_func_compile/ob_expr_str_cmp_func_common.ipp	EDGE	0	tracked hand-written .ipp (not written by gen_expr_str_cmp_func.py, which writes only part_N.cpp and all.cpp)
+src/oblib/common/timezone/localtime.c	-	-	-	FILE_EXCLUDED	0	third_party (tz database) AND never built. Third-party: public-domain notice 'This file is in the public domain, so clarified as of 1996-06-05 by Arthur David Olson' at src/oblib/common/timezone/localtime.c:17-20 below the OceanBase license header (1-15), plus 'Adapted from code provided by Robert Elz' :1713; same notice in private.h:21-24 and tzfile.h:21-24. Never built: no CMakeLists.txt/*.cmake/*.bzl/BUILD in src tools cmake bazel unittest names localtime.c (grep 'localtime\.c' is empty); src/oblib/common/CMakeLists.txt:1-4 compiles only inventory variables; no table variable names it (OBLIB_UNITY_GROUPS['src/oblib/common:oblib_common'] timezone group oblib_source_inventory.bzl:146-157 = ob_time_convert.cpp + ob_timezone_info.cpp; OBLIB_STANDALONE_SOURCES common :646-652 = ob_timezone_util.cpp); no source #includes it textually
+src/oblib/common/timezone/localtime.c	29	"private.h"	src/oblib/common/timezone/private.h	NOT_EDGE	0	resolves to excluded file: third_party (tz database header; public-domain notice 'Arthur David Olson' at src/oblib/common/timezone/private.h:21-24 below the OceanBase license header)
+src/oblib/common/timezone/localtime.c	30	"tzfile.h"	src/oblib/common/timezone/tzfile.h	NOT_EDGE	0	resolves to excluded file: third_party (tz database header; public-domain notice 'Arthur David Olson' at src/oblib/common/timezone/tzfile.h:21-24 below the OceanBase license header)
+src/oblib/common/timezone/localtime.c	31	"fcntl.h"	-	NOT_EDGE	0	system header not in repo (POSIX; quoted form but no fcntl.h in the including directory or any include root)
+src/sql/parser/ob_memory_tracker_wrapper.cpp	-	-	-	FILE_EXCLUDED	0	unbuilt under the contract definition (CMake files + table variables) but NOT dead code: not named by src/sql/parser/CMakeLists.txt (ob_inner_sql_parser_object_list :2-40 names parse_node.c, ob_parser.cpp, ob_sql_parser.cpp ... but not this file; no CMake glob of C++ sources exists) and absent from every table variable (SQL_UNITY_GROUPS, SQL_SIMD_UNITY_GROUPS, SQL_STANDALONE_SOURCES, SQL_EXTRA_SOURCES); its only build-list mention is SQL_PARSER_SOURCES (src/sql/sql_source_inventory.bzl:1700), a variable that is not in the emitter table (tools/cmake/emit_bazel_source_inventory.py:131-179) and is consumed by Bazel src/sql/parser/BUILD.bazel:21-24 (_PARSER_CXX_STANDALONE_SOURCES :34-42 -> _server_parser_cxx :190-193), so Bazel compiles it and CMake does not (CMake builds fall back on the weak check_mem_status/try_check_mem_status in src/sql/parser/parse_node.c:177-178); twin src/sql/executor/ob_memory_tracker_wrapper.cpp IS built (SEEKDB_SQL_UNITY group ob_sql_executor_1). Whether this is 'unbuilt' depends on whether Bazel-only membership counts as built
+src/sql/parser/ob_memory_tracker_wrapper.cpp	17	"sql/executor/ob_memory_tracker_wrapper.h"	src/sql/executor/ob_memory_tracker_wrapper.h	EDGE	0	tracked; this is the executor/ twin of sql/parser/ob_memory_tracker_wrapper.h (same include-guard macro, empty extern "C" block, declares nothing)
+src/sql/parser/ob_memory_tracker_wrapper.cpp	18	"sql/executor/ob_memory_tracker.h"	src/sql/executor/ob_memory_tracker.h	EDGE	0	tracked .h; no generated/vendored marker found
+src/sql/parser/ob_memory_tracker_wrapper.cpp	-	-	src/sql/parser/ob_memory_tracker_wrapper.h	EDGE	0	own_header; the .cpp does NOT include it (it includes the executor/ twin, same include-guard macro) although this header declares the two functions the .cpp defines
+src/storage/tx_table/ob_tx_data_memtable.cpp	18	"ob_tx_data_memtable.h"	src/storage/tx_table/ob_tx_data_memtable.h	EDGE	0	tracked .h; no generated/vendored marker found; also the own_header of this file
+src/storage/tx_table/ob_tx_data_memtable.cpp	19	"storage/compaction/ob_schedule_dag_func.h"	src/storage/compaction/ob_schedule_dag_func.h	EDGE	0	tracked .h; no generated/vendored marker found
+src/storage/tx_table/ob_tx_data_memtable.cpp	20	"storage/allocator/ob_shared_memory_allocator_mgr.h"	src/storage/allocator/ob_shared_memory_allocator_mgr.h	EDGE	0	tracked .h; no generated/vendored marker found
+src/storage/tx_table/ob_tx_data_memtable.cpp	21	"share/rc/ob_server_runtime.h"	src/share/rc/ob_server_runtime.h	EDGE	0	tracked .h; no generated/vendored marker found
+src/storage/tx_table/ob_tx_data_memtable.cpp	22	"storage/ls/ob_freezer.h"	src/storage/ls/ob_freezer.h	EDGE	0	tracked .h; no generated/vendored marker found
+src/storage/tx_table/ob_tx_data_memtable.cpp	23	"storage/ls/ob_ls_tablet_service.h"	src/storage/ls/ob_ls_tablet_service.h	EDGE	0	tracked .h; no generated/vendored marker found
+src/storage/tx_table/ob_tx_data_memtable.cpp	-	-	src/storage/tx_table/ob_tx_data_memtable.h	EDGE	0	own_header
+src/storage/ob_i_pre_warmer.h	18	<stdint.h>	-	NOT_EDGE	0	system header not in repo (C standard library)
+src/storage/ob_i_pre_warmer.h	19	"lib/utility/ob_print_utils.h"	src/oblib/lib/utility/ob_print_utils.h	EDGE	0	tracked .h; no generated/vendored marker found
+src/storage/ob_i_pre_warmer.h	20	"storage/access/ob_table_param.h"	src/storage/access/ob_table_param.h	EDGE	0	tracked hand-written compat header that only forwards to data_plane/access/ob_table_param.h
+src/storage/memtable/ob_lock_wait_mgr.cpp	17	"data_plane/transaction/ob_lock_wait_stat.h"	src/data_plane/api/data_plane/transaction/ob_lock_wait_stat.h	EDGE	0	tracked; found via include root src/data_plane/api (spelling data_plane/transaction/...)
+src/storage/memtable/ob_lock_wait_mgr.cpp	18	"ob_lock_wait_mgr.h"	src/storage/memtable/ob_lock_wait_mgr.h	EDGE	0	tracked .h; no generated/vendored marker found; also the own_header of this file
+src/storage/memtable/ob_lock_wait_mgr.cpp	19	"share/rc/ob_server_runtime.h"	src/share/rc/ob_server_runtime.h	EDGE	0	tracked .h; no generated/vendored marker found
+src/storage/memtable/ob_lock_wait_mgr.cpp	20	"storage/tx/ob_trans_service.h"	src/storage/tx/ob_trans_service.h	EDGE	0	tracked .h; no generated/vendored marker found
+src/storage/memtable/ob_lock_wait_mgr.cpp	-	-	src/storage/memtable/ob_lock_wait_mgr.h	EDGE	0	own_header
+src/storage/tmp_file/ob_tmp_file_thread_job.h	20	"lib/lock/ob_thread_cond.h"	src/oblib/lib/lock/ob_thread_cond.h	EDGE	0	tracked .h; no generated/vendored marker found
+src/storage/tmp_file/ob_tmp_file_thread_job.h	21	"lib/queue/ob_link_queue.h"	src/oblib/lib/queue/ob_link_queue.h	EDGE	0	tracked .h; no generated/vendored marker found
+src/storage/tmp_file/ob_tmp_file_thread_job.h	22	"lib/utility/ob_print_utils.h"	src/oblib/lib/utility/ob_print_utils.h	EDGE	0	tracked .h; no generated/vendored marker found
+src/storage/tmp_file/ob_tmp_file_thread_job.h	23	"storage/tmp_file/ob_tmp_file_global.h"	src/storage/tmp_file/ob_tmp_file_global.h	EDGE	0	tracked .h; no generated/vendored marker found
+src/storage/ob_file_system_router.cpp	18	"ob_file_system_router.h"	src/storage/ob_file_system_router.h	EDGE	0	tracked .h; no generated/vendored marker found; also the own_header of this file
+src/storage/ob_file_system_router.cpp	19	"share/ob_io_device_helper.h"	src/share/ob_io_device_helper.h	EDGE	0	tracked .h; no generated/vendored marker found
+src/storage/ob_file_system_router.cpp	20	"lib/file/file_directory_utils.h"	src/oblib/lib/file/file_directory_utils.h	EDGE	0	tracked .h; no generated/vendored marker found
+src/storage/ob_file_system_router.cpp	21	"lib/string/ob_sql_string.h"	src/oblib/lib/string/ob_sql_string.h	EDGE	0	tracked .h; no generated/vendored marker found
+src/storage/ob_file_system_router.cpp	-	-	src/storage/ob_file_system_router.h	EDGE	0	own_header
+src/sql/engine/px/ob_px_scheduler.h	20	"sql/engine/px/exchange/ob_receive_op.h"	src/sql/engine/px/exchange/ob_receive_op.h	EDGE	0	tracked .h; no generated/vendored marker found
+src/sql/engine/px/ob_px_scheduler.h	21	"sql/engine/px/ob_dfo_mgr.h"	src/sql/engine/px/ob_dfo_mgr.h	EDGE	0	tracked .h; no generated/vendored marker found
+src/sql/engine/px/ob_px_scheduler.h	22	"sql/engine/px/ob_px_data_ch_provider.h"	src/sql/engine/px/ob_px_data_ch_provider.h	EDGE	0	tracked .h; no generated/vendored marker found
+src/sql/engine/px/ob_px_scheduler.h	23	"sql/engine/px/exchange/ob_row_heap.h"	src/sql/engine/px/exchange/ob_row_heap.h	EDGE	0	tracked .h; no generated/vendored marker found
+src/sql/engine/px/ob_px_scheduler.h	24	"sql/engine/px/ob_px_dtl_proc.h"	src/sql/engine/px/ob_px_dtl_proc.h	EDGE	0	tracked .h; no generated/vendored marker found
+src/sql/engine/px/ob_px_scheduler.h	25	"sql/engine/px/ob_px_coord_msg_proc.h"	src/sql/engine/px/ob_px_coord_msg_proc.h	EDGE	0	tracked .h; no generated/vendored marker found
+src/sql/engine/px/ob_px_scheduler.h	26	"sql/dtl/ob_dtl_channel_loop.h"	src/sql/dtl/ob_dtl_channel_loop.h	EDGE	0	tracked .h; no generated/vendored marker found
+src/sql/engine/px/ob_px_scheduler.h	27	"sql/engine/px/ob_px_util.h"	src/sql/engine/px/ob_px_util.h	EDGE	0	tracked .h; no generated/vendored marker found
+src/sql/engine/px/ob_px_scheduler.h	28	"sql/engine/px/datahub/ob_dh_msg_ctx.h"	src/sql/engine/px/datahub/ob_dh_msg_ctx.h	EDGE	0	tracked .h; no generated/vendored marker found
+src/sql/engine/px/ob_px_scheduler.h	29	"sql/engine/px/datahub/components/ob_dh_barrier.h"	src/sql/engine/px/datahub/components/ob_dh_barrier.h	EDGE	0	tracked .h; no generated/vendored marker found
+src/sql/engine/px/ob_px_scheduler.h	30	"sql/engine/px/datahub/components/ob_dh_range_dist_wf.h"	src/sql/engine/px/datahub/components/ob_dh_range_dist_wf.h	EDGE	0	tracked .h; no generated/vendored marker found
+src/sql/engine/px/ob_px_scheduler.h	31	"sql/engine/px/datahub/components/ob_dh_second_stage_reporting_wf.h"	src/sql/engine/px/datahub/components/ob_dh_second_stage_reporting_wf.h	EDGE	0	tracked .h; no generated/vendored marker found
+src/sql/engine/px/ob_px_scheduler.h	32	"sql/engine/px/datahub/components/ob_dh_opt_stats_gather.h"	src/sql/engine/px/datahub/components/ob_dh_opt_stats_gather.h	EDGE	0	tracked .h; no generated/vendored marker found
+src/sql/engine/px/ob_slice_calc.h	20	"sql/engine/expr/ob_sql_expression.h"	src/sql/engine/expr/ob_sql_expression.h	EDGE	0	tracked .h; no generated/vendored marker found
+src/sql/engine/px/ob_slice_calc.h	21	"lib/container/ob_fixed_array.h"	src/oblib/lib/container/ob_fixed_array.h	EDGE	0	tracked .h; no generated/vendored marker found
+src/sql/engine/px/ob_slice_calc.h	22	"share/schema/ob_schema_struct.h"	src/share/schema/ob_schema_struct.h	EDGE	0	tracked .h; no generated/vendored marker found
+src/sql/engine/px/ob_slice_calc.h	23	"sql/engine/px/ob_px_dtl_msg.h"	src/sql/engine/px/ob_px_dtl_msg.h	EDGE	0	tracked .h; no generated/vendored marker found
+src/sql/engine/px/ob_slice_calc.h	24	"sql/ob_sql_define.h"	src/sql/ob_sql_define.h	EDGE	0	tracked hand-written forwarding header (#pragma once + #include "query/ob_sql_define.h")
+src/sql/engine/px/ob_slice_calc.h	25	"sql/engine/sort/ob_sort_basic_info.h"	src/sql/engine/sort/ob_sort_basic_info.h	EDGE	0	tracked .h; no generated/vendored marker found
+src/storage/compaction/ob_partition_parallel_merge_ctx.cpp	17	"config_bridge.h"	-	NOT_EDGE	0	build-generated, untracked: config_bridge.h exists only in build trees (build_release/rust-target/include/ and build_mutant/rust-target/include/, both untracked); produced by rust/config/build.rs:392 into CONFIG_HEADER_DIR=${CMAKE_BINARY_DIR}/rust-target/include (cmake/Rust.cmake) and by Bazel //rust:config_bridge_headers (rust/BUILD.bazel:44,124-127); no tracked file of that name
+src/storage/compaction/ob_partition_parallel_merge_ctx.cpp	18	"ob_partition_parallel_merge_ctx.h"	src/storage/compaction/ob_partition_parallel_merge_ctx.h	EDGE	0	tracked .h; no generated/vendored marker found; also the own_header of this file
+src/storage/compaction/ob_partition_parallel_merge_ctx.cpp	19	"lib/alloc/alloc_func.h"	src/oblib/lib/alloc/alloc_func.h	EDGE	0	tracked .h; no generated/vendored marker found
+src/storage/compaction/ob_partition_parallel_merge_ctx.cpp	20	"share/rc/ob_server_runtime.h"	src/share/rc/ob_server_runtime.h	EDGE	0	tracked .h; no generated/vendored marker found
+src/storage/compaction/ob_partition_parallel_merge_ctx.cpp	21	"storage/ob_partition_range_spliter.h"	src/storage/ob_partition_range_spliter.h	EDGE	0	tracked .h; no generated/vendored marker found
+src/storage/compaction/ob_partition_parallel_merge_ctx.cpp	22	"ob_tablet_merge_ctx.h"	src/storage/compaction/ob_tablet_merge_ctx.h	EDGE	0	tracked .h; no generated/vendored marker found
+src/storage/compaction/ob_partition_parallel_merge_ctx.cpp	23	"ob_tablet_scheduler.h"	src/storage/compaction/ob_tablet_scheduler.h	EDGE	0	tracked .h; no generated/vendored marker found
+src/storage/compaction/ob_partition_parallel_merge_ctx.cpp	-	-	src/storage/compaction/ob_partition_parallel_merge_ctx.h	EDGE	0	own_header
+src/sql/optimizer/ob_log_join.cpp	18	"ob_log_join.h"	src/sql/optimizer/ob_log_join.h	EDGE	0	tracked .h; no generated/vendored marker found; also the own_header of this file
+src/sql/optimizer/ob_log_join.cpp	19	"sql/optimizer/ob_log_exchange.h"	src/sql/optimizer/ob_log_exchange.h	EDGE	0	tracked .h; no generated/vendored marker found
+src/sql/optimizer/ob_log_join.cpp	20	"sql/optimizer/ob_log_table_scan.h"	src/sql/optimizer/ob_log_table_scan.h	EDGE	0	tracked .h; no generated/vendored marker found
+src/sql/optimizer/ob_log_join.cpp	21	"sql/optimizer/ob_log_join_filter.h"	src/sql/optimizer/ob_log_join_filter.h	EDGE	0	tracked .h; no generated/vendored marker found
+src/sql/optimizer/ob_log_join.cpp	22	"sql/optimizer/ob_log_granule_iterator.h"	src/sql/optimizer/ob_log_granule_iterator.h	EDGE	0	tracked .h; no generated/vendored marker found
+src/sql/optimizer/ob_log_join.cpp	-	-	src/sql/optimizer/ob_log_join.h	EDGE	0	own_header
+src/sql/engine/expr/ob_expr_sql_udt_utils.cpp	18	"sql/engine/expr/ob_expr_sql_udt_utils.h"	src/sql/engine/expr/ob_expr_sql_udt_utils.h	EDGE	0	tracked .h; no generated/vendored marker found; also the own_header of this file
+src/sql/engine/expr/ob_expr_sql_udt_utils.cpp	19	"sql/engine/expr/ob_expr_lob_utils.h"	src/sql/engine/expr/ob_expr_lob_utils.h	EDGE	0	tracked hand-written forwarding header (#pragma once + #include "query/engine/expr/ob_expr_lob_utils.h")
+src/sql/engine/expr/ob_expr_sql_udt_utils.cpp	20	"sql/ob_spi.h"	src/sql/ob_spi.h	EDGE	0	tracked .h; no generated/vendored marker found
+src/sql/engine/expr/ob_expr_sql_udt_utils.cpp	21	"sql/pl/ob_pl_resolver.h"	src/sql/pl/ob_pl_resolver.h	EDGE	0	tracked .h; no generated/vendored marker found
+src/sql/engine/expr/ob_expr_sql_udt_utils.cpp	-	-	src/sql/engine/expr/ob_expr_sql_udt_utils.h	EDGE	0	own_header

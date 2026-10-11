@@ -1371,7 +1371,6 @@ src/share/datum/ob_datum_funcs_compilation/ob_datum_funcs_compilation_4.cpp
 src/share/datum/ob_datum_funcs_compilation/ob_datum_funcs_compilation_5.cpp
 src/share/datum/ob_datum_funcs_compilation/ob_datum_funcs_compilation_6.cpp
 src/share/datum/ob_datum_funcs_compilation/ob_datum_funcs_compilation_7.cpp
-src/share/datum/ob_str_datum_funcs_compilation/ob_str_datum_funcs_compilation.ipp
 src/share/geo/ob_geo_func_covered_by_helper.ipp
 src/share/geo/ob_geo_func_covered_by1.cpp
 src/share/geo/ob_geo_func_covered_by2.cpp
@@ -1447,7 +1446,6 @@ src/sql/engine/expr/ob_expr_compatiable_promotion.map
 src/sql/engine/expr/ob_expr_in.h
 src/sql/engine/expr/ob_expr_not_in.h
 src/sql/engine/expr/ob_expr_str_cmp_func_compile/ob_expr_str_cmp_func_common.ipp
-src/sql/engine/expr/ob_expr_str_cmp_func_compile/ob_expr_str_cmp_func_part_7.cpp
 src/sql/engine/expr/ob_expr_tablet_autoinc_nextval.h
 src/sql/engine/expr/ob_expr_upper.cpp
 src/sql/engine/expr/ob_iter_expr_range_param.h

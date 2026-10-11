@@ -16,7 +16,8 @@ What counts
     recorded in external_refs.tsv:
       third_party  vendored code: THIRD_PARTY_PREFIXES, or an upstream copyright /
                    public-domain notice in the first 80 lines (THIRD_PARTY_NOTICE)
-      generated    checked-in generator output (GENERATED below)
+      generated    checked-in generator output: a GENERATED rule (what each generator
+                   writes), or a generated marker in the first 40 lines
       unbuilt      an implementation file the CMake build's source lists do not name
                    (CMake files, and the Bazel inventory variables CMake reads through
                    tools/cmake/emit_bazel_source_inventory.py) and no node includes
@@ -61,6 +62,7 @@ Usage
 import argparse
 import ast
 import collections
+import fnmatch
 import os
 import re
 import subprocess
@@ -90,44 +92,39 @@ THIRD_PARTY_PREFIXES = {
 # 80 lines that names nobody of OceanBase's own lineage marks the file third-party.
 THIRD_PARTY_NOTICE = re.compile(r"(?i)\bcopyright\b|\bpublic domain\b")
 OWN_NOTICE = re.compile(r"(?i)oceanbase|alibaba|ant group|antfin|apache license|www\.apache\.org")
-# Checked-in generator output (migration/feasibility/results/units/generated_checked_in.txt,
-# plus ob_uctype.h whose header says it was generated from UnicodeData).
-GENERATED = {
-    "src/share/ob_errno.h": "src/share/gen_errno.pl <- src/share/ob_errno.def",
-    "src/share/ob_errno.cpp": "src/share/gen_errno.pl <- src/share/ob_errno.def",
-    "src/oblib/lib/ob_errno.h": "src/share/gen_errno.pl <- src/share/ob_errno.def",
-    "src/share/system_variable/ob_system_variable_init.h": "gen_ob_sys_variables.py <- ob_system_variable_init.json",
-    "src/share/system_variable/ob_system_variable_init.cpp": "gen_ob_sys_variables.py <- ob_system_variable_init.json",
-    "src/share/system_variable/ob_system_variable_alias.h": "gen_ob_sys_variables.py",
-    "src/share/system_variable/ob_sys_var_class_type.h": "gen_ob_sys_variables.py",
-    "src/share/system_variable/ob_sys_var_meta.h": "gen_ob_sys_variables.py",
-    "src/share/system_variable/ob_sys_var_meta.cpp": "gen_ob_sys_variables.py",
-    "src/sql/session/ob_system_variable_factory.h": "gen_ob_sys_variables.py",
-    "src/sql/session/ob_system_variable_factory.cpp": "gen_ob_sys_variables.py",
-    "src/share/datum/ob_str_datum_funcs_compilation/ob_str_datum_funcs_compilation_0.cpp": "gen_str_datum_func_parts.py",
-    "src/share/datum/ob_str_datum_funcs_compilation/ob_str_datum_funcs_compilation_1.cpp": "gen_str_datum_func_parts.py",
-    "src/share/datum/ob_str_datum_funcs_compilation/ob_str_datum_funcs_compilation_2.cpp": "gen_str_datum_func_parts.py",
-    "src/share/datum/ob_str_datum_funcs_compilation/ob_str_datum_funcs_all.cpp": "gen_str_datum_func_parts.py",
-    "src/sql/engine/expr/ob_expr_str_cmp_func_compile/ob_expr_str_cmp_func_part_0.cpp": "gen_expr_str_cmp_func.py",
-    "src/sql/engine/expr/ob_expr_str_cmp_func_compile/ob_expr_str_cmp_func_part_1.cpp": "gen_expr_str_cmp_func.py",
-    "src/sql/engine/expr/ob_expr_str_cmp_func_compile/ob_expr_str_cmp_func_part_2.cpp": "gen_expr_str_cmp_func.py",
-    "src/sql/engine/expr/ob_expr_str_cmp_func_compile/ob_expr_str_cmp_func_part_3.cpp": "gen_expr_str_cmp_func.py",
-    "src/sql/engine/expr/ob_expr_str_cmp_func_compile/ob_expr_str_cmp_func_part_4.cpp": "gen_expr_str_cmp_func.py",
-    "src/sql/engine/expr/ob_expr_str_cmp_func_compile/ob_expr_str_cmp_func_part_5.cpp": "gen_expr_str_cmp_func.py",
-    "src/sql/engine/expr/ob_expr_str_cmp_func_compile/ob_expr_str_cmp_func_part_6.cpp": "gen_expr_str_cmp_func.py",
-    "src/sql/engine/expr/ob_expr_str_cmp_func_compile/ob_expr_str_cmp_func_all.cpp": "gen_expr_str_cmp_func.py",
-    "src/oblib/lib/codec/ob_generated_scalar_bp_func.h": "generate_scalar_bitpakcing.py",
-    "src/oblib/lib/codec/ob_generated_scalar_bp_func.cpp": "generate_scalar_bitpakcing.py",
-    "src/oblib/lib/codec/ob_generated_unalign_simd_bp_func.h": "generate_simd_bitpakcing.py",
-    "src/oblib/lib/codec/ob_generated_unalign_simd_bp_func.cpp": "generate_simd_bitpakcing.py",
-    "src/oblib/grpc/standbyservice.pb.h": "protoc <- src/oblib/grpc/standbyservice.proto",
-    "src/oblib/grpc/standbyservice.pb.cc": "protoc <- src/oblib/grpc/standbyservice.proto",
-    "src/oblib/grpc/standbyservice.grpc.pb.h": "grpc_cpp_plugin <- src/oblib/grpc/standbyservice.proto",
-    "src/oblib/grpc/standbyservice.grpc.pb.cc": "grpc_cpp_plugin <- src/oblib/grpc/standbyservice.proto",
-    "src/share/geo/ob_vector_tile.pb-c.h": "protoc-c",
-    "src/share/geo/ob_vector_tile.pb-c.c": "protoc-c",
-    "src/oblib/lib/charset/ob_uctype.h": "generated from UnicodeData-5.0.0d9.txt (generator not in the repo)",
-}
+# Checked-in generator output, one rule per thing a generator writes (fnmatch patterns,
+# so a generator that emits more parts is still covered), plus any file whose first 40
+# lines carry a generated marker (GENERATED_MARKER). Several generated files have no marker.
+GENERATED = [
+    ("src/share/ob_errno.h", "src/share/gen_errno.pl:110 <- src/share/ob_errno.def"),
+    ("src/share/ob_errno.cpp", "src/share/gen_errno.pl:244 <- src/share/ob_errno.def"),
+    ("src/oblib/lib/ob_errno.h", "src/share/gen_errno.pl:199 <- src/share/ob_errno.def"),
+    ("src/share/system_variable/ob_system_variable_init.h", "src/share/system_variable/gen_ob_sys_variables.py:1173"),
+    ("src/share/system_variable/ob_system_variable_init.cpp", "src/share/system_variable/gen_ob_sys_variables.py:1174"),
+    ("src/share/system_variable/ob_system_variable_alias.h", "src/share/system_variable/gen_ob_sys_variables.py:1175"),
+    ("src/share/system_variable/ob_sys_var_class_type.h", "src/share/system_variable/gen_ob_sys_variables.py:1176"),
+    ("src/share/system_variable/ob_sys_var_meta.h", "src/share/system_variable/gen_ob_sys_variables.py:1178"),
+    ("src/share/system_variable/ob_sys_var_meta.cpp", "src/share/system_variable/gen_ob_sys_variables.py:1179"),
+    ("src/sql/session/ob_system_variable_factory.h", "src/share/system_variable/gen_ob_sys_variables.py:1180"),
+    ("src/sql/session/ob_system_variable_factory.cpp", "src/share/system_variable/gen_ob_sys_variables.py:1181"),
+    ("src/share/datum/ob_str_datum_funcs_compilation/ob_str_datum_funcs_compilation_*.cpp",
+     "src/share/datum/ob_str_datum_funcs_compilation/gen_str_datum_func_parts.py:96"),
+    ("src/share/datum/ob_str_datum_funcs_compilation/ob_str_datum_funcs_all.cpp",
+     "src/share/datum/ob_str_datum_funcs_compilation/gen_str_datum_func_parts.py:151"),
+    ("src/share/datum/ob_str_datum_funcs_compilation/ob_str_datum_funcs_compilation.ipp",
+     "src/share/datum/ob_str_datum_funcs_compilation/gen_str_datum_func_parts.py:156"),
+    ("src/sql/engine/expr/ob_expr_str_cmp_func_compile/ob_expr_str_cmp_func_part_*.cpp",
+     "src/sql/engine/expr/ob_expr_str_cmp_func_compile/gen_expr_str_cmp_func.py:255"),
+    ("src/sql/engine/expr/ob_expr_str_cmp_func_compile/ob_expr_str_cmp_func_all.cpp",
+     "src/sql/engine/expr/ob_expr_str_cmp_func_compile/gen_expr_str_cmp_func.py:257"),
+    ("src/oblib/lib/codec/ob_generated_scalar_bp_func.*", "src/oblib/lib/codec/generate_scalar_bitpakcing.py:339-342"),
+    ("src/oblib/lib/codec/ob_generated_unalign_simd_bp_func.*", "src/oblib/lib/codec/generate_simd_bitpakcing.py"),
+    ("src/oblib/grpc/*.pb.h", "protoc / grpc_cpp_plugin <- src/oblib/grpc/standbyservice.proto"),
+    ("src/oblib/grpc/*.pb.cc", "protoc / grpc_cpp_plugin <- src/oblib/grpc/standbyservice.proto"),
+    ("src/share/geo/*.pb-c.h", "protoc-c"),
+    ("src/share/geo/*.pb-c.c", "protoc-c"),
+    ("src/oblib/lib/charset/ob_uctype.h", "generated from UnicodeData-5.0.0d9.txt (line 21; the generator is not in the repo)"),
+]
 GENERATED_MARKER = re.compile(r"(do not edit|don't edit|auto[- ]?generated|automatically generated|"
                               r"this file is generated|generated file|@generated|generated by|generated from)", re.I)
 # Marker hits checked by hand and found not to be generator output.
@@ -364,18 +361,21 @@ def classify(repo):
                 if THIRD_PARTY_NOTICE.search(line) and not OWN_NOTICE.search(line):
                     third = "upstream notice at line %d: %s" % (ln, line.strip().strip("/*").strip()[:100])
                     break
+        generator = next((why for pattern, why in GENERATED if fnmatch.fnmatchcase(rel, pattern)), None)
+        if not generator and rel not in MARKER_FALSE_POSITIVES:
+            for ln, line in enumerate(repo.text(rel).split("\n")[:40], 1):
+                if GENERATED_MARKER.search(line):
+                    generator = "generated marker at line %d: %s" % (ln, line.strip().strip("/*").strip()[:100])
+                    break
         if third:
             excluded[rel] = ("third_party", third)
-        elif rel in GENERATED:
-            excluded[rel] = ("generated", GENERATED[rel])
+        elif generator:
+            excluded[rel] = ("generated", generator)
         else:
             candidates.append(rel)
-            head = "\n".join(repo.text(rel).split("\n")[:40])
-            if GENERATED_MARKER.search(head) and rel not in MARKER_FALSE_POSITIVES:
-                warnings.append(rel)
-    for rel in GENERATED:
-        if rel not in repo.tracked_set:
-            warnings.append("listed as generated but not tracked: " + rel)
+    for pattern, _ in GENERATED:
+        if not any(fnmatch.fnmatchcase(rel, pattern) for rel in repo.tracked):
+            warnings.append("generated rule matches no tracked file: " + pattern)
     return candidates, excluded, warnings
 
 
@@ -683,7 +683,7 @@ def main():
     report.append("external_refs=%d by class=%s" % (len(mapper.external), dict(sorted(collections.Counter(x[3] for x in mapper.external).items()))))
     report.append("unresolved quoted includes=%d by class=%s" % (len(mapper.unresolved), dict(sorted(collections.Counter(u[2] for u in mapper.unresolved).items()))))
     if mapper.marker_warnings:
-        report.append("WARNING generated-marker hits not classified: %s" % mapper.marker_warnings)
+        report.append("WARNING %s" % mapper.marker_warnings)
     report.extend(mapper.build_check)
     sizes = sorted((len(s) for s in cycles), reverse=True)
     report.append("[file] batches=%d cycles=%d files_in_cycles=%d sizes=%s" % (len(sccs), len(cycles), sum(sizes), sizes))

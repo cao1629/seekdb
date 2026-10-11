@@ -1,0 +1,20 @@
+src/oblib/lib/utility/utility.h	adversarial: platform-specific
+src/data_plane/api/data_plane/vector/ob_vector_cosine_distance.h	adversarial: platform-specific
+src/oblib/lib/thread/ob_thread_hook.cpp	adversarial: platform-specific
+src/oblib/lib/time/ob_time_utility.cpp	adversarial: platform-specific
+src/oblib/lib/time/ob_tsc_timestamp.h	adversarial: platform-specific
+src/oblib/lib/allocator/ob_malloc.h	adversarial: platform-specific
+src/share/datum/ob_str_datum_funcs_compilation/ob_str_datum_funcs_all.cpp	adversarial: excluded (generated)
+src/sql/engine/expr/ob_expr_str_cmp_func_compile/ob_expr_str_cmp_func_part_1.cpp	adversarial: excluded (generated)
+src/oblib/lib/compress/zstd_1_3_8/ob_zstd_compressor_1_3_8.cpp	adversarial: excluded (third_party)
+src/observer/report/ob_tablet_meta_checker.cpp	adversarial: excluded (unbuilt)
+src/sql/resolver/cmd/ob_load_data_resolver.cpp	random
+src/storage/tx/ob_trans_ctx_mgr_v4.h	random
+src/storage/ls/ob_ls_tablet_service.h	random
+src/sql/engine/ob_operator_factory.cpp	random
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.h	random
+src/storage/tablet/ob_tablet_iterator.h	random
+src/sql/resolver/expr/ob_raw_expr_resolver.h	random
+src/storage/ddl/ob_ddl_macro_block_write_task.h	random
+src/storage/blocksstable/index_block/ob_agg_row_struct.cpp	random
+src/sql/resolver/dml/ob_insert_stmt.cpp	random

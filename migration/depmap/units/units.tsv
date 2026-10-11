@@ -1265,7 +1265,6 @@ src/share/datum/ob_datum_funcs_compilation/ob_datum_funcs_compilation_7	ob_datum
 src/share/datum/ob_datum_funcs_impl	ob_datum_funcs_impl.h	1591	src/share
 src/share/datum/ob_datum_util	ob_datum_util.h	139	src/share
 src/share/datum/ob_defined_collations	ob_defined_collations.h	46	src/share
-src/share/datum/ob_str_datum_funcs_compilation/ob_str_datum_funcs_compilation	ob_str_datum_funcs_compilation.ipp	42	src/share
 src/share/diagnosis/ob_sql_monitor_statname	ob_sql_monitor_statname.cpp,ob_sql_monitor_statname.h	164	src/share
 src/share/geo/ob_geo	ob_geo.cpp,ob_geo.h	89	src/share
 src/share/geo/ob_geo_3d	ob_geo_3d.cpp,ob_geo_3d.h	1541	src/share
@@ -2192,7 +2191,6 @@ src/sql/engine/expr/ob_expr_st_x	ob_expr_st_x.cpp,ob_expr_st_x.h	394	src/sql
 src/sql/engine/expr/ob_expr_statement_digest	ob_expr_statement_digest.cpp,ob_expr_statement_digest.h	303	src/sql
 src/sql/engine/expr/ob_expr_stmt_id	ob_expr_stmt_id.cpp,ob_expr_stmt_id.h	111	src/sql
 src/sql/engine/expr/ob_expr_str_cmp_func_compile/ob_expr_str_cmp_func_common	ob_expr_str_cmp_func_common.ipp	27	src/sql
-src/sql/engine/expr/ob_expr_str_cmp_func_compile/ob_expr_str_cmp_func_part_7	ob_expr_str_cmp_func_part_7.cpp	47	src/sql
 src/sql/engine/expr/ob_expr_str_to_date	ob_expr_str_to_date.cpp,ob_expr_str_to_date.h	405	src/sql
 src/sql/engine/expr/ob_expr_strcmp	ob_expr_strcmp.cpp,ob_expr_strcmp.h	110	src/sql
 src/sql/engine/expr/ob_expr_string_to_array	ob_expr_string_to_array.cpp,ob_expr_string_to_array.h	347	src/sql

@@ -36,7 +36,7 @@ src/rootserver	src/query	20	0	-
 src/rootserver	src/share	397	ref:1003	oceanbase::compaction::ObCompactionTimeGuard::add_time_guard(oceanbase::compaction::ObCompactionTimeGuard const&)
 src/rootserver	src/sql	54	ref:104	oceanbase::sql::ObSQLUtils::generate_new_name_with_escape_character(oceanbase::common::ObIAllocator&, oceanbase::common::ObString const&, oceanbase::common::ObString&)
 src/rootserver	src/storage	79	ref:128	oceanbase::compaction::ObTableCkmItems::validate_ckm_func
-src/share	src/oblib	908	ref:646	XXH64
+src/share	src/oblib	907	ref:646	XXH64
 src/share	src/observer	0	ref:2	oceanbase::common::ObIOManager::print_service_status()
 src/sql	src/data_plane	188	ref:11	oceanbase::data_plane::ObParallelRangeTaskPlanner::compute_total_task_count(oceanbase::data_plane::ObParallelRangeTaskParams const&, long long, long long&)
 src/sql	src/oblib	1266	ref:1026	futex_wait(int volatile*, int, timespec const*)

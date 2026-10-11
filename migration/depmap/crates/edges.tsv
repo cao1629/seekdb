@@ -30,7 +30,7 @@ src/rootserver	src/query	20	src/rootserver/ddl_task/ob_ddl_common_rs_impl.cpp ->
 src/rootserver	src/share	397	src/rootserver/dbms_job/ob_dbms_job_executor.h -> src/share/schema/ob_multi_version_schema_service.h
 src/rootserver	src/sql	54	src/rootserver/ddl_task/ob_ddl_common_rs_impl.cpp -> src/sql/engine/px/ob_px_dtl_msg.h
 src/rootserver	src/storage	79	src/rootserver/ddl_task/ob_constraint_task.cpp -> src/storage/ddl/ob_ddl_lock.h
-src/share	src/oblib	908	src/share/ai_service/ob_ai_model_info.h -> src/oblib/lib/ob_define.h
+src/share	src/oblib	907	src/share/ai_service/ob_ai_model_info.h -> src/oblib/lib/ob_define.h
 src/sql	src/data_plane	188	src/sql/code_generator/ob_tsc_cg_service.h -> src/data_plane/api/data_plane/blocksstable/ob_index_block_util.h
 src/sql	src/oblib	1266	src/sql/code_generator/ob_code_generator.h -> src/oblib/lib/container/ob_iarray.h
 src/sql	src/query	226	src/sql/code_generator/ob_dml_cg_service.cpp -> src/query/api/query/vector/ob_vector_index_util.h
