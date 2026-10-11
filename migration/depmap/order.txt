@@ -818,6 +818,7 @@ src/oblib/lib/codec/ob_tiered_codec.h
 src/oblib/lib/compress/ob_compressor.h
 src/oblib/lib/compress/none/ob_none_compressor.h
 src/oblib/lib/compress/zlib/ob_zlib_compressor.h
+src/oblib/lib/compress/zstd_1_3_8/ob_zstd_compressor_1_3_8.h
 src/oblib/lib/compress/ob_compressor_pool.h
 src/oblib/lib/codec/ob_universal_compression.h
 src/oblib/lib/codec/ob_xor_fixed_pfor.h
@@ -825,6 +826,9 @@ src/oblib/lib/compress/none/ob_none_compressor.cpp
 src/oblib/lib/compress/ob_compressor.cpp
 src/oblib/lib/compress/ob_compressor_pool.cpp
 src/oblib/lib/compress/zlib/ob_zlib_compressor.cpp
+src/oblib/lib/compress/zstd_1_3_8/ob_zstd_wrapper.h
+src/oblib/lib/compress/zstd_1_3_8/ob_zstd_compressor_1_3_8.cpp
+src/oblib/lib/compress/zstd_1_3_8/ob_zstd_wrapper.cpp
 src/oblib/lib/container/ob_bitmap.h
 src/oblib/lib/container/ob_bitmap.cpp
 src/oblib/lib/container/ob_concurrent_bitset.h

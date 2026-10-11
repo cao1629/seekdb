@@ -10,7 +10,7 @@ against	src/pl	src/observer	ref	10	oceanbase::query::ObInnerSQLConnectionAccess:
 against	src/rootserver	src/observer	ref	27	oceanbase::query::ObInnerSQLConnectionAccess::register_multi_data_source(oceanbase::common::sqlclient::ObISQLConnection*, oceanbase::transaction::ObTxDataSourceType, char const*, long long)
 against	src/share	src/observer	ref	2	oceanbase::common::ObIOManager::print_service_status()
 against	src/sql	src/observer	ref	130	oceanbase::data_plane::ObVectorRefreshTransaction::lock_domain_table(unsigned long long, bool)
-against	src/sql	src/pl	ref	153	oceanbase::pl::ExecCtxBak::backup(oceanbase::sql::ObExecContext&)
+against	src/sql	src/pl	ref	152	oceanbase::pl::ExecCtxBak::backup(oceanbase::sql::ObExecContext&)
 against	src/sql	src/rootserver	ref	1	oceanbase::data_plane::rebuild_vector_index(oceanbase::obcall::ObRebuildIndexArg const&, oceanbase::obcall::ObAlterTableRes&)
 against	src/storage	src/observer	ref	33	oceanbase::data_plane::submit_tablet_update(oceanbase::common::ObTabletID const&, bool)
 against	src/storage	src/rootserver	ref	4	oceanbase::data_plane::renew_ddl_task_lease(long long)
@@ -18,7 +18,7 @@ across	src/pl	src/storage	ref	7	oceanbase::data_plane::tx_desc_is_in_tx(oceanbas
 across	src/sql	src/storage	ref	271	request_finish_callback()
 across	src/storage	src/sql	ref	100	oceanbase::sql::ObDocIdExt::from_datum(oceanbase::common::ObDatum const&)
 with	src/data_plane	src/oblib	ref	43	oceanbase::lib::ObMallocAllocator::is_inited_
-with	src/logservice	src/oblib	ref	135	XXH64
+with	src/logservice	src/oblib	ref	134	oceanbase::lib::ObLibConfig::enable_trace_log_
 with	src/logservice	src/share	ref	93	oceanbase::logservice::ObLogBaseHeader::deserialize(char const*, long long, long long&)
 with	src/observer	src/data_plane	ref	1	vtable for oceanbase::common::ObVTableScanParam
 with	src/observer	src/logservice	ref	65	oceanbase::logservice::ObLogHandler::get_max_decided_scn(oceanbase::share::SCN&)
@@ -30,9 +30,9 @@ with	src/observer	src/share	ref	751	switch_check_io_hang_errsim()
 with	src/observer	src/sql	ref	427	oceanbase::lib::ObMemTrackerGuard::check_status()
 with	src/observer	src/standby	ref	12	oceanbase::standby::StandbyModule::reload_config(bool)
 with	src/observer	src/storage	ref	848	request_finish_callback()
-with	src/pl	src/oblib	ref	177	ob_convert(char*, unsigned int, ObCharsetInfo const*, char const*, unsigned int, ObCharsetInfo const*, bool, unsigned long, unsigned int*)
+with	src/pl	src/oblib	ref	176	ob_convert(char*, unsigned int, ObCharsetInfo const*, char const*, unsigned int, ObCharsetInfo const*, bool, unsigned long, unsigned int*)
 with	src/pl	src/share	ref	109	oceanbase::share::ObShareUtil::is_server_write_enabled(bool&)
-with	src/pl	src/sql	ref	378	oceanbase::pl::get_pl_data_type(oceanbase::share::schema::ObIRoutineParam const&)
+with	src/pl	src/sql	ref	374	oceanbase::pl::get_pl_data_type(oceanbase::share::schema::ObIRoutineParam const&)
 with	src/query	src/oblib	ref	106	oceanbase::lib::set_thread_name(char const*, unsigned long long)
 with	src/query	src/share	ref	22	oceanbase::share::ObJsonHelper::is_array_type(oceanbase::common::ObIJsonBase const*)
 with	src/rootserver	src/oblib	ref	282	futex_wake(int volatile*, int)
@@ -40,9 +40,9 @@ with	src/rootserver	src/pl	ref	2	oceanbase::pl::ObDbmsStats::get_part_ids_from_s
 with	src/rootserver	src/share	ref	1003	oceanbase::compaction::ObCompactionTimeGuard::add_time_guard(oceanbase::compaction::ObCompactionTimeGuard const&)
 with	src/rootserver	src/sql	ref	104	oceanbase::sql::ObSQLUtils::generate_new_name_with_escape_character(oceanbase::common::ObIAllocator&, oceanbase::common::ObString const&, oceanbase::common::ObString&)
 with	src/rootserver	src/storage	ref	128	oceanbase::compaction::ObTableCkmItems::validate_ckm_func
-with	src/share	src/oblib	ref	646	XXH64
+with	src/share	src/oblib	ref	645	futex_wake(int volatile*, int)
 with	src/sql	src/data_plane	ref	11	oceanbase::data_plane::ObParallelRangeTaskPlanner::compute_total_task_count(oceanbase::data_plane::ObParallelRangeTaskParams const&, long long, long long&)
-with	src/sql	src/oblib	ref	1026	futex_wait(int volatile*, int, timespec const*)
+with	src/sql	src/oblib	ref	1033	futex_wait(int volatile*, int, timespec const*)
 with	src/sql	src/query	ref	1	oceanbase::common::ObSMUtils::build_cell_value(oceanbase::common::ObObj const&, oceanbase::obmysql::MYSQL_PROTOCOL_TYPE, oceanbase::common::ObIAllocator&, oceanbase::obmysql::ObMySQLCellValue&, oceanbase::common::ObDataTypeCastParams const&, oceanbase::common::ObField const*, oceanbase::sql::ObSQLSessionInfo const&, oceanbase::share::schema::ObSchemaGetterGuard*)
 with	src/sql	src/share	ref	875	oceanbase::omt::ObTimezoneMgr::get_instance()
 with	src/standby	src/logservice	ref	28	oceanbase::logservice::ObLogHandler::get_palf_base_info(oceanbase::palf::LSN const&, oceanbase::palf::PalfBaseInfo&)
@@ -51,7 +51,7 @@ with	src/standby	src/share	ref	74	oceanbase::palf::PalfBaseInfo::deserialize(cha
 with	src/standby	src/storage	ref	204	oceanbase::compaction::merge_type_to_str(oceanbase::compaction::ObMergeType const&)
 with	src/storage	src/data_plane	ref	3	oceanbase::data_plane::ObParallelRangeTaskPlanner::compute_total_task_count(oceanbase::data_plane::ObParallelRangeTaskParams const&, long long, long long&)
 with	src/storage	src/logservice	ref	46	oceanbase::logservice::ObLogHandler::append_big_log(void const*, long long, oceanbase::share::SCN const&, bool, oceanbase::logservice::AppendCb*, oceanbase::palf::LSN&, oceanbase::share::SCN&)
-with	src/storage	src/oblib	ref	525	XXH64
+with	src/storage	src/oblib	ref	524	futex_wake(int volatile*, int)
 with	src/storage	src/query	ref	8	oceanbase::share::ObEmbeddingTask::disable_callback()
 with	src/storage	src/share	ref	448	oceanbase::compaction::ObNewMicroInfo::add(oceanbase::compaction::ObNewMicroInfo const&)
 # include + link-level SCCs > 1 crate: 1

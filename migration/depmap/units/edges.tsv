@@ -1472,8 +1472,11 @@ src/oblib/lib/compress/ob_compressor_pool	src/oblib/lib/allocator/ob_vslice_allo
 src/oblib/lib/compress/ob_compressor_pool	src/oblib/lib/compress/none/ob_none_compressor	1
 src/oblib/lib/compress/ob_compressor_pool	src/oblib/lib/compress/ob_compressor	1
 src/oblib/lib/compress/ob_compressor_pool	src/oblib/lib/compress/zlib/ob_zlib_compressor	1
+src/oblib/lib/compress/ob_compressor_pool	src/oblib/lib/compress/zstd_1_3_8/ob_zstd_compressor_1_3_8	1
 src/oblib/lib/compress/zlib/ob_zlib_compressor	src/oblib/lib/compress/ob_compress_util	1
 src/oblib/lib/compress/zlib/ob_zlib_compressor	src/oblib/lib/compress/ob_compressor	1
+src/oblib/lib/compress/zstd_1_3_8/ob_zstd_compressor_1_3_8	src/oblib/lib/compress/ob_compressor	1
+src/oblib/lib/compress/zstd_1_3_8/ob_zstd_compressor_1_3_8	src/oblib/lib/compress/zstd_1_3_8/ob_zstd_wrapper	1
 src/oblib/lib/container/ob_2d_array	src/oblib/lib/container/ob_iarray	1
 src/oblib/lib/container/ob_2d_array	src/oblib/lib/container/ob_se_array	1
 src/oblib/lib/container/ob_2d_array	src/oblib/lib/utility/ob_print_utils	1
@@ -8851,6 +8854,7 @@ src/sql/engine/basic/ob_ra_row_store	src/oblib/lib/list/ob_dlist	1
 src/sql/engine/basic/ob_ra_row_store	src/oblib/lib/utility/ob_print_utils	1
 src/sql/engine/basic/ob_ra_row_store	src/share/ob_define	1
 src/sql/engine/basic/ob_select_into_basic	src/oblib/lib/compress/ob_compress_util	1
+src/sql/engine/basic/ob_select_into_basic	src/oblib/lib/compress/zstd_1_3_8/ob_zstd_wrapper	1
 src/sql/engine/basic/ob_select_into_basic	src/oblib/lib/file/ob_file	1
 src/sql/engine/basic/ob_select_into_basic	src/sql/engine/cmd/ob_load_data_parser	1
 src/sql/engine/basic/ob_select_into_op	src/oblib/common/udt/ob_collection_type	1
@@ -9032,6 +9036,7 @@ src/sql/engine/cmd/ob_load_data_executor	src/sql/engine/cmd/ob_load_data_impl	1
 src/sql/engine/cmd/ob_load_data_executor	src/sql/resolver/cmd/ob_load_data_stmt	1
 src/sql/engine/cmd/ob_load_data_file_reader	src/oblib/lib/allocator/ob_allocator	1
 src/sql/engine/cmd/ob_load_data_file_reader	src/oblib/lib/compress/ob_compress_util	1
+src/sql/engine/cmd/ob_load_data_file_reader	src/oblib/lib/compress/zstd_1_3_8/ob_zstd_wrapper	1
 src/sql/engine/cmd/ob_load_data_file_reader	src/oblib/lib/file/ob_file	1
 src/sql/engine/cmd/ob_load_data_file_reader	src/oblib/lib/oblog/ob_log_module	1
 src/sql/engine/cmd/ob_load_data_file_reader	src/oblib/lib/string/ob_string	1

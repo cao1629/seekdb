@@ -390,6 +390,8 @@ src/oblib/lib/compress/ob_compress_util	ob_compress_util.h	112	src/oblib
 src/oblib/lib/compress/ob_compressor	ob_compressor.cpp,ob_compressor.h	80	src/oblib
 src/oblib/lib/compress/ob_compressor_pool	ob_compressor_pool.cpp,ob_compressor_pool.h	169	src/oblib
 src/oblib/lib/compress/zlib/ob_zlib_compressor	ob_zlib_compressor.cpp,ob_zlib_compressor.h	288	src/oblib
+src/oblib/lib/compress/zstd_1_3_8/ob_zstd_compressor_1_3_8	ob_zstd_compressor_1_3_8.cpp,ob_zstd_compressor_1_3_8.h	173	src/oblib
+src/oblib/lib/compress/zstd_1_3_8/ob_zstd_wrapper	ob_zstd_wrapper.cpp,ob_zstd_wrapper.h	419	src/oblib
 src/oblib/lib/container/ob_2d_array	ob_2d_array.h	653	src/oblib
 src/oblib/lib/container/ob_array	ob_array.h	869	src/oblib
 src/oblib/lib/container/ob_array_array	ob_array_array.h	426	src/oblib

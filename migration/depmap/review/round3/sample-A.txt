@@ -8,13 +8,13 @@ src/storage/blocksstable/encoding/ob_raw_decoder.cpp	adversarial: most preproces
 src/oblib/lib/container/ob_bitmap.cpp	adversarial: most preprocessor conditionals
 src/oblib/lib/allocator/ob_malloc.cpp	adversarial: most preprocessor conditionals
 src/oblib/lib/hash/ob_hashutils.h	adversarial: most preprocessor conditionals
-src/observer/virtual_table/ob_virtual_data_access_service.cpp	random
-src/sql/engine/aggregate/ob_exec_hash_struct.h	random
-src/share/schema/ob_database_sql_service.cpp	random
-src/observer/vector_index/ob_vector_index_param.cpp	random
-src/rootserver/freeze/ob_daily_major_freeze_launcher.cpp	random
-src/oblib/lib/alloc/memory_dump.cpp	random
-src/oblib/lib/allocator/ob_small_allocator.h	random
-src/oblib/common/log/ob_log_generator.cpp	random
-src/sql/engine/expr/ob_expr_gtid.cpp	random
-src/sql/das/iter/ob_das_local_lookup_iter.h	random
+src/oblib/lib/container/ob_id_map.h	random
+src/query/api/query/scheduler/ob_scheduler_func_type.h	random
+src/share/transaction/ob_tx_id.h	random
+src/query/api/query/resolver/ob_schema_lookup.h	random
+src/oblib/common/ob_version_def.cpp	random
+src/observer/virtual_table/ob_all_virtual_io_status.cpp	random
+src/sql/engine/expr/ob_expr_format_bytes.h	random
+src/oblib/common/meta_programming/ob_meta_compare.h	random
+src/observer/virtual_table/ob_all_virtual_compaction_diagnose_info.cpp	random
+src/share/ob_occam_time_guard.h	random

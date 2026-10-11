@@ -14,58 +14,54 @@ src/oblib/lib/codec/ob_generated_scalar_bp_func.cpp	generated	src/oblib/lib/code
 src/oblib/lib/codec/ob_generated_scalar_bp_func.h	generated	src/oblib/lib/codec/generate_scalar_bitpakcing.py:339-342
 src/oblib/lib/codec/ob_generated_unalign_simd_bp_func.cpp	generated	src/oblib/lib/codec/generate_simd_bitpakcing.py
 src/oblib/lib/codec/ob_generated_unalign_simd_bp_func.h	generated	src/oblib/lib/codec/generate_simd_bitpakcing.py
-src/oblib/lib/compress/zstd_1_3_8/ob_empty.c	third_party	zstd 1.3.8 sources
-src/oblib/lib/compress/zstd_1_3_8/ob_zstd_compressor_1_3_8.cpp	third_party	zstd 1.3.8 sources
-src/oblib/lib/compress/zstd_1_3_8/ob_zstd_compressor_1_3_8.h	third_party	zstd 1.3.8 sources
-src/oblib/lib/compress/zstd_1_3_8/ob_zstd_wrapper.cpp	third_party	zstd 1.3.8 sources
-src/oblib/lib/compress/zstd_1_3_8/ob_zstd_wrapper.h	third_party	zstd 1.3.8 sources
-src/oblib/lib/compress/zstd_1_3_8/zstd_src/bitstream.h	third_party	zstd 1.3.8 sources
-src/oblib/lib/compress/zstd_1_3_8/zstd_src/compiler.h	third_party	zstd 1.3.8 sources
-src/oblib/lib/compress/zstd_1_3_8/zstd_src/cpu.h	third_party	zstd 1.3.8 sources
-src/oblib/lib/compress/zstd_1_3_8/zstd_src/debug.c	third_party	zstd 1.3.8 sources
-src/oblib/lib/compress/zstd_1_3_8/zstd_src/debug.h	third_party	zstd 1.3.8 sources
-src/oblib/lib/compress/zstd_1_3_8/zstd_src/entropy_common.c	third_party	zstd 1.3.8 sources
-src/oblib/lib/compress/zstd_1_3_8/zstd_src/error_private.c	third_party	zstd 1.3.8 sources
-src/oblib/lib/compress/zstd_1_3_8/zstd_src/error_private.h	third_party	zstd 1.3.8 sources
-src/oblib/lib/compress/zstd_1_3_8/zstd_src/fse.h	third_party	zstd 1.3.8 sources
-src/oblib/lib/compress/zstd_1_3_8/zstd_src/fse_compress.c	third_party	zstd 1.3.8 sources
-src/oblib/lib/compress/zstd_1_3_8/zstd_src/fse_decompress.c	third_party	zstd 1.3.8 sources
-src/oblib/lib/compress/zstd_1_3_8/zstd_src/hist.c	third_party	zstd 1.3.8 sources
-src/oblib/lib/compress/zstd_1_3_8/zstd_src/hist.h	third_party	zstd 1.3.8 sources
-src/oblib/lib/compress/zstd_1_3_8/zstd_src/huf.h	third_party	zstd 1.3.8 sources
-src/oblib/lib/compress/zstd_1_3_8/zstd_src/huf_compress.c	third_party	zstd 1.3.8 sources
-src/oblib/lib/compress/zstd_1_3_8/zstd_src/huf_decompress.c	third_party	zstd 1.3.8 sources
-src/oblib/lib/compress/zstd_1_3_8/zstd_src/mem.h	third_party	zstd 1.3.8 sources
-src/oblib/lib/compress/zstd_1_3_8/zstd_src/pool.c	third_party	zstd 1.3.8 sources
-src/oblib/lib/compress/zstd_1_3_8/zstd_src/pool.h	third_party	zstd 1.3.8 sources
-src/oblib/lib/compress/zstd_1_3_8/zstd_src/threading.c	third_party	zstd 1.3.8 sources
-src/oblib/lib/compress/zstd_1_3_8/zstd_src/threading.h	third_party	zstd 1.3.8 sources
-src/oblib/lib/compress/zstd_1_3_8/zstd_src/xxhash.c	third_party	zstd 1.3.8 sources
-src/oblib/lib/compress/zstd_1_3_8/zstd_src/xxhash.h	third_party	zstd 1.3.8 sources
-src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd.h	third_party	zstd 1.3.8 sources
-src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_common.c	third_party	zstd 1.3.8 sources
-src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_compress.c	third_party	zstd 1.3.8 sources
-src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_compress_internal.h	third_party	zstd 1.3.8 sources
-src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_ddict.c	third_party	zstd 1.3.8 sources
-src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_ddict.h	third_party	zstd 1.3.8 sources
-src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_decompress.c	third_party	zstd 1.3.8 sources
-src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_decompress_block.c	third_party	zstd 1.3.8 sources
-src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_decompress_block.h	third_party	zstd 1.3.8 sources
-src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_decompress_internal.h	third_party	zstd 1.3.8 sources
-src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_double_fast.c	third_party	zstd 1.3.8 sources
-src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_double_fast.h	third_party	zstd 1.3.8 sources
-src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_errors.h	third_party	zstd 1.3.8 sources
-src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_fast.c	third_party	zstd 1.3.8 sources
-src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_fast.h	third_party	zstd 1.3.8 sources
-src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_internal.h	third_party	zstd 1.3.8 sources
-src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_lazy.c	third_party	zstd 1.3.8 sources
-src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_lazy.h	third_party	zstd 1.3.8 sources
-src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_ldm.c	third_party	zstd 1.3.8 sources
-src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_ldm.h	third_party	zstd 1.3.8 sources
-src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_opt.c	third_party	zstd 1.3.8 sources
-src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_opt.h	third_party	zstd 1.3.8 sources
-src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstdmt_compress.c	third_party	zstd 1.3.8 sources
-src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstdmt_compress.h	third_party	zstd 1.3.8 sources
+src/oblib/lib/compress/zstd_1_3_8/ob_empty.c	unbuilt	not in the CMake build's source lists and not included by any node
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/bitstream.h	third_party	upstream notice at line 4: Copyright (C) 2013-present, Yann Collet.
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/compiler.h	third_party	upstream notice at line 2: Copyright (c) 2016-present, Yann Collet, Facebook, Inc.
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/cpu.h	third_party	upstream notice at line 2: Copyright (c) 2018-present, Facebook, Inc.
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/debug.c	third_party	upstream notice at line 4: Copyright (C) 2013-present, Yann Collet.
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/debug.h	third_party	upstream notice at line 4: Copyright (C) 2013-present, Yann Collet.
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/entropy_common.c	third_party	upstream notice at line 3: Copyright (C) 2016, Yann Collet.
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/error_private.c	third_party	upstream notice at line 2: Copyright (c) 2016-present, Yann Collet, Facebook, Inc.
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/error_private.h	third_party	upstream notice at line 2: Copyright (c) 2016-present, Yann Collet, Facebook, Inc.
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/fse.h	third_party	upstream notice at line 4: Copyright (C) 2013-2016, Yann Collet.
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/fse_compress.c	third_party	upstream notice at line 3: Copyright (C) 2013-present, Yann Collet.
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/fse_decompress.c	third_party	upstream notice at line 3: Copyright (C) 2013-2015, Yann Collet.
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/hist.c	third_party	upstream notice at line 4: Copyright (C) 2013-present, Yann Collet.
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/hist.h	third_party	upstream notice at line 4: Copyright (C) 2013-present, Yann Collet.
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/huf.h	third_party	upstream notice at line 4: Copyright (C) 2013-present, Yann Collet.
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/huf_compress.c	third_party	upstream notice at line 3: Copyright (C) 2013-2016, Yann Collet.
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/huf_decompress.c	third_party	upstream notice at line 4: Copyright (C) 2013-present, Yann Collet.
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/mem.h	third_party	upstream notice at line 2: Copyright (c) 2016-present, Yann Collet, Facebook, Inc.
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/pool.c	third_party	upstream notice at line 2: Copyright (c) 2016-present, Yann Collet, Facebook, Inc.
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/pool.h	third_party	upstream notice at line 2: Copyright (c) 2016-present, Yann Collet, Facebook, Inc.
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/threading.c	third_party	upstream notice at line 2: Copyright (c) 2016 Tino Reichardt
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/threading.h	third_party	upstream notice at line 2: Copyright (c) 2016 Tino Reichardt
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/xxhash.c	third_party	upstream notice at line 3: Copyright (C) 2012-2016, Yann Collet
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/xxhash.h	third_party	upstream notice at line 4: Copyright (C) 2012-2016, Yann Collet.
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd.h	third_party	upstream notice at line 2: Copyright (c) 2016-present, Yann Collet, Facebook, Inc.
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_common.c	third_party	upstream notice at line 2: Copyright (c) 2016-present, Yann Collet, Facebook, Inc.
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_compress.c	third_party	upstream notice at line 2: Copyright (c) 2016-present, Yann Collet, Facebook, Inc.
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_compress_internal.h	third_party	upstream notice at line 2: Copyright (c) 2016-present, Yann Collet, Facebook, Inc.
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_ddict.c	third_party	upstream notice at line 2: Copyright (c) 2016-present, Yann Collet, Facebook, Inc.
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_ddict.h	third_party	upstream notice at line 2: Copyright (c) 2016-present, Yann Collet, Facebook, Inc.
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_decompress.c	third_party	upstream notice at line 2: Copyright (c) 2016-present, Yann Collet, Facebook, Inc.
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_decompress_block.c	third_party	upstream notice at line 2: Copyright (c) 2016-present, Yann Collet, Facebook, Inc.
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_decompress_block.h	third_party	upstream notice at line 2: Copyright (c) 2016-present, Yann Collet, Facebook, Inc.
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_decompress_internal.h	third_party	upstream notice at line 2: Copyright (c) 2016-present, Yann Collet, Facebook, Inc.
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_double_fast.c	third_party	upstream notice at line 2: Copyright (c) 2016-present, Yann Collet, Facebook, Inc.
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_double_fast.h	third_party	upstream notice at line 2: Copyright (c) 2016-present, Yann Collet, Facebook, Inc.
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_errors.h	third_party	upstream notice at line 2: Copyright (c) 2016-present, Yann Collet, Facebook, Inc.
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_fast.c	third_party	upstream notice at line 2: Copyright (c) 2016-present, Yann Collet, Facebook, Inc.
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_fast.h	third_party	upstream notice at line 2: Copyright (c) 2016-present, Yann Collet, Facebook, Inc.
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_internal.h	third_party	upstream notice at line 2: Copyright (c) 2016-present, Yann Collet, Facebook, Inc.
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_lazy.c	third_party	upstream notice at line 2: Copyright (c) 2016-present, Yann Collet, Facebook, Inc.
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_lazy.h	third_party	upstream notice at line 2: Copyright (c) 2016-present, Yann Collet, Facebook, Inc.
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_ldm.c	third_party	upstream notice at line 2: Copyright (c) 2016-present, Yann Collet, Facebook, Inc.
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_ldm.h	third_party	upstream notice at line 2: Copyright (c) 2016-present, Yann Collet, Facebook, Inc.
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_opt.c	third_party	upstream notice at line 2: Copyright (c) 2016-present, Przemyslaw Skibinski, Yann Collet, Facebook, Inc.
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_opt.h	third_party	upstream notice at line 2: Copyright (c) 2016-present, Yann Collet, Facebook, Inc.
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstdmt_compress.c	third_party	upstream notice at line 2: Copyright (c) 2016-present, Yann Collet, Facebook, Inc.
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstdmt_compress.h	third_party	upstream notice at line 2: Copyright (c) 2016-present, Yann Collet, Facebook, Inc.
 src/oblib/lib/file/config.cpp	unbuilt	not in the CMake build's source lists and not included by any node
 src/oblib/lib/hash_func/xxhash.c	third_party	upstream notice at line 19: Copyright (C) 2012-2016, Yann Collet
 src/oblib/lib/hash_func/xxhash.h	third_party	upstream notice at line 20: Copyright (C) 2012-2016, Yann Collet.

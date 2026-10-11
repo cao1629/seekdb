@@ -17,7 +17,9 @@ and turned into module-level edges:
 Symbols that are only ever defined weakly (inline functions, template
 instantiations) are not edges: their code comes from headers, which the
 include graph already covers. A module is src/<first directory> of the
-object's path below BUILD/src; objects of vendored code (zstd) are skipped.
+object's path below BUILD/src. Skipped: objects compiled only from vendored
+sources (an upstream notice, the rule depmap_seekdb.py uses) and partial links
+outside CMakeFiles/ that repeat their member objects.
 
 The edges describe one build configuration (this one: macOS, release);
 platform-specific code of other targets is not in it.
@@ -39,22 +41,54 @@ import re
 import subprocess
 import sys
 
-SKIP_OBJECT_DIRS = ("oblib/lib/compress/zstd_1_3_8/",)
 LINE = re.compile(r"^\s*(?:[0-9a-fA-F]+\s+)?\((?P<sect>[^)]*)\)\s+(?:\(alignment [^)]*\)\s+)?(?P<attrs>.*?)external\s+(?P<name>\S+)\s*$")
 WEAK_SITE = re.compile(r"OB_WEAK_SYMBOL\s+(?:[\w:<>*&\s]+?\s)?([A-Za-z_][\w:]*)\s*\(")
+# Same vendored-code rule as depmap_seekdb.py: an upstream notice in the first 80 lines.
+THIRD_PARTY_NOTICE = re.compile(r"(?i)\bcopyright\b|\bpublic domain\b")
+OWN_NOTICE = re.compile(r"(?i)oceanbase|alibaba|ant group|antfin|apache license|www\.apache\.org")
+UNITY_INCLUDE = re.compile(r'^\s*#\s*include\s+"([^"]+)"', re.M)
 
 
-def objects(build):
+def object_sources(root, rel, repo):
+    """Repo paths of the sources an object under BUILD/src was compiled from."""
+    if "/Unity/" in rel:
+        with open(os.path.join(root, rel[:-2]), encoding="utf-8", errors="replace") as handle:
+            return [os.path.relpath(p, repo).replace(os.sep, "/") for p in UNITY_INCLUDE.findall(handle.read())]
+    owner, _, rest = rel.partition("/CMakeFiles/")
+    source = rest.split("/", 1)[1][:-2].replace("__/", "../")
+    return [os.path.normpath(os.path.join("src", owner, source)).replace(os.sep, "/")]
+
+
+def vendored(repo, source):
+    try:
+        with open(os.path.join(repo, source), encoding="utf-8", errors="replace") as handle:
+            head = handle.read().split("\n")[:80]
+    except OSError:
+        return False
+    return any(THIRD_PARTY_NOTICE.search(l) and not OWN_NOTICE.search(l) for l in head)
+
+
+def objects(build, repo):
+    """(root, objects kept, skipped counts). Objects outside CMakeFiles/ are partial links
+    that repeat their member objects; objects compiled only from vendored sources are
+    third-party."""
     root = os.path.join(build, "src")
-    found = []
+    found, skipped = [], collections.Counter()
     for dirpath, dirnames, filenames in os.walk(root):
         dirnames.sort()
         for fn in sorted(filenames):
-            if fn.endswith(".o"):
-                rel = os.path.relpath(os.path.join(dirpath, fn), root).replace(os.sep, "/")
-                if not rel.startswith(SKIP_OBJECT_DIRS) and not rel.endswith(".tmp.o"):
-                    found.append(rel)
-    return root, found
+            if not fn.endswith(".o"):
+                continue
+            rel = os.path.relpath(os.path.join(dirpath, fn), root).replace(os.sep, "/")
+            if "/CMakeFiles/" not in rel:
+                skipped["partial link outside CMakeFiles"] += 1
+                continue
+            sources = object_sources(root, rel, repo)
+            if sources and all(vendored(repo, s) for s in sources):
+                skipped["compiled from vendored sources"] += 1
+                continue
+            found.append(rel)
+    return root, found, skipped
 
 
 def read_object(path):
@@ -109,7 +143,7 @@ def main():
     ap.add_argument("--out", default="migration/depmap/symbols")
     ap.add_argument("--jobs", type=int, default=6)
     args = ap.parse_args()
-    root, objs = objects(args.build)
+    root, objs, skipped = objects(args.build, os.path.abspath(args.repo))
     if not objs:
         sys.exit("no object files under %s/src" % args.build)
     module_of = {o: "src/" + o.split("/")[0] for o in objs}
@@ -170,7 +204,8 @@ def main():
             f.write("%s\t%s\n" % (names[s], ",".join(mods)))
     unmatched_sites = [where for fn, where in sites if not any(re.search(r"(^|[\s:*&])" + re.escape(fn) + r"\(", names[r[0]]) for r in weak_rows)]
     report = [
-        "objects=%d modules=%s" % (len(objs), dict(sorted(collections.Counter(module_of.values()).items()))),
+        "objects=%d modules=%s skipped=%s" % (len(objs), dict(sorted(collections.Counter(module_of.values()).items())),
+                                             dict(sorted(skipped.items()))),
         "module edges: ref=%d weak_override=%d" % (sum(1 for e in edges if e[2] == "ref"), sum(1 for e in edges if e[2] == "weak_override")),
         "weak symbols overridden across modules=%d; OB_WEAK_SYMBOL sites in src=%d; sites with no cross-module override in this build=%d" % (
             len(weak_rows), len(sites), len(unmatched_sites)),

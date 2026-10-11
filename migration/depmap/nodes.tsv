@@ -565,6 +565,10 @@ src/oblib/lib/compress/ob_compressor_pool.cpp	112	src/oblib	src/oblib/lib/compre
 src/oblib/lib/compress/ob_compressor_pool.h	57	src/oblib	src/oblib/lib/compress/ob_compressor_pool
 src/oblib/lib/compress/zlib/ob_zlib_compressor.cpp	231	src/oblib	src/oblib/lib/compress/zlib/ob_zlib_compressor
 src/oblib/lib/compress/zlib/ob_zlib_compressor.h	57	src/oblib	src/oblib/lib/compress/zlib/ob_zlib_compressor
+src/oblib/lib/compress/zstd_1_3_8/ob_zstd_compressor_1_3_8.cpp	117	src/oblib	src/oblib/lib/compress/zstd_1_3_8/ob_zstd_compressor_1_3_8
+src/oblib/lib/compress/zstd_1_3_8/ob_zstd_compressor_1_3_8.h	56	src/oblib	src/oblib/lib/compress/zstd_1_3_8/ob_zstd_compressor_1_3_8
+src/oblib/lib/compress/zstd_1_3_8/ob_zstd_wrapper.cpp	335	src/oblib	src/oblib/lib/compress/zstd_1_3_8/ob_zstd_wrapper
+src/oblib/lib/compress/zstd_1_3_8/ob_zstd_wrapper.h	84	src/oblib	src/oblib/lib/compress/zstd_1_3_8/ob_zstd_wrapper
 src/oblib/lib/container/ob_2d_array.h	653	src/oblib	src/oblib/lib/container/ob_2d_array
 src/oblib/lib/container/ob_array.h	869	src/oblib	src/oblib/lib/container/ob_array
 src/oblib/lib/container/ob_array_array.h	426	src/oblib	src/oblib/lib/container/ob_array_array

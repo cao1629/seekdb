@@ -14,8 +14,8 @@ What counts
     translates: .h .hpp .ipp .inc .def .map .c .cc .cpp, minus the excluded
     classes. Excluded files are neither edges nor misses; an include of one is
     recorded in external_refs.tsv:
-      third_party  vendored code: THIRD_PARTY_PREFIXES, or an upstream copyright /
-                   public-domain notice in the first 80 lines (THIRD_PARTY_NOTICE)
+      third_party  vendored code: an upstream copyright / public-domain notice in
+                   the first 80 lines (THIRD_PARTY_NOTICE)
       generated    checked-in generator output: a GENERATED rule (what each generator
                    writes), or a generated marker in the first 40 lines
       unbuilt      an implementation file the CMake build's source lists do not name
@@ -84,12 +84,11 @@ SRC_ROOTS = ["rust/sql-nio/include", ".", "src", "src/query/api", "src/data_plan
 OBLIB_ROOTS = ["rust/sql-nio/include", "src/oblib/easy", "src/oblib", "src/oblib/common",
                "src/oblib/easy/include"]
 
-THIRD_PARTY_PREFIXES = {
-    "src/oblib/lib/compress/zstd_1_3_8/": "zstd 1.3.8 sources",
-}
 # Vendored files keep their upstream notice, sometimes below the OceanBase license
-# header (tzcode, libev, xxHash): a copyright or public-domain line in the first
+# header (zstd, tzcode, libev, xxHash): a copyright or public-domain line in the first
 # 80 lines that names nobody of OceanBase's own lineage marks the file third-party.
+# There is no directory rule: vendored directories also hold OceanBase's own wrappers
+# (src/oblib/lib/compress/zstd_1_3_8/ob_zstd_*), which are hand-written.
 THIRD_PARTY_NOTICE = re.compile(r"(?i)\bcopyright\b|\bpublic domain\b")
 OWN_NOTICE = re.compile(r"(?i)oceanbase|alibaba|ant group|antfin|apache license|www\.apache\.org")
 # Checked-in generator output, one rule per thing a generator writes (fnmatch patterns,
@@ -355,12 +354,11 @@ def classify(repo):
     for rel in repo.tracked:
         if not rel.startswith("src/") or os.path.splitext(rel)[1] not in NODE_EXTS:
             continue
-        third = next((why for pre, why in THIRD_PARTY_PREFIXES.items() if rel.startswith(pre)), None)
-        if not third:
-            for ln, line in enumerate(repo.text(rel).split("\n")[:80], 1):
-                if THIRD_PARTY_NOTICE.search(line) and not OWN_NOTICE.search(line):
-                    third = "upstream notice at line %d: %s" % (ln, line.strip().strip("/*").strip()[:100])
-                    break
+        third = None
+        for ln, line in enumerate(repo.text(rel).split("\n")[:80], 1):
+            if THIRD_PARTY_NOTICE.search(line) and not OWN_NOTICE.search(line):
+                third = "upstream notice at line %d: %s" % (ln, line.strip().strip("/*").strip()[:100])
+                break
         generator = next((why for pattern, why in GENERATED if fnmatch.fnmatchcase(rel, pattern)), None)
         if not generator and rel not in MARKER_FALSE_POSITIVES:
             for ln, line in enumerate(repo.text(rel).split("\n")[:40], 1):

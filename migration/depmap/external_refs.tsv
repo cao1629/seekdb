@@ -26,7 +26,7 @@ src/oblib/lib/charset/ob_ctype_mb.cc	ob_uctype.h	src/oblib/lib/charset/ob_uctype
 src/oblib/lib/codec/ob_bp_helpers.h	ob_generated_scalar_bp_func.h	src/oblib/lib/codec/ob_generated_scalar_bp_func.h	generated	21
 src/oblib/lib/codec/ob_codecs.h	lib/ob_errno.h	src/oblib/lib/ob_errno.h	generated	22
 src/oblib/lib/codec/ob_simd_fixed_pfor.h	ob_generated_unalign_simd_bp_func.h	src/oblib/lib/codec/ob_generated_unalign_simd_bp_func.h	generated	22
-src/oblib/lib/compress/ob_compressor_pool.h	zstd_1_3_8/ob_zstd_compressor_1_3_8.h	src/oblib/lib/compress/zstd_1_3_8/ob_zstd_compressor_1_3_8.h	third_party	23
+src/oblib/lib/compress/zstd_1_3_8/ob_zstd_wrapper.cpp	zstd_src/zstd.h	src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd.h	third_party	20
 src/oblib/lib/container/ob_iarray.h	lib/ob_errno.h	src/oblib/lib/ob_errno.h	generated	22
 src/oblib/lib/container/ob_paringheap.h	lib/ob_errno.h	src/oblib/lib/ob_errno.h	generated	32
 src/oblib/lib/container/ob_rbtree.h	lib/ob_errno.h	src/oblib/lib/ob_errno.h	generated	30
@@ -129,8 +129,6 @@ src/share/table/ob_ttl_schedule.h	lib/ob_errno.h	src/oblib/lib/ob_errno.h	genera
 src/sql/das/ob_das_domain_utils.cpp	share/ob_errno.h	src/share/ob_errno.h	generated	20
 src/sql/das/ob_das_id_allocator.cpp	lib/ob_errno.h	src/oblib/lib/ob_errno.h	generated	19
 src/sql/engine/aggregate/ob_pushdown_aggregate_program.cpp	lib/ob_errno.h	src/oblib/lib/ob_errno.h	generated	23
-src/sql/engine/basic/ob_select_into_basic.cpp	lib/compress/zstd_1_3_8/ob_zstd_wrapper.h	src/oblib/lib/compress/zstd_1_3_8/ob_zstd_wrapper.h	third_party	21
-src/sql/engine/cmd/ob_load_data_file_reader.cpp	lib/compress/zstd_1_3_8/ob_zstd_wrapper.h	src/oblib/lib/compress/zstd_1_3_8/ob_zstd_wrapper.h	third_party	23
 src/sql/engine/expr/ob_datum_cast.h	share/ob_errno.h	src/share/ob_errno.h	generated	26
 src/sql/engine/expr/ob_expr_tokenize.cpp	lib/ob_errno.h	src/oblib/lib/ob_errno.h	generated	24
 src/sql/engine/expr/ob_expr_unhex.cpp	share/system_variable/ob_sys_var_class_type.h	src/share/system_variable/ob_sys_var_class_type.h	generated	18

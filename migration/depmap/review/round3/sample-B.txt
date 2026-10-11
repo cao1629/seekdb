@@ -6,15 +6,15 @@ src/oblib/lib/time/ob_tsc_timestamp.h	adversarial: platform-specific
 src/oblib/lib/allocator/ob_malloc.h	adversarial: platform-specific
 src/share/datum/ob_str_datum_funcs_compilation/ob_str_datum_funcs_all.cpp	adversarial: excluded (generated)
 src/sql/engine/expr/ob_expr_str_cmp_func_compile/ob_expr_str_cmp_func_part_1.cpp	adversarial: excluded (generated)
-src/oblib/lib/compress/zstd_1_3_8/ob_zstd_compressor_1_3_8.cpp	adversarial: excluded (third_party)
-src/observer/report/ob_tablet_meta_checker.cpp	adversarial: excluded (unbuilt)
-src/sql/resolver/cmd/ob_load_data_resolver.cpp	random
-src/storage/tx/ob_trans_ctx_mgr_v4.h	random
-src/storage/ls/ob_ls_tablet_service.h	random
-src/sql/engine/ob_operator_factory.cpp	random
-src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.h	random
-src/storage/tablet/ob_tablet_iterator.h	random
-src/sql/resolver/expr/ob_raw_expr_resolver.h	random
-src/storage/ddl/ob_ddl_macro_block_write_task.h	random
-src/storage/blocksstable/index_block/ob_agg_row_struct.cpp	random
-src/sql/resolver/dml/ob_insert_stmt.cpp	random
+src/oblib/lib/compress/zstd_1_3_8/zstd_src/zstd_ldm.h	adversarial: excluded (third_party)
+src/share/storage/ob_tablet_compaction_checksum_table_storage.cpp	adversarial: excluded (unbuilt)
+src/storage/compaction/ob_basic_schedule_tablet_func.h	random
+src/sql/resolver/expr/ob_raw_expr_part_func_checker.h	random
+src/sql/resolver/ddl/ob_recyclebin_restore_resolver.cpp	random
+src/storage/vector_type/ob_sparse_vector_ip_distance.h	random
+src/storage/ob_storage_rpc_arg.h	random
+src/sql/engine/expr/ob_expr_time_diff.cpp	random
+src/storage/tablet/ob_tablet_delete_mds_helper.h	random
+src/sql/engine/px/exchange/ob_transmit_op.cpp	random
+src/sql/engine/expr/ob_pl_expr_subquery.cpp	random
+src/storage/blocksstable/ob_fuse_row_cache.h	random

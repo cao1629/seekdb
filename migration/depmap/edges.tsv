@@ -1657,9 +1657,14 @@ src/oblib/lib/compress/ob_compressor_pool.h	src/oblib/lib/allocator/ob_vslice_al
 src/oblib/lib/compress/ob_compressor_pool.h	src/oblib/lib/compress/none/ob_none_compressor.h	inc	0	22
 src/oblib/lib/compress/ob_compressor_pool.h	src/oblib/lib/compress/ob_compressor.h	inc	0	20
 src/oblib/lib/compress/ob_compressor_pool.h	src/oblib/lib/compress/zlib/ob_zlib_compressor.h	inc	0	24
+src/oblib/lib/compress/ob_compressor_pool.h	src/oblib/lib/compress/zstd_1_3_8/ob_zstd_compressor_1_3_8.h	inc	0	23
 src/oblib/lib/compress/zlib/ob_zlib_compressor.cpp	src/oblib/lib/compress/ob_compress_util.h	inc	0	18
 src/oblib/lib/compress/zlib/ob_zlib_compressor.cpp	src/oblib/lib/compress/zlib/ob_zlib_compressor.h	inc,own_header	0	17
 src/oblib/lib/compress/zlib/ob_zlib_compressor.h	src/oblib/lib/compress/ob_compressor.h	inc	0	19
+src/oblib/lib/compress/zstd_1_3_8/ob_zstd_compressor_1_3_8.cpp	src/oblib/lib/compress/zstd_1_3_8/ob_zstd_compressor_1_3_8.h	inc,own_header	0	17
+src/oblib/lib/compress/zstd_1_3_8/ob_zstd_compressor_1_3_8.cpp	src/oblib/lib/compress/zstd_1_3_8/ob_zstd_wrapper.h	inc	0	19
+src/oblib/lib/compress/zstd_1_3_8/ob_zstd_compressor_1_3_8.h	src/oblib/lib/compress/ob_compressor.h	inc	0	19
+src/oblib/lib/compress/zstd_1_3_8/ob_zstd_wrapper.cpp	src/oblib/lib/compress/zstd_1_3_8/ob_zstd_wrapper.h	inc,own_header	0	17
 src/oblib/lib/container/ob_2d_array.h	src/oblib/lib/container/ob_iarray.h	inc	0	19
 src/oblib/lib/container/ob_2d_array.h	src/oblib/lib/container/ob_se_array.h	inc	0	22
 src/oblib/lib/container/ob_2d_array.h	src/oblib/lib/utility/ob_print_utils.h	inc	0	21
@@ -10023,6 +10028,7 @@ src/sql/engine/basic/ob_ra_row_store.h	src/oblib/lib/list/ob_dlist.h	inc	0	24
 src/sql/engine/basic/ob_ra_row_store.h	src/oblib/lib/utility/ob_print_utils.h	inc	0	23
 src/sql/engine/basic/ob_ra_row_store.h	src/share/ob_define.h	inc	0	20
 src/sql/engine/basic/ob_select_into_basic.cpp	src/oblib/lib/compress/ob_compress_util.h	inc	0	20
+src/sql/engine/basic/ob_select_into_basic.cpp	src/oblib/lib/compress/zstd_1_3_8/ob_zstd_wrapper.h	inc	0	21
 src/sql/engine/basic/ob_select_into_basic.cpp	src/sql/engine/basic/ob_select_into_basic.h	inc,own_header	0	19
 src/sql/engine/basic/ob_select_into_basic.h	src/oblib/lib/file/ob_file.h	inc	0	22
 src/sql/engine/basic/ob_select_into_basic.h	src/sql/engine/cmd/ob_load_data_parser.h	inc	0	21
@@ -10227,6 +10233,7 @@ src/sql/engine/cmd/ob_load_data_executor.cpp	src/sql/engine/cmd/ob_load_data_exe
 src/sql/engine/cmd/ob_load_data_executor.cpp	src/sql/engine/cmd/ob_load_data_impl.h	inc	0	21
 src/sql/engine/cmd/ob_load_data_executor.h	src/sql/resolver/cmd/ob_load_data_stmt.h	inc	0	19
 src/sql/engine/cmd/ob_load_data_file_reader.cpp	src/oblib/lib/compress/ob_compress_util.h	inc	0	24
+src/sql/engine/cmd/ob_load_data_file_reader.cpp	src/oblib/lib/compress/zstd_1_3_8/ob_zstd_wrapper.h	inc	0	23
 src/sql/engine/cmd/ob_load_data_file_reader.cpp	src/oblib/rpc/obmysql/ob_i_cs_mem_pool.h	inc	0	20
 src/sql/engine/cmd/ob_load_data_file_reader.cpp	src/oblib/rpc/obmysql/packet/ompk_local_infile.h	inc	0	21
 src/sql/engine/cmd/ob_load_data_file_reader.cpp	src/sql/engine/cmd/ob_load_data_file_reader.h	inc,own_header	0	19
