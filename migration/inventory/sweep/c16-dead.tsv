@@ -1,0 +1,11 @@
+file	symbol	source_construct	line	pretag
+src/oblib/lib/allocator/ob_delay_free_allocator.h	ob_delay_free_allocator	dead unit	35	includers=0;refs=0;bin_syms=0;classes=ObDelayFreeAllocator,ObDelayFreeMemBlock;members=ob_delay_free_allocator.cpp,ob_delay_free_allocator.h
+src/oblib/lib/container/ob_ring_array.h	ob_ring_array	dead unit	32	includers=0;refs=0;bin_syms=0;classes=ObRingArray;members=ob_ring_array.h
+src/oblib/lib/lock/ob_bucket_qsync_lock.h	ob_bucket_qsync_lock	dead unit	31	includers=0;refs=0;bin_syms=0;classes=ObBucketHashQSyncRLockGuard,ObBucketHashQSyncWLockGuard,ObBucketQSyncLock,ObBucketQSyncRLockGuard;members=ob_bucket_qsync_lock.cpp,ob_bucket_qsync_lock.h
+src/oblib/lib/queue/ob_co_seq_queue.h	ob_co_seq_queue	dead unit	29	includers=0;refs=0;bin_syms=0;classes=ObCoSeqQueue;members=ob_co_seq_queue.h
+src/oblib/lib/queue/ob_ms_queue.h	ob_ms_queue	dead unit	29	includers=0;refs=0;bin_syms=0;classes=ObMsQueue;members=ob_ms_queue.cpp,ob_ms_queue.h
+src/oblib/lib/signal/ob_signal_handlers.cpp	install_ob_signal_handler	dead function	69	callers=0;bin_syms=0;definitions=2
+src/oblib/lib/signal/ob_signal_handlers.cpp	install_ob_signal_handler#2	dead function	235	callers=0;bin_syms=0;definitions=2
+src/oblib/lib/signal/ob_signal_utils.h	do_with_crash_restore	dead function	57	callers=0;bin_syms=0;definitions=2
+src/oblib/lib/signal/ob_signal_utils.h	do_with_crash_restore#2	dead function	80	callers=0;bin_syms=0;definitions=2
+src/oblib/lib/thread/ob_map_queue_thread_pool.h	ob_map_queue_thread_pool	dead unit	37	includers=0;refs=0;bin_syms=0;classes=ObMapQueueThreadPool;members=ob_map_queue_thread_pool.cpp,ob_map_queue_thread_pool.h

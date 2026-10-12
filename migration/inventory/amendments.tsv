@@ -1,0 +1,11 @@
+source	section	problem	proposal
+1c-S4-seams	RULEBOOK §0.4 拆法	seams.tsv 里有 1,698 个成员函数体与所属类不在同一个 crate 编译；其中 991 行（168 个类）在函数体所在 crate 之下没有任何使用者，例如 data_plane 的 DAG 调度器 275 行中有 274 行如此。§0.4 的拆法都不适用，RULEBOOK 估的 741/54/67 也没算进这一类	§0.4 增加拆法"上移类型"：类在下层没有使用者时，把声明连同函数体移到函数体所在的 crate；seams.tsv 标出候选，由审查者逐个确认
+1c-S4-seams	RULEBOOK §0.3 storage_core 的依赖	storage_core 用到上层的值类型（palf::LSN 56 处，以及 SCN、ObTransID、ObTxSEQ），另有 15 个成员函数体在 storage 编译；0.3 只给了 storage_core 对 oblib 的依赖	与 08-A1（Q1）合并：把这些值类型移到 oblib，由 08 在 1d 移植；否则给 storage_core 加对相应值类型模块的依赖
+1c-S4-seams	RULEBOOK §0.3 新的向上边	query → data_plane 有 6 个类型（如 ObDatumRow、ObTableScanParam），storage → sql 有 7 个类型（两者现在是同级 crate），链接级数据里看不到	按前向声明的规则处理（不透明句柄或下移类型），逐个写进 seams.tsv，由审查者确认
+1c-S4-seams	RULEBOOK §0.4 逐边方案 share→observer	print_service_status 不能下移：函数体检查 server_service<ObServerRuntimeController>，这是 observer 的类型	改成 trait + 槽位，或由 observer 注册钩子
+1c-S4-seams	RULEBOOK §0.4、0.6	ObExprOperator 一族（seams.tsv 396 行）被 0.6 上移进 sql，§0.4 没有对应的拆法	并入第一行的"上移类型"
+1c-S4-seams	RULEBOOK §0.4 逐边方案 sql↔storage	ObTxDesc 出现在 27 个 sql 成员和 97 个签名里	在 data_plane 定义句柄 trait TxDesc，写进逐边方案
+1c-S2-sweeps	依赖图（DEV-007 附近）	sql → observer 的向上调用 lib_get_cpu_khz 没有进依赖图：depmap 的 nm 解析丢掉了 "external [no dead strip]" 的行	seams.tsv 已收录；修正 symdeps_seekdb.py 的正则并重跑链接级依赖
+1c-S2-sweeps	RULEBOOK 0.13 ObItemType	23 个先包含 objit 副本的编译单元里，有 19 个用到 T_MAX（这些单元里是 4920，其他单元是 4921），C++ 的定义在编译单元之间不一致	作为疑似 bug 记进清单第 17 类；生成器以 query 副本为准、不一致就报错（与 09 的设计一致）
+1c-S3a-ownership	RULEBOOK §4 名字	同一个编译单元里有 22 个结构体名字冲突（共 110 个类，多为嵌套类，如 ObLSPersistentState::State）	名字表对嵌套类保留外层类作为模块路径；写进 symbols.tsv 的规则
+1d-08	清单第 17 类	08 文档 §8.2 列了 6 个疑似 C++ bug：B1 撤销链接后复用批次槽（MT.cpp:2577）、B2 紧凑节点不初始化 write_epoch_/tx_end_scn_、B3 服务未运行时 remove_callback_for_uncommited_txn 返回成功、B4 KV 覆盖时不减旧块计数、B5 KV 退休条件（已在第 17 类）、B6 aarch64 上组缓冲 read_data 的双重检查没有保证	把 B1–B4、B6 加进清单第 17 类，逐个定位并分类（BUG 或 FIXED）

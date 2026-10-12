@@ -1,0 +1,1081 @@
+file	symbol	source_construct	line	pretag
+src/data_plane/api/data_plane/access/ob_table_scan_param.h	ScanResumePoint::allocator_	arena member	83	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/data_plane/api/data_plane/blocksstable/ob_datum_row.h	ObDatumRow::local_allocator_	arena member	345	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/data_plane/api/data_plane/fts/ob_fts_parser_property.h	ObFTParserJsonProps::allocator_	arena member	127	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/data_plane/api/data_plane/scheduler/ob_sys_task_stat.h	ObSysStatMgrIter::allocator_	arena member	63	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/data_plane/api/data_plane/vector/ob_vector_common_util.h	ObSPIVFixedSizeHeap::allocator_	arena member	102	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/oblib/common/json_type/ob_json_base.cpp	ObJsonBaseFactory::alloc_node#OB_NEWx(ObJsonNull,&allocator)	OB_NEWx pool argument	5727	pool-kind:addr-of;pool:&allocator
+src/oblib/common/json_type/ob_json_base.cpp	ObJsonBaseFactory::alloc_node#OB_NEWx(ObJsonDecimal,&allocator)	OB_NEWx pool argument	5735	pool-kind:addr-of;pool:&allocator
+src/oblib/common/json_type/ob_json_base.cpp	ObJsonBaseFactory::alloc_node#OB_NEWx(ObJsonInt,&allocator)	OB_NEWx pool argument	5743	pool-kind:addr-of;pool:&allocator
+src/oblib/common/json_type/ob_json_base.cpp	ObJsonBaseFactory::alloc_node#OB_NEWx(ObJsonUint,&allocator)	OB_NEWx pool argument	5751	pool-kind:addr-of;pool:&allocator
+src/oblib/common/json_type/ob_json_base.cpp	ObJsonBaseFactory::alloc_node#OB_NEWx(ObJsonDouble,&allocator)	OB_NEWx pool argument	5759	pool-kind:addr-of;pool:&allocator
+src/oblib/common/json_type/ob_json_base.cpp	ObJsonBaseFactory::alloc_node#OB_NEWx(ObJsonOFloat,&allocator)	OB_NEWx pool argument	5765	pool-kind:addr-of;pool:&allocator
+src/oblib/common/json_type/ob_json_base.cpp	ObJsonBaseFactory::alloc_node#OB_NEWx(ObJsonString,&allocator)	OB_NEWx pool argument	5771	pool-kind:addr-of;pool:&allocator
+src/oblib/common/json_type/ob_json_base.cpp	ObJsonBaseFactory::alloc_node#OB_NEWx(ObJsonObject,&allocator)	OB_NEWx pool argument	5777	pool-kind:addr-of;pool:&allocator
+src/oblib/common/json_type/ob_json_base.cpp	ObJsonBaseFactory::alloc_node#OB_NEWx(ObJsonArray,&allocator)	OB_NEWx pool argument	5783	pool-kind:addr-of;pool:&allocator
+src/oblib/common/json_type/ob_json_base.cpp	ObJsonBaseFactory::alloc_node#OB_NEWx(ObJsonBoolean,&allocator)	OB_NEWx pool argument	5789	pool-kind:addr-of;pool:&allocator
+src/oblib/common/json_type/ob_json_base.cpp	ObJsonBaseFactory::alloc_node#OB_NEWx(ObJsonDatetime,&allocator)	OB_NEWx pool argument	5805	pool-kind:addr-of;pool:&allocator
+src/oblib/common/json_type/ob_json_base.cpp	ObJsonBaseFactory::alloc_node#OB_NEWx(ObJsonOpaque,&allocator)	OB_NEWx pool argument	5811	pool-kind:addr-of;pool:&allocator
+src/oblib/common/json_type/ob_json_base.cpp	ObJsonBaseFactory::alloc_node#OB_NEWx(ObJsonORawString,&allocator)	OB_NEWx pool argument	5820	pool-kind:addr-of;pool:&allocator
+src/oblib/common/json_type/ob_json_bin.cpp	ObJsonBin::init_ctx#OB_NEWx(ObJsonBinCtx,allocator_)	OB_NEWx pool argument	1802	pool-kind:member;pool:allocator_
+src/oblib/common/json_type/ob_json_path.h	ObPathNodeContent::mode_arena_	arena member	177	guess:ARENA_CROSSCALL;type:PathArrayRangeArena
+src/oblib/common/json_type/ob_json_path.h	ObJsonPath::mode_arena_	arena member	324	guess:ARENA_CROSSCALL;type:JsonPathModuleArena
+src/oblib/common/json_type/ob_json_path.h	ObJsonPathCache::path_cache_arena_	arena member	438	guess:ARENA_CROSSCALL;type:PathCacheStatArena
+src/oblib/common/json_type/ob_json_path.h	ObJsonPathCache::path_arena_	arena member	439	guess:ARENA_CROSSCALL;type:JsonPathArena
+src/oblib/common/json_type/ob_json_schema.cpp	ObJsonSchemaTree::build_schema_tree#OB_NEWx(ObJsonArray,allocator_)	OB_NEWx pool argument	109	pool-kind:member;pool:allocator_
+src/oblib/common/json_type/ob_json_schema.cpp	ObJsonSchemaTree::build_schema_tree#OB_NEWx(ObJsonObject,allocator_)	OB_NEWx pool argument	110	pool-kind:member;pool:allocator_
+src/oblib/common/json_type/ob_json_schema.cpp	ObJsonSchemaTree::build_schema_tree#OB_NEWx(ObJsonObject,allocator_)#2	OB_NEWx pool argument	111	pool-kind:member;pool:allocator_
+src/oblib/common/json_type/ob_json_schema.cpp	ObJsonSchemaTree::build_schema_tree#OB_NEWx(ObJsonInt,allocator_)	OB_NEWx pool argument	112	pool-kind:member;pool:allocator_
+src/oblib/common/json_type/ob_json_schema.cpp	ObJsonSchemaTree::get_schema_vec#OB_NEWx(ObJsonArray,allocator_)	OB_NEWx pool argument	252	pool-kind:member;pool:allocator_
+src/oblib/common/json_type/ob_json_schema.cpp	ObJsonSchemaTree::get_schema_vec#OB_NEWx(ObJsonObject,allocator_)	OB_NEWx pool argument	265	pool-kind:member;pool:allocator_
+src/oblib/common/json_type/ob_json_schema.cpp	ObJsonSchemaTree::union_scalar_key_words_value#OB_NEWx(ObJsonArray,allocator_)	OB_NEWx pool argument	424	pool-kind:member;pool:allocator_
+src/oblib/common/json_type/ob_json_schema.cpp	ObJsonSchemaTree::generate_comp_and_record#OB_NEWx(ObJsonObject,allocator_)	OB_NEWx pool argument	564	pool-kind:member;pool:allocator_
+src/oblib/common/json_type/ob_json_schema.cpp	ObJsonSchemaTree::generate_comp_and_record#OB_NEWx(ObJsonInt,allocator_)	OB_NEWx pool argument	582	pool-kind:member;pool:allocator_
+src/oblib/common/json_type/ob_json_schema.cpp	ObJsonSchemaTree::generate_comp_and_record#OB_NEWx(ObJsonInt,allocator_)#2	OB_NEWx pool argument	585	pool-kind:member;pool:allocator_
+src/oblib/common/json_type/ob_json_schema.cpp	ObJsonSchemaTree::get_difined_type#OB_NEWx(ObJsonUint,allocator_)	OB_NEWx pool argument	763	pool-kind:member;pool:allocator_
+src/oblib/common/json_type/ob_json_schema.cpp	ObJsonSchemaTree::get_dep_schema_if_defined#OB_NEWx(ObJsonObject,allocator_)	OB_NEWx pool argument	799	pool-kind:member;pool:allocator_
+src/oblib/common/json_type/ob_json_schema.cpp	ObJsonSchemaTree::add_required_key#OB_NEWx(ObJsonString,allocator_)	OB_NEWx pool argument	977	pool-kind:member;pool:allocator_
+src/oblib/common/json_type/ob_json_schema.cpp	ObJsonSchemaTree::get_addition_pro_value#OB_NEWx(ObJsonArray,allocator_)	OB_NEWx pool argument	1019	pool-kind:member;pool:allocator_
+src/oblib/common/json_type/ob_json_schema.cpp	ObJsonSchemaTree::get_addition_pro_value#OB_NEWx(ObJsonArray,allocator_)#2	OB_NEWx pool argument	1020	pool-kind:member;pool:allocator_
+src/oblib/common/json_type/ob_json_schema.cpp	ObJsonSchemaTree::get_addition_pro_value#OB_NEWx(ObJsonArray,allocator_)#3	OB_NEWx pool argument	1021	pool-kind:member;pool:allocator_
+src/oblib/common/json_type/ob_json_schema.cpp	ObJsonSchemaTree::get_addition_pro_value#OB_NEWx(ObJsonString,allocator_)	OB_NEWx pool argument	1053	pool-kind:member;pool:allocator_
+src/oblib/common/json_type/ob_json_schema.cpp	ObJsonSchemaTree::check_keywords_of_array#OB_NEWx(ObJsonInt,allocator_)	OB_NEWx pool argument	1114	pool-kind:member;pool:allocator_
+src/oblib/common/json_type/ob_json_schema.cpp	ObJsonSchemaTree::handle_unnested_dependencies#OB_NEWx(ObJsonObject,allocator_)	OB_NEWx pool argument	1213	pool-kind:member;pool:allocator_
+src/oblib/common/json_type/ob_json_schema.cpp	ObJsonSchemaTree::handle_unnested_dependencies#OB_NEWx(ObJsonArray,allocator_)	OB_NEWx pool argument	1226	pool-kind:member;pool:allocator_
+src/oblib/common/json_type/ob_json_schema.cpp	ObJsonSchemaTree::handle_nested_dependencies#OB_NEWx(ObJsonObject,allocator_)	OB_NEWx pool argument	1245	pool-kind:member;pool:allocator_
+src/oblib/common/json_type/ob_json_schema.cpp	ObJsonSchemaTree::handle_nested_dependencies#OB_NEWx(ObJsonObject,allocator_)#2	OB_NEWx pool argument	1247	pool-kind:member;pool:allocator_
+src/oblib/common/json_type/ob_json_schema.cpp	ObJsonSchemaTree::handle_nested_dependencies#OB_NEWx(ObJsonArray,allocator_)	OB_NEWx pool argument	1261	pool-kind:member;pool:allocator_
+src/oblib/common/json_type/ob_json_schema.cpp	ObJsonSchemaTree::handle_unnested_composition#OB_NEWx(ObJsonArray,allocator_)	OB_NEWx pool argument	1451	pool-kind:member;pool:allocator_
+src/oblib/common/json_type/ob_json_schema.cpp	ObJsonSchemaTree::handle_unnested_not#OB_NEWx(ObJsonArray,allocator_)	OB_NEWx pool argument	1467	pool-kind:member;pool:allocator_
+src/oblib/common/json_type/ob_json_schema.cpp	ObJsonSchemaTree::handle_nested_composition#OB_NEWx(ObJsonObject,allocator_)	OB_NEWx pool argument	1504	pool-kind:member;pool:allocator_
+src/oblib/common/json_type/ob_json_schema.cpp	ObJsonSchemaTree::handle_nested_composition#OB_NEWx(ObJsonArray,allocator_)	OB_NEWx pool argument	1506	pool-kind:member;pool:allocator_
+src/oblib/common/json_type/ob_json_schema.cpp	ObJsonSchemaTree::handle_nested_composition#OB_NEWx(ObJsonArray,allocator_)#2	OB_NEWx pool argument	1519	pool-kind:member;pool:allocator_
+src/oblib/common/json_type/ob_json_schema.cpp	ObJsonSchemaTree::handle_nested_not#OB_NEWx(ObJsonObject,allocator_)	OB_NEWx pool argument	1539	pool-kind:member;pool:allocator_
+src/oblib/common/json_type/ob_json_schema.cpp	ObJsonSchemaTree::handle_nested_not#OB_NEWx(ObJsonArray,allocator_)	OB_NEWx pool argument	1541	pool-kind:member;pool:allocator_
+src/oblib/common/json_type/ob_json_schema.cpp	ObJsonSchemaTree::json_schema_move_to_key#OB_NEWx(ObJsonObject,allocator_)	OB_NEWx pool argument	1568	pool-kind:member;pool:allocator_
+src/oblib/common/json_type/ob_json_schema.cpp	ObJsonSchemaTree::json_schema_move_to_array#OB_NEWx(ObJsonArray,allocator_)	OB_NEWx pool argument	1597	pool-kind:member;pool:allocator_
+src/oblib/common/json_type/ob_json_schema.cpp	ObJsonSchemaTree::json_schema_move_to_array#OB_NEWx(ObJsonObject,allocator_)	OB_NEWx pool argument	1609	pool-kind:member;pool:allocator_
+src/oblib/common/json_type/ob_json_schema.cpp	ObJsonSchemaTree::json_schema_add_comp_value#OB_NEWx(ObJsonArray,allocator_)	OB_NEWx pool argument	1628	pool-kind:member;pool:allocator_
+src/oblib/common/json_type/ob_json_schema.cpp	ObJsonSchemaUtils::collect_key#OB_NEWx(ObJsonString,allocator)	OB_NEWx pool argument	3902	pool-kind:param-or-local;pool:allocator
+src/oblib/common/json_type/ob_json_schema.h	ObJsonSchemaCache::schema_cache_arena_	arena member	411	guess:ARENA_CROSSCALL;type:SchemaCacheStatArena
+src/oblib/common/json_type/ob_json_schema.h	ObJsonSchemaCache::schema_arena_	arena member	412	guess:ARENA_CROSSCALL;type:JsonSchemaArena
+src/oblib/common/json_type/ob_json_schema.h	ObJsonSchemaCache::str_arena_	arena member	413	guess:ARENA_CROSSCALL;type:JsonSchemaStrArena
+src/oblib/common/json_type/ob_json_tree.h	ObJsonArray::mode_arena_	arena member	420	guess:ARENA_CROSSCALL;type:JsonNodeModuleArena
+src/oblib/common/mysqlclient/ob_isql_connection.h	ObISQLConnection::allocator_	arena member	153	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/oblib/common/ob_data_version_mgr.h	ObDataVersionMgr::allocator_	arena member	98	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/oblib/common/ob_string_buf.h	ObStringBufT::local_arena_	arena member	82	guess:ARENA_CROSSCALL;type:PageArenaT
+src/oblib/common/rowkey/ob_rowkey_info.h	ObRowkeyInfo::arena_	arena member	120	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/oblib/common/udt/ob_collection_type.cpp	ObCollectionBasicType::deep_copy#OB_NEWx(ObCollectionBasicType,&allocator)	OB_NEWx pool argument	59	pool-kind:addr-of;pool:&allocator
+src/oblib/common/udt/ob_collection_type.cpp	ObCollectionArrayType::deep_copy#OB_NEWx(ObCollectionArrayType,&allocator)	OB_NEWx pool argument	116	pool-kind:addr-of;pool:&allocator
+src/oblib/common/udt/ob_collection_type.cpp	ObCollectionMapType::deep_copy#OB_NEWx(ObCollectionMapType,&allocator)	OB_NEWx pool argument	214	pool-kind:addr-of;pool:&allocator
+src/oblib/common/udt/ob_collection_type.cpp	ObSqlCollectionInfo::deep_copy#OB_NEWx(ObSqlCollectionInfo,&allocator)	OB_NEWx pool argument	298	pool-kind:addr-of;pool:&allocator
+src/oblib/common/udt/ob_collection_type.cpp	ObSqlCollectionInfo::collection_type_deserialize#OB_NEWx(ObCollectionBasicType,&allocator)	OB_NEWx pool argument	325	pool-kind:addr-of;pool:&allocator
+src/oblib/common/udt/ob_collection_type.cpp	ObSqlCollectionInfo::collection_type_deserialize#OB_NEWx(ObCollectionArrayType,&allocator)	OB_NEWx pool argument	331	pool-kind:addr-of;pool:&allocator
+src/oblib/common/udt/ob_collection_type.cpp	ObSqlCollectionInfo::collection_type_deserialize#OB_NEWx(ObCollectionMapType,&allocator)	OB_NEWx pool argument	337	pool-kind:addr-of;pool:&allocator
+src/oblib/common/udt/ob_collection_type.cpp	ObSqlCollectionInfo::parse_collection_info#OB_NEWx(ObCollectionMapType,&allocator_)	OB_NEWx pool argument	528	pool-kind:addr-of;pool:&allocator_
+src/oblib/common/udt/ob_collection_type.cpp	ObSqlCollectionInfo::parse_collection_info#OB_NEWx(ObCollectionArrayType,&allocator_)	OB_NEWx pool argument	552	pool-kind:addr-of;pool:&allocator_
+src/oblib/common/udt/ob_collection_type.cpp	ObSqlCollectionInfo::parse_collection_info#OB_NEWx(ObCollectionArrayType,&allocator_)#2	OB_NEWx pool argument	568	pool-kind:addr-of;pool:&allocator_
+src/oblib/common/udt/ob_collection_type.cpp	ObSqlCollectionInfo::parse_collection_info#OB_NEWx(ObCollectionMapType,&allocator_)#2	OB_NEWx pool argument	580	pool-kind:addr-of;pool:&allocator_
+src/oblib/common/udt/ob_collection_type.cpp	ObSqlCollectionInfo::parse_vec_element_info#OB_NEWx(ObCollectionBasicType,&allocator_)	OB_NEWx pool argument	603	pool-kind:addr-of;pool:&allocator_
+src/oblib/common/udt/ob_collection_type.cpp	ObSqlCollectionInfo::parse_element_info#OB_NEWx(ObCollectionBasicType,&allocator_)	OB_NEWx pool argument	643	pool-kind:addr-of;pool:&allocator_
+src/oblib/common/udt/ob_collection_type.cpp	ObSqlCollectionInfo::parse_map_element_info#OB_NEWx(ObCollectionArrayType,&allocator_)	OB_NEWx pool argument	694	pool-kind:addr-of;pool:&allocator_
+src/oblib/common/udt/ob_collection_type.cpp	ObSqlCollectionInfo::parse_map_element_info#OB_NEWx(ObCollectionArrayType,&allocator_)#2	OB_NEWx pool argument	696	pool-kind:addr-of;pool:&allocator_
+src/oblib/common/udt/ob_collection_type.cpp	ObSqlCollectionInfo::parse_sparse_vector_element_info#OB_NEWx(ObCollectionArrayType,&allocator_)	OB_NEWx pool argument	722	pool-kind:addr-of;pool:&allocator_
+src/oblib/common/udt/ob_collection_type.cpp	ObSqlCollectionInfo::parse_sparse_vector_element_info#OB_NEWx(ObCollectionArrayType,&allocator_)#2	OB_NEWx pool argument	724	pool-kind:addr-of;pool:&allocator_
+src/oblib/common/udt/ob_collection_type.cpp	ObSqlCollectionInfo::parse_sparse_vector_element_info#OB_NEWx(ObCollectionBasicType,&allocator_)	OB_NEWx pool argument	733	pool-kind:addr-of;pool:&allocator_
+src/oblib/common/udt/ob_collection_type.cpp	ObSqlCollectionInfo::parse_sparse_vector_element_info#OB_NEWx(ObCollectionBasicType,&allocator_)#2	OB_NEWx pool argument	736	pool-kind:addr-of;pool:&allocator_
+src/oblib/common/xml/ob_libxml2_sax_handler.cpp	ObLibXml2SaxParser::parse_content#OB_NEWx(ObXmlDocument,allocator_)	OB_NEWx pool argument	481	pool-kind:member;pool:allocator_
+src/oblib/common/xml/ob_libxml2_sax_handler.cpp	ObLibXml2SaxParser::start_document#OB_NEWx(ObXmlDocument,allocator_)	OB_NEWx pool argument	667	pool-kind:member;pool:allocator_
+src/oblib/common/xml/ob_libxml2_sax_handler.cpp	ObLibXml2SaxParser::add_element_attr#OB_NEWx(ObXmlAttribute,allocator)	OB_NEWx pool argument	766	pool-kind:param-or-local;pool:allocator
+src/oblib/common/xml/ob_libxml2_sax_handler.cpp	ObLibXml2SaxParser::start_element#OB_NEWx(ObXmlElement,allocator_)	OB_NEWx pool argument	848	pool-kind:member;pool:allocator_
+src/oblib/common/xml/ob_libxml2_sax_handler.cpp	ObLibXml2SaxParser::alloc_text_node#OB_NEWx(ObXmlText,allocator_)	OB_NEWx pool argument	910	pool-kind:member;pool:allocator_
+src/oblib/common/xml/ob_libxml2_sax_handler.cpp	ObLibXml2SaxParser::processing_instruction#OB_NEWx(ObXmlAttribute,allocator_)	OB_NEWx pool argument	994	pool-kind:member;pool:allocator_
+src/oblib/common/xml/ob_multi_mode_interface.h	ObMulModeMemCtx::mode_arena_	arena member	167	guess:ARENA_CROSSCALL;type:LibTreeModuleArena
+src/oblib/common/xml/ob_xml_parser.cpp	ObXmlParserBase::add_or_merge_text#OB_NEWx(ObXmlText,allocator)	OB_NEWx pool argument	82	pool-kind:param-or-local;pool:allocator
+src/oblib/common/xml/ob_xml_tree.cpp	ObXmlElement::append_unparse_text#OB_NEWx(ObXmlText,get_allocator())	OB_NEWx pool argument	688	pool-kind:call;pool:get_allocator()
+src/oblib/common/xml/ob_xml_tree.cpp	ObXmlElement::append_unparse_text#OB_NEWx(ObXmlElement,get_allocator())	OB_NEWx pool argument	696	pool-kind:call;pool:get_allocator()
+src/oblib/common/xml/ob_xml_tree.cpp	ObXmlElement::add_attr_by_str#OB_NEWx(ObXmlAttribute,get_allocator())	OB_NEWx pool argument	1065	pool-kind:call;pool:get_allocator()
+src/oblib/common/xml/ob_xpath.h	ObPathVarObject::pair_arena_	arena member	562	guess:ARENA_CROSSCALL;type:ObPathPairArena
+src/oblib/common/xml/ob_xpath.h	ObPathRootNode::arena_	arena member	643	guess:ARENA_CROSSCALL;type:SeekIterModuleArena
+src/oblib/common/xml/ob_xpath.h	ObPathExprIter::mode_arena_	arena member	937	guess:ARENA_CROSSCALL;type:ModeBaseModuleArena
+src/oblib/lib/allocator/ob_fixed_size_block_allocator.h	ObFixedSizeBlockAllocator::allocator_	arena member	77	infra-internal;type:ObArenaAllocator
+src/oblib/lib/allocator/ob_safe_arena.h	ObSafeArena::arena_alloc_	arena member	86	infra-internal;type:ObArenaAllocator
+src/oblib/lib/allocator/ob_simple_fifo_alloc.h	ObSimpleFifoAlloc::arena_[MAX_ARENA_NUM]	arena member	228	infra-internal;type:Arena
+src/oblib/lib/allocator/ob_slice_alloc.h	ObSliceAlloc::arena_[MAX_ARENA_NUM]	arena member	499	infra-internal;type:Arena
+src/oblib/lib/allocator/ob_vslice_alloc.h	ObVSliceAlloc::arena_[MAX_ARENA_NUM]	arena member	287	infra-internal;type:Arena
+src/oblib/lib/allocator/page_arena.h	PageArena::set_tracer#OB_NEWx(TracerContext,pool)	OB_NEWx pool argument	858	pool-kind:param-or-local;pool:pool
+src/oblib/lib/allocator/page_arena.h	ObArenaAllocator::arena_	arena member	1077	infra-internal;type:ModuleArena
+src/oblib/lib/json/ob_json.h	RegexFilter::allocator_	arena member	294	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/oblib/lib/json/ob_json.h	JsonFilter::allocator_	arena member	334	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/oblib/lib/objectpool/ob_resource_pool.h	ObBaseResourcePool::free_list_allocator_	arena member	278	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/oblib/lib/rc/context.h	__MemoryContext__::arena_alloc_	arena member	633	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/oblib/lib/rc/context.h	__MemoryContext__::safe_arena_alloc_	arena member	636	guess:ARENA_CROSSCALL;type:common::ObSafeArenaAllocator
+src/oblib/lib/stat/ob_diagnose_info.cpp	ObLatchStatArray::create_item#OB_NEWx(ObLatchStat,allocator_)	OB_NEWx pool argument	135	pool-kind:member;pool:allocator_
+src/oblib/lib/string/ob_strings.h	ObStrings::buf_	arena member	46	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/oblib/lib/utility/ob_print_utils.h	ObCStringHelper::allocator_	arena member	379	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/oblib/rpc/frame/ob_req_queue_thread.cpp	ObReqQueue::process_task#CREATE_WITH_TEMP_CONTEXT	temporary memory context	80	guess:SCOPE_REQUEST
+src/observer/composition/retrieval/ob_das_legacy_tr_merge_iter.cpp	ObDASLegacyTRMergeIter::create_dim_iters#OB_NEWx(ObTextRetrievalBlockMaxIter,&myself_allocator_)	OB_NEWx pool argument	310	pool-kind:addr-of;pool:&myself_allocator_
+src/observer/composition/retrieval/ob_das_legacy_tr_merge_iter.cpp	ObDASLegacyTRMergeIter::create_dim_iters#OB_NEWx(ObTextRetrievalDaaTTokenIter,&myself_allocator_)	OB_NEWx pool argument	321	pool-kind:addr-of;pool:&myself_allocator_
+src/observer/composition/retrieval/ob_das_legacy_tr_merge_iter.cpp	ObDASLegacyTRMergeIter::create_dim_iters#OB_NEWx(ObTextRetrievalTokenIter,&myself_allocator_)	OB_NEWx pool argument	331	pool-kind:addr-of;pool:&myself_allocator_
+src/observer/composition/retrieval/ob_das_legacy_tr_merge_iter.cpp	ObDASLegacyTRMergeIter::create_sparse_retrieval_iter#OB_NEWx(ObTextBMWIter,&myself_allocator_)	OB_NEWx pool argument	415	pool-kind:addr-of;pool:&myself_allocator_
+src/observer/composition/retrieval/ob_das_legacy_tr_merge_iter.cpp	ObDASLegacyTRMergeIter::create_sparse_retrieval_iter#OB_NEWx(ObTextDaaTIter,&myself_allocator_)	OB_NEWx pool argument	425	pool-kind:addr-of;pool:&myself_allocator_
+src/observer/composition/retrieval/ob_das_legacy_tr_merge_iter.cpp	ObDASLegacyTRMergeIter::create_sparse_retrieval_iter#OB_NEWx(ObTextTaaTIter,&myself_allocator_)	OB_NEWx pool argument	435	pool-kind:addr-of;pool:&myself_allocator_
+src/observer/composition/retrieval/ob_das_legacy_tr_merge_iter.cpp	ObDASLegacyTRMergeIter::create_sparse_retrieval_iter#OB_NEWx(ObSRSortedLookupIter,&myself_allocator_)	OB_NEWx pool argument	449	pool-kind:addr-of;pool:&myself_allocator_
+src/observer/composition/retrieval/ob_das_legacy_tr_merge_iter.cpp	ObDASLegacyTRMergeIter::create_sparse_retrieval_iter#OB_NEWx(ObSRHashLookupIter,&myself_allocator_)	OB_NEWx pool argument	453	pool-kind:addr-of;pool:&myself_allocator_
+src/observer/composition/retrieval/ob_das_legacy_tr_merge_iter.cpp	ObDASLegacyTRMergeIter::init_daat_iter_param#OB_NEWx(ObSRDaaTBooleanRelevanceCollector,&myself_allocator_)	OB_NEWx pool argument	499	pool-kind:addr-of;pool:&myself_allocator_
+src/observer/composition/retrieval/ob_das_legacy_tr_merge_iter.cpp	ObDASLegacyTRMergeIter::init_daat_iter_param#OB_NEWx(ObSRDaaTInnerProductRelevanceCollector,&myself_allocator_)	OB_NEWx pool argument	508	pool-kind:addr-of;pool:&myself_allocator_
+src/observer/composition/retrieval/ob_das_legacy_tr_merge_iter.h	ObDASLegacyTRMergeIter::myself_allocator_	arena member	115	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/observer/mysql/obmp_connect.h	ObMPConnect::allocator_	arena member	96	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/observer/mysql/obmp_query.cpp	ObMPQuery::process_with_tmp_context#CREATE_WITH_TEMP_CONTEXT	temporary memory context	475	guess:SCOPE_REQUEST
+src/observer/mysql/obmp_stmt_execute.cpp	ObMPStmtExecute::process_retry#CREATE_WITH_TEMP_CONTEXT	temporary memory context	1764	guess:SCOPE_REQUEST
+src/observer/ob_server_duty_task.h	ObServerDutyTask::allocator_	arena member	40	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/observer/ob_srv_xlator.cpp	macro:NEW_MYSQL_PROCESSOR#OB_NEWx(ObMySQLP,alloc)	OB_NEWx pool argument	65	pool-kind:param-or-local;pool:alloc
+src/observer/omt/ob_ai_service.cpp	ObAiServiceGuard::get_ai_endpoint#OB_NEWx(ObAiModelEndpointInfo,&local_allocator_)	OB_NEWx pool argument	125	pool-kind:addr-of;pool:&local_allocator_
+src/observer/omt/ob_ai_service.cpp	ObAiServiceGuard::get_ai_endpoint_by_ai_model_name#OB_NEWx(ObAiModelEndpointInfo,&local_allocator_)	OB_NEWx pool argument	141	pool-kind:addr-of;pool:&local_allocator_
+src/observer/omt/ob_ai_service.h	ObAiServiceGuard::local_allocator_	arena member	42	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/observer/omt/ob_srs_service.cpp	ObSrsService::fetch_all_srs#OB_NEWx(ObSrsCacheSnapShot,&allocator_)	OB_NEWx pool argument	220	pool-kind:addr-of;pool:&allocator_
+src/observer/omt/ob_srs_service.cpp	ObSrsCacheSnapShot::parse_srs_item#OB_NEWx(ObSrsItem,(&allocator_))	OB_NEWx pool argument	342	pool-kind:addr-of;pool:(&allocator_)
+src/observer/omt/ob_srs_service.cpp	ObSrsCacheSnapShot::add_pg_reserved_srs_item#OB_NEWx(ObSrsItem,(&allocator_))	OB_NEWx pool argument	366	pool-kind:addr-of;pool:(&allocator_)
+src/observer/omt/ob_srs_service.h	ObSrsCacheSnapShot::allocator_	arena member	67	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/observer/omt/ob_srs_service.h	ObSrsService::alloc_	arena member	111	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/observer/omt/ob_srs_service.h	ObSrsService::mode_arena_	arena member	115	guess:ARENA_CROSSCALL;type:ObCGeoModuleArena
+src/observer/omt/ob_th_worker.cpp	ObThWorker::worker#CREATE_WITH_TEMP_CONTEXT	temporary memory context	244	guess:SCOPE_REQUEST
+src/observer/schema/ob_schema_retrieve_utils.h	ObSchemaRetrieveHelper::current_allocator_	arena member	160	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/observer/schema/ob_schema_retrieve_utils.h	ObSchemaRetrieveHelper::another_allocator_	arena member	161	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/observer/schema/ob_schema_retrieve_utils.h	ObSubPartSchemaRetrieveHelper::current_allocator_	arena member	238	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/observer/schema/ob_schema_retrieve_utils.h	ObSubPartSchemaRetrieveHelper::another_allocator_	arena member	239	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/observer/vector_index/ob_ivf_async_task_executor.cpp	ObIvfAsyncTaskExector::LoadTaskCallback::operator()#OB_NEWx(ObVecIndexAsyncTaskCtx,allocator)	OB_NEWx pool argument	65	pool-kind:param-or-local;pool:allocator
+src/observer/vector_index/ob_ivf_async_task_executor.cpp	ObIvfAsyncTaskExector::LoadTaskCallback::operator()#OB_NEWx(ObVecIndexAsyncTaskCtx,allocator)#2	OB_NEWx pool argument	161	pool-kind:param-or-local;pool:allocator
+src/observer/vector_index/ob_ivf_async_task_executor.cpp	ObIvfAsyncTaskExector::LoadTaskCallback::operator()#OB_NEWx(ObIvfAuxTableInfo,&task_ctx->allocator_)	OB_NEWx pool argument	181	pool-kind:addr-of;pool:&task_ctx->allocator_
+src/observer/vector_index/ob_plugin_vector_index_adaptor.cpp	ObVectorQueryAdaptorResultContext::init_prefilter#OB_NEWx(ObHnswBitmapFilter,tmp_allocator_)	OB_NEWx pool argument	268	pool-kind:member;pool:tmp_allocator_
+src/observer/vector_index/ob_plugin_vector_index_adaptor.cpp	ObVectorQueryAdaptorResultContext::init_prefilter#OB_NEWx(ObHnswBitmapFilter,tmp_allocator_)#2	OB_NEWx pool argument	288	pool-kind:member;pool:tmp_allocator_
+src/observer/vector_index/ob_plugin_vector_index_adaptor.cpp	ObPluginVectorIndexAdaptor::init_mem#OB_NEWx(ObVsagMemContext,get_allocator())	OB_NEWx pool argument	506	pool-kind:call;pool:get_allocator()
+src/observer/vector_index/ob_plugin_vector_index_adaptor.cpp	ObPluginVectorIndexAdaptor::init_hnswsq_mem_data#OB_NEWx(ObVecIdxVidArray,allocator_)	OB_NEWx pool argument	964	pool-kind:member;pool:allocator_
+src/observer/vector_index/ob_plugin_vector_index_adaptor.cpp	ObPluginVectorIndexAdaptor::init_hnswsq_mem_data#OB_NEWx(ObVecIdxVecArray,allocator_)	OB_NEWx pool argument	966	pool-kind:member;pool:allocator_
+src/observer/vector_index/ob_plugin_vector_index_adaptor.cpp	ObPluginVectorIndexAdaptor::init_hnswsq_mem_data#OB_NEWx(ObVecExtraInfoBuffer,allocator_)	OB_NEWx pool argument	968	pool-kind:member;pool:allocator_
+src/observer/vector_index/ob_plugin_vector_index_adaptor.cpp	ObPluginVectorIndexAdaptor::init_sparse_vector_type#OB_NEWx(ObCollectionMapType,allocator_)	OB_NEWx pool argument	1330	pool-kind:member;pool:allocator_
+src/observer/vector_index/ob_plugin_vector_index_scheduler.cpp	ObVectorIndexTask::process#CREATE_WITH_TEMP_CONTEXT	temporary memory context	1350	guess:SCOPE_LOCAL_ARENA
+src/observer/vector_index/ob_plugin_vector_index_scheduler.h	ObVectorIndexTask::allocator_	arena member	389	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/observer/vector_index/ob_plugin_vector_index_scheduler.h	ObVectorIndexMemSyncInfo::first_task_allocator_	arena member	482	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/observer/vector_index/ob_plugin_vector_index_scheduler.h	ObVectorIndexMemSyncInfo::second_task_allocator_	arena member	483	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/observer/vector_index/ob_plugin_vector_index_serialize.cpp	ObHNSWDeserializeCallback::operator()#OB_NEWx(ObTextStringIter,allocator)	OB_NEWx pool argument	294	pool-kind:param-or-local;pool:allocator
+src/observer/vector_index/ob_plugin_vector_index_util.cpp	ObVectorQueryVidIterator::init#OB_NEWx(ObNewRow,allocator)	OB_NEWx pool argument	204	pool-kind:param-or-local;pool:allocator
+src/observer/vector_index/ob_vector_index_async_task_util.cpp	ObVecIndexAsyncTaskHandler::push_task#OB_NEWx(ObIvfAsyncTask,allocator)	OB_NEWx pool argument	930	pool-kind:param-or-local;pool:allocator
+src/observer/vector_index/ob_vector_index_async_task_util.h	ObVecIndexAsyncTaskCtx::allocator_	arena member	182	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/observer/vector_index/ob_vector_index_async_task_util.h	ObVecIndexAsyncTaskOption::allocator_	arena member	229	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/observer/vector_index/ob_vector_index_async_task_util.h	ObVecIndexIAsyncTask::allocator_	arena member	304	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/observer/vector_index/ob_vector_index_ivf_cache_mgr.cpp	ObIvfCacheMgr::init#OB_NEWx(ObIvfMemContext,&get_self_allocator())	OB_NEWx pool argument	106	pool-kind:addr-of;pool:&get_self_allocator()
+src/observer/vector_index/ob_vector_index_ivf_cache_mgr.cpp	ObIvfICache::inner_init#OB_NEWx(ObIvfMemContext,&get_self_allocator())	OB_NEWx pool argument	333	pool-kind:addr-of;pool:&get_self_allocator()
+src/observer/virtual_table/ob_all_virtual_dag.h	ObDagInfoIterator::allocator_	arena member	49	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/observer/virtual_table/ob_all_virtual_dtl_channel.h	ObAllVirtualDtlChannel::arena_allocator_	arena member	156	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/observer/virtual_table/ob_all_virtual_dtl_memory.h	ObAllVirtualDtlMemory::arena_allocator_	arena member	116	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/observer/virtual_table/ob_all_virtual_table_mgr.h	ObAllVirtualTableMgr::tablet_allocator_	arena member	71	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/observer/virtual_table/ob_all_virtual_tablet_sstable_macro_info.h	ObAllVirtualTabletSSTableMacroInfo::tablet_allocator_	arena member	122	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/observer/virtual_table/ob_all_virtual_tablet_sstable_macro_info.h	ObAllVirtualTabletSSTableMacroInfo::iter_allocator_	arena member	132	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/observer/virtual_table/ob_all_virtual_tablet_sstable_macro_info.h	ObAllVirtualTabletSSTableMacroInfo::rowkey_allocator_	arena member	133	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/observer/virtual_table/ob_all_virtual_vector_index_info.h	ObVectorIndexInfoIterator::allocator_	arena member	50	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/observer/virtual_table/ob_information_columns_table.cpp	ObInfoSchemaColumnsTable::iterate_table_schema_array#ObStmtFactory:stmt_factory	local IR factory	237	broadened
+src/observer/virtual_table/ob_information_columns_table.cpp	ObInfoSchemaColumnsTable::iterate_table_schema_array#ObRawExprFactory:expr_factory	local IR factory	238	broadened
+src/observer/virtual_table/ob_information_columns_table.h	ObInfoSchemaColumnsTable::view_resolve_alloc_	arena member	136	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/observer/virtual_table/ob_plan_cache_plan_explain.h	ObExpVisitor::allocator_	arena member	74	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/observer/virtual_table/ob_table_columns.cpp	ObTableColumns::inner_get_next_row#ObStmtFactory:stmt_factory	local IR factory	202	broadened
+src/observer/virtual_table/ob_table_columns.cpp	ObTableColumns::inner_get_next_row#ObRawExprFactory:expr_factory	local IR factory	203	broadened
+src/observer/virtual_table/ob_virtual_show_trace.h	ObVirtualShowTrace::alloc_	arena member	131	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/observer/virtual_table/ob_virtual_table_iterator.h	ObVirtualTableIterator::row_calc_buf_	arena member	119	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/observer/virtual_table/ob_virtual_table_iterator.h	ObVirtualTableIterator::convert_alloc_	arena member	122	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/observer/virtual_table/ob_virtual_table_tablet_iter.h	ObVirtualTableTabletIter::tablet_allocator_	arena member	50	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/pl/ob_pl_build.cpp	ObPLBuilder::compile#OB_NEWx(ObPLFunctionAST,(&allocator_))	OB_NEWx pool argument	259	pool-kind:addr-of;pool:(&allocator_)
+src/pl/ob_pl_build.cpp	ObPLBuilder::compile#OB_NEWx(ObPLFunctionAST,(&allocator_))#2	OB_NEWx pool argument	381	pool-kind:addr-of;pool:(&allocator_)
+src/pl/ob_pl_package_manager.cpp	ObPLPackageManager::load_package_spec#OB_NEWx(ObPLPackageAST,(&pkg_alloc))	OB_NEWx pool argument	908	pool-kind:addr-of;pool:(&pkg_alloc)
+src/pl/ob_pl_package_manager.cpp	ObPLPackageManager::load_package_body#OB_NEWx(ObPLPackageAST,(&pkg_alloc))	OB_NEWx pool argument	997	pool-kind:addr-of;pool:(&pkg_alloc)
+src/pl/ob_pl_package_manager.cpp	ObPLPackageManager::load_package_body#OB_NEWx(ObPLPackageAST,(&pkg_alloc))#2	OB_NEWx pool argument	998	pool-kind:addr-of;pool:(&pkg_alloc)
+src/pl/ob_pl_resolver.cpp	macro:RESOLVE_SELECT_VIEW_STMT#ObStmtFactory:stmt_factory	local IR factory	1170	broadened
+src/pl/ob_pl_resolver.cpp	macro:RESOLVE_SELECT_VIEW_STMT#ObRawExprFactory:expr_factory	local IR factory	1171	memo:33
+src/query/api/query/engine/cmd/ob_load_data_stat.h	ObLoadDataStat::allocator_	arena member	67	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/query/api/query/engine/ob_operator.h	ObBatchRescanParams::allocator_	arena member	137	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/query/api/query/engine/px/p2p_datahub/ob_small_hashset.h	ObSmallHashSet::alloc_	arena member	215	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/query/api/query/optimizer/stat/ob_opt_column_stat.h	ObOptColumnStat::inner_allocator_	arena member	366	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/query/api/query/optimizer/stat/ob_opt_osg_column_stat.h	ObOptOSGColumnStat::inner_min_allocator_	arena member	114	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/query/api/query/optimizer/stat/ob_opt_osg_column_stat.h	ObOptOSGColumnStat::inner_max_allocator_	arena member	115	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/query/api/query/optimizer/stat/ob_opt_osg_column_stat.h	ObOptOSGColumnStat::inner_allocator_	arena member	116	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/query/api/query/vector/ob_vector_embedding_handler.h	ObEmbeddingTask::local_allocator_	arena member	310	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/query/api/query/vector/ob_vector_index_adaptor.h	ObHnswBitmapFilter::tmp_alloc_	arena member	231	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/query/api/query/vector/ob_vector_index_adaptor.h	ObVsagSearchAlloc::alloc_	arena member	254	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/query/api/query/vector/ob_vector_index_adaptor.h	ObVectorQueryAdaptorResultContext::batch_allocator_	arena member	333	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/query/api/query/vector/ob_vector_index_util.h	ObExprVecIvfCenterIdCache::allocator_	arena member	434	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/query/api/query/vector/ob_vector_index_util.h	ObVecExtraInfoBuffer::alloctor_	arena member	990	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/query/vector/ob_vector_embedding_handler.cpp	ObEmbeddingTask::init_curl_handler#OB_NEWx(HttpResponseData,&allocator_)	OB_NEWx pool argument	1586	pool-kind:addr-of;pool:&allocator_
+src/rootserver/dbms_job/ob_dbms_job_master.h	ObDBMSJobMaster::allocator_	arena member	205	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/rootserver/ddl_task/ob_column_redefinition_task.h	ObColumnRedefinitionTask::allocator_	arena member	72	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/rootserver/ddl_task/ob_constraint_task.h	ObConstraintTask::allocator_	arena member	148	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/rootserver/ddl_task/ob_ddl_retry_task.h	ObDDLRetryTask::allocator_	arena member	72	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/rootserver/ddl_task/ob_ddl_scheduler.h	ObPrepareAlterTableArgParam::allocator_	arena member	168	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/rootserver/ddl_task/ob_ddl_task.h	ObDDLTask::allocator_	arena member	741	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/rootserver/ddl_task/ob_index_build_task.h	ObIndexSSTableBuildTask::allocator_	arena member	72	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/rootserver/ddl_task/ob_table_redefinition_task.h	ObTableRedefinitionTask::allocator_	arena member	108	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/rootserver/ob_ddl_service.cpp	ObDDLService::modify_generated_column_default_value#ObRawExprFactory:expr_factory	local IR factory	6597	broadened
+src/rootserver/ob_ddl_service.cpp	ObDDLService::modify_generated_column_local_vars#ObRawExprFactory:expr_factory	local IR factory	6660	broadened
+src/rootserver/ob_ddl_service.cpp	ObDDLService::modify_func_expr_column_name#ObRawExprFactory:expr_factory	local IR factory	6829	broadened
+src/rootserver/ob_ddl_service.cpp	ObDDLService::refill_columns_id_for_check_constraint#ObRawExprFactory:expr_factory	local IR factory	7109	broadened
+src/rootserver/ob_ddl_service.cpp	ObDDLService::refill_column_id_array_for_constraint#ObRawExprFactory:expr_factory	local IR factory	7170	broadened
+src/rootserver/ob_ddl_service.cpp	ObDDLService::rebuild_constraint_check_expr#ObRawExprFactory:expr_factory	local IR factory	7233	broadened
+src/rootserver/ob_load_inner_table_schema_executor.h	ObLoadInnerTableSchemaExecutor::allocator_	arena member	68	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/rootserver/ob_tablet_creator.h	ObTabletCreator::allocator_	arena member	138	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/rootserver/ob_tablet_drop.h	ObTabletDrop::allocator_	arena member	76	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/rootserver/parallel_ddl/ob_ddl_helper.h	ObDDLHelper::allocator_	arena member	219	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/rootserver/truncate_info/ob_truncate_info_service.cpp	ObTruncatePartKeyInfo::resolve_part_expr#ObStmtFactory:stmt_factory	local IR factory	196	broadened
+src/rootserver/truncate_info/ob_truncate_info_service.h	ObTruncateInfoService::allocator_	arena member	149	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/rootserver/truncate_info/ob_truncate_info_service.h	ObTruncateInfoService::loop_allocator_	arena member	150	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/share/allocator/ob_reserve_arena.h	ObReserveArenaAllocator::allocator_	arena member	106	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/share/cache/ob_cache_utils.h	ObFreeHeap::allocator_	arena member	392	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/share/cache/ob_cache_utils.h	ObSimpleFixedArray::local_allocator_	arena member	513	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/share/cache/ob_kv_storecache.h	ObKVCacheIterator::allocator_	arena member	324	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/share/cache/ob_kvcache_hazard_version.cpp	ObKVCacheHazardStation::print_current_status#CREATE_WITH_TEMP_CONTEXT	temporary memory context	295	guess:SCOPE_LOCAL_ARENA
+src/share/cache/ob_kvcache_hazard_version.h	ObKVCacheHazardStation::slot_allocator_	arena member	91	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/share/cache/ob_kvcache_inst_map.cpp	ObKVCacheInstMap::print_all_cache_info#CREATE_WITH_TEMP_CONTEXT	temporary memory context	357	guess:SCOPE_LOCAL_ARENA
+src/share/cache/ob_kvcache_store.cpp	ObKVCacheStore::print_memblock_info#CREATE_WITH_TEMP_CONTEXT	temporary memory context	765	guess:SCOPE_LOCAL_ARENA
+src/share/geo/ob_geo_3d.cpp	ObGeometry3D::to_2d_geo#OB_NEWx(ObWkbBuffer,&allocator)	OB_NEWx pool argument	72	pool-kind:addr-of;pool:&allocator
+src/share/geo/ob_geo_3d.cpp	ObGeometry3D::to_wkt#OB_NEWx(ObGeoStringBuffer,&allocator)	OB_NEWx pool argument	132	pool-kind:addr-of;pool:&allocator
+src/share/geo/ob_geo_box_clip_visitor.cpp	ObGeoBoxClipVisitor::get_geometry#OB_NEWx(ObCartesianMultipoint,allocator_)	OB_NEWx pool argument	79	pool-kind:member;pool:allocator_
+src/share/geo/ob_geo_box_clip_visitor.cpp	ObGeoBoxClipVisitor::get_geometry#OB_NEWx(ObCartesianMultipolygon,allocator_)	OB_NEWx pool argument	93	pool-kind:member;pool:allocator_
+src/share/geo/ob_geo_box_clip_visitor.cpp	ObGeoBoxClipVisitor::get_geometry#OB_NEWx(ObCartesianMultilinestring,allocator_)	OB_NEWx pool argument	107	pool-kind:member;pool:allocator_
+src/share/geo/ob_geo_box_clip_visitor.cpp	ObGeoBoxClipVisitor::prepare#OB_NEWx(ObCartesianGeometrycollection,allocator_)	OB_NEWx pool argument	131	pool-kind:member;pool:allocator_
+src/share/geo/ob_geo_box_clip_visitor.cpp	ObGeoBoxClipVisitor::visit#OB_NEWx(ObCartesianPoint,allocator_)	OB_NEWx pool argument	166	pool-kind:member;pool:allocator_
+src/share/geo/ob_geo_box_clip_visitor.cpp	ObGeoBoxClipVisitor::line_visit#OB_NEWx(ObCartesianMultilinestring,allocator_)	OB_NEWx pool argument	380	pool-kind:member;pool:allocator_
+src/share/geo/ob_geo_box_clip_visitor.cpp	ObGeoBoxClipVisitor::visit_polygon#OB_NEWx(ObCartesianMultipolygon,allocator_)	OB_NEWx pool argument	867	pool-kind:member;pool:allocator_
+src/share/geo/ob_geo_cache.h	ObCachedGeomBase::point_mode_arena_	arena member	91	guess:ARENA_CROSSCALL;type:ObCachePointModuleArena
+src/share/geo/ob_geo_cache_polygon.h	ObRingsRtree::rtrees_arena_	arena member	51	guess:ARENA_CROSSCALL;type:ObRtreeVecArena
+src/share/geo/ob_geo_cache_polygon.h	ObRingsRtree::int_arena_	arena member	52	guess:ARENA_CROSSCALL;type:ObIntArena
+src/share/geo/ob_geo_cache_polygon.h	ObCachedGeoPolygon::seg_mode_arena_	arena member	109	guess:ARENA_CROSSCALL;type:ObCacheSegModuleArena
+src/share/geo/ob_geo_elevation_visitor.cpp	ObGeoElevationVisitor::init#OB_NEWx(ObGeoElevationExtent,allocator_)	OB_NEWx pool argument	184	pool-kind:member;pool:allocator_
+src/share/geo/ob_geo_func_box.cpp	OB_GEO_UNARY_FUNC_BEGIN(ObGeoFuncBoxImpl,ObWkbGeogPoint,ObGeogBox*)#OB_NEWx(ObGeogBox,context.get_allocator())	OB_NEWx pool argument	46	pool-kind:call;pool:context.get_allocator()
+src/share/geo/ob_geo_func_box.cpp	OB_GEO_UNARY_FUNC_BEGIN(ObGeoFuncBoxImpl,ObWkbGeogLineString,ObGeogBox*)#OB_NEWx(ObGeogBox,context.get_allocator())	OB_NEWx pool argument	63	pool-kind:call;pool:context.get_allocator()
+src/share/geo/ob_geo_func_box.cpp	OB_GEO_UNARY_FUNC_BEGIN(ObGeoFuncBoxImpl,ObWkbGeogPolygon,ObGeogBox*)#OB_NEWx(ObGeogBox,context.get_allocator())	OB_NEWx pool argument	79	pool-kind:call;pool:context.get_allocator()
+src/share/geo/ob_geo_func_box.cpp	OB_GEO_UNARY_FUNC_BEGIN(ObGeoFuncBoxImpl,ObWkbGeogMultiPoint,ObGeogBox*)#OB_NEWx(ObGeogBox,context.get_allocator())	OB_NEWx pool argument	95	pool-kind:call;pool:context.get_allocator()
+src/share/geo/ob_geo_func_box.cpp	OB_GEO_UNARY_FUNC_BEGIN(ObGeoFuncBoxImpl,ObWkbGeogMultiLineString,ObGeogBox*)#OB_NEWx(ObGeogBox,context.get_allocator())	OB_NEWx pool argument	122	pool-kind:call;pool:context.get_allocator()
+src/share/geo/ob_geo_func_box.cpp	OB_GEO_UNARY_FUNC_BEGIN(ObGeoFuncBoxImpl,ObWkbGeogMultiPolygon,ObGeogBox*)#OB_NEWx(ObGeogBox,context.get_allocator())	OB_NEWx pool argument	149	pool-kind:call;pool:context.get_allocator()
+src/share/geo/ob_geo_func_box.cpp	OB_GEO_UNARY_FUNC_BEGIN(ObGeoFuncBoxImpl,ObWkbGeogCollection,ObGeogBox*)#OB_NEWx(ObGeogBox,allocator)	OB_NEWx pool argument	177	pool-kind:param-or-local;pool:allocator
+src/share/geo/ob_geo_func_box.cpp	OB_GEO_UNARY_FUNC_BEGIN(ObGeoFuncBoxImpl,ObWkbGeomPoint,ObGeogBox*)#OB_NEWx(ObGeogBox,context.get_allocator())	OB_NEWx pool argument	225	pool-kind:call;pool:context.get_allocator()
+src/share/geo/ob_geo_func_box.cpp	OB_GEO_UNARY_FUNC_BEGIN(ObGeoFuncBoxImpl,ObWkbGeomLineString,ObGeogBox*)#OB_NEWx(ObGeogBox,context.get_allocator())	OB_NEWx pool argument	243	pool-kind:call;pool:context.get_allocator()
+src/share/geo/ob_geo_func_box.cpp	OB_GEO_UNARY_FUNC_BEGIN(ObGeoFuncBoxImpl,ObWkbGeomPolygon,ObGeogBox*)#OB_NEWx(ObGeogBox,context.get_allocator())	OB_NEWx pool argument	260	pool-kind:call;pool:context.get_allocator()
+src/share/geo/ob_geo_func_box.cpp	OB_GEO_UNARY_FUNC_BEGIN(ObGeoFuncBoxImpl,ObWkbGeomMultiPoint,ObGeogBox*)#OB_NEWx(ObGeogBox,context.get_allocator())	OB_NEWx pool argument	275	pool-kind:call;pool:context.get_allocator()
+src/share/geo/ob_geo_func_box.cpp	OB_GEO_UNARY_FUNC_BEGIN(ObGeoFuncBoxImpl,ObWkbGeomMultiLineString,ObGeogBox*)#OB_NEWx(ObGeogBox,context.get_allocator())	OB_NEWx pool argument	292	pool-kind:call;pool:context.get_allocator()
+src/share/geo/ob_geo_func_box.cpp	OB_GEO_UNARY_FUNC_BEGIN(ObGeoFuncBoxImpl,ObWkbGeomMultiPolygon,ObGeogBox*)#OB_NEWx(ObGeogBox,context.get_allocator())	OB_NEWx pool argument	320	pool-kind:call;pool:context.get_allocator()
+src/share/geo/ob_geo_func_box.cpp	OB_GEO_UNARY_FUNC_BEGIN(ObGeoFuncBoxImpl,ObWkbGeomCollection,ObGeogBox*)#OB_NEWx(ObGeogBox,allocator)	OB_NEWx pool argument	349	pool-kind:param-or-local;pool:allocator
+src/share/geo/ob_geo_func_buffer.cpp	ObGeoFuncBufferImpl::eval_buffer_cartisan#OB_NEWx(ObCartesianMultipolygon,allocator)	OB_NEWx pool argument	118	pool-kind:param-or-local;pool:allocator
+src/share/geo/ob_geo_func_buffer.cpp	ObGeoFuncBufferImpl::eval_buffer_cartisan#OB_NEWx(ObCartesianGeometrycollection,allocator)	OB_NEWx pool argument	167	pool-kind:param-or-local;pool:allocator
+src/share/geo/ob_geo_func_buffer.cpp	ObGeoFuncBufferImpl::eval_buffer_cartisan_collection#OB_NEWx(ObCartesianMultipolygon,&tmp_allocator)	OB_NEWx pool argument	230	pool-kind:addr-of;pool:&tmp_allocator
+src/share/geo/ob_geo_func_buffer.cpp	ObGeoFuncBufferImpl::eval_buffer_cartisan_collection#OB_NEWx(ObCartesianMultipolygon,&tmp_allocator)#2	OB_NEWx pool argument	232	pool-kind:addr-of;pool:&tmp_allocator
+src/share/geo/ob_geo_func_buffer.cpp	ObGeoFuncBufferImpl::eval_buffer_cartisan_collection#OB_NEWx(ObCartesianMultipolygon,&tmp_allocator)#3	OB_NEWx pool argument	234	pool-kind:addr-of;pool:&tmp_allocator
+src/share/geo/ob_geo_func_buffer.cpp	ObGeoFuncBufferImpl::eval_buffer_cartisan_collection#OB_NEWx(ObCartesianGeometrycollection,allocator)	OB_NEWx pool argument	312	pool-kind:param-or-local;pool:allocator
+src/share/geo/ob_geo_func_buffer.cpp	ObGeoFuncBufferImpl::eval_buffer_cartisan_collection#OB_NEWx(ObCartesianGeometrycollection,allocator)#2	OB_NEWx pool argument	328	pool-kind:param-or-local;pool:allocator
+src/share/geo/ob_geo_func_buffer.cpp	ObGeoFuncBufferImpl::eval_buffer_geographic#OB_NEWx(ObGeographPolygon,allocator)	OB_NEWx pool argument	387	pool-kind:param-or-local;pool:allocator
+src/share/geo/ob_geo_func_buffer.cpp	OB_GEO_UNARY_FUNC_BEGIN(ObGeoFuncBufferImpl,ObWkbGeogPoint,ObGeometry*)#OB_NEWx(ObGeographMultipolygon,allocator)	OB_NEWx pool argument	544	pool-kind:param-or-local;pool:allocator
+src/share/geo/ob_geo_func_centroid.cpp	ObGeoFuncCentroidImpl::centroid_collection#OB_NEWx(ObCartesianPoint,allocator)	OB_NEWx pool argument	52	pool-kind:param-or-local;pool:allocator
+src/share/geo/ob_geo_func_centroid.cpp	ObGeoFuncCentroidImpl::centroid_default#OB_NEWx(ObCartesianPoint,context.get_allocator())	OB_NEWx pool argument	82	pool-kind:call;pool:context.get_allocator()
+src/share/geo/ob_geo_func_crosses_helper.ipp	ObGeoFuncCrossesImpl::make_collection#OB_NEWx(GcBinType,allocator)	OB_NEWx pool argument	388	pool-kind:param-or-local;pool:allocator
+src/share/geo/ob_geo_func_difference_helper.ipp	apply_bg_difference#OB_NEWx(GeometryRes,context.get_allocator())	OB_NEWx pool argument	34	pool-kind:call;pool:context.get_allocator()
+src/share/geo/ob_geo_func_difference_helper.ipp	apply_bg_difference_ll_strategy#OB_NEWx(GeometryRes,context.get_allocator())	OB_NEWx pool argument	67	pool-kind:call;pool:context.get_allocator()
+src/share/geo/ob_geo_func_difference_helper.ipp	apply_bg_difference_pl_strategy#OB_NEWx(GeometryRes,context.get_allocator())	OB_NEWx pool argument	102	pool-kind:call;pool:context.get_allocator()
+src/share/geo/ob_geo_func_difference_helper.ipp	ObGeoFuncDifferenceImpl::apply_bg_difference_collection#OB_NEWx(CollType,context.get_allocator())	OB_NEWx pool argument	174	pool-kind:call;pool:context.get_allocator()
+src/share/geo/ob_geo_func_difference_helper.ipp	ObGeoFuncDifferenceImpl::apply_bg_difference_collection#OB_NEWx(typenameCollType::sub_pt_type,context.get_allocator())	OB_NEWx pool argument	236	pool-kind:call;pool:context.get_allocator()
+src/share/geo/ob_geo_func_difference_helper.ipp	ObGeoFuncDifferenceImpl::eval_difference_gc_gc#OB_NEWx(GcTreeType,allocator)	OB_NEWx pool argument	273	pool-kind:param-or-local;pool:allocator
+src/share/geo/ob_geo_func_difference_helper.ipp	ObGeoFuncDifferenceImpl::eval_difference_gc_gc#OB_NEWx(typenameGcTreeType::sub_pt_type,allocator)	OB_NEWx pool argument	342	pool-kind:param-or-local;pool:allocator
+src/share/geo/ob_geo_func_dissolve_polygon.cpp	eval_dissolve_polygon#OB_NEWx(MPY,context.get_allocator())	OB_NEWx pool argument	46	pool-kind:call;pool:context.get_allocator()
+src/share/geo/ob_geo_func_dissolve_polygon.cpp	eval_dissolve_polygon#OB_NEWx(MPY,&tmp_alloc)	OB_NEWx pool argument	52	pool-kind:addr-of;pool:&tmp_alloc
+src/share/geo/ob_geo_func_dissolve_polygon.cpp	eval_dissolve_polygon#OB_NEWx(MPY,&tmp_alloc)#2	OB_NEWx pool argument	54	pool-kind:addr-of;pool:&tmp_alloc
+src/share/geo/ob_geo_func_dissolve_polygon.cpp	eval_dissolve_polygon#OB_NEWx(GeometryType,&tmp_alloc)	OB_NEWx pool argument	58	pool-kind:addr-of;pool:&tmp_alloc
+src/share/geo/ob_geo_func_dissolve_polygon.cpp	eval_dissolve_polygon#OB_NEWx(GeometryType,&tmp_alloc)#2	OB_NEWx pool argument	70	pool-kind:addr-of;pool:&tmp_alloc
+src/share/geo/ob_geo_func_dissolve_polygon.cpp	eval_dissolve_multipolygon#OB_NEWx(MPY,context.get_allocator())	OB_NEWx pool argument	112	pool-kind:call;pool:context.get_allocator()
+src/share/geo/ob_geo_func_dissolve_polygon.cpp	eval_dissolve_multipolygon#OB_NEWx(MPY,&tmp_alloc)	OB_NEWx pool argument	118	pool-kind:addr-of;pool:&tmp_alloc
+src/share/geo/ob_geo_func_dissolve_polygon.cpp	eval_dissolve_multipolygon#OB_NEWx(MPY,&tmp_alloc)#2	OB_NEWx pool argument	120	pool-kind:addr-of;pool:&tmp_alloc
+src/share/geo/ob_geo_func_symdifference_helper.ipp	get_specific_geos#OB_NEWx(GeometryRes,context.get_allocator())	OB_NEWx pool argument	48	pool-kind:call;pool:context.get_allocator()
+src/share/geo/ob_geo_func_symdifference_helper.ipp	apply_bg_symdifference_pt_pt#OB_NEWx(GeometryRes,&tmp_alloc)	OB_NEWx pool argument	67	pool-kind:addr-of;pool:&tmp_alloc
+src/share/geo/ob_geo_func_symdifference_helper.ipp	apply_bg_symdifference_pt_pt#OB_NEWx(GeometryRes,&tmp_alloc)#2	OB_NEWx pool argument	68	pool-kind:addr-of;pool:&tmp_alloc
+src/share/geo/ob_geo_func_symdifference_helper.ipp	push_disjoint_point#OB_NEWx(typenameGeoCollType::sub_pt_type,allocator)	OB_NEWx pool argument	99	pool-kind:param-or-local;pool:allocator
+src/share/geo/ob_geo_func_symdifference_helper.ipp	apply_bg_symdifference_la#OB_NEWx(typenameGeoCollType::sub_ml_type,allocator)	OB_NEWx pool argument	186	pool-kind:param-or-local;pool:allocator
+src/share/geo/ob_geo_func_symdifference_helper.ipp	apply_bg_symdifference_pt_coll#OB_NEWx(typenameGcTreeType::sub_mpt_type,&tmp_alloc)	OB_NEWx pool argument	295	pool-kind:addr-of;pool:&tmp_alloc
+src/share/geo/ob_geo_func_symdifference_helper.ipp	apply_bg_symdifference_pt_coll#OB_NEWx(typenameGcTreeType::sub_mpt_type,allocator)	OB_NEWx pool argument	297	pool-kind:param-or-local;pool:allocator
+src/share/geo/ob_geo_func_symdifference_helper.ipp	apply_bg_symdifference_pt_coll#OB_NEWx(GcTreeType,allocator)	OB_NEWx pool argument	298	pool-kind:param-or-local;pool:allocator
+src/share/geo/ob_geo_func_symdifference_helper.ipp	apply_bg_symdifference_line_coll#OB_NEWx(typenameGcTreeType::sub_ml_type,&tmp_alloc)	OB_NEWx pool argument	356	pool-kind:addr-of;pool:&tmp_alloc
+src/share/geo/ob_geo_func_symdifference_helper.ipp	apply_bg_symdifference_line_coll#OB_NEWx(GcTreeType,allocator)	OB_NEWx pool argument	357	pool-kind:param-or-local;pool:allocator
+src/share/geo/ob_geo_func_symdifference_helper.ipp	apply_bg_symdifference_line_coll#OB_NEWx(typenameGcTreeType::sub_ml_type,allocator)	OB_NEWx pool argument	359	pool-kind:param-or-local;pool:allocator
+src/share/geo/ob_geo_func_symdifference_helper.ipp	apply_bg_symdifference_line_coll#OB_NEWx(typenameGcTreeType::sub_mpt_type,allocator)	OB_NEWx pool argument	361	pool-kind:param-or-local;pool:allocator
+src/share/geo/ob_geo_func_symdifference_helper.ipp	apply_bg_symdifference_poly_coll#OB_NEWx(typenameGcTreeType::sub_ml_type,allocator)	OB_NEWx pool argument	415	pool-kind:param-or-local;pool:allocator
+src/share/geo/ob_geo_func_symdifference_helper.ipp	apply_bg_symdifference_poly_coll#OB_NEWx(GcTreeType,allocator)	OB_NEWx pool argument	416	pool-kind:param-or-local;pool:allocator
+src/share/geo/ob_geo_func_symdifference_helper.ipp	apply_bg_symdifference_poly_coll#OB_NEWx(typenameGcTreeType::sub_mp_type,allocator)	OB_NEWx pool argument	418	pool-kind:param-or-local;pool:allocator
+src/share/geo/ob_geo_func_symdifference_helper.ipp	apply_bg_symdifference_poly_coll#OB_NEWx(typenameGcTreeType::sub_mpt_type,allocator)	OB_NEWx pool argument	420	pool-kind:param-or-local;pool:allocator
+src/share/geo/ob_geo_func_symdifference_helper.ipp	ObGeoFuncSymDifferenceImpl::eval_symdifference_gc_gc#OB_NEWx(GcTreeType,allocator)	OB_NEWx pool argument	516	pool-kind:param-or-local;pool:allocator
+src/share/geo/ob_geo_func_transform.cpp	ObGeoFuncTransformImpl::apply_bg_transform_point#OB_NEWx(PtResType,(context.get_allocator()))	OB_NEWx pool argument	54	pool-kind:call;pool:(context.get_allocator())
+src/share/geo/ob_geo_func_transform.cpp	ObGeoFuncTransformImpl::apply_bg_transform#OB_NEWx(GeometryResType,alloc)	OB_NEWx pool argument	77	pool-kind:param-or-local;pool:alloc
+src/share/geo/ob_geo_func_transform.cpp	ObGeoFuncTransformImpl::apply_bg_transform_gc#OB_NEWx(GCOutType,alloc)	OB_NEWx pool argument	103	pool-kind:param-or-local;pool:alloc
+src/share/geo/ob_geo_func_union_helper.ipp	apply_bg_union#OB_NEWx(GeometryRes,context.get_allocator())	OB_NEWx pool argument	65	pool-kind:call;pool:context.get_allocator()
+src/share/geo/ob_geo_func_union_helper.ipp	apply_bg_union_collection#OB_NEWx(GeometryRes,context.get_allocator())	OB_NEWx pool argument	133	pool-kind:call;pool:context.get_allocator()
+src/share/geo/ob_geo_func_union_helper.ipp	apply_bg_multi_union_collection#OB_NEWx(GeometryRes,context.get_allocator())	OB_NEWx pool argument	164	pool-kind:call;pool:context.get_allocator()
+src/share/geo/ob_geo_func_union_helper.ipp	apply_bg_diff_union_collection#OB_NEWx(GeometryDiffType,context.get_allocator())	OB_NEWx pool argument	201	pool-kind:call;pool:context.get_allocator()
+src/share/geo/ob_geo_func_union_helper.ipp	apply_bg_diff_union_collection#OB_NEWx(GeometryRes,context.get_allocator())	OB_NEWx pool argument	208	pool-kind:call;pool:context.get_allocator()
+src/share/geo/ob_geo_func_union_helper.ipp	push_back_innerpoint#OB_NEWx(ObCartesianPoint,context.get_allocator())	OB_NEWx pool argument	235	pool-kind:call;pool:context.get_allocator()
+src/share/geo/ob_geo_func_union_helper.ipp	push_back_innerpoint#OB_NEWx(ObGeographPoint,context.get_allocator())	OB_NEWx pool argument	251	pool-kind:call;pool:context.get_allocator()
+src/share/geo/ob_geo_func_union_helper.ipp	apply_bg_union_multiline_multipolygon#OB_NEWx(GeometryDiffType,context.get_allocator())	OB_NEWx pool argument	269	pool-kind:call;pool:context.get_allocator()
+src/share/geo/ob_geo_func_union_helper.ipp	apply_bg_union_multiline_multipolygon#OB_NEWx(GeometryRes,context.get_allocator())	OB_NEWx pool argument	276	pool-kind:call;pool:context.get_allocator()
+src/share/geo/ob_geo_func_union_helper.ipp	apply_bg_union_multipoint_multigeo#OB_NEWx(GeometryDiffType,context.get_allocator())	OB_NEWx pool argument	313	pool-kind:call;pool:context.get_allocator()
+src/share/geo/ob_geo_func_union_helper.ipp	apply_bg_union_multipoint_multigeo#OB_NEWx(GeometryRes,context.get_allocator())	OB_NEWx pool argument	320	pool-kind:call;pool:context.get_allocator()
+src/share/geo/ob_geo_func_union_helper.ipp	apply_bg_union_multipoint_geo#OB_NEWx(GeometryDiffType,context.get_allocator())	OB_NEWx pool argument	357	pool-kind:call;pool:context.get_allocator()
+src/share/geo/ob_geo_func_union_helper.ipp	apply_bg_union_multipoint_geo#OB_NEWx(GeometryRes,context.get_allocator())	OB_NEWx pool argument	364	pool-kind:call;pool:context.get_allocator()
+src/share/geo/ob_geo_func_union_helper.ipp	ObGeoFuncUnionImpl::eval_unions_gc#OB_NEWx(GcTreeType,allocator)	OB_NEWx pool argument	430	pool-kind:param-or-local;pool:allocator
+src/share/geo/ob_geo_func_union_helper.ipp	ObGeoFuncUnionImpl::eval_unions_gc#OB_NEWx(GcTreeType,allocator)#2	OB_NEWx pool argument	443	pool-kind:param-or-local;pool:allocator
+src/share/geo/ob_geo_func_union_helper.ipp	ObGeoFuncUnionImpl::eval_unions_gc#OB_NEWx(PtType,allocator)	OB_NEWx pool argument	469	pool-kind:param-or-local;pool:allocator
+src/share/geo/ob_geo_func_utils.h	ObGeoFuncUtils::ob_geo_gc_union#OB_NEWx(MultiPolygonType,(&allocator))	OB_NEWx pool argument	87	pool-kind:addr-of;pool:(&allocator)
+src/share/geo/ob_geo_func_utils.h	ObGeoFuncUtils::ob_geo_gc_split#OB_NEWx(MPT,(&allocator))	OB_NEWx pool argument	186	pool-kind:addr-of;pool:(&allocator)
+src/share/geo/ob_geo_func_utils.h	ObGeoFuncUtils::ob_geo_gc_split#OB_NEWx(ML,(&allocator))	OB_NEWx pool argument	187	pool-kind:addr-of;pool:(&allocator)
+src/share/geo/ob_geo_func_utils.h	ObGeoFuncUtils::ob_geo_gc_split#OB_NEWx(MPO,(&allocator))	OB_NEWx pool argument	188	pool-kind:addr-of;pool:(&allocator)
+src/share/geo/ob_geo_func_utils.h	ObGeoFuncUtils::ob_gc_prepare#OB_NEWx(typenameGcTreeType::sub_ml_type,&tmp_alloc)	OB_NEWx pool argument	222	pool-kind:addr-of;pool:&tmp_alloc
+src/share/geo/ob_geo_func_utils.h	ObGeoFuncUtils::ob_gc_prepare#OB_NEWx(typenameGcTreeType::sub_mp_type,&tmp_alloc)	OB_NEWx pool argument	223	pool-kind:addr-of;pool:&tmp_alloc
+src/share/geo/ob_geo_func_utils.h	ObGeoFuncUtils::ob_gc_prepare#OB_NEWx(typenameGcTreeType::sub_mpt_type,allocator)	OB_NEWx pool argument	224	pool-kind:param-or-local;pool:allocator
+src/share/geo/ob_geo_interior_point_visitor.cpp	ObGeoInteriorPointVisitor::assign_interior_point#OB_NEWx(ObCartesianPoint,allocator_)	OB_NEWx pool argument	62	pool-kind:member;pool:allocator_
+src/share/geo/ob_geo_interior_point_visitor.cpp	ObGeoInteriorPointVisitor::assign_interior_endpoint#OB_NEWx(ObCartesianPoint,allocator_)	OB_NEWx pool argument	77	pool-kind:member;pool:allocator_
+src/share/geo/ob_geo_interior_point_visitor.cpp	ObGeoInteriorPointVisitor::get_interior_point#OB_NEWx(ObCartesianGeometrycollection,allocator_)	OB_NEWx pool argument	424	pool-kind:member;pool:allocator_
+src/share/geo/ob_geo_utils.cpp	ObGeoTypeUtil::create_geo_by_type#OB_NEWx(ObGeometry3D,(&allocator))	OB_NEWx pool argument	307	pool-kind:addr-of;pool:(&allocator)
+src/share/geo/ob_geo_utils.cpp	ObGeoTypeUtil::correct_polygon#CREATE_WITH_TEMP_CONTEXT	temporary memory context	640	guess:SCOPE_LOCAL_ARENA
+src/share/geo/ob_geo_utils.cpp	ObGeoTypeUtil::get_buffered_geo#CREATE_WITH_TEMP_CONTEXT	temporary memory context	721	guess:SCOPE_LOCAL_ARENA
+src/share/geo/ob_geo_utils.cpp	ObGeoBoxUtil::clip_by_box#OB_NEWx(ObCartesianGeometrycollection,&allocator)	OB_NEWx pool argument	1360	pool-kind:addr-of;pool:&allocator
+src/share/geo/ob_geo_utils.cpp	ObGeoTypeUtil::get_mbr_polygon#CREATE_WITH_TEMP_CONTEXT	temporary memory context	1857	guess:SCOPE_LOCAL_ARENA
+src/share/geo/ob_geo_utils.h	ObLineSegments::segs_arena_	arena member	122	guess:ARENA_CROSSCALL;type:ObCacheSegmentModuleArena
+src/share/geo/ob_geo_utils.h	ObGeoTypeUtil::create_geo_bin_by_type#OB_NEWx(PT,(&allocator))	OB_NEWx pool argument	493	pool-kind:addr-of;pool:(&allocator)
+src/share/geo/ob_geo_utils.h	ObGeoTypeUtil::create_geo_bin_by_type#OB_NEWx(LN,(&allocator))	OB_NEWx pool argument	497	pool-kind:addr-of;pool:(&allocator)
+src/share/geo/ob_geo_utils.h	ObGeoTypeUtil::create_geo_bin_by_type#OB_NEWx(PY,(&allocator))	OB_NEWx pool argument	501	pool-kind:addr-of;pool:(&allocator)
+src/share/geo/ob_geo_utils.h	ObGeoTypeUtil::create_geo_bin_by_type#OB_NEWx(MPT,(&allocator))	OB_NEWx pool argument	505	pool-kind:addr-of;pool:(&allocator)
+src/share/geo/ob_geo_utils.h	ObGeoTypeUtil::create_geo_bin_by_type#OB_NEWx(MLN,(&allocator))	OB_NEWx pool argument	509	pool-kind:addr-of;pool:(&allocator)
+src/share/geo/ob_geo_utils.h	ObGeoTypeUtil::create_geo_bin_by_type#OB_NEWx(MPY,(&allocator))	OB_NEWx pool argument	513	pool-kind:addr-of;pool:(&allocator)
+src/share/geo/ob_geo_utils.h	ObGeoTypeUtil::create_geo_bin_by_type#OB_NEWx(GC,(&allocator))	OB_NEWx pool argument	517	pool-kind:addr-of;pool:(&allocator)
+src/share/geo/ob_geo_utils.h	ObGeoTypeUtil::create_geo_tree_by_type#OB_NEWx(PT,(&allocator))	OB_NEWx pool argument	549	pool-kind:addr-of;pool:(&allocator)
+src/share/geo/ob_geo_utils.h	ObGeoTypeUtil::create_geo_tree_by_type#OB_NEWx(LN,(&allocator))	OB_NEWx pool argument	553	pool-kind:addr-of;pool:(&allocator)
+src/share/geo/ob_geo_utils.h	ObGeoTypeUtil::create_geo_tree_by_type#OB_NEWx(PY,(&allocator))	OB_NEWx pool argument	557	pool-kind:addr-of;pool:(&allocator)
+src/share/geo/ob_geo_utils.h	ObGeoTypeUtil::create_geo_tree_by_type#OB_NEWx(MPT,(&allocator))	OB_NEWx pool argument	561	pool-kind:addr-of;pool:(&allocator)
+src/share/geo/ob_geo_utils.h	ObGeoTypeUtil::create_geo_tree_by_type#OB_NEWx(MLN,(&allocator))	OB_NEWx pool argument	565	pool-kind:addr-of;pool:(&allocator)
+src/share/geo/ob_geo_utils.h	ObGeoTypeUtil::create_geo_tree_by_type#OB_NEWx(MPY,(&allocator))	OB_NEWx pool argument	569	pool-kind:addr-of;pool:(&allocator)
+src/share/geo/ob_geo_utils.h	ObGeoTypeUtil::create_geo_tree_by_type#OB_NEWx(GC,(&allocator))	OB_NEWx pool argument	573	pool-kind:addr-of;pool:(&allocator)
+src/share/geo/ob_geo_utils.h	ObGeoTypeUtil::simplify_multi_geo#OB_NEWx(typenameGcType::sub_pt_type,&allocator)	OB_NEWx pool argument	616	pool-kind:addr-of;pool:&allocator
+src/share/geo/ob_geo_utils.h	ObGeoTypeUtil::simplify_geo_collection#OB_NEWx(typenameGcTreeType::sub_mpt_type,&allocator)	OB_NEWx pool argument	687	pool-kind:addr-of;pool:&allocator
+src/share/geo/ob_geo_utils.h	ObGeoTypeUtil::simplify_geo_collection#OB_NEWx(typenameGcTreeType::sub_ml_type,&allocator)	OB_NEWx pool argument	703	pool-kind:addr-of;pool:&allocator
+src/share/geo/ob_geo_utils.h	ObGeoTypeUtil::simplify_geo_collection#OB_NEWx(typenameGcTreeType::sub_mp_type,&allocator)	OB_NEWx pool argument	718	pool-kind:addr-of;pool:&allocator
+src/share/geo/ob_geo_utils.h	ObGeoTypeUtil::remove_duplicate_multi_geo#OB_NEWx(typenameGcTreeType::sub_mpt_type,&allocator)	OB_NEWx pool argument	755	pool-kind:addr-of;pool:&allocator
+src/share/geo/ob_geo_utils.h	ObGeoTypeUtil::remove_duplicate_multi_geo#OB_NEWx(typenameGcTreeType::sub_ml_type,&allocator)	OB_NEWx pool argument	781	pool-kind:addr-of;pool:&allocator
+src/share/geo/ob_geo_utils.h	ObGeoTypeUtil::remove_duplicate_multi_geo#OB_NEWx(typenameGcTreeType::sub_mp_type,&allocator)	OB_NEWx pool argument	800	pool-kind:addr-of;pool:&allocator
+src/share/geo/ob_geo_utils.h	ObGeoTypeUtil::remove_duplicate_multi_geo#OB_NEWx(GcTreeType,&allocator)	OB_NEWx pool argument	819	pool-kind:addr-of;pool:&allocator
+src/share/geo/ob_s2adapter.cpp	ObS2Adapter::get_mbr#CREATE_WITH_TEMP_CONTEXT	temporary memory context	286	guess:SCOPE_LOCAL_ARENA
+src/share/geo/ob_srs_wkt_parser.h	ObQiString::allocator_	arena member	32	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/share/geo/ob_wkb_to_json_bin_visitor.cpp	ObWkbToJsonBinVisitor::appendBbox#CREATE_WITH_TEMP_CONTEXT	temporary memory context	881	guess:SCOPE_LOCAL_ARENA
+src/share/geo/ob_wkb_to_json_visitor.cpp	ObWkbToJsonVisitor::appendMySQLFlagInfo#CREATE_WITH_TEMP_CONTEXT	temporary memory context	580	guess:SCOPE_LOCAL_ARENA
+src/share/ob_core_table_proxy.h	ObCoreTableProxy::allocator_	arena member	257	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/share/ob_ddl_common.h	ObColumnNameMap::allocator_	arena member	479	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/share/ob_ddl_error_message_table_operator.h	ObDDLErrorMessageTableOperator::ObBuildDDLErrorMessage::allocator_	arena member	53	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/share/ob_ddl_sim_point.h	ObDDLSimPointMgr::arena_	arena member	150	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/share/ob_kv_parser.h	ObKVParser::allocator_	arena member	75	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/share/ob_max_id_cache.cpp	ObMaxIdCacheMgr::add_runtime_cache_#OB_NEWx(ObMaxIdCache,&allocator_)	OB_NEWx pool argument	213	pool-kind:addr-of;pool:&allocator_
+src/share/ob_max_id_cache.h	ObMaxIdCacheMgr::allocator_	arena member	75	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/share/ob_rpc_struct.h	ObStartRedefTableArg::allocator_	arena member	835	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/share/ob_rpc_struct.h	ObAlterTableArg::allocator_	arena member	1280	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/share/ob_rpc_struct.h	ObDropTableArg::allocator_	arena member	1427	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/share/ob_rpc_struct.h	ObCreateIndexArg::allocator_	arena member	1692	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/share/ob_rpc_struct.h	ObEstPartArg::allocator_	arena member	3311	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/share/object/ob_array_cast.cpp	ObArrayTypeCastFactory::alloc#OB_NEWx(ObArrayBinaryCast,&alloc)	OB_NEWx pool argument	1188	pool-kind:addr-of;pool:&alloc
+src/share/object/ob_array_cast.cpp	ObArrayTypeCastFactory::alloc#OB_NEWx(ObVectorDataCast,&alloc)	OB_NEWx pool argument	1190	pool-kind:addr-of;pool:&alloc
+src/share/object/ob_array_cast.cpp	ObArrayTypeCastFactory::alloc#OB_NEWx(ObArrayFixedSizeCast,&alloc)	OB_NEWx pool argument	1193	pool-kind:addr-of;pool:&alloc
+src/share/object/ob_array_cast.cpp	ObArrayTypeCastFactory::alloc#OB_NEWx(ObArrayNestedCast,&alloc)	OB_NEWx pool argument	1197	pool-kind:addr-of;pool:&alloc
+src/share/object/ob_array_cast.cpp	ObArrayTypeCastFactory::alloc#OB_NEWx(ObMapCast,&alloc)	OB_NEWx pool argument	1204	pool-kind:addr-of;pool:&alloc
+src/share/schema/ob_ai_model_mgr.h	ObAiModelMgr::local_allocator_	arena member	234	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/share/schema/ob_latest_schema_guard.h	ObLatestSchemaGuard::local_allocator_	arena member	295	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/share/schema/ob_mock_fk_parent_table_mgr.h	ObMockFKParentTableMgr::local_allocator_	arena member	147	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/share/schema/ob_outline_mgr.h	ObOutlineMgr::local_allocator_	arena member	219	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/share/schema/ob_package_mgr.h	ObPackageMgr::local_allocator_	arena member	265	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/share/schema/ob_partition_sql_helper.h	ObAddPartInfoHelper::allocator_	arena member	308	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/share/schema/ob_priv_mgr.h	ObPrivMgr::local_allocator_	arena member	313	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/share/schema/ob_routine_mgr.h	ObRoutineMgr::local_allocator_	arena member	295	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/share/schema/ob_schema_getter_guard.h	ObSchemaGetterGuard::local_allocator_	arena member	732	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/share/schema/ob_schema_mem_mgr.h	ObSchemaMemMgr::allocator_[2]	arena member	99	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/share/schema/ob_schema_mgr.h	ObSchemaMgr::local_allocator_	arena member	571	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/share/schema/ob_schema_struct.cpp	ObPartitionSchema::add_def_subpartition#OB_NEWx(ObSubPartition,(get_allocator()))	OB_NEWx pool argument	2423	pool-kind:call;pool:(get_allocator())
+src/share/schema/ob_schema_struct.cpp	ObPartitionSchema::add_partition#OB_NEWx(ObPartition,(get_allocator()))	OB_NEWx pool argument	2452	pool-kind:call;pool:(get_allocator())
+src/share/schema/ob_schema_struct.cpp	ObPartition::clone#OB_NEWx(ObPartition,(&allocator))	OB_NEWx pool argument	3776	pool-kind:addr-of;pool:(&allocator)
+src/share/schema/ob_schema_struct.cpp	ObPartition::add_partition#OB_NEWx(ObSubPartition,(get_allocator()))	OB_NEWx pool argument	3918	pool-kind:call;pool:(get_allocator())
+src/share/schema/ob_schema_struct.cpp	ObSubPartition::clone#OB_NEWx(ObSubPartition,(&allocator))	OB_NEWx pool argument	4077	pool-kind:addr-of;pool:(&allocator)
+src/share/schema/ob_schema_struct.h	ObSysTableChecker::allocator_	arena member	5417	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/share/schema/ob_server_schema_service.h	ObServerSchemaService::AllSimpleIncrementSchema::allocator_	arena member	663	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/share/schema/ob_sys_variable_mgr.h	ObSysVariableMgr::local_allocator_	arena member	143	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/share/schema/ob_table_schema.cpp	ObTableSchema::alloc_partition#OB_NEWx(ObPartition,(get_allocator()))	OB_NEWx pool argument	2661	pool-kind:call;pool:(get_allocator())
+src/share/schema/ob_table_schema.cpp	ObTableSchema::alloc_partition#OB_NEWx(ObSubPartition,(get_allocator()))	OB_NEWx pool argument	2676	pool-kind:call;pool:(get_allocator())
+src/share/schema/ob_trigger_mgr.h	ObTriggerMgr::local_allocator_	arena member	261	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/share/session/ob_local_session_var.cpp	ObLocalSessionVar::add_local_var#OB_NEWx(ObSessionSysVar,alloc_)	OB_NEWx pool argument	46	pool-kind:member;pool:alloc_
+src/share/storage/ob_sqlite_connection.h	ObSQLiteConnection::row_buffer_	arena member	193	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/share/text_analysis/ob_token_stream.h	ObBasicEnglishNormalizer::norm_allocator_	arena member	134	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/share/text_analysis/ob_token_stream.h	ObTextTokenGroupNormalizer::token_allocator_	arena member	152	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/sql/code_generator/ob_dml_cg_service.cpp	ObDmlCgService::generate_rowkey_domain_ctdef#OB_NEWx(ObDASTableLocMeta,&cg_.phy_plan_->get_allocator())	OB_NEWx pool argument	3215	pool-kind:addr-of;pool:&cg_.phy_plan_->get_allocator()
+src/sql/code_generator/ob_expr_generator_impl.h	ObExprGeneratorImpl::inner_alloc_	arena member	149	guess:ARENA_REQUEST;type:common::ObArenaAllocator
+src/sql/code_generator/ob_static_engine_cg.cpp	ObStaticEngineCG::postorder_generate_op#OB_NEWx(ObExprFrameInfo,(&phy_plan_->get_allocator()))	OB_NEWx pool argument	261	pool-kind:addr-of;pool:(&phy_plan_->get_allocator())
+src/sql/code_generator/ob_static_engine_cg.cpp	ObStaticEngineCG::postorder_generate_op#OB_NEWx(ObExprFrameInfo,(&phy_plan_->get_allocator()))#2	OB_NEWx pool argument	279	pool-kind:addr-of;pool:(&phy_plan_->get_allocator())
+src/sql/code_generator/ob_static_engine_cg.cpp	ObStaticEngineCG::generate_hash_rollup_info#OB_NEWx(HashRollupRTInfo,&phy_plan_->get_allocator())	OB_NEWx pool argument	4972	pool-kind:addr-of;pool:&phy_plan_->get_allocator()
+src/sql/code_generator/ob_static_engine_expr_cg.cpp	ObStaticEngineExprCG::generate#ObRawExprFactory:expr_factory	local IR factory	61	memo:33
+src/sql/code_generator/ob_static_engine_expr_cg.cpp	ObStaticEngineExprCG::generate#ObRawExprFactory:expr_factory#2	local IR factory	83	memo:33
+src/sql/code_generator/ob_tsc_cg_service.cpp	ObTscCgService::generate_vec_id_lookup_ctdef#OB_NEWx(ObDASTableLocMeta,&cg_.phy_plan_->get_allocator())	OB_NEWx pool argument	3346	pool-kind:addr-of;pool:&cg_.phy_plan_->get_allocator()
+src/sql/code_generator/ob_tsc_cg_service.cpp	ObTscCgService::generate_doc_id_lookup_ctdef#OB_NEWx(ObDASTableLocMeta,&cg_.phy_plan_->get_allocator())	OB_NEWx pool argument	3427	pool-kind:addr-of;pool:&cg_.phy_plan_->get_allocator()
+src/sql/code_generator/ob_tsc_cg_service.cpp	ObTscCgService::generate_rowkey_domain_id_ctdef#OB_NEWx(ObDASTableLocMeta,&cg_.phy_plan_->get_allocator())	OB_NEWx pool argument	3725	pool-kind:addr-of;pool:&cg_.phy_plan_->get_allocator()
+src/sql/code_generator/ob_tsc_cg_service.cpp	ObTscCgService::generate_table_lookup_ctdef#OB_NEWx(ObDASTableLocMeta,&allocator)	OB_NEWx pool argument	3779	pool-kind:addr-of;pool:&allocator
+src/sql/das/iter/ob_das_cache_lookup_iter.h	ObDASCacheLookupIter::store_allocator_	arena member	108	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/sql/das/iter/ob_das_domain_id_merge_iter.cpp	ObDASDomainIdMergeIter::inner_init#OB_NEWx(ObTableScanParam,&alloc)	OB_NEWx pool argument	164	pool-kind:addr-of;pool:&alloc
+src/sql/das/iter/ob_das_hnsw_scan_iter.h	ObDASHNSWScanIter::vec_op_alloc_	arena member	512	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/sql/das/iter/ob_das_hnsw_scan_iter.h	ObDASHNSWScanIter::hnsw_iter_alloc_	arena member	513	guess:ARENA_BATCH;type:ObArenaAllocator
+src/sql/das/iter/ob_das_index_merge_iter.cpp	ObDASIndexMergeIter::inner_init#OB_NEWx(ObTableScanParam,&alloc)	OB_NEWx pool argument	222	pool-kind:addr-of;pool:&alloc
+src/sql/das/iter/ob_das_iter_utils.cpp	ObDASIterUtils::create_das_ivf_scan_iter#OB_NEWx(ObDASIvfScanIter,&alloc)	OB_NEWx pool argument	88	pool-kind:addr-of;pool:&alloc
+src/sql/das/iter/ob_das_iter_utils.cpp	ObDASIterUtils::create_das_ivf_scan_iter#OB_NEWx(ObDASIvfPQScanIter,&alloc)	OB_NEWx pool argument	92	pool-kind:addr-of;pool:&alloc
+src/sql/das/iter/ob_das_iter_utils.cpp	ObDASIterUtils::create_das_ivf_scan_iter#OB_NEWx(ObDASIvfSQ8ScanIter,&alloc)	OB_NEWx pool argument	96	pool-kind:addr-of;pool:&alloc
+src/sql/das/iter/ob_das_iter_utils.cpp	ObDASIterUtils::create_function_lookup_tree#OB_NEWx(ObTableScanParam,&alloc)	OB_NEWx pool argument	1865	pool-kind:addr-of;pool:&alloc
+src/sql/das/iter/ob_das_iter_utils.h	ObDASIterUtils::create_das_iter#OB_NEWx(IterType,&alloc)	OB_NEWx pool argument	450	pool-kind:addr-of;pool:&alloc
+src/sql/das/iter/ob_das_ivf_scan_iter.h	ObDASIvfBaseScanIter::vec_op_alloc_	arena member	320	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/sql/das/iter/ob_das_ivf_scan_iter.h	ObDASIvfBaseScanIter::persist_alloc_	arena member	323	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/sql/das/iter/ob_das_spiv_merge_iter.cpp	ObDASSPIVMergeIter::create_dim_iters#OB_NEWx(ObTableScanParam,&allocator_)	OB_NEWx pool argument	778	pool-kind:addr-of;pool:&allocator_
+src/sql/das/iter/ob_das_spiv_merge_iter.cpp	ObDASSPIVMergeIter::create_dim_iters#OB_NEWx(ObDASSPIVDaaTSourceAdapter,&allocator_)	OB_NEWx pool argument	788	pool-kind:addr-of;pool:&allocator_
+src/sql/das/iter/ob_das_spiv_merge_iter.cpp	ObDASSPIVMergeIter::create_dim_iters#OB_NEWx(ObTableScanParam,&allocator_)#2	OB_NEWx pool argument	804	pool-kind:addr-of;pool:&allocator_
+src/sql/das/iter/ob_das_spiv_merge_iter.cpp	ObDASSPIVMergeIter::create_spiv_merge_iter#OB_NEWx(ObDASSPIVIdOpsAdapter,&allocator_)	OB_NEWx pool argument	860	pool-kind:addr-of;pool:&allocator_
+src/sql/das/iter/ob_das_spiv_merge_iter.cpp	ObDASSPIVMergeIter::create_spiv_merge_iter#OB_NEWx(ObDASSPIVFilterAdapter,&allocator_)	OB_NEWx pool argument	869	pool-kind:addr-of;pool:&allocator_
+src/sql/das/iter/ob_das_spiv_merge_iter.h	ObDASSPIVMergeIter::allocator_	arena member	242	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/sql/das/iter/ob_das_text_retrieval_iter.h	ObDASTextRetrievalIter::allocator_	arena member	134	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/sql/das/iter/ob_das_text_retrieval_merge_iter.cpp	ObDASTRDaatIter::inner_init#OB_NEWx(ObIRIterLoserTree,&mem_context_->get_arena_allocator())	OB_NEWx pool argument	1700	pool-kind:addr-of;pool:&mem_context_->get_arena_allocator()
+src/sql/das/iter/ob_das_text_retrieval_merge_iter.h	ObDASTextRetrievalMergeIter::allocator_	arena member	162	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/sql/das/iter/sparse_retrieval/ob_das_match_iter.cpp	ObDASMatchIter::inner_init#OB_NEWx(ObDASMatchBestFieldCollector,&myself_allocator_)	OB_NEWx pool argument	191	pool-kind:addr-of;pool:&myself_allocator_
+src/sql/das/iter/sparse_retrieval/ob_das_match_iter.cpp	ObDASMatchIter::inner_init#OB_NEWx(ObDASMatchSumRelevanceCollector,&myself_allocator_)	OB_NEWx pool argument	200	pool-kind:addr-of;pool:&myself_allocator_
+src/sql/das/iter/sparse_retrieval/ob_das_match_iter.cpp	ObDASMatchIter::inner_init#OB_NEWx(ObDASMatchMergeLoserTree,&myself_allocator_)	OB_NEWx pool argument	240	pool-kind:addr-of;pool:&myself_allocator_
+src/sql/das/iter/sparse_retrieval/ob_das_match_iter.h	ObDASMatchIter::myself_allocator_	arena member	141	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/sql/das/iter/sparse_retrieval/ob_das_tr_merge_iter.h	ObDASTRMergeIter::engine_allocator_	arena member	108	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/sql/das/ob_das_attach_define.cpp	OB_DEF_DESERIALIZE(ObDASAttachSpec)#OB_NEWx(ObDASTableLocMeta,&allocator_)	OB_NEWx pool argument	130	pool-kind:addr-of;pool:&allocator_
+src/sql/das/ob_das_domain_utils.h	ObDomainDMLIterator::allocator_	arena member	273	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/sql/das/ob_das_domain_utils.h	ObFTDMLIterator::ft_doc_word_allocator_	arena member	394	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/sql/das/ob_das_ref.h	ObDASRef::reuse_alloc_buf_	arena member	283	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/sql/das/ob_das_scan_op.h	ObDASScanOp::retry_alloc_buf_	arena member	337	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/sql/dtl/ob_dtl.h	ObDtl::allocator_	arena member	149	guess:ARENA_CROSSCALL;type:common::ObSafeArena
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	OB_DEF_DESERIALIZE(ObAggrInfo)#OB_NEWx(HashRollupRTInfo,alloc_)	OB_NEWx pool argument	220	pool-kind:member;pool:alloc_
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	ObAggrInfo::assign#OB_NEWx(HashRollupRTInfo,alloc_)	OB_NEWx pool argument	343	pool-kind:member;pool:alloc_
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	ObAggregateProcessor::init#OB_NEWx(LinearInterAggrFuncCtx,(&eval_ctx_.exec_ctx_.get_allocator()))	OB_NEWx pool argument	1375	pool-kind:addr-of;pool:(&eval_ctx_.exec_ctx_.get_allocator())
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	ObAggregateProcessor::init#OB_NEWx(DecIntAggFuncCtx,(&eval_ctx_.exec_ctx_.get_allocator()))	OB_NEWx pool argument	1389	pool-kind:addr-of;pool:(&eval_ctx_.exec_ctx_.get_allocator())
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	ObAggregateProcessor::linear_inter_calc#OB_NEWx(ObRTDatumArith,(&eval_ctx_.exec_ctx_.get_allocator()))	OB_NEWx pool argument	4222	pool-kind:addr-of;pool:(&eval_ctx_.exec_ctx_.get_allocator())
+src/sql/engine/aggregate/ob_aggregate_processor.h	ObAggregateProcessor::aggr_alloc_	arena member	1273	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/sql/engine/aggregate/ob_merge_distinct_op.h	ObMergeDistinctOp::alloc_	arena member	78	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/sql/engine/basic/chunk_store/ob_chunk_block.h	WriterBufferHandler::inner_alloc_	arena member	153	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/sql/engine/basic/ob_hp_infrastructure_manager.h	ObHashPartInfrastructureMgr::arena_alloc_	arena member	186	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/sql/engine/basic/ob_json_table_op.h	JtScanCtx::row_alloc_	arena member	169	guess:ARENA_BATCH;type:common::ObArenaAllocator
+src/sql/engine/basic/ob_temp_column_spill_spool.cpp	ObTempColumnSpillSpool::vector_allocator_	arena member	172	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/sql/engine/basic/ob_temp_column_store.cpp	macro:FIXED_VECTOR_INIT_SWITCH#OB_NEWx(VecType,&allocator)	OB_NEWx pool argument	339	pool-kind:addr-of;pool:&allocator
+src/sql/engine/basic/ob_temp_column_store.cpp	macro:CONTINUOUS_VECTOR_INIT_SWITCH#OB_NEWx(VecType,&allocator)	OB_NEWx pool argument	375	pool-kind:addr-of;pool:&allocator
+src/sql/engine/cmd/ob_load_data_executor.cpp	ObLoadDataExecutor::execute#OB_NEWx(ObLoadDataSPImpl,(&ctx.get_allocator()))	OB_NEWx pool argument	34	pool-kind:addr-of;pool:(&ctx.get_allocator())
+src/sql/engine/cmd/ob_load_data_file_reader.h	ObPacketStreamFileReader::arena_allocator_	arena member	190	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/sql/engine/cmd/ob_load_data_impl.cpp	ReplaceVariables::generate_new_expr#OB_NEWx(ObConstRawExpr,(&ctx_.get_allocator()))	OB_NEWx pool argument	441	pool-kind:addr-of;pool:(&ctx_.get_allocator())
+src/sql/engine/cmd/ob_load_data_impl.cpp	ObDataFragMgr::init#OB_NEWx(ObPartDataFragMgr,(&ctx.get_allocator()))	OB_NEWx pool argument	1561	pool-kind:addr-of;pool:(&ctx.get_allocator())
+src/sql/engine/cmd/ob_load_data_impl.cpp	ObLoadDataSPImpl::ToolBox::init#OB_NEWx(ObShuffleTaskHandle,(&ctx.get_allocator()))	OB_NEWx pool argument	1990	pool-kind:addr-of;pool:(&ctx.get_allocator())
+src/sql/engine/cmd/ob_load_data_impl.cpp	ObLoadDataSPImpl::ToolBox::init#OB_NEWx(ObLoadDataStat,(&ctx.get_allocator()))	OB_NEWx pool argument	2101	pool-kind:addr-of;pool:(&ctx.get_allocator())
+src/sql/engine/cmd/ob_load_data_impl.h	ObInsertResult::allocator_	arena member	149	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/sql/engine/cmd/ob_load_data_impl.h	ObShuffleTaskHandle::allocator	arena member	474	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/sql/engine/cmd/ob_table_executor.cpp	ObAlterTableExecutor::resolve_alter_column_partition_expr#ObRawExprFactory:expr_factory	local IR factory	933	memo:33
+src/sql/engine/cmd/ob_table_executor.cpp	ObAlterTableExecutor::resolve_alter_column_partition_expr#ObStmtFactory:stmt_factory	local IR factory	938	broadened
+src/sql/engine/cmd/ob_vector_index_refresh.h	ObVectorRefreshIndexCtx::allocator_	arena member	51	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/sql/engine/dml/ob_conflict_checker.cpp	ObConflictChecker::init_das_scan_rtdef#OB_NEWx(ObDASAttachRtInfo,&allocator_)	OB_NEWx pool argument	944	pool-kind:addr-of;pool:&allocator_
+src/sql/engine/expand/ob_expand_vec_op.h	ObExpandVecOp::allocator_	arena member	151	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/sql/engine/expr/ob_expr_ai/ob_ai_func_client.cpp	ObAIFuncClient::send_post_batch#OB_NEWx(ObStringBuffer,allocator_)	OB_NEWx pool argument	227	pool-kind:member;pool:allocator_
+src/sql/engine/expr/ob_expr_ai/ob_ai_func_client.cpp	ObAIFuncClient::send_post_batch_no_wait#OB_NEWx(ObStringBuffer,allocator_)	OB_NEWx pool argument	314	pool-kind:member;pool:allocator_
+src/sql/engine/expr/ob_expr_ai/ob_ai_func_utils.cpp	ObAIFuncJsonUtils::get_json_object#OB_NEWx(ObJsonObject,&allocator)	OB_NEWx pool argument	904	pool-kind:addr-of;pool:&allocator
+src/sql/engine/expr/ob_expr_ai/ob_ai_func_utils.cpp	ObAIFuncJsonUtils::get_json_array#OB_NEWx(ObJsonArray,&allocator)	OB_NEWx pool argument	916	pool-kind:addr-of;pool:&allocator
+src/sql/engine/expr/ob_expr_ai/ob_ai_func_utils.cpp	ObAIFuncJsonUtils::get_json_string#OB_NEWx(ObJsonString,&allocator)	OB_NEWx pool argument	928	pool-kind:addr-of;pool:&allocator
+src/sql/engine/expr/ob_expr_ai/ob_ai_func_utils.cpp	ObAIFuncJsonUtils::get_json_int#OB_NEWx(ObJsonInt,&allocator)	OB_NEWx pool argument	940	pool-kind:addr-of;pool:&allocator
+src/sql/engine/expr/ob_expr_ai/ob_ai_func_utils.cpp	ObAIFuncJsonUtils::get_json_boolean#OB_NEWx(ObJsonBoolean,&allocator)	OB_NEWx pool argument	952	pool-kind:addr-of;pool:&allocator
+src/sql/engine/expr/ob_expr_ai/ob_ai_func_utils.cpp	ObAIFuncJsonUtils::transform_array_to_json_array#OB_NEWx(ObJsonArray,&allocator)	OB_NEWx pool argument	1036	pool-kind:addr-of;pool:&allocator
+src/sql/engine/expr/ob_expr_ai/ob_ai_func_utils.cpp	ObAIFuncJsonUtils::transform_array_to_json_array#OB_NEWx(ObJsonString,&allocator)	OB_NEWx pool argument	1041	pool-kind:addr-of;pool:&allocator
+src/sql/engine/expr/ob_expr_ai/ob_ai_func_utils.cpp	ObAIFuncUtils::get_complete_provider#OB_NEWx(ObOpenAIUtils::ObOpenAIComplete,&allocator)	OB_NEWx pool argument	1063	pool-kind:addr-of;pool:&allocator
+src/sql/engine/expr/ob_expr_ai/ob_ai_func_utils.cpp	ObAIFuncUtils::get_complete_provider#OB_NEWx(ObDashscopeUtils::ObDashscopeComplete,&allocator)	OB_NEWx pool argument	1065	pool-kind:addr-of;pool:&allocator
+src/sql/engine/expr/ob_expr_ai/ob_ai_func_utils.cpp	ObAIFuncUtils::get_embed_provider#OB_NEWx(ObOpenAIUtils::ObOpenAIEmbed,&allocator)	OB_NEWx pool argument	1086	pool-kind:addr-of;pool:&allocator
+src/sql/engine/expr/ob_expr_ai/ob_ai_func_utils.cpp	ObAIFuncUtils::get_embed_provider#OB_NEWx(ObDashscopeUtils::ObDashscopeEmbed,&allocator)	OB_NEWx pool argument	1088	pool-kind:addr-of;pool:&allocator
+src/sql/engine/expr/ob_expr_ai/ob_ai_func_utils.cpp	ObAIFuncUtils::get_rerank_provider#OB_NEWx(ObSiliconflowUtils::ObSiliconflowRerank,&allocator)	OB_NEWx pool argument	1107	pool-kind:addr-of;pool:&allocator
+src/sql/engine/expr/ob_expr_ai/ob_ai_func_utils.cpp	ObAIFuncUtils::get_rerank_provider#OB_NEWx(ObDashscopeUtils::ObDashscopeRerank,&allocator)	OB_NEWx pool argument	1109	pool-kind:addr-of;pool:&allocator
+src/sql/engine/expr/ob_expr_ai/ob_ai_func_utils.cpp	ObAIFuncUtils::get_ai_func_info#OB_NEWx(ObAIFuncExprInfo,(&allocator))	OB_NEWx pool argument	1181	pool-kind:addr-of;pool:(&allocator)
+src/sql/engine/expr/ob_expr_collection_construct.cpp	ObExprCollectionConstruct::cg_expr#OB_NEWx(ExtraInfo,(&alloc))	OB_NEWx pool argument	77	pool-kind:addr-of;pool:(&alloc)
+src/sql/engine/expr/ob_expr_extract_value.cpp	ObExprExtractValue::merge_text_nodes_with_same_parent#OB_NEWx(ObStringBuffer,allocator)	OB_NEWx pool argument	226	pool-kind:param-or-local;pool:allocator
+src/sql/engine/expr/ob_expr_extract_value.cpp	ObExprExtractValue::extract_node_value#OB_NEWx(ObStringBuffer,&allocator)	OB_NEWx pool argument	308	pool-kind:addr-of;pool:&allocator
+src/sql/engine/expr/ob_expr_in.cpp	eval_composite_comparison#CREATE_WITH_TEMP_CONTEXT	temporary memory context	509	guess:SCOPE_LOCAL_ARENA
+src/sql/engine/expr/ob_expr_json_func_helper.cpp	ObJsonExprHelper::get_partial_json_bin#OB_NEWx(ObJsonBinUpdateCtx,&allocator)	OB_NEWx pool argument	218	pool-kind:addr-of;pool:&allocator
+src/sql/engine/expr/ob_expr_json_func_helper.cpp	ObJsonExprHelper::get_partial_json_bin#OB_NEWx(ObJsonBinCtx,&allocator)	OB_NEWx pool argument	226	pool-kind:addr-of;pool:&allocator
+src/sql/engine/expr/ob_expr_json_func_helper.cpp	ObJsonExprHelper::get_partial_json_bin#OB_NEWx(ObJsonBin,&allocator)	OB_NEWx pool argument	230	pool-kind:addr-of;pool:&allocator
+src/sql/engine/expr/ob_expr_json_func_helper.cpp	ObJsonExprHelper::datum_to_json_val#OB_NEWx(ObJsonNull,allocator)	OB_NEWx pool argument	588	pool-kind:param-or-local;pool:allocator
+src/sql/engine/expr/ob_expr_json_func_helper.cpp	ObJsonExprHelper::datum_to_json_val#OB_NEWx(ObJsonBoolean,allocator)	OB_NEWx pool argument	594	pool-kind:param-or-local;pool:allocator
+src/sql/engine/expr/ob_expr_json_func_helper.cpp	ObJsonExprHelper::datum_to_json_val#OB_NEWx(ObJsonString,allocator)	OB_NEWx pool argument	618	pool-kind:param-or-local;pool:allocator
+src/sql/engine/expr/ob_expr_json_func_helper.cpp	ObJsonExprHelper::datum_to_json_val#OB_NEWx(ObJsonString,allocator)#2	OB_NEWx pool argument	628	pool-kind:param-or-local;pool:allocator
+src/sql/engine/expr/ob_expr_json_func_helper.cpp	ObJsonDeltaLob::init#OB_NEWx(ObJsonBinUpdateCtx,allocator_)	OB_NEWx pool argument	2303	pool-kind:member;pool:allocator_
+src/sql/engine/expr/ob_expr_json_merge_patch.cpp	ObExprJsonMergePatch::eval_ora_json_merge_patch#OB_NEWx(ObJsonBuffer,&temp_allocator)	OB_NEWx pool argument	251	pool-kind:addr-of;pool:&temp_allocator
+src/sql/engine/expr/ob_expr_json_query.cpp	ObExprJsonQuery::cg_expr#OB_NEWx(ObExprJsonQueryParamInfo,(&alloc))	OB_NEWx pool argument	890	pool-kind:addr-of;pool:(&alloc)
+src/sql/engine/expr/ob_expr_json_schema_valid.cpp	ObExprJsonSchemaValid::cg_expr#OB_NEWx(ObExprJsonSchemaValidInfo,(&alloc))	OB_NEWx pool argument	71	pool-kind:addr-of;pool:(&alloc)
+src/sql/engine/expr/ob_expr_json_schema_validation_report.cpp	ObExprJsonSchemaValidationReport::cg_expr#OB_NEWx(ObExprJsonSchemaValidInfo,(&alloc))	OB_NEWx pool argument	83	pool-kind:addr-of;pool:(&alloc)
+src/sql/engine/expr/ob_expr_json_schema_validation_report.cpp	ObExprJsonSchemaValidationReport::raise_validation_report#OB_NEWx(ObJsonObject,&allocator)	OB_NEWx pool argument	157	pool-kind:addr-of;pool:&allocator
+src/sql/engine/expr/ob_expr_json_schema_validation_report.cpp	ObExprJsonSchemaValidationReport::raise_validation_report#OB_NEWx(ObJsonBoolean,&allocator)	OB_NEWx pool argument	161	pool-kind:addr-of;pool:&allocator
+src/sql/engine/expr/ob_expr_json_schema_validation_report.cpp	ObExprJsonSchemaValidationReport::raise_validation_report#OB_NEWx(ObJsonString,&allocator)	OB_NEWx pool argument	182	pool-kind:addr-of;pool:&allocator
+src/sql/engine/expr/ob_expr_json_schema_validation_report.cpp	ObExprJsonSchemaValidationReport::raise_validation_report#OB_NEWx(ObJsonString,&allocator)#2	OB_NEWx pool argument	183	pool-kind:addr-of;pool:&allocator
+src/sql/engine/expr/ob_expr_json_schema_validation_report.cpp	ObExprJsonSchemaValidationReport::raise_validation_report#OB_NEWx(ObJsonString,&allocator)#3	OB_NEWx pool argument	184	pool-kind:addr-of;pool:&allocator
+src/sql/engine/expr/ob_expr_json_schema_validation_report.cpp	ObExprJsonSchemaValidationReport::raise_validation_report#OB_NEWx(ObJsonString,&allocator)#4	OB_NEWx pool argument	185	pool-kind:addr-of;pool:&allocator
+src/sql/engine/expr/ob_expr_json_value.cpp	ObExprJsonValue::cg_expr#OB_NEWx(ObExprJsonQueryParamInfo,(&alloc))	OB_NEWx pool argument	248	pool-kind:addr-of;pool:(&alloc)
+src/sql/engine/expr/ob_expr_least.cpp	ObExprLeastGreatest::cg_expr#OB_NEWx(DatumCastExtraInfo,op_cg_ctx.allocator_)	OB_NEWx pool argument	137	pool-kind:field-of;pool:op_cg_ctx.allocator_
+src/sql/engine/expr/ob_expr_nullif.cpp	ObExprNullif::set_extra_info#OB_NEWx(DatumCastExtraInfo,expr_cg_ctx.allocator_)	OB_NEWx pool argument	141	pool-kind:field-of;pool:expr_cg_ctx.allocator_
+src/sql/engine/expr/ob_expr_obj_access.cpp	ObExprObjAccess::cg_expr#OB_NEWx(ExtraInfo,(&alloc))	OB_NEWx pool argument	516	pool-kind:addr-of;pool:(&alloc)
+src/sql/engine/expr/ob_expr_object_construct.cpp	ObExprObjectConstruct::cg_expr#OB_NEWx(ObExprObjectConstructInfo,(&alloc))	OB_NEWx pool argument	63	pool-kind:addr-of;pool:(&alloc)
+src/sql/engine/expr/ob_expr_pl_integer_checker.cpp	ObExprPLIntegerChecker::cg_expr#OB_NEWx(ExtraInfo,(&alloc))	OB_NEWx pool argument	247	pool-kind:addr-of;pool:(&alloc)
+src/sql/engine/expr/ob_expr_plsql_variable.cpp	ObExprPLSQLVariable::cg_expr#OB_NEWx(ObPLSQLVariableInfo,(&alloc))	OB_NEWx pool argument	145	pool-kind:addr-of;pool:(&alloc)
+src/sql/engine/expr/ob_expr_priv_st_asmvtgeom.cpp	ObExprPrivSTAsMVTGeom::clip_geometry#OB_NEWx(ObGeogBox,&allocator)	OB_NEWx pool argument	347	pool-kind:addr-of;pool:&allocator
+src/sql/engine/expr/ob_expr_priv_st_geohash.cpp	ObExprPrivSTGeoHash::eval_priv_st_geohash#OB_NEWx(ObGeogBox,&temp_allocator)	OB_NEWx pool argument	305	pool-kind:addr-of;pool:&temp_allocator
+src/sql/engine/expr/ob_expr_soundex.h	ObExprSoundex::str_allocator_	arena member	64	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/sql/engine/expr/ob_expr_st_buffer.cpp	ObExprSTBuffer::eval_st_buffer#OB_NEWx(ObCartesianGeometrycollection,(&temp_allocator))	OB_NEWx pool argument	413	pool-kind:addr-of;pool:(&temp_allocator)
+src/sql/engine/expr/ob_expr_st_buffer.cpp	ObExprPrivSTBuffer::eval_priv_st_buffer#OB_NEWx(ObGeographGeometrycollection,(&temp_allocator))	OB_NEWx pool argument	723	pool-kind:addr-of;pool:(&temp_allocator)
+src/sql/engine/expr/ob_expr_st_buffer.cpp	ObExprPrivSTBuffer::eval_priv_st_buffer#OB_NEWx(ObCartesianGeometrycollection,(&temp_allocator))	OB_NEWx pool argument	725	pool-kind:addr-of;pool:(&temp_allocator)
+src/sql/engine/expr/ob_expr_tokenize.h	ObExprTokenize::TokenizeParam::allocator_	arena member	71	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/sql/engine/expr/ob_expr_udf.cpp	ObExprUDF::cg_expr#OB_NEWx(ObExprUDFInfo,(&alloc))	OB_NEWx pool argument	632	pool-kind:addr-of;pool:(&alloc)
+src/sql/engine/expr/ob_expr_udf.h	ObExprUDF::ObExprUDFCtx::ctx_allocator_	arena member	110	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/sql/engine/expr/ob_expr_update_xml.cpp	ObExprUpdateXml::update_xml_tree_mysql#OB_NEWx(ObXmlText,xml_mem_ctx->allocator_)	OB_NEWx pool argument	191	pool-kind:field-of;pool:xml_mem_ctx->allocator_
+src/sql/engine/expr/ob_expr_update_xml.cpp	ObExprUpdateXml::update_xml_tree_mysql#OB_NEWx(ObXmlDocument,xml_mem_ctx->allocator_)	OB_NEWx pool argument	199	pool-kind:field-of;pool:xml_mem_ctx->allocator_
+src/sql/engine/expr/ob_expr_update_xml.cpp	ObExprUpdateXml::update_xml_tree_mysql#OB_NEWx(ObXmlAttribute,xml_mem_ctx->allocator_)	OB_NEWx pool argument	223	pool-kind:field-of;pool:xml_mem_ctx->allocator_
+src/sql/engine/expr/ob_expr_update_xml.cpp	ObExprUpdateXml::update_namespace_value#OB_NEWx(ObXmlAttribute,(&allocator))	OB_NEWx pool argument	614	pool-kind:addr-of;pool:(&allocator)
+src/sql/engine/expr/ob_expr_util.cpp	ObSolidifiedVarsContext::get_local_tz_info#OB_NEWx(ObTimeZoneInfoWrap,alloc_)	OB_NEWx pool argument	712	pool-kind:member;pool:alloc_
+src/sql/engine/expr/ob_expr_xml_func_helper.cpp	ObXMLExprHelper::update_new_nodes_ns#OB_NEWx(ObXmlAttribute,(&allocator))	OB_NEWx pool argument	126	pool-kind:addr-of;pool:(&allocator)
+src/sql/engine/expr/ob_geo_expr_utils.cpp	ObGeoExprUtils::make_valid_polygon_inner#OB_NEWx(ObCartesianPolygon,&allocator)	OB_NEWx pool argument	922	pool-kind:addr-of;pool:&allocator
+src/sql/engine/expr/ob_geo_expr_utils.cpp	ObGeoExprUtils::make_valid_polygon_inner#OB_NEWx(ObCartesianPolygon,&allocator)#2	OB_NEWx pool argument	933	pool-kind:addr-of;pool:&allocator
+src/sql/engine/expr/ob_pl_expr_subquery.cpp	ObExprOpSubQueryInPl::cg_expr#OB_NEWx(ObExprPlSubQueryInfo,(&alloc))	OB_NEWx pool argument	120	pool-kind:addr-of;pool:(&alloc)
+src/sql/engine/expr/ob_rt_datum_arith.cpp	ObRTDatumArith::generate#OB_NEWx(ObEvalCtx,(&alloc_))	OB_NEWx pool argument	149	pool-kind:addr-of;pool:(&alloc_)
+src/sql/engine/expr/ob_rt_datum_arith.h	ObRTDatumArith::alloc_	arena member	103	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/sql/engine/ob_exec_context.cpp	ObExecContext::get_stmt_factory#OB_NEWx(ObStmtFactory,(&allocator_))	OB_NEWx pool argument	645	pool-kind:addr-of;pool:(&allocator_)
+src/sql/engine/ob_exec_context.cpp	ObExecContext::get_expr_factory#OB_NEWx(ObRawExprFactory,(&allocator_))	OB_NEWx pool argument	657	pool-kind:addr-of;pool:(&allocator_)
+src/sql/engine/ob_exec_context.h	ObDiagnosisManager::allocator_	arena member	162	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/sql/engine/ob_exec_context.h	ObExecContext::sche_allocator_	arena member	794	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/sql/engine/ob_exec_context.h	ObExecContext::eval_res_allocator_	arena member	884	guess:ARENA_BATCH;type:common::ObArenaAllocator
+src/sql/engine/ob_exec_context.h	ObExecContext::eval_tmp_allocator_	arena member	885	guess:ARENA_BATCH;type:common::ObArenaAllocator
+src/sql/engine/ob_physical_plan_ctx.cpp	OB_DEF_DESERIALIZE(ObPhysicalPlanCtx)#OB_NEWx(ObLocalSessionVar,&allocator_)	OB_NEWx pool argument	777	pool-kind:addr-of;pool:&allocator_
+src/sql/engine/ob_subschema_ctx.cpp	ObSubSchemaCtx::get_subschema_id_by_typedef#OB_NEWx(ObSqlCollectionInfo,&allocator_)	OB_NEWx pool argument	463	pool-kind:addr-of;pool:&allocator_
+src/sql/engine/opt_statistics/ob_optimizer_stats_gathering_op.h	ObOptimizerStatsGatheringOp::arena_	arena member	133	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/sql/engine/pdml/static/ob_pdml_op_batch_row_cache.h	ObPDMLOpBatchRowCache::row_allocator_	arena member	97	guess:ARENA_BATCH;type:common::ObArenaAllocator
+src/sql/engine/pdml/static/ob_px_sstable_insert_op.h	ObPxMultiPartSSTableInsertOp::allocator_	arena member	122	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/sql/engine/px/datahub/components/ob_dh_join_filter_count_row.h	ObJoinFilterNdv::allocator_	arena member	86	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/sql/engine/px/datahub/components/ob_dh_opt_stats_gather.cpp	OB_DEF_DESERIALIZE(ObOptStatsGatherPieceMsg)#OB_NEWx(ObOptTableStat,(&arena_))	OB_NEWx pool argument	51	pool-kind:addr-of;pool:(&arena_)
+src/sql/engine/px/datahub/components/ob_dh_opt_stats_gather.h	ObOptStatsGatherPieceMsg::arena_	arena member	79	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/sql/engine/px/datahub/components/ob_dh_range_dist_wf.cpp	OB_DEF_DESERIALIZE(ObRDWFWholeMsg)#OB_NEWx(ObRDWFPartialInfo,(&arena_alloc_))	OB_NEWx pool argument	134	pool-kind:addr-of;pool:(&arena_alloc_)
+src/sql/engine/px/datahub/components/ob_dh_range_dist_wf.cpp	ObRDWFPartialInfo::dup#OB_NEWx(ObRDWFPartialInfo,(&alloc))	OB_NEWx pool argument	161	pool-kind:addr-of;pool:(&alloc)
+src/sql/engine/px/datahub/components/ob_dh_range_dist_wf.cpp	ObRDWFPieceMsgCtx::alloc_piece_msg_ctx#OB_NEWx(ObRDWFPieceMsgCtx,(&ctx.get_allocator()))	OB_NEWx pool argument	186	pool-kind:addr-of;pool:(&ctx.get_allocator())
+src/sql/engine/px/datahub/components/ob_dh_range_dist_wf.h	ObRDWFPieceMsg::arena_alloc_	arena member	90	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/sql/engine/px/datahub/components/ob_dh_range_dist_wf.h	ObRDWFWholeMsg::arena_alloc_	arena member	113	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/sql/engine/px/datahub/components/ob_dh_range_dist_wf.h	ObRDWFPieceMsgCtx::arena_alloc_	arena member	142	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/sql/engine/px/datahub/components/ob_dh_sample.h	ObDynamicSamplePieceMsg::arena_	arena member	70	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/sql/engine/px/datahub/components/ob_dh_sample.h	ObDynamicSampleWholeMsg::assign_allocator_	arena member	91	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/sql/engine/px/datahub/components/ob_dh_sample.h	ObDynamicSamplePieceMsgCtx::arena_	arena member	154	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/sql/engine/px/datahub/components/ob_dh_winbuf.h	ObWinbufPieceMsg::deseria_allocator_	arena member	70	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/sql/engine/px/datahub/components/ob_dh_winbuf.h	ObWinbufWholeMsg::assign_allocator_	arena member	102	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/sql/engine/px/exchange/ob_px_dist_transmit_op.cpp	ObPxDistTransmitOp::build_row_sample_piece_msg#OB_NEWx(ObChunkDatumStore,&ctx_.get_allocator())	OB_NEWx pool argument	472	pool-kind:addr-of;pool:&ctx_.get_allocator()
+src/sql/engine/px/exchange/ob_px_ms_coord_op.h	ObPxMSCoordOp::alloc_	arena member	182	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/sql/engine/px/exchange/ob_px_transmit_op.h	ObPxTransmitOp::px_row_allocator_	arena member	185	guess:ARENA_BATCH;type:common::ObArenaAllocator
+src/sql/engine/px/ob_dfo.h	ObPxSqcMeta::allocator_	arena member	347	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/sql/engine/px/ob_dfo.h	ObSqcSerializeCache::allocator_	arena member	671	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/sql/engine/px/ob_dfo.h	ObPxTask::allocator_	arena member	937	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/sql/engine/px/ob_px_bloom_filter.h	ObPxBloomFilter::allocator_	arena member	102	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/sql/engine/px/ob_px_coord_op.h	ObPxCoordOp::allocator_	arena member	136	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/sql/engine/px/ob_px_coord_op.h	ObPxCoordOp::row_allocator_	arena member	137	guess:ARENA_BATCH;type:common::ObArenaAllocator
+src/sql/engine/px/ob_px_sub_coord.h	ObPxSubCoord::allocator_	arena member	146	guess:ARENA_CROSSCALL;type:common::ObSafeArena
+src/sql/engine/px/ob_px_util.h	ObBaseOrderMap::allocator_	arena member	79	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/sql/engine/px/ob_px_worker_stat.h	ObPxWorkerStatList::allocator_	arena member	75	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/sql/engine/px/p2p_datahub/ob_p2p_dh_msg.h	ObP2PDatahubMsgBase::allocator_	arena member	141	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/sql/engine/px/p2p_datahub/ob_runtime_filter_msg.h	ObRFRangeFilterMsg::query_range_allocator_	arena member	188	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/sql/engine/px/p2p_datahub/ob_runtime_filter_msg.h	ObRFInFilterMsg::query_range_allocator_	arena member	301	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/sql/engine/recursive_cte/ob_recursive_inner_data_op.h	ObRecursiveInnerDataOp::stored_row_buf_	arena member	131	guess:ARENA_BATCH;type:common::ObArenaAllocator
+src/sql/engine/set/ob_merge_set_op.h	ObMergeSetOp::alloc_	arena member	108	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/sql/engine/sort/ob_sort_op_impl.cpp	ObSortOpImpl::init_topn#OB_NEWx(TopnHeapNode,(&mem_context_->get_malloc_allocator()))	OB_NEWx pool argument	609	pool-kind:addr-of;pool:(&mem_context_->get_malloc_allocator())
+src/sql/engine/sort/ob_sort_op_impl.cpp	ObSortOpImpl::build_chunk#OB_NEWx(ObSortOpChunk,(&mem_context_->get_malloc_allocator()))	OB_NEWx pool argument	941	pool-kind:addr-of;pool:(&mem_context_->get_malloc_allocator())
+src/sql/engine/sort/ob_sort_op_impl.cpp	ObSortOpImpl::build_ems_heap#OB_NEWx(EMSHeap,(&mem_context_->get_malloc_allocator()))	OB_NEWx pool argument	1684	pool-kind:addr-of;pool:(&mem_context_->get_malloc_allocator())
+src/sql/engine/sort/ob_sort_op_impl.cpp	ObSortOpImpl::sort_inmem_data#OB_NEWx(IMMSHeap,(&mem_context_->get_malloc_allocator()))	OB_NEWx pool argument	1875	pool-kind:addr-of;pool:(&mem_context_->get_malloc_allocator())
+src/sql/engine/sort/ob_sort_op_impl.cpp	ObSortOpImpl::locate_current_heap#OB_NEWx(PartHeapNode,&alloc)	OB_NEWx pool argument	2046	pool-kind:addr-of;pool:&alloc
+src/sql/engine/table/ob_table_partition_ranges.h	ObMultiPartitionsRangesWarpper::allocator_	arena member	79	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/sql/engine/table/ob_table_scan_op.cpp	ObTableScanOp::init_table_scan_rtdef#OB_NEWx(ObDASAttachRtInfo,&ctx_.get_allocator())	OB_NEWx pool argument	1059	pool-kind:addr-of;pool:&ctx_.get_allocator()
+src/sql/engine/table/ob_table_scan_op.h	ObDomainIndexCache::alloc_	arena member	103	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/sql/engine/window_function/ob_window_function_op.cpp	ObWindowFunctionOp::init#OB_NEWx(ReportingWFHashSet,(&local_allocator_))	OB_NEWx pool argument	1286	pool-kind:addr-of;pool:(&local_allocator_)
+src/sql/engine/window_function/ob_window_function_op.cpp	ObWindowFunctionOp::build_pby_hash_values_for_transmit#OB_NEWx(PbyHashValueArray,(&local_allocator_))	OB_NEWx pool argument	1312	pool-kind:addr-of;pool:(&local_allocator_)
+src/sql/engine/window_function/ob_window_function_op.cpp	ObWindowFunctionOp::build_participator_whole_msg_array#OB_NEWx(ObReportingWFWholeMsg,(&local_allocator_))	OB_NEWx pool argument	1327	pool-kind:addr-of;pool:(&local_allocator_)
+src/sql/engine/window_function/ob_window_function_op.cpp	ObWindowFunctionOp::create_row_store#OB_NEWx(RowsStore,(&local_allocator_))	OB_NEWx pool argument	1515	pool-kind:addr-of;pool:(&local_allocator_)
+src/sql/engine/window_function/ob_window_function_op.cpp	ObWindowFunctionSpec::register_to_datahub#OB_NEWx(ObRDWFWholeMsg::WholeMsgProvider,(&ctx.get_allocator()))	OB_NEWx pool argument	2884	pool-kind:addr-of;pool:(&ctx.get_allocator())
+src/sql/engine/window_function/ob_window_function_op.cpp	ObWindowFunctionSpec::register_to_datahub#OB_NEWx(ObReportingWFWholeMsg::WholeMsgProvider,(&ctx.get_allocator()))	OB_NEWx pool argument	2890	pool-kind:addr-of;pool:(&ctx.get_allocator())
+src/sql/engine/window_function/ob_window_function_op.h	ObWindowFunctionOp::local_allocator_	arena member	990	guess:ARENA_BATCH;type:common::ObArenaAllocator
+src/sql/engine/window_function/ob_window_function_op.h	ObWindowFunctionOp::rescan_alloc_	arena member	992	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/sql/engine/window_function/ob_window_function_op.h	ObWindowFunctionOp::patch_alloc_	arena member	1018	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/sql/executor/ob_maintain_dependency_info_task.h	ObMaintainObjDepInfoTask::alloc_	arena member	86	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/sql/hybrid_search/ob_hybrid_search_executor.cpp	ObHybridSearchExecutor::construct_column_index_info#OB_NEWx(ObColumnIndexInfo,&alloc)	OB_NEWx pool argument	282	pool-kind:addr-of;pool:&alloc
+src/sql/hybrid_search/ob_hybrid_search_executor.h	ObHybridSearchExecutor::allocator_	arena member	95	guess:ARENA_REQUEST;type:ObArenaAllocator
+src/sql/hybrid_search/ob_query_parse.cpp	ObESQueryParser::knn_fusion#OB_NEWx(ObMultiSetTable,&alloc_)	OB_NEWx pool argument	358	pool-kind:addr-of;pool:&alloc_
+src/sql/hybrid_search/ob_query_parse.cpp	ObESQueryParser::knn_fusion#OB_NEWx(ObQueryReqFromJson,&alloc_)	OB_NEWx pool argument	360	pool-kind:addr-of;pool:&alloc_
+src/sql/hybrid_search/ob_query_parse.cpp	ObESQueryParser::construct_hybrid_query#OB_NEWx(ObQueryReqFromJson,&alloc_)	OB_NEWx pool argument	649	pool-kind:addr-of;pool:&alloc_
+src/sql/hybrid_search/ob_query_parse.cpp	ObESQueryParser::construct_hybrid_query#OB_NEWx(ObReqJoinedTable,&alloc_)	OB_NEWx pool argument	657	pool-kind:addr-of;pool:&alloc_
+src/sql/hybrid_search/ob_query_parse.cpp	ObESQueryParser::parse_basic_table#OB_NEWx(ObReqTable,&alloc_)	OB_NEWx pool argument	767	pool-kind:addr-of;pool:&alloc_
+src/sql/hybrid_search/ob_query_parse.cpp	ObESQueryParser::parse_query#OB_NEWx(ObQueryReqFromJson,&alloc_)	OB_NEWx pool argument	780	pool-kind:addr-of;pool:&alloc_
+src/sql/hybrid_search/ob_query_parse.cpp	ObESQueryParser::construct_order_by_item#OB_NEWx(OrderInfo,&alloc_)	OB_NEWx pool argument	2223	pool-kind:addr-of;pool:&alloc_
+src/sql/hybrid_search/ob_query_parse.cpp	ObESQueryParser::parse_knn#OB_NEWx(ObQueryReqFromJson,&alloc_)	OB_NEWx pool argument	2253	pool-kind:addr-of;pool:&alloc_
+src/sql/hybrid_search/ob_query_parse.cpp	ObESQueryParser::construct_sub_query_table#OB_NEWx(ObReqTable,&alloc_)	OB_NEWx pool argument	2507	pool-kind:addr-of;pool:&alloc_
+src/sql/hybrid_search/ob_query_parse.cpp	ObESQueryParser::wrap_sub_query#OB_NEWx(ObQueryReqFromJson,&alloc_)	OB_NEWx pool argument	2520	pool-kind:addr-of;pool:&alloc_
+src/sql/hybrid_search/ob_query_parse.cpp	ObESQueryParser::construct_all_query#OB_NEWx(ObQueryReqFromJson,&alloc_)	OB_NEWx pool argument	3171	pool-kind:addr-of;pool:&alloc_
+src/sql/hybrid_search/ob_query_parse.cpp	ObEsQueryInfo::init_query_info#OB_NEWx(ObEsQueryInfo,&alloc)	OB_NEWx pool argument	3376	pool-kind:addr-of;pool:&alloc
+src/sql/hybrid_search/ob_request_base.cpp	ObReqWindowFunExpr::construct_window_fun_expr#OB_NEWx(ObReqWindowFunExpr,&alloc)	OB_NEWx pool argument	421	pool-kind:addr-of;pool:&alloc
+src/sql/hybrid_search/ob_request_base.cpp	ObReqExpr::construct_expr#OB_NEWx(ObReqExpr,&alloc)	OB_NEWx pool argument	655	pool-kind:addr-of;pool:&alloc
+src/sql/hybrid_search/ob_request_base.cpp	ObReqExpr::construct_expr#OB_NEWx(ObReqExpr,&alloc)#2	OB_NEWx pool argument	664	pool-kind:addr-of;pool:&alloc
+src/sql/hybrid_search/ob_request_base.cpp	ObReqExpr::construct_expr#OB_NEWx(ObReqExpr,&alloc)#3	OB_NEWx pool argument	674	pool-kind:addr-of;pool:&alloc
+src/sql/hybrid_search/ob_request_base.cpp	ObReqExpr::construct_expr#OB_NEWx(ObReqExpr,&alloc)#4	OB_NEWx pool argument	685	pool-kind:addr-of;pool:&alloc
+src/sql/hybrid_search/ob_request_base.cpp	ObReqColumnExpr::construct_column_expr#OB_NEWx(ObReqColumnExpr,&alloc)	OB_NEWx pool argument	699	pool-kind:addr-of;pool:&alloc
+src/sql/hybrid_search/ob_request_base.cpp	ObReqColumnExpr::construct_column_expr#OB_NEWx(ObReqColumnExpr,&alloc)#2	OB_NEWx pool argument	708	pool-kind:addr-of;pool:&alloc
+src/sql/hybrid_search/ob_request_base.cpp	ObReqConstExpr::construct_const_expr#OB_NEWx(ObReqConstExpr,&alloc)	OB_NEWx pool argument	717	pool-kind:addr-of;pool:&alloc
+src/sql/hybrid_search/ob_request_base.cpp	ObReqConstExpr::construct_const_numeric_expr#OB_NEWx(ObReqConstExpr,&alloc)	OB_NEWx pool argument	728	pool-kind:addr-of;pool:&alloc
+src/sql/hybrid_search/ob_request_base.cpp	ObReqMatchExpr::construct_match_expr#OB_NEWx(ObReqMatchExpr,&alloc)	OB_NEWx pool argument	786	pool-kind:addr-of;pool:&alloc
+src/sql/hybrid_search/ob_request_base.cpp	ObReqCaseWhenExpr::construct_case_when_expr#OB_NEWx(ObReqCaseWhenExpr,&alloc)	OB_NEWx pool argument	804	pool-kind:addr-of;pool:&alloc
+src/sql/hybrid_search/ob_request_base.cpp	ObReqCaseWhenExpr::construct_case_when_expr#OB_NEWx(ObReqCaseWhenExpr,&alloc)#2	OB_NEWx pool argument	819	pool-kind:addr-of;pool:&alloc
+src/sql/hybrid_search/ob_request_base.cpp	ObReqOpExpr::construct_binary_op_expr#OB_NEWx(ObReqOpExpr,&alloc)	OB_NEWx pool argument	830	pool-kind:addr-of;pool:&alloc
+src/sql/hybrid_search/ob_request_base.cpp	ObReqOpExpr::construct_unary_op_expr#OB_NEWx(ObReqOpExpr,&alloc)	OB_NEWx pool argument	844	pool-kind:addr-of;pool:&alloc
+src/sql/hybrid_search/ob_request_base.cpp	ObReqOpExpr::construct_op_expr#OB_NEWx(ObReqOpExpr,&alloc)	OB_NEWx pool argument	857	pool-kind:addr-of;pool:&alloc
+src/sql/hybrid_search/ob_request_base.cpp	ObReqOpExpr::construct_in_expr#OB_NEWx(ObReqOpExpr,&alloc)	OB_NEWx pool argument	875	pool-kind:addr-of;pool:&alloc
+src/sql/ob_optimizer_trace_impl.h	LogFileAppender::allocator_	arena member	279	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/sql/ob_optimizer_trace_impl.h	ObOptimizerTraceImpl::allocator_	arena member	398	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/sql/ob_result_set.h	ObResultSet::inner_mem_pool_	arena member	379	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/sql/ob_scanner.h	ObScanner::inner_allocator_	arena member	185	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/sql/ob_spi.h	ObSPIResultSet::allocator_	arena member	279	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/sql/ob_sql.cpp	ObSql::generate_stmt#OB_NEWx(ObSchemaChecker,(&allocator))	OB_NEWx pool argument	2045	pool-kind:addr-of;pool:(&allocator)
+src/sql/ob_sql_utils.cpp	ObSQLUtils::calc_simple_expr_without_row#ObRawExprFactory:expr_factory	local IR factory	322	memo:33
+src/sql/ob_sql_utils.cpp	ObSQLUtils::se_calc_const_expr#CREATE_WITH_TEMP_CONTEXT	temporary memory context	516	guess:SCOPE_STMT_QA
+src/sql/ob_sql_utils.cpp	ObSQLUtils::se_calc_const_expr#ObRawExprFactory:expr_factory	local IR factory	587	memo:33;inside-temp-context
+src/sql/ob_sql_utils.h	ObVirtualTableResultConverter::output_row_alloc_	arena member	1030	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/sql/optimizer/ob_dynamic_sampling.cpp	ObDynamicSampling::print_filter_exprs#ObRawExprFactory:expr_factory	local IR factory	716	memo:33
+src/sql/optimizer/ob_insert_log_plan.cpp	ObInsertLogPlan::generate_osg_share_info#OB_NEWx(OSGShareInfo,(&get_allocator()))	OB_NEWx pool argument	203	pool-kind:addr-of;pool:(&get_allocator())
+src/sql/optimizer/ob_join_order.cpp	ObJoinOrder::generate_candi_index_merge_node#OB_NEWx(ObIndexMergeNode,allocator_)	OB_NEWx pool argument	2726	pool-kind:member;pool:allocator_
+src/sql/optimizer/ob_join_order.cpp	ObJoinOrder::generate_candi_index_merge_node#OB_NEWx(ObIndexMergeNode,allocator_)#2	OB_NEWx pool argument	2771	pool-kind:member;pool:allocator_
+src/sql/optimizer/ob_optimizer_util.cpp	ObOptimizerUtil::preprocess_multivalue_range_exprs#ObRawExprFactory:expr_factory	local IR factory	8118	memo:33
+src/sql/optimizer/ob_px_resource_analyzer.h	ObPxResourceAnalyzer::allocator_	arena member	217	guess:ARENA_REQUEST;type:common::ObArenaAllocator
+src/sql/optimizer/ob_sel_estimator.h	ObSelEstimatorFactory::allocator_	arena member	176	guess:ARENA_REQUEST;type:common::ObArenaAllocator
+src/sql/optimizer/ob_table_location.cpp	ObTableLocation::init_table_location_with_column_ids#ObRawExprFactory:expr_factory	local IR factory	1058	memo:33
+src/sql/optimizer/ob_table_location.cpp	ObTableLocation::init_table_location_with_column_ids#ObStmtFactory:stmt_factory	local IR factory	1059	broadened
+src/sql/optimizer/ob_table_location.cpp	ObTableLocation::get_list_value_node#ObRawExprFactory:expr_factory	local IR factory	4939	memo:33
+src/sql/optimizer/ob_table_location.h	ObTableLocation::inner_allocator_	arena member	1130	guess:ARENA_REQUEST;type:common::ObArenaAllocator
+src/sql/optimizer/ob_table_partition_info.h	ObTablePartitionInfo::inner_allocator_	arena member	102	guess:ARENA_REQUEST;type:common::ObArenaAllocator
+src/sql/optimizer/stat/ob_dbms_stats_copy_table_stats.cpp	CopyTableStatHelper::copy_part_stat#OB_NEWx(ObOptTableStat,allocator_)	OB_NEWx pool argument	28	pool-kind:member;pool:allocator_
+src/sql/optimizer/stat/ob_dbms_stats_copy_table_stats.cpp	ObDbmsStatsCopyTableStats::get_copy_part_info#OB_NEWx(ObCopyPartInfo,helper.allocator_)	OB_NEWx pool argument	709	pool-kind:field-of;pool:helper.allocator_
+src/sql/optimizer/stat/ob_opt_column_stat.cpp	ObOptColumnStat::malloc_new_column_stat#OB_NEWx(ObOptColumnStat,(&allocator))	OB_NEWx pool argument	468	pool-kind:addr-of;pool:(&allocator)
+src/sql/optimizer/stat/ob_opt_osg_column_stat.cpp	ObMinMaxValEval::deep_copy#OB_NEWx(ObDatum,(&alloc))	OB_NEWx pool argument	39	pool-kind:addr-of;pool:(&alloc)
+src/sql/optimizer/stat/ob_opt_osg_column_stat.cpp	ObOptOSGColumnStat::create_new_osg_col_stat#OB_NEWx(ObOptOSGColumnStat,(&allocator))	OB_NEWx pool argument	69	pool-kind:addr-of;pool:(&allocator)
+src/sql/optimizer/stat/ob_opt_osg_column_stat.cpp	ObOptOSGColumnStat::set_min_max_datum_to_obj#OB_NEWx(ObObj,(&allocator_))	OB_NEWx pool argument	110	pool-kind:addr-of;pool:(&allocator_)
+src/sql/optimizer/stat/ob_opt_osg_column_stat.cpp	ObOptOSGColumnStat::set_min_max_datum_to_obj#OB_NEWx(ObObj,(&allocator_))#2	OB_NEWx pool argument	111	pool-kind:addr-of;pool:(&allocator_)
+src/sql/optimizer/stat/ob_opt_osg_column_stat.cpp	ObOptOSGColumnStat::inner_merge_min#OB_NEWx(ObDatum,(&allocator_))	OB_NEWx pool argument	221	pool-kind:addr-of;pool:(&allocator_)
+src/sql/optimizer/stat/ob_opt_osg_column_stat.cpp	ObOptOSGColumnStat::inner_merge_max#OB_NEWx(ObDatum,(&allocator_))	OB_NEWx pool argument	253	pool-kind:addr-of;pool:(&allocator_)
+src/sql/optimizer/stat/ob_opt_osg_column_stat.cpp	ObOptOSGColumnStat::inner_merge_min_max#OB_NEWx(ObDatum,(&allocator_))	OB_NEWx pool argument	289	pool-kind:addr-of;pool:(&allocator_)
+src/sql/optimizer/stat/ob_opt_osg_column_stat.cpp	ObOptOSGColumnStat::inner_merge_min_max#OB_NEWx(ObDatum,(&allocator_))#2	OB_NEWx pool argument	309	pool-kind:addr-of;pool:(&allocator_)
+src/sql/optimizer/stat/ob_topk_hist_estimator.cpp	ObTopKFrequencyHistograms::add_entry#OB_NEWx(ObDatum,(&get_allocator()))	OB_NEWx pool argument	325	pool-kind:addr-of;pool:(&get_allocator())
+src/sql/optimizer/stat/ob_topk_hist_estimator.cpp	ObTopKFrequencyHistograms::shrink_memory_usage#OB_NEWx(ObDatum,(&next_allocator))	OB_NEWx pool argument	535	pool-kind:addr-of;pool:(&next_allocator)
+src/sql/optimizer/stat/ob_topk_hist_estimator.h	ObTopKFrequencyHistograms::topk_buf_	arena member	187	guess:ARENA_REQUEST;type:ObArenaAllocator
+src/sql/optimizer/stat/ob_topk_hist_estimator.h	ObTopKFrequencyHistograms::obj_buf1_	arena member	191	guess:ARENA_REQUEST;type:ObArenaAllocator
+src/sql/optimizer/stat/ob_topk_hist_estimator.h	ObTopKFrequencyHistograms::obj_buf2_	arena member	192	guess:ARENA_REQUEST;type:ObArenaAllocator
+src/sql/pl/ob_pl.h	ObPLExecCtx::local_expr_alloc_	arena member	509	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/sql/pl/ob_pl_build.h	ObPLBuilderEnvGuard::allocator_	arena member	196	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/sql/pl/ob_pl_package_guard.h	ObPLPackageGuard::alloc_	arena member	53	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/sql/pl/ob_pl_package_state.h	ObPLPackageState::parent_alloc_	arena member	134	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/sql/pl/ob_pl_package_state.h	ObPLPackageState::cursor_allocator_	arena member	136	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/sql/pl/ob_pl_router.h	ObPLRouter::inner_allocator_	arena member	61	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/sql/plan_cache/ob_plan_set.h	ObPlanSet::alloc_	arena member	271	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/sql/plan_cache/ob_pre_calc_expr_handler.h	PreCalcExprHandler::alloc_	arena member	79	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/sql/printer/ob_schema_printer.cpp	ObSchemaPrinter::print_generated_column_definition#ObRawExprFactory:expr_factory	local IR factory	345	memo:33
+src/sql/printer/ob_schema_printer.cpp	ObSchemaPrinter::print_prefix_index_column#ObRawExprFactory:expr_factory	local IR factory	783	memo:33
+src/sql/printer/ob_schema_printer.cpp	ObSchemaPrinter::print_index_definition_columns#ObRawExprFactory:expr_factory	local IR factory	1678	memo:33
+src/sql/resolver/ddl/ob_alter_table_resolver.cpp	ObAlterTableResolver::check_alter_part_key_allowed#ObRawExprFactory:expr_factory	local IR factory	3760	memo:33
+src/sql/resolver/ddl/ob_alter_table_resolver.cpp	ObAlterTableResolver::check_alter_part_key_allowed#ObStmtFactory:stmt_factory	local IR factory	3761	broadened
+src/sql/resolver/ddl/ob_ddl_resolver.cpp	ObDDLResolver::reformat_generated_column_expr#ObRawExprFactory:expr_factory	local IR factory	3606	memo:33
+src/sql/resolver/ddl/ob_ddl_resolver.cpp	ObDDLResolver::check_default_value#ObRawExprFactory:expr_factory	local IR factory	3722	memo:33
+src/sql/resolver/ddl/ob_ddl_resolver.cpp	ObDDLResolver::check_default_value#ObRawExprFactory:expr_factory#2	local IR factory	3747	memo:33
+src/sql/resolver/ddl/ob_ddl_resolver.cpp	ObDDLResolver::calc_default_value#ObRawExprFactory:expr_factory	local IR factory	3890	memo:33
+src/sql/resolver/ddl/ob_ddl_resolver.cpp	ObDDLResolver::get_udt_column_default_values#ObRawExprFactory:expr_factory	local IR factory	4119	memo:33
+src/sql/resolver/ddl/ob_ddl_resolver.cpp	ObDDLResolver::resolve_spatial_index_constraint#ObRawExprFactory:expr_factory	local IR factory	4365	memo:33
+src/sql/resolver/ddl/ob_ddl_stmt.h	ObDDLStmt::allocator_	arena member	58	guess:ARENA_REQUEST;type:ObArenaAllocator
+src/sql/resolver/ddl/ob_fts_index_builder_util.cpp	ObMulValueIndexBuilderUtil::build_and_generate_multivalue_column_raw#ObRawExprFactory:expr_factory	local IR factory	2512	memo:33
+src/sql/resolver/ddl/ob_index_builder_util.cpp	ObIndexBuilderUtil::adjust_ordinary_index_column_args#ObRawExprFactory:expr_factory	local IR factory	585	memo:33
+src/sql/resolver/dml/ob_standard_group_checker.cpp	ObStandardGroupChecker::check_only_full_group_by#ObRawExprFactory:expr_factory	local IR factory	76	memo:33
+src/sql/resolver/expr/ob_raw_expr.h	ObResolveContext::local_allocator_	arena member	1670	guess:ARENA_REQUEST;type:common::ObArenaAllocator
+src/sql/resolver/expr/ob_raw_expr_deduce_type.h	ObRawExprDeduceType::alloc_	arena member	159	guess:ARENA_REQUEST;type:common::ObArenaAllocator
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	ObRawExprResolverImpl::check_pl_variable#ObRawExprFactory:expr_factory	local IR factory	1274	memo:33
+src/sql/resolver/expr/ob_raw_expr_util.cpp	ObRawExprUtils::check_generated_column_expr_str#ObRawExprFactory:expr_factory	local IR factory	1979	memo:33
+src/sql/resolver/expr/ob_shared_expr_resolver.h	ObSharedExprResolver::allocator_	arena member	120	guess:ARENA_REQUEST;type:ObArenaAllocator
+src/sql/rewrite/ob_query_range_define.cpp	ObPreRangeGraph::preliminary_extract_query_range#ObRawExprFactory:expr_factory	local IR factory	595	memo:33
+src/sql/rewrite/ob_range_generator.cpp	ObRangeGenerator::get_intersects_tmp_geo_param#OB_NEWx(ObS2Adapter,(&tmp_alloc))	OB_NEWx pool argument	1642	pool-kind:addr-of;pool:(&tmp_alloc)
+src/sql/rewrite/ob_range_generator.cpp	ObRangeGenerator::get_intersects_tmp_geo_param#OB_NEWx(ObS2Adapter,(&tmp_alloc))#2	OB_NEWx pool argument	1658	pool-kind:addr-of;pool:(&tmp_alloc)
+src/sql/rewrite/ob_range_generator.cpp	ObRangeGenerator::get_coveredby_tmp_geo_param#OB_NEWx(ObS2Adapter,(&tmp_alloc))	OB_NEWx pool argument	1745	pool-kind:addr-of;pool:(&tmp_alloc)
+src/sql/rewrite/ob_transform_const_propagate.h	ObTransformConstPropagate::allocator_	arena member	379	guess:ARENA_REQUEST;type:ObArenaAllocator
+src/sql/rewrite/ob_transform_late_materialization.cpp	ObTransformLateMaterialization::evaluate_stmt_cost#CREATE_WITH_TEMP_CONTEXT	temporary memory context	444	guess:SCOPE_STMT_QA
+src/sql/rewrite/ob_transform_late_materialization.cpp	ObTransformLateMaterialization::evaluate_stmt_cost#ObRawExprFactory:tmp_expr_factory	local IR factory	445	memo:33;inside-temp-context
+src/sql/rewrite/ob_transform_predicate_move_around.h	ObTransformPredicateMoveAround::allocator_	arena member	415	guess:ARENA_REQUEST;type:ObArenaAllocator
+src/sql/rewrite/ob_transform_rule.cpp	ObTransformRule::evaluate_cost#CREATE_WITH_TEMP_CONTEXT	temporary memory context	379	guess:SCOPE_STMT_QA
+src/sql/rewrite/ob_transform_rule.cpp	ObTransformRule::evaluate_cost#ObRawExprFactory:tmp_expr_factory	local IR factory	380	memo:33;inside-temp-context
+src/sql/rewrite/ob_transform_subquery_coalesce.h	ObTransformSubqueryCoalesce::allocator_	arena member	250	guess:ARENA_REQUEST;type:ObArenaAllocator
+src/sql/rewrite/ob_transform_temp_table.cpp	ObTransformTempTable::evaluate_cte_cost#CREATE_WITH_TEMP_CONTEXT	temporary memory context	2337	guess:SCOPE_STMT_QA
+src/sql/rewrite/ob_transform_temp_table.cpp	ObTransformTempTable::evaluate_cte_cost#ObRawExprFactory:tmp_expr_factory	local IR factory	2338	memo:33;inside-temp-context
+src/sql/rewrite/ob_transform_temp_table.cpp	ObTransformTempTable::evaluate_cte_cost_partially#CREATE_WITH_TEMP_CONTEXT	temporary memory context	2523	guess:SCOPE_STMT_QA
+src/sql/rewrite/ob_transform_temp_table.cpp	ObTransformTempTable::evaluate_cte_cost_partially#ObRawExprFactory:tmp_expr_factory	local IR factory	2524	memo:33;inside-temp-context
+src/sql/rewrite/ob_transform_temp_table.cpp	ObTransformTempTable::evaluate_cte_cost_globally#CREATE_WITH_TEMP_CONTEXT	temporary memory context	2598	guess:SCOPE_STMT_QA
+src/sql/rewrite/ob_transform_temp_table.cpp	ObTransformTempTable::evaluate_cte_cost_globally#ObRawExprFactory:tmp_expr_factory	local IR factory	2599	memo:33;inside-temp-context
+src/sql/rewrite/ob_transform_temp_table.h	ObTransformTempTable::allocator_	arena member	337	guess:ARENA_REQUEST;type:ObArenaAllocator
+src/sql/rewrite/ob_transform_utils.cpp	ObTransformUtils::check_exprs_unique_on_table_items#ObRawExprFactory:expr_factory	local IR factory	3606	memo:33
+src/sql/rewrite/ob_transform_utils.cpp	ObTransformUtils::check_stmt_unique#ObRawExprFactory:expr_factory	local IR factory	3712	memo:33
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::changed_var_pool_	arena member	1784	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/sql/session/ob_session_val_map.h	ObSessionValMap::bucket_allocator_	arena member	86	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/standby/restore/ob_physical_copy_ctx.h	ObPhysicalCopyCtx::allocator_	arena member	119	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/standby/restore/ob_physical_copy_task.h	ObPhysicalCopyTask::ObCopyMacroBlockHelperReader::allocator_	arena member	73	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/standby/restore/ob_restore_helper.h	ObStandbyRestoreHelper::ctx_allocator_	arena member	100	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/standby/restore/ob_standby_restore_reader.h	ObICopyMacroBlockReader::CopyMacroBlockReadData::allocator_	arena member	64	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/standby/restore/ob_standby_restore_reader.h	ObCopyMacroBlockHandle::allocator_	arena member	86	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/standby/restore/ob_standby_restore_reader.h	ObCopyMacroBlockObProducer::tablet_allocator_	arena member	125	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/standby/restore/ob_standby_restore_reader.h	ObCopyMacroBlockObProducer::allocator_	arena member	130	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/standby/restore/ob_standby_restore_reader.h	ObCopyMacroBlockObProducer::io_allocator_	arena member	132	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/standby/restore/ob_standby_restore_reader.h	ObCopySSTableMacroRangeObProducer::allocator_	arena member	283	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/standby/restore/ob_standby_restore_rpc.h	ObMigrationSSTableParam::allocator_	arena member	57	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/standby/restore/ob_standby_restore_rpc.h	ObMigrationTabletParam::allocator_	arena member	99	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/standby/restore/ob_standby_restore_rpc.h	ObCopyMacroRangeInfo::allocator_	arena member	124	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/standby/restore/ob_standby_restore_tablet_builder.h	ObStandbyRestoreTableInfoMgr::ObStandbyRestoreTabletTableInfoMgr::allocator_	arena member	105	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/standby/restore/ob_standby_restore_tablet_builder.h	ObStandbyRestoreCopySSTableInfoMgr::allocator_	arena member	153	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/standby/restore/ob_tablet_copy_finish_task.h	ObTabletCopyFinishTask::arena_allocator_	arena member	97	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/access/ob_advance_scan_helper.cpp	ObAdvanceScanHelperFactory::build_advance_scan_helper#OB_NEWx(ObAdvanceScanHelper,&stmt_allocator)	OB_NEWx pool argument	218	pool-kind:addr-of;pool:&stmt_allocator
+src/storage/access/ob_advance_scan_helper.h	ObAdvanceScanHelper::range_alloc_	arena member	109	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/access/ob_advance_scanner.h	ObAdvanceScanner::range_alloc_	arena member	158	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/access/ob_aggregate_base.h	ObGroupByCellBase::padding_allocator_	arena member	341	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/access/ob_block_row_store.cpp	ObBlockRowStore::init#OB_NEWx(ObWhereOptimizer,context_.stmt_allocator_)	OB_NEWx pool argument	79	pool-kind:field-of;pool:context_.stmt_allocator_
+src/storage/access/ob_block_sample_iterator.h	ObBlockSampleIterator::range_allocator_	arena member	188	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/access/ob_datum_reshape.cpp	macro:DISCRETE_VECTOR_INIT_SWITCH#OB_NEWx(VecType,&allocator)	OB_NEWx pool argument	197	pool-kind:addr-of;pool:&allocator
+src/storage/access/ob_ddl_block_sample_iterator.cpp	ObDDLBlockSampleIterator::reservoir_block_sample#OB_NEWx(ObDatumRange,&range_allocator_)	OB_NEWx pool argument	190	pool-kind:addr-of;pool:&range_allocator_
+src/storage/access/ob_dml_param.h	ObDMLBaseParam::lob_allocator_	arena member	110	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/storage/access/ob_empty_read_bucket.h	ObEmptyReadBucket::allocator_	arena member	124	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/storage/access/ob_global_iterator_pool.h	CachedIteratorNode::iter_allocator_	arena member	66	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/access/ob_global_iterator_pool.h	ObGlobalIteratorPool::allocator_	arena member	136	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/storage/access/ob_index_sstable_estimator.h	ObIndexBlockScanEstimator::allocator_	arena member	143	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/storage/access/ob_multiple_merge.h	ObMultipleMerge::padding_allocator_	arena member	154	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/access/ob_multiple_scan_merge.cpp	ObMultipleScanMerge::set_rows_merger#OB_NEWx(ObScanSimpleMerger,long_life_allocator_)	OB_NEWx pool argument	645	pool-kind:member;pool:long_life_allocator_
+src/storage/access/ob_multiple_scan_merge.cpp	ObMultipleScanMerge::set_rows_merger#OB_NEWx(ObScanMergeLoserTree,long_life_allocator_)	OB_NEWx pool argument	653	pool-kind:member;pool:long_life_allocator_
+src/storage/access/ob_pushdown_aggregate.h	ObAggCell::padding_allocator_	arena member	165	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/access/ob_pushdown_aggregate.h	ObMinAggCell::datum_allocator_	arena member	244	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/access/ob_pushdown_aggregate.h	ObMaxAggCell::datum_allocator_	arena member	278	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/access/ob_pushdown_aggregate.h	ObSumAggCell::datum_allocator_	arena member	499	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/access/ob_pushdown_aggregate.h	ObFirstRowAggCell::datum_allocator_	arena member	566	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/access/ob_pushdown_aggregate_input.h	ObPushdownAggregateInput::value_allocator_	arena member	123	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/access/ob_sample_filter.cpp	ObRowSampleFilterFactory::build_sample_filter#OB_NEWx(ObRowSampleFilter,allocator)	OB_NEWx pool argument	662	pool-kind:param-or-local;pool:allocator
+src/storage/access/ob_sstable_index_filter.cpp	ObSSTableIndexFilterFactory::build_sstable_index_filter#OB_NEWx(ObSSTableIndexFilter,allocator)	OB_NEWx pool argument	225	pool-kind:param-or-local;pool:allocator
+src/storage/access/ob_sstable_row_getter.cpp	ObSSTableRowGetter::fetch_row#OB_NEWx(ObMicroBlockRowGetter,long_life_allocator_)	OB_NEWx pool argument	133	pool-kind:member;pool:long_life_allocator_
+src/storage/access/ob_sstable_row_getter.cpp	ObSSTableRowGetter::fetch_row#OB_NEWx(ObMacroBlockReader,long_life_allocator_)	OB_NEWx pool argument	141	pool-kind:member;pool:long_life_allocator_
+src/storage/access/ob_sstable_row_lock_checker.cpp	ObSSTableRowLockChecker::init_micro_scanner#OB_NEWx(ObMicroBlockRowLockChecker,access_ctx_->stmt_allocator_)	OB_NEWx pool argument	67	pool-kind:field-of;pool:access_ctx_->stmt_allocator_
+src/storage/access/ob_sstable_row_lock_checker.cpp	ObSSTableRowLockMultiChecker::init_micro_scanner#OB_NEWx(ObMicroBlockRowLockMultiChecker,access_ctx_->stmt_allocator_)	OB_NEWx pool argument	216	pool-kind:field-of;pool:access_ctx_->stmt_allocator_
+src/storage/access/ob_sstable_row_multi_getter.cpp	ObSSTableRowMultiGetter::fetch_row#OB_NEWx(ObMicroBlockRowGetter,long_life_allocator_)	OB_NEWx pool argument	137	pool-kind:member;pool:long_life_allocator_
+src/storage/access/ob_sstable_row_multi_getter.cpp	ObSSTableRowMultiGetter::fetch_row#OB_NEWx(ObMacroBlockReader,long_life_allocator_)	OB_NEWx pool argument	146	pool-kind:member;pool:long_life_allocator_
+src/storage/access/ob_sstable_row_scanner.ipp	macro:INIT_MICRO_DATA_SCANNER#OB_NEWx(type,long_life_allocator_)	OB_NEWx pool argument	188	pool-kind:member;pool:long_life_allocator_
+src/storage/access/ob_sstable_row_whole_scanner.h	ObSSTableRowWholeScanner::allocator_	arena member	124	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/access/ob_table_access_context.h	ObTableAccessContext::lob_allocator_	arena member	358	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/access/ob_table_param.cpp	ObTableParam::ObTableParam#OB_NEWx(storage::ObTableReadInfo,&allocator_)	OB_NEWx pool argument	540	pool-kind:addr-of;pool:&allocator_
+src/storage/allocator/ob_memstore_allocator.h	ObMemstoreAllocator::AllocHandle::arena_handle_	arena member	80	guess:ARENA_CROSSCALL;type:ArenaHandle
+src/storage/allocator/ob_memstore_allocator.h	ObMemstoreAllocator::arena_	arena member	198	guess:ARENA_CROSSCALL;type:Arena
+src/storage/blocksstable/encoding/ob_encoding_hash_util.h	ObEncodingHashTable::alloc_	arena member	281	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/blocksstable/encoding/ob_encoding_util.h	ObEncodingRowBufHolder::allocator_	arena member	737	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/blocksstable/encoding/ob_micro_block_decoder.h	ObIEncodeBlockReader::decoder_allocator_	arena member	130	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/blocksstable/encoding/ob_micro_block_decoder.h	ObIEncodeBlockReader::buf_allocator_	arena member	134	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/blocksstable/encoding/ob_micro_block_decoder.h	ObMicroBlockDecoder::buf_allocator_	arena member	414	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/blocksstable/encoding/ob_micro_block_encoder.cpp	ObMicroBlockEncoder::init_all_col_values#OB_NEWx(ObColDatums,&pivot_allocator_)	OB_NEWx pool argument	296	pool-kind:addr-of;pool:&pivot_allocator_
+src/storage/blocksstable/encoding/ob_micro_block_encoder.h	ObMicroBlockEncoder::encoding_meta_allocator_	arena member	159	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/storage/blocksstable/encoding/ob_micro_block_encoder.h	ObMicroBlockEncoder::pivot_allocator_	arena member	163	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/storage/blocksstable/encoding/ob_multi_prefix_tree.h	ObMultiPrefixTree::alloc_	arena member	289	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/blocksstable/encoding/ob_string_diff_encoder.h	ObStringDiffEncoder::allocator_	arena member	160	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/blocksstable/index_block/ob_clustered_index_block_writer.cpp	ObClusteredIndexBlockWriter::init#OB_NEWx(ObMacroBlockWriter,task_allocator_)	OB_NEWx pool argument	104	pool-kind:member;pool:task_allocator_
+src/storage/blocksstable/index_block/ob_clustered_index_block_writer.h	ObClusteredIndexBlockWriter::row_allocator_	arena member	112	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/blocksstable/index_block/ob_clustered_index_block_writer.h	ObClusteredIndexBlockWriter::macro_block_io_allocator_	arena member	113	guess:ARENA_CROSSCALL;type:compaction::ObLocalArena
+src/storage/blocksstable/index_block/ob_clustered_index_block_writer.h	ObClusteredIndexBlockWriter::decompress_allocator_	arena member	114	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/blocksstable/index_block/ob_index_block_aggregator.cpp	ObISkipIndexAggregator::init_multi_col_aggregators#OB_NEWx(ObBM25ParamAggregator,&allocator)	OB_NEWx pool argument	1413	pool-kind:addr-of;pool:&allocator
+src/storage/blocksstable/index_block/ob_index_block_builder.cpp	ObSSTableIndexBuilder::get_single_macro_meta#OB_NEWx(ObDatumRow,&allocator)	OB_NEWx pool argument	1716	pool-kind:addr-of;pool:&allocator
+src/storage/blocksstable/index_block/ob_index_block_builder.cpp	ObDataIndexBlockBuilder::init#OB_NEWx(ObDataStoreDesc,&task_allocator_)	OB_NEWx pool argument	2440	pool-kind:addr-of;pool:&task_allocator_
+src/storage/blocksstable/index_block/ob_index_block_builder.cpp	ObDataIndexBlockBuilder::init#OB_NEWx(ObClusteredIndexBlockWriter,&task_allocator_)	OB_NEWx pool argument	2463	pool-kind:addr-of;pool:&task_allocator_
+src/storage/blocksstable/index_block/ob_index_block_builder.cpp	ObDataIndexBlockBuilder::init#OB_NEWx(ObClusteredIndexBlockWriter,&task_allocator_)#2	OB_NEWx pool argument	2498	pool-kind:addr-of;pool:&task_allocator_
+src/storage/blocksstable/index_block/ob_index_block_builder.cpp	ObIndexBlockRebuilder::inner_init#OB_NEWx(ObBaseIndexBlockDumper,&task_allocator_)	OB_NEWx pool argument	3398	pool-kind:addr-of;pool:&task_allocator_
+src/storage/blocksstable/index_block/ob_index_block_builder.cpp	ObIndexBlockRebuilder::inner_init#OB_NEWx(ObIndexTreeBlockDumper,&task_allocator_)	OB_NEWx pool argument	3411	pool-kind:addr-of;pool:&task_allocator_
+src/storage/blocksstable/index_block/ob_index_block_builder.cpp	ObIndexBlockRebuilder::inner_init#OB_NEWx(ObDataBlockInfo,index_tree_root_ctx_->allocator_)	OB_NEWx pool argument	3423	pool-kind:field-of;pool:index_tree_root_ctx_->allocator_
+src/storage/blocksstable/index_block/ob_index_block_builder.cpp	ObIndexBlockRebuilder::inner_init#OB_NEWx(ObBaseIndexBlockDumper,&task_allocator_)#2	OB_NEWx pool argument	3454	pool-kind:addr-of;pool:&task_allocator_
+src/storage/blocksstable/index_block/ob_index_block_builder.cpp	ObIndexBlockRebuilder::inner_init#OB_NEWx(ObClusteredIndexBlockWriter,&task_allocator_)	OB_NEWx pool argument	3482	pool-kind:addr-of;pool:&task_allocator_
+src/storage/blocksstable/index_block/ob_index_block_builder.h	ObBaseIndexBlockBuilder::row_allocator_	arena member	339	guess:ARENA_CROSSCALL;type:compaction::ObLocalArena
+src/storage/blocksstable/index_block/ob_index_block_builder.h	ObDataIndexBlockBuilder::task_allocator_	arena member	396	guess:ARENA_CROSSCALL;type:compaction::ObLocalArena
+src/storage/blocksstable/index_block/ob_index_block_builder.h	ObDataIndexBlockBuilder::meta_row_allocator_	arena member	397	guess:ARENA_CROSSCALL;type:compaction::ObLocalArena
+src/storage/blocksstable/index_block/ob_index_block_builder.h	ObMetaIndexBlockBuilder::leaf_rowkey_allocator_	arena member	451	guess:ARENA_CROSSCALL;type:compaction::ObLocalArena
+src/storage/blocksstable/index_block/ob_index_block_builder.h	ObIndexBlockRebuilder::task_allocator_	arena member	530	guess:ARENA_CROSSCALL;type:compaction::ObLocalArena
+src/storage/blocksstable/index_block/ob_index_block_builder.h	ObIndexBlockRebuilder::row_allocator_	arena member	531	guess:ARENA_CROSSCALL;type:compaction::ObLocalArena
+src/storage/blocksstable/index_block/ob_index_block_builder.h	ObIndexBlockRebuilder::macro_block_io_allocator_	arena member	532	guess:ARENA_CROSSCALL;type:compaction::ObLocalArena
+src/storage/blocksstable/index_block/ob_index_block_builder.h	ObSSTableIndexBuilder::sstable_allocator_	arena member	708	guess:ARENA_CROSSCALL;type:compaction::ObLocalSafeArena
+src/storage/blocksstable/index_block/ob_index_block_builder.h	ObSSTableIndexBuilder::self_allocator_	arena member	709	guess:ARENA_CROSSCALL;type:compaction::ObLocalArena
+src/storage/blocksstable/index_block/ob_index_block_builder.h	ObSSTableIndexBuilder::row_allocator_	arena member	710	guess:ARENA_CROSSCALL;type:compaction::ObLocalArena
+src/storage/blocksstable/index_block/ob_index_block_dumper.cpp	ObBaseIndexBlockDumper::new_macro_writer#OB_NEWx(ObMacroBlockWriter,task_allocator_)	OB_NEWx pool argument	270	pool-kind:member;pool:task_allocator_
+src/storage/blocksstable/index_block/ob_index_block_dumper.cpp	ObBaseIndexBlockDumper::append_next_level_row#OB_NEWx(ObIndexBlockRowDesc,sstable_allocator_)	OB_NEWx pool argument	342	pool-kind:member;pool:sstable_allocator_
+src/storage/blocksstable/index_block/ob_index_block_dumper.cpp	ObBaseIndexBlockDumper::close_to_mem#OB_NEWx(ObMicroBlockDesc,sstable_allocator_)	OB_NEWx pool argument	422	pool-kind:member;pool:sstable_allocator_
+src/storage/blocksstable/index_block/ob_index_block_dumper.cpp	ObIndexTreeBlockDumper::append_next_level_row#OB_NEWx(ObIndexBlockRowDesc,sstable_allocator_)	OB_NEWx pool argument	500	pool-kind:member;pool:sstable_allocator_
+src/storage/blocksstable/index_block/ob_index_block_dumper.cpp	ObIndexTreeBlockDumper::append_next_level_row#OB_NEWx(ObSkipIndexAggResult,sstable_allocator_)	OB_NEWx pool argument	509	pool-kind:member;pool:sstable_allocator_
+src/storage/blocksstable/index_block/ob_index_block_dumper.cpp	ObIndexTreeBlockDumper::close_to_mem#OB_NEWx(ObIndexRowAggInfo,sstable_allocator_)	OB_NEWx pool argument	532	pool-kind:member;pool:sstable_allocator_
+src/storage/blocksstable/index_block/ob_index_block_dumper.h	ObBaseIndexBlockDumper::row_allocator_	arena member	170	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/blocksstable/index_block/ob_index_block_dumper.h	ObIndexBlockLoader::row_allocator_	arena member	260	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/storage/blocksstable/index_block/ob_index_block_macro_iterator.h	ObIndexBlockMacroIterator::micro_endkey_allocator_	arena member	189	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/blocksstable/index_block/ob_index_block_row_scanner.h	ObIndexBlockDataTransformer::allocator_	arena member	102	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/storage/blocksstable/index_block/ob_index_block_row_struct.h	ObIndexBlockRowBuilder::index_data_allocator_	arena member	850	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/blocksstable/index_block/ob_macro_meta_temp_store.h	ObMacroMetaTempStore::allocator_	arena member	96	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/storage/blocksstable/index_block/ob_macro_meta_temp_store.h	ObMacroMetaTempStore::datum_allocator_	arena member	97	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/storage/blocksstable/index_block/ob_macro_meta_temp_store.h	ObMacroMetaTempStore::macro_meta_allocator_	arena member	98	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/storage/blocksstable/index_block/ob_macro_meta_temp_store.h	ObMacroMetaTempStoreIter::io_allocator_	arena member	126	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/storage/blocksstable/index_block/ob_sstable_index_scanner.cpp	ObSSTableIndexScanner::init_level_scanners#OB_NEWx(ObSSTableIndexBlockLevelScanner,&scan_allocator)	OB_NEWx pool argument	568	pool-kind:addr-of;pool:&scan_allocator
+src/storage/blocksstable/index_block/ob_sstable_meta_info.h	ObMacroIdIterator::allocator_	arena member	129	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/blocksstable/ob_bloom_filter_cache.h	ObBloomFilter::allocator_	arena member	62	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/blocksstable/ob_data_store_desc.h	ObColDataStoreDesc::allocator_	arena member	155	guess:ARENA_CROSSCALL;type:compaction::ObLocalArena
+src/storage/blocksstable/ob_datum_row_store.h	ObDatumRowStore::inner_alloc_	arena member	87	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/blocksstable/ob_datum_rowkey.h	ObDatumRowkeyHelper::local_allocator_	arena member	144	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/blocksstable/ob_imicro_block_reader.h	ObBlockReaderAllocator::inner_allocator_	arena member	490	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/blocksstable/ob_kvcache_pre_warmer.h	ObIndexBlockCachePreWarmer::allocator_	arena member	91	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/storage/blocksstable/ob_macro_block.h	ObMacroBlock::allocator_	arena member	133	guess:ARENA_CROSSCALL;type:compaction::ObLocalArena
+src/storage/blocksstable/ob_macro_block_bare_iterator.cpp	ObMacroBlockRowBareIterator::init_micro_reader#OB_NEWx(ObMicroBlockReader,allocator_)	OB_NEWx pool argument	897	pool-kind:member;pool:allocator_
+src/storage/blocksstable/ob_macro_block_bare_iterator.cpp	ObMacroBlockRowBareIterator::init_micro_reader#OB_NEWx(ObMicroBlockDecoder,allocator_)	OB_NEWx pool argument	904	pool-kind:member;pool:allocator_
+src/storage/blocksstable/ob_macro_block_bare_iterator.h	ObMicroBlockBareIterator::allocator_	arena member	116	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/storage/blocksstable/ob_macro_block_reader.h	ObMacroBlockReader::allocator_	arena member	121	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/blocksstable/ob_macro_block_reader.h	ObSSTableDataBlockReader::allocator_	arena member	174	guess:ARENA_CROSSCALL;type:compaction::ObLocalArena
+src/storage/blocksstable/ob_macro_block_writer.cpp	ObMacroBlockWriter::init_macro_seq_generator#OB_NEWx(ObMacroIncSeqGenerator,&allocator_)	OB_NEWx pool argument	1246	pool-kind:addr-of;pool:&allocator_
+src/storage/blocksstable/ob_macro_block_writer.cpp	ObMacroBlockWriter::init_macro_seq_generator#OB_NEWx(ObMacroSkipSeqGenerator,&allocator_)	OB_NEWx pool argument	1248	pool-kind:addr-of;pool:&allocator_
+src/storage/blocksstable/ob_macro_block_writer.cpp	ObMacroBlockWriter::create_mem_pre_warmer#OB_NEWx(ObIndexBlockCachePreWarmer,&allocator_)	OB_NEWx pool argument	2443	pool-kind:addr-of;pool:&allocator_
+src/storage/blocksstable/ob_macro_block_writer.cpp	ObMacroBlockWriter::create_mem_pre_warmer#OB_NEWx(ObDataBlockCachePreWarmer,&allocator_)	OB_NEWx pool argument	2448	pool-kind:addr-of;pool:&allocator_
+src/storage/blocksstable/ob_macro_block_writer.h	ObMicroBlockBufferHelper::allocator_	arena member	103	guess:ARENA_CROSSCALL;type:compaction::ObLocalArena
+src/storage/blocksstable/ob_macro_block_writer.h	ObMacroBlockWriter::allocator_	arena member	332	guess:ARENA_CROSSCALL;type:compaction::ObLocalArena
+src/storage/blocksstable/ob_macro_block_writer.h	ObMacroBlockWriter::index_builder_allocator_	arena member	333	guess:ARENA_CROSSCALL;type:compaction::ObLocalArena
+src/storage/blocksstable/ob_macro_block_writer.h	ObMacroBlockWriter::rowkey_allocator_	arena member	334	guess:ARENA_CROSSCALL;type:compaction::ObLocalArena
+src/storage/blocksstable/ob_micro_block_checksum_helper.h	ObMicroBlockChecksumHelper::allocator_	arena member	98	guess:ARENA_CROSSCALL;type:compaction::ObLocalArena
+src/storage/blocksstable/ob_micro_block_reader_helper.h	ObMicroBlockReaderHelper::init_reader#OB_NEWx(T,allocator_)	OB_NEWx pool argument	112	pool-kind:member;pool:allocator_
+src/storage/blocksstable/ob_micro_block_row_getter.cpp	ObIMicroBlockRowFetcher::prepare_reader#OB_NEWx(ObMicroBlockGetReader,long_life_allocator_)	OB_NEWx pool argument	107	pool-kind:member;pool:long_life_allocator_
+src/storage/blocksstable/ob_micro_block_row_getter.cpp	ObIMicroBlockRowFetcher::prepare_reader#OB_NEWx(ObEncodeBlockGetReader,long_life_allocator_)	OB_NEWx pool argument	113	pool-kind:member;pool:long_life_allocator_
+src/storage/blocksstable/ob_micro_block_row_scanner.cpp	macro:INIT_MICRO_READER#OB_NEWx(type,(&allocator_))	OB_NEWx pool argument	324	pool-kind:addr-of;pool:(&allocator_)
+src/storage/blocksstable/ob_micro_block_row_scanner.cpp	ObIMicroBlockRowScanner::init_bitmap#OB_NEWx(ObRowBitmap,&allocator_)	OB_NEWx pool argument	934	pool-kind:addr-of;pool:&allocator_
+src/storage/blocksstable/ob_micro_block_row_scanner.h	ObMultiVersionMicroBlockRowScanner::cell_allocator_	arena member	376	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/blocksstable/ob_sstable_meta.h	ObSSTableCloneParam::allocator_	arena member	345	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/blocksstable/ob_super_block_buffer_holder.h	ObSuperBlockBufferHolder::allocator_	arena member	48	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/compaction/ob_basic_tablet_merge_ctx.cpp	ObBasicTabletMergeCtx::prepare_merge_progress#OB_NEWx(ObPartitionMajorMergeProgress,&(mem_ctx_.get_safe_arena()))	OB_NEWx pool argument	386	pool-kind:addr-of;pool:&(mem_ctx_.get_safe_arena())
+src/storage/compaction/ob_basic_tablet_merge_ctx.cpp	ObBasicTabletMergeCtx::prepare_merge_progress#OB_NEWx(ObPartitionMergeProgress,&(mem_ctx_.get_safe_arena()))	OB_NEWx pool argument	388	pool-kind:addr-of;pool:&(mem_ctx_.get_safe_arena())
+src/storage/compaction/ob_column_checksum_calculator.h	ObColumnChecksumCalculator::allocator_	arena member	54	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/compaction/ob_column_checksum_calculator.h	ObColumnChecksumAccumulator::allocator_	arena member	71	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/compaction/ob_column_checksum_calculator.h	ObSSTableColumnChecksum::allocator_	arena member	97	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/compaction/ob_compaction_diagnose.h	ObCompactionDiagnoseIterator::allocator_	arena member	542	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/storage/compaction/ob_compaction_memory_context.h	ObCompactionMemoryContext::inner_arena_	arena member	110	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/compaction/ob_compaction_memory_context.h	ObCompactionMemoryContext::safe_arena_	arena member	111	guess:ARENA_CROSSCALL;type:common::ObSafeArenaAllocator
+src/storage/compaction/ob_compaction_progress.h	ObCompactionProgressMgr::allocator_	arena member	125	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/storage/compaction/ob_compaction_progress.h	ObTabletCompactionProgressIterator::allocator_	arena member	216	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/storage/compaction/ob_compaction_suggestion.h	ObCompactionSuggestionMgr::allocator_	arena member	282	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/storage/compaction/ob_index_block_micro_iterator.h	ObIndexBlockMicroIterator::allocator_	arena member	101	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/compaction/ob_medium_compaction_func.h	ObMediumCompactionScheduleFunc::allocator_	arena member	164	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/storage/compaction/ob_partition_merge_iter.cpp	ObPartitionMicroMergeIter::inner_init#OB_NEWx(ObMicroBlockRowScanner,(&allocator_))	OB_NEWx pool argument	638	pool-kind:addr-of;pool:(&allocator_)
+src/storage/compaction/ob_partition_merge_iter.h	ObPartitionMinorRowMergeIter::obj_copy_allocator_	arena member	300	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/compaction/ob_partition_merger.cpp	ObPartitionMajorMerger::inner_init#OB_NEWx(ObPartitionMajorMergeHelper,(&merger_arena_))	OB_NEWx pool argument	467	pool-kind:addr-of;pool:(&merger_arena_)
+src/storage/compaction/ob_partition_merger.cpp	ObPartitionMinorMerger::inner_init#OB_NEWx(ObPartitionMinorMergeHelper,(&merger_arena_))	OB_NEWx pool argument	812	pool-kind:addr-of;pool:(&merger_arena_)
+src/storage/compaction/ob_schedule_status_cache.h	ObTabletStatusCache::allocator_	arena member	164	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/storage/compaction/ob_server_compaction_event_history.h	ObServerCompactionEventHistory::allocator_	arena member	113	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/storage/compaction/ob_sstable_builder.h	ObSSTableRebuildMicroBlockIter::allocator_	arena member	68	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/storage/compaction/ob_sstable_builder.h	ObSSTableRebuildMicroBlockIter::io_allocator_	arena member	69	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/storage/compaction/ob_sstable_builder.h	ObSSTableBuilder::allocator_	arena member	105	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/storage/compaction/ob_tablet_merge_task.cpp	macro:NEW_CTX#OB_NEWx(CTX_NAME,&allocator_)	OB_NEWx pool argument	579	pool-kind:addr-of;pool:&allocator_
+src/storage/compaction/ob_tablet_merge_task.cpp	ObTabletMergeTask::init#OB_NEWx(ObPartitionMajorMerger,&allocator_)	OB_NEWx pool argument	852	pool-kind:addr-of;pool:&allocator_
+src/storage/compaction/ob_tablet_merge_task.cpp	ObTabletMergeTask::init#OB_NEWx(ObPartitionMinorMerger,&allocator_)	OB_NEWx pool argument	854	pool-kind:addr-of;pool:&allocator_
+src/storage/compaction/ob_tablet_merge_task.h	ObTabletMergeDag::allocator_	arena member	202	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/compaction/ob_tablet_merge_task.h	ObTabletMergeTask::allocator_	arena member	243	guess:ARENA_CROSSCALL;type:compaction::ObLocalArena
+src/storage/ddl/ob_build_index_task.h	ObUniqueCheckingParam::allocator_	arena member	210	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/ddl/ob_complement_data_task.h	ObComplementDataParam::allocator_	arena member	156	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/ddl/ob_complement_data_task.h	ObComplementDataContext::allocator_	arena member	183	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/storage/ddl/ob_complement_data_task.h	ObComplementWriteTask::allocator_	arena member	305	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/ddl/ob_complement_data_task.h	ObLocalScan::allocator_	arena member	420	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/ddl/ob_complement_data_task.h	ObLocalScan::calc_buf_	arena member	421	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/ddl/ob_ddl_batch_datum_rows.h	ObDDLBatchDatumRows::allocator_	arena member	35	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/storage/ddl/ob_ddl_batch_rows.h	ObDDLBatchRows::allocator_	arena member	119	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/ddl/ob_ddl_common_storage_impl.cpp	oceanbase::storage::ObDDLStorageUtil::init_macro_block_writer#OB_NEWx(ObDDLMacroBlockWriter,&allocator)	OB_NEWx pool argument	255	pool-kind:addr-of;pool:&allocator
+src/storage/ddl/ob_ddl_common_storage_impl.cpp	macro:DISCRETE_VECTOR_INIT_SWITCH#OB_NEWx(VecType,&allocator)	OB_NEWx pool argument	856	pool-kind:addr-of;pool:&allocator
+src/storage/ddl/ob_ddl_discrete_vector.h	ObDDLDiscreteVector::allocator_	arena member	150	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/storage/ddl/ob_ddl_independent_dag.cpp	ObDDLIndependentDag::init_tablet_context_map#OB_NEWx(ObDDLTabletContext,&arena_)	OB_NEWx pool argument	119	pool-kind:addr-of;pool:&arena_
+src/storage/ddl/ob_ddl_independent_dag.h	ObDDLIndependentDag::arena_	arena member	112	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/storage/ddl/ob_ddl_merge_task.cpp	ObDDLMacroBlockIterator::open#OB_NEWx(ObSSTableSecMetaIterator,&allocator)	OB_NEWx pool argument	882	pool-kind:addr-of;pool:&allocator
+src/storage/ddl/ob_ddl_merge_task.h	ObDDLTableMergeDag::arena_	arena member	75	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/storage/ddl/ob_ddl_merge_task_v2.h	ObDDLMergePrepareTask::allocator_	arena member	88	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/storage/ddl/ob_ddl_pipeline.cpp	ObVectorIndexWriteMacroBaseOperator::write#OB_NEWx(ObTabletSliceWriter,&op_allocator_)	OB_NEWx pool argument	1093	pool-kind:addr-of;pool:&op_allocator_
+src/storage/ddl/ob_ddl_pipeline.cpp	ObHNSWEmbeddingWriteMacroOperator::init#OB_NEWx(ObTabletSliceWriter,&op_allocator_)	OB_NEWx pool argument	1934	pool-kind:addr-of;pool:&op_allocator_
+src/storage/ddl/ob_ddl_redo_log_writer.h	ObDDLRedoLogWriterCallback::allocator_	arena member	272	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/storage/ddl/ob_ddl_struct.h	ObDDLMacroBlock::allocator_	arena member	88	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/storage/ddl/ob_ddl_tablet_context.h	ObDDLTabletContext::MergeCtx::arena_	arena member	105	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/storage/ddl/ob_ddl_tablet_context.h	ObDDLTabletContext::arena_	arena member	138	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/storage/ddl/ob_ddl_vector.cpp	macro:FIXED_VECTOR_INIT_SWITCH#OB_NEWx(NullableVecType,&allocator)	OB_NEWx pool argument	54	pool-kind:addr-of;pool:&allocator
+src/storage/ddl/ob_ddl_vector.cpp	macro:FIXED_VECTOR_INIT_SWITCH#OB_NEWx(FixedLengthVecType,&allocator)	OB_NEWx pool argument	56	pool-kind:addr-of;pool:&allocator
+src/storage/ddl/ob_ddl_vector.cpp	ObDDLVector::create_vector#OB_NEWx(NullableVecType,&allocator)	OB_NEWx pool argument	99	pool-kind:addr-of;pool:&allocator
+src/storage/ddl/ob_ddl_vector.cpp	ObDDLVector::create_vector#OB_NEWx(ObDDLContinuousVector,&allocator)	OB_NEWx pool argument	101	pool-kind:addr-of;pool:&allocator
+src/storage/ddl/ob_ddl_vector.cpp	ObDDLVector::create_vector#OB_NEWx(NullableVecType,&allocator)#2	OB_NEWx pool argument	114	pool-kind:addr-of;pool:&allocator
+src/storage/ddl/ob_ddl_vector.cpp	ObDDLVector::create_vector#OB_NEWx(ObDDLDiscreteVector,&allocator)	OB_NEWx pool argument	117	pool-kind:addr-of;pool:&allocator
+src/storage/ddl/ob_ddl_vector_continuous.cpp	macro:CONTINUOUS_VECTOR_INIT_SWITCH#OB_NEWx(VecType,&allocator)	OB_NEWx pool argument	45	pool-kind:addr-of;pool:&allocator
+src/storage/ddl/ob_ddl_vector_discrete.cpp	macro:DISCRETE_VECTOR_INIT_SWITCH#OB_NEWx(VecType,&allocator)	OB_NEWx pool argument	45	pool-kind:addr-of;pool:&allocator
+src/storage/ddl/ob_ddl_vector_fixed.cpp	macro:FIXED_VECTOR_INIT_SWITCH#OB_NEWx(VecType,&allocator)	OB_NEWx pool argument	45	pool-kind:addr-of;pool:&allocator
+src/storage/ddl/ob_ddl_vector_uniform.cpp	ObDDLVectorUtils::new_vector_uniform#OB_NEWx(ObEvalInfo,&allocator)	OB_NEWx pool argument	42	pool-kind:addr-of;pool:&allocator
+src/storage/ddl/ob_ddl_vector_uniform.cpp	macro:UNIFORM_VECTOR_INIT_SWITCH#OB_NEWx(VecType,&allocator)	OB_NEWx pool argument	50	pool-kind:addr-of;pool:&allocator
+src/storage/ddl/ob_ddl_vector_uniform_const.cpp	ObDDLVectorUtils::new_vector_uniform_const#OB_NEWx(ObEvalInfo,&allocator)	OB_NEWx pool argument	42	pool-kind:addr-of;pool:&allocator
+src/storage/ddl/ob_ddl_vector_uniform_const.cpp	macro:UNIFORM_CONST_VECTOR_INIT_SWITCH#OB_NEWx(VecType,&allocator)	OB_NEWx pool argument	50	pool-kind:addr-of;pool:&allocator
+src/storage/ddl/ob_ddl_vector_utils.cpp	ObDDLVectorUtils::make_const_tablet_id_vector#OB_NEWx(ObStorageDatum,&allocator)	OB_NEWx pool argument	372	pool-kind:addr-of;pool:&allocator
+src/storage/ddl/ob_ddl_vector_utils.cpp	ObDDLVectorUtils::make_const_multi_version_vector#OB_NEWx(ObStorageDatum,&allocator)	OB_NEWx pool argument	638	pool-kind:addr-of;pool:&allocator
+src/storage/ddl/ob_delete_lob_meta_row_task.h	ObDeleteLobMetaRowParam::allocator_	arena member	90	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/ddl/ob_direct_insert.cpp	ObDirectInsertSessionImpl::create#OB_NEWx(storage::ObHeapBatchSliceWriter,&allocator)	OB_NEWx pool argument	436	pool-kind:addr-of;pool:&allocator
+src/storage/ddl/ob_direct_insert.cpp	ObDirectInsertSessionImpl::create#OB_NEWx(storage::ObHeapRsSliceWriter,&allocator)	OB_NEWx pool argument	448	pool-kind:addr-of;pool:&allocator
+src/storage/ddl/ob_direct_insert.cpp	ObDirectInsertSessionImpl::create#OB_NEWx(storage::ObBatchSliceWriter,&allocator)	OB_NEWx pool argument	461	pool-kind:addr-of;pool:&allocator
+src/storage/ddl/ob_direct_insert.cpp	ObDirectInsertSessionImpl::create#OB_NEWx(storage::ObRsSliceWriter,&allocator)	OB_NEWx pool argument	472	pool-kind:addr-of;pool:&allocator
+src/storage/ddl/ob_direct_insert.cpp	ObDirectInsertSessionImpl::create#OB_NEWx(ObDirectInsertWriterAdapter,&allocator)	OB_NEWx pool argument	481	pool-kind:addr-of;pool:&allocator
+src/storage/ddl/ob_direct_insert.cpp	ObDirectInsertOrchestrator::start#OB_NEWx(ObDirectInsertSessionImpl,&allocator)	OB_NEWx pool argument	535	pool-kind:addr-of;pool:&allocator
+src/storage/ddl/ob_direct_load_struct.h	ObDDLTableMergeDagParam::arena_	arena member	269	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/storage/ddl/ob_hnsw_embedmgr.h	ObTaskBatchInfo::allocator_	arena member	140	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/storage/ddl/ob_hnsw_embedmgr.h	ObEmbeddingTaskMgr::allocator_	arena member	270	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/storage/ddl/ob_lob_macro_block_writer.h	ObLobMacroBlockWriter::lob_arena_	arena member	74	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/storage/ddl/ob_tablet_ddl_kv.h	ObBlockMetaTree::arena_	arena member	161	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/storage/ddl/ob_tablet_ddl_kv.h	ObDDLKV::arena_allocator_	arena member	352	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/ddl/ob_tablet_ddl_kv_mgr.h	ObDDLMacroIdemChecker::allocator_	arena member	95	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/storage/ddl/ob_tablet_fork_task.h	ObForkSnapshotRowScan::allocator_	arena member	100	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/ddl/ob_tablet_fork_task.h	ObTabletForkCtx::range_allocator_	arena member	157	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/ddl/ob_tablet_fork_task.h	ObTabletForkCtx::allocator_	arena member	158	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/ddl/ob_tablet_fork_task.h	ObTabletForkReuseTask::allocator_	arena member	231	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/ddl/ob_tablet_fork_task.h	ObTabletForkRewriteTask::allocator_	arena member	257	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/ddl/ob_tablet_slice_row_iterator.h	ObTabletSliceRowIterator::arena_	arena member	62	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/storage/ddl/ob_tablet_slice_writer.h	ObTabletSliceWriter::allocator_	arena member	83	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/storage/ddl/ob_tablet_slice_writer.h	ObRsSliceWriter::row_arena_	arena member	192	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/storage/ddl/ob_tablet_slice_writer.h	ObBatchSliceWriter::arena_	arena member	289	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/storage/ddl/ob_tablet_slice_writer.h	ObBatchSliceWriter::rowkey_arena_	arena member	296	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/storage/ddl/ob_vector_index_ddl_pipeline.h	ObVectorIndexTabletContext::allocator_	arena member	116	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/ddl/ob_vector_index_ddl_pipeline.h	ObVectorIndexRowIterator::iter_allocator_	arena member	138	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/storage/ddl/ob_vector_index_ddl_pipeline.h	ObVectorIndexRowIterator::row_allocator_	arena member	139	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/ddl/ob_vector_index_ddl_pipeline.h	ObVectorIndexBaseOperator::op_allocator_	arena member	266	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/storage/ddl/ob_vector_index_ddl_pipeline.h	ObVectorIndexBaseOperator::row_allocator_	arena member	267	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/storage/fts/dict/ob_ft_cache_container.h	ObFTCacheRangeContainer::fetch_info_for_dict#OB_NEWx(ObFTCacheRangeHandle,&alloc_)	OB_NEWx pool argument	59	pool-kind:addr-of;pool:&alloc_
+src/storage/fts/dict/ob_ft_range_dict.cpp	ObFTRangeDict::build_ranges_concurrently_thread_pool#OB_NEWx(ObFTTrie<void>,&tmp_alloc)	OB_NEWx pool argument	150	pool-kind:addr-of;pool:&tmp_alloc
+src/storage/fts/dict/ob_ft_range_dict.cpp	ObFTRangeDict::build_dict_from_cache#OB_NEWx(ObFTCacheDict,&range_alloc_)	OB_NEWx pool argument	414	pool-kind:addr-of;pool:&range_alloc_
+src/storage/fts/dict/ob_ft_range_dict.h	ObFTRangeDict::range_alloc_	arena member	106	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/storage/fts/dict/ob_ft_trie.cpp	ObFTTrie::insert#OB_NEWx(ObFTTrieNode<DATA_TYPE>,&allocator_)	OB_NEWx pool argument	50	pool-kind:addr-of;pool:&allocator_
+src/storage/fts/dict/ob_ft_trie.h	ObFTTrieNode::add_children#OB_NEWx(ListType,&alloc_)	OB_NEWx pool argument	72	pool-kind:addr-of;pool:&alloc_
+src/storage/fts/ik/ob_ik_arbitrator.cpp	ObIKArbitrator::process#OB_NEWx(ObIKTokenChain,&alloc_)	OB_NEWx pool argument	43	pool-kind:addr-of;pool:&alloc_
+src/storage/fts/ik/ob_ik_arbitrator.cpp	ObIKArbitrator::process#OB_NEWx(ObIKTokenChain,&alloc_)#2	OB_NEWx pool argument	73	pool-kind:addr-of;pool:&alloc_
+src/storage/fts/ik/ob_ik_arbitrator.cpp	ObIKArbitrator::optimize#OB_NEWx(ObIKTokenChain,&alloc_)	OB_NEWx pool argument	228	pool-kind:addr-of;pool:&alloc_
+src/storage/fts/ik/ob_ik_arbitrator.cpp	ObIKArbitrator::optimize#OB_NEWx(ObIKTokenChain,&alloc_)#2	OB_NEWx pool argument	232	pool-kind:addr-of;pool:&alloc_
+src/storage/fts/ik/ob_ik_arbitrator.cpp	ObIKArbitrator::optimize#OB_NEWx(ObIKTokenChain,&alloc_)#3	OB_NEWx pool argument	244	pool-kind:addr-of;pool:&alloc_
+src/storage/fts/ik/ob_ik_arbitrator.h	ObIKArbitrator::alloc_	arena member	63	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/storage/fts/ob_beng_ft_parser.cpp	ObBasicEnglishFTParserDesc::segment#OB_NEWx(ObBEngFTParser,param->allocator_)	OB_NEWx pool argument	126	pool-kind:field-of;pool:param->allocator_
+src/storage/fts/ob_fts_doc_word_iterator.h	ObFTDocWordScanIterator::allocator_	arena member	67	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/fts/ob_fts_doc_word_iterator.h	ObFTDocWordScanIterator::scan_allocator_	arena member	68	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/fts/ob_fts_parser_helper.cpp	ObFTParseData::init_and_set_stopword_list#OB_NEWx(ObStopWordChecker,&handler_allocator_)	OB_NEWx pool argument	202	pool-kind:addr-of;pool:&handler_allocator_
+src/storage/fts/ob_fts_parser_helper.cpp	ObFTParseData::init_dict_hub#OB_NEWx(ObFTDictHub,&handler_allocator_)	OB_NEWx pool argument	219	pool-kind:addr-of;pool:&handler_allocator_
+src/storage/fts/ob_fts_parser_helper.cpp	ObFTParseHelper::make_detail_json#OB_NEWx(ObJsonObject,allocator_)	OB_NEWx pool argument	434	pool-kind:member;pool:allocator_
+src/storage/fts/ob_fts_parser_helper.cpp	ObFTParseHelper::make_detail_json#OB_NEWx(ObJsonInt,allocator_)	OB_NEWx pool argument	436	pool-kind:member;pool:allocator_
+src/storage/fts/ob_fts_parser_helper.cpp	ObFTParseHelper::make_detail_json#OB_NEWx(ObJsonArray,allocator_)	OB_NEWx pool argument	438	pool-kind:member;pool:allocator_
+src/storage/fts/ob_fts_parser_helper.cpp	ObFTParseHelper::make_detail_json#OB_NEWx(ObJsonObject,allocator_)#2	OB_NEWx pool argument	445	pool-kind:member;pool:allocator_
+src/storage/fts/ob_fts_parser_helper.cpp	ObFTParseHelper::make_detail_json#OB_NEWx(ObJsonInt,allocator_)#2	OB_NEWx pool argument	447	pool-kind:member;pool:allocator_
+src/storage/fts/ob_fts_parser_helper.cpp	ObFTParseHelper::make_token_array_json#OB_NEWx(ObJsonArray,allocator_)	OB_NEWx pool argument	484	pool-kind:member;pool:allocator_
+src/storage/fts/ob_fts_parser_helper.cpp	ObFTParseHelper::make_token_array_json#OB_NEWx(ObJsonString,allocator_)	OB_NEWx pool argument	490	pool-kind:member;pool:allocator_
+src/storage/fts/ob_fts_parser_property.cpp	ObFTParserJsonProps::init#OB_NEWx(ObJsonObject,&allocator_)	OB_NEWx pool argument	44	pool-kind:addr-of;pool:&allocator_
+src/storage/fts/ob_fts_parser_property.cpp	ObFTParserJsonProps::config_set_min_token_size#OB_NEWx(ObJsonInt,&allocator_)	OB_NEWx pool argument	64	pool-kind:addr-of;pool:&allocator_
+src/storage/fts/ob_fts_parser_property.cpp	ObFTParserJsonProps::config_set_max_token_size#OB_NEWx(ObJsonInt,&allocator_)	OB_NEWx pool argument	86	pool-kind:addr-of;pool:&allocator_
+src/storage/fts/ob_fts_parser_property.cpp	ObFTParserJsonProps::config_set_ngram_token_size#OB_NEWx(ObJsonInt,&allocator_)	OB_NEWx pool argument	108	pool-kind:addr-of;pool:&allocator_
+src/storage/fts/ob_fts_parser_property.cpp	ObFTParserJsonProps::config_set_dict_table#OB_NEWx(ObJsonString,&allocator_)	OB_NEWx pool argument	131	pool-kind:addr-of;pool:&allocator_
+src/storage/fts/ob_fts_parser_property.cpp	ObFTParserJsonProps::config_set_stopword_table#OB_NEWx(ObJsonString,&allocator_)	OB_NEWx pool argument	151	pool-kind:addr-of;pool:&allocator_
+src/storage/fts/ob_fts_parser_property.cpp	ObFTParserJsonProps::config_set_quantifier_table#OB_NEWx(ObJsonString,&allocator_)	OB_NEWx pool argument	171	pool-kind:addr-of;pool:&allocator_
+src/storage/fts/ob_fts_parser_property.cpp	ObFTParserJsonProps::config_set_ik_mode#OB_NEWx(ObJsonString,&allocator_)	OB_NEWx pool argument	191	pool-kind:addr-of;pool:&allocator_
+src/storage/fts/ob_fts_parser_property.cpp	ObFTParserJsonProps::config_set_min_ngram_token_size#OB_NEWx(ObJsonInt,&allocator_)	OB_NEWx pool argument	210	pool-kind:addr-of;pool:&allocator_
+src/storage/fts/ob_fts_parser_property.cpp	ObFTParserJsonProps::config_set_max_ngram_token_size#OB_NEWx(ObJsonInt,&allocator_)	OB_NEWx pool argument	232	pool-kind:addr-of;pool:&allocator_
+src/storage/fts/ob_ik_ft_parser.cpp	ObIKFTParserDesc::segment#OB_NEWx(ObIKFTParser,param->allocator_)	OB_NEWx pool argument	201	pool-kind:field-of;pool:param->allocator_
+src/storage/fts/ob_ik_ft_parser.cpp	ObIKFTParser::init_ctx#OB_NEWx(TokenizeContext,&allocator_)	OB_NEWx pool argument	294	pool-kind:addr-of;pool:&allocator_
+src/storage/fts/ob_ik_ft_parser.cpp	ObIKFTParser::init_segmenter#OB_NEWx(ObIKLetterProcessor,&allocator_)	OB_NEWx pool argument	318	pool-kind:addr-of;pool:&allocator_
+src/storage/fts/ob_ik_ft_parser.cpp	ObIKFTParser::init_segmenter#OB_NEWx(ObIKQuantifierProcessor,&allocator_)	OB_NEWx pool argument	322	pool-kind:addr-of;pool:&allocator_
+src/storage/fts/ob_ik_ft_parser.cpp	ObIKFTParser::init_segmenter#OB_NEWx(ObIKCJKProcessor,&allocator_)	OB_NEWx pool argument	326	pool-kind:addr-of;pool:&allocator_
+src/storage/fts/ob_ik_ft_parser.cpp	ObIKFTParser::init_segmenter#OB_NEWx(ObIKSurrogateProcessor,&allocator_)	OB_NEWx pool argument	328	pool-kind:addr-of;pool:&allocator_
+src/storage/fts/ob_ik_ft_parser.cpp	ObIKFTParser::build_dict_from_cache#OB_NEWx(ObFTRangeDict,&allocator_)	OB_NEWx pool argument	393	pool-kind:addr-of;pool:&allocator_
+src/storage/fts/ob_ngram2_ft_parser.cpp	ObNgram2FTParserDesc::segment#OB_NEWx(ObNgram2FTParser,param->allocator_)	OB_NEWx pool argument	92	pool-kind:field-of;pool:param->allocator_
+src/storage/fts/ob_ngram_ft_parser.cpp	ObNgramFTParserDesc::segment#OB_NEWx(ObNgramFTParser,param->allocator_)	OB_NEWx pool argument	98	pool-kind:field-of;pool:param->allocator_
+src/storage/fts/ob_whitespace_ft_parser.cpp	ObWhiteSpaceFTParserDesc::segment#OB_NEWx(ObSpaceFTParser,param->allocator_)	OB_NEWx pool argument	152	pool-kind:field-of;pool:param->allocator_
+src/storage/lob/ob_ext_info_callback.cpp	ObExtInfoCbRegister::build_data_iter#OB_NEWx(ObLobAccessParam,&tmp_allocator_)	OB_NEWx pool argument	294	pool-kind:addr-of;pool:&tmp_allocator_
+src/storage/lob/ob_ext_info_callback.h	ObExtInfoCbRegister::tmp_allocator_	arena member	192	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/storage/lob/ob_lob_data_reader.h	ObLobDataReader::allocator_	arena member	50	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/lob/ob_lob_locator.h	ObLobLocatorHelper::locator_allocator_	arena member	85	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/lob/ob_lob_manager.cpp	ObLobManager::query#OB_NEWx(ObLobCursor,allocator)	OB_NEWx pool argument	386	pool-kind:param-or-local;pool:allocator
+src/storage/lob/ob_lob_manager.cpp	ObLobManager::query#OB_NEWx(ObLobAccessParam,allocator)	OB_NEWx pool argument	388	pool-kind:param-or-local;pool:allocator
+src/storage/lob/ob_lob_manager.cpp	ObLobManager::query#OB_NEWx(ObLobPartialData,allocator)	OB_NEWx pool argument	398	pool-kind:param-or-local;pool:allocator
+src/storage/lob/ob_lob_manager.cpp	ObLobManager::check_need_out_row#OB_NEWx(ObLobCommon,param.allocator_)	OB_NEWx pool argument	647	pool-kind:field-of;pool:param.allocator_
+src/storage/lob/ob_lob_manager.cpp	ObLobManager::append#OB_NEWx(ObLobLocatorV2,param.get_tmp_allocator())	OB_NEWx pool argument	970	pool-kind:call;pool:param.get_tmp_allocator()
+src/storage/lob/ob_lob_manager.cpp	create_json_lob_handle#OB_NEWx(ObJsonLobHandle,&allocator)	OB_NEWx pool argument	2372	pool-kind:addr-of;pool:&allocator
+src/storage/lob/ob_lob_manager.cpp	ObJsonLobDeltaCodec::deserialize_partial_data#OB_NEWx(storage::ObLobPartialData,allocator_)	OB_NEWx pool argument	2490	pool-kind:member;pool:allocator_
+src/storage/lob/ob_lob_persistent_adaptor.cpp	ObPersistentLobApator::init_table_param#OB_NEWx(ObTableParam,&allocator_)	OB_NEWx pool argument	113	pool-kind:addr-of;pool:&allocator_
+src/storage/lob/ob_lob_persistent_adaptor.cpp	ObPersistentLobApator::init_table_param#OB_NEWx(ObTableDMLParam,&allocator_)	OB_NEWx pool argument	118	pool-kind:addr-of;pool:&allocator_
+src/storage/lob/ob_lob_persistent_adaptor.cpp	ObPersistentLobApator::scan_lob_meta#OB_NEWx(ObLobMetaIterator,param.allocator_)	OB_NEWx pool argument	396	pool-kind:field-of;pool:param.allocator_
+src/storage/lob/ob_lob_persistent_adaptor.h	ObPersistentLobApator::allocator_	arena member	139	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/storage/lob/ob_lob_persistent_iterator.h	ObLobMetaIterator::scan_allocator_	arena member	120	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/storage/lob/ob_lob_persistent_reader.cpp	ObPersistLobReaderCache::put#OB_NEWx(ObPersistLobReaderCacheNode,&allocator_)	OB_NEWx pool argument	61	pool-kind:addr-of;pool:&allocator_
+src/storage/lob/ob_lob_persistent_reader.cpp	ObPersistLobReaderCache::alloc_reader#OB_NEWx(ObLobMetaIterator,&allocator_)	OB_NEWx pool argument	97	pool-kind:addr-of;pool:&allocator_
+src/storage/lob/ob_lob_persistent_reader.cpp	create_lob_access_context#OB_NEWx(storage::ObLobAccessCtx,&allocator)	OB_NEWx pool argument	111	pool-kind:addr-of;pool:&allocator
+src/storage/lob/ob_lob_persistent_reader.h	ObPersistLobReaderCache::allocator_	arena member	83	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/storage/ls/ob_ls_reserved_snapshot_mgr.h	ObLSReservedSnapshotMgr::allocator_	arena member	98	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/memtable/mvcc/ob_crtp_util.h	ObWithArenaT::arena_	arena member	56	guess:ARENA_CROSSCALL;type:common::ModuleArena
+src/storage/memtable/ob_memtable_ctx_obj_pool.h	ObMemtableCtxObjPool::lock_op_node_pool_	arena-backed pool member	88	guess:ARENA_CROSSCALL;type:ObArenaObjPool<transaction::tablelock::ObMemCtxLockOpLinkNode,OBJ_NUM>
+src/storage/memtable/ob_memtable_ctx_obj_pool.h	ObMemtableCtxObjPool::lock_callback_pool_	arena-backed pool member	89	guess:ARENA_CROSSCALL;type:ObArenaObjPool<transaction::tablelock::ObOBJLockCallback,OBJ_NUM>
+src/storage/memtable/ob_memtable_ctx_obj_pool.h	ObMemtableCtxObjPool::mvcc_callback_pool_	arena-backed pool member	90	guess:ARENA_CROSSCALL;type:ObArenaObjPool<memtable::ObMvccRowCallback,OBJ_NUM>
+src/storage/memtable/ob_memtable_key.h	ObMemtableKeyGenerator::allocator_	arena member	327	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/storage/meta_mem/ob_storage_meta_cache.cpp	ObStorageMetaValueHandle::new_value#OB_NEWx(ObStorageMetaCacheValue,allocator_)	OB_NEWx pool argument	288	pool-kind:member;pool:allocator_
+src/storage/multi_data_source/ob_mds_minor_compaction_filter.h	ObMdsMinorFilter::allocator_	arena member	61	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/storage/ob_bloom_filter_task.h	ObBloomFilterBuildTask::allocator_	arena member	51	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/ob_memtable_ctx_obj_pool.h	ObMemtableCtxObjPool::lock_op_node_pool_	arena-backed pool member	120	guess:ARENA_CROSSCALL;type:ObArenaObjPool<tablelock::ObMemCtxLockOpLinkNode,OBJ_NUM>
+src/storage/ob_memtable_ctx_obj_pool.h	ObMemtableCtxObjPool::prio_op_node_pool_	arena-backed pool member	121	guess:ARENA_CROSSCALL;type:ObArenaObjPool<tablelock::ObMemCtxLockPrioOpLinkNode,OBJ_NUM>
+src/storage/ob_memtable_ctx_obj_pool.h	ObMemtableCtxObjPool::lock_callback_pool_	arena-backed pool member	122	guess:ARENA_CROSSCALL;type:ObArenaObjPool<tablelock::ObOBJLockCallback,OBJ_NUM>
+src/storage/ob_memtable_ctx_obj_pool.h	ObMemtableCtxObjPool::mvcc_callback_pool_	arena-backed pool member	123	guess:ARENA_CROSSCALL;type:ObArenaObjPool<memtable::ObMvccRowCallback,OBJ_NUM>
+src/storage/ob_memtable_ctx_obj_pool.h	ObMemtableCtxObjPool::ext_info_callback_pool_	arena-backed pool member	124	guess:ARENA_CROSSCALL;type:ObArenaObjPool<storage::ObExtInfoCallback,OBJ_NUM>
+src/storage/ob_parallel_external_sort.h	ObFragmentWriterV2::allocator_	arena member	194	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/ob_parallel_external_sort.h	ObFragmentReaderV2::allocator_	arena member	447	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/ob_parallel_external_sort.h	ObFragmentReaderV2::sample_allocator_	arena member	448	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/ob_parallel_external_sort.h	ObExternalSortRound::allocator_	arena member	1012	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/ob_parallel_external_sort.h	ObMemorySortRound::allocator_	arena member	1423	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/ob_partition_range_spliter.cpp	ObPartitionIncrementalRangeSpliter::ObIncrementalIterator::init#OB_NEWx(ObMultipleScanMerge,(&allocator_))	OB_NEWx pool argument	2028	pool-kind:addr-of;pool:(&allocator_)
+src/storage/ob_partition_range_spliter.cpp	ObPartitionIncrementalRangeSpliter::init_incremental_iter#OB_NEWx(ObIncrementalIterator,allocator_)	OB_NEWx pool argument	2230	pool-kind:member;pool:allocator_
+src/storage/ob_partition_range_spliter.h	ObIndexBlockTreeTraverser::TreeNodeContext::allocator_	arena member	145	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/storage/ob_partition_range_spliter.h	ObIndexBlockTreeTraverser::PathNodeCaches::allocator_	arena member	208	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/storage/ob_partition_range_spliter.h	ObIndexBlockTreeTraverser::allocator_	arena member	232	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/storage/ob_value_row_iterator.h	ObValueRowIterator::allocator_	arena member	53	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/retrieval/ob_block_stat_collector.h	ObBlockStatCollector::result_tmp_allocator_	arena member	139	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/storage/retrieval/ob_block_stat_iter.cpp	ObBlockStatIterator::build_merge_heap#OB_NEWx(ObBSSimpleMerger,iter_allocator_)	OB_NEWx pool argument	514	pool-kind:member;pool:iter_allocator_
+src/storage/retrieval/ob_block_stat_iter.cpp	ObBlockStatIterator::build_merge_heap#OB_NEWx(ObBSLoserTree,iter_allocator_)	OB_NEWx pool argument	517	pool-kind:member;pool:iter_allocator_
+src/storage/retrieval/ob_block_stat_iter.h	ObBlockStatIterator::allocator_	arena member	195	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/storage/retrieval/ob_block_stat_iter.h	ObBlockStatIterator::merged_endkey_allocator_	arena member	196	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/storage/retrieval/ob_retrieval_program.cpp	ObRetrievalRunStorage::arena_	arena member	175	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/retrieval/ob_retrieval_program.cpp	ObRetrievalProgram::query_arena_	arena member	542	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/retrieval/ob_sparse_bmw_iter.h	ObSRBMWIterImpl::allocator_	arena member	100	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/storage/retrieval/ob_sparse_daat_iter.cpp	ObSRDaaTIterImpl::init_merge_heap#OB_NEWx(ObSRSimpleMerger,iter_allocator_)	OB_NEWx pool argument	457	pool-kind:member;pool:iter_allocator_
+src/storage/retrieval/ob_sparse_daat_iter.cpp	ObSRDaaTIterImpl::init_merge_heap#OB_NEWx(ObSRLoserTree,iter_allocator_)	OB_NEWx pool argument	462	pool-kind:member;pool:iter_allocator_
+src/storage/retrieval/ob_spiv_daat_iter.cpp	ObSPIVDaaTNaiveIter::inner_init#OB_NEWx(SPIVSortHeap,iter_allocator_)	OB_NEWx pool argument	144	pool-kind:member;pool:iter_allocator_
+src/storage/retrieval/ob_spiv_daat_iter.h	ObSPIVSortHeap::allocator_	arena member	123	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/storage/slog_ckpt/ob_linked_macro_block_reader.h	ObLinkedMacroBlockReader::allocator_	arena member	72	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/slog_ckpt/ob_linked_macro_block_reader.h	ObLinkedMacroBlockItemReader::allocator_	arena member	115	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/slog_ckpt/ob_linked_macro_block_writer.h	ObLinkedMacroBlockItemWriter::allocator_	arena member	97	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/slog_ckpt/ob_tablet_replay_create_handler.h	ObTabletReplayCreateHandler::allocator_	arena member	164	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/storage/tablelock/ob_table_lock_iterator.h	ObTableLockScanIterator::allocator_	arena member	105	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/storage/tablet/ob_batch_create_tablet_arg.h	ObBatchCreateTabletArg::allocator_	arena member	60	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/storage/tablet/ob_full_tablet_creator.cpp	ObFullTabletCreator::create_tablet#OB_NEWx(ObArenaAllocator,(&tiny_allocator_))	OB_NEWx pool argument	131	pool-kind:addr-of;pool:(&tiny_allocator_)
+src/storage/tablet/ob_full_tablet_creator.cpp	ObFullTabletCreator::create_tablet#OB_NEWx(ObTablet,allocator)	OB_NEWx pool argument	136	pool-kind:param-or-local;pool:allocator
+src/storage/tablet/ob_mds_cl_range_query_iterator.h	ObMdsRangeQueryIterator::allocator_	arena member	66	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/tablet/ob_mds_range_query_iterator.h	ObSingleTabletMdsRangeQueryIterator::allocator_	arena member	89	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/tablet/ob_mds_schema_helper.h	ObMdsSchemaHelper::allocator_	arena member	110	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/storage/tablet/ob_tablet_ddl_complete_mds_helper.h	ObTabletDDLCompleteArg::allocator_	arena member	83	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/storage/tablet/ob_tablet_fork_mds_helper.h	ObTabletForkMdsArg::allocator_	arena member	67	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/tablet/ob_tablet_macro_info_iterator.h	ObMacroInfoIterator::allocator_	arena member	72	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/tablet/ob_tablet_mds_table_mini_merger.h	ObMdsMergeMultiVersionRowStore::row_queue_allocator_	arena member	52	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/tablet/ob_tablet_mds_table_mini_merger.h	ObMdsMiniMergeOperator::cur_allocator_	arena member	76	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/tablet/ob_tablet_mds_table_mini_merger.h	ObMdsTableMiniMerger::allocator_	arena member	119	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/storage/tablet/ob_tablet_medium_info_reader.h	ObTabletMediumInfoReader::allocator_	arena member	59	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/tablet/ob_tablet_persister.h	ObTabletPersister::allocator_	arena member	392	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/storage/truncate_info/ob_tablet_truncate_info_reader.h	ObTabletTruncateInfoReader::allocator_	arena member	47	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/truncate_info/ob_truncate_filter_evaluator.h	ObTruncateFilterEvaluator::allocator_	arena member	85	guess:ARENA_CROSSCALL;type:common::ObArenaAllocator
+src/storage/truncate_info/ob_truncate_partition_filter.cpp	ObTruncatePartitionFilterFactory::build_truncate_partition_filter#OB_NEWx(ObTruncatePartitionFilter,outer_allocator)	OB_NEWx pool argument	335	pool-kind:param-or-local;pool:outer_allocator
+src/storage/truncate_info/ob_truncate_partition_filter.h	ObTruncatePartitionFilter::filter_allocator_	arena member	141	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/storage/truncate_info/ob_truncate_partition_filter.h	ObTruncatePartitionFilter::truncate_info_allocator_	arena member	142	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/storage/tx/ob_defensive_check_mgr.h	SingleRowDefensiveRecord::allocator_	arena member	74	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/storage/tx_table/ob_tx_ctx_table.h	ObTxCtxTableRecoverHelper::allocator_	arena member	58	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/storage/tx_table/ob_tx_data_memtable.h	ObTxDataMemtable::arena_allocator_	arena member	470	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/storage/tx_table/ob_tx_data_table.h	ObTxDataTable::arena_allocator_	arena member	341	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/storage/tx_table/ob_tx_table_iterator.h	ObTxDataSingleRowGetter::arena_allocator_	arena member	214	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/storage/tx_table/ob_tx_table_iterator.h	ObCommitVersionsGetter::arena_allocator_	arena member	232	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/storage/tx_table/ob_tx_table_iterator.h	ObTxCtxMemtableScanIterator::allocator_	arena member	280	guess:ARENA_CROSSCALL;type:ObArenaAllocator
+src/storage/vector_index/ob_vector_kmeans_ctx.cpp	ObIvfBuildHelper::init#OB_NEWx(ObIvfMemContext,get_allocator())	OB_NEWx pool argument	941	pool-kind:call;pool:get_allocator()

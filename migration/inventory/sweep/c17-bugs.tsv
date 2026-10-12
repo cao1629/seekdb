@@ -1,0 +1,63 @@
+file	symbol	source_construct	line	pretag
+src/data_plane/api/data_plane/transaction/ob_tx_options.h	is_RR_or_SERIAL_isolevel#bug07	suspected bug site (00b §6 D #7)	50	conf:high;SERIALIZABLE grouped with RR (snapshot isolation)
+src/oblib/common/ob_field.cpp	ObField::get_field_mb_length#bug13	suspected bug site (00b §6 D #13)	205	conf:low;integer column length = display width 255
+src/oblib/lib/vector/ob_vsag_adaptor.cpp	construct_vsag_sindi_create_param#bug14	suspected bug site (00b §6 D #14)	708	conf:medium;drop_ratio_build passed to the linked VSAG build
+src/oblib/lib/vector/ob_vsag_adaptor.cpp	construct_vsag_sindi_search_param#bug14	suspected bug site (00b §6 D #14)	782	conf:low;drop_ratio_search passed to VSAG
+src/oblib/lib/vector/ob_vsag_adaptor.cpp	knn_search#bug14	suspected bug site (00b §6 D #14)	1250	conf:low;local adjustment of the internal k
+src/observer/composition/retrieval/ob_das_legacy_tr_merge_iter.cpp	ObDASLegacyTRMergeIter::build_query_tokens#bug10	suspected bug site (00b §6 D #10)	1049	conf:medium;boolean branch never consults the index parser
+src/observer/composition/retrieval/ob_das_legacy_tr_merge_iter.cpp	ObDASLegacyTRMergeIter::build_query_tokens#bug10#2	suspected bug site (00b §6 D #10)	1081	conf:high;split only by the boolean grammar
+src/observer/composition/retrieval/ob_das_legacy_tr_merge_iter.cpp	ObDASLegacyTRMergeIter::build_query_tokens#bug10#3	suspected bug site (00b §6 D #10)	1107	conf:medium;only natural-language mode uses the index parser
+src/observer/mysql/obmp_packet_sender.cpp	make_field_view#bug13	suspected bug site (00b §6 D #13)	107	conf:medium;length 255 + ZEROFILL_FLAG; client pads and reports 101
+src/observer/vector_index/ob_plugin_vector_index_adaptor.cpp	ObPluginVectorIndexAdaptor::init_mem_data#bug14	suspected bug site (00b §6 D #14)	859	conf:low;snapshot SINDI index created with ob_sparse_drop_ratio_build_
+src/query/protocol/ob_mysql_protocol_util.cpp	ObSMUtils::build_cell_value#bug13	suspected bug site (00b §6 D #13)	238	conf:low;only the text protocol pads
+src/query/protocol/ob_mysql_protocol_util.cpp	ObSMUtils::build_cell_value#bug13#2	suspected bug site (00b §6 D #13)	241	conf:medium;binary INT sent unpadded (MySQL-compatible)
+src/rootserver/fork_table/ob_fork_database_service.cpp	ObDDLService::fork_database#bug05	suspected bug site (00b §6 D #5)	142	conf:medium;only table schemas are enumerated
+src/rootserver/fork_table/ob_fork_database_service.cpp	ObDDLService::fork_database#bug05#2	suspected bug site (00b §6 D #5)	152	conf:high;views are skipped silently
+src/rootserver/fork_table/ob_fork_database_service.cpp	ObDDLService::fork_database#bug05#3	suspected bug site (00b §6 D #5)	191	conf:high;cross-database foreign keys only logged, never rebuilt
+src/share/cache/ob_kvcache_hazard_version.cpp	ObKVCacheHazardSlot::retire#bug16	suspected bug site (KV cache retire condition, RULEBOOK 0.8)	93	conf:high;walks the whole delete list with no version filter
+src/share/cache/ob_kvcache_hazard_version.cpp	ObKVCacheHazardSlot::retire#bug16#2	suspected bug site (KV cache retire condition, RULEBOOK 0.8)	96	conf:high;frees every node regardless of min_version
+src/share/cache/ob_kvcache_hazard_version.cpp	ObKVCacheHazardStation::release#bug16	suspected bug site (KV cache retire condition, RULEBOOK 0.8)	255	conf:high;caller passes min_version that retire ignores (also :273)
+src/share/cache/ob_kvcache_hazard_version.h	ObKVCacheHazardSlot::retire#bug16	suspected bug site (KV cache retire condition, RULEBOOK 0.8)	54	conf:high;documented contract: retire only older versions
+src/sql/code_generator/ob_tsc_cg_service.cpp	ObTscCgService::generate_text_ir_ctdef#bug09	suspected bug site (00b §6 D #9)	1906	conf:high;doc count from optimizer estimate at plan time
+src/sql/code_generator/ob_tsc_cg_service.cpp	ObTscCgService::generate_text_ir_ctdef#bug09#2	suspected bug site (00b §6 D #9)	1908	conf:high;stored in the cached plan ctdef
+src/sql/das/iter/ob_das_ivf_scan_iter.cpp	ObDASIvfScanIter::get_nearest_limit_rowkeys_in_cids#bug11	suspected bug site (00b §6 D #11)	1284	conf:medium;no centroids: heap of tied distances
+src/sql/das/iter/ob_das_ivf_scan_iter.cpp	ObDASIvfSQ8ScanIter::get_real_search_vec_u8#bug11	suspected bug site (00b §6 D #11)	2986	conf:high;query vector zero too: all distances tie
+src/sql/das/iter/ob_das_text_retrieval_eval_node.cpp	ObFtsEvalNode::fts_boolean_node_create#bug10	suspected bug site (00b §6 D #10)	237	conf:high;each boolean term pushed as one token
+src/sql/das/iter/sparse_retrieval/ob_das_match_iter.cpp	ObDASMatchIter::get_match_param#bug12	suspected bug site (00b §6 D #12)	826	conf:high;unknown option keys fall through silently
+src/sql/das/ob_das_ir_define.h	ObDASIRScanCtDef::need_estimate_total_doc_cnt#bug09	suspected bug site (00b §6 D #9)	151	conf:medium;non-zero estimate disables the runtime doc count
+src/sql/engine/cmd/ob_merge_table_executor.cpp	ObMergeTableExecutor::execute#bug02	suspected bug site (00b §6 D #2)	93	conf:medium;executor runs only INSERT and UPDATE, no delete step
+src/sql/engine/cmd/ob_merge_table_executor.cpp	ObMergeTableExecutor::execute#bug01	suspected bug site (00b §6 D #1)	129	conf:high;stores INSERT+UPDATE total as the OK-packet affected rows
+src/sql/engine/cmd/ob_tcl_executor.cpp	ObStartTransExecutor::start_trans#bug06	suspected bug site (00b §6 D #6)	57	conf:high;snapshot flag not passed on
+src/sql/engine/expr/ob_expr_row_count.cpp	ObExprRowCount::eval_row_count#bug01	suspected bug site (00b §6 D #1)	54	conf:high;ROW_COUNT() reads the session value
+src/sql/engine/expr/ob_expr_vec_ivf_sq8_data_vector.cpp	ObExprVecIVFSQ8DataVector::generate_data_vector#bug11	suspected bug site (00b §6 D #11)	154	conf:high;empty SQ8 meta: vectors quantised to zeros
+src/sql/hybrid_search/ob_query_parse.cpp	ObESQueryParser::parse#bug12	suspected bug site (00b §6 D #12)	97	conf:high;case-insensitive check accepts SIZE, ignored
+src/sql/hybrid_search/ob_query_parse.cpp	ObESQueryParser::init_default_params#bug12	suspected bug site (00b §6 D #12)	245	conf:medium;same mismatch for RANK (and ES_MODE at :61)
+src/sql/hybrid_search/ob_query_parse.cpp	ObESQueryParser::init_default_params#bug12#2	suspected bug site (00b §6 D #12)	253	conf:high;case-sensitive lookup misses SIZE
+src/sql/ob_result_set.cpp	ObResultSet::open_result#bug01	suspected bug site (00b §6 D #1)	234	conf:high;command results copy plan-ctx affected rows: client sees 7
+src/sql/ob_result_set.cpp	ObResultSet::store_affected_rows#bug01	suspected bug site (00b §6 D #1)	532	conf:high;T_MERGE_TABLE is not DML, so session affected_rows becomes 0
+src/sql/ob_sql.cpp	ObSql::generate_physical_plan#bug04	suspected bug site (00b §6 D #4)	2270	conf:high;privilege check runs after resolve, so 4029 precedes 1142
+src/sql/parser/sql_parser_mysql_mode.y	opt_lock_type#bug08	suspected bug site (00b §6 D #8)	8503	conf:medium;share-mode node indistinguishable from FOR UPDATE
+src/sql/parser/sql_parser_mysql_mode.y	opt_lock_in_share_mode#bug08	suspected bug site (00b §6 D #8)	10253	conf:high;same T_SFU_INT node as FOR UPDATE
+src/sql/resolver/cmd/ob_diff_table_resolver.cpp	ObDiffTableResolver::resolve#bug04	suspected bug site (00b §6 D #4)	57	conf:high;column validation runs in the resolver (MERGE: ob_merge_table_resolver.cpp:68)
+src/sql/resolver/cmd/ob_diff_table_resolver.cpp	ObDiffTableResolver::build_diff_sql_#bug03	suspected bug site (00b §6 D #3)	170	conf:high;branch 1 (current-only rows) hard-codes INSERT
+src/sql/resolver/cmd/ob_diff_table_resolver.cpp	ObDiffTableResolver::build_diff_sql_#bug03#2	suspected bug site (00b §6 D #3)	192	conf:high;branch 2 (incoming-only rows) hard-codes INSERT
+src/sql/resolver/cmd/ob_diff_table_resolver.cpp	ObDiffTableResolver::build_diff_sql_#bug03#3	suspected bug site (00b §6 D #3)	215	conf:high;branch 3 (current version of a differing row) hard-codes INSERT
+src/sql/resolver/cmd/ob_diff_table_resolver.cpp	ObDiffTableResolver::build_diff_sql_#bug03#4	suspected bug site (00b §6 D #3)	236	conf:high;branch 4 (incoming version of a differing row) hard-codes INSERT
+src/sql/resolver/cmd/ob_merge_table_resolver.cpp	ObMergeTableResolver::build_merge_sqls_#bug02	suspected bug site (00b §6 D #2)	205	conf:high;anti-join INSERT re-inserts rows current deleted; no DELETE is built
+src/sql/resolver/cmd/ob_merge_table_resolver.cpp	ObMergeTableResolver::build_merge_sqls_#bug02#2	suspected bug site (00b §6 D #2)	218	conf:high;THEIRS builds a two-way UPDATE without a merge base
+src/sql/resolver/cmd/ob_merge_table_resolver.cpp	ObMergeTableResolver::build_merge_sqls_#bug02#3	suspected bug site (00b §6 D #2)	232	conf:high;overwrites every differing row whichever side changed it
+src/sql/resolver/dml/ob_select_resolver.cpp	ObSelectResolver::resolve_for_update_clause_mysql#bug08	suspected bug site (00b §6 D #8)	1127	conf:high;resolved as FOR UPDATE with infinite wait
+src/sql/resolver/dml/ob_select_resolver.cpp	ObSelectResolver::set_for_update_mysql#bug08	suspected bug site (00b §6 D #8)	1155	conf:high;exclusive row-lock path
+src/sql/resolver/ob_resolver_utils.cpp	ObResolverUtils::collect_and_validate_columns#bug04	suspected bug site (00b §6 D #4)	7359	conf:high;OB_SCHEMA_ERROR format has no %s: detail text dropped (same at :7346)
+src/sql/resolver/ob_schema_checker.cpp	ObSchemaChecker::get_table_schema#bug04	suspected bug site (00b §6 D #4)	485	conf:high;OB_TABLE_NOT_EXIST without LOG_USER_ERROR(db, table): 1146 has no name
+src/sql/resolver/tcl/ob_start_trans_resolver.cpp	ObStartTransResolver::resolve#bug06	suspected bug site (00b §6 D #6)	74	conf:high;flag recorded but never read
+src/storage/ddl/ob_ddl_pipeline.cpp	ObIVFSq8MetaRowIterator::get_next_row#bug11	suspected bug site (00b §6 D #11)	629	conf:medium;only writer of SQ8 min/max/step rows
+src/storage/deadlock/ob_lcl_scheme/ob_lcl_node.cpp	ObLCLNode::register_timer_with_necessary_retry_with_lock_#bug15	suspected bug site (00b §6 D #15)	191	conf:medium;ticks aligned to _lcl_op_interval (5 s)
+src/storage/deadlock/ob_lcl_scheme/ob_lcl_node.cpp	ObLCLNode::process_lcl_state#bug15	suspected bug site (00b §6 D #15)	564	conf:low;detection waits for a tick in the right phase
+src/storage/memtable/mvcc/ob_mvcc_row.cpp	ObMvccRow::mvcc_write#bug07	suspected bug site (00b §6 D #7)	1053	conf:medium;only per-row write-write conflict check
+src/storage/memtable/ob_lock_wait_mgr.cpp	ObLockWaitMgr::check_timeout#bug15	suspected bug site (00b §6 D #15)	478	conf:low;forced wake-up resets detector progress
+src/storage/retrieval/ob_inv_idx_param_estimator.cpp	ObBM25ParamEstimator::do_estimation#bug09	suspected bug site (00b §6 D #9)	230	conf:high;plan value used as BM25 N at execution
+src/storage/tx/ob_trans_deadlock_adapter.cpp	ObTransDeadlockDetectorAdapter::register_to_deadlock_detector_#bug15	suspected bug site (00b §6 D #15)	273	conf:medium;3 s start delay, count_down_allow_detect 10
+src/storage/tx/ob_tx_api.cpp	ObTransService::start_tx#bug06	suspected bug site (00b §6 D #6)	248	conf:high;start_tx resets snapshot_version_ and takes no snapshot
+src/storage/tx/ob_tx_api.cpp	ObTransService::get_read_snapshot#bug07	suspected bug site (00b §6 D #7)	681	conf:high;SERIAL gets one snapshot; reads not tracked
+src/storage/tx/ob_tx_api.cpp	ObTransService::get_read_snapshot#bug06	suspected bug site (00b §6 D #6)	684	conf:high;RR snapshot taken lazily by the first read

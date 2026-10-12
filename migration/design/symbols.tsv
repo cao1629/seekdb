@@ -1,0 +1,234 @@
+crate	name	unit	kind	full_path	header	line	rename
+oblib	CreateIndexParam	src/oblib/lib/vector/ob_vector_util.h	typedef	oblib::lib_m::vector::ob_vector_util::CreateIndexParam	src/oblib/lib/vector/ob_vector_util.h	33	
+oblib	CreateIndexParam	src/oblib/lib/vector/ob_vsag_adaptor.h	struct	oblib::lib_m::vector::ob_vsag_adaptor::CreateIndexParam	src/oblib/lib/vector/ob_vsag_adaptor.h	51	
+oblib	DEFAULT_PAGE_SIZE	src/oblib/common/json_type/ob_json_path.h	var	oblib::common::json_type::ob_json_path::DEFAULT_PAGE_SIZE	src/oblib/common/json_type/ob_json_path.cpp	601	
+oblib	DEFAULT_PAGE_SIZE	src/oblib/common/xml/ob_tree_base.h	var	oblib::common::xml::ob_tree_base::DEFAULT_PAGE_SIZE	src/oblib/common/xml/ob_tree_base.h	33	
+oblib	Iterator	src/oblib/lib/container/ob_array_iterator.h	class_template	oblib::lib_m::container::ob_array_iterator::Iterator	src/oblib/lib/container/ob_array_iterator.h	35	
+oblib	Iterator	src/oblib/lib/list/ob_list.h	class_template	oblib::lib_m::list::ob_list::Iterator	src/oblib/lib/list/ob_list.h	139	
+oblib	Mutex	src/oblib/lib/lock/cond.h	typedef	oblib::lib_m::lock::cond::Mutex	src/oblib/lib/lock/cond.h	35	
+oblib	Mutex	src/oblib/lib/lock/mutex.h	typedef	oblib::lib_m::lock::mutex::Mutex	src/oblib/lib/lock/mutex.h	63	
+oblib	NEWLINE	src/oblib/common/xml/ob_multi_mode_interface.h	enum_constant	oblib::common::xml::ob_multi_mode_interface::NEWLINE	src/oblib/common/xml/ob_multi_mode_interface.h	120	
+oblib	NEWLINE	src/oblib/lib/oblog/ob_log.h	var	oblib::lib_m::oblog::ob_log::NEWLINE	src/oblib/lib/oblog/ob_log.cpp	652	
+oblib	TEXT	src/oblib/common/xml/ob_xpath.h	enum_constant	oblib::common::xml::ob_xpath::TEXT	src/oblib/common/xml/ob_xpath.h	277	
+oblib	TEXT	src/oblib/rpc/obmysql/ob_mysql_util.h	enum_constant	oblib::rpc::obmysql::ob_mysql_util::TEXT	src/oblib/rpc/obmysql/ob_mysql_util.h	35	
+oblib	ThreadPool	src/oblib/lib/thread/thread_pool.h	alias	oblib::lib_m::thread::thread_pool::ThreadPool	src/oblib/lib/thread/thread_pool.h	25	
+oblib	ThreadPool	src/oblib/lib/thread/threads.h	alias	oblib::lib_m::thread::threads::ThreadPool	src/oblib/lib/thread/threads.h	161	
+oblib	add_index	src/oblib/lib/vector/ob_vector_util.h	function	oblib::lib_m::vector::ob_vector_util::add_index	src/oblib/lib/vector/ob_vector_util.h	78	
+oblib	add_index	src/oblib/lib/vector/ob_vsag_adaptor.h	function	oblib::lib_m::vector::ob_vsag_adaptor::add_index	src/oblib/lib/vector/ob_vsag_adaptor.h	125	
+oblib	build_index	src/oblib/lib/vector/ob_vector_util.h	function	oblib::lib_m::vector::ob_vector_util::build_index	src/oblib/lib/vector/ob_vector_util.h	73	
+oblib	build_index	src/oblib/lib/vector/ob_vsag_adaptor.h	function	oblib::lib_m::vector::ob_vsag_adaptor::build_index	src/oblib/lib/vector/ob_vsag_adaptor.h	122	
+oblib	cal_distance_by_id	src/oblib/lib/vector/ob_vector_util.h	function	oblib::lib_m::vector::ob_vector_util::cal_distance_by_id	src/oblib/lib/vector/ob_vector_util.h	86	
+oblib	cal_distance_by_id	src/oblib/lib/vector/ob_vsag_adaptor.h	function	oblib::lib_m::vector::ob_vsag_adaptor::cal_distance_by_id	src/oblib/lib/vector/ob_vsag_adaptor.h	130	
+oblib	cal_distance_by_id_uint32_t_uint32_t_float_int64_t_int64_t_float	src/oblib/lib/vector/ob_vector_util.h	function	oblib::lib_m::vector::ob_vector_util::cal_distance_by_id_uint32_t_uint32_t_float_int64_t_int64_t_float	src/oblib/lib/vector/ob_vector_util.h	91	
+oblib	cal_distance_by_id_uint32_t_uint32_t_float_int64_t_int64_t_float	src/oblib/lib/vector/ob_vsag_adaptor.h	function	oblib::lib_m::vector::ob_vsag_adaptor::cal_distance_by_id_uint32_t_uint32_t_float_int64_t_int64_t_float	src/oblib/lib/vector/ob_vsag_adaptor.h	131	
+oblib	compare	src/oblib/common/meta_programming/ob_meta_compare.h	function_template	oblib::common::meta_programming::ob_meta_compare::compare	src/oblib/common/meta_programming/ob_meta_compare.h	31	
+oblib	compare	src/oblib/common/wide_integer/ob_wide_integer_cmp_funcs.h	function_template	oblib::common::wide_integer::ob_wide_integer_cmp_funcs::compare	src/oblib/common/wide_integer/ob_wide_integer_cmp_funcs.h	65	
+oblib	compare	src/oblib/lib/hash/ob_hash.h	function	oblib::lib_m::hash::ob_hash::compare	src/oblib/lib/hash/ob_hash.h	53	
+oblib	create_index	src/oblib/lib/vector/ob_vector_util.h	function	oblib::lib_m::vector::ob_vector_util::create_index	src/oblib/lib/vector/ob_vector_util.h	61	
+oblib	create_index	src/oblib/lib/vector/ob_vsag_adaptor.h	function	oblib::lib_m::vector::ob_vsag_adaptor::create_index	src/oblib/lib/vector/ob_vsag_adaptor.h	113	
+oblib	create_index_bool_float_void_int	src/oblib/lib/vector/ob_vector_util.h	function	oblib::lib_m::vector::ob_vector_util::create_index_bool_float_void_int	src/oblib/lib/vector/ob_vector_util.h	70	
+oblib	create_index_bool_float_void_int	src/oblib/lib/vector/ob_vsag_adaptor.h	function	oblib::lib_m::vector::ob_vsag_adaptor::create_index_bool_float_void_int	src/oblib/lib/vector/ob_vsag_adaptor.h	120	
+oblib	databuff_encode_element	src/oblib/lib/container/ob_array.h	function_template	oblib::lib_m::container::ob_array::databuff_encode_element	src/oblib/lib/container/ob_array.h	850	
+oblib	databuff_encode_element	src/oblib/lib/json/ob_yson_encode.h	function_template	oblib::lib_m::json::ob_yson_encode::databuff_encode_element	src/oblib/lib/json/ob_yson_encode.h	62	
+oblib	delete_index	src/oblib/lib/vector/ob_vector_util.h	function	oblib::lib_m::vector::ob_vector_util::delete_index	src/oblib/lib/vector/ob_vector_util.h	145	
+oblib	delete_index	src/oblib/lib/vector/ob_vsag_adaptor.h	function	oblib::lib_m::vector::ob_vsag_adaptor::delete_index	src/oblib/lib/vector/ob_vsag_adaptor.h	153	
+oblib	delete_iter_ctx	src/oblib/lib/vector/ob_vector_util.h	function	oblib::lib_m::vector::ob_vector_util::delete_iter_ctx	src/oblib/lib/vector/ob_vector_util.h	146	
+oblib	delete_iter_ctx	src/oblib/lib/vector/ob_vsag_adaptor.h	function	oblib::lib_m::vector::ob_vsag_adaptor::delete_iter_ctx	src/oblib/lib/vector/ob_vsag_adaptor.h	154	
+oblib	destroy	src/oblib/lib/hash/ob_hashutils.h	function_template	oblib::lib_m::hash::ob_hashutils::destroy	src/oblib/lib/hash/ob_hashutils.h	1258	
+oblib	destroy	src/oblib/lib/ob_name_id_def.h	enum_constant	oblib::lib_m::ob_name_id_def::destroy	src/oblib/lib/ob_name_id_def.h	98	
+oblib	estimate_memory	src/oblib/lib/vector/ob_vector_util.h	function	oblib::lib_m::vector::ob_vector_util::estimate_memory	src/oblib/lib/vector/ob_vector_util.h	101	
+oblib	estimate_memory	src/oblib/lib/vector/ob_vsag_adaptor.h	function	oblib::lib_m::vector::ob_vsag_adaptor::estimate_memory	src/oblib/lib/vector/ob_vsag_adaptor.h	155	
+oblib	fdeserialize	src/oblib/lib/vector/ob_vector_util.h	function	oblib::lib_m::vector::ob_vector_util::fdeserialize	src/oblib/lib/vector/ob_vector_util.h	144	
+oblib	fdeserialize	src/oblib/lib/vector/ob_vsag_adaptor.h	function	oblib::lib_m::vector::ob_vsag_adaptor::fdeserialize	src/oblib/lib/vector/ob_vsag_adaptor.h	152	
+oblib	fserialize	src/oblib/lib/vector/ob_vector_util.h	function	oblib::lib_m::vector::ob_vector_util::fserialize	src/oblib/lib/vector/ob_vector_util.h	142	
+oblib	fserialize	src/oblib/lib/vector/ob_vsag_adaptor.h	function	oblib::lib_m::vector::ob_vsag_adaptor::fserialize	src/oblib/lib/vector/ob_vsag_adaptor.h	151	
+oblib	func_str_map	src/oblib/common/json_type/ob_json_path.h	var	oblib::common::json_type::ob_json_path::func_str_map	src/oblib/common/json_type/ob_json_path.cpp	1143	
+oblib	func_str_map	src/oblib/common/xml/ob_xpath.h	var	oblib::common::xml::ob_xpath::func_str_map	src/oblib/common/xml/ob_xpath.h	149	
+oblib	get	src/oblib/lib/container/ob_ext_ring_buffer_impl.h	function_template	oblib::lib_m::container::ob_ext_ring_buffer_impl::get	src/oblib/lib/container/ob_ext_ring_buffer_impl.h	108	
+oblib	get	src/oblib/lib/container/ob_tuple.h	function_template	oblib::lib_m::container::ob_tuple::get	src/oblib/lib/container/ob_tuple.h	59	
+oblib	get	src/oblib/lib/ob_name_id_def.h	enum_constant	oblib::lib_m::ob_name_id_def::get	src/oblib/lib/ob_name_id_def.h	92	
+oblib	get_extra_info_by_ids	src/oblib/lib/vector/ob_vector_util.h	function	oblib::lib_m::vector::ob_vector_util::get_extra_info_by_ids	src/oblib/lib/vector/ob_vector_util.h	96	
+oblib	get_extra_info_by_ids	src/oblib/lib/vector/ob_vsag_adaptor.h	function	oblib::lib_m::vector::ob_vsag_adaptor::get_extra_info_by_ids	src/oblib/lib/vector/ob_vsag_adaptor.h	156	
+oblib	get_index_number	src/oblib/lib/vector/ob_vector_util.h	function	oblib::lib_m::vector::ob_vector_util::get_index_number	src/oblib/lib/vector/ob_vector_util.h	83	
+oblib	get_index_number	src/oblib/lib/vector/ob_vsag_adaptor.h	function	oblib::lib_m::vector::ob_vsag_adaptor::get_index_number	src/oblib/lib/vector/ob_vsag_adaptor.h	128	
+oblib	get_index_type	src/oblib/lib/vector/ob_vector_util.h	function	oblib::lib_m::vector::ob_vector_util::get_index_type	src/oblib/lib/vector/ob_vector_util.h	85	
+oblib	get_index_type	src/oblib/lib/vector/ob_vsag_adaptor.h	function	oblib::lib_m::vector::ob_vsag_adaptor::get_index_type	src/oblib/lib/vector/ob_vsag_adaptor.h	129	
+oblib	get_rel_offset_c	src/oblib/lib/signal/ob_signal_utils.h	function	oblib::lib_m::signal::ob_signal_utils::get_rel_offset_c	src/oblib/lib/signal/ob_signal_utils.cpp	30	
+oblib	get_rel_offset_c	src/oblib/lib/utility/ob_backtrace.h	function	oblib::lib_m::utility::ob_backtrace::get_rel_offset_c	src/oblib/lib/utility/ob_backtrace.cpp	200	
+oblib	get_vid_bound	src/oblib/lib/vector/ob_vector_util.h	function	oblib::lib_m::vector::ob_vector_util::get_vid_bound	src/oblib/lib/vector/ob_vector_util.h	100	
+oblib	get_vid_bound	src/oblib/lib/vector/ob_vsag_adaptor.h	function	oblib::lib_m::vector::ob_vsag_adaptor::get_vid_bound	src/oblib/lib/vector/ob_vsag_adaptor.h	133	
+oblib	has_assign	src/oblib/common/meta_programming/ob_type_traits.h	class_template	oblib::common::meta_programming::ob_type_traits::has_assign	src/oblib/common/meta_programming/ob_type_traits.h	129	
+oblib	has_assign	src/oblib/lib/container/ob_tuple.h	class_template	oblib::lib_m::container::ob_tuple::has_assign	src/oblib/lib/container/ob_tuple.h	82	
+oblib	has_deserialize	src/oblib/common/meta_programming/ob_type_traits.h	class_template	oblib::common::meta_programming::ob_type_traits::has_deserialize	src/oblib/common/meta_programming/ob_type_traits.h	132	
+oblib	has_deserialize	src/oblib/lib/container/ob_tuple.h	class_template	oblib::lib_m::container::ob_tuple::has_deserialize	src/oblib/lib/container/ob_tuple.h	161	
+oblib	has_get_serialize_size	src/oblib/common/meta_programming/ob_type_traits.h	class_template	oblib::common::meta_programming::ob_type_traits::has_get_serialize_size	src/oblib/common/meta_programming/ob_type_traits.h	133	
+oblib	has_get_serialize_size	src/oblib/lib/container/ob_tuple.h	class_template	oblib::lib_m::container::ob_tuple::has_get_serialize_size	src/oblib/lib/container/ob_tuple.h	202	
+oblib	has_serialize	src/oblib/common/meta_programming/ob_type_traits.h	class_template	oblib::common::meta_programming::ob_type_traits::has_serialize	src/oblib/common/meta_programming/ob_type_traits.h	131	
+oblib	has_serialize	src/oblib/lib/container/ob_tuple.h	class_template	oblib::lib_m::container::ob_tuple::has_serialize	src/oblib/lib/container/ob_tuple.h	120	
+oblib	has_to_string	src/oblib/common/meta_programming/ob_type_traits.h	class_template	oblib::common::meta_programming::ob_type_traits::has_to_string	src/oblib/common/meta_programming/ob_type_traits.h	130	
+oblib	has_to_string	src/oblib/lib/container/ob_iarray.h	class_template	oblib::lib_m::container::ob_iarray::has_to_string	src/oblib/lib/container/ob_iarray.h	31	
+oblib	immutable_optimize	src/oblib/lib/vector/ob_vector_util.h	function	oblib::lib_m::vector::ob_vector_util::immutable_optimize	src/oblib/lib/vector/ob_vector_util.h	147	
+oblib	immutable_optimize	src/oblib/lib/vector/ob_vsag_adaptor.h	function	oblib::lib_m::vector::ob_vsag_adaptor::immutable_optimize	src/oblib/lib/vector/ob_vsag_adaptor.h	160	
+oblib	init	src/oblib/lib/container/ob_ext_ring_buffer_impl.h	function_template	oblib::lib_m::container::ob_ext_ring_buffer_impl::init	src/oblib/lib/container/ob_ext_ring_buffer_impl.h	88	
+oblib	init	src/oblib/lib/ob_name_id_def.h	enum_constant	oblib::lib_m::ob_name_id_def::init	src/oblib/lib/ob_name_id_def.h	97	
+oblib	knn_search	src/oblib/lib/vector/ob_vector_util.h	function	oblib::lib_m::vector::ob_vector_util::knn_search	src/oblib/lib/vector/ob_vector_util.h	102	
+oblib	knn_search	src/oblib/lib/vector/ob_vsag_adaptor.h	function	oblib::lib_m::vector::ob_vsag_adaptor::knn_search	src/oblib/lib/vector/ob_vsag_adaptor.h	134	
+oblib	lock	src/oblib/lib/container/ob_ext_ring_buffer_impl.h	function_template	oblib::lib_m::container::ob_ext_ring_buffer_impl::lock	src/oblib/lib/container/ob_ext_ring_buffer_impl.h	93	
+oblib	lock	src/oblib/lib/ob_name_id_def.h	enum_constant	oblib::lib_m::ob_name_id_def::lock	src/oblib/lib/ob_name_id_def.h	515	
+oblib	min	src/oblib/common/timezone/ob_timezone_util.h	function_template	oblib::common::timezone::ob_timezone_util::min	src/oblib/common/timezone/ob_timezone_util.cpp	278	
+oblib	min	src/oblib/lib/utility/utility.h	function	oblib::lib_m::utility::utility::min	src/oblib/lib/utility/utility.h	134	
+oblib	set	src/oblib/lib/container/ob_ext_ring_buffer_impl.h	function_template	oblib::lib_m::container::ob_ext_ring_buffer_impl::set	src/oblib/lib/container/ob_ext_ring_buffer_impl.h	113	
+oblib	set	src/oblib/lib/ob_name_id_def.h	enum_constant	oblib::lib_m::ob_name_id_def::set	src/oblib/lib/ob_name_id_def.h	514	
+oblib	to_string	src/oblib/common/wide_integer/ob_wide_integer_str_funcs.h	function_template	oblib::common::wide_integer::ob_wide_integer_str_funcs::to_string	src/oblib/common/wide_integer/ob_wide_integer_str_funcs.h	129	
+oblib	to_string	src/oblib/lib/utility/ob_print_utils.h	function_template	oblib::lib_m::utility::ob_print_utils::to_string	src/oblib/lib/utility/ob_print_utils.h	124	
+oblib	validate_create_index	src/oblib/lib/vector/ob_vector_util.h	function	oblib::lib_m::vector::ob_vector_util::validate_create_index	src/oblib/lib/vector/ob_vector_util.h	68	
+oblib	validate_create_index	src/oblib/lib/vector/ob_vsag_adaptor.h	function	oblib::lib_m::vector::ob_vsag_adaptor::validate_create_index	src/oblib/lib/vector/ob_vsag_adaptor.h	119	
+oblib	version	src/oblib/lib/ob_name_id_def.h	enum_constant	oblib::lib_m::ob_name_id_def::version	src/oblib/lib/ob_name_id_def.h	319	
+oblib	version	src/oblib/lib/vector/ob_vsag_adaptor.h	function	oblib::lib_m::vector::ob_vsag_adaptor::version	src/oblib/lib/vector/ob_vsag_adaptor.h	81	
+observer	AUTH_PLUGIN_MYSQL_NATIVE_PASSWORD	src/observer/mysql/obmp_change_user.h	var	observer::mysql::obmp_change_user::AUTH_PLUGIN_MYSQL_NATIVE_PASSWORD	src/observer/mysql/obmp_change_user.cpp	33	
+observer	AUTH_PLUGIN_MYSQL_NATIVE_PASSWORD	src/observer/mysql/obmp_connect.h	var	observer::mysql::obmp_connect::AUTH_PLUGIN_MYSQL_NATIVE_PASSWORD	src/observer/mysql/obmp_connect.cpp	308	
+query	INVALID_TYPE	src/query/api/query/engine/px/ob_px_basic_info.h	enum_constant	query::engine::px::ob_px_basic_info::INVALID_TYPE	src/query/api/query/engine/px/ob_px_basic_info.h	99	
+query	INVALID_TYPE	src/query/api/query/optimizer/stat/ob_opt_column_stat.h	enum_constant	query::optimizer::stat::ob_opt_column_stat::INVALID_TYPE	src/query/api/query/optimizer/stat/ob_opt_column_stat.h	35	
+query	ObTextStringDatumResult	src/query/api/query/engine/expr/ob_expr_lob_utils.h	alias	query::engine::expr::ob_expr_lob_utils::ObTextStringDatumResult	src/query/api/query/engine/expr/ob_expr_lob_utils.h	136	
+query	ObTextStringDatumResult	src/query/api/query/engine/expr/ob_expr_util.h	alias	query::engine::expr::ob_expr_util::ObTextStringDatumResult	src/query/api/query/engine/expr/ob_expr_util.h	56	
+rootserver	ObAddrArray	src/rootserver/ob_ddl_service.h	alias	rootserver::ob_ddl_service::ObAddrArray	src/rootserver/ob_ddl_service.h	47	
+rootserver	ObAddrArray	src/rootserver/ob_runtime_ddl_service.h	alias	rootserver::ob_runtime_ddl_service::ObAddrArray	src/rootserver/ob_runtime_ddl_service.h	28	
+rootserver	ObAddrIArray	src/rootserver/ob_ddl_service.h	alias	rootserver::ob_ddl_service::ObAddrIArray	src/rootserver/ob_ddl_service.h	46	
+rootserver	ObAddrIArray	src/rootserver/ob_runtime_ddl_service.h	alias	rootserver::ob_runtime_ddl_service::ObAddrIArray	src/rootserver/ob_runtime_ddl_service.h	27	
+rootserver	ObTabletStatusMap	src/rootserver/freeze/ob_major_merge_progress_checker.h	typedef	rootserver::freeze::ob_major_merge_progress_checker::ObTabletStatusMap	src/rootserver/freeze/ob_major_merge_progress_checker.h	51	
+rootserver	ObTabletStatusMap	src/rootserver/freeze/ob_major_merge_progress_util.h	typedef	rootserver::freeze::ob_major_merge_progress_util::ObTabletStatusMap	src/rootserver/freeze/ob_major_merge_progress_util.h	232	
+share	INVALID	src/share/diagnosis/ob_sql_monitor_statname.h	enum_constant	share::diagnosis::ob_sql_monitor_statname::INVALID	src/share/diagnosis/ob_sql_monitor_statname.cpp	26	
+share	INVALID	src/share/geo/ob_geo_box_clip_visitor.h	enum_constant	share::geo::ob_geo_box_clip_visitor::INVALID	src/share/geo/ob_geo_box_clip_visitor.h	29	
+share	INVALID	src/share/schema/ob_schema_struct.h	enum_constant	share::schema::ob_schema_struct::INVALID	src/share/schema/ob_schema_struct.h	211	
+share	ObS2Cellids	src/share/geo/ob_geo_to_s2_visitor.h	typedef	share::geo::ob_geo_to_s2_visitor::ObS2Cellids	src/share/geo/ob_geo_to_s2_visitor.h	51	
+share	ObS2Cellids	src/share/geo/ob_s2adapter.h	typedef	share::geo::ob_s2adapter::ObS2Cellids	src/share/geo/ob_s2adapter.h	54	
+share	apply_bg_difference	src/share/geo/ob_geo_func_difference_helper.ipp	function_template	share::geo::ob_geo_func_difference_helper::apply_bg_difference	src/share/geo/ob_geo_func_difference_helper.ipp	29	
+share	apply_bg_difference	src/share/geo/ob_geo_func_union_helper.ipp	function_template	share::geo::ob_geo_func_union_helper::apply_bg_difference	src/share/geo/ob_geo_func_union_helper.ipp	102	
+sql	ColContentFixedArray	src/sql/engine/dml/ob_dml_ctx_define.h	typedef	sql::engine::dml::ob_dml_ctx_define::ColContentFixedArray	src/sql/engine/dml/ob_dml_ctx_define.h	385	
+sql	ColContentFixedArray	src/sql/engine/ob_exec_context.h	typedef	sql::engine::ob_exec_context::ColContentFixedArray	src/sql/engine/ob_exec_context.h	127	
+sql	Compare	src/sql/optimizer/ob_logical_operator.h	struct	sql::optimizer::ob_logical_operator::Compare	src/sql/optimizer/ob_logical_operator.cpp	3239	
+sql	Compare	src/sql/optimizer/stat/ob_topk_hist_estimator.h	struct	sql::optimizer::stat::ob_topk_hist_estimator::Compare	src/sql/optimizer/stat/ob_topk_hist_estimator.cpp	26	
+sql	CopyableComparer	src/sql/optimizer/ob_logical_operator.h	struct	sql::optimizer::ob_logical_operator::CopyableComparer	src/sql/optimizer/ob_logical_operator.cpp	3256	
+sql	CopyableComparer	src/sql/optimizer/stat/ob_topk_hist_estimator.h	struct	sql::optimizer::stat::ob_topk_hist_estimator::CopyableComparer	src/sql/optimizer/stat/ob_topk_hist_estimator.cpp	50	
+sql	DASTableIdList	src/sql/code_generator/ob_static_engine_cg.h	typedef	sql::code_generator::ob_static_engine_cg::DASTableIdList	src/sql/code_generator/ob_static_engine_cg.h	128	
+sql	DASTableIdList	src/sql/das/ob_das_define.h	typedef	sql::das::ob_das_define::DASTableIdList	src/sql/das/ob_das_define.h	318	
+sql	EqualSets	src/sql/optimizer/ob_sharding_info.h	typedef	sql::optimizer::ob_sharding_info::EqualSets	src/sql/optimizer/ob_sharding_info.h	38	
+sql	EqualSets	src/sql/resolver/dml/ob_raw_expr_sets.h	typedef	sql::resolver::dml::ob_raw_expr_sets::EqualSets	src/sql/resolver/dml/ob_raw_expr_sets.h	35	
+sql	ExplainColumnName	src/sql/monitor/ob_sql_plan.h	var	sql::monitor::ob_sql_plan::ExplainColumnName	src/sql/monitor/ob_sql_plan.cpp	39	
+sql	ExplainColumnName	src/sql/optimizer/ob_log_plan.h	var	sql::optimizer::ob_log_plan::ExplainColumnName	src/sql/optimizer/ob_log_plan.cpp	66	
+sql	IntFastArray	src/sql/ob_result_set.h	typedef	sql::ob_result_set::IntFastArray	src/sql/ob_result_set.h	57	
+sql	IntFastArray	src/sql/resolver/ob_resolver_define.h	typedef	sql::resolver::ob_resolver_define::IntFastArray	src/sql/resolver/ob_resolver_define.h	268	
+sql	MAX_DOUBLE_STRICT_PRINT_SIZE	src/sql/engine/expr/ob_datum_cast.h	var	sql::engine::expr::ob_datum_cast::MAX_DOUBLE_STRICT_PRINT_SIZE	src/sql/engine/expr/ob_datum_cast.cpp	259	
+sql	MAX_DOUBLE_STRICT_PRINT_SIZE	src/sql/engine/expr/ob_expr_align_date4cmp.h	var	sql::engine::expr::ob_expr_align_date4cmp::MAX_DOUBLE_STRICT_PRINT_SIZE	src/sql/engine/expr/ob_expr_align_date4cmp.cpp	287	
+sql	MAX_TYPE	src/sql/engine/ob_sql_memory_manager.h	enum_constant	sql::engine::ob_sql_memory_manager::MAX_TYPE	src/sql/engine/ob_sql_memory_manager.h	36	
+sql	MAX_TYPE	src/sql/pl/ob_pl_stmt.h	enum_constant	sql::pl::ob_pl_stmt::MAX_TYPE	src/sql/pl/ob_pl_stmt.h	297	
+sql	MEMORY_LABEL	src/sql/engine/cmd/ob_load_data_file_reader.h	var	sql::engine::cmd::ob_load_data_file_reader::MEMORY_LABEL	src/sql/engine/cmd/ob_load_data_file_reader.cpp	32	
+sql	MEMORY_LABEL	src/sql/session/ob_user_resource_mgr.h	var	sql::session::ob_user_resource_mgr::MEMORY_LABEL	src/sql/session/ob_user_resource_mgr.cpp	28	
+sql	ObQueryRangeArray	src/sql/ob_sql_utils.h	typedef	sql::ob_sql_utils::ObQueryRangeArray	src/sql/ob_sql_utils.h	78	
+sql	ObQueryRangeArray	src/sql/rewrite/ob_query_range_provider.h	typedef	sql::rewrite::ob_query_range_provider::ObQueryRangeArray	src/sql/rewrite/ob_query_range_provider.h	34	
+sql	ObRawExprSet	src/sql/optimizer/ob_sharding_info.h	typedef	sql::optimizer::ob_sharding_info::ObRawExprSet	src/sql/optimizer/ob_sharding_info.h	36	
+sql	ObRawExprSet	src/sql/resolver/dml/ob_raw_expr_sets.h	typedef	sql::resolver::dml::ob_raw_expr_sets::ObRawExprSet	src/sql/resolver/dml/ob_raw_expr_sets.h	29	
+sql	ObRawExprSets	src/sql/optimizer/ob_sharding_info.h	typedef	sql::optimizer::ob_sharding_info::ObRawExprSets	src/sql/optimizer/ob_sharding_info.h	37	
+sql	ObRawExprSets	src/sql/resolver/dml/ob_raw_expr_sets.h	typedef	sql::resolver::dml::ob_raw_expr_sets::ObRawExprSets	src/sql/resolver/dml/ob_raw_expr_sets.h	33	
+sql	ObRuntimeFilterParams	src/sql/engine/expr/ob_expr_join_filter.h	alias	sql::engine::expr::ob_expr_join_filter::ObRuntimeFilterParams	src/sql/engine/expr/ob_expr_join_filter.h	44	
+sql	ObRuntimeFilterParams	src/sql/engine/expr/ob_expr_topn_filter.h	alias	sql::engine::expr::ob_expr_topn_filter::ObRuntimeFilterParams	src/sql/engine/expr/ob_expr_topn_filter.h	30	
+sql	PL_VAR	src/sql/pl/ob_pl_stmt.h	enum_constant	sql::pl::ob_pl_stmt::PL_VAR	src/sql/pl/ob_pl_stmt.h	1558	
+sql	PL_VAR	src/sql/resolver/expr/ob_raw_expr.h	enum_constant	sql::resolver::expr::ob_raw_expr::PL_VAR	src/sql/resolver/expr/ob_raw_expr.h	1088	
+sql	ParamStore	src/sql/engine/expr/ob_expr_udf.h	typedef	sql::engine::expr::ob_expr_udf::ParamStore	src/sql/engine/expr/ob_expr_udf.h	38	
+sql	ParamStore	src/sql/pl/ob_pl.h	typedef	sql::pl::ob_pl::ParamStore	src/sql/pl/ob_pl.h	67	
+sql	RawExprFastArray	src/sql/ob_result_set.h	typedef	sql::ob_result_set::RawExprFastArray	src/sql/ob_result_set.h	59	
+sql	RawExprFastArray	src/sql/resolver/ob_resolver_define.h	typedef	sql::resolver::ob_resolver_define::RawExprFastArray	src/sql/resolver/ob_resolver_define.h	270	
+sql	RowParamMap	src/sql/code_generator/ob_static_engine_cg.h	typedef	sql::code_generator::ob_static_engine_cg::RowParamMap	src/sql/code_generator/ob_static_engine_cg.h	130	
+sql	RowParamMap	src/sql/optimizer/ob_insert_log_plan.h	typedef	sql::optimizer::ob_insert_log_plan::RowParamMap	src/sql/optimizer/ob_insert_log_plan.h	29	
+sql	UIntFastArray	src/sql/ob_result_set.h	typedef	sql::ob_result_set::UIntFastArray	src/sql/ob_result_set.h	58	
+sql	UIntFastArray	src/sql/resolver/ob_resolver_define.h	typedef	sql::resolver::ob_resolver_define::UIntFastArray	src/sql/resolver/ob_resolver_define.h	269	
+sql	assign_datums	src/sql/engine/basic/chunk_store/ob_default_block_writer.h	function_template	sql::engine::basic::chunk_store::ob_default_block_writer::assign_datums	src/sql/engine/basic/chunk_store/ob_default_block_writer.cpp	74	
+sql	assign_datums	src/sql/engine/basic/ob_chunk_datum_store.h	function_template	sql::engine::basic::ob_chunk_datum_store::assign_datums	src/sql/engine/basic/ob_chunk_datum_store.cpp	1193	
+sql	common_floating_number	src/sql/engine/expr/ob_datum_cast.h	function_template	sql::engine::expr::ob_datum_cast::common_floating_number	src/sql/engine/expr/ob_datum_cast.cpp	1919	
+sql	common_floating_number	src/sql/engine/expr/ob_expr_align_date4cmp.h	function_template	sql::engine::expr::ob_expr_align_date4cmp::common_floating_number	src/sql/engine/expr/ob_expr_align_date4cmp.cpp	290	
+sql	get_cast_ret	src/sql/engine/expr/ob_datum_cast.h	function	sql::engine::expr::ob_datum_cast::get_cast_ret	src/sql/engine/expr/ob_datum_cast.cpp	158	
+sql	get_cast_ret	src/sql/engine/expr/ob_expr_json_utils.h	function	sql::engine::expr::ob_expr_json_utils::get_cast_ret	src/sql/engine/expr/ob_expr_json_utils.cpp	379	
+sql	off2pointer	src/sql/engine/basic/ob_chunk_datum_store.h	function_template	sql::engine::basic::ob_chunk_datum_store::off2pointer	src/sql/engine/basic/ob_chunk_datum_store.cpp	55	
+sql	off2pointer	src/sql/engine/basic/ob_chunk_row_store.h	function_template	sql::engine::basic::ob_chunk_row_store::off2pointer	src/sql/engine/basic/ob_chunk_row_store.cpp	55	
+sql	off2pointer	src/sql/engine/basic/ob_ra_datum_store.h	function_template	sql::engine::basic::ob_ra_datum_store::off2pointer	src/sql/engine/basic/ob_ra_datum_store.cpp	59	
+sql	off2pointer	src/sql/engine/basic/ob_ra_row_store.h	function_template	sql::engine::basic::ob_ra_row_store::off2pointer	src/sql/engine/basic/ob_ra_row_store.cpp	55	
+sql	off2pointer	src/sql/engine/px/datahub/components/ob_dh_winbuf.h	function_template	sql::engine::px::datahub::components::ob_dh_winbuf::off2pointer	src/sql/engine/px/datahub/components/ob_dh_winbuf.cpp	123	
+sql	point2pointer	src/sql/engine/basic/ob_chunk_datum_store.h	function_template	sql::engine::basic::ob_chunk_datum_store::point2pointer	src/sql/engine/basic/ob_chunk_datum_store.cpp	62	
+sql	point2pointer	src/sql/engine/basic/ob_chunk_row_store.h	function_template	sql::engine::basic::ob_chunk_row_store::point2pointer	src/sql/engine/basic/ob_chunk_row_store.cpp	62	
+sql	point2pointer	src/sql/engine/basic/ob_ra_datum_store.h	function_template	sql::engine::basic::ob_ra_datum_store::point2pointer	src/sql/engine/basic/ob_ra_datum_store.cpp	66	
+sql	pointer2off	src/sql/engine/basic/ob_chunk_datum_store.h	function_template	sql::engine::basic::ob_chunk_datum_store::pointer2off	src/sql/engine/basic/ob_chunk_datum_store.cpp	48	
+sql	pointer2off	src/sql/engine/basic/ob_chunk_row_store.h	function_template	sql::engine::basic::ob_chunk_row_store::pointer2off	src/sql/engine/basic/ob_chunk_row_store.cpp	48	
+sql	pointer2off	src/sql/engine/basic/ob_ra_datum_store.h	function_template	sql::engine::basic::ob_ra_datum_store::pointer2off	src/sql/engine/basic/ob_ra_datum_store.cpp	52	
+sql	pointer2off	src/sql/engine/basic/ob_ra_row_store.h	function_template	sql::engine::basic::ob_ra_row_store::pointer2off	src/sql/engine/basic/ob_ra_row_store.cpp	48	
+sql	pointer2off	src/sql/engine/px/datahub/components/ob_dh_winbuf.h	function_template	sql::engine::px::datahub::components::ob_dh_winbuf::pointer2off	src/sql/engine/px/datahub/components/ob_dh_winbuf.cpp	116	
+storage	ACTIVE	src/storage/checkpoint/ob_freeze_checkpoint.h	enum_constant	storage::checkpoint::ob_freeze_checkpoint::ACTIVE	src/storage/checkpoint/ob_freeze_checkpoint.h	43	
+storage	ACTIVE	src/storage/ob_i_tablet_memtable.h	enum_constant	storage::ob_i_tablet_memtable::ACTIVE	src/storage/ob_i_tablet_memtable.h	122	
+storage	INVALID	src/storage/ob_i_tablet_memtable.h	enum_constant	storage::ob_i_tablet_memtable::INVALID	src/storage/ob_i_tablet_memtable.h	121	
+storage	INVALID	src/storage/tmp_file/ob_tmp_file_meta_tree.h	enum_constant	storage::tmp_file::ob_tmp_file_meta_tree::INVALID	src/storage/tmp_file/ob_tmp_file_meta_tree.h	191	
+storage	INVALID_VALUE	src/storage/deadlock/ob_deadlock_parameters.h	var	storage::deadlock::ob_deadlock_parameters::INVALID_VALUE	src/storage/deadlock/ob_deadlock_parameters.h	31	
+storage	INVALID_VALUE	src/storage/multi_data_source/runtime_utility/common_define.h	var	storage::multi_data_source::runtime_utility::common_define::INVALID_VALUE	src/storage/multi_data_source/runtime_utility/common_define.h	241	
+storage	LogOffSet	src/storage/tx/ob_trans_define.h	typedef	storage::tx::ob_trans_define::LogOffSet	src/storage/tx/ob_trans_define.h	97	
+storage	LogOffSet	src/storage/tx/ob_tx_log.h	typedef	storage::tx::ob_tx_log::LogOffSet	src/storage/tx/ob_tx_log.h	75	
+storage	MEMORY_BUDGET_PER_EFFECTIVE_GIB	src/storage/meta_mem/ob_storage_meta_mem_mgr.h	var	storage::meta_mem::ob_storage_meta_mem_mgr::MEMORY_BUDGET_PER_EFFECTIVE_GIB	src/storage/meta_mem/ob_storage_meta_mem_mgr.cpp	37	
+storage	MEMORY_BUDGET_PER_EFFECTIVE_GIB	src/storage/tablet/ob_tablet_create_mds_helper.h	var	storage::tablet::ob_tablet_create_mds_helper::MEMORY_BUDGET_PER_EFFECTIVE_GIB	src/storage/tablet/ob_tablet_create_mds_helper.cpp	38	
+storage	NONE	src/storage/blocksstable/ob_imicro_block_writer.h	enum_constant	storage::blocksstable::ob_imicro_block_writer::NONE	src/storage/blocksstable/ob_imicro_block_writer.h	101	
+storage	NONE	src/storage/multi_data_source/runtime_utility/common_define.h	enum_constant	storage::multi_data_source::runtime_utility::common_define::NONE	src/storage/multi_data_source/runtime_utility/common_define.h	238	
+storage	ObCallbackScopeArray	src/storage/memtable/mvcc/ob_mvcc_trans_ctx.h	typedef	storage::memtable::mvcc::ob_mvcc_trans_ctx::ObCallbackScopeArray	src/storage/memtable/mvcc/ob_mvcc_trans_ctx.h	50	
+storage	ObCallbackScopeArray	src/storage/memtable/ob_redo_log_generator.h	typedef	storage::memtable::ob_redo_log_generator::ObCallbackScopeArray	src/storage/memtable/ob_redo_log_generator.h	49	
+storage	ObCallbackScopeArray	src/storage/tx/ob_trans_submit_log_cb.h	typedef	storage::tx::ob_trans_submit_log_cb::ObCallbackScopeArray	src/storage/tx/ob_trans_submit_log_cb.h	81	
+storage	ObColDescIArray	src/storage/blocksstable/ob_row_reader.h	typedef	storage::blocksstable::ob_row_reader::ObColDescIArray	src/storage/blocksstable/ob_row_reader.h	37	
+storage	ObColDescIArray	src/storage/ob_i_store.h	typedef	storage::ob_i_store::ObColDescIArray	src/storage/ob_i_store.h	127	
+storage	ObMacroMetasArray	src/storage/blocksstable/index_block/ob_index_block_builder.h	typedef	storage::blocksstable::index_block::ob_index_block_builder::ObMacroMetasArray	src/storage/blocksstable/index_block/ob_index_block_builder.h	53	
+storage	ObMacroMetasArray	src/storage/blocksstable/index_block/ob_index_block_dumper.h	typedef	storage::blocksstable::index_block::ob_index_block_dumper::ObMacroMetasArray	src/storage/blocksstable/index_block/ob_index_block_dumper.h	34	
+storage	ObTabletStatusCache	src/storage/compaction/ob_schedule_status_cache.h	struct	storage::compaction::ob_schedule_status_cache::ObTabletStatusCache	src/storage/compaction/ob_schedule_status_cache.h	73	
+storage	ObTabletStatusCache	src/storage/tablet/ob_tablet_mds_data_cache.h	class	storage::tablet::ob_tablet_mds_data_cache::ObTabletStatusCache	src/storage/tablet/ob_tablet_mds_data_cache.h	31	
+storage	TX_FORCE_WRITE_CLOG	src/storage/memtable/ob_memtable_context.h	var	storage::memtable::ob_memtable_context::TX_FORCE_WRITE_CLOG	src/storage/memtable/ob_memtable_context.cpp	839	
+storage	TX_FORCE_WRITE_CLOG	src/storage/tx/ob_tx_ctx.h	var	storage::tx::ob_tx_ctx::TX_FORCE_WRITE_CLOG	src/storage/tx/ob_tx_ctx.cpp	4928	
+storage	__IDMapper	src/storage/deadlock/ob_deadlock_key_wrapper.h	class_template	storage::deadlock::ob_deadlock_key_wrapper::__IDMapper	src/storage/deadlock/ob_deadlock_key_wrapper.h	40	
+storage	__IDMapper	src/storage/multi_data_source/compile_utility/compile_mapper.h	class_template	storage::multi_data_source::compile_utility::compile_mapper::__IDMapper	src/storage/multi_data_source/compile_utility/compile_mapper.h	39	
+storage	__TypeMapper	src/storage/deadlock/ob_deadlock_key_wrapper.h	class_template	storage::deadlock::ob_deadlock_key_wrapper::__TypeMapper	src/storage/deadlock/ob_deadlock_key_wrapper.h	37	
+storage	__TypeMapper	src/storage/multi_data_source/compile_utility/compile_mapper.h	class_template	storage::multi_data_source::compile_utility::compile_mapper::__TypeMapper	src/storage/multi_data_source/compile_utility/compile_mapper.h	36	
+storage	new_discrete_vector	src/storage/access/ob_datum_reshape.cpp	function	storage::access::ob_datum_reshape::new_discrete_vector	src/storage/access/ob_datum_reshape.cpp	183	
+storage	new_discrete_vector	src/storage/ddl/ob_ddl_common_storage_impl.cpp	function	storage::ddl::ob_ddl_common_storage_impl::new_discrete_vector	src/storage/ddl/ob_ddl_common_storage_impl.cpp	842	
+data_plane	DAG_SCHEDULER_DAG_TYPE_DEF	src/data_plane/api/data_plane/scheduler/ob_dag_scheduler_config.h	macro	data_plane::dag_scheduler_dag_type_def!	src/data_plane/api/data_plane/scheduler/ob_dag_scheduler_config.h	166	dag_scheduler_dag_type_def
+data_plane	DAG_SCHEDULER_DAG_TYPE_DEF	src/data_plane/api/data_plane/scheduler/ob_diagnose_config.h	macro	data_plane::ob_diagnose_config_dag_scheduler_dag_type_def!	src/data_plane/api/data_plane/scheduler/ob_diagnose_config.h	108	ob_diagnose_config_dag_scheduler_dag_type_def
+oblib	FLT_DEF_SPAN	src/oblib/lib/trace/ob_trace.h	macro	oblib::ob_trace_flt_def_span!	src/oblib/lib/trace/ob_trace.h	73	ob_trace_flt_def_span
+oblib	FLT_DEF_SPAN	src/oblib/lib/trace/ob_trace_def.h	macro	oblib::flt_def_span!	src/oblib/lib/trace/ob_trace_def.h	297	flt_def_span
+oblib	int2store	src/oblib/common/mysqlclient/ob_mysql_global.h	macro	oblib::ob_mysql_global_int2store!	src/oblib/common/mysqlclient/ob_mysql_global.h	89	ob_mysql_global_int2store
+oblib	int2store	src/oblib/lib/charset/ob_mysql_global.h	macro	oblib::int2store!	src/oblib/lib/charset/ob_mysql_global.h	335	int2store
+oblib	int3store	src/oblib/common/mysqlclient/ob_mysql_global.h	macro	oblib::ob_mysql_global_int3store!	src/oblib/common/mysqlclient/ob_mysql_global.h	93	ob_mysql_global_int3store
+oblib	int3store	src/oblib/lib/charset/ob_mysql_global.h	macro	oblib::int3store!	src/oblib/lib/charset/ob_mysql_global.h	339	int3store
+oblib	int4store	src/oblib/common/mysqlclient/ob_mysql_global.h	macro	oblib::ob_mysql_global_int4store!	src/oblib/common/mysqlclient/ob_mysql_global.h	98	ob_mysql_global_int4store
+oblib	int4store	src/oblib/lib/charset/ob_mysql_global.h	macro	oblib::int4store!	src/oblib/lib/charset/ob_mysql_global.h	343	int4store
+oblib	int5store	src/oblib/common/mysqlclient/ob_mysql_global.h	macro	oblib::ob_mysql_global_int5store!	src/oblib/common/mysqlclient/ob_mysql_global.h	102	ob_mysql_global_int5store
+oblib	int5store	src/oblib/lib/charset/ob_mysql_global.h	macro	oblib::int5store!	src/oblib/lib/charset/ob_mysql_global.h	347	int5store
+oblib	int6store	src/oblib/common/mysqlclient/ob_mysql_global.h	macro	oblib::ob_mysql_global_int6store!	src/oblib/common/mysqlclient/ob_mysql_global.h	108	ob_mysql_global_int6store
+oblib	int6store	src/oblib/lib/charset/ob_mysql_global.h	macro	oblib::int6store!	src/oblib/lib/charset/ob_mysql_global.h	353	int6store
+oblib	int8store	src/oblib/common/mysqlclient/ob_mysql_global.h	macro	oblib::ob_mysql_global_int8store!	src/oblib/common/mysqlclient/ob_mysql_global.h	115	ob_mysql_global_int8store
+oblib	int8store	src/oblib/lib/charset/ob_mysql_global.h	macro	oblib::int8store!	src/oblib/lib/charset/ob_mysql_global.h	360	int8store
+oblib	SLEEP	src/oblib/lib/stat/ob_diagnose_info.h	macro	oblib::ob_diagnose_info_sleep!	src/oblib/lib/stat/ob_diagnose_info.h	318	ob_diagnose_info_sleep
+oblib	SLEEP	src/oblib/lib/utility/utility.h	macro	oblib::sleep!	src/oblib/lib/utility/utility.h	54	sleep
+oblib	STRTOK_R	src/oblib/lib/utility/alloc_assist.h	macro	oblib::strtok_r!	src/oblib/lib/utility/alloc_assist.h	119	strtok_r
+oblib	strtok_r	src/oblib/lib/ob_define.h	macro	oblib::ob_define_strtok_r!	src/oblib/lib/ob_define.h	70	ob_define_strtok_r
+oblib	USLEEP	src/oblib/lib/stat/ob_diagnose_info.h	macro	oblib::ob_diagnose_info_usleep!	src/oblib/lib/stat/ob_diagnose_info.h	325	ob_diagnose_info_usleep
+oblib	USLEEP	src/oblib/lib/utility/utility.h	macro	oblib::usleep!	src/oblib/lib/utility/utility.h	55	usleep
+oblib	WITH_COMMA	src/oblib/lib/oblog/ob_log_print_kv.h	macro	oblib::with_comma!	src/oblib/lib/oblog/ob_log_print_kv.h	53	with_comma
+oblib	WITH_COMMA	src/oblib/lib/utility/ob_print_utils.h	macro	oblib::ob_print_utils_with_comma!	src/oblib/lib/utility/ob_print_utils.h	33	ob_print_utils_with_comma
+share	DEFINE_GETTER	src/share/schema/ob_dependency_info.h	macro	share::define_getter!	src/share/schema/ob_dependency_info.h	78	define_getter
+share	DEFINE_GETTER	src/share/schema/ob_error_info.h	macro	share::ob_error_info_define_getter!	src/share/schema/ob_error_info.h	69	ob_error_info_define_getter
+share	DEFINE_SETTER	src/share/schema/ob_dependency_info.h	macro	share::define_setter!	src/share/schema/ob_dependency_info.h	98	define_setter
+share	DEFINE_SETTER	src/share/schema/ob_error_info.h	macro	share::ob_error_info_define_setter!	src/share/schema/ob_error_info.h	88	ob_error_info_define_setter
+share	GET_OBJ_SCHEMA_VERSIONS	src/share/schema/ob_latest_schema_guard.h	macro	share::get_obj_schema_versions!	src/share/schema/ob_latest_schema_guard.h	203	get_obj_schema_versions
+share	GET_OBJ_SCHEMA_VERSIONS	src/share/schema/ob_schema_guard_wrapper.h	macro	share::ob_schema_guard_wrapper_get_obj_schema_versions!	src/share/schema/ob_schema_guard_wrapper.h	66	ob_schema_guard_wrapper_get_obj_schema_versions
+sql	DECLARE_FUNC	src/sql/pl/sys_package/ob_dbms_hybrid_vector_mysql.h	macro	sql::ob_dbms_hybrid_vector_mysql_declare_func!	src/sql/pl/sys_package/ob_dbms_hybrid_vector_mysql.h	33	ob_dbms_hybrid_vector_mysql_declare_func
+sql	DECLARE_FUNC	src/sql/pl/sys_package/ob_dbms_scheduler_mysql.h	macro	sql::declare_func!	src/sql/pl/sys_package/ob_dbms_scheduler_mysql.h	34	declare_func
+sql	DECLARE_FUNC	src/sql/pl/sys_package/ob_dbms_vector_mysql.h	macro	sql::ob_dbms_vector_mysql_declare_func!	src/sql/pl/sys_package/ob_dbms_vector_mysql.h	33	ob_dbms_vector_mysql_declare_func
+sql	DEF_SIMPLE_EXECUTOR	src/sql/engine/cmd/ob_alter_system_executor.h	macro	sql::def_simple_executor!	src/sql/engine/cmd/ob_alter_system_executor.h	30	def_simple_executor
+sql	DEF_SIMPLE_EXECUTOR	src/sql/engine/cmd/ob_package_executor.h	macro	sql::ob_package_executor_def_simple_executor!	src/sql/engine/cmd/ob_package_executor.h	25	ob_package_executor_def_simple_executor
+sql	DEF_SIMPLE_EXECUTOR	src/sql/engine/cmd/ob_recyclebin_executor.h	macro	sql::ob_recyclebin_executor_def_simple_executor!	src/sql/engine/cmd/ob_recyclebin_executor.h	28	ob_recyclebin_executor_def_simple_executor
+sql	DEF_SIMPLE_EXECUTOR	src/sql/engine/cmd/ob_routine_executor.h	macro	sql::ob_routine_executor_def_simple_executor!	src/sql/engine/cmd/ob_routine_executor.h	26	ob_routine_executor_def_simple_executor
+storage	_GENERATE_MDS_FRAME_CODE_FOR_TRANSACTION_	src/storage/multi_data_source/compile_utility/compile_mapper.h	macro	storage::compile_mapper__generate_mds_frame_code_for_transaction_!	src/storage/multi_data_source/compile_utility/compile_mapper.h	55	compile_mapper__generate_mds_frame_code_for_transaction_
+storage	_GENERATE_MDS_FRAME_CODE_FOR_TRANSACTION_	src/storage/multi_data_source/compile_utility/map_type_index_in_tuple.h	macro	storage::map_type_index_in_tuple__generate_mds_frame_code_for_transaction_!	src/storage/multi_data_source/compile_utility/map_type_index_in_tuple.h	49	map_type_index_in_tuple__generate_mds_frame_code_for_transaction_
+storage	_GENERATE_MDS_FRAME_CODE_FOR_TRANSACTION_	src/storage/tx/ob_multi_data_source.h	macro	storage::_generate_mds_frame_code_for_transaction_!	src/storage/tx/ob_multi_data_source.h	63	_generate_mds_frame_code_for_transaction_
+storage	_GENERATE_MDS_UNIT_	src/storage/multi_data_source/compile_utility/map_type_index_in_tuple.h	macro	storage::_generate_mds_unit_!	src/storage/multi_data_source/compile_utility/map_type_index_in_tuple.h	39	_generate_mds_unit_
+storage	_GENERATE_MDS_UNIT_	src/storage/multi_data_source/mds_table_impl.h	macro	storage::mds_table_impl__generate_mds_unit_!	src/storage/multi_data_source/mds_table_impl.h	54	mds_table_impl__generate_mds_unit_

@@ -1,0 +1,343 @@
+file	symbol	source_construct	line	pretag
+src/data_plane/api/data_plane/scheduler/ob_dag_scheduler.h	ObITask	intrusive node also held elsewhere	156	links=ObDLinkBase;in=ObIDag::task_list_(ObDList) ObIndependentDag::waiting_task_list_(ObDList);n_plain=0;n_intrusive=2
+src/data_plane/api/data_plane/scheduler/ob_dag_scheduler.h	ObITask::dag_	host back-pointer	292	host=ObIDag(task_list_);pointee=ObIDag
+src/data_plane/api/data_plane/scheduler/ob_dag_scheduler.h	ObIDag	intrusive node also held elsewhere	338	links=ObDLinkBase;in=ObDagPrioScheduler::dag_map_(ObHashMap) ObIDagNet::dag_record_map_(ObHashMap) ObDagPrioScheduler::dag_list_(ObDList);n_plain=2;n_intrusive=1
+src/data_plane/api/data_plane/scheduler/ob_dag_scheduler.h	ObIDag::dag_net_	host back-pointer	610	host=ObIDagNet(dag_record_map_);pointee=ObIDagNet
+src/data_plane/api/data_plane/scheduler/ob_dag_scheduler.h	ObDagRecord	intrusive node also held elsewhere	620	links=ObDLinkBase;in=ObIDagNet::dag_record_map_(ObHashMap);n_plain=1;n_intrusive=0
+src/data_plane/api/data_plane/scheduler/ob_dag_scheduler.h	ObIDagNet	intrusive node also held elsewhere	635	links=ObDLinkBase;in=ObDagNetScheduler::dag_net_id_map_(ObHashMap) ObDagNetScheduler::dag_net_map_(ObHashMap) ObDagNetScheduler::dag_net_list_(ObDList);n_plain=2;n_intrusive=1
+src/data_plane/api/data_plane/scheduler/ob_dag_scheduler.h	ObDagWorker	intrusive node also held elsewhere	776	links=ObDLinkBase;in=ObDagPrioScheduler::running_workers_(ObDList) ObDagPrioScheduler::waiting_workers_(ObDList) ObDagScheduler::free_workers_(ObDList);n_plain=0;n_intrusive=3
+src/data_plane/api/data_plane/scheduler/ob_dag_scheduler.h	ObDagNetScheduler::scheduler_	host back-pointer	909	module;host=ObDagScheduler(dag_net_sche_);pointee=ObDagScheduler
+src/data_plane/api/data_plane/scheduler/ob_dag_scheduler.h	ObDagPrioScheduler::scheduler_	host back-pointer	1115	module;host=ObDagScheduler(prio_sche_);pointee=ObDagScheduler
+src/logservice/applyservice/ob_log_apply_service.h	ObApplyFsCb::apply_status_	host back-pointer	84	host=ObApplyStatus(fs_cb_);pointee=ObApplyStatus
+src/logservice/applyservice/ob_log_apply_service.h	ObApplyStatus::ap_sv_	host back-pointer	215	host=ObLogApplyService(apply_status_);pointee=ObLogApplyService
+src/logservice/applyservice/ob_log_apply_service.h	ObLogApplyService::apply_status_	host back-pointer	276	host=ObApplyStatus(ap_sv_);pointee=ObApplyStatus
+src/logservice/palf/block_gc_timer_task.h	BlockGCTimerTask	timer task	25	host=PalfEnvImpl(block_gc_timer_task_);backref=palf_env_impl_(PalfEnvImpl,host);bases=ObTimerTask
+src/logservice/palf/block_gc_timer_task.h	BlockGCTimerTask::palf_env_impl_	host back-pointer	38	host=PalfEnvImpl(block_gc_timer_task_);pointee=PalfEnvImpl
+src/logservice/palf/log_io_task.h	LogIOFlushLogTask	intrusive node also held elsewhere	106	links=ObLink;in=BatchLogIOFlushLogTask::io_task_array_(ObFixedArray);n_plain=1;n_intrusive=0
+src/logservice/palf/log_sliding_window.h	LogSlidingWindow::state_mgr_	host back-pointer	243	host=LogStateMgr(sw_);pointee=LogStateMgr
+src/logservice/palf/log_state_mgr.h	LogStateMgr::sw_	host back-pointer	64	host=LogSlidingWindow(state_mgr_);pointee=LogSlidingWindow
+src/logservice/replayservice/ob_log_replay_service.h	ReplayProcessStat	timer task	40	host=ObLogReplayService(replay_stat_);backref=rp_sv_(ObLogReplayService,host);bases=ObTimerTask
+src/logservice/replayservice/ob_log_replay_service.h	ReplayProcessStat::rp_sv_	host back-pointer	57	host=ObLogReplayService(replay_stat_);pointee=ObLogReplayService
+src/logservice/replayservice/ob_log_replay_service.h	ObLogReplayService::replay_status_	host back-pointer	186	host=ObReplayStatus(rp_sv_);pointee=ObReplayStatus
+src/logservice/replayservice/ob_replay_status.h	ObReplayFsCb::replay_status_	host back-pointer	389	host=ObReplayStatus(fs_cb_);pointee=ObReplayStatus
+src/logservice/replayservice/ob_replay_status.h	ObReplayStatus::rp_sv_	host back-pointer	605	host=ObLogReplayService(replay_status_);pointee=ObLogReplayService
+src/oblib/common/timezone/ob_timezone_info.h	ObTimeZoneInfoPos	intrusive node also held elsewhere	538	links=LinkHashValue;in=ObRequestTZInfoResult::tz_array_(ObArray) ObTZInfoMap::id_map_(ObLinkHashMap) ObTZInfoMap::id_map_buf_(ObLinkHashMap);n_plain=1;n_intrusive=2
+src/oblib/common/timezone/ob_timezone_info.h	ObTZNameIDInfo	intrusive node also held elsewhere	631	links=LinkHashValue;in=ObTZInfoMap::name_map_(ObLinkHashMap) ObTZInfoMap::name_map_buf_(ObLinkHashMap);n_plain=0;n_intrusive=2
+src/oblib/common/xml/ob_tree_base.h	ObLibContainerNode::ctx_	host back-pointer	300	host=ObMulModeMemCtx(mode_arena_);pointee=ObMulModeMemCtx
+src/oblib/common/xml/ob_xml_tree.h	ObXmlElement::name_spaces_	host back-pointer	348	host=ObXmlAttribute(attr_decl_);pointee=ObXmlAttribute
+src/oblib/common/xml/ob_xpath.h	ObPathFuncNode::ans_	host back-pointer	771	host=ObLibContainerNode(child_);pointee=ObPathArgNode
+src/oblib/easy/io/easy_io_struct.h	easy_client_t::c	host back-pointer	255	host=easy_connection_t(client);pointee=easy_connection_t;disp=delete
+src/oblib/easy/io/easy_io_struct.h	easy_connection_t::client	host back-pointer	354	host=easy_client_t(c);pointee=easy_client_t;disp=delete
+src/oblib/lib/alloc/alloc_struct.h	AChunk::block_set_	host back-pointer	184	host=BlockSet(clist_);pointee=BlockSet;disp=replace:mem
+src/oblib/lib/alloc/alloc_struct.h	ABlock::obj_set_	host back-pointer	218	host=ObjectSet(blist_);pointee=ObjectSet;disp=replace:mem
+src/oblib/lib/alloc/block_set.h	BlockSet::clist_	host back-pointer	80	owner-deletes;host=AChunk(block_set_);pointee=AChunk;disp=replace:mem
+src/oblib/lib/alloc/ob_ctx_allocator.h	ObCtxAllocatorState::allocator_	host back-pointer	177	host=ObCtxAllocator(ctx_allocator_);pointee=ObCtxAllocator;disp=replace:mem
+src/oblib/lib/alloc/object_set.h	ObjectSet::blist_	host back-pointer	107	owner-deletes;host=ABlock(obj_set_);pointee=ABlock;disp=replace:mem
+src/oblib/lib/allocator/ob_allocator_v2.h	ObAllocator::mem_context_	host back-pointer	69	host=__MemoryContext__(alloc_);pointee=__MemoryContext__;disp=replace:mem
+src/oblib/lib/allocator/ob_delay_free_allocator.h	ObDelayFreeMemBlock	intrusive node also held elsewhere	35	links=ObDLinkBase;in=ObDelayFreeAllocator::free_list_(ObDList) ObDelayFreeAllocator::working_list_(ObDList);n_plain=0;n_intrusive=2;disp=delete
+src/oblib/lib/hash/ob_build_in_hashmap.h	ObBuildInHashMap::ObBuildInBucket::Link_link_	intrusive node also held elsewhere	89	links=Link+SLink;n_plain=0;n_intrusive=0;disp=replace:hash
+src/oblib/lib/json/ob_json.h	Pair::value_	host back-pointer	77	host=Value(obj_);pointee=Value
+src/oblib/lib/list/ob_dlink_node.h	ObDLinkNode	intrusive node also held elsewhere	143	links=ObDLinkBase;in=ObDasAggregatedTask::failed_tasks_(ObDList) ObDasAggregatedTask::success_tasks_(ObDList) ObDasAggregatedTask::tasks_(ObDList) ObFIFOAllocator::free_page_list_(ObDList) ObFIFOAllocator::special_page_list_(ObDList) ObFIFOAllocator::using_page_list_(ObDList);n_plain=0;n_intrusive=10;disp=replace:container
+src/oblib/lib/objectpool/ob_global_factory.h	ObTCBlock	intrusive node also held elsewhere	28	links=ObDLinkBase;in=ObGlobalFreeList::empty_blocks_(ObDList) ObGlobalFreeList::nonempty_blocks_(ObDList);n_plain=0;n_intrusive=2;disp=replace:mem
+src/oblib/lib/oblog/ob_log_compressor.h	ObLogCompressorTimerTask	timer task	154	host=ObLogCompressor(timer_task_);backref=log_compressor_(ObLogCompressor,host);bases=ObTimerTask;disp=replace:log
+src/oblib/lib/task/ob_timer_monitor.h	ObTimerMonitor::ObTimerMonitorTask	timer task	59	module-host;host=ObTimerMonitor(monitor_task_);backref=monitor_(ObTimerMonitor,host);bases=ObTimerTask;disp=replace:thread
+src/oblib/lib/thread/ob_dynamic_thread_pool.h	ObDynamicThreadInfo::pool_	host back-pointer	37	host=ObDynamicThreadPool(thread_infos_);pointee=ObDynamicThreadPool;disp=replace:thread
+src/oblib/lib/thread/ob_map_queue_thread_pool.h	ObMapQueueThreadPool::ThreadConf::host_	host back-pointer	91	host=ObMapQueueThreadPool(tc_);pointee=ObMapQueueThreadPool;disp=delete
+src/oblib/lib/thread/ob_queue_thread.h	S2MQueueThread::ThreadConf::host	host back-pointer	78	host=S2MQueueThread(thread_conf_array_);pointee=S2MQueueThread;disp=replace:thread
+src/oblib/lib/time/ob_cur_time.h	TimeUpdateDuty	timer task	28	no-host;bases=ObTimerTask
+src/oblib/lib/trace/ob_trace.h	ObSpanCtx	intrusive node also held elsewhere	225	links=ObDLinkBase;in=ObTrace::current_span_(ObDList) ObTrace::freed_span_(ObDList);n_plain=0;n_intrusive=2
+src/oblib/rpc/ob_lock_wait_node.h	ObLockWaitNode	intrusive node also held elsewhere	105	links=ObLink;in=ObLockWaitMgr::hash_(FixedHash2);n_plain=1;n_intrusive=0
+src/oblib/rpc/ob_request.h	ObRequest::handle_ctx_	host back-pointer	131	host=ObSqlSockSession(sql_req_);pointee=ObSqlSockSession
+src/observer/change_stream/ob_change_stream_dispatcher.h	ObCSExecSubTask	intrusive node also held elsewhere	82	links=ObLink;in=ObCSExecCtx::sub_tasks_(ObSEArray);n_plain=1;n_intrusive=0
+src/observer/change_stream/ob_change_stream_dispatcher.h	ObCSExecSubTask::exec_ctx_	host back-pointer	97	host=ObCSExecCtx(sub_tasks_);pointee=ObCSExecCtx
+src/observer/dbms_scheduler/ob_dbms_sched_job_master.h	ObDBMSSchedJobKey	intrusive node also held elsewhere	45	links=ObLink;in=ObDBMSSchedJobMaster::wait_vector_(ObSortedVector);n_plain=1;n_intrusive=0
+src/observer/ob_inner_sql_connection.h	ObInnerSQLConnection::extern_session_	host back-pointer	313	host=ObSQLSessionInfo(inner_conn_);pointee=ObSQLSessionInfo
+src/observer/ob_inner_sql_connection.h	ObInnerSQLConnection::inner_session_	host back-pointer	314	owner-deletes;host=ObSQLSessionInfo(inner_conn_);pointee=ObSQLSessionInfo
+src/observer/ob_inner_sql_connection.h	ObInnerSQLConnection::ref_ctx_	host back-pointer	319	host=ObInnerSQLReadContext(conn_guard_);pointee=ObInnerSQLReadContext
+src/observer/ob_server.h	ObServer::ObCTASCleanUpTask	timer task	270	module-host;host=ObServer(ctas_clean_up_task_);backref=obs_(ObServer,host);bases=ObTimerTask
+src/observer/ob_server.h	ObServer::ObCTASCleanUpTask::obs_	host back-pointer	279	module;host=ObServer(ctas_clean_up_task_);pointee=ObServer
+src/observer/ob_server.h	ObServer::ObRefreshCpuFreqTimeTask	timer task	283	module-host;host=ObServer(refresh_cpu_frequency_task_);backref=obs_(ObServer,host);bases=ObTimerTask
+src/observer/ob_server.h	ObServer::ObRefreshCpuFreqTimeTask::obs_	host back-pointer	292	module;host=ObServer(refresh_cpu_frequency_task_);pointee=ObServer
+src/observer/ob_server.h	ObServer::standby_host_	host back-pointer	465	owner-deletes;host=ObServer::StandbyHostAdapter(server_);pointee=ObServer::StandbyHostAdapter
+src/observer/ob_server.h	ObServer::mods_lock_wait_mgr_	host back-pointer	706	module;host=ObLockWaitMgr(repost_service_);pointee=ObLockWaitMgr
+src/observer/ob_server.h	ObServer::mods_plan_cache_	host back-pointer	724	module;host=ObPlanCache(access_service_);pointee=ObPlanCache
+src/observer/ob_server_duty_task.h	ObServerDutyTask	timer task	26	module-host;host=ObServer(duty_task_);bases=ObTimerTask
+src/observer/ob_server_duty_task.h	ObSqlMemoryTimerTask	timer task	43	module-host;host=ObServer(sql_mem_task_);bases=ObTimerTask
+src/observer/ob_service.h	ObSchemaReleaseTimeTask	timer task	52	module-host;host=ObService(schema_release_task_);backref=schema_updater_(ObServerSchemaUpdater);bases=ObTimerTask
+src/observer/ob_system_package_load_task.h	ObSystemPackageLoadTask	timer task	28	host=ObSystemPackageLoadService(task_);bases=ObTimerTask
+src/observer/omt/ob_server_runtime_controller.h	ObServerRuntimeController	timer task	45	module-host;host=ObServer(server_runtime_controller_);backref=runtime_(ObServerRuntime) log_block_mgr_(ObServerLogBlockMgr);bases=ObTimerTask
+src/observer/omt/ob_th_worker.h	ObThWorker::runtime_	host back-pointer	98	host=ObServerRuntime(workers_);pointee=ObServerRuntime
+src/observer/schema/ob_schema_service_sql_impl.h	ObSchemaServiceSQLImpl::schema_service_	host back-pointer	893	host=ObServerSchemaService(schema_service_);pointee=ObServerSchemaService
+src/observer/vector_index/ob_plugin_vector_index_scheduler.h	ObVectorIndexSyncLogCb::scheduler_	host back-pointer	121	host=ObPluginVectorIndexLoadScheduler(cb_);pointee=ObPluginVectorIndexLoadScheduler
+src/observer/vector_index/ob_plugin_vector_index_scheduler.h	ObPluginVectorIndexLoadScheduler	timer task	188	host=ObVectorIndexSyncLogCb(scheduler_,ptr);host=ObVectorIndexTask(vec_idx_scheduler_,ptr);backref=vector_index_service_(ObPluginVectorIndexService) ls_(ObLS);bases=ObTimerTask
+src/observer/vector_index/ob_plugin_vector_index_scheduler.h	ObPluginVectorIndexLoadScheduler::ls_	host back-pointer	348	host=ObLS(vector_idx_scheduler_);pointee=ObLS
+src/observer/vector_index/ob_plugin_vector_index_service.h	ObPluginVectorIndexMgr::vector_index_service_	host back-pointer	260	module;host=ObPluginVectorIndexService(single_index_mgr_);pointee=ObPluginVectorIndexService
+src/observer/vector_index/ob_plugin_vector_index_service.h	ObPluginVectorIndexService::single_index_mgr_	host back-pointer	467	owner-deletes;host=ObPluginVectorIndexMgr(vector_index_service_);pointee=ObPluginVectorIndexMgr
+src/observer/vector_index/ob_vector_index_async_task.h	ObVectorIndexHistoryTask	timer task	65	host=ObVecAsyncTaskScheduler(vec_history_task_);backref=sql_proxy_(ObMySQLProxy);bases=ObTimerTask
+src/query/api/query/engine/basic/ob_pushdown_filter.h	ObPushdownOperator::pd_storage_filters_	host back-pointer	1433	host=ObPushdownFilterExecutor(op_);pointee=ObPushdownFilterExecutor
+src/query/api/query/engine/expr/ob_expr.h	ObEvalCtx::datum_caster_	host back-pointer	282	host=ObDatumCaster(eval_ctx_);pointee=ObDatumCaster;disp=rewrite:frame
+src/query/api/query/engine/ob_operator.h	ObBatchRowIter::op_	host back-pointer	190	host=ObOperator(br_it_);pointee=ObOperator
+src/query/api/query/engine/ob_operator.h	ObOpSpec::plan_	host back-pointer	313	host=ObPhysicalPlan(root_op_spec_);pointee=ObPhysicalPlan
+src/query/api/query/engine/ob_operator.h	ObOperator::br_it_	host back-pointer	606	host=ObBatchRowIter(op_);pointee=ObBatchRowIter
+src/query/api/query/monitor/ob_monitor_node.h	ObMonitorNode::op_	host back-pointer	131	host=ObOperator(op_monitor_info_);pointee=ObOperator
+src/rootserver/dbms_job/ob_dbms_job_master.h	ObDBMSJobKey	intrusive node also held elsewhere	47	links=ObLink;in=ObDBMSJobTask::wait_vector_(ObSortedVector);n_plain=1;n_intrusive=0
+src/rootserver/dbms_job/ob_dbms_job_master.h	ObDBMSJobTask	timer task	103	module-host;host=ObDBMSJobMaster(scheduler_task_);backref=job_key_(ObDBMSJobKey) ready_queue_(ObPriorityQueueImpl) wait_vector_(ObDBMSJobKey);bases=ObTimerTask
+src/rootserver/ddl_task/ob_ddl_scheduler.h	ObDDLScheduler::DDLScanTask	timer task	344	module-host;host=ObDDLScheduler(scan_task_);backref=ddl_scheduler_(ObDDLScheduler,host);bases=ObTimerTask
+src/rootserver/ddl_task/ob_ddl_scheduler.h	ObDDLScheduler::HeartBeatCheckTask	timer task	363	module-host;host=ObDDLScheduler(heart_beat_check_task_);backref=ddl_scheduler_(ObDDLScheduler,host);bases=ObTimerTask
+src/rootserver/ddl_task/ob_ddl_task.h	ObDDLTask	intrusive node also held elsewhere	579	links=ObDLinkBase;in=ObDDLTaskQueue::task_id_map_(ObHashMap) ObDDLTaskQueue::task_map_(ObHashMap) ObDDLTaskQueue::task_list_(ObDList);n_plain=2;n_intrusive=1
+src/rootserver/freeze/ob_daily_major_freeze_launcher.h	ObDailyMajorFreezeLauncher	timer task	35	host=ObLocalMajorFreeze(daily_launcher_);backref=sql_proxy_(ObMySQLProxy) merge_info_mgr_(ObMajorMergeInfoManager);bases=ObTimerTask
+src/rootserver/freeze/ob_freeze_info_detector.h	ObMajorMergeInfoDetector	timer task	35	host=ObLocalMajorFreeze(major_merge_info_detector_);backref=sql_proxy_(ObMySQLProxy) major_merge_info_mgr_(ObMajorMergeInfoManager) snapshot_gc_scn_renewer_(ObSnapshotGcScnRenewer) major_scheduler_idling_(ObThreadIdling);bases=ObTimerTask
+src/rootserver/ob_ddl_service.h	ObDDLService::runtime_ddl_service_	host back-pointer	2046	host=ObRuntimeDDLService(ddl_service_);pointee=ObRuntimeDDLService
+src/rootserver/ob_local_management_service.h	ObLocalManagementService::ObLoadDDLTask	timer task	84	module-host;host=ObLocalManagementService(load_ddl_task_);backref=local_management_service_(ObLocalManagementService,host);bases=ObTimerTask
+src/rootserver/ob_local_management_service.h	ObLocalManagementService::ObDeadlockEventClearTask	timer task	94	module-host;host=ObLocalManagementService(deadlock_event_clear_task_);backref=local_management_service_(ObLocalManagementService,host);bases=ObTimerTask
+src/rootserver/ob_root_inspection.h	ObPurgeRecyclebinTask	timer task	53	module-host;host=ObLocalManagementService(purge_recyclebin_task_);backref=local_management_service_(ObLocalManagementService,host);bases=ObTimerTask
+src/rootserver/ob_runtime_ddl_service.h	ObRuntimeDDLService::ddl_service_	host back-pointer	121	host=ObDDLService(runtime_ddl_service_);pointee=ObDDLService
+src/share/cache/ob_kv_storecache.h	ObKVGlobalCache::KVStoreWashTask	timer task	221	module-host;host=ObKVGlobalCache(wash_task_);bases=ObTimerTask
+src/share/cache/ob_kv_storecache.h	ObKVGlobalCache::KVMapReplaceTask	timer task	239	module-host;host=ObKVGlobalCache(replace_task_);bases=ObTimerTask
+src/share/cache/ob_kvcache_hazard_domain.h	FixedTinyAllocator::Block::Wrapper::block_	host back-pointer	114	host=FixedTinyAllocator::Block(all_objs_);pointee=FixedTinyAllocator::Block;disp=rewrite:share_cache
+src/share/cache/ob_kvcache_map.h	ObKVCacheMap::Node	intrusive node also held elsewhere	77	links=ObKVCacheHazardNode;in=ObKVCacheIterator::handle_list_(ObList);n_plain=1;n_intrusive=0;disp=rewrite:share_cache
+src/share/cache/ob_kvcache_struct.h	ObKVMemBlockHandle	intrusive node also held elsewhere	115	links=ObDLink+ObLink;in=ObKVCacheStore::mb_handles_pool_(ObFixedQueue);n_plain=1;n_intrusive=0
+src/share/geo/ob_geo_cache_linestring.h	ObCachedGeoLinestring::lAnalyzer_	host back-pointer	45	host=ObLineIntersectionAnalyzer(cache_geo_);pointee=ObLineIntersectionAnalyzer
+src/share/geo/ob_geo_cache_polygon.h	ObCachedGeoPolygon::lAnalyzer_	host back-pointer	107	host=ObLineIntersectionAnalyzer(cache_geo_);pointee=ObLineIntersectionAnalyzer
+src/share/geo/ob_geo_cache_polygon.h	ObCachedGeoPolygon::pAnalyzer_	host back-pointer	108	host=ObPointLocationAnalyzer(cache_geo_);pointee=ObPointLocationAnalyzer
+src/share/io/ob_io_struct.h	ObIOChannel::device_channel_	host back-pointer	327	host=ObDeviceChannel(async_channels_);pointee=ObDeviceChannel
+src/share/ob_core_table_proxy.h	ObCoreTableProxy::Row::kv_proxy_	host back-pointer	158	host=ObCoreTableProxy(all_row_);pointee=ObCoreTableProxy
+src/share/ob_ddl_task_executor.h	ObIDDLTask	intrusive node also held elsewhere	45	links=ObDLinkBase;in=ObDDLTaskQueue::task_set_(ObHashSet) ObDDLTaskQueue::task_list_(ObDList);n_plain=1;n_intrusive=1
+src/share/ob_debug_sync.h	ObDSActionNode	intrusive node also held elsewhere	93	links=ObDLinkBase;in=ObDSSessionActions::actions_(ObDList) ObDSSessionActions::free_list_(ObDList);n_plain=0;n_intrusive=2
+src/share/ob_debug_sync.h	ObDSEventControl::Event	intrusive node also held elsewhere	140	links=ObDLinkBase;in=ObDSEventControl::free_(ObDList) ObDSEventControl::used_(ObDList);n_plain=0;n_intrusive=2
+src/share/ob_timezone_mgr.h	ObTimezoneMgr::UpdateTimezoneTask	timer task	39	module-host;host=ObTimezoneMgr(update_task_);backref=timezone_mgr_(ObTimezoneMgr,host);bases=ObTimerTask
+src/share/ob_timezone_mgr.h	ObTimezoneMgr::UpdateTimezoneTask::timezone_mgr_	host back-pointer	47	module;host=ObTimezoneMgr(update_task_);pointee=ObTimezoneMgr
+src/share/redolog/ob_log_file_reader.h	ObLogFileReader2::EvictTask	timer task	117	module-host;host=ObLogFileReader2(evict_task_);backref=reader_(ObLogFileReader2,host);bases=ObTimerTask
+src/share/redolog/ob_log_file_reader.h	ObLogFileReader2::EvictTask::reader_	host back-pointer	124	module;host=ObLogFileReader2(evict_task_);pointee=ObLogFileReader2
+src/share/schema/ob_ddl_epoch.h	ObDDLEpochMgr::schema_service_	host back-pointer	74	module;host=ObMultiVersionSchemaService(ddl_epoch_mgr_);pointee=ObMultiVersionSchemaService
+src/share/schema/ob_ddl_trans_controller.h	ObDDLTransController::schema_service_	host back-pointer	72	module;host=ObMultiVersionSchemaService(ddl_trans_controller_);pointee=ObMultiVersionSchemaService
+src/share/schema/ob_schema_struct.h	ObSysVariableSchema::sysvar_array_	host back-pointer	1738	host=ObSchema(buffer_);pointee=ObSysVarSchema
+src/sql/das/iter/ob_das_domain_id_merge_iter.h	ObDASDomainIdMergeIter::data_table_iter_	host back-pointer	171	host=ObDASScanIter(result_);pointee=ObDASScanIter
+src/sql/das/iter/ob_das_hnsw_scan_iter.h	ObDASHNSWScanIter::delta_buf_iter_	host back-pointer	518	host=ObDASScanIter(result_);pointee=ObDASScanIter
+src/sql/das/iter/ob_das_hnsw_scan_iter.h	ObDASHNSWScanIter::index_id_iter_	host back-pointer	519	host=ObDASScanIter(result_);pointee=ObDASScanIter
+src/sql/das/iter/ob_das_hnsw_scan_iter.h	ObDASHNSWScanIter::snapshot_iter_	host back-pointer	520	host=ObDASScanIter(result_);pointee=ObDASScanIter
+src/sql/das/iter/ob_das_hnsw_scan_iter.h	ObDASHNSWScanIter::vid_rowkey_iter_	host back-pointer	521	host=ObDASScanIter(result_);pointee=ObDASScanIter
+src/sql/das/iter/ob_das_hnsw_scan_iter.h	ObDASHNSWScanIter::com_aux_vec_iter_	host back-pointer	522	host=ObDASScanIter(result_);pointee=ObDASScanIter
+src/sql/das/iter/ob_das_hnsw_scan_iter.h	ObDASHNSWScanIter::embedded_table_iter_	host back-pointer	523	host=ObDASScanIter(result_);pointee=ObDASScanIter
+src/sql/das/iter/ob_das_hnsw_scan_iter.h	ObDASHNSWScanIter::rowkey_vid_iter_	host back-pointer	524	host=ObDASScanIter(result_);pointee=ObDASScanIter
+src/sql/das/iter/ob_das_hnsw_scan_iter.h	ObDASHNSWScanIter::data_filter_iter_	host back-pointer	525	host=ObDASScanIter(result_);pointee=ObDASScanIter
+src/sql/das/iter/ob_das_ivf_scan_iter.h	ObDASIvfBaseScanIter::centroid_iter_	host back-pointer	327	host=ObDASScanIter(result_);pointee=ObDASScanIter
+src/sql/das/iter/ob_das_ivf_scan_iter.h	ObDASIvfBaseScanIter::cid_vec_iter_	host back-pointer	328	host=ObDASScanIter(result_);pointee=ObDASScanIter
+src/sql/das/iter/ob_das_ivf_scan_iter.h	ObDASIvfBaseScanIter::rowkey_cid_iter_	host back-pointer	329	host=ObDASScanIter(result_);pointee=ObDASScanIter
+src/sql/das/iter/ob_das_ivf_scan_iter.h	ObDASIvfBaseScanIter::brute_iter_	host back-pointer	330	host=ObDASScanIter(result_);pointee=ObDASScanIter
+src/sql/das/iter/ob_das_ivf_scan_iter.h	ObDASIvfBaseScanIter::saved_rowkeys_itr_	host back-pointer	367	host=ObVectorQueryRowkeyIterator(scan_iter_);pointee=ObVectorQueryRowkeyIterator
+src/sql/das/iter/ob_das_ivf_scan_iter.h	ObDASIvfPQScanIter::pq_centroid_iter_	host back-pointer	526	host=ObDASScanIter(result_);pointee=ObDASScanIter
+src/sql/das/iter/ob_das_ivf_scan_iter.h	ObDASIvfSQ8ScanIter::sq_meta_iter_	host back-pointer	567	host=ObDASScanIter(result_);pointee=ObDASScanIter
+src/sql/das/iter/ob_das_merge_iter.h	ObDASMergeIter::WildDatumPtrInfo::global_lookup_iter_	host back-pointer	199	host=ObDASMergeIter(wild_datum_info_);pointee=ObDASMergeIter
+src/sql/das/iter/ob_das_spiv_merge_iter.h	ObDASSPIVMergeIter::rowkey_docid_iter_	host back-pointer	247	host=ObDASScanIter(result_);pointee=ObDASScanIter
+src/sql/das/iter/ob_das_spiv_merge_iter.h	ObDASSPIVMergeIter::aux_data_iter_	host back-pointer	248	host=ObDASScanIter(result_);pointee=ObDASScanIter
+src/sql/das/iter/ob_das_spiv_scan_iter.h	ObDASSPIVScanIter::scan_iter_	host back-pointer	100	host=ObDASScanIter(result_);pointee=ObDASScanIter
+src/sql/das/iter/ob_das_text_retrieval_iter.h	ObDASTextRetrievalIter::inverted_idx_scan_iter_	host back-pointer	143	host=ObDASScanIter(result_);pointee=ObDASScanIter
+src/sql/das/iter/ob_das_text_retrieval_iter.h	ObDASTextRetrievalIter::inverted_idx_agg_iter_	host back-pointer	144	host=ObDASScanIter(result_);pointee=ObDASScanIter
+src/sql/das/iter/ob_das_text_retrieval_iter.h	ObDASTextRetrievalIter::forward_idx_iter_	host back-pointer	145	host=ObDASScanIter(result_);pointee=ObDASScanIter
+src/sql/das/iter/ob_das_text_retrieval_merge_iter.h	ObDASTextRetrievalMergeIter::whole_doc_cnt_iter_	host back-pointer	180	host=ObDASScanIter(result_);pointee=ObDASScanIter
+src/sql/das/ob_das_task.h	ObIDASTaskOp::agg_task_	host back-pointer	283	host=ObDasAggregatedTask(failed_tasks_);pointee=ObDasAggregatedTask
+src/sql/das/ob_das_task.h	DASOpResultIter::WildDatumPtrInfo::lookup_iter_	host back-pointer	317	host=DASOpResultIter(wild_datum_info_);pointee=DASOpResultIter
+src/sql/das/ob_das_task.h	DASOpResultIter::wild_datum_info_	host back-pointer	338	host=DASOpResultIter::WildDatumPtrInfo(lookup_iter_);pointee=DASOpResultIter::WildDatumPtrInfo
+src/sql/dtl/ob_dtl_basic_channel.h	ObDtlBasicChannel	intrusive node also held elsewhere	329	links=ObDLinkBase+ObDtlChannel;n_plain=0;n_intrusive=0
+src/sql/dtl/ob_dtl_channel.h	ObDtlChannel::channel_loop_	host back-pointer	253	host=ObDtlChannelLoop(chans_);pointee=ObDtlChannelLoop
+src/sql/dtl/ob_dtl_channel.h	ObDtlChannel::dfc_	host back-pointer	254	host=ObDtlFlowControl(chans_);pointee=ObDtlFlowControl
+src/sql/dtl/ob_dtl_interm_result_manager.h	ObDTLIntermResultGCTask	timer task	381	module-host;host=ObDTLIntermResultManager(gc_task_);backref=dtl_interm_result_manager_(ObDTLIntermResultManager,host);bases=ObTimerTask
+src/sql/dtl/ob_dtl_interm_result_manager.h	ObDTLIntermResultGCTask::dtl_interm_result_manager_	host back-pointer	388	module;host=ObDTLIntermResultManager(gc_task_);pointee=ObDTLIntermResultManager
+src/sql/dtl/ob_dtl_local_channel.h	ObDtlLocalChannel	intrusive node also held elsewhere	38	links=ObDLinkBase+ObDtlChannel;in=ObDtlChanAgent::local_channels_(ObArray);n_plain=1;n_intrusive=0
+src/sql/engine/basic/chunk_store/ob_compact_store.h	ObCompactStore::writer_	host back-pointer	99	owner-deletes;host=ObBlockIWriter(store_);pointee=ObBlockIWriter
+src/sql/engine/basic/chunk_store/ob_compact_store.h	ObCompactStore::reader_	host back-pointer	100	owner-deletes;host=ObBlockIReader(store_);pointee=ObBlockIReader
+src/sql/engine/basic/ob_json_table_op.h	JtScanCtx::jt_op_	host back-pointer	171	host=ObJsonTableOp(jt_ctx_);pointee=ObJsonTableOp
+src/sql/engine/basic/ob_ra_datum_store.h	ObRADatumStore::BlockIndex::idx_blk_	host back-pointer	215	host=ObRADatumStore::IndexBlock(block_indexes_);pointee=ObRADatumStore::IndexBlock
+src/sql/engine/basic/ob_ra_row_store.h	ObRARowStore::BlockIndex::idx_blk_	host back-pointer	137	host=ObRARowStore::IndexBlock(block_indexes_);pointee=ObRARowStore::IndexBlock
+src/sql/engine/basic/ob_temp_block_store.h	ObTempBlockStore::BlockIndex::idx_blk_	host back-pointer	185	host=ObTempBlockStore::IndexBlock(block_indexes_);pointee=ObTempBlockStore::IndexBlock
+src/sql/engine/basic/ob_temp_block_store.h	ObTempBlockStore::LinkNode	intrusive node also held elsewhere	194	links=ObDLinkBase;in=ObTempBlockStore::alloced_mem_list_(ObDList) ObTempBlockStore::blk_mem_list_(ObDList);n_plain=0;n_intrusive=2
+src/sql/engine/basic/ob_temp_block_store.h	ObTempBlockStore::TryFreeMemBlk::reader_	host back-pointer	260	host=ObTempBlockStore::BlockReader(try_free_list_);pointee=ObTempBlockStore::BlockReader
+src/sql/engine/basic/ob_temp_block_store.h	ObTempBlockStore::BlockReader::store_	host back-pointer	337	host=ObTempBlockStore(inner_reader_);pointee=ObTempBlockStore
+src/sql/engine/basic/ob_temp_block_store.h	ObTempBlockStore::BlockReader::try_free_list_	host back-pointer	349	owner-deletes;host=ObTempBlockStore::TryFreeMemBlk(reader_);pointee=ObTempBlockStore::TryFreeMemBlk
+src/sql/engine/basic/ob_temp_column_store.h	ObTempColumnStore::Iterator::column_store_	host back-pointer	141	host=ObTempBlockStore(inner_reader_);pointee=ObTempColumnStore
+src/sql/engine/cmd/ob_load_data_impl.h	ObDataFrag	intrusive node also held elsewhere	104	links=ObLink;in=ObPartDataFragMgr::frag_free_list_(ObSEArray);n_plain=1;n_intrusive=0
+src/sql/engine/cmd/ob_load_data_impl.h	ObPartDataFragMgr::Link_part_datafrag_hash_link_	intrusive node also held elsewhere	216	links=Link+SLink;n_plain=0;n_intrusive=0
+src/sql/engine/dml/ob_dml_ctx_define.h	ObDMLModifyRowNode::dml_op_	host back-pointer	1062	host=ObTableModifyOp(dml_modify_rows_);pointee=ObTableModifyOp
+src/sql/engine/expr/ob_datum_cast.h	ObDatumCaster::eval_ctx_	host back-pointer	641	owner-deletes;host=ObEvalCtx(datum_caster_);pointee=ObEvalCtx
+src/sql/engine/expr/ob_expr_frame_info.h	ObPreCalcExprFrameInfo	intrusive node also held elsewhere	163	links=ObDLinkBase;in=ObPlanCacheObject::pre_calc_frames_(ObDList) PreCalcExprHandler::pre_calc_frames_(ObDList);n_plain=0;n_intrusive=2;disp=rewrite:frame
+src/sql/engine/expr/ob_sql_expression.h	ObSqlExpression	intrusive node also held elsewhere	62	links=ObDLinkBase;in=ObHashSliceIdCalc::dist_exprs_(ObIArray) ObPLCacheObject::expressions_(ObFixedArray);n_plain=2;n_intrusive=0
+src/sql/engine/ob_exec_context.h	ObExecContext::phy_plan_ctx_	host back-pointer	803	owner-deletes;host=ObPhysicalPlanCtx(exec_ctx_);pointee=ObPhysicalPlanCtx
+src/sql/engine/ob_exec_context.h	ObExecContext::my_session_	host back-pointer	807	host=ObSQLSessionInfo(cur_exec_ctx_);pointee=ObSQLSessionInfo
+src/sql/engine/ob_exec_context.h	ObExecContext::pl_stack_ctx_	host back-pointer	830	host=ObPLContext(my_exec_ctx_);pointee=ObPLContext
+src/sql/engine/ob_physical_plan.h	ObPhysicalPlan::root_op_spec_	host back-pointer	389	host=ObOpSpec(plan_);pointee=ObOpSpec
+src/sql/engine/ob_physical_plan_ctx.h	ObPhysicalPlanCtx::exec_ctx_	host back-pointer	591	host=ObExecContext(phy_plan_ctx_);pointee=ObExecContext
+src/sql/engine/px/ob_dfo.h	ObPxInitSqcArgs::sqc_handler_	host back-pointer	727	host=ObPxSqcHandler(sqc_init_args_);pointee=ObPxSqcHandler
+src/sql/engine/px/ob_px_sqc_handler.h	ObPxSqcHandler::exec_ctx_	host back-pointer	151	host=ObExecContext(sqc_handler_);pointee=ObDesExecContext
+src/sql/engine/px/ob_px_sqc_handler.h	ObPxSqcHandler::sqc_init_args_	host back-pointer	153	host=ObPxInitSqcArgs(sqc_handler_);pointee=ObPxInitSqcArgs
+src/sql/engine/px/ob_px_worker_stat.h	ObPxWorkerStat	intrusive node also held elsewhere	30	links=ObDLinkBase;in=ObAllPxWorkerStatTable::stat_array_(ObArray) ObPxWorkerStatList::worker_stat_list_(ObDList);n_plain=1;n_intrusive=1
+src/sql/engine/sort/ob_sort_op_impl.h	ObSortOpChunk	intrusive node also held elsewhere	201	links=ObDLinkBase;in=ObSortOpImpl::ems_heap_(ObBinaryHeap) ObSortOpImpl::sort_chunks_(ObDList);n_plain=1;n_intrusive=1
+src/sql/engine/subquery/ob_subplan_filter_op.h	ObSubQueryIterator::parent_	host back-pointer	138	host=ObSubPlanFilterOp(subplan_iters_);pointee=ObSubPlanFilterOp
+src/sql/engine/table/ob_table_scan_op.h	ObRandScanProcessor::tsc_op_	host back-pointer	461	host=ObTableScanOp(rand_scan_processor_);pointee=ObTableScanOp
+src/sql/hybrid_search/ob_request_base.h	ObReqTable::ref_query_	host back-pointer	265	host=ObReqFromJson(cte_definitions_);pointee=ObReqFromJson
+src/sql/ob_optimizer_trace_impl.h	ObOptimizerTraceImpl::session_info_	host back-pointer	401	host=ObSQLSessionInfo(optimizer_tracer_);pointee=ObSQLSessionInfo
+src/sql/ob_sql_context.h	ObQueryCtx::root_stmt_	host back-pointer	717	host=ObStmt(query_ctx_);pointee=ObDMLStmt
+src/sql/ob_sql_utils.h	ObPreCalcExprConstraint	intrusive node also held elsewhere	1099	links=ObDLinkBase;in=ObPlanSet::all_pre_calc_constraints_(ObDList) ObQueryCtx::all_pre_calc_constraints_(ObDList) ObSqlCtx::all_pre_calc_constraints_(ObDList);n_plain=0;n_intrusive=3
+src/sql/optimizer/ob_join_order.h	Path::parent_	host back-pointer	518	host=ObJoinOrder(interesting_paths_);pointee=ObJoinOrder
+src/sql/optimizer/ob_join_order.h	IndexMergePath::root_	host back-pointer	804	host=ObIndexMergeNode(ap_);pointee=ObIndexMergeNode
+src/sql/optimizer/ob_join_order.h	ObJoinOrder::plan_	host back-pointer	2955	host=ObLogPlan(id_order_map_allocer_);pointee=ObLogPlan
+src/sql/optimizer/ob_log_exchange.h	ObLogExchange::px_info_	host back-pointer	270	host=ObPxResourceAnalyzer::PxInfo(root_op_);pointee=ObPxResourceAnalyzer::PxInfo
+src/sql/optimizer/ob_log_join.h	ObLogJoin::join_path_	host back-pointer	234	host=Path(log_op_);pointee=JoinPath
+src/sql/optimizer/ob_log_plan.h	SubPlanInfo::subplan_	host back-pointer	116	host=ObLogPlan(subplan_infos_);pointee=ObLogPlan
+src/sql/optimizer/ob_log_plan.h	ObLogPlan::stat_table_scan_	host back-pointer	1797	host=ObLogicalOperator(my_plan_);pointee=ObLogTableScan
+src/sql/optimizer/ob_log_plan.h	ObLogPlan::root_	host back-pointer	1806	host=ObLogicalOperator(my_plan_);pointee=ObLogicalOperator
+src/sql/optimizer/ob_log_plan.h	ObLogPlan::join_order_	host back-pointer	1873	owner-deletes;host=ObJoinOrder(plan_);pointee=ObJoinOrder
+src/sql/optimizer/ob_log_table_scan.h	ObLogTableScan::access_path_	host back-pointer	1185	host=Path(log_op_);pointee=AccessPath
+src/sql/optimizer/ob_log_values.h	ObLogValues::explain_plan_	host back-pointer	82	host=ObLogPlan(root_);pointee=ObLogPlan
+src/sql/optimizer/ob_log_values_table_access.h	ObLogValuesTableAccess::values_path_	host back-pointer	67	host=Path(log_op_);pointee=ValuesTablePath
+src/sql/optimizer/ob_logical_operator.h	ObLogicalOperator::my_plan_	host back-pointer	1742	host=ObLogPlan(root_);pointee=ObLogPlan
+src/sql/optimizer/ob_opt_selectivity.h	OptSelectivityCtx::plan_	host back-pointer	289	host=ObLogPlan(selectivity_ctx_);pointee=ObLogPlan
+src/sql/optimizer/ob_px_resource_analyzer.h	ObPxResourceAnalyzer::PxInfo::root_op_	host back-pointer	171	host=ObLogExchange(px_info_);pointee=ObLogExchange
+src/sql/optimizer/stat/ob_opt_stat_gather_stat.h	ObOptStatGatherStat	intrusive node also held elsewhere	121	links=ObDLinkBase;in=ObAllVirtualOptStatGatherMonitor::stat_array_(ObArray) ObOptStatGatherStatList::stat_list_(ObDList);n_plain=1;n_intrusive=1
+src/sql/optimizer/stat/ob_opt_stat_monitor_manager.h	ObOptStatMonitorFlushAllTask	timer task	58	module-host;host=ObOptStatMonitorManager(flush_all_task_);backref=optstat_monitor_mgr_(ObOptStatMonitorManager,host);bases=ObTimerTask
+src/sql/optimizer/stat/ob_opt_stat_monitor_manager.h	ObOptStatMonitorFlushAllTask::optstat_monitor_mgr_	host back-pointer	65	module;host=ObOptStatMonitorManager(flush_all_task_);pointee=ObOptStatMonitorManager
+src/sql/optimizer/stat/ob_opt_stat_monitor_manager.h	ObOptStatMonitorCheckTask	timer task	68	module-host;host=ObOptStatMonitorManager(check_task_);backref=optstat_monitor_mgr_(ObOptStatMonitorManager,host);bases=ObTimerTask
+src/sql/optimizer/stat/ob_opt_stat_monitor_manager.h	ObOptStatMonitorCheckTask::optstat_monitor_mgr_	host back-pointer	75	module;host=ObOptStatMonitorManager(check_task_);pointee=ObOptStatMonitorManager
+src/sql/parser/fts_base.h	FtsNodeList::head	host back-pointer	67	host=FtsNode(list);pointee=FtsNode;disp=keep-c
+src/sql/parser/fts_base.h	FtsNodeList::tail	host back-pointer	68	host=FtsNode(list);pointee=FtsNode;disp=keep-c
+src/sql/pl/ob_pl.h	ObPLExecState::top_context_	host back-pointer	658	host=ObPLContext(exec_stack_);pointee=ObPLContext
+src/sql/pl/ob_pl.h	ObPLContext::session_info_	host back-pointer	836	host=ObSQLSessionInfo(pl_context_);pointee=ObSQLSessionInfo
+src/sql/pl/ob_pl.h	ObPLContext::my_exec_ctx_	host back-pointer	843	host=ObExecContext(pl_stack_ctx_);pointee=ObExecContext
+src/sql/pl/ob_pl_stmt.h	ObPLExternalNS::parent_ns_	host back-pointer	1022	host=ObPLBlockNS(external_ns_);pointee=ObPLBlockNS
+src/sql/pl/ob_pl_stmt.h	ObPLBlockNS::external_ns_	host back-pointer	1311	host=ObPLExternalNS(parent_ns_);pointee=ObPLExternalNS
+src/sql/pl/ob_pl_stmt.h	ObPLIfStmt::then_	host back-pointer	1856	owner-deletes;host=ObPLStmtBlock(eh_);pointee=ObPLStmtBlock
+src/sql/pl/ob_pl_stmt.h	ObPLIfStmt::else_	host back-pointer	1857	owner-deletes;host=ObPLStmtBlock(eh_);pointee=ObPLStmtBlock
+src/sql/pl/ob_pl_stmt.h	ObPLCaseStmt::else_	host back-pointer	1917	owner-deletes;host=ObPLStmtBlock(eh_);pointee=ObPLStmtBlock
+src/sql/pl/ob_pl_stmt.h	ObPLLoop::body_	host back-pointer	2034	owner-deletes;host=ObPLStmtBlock(eh_);pointee=ObPLStmtBlock
+src/sql/plan_cache/ob_dist_plans.h	ObDistPlans::plan_set_	host back-pointer	101	host=ObSqlPlanSet(dist_plans_);pointee=ObSqlPlanSet
+src/sql/plan_cache/ob_i_lib_cache_node.h	ObILibCacheNode::lib_cache_	host back-pointer	217	module;host=ObPlanCache(cache_key_node_map_);pointee=ObPlanCache
+src/sql/plan_cache/ob_lib_cache_node_factory.h	ObLCNodeFactory::lib_cache_	host back-pointer	46	module;host=ObPlanCache(cn_factory_);pointee=ObPlanCache
+src/sql/plan_cache/ob_lib_cache_object_manager.h	ObLCObjectManager::lib_cache_	host back-pointer	74	module;host=ObPlanCache(co_mgr_);pointee=ObPlanCache
+src/sql/plan_cache/ob_plan_cache.h	ObPlanCacheEliminationTask	timer task	197	module-host;host=ObPlanCache(evict_task_);backref=plan_cache_(ObPlanCache,host);bases=ObTimerTask
+src/sql/plan_cache/ob_plan_cache.h	ObPlanCacheEliminationTask::plan_cache_	host back-pointer	208	module;host=ObPlanCache(evict_task_);pointee=ObPlanCache
+src/sql/plan_cache/ob_plan_cache_util.h	ObPlanStat::plan_	host back-pointer	517	host=ObPhysicalPlan(stat_);pointee=ObPhysicalPlan
+src/sql/plan_cache/ob_plan_cache_value.h	ObPlanCacheValue::pcv_set_	host back-pointer	355	host=ObPCVSet(pcv_list_);pointee=ObPCVSet
+src/sql/plan_cache/ob_plan_set.h	ObPlanSet::plan_cache_value_	host back-pointer	272	host=ObPlanCacheValue(plan_sets_);pointee=ObPlanCacheValue
+src/sql/plan_cache/ob_prepare_stmt_struct.h	ObPsStmtItem::memory_owner_	host back-pointer	112	module;host=ObPsCache(stmt_id_map_);pointee=ObPsCache
+src/sql/plan_cache/ob_prepare_stmt_struct.h	ObPsStmtInfo::memory_owner_	host back-pointer	267	module;host=ObPsCache(stmt_info_map_);pointee=ObPsCache
+src/sql/plan_cache/ob_ps_cache.h	ObPsCacheEliminationTask	timer task	62	module-host;host=ObPsCache(evict_task_);backref=ps_cache_(ObPsCache,host);bases=ObTimerTask
+src/sql/plan_cache/ob_ps_cache.h	ObPsCacheEliminationTask::ps_cache_	host back-pointer	70	module;host=ObPsCache(evict_task_);pointee=ObPsCache
+src/sql/resolver/dml/ob_dml_stmt.h	TableItem::ref_query_	host back-pointer	278	host=ObDMLStmt(cte_definitions_);pointee=ObSelectStmt
+src/sql/resolver/dml/ob_insert_resolver.h	ObInsertResolver::sub_select_resolver_	host back-pointer	118	owner-deletes;host=ObDMLResolver(upper_insert_resolver_);pointee=ObSelectResolver
+src/sql/resolver/expr/ob_raw_expr.h	ObRawExpr::expr_factory_	host back-pointer	2226	host=ObRawExprFactory(expr_store_);pointee=ObRawExprFactory
+src/sql/resolver/expr/ob_raw_expr.h	ObQueryRefRawExpr::ref_stmt_	host back-pointer	2892	host=ObDMLStmt(subquery_exprs_);pointee=ObSelectStmt
+src/sql/resolver/expr/ob_raw_expr.h	ObNonTerminalRawExpr::op_	host back-pointer	3293	host=ObExprOperator(raw_expr_);pointee=ObExprOperator
+src/sql/resolver/expr/ob_raw_expr.h	ObWinFunRawExpr::agg_expr_	host back-pointer	4782	host=ObAggFunRawExpr(pl_agg_udf_expr_);pointee=ObAggFunRawExpr
+src/sql/rewrite/ob_range_generator.h	ObTmpRange	intrusive node also held elsewhere	70	links=ObDLinkBase;in=ObRangeGenerator::all_tmp_ranges_(ObFixedArray) ObRangeGenerator::tmp_range_lists_(ObDList);n_plain=1;n_intrusive=1
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::ObCachedRuntimeConfig::session_	host back-pointer	385	host=ObSQLSessionInfo(cached_runtime_config_info_);pointee=ObSQLSessionInfo
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::pl_context_	host back-pointer	959	host=ObPLContext(session_info_);pointee=ObPLContext
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::session_mgr_	host back-pointer	1000	module;host=ObSQLSessionMgr(sessinfo_map_);pointee=ObSQLSessionMgr
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::cur_exec_ctx_	host back-pointer	1022	host=ObExecContext(my_session_);pointee=ObExecContext
+src/sql/session/ob_sql_session_mgr.h	ObSQLSessionMgr	timer task	44	module-host;host=ObAllVirtualSchedulerRunningJob(session_mgr_,ptr);host=ObAllVirtualSessionInfo(session_mgr_,ptr);host=ObExecContext(session_mgr_,ptr);host=ObPxCoroWorkerFactory(session_mgr_,ptr);host=ObSQLSessionInfo(session_mgr_,ptr);host=ObSQLSessionMgr::CheckSessionFunctor(sess_mgr_,ptr);backref=debug_sync_broadcaster_(ObIDebugSyncBroadcaster) ps_cache_(ObPsCache) connect_resource_manager_(ObConnectResourceMgr);bases=ObTimerTask
+src/sql/session/ob_user_resource_mgr.h	ObConnectResource	intrusive node also held elsewhere	67	links=LinkHashValue;in=ObConnectResourceMgr::CleanUpConnResourceFunc::conn_res_map_(ObLinkHashMap) ObConnectResourceMgr::user_res_map_(ObLinkHashMap);n_plain=0;n_intrusive=2
+src/sql/session/ob_user_resource_mgr.h	ObConnectResourceMgr::ConnResourceCleanUpTask	timer task	150	module-host;host=ObConnectResourceMgr(cleanup_task_);backref=conn_res_mgr_(ObConnectResourceMgr,host);bases=ObTimerTask
+src/standby/ob_standby_log_sync_service.h	ObStandbyLogSyncService	timer task	39	module-host;host=ObStandbyRoleTransitionService(log_sync_service_,ptr);host=StandbyModule::Impl(log_sync_service_);backref=config_(StandbyConfig) host_(IStandbyHost);bases=ObTimerTask
+src/standby/ob_standby_schema_refresh_trigger.h	ObStandbySchemaRefreshTrigger	timer task	29	module-host;host=ObStandbyRoleTransitionService(schema_refresh_trigger_,ptr);host=StandbyModule::Impl(schema_refresh_trigger_);backref=config_(StandbyConfig) host_(IStandbyHost);bases=ObTimerTask
+src/storage/access/ob_table_access_context.h	ObTableAccessContext::block_row_store_	host back-pointer	362	host=ObBlockRowStore(context_);pointee=ObBlockRowStore
+src/storage/allocator/ob_fifo_arena.h	ObFifoArena::Ref::page_	host back-pointer	55	host=ObFifoArena::Page(self_ref_);pointee=ObFifoArena::Page;disp=rewrite:storage_core
+src/storage/blocksstable/index_block/ob_index_block_builder.h	ObDataIndexBlockBuilder::sstable_builder_	host back-pointer	395	host=ObSSTableIndexBuilder(index_builder_);pointee=ObSSTableIndexBuilder
+src/storage/blocksstable/ob_block_manager.h	ObBlockManager::MarkBlockTask	timer task	459	host=ObBlockManager(mark_block_task_);backref=blk_mgr_(ObBlockManager,host);bases=ObTimerTask
+src/storage/blocksstable/ob_block_manager.h	ObBlockManager::InspectBadBlockTask	timer task	474	host=ObBlockManager(inspect_bad_block_task_);backref=blk_mgr_(ObBlockManager,host);bases=ObTimerTask
+src/storage/blocksstable/ob_data_store_desc.h	ObDataStoreDesc::sstable_index_builder_	host back-pointer	288	host=ObSSTableIndexBuilder(container_store_desc_);pointee=ObSSTableIndexBuilder
+src/storage/blocksstable/ob_datum_rowkey.h	ObDiscreteDatumRowkey::rowkey_vector_	host back-pointer	269	host=ObRowkeyVector(discrete_rowkey_array_);pointee=ObRowkeyVector
+src/storage/blocksstable/ob_datum_rowkey_vector.h	ObRowkeyVector::discrete_rowkey_array_	host back-pointer	246	host=ObDiscreteDatumRowkey(rowkey_vector_);pointee=ObDiscreteDatumRowkey
+src/storage/blocksstable/ob_macro_block_writer.h	ObMacroBlockWriter::ObDefaultMacroBlockFlusher::macro_block_writer_	host back-pointer	163	host=ObMacroBlockWriter(default_macro_flusher_);pointee=ObMacroBlockWriter
+src/storage/blocksstable/ob_macro_block_writer.h	ObMacroBlockWriter::builder_	host back-pointer	341	owner-deletes;host=ObBaseIndexBlockBuilder(macro_writer_);pointee=ObDataIndexBlockBuilder
+src/storage/blocksstable/ob_shared_macro_block_manager.h	ObSharedMacroBlockMgr::ObBlockDefragmentationTask	timer task	77	module-host;host=ObSharedMacroBlockMgr(defragmentation_task_);backref=shared_mgr_(ObSharedMacroBlockMgr,host);bases=ObTimerTask
+src/storage/checkpoint/ob_checkpoint_executor.h	ObCheckpointExecutor::ls_	host back-pointer	89	host=ObLS(checkpoint_executor_);pointee=ObLS
+src/storage/checkpoint/ob_data_checkpoint.h	ObDataCheckpoint::ls_	host back-pointer	200	host=ObLS(data_checkpoint_);pointee=ObLS
+src/storage/compaction/ob_basic_tablet_merge_ctx.h	ObBasicTabletMergeCtx::merge_dag_	host back-pointer	343	host=ObTabletMergeDag(ctx_);pointee=ObTabletMergeDag
+src/storage/compaction/ob_compaction_diagnose.h	ObIDiagnoseInfo	intrusive node also held elsewhere	98	links=ObDLinkBase;in=ObIDiagnoseInfoMgr::info_map_(ObHashMap) ObIDiagnoseInfoMgr::info_list_(ObDList);n_plain=1;n_intrusive=1
+src/storage/compaction/ob_compaction_memory_pool.h	ObCompactionMemPool::MemPoolShrinkTask	timer task	132	module-host;host=ObCompactionMemPool(mem_shrink_task_);backref=mem_pool_(ObCompactionMemPool,host);bases=ObTimerTask
+src/storage/compaction/ob_freeze_info_mgr.h	ObFreezeInfoMgr::ReloadTask	timer task	162	module-host;host=ObFreezeInfoMgr(reload_task_);backref=mgr_(ObFreezeInfoMgr,host);bases=ObTimerTask
+src/storage/compaction/ob_freeze_info_mgr.h	ObFreezeInfoMgr::UpdateLSResvSnapshotTask	timer task	177	module-host;host=ObFreezeInfoMgr(update_reserved_snapshot_task_);backref=mgr_(ObFreezeInfoMgr,host);bases=ObTimerTask
+src/storage/compaction/ob_medium_compaction_info.h	ObMediumCompactionInfo	intrusive node also held elsewhere	175	links=ObDLinkBase;in=ObTabletDumpedMediumInfo::medium_info_list_(ObSEArray) ObTabletDumpedMediumInfoIterator::medium_info_list_(ObSEArray) ObMediumCompactionInfoList::medium_info_list_(ObDList);n_plain=2;n_intrusive=1
+src/storage/compaction/ob_tablet_merge_task.h	ObTabletMergePrepareTask::merge_dag_	host back-pointer	108	host=ObIDag(task_list_);pointee=ObTabletMergeDag
+src/storage/compaction/ob_tablet_merge_task.h	ObTabletMergeFinishTask::merge_dag_	host back-pointer	125	host=ObIDag(task_list_);pointee=ObTabletMergeDag
+src/storage/compaction/ob_tablet_merge_task.h	ObTabletMergeDag::ctx_	host back-pointer	200	owner-deletes;host=ObBasicTabletMergeCtx(merge_dag_);pointee=ObBasicTabletMergeCtx
+src/storage/compaction/ob_tablet_scheduler_task_mgr.h	ObTabletSchedulerTaskMgr::MergeLoopTask	timer task	52	host=ObTabletSchedulerTaskMgr(merge_loop_task_);bases=ObTimerTask
+src/storage/compaction/ob_tablet_scheduler_task_mgr.h	ObTabletSchedulerTaskMgr::SSTableGCTask	timer task	53	host=ObTabletSchedulerTaskMgr(sstable_gc_task_);bases=ObTimerTask
+src/storage/compaction/ob_tablet_scheduler_task_mgr.h	ObTabletSchedulerTaskMgr::InfoPoolResizeTask	timer task	54	host=ObTabletSchedulerTaskMgr(info_pool_resize_task_);bases=ObTimerTask
+src/storage/compaction/ob_tablet_scheduler_task_mgr.h	ObTabletSchedulerTaskMgr::TabletUpdaterRefreshTask	timer task	55	host=ObTabletSchedulerTaskMgr(tablet_updater_refresh_task_);bases=ObTimerTask
+src/storage/compaction/ob_tablet_scheduler_task_mgr.h	ObTabletSchedulerTaskMgr::MediumLoopTask	timer task	56	host=ObTabletSchedulerTaskMgr(medium_loop_task_);bases=ObTimerTask
+src/storage/compaction/ob_tablet_scheduler_task_mgr.h	ObTabletSchedulerTaskMgr::MediumCheckTask	timer task	57	host=ObTabletSchedulerTaskMgr(medium_check_task_);bases=ObTimerTask
+src/storage/concurrency_control/ob_multi_version_garbage_collector.h	ObMultiVersionGarbageCollector::TimerTask	timer task	111	module-host;host=ObMultiVersionGarbageCollector(timer_task_);backref=collector_(ObMultiVersionGarbageCollector,host);bases=ObTimerTask
+src/storage/ddl/ob_ddl_heart_beat_task.h	ObRedefTableHeartBeatTask	timer task	58	module-host;host=ObServer(redef_table_heart_beat_task_);bases=ObTimerTask
+src/storage/ddl/ob_ddl_macro_block_write_task.h	ObDDLScanTask::ddl_dag_	host back-pointer	50	host=ObIDag(task_list_);pointee=ObDDLIndependentDag
+src/storage/ddl/ob_ddl_redo_log_writer.h	ObDDLCtrlSpeedHandle::RefreshSpeedHandleTask	timer task	121	module-host;host=ObDDLCtrlSpeedHandle(refreshTimerTask_);bases=ObTimerTask
+src/storage/ddl/ob_pipeline.h	ObPipelineOperator::pipeline_	host back-pointer	118	host=ObPipeline(ops_);pointee=ObPipeline
+src/storage/deadlock/ob_deadlock_detector_mgr.h	ObDeadLockLocalTaskQueue::mgr_	host back-pointer	96	module;host=ObDeadLockDetectorMgr(local_task_queue_);pointee=ObDeadLockDetectorMgr
+src/storage/deadlock/ob_lcl_scheme/ob_lcl_node.h	ObLCLNode::PushStateTask	timer task	132	host=ObLCLNode(push_state_task_);backref=lcl_node_(ObLCLNode,host);bases=ObTimeWheelTask
+src/storage/ls/ob_freezer.h	ObFreezer::ls_	host back-pointer	354	host=ObLS(ls_freezer_);pointee=ObLS
+src/storage/ls/ob_ls_ddl_log_handler.h	ObLSDDLLogHandler::ls_	host back-pointer	107	host=ObLS(ls_ddl_log_handler_);pointee=ObLS
+src/storage/ls/ob_ls_reserved_snapshot_mgr.h	ObLSReservedSnapshotMgr::ls_	host back-pointer	103	host=ObLS(reserved_snapshot_mgr_);pointee=ObLS
+src/storage/ls/ob_ls_sync_tablet_seq_handler.h	ObLSSyncTabletSeqHandler::ls_	host back-pointer	58	host=ObLS(ls_sync_tablet_seq_handler_);pointee=ObLS
+src/storage/ls/ob_ls_tablet_service.h	ObLSTabletService::ls_	host back-pointer	853	host=ObLS(ls_tablet_svr_);pointee=ObLS
+src/storage/ls/ob_ls_tx_service.h	ObLSTxService::parent_	host back-pointer	185	host=ObLS(ls_tx_svr_);pointee=ObLS
+src/storage/memtable/mvcc/ob_mvcc_engine.h	ObMvccEngine::memtable_	host back-pointer	155	host=ObMemtable(mvcc_engine_);pointee=ObMemtable
+src/storage/memtable/mvcc/ob_mvcc_trans_ctx.h	ObTransCallbackMgr::callback_lists_	host back-pointer	377	owner-deletes;host=ObTxCallbackList(callback_mgr_);pointee=ObTxCallbackList
+src/storage/memtable/ob_memtable_context.h	ObMemtableCtx::ctx_	host back-pointer	568	host=ObTransCtx(p_mt_ctx_);pointee=ObTxCtx
+src/storage/memtable/ob_redo_log_generator.h	ObRedoLogGenerator::mem_ctx_	host back-pointer	206	host=ObMemtableCtx(log_gen_);pointee=ObMemtableCtx
+src/storage/meta_mem/ob_storage_meta_mem_mgr.h	ObStorageMetaMemMgr::TabletGCTask	timer task	369	module-host;host=ObStorageMetaMemMgr(tablet_gc_task_);backref=t3m_(ObStorageMetaMemMgr,host);bases=ObTimerTask
+src/storage/meta_mem/ob_storage_meta_mem_mgr.h	ObStorageMetaMemMgr::TabletGCTask::t3m_	host back-pointer	376	module;host=ObStorageMetaMemMgr(tablet_gc_task_);pointee=ObStorageMetaMemMgr
+src/storage/meta_mem/ob_storage_meta_mem_mgr.h	ObStorageMetaMemMgr::TableGCTask	timer task	378	module-host;host=ObStorageMetaMemMgr(table_gc_task_);backref=t3m_(ObStorageMetaMemMgr,host);bases=ObTimerTask
+src/storage/meta_mem/ob_storage_meta_mem_mgr.h	ObStorageMetaMemMgr::TableGCTask::t3m_	host back-pointer	389	module;host=ObStorageMetaMemMgr(table_gc_task_);pointee=ObStorageMetaMemMgr
+src/storage/meta_mem/ob_storage_meta_mem_mgr.h	ObStorageMetaMemMgr::RefreshConfigTask	timer task	391	module-host;host=ObStorageMetaMemMgr(refresh_config_task_);bases=ObTimerTask
+src/storage/multi_data_source/mds_node.h	MdsNode::mds_ctx_	host back-pointer	177	host=MdsCtx(write_list_);pointee=MdsCtx
+src/storage/multi_data_source/mds_table_base.h	MdsTableBase	intrusive node also held elsewhere	72	links=ListNodeBase;in=ObMdsTableMgr::mds_table_map_(ObLinearHashMap);n_plain=1;n_intrusive=0
+src/storage/multi_data_source/ob_mds_table_merge_task.h	ObMdsTableMergeTask::mds_merge_dag_	host back-pointer	59	host=ObIDag(task_list_);pointee=ObMdsTableMergeDag
+src/storage/multi_data_source/runtime_utility/mds_service.h	ObMdsService::RecyleTimerTask	timer task	85	module-host;host=ObMdsService(recyle_timer_task_);backref=service_(ObMdsService,host);bases=ObTimerTask
+src/storage/multi_data_source/runtime_utility/mds_service.h	ObMdsService::DumpStatusTimerTask	timer task	96	module-host;host=ObMdsService(dump_status_timer_task_);bases=ObTimerTask
+src/storage/ob_storage_clog_recorder.h	ObIStorageClogRecorder::logcb_ptr_	host back-pointer	147	host=ObIStorageClogRecorder::ObStorageCLogCb(recorder_);pointee=ObIStorageClogRecorder::ObStorageCLogCb
+src/storage/ob_tablet_stat_mgr.h	ObTabletStreamNode	intrusive node also held elsewhere	303	links=ObDLinkBase;in=ObTabletStatMgr::stream_map_(HashMapPair) ObTabletStatMgr::stream_map_(ObHashMap) ObTabletStreamPool::lru_list_(ObDList);n_plain=2;n_intrusive=1
+src/storage/ob_tablet_stat_mgr.h	ObTabletStatMgr::TabletStatUpdater	timer task	387	module-host;host=ObTabletStatMgr(report_stat_task_);backref=mgr_(ObTabletStatMgr,host);bases=ObTimerTask
+src/storage/slog_ckpt/ob_local_storage_checkpoint_slog_handler.h	ObLocalStorageCheckpointSlogHandler::ObWriteCheckpointTask	timer task	70	host=ObLocalStorageCheckpointSlogHandler(write_ckpt_task_);backref=handler_(ObLocalStorageCheckpointSlogHandler,host);bases=ObTimerTask
+src/storage/slog_ckpt/ob_local_storage_checkpoint_slog_handler.h	ObLocalStorageCheckpointSlogHandler::ObWriteCheckpointTask::handler_	host back-pointer	86	host=ObLocalStorageCheckpointSlogHandler(write_ckpt_task_);pointee=ObLocalStorageCheckpointSlogHandler
+src/storage/slog_ckpt/ob_server_checkpoint_slog_handler.h	ObServerCheckpointSlogHandler::ObWriteCheckpointTask	timer task	41	module-host;host=ObServerCheckpointSlogHandler(write_ckpt_task_);backref=handler_(ObServerCheckpointSlogHandler,host);bases=ObTimerTask
+src/storage/slog_ckpt/ob_server_checkpoint_slog_handler.h	ObServerCheckpointSlogHandler::ObWriteCheckpointTask::handler_	host back-pointer	54	module;host=ObServerCheckpointSlogHandler(write_ckpt_task_);pointee=ObServerCheckpointSlogHandler
+src/storage/slog_ckpt/ob_tablet_replay_create_handler.h	ObTabletReplayCreateTask::handler_	host back-pointer	107	host=ObTabletReplayCreateHandler(aggrgate_task_);pointee=ObTabletReplayCreateHandler
+src/storage/slog_ckpt/ob_tablet_replay_create_handler.h	ObTabletReplayCreateHandler::aggrgate_task_	host back-pointer	172	host=ObTabletReplayCreateTask(handler_);pointee=ObTabletReplayCreateTask
+src/storage/slog_ckpt/ob_tablet_replay_create_handler.h	ObTabletReplayCreateHandler::discrete_task_	host back-pointer	173	host=ObTabletReplayCreateTask(handler_);pointee=ObTabletReplayCreateTask
+src/storage/tablelock/ob_lock_table.h	ObLockTable::CheckObjLockTask	timer task	174	host=ObLockTable(check_obj_lock_task_);backref=lock_table_(ObLockTable,host);bases=ObTimerTask
+src/storage/tablelock/ob_lock_table.h	ObLockTable::parent_	host back-pointer	189	host=ObLS(lock_table_);pointee=ObLS
+src/storage/tablelock/ob_obj_lock.h	ObObjLockPriorityTask	intrusive node also held elsewhere	53	links=ObDLinkBase;in=ObObjLockPriorityQueue::high1_list_(ObDList) ObObjLockPriorityQueue::high2_list_(ObDList) ObObjLockPriorityQueue::normal_list_(ObDList);n_plain=0;n_intrusive=3
+src/storage/tablelock/ob_table_lock_service.h	ObTableLockService::ObOBJLockGarbageCollector::TimerTask	timer task	212	host=ObTableLockService::ObOBJLockGarbageCollector(timer_task_);backref=collector_(ObTableLockService::ObOBJLockGarbageCollector,host);bases=ObTimerTask
+src/storage/tmp_file/ob_i_tmp_file.h	ObITmpFile::ObTmpFileNode	intrusive node also held elsewhere	212	links=ObDLinkBase;in=ObTmpFileEvictionManager::file_data_eviction_list_(ObDList) ObTmpFileEvictionManager::file_meta_eviction_list_(ObDList) ObTmpFileFlushPriorityManager::data_flush_lists_(ObDList) ObTmpFileFlushPriorityManager::meta_flush_lists_(ObDList);n_plain=0;n_intrusive=4
+src/storage/tmp_file/ob_tmp_file_block_manager.h	ObTmpFileBlockHandle::tmp_file_blk_mgr_	host back-pointer	166	host=ObTmpFileBlockManager(block_map_);pointee=ObTmpFileBlockManager
+src/storage/tmp_file/ob_tmp_file_flush_ctx.h	ObTmpFileWriteBlockTask	timer task	35	host=ObTmpFileFlushTask(flush_write_block_task_);backref=flush_task_(ObTmpFileFlushTask,host);bases=ObTimerTask
+src/storage/tx/ob_trans_ctx.h	ObTransCtx::ls_tx_ctx_mgr_	host back-pointer	225	host=ObLSTxCtxMgr(ls_tx_ctx_map_);pointee=ObLSTxCtxMgr
+src/storage/tx/ob_trans_ctx_lock.h	CtxLock::ctx_	host back-pointer	94	host=ObTransCtx(lock_);pointee=ObTransCtx
+src/storage/tx/ob_trans_ctx_mgr_v4.h	ObTxCtxMgr::txs_	host back-pointer	655	module;host=ObTransService(tx_ctx_mgr_);pointee=ObTransService
+src/storage/tx/ob_trans_end_trans_callback.h	ObTxCommitCallback::tx_ctx_	host back-pointer	96	host=ObTransCtx(commit_cb_);pointee=ObTransCtx
+src/storage/tx/ob_trans_submit_log_cb.h	ObTxLogCb::tx_ctx_	host back-pointer	155	host=ObTxCtx(busy_cbs_);pointee=ObTxCtx
+src/storage/tx/ob_trans_timer.h	ObITimeoutTask	timer task	39	no-host;bases=ObTimeWheelTask
+src/storage/tx/ob_trans_timer.h	ObTransTimeoutTask	timer task	79	host=ObTransCtx(timeout_task_);backref=ctx_(ObTransCtx,host);bases=ObTimeWheelTask
+src/storage/tx/ob_trans_timer.h	ObTransTimeoutTask::ctx_	host back-pointer	95	host=ObTransCtx(timeout_task_);pointee=ObTransCtx
+src/storage/tx/ob_trans_timer.h	ObTxTimeoutTask	timer task	98	host=ObTxDesc(commit_task_);backref=tx_desc_(ObTxDesc,host) txs_(ObTransService);bases=ObTimeWheelTask
+src/storage/tx/ob_trans_timer.h	ObTxTimeoutTask::tx_desc_	host back-pointer	113	host=ObTxDesc(commit_task_);pointee=ObTxDesc
+src/storage/tx/ob_tx_ctx.h	ObTxCtx	intrusive node also held elsewhere	103	links=ObLightHashLink+ObLink;n_plain=0;n_intrusive=0
+src/storage/tx/ob_tx_data_define.h	ObTxDataLinkNode::next_	host back-pointer	139	host=ObTxDataLink(hash_node_);pointee=ObTxData
+src/storage/tx/ob_tx_loop_worker.h	ObTxLoopWorker	timer task	34	module-host;host=ObServer(mods_tx_loop_worker_,ptr);bases=ObTimerTask
+src/storage/tx/ob_tx_timestamp_waiter.h	ObTxTimestampCallbackWorker::waiter_	host back-pointer	48	host=ObTxTimestampWaiter(callback_worker_);pointee=ObTxTimestampWaiter
+src/storage/tx_storage/ob_checkpoint_service.h	ObCheckPointService::ObCheckpointTask	timer task	76	module-host;host=ObCheckPointService(checkpoint_task_);bases=ObTimerTask
+src/storage/tx_storage/ob_checkpoint_service.h	ObCheckPointService::ObTraversalFlushTask	timer task	85	module-host;host=ObCheckPointService(traversal_flush_task_);bases=ObTimerTask
+src/storage/tx_storage/ob_checkpoint_service.h	ObCheckPointService::ObCheckClogDiskUsageTask	timer task	93	module-host;host=ObCheckPointService(check_clog_disk_usage_task_);backref=checkpoint_service_(ObCheckPointService,host);bases=ObTimerTask
+src/storage/tx_storage/ob_checkpoint_service.h	ObCheckPointService::ObAdvanceCkptTask	timer task	105	module-host;host=ObCheckPointService(advance_ckpt_task_);bases=ObTimerTask
+src/storage/tx_storage/ob_empty_shell_task.h	ObTabletEmptyShellHandler::ls_	host back-pointer	62	host=ObLS(tablet_empty_shell_handler_);pointee=ObLS
+src/storage/tx_storage/ob_empty_shell_task.h	ObEmptyShellTask	timer task	69	host=ObTabletGCService(tablet_shell_task_);backref=tablet_gc_service_(ObTabletGCService,host);bases=ObTimerTask
+src/storage/tx_storage/ob_ls_freeze_thread.h	ObLSFreezeTask::host_	host back-pointer	48	host=ObLSFreezeThread(task_array_);pointee=ObLSFreezeThread
+src/storage/tx_storage/ob_ls_freeze_thread.h	ObLSFreezeThread::task_array_	host back-pointer	77	host=ObLSFreezeTask(host_);pointee=ObLSFreezeTask
+src/storage/tx_storage/ob_memory_printer.h	ObPrintMemoryUsage	timer task	29	module-host;host=ObMemoryPrinter(print_task_);bases=ObTimerTask
+src/storage/tx_storage/ob_memstore_freezer.h	ObMemstoreFreezer::TimerTask	timer task	305	module-host;host=ObMemstoreFreezer(freeze_trigger_timer_task_);backref=freezer_(ObMemstoreFreezer,host);bases=ObTimerTask
+src/storage/tx_storage/ob_tablet_gc_service.h	ObTabletGCHandler::ls_	host back-pointer	128	host=ObLS(tablet_gc_handler_);pointee=ObLS
+src/storage/tx_storage/ob_tablet_gc_service.h	ObTabletGCService::ObTabletChangeTask	timer task	160	host=ObTabletGCService(tablet_change_task_);backref=tablet_gc_service_(ObTabletGCService,host);bases=ObTimerTask
+src/storage/tx_table/ob_tx_data_memtable.h	ObTxDataMemtable::memtable_mgr_	host back-pointer	479	host=ObIMemtableMgr(tables_);pointee=ObTxDataMemtableMgr
+src/storage/tx_table/ob_tx_data_memtable_mgr.h	ObTxDataMemtableMgr::tx_data_table_	host back-pointer	187	host=ObTxDataTable(memtable_mgr_);pointee=ObTxDataTable
+src/storage/tx_table/ob_tx_data_memtable_mgr.h	ObTxDataMemtableMgr::ls_tablet_svr_	host back-pointer	188	host=ObLSTabletService(tx_data_memtable_mgr_);pointee=ObLSTabletService
+src/storage/tx_table/ob_tx_data_table.h	ObTxDataTable::memtable_mgr_	host back-pointer	347	host=ObTxDataMemtableMgr(tx_data_table_);pointee=ObTxDataMemtableMgr
+src/storage/tx_table/ob_tx_table.h	ObTxTable::ls_	host back-pointer	388	host=ObLS(tx_table_);pointee=ObLS

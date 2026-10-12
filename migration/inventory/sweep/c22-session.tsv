@@ -1,0 +1,325 @@
+file	symbol	source_construct	line	pretag
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::TableStmtType::table_id_	session member-struct field	198	type=uint64_t
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::TableStmtType::stmt_type_	session member-struct field	199	cross-thread,under-query-mutex,under-thread-data-mutex;type=StmtType;accessors=get_stmt_type+is_mutating+set_stmt_type;xt=src/observer/virtual_table/ob_all_virtual_session_ps_info.cpp:139
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::TransFlags::flags_	session member-struct field	220	type=uint64_t;accessors=get_flags
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::TransFlags::has_exec_inner_dml_	session member-struct field	225	type=bool;accessors=has_exec_inner_dml+set_has_exec_inner_dml
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::TransFlags::changed_	session member-struct field	228	type=bool
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::SqlScopeFlags::flags_	session member-struct field	255	type=uint64_t;accessors=get_flags+is_in_user_scope+set_flag+set_flags
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::SysVarIncInfo::all_sys_var_ids_	session member-struct field	840	type=SysVarIds;accessors=add_sys_var_id+all_has_sys_var_id+get_all_sys_var_ids
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::sys_var_inc_info_	session field	847	type=SysVarIncInfo;accessors=calc_need_serialize_vars+set_autocommit+update_sys_variable
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::ChangedVar::id_	session member-struct field	942	type=ObSysVarClassType;accessors=is_already_tracked
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::ChangedVar::old_val_	session member-struct field	943	type=ObObj
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::MultiThreadData::user_name_	session member-struct field	1292	cross-thread,under-thread-data-mutex,in-thread-data;type=ObString;accessors=get_user_name+is_restore_user+set_login_info;xt=src/observer/virtual_table/ob_all_virtual_session_info.cpp:143
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::MultiThreadData::host_name_	session member-struct field	1293	cross-thread,under-thread-data-mutex,in-thread-data;type=ObString;accessors=get_host_name;xt=src/observer/virtual_table/ob_all_virtual_session_info.cpp:223
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::MultiThreadData::client_ip_	session member-struct field	1294	cross-thread,under-query-mutex,under-thread-data-mutex,in-thread-data;type=ObString;accessors=get_client_ip+set_login_info;xt=src/observer/virtual_table/ob_all_virtual_session_info.cpp:214
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::MultiThreadData::user_at_host_name_	session member-struct field	1295	under-thread-data-mutex,in-thread-data;type=ObString;accessors=get_user_at_host
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::MultiThreadData::user_at_client_ip_	session member-struct field	1296	under-thread-data-mutex,in-thread-data;type=ObString;accessors=get_user_at_client_ip
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::MultiThreadData::database_name_	session member-struct field	1297	cross-thread,under-thread-data-mutex,in-thread-data;type=char[387];accessors=get_database_name+update_database_variables;xt=src/observer/virtual_table/ob_all_virtual_session_info.cpp:159
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::MultiThreadData::peer_addr_	session member-struct field	1301	cross-thread,under-query-mutex,under-thread-data-mutex,in-thread-data;type=ObAddr;accessors=get_peer_addr+set_peer_addr;xt=src/observer/virtual_table/ob_all_virtual_session_info.cpp:149
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::MultiThreadData::client_addr_	session member-struct field	1302	under-thread-data-mutex,in-thread-data;type=ObAddr;accessors=get_client_addr+set_client_addr
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::MultiThreadData::user_client_addr_	session member-struct field	1303	under-thread-data-mutex,in-thread-data;type=ObAddr;accessors=get_user_client_addr
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::MultiThreadData::cur_query_buf_len_	session member-struct field	1304	under-thread-data-mutex,in-thread-data;type=int64_t
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::MultiThreadData::cur_query_	session member-struct field	1305	cross-thread,under-query-mutex,under-thread-data-mutex,in-thread-data;type=char *;accessors=get_current_query_string+reset_query_string;xt=src/observer/virtual_table/ob_all_virtual_session_info.cpp:198
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::MultiThreadData::cur_query_len_	session member-struct field	1306	cross-thread,under-query-mutex,under-thread-data-mutex,atomic,in-thread-data;type=volatile int64_t;accessors=get_current_query_string+reset_query_string;xt=src/observer/virtual_table/ob_all_virtual_session_info.cpp:198
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::MultiThreadData::top_query_buf_len_	session member-struct field	1307	under-thread-data-mutex,in-thread-data;type=int64_t
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::MultiThreadData::top_query_	session member-struct field	1308	cross-thread,under-thread-data-mutex,in-thread-data;type=char *;accessors=get_top_query_string+reset_top_query_string;xt=src/observer/virtual_table/ob_show_processlist.cpp:376
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::MultiThreadData::top_query_len_	session member-struct field	1309	cross-thread,under-thread-data-mutex,atomic,in-thread-data;type=volatile int64_t;accessors=get_top_query_string+reset_top_query_string;xt=src/observer/virtual_table/ob_show_processlist.cpp:376
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::MultiThreadData::cur_statement_id_	session member-struct field	1310	in-thread-data;type=uint64_t;accessors=get_current_statement_id
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::MultiThreadData::last_active_time_	session member-struct field	1311	cross-thread,under-query-mutex,under-thread-data-mutex,in-thread-data;type=int64_t;accessors=get_last_active_time+update_last_active_time;xt=src/sql/session/ob_sql_session_mgr.cpp:313
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::MultiThreadData::dis_state_	session member-struct field	1312	cross-thread,under-query-mutex,under-thread-data-mutex,in-thread-data;type=ObDisconnectState;accessors=get_disconnect_state+set_disconnect_state;xt=src/sql/session/ob_sql_session_mgr.cpp:443
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::MultiThreadData::state_	session member-struct field	1313	cross-thread,under-query-mutex,under-thread-data-mutex,in-thread-data;type=ObSQLSessionState;accessors=check_session_status+get_session_state+get_session_state_str;xt=src/observer/virtual_table/ob_all_virtual_session_info.cpp:190
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::MultiThreadData::is_interactive_	session member-struct field	1314	under-thread-data-mutex,in-thread-data;type=bool;accessors=get_interactive+set_interactive
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::MultiThreadData::sock_desc_	session member-struct field	1315	cross-thread,under-query-mutex,under-thread-data-mutex,in-thread-data;type=ObSqlSockDesc;accessors=get_sm_connection+get_sock_desc;xt=src/sql/session/ob_sql_session_mgr.cpp:404
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::MultiThreadData::mysql_cmd_	session member-struct field	1316	cross-thread,under-query-mutex,under-thread-data-mutex,in-thread-data;type=ObMySQLCmd;accessors=get_mysql_cmd+get_mysql_cmd_str+set_mysql_cmd;xt=src/observer/virtual_table/ob_all_virtual_session_info.cpp:168
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::MultiThreadData::cur_query_start_time_	session member-struct field	1317	cross-thread,under-query-mutex,under-thread-data-mutex,in-thread-data;type=int64_t;accessors=get_query_start_time+set_query_start_time;xt=src/observer/virtual_table/ob_show_processlist.cpp:289
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::MultiThreadData::cur_state_start_time_	session member-struct field	1318	cross-thread,under-thread-data-mutex,in-thread-data;type=int64_t;accessors=get_cur_state_start_time;xt=src/observer/virtual_table/ob_all_virtual_session_info.cpp:180
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::MultiThreadData::wait_timeout_	session member-struct field	1319	under-thread-data-mutex,in-thread-data;type=int64_t;accessors=get_wait_timeout
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::MultiThreadData::interactive_timeout_	session member-struct field	1320	in-thread-data;type=int64_t;accessors=get_interactive_timeout
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::MultiThreadData::max_packet_size_	session member-struct field	1321	in-thread-data;type=int64_t;accessors=get_max_packet_size+update_max_packet_size
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::MultiThreadData::is_shadow_	session member-struct field	1322	cross-thread,under-thread-data-mutex,atomic,in-thread-data;type=bool;accessors=is_shadow+set_shadow;xt=src/observer/virtual_table/ob_all_virtual_session_ps_info.cpp:255
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::MultiThreadData::is_in_retry_	session member-struct field	1323	under-thread-data-mutex,in-thread-data;type=ObSessionRetryStatus;accessors=get_is_in_retry+set_session_in_retry
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::MultiThreadData::client_addr_port_	session member-struct field	1324	cross-thread,under-thread-data-mutex,in-thread-data;type=int32_t;accessors=get_client_addr_port+set_client_addr_port;xt=src/observer/virtual_table/ob_all_virtual_session_info.cpp:275
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::MultiThreadData::is_mark_killed_	session member-struct field	1325	cross-thread,under-query-mutex,under-thread-data-mutex,atomic,in-thread-data;type=bool;accessors=is_mark_killed+set_mark_killed;xt=src/sql/session/ob_sql_session_mgr.cpp:436
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::MultiThreadData::retry_active_time_	session member-struct field	1331	cross-thread,under-thread-data-mutex,in-thread-data;type=int64_t;accessors=get_retry_active_time+set_retry_active_time;xt=src/observer/virtual_table/ob_all_virtual_session_info.cpp:281
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::MultiThreadData::is_request_end_	session member-struct field	1332	cross-thread,under-thread-data-mutex,in-thread-data;type=bool;accessors=get_is_request_end+set_is_request_end+set_session_active;xt=src/observer/virtual_table/ob_show_processlist.cpp:287
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::SysVarsCacheData::auto_increment_increment_	session member-struct field	1484	type=uint64_t
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::SysVarsCacheData::sql_select_limit_	session member-struct field	1485	type=int64_t
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::SysVarsCacheData::auto_increment_offset_	session member-struct field	1486	type=uint64_t
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::SysVarsCacheData::last_insert_id_	session member-struct field	1487	type=uint64_t
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::SysVarsCacheData::binlog_row_image_	session member-struct field	1488	type=int64_t
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::SysVarsCacheData::foreign_key_checks_	session member-struct field	1489	type=int64_t
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::SysVarsCacheData::default_password_lifetime_	session member-struct field	1490	type=uint64_t
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::SysVarsCacheData::tx_read_only_	session member-struct field	1491	type=bool
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::SysVarsCacheData::ob_enable_pl_cache_	session member-struct field	1492	type=bool
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::SysVarsCacheData::ob_enable_plan_cache_	session member-struct field	1493	type=bool
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::SysVarsCacheData::is_result_accurate_	session member-struct field	1494	type=bool
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::SysVarsCacheData::character_set_results_	session member-struct field	1495	type=ObCharsetType
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::SysVarsCacheData::character_set_connection_	session member-struct field	1496	type=ObCharsetType
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::SysVarsCacheData::cursor_sharing_mode_	session member-struct field	1497	type=ObCursorSharingMode
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::SysVarsCacheData::timestamp_	session member-struct field	1499	type=int64_t
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::SysVarsCacheData::tx_isolation_	session member-struct field	1500	type=ObTxIsolationLevel
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::SysVarsCacheData::ob_pl_block_timeout_	session member-struct field	1502	type=int64_t
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::SysVarsCacheData::log_row_value_option_	session member-struct field	1504	type=ObString;accessors=get_log_row_value_option+set_log_row_value_option
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::SysVarsCacheData::log_row_value_option_buf_	session member-struct field	1505	type=char[256];accessors=set_log_row_value_option
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::SysVarsCacheData::default_lob_inrow_threshold_	session member-struct field	1506	type=int64_t;accessors=get_default_lob_inrow_threshold+set_default_lob_inrow_threshold
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::SysVarsCacheData::autocommit_	session member-struct field	1508	cross-thread;type=bool;accessors=get_autocommit_info+set_autocommit_info;xt=src/sql/session/ob_sql_session_mgr.cpp:688
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::SysVarsCacheData::ob_enable_trace_log_	session member-struct field	1509	type=bool
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::SysVarsCacheData::ob_query_timeout_	session member-struct field	1510	type=int64_t
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::SysVarsCacheData::ob_trx_timeout_	session member-struct field	1511	type=int64_t
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::SysVarsCacheData::collation_connection_	session member-struct field	1512	type=int64_t
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::SysVarsCacheData::sql_mode_	session member-struct field	1513	type=ObSQLMode
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::SysVarsCacheData::ob_trx_idle_timeout_	session member-struct field	1514	type=int64_t
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::SysVarsCacheData::ob_trx_lock_timeout_	session member-struct field	1515	type=int64_t
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::SysVarsCacheData::nls_collation_	session member-struct field	1516	type=ObCollationType;accessors=get_charsets4parser+get_session_nls_params
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::SysVarsCacheData::nls_nation_collation_	session member-struct field	1517	type=ObCollationType;accessors=get_session_nls_params
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::SysVarsCacheData::ob_max_read_stale_time_	session member-struct field	1518	type=int64_t
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::SysVarsCacheData::runtime_filter_type_	session member-struct field	1519	type=int64_t
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::SysVarsCacheData::runtime_filter_wait_time_ms_	session member-struct field	1520	type=int64_t
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::SysVarsCacheData::runtime_filter_max_in_num_	session member-struct field	1521	type=int64_t
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::SysVarsCacheData::runtime_bloom_filter_max_size_	session member-struct field	1522	type=int64_t
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::SysVarsCacheData::enable_sql_plan_monitor_	session member-struct field	1524	type=bool
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::SysVarsCache::inc_data_	session member-struct field	1638	type=SysVarsCacheData;accessors=get_autocommit_info+get_sys_var_cache_inc_data+set_autocommit_info
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::SysVarsCache::inc_flags_	session member-struct field	1640	type=uint64_t;accessors=clean_inc+is_inc_empty
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::SysVarsCache::inc_auto_increment_increment_	session member-struct field	1642	type=bool
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::SysVarsCache::inc_reserved_last_schema_version_	session member-struct field	1643	type=bool
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::SysVarsCache::inc_sql_select_limit_	session member-struct field	1644	type=bool
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::SysVarsCache::inc_auto_increment_offset_	session member-struct field	1645	type=bool
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::SysVarsCache::inc_last_insert_id_	session member-struct field	1646	type=bool
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::SysVarsCache::inc_binlog_row_image_	session member-struct field	1647	type=bool
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::SysVarsCache::inc_foreign_key_checks_	session member-struct field	1648	type=bool
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::SysVarsCache::inc_default_password_lifetime_	session member-struct field	1649	type=bool
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::SysVarsCache::inc_tx_read_only_	session member-struct field	1650	type=bool
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::SysVarsCache::inc_ob_enable_plan_cache_	session member-struct field	1651	type=bool
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::SysVarsCache::inc_is_result_accurate_	session member-struct field	1652	type=bool
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::SysVarsCache::inc_character_set_results_	session member-struct field	1653	type=bool
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::SysVarsCache::inc_character_set_connection_	session member-struct field	1654	type=bool
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::SysVarsCache::inc_reserved_	session member-struct field	1655	type=bool
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::SysVarsCache::inc_cursor_sharing_mode_	session member-struct field	1656	type=bool
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::SysVarsCache::inc_timestamp_	session member-struct field	1657	type=bool
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::SysVarsCache::inc_tx_isolation_	session member-struct field	1658	type=bool
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::SysVarsCache::inc_autocommit_	session member-struct field	1659	type=bool;accessors=get_autocommit_info+set_autocommit_info
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::SysVarsCache::inc_ob_enable_trace_log_	session member-struct field	1660	type=bool
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::SysVarsCache::inc_ob_query_timeout_	session member-struct field	1661	type=bool
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::SysVarsCache::inc_ob_trx_timeout_	session member-struct field	1662	type=bool
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::SysVarsCache::inc_collation_connection_	session member-struct field	1663	type=bool
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::SysVarsCache::inc_sql_mode_	session member-struct field	1664	type=bool
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::SysVarsCache::inc_ob_trx_idle_timeout_	session member-struct field	1665	type=bool
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::SysVarsCache::inc_ob_trx_lock_timeout_	session member-struct field	1666	type=bool
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::SysVarsCache::inc_nls_collation_	session member-struct field	1667	type=bool
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::SysVarsCache::inc_nls_nation_collation_	session member-struct field	1668	type=bool
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::SysVarsCache::inc_ob_pl_block_timeout_	session member-struct field	1669	type=bool
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::SysVarsCache::inc_log_row_value_option_	session member-struct field	1670	type=bool
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::SysVarsCache::inc_ob_max_read_stale_time_	session member-struct field	1671	type=bool
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::SysVarsCache::inc_runtime_filter_type_	session member-struct field	1672	type=bool
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::SysVarsCache::inc_runtime_filter_wait_time_ms_	session member-struct field	1673	type=bool
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::SysVarsCache::inc_runtime_filter_max_in_num_	session member-struct field	1674	type=bool
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::SysVarsCache::inc_runtime_bloom_filter_max_size_	session member-struct field	1675	type=bool
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::SysVarsCache::inc_default_lob_inrow_threshold_	session member-struct field	1676	type=bool
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::SysVarsCache::inc_ob_enable_pl_cache_	session member-struct field	1677	type=bool
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::SysVarsCache::inc_enable_sql_plan_monitor_	session member-struct field	1678	type=bool
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::query_mutex_	session field	1686	under-query-mutex,under-thread-data-mutex,lock;type=ObRecursiveMutex
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::thread_data_mutex_	session field	1687	cross-thread,under-query-mutex,under-thread-data-mutex,lock;type=ObRecursiveMutex;accessors=set_client_addr+set_disconnect_state+set_interactive+set_is_request_end;xt=src/sql/session/ob_sql_session_mgr.cpp:313
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::is_valid_	session field	1688	cross-thread,under-query-mutex,under-thread-data-mutex;type=bool;accessors=set_valid;xt=src/sql/session/ob_sql_session_mgr.cpp:180
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::is_deserialized_	session field	1689	cross-thread,under-query-mutex,under-thread-data-mutex;type=bool;accessors=get_is_deserialized+set_is_deserialized+update_sys_variable;xt=src/observer/virtual_table/ob_all_virtual_session_info.cpp:135
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::runtime_	session field	1691	under-query-mutex,under-thread-data-mutex;type=char[65];accessors=get_runtime_name+init_runtime+set_runtime
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::user_id_	session field	1692	cross-thread,under-query-mutex,under-thread-data-mutex;type=uint64_t;accessors=get_user_id+is_mysql_root_user;xt=src/sql/engine/cmd/ob_kill_executor.cpp:65
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::client_version_	session field	1693	under-query-mutex,under-thread-data-mutex;type=ObString;accessors=get_client_version
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::driver_version_	session field	1694	under-query-mutex,under-thread-data-mutex;type=ObString;accessors=get_driver_version
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::sessid_	session field	1695	cross-thread,under-query-mutex,under-thread-data-mutex;type=uint32_t;accessors=check_session_status+get_server_sid+get_sid;xt=src/observer/virtual_table/ob_all_virtual_session_info.cpp:131
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::master_sessid_	session field	1696	cross-thread,under-query-mutex,under-thread-data-mutex;type=uint32_t;accessors=get_master_sessid+is_master_session;xt=src/observer/virtual_table/ob_all_virtual_session_info.cpp:206
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::client_sessid_	session field	1697	type=uint32_t
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::client_create_time_	session field	1698	type=uint64_t
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::global_vars_version_	session field	1699	under-query-mutex,under-thread-data-mutex;type=int64_t;accessors=get_global_vars_version+set_global_vars_version
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::last_ddl_schema_version_	session field	1700	under-query-mutex,under-thread-data-mutex;type=int64_t;accessors=get_last_ddl_schema_version+set_last_ddl_schema_version
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::sys_var_base_version_	session field	1701	under-query-mutex,under-thread-data-mutex;type=int64_t
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::tx_desc_	session field	1706	cross-thread,under-query-mutex,under-thread-data-mutex;type=ObTxDesc *;accessors=check_global_read_only_privilege+get_tx_desc+get_tx_id+get_tx_id_with_thread_data_lock;xt=src/observer/virtual_table/ob_all_virtual_session_info.cpp:232
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::tx_result_	session field	1707	under-query-mutex,under-thread-data-mutex;type=ObTxExecResult;accessors=get_trans_result
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::reserved_read_snapshot_version_	session field	1711	cross-thread,under-query-mutex,under-thread-data-mutex;type=SCN;accessors=get_reserved_snapshot_version+reset_reserved_snapshot_version+set_reserved_snapshot_version;xt=src/sql/session/ob_sql_session_mgr.cpp:71
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::cached_runtime_config_version_	session field	1712	under-query-mutex,under-thread-data-mutex;type=int64_t;accessors=update_runtime_config_version
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::total_stmt_tables_	session field	1719	type=ObSEArray<TableStmtType, 2>;accessors=merge_stmt_tables
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::cur_stmt_tables_	session field	1720	type=ObSEArray<TableStmtType, 1>;accessors=merge_stmt_tables
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::ssl_cipher_buff_	session field	1721	cross-thread,under-query-mutex,under-thread-data-mutex;type=char[64];accessors=get_ssl_cipher+set_ssl_cipher;xt=src/observer/virtual_table/ob_all_virtual_session_info.cpp:242
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::block_allocator_	session field	1725	under-query-mutex,under-thread-data-mutex;type=ObSmallBlockAllocator<>;accessors=get_session_allocator+get_session_info_mem_size+is_use_inner_allocator
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::ps_session_info_allocator_	session field	1726	cross-thread,under-query-mutex,under-thread-data-mutex;type=ObSmallBlockAllocator<>;accessors=close_all_ps_stmt+prepare_ps_stmt+release_all_ps_session_info+remove_ps_session_info;xt=src/sql/session/ob_sql_session_mgr.cpp:331
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::cursor_info_allocator_	session field	1727	under-query-mutex,under-thread-data-mutex;type=ObSmallBlockAllocator<>;accessors=get_cursor_allocator
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::package_info_allocator_	session field	1728	under-query-mutex,under-thread-data-mutex;type=ObSmallBlockAllocator<>;accessors=get_package_allocator
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::sess_level_name_pool_	session field	1729	under-query-mutex,under-thread-data-mutex;type=ObStringBuf;accessors=gen_sys_var_in_pc_str
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::conn_level_name_pool_	session field	1730	under-query-mutex,under-thread-data-mutex;type=ObStringBuf;accessors=add_prepare
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::json_pl_mngr_	session field	1731	under-query-mutex,under-thread-data-mutex;type=intptr_t
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::trans_flags_	session field	1732	under-query-mutex,under-thread-data-mutex;type=TransFlags;accessors=get_trans_flags+has_exec_inner_dml+reset_trans_flags+set_has_exec_inner_dml
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::sql_scope_flags_	session field	1733	under-query-mutex,under-thread-data-mutex;type=SqlScopeFlags;accessors=get_sql_scope_flags+is_in_user_scope+set_is_in_user_scope
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::need_reset_package_	session field	1734	under-query-mutex,under-thread-data-mutex;type=bool;accessors=need_reset_package+set_need_reset_package
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::base_sys_var_alloc_	session field	1737	under-query-mutex,under-thread-data-mutex;type=ObStringBuf;accessors=cast_sys_variable
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::inc_sys_var_alloc_	session field	1739	under-query-mutex,under-thread-data-mutex;type=ObStringBuf *[2]
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::inc_sys_var_alloc1_	session field	1740	under-query-mutex,under-thread-data-mutex;type=ObStringBuf
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::inc_sys_var_alloc2_	session field	1741	under-query-mutex,under-thread-data-mutex;type=ObStringBuf
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::current_buf_index_	session field	1742	under-query-mutex,under-thread-data-mutex;type=int32_t
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::bucket_allocator_wrapper_	session field	1744	under-query-mutex,under-thread-data-mutex;type=ObWrapperAllocator;accessors=is_use_inner_allocator
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::user_var_val_map_	session field	1745	under-query-mutex,under-thread-data-mutex;type=ObSessionValMap;accessors=get_user_var_val_map+get_user_variable+get_user_variable_value+remove_user_variable
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::sys_vars_	session field	1746	under-query-mutex,under-thread-data-mutex;type=ObBasicSysVar *[719];accessors=create_sys_var+defragment_sys_variable_to+ensure_sys_var_loaded+get_influence_plan_sys_var
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::influence_plan_var_indexs_	session field	1747	under-query-mutex,under-thread-data-mutex;type=ObSEArray<int64_t, 32>;accessors=ensure_sys_var_loaded+get_influence_plan_sys_var+get_influence_plan_var_count+get_influence_plan_var_indexs
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::sys_var_in_pc_str_	session field	1748	type=ObString;accessors=eval_sys_var_config_hash_val+gen_sys_var_in_pc_str+get_sys_var_in_pc_str
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::config_in_pc_str_	session field	1750	type=ObString;accessors=eval_sys_var_config_hash_val+get_config_in_pc_str
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::is_first_gen_	session field	1751	under-query-mutex,under-thread-data-mutex;type=bool;accessors=gen_sys_var_in_pc_str
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::is_first_gen_config_	session field	1752	under-query-mutex,under-thread-data-mutex;type=bool
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::need_regenerate_sys_var_str_	session field	1753	under-query-mutex,under-thread-data-mutex;type=bool;accessors=gen_sys_var_in_pc_str_lazy+mark_sys_var_str_dirty
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::sys_var_fac_	session field	1754	under-query-mutex,under-thread-data-mutex;type=ObSysVarFactory;accessors=create_sys_var+load_all_sys_vars+load_default_sys_variable+load_essential_sys_vars_only
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::next_frag_mem_point_	session field	1755	under-query-mutex,under-thread-data-mutex;type=int64_t
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::sys_vars_encode_max_size_	session field	1756	under-query-mutex,under-thread-data-mutex;type=int64_t;accessors=get_sys_vars_encode_max_size+set_sys_vars_encode_max_size
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::consistency_level_	session field	1758	under-query-mutex,under-thread-data-mutex;type=ObConsistencyLevel;accessors=get_consistency_level
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::tz_info_wrap_	session field	1759	under-query-mutex,under-thread-data-mutex;type=ObTimeZoneInfoWrap;accessors=get_timezone_info+get_tz_info_wrap+init_runtime+process_session_overlap_time_value
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::next_tx_read_only_	session field	1760	under-query-mutex,under-thread-data-mutex;type=int64_t;accessors=get_tx_read_only+reset_tx_read_only+set_tx_read_only
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::next_tx_isolation_	session field	1761	cross-thread,under-query-mutex,under-thread-data-mutex;type=ObTxIsolationLevel;accessors=get_tx_isolation+reset_tx_isolation+set_tx_isolation;xt=src/sql/session/ob_sql_session_mgr.cpp:103
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::enable_mysql_compatible_dates_	session field	1762	type=bool;accessors=enable_mysql_compatible_dates+set_enable_mysql_compatible_dates
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::is_diagnosis_enabled_	session field	1763	under-query-mutex,under-thread-data-mutex;type=bool;accessors=is_diagnosis_enabled+set_diagnosis_enabled
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::diagnosis_limit_num_	session field	1764	under-query-mutex,under-thread-data-mutex;type=int64_t;accessors=get_diagnosis_limit_num+set_diagnosis_limit_num
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::log_id_level_map_valid_	session field	1767	under-query-mutex,under-thread-data-mutex;type=bool;accessors=get_log_id_level_map+process_session_log_level
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::log_id_level_map_	session field	1768	under-query-mutex,under-thread-data-mutex;type=ObLogIdLevelMap;accessors=get_log_id_level_map+process_session_log_level
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::cur_phy_plan_	session field	1771	under-query-mutex,under-thread-data-mutex;type=const ObPhysicalPlan *;accessors=calc_need_serialize_vars+reset_cur_phy_plan_to_null
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::sql_id_	session field	1773	cross-thread,under-query-mutex,under-thread-data-mutex;type=char[33];accessors=get_cur_sql_id+reset_cur_sql_id+set_cur_sql_id;xt=src/observer/virtual_table/ob_all_virtual_session_info.cpp:173
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::plan_id_	session field	1774	cross-thread,under-query-mutex,under-thread-data-mutex;type=uint64_t;accessors=get_current_plan_id+reset_current_plan_id;xt=src/observer/virtual_table/ob_show_processlist.cpp:336
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::last_plan_id_	session field	1775	under-query-mutex,under-thread-data-mutex;type=uint64_t;accessors=get_last_plan_id+set_last_plan_id
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::plan_hash_	session field	1776	under-query-mutex,under-thread-data-mutex;type=uint64_t;accessors=get_current_plan_hash+reset_current_plan_hash
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::show_trace_row_format_	session field	1778	under-query-mutex,under-thread-data-mutex;type=bool;accessors=is_row_traceformat+set_is_row_traceformat
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::show_trace_buf_	session field	1779	under-query-mutex,under-thread-data-mutex;type=ObShowTraceSessionBuffer *;accessors=destroy_show_trace_buffer+finish_show_trace_recording+get_show_trace_buffer+start_show_trace_recording
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::capability_	session field	1780	under-query-mutex,under-thread-data-mutex;type=ObMySQLCapabilityFlags;accessors=get_capability+is_track_session_info+set_capability
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::changed_sys_vars_	session field	1782	under-query-mutex,under-thread-data-mutex;type=ObSEArray<ChangedVar, 8>;accessors=get_changed_sys_var+is_sys_var_changed+track_sys_var
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::changed_user_vars_	session field	1783	under-query-mutex,under-thread-data-mutex;type=ObSEArray<ObString, 16>;accessors=get_changed_user_var+is_user_var_changed+remove_changed_user_var+track_user_var
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::changed_var_pool_	session field	1784	cross-thread,under-query-mutex,under-thread-data-mutex;type=ObArenaAllocator;accessors=add_changed_sys_var+get_allocator+track_user_var;xt=src/sql/engine/cmd/ob_kill_session_arg.cpp:57
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::is_database_changed_	session field	1785	under-query-mutex,under-thread-data-mutex;type=bool;accessors=is_database_changed
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::debug_sync_actions_	session field	1787	under-query-mutex,under-thread-data-mutex;type=ObDSSessionActions;accessors=get_debug_sync_actions+process_session_debug_sync
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::debug_sync_broadcaster_	session field	1788	cross-thread,under-query-mutex,under-thread-data-mutex;type=ObIDebugSyncBroadcaster *;accessors=get_debug_sync_broadcaster+process_session_debug_sync+set_debug_sync_broadcaster;xt=src/sql/session/ob_sql_session_mgr.cpp:310
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::magic_num_	session field	1789	under-query-mutex,under-thread-data-mutex;type=uint32_t;accessors=get_magic_num
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::current_execution_id_	session field	1790	under-query-mutex,under-thread-data-mutex;type=int64_t;accessors=get_current_execution_id+set_current_execution_id
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::last_trace_id_	session field	1791	type=ObCurTraceId::TraceId;accessors=get_last_trace_id+set_last_trace_id
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::curr_trace_id_	session field	1792	cross-thread,under-query-mutex,under-thread-data-mutex;type=ObCurTraceId::TraceId;accessors=get_current_trace_id+set_current_trace_id;xt=src/observer/virtual_table/ob_all_virtual_session_info.cpp:254
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::app_trace_id_	session field	1793	type=ObString;accessors=clear_app_trace_id+get_app_trace_id+set_app_trace_id
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::database_id_	session field	1794	under-query-mutex,under-thread-data-mutex;type=uint64_t;accessors=get_database_id+set_database_id
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::retry_info_	session field	1795	cross-thread,under-query-mutex,under-thread-data-mutex;type=ObQueryRetryInfo;accessors=check_and_init_retry_info+check_and_reset_retry_info+get_retry_info+get_retry_info_for_update;xt=src/observer/virtual_table/ob_show_processlist.cpp:309
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::last_query_trace_id_	session field	1797	under-query-mutex,under-thread-data-mutex;type=ObCurTraceId::TraceId;accessors=check_and_init_retry_info+check_and_reset_retry_info+get_last_query_trace_id
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::thread_data_	session field	1800	cross-thread,under-query-mutex,under-thread-data-mutex;type=MultiThreadData;accessors=check_session_status+get_client_addr+get_client_addr_port+get_client_ip;xt=src/observer/virtual_table/ob_all_virtual_session_info.cpp:143
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::nested_count_	session field	1802	under-query-mutex,under-thread-data-mutex;type=int64_t;accessors=begin_nested_session+end_nested_session+get_nested_count+has_start_stmt
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::inf_pc_configs_	session field	1804	under-query-mutex,under-thread-data-mutex;type=ObConfigInfoInPC;accessors=get_min_const_integer_precision+load_default_configs_in_pc
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::client_identifier_	session field	1805	type=ObString;accessors=get_client_identifier+get_client_identifier_for_update+init_client_identifier+set_client_identifier
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::sys_vars_cache_	session field	1815	cross-thread,under-query-mutex,under-thread-data-mutex;type=SysVarsCache;accessors=get_autocommit+get_binlog_row_image+get_character_set_connection+get_character_set_results;xt=src/sql/session/ob_sql_session_mgr.cpp:103
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::curr_trans_last_stmt_end_time_	session field	1822	cross-thread,under-query-mutex,under-thread-data-mutex;type=int64_t;accessors=get_curr_trans_last_stmt_end_time+is_trx_idle_timeout+set_curr_trans_last_stmt_end_time;xt=src/sql/session/ob_sql_session_mgr.cpp:538
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::acquire_from_pool_	session field	1824	under-query-mutex,under-thread-data-mutex;type=bool;accessors=is_acquire_from_pool+set_acquire_from_pool
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::release_to_pool_	session field	1827	under-query-mutex,under-thread-data-mutex;type=bool;accessors=can_release_to_pool+load_all_sys_vars+load_default_sys_variable+set_release_from_pool
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::server_stopping_	session field	1828	under-query-mutex,under-thread-data-mutex,atomic;type=volatile int64_t;accessors=is_server_stopping+set_server_stopping
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::reused_count_	session field	1829	under-query-mutex,under-thread-data-mutex;type=int64_t;accessors=get_reused_count
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::first_need_txn_stmt_type_	session field	1832	under-query-mutex,under-thread-data-mutex;type=StmtType;accessors=get_first_need_txn_stmt_type+reset_first_need_txn_stmt_type+set_first_need_txn_stmt_type
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::need_recheck_txn_readonly_	session field	1834	under-query-mutex,under-thread-data-mutex;type=bool;accessors=need_recheck_txn_readonly+set_need_recheck_txn_readonly
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::stmt_type_	session field	1835	cross-thread,under-query-mutex,under-thread-data-mutex;type=StmtType;accessors=get_stmt_type+set_stmt_type;xt=src/observer/virtual_table/ob_all_virtual_session_ps_info.cpp:139
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::thread_id_	session field	1839	cross-thread,under-query-mutex,under-thread-data-mutex;type=int64_t;accessors=get_thread_id+set_thread_id;xt=src/observer/virtual_table/ob_all_virtual_session_info.cpp:238
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::is_password_expired_	session field	1843	under-query-mutex,under-thread-data-mutex;type=bool;accessors=is_password_expired+set_password_expired
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::process_query_time_	session field	1845	under-query-mutex,under-thread-data-mutex;type=int64_t;accessors=get_process_query_time+set_process_query_time
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::last_update_tz_time_	session field	1846	under-query-mutex,under-thread-data-mutex;type=int64_t;accessors=update_timezone_info
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::last_refresh_schema_version_	session field	1847	under-query-mutex,under-thread-data-mutex;type=int64_t;accessors=update_query_sensitive_system_variable
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::enable_role_ids_	session field	1849	under-thread-data-mutex;type=ObSEArray<uint64_t, 4>;accessors=get_enable_role_ids
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::sys_var_config_hash_val_	session field	1850	under-query-mutex,under-thread-data-mutex;type=uint64_t;accessors=eval_sys_var_config_hash_val+get_sys_var_config_hash_val
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::thread_name_	session field	1851	under-query-mutex,under-thread-data-mutex;type=char[16];accessors=get_thread_name
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::is_real_inner_session_	session field	1852	cross-thread,under-query-mutex,under-thread-data-mutex;type=bool;accessors=is_real_inner_session+set_real_inner_session;xt=src/sql/engine/cmd/ob_kill_executor.cpp:63
+src/sql/session/ob_sql_session_info.h	ObSessionStat::total_logical_read_	session member-struct field	144	type=uint64_t;accessors=update_stat_from_exec_record
+src/sql/session/ob_sql_session_info.h	ObSessionStat::total_physical_read_	session member-struct field	145	type=uint64_t
+src/sql/session/ob_sql_session_info.h	ObSessionStat::total_logical_write_	session member-struct field	146	type=uint64_t
+src/sql/session/ob_sql_session_info.h	ObSessionStat::total_lock_count_	session member-struct field	147	type=uint64_t
+src/sql/session/ob_sql_session_info.h	ObSessionStat::total_cpu_time_us_	session member-struct field	148	type=uint64_t
+src/sql/session/ob_sql_session_info.h	ObSessionStat::total_exec_time_us_	session member-struct field	149	type=uint64_t
+src/sql/session/ob_sql_session_info.h	ObSessionStat::total_alive_time_us_	session member-struct field	150	type=uint64_t
+src/sql/session/ob_sql_session_info.h	ObCachedSchemaGuardInfo::schema_guard_	session member-struct field	170	cross-thread,under-query-mutex,under-thread-data-mutex;type=ObSchemaGetterGuard;accessors=get_schema_guard+refresh_runtime_schema_guard+try_revert_schema_guard;xt=src/sql/engine/cmd/ob_kill_session_arg.cpp:91
+src/sql/session/ob_sql_session_info.h	ObCachedSchemaGuardInfo::ref_ts_	session member-struct field	172	cross-thread,under-query-mutex,under-thread-data-mutex;type=int64_t;accessors=refresh_runtime_schema_guard+try_revert_schema_guard;xt=src/sql/session/ob_sql_session_mgr.cpp:531
+src/sql/session/ob_sql_session_info.h	ObCachedSchemaGuardInfo::schema_version_	session member-struct field	173	type=int64_t;accessors=refresh_runtime_schema_guard
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::CursorCache::mem_context_	session member-struct field	321	type=MemoryContext;accessors=is_inited
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::CursorCache::next_cursor_id_	session member-struct field	322	type=int64_t;accessors=gen_cursor_id
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::CursorCache::pl_cursor_map_	session member-struct field	325	under-thread-data-mutex;type=CursorMap;accessors=add_cursor+close_all+close_cursor+get_cursor
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::CursorCache::pl_non_session_cursor_map_	session member-struct field	326	under-thread-data-mutex;type=CursorMap;accessors=add_non_session_cursor+del_non_session_cursor
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::ObCachedRuntimeConfig::enable_batched_multi_statement_	session member-struct field	369	type=bool;accessors=get_enable_batched_multi_statement
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::ObCachedRuntimeConfig::enable_bloom_filter_	session member-struct field	370	type=bool;accessors=get_enable_bloom_filter
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::ObCachedRuntimeConfig::px_join_skew_handling_	session member-struct field	371	type=bool;accessors=get_px_join_skew_handling
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::ObCachedRuntimeConfig::px_join_skew_minfreq_	session member-struct field	372	type=int64_t;accessors=get_px_join_skew_minfreq
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::ObCachedRuntimeConfig::sort_area_size_	session member-struct field	373	atomic;type=int64_t;accessors=get_sort_area_size
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::ObCachedRuntimeConfig::hash_area_size_	session member-struct field	374	atomic;type=int64_t;accessors=get_hash_area_size
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::ObCachedRuntimeConfig::data_version_	session member-struct field	375	atomic;type=uint64_t;accessors=get_data_version
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::ObCachedRuntimeConfig::enable_immediate_row_conflict_check_	session member-struct field	376	atomic;type=bool;accessors=enable_immediate_row_conflict_check
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::ObCachedRuntimeConfig::range_optimizer_max_mem_size_	session member-struct field	377	atomic;type=int64_t;accessors=get_range_optimizer_max_mem_size
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::ObCachedRuntimeConfig::_query_record_size_limit_	session member-struct field	378	atomic;type=int64_t;accessors=get_query_record_size_limit
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::ObCachedRuntimeConfig::enable_decimal_int_type_	session member-struct field	379	type=bool;accessors=get_enable_decimal_int_type
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::ObCachedRuntimeConfig::enable_mysql_compatible_dates_	session member-struct field	380	type=bool;accessors=get_enable_mysql_compatible_dates
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::ObCachedRuntimeConfig::print_sample_ppm_	session member-struct field	382	atomic;type=int64_t;accessors=get_print_sample_ppm
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::ObCachedRuntimeConfig::last_check_ec_ts_	session member-struct field	383	atomic;type=int64_t
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::ObCachedRuntimeConfig::_ob_sqlstat_enable_	session member-struct field	384	atomic;type=bool;accessors=get_ob_sqlstat_enable
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::ObCachedRuntimeConfig::session_	session member-struct field	385	type=ObSQLSessionInfo *
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::ApplicationInfo::module_name_	session member-struct field	391	cross-thread,under-thread-data-mutex;type=ObString;accessors=get_module_name+set_module_name;xt=src/observer/virtual_table/ob_show_processlist.cpp:322
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::ApplicationInfo::action_name_	session member-struct field	392	cross-thread,under-thread-data-mutex;type=ObString;accessors=get_action_name+set_action_name;xt=src/observer/virtual_table/ob_show_processlist.cpp:317
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::ApplicationInfo::client_info_	session member-struct field	393	cross-thread,under-thread-data-mutex;type=ObString;accessors=get_client_info+set_client_info;xt=src/observer/virtual_table/ob_show_processlist.cpp:327
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::is_inited_	session field	879	under-thread-data-mutex;type=bool;accessors=test_init
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::warnings_buf_	session field	881	under-thread-data-mutex;type=ObWarningBuffer;accessors=get_warnings_buffer+reset_warnings_buf+set_show_warnings_buf+update_show_warnings_buf
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::show_warnings_buf_	session field	882	under-thread-data-mutex;type=ObWarningBuffer;accessors=get_show_warnings_buffer+reset_show_warnings_buf+set_show_warnings_buf+update_show_warnings_buf
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::end_trans_cb_	session field	883	under-thread-data-mutex;type=ObEndTransAsyncCallback;accessors=get_end_trans_cb+get_mysql_end_trans_cb
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::audit_record_	session field	884	under-thread-data-mutex;type=ObAuditRecordData;accessors=get_raw_audit_record+reset_audit_record+update_stat_from_exec_record
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::user_priv_set_	session field	886	cross-thread,under-thread-data-mutex;type=ObPrivSet;accessors=get_user_priv_set+has_user_process_privilege+has_user_super_privilege+set_user_priv_set;xt=src/sql/engine/cmd/ob_kill_session_arg.cpp:46
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::db_priv_set_	session field	887	under-thread-data-mutex;type=ObPrivSet;accessors=get_db_priv_set+set_db_priv_set
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::curr_trans_start_time_	session field	888	under-thread-data-mutex;type=int64_t;accessors=get_curr_trans_start_time+set_curr_trans_start_time
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::curr_trans_last_stmt_time_	session field	889	under-thread-data-mutex;type=int64_t;accessors=get_curr_trans_last_stmt_time+set_curr_trans_last_stmt_time
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::sess_create_time_	session field	890	under-thread-data-mutex;type=int64_t;accessors=get_sess_create_time+set_sess_create_time
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::has_temp_table_flag_	session field	891	under-thread-data-mutex;type=bool;accessors=get_has_temp_table_flag+set_has_temp_table_flag
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::has_accessed_session_level_temp_table_	session field	892	under-thread-data-mutex;type=bool;accessors=has_accessed_session_level_temp_table+set_accessed_session_level_temp_table
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::is_for_trigger_package_	session field	894	under-thread-data-mutex;type=bool;accessors=is_for_trigger_package+set_for_trigger_package
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::trans_type_	session field	895	under-thread-data-mutex;type=ObTxClass;accessors=get_trans_type+set_trans_type
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::version_provider_	session field	896	under-thread-data-mutex;type=const ObVersionProvider *;accessors=get_frozen_version+get_merged_version+set_version_provider
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::config_provider_	session field	897	under-thread-data-mutex;type=const ObSQLConfigProvider *;accessors=get_nlj_cache_limit+is_read_only+set_config_provider
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::found_rows_	session field	899	under-thread-data-mutex;type=int64_t;accessors=get_found_rows+set_found_rows
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::affected_rows_	session field	901	under-thread-data-mutex;type=int64_t;accessors=get_affected_rows+set_affected_rows
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::global_sessid_	session field	902	under-thread-data-mutex;type=int64_t;accessors=get_global_sessid+set_global_sessid
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::read_uncommited_	session field	903	under-thread-data-mutex;type=bool;accessors=get_read_uncommited+set_read_uncommited
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::trace_recorder_	session field	904	under-thread-data-mutex;type=ObTraceEventRecorder *
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::inner_flag_	session field	910	under-thread-data-mutex;type=bool;accessors=is_inner+set_inner_session+set_session_type_with_flag+set_user_session
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::is_max_availability_mode_	session field	912	under-thread-data-mutex;type=bool
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::ps_session_info_map_	session field	915	cross-thread,under-thread-data-mutex;type=PsSessionInfoMap;accessors=close_all_ps_stmt+for_each_ps_session_info+get_inner_ps_stmt_id+get_ps_session_info;xt=src/observer/virtual_table/ob_all_virtual_session_ps_info.cpp:111
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::in_use_ps_stmt_id_set_	session field	927	under-thread-data-mutex;type=ObHashSet<ObPsStmtId>;accessors=add_ps_stmt_id_in_use+check_ps_stmt_id_in_use+earse_ps_stmt_id_in_use+try_create_in_use_ps_stmt_id_set
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::ps_name_id_map_	session field	942	under-thread-data-mutex;type=PsNameIdMap;accessors=add_prepare+get_prepare_id+remove_prepare+reset_ps_name
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::next_client_ps_stmt_id_	session field	955	under-thread-data-mutex;type=ObPsStmtId;accessors=prepare_ps_stmt+reset_ps_name
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::session_type_	session field	956	cross-thread,under-query-mutex,under-thread-data-mutex;type=SessionType;accessors=get_session_type+is_user_session+set_inner_session+set_session_type;xt=src/sql/session/ob_sql_session_mgr.cpp:575
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::package_state_map_	session field	957	under-thread-data-mutex;type=ObPackageStateMap;accessors=add_package_state+del_package_state+get_package_state+get_package_state_map
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::pl_context_	session field	959	cross-thread,under-query-mutex,under-thread-data-mutex;type=ObPLContext *;accessors=clear_pl_implicit_savepoint+get_pl_context+get_pl_implicit_cursor+get_pl_sqlcode_info;xt=src/sql/session/ob_sql_session_mgr.cpp:574
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::pl_cursor_cache_	session field	960	under-thread-data-mutex;type=CursorCache;accessors=add_cursor+add_non_session_cursor+close_cursor+del_non_session_cursor
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::pl_can_retry_	session field	964	under-thread-data-mutex;type=bool;accessors=get_pl_can_retry+set_pl_can_retry
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::plsql_exec_time_	session field	965	under-thread-data-mutex;type=int64_t;accessors=add_plsql_exec_time+get_plsql_exec_time+reset_plsql_exec_time
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::plsql_compile_time_	session field	966	under-thread-data-mutex;type=int64_t;accessors=add_plsql_compile_time+get_plsql_compile_time+reset_plsql_compile_time
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::pl_query_sender_	session field	968	under-thread-data-mutex;type=ObIQueryResultSender *;accessors=get_pl_query_sender+set_pl_query_sender
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::pl_ps_protocol_	session field	969	under-thread-data-mutex;type=bool;accessors=is_ps_protocol+set_ps_protocol
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::inner_conn_	session field	971	under-thread-data-mutex;type=ObISQLConnection *;accessors=get_inner_conn+set_inner_conn
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::session_stat_	session field	973	under-thread-data-mutex;type=ObSessionStat;accessors=get_session_stat+update_stat_from_exec_record
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::enable_role_array_	session field	975	under-thread-data-mutex;type=ObSEArray<uint64_t, 8>
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::cached_schema_guard_info_	session field	976	cross-thread,under-query-mutex,under-thread-data-mutex;type=ObCachedSchemaGuardInfo;accessors=get_cached_schema_guard_info;xt=src/sql/session/ob_sql_session_mgr.cpp:531
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::in_definer_named_proc_	session field	977	under-thread-data-mutex;type=bool;accessors=get_in_definer_named_proc+set_in_definer_named_proc
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::priv_user_id_	session field	978	under-thread-data-mutex;type=uint64_t;accessors=get_priv_user_id+get_priv_user_id_allow_invalid+set_priv_user_id
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::cached_runtime_config_info_	session field	980	cross-thread,under-query-mutex,under-thread-data-mutex;type=ObCachedRuntimeConfig;accessors=enable_immediate_row_conflict_check+get_data_version+get_enable_mysql_compatible_dates_from_config+get_hash_area_size;xt=src/sql/session/ob_sql_session_mgr.cpp:533
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::prelock_	session field	981	under-thread-data-mutex;type=bool;accessors=get_prelock+set_prelock
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::is_ignore_stmt_	session field	985	type=bool;accessors=is_ignore_stmt+set_ignore_stmt
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::ddl_info_	session field	986	cross-thread,under-query-mutex,under-thread-data-mutex;type=ObSessionDDLInfo;accessors=get_ddl_info+set_ddl_info;xt=src/sql/session/ob_sql_session_mgr.cpp:573
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::is_table_name_hidden_	session field	987	type=bool;accessors=is_table_name_hidden+set_table_name_hidden
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::piece_cache_	session field	988	type=ObPieceCache *;accessors=get_piece_cache+set_piece_cache
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::is_load_data_exec_session_	session field	989	type=bool;accessors=is_load_data_exec_session+set_load_data_exec_session
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::pl_exact_err_msg_	session field	990	type=ObSqlString;accessors=get_pl_exact_err_msg+reset_warnings_buf
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::is_varparams_sql_prepare_	session field	991	type=bool;accessors=is_varparams_sql_prepare+set_is_varparams_sql_prepare
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::got_server_conn_res_	session field	996	type=bool;accessors=has_got_server_conn_res+set_got_server_conn_res
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::got_user_conn_res_	session field	997	type=bool;accessors=has_got_user_conn_res+set_got_user_conn_res
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::conn_res_user_id_	session field	998	type=uint64_t;accessors=get_conn_res_user_id+set_conn_res_user_id
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::conn_res_mgr_	session field	999	cross-thread;type=ObConnectResourceMgr *;accessors=on_user_disconnect+set_connect_resource_manager;xt=src/sql/session/ob_sql_session_mgr.cpp:311
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::session_mgr_	session field	1000	cross-thread;type=ObSQLSessionMgr *;accessors=get_session_manager+set_session_manager;xt=src/sql/session/ob_sql_session_mgr.cpp:312
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::tx_level_temp_table_	session field	1001	type=bool
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::client_app_info_	session field	1002	cross-thread,under-thread-data-mutex;type=ApplicationInfo;accessors=get_action_name+get_client_app_info+get_client_info+get_module_name;xt=src/observer/virtual_table/ob_show_processlist.cpp:317
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::module_buf_	session field	1003	type=char[48];accessors=set_module_name
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::action_buf_	session field	1004	type=char[32];accessors=set_action_name
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::client_info_buf_	session field	1005	type=char[64];accessors=set_client_info
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::is_lock_session_	session field	1006	under-thread-data-mutex;type=bool;accessors=is_lock_session+set_is_lock_session
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::cur_exec_ctx_	session field	1022	under-thread-data-mutex;type=ObExecContext *;accessors=get_cur_exec_ctx+is_pl_prepare_stage+set_cur_exec_ctx
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::optimizer_tracer_	session field	1023	under-thread-data-mutex;type=ObOptimizerTraceImpl;accessors=get_optimizer_tracer
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::in_bytes_	session field	1024	cross-thread,under-thread-data-mutex,atomic;type=int64_t;accessors=get_in_bytes+inc_in_bytes;xt=src/observer/virtual_table/ob_show_processlist.cpp:349
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::out_bytes_	session field	1025	cross-thread,under-thread-data-mutex,atomic;type=int64_t;accessors=get_out_bytes+inc_out_bytes;xt=src/observer/virtual_table/ob_show_processlist.cpp:353
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::login_info_	session field	1026	type=ObUserLoginInfo;accessors=get_login_info+set_login_auth_data+set_login_info
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::job_info_	session field	1027	under-thread-data-mutex;type=ObDBMSSchedJobInfo *;accessors=get_job_info+set_job_info
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::iter_cache_	session field	1028	type=void *;accessors=get_iter_cache
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::audit_filter_name_	session field	1029	type=ObString;accessors=get_audit_filter_name
+src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::executing_sql_stat_record_	session field	1030	under-thread-data-mutex;type=ObExecutingSqlStatRecord;accessors=get_executing_sql_stat_record+sql_sess_record_sql_stat_start_value

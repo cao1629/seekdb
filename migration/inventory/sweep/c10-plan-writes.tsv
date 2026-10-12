@@ -1,0 +1,66 @@
+file	symbol	source_construct	line	pretag
+src/query/api/query/engine/basic/ob_pushdown_filter.h	ObPushdownFilterExecutor::skipped_rows_	mutable member of engine type	859	type:int64_t
+src/query/api/query/engine/basic/ob_pushdown_filter.h	PushdownFilterInfo::col_datum_buf_	mutable member of engine type	1565	type:TmpColDatumBuf
+src/sql/code_generator/ob_static_engine_cg.cpp	ObStaticEngineCG::generate_param_spec#const_cast<ObExpr>	const_cast to plan type	3810	broadened;in-codegen
+src/sql/code_generator/ob_static_engine_cg.cpp	ObStaticEngineCG::generate_calc_part_id_expr#CalcPartitionBaseInfo	non-const cast of ObExpr::extra_info_	6255	broadened;base:dst;in-codegen
+src/sql/engine/aggregate/ob_exec_hash_struct.h	ObHashCols::hash_val_	mutable member of engine type	372	type:uint64_t
+src/sql/engine/aggregate/ob_groupby_op.cpp	ObGroupByOp::inner_open#const_cast<ObOpSpec>	const_cast to plan type	61	memo:6
+src/sql/engine/aggregate/ob_groupby_op.h	ObGroupByOp::ObGroupByOp#const_cast<ObOpSpec>	const_cast to plan type	82	memo:6
+src/sql/engine/aggregate/ob_merge_groupby_op.cpp	ObMergeGroupByOp::set_rollup_expr_null#const_cast<ObExpr>	const_cast to plan type	242	broadened;cg-or-setup-fn:set_rollup_expr_null
+src/sql/engine/aggregate/ob_merge_groupby_op.cpp	ObMergeGroupByOp::rewrite_rollup_column#const_cast<ObExpr>	const_cast to plan type	255	broadened
+src/sql/engine/basic/ob_json_table_op.cpp	ObJsonTableOp::init#const_cast<ObJsonTableSpec>	const_cast to plan type	641	memo:6
+src/sql/engine/basic/ob_json_table_op.cpp	ObJsonTableOp::init#const_cast<ObJsonTableSpec>#2	const_cast to plan type	649	memo:6
+src/sql/engine/expr/ob_datum_cast.cpp	ObDatumCaster::setup_cast_expr#const_cast<ObExpr>	const_cast to plan type	13070	broadened
+src/sql/engine/expr/ob_expr_array_filter.cpp	ObExprArrayFilter::eval_array_filter#ObExprArrayMapInfo	non-const cast of ObExpr::extra_info_	103	memo:31
+src/sql/engine/expr/ob_expr_array_first.cpp	ObExprArrayFirst::eval_array_first#ObExprArrayMapInfo	non-const cast of ObExpr::extra_info_	120	memo:31
+src/sql/engine/expr/ob_expr_array_first.cpp	ObExprArrayFirst::eval_array_first#ObExprArrayMapInfo#2	non-const cast of ObExpr::extra_info_	134	memo:31
+src/sql/engine/expr/ob_expr_array_map.cpp	ObExprArrayMap::eval_array_map#ObExprArrayMapInfo	non-const cast of ObExpr::extra_info_	499	memo:31
+src/sql/engine/expr/ob_expr_array_sortby.cpp	ObExprArraySortby::eval_array_sortby#ObExprArrayMapInfo	non-const cast of ObExpr::extra_info_	112	memo:31
+src/sql/engine/expr/ob_expr_autoinc_nextval.cpp	ObExprAutoincNextval::eval_nextval#ObAutoincNextvalInfo	non-const cast of ObExpr::extra_info_	315	memo:31
+src/sql/engine/expr/ob_expr_autoinc_nextval.cpp	ObExprAutoincNextval::eval_nextval#ObAutoincNextvalInfo#2	non-const cast of ObExpr::extra_info_	317	memo:31
+src/sql/engine/expr/ob_expr_calc_partition_id.cpp	ObExprCalcPartitionBase::calc_no_partition_location#CalcPartitionBaseInfo	non-const cast of ObExpr::extra_info_	162	broadened;base:expr
+src/sql/engine/expr/ob_expr_calc_partition_id.cpp	ObExprCalcPartitionBase::calc_partition_level_one#CalcPartitionBaseInfo	non-const cast of ObExpr::extra_info_	196	broadened;base:expr
+src/sql/engine/expr/ob_expr_calc_partition_id.cpp	ObExprCalcPartitionBase::calc_partition_level_two#CalcPartitionBaseInfo	non-const cast of ObExpr::extra_info_	225	broadened;base:expr
+src/sql/engine/expr/ob_expr_calc_partition_id.cpp	ObExprCalcPartitionBase::calc_part_and_subpart_and_tablet_id#CalcPartitionBaseInfo	non-const cast of ObExpr::extra_info_	348	broadened;base:calc_part_id
+src/sql/engine/expr/ob_expr_column_conv.cpp	ObExprColumnConv::cg_expr#ObEnumSetInfo	non-const cast of ObExpr::extra_info_	346	broadened;base:rt_expr;cg-or-setup-fn:cg_expr
+src/sql/engine/expr/ob_expr_column_conv.cpp	ObExprColumnConv::column_convert#ObEnumSetInfo	non-const cast of ObExpr::extra_info_	417	memo:31
+src/sql/engine/expr/ob_expr_column_conv.cpp	ObExprColumnConv::column_convert_batch#ObEnumSetInfo	non-const cast of ObExpr::extra_info_	535	memo:31
+src/sql/engine/expr/ob_expr_column_conv.cpp	ObExprColumnConv::eval_enumset#ObEnumSetInfo	non-const cast of ObExpr::extra_info_	738	memo:31
+src/sql/engine/expr/ob_expr_column_conv.cpp	ObExprColumnConv::eval_enumset#expr.args_[0]=	write through const ObExpr& at eval time	743	param:expr
+src/sql/engine/expr/ob_expr_column_conv.cpp	ObExprColumnConv::eval_enumset#expr.args_[0]=#2	write through const ObExpr& at eval time	746	param:expr
+src/sql/engine/expr/ob_expr_json_query.cpp	ObExprJsonQuery::init_ctx_var#ObExprJsonQueryParamInfo	non-const cast of ObExpr::extra_info_	592	memo:31
+src/sql/engine/expr/ob_expr_json_schema_valid.cpp	ObExprJsonSchemaValid::eval_json_schema_valid#ObExprJsonSchemaValidInfo	non-const cast of ObExpr::extra_info_	91	memo:31
+src/sql/engine/expr/ob_expr_json_schema_validation_report.cpp	ObExprJsonSchemaValidationReport::eval_json_schema_validation_report#ObExprJsonSchemaValidInfo	non-const cast of ObExpr::extra_info_	103	memo:31
+src/sql/engine/expr/ob_expr_json_value.cpp	ObExprJsonValue::init_ctx_var#ObExprJsonQueryParamInfo	non-const cast of ObExpr::extra_info_	406	memo:31
+src/sql/engine/expr/ob_expr_least.cpp	ObExprLeastGreatest::calc_mysql#DatumCastExtraInfo	non-const cast of ObExpr::extra_info_	287	memo:31
+src/sql/engine/expr/ob_expr_nullif.cpp	ObExprNullif::cg_expr#DatumCastExtraInfo	non-const cast of ObExpr::extra_info_	215	broadened;base:rt_expr;cg-or-setup-fn:cg_expr
+src/sql/engine/expr/ob_expr_nullif.cpp	ObExprNullif::eval_nullif#DatumCastExtraInfo	non-const cast of ObExpr::extra_info_	306	memo:31
+src/sql/engine/expr/ob_expr_nullif.cpp	ObExprNullif::eval_nullif_enumset#DatumCastExtraInfo	non-const cast of ObExpr::extra_info_	364	memo:31
+src/sql/engine/expr/ob_expr_object_construct.cpp	ObExprObjectConstruct::eval_object_construct#ObExprObjectConstructInfo	non-const cast of ObExpr::extra_info_	137	memo:31
+src/sql/engine/expr/ob_expr_output_pack.cpp	ObExprOutputPack::eval_output_pack#ObOutputPackInfo	non-const cast of ObExpr::extra_info_	140	memo:31
+src/sql/engine/expr/ob_expr_output_pack.cpp	ObExprOutputPack::eval_output_pack_batch#ObOutputPackInfo	non-const cast of ObExpr::extra_info_	162	memo:31
+src/sql/engine/expr/ob_expr_pl_get_cursor_attr.cpp	ObExprPLGetCursorAttr::calc_pl_get_cursor_attr#ExtraInfo	non-const cast of ObExpr::extra_info_	152	memo:31
+src/sql/engine/expr/ob_expr_pl_integer_checker.cpp	ObExprPLIntegerChecker::calc_pl_integer_checker#ExtraInfo	non-const cast of ObExpr::extra_info_	269	memo:31
+src/sql/engine/expr/ob_expr_plsql_variable.cpp	ObExprPLSQLVariable::eval_plsql_variable#ObPLSQLVariableInfo	non-const cast of ObExpr::extra_info_	159	memo:31
+src/sql/engine/expr/ob_expr_subquery_ref.cpp	ObExprSubQueryRef::expr_eval#ExtraInfo	non-const cast of ObExpr::extra_info_	210	memo:31
+src/sql/engine/expr/ob_expr_subquery_ref.cpp	ObExprSubQueryRef::reset_onetime_expr#ExtraInfo	non-const cast of ObExpr::extra_info_	333	memo:31
+src/sql/engine/expr/ob_expr_tokenize.h	ObExprTokenize::TokenizeParam::allocator_	mutable member of engine type	71	type:ObArenaAllocator
+src/sql/engine/expr/ob_expr_type_to_str.cpp	ObExprSetToStr::calc_to_str_expr#ObEnumSetInfo	non-const cast of ObExpr::extra_info_	223	memo:31
+src/sql/engine/expr/ob_expr_type_to_str.cpp	ObExprEnumToStr::calc_to_str_expr#ObEnumSetInfo	non-const cast of ObExpr::extra_info_	280	memo:31
+src/sql/engine/expr/ob_expr_type_to_str.cpp	ObExprSetToInnerType::calc_to_inner_expr#ObEnumSetInfo	non-const cast of ObExpr::extra_info_	356	memo:31
+src/sql/engine/expr/ob_expr_type_to_str.cpp	ObExprEnumToInnerType::calc_to_inner_expr#ObEnumSetInfo	non-const cast of ObExpr::extra_info_	454	memo:31
+src/sql/engine/expr/ob_expr_udf.cpp	ObExprUDF::eval_udf#ObExprUDFInfo	non-const cast of ObExpr::extra_info_	687	memo:31
+src/sql/engine/expr/ob_pl_expr_subquery.cpp	ObExprOpSubQueryInPl::eval_subquery#ObExprPlSubQueryInfo	non-const cast of ObExpr::extra_info_	144	memo:31
+src/sql/engine/join/ob_hash_join_op.cpp	ObHashJoinOp::inner_open#const_cast<ObExpr>	const_cast to plan type	432	broadened
+src/sql/engine/join/ob_hash_join_op.cpp	ObHashJoinOp::inner_open#const_cast<ObExpr>#2	const_cast to plan type	434	broadened
+src/sql/engine/ob_exec_context.cpp	ObExecContext::init_physical_plan_ctx#const_cast<ObPhysicalPlan>	const_cast to plan type	882	broadened;cg-or-setup-fn:init_physical_plan_ctx
+src/sql/engine/px/ob_dfo.cpp	OB_DEF_DESERIALIZE(ObPxInitTaskArgs)#const_cast<ObExprFrameInfo>	const_cast to plan type	663	broadened
+src/sql/engine/px/ob_dfo_scheduler.cpp	ObSerialDfoScheduler::dispatch_sqcs#const_cast<ObOpSpec>	const_cast to plan type	348	memo:6
+src/sql/engine/px/ob_dfo_scheduler.cpp	ObParallelDfoScheduler::dispatch_sqc#const_cast<ObOpSpec>	const_cast to plan type	949	memo:6
+src/sql/engine/px/ob_px_target_monitor.h	ObPxTargetCond::monitor_	mutable member of engine type	56	type:obutil::ObMonitor<obutil::Mutex>
+src/sql/engine/px/ob_px_task_process.cpp	ObPxTaskProcess::OpPreparation::apply#const_cast<ObOpSpec>	const_cast to plan type	578	broadened
+src/sql/engine/px/ob_px_util.h	ObPxTreeSerializer::deserialize_expr_frame_info#const_cast<ObExprFrameInfo>	const_cast to plan type	508	broadened;cg-or-setup-fn:deserialize_expr_frame_info
+src/sql/engine/px/ob_px_util.h	ObPxTreeSerializer::deserialize_expr_frame_info#const_cast<ObExprFrameInfo>#2	const_cast to plan type	540	broadened;cg-or-setup-fn:deserialize_expr_frame_info
+src/sql/engine/px/ob_px_worker_stat.h	ObPxWorkerStatList::lock_	mutable member of engine type	76	type:common::ObSpinLock
+src/sql/engine/px/ob_slice_calc.h	ObBc2HostSliceIdCalc::HostIndex::idx_	mutable member of engine type	554	type:uint64_t
+src/sql/engine/px/p2p_datahub/ob_p2p_dh_msg.h	ObP2PDatahubMsgBase::lock_	mutable member of engine type	140	type:common::ObSpinLock

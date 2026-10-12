@@ -1,0 +1,57 @@
+file	symbol	source_construct	line	pretag
+src/query/api/query/engine/ob_operator.h	ObBatchRowIter::op_	operator pointer held by non-operator class	190	type:ObOperator
+src/query/api/query/monitor/ob_monitor_node.h	ObMonitorNode::op_	operator pointer held by non-operator class	131	type:ObOperator
+src/sql/dtl/ob_dtl_basic_channel.cpp	ObDtlBasicChannel::switch_buffer#get_operator_kit(get_op_id())	operator lookup by id outside the operator	983	
+src/sql/engine/basic/ob_group_join_buffer.h	ObGroupJoinBufffer::op_	operator pointer held by non-operator class	113	type:ObOperator
+src/sql/engine/basic/ob_group_join_buffer.h	ObGroupJoinBufffer::left_	operator pointer held by non-operator class	117	type:ObOperator
+src/sql/engine/basic/ob_group_join_buffer.h	ObGroupJoinBufffer::right_	operator pointer held by non-operator class	118	type:ObOperator
+src/sql/engine/basic/ob_json_table_op.h	JtScanCtx::jt_op_	operator pointer held by non-operator class	171	type:ObJsonTableOp
+src/sql/engine/dml/ob_dml_ctx_define.h	ObDMLRtCtx::op_	operator reference held by non-operator class	1015	type:ObTableModifyOp
+src/sql/engine/dml/ob_dml_ctx_define.h	ObDMLModifyRowNode::dml_op_	operator pointer held by non-operator class	1062	type:ObTableModifyOp
+src/sql/engine/expr/ob_expr_subquery_ref.cpp	ObExprSubQueryRef::get_subquery_iter#get_operator_kit(extra.op_id_)	operator lookup by id outside the operator	312	
+src/sql/engine/join/ob_merge_join_op.h	ObMergeJoinOp::ChildRowFetcher::child_	operator pointer held by non-operator class	220	type:ObOperator
+src/sql/engine/join/ob_merge_join_op.h	ObMergeJoinOp::ChildBatchFetcher::child_	operator pointer held by non-operator class	277	type:ObOperator
+src/sql/engine/join/ob_merge_join_op.h	ObMergeJoinOp::ChildBatchFetcher::merge_join_op_	operator reference held by non-operator class	279	type:ObMergeJoinOp
+src/sql/engine/ob_exec_context.h	ObOperatorKit::op_	operator pointer held by non-operator class	135	type:ObOperator
+src/sql/engine/px/datahub/components/ob_dh_opt_stats_gather.cpp	ObOptStatsGatherPieceMsgCtx::alloc_piece_msg_ctx#get_operator_kit(pkt.target_osg_id_)	operator lookup by id outside the operator	136	px
+src/sql/engine/px/datahub/components/ob_dh_opt_stats_gather.cpp	ObOptStatsGatherPieceMsgCtx::alloc_piece_msg_ctx#get_operator_kit(pkt.target_osg_id_)#2	operator lookup by id outside the operator	139	px
+src/sql/engine/px/datahub/components/ob_dh_range_dist_wf.cpp	ObRDWFPieceMsgCtx::send_whole_msg#get_operator_kit(op_id_)	operator lookup by id outside the operator	238	px
+src/sql/engine/px/datahub/components/ob_dh_sample.cpp	ObDynamicSamplePieceMsgCtx::alloc_piece_msg_ctx#get_operator_kit(pkt.op_id_)	operator lookup by id outside the operator	231	px
+src/sql/engine/px/datahub/components/ob_dh_sample.h	ObDynamicSamplePieceMsgCtx::coord_	operator reference held by non-operator class	152	type:ObPxCoordOp
+src/sql/engine/px/exchange/ob_px_ms_coord_op.h	ObPxMSCoordOp::ObPxMSCoordOpEventListener::px_coord_op_	operator reference held by non-operator class	87	type:ObPxMSCoordOp
+src/sql/engine/px/exchange/ob_px_ordered_coord_op.h	ObPxOrderedCoordOp::ObPxOrderedCoordOpEventListener::px_coord_op_	operator reference held by non-operator class	77	type:ObPxOrderedCoordOp
+src/sql/engine/px/ob_dfo.h	ObPxInitSqcArgs::static_engine_root_	operator pointer held by non-operator class	724	type:ObOperator
+src/sql/engine/px/ob_dfo.h	ObPxInitTaskArgs::static_engine_root_	operator pointer held by non-operator class	1025	type:ObOperator
+src/sql/engine/px/ob_dfo_mgr.cpp	ObDfoSchedDepthGenerator::try_set_dfo_block#get_operator_kit(mat->id_)	operator lookup by id outside the operator	135	px
+src/sql/engine/px/ob_granule_pump.cpp	ObGranuleSplitter::get_query_range#get_operator_kit(op_id)	operator lookup by id outside the operator	859	px
+src/sql/engine/px/ob_px_coord_op.cpp	ObPxCoordOp::setup_op_input#get_operator_kit(receive->id_)	operator lookup by id outside the operator	354	px
+src/sql/engine/px/ob_px_coord_op.cpp	ObPxCoordOp::init_batch_info#get_operator_kit(MY_SPEC.batch_op_info_.op_id_)	operator lookup by id outside the operator	825	px
+src/sql/engine/px/ob_px_scheduler.h	ObPxCoordInfo::coord_	operator reference held by non-operator class	150	type:ObPxCoordOp
+src/sql/engine/px/ob_px_sub_coord.cpp	ObPxSubCoord::setup_gi_op_input#get_operator_kit(gi_op->id_)	operator lookup by id outside the operator	199	px
+src/sql/engine/px/ob_px_sub_coord.cpp	ObPxSubCoord::setup_op_input#get_operator_kit(receive_op->id_)	operator lookup by id outside the operator	277	px
+src/sql/engine/px/ob_px_sub_coord.cpp	ObPxSubCoord::setup_op_input#get_operator_kit(transmit_op->id_)	operator lookup by id outside the operator	291	px
+src/sql/engine/px/ob_px_sub_coord.cpp	ObPxSubCoord::setup_op_input#get_operator_kit(gi_op->id_)	operator lookup by id outside the operator	317	px
+src/sql/engine/px/ob_px_sub_coord.cpp	ObPxSubCoord::setup_op_input#get_operator_kit(root.id_)	operator lookup by id outside the operator	336	px
+src/sql/engine/px/ob_px_sub_coord.cpp	ObPxSubCoord::setup_op_input#get_operator_kit(root.id_)#2	operator lookup by id outside the operator	371	px
+src/sql/engine/px/ob_px_sub_coord.cpp	ObPxSubCoord::setup_op_input#get_operator_kit(root.id_)#3	operator lookup by id outside the operator	411	px
+src/sql/engine/px/ob_px_sub_coord.cpp	ObPxSubCoord::setup_op_input#get_operator_kit(root.id_)#4	operator lookup by id outside the operator	423	px
+src/sql/engine/px/ob_px_task_process.cpp	ObPxTaskProcess::execute#get_operator_kit(root_spec.id_)	operator lookup by id outside the operator	242	px
+src/sql/engine/px/ob_px_task_process.cpp	ObPxTaskProcess::OpPreparation::apply#get_operator_kit(op.id_)	operator lookup by id outside the operator	552	px
+src/sql/engine/px/ob_px_task_process.cpp	ObPxTaskProcess::OpPreparation::apply#get_operator_kit(op.id_)#2	operator lookup by id outside the operator	612	px
+src/sql/engine/px/ob_px_task_process.cpp	ObPxTaskProcess::OpPreparation::reset#get_operator_kit(op.id_)	operator lookup by id outside the operator	663	px
+src/sql/engine/px/ob_px_task_process.cpp	ObPxTaskProcess::OpPostparation::apply#get_operator_kit(op.id_)	operator lookup by id outside the operator	679	px
+src/sql/engine/px/ob_px_util.cpp	ObPxTreeSerializer::deserialize_op_input#get_operator_kit(index)	operator lookup by id outside the operator	1155	px
+src/sql/engine/px/ob_px_util.cpp	ObPxTreeSerializer::get_serialize_op_input_tree_size#get_operator_kit(index)	operator lookup by id outside the operator	1209	px
+src/sql/engine/px/ob_px_util.cpp	ObPxTreeSerializer::serialize_op_input_tree#get_operator_kit(index)	operator lookup by id outside the operator	1275	px
+src/sql/engine/recursive_cte/ob_recursive_inner_data_op.h	ObRecursiveInnerDataOp::pump_operator_	operator pointer held by non-operator class	132	type:ObFakeCTETableOp
+src/sql/engine/recursive_cte/ob_recursive_inner_data_op.h	ObRecursiveInnerDataOp::left_op_	operator pointer held by non-operator class	133	type:ObOperator
+src/sql/engine/recursive_cte/ob_recursive_inner_data_op.h	ObRecursiveInnerDataOp::right_op_	operator pointer held by non-operator class	134	type:ObOperator
+src/sql/engine/recursive_cte/ob_recursive_union_all_op.cpp	ObRecursiveUnionAllOp::inner_open#get_operator_kit(MY_SPEC.pump_operator_id_)	operator lookup by id outside the operator	68	
+src/sql/engine/sort/ob_sort_op_impl.h	ObPrefixSortImpl::child_	operator pointer held by non-operator class	954	type:ObOperator
+src/sql/engine/sort/ob_sort_op_impl.h	ObPrefixSortImpl::self_op_	operator pointer held by non-operator class	955	type:ObOperator
+src/sql/engine/subquery/ob_subplan_filter_op.h	ObSubQueryIterator::op_	operator reference held by non-operator class	126	type:ObOperator
+src/sql/engine/subquery/ob_subplan_filter_op.h	ObSubQueryIterator::parent_	operator pointer held by non-operator class	138	type:ObSubPlanFilterOp
+src/sql/engine/table/ob_table_scan_op.h	ObRandScanProcessor::tsc_op_	operator pointer held by non-operator class	461	type:ObTableScanOp
+src/sql/engine/window_function/ob_window_function_op.h	ObWindowFunctionOp::RowsStore::op_	operator reference held by non-operator class	478	type:ObWindowFunctionOp
+src/sql/engine/window_function/ob_window_function_op.h	ObWindowFunctionOp::WinFuncCell::op_	operator reference held by non-operator class	604	type:ObWindowFunctionOp
+src/sql/executor/ob_execute_result.h	ObExecuteResult::static_engine_root_	operator pointer held by non-operator class	70	type:ObOperator

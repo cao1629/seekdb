@@ -1,0 +1,194 @@
+file	symbol	source_construct	line	pretag
+src/pl/ob_pl.cpp	ObPL::get_pl_function#ParseNode root_node	stack-constructed ParseNode	1488	
+src/pl/ob_pl_resolver.cpp	ObPLResolver::resolve_declare_var_comm#0]->str_value_=	write to ParseNode pointer field str_value_	2031	receiver:0]
+src/pl/ob_pl_resolver.cpp	ObPLResolver::resolve_declare_var_comm#0]->raw_text_=	write to ParseNode pointer field raw_text_	2032	receiver:0]
+src/pl/ob_pl_resolver.cpp	ObPLResolver::replace_source_string#new_node->str_value_=	write to ParseNode pointer field str_value_	5006	receiver:new_node;receiver-looks-like-node
+src/pl/ob_pl_resolver.cpp	ObPLResolver::check_composite_cast#ParseNode parse_node	stack-constructed ParseNode	5167	
+src/pl/ob_pl_resolver.cpp	ObPLResolver::resolve_obj_access_ref_for_cursor_param_node#node->children_[]=	write to ParseNode pointer field children_	9580	receiver:node;receiver-looks-like-node
+src/pl/ob_pl_resolver.cpp	ObPLResolver::resolve_obj_access_ref_for_cursor_param_node#node->children_[]=#2	write to ParseNode pointer field children_	9582	receiver:node;receiver-looks-like-node
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	ObAggregateProcessor::get_ora_json_arrayagg_result#ParseNode parse_node	stack-constructed ParseNode	6623	
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	ObAggregateProcessor::get_ora_json_objectagg_result#ParseNode parse_node	stack-constructed ParseNode	6920	
+src/sql/engine/expr/ob_datum_cast.cpp	get_accuracy_from_parse_node#ParseNode node	stack-constructed ParseNode	8897	
+src/sql/engine/expr/ob_expr_cast.cpp	ObExprCast::calc_result_type2#ParseNode parse_node	stack-constructed ParseNode	487	
+src/sql/engine/expr/ob_expr_cast.cpp	ObExprCast::get_cast_type#ParseNode parse_node	stack-constructed ParseNode	540	
+src/sql/engine/expr/ob_expr_demote_cast.cpp	ObExprDemoteCastBase::get_column_datum_meta#ParseNode parse_node	stack-constructed ParseNode	71	
+src/sql/engine/expr/ob_expr_json_func_helper.cpp	ObJsonExprHelper::get_sql_scalar_type#ParseNode parse_node	stack-constructed ParseNode	1396	
+src/sql/engine/expr/ob_expr_json_func_helper.cpp	ObJsonExprHelper::get_cast_type#ParseNode parse_node	stack-constructed ParseNode	1433	
+src/sql/engine/expr/ob_expr_json_func_helper.cpp	ObJsonExprHelper::eval_and_check_res_type#ParseNode node	stack-constructed ParseNode	1746	
+src/sql/engine/expr/ob_expr_json_utils.cpp	ObJsonUtil::get_accuracy_internal#ParseNode node	stack-constructed ParseNode	315	
+src/sql/ob_sql.cpp	ObSql::generate_stmt#ParseNode tmp_node	stack-constructed ParseNode	2139	
+src/sql/ob_sql_utils.cpp	ObSQLUtils::replace_questionmarks#tree->str_value_=	write to ParseNode pointer field str_value_	203	receiver:tree;receiver-looks-like-node
+src/sql/ob_sql_utils.cpp	ObSQLUtils::replace_questionmarks#tree->str_value_=#2	write to ParseNode pointer field str_value_	212	receiver:tree;receiver-looks-like-node
+src/sql/plan_cache/ob_prepare_stmt_struct.cpp	ObPsStmtInfo::add_fixed_raw_param#deep_copy_parse_node()	ParseNode construction/copy call	359	
+src/sql/plan_cache/ob_sql_parameterization.cpp	ObSqlParameterization::transform_tree#root->children_[]=	write to ParseNode pointer field children_	747	receiver:root;receiver-looks-like-node
+src/sql/plan_cache/ob_sql_parameterization.cpp	ObSqlParameterization::gen_special_param_info#np_info.raw_text_=	write to ParseNode pointer field raw_text_	1072	receiver:np_info
+src/sql/plan_cache/ob_sql_parameterization.cpp	ObSqlParameterization::insert_neg_sign#node->str_value_=	write to ParseNode pointer field str_value_	1782	receiver:node;receiver-looks-like-node
+src/sql/plan_cache/ob_sql_parameterization.cpp	ObSqlParameterization::insert_neg_sign#node->raw_text_=	write to ParseNode pointer field raw_text_	1783	receiver:node;receiver-looks-like-node
+src/sql/plan_cache/ob_sql_parameterization.cpp	ObSqlParameterization::get_select_item_param_info#tree->str_value_=	write to ParseNode pointer field str_value_	2303	receiver:tree;receiver-looks-like-node
+src/sql/plan_cache/ob_sql_parameterization.cpp	ObSqlParameterization::transform_minus_op#child->str_value_=	write to ParseNode pointer field str_value_	2391	receiver:child;receiver-looks-like-node
+src/sql/plan_cache/ob_sql_parameterization.cpp	ObSqlParameterization::transform_minus_op#child->raw_text_=	write to ParseNode pointer field raw_text_	2392	receiver:child;receiver-looks-like-node
+src/sql/plan_cache/ob_sql_parameterization.cpp	ObSqlParameterization::transform_minus_op#const_node->str_value_=	write to ParseNode pointer field str_value_	2454	receiver:const_node;receiver-looks-like-node
+src/sql/plan_cache/ob_sql_parameterization.cpp	ObSqlParameterization::transform_minus_op#const_node->raw_text_=	write to ParseNode pointer field raw_text_	2455	receiver:const_node;receiver-looks-like-node
+src/sql/printer/ob_dml_stmt_printer.cpp	ObDMLStmtPrinter::print_mysql_json_return_type#ParseNode parse_node	stack-constructed ParseNode	443	
+src/sql/printer/ob_raw_expr_printer.cpp	ObRawExprPrinter::print_json_return_type#ParseNode parse_node	stack-constructed ParseNode	1286	
+src/sql/printer/ob_raw_expr_printer.cpp	ObRawExprPrinter::print_cast_type#ParseNode parse_node	stack-constructed ParseNode	3558	
+src/sql/resolver/cmd/ob_alter_system_resolver.cpp	ObAlterSystemSetResolver::resolve#ParseNode value_node	stack-constructed ParseNode	1000	
+src/sql/resolver/cmd/ob_load_data_resolver.cpp	ObLoadDataResolver::resolve#const_cast<ParseNode*>(&parse_tree)	const_cast<ParseNode>	102	
+src/sql/resolver/cmd/ob_show_resolver.cpp	ObShowResolver::replace_where_clause#node->str_value_=	write to ParseNode pointer field str_value_	1927	receiver:node;receiver-looks-like-node
+src/sql/resolver/cmd/ob_show_resolver.cpp	ObShowResolver::replace_where_clause#2]->str_value_=	write to ParseNode pointer field str_value_	1938	receiver:2]
+src/sql/resolver/cmd/ob_show_resolver.cpp	ObShowResolver::replace_where_clause#0]->str_value_=	write to ParseNode pointer field str_value_	1954	receiver:0]
+src/sql/resolver/cmd/ob_variable_set_resolver.cpp	ObVariableSetResolver::resolve#ParseNode value_node	stack-constructed ParseNode	140	
+src/sql/resolver/cmd/ob_variable_set_resolver.cpp	ObAlterSessionSetResolver::resolve#ParseNode value_node	stack-constructed ParseNode	383	
+src/sql/resolver/dcl/ob_alter_role_resolver.cpp	ObAlterRoleResolver::resolve#const_cast<ParseNode*>(parse_tree.children_[0])	const_cast<ParseNode>	55	
+src/sql/resolver/dcl/ob_create_role_resolver.cpp	ObCreateRoleResolver::resolve#const_cast<ParseNode*>(parse_tree.children_[0])	const_cast<ParseNode>	55	
+src/sql/resolver/dcl/ob_create_user_resolver.cpp	ObCreateUserResolver::resolve#const_cast<ParseNode*>(parse_tree.children_[0])	const_cast<ParseNode>	51	
+src/sql/resolver/dcl/ob_create_user_resolver.cpp	ObCreateUserResolver::resolve#const_cast<ParseNode*>(parse_tree.children_[1])	const_cast<ParseNode>	52	
+src/sql/resolver/dcl/ob_create_user_resolver.cpp	ObCreateUserResolver::resolve#const_cast<ParseNode*>(parse_tree.children_[2])	const_cast<ParseNode>	53	
+src/sql/resolver/dcl/ob_create_user_resolver.cpp	ObCreateUserResolver::resolve#const_cast<ParseNode*>(parse_tree.children_[3])	const_cast<ParseNode>	54	
+src/sql/resolver/dcl/ob_drop_role_resolver.cpp	ObDropRoleResolver::resolve#const_cast<ParseNode*>(parse_tree.children_[0])	const_cast<ParseNode>	54	
+src/sql/resolver/dcl/ob_drop_user_resolver.cpp	ObDropUserResolver::resolve#const_cast<ParseNode*>(&parse_tree)	const_cast<ParseNode>	37	
+src/sql/resolver/dcl/ob_grant_resolver.cpp	ObGrantResolver::resolve_mysql#const_cast<ParseNode*>(&parse_tree)	const_cast<ParseNode>	300	
+src/sql/resolver/dcl/ob_lock_user_resolver.cpp	ObLockUserResolver::resolve#const_cast<ParseNode*>(&parse_tree)	const_cast<ParseNode>	36	
+src/sql/resolver/dcl/ob_rename_user_resolver.cpp	ObRenameUserResolver::resolve#const_cast<ParseNode*>(&parse_tree)	const_cast<ParseNode>	36	
+src/sql/resolver/dcl/ob_revoke_resolver.cpp	ObRevokeResolver::resolve_mysql#const_cast<ParseNode*>(&parse_tree)	const_cast<ParseNode>	174	
+src/sql/resolver/dcl/ob_set_password_resolver.cpp	ObSetPasswordResolver::resolve#const_cast<ParseNode*>(&parse_tree)	const_cast<ParseNode>	66	
+src/sql/resolver/ddl/ob_alter_database_resolver.cpp	ObAlterDatabaseResolver::resolve#const_cast<ParseNode*>(&parse_tree)	const_cast<ParseNode>	41	
+src/sql/resolver/ddl/ob_alter_outline_resolver.cpp	ObAlterOutlineResolver::resolve#const_cast<ParseNode*>(&parse_tree)	const_cast<ParseNode>	32	
+src/sql/resolver/ddl/ob_create_database_resolver.cpp	ObCreateDatabaseResolver::resolve#const_cast<ParseNode*>(&parse_tree)	const_cast<ParseNode>	41	
+src/sql/resolver/ddl/ob_create_index_resolver.cpp	ObCreateIndexResolver::resolve#const_cast<ParseNode&>(parse_tree)	const_cast<ParseNode>	364	
+src/sql/resolver/ddl/ob_create_outline_resolver.cpp	ObCreateOutlineResolver::resolve#const_cast<ParseNode*>(&parse_tree)	const_cast<ParseNode>	80	
+src/sql/resolver/ddl/ob_create_table_resolver.cpp	ObCreateTableResolver::resolve#const_cast<ParseNode*>(&parse_tree)	const_cast<ParseNode>	169	
+src/sql/resolver/ddl/ob_drop_database_resolver.cpp	ObDropDatabaseResolver::resolve#const_cast<ParseNode*>(&parse_tree)	const_cast<ParseNode>	43	
+src/sql/resolver/ddl/ob_drop_outline_resolver.cpp	ObDropOutlineResolver::resolve#const_cast<ParseNode*>(&parse_tree)	const_cast<ParseNode>	30	
+src/sql/resolver/ddl/ob_rename_table_resolver.cpp	ObRenameTableResolver::resolve#const_cast<ParseNode*>(&parser_tree)	const_cast<ParseNode>	40	
+src/sql/resolver/ddl/ob_truncate_table_resolver.cpp	ObTruncateTableResolver::resolve#const_cast<ParseNode*>(&parser_tree)	const_cast<ParseNode>	41	
+src/sql/resolver/ddl/ob_use_database_resolver.cpp	ObUseDatabaseResolver::resolve#const_cast<ParseNode*>(&parse_tree)	const_cast<ParseNode>	41	
+src/sql/resolver/dml/ob_del_upd_resolver.cpp	ObDelUpdResolver::expand_record_to_columns#new_terminal_node()	ParseNode construction/copy call	1609	
+src/sql/resolver/dml/ob_del_upd_resolver.cpp	ObDelUpdResolver::expand_record_to_columns#member_node->children_[]=	write to ParseNode pointer field children_	1611	receiver:member_node;receiver-looks-like-node
+src/sql/resolver/dml/ob_del_upd_resolver.cpp	ObDelUpdResolver::expand_record_to_columns#new_non_terminal_node()	ParseNode construction/copy call	1611	
+src/sql/resolver/dml/ob_del_upd_resolver.cpp	ObDelUpdResolver::expand_record_to_columns#column_node->str_value_=	write to ParseNode pointer field str_value_	1626	receiver:column_node;receiver-looks-like-node
+src/sql/resolver/dml/ob_dml_resolver.cpp	ObDMLResolver::check_is_json_constraint#table_node->str_value_=	write to ParseNode pointer field str_value_	225	receiver:table_node;receiver-looks-like-node
+src/sql/resolver/dml/ob_dml_resolver.cpp	ObDMLResolver::check_is_json_constraint#table_node->raw_text_=	write to ParseNode pointer field raw_text_	226	receiver:table_node;receiver-looks-like-node
+src/sql/resolver/dml/ob_dml_resolver.cpp	ObDMLResolver::check_is_json_constraint#tmp_node->children_[]=	write to ParseNode pointer field children_	229	receiver:tmp_node;receiver-looks-like-node
+src/sql/resolver/dml/ob_dml_resolver.cpp	ObDMLResolver::create_col_ref_node#column_node->children_[]=	write to ParseNode pointer field children_	431	receiver:column_node;receiver-looks-like-node
+src/sql/resolver/dml/ob_dml_resolver.cpp	ObDMLResolver::pre_process_mvt_agg#node.children_=	write to ParseNode pointer field children_	751	receiver:node;receiver-looks-like-node
+src/sql/resolver/dml/ob_dml_resolver.cpp	ObDMLResolver::resolve_sql_expr#const_cast<ParseNode&>(node)	const_cast<ParseNode>	1011	
+src/sql/resolver/dml/ob_dml_resolver.cpp	ObDMLResolver::resolve_hybrid_search_item#new_node()	ParseNode construction/copy call	3750	
+src/sql/resolver/dml/ob_dml_resolver.cpp	ObDMLResolver::resolve_hybrid_search_item#sub_query_wrapper->children_[]=	write to ParseNode pointer field children_	3753	receiver:sub_query_wrapper
+src/sql/resolver/dml/ob_dml_resolver.cpp	ObDMLResolver::resolve_hybrid_search_item#sub_query_wrapper->children_[]=#2	write to ParseNode pointer field children_	3754	receiver:sub_query_wrapper
+src/sql/resolver/dml/ob_dml_resolver.cpp	ObDMLResolver::resolve_json_table_column_name_and_path#const_cast<ParseNode*>(path_node)	const_cast<ParseNode>	6888	
+src/sql/resolver/dml/ob_dml_resolver.cpp	ObDMLResolver::resolve_json_table_nested_column#const_cast<ParseNode*>(parse_tree.children_[0])	const_cast<ParseNode>	7320	
+src/sql/resolver/dml/ob_inlist_resolver.cpp	ObInListResolver::merge_two_in_nodes#ParseNode dummy	stack-constructed ParseNode	526	
+src/sql/resolver/dml/ob_inlist_resolver.cpp	ObInListResolver::merge_two_in_nodes#append_child()	ParseNode construction/copy call	541	
+src/sql/resolver/dml/ob_inlist_resolver.cpp	ObInListResolver::merge_two_in_nodes#dst_in_node->children_[]=	write to ParseNode pointer field children_	541	receiver:dst_in_node;receiver-looks-like-node
+src/sql/resolver/dml/ob_inlist_resolver.cpp	ObInListResolver::merge_two_in_nodes#new_node()	ParseNode construction/copy call	551	
+src/sql/resolver/dml/ob_inlist_resolver.cpp	ObInListResolver::merge_two_in_nodes#deep_copy_parse_node_base()	ParseNode construction/copy call	554	
+src/sql/resolver/dml/ob_inlist_resolver.cpp	ObInListResolver::merge_two_in_nodes#dst_in_node->children_[]=#2	write to ParseNode pointer field children_	555	receiver:dst_in_node;receiver-looks-like-node
+src/sql/resolver/dml/ob_inlist_resolver.cpp	ObInListResolver::merge_two_in_nodes#dst_in_node->children_[]=#3	write to ParseNode pointer field children_	556	receiver:dst_in_node;receiver-looks-like-node
+src/sql/resolver/dml/ob_inlist_resolver.cpp	ObInListResolver::merge_two_in_nodes#new_node()#2	ParseNode construction/copy call	556	
+src/sql/resolver/dml/ob_inlist_resolver.cpp	ObInListResolver::merge_two_in_nodes#deep_copy_parse_node_base()#2	ParseNode construction/copy call	558	
+src/sql/resolver/dml/ob_inlist_resolver.cpp	ObInListResolver::merge_two_in_nodes#append_child()#2	ParseNode construction/copy call	565	
+src/sql/resolver/dml/ob_inlist_resolver.cpp	ObInListResolver::merge_two_in_nodes#dst_in_node->children_[]=#4	write to ParseNode pointer field children_	565	receiver:dst_in_node;receiver-looks-like-node
+src/sql/resolver/dml/ob_inlist_resolver.cpp	ObInListResolver::do_merge_inlists#new_node()	ParseNode construction/copy call	645	
+src/sql/resolver/dml/ob_inlist_resolver.cpp	ObInListResolver::do_merge_inlists#deep_copy_parse_node_base()	ParseNode construction/copy call	647	
+src/sql/resolver/dml/ob_inlist_resolver.cpp	ObInListResolver::do_merge_inlists#push_back_child()	ParseNode construction/copy call	686	
+src/sql/resolver/dml/ob_inlist_resolver.cpp	ObInListResolver::do_merge_inlists#push_back_child()#2	ParseNode construction/copy call	695	
+src/sql/resolver/dml/ob_inlist_resolver.cpp	ObInListResolver::do_merge_inlists#push_back_child()#3	ParseNode construction/copy call	709	
+src/sql/resolver/dml/ob_inlist_resolver.cpp	ObInListResolver::do_merge_inlists#push_back_child()#4	ParseNode construction/copy call	732	
+src/sql/resolver/dml/ob_select_resolver.cpp	ObSelectResolver::mock_to_named_windows#mock_node->children_[]=	write to ParseNode pointer field children_	2760	receiver:mock_node;receiver-looks-like-node
+src/sql/resolver/expr/ob_raw_expr.cpp	ObRawExpr::get_geo_cast_result_type#ParseNode parse_node	stack-constructed ParseNode	714	
+src/sql/resolver/expr/ob_raw_expr.cpp	ObSysFunRawExpr::get_cast_type_name#ParseNode node	stack-constructed ParseNode	4201	
+src/sql/resolver/expr/ob_raw_expr_deduce_type.cpp	ObRawExprDeduceType::set_json_agg_result_type#ParseNode parse_node	stack-constructed ParseNode	1230	
+src/sql/resolver/expr/ob_raw_expr_deduce_type.cpp	ObRawExprDeduceType::adjust_cast_as_signed_unsigned#ParseNode node	stack-constructed ParseNode	1942	
+src/sql/resolver/expr/ob_raw_expr_deduce_type.cpp	ObRawExprDeduceType::set_agg_json_array_result_type#ParseNode parse_node	stack-constructed ParseNode	2521	
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	ObRawExprResolverImpl::do_recursive_resolve#const_cast<ParseNode*>(node)	const_cast<ParseNode>	400	
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	ObRawExprResolverImpl::do_recursive_resolve#ParseNode tmp_node	stack-constructed ParseNode	523	
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	ObRawExprResolverImpl::do_recursive_resolve#const_cast<ParseNode&>(*node)	const_cast<ParseNode>	924	
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	ObRawExprResolverImpl::do_recursive_resolve#const_cast<ParseNode&>(*node)#2	const_cast<ParseNode>	931	
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	ObRawExprResolverImpl::check_replace_lambda_params_node#const_cast<ParseNode*>(curr_node->children_[i])	const_cast<ParseNode>	2245	
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	ObRawExprResolverImpl::process_lambda_func_node#const_cast<ParseNode*>(node->children_[1])	const_cast<ParseNode>	2288	
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	ObRawExprResolverImpl::process_is_or_is_not_node#ParseNode default_node	stack-constructed ParseNode	2743	
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	ObRawExprResolverImpl::process_is_or_is_not_node#default_node.str_value_=	write to ParseNode pointer field str_value_	2748	receiver:default_node;receiver-looks-like-node
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	ObRawExprResolverImpl::process_is_or_is_not_node#default_node.raw_text_=	write to ParseNode pointer field raw_text_	2750	receiver:default_node;receiver-looks-like-node
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	ObRawExprResolverImpl::process_like_node#ParseNode escape_node	stack-constructed ParseNode	2994	
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	ObRawExprResolverImpl::process_like_node#escape_node.str_value_=	write to ParseNode pointer field str_value_	2999	receiver:escape_node;receiver-looks-like-node
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	ObRawExprResolverImpl::process_like_node#escape_node.raw_text_=	write to ParseNode pointer field raw_text_	3001	receiver:escape_node;receiver-looks-like-node
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	ObRawExprResolverImpl::process_like_node#escape_node.str_value_=#2	write to ParseNode pointer field str_value_	3009	receiver:escape_node;receiver-looks-like-node
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	ObRawExprResolverImpl::process_like_node#ParseNode replace_node	stack-constructed ParseNode	3034	
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	ObRawExprResolverImpl::process_like_node#replace_node.str_value_=	write to ParseNode pointer field str_value_	3039	receiver:replace_node;receiver-looks-like-node
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	ObRawExprResolverImpl::process_like_node#replace_node.raw_text_=	write to ParseNode pointer field raw_text_	3041	receiver:replace_node;receiver-looks-like-node
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	ObRawExprResolverImpl::process_case_node#ParseNode default_node	stack-constructed ParseNode	3264	
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	ObRawExprResolverImpl::process_case_node#default_node.str_value_=	write to ParseNode pointer field str_value_	3269	receiver:default_node;receiver-looks-like-node
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	ObRawExprResolverImpl::process_case_node#default_node.raw_text_=	write to ParseNode pointer field raw_text_	3271	receiver:default_node;receiver-looks-like-node
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	ObRawExprResolverImpl::malloc_new_specified_type_node#col_node->str_value_=	write to ParseNode pointer field str_value_	4178	receiver:col_node;receiver-looks-like-node
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	ObRawExprResolverImpl::malloc_new_specified_type_node#col_node->raw_text_=	write to ParseNode pointer field raw_text_	4179	receiver:col_node;receiver-looks-like-node
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	ObRawExprResolverImpl::malloc_new_specified_type_node#key_child_node->str_value_=	write to ParseNode pointer field str_value_	4190	receiver:key_child_node;receiver-looks-like-node
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	ObRawExprResolverImpl::malloc_new_specified_type_node#key_child_node->raw_text_=	write to ParseNode pointer field raw_text_	4191	receiver:key_child_node;receiver-looks-like-node
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	ObRawExprResolverImpl::malloc_new_specified_type_node#col_node->children_=	write to ParseNode pointer field children_	4201	receiver:col_node;receiver-looks-like-node
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	ObRawExprResolverImpl::malloc_new_specified_type_node#col_node->str_value_=#2	write to ParseNode pointer field str_value_	4206	receiver:col_node;receiver-looks-like-node
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	ObRawExprResolverImpl::malloc_new_specified_type_node#col_node->raw_text_=#2	write to ParseNode pointer field raw_text_	4207	receiver:col_node;receiver-looks-like-node
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	ObRawExprResolverImpl::malloc_new_specified_type_node#val_node->str_value_=	write to ParseNode pointer field str_value_	4217	receiver:val_node;receiver-looks-like-node
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	ObRawExprResolverImpl::malloc_new_specified_type_node#val_node->raw_text_=	write to ParseNode pointer field raw_text_	4218	receiver:val_node;receiver-looks-like-node
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	ObRawExprResolverImpl::malloc_new_specified_type_node#col_node->children_=#2	write to ParseNode pointer field children_	4229	receiver:col_node;receiver-looks-like-node
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	ObRawExprResolverImpl::malloc_new_specified_type_node#col_node->children_=#3	write to ParseNode pointer field children_	4256	receiver:col_node;receiver-looks-like-node
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	ObRawExprResolverImpl::malloc_new_specified_type_node#col_node->children_=#4	write to ParseNode pointer field children_	4268	receiver:col_node;receiver-looks-like-node
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	ObRawExprResolverImpl::malloc_new_specified_type_node#col_node->str_value_=#3	write to ParseNode pointer field str_value_	4272	receiver:col_node;receiver-looks-like-node
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	ObRawExprResolverImpl::malloc_new_specified_type_node#col_node->raw_text_=#3	write to ParseNode pointer field raw_text_	4273	receiver:col_node;receiver-looks-like-node
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	ObRawExprResolverImpl::create_json_object_star_node#json_object_star->children_[]=	write to ParseNode pointer field children_	4400	receiver:json_object_star
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	ObRawExprResolverImpl::create_json_object_star_node#node->children_[]=	write to ParseNode pointer field children_	4401	receiver:node;receiver-looks-like-node
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	ObRawExprResolverImpl::create_json_object_star_node#node->children_[]=#2	write to ParseNode pointer field children_	4410	receiver:node;receiver-looks-like-node
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	ObRawExprResolverImpl::process_ora_json_object_node#ParseNode key_node	stack-constructed ParseNode	4445	
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	ObRawExprResolverImpl::process_json_query_node#const_cast<ParseNode&>(*returning_type)	const_cast<ParseNode>	4620	
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	ObRawExprResolverImpl::process_json_value_node#const_cast<ParseNode&>(*returning_type)	const_cast<ParseNode>	4760	
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	ObRawExprResolverImpl::process_json_value_node#const_cast<ParseNode*>(on_mismatch)	const_cast<ParseNode>	4802	
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	ObRawExprResolverImpl::process_sys_func_params#ParseNode parse_node	stack-constructed ParseNode	5224	
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	ObRawExprResolverImpl::process_window_function_node#agg_udf_node->children_[]=	write to ParseNode pointer field children_	5578	receiver:agg_udf_node;receiver-looks-like-node
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	ObRawExprResolverImpl::process_window_function_node#agg_udf_node->children_[]=#2	write to ParseNode pointer field children_	5579	receiver:agg_udf_node;receiver-looks-like-node
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	ObRawExprResolverImpl::process_window_function_node#agg_udf_node->children_[]=#3	write to ParseNode pointer field children_	5580	receiver:agg_udf_node;receiver-looks-like-node
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	ObRawExprResolverImpl::process_window_function_node#obj_access_node->children_[]=	write to ParseNode pointer field children_	5582	receiver:obj_access_node;receiver-looks-like-node
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	ObRawExprResolverImpl::process_window_function_node#obj_access_node->children_[]=#2	write to ParseNode pointer field children_	5583	receiver:obj_access_node;receiver-looks-like-node
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	ObRawExprResolverImpl::process_window_function_node#parent_obj_access->children_[]=	write to ParseNode pointer field children_	5588	receiver:parent_obj_access
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	ObRawExprResolverImpl::process_window_function_node#parent_obj_access->children_[]=#2	write to ParseNode pointer field children_	5589	receiver:parent_obj_access
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	ObRawExprResolverImpl::transform_ratio_afun_to_arg_div_sum#const_cast<ParseNode*>(func_node)	const_cast<ParseNode>	6289	
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	ObRawExprResolverImpl::transform_ratio_afun_to_arg_div_sum#when_list_node->children_[]=	write to ParseNode pointer field children_	6303	receiver:when_list_node;receiver-looks-like-node
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	ObRawExprResolverImpl::transform_ratio_afun_to_arg_div_sum#when_list_node->children_[]=#2	write to ParseNode pointer field children_	6304	receiver:when_list_node;receiver-looks-like-node
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	ObRawExprResolverImpl::transform_ratio_afun_to_arg_div_sum#merge_when_list_node->children_[]=	write to ParseNode pointer field children_	6305	receiver:merge_when_list_node;receiver-looks-like-node
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	ObRawExprResolverImpl::transform_ratio_afun_to_arg_div_sum#const_cast<ParseNode*>(ratio_fun_node)	const_cast<ParseNode>	6306	
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	ObRawExprResolverImpl::transform_ratio_afun_to_arg_div_sum#divisor_node->children_[]=	write to ParseNode pointer field children_	6306	receiver:divisor_node;receiver-looks-like-node
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	ObRawExprResolverImpl::transform_ratio_afun_to_arg_div_sum#divisor_node->children_[]=#2	write to ParseNode pointer field children_	6307	receiver:divisor_node;receiver-looks-like-node
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	ObRawExprResolverImpl::transform_ratio_afun_to_arg_div_sum#const_cast<ParseNode*>(ratio_fun_node)#2	const_cast<ParseNode>	6308	
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	ObRawExprResolverImpl::transform_ratio_afun_to_arg_div_sum#divisor_node->children_[]=#3	write to ParseNode pointer field children_	6308	receiver:divisor_node;receiver-looks-like-node
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	ObRawExprResolverImpl::transform_ratio_afun_to_arg_div_sum#div_node->children_[]=	write to ParseNode pointer field children_	6310	receiver:div_node;receiver-looks-like-node
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	ObRawExprResolverImpl::transform_ratio_afun_to_arg_div_sum#div_node->children_[]=#2	write to ParseNode pointer field children_	6311	receiver:div_node;receiver-looks-like-node
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	ObRawExprResolverImpl::process_odbc_time_literals#ParseNode tmp_node	stack-constructed ParseNode	6494	
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	ObRawExprResolverImpl::process_odbc_time_literals#tmp_node.str_value_=	write to ParseNode pointer field str_value_	6498	receiver:tmp_node;receiver-looks-like-node
+src/sql/resolver/expr/ob_raw_expr_util.cpp	ObRawExprUtils::check_composite_cast#ParseNode parse_node	stack-constructed ParseNode	5311	
+src/sql/resolver/expr/ob_raw_expr_util.cpp	ObRawExprUtils::create_type_expr#ParseNode parse_node	stack-constructed ParseNode	6075	
+src/sql/resolver/expr/ob_raw_expr_util.cpp	ObRawExprUtils::new_parse_node#node->str_value_=	write to ParseNode pointer field str_value_	6457	receiver:node;receiver-looks-like-node
+src/sql/resolver/expr/ob_raw_expr_util.cpp	ObRawExprUtils::new_parse_node#node->raw_text_=	write to ParseNode pointer field raw_text_	6459	receiver:node;receiver-looks-like-node
+src/sql/resolver/expr/ob_raw_expr_util.cpp	ObRawExprUtils::new_parse_node#node->children_=	write to ParseNode pointer field children_	6463	receiver:node;receiver-looks-like-node
+src/sql/resolver/expr/ob_raw_expr_util.cpp	ObRawExprUtils::new_parse_node#node->children_=#2	write to ParseNode pointer field children_	6468	receiver:node;receiver-looks-like-node
+src/sql/resolver/expr/ob_raw_expr_util.cpp	ObRawExprUtils::mock_obj_access_ref_node#new_terminal_node()	ParseNode construction/copy call	6610	
+src/sql/resolver/expr/ob_raw_expr_util.cpp	ObRawExprUtils::mock_obj_access_ref_node#col_name_node->str_value_=	write to ParseNode pointer field str_value_	6612	receiver:col_name_node;receiver-looks-like-node
+src/sql/resolver/expr/ob_raw_expr_util.cpp	ObRawExprUtils::mock_obj_access_ref_node#new_terminal_node()#2	ParseNode construction/copy call	6615	
+src/sql/resolver/expr/ob_raw_expr_util.cpp	ObRawExprUtils::mock_obj_access_ref_node#tbl_name_node->str_value_=	write to ParseNode pointer field str_value_	6617	receiver:tbl_name_node;receiver-looks-like-node
+src/sql/resolver/expr/ob_raw_expr_util.cpp	ObRawExprUtils::mock_obj_access_ref_node#new_non_terminal_node()	ParseNode construction/copy call	6637	
+src/sql/resolver/expr/ob_raw_expr_util.cpp	ObRawExprUtils::mock_obj_access_ref_node#new_non_terminal_node()#2	ParseNode construction/copy call	6639	
+src/sql/resolver/ob_resolver_utils.cpp	ObResolverUtils::transform_sys_func_to_objaccess#new_non_terminal_node()	ParseNode construction/copy call	5130	
+src/sql/resolver/ob_resolver_utils.cpp	ObResolverUtils::transform_func_sys_to_udf#new_non_terminal_node()	ParseNode construction/copy call	5146	
+src/sql/resolver/ob_resolver_utils.cpp	ObResolverUtils::transform_func_sys_to_udf#new_terminal_node()	ParseNode construction/copy call	5151	
+src/sql/resolver/ob_resolver_utils.cpp	ObResolverUtils::transform_func_sys_to_udf#func_udf->children_[]=	write to ParseNode pointer field children_	5154	receiver:func_udf
+src/sql/resolver/ob_resolver_utils.cpp	ObResolverUtils::transform_func_sys_to_udf#db_name_node->str_value_=	write to ParseNode pointer field str_value_	5155	receiver:db_name_node;receiver-looks-like-node
+src/sql/resolver/ob_resolver_utils.cpp	ObResolverUtils::transform_func_sys_to_udf#new_terminal_node()#2	ParseNode construction/copy call	5166	
+src/sql/resolver/ob_resolver_utils.cpp	ObResolverUtils::transform_func_sys_to_udf#func_udf->children_[]=#2	write to ParseNode pointer field children_	5169	receiver:func_udf
+src/sql/resolver/ob_resolver_utils.cpp	ObResolverUtils::transform_func_sys_to_udf#pkg_name_node->str_value_=	write to ParseNode pointer field str_value_	5170	receiver:pkg_name_node;receiver-looks-like-node
+src/sql/resolver/ob_resolver_utils.cpp	ObResolverUtils::transform_func_sys_to_udf#func_udf->children_[]=#3	write to ParseNode pointer field children_	5182	receiver:func_udf
+src/sql/resolver/ob_resolver_utils.cpp	ObResolverUtils::transform_func_sys_to_udf#func_udf->children_[]=#4	write to ParseNode pointer field children_	5184	receiver:func_udf
+src/sql/resolver/ob_resolver_utils.cpp	ObResolverUtils::transform_func_sys_to_udf#func_udf->children_[]=#5	write to ParseNode pointer field children_	5186	receiver:func_udf
+src/sql/resolver/ob_resolver_utils.cpp	ObResolverUtils::rm_space_for_neg_num#param_node->str_value_=	write to ParseNode pointer field str_value_	6772	receiver:param_node;receiver-looks-like-node
+src/sql/resolver/ob_resolver_utils.cpp	ObResolverUtils::handle_varchar_charset#new_node()	ParseNode construction/copy call	6786	
+src/sql/resolver/ob_resolver_utils.cpp	ObResolverUtils::handle_varchar_charset#new_non_terminal_node()	ParseNode construction/copy call	6789	
+src/sql/resolver/ob_resolver_utils.cpp	ObResolverUtils::handle_varchar_charset#new_non_terminal_node()#2	ParseNode construction/copy call	6791	
+src/sql/resolver/ob_resolver_utils.cpp	ObResolverUtils::handle_varchar_charset#charset_node->str_value_=	write to ParseNode pointer field str_value_	6798	receiver:charset_node;receiver-looks-like-node
+src/sql/resolver/ob_resolver_utils.cpp	ObResolverUtils::handle_varchar_charset#varchar_node->str_value_=	write to ParseNode pointer field str_value_	6802	receiver:varchar_node;receiver-looks-like-node
+src/sql/resolver/ob_resolver_utils.cpp	ObResolverUtils::handle_varchar_charset#varchar_node->raw_text_=	write to ParseNode pointer field raw_text_	6804	receiver:varchar_node;receiver-looks-like-node

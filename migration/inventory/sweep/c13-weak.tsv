@@ -1,0 +1,175 @@
+file	symbol	source_construct	line	pretag
+src/oblib/common/mysqlclient/ob_mysql_proxy.cpp	create_inner_sql_connection_for_proxy(bool is_ddl, int32_t group_id, sqlclient::ObISQLConnectionGuard &conn)	weak definition	29	WEAK_OVERRIDDEN_IN_PROD
+src/oblib/common/object/ob_object.cpp	ob_obj_read_lob_data(ObIAllocator &allocator, const common::ObObj &obj, ObString &data)	weak definition	33	WEAK_PLAIN
+src/oblib/lib/alloc/malloc_hook.cpp	mmap(void *addr, size_t, int, int, int, loff_t)	weak alias definition	317	WEAK_PLAIN
+src/oblib/lib/alloc/malloc_hook.cpp	mmap64(void *addr, size_t, int, int, int, loff_t)	weak alias definition	319	WEAK_PLAIN
+src/oblib/lib/alloc/malloc_hook.cpp	munmap(void *addr, size_t length)	weak alias definition	321	WEAK_PLAIN
+src/oblib/lib/alloc/malloc_hook.cpp	__libc_malloc(size_t size)	extern function prototype	339	EXTERN_PROTO
+src/oblib/lib/alloc/malloc_hook.cpp	__libc_realloc(void* ptr, size_t size)	extern function prototype	340	EXTERN_PROTO
+src/oblib/lib/alloc/malloc_hook.cpp	__libc_free(void* ptr)	extern function prototype	341	EXTERN_PROTO
+src/oblib/lib/alloc/malloc_hook.cpp	__libc_memalign(size_t align, size_t size)	extern function prototype	342	EXTERN_PROTO
+src/oblib/lib/alloc/malloc_hook_extended.cpp	memset_ptr	extern variable declaration	36	EXTERN_PROTO
+src/oblib/lib/alloc/malloc_hook_extended.cpp	malloc(size_t size)	extern function prototype	64	EXTERN_PROTO
+src/oblib/lib/alloc/malloc_hook_extended.cpp	free(void *ptr)	extern function prototype	65	EXTERN_PROTO
+src/oblib/lib/alloc/malloc_hook_extended.cpp	realloc(void *ptr, size_t size)	extern function prototype	66	EXTERN_PROTO
+src/oblib/lib/alloc/malloc_hook_extended.cpp	memalign(size_t alignment, size_t size)	extern function prototype	67	EXTERN_PROTO
+src/oblib/lib/alloc/malloc_hook_extended.cpp	__libc_calloc(size_t n, size_t size)	extern function prototype	207	EXTERN_PROTO
+src/oblib/lib/alloc/malloc_hook_extended.cpp	__libc_free_sized(void* ptr, size_t size)	extern function prototype	208	EXTERN_PROTO
+src/oblib/lib/alloc/malloc_hook_extended.cpp	__libc_free_aligned_sized(void* ptr, size_t alignment, size_t size)	extern function prototype	209	EXTERN_PROTO
+src/oblib/lib/alloc/malloc_hook_extended.cpp	__libc_valloc(size_t size)	extern function prototype	210	EXTERN_PROTO
+src/oblib/lib/alloc/malloc_hook_extended.cpp	__libc_pvalloc(size_t size)	extern function prototype	211	EXTERN_PROTO
+src/oblib/lib/alloc/malloc_hook_extended.cpp	__posix_memalign(void** r, size_t a, size_t s)	extern function prototype	212	EXTERN_PROTO
+src/oblib/lib/alloc/object_set.cpp	has_unfree_callback(char *info)	weak definition	34	WEAK_PLAIN
+src/oblib/lib/allocator/ob_sanity_libc_wrap.cpp	__real_strncasecmp(const char *, const char *, size_t)	extern function prototype	28	EXTERN_PROTO
+src/oblib/lib/allocator/ob_sanity_libc_wrap.cpp	__real_memcpy(void *, const void *, size_t)	extern function prototype	96	EXTERN_PROTO
+src/oblib/lib/allocator/ob_sanity_libc_wrap.cpp	__real_memmove(void *, const void *, size_t)	extern function prototype	97	EXTERN_PROTO
+src/oblib/lib/allocator/ob_sanity_libc_wrap.cpp	__real_memset(void *, int, size_t)	extern function prototype	98	EXTERN_PROTO
+src/oblib/lib/allocator/ob_sanity_libc_wrap.cpp	__real_memcmp(const void *, const void *, size_t)	extern function prototype	99	EXTERN_PROTO
+src/oblib/lib/allocator/ob_sanity_libc_wrap.cpp	__real_strcpy(char *, const char *)	extern function prototype	100	EXTERN_PROTO
+src/oblib/lib/allocator/ob_sanity_libc_wrap.cpp	__real_strncpy(char *, const char *, size_t)	extern function prototype	101	EXTERN_PROTO
+src/oblib/lib/allocator/ob_sanity_libc_wrap.cpp	__real_vsprintf(char *, const char *, va_list)	extern function prototype	102	EXTERN_PROTO
+src/oblib/lib/allocator/ob_sanity_libc_wrap.cpp	__real_vsnprintf(char *, size_t, const char *, va_list)	extern function prototype	103	EXTERN_PROTO
+src/oblib/lib/charset/ob_dtoa.cc	ob_fcvt_help_opt(char **end, char **dst, char **dend, int sign, int decpt, int *precision, char **res, bool add_padding_zero)	extern function prototype	34	EXTERN_PROTO
+src/oblib/lib/cpu/ob_cpu_topology.cpp	get_cpu_count()	weak definition	27	WEAK_OVERRIDDEN_IN_PROD
+src/oblib/lib/lock/ob_futex.cpp	__ulock_wait(uint32_t operation, void *addr, uint64_t value, uint32_t timeout_us)	extern function prototype	35	EXTERN_PROTO
+src/oblib/lib/lock/ob_futex.cpp	__ulock_wake(uint32_t operation, void *addr, uint64_t wake_value)	extern function prototype	36	EXTERN_PROTO
+src/oblib/lib/lock/ob_futex.cpp	futex_hook(uint32_t *uaddr, int futex_op, uint32_t val, const struct timespec* timeout)	weak definition	102	WEAK_PLAIN
+src/oblib/lib/ob_abort.cpp	ob_abort(void)	weak definition	31	WEAK_PLAIN
+src/oblib/lib/oblog/ob_base_log_writer.cpp	ob_pthread_create(void **ptr, void *(*start_routine) (void *), void *arg)	extern function prototype	25	EXTERN_PROTO
+src/oblib/lib/oblog/ob_base_log_writer.cpp	ob_pthread_join(void *ptr)	extern function prototype	26	EXTERN_PROTO
+src/oblib/lib/oblog/ob_log.cpp	allow_next_syslog(int64_t)	weak definition	68	WEAK_OVERRIDDEN_IN_PROD
+src/oblib/lib/oblog/ob_log.cpp	ob_strerror(const int oberr)	weak definition	73	WEAK_OVERRIDDEN_IN_PROD
+src/oblib/lib/oblog/ob_log.cpp	update_easy_log_level()	extern function prototype	78	EXTERN_PROTO
+src/oblib/lib/oblog/ob_log.cpp	ObLogger::need_to_print(const int32_t level)	weak definition	1769	WEAK_PLAIN
+src/oblib/lib/oblog/ob_log.cpp	ObLogger::need_to_print(const uint64_t par_mod_id, const int32_t level)	weak definition	1774	WEAK_PLAIN
+src/oblib/lib/oblog/ob_log.cpp	ObLogger::need_to_print(const uint64_t par_mod_id, const uint64_t sub_mod_id, const int32_t level)	weak definition	1779	WEAK_PLAIN
+src/oblib/lib/oblog/ob_log.cpp	ObLogger::need_to_print_dba(const int32_t level, bool force)	weak definition	1785	WEAK_PLAIN
+src/oblib/lib/oblog/ob_ringbuf_log_writer.cpp	ob_pthread_create(void **ptr, void *(*start_routine) (void *), void *arg)	extern function prototype	24	EXTERN_PROTO
+src/oblib/lib/oblog/ob_ringbuf_log_writer.cpp	ob_pthread_join(void *ptr)	extern function prototype	25	EXTERN_PROTO
+src/oblib/lib/rc/ob_rc.cpp	current_resource_owner_id()	weak definition	25	WEAK_OVERRIDDEN_IN_PROD
+src/oblib/lib/signal/ob_libunwind.c	safe_parray_c(char *buf, int64_t len, int64_t *array, int size)	extern function prototype	28	EXTERN_PROTO
+src/oblib/lib/signal/ob_signal_utils.cpp	get_rel_offset_c(int64_t addr)	extern function prototype	30	EXTERN_PROTO
+src/oblib/lib/task/ob_timer_service.cpp	lib_server_runtime_dispatch(::oceanbase::lib::IRunWrapper *run_wrapper, std::function<void()> fn)	weak definition	24	WEAK_PLAIN
+src/oblib/lib/thread/ob_dynamic_thread_pool.cpp	ob_pthread_create(void **ptr, void *(*start_routine) (void *), void *arg)	extern function prototype	21	EXTERN_PROTO
+src/oblib/lib/thread/ob_dynamic_thread_pool.cpp	ob_pthread_join(void *ptr)	extern function prototype	22	EXTERN_PROTO
+src/oblib/lib/thread/ob_queue_thread.cpp	ob_pthread_create(void **ptr, void *(*start_routine) (void *), void *arg)	extern function prototype	22	EXTERN_PROTO
+src/oblib/lib/thread/ob_queue_thread.cpp	ob_pthread_join(void *ptr)	extern function prototype	23	EXTERN_PROTO
+src/oblib/lib/thread/thread.cpp	get_max_thread_num()	weak definition	498	WEAK_PLAIN
+src/oblib/lib/trace/ob_trace.cpp	get_flt_span_manager()	weak definition	27	WEAK_PLAIN
+src/oblib/lib/trace/ob_trace.cpp	handle_span_record(ObFLTSpanMgr *flt_span_manager, char* tag_buf, int64_t tag_len, ::oceanbase::trace::ObSpanCtx* span)	weak definition	31	WEAK_PLAIN
+src/oblib/lib/utility/ob_smart_var.cpp	smart_alloc(const int64_t nbyte, const char *label)	weak definition	30	WEAK_PLAIN
+src/oblib/lib/utility/ob_smart_var.cpp	smart_free(void *ptr)	weak definition	38	WEAK_PLAIN
+src/oblib/lib/utility/utility.cpp	do_breakpad_init()	weak declaration	50	WEAK_PLAIN
+src/oblib/lib/worker.cpp	alloc_worker()	weak definition	33	WEAK_PLAIN
+src/oblib/lib/worker.cpp	common_yield()	weak definition	39	WEAK_PLAIN
+src/oblib/rpc/ob_sql_request_operator.cpp	request_finish_callback()	weak definition	27	WEAK_OVERRIDDEN_IN_PROD
+src/observer/main.cpp	__llvm_profile_set_filename(const char *)	extern function prototype	27	EXTERN_PROTO
+src/observer/mysql/obmp_base.cpp	request_finish_callback()	extern function prototype	28	EXTERN_PROTO
+src/observer/mysql/obmp_disconnect.cpp	request_finish_callback()	extern function prototype	26	EXTERN_PROTO
+src/observer/ob_server.cpp	ussl_stop()	extern function prototype	377	EXTERN_PROTO
+src/observer/ob_server.cpp	ussl_wait()	extern function prototype	378	EXTERN_PROTO
+src/observer/ob_signal_handle.cpp	switch_check_io_hang_errsim()	extern function prototype	46	EXTERN_PROTO
+src/observer/omt/ob_server_runtime.cpp	ob_pthread_create(void **ptr, void *(*start_routine) (void *), void *arg)	extern function prototype	51	EXTERN_PROTO
+src/observer/omt/ob_server_runtime.cpp	ob_pthread_tryjoin_np(void *ptr)	extern function prototype	52	EXTERN_PROTO
+src/observer/omt/ob_server_runtime.cpp	print_all_thread(const char* desc)	weak definition	536	WEAK_PLAIN
+src/pl/ob_pl.cpp	sys_pkg_need_priv_check(uint64_t pkg_id, ObSchemaGetterGuard *schema_guard, bool &need_check, uint64_t &pkg_spec_id, bool &need_only_obj_check)	extern function prototype	43	EXTERN_PROTO
+src/pl/ob_pl_package_manager.cpp	syspack_source_count	extern variable declaration	320	EXTERN_PROTO
+src/pl/ob_pl_package_manager.cpp	syspack_source_contents	extern variable declaration	321	EXTERN_PROTO
+src/pl/ob_pl_package_manager.cpp	mysql_syspack_file_list_length	extern variable declaration	323	EXTERN_PROTO
+src/pl/ob_pl_package_manager.cpp	mysql_syspack_file_list	extern variable declaration	324	EXTERN_PROTO
+src/pl/ob_pl_package_manager.cpp	mysql_special_syspack_file_list_length	extern variable declaration	325	EXTERN_PROTO
+src/pl/ob_pl_package_manager.cpp	mysql_special_syspack_file_list	extern variable declaration	326	EXTERN_PROTO
+src/pl/parser/ob_pl_parser.cpp	obpl_parser_init(ObParseCtx *parse_ctx)	extern function prototype	25	EXTERN_PROTO
+src/pl/parser/ob_pl_parser.cpp	obpl_parser_parse(ObParseCtx *parse_ctx)	extern function prototype	26	EXTERN_PROTO
+src/pl/parser/ob_pl_parser.cpp	merge_tree(void *malloc_pool, int *fatal_error, ObItemType node_tag, ParseNode *source_tree)	extern function prototype	27	EXTERN_PROTO
+src/pl/parser/pl_parser_base.c	obpl_mysql_yy_scan_bytes(yyconst char *bytes,int len ,yyscan_t yyscanner)	extern function prototype	25	EXTERN_PROTO
+src/pl/parser/pl_parser_base.c	obpl_mysql_yy_switch_to_buffer(YY_BUFFER_STATE new_buffer ,yyscan_t yyscanner)	extern function prototype	26	EXTERN_PROTO
+src/pl/parser/pl_parser_base.c	obpl_mysql_yy_delete_buffer(YY_BUFFER_STATE b ,yyscan_t yyscanner)	extern function prototype	27	EXTERN_PROTO
+src/pl/parser/pl_parser_base.c	obpl_mysql_yylex_init_extra(YY_EXTRA_TYPE user_defined,yyscan_t* scanner)	extern function prototype	28	EXTERN_PROTO
+src/pl/parser/pl_parser_base.c	obpl_mysql_yyparse(ObParseCtx *parse_ctx)	extern function prototype	29	EXTERN_PROTO
+src/share/datum/ob_datum_funcs.cpp	__init_datum_funcs_all()	extern function prototype	163	EXTERN_PROTO
+src/share/datum/ob_datum_funcs.cpp	__init_all_str_funcs()	extern function prototype	164	EXTERN_PROTO
+src/share/datum/ob_datum_funcs_compilation/ob_datum_funcs_all.cpp	__init_datum_func0()	extern function prototype	20	EXTERN_PROTO
+src/share/datum/ob_datum_funcs_compilation/ob_datum_funcs_all.cpp	__init_datum_func1()	extern function prototype	21	EXTERN_PROTO
+src/share/datum/ob_datum_funcs_compilation/ob_datum_funcs_all.cpp	__init_datum_func2()	extern function prototype	22	EXTERN_PROTO
+src/share/datum/ob_datum_funcs_compilation/ob_datum_funcs_all.cpp	__init_datum_func3()	extern function prototype	23	EXTERN_PROTO
+src/share/datum/ob_datum_funcs_compilation/ob_datum_funcs_all.cpp	__init_datum_func4()	extern function prototype	24	EXTERN_PROTO
+src/share/datum/ob_datum_funcs_compilation/ob_datum_funcs_all.cpp	__init_datum_func5()	extern function prototype	25	EXTERN_PROTO
+src/share/datum/ob_datum_funcs_compilation/ob_datum_funcs_all.cpp	__init_datum_func6()	extern function prototype	26	EXTERN_PROTO
+src/share/datum/ob_datum_funcs_compilation/ob_datum_funcs_all.cpp	__init_datum_func7()	extern function prototype	27	EXTERN_PROTO
+src/share/geo/ob_geo_func_covered_by2.cpp	ob_geo_func_covered_by_eval_wkb_cart(const common::ObGeometry *g1, const common::ObGeometry *g2, const ObGeoEvalCtx &context, bool &result)	extern function prototype	586	EXTERN_PROTO
+src/share/geo/ob_geo_func_crosses2.cpp	ob_geo_func_crosses_eval_wkb_cart(const common::ObGeometry *g1, const common::ObGeometry *g2, const ObGeoEvalCtx &context, ObGeoFuncResWithNull &result)	extern function prototype	221	EXTERN_PROTO
+src/share/geo/ob_geo_func_difference3.cpp	ob_geo_func_difference_eval_wkb_cart(const ObGeometry *g1, const ObGeometry *g2, const ObGeoEvalCtx &context, ObGeometry *&result)	extern function prototype	223	EXTERN_PROTO
+src/share/geo/ob_geo_func_difference3.cpp	ob_geo_func_difference_eval_wkb_geog(const ObGeometry *g1, const ObGeometry *g2, const ObGeoEvalCtx &context, ObGeometry *&result)	extern function prototype	225	EXTERN_PROTO
+src/share/geo/ob_geo_func_equals1.cpp	ob_geo_func_equals_eval_tree_cart(const common::ObGeometry *g1, const common::ObGeometry *g2, const ObGeoEvalCtx &context, bool &result)	extern function prototype	120	EXTERN_PROTO
+src/share/geo/ob_geo_func_equals2.cpp	ob_geo_func_equals_eval_tree_geog(const common::ObGeometry *g1, const common::ObGeometry *g2, const ObGeoEvalCtx &context, bool &result)	extern function prototype	128	EXTERN_PROTO
+src/share/geo/ob_geo_func_equals3.cpp	ob_geo_func_equals_eval_wkb_cart(const common::ObGeometry *g1, const common::ObGeometry *g2, const ObGeoEvalCtx &context, bool &result)	extern function prototype	113	EXTERN_PROTO
+src/share/geo/ob_geo_func_equals3.cpp	ob_geo_func_equals_eval_wkb_geog(const common::ObGeometry *g1, const common::ObGeometry *g2, const ObGeoEvalCtx &context, bool &result)	extern function prototype	239	EXTERN_PROTO
+src/share/geo/ob_geo_func_equals3.cpp	ob_geo_func_equals_eval_wkb_cart(const common::ObGeometry *g1, const common::ObGeometry *g2, const ObGeoEvalCtx &context, bool &result)#2	extern function prototype	292	EXTERN_PROTO
+src/share/geo/ob_geo_func_equals3.cpp	ob_geo_func_equals_eval_wkb_geog(const common::ObGeometry *g1, const common::ObGeometry *g2, const ObGeoEvalCtx &context, bool &result)#2	extern function prototype	294	EXTERN_PROTO
+src/share/geo/ob_geo_func_overlaps1.cpp	ob_geo_func_overlaps_eval_tree(const common::ObGeometry *g1, const common::ObGeometry *g2, const ObGeoEvalCtx &context, ObGeoFuncResWithNull &result)	extern function prototype	151	EXTERN_PROTO
+src/share/geo/ob_geo_func_overlaps2.cpp	ob_geo_func_overlaps_eval_tree(const common::ObGeometry *g1, const common::ObGeometry *g2, const ObGeoEvalCtx &context, ObGeoFuncResWithNull &result)	extern function prototype	151	EXTERN_PROTO
+src/share/geo/ob_geo_func_overlaps3.cpp	ob_geo_func_overlaps_eval_wkb_cart(const common::ObGeometry *g1, const common::ObGeometry *g2, const ObGeoEvalCtx &context, ObGeoFuncResWithNull &result)	extern function prototype	169	EXTERN_PROTO
+src/share/geo/ob_geo_func_overlaps3.cpp	ob_geo_func_overlaps_eval_wkb_geog(const common::ObGeometry *g1, const common::ObGeometry *g2, const ObGeoEvalCtx &context, ObGeoFuncResWithNull &result)	extern function prototype	171	EXTERN_PROTO
+src/share/geo/ob_geo_func_symdifference1.cpp	eval_wkb_cart_part2(const common::ObGeometry *g1, const common::ObGeometry *g2, const ObGeoEvalCtx &context, ObGeometry *&result)	extern function prototype	312	EXTERN_PROTO
+src/share/geo/ob_geo_func_symdifference2.cpp	ob_geo_func_symdifference_eval_wkb_cart(const common::ObGeometry *g1, const common::ObGeometry *g2, const ObGeoEvalCtx &context, ObGeometry *&result)	extern function prototype	514	EXTERN_PROTO
+src/share/geo/ob_geo_func_symdifference3.cpp	ob_geo_func_symdifference_eval_wkb_cart(const common::ObGeometry *g1, const common::ObGeometry *g2, const ObGeoEvalCtx &context, ObGeometry *&result)	extern function prototype	28	EXTERN_PROTO
+src/share/geo/ob_geo_func_touches1.cpp	ob_geo_func_touches_eval_tree_cart(const common::ObGeometry *g1, const common::ObGeometry *g2, const ObGeoEvalCtx &context, bool &result)	extern function prototype	83	EXTERN_PROTO
+src/share/geo/ob_geo_func_touches2.cpp	ob_geo_func_touches_eval_tree_geog(const common::ObGeometry *g1, const common::ObGeometry *g2, const ObGeoEvalCtx &context, bool &result)	extern function prototype	36	EXTERN_PROTO
+src/share/geo/ob_geo_func_touches3.cpp	ob_geo_func_touches_eval_wkb_cart(const common::ObGeometry *g1, const common::ObGeometry *g2, const ObGeoEvalCtx &context, bool &result)	extern function prototype	219	EXTERN_PROTO
+src/share/geo/ob_geo_func_touches3.cpp	ob_geo_func_touches_eval_wkb_geog(const common::ObGeometry *g1, const common::ObGeometry *g2, const ObGeoEvalCtx &context, bool &result)	extern function prototype	221	EXTERN_PROTO
+src/share/geo/ob_geo_func_union2.cpp	ob_geo_func_union_eval_wkb_cart(const ObGeometry *g1, const ObGeometry *g2, const ObGeoEvalCtx &context, ObGeometry *&result)	extern function prototype	338	EXTERN_PROTO
+src/share/geo/ob_geo_func_within2.cpp	ob_geo_func_within_eval_wkb_cart(const common::ObGeometry *g1, const common::ObGeometry *g2, const ObGeoEvalCtx &context, bool &result)	extern function prototype	604	EXTERN_PROTO
+src/share/schema/ob_multi_version_schema_service.cpp	get_max_schema_slot_num_for_add_schema(const int64_t default_val)	extern function prototype	44	EXTERN_PROTO
+src/sql/code_generator/ob_static_engine_expr_cg.cpp	eval_question_mark_func(EVAL_FUNC_ARG_DECL)	extern function prototype	413	EXTERN_PROTO
+src/sql/code_generator/ob_static_engine_expr_cg.cpp	eval_assign_question_mark_func(EVAL_FUNC_ARG_DECL)	extern function prototype	414	EXTERN_PROTO
+src/sql/code_generator/ob_static_engine_expr_cg.cpp	eval_questionmark_decint2nmb(EVAL_FUNC_ARG_DECL)	extern function prototype	415	EXTERN_PROTO
+src/sql/code_generator/ob_static_engine_expr_cg.cpp	eval_questionmark_nmb2decint_eqcast(EVAL_FUNC_ARG_DECL)	extern function prototype	416	EXTERN_PROTO
+src/sql/code_generator/ob_static_engine_expr_cg.cpp	eval_questionmark_decint2decint_eqcast(EVAL_FUNC_ARG_DECL)	extern function prototype	417	EXTERN_PROTO
+src/sql/code_generator/ob_static_engine_expr_cg.cpp	eval_questionmark_decint2decint_normalcast(EVAL_FUNC_ARG_DECL)	extern function prototype	418	EXTERN_PROTO
+src/sql/das/ob_das_parallel_handler.cpp	request_finish_callback()	extern function prototype	30	EXTERN_PROTO
+src/sql/engine/basic/ob_pushdown_filter.cpp	mark_filtered_datums_simd(const ObDatum *datums, const uint64_t *values, const int64_t size, ObBitVector &bit_vec)	extern function prototype	2254	EXTERN_PROTO
+src/sql/engine/expr/ob_expr_cmp_func.cpp	__init_all_expr_cmp_funcs()	extern function prototype	402	EXTERN_PROTO
+src/sql/engine/expr/ob_expr_cmp_func.cpp	__init_all_str_expr_cmp_func()	extern function prototype	403	EXTERN_PROTO
+src/sql/engine/expr/ob_expr_cmp_func_compile/ob_expr_cmp_func_compile_init.cpp	__init_expr_cmp_func0()	extern function prototype	21	EXTERN_PROTO
+src/sql/engine/expr/ob_expr_cmp_func_compile/ob_expr_cmp_func_compile_init.cpp	__init_expr_cmp_func1()	extern function prototype	22	EXTERN_PROTO
+src/sql/engine/expr/ob_expr_cmp_func_compile/ob_expr_cmp_func_compile_init.cpp	__init_expr_cmp_func2()	extern function prototype	23	EXTERN_PROTO
+src/sql/engine/expr/ob_expr_cmp_func_compile/ob_expr_cmp_func_compile_init.cpp	__init_expr_cmp_func3()	extern function prototype	24	EXTERN_PROTO
+src/sql/engine/expr/ob_expr_cmp_func_compile/ob_expr_cmp_func_compile_init.cpp	__init_expr_cmp_func4()	extern function prototype	25	EXTERN_PROTO
+src/sql/engine/expr/ob_expr_cmp_func_compile/ob_expr_cmp_func_compile_init.cpp	__init_expr_cmp_func5()	extern function prototype	26	EXTERN_PROTO
+src/sql/engine/expr/ob_expr_cmp_func_compile/ob_expr_cmp_func_compile_init.cpp	__init_expr_cmp_func6()	extern function prototype	27	EXTERN_PROTO
+src/sql/engine/expr/ob_expr_cmp_func_compile/ob_expr_cmp_func_compile_init.cpp	__init_expr_cmp_func7()	extern function prototype	28	EXTERN_PROTO
+src/sql/engine/sort/ob_sort_op_impl.cpp	fast_compare_simd(const unsigned char *s, const unsigned char *t, int64_t length, int64_t &differ_at, int64_t cache_ends)	extern function prototype	263	EXTERN_PROTO
+src/sql/monitor/ob_monitor_node.cpp	lib_get_cpu_khz()	extern function prototype	21	EXTERN_PROTO
+src/sql/parser/fts_parse.c	obsql_fts_yyparse(FtsParserResult *ftsParserResult)	extern function prototype	21	EXTERN_PROTO
+src/sql/parser/ob_fast_parser.cpp	process_hex_chars_simd(ObRawSql& raw_sql, bool& is_arch_supported)	extern function prototype	1086	EXTERN_PROTO
+src/sql/parser/parse_node.c	get_type_name(int type)	extern function prototype	23	EXTERN_PROTO
+src/sql/parser/parse_node.c	check_mem_status()	weak definition	177	WEAK_PLAIN
+src/sql/parser/parse_node.c	try_check_mem_status(int64_t check_try_times)	weak definition	178	WEAK_PLAIN
+src/sql/parser/parse_node.c	ob_parse_binary_simd(const char **src, const char *end, char **dest)	extern function prototype	532	EXTERN_PROTO
+src/sql/parser/parse_node.c	ob_backtrace_c(void **buffer, int size)	extern function prototype	1017	EXTERN_PROTO
+src/sql/parser/parse_node.c	parray_c(char *buf, int64_t len, int64_t *array, int size)	extern function prototype	1018	EXTERN_PROTO
+src/sql/parser/sql_parser_base.c	obsql_mysql_yylex_init_extra(YY_EXTRA_TYPE yy_user_defined,yyscan_t* ptr_yy_globals)	extern function prototype	24	EXTERN_PROTO
+src/sql/parser/sql_parser_base.c	obsql_mysql_yyparse(ParseResult *result)	extern function prototype	25	EXTERN_PROTO
+src/sql/parser/sql_parser_base.c	obsql_mysql_multi_fast_parse(ParseResult *p)	extern function prototype	26	EXTERN_PROTO
+src/sql/parser/sql_parser_base.c	obsql_mysql_multi_values_parse(ParseResult *p)	extern function prototype	27	EXTERN_PROTO
+src/sql/parser/sql_parser_base.c	obsql_mysql_fast_parse(ParseResult *p)	extern function prototype	28	EXTERN_PROTO
+src/sql/parser/sql_parser_base.c	obsql_mysql_yylex_destroy(yyscan_t yyscanner)	extern function prototype	29	EXTERN_PROTO
+src/sql/parser/sql_parser_base.c	obsql_mysql_yy_scan_bytes(yyconst char *bytes,int len ,yyscan_t yyscanner)	extern function prototype	30	EXTERN_PROTO
+src/sql/parser/sql_parser_base.c	obsql_mysql_yy_switch_to_buffer(YY_BUFFER_STATE new_buffer ,yyscan_t yyscanner)	extern function prototype	31	EXTERN_PROTO
+src/sql/parser/sql_parser_base.c	obsql_mysql_yy_delete_buffer(YY_BUFFER_STATE b ,yyscan_t yyscanner)	extern function prototype	32	EXTERN_PROTO
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	init_dict_cmp_ref_simd_funcs()	extern function prototype	165	EXTERN_PROTO
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	init_dict_cmp_ref_neon_simd_funcs()	extern function prototype	166	EXTERN_PROTO
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	init_raw_fix_simd_filter_funcs()	extern function prototype	217	EXTERN_PROTO
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	init_raw_fix_neon_simd_filter_funcs()	extern function prototype	218	EXTERN_PROTO
+src/storage/multi_data_source/runtime_utility/common_define.cpp	DefaultAllocator::alloc(const int64_t size)	weak definition	28	WEAK_PLAIN
+src/storage/multi_data_source/runtime_utility/common_define.cpp	DefaultAllocator::free(void *ptr)	weak definition	30	WEAK_PLAIN
+src/storage/multi_data_source/runtime_utility/common_define.cpp	MdsAllocator::alloc(const int64_t size)	weak definition	36	WEAK_PLAIN
+src/storage/multi_data_source/runtime_utility/common_define.cpp	MdsAllocator::free(void *ptr)	weak definition	50	WEAK_PLAIN
+src/storage/tx/ob_trans_ctx_mgr_v4.cpp	ObLSTxCtxMgr::init(ObTxTable *tx_table, ObLockTable *lock_table, ObTsMgr *ts_mgr, ObTransService *txs, ObITxLogParam *param, ObITxLogAdapter *log_adapter)	weak definition	152	WEAK_PLAIN
+src/storage/tx/ob_tx_ctx.cpp	ObTxCtx::errsim_notify_mds_()	weak definition	4841	WEAK_PLAIN
+src/storage/tx/ob_tx_data_define.cpp	ObTxData::dec_ref()	weak definition	469	WEAK_PLAIN
+src/storage/tx_storage/ob_ls_service.cpp	ObTxDataAllocator::init(const char *label)	weak definition	798	WEAK_PLAIN
+src/storage/tx_storage/ob_ls_service.cpp	ObTxDataAllocator::alloc(const bool enable_throttle, const int64_t abs_expire_time)	weak definition	822	WEAK_PLAIN
+src/storage/tx_table/ob_tx_ctx_table.cpp	ObTxCtxTable::acquire_ref_()	weak definition	239	WEAK_PLAIN
+src/storage/tx_table/ob_tx_ctx_table.cpp	ObTxCtxTable::release_ref_()	weak definition	257	WEAK_PLAIN

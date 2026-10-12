@@ -1,0 +1,589 @@
+file	symbol	source_construct	line	pretag
+src/data_plane/api/data_plane/fts/dict/ob_gen_dic_loader.h	storage::ObGenDicLoader::lock_	lock member	86	lock=TCRWLock->BigReaderLatch; writes-under-lock=dic_loader_map_,is_inited_; reads-outside=is_inited_
+src/data_plane/api/data_plane/scheduler/ob_dag_scheduler.h	share::ObINodeWithChild::lock_	lock member	151	lock=ObMutex->Latch; writes-under-lock=dag_net_,emergency_,is_independent_,is_inited_,is_stop_,list_idx_,max_retry_times_,parent_,priority_,retry_strategy_,task_list_,type_,waiting_task_list_; reads-outside=dag_net_,emergency_,is_independent_,is_inited_,is_stop_,list_idx_,max_retry_times_,parent_,priority_,retry_strategy_,task_list_,type_,waiting_task_list_
+src/data_plane/api/data_plane/scheduler/ob_dag_scheduler.h	share::ObIDagNet::lock_	lock member	713	lock=ObMutex->Latch; writes-under-lock=add_time_,dag_record_map_,is_cancel_,is_finishing_last_dag_,is_stopped_,start_time_,type_; reads-outside=add_time_,dag_record_map_,is_cancel_,start_time_,type_
+src/data_plane/api/data_plane/scheduler/ob_dag_scheduler.h	share::ObDagWorker::cond_	lock member	821	lock=ObThreadCond->Monitor; writes-under-lock=last_check_time_,status_; reads-outside=last_check_time_,status_
+src/data_plane/api/data_plane/scheduler/ob_dag_scheduler.h	share::ObDagNetScheduler::dag_net_map_lock_	lock member	910	lock=ObMutex->Latch; writes-under-lock=dag_net_cnts_,dag_net_id_map_,dag_net_map_; reads-outside=dag_net_cnts_,dag_net_id_map_,dag_net_map_
+src/data_plane/api/data_plane/scheduler/ob_dag_scheduler.h	share::ObDagPrioScheduler::prio_lock_	lock member	1110	lock=ObMutex->Latch; writes-under-lock=limits_,running_task_cnts_,running_workers_; reads-outside=limits_,running_task_cnts_,running_workers_
+src/data_plane/api/data_plane/scheduler/ob_dag_scheduler.h	share::ObDagScheduler::scheduler_sync_	lock member	1326	lock=ObThreadCond->Monitor; writes-under-lock=compaction_dag_limit_,free_workers_,is_inited_,work_thread_num_; reads-outside=compaction_dag_limit_,free_workers_,is_inited_,work_thread_num_
+src/data_plane/api/data_plane/scheduler/ob_sys_task_stat.h	share::ObSysTaskStatMgr::lock_	lock member	101	lock=SpinRWLock->RwLatch; writes-under-lock=task_list_; reads-outside=task_list_
+src/logservice/applyservice/ob_log_apply_service.h	logservice::ObApplyStatus::lock_	lock member	227	lock=TCRWLock->BigReaderLatch; writes-under-lock=accepting_append_,is_in_stop_state_,last_check_scn_,max_applied_cb_scn_,palf_committed_end_lsn_,palf_committed_end_scn_; reads-outside=accepting_append_,is_in_stop_state_,last_check_scn_,max_applied_cb_scn_,palf_committed_end_lsn_,palf_committed_end_scn_; unlock-calls=1
+src/logservice/applyservice/ob_log_apply_service.h	logservice::ObApplyStatus::mutex_	lock member	228	lock=ObMutex->Latch; writes-under-lock=accepting_append_,last_check_scn_,max_applied_cb_scn_,palf_committed_end_scn_; reads-outside=accepting_append_,last_check_scn_,max_applied_cb_scn_,palf_committed_end_scn_
+src/logservice/applyservice/ob_log_apply_service.h	logservice::ObLogApplyService::lock_	lock member	277	lock=ObQSyncLock->QSyncLatch; writes-under-lock=apply_status_
+src/logservice/localservice/ob_local_log_handler_set.h	logservice::ObLocalLogHandlerSet::lock_	lock member	44	lock=ObSpinLock->Latch; writes-under-lock=local_log_handler_active_,local_log_handlers_; reads-outside=local_log_handler_active_,local_log_handlers_
+src/logservice/ob_log_allocator_mgr.h	common::ObLogAllocatorMgr::lock_	lock member	53	lock=ObRWLock->RwLatch(amendment 02-sync); writes-under-lock=allocator_; reads-outside=allocator_
+src/logservice/ob_log_handler.h	logservice::ObLogHandler::lock_	lock member	357	lock=TCRWLock->BigReaderLatch; writes-under-lock=apply_service_,apply_status_,get_max_decided_scn_debug_time_,is_in_stop_state_,is_inited_,is_offline_,local_append_enabled_,palf_env_,palf_handle_,replay_service_; reads-outside=apply_service_,apply_status_,get_max_decided_scn_debug_time_,is_in_stop_state_,is_inited_,is_offline_,local_append_enabled_,palf_env_,palf_handle_,replay_service_
+src/logservice/ob_log_handler.h	logservice::ObLogHandler::deps_lock_	lock member	366	lock=TCRWLock->BigReaderLatch; writes-under-lock=apply_service_,apply_status_,get_max_decided_scn_debug_time_,palf_env_,replay_service_; reads-outside=apply_service_,apply_status_,get_max_decided_scn_debug_time_,palf_env_,replay_service_
+src/logservice/ob_log_handler.h	logservice::ObLogHandler::ls_qs_	lock member	367	lock=ObQSync->Quiescence
+src/logservice/ob_log_service.h	logservice::ObLogService::update_palf_opts_lock_	lock member	195	lock=ObSpinLock->Latch; writes-under-lock=runtime_config_; reads-outside=runtime_config_
+src/logservice/palf/fixed_sliding_window.h	palf::FixedSlidingWindowSlot::slot_lock_	lock member	39	lock=ObSmallSpinLock->bitlock(backoff)
+src/logservice/palf/fixed_sliding_window.h	palf::FixedSlidingWindow::lock_	lock member	479	lock=TCRWLock->BigReaderLatch; writes-under-lock=begin_sn_,end_sn_; reads-outside=begin_sn_,end_sn_; unlock-calls=1
+src/logservice/palf/log_block_mgr.h	palf::LogBlockMgr::block_id_cache_lock_	lock member	121	lock=ObSpinLock->Latch; writes-under-lock=curr_writable_block_id_,max_block_id_,min_block_id_; reads-outside=curr_writable_block_id_,max_block_id_,min_block_id_
+src/logservice/palf/log_engine.h	palf::LogEngine::min_block_info_lock_	lock member	203	lock=ObSpinLock->Latch; writes-under-lock=min_block_id_,min_block_info_cache_version_,min_block_max_scn_,min_block_min_scn_; reads-outside=min_block_id_,min_block_info_cache_version_,min_block_max_scn_,min_block_min_scn_
+src/logservice/palf/log_engine.h	palf::LogEngine::log_meta_lock_	lock member	224	lock=ObSpinLock->Latch; writes-under-lock=base_lsn_for_block_gc_; reads-outside=base_lsn_for_block_gc_
+src/logservice/palf/log_group_buffer.h	palf::LogGroupBuffer::truncate_lock_	lock member	111	lock=ObSpinLock->Latch; unit=rewrite:storage_core
+src/logservice/palf/log_io_worker.h	palf::LogIOWorker::lock_	lock member	145	lock=ObSpinLock->Latch; writes-under-lock=queue_; reads-outside=queue_
+src/logservice/palf/log_sliding_window.h	palf::LogSlidingWindow::last_submit_info_lock_	lock member	251	lock=ObSpinLock->Latch; writes-under-lock=last_submit_log_id_,last_submit_lsn_; reads-outside=last_submit_log_id_,last_submit_lsn_
+src/logservice/palf/log_sliding_window.h	palf::LogSlidingWindow::max_flushed_info_lock_	lock member	258	lock=ObSpinLock->Latch; writes-under-lock=max_flushed_lsn_; reads-outside=max_flushed_lsn_
+src/logservice/palf/log_sliding_window.h	palf::LogSlidingWindow::committed_info_lock_	lock member	262	lock=ObSpinLock->Latch
+src/logservice/palf/log_sliding_window.h	palf::LogSlidingWindow::last_slide_info_lock_	lock member	267	lock=ObSpinLock->Latch; writes-under-lock=last_slide_end_lsn_,last_slide_log_accum_checksum_,last_slide_lsn_,last_slide_scn_; reads-outside=last_slide_end_lsn_,last_slide_log_accum_checksum_,last_slide_lsn_,last_slide_scn_
+src/logservice/palf/log_storage.h	palf::LogStorage::tail_info_lock_	lock member	198	lock=ObSpinLock->Latch; writes-under-lock=curr_block_writable_size_,log_tail_,need_append_block_header_; reads-outside=curr_block_writable_size_,log_tail_,need_append_block_header_
+src/logservice/palf/log_storage.h	palf::LogStorage::delete_block_lock_	lock member	199	lock=ObSpinLock->Latch
+src/logservice/palf/log_task.h	palf::LogTask::lock_	lock member	162	lock=ObLatch->RwLatch; unlock-calls=1; cross-function-lock
+src/logservice/palf/log_throttle.h	palf::LogWritingThrottle::lock_	lock member	139	lock=ObSpinLock->Latch; writes-under-lock=appended_log_size_cur_round_,last_update_ts_,throttling_options_; reads-outside=appended_log_size_cur_round_,last_update_ts_,throttling_options_; unlock-calls=2
+src/logservice/palf/lsn_allocator.h	palf::LSNAllocator::lock_	lock member	110	lock=TCRWLock->BigReaderLatch; writes-under-lock=log_id_base_,scn_base_; reads-outside=log_id_base_,scn_base_; unit=rewrite:storage_core
+src/logservice/palf/palf_callback_wrapper.h	palf::PalfFSCbWrapper::lock_	lock member	49	lock=ObSpinLock->Latch; writes-under-lock=list_; reads-outside=list_
+src/logservice/palf/palf_callback_wrapper.h	palf::LogPlugins::palf_monitor_lock_	lock member	82	lock=TCRWLock->BigReaderLatch; writes-under-lock=palf_monitor_
+src/logservice/palf/palf_env_impl.h	palf::PalfDiskOptionsWrapper::disk_opts_lock_	lock member	160	lock=ObSpinLock->Latch; writes-under-lock=cur_unrecyclable_log_disk_size_,disk_opts_for_recycling_blocks_,disk_opts_for_stopping_writing_,sequence_,status_; reads-outside=cur_unrecyclable_log_disk_size_,disk_opts_for_recycling_blocks_,disk_opts_for_stopping_writing_,sequence_,status_
+src/logservice/palf/palf_env_impl.h	palf::PalfEnvImpl::palf_meta_lock_	lock member	287	lock=TCRWLock->BigReaderLatch; writes-under-lock=enable_log_cache_; reads-outside=enable_log_cache_
+src/logservice/palf/palf_handle_impl.h	palf::PalfHandleImpl::lock_	lock member	432	lock=TCRWLock->BigReaderLatch; writes-under-lock=accum_write_log_size_,allocator_,diskspace_enough_,is_inited_,last_accum_write_statistic_time_,last_record_append_lsn_,log_cache_,log_engine_,mode_mgr_,palf_env_impl_,plugins_,self_,state_mgr_,sw_; reads-outside=accum_write_log_size_,allocator_,is_inited_,last_accum_write_statistic_time_,log_cache_,log_engine_,mode_mgr_,palf_env_impl_,plugins_,self_,state_mgr_,sw_
+src/logservice/palf/palf_handle_impl.h	palf::PalfHandleImpl::last_locate_lock_	lock member	444	lock=ObSpinLock->Latch; writes-under-lock=last_locate_block_,last_locate_scn_
+src/logservice/replayservice/ob_log_replay_service.h	logservice::ObLogReplayService::lock_	lock member	187	lock=ObQSyncLock->QSyncLatch; writes-under-lock=replay_status_
+src/logservice/replayservice/ob_replay_handler.h	logservice::ObReplayHandler::lock_	lock member	53	lock=TCRWLock->BigReaderLatch; writes-under-lock=handlers_; reads-outside=handlers_
+src/logservice/replayservice/ob_replay_status.h	logservice::ObReplayServiceTask::lock_	lock member	241	lock=ObSpinLock->Latch; writes-under-lock=base_lsn_,base_scn_,next_to_submit_lsn_,next_to_submit_scn_; reads-outside=base_lsn_,base_scn_,next_to_submit_lsn_,next_to_submit_scn_
+src/logservice/replayservice/ob_replay_status.h	logservice::ObReplayStatus::rwlock_	lock member	602	lock=TCRWLock->BigReaderLatch; writes-under-lock=check_enable_debug_time_,err_info_,fs_cb_,get_log_info_debug_time_,is_inited_,is_submit_blocked_,last_check_memstore_lsn_,local_replay_enabled_,palf_env_,pending_task_count_,post_barrier_lsn_,rp_sv_,submit_log_task_,try_wrlock_debug_time_; reads-outside=check_enable_debug_time_,err_info_,fs_cb_,get_log_info_debug_time_,is_inited_,is_submit_blocked_,last_check_memstore_lsn_,local_replay_enabled_,palf_env_,pending_task_count_,post_barrier_lsn_,rp_sv_,submit_log_task_,try_wrlock_debug_time_; unlock-calls=2; cross-function-lock
+src/logservice/replayservice/ob_replay_status.h	logservice::ObReplayStatus::local_replay_lock_	lock member	603	lock=TCRWLock->BigReaderLatch; writes-under-lock=is_submit_blocked_,local_replay_enabled_; reads-outside=is_submit_blocked_,local_replay_enabled_
+src/oblib/common/log/ob_log_cursor.h	common::ObAtomicLogCursor::cursor_lock_	lock member	61	lock=SpinRWLock->RwLatch
+src/oblib/common/ob_data_version_mgr.h	common::ObDataVersionMgr::lock_	lock member	97	lock=SpinRWLock->RwLatch
+src/oblib/easy/io/easy_io_struct.h	easy_ratelimitor_t::s2r_hmap_rwlock	lock member	319	lock=easy_spinrwlock_t->libeasy remnant; no-method-bodies; unit=delete
+src/oblib/easy/io/easy_io_struct.h	easy_io_t::ssl_rwlock_	lock member	626	lock=easy_spinrwlock_t->libeasy remnant; no-method-bodies; unit=delete
+src/oblib/easy/io/easy_io_struct.h	easy_client_wait_t::mutex	lock member	655	lock=pthread_mutex_t->Monitor/Latch; no-method-bodies; unit=delete
+src/oblib/easy/io/easy_io_struct.h	easy_client_wait_t::cond	lock member	656	lock=pthread_cond_t->Monitor; no-method-bodies; unit=delete
+src/oblib/lib/alloc/alloc_interface.h	lib::SetDoNothingLocker::<base lib::ISetLocker>	lock base class	66	lock=ISetLocker->unlisted(allocator set locker); base-access=public; unit=replace:mem
+src/oblib/lib/alloc/alloc_interface.h	lib::SetLocker::<base lib::ISetLocker>	lock base class	75	lock=ISetLocker->unlisted(allocator set locker); base-access=public; unit=replace:mem
+src/oblib/lib/alloc/alloc_interface.h	lib::SetLockerNoLog::<base lib::ISetLocker>	lock base class	97	lock=ISetLocker->unlisted(allocator set locker); base-access=public; unit=replace:mem
+src/oblib/lib/alloc/block_set.h	lib::BlockSet::locker_	lock pointer member	74	lock=ISetLocker->unlisted(allocator set locker); unlock-calls=1; cross-function-lock; unit=replace:mem
+src/oblib/lib/alloc/memory_dump.h	common::ObMemoryCheckContext::cond_	lock member	65	lock=ObThreadCond->Monitor; unit=replace:mem
+src/oblib/lib/alloc/memory_dump.h	common::ObMemoryDump::cond_	lock member	216	lock=ObThreadCond->Monitor; writes-under-lock=pending_,pending_dump_task_; unit=replace:mem
+src/oblib/lib/alloc/memory_dump.h	common::ObMemoryDump::iter_lock_	lock member	226	lock=ObLatch->RwLatch; unit=replace:mem
+src/oblib/lib/alloc/ob_context_allocator.h	ObContextAllocator::AChunkUsingList::Slot::mutex_	lock member (regex; file not parsed)	344	lock=ObMutex; regex-fallback(tus=0)
+src/oblib/lib/alloc/ob_context_allocator.h	ObContextAllocator::chunk_freelist_mutex_	lock member (regex; file not parsed)	509	lock=ObMutex; regex-fallback(tus=0)
+src/oblib/lib/alloc/ob_ctx_allocator.h	lib::ObCtxAllocator::AChunkUsingList::Slot::mutex_	lock member	328	lock=ObMutex->Latch; unit=replace:mem
+src/oblib/lib/alloc/ob_ctx_allocator.h	lib::ObCtxAllocator::chunk_freelist_mutex_	lock member	480	lock=ObMutex->Latch; writes-under-lock=chunk_cnt_; reads-outside=chunk_cnt_; unit=replace:mem
+src/oblib/lib/alloc/object_mgr.h	lib::SubObjectMgr::mutex_	lock member	75	lock=ObMutex->Latch; unit=replace:mem
+src/oblib/lib/alloc/object_mgr.h	lib::SubObjectMgr::normal_locker_	lock member	76	lock=SetLocker(<:ISetLocker)->unlisted(allocator set locker); unit=replace:mem
+src/oblib/lib/alloc/object_mgr.h	lib::SubObjectMgr::no_log_locker_	lock member	77	lock=SetLockerNoLog(<:ISetLocker)->unlisted(allocator set locker); unit=replace:mem
+src/oblib/lib/alloc/object_mgr.h	lib::SubObjectMgr::locker_	lock reference member	78	lock=ISetLocker->unlisted(allocator set locker); unlock-calls=1; cross-function-lock; unit=replace:mem
+src/oblib/lib/alloc/object_set.h	lib::ObjectSet::locker_	lock pointer member	104	lock=ISetLocker->unlisted(allocator set locker); unlock-calls=4; cross-function-lock; unit=replace:mem
+src/oblib/lib/alloc/object_set.h	lib::ObjectSet::dirty_list_mutex_	lock member	114	lock=ObMutex->Latch; writes-under-lock=dirty_list_,dirty_objs_; reads-outside=dirty_list_; unlock-calls=2; unit=replace:mem
+src/oblib/lib/allocator/ob_allocator_v2.h	common::ObAllocator::locker_	lock pointer member	73	lock=ISetLocker->unlisted(allocator set locker); unlock-calls=1; cross-function-lock; unit=replace:mem
+src/oblib/lib/allocator/ob_allocator_v2.h	common::ObAllocator::do_nothing_locker_	lock member	74	lock=SetDoNothingLocker(<:ISetLocker)->unlisted(allocator set locker); unit=replace:mem
+src/oblib/lib/allocator/ob_allocator_v2.h	common::ObAllocator::mutex_	lock member	75	lock=ObMutex->Latch; unit=replace:mem
+src/oblib/lib/allocator/ob_allocator_v2.h	common::ObAllocator::do_locker_	lock member	76	lock=SetLocker(<:ISetLocker)->unlisted(allocator set locker); unit=replace:mem
+src/oblib/lib/allocator/ob_allocator_v2.h	common::ObParallelAllocator::mutex_	lock member	198	lock=ObMutex->Latch; unit=replace:mem
+src/oblib/lib/allocator/ob_delay_free_allocator.h	common::ObDelayFreeAllocator::mutex_	lock member	105	lock=ObMutex->Latch; writes-under-lock=cache_memory_size_,memory_fragment_size_,total_size_; reads-outside=cache_memory_size_,memory_fragment_size_,total_size_; unit=delete
+src/oblib/lib/allocator/ob_fifo_allocator.h	common::ObFIFOAllocator::lock_	lock member	168	lock=ObSpinLock->Latch; writes-under-lock=current_using_,free_page_list_,idle_size_,is_inited_,max_size_,normal_used_,special_page_list_,special_total_,using_page_list_; reads-outside=current_using_,free_page_list_,idle_size_,is_inited_,max_size_,normal_used_,special_page_list_,special_total_,using_page_list_; unit=replace:mem
+src/oblib/lib/allocator/ob_fixed_size_block_allocator.h	common::ObFixedSizeBlockAllocator::lock_	lock member	74	lock=ObSpinLock->Latch; writes-under-lock=free_blocks_,is_inited_; reads-outside=free_blocks_,is_inited_; unit=replace:mem
+src/oblib/lib/allocator/ob_qsync.h	common::ObQSyncWrapper::<base common::ObQSyncImpl>	lock base class	112	lock=ObQSyncImpl->Quiescence; base-access=public; unit=replace:sync
+src/oblib/lib/allocator/ob_qsync.h	common::ObQSync::<base common::ObQSyncWrapper<256>>	lock base class	121	lock=ObQSyncWrapper->Quiescence; base-access=public; unit=replace:sync
+src/oblib/lib/allocator/ob_qsync.h	common::QSyncCriticalGuard::qsync_	lock reference member	129	lock=ObQSync->Quiescence; unit=replace:sync
+src/oblib/lib/allocator/ob_qsync.h	common::ObDynamicQSync::<base common::ObQSyncImpl>	lock base class	136	lock=ObQSyncImpl->Quiescence; base-access=public; unit=replace:sync
+src/oblib/lib/allocator/ob_qsync.h	common::DynamicQSyncCriticalGuard::qsync_	lock reference member	190	lock=ObDynamicQSync->Quiescence; unit=replace:sync
+src/oblib/lib/allocator/ob_safe_arena.h	common::ObSafeArena::lock_	lock member	87	lock=ObSpinLock->Latch; writes-under-lock=arena_alloc_; reads-outside=arena_alloc_; unit=replace:mem
+src/oblib/lib/allocator/ob_slice_alloc.h	common::ObDListWithLock::lock_	lock member	83	lock=ObLatch->RwLatch; unit=replace:mem
+src/oblib/lib/allocator/ob_slice_alloc.h	common::ObSliceAlloc::Arena::lock_	lock member	315	lock=ObLatch->RwLatch; unlock-calls=1; cross-function-lock; unit=replace:mem
+src/oblib/lib/allocator/page_arena.h	common::ObSafeArenaAllocator::lock_	lock member	1125	lock=ObSpinLock->Latch; writes-under-lock=arena_; reads-outside=arena_; unit=replace:mem
+src/oblib/lib/container/ob_concurrent_bitset.h	common::ObConcurrentBitset::mutex_	lock member	50	lock=ObMutex->Latch; writes-under-lock=start_pos_,word_array_; reads-outside=start_pos_,word_array_; unit=replace:container
+src/oblib/lib/container/ob_ext_ring_buffer_impl.h	common::erb::ObExtendibleRingBufferBase::es_lock_	lock member	845	lock=ObSpinLock->Latch; unlock-calls=1; cross-function-lock; unit=replace:container
+src/oblib/lib/container/ob_ext_ring_buffer_impl.h	common::erb::ObExtendibleRingBufferBase::sn_dir_lock_	lock member	846	lock=TCRWLock->BigReaderLatch; unit=replace:container
+src/oblib/lib/container/ob_id_map.h	common::ObIDMap::Node::lock	lock member	46	lock=SpinRWLock->RwLatch; no-method-bodies; unit=replace:container
+src/oblib/lib/future/ob_future.h	common::future::ObFutureBaseBase::FutureBlockBase::cv_	lock member	144	lock=ObThreadCond->Monitor; external-guards=6; no-method-bodies
+src/oblib/lib/hash/ob_array_hash_map.h	common::ObArrayHashMap::lock_	lock member	249	lock=ObSpinLock->Latch; writes-under-lock=size_; reads-outside=size_; unit=replace:hash
+src/oblib/lib/hash/ob_darray.h	common::TcRef::Item::lock_	lock member	98	lock=ObSpinLock->Latch; unit=replace:hash
+src/oblib/lib/hash/ob_dchash.h	common::get_global_dchash_qsync()	lock accessor	196	lock=ObQSync->Quiescence; returns=reference; returns-member=qsync; unit=replace:hash
+src/oblib/lib/hash/ob_dchash.h	common::DCHash::Handle::qsync_	lock reference member	245	lock=ObQSync->Quiescence; unit=replace:hash
+src/oblib/lib/hash/ob_dchash.h	common::DCHash::lock_	lock member	440	lock=ObSpinLock->Latch; unlock-calls=1; unit=replace:hash
+src/oblib/lib/hash/ob_hashtable.h	common::hash::ObBucketLockCond<_value_type, NoPthreadDefendMode>::lock()	lock accessor	320	lock=NLock->none; returns=reference; returns-member=lock_; unit=replace:hash
+src/oblib/lib/hash/ob_hashtable.h	common::hash::ObBucketLockCond<_value_type, NoPthreadDefendMode>::cond()	lock accessor	324	lock=NCond->none; returns=reference; returns-member=cond_; unit=replace:hash
+src/oblib/lib/hash/ob_hashtable.h	common::hash::ObBucketLockCond<_value_type, NoPthreadDefendMode>::lock_	lock member	329	lock=NLock->none; returns-lock-ref=common::hash::ObBucketLockCond<_value_type, NoPthreadDefendMode>::lock; unit=replace:hash
+src/oblib/lib/hash/ob_hashtable.h	common::hash::ObBucketLockCond<_value_type, NoPthreadDefendMode>::cond_	lock member	330	lock=NCond->none; returns-lock-ref=common::hash::ObBucketLockCond<_value_type, NoPthreadDefendMode>::cond; unit=replace:hash
+src/oblib/lib/hash/ob_hashutils.h	common::hash::SpinLocker::spin_	lock pointer member	162	lock=pthread_mutex_t->Monitor/Latch; unit=replace:hash
+src/oblib/lib/hash/ob_hashutils.h	common::hash::MutexLocker::mutex_	lock pointer member	194	lock=pthread_mutex_t->Monitor/Latch; unit=replace:hash
+src/oblib/lib/hash/ob_hashutils.h	common::hash::ReadLocker::rwlock_	lock pointer member	248	lock=pthread_rwlock_t->RwLatch; unit=replace:hash
+src/oblib/lib/hash/ob_hashutils.h	common::hash::WriteLocker::rwlock_	lock pointer member	280	lock=pthread_rwlock_t->RwLatch; unit=replace:hash
+src/oblib/lib/hash/ob_hashutils.h	common::hash::LatchReadLocker::rwlock_	lock pointer member	336	lock=ObLatch->RwLatch; unlock-calls=1; unit=replace:hash
+src/oblib/lib/hash/ob_hashutils.h	common::hash::LatchWriteLocker::rwlock_	lock pointer member	366	lock=ObLatch->RwLatch; unlock-calls=1; unit=replace:hash
+src/oblib/lib/hash/ob_hashutils.h	common::hash::SpinReadLocker::rwlock_	lock pointer member	399	lock=SpinRWLock->RwLatch; unlock-calls=1; unit=replace:hash
+src/oblib/lib/hash/ob_hashutils.h	common::hash::SpinWriteLocker::rwlock_	lock pointer member	428	lock=SpinRWLock->RwLatch; unlock-calls=1; unit=replace:hash
+src/oblib/lib/hash/ob_linear_hash_map.h	common::ObLinearHashMap::HashMapMemMgrCore::map_array_lock_	lock member	242	lock=ObSpinLock->Latch; writes-under-lock=map_array_; reads-outside=map_array_; unlock-calls=2; unit=replace:hash
+src/oblib/lib/hash/ob_linear_hash_map.h	common::ObLinearHashMap::eslock_	lock member	542	lock=ObSpinLock->Latch; unlock-calls=1; cross-function-lock; unit=replace:hash
+src/oblib/lib/hash/ob_link_hashmap.h	common::get_global_link_hashmap_qsync()	lock accessor	40	lock=ObQSync->Quiescence; returns=reference; returns-member=qsync; unit=replace:hash
+src/oblib/lib/lock/cond.h	obutil::Cond::_cond	lock member	79	lock=pthread_cond_t->Monitor; unit=replace:sync
+src/oblib/lib/lock/mutex.h	obutil::ObUtilMutex::operator=(const obutil::ObUtilMutex &)	lock accessor	50	lock=ObUtilMutex->Latch; returns=reference; unit=replace:sync
+src/oblib/lib/lock/mutex.h	obutil::ObUtilMutex::LockState::mutex	lock pointer member	54	lock=pthread_mutex_t->Monitor/Latch; no-method-bodies; unit=replace:sync
+src/oblib/lib/lock/mutex.h	obutil::ObUtilMutex::_mutex	lock member	59	lock=pthread_mutex_t->Monitor/Latch; unit=replace:sync
+src/oblib/lib/lock/ob_bucket_lock.h	common::ObBucketLock::latches_	lock pointer member	71	lock=ObLatch->RwLatch; unlock-calls=5; cross-function-lock; unit=replace:sync
+src/oblib/lib/lock/ob_bucket_lock.h	common::ObBucketRLockGuard::lock_	lock reference member	111	lock=ObBucketLock->BucketLatch; writes-under-lock=lock_start_ts_; unlock-calls=1; cross-function-lock; unit=replace:sync
+src/oblib/lib/lock/ob_bucket_lock.h	common::ObBucketWLockGuard::lock_	lock reference member	152	lock=ObBucketLock->BucketLatch; writes-under-lock=lock_start_ts_; unlock-calls=1; cross-function-lock; unit=replace:sync
+src/oblib/lib/lock/ob_bucket_lock.h	common::ObBucketWLockAllGuard::lock_	lock reference member	192	lock=ObBucketLock->BucketLatch; writes-under-lock=lock_start_ts_; unlock-calls=1; cross-function-lock; unit=replace:sync
+src/oblib/lib/lock/ob_bucket_lock.h	common::ObBucketTryWLockAllGuard::lock_	lock reference member	237	lock=ObBucketLock->BucketLatch; writes-under-lock=lock_start_ts_; unlock-calls=1; cross-function-lock; unit=replace:sync
+src/oblib/lib/lock/ob_bucket_lock.h	common::ObBucketTryRLockAllGuard::lock_	lock reference member	282	lock=ObBucketLock->BucketLatch; writes-under-lock=lock_start_ts_; unlock-calls=1; cross-function-lock; unit=replace:sync
+src/oblib/lib/lock/ob_bucket_lock.h	common::ObMultiBucketLockGuard::lock_	lock reference member	296	lock=ObBucketLock->BucketLatch; unlock-calls=2; unit=replace:sync
+src/oblib/lib/lock/ob_bucket_qsync_lock.h	common::ObBucketQSyncLock::locks_	lock pointer member	54	lock=ObQSyncLock->QSyncLatch; unlock-calls=6; cross-function-lock; unit=delete
+src/oblib/lib/lock/ob_bucket_qsync_lock.h	common::ObBucketQSyncRLockGuard::lock_	lock reference member	102	lock=ObBucketQSyncLock->BucketLatch(dead unit); writes-under-lock=lock_start_ts_; unlock-calls=1; cross-function-lock; unit=delete
+src/oblib/lib/lock/ob_bucket_qsync_lock.h	common::ObBucketQSyncWLockGuard::lock_	lock reference member	143	lock=ObBucketQSyncLock->BucketLatch(dead unit); writes-under-lock=lock_start_ts_; unlock-calls=1; cross-function-lock; unit=delete
+src/oblib/lib/lock/ob_bucket_qsync_lock.h	common::ObBucketQSyncWLockAllGuard::lock_	lock reference member	211	lock=ObBucketQSyncLock->BucketLatch(dead unit); writes-under-lock=lock_start_ts_; unlock-calls=1; cross-function-lock; unit=delete
+src/oblib/lib/lock/ob_bucket_qsync_lock.h	common::ObBucketTryQSyncRLockAllGuard::lock_	lock reference member	256	lock=ObBucketQSyncLock->BucketLatch(dead unit); writes-under-lock=lock_start_ts_; unlock-calls=1; cross-function-lock; unit=delete
+src/oblib/lib/lock/ob_drw_lock.h	common::DRWLock::RDLockGuard::rwlock_	lock reference member	58	lock=DRWLock->ShardedRwLatch; unlock-calls=1; cross-function-lock; unit=replace:sync
+src/oblib/lib/lock/ob_drw_lock.h	common::DRWLock::WRLockGuard::rwlock_	lock reference member	82	lock=DRWLock->ShardedRwLatch; unlock-calls=1; cross-function-lock; unit=replace:sync
+src/oblib/lib/lock/ob_drw_lock.h	common::DRWLock::WRLockGuardRetryTimeout::rwlock_	lock reference member	109	lock=DRWLock->ShardedRwLatch; unlock-calls=1; cross-function-lock; unit=replace:sync
+src/oblib/lib/lock/ob_drw_lock.h	common::DRWLock::AlignedLatch::latch_	lock member	117	lock=ObLatch->RwLatch; no-method-bodies; unit=replace:sync
+src/oblib/lib/lock/ob_latch.h	common::ObLatchMutex::lock_	lock member	68	lock=ObFutex->FutexCond; unit=replace:sync
+src/oblib/lib/lock/ob_latch.h	common::ObWaitProc::addr_	lock pointer member	93	lock=ObLatch->RwLatch; unit=replace:sync
+src/oblib/lib/lock/ob_latch.h	common::ObLatchWaitQueue::ObLatchBucket::lock_	lock member	119	lock=ObLatchMutex->Latch; unit=replace:sync
+src/oblib/lib/lock/ob_latch.h	common::ObLatchMutexGuard::lock_	lock reference member	285	lock=ObLatchMutex->Latch; unlock-calls=1; cross-function-lock; unit=replace:sync
+src/oblib/lib/lock/ob_latch.h	common::ObLatchRGuard::lock_	lock reference member	312	lock=ObLatch->RwLatch; unlock-calls=1; cross-function-lock; unit=replace:sync
+src/oblib/lib/lock/ob_latch.h	common::ObLatchWGuard::lock_	lock reference member	340	lock=ObLatch->RwLatch; unlock-calls=1; cross-function-lock; unit=replace:sync
+src/oblib/lib/lock/ob_monitor.h	obutil::ObMonitor::cond_	lock member	56	lock=Cond->Monitor; unit=replace:sync
+src/oblib/lib/lock/ob_mutex.h	lib::ObMutex::latch_	lock member	42	lock=ObLatchMutex->Latch; unlock-calls=1; cross-function-lock; unit=replace:sync
+src/oblib/lib/lock/ob_qsync_lock.h	common::ObQSyncLock::qsync_	lock member	46	lock=ObQSyncWrapper->Quiescence; unit=replace:sync
+src/oblib/lib/lock/ob_qsync_lock.h	common::ObQSyncLockWriteGuard::lock_	lock reference member	59	lock=ObQSyncLock->QSyncLatch; unlock-calls=1; cross-function-lock; unit=replace:sync
+src/oblib/lib/lock/ob_qsync_lock.h	common::ObQSyncLockReadGuard::lock_	lock reference member	72	lock=ObQSyncLock->QSyncLatch; unlock-calls=1; cross-function-lock; unit=replace:sync
+src/oblib/lib/lock/ob_recursive_mutex.h	common::ObRecursiveMutex::latch_	lock member	36	lock=ObLatch->RwLatch; writes-under-lock=lock_cnt_; reads-outside=lock_cnt_; reentry-site=2; unlock-calls=1; cross-function-lock; unit=replace:sync
+src/oblib/lib/lock/ob_rwlock.h	obsys::ObRLock::rlock_	lock pointer member	70	lock=pthread_rwlock_t->RwLatch; unit=replace:sync
+src/oblib/lib/lock/ob_rwlock.h	obsys::ObWLock::wlock_	lock pointer member	82	lock=pthread_rwlock_t->RwLatch; unit=replace:sync
+src/oblib/lib/lock/ob_rwlock.h	obsys::ObRWLock::rwlock_	lock member	93	lock=pthread_rwlock_t->RwLatch; unit=replace:sync
+src/oblib/lib/lock/ob_scond.h	common::SimpleCond::futex_	lock member	63	lock=ObFutex->FutexCond; unit=replace:sync
+src/oblib/lib/lock/ob_scond.h	common::SCondTemp::conds_	lock array member	212	lock=SimpleCond->FutexCond; unit=replace:sync
+src/oblib/lib/lock/ob_small_spin_lock.h	common::ObPtrSpinLock::lock_	lock member	223	lock=ObSmallSpinLock->bitlock(backoff); unlock-calls=1; cross-function-lock; unit=replace:sync
+src/oblib/lib/lock/ob_spin_lock.h	common::ObSpinLock::latch_	lock member	48	lock=ObLatchMutex->Latch; unlock-calls=1; cross-function-lock; unit=replace:sync
+src/oblib/lib/lock/ob_spin_rwlock.h	common::SpinRWLock::latch_	lock member	59	lock=ObLatch->RwLatch; unlock-calls=1; cross-function-lock; unit=replace:sync
+src/oblib/lib/lock/ob_spin_rwlock.h	common::SpinRLockGuard::lock_	lock reference member	85	lock=SpinRWLock->RwLatch; unlock-calls=1; cross-function-lock; unit=replace:sync
+src/oblib/lib/lock/ob_spin_rwlock.h	common::SpinRLockManualGuard::lock_	lock pointer member	116	lock=SpinRWLock->RwLatch; unlock-calls=1; cross-function-lock; unit=replace:sync
+src/oblib/lib/lock/ob_spin_rwlock.h	common::SpinWLockGuard::lock_	lock reference member	142	lock=SpinRWLock->RwLatch; unlock-calls=1; cross-function-lock; unit=replace:sync
+src/oblib/lib/lock/ob_tc_ref.h	common::TCRef::get_qs()	lock accessor	128	lock=ObQSync->Quiescence; returns=reference; returns-member=qsync; unit=replace:sync
+src/oblib/lib/lock/ob_tc_rwlock.h	common::LWaitCond::futex_	lock member	50	lock=ObFutex->FutexCond; unit=replace:sync
+src/oblib/lib/lock/ob_tc_rwlock.h	common::TCRWLock::RLockGuard::lock_	lock reference member	61	lock=TCRWLock->BigReaderLatch; unlock-calls=1; cross-function-lock; unit=replace:sync
+src/oblib/lib/lock/ob_tc_rwlock.h	common::TCRWLock::RLockGuardWithTimeout::lock_	lock reference member	80	lock=TCRWLock->BigReaderLatch; writes-under-lock=need_unlock_; unlock-calls=1; cross-function-lock; unit=replace:sync
+src/oblib/lib/lock/ob_tc_rwlock.h	common::TCRWLock::WLockGuard::lock_	lock reference member	88	lock=TCRWLock->BigReaderLatch; unlock-calls=1; cross-function-lock; unit=replace:sync
+src/oblib/lib/lock/ob_tc_rwlock.h	common::TCRWLock::WLockGuardWithTimeout::lock_	lock reference member	107	lock=TCRWLock->BigReaderLatch; writes-under-lock=need_unlock_; unlock-calls=1; cross-function-lock; unit=replace:sync
+src/oblib/lib/lock/ob_tc_rwlock.h	common::TCRWLock::WLockGuardWithRetry::lock_	lock reference member	117	lock=TCRWLock->BigReaderLatch; unlock-calls=1; cross-function-lock; unit=replace:sync
+src/oblib/lib/lock/ob_tc_rwlock.h	common::TCRWLock::WLockGuardWithRetryInterval::lock_	lock reference member	140	lock=TCRWLock->BigReaderLatch; unlock-calls=1; cross-function-lock; unit=replace:sync
+src/oblib/lib/lock/ob_tc_rwlock.h	common::TCRWLock::latch_	lock member	298	lock=ObLatch->RwLatch; unlock-calls=5; unit=replace:sync
+src/oblib/lib/lock/ob_tc_rwlock.h	common::TCRWLock::lcond_	lock member	301	lock=LWaitCond->FutexCond; unit=replace:sync
+src/oblib/lib/lock/ob_tc_rwlock.h	common::TCWLockGuard::lock_	lock reference member	326	lock=TCRWLock->BigReaderLatch; unlock-calls=1; cross-function-lock; unit=replace:sync
+src/oblib/lib/lock/ob_tc_rwlock.h	common::TCRLockGuard::lock_	lock reference member	352	lock=TCRWLock->BigReaderLatch; unlock-calls=1; cross-function-lock; unit=replace:sync
+src/oblib/lib/lock/ob_thread_cond.h	common::ObThreadCond::mutex_	lock member	104	lock=pthread_mutex_t->Monitor/Latch; unit=replace:sync
+src/oblib/lib/lock/ob_thread_cond.h	common::ObThreadCond::cond_	lock member	105	lock=pthread_cond_t->Monitor; unit=replace:sync
+src/oblib/lib/objectpool/ob_cached_allocator.h	common::ObCachedAllocator::lock_	lock member	45	lock=ObSpinLock->Latch; writes-under-lock=allocated_count_,cached_count_,cached_objs_; reads-outside=allocated_count_,cached_count_; unit=replace:mem
+src/oblib/lib/objectpool/ob_global_factory.h	common::ObGlobalFreeList::lock_	lock member	384	lock=ObRecursiveMutex->Latch+guard-passing(reentry rule); writes-under-lock=next_cache_line_; unit=replace:mem
+src/oblib/lib/objectpool/ob_server_object_pool.h	common::ObPoolArenaHead::lock	lock member	54	lock=ObSmallSpinLock->bitlock(backoff); external-guards=3; unit=replace:mem
+src/oblib/lib/oblog/ob_base_log_writer.h	common::ObBaseLogWriter::thread_mutex_	lock member	128	lock=std::mutex->Monitor/Latch; unit=replace:log
+src/oblib/lib/oblog/ob_base_log_writer.h	common::ObBaseLogWriter::log_write_cond_	lock pointer member	130	lock=SimpleCond->FutexCond; unit=replace:log
+src/oblib/lib/oblog/ob_base_log_writer.h	common::ObBaseLogWriter::log_flush_cond_	lock pointer member	131	lock=SimpleCond->FutexCond; unit=replace:log
+src/oblib/lib/oblog/ob_log.h	common::ObLogger::file_size_mutex_	lock member	858	lock=pthread_mutex_t->Monitor/Latch; unit=replace:log
+src/oblib/lib/oblog/ob_log.h	common::ObLogger::file_index_mutex_	lock member	859	lock=pthread_mutex_t->Monitor/Latch; unit=replace:log
+src/oblib/lib/oblog/ob_log_compressor.h	common::ObLogCompressor::log_compress_cond_	lock member	211	lock=ObThreadCond->Monitor; writes-under-lock=stopped_; reads-outside=stopped_; unit=replace:log
+src/oblib/lib/oblog/ob_ringbuf_log_writer.h	common::ObRingBuf::alloc_lock_	lock member	109	lock=RingSpinLock->unlisted(§2.7 has no row); unlock-calls=2; unit=replace:log
+src/oblib/lib/oblog/ob_ringbuf_log_writer.h	common::ObRingBufLogWriter::flush_cond_	lock pointer member	157	lock=SimpleCond->FutexCond; unit=replace:log
+src/oblib/lib/queue/ob_lighty_queue.h	common::ObLightyCond::futex_	lock member	42	lock=ObFutex->FutexCond; unit=replace:queue
+src/oblib/lib/queue/ob_lighty_queue.h	common::ObLightyQueue::get_cond(unsigned long long)	lock accessor	76	lock=ObLightyCond->FutexCond; returns=reference; returns-member=cond_; unit=replace:queue
+src/oblib/lib/queue/ob_lighty_queue.h	common::ObLightyQueue::cond_	lock pointer member	85	lock=ObLightyCond->FutexCond; returns-lock-ref=common::ObLightyQueue::get_cond; unit=replace:queue
+src/oblib/lib/queue/ob_lighty_queue.h	common::LightyQueue::cond_	lock member	110	lock=ObLightyCond->FutexCond; unit=replace:queue
+src/oblib/lib/queue/ob_priority_queue.h	common::ObPriorityQueueImpl::sem_	lock member	136	lock=SimpleCond->FutexCond; unit=replace:queue
+src/oblib/lib/queue/ob_priority_queue.h	common::ObPriorityQueue2::Queue_::cond	lock member	292	lock=SCondTemp->SCondTemp(amendment 02-sync); unit=replace:queue
+src/oblib/lib/resource/achunk_mgr.h	lib::AChunkList::mutex_	lock member	159	lock=ObMutex->Latch; unlock-calls=3; unit=replace:mem
+src/oblib/lib/resource/ob_resource_mgr.h	lib::ObResourceMgr::lock_	lock member	138	lock=SpinRWLock->RwLatch
+src/oblib/lib/stat/ob_diagnose_info.h	common::ObDiagnoseSessionInfo::lock_	lock member	203	lock=DIRWLock->unlisted(§2.7 has no row)
+src/oblib/lib/task/ob_timer_service.h	common::ObTimerService::monitor_	lock member	184	lock=ObMonitor->Monitor; writes-under-lock=is_destroyed_,is_never_started_,is_stopped_,priority_task_queue_,running_task_set_,token_alloc_,uncanceled_task_set_,worker_thread_pool_; reads-outside=is_destroyed_,is_never_started_,is_stopped_,priority_task_queue_,running_task_set_,token_alloc_,uncanceled_task_set_,worker_thread_pool_; unit=replace:thread
+src/oblib/lib/task/ob_timer_service.h	common::ObTimerService::mutex_	lock member	190	lock=ObMutex->Latch; writes-under-lock=is_destroyed_,is_never_started_,is_stopped_,priority_task_queue_,running_task_set_,token_alloc_,uncanceled_task_set_,worker_thread_pool_; reads-outside=is_destroyed_,is_never_started_,is_stopped_,priority_task_queue_,running_task_set_,token_alloc_,uncanceled_task_set_,worker_thread_pool_; unit=replace:thread
+src/oblib/lib/thread/ob_dedup_queue.h	common::IObDedupTask::sync_	lock member	90	lock=ObSpinLock->Latch; unlock-calls=1; cross-function-lock; unit=replace:thread
+src/oblib/lib/thread/ob_dedup_queue.h	common::ObDedupQueue::task_queue_sync_	lock member	288	lock=ObThreadCond->Monitor; unit=replace:thread
+src/oblib/lib/thread/ob_dedup_queue.h	common::ObDedupQueue::gc_queue_sync_	lock member	291	lock=ObMutex->Latch; writes-under-lock=gc_queue_head_,gc_queue_tail_; reads-outside=gc_queue_head_,gc_queue_tail_; unlock-calls=3; unit=replace:thread
+src/oblib/lib/thread/ob_dedup_queue.h	common::ObDedupQueue::work_thread_sync_	lock member	292	lock=ObThreadCond->Monitor; unit=replace:thread
+src/oblib/lib/thread/ob_dynamic_thread_pool.h	common::ObDynamicThreadPool::task_thread_cond_	lock member	87	lock=ObThreadCond->Monitor; unit=replace:thread
+src/oblib/lib/thread/ob_dynamic_thread_pool.h	common::ObDynamicThreadPool::cond_	lock member	88	lock=ObThreadCond->Monitor; writes-under-lock=need_idle_; unit=replace:thread
+src/oblib/lib/thread/ob_dynamic_thread_pool.h	common::ObSimpleThreadPoolDynamicMgr::pool_list_lock_	lock member	141	lock=SpinRWLock->RwLatch; writes-under-lock=pool_list_; unit=replace:thread
+src/oblib/lib/thread/ob_map_queue_thread_pool.h	common::ObMapQueueThreadPool::ThreadConf::cond_	lock member	94	lock=ObCond->ObCond(amendment 02-sync); unit=delete
+src/oblib/lib/thread/ob_queue_thread.h	common::ObCond::cond_	lock member	57	lock=pthread_cond_t->Monitor; unit=replace:thread
+src/oblib/lib/thread/ob_queue_thread.h	common::ObCond::mutex_	lock member	58	lock=pthread_mutex_t->Monitor/Latch; unit=replace:thread
+src/oblib/lib/thread/ob_queue_thread.h	common::S2MQueueThread::ThreadConf::queue_cond	lock member	70	lock=ObCond->ObCond(amendment 02-sync); unit=replace:thread
+src/oblib/lib/thread/ob_queue_thread.h	common::S2MQueueThread::thread_conf_lock_	lock member	129	lock=DRWLock->ShardedRwLatch; unit=replace:thread
+src/oblib/lib/thread/ob_queue_thread.h	common::M2SQueueThread::queue_cond_	lock member	156	lock=ObCond->ObCond(amendment 02-sync); unit=replace:thread
+src/oblib/lib/thread/ob_reentrant_thread.h	share::ObReentrantThread::get_cond()	lock accessor	79	lock=ObThreadCond->Monitor; returns=reference; returns-member=cond_; unit=replace:thread
+src/oblib/lib/thread/ob_reentrant_thread.h	share::ObReentrantThread::cond_	lock member	91	lock=ObThreadCond->Monitor; writes-under-lock=created_,running_cnt_,stop_; reads-outside=created_,stop_; returns-lock-ref=share::ObReentrantThread::get_cond; unit=replace:thread
+src/oblib/lib/thread/ob_simple_thread_pool.h	common::ObSimpleThreadPoolBase::workers_lock_	lock member	124	lock=ObMutex->Latch; writes-under-lock=cur_worker_idx_,workers_; reads-outside=cur_worker_idx_; unit=replace:thread
+src/oblib/lib/thread/protected_stack_allocator.h	lib::StackMgr::rwlock_	lock member	95	lock=ObLatch->RwLatch; unlock-calls=2; unit=replace:thread
+src/oblib/lib/thread/threads.h	lib::Threads::lock_	lock member	140	lock=SpinRWLock->RwLatch; writes-under-lock=pending_refresh_version_,queue_,stop_,tasks_; reads-outside=pending_refresh_version_,queue_,stop_,tasks_; unlock-calls=2; cross-function-lock; unit=replace:thread
+src/oblib/lib/trace/ob_trace_event.h	common::ObTraceEventRecorderBase::lock_	lock member	112	lock=ObMutex->Latch; unlock-calls=1; cross-function-lock
+src/oblib/lib/utility/utility.h	common::ObBandwidthThrottle::lock_	lock member	1062	lock=ObSpinLock->Latch; writes-under-lock=inited_,last_printed_bytes_,last_printed_sleep_ms_,last_printed_ts_,next_avaliable_timestamp_,rate_,total_bytes_,total_sleep_ms_,unlimit_bytes_; reads-outside=inited_,rate_
+src/oblib/rpc/obmysql/ob_sql_nio_server.h	obmysql::ObSqlNioServer::reactor_lock_	lock member	49	lock=ObMutex->Latch; writes-under-lock=io_handler_,n_thread_,reactor_; reads-outside=n_thread_
+src/observer/change_stream/ob_change_stream_dispatcher.h	share::ObCSDispatcher::dispatch_cond_	lock member	222	lock=ObThreadCond->Monitor
+src/observer/dbms_scheduler/ob_dbms_sched_job_master.h	dbms_scheduler::ObDBMSSchedJobMaster::thread_cond_	lock member	139	lock=ObThreadCond->Monitor; writes-under-lock=wokeup_
+src/observer/mysql/ob_diag.h	obmysql::ObDiag::lock_	lock member	41	lock=ObMutex->Latch; writes-under-lock=fresh_timestamp_
+src/observer/ob_uniq_task_queue.h	observer::ObUniqTaskQueue::cond_	lock member	169	lock=ObThreadCond->Monitor; writes-under-lock=barrier_task_count_,cur_group_,group_map_,groups_,processing_thread_count_,task_count_,task_set_; reads-outside=barrier_task_count_,cur_group_,group_map_,groups_,processing_thread_count_,task_count_,task_set_
+src/observer/omt/ob_server_runtime.h	omt::ObPxPool::recycle_lock_	lock member	94	lock=ObSpinLock->Latch; unlock-calls=2; cross-function-lock
+src/observer/omt/ob_server_runtime.h	omt::ObPxPools::lock_	lock member	159	lock=SpinRWLock->RwLatch; writes-under-lock=pool_map_; reads-outside=pool_map_
+src/observer/omt/ob_server_runtime.h	omt::ObServerRuntime::meta_lock_	lock member	273	lock=TCRWLock->BigReaderLatch
+src/observer/omt/ob_server_runtime.h	omt::ObServerRuntime::lock_	lock member	296	lock=ObLatch->RwLatch; unlock-calls=3; cross-function-lock
+src/observer/omt/ob_server_runtime.h	omt::ObServerRuntime::workers_lock_	lock member	299	lock=ObMutex->Latch; writes-under-lock=workers_; reads-outside=workers_; unlock-calls=2
+src/observer/omt/ob_server_runtime_controller.h	omt::ObServerRuntimeController::resource_conf_lock_	lock member	169	lock=ObMutex->Latch
+src/observer/omt/ob_srs_service.h	omt::ObSrsService::srs_load_lock_	lock member	119	lock=ObMutex->Latch
+src/observer/omt/ob_th_worker.h	omt::ObThWorker::run_cond_	lock member	99	lock=ObThreadCond->Monitor; writes-under-lock=pause_flag_; reads-outside=pause_flag_
+src/observer/schema/ob_schema_service_sql_impl.h	share::schema::ObSchemaServiceSQLImpl::rw_lock_	lock member	885	lock=SpinRWLock->RwLatch; writes-under-lock=gen_schema_version_,refreshed_schema_version_; reads-outside=refreshed_schema_version_
+src/observer/schema/ob_schema_service_sql_impl.h	share::schema::ObSchemaServiceSQLImpl::object_ids_mutex_	lock member	897	lock=ObMutex->Latch
+src/observer/schema/ob_schema_service_sql_impl.h	share::schema::ObSchemaServiceSQLImpl::tablet_ids_mutex_	lock member	898	lock=ObMutex->Latch
+src/observer/vector_index/ob_plugin_vector_index_scheduler.h	share::ObPluginVectorIndexTaskCtx::lock_	lock member	183	lock=ObSpinLock->Latch; external-guards=4
+src/observer/vector_index/ob_plugin_vector_index_scheduler.h	share::ObPluginVectorIndexLoadScheduler::logging_lock_	lock member	341	lock=ObSpinLock->Latch; writes-under-lock=cb_,is_logging_,table_id_array_,tablet_id_array_; reads-outside=cb_
+src/observer/vector_index/ob_plugin_vector_index_scheduler.h	share::ObVectorIndexMemSyncInfo::switch_lock_	lock member	479	lock=ObSpinLock->Latch; writes-under-lock=processing_first_mem_sync_; reads-outside=processing_first_mem_sync_
+src/observer/vector_index/ob_plugin_vector_index_service.h	share::ObPluginVectorIndexMgr::get_adapter_map_lock()	lock accessor	163	lock=TCRWLock->BigReaderLatch; returns=reference; returns-member=adapter_map_rwlock_
+src/observer/vector_index/ob_plugin_vector_index_service.h	share::ObPluginVectorIndexMgr::adapter_map_rwlock_	lock member	256	lock=TCRWLock->BigReaderLatch; returns-lock-ref=share::ObPluginVectorIndexMgr::get_adapter_map_lock
+src/observer/vector_index/ob_vector_index_async_task_util.h	share::ObVecIndexAsyncTaskCtx::lock_	lock member	181	lock=ObSpinLock->Latch; external-guards=6
+src/observer/vector_index/ob_vector_index_async_task_util.h	share::ObVecIndexAsyncTaskHandler::lock_	lock member	262	lock=ObSpinLock->Latch; external-guards=1
+src/query/api/query/command/ob_root_service_serialization.h	query::root_service_serial_mutex()	lock accessor	34	lock=ObMutex->Latch; returns=reference; returns-member=mutex
+src/query/api/query/runtime/ob_request_time_guard.h	observer::ObGlobalReqTimeService::lock_	lock member	137	lock=SpinRWLock->RwLatch; writes-under-lock=time_info_list_
+src/query/api/query/vector/ob_vector_embedding_handler.h	share::ObEmbeddingTask::task_lock_	lock member	345	lock=ObLatch->RwLatch
+src/query/api/query/vector/ob_vector_embedding_handler.h	share::ObEmbeddingTask::task_cond_	lock member	378	lock=ObThreadCond->Monitor; writes-under-lock=callback_done_,http_error_code_,http_error_message_,http_retry_count_,http_send_count_,http_total_retry_count_,internal_error_code_,internal_error_message_,need_retry_flag_,phase_,process_end_time_us_,process_start_time_us_,processed_chunks_; reads-outside=callback_done_,http_error_code_,http_error_message_,http_retry_count_,http_send_count_,http_total_retry_count_,internal_error_code_,internal_error_message_,need_retry_flag_,phase_,processed_chunks_
+src/query/api/query/vector/ob_vector_embedding_handler.h	share::ObEmbeddingTaskHandler::lock_	lock member	436	lock=ObSpinLock->Latch; writes-under-lock=is_inited_; reads-outside=is_inited_
+src/query/api/query/vector/ob_vector_embedding_handler.h	share::ObEmbeddingTaskHandler::task_list_lock_	lock member	453	lock=ObSpinLock->Latch; writes-under-lock=active_tasks_; reads-outside=active_tasks_
+src/query/api/query/vector/ob_vector_index_adaptor.h	share::ObVectorIndexMemData::mem_data_rwlock_	lock member	473	lock=TCRWLock->BigReaderLatch; external-guards=24
+src/query/api/query/vector/ob_vector_index_adaptor.h	share::ObVectorIndexMemData::bitmap_rwlock_	lock member	474	lock=TCRWLock->BigReaderLatch; external-guards=12
+src/query/api/query/vector/ob_vector_index_adaptor.h	share::ObPluginVectorIndexAdaptor::get_query_lock()	lock accessor	809	lock=TCRWLock->BigReaderLatch; returns=reference; returns-member=query_lock_
+src/query/api/query/vector/ob_vector_index_adaptor.h	share::ObPluginVectorIndexAdaptor::get_reload_lock()	lock accessor	810	lock=ObSpinLock->Latch; returns=reference; returns-member=reload_lock_
+src/query/api/query/vector/ob_vector_index_adaptor.h	share::ObPluginVectorIndexAdaptor::opt_task_lock_	lock member	945	lock=ObSpinLock->Latch; writes-under-lock=is_in_opt_task_,need_be_optimized_; reads-outside=need_be_optimized_
+src/query/api/query/vector/ob_vector_index_adaptor.h	share::ObPluginVectorIndexAdaptor::reload_lock_	lock member	946	lock=ObSpinLock->Latch; returns-lock-ref=share::ObPluginVectorIndexAdaptor::get_reload_lock
+src/query/api/query/vector/ob_vector_index_adaptor.h	share::ObPluginVectorIndexAdaptor::query_lock_	lock member	947	lock=TCRWLock->BigReaderLatch; returns-lock-ref=share::ObPluginVectorIndexAdaptor::get_query_lock
+src/query/api/query/vector/ob_vector_index_cache.h	share::ObIvfICache::get_lock()	lock accessor	130	lock=TCRWLock->BigReaderLatch; returns=reference; returns-member=rwlock_
+src/query/api/query/vector/ob_vector_index_cache.h	share::ObIvfICache::rwlock_	lock member	159	lock=TCRWLock->BigReaderLatch; returns-lock-ref=share::ObIvfICache::get_lock
+src/rootserver/dbms_job/ob_dbms_job_master.h	dbms_job::ObDBMSJobTask::lock_	lock member	140	lock=ObSpinLock->Latch; writes-under-lock=job_key_,ready_queue_,wait_vector_; reads-outside=ready_queue_
+src/rootserver/dbms_job/ob_dbms_job_master.h	dbms_job::ObDBMSJobMaster::lock_	lock member	204	lock=ObSpinLock->Latch
+src/rootserver/ddl_task/ob_constraint_task.h	rootserver::ObConstraintTask::lock_	lock member	146	lock=TCRWLock->BigReaderLatch
+src/rootserver/ddl_task/ob_ddl_local_build_executor.h	rootserver::ObDDLLocalBuildExecutor::lock_	lock member	207	lock=ObSpinLock->Latch; writes-under-lock=build_ctxs_,data_format_version_,ddl_task_id_,ddl_type_,execution_id_,is_inited_,lob_col_idxs_,parallelism_,snapshot_version_; reads-outside=build_ctxs_,data_format_version_,ddl_task_id_,ddl_type_,execution_id_,is_inited_,lob_col_idxs_,parallelism_,snapshot_version_
+src/rootserver/ddl_task/ob_ddl_scheduler.h	rootserver::ObDDLTaskQueue::lock_	lock member	99	lock=ObSpinLock->Latch; writes-under-lock=is_inited_,stop_,task_id_map_,task_list_,task_map_; reads-outside=is_inited_,stop_,task_id_map_,task_list_,task_map_
+src/rootserver/ddl_task/ob_ddl_scheduler.h	rootserver::ObDDLTaskHeartBeatMananger::lock_	lock member	125	lock=ObSpinLock->Latch; writes-under-lock=register_task_times_
+src/rootserver/ddl_task/ob_ddl_tablet_scheduler.h	rootserver::ObDDLTabletScheduler::lock_	lock member	71	lock=TCRWLock->BigReaderLatch; writes-under-lock=running_execution_id_,running_tablets_; reads-outside=running_execution_id_,running_tablets_
+src/rootserver/ddl_task/ob_ddl_task.h	rootserver::ObDDLTask::lock_	lock member	718	lock=TCRWLock->BigReaderLatch; writes-under-lock=check_table_empty_job_ret_code_,complete_sstable_job_ret_code_,dependent_task_result_map_,execution_id_,is_sstable_complete_task_submitted_,local_build_request_time_,ret_code_,sstable_complete_request_time_,sstable_complete_ts_; reads-outside=check_table_empty_job_ret_code_,complete_sstable_job_ret_code_,dependent_task_result_map_,execution_id_,is_sstable_complete_task_submitted_,ret_code_,sstable_complete_request_time_,sstable_complete_ts_
+src/rootserver/ddl_task/ob_ddl_task.h	rootserver::ObDDLWaitColumnChecksumCtx::lock_	lock member	841	lock=SpinRWLock->RwLatch
+src/rootserver/ddl_task/ob_modify_autoinc_task.h	rootserver::ObModifyAutoincTask::lock_	lock member	85	lock=TCRWLock->BigReaderLatch
+src/rootserver/freeze/ob_global_merge_manager.h	rootserver::ObGlobalMergeManagerBase::lock_	lock member	70	lock=SpinRWLock->RwLatch
+src/rootserver/freeze/ob_global_merge_manager.h	rootserver::ObGlobalMergeManager::ObGlobalMergeMgrGuard::lock_	lock reference member	125	lock=SpinRWLock->RwLatch; writes-under-lock=ret_
+src/rootserver/freeze/ob_global_merge_manager.h	rootserver::ObGlobalMergeManager::write_lock_	lock member	132	lock=SpinRWLock->RwLatch
+src/rootserver/freeze/ob_major_freeze_service.h	rootserver::ObMajorFreezeService::lock_	lock member	113	lock=ObRecursiveMutex->Latch+guard-passing(reentry rule); writes-under-lock=local_major_freeze_; reads-outside=local_major_freeze_
+src/rootserver/freeze/ob_major_freeze_service.h	rootserver::ObMajorFreezeService::rw_lock_	lock member	117	lock=SpinRWLock->RwLatch; writes-under-lock=local_major_freeze_; reads-outside=local_major_freeze_
+src/rootserver/freeze/ob_major_freeze_service.h	rootserver::ObMajorFreezeService::switch_lock_	lock member	119	lock=ObRecursiveMutex->Latch+guard-passing(reentry rule)
+src/rootserver/freeze/ob_major_merge_info_manager.h	rootserver::ObMajorMergeInfoManager::lock_	lock member	95	lock=ObRecursiveMutex->Latch+guard-passing(reentry rule)
+src/rootserver/freeze/ob_major_merge_progress_util.h	compaction::ObUncompactInfo::diagnose_rw_lock_	lock member	270	lock=SpinRWLock->RwLatch; writes-under-lock=skip_verify_tables_,table_ids_,tablets_; reads-outside=skip_verify_tables_
+src/rootserver/freeze/ob_major_merge_scheduler.h	rootserver::ObMajorMergeScheduler::epoch_update_lock_	lock member	116	lock=ObMutex->Latch
+src/rootserver/freeze/ob_snapshot_gc_scn_renewer.h	rootserver::ObSnapshotGcScnRenewer::role_lock_	lock member	98	lock=ObRecursiveMutex->Latch+guard-passing(reentry rule); writes-under-lock=is_inited_,is_primary_active_,is_primary_service_,last_renew_attempt_ts_,last_renewed_snapshot_gc_scn_,major_merge_info_mgr_,need_primary_catchup_,next_renew_ts_; reads-outside=last_renew_attempt_ts_,next_renew_ts_
+src/rootserver/ob_admin_job_table_operator.h	rootserver::ObAdminJobTableOperator::latch_	lock member	79	lock=ObLatch->RwLatch
+src/rootserver/ob_ddl_service.h	rootserver::ObDDLService::ddl_lock_	lock member	2047	lock=ObLatch->RwLatch; unlock-calls=1; cross-function-lock
+src/rootserver/ob_ddl_service_launcher.h	rootserver::ObDDLServiceLauncher::rw_lock_	lock member	76	lock=SpinRWLock->RwLatch
+src/rootserver/ob_local_ddl_serial_call.h	rootserver::local_ddl_serial_mutex()	lock accessor	29	lock=ObMutex->Latch; returns=reference; returns-member=mutex
+src/rootserver/ob_local_management_service.h	rootserver::ObLocalManagementService::bootstrap_lock_	lock member	356	lock=ObLatch->RwLatch; writes-under-lock=need_bootstrap_; reads-outside=need_bootstrap_
+src/rootserver/ob_local_management_service.h	rootserver::ObLocalManagementService::set_config_lock_	lock member	369	lock=ObLatch->RwLatch; unlock-calls=1
+src/rootserver/ob_server_thread_helper.h	rootserver::ObServerThreadHelper::thread_cond_	lock member	68	lock=ObThreadCond->Monitor
+src/rootserver/ob_thread_idling.h	rootserver::ObThreadIdling::cond_	lock member	40	lock=ObThreadCond->Monitor; writes-under-lock=wakeup_cnt_
+src/share/cache/ob_kv_storecache.h	common::ObKVGlobalCache::mutex_	lock member	265	lock=ObMutex->Latch; writes-under-lock=cache_num_; reads-outside=cache_num_
+src/share/cache/ob_kvcache_hazard_domain.h	common::FixedTinyAllocator::blocks_mu_	lock member	154	lock=ObMutex->Latch; writes-under-lock=last_wash_time_us_,memory_efficiency_; reads-outside=memory_efficiency_; unit=rewrite:share_cache
+src/share/cache/ob_kvcache_hazard_domain.h	common::HazardDomain::bit_set_mu_	lock member	205	lock=ObMutex->Latch; unit=rewrite:share_cache
+src/share/cache/ob_kvcache_inst_map.h	common::ObKVCacheInstMap::lock_	lock member	136	lock=DRWLock->ShardedRwLatch; writes-under-lock=inst_map_; reads-outside=inst_map_
+src/share/cache/ob_kvcache_map.h	common::ObKVCacheMap::bucket_lock_	lock member	134	lock=ObBucketLock->BucketLatch; unit=rewrite:share_cache
+src/share/cache/ob_kvcache_store.h	common::ObKVCacheStore::wash_out_lock_	lock member	250	lock=ObMutex->Latch; writes-under-lock=tmp_washbale_size_info_,wash_heap_; reads-outside=tmp_washbale_size_info_,wash_heap_
+src/share/cache/ob_recycle_multi_kvcache.h	common::cache::ObRecycleMultiKVCache::lock_	lock member	251	lock=ObSpinLock->Latch; writes-under-lock=hash_bkt_,offset_next_to_appended_,offset_reserved_,write_number_; reads-outside=hash_bkt_,offset_next_to_appended_,offset_reserved_
+src/share/io/ob_io_calibration.h	common::ObIOCalibration::lock_	lock member	113	lock=DRWLock->ShardedRwLatch; writes-under-lock=baseline_iops_,io_ability_; reads-outside=baseline_iops_,io_ability_
+src/share/io/ob_io_define.h	common::ObIOResult::get_cond()	lock accessor	413	lock=ObThreadCond->Monitor; returns=reference; returns-member=cond_
+src/share/io/ob_io_define.h	common::ObIOResult::cond_	lock member	444	lock=ObThreadCond->Monitor; writes-under-lock=is_canceled_,ret_code_; reads-outside=is_canceled_,ret_code_; returns-lock-ref=common::ObIOResult::get_cond; external-guards=1
+src/share/io/ob_io_manager.h	common::ObIOManager::mutex_	lock member	116	lock=ObMutex->Latch; writes-under-lock=io_config_; reads-outside=io_config_
+src/share/io/ob_io_manager.h	common::ObIOService::io_config_lock_	lock member	196	lock=DRWLock->ShardedRwLatch
+src/share/io/ob_io_struct.h	common::ObIOUsage::lock_	lock member	292	lock=ObQSyncLock->QSyncLatch; writes-under-lock=failed_req_info_,group_throttled_time_us_,info_; reads-outside=failed_req_info_,group_throttled_time_us_,info_
+src/share/io/ob_io_struct.h	common::ObAsyncIOChannel::depth_cond_	lock member	369	lock=ObThreadCond->Monitor
+src/share/io/ob_io_struct.h	common::ObSyncIOChannel::cond_	lock member	395	lock=ObThreadCond->Monitor
+src/share/io/ob_io_struct.h	common::ObDeviceChannel::lock_for_sync_io_	lock member	431	lock=ObSpinLock->Latch; unlock-calls=1
+src/share/io/ob_io_struct.h	common::ObIOFaultDetector::lock_	lock member	538	lock=ObSpinLock->Latch
+src/share/longops_mgr/ob_longops_mgr.h	share::ObLongopsMgr::lock_	lock member	52	lock=ObSpinLock->Latch; writes-under-lock=longops_stats_; reads-outside=longops_stats_
+src/share/ob_autoincrement_service.h	share::TableNode::alloc_mutex_	lock member	141	lock=ObMutex->Latch
+src/share/ob_autoincrement_service.h	share::ObAutoincrementService::map_mutex_	lock member	360	lock=ObMutex->Latch; writes-under-lock=node_map_; reads-outside=node_map_; unlock-calls=1
+src/share/ob_autoincrement_service.h	share::ObAutoincrementService::init_node_mutex_	lock array member	364	lock=ObLatch->RwLatch
+src/share/ob_ddl_task_executor.h	share::ObDDLTaskQueue::lock_	lock member	138	lock=ObSpinLock->Latch; writes-under-lock=allocator_,is_inited_,task_list_,task_set_
+src/share/ob_ddl_task_executor.h	share::ObDDLTaskExecutor::cond_	lock member	161	lock=ObThreadCond->Monitor; unlock-calls=1
+src/share/ob_debug_sync.h	common::ObDSEventControl::cond_	lock member	180	lock=ObThreadCond->Monitor; writes-under-lock=stop_,used_; reads-outside=used_
+src/share/ob_debug_sync.h	common::ObDebugSync::lock_	lock member	217	lock=ObSpinLock->Latch; writes-under-lock=global_actions_; reads-outside=global_actions_
+src/share/ob_device_manager.h	common::ObDeviceManager::lock_	lock member	77	lock=ObQSyncLock->QSyncLatch
+src/share/ob_local_device.cpp	io_event_queue::mtx	lock member	80	lock=std::mutex->Monitor/Latch; no-method-bodies
+src/share/ob_local_device.cpp	io_event_queue::cv	lock member	81	lock=std::condition_variable->Monitor; no-method-bodies
+src/share/ob_local_device.h	share::ObLocalDevice::block_lock_	lock member	240	lock=ObMutex->Latch; writes-under-lock=block_bitmap_,free_block_array_,free_block_cnt_,free_block_pop_pos_,free_block_push_pos_,is_marked_; reads-outside=block_bitmap_,free_block_array_,free_block_cnt_,free_block_pop_pos_,free_block_push_pos_,is_marked_
+src/share/ob_max_id_cache.h	share::ObMaxIdCacheItem::latch_	lock member	45	lock=ObLatch->RwLatch; writes-under-lock=min_id_,size_; reads-outside=min_id_,size_
+src/share/ob_max_id_cache.h	share::ObMaxIdCacheMgr::latch_	lock member	77	lock=ObLatch->RwLatch; writes-under-lock=allocator_,inited_,runtime_cache_,sql_proxy_; reads-outside=allocator_,inited_,runtime_cache_
+src/share/ob_occam_thread_pool.h	common::occam::ObOccamThreadPool::InnerTaskQueue::lock_	lock member	495	lock=ObSpinLock->Latch; writes-under-lock=buffer_,head_,tail_; reads-outside=buffer_
+src/share/ob_occam_thread_pool.h	common::occam::ObOccamThreadPool::cv_	lock member	504	lock=ObThreadCond->Monitor; writes-under-lock=is_stopped_,total_task_count_
+src/share/ob_schema_status_proxy.h	share::ObSchemaStatusProxy::schema_status_cache_lock_	lock member	81	lock=SpinRWLock->RwLatch; writes-under-lock=is_inited_,schema_status_cache_; reads-outside=is_inited_
+src/share/ob_snapshot_table_proxy.h	share::ObSnapshotTableProxy::lock_	lock member	121	lock=ObMutex->Latch; writes-under-lock=last_event_ts_
+src/share/ob_time_wheel.h	common::ObTimeWheelTask::lock_	lock member	72	lock=ObSmallSpinLock->bitlock(backoff); unlock-calls=1; cross-function-lock
+src/share/ob_time_wheel.h	common::TaskBucket::lock_	lock member	88	lock=ObSmallSpinLock->bitlock(backoff); unlock-calls=1; cross-function-lock
+src/share/redolog/ob_log_file_reader.h	share::ObLogFileReader2::lock_	lock member	137	lock=ObMutex->Latch; writes-under-lock=head_,tail_; reads-outside=head_,tail_
+src/share/resource_limit_calculator/ob_resource_limit_calculator.h	share::ObResourceLimitCalculator::lock_	lock member	145	lock=SpinRWLock->RwLatch; writes-under-lock=handlers_,is_inited_
+src/share/schema/ob_ddl_epoch.h	share::schema::ObDDLEpochMgr::lock_	lock member	76	lock=SpinRWLock->RwLatch; writes-under-lock=ddl_epoch_stat_
+src/share/schema/ob_ddl_epoch.h	share::schema::ObDDLEpochMgr::lock_for_promote_	lock member	77	lock=SpinRWLock->RwLatch; unlock-calls=1
+src/share/schema/ob_ddl_epoch.h	share::schema::ObDDLEpochMgr::mutex_for_promote_	lock member	78	lock=ObMutex->Latch
+src/share/schema/ob_ddl_trans_controller.h	share::schema::ObDDLTransController::cond_slot_	lock array member	69	lock=ObThreadCond->Monitor
+src/share/schema/ob_ddl_trans_controller.h	share::schema::ObDDLTransController::lock_	lock member	71	lock=SpinRWLock->RwLatch; writes-under-lock=pending_refresh_version_,tasks_; reads-outside=pending_refresh_version_,tasks_
+src/share/schema/ob_ddl_trans_controller.h	share::schema::ObDDLTransController::wait_cond_	lock member	74	lock=ObCond->ObCond(amendment 02-sync)
+src/share/schema/ob_multi_version_schema_service.h	share::schema::ObSchemaConstructTask::schema_mutex_	lock member	87	lock=pthread_mutex_t->Monitor/Latch
+src/share/schema/ob_multi_version_schema_service.h	share::schema::ObSchemaConstructTask::schema_cond_	lock member	88	lock=pthread_cond_t->Monitor
+src/share/schema/ob_multi_version_schema_service.h	share::schema::ObMultiVersionSchemaService::schema_refresh_mutex_	lock member	395	lock=ObMutex->Latch
+src/share/schema/ob_multi_version_schema_service.h	share::schema::ObMultiVersionSchemaService::schema_info_rwlock_	lock member	399	lock=SpinRWLock->RwLatch; writes-under-lock=last_refreshed_schema_info_
+src/share/schema/ob_schema_mem_mgr.h	share::schema::ObSchemaMemMgr::schema_mem_rwlock_	lock member	105	lock=SpinRWLock->RwLatch; writes-under-lock=all_ptrs_,pos_; reads-outside=all_ptrs_,pos_
+src/share/schema/ob_schema_mgr_cache.h	share::schema::ObSchemaMgrCache::lock_	lock member	148	lock=TCRWLock->BigReaderLatch; writes-under-lock=cur_cached_num_,last_get_schema_idx_,max_cached_num_; reads-outside=last_get_schema_idx_,max_cached_num_
+src/share/schema/ob_schema_publish_signal.h	share::schema::ObSchemaPublishSignal::cond_	lock member	115	lock=ObThreadCond->Monitor
+src/share/schema/ob_server_schema_service.h	share::schema::ObServerSchemaService::schema_manager_rwlock_	lock member	956	lock=SpinRWLock->RwLatch; writes-under-lock=init_; reads-outside=init_
+src/share/schema/ob_server_schema_service.h	share::schema::ObServerSchemaService::schema_mgr_for_cache_rwlock_	lock member	980	lock=SpinRWLock->RwLatch
+src/sql/das/iter/sparse_retrieval/ob_das_tr_merge_iter.cpp	sql::(anonymous namespace)::ObDASTextRetrievalProviderSlot::lock_	lock member	39	lock=std::mutex->Monitor/Latch
+src/sql/das/ob_das_ref.h	sql::DASRefCountContext::get_cond()	lock accessor	108	lock=ObThreadCond->Monitor; returns=reference; returns-member=cond_
+src/sql/das/ob_das_ref.h	sql::DASRefCountContext::cond_	lock member	126	lock=ObThreadCond->Monitor; writes-under-lock=err_ret_; reads-outside=err_ret_; returns-lock-ref=sql::DASRefCountContext::get_cond
+src/sql/dtl/ob_dtl.h	sql::dtl::ObDtlChannelManager::spin_lock_	lock member	87	lock=ObSpinLock->Latch
+src/sql/dtl/ob_dtl_basic_channel.h	sql::dtl::SendMsgResponse::cond_	lock member	325	lock=ObThreadCond->Monitor; writes-under-lock=finish_,in_process_,is_block_,ret_; reads-outside=finish_,in_process_,is_block_,ret_
+src/sql/dtl/ob_dtl_basic_channel.h	sql::dtl::ObDtlBasicChannel::send_sem_	lock member	440	lock=SimpleCond->FutexCond
+src/sql/dtl/ob_dtl_basic_channel.h	sql::dtl::ObDtlBasicChannel::recv_sem_	lock member	441	lock=SimpleCond->FutexCond
+src/sql/dtl/ob_dtl_channel.h	sql::dtl::ObDtlChannel::cond_	lock member	247	lock=ObThreadCond->Monitor
+src/sql/dtl/ob_dtl_channel_loop.h	sql::dtl::ObDtlChannelLoop::cond_	lock member	130	lock=SimpleCond->FutexCond
+src/sql/dtl/ob_dtl_channel_loop.h	sql::dtl::ObDtlChannelLoop::spin_lock_	lock member	135	lock=ObSpinLock->Latch
+src/sql/dtl/ob_dtl_interm_result_manager.h	sql::dtl::ObDTLMemProfileInfo::mutex_	lock member	140	lock=ObMutex->Latch; writes-under-lock=row_count_; external-guards=1
+src/sql/dtl/ob_dtl_interm_result_manager.h	sql::dtl::ObDTLIntermResultManager::mem_profile_mutex_	lock member	480	lock=ObMutex->Latch; writes-under-lock=mem_profile_map_; reads-outside=mem_profile_map_
+src/sql/engine/cmd/ob_load_data_utils.h	sql::ObParallelTaskController::vacant_cond_	lock member	78	lock=ObThreadCond->Monitor
+src/sql/engine/cmd/ob_load_data_utils.h	sql::ObConcurrentFixedCircularArray::lock_	lock member	142	lock=ObSpinLock->Latch
+src/sql/engine/join/ob_hash_join_op.h	sql::ObHashTableSharedTableInfo::lock_	lock member	39	lock=ObSpinLock->Latch; external-guards=1; no-method-bodies
+src/sql/engine/join/ob_hash_join_op.h	sql::ObHashTableSharedTableInfo::cond_	lock member	40	lock=SimpleCond->FutexCond; no-method-bodies
+src/sql/engine/join/ob_join_filter_op.h	sql::SharedJoinFilterConstructor::cond_	lock member	53	lock=ObThreadCond->Monitor; writes-under-lock=is_bloom_filter_constructed_; reads-outside=is_bloom_filter_constructed_
+src/sql/engine/ob_sql_memory_manager.h	sql::ObSqlMemoryList::get_lock()	lock accessor	554	lock=ObSpinLock->Latch; returns=reference; returns-member=lock_
+src/sql/engine/ob_sql_memory_manager.h	sql::ObSqlMemoryList::lock_	lock member	558	lock=ObSpinLock->Latch; writes-under-lock=profile_list_; reads-outside=profile_list_; returns-lock-ref=sql::ObSqlMemoryList::get_lock
+src/sql/engine/ob_sql_memory_manager.h	sql::ObSqlMemoryManager::mutex_	lock member	776	lock=ObMutex->Latch; writes-under-lock=drift_size_,enable_auto_memory_mgr_,global_bound_size_,mem_target_,pre_enable_auto_memory_mgr_,pre_profile_cnt_; reads-outside=drift_size_,enable_auto_memory_mgr_,global_bound_size_,mem_target_,pre_profile_cnt_
+src/sql/engine/ob_sql_memory_manager.h	sql::ObSqlMemoryManager::lock_	lock member	795	lock=ObLatch->RwLatch; writes-under-lock=manual_calc_cnt_,wa_cnt_,wa_end_,wa_ht_,wa_start_; reads-outside=manual_calc_cnt_,wa_cnt_; unlock-calls=2
+src/sql/engine/ob_sql_memory_manager.h	sql::ObSqlMemoryManager::global_bound_update_lock_	lock member	796	lock=ObLatch->RwLatch; writes-under-lock=manual_calc_cnt_; reads-outside=manual_calc_cnt_; unlock-calls=2
+src/sql/engine/px/datahub/components/ob_dh_sample.h	sql::ObDynamicSamplePieceMsg::spin_lock_	lock member	71	lock=ObSpinLock->Latch; writes-under-lock=part_ranges_; reads-outside=part_ranges_
+src/sql/engine/px/datahub/components/ob_dh_sample.h	sql::ObDynamicSamplePieceMsgCtx::mutex_	lock member	155	lock=ObMutex->Latch; writes-under-lock=received_; reads-outside=received_
+src/sql/engine/px/datahub/ob_dh_msg_provider.h	sql::ObPxDatahubDataProvider::sqc_level_sync_cond_	lock member	49	lock=ObThreadCond->Monitor; writes-under-lock=dh_msg_cnt_,whole_msg_set_; reads-outside=whole_msg_set_
+src/sql/engine/px/ob_granule_iterator_op.h	sql::ObGITaskReBalancer::cond_	lock member	103	lock=ObThreadCond->Monitor; writes-under-lock=maybe_has_new_task_; reads-outside=maybe_has_new_task_
+src/sql/engine/px/ob_granule_iterator_op.h	sql::ObGITaskReBalancer::pullup_version_lock_	lock member	104	lock=ObSpinLock->Latch
+src/sql/engine/px/ob_granule_pump.h	sql::ObGranulePump::lock_	lock member	500	lock=ObSpinLock->Latch; writes-under-lock=finished_cnt_,is_taskset_reset_; reads-outside=is_taskset_reset_
+src/sql/engine/px/ob_px_data_ch_provider.h	sql::ObPxTransmitChProvider::msg_ready_cond_	lock reference member	62	lock=ObThreadCond->Monitor; writes-under-lock=msg_set_; reads-outside=msg_set_
+src/sql/engine/px/ob_px_data_ch_provider.h	sql::ObPxReceiveChProvider::msg_ready_cond_	lock reference member	103	lock=ObThreadCond->Monitor; unlock-calls=1
+src/sql/engine/px/ob_px_data_ch_provider.h	sql::ObPxReceiveChProvider::lock_	lock member	105	lock=ObSpinLock->Latch; writes-under-lock=msg_set_,msgs_; reads-outside=msg_set_
+src/sql/engine/px/ob_px_sqc_handler.h	sql::ObPxWorkNotifier::cond_	lock member	57	lock=SimpleCond->FutexCond
+src/sql/engine/px/ob_px_sqc_handler.h	sql::ObPxSqcHandler::part_ranges_spin_lock_	lock member	166	lock=SpinRWLock->RwLatch; writes-under-lock=part_ranges_; reads-outside=part_ranges_
+src/sql/engine/px/ob_px_sqc_proxy.h	sql::ObSqcLeaderTokenGuard::lock_	lock reference member	56	lock=ObSpinLock->Latch; unlock-calls=1
+src/sql/engine/px/ob_px_sqc_proxy.h	sql::ObSqcLeaderTokenGuard::msg_ready_cond_	lock reference member	58	lock=ObThreadCond->Monitor
+src/sql/engine/px/ob_px_sqc_proxy.h	sql::ObPxSQCProxy::get_msg_ready_cond()	lock accessor	130	lock=ObThreadCond->Monitor; returns=reference; returns-member=msg_ready_cond_
+src/sql/engine/px/ob_px_sqc_proxy.h	sql::ObPxSQCProxy::leader_token_lock_	lock member	167	lock=ObSpinLock->Latch
+src/sql/engine/px/ob_px_sqc_proxy.h	sql::ObPxSQCProxy::dtl_lock_	lock member	170	lock=ObSpinLock->Latch
+src/sql/engine/px/ob_px_sqc_proxy.h	sql::ObPxSQCProxy::msg_ready_cond_	lock member	174	lock=ObThreadCond->Monitor; returns-lock-ref=sql::ObPxSQCProxy::get_msg_ready_cond
+src/sql/engine/px/ob_px_target_monitor.h	sql::ObPxTargetCond::monitor_	lock member	56	lock=ObMonitor->Monitor
+src/sql/engine/px/ob_px_target_monitor.h	sql::ObPxTargetMonitor::spin_lock_	lock member	90	lock=SpinRWLock->RwLatch; writes-under-lock=parallel_session_count_,px_target_used_; reads-outside=parallel_session_count_,px_target_used_
+src/sql/engine/px/ob_px_worker_stat.h	sql::ObPxWorkerStatList::lock_	lock member	76	lock=ObSpinLock->Latch; writes-under-lock=worker_stat_list_
+src/sql/engine/px/p2p_datahub/ob_p2p_dh_msg.h	sql::ObP2PDatahubMsgBase::lock_	lock member	140	lock=ObSpinLock->Latch; writes-under-lock=datum_access_ctx_,is_empty_; reads-outside=datum_access_ctx_,is_empty_
+src/sql/engine/window_function/ob_window_function_op.h	sql::ObWFParticipatorSharedInfo::lock_	lock member	142	lock=ObSpinLock->Latch; external-guards=2; no-method-bodies
+src/sql/engine/window_function/ob_window_function_op.h	sql::ObWFParticipatorSharedInfo::cond_	lock member	143	lock=SimpleCond->FutexCond; no-method-bodies
+src/sql/optimizer/stat/ob_opt_stat_gather_stat.h	common::ObOptStatGatherStatList::lock_	lock member	271	lock=ObSpinLock->Latch; writes-under-lock=stat_list_
+src/sql/optimizer/stat/ob_opt_stat_monitor_manager.h	common::ObOptStatMonitorManager::lock_	lock member	216	lock=SpinRWLock->RwLatch; writes-under-lock=column_usage_map_,dml_stat_map_; reads-outside=column_usage_map_,dml_stat_map_
+src/sql/optimizer/stat/ob_opt_stat_sql_service.h	common::ObOptStatSqlService::mutex_	lock member	275	lock=ObMutex->Latch; writes-under-lock=inited_,mysql_proxy_; reads-outside=inited_,mysql_proxy_
+src/sql/plan_cache/ob_i_lib_cache_node.h	sql::ObILibCacheNode::rwlock_	lock member	214	lock=TCRWLock->BigReaderLatch; unlock-calls=1; cross-function-lock
+src/sql/plan_cache/ob_i_lib_cache_node.h	sql::ObILibCacheNode::co_list_lock_	lock member	218	lock=SpinRWLock->RwLatch; writes-under-lock=co_list_
+src/sql/plan_cache/ob_plan_set.h	sql::ObPlanSet::ref_lock_	lock member	276	lock=SpinRWLock->RwLatch
+src/sql/plan_cache/ob_ps_cache.h	sql::ObPsCache::mutex_	lock member	189	lock=ObMutex->Latch; writes-under-lock=bucket_charge_,evict_timer_,host_,inited_,inner_allocator_,mem_context_,stmt_id_map_,stmt_info_map_; reads-outside=bucket_charge_,evict_timer_,inited_,inner_allocator_,mem_context_,stmt_id_map_,stmt_info_map_
+src/sql/session/ob_basic_session_info.h	sql::ObBasicSessionInfo::get_query_lock()	lock accessor	725	lock=ObRecursiveMutex->Latch+guard-passing(reentry rule); returns=reference; returns-member=query_mutex_
+src/sql/session/ob_basic_session_info.h	sql::ObBasicSessionInfo::get_thread_data_lock()	lock accessor	726	lock=ObRecursiveMutex->Latch+guard-passing(reentry rule); returns=reference; returns-member=thread_data_mutex_
+src/sql/session/ob_basic_session_info.h	sql::ObBasicSessionInfo::query_mutex_	lock member	1686	lock=ObRecursiveMutex->Latch+guard-passing(reentry rule); returns-lock-ref=sql::ObBasicSessionInfo::get_query_lock; unlock-calls=1
+src/sql/session/ob_basic_session_info.h	sql::ObBasicSessionInfo::thread_data_mutex_	lock member	1687	lock=ObRecursiveMutex->Latch+guard-passing(reentry rule); writes-under-lock=is_database_changed_,nested_count_,thread_id_,trans_flags_,tx_desc_,tx_result_,user_id_; reads-outside=is_database_changed_,nested_count_,thread_id_,trans_flags_,tx_desc_,tx_result_,user_id_; returns-lock-ref=sql::ObBasicSessionInfo::get_thread_data_lock; unlock-calls=1
+src/sql/session/ob_user_resource_mgr.h	sql::ObConnectResource::rwlock_	lock member	82	lock=ObLatch->RwLatch; external-guards=4
+src/standby/control/ob_standby_role_transition_service.h	standby::ObStandbyRoleTransitionService::lock_	lock member	54	lock=ObMutex->Latch
+src/standby/ob_standby_log_sync_service.h	standby::ObStandbyLogSyncService::lock_	lock member	95	lock=ObMutex->Latch; writes-under-lock=config_,fatal_error_,host_,is_inited_,is_scheduled_,paused_,startup_target_scn_,timer_; reads-outside=config_,host_,is_inited_,is_scheduled_,timer_
+src/standby/ob_standby_log_sync_service.h	standby::ObStandbyLogSyncService::sync_lock_	lock member	96	lock=ObMutex->Latch; writes-under-lock=paused_; reads-outside=paused_
+src/standby/restore/ob_physical_copy_ctx.h	storage::ObPhysicalCopyCtx::lock_	lock member	108	lock=SpinRWLock->RwLatch
+src/standby/restore/ob_sstable_copy_finish_task.h	storage::ObSSTableCopyFinishTask::lock_	lock member	210	lock=SpinRWLock->RwLatch; writes-under-lock=macro_range_info_index_; reads-outside=macro_range_info_index_
+src/standby/restore/ob_standby_restore_tablet_builder.h	storage::ObStandbyRestoreTableInfoMgr::lock_	lock member	115	lock=SpinRWLock->RwLatch; writes-under-lock=table_info_mgr_map_; reads-outside=table_info_mgr_map_
+src/standby/restore/ob_tablet_copy_finish_task.h	storage::ObTabletCopyFinishTask::lock_	lock member	96	lock=SpinRWLock->RwLatch; writes-under-lock=last_meta_seq_array_
+src/standby/standby_module.cpp	standby::StandbyModule::Impl::listener_lock_	lock member	67	lock=ObMutex->Latch; writes-under-lock=listener_ready_; reads-outside=listener_ready_
+src/storage/allocator/ob_fifo_arena.h	common::ObFifoArena::get_qs()	lock accessor	196	lock=ObQSync->Quiescence; returns=reference; returns-member=s_qs; unit=rewrite:storage_core
+src/storage/allocator/ob_memstore_allocator.h	share::ObMemstoreAllocator::lock_	lock member	196	lock=ObSpinLock->Latch; writes-under-lock=arena_; reads-outside=arena_; unit=rewrite:storage_core
+src/storage/blocksstable/index_block/ob_index_block_builder.h	blocksstable::ObIndexBlockRebuilder::mutex_	lock member	526	lock=ObMutex->Latch
+src/storage/blocksstable/index_block/ob_index_block_builder.h	blocksstable::ObSSTableIndexBuilder::mutex_	lock member	711	lock=ObMutex->Latch; writes-under-lock=roots_; reads-outside=roots_
+src/storage/blocksstable/ob_block_manager.h	blocksstable::ObMacroBlockRewriteSeqGenerator::lock_	lock member	177	lock=SpinRWLock->RwLatch; writes-under-lock=rewrite_seq_; reads-outside=rewrite_seq_
+src/storage/blocksstable/ob_block_manager.h	blocksstable::ObBlockManager::bucket_lock_	lock member	501	lock=ObBucketLock->BucketLatch; writes-under-lock=block_map_; reads-outside=block_map_
+src/storage/blocksstable/ob_block_manager.h	blocksstable::ObBlockManager::marker_lock_	lock member	507	lock=SpinRWLock->RwLatch; writes-under-lock=marker_status_; reads-outside=marker_status_
+src/storage/blocksstable/ob_block_manager.h	blocksstable::ObBlockManager::sweep_lock_	lock member	510	lock=SpinRWLock->RwLatch
+src/storage/blocksstable/ob_block_manager.h	blocksstable::ObBlockManager::bad_block_lock_	lock member	516	lock=ObMutex->Latch; writes-under-lock=bad_block_infos_
+src/storage/blocksstable/ob_io_bench_controller.h	storage::ObIOBenchController::running_mutex_	lock member	45	lock=ObMutex->Latch; writes-under-lock=finish_ts_,ret_code_,start_ts_; reads-outside=finish_ts_,ret_code_,start_ts_; unlock-calls=1
+src/storage/blocksstable/ob_object_manager.h	blocksstable::ObObjectManager::lock_	lock member	138	lock=SpinRWLock->RwLatch; writes-under-lock=super_block_; reads-outside=super_block_
+src/storage/blocksstable/ob_object_manager.h	blocksstable::ObObjectManager::resize_file_lock_	lock member	141	lock=ObMutex->Latch; writes-under-lock=super_block_; reads-outside=super_block_
+src/storage/blocksstable/ob_shared_macro_block_manager.h	blocksstable::ObSharedMacroBlockMgr::mutex_	lock member	193	lock=ObMutex->Latch; writes-under-lock=offset_; reads-outside=offset_
+src/storage/blocksstable/ob_shared_macro_block_manager.h	blocksstable::ObSharedMacroBlockMgr::blocks_mutex_	lock member	194	lock=ObMutex->Latch; writes-under-lock=block_used_size_; reads-outside=block_used_size_
+src/storage/blockstore/ob_object_reader_writer.h	storage::ObObjectReaderWriter::mutex_	lock member	344	lock=ObMutex->Latch
+src/storage/checkpoint/ob_checkpoint_executor.h	storage::checkpoint::ObCheckpointExecutor::rwlock_	lock member	98	lock=SpinRWLock->RwLatch; writes-under-lock=update_checkpoint_enabled_,update_clog_checkpoint_times_; reads-outside=update_checkpoint_enabled_,update_clog_checkpoint_times_
+src/storage/checkpoint/ob_checkpoint_executor.h	storage::checkpoint::ObCheckpointExecutor::rwlock_for_update_clog_checkpoint_	lock member	99	lock=SpinRWLock->RwLatch; writes-under-lock=update_clog_checkpoint_times_; reads-outside=update_clog_checkpoint_times_
+src/storage/checkpoint/ob_data_checkpoint.h	storage::checkpoint::ObDataCheckpoint::ObCheckpointLock::ls_frozen_list_lock_	lock member	217	lock=SpinRWLock->RwLatch; no-method-bodies
+src/storage/checkpoint/ob_data_checkpoint.h	storage::checkpoint::ObDataCheckpoint::ObCheckpointLock::new_create_list_lock_	lock member	218	lock=SpinRWLock->RwLatch; no-method-bodies
+src/storage/checkpoint/ob_data_checkpoint.h	storage::checkpoint::ObDataCheckpoint::ObCheckpointLock::active_list_lock_	lock member	219	lock=SpinRWLock->RwLatch; no-method-bodies
+src/storage/checkpoint/ob_data_checkpoint.h	storage::checkpoint::ObDataCheckpoint::ObCheckpointLock::prepare_list_lock_	lock member	220	lock=SpinRWLock->RwLatch; no-method-bodies
+src/storage/compaction/ob_basic_tablet_merge_ctx.h	compaction::ObMergeFilterCtx::lock_	lock member	154	lock=ObMutex->Latch; writes-under-lock=filter_statistics_
+src/storage/compaction/ob_batch_exec_dag.h	compaction::ObBatchExecCollector::lock_	lock member	100	lock=ObMutex->Latch; writes-under-lock=info_,remain_task_cnt_
+src/storage/compaction/ob_column_checksum_calculator.h	compaction::ObColumnChecksumAccumulator::lock_	lock member	73	lock=ObMutex->Latch; writes-under-lock=column_checksum_; reads-outside=column_checksum_
+src/storage/compaction/ob_compaction_diagnose.h	compaction::ObIDiagnoseInfoMgr::lock_	lock member	286	lock=SpinRWLock->RwLatch; writes-under-lock=allocator_,info_map_,is_inited_; reads-outside=allocator_,info_map_,is_inited_
+src/storage/compaction/ob_compaction_diagnose.h	compaction::ObIDiagnoseInfoMgr::rwlock_	lock member	287	lock=SpinRWLock->RwLatch; writes-under-lock=allocator_,info_list_,info_map_,is_inited_,version_; reads-outside=allocator_,info_list_,info_map_,is_inited_,version_; external-guards=1
+src/storage/compaction/ob_compaction_memory_context.h	compaction::ObCompactionMemoryContext::free_lock_	lock member	112	lock=ObSpinLock->Latch
+src/storage/compaction/ob_compaction_memory_context.h	compaction::ObLocalSafeArena::lock_	lock member	265	lock=ObSpinLock->Latch
+src/storage/compaction/ob_compaction_memory_pool.h	storage::ObCompactionMemPool::chunk_lock_	lock member	154	lock=ObSpinLock->Latch; writes-under-lock=chunk_list_,is_inited_,max_block_num_,mem_mode_,total_block_num_,used_block_num_; reads-outside=chunk_list_,is_inited_,max_block_num_,mem_mode_,total_block_num_
+src/storage/compaction/ob_compaction_memory_pool.h	storage::ObCompactionMemPool::piece_lock_	lock member	155	lock=ObSpinLock->Latch
+src/storage/compaction/ob_compaction_schedule_util.h	compaction::ObBasicMergeScheduler::frozen_version_lock_	lock member	110	lock=ObRWLock->RwLatch(amendment 02-sync); writes-under-lock=frozen_version_,inner_table_merged_scn_,major_merge_status_,merged_version_,runtime_status_; reads-outside=inner_table_merged_scn_,major_merge_status_,merged_version_,runtime_status_
+src/storage/compaction/ob_compaction_suggestion.h	compaction::ObInfoRingArray::lock_	lock member	145	lock=SpinRWLock->RwLatch; writes-under-lock=pos_; reads-outside=pos_
+src/storage/compaction/ob_compaction_suggestion.h	compaction::ObCompactionSuggestionMgr::lock_	lock member	283	lock=ObMutex->Latch; writes-under-lock=compaction_dag_status_
+src/storage/compaction/ob_compaction_tablet_diagnose.h	compaction::ObDiagnoseTabletMgr::diagnose_lock_	lock member	102	lock=ObMutex->Latch; writes-under-lock=diagnose_tablet_map_; reads-outside=diagnose_tablet_map_
+src/storage/compaction/ob_freeze_info_mgr.h	storage::ObFreezeInfoMgr::lock_	lock member	191	lock=TCRWLock->BigReaderLatch
+src/storage/compaction/ob_medium_checker.h	compaction::ObMediumChecker::lock_	lock member	82	lock=ObMutex->Latch; writes-under-lock=tablet_check_set_; reads-outside=tablet_check_set_
+src/storage/compaction/ob_sstable_merge_history.h	compaction::ObSSTableMergeHistory::lock_	lock member	229	lock=ObMutex->Latch; writes-under-lock=block_info_; reads-outside=block_info_
+src/storage/ddl/ob_build_index_task.h	storage::ObUniqueCheckingContext::lock_	lock member	233	lock=ObSpinLock->Latch
+src/storage/ddl/ob_complement_data_task.h	storage::ObComplementDataContext::lock_	lock member	187	lock=ObSpinLock->Latch
+src/storage/ddl/ob_ddl_clog.h	storage::ObDDLMacroBlockClogCb::data_buffer_lock_	lock member	109	lock=ObSpinLock->Latch; writes-under-lock=is_data_buffer_freed_
+src/storage/ddl/ob_ddl_heart_beat_task.h	storage::ObDDLHeartBeatTaskContainer::lock_	lock member	55	lock=ObSpinLock->Latch; writes-under-lock=register_tasks_
+src/storage/ddl/ob_ddl_insert_dag.h	storage::ObDDLInsertDag::mutex_	lock member	58	lock=ObMutex->Latch; writes-under-lock=is_range_count_ready_,total_slice_count_; reads-outside=total_slice_count_
+src/storage/ddl/ob_ddl_redo_log_replayer.h	storage::ObDDLRedoLogReplayer::bucket_lock_	lock member	53	lock=ObBucketLock->BucketLatch
+src/storage/ddl/ob_ddl_redo_log_writer.h	storage::ObDDLRedoLock::bucket_lock_	lock member	175	lock=ObBucketLock->BucketLatch
+src/storage/ddl/ob_ddl_tablet_context.h	storage::ObDDLTabletContext::MergeCtx::mutex_	lock member	103	lock=ObMutex->Latch
+src/storage/ddl/ob_ddl_tablet_context.h	storage::ObDDLTabletContext::mutex_	lock member	159	lock=ObMutex->Latch; writes-under-lock=last_autoinc_val_,last_lob_id_; reads-outside=last_autoinc_val_,last_lob_id_
+src/storage/ddl/ob_ddl_tablet_context.h	storage::ObDDLTabletContext::bucket_lock_	lock member	162	lock=ObBucketLock->BucketLatch; writes-under-lock=slice_map_; reads-outside=slice_map_
+src/storage/ddl/ob_hnsw_embedmgr.h	storage::ObTaskSlotRing::lock_	lock member	198	lock=ObSpinLock->Latch; writes-under-lock=capacity_,head_idx_,next_idx_; reads-outside=capacity_,head_idx_,next_idx_
+src/storage/ddl/ob_hnsw_embedmgr.h	storage::ObEmbeddingIOCallbackHandle::lock_	lock member	246	lock=ObSpinLock->Latch; writes-under-lock=disabled_; reads-outside=disabled_
+src/storage/ddl/ob_tablet_ddl_kv.h	storage::ObDDLKV::lock_	lock member	351	lock=TCRWLock->BigReaderLatch; writes-under-lock=macro_block_count_,max_scn_,merge_slice_idx_,min_scn_; reads-outside=macro_block_count_,max_scn_,merge_slice_idx_,min_scn_
+src/storage/ddl/ob_tablet_ddl_kv_mgr.h	storage::ObTabletDDLKvMgr::lock_	lock member	199	lock=ObLatch->RwLatch; writes-under-lock=head_,idem_checker_,is_inited_,max_freeze_scn_,tablet_id_,tail_; reads-outside=head_,idem_checker_,is_inited_,max_freeze_scn_,tablet_id_,tail_; unlock-calls=1; cross-function-lock
+src/storage/ddl/ob_tablet_fork_task.h	storage::ObTabletForkCtx::allocator_lock_	lock member	159	lock=ObSpinLock->Latch
+src/storage/ddl/ob_tablet_fork_task.h	storage::ObTabletForkCtx::created_sstable_handles_lock_	lock member	172	lock=ObMutex->Latch
+src/storage/deadlock/ob_deadlock_detector_mgr.cpp	share::detector::LimitRecordBuffer::lock_	lock member	750	lock=ObSpinLock->Latch; writes-under-lock=begin_,buffer_
+src/storage/deadlock/ob_lcl_scheme/ob_lcl_node.h	share::detector::ObLCLNode::lock_	lock member	192	lock=ObSpinLock->Latch; writes-under-lock=block_callback_list_,block_list_,last_report_waiting_for_period_,lcl_period_,parent_list_,public_label_,timeout_ts_; reads-outside=block_callback_list_,block_list_,last_report_waiting_for_period_,lcl_period_,public_label_
+src/storage/fts/dict/ob_ft_dict_hub.h	storage::ObFTDictHub::rw_dict_lock_	lock member	120	lock=ObBucketLock->BucketLatch
+src/storage/lob/ob_lob_persistent_adaptor.h	storage::ObPersistentLobApator::lock_	lock member	140	lock=ObSpinLock->Latch
+src/storage/ls/ob_freezer.h	storage::ObFreezerStat::lock_	lock member	158	lock=ObSpinLock->Latch; writes-under-lock=diagnose_info_,end_time_,freeze_clock_,freeze_snapshot_version_,memtables_info_,need_rewrite_meta_,ret_code_,start_time_,state_,tablet_id_
+src/storage/ls/ob_freezer.h	storage::ObFreezer::byte_lock_	lock member	362	lock=ObSmallSpinLock->bitlock(backoff); writes-under-lock=pend_replay_cnt_; reads-outside=pend_replay_cnt_
+src/storage/ls/ob_ls.h	storage::ObLS::RDLockGuard::lock_	lock reference member	114	lock=ObLatch->RwLatch; writes-under-lock=start_ts_; unlock-calls=1; cross-function-lock
+src/storage/ls/ob_ls.h	storage::ObLS::WRLockGuard::lock_	lock reference member	128	lock=ObLatch->RwLatch; writes-under-lock=start_ts_; unlock-calls=1; cross-function-lock
+src/storage/ls/ob_ls.h	storage::ObLS::meta_rwlock_	lock member	713	lock=ObLatch->RwLatch
+src/storage/ls/ob_ls_ddl_log_handler.h	storage::ObActiveDDLKVMgr::lock_	lock member	40	lock=ObSpinLock->Latch; writes-under-lock=active_ddl_tablets_
+src/storage/ls/ob_ls_ddl_log_handler.h	storage::ObLSDDLLogHandler::online_lock_	lock member	108	lock=TCRWLock->BigReaderLatch; writes-under-lock=ddl_log_replayer_,is_inited_,is_online_,last_rec_scn_,ls_; reads-outside=ddl_log_replayer_,is_inited_,last_rec_scn_,ls_
+src/storage/ls/ob_ls_lock.h	storage::ObLSLock::locks_	lock array member	58	lock=ObLatch->RwLatch; unlock-calls=1; cross-function-lock
+src/storage/ls/ob_ls_meta.h	storage::ObLSMeta::ObReentrantWLockGuard::lock_	lock reference member	97	lock=ObLatch->RwLatch; writes-under-lock=first_locked_,ret_; reads-outside=ret_; reentry-site=1; unlock-calls=1; cross-function-lock
+src/storage/ls/ob_ls_meta.h	storage::ObLSMeta::ObReentrantRLockGuard::lock_	lock reference member	113	lock=ObLatch->RwLatch; writes-under-lock=first_locked_,ret_; reads-outside=ret_; reentry-site=1; unlock-calls=1; cross-function-lock
+src/storage/ls/ob_ls_meta.h	storage::ObLSMeta::rw_lock_	lock member	123	lock=ObLatch->RwLatch; writes-under-lock=clog_base_lsn_,clog_checkpoint_scn_,ls_persistent_state_,replayable_point_,restore_status_,saved_info_,tablet_change_checkpoint_scn_; reads-outside=clog_base_lsn_,clog_checkpoint_scn_,ls_persistent_state_,replayable_point_,restore_status_,saved_info_,tablet_change_checkpoint_scn_
+src/storage/ls/ob_ls_meta.h	storage::ObLSMeta::update_lock_	lock member	124	lock=ObLatch->RwLatch; writes-under-lock=clog_base_lsn_,clog_checkpoint_scn_,ls_persistent_state_,replayable_point_,restore_status_,saved_info_,tablet_change_checkpoint_scn_; reads-outside=clog_base_lsn_,clog_checkpoint_scn_,ls_persistent_state_,replayable_point_,restore_status_,saved_info_,tablet_change_checkpoint_scn_
+src/storage/ls/ob_ls_reserved_snapshot_mgr.h	storage::ObLSReservedSnapshotMgr::snapshot_lock_	lock member	101	lock=TCRWLock->BigReaderLatch; writes-under-lock=dependent_tablet_set_,min_reserved_snapshot_,next_reserved_snapshot_; reads-outside=dependent_tablet_set_,min_reserved_snapshot_,next_reserved_snapshot_
+src/storage/ls/ob_ls_reserved_snapshot_mgr.h	storage::ObLSReservedSnapshotMgr::sync_clog_lock_	lock member	102	lock=ObMutex->Latch
+src/storage/ls/ob_ls_tablet_service.h	storage::ObLSTabletService::bucket_lock_	lock member	859	lock=ObBucketLock->BucketLatch; writes-under-lock=tablet_id_set_; reads-outside=tablet_id_set_
+src/storage/ls/ob_ls_tx_service.h	storage::ObLSTxService::rwlock_	lock member	195	lock=SpinRWLock->RwLatch; writes-under-lock=common_checkpoints_; reads-outside=common_checkpoints_
+src/storage/ls/ob_ls_wrs_handler.h	storage::ObLSWRSHandler::lock_	lock member	66	lock=ObSpinLock->Latch; writes-under-lock=is_enabled_; reads-outside=is_enabled_
+src/storage/memtable/mvcc/ob_keybtree.h	keybtree::ObKeyBtree::get_qsync()	lock accessor	303	lock=ObQSync->Quiescence; returns=reference; returns-member=qsync; unit=rewrite:storage_core
+src/storage/memtable/mvcc/ob_mvcc_row.h	memtable::ObMvccRow::latch_	lock member	278	lock=ObRowLatch->bitlock(TAS); writes-under-lock=total_trans_node_cnt_; reads-outside=total_trans_node_cnt_; external-guards=13; unit=rewrite:storage_core
+src/storage/memtable/mvcc/ob_mvcc_trans_ctx.h	memtable::ObTransCallbackMgr::get_rwlock()	lock accessor	264	lock=SpinRWLock->RwLatch; returns=reference; returns-member=rwlock_
+src/storage/memtable/mvcc/ob_mvcc_trans_ctx.h	memtable::ObTransCallbackMgr::rwlock_	lock member	378	lock=SpinRWLock->RwLatch; writes-under-lock=cb_allocators_; reads-outside=cb_allocators_; returns-lock-ref=memtable::ObTransCallbackMgr::get_rwlock; unlock-calls=1
+src/storage/memtable/mvcc/ob_row_latch.h	memtable::ObRowLatch::Guard::host_	lock reference member	34	lock=ObRowLatch->bitlock(TAS); unlock-calls=1; unit=rewrite:storage_core
+src/storage/memtable/mvcc/ob_tx_callback_list.h	memtable::ObTxCallbackList::try_lock_log()	lock accessor	187	lock=ObSmallSpinLock->bitlock(backoff); returns=pointer; unit=rewrite:storage_core
+src/storage/memtable/mvcc/ob_tx_callback_list.h	memtable::ObTxCallbackList::append_latch_	lock member	270	lock=ObSmallSpinLock->bitlock(backoff); unit=rewrite:storage_core
+src/storage/memtable/mvcc/ob_tx_callback_list.h	memtable::ObTxCallbackList::log_latch_	lock member	272	lock=ObSmallSpinLock->bitlock(backoff); unlock-calls=1; cross-function-lock; unit=rewrite:storage_core
+src/storage/memtable/mvcc/ob_tx_callback_list.h	memtable::ObTxCallbackList::iter_synced_latch_	lock member	274	lock=ObSmallSpinLock->bitlock(backoff); unit=rewrite:storage_core
+src/storage/memtable/ob_lock_wait_mgr.h	memtable::ObLockWaitMgr::get_qs()	lock accessor	300	lock=ObQSync->Quiescence; returns=reference; returns-member=qsync
+src/storage/memtable/ob_lock_wait_mgr.h	memtable::ObLockWaitMgr::deadlocked_sessions_lock_	lock member	348	lock=ObSpinLock->Latch; writes-under-lock=deadlocked_sessions_index_; reads-outside=deadlocked_sessions_index_
+src/storage/memtable/ob_memtable_context.h	memtable::ObMemtableCtx::rwlock_	lock member	557	lock=SpinRWLock->RwLatch; unlock-calls=2
+src/storage/memtable/ob_memtable_context.h	memtable::ObMemtableCtx::lock_	lock member	558	lock=ObSmallSpinLock->bitlock(backoff); unlock-calls=2
+src/storage/memtable/ob_redo_log_generator.h	memtable::ObCallbackListLogGuard::lock_ptr_	lock pointer member	167	lock=ObSmallSpinLock->bitlock(backoff); unlock-calls=1
+src/storage/meta_mem/ob_external_tablet_cnt_map.h	storage::ObExternalTabletCntMap::bucket_lock_	lock member	41	lock=ObBucketLock->BucketLatch; writes-under-lock=ex_tablet_map_; reads-outside=ex_tablet_map_
+src/storage/meta_mem/ob_flying_tablet_pointer_map.h	storage::ObFlyingTabletPointerMap::bucket_lock_	lock member	47	lock=ObBucketLock->BucketLatch; writes-under-lock=map_; reads-outside=map_
+src/storage/meta_mem/ob_storage_meta_mem_mgr.h	storage::ObStorageMetaMemMgr::TabletGCQueue::queue_lock_	lock member	421	lock=SpinRWLock->RwLatch; writes-under-lock=gc_head_,gc_tail_
+src/storage/meta_mem/ob_storage_meta_mem_mgr.h	storage::ObStorageMetaMemMgr::wash_lock_	lock member	486	lock=SpinRWLock->RwLatch; writes-under-lock=large_tablet_header_,normal_tablet_header_; reads-outside=large_tablet_header_,normal_tablet_header_
+src/storage/meta_mem/ob_storage_meta_mem_mgr.h	storage::ObStorageMetaMemMgr::bucket_lock_	lock member	488	lock=ObBucketLock->BucketLatch; writes-under-lock=flying_tablet_map_,tablet_map_; reads-outside=flying_tablet_map_,tablet_map_
+src/storage/meta_mem/ob_storage_meta_mem_mgr.h	storage::ObStorageMetaMemMgr::gc_queue_lock_	lock member	499	lock=ObSpinLock->Latch; writes-under-lock=free_tables_queue_; reads-outside=free_tables_queue_
+src/storage/meta_mem/ob_tablet_meta_mem_mgr.h	ObTabletMetaMemMgr::TabletGCQueue::queue_lock_	lock member (regex; file not parsed)	419	lock=common::SpinRWLock; regex-fallback(tus=0)
+src/storage/meta_mem/ob_tablet_meta_mem_mgr.h	ObTabletMetaMemMgr::wash_lock_	lock member (regex; file not parsed)	484	lock=common::SpinRWLock; regex-fallback(tus=0)
+src/storage/meta_mem/ob_tablet_meta_mem_mgr.h	ObTabletMetaMemMgr::bucket_lock_	lock member (regex; file not parsed)	486	lock=ObBucketLock; regex-fallback(tus=0)
+src/storage/meta_mem/ob_tablet_meta_mem_mgr.h	ObTabletMetaMemMgr::gc_queue_lock_	lock member (regex; file not parsed)	497	lock=common::ObSpinLock; regex-fallback(tus=0)
+src/storage/meta_mem/ob_tablet_pointer.h	storage::ObTabletPointer::get_mds_truncate_lock() const	lock accessor	133	lock=ObLatch->RwLatch; returns=reference; returns-member=mds_lock_; const-method
+src/storage/meta_mem/ob_tablet_pointer.h	storage::ObTabletPointer::ddl_kv_mgr_lock_	lock member	177	lock=ObSmallSpinLock->bitlock(backoff); writes-under-lock=ddl_kv_mgr_handle_; reads-outside=ddl_kv_mgr_handle_
+src/storage/meta_mem/ob_tablet_pointer.h	storage::ObTabletPointer::mds_lock_	lock member	178	lock=ObLatch->RwLatch; returns-lock-ref=storage::ObTabletPointer::get_mds_truncate_lock
+src/storage/multi_data_source/mds_ctx.h	storage::mds::MdsCtx::lock_	lock member	115	lock=SpinRWLock->RwLatch; writes-under-lock=state_,write_list_,writer_; reads-outside=write_list_,writer_
+src/storage/multi_data_source/mds_node.h	storage::mds::MdsRowBase::lock_	lock member	100	lock=SpinRWLock->RwLatch; external-guards=4
+src/storage/multi_data_source/mds_node.h	storage::mds::UserMdsNode::TryLockGuard::lock_	lock pointer member	208	lock=SpinRWLock->RwLatch; unlock-calls=1; cross-function-lock
+src/storage/multi_data_source/mds_table_base.h	storage::mds::MdsTableBase::lock_	lock member	332	lock=SpinRWLock->RwLatch; writes-under-lock=flushing_scn_,last_inner_recycled_scn_; reads-outside=flushing_scn_,last_inner_recycled_scn_
+src/storage/multi_data_source/mds_table_handler.h	storage::mds::ObMdsTableHandler::lock_	lock member	57	lock=SpinRWLock->RwLatch; writes-under-lock=mds_table_handle_; reads-outside=mds_table_handle_
+src/storage/multi_data_source/mds_table_mgr.h	storage::mds::RemovedMdsTableRecorder::lock_	lock member	53	lock=SpinRWLock->RwLatch; writes-under-lock=removed_mds_table_list_
+src/storage/multi_data_source/mds_unit.h	storage::mds::MdsUnit::lock_	lock member	225	lock=SpinRWLock->RwLatch; unlock-calls=1; cross-function-lock
+src/storage/multi_data_source/mds_unit.h	storage::mds::MdsUnit<DummyKey, V>::lock_	lock member	357	lock=SpinRWLock->RwLatch; unlock-calls=1; cross-function-lock
+src/storage/ob_i_memtable_mgr.h	storage::MemMgrRLockGuard::lock_	lock reference member	189	lock=MemtableMgrLock->unlisted(type-erased lock handle); unlock-calls=1; cross-function-lock
+src/storage/ob_i_memtable_mgr.h	storage::MemMgrWLockGuard::lock_	lock reference member	213	lock=MemtableMgrLock->unlisted(type-erased lock handle); unlock-calls=1; cross-function-lock
+src/storage/ob_i_memtable_mgr.h	storage::ObIMemtableMgr::lock_	lock member	330	lock=MemtableMgrLock->unlisted(type-erased lock handle); writes-under-lock=freezer_,is_inited_,ls_,ls_tablet_svr_,medium_info_recorder_,mini_merge_recycle_commit_versions_ts_,retry_times_,schema_recorder_,tablet_id_,tx_data_table_; reads-outside=freezer_,is_inited_,ls_,ls_tablet_svr_,medium_info_recorder_,mini_merge_recycle_commit_versions_ts_,retry_times_,schema_recorder_,tablet_id_,tx_data_table_; unlock-calls=1
+src/storage/ob_protected_memtable_mgr_handle.h	storage::ObProtectedMemtableMgrHandle::memtable_mgr_handle_lock_	lock member	180	lock=SpinRWLock->RwLatch; writes-under-lock=memtable_mgr_handle_; reads-outside=memtable_mgr_handle_
+src/storage/ob_resource_map.h	storage::ObResourceMap::bucket_lock_	lock member	193	lock=ObBucketLock->BucketLatch; writes-under-lock=map_; reads-outside=map_
+src/storage/ob_storage_clog_recorder.h	storage::ObIStorageClogRecorder::concurrent_lock_	lock member	146	lock=ObLatch->RwLatch
+src/storage/ob_tablet_autoinc_seq_service.h	storage::ObTabletAutoincSeqService::bucket_lock_	lock member	138	lock=ObBucketLock->BucketLatch
+src/storage/ob_tablet_autoincrement_service.h	share::ObTabletAutoincMgr::mutex_	lock member	107	lock=ObMutex->Latch; unlock-calls=1
+src/storage/ob_tablet_autoincrement_service.h	share::ObTabletAutoincrementService::init_node_mutexs_	lock array member	186	lock=ObMutex->Latch
+src/storage/ob_tablet_stat_mgr.h	storage::ObTabletStatMgr::bucket_lock_	lock member	425	lock=ObBucketLock->BucketLatch; writes-under-lock=extreme_tablet_cnt_,is_inited_,pending_cursor_,report_cursor_,stream_map_,stream_pool_; reads-outside=extreme_tablet_cnt_,is_inited_,pending_cursor_,report_cursor_,stream_map_,stream_pool_
+src/storage/scheduler/ob_independent_dag.h	share::ObIndependentDag::cond_	lock member	72	lock=ObThreadCond->Monitor
+src/storage/scheduler/ob_independent_dag.h	share::ObDagExecutor::lock_	lock member	95	lock=ObMutex->Latch; writes-under-lock=dag_,dag_status_,ref_cnt_; reads-outside=dag_,dag_status_
+src/storage/slog/ob_storage_log_item.h	storage::ObStorageLogItem::flush_cond_	lock member	79	lock=ObThreadCond->Monitor; writes-under-lock=flush_finish_,flush_ret_; reads-outside=flush_finish_,flush_ret_
+src/storage/slog/ob_storage_log_writer.h	storage::ObStorageLogWriter::ObSLogWriteRunner::writer_mutex_	lock member	139	lock=std::mutex->Monitor/Latch
+src/storage/slog/ob_storage_log_writer.h	storage::ObStorageLogWriter::ObSLogWriteRunner::wakeup_cond_	lock member	140	lock=SimpleCond->FutexCond
+src/storage/slog/ob_storage_log_writer.h	storage::ObStorageLogWriter::cursor_lock_	lock member	155	lock=ObSpinLock->Latch; writes-under-lock=batch_write_buf_,write_offset_; reads-outside=batch_write_buf_,write_offset_
+src/storage/slog/ob_storage_logger.h	storage::ObStorageLogger::build_log_mutex_	lock member	101	lock=ObMutex->Latch
+src/storage/slog_ckpt/ob_local_storage_checkpoint_slog_handler.h	storage::ObLocalStorageCheckpointSlogHandler::lock_	lock member	171	lock=TCRWLock->BigReaderLatch
+src/storage/slog_ckpt/ob_local_storage_checkpoint_slog_handler.h	storage::ObLocalStorageCheckpointSlogHandler::slog_ckpt_lock_	lock member	172	lock=TCRWLock->BigReaderLatch; writes-under-lock=is_copying_tablets_,tablet_key_set_; reads-outside=is_copying_tablets_,tablet_key_set_
+src/storage/slog_ckpt/ob_local_storage_checkpoint_slog_handler.h	storage::ObLocalStorageCheckpointSlogHandler::super_block_mutex_	lock member	182	lock=ObMutex->Latch
+src/storage/slog_ckpt/ob_server_checkpoint_slog_handler.h	storage::ObServerCheckpointSlogHandler::lock_	lock member	105	lock=TCRWLock->BigReaderLatch
+src/storage/tablelock/ob_lock_memtable.h	transaction::tablelock::ObLockMemtable::flush_lock_	lock member	255	lock=SpinRWLock->RwLatch; writes-under-lock=flushed_scn_,max_committed_scn_,pre_rec_scn_; reads-outside=flushed_scn_,max_committed_scn_,pre_rec_scn_
+src/storage/tablelock/ob_lock_memtable_mgr.h	transaction::tablelock::ObLockMemtableMgr::lock_def_	lock member	75	lock=ObQSyncLock->QSyncLatch
+src/storage/tablelock/ob_lock_table.h	transaction::tablelock::ObLockTable::rw_lock_	lock member	194	lock=TCRWLock->BigReaderLatch; writes-under-lock=lock_memtable_handle_; reads-outside=lock_memtable_handle_
+src/storage/tablelock/ob_mem_ctx_table_lock.h	transaction::tablelock::ObLockMemCtx::list_rwlock_	lock member	191	lock=SpinRWLock->RwLatch; writes-under-lock=lock_list_,priority_list_; reads-outside=lock_list_,priority_list_
+src/storage/tablelock/ob_mem_ctx_table_lock.h	transaction::tablelock::ObLockMemCtx::add_lock_latch_	lock member	204	lock=ObSpinLock->Latch
+src/storage/tablelock/ob_obj_lock.h	transaction::tablelock::ObOBJLock::rwlock_	lock member	417	lock=TCRWLock->BigReaderLatch; writes-under-lock=priority_queue_; reads-outside=priority_queue_; external-guards=3
+src/storage/tablet/ob_tablet.h	storage::ObTablet::memtables_lock_	lock member	785	lock=SpinRWLock->RwLatch
+src/storage/tablet/ob_tablet.h	storage::ObTablet::mds_cache_lock_	lock member	786	lock=SpinRWLock->RwLatch; writes-under-lock=ddl_data_cache_,tablet_status_cache_; reads-outside=ddl_data_cache_,tablet_status_cache_; unlock-calls=1
+src/storage/tablet/ob_tablet_ddl_info.h	storage::ObTabletDDLInfo::rwlock_	lock member	46	lock=ObSmallSpinLock->bitlock(backoff); writes-under-lock=ddl_schema_refreshed_ts_,ddl_schema_version_,schema_version_change_scn_; reads-outside=ddl_schema_refreshed_ts_,ddl_schema_version_,schema_version_change_scn_
+src/storage/tablet/ob_tablet_id_set.h	storage::ObTabletIDSet::bucket_lock_	lock member	73	lock=ObBucketLock->BucketLatch; writes-under-lock=id_set_; reads-outside=id_set_
+src/storage/tablet/ob_tablet_memtable_mgr.h	storage::ObTabletMemtableMgr::lock_def_	lock member	117	lock=SpinRWLock->RwLatch
+src/storage/tablet/ob_tablet_table_store.h	storage::ObTabletTableStore::memtables_lock_	lock member	337	lock=SpinRWLock->RwLatch; writes-under-lock=is_ready_for_read_,memtables_; reads-outside=is_ready_for_read_,memtables_
+src/storage/tmp_file/ob_i_tmp_file.h	tmp_file::ObITmpFile::meta_lock_	lock member	345	lock=TCRWLock->BigReaderLatch; writes-under-lock=begin_page_id_,begin_page_virtual_id_,cached_page_nums_,end_page_id_,file_size_,flushed_data_page_num_,flushed_page_id_,flushed_page_virtual_id_,inner_flush_ctx_,is_deleting_,is_in_data_eviction_list_,is_in_meta_eviction_list_,last_modify_ts_,page_idx_cache_,read_offset_,truncated_offset_,write_back_data_page_num_; reads-outside=begin_page_id_,begin_page_virtual_id_,cached_page_nums_,end_page_id_,file_size_,flushed_data_page_num_,flushed_page_id_,flushed_page_virtual_id_,inner_flush_ctx_,is_deleting_,is_in_data_eviction_list_,is_in_meta_eviction_list_,last_modify_ts_,page_idx_cache_,read_offset_,truncated_offset_,write_back_data_page_num_
+src/storage/tmp_file/ob_i_tmp_file.h	tmp_file::ObITmpFile::stat_lock_	lock member	346	lock=ObSpinLock->Latch
+src/storage/tmp_file/ob_i_tmp_file.h	tmp_file::ObITmpFile::multi_write_lock_	lock member	347	lock=ObSpinLock->Latch
+src/storage/tmp_file/ob_i_tmp_file.h	tmp_file::ObITmpFile::last_page_lock_	lock member	348	lock=ObSpinLock->Latch; writes-under-lock=last_modify_ts_,truncated_offset_; reads-outside=last_modify_ts_,truncated_offset_; unlock-calls=3
+src/storage/tmp_file/ob_shared_nothing_tmp_file.h	tmp_file::ObSharedNothingTmpFile::truncate_lock_	lock member	293	lock=SpinRWLock->RwLatch; unlock-calls=2
+src/storage/tmp_file/ob_tmp_file_block_manager.h	tmp_file::ObTmpFileBlock::lock_	lock member	143	lock=SpinRWLock->RwLatch; writes-under-lock=block_index_,block_state_,macro_block_id_,ref_cnt_; reads-outside=block_index_,block_state_,macro_block_id_,ref_cnt_
+src/storage/tmp_file/ob_tmp_file_block_manager.h	tmp_file::ObTmpFileBlockManager::stat_lock_	lock member	217	lock=SpinRWLock->RwLatch; writes-under-lock=physical_block_num_,used_page_num_; reads-outside=physical_block_num_,used_page_num_
+src/storage/tmp_file/ob_tmp_file_eviction_manager.h	tmp_file::ObTmpFileEvictionManager::data_list_lock_	lock member	51	lock=ObSpinLock->Latch; writes-under-lock=file_data_eviction_list_; reads-outside=file_data_eviction_list_
+src/storage/tmp_file/ob_tmp_file_eviction_manager.h	tmp_file::ObTmpFileEvictionManager::meta_list_lock_	lock member	53	lock=ObSpinLock->Latch; writes-under-lock=file_meta_eviction_list_; reads-outside=file_meta_eviction_list_
+src/storage/tmp_file/ob_tmp_file_flush_priority_manager.h	tmp_file::ObTmpFileFlushPriorityManager::data_list_locks_	lock array member	75	lock=ObSpinLock->Latch
+src/storage/tmp_file/ob_tmp_file_flush_priority_manager.h	tmp_file::ObTmpFileFlushPriorityManager::meta_list_locks_	lock array member	77	lock=ObSpinLock->Latch
+src/storage/tmp_file/ob_tmp_file_meta_tree.h	tmp_file::ObSharedNothingTmpFileMetaTree::lock_	lock member	541	lock=SpinRWLock->RwLatch; writes-under-lock=data_item_array_,is_writing_,level_page_range_array_; reads-outside=data_item_array_,is_writing_,level_page_range_array_; unlock-calls=1
+src/storage/tmp_file/ob_tmp_file_thread_job.h	tmp_file::ObTmpFileSwapJob::swap_cond_	lock member	64	lock=ObThreadCond->Monitor
+src/storage/tmp_file/ob_tmp_file_thread_wrapper.h	tmp_file::ObTmpFileSwapThread::idle_cond_	lock member	157	lock=ObThreadCond->Monitor
+src/storage/tmp_file/ob_tmp_file_write_buffer_pool.h	tmp_file::ObTmpWriteBufferPool::lock_	lock member	249	lock=TCRWLock->BigReaderLatch; writes-under-lock=fat_,first_free_page_id_,last_shrink_complete_ts_,shrink_ctx_; reads-outside=fat_,first_free_page_id_,last_shrink_complete_ts_,shrink_ctx_
+src/storage/tmp_file/ob_tmp_file_write_buffer_pool.h	tmp_file::ObTmpWriteBufferPool::free_list_lock_	lock member	250	lock=ObSpinLock->Latch; writes-under-lock=first_free_page_id_,last_shrink_complete_ts_,shrink_ctx_; reads-outside=first_free_page_id_,last_shrink_complete_ts_,shrink_ctx_
+src/storage/tx/ob_ctx_tx_data.h	transaction::ObCtxTxData::lock_	lock member	123	lock=SpinRWLock->RwLatch; writes-under-lock=read_only_,recovered_from_tx_table_,tx_data_guard_; reads-outside=read_only_,recovered_from_tx_table_,tx_data_guard_
+src/storage/tx/ob_defensive_check_mgr.h	transaction::ObDefensiveCheckMgr::lock_	lock member	135	lock=ObSmallSpinLock->bitlock(backoff)
+src/storage/tx/ob_id_service.h	transaction::ObIDService::rwlock_	lock member	155	lock=SpinRWLock->RwLatch; writes-under-lock=cb_,is_logging_,submit_log_ts_; reads-outside=cb_,is_logging_,submit_log_ts_; unlock-calls=1
+src/storage/tx/ob_id_service.h	transaction::ObAllIDMeta::lock_	lock member	196	lock=ObSpinLock->Latch
+src/storage/tx/ob_keep_alive_ls_handler.h	transaction::ObKeepAliveLSHandler::lock_	lock member	175	lock=SpinRWLock->RwLatch; writes-under-lock=durable_keep_alive_info_,log_handler_ptr_,tmp_keep_alive_info_; reads-outside=durable_keep_alive_info_,log_handler_ptr_,tmp_keep_alive_info_
+src/storage/tx/ob_trans_ctx.h	transaction::ObTransCtx::lock_	lock member	222	lock=CtxLock->CtxLock(rule 6: hooked guard); writes-under-lock=addr_,big_segment_info_,block_frozen_memtable_,busy_cbs_,can_elr_,commit_retry_timeout_,create_ctx_scn_,ctx_create_time_,ctx_source_,ctx_tx_data_,exec_info_,first_scn_,for_replay_,is_ctx_table_merged_,is_inited_,last_check_tx_status_ts_,last_op_sn_,last_request_ts_,last_scn_,ls_tx_ctx_mgr_,mds_cache_,part_trans_action_,pending_write_,replay_completeness_,session_id_,stmt_expired_time_,timeout_task_,timer_,tlog_,trans_expired_time_,trans_id_,trans_service_; reads-outside=addr_,big_segment_info_,block_frozen_memtable_,busy_cbs_,can_elr_,commit_retry_timeout_,create_ctx_scn_,ctx_create_time_,ctx_source_,ctx_tx_data_,exec_info_,first_scn_,for_replay_,is_ctx_table_merged_,is_inited_,last_check_tx_status_ts_,last_op_sn_,last_request_ts_,last_scn_,ls_tx_ctx_mgr_,mds_cache_,part_trans_action_,pending_write_,replay_completeness_,session_id_,stmt_expired_time_,timeout_task_,timer_,tlog_,trans_expired_time_,trans_id_,trans_service_; reentry-site=1; unlock-calls=4; cross-function-lock
+src/storage/tx/ob_trans_ctx_lock.h	transaction::CtxLock::ctx_lock_	lock member	91	lock=ObLatch->RwLatch; writes-under-lock=lock_start_ts_; reads-outside=lock_start_ts_; reentry-site=1; unlock-calls=1; cross-function-lock
+src/storage/tx/ob_trans_ctx_lock.h	transaction::CtxLock::access_lock_	lock member	92	lock=ObLatch->RwLatch; writes-under-lock=lock_start_ts_; reads-outside=lock_start_ts_; unlock-calls=5; cross-function-lock
+src/storage/tx/ob_trans_ctx_lock.h	transaction::CtxLock::flush_redo_lock_	lock member	93	lock=ObLatch->RwLatch; writes-under-lock=lock_start_ts_; reads-outside=lock_start_ts_; unlock-calls=3; cross-function-lock
+src/storage/tx/ob_trans_ctx_lock.h	transaction::CtxLockGuard::lock_	lock pointer member	144	lock=CtxLock->CtxLock(rule 6: hooked guard); writes-under-lock=hold_ts_; reads-outside=hold_ts_; unlock-calls=3; cross-function-lock
+src/storage/tx/ob_trans_ctx_mgr_v4.h	transaction::ObLSTxCtxMgr::rwlock_	lock member	468	lock=TCRWLock->BigReaderLatch; writes-under-lock=is_inited_,online_ts_,prev_aggre_rec_scn_; reads-outside=is_inited_,online_ts_,prev_aggre_rec_scn_
+src/storage/tx/ob_trans_define.h	transaction::ObPartitionAuditInfo::lock_	lock member	976	lock=ObSpinLock->Latch
+src/storage/tx/ob_trans_define_v4.h	transaction::ObTxDesc::lock_	lock member	286	lock=ObSpinLock->Latch; writes-under-lock=abort_cause_,commit_cb_,conflict_txs_,exec_info_reap_ts_,has_write_state_,last_branch_id_,savepoints_,snapshot_scn_,snapshot_uncertain_bound_,snapshot_version_,write_state_; reads-outside=abort_cause_,commit_cb_,conflict_txs_,exec_info_reap_ts_,has_write_state_,last_branch_id_,savepoints_,snapshot_scn_,snapshot_uncertain_bound_,snapshot_version_,write_state_; reentry-site=2; unlock-calls=5; external-guards=20
+src/storage/tx/ob_trans_define_v4.h	transaction::ObTxDesc::commit_cb_lock_	lock member	287	lock=ObSpinLock->Latch; writes-under-lock=commit_cb_; reads-outside=commit_cb_; reentry-site=1; unlock-calls=3
+src/storage/tx/ob_trans_result.h	transaction::ObTransCond::monitor_	lock member	51	lock=ObMonitor->Monitor; writes-under-lock=finished_,result_; reads-outside=finished_,result_
+src/storage/tx/ob_tx_ctx.h	transaction::ObTxCtx::log_cb_lock_	lock member	635	lock=ObSpinLock->Latch; writes-under-lock=allocated_log_cb_count_,busy_cbs_; reads-outside=allocated_log_cb_count_,busy_cbs_
+src/storage/tx/ob_tx_data_define.h	storage::ObUndoStatusList::lock_	lock member	188	lock=SpinRWLock->RwLatch
+src/storage/tx/ob_tx_data_define.h	storage::ObTxDataMiniCache::CacheItem::lock_	lock member	422	lock=SpinRWLock->RwLatch
+src/storage/tx/ob_tx_data_op.h	storage::ObTxDataOp::get_lock()	lock accessor	151	lock=SpinRWLock->RwLatch; returns=reference; returns-member=lock_
+src/storage/tx/ob_tx_data_op.h	storage::ObTxDataOp::lock_	lock member	164	lock=SpinRWLock->RwLatch; writes-under-lock=tx_op_list_; reads-outside=tx_op_list_; returns-lock-ref=storage::ObTxDataOp::get_lock
+src/storage/tx/ob_tx_timestamp_waiter.h	transaction::ObTxTimestampWaiter::cond_	lock member	79	lock=ObThreadCond->Monitor; writes-under-lock=wait_queue_; reads-outside=wait_queue_
+src/storage/tx_storage/ob_empty_shell_task.h	storage::checkpoint::ObTabletEmptyShellHandler::wait_lock_	lock member	59	lock=ObRWLock->RwLatch(amendment 02-sync)
+src/storage/tx_storage/ob_ls_freeze_thread.h	storage::ObLSFreezeThread::lock_	lock member	79	lock=ObSpinLock->Latch; writes-under-lock=available_index_,task_array_; reads-outside=available_index_,task_array_
+src/storage/tx_storage/ob_ls_service.h	storage::ObLSService::change_lock_	lock member	142	lock=ObMutex->Latch; writes-under-lock=is_running_,is_stopped_; reads-outside=is_running_,is_stopped_
+src/storage/tx_storage/ob_memory_printer.h	storage::ObMemoryPrinter::print_mutex_	lock member	58	lock=ObMutex->Latch; unlock-calls=1
+src/storage/tx_storage/ob_memstore_freezer_common.h	storage::ObMemstoreInfo::lock_	lock member	139	lock=SpinRWLock->RwLatch; writes-under-lock=freeze_interval_,last_freeze_timestamp_,mem_lower_limit_,mem_memstore_limit_,mem_upper_limit_,slow_freeze_,slow_freeze_mt_retire_clock_,slow_freeze_timestamp_,slow_tablet_; reads-outside=freeze_interval_,last_freeze_timestamp_,mem_lower_limit_,mem_memstore_limit_,mem_upper_limit_,slow_freeze_,slow_freeze_mt_retire_clock_,slow_freeze_timestamp_,slow_tablet_
+src/storage/tx_storage/ob_tablet_gc_service.h	storage::checkpoint::ObTabletGCHandler::wait_lock_	lock member	125	lock=ObRWLock->RwLatch(amendment 02-sync)
+src/storage/tx_storage/ob_tablet_gc_service.h	storage::checkpoint::ObTabletGCHandler::gc_rwlock_	lock member	131	lock=TCRWLock->BigReaderLatch; unlock-calls=4
+src/storage/tx_table/ob_tx_ctx_memtable.h	storage::ObTxCtxMemtable::flush_lock_	lock member	111	lock=ObSpinLock->Latch
+src/storage/tx_table/ob_tx_ctx_memtable_mgr.h	storage::ObTxCtxMemtableMgr::lock_def_	lock member	73	lock=SpinRWLock->RwLatch
+src/storage/tx_table/ob_tx_data_memtable_mgr.h	storage::ObTxDataMemtableMgr::lock_def_	lock member	189	lock=SpinRWLock->RwLatch
+src/storage/tx_table/ob_tx_data_table.h	storage::ObTxDataTable::MemtableHandlesCache::lock_	lock member	62	lock=TCRWLock->BigReaderLatch; external-guards=5
+src/storage/tx_table/ob_tx_table.h	storage::ObTxTable::CtxMinStartScnInfo::lock_	lock member	102	lock=SpinRWLock->RwLatch; external-guards=3
+src/storage/tx_table/ob_tx_table_define.h	storage::CalcUpperTransSCNCache::lock_	lock member	352	lock=TCRWLock->BigReaderLatch; external-guards=4
+src/storage/vector_index/ob_vector_kmeans_ctx.h	share::ObKmeansCtx::lock_	lock member	97	lock=ObMutex->Latch; writes-under-lock=sample_vectors_; reads-outside=sample_vectors_
+src/storage/vector_index/ob_vector_kmeans_ctx.h	share::ObIvfBuildHelper::lock_	lock member	310	lock=ObMutex->Latch; writes-under-lock=first_ret_code_,is_inited_; reads-outside=first_ret_code_,is_inited_
+src/storage/vector_index/ob_vector_kmeans_ctx.h	share::ObKmeansBuildTaskHandler::lock_	lock member	523	lock=ObSpinLock->Latch; external-guards=1

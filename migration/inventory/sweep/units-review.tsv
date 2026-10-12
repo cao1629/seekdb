@@ -1,0 +1,342 @@
+unit	members	target	crate	disposition	disposition_basis	batch
+src/oblib/lib/coro/co_var.h	src/oblib/lib/coro/co_var.h	rust/port/oblib/src/lib_m/coro/co_var.rs	oblib	translate	R-default-REVIEW	1
+src/oblib/lib/utility/ob_macro_utils.h	src/oblib/lib/utility/ob_macro_utils.h	rust/port/oblib/src/lib_m/utility/ob_macro_utils.rs	oblib	replace:prelude	R-infra-named:macro_utils-REVIEW	
+src/oblib/lib/list/ob_dlink_node.h	src/oblib/lib/list/ob_dlink_node.h	rust/port/oblib/src/lib_m/list/ob_dlink_node.rs	oblib	replace:container	R-infra-dir:list	
+src/oblib/easy/include/easy_define.h	src/oblib/easy/include/easy_define.h	rust/port/oblib/src/easy/include/easy_define.rs	oblib	delete	R-libeasy-remnant	
+src/oblib/lib/atomic/ob_atomic.h	src/oblib/lib/atomic/ob_atomic.h	rust/port/oblib/src/lib_m/atomic/ob_atomic.rs	oblib	replace:atomic	R-infra-dir:atomic	
+src/oblib/lib/hash/mprotect.h	src/oblib/lib/hash/mprotect.h	rust/port/oblib/src/lib_m/hash/mprotect.rs	oblib	replace:hash	R-infra-dir:hash	
+src/oblib/lib/allocator/ob_memory_sanity.h	src/oblib/lib/allocator/ob_memory_sanity.h	rust/port/oblib/src/lib_m/allocator/ob_memory_sanity.rs	oblib	replace:mem	R-infra-dir:allocator	
+src/oblib/easy/include/easy_atomic.h	src/oblib/easy/include/easy_atomic.h	rust/port/oblib/src/easy/include/easy_atomic.rs	oblib	delete	R-libeasy-remnant	
+src/oblib/easy/include/easy_list.h	src/oblib/easy/include/easy_list.h	rust/port/oblib/src/easy/include/easy_list.rs	oblib	delete	R-libeasy-remnant	
+src/oblib/easy/util/easy_pool.h	src/oblib/easy/util/easy_pool.h	rust/port/oblib/src/easy/util/easy_pool.rs	oblib	delete	R-libeasy-remnant	
+src/oblib/easy/thread/easy_uthread.h	src/oblib/easy/thread/easy_uthread.h	rust/port/oblib/src/easy/thread/easy_uthread.rs	oblib	delete	R-libeasy-remnant	
+src/oblib/easy/util/easy_array.h	src/oblib/easy/util/easy_array.h	rust/port/oblib/src/easy/util/easy_array.rs	oblib	delete	R-libeasy-remnant	
+src/oblib/easy/util/easy_buf.h	src/oblib/easy/util/easy_buf.h	rust/port/oblib/src/easy/util/easy_buf.rs	oblib	delete	R-libeasy-remnant	
+src/oblib/easy/util/easy_hash.h	src/oblib/easy/util/easy_hash.h	rust/port/oblib/src/easy/util/easy_hash.rs	oblib	delete	R-libeasy-remnant	
+src/oblib/easy/util/easy_inet.h	src/oblib/easy/util/easy_inet.h	rust/port/oblib/src/easy/util/easy_inet.rs	oblib	delete	R-libeasy-remnant	
+src/oblib/easy/util/easy_util.h	src/oblib/easy/util/easy_util.h	rust/port/oblib/src/easy/util/easy_util.rs	oblib	delete	R-libeasy-remnant	
+src/oblib/easy/io/easy_io_struct.h	src/oblib/easy/io/easy_io_struct.h	rust/port/oblib/src/easy/io/easy_io_struct.rs	oblib	delete	R-libeasy-remnant	
+src/oblib/lib/hash/fnv_hash.h	src/oblib/lib/hash/fnv_hash.h	rust/port/oblib/src/lib_m/hash/fnv_hash.rs	oblib	replace:hash	R-infra-dir:hash	
+src/oblib/lib/oblog/ob_log_level.h	src/oblib/lib/oblog/ob_log_level.h	rust/port/oblib/src/lib_m/oblog/ob_log_level.rs	oblib	replace:log	R-infra-dir:oblog	
+src/oblib/lib/oblog/ob_log_user_msg.h	src/oblib/lib/oblog/ob_log_user_msg.h	rust/port/oblib/src/lib_m/oblog/ob_log_user_msg.rs	oblib	replace:log	R-infra-dir:oblog	
+src/oblib/lib/allocator/ob_jemalloc.h	src/oblib/lib/allocator/ob_jemalloc.h	rust/port/oblib/src/lib_m/allocator/ob_jemalloc.rs	oblib	replace:mem	R-infra-dir:allocator	
+src/oblib/lib/lock/ob_lock.h	src/oblib/lib/lock/ob_lock.h	rust/port/oblib/src/lib_m/lock/ob_lock.rs	oblib	replace:sync	R-infra-dir:lock	
+src/oblib/lib/thread/ob_adaptive_worker_pool.h	src/oblib/lib/thread/ob_adaptive_worker_pool.h	rust/port/oblib/src/lib_m/thread/ob_adaptive_worker_pool.rs	oblib	replace:thread	R-infra-dir:thread	
+src/oblib/lib/thread/ob_priority_scheduler.h	src/oblib/lib/thread/ob_priority_scheduler.h	rust/port/oblib/src/lib_m/thread/ob_priority_scheduler.rs	oblib	replace:thread	R-infra-dir:thread	
+src/oblib/lib/oblog/ob_log_dba_event.h	src/oblib/lib/oblog/ob_log_dba_event.cpp,src/oblib/lib/oblog/ob_log_dba_event.h	rust/port/oblib/src/lib_m/oblog/ob_log_dba_event.rs	oblib	replace:log	R-infra-dir:oblog	
+src/oblib/lib/lock/ob_rwlock.h	src/oblib/lib/lock/ob_rwlock.cpp,src/oblib/lib/lock/ob_rwlock.h	rust/port/oblib/src/lib_m/lock/ob_rwlock.rs	oblib	replace:sync	R-infra-dir:lock	
+src/oblib/lib/oblog/ob_base_log_writer.h	src/oblib/lib/oblog/ob_base_log_writer.cpp,src/oblib/lib/oblog/ob_base_log_writer.h	rust/port/oblib/src/lib_m/oblog/ob_base_log_writer.rs	oblib	replace:log	R-infra-dir:oblog	
+src/oblib/lib/oblog/ob_log_print_kv.h	src/oblib/lib/oblog/ob_log_print_kv.h	rust/port/oblib/src/lib_m/oblog/ob_log_print_kv.rs	oblib	replace:log	R-infra-dir:oblog	
+src/oblib/lib/oblog/ob_log_time_fmt.h	src/oblib/lib/oblog/ob_log_time_fmt.cpp,src/oblib/lib/oblog/ob_log_time_fmt.h	rust/port/oblib/src/lib_m/oblog/ob_log_time_fmt.rs	oblib	replace:log	R-infra-dir:oblog	
+src/oblib/lib/oblog/ob_log_module.h	src/oblib/lib/oblog/ob_log_module.h,src/oblib/lib/oblog/ob_log_module.ipp	rust/port/oblib/src/lib_m/oblog/ob_log_module.rs	oblib	replace:log	R-infra-dir:oblog	
+src/oblib/lib/oblog/ob_async_log_struct.h	src/oblib/lib/oblog/ob_async_log_struct.cpp,src/oblib/lib/oblog/ob_async_log_struct.h	rust/port/oblib/src/lib_m/oblog/ob_async_log_struct.rs	oblib	replace:log	R-infra-dir:oblog	
+src/oblib/lib/oblog/ob_ringbuf_log_writer.h	src/oblib/lib/oblog/ob_ringbuf_log_writer.cpp,src/oblib/lib/oblog/ob_ringbuf_log_writer.h	rust/port/oblib/src/lib_m/oblog/ob_ringbuf_log_writer.rs	oblib	replace:log	R-infra-dir:oblog	
+src/oblib/lib/oblog/ob_syslog_rate_limiter.h	src/oblib/lib/oblog/ob_syslog_rate_limiter.cpp,src/oblib/lib/oblog/ob_syslog_rate_limiter.h	rust/port/oblib/src/lib_m/oblog/ob_syslog_rate_limiter.rs	oblib	replace:log	R-infra-dir:oblog	
+src/oblib/lib/oblog/ob_log.h	src/oblib/lib/oblog/ob_log.cpp,src/oblib/lib/oblog/ob_log.h	rust/port/oblib/src/lib_m/oblog/ob_log.rs	oblib	replace:log	R-infra-dir:oblog	
+src/oblib/lib/string/ob_string.h	src/oblib/lib/string/ob_string.cpp,src/oblib/lib/string/ob_string.h	rust/port/oblib/src/lib_m/string/ob_string.rs	oblib	replace:string	R-infra-named:ob_string	
+src/oblib/lib/alloc/abit_set.h	src/oblib/lib/alloc/abit_set.cpp,src/oblib/lib/alloc/abit_set.h	rust/port/oblib/src/lib_m/alloc/abit_set.rs	oblib	replace:mem	R-infra-dir:alloc	
+src/oblib/lib/alloc/alloc_struct.h	src/oblib/lib/alloc/alloc_struct.cpp,src/oblib/lib/alloc/alloc_struct.h	rust/port/oblib/src/lib_m/alloc/alloc_struct.rs	oblib	replace:mem	R-infra-dir:alloc	
+src/oblib/lib/alloc/ob_iallocator.h	src/oblib/lib/alloc/ob_iallocator.h	rust/port/oblib/src/lib_m/alloc/ob_iallocator.rs	oblib	replace:mem	R-infra-dir:alloc	
+src/oblib/lib/allocator/ob_allocator.h	src/oblib/lib/allocator/ob_allocator.h	rust/port/oblib/src/lib_m/allocator/ob_allocator.rs	oblib	replace:mem	R-infra-dir:allocator	
+src/oblib/lib/alloc/alloc_func.h	src/oblib/lib/alloc/alloc_func.cpp,src/oblib/lib/alloc/alloc_func.h	rust/port/oblib/src/lib_m/alloc/alloc_func.rs	oblib	replace:mem	R-infra-dir:alloc	
+src/oblib/lib/alloc/alloc_failed_reason.h	src/oblib/lib/alloc/alloc_failed_reason.cpp,src/oblib/lib/alloc/alloc_failed_reason.h	rust/port/oblib/src/lib_m/alloc/alloc_failed_reason.rs	oblib	replace:mem	R-infra-dir:alloc	
+src/oblib/lib/alloc/alloc_interface.h	src/oblib/lib/alloc/alloc_interface.h	rust/port/oblib/src/lib_m/alloc/alloc_interface.rs	oblib	replace:mem	R-infra-dir:alloc	
+src/oblib/lib/alloc/ob_ctx_define.h	src/oblib/lib/alloc/ob_ctx_define.cpp,src/oblib/lib/alloc/ob_ctx_define.h	rust/port/oblib/src/lib_m/alloc/ob_ctx_define.rs	oblib	replace:mem	R-infra-dir:alloc	
+src/oblib/lib/utility/serialization.h	src/oblib/lib/utility/serialization.h	rust/port/oblib/src/lib_m/utility/serialization.rs	oblib	replace:serialization	R-infra-named:serialization	
+src/oblib/lib/utility/ob_unify_serialize.h	src/oblib/lib/utility/ob_unify_serialize.h	rust/port/oblib/src/lib_m/utility/ob_unify_serialize.rs	oblib	replace:serialization	R-infra-named:serialization	
+src/oblib/lib/list/ob_dlist.h	src/oblib/lib/list/ob_dlist.h	rust/port/oblib/src/lib_m/list/ob_dlist.rs	oblib	replace:container	R-infra-dir:list	
+src/oblib/lib/lock/ob_futex.h	src/oblib/lib/lock/ob_futex.cpp,src/oblib/lib/lock/ob_futex.h	rust/port/oblib/src/lib_m/lock/ob_futex.rs	oblib	replace:sync	R-infra-dir:lock	
+src/oblib/lib/stat/ob_latch_define.h	src/oblib/lib/stat/ob_latch_define.cpp,src/oblib/lib/stat/ob_latch_define.h	rust/port/oblib/src/lib_m/stat/ob_latch_define.rs	oblib	translate	R-default-REVIEW	1
+src/oblib/lib/lock/ob_latch.h	src/oblib/lib/lock/ob_latch.cpp,src/oblib/lib/lock/ob_latch.h	rust/port/oblib/src/lib_m/lock/ob_latch.rs	oblib	replace:sync	R-infra-dir:lock	
+src/oblib/lib/lock/ob_lock_guard.h	src/oblib/lib/lock/ob_lock_guard.h	rust/port/oblib/src/lib_m/lock/ob_lock_guard.rs	oblib	replace:sync	R-infra-dir:lock	
+src/oblib/lib/lock/ob_mutex.h	src/oblib/lib/lock/ob_mutex.h	rust/port/oblib/src/lib_m/lock/ob_mutex.rs	oblib	replace:sync	R-infra-dir:lock	
+src/oblib/lib/resource/achunk_mgr.h	src/oblib/lib/resource/achunk_mgr.cpp,src/oblib/lib/resource/achunk_mgr.h	rust/port/oblib/src/lib_m/resource/achunk_mgr.rs	oblib	replace:mem	R-infra-named:achunk_mgr-REVIEW	
+src/oblib/lib/alloc/block_set.h	src/oblib/lib/alloc/block_set.cpp,src/oblib/lib/alloc/block_set.h	rust/port/oblib/src/lib_m/alloc/block_set.rs	oblib	replace:mem	R-infra-dir:alloc	
+src/oblib/lib/alloc/object_set.h	src/oblib/lib/alloc/object_set.cpp,src/oblib/lib/alloc/object_set.h	rust/port/oblib/src/lib_m/alloc/object_set.rs	oblib	replace:mem	R-infra-dir:alloc	
+src/oblib/lib/thread_local/ob_tsi_utils.h	src/oblib/lib/thread_local/ob_tsi_utils.cpp,src/oblib/lib/thread_local/ob_tsi_utils.h	rust/port/oblib/src/lib_m/thread_local/ob_tsi_utils.rs	oblib	replace:thread	R-infra-dir:thread_local	
+src/oblib/lib/alloc/object_mgr.h	src/oblib/lib/alloc/object_mgr.cpp,src/oblib/lib/alloc/object_mgr.h	rust/port/oblib/src/lib_m/alloc/object_mgr.rs	oblib	replace:mem	R-infra-dir:alloc	
+src/oblib/lib/lock/ob_spin_rwlock.h	src/oblib/lib/lock/ob_spin_rwlock.h	rust/port/oblib/src/lib_m/lock/ob_spin_rwlock.rs	oblib	replace:sync	R-infra-dir:lock	
+src/oblib/lib/alloc/ob_ctx_allocator.h	src/oblib/lib/alloc/ob_ctx_allocator.cpp,src/oblib/lib/alloc/ob_ctx_allocator.h	rust/port/oblib/src/lib_m/alloc/ob_ctx_allocator.rs	oblib	replace:mem	R-infra-dir:alloc	
+src/oblib/lib/alloc/ob_malloc_allocator.h	src/oblib/lib/alloc/ob_malloc_allocator.cpp,src/oblib/lib/alloc/ob_malloc_allocator.h	rust/port/oblib/src/lib_m/alloc/ob_malloc_allocator.rs	oblib	replace:mem	R-infra-dir:alloc	
+src/oblib/lib/allocator/ob_tc_malloc.h	src/oblib/lib/allocator/ob_tc_malloc.cpp,src/oblib/lib/allocator/ob_tc_malloc.h	rust/port/oblib/src/lib_m/allocator/ob_tc_malloc.rs	oblib	replace:mem	R-infra-dir:allocator	
+src/oblib/lib/allocator/ob_malloc.h	src/oblib/lib/allocator/ob_malloc.cpp,src/oblib/lib/allocator/ob_malloc.h	rust/port/oblib/src/lib_m/allocator/ob_malloc.rs	oblib	replace:mem	R-infra-dir:allocator	
+src/oblib/lib/lock/ob_spin_lock.h	src/oblib/lib/lock/ob_spin_lock.h	rust/port/oblib/src/lib_m/lock/ob_spin_lock.rs	oblib	replace:sync	R-infra-dir:lock	
+src/oblib/lib/allocator/page_arena.h	src/oblib/lib/allocator/page_arena.h	rust/port/oblib/src/lib_m/allocator/page_arena.rs	oblib	replace:mem	R-infra-dir:allocator	
+src/oblib/lib/utility/ob_print_kv.h	src/oblib/lib/utility/ob_print_kv.h	rust/port/oblib/src/lib_m/utility/ob_print_kv.rs	oblib	replace:fmt	R-infra-named:print_kv	
+src/oblib/lib/utility/ob_print_utils.h	src/oblib/lib/utility/ob_print_utils.cpp,src/oblib/lib/utility/ob_print_utils.h	rust/port/oblib/src/lib_m/utility/ob_print_utils.rs	oblib	replace:fmt	R-infra-named:print_utils	
+src/oblib/lib/container/ob_array_wrap.h	src/oblib/lib/container/ob_array_wrap.h	rust/port/oblib/src/lib_m/container/ob_array_wrap.rs	oblib	replace:container	R-infra-dir:container	
+src/oblib/lib/container/ob_iarray.h	src/oblib/lib/container/ob_iarray.h	rust/port/oblib/src/lib_m/container/ob_iarray.rs	oblib	replace:container	R-infra-dir:container	
+src/oblib/lib/thread_local/ob_tsi_factory.h	src/oblib/lib/thread_local/ob_tsi_factory.h	rust/port/oblib/src/lib_m/thread_local/ob_tsi_factory.rs	oblib	replace:thread	R-infra-dir:thread_local	
+src/oblib/lib/oblog/ob_trace_log.h	src/oblib/lib/oblog/ob_trace_log.cpp,src/oblib/lib/oblog/ob_trace_log.h	rust/port/oblib/src/lib_m/oblog/ob_trace_log.rs	oblib	replace:log	R-infra-dir:oblog	
+src/oblib/lib/thread/thread.h	src/oblib/lib/thread/thread.cpp,src/oblib/lib/thread/thread.h	rust/port/oblib/src/lib_m/thread/thread.rs	oblib	replace:thread	R-infra-dir:thread	
+src/oblib/lib/thread/threads.h	src/oblib/lib/thread/threads.cpp,src/oblib/lib/thread/threads.h	rust/port/oblib/src/lib_m/thread/threads.rs	oblib	replace:thread	R-infra-dir:thread	
+src/oblib/lib/thread/thread_pool.h	src/oblib/lib/thread/thread_pool.h	rust/port/oblib/src/lib_m/thread/thread_pool.rs	oblib	replace:thread	R-infra-dir:thread	
+src/oblib/lib/allocator/ob_page_manager.h	src/oblib/lib/allocator/ob_page_manager.cpp,src/oblib/lib/allocator/ob_page_manager.h	rust/port/oblib/src/lib_m/allocator/ob_page_manager.rs	oblib	replace:mem	R-infra-dir:allocator	
+src/oblib/lib/allocator/ob_allocator_v2.h	src/oblib/lib/allocator/ob_allocator_v2.cpp,src/oblib/lib/allocator/ob_allocator_v2.h	rust/port/oblib/src/lib_m/allocator/ob_allocator_v2.rs	oblib	replace:mem	R-infra-dir:allocator	
+src/oblib/lib/hash/ob_hashutils.h	src/oblib/lib/hash/ob_hashutils.cpp,src/oblib/lib/hash/ob_hashutils.h	rust/port/oblib/src/lib_m/hash/ob_hashutils.rs	oblib	replace:hash	R-infra-dir:hash	
+src/oblib/lib/hash/ob_serialization.h	src/oblib/lib/hash/ob_serialization.h	rust/port/oblib/src/lib_m/hash/ob_serialization.rs	oblib	replace:hash	R-infra-dir:hash	
+src/oblib/lib/hash/ob_hashtable.h	src/oblib/lib/hash/ob_hashtable.h	rust/port/oblib/src/lib_m/hash/ob_hashtable.rs	oblib	replace:hash	R-infra-dir:hash	
+src/oblib/lib/hash/ob_hashmap.h	src/oblib/lib/hash/ob_hashmap.h	rust/port/oblib/src/lib_m/hash/ob_hashmap.rs	oblib	replace:hash	R-infra-dir:hash	
+src/oblib/lib/rc/context.h	src/oblib/lib/rc/context.cpp,src/oblib/lib/rc/context.h	rust/port/oblib/src/lib_m/rc/context.rs	oblib	replace:mem	R-infra-named:memory_context	
+src/oblib/lib/container/ob_array.h	src/oblib/lib/container/ob_array.h	rust/port/oblib/src/lib_m/container/ob_array.rs	oblib	replace:container	R-infra-dir:container	
+src/oblib/lib/container/ob_se_array.h	src/oblib/lib/container/ob_se_array.h	rust/port/oblib/src/lib_m/container/ob_se_array.rs	oblib	replace:container	R-infra-dir:container	
+src/oblib/lib/container/ob_2d_array.h	src/oblib/lib/container/ob_2d_array.h	rust/port/oblib/src/lib_m/container/ob_2d_array.rs	oblib	replace:container	R-infra-dir:container	
+src/oblib/lib/queue/ob_link.h	src/oblib/lib/queue/ob_link.h	rust/port/oblib/src/lib_m/queue/ob_link.rs	oblib	replace:queue	R-infra-dir:queue	
+src/oblib/lib/container/ob_bit_set.h	src/oblib/lib/container/ob_bit_set.h	rust/port/oblib/src/lib_m/container/ob_bit_set.rs	oblib	replace:container	R-infra-dir:container	
+src/oblib/lib/allocator/ob_qsync.h	src/oblib/lib/allocator/ob_qsync.h	rust/port/oblib/src/lib_m/allocator/ob_qsync.rs	oblib	replace:sync	R-infra-named:qsync	
+src/oblib/lib/allocator/ob_block_alloc_mgr.h	src/oblib/lib/allocator/ob_block_alloc_mgr.cpp,src/oblib/lib/allocator/ob_block_alloc_mgr.h	rust/port/oblib/src/lib_m/allocator/ob_block_alloc_mgr.rs	oblib	replace:mem	R-infra-dir:allocator	
+src/oblib/lib/allocator/ob_slice_alloc.h	src/oblib/lib/allocator/ob_slice_alloc.cpp,src/oblib/lib/allocator/ob_slice_alloc.h	rust/port/oblib/src/lib_m/allocator/ob_slice_alloc.rs	oblib	replace:mem	R-infra-dir:allocator	
+src/oblib/lib/hash/ob_hashset.h	src/oblib/lib/hash/ob_hashset.h	rust/port/oblib/src/lib_m/hash/ob_hashset.rs	oblib	replace:hash	R-infra-dir:hash	
+src/oblib/lib/string/ob_sql_string.h	src/oblib/lib/string/ob_sql_string.cpp,src/oblib/lib/string/ob_sql_string.h	rust/port/oblib/src/lib_m/string/ob_sql_string.rs	oblib	replace:string	R-infra-named:ob_sql_string	
+src/oblib/lib/list/ob_list.h	src/oblib/lib/list/ob_list.h	rust/port/oblib/src/lib_m/list/ob_list.rs	oblib	replace:container	R-infra-dir:list	
+src/oblib/lib/container/ob_heap.h	src/oblib/lib/container/ob_heap.h	rust/port/oblib/src/lib_m/container/ob_heap.rs	oblib	replace:container	R-infra-dir:container	
+src/oblib/lib/container/ob_se_array_iterator.h	src/oblib/lib/container/ob_se_array_iterator.h	rust/port/oblib/src/lib_m/container/ob_se_array_iterator.rs	oblib	replace:container	R-infra-dir:container	
+src/oblib/lib/utility/ob_sort.h	src/oblib/lib/utility/ob_sort.h	rust/port/oblib/src/lib_m/utility/ob_sort.rs	oblib	replace:sort	R-infra-named:ob_sort	
+src/oblib/lib/container/ob_vector.h	src/oblib/lib/container/ob_vector.h,src/oblib/lib/container/ob_vector.ipp	rust/port/oblib/src/lib_m/container/ob_vector.rs	oblib	replace:container	R-infra-dir:container	
+src/oblib/lib/lock/mutex.h	src/oblib/lib/lock/mutex.cpp,src/oblib/lib/lock/mutex.h	rust/port/oblib/src/lib_m/lock/mutex.rs	oblib	replace:sync	R-infra-dir:lock	
+src/oblib/lib/lock/cond.h	src/oblib/lib/lock/cond.cpp,src/oblib/lib/lock/cond.h	rust/port/oblib/src/lib_m/lock/cond.rs	oblib	replace:sync	R-infra-dir:lock	
+src/oblib/lib/lock/ob_monitor.h	src/oblib/lib/lock/ob_monitor.h	rust/port/oblib/src/lib_m/lock/ob_monitor.rs	oblib	replace:sync	R-infra-dir:lock	
+src/oblib/lib/queue/ob_fixed_queue.h	src/oblib/lib/queue/ob_fixed_queue.h	rust/port/oblib/src/lib_m/queue/ob_fixed_queue.rs	oblib	replace:queue	R-infra-dir:queue	
+src/oblib/lib/queue/ob_lighty_queue.h	src/oblib/lib/queue/ob_lighty_queue.cpp,src/oblib/lib/queue/ob_lighty_queue.h	rust/port/oblib/src/lib_m/queue/ob_lighty_queue.rs	oblib	replace:queue	R-infra-dir:queue	
+src/oblib/lib/lock/ob_scond.h	src/oblib/lib/lock/ob_scond.h	rust/port/oblib/src/lib_m/lock/ob_scond.rs	oblib	replace:sync	R-infra-dir:lock	
+src/oblib/lib/queue/ob_link_queue.h	src/oblib/lib/queue/ob_link_queue.cpp,src/oblib/lib/queue/ob_link_queue.h	rust/port/oblib/src/lib_m/queue/ob_link_queue.rs	oblib	replace:queue	R-infra-dir:queue	
+src/oblib/lib/queue/ob_priority_queue.h	src/oblib/lib/queue/ob_priority_queue.h	rust/port/oblib/src/lib_m/queue/ob_priority_queue.rs	oblib	replace:queue	R-infra-dir:queue	
+src/oblib/lib/lock/ob_thread_cond.h	src/oblib/lib/lock/ob_thread_cond.cpp,src/oblib/lib/lock/ob_thread_cond.h	rust/port/oblib/src/lib_m/lock/ob_thread_cond.rs	oblib	replace:sync	R-infra-dir:lock	
+src/oblib/lib/thread/ob_dynamic_thread_pool.h	src/oblib/lib/thread/ob_dynamic_thread_pool.cpp,src/oblib/lib/thread/ob_dynamic_thread_pool.h	rust/port/oblib/src/lib_m/thread/ob_dynamic_thread_pool.rs	oblib	replace:thread	R-infra-dir:thread	
+src/oblib/lib/thread/ob_link_task.h	src/oblib/lib/thread/ob_link_task.h	rust/port/oblib/src/lib_m/thread/ob_link_task.rs	oblib	replace:thread	R-infra-dir:thread	
+src/oblib/lib/lock/ob_drw_lock.h	src/oblib/lib/lock/ob_drw_lock.h	rust/port/oblib/src/lib_m/lock/ob_drw_lock.rs	oblib	replace:sync	R-infra-dir:lock	
+src/oblib/lib/thread/ob_balance_filter.h	src/oblib/lib/thread/ob_balance_filter.cpp,src/oblib/lib/thread/ob_balance_filter.h	rust/port/oblib/src/lib_m/thread/ob_balance_filter.rs	oblib	replace:thread	R-infra-dir:thread	
+src/oblib/lib/thread/ob_queue_thread.h	src/oblib/lib/thread/ob_queue_thread.cpp,src/oblib/lib/thread/ob_queue_thread.h	rust/port/oblib/src/lib_m/thread/ob_queue_thread.rs	oblib	replace:thread	R-infra-dir:thread	
+src/oblib/lib/thread/ob_thread_name.h	src/oblib/lib/thread/ob_thread_name.cpp,src/oblib/lib/thread/ob_thread_name.h	rust/port/oblib/src/lib_m/thread/ob_thread_name.rs	oblib	replace:thread	R-infra-dir:thread	
+src/oblib/lib/thread/ob_simple_thread_pool.h	src/oblib/lib/thread/ob_simple_thread_pool.h,src/oblib/lib/thread/ob_simple_thread_pool.ipp	rust/port/oblib/src/lib_m/thread/ob_simple_thread_pool.rs	oblib	replace:thread	R-infra-dir:thread	
+src/oblib/lib/task/ob_timer_service.h	src/oblib/lib/task/ob_timer_service.cpp,src/oblib/lib/task/ob_timer_service.h	rust/port/oblib/src/lib_m/task/ob_timer_service.rs	oblib	replace:thread	R-infra-dir:task	
+src/oblib/lib/task/ob_timer.h	src/oblib/lib/task/ob_timer.cpp,src/oblib/lib/task/ob_timer.h	rust/port/oblib/src/lib_m/task/ob_timer.rs	oblib	replace:thread	R-infra-dir:task	
+src/oblib/lib/allocator/ob_vslice_alloc.h	src/oblib/lib/allocator/ob_vslice_alloc.h	rust/port/oblib/src/lib_m/allocator/ob_vslice_alloc.rs	oblib	replace:mem	R-infra-dir:allocator	
+src/oblib/lib/allocator/ob_fifo_allocator.h	src/oblib/lib/allocator/ob_fifo_allocator.cpp,src/oblib/lib/allocator/ob_fifo_allocator.h	rust/port/oblib/src/lib_m/allocator/ob_fifo_allocator.rs	oblib	replace:mem	R-infra-dir:allocator	
+src/oblib/lib/thread/protected_stack_allocator.h	src/oblib/lib/thread/protected_stack_allocator.cpp,src/oblib/lib/thread/protected_stack_allocator.h	rust/port/oblib/src/lib_m/thread/protected_stack_allocator.rs	oblib	replace:thread	R-infra-dir:thread	
+src/oblib/lib/utility/ob_smart_call.h	src/oblib/lib/utility/ob_smart_call.cpp,src/oblib/lib/utility/ob_smart_call.h	rust/port/oblib/src/lib_m/utility/ob_smart_call.rs	oblib	replace:thread	R-infra-named:smart_call	
+src/oblib/lib/alloc/ob_malloc_sample_struct.h	src/oblib/lib/alloc/ob_malloc_sample_struct.cpp,src/oblib/lib/alloc/ob_malloc_sample_struct.h	rust/port/oblib/src/lib_m/alloc/ob_malloc_sample_struct.rs	oblib	replace:mem	R-infra-dir:alloc	
+src/oblib/lib/alloc/memory_dump.h	src/oblib/lib/alloc/memory_dump.cpp,src/oblib/lib/alloc/memory_dump.h	rust/port/oblib/src/lib_m/alloc/memory_dump.rs	oblib	replace:mem	R-infra-dir:alloc	
+src/oblib/lib/alloc/malloc_hook.h	src/oblib/lib/alloc/malloc_hook.cpp,src/oblib/lib/alloc/malloc_hook.h	rust/port/oblib/src/lib_m/alloc/malloc_hook.rs	oblib	replace:mem	R-infra-dir:alloc	
+src/oblib/lib/signal/ob_signal_struct.h	src/oblib/lib/signal/ob_signal_struct.cpp,src/oblib/lib/signal/ob_signal_struct.h	rust/port/oblib/src/lib_m/signal/ob_signal_struct.rs	oblib	replace:signal	R-infra-dir:signal	
+src/oblib/lib/alloc/ob_malloc_callback.h	src/oblib/lib/alloc/ob_malloc_callback.cpp,src/oblib/lib/alloc/ob_malloc_callback.h	rust/port/oblib/src/lib_m/alloc/ob_malloc_callback.rs	oblib	replace:mem	R-infra-dir:alloc	
+src/oblib/lib/oblog/ob_log_compressor.h	src/oblib/lib/oblog/ob_log_compressor.cpp,src/oblib/lib/oblog/ob_log_compressor.h	rust/port/oblib/src/lib_m/oblog/ob_log_compressor.rs	oblib	replace:log	R-infra-dir:oblog	
+src/oblib/lib/oblog/ob_warning_buffer.h	src/oblib/lib/oblog/ob_warning_buffer.cpp,src/oblib/lib/oblog/ob_warning_buffer.h	rust/port/oblib/src/lib_m/oblog/ob_warning_buffer.rs	oblib	replace:log	R-infra-dir:oblog	
+src/oblib/lib/task/ob_timer_monitor.h	src/oblib/lib/task/ob_timer_monitor.cpp,src/oblib/lib/task/ob_timer_monitor.h	rust/port/oblib/src/lib_m/task/ob_timer_monitor.rs	oblib	replace:thread	R-infra-dir:task	
+src/oblib/lib/container/ob_fixed_array.h	src/oblib/lib/container/ob_fixed_array.h	rust/port/oblib/src/lib_m/container/ob_fixed_array.rs	oblib	replace:container	R-infra-dir:container	
+src/oblib/lib/string/ob_string_buffer.h	src/oblib/lib/string/ob_string_buffer.cpp,src/oblib/lib/string/ob_string_buffer.h	rust/port/oblib/src/lib_m/string/ob_string_buffer.rs	oblib	replace:string	R-infra-named:ob_string_buffer	
+src/oblib/lib/utility/ob_serialization_helper.h	src/oblib/lib/utility/ob_serialization_helper.cpp,src/oblib/lib/utility/ob_serialization_helper.h	rust/port/oblib/src/lib_m/utility/ob_serialization_helper.rs	oblib	replace:serialization	R-infra-named:serialization	
+src/oblib/lib/container/ob_array_serialization.h	src/oblib/lib/container/ob_array_serialization.h	rust/port/oblib/src/lib_m/container/ob_array_serialization.rs	oblib	replace:container	R-infra-dir:container	
+src/oblib/lib/allocator/ob_retire_station.h	src/oblib/lib/allocator/ob_retire_station.h	rust/port/oblib/src/lib_m/allocator/ob_retire_station.rs	oblib	rewrite:storage_core	R-infra-named:retire_station-REVIEW	
+src/oblib/lib/allocator/ob_hazard_ref.h	src/oblib/lib/allocator/ob_hazard_ref.cpp,src/oblib/lib/allocator/ob_hazard_ref.h	rust/port/oblib/src/lib_m/allocator/ob_hazard_ref.rs	oblib	replace:hash	R-infra-named:hazard_ref	
+src/oblib/lib/hash/ob_darray.h	src/oblib/lib/hash/ob_darray.h	rust/port/oblib/src/lib_m/hash/ob_darray.rs	oblib	replace:hash	R-infra-dir:hash	
+src/oblib/lib/hash/ob_dchash.h	src/oblib/lib/hash/ob_dchash.cpp,src/oblib/lib/hash/ob_dchash.h	rust/port/oblib/src/lib_m/hash/ob_dchash.rs	oblib	replace:hash	R-infra-dir:hash	
+src/oblib/lib/objectpool/ob_concurrency_objpool.h	src/oblib/lib/objectpool/ob_concurrency_objpool.h	rust/port/oblib/src/lib_m/objectpool/ob_concurrency_objpool.rs	oblib	replace:mem	R-infra-dir:objectpool	
+src/oblib/lib/hash/ob_link_hashmap_deps.h	src/oblib/lib/hash/ob_link_hashmap_deps.h	rust/port/oblib/src/lib_m/hash/ob_link_hashmap_deps.rs	oblib	replace:hash	R-infra-dir:hash	
+src/oblib/lib/lock/ob_tc_ref.h	src/oblib/lib/lock/ob_tc_ref.h	rust/port/oblib/src/lib_m/lock/ob_tc_ref.rs	oblib	replace:sync	R-infra-dir:lock	
+src/oblib/lib/hash/ob_link_hashmap.h	src/oblib/lib/hash/ob_link_hashmap.cpp,src/oblib/lib/hash/ob_link_hashmap.h	rust/port/oblib/src/lib_m/hash/ob_link_hashmap.rs	oblib	replace:hash	R-infra-dir:hash	
+src/oblib/lib/container/ob_array_iterator.h	src/oblib/lib/container/ob_array_iterator.h	rust/port/oblib/src/lib_m/container/ob_array_iterator.rs	oblib	replace:container	R-infra-dir:container	
+src/oblib/lib/container/ob_fast_array.h	src/oblib/lib/container/ob_fast_array.h	rust/port/oblib/src/lib_m/container/ob_fast_array.rs	oblib	replace:container	R-infra-dir:container	
+src/oblib/common/timezone/ob_timezone_info.h	src/oblib/common/timezone/ob_timezone_info.cpp,src/oblib/common/timezone/ob_timezone_info.h	rust/port/oblib/src/common/timezone/ob_timezone_info.rs	oblib	translate	R-data-split-REVIEW	1
+src/oblib/common/object/ob_object.h	src/oblib/common/object/ob_object.cpp,src/oblib/common/object/ob_object.h	rust/port/oblib/src/common/object/ob_object.rs	oblib	rewrite:object	R-object	
+src/oblib/common/datum/ob_datum.h	src/oblib/common/datum/ob_datum.cpp,src/oblib/common/datum/ob_datum.h	rust/port/oblib/src/common/datum/ob_datum.rs	oblib	rewrite:datum	R-datum	
+src/oblib/common/udt/ob_collection_type.h	src/oblib/common/udt/ob_collection_type.cpp,src/oblib/common/udt/ob_collection_type.h	rust/port/oblib/src/common/udt/ob_collection_type.rs	oblib	translate	R-thirdparty-shim:std_regex-REVIEW	1
+src/oblib/lib/hash/ob_array_index_hash_set.h	src/oblib/lib/hash/ob_array_index_hash_set.h	rust/port/oblib/src/lib_m/hash/ob_array_index_hash_set.rs	oblib	replace:hash	R-infra-dir:hash	
+src/oblib/lib/container/ob_array_helper.h	src/oblib/lib/container/ob_array_helper.h	rust/port/oblib/src/lib_m/container/ob_array_helper.rs	oblib	replace:container	R-infra-dir:container	
+src/oblib/lib/hash/ob_placement_hashutils.h	src/oblib/lib/hash/ob_placement_hashutils.h	rust/port/oblib/src/lib_m/hash/ob_placement_hashutils.rs	oblib	replace:hash	R-infra-dir:hash	
+src/oblib/lib/hash/ob_placement_hashset.h	src/oblib/lib/hash/ob_placement_hashset.h	rust/port/oblib/src/lib_m/hash/ob_placement_hashset.rs	oblib	replace:hash	R-infra-dir:hash	
+src/oblib/lib/hash/ob_pointer_hashmap.h	src/oblib/lib/hash/ob_pointer_hashmap.h	rust/port/oblib/src/lib_m/hash/ob_pointer_hashmap.rs	oblib	replace:hash	R-infra-dir:hash	
+src/oblib/lib/allocator/ob_lf_fifo_allocator.h	src/oblib/lib/allocator/ob_lf_fifo_allocator.h	rust/port/oblib/src/lib_m/allocator/ob_lf_fifo_allocator.rs	oblib	replace:mem	R-infra-dir:allocator	
+src/oblib/lib/atomic/ob_atomic_reference.h	src/oblib/lib/atomic/ob_atomic_reference.cpp,src/oblib/lib/atomic/ob_atomic_reference.h	rust/port/oblib/src/lib_m/atomic/ob_atomic_reference.rs	oblib	replace:atomic	R-infra-dir:atomic	
+src/oblib/lib/lock/ob_bucket_lock.h	src/oblib/lib/lock/ob_bucket_lock.cpp,src/oblib/lib/lock/ob_bucket_lock.h	rust/port/oblib/src/lib_m/lock/ob_bucket_lock.rs	oblib	replace:sync	R-infra-dir:lock	
+src/share/cache/ob_kvcache_hazard_version.h	src/share/cache/ob_kvcache_hazard_version.cpp,src/share/cache/ob_kvcache_hazard_version.h	rust/port/share/src/cache/ob_kvcache_hazard_version.rs	share	rewrite:share_cache	R-share-cache	
+src/share/cache/ob_kvcache_hazard_pointer.h	src/share/cache/ob_kvcache_hazard_pointer.cpp,src/share/cache/ob_kvcache_hazard_pointer.h	rust/port/share/src/cache/ob_kvcache_hazard_pointer.rs	share	rewrite:share_cache	R-share-cache	
+src/share/cache/ob_kvcache_struct.h	src/share/cache/ob_kvcache_struct.cpp,src/share/cache/ob_kvcache_struct.h	rust/port/share/src/cache/ob_kvcache_struct.rs	share	translate	R-share-cache-adjacent-REVIEW	2
+src/share/cache/ob_kvcache_store.h	src/share/cache/ob_kvcache_store.cpp,src/share/cache/ob_kvcache_store.h	rust/port/share/src/cache/ob_kvcache_store.rs	share	translate	R-share-cache-adjacent-REVIEW	2
+src/share/cache/ob_kvcache_hazard_domain.h	src/share/cache/ob_kvcache_hazard_domain.cpp,src/share/cache/ob_kvcache_hazard_domain.h	rust/port/share/src/cache/ob_kvcache_hazard_domain.rs	share	rewrite:share_cache	R-share-cache	
+src/share/cache/ob_kvcache_map.h	src/share/cache/ob_kvcache_map.cpp,src/share/cache/ob_kvcache_map.h	rust/port/share/src/cache/ob_kvcache_map.rs	share	rewrite:share_cache	R-share-cache	
+src/share/geo/ob_geo_bin_iter.h	src/share/geo/ob_geo_bin_iter.h,src/share/geo/ob_geo_bin_iter.ipp	rust/port/share/src/geo/ob_geo_bin_iter.rs	share	translate	R-bgk-adjacent-REVIEW	2
+src/share/geo/ob_geo_bin.h	src/share/geo/ob_geo_bin.cpp,src/share/geo/ob_geo_bin.h	rust/port/share/src/geo/ob_geo_bin.rs	share	translate	R-bgk-adjacent-REVIEW	2
+src/share/geo/ob_geo_tree.h	src/share/geo/ob_geo_tree.cpp,src/share/geo/ob_geo_tree.h	rust/port/share/src/geo/ob_geo_tree.rs	share	keep-cxx:bgk_shim	R-bgk	
+src/share/geo/ob_geo_bin_traits.h	src/share/geo/ob_geo_bin_traits.h	rust/port/share/src/geo/ob_geo_bin_traits.rs	share	keep-cxx:bgk_shim	R-bgk	
+src/share/geo/ob_geo_tree_traits.h	src/share/geo/ob_geo_tree_traits.h	rust/port/share/src/geo/ob_geo_tree_traits.rs	share	keep-cxx:bgk_shim	R-bgk	
+src/share/geo/ob_geo_func_length.h	src/share/geo/ob_geo_func_length.cpp,src/share/geo/ob_geo_func_length.h	rust/port/share/src/geo/ob_geo_func_length.rs	share	translate	R-thirdparty-shim:boost_geometry-REVIEW	2
+src/share/geo/ob_geo_to_s2_visitor.h	src/share/geo/ob_geo_to_s2_visitor.cpp,src/share/geo/ob_geo_to_s2_visitor.h	rust/port/share/src/geo/ob_geo_to_s2_visitor.rs	share	translate	R-thirdparty-shim:s2-REVIEW	2
+src/share/geo/ob_s2adapter.h	src/share/geo/ob_s2adapter.cpp,src/share/geo/ob_s2adapter.h	rust/port/share/src/geo/ob_s2adapter.rs	share	translate	R-thirdparty-shim:s2-REVIEW	2
+src/share/geo/ob_geo_utils.h	src/share/geo/ob_geo_utils.cpp,src/share/geo/ob_geo_utils.h	rust/port/share/src/geo/ob_geo_utils.rs	share	translate	R-thirdparty-shim:boost_geometry-REVIEW	3
+src/share/geo/ob_geo_func_buffer.h	src/share/geo/ob_geo_func_buffer.cpp,src/share/geo/ob_geo_func_buffer.h	rust/port/share/src/geo/ob_geo_func_buffer.rs	share	translate	R-thirdparty-shim:boost_geometry-REVIEW	3
+src/share/geo/ob_geo_func_dissolve_polygon.h	src/share/geo/ob_geo_func_dissolve_polygon.cpp,src/share/geo/ob_geo_func_dissolve_polygon.h	rust/port/share/src/geo/ob_geo_func_dissolve_polygon.rs	share	translate	R-thirdparty-shim:boost_geometry-REVIEW	3
+src/share/geo/ob_geo_func_distance.h	src/share/geo/ob_geo_func_distance.cpp,src/share/geo/ob_geo_func_distance.h	rust/port/share/src/geo/ob_geo_func_distance.rs	share	translate	R-thirdparty-shim:boost_geometry-REVIEW	3
+src/share/geo/ob_geo_func_distance_sphere.h	src/share/geo/ob_geo_func_distance_sphere.cpp,src/share/geo/ob_geo_func_distance_sphere.h	rust/port/share/src/geo/ob_geo_func_distance_sphere.rs	share	translate	R-thirdparty-shim:boost_geometry-REVIEW	3
+src/share/geo/ob_geo_func_intersects.h	src/share/geo/ob_geo_func_intersects.cpp,src/share/geo/ob_geo_func_intersects.h	rust/port/share/src/geo/ob_geo_func_intersects.rs	share	translate	R-thirdparty-shim:boost_geometry-REVIEW	3
+src/share/geo/ob_geo_func_isvalid.h	src/share/geo/ob_geo_func_isvalid.cpp,src/share/geo/ob_geo_func_isvalid.h	rust/port/share/src/geo/ob_geo_func_isvalid.rs	share	translate	R-thirdparty-shim:boost_geometry-REVIEW	3
+src/share/object/ob_array_cast.h	src/share/object/ob_array_cast.cpp,src/share/object/ob_array_cast.h	rust/port/share/src/object/ob_array_cast.rs	share	translate	R-thirdparty-shim:std_regex-REVIEW	3
+src/oblib/lib/container/ob_array_array.h	src/oblib/lib/container/ob_array_array.h	rust/port/oblib/src/lib_m/container/ob_array_array.rs	oblib	replace:container	R-infra-dir:container	
+src/oblib/lib/container/ob_rbtree.h	src/oblib/lib/container/ob_rbtree.h	rust/port/oblib/src/lib_m/container/ob_rbtree.rs	oblib	replace:container	R-infra-dir:container	
+src/oblib/lib/allocator/ob_concurrent_fifo_allocator.h	src/oblib/lib/allocator/ob_concurrent_fifo_allocator.cpp,src/oblib/lib/allocator/ob_concurrent_fifo_allocator.h	rust/port/oblib/src/lib_m/allocator/ob_concurrent_fifo_allocator.rs	oblib	replace:mem	R-infra-dir:allocator	
+src/oblib/lib/lock/ob_qsync_lock.h	src/oblib/lib/lock/ob_qsync_lock.cpp,src/oblib/lib/lock/ob_qsync_lock.h	rust/port/oblib/src/lib_m/lock/ob_qsync_lock.rs	oblib	replace:sync	R-infra-dir:lock	
+src/oblib/lib/atomic/atomic128.h	src/oblib/lib/atomic/atomic128.h	rust/port/oblib/src/lib_m/atomic/atomic128.rs	oblib	replace:atomic	R-infra-dir:atomic	
+src/oblib/lib/objectpool/ob_pool.h	src/oblib/lib/objectpool/ob_pool.h,src/oblib/lib/objectpool/ob_pool.ipp	rust/port/oblib/src/lib_m/objectpool/ob_pool.rs	oblib	replace:mem	R-infra-dir:objectpool	
+src/oblib/lib/hash/ob_ptr_array_map.h	src/oblib/lib/hash/ob_ptr_array_map.h	rust/port/oblib/src/lib_m/hash/ob_ptr_array_map.rs	oblib	replace:hash	R-infra-dir:hash	
+src/oblib/lib/lock/ob_tc_rwlock.h	src/oblib/lib/lock/ob_tc_rwlock.h	rust/port/oblib/src/lib_m/lock/ob_tc_rwlock.rs	oblib	replace:sync	R-infra-dir:lock	
+src/oblib/lib/hash/ob_iteratable_hashmap.h	src/oblib/lib/hash/ob_iteratable_hashmap.h	rust/port/oblib/src/lib_m/hash/ob_iteratable_hashmap.rs	oblib	replace:hash	R-infra-dir:hash	
+src/oblib/lib/container/ob_tuple.h	src/oblib/lib/container/ob_tuple.h	rust/port/oblib/src/lib_m/container/ob_tuple.rs	oblib	replace:container	R-infra-dir:container	
+src/oblib/lib/hash/ob_array_hash_map.h	src/oblib/lib/hash/ob_array_hash_map.h	rust/port/oblib/src/lib_m/hash/ob_array_hash_map.rs	oblib	replace:hash	R-infra-dir:hash	
+src/oblib/lib/lock/ob_small_spin_lock.h	src/oblib/lib/lock/ob_small_spin_lock.h	rust/port/oblib/src/lib_m/lock/ob_small_spin_lock.rs	oblib	replace:sync	R-infra-dir:lock	
+src/logservice/palf/log_group_buffer.h	src/logservice/palf/log_group_buffer.cpp,src/logservice/palf/log_group_buffer.h	rust/port/storage_core/src/log_group_buffer.rs	storage_core	rewrite:storage_core	R-storage-core	
+src/logservice/palf/lsn_allocator.h	src/logservice/palf/lsn_allocator.cpp,src/logservice/palf/lsn_allocator.h	rust/port/storage_core/src/lsn_allocator.rs	storage_core	rewrite:storage_core	R-storage-core	
+src/oblib/lib/allocator/ob_external_ref.h	src/oblib/lib/allocator/ob_external_ref.h	rust/port/oblib/src/lib_m/allocator/ob_external_ref.rs	oblib	replace:mem	R-infra-dir:allocator	
+src/oblib/lib/allocator/ob_small_allocator.h	src/oblib/lib/allocator/ob_small_allocator.h	rust/port/oblib/src/lib_m/allocator/ob_small_allocator.rs	oblib	replace:mem	R-infra-dir:allocator	
+src/oblib/lib/hash/ob_linear_hash_map.h	src/oblib/lib/hash/ob_linear_hash_map.cpp,src/oblib/lib/hash/ob_linear_hash_map.h	rust/port/oblib/src/lib_m/hash/ob_linear_hash_map.rs	oblib	replace:hash	R-infra-dir:hash	
+src/oblib/lib/thread/ob_thread_lease.h	src/oblib/lib/thread/ob_thread_lease.h	rust/port/oblib/src/lib_m/thread/ob_thread_lease.rs	oblib	replace:thread	R-infra-dir:thread	
+src/logservice/ob_server_log_block_mgr.h	src/logservice/ob_server_log_block_mgr.cpp,src/logservice/ob_server_log_block_mgr.h	rust/port/logservice/src/ob_server_log_block_mgr.rs	logservice	translate	R-thirdparty-shim:std_regex-REVIEW	6
+src/objit/include/objit/common/ob_item_type.h	src/objit/include/objit/common/ob_item_type.h	rust/port/query/src/objit/common/ob_item_type.rs	query	generate:item_type	R-itemtype	
+src/oblib/lib/objectpool/ob_pooled_allocator.h	src/oblib/lib/objectpool/ob_pooled_allocator.h	rust/port/oblib/src/lib_m/objectpool/ob_pooled_allocator.rs	oblib	replace:mem	R-infra-dir:objectpool	
+src/oblib/common/json_type/ob_json_schema.h	src/oblib/common/json_type/ob_json_schema.cpp,src/oblib/common/json_type/ob_json_schema.h	rust/port/oblib/src/common/json_type/ob_json_schema.rs	oblib	translate	R-thirdparty-shim:std_regex-REVIEW	6
+src/oblib/easy/io/easy_baseth_pool.h	src/oblib/easy/io/easy_baseth_pool.h	rust/port/oblib/src/easy/io/easy_baseth_pool.rs	oblib	delete	R-libeasy-remnant	
+src/oblib/easy/util/easy_string.h	src/oblib/easy/util/easy_string.h	rust/port/oblib/src/easy/util/easy_string.rs	oblib	delete	R-libeasy-remnant	
+src/oblib/easy/util/easy_time.h	src/oblib/easy/util/easy_time.h	rust/port/oblib/src/easy/util/easy_time.rs	oblib	delete	R-libeasy-remnant	
+src/oblib/easy/io/easy_log.h	src/oblib/easy/io/easy_log.h	rust/port/oblib/src/easy/io/easy_log.rs	oblib	delete	R-libeasy-remnant	
+src/oblib/easy/io/easy_summary.h	src/oblib/easy/io/easy_summary.h	rust/port/oblib/src/easy/io/easy_summary.rs	oblib	delete	R-libeasy-remnant	
+src/oblib/easy/io/easy_io.h	src/oblib/easy/io/easy_io.h	rust/port/oblib/src/easy/io/easy_io.rs	oblib	delete	R-libeasy-remnant	
+src/oblib/easy/util/easy_mod_stat.h	src/oblib/easy/util/easy_mod_stat.h	rust/port/oblib/src/easy/util/easy_mod_stat.rs	oblib	delete	R-libeasy-remnant	
+src/oblib/grpc/ob_grpc_context.h	src/oblib/grpc/ob_grpc_context.cpp,src/oblib/grpc/ob_grpc_context.h	rust/port/oblib/src/grpc/ob_grpc_context.rs	oblib	translate	R-thirdparty-shim:grpc-REVIEW	6
+src/oblib/grpc/ob_grpc_server.h	src/oblib/grpc/ob_grpc_server.cpp,src/oblib/grpc/ob_grpc_server.h	rust/port/oblib/src/grpc/ob_grpc_server.rs	oblib	translate	R-thirdparty-shim:grpc-REVIEW	6
+src/oblib/lib/alloc/malloc_hook_extended.cpp	src/oblib/lib/alloc/malloc_hook_extended.cpp	rust/port/oblib/src/lib_m/alloc/malloc_hook_extended.rs	oblib	replace:mem	R-infra-dir:alloc	
+src/oblib/lib/alloc/ob_context_allocator.h	src/oblib/lib/alloc/ob_context_allocator.h	rust/port/oblib/src/lib_m/alloc/ob_context_allocator.rs	oblib	replace:mem	R-infra-dir:alloc	
+src/oblib/lib/allocator/ob_delay_free_allocator.h	src/oblib/lib/allocator/ob_delay_free_allocator.cpp,src/oblib/lib/allocator/ob_delay_free_allocator.h	rust/port/oblib/src/lib_m/allocator/ob_delay_free_allocator.rs	oblib	delete	R-dead	
+src/oblib/lib/allocator/ob_fixed_size_block_allocator.h	src/oblib/lib/allocator/ob_fixed_size_block_allocator.h	rust/port/oblib/src/lib_m/allocator/ob_fixed_size_block_allocator.rs	oblib	replace:mem	R-infra-dir:allocator	
+src/oblib/lib/allocator/ob_heavy_ref.h	src/oblib/lib/allocator/ob_heavy_ref.h	rust/port/oblib/src/lib_m/allocator/ob_heavy_ref.rs	oblib	replace:mem	R-infra-dir:allocator	
+src/oblib/lib/allocator/ob_jemalloc_sanity.cpp	src/oblib/lib/allocator/ob_jemalloc_sanity.cpp	rust/port/oblib/src/lib_m/allocator/ob_jemalloc_sanity.rs	oblib	replace:mem	R-infra-dir:allocator	
+src/oblib/lib/allocator/ob_safe_arena.h	src/oblib/lib/allocator/ob_safe_arena.h	rust/port/oblib/src/lib_m/allocator/ob_safe_arena.rs	oblib	replace:mem	R-infra-dir:allocator	
+src/oblib/lib/allocator/ob_sanity_libc_wrap.cpp	src/oblib/lib/allocator/ob_sanity_libc_wrap.cpp	rust/port/oblib/src/lib_m/allocator/ob_sanity_libc_wrap.rs	oblib	replace:mem	R-infra-dir:allocator	
+src/oblib/lib/allocator/ob_simple_fifo_alloc.h	src/oblib/lib/allocator/ob_simple_fifo_alloc.h	rust/port/oblib/src/lib_m/allocator/ob_simple_fifo_alloc.rs	oblib	replace:mem	R-infra-dir:allocator	
+src/oblib/lib/charset/ob_ctype_bin_tab.h	src/oblib/lib/charset/ob_ctype_bin_tab.h	rust/port/oblib/src/lib_m/charset/ob_ctype_bin_tab.rs	oblib	data:charset_table	R-data-charset-tab	
+src/oblib/lib/charset/ob_ctype_utf8_tab.h	src/oblib/lib/charset/ob_ctype_utf8_tab.h	rust/port/oblib/src/lib_m/charset/ob_ctype_utf8_tab.rs	oblib	data:charset_table	R-data-charset-tab	
+src/oblib/lib/container/ob_bitmap.h	src/oblib/lib/container/ob_bitmap.cpp,src/oblib/lib/container/ob_bitmap.h	rust/port/oblib/src/lib_m/container/ob_bitmap.rs	oblib	replace:container	R-infra-dir:container	
+src/oblib/lib/container/ob_concurrent_bitset.h	src/oblib/lib/container/ob_concurrent_bitset.h	rust/port/oblib/src/lib_m/container/ob_concurrent_bitset.rs	oblib	replace:container	R-infra-dir:container	
+src/oblib/lib/container/ob_ext_ring_buffer_impl.h	src/oblib/lib/container/ob_ext_ring_buffer_impl.h	rust/port/oblib/src/lib_m/container/ob_ext_ring_buffer_impl.rs	oblib	replace:container	R-infra-dir:container	
+src/oblib/lib/container/ob_ext_ring_buffer.h	src/oblib/lib/container/ob_ext_ring_buffer.h	rust/port/oblib/src/lib_m/container/ob_ext_ring_buffer.rs	oblib	replace:container	R-infra-dir:container	
+src/oblib/lib/container/ob_fixed_array_iterator.h	src/oblib/lib/container/ob_fixed_array_iterator.h	rust/port/oblib/src/lib_m/container/ob_fixed_array_iterator.rs	oblib	replace:container	R-infra-dir:container	
+src/oblib/lib/container/ob_id_map.h	src/oblib/lib/container/ob_id_map.h	rust/port/oblib/src/lib_m/container/ob_id_map.rs	oblib	replace:container	R-infra-dir:container	
+src/oblib/lib/container/ob_int_flags.h	src/oblib/lib/container/ob_int_flags.h	rust/port/oblib/src/lib_m/container/ob_int_flags.rs	oblib	replace:container	R-infra-dir:container	
+src/oblib/lib/container/ob_loser_tree.h	src/oblib/lib/container/ob_loser_tree.h	rust/port/oblib/src/lib_m/container/ob_loser_tree.rs	oblib	replace:container	R-infra-dir:container	
+src/oblib/lib/container/ob_mask_set2.h	src/oblib/lib/container/ob_mask_set2.h	rust/port/oblib/src/lib_m/container/ob_mask_set2.rs	oblib	replace:container	R-infra-dir:container	
+src/oblib/lib/container/ob_paringheap.h	src/oblib/lib/container/ob_paringheap.h	rust/port/oblib/src/lib_m/container/ob_paringheap.rs	oblib	replace:container	R-infra-dir:container	
+src/oblib/lib/container/ob_raw_se_array.h	src/oblib/lib/container/ob_raw_se_array.h	rust/port/oblib/src/lib_m/container/ob_raw_se_array.rs	oblib	replace:container	R-infra-dir:container	
+src/oblib/lib/container/ob_ring_buffer.h	src/oblib/lib/container/ob_ring_buffer.h	rust/port/oblib/src/lib_m/container/ob_ring_buffer.rs	oblib	replace:container	R-infra-dir:container	
+src/oblib/lib/container/ob_ring_array.h	src/oblib/lib/container/ob_ring_array.h	rust/port/oblib/src/lib_m/container/ob_ring_array.rs	oblib	delete	R-dead	
+src/oblib/lib/core_local/ob_core_local_storage.h	src/oblib/lib/core_local/ob_core_local_storage.h	rust/port/oblib/src/lib_m/core_local/ob_core_local_storage.rs	oblib	translate	R-default-REVIEW	7
+src/oblib/lib/list/ob_atomic_list.h	src/oblib/lib/list/ob_atomic_list.h	rust/port/oblib/src/lib_m/list/ob_atomic_list.rs	oblib	replace:container	R-infra-dir:list	
+src/oblib/lib/list/ob_intrusive_list.h	src/oblib/lib/list/ob_intrusive_list.h	rust/port/oblib/src/lib_m/list/ob_intrusive_list.rs	oblib	replace:container	R-infra-dir:list	
+src/oblib/lib/hash/ob_build_in_hashmap.h	src/oblib/lib/hash/ob_build_in_hashmap.h	rust/port/oblib/src/lib_m/hash/ob_build_in_hashmap.rs	oblib	replace:hash	R-infra-dir:hash	
+src/oblib/lib/hash/ob_cuckoo_hashmap.h	src/oblib/lib/hash/ob_cuckoo_hashmap.h	rust/port/oblib/src/lib_m/hash/ob_cuckoo_hashmap.rs	oblib	replace:hash	R-infra-dir:hash	
+src/oblib/lib/hash/ob_hash.h	src/oblib/lib/hash/ob_hash.h	rust/port/oblib/src/lib_m/hash/ob_hash.rs	oblib	replace:hash	R-infra-dir:hash	
+src/oblib/lib/hash/ob_fixed_hash2.h	src/oblib/lib/hash/ob_fixed_hash2.h	rust/port/oblib/src/lib_m/hash/ob_fixed_hash2.rs	oblib	replace:hash	R-infra-dir:hash	
+src/oblib/lib/hash/ob_iteratable_hashset.h	src/oblib/lib/hash/ob_iteratable_hashset.h	rust/port/oblib/src/lib_m/hash/ob_iteratable_hashset.rs	oblib	replace:hash	R-infra-dir:hash	
+src/oblib/lib/hash/ob_multi_mod_ref_mgr.h	src/oblib/lib/hash/ob_multi_mod_ref_mgr.h	rust/port/oblib/src/lib_m/hash/ob_multi_mod_ref_mgr.rs	oblib	replace:hash	R-infra-dir:hash	
+src/oblib/lib/hash/ob_placement_hashmap.h	src/oblib/lib/hash/ob_placement_hashmap.h	rust/port/oblib/src/lib_m/hash/ob_placement_hashmap.rs	oblib	replace:hash	R-infra-dir:hash	
+src/oblib/lib/hash/ob_refered_map.h	src/oblib/lib/hash/ob_refered_map.h	rust/port/oblib/src/lib_m/hash/ob_refered_map.rs	oblib	replace:hash	R-infra-dir:hash	
+src/oblib/lib/list/ob_link.h	src/oblib/lib/list/ob_link.h	rust/port/oblib/src/lib_m/list/ob_link.rs	oblib	replace:container	R-infra-dir:list	
+src/oblib/lib/list/ob_obj_store.h	src/oblib/lib/list/ob_obj_store.h	rust/port/oblib/src/lib_m/list/ob_obj_store.rs	oblib	replace:container	R-infra-dir:list	
+src/oblib/lib/lock/ob_bucket_qsync_lock.h	src/oblib/lib/lock/ob_bucket_qsync_lock.cpp,src/oblib/lib/lock/ob_bucket_qsync_lock.h	rust/port/oblib/src/lib_m/lock/ob_bucket_qsync_lock.rs	oblib	delete	R-dead	
+src/oblib/lib/lock/ob_recursive_mutex.h	src/oblib/lib/lock/ob_recursive_mutex.h	rust/port/oblib/src/lib_m/lock/ob_recursive_mutex.rs	oblib	replace:sync	R-infra-dir:lock	
+src/oblib/lib/objectpool/ob_cached_allocator.h	src/oblib/lib/objectpool/ob_cached_allocator.h	rust/port/oblib/src/lib_m/objectpool/ob_cached_allocator.rs	oblib	replace:mem	R-infra-dir:objectpool	
+src/oblib/lib/objectpool/ob_global_factory.h	src/oblib/lib/objectpool/ob_global_factory.h	rust/port/oblib/src/lib_m/objectpool/ob_global_factory.rs	oblib	replace:mem	R-infra-dir:objectpool	
+src/oblib/lib/objectpool/ob_resource_pool.h	src/oblib/lib/objectpool/ob_resource_pool.h	rust/port/oblib/src/lib_m/objectpool/ob_resource_pool.rs	oblib	replace:mem	R-infra-dir:objectpool	
+src/oblib/lib/objectpool/ob_server_object_pool.h	src/oblib/lib/objectpool/ob_server_object_pool.cpp,src/oblib/lib/objectpool/ob_server_object_pool.h	rust/port/oblib/src/lib_m/objectpool/ob_server_object_pool.rs	oblib	replace:mem	R-infra-dir:objectpool	
+src/oblib/lib/objectpool/ob_tc_factory.h	src/oblib/lib/objectpool/ob_tc_factory.h	rust/port/oblib/src/lib_m/objectpool/ob_tc_factory.rs	oblib	replace:mem	R-infra-dir:objectpool	
+src/oblib/lib/oblog/ob_base_log_buffer.h	src/oblib/lib/oblog/ob_base_log_buffer.cpp,src/oblib/lib/oblog/ob_base_log_buffer.h	rust/port/oblib/src/lib_m/oblog/ob_base_log_buffer.rs	oblib	replace:log	R-infra-dir:oblog	
+src/oblib/lib/oblog/ob_easy_log.h	src/oblib/lib/oblog/ob_easy_log.h	rust/port/oblib/src/lib_m/oblog/ob_easy_log.rs	oblib	replace:log	R-infra-dir:oblog	
+src/oblib/lib/queue/ob_co_seq_queue.h	src/oblib/lib/queue/ob_co_seq_queue.h	rust/port/oblib/src/lib_m/queue/ob_co_seq_queue.rs	oblib	delete	R-dead	
+src/oblib/lib/queue/ob_ms_queue.h	src/oblib/lib/queue/ob_ms_queue.cpp,src/oblib/lib/queue/ob_ms_queue.h	rust/port/oblib/src/lib_m/queue/ob_ms_queue.rs	oblib	delete	R-dead	
+src/oblib/lib/signal/ob_libunwind.h	src/oblib/lib/signal/ob_libunwind.c,src/oblib/lib/signal/ob_libunwind.h	rust/port/oblib/src/lib_m/signal/ob_libunwind.rs	oblib	replace:signal	R-infra-dir:signal	
+src/oblib/lib/signal/ob_signal_utils.h	src/oblib/lib/signal/ob_signal_utils.cpp,src/oblib/lib/signal/ob_signal_utils.h	rust/port/oblib/src/lib_m/signal/ob_signal_utils.rs	oblib	replace:signal	R-infra-dir:signal	
+src/oblib/lib/signal/ob_signal_handlers.cpp	src/oblib/lib/signal/ob_signal_handlers.cpp	rust/port/oblib/src/lib_m/signal/ob_signal_handlers.rs	oblib	replace:signal	R-infra-dir:signal	
+src/oblib/lib/thread/ob_reentrant_thread.h	src/oblib/lib/thread/ob_reentrant_thread.cpp,src/oblib/lib/thread/ob_reentrant_thread.h	rust/port/oblib/src/lib_m/thread/ob_reentrant_thread.rs	oblib	replace:thread	R-infra-dir:thread	
+src/oblib/lib/thread/ob_async_task_queue.h	src/oblib/lib/thread/ob_async_task_queue.cpp,src/oblib/lib/thread/ob_async_task_queue.h	rust/port/oblib/src/lib_m/thread/ob_async_task_queue.rs	oblib	replace:thread	R-infra-dir:thread	
+src/oblib/lib/thread/ob_dedup_queue.h	src/oblib/lib/thread/ob_dedup_queue.cpp,src/oblib/lib/thread/ob_dedup_queue.h	rust/port/oblib/src/lib_m/thread/ob_dedup_queue.rs	oblib	replace:thread	R-infra-dir:thread	
+src/oblib/lib/thread/ob_map_queue.h	src/oblib/lib/thread/ob_map_queue.h	rust/port/oblib/src/lib_m/thread/ob_map_queue.rs	oblib	replace:thread	R-infra-dir:thread	
+src/oblib/lib/thread/ob_map_queue_thread_pool.h	src/oblib/lib/thread/ob_map_queue_thread_pool.cpp,src/oblib/lib/thread/ob_map_queue_thread_pool.h	rust/port/oblib/src/lib_m/thread/ob_map_queue_thread_pool.rs	oblib	delete	R-dead	
+src/oblib/lib/thread/ob_pthread.cpp	src/oblib/lib/thread/ob_pthread.cpp	rust/port/oblib/src/lib_m/thread/ob_pthread.rs	oblib	replace:thread	R-infra-dir:thread	
+src/oblib/lib/thread/ob_test_util.h	src/oblib/lib/thread/ob_test_util.h	rust/port/oblib/src/lib_m/thread/ob_test_util.rs	oblib	replace:thread	R-infra-dir:thread	
+src/oblib/lib/thread/ob_thread_hook.cpp	src/oblib/lib/thread/ob_thread_hook.cpp	rust/port/oblib/src/lib_m/thread/ob_thread_hook.rs	oblib	replace:thread	R-infra-dir:thread	
+src/oblib/lib/thread_local/thread_buffer.h	src/oblib/lib/thread_local/thread_buffer.cpp,src/oblib/lib/thread_local/thread_buffer.h	rust/port/oblib/src/lib_m/thread_local/thread_buffer.rs	oblib	replace:thread	R-infra-dir:thread_local	
+src/oblib/lib/vector/ob_vsag_adaptor.h	src/oblib/lib/vector/ob_vsag_adaptor.cpp,src/oblib/lib/vector/ob_vsag_adaptor.h	rust/port/oblib/src/lib_m/vector/ob_vsag_adaptor.rs	oblib	translate	R-thirdparty-shim:vsag-REVIEW	7
+src/oblib/lib/vector/ob_vector_util.h	src/oblib/lib/vector/ob_vector_util.cpp,src/oblib/lib/vector/ob_vector_util.h	rust/port/oblib/src/lib_m/vector/ob_vector_util.rs	oblib	translate	R-thirdparty-shim:vsag-REVIEW	7
+src/query/api/query/parser/ob_item_type.h	src/query/api/query/parser/ob_item_type.h	rust/port/query/src/parser/ob_item_type.rs	query	generate:item_type	R-itemtype	
+src/query/api/query/engine/expr/ob_expr.h	src/query/api/query/engine/expr/ob_expr.h	rust/port/query/src/engine/expr/ob_expr.rs	query	rewrite:frame	R-frame	
+src/sql/parser/parse_define.h	src/sql/parser/parse_define.h	rust/port/sql/src/parser/parse_define.rs	sql	keep-c	R-parser-c-header	
+src/query/api/query/parser/parse_node.h	src/query/api/query/parser/parse_node.h	rust/port/query/src/parser/parse_node.rs	query	keep-c	R-parser-c-header	
+src/sql/parser/parse_node_hash.h	src/sql/parser/parse_node_hash.cpp,src/sql/parser/parse_node_hash.h	rust/port/sql/src/parser/parse_node_hash.rs	sql	translate	R-parser-cxx-REVIEW	8
+src/sql/parser/ob_non_reserved_keywords.h	src/sql/parser/ob_non_reserved_keywords.c,src/sql/parser/ob_non_reserved_keywords.h	rust/port/sql/src/parser/ob_non_reserved_keywords.rs	sql	keep-c	R-parser-c	
+src/sql/parser/ob_parser_charset_utils.h	src/sql/parser/ob_parser_charset_utils.cpp,src/sql/parser/ob_parser_charset_utils.h	rust/port/sql/src/parser/ob_parser_charset_utils.rs	sql	translate	R-parser-cxx-REVIEW	8
+src/sql/parser/parse_node.h	src/sql/parser/parse_node.c,src/sql/parser/parse_node.h	rust/port/sql/src/parser/parse_node.rs	sql	keep-c	R-parser-c	
+src/sql/parser/parse_malloc.h	src/sql/parser/parse_malloc.cpp,src/sql/parser/parse_malloc.h	rust/port/sql/src/parser/parse_malloc.rs	sql	translate	R-parser-cxx-REVIEW	8
+src/sql/parser/sql_parser_base.h	src/sql/parser/sql_parser_base.c,src/sql/parser/sql_parser_base.h	rust/port/sql/src/parser/sql_parser_base.rs	sql	keep-c	R-parser-c	
+src/sql/parser/fts_base.h	src/sql/parser/fts_base.c,src/sql/parser/fts_base.h	rust/port/sql/src/parser/fts_base.rs	sql	keep-c	R-parser-c	
+src/sql/parser/fts_parse.h	src/sql/parser/fts_parse.c,src/sql/parser/fts_parse.h	rust/port/sql/src/parser/fts_parse.rs	sql	keep-c	R-parser-c	
+src/sql/pl/parser/parse_stmt_node.h	src/pl/parser/parse_stmt_node.h,src/sql/pl/parser/parse_stmt_node.h	rust/port/sql/src/pl/parser/parse_stmt_node.rs	sql	keep-c	R-parser-c-header	
+src/sql/parser/ob_parser_utils.h	src/sql/parser/ob_parser_utils.h	rust/port/sql/src/parser/ob_parser_utils.rs	sql	translate	R-parser-cxx-REVIEW	8
+src/sql/parser/ob_sql_parser.h	src/sql/parser/ob_sql_parser.cpp,src/sql/parser/ob_sql_parser.h	rust/port/sql/src/parser/ob_sql_parser.rs	sql	translate	R-parser-cxx-REVIEW	8
+src/sql/engine/expr/ob_expr_abs_result_type.map	src/sql/engine/expr/ob_expr_abs_result_type.map	rust/port/sql/src/engine/expr/ob_expr_abs_result_type.rs	sql	data:map_table	R-data-map	
+src/sql/engine/expr/ob_expr_arithmetic_result_type.map	src/sql/engine/expr/ob_expr_arithmetic_result_type.map	rust/port/sql/src/engine/expr/ob_expr_arithmetic_result_type.rs	sql	data:map_table	R-data-map	
+src/sql/engine/expr/ob_expr_div_result_type.map	src/sql/engine/expr/ob_expr_div_result_type.map	rust/port/sql/src/engine/expr/ob_expr_div_result_type.rs	sql	data:map_table	R-data-map	
+src/sql/engine/expr/ob_expr_int_div_result_type.map	src/sql/engine/expr/ob_expr_int_div_result_type.map	rust/port/sql/src/engine/expr/ob_expr_int_div_result_type.rs	sql	data:map_table	R-data-map	
+src/sql/engine/expr/ob_expr_merge_result_type.map	src/sql/engine/expr/ob_expr_merge_result_type.map	rust/port/sql/src/engine/expr/ob_expr_merge_result_type.rs	sql	data:map_table	R-data-map	
+src/sql/engine/expr/ob_expr_mod_result_type.map	src/sql/engine/expr/ob_expr_mod_result_type.map	rust/port/sql/src/engine/expr/ob_expr_mod_result_type.rs	sql	data:map_table	R-data-map	
+src/sql/engine/expr/ob_expr_neg_result_type.map	src/sql/engine/expr/ob_expr_neg_result_type.map	rust/port/sql/src/engine/expr/ob_expr_neg_result_type.rs	sql	data:map_table	R-data-map	
+src/sql/engine/expr/ob_expr_relational_cmp_type.map	src/sql/engine/expr/ob_expr_relational_cmp_type.map	rust/port/sql/src/engine/expr/ob_expr_relational_cmp_type.rs	sql	data:map_table	R-data-map	
+src/sql/engine/expr/ob_expr_relational_equal_type.map	src/sql/engine/expr/ob_expr_relational_equal_type.map	rust/port/sql/src/engine/expr/ob_expr_relational_equal_type.rs	sql	data:map_table	R-data-map	
+src/sql/engine/expr/ob_expr_relational_result_type.map	src/sql/engine/expr/ob_expr_relational_result_type.map	rust/port/sql/src/engine/expr/ob_expr_relational_result_type.rs	sql	data:map_table	R-data-map	
+src/sql/engine/expr/ob_expr_round_result_type.map	src/sql/engine/expr/ob_expr_round_result_type.map	rust/port/sql/src/engine/expr/ob_expr_round_result_type.rs	sql	data:map_table	R-data-map	
+src/sql/engine/expr/ob_expr_sum_result_type.map	src/sql/engine/expr/ob_expr_sum_result_type.map	rust/port/sql/src/engine/expr/ob_expr_sum_result_type.rs	sql	data:map_table	R-data-map	
+src/sql/parser/ob_item_type.h	src/sql/parser/ob_item_type.h	rust/port/sql/src/parser/ob_item_type.rs	sql	generate:item_type	R-itemtype	
+src/share/ob_lib_cache_namespace.h	src/share/ob_lib_cache_namespace.def,src/share/ob_lib_cache_namespace.h	rust/port/share/src/ob_lib_cache_namespace.rs	share	translate	R-data-split-REVIEW	8
+src/sql/pl/parser/parse_stmt_item_type.h	src/pl/parser/parse_stmt_item_type.h,src/sql/pl/parser/parse_stmt_item_type.h	rust/port/sql/src/pl/parser/parse_stmt_item_type.rs	sql	keep-c	R-parser-c-header	
+src/sql/parser/ob_char_type.h	src/sql/parser/ob_char_type.h	rust/port/sql/src/parser/ob_char_type.rs	sql	translate	R-parser-cxx-REVIEW	9
+src/sql/optimizer/ob_join_property.map	src/sql/optimizer/ob_join_property.map	rust/port/sql/src/optimizer/ob_join_property.rs	sql	data:map_table	R-data-map	
+src/sql/engine/expr/ob_expr_div_promotion.map	src/sql/engine/expr/ob_expr_div_promotion.map	rust/port/sql/src/engine/expr/ob_expr_div_promotion.rs	sql	data:map_table	R-data-map	
+src/sql/engine/expr/ob_expr_nvl_promotion.map	src/sql/engine/expr/ob_expr_nvl_promotion.map	rust/port/sql/src/engine/expr/ob_expr_nvl_promotion.rs	sql	data:map_table	R-data-map	
+src/sql/engine/expr/ob_expr_to_pinyin_tab.h	src/sql/engine/expr/ob_expr_to_pinyin_tab.cpp,src/sql/engine/expr/ob_expr_to_pinyin_tab.h	rust/port/sql/src/engine/expr/ob_expr_to_pinyin_tab.rs	sql	translate	R-data-candidate-REVIEW	10
+src/sql/parser/ob_item_type_str.h	src/sql/parser/ob_item_type_str.h	rust/port/sql/src/parser/ob_item_type_str.rs	sql	translate	R-parser-cxx-REVIEW	10
+src/query/api/query/vector/ob_vector_index_adaptor.h	src/query/api/query/vector/ob_vector_index_adaptor.h	rust/port/query/src/vector/ob_vector_index_adaptor.rs	query	translate	R-thirdparty-shim:vsag-REVIEW	10
+src/sql/engine/expr/ob_expr.h	src/sql/engine/expr/ob_expr.cpp,src/sql/engine/expr/ob_expr.h	rust/port/sql/src/engine/expr/ob_expr.rs	sql	translate	R-frame-adjacent-REVIEW	10
+src/sql/engine/expr/ob_expr_frame_info.h	src/sql/engine/expr/ob_expr_frame_info.cpp,src/sql/engine/expr/ob_expr_frame_info.h	rust/port/sql/src/engine/expr/ob_expr_frame_info.rs	sql	rewrite:frame	R-frame	
+src/sql/parser/ob_fast_parser.h	src/sql/parser/ob_fast_parser.cpp,src/sql/parser/ob_fast_parser.h	rust/port/sql/src/parser/ob_fast_parser.rs	sql	translate	R-parser-cxx-REVIEW	11
+src/sql/parser/ob_parser.h	src/sql/parser/ob_parser.cpp,src/sql/parser/ob_parser.h	rust/port/sql/src/parser/ob_parser.rs	sql	translate	R-parser-cxx-REVIEW	11
+src/sql/pl/parser/ob_pl_parser.h	src/pl/parser/ob_pl_parser.cpp,src/pl/parser/ob_pl_parser.h,src/sql/pl/parser/ob_pl_parser.h	rust/port/sql/src/pl/parser/ob_pl_parser.rs	sql	translate	R-parser-cxx-REVIEW	12
+src/storage/memtable/mvcc/ob_row_latch.h	src/storage/memtable/mvcc/ob_row_latch.h	rust/port/storage_core/src/ob_row_latch.rs	storage_core	rewrite:storage_core	R-storage-core	
+src/storage/memtable/mvcc/ob_keybtree_deps.h	src/storage/memtable/mvcc/ob_keybtree_deps.h	rust/port/storage_core/src/ob_keybtree_deps.rs	storage_core	rewrite:storage_core	R-storage-core	
+src/storage/memtable/ob_memtable_data.h	src/storage/memtable/ob_memtable_data.h	rust/port/storage_core/src/ob_memtable_data.rs	storage_core	rewrite:storage_core	R-storage-core	
+src/storage/memtable/mvcc/ob_mvcc_row.h	src/storage/memtable/mvcc/ob_mvcc_row.cpp,src/storage/memtable/mvcc/ob_mvcc_row.h	rust/port/storage_core/src/ob_mvcc_row.rs	storage_core	rewrite:storage_core	R-storage-core	
+src/storage/memtable/mvcc/ob_keybtree.h	src/storage/memtable/mvcc/ob_keybtree.cpp,src/storage/memtable/mvcc/ob_keybtree.h	rust/port/storage_core/src/ob_keybtree.rs	storage_core	rewrite:storage_core	R-storage-core	
+src/storage/allocator/ob_fifo_arena.h	src/storage/allocator/ob_fifo_arena.cpp,src/storage/allocator/ob_fifo_arena.h	rust/port/storage_core/src/ob_fifo_arena.rs	storage_core	rewrite:storage_core	R-storage-core	
+src/storage/allocator/ob_memstore_allocator.h	src/storage/allocator/ob_memstore_allocator.cpp,src/storage/allocator/ob_memstore_allocator.h	rust/port/storage_core/src/ob_memstore_allocator.rs	storage_core	rewrite:storage_core	R-storage-core	
+src/storage/memtable/mvcc/ob_mvcc.h	src/storage/memtable/mvcc/ob_mvcc.h	rust/port/storage_core/src/ob_mvcc.rs	storage_core	rewrite:storage_core	R-storage-core	
+src/storage/memtable/mvcc/ob_tx_callback_list.h	src/storage/memtable/mvcc/ob_tx_callback_list.cpp,src/storage/memtable/mvcc/ob_tx_callback_list.h	rust/port/storage_core/src/ob_tx_callback_list.rs	storage_core	rewrite:storage_core	R-storage-core	
+src/storage/allocator/ob_vector_allocator.h	src/storage/allocator/ob_vector_allocator.cpp,src/storage/allocator/ob_vector_allocator.h	rust/port/storage/src/allocator/ob_vector_allocator.rs	storage	translate	R-thirdparty-shim:vsag-REVIEW	26
+src/storage/fts/dict/ob_ik_dic.h	src/storage/fts/dict/ob_ik_dic.cpp,src/storage/fts/dict/ob_ik_dic.h	rust/port/storage/src/fts/dict/ob_ik_dic.rs	storage	translate	R-data-split-REVIEW	29
+src/share/geo/ob_srs_wkt_parser.h	src/share/geo/ob_srs_wkt_parser.cpp,src/share/geo/ob_srs_wkt_parser.h	rust/port/share/src/geo/ob_srs_wkt_parser.rs	share	translate	R-thirdparty-shim:boost_spirit-REVIEW	30
+src/standby/ob_standby_grpc.h	src/standby/ob_standby_grpc.cpp,src/standby/ob_standby_grpc.h	rust/port/standby/src/ob_standby_grpc.rs	standby	translate	R-thirdparty-shim:grpc-REVIEW	31
+src/standby/restore/ob_restore_helper_ctx.h	src/standby/restore/ob_restore_helper_ctx.cpp,src/standby/restore/ob_restore_helper_ctx.h	rust/port/standby/src/restore/ob_restore_helper_ctx.rs	standby	translate	R-thirdparty-shim:grpc-REVIEW	31
+src/standby/ob_standby_grpc_stream_util.h	src/standby/ob_standby_grpc_stream_util.cpp,src/standby/ob_standby_grpc_stream_util.h	rust/port/standby/src/ob_standby_grpc_stream_util.rs	standby	translate	R-thirdparty-shim:grpc-REVIEW	31
+src/pl/parser/pl_non_reserved_keywords_mysql_mode.c	src/pl/parser/pl_non_reserved_keywords_mysql_mode.c	rust/port/sql/src/pl/parser/pl_non_reserved_keywords_mysql_mode.rs	sql	keep-c	R-parser-c	
+src/pl/parser/pl_parser_base.h	src/pl/parser/pl_parser_base.c,src/pl/parser/pl_parser_base.h	rust/port/sql/src/pl/parser/pl_parser_base.rs	sql	keep-c	R-parser-c	
+src/share/geo/ob_geo_func_crosses_helper.ipp	src/share/geo/ob_geo_func_crosses_helper.ipp	rust/port/share/src/geo/ob_geo_func_crosses_helper.rs	share	translate	R-thirdparty-shim:boost_geometry-REVIEW	33
+src/share/geo/ob_geo_func_equals_helper.ipp	src/share/geo/ob_geo_func_equals_helper.ipp	rust/port/share/src/geo/ob_geo_func_equals_helper.rs	share	translate	R-thirdparty-shim:boost_geometry-REVIEW	33
+src/share/geo/ob_geo_func_overlaps_helper.ipp	src/share/geo/ob_geo_func_overlaps_helper.ipp	rust/port/share/src/geo/ob_geo_func_overlaps_helper.rs	share	translate	R-thirdparty-shim:boost_geometry-REVIEW	33
+src/share/geo/ob_geo_func_symdifference_helper.ipp	src/share/geo/ob_geo_func_symdifference_helper.ipp	rust/port/share/src/geo/ob_geo_func_symdifference_helper.rs	share	translate	R-thirdparty-shim:boost_geometry-REVIEW	33
+src/share/geo/ob_geo_func_touches_helper.ipp	src/share/geo/ob_geo_func_touches_helper.ipp	rust/port/share/src/geo/ob_geo_func_touches_helper.rs	share	translate	R-thirdparty-shim:boost_geometry-REVIEW	33
+src/share/geo/ob_geo_func_within_helper.ipp	src/share/geo/ob_geo_func_within_helper.ipp	rust/port/share/src/geo/ob_geo_func_within_helper.rs	share	translate	R-thirdparty-shim:boost_geometry-REVIEW	33
+src/share/geo/ob_geo_func_within1.cpp	src/share/geo/ob_geo_func_within1.cpp	rust/port/share/src/geo/ob_geo_func_within1.rs	share	translate	R-thirdparty-shim:boost_geometry-REVIEW	33
+src/share/geo/ob_geo_func_within2.cpp	src/share/geo/ob_geo_func_within2.cpp	rust/port/share/src/geo/ob_geo_func_within2.rs	share	translate	R-thirdparty-shim:boost_geometry-REVIEW	33
+src/share/ob_errno.def	src/share/ob_errno.def	rust/port/share/src/ob_errno.rs	share	generate:errno	R-errno-def	
+src/sql/engine/expr/ob_expr_compatiable_promotion.map	src/sql/engine/expr/ob_expr_compatiable_promotion.map	rust/port/sql/src/engine/expr/ob_expr_compatiable_promotion.rs	sql	data:map_table	R-data-map	
+src/sql/parser/non_reserved_keywords_mysql_mode.c	src/sql/parser/non_reserved_keywords_mysql_mode.c	rust/port/sql/src/parser/non_reserved_keywords_mysql_mode.rs	sql	keep-c	R-parser-c	
+src/sql/parser/ob_memory_tracker_wrapper.h	src/sql/parser/ob_memory_tracker_wrapper.h	rust/port/sql/src/parser/ob_memory_tracker_wrapper.rs	sql	translate	R-parser-cxx-REVIEW	34
+src/sql/parser/ob_parse_simd.cpp	src/sql/parser/ob_parse_simd.cpp	rust/port/sql/src/parser/ob_parse_simd.rs	sql	translate	R-parser-cxx-REVIEW	34
+src/sql/parser/parser_utility.h	src/sql/parser/parser_utility.cpp,src/sql/parser/parser_utility.h	rust/port/sql/src/parser/parser_utility.rs	sql	translate	R-parser-cxx-REVIEW	34
+src/sql/resolver/cmd/ob_sql_category.def	src/sql/resolver/cmd/ob_sql_category.def	rust/port/sql/src/resolver/cmd/ob_sql_category.rs	sql	data:def_table	R-data-def	
+src/sql/resolver/cmd/ob_sql_topic.def	src/sql/resolver/cmd/ob_sql_topic.def	rust/port/sql/src/resolver/cmd/ob_sql_topic.rs	sql	data:def_table	R-data-def	
+src/oblib/lib/charset/ob_uctype.h	src/oblib/lib/charset/ob_uctype.h	rust/port/oblib/src/lib_m/charset/ob_uctype.rs	oblib	data:uctype	R-data-excluded	

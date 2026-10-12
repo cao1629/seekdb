@@ -1,0 +1,545 @@
+file	symbol	source_construct	line	pretag
+src/logservice/palf/log_block_handler.cpp	LogBlockHandler::inner_write_once_#const_cast<char*>(buf)	const_cast<char *>	371	borrowed:param(char*)
+src/logservice/palf/log_entry.cpp	DEFINE_DESERIALIZE(LogEntry)#const_cast<char*>(buf+new_pos)	const_cast<char *>	95	
+src/logservice/palf/log_group_entry.cpp	DEFINE_DESERIALIZE(LogGroupEntry)#const_cast<char*>(buf+new_pos)	const_cast<char *>	122	
+src/logservice/palf/log_group_entry_header.cpp	LogGroupEntryHeader::calculate_log_checksum_#const_cast<char*>(log_buf)	const_cast<char *>	121	
+src/logservice/palf/log_group_entry_header.cpp	LogGroupEntryHeader::calculate_log_checksum_#const_cast<char*>(log_buf)#2	const_cast<char *>	143	
+src/logservice/palf/log_group_entry_header.cpp	LogGroupEntryHeader::calculate_log_checksum_#const_cast<char*>(log_buf)#3	const_cast<char *>	163	
+src/logservice/palf/log_io_task.cpp	LogIOFlushMetaTask::destroy#const_cast<char*>(buf_)	const_cast<char *>	262	borrowed:member
+src/logservice/palf/log_iterator_storage.cpp	MemoryStorage::pread#const_cast<char*>(buf_)	const_cast<char *>	256	borrowed:member
+src/logservice/palf/log_meta_entry.cpp	DEFINE_DESERIALIZE(LogMetaEntry)#const_cast<char*>(buf+new_pos)	const_cast<char *>	118	
+src/oblib/common/cell/ob_cell_reader.cpp	ObCellReader::get_cell#const_cast<char*>(buf_+row_start_)	const_cast<char *>	306	
+src/oblib/common/cell/ob_cell_reader.cpp	ObCellReader::get_cell#const_cast<char*>(buf_+row_start_)#2	const_cast<char *>	332	
+src/oblib/common/datum/ob_datum.h	ObDatum::from_obj#const_cast<char*>(obj.v_.string_)	const_cast<char *>	562	
+src/oblib/common/json_type/ob_json_base.cpp	ObIJsonBase::find_type_method#const_cast<char*>("")	const_cast<char *>	933	literal
+src/oblib/common/json_type/ob_json_base.cpp	ObIJsonBase::find_type_method#const_cast<char*>("")#2	const_cast<char *>	946	literal
+src/oblib/common/json_type/ob_json_base.cpp	ObIJsonBase::find_type_method#const_cast<char*>("")#3	const_cast<char *>	968	literal
+src/oblib/common/json_type/ob_json_base.cpp	ObIJsonBase::find_type_method#const_cast<char*>("")#4	const_cast<char *>	973	literal
+src/oblib/common/json_type/ob_json_base.cpp	ObIJsonBase::find_type_method#const_cast<char*>("")#5	const_cast<char *>	978	literal
+src/oblib/common/json_type/ob_json_base.cpp	ObIJsonBase::find_type_method#const_cast<char*>("")#6	const_cast<char *>	983	literal
+src/oblib/common/json_type/ob_json_path.cpp	<file-scope>#const_cast<char*>("")	const_cast<char *>	39	literal
+src/oblib/common/json_type/ob_json_path.cpp	<file-scope>#const_cast<char*>("")#2	const_cast<char *>	40	literal
+src/oblib/common/json_type/ob_json_path.cpp	<file-scope>#const_cast<char*>("")#3	const_cast<char *>	41	literal
+src/oblib/common/json_type/ob_json_path.cpp	<file-scope>#const_cast<char*>("")#4	const_cast<char *>	42	literal
+src/oblib/common/json_type/ob_json_path.cpp	<file-scope>#const_cast<char*>("")#5	const_cast<char *>	43	literal
+src/oblib/common/json_type/ob_json_path.cpp	<file-scope>#const_cast<char*>("")#6	const_cast<char *>	44	literal
+src/oblib/common/json_type/ob_json_path.cpp	<file-scope>#const_cast<char*>("")#7	const_cast<char *>	45	literal
+src/oblib/common/json_type/ob_json_path.cpp	<file-scope>#const_cast<char*>("")#8	const_cast<char *>	46	literal
+src/oblib/common/json_type/ob_json_path.cpp	<file-scope>#const_cast<char*>("")#9	const_cast<char *>	47	literal
+src/oblib/common/json_type/ob_json_path.cpp	<file-scope>#const_cast<char*>("")#10	const_cast<char *>	48	literal
+src/oblib/common/json_type/ob_json_path.cpp	<file-scope>#const_cast<char*>("")#11	const_cast<char *>	49	literal
+src/oblib/common/json_type/ob_json_path.cpp	<file-scope>#const_cast<char*>("")#12	const_cast<char *>	50	literal
+src/oblib/common/json_type/ob_json_path.cpp	<file-scope>#const_cast<char*>("")#13	const_cast<char *>	51	literal
+src/oblib/common/json_type/ob_json_path.cpp	<file-scope>#const_cast<char*>("")#14	const_cast<char *>	52	literal
+src/oblib/common/json_type/ob_json_path.cpp	<file-scope>#const_cast<char*>("")#15	const_cast<char *>	53	literal
+src/oblib/common/json_type/ob_json_path.cpp	<file-scope>#const_cast<char*>("")#16	const_cast<char *>	54	literal
+src/oblib/common/json_type/ob_json_path.cpp	<file-scope>#const_cast<char*>("")#17	const_cast<char *>	55	literal
+src/oblib/common/json_type/ob_json_path.cpp	<file-scope>#const_cast<char*>("")#18	const_cast<char *>	56	literal
+src/oblib/common/json_type/ob_json_path.cpp	<file-scope>#const_cast<char*>("")#19	const_cast<char *>	57	literal
+src/oblib/common/json_type/ob_json_path.cpp	<file-scope>#const_cast<char*>("")#20	const_cast<char *>	58	literal
+src/oblib/common/json_type/ob_json_path.cpp	<file-scope>#const_cast<char*>("")#21	const_cast<char *>	59	literal
+src/oblib/common/json_type/ob_json_path.cpp	<file-scope>#const_cast<char*>("")#22	const_cast<char *>	60	literal
+src/oblib/common/json_type/ob_json_path.cpp	<file-scope>#const_cast<char*>("")#23	const_cast<char *>	61	literal
+src/oblib/common/json_type/ob_json_path.cpp	<file-scope>#const_cast<char*>("")#24	const_cast<char *>	62	literal
+src/oblib/common/json_type/ob_json_path.cpp	<file-scope>#const_cast<char*>("")#25	const_cast<char *>	63	literal
+src/oblib/common/json_type/ob_json_path.cpp	<file-scope>#const_cast<char*>("")#26	const_cast<char *>	64	literal
+src/oblib/common/json_type/ob_json_path.cpp	<file-scope>#const_cast<char*>("")#27	const_cast<char *>	65	literal
+src/oblib/common/json_type/ob_json_path.cpp	<file-scope>#const_cast<char*>("")#28	const_cast<char *>	66	literal
+src/oblib/common/json_type/ob_json_path.cpp	<file-scope>#const_cast<char*>("")#29	const_cast<char *>	67	literal
+src/oblib/common/json_type/ob_json_path.cpp	<file-scope>#const_cast<char*>("")#30	const_cast<char *>	68	literal
+src/oblib/common/json_type/ob_json_path.cpp	<file-scope>#const_cast<char*>("")#31	const_cast<char *>	69	literal
+src/oblib/common/json_type/ob_json_path.cpp	<file-scope>#const_cast<char*>("")#32	const_cast<char *>	70	literal
+src/oblib/common/json_type/ob_json_path.cpp	<file-scope>#const_cast<char*>("")#33	const_cast<char *>	71	literal
+src/oblib/common/json_type/ob_json_path.cpp	<file-scope>#const_cast<char*>("")#34	const_cast<char *>	1144	literal
+src/oblib/common/json_type/ob_json_path.cpp	<file-scope>#const_cast<char*>("")#35	const_cast<char *>	1145	literal
+src/oblib/common/json_type/ob_json_path.cpp	<file-scope>#const_cast<char*>("")#36	const_cast<char *>	1146	literal
+src/oblib/common/json_type/ob_json_path.cpp	<file-scope>#const_cast<char*>("")#37	const_cast<char *>	1147	literal
+src/oblib/common/json_type/ob_json_path.cpp	<file-scope>#const_cast<char*>("")#38	const_cast<char *>	1148	literal
+src/oblib/common/json_type/ob_json_path.cpp	<file-scope>#const_cast<char*>("")#39	const_cast<char *>	1149	literal
+src/oblib/common/json_type/ob_json_path.cpp	<file-scope>#const_cast<char*>("")#40	const_cast<char *>	1150	literal
+src/oblib/common/json_type/ob_json_path.cpp	<file-scope>#const_cast<char*>("")#41	const_cast<char *>	1151	literal
+src/oblib/common/json_type/ob_json_path.cpp	<file-scope>#const_cast<char*>("")#42	const_cast<char *>	1152	literal
+src/oblib/common/json_type/ob_json_path.cpp	<file-scope>#const_cast<char*>("")#43	const_cast<char *>	1153	literal
+src/oblib/common/json_type/ob_json_path.cpp	<file-scope>#const_cast<char*>("")#44	const_cast<char *>	1154	literal
+src/oblib/common/json_type/ob_json_path.cpp	<file-scope>#const_cast<char*>("")#45	const_cast<char *>	1155	literal
+src/oblib/common/json_type/ob_json_path.cpp	<file-scope>#const_cast<char*>("")#46	const_cast<char *>	1156	literal
+src/oblib/common/json_type/ob_json_path.cpp	<file-scope>#const_cast<char*>("")#47	const_cast<char *>	1157	literal
+src/oblib/common/json_type/ob_json_path.cpp	<file-scope>#const_cast<char*>("")#48	const_cast<char *>	1158	literal
+src/oblib/common/json_type/ob_json_path.cpp	<file-scope>#const_cast<char*>("")#49	const_cast<char *>	1159	literal
+src/oblib/common/json_type/ob_json_path.cpp	<file-scope>#const_cast<char*>("")#50	const_cast<char *>	1160	literal
+src/oblib/common/json_type/ob_json_path.cpp	<file-scope>#const_cast<char*>("")#51	const_cast<char *>	1241	literal
+src/oblib/common/json_type/ob_json_path.cpp	<file-scope>#const_cast<char*>("")#52	const_cast<char *>	1242	literal
+src/oblib/common/json_type/ob_json_path.cpp	<file-scope>#const_cast<char*>("")#53	const_cast<char *>	1243	literal
+src/oblib/common/json_type/ob_json_path.cpp	<file-scope>#const_cast<char*>("")#54	const_cast<char *>	1244	literal
+src/oblib/common/json_type/ob_json_path.cpp	<file-scope>#const_cast<char*>("")#55	const_cast<char *>	1245	literal
+src/oblib/common/json_type/ob_json_path.cpp	<file-scope>#const_cast<char*>("")#56	const_cast<char *>	1246	literal
+src/oblib/common/json_type/ob_json_path.cpp	<file-scope>#const_cast<char*>("")#57	const_cast<char *>	1247	literal
+src/oblib/common/json_type/ob_json_path.cpp	<file-scope>#const_cast<char*>("")#58	const_cast<char *>	1248	literal
+src/oblib/common/json_type/ob_json_path.cpp	<file-scope>#const_cast<char*>("")#59	const_cast<char *>	1249	literal
+src/oblib/common/json_type/ob_json_path.cpp	<file-scope>#const_cast<char*>("")#60	const_cast<char *>	1250	literal
+src/oblib/common/json_type/ob_json_path.cpp	<file-scope>#const_cast<char*>("")#61	const_cast<char *>	1251	literal
+src/oblib/common/json_type/ob_json_path.cpp	<file-scope>#const_cast<char*>("")#62	const_cast<char *>	1252	literal
+src/oblib/common/json_type/ob_json_path.cpp	<file-scope>#const_cast<char*>("")#63	const_cast<char *>	1253	literal
+src/oblib/common/json_type/ob_json_schema.cpp	<file-scope>#const_cast<char*>("")	const_cast<char *>	28	literal
+src/oblib/common/json_type/ob_json_schema.cpp	<file-scope>#const_cast<char*>("")#2	const_cast<char *>	29	literal
+src/oblib/common/json_type/ob_json_schema.cpp	<file-scope>#const_cast<char*>("")#3	const_cast<char *>	30	literal
+src/oblib/common/json_type/ob_json_schema.cpp	<file-scope>#const_cast<char*>("")#4	const_cast<char *>	31	literal
+src/oblib/common/json_type/ob_json_schema.cpp	<file-scope>#const_cast<char*>("")#5	const_cast<char *>	32	literal
+src/oblib/common/json_type/ob_json_schema.cpp	<file-scope>#const_cast<char*>("")#6	const_cast<char *>	33	literal
+src/oblib/common/json_type/ob_json_schema.cpp	<file-scope>#const_cast<char*>("")#7	const_cast<char *>	34	literal
+src/oblib/common/json_type/ob_json_schema.cpp	<file-scope>#const_cast<char*>("")#8	const_cast<char *>	35	literal
+src/oblib/common/json_type/ob_json_schema.cpp	<file-scope>#const_cast<char*>("")#9	const_cast<char *>	36	literal
+src/oblib/common/json_type/ob_json_schema.cpp	<file-scope>#const_cast<char*>("")#10	const_cast<char *>	37	literal
+src/oblib/common/json_type/ob_json_schema.cpp	<file-scope>#const_cast<char*>("")#11	const_cast<char *>	38	literal
+src/oblib/common/json_type/ob_json_schema.cpp	<file-scope>#const_cast<char*>("")#12	const_cast<char *>	39	literal
+src/oblib/common/json_type/ob_json_schema.cpp	<file-scope>#const_cast<char*>("")#13	const_cast<char *>	42	literal
+src/oblib/common/json_type/ob_json_schema.cpp	<file-scope>#const_cast<char*>("")#14	const_cast<char *>	43	literal
+src/oblib/common/json_type/ob_json_schema.cpp	<file-scope>#const_cast<char*>("")#15	const_cast<char *>	44	literal
+src/oblib/common/json_type/ob_json_schema.cpp	<file-scope>#const_cast<char*>("")#16	const_cast<char *>	45	literal
+src/oblib/common/json_type/ob_json_schema.cpp	<file-scope>#const_cast<char*>("")#17	const_cast<char *>	46	literal
+src/oblib/common/json_type/ob_json_schema.cpp	<file-scope>#const_cast<char*>("")#18	const_cast<char *>	47	literal
+src/oblib/common/json_type/ob_json_schema.cpp	<file-scope>#const_cast<char*>("")#19	const_cast<char *>	48	literal
+src/oblib/common/json_type/ob_json_schema.cpp	<file-scope>#const_cast<char*>("")#20	const_cast<char *>	49	literal
+src/oblib/common/json_type/ob_json_schema.cpp	<file-scope>#const_cast<char*>("")#21	const_cast<char *>	50	literal
+src/oblib/common/json_type/ob_json_schema.cpp	<file-scope>#const_cast<char*>("")#22	const_cast<char *>	51	literal
+src/oblib/common/json_type/ob_json_schema.cpp	<file-scope>#const_cast<char*>("")#23	const_cast<char *>	52	literal
+src/oblib/common/json_type/ob_json_schema.cpp	<file-scope>#const_cast<char*>("")#24	const_cast<char *>	53	literal
+src/oblib/common/json_type/ob_json_schema.cpp	<file-scope>#const_cast<char*>("")#25	const_cast<char *>	54	literal
+src/oblib/common/json_type/ob_json_schema.cpp	<file-scope>#const_cast<char*>("")#26	const_cast<char *>	55	literal
+src/oblib/common/json_type/ob_json_schema.cpp	<file-scope>#const_cast<char*>("")#27	const_cast<char *>	56	literal
+src/oblib/common/json_type/ob_json_schema.cpp	<file-scope>#const_cast<char*>("")#28	const_cast<char *>	57	literal
+src/oblib/common/json_type/ob_json_schema.cpp	<file-scope>#const_cast<char*>("")#29	const_cast<char *>	58	literal
+src/oblib/common/json_type/ob_json_schema.cpp	<file-scope>#const_cast<char*>("")#30	const_cast<char *>	59	literal
+src/oblib/common/json_type/ob_json_schema.cpp	<file-scope>#const_cast<char*>("")#31	const_cast<char *>	60	literal
+src/oblib/common/json_type/ob_json_schema.cpp	<file-scope>#const_cast<char*>("")#32	const_cast<char *>	61	literal
+src/oblib/common/json_type/ob_json_schema.cpp	<file-scope>#const_cast<char*>("")#33	const_cast<char *>	62	literal
+src/oblib/common/json_type/ob_json_schema.cpp	<file-scope>#const_cast<char*>("")#34	const_cast<char *>	63	literal
+src/oblib/common/json_type/ob_json_schema.cpp	<file-scope>#const_cast<char*>("")#35	const_cast<char *>	64	literal
+src/oblib/common/json_type/ob_json_schema.cpp	<file-scope>#const_cast<char*>("")#36	const_cast<char *>	65	literal
+src/oblib/common/json_type/ob_json_schema.cpp	<file-scope>#const_cast<char*>("")#37	const_cast<char *>	66	literal
+src/oblib/common/json_type/ob_json_schema.cpp	<file-scope>#const_cast<char*>("")#38	const_cast<char *>	67	literal
+src/oblib/common/json_type/ob_json_schema.cpp	<file-scope>#const_cast<char*>("")#39	const_cast<char *>	68	literal
+src/oblib/common/json_type/ob_json_schema.cpp	<file-scope>#const_cast<char*>("")#40	const_cast<char *>	69	literal
+src/oblib/common/object/ob_object.cpp	OB_DEF_DESERIALIZE(ObLobLocatorV2)#const_cast<char*>(buf+new_pos)	const_cast<char *>	833	
+src/oblib/common/object/ob_object.h	ObLobLocatorV2::ObLobLocatorV2#const_cast<char*>(lob_str.ptr())	const_cast<char *>	925	
+src/oblib/common/object/ob_object.h	ObObj::get_data_ptr#const_cast<char*>(v_.string_)	const_cast<char *>	3323	borrowed:member
+src/oblib/common/row/ob_row_checksum.cpp	DEFINE_DESERIALIZE(ObRowChecksumValue)#const_cast<char*>(buf+pos)	const_cast<char *>	68	
+src/oblib/common/timezone/ob_time_convert.cpp	ObTimeConverter::str_to_ob_time_format#const_cast<char*>(str_pos)	const_cast<char *>	2356	
+src/oblib/common/timezone/ob_time_convert.cpp	ObTimeConverter::str_to_ob_time_format#const_cast<char*>(str_pos)#2	const_cast<char *>	2365	
+src/oblib/common/timezone/ob_time_convert.cpp	ObTimeConverter::str_to_ob_time_format#const_cast<char*>(str_pos)#3	const_cast<char *>	2379	
+src/oblib/common/timezone/ob_time_convert.cpp	ObTimeConverter::str_to_ob_time_format#const_cast<char*>(str_pos)#4	const_cast<char *>	2429	
+src/oblib/common/timezone/ob_time_convert.cpp	ObTimeConverter::str_to_ob_time_format#const_cast<char*>(str_pos)#5	const_cast<char *>	2497	
+src/oblib/common/udt/ob_array_binary.cpp	ObArrayBinary::init#const_cast<char*>(reinterpret_cast<constchar*>(attrs[idx++].get_string().ptr())	const_cast<char *>	300	
+src/oblib/common/udt/ob_udt_type.cpp	OB_DEF_DESERIALIZE(ObSqlUDTMeta)#const_cast<char*>(buf+pos)	const_cast<char *>	287	
+src/oblib/common/udt/ob_udt_type.cpp	OB_DEF_DESERIALIZE(ObSqlUDTMeta)#const_cast<char*>(buf+pos)#2	const_cast<char *>	295	
+src/oblib/common/xml/ob_multi_mode_interface.h	ObStack::ObStack#const_cast<char*>(from.buffer_.ptr())	const_cast<char *>	214	borrowed:param(ObStack&)
+src/oblib/common/xml/ob_multi_mode_interface.h	ObStack::ObStack#const_cast<char*>(buffer_.ptr())	const_cast<char *>	215	borrowed:member
+src/oblib/common/xml/ob_path_parser.h	<file-scope>#const_cast<char*>("")	const_cast<char *>	56	literal
+src/oblib/common/xml/ob_path_parser.h	<file-scope>#const_cast<char*>("")#2	const_cast<char *>	57	literal
+src/oblib/common/xml/ob_path_parser.h	<file-scope>#const_cast<char*>("")#3	const_cast<char *>	58	literal
+src/oblib/common/xml/ob_path_parser.h	<file-scope>#const_cast<char*>("")#4	const_cast<char *>	59	literal
+src/oblib/common/xml/ob_path_parser.h	<file-scope>#const_cast<char*>("")#5	const_cast<char *>	60	literal
+src/oblib/common/xml/ob_path_parser.h	<file-scope>#const_cast<char*>("")#6	const_cast<char *>	61	literal
+src/oblib/common/xml/ob_path_parser.h	<file-scope>#const_cast<char*>("")#7	const_cast<char *>	62	literal
+src/oblib/common/xml/ob_path_parser.h	<file-scope>#const_cast<char*>("")#8	const_cast<char *>	63	literal
+src/oblib/common/xml/ob_path_parser.h	<file-scope>#const_cast<char*>("")#9	const_cast<char *>	64	literal
+src/oblib/common/xml/ob_path_parser.h	<file-scope>#const_cast<char*>("")#10	const_cast<char *>	65	literal
+src/oblib/common/xml/ob_path_parser.h	<file-scope>#const_cast<char*>("")#11	const_cast<char *>	66	literal
+src/oblib/common/xml/ob_path_parser.h	<file-scope>#const_cast<char*>("")#12	const_cast<char *>	67	literal
+src/oblib/common/xml/ob_path_parser.h	<file-scope>#const_cast<char*>("")#13	const_cast<char *>	68	literal
+src/oblib/common/xml/ob_path_parser.h	<file-scope>#const_cast<char*>("")#14	const_cast<char *>	69	literal
+src/oblib/common/xml/ob_path_parser.h	<file-scope>#const_cast<char*>("")#15	const_cast<char *>	70	literal
+src/oblib/common/xml/ob_path_parser.h	<file-scope>#const_cast<char*>("")#16	const_cast<char *>	71	literal
+src/oblib/common/xml/ob_path_parser.h	<file-scope>#const_cast<char*>("")#17	const_cast<char *>	72	literal
+src/oblib/common/xml/ob_path_parser.h	<file-scope>#const_cast<char*>("")#18	const_cast<char *>	73	literal
+src/oblib/common/xml/ob_path_parser.h	<file-scope>#const_cast<char*>("")#19	const_cast<char *>	74	literal
+src/oblib/common/xml/ob_path_parser.h	<file-scope>#const_cast<char*>("")#20	const_cast<char *>	75	literal
+src/oblib/common/xml/ob_path_parser.h	<file-scope>#const_cast<char*>("")#21	const_cast<char *>	76	literal
+src/oblib/common/xml/ob_path_parser.h	<file-scope>#const_cast<char*>("")#22	const_cast<char *>	77	literal
+src/oblib/common/xml/ob_path_parser.h	<file-scope>#const_cast<char*>("")#23	const_cast<char *>	78	literal
+src/oblib/common/xml/ob_path_parser.h	<file-scope>#const_cast<char*>("")#24	const_cast<char *>	79	literal
+src/oblib/common/xml/ob_path_parser.h	<file-scope>#const_cast<char*>("")#25	const_cast<char *>	80	literal
+src/oblib/common/xml/ob_path_parser.h	<file-scope>#const_cast<char*>("")#26	const_cast<char *>	81	literal
+src/oblib/common/xml/ob_path_parser.h	<file-scope>#const_cast<char*>("")#27	const_cast<char *>	82	literal
+src/oblib/common/xml/ob_xpath.h	<file-scope>#const_cast<char*>("")	const_cast<char *>	94	literal
+src/oblib/common/xml/ob_xpath.h	<file-scope>#const_cast<char*>("")#2	const_cast<char *>	95	literal
+src/oblib/common/xml/ob_xpath.h	<file-scope>#const_cast<char*>("")#3	const_cast<char *>	96	literal
+src/oblib/common/xml/ob_xpath.h	<file-scope>#const_cast<char*>("")#4	const_cast<char *>	97	literal
+src/oblib/common/xml/ob_xpath.h	<file-scope>#const_cast<char*>("")#5	const_cast<char *>	98	literal
+src/oblib/common/xml/ob_xpath.h	<file-scope>#const_cast<char*>("")#6	const_cast<char *>	99	literal
+src/oblib/common/xml/ob_xpath.h	<file-scope>#const_cast<char*>("")#7	const_cast<char *>	100	literal
+src/oblib/common/xml/ob_xpath.h	<file-scope>#const_cast<char*>("")#8	const_cast<char *>	101	literal
+src/oblib/common/xml/ob_xpath.h	<file-scope>#const_cast<char*>("")#9	const_cast<char *>	102	literal
+src/oblib/common/xml/ob_xpath.h	<file-scope>#const_cast<char*>("")#10	const_cast<char *>	103	literal
+src/oblib/common/xml/ob_xpath.h	<file-scope>#const_cast<char*>("")#11	const_cast<char *>	104	literal
+src/oblib/common/xml/ob_xpath.h	<file-scope>#const_cast<char*>("")#12	const_cast<char *>	105	literal
+src/oblib/common/xml/ob_xpath.h	<file-scope>#const_cast<char*>("")#13	const_cast<char *>	106	literal
+src/oblib/common/xml/ob_xpath.h	<file-scope>#const_cast<char*>("")#14	const_cast<char *>	107	literal
+src/oblib/common/xml/ob_xpath.h	<file-scope>#const_cast<char*>("")#15	const_cast<char *>	108	literal
+src/oblib/common/xml/ob_xpath.h	<file-scope>#const_cast<char*>("")#16	const_cast<char *>	150	literal
+src/oblib/common/xml/ob_xpath.h	<file-scope>#const_cast<char*>("")#17	const_cast<char *>	151	literal
+src/oblib/common/xml/ob_xpath.h	<file-scope>#const_cast<char*>("")#18	const_cast<char *>	152	literal
+src/oblib/common/xml/ob_xpath.h	<file-scope>#const_cast<char*>("")#19	const_cast<char *>	153	literal
+src/oblib/common/xml/ob_xpath.h	<file-scope>#const_cast<char*>("")#20	const_cast<char *>	154	literal
+src/oblib/common/xml/ob_xpath.h	<file-scope>#const_cast<char*>("")#21	const_cast<char *>	155	literal
+src/oblib/common/xml/ob_xpath.h	<file-scope>#const_cast<char*>("")#22	const_cast<char *>	156	literal
+src/oblib/common/xml/ob_xpath.h	<file-scope>#const_cast<char*>("")#23	const_cast<char *>	157	literal
+src/oblib/common/xml/ob_xpath.h	<file-scope>#const_cast<char*>("")#24	const_cast<char *>	158	literal
+src/oblib/common/xml/ob_xpath.h	<file-scope>#const_cast<char*>("")#25	const_cast<char *>	159	literal
+src/oblib/common/xml/ob_xpath.h	<file-scope>#const_cast<char*>("")#26	const_cast<char *>	160	literal
+src/oblib/common/xml/ob_xpath.h	<file-scope>#const_cast<char*>("")#27	const_cast<char *>	161	literal
+src/oblib/common/xml/ob_xpath.h	<file-scope>#const_cast<char*>("")#28	const_cast<char *>	162	literal
+src/oblib/common/xml/ob_xpath.h	<file-scope>#const_cast<char*>("")#29	const_cast<char *>	163	literal
+src/oblib/common/xml/ob_xpath.h	<file-scope>#const_cast<char*>("")#30	const_cast<char *>	164	literal
+src/oblib/common/xml/ob_xpath.h	<file-scope>#const_cast<char*>("")#31	const_cast<char *>	165	literal
+src/oblib/common/xml/ob_xpath.h	<file-scope>#const_cast<char*>("")#32	const_cast<char *>	166	literal
+src/oblib/common/xml/ob_xpath.h	<file-scope>#const_cast<char*>("")#33	const_cast<char *>	167	literal
+src/oblib/common/xml/ob_xpath.h	<file-scope>#const_cast<char*>("")#34	const_cast<char *>	168	literal
+src/oblib/common/xml/ob_xpath.h	<file-scope>#const_cast<char*>("")#35	const_cast<char *>	169	literal
+src/oblib/common/xml/ob_xpath.h	<file-scope>#const_cast<char*>("")#36	const_cast<char *>	170	literal
+src/oblib/common/xml/ob_xpath.h	<file-scope>#const_cast<char*>("")#37	const_cast<char *>	171	literal
+src/oblib/common/xml/ob_xpath.h	<file-scope>#const_cast<char*>("")#38	const_cast<char *>	172	literal
+src/oblib/common/xml/ob_xpath.h	<file-scope>#const_cast<char*>("")#39	const_cast<char *>	173	literal
+src/oblib/common/xml/ob_xpath.h	<file-scope>#const_cast<char*>("")#40	const_cast<char *>	174	literal
+src/oblib/common/xml/ob_xpath.h	<file-scope>#const_cast<char*>("")#41	const_cast<char *>	175	literal
+src/oblib/common/xml/ob_xpath.h	<file-scope>#const_cast<char*>("")#42	const_cast<char *>	176	literal
+src/oblib/common/xml/ob_xpath.h	<file-scope>#const_cast<char*>("")#43	const_cast<char *>	177	literal
+src/oblib/common/xml/ob_xpath.h	<file-scope>#const_cast<char*>("")#44	const_cast<char *>	178	literal
+src/oblib/common/xml/ob_xpath.h	<file-scope>#const_cast<char*>("")#45	const_cast<char *>	179	literal
+src/oblib/common/xml/ob_xpath.h	<file-scope>#const_cast<char*>("")#46	const_cast<char *>	180	literal
+src/oblib/common/xml/ob_xpath.h	<file-scope>#const_cast<char*>("")#47	const_cast<char *>	181	literal
+src/oblib/common/xml/ob_xpath.h	<file-scope>#const_cast<char*>("")#48	const_cast<char *>	182	literal
+src/oblib/common/xml/ob_xpath.h	<file-scope>#const_cast<char*>("")#49	const_cast<char *>	285	literal
+src/oblib/common/xml/ob_xpath.h	<file-scope>#const_cast<char*>("")#50	const_cast<char *>	286	literal
+src/oblib/common/xml/ob_xpath.h	<file-scope>#const_cast<char*>("")#51	const_cast<char *>	287	literal
+src/oblib/common/xml/ob_xpath.h	<file-scope>#const_cast<char*>("")#52	const_cast<char *>	288	literal
+src/oblib/common/xml/ob_xpath.h	<file-scope>#const_cast<char*>("")#53	const_cast<char *>	289	literal
+src/oblib/common/xml/ob_xpath.h	<file-scope>#const_cast<char*>("")#54	const_cast<char *>	311	literal
+src/oblib/common/xml/ob_xpath.h	<file-scope>#const_cast<char*>("")#55	const_cast<char *>	312	literal
+src/oblib/common/xml/ob_xpath.h	<file-scope>#const_cast<char*>("")#56	const_cast<char *>	313	literal
+src/oblib/common/xml/ob_xpath.h	<file-scope>#const_cast<char*>("")#57	const_cast<char *>	314	literal
+src/oblib/common/xml/ob_xpath.h	<file-scope>#const_cast<char*>("")#58	const_cast<char *>	315	literal
+src/oblib/common/xml/ob_xpath.h	<file-scope>#const_cast<char*>("")#59	const_cast<char *>	316	literal
+src/oblib/common/xml/ob_xpath.h	<file-scope>#const_cast<char*>("")#60	const_cast<char *>	317	literal
+src/oblib/common/xml/ob_xpath.h	<file-scope>#const_cast<char*>("")#61	const_cast<char *>	318	literal
+src/oblib/common/xml/ob_xpath.h	<file-scope>#const_cast<char*>("")#62	const_cast<char *>	319	literal
+src/oblib/common/xml/ob_xpath.h	<file-scope>#const_cast<char*>("")#63	const_cast<char *>	320	literal
+src/oblib/common/xml/ob_xpath.h	<file-scope>#const_cast<char*>("")#64	const_cast<char *>	321	literal
+src/oblib/common/xml/ob_xpath.h	<file-scope>#const_cast<char*>("")#65	const_cast<char *>	322	literal
+src/oblib/common/xml/ob_xpath.h	<file-scope>#const_cast<char*>("")#66	const_cast<char *>	323	literal
+src/oblib/lib/charset/ob_charset.cpp	ObCharset::strntod#const_cast<char*>(str)	const_cast<char *>	292	borrowed:param(char*)
+src/oblib/lib/charset/ob_charset.cpp	ObCharset::strntoll#const_cast<char*>(str)	const_cast<char *>	304	borrowed:param(char*)
+src/oblib/lib/charset/ob_charset.cpp	ObCharset::strntoull#const_cast<char*>(str)	const_cast<char *>	319	borrowed:param(char*)
+src/oblib/lib/charset/ob_charset.cpp	ObCharset::toupper#const_cast<char*>(src.ptr())	const_cast<char *>	1884	borrowed:param(ObString&)
+src/oblib/lib/charset/ob_charset.cpp	ObCharset::tolower#const_cast<char*>(src.ptr())	const_cast<char *>	1924	borrowed:param(ObString&)
+src/oblib/lib/charset/ob_charset.cpp	ObCharset::trim_end_of_str#const_cast<char*>(end)	const_cast<char *>	2361	
+src/oblib/lib/charset/ob_dtoa.cc	ob_fast_strtod#const_cast<char*>(ff_ret.ptr)	const_cast<char *>	372	
+src/oblib/lib/json/ob_json.cpp	Parser::parse_value#const_cast<char*>(cur_token_.value_.str_.begin_)	const_cast<char *>	216	borrowed:member
+src/oblib/lib/json/ob_json.cpp	Parser::parse_pair#const_cast<char*>(cur_token_.value_.str_.begin_)	const_cast<char *>	313	borrowed:member
+src/oblib/lib/oblog/ob_log.cpp	ObLogger::get_log_files_in_dir#const_cast<char*>("")	const_cast<char *>	1267	literal
+src/oblib/lib/oblog/ob_log_time_fmt.cpp	ObTime2Str::ob_timestamp_str_range_#const_cast<char*>(str)	const_cast<char *>	69	
+src/oblib/lib/string/ob_string.cpp	DEFINE_DESERIALIZE(ObString)#const_cast<char*>(serialization::decode_vstr(buf,data_len,pos,&len))	const_cast<char *>	49	
+src/oblib/lib/string/ob_string.h	ObString::ObString#const_cast<char*>(ptr)	const_cast<char *>	77	
+src/oblib/lib/string/ob_string.h	ObString::ObString#const_cast<char*>(ptr)#2	const_cast<char *>	87	
+src/oblib/lib/string/ob_string.h	ObString::ObString#const_cast<char*>(ptr)#3	const_cast<char *>	97	
+src/oblib/lib/string/ob_string.h	ObString::assign_ptr#const_cast<char*>(bytes)	const_cast<char *>	205	borrowed:param(char*)
+src/oblib/lib/string/ob_string.h	ObString::case_compare_equal#const_cast<char*>(str)	const_cast<char *>	334	borrowed:param(char*)
+src/oblib/lib/string/ob_string.h	ObString::case_compare#const_cast<char*>(str)	const_cast<char *>	363	borrowed:param(char*)
+src/oblib/lib/string/ob_string.h	ObString::compare_equal#const_cast<char*>(str)	const_cast<char *>	389	borrowed:param(char*)
+src/oblib/lib/string/ob_string.h	ObString::compare#const_cast<char*>(str)	const_cast<char *>	413	borrowed:param(char*)
+src/oblib/lib/string/ob_string.h	ObString::prefix_match#const_cast<char*>(str)	const_cast<char *>	469	borrowed:param(char*)
+src/oblib/lib/string/ob_string.h	ObString::prefix_match_ci#const_cast<char*>(str)	const_cast<char *>	493	borrowed:param(char*)
+src/oblib/lib/string/ob_string.h	ObString::make_string#const_cast<char*>(cstr)	const_cast<char *>	620	borrowed:param(char*)
+src/oblib/lib/string/ob_string.h	ObString::split_on#const_cast<char*>(p+1)	const_cast<char *>	718	
+src/oblib/lib/utility/ob_print_utils.h	ObCStringHelper::convert#const_cast<char*>(convert(obj))	const_cast<char *>	340	
+src/oblib/rpc/frame/ob_net_easy.cpp	easy_connection_str#const_cast<char*>("")	const_cast<char *>	162	literal
+src/oblib/rpc/obmysql/ob_mysql_packet.cpp	ObMySQLRawPacket::get_command_field#const_cast<char*>(cdata_-1+off)	const_cast<char *>	47	
+src/oblib/rpc/obmysql/packet/ompk_error.cpp	OMPKError::set_message#const_cast<char*>(message.ptr())	const_cast<char *>	41	borrowed:param(ObString&)
+src/observer/change_stream/ob_cs_plugin_async_index.cpp	ObCSAsyncIndexProcessor::extract_vector_data_#const_cast<char*>(datum.ptr_)	const_cast<char *>	582	
+src/observer/change_stream/ob_cs_plugin_async_index.cpp	ObCSAsyncIndexProcessor::extract_vector_data_#const_cast<char*>(datum.ptr_)#2	const_cast<char *>	585	
+src/observer/mysql/ob_mysql_end_trans_cb.cpp	ObSqlEndTransCb::complete_callback_locked#const_cast<char*>(pkt_param_.get_message())	const_cast<char *>	258	borrowed:member
+src/observer/mysql/ob_sync_cmd_driver.cpp	ObSyncCmdDriver::response_result#const_cast<char*>(result.get_message())	const_cast<char *>	162	borrowed:param(ObMySQLResultSet&)
+src/observer/mysql/ob_sync_plan_driver.cpp	ObSyncPlanDriver::response_result#const_cast<char*>(result.get_message())	const_cast<char *>	153	borrowed:param(ObMySQLResultSet&)
+src/observer/mysql/ob_sync_plan_driver.cpp	ObSyncPlanDriver::response_result#const_cast<char*>(result.get_message())#2	const_cast<char *>	174	borrowed:param(ObMySQLResultSet&)
+src/observer/ob_inner_sql_connection.cpp	ObInnerSQLConnection::process_audit_record#const_cast<char*>(ps_sql.ptr())	const_cast<char *>	612	borrowed:param(ObString&)
+src/observer/ob_win_service.cpp	ob_install_win_service#const_cast<char*>(OB_SERVICE_DESCRIPTION)	const_cast<char *>	190	
+src/observer/ob_win_service.cpp	ob_start_as_win_service#const_cast<char*>(service_name)	const_cast<char *>	291	borrowed:param(char*)
+src/observer/vector_index/ob_plugin_vector_index_adaptor.cpp	ObPluginVectorIndexAdaptor::vsag_query_vids#const_cast<char*>(vector_str.ptr())	const_cast<char *>	3337	local:view
+src/observer/vector_index/ob_plugin_vector_index_serialize.cpp	ObHNSWSerializeCallback::operator()#const_cast<char*>(data)	const_cast<char *>	358	borrowed:param(char*)
+src/observer/virtual_table/ob_all_virtual_schema_slot.cpp	ObAllVirtualSchemaSlot::release_slot_infos#const_cast<char*>(ptr)	const_cast<char *>	35	
+src/pl/parser/ob_pl_parser.cpp	ObPLParser::parse#const_cast<char*>(stmt_block.ptr())	const_cast<char *>	74	borrowed:param(ObString&)
+src/pl/pl_cache/ob_pl_cache.cpp	ObPLObjectKey::destory#const_cast<char*>(name_.ptr())	const_cast<char *>	286	borrowed:member
+src/pl/pl_cache/ob_pl_cache.cpp	ObPLObjectKey::destory#const_cast<char*>(sys_vars_str_.ptr())	const_cast<char *>	289	borrowed:member
+src/pl/sys_package/ob_dbms_stats.cpp	ObDbmsStats::get_new_stat_pref#ObCharset::caseup(opt_name)	ObCharset::caseup in-place case conversion	5178	borrowed:param(ObString&)
+src/pl/sys_package/ob_dbms_stats.cpp	ObDbmsStats::get_new_stat_pref#ObCharset::caseup(opt_value)	ObCharset::caseup in-place case conversion	5179	borrowed:param(ObString&)
+src/pl/sys_package/ob_dbms_stats.cpp	ObDbmsStats::convert_vaild_ident_name#ObCharset::caseup(ident_name)	ObCharset::caseup in-place case conversion	5368	borrowed:param(ObString&)
+src/query/api/query/engine/cmd/ob_load_data_parser.h	ObCSVGeneralParser::gen_new_field#const_cast<char*>(field_begin)	const_cast<char *>	583	borrowed:param(char*)
+src/query/api/query/engine/expr/ob_array_expr_utils.h	ObArrayExprUtils::calc_array_sum_by_type#const_cast<char*>(data_ptr)	const_cast<char *>	97	borrowed:param(char*)
+src/query/api/query/engine/expr/ob_expr.h	ObExpr::deep_copy_datum#const_cast<char*>(dst.ptr_)	const_cast<char *>	1119	
+src/query/api/query/engine/expr/ob_expr.h	ObExpr::deep_copy_datum#const_cast<char*>(dst.ptr_)#2	const_cast<char *>	1122	
+src/query/api/query/engine/vector/ob_discrete_format.h	ObDiscreteFormat::set_payload_shallow#const_cast<char*>(static_cast<constchar*>(payload))	const_cast<char *>	53	
+src/query/api/query/engine/vector/ob_uniform_format.h	ObUniformFormat::set_payload#const_cast<char*>(get_payload(idx))	const_cast<char *>	70	
+src/query/api/query/vector/ob_vector_index_util.h	ObVecExtraInfoPtr::set_with_copy#const_cast<char*>(buf_[idx])	const_cast<char *>	1016	
+src/share/geo/ob_geo_3d.cpp	ObGeometry3D::byteorder#const_cast<char*>(ptr+pos)	const_cast<char *>	38	
+src/share/geo/ob_geo_3d.cpp	ObGeo3DReserverCoordinate::visit_pointz_start#const_cast<char*>(geo->val())	const_cast<char *>	905	borrowed:param(ObGeometry3D*)
+src/share/geo/ob_geo_3d.cpp	ObGeo3DElevationVisitor::visit_pointz_start#const_cast<char*>(geo->val())	const_cast<char *>	1145	borrowed:param(ObGeometry3D*)
+src/share/geo/ob_geo_3d.cpp	ObGeo3DNormalizeVisitor::visit_pointz_start#const_cast<char*>(geo->val())	const_cast<char *>	1169	borrowed:param(ObGeometry3D*)
+src/share/geo/ob_geo_3d.cpp	ObGeo3DEmptyVisitor::visit_pointz_start#const_cast<char*>(geo->val())	const_cast<char *>	1203	borrowed:param(ObGeometry3D*)
+src/share/geo/ob_geo_3d.cpp	ObGeo3DLonLatChecker::visit_pointz_start#const_cast<char*>(geo->val())	const_cast<char *>	1231	borrowed:param(ObGeometry3D*)
+src/share/geo/ob_geo_func_centroid.cpp	ObGeoFuncCentroidImpl::centroid_default#const_cast<char*>(g->val())	const_cast<char *>	88	borrowed:param(ObGeometry*)
+src/share/geo/ob_geo_func_correct.cpp	ObGeoFuncCorrectImpl::correct_default#const_cast<char*>(g->val())	const_cast<char *>	48	borrowed:param(ObGeometry*)
+src/share/geo/ob_geo_func_correct.cpp	ObGeoFuncCorrectImpl::correct_with_strategy#const_cast<char*>(g->val())	const_cast<char *>	68	borrowed:param(ObGeometry*)
+src/share/geo/ob_geo_func_dissolve_polygon.cpp	eval_dissolve_polygon#const_cast<char*>(g1->val())	const_cast<char *>	36	borrowed:param(ObGeometry*)
+src/share/geo/ob_geo_func_dissolve_polygon.cpp	eval_dissolve_multipolygon#const_cast<char*>(g1->val())	const_cast<char *>	102	borrowed:param(ObGeometry*)
+src/share/geo/ob_geo_func_isvalid.cpp	eval_isvalid_without_strategy#const_cast<char*>(g->val())	const_cast<char *>	38	borrowed:param(ObGeometry*)
+src/share/geo/ob_geo_func_isvalid.cpp	eval_isvalid_with_strategy#const_cast<char*>(g->val())	const_cast<char *>	67	borrowed:param(ObGeometry*)
+src/share/geo/ob_geo_func_isvalid.cpp	ObGeoFuncIsValidImpl::eval_isvalid_geometry_collection#const_cast<char*>(g->val())	const_cast<char *>	116	borrowed:param(ObGeometry*)
+src/share/geo/ob_geo_func_length.cpp	eval_length_without_strategy#const_cast<char*>(g->val())	const_cast<char *>	33	borrowed:param(ObGeometry*)
+src/share/geo/ob_geo_func_length.cpp	eval_length_with_strategy#const_cast<char*>(g->val())	const_cast<char *>	48	borrowed:param(ObGeometry*)
+src/share/geo/ob_geo_reverse_coordinate_visitor.cpp	ObGeoReverseCoordinateVisitor::reverse_point_coordinate#const_cast<char*>(geo->val())	const_cast<char *>	37	borrowed:param(ObIWkbGeogPoint*)
+src/share/geo/ob_geo_utils.cpp	ObGeoTypeUtil::poly_close_ring#const_cast<char*>(raw_data)	const_cast<char *>	1540	local:stack-array
+src/share/geo/ob_geo_utils.cpp	ObGeoTypeUtil::poly_close_ring#const_cast<char*>(raw_data)#2	const_cast<char *>	1541	local:stack-array
+src/share/io/ob_io_manager.cpp	ObIOManager::pread#const_cast<char*>(info.buf_)	const_cast<char *>	287	borrowed:param(ObIOInfo&)
+src/share/schema/ob_schema_mgr.cpp	ObSchemaMgr::get_foreign_key_info#const_cast<char*>(foreign_key_name.ptr())	const_cast<char *>	1586	borrowed:param(ObString&)
+src/share/schema/ob_schema_mgr.cpp	ObSchemaMgr::get_constraint_info#const_cast<char*>(constraint_name.ptr())	const_cast<char *>	1758	borrowed:param(ObString&)
+src/share/schema/ob_schema_struct.cpp	ObSchema::str2string_array#const_cast<char*>(str)	const_cast<char *>	1094	borrowed:param(char*)
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	ObDASHNSWScanIter::query_brute_force_distances#const_cast<char*>(search_vec.ptr())	const_cast<char *>	1145	borrowed:param(ObString&)
+src/sql/das/iter/ob_das_hnsw_scan_iter.cpp	ObDASHNSWScanIter::query_brute_force_distances#const_cast<char*>(search_vec.ptr())#2	const_cast<char *>	1147	borrowed:param(ObString&)
+src/sql/das/ob_das_dml_vec_iter.h	<file-scope>#const_cast<char*>("")	const_cast<char *>	30	literal
+src/sql/das/ob_das_dml_vec_iter.h	<file-scope>#const_cast<char*>("")#2	const_cast<char *>	31	literal
+src/sql/das/ob_das_dml_vec_iter.h	<file-scope>#const_cast<char*>("")#3	const_cast<char *>	119	literal
+src/sql/das/ob_das_dml_vec_iter.h	<file-scope>#const_cast<char*>("")#4	const_cast<char *>	120	literal
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	ObAggregateProcessor::calc_overflow_res_to_decimal_int#const_cast<char*>(buf)	const_cast<char *>	4707	
+src/sql/engine/aggregate/ob_aggregate_processor.cpp	ObAggregateProcessor::llc_add_value#const_cast<char*>(llc_bitmap_buf.ptr())	const_cast<char *>	5684	borrowed:param(ObString&)
+src/sql/engine/aggregate/ob_aggregate_processor.h	ObAggregateProcessor::clone_cell#const_cast<char*>(target_cell.ptr_)	const_cast<char *>	1364	
+src/sql/engine/aggregate/ob_aggregate_processor.h	ObAggregateProcessor::clone_aggr_cell#const_cast<char*>(buf)	const_cast<char *>	1428	
+src/sql/engine/basic/ob_chunk_datum_store.cpp	ObChunkDatumStore::StoredRow::set_null#const_cast<char*>(cells()[i].ptr_)	const_cast<char *>	117	
+src/sql/engine/basic/ob_chunk_datum_store.cpp	ObChunkDatumStore::StoredRow::set_null#const_cast<char*>(cells()[i].ptr_)#2	const_cast<char *>	118	
+src/sql/engine/basic/ob_chunk_datum_store.h	ObChunkDatumStore::StoredRow::get_extra_payload#const_cast<char*>(payload_+sizeof(ObDatum)*cnt_)	const_cast<char *>	142	
+src/sql/engine/basic/ob_chunk_datum_store.h	ObChunkDatumStore::StoredRow::to_expr#const_cast<char*>(dst.ptr_)	const_cast<char *>	1252	
+src/sql/engine/basic/ob_chunk_datum_store.h	ObChunkDatumStore::Iterator::get_next_row#const_cast<char*>(dst.ptr_)	const_cast<char *>	1323	
+src/sql/engine/basic/ob_chunk_datum_store.h	ObChunkDatumStore::Iterator::attach_rows#const_cast<char*>(dst.ptr_)	const_cast<char *>	1398	
+src/sql/engine/basic/ob_chunk_datum_store.h	ObChunkDatumStore::Iterator::attach_rows#const_cast<char*>(dst.ptr_)#2	const_cast<char *>	1405	
+src/sql/engine/basic/ob_chunk_row_store.h	ObChunkRowStore::StoredRow::get_extra_payload#const_cast<char*>(payload_+sizeof(ObObj)*cnt_)	const_cast<char *>	62	
+src/sql/engine/basic/ob_expr_values_op.cpp	ObExprValuesOp::calc_next_row#const_cast<char*>(dst_datum.ptr_)	const_cast<char *>	534	
+src/sql/engine/basic/ob_pushdown_filter.cpp	ObPushdownOperator::write_trans_info_datum#const_cast<char*>(datum.ptr_)	const_cast<char *>	2791	
+src/sql/engine/basic/ob_pushdown_filter.cpp	ObPushdownOperator::deep_copy#const_cast<char*>(ptr)	const_cast<char *>	2846	
+src/sql/engine/basic/ob_ra_datum_store.h	ObRADatumStore::StoredRow::get_extra_payload#const_cast<char*>(payload_+sizeof(common::ObDatum)*cnt_)	const_cast<char *>	125	
+src/sql/engine/basic/ob_temp_column_store.cpp	ObTempColumnStore::ColumnBlock::get_next_batch#const_cast<char*>(payload_+start_read_pos)	const_cast<char *>	187	
+src/sql/engine/basic/ob_values_table_access_op.cpp	ObValuesTableAccessOp::calc_datum_from_expr#const_cast<char*>(dst_datum.ptr_)	const_cast<char *>	215	
+src/sql/engine/expr/ob_datum_cast.cpp	geom_copy_string#const_cast<char*>(res_datum.ptr_)	const_cast<char *>	8564	borrowed:param(ObDatum&)
+src/sql/engine/expr/ob_expr_crc32.cpp	calc_crc32_inner#const_cast<char*>(str_val.ptr())	const_cast<char *>	55	borrowed:param(ObString&)
+src/sql/engine/expr/ob_expr_func_dump.cpp	ObExprFuncDump::eval_dump#const_cast<char*>(nmb_str)	const_cast<char *>	232	
+src/sql/engine/expr/ob_expr_json_schema_validation_report.cpp	<file-scope>#const_cast<char*>("")	const_cast<char *>	31	literal
+src/sql/engine/expr/ob_expr_json_schema_validation_report.cpp	<file-scope>#const_cast<char*>("")#2	const_cast<char *>	32	literal
+src/sql/engine/expr/ob_expr_json_schema_validation_report.cpp	<file-scope>#const_cast<char*>("")#3	const_cast<char *>	33	literal
+src/sql/engine/expr/ob_expr_json_schema_validation_report.cpp	<file-scope>#const_cast<char*>("")#4	const_cast<char *>	34	literal
+src/sql/engine/expr/ob_expr_json_schema_validation_report.cpp	<file-scope>#const_cast<char*>("")#5	const_cast<char *>	35	literal
+src/sql/engine/expr/ob_expr_json_schema_validation_report.cpp	<file-scope>#const_cast<char*>("")#6	const_cast<char *>	36	literal
+src/sql/engine/expr/ob_expr_json_schema_validation_report.cpp	<file-scope>#const_cast<char*>("")#7	const_cast<char *>	37	literal
+src/sql/engine/expr/ob_expr_json_schema_validation_report.cpp	<file-scope>#const_cast<char*>("")#8	const_cast<char *>	38	literal
+src/sql/engine/expr/ob_expr_lower.cpp	ObExprLower::calc#ObCharset::casedn(src)	ObCharset::casedn in-place case conversion	109	borrowed:param(char*)
+src/sql/engine/expr/ob_expr_lower.cpp	ObExprUpper::calc#ObCharset::caseup(src)	ObCharset::caseup in-place case conversion	133	borrowed:param(char*)
+src/sql/engine/expr/ob_expr_lower.cpp	calc_common_inner#const_cast<char*>(m_text.ptr())	const_cast<char *>	201	borrowed:param(ObString&)
+src/sql/engine/expr/ob_expr_lower.cpp	calc_common_inner#ObCharset::casedn(src_str)	ObCharset::casedn in-place case conversion	203	
+src/sql/engine/expr/ob_expr_lower.cpp	calc_common_inner#ObCharset::caseup(src_str)	ObCharset::caseup in-place case conversion	204	
+src/sql/engine/expr/ob_expr_md5.cpp	ObExprMd5::calc_md5#ObCharset::casedn(md5_hex_res_buf)	ObCharset::casedn in-place case conversion	99	
+src/sql/engine/expr/ob_expr_operator.cpp	ObExprKMPSearchCtx::substring_index_search#const_cast<char*>(pattern_.ptr())	const_cast<char *>	5445	borrowed:member
+src/sql/engine/expr/ob_expr_operator.cpp	ObExprKMPSearchCtx::substring_index_search#const_cast<char*>(text.ptr())	const_cast<char *>	5447	borrowed:param(ObString&)
+src/sql/engine/expr/ob_expr_operator.cpp	ObExprKMPSearchCtx::substring_index_search#const_cast<char*>(text.ptr())#2	const_cast<char *>	5454	borrowed:param(ObString&)
+src/sql/engine/expr/ob_expr_operator.cpp	ObExprKMPSearchCtx::substring_index_search#const_cast<char*>(pattern_.ptr())#2	const_cast<char *>	5457	borrowed:member
+src/sql/engine/expr/ob_expr_operator.cpp	ObExprKMPSearchCtx::substring_index_search#const_cast<char*>(text.ptr())#3	const_cast<char *>	5459	borrowed:param(ObString&)
+src/sql/engine/expr/ob_expr_operator.cpp	ObExprKMPSearchCtx::substring_index_search#const_cast<char*>(text.ptr()+static_cast<int32_t>(pos+pattern_.length()))	const_cast<char *>	5467	borrowed:param(ObString&)
+src/sql/engine/expr/ob_expr_operator.cpp	ObExprKMPSearchCtx::substring_index_search#const_cast<char*>(text.ptr())#4	const_cast<char *>	5474	borrowed:param(ObString&)
+src/sql/engine/expr/ob_expr_pl_sqlcode_sqlerrm.cpp	ObExprPLSQLCodeSQLErrm::eval_pl_sql_code_errm#const_cast<char*>(wb->get_err_msg())	const_cast<char *>	123	
+src/sql/engine/expr/ob_expr_pl_sqlcode_sqlerrm.cpp	ObExprPLSQLCodeSQLErrm::eval_pl_sql_code_errm#const_cast<char*>(err_msg)	const_cast<char *>	131	
+src/sql/engine/expr/ob_expr_pl_sqlcode_sqlerrm.cpp	ObExprPLSQLCodeSQLErrm::eval_pl_sql_code_errm#const_cast<char*>(wb->get_err_msg())#2	const_cast<char *>	151	
+src/sql/engine/expr/ob_expr_pl_sqlcode_sqlerrm.cpp	ObExprPLSQLCodeSQLErrm::eval_pl_sql_code_errm#const_cast<char*>(err_msg)#2	const_cast<char *>	158	
+src/sql/engine/expr/ob_expr_st_geomfromewkb.cpp	ObExprPrivSTGeomFromEWKB::get_header_info_from_ewkb#const_cast<char*>(ewkb.ptr()+WKB_GEO_BO_SIZE)	const_cast<char *>	165	borrowed:param(ObString&)
+src/sql/engine/expr/ob_expr_st_geomfromewkb.cpp	ObExprPrivSTGeomFromEWKB::get_header_info_from_ewkb#const_cast<char*>(ewkb.ptr()+EWKB_COMMON_WKB_HEADER_LEN)	const_cast<char *>	192	borrowed:param(ObString&)
+src/sql/engine/expr/ob_expr_st_geomfromewkb.cpp	ObExprPrivSTGeomFromEWKB::construct_ewkb_data#const_cast<char*>(ewkb.ptr()+WKB_GEO_BO_SIZE)	const_cast<char *>	210	borrowed:param(ObString&)
+src/sql/engine/expr/ob_expr_st_geomfromewkb.cpp	ObExprPrivSTGeomFromEWKB::construct_ewkb_data#const_cast<char*>(ewkb.ptr()+EWKB_COMMON_WKB_HEADER_LEN)	const_cast<char *>	216	borrowed:param(ObString&)
+src/sql/engine/expr/ob_expr_st_geomfromewkb.cpp	ObExprPrivSTGeomFromEWKB::construct_ewkb_data#const_cast<char*>(ewkb.ptr()+WKB_GEO_BO_SIZE)#2	const_cast<char *>	222	borrowed:param(ObString&)
+src/sql/engine/expr/ob_expr_st_geomfromwkb.cpp	ObIExprSTGeomFromWKB::get_type_bo_from_wkb_without_srid#const_cast<char*>(wkb.ptr()+WKB_GEO_BO_SIZE)	const_cast<char *>	277	borrowed:param(ObString&)
+src/sql/engine/expr/ob_expr_trim.cpp	ObExprTrim::trim#const_cast<char*>(text.ptr()+start)	const_cast<char *>	171	borrowed:param(ObString&)
+src/sql/engine/expr/ob_expr_trim.cpp	ObExprTrim::trim2#const_cast<char*>(text.ptr()+start)	const_cast<char *>	211	borrowed:param(ObString&)
+src/sql/engine/px/p2p_datahub/ob_pushdown_topn_filter_msg.cpp	ObPushDownTopNFilterMsg::dynamic_copy_cell#const_cast<char*>(target.ptr_)	const_cast<char *>	437	borrowed:param(ObDatum&)
+src/sql/engine/px/p2p_datahub/ob_runtime_filter_msg.cpp	ObRFRangeFilterMsg::dynamic_copy_cell#const_cast<char*>(target.ptr_)	const_cast<char *>	774	borrowed:param(ObDatum&)
+src/sql/engine/recursive_cte/ob_fake_cte_table_op.cpp	ObFakeCTETableOp::to_expr#const_cast<char*>(dst.ptr_)	const_cast<char *>	317	
+src/sql/engine/recursive_cte/ob_fake_cte_table_op.cpp	ObFakeCTETableOp::attach_rows#const_cast<char*>(dst.ptr_)	const_cast<char *>	364	
+src/sql/engine/recursive_cte/ob_fake_cte_table_op.cpp	ObFakeCTETableOp::attach_rows#const_cast<char*>(dst.ptr_)#2	const_cast<char *>	375	
+src/sql/engine/window_function/ob_window_function_op.cpp	ObWindowFunctionOp::copy_datum_row#const_cast<char*>(row.payload_)	const_cast<char *>	2396	borrowed:param(StoredRow&)
+src/sql/ob_sql_utils.cpp	ObSQLUtils::check_and_convert_db_name#ObCharset::casedn(last_name)	ObCharset::casedn in-place case conversion	686	local:view
+src/sql/ob_sql_utils.cpp	ObSQLUtils::check_and_convert_table_name#ObCharset::casedn(name)	ObCharset::casedn in-place case conversion	756	borrowed:param(ObString&)
+src/sql/ob_sql_utils.cpp	ObSQLNameService::resolve_table_name#str_tolower(database_name.ptr())	in-place case helper str_tolower	3862	borrowed:param(ObString&)
+src/sql/ob_sql_utils.cpp	ObSQLNameService::resolve_table_name#str_tolower(table_name.ptr())	in-place case helper str_tolower	3863	borrowed:param(ObString&)
+src/sql/optimizer/stat/ob_opt_stat_sql_service.cpp	ObOptStatSqlService::get_compressed_llc_bitmap#const_cast<char*>(bitmap_buf)	const_cast<char *>	1264	borrowed:param(char*)
+src/sql/optimizer/stat/ob_opt_stat_sql_service.cpp	ObOptStatSqlService::get_decompressed_llc_bitmap#const_cast<char*>(comp_buf)	const_cast<char *>	1286	borrowed:param(char*)
+src/sql/parser/ob_fast_parser.cpp	ObFastParserBase::parse_integer#const_cast<char*>(node->str_value_)	const_cast<char *>	1643	borrowed:parse-node
+src/sql/parser/parse_malloc.cpp	charset_upper#str_toupper(src_ptr)	in-place case helper str_toupper	56	borrowed:param(char*)
+src/sql/parser/parse_malloc.cpp	replace_invalid_character#const_cast<char*>(str)	const_cast<char *>	178	borrowed:param(char*)
+src/sql/plan_cache/ob_prepare_stmt_struct.cpp	ObPsStmtInfo::add_fixed_raw_param#const_cast<char*>(param->node_->str_value_)	const_cast<char *>	371	borrowed:parse-node
+src/sql/resolver/cmd/ob_alter_system_resolver.cpp	ObSetConfigResolver::resolve#ObCharset::casedn(name)	ObCharset::casedn in-place case conversion	609	local:view
+src/sql/resolver/cmd/ob_alter_system_resolver.cpp	ObAlterSystemSetResolver::resolve#ObCharset::casedn(name)	ObCharset::casedn in-place case conversion	898	local:view
+src/sql/resolver/cmd/ob_alter_system_resolver.cpp	ObAlterSystemSetResolver::resolve#ObCharset::casedn(var_node.variable_name_)	ObCharset::casedn in-place case conversion	991	
+src/sql/resolver/cmd/ob_alter_system_resolver.cpp	ObResetConfigResolver::resolve#ObCharset::casedn(name)	ObCharset::casedn in-place case conversion	1060	local:view
+src/sql/resolver/cmd/ob_alter_system_resolver.cpp	ObAlterSystemResetResolver::resolve#ObCharset::casedn(name)	ObCharset::casedn in-place case conversion	1159	local:view
+src/sql/resolver/cmd/ob_load_data_resolver.cpp	ObLoadDataResolver::resolve_hints#const_cast<char*>(node.str_value_)	const_cast<char *>	446	borrowed:parse-node
+src/sql/resolver/cmd/ob_load_data_resolver.cpp	ObLoadDataResolver::resolve_user_vars_node#const_cast<char*>(node.children_[0]->str_value_)	const_cast<char *>	839	borrowed:parse-node
+src/sql/resolver/cmd/ob_load_data_resolver.cpp	ObLoadDataResolver::resolve_user_vars_node#const_cast<char*>(node.children_[0]->str_value_)#2	const_cast<char *>	843	borrowed:parse-node
+src/sql/resolver/cmd/ob_load_data_resolver.cpp	ObLoadDataResolver::resolve_partitions#ObCharset::casedn(partition_name)	ObCharset::casedn in-place case conversion	1293	local:view
+src/sql/resolver/cmd/ob_set_transaction_resolver.cpp	ObSetTransactionResolver::resolve#ObCharset::casedn(isolation_var_node.variable_name_)	ObCharset::casedn in-place case conversion	74	
+src/sql/resolver/cmd/ob_set_transaction_resolver.cpp	ObSetTransactionResolver::resolve#ObCharset::casedn(access_var_node.variable_name_)	ObCharset::casedn in-place case conversion	75	
+src/sql/resolver/cmd/ob_show_resolver.cpp	ObShowResolver::resolve_show_from_table#const_cast<char*>(relation_node->str_value_)	const_cast<char *>	1579	borrowed:parse-node
+src/sql/resolver/cmd/ob_variable_set_resolver.cpp	ObVariableSetResolver::resolve#ObCharset::casedn(var_node.variable_name_)	ObCharset::casedn in-place case conversion	130	
+src/sql/resolver/cmd/ob_variable_set_resolver.cpp	ObAlterSessionSetResolver::resolve#ObCharset::casedn(var_node.variable_name_)	ObCharset::casedn in-place case conversion	375	
+src/sql/resolver/dcl/ob_grant_resolver.cpp	ObGrantResolver::resolve_grant_user#const_cast<char*>(grant_user->children_[0]->str_value_)	const_cast<char *>	103	borrowed:parse-node
+src/sql/resolver/dcl/ob_grant_resolver.cpp	ObGrantResolver::resolve_grant_user#const_cast<char*>(grant_user->children_[3]->str_value_)	const_cast<char *>	108	borrowed:parse-node
+src/sql/resolver/dcl/ob_grant_resolver.cpp	ObGrantResolver::resolve_grant_user#const_cast<char*>(grant_user->str_value_)	const_cast<char *>	125	borrowed:parse-node
+src/sql/resolver/dcl/ob_grant_resolver.cpp	ObGrantResolver::resolve_mysql#const_cast<char*>(user_node->children_[0]->str_value_)	const_cast<char *>	435	borrowed:parse-node
+src/sql/resolver/dcl/ob_grant_resolver.cpp	ObGrantResolver::resolve_mysql#const_cast<char*>(user_node->children_[1]->str_value_)	const_cast<char *>	464	borrowed:parse-node
+src/sql/resolver/dcl/ob_grant_resolver.h	ObGrantResolver::resolve_col_names_mysql#const_cast<char*>(child_node->str_value_)	const_cast<char *>	140	borrowed:parse-node
+src/sql/resolver/ddl/ob_analyze_stmt_resolver.cpp	ObAnalyzeStmtResolver::resolve_mysql_column_bucket_info#const_cast<char*>(column_node->children_[i]->str_value_)	const_cast<char *>	185	borrowed:parse-node
+src/sql/resolver/ddl/ob_create_index_resolver.cpp	ObCreateIndexResolver::resolve_index_column_node#const_cast<char*>(col_node->children_[0]->str_value_)	const_cast<char *>	147	borrowed:parse-node
+src/sql/resolver/ddl/ob_create_table_resolver.cpp	ObCreateTableResolver::resolve_index_node#const_cast<char*>(index_column_node->children_[0]->str_value_)	const_cast<char *>	1602	borrowed:parse-node
+src/sql/resolver/ddl/ob_create_table_resolver.cpp	ObCreateTableResolver::resolve_index_node#const_cast<char*>(index_column_node->children_[0]->str_value_)#2	const_cast<char *>	1765	borrowed:parse-node
+src/sql/resolver/ddl/ob_create_table_resolver.cpp	ObCreateTableResolver::resolve_index_node#const_cast<char*>(node->children_[0]->children_[2]->str_value_)	const_cast<char *>	1811	borrowed:parse-node
+src/sql/resolver/ddl/ob_create_table_resolver.cpp	ObCreateTableResolver::resolve_primary_key_node_in_heap_table#const_cast<char*>(key_node->str_value_)	const_cast<char *>	2196	borrowed:parse-node
+src/sql/resolver/ddl/ob_create_table_resolver.cpp	ObCreateTableResolver::resolve_single_column_primary_key_node#const_cast<char*>(key_node->str_value_)	const_cast<char *>	2299	borrowed:parse-node
+src/sql/resolver/ddl/ob_create_view_resolver.cpp	ObCreateViewResolver::resolve_select_node_for_force_view#const_cast<char*>(alias_node->str_value_)	const_cast<char *>	831	borrowed:parse-node
+src/sql/resolver/ddl/ob_ddl_resolver.cpp	ObDDLResolver::resolve_default_value#const_cast<char*>(def_val->str_value_)	const_cast<char *>	317	borrowed:parse-node
+src/sql/resolver/ddl/ob_ddl_resolver.cpp	ObDDLResolver::resolve_default_value#const_cast<char*>(def_val->str_value_)#2	const_cast<char *>	333	borrowed:parse-node
+src/sql/resolver/ddl/ob_ddl_resolver.cpp	ObDDLResolver::resolve_table_option#const_cast<char*>(option_node->children_[0]->str_value_)	const_cast<char *>	1080	borrowed:parse-node
+src/sql/resolver/ddl/ob_ddl_resolver.cpp	ObDDLResolver::resolve_normal_column_attribute#const_cast<char*>(comment.ptr())	const_cast<char *>	2178	local:view
+src/sql/resolver/ddl/ob_ddl_resolver.cpp	ObDDLResolver::resolve_generated_column_attribute#const_cast<char*>(comment.ptr())	const_cast<char *>	2422	local:view
+src/sql/resolver/ddl/ob_ddl_resolver.cpp	ObDDLResolver::resolve_hash_or_key_partition_basic_infos#ObCharset::casedn(func_expr_name)	ObCharset::casedn in-place case conversion	6202	borrowed:param(ObString&)
+src/sql/resolver/dml/ob_dml_resolver.cpp	ObDMLResolver::resolve_into_variables#ObCharset::casedn(var_name)	ObCharset::casedn in-place case conversion	1351	local:view
+src/sql/resolver/dml/ob_dml_resolver.cpp	ObDMLResolver::resolve_using_columns#const_cast<char*>(child_node->str_value_)	const_cast<char *>	2860	borrowed:parse-node
+src/sql/resolver/dml/ob_dml_resolver.cpp	ObDMLResolver::resolve_partitions#ObCharset::casedn(partition_name)	ObCharset::casedn in-place case conversion	5640	local:view
+src/sql/resolver/dml/ob_dml_resolver.cpp	ObDMLResolver::add_fake_schema#ObCharset::casedn(tblname)	ObCharset::casedn in-place case conversion	10576	local:view
+src/sql/resolver/dml/ob_dml_resolver.cpp	ObDMLResolver::resolve_basic_table_with_cte#const_cast<char*>(parse_tree.children_[1]->str_value_)	const_cast<char *>	10735	borrowed:parse-node
+src/sql/resolver/dml/ob_insert_resolver.cpp	ObInsertResolver::resolve_values#const_cast<char*>(table_alias_node->str_value_)	const_cast<char *>	527	borrowed:parse-node
+src/sql/resolver/dml/ob_insert_resolver.cpp	ObInsertResolver::check_table_and_column_name#ObCharset::casedn(ori_table_name)	ObCharset::casedn in-place case conversion	614	borrowed:param(ObString&)
+src/sql/resolver/dml/ob_insert_resolver.cpp	ObInsertResolver::check_table_and_column_name#ObCharset::casedn(row_alias_table_name)	ObCharset::casedn in-place case conversion	615	borrowed:param(ObString&)
+src/sql/resolver/dml/ob_select_resolver.cpp	ObSelectResolver::resolve_field_list#const_cast<char*>(alias_node->str_value_)	const_cast<char *>	1398	borrowed:parse-node
+src/sql/resolver/dml/ob_select_resolver.cpp	ObSelectResolver::resolve_field_list#const_cast<char*>(alias_node->str_value_)#2	const_cast<char *>	1433	borrowed:parse-node
+src/sql/resolver/dml/ob_select_resolver.cpp	ObSelectResolver::resolve_field_list#const_cast<char*>(alias_node->str_value_)#3	const_cast<char *>	1457	borrowed:parse-node
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	ObRawExprResolverImpl::process_system_variable_node#const_cast<char*>(node->str_value_)	const_cast<char *>	1988	borrowed:parse-node
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	ObRawExprResolverImpl::process_left_value_node#const_cast<char*>(node->str_value_)	const_cast<char *>	2382	borrowed:parse-node
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	ObRawExprResolverImpl::process_left_value_node#ObCharset::casedn(str)	ObCharset::casedn in-place case conversion	2383	local:view
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	ObRawExprResolverImpl::process_window_function_node#const_cast<char*>(sort_expr_node->str_value_)	const_cast<char *>	5833	borrowed:parse-node
+src/sql/resolver/expr/ob_raw_expr_resolver_impl.cpp	ObRawExprResolverImpl::process_bound_node#const_cast<char*>(node->children_[0]->str_value_)	const_cast<char *>	6015	borrowed:parse-node
+src/sql/resolver/expr/ob_raw_expr_util.cpp	ObRawExprUtils::build_get_user_var#ObCharset::casedn(str)	ObCharset::casedn in-place case conversion	4196	local:view
+src/sql/resolver/ob_resolver_utils.cpp	ObResolverUtils::resolve_column_ref#const_cast<char*>(db_node->str_value_)	const_cast<char *>	1592	borrowed:parse-node
+src/sql/resolver/ob_resolver_utils.cpp	ObResolverUtils::resolve_column_ref#const_cast<char*>(relation_node->str_value_)	const_cast<char *>	1598	borrowed:parse-node
+src/sql/resolver/ob_resolver_utils.cpp	ObResolverUtils::resolve_column_ref#const_cast<char*>(column_node->str_value_)	const_cast<char *>	1607	borrowed:parse-node
+src/sql/resolver/ob_resolver_utils.cpp	ObResolverUtils::resolve_column_ref#ObCharset::casedn(column_ref.database_name_)	ObCharset::casedn in-place case conversion	1613	borrowed:param(ObQualifiedName&)
+src/sql/resolver/ob_resolver_utils.cpp	ObResolverUtils::resolve_column_ref#ObCharset::casedn(column_ref.tbl_name_)	ObCharset::casedn in-place case conversion	1614	borrowed:param(ObQualifiedName&)
+src/sql/resolver/ob_resolver_utils.cpp	ObResolverUtils::resolve_const#const_cast<char*>(node->str_value_)	const_cast<char *>	1952	borrowed:parse-node
+src/sql/resolver/ob_resolver_utils.cpp	ObResolverUtils::resolve_const#const_cast<char*>(node->str_value_)#2	const_cast<char *>	1967	borrowed:parse-node
+src/sql/resolver/ob_resolver_utils.cpp	ObResolverUtils::resolve_udf_name_by_parse_node#const_cast<char*>(node->children_[0]->str_value_)	const_cast<char *>	4582	borrowed:parse-node
+src/sql/resolver/ob_resolver_utils.cpp	ObResolverUtils::resolve_udf_name_by_parse_node#const_cast<char*>(node->children_[3]->str_value_)	const_cast<char *>	4585	borrowed:parse-node
+src/sql/resolver/ob_resolver_utils.cpp	ObResolverUtils::resolve_udf_name_by_parse_node#const_cast<char*>(node->children_[2]->str_value_)	const_cast<char *>	4589	borrowed:parse-node
+src/sql/resolver/ob_stmt_resolver.cpp	ObStmtResolver::resolve_table_relation_node_v2#const_cast<char*>(relation_node->str_value_)	const_cast<char *>	74	borrowed:parse-node
+src/sql/resolver/ob_stmt_resolver.cpp	ObStmtResolver::resolve_table_relation_node_v2#const_cast<char*>(db_node->str_value_)	const_cast<char *>	100	borrowed:parse-node
+src/sql/resolver/ob_stmt_resolver.cpp	ObStmtResolver::resolve_ref_factor#const_cast<char*>(relation_node->str_value_)	const_cast<char *>	146	borrowed:parse-node
+src/sql/resolver/ob_stmt_resolver.cpp	ObStmtResolver::resolve_ref_factor#const_cast<char*>(db_node->str_value_)	const_cast<char *>	163	borrowed:parse-node
+src/sql/resolver/ob_stmt_resolver.cpp	ObStmtResolver::resolve_database_factor#const_cast<char*>(node->str_value_)	const_cast<char *>	184	borrowed:parse-node
+src/sql/resolver/ob_stmt_resolver.cpp	ObStmtResolver::normalize_table_or_database_names#ObCharset::casedn(name)	ObCharset::casedn in-place case conversion	201	borrowed:param(ObString&)
+src/sql/session/ob_basic_session_info.cpp	ObBasicSessionInfo::get_database_name#const_cast<char*>(thread_data_.database_name_)	const_cast<char *>	705	borrowed:member
+src/sql/session/ob_basic_session_info.cpp	ObBasicSessionInfo::init_system_variables#const_cast<char*>(ObSysVariables::get_name(i).ptr())	const_cast<char *>	834	
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::get_current_query_string#const_cast<char*>(thread_data_.cur_query_)	const_cast<char *>	1864	borrowed:member
+src/sql/session/ob_basic_session_info.h	ObBasicSessionInfo::get_top_query_string#const_cast<char*>(thread_data_.top_query_)	const_cast<char *>	1871	borrowed:member
+src/storage/access/ob_micro_block_handle_mgr.cpp	ObMicroBlockDataHandle::try_release_loaded_block#const_cast<char*>(loaded_block_data_.get_buf())	const_cast<char *>	253	borrowed:member
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	ObConstDecoder::batch_decode_without_dict#const_cast<char*>(datums[i].ptr_)	const_cast<char *>	178	
+src/storage/blocksstable/encoding/ob_const_decoder.cpp	ObConstDecoder::batch_decode_without_dict#const_cast<char*>(datums[i].ptr_)#2	const_cast<char *>	185	
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	DictFixBatchDecodeFunc_T::dict_fix_batch_decode_func#const_cast<char*>(datum.ptr_)	const_cast<char *>	51	
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	<file-scope>#const_cast<char*>(datum.ptr_)	const_cast<char *>	83	
+src/storage/blocksstable/encoding/ob_dict_decoder.cpp	DictVarBatchDecodeFunc_T::dict_var_batch_decode_func#const_cast<char*>(datum.ptr_)	const_cast<char *>	117	
+src/storage/blocksstable/encoding/ob_encoding_bitset.h	ObBitMapMetaReader::read#const_cast<char*>(buf)	const_cast<char *>	593	borrowed:param(char*)
+src/storage/blocksstable/encoding/ob_encoding_bitset.h	ObBitMapMetaReader::read#const_cast<char*>(buf+meta->ext_offset_)	const_cast<char *>	601	
+src/storage/blocksstable/encoding/ob_encoding_bitset.h	ObBitMapMetaReader::read_exc_cell#const_cast<char*>(buf+meta->data_offset_)	const_cast<char *>	634	
+src/storage/blocksstable/encoding/ob_encoding_bitset.h	ObBitMapMetaReader::read_exc_cell#const_cast<char*>(datum.ptr_)	const_cast<char *>	638	borrowed:param(ObDatum&)
+src/storage/blocksstable/encoding/ob_encoding_bitset.h	ObBitMapMetaReader::read_exc_cell#const_cast<char*>(datum.ptr_)#2	const_cast<char *>	647	borrowed:param(ObDatum&)
+src/storage/blocksstable/encoding/ob_encoding_bitset.h	ObBitMapMetaReader::read_exc_cell#const_cast<char*>(datum.ptr_)#3	const_cast<char *>	672	borrowed:param(ObDatum&)
+src/storage/blocksstable/encoding/ob_encoding_bitset.h	ObBitMapMetaReader::read_exc_cell#const_cast<char*>(datum.ptr_)#4	const_cast<char *>	676	borrowed:param(ObDatum&)
+src/storage/blocksstable/encoding/ob_encoding_bitset.h	ObBitMapMetaReader::read_exc_cell#const_cast<char*>(datum.ptr_)#5	const_cast<char *>	679	borrowed:param(ObDatum&)
+src/storage/blocksstable/encoding/ob_encoding_bitset.h	ObBitMapMetaReader::read_exc_cell#const_cast<char*>(datum.ptr_)#6	const_cast<char *>	713	borrowed:param(ObDatum&)
+src/storage/blocksstable/encoding/ob_encoding_bitset.h	ObBitMapMetaReader::read_exc_cell#const_cast<char*>(datum.ptr_)#7	const_cast<char *>	774	borrowed:param(ObDatum&)
+src/storage/blocksstable/encoding/ob_encoding_bitset.h	<file-scope>#const_cast<char*>(buf+meta->data_offset_)	const_cast<char *>	837	
+src/storage/blocksstable/encoding/ob_encoding_bitset.h	ObBitMapExcValDecodeFunc::decode#const_cast<char*>(store_data+meta->ext_offset_)	const_cast<char *>	875	
+src/storage/blocksstable/encoding/ob_encoding_util.h	batch_load_number_data_to_datum#const_cast<char*>(datums[i].ptr_)	const_cast<char *>	344	
+src/storage/blocksstable/encoding/ob_encoding_util.h	batch_load_number_data_to_datum#const_cast<char*>(datums[i].ptr_)#2	const_cast<char *>	348	
+src/storage/blocksstable/encoding/ob_encoding_util.h	batch_load_number_data_to_datum#const_cast<char*>(datums[i].ptr_)#3	const_cast<char *>	351	
+src/storage/blocksstable/encoding/ob_encoding_util.h	batch_load_ots_intvl_data_to_datum#const_cast<char*>(datums[i].ptr_)	const_cast<char *>	376	
+src/storage/blocksstable/encoding/ob_encoding_util.h	batch_load_data_to_datum#const_cast<char*>(datums[i].ptr_)	const_cast<char *>	412	
+src/storage/blocksstable/encoding/ob_encoding_util.h	batch_load_data_to_datum#const_cast<char*>(datums[i].ptr_)#2	const_cast<char *>	428	
+src/storage/blocksstable/encoding/ob_encoding_util.h	load_data_to_datum#const_cast<char*>(datum.ptr_)	const_cast<char *>	483	borrowed:param(ObDatum&)
+src/storage/blocksstable/encoding/ob_encoding_util.h	load_data_to_datum#const_cast<char*>(datum.ptr_)#2	const_cast<char *>	488	borrowed:param(ObDatum&)
+src/storage/blocksstable/encoding/ob_encoding_util.h	load_data_to_datum#const_cast<char*>(datum.ptr_)#3	const_cast<char *>	492	borrowed:param(ObDatum&)
+src/storage/blocksstable/encoding/ob_encoding_util.h	load_data_to_datum#const_cast<char*>(datum.ptr_)#4	const_cast<char *>	495	borrowed:param(ObDatum&)
+src/storage/blocksstable/encoding/ob_encoding_util.h	load_data_to_datum#const_cast<char*>(datum.ptr_)#5	const_cast<char *>	501	borrowed:param(ObDatum&)
+src/storage/blocksstable/encoding/ob_encoding_util.h	load_data_to_datum#const_cast<char*>(datum.ptr_)#6	const_cast<char *>	517	borrowed:param(ObDatum&)
+src/storage/blocksstable/encoding/ob_icolumn_decoder.cpp	ObIColumnDecoder::get_null_count#const_cast<char*>(row_data)	const_cast<char *>	176	
+src/storage/blocksstable/encoding/ob_integer_array.h	ObIntegerArrayGenerator::init#const_cast<char*>(data)	const_cast<char *>	78	borrowed:param(char*)
+src/storage/blocksstable/encoding/ob_integer_array.h	ObIntegerArrayGenerator::get_array#const_cast<char*>(data_)	const_cast<char *>	82	borrowed:member
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.cpp	ObIntegerBaseDiffDecoder::decode#const_cast<char*>(datum.ptr_)	const_cast<char *>	64	borrowed:param(ObDatum&)
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.cpp	ObIntegerBaseDiffDecoder::decode#const_cast<char*>(datum.ptr_)#2	const_cast<char *>	71	borrowed:param(ObDatum&)
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.cpp	macro:INT_DIFF_UNPACK_VALUES#const_cast<char*>(datums[i].ptr_)	const_cast<char *>	106	
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.cpp	macro:INT_DIFF_UNPACK_VALUES#const_cast<char*>(datums[i].ptr_)#2	const_cast<char *>	119	
+src/storage/blocksstable/encoding/ob_integer_base_diff_decoder.cpp	ObIntegerBaseDiffDecoder::batch_decode#const_cast<char*>(datums[i].ptr_)	const_cast<char *>	202	
+src/storage/blocksstable/encoding/ob_micro_block_decoder.cpp	ObEncodeBlockGetReader::get_all_columns#const_cast<char*>(row_data)	const_cast<char *>	573	borrowed:param(char*)
+src/storage/blocksstable/encoding/ob_micro_block_decoder.cpp	ObEncodeBlockGetReader::locate_row#const_cast<char*>(row_data)	const_cast<char *>	615	borrowed:param(char*&)
+src/storage/blocksstable/encoding/ob_micro_block_decoder.cpp	ObMicroBlockDecoder::decode_cells#const_cast<char*>(row_data)	const_cast<char *>	1225	borrowed:param(char*)
+src/storage/blocksstable/encoding/ob_micro_block_decoder.cpp	ObMicroBlockDecoder::compare_rowkey#const_cast<char*>(row_data)	const_cast<char *>	1287	
+src/storage/blocksstable/encoding/ob_micro_block_decoder.cpp	ObMicroBlockDecoder::compare_rowkey#const_cast<char*>(row_data)#2	const_cast<char *>	1323	
+src/storage/blocksstable/encoding/ob_micro_block_decoder.cpp	ObMicroBlockDecoder::filter_pushdown_filter#const_cast<char*>(row_data)	const_cast<char *>	1511	
+src/storage/blocksstable/encoding/ob_micro_block_decoder.cpp	ObMicroBlockDecoder::filter_pushdown_retro#const_cast<char*>(row_data)	const_cast<char *>	1652	
+src/storage/blocksstable/encoding/ob_micro_block_decoder.cpp	ObMicroBlockDecoder::get_col_datums#const_cast<char*>(row_data)	const_cast<char *>	1904	
+src/storage/blocksstable/encoding/ob_micro_block_decoder.cpp	ObMicroBlockDecoder::get_column_datum#const_cast<char*>(row_data)	const_cast<char *>	1938	
+src/storage/blocksstable/encoding/ob_micro_block_encoder.cpp	ObMicroBlockEncoder::copy_cell#const_cast<char*>(dest.ptr_)	const_cast<char *>	1017	borrowed:param(ObDatum&)
+src/storage/blocksstable/encoding/ob_micro_block_encoder.cpp	ObMicroBlockEncoder::copy_cell#const_cast<char*>(dest.ptr_)#2	const_cast<char *>	1019	borrowed:param(ObDatum&)
+src/storage/blocksstable/encoding/ob_micro_block_encoder.cpp	ObMicroBlockEncoder::process_large_row#const_cast<char*>(dest_datum.ptr_)	const_cast<char *>	1063	
+src/storage/blocksstable/encoding/ob_micro_block_encoder.cpp	ObMicroBlockEncoder::process_large_row#const_cast<char*>(dest_datum.ptr_)#2	const_cast<char *>	1065	
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	RawVarBatchDecodeFunc_T::raw_var_batch_decode_func#const_cast<char*>(datum.ptr_)	const_cast<char *>	122	
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	RawFixBatchDecodeFunc_T::raw_fix_batch_decode_func#const_cast<char*>(datum.ptr_)	const_cast<char *>	148	
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	<file-scope>#const_cast<char*>(datums[i].ptr_)	const_cast<char *>	173	
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	ObRawDecoder::decode#const_cast<char*>(datum.ptr_)	const_cast<char *>	292	borrowed:param(ObDatum&)
+src/storage/blocksstable/encoding/ob_raw_decoder.cpp	ObRawDecoder::batch_decode_general#const_cast<char*>(datums[i].ptr_)	const_cast<char *>	475	
+src/storage/blocksstable/index_block/ob_index_block_aggregator.cpp	ObIColAggregator::copy_agg_datum#const_cast<char*>(dst.ptr_)	const_cast<char *>	130	borrowed:param(ObDatum&)
+src/storage/blocksstable/index_block/ob_index_block_tree_cursor.cpp	ObIndexBlockTreePath::PathItemStack::release_item_memory#const_cast<char*>(release_item.block_data_.buf_)	const_cast<char *>	242	borrowed:param(ObIndexBlockTreePathItem&)
+src/storage/blocksstable/index_block/ob_index_block_tree_cursor.cpp	ObIndexBlockTreeCursor::release_held_path_item#const_cast<char*>(held_item.block_data_.buf_)	const_cast<char *>	908	borrowed:param(ObIndexBlockTreePathItem&)
+src/storage/blocksstable/index_block/ob_sstable_sec_meta_iterator.cpp	ObSSTableSecMetaIterator::open#const_cast<char*>(root_block.buf_)	const_cast<char *>	104	
+src/storage/blocksstable/ob_data_buffer.h	DEFINE_DESERIALIZE(ObBufferHolder)#const_cast<char*>(common::serialization::decode_vstr(buf,data_len,pos,&len))	const_cast<char *>	161	
+src/storage/blocksstable/ob_data_buffer.h	ObBufferWriter::assign#const_cast<char*>(buf)	const_cast<char *>	316	borrowed:param(char*)
+src/storage/blocksstable/ob_data_buffer.h	ObBufferReader::assign#const_cast<char*>(buf)	const_cast<char *>	493	borrowed:param(char*)
+src/storage/blocksstable/ob_macro_block_bare_iterator.cpp	ObMicroBlockBareIterator::get_micro_block_header#const_cast<char*>(buf)	const_cast<char *>	542	borrowed:param(char*)
+src/storage/blocksstable/ob_macro_block_writer.cpp	ObMicroBlockBufferHelper::check_micro_block#const_cast<char*>(uncompressed_buf)	const_cast<char *>	120	borrowed:param(char*)
+src/storage/blocksstable/ob_micro_block_cache.cpp	ObIndexMicroBlockCache::load_block#const_cast<char*>(block_data.get_buf())	const_cast<char *>	1364	borrowed:param(ObMicroBlockData&)
+src/storage/blocksstable/ob_sstable.cpp	ObSSTable::get_last_rowkey#const_cast<char*>(root_block.buf_)	const_cast<char *>	1432	
+src/storage/blocksstable/ob_sstable_macro_block_header.cpp	ObSSTableMacroBlockHeader::deserialize#const_cast<char*>(buf+tmp_pos)	const_cast<char *>	226	
+src/storage/blocksstable/ob_sstable_macro_block_header.cpp	ObSSTableMacroBlockHeader::deserialize#const_cast<char*>(buf+tmp_pos)#2	const_cast<char *>	231	
+src/storage/blocksstable/ob_sstable_macro_block_header.cpp	ObSSTableMacroBlockHeader::deserialize#const_cast<char*>(buf+tmp_pos)#3	const_cast<char *>	236	
+src/storage/blockstore/ob_object_reader_writer.cpp	ObObjectReadHandle::get_data#const_cast<char*>(data_buf)	const_cast<char *>	342	
+src/storage/blockstore/ob_object_reader_writer.cpp	ObObjectReadHandle::get_data#const_cast<char*>(data_buf)#2	const_cast<char *>	373	borrowed:param(char*)
+src/storage/blockstore/ob_object_reader_writer.cpp	ObObjectReaderWriter::inner_write_block#const_cast<char*>(object_info.buffer_)	const_cast<char *>	1027	
+src/storage/blockstore/ob_object_reader_writer.cpp	ObObjectReaderWriter::parse_data_from_object#const_cast<char*>(block_buf)	const_cast<char *>	1157	
+src/storage/blockstore/ob_object_reader_writer.cpp	ObObjectReaderWriter::parse_data_from_object#const_cast<char*>(block_buf)#2	const_cast<char *>	1160	
+src/storage/ddl/ob_ddl_common_storage_impl.cpp	check_skip_handle_lob_column#const_cast<char*>(datum.ptr_)	const_cast<char *>	86	borrowed:param(ObDatum&)
+src/storage/ddl/ob_ddl_common_storage_impl.cpp	check_skip_handle_lob_column#const_cast<char*>(datum.ptr_)#2	const_cast<char *>	140	
+src/storage/ddl/ob_ddl_common_storage_impl.cpp	check_skip_handle_lob_column#const_cast<char*>(datum.ptr_)#3	const_cast<char *>	153	
+src/storage/ddl/ob_ddl_common_storage_impl.cpp	oceanbase::storage::ObDDLStorageUtil::handle_lob_columns#const_cast<char*>(temp_datum.ptr_)	const_cast<char *>	342	
+src/storage/ddl/ob_ddl_common_storage_impl.cpp	ObDDLStorageUtil::handle_lob_column#const_cast<char*>(temp_datum.ptr_)	const_cast<char *>	1120	
+src/storage/ddl/ob_ddl_common_storage_impl.cpp	ObDDLStorageUtil::handle_lob_column#const_cast<char*>(temp_datum.ptr_)#2	const_cast<char *>	1149	
+src/storage/ddl/ob_ddl_common_storage_impl.cpp	ObDDLStorageUtil::handle_lob_column#const_cast<char*>(datum.ptr_)	const_cast<char *>	1203	
+src/storage/ddl/ob_ddl_discrete_vector.cpp	ObDDLDiscreteVector::append_datum#const_cast<char*>(datum.ptr_)	const_cast<char *>	310	
+src/storage/ddl/ob_ddl_discrete_vector.cpp	ObDDLDiscreteVector::append_datum#const_cast<char*>(datum.ptr_)#2	const_cast<char *>	322	
+src/storage/ddl/ob_tablet_slice_writer.cpp	ObBatchSliceWriter::convert_to_storage_vector#const_cast<char*>(temp_datum.ptr_)	const_cast<char *>	880	
+src/storage/lob/ob_lob_manager.cpp	ObLobManager::write_inrow_inner#const_cast<char*>(new_lob_common->get_inrow_data_ptr())	const_cast<char *>	1401	
+src/storage/lob/ob_lob_tablet_dml.cpp	ObLobTabletDmlHelper::register_ext_info_commit_cb#const_cast<char*>(col_data.get_string().ptr())	const_cast<char *>	434	borrowed:param(ObDatum&)
+src/storage/memtable/ob_memtable_mutator.cpp	ObMemtableMutatorIterator::deserialize#const_cast<char*>(buf+pos)	const_cast<char *>	870	
+src/storage/ob_row_reshape.cpp	ObRowReshapeUtil::reshape_row#const_cast<char*>(str)	const_cast<char *>	139	
+src/storage/slog/ob_storage_log_writer.cpp	ObStorageLogWriter::aggregate_multi_log_items#const_cast<char*>(batch_write_buf_.get_buf())	const_cast<char *>	469	borrowed:member
+src/storage/slog_ckpt/ob_linked_macro_block_reader.cpp	ObLinkedMacroBlockReader::iter_read_block#const_cast<char*>(handles_[read_handle_pos].get_buffer())	const_cast<char *>	151	
+src/storage/tablet/ob_tablet_persister.cpp	ObTabletPersister::modify_and_fill_tablet#const_cast<char*>(buf)	const_cast<char *>	368	
+src/storage/tablet/ob_tablet_persister.cpp	ObTabletPersister::copy_from_old_tablet#const_cast<char*>(buf)	const_cast<char *>	403	
