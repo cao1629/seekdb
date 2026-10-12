@@ -642,6 +642,20 @@ static int safe_sd_notify(int unset_environment, const char *state)
 #endif
 }
 
+static void graceful_mark(const char *what, int ret)
+{
+  if (getenv("SEEKDB_GRACEFUL_SHUTDOWN") == nullptr) {
+    return;
+  }
+  FILE *f = fopen("run/graceful.marker", "a");
+  if (f != nullptr) {
+    struct timeval tv;
+    gettimeofday(&tv, nullptr);
+    fprintf(f, "%s %ld.%06d ret=%d\n", what, (long)tv.tv_sec, (int)tv.tv_usec, ret);
+    fclose(f);
+  }
+}
+
 int inner_main(int argc, char *argv[])
 {
 #if defined(__APPLE__)
@@ -818,17 +832,23 @@ int inner_main(int argc, char *argv[])
       if (OB_FAIL(ret)) {
       } else if (OB_FAIL(observer.wait())) {
       }
+      graceful_mark("wait_return", ret);
 
       if (OB_FAIL(ret)) {
         _exit(1);
       }
       observer.destroy();
+      graceful_mark("destroy_end", ret);
+      if (const char *hold = getenv("SEEKDB_GRACEFUL_HOLD_SECONDS")) {
+        sleep(atoi(hold));
+      }
     }
     curl_global_cleanup();
     unlink(PID_FILE_NAME);
   }
 
   LOG_INFO("seekdb exits", "seekdb_version", PACKAGE_STRING);
+  graceful_mark("main_return", ret);
   return ret;
 }
 

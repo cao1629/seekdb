@@ -29,6 +29,8 @@
 #endif
 #include <thread>
 #include "observer/ob_server.h"
+#include "observer/ob_system_package_load_service.h"
+#include "rootserver/ob_ddl_service_launcher.h"
 #include "share/ob_autoincrement_service.h"
 #include "observer/ob_req_time_service.h"
 #include "observer/omt/ob_ai_service.h"
@@ -1490,9 +1492,37 @@ int ObServer::check_if_timezone_usable()
   FLOG_INFO("check if timezone usable", KR(ret), K(stop_), K(timezone_usable));
   return ret;
 }
+static bool graceful_shutdown_enabled()
+{
+  const char *value = getenv("SEEKDB_GRACEFUL_SHUTDOWN");
+  return value != nullptr && value[0] == '1';
+}
+
+static void stop_package_ddl_before_runtime(
+    rootserver::ObDDLServiceLauncher *launcher,
+    rootserver::ObSystemPackageLoadService *loader)
+{
+  static std::atomic<bool> done{false};
+  if (done.exchange(true)) {
+    return;
+  }
+  FLOG_INFO("[GRACEFUL_SHUTDOWN] cancel package DDL begin");
+  if (launcher != nullptr) {
+    launcher->deactivate();
+  }
+  if (loader != nullptr) {
+    loader->stop();
+    loader->wait();
+  }
+  FLOG_INFO("[GRACEFUL_SHUTDOWN] cancel package DDL end");
+}
+
 void ObServer::prepare_stop()
 {
   prepare_stop_ = true;
+  if (graceful_shutdown_enabled()) {
+    stop_package_ddl_before_runtime(mods_ddl_service_launcher_, mods_system_package_load_service_);
+  }
   // reserve some time to switch leader
   ob_usleep(5 * 1000 * 1000);
 }
@@ -1523,6 +1553,12 @@ int ObServer::stop()
   FLOG_INFO("[OBSERVER_NOTICE] stop observer begin");
   LOG_DBA_INFO_V2(OB_SERVER_STOP_BEGIN, "observer stop begin.");
 
+  if (graceful_shutdown_enabled()) {
+    FLOG_INFO("[GRACEFUL_SHUTDOWN] cancel package DDL before stopping services");
+    stop_package_ddl_before_runtime(mods_ddl_service_launcher_, mods_system_package_load_service_);
+    FLOG_INFO("[GRACEFUL_SHUTDOWN] package DDL cancelled");
+  }
+
   FLOG_INFO("begin to stop OB_LOGGER");
   OB_LOGGER.stop();
   FLOG_INFO("stop OB_LOGGER success");
@@ -1540,6 +1576,11 @@ int ObServer::stop()
 
     FLOG_INFO("begin stop signal handle");
     signal_handle_.stop();
+#ifdef __APPLE__
+    if (graceful_shutdown_enabled() && signal_handle_.thread_id_ != 0) {
+      pthread_kill(signal_handle_.thread_id_, SIGPIPE);
+    }
+#endif
     FLOG_INFO("stop signal handle success");
 
     FLOG_INFO("begin to stop GDS");
@@ -1611,6 +1652,10 @@ int ObServer::stop()
     // It will wait for all requests done.
     FLOG_INFO("begin to stop server runtime");
     server_runtime_controller_.stop();
+    if (graceful_shutdown_enabled() && getenv("SEEKDB_GRACEFUL_JOIN_RUNTIME") != nullptr) {
+      FLOG_INFO("[GRACEFUL_SHUTDOWN] join server runtime workers");
+      server_runtime_controller_.wait();
+    }
     FLOG_INFO("server runtime stopped");
     FLOG_INFO("begin to stop ob_service");
     if (OB_NOT_NULL(standby_module_)) {
@@ -1661,7 +1706,11 @@ int ObServer::wait_no_client()
                  0, MAXDWORD, MAXDWORD, &ov)) {
     FLOG_INFO("no clients remaining, exiting");
     net_frame_.sql_nio_stop();
-    _Exit(0);
+    if (graceful_shutdown_enabled()) {
+      set_stop();
+    } else {
+      _Exit(0);
+    }
   } else {
     ret = OB_ERROR;
     LOG_ERROR("LockFileEx failed", "last_error", (int)GetLastError());
@@ -1670,7 +1719,12 @@ int ObServer::wait_no_client()
   if (flock(clients_fd_, LOCK_EX) == 0) {
     FLOG_INFO("no clients remaining, exiting");
     net_frame_.sql_nio_stop();
-    _Exit(0);
+    if (graceful_shutdown_enabled()) {
+      stop_package_ddl_before_runtime(mods_ddl_service_launcher_, mods_system_package_load_service_);
+      set_stop();
+    } else {
+      _Exit(0);
+    }
   } else {
     ret = OB_ERROR;
     LOG_ERROR("flock failed", K(errno));
@@ -1693,6 +1747,10 @@ int ObServer::wait()
   FLOG_INFO("begin to wait observer setted to stop");
   while (OB_SUCC(ret) && !stop_) {
     SLEEP(3);
+  }
+  if (graceful_shutdown_enabled()) {
+    FLOG_INFO("[GRACEFUL_SHUTDOWN] stop instead of _Exit");
+    return stop();
   }
   _Exit(0);
   return ret;
