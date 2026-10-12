@@ -1,0 +1,78 @@
+amend_id	class	verdict	evidence	duplicate_of	recommendation
+AM-01	fact-correction	CONFIRMED	ob_latch.cpp:67-72,91-98 用 GETTID()；uid>=WRITE_MASK(1<<30, ob_latch.h:66) 报 OB_INVALID_ARGUMENT；ob_tc_rwlock.h:187,234 记 itid+1；macOS tid 来自 pthread_threadid_np(ob_define.h:1911-1922)	-	accept：0.8 注明 itid+1 是有意的内部差异，不进 A.4
+AM-02	fact-correction	CONFIRMED	ob_bucket_lock.cpp:66 latch_cnt_=bucket_cnt_/8+1；ob_bucket_lock.h:332-334 bucket_idx/8；多桶 guard 按 latch 下标记录 ob_bucket_lock.cpp:315-342	-	accept；05 的 BucketedHashMap 以它为前提
+AM-03	fact-correction	CONFIRMED	ob_qsync.h:45-52 get_id()%ref_num_；:65-74 逐槽忙等不 PAUSE；:121 ObQSyncWrapper<256>；ob_qsync_lock.h:43-46 48 槽；itid_slots[1024]x64=65536 (ob_tsi_utils.h:36)	-	accept；0.8 的 enter/leave 改为 C++ 名
+AM-04	fact-correction	CONFIRMED	ObFutex 带 CACHE_ALIGNED (ob_futex.h:130)；TCRWLock 成员 ob_tc_rwlock.h:298-303 → x86 192B、ARM 384B	-	accept
+AM-05	process	CONFIRMED	RULEBOOK §1 白名单(:582-590) 无 loom；§3(:949) 要求 loom 测试	M-01	merge(M-01) accept
+AM-06	naming	NOT-A-FACT	改名表 oblib::sync 一行只有锁类型名(RULEBOOK:1027)	M-05	merge(M-05) accept
+AM-07	process	NOT-A-FACT	let _ = x.lock() 立即释放 guard 属实；clippy::let_underscore_must_use 是默认关闭的 restriction lint，-D warnings 不启用，误伤一句不成立	-	modify：保留 disallowed_methods 与 grep，删 clippy 一句
+AM-08	fact-correction	PARTIAL	成立：ObCond ob_queue_thread.h:42-57；SCondTemp ob_scond.h:131-215(ob_priority_queue.h:292)；ObNullLock ob_spin_lock.h:94、ob_pool.h:35,106。不成立：ObAtomicReference 在 src 无使用者(只有自身 .h/.cpp)；obsys::ObRWLock 用在 4 个文件(ob_tablet_gc_service.h:125、ob_empty_shell_task.h:59、ob_compaction_schedule_util.h:110、ob_log_allocator_mgr.h:53)	-	modify：ObAtomicReference 改记 delete，02 不提供
+AM-09	fact-correction	CONFIRMED	读锁路径 ob_tx_ctx.cpp:5975-5978；CtxLock::unlock_ctx 无条件调 before_unlock(ob_trans_ctx_lock.cpp:161-165)；before_unlock 写 opid_/has_pending_callback_(ob_trans_ctx.cpp:46-60)	-	accept
+AM-10	rule-change	PARTIAL	成立：tracker thread_local(ob_memory_tracker.cpp:26)、唯一装入点 ob_th_worker.cpp:245、嵌套上下文 obmp_query.cpp:475 不受保护。不成立：解析器两个 C 回调在基线是恒成功的 weak 版本(parse_node.c:177-178)，src/sql/parser/ob_memory_tracker_wrapper.cpp 不参与构建，全部 .o 只有 weak 定义	-	modify：删去解析器回调一句(C-05/K-07)
+AM-11	process	PARTIAL	CURRENT_CONTEXT 119、->CREATE_CONTEXT 52、->get_arena_allocator() 31、->get_malloc_allocator() 10 均复现；ObCtxIds::WORK_AREA 复数 66 行/31 文件(非 83 行)	-	modify：改计数；07 须回应 MemCtx 来源(C-28)
+AM-12	rule-change	PARTIAL	A.4 无对应项属实；裁判依据读反：join_many_table.test:13 把工作区调到 100(缺省 5，:86 恢复)，无调低用例(旁证 fidelity-01 F-04)；漏了 ObSEArrayImpl::reserve 按块取整(旁证 F-01)；给 05 的 tracker 请求未被接(K-09)	M-09	modify：保留 mem-accounting，删裁判改动，补取整口径
+AM-13	rule-change	CONFIRMED	malloc_hook 只在非 Apple/Windows/Android 构建(src/oblib/lib/CMakeLists.txt:34-41)；jemalloc 只在 Linux/macOS 且非 ASAN(deps/external/CMakeLists.txt:17)；macOS zone ob_malloc.cpp:177-194	-	accept；init_malloc_hook 位置并入 M-08
+AM-14	rule-change	CONFIRMED	build_release/compile_commands.json 363 条命令，0 条含 ENABLE_SANITY	M-10	accept；01 的 enable_sanity 改 ENABLE_SANITY
+AM-15	rule-change	CONFIRMED	sigsetjmp/siglongjmp 段错误捕获只在 memory_dump.cpp:41-75，用于 :395,648,788 三处扫描；ob_dump_task_generator.cpp:95 取用户给的地址	-	human：推荐接受；03 删 probe_read_memory(K-02)
+AM-16	process	CONFIRMED	工具链钉 1.98.1(RULEBOOK:130)；§1 无 trybuild；Miri 与 -Zsanitizer 只在 nightly	AM-05 (M-01)	merge(M-01) accept
+AM-17	naming	NOT-A-FACT	改名表 oblib::mem 一行只有 6 个名字(RULEBOOK:1026)	M-05	merge(M-05) accept
+AM-18	naming	CONFIRMED	RULEBOOK:349,750-751,809 用 Timer/TimerService/SimplePool<T>/ReentrantThread/AdaptivePool/TimerTask/Runnable，不在改名表；C++ 名 ObTimer/ObTimerService/ObSimpleThreadPoolBase/ObReentrantThread/ObAdaptiveWorkerPool/ObTimerTask 都存在	M-05	merge(M-05) accept；先对齐 03 §1.4/§8.2 名单；AM-15 通过则删 probe_read_memory
+AM-19	rule-change	CONFIRMED	Rust 可分派接收者只有 &Self/&mut Self/Box/Rc/Arc<Self>/Pin；self: &Arc<Self> 无 DispatchFromDyn，trait 做不成 dyn；旁证 fidelity-03(R2 正确)	-	accept
+AM-20	process	CONFIRMED	§3 白名单只有 thread/stack/**(RULEBOOK:931)；std 只能建线程时命名、拿不到 OS tid	M-03	merge(M-03) accept
+AM-21	fact-correction	CONFIRMED	ob_timer_service.cpp:233-235 先 init(MIN_WORKER_THREAD_NUM, TASK_NUM_LIMIT, "TimerWK") 再 set_thread_count(MAX_WORKER_THREAD_NUM)；ob_simple_thread_pool.ipp:63-68,196-199；旁证 fidelity-03	-	accept
+AM-22	process	PARTIAL	放开清单无 non_snake_case(RULEBOOK:967)；ObSysTime::toMicroSeconds 存在(Time.cpp:134)；但 runTimerTask 实现约 77 处(类外 72+类内 5)，145 是声明+定义+调用(全部 153 行)	-	accept：改计数
+AM-23	process	CONFIRMED	src/oblib/lib/time/ 5 个单元合计 1,570 行(wc -l)；units.tsv 均 translate；ob_addr.h translate	M-02	merge(M-02) accept；ObAddr 须有接手方；02 撤回 Q5(K-05)
+AM-24	rule-change	NOT-A-FACT	0.5 生命周期方法一律取 &self(RULEBOOK:208)；交给线程的闭包须 'static 属实	-	accept
+AM-25	rule-change	CONFIRMED	OB_MAX_LONGTEXT_LENGTH=2^29-1(ob_define.h:1420)；len_:29 flag_:2 null_:1(ob_datum.h:143-148)，12 字节无判别位	-	accept
+AM-26	rule-change	CONFIRMED	RULEBOOK:251(NonZeroU32) 与 :262,:725(slotmap 代际 key) 矛盾；free_stmt 只对 ObSelectStmt(ob_stmt.cpp:207-226)	-	modify：接受墓碑方案，拒绝'白名单删 slotmap'(K-01)
+AM-27	rule-change	CONFIRMED	R1 类型表只有 ObDMLStmt(RULEBOOK:718)；sql 里 create_stmt< 101 行、派生自 Ob*Stmt 的类声明 112 行	-	accept；判定脚本交 1c
+AM-28	rule-change	CONFIRMED	TempAllocGuard 374 行(去掉 ob_expr.h 为 370)；'66 处'是 07 附录 A 启发式，未独立复数；ob_expr_repeat.cpp:253-262 写法属实	-	accept；计量差别归 A.4 query-mem-limit
+AM-29	naming	NOT-A-FACT	改名表没有 StoreTable 等 6 个名字	M-05	merge(M-05) accept；补 EvalBatchFn/EvalEnumSetFn/BitWord
+AM-30	rule-change	CONFIRMED	安全 Rust 从字节切片借 &[u32] 须 4 字节对齐；C++ 经 to_obj 直接用载荷里的 digit	-	accept
+AM-31	fact-correction	CONFIRMED	N_NULL "null"/N_TRUE "true"(ob_name_def.h:22-24)；KV 路径 %s:null(ob_print_utils.h:718-760)、bool true/false(:858-868)、float/double 带引号(:849-857)；ob_iarray.h:68-86；ob_array.h:748-764	M-04	merge(M-04) accept
+AM-32	fact-correction	CONFIRMED	OB_E/ERRSIM_POINT_DEF/EventTable 不在 #ifdef ERRSIM 内(ob_tracepoint.h:108-128)；按预处理分支统计 #ifdef ERRSIM 之外 OB_E( 92、ERRSIM_POINT_DEF( 92(之内 99、6)；ob_service.cpp:866-868；RULEBOOK:556 ERRSIM vs :617 errsim	M-10	accept；01/03/06/07 照改(K-06)
+AM-33	rule-change	CONFIRMED	obmp_query.cpp:361 setup_wb；obmp_base.cpp:370 ob_setup_tsi_warning_buffer(NULL)；ob_virtual_warning.cpp:83-85、ob_mysql_end_trans_cb.cpp:262,267 直接读会话缓冲区	-	accept
+AM-34	rule-change	CONFIRMED	ob_server.cpp:650 OB_LOGGER.init(log_cfg)；未初始化时 ob_log.cpp:1666-1667 返回 OB_NOT_INIT	M-08	merge(M-08) accept
+AM-35	process	CONFIRMED	ObBasicTimeGuard 在 ob_common_utility.h:67；03 已把该单元定为 replace:thread(03:50)	AM-23 (M-02)	merge into AM-23
+AM-36	process	CONFIRMED	dup2: ob_async_log_struct.cpp:93-104、ob_log.cpp:820-821；statfs: ob_log.cpp:1465-1466、ob_log_compressor.cpp:605-606；localtime_r: utility.cpp:2204	AM-20 (M-03)	merge(M-03) accept
+AM-37	fact-correction	CONFIRMED	用 snprintf 返回值：ob_log.cpp:402、ob_string.h:633、ob_backtrace.cpp:168	-	accept
+AM-38	rule-change	NOT-A-FACT	A.4(RULEBOOK:1211-1221) 只有 log-prefix，无日志内容一项	M-09	merge(M-09) accept
+AM-39	fact-correction	CONFIRMED	abort_unless 只调 ob_abort()(ob_abort.h:35-43)；ob_abort 写 stderr 后 abort()，不写日志(ob_abort.cpp:31-44)	-	accept
+AM-40	fact-correction	CONFIRMED	Windows 改写 %l：ob_print_utils.cpp:460-505、ob_log.cpp:149 起；log_user_message 直接 vsnprintf(ob_log.cpp:663)	-	accept
+AM-41	fact-correction	CONFIRMED	EXECUTE_COUNT_PER_SEC 用 LOAD128/CAS128(ob_macro_utils.h:891-916)，7 个调用点；REACH_COUNT_PER_SEC 2 个	-	accept
+AM-42	rule-change	CONFIRMED	main.cpp:693-698 四次 setlocale	M-08	merge(M-08) accept；包装函数归属一并定
+AM-43	fact-correction	CONFIRMED	MacOSX15.4.sdk __tree:1673-1704 __find_equal：两次比较都为假即相等，NaN 等于第一个比较到的节点；ob_array_cast.cpp:989 fast_float；ob_expr_map.cpp:235-252 std::map<Element_Type,...>	-	human：推荐 CppFloatMap
+AM-44	fact-correction	CONFIRMED	libc-0.2.190 只在 src/teeos/mod.rs:1283 声明 frexp，无 ldexp/modf；remainder 8、lround 6、lrint 1	-	accept
+AM-45	rule-change	CONFIRMED	ob_core_table_proxy.cpp:855-866 NULL→NULL、空串→''；ob_string.h:313-320；对 .ptr() 的显式判空按窄口径 119 行(原文约 172 口径更宽)	M-09	human；同时定 01 try_str 如何表达 NULL(C-15(15))
+AM-46	rule-change	CONFIRMED	errno 446 行；utility.cpp:2086-2097 靠 errno 判溢出	-	accept(归 06 oblib::num)
+AM-47	rule-change	CONFIRMED	qsort 恰好 2 处	-	accept
+AM-48	naming	NOT-A-FACT	名字清单见 06 §2.10；重载一句与 AM-76 第 1 部分相同	M-05; M-06	merge(M-05,M-06) accept(K-03)
+AM-49	rule-change	NOT-A-FACT	0.7 要求用户数据大小的分配可失败(RULEBOOK:335)	M-09	human
+AM-50	fact-correction	CONFIRMED	src 无 ob_strtol；ob_ctype_simple.cc:60,144,224,309,405(ob_strnto*_8bit、ob_strntoull10rnd_8bit)、:754,759(C 包装)；ob_dtoa.cc:344,389-397 fast_float 快路径+回退	-	accept
+AM-51	fact-correction	CONFIRMED	parse_node.c:551-553(#if defined(__GNUC__) && defined(__x86_64__))；ob_parse_simd.cpp:204	-	accept
+AM-52	fact-correction	CONFIRMED	sql_parser_base.h:774-796、:797-811 都在注释里；活代码只把 charset_info_ 交给回调(:771-773)	-	accept
+AM-53	rule-change	CONFIRMED	pl_ns_ 每次解析设置(ob_parser.cpp:1090)	-	accept
+AM-54	fact-correction	CONFIRMED	gen_ob_sys_variables.py:1170-1197 写 share 6 个、sql/session 2 个文件；JSON 钩子键 94 处；钩子类从 ob_system_variable.h:775 起	-	accept
+AM-55	fact-correction	CONFIRMED	ob_lib_cache_register.cpp:98-116 三次 include ob_lib_cache_register.h(其 :18 include 该 .def)；ob_sql_topic.def/ob_sql_category.def 无包含点	-	accept
+AM-56	fact-correction	CONFIRMED	ob_geo_dispatcher.h:1314-1366 每平台 20 个 catch、18 个不同错误码，Windows 分支 :1347-1351；RULEBOOK:516 写 17	-	accept
+AM-57	rule-change	NOT-A-FACT	RULEBOOK:535 回调上下文类型必须 Sync	-	accept
+AM-58	naming	NOT-A-FACT	-	M-05	merge(M-05) accept；登记 zlib1213_sys、build_support
+AM-59	fact-correction	CONFIRMED	ob_expr_regexp_context.cpp 用 15 个 ICU 函数(12 uregex_* + u_strFromUTF8/u_strToUTF8/u_errorName)；ob_libxml2_sax_handler.cpp:29-61 非空回调 11 个；oceanbase.android.arm64.deps:11 libcurl 8.2.1	-	accept
+AM-60	rule-change	CONFIRMED	字段类型 ob_mvcc_row.h:85-90,280-292；行数 scn 640(154+486)、ob_tx_id 113、ob_tx_seq 190、lsn 217	M-02	human：推荐项；同时改 README 模块表(C-25)
+AM-61	rule-change	NOT-A-FACT	08 §1.2 列出的策略函数确实引用 storage/tx 类型	-	accept；函数级重映射写进 seams.tsv
+AM-62	fact-correction	CONFIRMED	MAX_RETIRE_SLOT_NUM=OB_MAX_CPU_NUM*32(ob_retire_station.h:198)，get_itid()%…(:258)；OB_MAX_CPU_NUM x86-64 64、aarch64 128(ob_define.h:1483-1487)；MAX_QCLOCK_SLOT_NUM=OB_MAX_CPU_NUM*4(:33)	M-07	merge(M-07) accept；OB_MAX_CPU_NUM 进 M-02
+AM-63	rule-change	CONFIRMED	RULEBOOK:370-371 两份回收分在互不依赖的 crate；share::cache 用 QClockGuard(ob_kvcache_store.cpp:636,774,1178,1197) 与 RetireStation::retire(:1226)	M-07	modify：02 共审，同步改 01:41、02:76、units.tsv(K-08)
+AM-64	naming	NOT-A-FACT	-	M-05	merge(M-05) accept
+AM-65	rule-change	CONFIRMED	log_group_buffer.cpp:461-477 先 memcpy 再复查 readable_begin_lsn_	-	accept
+AM-66	fact-correction	PARTIAL	类名确是 ObExtInfoCallback(storage/lob/ob_ext_info_callback.h:84)；但 RULEBOOK 0.9 没有出现 ObExtInfoLogCallback，错名在 migration/design/survey/storage-txn.md:84	-	no-rulebook-change：改调查备忘
+AM-67	fact-correction	CONFIRMED	ob_tablet_ddl_kv.h:83-85 第二个实例化；ob_keybtree.cpp:1742-1761 函数内静态回收域	-	accept
+AM-68	fact-correction	CONFIRMED	块句柄经 get_retire_station().retire(…)(ob_kvcache_store.cpp:1226) 退休，等 QClock 宽限期；hazard 持有者与 map 读者不被等待	M-07	merge(M-07) accept
+AM-69	rule-change	CONFIRMED	is_fragment/internal_map_replace(ob_kvcache_map.cpp:193,385,616,706)；KVCacheRep 定时器(ob_kv_storecache.cpp:215)	M-09	merge(M-09) accept：扩写 mem-view
+AM-70	rule-change	CONFIRMED	RULEBOOK:234 的'同理'两种读法；ObCurTraceId::get_trace_id( 159 行；v0.1 原文见 design/review/soundness.md S-11(:191)	-	accept；04 删 TRACE_ID_STR_HOOK(K-04)
+AM-71	rule-change	CONFIRMED	固有方法优先：Vec::reserve(usize)/remove(usize) 遮蔽同名 trait 方法，实参 i64 时报错；ObFixedArray::reserve 返回 OB_SIZE_OVERFLOW(ob_fixed_array.h:159-170)	-	accept；07:1211 随之改(K-10)
+AM-72	rule-change	CONFIRMED	ob_ik_token.h:94-95 迭代器类型；ob_ik_arbitrator.cpp:226-241 把迭代器存进 conflict_stack 再用	-	accept；保留 slotmap(K-01)
+AM-73	fact-correction	CONFIRMED	typedef uint32_t BitSetWord(ob_bit_set.h:39,188)	-	accept
+AM-74	fact-correction	CONFIRMED	top: ob_log_apply_service.cpp:175、ob_load_data_impl.cpp:1455,1457；push_front: ob_tmp_file_thread_wrapper.cpp:1043,1151、ob_priority_queue.h:65-72	-	accept
+AM-75	fact-correction	CONFIRMED	ob_array.h:748-764 省略号后仍打印最后一个元素；ob_list.h:537、ob_hashset.h:202 各有 to_string	AM-31 (M-04)	merge(M-04) accept；04:1555 先改(C-23)
+AM-76	process	CONFIRMED	ObDLinkBase 有虚函数 reset/to_string(ob_dlink_node.h:60-61)；第 1 部分与 AM-48 重载句重复	AM-48 (M-06, part 1)	merge(M-06) accept(K-03)
+AM-77	fact-correction	CONFIRMED	ObVector::at 越界记 "invalid index"(ob_vector.h:127-133)；ObSEArray::operator[] 记 "idx out of range"(ob_array.h:323-336)	-	accept
