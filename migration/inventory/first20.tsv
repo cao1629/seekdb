@@ -1,0 +1,21 @@
+category	file	symbol	source_construct	line
+c02-ptr-params	src/sql/engine/ob_exec_context.h	ObExecContext::create_expr_op_ctx(unsigned long long, long long, void *&)#out:2	T *& out-param	304
+c02-ptr-params	src/sql/engine/dml/ob_dml_service.h	ObDMLService::create_rowkey_check_hashset(long long, ObExecContext *, ObHashSet<ObRowkey, NoPthreadDefendMode> *&)#out:2	T *& out-param	59
+c03-ptr-members	src/sql/session/ob_sql_session_info.h	ObSQLSessionInfo::cur_exec_ctx_	raw pointer member	1022
+c03-ptr-members	src/sql/engine/ob_exec_context.h	ObExecContext::my_session_	raw pointer member	807
+c04-borrow-members	src/query/api/query/engine/expr/ob_expr.h	ObEvalCtx::exec_ctx_	reference member	278
+c04-borrow-members	src/sql/resolver/expr/ob_raw_expr.h	ObColumnRefRawExpr::column_name_	ObString member	3126
+c05-self-arena	src/sql/ob_result_set.h	ObResultSet	self-arena class	61
+c05-self-arena	src/sql/ob_spi.h	ObSPIResultSet	self-arena class	161
+c07-locks	src/storage/tx/ob_trans_ctx.h	transaction::ObTransCtx::lock_	lock member	222
+c07-locks	src/storage/ls/ob_ls_meta.h	storage::ObLSMeta::rw_lock_	lock member	123
+c08-atomics	src/storage/memtable/mvcc/ob_mvcc_trans_ctx.h	memtable::ObTransCallbackMgr::callback_lists_	atomic-accessed field	377
+c08-atomics	src/observer/ob_service.h	observer::ObService::stopped_	volatile field	171
+c10-plan-writes	src/sql/engine/expr/ob_expr_column_conv.cpp	ObExprColumnConv::eval_enumset#expr.args_[0]=	write through const ObExpr& at eval time	743
+c11-scopes	src/sql/rewrite/ob_transform_utils.cpp	ObTransformUtils::check_exprs_unique_on_table_items#ObRawExprFactory:expr_factory	local IR factory	3606
+c11-scopes	src/observer/mysql/obmp_query.cpp	ObMPQuery::process_with_tmp_context#CREATE_WITH_TEMP_CONTEXT	temporary memory context	475
+c12-side-channels	src/sql/engine/expr/ob_expr_subquery_ref.cpp	ObExprSubQueryRef::get_subquery_iter#get_operator_kit(extra.op_id_)	operator lookup by id outside the operator	312
+c18-inplace	src/sql/resolver/cmd/ob_alter_system_resolver.cpp	ObSetConfigResolver::resolve#ObCharset::casedn(name)	ObCharset::casedn in-place case conversion	609
+c18-inplace	src/sql/plan_cache/ob_prepare_stmt_struct.cpp	ObPsStmtInfo::add_fixed_raw_param#const_cast<char*>(param->node_->str_value_)	const_cast<char *>	371
+c19-multi-owner	src/oblib/rpc/ob_lock_wait_node.h	ObLockWaitNode	intrusive node also held elsewhere	105
+c21-parse-tree	src/sql/ob_sql_utils.cpp	ObSQLUtils::replace_questionmarks#tree->str_value_=#2	write to ParseNode pointer field str_value_	212

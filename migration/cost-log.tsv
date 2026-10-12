@@ -3,3 +3,4 @@ step	timestamp	wall_clock_min	tokens	subagents	model
 0b	2026-10-10T17:30Z	382	5438116	10	claude-opus-5-5
 1-depmap	2026-10-11T02:25Z	86	1674268	6	claude-sonnet-5-5
 1-design	2026-10-11T06:16Z	198	6412705	12	claude-opus-5-5
+1c1d-first20	2026-10-12T14:25Z	290	19387214	22	claude-opus-5-5
