@@ -1559,9 +1559,11 @@ int ObServer::stop()
     FLOG_INFO("[GRACEFUL_SHUTDOWN] package DDL cancelled");
   }
 
-  FLOG_INFO("begin to stop OB_LOGGER");
-  OB_LOGGER.stop();
-  FLOG_INFO("stop OB_LOGGER success");
+  if (!graceful_shutdown_enabled()) {
+    FLOG_INFO("begin to stop OB_LOGGER");
+    OB_LOGGER.stop();
+    FLOG_INFO("stop OB_LOGGER success");
+  }
 
   FLOG_INFO("begin to stop OB_LOG_COMPRESSOR");
   OB_LOG_COMPRESSOR.stop();
